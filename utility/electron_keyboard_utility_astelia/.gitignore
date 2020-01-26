@@ -1,0 +1,8 @@
+.personal
+node_modules/
+.cache
+yarn.lock
+yarn-error.log
+package-lock.json
+dist/
+data/

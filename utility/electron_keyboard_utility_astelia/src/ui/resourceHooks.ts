@@ -1,0 +1,66 @@
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { IProfileManagerStatus } from '~contract/data';
+import { useGetLatest } from './hooks';
+import { isEditModelDirty, EditorState } from './state/editorSlice';
+import { backendAgent, sendIpcPacketSync } from './state/ipc';
+import { playerSlice } from './state/playerSlice';
+import { profileAsyncActions } from './state/profileSlice';
+import { AppState, store } from './state/store';
+import { IRealtimeKeyboardEvent } from '~contract/ipc';
+
+export function useRealtimeKeyboardEventReceiver() {
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    const handler = (ev: IRealtimeKeyboardEvent) => {
+      if (ev.type === 'keyStateChanged') {
+        const { keyIndex, isDown } = ev;
+        const keyId = `ku${keyIndex}`;
+        dispatch(playerSlice.actions.setKeyPressed({ keyId, isDown }));
+      }
+    };
+    backendAgent.keyEvents.subscribe(handler);
+    return () => backendAgent.keyEvents.unsubscribe(handler);
+  }, []);
+}
+
+export function useProfileManagerStateResources() {
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    const handler = (payload: Partial<IProfileManagerStatus>) => {
+      dispatch(profileAsyncActions.handleProfileManagerStatusEvents(payload));
+    };
+    backendAgent.profileStatusEvents.subscribe(handler);
+    return () => {
+      backendAgent.profileStatusEvents.unsubscribe(handler);
+    };
+  }, []);
+}
+
+export function saveDirtyEditModelOnClosing() {
+  const editorState = store.getState().editor as EditorState;
+  const isDirty = isEditModelDirty(editorState);
+  if (isDirty) {
+    const latestEditModel = editorState.editModel;
+    sendIpcPacketSync({ reserveSaveProfileTask: latestEditModel });
+  }
+}
+
+// export function useProfileEditModelSaver() {
+//   const editorState = useSelector((state: AppState) => state.editor)
+//   const getLatestEditorState = useGetLatest(editorState)
+//   React.useEffect(() => {
+//     const beforeUnloadHandler = () => {
+//       const editorState = getLatestEditorState()
+//       const isDirty = isEditModelDirty(editorState)
+//       if (isDirty) {
+//         const latestEditModel = editorState.editModel
+//         sendIpcPacketSync({ reserveSaveProfileTask: latestEditModel })
+//       }
+//     }
+//     window.addEventListener('beforeunload', beforeUnloadHandler)
+//     return () => {
+//       window.removeEventListener('beforeunload', beforeUnloadHandler)
+//     }
+//   }, [])
+// }
