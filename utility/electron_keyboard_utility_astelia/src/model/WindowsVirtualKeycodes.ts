@@ -1,7 +1,50 @@
 import { VirtualKey } from './HighLevelDefs';
 
 const enum WVK {
-  VK_A = 0x41,
+  VK_BACK = 8,
+  VK_TAB,
+
+  VK_RETURN = 13,
+
+  VK_CONTROL = 17,
+  VK_MENU,
+  VK_PAUSAE,
+  VK_CAPITAL,
+  VK_KANA,
+
+  VK_ESCAPE = 27,
+  VK_CONVERT,
+  VK_NONCONVERT,
+  VK_ACCEPT,
+  VK_MODECHANGE,
+  VK_SPACE,
+  VK_PRIOR,
+  VK_NEXT,
+  VK_END,
+  VK_HOME,
+  VK_LEFT,
+  VK_UP,
+  VK_RIGHT,
+  VK_DOWN,
+  VK_SELECT,
+  VK_PRINT,
+  VK_EXECUTE,
+  VK_SNAPSHOT,
+  VK_INSERT,
+  VK_DELETE,
+  VK_HELP,
+  VK_0,
+  VK_1,
+  VK_2,
+  VK_3,
+  VK_4,
+  VK_5,
+  VK_6,
+  VK_7,
+  VK_8,
+  VK_9,
+
+  VK_A = 65,
   VK_B,
   VK_C,
   VK_D,
@@ -16,8 +59,72 @@ const enum WVK {
   VK_M,
   VK_N,
   VK_O,
-  VK_P
+  VK_P,
+  VK_Q,
+  VK_R,
+  VK_S,
+  VK_T,
+  VK_U,
+  VK_V,
+  VK_W,
+  VK_X,
+  VK_Y,
+  VK_Z, //90
+
+  VK_LWIN,
+  VK_RWIN,
+  VK_APPS,
+
+  VK_F1 = 112,
+  VK_F2,
+  VK_F3,
+  VK_F4,
+  VK_F5,
+  VK_F6,
+  VK_F7,
+  VK_F8,
+  VK_F9,
+  VK_F10,
+  VK_F11,
+  VK_F12,
+  VK_F13,
+  VK_F14,
+  VK_F15,
+  VK_F16,
+  VK_F17,
+  VK_F18,
+  VK_F19,
+  VK_F20,
+  VK_F21,
+  VK_F22,
+  VK_F23,
+  VK_F24,
+
+  VK_LSHIFT = 160,
+  VK_RSHIFT,
+  VK_LCONTROL,
+  VK_RCONTROL,
+  VK_LMENU,
+  VK_RMENU,
+
+  VK_OEM_1 = 186,
+  VK_OEM_PLUS,
+  VK_OEM_COMMA,
+  VK_OEM_MINUS,
+  VK_OEM_PERIOD,
+  VK_OEM_2,
+  VK_OEM_3,
+
+  VK_OEM_4 = 219,
+  VK_OEM_5,
+  VK_OEM_6,
+  VK_OEM_7,
+  VK_OEM_8,
+
+  VK_OEM_102 = 226
 }
+
+const OUT_SHIFT = 0x100;
 
 export const VirtualKeyToWindowsVirtualKeyCodeTable: {
   [vk in VirtualKey]?: number;
@@ -37,5 +144,10 @@ export const VirtualKeyToWindowsVirtualKeyCodeTable: {
   K_M: WVK.VK_M,
   K_N: WVK.VK_N,
   K_O: WVK.VK_O,
-  K_P: WVK.VK_P
+  K_P: WVK.VK_P,
+  K_AtMark: WVK.VK_OEM_3,
+  K_Dollar: WVK.VK_4 | OUT_SHIFT,
+  K_Shift: WVK.VK_LSHIFT,
+  K_Semicolon: WVK.VK_OEM_PLUS,
+  K_Plus: WVK.VK_OEM_PLUS | OUT_SHIFT
 };

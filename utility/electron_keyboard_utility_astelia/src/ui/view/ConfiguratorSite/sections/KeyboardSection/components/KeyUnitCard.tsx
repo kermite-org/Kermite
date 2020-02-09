@@ -1,6 +1,7 @@
 import { css, jsx } from '@emotion/core';
 import React from 'react';
 import { IKeyUnitCardViewModel } from '../Types';
+import { UiTheme } from '~ui/view/ConfiguratorSite/UiTheme';
 
 export const KeyUnitCard = (props: { keyUnit: IKeyUnitCardViewModel }) => {
   const {
@@ -31,7 +32,7 @@ export const KeyUnitCard = (props: { keyUnit: IKeyUnitCardViewModel }) => {
 
   const cssSlot = css`
     &[data-selected='true'] {
-      fill: #0f0;
+      fill: ${UiTheme.clSelectHighlight};
     }
     stroke: #080;
     fill: transparent;

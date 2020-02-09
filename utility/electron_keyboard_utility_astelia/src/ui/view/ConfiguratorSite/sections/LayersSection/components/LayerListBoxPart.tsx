@@ -1,5 +1,6 @@
 import { css, jsx } from '@emotion/core';
 import { ILayer } from '~contract/data';
+import { UiTheme } from '~ui/view/ConfiguratorSite/UiTheme';
 
 export const LayerListBoxPart = (props: {
   layers: ILayer[];
@@ -17,7 +18,7 @@ export const LayerListBoxPart = (props: {
     border: solid 1px #444;
 
     &[data-current='true'] {
-      background: #f0f;
+      background: ${UiTheme.clSelectHighlight};
     }
     padding: 4px;
     cursor: pointer;

@@ -7,5 +7,6 @@ export const UiTheme = {
   assignPallet: {
     commonMargin: '5px',
     commonHalfMargin: '2.5px'
-  }
+  },
+  clSelectHighlight: '#0a7'
 };

@@ -3,6 +3,7 @@ import { ILayer } from '~contract/data';
 import { VirtualKey } from '~model/HighLevelDefs';
 import { VirtualKeyTexts } from '~ui/view/ConfiguratorSite/Constants';
 import { checkIfLognNameKeyAssign } from '~ui/state/editor';
+import { UiTheme } from '~ui/view/ConfiguratorSite/UiTheme';
 
 const cssAssignSlotCard = (
   isActive: boolean,
@@ -21,7 +22,7 @@ const cssAssignSlotCard = (
 
   ${isActive &&
     css`
-      background: #0a7;
+      background: ${UiTheme.clSelectHighlight};
     `}
 
   ${isVariableWidth &&

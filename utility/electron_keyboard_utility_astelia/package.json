@@ -13,6 +13,7 @@
     "cs:copy": "cpx ./src/keybd_event.cs ./dist",
     "bundle": "run-p main:watch ui:serve preload:copy cs:copy",
     "start": "cross-env NODE_ENV=development electron ./dist",
+    "start_nodemon": "cross-env NODE_ENV=development nodemon --watch dist/* --exec 'electron ./dist'",
     "typecheck": "tsc --noEmit",
     "lint": "npx eslint src/ --ext .ts,.tsx",
     "lint_fix": "npx eslint src/ --ext .ts,.tsx --fix"
