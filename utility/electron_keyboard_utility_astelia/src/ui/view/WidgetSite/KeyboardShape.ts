@@ -1,5 +1,12 @@
+export interface IKeyUnitPositionEntry {
+  id: string;
+  x: number;
+  y: number;
+  r: number;
+}
+
 export namespace KeyboardShape {
-  export const keyPositions = [
+  export const keyPositions: IKeyUnitPositionEntry[] = [
     { id: 'ku0', x: -21.259478, y: 25.185357, r: 9 },
     { id: 'ku1', x: -40.027745, y: 22.233922, r: 9 },
     { id: 'ku2', x: -58.796012, y: 19.282486, r: 9 },
@@ -57,7 +64,7 @@ export namespace KeyboardShape {
     { id: 'ku47', x: 124.0, y: 79.0, r: 0 }
   ];
 
-  export const outerPathMarkup = [
+  export const keyboardBodyPathMarkup = [
     'M 0,0',
     'L 139,0',
     'A 4,4 0 0 1 143,4',

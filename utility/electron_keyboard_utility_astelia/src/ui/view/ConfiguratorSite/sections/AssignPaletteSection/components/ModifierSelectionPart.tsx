@@ -1,9 +1,9 @@
 import { css, jsx } from '@emotion/core';
 import { IKeyAssignEntry } from '~contract/data';
 import { ModifierVirtualKeys } from '~model/HighLevelDefs';
-import { assignPaletteLocalTheme } from '../assignPaletteLocalTheme';
-import { AssignSlotCard } from '../components/AssignSlotCard';
+import { AssignSlotCard } from './AssignSlotCards';
 import { isAssignModifierActive } from '~ui/state/editor';
+import { UiTheme } from '~ui/view/ConfiguratorSite/UiTheme';
 
 const modifiresGroup: ModifierVirtualKeys[] = [
   'K_Shift',
@@ -21,7 +21,7 @@ export const ModifierSelectionPart = (props: {
   const cssBox = css`
     flex-shrink: 0;
     > * {
-      margin: ${assignPaletteLocalTheme.commonMargin};
+      margin: ${UiTheme.assignPallet.commonMargin};
     }
   `;
 

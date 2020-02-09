@@ -3,5 +3,9 @@ export const UiTheme = {
   clStatusBar: '#3563b7',
   clNavigationColumn: '#1d1d1d',
   clPanelBox: '#181C23',
-  editorPartMargin: '4px'
+  editorPartMargin: '4px',
+  assignPallet: {
+    commonMargin: '5px',
+    commonHalfMargin: '2.5px'
+  }
 };

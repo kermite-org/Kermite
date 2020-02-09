@@ -43,7 +43,11 @@ function KeyboardSvgView() {
         strokeWidth={sw}
         strokeLinejoin="round"
       >
-        <path d={KeyboardShape.outerPathMarkup} stroke="#003" fill="#89C" />
+        <path
+          d={KeyboardShape.keyboardBodyPathMarkup}
+          stroke="#003"
+          fill="#89C"
+        />
 
         {KeyboardShape.keyPositions.map(a => {
           const fillColor = keyPressedFlags[a.id] ? '#F08' : '#FFF';

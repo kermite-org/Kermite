@@ -1,9 +1,4 @@
-import { css, jsx } from '@emotion/core';
-import { IKeyAssignEntry } from '~contract/data';
 import { VirtualKey } from '~model/HighLevelDefs';
-import { assignPaletteLocalTheme } from '../assignPaletteLocalTheme';
-import { AssignSlotCard } from '../components/AssignSlotCard';
-import { isAssignKeySpecific } from '~ui/state/editor';
 
 const assignKeysGroup0: VirtualKey[] = [
   'K_A',
@@ -142,52 +137,3 @@ export const assignKeyGroupsTable: VirtualKey[][] = [
   assignKeysGroup4,
   assignKeysGroup5
 ];
-
-export const AssignKeySelectionPart = (props: {
-  currentAssign: IKeyAssignEntry | undefined;
-  setCurrentAssignKey: (virtualKey: VirtualKey) => void;
-}) => {
-  const { currentAssign, setCurrentAssignKey } = props;
-
-  const cssBox = css`
-    flex-grow: 1;
-
-    overflow-y: auto;
-    height: 230px;
-    padding: ${assignPaletteLocalTheme.commonHalfMargin};
-  `;
-
-  const cssCardListFrame = css`
-    display: flex;
-    flex-wrap: wrap;
-    align-content: flex-start;
-    > * {
-      margin: ${assignPaletteLocalTheme.commonHalfMargin};
-    }
-  `;
-
-  return (
-    <div css={cssBox}>
-      {assignKeyGroupsTable.map((srcTable, index) => {
-        return (
-          <div css={cssCardListFrame} key={index}>
-            {srcTable.map(vk => {
-              const isActive = isAssignKeySpecific(currentAssign, vk);
-              const onClick = () => {
-                setCurrentAssignKey(vk);
-              };
-              return (
-                <AssignSlotCard
-                  isActive={isActive}
-                  onClick={onClick}
-                  virtualKey={vk}
-                  key={vk}
-                ></AssignSlotCard>
-              );
-            })}
-          </div>
-        );
-      })}
-    </div>
-  );
-};

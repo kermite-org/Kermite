@@ -1,4 +1,4 @@
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 import { useSelector } from 'react-redux';
 import { useMapDispatchToProps } from '~ui/hooks';
 import {
@@ -9,8 +9,8 @@ import {
   editorSelectors
 } from '~ui/state/editor';
 import { AppState, AsyncDispatch } from '~ui/state/store';
-import { LayerListBoxPart } from './LayerListBoxPart';
-import { LayerOperationButtonsPart } from './LayerOperationButtonsPart';
+import { LayerListBoxPart } from './components/LayerListBoxPart';
+import { LayerOperationButtonsPart } from './components/LayerOperationButtonsPart';
 
 const mapStateToProps = (state: AppState) => ({
   layers: state.editor.editModel.layers,
@@ -33,8 +33,11 @@ const mapDispatchToProps = (dispatch: AsyncDispatch) => ({
   addNewLayer() {
     dispatch(editorAsyncActions.craeteNewLayerThunkAction());
   },
-  shiftCurrentLayerOrder(dir: -1 | 1) {
-    dispatch(editorSlice.actions.shiftCurrentLayerOrder(dir));
+  shiftCurrentLayerBack() {
+    dispatch(editorSlice.actions.shiftCurrentLayerOrder(-1));
+  },
+  shiftCurrentLayerForward() {
+    dispatch(editorSlice.actions.shiftCurrentLayerOrder(1));
   }
 });
 
@@ -45,7 +48,8 @@ export const LayersSection = () => {
     addNewLayer,
     removeCurrentLayer,
     renameCurrentLayer,
-    shiftCurrentLayerOrder
+    shiftCurrentLayerBack,
+    shiftCurrentLayerForward
   } = useMapDispatchToProps(mapDispatchToProps);
 
   const canModifyCurrentLayer = isCustomLayer(currentLayer);
@@ -55,10 +59,13 @@ export const LayersSection = () => {
     layers,
     1
   );
-  const shiftCurrentLayerBack = () => shiftCurrentLayerOrder(-1);
-  const shiftCurrentLayerForward = () => shiftCurrentLayerOrder(1);
+
+  const cssSectionHeader = css`
+    padding: 6px;
+  `;
   return (
     <div>
+      <div css={cssSectionHeader}>Layers</div>
       <LayerListBoxPart
         layers={layers}
         currentLayer={currentLayer}

@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IEditModel } from '~contract/data';
 import { Arrays } from '~funcs/Arrays';
 import { ModifierVirtualKeys, VirtualKey } from '~model/HighLevelDefs';
-import { updateAssignEntry } from './assignEntryUpdator';
+import { assignEntryUpdator } from './assignEntryUpdator';
 import {
   createNewEntityId,
   getAssignSlotAddress,
@@ -61,21 +61,17 @@ export const editorSlice = createSlice({
       const addr = state.currentAssignSlotAddress;
       if (addr) {
         const { keyAssigns } = state.editModel;
-        keyAssigns[addr] = updateAssignEntry(keyAssigns[addr], {
+        keyAssigns[addr] = assignEntryUpdator(keyAssigns[addr], {
           removeKeyAssign: true
         });
       }
     },
-    setKeyAssignToCurrentSlot(
-      state,
-      action: PayloadAction<{ virtualKey: VirtualKey }>
-    ) {
+    setKeyAssignToCurrentSlot(state, action: PayloadAction<VirtualKey>) {
       const addr = state.currentAssignSlotAddress;
       if (addr) {
         const { keyAssigns } = state.editModel;
-        const { virtualKey } = action.payload;
-        keyAssigns[addr] = updateAssignEntry(keyAssigns[addr], {
-          setVirtualKey: virtualKey
+        keyAssigns[addr] = assignEntryUpdator(keyAssigns[addr], {
+          setVirtualKey: action.payload
         });
       }
     },
@@ -94,7 +90,16 @@ export const editorSlice = createSlice({
         const cmd = enabled
           ? { addModifier: modifierKey }
           : { removeModifier: modifierKey };
-        keyAssigns[addr] = updateAssignEntry(keyAssigns[addr], cmd);
+        keyAssigns[addr] = assignEntryUpdator(keyAssigns[addr], cmd);
+      }
+    },
+    setHoldLayerForCurrentAssignSlot(state, action: PayloadAction<string>) {
+      const addr = state.currentAssignSlotAddress;
+      if (addr) {
+        state.editModel.keyAssigns[addr] = {
+          type: 'holdLayer',
+          targetLayerId: action.payload
+        };
       }
     },
     addNewLayer(state, action: PayloadAction<string>) {

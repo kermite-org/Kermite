@@ -5,7 +5,7 @@ import {
 } from '~funcs/Utils';
 import { ModifierVirtualKeys, VirtualKey } from '~model/HighLevelDefs';
 
-export function updateAssignEntry(
+export function assignEntryUpdator(
   assign: IKeyAssignEntry | undefined,
   cmd: {
     removeKeyAssign?: boolean;

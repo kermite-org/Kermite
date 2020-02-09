@@ -9,7 +9,7 @@ export const LayerListBoxPart = (props: {
   const { layers, currentLayer, selectLayer } = props;
 
   const cssLayersListBox = css`
-    height: 270px;
+    height: 240px;
     overflow-y: scroll;
   `;
 

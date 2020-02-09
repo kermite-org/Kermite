@@ -40,6 +40,18 @@ export function isAssignKeySpecific(
   );
 }
 
+export function isAssignLayerTrigger(
+  assign: IKeyAssignEntry | undefined,
+  layerId: string
+): boolean {
+  return (
+    (assign &&
+      assign.type === 'holdLayer' &&
+      assign.targetLayerId === layerId) ||
+    false
+  );
+}
+
 export function isAssignModifierActive(
   assign: IKeyAssignEntry | undefined,
   mo: ModifierVirtualKeys
@@ -70,4 +82,8 @@ export const canShiftLayerOrder = (
 
 export function getEditModelLayerById(model: IEditModel, layerId: string) {
   return model.layers.find(la => la.layerId === layerId);
+}
+
+export function checkIfLognNameKeyAssign(text: string) {
+  return text.length >= 2 && !text.match(/^F[0-9]+$/);
 }

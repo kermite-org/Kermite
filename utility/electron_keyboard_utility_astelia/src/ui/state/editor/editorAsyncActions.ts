@@ -1,6 +1,6 @@
 import { AppState, AsyncDispatch } from '../store';
 import { editorSlice } from './editorSlice';
-import { editorSelectors } from './selectors';
+import { editorSelectors } from './editorSelectors';
 
 const craeteNewLayerThunkAction = () => {
   return async (dispatch: AsyncDispatch) => {

@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf dist",
-    "postinstall": "electron-rebuild -f -o node-hid",
+    "postinstall": "electron-rebuild -o node-hid",
     "main:watch": "parcel watch ./src/index.ts -d ./dist -t electron",
     "ui:serve": "parcel ./src/index.html -d ./dist/xui -p 3000",
     "ui:build": "parcel build ./src/index.html -d ./dist/xui --public-url .",
@@ -18,10 +18,10 @@
     "lint_fix": "npx eslint src/ --ext .ts,.tsx --fix"
   },
   "dependencies": {
+    "@emotion/css": "^10.0.27",
+    "@emotion/styled": "^10.0.27",
     "electron-edge-js": "^12.8.1",
-    "node-hid": "^1.1.0"
-  },
-  "devDependencies": {
+    "node-hid": "^1.1.0",
     "@babel/core": "^7.0.0-0",
     "@babel/preset-env": "^7.7.6",
     "@babel/preset-react": "^7.7.4",

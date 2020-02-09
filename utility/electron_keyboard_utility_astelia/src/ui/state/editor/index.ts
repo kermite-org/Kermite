@@ -1,4 +1,4 @@
 export * from './editorSlice';
-export * from './asyncActions';
-export * from './selectors';
+export * from './editorAsyncActions';
+export * from './editorSelectors';
 export * from './helpers';

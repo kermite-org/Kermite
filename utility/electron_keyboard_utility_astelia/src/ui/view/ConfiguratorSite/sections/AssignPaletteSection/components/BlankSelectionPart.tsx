@@ -1,8 +1,8 @@
 import { css, jsx } from '@emotion/core';
 import { IKeyAssignEntry } from '~contract/data';
-import { assignPaletteLocalTheme } from '../assignPaletteLocalTheme';
-import { AssignSlotCard } from '../components/AssignSlotCard';
+import { AssignSlotCard } from './AssignSlotCards';
 import { isAssignKeyBlank } from '~ui/state/editor';
+import { UiTheme } from '~ui/view/ConfiguratorSite/UiTheme';
 
 export const BlankSelectionPart = (props: {
   currentAssign: IKeyAssignEntry | undefined;
@@ -13,7 +13,7 @@ export const BlankSelectionPart = (props: {
 
   const cssBox = css`
     flex-shrink: 0;
-    margin: ${assignPaletteLocalTheme.commonMargin};
+    margin: ${UiTheme.assignPallet.commonMargin};
   `;
 
   const isActive = isSlotSelected && isAssignKeyBlank(currentAssign);
