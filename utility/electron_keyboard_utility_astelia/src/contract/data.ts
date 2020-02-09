@@ -1,4 +1,4 @@
-import { VirtualKey } from '~model/HighLevelDefs';
+import { VirtualKey, ModifierVirtualKeys } from '~model/HighLevelDefs';
 
 export interface ILayer {
   layerId: string;
@@ -10,6 +10,7 @@ export type IKeyAssignEntry =
   | {
       type: 'keyInput';
       virtualKey: VirtualKey;
+      modifiers?: ModifierVirtualKeys[];
     }
   | {
       type: 'holdLayer';

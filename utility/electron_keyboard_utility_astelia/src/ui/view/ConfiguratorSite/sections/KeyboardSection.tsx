@@ -101,9 +101,11 @@ export function KeyboardSection() {
             const assign = keyAssigns[primarySlotAddress] || undefined;
 
             const assignText =
-              assign &&
-              assign.type === 'keyInput' &&
-              VirtualKeyTexts[assign.virtualKey];
+              (assign &&
+                assign.type === 'keyInput' &&
+                assign.virtualKey !== 'K_NONE' &&
+                VirtualKeyTexts[assign.virtualKey]) ||
+              '';
 
             const onClick = (e: React.MouseEvent<SVGRectElement>) => {
               selectAssignSlot(ku.id, true);

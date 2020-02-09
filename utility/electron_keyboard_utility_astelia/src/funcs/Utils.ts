@@ -29,3 +29,34 @@ export function compareObjectByStringify(a: any, b: any) {
 export function duplicateObjectByStringify<T>(obj: T): T {
   return JSON.parse(JSON.stringify(obj));
 }
+
+export function addOptionToOptionsArray<T>(
+  options: T[] | undefined,
+  option: T
+): T[] {
+  if (options) {
+    if (options.includes(option)) {
+      return options;
+    } else {
+      return [...options, option];
+    }
+  } else {
+    return [option];
+  }
+}
+
+export function removeOptionFromOptionsArray<T>(
+  options: T[] | undefined,
+  option: T
+): T[] | undefined {
+  if (options) {
+    if (options.includes(option)) {
+      const newOptions = options.filter(a => a !== option);
+      return newOptions.length > 0 ? newOptions : undefined;
+    } else {
+      return options;
+    }
+  } else {
+    return undefined;
+  }
+}

@@ -4,7 +4,7 @@ import {
   useProfileManagerStateResources,
   useRealtimeKeyboardEventReceiver
 } from '~ui/resourceHooks';
-import { AssignSection } from './sections/AssignSection';
+import { AssignSection } from './sections/AssignPaletteSection/AssignSection';
 import { KeyboardSection } from './sections/KeyboardSection';
 import { LayersSection } from './sections/LayersSection';
 import { ProfileSelection } from './sections/ProfileSection';

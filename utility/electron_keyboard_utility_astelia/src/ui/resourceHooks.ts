@@ -1,13 +1,12 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { IProfileManagerStatus } from '~contract/data';
-import { useGetLatest } from './hooks';
-import { isEditModelDirty, EditorState } from './state/editorSlice';
+import { IRealtimeKeyboardEvent } from '~contract/ipc';
+import { editorSelectors, EditorState } from './state/editorSlice';
 import { backendAgent, sendIpcPacketSync } from './state/ipc';
 import { playerSlice } from './state/playerSlice';
 import { profileAsyncActions } from './state/profileSlice';
-import { AppState, store } from './state/store';
-import { IRealtimeKeyboardEvent } from '~contract/ipc';
+import { store } from './state/store';
 
 export function useRealtimeKeyboardEventReceiver() {
   const dispatch = useDispatch();
@@ -39,28 +38,9 @@ export function useProfileManagerStateResources() {
 
 export function saveDirtyEditModelOnClosing() {
   const editorState = store.getState().editor as EditorState;
-  const isDirty = isEditModelDirty(editorState);
+  const isDirty = editorSelectors.isEditModelDirty(editorState);
   if (isDirty) {
     const latestEditModel = editorState.editModel;
     sendIpcPacketSync({ reserveSaveProfileTask: latestEditModel });
   }
 }
-
-// export function useProfileEditModelSaver() {
-//   const editorState = useSelector((state: AppState) => state.editor)
-//   const getLatestEditorState = useGetLatest(editorState)
-//   React.useEffect(() => {
-//     const beforeUnloadHandler = () => {
-//       const editorState = getLatestEditorState()
-//       const isDirty = isEditModelDirty(editorState)
-//       if (isDirty) {
-//         const latestEditModel = editorState.editModel
-//         sendIpcPacketSync({ reserveSaveProfileTask: latestEditModel })
-//       }
-//     }
-//     window.addEventListener('beforeunload', beforeUnloadHandler)
-//     return () => {
-//       window.removeEventListener('beforeunload', beforeUnloadHandler)
-//     }
-//   }, [])
-// }

@@ -165,3 +165,5 @@ export type VirtualKey =
   | 'K_RCtrl'
   | 'K_RAlt'
   | 'K_ROS';
+
+export type ModifierVirtualKeys = 'K_Shift' | 'K_Ctrl' | 'K_Alt' | 'K_OS';

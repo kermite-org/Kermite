@@ -49,6 +49,7 @@ library.add(
   faEye,
   faKeyboard,
   faMicrochip,
+  faUndo,
   faPen,
   faPenAlt,
   faPenSquare,

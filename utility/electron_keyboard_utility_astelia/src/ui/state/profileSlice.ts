@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IProfileManagerStatus } from '~contract/data';
 import { IProfileManagerCommand } from '~contract/ipc';
-import { editorSlice, isEditModelDirty } from './editorSlice';
+import { editorSlice, editorSelectors } from './editorSlice';
 import { sendProfileManagerCommands } from './ipc';
 import { AppState, AsyncDispatch } from './store';
 
@@ -32,7 +32,7 @@ function getSaveCommandIfDirty(
   getState: () => AppState
 ): IProfileManagerCommand | undefined {
   const editorState = getState().editor;
-  const isDirty = isEditModelDirty(editorState);
+  const isDirty = editorSelectors.isEditModelDirty(editorState);
   if (isDirty) {
     return { saveCurrentProfile: { editModel: editorState.editModel } };
   }

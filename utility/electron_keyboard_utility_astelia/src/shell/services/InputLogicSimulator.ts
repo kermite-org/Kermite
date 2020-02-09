@@ -40,7 +40,6 @@ export class InputLogicSimulator {
 
     appGlobal.profileManager.subscribeStatus(partialStatus => {
       if (partialStatus.loadedEditModel) {
-        console.log(`edit model received`);
         this.editModel = partialStatus.loadedEditModel;
       }
     });
