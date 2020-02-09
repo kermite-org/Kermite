@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
 import { ModifierVirtualKeys, VirtualKey } from '~model/HighLevelDefs';
 import { useMapDispatchToProps } from '~ui/hooks';
-import { editorSelectors, editorSlice } from '~ui/state/editorSlice';
+import { editorSlice, editorSelectors } from '~ui/state/editor';
 import { AppState } from '~ui/state/store';
 import { BlankSelectionPart } from './parts/BlankSelectionPart';
 import { AssignKeySelectionPart } from './parts/AssignKeySelectionPart';

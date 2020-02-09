@@ -1,32 +1,9 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IProfileManagerStatus } from '~contract/data';
 import { IProfileManagerCommand } from '~contract/ipc';
-import { editorSlice, editorSelectors } from './editorSlice';
-import { sendProfileManagerCommands } from './ipc';
-import { AppState, AsyncDispatch } from './store';
-
-export interface ProfileState {
-  currentProfileName: string;
-  allProfileNames: string[];
-}
-
-const initialState: ProfileState = {
-  currentProfileName: '',
-  allProfileNames: []
-};
-
-export const profileSlice = createSlice({
-  name: 'profile',
-  initialState,
-  reducers: {
-    setAllProfileNames(state: ProfileState, action: PayloadAction<string[]>) {
-      state.allProfileNames = action.payload;
-    },
-    setCurrentProfileName(state: ProfileState, action: PayloadAction<string>) {
-      state.currentProfileName = action.payload;
-    }
-  }
-});
+import { editorSlice, editorSelectors } from '../editor';
+import { sendProfileManagerCommands } from '../ipc';
+import { AppState, AsyncDispatch } from '../store';
+import { profileSlice } from './profileSlice';
 
 function getSaveCommandIfDirty(
   getState: () => AppState

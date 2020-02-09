@@ -3,6 +3,7 @@ import { IKeyAssignEntry } from '~contract/data';
 import { VirtualKey } from '~model/HighLevelDefs';
 import { assignPaletteLocalTheme } from '../assignPaletteLocalTheme';
 import { AssignSlotCard } from '../components/AssignSlotCard';
+import { isAssignKeySpecific } from '~ui/state/editor';
 
 const assignKeysGroup0: VirtualKey[] = [
   'K_A',
@@ -171,18 +172,13 @@ export const AssignKeySelectionPart = (props: {
         return (
           <div css={cssCardListFrame} key={index}>
             {srcTable.map(vk => {
-              const isCurrent =
-                (currentAssign &&
-                  currentAssign.type === 'keyInput' &&
-                  currentAssign.virtualKey === vk) ||
-                false;
-
+              const isActive = isAssignKeySpecific(currentAssign, vk);
               const onClick = () => {
                 setCurrentAssignKey(vk);
               };
               return (
                 <AssignSlotCard
-                  isActive={isCurrent}
+                  isActive={isActive}
                   onClick={onClick}
                   virtualKey={vk}
                   key={vk}

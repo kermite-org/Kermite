@@ -1,6 +1,6 @@
 import { css, jsx } from '@emotion/core';
 import { VirtualKey } from '~model/HighLevelDefs';
-import { VirtualKeyTexts } from '../../../Constants';
+import { VirtualKeyTexts } from '~ui/view/ConfiguratorSite/Constants';
 
 export const AssignSlotCard = (props: {
   virtualKey: VirtualKey;

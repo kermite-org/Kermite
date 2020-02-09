@@ -2,10 +2,10 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { IProfileManagerStatus } from '~contract/data';
 import { IRealtimeKeyboardEvent } from '~contract/ipc';
-import { editorSelectors, EditorState } from './state/editorSlice';
+import { EditorState, editorSelectors } from './state/editor';
 import { backendAgent, sendIpcPacketSync } from './state/ipc';
 import { playerSlice } from './state/playerSlice';
-import { profileAsyncActions } from './state/profileSlice';
+import { profileAsyncActions } from './state/profile';
 import { store } from './state/store';
 
 export function useRealtimeKeyboardEventReceiver() {

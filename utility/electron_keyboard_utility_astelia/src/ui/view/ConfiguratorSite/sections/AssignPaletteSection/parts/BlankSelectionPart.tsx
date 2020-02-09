@@ -2,6 +2,7 @@ import { css, jsx } from '@emotion/core';
 import { IKeyAssignEntry } from '~contract/data';
 import { assignPaletteLocalTheme } from '../assignPaletteLocalTheme';
 import { AssignSlotCard } from '../components/AssignSlotCard';
+import { isAssignKeyBlank } from '~ui/state/editor';
 
 export const BlankSelectionPart = (props: {
   currentAssign: IKeyAssignEntry | undefined;
@@ -15,17 +16,13 @@ export const BlankSelectionPart = (props: {
     margin: ${assignPaletteLocalTheme.commonMargin};
   `;
 
-  const isCurrent =
-    isSlotSelected &&
-    (currentAssign === undefined ||
-      (currentAssign.type === 'keyInput' &&
-        currentAssign.virtualKey === 'K_NONE'));
+  const isActive = isSlotSelected && isAssignKeyBlank(currentAssign);
 
   return (
     <div css={cssBox}>
       <AssignSlotCard
         virtualKey={'K_NONE'}
-        isActive={isCurrent}
+        isActive={isActive}
         onClick={() => clearCurrentAssign()}
       ></AssignSlotCard>
     </div>

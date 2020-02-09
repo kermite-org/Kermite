@@ -6,7 +6,7 @@ import {
 } from '~ui/resourceHooks';
 import { AssignSection } from './sections/AssignPaletteSection/AssignSection';
 import { KeyboardSection } from './sections/KeyboardSection';
-import { LayersSection } from './sections/LayersSection';
+import { LayersSection } from './sections/LayersSection/LayersSection';
 import { ProfileSelection } from './sections/ProfileSection';
 import { TitleBarSection } from './sections/TitleBarSection';
 import { UiTheme } from './UiTheme';

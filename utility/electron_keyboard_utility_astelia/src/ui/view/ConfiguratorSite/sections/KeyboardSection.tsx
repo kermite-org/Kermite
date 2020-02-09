@@ -3,9 +3,8 @@ import { useSelector } from 'react-redux';
 import { AppState } from '~ui/state/store';
 import { AutoScaledBox } from '~ui/view/SizeMonitoredBox';
 import { KeyboardShape } from '~ui/view/WidgetSite/KeyboardShape';
-import { getAssignSlotAddress } from '~ui/state/helpers';
+import { editorSlice, getAssignSlotAddress } from '~ui/state/editor';
 import { Dispatch } from 'redux';
-import { editorSlice } from '~ui/state/editorSlice';
 import { useMapDispatchToProps } from '~ui/hooks';
 import { VirtualKeyTexts } from '../Constants';
 

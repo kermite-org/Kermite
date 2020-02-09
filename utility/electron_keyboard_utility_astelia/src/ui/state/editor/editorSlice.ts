@@ -1,11 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IEditModel, IKeyAssignEntry } from '~contract/data';
-import {
-  addOptionToOptionsArray,
-  removeOptionFromOptionsArray
-} from '~funcs/Utils';
+import { IEditModel } from '~contract/data';
+import { Arrays } from '~funcs/Arrays';
 import { ModifierVirtualKeys, VirtualKey } from '~model/HighLevelDefs';
-import { getAssignSlotAddress } from './helpers';
+import { updateAssignEntry } from './assignEntryUpdator';
+import {
+  createNewEntityId,
+  getAssignSlotAddress,
+  getEditModelLayerById,
+  isCustomLayer
+} from './helpers';
 
 const fallbackEditModel: IEditModel = {
   version: 1,
@@ -25,63 +28,6 @@ const initialState: EditorState = {
   currentLayerId: '',
   currentAssignSlotAddress: ''
 };
-
-function changeAssignEntry(
-  assign: IKeyAssignEntry | undefined,
-  cmd: {
-    removeKeyAssign?: boolean;
-    setVirtualKey?: VirtualKey;
-    addModifier?: ModifierVirtualKeys;
-    removeModifier?: ModifierVirtualKeys;
-    setHoldLayer?: string;
-  }
-): IKeyAssignEntry | undefined {
-  if (cmd.removeKeyAssign) {
-    if (assign && assign.type === 'keyInput') {
-      return { ...assign, virtualKey: 'K_NONE' };
-    } else {
-      return undefined;
-    }
-  }
-  if (cmd.setVirtualKey) {
-    const virtualKey = cmd.setVirtualKey;
-    if (assign && assign.type === 'keyInput') {
-      return { ...assign, virtualKey };
-    } else {
-      return { type: 'keyInput', virtualKey };
-    }
-  }
-  if (cmd.addModifier) {
-    const modifierKey = cmd.addModifier;
-    if (assign && assign.type === 'keyInput') {
-      const modifiers = addOptionToOptionsArray(assign.modifiers, modifierKey);
-      return { ...assign, modifiers };
-    } else {
-      return {
-        type: 'keyInput',
-        virtualKey: 'K_NONE',
-        modifiers: [modifierKey]
-      };
-    }
-  }
-  if (cmd.removeModifier) {
-    const modifierKey = cmd.removeModifier;
-    if (assign && assign.type === 'keyInput') {
-      const modifiers = removeOptionFromOptionsArray(
-        assign.modifiers,
-        modifierKey
-      );
-      return { ...assign, modifiers };
-    } else {
-      return assign;
-    }
-  }
-  if (cmd.setHoldLayer) {
-    const targetLayerId = cmd.setHoldLayer;
-    return { type: 'holdLayer', targetLayerId };
-  }
-  return assign;
-}
 
 export const editorSlice = createSlice({
   name: 'editor',
@@ -115,7 +61,7 @@ export const editorSlice = createSlice({
       const addr = state.currentAssignSlotAddress;
       if (addr) {
         const { keyAssigns } = state.editModel;
-        keyAssigns[addr] = changeAssignEntry(keyAssigns[addr], {
+        keyAssigns[addr] = updateAssignEntry(keyAssigns[addr], {
           removeKeyAssign: true
         });
       }
@@ -128,7 +74,7 @@ export const editorSlice = createSlice({
       if (addr) {
         const { keyAssigns } = state.editModel;
         const { virtualKey } = action.payload;
-        keyAssigns[addr] = changeAssignEntry(keyAssigns[addr], {
+        keyAssigns[addr] = updateAssignEntry(keyAssigns[addr], {
           setVirtualKey: virtualKey
         });
       }
@@ -148,16 +94,54 @@ export const editorSlice = createSlice({
         const cmd = enabled
           ? { addModifier: modifierKey }
           : { removeModifier: modifierKey };
-        keyAssigns[addr] = changeAssignEntry(keyAssigns[addr], cmd);
+        keyAssigns[addr] = updateAssignEntry(keyAssigns[addr], cmd);
+      }
+    },
+    addNewLayer(state, action: PayloadAction<string>) {
+      const layerIds = state.editModel.layers.map(la => la.layerId);
+      const newLayer = {
+        layerId: createNewEntityId('la', layerIds),
+        layerName: action.payload,
+        layerRole: 'custom' as 'custom'
+      };
+      state.editModel.layers.push(newLayer);
+    },
+    removeCurrentLayer(state) {
+      const currentLayer = getEditModelLayerById(
+        state.editModel,
+        state.currentLayerId
+      );
+      if (isCustomLayer(currentLayer)) {
+        Arrays.remove(state.editModel.layers, currentLayer);
+        state.currentLayerId = '';
+      }
+    },
+    renameCurrentLayer(state, action: PayloadAction<string>) {
+      const currentLayer = getEditModelLayerById(
+        state.editModel,
+        state.currentLayerId
+      );
+      if (isCustomLayer(currentLayer)) {
+        currentLayer.layerName = action.payload;
+      }
+    },
+    shiftCurrentLayerOrder(state, action: PayloadAction<-1 | 1>) {
+      const dir = action.payload;
+      const currentLayer = getEditModelLayerById(
+        state.editModel,
+        state.currentLayerId
+      );
+      if (currentLayer) {
+        const { layers } = state.editModel;
+        const srcIndex = layers.indexOf(currentLayer);
+        const dstIndex = srcIndex + dir;
+        if (2 <= dstIndex && dstIndex < layers.length) {
+          [layers[srcIndex], layers[dstIndex]] = [
+            layers[dstIndex],
+            layers[srcIndex]
+          ];
+        }
       }
     }
   }
 });
-
-export const editorSelectors = {
-  isEditModelDirty: (state: EditorState): boolean =>
-    state.loadedEditModel !== state.editModel,
-  getCurrentAssign: (state: EditorState) =>
-    state.editModel.keyAssigns[state.currentAssignSlotAddress],
-  isSlotSelected: (state: EditorState) => state.currentAssignSlotAddress !== ''
-};

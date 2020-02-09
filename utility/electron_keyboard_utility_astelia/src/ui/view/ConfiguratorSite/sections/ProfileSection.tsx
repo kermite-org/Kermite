@@ -1,9 +1,9 @@
 import { css, jsx } from '@emotion/core';
 import React, { ChangeEvent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { useMapDispatchToProps } from '~ui/hooks';
-import { profileAsyncActions } from '~ui/state/profileSlice';
+import { profileAsyncActions } from '~ui/state/profile';
 import { AppState } from '~ui/state/store';
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

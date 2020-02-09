@@ -37,7 +37,9 @@ import {
   faStarAndCrescent,
   faEdit,
   faCube,
-  faDiceD6
+  faDiceD6,
+  faLongArrowAltUp,
+  faLongArrowAltDown
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -78,5 +80,7 @@ library.add(
   faStarAndCrescent,
   faEdit,
   faCube,
-  faDiceD6
+  faDiceD6,
+  faLongArrowAltUp,
+  faLongArrowAltDown
 );

@@ -1,7 +1,7 @@
 import { configureStore, combineReducers, Action } from '@reduxjs/toolkit';
 import { playerSlice, PlayerState } from './playerSlice';
-import { EditorState, editorSlice } from './editorSlice';
-import { ProfileState, profileSlice } from './profileSlice';
+import { EditorState, editorSlice } from './editor/editorSlice';
+import { ProfileState, profileSlice } from './profile/profileSlice';
 import { ThunkAction } from 'redux-thunk';
 import { SiteState, siteSlice } from './siteSlice';
 

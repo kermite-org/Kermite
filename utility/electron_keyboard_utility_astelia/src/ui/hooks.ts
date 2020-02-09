@@ -1,9 +1,13 @@
 import { useDispatch } from 'react-redux';
-import { Dispatch } from '@reduxjs/toolkit';
+// import { Dispatch } from '@reduxjs/toolkit';
 import React from 'react';
+import { AsyncDispatch } from './state/store';
+import { Dispatch } from 'redux';
 
-export function useMapDispatchToProps<T>(proc: (dispatch: Dispatch) => T) {
-  const dispatch = useDispatch();
+export function useMapDispatchToProps<T, D extends Dispatch | AsyncDispatch>(
+  proc: (dispatch: D) => T
+): T {
+  const dispatch = useDispatch() as any;
   return React.useMemo(() => proc(dispatch), []);
 }
 

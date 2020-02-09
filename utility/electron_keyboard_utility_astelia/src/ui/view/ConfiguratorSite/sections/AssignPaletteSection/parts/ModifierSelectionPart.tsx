@@ -3,6 +3,7 @@ import { IKeyAssignEntry } from '~contract/data';
 import { ModifierVirtualKeys } from '~model/HighLevelDefs';
 import { assignPaletteLocalTheme } from '../assignPaletteLocalTheme';
 import { AssignSlotCard } from '../components/AssignSlotCard';
+import { isAssignModifierActive } from '~ui/state/editor';
 
 const modifiresGroup: ModifierVirtualKeys[] = [
   'K_Shift',
@@ -27,11 +28,7 @@ export const ModifierSelectionPart = (props: {
   return (
     <div css={cssBox}>
       {modifiresGroup.map(mo => {
-        const isActive =
-          (currentAssign &&
-            currentAssign.type === 'keyInput' &&
-            currentAssign.modifiers?.includes(mo)) ||
-          false;
+        const isActive = isAssignModifierActive(currentAssign, mo);
         return (
           <AssignSlotCard
             virtualKey={mo}
