@@ -60,3 +60,28 @@ export function removeOptionFromOptionsArray<T>(
     return undefined;
   }
 }
+
+export function diffArray<T>(
+  prev: T[],
+  curr: T[]
+): {
+  added: T[];
+  removed: T[];
+} {
+  const removed = prev.filter(a => !curr.includes(a));
+  const added = curr.filter(a => !prev.includes(a));
+  return { added, removed };
+}
+
+export function findFirst<T, R>(
+  values: T[],
+  mapper: (value: T) => R
+): R | undefined {
+  for (const value of values) {
+    const result = mapper(value);
+    if (result) {
+      return result;
+    }
+  }
+  return undefined;
+}

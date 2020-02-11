@@ -42,15 +42,29 @@ export const AssignKeySelectionPart = (props: {
         return (
           <div css={cssCardListFrame} key={index}>
             {srcTable.map(vk => {
-              const isActive = isAssignKeySpecific(currentAssign, vk);
-              return (
-                <AssignSlotCard
-                  isActive={isActive}
-                  onClick={() => setCurrentAssignKey(vk)}
-                  virtualKey={vk}
-                  key={vk}
-                ></AssignSlotCard>
-              );
+              if (vk === 'K_Shift') {
+                const isActive = isAssignLayerTrigger(currentAssign, 'la1');
+                const onClick = () => setCurrentAssignHoldLayer('la1');
+                return (
+                  <AssignSlotCard
+                    isActive={isActive}
+                    onClick={onClick}
+                    virtualKey={vk}
+                    key={vk}
+                  ></AssignSlotCard>
+                );
+              } else {
+                const isActive = isAssignKeySpecific(currentAssign, vk);
+                const onClick = () => setCurrentAssignKey(vk);
+                return (
+                  <AssignSlotCard
+                    isActive={isActive}
+                    onClick={onClick}
+                    virtualKey={vk}
+                    key={vk}
+                  ></AssignSlotCard>
+                );
+              }
             })}
           </div>
         );

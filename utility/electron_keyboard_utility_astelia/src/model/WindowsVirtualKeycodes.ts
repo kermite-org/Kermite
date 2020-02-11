@@ -125,9 +125,10 @@ const enum WVK {
 }
 
 const OUT_SHIFT = 0x100;
+const OUT_NOSHIFT = 0x200;
 
 export const VirtualKeyToWindowsVirtualKeyCodeTable: {
-  [vk in VirtualKey]?: number;
+  [vk in VirtualKey]: number;
 } = {
   K_A: WVK.VK_A,
   K_B: WVK.VK_B,
@@ -145,9 +146,34 @@ export const VirtualKeyToWindowsVirtualKeyCodeTable: {
   K_N: WVK.VK_N,
   K_O: WVK.VK_O,
   K_P: WVK.VK_P,
-  K_AtMark: WVK.VK_OEM_3,
+  K_Q: WVK.VK_Q,
+  K_R: WVK.VK_R,
+  K_S: WVK.VK_S,
+  K_T: WVK.VK_T,
+  K_U: WVK.VK_U,
+  K_V: WVK.VK_V,
+  K_W: WVK.VK_W,
+  K_X: WVK.VK_X,
+  K_Y: WVK.VK_Y,
+  K_Z: WVK.VK_Z,
+  K_AtMark: WVK.VK_OEM_3 | OUT_NOSHIFT,
   K_Dollar: WVK.VK_4 | OUT_SHIFT,
   K_Shift: WVK.VK_LSHIFT,
-  K_Semicolon: WVK.VK_OEM_PLUS,
-  K_Plus: WVK.VK_OEM_PLUS | OUT_SHIFT
-};
+  K_Ctrl: WVK.VK_CONTROL,
+  K_Alt: WVK.VK_LMENU,
+  K_OS: WVK.VK_LWIN,
+  K_Semicolon: WVK.VK_OEM_PLUS | OUT_NOSHIFT,
+  K_Plus: WVK.VK_OEM_PLUS | OUT_SHIFT,
+  K_Enter: WVK.VK_RETURN,
+  K_Num_0: WVK.VK_0,
+  K_Num_1: WVK.VK_1,
+  K_Num_2: WVK.VK_2,
+  K_Num_3: WVK.VK_3,
+  K_Num_4: WVK.VK_4,
+  K_Num_5: WVK.VK_5,
+  K_Num_6: WVK.VK_6,
+  K_Num_7: WVK.VK_7,
+  K_Num_8: WVK.VK_8,
+  K_Num_9: WVK.VK_9
+  //todo: define all mapping entries
+} as any;

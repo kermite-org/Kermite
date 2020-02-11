@@ -1,145 +1,258 @@
-import { IEditModel } from '~contract/data';
+import { IEditModel, IKeyAssignEntry } from '~contract/data';
 import { IRealtimeKeyboardEvent } from '~contract/ipc';
+import { VirtualKey, ModifierVirtualKeys } from '~model/HighLevelDefs';
 import { VirtualKeyToWindowsVirtualKeyCodeTable } from '~model/WindowsVirtualKeycodes';
 import { callApiKeybdEvent as callApiKeybdEventOriginal } from '~shell/VirtualKeyboardApiBridge';
 import { appGlobal } from './appGlobal';
 import { fallbackEditModel } from './ProfileManager';
-import { VirtualKey } from '~model/HighLevelDefs';
 
-const shiftKeyCode = VirtualKeyToWindowsVirtualKeyCodeTable['K_Shift']!;
+type TAdhocShift = 'down' | 'up' | undefined;
 
-function callApiKeybdEvent(keyCode: number, isDown: boolean) {
-  console.log(`callApiKeyboardEvent ${keyCode} ${isDown}`);
-  callApiKeybdEventOriginal(keyCode, isDown);
+interface IVirtualStroke {
+  readonly keyCode: number;
+  readonly adhocShift?: TAdhocShift;
+  readonly attachedModifierKeyCodes?: number[];
 }
 
-function getAdhocShiftTransient(curr: boolean, next: boolean): 0 | -1 | 1 {
-  if (!curr && next) {
-    return 1;
-  } else if (curr && !next) {
-    return -1;
-  } else {
-    return 0;
-  }
-}
-
-interface LogicModelState {
-  holdShiftLayerKey: boolean;
-  holdShift: boolean;
-}
-
-type LogicalKeyAction = { dir: 1 | -1 } & (
+type LogicalKeyAction =
   | {
-      type: 'keyInput';
-      keyCode: number;
-      holdShiftTransient: 1 | -1 | 0;
+      readonly type: 'keyInput';
+      readonly stroke: IVirtualStroke;
     }
-  | { type: 'shiftLayer' }
-);
+  | { readonly type: 'holdLayer'; readonly targetLayerId: string };
 
-function commitLogicalKeyAction(
-  state: LogicModelState,
-  action: LogicalKeyAction
-): LogicModelState {
-  if (action.type === 'keyInput') {
-    const { keyCode, holdShiftTransient: adhocShift } = action;
-    const isDown = action.dir === 1;
-    if (adhocShift) {
-      const isAdhocShiftDown = adhocShift * action.dir === 1;
-      callApiKeybdEvent(shiftKeyCode, isAdhocShiftDown);
-      callApiKeybdEvent(keyCode, isDown);
-      return { ...state, holdShift: isAdhocShiftDown };
-    } else {
-      callApiKeybdEvent(keyCode, isDown);
-      return state;
+namespace RealWorldKeyStateUpdator {
+  const shiftKeyCode = VirtualKeyToWindowsVirtualKeyCodeTable['K_Shift'];
+
+  const local: {
+    outputKeyState: { [key: number]: true | undefined };
+    holdRawShift: boolean;
+  } = {
+    outputKeyState: {},
+    holdRawShift: false
+  };
+
+  function callApiKeybdEvent(keyCode: number, isDown: boolean) {
+    console.log(`    callApiKeyboardEvent ${keyCode} ${isDown}`);
+    callApiKeybdEventOriginal(keyCode, isDown);
+  }
+
+  function outputKeyboardEvent(
+    keyCode: number,
+    isDown: boolean,
+    retriggerIfNeed?: boolean
+  ) {
+    const prevState = local.outputKeyState[keyCode];
+    if (!prevState && isDown) {
+      callApiKeybdEvent(keyCode, true);
+      local.outputKeyState[keyCode] = true;
+    }
+    if (prevState && isDown && retriggerIfNeed) {
+      callApiKeybdEvent(keyCode, false);
+      callApiKeybdEvent(keyCode, true);
+      local.outputKeyState[keyCode] = true;
+    }
+    if (prevState && !isDown) {
+      callApiKeybdEvent(keyCode, false);
+      delete local.outputKeyState[keyCode];
     }
   }
-  if (action.type === 'shiftLayer') {
-    const isDown = action.dir === 1;
-    callApiKeybdEvent(shiftKeyCode, isDown);
-    return { ...state, holdShiftLayerKey: isDown, holdShift: isDown };
-  }
-  return state;
-}
 
-function getOsVirtualKey(
-  virtualKey: VirtualKey
-): {
-  vkCode: number;
-  withShift: boolean;
-} {
-  const vkSet = VirtualKeyToWindowsVirtualKeyCodeTable[virtualKey];
-  if (vkSet !== undefined) {
-    const vkCode = vkSet & 0xff;
-    const withShift = (vkSet & 0x100) === 0x100;
-    if (vkCode !== 0) {
-      return { vkCode, withShift };
-    }
-  }
-  return { vkCode: 0, withShift: false };
-}
-
-function getLogicalKeyAction(
-  state: LogicModelState,
-  vkCode: number,
-  withShift: boolean
-): LogicalKeyAction {
-  if (vkCode === shiftKeyCode) {
-    return { type: 'shiftLayer', dir: 1 };
-  } else {
-    const isAlphabet = 65 <= vkCode && vkCode <= 90;
-    const nextHoldShift = withShift || (state.holdShiftLayerKey && isAlphabet);
-    const holdShiftTransient = getAdhocShiftTransient(
-      state.holdShift,
-      nextHoldShift
-    );
-    return { type: 'keyInput', dir: 1, keyCode: vkCode, holdShiftTransient };
-  }
-}
-
-let state: LogicModelState = {
-  holdShiftLayerKey: false,
-  holdShift: false
-};
-
-const boundLogicalKeyActions: {
-  [keyIndex: number]: LogicalKeyAction;
-} = {};
-
-function handlerHardwareKeyStateEvent(
-  editModel: IEditModel,
-  keyIndex: number,
-  isDown: boolean
-) {
-  if (isDown) {
-    const layerId = state.holdShiftLayerKey ? 'la1' : 'la0';
-    let assign = editModel.keyAssigns[`ku${keyIndex}.${layerId}.pri`];
-    if (!assign) {
-      assign = editModel.keyAssigns[`ku${keyIndex}.la0.pri`];
-    }
-    if (!assign) {
-      return;
-    }
-    if (assign.type === 'keyInput') {
-      const { vkCode, withShift } = getOsVirtualKey(assign.virtualKey);
-      if (vkCode === 0) {
-        return;
+  export function handleStroke(stroke: IVirtualStroke, isDown: boolean) {
+    const { keyCode, adhocShift, attachedModifierKeyCodes } = stroke;
+    if (isDown) {
+      attachedModifierKeyCodes?.forEach(m => outputKeyboardEvent(m, true));
+      if (adhocShift) {
+        outputKeyboardEvent(shiftKeyCode, adhocShift === 'down');
       }
-      const action = getLogicalKeyAction(state, vkCode, withShift);
-      state = commitLogicalKeyAction(state, action);
-      // console.log({ action });
-      // console.log({ state });
-      boundLogicalKeyActions[keyIndex] = action;
+      outputKeyboardEvent(keyCode, true, true);
+    } else {
+      outputKeyboardEvent(keyCode, false);
+      if (adhocShift) {
+        outputKeyboardEvent(shiftKeyCode, local.holdRawShift);
+      }
+      attachedModifierKeyCodes?.forEach(m => outputKeyboardEvent(m, false));
     }
-  } else {
-    const action = boundLogicalKeyActions[keyIndex];
-    if (action) {
-      action.dir *= -1;
-      state = commitLogicalKeyAction(state, action);
-      // console.log({ action });
-      // console.log({ state });
-      delete boundLogicalKeyActions[keyIndex];
+  }
+
+  export function handleRawShift(isDown: boolean) {
+    outputKeyboardEvent(shiftKeyCode, isDown);
+    local.holdRawShift = isDown;
+  }
+}
+
+namespace VirtualStateManager {
+  const state: {
+    currentLayerId: string;
+    boundLogicalKeyActions: {
+      [keyIndex: number]: LogicalKeyAction;
+    };
+  } = {
+    currentLayerId: 'la0',
+    boundLogicalKeyActions: {}
+  };
+
+  function mapKeyIndexToKeyAssignEntry(
+    editModel: IEditModel,
+    keyIndex: number
+  ): IKeyAssignEntry | undefined {
+    const { keyAssigns } = editModel;
+    const { currentLayerId } = state;
+    let assign = keyAssigns[`ku${keyIndex}.${currentLayerId}.pri`];
+    if (!assign && currentLayerId !== 'la0') {
+      assign = keyAssigns[`ku${keyIndex}.la0.pri`];
     }
+    return assign;
+  }
+
+  function extractVkSet(
+    vkSet: number | undefined
+  ): { vkCode: number; adhocShift: TAdhocShift } | undefined {
+    if (vkSet !== undefined) {
+      const vkCode = vkSet & 0xff;
+      const adhocShift =
+        (vkSet & 0x100) === 0x100
+          ? 'down'
+          : (vkSet & 0x200) === 0x200
+          ? 'up'
+          : undefined;
+      if (vkCode !== 0) {
+        return { vkCode, adhocShift };
+      }
+    }
+    return undefined;
+  }
+
+  function createKeyInputLogicalKeyAction(
+    virtualKey: VirtualKey,
+    modifiers?: ModifierVirtualKeys[]
+  ): LogicalKeyAction | undefined {
+    const vkSet = extractVkSet(
+      VirtualKeyToWindowsVirtualKeyCodeTable[virtualKey]
+    );
+    if (vkSet) {
+      const { vkCode, adhocShift } = vkSet;
+      const attachedModifierKeyCodes = modifiers?.map(
+        m => VirtualKeyToWindowsVirtualKeyCodeTable[m]
+      );
+      return {
+        type: 'keyInput',
+        stroke: {
+          keyCode: vkCode,
+          adhocShift,
+          attachedModifierKeyCodes
+        }
+      };
+    }
+    return undefined;
+  }
+
+  function mapKeyAssignEntryToLogicalKeyAction(
+    assign: IKeyAssignEntry
+  ): LogicalKeyAction | undefined {
+    if (assign.type === 'keyInput') {
+      const { virtualKey, modifiers } = assign;
+      return createKeyInputLogicalKeyAction(virtualKey, modifiers);
+    } else if (assign.type === 'holdLayer') {
+      const { targetLayerId } = assign;
+      return { type: 'holdLayer', targetLayerId };
+    }
+    return undefined;
+  }
+
+  function commitLogicalKeyAction(
+    action: LogicalKeyAction,
+    isDown: boolean
+  ): void {
+    if (action.type === 'keyInput') {
+      const { stroke } = action;
+      RealWorldKeyStateUpdator.handleStroke(stroke, isDown);
+    }
+    if (action.type === 'holdLayer') {
+      const { targetLayerId } = action;
+      if (targetLayerId === 'la1') {
+        RealWorldKeyStateUpdator.handleRawShift(isDown);
+      }
+      state.currentLayerId = isDown ? targetLayerId : 'la0';
+    }
+  }
+
+  export function handlerHardwareKeyStateEvent(
+    editModel: IEditModel,
+    keyIndex: number,
+    isDown: boolean
+  ) {
+    const { boundLogicalKeyActions } = state;
+    if (isDown) {
+      const assign = mapKeyIndexToKeyAssignEntry(editModel, keyIndex);
+      if (assign) {
+        const action = mapKeyAssignEntryToLogicalKeyAction(assign);
+        if (action) {
+          commitLogicalKeyAction(action, true);
+          boundLogicalKeyActions[keyIndex] = action;
+        }
+      }
+    } else {
+      const action = boundLogicalKeyActions[keyIndex];
+      if (action) {
+        commitLogicalKeyAction(action, false);
+        delete boundLogicalKeyActions[keyIndex];
+      }
+    }
+  }
+}
+
+namespace EditModelFixer {
+  const alphabetVirtualKeys: VirtualKey[] = [
+    'K_A',
+    'K_B',
+    'K_C',
+    'K_D',
+    'K_E',
+    'K_F',
+    'K_G',
+    'K_H',
+    'K_I',
+    'K_J',
+    'K_K',
+    'K_L',
+    'K_M',
+    'K_N',
+    'K_O',
+    'K_P',
+    'K_Q',
+    'K_R',
+    'K_S',
+    'K_T',
+    'K_U',
+    'K_V',
+    'K_W',
+    'K_X',
+    'K_Y',
+    'K_Z'
+  ];
+
+  export function completeEditModelForShiftLayer(
+    editModel: IEditModel
+  ): IEditModel {
+    const keyAssigns = { ...editModel.keyAssigns };
+    for (let i = 0; i < 48; i++) {
+      const addr0 = `ku${i}.la0.pri`;
+      const addr1 = `ku${i}.la1.pri`;
+
+      const assign = keyAssigns[addr0];
+      if (
+        assign &&
+        assign.type === 'keyInput' &&
+        alphabetVirtualKeys.includes(assign.virtualKey) &&
+        assign.modifiers === undefined &&
+        keyAssigns[addr1] === undefined
+      ) {
+        keyAssigns[addr1] = { ...assign, modifiers: ['K_Shift'] };
+      }
+    }
+    // console.log(JSON.stringify(keyAssigns, null, ' '));
+    return { ...editModel, keyAssigns };
   }
 }
 
@@ -148,8 +261,12 @@ export class InputLogicSimulator {
 
   private onRealtimeKeyboardEvent = (event: IRealtimeKeyboardEvent) => {
     if (event.type === 'keyStateChanged') {
+      if (event.keyIndex === 13) {
+        console.log('');
+        return;
+      }
       console.log(`key ${event.keyIndex} ${event.isDown ? 'down' : 'up'}`);
-      handlerHardwareKeyStateEvent(
+      VirtualStateManager.handlerHardwareKeyStateEvent(
         this.editModel,
         event.keyIndex,
         event.isDown
@@ -163,9 +280,11 @@ export class InputLogicSimulator {
   async initialize() {
     appGlobal.deviceService.subscribe(this.onRealtimeKeyboardEvent);
 
-    appGlobal.profileManager.subscribeStatus(partialStatus => {
-      if (partialStatus.loadedEditModel) {
-        this.editModel = partialStatus.loadedEditModel;
+    appGlobal.profileManager.subscribeStatus(changedStatus => {
+      if (changedStatus.loadedEditModel) {
+        this.editModel = EditModelFixer.completeEditModelForShiftLayer(
+          changedStatus.loadedEditModel
+        );
       }
     });
   }
