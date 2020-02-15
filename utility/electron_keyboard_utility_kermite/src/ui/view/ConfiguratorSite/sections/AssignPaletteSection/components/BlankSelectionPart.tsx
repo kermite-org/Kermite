@@ -1,8 +1,8 @@
 import { css, jsx } from '@emotion/core';
 import { IKeyAssignEntry } from '~contract/data';
-import { AssignSlotCard } from './AssignSlotCards';
 import { isAssignKeyBlank } from '~ui/state/editor';
 import { UiTheme } from '~ui/view/ConfiguratorSite/UiTheme';
+import { AssignModeButtonRaw } from './AssignSlotCards';
 
 export const BlankSelectionPart = (props: {
   currentAssign: IKeyAssignEntry | undefined;
@@ -20,11 +20,11 @@ export const BlankSelectionPart = (props: {
 
   return (
     <div css={cssBox}>
-      <AssignSlotCard
-        virtualKey={'K_NONE'}
+      <AssignModeButtonRaw
+        text="none"
         isActive={isActive}
         onClick={() => clearCurrentAssign()}
-      ></AssignSlotCard>
+      ></AssignModeButtonRaw>
     </div>
   );
 };

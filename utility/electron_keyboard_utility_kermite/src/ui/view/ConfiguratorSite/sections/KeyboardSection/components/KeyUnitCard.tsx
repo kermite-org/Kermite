@@ -1,16 +1,15 @@
 import { css, jsx } from '@emotion/core';
 import React from 'react';
-import { IKeyUnitCardViewModel } from '../Types';
 import { UiTheme } from '~ui/view/ConfiguratorSite/UiTheme';
+import { IKeyUnitCardViewModel } from '../Data';
 
 export const KeyUnitCard = (props: { keyUnit: IKeyUnitCardViewModel }) => {
   const {
     keyUnitId,
     pos,
     isPressed,
-    isSelected,
-    assignText,
-    isExtendedAssign,
+    primaryAssign,
+    secondaryAssign,
     selectionHandler
   } = props.keyUnit;
 
@@ -34,15 +33,8 @@ export const KeyUnitCard = (props: { keyUnit: IKeyUnitCardViewModel }) => {
     &[data-selected='true'] {
       fill: ${UiTheme.clSelectHighlight};
     }
-    /* stroke: #080; */
     fill: transparent;
     cursor: pointer;
-  `;
-
-  const cssAssignText = css`
-    fill: #fff;
-    font-size: ${isExtendedAssign ? '5px' : '8px'};
-    pointer-events: none;
   `;
 
   return (
@@ -58,8 +50,18 @@ export const KeyUnitCard = (props: { keyUnit: IKeyUnitCardViewModel }) => {
         width={18}
         height={18}
       />
+
       <rect
-        data-selected={isSelected}
+        data-selected={secondaryAssign.isSelected}
+        x={-9}
+        y={4}
+        width={18}
+        height={5}
+        css={cssSlot}
+      />
+
+      <rect
+        data-selected={primaryAssign.isSelected}
         x={-9}
         y={-9}
         width={18}
@@ -67,14 +69,33 @@ export const KeyUnitCard = (props: { keyUnit: IKeyUnitCardViewModel }) => {
         css={cssSlot}
         onClick={onClick}
       />
+
       <text
-        css={cssAssignText}
+        css={css`
+          fill: #fff;
+          font-size: ${primaryAssign.isExtendedAssign ? '5px' : '8px'};
+          pointer-events: none;
+        `}
         x={0}
         y={3}
         textAnchor="middle"
         dominantBaseline="center"
       >
-        {assignText}
+        {primaryAssign.assignText}
+      </text>
+
+      <text
+        css={css`
+          fill: #fff;
+          font-size: ${secondaryAssign.isExtendedAssign ? '5px' : '8px'};
+          pointer-events: none;
+        `}
+        x={0}
+        y={8}
+        textAnchor="middle"
+        dominantBaseline="center"
+      >
+        {secondaryAssign.assignText}
       </text>
     </g>
   );

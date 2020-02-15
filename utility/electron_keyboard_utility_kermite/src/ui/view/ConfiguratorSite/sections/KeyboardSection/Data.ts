@@ -5,7 +5,6 @@ import {
   checkIfLognNameKeyAssign
 } from '~ui/state/editor';
 
-import { IKeyUnitCardViewModel } from './Types';
 import { VirtualKeyTexts } from '../../Constants';
 import { IKeyboardShape } from '~ui/view/WidgetSite/KeyboardShapes';
 
@@ -21,8 +20,50 @@ function getAssignText(
       const layer = layers.find(la => la.layerId === assign.targetLayerId);
       return (layer && layer.layerName) || '';
     }
+    if (assign.type === 'holdModifier') {
+      return VirtualKeyTexts[assign.modifierKey] || '';
+    }
   }
   return '';
+}
+
+interface IAssignViewModel {
+  isSelected: boolean;
+  assignText: string;
+  isExtendedAssign: boolean;
+}
+export interface IKeyUnitCardViewModel {
+  keyUnitId: string;
+  pos: { x: number; y: number; r: number };
+  isPressed: boolean;
+  primaryAssign: IAssignViewModel;
+  secondaryAssign: IAssignViewModel;
+  selectionHandler(): void;
+}
+
+function createAssignViewModel(
+  keyUnitId: string,
+  isPrimary: boolean,
+  keyAssigns: IKeyAssignsSet,
+  layers: ILayer[],
+  currentSlotAddress: string,
+  currentLayerId: string
+): IAssignViewModel {
+  const slotAddress = getAssignSlotAddress(
+    keyUnitId,
+    currentLayerId,
+    isPrimary
+  );
+  const isSelected = currentSlotAddress === slotAddress;
+
+  const assign = keyAssigns[slotAddress] || undefined;
+  const assignText = getAssignText(assign, layers);
+  const isExtendedAssign = checkIfLognNameKeyAssign(assignText);
+  return {
+    isSelected,
+    assignText,
+    isExtendedAssign
+  };
 }
 
 export function useKeyUnitCardViewModels(props: {
@@ -50,25 +91,34 @@ export function useKeyUnitCardViewModels(props: {
     () =>
       keyboardShape.keyPositions.map(ku => {
         const { id: keyUnitId, x, y, r } = ku;
-        const primarySlotAddress = getAssignSlotAddress(
-          ku.id,
-          currentLayerId,
-          true
-        );
         const isPressed = pressedKeyFlags[ku.id];
-        const isSelected = primarySlotAddress === currentSlotAddress;
-        const assign = keyAssigns[primarySlotAddress] || undefined;
-        const assignText = getAssignText(assign, layers);
-        const isExtendedAssign = checkIfLognNameKeyAssign(assignText);
+
+        const primaryAssign = createAssignViewModel(
+          keyUnitId,
+          true,
+          keyAssigns,
+          layers,
+          currentSlotAddress,
+          currentLayerId
+        );
+
+        const secondaryAssign = createAssignViewModel(
+          keyUnitId,
+          false,
+          keyAssigns,
+          layers,
+          currentSlotAddress,
+          currentLayerId
+        );
+
         const selectionHandler = () => selectAssignSlot(ku.id, true);
         return {
           keyUnitId,
           pos: { x, y, r },
-          isSelected,
           isPressed,
-          assignText,
-          selectionHandler,
-          isExtendedAssign
+          primaryAssign,
+          secondaryAssign,
+          selectionHandler
         };
       }),
     [keyAssigns, layers, currentLayerId, currentSlotAddress, pressedKeyFlags]

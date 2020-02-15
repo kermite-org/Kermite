@@ -23,7 +23,7 @@ export const AssignKeySelectionPart = (props: {
     flex-grow: 1;
 
     overflow-y: auto;
-    height: 230px;
+    height: 100%;
     padding: ${UiTheme.assignPallet.commonHalfMargin};
   `;
 
@@ -69,19 +69,6 @@ export const AssignKeySelectionPart = (props: {
           </div>
         );
       })}
-      <div css={cssCardListFrame}>
-        {customLayers.map(la => {
-          const isActive = isAssignLayerTrigger(currentAssign, la.layerId);
-          return (
-            <LayerTriggerAssignSlotCard
-              layer={la}
-              isActive={isActive}
-              onClick={() => setCurrentAssignHoldLayer(la.layerId)}
-              key={la.layerId}
-            />
-          );
-        })}
-      </div>
     </div>
   );
 };

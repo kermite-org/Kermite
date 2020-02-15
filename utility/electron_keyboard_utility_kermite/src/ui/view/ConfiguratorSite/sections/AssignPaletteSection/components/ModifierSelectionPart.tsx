@@ -1,11 +1,11 @@
 import { css, jsx } from '@emotion/core';
 import { IKeyAssignEntry } from '~contract/data';
-import { ModifierVirtualKeys } from '~model/HighLevelDefs';
+import { ModifierVirtualKey } from '~model/HighLevelDefs';
 import { AssignSlotCard } from './AssignSlotCards';
 import { isAssignModifierActive } from '~ui/state/editor';
 import { UiTheme } from '~ui/view/ConfiguratorSite/UiTheme';
 
-const modifiresGroup: ModifierVirtualKeys[] = [
+const modifiresGroup: ModifierVirtualKey[] = [
   'K_Shift',
   'K_Ctrl',
   'K_Alt',
@@ -14,7 +14,7 @@ const modifiresGroup: ModifierVirtualKeys[] = [
 
 export const ModifierSelectionPart = (props: {
   currentAssign: IKeyAssignEntry | undefined;
-  setCurrentModifiers(modifierKey: ModifierVirtualKeys, enabled: boolean): void;
+  setCurrentModifiers(modifierKey: ModifierVirtualKey, enabled: boolean): void;
 }) => {
   const { currentAssign, setCurrentModifiers } = props;
 

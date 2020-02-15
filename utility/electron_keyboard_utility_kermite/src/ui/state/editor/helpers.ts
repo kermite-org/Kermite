@@ -1,5 +1,6 @@
 import { IKeyAssignEntry, ILayer, IEditModel } from '~contract/data';
-import { VirtualKey, ModifierVirtualKeys } from '~model/HighLevelDefs';
+import { VirtualKey, ModifierVirtualKey } from '~model/HighLevelDefs';
+import { AssignCategory } from './editorSlice';
 
 export function getAssignSlotAddress(
   keyUnitId: string,
@@ -8,6 +9,27 @@ export function getAssignSlotAddress(
 ): string {
   const priority = isPrimary ? 'pri' : 'sec';
   return `${keyUnitId}.${layerId}.${priority}`;
+}
+
+export function extractAssignSlotAddress(
+  addr: string
+):
+  | {
+      keyUnitId: string;
+      layerId: string;
+      isPrimary: boolean;
+    }
+  | undefined {
+  const arr = addr.split('.');
+  if (arr.length !== 3) {
+    return undefined;
+  }
+  const [keyUnitId, layerId, priority] = arr;
+  return {
+    keyUnitId,
+    layerId,
+    isPrimary: priority === 'pri'
+  };
 }
 
 export function createNewEntityId(
@@ -54,10 +76,20 @@ export function isAssignLayerTrigger(
 
 export function isAssignModifierActive(
   assign: IKeyAssignEntry | undefined,
-  mo: ModifierVirtualKeys
+  mo: ModifierVirtualKey
 ): boolean {
   return (
     (assign && assign.type === 'keyInput' && assign.modifiers?.includes(mo)) ||
+    false
+  );
+}
+
+export function isAssignHoldModifierActive(
+  assign: IKeyAssignEntry | undefined,
+  mo: ModifierVirtualKey
+): boolean {
+  return (
+    (assign && assign.type === 'holdModifier' && assign.modifierKey === mo) ||
     false
   );
 }
@@ -86,4 +118,19 @@ export function getEditModelLayerById(model: IEditModel, layerId: string) {
 
 export function checkIfLognNameKeyAssign(text: string) {
   return text.length >= 2 && !text.match(/^F[0-9]+$/);
+}
+
+export function getAssignCategoryFromAssign(
+  assign: IKeyAssignEntry | undefined
+): AssignCategory {
+  if (assign) {
+    if (assign.type === 'keyInput') {
+      return 'input';
+    } else if (assign.type === 'holdLayer') {
+      return 'hold';
+    } else if (assign.type === 'holdModifier') {
+      return 'hold';
+    }
+  }
+  return 'none';
 }

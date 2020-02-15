@@ -8,5 +8,6 @@ export const UiTheme = {
     commonMargin: '5px',
     commonHalfMargin: '2.5px'
   },
-  clSelectHighlight: '#0a7'
+  // clSelectHighlight: '#0a7'
+  clSelectHighlight: '#22967d'
 };

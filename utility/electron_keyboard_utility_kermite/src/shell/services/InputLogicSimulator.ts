@@ -1,6 +1,6 @@
 import { IEditModel, IKeyAssignEntry } from '~contract/data';
 import { IRealtimeKeyboardEvent } from '~contract/ipc';
-import { VirtualKey, ModifierVirtualKeys } from '~model/HighLevelDefs';
+import { VirtualKey, ModifierVirtualKey } from '~model/HighLevelDefs';
 import { VirtualKeyToWindowsVirtualKeyCodeTable } from '~model/WindowsVirtualKeycodes';
 import { callApiKeybdEvent as callApiKeybdEventOriginal } from '~shell/VirtualKeyboardApiBridge';
 import { appGlobal } from './appGlobal';
@@ -134,7 +134,7 @@ namespace VirtualStateManager {
 
   function createKeyInputLogicalKeyAction(
     virtualKey: VirtualKey,
-    modifiers?: ModifierVirtualKeys[]
+    modifiers?: ModifierVirtualKey[]
   ): LogicalKeyAction | undefined {
     const vkSet = extractVkSet(
       VirtualKeyToWindowsVirtualKeyCodeTable[virtualKey]

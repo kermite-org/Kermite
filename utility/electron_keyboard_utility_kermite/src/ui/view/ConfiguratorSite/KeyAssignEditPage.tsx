@@ -64,7 +64,7 @@ export const KeyAssignEditPage = () => {
 
   const cssAssignPartBox = css`
     background: ${clPanelBox};
-    height: 230px;
+    height: 270px;
     flex-shrink: 0;
   `;
 

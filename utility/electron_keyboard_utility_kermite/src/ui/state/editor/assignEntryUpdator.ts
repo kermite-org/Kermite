@@ -3,24 +3,20 @@ import {
   addOptionToOptionsArray,
   removeOptionFromOptionsArray
 } from '~funcs/Utils';
-import { ModifierVirtualKeys, VirtualKey } from '~model/HighLevelDefs';
+import { ModifierVirtualKey, VirtualKey } from '~model/HighLevelDefs';
 
 export function assignEntryUpdator(
   assign: IKeyAssignEntry | undefined,
   cmd: {
     removeKeyAssign?: boolean;
     setVirtualKey?: VirtualKey;
-    addModifier?: ModifierVirtualKeys;
-    removeModifier?: ModifierVirtualKeys;
+    addModifier?: ModifierVirtualKey;
+    removeModifier?: ModifierVirtualKey;
     setHoldLayer?: string;
   }
 ): IKeyAssignEntry | undefined {
   if (cmd.removeKeyAssign) {
-    if (assign && assign.type === 'keyInput') {
-      return { ...assign, virtualKey: 'K_NONE' };
-    } else {
-      return undefined;
-    }
+    return undefined;
   }
   if (cmd.setVirtualKey) {
     const virtualKey = cmd.setVirtualKey;
@@ -57,7 +53,7 @@ export function assignEntryUpdator(
   }
   if (cmd.setHoldLayer) {
     const targetLayerId = cmd.setHoldLayer;
-    return { type: 'holdLayer', targetLayerId };
+    return { type: 'holdLayer', targetLayerId, layerInvocationMode: 'hold' };
   }
   return assign;
 }

@@ -66,3 +66,17 @@ export const LayerTriggerAssignSlotCard = (props: {
     </div>
   );
 };
+
+export const AssignModeButtonRaw = (props: {
+  text: string;
+  isActive: boolean;
+  onClick(): void;
+}) => {
+  const { isActive, onClick, text } = props;
+  const isExtended = checkIfLognNameKeyAssign(text);
+  return (
+    <div css={cssAssignSlotCard(isActive, isExtended, true)} onClick={onClick}>
+      {text}
+    </div>
+  );
+};
