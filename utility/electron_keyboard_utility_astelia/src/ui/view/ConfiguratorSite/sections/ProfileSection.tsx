@@ -5,6 +5,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { useMapDispatchToProps } from '~ui/hooks';
 import { profileAsyncActions } from '~ui/state/profile';
 import { AppState } from '~ui/state/store';
+import { getAvailableBreedNames } from '~ui/view/WidgetSite/KeyboardShapes';
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   ...bindActionCreators(profileAsyncActions, dispatch)
@@ -25,9 +26,15 @@ export const ProfileSelection = () => {
     saveProfile
   } = useMapDispatchToProps(mapDispatchToProps);
 
+  const breedNames = getAvailableBreedNames();
+  const [currentBreedName, setCurrentBreedName] = React.useState(breedNames[0]);
+  const onBreedSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setCurrentBreedName(e.currentTarget.value);
+  };
+
   const onCreateButton = () => {
     if (editText) {
-      createProfile(editText);
+      createProfile(editText, currentBreedName);
       setEditText('');
     }
   };
@@ -82,6 +89,16 @@ export const ProfileSelection = () => {
           style={{ width: '100px' }}
           onChange={() => {}}
         />
+      </div>
+
+      <div>
+        <select value={currentBreedName} onChange={onBreedSelect}>
+          {breedNames.map(breedName => (
+            <option value={breedName} key={breedName}>
+              {breedName}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div>

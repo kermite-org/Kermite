@@ -24,7 +24,8 @@ export const fallbackEditModel: IEditModel = {
       layerName: 'shift'
     }
   ],
-  keyAssigns: {}
+  keyAssigns: {},
+  breedName: '__default'
 };
 
 class ProfileManagerCore {
@@ -72,8 +73,12 @@ class ProfileManagerCore {
     await Files.writeJson(fpath, editModel);
   }
 
-  static async createProfile(profName: string): Promise<IEditModel> {
+  static async createProfile(
+    profName: string,
+    breedName: string
+  ): Promise<IEditModel> {
     const editModel: IEditModel = duplicateObjectByStringify(fallbackEditModel);
+    editModel.breedName = breedName;
     await this.saveProfile(profName, editModel);
     return editModel;
   }
@@ -124,7 +129,7 @@ export class ProfileManager {
     const allProfileNames = await ProfileManagerCore.listAllProfileNames();
     if (allProfileNames.length === 0) {
       const profName = this.defaultProfileName;
-      await ProfileManagerCore.createProfile(profName);
+      await ProfileManagerCore.createProfile(profName, '__default');
       allProfileNames.push(profName);
     }
     return allProfileNames;
@@ -162,6 +167,9 @@ export class ProfileManager {
   private fixEditModelData(editModel: IEditModel) {
     if (editModel.layers.length === 0) {
       editModel.layers = duplicateObjectByStringify(fallbackEditModel.layers);
+    }
+    if (!editModel.breedName) {
+      editModel.breedName = 'astelia';
     }
   }
 
@@ -211,12 +219,15 @@ export class ProfileManager {
     }
   }
 
-  async createProfile(profName: string): Promise<boolean> {
+  async createProfile(profName: string, breedName: string): Promise<boolean> {
     if (this.status.allProfileNames.includes(profName)) {
       return false;
     }
     try {
-      const editModel = await ProfileManagerCore.createProfile(profName);
+      const editModel = await ProfileManagerCore.createProfile(
+        profName,
+        breedName
+      );
       const allProfileNames = await ProfileManagerCore.listAllProfileNames();
       this.setStatus({
         allProfileNames,
@@ -240,7 +251,10 @@ export class ProfileManager {
       const isLastOne = this.status.allProfileNames.length === 1;
       await ProfileManagerCore.deleteProfile(profName);
       if (isLastOne) {
-        await ProfileManagerCore.createProfile(this.defaultProfileName);
+        await ProfileManagerCore.createProfile(
+          this.defaultProfileName,
+          '__default'
+        );
       }
       const allProfileNames = await ProfileManagerCore.listAllProfileNames();
       this.setStatus({ allProfileNames });
@@ -283,7 +297,10 @@ export class ProfileManager {
 
   private async executeCommand(cmd: IProfileManagerCommand): Promise<boolean> {
     if (cmd.creatProfile) {
-      return await this.createProfile(cmd.creatProfile.name);
+      return await this.createProfile(
+        cmd.creatProfile.name,
+        cmd.creatProfile.breedName
+      );
     } else if (cmd.deleteProfile) {
       return await this.deleteProfile(cmd.deleteProfile.name);
     } else if (cmd.loadProfile) {

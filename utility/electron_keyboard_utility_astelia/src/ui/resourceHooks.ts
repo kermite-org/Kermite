@@ -1,21 +1,32 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { IProfileManagerStatus } from '~contract/data';
 import { IRealtimeKeyboardEvent } from '~contract/ipc';
 import { EditorState, editorSelectors } from './state/editor';
 import { backendAgent, sendIpcPacketSync } from './state/ipc';
 import { playerSlice } from './state/playerSlice';
 import { profileAsyncActions } from './state/profile';
-import { store } from './state/store';
+import { store, AppState } from './state/store';
 
 export function useRealtimeKeyboardEventReceiver() {
   const dispatch = useDispatch();
+
+  const state = useSelector((state: AppState) => state);
+  const stateRef = React.useRef(state);
+  stateRef.current = state;
+
   React.useEffect(() => {
     const handler = (ev: IRealtimeKeyboardEvent) => {
       if (ev.type === 'keyStateChanged') {
         const { keyIndex, isDown } = ev;
-        const keyId = `ku${keyIndex}`;
-        dispatch(playerSlice.actions.setKeyPressed({ keyId, isDown }));
+
+        const keyboardShape = stateRef.current.editor.keyboardShape;
+
+        const keyUnit = keyboardShape.keyPositions.find(k => k.pk === keyIndex);
+        if (keyUnit) {
+          const keyId = keyUnit.id;
+          dispatch(playerSlice.actions.setKeyPressed({ keyId, isDown }));
+        }
       }
     };
     backendAgent.keyEvents.subscribe(handler);

@@ -42,14 +42,14 @@ export const profileAsyncActions = {
     };
   },
 
-  createProfile(name: string) {
+  createProfile(name: string, breedName: string) {
     return async (dispatch: AsyncDispatch, getState: () => AppState) => {
       if (getState().profile.allProfileNames.includes(name)) {
         alert(`Profile ${name} already exists. Please specify another name.`);
         return;
       }
       const saveCommand = getSaveCommandIfDirty(getState);
-      const createCommand = { creatProfile: { name } };
+      const createCommand = { creatProfile: { name, breedName } };
       sendProfileManagerCommands(saveCommand, createCommand);
     };
   },

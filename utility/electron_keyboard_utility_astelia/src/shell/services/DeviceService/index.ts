@@ -4,22 +4,6 @@ import { IRealtimeKeyboardEvent } from '~contract/ipc';
 
 type IRealtimeEventHandlerFunc = (event: IRealtimeKeyboardEvent) => void;
 
-//key index mapper for temporal prototype board
-const debugBoardKeyIndexMapper: number[] = [
-  4,
-  3,
-  2,
-  1,
-  10,
-  9,
-  8,
-  7,
-  16,
-  15,
-  14,
-  13
-];
-
 export class DeviceService {
   private handlers: IRealtimeEventHandlerFunc[] = [];
   private deviceWrapper: DeviceWrapper | null = null;
@@ -38,18 +22,11 @@ export class DeviceService {
     if (buf[0] === 0xe0 && buf[1] === 0x90) {
       const keyIndex = buf[2];
       const isDown = buf[3] !== 0;
-
-      const keyIndexMod = debugBoardKeyIndexMapper[keyIndex] as
-        | number
-        | undefined;
-
-      if (keyIndexMod) {
-        this.emitRealtimeEvent({
-          type: 'keyStateChanged',
-          keyIndex: keyIndexMod,
-          isDown
-        });
-      }
+      this.emitRealtimeEvent({
+        type: 'keyStateChanged',
+        keyIndex: keyIndex,
+        isDown
+      });
     }
 
     if (buf[0] === 0xe0 && buf[1] === 0x91) {
@@ -63,7 +40,8 @@ export class DeviceService {
 
   async initialize(): Promise<void> {
     const dw = new DeviceWrapper();
-    const isOpen = dw.open(0xf055, 0xa57a, 'mi_03');
+    const isOpen = dw.open(0xf055, 0xa577, 'mi_00', '74F3AC2E');
+    // const isOpen = dw.open(0xf055, 0xa57a, 'mi_03');
     if (isOpen) {
       console.log('device opened');
     } else {

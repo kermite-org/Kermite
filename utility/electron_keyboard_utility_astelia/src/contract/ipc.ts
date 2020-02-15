@@ -22,7 +22,7 @@ export interface IWindowManagerCommand {
 }
 
 export interface IProfileManagerCommand {
-  creatProfile?: { name: string };
+  creatProfile?: { name: string; breedName: string };
   loadProfile?: { name: string };
   saveCurrentProfile?: { editModel: IEditModel };
   deleteProfile?: { name: string };

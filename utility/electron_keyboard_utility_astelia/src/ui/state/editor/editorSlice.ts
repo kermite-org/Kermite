@@ -9,21 +9,28 @@ import {
   getEditModelLayerById,
   isCustomLayer
 } from './helpers';
+import {
+  IKeyboardShape,
+  getKeyboardShapeByBreedName
+} from '~ui/view/WidgetSite/KeyboardShapes';
 
 const fallbackEditModel: IEditModel = {
   version: 1,
   layers: [],
-  keyAssigns: {}
+  keyAssigns: {},
+  breedName: 'none'
 };
 
 export interface EditorState {
   loadedEditModel: IEditModel;
+  keyboardShape: IKeyboardShape;
   editModel: IEditModel;
   currentLayerId: string;
   currentAssignSlotAddress: string;
 }
 const initialState: EditorState = {
   loadedEditModel: { ...fallbackEditModel },
+  keyboardShape: getKeyboardShapeByBreedName('none'),
   editModel: { ...fallbackEditModel },
   currentLayerId: '',
   currentAssignSlotAddress: ''
@@ -39,6 +46,7 @@ export const editorSlice = createSlice({
       state.editModel = editModel;
       state.currentLayerId = editModel.layers[0].layerId;
       state.currentAssignSlotAddress = '';
+      state.keyboardShape = getKeyboardShapeByBreedName(editModel.breedName);
     },
     selectLayer(state, action: PayloadAction<string>) {
       state.currentLayerId = action.payload;

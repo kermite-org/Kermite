@@ -13,15 +13,22 @@ export class DeviceWrapper {
   private static openTargetDevice(
     venderId: number,
     productId: number,
-    pathSearchWord: string
+    pathSearchWord?: string,
+    serialNumberSearchWord?: string
   ): HID.HID | null {
     const allDeviceInfos = HID.devices();
+    // console.log(allDeviceInfos);
     const targetDeviceInfo = allDeviceInfos.find(
       d =>
         d.vendorId === venderId &&
         d.productId === productId &&
-        d.path &&
-        d.path.indexOf(pathSearchWord) >= 0
+        (pathSearchWord
+          ? d.path && d.path.indexOf(pathSearchWord) >= 0
+          : true) &&
+        (serialNumberSearchWord
+          ? d.serialNumber &&
+            d.serialNumber.indexOf(serialNumberSearchWord) >= 0
+          : true)
     );
     if (targetDeviceInfo && targetDeviceInfo.path) {
       return new HID.HID(targetDeviceInfo.path);
@@ -30,11 +37,17 @@ export class DeviceWrapper {
     }
   }
 
-  open(venderId: number, productId: number, pathSearchWord: string): boolean {
+  open(
+    venderId: number,
+    productId: number,
+    pathSearchWord?: string,
+    serialNumberSearchWord?: string
+  ): boolean {
     this.device = DeviceWrapper.openTargetDevice(
       venderId,
       productId,
-      pathSearchWord
+      pathSearchWord,
+      serialNumberSearchWord
     );
     if (this.device) {
       this.device.on('data', data => {

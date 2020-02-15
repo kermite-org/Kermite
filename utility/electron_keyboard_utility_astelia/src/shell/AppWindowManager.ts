@@ -12,9 +12,9 @@ export class AppWindowManager {
       webPreferences: {
         nodeIntegration: false,
         preload: path.join(__dirname, 'preload.js')
-      },
-      frame: false,
-      transparent: true
+      }
+      // frame: false,
+      // transparent: true
     });
 
     if (appConfig.isDevelopment) {

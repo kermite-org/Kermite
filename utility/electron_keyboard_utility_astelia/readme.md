@@ -11,5 +11,7 @@ yarn install
   yarn start
 ```
 
-
-
+### node-hidのバージョンがおかしいエラーが出る場合のworkaround
+```
+  npx electron-rebuild -o node-hid -f
+```

@@ -26,6 +26,7 @@ export interface IEditModel {
   version: 1;
   layers: ILayer[];
   keyAssigns: IKeyAssignsSet;
+  breedName: string;
 }
 
 export interface IProfileManagerStatus {

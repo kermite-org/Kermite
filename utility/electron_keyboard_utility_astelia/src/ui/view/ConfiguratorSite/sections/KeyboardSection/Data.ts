@@ -4,9 +4,10 @@ import {
   getAssignSlotAddress,
   checkIfLognNameKeyAssign
 } from '~ui/state/editor';
-import { KeyboardShape } from '~ui/view/WidgetSite/KeyboardShape';
+
 import { IKeyUnitCardViewModel } from './Types';
 import { VirtualKeyTexts } from '../../Constants';
+import { IKeyboardShape } from '~ui/view/WidgetSite/KeyboardShapes';
 
 function getAssignText(
   assign: IKeyAssignEntry | undefined,
@@ -33,6 +34,7 @@ export function useKeyUnitCardViewModels(props: {
     [keyId: string]: boolean;
   };
   selectAssignSlot(keyUnitId: string, isPrimary: boolean): void;
+  keyboardShape: IKeyboardShape;
 }): IKeyUnitCardViewModel[] {
   const {
     keyAssigns,
@@ -40,12 +42,13 @@ export function useKeyUnitCardViewModels(props: {
     currentLayerId,
     currentSlotAddress,
     pressedKeyFlags,
-    selectAssignSlot
+    selectAssignSlot,
+    keyboardShape
   } = props;
 
   return React.useMemo(
     () =>
-      KeyboardShape.keyPositions.map(ku => {
+      keyboardShape.keyPositions.map(ku => {
         const { id: keyUnitId, x, y, r } = ku;
         const primarySlotAddress = getAssignSlotAddress(
           ku.id,

@@ -34,7 +34,7 @@ export const KeyUnitCard = (props: { keyUnit: IKeyUnitCardViewModel }) => {
     &[data-selected='true'] {
       fill: ${UiTheme.clSelectHighlight};
     }
-    stroke: #080;
+    /* stroke: #080; */
     fill: transparent;
     cursor: pointer;
   `;
@@ -60,10 +60,10 @@ export const KeyUnitCard = (props: { keyUnit: IKeyUnitCardViewModel }) => {
       />
       <rect
         data-selected={isSelected}
-        x={-6}
-        y={-6}
-        width={12}
-        height={12}
+        x={-9}
+        y={-9}
+        width={18}
+        height={18}
         css={cssSlot}
         onClick={onClick}
       />

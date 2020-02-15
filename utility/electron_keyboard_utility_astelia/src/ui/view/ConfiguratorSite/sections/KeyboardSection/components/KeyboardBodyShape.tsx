@@ -1,9 +1,9 @@
 import { css, jsx } from '@emotion/core';
-import { KeyboardShape } from '~ui/view/WidgetSite/KeyboardShape';
 
-export const KeyboardBodyShape = () => {
+export const KeyboardBodyShape = (props: { pathMarkupText: string }) => {
+  const { pathMarkupText } = props;
   const cssBody = css`
     fill: #54566f;
   `;
-  return <path d={KeyboardShape.keyboardBodyPathMarkup} css={cssBody} />;
+  return <path d={pathMarkupText} css={cssBody} />;
 };

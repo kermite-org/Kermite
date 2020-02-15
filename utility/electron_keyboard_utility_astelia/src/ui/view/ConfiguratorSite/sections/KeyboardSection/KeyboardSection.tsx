@@ -15,7 +15,8 @@ const mapStateToProps = (state: AppState) => ({
   layers: state.editor.editModel.layers,
   currentLayerId: state.editor.currentLayerId,
   currentSlotAddress: state.editor.currentAssignSlotAddress,
-  pressedKeyFlags: state.player.pressedKeyFlags
+  pressedKeyFlags: state.player.pressedKeyFlags,
+  keyboardShape: state.editor.keyboardShape
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
@@ -35,7 +36,8 @@ export function KeyboardSection() {
     layers,
     currentLayerId,
     currentSlotAddress,
-    pressedKeyFlags
+    pressedKeyFlags,
+    keyboardShape
   } = useSelector(mapStateToProps);
 
   const { clearAssignSlotSelection, selectAssignSlot } = useMapDispatchToProps(
@@ -48,13 +50,14 @@ export function KeyboardSection() {
     currentLayerId,
     currentSlotAddress,
     pressedKeyFlags,
-    selectAssignSlot
+    selectAssignSlot,
+    keyboardShape
   });
 
   return (
     <AutoScaledBox contentWidth={600} contentHeight={240}>
       <KeyboardBasePlane clearAssignSlotSelection={clearAssignSlotSelection}>
-        <KeyboardBodyShape />
+        <KeyboardBodyShape pathMarkupText={keyboardShape.bodyPathMarkupText} />
         {cardViewModels.map(vm => (
           <KeyUnitCard keyUnit={vm} key={vm.keyUnitId} />
         ))}

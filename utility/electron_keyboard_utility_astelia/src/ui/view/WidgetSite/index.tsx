@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Nums } from '~funcs/Nums';
 import { siteSlice } from '~ui/state/siteSlice';
 import { AppState } from '../../state/store';
-import { KeyboardShape } from './KeyboardShape';
+import { getKeyboardShapeByBreedName } from './KeyboardShapes';
 
 const cssGlobal = css`
   * {
@@ -36,6 +36,7 @@ function KeyboardSvgView() {
     (state: AppState) => state.player.pressedKeyFlags
   );
 
+  const keyboardShape = getKeyboardShapeByBreedName('astelia');
   return (
     <svg width="600" height="240" css={cssSvg} viewBox="-300 -120 600 240">
       <g
@@ -43,13 +44,9 @@ function KeyboardSvgView() {
         strokeWidth={sw}
         strokeLinejoin="round"
       >
-        <path
-          d={KeyboardShape.keyboardBodyPathMarkup}
-          stroke="#003"
-          fill="#89C"
-        />
+        <path d={keyboardShape.bodyPathMarkupText} stroke="#003" fill="#89C" />
 
-        {KeyboardShape.keyPositions.map(a => {
+        {keyboardShape.keyPositions.map(a => {
           const fillColor = keyPressedFlags[a.id] ? '#F08' : '#FFF';
           return (
             <g

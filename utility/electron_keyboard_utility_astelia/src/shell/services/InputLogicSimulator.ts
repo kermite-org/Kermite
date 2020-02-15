@@ -5,6 +5,7 @@ import { VirtualKeyToWindowsVirtualKeyCodeTable } from '~model/WindowsVirtualKey
 import { callApiKeybdEvent as callApiKeybdEventOriginal } from '~shell/VirtualKeyboardApiBridge';
 import { appGlobal } from './appGlobal';
 import { fallbackEditModel } from './ProfileManager';
+import { getKeyboardShapeByBreedName } from '~ui/view/WidgetSite/KeyboardShapes';
 
 type TAdhocShift = 'down' | 'up' | undefined;
 
@@ -98,9 +99,17 @@ namespace VirtualStateManager {
   ): IKeyAssignEntry | undefined {
     const { keyAssigns } = editModel;
     const { currentLayerId } = state;
-    let assign = keyAssigns[`ku${keyIndex}.${currentLayerId}.pri`];
+
+    const keyboardShape = getKeyboardShapeByBreedName(editModel.breedName);
+    const keyUnit = keyboardShape.keyPositions.find(ku => ku.pk === keyIndex);
+    if (!keyUnit) {
+      return undefined;
+    }
+    const keyUnitId = keyUnit.id;
+
+    let assign = keyAssigns[`${keyUnitId}.${currentLayerId}.pri`];
     if (!assign && currentLayerId !== 'la0') {
-      assign = keyAssigns[`ku${keyIndex}.la0.pri`];
+      assign = keyAssigns[`${keyUnitId}.la0.pri`];
     }
     return assign;
   }
@@ -261,15 +270,16 @@ export class InputLogicSimulator {
 
   private onRealtimeKeyboardEvent = (event: IRealtimeKeyboardEvent) => {
     if (event.type === 'keyStateChanged') {
-      if (event.keyIndex === 13) {
+      const { keyIndex, isDown } = event;
+      if (keyIndex === 13) {
         console.log('');
         return;
       }
-      console.log(`key ${event.keyIndex} ${event.isDown ? 'down' : 'up'}`);
+      console.log(`key ${keyIndex} ${isDown ? 'down' : 'up'}`);
       VirtualStateManager.handlerHardwareKeyStateEvent(
         this.editModel,
-        event.keyIndex,
-        event.isDown
+        keyIndex,
+        isDown
       );
     }
     if (event.type === 'layerChanged') {
