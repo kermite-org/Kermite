@@ -3,15 +3,12 @@ import React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider, useSelector } from 'react-redux';
 import './fontAwesomeSetup';
-import {
-  backendAgent,
-  debugTrace,
-  sendWindowManagerCommand
-} from './state/ipc';
+import { ForegroundModalLayerRoot } from './foregroundModalLayer';
+import { saveDirtyEditModelOnClosing } from './resourceHooks';
+import { debugTrace, sendWindowManagerCommand } from './state/ipc';
 import { AppState, store } from './state/store';
 import { ConfiguratorContentRoot } from './view/ConfiguratorSite';
 import { WidgetContentRoot } from './view/WidgetSite';
-import { saveDirtyEditModelOnClosing } from './resourceHooks';
 
 function PageRoot() {
   // const isWidget = location.search.includes('widget')
@@ -28,6 +25,7 @@ function PageRoot() {
   return (
     <React.Fragment>
       <Content />
+      <ForegroundModalLayerRoot />
     </React.Fragment>
   );
 }

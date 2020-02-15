@@ -2,8 +2,10 @@ import { IProfileManagerStatus } from '~contract/data';
 import { IProfileManagerCommand } from '~contract/ipc';
 import { editorSlice, editorSelectors } from '../editor';
 import { sendProfileManagerCommands } from '../ipc';
-import { AppState, AsyncDispatch } from '../store';
+import { AppState, AsyncDispatch, IGetState } from '../store';
 import { profileSlice } from './profileSlice';
+import { processCreateProfileDialog } from '~ui/extraModals';
+import { modalTextInput, modalConfirm } from '~ui/basicModals';
 
 function getSaveCommandIfDirty(
   getState: () => AppState
@@ -42,47 +44,72 @@ export const profileAsyncActions = {
     };
   },
 
-  createProfile(name: string, breedName: string) {
-    return async (dispatch: AsyncDispatch, getState: () => AppState) => {
-      if (getState().profile.allProfileNames.includes(name)) {
-        alert(`Profile ${name} already exists. Please specify another name.`);
+  createProfile() {
+    return async (dispatch: AsyncDispatch, getState: IGetState) => {
+      const res = await processCreateProfileDialog(undefined);
+      if (!res) {
+        return;
+      }
+      const { newProfileName, breedName } = res;
+
+      if (getState().profile.allProfileNames.includes(newProfileName)) {
+        alert(
+          `Profile ${newProfileName} already exists. Please specify another name.`
+        );
         return;
       }
       const saveCommand = getSaveCommandIfDirty(getState);
-      const createCommand = { creatProfile: { name, breedName } };
+      const createCommand = {
+        creatProfile: { name: newProfileName, breedName }
+      };
       sendProfileManagerCommands(saveCommand, createCommand);
     };
   },
-  loadProfile(name: string) {
-    return async (dispatch: AsyncDispatch, getState: () => AppState) => {
+  loadProfile(profName: string) {
+    return async (dispatch: AsyncDispatch, getState: IGetState) => {
       const curProfName = getState().profile.currentProfileName;
-      if (name === curProfName) {
+      if (profName === curProfName) {
         return;
       }
       const saveCommand = getSaveCommandIfDirty(getState);
-      const loadCommand = { loadProfile: { name } };
+      const loadCommand = { loadProfile: { name: profName } };
       sendProfileManagerCommands(saveCommand, loadCommand);
     };
   },
-  renameProfile(name: string, newName: string) {
-    return async (dispatch: AsyncDispatch, getState: () => AppState) => {
+  renameProfile() {
+    return async (dispatch: AsyncDispatch, getState: IGetState) => {
+      const curProfName = getState().profile.currentProfileName;
+
+      const newProfileName = await modalTextInput({
+        message: 'input new profile name',
+        defaultText: curProfName
+      });
+      if (!newProfileName) {
+        return;
+      }
       const saveCommand = getSaveCommandIfDirty(getState);
-      const renameCommand = { renameProfile: { name, newName } };
+      const renameCommand = {
+        renameProfile: { name: curProfName, newName: newProfileName }
+      };
       sendProfileManagerCommands(saveCommand, renameCommand);
     };
   },
-  deleteProfile(name: string) {
-    return async (dispatch: AsyncDispatch, getState: () => AppState) => {
-      const ok = confirm(`Profile ${name} will be deleted. Are you sure?`);
+  deleteProfile() {
+    return async (dispatch: AsyncDispatch, getState: IGetState) => {
+      const curProfName = getState().profile.currentProfileName;
+
+      const ok = await modalConfirm(
+        `Profile ${curProfName} will be deleted. Are you sure?`
+      );
       if (!ok) {
         return;
       }
-      const deleteCommand = { deleteProfile: { name } };
+      const deleteCommand = { deleteProfile: { name: curProfName } };
       sendProfileManagerCommands(deleteCommand);
     };
   },
   saveProfile() {
-    return async (dispatch: AsyncDispatch, getState: () => AppState) => {
+    return async (dispatch: AsyncDispatch, getState: IGetState) => {
       const saveCommand = getSaveCommandIfDirty(getState);
       if (saveCommand) {
         sendProfileManagerCommands(saveCommand);

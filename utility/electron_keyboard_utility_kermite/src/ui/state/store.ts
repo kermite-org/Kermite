@@ -16,6 +16,8 @@ export interface AppState {
   site: SiteState;
 }
 
+export type IGetState = () => AppState;
+
 type ReducerType<T> = { [K in keyof T]: (state: T[K], action: Action) => T[K] };
 
 const appReducer: ReducerType<AppState> = {
