@@ -85,3 +85,15 @@ export function findFirst<T, R>(
   }
   return undefined;
 }
+
+export function createDictionaryFromKeyValues<K extends string | number, V>(
+  arr: [K, V][]
+): { [key in K]: V } {
+  const obj: { [key in K]: V } = {} as any;
+  arr.forEach(el => {
+    const key = el[0];
+    const value = el[1];
+    obj[key] = value;
+  });
+  return obj;
+}
