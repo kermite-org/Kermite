@@ -46,7 +46,10 @@ export const AssignSlotCard = (props: {
   const text = VirtualKeyTexts[virtualKey] || '';
   const isExtended = checkIfLognNameKeyAssign(text);
   return (
-    <div css={cssAssignSlotCard(isActive, isExtended, false)} onClick={onClick}>
+    <div
+      css={cssAssignSlotCard(isActive, isExtended, false)}
+      onMouseDown={onClick}
+    >
       {text}
     </div>
   );
@@ -61,7 +64,10 @@ export const LayerTriggerAssignSlotCard = (props: {
   const text = layer.layerName;
   const isExtended = checkIfLognNameKeyAssign(text);
   return (
-    <div css={cssAssignSlotCard(isActive, isExtended, true)} onClick={onClick}>
+    <div
+      css={cssAssignSlotCard(isActive, isExtended, true)}
+      onMouseDown={onClick}
+    >
       {text}
     </div>
   );
@@ -75,7 +81,10 @@ export const AssignModeButtonRaw = (props: {
   const { isActive, onClick, text } = props;
   const isExtended = checkIfLognNameKeyAssign(text);
   return (
-    <div css={cssAssignSlotCard(isActive, isExtended, true)} onClick={onClick}>
+    <div
+      css={cssAssignSlotCard(isActive, isExtended, true)}
+      onMouseDown={onClick}
+    >
       {text}
     </div>
   );

@@ -1,9 +1,15 @@
-import { configureStore, combineReducers, Action } from '@reduxjs/toolkit';
+import {
+  configureStore,
+  combineReducers,
+  Action,
+  getDefaultMiddleware
+} from '@reduxjs/toolkit';
 import { playerSlice, PlayerState } from './playerSlice';
 import { EditorState, editorSlice } from './editor/editorSlice';
 import { ProfileState, profileSlice } from './profile/profileSlice';
 import { ThunkAction } from 'redux-thunk';
 import { SiteState, siteSlice } from './siteSlice';
+import { createLogger } from 'redux-logger';
 
 export type AsyncDispatch = (
   action: Action | ThunkAction<any, any, any, any>
@@ -28,5 +34,9 @@ const appReducer: ReducerType<AppState> = {
 };
 
 export const store = configureStore({
-  reducer: combineReducers(appReducer)
+  reducer: combineReducers(appReducer),
+  middleware: [
+    ...getDefaultMiddleware(),
+    createLogger({ collapsed: true })
+  ] as any
 });

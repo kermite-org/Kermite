@@ -76,7 +76,10 @@ export const AssignSection = () => {
   } = useMapDispatchToProps(mapDispatchToProps);
 
   React.useEffect(() => {
-    setAssignCategory(getAssignCategoryFromAssign(currentAssign));
+    const category = getAssignCategoryFromAssign(currentAssign);
+    if (category !== currentAssignCategory) {
+      setAssignCategory(category);
+    }
   }, [currentAssign]);
 
   const cssBase = css`

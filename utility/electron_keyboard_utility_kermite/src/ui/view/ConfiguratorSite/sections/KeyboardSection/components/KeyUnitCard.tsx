@@ -3,6 +3,25 @@ import React from 'react';
 import { UiTheme } from '~ui/view/ConfiguratorSite/UiTheme';
 import { IKeyUnitCardViewModel } from '../Data';
 
+const cssKey = css`
+  fill: #2c2d33;
+
+  &[data-pressed='true'] {
+    fill: #f80;
+  }
+
+  &.selected {
+  }
+`;
+
+const cssSlot = css`
+  &[data-selected='true'] {
+    fill: ${UiTheme.clSelectHighlight};
+  }
+  fill: transparent;
+  cursor: pointer;
+`;
+
 export const KeyUnitCard = (props: { keyUnit: IKeyUnitCardViewModel }) => {
   const {
     keyUnitId,
@@ -17,25 +36,6 @@ export const KeyUnitCard = (props: { keyUnit: IKeyUnitCardViewModel }) => {
     selectionHandler();
     e.stopPropagation();
   };
-
-  const cssKey = css`
-    fill: #2c2d33;
-
-    &[data-pressed='true'] {
-      fill: #f80;
-    }
-
-    &.selected {
-    }
-  `;
-
-  const cssSlot = css`
-    &[data-selected='true'] {
-      fill: ${UiTheme.clSelectHighlight};
-    }
-    fill: transparent;
-    cursor: pointer;
-  `;
 
   return (
     <g
@@ -67,7 +67,7 @@ export const KeyUnitCard = (props: { keyUnit: IKeyUnitCardViewModel }) => {
         width={18}
         height={18}
         css={cssSlot}
-        onClick={onClick}
+        onMouseDown={onClick}
       />
 
       <text

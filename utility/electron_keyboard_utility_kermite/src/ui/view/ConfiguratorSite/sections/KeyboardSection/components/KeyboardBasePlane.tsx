@@ -17,7 +17,7 @@ export const KeyboardBasePlane = (props: {
       height="240"
       viewBox="-300 -120 600 240"
       css={cssSvg}
-      onClick={clearAssignSlotSelection}
+      onMouseDown={clearAssignSlotSelection}
     >
       <g
         transform="scale(2) translate(0, -53.5)"
