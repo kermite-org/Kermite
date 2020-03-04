@@ -49,25 +49,24 @@ const triggerMatcherPatternMap: {
   //key event patterns
   //D: down event
   //U: up event
-  //.: blank time shorter than tapTimeMs
   //_: blank time longer than holdTimeMs
   down: 'D',
   down_w: 'D_',
   up: 'U',
   up_w: 'U_',
-  tap: 'D.U',
-  tap_w: 'D.U_',
-  tap_redown: 'D.U!.D',
-  tap_rehold: 'D.U!.D_',
-  tap_dtap: 'D.U!.D.U',
-  tap_dtap_tritap: 'D.U!.D.U!.D.U',
+  tap: 'DU',
+  tap_w: 'DU_',
+  tap_redown: 'DU!D',
+  tap_rehold: 'DU!D_',
+  tap_dtap: 'DU!DU',
+  tap_dtap_tritap: 'DU!DU!DU',
   hold: 'D_',
-  dtap: 'D.U.D.U',
-  dtap_w: 'D.U.D.U_',
-  tritap: 'D.U.D.U.D.U',
+  dtap: 'DUDU',
+  dtap_w: 'DUDU_',
+  tritap: 'DUDUDU',
   tap_drill_d: 'D',
-  tap_drill_dd: 'D!.U.D',
-  tap_drill_ddd: 'D!.U.D!.U.D'
+  tap_drill_dd: 'D!UD',
+  tap_drill_ddd: 'D!UD!UD'
 };
 
 const targetTriggersMap: { [keyId: string]: InputTrigger[] } = {
@@ -133,7 +132,7 @@ namespace PatternEventsResolver {
         const dur = ev.timeStamp - prev.timeStamp;
         if (ev.type === 'D' || ev.type === 'U') {
           if (dur < tapTimeMs) {
-            str += '.';
+            //str += '.';
           } else if (dur > holdTimeMs) {
             str += '_';
           }
