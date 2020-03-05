@@ -8,13 +8,15 @@ type ICoreEvent =
       type: 'T';
       keyId: undefined;
       timeStamp: number;
-    }
-  | {
-      type: 'R';
-      keyId: string;
-      trigger: InputTrigger;
-      timeStamp: number;
+      prevTimeStamp: number;
     };
+// | {
+//     //deprecated resolve event
+//     type: 'R';
+//     keyId: string;
+//     trigger: InputTrigger;
+//     timeStamp: number;
+//   };
 
 type InputTrigger =
   | 'down'
@@ -33,7 +35,8 @@ type InputTrigger =
   | 'tap_dtap_tritap'
   | 'tap_drill_d'
   | 'tap_drill_dd'
-  | 'tap_drill_ddd';
+  | 'tap_drill_ddd'
+  | 'head_down';
 
 type IResolveResult =
   | {
@@ -47,6 +50,7 @@ const triggerMatcherPatternMap: {
   [trigger in InputTrigger]: string;
 } = {
   //key event patterns
+  //:: start of sequence | blank time longer than holdTimeMs
   //D: down event
   //U: up event
   //_: blank time longer than holdTimeMs
@@ -54,30 +58,31 @@ const triggerMatcherPatternMap: {
   down_w: 'D_',
   up: 'U',
   up_w: 'U_',
-  tap: 'DU',
-  tap_w: 'DU_',
-  tap_redown: 'DU!D',
-  tap_rehold: 'DU!D_',
-  tap_dtap: 'DU!DU',
-  tap_dtap_tritap: 'DU!DU!DU',
-  hold: 'D_',
-  dtap: 'DUDU',
-  dtap_w: 'DUDU_',
-  tritap: 'DUDUDU',
-  tap_drill_d: 'D',
-  tap_drill_dd: 'D!UD',
-  tap_drill_ddd: 'D!UD!UD'
+  head_down: ':D',
+  tap: ':DU',
+  tap_w: ':DU_',
+  tap_redown: ':DUD',
+  tap_rehold: ':DUD_',
+  tap_dtap: ':DUDU',
+  tap_dtap_tritap: ':DUDUDU',
+  hold: ':D_',
+  dtap: ':DUDU',
+  dtap_w: ':DUDU_',
+  tritap: ':DUDUDU',
+  tap_drill_d: ':D',
+  tap_drill_dd: ':DUD',
+  tap_drill_ddd: ':DUDUD'
 };
 
 const targetTriggersMap: { [keyId: string]: InputTrigger[] } = {
   k0: ['down'],
   k1: ['down', 'up'],
-  k2: ['tap', 'hold', 'tap_redown'],
-  k3: ['hold', 'tap_w', 'dtap'],
-  k4: ['hold', 'tap_w', 'dtap_w', 'tritap'],
-  k5: ['tap', 'hold', 'tap_dtap', 'tap_dtap_tritap'],
-  k6: ['tap_drill_d', 'tap_drill_dd', 'tap_drill_ddd'],
-  k7: ['up_w']
+  k2: ['head_down', 'tap', 'hold', 'tap_redown', 'tap_rehold'],
+  k3: ['up_w'],
+  k4: ['hold', 'tap_w', 'dtap'],
+  k5: ['hold', 'tap_w', 'dtap_w', 'tritap'],
+  k6: ['hold', 'tap', 'tap_dtap', 'tap_dtap_tritap'],
+  k7: ['hold', 'tap_drill_d', 'tap_drill_dd', 'tap_drill_ddd']
 };
 
 const timeConstants = {
@@ -126,26 +131,29 @@ namespace PatternEventsResolver {
     let str = '';
     events.forEach((ev, idx) => {
       if (idx === 0) {
+        str += ':';
         str += ev.type;
       } else {
-        const prev = events[idx - 1];
-        const dur = ev.timeStamp - prev.timeStamp;
         if (ev.type === 'D' || ev.type === 'U') {
-          if (dur < tapTimeMs) {
-            //str += '.';
-          } else if (dur > holdTimeMs) {
-            str += '_';
+          const prevEvent = events[idx - 1];
+          const pos = ev.timeStamp - prevEvent.timeStamp;
+          if (pos > holdTimeMs) {
+            str += ':';
           }
           str += ev.type;
         } else if (ev.type === 'T') {
-          if (dur > holdTimeMs) {
+          const prevEvent = events[idx - 1];
+          const pos0 = ev.prevTimeStamp - prevEvent.timeStamp;
+          const pos1 = ev.timeStamp - prevEvent.timeStamp;
+          if (pos0 < holdTimeMs && holdTimeMs <= pos1) {
             str += '_';
           } else {
             str += '.';
           }
-        } else if (ev.type === 'R') {
-          str += '!';
         }
+        // } else if (ev.type === 'R') {
+        //   str += '!';
+        // }
       }
     });
     return str;
@@ -160,15 +168,16 @@ namespace PatternEventsResolver {
       timeConstants.tapTime,
       timeConstants.holdTime
     );
-    if (events[events.length - 1].type !== 'T') {
-      console.log(eventsPattern);
-    }
+    // if (events[events.length - 1].type !== 'T') {
+    //   console.log(eventsPattern);
+    // }
+    console.log(eventsPattern);
     const targetTriggers = targetTriggersMap[targetKeyId].slice().reverse();
     for (const trigger of targetTriggers) {
       const refPattern = triggerMatcherPatternMap[trigger];
       if (eventsPattern.endsWith(refPattern)) {
-        EventsFuncs.dumpEventQueue(events);
-        console.log(eventsPattern);
+        // EventsFuncs.dumpEventQueue(events);
+        // console.log(eventsPattern);
         return makeResolveResult(targetKeyId, trigger);
       }
     }
@@ -271,16 +280,13 @@ namespace EventsResolver {
         .find(a => !!a);
 
       if (targetKeyId) {
-        const events2 = events.filter(
+        const targetEvents = events.filter(
           ev => ev.keyId === targetKeyId || ev.keyId === undefined
         );
-        const res0 = PatternEventsResolver.detectEventsByPattern(
-          events2,
+        return PatternEventsResolver.detectEventsByPattern(
+          targetEvents,
           targetKeyId
         );
-        if (res0) {
-          return res0;
-        }
       }
     }
     return undefined;
@@ -300,30 +306,37 @@ namespace CoreEventHelpers {
     };
   }
 
-  export function createTickerEvent(): ICoreEvent {
-    return { type: 'T', keyId: undefined, timeStamp: getSystemTickMs() };
-  }
-
-  export function createResolveEvent(
-    keyId: string,
-    trigger: InputTrigger
-  ): ICoreEvent {
+  export function createTickerEvent(lastTime: number): ICoreEvent {
     return {
-      type: 'R',
+      type: 'T',
+      keyId: undefined,
       timeStamp: getSystemTickMs(),
-      keyId,
-      trigger
+      prevTimeStamp: lastTime
     };
   }
+
+  // export function createResolveEvent_Deprecated(
+  //   keyId: string,
+  //   trigger: InputTrigger
+  // ): ICoreEvent {
+  //   return {
+  //     type: 'R',
+  //     timeStamp: getSystemTickMs(),
+  //     keyId,
+  //     trigger
+  //   };
+  // }
 }
 
 namespace layer1 {
   const local = new (class {
     events: ICoreEvent[] = [];
+    prevTimeStamp: number = 0;
   })();
 
   export function reset() {
     local.events = [];
+    local.prevTimeStamp = 0;
   }
 
   export function processEvents() {
@@ -332,19 +345,23 @@ namespace layer1 {
     if (resolved) {
       const { trigger, keyId } = resolved;
       console.log(`  [trigger detected] ${trigger} ${keyId}`);
-      events.push(CoreEventHelpers.createResolveEvent(keyId, trigger));
+      // events.push(CoreEventHelpers.createResolveEvent(keyId, trigger));
     }
   }
 
   export function handleTicker() {
-    local.events.push(CoreEventHelpers.createTickerEvent());
+    const ev = CoreEventHelpers.createTickerEvent(local.prevTimeStamp);
+    local.events.push(ev);
     processEvents();
     local.events.pop();
+    local.prevTimeStamp = ev.timeStamp;
   }
 
   export function handleKey(keyId: string, isDown: boolean) {
-    local.events.push(CoreEventHelpers.createKeyEvent(keyId, isDown));
+    const ev = CoreEventHelpers.createKeyEvent(keyId, isDown);
+    local.events.push(ev);
     processEvents();
+    local.prevTimeStamp = ev.timeStamp;
   }
 }
 
