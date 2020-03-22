@@ -1,16 +1,17 @@
 #include <Arduino.h>
 #include <HID-Project.h>
 #include <FlashStorage.h>
-#include <board_io.h>
+#include <board_io_bb.h>
 #include <KeyMatrixScanner3.h>
+#include <env.h>
 
-void processArduinoSerials()
-{
-  if (serialEventRun)
-  {
-    serialEventRun();
-  }
-}
+// void processArduinoSerials()
+// {
+//   if (serialEventRun)
+//   {
+//     serialEventRun();
+//   }
+// }
 
 //----------------------------------------------------------------
 
@@ -378,18 +379,3 @@ void setup()
   keyMatrixScanDev();
 }
 void loop() {}
-
-// void sendKeyState(uint8_t keyId, bool isDown)
-// {
-//   buf[0] = 0x02;
-//   buf[1] = 0xFA;
-//   buf[2] = 3;
-//   buf[3] = 0;
-//   buf[4] = 0xF0;
-//   buf[5] = keyId;
-//   buf[6] = isDown ? 1 : 0;
-//   buf[7] = 0xFD;
-//   buf[8] = 0x03;
-
-//   Serial.write(buf, sizeof(buf));
-// }

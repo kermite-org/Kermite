@@ -1,5 +1,5 @@
-#ifndef __BOARD_H__
-#define __BOARD_H__
+#ifndef __BOARD_BB_H__
+#define __BOARD_BB_H__
 
 #include <Arduino.h>
 
