@@ -1,1 +1,5 @@
 .local/
+node_modules/
+.cache/
+yarn.lock
+dist/
