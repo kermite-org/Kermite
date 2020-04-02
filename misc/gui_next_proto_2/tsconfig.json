@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "lib": ["dom", "esnext"],
+    "jsx": "react",
+    "jsxFactory": "hx",
+    "baseUrl": ".",
+    "paths": {
+      "~*": ["./src/*"]
+    },
+    "strict": true
+  }
+}
