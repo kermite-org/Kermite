@@ -4,7 +4,7 @@ import { hx } from '~views/basis/qx';
 
 const LayerOperationButtton = (props: {
   icon: string;
-  onClick: () => void;
+  handler: () => void;
   enabled: boolean;
 }) => {
   const cssButton = css`
@@ -27,95 +27,54 @@ const LayerOperationButtton = (props: {
     color: #fff;
   `;
   return (
-    <div css={cssButton} onClick={props.onClick} data-disabled={!props.enabled}>
+    <div css={cssButton} onClick={props.handler} data-disabled={!props.enabled}>
       <i class={props.icon} />
     </div>
   );
 };
 
-function makeOperationButtonsViewModel() {
-  const la = editorModel.profileModel.currentLayer;
-
-  const canModifyLayer = la.canModify;
-  const canShiftBackLayer = la.canShiftBack;
-  const canShiftForwardLayer = la.canShiftForward;
-  const deleteLayer = la.delete.bind(la);
-  const shiftBackLayer = la.shiftBack.bind(la);
-  const shiftForwardLayer = la.shiftForward.bind(la);
-
-  const addNewLayer = async () => {
-    // const newLayerName = await modalTextInput({
-    //   message: 'please input new layer name',
-    // });
-    // if (newLayerName) {
-    // }
-  };
-
-  const renameLayer = async () => {
-    // const curLayer = editorModel.currentLayer;
-    // if (curLayer) {
-    //   const newLayerName = await modalTextInput({
-    //     message: 'please input new layer name',
-    //     defaultText: curLayer.layerName,
-    //   });
-    //   if (newLayerName) {
-    //     curLayer.layerName = newLayerName;
-    //   }
-    // }
-  };
-
-  return {
-    canModifyLayer,
-    canShiftBackLayer,
-    canShiftForwardLayer,
-    deleteLayer,
-    shiftBackLayer,
-    shiftForwardLayer,
-    addNewLayer,
-    renameLayer,
-  };
-}
-
 export const LayerOperationButtonsPart = () => {
   const cssButtonsRow = css`
     display: flex;
   `;
+
   const {
-    canModifyLayer,
-    canShiftBackLayer,
-    canShiftForwardLayer,
-    deleteLayer,
-    shiftBackLayer,
-    shiftForwardLayer,
+    canModifyCurrentLayer,
+    canShiftBackCurrentLayer,
+    canShiftForwardCurrentLayer,
+    shiftBackCurrentLayer,
+    shiftForwardCurrentLayer,
+    renameCurrentLayer,
+    deleteCurrentLayer,
     addNewLayer,
-    renameLayer,
-  } = makeOperationButtonsViewModel();
+  } = editorModel.layerManagementModel;
+
   return (
     <div css={cssButtonsRow}>
       <LayerOperationButtton
         icon="fa fa-plus"
-        onClick={addNewLayer}
         enabled={true}
+        handler={addNewLayer}
       />
       <LayerOperationButtton
         icon="fa fa-times"
-        onClick={deleteLayer}
-        enabled={canModifyLayer}
+        enabled={canModifyCurrentLayer}
+        handler={deleteCurrentLayer}
       />
       <LayerOperationButtton
         icon="fa fa-pen-square"
-        onClick={renameLayer}
-        enabled={canModifyLayer}
+        enabled={canModifyCurrentLayer}
+        handler={renameCurrentLayer}
       />
       <LayerOperationButtton
         icon="fa fa-long-arrow-alt-up"
-        onClick={shiftBackLayer}
-        enabled={canShiftBackLayer}
+        enabled={canShiftBackCurrentLayer}
+        handler={shiftBackCurrentLayer}
       />
       <LayerOperationButtton
         icon="fa fa-long-arrow-alt-down"
-        onClick={shiftForwardLayer}
-        enabled={canShiftForwardLayer}
+        enabled={canShiftForwardCurrentLayer}
+        handler={shiftForwardCurrentLayer}
       />
     </div>
   );

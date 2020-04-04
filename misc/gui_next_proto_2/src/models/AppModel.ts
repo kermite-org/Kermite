@@ -2,7 +2,6 @@ import { EditorModel } from './EditorModel';
 import { testProfileData } from '../defs/testProfileData';
 
 export class AppModel {
-  count: number = 0;
   readonly editorModel = new EditorModel();
   debugObject?: any;
 

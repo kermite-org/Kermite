@@ -14,7 +14,7 @@ function getAssignOperationText(op?: IAssignOperation): string {
     return VirtualKeyTexts[op.virtualKey] || '';
   }
   if (op?.type === 'layerCall') {
-    const layer = editorModel.profileModel.layers.find(
+    const layer = editorModel.profileData.layers.find(
       (la) => la.layerId === op.targetLayerId
     );
     return (layer && layer.layerName) || '';
@@ -60,7 +60,7 @@ function makeKeyUnitViewModel(kp: IKeyUnitPositionEntry) {
   };
 
   const curLayerId = 'la0'; //editorModel.currentLayerId
-  const assign = editorModel.profileModel.assigns[`${curLayerId}.${keyUnitId}`];
+  const assign = editorModel.profileData.assigns[`${curLayerId}.${keyUnitId}`];
   const { primaryText, secondaryText } = getAssignEntryTexts(assign);
 
   return {
@@ -151,7 +151,7 @@ export function KeyUnitCard({ kp }: { kp: IKeyUnitPositionEntry }) {
 export function KeyUnitCardsPart() {
   return (
     <g>
-      {editorModel.profileModel.keyboardShape.keyPositions.map((kp) => (
+      {editorModel.profileData.keyboardShape.keyPositions.map((kp) => (
         <KeyUnitCard kp={kp} />
       ))}
     </g>

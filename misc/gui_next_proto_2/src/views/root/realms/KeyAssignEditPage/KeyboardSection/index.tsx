@@ -6,7 +6,7 @@ import { editorModel } from '~models/AppModel';
 import { hx } from '~views/basis/qx';
 
 export const KeyboardBodyShape = () => {
-  const outerPaths = editorModel.profileModel.keyboardShape.bodyPathMarkupText;
+  const outerPaths = editorModel.profileData.keyboardShape.bodyPathMarkupText;
   const cssBody = css`
     fill: #54566f;
   `;
