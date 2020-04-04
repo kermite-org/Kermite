@@ -1,6 +1,8 @@
 import { hx } from '~views/basis/qx';
 import { UiTheme } from '~views/common/UiTheme';
 import { css } from 'goober';
+import { KeyboardSection } from './KeyboardSection';
+import { LayersSection } from './LayersSection';
 
 export const KeyAssignEditPage = () => {
   const { clPanelBox, editorPartMargin: mm } = UiTheme;
@@ -92,11 +94,15 @@ export const KeyAssignEditPage = () => {
       <div css={cssEditTopBarBox}>{/* <ProfileSelection /> */}</div>
       <div css={cssEditMainRow}>
         <div css={cssEditMainColumn}>
-          <div css={cssKeyboardPartBox}>{/* <KeyboardSection2 /> */}</div>
+          <div css={cssKeyboardPartBox}>
+            <KeyboardSection />
+          </div>
           <div css={cssAssignPartBox}>{/* <AssignSection2 /> */}</div>
         </div>
         <div css={cssEditSideBarColumn}>
-          <div css={cssLayersPartBox}>{/* <LayersSection2 /> */}</div>
+          <div css={cssLayersPartBox}>
+            <LayersSection />
+          </div>
           <div css={cssRestPartBox} />
         </div>
       </div>

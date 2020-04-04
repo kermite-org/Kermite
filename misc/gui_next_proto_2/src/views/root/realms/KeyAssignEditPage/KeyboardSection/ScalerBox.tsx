@@ -14,6 +14,7 @@ export function ScalerBox(props: {
     const sc = Math.min(w / contentWidth, h / contentHeight);
     const mh = Math.max((w - contentWidth * sc) / 2, 0);
     const mv = Math.max((h - contentHeight * sc) / 2, 0);
+
     const cssBaseDiv = css`
       flex-grow: 1;
       width: 100%;

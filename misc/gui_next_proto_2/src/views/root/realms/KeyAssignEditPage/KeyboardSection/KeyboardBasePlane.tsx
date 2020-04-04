@@ -2,6 +2,7 @@ import { css } from 'goober';
 import { hx } from '~views/basis/qx';
 
 export const KeyboardBasePlane = (props: { children: any }) => {
+  // console.log('KeyboardBasePlane');
   const clearAssignSlotSelection = () => {
     // appModel.editorModel.setCurrentKeyUnit('');
   };

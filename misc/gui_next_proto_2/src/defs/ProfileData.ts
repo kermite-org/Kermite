@@ -196,7 +196,7 @@ export interface IKeyboardShape {
 export const keyboardShape_fallbackData: IKeyboardShape = {
   bleedName: 'none',
   keyPositions: [],
-  bodyPathMarkupText: ''
+  bodyPathMarkupText: '',
 };
 
 export interface IProfileData {
@@ -210,7 +210,7 @@ export interface IProfileData {
     2 single1, single2, singleVersatile1
     3 single1, single2, singleVersatile1, combinations
     */
-  featureLevel: 0 | 1 | 2 | 3;
+  // featureLevel: 0 | 1 | 2 | 3;
   /*
     strong fallback layer is checked after when there aren't any assigns found
     */
@@ -231,19 +231,19 @@ export interface IProfileData {
 
 export const fallbackProfileData: IProfileData = {
   revision: 'PRF02',
-  featureLevel: 3,
+  // featureLevel: 3,
   keyboardShape: keyboardShape_fallbackData,
   layers: [
     {
       layerId: 'la0',
-      layerName: 'main'
+      layerName: 'main',
       // layerRole: 'main'
-    }
+    },
     // {
     //   layerId: 'la1',
     //   // layerRole: 'shift',
     //   layerName: 'shift'
     // }
   ],
-  assigns: {}
+  assigns: {},
 };

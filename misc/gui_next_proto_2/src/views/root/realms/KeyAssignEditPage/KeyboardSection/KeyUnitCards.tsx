@@ -2,7 +2,7 @@ import { css } from 'goober';
 import {
   IAssignOperation,
   ISingleAssignEntry,
-  IKeyUnitPositionEntry
+  IKeyUnitPositionEntry,
 } from '~defs/ProfileData';
 import { VirtualKeyTexts } from '~defs/VirtualKeyTexts';
 import { editorModel } from '~models/AppModel';
@@ -14,8 +14,8 @@ function getAssignOperationText(op?: IAssignOperation): string {
     return VirtualKeyTexts[op.virtualKey] || '';
   }
   if (op?.type === 'layerCall') {
-    const layer = editorModel.profileData.layers.find(
-      la => la.layerId === op.targetLayerId
+    const layer = editorModel.profileModel.layers.find(
+      (la) => la.layerId === op.targetLayerId
     );
     return (layer && layer.layerName) || '';
   }
@@ -41,13 +41,13 @@ function getAssignEntryTexts(
         secondaryText:
           assign.mode === 'dual'
             ? getAssignOperationText(assign.secondaryOp)
-            : ''
+            : '',
       };
     }
   }
   return {
     primaryText: '',
-    secondaryText: ''
+    secondaryText: '',
   };
 }
 
@@ -59,8 +59,8 @@ function makeKeyUnitViewModel(kp: IKeyUnitPositionEntry) {
     // editorModel.setCurrentKeyUnit(keyUnitId);
   };
 
-  const curLayerId = ''; //editorModel.currentLayerId
-  const assign = editorModel.profileData.assigns[`${curLayerId}.${keyUnitId}`];
+  const curLayerId = 'la0'; //editorModel.currentLayerId
+  const assign = editorModel.profileModel.assigns[`${curLayerId}.${keyUnitId}`];
   const { primaryText, secondaryText } = getAssignEntryTexts(assign);
 
   return {
@@ -69,7 +69,7 @@ function makeKeyUnitViewModel(kp: IKeyUnitPositionEntry) {
     isCurrent,
     setCurrent,
     primaryText,
-    secondaryText
+    secondaryText,
   };
 }
 
@@ -80,7 +80,7 @@ export function KeyUnitCard({ kp }: { kp: IKeyUnitPositionEntry }) {
     isCurrent,
     setCurrent,
     primaryText,
-    secondaryText
+    secondaryText,
   } = makeKeyUnitViewModel(kp);
 
   const cssKeyRect = css`
@@ -151,7 +151,7 @@ export function KeyUnitCard({ kp }: { kp: IKeyUnitPositionEntry }) {
 export function KeyUnitCardsPart() {
   return (
     <g>
-      {editorModel.profileData.keyboardShape.keyPositions.map(kp => (
+      {editorModel.profileModel.keyboardShape.keyPositions.map((kp) => (
         <KeyUnitCard kp={kp} />
       ))}
     </g>

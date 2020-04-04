@@ -6,14 +6,14 @@ import { editorModel } from '~models/AppModel';
 import { hx } from '~views/basis/qx';
 
 export const KeyboardBodyShape = () => {
-  const outerPaths = editorModel.profileData.keyboardShape.bodyPathMarkupText;
+  const outerPaths = editorModel.profileModel.keyboardShape.bodyPathMarkupText;
   const cssBody = css`
     fill: #54566f;
   `;
   return <path d={outerPaths} css={cssBody} />;
 };
 
-export function KeyboardSection2() {
+export function KeyboardSection() {
   return (
     <ScalerBox
       boxId="KeyboardSection_scalerBox"

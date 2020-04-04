@@ -53,4 +53,5 @@ export function initialzeView() {
 
   window.addEventListener('resize', app.rerender);
   setTimeout(app.rerender, 1);
+  setTimeout(app.rerender, 2);
 }
