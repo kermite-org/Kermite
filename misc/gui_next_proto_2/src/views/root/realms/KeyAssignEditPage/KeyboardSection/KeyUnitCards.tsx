@@ -1,79 +1,10 @@
 import { css } from 'goober';
-import {
-  IAssignOperation,
-  ISingleAssignEntry,
-  IKeyUnitPositionEntry,
-} from '~defs/ProfileData';
-import { VirtualKeyTexts } from '~defs/VirtualKeyTexts';
-import { editorModel } from '~models/AppModel';
+import { editorModel } from '~models/model/EditorModel';
+import { IKeyUnitCardModel } from '~models/model/KeyUnitCardModel';
 import { hx } from '~views/basis/qx';
 import { UiTheme } from '~views/common/UiTheme';
 
-function getAssignOperationText(op?: IAssignOperation): string {
-  if (op?.type === 'keyInput' && op.virtualKey !== 'K_NONE') {
-    return VirtualKeyTexts[op.virtualKey] || '';
-  }
-  if (op?.type === 'layerCall') {
-    const layer = editorModel.profileData.layers.find(
-      (la) => la.layerId === op.targetLayerId
-    );
-    return (layer && layer.layerName) || '';
-  }
-  if (op?.type === 'modifierCall') {
-    return VirtualKeyTexts[op.modifierKey] || '';
-  }
-  return '';
-}
-
-function getAssignEntryTexts(
-  assign?: ISingleAssignEntry
-): { primaryText: string; secondaryText: string } {
-  if (assign) {
-    // if (assign.type === 'single1' && assign.op) {
-    //   return {
-    //     primaryText: getAssignOperationText(assign.op),
-    //     secondaryText: ''
-    //   };
-    // }
-    if (assign.type === 'single2') {
-      return {
-        primaryText: getAssignOperationText(assign.primaryOp),
-        secondaryText:
-          assign.mode === 'dual'
-            ? getAssignOperationText(assign.secondaryOp)
-            : '',
-      };
-    }
-  }
-  return {
-    primaryText: '',
-    secondaryText: '',
-  };
-}
-
-function makeKeyUnitViewModel(kp: IKeyUnitPositionEntry) {
-  const keyUnitId = kp.id;
-  const pos = { x: kp.x, y: kp.y, r: kp.r };
-  const isCurrent = false; ///editorModel.currentKeyUnitId === keyUnitId;
-  const setCurrent = () => {
-    // editorModel.setCurrentKeyUnit(keyUnitId);
-  };
-
-  const curLayerId = 'la0'; //editorModel.currentLayerId
-  const assign = editorModel.profileData.assigns[`${curLayerId}.${keyUnitId}`];
-  const { primaryText, secondaryText } = getAssignEntryTexts(assign);
-
-  return {
-    keyUnitId,
-    pos,
-    isCurrent,
-    setCurrent,
-    primaryText,
-    secondaryText,
-  };
-}
-
-export function KeyUnitCard({ kp }: { kp: IKeyUnitPositionEntry }) {
+export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardModel }) {
   const {
     keyUnitId,
     pos,
@@ -81,7 +12,7 @@ export function KeyUnitCard({ kp }: { kp: IKeyUnitPositionEntry }) {
     setCurrent,
     primaryText,
     secondaryText,
-  } = makeKeyUnitViewModel(kp);
+  } = keyUnit;
 
   const cssKeyRect = css`
     cursor: pointer;
@@ -151,8 +82,8 @@ export function KeyUnitCard({ kp }: { kp: IKeyUnitPositionEntry }) {
 export function KeyUnitCardsPart() {
   return (
     <g>
-      {editorModel.profileData.keyboardShape.keyPositions.map((kp) => (
-        <KeyUnitCard kp={kp} />
+      {editorModel.keyUnitCardModels.map((keyUnit) => (
+        <KeyUnitCard keyUnit={keyUnit} key={keyUnit.keyUnitId} />
       ))}
     </g>
   );

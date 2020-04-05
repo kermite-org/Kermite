@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "parcel src/index.html -p 3000 --open"
+    "start": "parcel src/index.html -p 3000 --open",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@typescript-eslint/parser": "^2.26.0",

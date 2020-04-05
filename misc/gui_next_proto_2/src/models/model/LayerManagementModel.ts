@@ -1,29 +1,14 @@
-import { IProfileData, ILayer, fallbackProfileData } from '~defs/ProfileData';
+import { ILayer } from '~defs/ProfileData';
 import { Arrays } from '~funcs/Arrays';
+import { editorState } from '~models/core/EditorState';
 
 export class LayerManagementModel {
-  profileData: IProfileData = fallbackProfileData;
-  currentLayerId: string = '';
-
-  setProfileData(profileData: IProfileData) {
-    this.profileData = profileData;
-    this.currentLayerId = profileData.layers[0].layerId;
-  }
-
-  isLayerCurrent(layerId: string) {
-    return layerId === this.currentLayerId;
-  }
-
-  setCurrentLayer(layerId: string) {
-    this.currentLayerId = layerId;
-  }
-
   private get layers() {
-    return this.profileData.layers;
+    return editorState.profileData.layers;
   }
 
   private get curLayer(): ILayer {
-    return this.layers.find((la) => la.layerId === this.currentLayerId)!;
+    return this.layers.find((la) => la.layerId === editorState.currentLayerId)!;
   }
 
   private get isCurrentLayerCustom() {
@@ -69,7 +54,7 @@ export class LayerManagementModel {
 
   deleteCurrentLayer = () => {
     Arrays.remove(this.layers, this.curLayer);
-    this.currentLayerId = this.layers[0].layerId;
+    editorState.currentLayerId = this.layers[0].layerId;
   };
 
   renameCurrentLayer = () => {

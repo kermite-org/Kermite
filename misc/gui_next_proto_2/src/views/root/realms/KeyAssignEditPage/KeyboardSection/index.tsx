@@ -2,11 +2,11 @@ import { KeyboardBasePlane } from './KeyboardBasePlane';
 import { KeyUnitCardsPart } from './KeyUnitCards';
 import { css } from 'goober';
 import { ScalerBox } from './ScalerBox';
-import { editorModel } from '~models/AppModel';
 import { hx } from '~views/basis/qx';
+import { editorState } from '~models/core/EditorState';
 
 export const KeyboardBodyShape = () => {
-  const outerPaths = editorModel.profileData.keyboardShape.bodyPathMarkupText;
+  const outerPaths = editorState.profileData.keyboardShape.bodyPathMarkupText;
   const cssBody = css`
     fill: #54566f;
   `;
@@ -19,16 +19,11 @@ export function KeyboardSection() {
       boxId="KeyboardSection_scalerBox"
       contentWidth={600}
       contentHeight={240}
-      children={
-        <KeyboardBasePlane
-          children={
-            <g>
-              <KeyboardBodyShape />
-              <KeyUnitCardsPart />
-            </g>
-          }
-        />
-      }
-    />
+    >
+      <KeyboardBasePlane>
+        <KeyboardBodyShape />
+        <KeyUnitCardsPart />
+      </KeyboardBasePlane>
+    </ScalerBox>
   );
 }

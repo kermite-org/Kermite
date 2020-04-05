@@ -1,6 +1,6 @@
 import { css } from 'goober';
-import { editorModel } from '~models/AppModel';
 import { hx } from '~views/basis/qx';
+import { editorModel } from '~models/model/EditorModel';
 
 const LayerOperationButtton = (props: {
   icon: string;

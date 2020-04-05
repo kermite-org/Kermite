@@ -1,13 +1,13 @@
-import { appModel } from './models/AppModel';
+import { appDomain } from './models/AppDomain';
 import { initialzeView } from './views';
 
 function start() {
   console.log('start');
 
-  appModel.initialize();
+  appDomain.initialize();
   initialzeView();
 
-  window.addEventListener('beforeunload', () => appModel.terminate());
+  window.addEventListener('beforeunload', () => appDomain.terminate());
 }
 
 window.addEventListener('load', start);

@@ -1,10 +1,9 @@
 import { qx, hx } from './basis/qx';
 import { PageContentRoot } from './root/PageContentRoot';
 import { glob, setPragma, css } from 'goober';
-import { app } from '~models/appGlobal';
+import { app } from '~models/core/appGlobal';
 import { DebugOverlay } from './basis/DebugOverlay';
 import { ForegroundModalLayerRoot } from './basis/ForegroundModalLayer';
-import { appModel } from '~models/AppModel';
 
 setPragma(hx);
 
@@ -41,7 +40,7 @@ const SiteRoot = () => {
   return (
     <div css={cssSiteRoot}>
       <PageContentRoot />
-      <DebugOverlay debugObj={appModel.debugObject} />
+      <DebugOverlay debugObj={app.debugObject} />
       <ForegroundModalLayerRoot />
     </div>
   );
