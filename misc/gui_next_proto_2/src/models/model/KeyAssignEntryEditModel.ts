@@ -10,11 +10,16 @@ const localModelState: IState = {
   targetSlot: 'pri',
 };
 
+export interface IOperationSlotModel {
+  text: string;
+  isCurrent: boolean;
+  setCurrent(): void;
+}
+
+const targetSlotSigs: TargetSlotSig[] = ['pri', 'sec'];
+
 type IKeyAssignEntryEditModel_Single2 = {
-  isPrimaryCurrent: boolean;
-  isSecondaryCurrent: boolean;
-  setPrimaryCurrent(): void;
-  setSecondaryCurrent(): void;
+  slots: IOperationSlotModel[];
 };
 
 export function makeKeyAssignEntryEditModel(
@@ -23,16 +28,14 @@ export function makeKeyAssignEntryEditModel(
   const { targetSlot } = localModelState;
   const setTargetSlot = (sig: TargetSlotSig) =>
     (localModelState.targetSlot = sig);
-
-  const isPrimaryCurrent = targetSlot === 'pri';
-  const isSecondaryCurrent = targetSlot === 'sec';
-  const setPrimaryCurrent = () => setTargetSlot('pri');
-  const setSecondaryCurrent = () => setTargetSlot('sec');
-
+  const slots: IOperationSlotModel[] = targetSlotSigs.map((sig) => {
+    return {
+      text: sig === 'pri' ? 'primary' : 'secondary',
+      isCurrent: targetSlot === sig,
+      setCurrent: () => setTargetSlot(sig),
+    };
+  });
   return {
-    isPrimaryCurrent,
-    isSecondaryCurrent,
-    setPrimaryCurrent,
-    setSecondaryCurrent,
+    slots,
   };
 }
