@@ -5,6 +5,7 @@ import {
 } from '~defs/ProfileData';
 import { VirtualKeyTexts } from '~defs/VirtualKeyTexts';
 import { editorState } from '~models/core/EditorState';
+import { editorMutations } from '~models/core/EditorMutations';
 
 export interface IKeyUnitCardModel {
   keyUnitId: string;
@@ -66,12 +67,12 @@ export function makeKeyUnitCardModel(
 ): IKeyUnitCardModel {
   const keyUnitId = kp.id;
   const pos = { x: kp.x, y: kp.y, r: kp.r };
-  const isCurrent = false; ///editorModel.currentKeyUnitId === keyUnitId;
+  const isCurrent = editorState.currentKeyUnitId === keyUnitId;
   const setCurrent = () => {
-    // editorModel.setCurrentKeyUnit(keyUnitId);
+    editorMutations.setCurrentKeyUnitId(keyUnitId);
   };
 
-  const curLayerId = 'la0'; //editorModel.currentLayerId
+  const curLayerId = 'la0';
   const assign = editorState.profileData.assigns[`${curLayerId}.${keyUnitId}`];
   const { primaryText, secondaryText } = getAssignEntryTexts(assign);
 

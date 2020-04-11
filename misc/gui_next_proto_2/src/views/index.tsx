@@ -35,13 +35,11 @@ const SiteRoot = () => {
   const cssSiteRoot = css`
     height: 100%;
   `;
-  console.log(`render`);
-  // appModel.debugObject = { foo: 100, bar: 200 };
   return (
     <div css={cssSiteRoot}>
       <PageContentRoot />
-      <DebugOverlay debugObj={app.debugObject} />
       <ForegroundModalLayerRoot />
+      <DebugOverlay debugObj={app.debugObject} />
     </div>
   );
 };
@@ -53,4 +51,13 @@ export function initialzeView() {
   window.addEventListener('resize', app.rerender);
   setTimeout(app.rerender, 1);
   setTimeout(app.rerender, 2);
+
+  function renderLoop() {
+    if (app.reqRerender) {
+      qx.rerender();
+      app.reqRerender = false;
+    }
+    requestAnimationFrame(renderLoop);
+  }
+  renderLoop();
 }

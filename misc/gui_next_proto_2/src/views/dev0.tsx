@@ -1,8 +1,10 @@
 import { hx } from './basis/qx';
 import {
   createClosureComponent,
-  createClosureComponent2
+  createClosureComponent2,
 } from './basis/qxUtils';
+import { DebugOverlay } from './basis/DebugOverlay';
+import { app } from '~models/core/appGlobal';
 
 // class CounterViewModel {
 //   get count() {
@@ -47,15 +49,18 @@ import {
 function makeCounterViewModel(initialCount: number) {
   const self = {
     count: initialCount,
-    increment: () => self.count++
+    increment: () => self.count++,
   };
   return self;
 }
 
 const ClosureCounter = createClosureComponent(() => {
   const vm = makeCounterViewModel(10);
+
   return () => {
     const { count, increment } = vm;
+
+    app.setDebugObject({ count });
     return (
       <div>
         <div>closure counter</div>
@@ -85,11 +90,13 @@ const ClosureComponent2 = createClosureComponent2((props: { text: string }) => {
 let textHoge = 'hoge';
 
 export const SiteRootD = () => {
+  // console.log(`site root d`);
   return (
     <div>
       <ClosureCounter />
       <ClosureComponent2 text={textHoge} />
       <button onClick={() => (textHoge = 'piyo')}>piyo</button>
+      <DebugOverlay debugObj={app.debugObject} />
     </div>
   );
 };

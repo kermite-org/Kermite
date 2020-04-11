@@ -1,4 +1,12 @@
 export const app = new (class {
   debugObject?: any;
-  rerender: () => void = () => {};
+  reqRerender: boolean = false;
+  rerender() {
+    this.reqRerender = true;
+  }
+
+  setDebugObject(obj: any) {
+    this.debugObject = obj;
+    this.reqRerender = true;
+  }
 })();

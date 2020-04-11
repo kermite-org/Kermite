@@ -12,4 +12,8 @@ export const editorMutations = new (class {
   setCurrentLayerId(layerId: string) {
     editorState.currentLayerId = layerId;
   }
+
+  setCurrentKeyUnitId(keyUnitId: string) {
+    editorState.currentKeyUnitId = keyUnitId;
+  }
 })();

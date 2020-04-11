@@ -38,17 +38,18 @@ export const DebugOverlay = createClosureComponent(() => {
     visible = !visible;
   };
 
-  return (props: { debugObj?: any }) =>
-    props.debugObj ? (
+  return (props: { debugObj?: any }) => {
+    return props.debugObj ? (
       <div>
         <div css={cssTab} onClick={toggleVisible}>
           D
         </div>
         {visible && (
           <div css={cssDebugPane}>
-            {JSON.stringify(props.debugObj, null, '  ')}
+            <pre>{JSON.stringify(props.debugObj, null, '  ')}</pre>
           </div>
         )}
       </div>
     ) : null;
+  };
 });

@@ -3,6 +3,7 @@ import { UiTheme } from '~views/common/UiTheme';
 import { css } from 'goober';
 import { KeyboardSection } from './KeyboardSection';
 import { LayersSection } from './LayersSection';
+import { AssignEditSection } from './AssignEditSection';
 
 export const KeyAssignEditPage = () => {
   const { clPanelBox, editorPartMargin: mm } = UiTheme;
@@ -11,6 +12,7 @@ export const KeyAssignEditPage = () => {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    color: #fff;
 
     > div {
       margin-left: ${mm};
@@ -97,13 +99,15 @@ export const KeyAssignEditPage = () => {
           <div css={cssKeyboardPartBox}>
             <KeyboardSection />
           </div>
-          <div css={cssAssignPartBox}>{/* <AssignSection2 /> */}</div>
+          <div css={cssAssignPartBox}>
+            <AssignEditSection />
+          </div>
         </div>
         <div css={cssEditSideBarColumn}>
           <div css={cssLayersPartBox}>
             <LayersSection />
           </div>
-          <div css={cssRestPartBox} />
+          <div css={cssRestPartBox}></div>
         </div>
       </div>
     </div>

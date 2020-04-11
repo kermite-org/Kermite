@@ -22,7 +22,10 @@ export type IAssignOperationType =
   | 'layerCall'
   | 'modifierCall';
 
-export type IAssingOperationKeyINput = {
+// export type IAssingOperationNone = {
+//   type: 'none';
+// };
+export type IAssingOperationKeyInput = {
   type: 'keyInput';
   virtualKey: VirtualKey;
   attachedModifiers?: ModifierVirtualKey[];
@@ -48,7 +51,8 @@ export type IAssignOperation =
   //   }
   // |
   | undefined
-  | IAssingOperationKeyINput
+  // | IAssingOperationNone
+  | IAssingOperationKeyInput
   | IAssignOperationLayerCall
   | IAssignOperationModifierCall;
 // | {
@@ -80,37 +84,38 @@ export type IAssignOperation =
 //   | 'up';
 
 export type IAssignOperationTypeMap = {
+  // none: IAssingOperationNone | undefined;
   none: undefined;
-  keyInput: IAssingOperationKeyINput;
+  keyInput: IAssingOperationKeyInput;
   layerCall: IAssignOperationLayerCall;
   modifierCall: IAssignOperationModifierCall;
 };
 
-export type IInputTriggersA =
-  | 'down'
-  | 'down_w'
-  | 'up'
-  | 'up_w'
-  | 'tap'
-  | 'tap_w'
-  | 'tap_redown'
-  | 'tap_rehold'
-  | 'hold'
-  | 'dtap'
-  | 'dtap_w'
-  | 'tritap'
-  | 'tap_dtap'
-  | 'tap_dtap_tritap'
-  | 'tap_drill_d'
-  | 'tap_drill_dd'
-  | 'tap_drill_ddd';
+// export type IInputTriggersA =
+//   | 'down'
+//   | 'down_w'
+//   | 'up'
+//   | 'up_w'
+//   | 'tap'
+//   | 'tap_w'
+//   | 'tap_redown'
+//   | 'tap_rehold'
+//   | 'hold'
+//   | 'dtap'
+//   | 'dtap_w'
+//   | 'tritap'
+//   | 'tap_dtap'
+//   | 'tap_dtap_tritap'
+//   | 'tap_drill_d'
+//   | 'tap_drill_dd'
+//   | 'tap_drill_ddd';
 
 export type ISingleAssignEntryType =
   | 'none'
   | 'transparent'
   // | 'single1'
-  | 'single2'
-  | 'singleVersatile1';
+  | 'single2';
+// | 'singleVersatile1';
 
 // export type ISingleAssignEntry_None = {
 //   type: 'none';
@@ -123,34 +128,37 @@ export type ISingleAssignEntry_Transparent = {
 //   op?: IAssignOperation;
 // };
 
-export type ISingleAssignEntry_Single2_Mode = 'single' | 'dual';
+// export type ISingleAssignEntry_Single2_Mode = 'single' | 'dual';
 export type ISingleAssignEntry_Single2 = {
   type: 'single2';
-  mode: 'single' | 'dual';
+  // mode: 'single' | 'dual';
+  mode: 'dual';
   primaryOp?: IAssignOperation; //down, tap(if secondaryOp exists)
   secondaryOp?: IAssignOperation; //hold
 };
-export type ISingleAssignEntry_SingleVersatile1 = {
-  type: 'singleVersatile1';
-  slots: {
-    trigger: IInputTriggersA;
-    op: IAssignOperation;
-    cancelPreviousInput?: boolean;
-  }[];
-};
+// export type ISingleAssignEntry_SingleVersatile1 = {
+//   type: 'singleVersatile1';
+//   slots: {
+//     trigger: IInputTriggersA;
+//     op: IAssignOperation;
+//     cancelPreviousInput?: boolean;
+//   }[];
+// };
 export type ISingleAssignEntry =
   | undefined
+  // | ISingleAssignEntry_None
   | ISingleAssignEntry_Transparent
   // | ISingleAssignEntry_Single1
-  | ISingleAssignEntry_Single2
-  | ISingleAssignEntry_SingleVersatile1;
+  | ISingleAssignEntry_Single2;
+// | ISingleAssignEntry_SingleVersatile1;
 
 export type ISingleAssignEntryTypeMap = {
-  none: 'undefined';
+  // none: ISingleAssignEntry_None | undefined;
+  none: undefined;
   transparent: ISingleAssignEntry_Transparent;
   // single1: ISingleAssignEntry_Single1;
   single2: ISingleAssignEntry_Single2;
-  singleVersatile1: ISingleAssignEntry_SingleVersatile1;
+  // singleVersatile1: ISingleAssignEntry_SingleVersatile1;
 };
 
 export type ICombinationAssignEntry =
@@ -223,10 +231,9 @@ export interface IProfileData {
     //   [keyId: string]: ISingleAssignEntry;
     // };
   };
-  multiAssigns?: {
-    [layerId: string]: ICombinationAssignEntry[];
-  };
-  //assigns: IKeyAssignsSet;
+  // multiAssigns?: {
+  //   [layerId: string]: ICombinationAssignEntry[];
+  // };
 }
 
 export const fallbackProfileData: IProfileData = {

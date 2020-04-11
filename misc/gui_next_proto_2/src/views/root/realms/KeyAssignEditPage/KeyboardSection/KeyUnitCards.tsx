@@ -17,7 +17,7 @@ export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardModel }) {
   const cssKeyRect = css`
     cursor: pointer;
     fill: rgba(0, 0, 0, 0.5);
-    &[data-current='true'] {
+    &[data-current] {
       fill: ${UiTheme.clSelectHighlight};
     }
   `;
