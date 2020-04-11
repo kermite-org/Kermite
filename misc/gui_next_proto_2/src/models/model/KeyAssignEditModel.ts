@@ -1,5 +1,6 @@
 import { ISingleAssignEntry, ISingleAssignEntryType } from '~defs/ProfileData';
 import { editorState } from '~models/core/EditorState';
+import { makeKeyAssignEntryEditModel } from './KeyAssignEntryEditModel';
 
 const entryTypes: ISingleAssignEntryType[] = [
   'none',
@@ -44,8 +45,11 @@ export class KeyAssignEditModel {
   }
 
   get assignEntryModel() {
-    // return new AssignEntryModel(this.profileDataAssignEntry)
-    return this.profileDataAssignEntry;
+    if (this.profileDataAssignEntry?.type === 'single2') {
+      return makeKeyAssignEntryEditModel(this.profileDataAssignEntry);
+    } else {
+      return undefined;
+    }
   }
 
   constructor(slotAddress: string) {

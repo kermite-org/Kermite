@@ -72,7 +72,7 @@ export function makeKeyUnitCardModel(
     editorMutations.setCurrentKeyUnitId(keyUnitId);
   };
 
-  const curLayerId = 'la0';
+  const curLayerId = editorState.currentLayerId;
   const assign = editorState.profileData.assigns[`${curLayerId}.${keyUnitId}`];
   const { primaryText, secondaryText } = getAssignEntryTexts(assign);
 
