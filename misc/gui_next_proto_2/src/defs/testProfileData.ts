@@ -49,7 +49,7 @@ export const testProfileData: IProfileData = {
   assigns: {
     'la0.ku0': {
       type: 'single2',
-      mode: 'single',
+      mode: 'dual',
       primaryOp: {
         type: 'keyInput',
         virtualKey: 'K_A',

@@ -1,6 +1,20 @@
-import { ISingleAssignEntry, ISingleAssignEntryType } from '~defs/ProfileData';
-import { editorState } from '~models/core/EditorState';
-import { makeKeyAssignEntryEditModel } from './KeyAssignEntryEditModel';
+import { ISingleAssignEntryType } from '~defs/ProfileData';
+import {
+  assignEditMutations,
+  assignEditGetters,
+} from '~models/core/AssignEditModule';
+import {
+  makeKeyAssignEntryEditModel_Single2,
+  IKeyAssignEntryEditModel_Single2,
+} from './KeyAssignEntryEditModel';
+import { editorGetters } from '~models/core/EditorModule';
+
+interface IAssignTypeSlotModel {
+  assignType: ISingleAssignEntryType;
+  text: string;
+  isCurrent: boolean;
+  setCurrent(): void;
+}
 
 const entryTypes: ISingleAssignEntryType[] = [
   'none',
@@ -18,63 +32,33 @@ const entryTypeToTextMap: { [key in ISingleAssignEntryType]: string } = {
   // singleVersatile1: 'SV1'
 };
 
-type IEditEntriesStock = {
-  [K in ISingleAssignEntryType]: ISingleAssignEntry;
-};
-
-const createDefaultEntriesStock = (): IEditEntriesStock => ({
-  none: undefined,
-  transparent: { type: 'transparent' },
-  single2: { type: 'single2', mode: 'dual' },
-});
-
-interface IAssignTypeSlotModel {
-  assignType: ISingleAssignEntryType;
-  text: string;
-  isCurrent: boolean;
-  setCurrent(): void;
+export interface IKeyAssignEditModel {
+  assignTypeSlotModels: IAssignTypeSlotModel[];
+  assignEntryModel: IKeyAssignEntryEditModel_Single2 | undefined;
 }
 
-export class KeyAssignEditModel {
-  readonly slotAddress: string;
-  private editAssignType: ISingleAssignEntryType;
-  private editEntriesStock: IEditEntriesStock;
+export function makeKeyAssignEditModel(): IKeyAssignEditModel {
+  const assignTypeSlotModels = entryTypes.map((assignType) => {
+    return {
+      assignType,
+      text: entryTypeToTextMap[assignType],
+      isCurrent: assignType === assignEditGetters.editAssignType,
+      setCurrent: () =>
+        assignEditMutations.setEditAssignType(
+          editorGetters.slotAddress,
+          assignType
+        ),
+    };
+  });
 
-  private get profileDataAssignEntry(): ISingleAssignEntry {
-    return editorState.profileData.assigns[this.slotAddress];
-  }
+  const { assignEntry } = editorGetters;
+  const assignEntryModel =
+    (assignEntry?.type === 'single2' &&
+      makeKeyAssignEntryEditModel_Single2(assignEntry)) ||
+    undefined;
 
-  get assignEntryModel() {
-    if (this.profileDataAssignEntry?.type === 'single2') {
-      return makeKeyAssignEntryEditModel(this.profileDataAssignEntry);
-    } else {
-      return undefined;
-    }
-  }
-
-  constructor(slotAddress: string) {
-    this.slotAddress = slotAddress;
-    this.editEntriesStock = createDefaultEntriesStock();
-    this.editAssignType = this.profileDataAssignEntry?.type || 'none';
-    this.editEntriesStock[this.editAssignType] =
-      editorState.profileData.assigns[this.slotAddress];
-  }
-
-  private setAssignEntryType(type: ISingleAssignEntryType) {
-    this.editAssignType = type;
-    editorState.profileData.assigns[this.slotAddress] = this.editEntriesStock[
-      this.editAssignType
-    ];
-  }
-
-  get assignTypeSlotModels(): IAssignTypeSlotModel[] {
-    return entryTypes.map((assignType) => {
-      return {
-        assignType,
-        text: entryTypeToTextMap[assignType],
-        isCurrent: assignType === this.editAssignType,
-        setCurrent: () => this.setAssignEntryType(assignType),
-      };
-    });
-  }
+  return {
+    assignEntryModel,
+    assignTypeSlotModels,
+  };
 }

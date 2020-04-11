@@ -1,34 +1,29 @@
 import { IKeyUnitCardModel, makeKeyUnitCardModel } from './KeyUnitCardModel';
 import { makeLayerListModel, ILayerListModel } from './LayerListModel';
 import { LayerManagementModel } from './LayerManagementModel';
-import { editorState } from '~models/core/EditorState';
-import { KeyAssignEditModel } from './KeyAssignEditModel';
+import {
+  IKeyAssignEditModel,
+  makeKeyAssignEditModel,
+} from './KeyAssignEditModel';
+import { editorGetters } from '~models/core/EditorModule';
 
 class EditorModel {
   layerManagementModel = new LayerManagementModel();
 
+  get keyAssignEditModel(): IKeyAssignEditModel {
+    return makeKeyAssignEditModel();
+  }
+
   get keyUnitCardModels(): IKeyUnitCardModel[] {
-    return editorState.profileData.keyboardShape.keyPositions.map(
-      makeKeyUnitCardModel
-    );
+    return editorGetters.keyPositions.map(makeKeyUnitCardModel);
   }
 
   get layerListModels(): ILayerListModel[] {
-    return editorState.profileData.layers.map(makeLayerListModel);
+    return editorGetters.layers.map(makeLayerListModel);
   }
 
-  private _keyAssignEditModel: KeyAssignEditModel = new KeyAssignEditModel('');
-  get keyAssignEditModel(): KeyAssignEditModel | undefined {
-    const curLayerId = editorState.currentLayerId;
-    const curKeyUnitId = editorState.currentKeyUnitId;
-    if (!(curLayerId && curKeyUnitId)) {
-      return undefined;
-    }
-    const slotAddress = `${curLayerId}.${curKeyUnitId}`;
-    if (this._keyAssignEditModel.slotAddress !== slotAddress) {
-      this._keyAssignEditModel = new KeyAssignEditModel(slotAddress);
-    }
-    return this._keyAssignEditModel;
+  get isSlotSelected() {
+    return editorGetters.isSlotSelected;
   }
 }
 export const editorModel = new EditorModel();

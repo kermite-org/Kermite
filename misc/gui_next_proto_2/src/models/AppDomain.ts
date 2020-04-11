@@ -1,5 +1,5 @@
 import { testProfileData } from '../defs/testProfileData';
-import { editorMutations } from './core/EditorMutations';
+import { editorMutations } from './core/EditorModule';
 
 export const appDomain = new (class {
   initialize() {

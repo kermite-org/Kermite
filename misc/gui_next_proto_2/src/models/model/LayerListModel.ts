@@ -1,6 +1,6 @@
 import { ILayer } from '~defs/ProfileData';
-import { editorState } from '~models/core/EditorState';
-import { editorMutations } from '~models/core/EditorMutations';
+// import { editorState } from '~models/core/EditorModule';
+import { editorMutations, editorGetters } from '~models/core/EditorModule';
 
 export interface ILayerListModel {
   layerId: string;
@@ -11,7 +11,7 @@ export interface ILayerListModel {
 
 export function makeLayerListModel(layer: ILayer): ILayerListModel {
   const { layerId, layerName } = layer;
-  const isCurrent = editorState.currentLayerId === layerId;
+  const isCurrent = editorGetters.isLayerCurrent(layerId);
   const setCurrent = () => editorMutations.setCurrentLayerId(layerId);
 
   return {

@@ -2,12 +2,12 @@ import { css } from 'goober';
 import { editorModel } from '~models/model/EditorModel';
 import { hx } from '~views/basis/qx';
 import { EntryEditPartContent } from './EntryEditPartContent';
-import { OpertionEditPartContent } from './OperationEditPart';
+import { OpertionEditPartContent } from './OperationEditPartContent';
 
 export function AssignEntryEditPart() {
   const model = editorModel.keyAssignEditModel?.assignEntryModel;
   if (!model) {
-    return null;
+    return <div>no assign entry loaded</div>;
   }
 
   const cssAssignEntryEditPart = css`

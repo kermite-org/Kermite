@@ -1,15 +1,10 @@
-import { hx } from '~views/basis/qx';
 import { editorModel } from '~models/model/EditorModel';
-import { app } from '~models/core/appGlobal';
-import { AssingTypeSelectionPart } from './AssignTypeSelectionPart';
+import { hx } from '~views/basis/qx';
 import { AssignEntryEditPart } from './AssignEntryEditPart';
+import { AssingTypeSelectionPart } from './AssignTypeSelectionPart';
 
 export function AssignEditSection() {
-  const model = editorModel.keyAssignEditModel;
-
-  app.setDebugObject({ m: model?.assignEntryModel || null });
-
-  if (!model) {
+  if (!editorModel.isSlotSelected) {
     return <div>no assign loaded</div>;
   }
   return (

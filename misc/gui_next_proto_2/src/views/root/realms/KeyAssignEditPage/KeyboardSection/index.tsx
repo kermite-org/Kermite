@@ -3,7 +3,7 @@ import { KeyUnitCardsPart } from './KeyUnitCards';
 import { css } from 'goober';
 import { ScalerBox } from './ScalerBox';
 import { hx } from '~views/basis/qx';
-import { editorState } from '~models/core/EditorState';
+import { editorState } from '~models/core/EditorModule';
 
 export const KeyboardBodyShape = () => {
   const outerPaths = editorState.profileData.keyboardShape.bodyPathMarkupText;

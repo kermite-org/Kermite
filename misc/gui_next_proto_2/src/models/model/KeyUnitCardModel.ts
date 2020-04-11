@@ -4,8 +4,7 @@ import {
   ISingleAssignEntry,
 } from '~defs/ProfileData';
 import { VirtualKeyTexts } from '~defs/VirtualKeyTexts';
-import { editorState } from '~models/core/EditorState';
-import { editorMutations } from '~models/core/EditorMutations';
+import { editorMutations, editorGetters } from '~models/core/EditorModule';
 
 export interface IKeyUnitCardModel {
   keyUnitId: string;
@@ -25,7 +24,7 @@ function getAssignOperationText(op?: IAssignOperation): string {
     return VirtualKeyTexts[op.virtualKey] || '';
   }
   if (op?.type === 'layerCall') {
-    const layer = editorState.profileData.layers.find(
+    const layer = editorGetters.layers.find(
       (la) => la.layerId === op.targetLayerId
     );
     return (layer && layer.layerName) || '';
@@ -67,13 +66,11 @@ export function makeKeyUnitCardModel(
 ): IKeyUnitCardModel {
   const keyUnitId = kp.id;
   const pos = { x: kp.x, y: kp.y, r: kp.r };
-  const isCurrent = editorState.currentKeyUnitId === keyUnitId;
+  const isCurrent = editorGetters.isKeyUnitCurrent(keyUnitId);
   const setCurrent = () => {
     editorMutations.setCurrentKeyUnitId(keyUnitId);
   };
-
-  const curLayerId = editorState.currentLayerId;
-  const assign = editorState.profileData.assigns[`${curLayerId}.${keyUnitId}`];
+  const assign = editorGetters.getAssignForKeyUnit(keyUnitId);
   const { primaryText, secondaryText } = getAssignEntryTexts(assign);
 
   return {

@@ -1,6 +1,6 @@
 import { ILayer } from '~defs/ProfileData';
 import { Arrays } from '~funcs/Arrays';
-import { editorState } from '~models/core/EditorState';
+import { editorState } from '~models/core/EditorModule';
 
 export class LayerManagementModel {
   private get layers() {

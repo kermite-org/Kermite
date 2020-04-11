@@ -1,12 +1,18 @@
 export const app = new (class {
-  debugObject?: any;
+  private _debugObject?: any;
+
   reqRerender: boolean = false;
+
   rerender() {
     this.reqRerender = true;
   }
 
+  get debugObject() {
+    return this._debugObject;
+  }
+
   setDebugObject(obj: any) {
-    this.debugObject = obj;
+    this._debugObject = obj;
     this.reqRerender = true;
   }
 })();

@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { hx } from '~views/basis/qx';
-import { editorMutations } from '~models/core/EditorMutations';
+import { editorMutations } from '~models/core/EditorModule';
 
 export const KeyboardBasePlane = (props: { children: any }) => {
   const clearAssignSlotSelection = () => {
