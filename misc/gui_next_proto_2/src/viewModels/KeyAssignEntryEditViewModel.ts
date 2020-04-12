@@ -1,15 +1,15 @@
 import { ISingleAssignEntry_Single2 } from '~defs/ProfileData';
-import { IAssignEditSingle2_TargetSlotSig } from '~models/core/AssignEditSingle2Module';
-import { editorModule } from '~models/core/EditorModule';
+import { IAssignEditSingle2_TargetSlotSig } from '~models/AssignEditSingle2Model';
+import { editorModel } from '~models/EditorModel';
 
-export interface IOperationSlotModel {
+export interface IOperationSlotViewModel {
   text: string;
   isCurrent: boolean;
   setCurrent(): void;
 }
 
-export type IKeyAssignEntryEditModel_Single2 = {
-  slots: IOperationSlotModel[];
+export type IKeyAssignEntryEditViewModel_Single2 = {
+  slots: IOperationSlotViewModel[];
 };
 
 type ITargetSlotSig = IAssignEditSingle2_TargetSlotSig;
@@ -21,13 +21,13 @@ const targetSlotSigToTextMap: { [key in ITargetSlotSig]: string } = {
   sec: 'secondary',
 };
 
-export function makeKeyAssignEntryEditModel_Single2(
+export function makeKeyAssignEntryEditViewModel_Single2(
   entry: ISingleAssignEntry_Single2
-): IKeyAssignEntryEditModel_Single2 {
+): IKeyAssignEntryEditViewModel_Single2 {
   const {
     targetSlotSig,
     setTargetSlotSig,
-  } = editorModule.assignEditSingle2Module;
+  } = editorModel.assignEditSingle2Model;
   const slots = targetSlotSigs.map((sig) => {
     return {
       text: targetSlotSigToTextMap[sig],

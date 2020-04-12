@@ -1,12 +1,12 @@
+import { css } from 'goober';
+import { editorViewModel } from '~viewModels/EditorViewModel';
+import { hx } from '~views/basis/qx';
 import { KeyboardBasePlane } from './KeyboardBasePlane';
 import { KeyUnitCardsPart } from './KeyUnitCards';
-import { css } from 'goober';
 import { ScalerBox } from './ScalerBox';
-import { hx } from '~views/basis/qx';
-import { editorModule } from '~models/core/EditorModule';
 
 export const KeyboardBodyShape = () => {
-  const outerPaths = editorModule.bodyPathMarkupText;
+  const outerPaths = editorViewModel.keyboardPartViewModel.bodyPathMarkupText;
   const cssBody = css`
     fill: #54566f;
   `;

@@ -1,15 +1,15 @@
 import { ILayer } from '~defs/ProfileData';
-import { editorModule } from '~models/core/EditorModule';
+import { editorModel } from '~models/EditorModel';
 
-export interface ILayerListModel {
+export interface ILayerListViewModel {
   layerId: string;
   layerName: string;
   isCurrent: boolean;
   setCurrent: () => void;
 }
 
-export function makeLayerListModel(layer: ILayer): ILayerListModel {
-  const { isLayerCurrent, setCurrentLayerId } = editorModule;
+export function makeLayerListViewModel(layer: ILayer): ILayerListViewModel {
+  const { isLayerCurrent, setCurrentLayerId } = editorModel;
   const { layerId, layerName } = layer;
   const isCurrent = isLayerCurrent(layerId);
   const setCurrent = () => setCurrentLayerId(layerId);

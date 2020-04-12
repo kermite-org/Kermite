@@ -4,14 +4,14 @@ import {
   ISingleAssignEntry,
 } from '~/defs/ProfileData';
 import { duplicateObjectByJsonStringifyParse } from '~funcs/utils';
-import { AssignEditSingle2Module } from './AssignEditSingle2Module';
-import { AssignEditModule } from './AssignEditModule';
+import { AssignEditSingle2Model } from './AssignEditSingle2Model';
+import { AssignEditModel } from './AssignEditModel';
 
-export class EditorModule {
+export class EditorModel {
   //modules
 
-  assignEditModule = new AssignEditModule(this);
-  assignEditSingle2Module = new AssignEditSingle2Module();
+  assignEditModel = new AssignEditModel(this);
+  assignEditSingle2Model = new AssignEditSingle2Model();
 
   //state
 
@@ -74,7 +74,7 @@ export class EditorModule {
     const slotAddress = `${currentLayerId}.${currentKeyUnitId}`;
     if (this.slotAddress !== slotAddress) {
       this.slotAddress = slotAddress;
-      this.assignEditModule.handleAssignSlotChange();
+      this.assignEditModel.handleAssignSlotChange();
     }
   };
 
@@ -96,4 +96,4 @@ export class EditorModule {
     this.profileData.assigns[this.slotAddress] = assign;
   };
 }
-export const editorModule = new EditorModule();
+export const editorModel = new EditorModel();

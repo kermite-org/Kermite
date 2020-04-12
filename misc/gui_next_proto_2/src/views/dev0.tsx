@@ -4,7 +4,7 @@ import {
   createClosureComponent2,
 } from './basis/qxUtils';
 import { DebugOverlay } from './basis/DebugOverlay';
-import { app } from '~models/core/appGlobal';
+import { app } from '~models/appGlobal';
 
 // class CounterViewModel {
 //   get count() {

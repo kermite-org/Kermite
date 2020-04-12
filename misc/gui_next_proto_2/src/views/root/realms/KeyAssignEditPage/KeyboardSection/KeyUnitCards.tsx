@@ -1,10 +1,10 @@
 import { css } from 'goober';
-import { editorModel } from '~models/model/EditorModel';
-import { IKeyUnitCardModel } from '~models/model/KeyUnitCardModel';
+import { editorViewModel } from '~viewModels/EditorViewModel';
+import { IKeyUnitCardViewModel } from '~viewModels/KeyUnitCardViewModel';
 import { hx } from '~views/basis/qx';
 import { UiTheme } from '~views/common/UiTheme';
 
-export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardModel }) {
+export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
   const {
     keyUnitId,
     pos,
@@ -82,7 +82,7 @@ export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardModel }) {
 export function KeyUnitCardsPart() {
   return (
     <g>
-      {editorModel.keyUnitCardModels.map((keyUnit) => (
+      {editorViewModel.keyUnitCardViewModels.map((keyUnit) => (
         <KeyUnitCard keyUnit={keyUnit} key={keyUnit.keyUnitId} />
       ))}
     </g>

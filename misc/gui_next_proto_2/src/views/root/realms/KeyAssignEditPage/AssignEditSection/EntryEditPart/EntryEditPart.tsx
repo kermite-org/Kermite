@@ -1,11 +1,11 @@
-import { editorModel } from '~models/model/EditorModel';
+import { editorViewModel } from '~viewModels/EditorViewModel';
 import { hx } from '~views/basis/qx';
 import { AssingTypeSelectionPart } from './AssignTypeSelectionPart';
 import { OerationSlotsPart } from './OperationSlotsPart';
 
 export function EntryEditPart() {
-  const model = editorModel.keyAssignEditModel;
-  if (!model) {
+  const vm = editorViewModel.keyAssignEditViewModel;
+  if (!vm) {
     return <div>no assign entry loaded</div>;
   }
 
@@ -13,7 +13,7 @@ export function EntryEditPart() {
     <div>
       <div>asssign edit</div>
       <AssingTypeSelectionPart />
-      {model.assignEntryModel && <OerationSlotsPart />}
+      {vm.assignEntryViewModel && <OerationSlotsPart />}
     </div>
   );
 }

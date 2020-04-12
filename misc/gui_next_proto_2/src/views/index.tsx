@@ -1,7 +1,7 @@
 import { qx, hx } from './basis/qx';
 import { PageContentRoot } from './root/PageContentRoot';
 import { glob, setPragma, css } from 'goober';
-import { app } from '~models/core/appGlobal';
+import { app } from '~models/appGlobal';
 import { DebugOverlay } from './basis/DebugOverlay';
 import { ForegroundModalLayerRoot } from './basis/ForegroundModalLayer';
 

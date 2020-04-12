@@ -4,9 +4,9 @@ import {
   ISingleAssignEntry,
 } from '~defs/ProfileData';
 import { VirtualKeyTexts } from '~defs/VirtualKeyTexts';
-import { editorModule } from '~models/core/EditorModule';
+import { editorModel } from '~models/EditorModel';
 
-export interface IKeyUnitCardModel {
+export interface IKeyUnitCardViewModel {
   keyUnitId: string;
   pos: {
     x: number;
@@ -24,7 +24,7 @@ function getAssignOperationText(op?: IAssignOperation): string {
     return VirtualKeyTexts[op.virtualKey] || '';
   }
   if (op?.type === 'layerCall') {
-    const layer = editorModule.layers.find(
+    const layer = editorModel.layers.find(
       (la) => la.layerId === op.targetLayerId
     );
     return (layer && layer.layerName) || '';
@@ -67,9 +67,9 @@ function getAssignEntryTexts(
   };
 }
 
-export function makeKeyUnitCardModel(
+export function makeKeyUnitCardViewModel(
   kp: IKeyUnitPositionEntry
-): IKeyUnitCardModel {
+): IKeyUnitCardViewModel {
   const keyUnitId = kp.id;
   const pos = { x: kp.x, y: kp.y, r: kp.r };
 
@@ -77,7 +77,7 @@ export function makeKeyUnitCardModel(
     isKeyUnitCurrent,
     setCurrentKeyUnitId,
     getAssignForKeyUnit,
-  } = editorModule;
+  } = editorModel;
 
   const isCurrent = isKeyUnitCurrent(keyUnitId);
   const setCurrent = () => setCurrentKeyUnitId(keyUnitId);

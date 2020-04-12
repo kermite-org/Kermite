@@ -1,5 +1,5 @@
 import { ISingleAssignEntryType, ISingleAssignEntry } from '~defs/ProfileData';
-import { EditorModule } from './EditorModule';
+import { EditorModel } from './EditorModel';
 
 export type IEditEntriesStock = {
   [K in ISingleAssignEntryType]: ISingleAssignEntry;
@@ -11,8 +11,8 @@ export const createDefaultEntriesStock = (): IEditEntriesStock => ({
   single2: { type: 'single2', mode: 'dual' },
 });
 
-export class AssignEditModule {
-  constructor(private editorModule: EditorModule) {}
+export class AssignEditModel {
+  constructor(private editorModule: EditorModel) {}
 
   //state
 

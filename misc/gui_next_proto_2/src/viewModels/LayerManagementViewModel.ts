@@ -1,16 +1,14 @@
 import { ILayer } from '~defs/ProfileData';
 import { Arrays } from '~funcs/Arrays';
-import { editorModule } from '~models/core/EditorModule';
+import { editorModel } from '~models/EditorModel';
 
-export class LayerManagementModel {
+export class LayerManagementViewModel {
   private get layers() {
-    return editorModule.layers;
+    return editorModel.layers;
   }
 
   private get curLayer(): ILayer {
-    return this.layers.find(
-      (la) => la.layerId === editorModule.currentLayerId
-    )!;
+    return this.layers.find((la) => la.layerId === editorModel.currentLayerId)!;
   }
 
   private get isCurrentLayerCustom() {
@@ -56,7 +54,7 @@ export class LayerManagementModel {
 
   deleteCurrentLayer = () => {
     Arrays.remove(this.layers, this.curLayer);
-    editorModule.setCurrentLayerId(this.layers[0].layerId);
+    editorModel.setCurrentLayerId(this.layers[0].layerId);
   };
 
   renameCurrentLayer = () => {

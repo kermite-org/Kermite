@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { hx } from '~views/basis/qx';
-import { editorModel } from '~models/model/EditorModel';
+import { editorViewModel } from '~viewModels/EditorViewModel';
 
 const LayerOperationButtton = (props: {
   icon: string;
@@ -47,7 +47,7 @@ export const LayerOperationButtonsPart = () => {
     renameCurrentLayer,
     deleteCurrentLayer,
     addNewLayer,
-  } = editorModel.layerManagementModel;
+  } = editorViewModel.layerManagementViewModel;
 
   return (
     <div css={cssButtonsRow}>

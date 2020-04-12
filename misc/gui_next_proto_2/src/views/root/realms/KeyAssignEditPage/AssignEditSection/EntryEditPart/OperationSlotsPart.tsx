@@ -1,8 +1,8 @@
 import { hx } from '~views/basis/qx';
-import { editorModel } from '~models/model/EditorModel';
+import { editorViewModel } from '~viewModels/EditorViewModel';
 import { css } from 'goober';
 import { UiTheme } from '~views/common/UiTheme';
-import { IOperationSlotModel } from '~models/model/KeyAssignEntryEditModel';
+import { IOperationSlotViewModel } from '~viewModels/KeyAssignEntryEditViewModel';
 
 function OperationSlotCard(props: { isCurrent: boolean; setCurrent(): void }) {
   const cssSlotCard = css`
@@ -23,7 +23,7 @@ function OperationSlotCard(props: { isCurrent: boolean; setCurrent(): void }) {
   );
 }
 
-function OperationSlotRow({ slot }: { slot: IOperationSlotModel }) {
+function OperationSlotRow({ slot }: { slot: IOperationSlotViewModel }) {
   const cssSlotRow = css`
     display: flex;
 
@@ -45,7 +45,9 @@ function OperationSlotRow({ slot }: { slot: IOperationSlotModel }) {
 }
 
 export function OerationSlotsPart() {
-  const { slots } = editorModel.keyAssignEditModel?.assignEntryModel!;
+  const {
+    slots,
+  } = editorViewModel.keyAssignEditViewModel?.assignEntryViewModel!;
   return (
     <div>
       <div>assign entry</div>

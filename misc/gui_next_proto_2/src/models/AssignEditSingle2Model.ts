@@ -1,6 +1,6 @@
 export type IAssignEditSingle2_TargetSlotSig = 'pri' | 'sec';
 
-export class AssignEditSingle2Module {
+export class AssignEditSingle2Model {
   //state
   targetSlotSig: IAssignEditSingle2_TargetSlotSig = 'pri';
 

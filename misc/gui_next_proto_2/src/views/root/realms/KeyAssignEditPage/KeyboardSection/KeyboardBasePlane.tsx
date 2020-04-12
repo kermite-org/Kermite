@@ -1,9 +1,9 @@
 import { css } from 'goober';
+import { editorViewModel } from '~viewModels/EditorViewModel';
 import { hx } from '~views/basis/qx';
-import { editorModule } from '~models/core/EditorModule';
 
 export const KeyboardBasePlane = (props: { children: any }) => {
-  const { clearAssignSlotSelection } = editorModule;
+  const { clearAssignSlotSelection } = editorViewModel.keyboardPartViewModel;
   const { children } = props;
   const cssSvg = css`
     user-select: none;

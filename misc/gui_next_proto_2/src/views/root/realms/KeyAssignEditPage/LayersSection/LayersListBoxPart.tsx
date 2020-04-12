@@ -1,10 +1,10 @@
 import { css } from 'goober';
-import { editorModel } from '~models/model/EditorModel';
-import { ILayerListModel } from '~models/model/LayerListModel';
+import { editorViewModel } from '~viewModels/EditorViewModel';
+import { ILayerListViewModel } from '~viewModels/LayerListViewModel';
 import { hx } from '~views/basis/qx';
 import { UiTheme } from '~views/common/UiTheme';
 
-const LayerCard = (props: { layerModel: ILayerListModel }) => {
+const LayerCard = (props: { layerModel: ILayerListViewModel }) => {
   const cssLayerCard = css`
     border: solid 1px #444;
 
@@ -38,7 +38,7 @@ export function LayersListBoxPart() {
 
   return (
     <div css={cssLayersListBox}>
-      {editorModel.layerListModels.map((la) => (
+      {editorViewModel.layerListViewModels.map((la) => (
         <LayerCard layerModel={la} key={la.layerId} />
       ))}
     </div>
