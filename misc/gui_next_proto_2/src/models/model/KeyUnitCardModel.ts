@@ -39,6 +39,12 @@ function getAssignEntryTexts(
   assign?: ISingleAssignEntry
 ): { primaryText: string; secondaryText: string } {
   if (assign) {
+    if (assign.type === 'transparent') {
+      return {
+        primaryText: 'TR',
+        secondaryText: '',
+      };
+    }
     // if (assign.type === 'single1' && assign.op) {
     //   return {
     //     primaryText: getAssignOperationText(assign.op),

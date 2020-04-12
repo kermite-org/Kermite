@@ -68,6 +68,8 @@ export const KeyAssignEditPage = () => {
   const cssAssignPartBox = css`
     background: ${clPanelBox};
     flex-grow: 1;
+    display: flex;
+    flex-direction: column;
   `;
 
   const cssEditSideBarColumn = css`

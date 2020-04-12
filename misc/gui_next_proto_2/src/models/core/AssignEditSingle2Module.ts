@@ -12,6 +12,10 @@ export const assignEditSingle2Getters = new (class {
   get targetSlotSig() {
     return assignEditSing2State.targetSlotSig;
   }
+
+  get fieldPath(): 'primaryOp' | 'secondaryOp' {
+    return this.targetSlotSig === 'pri' ? 'primaryOp' : 'secondaryOp';
+  }
 })();
 
 export const assignEditSingle2Mutations = {

@@ -6,6 +6,7 @@ import { UiTheme } from '~views/common/UiTheme';
 export function AssingTypeSelectionPart() {
   const cssAssignTypeSlotsBox = css`
     display: flex;
+    border: solid 2px #f08;
   `;
 
   const cssAssignTypeSlotCard = css`

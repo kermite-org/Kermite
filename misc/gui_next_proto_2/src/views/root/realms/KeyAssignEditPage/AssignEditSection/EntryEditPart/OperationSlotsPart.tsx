@@ -44,7 +44,7 @@ function OperationSlotRow({ slot }: { slot: IOperationSlotModel }) {
   );
 }
 
-export function EntryEditPartContent() {
+export function OerationSlotsPart() {
   const { slots } = editorModel.keyAssignEditModel?.assignEntryModel!;
   return (
     <div>

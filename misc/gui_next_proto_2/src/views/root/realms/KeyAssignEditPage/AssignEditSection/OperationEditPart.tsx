@@ -1,5 +1,5 @@
 import { hx } from '~views/basis/qx';
 
-export function OpertionEditPartContent() {
+export function OpertionEditPart() {
   return <div>op</div>;
 }

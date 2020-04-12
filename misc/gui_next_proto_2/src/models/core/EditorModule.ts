@@ -52,6 +52,10 @@ export const editorGetters = new (class {
     const curLayerId = editorState.currentLayerId;
     return editorState.profileData.assigns[`${curLayerId}.${keyUnitId}`];
   }
+
+  get isAssignEntryEditAvailable() {
+    return this.assignEntry?.type === 'single2';
+  }
 })();
 
 export const editorMutations = new (class {
