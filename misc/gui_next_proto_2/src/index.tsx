@@ -1,4 +1,4 @@
-import { appDomain } from './models/AppDomain';
+import { appDomain } from './models/core/AppDomain';
 import { initialzeView } from './views';
 
 function start() {

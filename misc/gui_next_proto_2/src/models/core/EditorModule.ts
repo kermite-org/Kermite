@@ -1,25 +1,18 @@
-import { fallbackProfileData, IProfileData } from '~/defs/ProfileData';
+import {
+  fallbackProfileData,
+  IProfileData,
+  ISingleAssignEntry,
+} from '~/defs/ProfileData';
 import { duplicateObjectByJsonStringifyParse } from '~funcs/utils';
-import { assignEditSingle2Module } from './AssignEditSingle2Module';
-import { assignEditModule } from './AssignEditModule';
-
-interface IEditorState {
-  loadedPorfileData: IProfileData;
-  profileData: IProfileData;
-  currentLayerId: string;
-  currentKeyUnitId: string;
-  slotAddress: string;
-}
-
-export const editorState: IEditorState = {
-  loadedPorfileData: fallbackProfileData,
-  profileData: fallbackProfileData,
-  currentLayerId: '',
-  currentKeyUnitId: '',
-  slotAddress: '',
-};
+import { AssignEditSingle2Module } from './AssignEditSingle2Module';
+import { AssignEditModule } from './AssignEditModule';
 
 export class EditorModule {
+  //modules
+
+  assignEditModule = new AssignEditModule(this);
+  assignEditSingle2Module = new AssignEditSingle2Module();
+
   //state
 
   loadedPorfileData: IProfileData = fallbackProfileData;
@@ -31,38 +24,38 @@ export class EditorModule {
   //getters
 
   get isSlotSelected() {
-    const { currentLayerId, currentKeyUnitId } = editorState;
+    const { currentLayerId, currentKeyUnitId } = this;
     return currentLayerId && currentKeyUnitId;
   }
 
   get assignEntry() {
-    return editorState.profileData.assigns[editorState.slotAddress];
+    return this.profileData.assigns[this.slotAddress];
   }
 
   get layers() {
-    return editorState.profileData.layers;
+    return this.profileData.layers;
   }
 
   get keyPositions() {
-    return editorState.profileData.keyboardShape.keyPositions;
+    return this.profileData.keyboardShape.keyPositions;
   }
 
   get bodyPathMarkupText() {
-    return editorState.profileData.keyboardShape.bodyPathMarkupText;
+    return this.profileData.keyboardShape.bodyPathMarkupText;
   }
 
-  isLayerCurrent(layerId: string) {
-    return editorState.currentLayerId === layerId;
-  }
+  isLayerCurrent = (layerId: string) => {
+    return this.currentLayerId === layerId;
+  };
 
-  isKeyUnitCurrent(keyUnitId: string) {
-    return editorState.currentKeyUnitId === keyUnitId;
-  }
+  isKeyUnitCurrent = (keyUnitId: string) => {
+    return this.currentKeyUnitId === keyUnitId;
+  };
 
-  getAssignForKeyUnit(keyUnitId: string) {
-    const curLayerId = editorState.currentLayerId;
-    return editorState.profileData.assigns[`${curLayerId}.${keyUnitId}`];
-  }
+  getAssignForKeyUnit = (keyUnitId: string) => {
+    const curLayerId = this.currentLayerId;
+    return this.profileData.assigns[`${curLayerId}.${keyUnitId}`];
+  };
 
   get isAssignEntryEditAvailable() {
     return this.assignEntry?.type === 'single2';
@@ -71,33 +64,36 @@ export class EditorModule {
   //mutations
 
   loadProfileData = (profileData: IProfileData) => {
-    editorState.loadedPorfileData = profileData;
-    editorState.profileData = duplicateObjectByJsonStringifyParse(profileData);
-    editorState.currentLayerId = profileData.layers[0].layerId;
+    this.loadedPorfileData = profileData;
+    this.profileData = duplicateObjectByJsonStringifyParse(profileData);
+    this.currentLayerId = profileData.layers[0].layerId;
   };
 
   private updateEditAssignSlot = () => {
-    const { currentLayerId, currentKeyUnitId } = editorState;
+    const { currentLayerId, currentKeyUnitId } = this;
     const slotAddress = `${currentLayerId}.${currentKeyUnitId}`;
-    if (editorState.slotAddress !== slotAddress) {
-      editorState.slotAddress = slotAddress;
-      const assign = editorState.profileData.assigns[slotAddress];
-      assignEditModule.loadAssignSlot(assign);
+    if (this.slotAddress !== slotAddress) {
+      this.slotAddress = slotAddress;
+      this.assignEditModule.handleAssignSlotChange();
     }
   };
 
   setCurrentLayerId = (layerId: string) => {
-    editorState.currentLayerId = layerId;
+    this.currentLayerId = layerId;
     this.updateEditAssignSlot();
   };
 
   setCurrentKeyUnitId = (keyUnitId: string) => {
-    editorState.currentKeyUnitId = keyUnitId;
+    this.currentKeyUnitId = keyUnitId;
     this.updateEditAssignSlot();
   };
 
   clearAssignSlotSelection = () => {
     this.setCurrentKeyUnitId('');
+  };
+
+  writeAssignEntry = (assign: ISingleAssignEntry) => {
+    this.profileData.assigns[this.slotAddress] = assign;
   };
 }
 export const editorModule = new EditorModule();

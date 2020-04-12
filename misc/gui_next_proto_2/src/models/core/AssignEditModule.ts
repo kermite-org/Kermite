@@ -1,5 +1,5 @@
 import { ISingleAssignEntryType, ISingleAssignEntry } from '~defs/ProfileData';
-import { editorState } from './EditorModule';
+import { EditorModule } from './EditorModule';
 
 export type IEditEntriesStock = {
   [K in ISingleAssignEntryType]: ISingleAssignEntry;
@@ -12,6 +12,8 @@ export const createDefaultEntriesStock = (): IEditEntriesStock => ({
 });
 
 export class AssignEditModule {
+  constructor(private editorModule: EditorModule) {}
+
   //state
 
   editAssignType: ISingleAssignEntryType = 'none';
@@ -19,30 +21,16 @@ export class AssignEditModule {
 
   //mutations
 
-  private resetEntriesStock = (assign: ISingleAssignEntry) => {
-    const stock = createDefaultEntriesStock();
-    if (assign) {
-      stock[assign.type] = assign;
-    }
-    this.editEntriesStock = stock;
+  handleAssignSlotChange = () => {
+    const assign = this.editorModule.assignEntry;
+    this.editEntriesStock = createDefaultEntriesStock();
+    const assignType = assign?.type || 'none';
+    this.editEntriesStock[assignType] = assign;
+    this.editAssignType = assignType;
   };
 
-  private setEditAssignEntryType = (type: ISingleAssignEntryType) => {
+  setEditAssignType = (type: ISingleAssignEntryType) => {
+    this.editorModule.writeAssignEntry(this.editEntriesStock[type]);
     this.editAssignType = type;
   };
-
-  loadAssignSlot = (assign: ISingleAssignEntry) => {
-    this.resetEntriesStock(assign);
-    this.setEditAssignEntryType(assign?.type || 'none');
-  };
-
-  linkAssignSlot = (slotAddress: string, type: ISingleAssignEntryType) => {
-    editorState.profileData.assigns[slotAddress] = this.editEntriesStock[type];
-  };
-
-  setEditAssignType = (slotAddress: string, type: ISingleAssignEntryType) => {
-    this.setEditAssignEntryType(type);
-    this.linkAssignSlot(slotAddress, type);
-  };
 }
-export const assignEditModule = new AssignEditModule();

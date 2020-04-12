@@ -80,9 +80,8 @@ export function makeKeyUnitCardModel(
   } = editorModule;
 
   const isCurrent = isKeyUnitCurrent(keyUnitId);
-  const setCurrent = () => {
-    setCurrentKeyUnitId(keyUnitId);
-  };
+  const setCurrent = () => setCurrentKeyUnitId(keyUnitId);
+
   const assign = getAssignForKeyUnit(keyUnitId);
   const { primaryText, secondaryText } = getAssignEntryTexts(assign);
 

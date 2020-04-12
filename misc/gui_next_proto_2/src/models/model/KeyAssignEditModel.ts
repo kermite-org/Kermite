@@ -3,8 +3,6 @@ import {
   makeKeyAssignEntryEditModel_Single2,
   IKeyAssignEntryEditModel_Single2,
 } from './KeyAssignEntryEditModel';
-import { assignEditModule } from '~models/core/AssignEditModule';
-import { editorModel } from './EditorModel';
 import { editorModule } from '~models/core/EditorModule';
 
 interface IAssignTypeSlotModel {
@@ -36,13 +34,13 @@ export interface IKeyAssignEditModel {
 }
 
 export function makeKeyAssignEditModel(): IKeyAssignEditModel {
-  const { editAssignType, setEditAssignType } = assignEditModule;
+  const { editAssignType, setEditAssignType } = editorModule.assignEditModule;
   const assignTypeSlotModels = entryTypes.map((assignType) => {
     return {
       assignType,
       text: entryTypeToTextMap[assignType],
       isCurrent: assignType === editAssignType,
-      setCurrent: () => setEditAssignType(editorModule.slotAddress, assignType),
+      setCurrent: () => setEditAssignType(assignType),
     };
   });
 

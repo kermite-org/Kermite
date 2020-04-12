@@ -14,4 +14,3 @@ export class AssignEditSingle2Module {
     this.targetSlotSig = sig;
   };
 }
-export const assignEditSingle2Module = new AssignEditSingle2Module();
