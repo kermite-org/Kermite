@@ -1,18 +1,20 @@
 import { ILayer } from '~defs/ProfileData';
 import { Arrays } from '~funcs/Arrays';
-import { editorState } from '~models/core/EditorModule';
+import { editorModule } from '~models/core/EditorModule';
 
 export class LayerManagementModel {
   private get layers() {
-    return editorState.profileData.layers;
+    return editorModule.layers;
   }
 
   private get curLayer(): ILayer {
-    return this.layers.find((la) => la.layerId === editorState.currentLayerId)!;
+    return this.layers.find(
+      (la) => la.layerId === editorModule.currentLayerId
+    )!;
   }
 
   private get isCurrentLayerCustom() {
-    return this.curLayer.layerId !== 'la0' || false;
+    return this.curLayer?.layerId !== 'la0' || false;
   }
 
   private canShiftCurrentLayerOrder = (dir: -1 | 1): boolean => {
@@ -54,7 +56,7 @@ export class LayerManagementModel {
 
   deleteCurrentLayer = () => {
     Arrays.remove(this.layers, this.curLayer);
-    editorState.currentLayerId = this.layers[0].layerId;
+    editorModule.setCurrentLayerId(this.layers[0].layerId);
   };
 
   renameCurrentLayer = () => {

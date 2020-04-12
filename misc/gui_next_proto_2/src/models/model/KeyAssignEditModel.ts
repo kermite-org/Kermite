@@ -1,13 +1,11 @@
 import { ISingleAssignEntryType } from '~defs/ProfileData';
 import {
-  assignEditMutations,
-  assignEditGetters,
-} from '~models/core/AssignEditModule';
-import {
   makeKeyAssignEntryEditModel_Single2,
   IKeyAssignEntryEditModel_Single2,
 } from './KeyAssignEntryEditModel';
-import { editorGetters } from '~models/core/EditorModule';
+import { assignEditModule } from '~models/core/AssignEditModule';
+import { editorModel } from './EditorModel';
+import { editorModule } from '~models/core/EditorModule';
 
 interface IAssignTypeSlotModel {
   assignType: ISingleAssignEntryType;
@@ -38,20 +36,17 @@ export interface IKeyAssignEditModel {
 }
 
 export function makeKeyAssignEditModel(): IKeyAssignEditModel {
+  const { editAssignType, setEditAssignType } = assignEditModule;
   const assignTypeSlotModels = entryTypes.map((assignType) => {
     return {
       assignType,
       text: entryTypeToTextMap[assignType],
-      isCurrent: assignType === assignEditGetters.editAssignType,
-      setCurrent: () =>
-        assignEditMutations.setEditAssignType(
-          editorGetters.slotAddress,
-          assignType
-        ),
+      isCurrent: assignType === editAssignType,
+      setCurrent: () => setEditAssignType(editorModule.slotAddress, assignType),
     };
   });
 
-  const { assignEntry } = editorGetters;
+  const { assignEntry } = editorModule;
   const assignEntryModel =
     (assignEntry?.type === 'single2' &&
       makeKeyAssignEntryEditModel_Single2(assignEntry)) ||

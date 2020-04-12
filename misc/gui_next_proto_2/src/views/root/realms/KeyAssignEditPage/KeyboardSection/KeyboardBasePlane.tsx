@@ -1,12 +1,9 @@
 import { css } from 'goober';
 import { hx } from '~views/basis/qx';
-import { editorMutations } from '~models/core/EditorModule';
+import { editorModule } from '~models/core/EditorModule';
 
 export const KeyboardBasePlane = (props: { children: any }) => {
-  const clearAssignSlotSelection = () => {
-    editorMutations.setCurrentKeyUnitId('');
-  };
-
+  const { clearAssignSlotSelection } = editorModule;
   const { children } = props;
   const cssSvg = css`
     user-select: none;

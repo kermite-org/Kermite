@@ -1,8 +1,7 @@
 import { ISingleAssignEntry_Single2 } from '~defs/ProfileData';
 import {
-  assignEditSingle2Mutations,
-  assignEditSingle2Getters,
   IAssignEditSingle2_TargetSlotSig,
+  assignEditSingle2Module,
 } from '~models/core/AssignEditSingle2Module';
 
 export interface IOperationSlotModel {
@@ -27,8 +26,7 @@ const targetSlotSigToTextMap: { [key in ITargetSlotSig]: string } = {
 export function makeKeyAssignEntryEditModel_Single2(
   entry: ISingleAssignEntry_Single2
 ): IKeyAssignEntryEditModel_Single2 {
-  const { targetSlotSig } = assignEditSingle2Getters;
-  const { setTargetSlotSig } = assignEditSingle2Mutations;
+  const { targetSlotSig, setTargetSlotSig } = assignEditSingle2Module;
   const slots = targetSlotSigs.map((sig) => {
     return {
       text: targetSlotSigToTextMap[sig],

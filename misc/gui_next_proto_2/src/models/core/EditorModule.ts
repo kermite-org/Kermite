@@ -1,6 +1,7 @@
 import { fallbackProfileData, IProfileData } from '~/defs/ProfileData';
 import { duplicateObjectByJsonStringifyParse } from '~funcs/utils';
-import { assignEditMutations } from './AssignEditModule';
+import { assignEditSingle2Module } from './AssignEditSingle2Module';
+import { assignEditModule } from './AssignEditModule';
 
 interface IEditorState {
   loadedPorfileData: IProfileData;
@@ -18,7 +19,17 @@ export const editorState: IEditorState = {
   slotAddress: '',
 };
 
-export const editorGetters = new (class {
+export class EditorModule {
+  //state
+
+  loadedPorfileData: IProfileData = fallbackProfileData;
+  profileData: IProfileData = fallbackProfileData;
+  currentLayerId: string = '';
+  currentKeyUnitId: string = '';
+  slotAddress: string = '';
+
+  //getters
+
   get isSlotSelected() {
     const { currentLayerId, currentKeyUnitId } = editorState;
     return currentLayerId && currentKeyUnitId;
@@ -36,8 +47,8 @@ export const editorGetters = new (class {
     return editorState.profileData.keyboardShape.keyPositions;
   }
 
-  get slotAddress() {
-    return editorState.slotAddress;
+  get bodyPathMarkupText() {
+    return editorState.profileData.keyboardShape.bodyPathMarkupText;
   }
 
   isLayerCurrent(layerId: string) {
@@ -56,32 +67,37 @@ export const editorGetters = new (class {
   get isAssignEntryEditAvailable() {
     return this.assignEntry?.type === 'single2';
   }
-})();
 
-export const editorMutations = new (class {
-  loadProfileData(profileData: IProfileData) {
+  //mutations
+
+  loadProfileData = (profileData: IProfileData) => {
     editorState.loadedPorfileData = profileData;
     editorState.profileData = duplicateObjectByJsonStringifyParse(profileData);
     editorState.currentLayerId = profileData.layers[0].layerId;
-  }
+  };
 
-  updateEditAssignSlot() {
+  private updateEditAssignSlot = () => {
     const { currentLayerId, currentKeyUnitId } = editorState;
     const slotAddress = `${currentLayerId}.${currentKeyUnitId}`;
     if (editorState.slotAddress !== slotAddress) {
       editorState.slotAddress = slotAddress;
       const assign = editorState.profileData.assigns[slotAddress];
-      assignEditMutations.loadAssignSlot(assign);
+      assignEditModule.loadAssignSlot(assign);
     }
-  }
+  };
 
-  setCurrentLayerId(layerId: string) {
+  setCurrentLayerId = (layerId: string) => {
     editorState.currentLayerId = layerId;
     this.updateEditAssignSlot();
-  }
+  };
 
-  setCurrentKeyUnitId(keyUnitId: string) {
+  setCurrentKeyUnitId = (keyUnitId: string) => {
     editorState.currentKeyUnitId = keyUnitId;
     this.updateEditAssignSlot();
-  }
-})();
+  };
+
+  clearAssignSlotSelection = () => {
+    this.setCurrentKeyUnitId('');
+  };
+}
+export const editorModule = new EditorModule();

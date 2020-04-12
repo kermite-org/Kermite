@@ -11,47 +11,38 @@ export const createDefaultEntriesStock = (): IEditEntriesStock => ({
   single2: { type: 'single2', mode: 'dual' },
 });
 
-interface IAssignEditState {
-  editAssignType: ISingleAssignEntryType;
-  editEntriesStock: IEditEntriesStock;
-}
+export class AssignEditModule {
+  //state
 
-const assignEditState: IAssignEditState = {
-  editAssignType: 'none',
-  editEntriesStock: createDefaultEntriesStock(),
-};
+  editAssignType: ISingleAssignEntryType = 'none';
+  editEntriesStock: IEditEntriesStock = createDefaultEntriesStock();
 
-export const assignEditGetters = new (class {
-  get editAssignType() {
-    return assignEditState.editAssignType;
-  }
-})();
+  //mutations
 
-export const assignEditMutations = new (class {
-  resetEntriesStock(assign: ISingleAssignEntry) {
+  private resetEntriesStock = (assign: ISingleAssignEntry) => {
     const stock = createDefaultEntriesStock();
     if (assign) {
       stock[assign.type] = assign;
     }
-    assignEditState.editEntriesStock = stock;
-  }
+    this.editEntriesStock = stock;
+  };
 
-  setEditAssignEntryType(type: ISingleAssignEntryType) {
-    assignEditState.editAssignType = type;
-  }
+  private setEditAssignEntryType = (type: ISingleAssignEntryType) => {
+    this.editAssignType = type;
+  };
 
-  loadAssignSlot(assign: ISingleAssignEntry) {
+  loadAssignSlot = (assign: ISingleAssignEntry) => {
     this.resetEntriesStock(assign);
     this.setEditAssignEntryType(assign?.type || 'none');
-  }
+  };
 
-  linkAssignSlot(slotAddress: string, type: ISingleAssignEntryType) {
-    editorState.profileData.assigns[slotAddress] =
-      assignEditState.editEntriesStock[type];
-  }
+  linkAssignSlot = (slotAddress: string, type: ISingleAssignEntryType) => {
+    editorState.profileData.assigns[slotAddress] = this.editEntriesStock[type];
+  };
 
-  setEditAssignType(slotAddress: string, type: ISingleAssignEntryType) {
+  setEditAssignType = (slotAddress: string, type: ISingleAssignEntryType) => {
     this.setEditAssignEntryType(type);
     this.linkAssignSlot(slotAddress, type);
-  }
-})();
+  };
+}
+export const assignEditModule = new AssignEditModule();

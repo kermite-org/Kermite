@@ -5,7 +5,7 @@ import {
   IKeyAssignEditModel,
   makeKeyAssignEditModel,
 } from './KeyAssignEditModel';
-import { editorGetters } from '~models/core/EditorModule';
+import { editorModule } from '~models/core/EditorModule';
 
 class EditorModel {
   layerManagementModel = new LayerManagementModel();
@@ -15,15 +15,15 @@ class EditorModel {
   }
 
   get keyUnitCardModels(): IKeyUnitCardModel[] {
-    return editorGetters.keyPositions.map(makeKeyUnitCardModel);
+    return editorModule.keyPositions.map(makeKeyUnitCardModel);
   }
 
   get layerListModels(): ILayerListModel[] {
-    return editorGetters.layers.map(makeLayerListModel);
+    return editorModule.layers.map(makeLayerListModel);
   }
 
   get isSlotSelected() {
-    return editorGetters.isSlotSelected;
+    return editorModule.isSlotSelected;
   }
 }
 export const editorModel = new EditorModel();

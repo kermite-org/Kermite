@@ -1,9 +1,9 @@
 import { testProfileData } from '../defs/testProfileData';
-import { editorMutations } from './core/EditorModule';
+import { editorModule } from './core/EditorModule';
 
 export const appDomain = new (class {
   initialize() {
-    editorMutations.loadProfileData(testProfileData);
+    editorModule.loadProfileData(testProfileData);
   }
 
   terminate() {}
