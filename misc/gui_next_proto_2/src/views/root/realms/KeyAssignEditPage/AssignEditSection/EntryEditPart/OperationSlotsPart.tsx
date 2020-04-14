@@ -1,8 +1,10 @@
-import { hx } from '~views/basis/qx';
-import { editorViewModel } from '~viewModels/EditorViewModel';
 import { css } from 'goober';
+import { hx } from '~views/basis/qx';
 import { UiTheme } from '~views/common/UiTheme';
-import { IOperationSlotViewModel } from '~viewModels/KeyAssignEntryEditViewModel';
+import {
+  IOperationSlotViewModel,
+  makeOperationSlotsPartViewModel_Single2,
+} from './OperationSlotsPart.model';
 
 function OperationSlotCard(props: { isCurrent: boolean; setCurrent(): void }) {
   const cssSlotCard = css`
@@ -45,13 +47,11 @@ function OperationSlotRow({ slot }: { slot: IOperationSlotViewModel }) {
 }
 
 export function OerationSlotsPart() {
-  const {
-    slots,
-  } = editorViewModel.keyAssignEditViewModel?.assignEntryViewModel!;
+  const operationSlotsPartViewModel = makeOperationSlotsPartViewModel_Single2();
   return (
     <div>
       <div>assign entry</div>
-      {slots.map((slot) => (
+      {operationSlotsPartViewModel.slots.map((slot) => (
         <OperationSlotRow slot={slot} />
       ))}
     </div>

@@ -1,12 +1,36 @@
 import { css } from 'goober';
-import { editorViewModel } from '~viewModels/EditorViewModel';
 import { hx } from '~views/basis/qx';
-import { KeyboardBasePlane } from './KeyboardBasePlane';
-import { KeyUnitCardsPart } from './KeyUnitCards';
+import { KeyUnitCardsPart } from './KeyUnitCardsPart';
 import { ScalerBox } from './ScalerBox';
+import { editorModel } from '~models/EditorModel';
+
+export const KeyboardBasePlane = (props: { children: any }) => {
+  const { clearAssignSlotSelection } = editorModel;
+  const { children } = props;
+  const cssSvg = css`
+    user-select: none;
+  `;
+  return (
+    <svg
+      width="600"
+      height="240"
+      viewBox="-300 -120 600 240"
+      css={cssSvg}
+      onMouseDown={clearAssignSlotSelection}
+    >
+      <g
+        transform="scale(2) translate(0, -53.5)"
+        strokeWidth={0.3}
+        strokeLinejoin="round"
+      >
+        {children}
+      </g>
+    </svg>
+  );
+};
 
 export const KeyboardBodyShape = () => {
-  const outerPaths = editorViewModel.keyboardPartViewModel.bodyPathMarkupText;
+  const outerPaths = editorModel.bodyPathMarkupText;
   const cssBody = css`
     fill: #54566f;
   `;

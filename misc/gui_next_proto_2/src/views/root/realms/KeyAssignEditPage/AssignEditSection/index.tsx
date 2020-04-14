@@ -1,11 +1,11 @@
 import { css } from 'goober';
-import { editorViewModel } from '~viewModels/EditorViewModel';
 import { hx } from '~views/basis/qx';
-import { EntryEditPart } from './EntryEditPart/EntryEditPart';
+import { EntryEditPart } from './EntryEditPart';
 import { OpertionEditPart } from './OperationEditPart';
+import { editorModel } from '~models/EditorModel';
 
 export function AssignEditSection() {
-  if (!editorViewModel.isSlotSelected) {
+  if (!editorModel.isSlotSelected) {
     return <div>no assign loaded</div>;
   }
 

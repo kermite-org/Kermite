@@ -2,7 +2,7 @@ import { ILayer } from '~defs/ProfileData';
 import { Arrays } from '~funcs/Arrays';
 import { editorModel } from '~models/EditorModel';
 
-export class LayerManagementViewModel {
+export class LayerManagementPartViewModel {
   private get layers() {
     return editorModel.layers;
   }

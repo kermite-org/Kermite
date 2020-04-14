@@ -1,8 +1,4 @@
 import { ISingleAssignEntryType } from '~defs/ProfileData';
-import {
-  makeKeyAssignEntryEditViewModel_Single2,
-  IKeyAssignEntryEditViewModel_Single2,
-} from './KeyAssignEntryEditViewModel';
 import { editorModel } from '~models/EditorModel';
 
 interface IAssignTypeSlotViewModel {
@@ -28,14 +24,13 @@ const entryTypeToTextMap: { [key in ISingleAssignEntryType]: string } = {
   // singleVersatile1: 'SV1'
 };
 
-export interface IKeyAssignEditViewModel {
-  assignTypeSlotViewModels: IAssignTypeSlotViewModel[];
-  assignEntryViewModel: IKeyAssignEntryEditViewModel_Single2 | undefined;
+export interface IKeyAssignTypeSelectionViewModel {
+  slots: IAssignTypeSlotViewModel[];
 }
 
-export function makeKeyAssignEditViewModel(): IKeyAssignEditViewModel {
+export function makeKeyAssignTypeSelectionPartViewModel(): IKeyAssignTypeSelectionViewModel {
   const { editAssignType, setEditAssignType } = editorModel.assignEditModel;
-  const assignTypeSlotViewModels = entryTypes.map((assignType) => {
+  const slots = entryTypes.map((assignType) => {
     return {
       assignType,
       text: entryTypeToTextMap[assignType],
@@ -43,15 +38,5 @@ export function makeKeyAssignEditViewModel(): IKeyAssignEditViewModel {
       setCurrent: () => setEditAssignType(assignType),
     };
   });
-
-  const { assignEntry } = editorModel;
-  const assignEntryViewModel =
-    (assignEntry?.type === 'single2' &&
-      makeKeyAssignEntryEditViewModel_Single2(assignEntry)) ||
-    undefined;
-
-  return {
-    assignEntryViewModel,
-    assignTypeSlotViewModels,
-  };
+  return { slots };
 }

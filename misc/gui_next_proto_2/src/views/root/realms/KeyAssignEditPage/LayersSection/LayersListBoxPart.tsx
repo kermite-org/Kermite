@@ -1,8 +1,10 @@
 import { css } from 'goober';
-import { editorViewModel } from '~viewModels/EditorViewModel';
-import { ILayerListViewModel } from '~viewModels/LayerListViewModel';
 import { hx } from '~views/basis/qx';
 import { UiTheme } from '~views/common/UiTheme';
+import {
+  ILayerListViewModel,
+  makeLayerListBoxPartViewModel,
+} from './LayersListBoxPart.model';
 
 const LayerCard = (props: { layerModel: ILayerListViewModel }) => {
   const cssLayerCard = css`
@@ -36,9 +38,10 @@ export function LayersListBoxPart() {
     overflow-y: scroll;
   `;
 
+  const layerListBoxPartViewModel = makeLayerListBoxPartViewModel();
   return (
     <div css={cssLayersListBox}>
-      {editorViewModel.layerListViewModels.map((la) => (
+      {layerListBoxPartViewModel.layers.map((la) => (
         <LayerCard layerModel={la} key={la.layerId} />
       ))}
     </div>

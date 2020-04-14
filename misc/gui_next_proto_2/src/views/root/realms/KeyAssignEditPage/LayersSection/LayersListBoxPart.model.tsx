@@ -8,7 +8,11 @@ export interface ILayerListViewModel {
   setCurrent: () => void;
 }
 
-export function makeLayerListViewModel(layer: ILayer): ILayerListViewModel {
+export interface ILayerListBoxPartViewModel {
+  layers: ILayerListViewModel[];
+}
+
+function makeLayerListViewModel(layer: ILayer): ILayerListViewModel {
   const { isLayerCurrent, setCurrentLayerId } = editorModel;
   const { layerId, layerName } = layer;
   const isCurrent = isLayerCurrent(layerId);
@@ -18,5 +22,11 @@ export function makeLayerListViewModel(layer: ILayer): ILayerListViewModel {
     layerName,
     isCurrent,
     setCurrent,
+  };
+}
+
+export function makeLayerListBoxPartViewModel(): ILayerListBoxPartViewModel {
+  return {
+    layers: editorModel.layers.map(makeLayerListViewModel),
   };
 }

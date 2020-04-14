@@ -1,7 +1,7 @@
-import { hx } from '~views/basis/qx';
-import { editorViewModel } from '~viewModels/EditorViewModel';
 import { css } from 'goober';
+import { hx } from '~views/basis/qx';
 import { UiTheme } from '~views/common/UiTheme';
+import { makeKeyAssignTypeSelectionPartViewModel } from './AssignTypeSelectionPart.model';
 
 export function AssingTypeSelectionPart() {
   const cssAssignTypeSlotsBox = css`
@@ -23,10 +23,11 @@ export function AssingTypeSelectionPart() {
     }
   `;
 
-  const vm = editorViewModel.keyAssignEditViewModel!;
+  const assignTypeSelectionPartViewModel = makeKeyAssignTypeSelectionPartViewModel();
+
   return (
     <div css={cssAssignTypeSlotsBox}>
-      {vm.assignTypeSlotViewModels.map((slot) => {
+      {assignTypeSelectionPartViewModel.slots.map((slot) => {
         return (
           <div
             data-current={slot.isCurrent}

@@ -1,6 +1,7 @@
 import { css } from 'goober';
 import { hx } from '~views/basis/qx';
-import { editorViewModel } from '~viewModels/EditorViewModel';
+import { useViewModel } from '~views/basis/qxUtils';
+import { LayerManagementPartViewModel } from './LayerManagementPart.model';
 
 const LayerOperationButtton = (props: {
   icon: string;
@@ -33,10 +34,14 @@ const LayerOperationButtton = (props: {
   );
 };
 
-export const LayerOperationButtonsPart = () => {
+export const LayerManagementPart = () => {
   const cssButtonsRow = css`
     display: flex;
   `;
+
+  const layerManagementPartViewModel = useViewModel(
+    LayerManagementPartViewModel
+  );
 
   const {
     canModifyCurrentLayer,
@@ -47,7 +52,7 @@ export const LayerOperationButtonsPart = () => {
     renameCurrentLayer,
     deleteCurrentLayer,
     addNewLayer,
-  } = editorViewModel.layerManagementViewModel;
+  } = layerManagementPartViewModel;
 
   return (
     <div css={cssButtonsRow}>

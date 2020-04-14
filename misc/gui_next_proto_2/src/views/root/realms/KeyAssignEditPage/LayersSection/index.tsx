@@ -1,5 +1,5 @@
 import { css } from 'goober';
-import { LayerOperationButtonsPart } from './LayerOperationButtonsPart';
+import { LayerManagementPart } from './LayerManagementPart';
 import { LayersListBoxPart } from './LayersListBoxPart';
 import { hx } from '~views/basis/qx';
 
@@ -15,7 +15,7 @@ export function LayersSection() {
     <div>
       <LayerSectionHeaderPart />
       <LayersListBoxPart />
-      <LayerOperationButtonsPart />
+      <LayerManagementPart />
     </div>
   );
 }

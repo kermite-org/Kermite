@@ -1,8 +1,10 @@
 import { css } from 'goober';
-import { editorViewModel } from '~viewModels/EditorViewModel';
-import { IKeyUnitCardViewModel } from '~viewModels/KeyUnitCardViewModel';
 import { hx } from '~views/basis/qx';
 import { UiTheme } from '~views/common/UiTheme';
+import {
+  IKeyUnitCardViewModel,
+  makeKeyUnitCardsPartViewModel,
+} from './KeyUnitCardsPart.model';
 
 export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
   const {
@@ -80,9 +82,10 @@ export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
 }
 
 export function KeyUnitCardsPart() {
+  const keyUnitCardsPartViewModel = makeKeyUnitCardsPartViewModel();
   return (
     <g>
-      {editorViewModel.keyUnitCardViewModels.map((keyUnit) => (
+      {keyUnitCardsPartViewModel.cards.map((keyUnit) => (
         <KeyUnitCard keyUnit={keyUnit} key={keyUnit.keyUnitId} />
       ))}
     </g>

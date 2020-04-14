@@ -19,6 +19,10 @@ export interface IKeyUnitCardViewModel {
   secondaryText: string;
 }
 
+export interface IKeyUnitCardPartViewModel {
+  cards: IKeyUnitCardViewModel[];
+}
+
 function getAssignOperationText(op?: IAssignOperation): string {
   if (op?.type === 'keyInput' && op.virtualKey !== 'K_NONE') {
     return VirtualKeyTexts[op.virtualKey] || '';
@@ -67,7 +71,7 @@ function getAssignEntryTexts(
   };
 }
 
-export function makeKeyUnitCardViewModel(
+function makeKeyUnitCardViewModel(
   kp: IKeyUnitPositionEntry
 ): IKeyUnitCardViewModel {
   const keyUnitId = kp.id;
@@ -92,5 +96,11 @@ export function makeKeyUnitCardViewModel(
     setCurrent,
     primaryText,
     secondaryText,
+  };
+}
+
+export function makeKeyUnitCardsPartViewModel(): IKeyUnitCardPartViewModel {
+  return {
+    cards: editorModel.keyPositions.map(makeKeyUnitCardViewModel),
   };
 }
