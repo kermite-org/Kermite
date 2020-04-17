@@ -2,6 +2,7 @@ import {
   fallbackProfileData,
   IProfileData,
   ISingleAssignEntry,
+  IAssignOperation,
 } from '~/defs/ProfileData';
 import { duplicateObjectByJsonStringifyParse } from '~funcs/utils';
 import { AssignEditSingle2Model } from './AssignEditSingle2Model';
@@ -61,6 +62,15 @@ export class EditorModel {
     return this.assignEntry?.type === 'single2';
   }
 
+  get editOperation(): IAssignOperation | undefined {
+    const assign = this.assignEntry;
+    if (assign?.type === 'single2') {
+      const { fieldPath } = this.assignEditSingle2Model;
+      return assign[fieldPath];
+    }
+    return undefined;
+  }
+
   //mutations
 
   loadProfileData = (profileData: IProfileData) => {
@@ -94,6 +104,14 @@ export class EditorModel {
 
   writeAssignEntry = (assign: ISingleAssignEntry) => {
     this.profileData.assigns[this.slotAddress] = assign;
+  };
+
+  writeEditOperation = (op: IAssignOperation) => {
+    const assign = this.assignEntry;
+    if (assign?.type === 'single2') {
+      const { fieldPath } = this.assignEditSingle2Model;
+      assign[fieldPath] = op;
+    }
   };
 }
 export const editorModel = new EditorModel();
