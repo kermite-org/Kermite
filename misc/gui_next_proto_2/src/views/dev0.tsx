@@ -5,6 +5,8 @@ import {
 } from './basis/qxUtils';
 import { DebugOverlay } from './basis/DebugOverlay';
 import { app } from '~models/appGlobal';
+import { modalAlert, modalTextInput } from './common/basicModals';
+import { ForegroundModalLayerRoot } from './basis/ForegroundModalLayer';
 
 // class CounterViewModel {
 //   get count() {
@@ -91,12 +93,23 @@ let textHoge = 'hoge';
 
 export const SiteRootD = () => {
   // console.log(`site root d`);
+
+  const onEditButton = async () => {
+    const val = await modalTextInput({
+      message: 'please input your name',
+      defaultText: 'profile1',
+    });
+    console.log(val);
+  };
   return (
     <div>
       <ClosureCounter />
       <ClosureComponent2 text={textHoge} />
       <button onClick={() => (textHoge = 'piyo')}>piyo</button>
       <DebugOverlay debugObj={app.debugObject} />
+      <button onClick={() => modalAlert('hogehoge')}>alert</button>
+      <button onClick={onEditButton}>edit</button>
+      <ForegroundModalLayerRoot />
     </div>
   );
 };

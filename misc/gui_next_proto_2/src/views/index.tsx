@@ -4,6 +4,7 @@ import { glob, setPragma, css } from 'goober';
 import { app } from '~models/appGlobal';
 import { DebugOverlay } from './basis/DebugOverlay';
 import { ForegroundModalLayerRoot } from './basis/ForegroundModalLayer';
+import { SiteRootD } from './dev0';
 
 setPragma(hx);
 
