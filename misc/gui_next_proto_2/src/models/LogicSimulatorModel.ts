@@ -47,7 +47,7 @@ export class LogicSimulatorModel {
   }
 
   //mutations
-  clearInputResult = () => {
+  clearInputResultText = () => {
     this.logicSimulator.clearInputResultText();
   };
 }
