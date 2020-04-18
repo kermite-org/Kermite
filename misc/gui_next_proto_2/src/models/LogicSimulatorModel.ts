@@ -28,7 +28,7 @@ export class LogicSimulatorModel {
     this.keyEventProvider = new RealtimeKeyboardEventProvider_DomKeyboardSimulator();
     this.keyEventProvider.setListener(this.handlekeyEvents);
     this.keyEventProvider.start();
-    this.logicSimulator.setEditModel(editorModel);
+    this.logicSimulator.setEditorModel(editorModel);
     this.logicSimulator.start();
   };
 
