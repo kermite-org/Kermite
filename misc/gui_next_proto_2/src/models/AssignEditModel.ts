@@ -22,7 +22,17 @@ export class AssignEditModel {
   //mutations
 
   handleAssignSlotChange = () => {
-    const assign = this.editorModule.assignEntry;
+    let assign = this.editorModule.assignEntry;
+    //assign S2 if blank
+    // if (!assign) {
+    //   assign = {
+    //     type: 'single2',
+    //     mode: 'dual',
+    //     primaryOp: undefined,
+    //     secondaryOp: undefined,
+    //   };
+    //   this.editorModule.writeAssignEntry(assign);
+    // }
     this.editEntriesStock = createDefaultEntriesStock();
     const assignType = assign?.type || 'none';
     this.editEntriesStock[assignType] = assign;

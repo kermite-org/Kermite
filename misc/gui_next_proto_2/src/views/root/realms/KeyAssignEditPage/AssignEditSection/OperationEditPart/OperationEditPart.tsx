@@ -33,13 +33,17 @@ const OperationCard = (props: { model: IOperationCardViewModel }) => {
 };
 
 export function OpertionEditPart() {
-  const { virtualKeyEntryGroups } = makeOperationEditPartViewModel();
+  const {
+    virtualKeyEntryGroups,
+    layerCallEntries,
+  } = makeOperationEditPartViewModel();
 
   const cssGroupsOuter = css`
     flex-grow: 1;
     overflow-y: scroll;
     border: solid 4px red;
     height: 100px;
+    padding: 4px;
   `;
   const cssGroupBox = css`
     display: flex;
@@ -48,13 +52,20 @@ export function OpertionEditPart() {
 
   return (
     <div css={cssGroupsOuter}>
+      <div>keys</div>
       {virtualKeyEntryGroups.map((group, index) => (
         <div css={cssGroupBox} key={index}>
-          {group.map((model, index) => (
-            <OperationCard model={model} key={index} />
+          {group.map((model) => (
+            <OperationCard model={model} key={model.sig} />
           ))}
         </div>
       ))}
+      <div>layers</div>
+      <div css={cssGroupBox}>
+        {layerCallEntries.map((model) => (
+          <OperationCard model={model} key={model.sig} />
+        ))}
+      </div>
     </div>
   );
 }
