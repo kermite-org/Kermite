@@ -83,7 +83,7 @@ export const modalConfirm = createModal((message: string) => {
   };
 });
 
-export const modalTextInput = createModal(
+export const modalTextEdit = createModal(
   (args: { message: string; defaultText?: string }) => {
     const { message, defaultText } = args;
     let editText = defaultText || '';

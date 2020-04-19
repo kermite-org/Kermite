@@ -1,6 +1,7 @@
 import { ILayer } from '~defs/ProfileData';
 import { Arrays } from '~funcs/Arrays';
 import { editorModel } from '~models/EditorModel';
+import { modalTextEdit } from '~views/common/basicModals';
 
 export class LayerManagementPartViewModel {
   private get layers() {
@@ -57,19 +58,28 @@ export class LayerManagementPartViewModel {
     editorModel.setCurrentLayerId(this.layers[0].layerId);
   };
 
-  renameCurrentLayer = () => {
-    // const newName = await inputLayerNameModal()
-    const newName = `layer-${(Math.random() * 1000) >> 0}`;
-    this.curLayer.layerName = newName;
+  renameCurrentLayer = async () => {
+    const newLayerName = await modalTextEdit({
+      message: 'layer name:',
+      defaultText: this.curLayer.layerName,
+    });
+    if (newLayerName) {
+      this.curLayer.layerName = newLayerName;
+    }
   };
 
-  addNewLayer = () => {
-    // const newName = await inputLayerNameModal(this.curLayer.layerName)
+  addNewLayer = async () => {
+    //todo: use sequential layer number
     const layerId = `la${(Math.random() * 1000) >> 0}`;
-    const layerName = `layer-${(Math.random() * 1000) >> 0}`;
-    this.layers.push({
-      layerId,
-      layerName,
+    const newLayerName = await modalTextEdit({
+      message: 'layer name:',
+      defaultText: '',
     });
+    if (newLayerName) {
+      this.layers.push({
+        layerId,
+        layerName: newLayerName,
+      });
+    }
   };
 }

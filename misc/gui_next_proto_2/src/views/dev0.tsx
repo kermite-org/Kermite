@@ -5,7 +5,7 @@ import {
 } from './basis/qxUtils';
 import { DebugOverlay } from './basis/DebugOverlay';
 import { app } from '~models/appGlobal';
-import { modalAlert, modalTextInput } from './common/basicModals';
+import { modalAlert, modalTextEdit } from './common/basicModals';
 import { ForegroundModalLayerRoot } from './basis/ForegroundModalLayer';
 
 // class CounterViewModel {
@@ -95,7 +95,7 @@ export const SiteRootD = () => {
   // console.log(`site root d`);
 
   const onEditButton = async () => {
-    const val = await modalTextInput({
+    const val = await modalTextEdit({
       message: 'please input your name',
       defaultText: 'profile1',
     });
