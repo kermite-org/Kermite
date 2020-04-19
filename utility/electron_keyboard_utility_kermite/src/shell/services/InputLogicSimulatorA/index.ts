@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { IProfileManagerStatus, IKeyAssignEntry } from '~contract/data';
+import { IProfileManagerStatus } from '~contract/data';
 import { IRealtimeKeyboardEvent } from '~contract/ipc';
 import { Arrays } from '~funcs/Arrays';
 import { createDictionaryFromKeyValues } from '~funcs/Utils';
 import { ModifierVirtualKey, VirtualKey } from '~model/HighLevelDefs';
-import { callApiKeybdEvent as callApiKeybdEventOriginal } from '~shell/VirtualKeyboardApiBridge';
 import { appGlobal } from '../appGlobal';
 import { coloredLog } from '~shell/ColoredLog';
 import { LogicalKeyAction } from '../InputLogicSimulator/Types';
@@ -613,7 +612,7 @@ const inputCoreLogic = InputCoreLogic.getInterface();
 export class InputLogicSimulatorA {
   private callApiKeyboardEvent = (keyCode: number, isDown: boolean) => {
     console.log(`    callApiKeyboardEvent __SIM__ ${keyCode} ${isDown}`);
-    callApiKeybdEventOriginal(keyCode, isDown);
+    // callApiKeybdEventOriginal(keyCode, isDown);
   };
 
   private onProfileManagerStatusChanged = (

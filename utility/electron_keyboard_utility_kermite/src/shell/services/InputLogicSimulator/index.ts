@@ -1,6 +1,5 @@
 import { IProfileManagerStatus } from '~contract/data';
 import { IRealtimeKeyboardEvent } from '~contract/ipc';
-import { callApiKeybdEvent as callApiKeybdEventOriginal } from '~shell/VirtualKeyboardApiBridge';
 import { appGlobal } from '../appGlobal';
 import {
   completeEditModelForShiftLayer,
@@ -21,7 +20,7 @@ export class InputLogicSimulator {
 
   private callApiKeyboardEvent = (keyCode: number, isDown: boolean) => {
     console.log(`    callApiKeyboardEvent __SIM__ ${keyCode} ${isDown}`);
-    callApiKeybdEventOriginal(keyCode, isDown);
+    // callApiKeybdEventOriginal(keyCode, isDown);
   };
 
   private onProfileManagerStatusChanged = (
