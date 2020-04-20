@@ -13,7 +13,7 @@ export class DeviceWrapper {
   private static openTargetDevice(
     venderId: number,
     productId: number,
-    pathSearchWord?: string,
+    pathSearchWords?: string[],
     serialNumberSearchWord?: string
   ): HID.HID | null {
     const allDeviceInfos = HID.devices();
@@ -22,8 +22,8 @@ export class DeviceWrapper {
       d =>
         d.vendorId === venderId &&
         d.productId === productId &&
-        (pathSearchWord
-          ? d.path && d.path.indexOf(pathSearchWord) >= 0
+        (pathSearchWords
+          ? d.path && pathSearchWords.some(word => d.path!.indexOf(word) >= 0)
           : true) &&
         (serialNumberSearchWord
           ? d.serialNumber &&
@@ -40,13 +40,13 @@ export class DeviceWrapper {
   open(
     venderId: number,
     productId: number,
-    pathSearchWord?: string,
+    pathSearchWords?: string[],
     serialNumberSearchWord?: string
   ): boolean {
     this.device = DeviceWrapper.openTargetDevice(
       venderId,
       productId,
-      pathSearchWord,
+      pathSearchWords,
       serialNumberSearchWord
     );
     if (this.device) {
