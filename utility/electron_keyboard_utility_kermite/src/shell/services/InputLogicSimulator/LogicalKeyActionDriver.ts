@@ -1,11 +1,8 @@
 import { OutputKeyStateUpdator } from './OutputKeyStateUpdator';
 import { IStrokeEmitterFunction, LogicalKeyAction, LayerState } from './Types';
-
-import { VirtualKeyToWindowsVirtualKeyCodeTable } from '~model/WindowsVirtualKeycodes';
+import { HidKeyCodes } from '~model/HidKeyCodes';
 
 export namespace LogicalKeyActionDriver {
-  const shiftKeyCode = VirtualKeyToWindowsVirtualKeyCodeTable['K_Shift'];
-
   const outputKeyStateUpdator = OutputKeyStateUpdator.getInterface();
   export function setKeyDestinationProc(proc: IStrokeEmitterFunction) {
     outputKeyStateUpdator.setKeyDestinationProc(proc);
@@ -36,7 +33,7 @@ export namespace LogicalKeyActionDriver {
       const { targetLayerId } = action;
       if (action.layerInvocationMode === 'hold') {
         if (targetLayerId === 'la1') {
-          outputKeyStateUpdator.handleModifier(shiftKeyCode, isDown);
+          outputKeyStateUpdator.handleModifier(HidKeyCodes.K_Shift, isDown);
         }
         state.holdLayerId = isDown ? targetLayerId : 'la0';
       } else if (action.layerInvocationMode === 'modal') {

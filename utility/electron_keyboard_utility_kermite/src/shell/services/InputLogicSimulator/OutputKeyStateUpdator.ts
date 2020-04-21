@@ -1,5 +1,5 @@
-import { VirtualKeyToWindowsVirtualKeyCodeTable } from '~model/WindowsVirtualKeycodes';
 import { IStrokeEmitterFunction, IVirtualStroke } from './Types';
+import { HidKeyCodes } from '~model/HidKeyCodes';
 
 export interface IOutputKeyStateUpdator {
   setKeyDestinationProc(proc: IStrokeEmitterFunction): void;
@@ -8,8 +8,6 @@ export interface IOutputKeyStateUpdator {
 }
 
 export namespace OutputKeyStateUpdator {
-  const shiftKeyCode = VirtualKeyToWindowsVirtualKeyCodeTable['K_Shift'];
-
   const local: {
     outputKeyState: { [key: number]: true | undefined };
     holdRawShift: boolean;
@@ -50,13 +48,13 @@ export namespace OutputKeyStateUpdator {
     if (isDown) {
       attachedModifierKeyCodes?.forEach(m => outputKeyboardEvent(m, true));
       if (adhocShift) {
-        outputKeyboardEvent(shiftKeyCode, adhocShift === 'down');
+        outputKeyboardEvent(HidKeyCodes.K_Shift, adhocShift === 'down');
       }
       outputKeyboardEvent(keyCode, true, true);
     } else {
       outputKeyboardEvent(keyCode, false);
       if (adhocShift) {
-        outputKeyboardEvent(shiftKeyCode, local.holdRawShift);
+        outputKeyboardEvent(HidKeyCodes.K_Shift, local.holdRawShift);
       }
       attachedModifierKeyCodes?.forEach(m => outputKeyboardEvent(m, false));
     }
@@ -64,7 +62,7 @@ export namespace OutputKeyStateUpdator {
 
   function handleModifier(keyCode: number, isDown: boolean) {
     outputKeyboardEvent(keyCode, isDown);
-    if (keyCode === shiftKeyCode) {
+    if (keyCode === HidKeyCodes.K_Shift) {
       local.holdRawShift = isDown;
     }
   }

@@ -1,7 +1,7 @@
 import { IKeyAssignEntry } from '~contract/data';
 import { ModifierVirtualKey, VirtualKey } from '~model/HighLevelDefs';
-import { VirtualKeyToWindowsVirtualKeyCodeTable } from '~model/WindowsVirtualKeycodes';
 import { LogicalKeyAction, TAdhocShift } from './Types';
+import { HidKeyCodes } from '~model/HidKeyCodes';
 
 export namespace KeyAssignToLogicalKeyActionResolver {
   function extractVkSet(
@@ -35,14 +35,10 @@ export namespace KeyAssignToLogicalKeyActionResolver {
     virtualKey: VirtualKey,
     modifiers?: ModifierVirtualKey[]
   ): LogicalKeyAction | undefined {
-    const vkSet = extractVkSet(
-      VirtualKeyToWindowsVirtualKeyCodeTable[virtualKey]
-    );
+    const vkSet = extractVkSet(HidKeyCodes[virtualKey]);
     if (vkSet) {
       const { vkCode, adhocShift } = vkSet;
-      const attachedModifierKeyCodes = modifiers?.map(
-        m => VirtualKeyToWindowsVirtualKeyCodeTable[m]
-      );
+      const attachedModifierKeyCodes = modifiers?.map(m => HidKeyCodes[m]);
       return {
         type: 'keyInput',
         stroke: {
@@ -72,8 +68,7 @@ export namespace KeyAssignToLogicalKeyActionResolver {
       };
     } else if (assign.type === 'holdModifier') {
       const { modifierKey, isOneShot } = assign;
-      const modifierKeyCode =
-        VirtualKeyToWindowsVirtualKeyCodeTable[modifierKey];
+      const modifierKeyCode = HidKeyCodes[modifierKey];
       return {
         type: 'holdModifier',
         modifierKeyCode,

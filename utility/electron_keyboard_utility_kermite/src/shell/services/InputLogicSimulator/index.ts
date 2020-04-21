@@ -9,6 +9,20 @@ import { VirtualKeyStateManager2 } from './VirtualStateManager2';
 import { VirtualStateManager } from './VirtualStateManager';
 import { IModelKeyAssignsProvider } from './Types';
 import { LogicalKeyActionDriver } from './LogicalKeyActionDriver';
+import { HidKeyCodes } from '~model/HidKeyCodes';
+
+const modifierBitPositionMap: {
+  [hidKeyCode: number]: number;
+} = {
+  [HidKeyCodes.K_LCtrl]: 0,
+  [HidKeyCodes.K_LShift]: 1,
+  [HidKeyCodes.K_LAlt]: 2,
+  [HidKeyCodes.K_LOS]: 3,
+  [HidKeyCodes.K_RCtrl]: 4,
+  [HidKeyCodes.K_RShift]: 5,
+  [HidKeyCodes.K_RAlt]: 6,
+  [HidKeyCodes.K_ROS]: 7
+};
 
 export class InputLogicSimulator {
   private keyAssignsProvider: IModelKeyAssignsProvider = {
@@ -16,14 +30,27 @@ export class InputLogicSimulator {
     keyUnitIdTable: []
   };
 
-  private callApiKeyboardEvent = (keyCode: number, isDown: boolean) => {
-    console.log(`    callApiKeyboardEvent __SIM__ ${keyCode} ${isDown}`);
-    // callApiKeybdEventOriginal(keyCode, isDown);
-    if (65 <= keyCode && keyCode < 68) {
-      const scanCode = keyCode - 65 + 4;
-      const report = [0, 0, isDown ? scanCode : 0, 0, 0, 0, 0, 0];
+  private modifierBits: number = 0;
+
+  private updateSideBrainHidReport = (hidKeyCode: number, isDown: boolean) => {
+    // console.log(`    updateSideBrainHidReport ${hidKeyCode} ${isDown}`);
+    let outKeyCode = 0;
+    if (modifierBitPositionMap[hidKeyCode] !== undefined) {
+      const bitPos = modifierBitPositionMap[hidKeyCode];
+      if (isDown) {
+        this.modifierBits |= 1 << bitPos;
+      } else {
+        this.modifierBits &= ~(1 << bitPos);
+      }
+      const report = [this.modifierBits, 0, 0, 0, 0, 0, 0, 0];
       appGlobal.deviceService.writeSideBrainHidReport(report);
+    } else {
+      outKeyCode = isDown ? hidKeyCode : 0;
     }
+
+    const report = [this.modifierBits, 0, outKeyCode, 0, 0, 0, 0, 0];
+    console.log(report);
+    appGlobal.deviceService.writeSideBrainHidReport(report);
   };
 
   private onProfileManagerStatusChanged = (
@@ -43,10 +70,6 @@ export class InputLogicSimulator {
   private onRealtimeKeyboardEvent = (event: IRealtimeKeyboardEvent) => {
     if (event.type === 'keyStateChanged') {
       const { keyIndex, isDown } = event;
-      if (keyIndex === 12) {
-        console.log('');
-        return;
-      }
       console.log(`key ${keyIndex} ${isDown ? 'down' : 'up'}`);
 
       const mode: number = 1;
@@ -76,7 +99,7 @@ export class InputLogicSimulator {
     );
     appGlobal.deviceService.subscribe(this.onRealtimeKeyboardEvent);
 
-    LogicalKeyActionDriver.setKeyDestinationProc(this.callApiKeyboardEvent);
+    LogicalKeyActionDriver.setKeyDestinationProc(this.updateSideBrainHidReport);
     VirtualKeyStateManager2.start();
 
     appGlobal.deviceService.writeSideBrainMode(true);
