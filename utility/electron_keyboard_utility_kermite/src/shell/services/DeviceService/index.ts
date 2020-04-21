@@ -82,4 +82,19 @@ export class DeviceService {
   unsubscribe(proc: (ev: IRealtimeKeyboardEvent) => void) {
     Arrays.remove(this.handlers, proc);
   }
+
+  writeSideBrainMode(enabled: boolean) {
+    console.log(`writeSideBrainMode ${enabled ? 1 : 0}`);
+    const buf = [0xd0, 0x10, enabled ? 1 : 0];
+    this.deviceWrapper?.writeSingleFrame(buf);
+  }
+
+  writeSideBrainHidReport(report: number[]) {
+    //report must be 8bytes
+    if (report.length !== 8) {
+      return;
+    }
+    const buf = [0xd0, 0x20, ...report];
+    this.deviceWrapper?.writeSingleFrame(buf);
+  }
 }

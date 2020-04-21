@@ -613,6 +613,11 @@ export class InputLogicSimulatorA {
   private callApiKeyboardEvent = (keyCode: number, isDown: boolean) => {
     console.log(`    callApiKeyboardEvent __SIM__ ${keyCode} ${isDown}`);
     // callApiKeybdEventOriginal(keyCode, isDown);
+    if (65 <= keyCode && keyCode < 68) {
+      const scanCode = keyCode - 65 + 4;
+      const report = [0, 0, isDown ? scanCode : 0, 0, 0, 0, 0, 0];
+      appGlobal.deviceService.writeSideBrainHidReport(report);
+    }
   };
 
   private onProfileManagerStatusChanged = (
@@ -643,17 +648,20 @@ export class InputLogicSimulatorA {
       this.onProfileManagerStatusChanged
     );
     appGlobal.deviceService.subscribe(this.onRealtimeKeyboardEvent);
-    // LogicalKeyActionDriver.setKeyDestinationProc(this.callApiKeyboardEvent);
-    // VirtualKeyStateManager2.start();
+    LogicalKeyActionDriver.setKeyDestinationProc(this.callApiKeyboardEvent);
     inputCoreLogic.start();
 
     inputCoreLogic.setKeyAssignsProvider({
       profileModel: testBoard_profileModel,
       keyUnitIdTable: testBoard_keyUnitIdTable
     });
+
+    appGlobal.deviceService.writeSideBrainMode(true);
   }
 
   async terminate() {
     appGlobal.deviceService.unsubscribe(this.onRealtimeKeyboardEvent);
+
+    appGlobal.deviceService.writeSideBrainMode(false);
   }
 }

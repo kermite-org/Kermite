@@ -16,11 +16,14 @@ export class InputLogicSimulator {
     keyUnitIdTable: []
   };
 
-  // private logic1(keyIndex: number, isDown: boolean) {}
-
   private callApiKeyboardEvent = (keyCode: number, isDown: boolean) => {
     console.log(`    callApiKeyboardEvent __SIM__ ${keyCode} ${isDown}`);
     // callApiKeybdEventOriginal(keyCode, isDown);
+    if (65 <= keyCode && keyCode < 68) {
+      const scanCode = keyCode - 65 + 4;
+      const report = [0, 0, isDown ? scanCode : 0, 0, 0, 0, 0, 0];
+      appGlobal.deviceService.writeSideBrainHidReport(report);
+    }
   };
 
   private onProfileManagerStatusChanged = (
@@ -75,9 +78,13 @@ export class InputLogicSimulator {
 
     LogicalKeyActionDriver.setKeyDestinationProc(this.callApiKeyboardEvent);
     VirtualKeyStateManager2.start();
+
+    appGlobal.deviceService.writeSideBrainMode(true);
   }
 
   async terminate() {
     appGlobal.deviceService.unsubscribe(this.onRealtimeKeyboardEvent);
+
+    appGlobal.deviceService.writeSideBrainMode(false);
   }
 }

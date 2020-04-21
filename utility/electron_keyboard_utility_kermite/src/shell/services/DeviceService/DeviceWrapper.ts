@@ -1,4 +1,5 @@
 import * as HID from 'node-hid';
+import { zeros, delayMs } from './Helpers';
 
 function getArrayFromBuffer(data: any) {
   return new Uint8Array(Buffer.from(data));
@@ -74,5 +75,28 @@ export class DeviceWrapper {
 
   setReceiverFunc(func: IReceiverFunc) {
     this.receiverFunc = func;
+  }
+
+  writeSingleFrame(bytes: number[]) {
+    if (bytes.length > 64) {
+      throw new Error(`generic hid frame length too long, ${bytes.length}/64`);
+    }
+    const padding = zeros(64 - bytes.length);
+    const buf = [...bytes, ...padding];
+
+    console.log(`sending ${buf.length} bytes:`);
+    console.log(buf.map(v => ('00' + v.toString(16)).slice(-2)).join(' '));
+
+    buf.unshift(0); //先頭に0を付加して送信
+
+    this.device && this.device.write(buf);
+  }
+
+  async writeFrames(frames: number[][]) {
+    for (let i = 0; i < frames.length; i++) {
+      this.writeSingleFrame(frames[i]);
+      //await delayMs(10);
+      await delayMs(50); //debug
+    }
   }
 }
