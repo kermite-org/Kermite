@@ -12,20 +12,21 @@ module.exports = {
   ],
   plugins: ['react', 'prettier'],
   rules: {
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    'no-console': 'off',
-    '@typescript-eslint/no-use-before-define': ['error', 'nofunc'],
-    '@typescript-eslint/no-unused-vars': 'off',
-    '@typescript-eslint/no-explicit-any': 'off',
-    '@typescript-eslint/no-empty-function': 'off',
-    'react/react-in-jsx-scope': 'off',
-    '@typescript-eslint/no-inferrable-types': 'off',
-    eqeqeq: ['error', 'always'],
-    '@typescript-eslint/no-namespace': 'off',
-    '@typescript-eslint/interface-name-prefix': 'off',
-    '@typescript-eslint/no-empty-interface': 'off',
-    '@typescript-eslint/camelcase': 'off',
-    '@typescript-eslint/class-name-casing': 'off',
-    '@typescript-eslint/no-non-null-assertion': 'off'
+    '@typescript-eslint/explicit-function-return-type': 0,
+    'no-console': 0,
+    '@typescript-eslint/no-use-before-define': [1, 'nofunc'],
+    '@typescript-eslint/no-unused-vars': 0,
+    '@typescript-eslint/no-explicit-any': 0,
+    '@typescript-eslint/no-empty-function': 0,
+    'react/react-in-jsx-scope': 0,
+    '@typescript-eslint/no-inferrable-types': 0,
+    eqeqeq: [1, 'always'],
+    '@typescript-eslint/no-namespace': 0,
+    '@typescript-eslint/interface-name-prefix': 0,
+    '@typescript-eslint/no-empty-interface': 0,
+    '@typescript-eslint/camelcase': 0,
+    '@typescript-eslint/class-name-casing': 0,
+    '@typescript-eslint/no-non-null-assertion': 0,
+    '@typescript-eslint/ban-ts-ignore': 0
   }
-}
+};
