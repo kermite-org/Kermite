@@ -145,9 +145,12 @@ const enum HidKeyJp {
 const OUT_SHIFT = 0x100;
 const OUT_NOSHIFT = 0x200;
 
+// @ts-ignore
 export const HidKeyCodes: {
   [vk in VirtualKey]: number;
-} = ({
+} = {
+  //todo: define hid keycodes for all virtualkeys
+
   K_A: HidKey.KU_A,
   K_B: HidKey.KU_B,
   K_C: HidKey.KU_C,
@@ -189,7 +192,18 @@ export const HidKeyCodes: {
   K_Enter: HidKey.KU_Enter,
   K_Tab: HidKey.KU_Tab,
   K_BackSpace: HidKey.KU_BackSpace,
-
+  K_F1: HidKey.KU_F1,
+  K_F2: HidKey.KU_F2,
+  K_F3: HidKey.KU_F3,
+  K_F4: HidKey.KU_F4,
+  K_F5: HidKey.KU_F5,
+  K_F6: HidKey.KU_F6,
+  K_F7: HidKey.KU_F7,
+  K_F8: HidKey.KU_F8,
+  K_F9: HidKey.KU_F9,
+  K_F10: HidKey.KU_F10,
+  K_F11: HidKey.KU_F11,
+  K_F12: HidKey.KU_F12,
   K_Dot: HidKeyJp.KU__JP_Dot_GreaterThan | OUT_NOSHIFT,
   K_Comma: HidKeyJp.KU__JP_Comma_LessThan | OUT_NOSHIFT,
   K_Exclamation: HidKeyJp.KU__JP_Num1_Exclamation | OUT_SHIFT,
@@ -244,7 +258,7 @@ export const HidKeyCodes: {
   K_Insert: HidKey.KU_Insert,
   K_Delete: HidKey.KU_Delete,
   K_PageUp: HidKey.KU_PageUp,
-  K_PageDown: HidKey.KU_PageDown,
+  K_PageDn: HidKey.KU_PageDown,
   K_LeftArrow: HidKey.KU_LeftArrow,
   K_RightArrow: HidKey.KU_RightArrow,
   K_UpArrow: HidKey.KU_UpArrow,
@@ -253,8 +267,4 @@ export const HidKeyCodes: {
   K_KatakanaHiragana: HidKeyJp.KU_KatakanaHiragana,
   K_Henkan: HidKeyJp.KU_Henkan,
   K_Muhenkan: HidKeyJp.KU_Muhenkan
-  //todo: define all mapping entries
-} as {
-  [vk in VirtualKey]?: number;
-}) as any;
-// export type HidKeyCodes = typeof HidKeyCodes;
+};
