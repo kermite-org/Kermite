@@ -18,11 +18,11 @@ export class AppWindowManager {
     });
 
     if (appConfig.isDevelopment) {
-      this.mainWindow.loadURL('http://localhost:3000');
+      this.mainWindow.loadURL('http://localhost:3700');
       this.mainWindow?.webContents.openDevTools();
     } else {
       this.mainWindow.loadURL(`file://${__dirname}/xui/index.html`);
-      this.mainWindow?.webContents.openDevTools();
+      // this.mainWindow?.webContents.openDevTools();
     }
 
     this.mainWindow.on('closed', () => {
