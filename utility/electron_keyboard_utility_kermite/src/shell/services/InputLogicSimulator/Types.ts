@@ -8,7 +8,10 @@ export interface IVirtualStroke {
   attachedModifierKeyCodes?: number[];
 }
 
-export type IStrokeEmitterFunction = (keyCode: number, isDown: boolean) => void;
+export type IStrokeEmitterFunction = (ev: {
+  keyCode: number;
+  isDown: boolean;
+}) => void;
 
 export type LogicalKeyAction = { rcode: string } & (
   | {

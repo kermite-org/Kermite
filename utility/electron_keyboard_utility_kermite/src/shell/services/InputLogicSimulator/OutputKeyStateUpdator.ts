@@ -22,6 +22,10 @@ export namespace OutputKeyStateUpdator {
     local.keyStrokeDestinationProc = proc;
   }
 
+  function emitKeyEvent(keyCode: number, isDown: boolean) {
+    local.keyStrokeDestinationProc({ keyCode, isDown });
+  }
+
   function outputKeyboardEvent(
     keyCode: number,
     isDown: boolean,
@@ -29,16 +33,16 @@ export namespace OutputKeyStateUpdator {
   ) {
     const prevState = local.outputKeyState[keyCode];
     if (!prevState && isDown) {
-      local.keyStrokeDestinationProc(keyCode, true);
+      emitKeyEvent(keyCode, true);
       local.outputKeyState[keyCode] = true;
     }
     if (prevState && isDown && retriggerIfNeed) {
-      local.keyStrokeDestinationProc(keyCode, false);
-      local.keyStrokeDestinationProc(keyCode, true);
+      emitKeyEvent(keyCode, false);
+      emitKeyEvent(keyCode, true);
       local.outputKeyState[keyCode] = true;
     }
     if (prevState && !isDown) {
-      local.keyStrokeDestinationProc(keyCode, false);
+      emitKeyEvent(keyCode, false);
       delete local.outputKeyState[keyCode];
     }
   }

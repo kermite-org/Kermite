@@ -10,6 +10,8 @@ import { VirtualStateManager } from './VirtualStateManager';
 import { IModelKeyAssignsProvider } from './Types';
 import { LogicalKeyActionDriver } from './LogicalKeyActionDriver';
 import { HidKeyCodes } from '~model/HidKeyCodes';
+import { OutputKeyPrioritySorter } from './OutputKeyPrioritySorter';
+import { IntervalTimerWrapper } from './IntervalTimerWrapper';
 
 const modifierBitPositionMap: {
   [hidKeyCode: number]: number;
@@ -30,9 +32,17 @@ export class InputLogicSimulator {
     keyUnitIdTable: []
   };
 
+  private outputKeyPrioritySorter = new OutputKeyPrioritySorter();
+
+  private sorterIntervalTimer = new IntervalTimerWrapper();
+
   private modifierBits: number = 0;
 
-  private updateSideBrainHidReport = (hidKeyCode: number, isDown: boolean) => {
+  private updateSideBrainHidReport = (ev: {
+    hidKeyCode: number;
+    isDown: boolean;
+  }) => {
+    const { hidKeyCode, isDown } = ev;
     // console.log(`    updateSideBrainHidReport ${hidKeyCode} ${isDown}`);
     let outKeyCode = 0;
     if (modifierBitPositionMap[hidKeyCode] !== undefined) {
@@ -99,15 +109,32 @@ export class InputLogicSimulator {
     );
     appGlobal.deviceService.subscribe(this.onRealtimeKeyboardEvent);
 
-    LogicalKeyActionDriver.setKeyDestinationProc(this.updateSideBrainHidReport);
+    LogicalKeyActionDriver.setKeyDestinationProc(ev => {
+      this.outputKeyPrioritySorter.pushInputEvent({
+        hidKeyCode: ev.keyCode,
+        isDown: ev.isDown,
+        tick: Date.now()
+      });
+    });
     VirtualKeyStateManager2.start();
 
     appGlobal.deviceService.writeSideBrainMode(true);
+
+    this.outputKeyPrioritySorter.setDesinationProc(
+      this.updateSideBrainHidReport
+    );
+
+    this.sorterIntervalTimer.start(
+      () => this.outputKeyPrioritySorter.processUpdate(),
+      10
+    );
   }
 
   async terminate() {
     appGlobal.deviceService.unsubscribe(this.onRealtimeKeyboardEvent);
 
     appGlobal.deviceService.writeSideBrainMode(false);
+
+    this.sorterIntervalTimer.stop();
   }
 }
