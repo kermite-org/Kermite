@@ -3,6 +3,8 @@ import { appGlobal } from './services/appGlobal';
 import * as childProcess from 'child_process';
 import { appWindowManager } from './AppWindowManager';
 
+app.allowRendererProcessReuse = true;
+
 export class AppEntry {
   private respawned: boolean = false;
 
