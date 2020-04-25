@@ -610,7 +610,8 @@ namespace InputCoreLogic {
 const inputCoreLogic = InputCoreLogic.getInterface();
 
 export class InputLogicSimulatorA {
-  private callApiKeyboardEvent = (keyCode: number, isDown: boolean) => {
+  private callApiKeyboardEvent = (ev: { keyCode: number; isDown: boolean }) => {
+    const { keyCode, isDown } = ev;
     console.log(`    callApiKeyboardEvent __SIM__ ${keyCode} ${isDown}`);
     // callApiKeybdEventOriginal(keyCode, isDown);
     if (65 <= keyCode && keyCode < 68) {
