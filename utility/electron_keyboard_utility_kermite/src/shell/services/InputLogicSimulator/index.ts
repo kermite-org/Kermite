@@ -52,14 +52,12 @@ export class InputLogicSimulator {
       } else {
         this.modifierBits &= ~(1 << bitPos);
       }
-      const report = [this.modifierBits, 0, 0, 0, 0, 0, 0, 0];
-      appGlobal.deviceService.writeSideBrainHidReport(report);
     } else {
       outKeyCode = isDown ? hidKeyCode : 0;
     }
 
     const report = [this.modifierBits, 0, outKeyCode, 0, 0, 0, 0, 0];
-    console.log(report);
+    console.log(JSON.stringify(report));
     appGlobal.deviceService.writeSideBrainHidReport(report);
   };
 

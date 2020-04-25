@@ -12,10 +12,16 @@ interface IOutputKeyPrioritySorter {
   processUpdate(): void;
 }
 
+// const bypass = false
+const bypass = true;
 const waitTimeMs = 50;
 
 const virtualKeyPriorityOrders: VirtualKey[] = [
+  'K_Ctrl',
+  'K_Alt',
+  'K_OS',
   'K_Shift',
+
   'K_B',
   'K_C',
   'K_D',
@@ -63,6 +69,10 @@ export class OutputKeyPrioritySorter implements IOutputKeyPrioritySorter {
   }
 
   pushInputEvent(ev: IOutputKeyEvent) {
+    if (bypass) {
+      this.destinationProc!(ev);
+      return;
+    }
     this.outputEvents.push(ev);
     if (ev.isDown) {
       this.holdCount++;
