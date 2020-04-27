@@ -6,23 +6,28 @@ export class AppWindowManager {
   private mainWindow: BrowserWindow | null = null;
 
   openMainWindow() {
-    this.mainWindow = new BrowserWindow({
+    const options: Electron.BrowserWindowConstructorOptions = {
       width: 1200,
       height: 800,
       webPreferences: {
         nodeIntegration: false,
         preload: path.join(__dirname, 'preload.js')
       }
-      // frame: false,
-      // transparent: true
-    });
+    };
+
+    const isProd = process.env.NODE_ENV === 'production';
+    if (isProd) {
+      options.frame = false;
+      options.transparent = true;
+    }
+
+    this.mainWindow = new BrowserWindow(options);
 
     if (appConfig.isDevelopment) {
       this.mainWindow.loadURL('http://localhost:3700');
       this.mainWindow?.webContents.openDevTools();
     } else {
       this.mainWindow.loadURL(`file://${__dirname}/xui/index.html`);
-      // this.mainWindow?.webContents.openDevTools();
     }
 
     this.mainWindow.on('closed', () => {

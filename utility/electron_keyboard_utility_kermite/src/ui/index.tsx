@@ -31,7 +31,7 @@ function PageRoot() {
 }
 
 function start() {
-  debugTrace('renderer start');
+  // debugTrace('renderer start');
 
   const appDiv = document.getElementById('app');
   if (appDiv) {
@@ -42,7 +42,7 @@ function start() {
       appDiv
     );
     window.addEventListener('beforeunload', () => {
-      debugTrace('renderer beforeunload');
+      // debugTrace('renderer beforeunload');
       saveDirtyEditModelOnClosing();
       ReactDOM.unmountComponentAtNode(appDiv);
     });
