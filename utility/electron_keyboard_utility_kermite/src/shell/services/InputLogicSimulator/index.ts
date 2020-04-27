@@ -1,5 +1,5 @@
-import { IProfileManagerStatus } from '~contract/data';
-import { IRealtimeKeyboardEvent } from '~contract/ipc';
+import { IProfileManagerStatus } from '~defs/data';
+import { IRealtimeKeyboardEvent } from '~defs/ipc';
 import { appGlobal } from '../appGlobal';
 import {
   completeEditModelForShiftLayer,
@@ -9,7 +9,7 @@ import { VirtualKeyStateManager2 } from './VirtualStateManager2';
 import { VirtualStateManager } from './VirtualStateManager';
 import { IModelKeyAssignsProvider } from './Types';
 import { LogicalKeyActionDriver } from './LogicalKeyActionDriver';
-import { HidKeyCodes } from '~model/HidKeyCodes';
+import { HidKeyCodes } from '~defs/HidKeyCodes';
 import { OutputKeyPrioritySorter } from './OutputKeyPrioritySorter';
 import { IntervalTimerWrapper } from './IntervalTimerWrapper';
 

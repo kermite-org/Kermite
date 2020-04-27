@@ -1,4 +1,4 @@
-import { LayerInvocationMode, IKeyAssignsSet } from '~contract/data';
+import { LayerInvocationMode, IKeyAssignsSet } from '~defs/data';
 
 export type TAdhocShift = 'down' | 'up' | undefined;
 

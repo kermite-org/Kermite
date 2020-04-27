@@ -1,5 +1,12 @@
 import { IEventSource } from '~funcs/xpc/types';
-import { IEditModel, IProfileManagerStatus } from './data';
+import { IProfileData } from './ProfileData';
+
+export interface IProfileManagerStatus {
+  currentProfileName: string;
+  allProfileNames: string[];
+  loadedEditModel: IProfileData | undefined;
+  errorMessage: string;
+}
 
 export type IRealtimeKeyboardEvent =
   | {
@@ -24,7 +31,7 @@ export interface IWindowManagerCommand {
 export interface IProfileManagerCommand {
   creatProfile?: { name: string; breedName: string };
   loadProfile?: { name: string };
-  saveCurrentProfile?: { editModel: IEditModel };
+  saveCurrentProfile?: { editModel: IProfileData };
   deleteProfile?: { name: string };
   renameProfile?: { name: string; newName: string };
 }
@@ -35,6 +42,6 @@ export interface IpcPacket {
   closeWindow?: boolean;
   minimizeWindow?: boolean;
   maximizeWindow?: boolean;
-  reserveSaveProfileTask?: IEditModel;
+  reserveSaveProfileTask?: IProfileData;
   widgetModeChanged?: boolean;
 }

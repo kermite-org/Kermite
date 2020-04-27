@@ -1,4 +1,4 @@
-import { IKeyAssignEntry } from '~contract/data';
+import { IKeyAssignEntry } from '~defs/data';
 import { KeyAssignToLogicalKeyActionResolver } from './KeyAssignToLogicalKeyActionResolver';
 import { LogicalKeyActionDriver } from './LogicalKeyActionDriver';
 import {

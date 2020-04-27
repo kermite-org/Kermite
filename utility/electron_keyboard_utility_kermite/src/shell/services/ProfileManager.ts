@@ -1,32 +1,15 @@
 import { appGlobal } from './appGlobal';
 import { Files } from '~funcs/Files';
-import { IEditModel, IProfileManagerStatus } from '~contract/data';
+import { IProfileManagerStatus } from '~defs/ipc';
 import { resolveFilePath } from '~shell/AppConfig';
 import { Arrays } from '~funcs/Arrays';
-import { duplicateObjectByStringify } from '~funcs/Utils';
+import { duplicateObjectByJsonStringifyParse } from '~funcs/Utils';
 import * as path from 'path';
 import { Nums } from '~funcs/Nums';
-import { IProfileManagerCommand } from '~contract/ipc';
+import { IProfileManagerCommand } from '~defs/ipc';
+import { IEditModel, fallbackProfileData } from '~defs/ProfileData';
 
 type StatusListener = (partialStatus: Partial<IProfileManagerStatus>) => void;
-
-export const fallbackEditModel: IEditModel = {
-  version: 1,
-  layers: [
-    {
-      layerId: 'la0',
-      layerName: 'main',
-      layerRole: 'main'
-    },
-    {
-      layerId: 'la1',
-      layerRole: 'shift',
-      layerName: 'shift'
-    }
-  ],
-  keyAssigns: {},
-  breedName: '__default'
-};
 
 class ProfileManagerCore {
   static getDataFilePath(profName: string): string {
@@ -77,8 +60,10 @@ class ProfileManagerCore {
     profName: string,
     breedName: string
   ): Promise<IEditModel> {
-    const editModel: IEditModel = duplicateObjectByStringify(fallbackEditModel);
-    editModel.breedName = breedName;
+    const editModel: IEditModel = duplicateObjectByJsonStringifyParse(
+      fallbackProfileData
+    );
+    // editModel.breedName = breedName;
     await this.saveProfile(profName, editModel);
     return editModel;
   }
@@ -165,12 +150,14 @@ export class ProfileManager {
   }
 
   private fixEditModelData(editModel: IEditModel) {
-    if (editModel.layers.length === 0) {
-      editModel.layers = duplicateObjectByStringify(fallbackEditModel.layers);
-    }
-    if (!editModel.breedName) {
-      editModel.breedName = 'astelia';
-    }
+    // if (editModel.layers.length === 0) {
+    //   editModel.layers = duplicateObjectByJsonStringifyParse(
+    //     fallbackProfileData.layers
+    //   );
+    // }
+    // if (!editModel.breedName) {
+    //   editModel.breedName = 'astelia';
+    // }
   }
 
   private raiseErrorMessage(errorMessage: string) {

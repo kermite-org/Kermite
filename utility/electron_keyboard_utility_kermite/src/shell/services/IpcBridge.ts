@@ -1,11 +1,10 @@
 import { ipcMain } from 'electron';
-import { IEditModel } from '~contract/data';
 import {
   IBackendAgent,
   IpcPacket,
   IProfileManagerCommand,
   IWindowManagerCommand
-} from '~contract/ipc';
+} from '~defs/ipc';
 import { xpcMain } from '~funcs/xpc/xpcMain';
 import { appWindowManager } from '~shell/AppWindowManager';
 import { appGlobal } from './appGlobal';

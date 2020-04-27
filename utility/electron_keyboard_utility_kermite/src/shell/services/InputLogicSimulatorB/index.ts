@@ -1,5 +1,5 @@
-import { IProfileManagerStatus } from '~contract/data';
-import { IRealtimeKeyboardEvent } from '~contract/ipc';
+import { IProfileManagerStatus } from '~defs/data';
+import { IRealtimeKeyboardEvent } from '~defs/ipc';
 import { appGlobal } from '../appGlobal';
 import { IInputLogicSimulator } from '../InputLogicSimulator.interface';
 import {

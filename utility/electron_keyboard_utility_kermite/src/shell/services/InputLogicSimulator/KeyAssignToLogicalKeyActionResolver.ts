@@ -1,7 +1,7 @@
-import { IKeyAssignEntry } from '~contract/data';
+import { IKeyAssignEntry } from '~defs/data';
 import { ModifierVirtualKey, VirtualKey } from '~model/HighLevelDefs';
 import { LogicalKeyAction, TAdhocShift } from './Types';
-import { HidKeyCodes } from '~model/HidKeyCodes';
+import { HidKeyCodes } from '~defs/HidKeyCodes';
 
 export namespace KeyAssignToLogicalKeyActionResolver {
   function extractVkSet(

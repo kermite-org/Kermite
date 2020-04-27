@@ -1,5 +1,5 @@
-import { IEditModel } from '~contract/data';
-import { VirtualKey } from '~model/HighLevelDefs';
+import { IEditModel } from '~defs/data';
+import { VirtualKey } from '~defs/VirtualKeys';
 import { getKeyboardShapeByBreedName } from '~ui/view/WidgetSite/KeyboardShapes';
 import { createDictionaryFromKeyValues } from '~funcs/Utils';
 

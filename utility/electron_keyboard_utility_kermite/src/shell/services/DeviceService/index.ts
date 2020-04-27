@@ -1,6 +1,6 @@
 import { DeviceWrapper } from './DeviceWrapper';
 import { Arrays } from '~funcs/Arrays';
-import { IRealtimeKeyboardEvent } from '~contract/ipc';
+import { IRealtimeKeyboardEvent } from '~defs/ipc';
 
 type IRealtimeEventHandlerFunc = (event: IRealtimeKeyboardEvent) => void;
 

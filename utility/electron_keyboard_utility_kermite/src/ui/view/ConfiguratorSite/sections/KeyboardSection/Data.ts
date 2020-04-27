@@ -1,5 +1,5 @@
 import React from 'react';
-import { IKeyAssignsSet, ILayer, IKeyAssignEntry } from '~contract/data';
+import { IKeyAssignsSet, ILayer, IKeyAssignEntry } from '~defs/data';
 import {
   getAssignSlotAddress,
   checkIfLognNameKeyAssign

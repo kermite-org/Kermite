@@ -102,7 +102,7 @@ export type VirtualKey =
   | 'K_DownArrow'
   | 'K_PrintScreen'
   | 'K_CapsLock'
-  | 'K_ScrollLock'
+  | 'K_ScrollLockk'
   | 'K_PauseBreak'
   | 'K_Menu'
   | 'K_HankakuZenkaku'

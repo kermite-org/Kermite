@@ -1,5 +1,5 @@
 import { css, jsx } from '@emotion/core';
-import { IKeyAssignEntry } from '~contract/data';
+import { IKeyAssignEntry } from '~defs/data';
 import { isAssignKeyBlank } from '~ui/state/editor';
 import { UiTheme } from '~ui/view/ConfiguratorSite/UiTheme';
 import { AssignModeButtonRaw } from './AssignSlotCards';

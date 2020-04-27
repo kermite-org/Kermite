@@ -1,5 +1,5 @@
 import { css, jsx } from '@emotion/core';
-import { ILayer } from '~contract/data';
+import { ILayer } from '~defs/data';
 import { UiTheme } from '~ui/view/ConfiguratorSite/UiTheme';
 
 export const LayerListBoxPart = (props: {

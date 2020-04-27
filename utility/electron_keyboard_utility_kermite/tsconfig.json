@@ -4,10 +4,9 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "strict": true,
-    "strictNullChecks": true,
+    "lib": ["dom", "esnext"],
     "jsx": "react",
-    "jsxFactory": "jsx",
-    "allowSyntheticDefaultImports": true,
+    "jsxFactory": "hx",
     "baseUrl": ".",
     "paths": {
       "~*": ["./src/*"]

@@ -1,5 +1,5 @@
 import { VirtualKey } from '~model/HighLevelDefs';
-import { HidKeyCodes } from '~model/HidKeyCodes';
+import { HidKeyCodes } from '~defs/HidKeyCodes';
 
 interface IOutputKeyEvent {
   hidKeyCode: number;

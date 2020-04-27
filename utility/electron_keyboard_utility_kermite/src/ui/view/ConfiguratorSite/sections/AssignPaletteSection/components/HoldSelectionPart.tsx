@@ -1,5 +1,5 @@
 import { css, jsx } from '@emotion/core';
-import { IKeyAssignEntry, ILayer, LayerInvocationMode } from '~contract/data';
+import { IKeyAssignEntry, ILayer, LayerInvocationMode } from '~defs/data';
 import { ModifierVirtualKey } from '~model/HighLevelDefs';
 import { AssignSlotCard, LayerTriggerAssignSlotCard } from './AssignSlotCards';
 import {

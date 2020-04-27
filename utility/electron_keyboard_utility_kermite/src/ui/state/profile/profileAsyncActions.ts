@@ -1,5 +1,5 @@
-import { IProfileManagerStatus } from '~contract/data';
-import { IProfileManagerCommand } from '~contract/ipc';
+import { IProfileManagerStatus } from '~defs/data';
+import { IProfileManagerCommand } from '~defs/ipc';
 import { editorSlice, editorSelectors } from '../editor';
 import { sendProfileManagerCommands } from '../ipc';
 import { AppState, AsyncDispatch, IGetState } from '../store';

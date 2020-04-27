@@ -1,4 +1,4 @@
-import { IKeyAssignEntry } from '~contract/data';
+import { IKeyAssignEntry } from '~defs/data';
 import {
   addOptionToOptionsArray,
   removeOptionFromOptionsArray

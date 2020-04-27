@@ -22,11 +22,11 @@ export function arrayToIdIndexMap<
   return obj;
 }
 
-export function compareObjectByStringify(a: any, b: any) {
+export function compareObjectByJsonStringify(a: any, b: any) {
   return JSON.stringify(a) === JSON.stringify(b);
 }
 
-export function duplicateObjectByStringify<T>(obj: T): T {
+export function duplicateObjectByJsonStringifyParse<T>(obj: T): T {
   return JSON.parse(JSON.stringify(obj));
 }
 
@@ -96,4 +96,22 @@ export function createDictionaryFromKeyValues<K extends string | number, V>(
     obj[key] = value;
   });
   return obj;
+}
+
+export function clonePlainOldObject(src: any): any {
+  if (src instanceof Array) {
+    return src.map(clonePlainOldObject);
+  } else if (src instanceof Object) {
+    const dst: any = {};
+    for (const key in src) {
+      dst[key] = clonePlainOldObject(src[key]);
+    }
+    return dst;
+  } else {
+    return src;
+  }
+}
+
+export function bindMethod<T>(obj: T, key: keyof T) {
+  return (obj[key] as any).bind(obj);
 }

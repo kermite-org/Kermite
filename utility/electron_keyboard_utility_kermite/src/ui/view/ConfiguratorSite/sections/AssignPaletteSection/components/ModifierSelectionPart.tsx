@@ -1,5 +1,5 @@
 import { css, jsx } from '@emotion/core';
-import { IKeyAssignEntry } from '~contract/data';
+import { IKeyAssignEntry } from '~defs/data';
 import { ModifierVirtualKey } from '~model/HighLevelDefs';
 import { AssignSlotCard } from './AssignSlotCards';
 import { isAssignModifierActive } from '~ui/state/editor';

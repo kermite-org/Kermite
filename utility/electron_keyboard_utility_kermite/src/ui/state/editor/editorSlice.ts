@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IEditModel, IKeyAssignEntry } from '~contract/data';
+import { IEditModel, IKeyAssignEntry } from '~defs/data';
 import { Arrays } from '~funcs/Arrays';
 import { ModifierVirtualKey, VirtualKey } from '~model/HighLevelDefs';
 import { assignEntryUpdator } from './assignEntryUpdator';

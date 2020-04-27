@@ -1,5 +1,5 @@
 import { IStrokeEmitterFunction, IVirtualStroke } from './Types';
-import { HidKeyCodes } from '~model/HidKeyCodes';
+import { HidKeyCodes } from '~defs/HidKeyCodes';
 
 export interface IOutputKeyStateUpdator {
   setKeyDestinationProc(proc: IStrokeEmitterFunction): void;

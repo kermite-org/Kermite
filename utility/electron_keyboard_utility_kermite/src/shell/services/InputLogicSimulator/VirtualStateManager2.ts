@@ -3,7 +3,7 @@ import {
   LayerState,
   LogicalKeyAction
 } from './Types';
-import { IKeyAssignEntry } from '~contract/data';
+import { IKeyAssignEntry } from '~defs/data';
 import { KeyAssignToLogicalKeyActionResolver } from './KeyAssignToLogicalKeyActionResolver';
 import { LogicalKeyActionDriver } from './LogicalKeyActionDriver';
 import { coloredLog } from '~shell/ColoredLog';

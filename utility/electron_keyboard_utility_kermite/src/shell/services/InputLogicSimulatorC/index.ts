@@ -1,17 +1,15 @@
+import { HidKeyCodes } from '~defs/HidKeyCodes';
+import { IProfileManagerStatus, IRealtimeKeyboardEvent } from '~defs/ipc';
 import {
+  fallbackProfileData,
   IEditModel,
-  IProfileManagerStatus,
   IKeyAssignEntry
-} from '~contract/data';
-import { IRealtimeKeyboardEvent } from '~contract/ipc';
-import { HidKeyCodes } from '~model/HidKeyCodes';
-import { ModifierVirtualKey } from '~model/HighLevelDefs';
-import { getKeyboardShapeByBreedName } from '~ui/view/WidgetSite/KeyboardShapes';
+} from '~defs/ProfileData';
+import { ModifierVirtualKey } from '~defs/VirtualKeys';
 import { appGlobal } from '../appGlobal';
 import { IInputLogicSimulator } from '../InputLogicSimulator.interface';
 import { IntervalTimerWrapper } from '../InputLogicSimulator/IntervalTimerWrapper';
 import { KeyIndexKeyEvent, TKeyTrigger } from '../InputLogicSimulatorB/common';
-import { fallbackEditModel } from '../ProfileManager';
 
 interface IKeyBindingInfo {
   assign: IKeyAssignEntry;
@@ -21,7 +19,7 @@ interface IKeyBindingInfo {
 type IKeyBindingInfoDict = { [keyId: string]: IKeyBindingInfo };
 
 const logicSimulatorStateC = new (class {
-  editModel: IEditModel = fallbackEditModel;
+  editModel: IEditModel = fallbackProfileData;
   keyBindingInfoDict: IKeyBindingInfoDict = {};
   currentLayerId: string = 'la0';
 })();
@@ -77,6 +75,7 @@ namespace Module1 {
     const bindingInfos = Object.values(logicSimulatorStateC.keyBindingInfoDict);
     bindingInfos.sort((a, b) => a.timeStamp - b.timeStamp);
     const hidReport = reduceBindingInfosToHidReport(bindingInfos);
+    // eslint-disable-next-line no-console
     console.log(JSON.stringify(hidReport));
 
     //dirty fix for modifier transition delay problem
@@ -95,10 +94,9 @@ namespace Module1 {
 
 namespace Module0 {
   function getKeyId(keyIndex: number): string | undefined {
-    const keyboardShape = getKeyboardShapeByBreedName(
-      logicSimulatorStateC.editModel.breedName
+    const kp = logicSimulatorStateC.editModel.keyboardShape.keyPositions.find(
+      key => key.pk === keyIndex
     );
-    const kp = keyboardShape.keyPositions.find(key => key.pk === keyIndex);
     return kp && kp.id;
   }
 
@@ -112,17 +110,22 @@ namespace Module0 {
     targetLayerId: string,
     keyId: string
   ): IKeyAssignEntry | undefined {
-    const { keyAssigns } = logicSimulatorStateC.editModel;
-    const assign = keyAssigns[`${keyId}.${targetLayerId}.pri`];
+    const { assigns } = logicSimulatorStateC.editModel;
+    const assign = assigns[`${targetLayerId}.${keyId}`];
+    if (assign && assign?.type === 'single') {
+      const op = assign.op;
 
-    //dirty migration fix for next model implementation
-    if (assign?.type === 'holdLayer' && assign.targetLayerId === 'la1') {
-      return {
-        type: 'keyInput',
-        virtualKey: 'K_Shift'
-      };
+      //dirty migration fix for next model implementation
+      if (op && op.type === 'layerCall' && op.targetLayerId === 'la1') {
+        return {
+          type: 'keyInput',
+          virtualKey: 'K_Shift'
+        };
+      }
+
+      return op;
     }
-    return assign;
+    return undefined;
   }
 
   function getAssign(keyId: string, trigger: TKeyTrigger) {
@@ -138,10 +141,11 @@ namespace Module0 {
 
   function commitAssign(assign: IKeyAssignEntry, isDown: boolean) {
     if (isDown) {
+      // eslint-disable-next-line no-console
       console.log(assign);
     }
 
-    if (assign.type === 'holdLayer') {
+    if (assign.type === 'layerCall') {
       logicSimulatorStateC.currentLayerId = isDown
         ? assign.targetLayerId
         : 'la0';

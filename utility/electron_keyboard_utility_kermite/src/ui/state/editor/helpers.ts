@@ -1,4 +1,4 @@
-import { IKeyAssignEntry, ILayer, IEditModel } from '~contract/data';
+import { IKeyAssignEntry, ILayer, IEditModel } from '~defs/data';
 import { VirtualKey, ModifierVirtualKey } from '~model/HighLevelDefs';
 import { AssignCategory } from './editorSlice';
 

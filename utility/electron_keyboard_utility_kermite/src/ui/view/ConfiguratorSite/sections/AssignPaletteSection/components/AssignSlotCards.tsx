@@ -1,5 +1,5 @@
 import { css, jsx } from '@emotion/core';
-import { ILayer } from '~contract/data';
+import { ILayer } from '~defs/data';
 import { VirtualKey } from '~model/HighLevelDefs';
 import { VirtualKeyTexts } from '~ui/view/ConfiguratorSite/Constants';
 import { checkIfLognNameKeyAssign } from '~ui/state/editor';

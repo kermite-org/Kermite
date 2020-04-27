@@ -1,5 +1,5 @@
 import { VirtualKey } from '~model/HighLevelDefs';
-import { IKeyAssignEntry } from '~contract/data';
+import { IKeyAssignEntry } from '~defs/data';
 import { KeyAssignEventWithTick, IChannel, KeyAssignEvent } from './common';
 
 const waitTimeMs = 200;

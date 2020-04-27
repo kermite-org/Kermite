@@ -3,7 +3,7 @@ import {
   IBackendAgent,
   IProfileManagerCommand,
   IWindowManagerCommand
-} from '~contract/ipc';
+} from '~defs/ipc';
 import { createXpcRenderer } from '~funcs/xpc/xpcRenderer';
 import { IpcRenderer } from 'electron';
 

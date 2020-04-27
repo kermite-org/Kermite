@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { IProfileManagerStatus } from '~contract/data';
-import { IRealtimeKeyboardEvent } from '~contract/ipc';
+import { IProfileManagerStatus } from '~defs/data';
+import { IRealtimeKeyboardEvent } from '~defs/ipc';
 import { EditorState, editorSelectors } from './state/editor';
 import { backendAgent, sendIpcPacketSync } from './state/ipc';
 import { playerSlice } from './state/playerSlice';

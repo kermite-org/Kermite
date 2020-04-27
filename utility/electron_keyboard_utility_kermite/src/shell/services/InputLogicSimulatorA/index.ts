@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { IProfileManagerStatus } from '~contract/data';
-import { IRealtimeKeyboardEvent } from '~contract/ipc';
+import { IProfileManagerStatus } from '~defs/data';
+import { IRealtimeKeyboardEvent } from '~defs/ipc';
 import { Arrays } from '~funcs/Arrays';
 import { createDictionaryFromKeyValues } from '~funcs/Utils';
 import { ModifierVirtualKey, VirtualKey } from '~model/HighLevelDefs';
