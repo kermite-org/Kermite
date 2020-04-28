@@ -6,7 +6,7 @@ export const editorSelectors = {
   isEditModelDirty: (state: EditorState): boolean =>
     state.loadedEditModel !== state.editModel,
   getCurrentAssign: (state: EditorState) =>
-    state.editModel.keyAssigns[state.currentAssignSlotAddress],
+    state.editModel.assigns[state.currentAssignSlotAddress],
   isSlotSelected: (state: EditorState) => state.currentAssignSlotAddress !== '',
   getCurrentLayer: (state: EditorState) =>
     state.editModel.layers.find(la => la.layerId === state.currentLayerId),

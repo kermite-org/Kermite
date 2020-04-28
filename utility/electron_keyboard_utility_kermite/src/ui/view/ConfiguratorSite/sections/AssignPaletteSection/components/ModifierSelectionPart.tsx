@@ -1,9 +1,9 @@
 import { css, jsx } from '@emotion/core';
-import { IKeyAssignEntry } from '~defs/data';
-import { ModifierVirtualKey } from '~model/HighLevelDefs';
 import { AssignSlotCard } from './AssignSlotCards';
 import { isAssignModifierActive } from '~ui/state/editor';
 import { UiTheme } from '~ui/view/ConfiguratorSite/UiTheme';
+import { IKeyAssignEntry } from '~defs/ProfileData';
+import { ModifierVirtualKey } from '~defs/VirtualKeys';
 
 const modifiresGroup: ModifierVirtualKey[] = [
   'K_Shift',

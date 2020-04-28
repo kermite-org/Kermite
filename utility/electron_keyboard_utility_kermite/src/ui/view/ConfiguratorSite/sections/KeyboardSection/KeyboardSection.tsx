@@ -11,12 +11,12 @@ import { KeyUnitCard } from './components/KeyUnitCard';
 import { useKeyUnitCardViewModels } from './Data';
 
 const mapStateToProps = (state: AppState) => ({
-  keyAssigns: state.editor.editModel.keyAssigns,
+  keyAssigns: state.editor.editModel.assigns,
   layers: state.editor.editModel.layers,
   currentLayerId: state.editor.currentLayerId,
   currentSlotAddress: state.editor.currentAssignSlotAddress,
   pressedKeyFlags: state.player.pressedKeyFlags,
-  keyboardShape: state.editor.keyboardShape
+  keyboardShape: state.editor.editModel.keyboardShape
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => {

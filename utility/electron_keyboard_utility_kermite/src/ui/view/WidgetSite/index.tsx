@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Nums } from '~funcs/Nums';
 import { siteSlice } from '~ui/state/siteSlice';
 import { AppState } from '../../state/store';
-import { getKeyboardShapeByBreedName } from './KeyboardShapes';
+import { getKeyboardShapeByBreedName } from '~defs/keyboardShapes';
 
 const cssGlobal = css`
   * {

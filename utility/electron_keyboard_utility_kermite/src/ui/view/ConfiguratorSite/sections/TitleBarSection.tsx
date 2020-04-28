@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { sendIpcPacketSync } from '~ui/state/ipc';
 import { siteSlice } from '~ui/state/siteSlice';
 
-const ControlButton = (props: { icon: IconProp; onClick: () => void }) => {
+const ControlButton = (props: { icon: string; onClick: () => void }) => {
   const cssButton = css`
     display: flex;
     justify-content: center;
@@ -21,7 +21,7 @@ const ControlButton = (props: { icon: IconProp; onClick: () => void }) => {
   `;
   return (
     <div css={cssButton} onClick={props.onClick}>
-      <FontAwesomeIcon icon={props.icon} />
+      <FontAwesomeIcon icon={props.icon as IconProp} />
     </div>
   );
 };

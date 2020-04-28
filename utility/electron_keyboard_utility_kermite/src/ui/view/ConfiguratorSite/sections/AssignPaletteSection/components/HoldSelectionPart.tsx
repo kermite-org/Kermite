@@ -1,6 +1,4 @@
 import { css, jsx } from '@emotion/core';
-import { IKeyAssignEntry, ILayer, LayerInvocationMode } from '~defs/data';
-import { ModifierVirtualKey } from '~model/HighLevelDefs';
 import { AssignSlotCard, LayerTriggerAssignSlotCard } from './AssignSlotCards';
 import {
   isAssignModifierActive,
@@ -8,6 +6,12 @@ import {
   isAssignLayerTrigger
 } from '~ui/state/editor';
 import { UiTheme } from '~ui/view/ConfiguratorSite/UiTheme';
+import { ModifierVirtualKey } from '~defs/VirtualKeys';
+import {
+  LayerInvocationMode,
+  IKeyAssignEntry,
+  ILayer
+} from '~defs/ProfileData';
 
 const modifiresGroup: ModifierVirtualKey[] = [
   'K_Shift',
@@ -44,14 +48,13 @@ const HoldLayerSelectionPart = (props: {
   } = props;
 
   const layerModeValue =
-    (currentAssign?.type === 'holdLayer' &&
-      currentAssign.layerInvocationMode) ||
+    (currentAssign?.type === 'layerCall' && currentAssign.invocationMode) ||
     undefined;
 
   const onLayerModeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const layerInvocationMode = e.currentTarget.value as LayerInvocationMode;
-    if (currentAssign && currentAssign.type === 'holdLayer') {
-      setAssignForCurrentSlot({ ...currentAssign, layerInvocationMode });
+    const invocationMode = e.currentTarget.value as LayerInvocationMode;
+    if (currentAssign && currentAssign.type === 'layerCall') {
+      setAssignForCurrentSlot({ ...currentAssign, invocationMode });
     }
   };
 
@@ -92,12 +95,12 @@ const HoldModifierSelectionPart = (props: {
 
   const isOneShot =
     (currentAssign &&
-      currentAssign.type === 'holdModifier' &&
+      currentAssign.type === 'modifierCall' &&
       currentAssign.isOneShot) ||
     false;
 
   const onCheckChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (currentAssign && currentAssign.type === 'holdModifier') {
+    if (currentAssign && currentAssign.type === 'modifierCall') {
       setAssignForCurrentSlot({
         ...currentAssign,
         isOneShot: e.currentTarget.checked
@@ -112,7 +115,7 @@ const HoldModifierSelectionPart = (props: {
           const isActive = isAssignHoldModifierActive(currentAssign, mo);
           const onClick = () => {
             setAssignForCurrentSlot({
-              type: 'holdModifier',
+              type: 'modifierCall',
               modifierKey: mo,
               isOneShot: false
             });

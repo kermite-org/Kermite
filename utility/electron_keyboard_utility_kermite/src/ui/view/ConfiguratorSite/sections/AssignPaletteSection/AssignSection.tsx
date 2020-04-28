@@ -1,7 +1,6 @@
 import { css, jsx } from '@emotion/core';
 import { useSelector } from 'react-redux';
 import { Dispatch, bindActionCreators } from 'redux';
-import { ModifierVirtualKey, VirtualKey } from '~model/HighLevelDefs';
 import { useMapDispatchToProps } from '~ui/hooks';
 import {
   editorSlice,
@@ -17,6 +16,7 @@ import { SlotSelectionPart } from './components/SlotSelectionPart';
 import { AssingTypeSelectionPart } from './components/AssignTypeSelectionPart';
 import React from 'react';
 import { HoldSelectionPart } from './components/HoldSelectionPart';
+import { VirtualKey, ModifierVirtualKey } from '~defs/VirtualKeys';
 
 const mapStateToProps = (state: AppState) => ({
   layers: state.editor.editModel.layers,
@@ -76,7 +76,7 @@ export const AssignSection = () => {
   } = useMapDispatchToProps(mapDispatchToProps);
 
   React.useEffect(() => {
-    const category = getAssignCategoryFromAssign(currentAssign);
+    const category = getAssignCategoryFromAssign(currentAssign?.op);
     if (category !== currentAssignCategory) {
       setAssignCategory(category);
     }
@@ -103,12 +103,12 @@ export const AssignSection = () => {
 
       <BlankSelectionPart
         isSlotSelected={isSlotSelected}
-        currentAssign={currentAssign}
+        currentAssign={currentAssign?.op}
         clearCurrentAssign={clearCurrentAssign}
       />
 
       <AssingTypeSelectionPart
-        currentAssign={currentAssign}
+        currentAssign={currentAssign?.op}
         isSlotSelected={isSlotSelected}
         currentAssignCategory={currentAssignCategory}
         setAssignCategory={setAssignCategory}
@@ -117,14 +117,14 @@ export const AssignSection = () => {
       {showKeySelectionPart && (
         <React.Fragment>
           <AssignKeySelectionPart
-            currentAssign={currentAssign}
+            currentAssign={currentAssign?.op}
             setCurrentAssignKey={setCurrentAssignKey}
             customLayers={customLayers}
             setCurrentAssignHoldLayer={setCurrentAssignHoldLayer}
           />
 
           <ModifierSelectionPart
-            currentAssign={currentAssign}
+            currentAssign={currentAssign?.op}
             setCurrentModifiers={setCurrentModifiers}
           />
         </React.Fragment>
@@ -132,7 +132,7 @@ export const AssignSection = () => {
 
       {showHoldSelectionPart && (
         <HoldSelectionPart
-          currentAssign={currentAssign}
+          currentAssign={currentAssign?.op}
           customLayers={customLayers}
           setCurrentAssignHoldLayer={setCurrentAssignHoldLayer}
           setAssignForCurrentSlot={setAssignForCurrentSlot}

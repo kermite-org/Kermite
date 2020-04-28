@@ -3,9 +3,10 @@ import {
   FontAwesomeIcon,
   FontAwesomeIconProps
 } from '@fortawesome/react-fontawesome';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 const LayerOperationButtton = (props: {
-  icon: FontAwesomeIconProps['icon'];
+  icon: string; //FontAwesomeIconProps['icon'];
   onClick: () => void;
   enabled: boolean;
 }) => {
@@ -29,7 +30,7 @@ const LayerOperationButtton = (props: {
   `;
   return (
     <div css={cssButton} onClick={props.onClick} data-enabled={props.enabled}>
-      <FontAwesomeIcon icon={props.icon} />
+      <FontAwesomeIcon icon={props.icon as IconProp} />
     </div>
   );
 };

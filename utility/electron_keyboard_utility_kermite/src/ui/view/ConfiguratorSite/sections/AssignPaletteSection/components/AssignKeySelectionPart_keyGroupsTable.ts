@@ -1,4 +1,4 @@
-import { VirtualKey } from '~model/HighLevelDefs';
+import { VirtualKey } from '~defs/VirtualKeys';
 
 const assignKeysGroup0: VirtualKey[] = [
   'K_A',

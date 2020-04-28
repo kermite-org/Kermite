@@ -1,8 +1,8 @@
 import { css, jsx } from '@emotion/core';
-import { IKeyAssignEntry } from '~defs/data';
 import { isAssignKeyBlank } from '~ui/state/editor';
 import { UiTheme } from '~ui/view/ConfiguratorSite/UiTheme';
 import { AssignModeButtonRaw } from './AssignSlotCards';
+import { IKeyAssignEntry } from '~defs/ProfileData';
 
 export const BlankSelectionPart = (props: {
   currentAssign: IKeyAssignEntry | undefined;

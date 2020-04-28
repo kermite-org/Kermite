@@ -1,14 +1,14 @@
-import { IKeyAssignEntry, ILayer, IEditModel } from '~defs/data';
-import { VirtualKey, ModifierVirtualKey } from '~model/HighLevelDefs';
 import { AssignCategory } from './editorSlice';
+import { IKeyAssignEntry, ILayer, IEditModel } from '~defs/ProfileData';
+import { VirtualKey, ModifierVirtualKey } from '~defs/VirtualKeys';
 
 export function getAssignSlotAddress(
   keyUnitId: string,
-  layerId: string,
-  isPrimary: boolean
+  layerId: string
+  // isPrimary: boolean
 ): string {
-  const priority = isPrimary ? 'pri' : 'sec';
-  return `${keyUnitId}.${layerId}.${priority}`;
+  // const priority = isPrimary ? 'pri' : 'sec';
+  return `${layerId}.${keyUnitId}`; //.${layerId}.${priority}`;
 }
 
 export function extractAssignSlotAddress(
@@ -68,7 +68,7 @@ export function isAssignLayerTrigger(
 ): boolean {
   return (
     (assign &&
-      assign.type === 'holdLayer' &&
+      assign.type === 'layerCall' &&
       assign.targetLayerId === layerId) ||
     false
   );
@@ -79,7 +79,9 @@ export function isAssignModifierActive(
   mo: ModifierVirtualKey
 ): boolean {
   return (
-    (assign && assign.type === 'keyInput' && assign.modifiers?.includes(mo)) ||
+    (assign &&
+      assign.type === 'keyInput' &&
+      assign.attachedModifiers?.includes(mo)) ||
     false
   );
 }
@@ -89,13 +91,13 @@ export function isAssignHoldModifierActive(
   mo: ModifierVirtualKey
 ): boolean {
   return (
-    (assign && assign.type === 'holdModifier' && assign.modifierKey === mo) ||
+    (assign && assign.type === 'modifierCall' && assign.modifierKey === mo) ||
     false
   );
 }
 
 export function isCustomLayer(layer: ILayer | undefined): layer is ILayer {
-  return (layer && layer.layerRole === 'custom') || false;
+  return (layer && layer.layerId !== 'la0') || false;
 }
 
 export const canShiftLayerOrder = (
@@ -126,9 +128,9 @@ export function getAssignCategoryFromAssign(
   if (assign) {
     if (assign.type === 'keyInput') {
       return 'input';
-    } else if (assign.type === 'holdLayer') {
+    } else if (assign.type === 'layerCall') {
       return 'hold';
-    } else if (assign.type === 'holdModifier') {
+    } else if (assign.type === 'modifierCall') {
       return 'hold';
     }
   }

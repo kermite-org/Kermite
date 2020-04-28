@@ -1,9 +1,9 @@
-import { IKeyAssignEntry } from '~defs/data';
 import {
   addOptionToOptionsArray,
   removeOptionFromOptionsArray
 } from '~funcs/Utils';
-import { ModifierVirtualKey, VirtualKey } from '~model/HighLevelDefs';
+import { IKeyAssignEntry } from '~defs/ProfileData';
+import { ModifierVirtualKey, VirtualKey } from '~defs/VirtualKeys';
 
 export function assignEntryUpdator(
   assign: IKeyAssignEntry | undefined,
@@ -29,31 +29,34 @@ export function assignEntryUpdator(
   if (cmd.addModifier) {
     const modifierKey = cmd.addModifier;
     if (assign && assign.type === 'keyInput') {
-      const modifiers = addOptionToOptionsArray(assign.modifiers, modifierKey);
-      return { ...assign, modifiers };
+      const attachedModifiers = addOptionToOptionsArray(
+        assign.attachedModifiers,
+        modifierKey
+      );
+      return { ...assign, attachedModifiers };
     } else {
       return {
         type: 'keyInput',
         virtualKey: 'K_NONE',
-        modifiers: [modifierKey]
+        attachedModifiers: [modifierKey]
       };
     }
   }
   if (cmd.removeModifier) {
     const modifierKey = cmd.removeModifier;
     if (assign && assign.type === 'keyInput') {
-      const modifiers = removeOptionFromOptionsArray(
-        assign.modifiers,
+      const attachedModifiers = removeOptionFromOptionsArray(
+        assign.attachedModifiers,
         modifierKey
       );
-      return { ...assign, modifiers };
+      return { ...assign, attachedModifiers };
     } else {
       return assign;
     }
   }
   if (cmd.setHoldLayer) {
     const targetLayerId = cmd.setHoldLayer;
-    return { type: 'holdLayer', targetLayerId, layerInvocationMode: 'hold' };
+    return { type: 'layerCall', targetLayerId, invocationMode: 'hold' };
   }
   return assign;
 }

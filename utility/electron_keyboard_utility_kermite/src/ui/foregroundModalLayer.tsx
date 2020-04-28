@@ -63,9 +63,10 @@ export namespace ForegroundModalLayerDomain {
       modalUpdator.closeModal(result);
     }, []);
     return (
-      <React.Fragment>
-        {RenderModal && <RenderModal close={close} />}
-      </React.Fragment>
+      (RenderModal && <RenderModal close={close} />) || null
+      // <React.Fragment>
+      //   {RenderModal && <RenderModal close={close} />}
+      // </React.Fragment>
     );
   }
 

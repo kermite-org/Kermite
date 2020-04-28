@@ -1,10 +1,10 @@
 import { css, jsx } from '@emotion/core';
-import { IKeyAssignEntry, ILayer } from '~defs/data';
-import { VirtualKey } from '~model/HighLevelDefs';
 import { AssignSlotCard, LayerTriggerAssignSlotCard } from './AssignSlotCards';
 import { isAssignKeySpecific, isAssignLayerTrigger } from '~ui/state/editor';
 import { assignKeyGroupsTable } from './AssignKeySelectionPart_keyGroupsTable';
 import { UiTheme } from '~ui/view/ConfiguratorSite/UiTheme';
+import { IKeyAssignEntry, ILayer } from '~defs/ProfileData';
+import { VirtualKey } from '~defs/VirtualKeys';
 
 export const AssignKeySelectionPart = (props: {
   currentAssign: IKeyAssignEntry | undefined;

@@ -1,12 +1,16 @@
-import React from 'react';
-import { IKeyAssignsSet, ILayer, IKeyAssignEntry } from '~defs/data';
 import {
   getAssignSlotAddress,
   checkIfLognNameKeyAssign
 } from '~ui/state/editor';
 
 import { VirtualKeyTexts } from '../../Constants';
-import { IKeyboardShape } from '~ui/view/WidgetSite/KeyboardShapes';
+import {
+  IKeyAssignEntry,
+  ILayer,
+  IKeyAssignsSet,
+  IKeyboardShape
+} from '~defs/ProfileData';
+import React from 'react';
 
 function getAssignText(
   assign: IKeyAssignEntry | undefined,
@@ -16,11 +20,11 @@ function getAssignText(
     if (assign.type === 'keyInput' && assign.virtualKey !== 'K_NONE') {
       return VirtualKeyTexts[assign.virtualKey] || '';
     }
-    if (assign.type === 'holdLayer') {
+    if (assign.type === 'layerCall') {
       const layer = layers.find(la => la.layerId === assign.targetLayerId);
       return (layer && layer.layerName) || '';
     }
-    if (assign.type === 'holdModifier') {
+    if (assign.type === 'modifierCall') {
       return VirtualKeyTexts[assign.modifierKey] || '';
     }
   }
@@ -49,15 +53,11 @@ function createAssignViewModel(
   currentSlotAddress: string,
   currentLayerId: string
 ): IAssignViewModel {
-  const slotAddress = getAssignSlotAddress(
-    keyUnitId,
-    currentLayerId,
-    isPrimary
-  );
+  const slotAddress = getAssignSlotAddress(keyUnitId, currentLayerId);
   const isSelected = currentSlotAddress === slotAddress;
 
   const assign = keyAssigns[slotAddress] || undefined;
-  const assignText = getAssignText(assign, layers);
+  const assignText = getAssignText(assign?.op, layers);
   const isExtendedAssign = checkIfLognNameKeyAssign(assignText);
   return {
     isSelected,

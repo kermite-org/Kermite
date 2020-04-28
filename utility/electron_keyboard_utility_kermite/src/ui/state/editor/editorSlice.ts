@@ -1,7 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IEditModel, IKeyAssignEntry } from '~defs/data';
 import { Arrays } from '~funcs/Arrays';
-import { ModifierVirtualKey, VirtualKey } from '~model/HighLevelDefs';
 import { assignEntryUpdator } from './assignEntryUpdator';
 import {
   createNewEntityId,
@@ -11,16 +9,12 @@ import {
   getAssignCategoryFromAssign
 } from './helpers';
 import {
-  IKeyboardShape,
-  getKeyboardShapeByBreedName
-} from '~ui/view/WidgetSite/KeyboardShapes';
-
-const fallbackEditModel: IEditModel = {
-  version: 1,
-  layers: [],
-  keyAssigns: {},
-  breedName: 'none'
-};
+  IEditModel,
+  fallbackProfileData,
+  IKeyAssignEntry,
+  IKeyboardShape
+} from '~defs/ProfileData';
+import { ModifierVirtualKey, VirtualKey } from '~defs/VirtualKeys';
 
 export type AssignCategory =
   | 'input'
@@ -32,16 +26,14 @@ export type AssignCategory =
 
 export interface EditorState {
   loadedEditModel: IEditModel;
-  keyboardShape: IKeyboardShape;
   editModel: IEditModel;
   currentLayerId: string;
   currentAssignSlotAddress: string;
   currentAssignCategory: AssignCategory;
 }
 const initialState: EditorState = {
-  loadedEditModel: { ...fallbackEditModel },
-  keyboardShape: getKeyboardShapeByBreedName('none'),
-  editModel: { ...fallbackEditModel },
+  loadedEditModel: { ...fallbackProfileData },
+  editModel: { ...fallbackProfileData },
   currentLayerId: '',
   currentAssignSlotAddress: '',
   currentAssignCategory: 'none'
@@ -57,7 +49,6 @@ export const editorSlice = createSlice({
       state.editModel = editModel;
       state.currentLayerId = editModel.layers[0].layerId;
       state.currentAssignSlotAddress = '';
-      state.keyboardShape = getKeyboardShapeByBreedName(editModel.breedName);
     },
     selectLayer(state, action: PayloadAction<string>) {
       state.currentLayerId = action.payload;
@@ -69,8 +60,7 @@ export const editorSlice = createSlice({
       const { keyUnitId, isPrimary } = action.payload;
       state.currentAssignSlotAddress = getAssignSlotAddress(
         keyUnitId,
-        state.currentLayerId,
-        isPrimary
+        state.currentLayerId
       );
     },
     clearAssignSlotSelection(state) {
@@ -79,19 +69,25 @@ export const editorSlice = createSlice({
     clearCurrentSlotAssign(state) {
       const addr = state.currentAssignSlotAddress;
       if (addr) {
-        const { keyAssigns } = state.editModel;
-        keyAssigns[addr] = assignEntryUpdator(keyAssigns[addr], {
-          removeKeyAssign: true
-        });
+        const { assigns } = state.editModel;
+        assigns[addr] = {
+          type: 'single',
+          op: assignEntryUpdator(assigns[addr]?.op, {
+            removeKeyAssign: true
+          })
+        };
       }
     },
     setKeyAssignToCurrentSlot(state, action: PayloadAction<VirtualKey>) {
       const addr = state.currentAssignSlotAddress;
       if (addr) {
-        const { keyAssigns } = state.editModel;
-        keyAssigns[addr] = assignEntryUpdator(keyAssigns[addr], {
-          setVirtualKey: action.payload
-        });
+        const { assigns } = state.editModel;
+        assigns[addr] = {
+          type: 'single',
+          op: assignEntryUpdator(assigns[addr]?.op, {
+            setVirtualKey: action.payload
+          })
+        };
       }
     },
     setModifierForCurrentAssignSlot(
@@ -104,28 +100,37 @@ export const editorSlice = createSlice({
       const addr = state.currentAssignSlotAddress;
 
       if (addr) {
-        const { keyAssigns } = state.editModel;
+        const { assigns } = state.editModel;
         const { modifierKey, enabled } = action.payload;
         const cmd = enabled
           ? { addModifier: modifierKey }
           : { removeModifier: modifierKey };
-        keyAssigns[addr] = assignEntryUpdator(keyAssigns[addr], cmd);
+        assigns[addr] = {
+          type: 'single',
+          op: assignEntryUpdator(assigns[addr]?.op, cmd)
+        };
       }
     },
     setHoldLayerForCurrentAssignSlot(state, action: PayloadAction<string>) {
       const addr = state.currentAssignSlotAddress;
       if (addr) {
-        state.editModel.keyAssigns[addr] = {
-          type: 'holdLayer',
-          layerInvocationMode: 'hold',
-          targetLayerId: action.payload
+        state.editModel.assigns[addr] = {
+          type: 'single',
+          op: {
+            type: 'layerCall',
+            invocationMode: 'hold',
+            targetLayerId: action.payload
+          }
         };
       }
     },
     setAssignForCurrentSlot(state, action: PayloadAction<IKeyAssignEntry>) {
       const addr = state.currentAssignSlotAddress;
       if (addr) {
-        state.editModel.keyAssigns[addr] = action.payload;
+        state.editModel.assigns[addr] = {
+          type: 'single',
+          op: action.payload
+        };
       }
     },
     addNewLayer(state, action: PayloadAction<string>) {

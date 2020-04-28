@@ -1,5 +1,4 @@
 import { css, jsx } from '@emotion/core';
-import React from 'react';
 
 export const KeyboardBasePlane = (props: {
   children: React.ReactNode;

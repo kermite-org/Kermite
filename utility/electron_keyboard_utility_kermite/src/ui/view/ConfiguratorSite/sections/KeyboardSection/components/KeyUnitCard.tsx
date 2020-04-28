@@ -1,5 +1,4 @@
 import { css, jsx } from '@emotion/core';
-import React from 'react';
 import { UiTheme } from '~ui/view/ConfiguratorSite/UiTheme';
 import { IKeyUnitCardViewModel } from '../Data';
 
@@ -52,15 +51,6 @@ export const KeyUnitCard = (props: { keyUnit: IKeyUnitCardViewModel }) => {
       />
 
       <rect
-        data-selected={secondaryAssign.isSelected}
-        x={-9}
-        y={4}
-        width={18}
-        height={5}
-        css={cssSlot}
-      />
-
-      <rect
         data-selected={primaryAssign.isSelected}
         x={-9}
         y={-9}
@@ -69,6 +59,15 @@ export const KeyUnitCard = (props: { keyUnit: IKeyUnitCardViewModel }) => {
         css={cssSlot}
         onMouseDown={onClick}
       />
+
+      {/* <rect
+        data-selected={secondaryAssign.isSelected}
+        x={-9}
+        y={4}
+        width={18}
+        height={5}
+        css={cssSlot}
+      /> */}
 
       <text
         css={css`
@@ -84,7 +83,7 @@ export const KeyUnitCard = (props: { keyUnit: IKeyUnitCardViewModel }) => {
         {primaryAssign.assignText}
       </text>
 
-      <text
+      {/* <text
         css={css`
           fill: #fff;
           font-size: ${secondaryAssign.isExtendedAssign ? '5px' : '8px'};
@@ -96,7 +95,7 @@ export const KeyUnitCard = (props: { keyUnit: IKeyUnitCardViewModel }) => {
         dominantBaseline="center"
       >
         {secondaryAssign.assignText}
-      </text>
+      </text> */}
     </g>
   );
 };

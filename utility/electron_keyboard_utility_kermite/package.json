@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "postinstall": "electron-rebuild -o node-hid",
+    "fixlib": "electron-rebuild -o node-hid -f",
     "start": "cross-env NODE_ENV=production node ./boot.js",
     "bundle": "cross-env NODE_ENV=development node ./boot.js bundle",
     "serve": "cross-env NODE_ENV=development node ./boot.js start",
@@ -29,6 +30,7 @@
     "@reduxjs/toolkit": "^1.2.1",
     "@types/node-hid": "^0.7.3",
     "@types/parcel-bundler": "^1.12.1",
+    "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.4",
     "@types/react-redux": "^7.1.5",
     "@types/react-router": "^5.1.3",

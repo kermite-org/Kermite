@@ -3,7 +3,7 @@ import { css, jsx } from '@emotion/core';
 import React from 'react';
 import { createModal } from './foregroundModalLayer';
 import { ClosableOverlay } from './basicModals';
-import { getAvailableBreedNames } from './view/WidgetSite/KeyboardShapes';
+import { getAvailableBreedNames } from '~defs/keyboardShapes';
 
 const cteateProfileDialogPanel = css`
   background: #fff;

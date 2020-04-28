@@ -1,4 +1,4 @@
-import { VirtualKey } from '~model/HighLevelDefs';
+import { VirtualKey } from '~defs/VirtualKeys';
 
 export const VirtualKeyTexts: { [key in VirtualKey]?: string } = {
   K_NONE: 'none',

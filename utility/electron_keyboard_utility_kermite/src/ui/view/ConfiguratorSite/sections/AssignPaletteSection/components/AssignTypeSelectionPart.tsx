@@ -2,7 +2,7 @@ import { css, jsx } from '@emotion/core';
 import { AssignCategory } from '~ui/state/editor';
 import { UiTheme } from '~ui/view/ConfiguratorSite/UiTheme';
 import { AssignModeButtonRaw } from './AssignSlotCards';
-import { IKeyAssignEntry } from '~defs/data';
+import { IKeyAssignEntry } from '~defs/ProfileData';
 
 function AssignCategoryButton(props: {
   category: AssignCategory;
