@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { IProfileManagerStatus } from '~defs/data';
-import { IRealtimeKeyboardEvent } from '~defs/ipc';
+import { IRealtimeKeyboardEvent, IProfileManagerStatus } from '~defs/ipc';
 import { Arrays } from '~funcs/Arrays';
 import { createDictionaryFromKeyValues } from '~funcs/Utils';
-import { ModifierVirtualKey, VirtualKey } from '~model/HighLevelDefs';
 import { appGlobal } from '../appGlobal';
 import { coloredLog } from '~shell/ColoredLog';
 import { LogicalKeyAction } from '../InputLogicSimulator/Types';
 import { LogicalKeyActionDriver } from '../InputLogicSimulator/LogicalKeyActionDriver';
 import { KeyAssignToLogicalKeyActionResolver } from '../InputLogicSimulator/KeyAssignToLogicalKeyActionResolver';
+import { VirtualKey, ModifierVirtualKey } from '~defs/VirtualKeys';
+import { LayerInvocationMode } from '~defs/ProfileData';
 
 type InputTrigger = 'down' | 'downLazy' | 'tap' | 'hold' | 'doubleTap' | 'up';
 
-type LayerInvocationMode = 'hold' | 'oneshot' | 'modal' | 'unmodal';
+//export type LayerInvocationMode = 'hold' | 'oneshot' | 'modal' | 'unmodal';
 
 type MultiSourceKeyAssignMode =
   | 'groupDown'
@@ -31,12 +31,12 @@ type IKeyInputOperation =
       immediateRelease?: boolean;
     }
   | {
-      type: 'holdLayer';
+      type: 'layerCall';
       targetLayerId: string;
-      layerInvocationMode: LayerInvocationMode;
+      invocationMode: LayerInvocationMode;
     }
   | {
-      type: 'holdModifier';
+      type: 'modifierCall';
       modifierKey: ModifierVirtualKey;
       isOneShot: boolean;
     };

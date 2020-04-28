@@ -1,7 +1,7 @@
-import { IKeyAssignEntry } from '~defs/data';
-import { ModifierVirtualKey, VirtualKey } from '~model/HighLevelDefs';
 import { LogicalKeyAction, TAdhocShift } from './Types';
 import { HidKeyCodes } from '~defs/HidKeyCodes';
+import { VirtualKey, ModifierVirtualKey } from '~defs/VirtualKeys';
+import { IKeyAssignEntry } from '~defs/ProfileData';
 
 export namespace KeyAssignToLogicalKeyActionResolver {
   function extractVkSet(
@@ -56,17 +56,17 @@ export namespace KeyAssignToLogicalKeyActionResolver {
     assign: IKeyAssignEntry
   ): LogicalKeyAction | undefined {
     if (assign.type === 'keyInput') {
-      const { virtualKey, modifiers } = assign;
-      return createKeyInputLogicalKeyAction(virtualKey, modifiers);
-    } else if (assign.type === 'holdLayer') {
-      const { targetLayerId, layerInvocationMode } = assign;
+      const { virtualKey, attachedModifiers } = assign;
+      return createKeyInputLogicalKeyAction(virtualKey, attachedModifiers);
+    } else if (assign.type === 'layerCall') {
+      const { targetLayerId, invocationMode } = assign;
       return {
         type: 'holdLayer',
         targetLayerId,
-        layerInvocationMode: layerInvocationMode || 'hold',
+        layerInvocationMode: invocationMode || 'hold',
         rcode: getRandomCode()
       };
-    } else if (assign.type === 'holdModifier') {
+    } else if (assign.type === 'modifierCall') {
       const { modifierKey, isOneShot } = assign;
       const modifierKeyCode = HidKeyCodes[modifierKey];
       return {

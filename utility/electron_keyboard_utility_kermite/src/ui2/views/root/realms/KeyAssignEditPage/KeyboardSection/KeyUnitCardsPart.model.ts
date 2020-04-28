@@ -98,7 +98,7 @@ function makeKeyUnitCardViewModel(
   const assign = getAssignForKeyUnit(keyUnitId);
   const { primaryText, secondaryText } = getAssignEntryTexts(assign);
 
-  const isHold = logicSimulatorModel.keyStates[kp.pk];
+  const isHold = logicSimulatorModel.keyStates[kp.keyIndex];
 
   return {
     keyUnitId,

@@ -25,19 +25,19 @@ export const appGlobal = new (class {
 
   async initialize() {
     console.log(`initialize services`);
-    await appGlobal.applicationStorage.initialize();
-    await appGlobal.profileManager.initialize();
-    await appGlobal.deviceService.initialize();
-    await appGlobal.inputLogicSimulator.initialize();
-    await appGlobal.ipcBridge.initialize();
+    await this.applicationStorage.initialize();
+    await this.profileManager.initialize();
+    await this.deviceService.initialize();
+    await this.inputLogicSimulator.initialize();
+    await this.ipcBridge.initialize();
   }
 
   async terminate() {
     console.log(`terminate services`);
-    await appGlobal.ipcBridge.terminate();
-    await appGlobal.inputLogicSimulator.terminate();
-    await appGlobal.deviceService.terminate();
-    await appGlobal.profileManager.terminate();
-    await appGlobal.applicationStorage.terminate();
+    await this.ipcBridge.terminate();
+    await this.inputLogicSimulator.terminate();
+    await this.deviceService.terminate();
+    await this.profileManager.terminate();
+    await this.applicationStorage.terminate();
   }
 })();

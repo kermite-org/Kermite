@@ -42,7 +42,7 @@ export function AssignMappingModule(
   const { keyId, trigger } = src;
   const { keyAssigns } = logicSimulatorState.keyAssignsProvider;
   const targetLayerId = logicSimulatorState.layerState.currentLayerId;
-  const primary = keyAssigns[`${keyId}.${targetLayerId}.pri`];
+  const primary = keyAssigns[`${targetLayerId}.${keyId}`]?.op;
   if (trigger === 'down' && primary) {
     return { keyId, assign: primary };
   }

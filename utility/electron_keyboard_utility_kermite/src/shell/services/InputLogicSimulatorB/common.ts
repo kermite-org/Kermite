@@ -1,5 +1,5 @@
-import { IKeyAssignEntry } from '~defs/data';
 import { IModelKeyAssignsProvider } from '../InputLogicSimulator/Types';
+import { IKeyAssignEntry } from '~defs/ProfileData';
 
 export type IChannel<T> = {
   emit(ev: T): void;

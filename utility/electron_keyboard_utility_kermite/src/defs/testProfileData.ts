@@ -1,20 +1,20 @@
 import { IProfileData, IKeyboardShape } from './ProfileData';
 
 const keyboardShape_4x3pad: IKeyboardShape = {
-  bleedName: '4x3pad',
+  breedName: '4x3pad',
   keyPositions: [
-    { id: 'ku3', x: 0, y: 19, r: 0, pk: 0 },
-    { id: 'ku2', x: 19, y: 19, r: 0, pk: 1 },
-    { id: 'ku1', x: 38, y: 19, r: 0, pk: 2 },
-    { id: 'ku0', x: 57, y: 19, r: 0, pk: 3 },
-    { id: 'ku10', x: 0, y: 38, r: 0, pk: 4 },
-    { id: 'ku9', x: 19, y: 38, r: 0, pk: 5 },
-    { id: 'ku8', x: 38, y: 38, r: 0, pk: 6 },
-    { id: 'ku7', x: 57, y: 38, r: 0, pk: 7 },
-    { id: 'ku16', x: 0, y: 57, r: 0, pk: 8 },
-    { id: 'ku15', x: 19, y: 57, r: 0, pk: 9 },
-    { id: 'ku14', x: 38, y: 57, r: 0, pk: 10 },
-    { id: 'ku13', x: 57, y: 57, r: 0, pk: 11 }
+    { id: 'ku3', x: 0, y: 19, r: 0, keyIndex: 0 },
+    { id: 'ku2', x: 19, y: 19, r: 0, keyIndex: 1 },
+    { id: 'ku1', x: 38, y: 19, r: 0, keyIndex: 2 },
+    { id: 'ku0', x: 57, y: 19, r: 0, keyIndex: 3 },
+    { id: 'ku10', x: 0, y: 38, r: 0, keyIndex: 4 },
+    { id: 'ku9', x: 19, y: 38, r: 0, keyIndex: 5 },
+    { id: 'ku8', x: 38, y: 38, r: 0, keyIndex: 6 },
+    { id: 'ku7', x: 57, y: 38, r: 0, keyIndex: 7 },
+    { id: 'ku16', x: 0, y: 57, r: 0, keyIndex: 8 },
+    { id: 'ku15', x: 19, y: 57, r: 0, keyIndex: 9 },
+    { id: 'ku14', x: 38, y: 57, r: 0, keyIndex: 10 },
+    { id: 'ku13', x: 57, y: 57, r: 0, keyIndex: 11 }
   ],
   bodyPathMarkupText: ['M -20,0', 'L 100,0', 'L 100,80', 'L -20,80', 'z'].join(
     ' '

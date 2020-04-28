@@ -1,7 +1,7 @@
-import { IEditModel } from '~defs/data';
 import { VirtualKey } from '~defs/VirtualKeys';
-import { getKeyboardShapeByBreedName } from '~ui/view/WidgetSite/KeyboardShapes';
+import { getKeyboardShapeByBreedName } from '~defs/KeyboardShapes';
 import { createDictionaryFromKeyValues } from '~funcs/Utils';
+import { IEditModel } from '~defs/ProfileData';
 
 const alphabetVirtualKeys: VirtualKey[] = [
   'K_A',
@@ -35,30 +35,37 @@ const alphabetVirtualKeys: VirtualKey[] = [
 export function completeEditModelForShiftLayer(
   editModel: IEditModel
 ): IEditModel {
-  const keyAssigns = { ...editModel.keyAssigns };
+  const assigns = { ...editModel.assigns };
   for (let i = 0; i < 48; i++) {
     const addr0 = `ku${i}.la0.pri`;
     const addr1 = `ku${i}.la1.pri`;
-    const assign = keyAssigns[addr0];
+    const assign = assigns[addr0];
     if (
       assign &&
-      assign.type === 'keyInput' &&
-      alphabetVirtualKeys.includes(assign.virtualKey) &&
-      assign.modifiers === undefined &&
-      keyAssigns[addr1] === undefined
+      assign.type === 'single' &&
+      assign.op &&
+      assign.op.type === 'keyInput' &&
+      alphabetVirtualKeys.includes(assign.op.virtualKey) &&
+      assign.op.attachedModifiers === undefined &&
+      assigns[addr1] === undefined
     ) {
-      keyAssigns[addr1] = { ...assign, modifiers: ['K_Shift'] };
+      assigns[addr1] = {
+        ...assign,
+        op: { ...assign.op, attachedModifiers: ['K_Shift'] }
+      };
     }
   }
   // console.log(JSON.stringify(keyAssigns, null, ' '));
-  return { ...editModel, keyAssigns };
+  return { ...editModel, assigns };
 }
 
 export function createKeyIndexToKeyUnitIdTable(
   editModel: IEditModel
 ): { [KeyIndex: number]: string } {
-  const keyboardShape = getKeyboardShapeByBreedName(editModel.breedName);
+  const keyboardShape = getKeyboardShapeByBreedName(
+    editModel.keyboardShape.breedName
+  );
   return createDictionaryFromKeyValues(
-    keyboardShape.keyPositions.map(ku => [ku.pk, ku.id])
+    keyboardShape.keyPositions.map(ku => [ku.keyIndex, ku.id])
   );
 }

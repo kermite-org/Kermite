@@ -8,6 +8,7 @@ import * as path from 'path';
 import { Nums } from '~funcs/Nums';
 import { IProfileManagerCommand } from '~defs/ipc';
 import { IEditModel, fallbackProfileData } from '~defs/ProfileData';
+import { keyboardShapes } from '~defs/keyboardShapes';
 
 type StatusListener = (partialStatus: Partial<IProfileManagerStatus>) => void;
 
@@ -63,7 +64,10 @@ class ProfileManagerCore {
     const editModel: IEditModel = duplicateObjectByJsonStringifyParse(
       fallbackProfileData
     );
-    // editModel.breedName = breedName;
+    const keyboardShape = keyboardShapes.find(it => it.breedName === breedName);
+    if (keyboardShape) {
+      editModel.keyboardShape = keyboardShape;
+    }
     await this.saveProfile(profName, editModel);
     return editModel;
   }

@@ -1,7 +1,5 @@
 import { ModifierVirtualKey, VirtualKey } from './VirtualKeys';
 
-// import { VirtualKey, ModifierVirtualKey } from './VirtualKey';
-
 export interface ILayer {
   layerId: string;
   layerName: string;
@@ -191,17 +189,17 @@ export interface IKeyUnitPositionEntry {
   x: number;
   y: number;
   r: number;
-  pk: number;
+  keyIndex: number;
 }
 
 export interface IKeyboardShape {
-  bleedName: string;
+  breedName: string;
   keyPositions: IKeyUnitPositionEntry[];
   bodyPathMarkupText: string;
 }
 
 export const keyboardShape_fallbackData: IKeyboardShape = {
-  bleedName: 'none',
+  breedName: 'none',
   keyPositions: [],
   bodyPathMarkupText: ''
 };
@@ -257,3 +255,8 @@ export const fallbackProfileData: IProfileData = {
 //glue definitions for model migration
 export type IKeyAssignEntry = NonNullable<IAssignOperation>;
 export type IEditModel = IProfileData;
+
+export type IKeyAssignsSet = {
+  [address: string]: ISingleAssignEntry | undefined;
+};
+export type LayerInvocationMode = IHoldFunctionInvocationMode;

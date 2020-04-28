@@ -3,10 +3,10 @@ import {
   LayerState,
   LogicalKeyAction
 } from './Types';
-import { IKeyAssignEntry } from '~defs/data';
 import { KeyAssignToLogicalKeyActionResolver } from './KeyAssignToLogicalKeyActionResolver';
 import { LogicalKeyActionDriver } from './LogicalKeyActionDriver';
 import { coloredLog } from '~shell/ColoredLog';
+import { IKeyAssignEntry } from '~defs/ProfileData';
 
 interface IGateEvent {
   trigger: 'D' | 'U' | 'R';
@@ -143,8 +143,8 @@ export namespace VirtualKeyStateManager2 {
 
     const targetLayerId = getTargetLayerId(layerState);
 
-    const primary = keyAssigns[`${keyId}.${targetLayerId}.pri`];
-    const secondary = keyAssigns[`${keyId}.${targetLayerId}.sec`];
+    const primary = keyAssigns[`${targetLayerId}.${keyId}`]?.op;
+    const secondary = keyAssigns[`${targetLayerId}.${keyId}`]?.op && undefined; //glue
 
     if (trigger === 'D') {
       if (secondary) {

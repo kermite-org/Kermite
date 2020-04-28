@@ -1,5 +1,4 @@
-import { IProfileManagerStatus } from '~defs/data';
-import { IRealtimeKeyboardEvent } from '~defs/ipc';
+import { IRealtimeKeyboardEvent, IProfileManagerStatus } from '~defs/ipc';
 import { appGlobal } from '../appGlobal';
 import {
   completeEditModelForShiftLayer,
@@ -69,7 +68,7 @@ export class InputLogicSimulator {
         changedStatus.loadedEditModel
       );
       this.keyAssignsProvider = {
-        keyAssigns: editModel.keyAssigns,
+        keyAssigns: editModel.assigns,
         keyUnitIdTable: createKeyIndexToKeyUnitIdTable(editModel)
       };
     }

@@ -1,5 +1,4 @@
-import { IProfileManagerStatus } from '~defs/data';
-import { IRealtimeKeyboardEvent } from '~defs/ipc';
+import { IRealtimeKeyboardEvent, IProfileManagerStatus } from '~defs/ipc';
 import { appGlobal } from '../appGlobal';
 import { IInputLogicSimulator } from '../InputLogicSimulator.interface';
 import {
@@ -61,7 +60,7 @@ export class InputLogicSimulatorB implements IInputLogicSimulator {
         changedStatus.loadedEditModel
       );
       logicSimulatorState.keyAssignsProvider = {
-        keyAssigns: editModel.keyAssigns,
+        keyAssigns: editModel.assigns,
         keyUnitIdTable: createKeyIndexToKeyUnitIdTable(editModel)
       };
     }

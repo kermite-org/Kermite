@@ -1,4 +1,3 @@
-import { IKeyAssignEntry } from '~defs/data';
 import { KeyAssignToLogicalKeyActionResolver } from './KeyAssignToLogicalKeyActionResolver';
 import { LogicalKeyActionDriver } from './LogicalKeyActionDriver';
 import {
@@ -7,6 +6,7 @@ import {
   LayerState,
   LogicalKeyAction
 } from './Types';
+import { IKeyAssignEntry, IAssignOperation } from '~defs/ProfileData';
 
 function mapKeyIndexToKeyAssignEntry(
   keyIndex: number,
@@ -19,13 +19,13 @@ function mapKeyIndexToKeyAssignEntry(
   if (keyUnitId === undefined) {
     return undefined;
   }
-  let assign: IKeyAssignEntry | undefined = undefined;
+  let assign: IAssignOperation | undefined = undefined;
   if (oneshotLayerId) {
-    assign = keyAssigns[`${keyUnitId}.${oneshotLayerId}.pri`];
+    assign = keyAssigns[`${oneshotLayerId}.${keyUnitId}`]?.op;
   } else if (modalLayerId) {
-    assign = keyAssigns[`${keyUnitId}.${modalLayerId}.pri`];
+    assign = keyAssigns[`${modalLayerId}.${keyUnitId}`]?.op;
   } else {
-    assign = keyAssigns[`${keyUnitId}.${holdLayerId}.pri`];
+    assign = keyAssigns[`${holdLayerId}.${keyUnitId}`]?.op;
     // if (!assign && holdLayerId !== 'la0') {
     //   assign = keyAssigns[`${keyUnitId}.la0.pri`];
     // }

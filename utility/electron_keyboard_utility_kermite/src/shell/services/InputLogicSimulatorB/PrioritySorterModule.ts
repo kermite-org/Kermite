@@ -1,6 +1,6 @@
-import { VirtualKey } from '~model/HighLevelDefs';
-import { IKeyAssignEntry } from '~defs/data';
 import { KeyAssignEventWithTick, IChannel, KeyAssignEvent } from './common';
+import { VirtualKey } from '~defs/VirtualKeys';
+import { IKeyAssignEntry } from '~defs/ProfileData';
 
 const waitTimeMs = 200;
 const virtualKeyPriorityOrders: VirtualKey[] = [
