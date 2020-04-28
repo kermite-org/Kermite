@@ -31,6 +31,7 @@ function PageRoot() {
 }
 
 function start() {
+  console.log('start2');
   debugTrace('renderer start');
 
   const appDiv = document.getElementById('app');

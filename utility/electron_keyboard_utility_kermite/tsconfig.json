@@ -15,6 +15,5 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["src/ui2/**/*"]
+  "include": ["src/**/*"]
 }

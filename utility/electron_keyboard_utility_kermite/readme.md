@@ -1,3 +1,10 @@
+### 環境
+
+以下が必要です
+
+- node.js 14
+- yarn
+
 ### 導入
 
 ```
@@ -22,5 +29,5 @@ yarn serve
 ### 起動時に node-hid のバージョンがおかしいエラーが出る場合の workaround
 
 ```
-  npx electron-rebuild -o node-hid -f
+  yarn fixlib
 ```
