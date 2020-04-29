@@ -1,12 +1,12 @@
-import { hx } from './basis/qx';
+import { hx } from '../basis/qx';
 import {
   createClosureComponent,
   createClosureComponent2
-} from './basis/qxUtils';
-import { DebugOverlay } from './basis/DebugOverlay';
+} from '../basis/qxUtils';
+import { DebugOverlay } from '../basis/DebugOverlay';
 import { appUi } from '~ui2/models/appGlobal';
-import { modalAlert, modalTextEdit } from './common/basicModals';
-import { ForegroundModalLayerRoot } from './basis/ForegroundModalLayer';
+import { modalAlert, modalTextEdit } from '../common/basicModals';
+import { ForegroundModalLayerRoot } from '../basis/ForegroundModalLayer';
 
 // class CounterViewModel {
 //   get count() {
@@ -101,6 +101,7 @@ export const SiteRootD = () => {
       message: 'please input your name',
       defaultText: 'profile1'
     });
+    // eslint-disable-next-line no-console
     console.log(val);
   };
   return (

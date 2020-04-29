@@ -1,11 +1,13 @@
 import { EditorModel } from './EditorModel';
 import { PlayerModel } from './PlayerModel';
 import { ProfilesModel } from './ProfilesModel';
+import { SiteModel } from './SiteModel';
 
 export const appDomain = new (class {
   readonly editorModel = new EditorModel();
   readonly playerModel = new PlayerModel(this.editorModel);
   readonly profilesModel = new ProfilesModel(this.editorModel);
+  readonly siteModel = new SiteModel();
 
   initialize() {
     // debugTrace('start appDomain initialize');
@@ -21,4 +23,4 @@ export const appDomain = new (class {
   }
 })();
 
-export const { editorModel, playerModel, profilesModel } = appDomain;
+export const { editorModel, playerModel, profilesModel, siteModel } = appDomain;

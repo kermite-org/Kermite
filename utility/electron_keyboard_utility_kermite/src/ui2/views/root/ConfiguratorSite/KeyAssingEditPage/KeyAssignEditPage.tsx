@@ -115,7 +115,3 @@ export const KeyAssignEditPage = () => {
     </div>
   );
 };
-
-export const KeyAssignEditPage0 = () => {
-  return <div>configurator page</div>;
-};
