@@ -1,7 +1,7 @@
 import { qx, hx } from './basis/qx';
 import { PageContentRoot } from './root/PageContentRoot';
 import { glob, setPragma, css } from 'goober';
-import { app } from '~ui2/models/appGlobal';
+import { appUi } from '~ui2/models/appGlobal';
 import { DebugOverlay } from './basis/DebugOverlay';
 import { ForegroundModalLayerRoot } from './basis/ForegroundModalLayer';
 import { SiteRootD } from './dev0';
@@ -38,23 +38,23 @@ const SiteRoot = () => {
     <div css={cssSiteRoot}>
       <PageContentRoot />
       <ForegroundModalLayerRoot />
-      <DebugOverlay debugObj={app.debugObject} />
+      <DebugOverlay debugObj={appUi.debugObject} />
     </div>
   );
 };
 
 export function initialzeView() {
-  app.rerender = qx.rerender;
+  appUi.rerender = qx.rerender;
   qx.render(() => <SiteRoot />, document.getElementById('app')!);
 
-  window.addEventListener('resize', app.rerender);
-  setTimeout(app.rerender, 1);
-  setTimeout(app.rerender, 2);
+  window.addEventListener('resize', appUi.rerender);
+  setTimeout(appUi.rerender, 1);
+  setTimeout(appUi.rerender, 2);
 
   function renderLoop() {
-    if (app.reqRerender) {
+    if (appUi.reqRerender) {
       qx.rerender();
-      app.reqRerender = false;
+      appUi.reqRerender = false;
     }
     requestAnimationFrame(renderLoop);
   }

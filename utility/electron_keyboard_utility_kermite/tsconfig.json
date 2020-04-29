@@ -6,8 +6,8 @@
     "strict": true,
     "lib": ["dom", "esnext"],
     "jsx": "react",
-    "jsxFactory": "jsx",
-    // "jsxFactory": "hx",
+    // "jsxFactory": "jsx",
+    "jsxFactory": "hx",
     "baseUrl": ".",
     "paths": {
       "~*": ["./src/*"]
@@ -15,5 +15,6 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["src/ui/**/*"]
 }

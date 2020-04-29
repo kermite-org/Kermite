@@ -184,7 +184,7 @@ export type ICombinationAssignEntry =
 //   };
 // };
 
-export interface IKeyUnitPositionEntry {
+export interface IKeyUnitEntry {
   id: string;
   x: number;
   y: number;
@@ -194,13 +194,13 @@ export interface IKeyUnitPositionEntry {
 
 export interface IKeyboardShape {
   breedName: string;
-  keyPositions: IKeyUnitPositionEntry[];
+  keyUnits: IKeyUnitEntry[];
   bodyPathMarkupText: string;
 }
 
 export const keyboardShape_fallbackData: IKeyboardShape = {
   breedName: 'none',
-  keyPositions: [],
+  keyUnits: [],
   bodyPathMarkupText: ''
 };
 

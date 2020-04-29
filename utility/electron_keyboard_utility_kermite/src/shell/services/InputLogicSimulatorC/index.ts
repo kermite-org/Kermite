@@ -94,7 +94,7 @@ namespace Module1 {
 
 namespace Module0 {
   function getKeyId(keyIndex: number): string | undefined {
-    const kp = logicSimulatorStateC.editModel.keyboardShape.keyPositions.find(
+    const kp = logicSimulatorStateC.editModel.keyboardShape.keyUnits.find(
       (key) => key.keyIndex === keyIndex
     );
     return kp && kp.id;

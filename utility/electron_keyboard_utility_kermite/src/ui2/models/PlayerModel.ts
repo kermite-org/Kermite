@@ -1,18 +1,28 @@
-import { app } from './appGlobal';
+import { appUi } from './appGlobal';
 import { IUiRealtimeKeyboardEvent } from './dataSource/interfaces/IRealtimeKeyboardEventProvider';
 import { RealtimeKeyboardEventProvider_RealDevice } from './dataSource/RealtimeKeyboardEventProvider_RealDevice';
+import { EditorModel } from './EditorModel';
 
-export class LogicSimulatorModel {
+export class PlayerModel {
+  constructor(private editorModel: EditorModel) {}
   private keyEventProvider = new RealtimeKeyboardEventProvider_RealDevice();
+  private _keyStates: { [keyId: string]: boolean } = {};
 
-  //state
-  private _keyStates: boolean[] = [];
+  //getters
+  get keyStates() {
+    return this._keyStates;
+  }
 
-  //services
+  //listeners
   private handlekeyEvents = (event: IUiRealtimeKeyboardEvent) => {
     const { keyIndex, isDown } = event;
-    this._keyStates[keyIndex] = isDown;
-    app.rerender();
+    const keyUnit = this.editorModel.profileData.keyboardShape.keyUnits.find(
+      (kp) => kp.keyIndex === keyIndex
+    );
+    if (keyUnit) {
+      this._keyStates[keyUnit.id] = isDown;
+    }
+    appUi.rerender();
   };
 
   initialize = () => {
@@ -23,20 +33,4 @@ export class LogicSimulatorModel {
   finalize = () => {
     this.keyEventProvider.stop();
   };
-
-  //getters
-  get keyStates() {
-    return this._keyStates;
-  }
-
-  get inputResultText() {
-    // return this.logicSimulator.inputResultText;
-    return '';
-  }
-
-  //mutations
-  clearInputResultText = () => {
-    // this.logicSimulator.clearInputResultText();
-  };
 }
-export const logicSimulatorModel = new LogicSimulatorModel();

@@ -1,22 +1,24 @@
-import { IProfileManagerStatus } from '~defs/ipc';
-import { ProfileProvider2 } from './dataSource/ProfileProvider2';
-import { editorModel } from './EditorModel';
-import { logicSimulatorModel } from './LogicSimulatorModel';
-import { testProfileData } from '~defs/testProfileData';
+import { EditorModel } from './EditorModel';
+import { PlayerModel } from './PlayerModel';
+import { ProfilesModel } from './ProfilesModel';
 
 export const appDomain = new (class {
-  private profileProvider = new ProfileProvider2();
+  readonly editorModel = new EditorModel();
+  readonly playerModel = new PlayerModel(this.editorModel);
+  readonly profilesModel = new ProfilesModel(this.editorModel);
 
   initialize() {
-    logicSimulatorModel.initialize();
+    // debugTrace('start appDomain initialize');
+    this.playerModel.initialize();
+    this.profilesModel.initialize();
     // editorModel.loadProfileData(testProfileData);
-    this.profileProvider.setListener(editorModel.loadProfileData);
-    this.profileProvider.initialize();
   }
 
   terminate() {
-    logicSimulatorModel.finalize();
-    this.profileProvider.saveProfileOnClosing(editorModel.profileData);
-    this.profileProvider.finalize();
+    this.playerModel.finalize();
+    this.profilesModel.finalize();
+    // debugTrace('end appDomain terminate');
   }
 })();
+
+export const { editorModel, playerModel, profilesModel } = appDomain;

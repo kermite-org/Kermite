@@ -1,4 +1,4 @@
-export const app = new (class {
+export const appUi = new (class {
   private _debugObject?: any;
 
   reqRerender: boolean = false;

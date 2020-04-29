@@ -2,7 +2,7 @@ import { css } from 'goober';
 import { hx } from '~ui2/views/basis/qx';
 import { KeyUnitCardsPart } from './KeyUnitCardsPart';
 import { ScalerBox } from './ScalerBox';
-import { editorModel } from '~ui2/models/EditorModel';
+import { editorModel } from '~ui2/models/zAppDomain';
 
 export const KeyboardBasePlane = (props: { children: any }) => {
   const { clearAssignSlotSelection } = editorModel;

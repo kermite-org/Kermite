@@ -1,7 +1,7 @@
-import { editorModel } from '~ui2/models/EditorModel';
 import { hx } from '~ui2/views/basis/qx';
 import { AssingTypeSelectionPart } from './AssignTypeSelectionPart';
 import { OerationSlotsPart } from './OperationSlotsPart';
+import { editorModel } from '~ui2/models/zAppDomain';
 
 export function EntryEditPart() {
   if (!editorModel.isSlotSelected) {

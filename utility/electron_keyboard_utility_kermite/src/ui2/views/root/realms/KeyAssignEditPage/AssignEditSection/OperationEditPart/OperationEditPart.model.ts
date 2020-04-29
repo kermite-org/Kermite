@@ -1,6 +1,6 @@
-import { editorModel } from '~ui2/models/EditorModel';
 import { virtualKeyGroupsTable } from './virtualkeyGroupsTable';
 import { VirtualKeyTexts } from '~defs/VirtualKeyTexts';
+import { editorModel } from '~ui2/models/zAppDomain';
 
 export interface IOperationCardViewModel {
   sig: string;

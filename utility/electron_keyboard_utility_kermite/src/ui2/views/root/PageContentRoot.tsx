@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { KeyAssignEditPage } from './realms/KeyAssignEditPage';
-import { SimulatorInputBar } from './realms/SimulatorInputBar';
 import { hx } from '~ui2/views/basis/qx';
+import { ProfileManagementPart } from './realms/KeyAssignEditPage/ProfilesSection/ProfileManagementPart';
 
 export function PageContentRoot() {
   const cssPageRoot = css`
@@ -23,7 +23,7 @@ export function PageContentRoot() {
 
   return (
     <div css={cssPageRoot}>
-      <SimulatorInputBar />
+      <ProfileManagementPart />
       <div css={KeyAssignsEditPageFrame}>
         <KeyAssignEditPage />
       </div>

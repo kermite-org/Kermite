@@ -1,11 +1,10 @@
 import {
   IAssignOperation,
-  IKeyUnitPositionEntry,
+  IKeyUnitEntry,
   ISingleAssignEntry
 } from '~defs/ProfileData';
 import { VirtualKeyTexts } from '~defs/VirtualKeyTexts';
-import { editorModel } from '~ui2/models/EditorModel';
-import { logicSimulatorModel } from '~ui2/models/LogicSimulatorModel';
+import { editorModel, appDomain } from '~ui2/models/zAppDomain';
 
 export interface IKeyUnitCardViewModel {
   keyUnitId: string;
@@ -80,9 +79,7 @@ function getAssignEntryTexts(
   };
 }
 
-function makeKeyUnitCardViewModel(
-  kp: IKeyUnitPositionEntry
-): IKeyUnitCardViewModel {
+function makeKeyUnitCardViewModel(kp: IKeyUnitEntry): IKeyUnitCardViewModel {
   const keyUnitId = kp.id;
   const pos = { x: kp.x, y: kp.y, r: kp.r };
 
@@ -98,7 +95,7 @@ function makeKeyUnitCardViewModel(
   const assign = getAssignForKeyUnit(keyUnitId);
   const { primaryText, secondaryText } = getAssignEntryTexts(assign);
 
-  const isHold = logicSimulatorModel.keyStates[kp.keyIndex];
+  const isHold = appDomain.playerModel.keyStates[kp.id];
 
   return {
     keyUnitId,

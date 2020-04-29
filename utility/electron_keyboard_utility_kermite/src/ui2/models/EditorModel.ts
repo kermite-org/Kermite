@@ -4,14 +4,12 @@ import {
   ISingleAssignEntry,
   IAssignOperation
 } from '~/defs/ProfileData';
-import { duplicateObjectByJsonStringifyParse } from '~funcs/Utils';
-import { AssignEditModel } from './AssignEditModel';
+import {
+  duplicateObjectByJsonStringifyParse,
+  compareObjectByJsonStringify
+} from '~funcs/Utils';
 
 export class EditorModel {
-  //modules
-
-  assignEditModel = new AssignEditModel(this);
-
   //state
 
   loadedPorfileData: IProfileData = fallbackProfileData;
@@ -36,7 +34,7 @@ export class EditorModel {
   }
 
   get keyPositions() {
-    return this.profileData.keyboardShape.keyPositions;
+    return this.profileData.keyboardShape.keyUnits;
   }
 
   get bodyPathMarkupText() {
@@ -68,6 +66,13 @@ export class EditorModel {
     return undefined;
   }
 
+  checkDirty(): boolean {
+    return !compareObjectByJsonStringify(
+      this.loadedPorfileData,
+      this.profileData
+    );
+  }
+
   //mutations
 
   loadProfileData = (profileData: IProfileData) => {
@@ -81,7 +86,10 @@ export class EditorModel {
     const slotAddress = `${currentLayerId}.${currentKeyUnitId}`;
     if (this.slotAddress !== slotAddress) {
       this.slotAddress = slotAddress;
-      this.assignEditModel.handleAssignSlotChange();
+      // this.assignEditModel.handleAssignSlotChange();
+      if (!this.assignEntry) {
+        this.writeAssignEntry({ type: 'single' });
+      }
     }
   };
 
@@ -110,4 +118,3 @@ export class EditorModel {
     }
   };
 }
-export const editorModel = new EditorModel();

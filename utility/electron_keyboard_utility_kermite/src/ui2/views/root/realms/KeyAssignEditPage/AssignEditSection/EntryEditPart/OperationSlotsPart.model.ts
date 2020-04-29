@@ -1,6 +1,3 @@
-import { IAssignEditSingle2_TargetSlotSig } from '~ui2/models/AssignEditSingle2Model';
-import { editorModel } from '~ui2/models/EditorModel';
-
 export interface IOperationSlotViewModel {
   text: string;
   isCurrent: boolean;

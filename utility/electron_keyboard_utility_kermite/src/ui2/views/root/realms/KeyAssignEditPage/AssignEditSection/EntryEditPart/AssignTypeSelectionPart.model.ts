@@ -1,5 +1,5 @@
 import { ISingleAssignEntryType } from '~defs/ProfileData';
-import { editorModel } from '~ui2/models/EditorModel';
+import { editorModel } from '~ui2/models/zAppDomain';
 
 interface IAssignTypeSlotViewModel {
   assignType: ISingleAssignEntryType;
@@ -31,14 +31,25 @@ export interface IKeyAssignTypeSelectionViewModel {
 }
 
 export function makeKeyAssignTypeSelectionPartViewModel(): IKeyAssignTypeSelectionViewModel {
-  const { editAssignType, setEditAssignType } = editorModel.assignEditModel;
-  const slots = entryTypes.map((assignType) => {
-    return {
-      assignType,
-      text: entryTypeToTextMap[assignType],
-      isCurrent: assignType === editAssignType,
-      setCurrent: () => setEditAssignType(assignType)
-    };
-  });
-  return { slots };
+  // const { editAssignType, setEditAssignType } = editorModel.assignEditModel;
+  // const slots = entryTypes.map((assignType) => {
+  //   return {
+  //     assignType,
+  //     text: entryTypeToTextMap[assignType],
+  //     isCurrent: assignType === editAssignType,
+  //     setCurrent: () => setEditAssignType(assignType)
+  //   };
+  // });
+
+  return {
+    slots: [
+      {
+        assignType: 'single',
+        text: 'S1',
+        isCurrent: true,
+        setCurrent: () => {}
+      }
+    ]
+  };
+  // return { slots };
 }

@@ -2,7 +2,7 @@ import { css } from 'goober';
 import { hx } from '~ui2/views/basis/qx';
 import { EntryEditPart } from './EntryEditPart';
 import { OpertionEditPart } from './OperationEditPart/OperationEditPart';
-import { editorModel } from '~ui2/models/EditorModel';
+import { editorModel } from '~ui2/models/zAppDomain';
 
 export function AssignEditSection() {
   if (!editorModel.isSlotSelected) {
@@ -30,9 +30,9 @@ export function AssignEditSection() {
 
   return (
     <div css={cssAssignEntryEditPart}>
-      <div className="entryEditColumnBox">
+      {/* <div className="entryEditColumnBox">
         <EntryEditPart />
-      </div>
+      </div> */}
       <div className="operatinEditColumnBox">
         <OpertionEditPart />
       </div>

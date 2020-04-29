@@ -1,7 +1,7 @@
 import { ILayer } from '~defs/ProfileData';
 import { Arrays } from '~funcs/Arrays';
-import { editorModel } from '~ui2/models/EditorModel';
 import { modalTextEdit } from '~ui2/views/common/basicModals';
+import { editorModel } from '~ui2/models/zAppDomain';
 
 export class LayerManagementPartViewModel {
   private get layers() {

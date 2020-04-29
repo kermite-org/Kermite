@@ -66,6 +66,6 @@ export function createKeyIndexToKeyUnitIdTable(
     editModel.keyboardShape.breedName
   );
   return createDictionaryFromKeyValues(
-    keyboardShape.keyPositions.map((ku) => [ku.keyIndex, ku.id])
+    keyboardShape.keyUnits.map((ku) => [ku.keyIndex, ku.id])
   );
 }

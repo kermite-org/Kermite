@@ -4,7 +4,7 @@ import {
   createClosureComponent2
 } from './basis/qxUtils';
 import { DebugOverlay } from './basis/DebugOverlay';
-import { app } from '~ui2/models/appGlobal';
+import { appUi } from '~ui2/models/appGlobal';
 import { modalAlert, modalTextEdit } from './common/basicModals';
 import { ForegroundModalLayerRoot } from './basis/ForegroundModalLayer';
 
@@ -62,7 +62,7 @@ const ClosureCounter = createClosureComponent(() => {
   return () => {
     const { count, increment } = vm;
 
-    app.setDebugObject({ count });
+    appUi.setDebugObject({ count });
     return (
       <div>
         <div>closure counter</div>
@@ -108,7 +108,7 @@ export const SiteRootD = () => {
       <ClosureCounter />
       <ClosureComponent2 text={textHoge} />
       <button onClick={() => (textHoge = 'piyo')}>piyo</button>
-      <DebugOverlay debugObj={app.debugObject} />
+      <DebugOverlay debugObj={appUi.debugObject} />
       <button onClick={() => modalAlert('hogehoge')}>alert</button>
       <button onClick={onEditButton}>edit</button>
       <ForegroundModalLayerRoot />

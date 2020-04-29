@@ -2,7 +2,8 @@ import { backendAgent, sendIpcPacketSync } from '~ui/state/ipc';
 import { IProfileManagerStatus } from '~defs/ipc';
 import { IProfileData } from '~defs/ProfileData';
 
-type IListener = (profile: IProfileData) => void;
+type IListener = (profile: Partial<IProfileManagerStatus>) => void;
+
 export const ProfileProvider2 = class {
   private listener?: IListener;
 
@@ -15,9 +16,7 @@ export const ProfileProvider2 = class {
   }
 
   private onProfileChanged = (payload: Partial<IProfileManagerStatus>) => {
-    if (payload.loadedEditModel) {
-      this.listener?.(payload.loadedEditModel);
-    }
+    this.listener?.(payload);
   };
 
   initialize() {
