@@ -21,7 +21,7 @@ export function createXpcRenderer(ipcRenderer: Electron.IpcRenderer) {
       const sig = name.toString();
       //invoker object can be treated as well as both a promise function and an eventSource
       const invoker: IRpcInvokerObject = (...params: any[]) => {
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
           ipcRenderer.once(`XPC__${realm}__${sig}__reply`, (event, response) =>
             resolve(response)
           );

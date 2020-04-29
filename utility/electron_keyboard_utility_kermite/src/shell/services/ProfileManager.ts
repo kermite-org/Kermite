@@ -30,7 +30,7 @@ class ProfileManagerCore {
 
   static async listAllProfileNames(): Promise<string[]> {
     const fileNames = await Files.listFiles(resolveFilePath(`data/profiles`));
-    return fileNames.map(fname => fname.replace('.json', ''));
+    return fileNames.map((fname) => fname.replace('.json', ''));
   }
 
   static loadCurrentProfileName(): string | undefined {
@@ -64,7 +64,9 @@ class ProfileManagerCore {
     const editModel: IEditModel = duplicateObjectByJsonStringifyParse(
       fallbackProfileData
     );
-    const keyboardShape = keyboardShapes.find(it => it.breedName === breedName);
+    const keyboardShape = keyboardShapes.find(
+      (it) => it.breedName === breedName
+    );
     if (keyboardShape) {
       editModel.keyboardShape = keyboardShape;
     }
@@ -111,7 +113,7 @@ export class ProfileManager {
 
   private setStatus(newStatePartial: Partial<IProfileManagerStatus>) {
     this.status = { ...this.status, ...newStatePartial };
-    this.statusListeners.forEach(listener => listener(newStatePartial));
+    this.statusListeners.forEach((listener) => listener(newStatePartial));
   }
 
   private async initializeProfileList(): Promise<string[]> {

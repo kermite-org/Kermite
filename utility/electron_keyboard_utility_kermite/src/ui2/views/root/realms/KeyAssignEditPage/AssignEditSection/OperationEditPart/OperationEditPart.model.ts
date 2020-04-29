@@ -16,8 +16,8 @@ interface IOperationEditPartViewModel {
 
 export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
   const { editOperation, writeEditOperation } = editorModel;
-  const virtualKeyEntryGroups = virtualKeyGroupsTable.map(group =>
-    group.map(vk => ({
+  const virtualKeyEntryGroups = virtualKeyGroupsTable.map((group) =>
+    group.map((vk) => ({
       sig: vk,
       text: VirtualKeyTexts[vk] || '',
       isCurrent:
@@ -27,8 +27,8 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
   );
 
   const layerCallEntries = editorModel.profileData.layers
-    .filter(la => la.layerId !== 'la0')
-    .map(la => ({
+    .filter((la) => la.layerId !== 'la0')
+    .map((la) => ({
       sig: la.layerId,
       text: la.layerName,
       isCurrent:

@@ -32,7 +32,7 @@ export interface IKeyAssignTypeSelectionViewModel {
 
 export function makeKeyAssignTypeSelectionPartViewModel(): IKeyAssignTypeSelectionViewModel {
   const { editAssignType, setEditAssignType } = editorModel.assignEditModel;
-  const slots = entryTypes.map(assignType => {
+  const slots = entryTypes.map((assignType) => {
     return {
       assignType,
       text: entryTypeToTextMap[assignType],

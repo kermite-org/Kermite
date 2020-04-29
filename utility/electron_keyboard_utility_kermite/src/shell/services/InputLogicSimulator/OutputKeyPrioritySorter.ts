@@ -54,7 +54,7 @@ const virtualKeyPriorityOrders: VirtualKey[] = [
   'K_Minus'
 ];
 const hidKeyPriorityOrders = virtualKeyPriorityOrders.map(
-  vk => HidKeyCodes[vk]
+  (vk) => HidKeyCodes[vk]
 );
 
 export class OutputKeyPrioritySorter implements IOutputKeyPrioritySorter {

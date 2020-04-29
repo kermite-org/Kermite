@@ -31,7 +31,7 @@ function getAssignOperationText(op?: IAssignOperation): string {
   }
   if (op?.type === 'layerCall') {
     const layer = editorModel.layers.find(
-      la => la.layerId === op.targetLayerId
+      (la) => la.layerId === op.targetLayerId
     );
     return (layer && layer.layerName) || '';
   }

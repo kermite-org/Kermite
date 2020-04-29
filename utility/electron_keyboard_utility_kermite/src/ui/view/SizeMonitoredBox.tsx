@@ -29,7 +29,7 @@ export const useDomSizeMonitor = (
   React.useEffect(() => {
     const node = ref.current;
     if (node) {
-      const ro = new ResizeObserver(entries => {
+      const ro = new ResizeObserver((entries) => {
         const entry = entries[0];
         const rect = entry.contentRect;
         sizeChangedCallbackLatest({ w: rect.width, h: rect.height });

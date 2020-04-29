@@ -41,7 +41,7 @@ export function LayersListBoxPart() {
   const layerListBoxPartViewModel = makeLayerListBoxPartViewModel();
   return (
     <div css={cssLayersListBox}>
-      {layerListBoxPartViewModel.layers.map(la => (
+      {layerListBoxPartViewModel.layers.map((la) => (
         <LayerCard layerModel={la} key={la.layerId} />
       ))}
     </div>

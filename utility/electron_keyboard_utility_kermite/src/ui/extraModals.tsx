@@ -57,7 +57,10 @@ export const processCreateProfileDialog = createModal(() => {
 
     return (
       <ClosableOverlay close={() => props.close(undefined)}>
-        <div css={cteateProfileDialogPanel} onClick={e => e.stopPropagation()}>
+        <div
+          css={cteateProfileDialogPanel}
+          onClick={(e) => e.stopPropagation()}
+        >
           <div>
             <input
               type="text"
@@ -67,7 +70,7 @@ export const processCreateProfileDialog = createModal(() => {
           </div>
           <div>
             <select value={currentBreedName} onChange={onBreedSelect}>
-              {breedNames.map(breedName => (
+              {breedNames.map((breedName) => (
                 <option value={breedName} key={breedName}>
                   {breedName}
                 </option>

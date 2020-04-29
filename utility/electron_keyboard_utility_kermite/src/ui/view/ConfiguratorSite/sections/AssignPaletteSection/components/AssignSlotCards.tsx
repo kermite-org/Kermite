@@ -20,21 +20,27 @@ const cssAssignSlotCard = (
   user-select: none;
   cursor: pointer;
 
-  ${isActive &&
+  ${
+    isActive &&
     css`
       background: ${UiTheme.clSelectHighlight};
-    `}
+    `
+  }
 
-  ${isVariableWidth &&
+  ${
+    isVariableWidth &&
     css`
       width: auto;
       padding: 0 12px;
-    `}
+    `
+  }
 
-  ${isLongName &&
+  ${
+    isLongName &&
     css`
       font-size: 12px;
-    `}
+    `
+  }
 `;
 
 export const AssignSlotCard = (props: {

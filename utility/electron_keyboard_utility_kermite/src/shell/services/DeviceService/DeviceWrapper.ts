@@ -20,11 +20,11 @@ export class DeviceWrapper {
     const allDeviceInfos = HID.devices();
     // console.log(allDeviceInfos);
     const targetDeviceInfo = allDeviceInfos.find(
-      d =>
+      (d) =>
         d.vendorId === venderId &&
         d.productId === productId &&
         (pathSearchWords
-          ? d.path && pathSearchWords.some(word => d.path!.indexOf(word) >= 0)
+          ? d.path && pathSearchWords.some((word) => d.path!.indexOf(word) >= 0)
           : true) &&
         (serialNumberSearchWord
           ? d.serialNumber &&
@@ -51,13 +51,13 @@ export class DeviceWrapper {
       serialNumberSearchWord
     );
     if (this.device) {
-      this.device.on('data', data => {
+      this.device.on('data', (data) => {
         const buf = getArrayFromBuffer(data);
         if (this.receiverFunc) {
           this.receiverFunc(buf);
         }
       });
-      this.device.on('error', error => {
+      this.device.on('error', (error) => {
         console.log(`error occured: ${error}`);
       });
       return true;
@@ -86,7 +86,7 @@ export class DeviceWrapper {
 
     //console.log(`sending ${buf.length} bytes:`);
     //console.log(buf.map(v => ('00' + v.toString(16)).slice(-2)).join(' '));
-    console.log(bytes.map(v => ('00' + v.toString(16)).slice(-2)).join(' '));
+    console.log(bytes.map((v) => ('00' + v.toString(16)).slice(-2)).join(' '));
 
     buf.unshift(0); //先頭に0を付加して送信
 

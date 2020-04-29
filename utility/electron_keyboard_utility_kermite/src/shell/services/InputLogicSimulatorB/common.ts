@@ -9,7 +9,7 @@ export type IChannel<T> = {
 export class EventChannel<T> implements IChannel<T> {
   handlers: ((ev: T) => void)[] = [];
   emit(ev: T) {
-    this.handlers.forEach(handler => handler(ev));
+    this.handlers.forEach((handler) => handler(ev));
   }
 
   subscribe(proc: (ev: T) => void) {
@@ -24,7 +24,7 @@ export function setupChainGeneral<S, D>(
   srcChannel: IChannel<S>,
   dstChannel: IChannel<D>
 ) {
-  srcChannel.subscribe(src => {
+  srcChannel.subscribe((src) => {
     const dst = processEventsProc(src);
     if (dst) {
       dstChannel.emit(dst);

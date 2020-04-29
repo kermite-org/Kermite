@@ -37,8 +37,8 @@ export function createNewEntityId(
   existingIds: string[]
 ): string {
   const numbers = existingIds
-    .map(id => parseInt(id.replace(prefix, ''), 10))
-    .filter(val => isFinite(val));
+    .map((id) => parseInt(id.replace(prefix, ''), 10))
+    .filter((val) => isFinite(val));
   if (numbers.length === 0) {
     return `${prefix}1`;
   }
@@ -115,7 +115,7 @@ export const canShiftLayerOrder = (
 };
 
 export function getEditModelLayerById(model: IEditModel, layerId: string) {
-  return model.layers.find(la => la.layerId === layerId);
+  return model.layers.find((la) => la.layerId === layerId);
 }
 
 export function checkIfLognNameKeyAssign(text: string) {

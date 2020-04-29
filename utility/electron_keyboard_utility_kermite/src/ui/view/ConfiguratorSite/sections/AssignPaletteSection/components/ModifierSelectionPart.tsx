@@ -27,7 +27,7 @@ export const ModifierSelectionPart = (props: {
 
   return (
     <div css={cssBox}>
-      {modifiresGroup.map(mo => {
+      {modifiresGroup.map((mo) => {
         const isActive = isAssignModifierActive(currentAssign, mo);
         return (
           <AssignSlotCard

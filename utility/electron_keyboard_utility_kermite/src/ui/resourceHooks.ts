@@ -22,7 +22,7 @@ export function useRealtimeKeyboardEventReceiver() {
         const keyboardShape = stateRef.current.editor.editModel.keyboardShape;
 
         const keyUnit = keyboardShape.keyPositions.find(
-          k => k.keyIndex === keyIndex
+          (k) => k.keyIndex === keyIndex
         );
         if (keyUnit) {
           const keyId = keyUnit.id;

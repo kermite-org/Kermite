@@ -61,7 +61,7 @@ export class PrioritySorterModule {
     srcChannel: IChannel<KeyAssignEvent>,
     dstChannel: IChannel<KeyAssignEvent>
   ) {
-    srcChannel.subscribe(ev => {
+    srcChannel.subscribe((ev) => {
       this.events.push({ ...ev, tick: Date.now() });
     });
     this.dstChannel = dstChannel;
@@ -75,7 +75,7 @@ export class PrioritySorterModule {
         this.events.sort(
           (a, b) => getAssignOrder(a.assign) - getAssignOrder(b.assign)
         );
-        this.events.forEach(ev => {
+        this.events.forEach((ev) => {
           const { keyId, assign } = ev;
           this.dstChannel.emit({ keyId, assign });
         });

@@ -10,7 +10,7 @@ export class AppEntry {
 
   private onReloadApplicationRequested() {
     const proc = childProcess.spawn('electron', ['./dist']);
-    proc.stdout.on('data', data => {
+    proc.stdout.on('data', (data) => {
       console.log(data.toString().slice(0, -1));
     });
     proc.on('exit', () => {

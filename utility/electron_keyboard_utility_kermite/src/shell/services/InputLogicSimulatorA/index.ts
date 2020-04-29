@@ -214,7 +214,7 @@ const testBoard_profileModel: IProfileModel = {
   ]
 };
 const testBoard_keyUnitIdTable = createDictionaryFromKeyValues(
-  Arrays.iota(48).map(idx => [idx, `ku${idx}`])
+  Arrays.iota(48).map((idx) => [idx, `ku${idx}`])
 );
 
 interface IModelKeyAssignsProvider {
@@ -262,7 +262,7 @@ function findAssignEntry(
   keyId: string,
   trigger: InputTrigger
 ) {
-  return profileModel.assigns.find(it => {
+  return profileModel.assigns.find((it) => {
     return (
       it.layerId === layerId &&
       it.source.type === 'single' &&

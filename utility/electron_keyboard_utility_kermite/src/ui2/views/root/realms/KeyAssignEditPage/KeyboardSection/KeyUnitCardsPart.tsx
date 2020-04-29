@@ -91,7 +91,7 @@ export function KeyUnitCardsPart() {
   const keyUnitCardsPartViewModel = makeKeyUnitCardsPartViewModel();
   return (
     <g>
-      {keyUnitCardsPartViewModel.cards.map(keyUnit => (
+      {keyUnitCardsPartViewModel.cards.map((keyUnit) => (
         <KeyUnitCard keyUnit={keyUnit} key={keyUnit.keyUnitId} />
       ))}
     </g>

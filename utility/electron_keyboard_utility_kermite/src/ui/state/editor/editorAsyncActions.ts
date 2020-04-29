@@ -5,11 +5,7 @@ import { editorSelectors } from './editorSelectors';
 const craeteNewLayerThunkAction = () => {
   return async (dispatch: AsyncDispatch) => {
     //window.prompt('レイヤの名前を入力してください', '');
-    const layerName =
-      'LEM' +
-      Math.random()
-        .toString()
-        .slice(2, 6);
+    const layerName = 'LEM' + Math.random().toString().slice(2, 6);
 
     if (layerName) {
       dispatch(editorSlice.actions.addNewLayer(layerName));
@@ -25,11 +21,7 @@ const renameCurrentLayerThunkAction = () => {
       //   'レイヤの名前を入力してください',
       //   currentLayer.layerName
       // );
-      const newLayerName =
-        'LN' +
-        Math.random()
-          .toString()
-          .slice(2, 6);
+      const newLayerName = 'LN' + Math.random().toString().slice(2, 6);
 
       if (newLayerName) {
         dispatch(editorSlice.actions.renameCurrentLayer(newLayerName));

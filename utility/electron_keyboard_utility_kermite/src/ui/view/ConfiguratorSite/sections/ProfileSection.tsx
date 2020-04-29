@@ -40,7 +40,7 @@ export const ProfileSelection = () => {
     <div css={cssProfileSelectionRow}>
       <div>
         <select onChange={onSelectChange} value={currentProfileName}>
-          {allProfileNames.map(profName => {
+          {allProfileNames.map((profName) => {
             return (
               <option key={profName} value={profName}>
                 {profName}

@@ -21,7 +21,7 @@ function getAssignText(
       return VirtualKeyTexts[assign.virtualKey] || '';
     }
     if (assign.type === 'layerCall') {
-      const layer = layers.find(la => la.layerId === assign.targetLayerId);
+      const layer = layers.find((la) => la.layerId === assign.targetLayerId);
       return (layer && layer.layerName) || '';
     }
     if (assign.type === 'modifierCall') {
@@ -89,7 +89,7 @@ export function useKeyUnitCardViewModels(props: {
 
   return React.useMemo(
     () =>
-      keyboardShape.keyPositions.map(ku => {
+      keyboardShape.keyPositions.map((ku) => {
         const { id: keyUnitId, x, y, r } = ku;
         const isPressed = pressedKeyFlags[ku.id];
 

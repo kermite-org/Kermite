@@ -50,7 +50,7 @@ export namespace OutputKeyStateUpdator {
   function handleStroke(stroke: IVirtualStroke, isDown: boolean) {
     const { keyCode, adhocShift, attachedModifierKeyCodes } = stroke;
     if (isDown) {
-      attachedModifierKeyCodes?.forEach(m => outputKeyboardEvent(m, true));
+      attachedModifierKeyCodes?.forEach((m) => outputKeyboardEvent(m, true));
       if (adhocShift) {
         outputKeyboardEvent(HidKeyCodes.K_Shift, adhocShift === 'down');
       }
@@ -60,7 +60,7 @@ export namespace OutputKeyStateUpdator {
       if (adhocShift) {
         outputKeyboardEvent(HidKeyCodes.K_Shift, local.holdRawShift);
       }
-      attachedModifierKeyCodes?.forEach(m => outputKeyboardEvent(m, false));
+      attachedModifierKeyCodes?.forEach((m) => outputKeyboardEvent(m, false));
     }
   }
 

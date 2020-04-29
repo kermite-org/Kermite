@@ -9,7 +9,7 @@ export class DeviceService {
   private deviceWrapper: DeviceWrapper | null = null;
 
   private emitRealtimeEvent(ev: IRealtimeKeyboardEvent) {
-    this.handlers.forEach(h => h(ev));
+    this.handlers.forEach((h) => h(ev));
   }
 
   private decodeReceivedBytes(buf: Uint8Array) {
@@ -59,7 +59,7 @@ export class DeviceService {
       return;
     }
     this.deviceWrapper = dw;
-    dw.setReceiverFunc(buf => {
+    dw.setReceiverFunc((buf) => {
       this.decodeReceivedBytes(buf);
     });
   }

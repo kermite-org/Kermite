@@ -25,7 +25,7 @@ export namespace TriggerDetectionModule {
     srcChannel: IChannel<KeyIdKeyEvent>,
     dstChannel: IChannel<KeyTriggerEvent>
   ) {
-    srcChannel.subscribe(ev => {
+    srcChannel.subscribe((ev) => {
       const { keyId, isDown } = ev;
       if (isDown) {
         dstChannel.emit({ keyId, trigger: 'down' });

@@ -134,7 +134,7 @@ export const editorSlice = createSlice({
       }
     },
     addNewLayer(state, action: PayloadAction<string>) {
-      const layerIds = state.editModel.layers.map(la => la.layerId);
+      const layerIds = state.editModel.layers.map((la) => la.layerId);
       const newLayer = {
         layerId: createNewEntityId('la', layerIds),
         layerName: action.payload,

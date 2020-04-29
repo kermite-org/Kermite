@@ -63,7 +63,7 @@ export const AssingTypeSelectionPart = (props: {
 
   return (
     <div css={cssBox}>
-      {assignCategories.map(category => (
+      {assignCategories.map((category) => (
         <AssignCategoryButton
           key={category}
           category={category}

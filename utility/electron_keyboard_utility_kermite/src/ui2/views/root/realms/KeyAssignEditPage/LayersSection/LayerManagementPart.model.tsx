@@ -9,7 +9,7 @@ export class LayerManagementPartViewModel {
   }
 
   private get curLayer(): ILayer {
-    return this.layers.find(la => la.layerId === editorModel.currentLayerId)!;
+    return this.layers.find((la) => la.layerId === editorModel.currentLayerId)!;
   }
 
   private get isCurrentLayerCustom() {

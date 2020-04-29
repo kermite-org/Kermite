@@ -62,7 +62,7 @@ const HoldLayerSelectionPart = (props: {
     <div>
       <div>Layers</div>
       <div css={cssRow}>
-        {customLayers.map(la => {
+        {customLayers.map((la) => {
           const isActive = isAssignLayerTrigger(currentAssign, la.layerId);
           return (
             <LayerTriggerAssignSlotCard
@@ -76,7 +76,7 @@ const HoldLayerSelectionPart = (props: {
       </div>
       <div>
         <select value={layerModeValue} onChange={onLayerModeChange}>
-          {layerInvocationModes.map(mode => (
+          {layerInvocationModes.map((mode) => (
             <option value={mode} key={mode}>
               {mode}
             </option>
@@ -111,7 +111,7 @@ const HoldModifierSelectionPart = (props: {
     <div>
       <div>Modifiers</div>
       <div css={cssRow}>
-        {modifiresGroup.map(mo => {
+        {modifiresGroup.map((mo) => {
           const isActive = isAssignHoldModifierActive(currentAssign, mo);
           const onClick = () => {
             setAssignForCurrentSlot({

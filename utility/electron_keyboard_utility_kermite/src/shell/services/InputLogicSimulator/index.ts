@@ -106,7 +106,7 @@ export class InputLogicSimulator {
     );
     appGlobal.deviceService.subscribe(this.onRealtimeKeyboardEvent);
 
-    LogicalKeyActionDriver.setKeyDestinationProc(ev => {
+    LogicalKeyActionDriver.setKeyDestinationProc((ev) => {
       this.outputKeyPrioritySorter.pushInputEvent({
         hidKeyCode: ev.keyCode,
         isDown: ev.isDown,

@@ -21,7 +21,7 @@ export function padZeros(buf: number[], n: number) {
 
 export function calcChecksum(data: number[]) {
   let ck = 0;
-  data.forEach(d => (ck = ck ^ d));
+  data.forEach((d) => (ck = ck ^ d));
   return ck;
 }
 
@@ -52,5 +52,5 @@ export function getArrayFromBuffer(data: any) {
 }
 
 export function delayMs(n: number) {
-  return new Promise(resolve => setTimeout(resolve, n));
+  return new Promise((resolve) => setTimeout(resolve, n));
 }

@@ -31,7 +31,7 @@ export function sendProfileManagerCommands(
 ) {
   ipcRenderer.send(
     'profileManagerCommands',
-    commands.filter(c => c !== undefined)
+    commands.filter((c) => c !== undefined)
   );
 }
 

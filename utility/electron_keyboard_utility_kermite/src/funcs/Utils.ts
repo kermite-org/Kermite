@@ -51,7 +51,7 @@ export function removeOptionFromOptionsArray<T>(
 ): T[] | undefined {
   if (options) {
     if (options.includes(option)) {
-      const newOptions = options.filter(a => a !== option);
+      const newOptions = options.filter((a) => a !== option);
       return newOptions.length > 0 ? newOptions : undefined;
     } else {
       return options;
@@ -68,8 +68,8 @@ export function diffArray<T>(
   added: T[];
   removed: T[];
 } {
-  const removed = prev.filter(a => !curr.includes(a));
-  const added = curr.filter(a => !prev.includes(a));
+  const removed = prev.filter((a) => !curr.includes(a));
+  const added = curr.filter((a) => !prev.includes(a));
   return { added, removed };
 }
 
@@ -90,7 +90,7 @@ export function createDictionaryFromKeyValues<K extends string | number, V>(
   arr: [K, V][]
 ): { [key in K]: V } {
   const obj: { [key in K]: V } = {} as any;
-  arr.forEach(el => {
+  arr.forEach((el) => {
     const key = el[0];
     const value = el[1];
     obj[key] = value;

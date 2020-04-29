@@ -82,7 +82,7 @@ namespace Module1 {
     if (
       prevReport[0] &&
       !hidReport[0] &&
-      hidReport.slice(2).some(val => val > 0)
+      hidReport.slice(2).some((val) => val > 0)
     ) {
       appGlobal.deviceService.writeSideBrainHidReport([0, 0, 0, 0, 0, 0, 0, 0]);
     }
@@ -95,14 +95,15 @@ namespace Module1 {
 namespace Module0 {
   function getKeyId(keyIndex: number): string | undefined {
     const kp = logicSimulatorStateC.editModel.keyboardShape.keyPositions.find(
-      key => key.keyIndex === keyIndex
+      (key) => key.keyIndex === keyIndex
     );
     return kp && kp.id;
   }
 
   function isShiftHold() {
     return Object.values(logicSimulatorStateC.keyBindingInfoDict).some(
-      it => it.assign.type === 'keyInput' && it.assign.virtualKey === 'K_Shift'
+      (it) =>
+        it.assign.type === 'keyInput' && it.assign.virtualKey === 'K_Shift'
     );
   }
 

@@ -9,9 +9,9 @@ export const editorSelectors = {
     state.editModel.assigns[state.currentAssignSlotAddress],
   isSlotSelected: (state: EditorState) => state.currentAssignSlotAddress !== '',
   getCurrentLayer: (state: EditorState) =>
-    state.editModel.layers.find(la => la.layerId === state.currentLayerId),
+    state.editModel.layers.find((la) => la.layerId === state.currentLayerId),
   getCustomLayers: createSelector(
     (state: EditorState) => state.editModel.layers,
-    layers => layers.filter(isCustomLayer)
+    (layers) => layers.filter(isCustomLayer)
   )
 };

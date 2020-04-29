@@ -17,7 +17,7 @@ export namespace ForegroundModalLayerDomain {
 
     openModal<D>(renderFunc: RenderFunc<D>): Promise<D> {
       this.modalRenderFunc = renderFunc;
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         this.modalPromiseResolver = resolve;
       });
     }

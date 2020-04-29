@@ -27,7 +27,7 @@ export const LayerListBoxPart = (props: {
 
   return (
     <div css={cssLayersListBox}>
-      {layers.map(la => {
+      {layers.map((la) => {
         const isCurrent = la === currentLayer;
         return (
           <div

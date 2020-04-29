@@ -23,12 +23,7 @@ export namespace KeyAssignToLogicalKeyActionResolver {
   }
 
   function getRandomCode() {
-    return (
-      'c' +
-      Math.random()
-        .toString()
-        .slice(2, 6)
-    );
+    return 'c' + Math.random().toString().slice(2, 6);
   }
 
   function createKeyInputLogicalKeyAction(
@@ -38,7 +33,7 @@ export namespace KeyAssignToLogicalKeyActionResolver {
     const vkSet = extractVkSet(HidKeyCodes[virtualKey]);
     if (vkSet) {
       const { vkCode, adhocShift } = vkSet;
-      const attachedModifierKeyCodes = modifiers?.map(m => HidKeyCodes[m]);
+      const attachedModifierKeyCodes = modifiers?.map((m) => HidKeyCodes[m]);
       return {
         type: 'keyInput',
         stroke: {

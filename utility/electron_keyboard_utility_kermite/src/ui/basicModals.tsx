@@ -57,7 +57,7 @@ export const modalAlert = createModal((message: string) => {
   return (props: { close: () => void }) => {
     return (
       <ClosableOverlay close={props.close}>
-        <div css={cssCommonModalPanel} onClick={e => e.stopPropagation()}>
+        <div css={cssCommonModalPanel} onClick={(e) => e.stopPropagation()}>
           <div className="main-row">{message}</div>
           <div className="buttons-row">
             <button onClick={props.close}>OK</button>
@@ -72,7 +72,7 @@ export const modalConfirm = createModal((message: string) => {
   return (props: { close: (result: boolean) => void }) => {
     return (
       <ClosableOverlay close={() => props.close(false)}>
-        <div css={cssCommonModalPanel} onClick={e => e.stopPropagation()}>
+        <div css={cssCommonModalPanel} onClick={(e) => e.stopPropagation()}>
           <div className="main-row">{message}</div>
           <div className="buttons-row">
             <button onClick={() => props.close(false)}>cancel</button>
@@ -96,7 +96,7 @@ export const modalTextInput = createModal(
 
       return (
         <ClosableOverlay close={() => props.close(undefined)}>
-          <div css={cssCommonModalPanel} onClick={e => e.stopPropagation()}>
+          <div css={cssCommonModalPanel} onClick={(e) => e.stopPropagation()}>
             <div className="main-row">{message}</div>
             <div>
               <input type="text" value={text} onChange={onTextChange} />

@@ -41,7 +41,7 @@ export const AssignKeySelectionPart = (props: {
       {assignKeyGroupsTable.map((srcTable, index) => {
         return (
           <div css={cssCardListFrame} key={index}>
-            {srcTable.map(vk => {
+            {srcTable.map((vk) => {
               if (vk === 'K_Shift') {
                 const isActive = isAssignLayerTrigger(currentAssign, 'la1');
                 const onClick = () => setCurrentAssignHoldLayer('la1');

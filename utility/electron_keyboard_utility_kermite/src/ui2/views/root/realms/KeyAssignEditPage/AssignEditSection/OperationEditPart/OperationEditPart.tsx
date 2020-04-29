@@ -55,14 +55,14 @@ export function OpertionEditPart() {
       <div>keys</div>
       {virtualKeyEntryGroups.map((group, index) => (
         <div css={cssGroupBox} key={index}>
-          {group.map(model => (
+          {group.map((model) => (
             <OperationCard model={model} key={model.sig} />
           ))}
         </div>
       ))}
       <div>layers</div>
       <div css={cssGroupBox}>
-        {layerCallEntries.map(model => (
+        {layerCallEntries.map((model) => (
           <OperationCard model={model} key={model.sig} />
         ))}
       </div>

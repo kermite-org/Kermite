@@ -58,7 +58,7 @@ export function KeyboardSection() {
     <AutoScaledBox contentWidth={600} contentHeight={240}>
       <KeyboardBasePlane clearAssignSlotSelection={clearAssignSlotSelection}>
         <KeyboardBodyShape pathMarkupText={keyboardShape.bodyPathMarkupText} />
-        {cardViewModels.map(vm => (
+        {cardViewModels.map((vm) => (
           <KeyUnitCard keyUnit={vm} key={vm.keyUnitId} />
         ))}
       </KeyboardBasePlane>
