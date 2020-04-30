@@ -7,7 +7,7 @@ import {
 } from './OperationEditPart.model';
 
 const OperationCard = (props: { model: IOperationCardViewModel }) => {
-  const { text, isCurrent, setCurrent } = props.model;
+  const { text, isCurrent, setCurrent, isEnabled } = props.model;
 
   const cssCard = css`
     min-width: 20px;
@@ -23,10 +23,20 @@ const OperationCard = (props: { model: IOperationCardViewModel }) => {
     &[data-current] {
       background: ${UiTheme.clSelectHighlight};
     }
+
+    &[data-disabled] {
+      opacity: 0.5;
+      cursor: default;
+    }
   `;
 
   return (
-    <div css={cssCard} data-current={isCurrent} onClick={setCurrent}>
+    <div
+      css={cssCard}
+      data-current={isCurrent}
+      onMouseDown={setCurrent}
+      data-disabled={!isEnabled}
+    >
       {text}
     </div>
   );
@@ -35,6 +45,7 @@ const OperationCard = (props: { model: IOperationCardViewModel }) => {
 export function OpertionEditPart() {
   const {
     virtualKeyEntryGroups,
+    attachedModifierEntries,
     layerCallEntries
   } = makeOperationEditPartViewModel();
 
@@ -60,6 +71,12 @@ export function OpertionEditPart() {
           ))}
         </div>
       ))}
+      <div>modifiers</div>
+      <div css={cssGroupBox}>
+        {attachedModifierEntries.map((model) => (
+          <OperationCard model={model} key={model.sig} />
+        ))}
+      </div>
       <div>layers</div>
       <div css={cssGroupBox}>
         {layerCallEntries.map((model) => (
