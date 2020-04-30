@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { hx } from '~ui2/views/basis/qx';
 import { makeProfileManagementViewModel } from './ProfileManagementPart.model';
-import { handleValue } from './ProfileSetupModal';
+import { reflectValue } from './ProfileSetupModal';
 
 export const ProfileManagementPart = () => {
   // const cssBase = css`
@@ -41,7 +41,7 @@ export const ProfileManagementPart = () => {
   return (
     <div css={cssProfileSelectionRow}>
       <div>
-        <select onChange={handleValue(loadProfile)} value={currentProfileName}>
+        <select onChange={reflectValue(loadProfile)} value={currentProfileName}>
           {allProfileNames.map((profName) => (
             <option key={profName} value={profName}>
               {profName}

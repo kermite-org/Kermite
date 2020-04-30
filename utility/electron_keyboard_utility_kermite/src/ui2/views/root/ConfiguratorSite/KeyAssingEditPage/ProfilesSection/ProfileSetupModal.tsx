@@ -30,7 +30,7 @@ interface CreateProfileDialogResult {
   breedName: string;
 }
 
-export function handleValue(proc: (value: string) => void) {
+export function reflectValue(proc: (value: string) => void) {
   return (e: Event) => {
     proc((e.currentTarget as HTMLInputElement).value);
   };
@@ -64,13 +64,13 @@ export const profileSetupModal = createModal(() => {
             <input
               type="text"
               value={profileNameText}
-              onChange={handleValue(setProfileName)}
+              onChange={reflectValue(setProfileName)}
             />
           </div>
           <div>
             <select
               value={currentBreedName}
-              onChange={handleValue(setCurrentBreedName)}
+              onChange={reflectValue(setCurrentBreedName)}
             >
               {breedNames.map((breedName) => (
                 <option value={breedName} key={breedName}>

@@ -1,9 +1,10 @@
+import { css } from 'goober';
 import { hx } from '~ui2/views/basis/qx';
 import { UiTheme } from '~ui2/views/common/UiTheme';
-import { css } from 'goober';
+import { AssignEditSection } from './AssignEditSection';
 import { KeyboardSection } from './KeyboardSection';
 import { LayersSection } from './LayersSection';
-import { AssignEditSection } from './AssignEditSection';
+import { TestInputArea } from './TestInputArea';
 
 export const KeyAssignEditPage = () => {
   const { clPanelBox, editorPartMargin: mm } = UiTheme;
@@ -92,7 +93,9 @@ export const KeyAssignEditPage = () => {
 
   return (
     <div css={cssKeyAssignEditPageRoot}>
-      <div css={cssEditTopBarBox}>{/* <ProfileSelection /> */}</div>
+      <div css={cssEditTopBarBox}>
+        <TestInputArea />
+      </div>
       <div css={cssEditMainRow}>
         <div css={cssEditMainColumn}>
           <div css={cssKeyboardPartBox}>

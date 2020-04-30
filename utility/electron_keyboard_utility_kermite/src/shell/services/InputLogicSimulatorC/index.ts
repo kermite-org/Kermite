@@ -3,7 +3,8 @@ import { IProfileManagerStatus, IRealtimeKeyboardEvent } from '~defs/ipc';
 import {
   fallbackProfileData,
   IEditModel,
-  IKeyAssignEntry
+  IKeyAssignEntry,
+  IAssignOperation
 } from '~defs/ProfileData';
 import { ModifierVirtualKey } from '~defs/VirtualKeys';
 import { appGlobal } from '../appGlobal';
@@ -21,7 +22,6 @@ type IKeyBindingInfoDict = { [keyId: string]: IKeyBindingInfo };
 const logicSimulatorStateC = new (class {
   editModel: IEditModel = fallbackProfileData;
   keyBindingInfoDict: IKeyBindingInfoDict = {};
-  currentLayerId: string = 'la0';
 })();
 
 namespace Module1 {
@@ -49,6 +49,14 @@ namespace Module1 {
 
     for (const info of bindingInfos) {
       const assign = info.assign;
+      if (assign.type === 'layerCall') {
+        const layer = logicSimulatorStateC.editModel.layers.find(
+          (la) => la.layerId === assign.targetLayerId
+        );
+        if (layer?.layerName.includes('shift')) {
+          modFlags.K_Shift = true;
+        }
+      }
       if (assign.type === 'keyInput') {
         const vk = assign.virtualKey;
         if (vk in modFlags) {
@@ -100,11 +108,14 @@ namespace Module0 {
     return kp && kp.id;
   }
 
-  function isShiftHold() {
-    return Object.values(logicSimulatorStateC.keyBindingInfoDict).some(
-      (it) =>
-        it.assign.type === 'keyInput' && it.assign.virtualKey === 'K_Shift'
-    );
+  function getLayerHoldStates() {
+    const layerHoldStates: { [layerId: string]: boolean } = { la0: true };
+    Object.values(logicSimulatorStateC.keyBindingInfoDict).forEach((bi) => {
+      if (bi.assign.type === 'layerCall') {
+        layerHoldStates[bi.assign.targetLayerId] = true;
+      }
+    });
+    return layerHoldStates;
   }
 
   function getLayerAssign(
@@ -116,12 +127,8 @@ namespace Module0 {
     if (assign && assign?.type === 'single') {
       const op = assign.op;
 
-      //dirty migration fix for next model implementation
-      if (op && op.type === 'layerCall' && op.targetLayerId === 'la1') {
-        return {
-          type: 'keyInput',
-          virtualKey: 'K_Shift'
-        };
+      if (op && op.type === 'keyInput' && op.virtualKey === 'K_NONE') {
+        return undefined;
       }
 
       return op;
@@ -129,27 +136,31 @@ namespace Module0 {
     return undefined;
   }
 
-  function getAssign(keyId: string, trigger: TKeyTrigger) {
-    const { currentLayerId } = logicSimulatorStateC;
-    if (isShiftHold()) {
-      return (
-        getLayerAssign('la1', keyId) || getLayerAssign(currentLayerId, keyId)
-      );
-    } else {
-      return getLayerAssign(currentLayerId, keyId);
+  function getAssign(keyId: string, trigger: TKeyTrigger): IAssignOperation {
+    const layerHoldStates = getLayerHoldStates();
+
+    const activeLayers = logicSimulatorStateC.editModel.layers
+      .filter((la) => layerHoldStates[la.layerId])
+      .reverse();
+
+    // return activeLayers
+    //   .map((la) => getLayerAssign(la.layerId, keyId))
+    //   .find((assign) => !!assign);
+
+    for (const la of activeLayers) {
+      const assign = getLayerAssign(la.layerId, keyId);
+      if (assign) {
+        return assign;
+      }
+      //return undefined for transparent assign here
     }
+    return undefined;
   }
 
   function commitAssign(assign: IKeyAssignEntry, isDown: boolean) {
     if (isDown) {
       // eslint-disable-next-line no-console
       console.log(assign);
-    }
-
-    if (assign.type === 'layerCall') {
-      logicSimulatorStateC.currentLayerId = isDown
-        ? assign.targetLayerId
-        : 'la0';
     }
   }
 
