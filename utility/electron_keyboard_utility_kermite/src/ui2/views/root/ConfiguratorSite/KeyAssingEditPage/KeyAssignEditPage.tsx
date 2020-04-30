@@ -55,13 +55,10 @@ export const KeyAssignEditPage = () => {
 
   const cssKeyboardPartBox = css`
     background: ${clPanelBox};
-
     display: flex;
     flex-direction: column;
-    min-width: 100px;
-    min-height: 50px;
-
-    height: 270px;
+    min-width: 200px;
+    min-height: 80px;
     flex-shrink: 0;
   `;
 

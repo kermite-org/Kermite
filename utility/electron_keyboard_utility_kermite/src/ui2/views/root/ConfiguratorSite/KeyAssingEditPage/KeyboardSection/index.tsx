@@ -2,7 +2,6 @@ import { css } from 'goober';
 import { hx } from '~ui2/views/basis/qx';
 import { KeyUnitCardsPart } from './KeyUnitCardsPart';
 import { editorModel } from '~ui2/models/zAppDomain';
-import { ScalerBox } from '~ui2/views/common/ScalerBox';
 
 export const KeyboardBasePlane = (props: { children: any }) => {
   const { clearAssignSlotSelection } = editorModel;
@@ -10,13 +9,16 @@ export const KeyboardBasePlane = (props: { children: any }) => {
   const cssSvg = css`
     user-select: none;
   `;
+  const maxHeight = Math.max(((window.innerHeight / 2) >> 0) - 60, 200);
+  const styleSvg = {
+    'max-height': `${maxHeight}px`
+  };
   return (
     <svg
-      width="600"
-      height="240"
       viewBox="-300 -120 600 240"
       css={cssSvg}
       onMouseDown={clearAssignSlotSelection}
+      style={styleSvg}
     >
       <g
         transform="scale(2) translate(0, -53.5)"
@@ -38,16 +40,16 @@ export const KeyboardBodyShape = () => {
 };
 
 export function KeyboardSection() {
+  const cssSvgOuter = css`
+    object-fit: contain;
+  `;
+
   return (
-    <ScalerBox
-      boxId="KeyboardSection_scalerBox"
-      contentWidth={600}
-      contentHeight={240}
-    >
+    <div css={cssSvgOuter}>
       <KeyboardBasePlane>
         <KeyboardBodyShape />
         <KeyUnitCardsPart />
       </KeyboardBasePlane>
-    </ScalerBox>
+    </div>
   );
 }

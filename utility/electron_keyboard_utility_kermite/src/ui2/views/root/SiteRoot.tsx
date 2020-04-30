@@ -38,6 +38,7 @@ export const SiteRoot = () => {
   `;
 
   const { isWidgetMode } = siteModel;
+
   return (
     <div css={cssSiteRoot}>
       {/* {!isWidgetMode && <ConfiguratorSiteRoot />}
