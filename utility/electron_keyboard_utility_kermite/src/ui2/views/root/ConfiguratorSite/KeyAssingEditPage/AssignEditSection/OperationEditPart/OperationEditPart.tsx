@@ -44,6 +44,7 @@ const OperationCard = (props: { model: IOperationCardViewModel }) => {
 
 export function OpertionEditPart() {
   const {
+    noAssignEntry,
     virtualKeyEntryGroups,
     attachedModifierEntries,
     layerCallEntries
@@ -63,6 +64,9 @@ export function OpertionEditPart() {
 
   return (
     <div css={cssGroupsOuter}>
+      <div css={cssGroupBox}>
+        <OperationCard model={noAssignEntry} />
+      </div>
       <div>keys</div>
       {virtualKeyEntryGroups.map((group, index) => (
         <div css={cssGroupBox} key={index}>

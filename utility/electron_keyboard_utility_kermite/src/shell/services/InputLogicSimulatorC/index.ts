@@ -125,13 +125,7 @@ namespace Module0 {
     const { assigns } = logicSimulatorStateC.editModel;
     const assign = assigns[`${targetLayerId}.${keyId}`];
     if (assign && assign?.type === 'single') {
-      const op = assign.op;
-
-      if (op && op.type === 'keyInput' && op.virtualKey === 'K_NONE') {
-        return undefined;
-      }
-
-      return op;
+      return assign.op;
     }
     return undefined;
   }
@@ -149,6 +143,10 @@ namespace Module0 {
 
     for (const la of activeLayers) {
       const assign = getLayerAssign(la.layerId, keyId);
+      if (!assign && la.layerName.endsWith('_b')) {
+        //block
+        return undefined;
+      }
       if (assign) {
         return assign;
       }

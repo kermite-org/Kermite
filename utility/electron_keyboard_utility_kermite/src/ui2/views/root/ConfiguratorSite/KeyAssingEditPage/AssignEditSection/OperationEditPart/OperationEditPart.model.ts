@@ -16,6 +16,7 @@ export interface IOperationCardViewModel {
 }
 
 interface IOperationEditPartViewModel {
+  noAssignEntry: IOperationCardViewModel;
   virtualKeyEntryGroups: IOperationCardViewModel[][];
   attachedModifierEntries: IOperationCardViewModel[];
   layerCallEntries: IOperationCardViewModel[];
@@ -30,6 +31,15 @@ const modifierVirtualKeys: ModifierVirtualKey[] = [
 
 export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
   const { editOperation, writeEditOperation } = editorModel;
+
+  const noAssignEntry: IOperationCardViewModel = {
+    sig: 'none',
+    text: 'none',
+    isCurrent: editOperation === undefined,
+    setCurrent: () => writeEditOperation(undefined),
+    isEnabled: true
+  };
+
   const virtualKeyEntryGroups: IOperationCardViewModel[][] = virtualKeyGroupsTable.map(
     (group) =>
       group.map((vk) => ({
@@ -85,5 +95,10 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
         }),
       isEnabled: true
     }));
-  return { virtualKeyEntryGroups, attachedModifierEntries, layerCallEntries };
+  return {
+    noAssignEntry,
+    virtualKeyEntryGroups,
+    attachedModifierEntries,
+    layerCallEntries
+  };
 }

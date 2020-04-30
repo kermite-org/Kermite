@@ -1,6 +1,6 @@
 import { VirtualKey } from '~defs/VirtualKeys';
 
-const assignKeysGroup00: VirtualKey[] = ['K_NONE'];
+// const assignKeysGroup00: VirtualKey[] = ['K_NONE'];
 
 const assignKeysGroup0: VirtualKey[] = [
   'K_A',
@@ -132,7 +132,7 @@ const assignKeysGroup5: VirtualKey[] = [
 const assignKeysGroup6: VirtualKey[] = ['K_Shift', 'K_Ctrl', 'K_Alt', 'K_OS'];
 
 export const virtualKeyGroupsTable: VirtualKey[][] = [
-  assignKeysGroup00,
+  // assignKeysGroup00,
   assignKeysGroup0,
   assignKeysGroup1,
   assignKeysGroup2,

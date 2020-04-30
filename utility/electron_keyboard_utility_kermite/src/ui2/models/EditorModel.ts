@@ -87,9 +87,9 @@ export class EditorModel {
     if (this.slotAddress !== slotAddress) {
       this.slotAddress = slotAddress;
       // this.assignEditModel.handleAssignSlotChange();
-      if (!this.assignEntry) {
-        this.writeAssignEntry({ type: 'single' });
-      }
+      // if (!this.assignEntry) {
+      //   this.writeAssignEntry({ type: 'single' });
+      // }
     }
   };
 
