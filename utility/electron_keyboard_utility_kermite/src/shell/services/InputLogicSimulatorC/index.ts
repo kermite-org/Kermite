@@ -62,6 +62,12 @@ namespace Module1 {
         if (vk in modFlags) {
           modFlags[vk as ModifierVirtualKey] = true;
         } else {
+          const mods = assign.attachedModifiers;
+          if (mods) {
+            mods.forEach((modVk) => {
+              modFlags[modVk] = true;
+            });
+          }
           const hk = HidKeyCodes[vk];
           const withShift = (hk & 0x100) > 0;
           const cancelShift = (hk & 0x200) > 0;
