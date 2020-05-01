@@ -6,11 +6,12 @@ import {
   IKeyAssignEntry,
   IAssignOperation
 } from '~defs/ProfileData';
-import { ModifierVirtualKey } from '~defs/VirtualKeys';
+import { ModifierVirtualKey, VirtualKey } from '~defs/VirtualKeys';
 import { appGlobal } from '../appGlobal';
 import { IInputLogicSimulator } from '../InputLogicSimulator.interface';
 import { IntervalTimerWrapper } from '../InputLogicSimulator/IntervalTimerWrapper';
 import { KeyIndexKeyEvent, TKeyTrigger } from '../InputLogicSimulatorB/common';
+import { AssingTypeSelectionPart } from '~ui2/views/root/ConfiguratorSite/KeyAssingEditPage/AssignEditSection/EntryEditPart/AssignTypeSelectionPart';
 
 interface IKeyBindingInfo {
   assign: IKeyAssignEntry;
@@ -24,7 +25,7 @@ const logicSimulatorStateC = new (class {
   keyBindingInfoDict: IKeyBindingInfoDict = {};
 })();
 
-namespace Module1 {
+namespace ModuleZ {
   function getModifierBits(modFlags: { [vk in ModifierVirtualKey]: boolean }) {
     let modifierBits = 0;
     modFlags.K_Ctrl && (modifierBits |= 0x01);
@@ -109,7 +110,120 @@ namespace Module1 {
   }
 }
 
-namespace Module0 {
+namespace ModuleF {
+  type CommitEventType =
+    | {
+        type: 'down';
+        keyId: string;
+        assign: IKeyAssignEntry;
+        priorityVirtualKey: VirtualKey;
+        tick: number;
+      }
+    | {
+        type: 'up';
+        keyId: string;
+        priorityVirtualKey: VirtualKey;
+        tick: number;
+      };
+
+  const configs = {
+    bypass: false,
+    waitTimeMs: 100
+  };
+  // configs.bypass = true;
+
+  const virtualKeyPriorityOrders: VirtualKey[] = [
+    'K_Ctrl',
+    'K_Alt',
+    'K_OS',
+    'K_Shift',
+
+    'K_B',
+    'K_C',
+    'K_D',
+    'K_F',
+    'K_G',
+    'K_J',
+    'K_K',
+    'K_M',
+    'K_N',
+    'K_P',
+    'K_Q',
+    'K_R',
+    'K_S',
+    'K_T',
+    'K_V',
+    'K_W',
+    'K_X',
+    'K_Z',
+
+    'K_L',
+    'K_H',
+    'K_Y',
+
+    'K_E',
+    'K_A',
+    'K_O',
+    'K_I',
+    'K_U',
+
+    'K_Minus',
+    'K_NONE'
+  ];
+
+  const local = new (class {
+    holdCount: number = 0;
+    commitEventQueue: CommitEventType[] = [];
+  })();
+
+  function handleCommitEvent(ev: CommitEventType) {
+    const { keyBindingInfoDict } = logicSimulatorStateC;
+    if (ev.type === 'down') {
+      const { keyId, assign } = ev;
+      console.log('down', ev.keyId, assign);
+      keyBindingInfoDict[keyId] = { assign, timeStamp: Date.now() };
+    }
+    if (ev.type === 'up') {
+      const { keyId } = ev;
+      // console.log('up', ev.keyId);
+      delete keyBindingInfoDict[keyId];
+    }
+  }
+
+  export function pushCommitEvent(ev: CommitEventType) {
+    if (configs.bypass) {
+      handleCommitEvent(ev);
+      return;
+    }
+    local.commitEventQueue.push(ev);
+    if (ev.type === 'down') {
+      local.holdCount++;
+    } else {
+      local.holdCount--;
+    }
+  }
+
+  export function readQueuedEvents(): boolean {
+    const { commitEventQueue: queue, holdCount } = local;
+    if (queue.length > 0) {
+      const latest = queue[queue.length - 1];
+      const curTick = Date.now();
+      if (curTick > latest.tick + configs.waitTimeMs || holdCount === 0) {
+        queue.sort(
+          (a, b) =>
+            virtualKeyPriorityOrders.indexOf(a.priorityVirtualKey) -
+            virtualKeyPriorityOrders.indexOf(b.priorityVirtualKey)
+        );
+        const ev = queue.shift()!;
+        handleCommitEvent(ev);
+        return true;
+      }
+    }
+    return false;
+  }
+}
+
+namespace ModuleA {
   function getKeyId(keyIndex: number): string | undefined {
     const kp = logicSimulatorStateC.editModel.keyboardShape.keyUnits.find(
       (key) => key.keyIndex === keyIndex
@@ -146,10 +260,6 @@ namespace Module0 {
       .filter((la) => layerHoldStates[la.layerId])
       .reverse();
 
-    // return activeLayers
-    //   .map((la) => getLayerAssign(la.layerId, keyId))
-    //   .find((assign) => !!assign);
-
     for (const la of activeLayers) {
       const assign = getLayerAssign(la.layerId, keyId);
       if (!assign && la.layerName.endsWith('_b')) {
@@ -159,48 +269,43 @@ namespace Module0 {
       if (assign) {
         return assign;
       }
-      //return undefined for transparent assign here
     }
     return undefined;
-  }
-
-  function commitAssign(assign: IKeyAssignEntry, isDown: boolean) {
-    if (isDown) {
-      // eslint-disable-next-line no-console
-      console.log(assign);
-    }
-  }
-
-  function handleKeyIdEvent(keyId: string, isDown: boolean) {
-    const { keyBindingInfoDict } = logicSimulatorStateC;
-
-    if (!isDown) {
-      const boundInfo = keyBindingInfoDict[keyId];
-      if (boundInfo) {
-        commitAssign(boundInfo.assign, false);
-        delete keyBindingInfoDict[keyId];
-      }
-    } else {
-      const assign = getAssign(keyId, 'down');
-      if (assign) {
-        commitAssign(assign, true);
-        keyBindingInfoDict[keyId] = { assign, timeStamp: Date.now() };
-      }
-    }
-
-    Module1.updateOutputReport();
   }
 
   export function processEvents(ev: KeyIndexKeyEvent) {
     const { keyIndex, isDown } = ev;
     const keyId = getKeyId(keyIndex);
     if (keyId) {
-      handleKeyIdEvent(keyId, isDown);
+      if (isDown) {
+        const assign = getAssign(keyId, 'down');
+        if (assign) {
+          const sortOrderVirtualKey =
+            (assign.type === 'keyInput' && assign.virtualKey) || 'K_NONE';
+          ModuleF.pushCommitEvent({
+            type: 'down',
+            keyId,
+            assign,
+            priorityVirtualKey: sortOrderVirtualKey,
+            tick: Date.now()
+          });
+        }
+      } else {
+        ModuleF.pushCommitEvent({
+          type: 'up',
+          keyId,
+          priorityVirtualKey: 'K_NONE',
+          tick: Date.now()
+        });
+      }
     }
   }
 
   export function processTicker() {
-    // updateOutputKeys();
+    const needUpdate = ModuleF.readQueuedEvents();
+    if (needUpdate) {
+      ModuleZ.updateOutputReport();
+    }
   }
 }
 
@@ -219,12 +324,12 @@ export class InputLogicSimulatorC implements IInputLogicSimulator {
     if (event.type === 'keyStateChanged') {
       const { keyIndex, isDown } = event;
       const ev0 = { keyIndex, isDown };
-      Module0.processEvents(ev0);
+      ModuleA.processEvents(ev0);
     }
   };
 
   private processTicker = () => {
-    Module0.processTicker();
+    ModuleA.processTicker();
   };
 
   async initialize() {
