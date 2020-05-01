@@ -63,9 +63,14 @@ namespace Module1 {
           modFlags[vk as ModifierVirtualKey] = true;
         } else {
           const hk = HidKeyCodes[vk];
-          if ((hk & 0x100) > 0) {
+          const withShift = (hk & 0x100) > 0;
+          const cancelShift = (hk & 0x200) > 0;
+          if (withShift) {
             modFlags.K_Shift = true;
-          } else if ((hk & 0x200) > 0) {
+          }
+          const hasExModifiers =
+            modFlags.K_Ctrl || modFlags.K_Alt || modFlags.K_OS;
+          if (!hasExModifiers && cancelShift) {
             modFlags.K_Shift = false;
           }
           hidKeyCodes.push(hk & 0xff);
@@ -83,8 +88,6 @@ namespace Module1 {
     const bindingInfos = Object.values(logicSimulatorStateC.keyBindingInfoDict);
     bindingInfos.sort((a, b) => a.timeStamp - b.timeStamp);
     const hidReport = reduceBindingInfosToHidReport(bindingInfos);
-    // eslint-disable-next-line no-console
-    console.log(JSON.stringify(hidReport));
 
     //dirty fix for modifier transition delay problem
     if (

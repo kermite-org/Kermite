@@ -86,7 +86,7 @@ export class DeviceWrapper {
 
     //console.log(`sending ${buf.length} bytes:`);
     //console.log(buf.map(v => ('00' + v.toString(16)).slice(-2)).join(' '));
-    console.log(bytes.map((v) => ('00' + v.toString(16)).slice(-2)).join(' '));
+    // console.log(bytes.map((v) => ('00' + v.toString(16)).slice(-2)).join(' '));
 
     buf.unshift(0); //先頭に0を付加して送信
 

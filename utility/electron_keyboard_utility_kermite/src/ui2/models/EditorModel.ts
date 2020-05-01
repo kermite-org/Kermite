@@ -115,6 +115,8 @@ export class EditorModel {
     const assign = this.assignEntry;
     if (assign?.type === 'single') {
       assign.op = op;
+    } else {
+      this.writeAssignEntry({ type: 'single', op });
     }
   };
 }

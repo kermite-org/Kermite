@@ -90,6 +90,8 @@ export class DeviceService {
   }
 
   writeSideBrainHidReport(report: number[]) {
+    console.log(JSON.stringify(report));
+
     //report must be 8bytes
     if (report.length !== 8) {
       return;
