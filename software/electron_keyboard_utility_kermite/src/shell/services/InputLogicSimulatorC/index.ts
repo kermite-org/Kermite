@@ -11,7 +11,6 @@ import { appGlobal } from '../appGlobal';
 import { IInputLogicSimulator } from '../InputLogicSimulator.interface';
 import { IntervalTimerWrapper } from '../InputLogicSimulator/IntervalTimerWrapper';
 import { KeyIndexKeyEvent, TKeyTrigger } from '../InputLogicSimulatorB/common';
-import { AssingTypeSelectionPart } from '~ui2/views/root/ConfiguratorSite/KeyAssingEditPage/AssignEditSection/EntryEditPart/AssignTypeSelectionPart';
 
 interface IKeyBindingInfo {
   assign: IKeyAssignEntry;
@@ -25,7 +24,24 @@ const logicSimulatorStateC = new (class {
   keyBindingInfoDict: IKeyBindingInfoDict = {};
 })();
 
-namespace ModuleZ {
+namespace ModuleW {
+  const local = new (class {
+    hidReportQueue: number[][] = [];
+  })();
+
+  export function commitHidReport(report: number[]) {
+    local.hidReportQueue.push(report);
+  }
+
+  export function processTicker() {
+    const report = local.hidReportQueue.shift();
+    if (report) {
+      appGlobal.deviceService.writeSideBrainHidReport(report);
+    }
+  }
+}
+
+namespace ModuleP {
   function getModifierBits(modFlags: { [vk in ModifierVirtualKey]: boolean }) {
     let modifierBits = 0;
     modFlags.K_Ctrl && (modifierBits |= 0x01);
@@ -96,15 +112,15 @@ namespace ModuleZ {
     bindingInfos.sort((a, b) => a.timeStamp - b.timeStamp);
     const hidReport = reduceBindingInfosToHidReport(bindingInfos);
 
-    //dirty fix for modifier transition delay problem
+    // dirty fix for modifier transition delay problem
     if (
       prevReport[0] &&
       !hidReport[0] &&
       hidReport.slice(2).some((val) => val > 0)
     ) {
-      appGlobal.deviceService.writeSideBrainHidReport([0, 0, 0, 0, 0, 0, 0, 0]);
+      ModuleW.commitHidReport([0, 0, 0, 0, 0, 0, 0, 0]);
     }
-    appGlobal.deviceService.writeSideBrainHidReport(hidReport);
+    ModuleW.commitHidReport(hidReport);
 
     prevReport = hidReport;
   }
@@ -304,13 +320,15 @@ namespace ModuleA {
   export function processTicker() {
     const needUpdate = ModuleF.readQueuedEvents();
     if (needUpdate) {
-      ModuleZ.updateOutputReport();
+      ModuleP.updateOutputReport();
     }
   }
 }
 
 export class InputLogicSimulatorC implements IInputLogicSimulator {
-  private sorterIntervalTimer = new IntervalTimerWrapper();
+  private tikerTimer = new IntervalTimerWrapper();
+  private tikerTimer2 = new IntervalTimerWrapper();
+  // private sorterIntervalTimer = new IntervalTimerWrapper();
 
   private onProfileStatusChanged = (
     changedStatus: Partial<IProfileManagerStatus>
@@ -332,16 +350,21 @@ export class InputLogicSimulatorC implements IInputLogicSimulator {
     ModuleA.processTicker();
   };
 
+  private processFastTicker = () => {
+    ModuleW.processTicker();
+  };
+
   async initialize() {
     appGlobal.profileManager.subscribeStatus(this.onProfileStatusChanged);
     appGlobal.deviceService.writeSideBrainMode(true);
     appGlobal.deviceService.subscribe(this.onRealtimeKeyboardEvent);
-    this.sorterIntervalTimer.start(this.processTicker, 10);
+    this.tikerTimer.start(this.processTicker, 10);
+    this.tikerTimer.start(this.processFastTicker, 2);
   }
 
   async terminate() {
     appGlobal.deviceService.unsubscribe(this.onRealtimeKeyboardEvent);
     appGlobal.deviceService.writeSideBrainMode(false);
-    this.sorterIntervalTimer.stop();
+    this.tikerTimer.stop();
   }
 }
