@@ -104,14 +104,14 @@ export class InputLogicSimulatorB implements IInputLogicSimulator {
   async initialize() {
     this.setupChain();
     appGlobal.profileManager.subscribeStatus(this.onProfileStatusChanged);
-    appGlobal.deviceService.writeSideBrainMode(true);
+    appGlobal.deviceService.setSideBrainMode(true);
     appGlobal.deviceService.subscribe(this.onRealtimeKeyboardEvent);
     this.sorterIntervalTimer.start(this.processTicker, 10);
   }
 
   async terminate() {
     appGlobal.deviceService.unsubscribe(this.onRealtimeKeyboardEvent);
-    appGlobal.deviceService.writeSideBrainMode(false);
+    appGlobal.deviceService.setSideBrainMode(false);
     this.sorterIntervalTimer.stop();
   }
 }

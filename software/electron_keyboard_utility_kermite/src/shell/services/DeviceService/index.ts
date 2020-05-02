@@ -83,7 +83,7 @@ export class DeviceService {
     Arrays.remove(this.handlers, proc);
   }
 
-  writeSideBrainMode(enabled: boolean) {
+  setSideBrainMode(enabled: boolean) {
     console.log(`writeSideBrainMode ${enabled ? 1 : 0}`);
     const buf = [0xd0, 0x10, enabled ? 1 : 0];
     this.deviceWrapper?.writeSingleFrame(buf);

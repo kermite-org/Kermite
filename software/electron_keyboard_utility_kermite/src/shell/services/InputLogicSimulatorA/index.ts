@@ -657,12 +657,12 @@ export class InputLogicSimulatorA {
       keyUnitIdTable: testBoard_keyUnitIdTable
     });
 
-    appGlobal.deviceService.writeSideBrainMode(true);
+    appGlobal.deviceService.setSideBrainMode(true);
   }
 
   async terminate() {
     appGlobal.deviceService.unsubscribe(this.onRealtimeKeyboardEvent);
 
-    appGlobal.deviceService.writeSideBrainMode(false);
+    appGlobal.deviceService.setSideBrainMode(false);
   }
 }

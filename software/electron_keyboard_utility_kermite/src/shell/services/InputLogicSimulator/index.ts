@@ -115,7 +115,7 @@ export class InputLogicSimulator {
     });
     VirtualKeyStateManager2.start();
 
-    appGlobal.deviceService.writeSideBrainMode(true);
+    appGlobal.deviceService.setSideBrainMode(true);
 
     this.outputKeyPrioritySorter.setDesinationProc(
       this.updateSideBrainHidReport
@@ -130,7 +130,7 @@ export class InputLogicSimulator {
   async terminate() {
     appGlobal.deviceService.unsubscribe(this.onRealtimeKeyboardEvent);
 
-    appGlobal.deviceService.writeSideBrainMode(false);
+    appGlobal.deviceService.setSideBrainMode(false);
 
     this.sorterIntervalTimer.stop();
   }

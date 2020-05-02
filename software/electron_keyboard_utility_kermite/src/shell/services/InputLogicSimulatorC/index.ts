@@ -356,7 +356,7 @@ export class InputLogicSimulatorC implements IInputLogicSimulator {
 
   async initialize() {
     appGlobal.profileManager.subscribeStatus(this.onProfileStatusChanged);
-    appGlobal.deviceService.writeSideBrainMode(true);
+    appGlobal.deviceService.setSideBrainMode(true);
     appGlobal.deviceService.subscribe(this.onRealtimeKeyboardEvent);
     this.tikerTimer.start(this.processTicker, 10);
     this.tikerTimer.start(this.processFastTicker, 2);
@@ -364,7 +364,7 @@ export class InputLogicSimulatorC implements IInputLogicSimulator {
 
   async terminate() {
     appGlobal.deviceService.unsubscribe(this.onRealtimeKeyboardEvent);
-    appGlobal.deviceService.writeSideBrainMode(false);
+    appGlobal.deviceService.setSideBrainMode(false);
     this.tikerTimer.stop();
   }
 }
