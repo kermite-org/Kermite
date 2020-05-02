@@ -1,20 +1,10 @@
-import { HidKeyCodes } from '~defs/HidKeyCodes';
 import { IProfileManagerStatus, IRealtimeKeyboardEvent } from '~defs/ipc';
-import {
-  fallbackProfileData,
-  IEditModel,
-  IKeyAssignEntry,
-  IAssignOperation
-} from '~defs/ProfileData';
-import { ModifierVirtualKey, VirtualKey } from '~defs/VirtualKeys';
 import { appGlobal } from '../appGlobal';
 import { IInputLogicSimulator } from '../InputLogicSimulator.interface';
 import { IntervalTimerWrapper } from '../InputLogicSimulator/IntervalTimerWrapper';
-import { KeyIndexKeyEvent, TKeyTrigger } from '../InputLogicSimulatorB/common';
-import { Arrays } from '~funcs/Arrays';
-import { ModuleW_HidReportOutputBuffer } from './ModuleW_HidReportOutputBuffer';
-import { logicSimulatorStateC } from './LogicSimulatorStateC';
+import { logicSimulatorStateC } from './LogicSimulatorCCommon';
 import { ModuleA_KeyInputAssignBinder } from './ModuleA_KeyInputAssignBinder';
+import { ModuleW_HidReportOutputBuffer } from './ModuleW_HidReportOutputBuffer';
 
 export class InputLogicSimulatorC implements IInputLogicSimulator {
   private tikerTimer = new IntervalTimerWrapper();

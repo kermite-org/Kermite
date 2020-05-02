@@ -1,8 +1,12 @@
 import { IAssignOperation, IKeyAssignEntry } from '~defs/ProfileData';
 import { KeyIndexKeyEvent, TKeyTrigger } from '../InputLogicSimulatorB/common';
-import { logicSimulatorStateC } from './LogicSimulatorStateC';
-import { ModuleF_KeyEventPrioritySorter } from './ModuleF_KeyEventPrioritySorter';
-import { ModuleP_OutputKeyStateCombiner } from './ModuleP_OutputKeyStateCombiner';
+import {
+  IKeyStrokeAssignEvent,
+  logicSimulatorStateC,
+  PrioritySorterConfig
+} from './LogicSimulatorCCommon';
+import { KeyEventPrioritySorter } from './ModuleF_KeyEventPrioritySorter';
+import { KeyStrokeAssignGate } from './ModuleK_KeyStrokeAssignGate';
 
 export namespace ModuleA_KeyInputAssignBinder {
   function getKeyId(keyIndex: number): string | undefined {
@@ -54,6 +58,14 @@ export namespace ModuleA_KeyInputAssignBinder {
     return undefined;
   }
 
+  function pushStrokeEvent(ev: IKeyStrokeAssignEvent) {
+    if (PrioritySorterConfig.bypass) {
+      KeyStrokeAssignGate.handleLogicalStroke(ev);
+    } else {
+      KeyEventPrioritySorter.pushStrokeAssignEvent(ev);
+    }
+  }
+
   export function processEvents(ev: KeyIndexKeyEvent) {
     const { keyIndex, isDown } = ev;
     const keyId = getKeyId(keyIndex);
@@ -63,7 +75,7 @@ export namespace ModuleA_KeyInputAssignBinder {
         if (assign) {
           const sortOrderVirtualKey =
             (assign.type === 'keyInput' && assign.virtualKey) || 'K_NONE';
-          ModuleF_KeyEventPrioritySorter.pushCommitEvent({
+          pushStrokeEvent({
             type: 'down',
             keyId,
             assign,
@@ -72,7 +84,7 @@ export namespace ModuleA_KeyInputAssignBinder {
           });
         }
       } else {
-        ModuleF_KeyEventPrioritySorter.pushCommitEvent({
+        pushStrokeEvent({
           type: 'up',
           keyId,
           priorityVirtualKey: 'K_NONE',
@@ -83,9 +95,9 @@ export namespace ModuleA_KeyInputAssignBinder {
   }
 
   export function processTicker() {
-    const needUpdate = ModuleF_KeyEventPrioritySorter.readQueuedEvents();
-    if (needUpdate) {
-      ModuleP_OutputKeyStateCombiner.updateOutputReport();
+    const ev = KeyEventPrioritySorter.readQueuedEventOne();
+    if (ev) {
+      KeyStrokeAssignGate.handleLogicalStroke(ev);
     }
   }
 }

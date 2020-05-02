@@ -1,6 +1,6 @@
 import { HidKeyCodes } from '~defs/HidKeyCodes';
-import { ModifierVirtualKey, VirtualKey } from '~defs/VirtualKeys';
-import { Arrays } from '~funcs/Arrays';
+import { ModifierVirtualKey } from '~defs/VirtualKeys';
+import { IHoldKeyBind, logicSimulatorStateC } from './LogicSimulatorCCommon';
 import { ModuleW_HidReportOutputBuffer } from './ModuleW_HidReportOutputBuffer';
 
 export namespace ModuleP_OutputKeyStateCombiner {
@@ -14,7 +14,7 @@ export namespace ModuleP_OutputKeyStateCombiner {
   }
 
   function reduceHoldKeyBindsToHidReport(
-    holdKeyBinds: HoldKeyBind[]
+    holdKeyBinds: IHoldKeyBind[]
   ): number[] {
     const modFlags: {
       [vk in ModifierVirtualKey]: boolean;
@@ -55,30 +55,10 @@ export namespace ModuleP_OutputKeyStateCombiner {
     return [modifierBits, 0, ...[...hidKeyCodes, 0, 0, 0, 0, 0, 0].slice(0, 6)];
   }
 
-  interface HoldKeyBind {
-    keyId: string;
-    virtualKey: VirtualKey;
-    attachedModifiers: ModifierVirtualKey[];
-  }
-
-  const local = new (class {
-    holdKeyBinds: HoldKeyBind[] = [];
-  })();
-
-  export function pushHoldKeyBind(
-    keyId: string,
-    virtualKey: VirtualKey,
-    attachedModifiers: ModifierVirtualKey[]
-  ) {
-    local.holdKeyBinds.push({ keyId, virtualKey, attachedModifiers });
-  }
-
-  export function removeHoldKeyBind(keyId: string) {
-    Arrays.removeIf(local.holdKeyBinds, (hk) => hk.keyId === keyId);
-  }
-
   export function updateOutputReport() {
-    const hidReport = reduceHoldKeyBindsToHidReport(local.holdKeyBinds);
+    const hidReport = reduceHoldKeyBindsToHidReport(
+      logicSimulatorStateC.holdKeyBinds
+    );
     ModuleW_HidReportOutputBuffer.commitHidReport(hidReport);
   }
 }
