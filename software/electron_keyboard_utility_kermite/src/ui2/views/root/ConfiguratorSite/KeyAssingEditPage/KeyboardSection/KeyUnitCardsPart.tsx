@@ -40,7 +40,7 @@ export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
   };
 
   const getFontSize = (text: string) => {
-    if (text.length <= 3) {
+    if (text.length === 1) {
       return '8px';
     } else {
       return '5px';
