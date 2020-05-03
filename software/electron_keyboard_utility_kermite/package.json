@@ -4,10 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "engines": {
-    "node": "14.0.0"
+    "node": "^13.0.0"
   },
   "scripts": {
-    "postinstall": "electron-rebuild -o node-hid",
+    "postinstall": "electron-rebuild node-hid",
     "fixlib": "electron-rebuild -o node-hid -f",
     "start": "cross-env NODE_ENV=production node ./boot.js",
     "bundle": "cross-env NODE_ENV=development node ./boot.js bundle",
