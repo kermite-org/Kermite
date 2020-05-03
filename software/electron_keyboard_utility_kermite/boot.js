@@ -5,7 +5,7 @@ const fs = require('fs');
 
 function copyFileAsync(src, dst) {
   return new Promise((resolve, reject) => {
-    fs.copyFile(src, dst, err => {
+    fs.copyFile(src, dst, (err) => {
       if (err) {
         reject(err);
       } else {
@@ -91,7 +91,8 @@ function runProduction() {
     await copyFileAsync('./src/preload.js', './dist/preload.js');
 
     const sub = childProcess.spawn('electron', ['./dist'], {
-      stdio: 'inherit'
+      stdio: 'inherit',
+      shell: true
     });
     sub.on('close', () => {
       process.exit();
