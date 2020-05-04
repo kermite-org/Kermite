@@ -25,8 +25,15 @@ export interface IKeyUnitCardPartViewModel {
 }
 
 function getAssignOperationText(op?: IAssignOperation): string {
-  if (op?.type === 'keyInput' && op.virtualKey !== 'K_NONE') {
-    return VirtualKeyTexts[op.virtualKey] || '';
+  if (op?.type === 'keyInput') {
+    const keyText = VirtualKeyTexts[op.virtualKey] || '';
+    if (op.attachedModifiers) {
+      const modText = op.attachedModifiers
+        .map((m) => VirtualKeyTexts[m]?.charAt(0))
+        .join('+');
+      return `${modText}+${keyText}`;
+    }
+    return keyText;
   }
   if (op?.type === 'layerCall') {
     const layer = editorModel.layers.find(
