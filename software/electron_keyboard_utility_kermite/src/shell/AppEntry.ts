@@ -6,21 +6,8 @@ import { appWindowManager } from './AppWindowManager';
 app.allowRendererProcessReuse = true;
 
 export class AppEntry {
-  private respawned: boolean = false;
-
-  private onReloadApplicationRequested() {
-    const proc = childProcess.spawn('electron', ['./dist']);
-    proc.stdout.on('data', (data) => {
-      console.log(data.toString().slice(0, -1));
-    });
-    proc.on('exit', () => {
-      app.quit();
-    });
-    this.respawned = true;
-    appWindowManager.closeMainWindow();
-  }
-
   start() {
+    // eslint-disable-next-line no-console
     console.log('debug v0126a');
 
     app.on('ready', async () => {
@@ -30,14 +17,7 @@ export class AppEntry {
 
     app.on('window-all-closed', async () => {
       await appGlobal.terminate();
-      if (!this.respawned) {
-        app.quit();
-      }
+      app.quit();
     });
-
-    appGlobal.eventBus.on(
-      'reloadApplicationRequested',
-      this.onReloadApplicationRequested.bind(this)
-    );
   }
 }

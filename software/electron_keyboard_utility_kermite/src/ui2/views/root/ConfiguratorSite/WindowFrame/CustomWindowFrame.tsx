@@ -2,7 +2,6 @@ import { css } from 'goober';
 import { hx } from '~ui2/views/basis/qx';
 import { UiTheme } from '~ui2/views/common/UiTheme';
 import { TitleBarSection } from './TitleBarSection';
-import { KeyAssignEditPage } from '../KeyAssingEditPage/KeyAssignEditPage';
 
 export const CustomWindowFrame = (props: { children: JSX.Element }) => {
   const cssRoot = css`

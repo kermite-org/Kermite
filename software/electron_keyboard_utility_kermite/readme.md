@@ -1,11 +1,23 @@
-### 環境
+## 動作環境
 
-以下が必要です
+### 対象 OS
 
-- node.js 14
+- macOS 10.15 Catalina
+- Windows10
+
+### 実行環境
+
+- node.js
+- Electron
+
+## 環境構築
+
+ビルド/実行には以下が必要です
+
+- node.js 13
 - yarn
 
-### 導入
+## 導入
 
 ```
 yarn install
@@ -17,13 +29,10 @@ yarn install
 yarn start
 ```
 
-### デバッグビルド/実行
+## デバッグビルド/実行
 
 ```
-(in terminal 1)
-yarn bundle
-(in terminal 2)
-yarn serve
+yarn start:dev
 ```
 
 ### 起動時に node-hid のバージョンがおかしいエラーが出る場合の workaround

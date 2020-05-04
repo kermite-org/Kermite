@@ -1,5 +1,5 @@
 import { VirtualKey } from '~defs/VirtualKeys';
-import { getKeyboardShapeByBreedName } from '~defs/KeyboardShapes';
+import { getKeyboardShapeByBreedName } from '~defs/keyboardShapes';
 import { createDictionaryFromKeyValues } from '~funcs/Utils';
 import { IEditModel } from '~defs/ProfileData';
 

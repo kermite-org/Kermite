@@ -25,6 +25,27 @@ const ControlButton = (props: { icon: string; onClick: () => void }) => {
   );
 };
 
+const ReloadButtonPart = () => {
+  const cssReloadButton = css`
+    padding: 3px 6px;
+    margin-right: 10px;
+    cursor: pointer;
+  `;
+  const onReloadButton = () => {
+    sendIpcPacketSync({ reloadApplication: true });
+  };
+  const isDevelopment = location.protocol === 'http:';
+  return (
+    <div>
+      {isDevelopment && (
+        <button css={cssReloadButton} onClick={onReloadButton}>
+          Restart
+        </button>
+      )}
+    </div>
+  );
+};
+
 const ControlButtonsPart = () => {
   const onWidgetButton = () => {
     siteModel.setWidgetMode(true);
@@ -50,6 +71,7 @@ const ControlButtonsPart = () => {
 
   return (
     <div css={cssButtonsBox}>
+      <ReloadButtonPart />
       <ControlButton icon="fa fa-feather-alt" onClick={onWidgetButton} />
       <ControlButton icon="fa fa-window-minimize" onClick={onMinimizeButton} />
       <ControlButton icon="fa fa-window-maximize" onClick={onMaximizeButton} />

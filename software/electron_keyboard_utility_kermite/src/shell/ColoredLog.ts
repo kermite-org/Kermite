@@ -21,5 +21,6 @@ const LogColorTable: { [color in TLogColor]: string } = {
 const resetCode = '\u001b[0m';
 
 export function coloredLog(text: string, color: TLogColor) {
+  // eslint-disable-next-line no-console
   console.log(`${LogColorTable[color]}${text}${resetCode}`);
 }

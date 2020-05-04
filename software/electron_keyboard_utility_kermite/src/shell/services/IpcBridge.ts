@@ -13,12 +13,16 @@ export class IpcBridge {
   async initialize() {
     ipcMain.on('message', (event, packet: IpcPacket) => {
       if (packet.debugMessage) {
+        // eslint-disable-next-line no-console
         console.log(packet.debugMessage);
         event.returnValue = true;
       }
 
       if (packet.reloadApplication) {
-        appGlobal.eventBus.emit('reloadApplicationRequested', true);
+        // eslint-disable-next-line no-console
+        console.log('##REBOOT_ME_AFTER_CLOSE');
+        appWindowManager.closeMainWindow();
+        event.returnValue = true;
       }
 
       if (packet.reserveSaveProfileTask) {

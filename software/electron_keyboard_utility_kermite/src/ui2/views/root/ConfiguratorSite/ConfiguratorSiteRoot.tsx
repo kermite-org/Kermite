@@ -4,7 +4,6 @@ import { hx } from '~ui2/views/basis/qx';
 import { ProfileManagementPart } from './KeyAssingEditPage/ProfilesSection/ProfileManagementPart';
 import { CustomWindowFrame } from './WindowFrame/CustomWindowFrame';
 import { UiTheme } from '~ui2/views/common/UiTheme';
-import { siteModel } from '~ui2/models/zAppDomain';
 
 export function ConfiguratorSiteRootContent() {
   const cssPageRoot = css`

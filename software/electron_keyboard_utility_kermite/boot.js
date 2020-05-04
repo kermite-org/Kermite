@@ -41,6 +41,29 @@ function runDevelopment() {
     }).serve(3700, false, 'localhost');
   }
 
+  function startElectronProcess() {
+    let reqReboot = false;
+    const sub = childProcess.spawn('electron', ['./dist'], {
+      shell: true
+    });
+
+    sub.stdout.on('data', (text) => {
+      if (text.includes('##REBOOT_ME_AFTER_CLOSE')) {
+        reqReboot = true;
+      }
+      console.log(`${text.toString().trim()}`);
+    });
+    sub.stderr.on('data', (text) => console.log(`${text.toString().trim()}`));
+
+    sub.on('close', () => {
+      if (reqReboot) {
+        startElectronProcess();
+      } else {
+        process.exit();
+      }
+    });
+  }
+
   async function bootEntry() {
     const bundle = process.argv.includes('bundle');
     const start = process.argv.includes('start');
@@ -50,12 +73,7 @@ function runDevelopment() {
       await copyFileAsync('./src/preload.js', './dist/preload.js');
     }
     if (start) {
-      const sub = childProcess.spawn('electron', ['./dist'], {
-        stdio: 'inherit'
-      });
-      sub.on('close', () => {
-        process.exit();
-      });
+      startElectronProcess();
     }
   }
   bootEntry();
@@ -85,18 +103,18 @@ function runProduction() {
     }).bundle();
   }
 
+  function startElectronProcess() {
+    childProcess.spawn('electron', ['./dist'], {
+      stdio: 'inherit',
+      shell: true
+    });
+  }
+
   async function bootEntry() {
     await bundleMain();
     await bundleRenderer();
     await copyFileAsync('./src/preload.js', './dist/preload.js');
-
-    const sub = childProcess.spawn('electron', ['./dist'], {
-      stdio: 'inherit',
-      shell: true
-    });
-    sub.on('close', () => {
-      process.exit();
-    });
+    startElectronProcess();
   }
   bootEntry();
 }

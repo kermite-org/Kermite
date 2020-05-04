@@ -6,14 +6,14 @@
     "strict": true,
     "lib": ["dom", "esnext"],
     "jsx": "react",
-    // "jsxFactory": "jsx",
     "jsxFactory": "hx",
     "baseUrl": ".",
     "paths": {
       "~*": ["./src/*"]
     },
     "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["src/**/*"],
   "exclude": ["src/ui/**/*"]
