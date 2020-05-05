@@ -1,11 +1,13 @@
 import { ModifierVirtualKey, VirtualKey } from './VirtualKeys';
 
+export type ILayerDefaultScheme = 'block' | 'transparent';
 export interface ILayer {
   layerId: string;
   layerName: string;
   // layerRole: 'root' | 'main' | 'custom';
   // attachedModifiers?: ModifierVirtualKey[];
   isShiftLayer?: boolean;
+  defaultScheme: ILayerDefaultScheme;
 }
 
 export type IHoldFunctionInvocationMode =
@@ -240,7 +242,8 @@ export const fallbackProfileData: IProfileData = {
   layers: [
     {
       layerId: 'la0',
-      layerName: 'main'
+      layerName: 'main',
+      defaultScheme: 'block'
       // layerRole: 'main'
     }
     // {

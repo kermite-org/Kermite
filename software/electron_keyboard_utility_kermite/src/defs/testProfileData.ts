@@ -28,20 +28,23 @@ export const testProfileData: IProfileData = {
   layers: [
     {
       layerId: 'la0',
-      layerName: 'main'
+      layerName: 'main',
+      defaultScheme: 'block'
       // layerRole: 'main'
     },
     {
       layerId: 'la1',
       // layerRole: 'shift',
       layerName: 'shift',
-      isShiftLayer: true
+      isShiftLayer: true,
+      defaultScheme: 'block'
       // attachedModifiers: ['K_Shift']
     },
     {
       layerId: 'la2',
       // layerRole: 'shift',
-      layerName: 'func'
+      layerName: 'func',
+      defaultScheme: 'block'
     }
   ],
   assigns: {

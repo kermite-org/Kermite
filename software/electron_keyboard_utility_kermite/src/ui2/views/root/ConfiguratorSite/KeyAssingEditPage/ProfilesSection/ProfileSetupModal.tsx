@@ -3,6 +3,7 @@ import { hx } from '~ui2/views/basis/qx';
 import { createModal } from '~ui2/views/basis/ForegroundModalLayer';
 import { getAvailableBreedNames } from '~defs/keyboardShapes';
 import { ClosableOverlay } from '~ui2/views/common/basicModals';
+import { reflectValue } from '~ui2/views/common/FormHelpers';
 
 const cteateProfileDialogPanel = css`
   background: #fff;
@@ -28,12 +29,6 @@ const cteateProfileDialogPanel = css`
 interface CreateProfileDialogResult {
   newProfileName: string;
   breedName: string;
-}
-
-export function reflectValue(proc: (value: string) => void) {
-  return (e: Event) => {
-    proc((e.currentTarget as HTMLInputElement).value);
-  };
 }
 
 export const profileSetupModal = createModal(() => {

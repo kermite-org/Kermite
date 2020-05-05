@@ -1,24 +1,9 @@
 import { css } from 'goober';
 import { hx } from '~ui2/views/basis/qx';
 import { makeProfileManagementViewModel } from './ProfileManagementPart.model';
-import { reflectValue } from './ProfileSetupModal';
+import { reflectValue } from '~ui2/views/common/FormHelpers';
 
 export const ProfileManagementPart = () => {
-  // const cssBase = css`
-  //   flex-shrink: 0;
-  //   border: solid 1px #08f;
-  //   padding: 4px;
-  //   background: #222;
-
-  //   display: flex;
-  //   > * + * {
-  //     margin-left: 4px;
-  //   }
-  // `;
-  // return <div css={cssBase}>
-
-  // </div>;
-
   const {
     currentProfileName,
     allProfileNames,

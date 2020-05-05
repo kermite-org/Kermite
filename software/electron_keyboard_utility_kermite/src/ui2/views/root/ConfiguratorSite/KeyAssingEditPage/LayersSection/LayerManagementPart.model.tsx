@@ -1,7 +1,8 @@
 import { ILayer } from '~defs/ProfileData';
 import { Arrays } from '~funcs/Arrays';
-import { modalTextEdit } from '~ui2/views/common/basicModals';
 import { editorModel } from '~ui2/models/zAppDomain';
+import { callLayerConfigurationModal } from './LayerConfigurationModal';
+import { modalConfirm } from '~ui2/views/common/basicModals';
 
 export class LayerManagementPartViewModel {
   private get layers() {
@@ -53,32 +54,46 @@ export class LayerManagementPartViewModel {
     this.shiftCurrentLayerOrder(1);
   };
 
-  deleteCurrentLayer = () => {
-    Arrays.remove(this.layers, this.curLayer);
-    editorModel.setCurrentLayerId(this.layers[0].layerId);
+  deleteCurrentLayer = async () => {
+    const ok = await modalConfirm(
+      `Layer ${this.curLayer.layerName} is removed. Are you ok?`
+    );
+    if (ok) {
+      Arrays.remove(this.layers, this.curLayer);
+      editorModel.setCurrentLayerId(this.layers[0].layerId);
+    }
   };
 
   renameCurrentLayer = async () => {
-    const newLayerName = await modalTextEdit({
-      message: 'layer name:',
-      defaultText: this.curLayer.layerName
-    });
-    if (newLayerName) {
-      this.curLayer.layerName = newLayerName;
+    const { layerName, isShiftLayer, defaultScheme } = this.curLayer;
+    const srcValues = {
+      layerName,
+      isShiftLayer: !!isShiftLayer,
+      defaultScheme
+    };
+    const editValues = await callLayerConfigurationModal(srcValues);
+    if (editValues) {
+      this.curLayer.layerName = editValues.layerName;
+      this.curLayer.isShiftLayer = editValues.isShiftLayer;
+      this.curLayer.defaultScheme = editValues.defaultScheme;
     }
   };
 
   addNewLayer = async () => {
-    //todo: use sequential layer number
-    const layerId = `la${(Math.random() * 1000) >> 0}`;
-    const newLayerName = await modalTextEdit({
-      message: 'layer name:',
-      defaultText: ''
+    const layerAttrs = await callLayerConfigurationModal({
+      layerName: '',
+      defaultScheme: 'block',
+      isShiftLayer: false
     });
-    if (newLayerName) {
+    if (layerAttrs && layerAttrs.layerName) {
+      //todo: use sequential layer number
+      const layerId = `la${(Math.random() * 1000) >> 0}`;
+      const { layerName, defaultScheme, isShiftLayer } = layerAttrs;
       this.layers.push({
         layerId,
-        layerName: newLayerName
+        layerName,
+        defaultScheme,
+        isShiftLayer
       });
     }
   };

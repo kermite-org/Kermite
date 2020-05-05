@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { hx } from '~ui2/views/basis/qx';
 import { createClosureComponent } from '~ui2/views/basis/qxUtils';
-import { reflectValue } from './ProfilesSection/ProfileSetupModal';
+import { reflectValue } from '~ui2/views/common/FormHelpers';
 
 export const TestInputArea = createClosureComponent(() => {
   let text = '';

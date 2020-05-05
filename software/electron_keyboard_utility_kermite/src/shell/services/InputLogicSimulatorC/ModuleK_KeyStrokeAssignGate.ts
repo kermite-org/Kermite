@@ -57,7 +57,7 @@ export namespace KeyStrokeAssignGate {
     const layer = logicSimulatorStateC.editModel.layers.find(
       (la) => la.layerId === targetLayerId
     );
-    return layer?.layerName.includes('shift');
+    return layer?.isShiftLayer;
   }
 
   const fixedTextPattern: { [vk in VirtualKey]?: VirtualKey[] } = {

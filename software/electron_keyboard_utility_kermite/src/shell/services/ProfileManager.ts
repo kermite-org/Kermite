@@ -156,6 +156,11 @@ export class ProfileManager {
   }
 
   private fixEditModelData(editModel: IEditModel) {
+    for (const la of editModel.layers) {
+      if (la.defaultScheme === undefined) {
+        la.defaultScheme = 'block';
+      }
+    }
     // if (editModel.layers.length === 0) {
     //   editModel.layers = duplicateObjectByJsonStringifyParse(
     //     fallbackProfileData.layers

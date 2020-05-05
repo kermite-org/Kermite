@@ -47,8 +47,7 @@ export namespace ModuleA_KeyInputAssignBinder {
 
     for (const la of activeLayers) {
       const assign = getLayerAssign(la.layerId, keyId);
-      if (!assign && la.layerName.endsWith('_b')) {
-        //block
+      if (!assign && la.defaultScheme === 'block') {
         return undefined;
       }
       if (assign) {
