@@ -7,7 +7,7 @@
     "node": "^13.0.0"
   },
   "scripts": {
-    "postinstall": "electron-rebuild node-hid",
+    "postinstall": "electron-rebuild -o node-hid",
     "fixlib": "electron-rebuild -o node-hid -f",
     "start": "cross-env NODE_ENV=production node ./boot.js",
     "start:dev": "cross-env NODE_ENV=development node ./boot.js bundle start",
