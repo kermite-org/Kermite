@@ -1,8 +1,7 @@
 import { ProfileProvider2 } from './dataSource/ProfileProvider2';
 import { IProfileManagerStatus } from '~defs/ipc';
 import { EditorModel } from './EditorModel';
-import { sendProfileManagerCommands } from '~ui/state/ipc';
-import { modalConfirm, modalTextEdit } from '~ui2/views/common/basicModals';
+import { sendProfileManagerCommands } from '~ui2/models/ipc';
 import { appUi } from './appGlobal';
 
 export class ProfilesModel {

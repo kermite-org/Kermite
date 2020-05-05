@@ -1,5 +1,5 @@
 import { css } from 'goober';
-import { sendIpcPacketSync } from '~ui/state/ipc';
+import { sendIpcPacketSync } from '~ui2/models/ipc';
 import { siteModel } from '~ui2/models/zAppDomain';
 import { hx } from '~ui2/views/basis/qx';
 
