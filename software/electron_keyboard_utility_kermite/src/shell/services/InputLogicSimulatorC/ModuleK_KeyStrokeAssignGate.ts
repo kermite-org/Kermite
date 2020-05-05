@@ -5,16 +5,10 @@ import {
   logicSimulatorStateC
 } from './LogicSimulatorCCommon';
 import { ModuleP_OutputKeyStateCombiner } from './ModuleP_OutputKeyStateCombiner';
+import { delayMs } from '../DeviceService/Helpers';
 
-export namespace KeyStrokeAssignGate {
-  function isShiftLayer(targetLayerId: string) {
-    const layer = logicSimulatorStateC.editModel.layers.find(
-      (la) => la.layerId === targetLayerId
-    );
-    return layer?.layerName.includes('shift');
-  }
-
-  function pushHoldKeyBind(
+namespace KeyBindUpdator {
+  export function pushHoldKeyBind(
     keyId: string,
     virtualKey: VirtualKey,
     attachedModifiers: ModifierVirtualKey[] = []
@@ -27,7 +21,7 @@ export namespace KeyStrokeAssignGate {
     ModuleP_OutputKeyStateCombiner.updateOutputReport();
   }
 
-  function removeHoldKeyBind(keyId: string) {
+  export function removeHoldKeyBind(keyId: string) {
     const { holdKeyBinds } = logicSimulatorStateC;
     const target = holdKeyBinds.find((hk) => hk.keyId === keyId);
     if (target) {
@@ -35,7 +29,9 @@ export namespace KeyStrokeAssignGate {
       ModuleP_OutputKeyStateCombiner.updateOutputReport();
     }
   }
+}
 
+namespace StrokeSequenceEmitter {
   function releaseSpecificKeyHoldBind(virtualKey: VirtualKey) {
     const { holdKeyBinds } = logicSimulatorStateC;
     const target = holdKeyBinds.find((hk) => hk.virtualKey === virtualKey);
@@ -45,13 +41,23 @@ export namespace KeyStrokeAssignGate {
     }
   }
 
-  function emitFakeStrokes(vks: VirtualKey[]) {
+  export async function emitFakeStrokes(vks: VirtualKey[]) {
     const exKeyId = `FakeStroke`;
     for (const vk of vks) {
       releaseSpecificKeyHoldBind(vk);
-      pushHoldKeyBind(exKeyId, vk);
-      removeHoldKeyBind(exKeyId);
+      KeyBindUpdator.pushHoldKeyBind(exKeyId, vk);
+      await delayMs(50);
+      KeyBindUpdator.removeHoldKeyBind(exKeyId);
     }
+  }
+}
+
+export namespace KeyStrokeAssignGate {
+  function isShiftLayer(targetLayerId: string) {
+    const layer = logicSimulatorStateC.editModel.layers.find(
+      (la) => la.layerId === targetLayerId
+    );
+    return layer?.layerName.includes('shift');
   }
 
   const fixedTextPattern: { [vk in VirtualKey]?: VirtualKey[] } = {
@@ -70,23 +76,26 @@ export namespace KeyStrokeAssignGate {
       if (assign.type === 'keyInput') {
         const vk = assign.virtualKey;
         if (fixedTextPattern[vk]) {
-          emitFakeStrokes(fixedTextPattern[vk]!);
+          StrokeSequenceEmitter.emitFakeStrokes(fixedTextPattern[vk]!);
           return;
         }
       }
 
       if (assign.type === 'keyInput') {
-        pushHoldKeyBind(keyId, assign.virtualKey, assign.attachedModifiers);
+        KeyBindUpdator.pushHoldKeyBind(
+          keyId,
+          assign.virtualKey,
+          assign.attachedModifiers
+        );
       } else if (assign.type === 'layerCall') {
         if (isShiftLayer(assign.targetLayerId)) {
-          pushHoldKeyBind(keyId, 'K_Shift');
+          KeyBindUpdator.pushHoldKeyBind(keyId, 'K_Shift');
         }
       }
       keyBindingInfoDict[keyId] = { assign, timeStamp: Date.now() };
     } else {
       const { keyId } = ev;
-      // console.log('up', ev.keyId);
-      removeHoldKeyBind(keyId);
+      KeyBindUpdator.removeHoldKeyBind(keyId);
       delete keyBindingInfoDict[keyId];
     }
   }

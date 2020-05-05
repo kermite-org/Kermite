@@ -50,35 +50,80 @@ const virtualKeyPriorityOrders: VirtualKey[] = [
 export namespace KeyEventPrioritySorter {
   const local = new (class {
     holdCount: number = 0;
-    commitEventQueue: IKeyStrokeAssignEvent[] = [];
+    inputQueue: IKeyStrokeAssignEvent[] = [];
+    outputQueue: IKeyStrokeAssignEvent[] = [];
+    prevDownOutputTick: number = 0;
+    outputTickMap: { [keyId: string]: number } = {};
+    upEventsDict: { [keyId: string]: IKeyStrokeAssignEvent } = {};
   })();
 
   export function pushStrokeAssignEvent(ev: IKeyStrokeAssignEvent) {
-    local.commitEventQueue.push(ev);
     if (ev.type === 'down') {
+      local.inputQueue.push(ev);
       local.holdCount++;
     } else {
+      local.upEventsDict[ev.keyId] = ev;
       local.holdCount--;
     }
   }
 
-  export function readQueuedEventOne(): IKeyStrokeAssignEvent | undefined {
-    const { commitEventQueue: queue, holdCount } = local;
-    if (queue.length > 0) {
-      const latest = queue[queue.length - 1];
-      const curTick = Date.now();
-      if (
-        curTick > latest.tick + PrioritySorterConfig.waitTimeMs ||
-        holdCount === 0
-      ) {
-        queue.sort(
+  const cfg = {
+    inputSimultaneousKeysWaitTime: 50,
+    outputMinimumDownEventInterval: 25,
+    outputMinimumStrokeDuration: 50
+  };
+
+  function processInputQueue() {
+    const { inputQueue, holdCount, outputQueue } = local;
+    const curTick = Date.now();
+
+    if (inputQueue.length > 0) {
+      const latest = inputQueue[inputQueue.length - 1];
+      const timeOk = curTick > latest.tick + cfg.inputSimultaneousKeysWaitTime;
+      if (timeOk || holdCount === 0) {
+        inputQueue.sort(
           (a, b) =>
             virtualKeyPriorityOrders.indexOf(a.priorityVirtualKey) -
             virtualKeyPriorityOrders.indexOf(b.priorityVirtualKey)
         );
-        return queue.shift();
+        outputQueue.push(...inputQueue);
+        local.inputQueue = [];
       }
     }
+  }
+
+  function readOutputQueueOne() {
+    const { outputQueue } = local;
+    const curTick = Date.now();
+
+    if (outputQueue.length > 0) {
+      const ev = outputQueue[0];
+      if (
+        curTick >
+        local.prevDownOutputTick + cfg.outputMinimumDownEventInterval
+      ) {
+        local.prevDownOutputTick = curTick;
+        local.outputTickMap[ev.keyId] = curTick;
+        outputQueue.shift();
+        return ev;
+      }
+    }
+
+    for (const keyId in local.upEventsDict) {
+      const ev = local.upEventsDict[keyId];
+      const downTick = local.outputTickMap[keyId];
+      if (downTick && curTick > downTick + cfg.outputMinimumStrokeDuration) {
+        delete local.outputTickMap[keyId];
+        delete local.upEventsDict[keyId];
+        return ev;
+      }
+    }
+
     return undefined;
+  }
+
+  export function readQueuedEventOne(): IKeyStrokeAssignEvent | undefined {
+    processInputQueue();
+    return readOutputQueueOne();
   }
 }

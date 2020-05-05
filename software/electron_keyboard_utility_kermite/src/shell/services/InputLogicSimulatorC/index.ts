@@ -39,9 +39,7 @@ export class InputLogicSimulatorC implements IInputLogicSimulator {
     appGlobal.deviceService.setSideBrainMode(true);
     appGlobal.deviceService.subscribe(this.onRealtimeKeyboardEvent);
     this.tikerTimer.start(this.processTicker, 10);
-    // this.tikerTimer2.start(this.processFastTicker, 2);
-    //for polling based typing game
-    this.tikerTimer2.start(this.processOutputTicker, 70);
+    this.tikerTimer2.start(this.processOutputTicker, 5);
   }
 
   async terminate() {

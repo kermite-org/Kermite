@@ -39,6 +39,5 @@ export const logicSimulatorStateC = new (class {
 
 export const PrioritySorterConfig = new (class {
   bypass: boolean = false;
-  waitTimeMs: number = 100;
 })();
 // PrioritySorterConfig.bypass = true;
