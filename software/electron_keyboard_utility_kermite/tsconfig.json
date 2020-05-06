@@ -12,7 +12,6 @@
       "~*": ["./src/*"]
     },
     "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true
   },
   "include": ["src/**/*"]
