@@ -1,0 +1,8 @@
+BraceWrapping:
+  AfterFunction: true
+  AfterControlStatement: false
+ColumnLimit: 0
+Cpp11BracedListStyle: false
+AllowShortBlocksOnASingleLine: true
+TabWidth: 2
+IndentWidth: 2
