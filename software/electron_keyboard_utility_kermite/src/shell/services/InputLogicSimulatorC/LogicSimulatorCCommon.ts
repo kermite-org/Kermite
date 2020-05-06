@@ -37,7 +37,11 @@ export const logicSimulatorStateC = new (class {
   holdKeyBinds: IHoldKeyBind[] = [];
 })();
 
-export const PrioritySorterConfig = new (class {
-  bypass: boolean = false;
+export const logicSimulatorCConfig = new (class {
+  usePrioritySorter: boolean = false;
+  useImmediateDownUp: boolean = false;
+  useKeyBindEventAligner: boolean = false;
 })();
-// PrioritySorterConfig.bypass = true;
+logicSimulatorCConfig.usePrioritySorter = true;
+logicSimulatorCConfig.useImmediateDownUp = false;
+logicSimulatorCConfig.useKeyBindEventAligner = true;

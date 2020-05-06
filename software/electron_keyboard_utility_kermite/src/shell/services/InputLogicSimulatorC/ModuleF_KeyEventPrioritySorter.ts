@@ -1,8 +1,6 @@
 import { VirtualKey } from '~defs/VirtualKeys';
-import {
-  IKeyStrokeAssignEvent,
-  PrioritySorterConfig
-} from './LogicSimulatorCCommon';
+import { IKeyStrokeAssignEvent } from './LogicSimulatorCCommon';
+import { sortOrderBy } from '~funcs/Utils';
 
 const virtualKeyPriorityOrders: VirtualKey[] = [
   'K_Ctrl',
@@ -52,25 +50,19 @@ export namespace KeyEventPrioritySorter {
     holdCount: number = 0;
     inputQueue: IKeyStrokeAssignEvent[] = [];
     outputQueue: IKeyStrokeAssignEvent[] = [];
-    prevDownOutputTick: number = 0;
-    outputTickMap: { [keyId: string]: number } = {};
-    upEventsDict: { [keyId: string]: IKeyStrokeAssignEvent } = {};
   })();
 
   export function pushStrokeAssignEvent(ev: IKeyStrokeAssignEvent) {
+    local.inputQueue.push(ev);
     if (ev.type === 'down') {
-      local.inputQueue.push(ev);
       local.holdCount++;
     } else {
-      local.upEventsDict[ev.keyId] = ev;
       local.holdCount--;
     }
   }
 
   const cfg = {
-    inputSimultaneousKeysWaitTime: 50,
-    outputMinimumDownEventInterval: 25,
-    outputMinimumStrokeDuration: 50
+    inputSimultaneousKeysWaitTime: 50
   };
 
   function processInputQueue() {
@@ -78,52 +70,31 @@ export namespace KeyEventPrioritySorter {
     const curTick = Date.now();
 
     if (inputQueue.length > 0) {
-      const latest = inputQueue[inputQueue.length - 1];
-      const timeOk = curTick > latest.tick + cfg.inputSimultaneousKeysWaitTime;
-      if (timeOk || holdCount === 0) {
-        inputQueue.sort(
-          (a, b) =>
-            virtualKeyPriorityOrders.indexOf(a.priorityVirtualKey) -
-            virtualKeyPriorityOrders.indexOf(b.priorityVirtualKey)
-        );
+      const downs = inputQueue.filter((ev) => ev.type === 'down');
+      if (downs.length > 0) {
+        const latest = downs[downs.length - 1];
+        const timeOk =
+          curTick > latest.tick + cfg.inputSimultaneousKeysWaitTime;
+        if (timeOk || holdCount === 0) {
+          inputQueue.sort(
+            sortOrderBy(
+              (a) =>
+                (a.type === 'up' ? 1000 : 0) +
+                virtualKeyPriorityOrders.indexOf(a.priorityVirtualKey)
+            )
+          );
+          outputQueue.push(...inputQueue);
+          local.inputQueue = [];
+        }
+      } else {
         outputQueue.push(...inputQueue);
         local.inputQueue = [];
       }
     }
   }
 
-  function readOutputQueueOne() {
-    const { outputQueue } = local;
-    const curTick = Date.now();
-
-    if (outputQueue.length > 0) {
-      const ev = outputQueue[0];
-      if (
-        curTick >
-        local.prevDownOutputTick + cfg.outputMinimumDownEventInterval
-      ) {
-        local.prevDownOutputTick = curTick;
-        local.outputTickMap[ev.keyId] = curTick;
-        outputQueue.shift();
-        return ev;
-      }
-    }
-
-    for (const keyId in local.upEventsDict) {
-      const ev = local.upEventsDict[keyId];
-      const downTick = local.outputTickMap[keyId];
-      if (downTick && curTick > downTick + cfg.outputMinimumStrokeDuration) {
-        delete local.outputTickMap[keyId];
-        delete local.upEventsDict[keyId];
-        return ev;
-      }
-    }
-
-    return undefined;
-  }
-
   export function readQueuedEventOne(): IKeyStrokeAssignEvent | undefined {
     processInputQueue();
-    return readOutputQueueOne();
+    return local.outputQueue.shift();
   }
 }

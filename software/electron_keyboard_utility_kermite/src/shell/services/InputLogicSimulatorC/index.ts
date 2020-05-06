@@ -5,6 +5,7 @@ import { IntervalTimerWrapper } from '../InputLogicSimulator/IntervalTimerWrappe
 import { logicSimulatorStateC } from './LogicSimulatorCCommon';
 import { ModuleA_KeyInputAssignBinder } from './ModuleA_KeyInputAssignBinder';
 import { ModuleW_HidReportOutputBuffer } from './ModuleW_HidReportOutputBuffer';
+import { KeyBindUpdator } from './ModuleK_KeyStrokeAssignGate';
 
 export class InputLogicSimulatorC implements IInputLogicSimulator {
   private tikerTimer = new IntervalTimerWrapper();
@@ -28,6 +29,7 @@ export class InputLogicSimulatorC implements IInputLogicSimulator {
 
   private processTicker = () => {
     ModuleA_KeyInputAssignBinder.processTicker();
+    KeyBindUpdator.processUpdate();
   };
 
   private processOutputTicker = () => {

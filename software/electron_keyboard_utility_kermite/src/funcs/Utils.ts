@@ -115,3 +115,14 @@ export function clonePlainOldObject(src: any): any {
 export function bindMethod<T>(obj: T, key: keyof T) {
   return (obj[key] as any).bind(obj);
 }
+
+export function sortOrderBy<T>(
+  proc: (arg: T) => number,
+  method: 'asc' | 'dsc' = 'asc'
+): (a: T, b: T) => number {
+  if (method === 'asc') {
+    return (a, b) => proc(a) - proc(b);
+  } else {
+    return (a, b) => proc(b) - proc(a);
+  }
+}

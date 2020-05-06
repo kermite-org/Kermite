@@ -3,7 +3,7 @@ import { KeyIndexKeyEvent, TKeyTrigger } from '../InputLogicSimulatorB/common';
 import {
   IKeyStrokeAssignEvent,
   logicSimulatorStateC,
-  PrioritySorterConfig
+  logicSimulatorCConfig
 } from './LogicSimulatorCCommon';
 import { KeyEventPrioritySorter } from './ModuleF_KeyEventPrioritySorter';
 import { KeyStrokeAssignGate } from './ModuleK_KeyStrokeAssignGate';
@@ -58,7 +58,7 @@ export namespace ModuleA_KeyInputAssignBinder {
   }
 
   function pushStrokeEvent(ev: IKeyStrokeAssignEvent) {
-    if (PrioritySorterConfig.bypass) {
+    if (!logicSimulatorCConfig.usePrioritySorter) {
       KeyStrokeAssignGate.handleLogicalStroke(ev);
     } else {
       KeyEventPrioritySorter.pushStrokeAssignEvent(ev);
