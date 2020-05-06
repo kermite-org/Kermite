@@ -134,7 +134,6 @@ const assignKeysGroup6: VirtualKey[] = ['K_Shift', 'K_Ctrl', 'K_Alt', 'K_OS'];
 const assignKeysGroup7: VirtualKey[] = ['K_NN', 'K_UU', 'K_LTU'];
 
 export const virtualKeyGroupsTable: VirtualKey[][] = [
-  // assignKeysGroup00,
   assignKeysGroup0,
   assignKeysGroup1,
   assignKeysGroup2,
@@ -143,4 +142,12 @@ export const virtualKeyGroupsTable: VirtualKey[][] = [
   assignKeysGroup5,
   assignKeysGroup6,
   assignKeysGroup7
+];
+
+export const virtualKeyGroupsTable2: VirtualKey[][] = [
+  [...assignKeysGroup0, ...assignKeysGroup1],
+  [...assignKeysGroup3, ...assignKeysGroup7],
+  assignKeysGroup4,
+  [...assignKeysGroup2, ...assignKeysGroup6],
+  [...assignKeysGroup5]
 ];

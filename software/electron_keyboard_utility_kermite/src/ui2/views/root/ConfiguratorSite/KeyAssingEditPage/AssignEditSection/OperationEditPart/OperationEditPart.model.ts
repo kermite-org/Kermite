@@ -1,4 +1,7 @@
-import { virtualKeyGroupsTable } from './virtualkeyGroupsTable';
+import {
+  virtualKeyGroupsTable,
+  virtualKeyGroupsTable2
+} from './virtualkeyGroupsTable';
 import { VirtualKeyTexts } from '~defs/VirtualKeyTexts';
 import { editorModel } from '~ui2/models/zAppDomain';
 import { ModifierVirtualKey } from '~defs/VirtualKeys';
@@ -30,17 +33,17 @@ const modifierVirtualKeys: ModifierVirtualKey[] = [
 ];
 
 export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
-  const { editOperation, writeEditOperation } = editorModel;
+  const { editOperation, writeEditOperation, isSlotSelected } = editorModel;
 
   const noAssignEntry: IOperationCardViewModel = {
     sig: 'none',
     text: 'none',
-    isCurrent: editOperation === undefined,
+    isCurrent: isSlotSelected && editOperation === undefined,
     setCurrent: () => writeEditOperation(undefined),
     isEnabled: true
   };
 
-  const virtualKeyEntryGroups: IOperationCardViewModel[][] = virtualKeyGroupsTable.map(
+  const virtualKeyEntryGroups: IOperationCardViewModel[][] = virtualKeyGroupsTable2.map(
     (group) =>
       group.map((vk) => ({
         sig: vk,

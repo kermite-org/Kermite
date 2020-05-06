@@ -22,7 +22,7 @@ export class EditorModel {
 
   get isSlotSelected() {
     const { currentLayerId, currentKeyUnitId } = this;
-    return currentLayerId && currentKeyUnitId;
+    return !!(currentLayerId && currentKeyUnitId);
   }
 
   get assignEntry() {

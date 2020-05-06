@@ -10,11 +10,9 @@ export function ConfiguratorSiteRootContent() {
     height: 100%;
     display: flex;
     flex-direction: column;
-    border: solid 1px #0f0;
   `;
 
   const KeyAssignsEditPageFrame = css`
-    border: solid 2px #f80;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -61,13 +59,3 @@ export const ConfiguratorSiteRoot = () => {
     </CustomWindowFrame>
   );
 };
-
-//debug
-// export const ConfiguratorSiteRoot1 = () => {
-//   return (
-//     <div>
-//       cfg
-//       <button onClick={() => siteModel.setWidgetMode(true)}>back</button>
-//     </div>
-//   );
-// };

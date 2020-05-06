@@ -9,16 +9,18 @@ import {
 const OperationCard = (props: { model: IOperationCardViewModel }) => {
   const { text, isCurrent, setCurrent, isEnabled } = props.model;
 
+  const isTextLong = text.length >= 2;
+
   const cssCard = css`
-    min-width: 20px;
-    height: 20px;
+    min-width: 28px;
+    height: 28px;
     background: #383838;
-    margin: 1.5px;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0 4px;
+    padding: 0 2px;
     cursor: pointer;
+    font-size: ${isTextLong ? '12px' : '15px'};
 
     &[data-current] {
       background: ${UiTheme.clSelectHighlight};
@@ -50,42 +52,76 @@ export function OpertionEditPart() {
     layerCallEntries
   } = makeOperationEditPartViewModel();
 
-  const cssGroupsOuter = css`
+  const cssBase = css`
     flex-grow: 1;
-    overflow-y: scroll;
-    border: solid 4px red;
-    height: 100px;
-    padding: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   `;
+
+  const cssAssignPanel = css`
+    display: flex;
+    border: solid 1px #333;
+    padding: 8px;
+  `;
+
   const cssGroupBox = css`
     display: flex;
     flex-wrap: wrap;
+    width: 580px;
+    > * {
+      margin: 2px;
+    }
+  `;
+
+  const cssGroupBoxV = css`
+    margin: 2px 6px;
+    > * + * {
+      margin-top: 4px;
+    }
+  `;
+
+  const cssKeyAssignsRow = css`
+    display: flex;
+  `;
+
+  const cssLayerAssignsRow = css`
+    margin-top: 8px;
   `;
 
   return (
-    <div css={cssGroupsOuter}>
-      <div css={cssGroupBox}>
-        <OperationCard model={noAssignEntry} />
-      </div>
-      <div>keys</div>
-      {virtualKeyEntryGroups.map((group, index) => (
-        <div css={cssGroupBox} key={index}>
-          {group.map((model) => (
-            <OperationCard model={model} key={model.sig} />
-          ))}
+    <div css={cssBase}>
+      <div css={cssAssignPanel}>
+        <div css={cssGroupBoxV}>
+          <OperationCard model={noAssignEntry} />
         </div>
-      ))}
-      <div>modifiers</div>
-      <div css={cssGroupBox}>
-        {attachedModifierEntries.map((model) => (
-          <OperationCard model={model} key={model.sig} />
-        ))}
-      </div>
-      <div>layers</div>
-      <div css={cssGroupBox}>
-        {layerCallEntries.map((model) => (
-          <OperationCard model={model} key={model.sig} />
-        ))}
+        <div>
+          <div css={cssKeyAssignsRow}>
+            <div>
+              {virtualKeyEntryGroups.map((group, index) => (
+                <div css={cssGroupBox} key={index}>
+                  {group.map((model) => (
+                    <OperationCard model={model} key={model.sig} />
+                  ))}
+                </div>
+              ))}
+            </div>
+            <div>
+              <div css={cssGroupBoxV}>
+                {attachedModifierEntries.map((model) => (
+                  <OperationCard model={model} key={model.sig} />
+                ))}
+              </div>
+            </div>
+          </div>
+          <div css={cssLayerAssignsRow}>
+            <div css={cssGroupBox}>
+              {layerCallEntries.map((model) => (
+                <OperationCard model={model} key={model.sig} />
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
