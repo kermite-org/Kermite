@@ -2,7 +2,6 @@ import { HidKeyCodes } from '~defs/HidKeyCodes';
 import { ModifierVirtualKey } from '~defs/VirtualKeys';
 import { IHoldKeyBind, logicSimulatorStateC } from './LogicSimulatorCCommon';
 import { ModuleW_HidReportOutputBuffer } from './ModuleW_HidReportOutputBuffer';
-import { Arrays } from '~funcs/Arrays';
 
 export namespace ModuleP_OutputKeyStateCombiner {
   function getModifierByte(modFlags: { [vk in ModifierVirtualKey]: boolean }) {
@@ -53,7 +52,27 @@ export namespace ModuleP_OutputKeyStateCombiner {
     return { holdKeyCodes, modifierByte };
   }
 
-  function updateSlots(slots: number[], holdKeyCodes: number[]) {
+  const local = new (class {
+    slots: number[] = [0, 0, 0, 0, 0, 0];
+    nextSlotIndex: number = 0;
+  })();
+
+  function findNextSlotIndex(): number {
+    const { slots, nextSlotIndex } = local;
+    let idx = nextSlotIndex;
+    for (let i = 0; i < slots.length; i++) {
+      idx = (idx + 1) % slots.length;
+      if (slots[idx] === 0) {
+        local.nextSlotIndex = idx;
+        return idx;
+      }
+    }
+    local.nextSlotIndex = idx;
+    return -1;
+  }
+
+  function updateSlots(holdKeyCodes: number[]) {
+    const { slots } = local;
     //remove released keys from slots
     for (let i = 0; i < slots.length; i++) {
       const kc = slots[i];
@@ -65,23 +84,20 @@ export namespace ModuleP_OutputKeyStateCombiner {
     //add pressed keys to slots
     for (const kc of holdKeyCodes) {
       if (!slots.includes(kc)) {
-        const pos = slots.indexOf(0);
-        if (pos !== -1) {
-          slots[pos] = kc;
+        // const pos = slots.indexOf(0);  //seek from head
+        const idx = findNextSlotIndex(); //round robin
+        if (idx !== -1) {
+          slots[idx] = kc;
         }
       }
     }
   }
 
-  const local = new (class {
-    slots: number[] = [0, 0, 0, 0, 0, 0];
-  })();
-
   export function updateOutputReport() {
     const { holdKeyCodes, modifierByte } = reduceHoldKeyBindsToHidReport(
       logicSimulatorStateC.holdKeyBinds
     );
-    updateSlots(local.slots, holdKeyCodes);
+    updateSlots(holdKeyCodes);
     const hidReport = [modifierByte, 0, ...local.slots];
     ModuleW_HidReportOutputBuffer.commitHidReport(hidReport);
   }
