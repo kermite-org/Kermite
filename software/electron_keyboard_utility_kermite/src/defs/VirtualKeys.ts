@@ -167,6 +167,7 @@ export type VirtualKey =
   | 'K_ROS'
   | 'K_NN'
   | 'K_LTU'
-  | 'K_UU';
+  | 'K_UU'
+  | 'K_NextDouble';
 
 export type ModifierVirtualKey = 'K_Shift' | 'K_Ctrl' | 'K_Alt' | 'K_OS';

@@ -168,6 +168,8 @@ export namespace KeyStrokeAssignGate {
     K_UU: ['K_U', 'K_U']
   };
 
+  let nextDoubleReserved: boolean = false;
+
   export function handleLogicalStroke(ev: IKeyStrokeAssignEvent) {
     const { keyBindingInfoDict } = logicSimulatorStateC;
     if (ev.type === 'down') {
@@ -177,6 +179,11 @@ export namespace KeyStrokeAssignGate {
 
       if (assign.type === 'keyInput') {
         const vk = assign.virtualKey;
+
+        if (vk === 'K_NextDouble') {
+          nextDoubleReserved = true;
+          return;
+        }
         if (fixedTextPattern[vk]) {
           StrokeSequenceEmitter.emitFakeStrokes(fixedTextPattern[vk]!);
           return;
@@ -189,6 +196,9 @@ export namespace KeyStrokeAssignGate {
       }
 
       if (assign.type === 'keyInput') {
+        if (nextDoubleReserved) {
+          StrokeSequenceEmitter.emitFakeStrokes([assign.virtualKey, 'K_NONE']);
+        }
         KeyBindUpdator.pushHoldKeyBind(
           keyId,
           assign.virtualKey,
@@ -199,6 +209,7 @@ export namespace KeyStrokeAssignGate {
           KeyBindUpdator.pushHoldKeyBind(keyId, 'K_Shift');
         }
       }
+      nextDoubleReserved = false;
       keyBindingInfoDict[keyId] = { assign, timeStamp: Date.now() };
     } else {
       const { keyId } = ev;

@@ -40,8 +40,8 @@ const virtualKeyPriorityOrders: VirtualKey[] = [
   'K_UU',
   'K_NN',
   'K_LTU',
-
   'K_Minus',
+  'K_NextDouble',
   'K_NONE'
 ];
 
