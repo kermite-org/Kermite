@@ -126,3 +126,16 @@ export function sortOrderBy<T>(
     return (a, b) => proc(b) - proc(a);
   }
 }
+
+export function mapObjectValues<P, Q>(
+  src: {
+    [key: string]: P;
+  },
+  proc: (value: P) => Q
+): { [key: string]: Q } {
+  const dst: { [key: string]: Q } = {};
+  for (const key in src) {
+    dst[key] = proc(src[key]);
+  }
+  return dst;
+}

@@ -5,6 +5,7 @@ import { AssignEditSection } from './AssignEditSection';
 import { KeyboardSection } from './KeyboardSection';
 import { LayersSection } from './LayersSection';
 import { TestInputArea } from './TestInputArea';
+import { ProfileConfigurationPart } from './ProfileConfigurationPart';
 
 export const KeyAssignEditPage = () => {
   const { clPanelBox, editorPartMargin: mm } = UiTheme;
@@ -109,7 +110,9 @@ export const KeyAssignEditPage = () => {
           <div css={cssLayersPartBox}>
             <LayersSection />
           </div>
-          <div css={cssRestPartBox}></div>
+          <div css={cssRestPartBox}>
+            <ProfileConfigurationPart />
+          </div>
         </div>
       </div>
     </div>

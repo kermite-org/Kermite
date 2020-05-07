@@ -2,12 +2,14 @@ import {
   fallbackProfileData,
   IProfileData,
   IAssignEntry,
-  IAssignOperation
+  IAssignOperation,
+  IProfileAssignType
 } from '~/defs/ProfileData';
 import {
   duplicateObjectByJsonStringifyParse,
   compareObjectByJsonStringify
 } from '~funcs/Utils';
+import { changeProfileDataAssignType } from './ProfileDataHelper';
 
 export class EditorModel {
   //state
@@ -118,5 +120,12 @@ export class EditorModel {
     } else {
       this.writeAssignEntry({ type: 'single', op });
     }
+  };
+
+  changeProfileAssignType = (dstAssignType: IProfileAssignType) => {
+    this.profileData = changeProfileDataAssignType(
+      this.profileData,
+      dstAssignType
+    );
   };
 }
