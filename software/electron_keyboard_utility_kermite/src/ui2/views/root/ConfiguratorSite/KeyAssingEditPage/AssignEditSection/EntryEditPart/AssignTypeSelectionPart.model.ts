@@ -1,14 +1,14 @@
-import { ISingleAssignEntryType } from '~defs/ProfileData';
+import { IAssignEntryType } from '~defs/ProfileData';
 import { editorModel } from '~ui2/models/zAppDomain';
 
 interface IAssignTypeSlotViewModel {
-  assignType: ISingleAssignEntryType;
+  assignType: IAssignEntryType;
   text: string;
   isCurrent: boolean;
   setCurrent(): void;
 }
 
-const entryTypes: ISingleAssignEntryType[] = [
+const entryTypes: IAssignEntryType[] = [
   'none',
   'single'
   // 'transparent',
@@ -17,9 +17,10 @@ const entryTypes: ISingleAssignEntryType[] = [
   // 'singleVersatile1'
 ];
 
-const entryTypeToTextMap: { [key in ISingleAssignEntryType]: string } = {
+const entryTypeToTextMap: { [key in IAssignEntryType]: string } = {
   none: '無',
-  single: 'S1'
+  single: 'S',
+  dual: 'D'
   // transparent: '透',
   // single1: 'S1',
   // single2: 'S2'

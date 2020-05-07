@@ -1,4 +1,4 @@
-import { IKeyAssignsSet, LayerInvocationMode } from '~defs/ProfileData';
+import { IKeyAssignsSet_Single, LayerInvocationMode } from '~defs/ProfileData';
 
 export type TAdhocShift = 'down' | 'up' | undefined;
 
@@ -32,7 +32,7 @@ export type LogicalKeyAction = { rcode: string } & (
 );
 
 export interface IModelKeyAssignsProvider {
-  keyAssigns: IKeyAssignsSet;
+  keyAssigns: IKeyAssignsSet_Single;
   keyUnitIdTable: { [KeyIndex: number]: string };
 }
 

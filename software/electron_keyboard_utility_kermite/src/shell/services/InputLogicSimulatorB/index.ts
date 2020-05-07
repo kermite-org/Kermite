@@ -20,9 +20,9 @@ import {
   KeyIndexToKeyIdConversionModule,
   TriggerDetectionModule,
   AssignMappingModule,
-  traceModule,
   AssignDriverModule
 } from './modules';
+import { IKeyAssignsSet_Single } from '~defs/ProfileData';
 
 // class LogicClassModule<S, D> {
 //   processEvents(src: IChannel<S>, dst: IChannel<D>) {}
@@ -60,7 +60,7 @@ export class InputLogicSimulatorB implements IInputLogicSimulator {
         changedStatus.loadedEditModel
       );
       logicSimulatorState.keyAssignsProvider = {
-        keyAssigns: editModel.assigns,
+        keyAssigns: editModel.assigns as IKeyAssignsSet_Single,
         keyUnitIdTable: createKeyIndexToKeyUnitIdTable(editModel)
       };
     }

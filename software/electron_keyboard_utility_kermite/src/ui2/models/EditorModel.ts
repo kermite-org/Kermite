@@ -1,7 +1,7 @@
 import {
   fallbackProfileData,
   IProfileData,
-  ISingleAssignEntry,
+  IAssignEntry,
   IAssignOperation
 } from '~/defs/ProfileData';
 import {
@@ -107,7 +107,7 @@ export class EditorModel {
     this.setCurrentKeyUnitId('');
   };
 
-  writeAssignEntry = (assign: ISingleAssignEntry) => {
+  writeAssignEntry = (assign: IAssignEntry) => {
     this.profileData.assigns[this.slotAddress] = assign;
   };
 

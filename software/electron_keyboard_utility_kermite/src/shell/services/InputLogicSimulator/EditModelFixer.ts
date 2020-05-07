@@ -56,7 +56,7 @@ export function completeEditModelForShiftLayer(
     }
   }
   // console.log(JSON.stringify(keyAssigns, null, ' '));
-  return { ...editModel, assigns };
+  return { ...editModel, assigns } as IEditModel;
 }
 
 export function createKeyIndexToKeyUnitIdTable(

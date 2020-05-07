@@ -111,7 +111,9 @@ export type IAssignOperationTypeMap = {
 //   | 'tap_drill_dd'
 //   | 'tap_drill_ddd';
 
-export type ISingleAssignEntryType = 'none' | 'single';
+export type IProfileAssignType = 'single' | 'dual';
+
+export type IAssignEntryType = 'none' | 'single' | 'dual';
 // | 'transparent'
 // | 'single1'
 // | 'single2';
@@ -120,19 +122,19 @@ export type ISingleAssignEntryType = 'none' | 'single';
 // export type ISingleAssignEntry_None = {
 //   type: 'none';
 // };
-export type ISingleAssignEntry_Transparent = {
-  type: 'transparent';
-};
-export type ISingleAssignEntry_Single = {
+// export type IAssignEntry_Transparent = {
+//   type: 'transparent';
+// };
+export type IAssignEntry_Single = {
   type: 'single';
   op?: IAssignOperation;
 };
 
 // export type ISingleAssignEntry_Single2_Mode = 'single' | 'dual';
-export type ISingleAssignEntry_Single2 = {
-  type: 'single2';
+export type IAssignEntry_Dual = {
+  type: 'dual';
   // mode: 'single' | 'dual';
-  mode: 'dual';
+  // mode: 'dual';
   primaryOp?: IAssignOperation; //down, tap(if secondaryOp exists)
   secondaryOp?: IAssignOperation; //hold
 };
@@ -144,34 +146,35 @@ export type ISingleAssignEntry_Single2 = {
 //     cancelPreviousInput?: boolean;
 //   }[];
 // };
-export type ISingleAssignEntry = undefined | ISingleAssignEntry_Single;
+export type IAssignEntry = undefined | IAssignEntry_Single | IAssignEntry_Dual;
 // | ISingleAssignEntry_None
 // | ISingleAssignEntry_Transparent
 // | ISingleAssignEntry_Single2;
 // | ISingleAssignEntry_SingleVersatile1;
 
-export type ISingleAssignEntryTypeMap = {
+export type IAssignEntryTypeMap = {
   // none: ISingleAssignEntry_None | undefined;
   none: undefined;
-  single: ISingleAssignEntry_Single;
+  single: IAssignEntry_Single;
+  double: IAssignEntry_Dual;
   // transparent: ISingleAssignEntry_Transparent;
   // single1: ISingleAssignEntry_Single1;
   // single2: ISingleAssignEntry_Single2;
   // singleVersatile1: ISingleAssignEntry_SingleVersatile1;
 };
 
-export type ICombinationAssignEntry =
-  | {
-      type: 'combination1';
-      keyIds: string[];
-      op: IAssignOperation;
-      // combinationMode: MultiSourceKeyAssignMode;
-    }
-  | {
-      type: 'sequence1';
-      keyIds: string[];
-      op: IAssignOperation;
-    };
+// export type ICombinationAssignEntry =
+//   | {
+//       type: 'combination1';
+//       keyIds: string[];
+//       op: IAssignOperation;
+//       // combinationMode: MultiSourceKeyAssignMode;
+//     }
+//   | {
+//       type: 'sequence1';
+//       keyIds: string[];
+//       op: IAssignOperation;
+//     };
 
 // export type ISingleKeyAssignsDict = {
 //   [keyId: string]: ISingleAssignEntry;
@@ -206,39 +209,40 @@ export const keyboardShape_fallbackData: IKeyboardShape = {
   bodyPathMarkupText: ''
 };
 
-export interface IProfileData {
+export type IProfileData = {
   revision: 'PRF02';
   // keyboardBreedName: string;
   keyboardShape: IKeyboardShape;
-  /*
-    featureLevel controls which assign features are enabled (& displayed in UI)
-    0 single1
-    1 single1, signle2
-    2 single1, single2, singleVersatile1
-    3 single1, single2, singleVersatile1, combinations
-    */
-  // featureLevel: 0 | 1 | 2 | 3;
   /*
     strong fallback layer is checked after when there aren't any assigns found
     */
   strongFallbackLayerId?: string;
   layers: ILayer[];
-  assigns: {
-    //laX.kuY
-    [address: string]: ISingleAssignEntry | undefined;
-    // [layerId: string]: {
-    //   [keyId: string]: ISingleAssignEntry;
-    // };
-  };
   // multiAssigns?: {
   //   [layerId: string]: ICombinationAssignEntry[];
   // };
-}
+} & (
+  | {
+      assignType: 'single';
+      assigns: {
+        //laX.kuY
+        [address: string]: IAssignEntry_Single | undefined;
+      };
+    }
+  | {
+      assignType: 'dual';
+      assigns: {
+        //laX.kuY
+        [address: string]: IAssignEntry_Dual | undefined;
+      };
+    }
+);
 
 export const fallbackProfileData: IProfileData = {
   revision: 'PRF02',
   // featureLevel: 3,
   keyboardShape: keyboardShape_fallbackData,
+  assignType: 'single',
   layers: [
     {
       layerId: 'la0',
@@ -259,7 +263,12 @@ export const fallbackProfileData: IProfileData = {
 export type IKeyAssignEntry = NonNullable<IAssignOperation>;
 export type IEditModel = IProfileData;
 
-export type IKeyAssignsSet = {
-  [address: string]: ISingleAssignEntry | undefined;
+export type IKeyAssignsSet_Single = {
+  [address: string]: IAssignEntry_Single | undefined;
+  // [address: string]: IAssignEntry | undefined;
 };
 export type LayerInvocationMode = IHoldFunctionInvocationMode;
+
+// export type IKeyAssignsSetSingle = {
+//   [address: string]: IAssignEntry_Single | undefined;
+// };

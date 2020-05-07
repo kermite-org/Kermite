@@ -11,6 +11,7 @@ import { LogicalKeyActionDriver } from './LogicalKeyActionDriver';
 import { HidKeyCodes } from '~defs/HidKeyCodes';
 import { OutputKeyPrioritySorter } from './OutputKeyPrioritySorter';
 import { IntervalTimerWrapper } from './IntervalTimerWrapper';
+import { IKeyAssignsSet_Single } from '~defs/ProfileData';
 
 const modifierBitPositionMap: {
   [hidKeyCode: number]: number;
@@ -68,7 +69,7 @@ export class InputLogicSimulator {
         changedStatus.loadedEditModel
       );
       this.keyAssignsProvider = {
-        keyAssigns: editModel.assigns,
+        keyAssigns: editModel.assigns as IKeyAssignsSet_Single,
         keyUnitIdTable: createKeyIndexToKeyUnitIdTable(editModel)
       };
     }

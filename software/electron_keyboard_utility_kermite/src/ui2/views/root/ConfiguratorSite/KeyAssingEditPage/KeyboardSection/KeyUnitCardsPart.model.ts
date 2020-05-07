@@ -1,7 +1,7 @@
 import {
   IAssignOperation,
   IKeyUnitEntry,
-  ISingleAssignEntry
+  IAssignEntry
 } from '~defs/ProfileData';
 import { VirtualKeyTexts } from '~defs/VirtualKeyTexts';
 import { editorModel, appDomain } from '~ui2/models/zAppDomain';
@@ -48,7 +48,7 @@ function getAssignOperationText(op?: IAssignOperation): string {
 }
 
 function getAssignEntryTexts(
-  assign?: ISingleAssignEntry
+  assign?: IAssignEntry
 ): { primaryText: string; secondaryText: string } {
   if (assign) {
     // if (assign.type === 'transparent') {

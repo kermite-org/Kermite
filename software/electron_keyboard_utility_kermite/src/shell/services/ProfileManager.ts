@@ -161,6 +161,9 @@ export class ProfileManager {
         la.defaultScheme = 'block';
       }
     }
+    if (!editModel.assignType) {
+      (editModel as any).assignType = 'single';
+    }
     // if (editModel.layers.length === 0) {
     //   editModel.layers = duplicateObjectByJsonStringifyParse(
     //     fallbackProfileData.layers
