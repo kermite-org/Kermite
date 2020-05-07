@@ -36,8 +36,8 @@ export namespace KeyBindingEventTimingAligner {
   }
 
   const cfg = {
-    outputMinimumDownEventInterval: 50,
-    outputMinimumStrokeDuration: 50
+    outputMinimumDownEventInterval: 70,
+    outputMinimumStrokeDuration: 70
   };
 
   function readOutputQueueOne() {
