@@ -2,37 +2,33 @@ import { css } from 'goober';
 import { editorModel } from '~ui2/models/zAppDomain';
 import { hx } from '~ui2/views/basis/qx';
 import { OpertionEditPart } from './OperationEditPart/OperationEditPart';
+import { OerationSlotsPart } from './EntryEditPart/OperationSlotsPart';
 
 export function AssignEditSection() {
-  const cssAssignEntryEditPart = css`
+  const cssBase = css`
     flex-grow: 1;
     display: flex;
+    justify-content: center;
+    align-items: center;
   `;
 
-  // const cssEntryEditColumnBox = css`
-  //   width: 140px;
-  //   flex-shrink: 0;
-  // `;
-
-  const cssOperatinEditColumnBox = css`
-    flex-grow: 1;
+  const cssAssignEntryEditPart = css`
     display: flex;
-    flex-direction: column;
-
     &[data-disabled] {
       opacity: 0.3;
       pointer-events: none;
     }
+    border: solid 1px #333;
+    padding: 8px;
   `;
 
   const isDisabled = !editorModel.isSlotSelected;
+  const isDualMode = editorModel.isDualMode;
 
   return (
-    <div css={cssAssignEntryEditPart}>
-      {/* <div css={cssEntryEditColumnBox}>
-        <EntryEditPart />
-      </div> */}
-      <div css={cssOperatinEditColumnBox} data-disabled={isDisabled}>
+    <div css={cssBase}>
+      <div css={cssAssignEntryEditPart} data-disabled={isDisabled}>
+        {isDualMode && <OerationSlotsPart />}
         <OpertionEditPart />
       </div>
     </div>

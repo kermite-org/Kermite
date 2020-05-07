@@ -1,4 +1,4 @@
-import { backendAgent, sendIpcPacketSync } from '~ui2/models/ipc';
+import { backendAgent, sendIpcPacketSync } from '~ui2/models/dataSource/ipc';
 import { IProfileManagerStatus } from '~defs/ipc';
 import { IProfileData } from '~defs/ProfileData';
 

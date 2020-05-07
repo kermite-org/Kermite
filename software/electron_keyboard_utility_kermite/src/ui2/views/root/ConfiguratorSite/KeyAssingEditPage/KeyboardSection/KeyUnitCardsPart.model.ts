@@ -57,28 +57,18 @@ function getAssignEntryTexts(
     //     secondaryText: ''
     //   };
     // }
-    // if (assign.type === 'single1' && assign.op) {
-    //   return {
-    //     primaryText: getAssignOperationText(assign.op),
-    //     secondaryText: ''
-    //   };
-    // }
-
     if (assign.type === 'single') {
       return {
         primaryText: getAssignOperationText(assign.op),
         secondaryText: ''
       };
     }
-    // if (assign.type === 'single2') {
-    //   return {
-    //     primaryText: getAssignOperationText(assign.primaryOp),
-    //     secondaryText:
-    //       assign.mode === 'dual'
-    //         ? getAssignOperationText(assign.secondaryOp)
-    //         : ''
-    //   };
-    // }
+    if (assign.type === 'dual') {
+      return {
+        primaryText: getAssignOperationText(assign.primaryOp),
+        secondaryText: getAssignOperationText(assign.secondaryOp)
+      };
+    }
   }
   return {
     primaryText: '',

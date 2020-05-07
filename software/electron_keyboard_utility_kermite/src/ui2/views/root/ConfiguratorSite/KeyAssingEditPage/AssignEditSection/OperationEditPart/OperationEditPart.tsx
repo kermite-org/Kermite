@@ -52,17 +52,8 @@ export function OpertionEditPart() {
     layerCallEntries
   } = makeOperationEditPartViewModel();
 
-  const cssBase = css`
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  `;
-
   const cssAssignPanel = css`
     display: flex;
-    border: solid 1px #333;
-    padding: 8px;
   `;
 
   const cssGroupBox = css`
@@ -90,36 +81,34 @@ export function OpertionEditPart() {
   `;
 
   return (
-    <div css={cssBase}>
-      <div css={cssAssignPanel}>
-        <div css={cssGroupBoxV}>
-          <OperationCard model={noAssignEntry} />
-        </div>
-        <div>
-          <div css={cssKeyAssignsRow}>
-            <div>
-              {virtualKeyEntryGroups.map((group, index) => (
-                <div css={cssGroupBox} key={index}>
-                  {group.map((model) => (
-                    <OperationCard model={model} key={model.sig} />
-                  ))}
-                </div>
-              ))}
-            </div>
-            <div>
-              <div css={cssGroupBoxV}>
-                {attachedModifierEntries.map((model) => (
+    <div css={cssAssignPanel}>
+      <div css={cssGroupBoxV}>
+        <OperationCard model={noAssignEntry} />
+      </div>
+      <div>
+        <div css={cssKeyAssignsRow}>
+          <div>
+            {virtualKeyEntryGroups.map((group, index) => (
+              <div css={cssGroupBox} key={index}>
+                {group.map((model) => (
                   <OperationCard model={model} key={model.sig} />
                 ))}
               </div>
-            </div>
+            ))}
           </div>
-          <div css={cssLayerAssignsRow}>
-            <div css={cssGroupBox}>
-              {layerCallEntries.map((model) => (
+          <div>
+            <div css={cssGroupBoxV}>
+              {attachedModifierEntries.map((model) => (
                 <OperationCard model={model} key={model.sig} />
               ))}
             </div>
+          </div>
+        </div>
+        <div css={cssLayerAssignsRow}>
+          <div css={cssGroupBox}>
+            {layerCallEntries.map((model) => (
+              <OperationCard model={model} key={model.sig} />
+            ))}
           </div>
         </div>
       </div>

@@ -11,6 +11,9 @@ import {
 } from '~funcs/Utils';
 import { changeProfileDataAssignType } from './ProfileDataHelper';
 
+export type IDualModeEditTargetOperationSig = 'pri' | 'sec';
+export type IDualModeOperationPath = 'primaryOp' | 'secondaryOp';
+
 export class EditorModel {
   //state
 
@@ -19,15 +22,24 @@ export class EditorModel {
   currentLayerId: string = '';
   currentKeyUnitId: string = '';
   slotAddress: string = '';
+  dualModeEditTargetOperationSig: IDualModeEditTargetOperationSig = 'pri';
 
   //getters
+
+  private get profileAssignType(): IProfileAssignType {
+    return this.profileData.assignType;
+  }
+
+  get isDualMode() {
+    return this.profileAssignType === 'dual';
+  }
 
   get isSlotSelected() {
     const { currentLayerId, currentKeyUnitId } = this;
     return !!(currentLayerId && currentKeyUnitId);
   }
 
-  get assignEntry() {
+  private get assignEntry() {
     return this.profileData.assigns[this.slotAddress];
   }
 
@@ -56,14 +68,21 @@ export class EditorModel {
     return this.profileData.assigns[`${curLayerId}.${keyUnitId}`];
   };
 
-  get isAssignEntryEditAvailable() {
-    return this.assignEntry?.type === 'single';
+  private get dualModeOperationPath(): IDualModeOperationPath {
+    if (this.dualModeEditTargetOperationSig === 'pri') {
+      return 'primaryOp';
+    } else {
+      return 'secondaryOp';
+    }
   }
 
   get editOperation(): IAssignOperation | undefined {
     const assign = this.assignEntry;
     if (assign?.type === 'single') {
       return assign.op;
+    }
+    if (assign?.type === 'dual') {
+      return assign[this.dualModeOperationPath];
     }
     return undefined;
   }
@@ -85,14 +104,7 @@ export class EditorModel {
 
   private updateEditAssignSlot = () => {
     const { currentLayerId, currentKeyUnitId } = this;
-    const slotAddress = `${currentLayerId}.${currentKeyUnitId}`;
-    if (this.slotAddress !== slotAddress) {
-      this.slotAddress = slotAddress;
-      // this.assignEditModel.handleAssignSlotChange();
-      // if (!this.assignEntry) {
-      //   this.writeAssignEntry({ type: 'single' });
-      // }
-    }
+    this.slotAddress = `${currentLayerId}.${currentKeyUnitId}`;
   };
 
   setCurrentLayerId = (layerId: string) => {
@@ -105,6 +117,12 @@ export class EditorModel {
     this.updateEditAssignSlot();
   };
 
+  setDualModeEditTargetOperationSig = (
+    sig: IDualModeEditTargetOperationSig
+  ) => {
+    this.dualModeEditTargetOperationSig = sig;
+  };
+
   clearAssignSlotSelection = () => {
     this.setCurrentKeyUnitId('');
   };
@@ -115,10 +133,22 @@ export class EditorModel {
 
   writeEditOperation = (op: IAssignOperation) => {
     const assign = this.assignEntry;
-    if (assign?.type === 'single') {
-      assign.op = op;
-    } else {
-      this.writeAssignEntry({ type: 'single', op });
+    if (this.profileAssignType === 'single') {
+      if (assign?.type === 'single') {
+        assign.op = op;
+      } else {
+        this.writeAssignEntry({ type: 'single', op });
+      }
+    }
+    if (this.profileAssignType === 'dual') {
+      if (assign?.type === 'dual') {
+        assign[this.dualModeOperationPath] = op;
+      } else {
+        this.writeAssignEntry({
+          type: 'dual',
+          [this.dualModeOperationPath]: op
+        });
+      }
     }
   };
 

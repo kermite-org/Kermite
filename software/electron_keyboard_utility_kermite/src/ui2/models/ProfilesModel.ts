@@ -1,7 +1,7 @@
 import { ProfileProvider2 } from './dataSource/ProfileProvider2';
 import { IProfileManagerStatus } from '~defs/ipc';
 import { EditorModel } from './EditorModel';
-import { sendProfileManagerCommands } from '~ui2/models/ipc';
+import { sendProfileManagerCommands } from '~ui2/models/dataSource/ipc';
 import { appUi } from './appGlobal';
 
 export class ProfilesModel {

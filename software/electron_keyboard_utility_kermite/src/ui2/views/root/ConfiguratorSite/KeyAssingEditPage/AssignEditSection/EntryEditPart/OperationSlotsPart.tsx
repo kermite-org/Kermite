@@ -1,17 +1,23 @@
 import { css } from 'goober';
 import { hx } from '~ui2/views/basis/qx';
 import { UiTheme } from '~ui2/views/common/UiTheme';
-import {
-  IOperationSlotViewModel,
-  makeOperationSlotsPartViewModel_Single2
-} from './OperationSlotsPart.model';
+import { makeOperationSlotsPartViewModel } from './OperationSlotsPart.model';
 
-function OperationSlotCard(props: { isCurrent: boolean; setCurrent(): void }) {
+function OperationSlotCard(props: {
+  text: string;
+  isCurrent: boolean;
+  setCurrent(): void;
+}) {
   const cssSlotCard = css`
-    border: solid 1px #888;
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #444;
+
     &[data-current] {
       background: ${UiTheme.clSelectHighlight};
     }
@@ -21,38 +27,34 @@ function OperationSlotCard(props: { isCurrent: boolean; setCurrent(): void }) {
       css={cssSlotCard}
       data-current={props.isCurrent}
       onClick={props.setCurrent}
-    ></div>
-  );
-}
-
-function OperationSlotRow({ slot }: { slot: IOperationSlotViewModel }) {
-  const cssSlotRow = css`
-    display: flex;
-
-    > .textColumn {
-      width: 80px;
-    }
-  `;
-  return (
-    <div css={cssSlotRow}>
-      <div className="textColumn">{slot.text} </div>
-      <div className="slotColumn">
-        <OperationSlotCard
-          isCurrent={slot.isCurrent}
-          setCurrent={slot.setCurrent}
-        />
-      </div>
+    >
+      {props.text}
     </div>
   );
 }
 
 export function OerationSlotsPart() {
-  const operationSlotsPartViewModel = makeOperationSlotsPartViewModel_Single2();
+  const operationSlotsPartViewModel = makeOperationSlotsPartViewModel();
+
+  const cssBox = css`
+    > * {
+      margin: 2px;
+    }
+    > * + * {
+      margin-top: 4px;
+    }
+    margin-right: 6px;
+  `;
+
   return (
-    <div>
-      <div>assign entry</div>
+    <div css={cssBox}>
       {operationSlotsPartViewModel.slots.map((slot, index) => (
-        <OperationSlotRow slot={slot} key={index} />
+        <OperationSlotCard
+          key={index}
+          text={slot.text}
+          isCurrent={slot.isCurrent}
+          setCurrent={slot.setCurrent}
+        />
       ))}
     </div>
   );

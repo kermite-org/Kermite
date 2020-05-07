@@ -1,5 +1,5 @@
 import { css } from 'goober';
-import { sendIpcPacketSync } from '~ui2/models/ipc';
+import { sendIpcPacketSync } from '~ui2/models/dataSource/ipc';
 import { siteModel } from '~ui2/models/zAppDomain';
 import { hx } from '~ui2/views/basis/qx';
 
@@ -19,7 +19,6 @@ const ControlButton = (props: { icon: string; onClick: () => void }) => {
   `;
   return (
     <div css={cssButton} onClick={props.onClick}>
-      {/* <FontAwesomeIcon icon={props.icon} /> */}
       <i className={props.icon} />
     </div>
   );

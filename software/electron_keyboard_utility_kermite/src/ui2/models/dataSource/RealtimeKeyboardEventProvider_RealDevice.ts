@@ -2,7 +2,7 @@ import {
   IUiRealtimeKeyboardEventProvider,
   IUiRealtimeKeyboardEvent
 } from './interfaces/IRealtimeKeyboardEventProvider';
-import { backendAgent } from '~ui2/models/ipc';
+import { backendAgent } from '~ui2/models/dataSource/ipc';
 import { IRealtimeKeyboardEvent } from '~defs/ipc';
 
 type IUiRealtimetimeKeyboardEventListener = (

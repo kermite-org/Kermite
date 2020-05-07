@@ -1,47 +1,38 @@
+import { IDualModeEditTargetOperationSig } from '~ui2/models/EditorModel';
+import { editorModel } from '~ui2/models/zAppDomain';
+
 export interface IOperationSlotViewModel {
   text: string;
   isCurrent: boolean;
   setCurrent(): void;
 }
 
-export type IOperationSlotsPartViewModel_Single2 = {
+export type IOperationSlotsPartViewModel = {
   slots: IOperationSlotViewModel[];
 };
 
-// type ITargetSlotSig = IAssignEditSingle2_TargetSlotSig;
+const targetSlotSigs: IDualModeEditTargetOperationSig[] = ['pri', 'sec'];
 
-// const targetSlotSigs: ITargetSlotSig[] = ['pri', 'sec'];
+const targetSlotSigToTextMap: {
+  [key in IDualModeEditTargetOperationSig]: string;
+} = {
+  pri: 'pri',
+  sec: 'sec'
+};
 
-// const targetSlotSigToTextMap: { [key in ITargetSlotSig]: string } = {
-//   pri: 'primary',
-//   sec: 'secondary'
-// };
+export function makeOperationSlotsPartViewModel(): IOperationSlotsPartViewModel {
+  const {
+    isSlotSelected,
+    dualModeEditTargetOperationSig,
+    setDualModeEditTargetOperationSig
+  } = editorModel;
 
-export function makeOperationSlotsPartViewModel_Single2(): IOperationSlotsPartViewModel_Single2 {
-  // const { assignEntry } = editorModel;
-  // const assignEntryViewModel =
-  //   (assignEntry?.type === 'single2' &&
-  //     makeKeyAssignEntryEditViewModel_Single2(assignEntry)) ||
-  //   undefined;
-
-  // const {
-  //   targetSlotSig,
-  //   setTargetSlotSig
-  // } = editorModel.assignEditSingle2Model;
-  // const slots = targetSlotSigs.map(sig => {
-  //   return {
-  //     text: targetSlotSigToTextMap[sig],
-  //     isCurrent: targetSlotSig === sig,
-  //     setCurrent: () => setTargetSlotSig(sig)
-  //   };
-  // });
-
-  const slots = [
-    {
-      text: 'pri',
-      isCurrent: true,
-      setCurrent: () => {}
-    }
-  ];
+  const slots = targetSlotSigs.map((sig) => {
+    return {
+      text: targetSlotSigToTextMap[sig],
+      isCurrent: isSlotSelected && dualModeEditTargetOperationSig === sig,
+      setCurrent: () => setDualModeEditTargetOperationSig(sig)
+    };
+  });
   return { slots };
 }
