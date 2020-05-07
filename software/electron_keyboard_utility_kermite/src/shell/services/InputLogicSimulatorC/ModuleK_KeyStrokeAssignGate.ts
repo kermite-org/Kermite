@@ -155,6 +155,15 @@ namespace StrokeSequenceEmitter {
 }
 
 export namespace KeyStrokeAssignGate {
+  // function releaseSpecificKeyHoldBind(virtualKey: VirtualKey) {
+  //   const { holdKeyBinds } = logicSimulatorStateC;
+  //   const target = holdKeyBinds.find((hk) => hk.virtualKey === virtualKey);
+  //   if (target) {
+  //     Arrays.remove(holdKeyBinds, target);
+  //     ModuleP_OutputKeyStateCombiner.updateOutputReport();
+  //   }
+  // }
+
   function isShiftLayer(targetLayerId: string) {
     const layer = logicSimulatorStateC.editModel.layers.find(
       (la) => la.layerId === targetLayerId
@@ -169,6 +178,7 @@ export namespace KeyStrokeAssignGate {
   };
 
   let nextDoubleReserved: boolean = false;
+  let lastInputVirtualKey: VirtualKey = 'K_NONE';
 
   export function handleLogicalStroke(ev: IKeyStrokeAssignEvent) {
     const { keyBindingInfoDict } = logicSimulatorStateC;
@@ -182,6 +192,14 @@ export namespace KeyStrokeAssignGate {
 
         if (vk === 'K_NextDouble') {
           nextDoubleReserved = true;
+          return;
+        }
+
+        if (vk === 'K_PostDouble') {
+          StrokeSequenceEmitter.emitFakeStrokes([
+            'K_NONE',
+            lastInputVirtualKey
+          ]);
           return;
         }
         if (fixedTextPattern[vk]) {
@@ -204,6 +222,7 @@ export namespace KeyStrokeAssignGate {
           assign.virtualKey,
           assign.attachedModifiers
         );
+        lastInputVirtualKey = assign.virtualKey;
       } else if (assign.type === 'layerCall') {
         if (isShiftLayer(assign.targetLayerId)) {
           KeyBindUpdator.pushHoldKeyBind(keyId, 'K_Shift');

@@ -41,6 +41,7 @@ const virtualKeyPriorityOrders: VirtualKey[] = [
   'K_NN',
   'K_LTU',
   'K_Minus',
+  'K_PostDouble',
   'K_NextDouble',
   'K_NONE'
 ];
@@ -62,7 +63,7 @@ export namespace KeyEventPrioritySorter {
   }
 
   const cfg = {
-    inputSimultaneousKeysWaitTime: 50
+    inputSimultaneousKeysWaitTime: 60
   };
 
   function processInputQueue() {
