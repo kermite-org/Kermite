@@ -3,9 +3,9 @@ import { appGlobal } from '../appGlobal';
 import { IInputLogicSimulator } from '../InputLogicSimulator.interface';
 import { IntervalTimerWrapper } from '../InputLogicSimulator/IntervalTimerWrapper';
 import { logicSimulatorStateC } from './LogicSimulatorCCommon';
-import { ModuleA_KeyInputAssignBinder } from './ModuleA_KeyInputAssignBinder';
 import { ModuleW_HidReportOutputBuffer } from './ModuleW_HidReportOutputBuffer';
-import { KeyBindUpdator } from './ModuleK_KeyStrokeAssignGate';
+import { ModuleA_LogicModulesEntry } from './ModuleA_LogicModulesEntry';
+import { ModuleN_KeyBindUpdator } from './ModuleN_KeyBindUpdator';
 
 export class InputLogicSimulatorC implements IInputLogicSimulator {
   private tikerTimer = new IntervalTimerWrapper();
@@ -23,13 +23,13 @@ export class InputLogicSimulatorC implements IInputLogicSimulator {
     if (event.type === 'keyStateChanged') {
       const { keyIndex, isDown } = event;
       const ev0 = { keyIndex, isDown };
-      ModuleA_KeyInputAssignBinder.processEvents(ev0);
+      ModuleA_LogicModulesEntry.processEvents(ev0);
     }
   };
 
   private processTicker = () => {
-    ModuleA_KeyInputAssignBinder.processTicker();
-    KeyBindUpdator.processUpdate();
+    ModuleA_LogicModulesEntry.processTicker();
+    ModuleN_KeyBindUpdator.processUpdate();
   };
 
   private processOutputTicker = () => {

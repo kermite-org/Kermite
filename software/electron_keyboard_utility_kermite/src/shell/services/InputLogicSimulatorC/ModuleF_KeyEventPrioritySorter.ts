@@ -1,8 +1,11 @@
-import { VirtualKey } from '~defs/VirtualKeys';
-import { IKeyStrokeAssignEvent } from './LogicSimulatorCCommon';
+import {
+  IKeyStrokeAssignEvent,
+  PriorityVirtualKey
+} from './LogicSimulatorCCommon';
 import { sortOrderBy } from '~funcs/Utils';
 
-const virtualKeyPriorityOrders: VirtualKey[] = [
+const virtualKeyPriorityOrders: PriorityVirtualKey[] = [
+  'PK_SortOrder_Forward',
   'K_Ctrl',
   'K_Alt',
   'K_OS',
@@ -43,10 +46,11 @@ const virtualKeyPriorityOrders: VirtualKey[] = [
   'K_Minus',
   'K_PostDouble',
   'K_NextDouble',
-  'K_NONE'
+  'K_NONE',
+  'PK_SortOrder_Forward'
 ];
 
-export namespace KeyEventPrioritySorter {
+export namespace ModuleF_KeyEventPrioritySorter {
   const local = new (class {
     holdCount: number = 0;
     inputQueue: IKeyStrokeAssignEvent[] = [];

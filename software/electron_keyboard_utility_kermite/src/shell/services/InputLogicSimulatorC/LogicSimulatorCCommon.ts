@@ -16,18 +16,23 @@ export interface IHoldKeyBind {
   attachedModifiers: ModifierVirtualKey[];
 }
 
+export type PriorityVirtualKey =
+  | VirtualKey
+  | 'PK_SortOrder_Forward'
+  | 'PK_SortOrder_Backward';
+
 export type IKeyStrokeAssignEvent =
   | {
       type: 'down';
       keyId: string;
       assign: IKeyAssignEntry;
-      priorityVirtualKey: VirtualKey;
+      priorityVirtualKey: PriorityVirtualKey;
       tick: number;
     }
   | {
       type: 'up';
       keyId: string;
-      priorityVirtualKey: VirtualKey;
+      priorityVirtualKey: PriorityVirtualKey;
       tick: number;
     };
 
@@ -43,5 +48,9 @@ export const logicSimulatorCConfig = new (class {
   useKeyBindEventAligner: boolean = false;
 })();
 logicSimulatorCConfig.usePrioritySorter = true;
+logicSimulatorCConfig.useImmediateDownUp = false;
+logicSimulatorCConfig.useKeyBindEventAligner = true;
+
+logicSimulatorCConfig.usePrioritySorter = false;
 logicSimulatorCConfig.useImmediateDownUp = false;
 logicSimulatorCConfig.useKeyBindEventAligner = true;
