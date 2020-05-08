@@ -51,6 +51,6 @@ logicSimulatorCConfig.usePrioritySorter = true;
 logicSimulatorCConfig.useImmediateDownUp = false;
 logicSimulatorCConfig.useKeyBindEventAligner = true;
 
-logicSimulatorCConfig.usePrioritySorter = false;
-logicSimulatorCConfig.useImmediateDownUp = false;
-logicSimulatorCConfig.useKeyBindEventAligner = true;
+// logicSimulatorCConfig.usePrioritySorter = false;
+// logicSimulatorCConfig.useImmediateDownUp = false;
+// logicSimulatorCConfig.useKeyBindEventAligner = true;

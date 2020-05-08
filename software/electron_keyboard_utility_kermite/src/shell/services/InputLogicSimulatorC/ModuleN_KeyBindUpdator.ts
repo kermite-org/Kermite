@@ -5,75 +5,7 @@ import {
   logicSimulatorStateC
 } from './LogicSimulatorCCommon';
 import { ModuleP_OutputKeyStateCombiner } from './ModuleP_OutputKeyStateCombiner';
-
-export type IKeyBindingEvent =
-  | {
-      type: 'down';
-      keyId: string;
-      virtualKey: VirtualKey;
-      attachedModifiers: ModifierVirtualKey[];
-    }
-  | {
-      type: 'up';
-      keyId: string;
-    };
-
-export namespace KeyBindingEventTimingAligner {
-  const local = new (class {
-    outputQueue: IKeyBindingEvent[] = [];
-    prevDownOutputTick: number = 0;
-    outputDownTickMap: { [keyId: string]: number } = {};
-    upEventsDict: { [keyId: string]: IKeyBindingEvent } = {};
-  })();
-
-  export function pushKeyBindingEvent(ev: IKeyBindingEvent) {
-    if (ev.type === 'down') {
-      local.outputQueue.push(ev);
-    } else {
-      local.upEventsDict[ev.keyId] = ev;
-    }
-  }
-
-  const cfg = {
-    outputMinimumDownEventInterval: 70,
-    outputMinimumStrokeDuration: 70
-  };
-
-  function readOutputQueueOne() {
-    const { outputQueue } = local;
-    const curTick = Date.now();
-
-    if (outputQueue.length > 0) {
-      const ev = outputQueue[0];
-      if (
-        curTick >
-        local.prevDownOutputTick + cfg.outputMinimumDownEventInterval
-      ) {
-        local.prevDownOutputTick = curTick;
-        local.outputDownTickMap[ev.keyId] = curTick;
-        outputQueue.shift();
-        return ev;
-      }
-    }
-
-    for (const keyId in local.upEventsDict) {
-      const ev = local.upEventsDict[keyId];
-      const downTick = local.outputDownTickMap[keyId];
-      if (downTick && curTick > downTick + cfg.outputMinimumStrokeDuration) {
-        delete local.outputDownTickMap[keyId];
-        delete local.upEventsDict[keyId];
-        return ev;
-      }
-    }
-
-    return undefined;
-  }
-
-  export function readQueuedEventOne(): IKeyBindingEvent | undefined {
-    const ev = readOutputQueueOne();
-    return ev;
-  }
-}
+import { KeyBindingEventTimingAligner } from './ModuleN_KeyBindUpdator_Aligner';
 
 export namespace ModuleN_KeyBindUpdator {
   export function pushHoldKeyBindInternal(

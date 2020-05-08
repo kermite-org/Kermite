@@ -43,7 +43,7 @@ export namespace ModuleK_KeyStrokeAssignGate {
   }
 
   const fixedTextPattern: { [vk in VirtualKey]?: VirtualKey[] } = {
-    K_NN: ['K_N', 'K_NONE', 'K_N'],
+    K_NN: ['K_N', 'K_N'],
     K_LTU: ['K_L', 'K_T', 'K_U'],
     K_UU: ['K_U', 'K_U']
   };
@@ -86,7 +86,7 @@ export namespace ModuleK_KeyStrokeAssignGate {
 
       if (assign.type === 'keyInput') {
         if (nextDoubleReserved) {
-          StrokeSequenceEmitter.emitFakeStrokes([assign.virtualKey, 'K_NONE']);
+          StrokeSequenceEmitter.emitFakeStrokes([assign.virtualKey]);
         }
         ModuleN_KeyBindUpdator.pushHoldKeyBind(
           keyId,

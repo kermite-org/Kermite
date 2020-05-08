@@ -44,11 +44,14 @@ export namespace Arrays {
   }
 
   export function removeIf<T>(ar: T[], cond: (a: T) => boolean): boolean {
-    const index = ar.findIndex(cond);
-    if (index >= 0) {
-      ar.splice(index, 1);
-      return true;
+    let someRemoved = false;
+    for (let i = 0; i < ar.length; i++) {
+      if (cond(ar[i])) {
+        ar.splice(i, 1);
+        someRemoved = true;
+        continue;
+      }
     }
-    return false;
+    return someRemoved;
   }
 }

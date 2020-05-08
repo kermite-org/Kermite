@@ -1,5 +1,4 @@
 import {
-  IAssignOperation,
   IKeyAssignEntry,
   IAssignEntry,
   IAssignEntry_Single,
@@ -101,7 +100,6 @@ export namespace ModuleD_KeyInputAssignBinder {
 
   function processEvents_Signle(ev: IKeyTriggerEvent) {
     const { keyId, trigger } = ev;
-    // console.log(`S-PREVs`, keyId, trigger);
     if (trigger === 'down') {
       const assign = getAssign(keyId, 'single') as
         | IAssignEntry_Single
@@ -117,14 +115,13 @@ export namespace ModuleD_KeyInputAssignBinder {
 
   function processEvents_Dual(ev: IKeyTriggerEvent) {
     const { keyId, trigger } = ev;
-    // console.log(`D-PREVs`, keyId, trigger);
 
     const assign = getAssign(keyId, 'dual') as IAssignEntry_Dual | undefined;
     if (assign) {
       const pri = assign?.primaryOp;
       const sec = assign?.secondaryOp;
 
-      if (1) {
+      if (0) {
         //tap-primary-hold-secondary
         if (pri && sec) {
           if (trigger === 'tap') {
