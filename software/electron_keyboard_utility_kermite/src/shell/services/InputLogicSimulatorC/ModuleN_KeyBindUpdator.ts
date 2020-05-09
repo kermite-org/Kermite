@@ -5,63 +5,56 @@ import {
   logicSimulatorStateC
 } from './LogicSimulatorCCommon';
 import { ModuleP_OutputKeyStateCombiner } from './ModuleP_OutputKeyStateCombiner';
-import { KeyBindingEventTimingAligner } from './ModuleN_KeyBindUpdator_Aligner';
+import { KeyBindingEventTimingAligner } from './ModuleN_KeyBindUpdatorAligner';
 
 export namespace ModuleN_KeyBindUpdator {
   export function pushHoldKeyBindInternal(
-    keyId: string,
     virtualKey: VirtualKey,
     attachedModifiers: ModifierVirtualKey[] = []
   ) {
     logicSimulatorStateC.holdKeyBinds.push({
-      keyId,
       virtualKey,
       attachedModifiers
     });
     ModuleP_OutputKeyStateCombiner.updateOutputReport();
   }
 
-  export function removeHoldKeyBindInternal(keyId: string) {
+  export function removeHoldKeyBindInternal(virtualKey: VirtualKey) {
     const { holdKeyBinds } = logicSimulatorStateC;
-    const target = holdKeyBinds.find((hk) => hk.keyId === keyId);
-    if (target) {
-      Arrays.remove(holdKeyBinds, target);
+    const removed = Arrays.removeIf(
+      holdKeyBinds,
+      (hk) => hk.virtualKey === virtualKey
+    );
+    if (removed) {
       ModuleP_OutputKeyStateCombiner.updateOutputReport();
     }
   }
 
   export function pushHoldKeyBind(
-    keyId: string,
     virtualKey: VirtualKey,
     attachedModifiers: ModifierVirtualKey[] = []
   ) {
-    if (!logicSimulatorCConfig.useKeyBindEventAligner) {
-      pushHoldKeyBindInternal(keyId, virtualKey, attachedModifiers);
-      return;
-    }
     KeyBindingEventTimingAligner.pushKeyBindingEvent({
       type: 'down',
-      keyId,
       virtualKey,
       attachedModifiers
     });
   }
 
-  export function removeHoldKeyBind(keyId: string) {
-    if (!logicSimulatorCConfig.useKeyBindEventAligner) {
-      removeHoldKeyBindInternal(keyId);
-      return;
-    }
-    KeyBindingEventTimingAligner.pushKeyBindingEvent({ type: 'up', keyId });
+  export function removeHoldKeyBind(virtualKey: VirtualKey) {
+    KeyBindingEventTimingAligner.pushKeyBindingEvent({
+      type: 'up',
+      virtualKey
+    });
   }
 
   export function processUpdate() {
     const ev = KeyBindingEventTimingAligner.readQueuedEventOne();
     if (ev) {
       if (ev.type === 'down') {
-        pushHoldKeyBindInternal(ev.keyId, ev.virtualKey, ev.attachedModifiers);
+        pushHoldKeyBindInternal(ev.virtualKey, ev.attachedModifiers);
       } else {
-        removeHoldKeyBindInternal(ev.keyId);
+        removeHoldKeyBindInternal(ev.virtualKey);
       }
     }
   }

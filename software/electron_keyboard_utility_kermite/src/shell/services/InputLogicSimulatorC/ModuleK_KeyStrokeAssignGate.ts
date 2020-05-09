@@ -7,21 +7,16 @@ import {
 import { ModuleN_KeyBindUpdator } from './ModuleN_KeyBindUpdator';
 
 namespace StrokeSequenceEmitter {
-  let fakeStrokeIndex = 0;
-
   export function emitFakeStrokes(vks: VirtualKey[]) {
-    const fsIndex = fakeStrokeIndex++;
-    vks.forEach((vk, idx) => {
-      const keyId = `FS${fsIndex}_${idx}`;
-      ModuleN_KeyBindUpdator.pushHoldKeyBind(keyId, vk);
-      ModuleN_KeyBindUpdator.removeHoldKeyBind(keyId);
+    vks.forEach((vk) => {
+      ModuleN_KeyBindUpdator.pushHoldKeyBind(vk);
+      ModuleN_KeyBindUpdator.removeHoldKeyBind(vk);
     });
   }
 
   export async function emitImmediateDownUp(vk: VirtualKey) {
-    const keyId = `IDU${fakeStrokeIndex++} ${vk}`;
-    ModuleN_KeyBindUpdator.pushHoldKeyBind(keyId, vk);
-    ModuleN_KeyBindUpdator.removeHoldKeyBind(keyId);
+    ModuleN_KeyBindUpdator.pushHoldKeyBind(vk);
+    ModuleN_KeyBindUpdator.removeHoldKeyBind(vk);
   }
 }
 
@@ -67,10 +62,7 @@ export namespace ModuleK_KeyStrokeAssignGate {
         }
 
         if (vk === 'K_PostDouble') {
-          StrokeSequenceEmitter.emitFakeStrokes([
-            'K_NONE',
-            lastInputVirtualKey
-          ]);
+          StrokeSequenceEmitter.emitFakeStrokes([lastInputVirtualKey]);
           return;
         }
         if (fixedTextPattern[vk]) {
@@ -89,23 +81,32 @@ export namespace ModuleK_KeyStrokeAssignGate {
           StrokeSequenceEmitter.emitFakeStrokes([assign.virtualKey]);
         }
         ModuleN_KeyBindUpdator.pushHoldKeyBind(
-          keyId,
           assign.virtualKey,
           assign.attachedModifiers
         );
         lastInputVirtualKey = assign.virtualKey;
       } else if (assign.type === 'layerCall') {
         if (isShiftLayer(assign.targetLayerId)) {
-          ModuleN_KeyBindUpdator.pushHoldKeyBind(keyId, 'K_Shift');
+          ModuleN_KeyBindUpdator.pushHoldKeyBind('K_Shift');
         }
       }
       nextDoubleReserved = false;
       keyBindingInfoDict[keyId] = { assign, timeStamp: Date.now() };
     } else {
       const { keyId } = ev;
+      const info = keyBindingInfoDict[keyId];
+      if (info) {
+        const { assign } = info;
+        if (assign.type === 'keyInput') {
+          ModuleN_KeyBindUpdator.removeHoldKeyBind(assign.virtualKey);
+        }
+        if (assign.type === 'layerCall' && isShiftLayer(assign.targetLayerId)) {
+          ModuleN_KeyBindUpdator.removeHoldKeyBind('K_Shift');
+        }
+        delete keyBindingInfoDict[keyId];
+      }
       // console.log('[K]up', keyId);
-      ModuleN_KeyBindUpdator.removeHoldKeyBind(keyId);
-      delete keyBindingInfoDict[keyId];
+      // ModuleN_KeyBindUpdator.removeHoldKeyBind(keyId);
     }
   }
 }

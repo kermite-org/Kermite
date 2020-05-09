@@ -11,7 +11,6 @@ export interface IKeyBindingInfo {
 }
 
 export interface IHoldKeyBind {
-  keyId: string;
   virtualKey: VirtualKey;
   attachedModifiers: ModifierVirtualKey[];
 }
@@ -45,11 +44,11 @@ export const logicSimulatorStateC = new (class {
 export const logicSimulatorCConfig = new (class {
   usePrioritySorter: boolean = false;
   useImmediateDownUp: boolean = false;
-  useKeyBindEventAligner: boolean = false;
+  // useKeyBindEventAligner: boolean = false;
 })();
 logicSimulatorCConfig.usePrioritySorter = true;
 logicSimulatorCConfig.useImmediateDownUp = false;
-logicSimulatorCConfig.useKeyBindEventAligner = true;
+// logicSimulatorCConfig.useKeyBindEventAligner = true;
 
 // logicSimulatorCConfig.usePrioritySorter = false;
 // logicSimulatorCConfig.useImmediateDownUp = false;

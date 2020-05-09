@@ -4,17 +4,15 @@ import { Arrays } from '~funcs/Arrays';
 export type IKeyBindingEvent =
   | {
       type: 'down';
-      keyId: string;
       virtualKey: VirtualKey;
       attachedModifiers: ModifierVirtualKey[];
     }
   | {
       type: 'up';
-      keyId: string;
+      virtualKey: VirtualKey;
     };
 
 interface BindingStroke {
-  keyId: string;
   virtualKey: VirtualKey;
   attachedModifiers: ModifierVirtualKey[];
   outDownTick: number;
@@ -26,32 +24,34 @@ export namespace KeyBindingEventTimingAligner {
     inputQueue: IKeyBindingEvent[] = [];
     strokes: BindingStroke[] = [];
     lastOutDownTick: number = 0;
+    lastOutputStroke: BindingStroke | undefined = undefined;
+    lastOutputStrokeUpTick: number = 0;
   })();
 
   const cfg = {
     outputMinimumDownEventInterval: 70,
-    outputMinimumStrokeDuration: 70
+    outputMinimumStrokeDuration: 70,
+    outputMinimumStrokeIntervalBetweenSameKeyId: 40
+    // outputMinimumDownEventInterval: 10,
+    // outputMinimumStrokeDuration: 10,
+    // outputMinimumStrokeIntervalBetweenSameKeyId: 10
   };
 
   function processInputQueue() {
     const { inputQueue, strokes } = local;
     Arrays.removeIf(inputQueue, (ev) => {
       if (ev.type === 'down') {
-        const { keyId, virtualKey, attachedModifiers } = ev;
-        const stroke = strokes.find((s) => s.keyId === keyId);
-        if (!stroke) {
-          strokes.push({
-            keyId,
-            virtualKey,
-            attachedModifiers,
-            outDownTick: 0,
-            canRelease: false
-          });
-          return true;
-        }
+        const { virtualKey, attachedModifiers } = ev;
+        strokes.push({
+          virtualKey,
+          attachedModifiers,
+          outDownTick: 0,
+          canRelease: false
+        });
+        return true;
       } else {
         const stroke = strokes.find(
-          (s) => s.keyId === ev.keyId && !s.canRelease
+          (s) => s.virtualKey === ev.virtualKey && !s.canRelease
         );
         if (stroke) {
           stroke.canRelease = true;
@@ -66,30 +66,44 @@ export namespace KeyBindingEventTimingAligner {
     const { strokes } = local;
     const curTick = Date.now();
 
+    let stop = false;
+
     for (const stroke of strokes) {
+      let downAcceptableTick =
+        local.lastOutDownTick + cfg.outputMinimumDownEventInterval;
       if (
-        curTick > local.lastOutDownTick + cfg.outputMinimumDownEventInterval &&
-        !stroke.outDownTick
+        local.lastOutputStroke &&
+        stroke.virtualKey === local.lastOutputStroke.virtualKey
       ) {
+        downAcceptableTick =
+          local.lastOutputStrokeUpTick +
+          cfg.outputMinimumStrokeIntervalBetweenSameKeyId;
+      }
+      if (!stop && !stroke.outDownTick && curTick > downAcceptableTick) {
         local.lastOutDownTick = curTick;
         stroke.outDownTick = curTick;
-        const { keyId, virtualKey, attachedModifiers } = stroke;
+        const { virtualKey, attachedModifiers } = stroke;
         return {
           type: 'down',
-          keyId,
           virtualKey,
           attachedModifiers
         };
       }
+      if (!stroke.outDownTick) {
+        stop = true;
+      }
+
       if (
         stroke.outDownTick &&
         stroke.canRelease &&
         curTick > stroke.outDownTick + cfg.outputMinimumStrokeDuration
       ) {
         Arrays.remove(strokes, stroke);
+        local.lastOutputStroke = stroke;
+        local.lastOutputStrokeUpTick = Date.now();
         return {
           type: 'up',
-          keyId: stroke.keyId
+          virtualKey: stroke.virtualKey
         };
       }
     }
