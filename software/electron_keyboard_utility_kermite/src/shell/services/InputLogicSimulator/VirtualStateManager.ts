@@ -6,13 +6,13 @@ import {
   LayerState,
   LogicalKeyAction
 } from './Types';
-import { IKeyAssignEntry, IAssignOperation } from '~defs/ProfileData';
+import { IAssignOperation } from '~defs/ProfileData';
 
-function mapKeyIndexToKeyAssignEntry(
+function mapKeyIndexToAssignOperation(
   keyIndex: number,
   keyAssignsProvider: IModelKeyAssignsProvider,
   state: LayerState
-): IKeyAssignEntry | undefined {
+): IAssignOperation | undefined {
   const { keyAssigns, keyUnitIdTable } = keyAssignsProvider;
   const { holdLayerId, modalLayerId, oneshotLayerId } = state;
   const keyUnitId = keyUnitIdTable[keyIndex];
@@ -62,13 +62,13 @@ export namespace VirtualStateManager {
     keyAssignsProvider: IModelKeyAssignsProvider
   ) {
     if (isDown) {
-      const assign = mapKeyIndexToKeyAssignEntry(
+      const assign = mapKeyIndexToAssignOperation(
         keyIndex,
         keyAssignsProvider,
         logicModelState
       );
       if (assign) {
-        const action = KeyAssignToLogicalKeyActionResolver.mapKeyAssignEntryToLogicalKeyAction(
+        const action = KeyAssignToLogicalKeyActionResolver.mapAssignOperationToLogicalKeyAction(
           assign
         );
         if (action) {

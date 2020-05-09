@@ -1,8 +1,27 @@
-import {
-  IKeyStrokeAssignEvent,
-  PriorityVirtualKey
-} from './LogicSimulatorCCommon';
 import { sortOrderBy } from '~funcs/Utils';
+import { VirtualKey } from '~defs/VirtualKeys';
+import { IAssignOperation } from '~defs/ProfileData';
+import { ModuleK_KeyStrokeAssignDispatcher } from './ModuleK_KeyStrokeAssignDispatcher';
+
+export type PriorityVirtualKey =
+  | VirtualKey
+  | 'PK_SortOrder_Forward'
+  | 'PK_SortOrder_Backward';
+
+export type IKeyStrokeAssignEvent =
+  | {
+      type: 'down';
+      keyId: string;
+      assign: IAssignOperation;
+      priorityVirtualKey: PriorityVirtualKey;
+      tick: number;
+    }
+  | {
+      type: 'up';
+      keyId: string;
+      priorityVirtualKey: PriorityVirtualKey;
+      tick: number;
+    };
 
 const virtualKeyPriorityOrders: PriorityVirtualKey[] = [
   'PK_SortOrder_Forward',
@@ -50,25 +69,16 @@ const virtualKeyPriorityOrders: PriorityVirtualKey[] = [
   'PK_SortOrder_Forward'
 ];
 
+const cfg = {
+  inputSimultaneousKeysWaitTime: 60
+};
+
 export namespace ModuleF_KeyEventPrioritySorter {
   const local = new (class {
     holdCount: number = 0;
     inputQueue: IKeyStrokeAssignEvent[] = [];
     outputQueue: IKeyStrokeAssignEvent[] = [];
   })();
-
-  export function pushStrokeAssignEvent(ev: IKeyStrokeAssignEvent) {
-    local.inputQueue.push(ev);
-    if (ev.type === 'down') {
-      local.holdCount++;
-    } else {
-      local.holdCount--;
-    }
-  }
-
-  const cfg = {
-    inputSimultaneousKeysWaitTime: 60
-  };
 
   function processInputQueue() {
     const { inputQueue, holdCount, outputQueue } = local;
@@ -98,8 +108,24 @@ export namespace ModuleF_KeyEventPrioritySorter {
     }
   }
 
-  export function readQueuedEventOne(): IKeyStrokeAssignEvent | undefined {
+  export function pushStrokeAssignEvent(ev: IKeyStrokeAssignEvent) {
+    local.inputQueue.push(ev);
+    if (ev.type === 'down') {
+      local.holdCount++;
+    } else {
+      local.holdCount--;
+    }
+  }
+
+  function readQueuedEventOne(): IKeyStrokeAssignEvent | undefined {
     processInputQueue();
     return local.outputQueue.shift();
+  }
+
+  export function processTicker() {
+    const ev = readQueuedEventOne();
+    if (ev) {
+      ModuleK_KeyStrokeAssignDispatcher.handleLogicalStroke(ev);
+    }
   }
 }

@@ -4,11 +4,13 @@ import { Arrays } from '~funcs/Arrays';
 import { createDictionaryFromKeyValues } from '~funcs/Utils';
 import { appGlobal } from '../appGlobal';
 import { coloredLog } from '~shell/ColoredLog';
-import { LogicalKeyAction } from '../InputLogicSimulator/Types';
+import {
+  LogicalKeyAction,
+  LayerInvocationMode
+} from '../InputLogicSimulator/Types';
 import { LogicalKeyActionDriver } from '../InputLogicSimulator/LogicalKeyActionDriver';
 import { KeyAssignToLogicalKeyActionResolver } from '../InputLogicSimulator/KeyAssignToLogicalKeyActionResolver';
 import { VirtualKey, ModifierVirtualKey } from '~defs/VirtualKeys';
-import { LayerInvocationMode } from '~defs/ProfileData';
 
 type InputTrigger = 'down' | 'downLazy' | 'tap' | 'hold' | 'doubleTap' | 'up';
 
@@ -372,7 +374,7 @@ namespace InputCoreLogic {
     assign: IKeyAssignEntryA,
     trigger: 'down' | 'tap' | 'hold'
   ): void {
-    const action = KeyAssignToLogicalKeyActionResolver.mapKeyAssignEntryToLogicalKeyAction(
+    const action = KeyAssignToLogicalKeyActionResolver.mapAssignOperationToLogicalKeyAction(
       assign.operation
     );
     if (action) {
@@ -624,7 +626,7 @@ export class InputLogicSimulatorA {
   private onProfileManagerStatusChanged = (
     changedStatus: Partial<IProfileManagerStatus>
   ) => {
-    if (changedStatus.loadedEditModel) {
+    if (changedStatus.loadedProfileData) {
     }
   };
 

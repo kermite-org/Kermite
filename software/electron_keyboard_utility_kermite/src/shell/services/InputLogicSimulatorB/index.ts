@@ -22,7 +22,7 @@ import {
   AssignMappingModule,
   AssignDriverModule
 } from './modules';
-import { IKeyAssignsSet_Single } from '~defs/ProfileData';
+import { IKeyAssignsSet_Single } from '../InputLogicSimulator/Types';
 
 // class LogicClassModule<S, D> {
 //   processEvents(src: IChannel<S>, dst: IChannel<D>) {}
@@ -55,9 +55,9 @@ export class InputLogicSimulatorB implements IInputLogicSimulator {
   private onProfileStatusChanged = (
     changedStatus: Partial<IProfileManagerStatus>
   ) => {
-    if (changedStatus.loadedEditModel) {
+    if (changedStatus.loadedProfileData) {
       const editModel = completeEditModelForShiftLayer(
-        changedStatus.loadedEditModel
+        changedStatus.loadedProfileData
       );
       logicSimulatorState.keyAssignsProvider = {
         keyAssigns: editModel.assigns as IKeyAssignsSet_Single,

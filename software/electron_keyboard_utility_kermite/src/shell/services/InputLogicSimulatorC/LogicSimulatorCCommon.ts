@@ -1,44 +1,9 @@
-import {
-  IKeyAssignEntry,
-  IEditModel,
-  fallbackProfileData
-} from '~defs/ProfileData';
-import { ModifierVirtualKey, VirtualKey } from '~defs/VirtualKeys';
-
-export interface IKeyBindingInfo {
-  assign: IKeyAssignEntry;
-  timeStamp: number;
-}
-
-export interface IHoldKeyBind {
-  virtualKey: VirtualKey;
-  attachedModifiers: ModifierVirtualKey[];
-}
-
-export type PriorityVirtualKey =
-  | VirtualKey
-  | 'PK_SortOrder_Forward'
-  | 'PK_SortOrder_Backward';
-
-export type IKeyStrokeAssignEvent =
-  | {
-      type: 'down';
-      keyId: string;
-      assign: IKeyAssignEntry;
-      priorityVirtualKey: PriorityVirtualKey;
-      tick: number;
-    }
-  | {
-      type: 'up';
-      keyId: string;
-      priorityVirtualKey: PriorityVirtualKey;
-      tick: number;
-    };
+import { fallbackProfileData, IProfileData } from '~defs/ProfileData';
 
 export const logicSimulatorStateC = new (class {
-  editModel: IEditModel = fallbackProfileData;
-  keyBindingInfoDict: { [keyId: string]: IKeyBindingInfo } = {};
-  holdKeyBinds: IHoldKeyBind[] = [];
+  profileData: IProfileData = fallbackProfileData;
+  holdLayerIds: Set<string> = new Set(['la0']);
+  // holdKeySets: IHoldKeySet[] = [];
 })();
 
 export const logicSimulatorCConfig = new (class {
@@ -47,7 +12,6 @@ export const logicSimulatorCConfig = new (class {
   // useKeyBindEventAligner: boolean = false;
 })();
 logicSimulatorCConfig.usePrioritySorter = true;
-logicSimulatorCConfig.useImmediateDownUp = false;
 // logicSimulatorCConfig.useKeyBindEventAligner = true;
 
 // logicSimulatorCConfig.usePrioritySorter = false;

@@ -7,7 +7,7 @@ import { duplicateObjectByJsonStringifyParse } from '~funcs/Utils';
 import * as path from 'path';
 import { Nums } from '~funcs/Nums';
 import { IProfileManagerCommand } from '~defs/ipc';
-import { IEditModel, fallbackProfileData } from '~defs/ProfileData';
+import { IProfileData, fallbackProfileData } from '~defs/ProfileData';
 import { keyboardShapes } from '~defs/keyboardShapes';
 
 type StatusListener = (partialStatus: Partial<IProfileManagerStatus>) => void;
@@ -43,35 +43,35 @@ class ProfileManagerCore {
     appGlobal.applicationStorage.setItem('currentProfileName', profName);
   }
 
-  static async loadProfile(profName: string): Promise<IEditModel> {
+  static async loadProfile(profName: string): Promise<IProfileData> {
     const fpath = this.getDataFilePath(profName);
-    return (await Files.readJson(fpath)) as IEditModel;
+    return (await Files.readJson(fpath)) as IProfileData;
   }
 
   static async saveProfile(
     profName: string,
-    editModel: IEditModel
+    profileData: IProfileData
   ): Promise<void> {
     const fpath = this.getDataFilePath(profName);
     console.log(`saving current profile to ${path.basename(fpath)}`);
-    await Files.writeJson(fpath, editModel);
+    await Files.writeJson(fpath, profileData);
   }
 
   static async createProfile(
     profName: string,
     breedName: string
-  ): Promise<IEditModel> {
-    const editModel: IEditModel = duplicateObjectByJsonStringifyParse(
+  ): Promise<IProfileData> {
+    const profileData: IProfileData = duplicateObjectByJsonStringifyParse(
       fallbackProfileData
     );
     const keyboardShape = keyboardShapes.find(
       (it) => it.breedName === breedName
     );
     if (keyboardShape) {
-      editModel.keyboardShape = keyboardShape;
+      profileData.keyboardShape = keyboardShape;
     }
-    await this.saveProfile(profName, editModel);
-    return editModel;
+    await this.saveProfile(profName, profileData);
+    return profileData;
   }
 
   static async deleteProfile(profName: string): Promise<void> {
@@ -93,7 +93,7 @@ export class ProfileManager {
   private status: IProfileManagerStatus = {
     currentProfileName: '',
     allProfileNames: [],
-    loadedEditModel: undefined,
+    loadedProfileData: undefined,
     errorMessage: ''
   };
 
@@ -101,7 +101,7 @@ export class ProfileManager {
 
   private statusListeners: StatusListener[] = [];
 
-  private savingEditModel: IEditModel | undefined = undefined;
+  private savingProfileData: IProfileData | undefined = undefined;
 
   subscribeStatus(listener: StatusListener) {
     this.statusListeners.push(listener);
@@ -155,14 +155,14 @@ export class ProfileManager {
     ProfileManagerCore.storeCurrentProfileName(this.status.currentProfileName);
   }
 
-  private fixEditModelData(editModel: IEditModel) {
-    for (const la of editModel.layers) {
+  private fixProfileData(profileData: IProfileData) {
+    for (const la of profileData.layers) {
       if (la.defaultScheme === undefined) {
         la.defaultScheme = 'block';
       }
     }
-    if (!editModel.assignType) {
-      (editModel as any).assignType = 'single';
+    if (!profileData.assignType) {
+      (profileData as any).assignType = 'single';
     }
     // if (editModel.layers.length === 0) {
     //   editModel.layers = duplicateObjectByJsonStringifyParse(
@@ -180,11 +180,11 @@ export class ProfileManager {
 
   async loadProfile(profName: string): Promise<boolean> {
     try {
-      const editModel = await ProfileManagerCore.loadProfile(profName);
-      this.fixEditModelData(editModel);
+      const profileData = await ProfileManagerCore.loadProfile(profName);
+      this.fixProfileData(profileData);
       this.setStatus({
         currentProfileName: profName,
-        loadedEditModel: editModel
+        loadedProfileData: profileData
       });
       return true;
     } catch (error) {
@@ -193,11 +193,14 @@ export class ProfileManager {
     }
   }
 
-  async saveCurrentProfile(editModel: IEditModel): Promise<boolean> {
+  async saveCurrentProfile(profileData: IProfileData): Promise<boolean> {
     try {
-      ProfileManagerCore.saveProfile(this.status.currentProfileName, editModel);
+      ProfileManagerCore.saveProfile(
+        this.status.currentProfileName,
+        profileData
+      );
       this.setStatus({
-        loadedEditModel: editModel
+        loadedProfileData: profileData
       });
       return true;
     } catch (error) {
@@ -206,16 +209,16 @@ export class ProfileManager {
     }
   }
 
-  reserveSaveProfileTask(prof: IEditModel) {
+  reserveSaveProfileTask(prof: IProfileData) {
     //console.log(`reserveSaveProfileTask`)
-    this.savingEditModel = prof;
+    this.savingProfileData = prof;
   }
 
   private async executeSaveProfileTask() {
     //console.log(`execute save profile task ${!!this.savingEditModel}`)
-    if (this.savingEditModel) {
-      await this.saveCurrentProfile(this.savingEditModel);
-      this.savingEditModel = undefined;
+    if (this.savingProfileData) {
+      await this.saveCurrentProfile(this.savingProfileData);
+      this.savingProfileData = undefined;
       //console.log(`execute save done`)
     }
   }
@@ -225,7 +228,7 @@ export class ProfileManager {
       return false;
     }
     try {
-      const editModel = await ProfileManagerCore.createProfile(
+      const profileData = await ProfileManagerCore.createProfile(
         profName,
         breedName
       );
@@ -233,7 +236,7 @@ export class ProfileManager {
       this.setStatus({
         allProfileNames,
         currentProfileName: profName,
-        loadedEditModel: editModel
+        loadedProfileData: profileData
       });
       return true;
     } catch (error) {
@@ -312,7 +315,7 @@ export class ProfileManager {
         cmd.renameProfile.newName
       );
     } else if (cmd.saveCurrentProfile) {
-      return await this.saveCurrentProfile(cmd.saveCurrentProfile.editModel);
+      return await this.saveCurrentProfile(cmd.saveCurrentProfile.profileData);
     }
     return false;
   }

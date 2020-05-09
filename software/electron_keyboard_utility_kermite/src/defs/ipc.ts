@@ -4,7 +4,7 @@ import { IProfileData } from './ProfileData';
 export interface IProfileManagerStatus {
   currentProfileName: string;
   allProfileNames: string[];
-  loadedEditModel: IProfileData | undefined;
+  loadedProfileData: IProfileData | undefined;
   errorMessage: string;
 }
 
@@ -31,7 +31,7 @@ export interface IWindowManagerCommand {
 export interface IProfileManagerCommand {
   creatProfile?: { name: string; breedName: string };
   loadProfile?: { name: string };
-  saveCurrentProfile?: { editModel: IProfileData };
+  saveCurrentProfile?: { profileData: IProfileData };
   deleteProfile?: { name: string };
   renameProfile?: { name: string; newName: string };
 }

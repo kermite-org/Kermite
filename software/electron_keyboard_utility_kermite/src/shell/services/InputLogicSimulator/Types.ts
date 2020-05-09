@@ -1,4 +1,13 @@
-import { IKeyAssignsSet_Single, LayerInvocationMode } from '~defs/ProfileData';
+import {
+  IAssignEntry_Single,
+  IHoldFunctionInvocationMode
+} from '~defs/ProfileData';
+
+export type IKeyAssignsSet_Single = {
+  [address: string]: IAssignEntry_Single | undefined;
+  // [address: string]: IAssignEntry | undefined;
+};
+export type LayerInvocationMode = IHoldFunctionInvocationMode;
 
 export type TAdhocShift = 'down' | 'up' | undefined;
 

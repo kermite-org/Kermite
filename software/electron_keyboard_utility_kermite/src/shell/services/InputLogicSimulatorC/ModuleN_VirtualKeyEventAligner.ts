@@ -1,7 +1,8 @@
 import { ModifierVirtualKey, VirtualKey } from '~defs/VirtualKeys';
 import { Arrays } from '~funcs/Arrays';
+import { ModuleR_VirtualKeyBinder } from './ModuleR_VirtualKeyBinder';
 
-export type IKeyBindingEvent =
+export type IVirtualKeyEvent =
   | {
       type: 'down';
       virtualKey: VirtualKey;
@@ -12,30 +13,30 @@ export type IKeyBindingEvent =
       virtualKey: VirtualKey;
     };
 
-interface BindingStroke {
+interface IVirtualKeyStroke {
   virtualKey: VirtualKey;
   attachedModifiers: ModifierVirtualKey[];
   outDownTick: number;
   canRelease: boolean;
 }
 
-export namespace KeyBindingEventTimingAligner {
+const cfg = {
+  // outputMinimumDownEventInterval: 70,
+  // outputMinimumStrokeDuration: 70,
+  // outputMinimumStrokeIntervalBetweenSameKeyId: 40
+  outputMinimumDownEventInterval: 10,
+  outputMinimumStrokeDuration: 10,
+  outputMinimumStrokeIntervalBetweenSameKeyId: 10
+};
+
+export namespace ModuleN_VirtualKeyEventAligner {
   const local = new (class {
-    inputQueue: IKeyBindingEvent[] = [];
-    strokes: BindingStroke[] = [];
+    inputQueue: IVirtualKeyEvent[] = [];
+    strokes: IVirtualKeyStroke[] = [];
     lastOutDownTick: number = 0;
-    lastOutputStroke: BindingStroke | undefined = undefined;
+    lastOutputStroke: IVirtualKeyStroke | undefined = undefined;
     lastOutputStrokeUpTick: number = 0;
   })();
-
-  const cfg = {
-    outputMinimumDownEventInterval: 70,
-    outputMinimumStrokeDuration: 70,
-    outputMinimumStrokeIntervalBetweenSameKeyId: 40
-    // outputMinimumDownEventInterval: 10,
-    // outputMinimumStrokeDuration: 10,
-    // outputMinimumStrokeIntervalBetweenSameKeyId: 10
-  };
 
   function processInputQueue() {
     const { inputQueue, strokes } = local;
@@ -62,7 +63,7 @@ export namespace KeyBindingEventTimingAligner {
     });
   }
 
-  function readOutputQueueOne(): IKeyBindingEvent | undefined {
+  function readOutputQueueOne(): IVirtualKeyEvent | undefined {
     const { strokes } = local;
     const curTick = Date.now();
 
@@ -110,13 +111,45 @@ export namespace KeyBindingEventTimingAligner {
     return undefined;
   }
 
-  export function pushKeyBindingEvent(ev: IKeyBindingEvent) {
+  function pushVirtualKeyEvent(ev: IVirtualKeyEvent) {
     local.inputQueue.push(ev);
   }
 
-  export function readQueuedEventOne(): IKeyBindingEvent | undefined {
+  function readQueuedEventOne(): IVirtualKeyEvent | undefined {
     processInputQueue();
     const ev = readOutputQueueOne();
     return ev;
+  }
+
+  export function pushVirtualKey(
+    virtualKey: VirtualKey,
+    attachedModifiers: ModifierVirtualKey[] = []
+  ) {
+    pushVirtualKeyEvent({
+      type: 'down',
+      virtualKey,
+      attachedModifiers
+    });
+  }
+
+  export function removeVirtualKey(virtualKey: VirtualKey) {
+    pushVirtualKeyEvent({
+      type: 'up',
+      virtualKey
+    });
+  }
+
+  export function processUpdate() {
+    const ev = readQueuedEventOne();
+    if (ev) {
+      if (ev.type === 'down') {
+        ModuleR_VirtualKeyBinder.pushVirtualKey(
+          ev.virtualKey,
+          ev.attachedModifiers
+        );
+      } else {
+        ModuleR_VirtualKeyBinder.removeVirtualKey(ev.virtualKey);
+      }
+    }
   }
 }

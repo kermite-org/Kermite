@@ -1,8 +1,8 @@
-import { ModuleD_KeyInputAssignBinder } from './ModuleD_KeyInputAssignBinder';
+import { ModuleD_KeyInputAssignReader } from './ModuleD_KeyInputAssignReader';
 
 const TH = 400;
 
-type ITrigger = 'down' | 'tap' | 'hold' | 'up';
+type IKeyTrigger = 'down' | 'tap' | 'hold' | 'up';
 
 class TriggerResolver {
   private downTick: number = 0;
@@ -10,10 +10,10 @@ class TriggerResolver {
 
   constructor(
     private keyId: string,
-    private destProc: (keyId: string, trigger: ITrigger) => void
+    private destProc: (keyId: string, trigger: IKeyTrigger) => void
   ) {}
 
-  private emitTrigger(trigger: ITrigger) {
+  private emitTrigger(trigger: IKeyTrigger) {
     this.destProc(this.keyId, trigger);
   }
 
@@ -48,14 +48,14 @@ export namespace ModuleC_InputTriggerDetector {
     triggerResolvers: { [keyId: string]: TriggerResolver } = {};
   })();
 
-  function onTriggerDetected(keyId: string, trigger: ITrigger) {
-    ModuleD_KeyInputAssignBinder.processEvents({
+  function onTriggerDetected(keyId: string, trigger: IKeyTrigger) {
+    ModuleD_KeyInputAssignReader.processEvent({
       keyId,
       trigger
     });
   }
 
-  function getKeyResolverById(keyId: string) {
+  function getKeyResolverCached(keyId: string) {
     const { triggerResolvers } = local;
     let resolver = triggerResolvers[keyId];
     if (!resolver) {
@@ -68,7 +68,7 @@ export namespace ModuleC_InputTriggerDetector {
   }
 
   export function handleKeyInput(keyId: string, isDown: boolean) {
-    const resolver = getKeyResolverById(keyId);
+    const resolver = getKeyResolverCached(keyId);
     if (isDown) {
       resolver.down();
     } else {

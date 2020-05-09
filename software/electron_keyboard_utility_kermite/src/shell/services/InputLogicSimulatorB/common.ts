@@ -1,5 +1,5 @@
 import { IModelKeyAssignsProvider } from '../InputLogicSimulator/Types';
-import { IKeyAssignEntry } from '~defs/ProfileData';
+import { IAssignOperation } from '~defs/ProfileData';
 
 export type IChannel<T> = {
   emit(ev: T): void;
@@ -52,13 +52,13 @@ export interface KeyTriggerEvent {
 export interface KeyAssignEvent {
   keyId: string;
   // trigger: TKeyTrigger;
-  assign: IKeyAssignEntry;
+  assign: IAssignOperation;
 }
 
 export interface KeyAssignEventWithTick {
   keyId: string;
   // trigger: TKeyTrigger;
-  assign: IKeyAssignEntry;
+  assign: IAssignOperation;
   tick: number;
 }
 
@@ -70,5 +70,5 @@ export const logicSimulatorState = new (class {
   layerState = {
     currentLayerId: 'la0'
   };
-  boundAssigns: { [keyId: string]: IKeyAssignEntry } = {};
+  boundAssigns: { [keyId: string]: IAssignOperation } = {};
 })();

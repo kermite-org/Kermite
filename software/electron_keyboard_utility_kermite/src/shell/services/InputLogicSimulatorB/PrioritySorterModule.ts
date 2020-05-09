@@ -1,6 +1,6 @@
 import { KeyAssignEventWithTick, IChannel, KeyAssignEvent } from './common';
 import { VirtualKey } from '~defs/VirtualKeys';
-import { IKeyAssignEntry } from '~defs/ProfileData';
+import { IAssignOperation } from '~defs/ProfileData';
 
 const waitTimeMs = 200;
 const virtualKeyPriorityOrders: VirtualKey[] = [
@@ -40,7 +40,7 @@ const virtualKeyPriorityOrders: VirtualKey[] = [
   'K_Minus'
 ];
 
-function getAssignOrder(assign: IKeyAssignEntry): number {
+function getAssignOrder(assign: IAssignOperation): number {
   let order = 0;
   if (assign.type === 'keyInput') {
     order = virtualKeyPriorityOrders.indexOf(assign.virtualKey);

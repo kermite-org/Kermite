@@ -1,46 +1,37 @@
 import {
-  IKeyAssignEntry,
+  IAssignOperation,
   IAssignEntry,
   IAssignEntry_Single,
   IAssignEntry_Dual
 } from '~defs/ProfileData';
 import {
-  IKeyStrokeAssignEvent,
   logicSimulatorCConfig,
   logicSimulatorStateC
 } from './LogicSimulatorCCommon';
-import { ModuleF_KeyEventPrioritySorter } from './ModuleF_KeyEventPrioritySorter';
-import { ModuleK_KeyStrokeAssignGate } from './ModuleK_KeyStrokeAssignGate';
+import {
+  ModuleF_KeyEventPrioritySorter,
+  IKeyStrokeAssignEvent
+} from './ModuleF_KeyEventPrioritySorter';
+import { ModuleK_KeyStrokeAssignDispatcher } from './ModuleK_KeyStrokeAssignDispatcher';
 
 //down-tap-up
 //down-hold-up
-type ITrigger = 'down' | 'tap' | 'hold' | 'up';
+type IKeyTrigger = 'down' | 'tap' | 'hold' | 'up';
 
 interface IKeyTriggerEvent {
   keyId: string;
-  trigger: ITrigger;
+  trigger: IKeyTrigger;
 }
 
-export namespace ModuleD_KeyInputAssignBinder {
-  function getLayerHoldStates() {
-    //todo: store layerHoldStates directly in logicSimulatorStateC
-    const layerHoldStates: { [layerId: string]: boolean } = { la0: true };
-    Object.values(logicSimulatorStateC.keyBindingInfoDict).forEach((bi) => {
-      if (bi.assign.type === 'layerCall') {
-        layerHoldStates[bi.assign.targetLayerId] = true;
-      }
-    });
-    return layerHoldStates;
-  }
-
+export namespace ModuleD_KeyInputAssignReader {
   function getAssign(
     keyId: string,
     targetType: 'single' | 'dual'
-  ): IAssignEntry {
-    const { layers, assigns } = logicSimulatorStateC.editModel;
-    const layerHoldStates = getLayerHoldStates();
+  ): IAssignEntry | undefined {
+    const { layers, assigns } = logicSimulatorStateC.profileData;
+    const { holdLayerIds } = logicSimulatorStateC;
     const activeLayers = layers
-      .filter((la) => layerHoldStates[la.layerId])
+      .filter((la) => holdLayerIds.has(la.layerId))
       .reverse();
     for (const la of activeLayers) {
       const assign = assigns[`${la.layerId}.${keyId}`];
@@ -56,13 +47,13 @@ export namespace ModuleD_KeyInputAssignBinder {
 
   function pushStrokeEvent(ev: IKeyStrokeAssignEvent) {
     if (!logicSimulatorCConfig.usePrioritySorter) {
-      ModuleK_KeyStrokeAssignGate.handleLogicalStroke(ev);
+      ModuleK_KeyStrokeAssignDispatcher.handleLogicalStroke(ev);
     } else {
       ModuleF_KeyEventPrioritySorter.pushStrokeAssignEvent(ev);
     }
   }
 
-  function getPriorityVirtualKey(assign: IKeyAssignEntry) {
+  function getPriorityVirtualKey(assign: IAssignOperation) {
     if (assign.type === 'layerCall') {
       return 'PK_SortOrder_Forward';
     }
@@ -72,9 +63,12 @@ export namespace ModuleD_KeyInputAssignBinder {
     return 'PK_SortOrder_Backward';
   }
 
-  const holdKeyIdSet: Set<string> = new Set();
+  const local = new (class {
+    holdKeyIdSet: Set<string> = new Set();
+  })();
 
-  function pushStrokeDown(keyId: string, assign: IKeyAssignEntry) {
+  function pushStrokeDown(keyId: string, assign: IAssignOperation) {
+    const { holdKeyIdSet } = local;
     const priorityVirtualKey = getPriorityVirtualKey(assign);
     pushStrokeEvent({
       type: 'down',
@@ -87,6 +81,7 @@ export namespace ModuleD_KeyInputAssignBinder {
   }
 
   function pushStrokeUp(keyId: string) {
+    const { holdKeyIdSet } = local;
     if (holdKeyIdSet.has(keyId)) {
       pushStrokeEvent({
         type: 'up',
@@ -98,7 +93,7 @@ export namespace ModuleD_KeyInputAssignBinder {
     }
   }
 
-  function processEvents_Signle(ev: IKeyTriggerEvent) {
+  function processEvent_Signle(ev: IKeyTriggerEvent) {
     const { keyId, trigger } = ev;
     if (trigger === 'down') {
       const assign = getAssign(keyId, 'single') as
@@ -113,7 +108,7 @@ export namespace ModuleD_KeyInputAssignBinder {
     }
   }
 
-  function processEvents_Dual(ev: IKeyTriggerEvent) {
+  function processEvent_Dual(ev: IKeyTriggerEvent) {
     const { keyId, trigger } = ev;
 
     const assign = getAssign(keyId, 'dual') as IAssignEntry_Dual | undefined;
@@ -166,13 +161,13 @@ export namespace ModuleD_KeyInputAssignBinder {
     }
   }
 
-  export function processEvents(ev: IKeyTriggerEvent) {
-    const assignType = logicSimulatorStateC.editModel.assignType;
+  export function processEvent(ev: IKeyTriggerEvent) {
+    const assignType = logicSimulatorStateC.profileData.assignType;
     if (assignType === 'single') {
-      processEvents_Signle(ev);
+      processEvent_Signle(ev);
     }
     if (assignType === 'dual') {
-      processEvents_Dual(ev);
+      processEvent_Dual(ev);
     }
   }
 }

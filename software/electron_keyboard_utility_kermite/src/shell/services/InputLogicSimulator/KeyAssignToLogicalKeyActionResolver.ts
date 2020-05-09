@@ -1,7 +1,7 @@
 import { LogicalKeyAction, TAdhocShift } from './Types';
 import { HidKeyCodes } from '~defs/HidKeyCodes';
 import { VirtualKey, ModifierVirtualKey } from '~defs/VirtualKeys';
-import { IKeyAssignEntry } from '~defs/ProfileData';
+import { IAssignOperation } from '~defs/ProfileData';
 
 export namespace KeyAssignToLogicalKeyActionResolver {
   function extractVkSet(
@@ -47,8 +47,8 @@ export namespace KeyAssignToLogicalKeyActionResolver {
     return undefined;
   }
 
-  export function mapKeyAssignEntryToLogicalKeyAction(
-    assign: IKeyAssignEntry
+  export function mapAssignOperationToLogicalKeyAction(
+    assign: IAssignOperation
   ): LogicalKeyAction | undefined {
     if (assign.type === 'keyInput') {
       const { virtualKey, attachedModifiers } = assign;

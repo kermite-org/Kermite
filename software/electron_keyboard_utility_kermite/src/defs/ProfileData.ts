@@ -50,7 +50,7 @@ export type IAssignOperation =
   //     type: 'none';
   //   }
   // |
-  | undefined
+  // | undefined
   // | IAssingOperationNone
   | IAssingOperationKeyInput
   | IAssignOperationLayerCall
@@ -84,13 +84,13 @@ export type IAssignOperation =
 //   | 'doubleTap'
 //   | 'up';
 
-export type IAssignOperationTypeMap = {
-  // none: IAssingOperationNone | undefined;
-  none: undefined;
-  keyInput: IAssingOperationKeyInput;
-  layerCall: IAssignOperationLayerCall;
-  modifierCall: IAssignOperationModifierCall;
-};
+// export type IAssignOperationTypeMap = {
+//   // none: IAssingOperationNone | undefined;
+//   none: undefined;
+//   keyInput: IAssingOperationKeyInput;
+//   layerCall: IAssignOperationLayerCall;
+//   modifierCall: IAssignOperationModifierCall;
+// };
 
 // export type IInputTriggersA =
 //   | 'down'
@@ -146,22 +146,22 @@ export type IAssignEntry_Dual = {
 //     cancelPreviousInput?: boolean;
 //   }[];
 // };
-export type IAssignEntry = undefined | IAssignEntry_Single | IAssignEntry_Dual;
+export type IAssignEntry = IAssignEntry_Single | IAssignEntry_Dual;
 // | ISingleAssignEntry_None
 // | ISingleAssignEntry_Transparent
 // | ISingleAssignEntry_Single2;
 // | ISingleAssignEntry_SingleVersatile1;
 
-export type IAssignEntryTypeMap = {
-  // none: ISingleAssignEntry_None | undefined;
-  none: undefined;
-  single: IAssignEntry_Single;
-  double: IAssignEntry_Dual;
-  // transparent: ISingleAssignEntry_Transparent;
-  // single1: ISingleAssignEntry_Single1;
-  // single2: ISingleAssignEntry_Single2;
-  // singleVersatile1: ISingleAssignEntry_SingleVersatile1;
-};
+// export type IAssignEntryTypeMap = {
+//   // none: ISingleAssignEntry_None | undefined;
+//   none: undefined;
+//   single: IAssignEntry_Single;
+//   double: IAssignEntry_Dual;
+//   // transparent: ISingleAssignEntry_Transparent;
+//   // single1: ISingleAssignEntry_Single1;
+//   // single2: ISingleAssignEntry_Single2;
+//   // singleVersatile1: ISingleAssignEntry_SingleVersatile1;
+// };
 
 // export type ICombinationAssignEntry =
 //   | {
@@ -258,17 +258,3 @@ export const fallbackProfileData: IProfileData = {
   ],
   assigns: {}
 };
-
-//glue definitions for model migration
-export type IKeyAssignEntry = NonNullable<IAssignOperation>;
-export type IEditModel = IProfileData;
-
-export type IKeyAssignsSet_Single = {
-  [address: string]: IAssignEntry_Single | undefined;
-  // [address: string]: IAssignEntry | undefined;
-};
-export type LayerInvocationMode = IHoldFunctionInvocationMode;
-
-// export type IKeyAssignsSetSingle = {
-//   [address: string]: IAssignEntry_Single | undefined;
-// };

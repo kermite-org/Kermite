@@ -127,11 +127,11 @@ export class EditorModel {
     this.setCurrentKeyUnitId('');
   };
 
-  writeAssignEntry = (assign: IAssignEntry) => {
+  writeAssignEntry = (assign: IAssignEntry | undefined) => {
     this.profileData.assigns[this.slotAddress] = assign;
   };
 
-  writeEditOperation = (op: IAssignOperation) => {
+  writeEditOperation = (op: IAssignOperation | undefined) => {
     const assign = this.assignEntry;
     if (this.profileAssignType === 'single') {
       if (assign?.type === 'single') {

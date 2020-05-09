@@ -6,7 +6,7 @@ import {
 import { KeyAssignToLogicalKeyActionResolver } from './KeyAssignToLogicalKeyActionResolver';
 import { LogicalKeyActionDriver } from './LogicalKeyActionDriver';
 import { coloredLog } from '~shell/ColoredLog';
-import { IKeyAssignEntry } from '~defs/ProfileData';
+import { IAssignOperation } from '~defs/ProfileData';
 
 interface IGateEvent {
   trigger: 'D' | 'U' | 'R';
@@ -100,10 +100,10 @@ export namespace VirtualKeyStateManager2 {
 
   function resolveAssign(
     keyId: string,
-    assign: IKeyAssignEntry,
+    assign: IAssignOperation,
     trigger: 'down' | 'tap' | 'hold'
   ) {
-    const action = KeyAssignToLogicalKeyActionResolver.mapKeyAssignEntryToLogicalKeyAction(
+    const action = KeyAssignToLogicalKeyActionResolver.mapAssignOperationToLogicalKeyAction(
       assign
     );
     if (action) {

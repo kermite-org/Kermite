@@ -24,8 +24,8 @@ export class ProfilesModel {
     if (payload.allProfileNames) {
       this.allProfileNames = payload.allProfileNames;
     }
-    if (payload.loadedEditModel) {
-      this.editorModel.loadProfileData(payload.loadedEditModel);
+    if (payload.loadedProfileData) {
+      this.editorModel.loadProfileData(payload.loadedProfileData);
     }
     if (payload.errorMessage) {
       alert(payload.errorMessage);
@@ -49,7 +49,7 @@ export class ProfilesModel {
     const isDirty = this.editorModel.checkDirty();
     if (isDirty) {
       return {
-        saveCurrentProfile: { editModel: this.editorModel.profileData }
+        saveCurrentProfile: { profileData: this.editorModel.profileData }
       };
     }
     return undefined;

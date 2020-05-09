@@ -6,12 +6,11 @@ import {
 } from './EditModelFixer';
 import { VirtualKeyStateManager2 } from './VirtualStateManager2';
 import { VirtualStateManager } from './VirtualStateManager';
-import { IModelKeyAssignsProvider } from './Types';
+import { IModelKeyAssignsProvider, IKeyAssignsSet_Single } from './Types';
 import { LogicalKeyActionDriver } from './LogicalKeyActionDriver';
 import { HidKeyCodes } from '~defs/HidKeyCodes';
 import { OutputKeyPrioritySorter } from './OutputKeyPrioritySorter';
 import { IntervalTimerWrapper } from './IntervalTimerWrapper';
-import { IKeyAssignsSet_Single } from '~defs/ProfileData';
 
 const modifierBitPositionMap: {
   [hidKeyCode: number]: number;
@@ -64,13 +63,13 @@ export class InputLogicSimulator {
   private onProfileManagerStatusChanged = (
     changedStatus: Partial<IProfileManagerStatus>
   ) => {
-    if (changedStatus.loadedEditModel) {
-      const editModel = completeEditModelForShiftLayer(
-        changedStatus.loadedEditModel
+    if (changedStatus.loadedProfileData) {
+      const profileData = completeEditModelForShiftLayer(
+        changedStatus.loadedProfileData
       );
       this.keyAssignsProvider = {
-        keyAssigns: editModel.assigns as IKeyAssignsSet_Single,
-        keyUnitIdTable: createKeyIndexToKeyUnitIdTable(editModel)
+        keyAssigns: profileData.assigns as IKeyAssignsSet_Single,
+        keyUnitIdTable: createKeyIndexToKeyUnitIdTable(profileData)
       };
     }
   };
