@@ -10,8 +10,7 @@ import { ModuleN_VirtualKeyEventAligner } from './ModuleN_VirtualKeyEventAligner
 import { ModuleW_HidReportOutputBuffer } from './ModuleW_HidReportOutputBuffer';
 
 export class InputLogicSimulatorC implements IInputLogicSimulator {
-  private tikerTimer = new IntervalTimerWrapper();
-  // private tikerTimer2 = new IntervalTimerWrapper();
+  private tickerTimer = new IntervalTimerWrapper();
 
   private onProfileStatusChanged = (
     changedStatus: Partial<IProfileManagerStatus>
@@ -36,20 +35,16 @@ export class InputLogicSimulatorC implements IInputLogicSimulator {
     ModuleW_HidReportOutputBuffer.processTicker();
   };
 
-  // private processOutputTicker = () => {};
-
   async initialize() {
     appGlobal.profileManager.subscribeStatus(this.onProfileStatusChanged);
     appGlobal.deviceService.setSideBrainMode(true);
     appGlobal.deviceService.subscribe(this.onRealtimeKeyboardEvent);
-    this.tikerTimer.start(this.processTicker, 10);
-    // this.tikerTimer2.start(this.processOutputTicker, 5);
+    this.tickerTimer.start(this.processTicker, 5);
   }
 
   async terminate() {
     appGlobal.deviceService.unsubscribe(this.onRealtimeKeyboardEvent);
     appGlobal.deviceService.setSideBrainMode(false);
-    this.tikerTimer.stop();
-    // this.tikerTimer2.stop();
+    this.tickerTimer.stop();
   }
 }

@@ -1,155 +1,151 @@
 import { ModifierVirtualKey, VirtualKey } from '~defs/VirtualKeys';
-import { Arrays } from '~funcs/Arrays';
 import { ModuleR_VirtualKeyBinder } from './ModuleR_VirtualKeyBinder';
-
-export type IVirtualKeyEvent =
-  | {
-      type: 'down';
-      virtualKey: VirtualKey;
-      attachedModifiers: ModifierVirtualKey[];
-    }
-  | {
-      type: 'up';
-      virtualKey: VirtualKey;
-    };
-
-interface IVirtualKeyStroke {
-  virtualKey: VirtualKey;
-  attachedModifiers: ModifierVirtualKey[];
-  outDownTick: number;
-  canRelease: boolean;
-}
 
 const cfg = {
   // outputMinimumDownEventInterval: 70,
   // outputMinimumStrokeDuration: 70,
-  // outputMinimumStrokeIntervalBetweenSameKeyId: 40
+  // outputMinimumStrokeIntervalBetweenSameKeyId: 50
   outputMinimumDownEventInterval: 10,
   outputMinimumStrokeDuration: 10,
   outputMinimumStrokeIntervalBetweenSameKeyId: 10
 };
 
-export namespace ModuleN_VirtualKeyEventAligner {
-  const local = new (class {
-    inputQueue: IVirtualKeyEvent[] = [];
-    strokes: IVirtualKeyStroke[] = [];
-    lastOutDownTick: number = 0;
-    lastOutputStroke: IVirtualKeyStroke | undefined = undefined;
-    lastOutputStrokeUpTick: number = 0;
-  })();
+class VirtualStroke {
+  prevStroke?: VirtualStroke;
+  virtualKey: VirtualKey;
+  attachedModifiers?: ModifierVirtualKey[];
+  inputDownFired: boolean = false;
+  outputDownTick?: number;
+  outputUpTick?: number;
 
-  function processInputQueue() {
-    const { inputQueue, strokes } = local;
-    Arrays.removeIf(inputQueue, (ev) => {
-      if (ev.type === 'down') {
-        const { virtualKey, attachedModifiers } = ev;
-        strokes.push({
-          virtualKey,
-          attachedModifiers,
-          outDownTick: 0,
-          canRelease: false
-        });
-        return true;
-      } else {
-        const stroke = strokes.find(
-          (s) => s.virtualKey === ev.virtualKey && !s.canRelease
-        );
-        if (stroke) {
-          stroke.canRelease = true;
-          return true;
-        }
-      }
-      return false;
-    });
+  constructor(
+    prev: VirtualStroke | undefined,
+    virtualKey: VirtualKey,
+    attachedModifiers: ModifierVirtualKey[]
+    // private ignoreOneInputUp?: boolean
+  ) {
+    this.prevStroke = prev;
+    this.virtualKey = virtualKey;
+    this.attachedModifiers = attachedModifiers;
   }
 
-  function readOutputQueueOne(): IVirtualKeyEvent | undefined {
-    const { strokes } = local;
-    const curTick = Date.now();
+  fireInputUp() {
+    // if (this.ignoreOneInputUp) {
+    //   this.ignoreOneInputUp = false;
+    //   return;
+    // }
+    this.inputDownFired = true;
+  }
 
-    let stop = false;
+  get inputHold() {
+    return !this.inputDownFired;
+  }
 
-    for (const stroke of strokes) {
-      let downAcceptableTick =
-        local.lastOutDownTick + cfg.outputMinimumDownEventInterval;
-      if (
-        local.lastOutputStroke &&
-        stroke.virtualKey === local.lastOutputStroke.virtualKey
-      ) {
-        downAcceptableTick =
-          local.lastOutputStrokeUpTick +
-          cfg.outputMinimumStrokeIntervalBetweenSameKeyId;
-      }
-      if (!stop && !stroke.outDownTick && curTick > downAcceptableTick) {
-        local.lastOutDownTick = curTick;
-        stroke.outDownTick = curTick;
-        const { virtualKey, attachedModifiers } = stroke;
-        return {
-          type: 'down',
-          virtualKey,
-          attachedModifiers
-        };
-      }
-      if (!stroke.outDownTick) {
-        stop = true;
-      }
-
-      if (
-        stroke.outDownTick &&
-        stroke.canRelease &&
-        curTick > stroke.outDownTick + cfg.outputMinimumStrokeDuration
-      ) {
-        Arrays.remove(strokes, stroke);
-        local.lastOutputStroke = stroke;
-        local.lastOutputStrokeUpTick = Date.now();
-        return {
-          type: 'up',
-          virtualKey: stroke.virtualKey
-        };
+  private get canOutputDown(): boolean {
+    const curr = Date.now();
+    if (!this.outputDownTick) {
+      const { prevStroke: prev } = this;
+      if (prev && prev.virtualKey === this.virtualKey) {
+        return (
+          (prev.outputUpTick &&
+            curr >
+              prev.outputUpTick +
+                cfg.outputMinimumStrokeIntervalBetweenSameKeyId) ||
+          false
+        );
+      } else if (prev) {
+        return (
+          (prev.outputDownTick &&
+            curr > prev.outputDownTick + cfg.outputMinimumDownEventInterval) ||
+          false
+        );
+      } else {
+        return true;
       }
     }
-    return undefined;
+    return false;
   }
 
-  function pushVirtualKeyEvent(ev: IVirtualKeyEvent) {
-    local.inputQueue.push(ev);
+  private outputDown() {
+    ModuleR_VirtualKeyBinder.pushVirtualKey(
+      this.virtualKey,
+      this.attachedModifiers
+    );
+    this.outputDownTick = Date.now();
   }
 
-  function readQueuedEventOne(): IVirtualKeyEvent | undefined {
-    processInputQueue();
-    const ev = readOutputQueueOne();
-    return ev;
+  private get canOutputUp(): boolean {
+    const curr = Date.now();
+    return (
+      (this.outputDownTick &&
+        !this.outputUpTick &&
+        this.inputDownFired &&
+        curr > this.outputDownTick + cfg.outputMinimumStrokeDuration) ||
+      false
+    );
   }
+
+  private outputUp() {
+    ModuleR_VirtualKeyBinder.removeVirtualKey(this.virtualKey);
+    this.outputUpTick = Date.now();
+  }
+
+  get completed() {
+    return !!this.outputUpTick;
+  }
+
+  update() {
+    if (this.canOutputDown) {
+      this.outputDown();
+    }
+    if (this.canOutputUp) {
+      return this.outputUp();
+    }
+  }
+}
+
+export namespace ModuleN_VirtualKeyEventAligner {
+  const local = new (class {
+    strokes: VirtualStroke[] = [];
+    lastStroke: VirtualStroke | undefined = undefined;
+  })();
 
   export function pushVirtualKey(
     virtualKey: VirtualKey,
     attachedModifiers: ModifierVirtualKey[] = []
   ) {
-    pushVirtualKeyEvent({
-      type: 'down',
+    // const holdingSameKeyStroke = local.strokes.find(
+    //   (s) => s.virtualKey === virtualKey && s.inputHold
+    // );
+    // if (holdingSameKeyStroke) {
+    //   console.log(`hsks found`, virtualKey);
+    //   holdingSameKeyStroke.fireInputUp();
+    // }
+    // const strokeOverwritten = !!holdingSameKeyStroke;
+
+    const stroke = new VirtualStroke(
+      local.lastStroke,
       virtualKey,
       attachedModifiers
-    });
+      // strokeOverwritten
+    );
+    local.strokes.push(stroke);
+    local.lastStroke = stroke;
   }
 
   export function removeVirtualKey(virtualKey: VirtualKey) {
-    pushVirtualKeyEvent({
-      type: 'up',
-      virtualKey
-    });
+    const stroke = local.strokes.find(
+      (s) => s.virtualKey === virtualKey && s.inputHold
+    );
+    if (stroke) {
+      stroke.fireInputUp();
+    }
   }
 
   export function processUpdate() {
-    const ev = readQueuedEventOne();
-    if (ev) {
-      if (ev.type === 'down') {
-        ModuleR_VirtualKeyBinder.pushVirtualKey(
-          ev.virtualKey,
-          ev.attachedModifiers
-        );
-      } else {
-        ModuleR_VirtualKeyBinder.removeVirtualKey(ev.virtualKey);
-      }
+    for (const stroke of local.strokes) {
+      stroke.update();
     }
+    local.strokes = local.strokes.filter((s) => !s.completed);
   }
 }
