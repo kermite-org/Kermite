@@ -1,12 +1,14 @@
-import { appGlobal } from '../appGlobal';
+import { createModuleIo } from './LogicSimulatorCCommon';
 
 export namespace ModuleW_HidReportOutputBuffer {
+  export const io = createModuleIo<number[], number[]>(commitHidReport);
+
   const local = new (class {
     hidReportQueue: number[][] = [];
     prevInputHidReport: number[] = [];
   })();
 
-  export function commitHidReport(hidReport: number[]) {
+  function commitHidReport(hidReport: number[]) {
     // fix modifier transition delay problem
     //[ 2, 0, 0, ...] (shift hold)
     //[ 0, 0, 0, ...] (nothing hold) <--- will be added here
@@ -26,7 +28,7 @@ export namespace ModuleW_HidReportOutputBuffer {
   export function processTicker() {
     const hidReport = local.hidReportQueue.shift();
     if (hidReport) {
-      appGlobal.deviceService.writeSideBrainHidReport(hidReport);
+      io.emit(hidReport);
     }
   }
 }

@@ -1,21 +1,13 @@
 import { IAssignEntry, IAssignOperation } from '~defs/ProfileData';
 import {
+  createModuleIo,
   IKeyTrigger,
-  logicSimulatorCConfig,
-  logicSimulatorStateC
+  logicSimulatorStateC,
+  IKeyTriggerEvent,
+  IKeyStrokeAssignEvent
 } from './LogicSimulatorCCommon';
-import {
-  IKeyStrokeAssignEvent,
-  ModuleF_KeyEventPrioritySorter
-} from './ModuleF_KeyEventPrioritySorter';
-import { ModuleK_KeyStrokeAssignDispatcher } from './ModuleK_KeyStrokeAssignDispatcher';
 
-interface IKeyTriggerEvent {
-  keyId: string;
-  trigger: IKeyTrigger;
-}
-
-export namespace ModuleD_KeyInputAssignReader {
+export namespace KeyInputAssignReaderCore {
   export function getAssign(
     keyId: string,
     targetType: 'single' | 'dual'
@@ -37,15 +29,7 @@ export namespace ModuleD_KeyInputAssignReader {
     return undefined;
   }
 
-  function pushStrokeEvent(ev: IKeyStrokeAssignEvent) {
-    if (!logicSimulatorCConfig.usePrioritySorter) {
-      ModuleK_KeyStrokeAssignDispatcher.handleLogicalStroke(ev);
-    } else {
-      ModuleF_KeyEventPrioritySorter.pushStrokeAssignEvent(ev);
-    }
-  }
-
-  function getPriorityVirtualKey(op: IAssignOperation) {
+  export function getPriorityVirtualKey(op: IAssignOperation) {
     if (op.type === 'layerCall') {
       return 'PK_SortOrder_Forward';
     }
@@ -53,41 +37,6 @@ export namespace ModuleD_KeyInputAssignReader {
       return op.virtualKey;
     }
     return 'PK_SortOrder_Backward';
-  }
-
-  const local = new (class {
-    holdKeyIdSet: Set<string> = new Set();
-  })();
-
-  function pushStrokeDown(
-    keyId: string,
-    op: IAssignOperation,
-    trigger: IKeyTrigger
-  ) {
-    const { holdKeyIdSet } = local;
-    const priorityVirtualKey = getPriorityVirtualKey(op);
-    pushStrokeEvent({
-      type: 'down',
-      keyId,
-      trigger,
-      op,
-      priorityVirtualKey,
-      tick: Date.now()
-    });
-    holdKeyIdSet.add(keyId);
-  }
-
-  function pushStrokeUp(keyId: string) {
-    const { holdKeyIdSet } = local;
-    if (holdKeyIdSet.has(keyId)) {
-      pushStrokeEvent({
-        type: 'up',
-        keyId,
-        priorityVirtualKey: 'PK_SortOrder_Backward',
-        tick: Date.now()
-      });
-      holdKeyIdSet.delete(keyId);
-    }
   }
 
   export function getAssignOperation(
@@ -124,12 +73,59 @@ export namespace ModuleD_KeyInputAssignReader {
     }
     return undefined;
   }
+}
 
-  export function processEvent(ev: IKeyTriggerEvent) {
+export namespace ModuleD_KeyInputAssignReader {
+  export const io = createModuleIo<IKeyTriggerEvent, IKeyStrokeAssignEvent>(
+    processEvent
+  );
+
+  const local = new (class {
+    holdKeyIdSet: Set<string> = new Set();
+  })();
+
+  function pushStrokeDown(
+    keyId: string,
+    op: IAssignOperation,
+    trigger: IKeyTrigger
+  ) {
+    const { holdKeyIdSet } = local;
+    const priorityVirtualKey = KeyInputAssignReaderCore.getPriorityVirtualKey(
+      op
+    );
+    io.emit({
+      type: 'down',
+      keyId,
+      trigger,
+      op,
+      priorityVirtualKey,
+      tick: Date.now()
+    });
+    holdKeyIdSet.add(keyId);
+  }
+
+  function pushStrokeUp(keyId: string) {
+    const { holdKeyIdSet } = local;
+    if (holdKeyIdSet.has(keyId)) {
+      io.emit({
+        type: 'up',
+        keyId,
+        priorityVirtualKey: 'PK_SortOrder_Backward',
+        tick: Date.now()
+      });
+      holdKeyIdSet.delete(keyId);
+    }
+  }
+
+  function processEvent(ev: IKeyTriggerEvent) {
     const assignType = logicSimulatorStateC.profileData.assignType;
     const { keyId, trigger } = ev;
     if (trigger === 'down' || trigger === 'tap' || trigger === 'hold') {
-      const op = getAssignOperation(keyId, trigger, assignType);
+      const op = KeyInputAssignReaderCore.getAssignOperation(
+        keyId,
+        trigger,
+        assignType
+      );
       if (op) {
         pushStrokeDown(keyId, op, trigger);
       }

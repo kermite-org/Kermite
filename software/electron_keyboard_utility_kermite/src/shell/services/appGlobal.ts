@@ -15,7 +15,7 @@ export const appGlobal = new (class {
   applicationStorage = new ApplicationStorage();
   profileManager = new ProfileManager();
   deviceService = new DeviceService();
-  inputLogicSimulator: IInputLogicSimulator = new InputLogicSimulatorC();
+  inputLogicSimulator = InputLogicSimulatorC.getInterface();
   ipcBridge = new IpcBridge();
   eventBus = new EventBus<TypedApplicationEvent>();
 

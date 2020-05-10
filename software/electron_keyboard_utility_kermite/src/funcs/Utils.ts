@@ -139,3 +139,9 @@ export function mapObjectValues<P, Q>(
   }
   return dst;
 }
+
+export type ArugmentTypes<F extends Function> = F extends (
+  ...args: infer A
+) => any
+  ? A
+  : never;

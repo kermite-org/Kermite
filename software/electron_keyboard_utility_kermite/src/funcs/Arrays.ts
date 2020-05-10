@@ -54,4 +54,8 @@ export namespace Arrays {
     }
     return someRemoved;
   }
+
+  export function clear<T>(ar: T[]) {
+    ar.splice(0, ar.length);
+  }
 }

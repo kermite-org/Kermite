@@ -1,24 +1,13 @@
-import { IAssignOperation, IAssignEntry_Single } from '~defs/ProfileData';
-import { VirtualKey } from '~defs/VirtualKeys';
+import { IAssignOperation } from '~defs/ProfileData';
+import { ModifierVirtualKey, VirtualKey } from '~defs/VirtualKeys';
 import {
+  createModuleIo,
+  IKeyStrokeAssignEvent,
+  IVirtualKeyEvent,
   logicSimulatorCConfig,
-  logicSimulatorStateC,
-  IKeyTrigger
+  logicSimulatorStateC
 } from './LogicSimulatorCCommon';
-import { ModuleN_VirtualKeyEventAligner } from './ModuleN_VirtualKeyEventAligner';
-import { ModuleD_KeyInputAssignReader } from './ModuleD_KeyInputAssignReader';
-
-type IKeyStrokeAssignEvent =
-  | {
-      type: 'down';
-      keyId: string;
-      trigger: IKeyTrigger;
-      op: IAssignOperation;
-    }
-  | {
-      type: 'up';
-      keyId: string;
-    };
+import { KeyInputAssignReaderCore } from './ModuleD_KeyInputAssignReader';
 
 const fixedTextPattern: { [vk in VirtualKey]?: VirtualKey[] } = {
   K_NN: ['K_N', 'K_N'],
@@ -27,6 +16,9 @@ const fixedTextPattern: { [vk in VirtualKey]?: VirtualKey[] } = {
 };
 
 export namespace ModuleK_KeyStrokeAssignDispatcher {
+  export const io = createModuleIo<IKeyStrokeAssignEvent, IVirtualKeyEvent>(
+    handleLogicalStroke
+  );
   const local = new (class {
     operationBindMap: {
       [keyId: string]: IAssignOperation;
@@ -42,10 +34,21 @@ export namespace ModuleK_KeyStrokeAssignDispatcher {
     return layer?.isShiftLayer;
   }
 
+  function pushVirtualKey(
+    virtualKey: VirtualKey,
+    attachedModifiers?: ModifierVirtualKey[]
+  ) {
+    io.emit({ virtualKey, attachedModifiers, isDown: true });
+  }
+
+  function removeVirtualKey(virtualKey: VirtualKey) {
+    io.emit({ virtualKey, isDown: false });
+  }
+
   function emitFakeStrokes(vks: VirtualKey[]) {
     vks.forEach((vk) => {
-      ModuleN_VirtualKeyEventAligner.pushVirtualKey(vk);
-      ModuleN_VirtualKeyEventAligner.removeVirtualKey(vk);
+      pushVirtualKey(vk);
+      removeVirtualKey(vk);
     });
   }
 
@@ -84,18 +87,15 @@ export namespace ModuleK_KeyStrokeAssignDispatcher {
         if (local.nextDoubleReserved) {
           emitFakeStrokes([op.virtualKey]);
         }
-        ModuleN_VirtualKeyEventAligner.pushVirtualKey(
-          op.virtualKey,
-          op.attachedModifiers
-        );
+        pushVirtualKey(op.virtualKey, op.attachedModifiers);
         local.lastInputVirtualKey = op.virtualKey;
       } else if (op.type === 'layerCall') {
         const { targetLayerId } = op;
         if (isShiftLayer(targetLayerId)) {
-          ModuleN_VirtualKeyEventAligner.pushVirtualKey('K_Shift');
+          pushVirtualKey('K_Shift');
         }
         holdLayerIds.add(targetLayerId);
-        // console.log(`HL`, holdLayerIds);
+        // console.log(`layers`, holdLayerIds);
       }
       local.nextDoubleReserved = false;
       operationBindMap[keyId] = op;
@@ -112,26 +112,26 @@ export namespace ModuleK_KeyStrokeAssignDispatcher {
       const op = operationBindMap[keyId];
       if (op) {
         if (op.type === 'keyInput') {
-          ModuleN_VirtualKeyEventAligner.removeVirtualKey(op.virtualKey);
+          removeVirtualKey(op.virtualKey);
         }
         if (op.type === 'layerCall' && isShiftLayer(op.targetLayerId)) {
-          ModuleN_VirtualKeyEventAligner.removeVirtualKey('K_Shift');
+          removeVirtualKey('K_Shift');
         }
         if (op.type === 'layerCall') {
           holdLayerIds.delete(op.targetLayerId);
-          // console.log(`HL`, holdLayerIds);
+          // console.log(`layers`, holdLayerIds);
         }
         delete operationBindMap[keyId];
       }
     }
   }
 
-  export function handleLogicalStroke(ev: IKeyStrokeAssignEvent) {
+  function handleLogicalStroke(ev: IKeyStrokeAssignEvent) {
     if (1) {
       //dirty fix for layer + sorter combination problem
       if (ev.type === 'down') {
         const assignType = logicSimulatorStateC.profileData.assignType;
-        const op = ModuleD_KeyInputAssignReader.getAssignOperation(
+        const op = KeyInputAssignReaderCore.getAssignOperation(
           ev.keyId,
           ev.trigger,
           assignType

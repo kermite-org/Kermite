@@ -1,5 +1,5 @@
 import { ModifierVirtualKey, VirtualKey } from '~defs/VirtualKeys';
-import { ModuleR_VirtualKeyBinder } from './ModuleR_VirtualKeyBinder';
+import { createModuleIo, IVirtualKeyEvent } from './LogicSimulatorCCommon';
 
 const cfg = {
   // outputMinimumDownEventInterval: 70,
@@ -17,16 +17,19 @@ class VirtualStroke {
   inputDownFired: boolean = false;
   outputDownTick?: number;
   outputUpTick?: number;
+  emitter: (ev: IVirtualKeyEvent) => void;
 
   constructor(
     prev: VirtualStroke | undefined,
     virtualKey: VirtualKey,
-    attachedModifiers: ModifierVirtualKey[]
+    attachedModifiers: ModifierVirtualKey[],
+    emitter: (ev: IVirtualKeyEvent) => void
     // private ignoreOneInputUp?: boolean
   ) {
     this.prevStroke = prev;
     this.virtualKey = virtualKey;
     this.attachedModifiers = attachedModifiers;
+    this.emitter = emitter;
   }
 
   fireInputUp() {
@@ -67,10 +70,8 @@ class VirtualStroke {
   }
 
   private outputDown() {
-    ModuleR_VirtualKeyBinder.pushVirtualKey(
-      this.virtualKey,
-      this.attachedModifiers
-    );
+    const { virtualKey, attachedModifiers } = this;
+    this.emitter({ virtualKey, attachedModifiers, isDown: true });
     this.outputDownTick = Date.now();
   }
 
@@ -86,7 +87,8 @@ class VirtualStroke {
   }
 
   private outputUp() {
-    ModuleR_VirtualKeyBinder.removeVirtualKey(this.virtualKey);
+    const { virtualKey } = this;
+    this.emitter({ virtualKey, isDown: false });
     this.outputUpTick = Date.now();
   }
 
@@ -105,12 +107,16 @@ class VirtualStroke {
 }
 
 export namespace ModuleN_VirtualKeyEventAligner {
+  export const io = createModuleIo<IVirtualKeyEvent, IVirtualKeyEvent>(
+    handleInputEvent
+  );
+
   const local = new (class {
     strokes: VirtualStroke[] = [];
     lastStroke: VirtualStroke | undefined = undefined;
   })();
 
-  export function pushVirtualKey(
+  function pushVirtualKey(
     virtualKey: VirtualKey,
     attachedModifiers: ModifierVirtualKey[] = []
   ) {
@@ -126,19 +132,28 @@ export namespace ModuleN_VirtualKeyEventAligner {
     const stroke = new VirtualStroke(
       local.lastStroke,
       virtualKey,
-      attachedModifiers
+      attachedModifiers,
+      io.emit
       // strokeOverwritten
     );
     local.strokes.push(stroke);
     local.lastStroke = stroke;
   }
 
-  export function removeVirtualKey(virtualKey: VirtualKey) {
+  function removeVirtualKey(virtualKey: VirtualKey) {
     const stroke = local.strokes.find(
       (s) => s.virtualKey === virtualKey && s.inputHold
     );
     if (stroke) {
       stroke.fireInputUp();
+    }
+  }
+
+  function handleInputEvent(ev: IVirtualKeyEvent) {
+    if (ev.isDown) {
+      pushVirtualKey(ev.virtualKey, ev.attachedModifiers);
+    } else {
+      removeVirtualKey(ev.virtualKey);
     }
   }
 

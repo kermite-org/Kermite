@@ -1,11 +1,6 @@
 import { HidKeyCodes } from '~defs/HidKeyCodes';
-import { ModifierVirtualKey, VirtualKey } from '~defs/VirtualKeys';
-import { ModuleW_HidReportOutputBuffer } from './ModuleW_HidReportOutputBuffer';
-
-export interface IHoldKeySet {
-  virtualKey: VirtualKey;
-  attachedModifiers: ModifierVirtualKey[];
-}
+import { ModifierVirtualKey } from '~defs/VirtualKeys';
+import { IHoldKeySet, createModuleIo } from './LogicSimulatorCCommon';
 
 export namespace ModuleT_OutputKeyStateCombiner {
   function getModifierByte(modFlags: { [vk in ModifierVirtualKey]: boolean }) {
@@ -97,12 +92,14 @@ export namespace ModuleT_OutputKeyStateCombiner {
     }
   }
 
-  export function updateOutputReport(holdKeySets: IHoldKeySet[]) {
+  export const io = createModuleIo<IHoldKeySet[], number[]>(updateOutputReport);
+
+  function updateOutputReport(holdKeySets: IHoldKeySet[]) {
     const { holdKeyCodes, modifierByte } = reduceHoldKeyBindsToHidReport(
       holdKeySets
     );
     updateSlots(holdKeyCodes);
     const hidReport = [modifierByte, 0, ...local.slots];
-    ModuleW_HidReportOutputBuffer.commitHidReport(hidReport);
+    io.emit(hidReport);
   }
 }

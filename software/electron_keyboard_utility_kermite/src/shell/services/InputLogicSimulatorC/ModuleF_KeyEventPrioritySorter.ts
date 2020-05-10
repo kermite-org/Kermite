@@ -1,29 +1,10 @@
 import { sortOrderBy } from '~funcs/Utils';
-import { VirtualKey } from '~defs/VirtualKeys';
-import { IAssignOperation } from '~defs/ProfileData';
-import { ModuleK_KeyStrokeAssignDispatcher } from './ModuleK_KeyStrokeAssignDispatcher';
-import { IKeyTrigger } from './LogicSimulatorCCommon';
-
-export type PriorityVirtualKey =
-  | VirtualKey
-  | 'PK_SortOrder_Forward'
-  | 'PK_SortOrder_Backward';
-
-export type IKeyStrokeAssignEvent =
-  | {
-      type: 'down';
-      keyId: string;
-      trigger: IKeyTrigger;
-      op: IAssignOperation;
-      priorityVirtualKey: PriorityVirtualKey;
-      tick: number;
-    }
-  | {
-      type: 'up';
-      keyId: string;
-      priorityVirtualKey: PriorityVirtualKey;
-      tick: number;
-    };
+import {
+  createModuleIo,
+  logicSimulatorCConfig,
+  PriorityVirtualKey,
+  IKeyStrokeAssignEvent
+} from './LogicSimulatorCCommon';
 
 const virtualKeyPriorityOrders: PriorityVirtualKey[] = [
   'PK_SortOrder_Forward',
@@ -76,6 +57,11 @@ const cfg = {
 };
 
 export namespace ModuleF_KeyEventPrioritySorter {
+  export const io = createModuleIo<
+    IKeyStrokeAssignEvent,
+    IKeyStrokeAssignEvent
+  >(pushStrokeAssignEvent);
+
   const local = new (class {
     holdCount: number = 0;
     inputQueue: IKeyStrokeAssignEvent[] = [];
@@ -110,7 +96,12 @@ export namespace ModuleF_KeyEventPrioritySorter {
     }
   }
 
-  export function pushStrokeAssignEvent(ev: IKeyStrokeAssignEvent) {
+  function pushStrokeAssignEvent(ev: IKeyStrokeAssignEvent) {
+    if (!logicSimulatorCConfig.usePrioritySorter) {
+      local.outputQueue.push(ev);
+      return;
+    }
+
     local.inputQueue.push(ev);
     if (ev.type === 'down') {
       local.holdCount++;
@@ -127,7 +118,7 @@ export namespace ModuleF_KeyEventPrioritySorter {
   export function processTicker() {
     const ev = readQueuedEventOne();
     if (ev) {
-      ModuleK_KeyStrokeAssignDispatcher.handleLogicalStroke(ev);
+      io.emit(ev);
     }
   }
 }

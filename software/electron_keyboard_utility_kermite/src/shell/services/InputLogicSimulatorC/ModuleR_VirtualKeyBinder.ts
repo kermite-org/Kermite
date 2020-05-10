@@ -1,16 +1,20 @@
 import { ModifierVirtualKey, VirtualKey } from '~defs/VirtualKeys';
 import { Arrays } from '~funcs/Arrays';
 import {
-  ModuleT_OutputKeyStateCombiner,
+  createModuleIo,
+  IVirtualKeyEvent,
   IHoldKeySet
-} from './ModuleT_OutputKeyStateCombiner';
+} from './LogicSimulatorCCommon';
 
 export namespace ModuleR_VirtualKeyBinder {
+  export const io = createModuleIo<IVirtualKeyEvent, IHoldKeySet[]>(
+    handleInputEvent
+  );
   const local = new (class {
     holdKeySets: IHoldKeySet[] = [];
   })();
 
-  export function pushVirtualKey(
+  function pushVirtualKey(
     virtualKey: VirtualKey,
     attachedModifiers: ModifierVirtualKey[] = []
   ) {
@@ -19,17 +23,25 @@ export namespace ModuleR_VirtualKeyBinder {
       virtualKey,
       attachedModifiers
     });
-    ModuleT_OutputKeyStateCombiner.updateOutputReport(holdKeySets);
+    io.emit(holdKeySets);
   }
 
-  export function removeVirtualKey(virtualKey: VirtualKey) {
+  function removeVirtualKey(virtualKey: VirtualKey) {
     const { holdKeySets } = local;
     const removed = Arrays.removeIf(
       holdKeySets,
       (hk) => hk.virtualKey === virtualKey
     );
     if (removed) {
-      ModuleT_OutputKeyStateCombiner.updateOutputReport(holdKeySets);
+      io.emit(holdKeySets);
+    }
+  }
+
+  function handleInputEvent(ev: IVirtualKeyEvent) {
+    if (ev.isDown) {
+      pushVirtualKey(ev.virtualKey, ev.attachedModifiers);
+    } else {
+      removeVirtualKey(ev.virtualKey);
     }
   }
 }

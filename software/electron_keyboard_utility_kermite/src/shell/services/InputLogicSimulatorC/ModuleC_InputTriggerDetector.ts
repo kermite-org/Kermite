@@ -1,8 +1,11 @@
-import { ModuleD_KeyInputAssignReader } from './ModuleD_KeyInputAssignReader';
+import {
+  createModuleIo,
+  IKeyTriggerEvent,
+  IKeyIdKeyEvent,
+  IKeyTrigger
+} from './LogicSimulatorCCommon';
 
 const TH = 400;
-
-type IKeyTrigger = 'down' | 'tap' | 'hold' | 'up';
 
 class TriggerResolver {
   private downTick: number = 0;
@@ -57,15 +60,16 @@ class TriggerResolver {
 }
 
 export namespace ModuleC_InputTriggerDetector {
+  export const io = createModuleIo<IKeyIdKeyEvent, IKeyTriggerEvent>(
+    handleKeyInput
+  );
+
   const local = new (class {
     triggerResolvers: { [keyId: string]: TriggerResolver } = {};
   })();
 
   function onTriggerDetected(keyId: string, trigger: IKeyTrigger) {
-    ModuleD_KeyInputAssignReader.processEvent({
-      keyId,
-      trigger
-    });
+    io.emit({ keyId, trigger });
   }
 
   function getKeyResolverCached(keyId: string) {
@@ -80,10 +84,12 @@ export namespace ModuleC_InputTriggerDetector {
     return resolver;
   }
 
-  export function handleKeyInput(keyId: string, isDown: boolean) {
+  function handleKeyInput(ev: { keyId: string; isDown: boolean }) {
+    const { keyId, isDown } = ev;
     const resolver = getKeyResolverCached(keyId);
     if (isDown) {
       if (1) {
+        //interrupt hold resolver
         Object.values(local.triggerResolvers)
           .filter((tr) => tr.resolving)
           .forEach((tr) => tr.inputInterrupt());
