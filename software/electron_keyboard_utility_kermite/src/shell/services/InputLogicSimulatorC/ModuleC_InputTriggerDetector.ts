@@ -6,7 +6,7 @@ type IKeyTrigger = 'down' | 'tap' | 'hold' | 'up';
 
 class TriggerResolver {
   private downTick: number = 0;
-  private resolving: boolean = false;
+  private _resolving: boolean = false;
 
   constructor(
     private keyId: string,
@@ -17,27 +17,40 @@ class TriggerResolver {
     this.destProc(this.keyId, trigger);
   }
 
-  down() {
-    this.downTick = Date.now();
-    this.emitTrigger('down');
-    this.resolving = true;
+  get resolving() {
+    return this._resolving;
   }
 
-  up() {
-    const curTick = Date.now();
-    if (curTick < this.downTick + TH) {
-      this.emitTrigger('tap');
+  inputDown() {
+    this.downTick = Date.now();
+    this.emitTrigger('down');
+    this._resolving = true;
+  }
+
+  inputInterrupt() {
+    if (this._resolving) {
+      this.emitTrigger('hold');
+      this._resolving = false;
+    }
+  }
+
+  inputUp() {
+    if (this._resolving) {
+      const curTick = Date.now();
+      if (curTick < this.downTick + TH) {
+        this.emitTrigger('tap');
+        this._resolving = false;
+      }
     }
     this.emitTrigger('up');
-    this.resolving = false;
   }
 
   tick() {
-    if (this.resolving) {
+    if (this._resolving) {
       const curTick = Date.now();
       if (curTick >= this.downTick + TH) {
         this.emitTrigger('hold');
-        this.resolving = false;
+        this._resolving = false;
       }
     }
   }
@@ -70,9 +83,15 @@ export namespace ModuleC_InputTriggerDetector {
   export function handleKeyInput(keyId: string, isDown: boolean) {
     const resolver = getKeyResolverCached(keyId);
     if (isDown) {
-      resolver.down();
+      if (1) {
+        Object.values(local.triggerResolvers)
+          .filter((tr) => tr.resolving)
+          .forEach((tr) => tr.inputInterrupt());
+      }
+
+      resolver.inputDown();
     } else {
-      resolver.up();
+      resolver.inputUp();
     }
   }
 

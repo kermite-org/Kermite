@@ -110,13 +110,13 @@ export namespace ModuleD_KeyInputAssignReader {
 
   function processEvent_Dual(ev: IKeyTriggerEvent) {
     const { keyId, trigger } = ev;
-
+    // console.log(keyId, trigger);
     const assign = getAssign(keyId, 'dual') as IAssignEntry_Dual | undefined;
     if (assign) {
       const pri = assign?.primaryOp;
       const sec = assign?.secondaryOp;
 
-      if (0) {
+      if (1) {
         //tap-primary-hold-secondary
         if (pri && sec) {
           if (trigger === 'tap') {
@@ -154,10 +154,10 @@ export namespace ModuleD_KeyInputAssignReader {
           }
         }
       }
+    }
 
-      if (trigger === 'up') {
-        pushStrokeUp(keyId);
-      }
+    if (trigger === 'up') {
+      pushStrokeUp(keyId);
     }
   }
 
