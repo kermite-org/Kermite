@@ -24,7 +24,7 @@ interface IKeyTriggerEvent {
 }
 
 export namespace ModuleD_KeyInputAssignReader {
-  function getAssign(
+  export function getAssign(
     keyId: string,
     targetType: 'single' | 'dual'
   ): IAssignEntry | undefined {
@@ -53,12 +53,12 @@ export namespace ModuleD_KeyInputAssignReader {
     }
   }
 
-  function getPriorityVirtualKey(assign: IAssignOperation) {
-    if (assign.type === 'layerCall') {
+  function getPriorityVirtualKey(op: IAssignOperation) {
+    if (op.type === 'layerCall') {
       return 'PK_SortOrder_Forward';
     }
-    if (assign.type === 'keyInput' && assign.virtualKey) {
-      return assign.virtualKey;
+    if (op.type === 'keyInput' && op.virtualKey) {
+      return op.virtualKey;
     }
     return 'PK_SortOrder_Backward';
   }
@@ -67,13 +67,13 @@ export namespace ModuleD_KeyInputAssignReader {
     holdKeyIdSet: Set<string> = new Set();
   })();
 
-  function pushStrokeDown(keyId: string, assign: IAssignOperation) {
+  function pushStrokeDown(keyId: string, op: IAssignOperation) {
     const { holdKeyIdSet } = local;
-    const priorityVirtualKey = getPriorityVirtualKey(assign);
+    const priorityVirtualKey = getPriorityVirtualKey(op);
     pushStrokeEvent({
       type: 'down',
       keyId,
-      assign,
+      op,
       priorityVirtualKey,
       tick: Date.now()
     });

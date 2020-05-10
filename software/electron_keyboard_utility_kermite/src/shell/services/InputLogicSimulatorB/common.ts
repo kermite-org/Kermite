@@ -52,13 +52,13 @@ export interface KeyTriggerEvent {
 export interface KeyAssignEvent {
   keyId: string;
   // trigger: TKeyTrigger;
-  assign: IAssignOperation;
+  op: IAssignOperation;
 }
 
 export interface KeyAssignEventWithTick {
   keyId: string;
   // trigger: TKeyTrigger;
-  assign: IAssignOperation;
+  op: IAssignOperation;
   tick: number;
 }
 

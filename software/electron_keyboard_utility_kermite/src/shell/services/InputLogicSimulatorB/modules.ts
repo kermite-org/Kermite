@@ -44,16 +44,16 @@ export function AssignMappingModule(
   const targetLayerId = logicSimulatorState.layerState.currentLayerId;
   const primary = keyAssigns[`${targetLayerId}.${keyId}`]?.op;
   if (trigger === 'down' && primary) {
-    return { keyId, assign: primary };
+    return { keyId, op: primary };
   }
   return undefined;
 }
 
 export function AssignDriverModule(src: KeyAssignEvent): KeyAssignEvent {
-  const { keyId, assign } = src;
+  const { keyId, op: assign } = src;
   if (assign.type === 'keyInput') {
     console.log('DOWN', assign.virtualKey);
   }
   logicSimulatorState.boundAssigns[keyId] = assign;
-  return { keyId, assign };
+  return { keyId, op: assign };
 }

@@ -1,16 +1,17 @@
-import { IAssignOperation } from '~defs/ProfileData';
+import { IAssignOperation, IAssignEntry_Single } from '~defs/ProfileData';
 import { VirtualKey } from '~defs/VirtualKeys';
 import {
   logicSimulatorCConfig,
   logicSimulatorStateC
 } from './LogicSimulatorCCommon';
 import { ModuleN_VirtualKeyEventAligner } from './ModuleN_VirtualKeyEventAligner';
+import { ModuleD_KeyInputAssignReader } from './ModuleD_KeyInputAssignReader';
 
 type IKeyStrokeAssignEvent =
   | {
       type: 'down';
       keyId: string;
-      assign: IAssignOperation;
+      op: IAssignOperation;
     }
   | {
       type: 'up';
@@ -50,12 +51,12 @@ export namespace ModuleK_KeyStrokeAssignDispatcher {
     const { holdLayerIds } = logicSimulatorStateC;
     const { operationBindMap } = local;
     if (ev.type === 'down') {
-      const { keyId, assign } = ev;
+      const { keyId, op } = ev;
       // eslint-disable-next-line no-console
-      console.log('[K]down', ev.keyId, assign);
+      console.log('[K]down', ev.keyId, op);
 
-      if (assign.type === 'keyInput') {
-        const vk = assign.virtualKey;
+      if (op.type === 'keyInput') {
+        const vk = op.virtualKey;
 
         if (vk === 'K_NextDouble') {
           local.nextDoubleReserved = true;
@@ -72,29 +73,30 @@ export namespace ModuleK_KeyStrokeAssignDispatcher {
         }
 
         if (logicSimulatorCConfig.useImmediateDownUp) {
-          emitFakeStrokes([assign.virtualKey]);
+          emitFakeStrokes([op.virtualKey]);
           return;
         }
       }
 
-      if (assign.type === 'keyInput') {
+      if (op.type === 'keyInput') {
         if (local.nextDoubleReserved) {
-          emitFakeStrokes([assign.virtualKey]);
+          emitFakeStrokes([op.virtualKey]);
         }
         ModuleN_VirtualKeyEventAligner.pushVirtualKey(
-          assign.virtualKey,
-          assign.attachedModifiers
+          op.virtualKey,
+          op.attachedModifiers
         );
-        local.lastInputVirtualKey = assign.virtualKey;
-      } else if (assign.type === 'layerCall') {
-        const { targetLayerId } = assign;
+        local.lastInputVirtualKey = op.virtualKey;
+      } else if (op.type === 'layerCall') {
+        const { targetLayerId } = op;
         if (isShiftLayer(targetLayerId)) {
           ModuleN_VirtualKeyEventAligner.pushVirtualKey('K_Shift');
         }
         holdLayerIds.add(targetLayerId);
+        // console.log(`HL`, holdLayerIds);
       }
       local.nextDoubleReserved = false;
-      operationBindMap[keyId] = assign;
+      operationBindMap[keyId] = op;
     }
   }
 
@@ -103,16 +105,19 @@ export namespace ModuleK_KeyStrokeAssignDispatcher {
     const { operationBindMap } = local;
     if (ev.type === 'up') {
       const { keyId } = ev;
-      const assign = operationBindMap[keyId];
-      if (assign) {
-        if (assign.type === 'keyInput') {
-          ModuleN_VirtualKeyEventAligner.removeVirtualKey(assign.virtualKey);
+      // eslint-disable-next-line no-console
+      console.log('[K]up', ev.keyId);
+      const op = operationBindMap[keyId];
+      if (op) {
+        if (op.type === 'keyInput') {
+          ModuleN_VirtualKeyEventAligner.removeVirtualKey(op.virtualKey);
         }
-        if (assign.type === 'layerCall' && isShiftLayer(assign.targetLayerId)) {
+        if (op.type === 'layerCall' && isShiftLayer(op.targetLayerId)) {
           ModuleN_VirtualKeyEventAligner.removeVirtualKey('K_Shift');
         }
-        if (assign.type === 'layerCall') {
-          holdLayerIds.delete(assign.targetLayerId);
+        if (op.type === 'layerCall') {
+          holdLayerIds.delete(op.targetLayerId);
+          // console.log(`HL`, holdLayerIds);
         }
         delete operationBindMap[keyId];
       }

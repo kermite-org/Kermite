@@ -48,21 +48,21 @@ export namespace KeyAssignToLogicalKeyActionResolver {
   }
 
   export function mapAssignOperationToLogicalKeyAction(
-    assign: IAssignOperation
+    op: IAssignOperation
   ): LogicalKeyAction | undefined {
-    if (assign.type === 'keyInput') {
-      const { virtualKey, attachedModifiers } = assign;
+    if (op.type === 'keyInput') {
+      const { virtualKey, attachedModifiers } = op;
       return createKeyInputLogicalKeyAction(virtualKey, attachedModifiers);
-    } else if (assign.type === 'layerCall') {
-      const { targetLayerId, invocationMode } = assign;
+    } else if (op.type === 'layerCall') {
+      const { targetLayerId, invocationMode } = op;
       return {
         type: 'holdLayer',
         targetLayerId,
         layerInvocationMode: invocationMode || 'hold',
         rcode: getRandomCode()
       };
-    } else if (assign.type === 'modifierCall') {
-      const { modifierKey, isOneShot } = assign;
+    } else if (op.type === 'modifierCall') {
+      const { modifierKey, isOneShot } = op;
       const modifierKeyCode = HidKeyCodes[modifierKey];
       return {
         type: 'holdModifier',

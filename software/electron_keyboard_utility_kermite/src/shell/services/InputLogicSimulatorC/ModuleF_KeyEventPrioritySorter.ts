@@ -12,7 +12,7 @@ export type IKeyStrokeAssignEvent =
   | {
       type: 'down';
       keyId: string;
-      assign: IAssignOperation;
+      op: IAssignOperation;
       priorityVirtualKey: PriorityVirtualKey;
       tick: number;
     }

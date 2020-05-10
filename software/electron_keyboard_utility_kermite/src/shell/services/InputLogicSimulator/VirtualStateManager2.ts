@@ -100,11 +100,11 @@ export namespace VirtualKeyStateManager2 {
 
   function resolveAssign(
     keyId: string,
-    assign: IAssignOperation,
+    op: IAssignOperation,
     trigger: 'down' | 'tap' | 'hold'
   ) {
     const action = KeyAssignToLogicalKeyActionResolver.mapAssignOperationToLogicalKeyAction(
-      assign
+      op
     );
     if (action) {
       coloredLog(

@@ -40,10 +40,10 @@ const virtualKeyPriorityOrders: VirtualKey[] = [
   'K_Minus'
 ];
 
-function getAssignOrder(assign: IAssignOperation): number {
+function getAssignOrder(op: IAssignOperation): number {
   let order = 0;
-  if (assign.type === 'keyInput') {
-    order = virtualKeyPriorityOrders.indexOf(assign.virtualKey);
+  if (op.type === 'keyInput') {
+    order = virtualKeyPriorityOrders.indexOf(op.virtualKey);
     if (order === -1) {
       order = 999;
     }
@@ -72,12 +72,10 @@ export class PrioritySorterModule {
       const latest = this.events[this.events.length - 1];
       const curTick = Date.now();
       if (curTick > latest.tick + waitTimeMs) {
-        this.events.sort(
-          (a, b) => getAssignOrder(a.assign) - getAssignOrder(b.assign)
-        );
+        this.events.sort((a, b) => getAssignOrder(a.op) - getAssignOrder(b.op));
         this.events.forEach((ev) => {
-          const { keyId, assign } = ev;
-          this.dstChannel.emit({ keyId, assign });
+          const { keyId, op: assign } = ev;
+          this.dstChannel.emit({ keyId, op: assign });
         });
         this.events = [];
       }
