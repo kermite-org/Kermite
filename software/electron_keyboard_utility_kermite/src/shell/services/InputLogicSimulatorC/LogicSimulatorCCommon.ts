@@ -1,5 +1,9 @@
 import { fallbackProfileData, IProfileData } from '~defs/ProfileData';
 
+//down-tap-up
+//down-hold-up
+export type IKeyTrigger = 'down' | 'tap' | 'hold' | 'up';
+
 export const logicSimulatorStateC = new (class {
   profileData: IProfileData = fallbackProfileData;
   holdLayerIds: Set<string> = new Set(['la0']);

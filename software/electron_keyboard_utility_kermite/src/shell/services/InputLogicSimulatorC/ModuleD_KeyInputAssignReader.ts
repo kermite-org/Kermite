@@ -1,22 +1,14 @@
+import { IAssignEntry, IAssignOperation } from '~defs/ProfileData';
 import {
-  IAssignOperation,
-  IAssignEntry,
-  IAssignEntry_Single,
-  IAssignEntry_Dual
-} from '~defs/ProfileData';
-import {
+  IKeyTrigger,
   logicSimulatorCConfig,
   logicSimulatorStateC
 } from './LogicSimulatorCCommon';
 import {
-  ModuleF_KeyEventPrioritySorter,
-  IKeyStrokeAssignEvent
+  IKeyStrokeAssignEvent,
+  ModuleF_KeyEventPrioritySorter
 } from './ModuleF_KeyEventPrioritySorter';
 import { ModuleK_KeyStrokeAssignDispatcher } from './ModuleK_KeyStrokeAssignDispatcher';
-
-//down-tap-up
-//down-hold-up
-type IKeyTrigger = 'down' | 'tap' | 'hold' | 'up';
 
 interface IKeyTriggerEvent {
   keyId: string;
@@ -67,12 +59,17 @@ export namespace ModuleD_KeyInputAssignReader {
     holdKeyIdSet: Set<string> = new Set();
   })();
 
-  function pushStrokeDown(keyId: string, op: IAssignOperation) {
+  function pushStrokeDown(
+    keyId: string,
+    op: IAssignOperation,
+    trigger: IKeyTrigger
+  ) {
     const { holdKeyIdSet } = local;
     const priorityVirtualKey = getPriorityVirtualKey(op);
     pushStrokeEvent({
       type: 'down',
       keyId,
+      trigger,
       op,
       priorityVirtualKey,
       tick: Date.now()
@@ -93,81 +90,52 @@ export namespace ModuleD_KeyInputAssignReader {
     }
   }
 
-  function processEvent_Signle(ev: IKeyTriggerEvent) {
-    const { keyId, trigger } = ev;
-    if (trigger === 'down') {
-      const assign = getAssign(keyId, 'single') as
-        | IAssignEntry_Single
-        | undefined;
-      if (assign?.op) {
-        pushStrokeDown(keyId, assign.op);
+  export function getAssignOperation(
+    keyId: string,
+    trigger: IKeyTrigger,
+    targetType: 'single' | 'dual'
+  ): IAssignOperation | undefined {
+    const assign = getAssign(keyId, targetType);
+    if (targetType === 'single' && assign?.type === 'single') {
+      if (trigger === 'down') {
+        return assign.op;
       }
     }
-    if (trigger === 'up') {
-      pushStrokeUp(keyId);
-    }
-  }
-
-  function processEvent_Dual(ev: IKeyTriggerEvent) {
-    const { keyId, trigger } = ev;
-    // console.log(keyId, trigger);
-    const assign = getAssign(keyId, 'dual') as IAssignEntry_Dual | undefined;
-    if (assign) {
+    if (targetType === 'dual' && assign?.type === 'dual') {
       const pri = assign?.primaryOp;
       const sec = assign?.secondaryOp;
-
-      if (1) {
-        //tap-primary-hold-secondary
-        if (pri && sec) {
-          if (trigger === 'tap') {
-            pushStrokeDown(keyId, pri);
-          }
-          if (trigger === 'hold') {
-            pushStrokeDown(keyId, sec);
-          }
-        } else if (pri && !sec) {
-          if (trigger === 'down') {
-            pushStrokeDown(keyId, pri);
-          }
-        } else if (!pri && sec) {
-          if (trigger === 'down') {
-            pushStrokeDown(keyId, sec);
-          }
+      //tap-primary-hold-secondary
+      if (pri && sec) {
+        if (trigger === 'tap') {
+          return pri;
         }
-      } else {
-        //down-secondary-tap-primary
-        if (pri && sec) {
-          if (trigger === 'down') {
-            pushStrokeDown(keyId, sec);
-          }
-          if (trigger === 'tap') {
-            pushStrokeUp(keyId);
-            pushStrokeDown(keyId, pri);
-          }
-        } else if (pri && !sec) {
-          if (trigger === 'down') {
-            pushStrokeDown(keyId, pri);
-          }
-        } else if (!pri && sec) {
-          if (trigger === 'down') {
-            pushStrokeDown(keyId, sec);
-          }
+        if (trigger === 'hold') {
+          return sec;
+        }
+      } else if (pri && !sec) {
+        if (trigger === 'down') {
+          return pri;
+        }
+      } else if (!pri && sec) {
+        if (trigger === 'down') {
+          return sec;
         }
       }
     }
-
-    if (trigger === 'up') {
-      pushStrokeUp(keyId);
-    }
+    return undefined;
   }
 
   export function processEvent(ev: IKeyTriggerEvent) {
     const assignType = logicSimulatorStateC.profileData.assignType;
-    if (assignType === 'single') {
-      processEvent_Signle(ev);
+    const { keyId, trigger } = ev;
+    if (trigger === 'down' || trigger === 'tap' || trigger === 'hold') {
+      const op = getAssignOperation(keyId, trigger, assignType);
+      if (op) {
+        pushStrokeDown(keyId, op, trigger);
+      }
     }
-    if (assignType === 'dual') {
-      processEvent_Dual(ev);
+    if (trigger === 'up') {
+      pushStrokeUp(keyId);
     }
   }
 }

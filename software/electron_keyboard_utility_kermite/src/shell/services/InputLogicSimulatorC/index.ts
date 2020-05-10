@@ -43,6 +43,7 @@ export class InputLogicSimulatorC implements IInputLogicSimulator {
   }
 
   async terminate() {
+    appGlobal.deviceService.writeSideBrainHidReport([0, 0, 0, 0, 0, 0, 0, 0]);
     appGlobal.deviceService.unsubscribe(this.onRealtimeKeyboardEvent);
     appGlobal.deviceService.setSideBrainMode(false);
     this.tickerTimer.stop();

@@ -2,6 +2,7 @@ import { sortOrderBy } from '~funcs/Utils';
 import { VirtualKey } from '~defs/VirtualKeys';
 import { IAssignOperation } from '~defs/ProfileData';
 import { ModuleK_KeyStrokeAssignDispatcher } from './ModuleK_KeyStrokeAssignDispatcher';
+import { IKeyTrigger } from './LogicSimulatorCCommon';
 
 export type PriorityVirtualKey =
   | VirtualKey
@@ -12,6 +13,7 @@ export type IKeyStrokeAssignEvent =
   | {
       type: 'down';
       keyId: string;
+      trigger: IKeyTrigger;
       op: IAssignOperation;
       priorityVirtualKey: PriorityVirtualKey;
       tick: number;

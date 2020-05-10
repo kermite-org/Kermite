@@ -2,7 +2,8 @@ import { IAssignOperation, IAssignEntry_Single } from '~defs/ProfileData';
 import { VirtualKey } from '~defs/VirtualKeys';
 import {
   logicSimulatorCConfig,
-  logicSimulatorStateC
+  logicSimulatorStateC,
+  IKeyTrigger
 } from './LogicSimulatorCCommon';
 import { ModuleN_VirtualKeyEventAligner } from './ModuleN_VirtualKeyEventAligner';
 import { ModuleD_KeyInputAssignReader } from './ModuleD_KeyInputAssignReader';
@@ -11,6 +12,7 @@ type IKeyStrokeAssignEvent =
   | {
       type: 'down';
       keyId: string;
+      trigger: IKeyTrigger;
       op: IAssignOperation;
     }
   | {
@@ -125,6 +127,22 @@ export namespace ModuleK_KeyStrokeAssignDispatcher {
   }
 
   export function handleLogicalStroke(ev: IKeyStrokeAssignEvent) {
+    if (1) {
+      //dirty fix for layer + sorter combination problem
+      if (ev.type === 'down') {
+        const assignType = logicSimulatorStateC.profileData.assignType;
+        const op = ModuleD_KeyInputAssignReader.getAssignOperation(
+          ev.keyId,
+          ev.trigger,
+          assignType
+        );
+        if (op) {
+          ev.op = op;
+        } else {
+          return;
+        }
+      }
+    }
     handleLogicalStrokeDown(ev);
     handleLogicalStrokeUp(ev);
   }
