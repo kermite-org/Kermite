@@ -15,6 +15,7 @@ import { ModuleN_VirtualKeyEventAligner } from './ModuleN_VirtualKeyEventAligner
 import { ModuleR_VirtualKeyBinder } from './ModuleR_VirtualKeyBinder';
 import { ModuleT_OutputKeyStateCombiner } from './ModuleT_OutputKeyStateCombiner';
 import { ModuleW_HidReportOutputBuffer } from './ModuleW_HidReportOutputBuffer';
+import { delayMs } from '../DeviceService/Helpers';
 
 export namespace InputLogicSimulatorC {
   const tickerTimer = new IntervalTimerWrapper();
@@ -27,9 +28,27 @@ export namespace InputLogicSimulatorC {
     }
   }
 
+  async function hidReportExperiment() {
+    appGlobal.deviceService.writeSideBrainHidReport([2, 0, 0, 30, 0, 0, 0, 0]);
+    await delayMs(100);
+    appGlobal.deviceService.writeSideBrainHidReport([0, 0, 0, 0, 0, 0, 0, 0]);
+    await delayMs(100);
+    appGlobal.deviceService.writeSideBrainHidReport([0, 0, 30, 0, 0, 0, 0, 0]);
+    await delayMs(100);
+    appGlobal.deviceService.writeSideBrainHidReport([0, 0, 0, 0, 0, 0, 0, 0]);
+    await delayMs(100);
+  }
+
   function onRealtimeKeyboardEvent(event: IRealtimeKeyboardEvent) {
     if (event.type === 'keyStateChanged') {
       const { keyIndex, isDown } = event;
+      if (0) {
+        //experiment
+        if (isDown) {
+          hidReportExperiment();
+          return;
+        }
+      }
       ModuleA_KeyIdReader.io.push({ keyIndex, isDown });
     }
   }
