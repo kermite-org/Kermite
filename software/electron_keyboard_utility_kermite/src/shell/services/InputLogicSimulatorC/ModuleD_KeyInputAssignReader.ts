@@ -4,7 +4,8 @@ import {
   IKeyTrigger,
   logicSimulatorStateC,
   IKeyTriggerEvent,
-  IKeyStrokeAssignEvent
+  IKeyStrokeAssignEvent,
+  logicSimulatorCConfig
 } from './LogicSimulatorCCommon';
 
 export namespace KeyInputAssignReaderCore {
@@ -51,6 +52,7 @@ export namespace KeyInputAssignReaderCore {
       }
     }
     if (targetType === 'dual' && assign?.type === 'dual') {
+      const { primeryDefaultTrigger } = logicSimulatorCConfig;
       const pri = assign?.primaryOp;
       const sec = assign?.secondaryOp;
       //tap-primary-hold-secondary
@@ -62,11 +64,11 @@ export namespace KeyInputAssignReaderCore {
           return sec;
         }
       } else if (pri && !sec) {
-        if (trigger === 'down') {
+        if (trigger === primeryDefaultTrigger) {
           return pri;
         }
       } else if (!pri && sec) {
-        if (trigger === 'down') {
+        if (trigger === primeryDefaultTrigger) {
           return sec;
         }
       }

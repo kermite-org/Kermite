@@ -71,9 +71,15 @@ export const logicSimulatorCConfig = new (class {
   usePrioritySorter: boolean = false;
   useImmediateDownUp: boolean = false;
   // useKeyBindEventAligner: boolean = false;
+  // const primeryDefaultTrigger = 'down'
+  primeryDefaultTrigger: 'down' | 'tap' = 'down';
+  useInterruptHold: boolean = false;
+  tapHoldThretholdMs: number = 500;
 })();
 logicSimulatorCConfig.usePrioritySorter = true;
 // logicSimulatorCConfig.useKeyBindEventAligner = true;
+// logicSimulatorCConfig.primeryDefaultTrigger = 'tap';
+logicSimulatorCConfig.useInterruptHold = true;
 
 // logicSimulatorCConfig.usePrioritySorter = false;
 // logicSimulatorCConfig.useImmediateDownUp = false;

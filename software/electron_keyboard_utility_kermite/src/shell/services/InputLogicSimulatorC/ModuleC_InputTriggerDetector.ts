@@ -2,19 +2,23 @@ import {
   createModuleIo,
   IKeyTriggerEvent,
   IKeyIdKeyEvent,
-  IKeyTrigger
+  IKeyTrigger,
+  logicSimulatorCConfig
 } from './LogicSimulatorCCommon';
 
-const TH = 400;
-
 class TriggerResolver {
-  private downTick: number = 0;
+  keyId: string;
+  downTick: number = 0;
+  private destProc: (keyId: string, trigger: IKeyTrigger) => void;
   private _resolving: boolean = false;
 
   constructor(
-    private keyId: string,
-    private destProc: (keyId: string, trigger: IKeyTrigger) => void
-  ) {}
+    keyId: string,
+    destProc: (keyId: string, trigger: IKeyTrigger) => void
+  ) {
+    this.keyId = keyId;
+    this.destProc = destProc;
+  }
 
   private emitTrigger(trigger: IKeyTrigger) {
     this.destProc(this.keyId, trigger);
@@ -39,6 +43,7 @@ class TriggerResolver {
 
   inputUp() {
     if (this._resolving) {
+      const TH = logicSimulatorCConfig.tapHoldThretholdMs;
       const curTick = Date.now();
       if (curTick < this.downTick + TH) {
         this.emitTrigger('tap');
@@ -51,6 +56,7 @@ class TriggerResolver {
   tick() {
     if (this._resolving) {
       const curTick = Date.now();
+      const TH = logicSimulatorCConfig.tapHoldThretholdMs;
       if (curTick >= this.downTick + TH) {
         this.emitTrigger('hold');
         this._resolving = false;
@@ -84,17 +90,37 @@ export namespace ModuleC_InputTriggerDetector {
     return resolver;
   }
 
+  function resolveInterruptHold(keyId: string) {
+    Object.values(local.triggerResolvers)
+      .filter((tr) => tr.resolving && tr.keyId !== keyId)
+      .forEach((tr) => tr.inputInterrupt());
+  }
+
+  function resolveInterruptHold2(keyId: string, downTickTh: number) {
+    Object.values(local.triggerResolvers)
+      .filter(
+        (tr) => tr.resolving && tr.keyId !== keyId && tr.downTick < downTickTh
+      )
+      .forEach((tr) => tr.inputInterrupt());
+  }
+
   function handleKeyInput(ev: { keyId: string; isDown: boolean }) {
     const { keyId, isDown } = ev;
     const resolver = getKeyResolverCached(keyId);
-    if (isDown) {
-      if (1) {
-        //interrupt hold resolver
-        Object.values(local.triggerResolvers)
-          .filter((tr) => tr.resolving)
-          .forEach((tr) => tr.inputInterrupt());
-      }
 
+    const { useInterruptHold, primeryDefaultTrigger } = logicSimulatorCConfig;
+    if (useInterruptHold) {
+      //down interrupt hold
+      if (primeryDefaultTrigger === 'down' && isDown) {
+        resolveInterruptHold(keyId);
+      }
+      //tap interrupt hold
+      if (primeryDefaultTrigger === 'tap' && resolver.resolving && !isDown) {
+        resolveInterruptHold2(keyId, resolver.downTick);
+      }
+    }
+
+    if (isDown) {
       resolver.inputDown();
     } else {
       resolver.inputUp();
