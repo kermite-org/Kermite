@@ -45,14 +45,19 @@ export namespace KeyInputAssignReaderCore {
     trigger: IKeyTrigger,
     targetType: 'single' | 'dual'
   ): IAssignOperation | undefined {
+    const { profileData } = logicSimulatorStateC;
     const assign = getAssign(keyId, targetType);
     if (targetType === 'single' && assign?.type === 'single') {
       if (trigger === 'down') {
         return assign.op;
       }
     }
-    if (targetType === 'dual' && assign?.type === 'dual') {
-      const { primeryDefaultTrigger } = logicSimulatorCConfig;
+    if (
+      targetType === 'dual' &&
+      assign?.type === 'dual' &&
+      profileData.assignType === 'dual'
+    ) {
+      const { primaryDefaultTrigger } = profileData.settings;
       const pri = assign?.primaryOp;
       const sec = assign?.secondaryOp;
       //tap-primary-hold-secondary
@@ -64,11 +69,11 @@ export namespace KeyInputAssignReaderCore {
           return sec;
         }
       } else if (pri && !sec) {
-        if (trigger === primeryDefaultTrigger) {
+        if (trigger === primaryDefaultTrigger) {
           return pri;
         }
       } else if (!pri && sec) {
-        if (trigger === primeryDefaultTrigger) {
+        if (trigger === primaryDefaultTrigger) {
           return sec;
         }
       }
@@ -122,6 +127,7 @@ export namespace ModuleD_KeyInputAssignReader {
   function processEvent(ev: IKeyTriggerEvent) {
     const assignType = logicSimulatorStateC.profileData.assignType;
     const { keyId, trigger } = ev;
+    // console.log({ keyId, trigger });
     if (trigger === 'down' || trigger === 'tap' || trigger === 'hold') {
       const op = KeyInputAssignReaderCore.getAssignOperation(
         keyId,

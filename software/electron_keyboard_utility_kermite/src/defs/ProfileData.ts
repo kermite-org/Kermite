@@ -224,6 +224,7 @@ export type IProfileData = {
 } & (
   | {
       assignType: 'single';
+      settings: {};
       assigns: {
         //laX.kuY
         [address: string]: IAssignEntry_Single | undefined;
@@ -231,6 +232,12 @@ export type IProfileData = {
     }
   | {
       assignType: 'dual';
+      settings: {
+        type: 'dual';
+        primaryDefaultTrigger: 'down' | 'tap';
+        useInterruptHold: boolean;
+        tapHoldThresholdMs: number;
+      };
       assigns: {
         //laX.kuY
         [address: string]: IAssignEntry_Dual | undefined;
@@ -243,6 +250,7 @@ export const fallbackProfileData: IProfileData = {
   // featureLevel: 3,
   keyboardShape: keyboardShape_fallbackData,
   assignType: 'single',
+  settings: {},
   layers: [
     {
       layerId: 'la0',

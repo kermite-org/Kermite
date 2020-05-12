@@ -36,6 +36,12 @@ export function changeProfileDataAssignType(
     return {
       ...profile,
       assignType: 'dual',
+      settings: {
+        type: 'dual',
+        primaryDefaultTrigger: 'down',
+        tapHoldThresholdMs: 200,
+        useInterruptHold: true
+      },
       assigns: mapObjectValues(
         profile.assigns,
         (it) => it && convertSignleAssignToDualAssign(it)
@@ -46,6 +52,7 @@ export function changeProfileDataAssignType(
     return {
       ...profile,
       assignType: 'single',
+      settings: {},
       assigns: mapObjectValues(
         profile.assigns,
         (it) => it && convertDualAssignToSingleAssign(it)

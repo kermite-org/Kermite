@@ -174,14 +174,20 @@ export class ProfileManager {
     if (!profileData.assignType) {
       (profileData as any).assignType = 'single';
     }
-    // if (editModel.layers.length === 0) {
-    //   editModel.layers = duplicateObjectByJsonStringifyParse(
-    //     fallbackProfileData.layers
-    //   );
-    // }
-    // if (!editModel.breedName) {
-    //   editModel.breedName = 'astelia';
-    // }
+
+    if (!profileData.settings) {
+      if (profileData.assignType === 'single') {
+        profileData.settings = {};
+      }
+      if (profileData.assignType === 'dual') {
+        profileData.settings = {
+          type: 'dual',
+          primaryDefaultTrigger: 'down',
+          tapHoldThresholdMs: 200,
+          useInterruptHold: true
+        };
+      }
+    }
   }
 
   private raiseErrorMessage(errorMessage: string) {

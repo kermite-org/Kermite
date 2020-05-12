@@ -24,6 +24,7 @@ const keyboardShape_4x3pad: IKeyboardShape = {
 export const testProfileData: IProfileData = {
   revision: 'PRF02',
   assignType: 'single',
+  settings: {},
   // featureLevel: 3,
   keyboardShape: keyboardShape_4x3pad,
   layers: [

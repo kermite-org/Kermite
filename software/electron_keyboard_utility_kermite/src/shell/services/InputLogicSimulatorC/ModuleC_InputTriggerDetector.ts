@@ -1,9 +1,9 @@
 import {
   createModuleIo,
-  IKeyTriggerEvent,
   IKeyIdKeyEvent,
   IKeyTrigger,
-  logicSimulatorCConfig
+  IKeyTriggerEvent,
+  logicSimulatorStateC
 } from './LogicSimulatorCCommon';
 
 class TriggerResolver {
@@ -11,13 +11,16 @@ class TriggerResolver {
   downTick: number = 0;
   private destProc: (keyId: string, trigger: IKeyTrigger) => void;
   private _resolving: boolean = false;
+  private tapHoldThreshold: number;
 
   constructor(
     keyId: string,
-    destProc: (keyId: string, trigger: IKeyTrigger) => void
+    destProc: (keyId: string, trigger: IKeyTrigger) => void,
+    tapHoldThreshold: number
   ) {
     this.keyId = keyId;
     this.destProc = destProc;
+    this.tapHoldThreshold = tapHoldThreshold;
   }
 
   private emitTrigger(trigger: IKeyTrigger) {
@@ -43,9 +46,11 @@ class TriggerResolver {
 
   inputUp() {
     if (this._resolving) {
-      const TH = logicSimulatorCConfig.tapHoldThretholdMs;
       const curTick = Date.now();
-      if (curTick < this.downTick + TH) {
+      if (
+        this.tapHoldThreshold &&
+        curTick < this.downTick + this.tapHoldThreshold
+      ) {
         this.emitTrigger('tap');
         this._resolving = false;
       }
@@ -56,8 +61,10 @@ class TriggerResolver {
   tick() {
     if (this._resolving) {
       const curTick = Date.now();
-      const TH = logicSimulatorCConfig.tapHoldThretholdMs;
-      if (curTick >= this.downTick + TH) {
+      if (
+        this.tapHoldThreshold &&
+        curTick >= this.downTick + this.tapHoldThreshold
+      ) {
         this.emitTrigger('hold');
         this._resolving = false;
       }
@@ -82,21 +89,21 @@ export namespace ModuleC_InputTriggerDetector {
     const { triggerResolvers } = local;
     let resolver = triggerResolvers[keyId];
     if (!resolver) {
+      const { profileData } = logicSimulatorStateC;
+      const tapHoldThreshold =
+        (profileData.assignType === 'dual' &&
+          profileData.settings.tapHoldThresholdMs) ||
+        0;
       resolver = triggerResolvers[keyId] = new TriggerResolver(
         keyId,
-        onTriggerDetected
+        onTriggerDetected,
+        tapHoldThreshold
       );
     }
     return resolver;
   }
 
-  function resolveInterruptHold(keyId: string) {
-    Object.values(local.triggerResolvers)
-      .filter((tr) => tr.resolving && tr.keyId !== keyId)
-      .forEach((tr) => tr.inputInterrupt());
-  }
-
-  function resolveInterruptHold2(keyId: string, downTickTh: number) {
+  function resolveInterruptHold(keyId: string, downTickTh: number) {
     Object.values(local.triggerResolvers)
       .filter(
         (tr) => tr.resolving && tr.keyId !== keyId && tr.downTick < downTickTh
@@ -108,15 +115,18 @@ export namespace ModuleC_InputTriggerDetector {
     const { keyId, isDown } = ev;
     const resolver = getKeyResolverCached(keyId);
 
-    const { useInterruptHold, primeryDefaultTrigger } = logicSimulatorCConfig;
-    if (useInterruptHold) {
-      //down interrupt hold
-      if (primeryDefaultTrigger === 'down' && isDown) {
-        resolveInterruptHold(keyId);
-      }
-      //tap interrupt hold
-      if (primeryDefaultTrigger === 'tap' && resolver.resolving && !isDown) {
-        resolveInterruptHold2(keyId, resolver.downTick);
+    const { profileData } = logicSimulatorStateC;
+    if (profileData.assignType === 'dual') {
+      const { useInterruptHold, primaryDefaultTrigger } = profileData.settings;
+      if (useInterruptHold) {
+        //down interrupt hold
+        if (primaryDefaultTrigger === 'down' && isDown) {
+          resolveInterruptHold(keyId, Date.now());
+        }
+        //tap interrupt hold
+        if (primaryDefaultTrigger === 'tap' && resolver.resolving && !isDown) {
+          resolveInterruptHold(keyId, resolver.downTick);
+        }
       }
     }
 

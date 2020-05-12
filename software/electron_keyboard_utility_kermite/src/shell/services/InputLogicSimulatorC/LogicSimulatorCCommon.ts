@@ -72,14 +72,14 @@ export const logicSimulatorCConfig = new (class {
   useImmediateDownUp: boolean = false;
   // useKeyBindEventAligner: boolean = false;
   // const primeryDefaultTrigger = 'down'
-  primeryDefaultTrigger: 'down' | 'tap' = 'down';
-  useInterruptHold: boolean = false;
-  tapHoldThretholdMs: number = 500;
+  // primaryDefaultTrigger: 'down' | 'tap' = 'down';
+  // useInterruptHold: boolean = false;
+  // tapHoldThresholdMs: number = 500;
 })();
-logicSimulatorCConfig.usePrioritySorter = true;
+// logicSimulatorCConfig.usePrioritySorter = true;
 // logicSimulatorCConfig.useKeyBindEventAligner = true;
 // logicSimulatorCConfig.primeryDefaultTrigger = 'tap';
-logicSimulatorCConfig.useInterruptHold = true;
+// logicSimulatorCConfig.useInterruptHold = true;
 
 // logicSimulatorCConfig.usePrioritySorter = false;
 // logicSimulatorCConfig.useImmediateDownUp = false;
