@@ -55,23 +55,27 @@ export class LayerManagementPartViewModel {
   };
 
   deleteCurrentLayer = async () => {
-    const ok = await modalConfirm(
-      `Layer ${this.curLayer.layerName} is removed. Are you ok?`
-    );
+    const ok = await modalConfirm({
+      message: `Layer ${this.curLayer.layerName} is removed. Are you sure?`,
+      caption: 'Delete Layer'
+    });
     if (ok) {
       Arrays.remove(this.layers, this.curLayer);
       editorModel.setCurrentLayerId(this.layers[0].layerId);
     }
   };
 
-  renameCurrentLayer = async () => {
+  editCurrentLayer = async () => {
     const { layerName, isShiftLayer, defaultScheme } = this.curLayer;
-    const srcValues = {
+    const sourceValues = {
       layerName,
       isShiftLayer: !!isShiftLayer,
       defaultScheme
     };
-    const editValues = await callLayerConfigurationModal(srcValues);
+    const editValues = await callLayerConfigurationModal({
+      sourceValues,
+      caption: 'Edit Layer Properties'
+    });
     if (editValues) {
       this.curLayer.layerName = editValues.layerName;
       this.curLayer.isShiftLayer = editValues.isShiftLayer;
@@ -81,9 +85,12 @@ export class LayerManagementPartViewModel {
 
   addNewLayer = async () => {
     const layerAttrs = await callLayerConfigurationModal({
-      layerName: '',
-      defaultScheme: 'block',
-      isShiftLayer: false
+      sourceValues: {
+        layerName: '',
+        defaultScheme: 'block',
+        isShiftLayer: false
+      },
+      caption: 'Add Layer'
     });
     if (layerAttrs && layerAttrs.layerName) {
       //todo: use sequential layer number

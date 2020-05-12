@@ -1,7 +1,6 @@
 import { createModal } from '~ui2/views/basis/ForegroundModalLayer';
 import { ILayerDefaultScheme } from '~defs/ProfileData';
 import { hx } from '~ui2/views/basis/qx';
-import { ClosableOverlay } from '~ui2/views/common/basicModals';
 import { css } from 'goober';
 import {
   reflectFieldValue,
@@ -11,11 +10,12 @@ import {
   CommonDialogFrame,
   DialogContentRow,
   DialogButton,
-  DialogButtonsRow
+  DialogButtonsRow,
+  ClosableOverlay
 } from '~ui2/views/common/CommonDialogParts';
 import {
   cssCommonPropertiesTable,
-  cssCommonInput
+  cssCommonTextInput
 } from '~ui2/views/common/commonStyles';
 
 interface ILayerConfigurationModelEditValues {
@@ -59,8 +59,9 @@ const LayerConfigurationModalContent = (props: {
   editValues: ILayerConfigurationModelEditValues;
   submit(): void;
   close(): void;
+  caption: string;
 }) => {
-  const { editValues, submit, close } = props;
+  const { editValues, submit, close, caption } = props;
   const defaultSchemeOptions: ILayerDefaultScheme[] = ['block', 'transparent'];
   const cssDefaultSchemeButtonsRow = css`
     display: flex;
@@ -68,7 +69,7 @@ const LayerConfigurationModalContent = (props: {
 
   return (
     <ClosableOverlay close={close}>
-      <CommonDialogFrame caption="Layer Properties">
+      <CommonDialogFrame caption={caption}>
         <DialogContentRow>
           <table css={cssCommonPropertiesTable}>
             <tbody>
@@ -77,7 +78,7 @@ const LayerConfigurationModalContent = (props: {
                 <td>
                   <input
                     type="text"
-                    css={cssCommonInput}
+                    css={cssCommonTextInput}
                     value={editValues.layerName}
                     onChange={reflectFieldValue(editValues, 'layerName')}
                   />
@@ -123,8 +124,11 @@ const LayerConfigurationModalContent = (props: {
 };
 
 export const callLayerConfigurationModal = createModal(
-  (sourceValues: ILayerConfigurationModelEditValues) => {
-    const editValues = sourceValues;
+  (args: {
+    sourceValues: ILayerConfigurationModelEditValues;
+    caption: string;
+  }) => {
+    const editValues = args.sourceValues;
     return (props: {
       close: (result: ILayerConfigurationModelEditValues | undefined) => void;
     }) => {
@@ -135,6 +139,7 @@ export const callLayerConfigurationModal = createModal(
           editValues={editValues}
           submit={submit}
           close={close}
+          caption={args.caption}
         />
       );
     };

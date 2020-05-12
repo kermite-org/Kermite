@@ -43,10 +43,13 @@ export function makeProfileManagementViewModel() {
     }
   };
 
-  const inputNewProfileName = async (): Promise<string | undefined> => {
+  const inputNewProfileName = async (
+    caption: string
+  ): Promise<string | undefined> => {
     const newProfileName = await modalTextEdit({
-      message: 'input new profile name',
-      defaultText: currentProfileName
+      message: 'New Profile Name',
+      defaultText: currentProfileName,
+      caption
     });
     if (newProfileName) {
       const nameValid = await checkValidNewProfileName(newProfileName);
@@ -58,23 +61,24 @@ export function makeProfileManagementViewModel() {
   };
 
   const renameProfile = async () => {
-    const newProfileName = await inputNewProfileName();
+    const newProfileName = await inputNewProfileName('Rename Profile');
     if (newProfileName) {
       profilesModel.renameProfile(newProfileName);
     }
   };
 
   const copyProfile = async () => {
-    const newProfileName = await inputNewProfileName();
+    const newProfileName = await inputNewProfileName('Copy Profile');
     if (newProfileName) {
       profilesModel.copyProfile(newProfileName);
     }
   };
 
   const deleteProfile = async () => {
-    const ok = await modalConfirm(
-      `Profile ${currentProfileName} will be deleted. Are you sure?`
-    );
+    const ok = await modalConfirm({
+      message: `Profile ${currentProfileName} will be deleted. Are you sure?`,
+      caption: 'Delete Profile'
+    });
     if (ok) {
       profilesModel.deleteProfile();
     }

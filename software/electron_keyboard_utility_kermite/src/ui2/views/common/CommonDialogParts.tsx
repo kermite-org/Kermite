@@ -1,6 +1,28 @@
 import { css } from 'goober';
 import { hx } from '~ui2/views/basis/qx';
 
+export function ClosableOverlay(props: {
+  close: () => void;
+  children: JSX.Element;
+}) {
+  const cssDiv = css`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+  `;
+  return (
+    <div onClick={props.close} css={cssDiv}>
+      {props.children}
+    </div>
+  );
+}
+
 export const CommonDialogFrame = (props: {
   caption?: string;
   children: any;
@@ -9,7 +31,7 @@ export const CommonDialogFrame = (props: {
     background: #fff;
     border: solid 1px #ccc;
     min-width: 400px;
-    min-height: 120px;
+    /* min-height: 120px; */
     border-radius: 4px;
     overflow: hidden;
     border: solid 2px #8af;
@@ -38,15 +60,22 @@ export const DialogContentRow = (props: { children: any }) => {
   const cssBody = css`
     margin: 10px 15px 0;
     color: #048;
+    min-height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   `;
   return <div css={cssBody}>{props.children}</div>;
 };
 
 export const DialogButtonsRow = (props: { children: any }) => {
   const cssButtonsRow = css`
-    margin: 0 15px 10px;
+    margin: 10px 15px;
     display: flex;
     justify-content: flex-end;
+    > * + * {
+      margin-left: 10px;
+    }
   `;
   return <div css={cssButtonsRow}>{props.children}</div>;
 };

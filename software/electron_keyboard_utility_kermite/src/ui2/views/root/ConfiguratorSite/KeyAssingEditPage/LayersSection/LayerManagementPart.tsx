@@ -49,7 +49,7 @@ export const LayerManagementPart = () => {
     canShiftForwardCurrentLayer,
     shiftBackCurrentLayer,
     shiftForwardCurrentLayer,
-    renameCurrentLayer,
+    editCurrentLayer,
     deleteCurrentLayer,
     addNewLayer
   } = layerManagementPartViewModel;
@@ -62,15 +62,16 @@ export const LayerManagementPart = () => {
         handler={addNewLayer}
       />
       <LayerOperationButtton
+        icon="fa fa-pen-square"
+        enabled={canModifyCurrentLayer}
+        handler={editCurrentLayer}
+      />
+      <LayerOperationButtton
         icon="fa fa-times"
         enabled={canModifyCurrentLayer}
         handler={deleteCurrentLayer}
       />
-      <LayerOperationButtton
-        icon="fa fa-pen-square"
-        enabled={canModifyCurrentLayer}
-        handler={renameCurrentLayer}
-      />
+
       <LayerOperationButtton
         icon="fa fa-long-arrow-alt-up"
         enabled={canShiftBackCurrentLayer}

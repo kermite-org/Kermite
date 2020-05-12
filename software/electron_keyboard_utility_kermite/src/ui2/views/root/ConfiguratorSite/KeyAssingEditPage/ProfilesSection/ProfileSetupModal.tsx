@@ -1,18 +1,17 @@
-import { css } from 'goober';
 import { hx } from '~ui2/views/basis/qx';
 import { createModal } from '~ui2/views/basis/ForegroundModalLayer';
 import { getAvailableBreedNames } from '~defs/keyboardShapes';
-import { ClosableOverlay } from '~ui2/views/common/basicModals';
 import { reflectFieldValue } from '~ui2/views/common/FormHelpers';
 import {
   CommonDialogFrame,
   DialogContentRow,
   DialogButton,
-  DialogButtonsRow
+  DialogButtonsRow,
+  ClosableOverlay
 } from '~ui2/views/common/CommonDialogParts';
 import {
   cssCommonPropertiesTable,
-  cssCommonInput
+  cssCommonTextInput
 } from '~ui2/views/common/commonStyles';
 
 interface ICreateProfileDialogEditValues {
@@ -30,7 +29,7 @@ const ProfileSetupModalContent = (props: {
 
   return (
     <ClosableOverlay close={close}>
-      <CommonDialogFrame caption="Profiler Properties">
+      <CommonDialogFrame caption="Create Profile">
         <DialogContentRow>
           <table css={cssCommonPropertiesTable}>
             <tbody>
@@ -39,7 +38,7 @@ const ProfileSetupModalContent = (props: {
                 <td>
                   <input
                     type="text"
-                    css={cssCommonInput}
+                    css={cssCommonTextInput}
                     value={editValues.profileName}
                     onChange={reflectFieldValue(editValues, 'profileName')}
                   />

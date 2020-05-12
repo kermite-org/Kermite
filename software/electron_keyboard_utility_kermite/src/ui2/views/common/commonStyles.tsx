@@ -11,7 +11,7 @@ export const cssCommonPropertiesTable = css`
   }
 `;
 
-export const cssCommonInput = css`
+export const cssCommonTextInput = css`
   width: 100%;
   height: 26px;
   font-size: 14px;

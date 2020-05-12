@@ -99,7 +99,8 @@ export const SiteRootD = () => {
   const onEditButton = async () => {
     const val = await modalTextEdit({
       message: 'please input your name',
-      defaultText: 'profile1'
+      defaultText: 'profile1',
+      caption: 'hello'
     });
     // eslint-disable-next-line no-console
     console.log(val);
