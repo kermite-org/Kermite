@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "start": "parcel src/index.html -p 3000 --open",
-    "lint": "tsc --noEmit && eslint './src/**/*.{ts,tsx}' --quiet"
+    "lint": "tsc --noEmit && eslint './src/**/*.{ts,tsx}' --quiet",
+    "build": "parcel build src/index.html --public-url ."
   },
   "dependencies": {
     "@typescript-eslint/parser": "^2.26.0",
