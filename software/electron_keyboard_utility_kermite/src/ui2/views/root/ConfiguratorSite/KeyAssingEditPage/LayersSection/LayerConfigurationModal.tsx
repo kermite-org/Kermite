@@ -7,8 +7,18 @@ import {
   reflectFieldValue,
   reflectFieldChecked
 } from '~ui2/views/common/FormHelpers';
+import {
+  CommonDialogFrame,
+  DialogContentRow,
+  DialogButton,
+  DialogButtonsRow
+} from '~ui2/views/common/CommonDialogParts';
+import {
+  cssCommonPropertiesTable,
+  cssCommonInput
+} from '~ui2/views/common/commonStyles';
 
-interface LayerConfigurationModelEditValues {
+interface ILayerConfigurationModelEditValues {
   layerName: string;
   defaultScheme: ILayerDefaultScheme;
   isShiftLayer: boolean;
@@ -22,12 +32,20 @@ const DefaultSchemeButton = (props: {
   const { value, isCurrent, setCurrent } = props;
 
   const cssButton = css`
-    width: 80px;
-    padding: 0 4px;
+    min-width: 80px;
+    height: 26px;
+    padding: 0 8px;
     cursor: pointer;
-    border: solid 1px #888;
+    border: solid 1px #048;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
     &[data-current] {
-      background: #0f0;
+      background: #0cf;
+    }
+    &:hover {
+      opacity: 0.8;
     }
   `;
   return (
@@ -37,85 +55,87 @@ const DefaultSchemeButton = (props: {
   );
 };
 
-const defaultSchemeOptions: ILayerDefaultScheme[] = ['block', 'transparent'];
-
-const cssLayerEditDialogPanel = css`
-  background: #fff;
-  border: solid 1px #ccc;
-  width: 400px;
-  height: 400px;
-  display: flex;
-  flex-direction: column;
-
-  .buttons-row {
-    flex-grow: 0;
-    padding: 5px;
+const LayerConfigurationModalContent = (props: {
+  editValues: ILayerConfigurationModelEditValues;
+  submit(): void;
+  close(): void;
+}) => {
+  const { editValues, submit, close } = props;
+  const defaultSchemeOptions: ILayerDefaultScheme[] = ['block', 'transparent'];
+  const cssDefaultSchemeButtonsRow = css`
     display: flex;
-    justify-content: flex-end;
-  }
+  `;
 
-  button {
-    padding: 0 4px;
-    border: solid 1px #08f;
-  }
-`;
-
-const cssDefaultSchemeButtonsRow = css`
-  display: flex;
-`;
+  return (
+    <ClosableOverlay close={close}>
+      <CommonDialogFrame caption="Layer Properties">
+        <DialogContentRow>
+          <table css={cssCommonPropertiesTable}>
+            <tbody>
+              <tr>
+                <td>Layer Name</td>
+                <td>
+                  <input
+                    type="text"
+                    css={cssCommonInput}
+                    value={editValues.layerName}
+                    onChange={reflectFieldValue(editValues, 'layerName')}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>Default Scheme</td>
+                <td>
+                  <div css={cssDefaultSchemeButtonsRow}>
+                    {defaultSchemeOptions.map((ds) => (
+                      <DefaultSchemeButton
+                        key={ds}
+                        value={ds}
+                        isCurrent={editValues.defaultScheme === ds}
+                        setCurrent={() => (editValues.defaultScheme = ds)}
+                      />
+                    ))}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Attached Modifiers</td>
+                <td>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={editValues.isShiftLayer}
+                      onChange={reflectFieldChecked(editValues, 'isShiftLayer')}
+                    />
+                    <span>shift</span>
+                  </label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </DialogContentRow>
+        <DialogButtonsRow>
+          <DialogButton onClick={submit}>OK</DialogButton>
+        </DialogButtonsRow>
+      </CommonDialogFrame>
+    </ClosableOverlay>
+  );
+};
 
 export const callLayerConfigurationModal = createModal(
-  (sourceValues: LayerConfigurationModelEditValues) => {
-    const edit = sourceValues;
-
+  (sourceValues: ILayerConfigurationModelEditValues) => {
+    const editValues = sourceValues;
     return (props: {
-      close: (result: LayerConfigurationModelEditValues | undefined) => void;
+      close: (result: ILayerConfigurationModelEditValues | undefined) => void;
     }) => {
-      const onSubmitButton = () => {
-        props.close(edit);
-      };
-
+      const submit = () => props.close(editValues);
+      const close = () => props.close(undefined);
       return (
-        <ClosableOverlay close={() => props.close(undefined)}>
-          <div
-            css={cssLayerEditDialogPanel}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div>
-              <input
-                type="text"
-                value={edit.layerName}
-                onChange={reflectFieldValue(edit, 'layerName')}
-              />
-            </div>
-            <div>
-              <span>default scheme</span>
-              <div css={cssDefaultSchemeButtonsRow}>
-                {defaultSchemeOptions.map((ds) => (
-                  <DefaultSchemeButton
-                    key={ds}
-                    value={ds}
-                    isCurrent={edit.defaultScheme === ds}
-                    setCurrent={() => (edit.defaultScheme = ds)}
-                  />
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <span>isShiftLayer:</span>
-              <input
-                type="checkbox"
-                checked={edit.isShiftLayer}
-                onChange={reflectFieldChecked(edit, 'isShiftLayer')}
-              />
-            </div>
-
-            <div className="buttons-row">
-              <button onClick={onSubmitButton}>OK</button>
-            </div>
-          </div>
-        </ClosableOverlay>
+        <LayerConfigurationModalContent
+          editValues={editValues}
+          submit={submit}
+          close={close}
+        />
       );
     };
   }

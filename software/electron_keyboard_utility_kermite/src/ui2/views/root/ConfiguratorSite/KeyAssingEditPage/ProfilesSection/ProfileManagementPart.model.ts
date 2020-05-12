@@ -1,5 +1,5 @@
 import { profilesModel } from '~ui2/models/zAppDomain';
-import { profileSetupModal } from './ProfileSetupModal';
+import { callProfileSetupModal } from './ProfileSetupModal';
 import {
   modalTextEdit,
   modalConfirm,
@@ -33,12 +33,12 @@ export function makeProfileManagementViewModel() {
   };
 
   const createProfile = async () => {
-    const res = await profileSetupModal(undefined);
-    if (res && res.newProfileName && res.breedName) {
-      const { newProfileName, breedName } = res;
-      const nameValid = await checkValidNewProfileName(newProfileName);
+    const res = await callProfileSetupModal(undefined);
+    if (res && res.profileName && res.breedName) {
+      const { profileName, breedName } = res;
+      const nameValid = await checkValidNewProfileName(profileName);
       if (nameValid) {
-        profilesModel.createProfile(newProfileName, breedName);
+        profilesModel.createProfile(profileName, breedName);
       }
     }
   };

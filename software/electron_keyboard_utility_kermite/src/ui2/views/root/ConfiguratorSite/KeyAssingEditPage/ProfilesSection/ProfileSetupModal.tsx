@@ -3,83 +3,92 @@ import { hx } from '~ui2/views/basis/qx';
 import { createModal } from '~ui2/views/basis/ForegroundModalLayer';
 import { getAvailableBreedNames } from '~defs/keyboardShapes';
 import { ClosableOverlay } from '~ui2/views/common/basicModals';
-import { reflectValue } from '~ui2/views/common/FormHelpers';
+import { reflectFieldValue } from '~ui2/views/common/FormHelpers';
+import {
+  CommonDialogFrame,
+  DialogContentRow,
+  DialogButton,
+  DialogButtonsRow
+} from '~ui2/views/common/CommonDialogParts';
+import {
+  cssCommonPropertiesTable,
+  cssCommonInput
+} from '~ui2/views/common/commonStyles';
 
-const cteateProfileDialogPanel = css`
-  background: #fff;
-  border: solid 1px #ccc;
-  width: 400px;
-  height: 400px;
-  display: flex;
-  flex-direction: column;
-
-  .buttons-row {
-    flex-grow: 0;
-    padding: 5px;
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  button {
-    padding: 0 4px;
-    border: solid 1px #08f;
-  }
-`;
-
-interface CreateProfileDialogResult {
-  newProfileName: string;
+interface ICreateProfileDialogEditValues {
+  profileName: string;
   breedName: string;
 }
 
-export const profileSetupModal = createModal(() => {
+const ProfileSetupModalContent = (props: {
+  editValues: ICreateProfileDialogEditValues;
+  breedNames: string[];
+  submit(): void;
+  close(): void;
+}) => {
+  const { editValues, submit, close, breedNames } = props;
+
+  return (
+    <ClosableOverlay close={close}>
+      <CommonDialogFrame caption="Profiler Properties">
+        <DialogContentRow>
+          <table css={cssCommonPropertiesTable}>
+            <tbody>
+              <tr>
+                <td>Profile Name</td>
+                <td>
+                  <input
+                    type="text"
+                    css={cssCommonInput}
+                    value={editValues.profileName}
+                    onChange={reflectFieldValue(editValues, 'profileName')}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>Target Keyboard</td>
+                <td>
+                  <select
+                    value={editValues.breedName}
+                    onChange={reflectFieldValue(editValues, 'breedName')}
+                  >
+                    {breedNames.map((breedName) => (
+                      <option value={breedName} key={breedName}>
+                        {breedName}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </DialogContentRow>
+        <DialogButtonsRow>
+          <DialogButton onClick={submit}>OK</DialogButton>
+        </DialogButtonsRow>
+      </CommonDialogFrame>
+    </ClosableOverlay>
+  );
+};
+
+export const callProfileSetupModal = createModal(() => {
   const breedNames = getAvailableBreedNames();
-  let profileNameText = '';
-  let currentBreedName = breedNames[0];
-
-  const setProfileName = (value: string) => (profileNameText = value);
-  const setCurrentBreedName = (value: string) => (currentBreedName = value);
-
+  const editValues: ICreateProfileDialogEditValues = {
+    profileName: '',
+    breedName: breedNames[0]
+  };
   return (props: {
-    close: (result: CreateProfileDialogResult | undefined) => void;
+    close: (result: ICreateProfileDialogEditValues | undefined) => void;
   }) => {
-    const onSubmitButton = () => {
-      props.close({
-        newProfileName: profileNameText,
-        breedName: currentBreedName
-      });
-    };
-
+    const submit = () => props.close(editValues);
+    const close = () => props.close(undefined);
     return (
-      <ClosableOverlay close={() => props.close(undefined)}>
-        <div
-          css={cteateProfileDialogPanel}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div>
-            <input
-              type="text"
-              value={profileNameText}
-              onChange={reflectValue(setProfileName)}
-            />
-          </div>
-          <div>
-            <select
-              value={currentBreedName}
-              onChange={reflectValue(setCurrentBreedName)}
-            >
-              {breedNames.map((breedName) => (
-                <option value={breedName} key={breedName}>
-                  {breedName}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="buttons-row">
-            <button onClick={onSubmitButton}>OK</button>
-          </div>
-        </div>
-      </ClosableOverlay>
+      <ProfileSetupModalContent
+        editValues={editValues}
+        submit={submit}
+        close={close}
+        breedNames={breedNames}
+      />
     );
   };
 });
