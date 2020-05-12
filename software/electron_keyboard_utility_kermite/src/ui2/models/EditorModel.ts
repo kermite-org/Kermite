@@ -9,7 +9,10 @@ import {
   duplicateObjectByJsonStringifyParse,
   compareObjectByJsonStringify
 } from '~funcs/Utils';
-import { changeProfileDataAssignType } from './ProfileDataHelper';
+import {
+  changeProfileDataAssignType,
+  removeInvalidProfileAssigns
+} from './ProfileDataHelper';
 
 export type IDualModeEditTargetOperationSig = 'pri' | 'sec';
 export type IDualModeOperationPath = 'primaryOp' | 'secondaryOp';
@@ -88,6 +91,7 @@ export class EditorModel {
   }
 
   checkDirty(): boolean {
+    removeInvalidProfileAssigns(this.profileData);
     return !compareObjectByJsonStringify(
       this.loadedPorfileData,
       this.profileData

@@ -2,7 +2,8 @@ import {
   IProfileData,
   IAssignEntry_Single,
   IAssignEntry_Dual,
-  IProfileAssignType
+  IProfileAssignType,
+  IAssignEntry
 } from '~defs/ProfileData';
 import { mapObjectValues } from '~funcs/Utils';
 
@@ -60,4 +61,36 @@ export function changeProfileDataAssignType(
     };
   }
   return profile;
+}
+
+function checkAssignValid(assign?: IAssignEntry): boolean {
+  if (assign === undefined) {
+    return false;
+  }
+  if (assign.type === undefined) {
+    return false;
+  }
+  if (assign.type === 'single') {
+    return !!assign.op;
+  }
+  if (assign.type === 'dual') {
+    return !!assign.primaryOp || !!assign.secondaryOp;
+  }
+  return false;
+}
+
+export function removeInvalidProfileAssigns(profile: IProfileData) {
+  let cnt = 0;
+  const { assigns } = profile;
+  for (const key in assigns) {
+    const assign = assigns[key];
+    if (!checkAssignValid(assign)) {
+      delete assigns[key];
+      cnt++;
+    }
+  }
+  if (cnt > 0) {
+    // eslint-disable-next-line no-console
+    console.log(`${cnt} invalid assigns removed`);
+  }
 }

@@ -70,20 +70,9 @@ export const logicSimulatorStateC = new (class {
 export const logicSimulatorCConfig = new (class {
   usePrioritySorter: boolean = false;
   useImmediateDownUp: boolean = false;
-  // useKeyBindEventAligner: boolean = false;
-  // const primeryDefaultTrigger = 'down'
-  // primaryDefaultTrigger: 'down' | 'tap' = 'down';
-  // useInterruptHold: boolean = false;
-  // tapHoldThresholdMs: number = 500;
 })();
 // logicSimulatorCConfig.usePrioritySorter = true;
-// logicSimulatorCConfig.useKeyBindEventAligner = true;
-// logicSimulatorCConfig.primeryDefaultTrigger = 'tap';
-// logicSimulatorCConfig.useInterruptHold = true;
-
-// logicSimulatorCConfig.usePrioritySorter = false;
-// logicSimulatorCConfig.useImmediateDownUp = false;
-// logicSimulatorCConfig.useKeyBindEventAligner = true;
+// logicSimulatorCConfig.useImmediateDownUp = true;
 
 export interface IModuleIO<TEventIn, TEventOut> {
   push(ev: TEventIn): void;

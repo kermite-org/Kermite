@@ -3,6 +3,7 @@ import { IProfileManagerStatus } from '~defs/ipc';
 import { EditorModel } from './EditorModel';
 import { sendProfileManagerCommands } from '~ui2/models/dataSource/ipc';
 import { appUi } from './appGlobal';
+import { removeInvalidProfileAssigns } from './ProfileDataHelper';
 
 export class ProfilesModel {
   private profileProvider = new ProfileProvider2();
@@ -39,7 +40,9 @@ export class ProfilesModel {
   }
 
   finalize() {
-    this.profileProvider.saveProfileOnClosing(this.editorModel.profileData);
+    if (this.editorModel.checkDirty()) {
+      this.profileProvider.saveProfileOnClosing(this.editorModel.profileData);
+    }
     this.profileProvider.finalize();
   }
 
