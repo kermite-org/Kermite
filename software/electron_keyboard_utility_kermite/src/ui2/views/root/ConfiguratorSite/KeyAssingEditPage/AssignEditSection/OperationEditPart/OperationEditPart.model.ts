@@ -35,6 +35,10 @@ const modifierVirtualKeys: ModifierVirtualKey[] = [
 export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
   const { editOperation, writeEditOperation, isSlotSelected } = editorModel;
 
+  const isDualSecondary =
+    editorModel.isDualMode &&
+    editorModel.dualModeEditTargetOperationSig === 'sec';
+
   const noAssignEntry: IOperationCardViewModel = {
     sig: 'none',
     text: 'none',
@@ -52,7 +56,10 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
           editOperation?.type === 'keyInput' && editOperation.virtualKey === vk,
         setCurrent: () =>
           writeEditOperation({ type: 'keyInput', virtualKey: vk }),
-        isEnabled: true
+        isEnabled:
+          !isDualSecondary ||
+          (isDualSecondary &&
+            modifierVirtualKeys.includes(vk as ModifierVirtualKey))
       }))
   );
 
@@ -77,7 +84,7 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
         text: VirtualKeyTexts[vk] || '',
         isCurrent,
         setCurrent,
-        isEnabled: editOperation?.type === 'keyInput'
+        isEnabled: editOperation?.type === 'keyInput' && !isDualSecondary
       };
     }
   );
@@ -98,6 +105,7 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
         }),
       isEnabled: true
     }));
+
   return {
     noAssignEntry,
     virtualKeyEntryGroups,

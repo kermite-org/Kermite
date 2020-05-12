@@ -27,8 +27,9 @@ const OperationCard = (props: { model: IOperationCardViewModel }) => {
     }
 
     &[data-disabled] {
-      opacity: 0.5;
+      opacity: 0.3;
       cursor: default;
+      pointer-events: none;
     }
   `;
 
