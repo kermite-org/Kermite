@@ -11,6 +11,7 @@ export const ProfileManagementPart = () => {
     loadProfile,
     saveProfile,
     renameProfile,
+    copyProfile,
     deleteProfile
   } = makeProfileManagementViewModel();
 
@@ -37,6 +38,7 @@ export const ProfileManagementPart = () => {
       <div>
         <button onClick={createProfile}>new</button>
         <button onClick={renameProfile}>rename</button>
+        <button onClick={copyProfile}>copy</button>
         <button onClick={deleteProfile}>delete</button>
         <button onClick={saveProfile}>save</button>
       </div>

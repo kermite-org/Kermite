@@ -77,4 +77,15 @@ export namespace Files {
       });
     });
   }
+
+  export function copyFile(src: string, dst: string): Promise<void> {
+    return new Promise((resolve) => {
+      fs.copyFile(src, dst, (err) => {
+        if (err) {
+          throw err;
+        }
+        resolve();
+      });
+    });
+  }
 }

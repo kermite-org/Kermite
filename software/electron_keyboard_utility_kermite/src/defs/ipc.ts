@@ -34,6 +34,7 @@ export interface IProfileManagerCommand {
   saveCurrentProfile?: { profileData: IProfileData };
   deleteProfile?: { name: string };
   renameProfile?: { name: string; newName: string };
+  copyProfile?: { name: string; newName: string };
 }
 
 export interface IpcPacket {

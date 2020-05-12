@@ -53,6 +53,7 @@ class ProfileManagerCore {
     profileData: IProfileData
   ): Promise<void> {
     const fpath = this.getDataFilePath(profName);
+    // eslint-disable-next-line no-console
     console.log(`saving current profile to ${path.basename(fpath)}`);
     await Files.writeJson(fpath, profileData);
   }
@@ -86,6 +87,15 @@ class ProfileManagerCore {
     const srcPath = this.getDataFilePath(profName);
     const dstPath = this.getDataFilePath(newProfName);
     await Files.renameFile(srcPath, dstPath);
+  }
+
+  static async copyProfile(
+    profName: string,
+    newProfName: string
+  ): Promise<void> {
+    const srcPath = this.getDataFilePath(profName);
+    const dstPath = this.getDataFilePath(newProfName);
+    await Files.copyFile(srcPath, dstPath);
   }
 }
 
@@ -299,6 +309,25 @@ export class ProfileManager {
     }
   }
 
+  async copyProfile(profName: string, newProfName: string): Promise<boolean> {
+    if (!this.status.allProfileNames.includes(profName)) {
+      return false;
+    }
+    if (this.status.allProfileNames.includes(newProfName)) {
+      return false;
+    }
+    try {
+      await ProfileManagerCore.copyProfile(profName, newProfName);
+      const allProfileNames = await ProfileManagerCore.listAllProfileNames();
+      this.setStatus({ allProfileNames });
+      await this.loadProfile(newProfName);
+      return true;
+    } catch (error) {
+      this.raiseErrorMessage('failed to copy profile');
+      return false;
+    }
+  }
+
   private async executeCommand(cmd: IProfileManagerCommand): Promise<boolean> {
     if (cmd.creatProfile) {
       return await this.createProfile(
@@ -313,6 +342,11 @@ export class ProfileManager {
       return await this.renameProfile(
         cmd.renameProfile.name,
         cmd.renameProfile.newName
+      );
+    } else if (cmd.copyProfile) {
+      return await this.copyProfile(
+        cmd.copyProfile.name,
+        cmd.copyProfile.newName
       );
     } else if (cmd.saveCurrentProfile) {
       return await this.saveCurrentProfile(cmd.saveCurrentProfile.profileData);

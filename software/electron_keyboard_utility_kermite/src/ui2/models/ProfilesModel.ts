@@ -81,6 +81,15 @@ export class ProfilesModel {
     sendProfileManagerCommands(saveCommand, renameCommand);
   };
 
+  copyProfile = (newProfileName: string) => {
+    const curProfName = this.currentProfileName;
+    const saveCommand = this.getSaveCommandIfDirty();
+    const copyCommand = {
+      copyProfile: { name: curProfName, newName: newProfileName }
+    };
+    sendProfileManagerCommands(saveCommand, copyCommand);
+  };
+
   saveProfile = () => {
     const saveCommand = this.getSaveCommandIfDirty();
     if (saveCommand) {
