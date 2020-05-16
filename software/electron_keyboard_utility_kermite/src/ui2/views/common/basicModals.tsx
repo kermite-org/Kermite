@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 import { css } from 'goober';
-import { hx } from '~ui2/views/basis/qx';
+import { h } from '~ui2/views/basis/qx';
 import { createModal } from '~ui2/views/basis/ForegroundModalLayer';
 import {
   CommonDialogFrame,

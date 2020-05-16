@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { KeyAssignEditPage } from './KeyAssingEditPage/KeyAssignEditPage';
-import { hx } from '~ui2/views/basis/qx';
+import { h } from '~ui2/views/basis/qx';
 import { ProfileManagementPart } from './KeyAssingEditPage/ProfilesSection/ProfileManagementPart';
 import { CustomWindowFrame } from './WindowFrame/CustomWindowFrame';
 import { UiTheme } from '~ui2/views/common/UiTheme';

@@ -6,7 +6,7 @@
     "strict": true,
     "lib": ["dom", "esnext"],
     "jsx": "react",
-    "jsxFactory": "hx",
+    "jsxFactory": "h",
     "baseUrl": ".",
     "paths": {
       "~*": ["./src/*"]

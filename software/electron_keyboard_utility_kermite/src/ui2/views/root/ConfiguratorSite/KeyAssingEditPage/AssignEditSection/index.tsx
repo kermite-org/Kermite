@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { editorModel } from '~ui2/models/zAppDomain';
-import { hx } from '~ui2/views/basis/qx';
+import { h } from '~ui2/views/basis/qx';
 import { OpertionEditPart } from './OperationEditPart/OperationEditPart';
 import { OerationSlotsPart } from './EntryEditPart/OperationSlotsPart';
 

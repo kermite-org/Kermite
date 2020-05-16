@@ -58,6 +58,7 @@ export class DeviceWrapper {
         }
       });
       this.device.on('error', (error) => {
+        // eslint-disable-next-line no-console
         console.log(`error occured: ${error}`);
       });
       return true;

@@ -1,12 +1,9 @@
-import { hx } from '../basis/qx';
-import {
-  createClosureComponent,
-  createClosureComponent2
-} from '../basis/qxUtils';
-import { DebugOverlay } from '../basis/DebugOverlay';
+import { h, rerender, render } from './basis/qx';
+import { DebugOverlay } from './basis/DebugOverlay';
 import { appUi } from '~ui2/models/appGlobal';
-import { modalAlert, modalTextEdit } from '../common/basicModals';
-import { ForegroundModalLayerRoot } from '../basis/ForegroundModalLayer';
+import { modalAlert, modalTextEdit } from './common/basicModals';
+import { ForegroundModalLayerRoot } from './basis/ForegroundModalLayer';
+import { css } from 'goober';
 
 // class CounterViewModel {
 //   get count() {
@@ -56,7 +53,7 @@ function makeCounterViewModel(initialCount: number) {
   return self;
 }
 
-const ClosureCounter = createClosureComponent(() => {
+const ClosureCounter = () => {
   const vm = makeCounterViewModel(10);
 
   return () => {
@@ -71,17 +68,17 @@ const ClosureCounter = createClosureComponent(() => {
       </div>
     );
   };
-});
+};
 
-const ClosureComponent2 = createClosureComponent2((props: { text: string }) => {
-  let text1 = 'a';
+const ClosureComponent2 = (props: { text: string }) => {
+  let text1 = props.text;
   const pushText = () => {
     text1 += 'b';
   };
-
-  return () => {
-    // eslint-disable-next-line react/prop-types
-    const { text } = props;
+  // console.log('cc2 created', props.text);
+  return (props2: { text: string }) => {
+    // console.log(`cc2 render`, { props, props2 });
+    const { text } = props2;
     return (
       <div>
         <div>text: {text} </div> <div>text1: {text1} </div>{' '}
@@ -89,12 +86,43 @@ const ClosureComponent2 = createClosureComponent2((props: { text: string }) => {
       </div>
     );
   };
-});
+};
+
+let rc = 0;
+
+const DivOrNullTest = (props: any) => {
+  const show = props.rc % 2 === 0;
+  return show ? (
+    <div id="divOrNullTestDiv">
+      <div>HELL</div>
+      <div id="D">D</div>
+    </div>
+  ) : null;
+};
 
 let textHoge = 'hoge';
 
+export const DebugOverlayD = (_: any) => {
+  return (props: any) => {
+    const show = !!props.debugObj;
+    console.log({ d: props.debugObj, show });
+    return show ? (
+      <div>
+        <div>HELL</div>
+        <div>D</div>
+      </div>
+    ) : null;
+  };
+};
+
 export const SiteRootD = () => {
   // console.log(`site root d`);
+
+  const cssBoxOuter = css`
+    > * {
+      border: solid 1px #48f;
+    }
+  `;
 
   const onEditButton = async () => {
     const val = await modalTextEdit({
@@ -105,15 +133,27 @@ export const SiteRootD = () => {
     // eslint-disable-next-line no-console
     console.log(val);
   };
+
+  rc++;
+
   return (
     <div>
-      <ClosureCounter />
-      <ClosureComponent2 text={textHoge} />
-      <button onClick={() => (textHoge = 'piyo')}>piyo</button>
-      <DebugOverlay debugObj={appUi.debugObject} />
-      <button onClick={() => modalAlert('hogehoge')}>alert</button>
-      <button onClick={onEditButton}>edit</button>
+      <div css={cssBoxOuter} id="bouter">
+        <ClosureCounter />
+        <ClosureComponent2 text={textHoge} />
+        <div>
+          <div>{textHoge}</div>
+          <button onClick={() => (textHoge = 'piyo')}>piyo</button>
+          <button onClick={() => modalAlert('hogehogea')}>alert</button>
+          <button onClick={onEditButton}>edit</button>
+        </div>
+        {/* <DivOrNullTest rc={rc} id="divorNullTest" /> */}
+      </div>
+      <DebugOverlay debugObj={rc % 2 === 0 ? { a: 'b' } : undefined} />
       <ForegroundModalLayerRoot />
     </div>
   );
 };
+
+appUi.rerender = rerender;
+render(() => <SiteRootD />, document.getElementById('app')!);

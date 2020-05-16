@@ -1,8 +1,11 @@
 import { css } from 'goober';
-import { hx } from './qx';
-import { createClosureComponent } from './qxUtils';
+import { h } from './qx';
 
-export const DebugOverlay = createClosureComponent(() => {
+interface IDebugOverlayProps {
+  debugObj: any | undefined;
+}
+
+export const DebugOverlay = (_: IDebugOverlayProps) => {
   const cssTab = css`
     position: absolute;
     top: 0;
@@ -23,11 +26,11 @@ export const DebugOverlay = createClosureComponent(() => {
     position: absolute;
     top: 0;
     right: 0;
-    height: 100%;
+    height: calc(100% - 40px);
     background: rgba(0, 0, 0, 0.3);
     color: #0f0;
     pointer-events: none;
-    overflow: auto;
+    overflow: hidden;
     padding: 5px;
     font-size: 10px;
   `;
@@ -38,7 +41,7 @@ export const DebugOverlay = createClosureComponent(() => {
     visible = !visible;
   };
 
-  return (props: { debugObj?: any }) => {
+  return (props: IDebugOverlayProps) => {
     return props.debugObj ? (
       <div>
         <div css={cssTab} onClick={toggleVisible}>
@@ -52,4 +55,4 @@ export const DebugOverlay = createClosureComponent(() => {
       </div>
     ) : null;
   };
-});
+};

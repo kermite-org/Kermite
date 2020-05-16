@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unknown-property */
-import { hx } from '~ui2/views/basis/qx';
+import { h } from '~ui2/views/basis/qx';
 import { Nums } from '~funcs/Nums';
 import { css } from 'goober';
 import { siteModel, playerModel, editorModel } from '~ui2/models/zAppDomain';

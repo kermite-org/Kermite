@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { sendIpcPacketSync } from '~ui2/models/dataSource/ipc';
 import { siteModel } from '~ui2/models/zAppDomain';
-import { hx } from '~ui2/views/basis/qx';
+import { h } from '~ui2/views/basis/qx';
 
 const ControlButton = (props: { icon: string; onClick: () => void }) => {
   const cssButton = css`

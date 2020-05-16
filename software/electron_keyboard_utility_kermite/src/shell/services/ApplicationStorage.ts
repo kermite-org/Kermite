@@ -16,12 +16,14 @@ export class ApplicationStorage {
     if (Files.isExists(this.configFilePath)) {
       this.data = await Files.readJson(this.configFilePath);
     } else {
+      // eslint-disable-next-line no-console
       console.log('config file not found!');
     }
   }
 
   async terminate(): Promise<void> {
     await Files.writeJson(this.configFilePath, this.data);
+    // eslint-disable-next-line no-console
     console.log('config file saved');
   }
 }

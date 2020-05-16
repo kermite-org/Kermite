@@ -1,5 +1,5 @@
 import { css } from 'goober';
-import { hx } from '~ui2/views/basis/qx';
+import { h } from '~ui2/views/basis/qx';
 import { makeProfileManagementViewModel } from './ProfileManagementPart.model';
 import { reflectValue } from '~ui2/views/common/FormHelpers';
 

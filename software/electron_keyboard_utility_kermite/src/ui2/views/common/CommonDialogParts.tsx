@@ -1,5 +1,5 @@
 import { css } from 'goober';
-import { hx } from '~ui2/views/basis/qx';
+import { h } from '~ui2/views/basis/qx';
 
 export function ClosableOverlay(props: {
   close: () => void;
@@ -96,7 +96,7 @@ export const DialogButton = (props: { children: any; onClick: () => void }) => {
     }
   `;
   return (
-    <button css={cssButton} onClick={props.onClick}>
+    <button css={cssButton} onClick={props.onClick} data-debug="hoge">
       {props.children}
     </button>
   );

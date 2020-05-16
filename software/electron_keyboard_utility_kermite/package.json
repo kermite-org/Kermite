@@ -13,7 +13,7 @@
     "start:dev": "cross-env NODE_ENV=development node ./boot.js bundle start",
     "typecheck": "tsc --noEmit",
     "lint": "npx eslint src/ --ext .ts,.tsx",
-    "lint_fix": "npx eslint src/ --ext .ts,.tsx --fix",
+    "lint:fix": "npx eslint src/ --ext .ts,.tsx --fix",
     "clean": "rm -rf dist .cache"
   },
   "dependencies": {

@@ -1,4 +1,4 @@
-import { hx } from '~ui2/views/basis/qx';
+import { h } from '~ui2/views/basis/qx';
 import { AssingTypeSelectionPart } from './AssignTypeSelectionPart';
 import { OerationSlotsPart } from './OperationSlotsPart';
 import { editorModel } from '~ui2/models/zAppDomain';

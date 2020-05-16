@@ -1,6 +1,5 @@
 import { css } from 'goober';
-import { hx } from '~ui2/views/basis/qx';
-import { useViewModel } from '~ui2/views/basis/qxUtils';
+import { h } from '~ui2/views/basis/qx';
 import { LayerManagementPartViewModel } from './LayerManagementPart.model';
 
 const LayerOperationButtton = (props: {
@@ -39,49 +38,49 @@ export const LayerManagementPart = () => {
     display: flex;
   `;
 
-  const layerManagementPartViewModel = useViewModel(
-    LayerManagementPartViewModel
-  );
+  const layerManagementPartViewModel = new LayerManagementPartViewModel();
 
-  const {
-    canModifyCurrentLayer,
-    canShiftBackCurrentLayer,
-    canShiftForwardCurrentLayer,
-    shiftBackCurrentLayer,
-    shiftForwardCurrentLayer,
-    editCurrentLayer,
-    deleteCurrentLayer,
-    addNewLayer
-  } = layerManagementPartViewModel;
+  return () => {
+    const {
+      canModifyCurrentLayer,
+      canShiftBackCurrentLayer,
+      canShiftForwardCurrentLayer,
+      shiftBackCurrentLayer,
+      shiftForwardCurrentLayer,
+      editCurrentLayer,
+      deleteCurrentLayer,
+      addNewLayer
+    } = layerManagementPartViewModel;
 
-  return (
-    <div css={cssButtonsRow}>
-      <LayerOperationButtton
-        icon="fa fa-plus"
-        enabled={true}
-        handler={addNewLayer}
-      />
-      <LayerOperationButtton
-        icon="fa fa-pen-square"
-        enabled={canModifyCurrentLayer}
-        handler={editCurrentLayer}
-      />
-      <LayerOperationButtton
-        icon="fa fa-times"
-        enabled={canModifyCurrentLayer}
-        handler={deleteCurrentLayer}
-      />
+    return (
+      <div css={cssButtonsRow}>
+        <LayerOperationButtton
+          icon="fa fa-plus"
+          enabled={true}
+          handler={addNewLayer}
+        />
+        <LayerOperationButtton
+          icon="fa fa-pen-square"
+          enabled={canModifyCurrentLayer}
+          handler={editCurrentLayer}
+        />
+        <LayerOperationButtton
+          icon="fa fa-times"
+          enabled={canModifyCurrentLayer}
+          handler={deleteCurrentLayer}
+        />
 
-      <LayerOperationButtton
-        icon="fa fa-long-arrow-alt-up"
-        enabled={canShiftBackCurrentLayer}
-        handler={shiftBackCurrentLayer}
-      />
-      <LayerOperationButtton
-        icon="fa fa-long-arrow-alt-down"
-        enabled={canShiftForwardCurrentLayer}
-        handler={shiftForwardCurrentLayer}
-      />
-    </div>
-  );
+        <LayerOperationButtton
+          icon="fa fa-long-arrow-alt-up"
+          enabled={canShiftBackCurrentLayer}
+          handler={shiftBackCurrentLayer}
+        />
+        <LayerOperationButtton
+          icon="fa fa-long-arrow-alt-down"
+          enabled={canShiftForwardCurrentLayer}
+          handler={shiftForwardCurrentLayer}
+        />
+      </div>
+    );
+  };
 };

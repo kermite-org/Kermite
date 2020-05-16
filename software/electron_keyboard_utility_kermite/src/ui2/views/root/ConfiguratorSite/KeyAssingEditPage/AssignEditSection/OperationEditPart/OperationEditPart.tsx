@@ -1,4 +1,4 @@
-import { hx } from '~ui2/views/basis/qx';
+import { h } from '~ui2/views/basis/qx';
 import { css } from 'goober';
 import { UiTheme } from '~ui2/views/common/UiTheme';
 import {

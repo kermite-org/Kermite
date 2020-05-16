@@ -1,9 +1,8 @@
 import { css } from 'goober';
-import { hx } from '~ui2/views/basis/qx';
-import { createClosureComponent } from '~ui2/views/basis/qxUtils';
+import { h } from '~ui2/views/basis/qx';
 import { reflectValue } from '~ui2/views/common/FormHelpers';
 
-export const TestInputArea = createClosureComponent(() => {
+export const TestInputArea = () => {
   let text = '';
   const setText = (value: string) => (text = value);
   const clearText = () => (text = '');
@@ -28,4 +27,4 @@ export const TestInputArea = createClosureComponent(() => {
       </button>
     </div>
   );
-});
+};

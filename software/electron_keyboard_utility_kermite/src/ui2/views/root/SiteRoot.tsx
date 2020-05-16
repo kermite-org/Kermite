@@ -1,14 +1,13 @@
-import { qx, hx } from '../basis/qx';
+import { h } from '../basis/qx';
 import { ConfiguratorSiteRoot } from './ConfiguratorSite/ConfiguratorSiteRoot';
 import { glob, setPragma, css } from 'goober';
 import { appUi } from '~ui2/models/appGlobal';
 import { DebugOverlay } from '../basis/DebugOverlay';
 import { ForegroundModalLayerRoot } from '../basis/ForegroundModalLayer';
-import { SiteRootD } from './dev0';
 import { siteModel } from '~ui2/models/zAppDomain';
 import { WidgetSiteRoot } from './WidgetSite/WidgetSiteRoot';
 
-setPragma(hx);
+setPragma(h);
 
 glob`
   * {
