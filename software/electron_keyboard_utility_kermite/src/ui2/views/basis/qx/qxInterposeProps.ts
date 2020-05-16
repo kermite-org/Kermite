@@ -26,7 +26,7 @@ export function qxInterposeProps(
         props[key1] = originalProc
           ? (...a: any) => {
               originalProc?.(...a);
-              qxGlobal.reqRerender = true;
+              qxGlobal.rerender();
             }
           : undefined;
       }

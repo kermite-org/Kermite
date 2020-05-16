@@ -4,7 +4,7 @@ import { VNode } from './qxinternal_petit_dom/types';
 export { h } from './qxinternal_petit_dom/h';
 
 export function rerender() {
-  qxGlobal.reqRerender = true;
+  qxGlobal.rerender();
 }
 
 export function render(
@@ -13,14 +13,6 @@ export function render(
 ) {
   const executeRender = () =>
     petitDomRender(renderFn() as VNode, parentDomNode!);
-  qxGlobal.reqRerender = true;
-
-  function renderLoop() {
-    if (qxGlobal.reqRerender) {
-      executeRender();
-      qxGlobal.reqRerender = false;
-    }
-    requestAnimationFrame(renderLoop);
-  }
-  renderLoop();
+  qxGlobal.rerender = executeRender;
+  executeRender();
 }

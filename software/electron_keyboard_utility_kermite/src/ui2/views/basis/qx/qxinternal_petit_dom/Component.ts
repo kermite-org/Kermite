@@ -33,7 +33,7 @@ export class Component<P, S> {
   }
 
   forceUpdate() {
-    qxGlobal.reqRerender = true;
+    qxGlobal.rerender();
   }
 
   setState(arg: Partial<S> | ((prevState: S, props: P) => S)) {
@@ -42,7 +42,7 @@ export class Component<P, S> {
     } else {
       this.state = { ...this.state, arg };
     }
-    qxGlobal.reqRerender = true;
+    qxGlobal.rerender();
   }
 
   static mount(props: any, stateRef: IStateRef, env: IEnv) {
