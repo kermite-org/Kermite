@@ -2,6 +2,7 @@ import { indexOf } from './utils';
 import { isVNull, isVLeaf, isVElement, isVComponent } from './h';
 import { diff, INSERTION, DELETION, PATCH } from './diff';
 import { VNode, IEnv } from './types';
+import { qxGlobal } from '../qxGlobal';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const INTERACTIVE_PROPS = {
@@ -70,6 +71,8 @@ export function patch(
   domNode: Node,
   env: IEnv = DEFAULT_ENV
 ): Node {
+  qxGlobal.debug.nPatchCall++;
+
   if (oldVNode === newVNode) {
     return domNode;
   } else if (isVNull(newVNode) && isVNull(oldVNode)) {

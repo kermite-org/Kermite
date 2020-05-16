@@ -1,5 +1,7 @@
 import { mount, patch, unmount } from './vdom';
 import { IEnv, VNode, IComponentFunction, IComponentObject } from './types';
+import { qxGlobal } from '../qxGlobal';
+import { compareObjectByJsonStringify } from '~funcs/Utils';
 
 const promise = Promise.resolve();
 function doLater(fn: () => void) {
@@ -22,11 +24,11 @@ interface IComponentStateRef {
 }
 
 function createRenderComponent<P extends {}>({
-  componentFn,
-  shouldUpdate = shallowCompare
-}: {
+  componentFn
+}: //shouldUpdate = shallowCompare
+{
   componentFn: IComponentFunction<P>;
-  shouldUpdate?: (p1: P, p2: P, c1?: any, c2?: any) => boolean;
+  // shouldUpdate?: (p1: P, p2: P) => boolean;
 }): IComponentObject<P> {
   return {
     mount(props: P, stateRef: IComponentStateRef, env: IEnv) {
@@ -80,7 +82,25 @@ function createRenderComponent<P extends {}>({
       domNode: Node,
       env: IEnv
     ) {
-      if (!shouldUpdate(newProps, oldProps)) {
+      if (componentFn.name === 'HelloCard') {
+        // console.log(`props updation: `, oldProps, newProps);
+      }
+      // shouldUpdate = deadlyDeepCompare;
+
+      // console.log('COMP', componentFn.name, { oldProps, newProps });
+      const keep = shouldKeep(oldProps, newProps, componentFn.name);
+
+      // console.log('COMP RES req update', reqUpdate);
+      // const reqUpdate = false;
+      if (!keep) {
+        qxGlobal.debug.nUpdated++;
+      }
+      qxGlobal.debug.nAll++;
+
+      // console.log(componentFn.name);
+
+      if (keep) {
+        // console.log(`skip`, componentFn.name);
         return domNode;
       }
       const { renderFn } = stateRef;
@@ -106,13 +126,71 @@ function createRenderComponent<P extends {}>({
   };
 }
 
-function shallowCompare<P>(p1: P, p2: P, c1?: string, c2?: string) {
-  if (c1 !== c2) return true;
-
-  for (const key in p1) {
-    if (p1[key] !== p2[key]) return true;
+function chkEqExcFn(a: any, b: any): boolean {
+  if (typeof a !== typeof b) {
+    return false;
   }
-  return false;
+  if (typeof a === 'object') {
+    for (const key in a) {
+      if (!chkEqExcFn(a[key], b[key])) {
+        return false;
+      }
+    }
+    return true;
+  } else if (Array.isArray(a) && Array.isArray(b)) {
+    for (let i = 0; i < a.length; i++) {
+      if (!chkEqExcFn(a[i], b[i])) {
+        return false;
+      }
+    }
+    return true;
+  } else if (typeof a === 'function') {
+    return true;
+  } else {
+    return a === b;
+  }
+}
+
+function shouldKeep<P extends { [key: string]: any }>(
+  props0: P,
+  props1: P,
+  funcName: string
+) {
+  // if (c1 !== c2) return true;
+  // const { children: c0, ...p0 } = props0;
+  // const { children: c1, ...p1 } = props1;
+
+  // console.log({ funcName, p0, p1, c0, c1 });
+
+  const na = Object.keys(props1);
+  if (na.length === 1 && na[0] === 'children') {
+    return false;
+  }
+
+  // console.log({ p1 });
+  // return compareObjectByJsonStringify(props0, props1);
+  return chkEqExcFn(props0, props1);
+
+  // if (
+  //   funcName === 'KeyUnitCard' ||
+  //   funcName === 'OperationCard' ||
+  //   funcName === 'LayerCard' ||
+  //   funcName === 'LayerOperationButtton' ||
+  //   funcName === 'ControlButton'
+  // ) {
+  //   return true;
+  // }
+
+  for (const key in props1) {
+    if (key === 'children') {
+      continue;
+      if (props1[key] !== props0[key]) {
+        // console.log(`props changed`, key, p1, p2);
+        return true;
+      }
+    }
+    return false;
+  }
 }
 
 const PD_COMPONENT = Symbol('@petit-dom/component');
@@ -126,8 +204,7 @@ export function createFunctionComponent<P>(renderFunction: IRenderFunction<P>) {
   let component = renderFunction[PD_COMPONENT];
   if (!component) {
     component = renderFunction[PD_COMPONENT] = createRenderComponent({
-      componentFn: renderFunction,
-      shouldUpdate: renderFunction.shouldUpdate
+      componentFn: renderFunction
     });
   }
   return component;

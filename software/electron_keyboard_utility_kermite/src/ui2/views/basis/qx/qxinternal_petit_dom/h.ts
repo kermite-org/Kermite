@@ -5,7 +5,6 @@ import {
   VNode,
   VTYPE_ELEMENT,
   VTYPE_COMPONENT,
-  EMPTY_OBJECT,
   IComponentFunction,
   VElement,
   VComponent,
@@ -23,6 +22,8 @@ export const isVComponent = (c: VNode): c is VComponent =>
 
 const isValidComponentType = (c: any): c is IComponentObject<any> =>
   c && c.mount && c.patch && c.unmount;
+
+const EMPTY_OBJECT: { key?: any } = {};
 
 export function h(
   type: string | IComponentFunction<any>,

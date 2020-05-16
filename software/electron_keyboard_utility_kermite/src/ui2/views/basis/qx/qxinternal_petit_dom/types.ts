@@ -1,6 +1,5 @@
 export type IKey = string | number | any | null;
 
-export const EMPTY_OBJECT: { key?: any } = {};
 export const VTYPE_ELEMENT = 0x80;
 export const VTYPE_COMPONENT = 0x100;
 

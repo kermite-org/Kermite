@@ -115,6 +115,10 @@ export const DebugOverlayD = (_: any) => {
   };
 };
 
+const HelloCard = (props: { name: string }) => {
+  return <div>Hello, {props.name}</div>;
+};
+
 export const SiteRootD = () => {
   // console.log(`site root d`);
 
@@ -147,6 +151,7 @@ export const SiteRootD = () => {
           <button onClick={() => modalAlert('hogehogea')}>alert</button>
           <button onClick={onEditButton}>edit</button>
         </div>
+        <HelloCard name="yamada" />
         {/* <DivOrNullTest rc={rc} id="divorNullTest" /> */}
       </div>
       <DebugOverlay debugObj={rc % 2 === 0 ? { a: 'b' } : undefined} />
