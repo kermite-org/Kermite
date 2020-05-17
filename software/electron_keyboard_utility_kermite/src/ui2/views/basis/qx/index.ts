@@ -12,6 +12,7 @@ export function render(
   parentDomNode: HTMLElement | null
 ) {
   const executeRender = () => {
+    // console.log(`--------render start--------`);
     const d = qxGlobal.debug;
     d.nAll = 0;
     d.nUpdated = 0;

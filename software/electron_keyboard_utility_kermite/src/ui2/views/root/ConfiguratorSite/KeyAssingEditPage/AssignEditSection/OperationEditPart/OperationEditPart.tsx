@@ -92,7 +92,11 @@ export function OpertionEditPart() {
             {virtualKeyEntryGroups.map((group, index) => (
               <div css={cssGroupBox} key={index}>
                 {group.map((model) => (
-                  <OperationCard model={model} key={model.sig} />
+                  <OperationCard
+                    model={model}
+                    key={model.sig}
+                    optimizer="deepEqualExFn"
+                  />
                 ))}
               </div>
             ))}
@@ -100,7 +104,11 @@ export function OpertionEditPart() {
           <div>
             <div css={cssGroupBoxV}>
               {attachedModifierEntries.map((model) => (
-                <OperationCard model={model} key={model.sig} />
+                <OperationCard
+                  model={model}
+                  key={model.sig}
+                  optimizer="deepEqualExFn"
+                />
               ))}
             </div>
           </div>
@@ -108,7 +116,11 @@ export function OpertionEditPart() {
         <div css={cssLayerAssignsRow}>
           <div css={cssGroupBox}>
             {layerCallEntries.map((model) => (
-              <OperationCard model={model} key={model.sig} />
+              <OperationCard
+                model={model}
+                key={model.sig}
+                optimizer="deepEqualExFn"
+              />
             ))}
           </div>
         </div>

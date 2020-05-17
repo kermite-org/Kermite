@@ -92,7 +92,11 @@ export function KeyUnitCardsPart() {
   return (
     <g>
       {keyUnitCardsPartViewModel.cards.map((keyUnit) => (
-        <KeyUnitCard keyUnit={keyUnit} key={keyUnit.keyUnitId} />
+        <KeyUnitCard
+          keyUnit={keyUnit}
+          key={keyUnit.keyUnitId}
+          optimizer="deepEqualExFn"
+        />
       ))}
     </g>
   );

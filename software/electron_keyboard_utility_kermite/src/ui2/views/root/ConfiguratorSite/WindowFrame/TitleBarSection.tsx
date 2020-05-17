@@ -68,13 +68,29 @@ const ControlButtonsPart = () => {
     height: 100%;
   `;
 
-  return (
+  return () => (
     <div css={cssButtonsBox}>
       <ReloadButtonPart />
-      <ControlButton icon="fa fa-feather-alt" onClick={onWidgetButton} />
-      <ControlButton icon="fa fa-window-minimize" onClick={onMinimizeButton} />
-      <ControlButton icon="fa fa-window-maximize" onClick={onMaximizeButton} />
-      <ControlButton icon="fa fa-times" onClick={onCloseButton} />
+      <ControlButton
+        icon="fa fa-feather-alt"
+        onClick={onWidgetButton}
+        optimizer="deepEqual"
+      />
+      <ControlButton
+        icon="fa fa-window-minimize"
+        onClick={onMinimizeButton}
+        optimizer="deepEqual"
+      />
+      <ControlButton
+        icon="fa fa-window-maximize"
+        onClick={onMaximizeButton}
+        optimizer="deepEqual"
+      />
+      <ControlButton
+        icon="fa fa-times"
+        onClick={onCloseButton}
+        optimizer="deepEqual"
+      />
     </div>
   );
 };

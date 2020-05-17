@@ -28,6 +28,7 @@ declare global {
   namespace JSX {
     interface IntrinsicAttributes {
       key?: any;
+      optimizer?: 'shallowEqual' | 'deepEqual' | 'deepEqualExFn';
     }
 
     type Element =
