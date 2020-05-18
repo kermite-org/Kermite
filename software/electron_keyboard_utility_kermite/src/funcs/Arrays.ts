@@ -58,4 +58,23 @@ export namespace Arrays {
   export function clear<T>(ar: T[]) {
     ar.splice(0, ar.length);
   }
+
+  export function groupBy<T extends { [key in K]: any }, K extends keyof T>(
+    arr: T[],
+    keyPropName: K
+  ): T[][] {
+    const bins: { [key: string]: T[] } = {} as any;
+    for (const obj of arr) {
+      const key = obj[keyPropName].toString();
+      if (!bins[key]) {
+        bins[key] = [];
+      }
+      bins[key].push(obj);
+    }
+    return Object.keys(bins).map((key) => bins[key]);
+  }
+
+  function removeBlanks<T>(ar: T[]): NonNullable<T>[] {
+    return ar.filter((a) => !!a) as NonNullable<T>[];
+  }
 }

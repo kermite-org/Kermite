@@ -5,6 +5,7 @@ import { IInputLogicSimulator } from './InputLogicSimulator.interface';
 import { InputLogicSimulatorC } from './InputLogicSimulatorC';
 import { IpcBridge } from './IpcBridge';
 import { ProfileManager } from './ProfileManager';
+import { InputLogicSimulatorD } from './InputLogicSimulatorD';
 
 interface TypedApplicationEvent {
   mainWindowClosed: true;
@@ -15,7 +16,8 @@ export const appGlobal = new (class {
   applicationStorage = new ApplicationStorage();
   profileManager = new ProfileManager();
   deviceService = new DeviceService();
-  inputLogicSimulator = InputLogicSimulatorC.getInterface();
+  // inputLogicSimulator = InputLogicSimulatorC.getInterface();
+  inputLogicSimulator = InputLogicSimulatorD.getInterface();
   ipcBridge = new IpcBridge();
   eventBus = new EventBus<TypedApplicationEvent>();
 
