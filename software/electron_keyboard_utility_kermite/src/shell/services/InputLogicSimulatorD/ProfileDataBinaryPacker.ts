@@ -66,7 +66,8 @@ function encodeAssignOperation(op: IAssignOperation | undefined): number[] {
   if (op?.type === 'keyInput') {
     const tt = 0b01;
     const mods = makeAttachedModifiersBits(op.attachedModifiers);
-    const key = -1; //TODO VirtualKeyToLogicalKey[op.virtualKey] || 0
+    // const key = -1; //TODO VirtualKeyToLogicalKey[op.virtualKey] || 0
+    const key = 0xab;
     return [(tt << 6) | mods, key];
   } else if (op?.type === 'layerCall') {
     const tt = 0b10;
