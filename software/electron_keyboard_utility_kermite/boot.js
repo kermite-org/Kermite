@@ -43,9 +43,11 @@ function runDevelopment() {
 
   function startElectronProcess() {
     let reqReboot = false;
-    const sub = childProcess.spawn('electron', ['./dist'], {
-      shell: true
-    });
+
+    const sub = childProcess.spawn(path.resolve('node_modules/.bin/electron'), [
+      '--inspect=5880',
+      './dist'
+    ]);
 
     sub.stdout.on('data', (text) => {
       if (text.includes('##REBOOT_ME_AFTER_CLOSE')) {
