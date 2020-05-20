@@ -6,13 +6,19 @@ type size_t = number;
 
 const hidReportBuf: u8[] = new Array(8).fill(0);
 
-const StorageBufSize = 1024;
-
-const writableStorageBuf: u8[] = new Array(StorageBufSize).fill(0);
-
+const StorageBufCapacity = 1024;
+const storageBuf: u8[] = new Array(StorageBufCapacity).fill(0);
 let storageBufLength = 0;
 
-function helpers_copyBytes(dst: u8[], src: u8[], len: size_t) {
+function strU16Bin(val: u16) {
+  return `0000000000000000${val.toString(2)}`.slice(-16);
+}
+
+function strU16Hex(val: u16) {
+  return `0000${val.toString(16)}`.slice(-4);
+}
+
+function copyBytes(dst: u8[], src: u8[], len: size_t) {
   for (let i = 0; i < len; i++) {
     dst[i] = src[i];
   }
@@ -20,22 +26,20 @@ function helpers_copyBytes(dst: u8[], src: u8[], len: size_t) {
 
 export function coreLogic_getOutputHidReport(): u8[] {
   return hidReportBuf;
-  // return undefined;
 }
 
 export function coreLogic_writeProfileDataBlob(bytes: u8[]) {
   const len = bytes.length;
-  if (len < StorageBufSize) {
-    helpers_copyBytes(writableStorageBuf, bytes, len);
+  if (len < StorageBufCapacity) {
+    copyBytes(storageBuf, bytes, len);
     storageBufLength = len;
   }
 }
 
 function getKeyBoundAssignSetHeaderPos(keyIndex: u16): s16 {
-  const buf = writableStorageBuf;
   let pos = 0;
   while (pos < storageBufLength) {
-    const data = buf[pos];
+    const data = storageBuf[pos];
     if (data === 0) {
       break;
     }
@@ -43,7 +47,7 @@ function getKeyBoundAssignSetHeaderPos(keyIndex: u16): s16 {
       return pos;
     }
     pos++;
-    const bodyLength = buf[pos++];
+    const bodyLength = storageBuf[pos++];
     pos += bodyLength;
   }
   return -1;
@@ -53,9 +57,11 @@ function getLayerBoundAssignEntryHeaderPos(
   basePos: u16,
   targetLayerIndex: u16
 ): s16 {
-  const buf = writableStorageBuf;
+  const buf = storageBuf;
+  const len = buf[basePos + 1];
   let pos = basePos + 2;
-  while (pos < storageBufLength) {
+  const endPos = pos + len;
+  while (pos < endPos) {
     const data = buf[pos];
     const layerIndex = data & 0b1111;
     if (layerIndex === targetLayerIndex) {
@@ -75,7 +81,7 @@ function getAssignOperationWord(
   keyIndex: number,
   isSecondary: boolean
 ): u16 {
-  const buf = writableStorageBuf;
+  const buf = storageBuf;
   const pos0 = getKeyBoundAssignSetHeaderPos(keyIndex);
   if (pos0 >= 0) {
     const pos1 = getLayerBoundAssignEntryHeaderPos(pos0, layerIndex);
@@ -93,16 +99,97 @@ function getAssignOperationWord(
   return 0;
 }
 
-function strU16Bin(val: u16) {
-  return `0000000000000000${val.toString(2)}`.slice(-16);
+const state = new (class {
+  layerIndex: number = 0;
+  boundAssigns: number[] = new Array(128).fill(0);
+})();
+
+const OpType_keyInput = 0b01;
+const OpType_layerCall = 0b10;
+
+function handleKeyInputDown(keyIndex: u8) {
+  let opWord = getAssignOperationWord(state.layerIndex, keyIndex, false);
+  if (!opWord) {
+    opWord = getAssignOperationWord(0, keyIndex, false);
+  }
+  if (opWord) {
+    // console.log('op', strU16Hex(opWord));
+    const opType = (opWord >> 14) & 0b11;
+    if (opType === OpType_keyInput) {
+      const hidKey = opWord & 0x3ff;
+      const modFlag = (opWord >> 10) & 0b1111;
+      if (modFlag) {
+        hidReportBuf[0] |= modFlag;
+      }
+      if (hidKey) {
+        const keyCode = hidKey & 0xff;
+        const shiftOn = hidKey & 0x100;
+        const shiftOff = hidKey & 0x200;
+        if (shiftOn) {
+          hidReportBuf[0] = 2;
+        }
+        if (shiftOff) {
+          hidReportBuf[0] = 0;
+        }
+        if (keyCode) {
+          hidReportBuf[2] = keyCode;
+        }
+      }
+    }
+    if (opType === OpType_layerCall) {
+      const layerIndex = (opWord >> 8) & 0b1111;
+      const withShift = (opWord >> 13) & 0b1;
+      state.layerIndex = layerIndex;
+      if (withShift) {
+        hidReportBuf[0] = 2;
+      }
+      // console.log(`la`, state.layerIndex);
+    }
+    state.boundAssigns[keyIndex] = opWord;
+  }
+}
+
+function handleKeyInputUp(keyIndex: u8) {
+  const opWord = state.boundAssigns[keyIndex];
+  if (opWord) {
+    const opType = (opWord >> 14) & 0b11;
+    if (opType === OpType_keyInput) {
+      const hidKey = opWord & 0x3ff;
+      const modFlag = (opWord >> 10) & 0b1111;
+      if (modFlag) {
+        hidReportBuf[0] &= ~modFlag;
+      }
+      if (hidKey) {
+        const keyCode = hidKey & 0xff;
+        const shiftOn = hidKey & 0x100;
+        const shiftOff = hidKey & 0x200;
+        if (shiftOn) {
+          hidReportBuf[0] = 0;
+        }
+        if (shiftOff) {
+        }
+        if (keyCode) {
+          hidReportBuf[2] = 0;
+        }
+      }
+    }
+    if (opType === OpType_layerCall) {
+      state.layerIndex = 0;
+      const withShift = (opWord >> 13) & 0b1;
+      if (withShift) {
+        hidReportBuf[0] = 0;
+      }
+      // console.log(`la`, state.layerIndex);
+    }
+    state.boundAssigns[keyIndex] = 0;
+  }
 }
 
 export function coreLogic_handleKeyInput(keyIndex: u8, isDown: boolean) {
-  const layerIndex = 0;
-
   if (isDown) {
-    const opWord = getAssignOperationWord(layerIndex, keyIndex, false);
-    console.log('op:', strU16Bin(opWord));
+    handleKeyInputDown(keyIndex);
+  } else {
+    handleKeyInputUp(keyIndex);
   }
 }
 

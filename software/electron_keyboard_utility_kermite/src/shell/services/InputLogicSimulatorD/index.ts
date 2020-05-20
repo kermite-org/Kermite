@@ -41,7 +41,7 @@ export namespace InputLogicSimulatorD {
     const report = CL.coreLogic_getOutputHidReport();
     if (!compareArray(prevHidReport, report)) {
       appGlobal.deviceService.writeSideBrainHidReport(report);
-      prevHidReport = report;
+      prevHidReport = report.slice(0);
     }
   }
 

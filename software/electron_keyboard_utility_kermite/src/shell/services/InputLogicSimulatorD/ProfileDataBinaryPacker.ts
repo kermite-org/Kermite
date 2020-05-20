@@ -4,11 +4,12 @@ import {
   IAssignOperation
 } from '~defs/ProfileData';
 import { createDictionaryFromKeyValues, sortOrderBy } from '~funcs/Utils';
-import { ModifierVirtualKey } from '~defs/VirtualKeys';
+import { ModifierVirtualKey, isModifierVirtualKey } from '~defs/VirtualKeys';
 import { Arrays } from '~funcs/Arrays';
+import { HidKeyCodes } from '~defs/HidKeyCodes';
 
 /*
-Key Layout Restriction
+Key Assigns Restriction
 supports max 16 Layers
 supports max 128 Keys
 layerIndex: 0~15
@@ -23,10 +24,13 @@ interface IRawAssignEntry {
   entry: IAssignEntry;
 }
 
-type IIdToIndexMap = { [id: string]: number };
+interface IRawLayerInfo {
+  layerIndex: number;
+  isShiftLayer: boolean;
+}
 
 const localContext = new (class {
-  layerIdToLayerIndexMap: IIdToIndexMap = {};
+  layersDict: { [layerId: string]: IRawLayerInfo } = {};
 })();
 
 function makeAttachedModifiersBits(
@@ -50,29 +54,39 @@ noOperation
 TT: type, 0b00 for noOperation
 
 keyInput
-0bTTRR_MMMM 0bKKKK_KKKK
+0bTTMM_MMKK 0bKKKK_KKKK
 TT: type, 0b01 for keyInput
-RR: reserved
 MMMM: modifiers, [os, alt, shift, ctrl] for msb-lsb
-KKKK_KKKK: LogicalKey
+KK_KKKK_KKKK: hid keycode with adhocShift flags
 
 layerCall
-0bTTRR_LLLL 0bXXXX_XXXX
+0bTTSR_LLLL 0bXXXX_XXXX
 TT: type, 0b10 for layerCall
-RR: reserved
+S: is shift layer
+R: reserved
 LLLL: layerIndex
 */
 function encodeAssignOperation(op: IAssignOperation | undefined): number[] {
   if (op?.type === 'keyInput') {
     const tt = 0b01;
-    const mods = makeAttachedModifiersBits(op.attachedModifiers);
-    // const key = -1; //TODO VirtualKeyToLogicalKey[op.virtualKey] || 0
-    const key = 0xab;
-    return [(tt << 6) | mods, key];
-  } else if (op?.type === 'layerCall') {
+    const vk = op.virtualKey;
+    if (isModifierVirtualKey(vk)) {
+      const mods = makeAttachedModifiersBits([vk]);
+      return [(tt << 6) | (mods << 2), 0];
+    } else {
+      const mods = makeAttachedModifiersBits(op.attachedModifiers);
+      const hidKey = HidKeyCodes[vk];
+      return [(tt << 6) | (mods << 2), hidKey];
+    }
+  }
+  if (op?.type === 'layerCall') {
     const tt = 0b10;
-    const layerIndex = localContext.layerIdToLayerIndexMap[op.targetLayerId];
-    return [(tt << 6) | layerIndex];
+    const layerInfo = localContext.layersDict[op.targetLayerId];
+    if (layerInfo) {
+      const { layerIndex, isShiftLayer } = layerInfo;
+      const fShift = isShiftLayer ? 1 : 0;
+      return [(tt << 6) | (fShift << 5) | layerIndex, 0];
+    }
   }
   return [0, 0];
 }
@@ -185,8 +199,14 @@ function hexBytes(bytes: number[]) {
 }
 
 export function converProfileDataToBlobBytes(profile: IProfileData): number[] {
-  localContext.layerIdToLayerIndexMap = createDictionaryFromKeyValues(
-    profile.layers.map((la, idx) => [la.layerId, idx])
+  localContext.layersDict = createDictionaryFromKeyValues(
+    profile.layers.map((la, idx) => [
+      la.layerId,
+      {
+        layerIndex: idx,
+        isShiftLayer: la.isShiftLayer || false
+      }
+    ])
   );
 
   const rawAssigns = makeRawAssignEntries(profile);
@@ -207,7 +227,6 @@ export function converProfileDataToBlobBytes(profile: IProfileData): number[] {
   const buf = [...keyAssignsBufferBytes];
 
   console.log(`len: ${buf.length}`);
-  // console.log(buf);
 
   if (buf.length >= 1024) {
     //too bad
@@ -215,5 +234,3 @@ export function converProfileDataToBlobBytes(profile: IProfileData): number[] {
 
   return buf;
 }
-
-//todo: viertual key to logical key
