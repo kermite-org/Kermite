@@ -172,3 +172,14 @@ export type VirtualKey =
   | 'K_PostDouble';
 
 export type ModifierVirtualKey = 'K_Shift' | 'K_Ctrl' | 'K_Alt' | 'K_OS';
+
+const modfierVirutalKeys: ModifierVirtualKey[] = [
+  'K_Ctrl',
+  'K_Shift',
+  'K_Alt',
+  'K_OS'
+];
+
+export function isModifierVirtualKey(vk: VirtualKey): vk is ModifierVirtualKey {
+  return modfierVirutalKeys.includes(vk as ModifierVirtualKey);
+}

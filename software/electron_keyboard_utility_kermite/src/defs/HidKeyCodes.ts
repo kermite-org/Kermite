@@ -77,6 +77,24 @@ const enum HidKey {
   KU_UpArrow,
   KU_NumLock = 83,
 
+  KU_KeyPad_Slash = 84,
+  KU_KeyPad_Asterisk,
+  KU_KeyPad_Minus,
+  KU_KeyPad_Plus,
+  KU_KeyPad_Enter,
+  KU_KeyPad_1,
+  KU_KeyPad_2,
+  KU_KeyPad_3,
+  KU_KeyPad_4,
+  KU_KeyPad_5,
+  KU_KeyPad_6,
+  KU_KeyPad_7,
+  KU_KeyPad_8,
+  KU_KeyPad_9,
+  KU_KeyPad_0,
+  KU_KeyPad_Dot,
+  KU_KeyPad_Equal = 103,
+
   KU_F13 = 104,
   KU_F14,
   KU_F15,
@@ -91,6 +109,9 @@ const enum HidKey {
   KU_F24,
 
   KU_Menu = 118,
+
+  KU_KeyPad_00 = 176,
+  KU_KeyPad_BackSpace = 187,
 
   KU_LCtrl = 224,
   KU_LShift,
