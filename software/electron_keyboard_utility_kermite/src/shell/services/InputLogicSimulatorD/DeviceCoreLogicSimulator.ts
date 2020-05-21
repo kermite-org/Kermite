@@ -125,10 +125,12 @@ function handleKeyInputDown(keyIndex: u8) {
         const keyCode = hidKey & 0xff;
         const shiftOn = hidKey & 0x100;
         const shiftOff = hidKey & 0x200;
+
+        const isOtherModifiersClean = (hidReportBuf[0] & 0b1101) === 0;
         if (shiftOn) {
           hidReportBuf[0] = 2;
         }
-        if (shiftOff) {
+        if (shiftOff && isOtherModifiersClean) {
           hidReportBuf[0] = 0;
         }
         if (keyCode) {
