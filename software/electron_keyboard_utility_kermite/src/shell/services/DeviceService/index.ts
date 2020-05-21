@@ -99,4 +99,8 @@ export class DeviceService {
     const buf = [0xd0, 0x20, ...report];
     this.deviceWrapper?.writeSingleFrame(buf);
   }
+
+  emitLayerChangedEvent(layerIndex: number) {
+    this.emitRealtimeEvent({ type: 'layerChanged', layerIndex });
+  }
 }

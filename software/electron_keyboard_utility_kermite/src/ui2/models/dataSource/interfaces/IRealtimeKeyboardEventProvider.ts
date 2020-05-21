@@ -1,10 +1,7 @@
-export interface IUiRealtimeKeyboardEvent {
-  keyIndex: number;
-  isDown: boolean;
-}
+import { IRealtimeKeyboardEvent } from '~defs/ipc';
 
 export interface IUiRealtimeKeyboardEventProvider {
-  setListener(listener: (event: IUiRealtimeKeyboardEvent) => void): void;
+  setListener(listener: (event: IRealtimeKeyboardEvent) => void): void;
   start(): void;
   stop(): void;
 }

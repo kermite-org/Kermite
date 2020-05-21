@@ -66,9 +66,9 @@ export class EditorModel {
     return this.currentKeyUnitId === keyUnitId;
   };
 
-  getAssignForKeyUnit = (keyUnitId: string) => {
-    const curLayerId = this.currentLayerId;
-    return this.profileData.assigns[`${curLayerId}.${keyUnitId}`];
+  getAssignForKeyUnit = (keyUnitId: string, targetLayerId?: string) => {
+    const layerId = targetLayerId || this.currentLayerId;
+    return this.profileData.assigns[`${layerId}.${keyUnitId}`];
   };
 
   private get dualModeOperationPath(): IDualModeOperationPath {
@@ -88,6 +88,10 @@ export class EditorModel {
       return assign[this.dualModeOperationPath];
     }
     return undefined;
+  }
+
+  getLayerById(layerId: string) {
+    return this.layers.find((la) => la.layerId === layerId);
   }
 
   checkDirty(): boolean {

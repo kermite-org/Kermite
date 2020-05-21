@@ -1,3 +1,5 @@
+import { appGlobal } from '../appGlobal';
+
 type u8 = number;
 type s8 = number;
 type u16 = number;
@@ -142,6 +144,7 @@ function handleKeyInputDown(keyIndex: u8) {
       const layerIndex = (opWord >> 8) & 0b1111;
       const withShift = (opWord >> 13) & 0b1;
       state.layerIndex = layerIndex;
+      appGlobal.deviceService.emitLayerChangedEvent(layerIndex);
       if (withShift) {
         hidReportBuf[0] = 2;
       }
@@ -177,6 +180,7 @@ function handleKeyInputUp(keyIndex: u8) {
     }
     if (opType === OpType_layerCall) {
       state.layerIndex = 0;
+      appGlobal.deviceService.emitLayerChangedEvent(0);
       const withShift = (opWord >> 13) & 0b1;
       if (withShift) {
         hidReportBuf[0] = 0;

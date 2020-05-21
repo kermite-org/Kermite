@@ -1,12 +1,9 @@
-import {
-  IUiRealtimeKeyboardEventProvider,
-  IUiRealtimeKeyboardEvent
-} from './interfaces/IRealtimeKeyboardEventProvider';
+import { IUiRealtimeKeyboardEventProvider } from './interfaces/IRealtimeKeyboardEventProvider';
 import { backendAgent } from '~ui2/models/dataSource/ipc';
 import { IRealtimeKeyboardEvent } from '~defs/ipc';
 
 type IUiRealtimetimeKeyboardEventListener = (
-  event: IUiRealtimeKeyboardEvent
+  event: IRealtimeKeyboardEvent
 ) => void;
 
 export class RealtimeKeyboardEventProvider_RealDevice
@@ -18,10 +15,7 @@ export class RealtimeKeyboardEventProvider_RealDevice
   }
 
   private handleKeyEvent = (ev: IRealtimeKeyboardEvent) => {
-    if (ev.type === 'keyStateChanged') {
-      const { keyIndex, isDown } = ev;
-      this.listener({ keyIndex, isDown });
-    }
+    this.listener(ev);
   };
 
   start() {

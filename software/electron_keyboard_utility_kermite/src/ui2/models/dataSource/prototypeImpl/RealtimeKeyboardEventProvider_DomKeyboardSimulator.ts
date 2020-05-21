@@ -1,10 +1,8 @@
-import {
-  IUiRealtimeKeyboardEventProvider,
-  IUiRealtimeKeyboardEvent
-} from '../interfaces/IRealtimeKeyboardEventProvider';
+import { IUiRealtimeKeyboardEventProvider } from '../interfaces/IRealtimeKeyboardEventProvider';
+import { IRealtimeKeyboardEvent } from '~defs/ipc';
 
 type IRealtimetimeKeyboardEventListener = (
-  event: IUiRealtimeKeyboardEvent
+  event: IRealtimeKeyboardEvent
 ) => void;
 
 export class RealtimeKeyboardEventProvider_DomKeyboardSimulator
@@ -28,7 +26,7 @@ export class RealtimeKeyboardEventProvider_DomKeyboardSimulator
       const keyIndex = this.getKeyIndexByKey(e.key);
       const isDown = e.type === 'keydown';
       if (keyIndex !== undefined) {
-        this.listener({ keyIndex, isDown });
+        this.listener({ type: 'keyStateChanged', keyIndex, isDown });
       }
     }
   };
