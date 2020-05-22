@@ -1,8 +1,8 @@
 import { ILayer } from '~defs/ProfileData';
-import { Arrays } from '~funcs/Arrays';
 import { editorModel } from '~ui2/models/zAppDomain';
 import { callLayerConfigurationModal } from './LayerConfigurationModal';
 import { modalConfirm } from '~ui2/views/common/basicModals';
+import { removeArrayItems } from '~funcs/Utils';
 
 export class LayerManagementPartViewModel {
   private get layers() {
@@ -60,7 +60,7 @@ export class LayerManagementPartViewModel {
       caption: 'Delete Layer'
     });
     if (ok) {
-      Arrays.remove(this.layers, this.curLayer);
+      removeArrayItems(this.layers, this.curLayer);
       editorModel.setCurrentLayerId(this.layers[0].layerId);
     }
   };

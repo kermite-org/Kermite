@@ -1,4 +1,3 @@
-import { EventBus } from '~funcs/EventBus';
 import { ApplicationStorage } from './ApplicationStorage';
 import { DeviceService } from './DeviceService';
 import { IInputLogicSimulator } from './InputLogicSimulator.interface';
@@ -19,7 +18,6 @@ export const appGlobal = new (class {
   // inputLogicSimulator = InputLogicSimulatorC.getInterface();
   inputLogicSimulator = InputLogicSimulatorD.getInterface();
   ipcBridge = new IpcBridge();
-  eventBus = new EventBus<TypedApplicationEvent>();
 
   async initialize() {
     // eslint-disable-next-line no-console

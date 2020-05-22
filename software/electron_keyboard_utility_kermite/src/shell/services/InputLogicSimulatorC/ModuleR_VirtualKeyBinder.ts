@@ -1,10 +1,10 @@
 import { ModifierVirtualKey, VirtualKey } from '~defs/VirtualKeys';
-import { Arrays } from '~funcs/Arrays';
 import {
   createModuleIo,
   IVirtualKeyEvent,
   IHoldKeySet
 } from './LogicSimulatorCCommon';
+import { removeArrayItemsMatched } from '~funcs/Utils';
 
 export namespace ModuleR_VirtualKeyBinder {
   export const io = createModuleIo<IVirtualKeyEvent, IHoldKeySet[]>(
@@ -28,7 +28,7 @@ export namespace ModuleR_VirtualKeyBinder {
 
   function removeVirtualKey(virtualKey: VirtualKey) {
     const { holdKeySets } = local;
-    const removed = Arrays.removeIf(
+    const removed = removeArrayItemsMatched(
       holdKeySets,
       (hk) => hk.virtualKey === virtualKey
     );

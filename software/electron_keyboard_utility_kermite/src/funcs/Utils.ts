@@ -1,25 +1,58 @@
-export function arrayToDictionary<
-  T extends { [Key in K]: string },
-  K extends keyof T
->(elements: T[], keyPropName: K): { [key: string]: T } {
-  const obj: { [key: string]: T } = {};
-  for (const el of elements) {
-    const key = el[keyPropName];
-    obj[key] = el;
+export function flattenArray<T>(arr: T[][]): T[] {
+  const res: T[] = [];
+  for (const ar of arr) {
+    res.push(...ar);
   }
-  return obj;
+  return res;
 }
 
-export function arrayToIdIndexMap<
-  T extends { [Key in K]: string },
+export function generateNumberSequence(n: number): number[] {
+  const res: number[] = [];
+  for (let i = 0; i < n; i++) {
+    res.push(i);
+  }
+  return res;
+}
+
+export function removeArrayItems<T>(ar: T[], a: T) {
+  let i = 0;
+  while (i < ar.length) {
+    if (ar[i] === a) {
+      ar.splice(i, 1);
+      continue;
+    }
+    i++;
+  }
+}
+
+export function removeArrayItemsMatched<T>(
+  ar: T[],
+  cond: (a: T) => boolean
+): boolean {
+  let someRemoved = false;
+  for (let i = 0; i < ar.length; i++) {
+    if (cond(ar[i])) {
+      ar.splice(i, 1);
+      someRemoved = true;
+      continue;
+    }
+  }
+  return someRemoved;
+}
+
+export function createGroupedArrayByKey<
+  T extends { [key in K]: any },
   K extends keyof T
->(elements: T[], keyPropName: K): { [key: string]: number } {
-  const obj: { [key: string]: number } = {};
-  elements.forEach((el, index) => {
-    const key = el[keyPropName];
-    obj[key] = index;
-  });
-  return obj;
+>(arr: T[], keyPropName: K): T[][] {
+  const bins: { [key: string]: T[] } = {} as any;
+  for (const obj of arr) {
+    const key = obj[keyPropName].toString();
+    if (!bins[key]) {
+      bins[key] = [];
+    }
+    bins[key].push(obj);
+  }
+  return Object.keys(bins).map((key) => bins[key]);
 }
 
 export function compareObjectByJsonStringify(a: any, b: any) {
@@ -61,31 +94,6 @@ export function removeOptionFromOptionsArray<T>(
   }
 }
 
-export function diffArray<T>(
-  prev: T[],
-  curr: T[]
-): {
-  added: T[];
-  removed: T[];
-} {
-  const removed = prev.filter((a) => !curr.includes(a));
-  const added = curr.filter((a) => !prev.includes(a));
-  return { added, removed };
-}
-
-export function findFirst<T, R>(
-  values: T[],
-  mapper: (value: T) => R
-): R | undefined {
-  for (const value of values) {
-    const result = mapper(value);
-    if (result) {
-      return result;
-    }
-  }
-  return undefined;
-}
-
 export function createDictionaryFromKeyValues<K extends string | number, V>(
   arr: [K, V][]
 ): { [key in K]: V } {
@@ -112,10 +120,6 @@ export function clonePlainOldObject(src: any): any {
   }
 }
 
-export function bindMethod<T>(obj: T, key: keyof T) {
-  return (obj[key] as any).bind(obj);
-}
-
 export function sortOrderBy<T>(
   proc: (arg: T) => number,
   method: 'asc' | 'dsc' = 'asc'
@@ -140,8 +144,33 @@ export function mapObjectValues<P, Q>(
   return dst;
 }
 
-export type ArugmentTypes<F extends Function> = F extends (
-  ...args: infer A
-) => any
-  ? A
-  : never;
+export function linerInterpolateValue(
+  val: number,
+  s0: number,
+  s1: number,
+  d0: number,
+  d1: number,
+  clamp: boolean
+) {
+  const res = ((val - s0) / (s1 - s0)) * (d1 - d0) + d0;
+  if (clamp) {
+    const hi = Math.max(d0, d1);
+    const lo = Math.min(d0, d1);
+    if (res > hi) return hi;
+    if (res < lo) return lo;
+  }
+  return res;
+}
+
+export function clampValue(val: number, lo: number, hi: number): number {
+  if (val < lo) return lo;
+  if (val > hi) return hi;
+  return val;
+}
+
+export function generateRandomUid(): string {
+  //generate guid like identification string
+  return 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'.replace(/x/g, (m) =>
+    ((Math.random() * 16) >> 0).toString(16)
+  );
+}

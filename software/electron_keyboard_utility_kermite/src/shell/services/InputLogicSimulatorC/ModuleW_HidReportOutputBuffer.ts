@@ -1,5 +1,5 @@
 import { createModuleIo } from './LogicSimulatorCCommon';
-import { Arrays } from '~funcs/Arrays';
+import { generateNumberSequence } from '~funcs/Utils';
 
 export namespace ModuleW_HidReportOutputBuffer {
   export const io = createModuleIo<number[], number[]>(commitHidReport);
@@ -15,7 +15,7 @@ export namespace ModuleW_HidReportOutputBuffer {
     //HIDレポートの6つのキーコードのスロットが同一で、モディファイヤバイトだけが遷移した場合に
     //一旦全キーのホールドを解除した状態を挟み込む
     if (
-      Arrays.iota(6)
+      generateNumberSequence(6)
         .map((i) => i + 2)
         .every((i) => hidReport[i] === local.prevInputHidReport[i]) &&
       hidReport[0] !== local.prevInputHidReport[0]

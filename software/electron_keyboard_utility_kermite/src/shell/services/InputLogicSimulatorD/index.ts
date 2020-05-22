@@ -4,13 +4,13 @@ import { IInputLogicSimulator } from '../InputLogicSimulator.interface';
 import { IntervalTimerWrapper } from '../InputLogicSimulator/IntervalTimerWrapper';
 
 import * as CL from './DeviceCoreLogicSimulator';
-import { Arrays } from '~funcs/Arrays';
 import { converProfileDataToBlobBytes } from './ProfileDataBinaryPacker';
+import { generateNumberSequence } from '~funcs/Utils';
 
 function compareArray(ar0: any[], ar1: any[]): boolean {
   return (
     ar0.length === ar1.length &&
-    Arrays.iota(ar0.length).every((i) => ar0[i] === ar1[i])
+    generateNumberSequence(ar0.length).every((i) => ar0[i] === ar1[i])
   );
 }
 

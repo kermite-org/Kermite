@@ -1,91 +1,39 @@
 import * as fs from 'fs';
 
-export namespace Files {
-  export function isExists(fpath: string): boolean {
-    try {
-      fs.statSync(fpath);
-      return true;
-    } catch (err) {
-      return false;
-    }
-  }
+export function fsCreateDirectory(fpath: string) {
+  return fs.promises.mkdir(fpath);
+}
 
-  export function createDirectory(fpath: string) {
-    return new Promise((resolve) => {
-      fs.mkdir(fpath, (err) => {
-        if (err) {
-          throw err;
-        }
-        resolve();
-      });
-    });
-  }
+export function fsCopyFile(src: string, dst: string): Promise<void> {
+  return fs.promises.copyFile(src, dst);
+}
 
-  export async function readJson(fpath: string): Promise<any> {
-    return new Promise((resolve) => {
-      fs.readFile(fpath, { encoding: 'utf-8' }, (err, text) => {
-        if (err) {
-          throw err;
-        }
-        const obj = JSON.parse(text);
-        resolve(obj);
-      });
-    });
-  }
+export function fsDeleteFile(fpath: string): Promise<void> {
+  return fs.promises.unlink(fpath);
+}
 
-  export async function writeJson(fpath: string, obj: any): Promise<void> {
-    return new Promise((resolve) => {
-      const text = JSON.stringify(obj, null, '  ');
-      fs.writeFile(fpath, text, (err) => {
-        if (err) {
-          throw err;
-        }
-        resolve();
-      });
-    });
-  }
+export function fsIsFileExists(fpath: string): boolean {
+  return fs.existsSync(fpath);
+}
 
-  export function listFiles(dirPath: string): Promise<string[]> {
-    return new Promise((resolve) => {
-      fs.readdir(dirPath, (err, files) => {
-        if (err) {
-          throw err;
-        }
-        resolve(files);
-      });
-    });
-  }
+export function fsListFilesInDirectory(dirPath: string): Promise<string[]> {
+  return fs.promises.readdir(dirPath);
+}
 
-  export function deleteFile(fpath: string): Promise<void> {
-    return new Promise((resolve) => {
-      fs.unlink(fpath, (err) => {
-        if (err) {
-          throw err;
-        }
-        resolve();
-      });
-    });
-  }
+export function fsRenameFile(src: string, dst: string): Promise<void> {
+  return fs.promises.rename(src, dst);
+}
 
-  export function renameFile(src: string, dst: string): Promise<void> {
-    return new Promise((resolve) => {
-      fs.rename(src, dst, (err) => {
-        if (err) {
-          throw err;
-        }
-        resolve();
-      });
-    });
+export async function fsxReadJsonFile(fpath: string): Promise<any> {
+  const text = await fs.promises.readFile(fpath, { encoding: 'utf-8' });
+  if (text) {
+    const obj = JSON.parse(text);
+    return obj;
   }
+  return undefined;
+}
 
-  export function copyFile(src: string, dst: string): Promise<void> {
-    return new Promise((resolve) => {
-      fs.copyFile(src, dst, (err) => {
-        if (err) {
-          throw err;
-        }
-        resolve();
-      });
-    });
-  }
+export async function fsxWriteJsonFile(fpath: string, obj: any): Promise<void> {
+  const text = JSON.stringify(obj, null, '  ');
+  return fs.promises.writeFile(fpath, text);
 }

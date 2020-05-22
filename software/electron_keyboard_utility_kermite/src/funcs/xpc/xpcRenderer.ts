@@ -1,4 +1,4 @@
-import { generateRandomUid } from '~funcs/IdGenerator';
+import { generateRandomUid } from '~funcs/Utils';
 
 interface IRpcInvokerObject {
   (...params: any[]): Promise<any>;

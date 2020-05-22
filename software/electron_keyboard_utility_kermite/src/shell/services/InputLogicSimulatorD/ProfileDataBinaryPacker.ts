@@ -3,9 +3,13 @@ import {
   IAssignEntry,
   IAssignOperation
 } from '~defs/ProfileData';
-import { createDictionaryFromKeyValues, sortOrderBy } from '~funcs/Utils';
+import {
+  createDictionaryFromKeyValues,
+  sortOrderBy,
+  flattenArray,
+  createGroupedArrayByKey
+} from '~funcs/Utils';
 import { ModifierVirtualKey, isModifierVirtualKey } from '~defs/VirtualKeys';
-import { Arrays } from '~funcs/Arrays';
 import { HidKeyCodes } from '~defs/HidKeyCodes';
 
 /*
@@ -161,7 +165,7 @@ VV VV ...: body bytes, variable length
 */
 function encodeKeyBounAssignsSet(assigns: IRawAssignEntry[]): number[] {
   const { keyIndex } = assigns[0];
-  const bodyBytes = [...Arrays.flatten(assigns.map(encodeRawAssignEntry))];
+  const bodyBytes = [...flattenArray(assigns.map(encodeRawAssignEntry))];
   const headBytes = encodeKeyBounAssignsSetHeder(keyIndex, bodyBytes.length);
   return [...headBytes, ...bodyBytes];
 }
@@ -217,13 +221,14 @@ export function converProfileDataToBlobBytes(profile: IProfileData): number[] {
 
   // console.log(rawAssigns);
 
-  const groupedAssignBytes = Arrays.groupBy(rawAssigns, 'keyIndex').map(
-    encodeKeyBounAssignsSet
-  );
+  const groupedAssignBytes = createGroupedArrayByKey(
+    rawAssigns,
+    'keyIndex'
+  ).map(encodeKeyBounAssignsSet);
 
   console.log(groupedAssignBytes.map(hexBytes));
 
-  const keyAssignsBufferBytes = Arrays.flatten(groupedAssignBytes);
+  const keyAssignsBufferBytes = flattenArray(groupedAssignBytes);
   const buf = [...keyAssignsBufferBytes];
 
   console.log(`len: ${buf.length}`);

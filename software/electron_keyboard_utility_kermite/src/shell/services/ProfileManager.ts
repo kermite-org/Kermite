@@ -1,14 +1,25 @@
 import { appGlobal } from './appGlobal';
-import { Files } from '~funcs/Files';
 import { IProfileManagerStatus } from '~defs/ipc';
 import { resolveFilePath } from '~shell/AppConfig';
-import { Arrays } from '~funcs/Arrays';
-import { duplicateObjectByJsonStringifyParse } from '~funcs/Utils';
+import {
+  duplicateObjectByJsonStringifyParse,
+  clampValue,
+  removeArrayItems
+} from '~funcs/Utils';
 import * as path from 'path';
-import { Nums } from '~funcs/Nums';
 import { IProfileManagerCommand } from '~defs/ipc';
 import { IProfileData, fallbackProfileData } from '~defs/ProfileData';
 import { keyboardShapes } from '~defs/keyboardShapes';
+import {
+  fsIsFileExists,
+  fsCreateDirectory,
+  fsListFilesInDirectory,
+  fsxWriteJsonFile,
+  fsRenameFile,
+  fsDeleteFile,
+  fsCopyFile,
+  fsxReadJsonFile
+} from '~funcs/Files';
 
 type StatusListener = (partialStatus: Partial<IProfileManagerStatus>) => void;
 
@@ -19,17 +30,19 @@ class ProfileManagerCore {
 
   static async ensureProfilesDirectoryExists() {
     const dataDirPath = resolveFilePath('data');
-    if (!Files.isExists(dataDirPath)) {
-      await Files.createDirectory(dataDirPath);
+    if (!fsIsFileExists(dataDirPath)) {
+      await fsCreateDirectory(dataDirPath);
     }
     const profilesDirPath = resolveFilePath('data/profiles');
-    if (!Files.isExists(profilesDirPath)) {
-      await Files.createDirectory(profilesDirPath);
+    if (!fsIsFileExists(profilesDirPath)) {
+      await fsCreateDirectory(profilesDirPath);
     }
   }
 
   static async listAllProfileNames(): Promise<string[]> {
-    const fileNames = await Files.listFiles(resolveFilePath(`data/profiles`));
+    const fileNames = await fsListFilesInDirectory(
+      resolveFilePath(`data/profiles`)
+    );
     return fileNames.map((fname) => fname.replace('.json', ''));
   }
 
@@ -45,7 +58,7 @@ class ProfileManagerCore {
 
   static async loadProfile(profName: string): Promise<IProfileData> {
     const fpath = this.getDataFilePath(profName);
-    return (await Files.readJson(fpath)) as IProfileData;
+    return (await fsxReadJsonFile(fpath)) as IProfileData;
   }
 
   static async saveProfile(
@@ -55,7 +68,7 @@ class ProfileManagerCore {
     const fpath = this.getDataFilePath(profName);
     // eslint-disable-next-line no-console
     console.log(`saving current profile to ${path.basename(fpath)}`);
-    await Files.writeJson(fpath, profileData);
+    await fsxWriteJsonFile(fpath, profileData);
   }
 
   static async createProfile(
@@ -77,7 +90,7 @@ class ProfileManagerCore {
 
   static async deleteProfile(profName: string): Promise<void> {
     const fpath = this.getDataFilePath(profName);
-    await Files.deleteFile(fpath);
+    await fsDeleteFile(fpath);
   }
 
   static async renameProfile(
@@ -86,7 +99,7 @@ class ProfileManagerCore {
   ): Promise<void> {
     const srcPath = this.getDataFilePath(profName);
     const dstPath = this.getDataFilePath(newProfName);
-    await Files.renameFile(srcPath, dstPath);
+    await fsRenameFile(srcPath, dstPath);
   }
 
   static async copyProfile(
@@ -95,7 +108,7 @@ class ProfileManagerCore {
   ): Promise<void> {
     const srcPath = this.getDataFilePath(profName);
     const dstPath = this.getDataFilePath(newProfName);
-    await Files.copyFile(srcPath, dstPath);
+    await fsCopyFile(srcPath, dstPath);
   }
 }
 
@@ -118,7 +131,7 @@ export class ProfileManager {
     listener(this.status);
   }
   unsubscribeStatus(listener: StatusListener) {
-    Arrays.remove(this.statusListeners, listener);
+    removeArrayItems(this.statusListeners, listener);
   }
 
   private setStatus(newStatePartial: Partial<IProfileManagerStatus>) {
@@ -279,7 +292,7 @@ export class ProfileManager {
       const allProfileNames = await ProfileManagerCore.listAllProfileNames();
       this.setStatus({ allProfileNames });
       if (isCurrent) {
-        const newIndex = Nums.clamp(
+        const newIndex = clampValue(
           currentProfileIndex,
           0,
           this.status.allProfileNames.length - 1

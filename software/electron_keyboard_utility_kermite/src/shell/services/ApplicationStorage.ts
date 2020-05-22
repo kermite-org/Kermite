@@ -1,5 +1,9 @@
-import { Files } from '~funcs/Files';
 import { resolveFilePath } from '~shell/AppConfig';
+import {
+  fsIsFileExists,
+  fsxReadJsonFile,
+  fsxWriteJsonFile
+} from '~funcs/Files';
 
 export class ApplicationStorage {
   readonly configFilePath = resolveFilePath('data/config.json');
@@ -13,8 +17,8 @@ export class ApplicationStorage {
   }
 
   async initialize(): Promise<void> {
-    if (Files.isExists(this.configFilePath)) {
-      this.data = await Files.readJson(this.configFilePath);
+    if (fsIsFileExists(this.configFilePath)) {
+      this.data = await fsxReadJsonFile(this.configFilePath);
     } else {
       // eslint-disable-next-line no-console
       console.log('config file not found!');
@@ -22,7 +26,7 @@ export class ApplicationStorage {
   }
 
   async terminate(): Promise<void> {
-    await Files.writeJson(this.configFilePath, this.data);
+    await fsxWriteJsonFile(this.configFilePath, this.data);
     // eslint-disable-next-line no-console
     console.log('config file saved');
   }

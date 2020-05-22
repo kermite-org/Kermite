@@ -1,6 +1,6 @@
 import { DeviceWrapper } from './DeviceWrapper';
-import { Arrays } from '~funcs/Arrays';
 import { IRealtimeKeyboardEvent } from '~defs/ipc';
+import { removeArrayItems } from '~funcs/Utils';
 
 type IRealtimeEventHandlerFunc = (event: IRealtimeKeyboardEvent) => void;
 
@@ -80,7 +80,7 @@ export class DeviceService {
   }
 
   unsubscribe(proc: (ev: IRealtimeKeyboardEvent) => void) {
-    Arrays.remove(this.handlers, proc);
+    removeArrayItems(this.handlers, proc);
   }
 
   setSideBrainMode(enabled: boolean) {

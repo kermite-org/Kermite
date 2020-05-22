@@ -10,7 +10,7 @@ export const appDomain = new (class {
   readonly siteModel = new SiteModel();
 
   initialize() {
-    this.siteModel.isWidgetMode = true;
+    // this.siteModel.isWidgetMode = true;
 
     // debugTrace('start appDomain initialize');
     this.playerModel.initialize();

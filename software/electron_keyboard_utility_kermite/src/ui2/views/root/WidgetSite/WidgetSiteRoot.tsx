@@ -1,16 +1,16 @@
 /* eslint-disable react/no-unknown-property */
 import { h } from '~ui2/views/basis/qx';
-import { Nums } from '~funcs/Nums';
 import { css } from 'goober';
 import { siteModel, editorModel } from '~ui2/models/zAppDomain';
 import { WidgetKeyUnitCardsPart } from './WidgetKeyUnitCardsPart';
+import { linerInterpolateValue } from '~funcs/Utils';
 
 function KeyboardSvgView() {
   const cssSvg = css``;
 
   const winw = window.innerWidth;
 
-  const sw = Nums.vmap(winw, 200, 900, 0.8, 0.3, true);
+  const sw = linerInterpolateValue(winw, 200, 900, 0.8, 0.3, true);
 
   const { keyboardShape } = editorModel.profileData;
 
