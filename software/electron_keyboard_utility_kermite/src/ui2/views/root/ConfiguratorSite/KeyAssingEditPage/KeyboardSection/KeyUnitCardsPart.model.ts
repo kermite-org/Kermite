@@ -76,16 +76,19 @@ function getAssignEntryTexts(
   };
 }
 
-function getAssignForKeyUnit(keyUnitId: string) {
+function getAssignForKeyUnit(keyUnitId: string, isEdit: boolean) {
   const exLayerHold = playerModel.currentLayerId !== 'la0';
-  if (exLayerHold) {
+  if (!isEdit || exLayerHold) {
     return playerModel.getDynamicKeyAssign(keyUnitId);
   } else {
     return editorModel.getAssignForKeyUnit(keyUnitId);
   }
 }
 
-function makeKeyUnitCardViewModel(kp: IKeyUnitEntry): IKeyUnitCardViewModel {
+function makeKeyUnitCardViewModel(
+  kp: IKeyUnitEntry,
+  isEdit: boolean
+): IKeyUnitCardViewModel {
   const keyUnitId = kp.id;
   const pos = { x: kp.x, y: kp.y, r: kp.r };
 
@@ -93,7 +96,7 @@ function makeKeyUnitCardViewModel(kp: IKeyUnitEntry): IKeyUnitCardViewModel {
 
   const isCurrent = isKeyUnitCurrent(keyUnitId);
   const setCurrent = () => setCurrentKeyUnitId(keyUnitId);
-  const assign = getAssignForKeyUnit(keyUnitId);
+  const assign = getAssignForKeyUnit(keyUnitId, isEdit);
   const { primaryText, secondaryText } = getAssignEntryTexts(assign);
 
   const isHold = appDomain.playerModel.keyStates[kp.id];
@@ -109,8 +112,12 @@ function makeKeyUnitCardViewModel(kp: IKeyUnitEntry): IKeyUnitCardViewModel {
   };
 }
 
-export function makeKeyUnitCardsPartViewModel(): IKeyUnitCardPartViewModel {
+export function makeKeyUnitCardsPartViewModel(
+  isEdit: boolean
+): IKeyUnitCardPartViewModel {
   return {
-    cards: editorModel.keyPositions.map(makeKeyUnitCardViewModel)
+    cards: editorModel.keyPositions.map((kp) =>
+      makeKeyUnitCardViewModel(kp, isEdit)
+    )
   };
 }

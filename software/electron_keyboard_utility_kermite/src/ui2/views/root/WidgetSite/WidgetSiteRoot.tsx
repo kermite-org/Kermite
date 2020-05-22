@@ -2,7 +2,8 @@
 import { h } from '~ui2/views/basis/qx';
 import { Nums } from '~funcs/Nums';
 import { css } from 'goober';
-import { siteModel, playerModel, editorModel } from '~ui2/models/zAppDomain';
+import { siteModel, editorModel } from '~ui2/models/zAppDomain';
+import { WidgetKeyUnitCardsPart } from './WidgetKeyUnitCardsPart';
 
 function KeyboardSvgView() {
   const cssSvg = css``;
@@ -11,10 +12,8 @@ function KeyboardSvgView() {
 
   const sw = Nums.vmap(winw, 200, 900, 0.8, 0.3, true);
 
-  const { keyStates } = playerModel;
   const { keyboardShape } = editorModel.profileData;
 
-  // const keyboardShape = getKeyboardShapeByBreedName('astelia');
   return (
     <svg width="600" height="240" css={cssSvg} viewBox="-300 -120 600 240">
       <g
@@ -23,48 +22,13 @@ function KeyboardSvgView() {
         stroke-linejoin="round"
       >
         <path d={keyboardShape.bodyPathMarkupText} stroke="#003" fill="#89C" />
-
-        {keyboardShape.keyUnits.map((a) => {
-          const fillColor = keyStates[a.id] ? '#F08' : '#FFF';
-          return (
-            <g
-              transform={`translate(${a.x}, ${a.y}) rotate(${a.r}) `}
-              key={a.id}
-            >
-              <rect
-                key={a.id}
-                x={-9}
-                y={-9}
-                width={18}
-                height={18}
-                stroke="#003"
-                fill={fillColor}
-              />
-            </g>
-          );
-        })}
+        <WidgetKeyUnitCardsPart />
       </g>
     </svg>
   );
 }
 
 function MainPanel() {
-  // const [winSize, setWinSize] = React.useState({
-  //   w: window.innerWidth,
-  //   h: window.innerHeight
-  // });
-
-  // React.useEffect(() => {
-  //   const onresizeHandler = () => {
-  //     setWinSize({
-  //       w: window.innerWidth,
-  //       h: window.innerHeight
-  //     });
-  //   };
-  //   window.addEventListener('resize', onresizeHandler);
-  //   return () => window.removeEventListener('resize', onresizeHandler);
-  // }, []);
-
   const sc = window.innerWidth / 600;
 
   const cssPanel = css`

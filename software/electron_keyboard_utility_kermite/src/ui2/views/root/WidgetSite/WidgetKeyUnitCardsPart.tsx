@@ -1,43 +1,25 @@
 /* eslint-disable react/no-unknown-property */
 import { css } from 'goober';
 import { h } from '~ui2/views/basis/qx';
-import { UiTheme } from '~ui2/views/common/UiTheme';
 import {
   IKeyUnitCardViewModel,
   makeKeyUnitCardsPartViewModel
-} from './KeyUnitCardsPart.model';
+} from '../ConfiguratorSite/KeyAssingEditPage/KeyboardSection/KeyUnitCardsPart.model';
 
-export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
-  const {
-    keyUnitId,
-    pos,
-    isCurrent,
-    setCurrent,
-    primaryText,
-    secondaryText,
-    isHold
-  } = keyUnit;
+function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
+  const { keyUnitId, pos, primaryText, secondaryText, isHold } = keyUnit;
 
   const cssKeyRect = css`
-    cursor: pointer;
-    fill: rgba(0, 0, 0, 0.5);
-    &[data-current] {
-      fill: ${UiTheme.clSelectHighlight};
-    }
+    fill: #e0e8ff;
+    stroke: #003;
     &[data-hold] {
-      fill: #f80;
+      fill: #fc0;
     }
   `;
 
   const cssKeyText = css`
-    fill: #fff;
-    pointer-events: none;
+    fill: #003;
   `;
-
-  const onMouseDown = (e: MouseEvent) => {
-    setCurrent();
-    e.stopPropagation();
-  };
 
   const getFontSize = (text: string) => {
     if (text.length === 1) {
@@ -58,9 +40,7 @@ export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
         width={18}
         height={18}
         css={cssKeyRect}
-        data-current={isCurrent}
         data-hold={isHold}
-        onMouseDown={onMouseDown}
       />
       <text
         css={cssKeyText}
@@ -87,8 +67,8 @@ export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
   );
 }
 
-export function KeyUnitCardsPart() {
-  const keyUnitCardsPartViewModel = makeKeyUnitCardsPartViewModel(true);
+export function WidgetKeyUnitCardsPart() {
+  const keyUnitCardsPartViewModel = makeKeyUnitCardsPartViewModel(false);
   return (
     <g>
       {keyUnitCardsPartViewModel.cards.map((keyUnit) => (
