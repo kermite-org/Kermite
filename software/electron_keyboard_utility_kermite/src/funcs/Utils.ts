@@ -174,3 +174,14 @@ export function generateRandomUid(): string {
     ((Math.random() * 16) >> 0).toString(16)
   );
 }
+
+export function thinningListenerCall(targetProc: () => void, ms: number) {
+  let timerId: any;
+  return () => {
+    if (timerId) {
+      clearTimeout(timerId);
+      timerId = 0;
+    }
+    timerId = setTimeout(targetProc, ms);
+  };
+}
