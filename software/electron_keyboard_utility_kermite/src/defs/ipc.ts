@@ -19,9 +19,14 @@ export type IRealtimeKeyboardEvent =
       layerIndex: number;
     };
 
+export type IAppWindowEvent = {
+  activeChanged?: boolean;
+};
+
 export interface IBackendAgent {
   keyEvents: IEventSource<IRealtimeKeyboardEvent>;
   profileStatusEvents: IEventSource<Partial<IProfileManagerStatus>>;
+  appWindowEvents: IEventSource<IAppWindowEvent>;
 }
 
 export interface IWindowManagerCommand {

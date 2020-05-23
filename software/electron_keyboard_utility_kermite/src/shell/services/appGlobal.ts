@@ -5,10 +5,13 @@ import { InputLogicSimulatorC } from './InputLogicSimulatorC';
 import { IpcBridge } from './IpcBridge';
 import { ProfileManager } from './ProfileManager';
 import { InputLogicSimulatorD } from './InputLogicSimulatorD';
+import { TypedEventEmitter } from '~funcs/TypedEventEmitter';
+import { IAppWindowEvent } from '~defs/ipc';
 
 interface TypedApplicationEvent {
   mainWindowClosed: true;
   reloadApplicationRequested: true;
+  appWindowEvent: IAppWindowEvent;
 }
 
 export const appGlobal = new (class {
@@ -18,6 +21,7 @@ export const appGlobal = new (class {
   // inputLogicSimulator = InputLogicSimulatorC.getInterface();
   inputLogicSimulator = InputLogicSimulatorD.getInterface();
   ipcBridge = new IpcBridge();
+  eventBus = new TypedEventEmitter<TypedApplicationEvent>();
 
   async initialize() {
     // eslint-disable-next-line no-console

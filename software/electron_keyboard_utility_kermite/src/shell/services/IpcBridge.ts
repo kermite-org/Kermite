@@ -45,7 +45,7 @@ export class IpcBridge {
         event.returnValue = true;
       }
 
-      if (packet.widgetModeChanged) {
+      if (packet.widgetModeChanged !== undefined) {
         appWindowManager.adjustWindowSize(packet.widgetModeChanged);
         event.returnValue = true;
       }
@@ -79,6 +79,14 @@ export class IpcBridge {
         },
         unsubscribe(listener) {
           appGlobal.profileManager.unsubscribeStatus(listener);
+        }
+      },
+      appWindowEvents: {
+        subscribe(listener) {
+          appGlobal.eventBus.on('appWindowEvent', listener);
+        },
+        unsubscribe(listener) {
+          appGlobal.eventBus.off('appWindowEvent', listener);
         }
       }
     };

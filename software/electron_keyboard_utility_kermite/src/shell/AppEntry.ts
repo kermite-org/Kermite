@@ -18,5 +18,12 @@ export class AppEntry {
       await appGlobal.terminate();
       app.quit();
     });
+
+    app.on('browser-window-focus', () => {
+      appGlobal.eventBus.emit('appWindowEvent', { activeChanged: true });
+    });
+    app.on('browser-window-blur', () => {
+      appGlobal.eventBus.emit('appWindowEvent', { activeChanged: false });
+    });
   }
 }

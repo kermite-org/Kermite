@@ -19,6 +19,7 @@ export class AppWindowManager {
     if (isProd) {
       options.frame = false;
       options.transparent = true;
+      options.hasShadow = false;
     }
 
     this.mainWindow = new BrowserWindow(options);
@@ -68,12 +69,15 @@ export class AppWindowManager {
 
       if (isWidgetMode) {
         this._winHeight = h;
+        //todo: 現在選択されているプロファイルのキーボード形状データから縦横比を計算
         const asr = 0.4;
         const [w1, h1] = [w, (w * asr) >> 0];
         this.mainWindow.setSize(w1, h1);
+        this.mainWindow.setAlwaysOnTop(true);
       } else {
         const [w1, h1] = [w, this._winHeight];
         this.mainWindow.setSize(w1, h1);
+        this.mainWindow.setAlwaysOnTop(false);
       }
     }
   }
