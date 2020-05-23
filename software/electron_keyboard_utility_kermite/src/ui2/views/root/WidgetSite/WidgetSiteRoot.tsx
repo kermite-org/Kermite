@@ -4,6 +4,7 @@ import { css } from 'goober';
 import { siteModel, editorModel } from '~ui2/models/zAppDomain';
 import { WidgetKeyUnitCardsPart } from './WidgetKeyUnitCardsPart';
 import { linerInterpolateValue } from '~funcs/Utils';
+import { Display } from '~ui2/views/common/helperComponents';
 
 function KeyboardSvgView() {
   const cssSvg = css``;
@@ -73,6 +74,54 @@ function MainPanel() {
   );
 }
 
+const WindowActiveChrome = () => {
+  const cssBase = css`
+    position: absolute;
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+    /* border: solid 1px rgba(0, 128, 255, 0.3); */
+    /* background: rgba(0, 160, 255, 0.15); */
+
+    > div {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background: #08f;
+      border-radius: 50%;
+      margin: 2px;
+    }
+
+    .tl {
+      top: 0;
+      left: 0;
+    }
+
+    .tr {
+      top: 0;
+      right: 0;
+    }
+
+    .bl {
+      bottom: 0;
+      left: 0;
+    }
+
+    .br {
+      bottom: 0;
+      right: 0;
+    }
+  `;
+  return (
+    <div css={cssBase}>
+      <div class="tl" />
+      <div class="tr" />
+      <div class="bl" />
+      <div class="br" />
+    </div>
+  );
+};
+
 export const WidgetSiteRoot = () => {
   const cssRoot = css`
     height: 100%;
@@ -80,12 +129,19 @@ export const WidgetSiteRoot = () => {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* border: solid 1px rgba(255, 255, 255, 0.2); */
+    background: transparent;
+
+    &[data-window-active] {
+    }
   `;
 
   return (
     <div css={cssRoot}>
+      {siteModel.isWindowActive && <WindowActiveChrome />}
       <MainPanel />
+      {/* <Display visible={siteModel.isWindowActive}>
+        <WindowCornerMarkers />
+      </Display> */}
     </div>
   );
 };

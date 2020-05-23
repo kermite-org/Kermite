@@ -16,12 +16,14 @@ export const appDomain = new (class {
     this.playerModel.initialize();
     this.profilesModel.initialize();
     // editorModel.loadProfileData(testProfileData);
+    this.siteModel.initialize();
   }
 
   terminate() {
     this.playerModel.finalize();
     this.profilesModel.finalize();
     // debugTrace('end appDomain terminate');
+    this.siteModel.finalize();
   }
 })();
 
