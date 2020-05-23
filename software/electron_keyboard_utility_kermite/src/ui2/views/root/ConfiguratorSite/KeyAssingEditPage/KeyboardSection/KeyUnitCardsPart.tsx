@@ -95,7 +95,7 @@ export function KeyUnitCardsPart() {
         <KeyUnitCard
           keyUnit={keyUnit}
           key={keyUnit.keyUnitId}
-          optimizer="deepEqualExFn"
+          qxOptimizer="deepEqualExFn"
         />
       ))}
     </g>

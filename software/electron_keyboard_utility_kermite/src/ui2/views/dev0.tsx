@@ -152,6 +152,8 @@ export const SiteRootD = () => {
           <button onClick={onEditButton}>edit</button>
         </div>
         <HelloCard name="yamada" />
+        <div qxIf={true}>aaa</div>
+        <div qxIf={rc % 2 === 0}>bbb</div>
         {/* <DivOrNullTest rc={rc} id="divorNullTest" /> */}
       </div>
       <DebugOverlay debugObj={rc % 2 === 0 ? { a: 'b' } : undefined} />

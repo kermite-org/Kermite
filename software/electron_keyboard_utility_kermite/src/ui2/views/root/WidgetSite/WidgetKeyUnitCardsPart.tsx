@@ -75,7 +75,7 @@ export function WidgetKeyUnitCardsPart() {
         <KeyUnitCard
           keyUnit={keyUnit}
           key={keyUnit.keyUnitId}
-          optimizer="deepEqualExFn"
+          qxOptimizer="deepEqualExFn"
         />
       ))}
     </g>

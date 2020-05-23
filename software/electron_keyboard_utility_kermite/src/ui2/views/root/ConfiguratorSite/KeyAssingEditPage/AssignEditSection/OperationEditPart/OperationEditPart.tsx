@@ -95,7 +95,7 @@ export function OpertionEditPart() {
                   <OperationCard
                     model={model}
                     key={model.sig}
-                    optimizer="deepEqualExFn"
+                    qxOptimizer="deepEqualExFn"
                   />
                 ))}
               </div>
@@ -107,7 +107,7 @@ export function OpertionEditPart() {
                 <OperationCard
                   model={model}
                   key={model.sig}
-                  optimizer="deepEqualExFn"
+                  qxOptimizer="deepEqualExFn"
                 />
               ))}
             </div>
@@ -119,7 +119,7 @@ export function OpertionEditPart() {
               <OperationCard
                 model={model}
                 key={model.sig}
-                optimizer="deepEqualExFn"
+                qxOptimizer="deepEqualExFn"
               />
             ))}
           </div>

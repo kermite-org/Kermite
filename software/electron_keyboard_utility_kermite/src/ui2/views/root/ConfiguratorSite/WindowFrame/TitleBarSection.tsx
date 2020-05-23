@@ -74,22 +74,22 @@ const ControlButtonsPart = () => {
       <ControlButton
         icon="fa fa-feather-alt"
         onClick={onWidgetButton}
-        optimizer="deepEqual"
+        qxOptimizer="deepEqual"
       />
       <ControlButton
         icon="fa fa-window-minimize"
         onClick={onMinimizeButton}
-        optimizer="deepEqual"
+        qxOptimizer="deepEqual"
       />
       <ControlButton
         icon="fa fa-window-maximize"
         onClick={onMaximizeButton}
-        optimizer="deepEqual"
+        qxOptimizer="deepEqual"
       />
       <ControlButton
         icon="fa fa-times"
         onClick={onCloseButton}
-        optimizer="deepEqual"
+        qxOptimizer="deepEqual"
       />
     </div>
   );

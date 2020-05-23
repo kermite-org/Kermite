@@ -23,14 +23,17 @@ export const isVComponent = (c: VNode): c is VComponent =>
 const isValidComponentType = (c: any): c is IComponentObject<any> =>
   c && c.mount && c.patch && c.unmount;
 
-const EMPTY_OBJECT: { key?: any } = {};
-
 export function h(
   type: string | IComponentFunction<any>,
-  props = EMPTY_OBJECT,
+  props: any,
   ...children: any[]
-): VNode {
+): VNode | null {
   const key = props ? props.key : null;
+
+  const skip = props && 'qxIf' in props && !props.qxIf;
+  if (skip) {
+    return null;
+  }
 
   qxInterposeProps(props, type);
 

@@ -3,6 +3,7 @@ import { IEnv, VNode, IComponentFunction, IComponentObject } from './types';
 import { qxGlobal } from '../qxGlobal';
 import { deepEqualValuesBesidesFunction } from '../qxUtils';
 import { deepEqual } from 'fast-equals';
+import { QxOptimizerSpec } from '../qx';
 
 const promise = Promise.resolve();
 function doLater(fn: () => void) {
@@ -118,12 +119,10 @@ function createRenderComponent<P extends {}>({
   };
 }
 
-function shouldRetainCurrentDomNode<P extends { [key: string]: any }>(
-  props0: P,
-  props1: P,
-  funcName: string
-) {
-  if (props1.optimizer === 'shallowEqual') {
+function shouldRetainCurrentDomNode<
+  P extends { qxOptimizer?: QxOptimizerSpec; [key: string]: any }
+>(props0: P, props1: P, funcName: string) {
+  if (props1.qxOptimizer === 'shallowEqual') {
     for (const key in props1) {
       if (props1[key] !== props0[key]) {
         return true;
@@ -132,13 +131,13 @@ function shouldRetainCurrentDomNode<P extends { [key: string]: any }>(
     return false;
   }
 
-  if (props1.optimizer === 'deepEqual') {
+  if (props1.qxOptimizer === 'deepEqual') {
     const res = deepEqual(props0, props1);
     // console.log('deepEqual', funcName, res);
     return res;
   }
 
-  if (props1.optimizer === 'deepEqualExFn') {
+  if (props1.qxOptimizer === 'deepEqualExFn') {
     const res = deepEqualValuesBesidesFunction(props0, props1);
     // console.log('deepEqualExFn', funcName, res);
     return res;

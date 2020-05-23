@@ -2,7 +2,7 @@ import { appDomain } from './models/zAppDomain';
 import { initialzeView } from './views';
 
 function start() {
-  console.log('start1');
+  console.log('start');
 
   appDomain.initialize();
   initialzeView();

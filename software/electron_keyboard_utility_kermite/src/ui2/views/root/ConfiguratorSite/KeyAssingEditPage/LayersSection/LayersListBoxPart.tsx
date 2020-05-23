@@ -42,7 +42,11 @@ export function LayersListBoxPart() {
   return (
     <div css={cssLayersListBox}>
       {layerListBoxPartViewModel.layers.map((la) => (
-        <LayerCard layerModel={la} key={la.layerId} optimizer="deepEqualExFn" />
+        <LayerCard
+          layerModel={la}
+          key={la.layerId}
+          qxOptimizer="deepEqualExFn"
+        />
       ))}
     </div>
   );

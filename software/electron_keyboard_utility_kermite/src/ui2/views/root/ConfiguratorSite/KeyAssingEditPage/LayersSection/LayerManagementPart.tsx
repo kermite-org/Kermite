@@ -58,32 +58,32 @@ export const LayerManagementPart = () => {
           icon="fa fa-plus"
           enabled={true}
           handler={addNewLayer}
-          optimizer="deepEqual"
+          qxOptimizer="deepEqual"
         />
         <LayerOperationButtton
           icon="fa fa-pen-square"
           enabled={canModifyCurrentLayer}
           handler={editCurrentLayer}
-          optimizer="deepEqual"
+          qxOptimizer="deepEqual"
         />
         <LayerOperationButtton
           icon="fa fa-times"
           enabled={canModifyCurrentLayer}
           handler={deleteCurrentLayer}
-          optimizer="deepEqual"
+          qxOptimizer="deepEqual"
         />
 
         <LayerOperationButtton
           icon="fa fa-long-arrow-alt-up"
           enabled={canShiftBackCurrentLayer}
           handler={shiftBackCurrentLayer}
-          optimizer="deepEqual"
+          qxOptimizer="deepEqual"
         />
         <LayerOperationButtton
           icon="fa fa-long-arrow-alt-down"
           enabled={canShiftForwardCurrentLayer}
           handler={shiftForwardCurrentLayer}
-          optimizer="deepEqual"
+          qxOptimizer="deepEqual"
         />
       </div>
     );

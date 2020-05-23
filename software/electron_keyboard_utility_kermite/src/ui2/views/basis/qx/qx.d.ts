@@ -3,11 +3,14 @@
 import { VNode } from './qxinternal_petit_dom/types';
 import { Component } from './qxinternal_petit_dom/Component';
 
+export type QxOptimizerSpec = 'shallowEqual' | 'deepEqual' | 'deepEqualExFn';
+
 declare namespace JsxLocal {
   type InternalClassAttributes = {
     key?: string | number;
     jsx?: boolean;
     css?: string;
+    qxIf?: boolean;
   };
 
   type ComponentChild =
@@ -28,7 +31,8 @@ declare global {
   namespace JSX {
     interface IntrinsicAttributes {
       key?: any;
-      optimizer?: 'shallowEqual' | 'deepEqual' | 'deepEqualExFn';
+      qxIf?: boolean;
+      qxOptimizer?: QxOptimizerSpec;
     }
 
     type Element =

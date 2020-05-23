@@ -4,7 +4,6 @@ import { css } from 'goober';
 import { siteModel, editorModel } from '~ui2/models/zAppDomain';
 import { WidgetKeyUnitCardsPart } from './WidgetKeyUnitCardsPart';
 import { linerInterpolateValue } from '~funcs/Utils';
-import { Display } from '~ui2/views/common/helperComponents';
 
 function KeyboardSvgView() {
   const cssSvg = css``;
@@ -137,11 +136,8 @@ export const WidgetSiteRoot = () => {
 
   return (
     <div css={cssRoot}>
-      {siteModel.isWindowActive && <WindowActiveChrome />}
+      <WindowActiveChrome qxIf={siteModel.isWindowActive} />
       <MainPanel />
-      {/* <Display visible={siteModel.isWindowActive}>
-        <WindowCornerMarkers />
-      </Display> */}
     </div>
   );
 };
