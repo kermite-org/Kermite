@@ -6,7 +6,18 @@ import {
   modalAlert
 } from '~ui2/views/common/basicModals';
 
-export function makeProfileManagementViewModel() {
+export interface IProfileManagerViewModel {
+  currentProfileName: string;
+  allProfileNames: string[];
+  createProfile(): void;
+  loadProfile(name: string): void;
+  saveProfile(): void;
+  renameProfile(): void;
+  copyProfile(): void;
+  deleteProfile(): void;
+}
+
+export function makeProfileManagementViewModel(): IProfileManagerViewModel {
   const {
     currentProfileName,
     allProfileNames,
