@@ -1,3 +1,13 @@
+# Kermite ファームウェア(ProMicro版)
+
+## 概要
+
+ProMicroを使用した自作キーボード向けのファームウェアです。
+
+## 対応(予定)機種
+- Let's Split
+- Astelia
+
 ## 準備
 
 ビルドには

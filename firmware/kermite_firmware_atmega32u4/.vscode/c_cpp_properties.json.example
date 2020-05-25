@@ -3,7 +3,7 @@
     "myCompilerBaseDirectory__windows_example": "C:/tools/avr8-gnu-toolchain-win32_x86",
     "myCompilerExecutablePath__windows_example": "C:/tools/avr8-gnu-toolchain-win32_x86/bin/avr-gcc.exe",
     "myCompilerBaseDirectory": "/usr/local/Cellar/avr-gcc/9.3.0",
-    "myCompilerExecutablePath": "/usr/local/avr-gcc"
+    "myCompilerExecutablePath": "/usr/local/bin/avr-gcc"
   },
   "configurations": [
     {
