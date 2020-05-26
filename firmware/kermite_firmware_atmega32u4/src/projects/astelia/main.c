@@ -61,8 +61,8 @@ static const uint8_t columnPins[NumColumns] = { P_C6, P_D4, P_F7, P_F6, P_F5, P_
 #define NumKeySlots 48
 #define NumPhysicalKeys 48
 
-static bool EmitHidKeys = true;
-//static bool EmitHidKeys = false;
+//static bool EmitHidKeys = true;
+static bool EmitHidKeys = false;
 
 //---------------------------------------------
 //variables
