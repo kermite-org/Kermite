@@ -169,7 +169,9 @@ void onPhysicalKeyStateChanged(uint8_t keySlotIndex, bool isDown) {
     pressedKeyCount--;
   }
 
-  keyInputLogicModel_issuePhysicalKeyStateChanged(keyIndex, isDown);
+  if (1) {
+    keyInputLogicModel_issuePhysicalKeyStateChanged(keyIndex, isDown);
+  }
   configuratorServant_emitRealtimeKeyEvent(keyIndex, isDown);
 }
 

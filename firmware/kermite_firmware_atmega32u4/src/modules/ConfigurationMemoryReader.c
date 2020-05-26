@@ -32,29 +32,25 @@ static uint16_t readEepRomWordLE(uint16_t addr) {
   //return xf_eeprom_read_word(addr);
 }
 
-static void initKeyAssignsReader() { //uint8_t numKeysHardCoded) {
+static void initKeyAssignsReader() {
   xf_eeprom_read_block(0, eepromTempBuf, 8);
   uint8_t *p = eepromTempBuf;
   uint16_t magicNumber = decode_word_le(p + 0);
-  uint8_t reserved0xFF = decode_byte(p + 2);
-  uint8_t logicModelType = decode_byte(p + 3);
-  uint8_t formatRevision = decode_byte(p + 4);
-  uint8_t assignDataStartLocation = decode_byte(p + 5);
-  uint8_t numKeys = decode_byte(p + 6);
-  uint8_t numLayers = decode_byte(p + 7);
-  bool useDualAssign = decode_byte(p + 8) > 0;
+  uint16_t reserved0xFFFF = decode_word_le(p + 2);
+  uint8_t logicModelType = decode_byte(p + 4);
+  uint8_t formatRevision = decode_byte(p + 5);
+  uint8_t assignDataStartLocation = decode_byte(p + 6);
+  uint8_t numKeys = decode_byte(p + 7);
+  uint8_t numLayers = decode_byte(p + 8);
 
-  printf("%x %x %x %d %d %d\n", magicNumber, reserved0xFF, logicModelType, numKeys, numLayers, useDualAssign);
+  printf("%x %x %x %d %d %d\n", magicNumber, reserved0xFFFF, logicModelType, numKeys, numLayers);
 
-  assignDataSize = (2 * numKeys * numLayers) * (useDualAssign ? 2 : 1);
   assignMemoryValid =
-      magicNumber == 0xFE02 &&
-      reserved0xFF == 0xFF &&
+      magicNumber == 0xFE03 &&
+      reserved0xFFFF == 0xFFff &&
       logicModelType == 0x01 &&
       formatRevision == 0x01 &&
-      assignDataStartLocation == ASSIGN_HEADER_LENGTH &&
-      // numKeys == numKeysHardCoded &&
-      assignDataSize <= ASSIGN_DATA_LENGTH_MAX;
+      assignDataStartLocation == ASSIGN_HEADER_LENGTH;
 
   if (!assignMemoryValid) {
     printf("invalid config memory data\n");
@@ -75,8 +71,8 @@ static uint16_t readKeyAssignMemory(uint16_t wordIndex) {
 //---------------------------------------------
 //exports
 
-void configurationMemoryReader_initialize() { //uint8_t numKeys) {
-  initKeyAssignsReader();                     //numKeys);
+void configurationMemoryReader_initialize() {
+  initKeyAssignsReader();
 }
 
 uint16_t configurationMemoryReader_readKeyAssignMemoryWord(uint16_t wordIndex) {
