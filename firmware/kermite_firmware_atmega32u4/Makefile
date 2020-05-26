@@ -1,0 +1,160 @@
+PROJECT ?= modules_dev
+#PROJECT = astelia
+-include Makefile.user
+
+BUILD_DIR = build
+OBJ_DIR = build/obj
+
+APP = $(PROJECT)
+ELF = $(BUILD_DIR)/$(APP).elf
+HEX = $(BUILD_DIR)/$(APP).hex
+LST = $(BUILD_DIR)/$(APP).lst
+
+INC_PATHS =
+INC_PATHS += -Isrc/modules
+INC_PATHS += -Isrc/projects/$(PROJECT)
+
+
+MODULE_SRCS = 
+PROJECT_SRCS = 
+
+MODULE_ASM_SRCS =
+PROJECT_ASM_SRCS =
+
+include src/projects/$(PROJECT)/rules.mk
+
+C_SRCS = $(addprefix src/modules/,$(MODULE_SRCS)) $(addprefix src/projects/$(PROJECT)/, $(PROJECT_SRCS))
+ASM_SRCS = $(addprefix src/modules/,$(MODULE_ASM_SRCS)) $(addprefix src/projects/$(PROJECT)/, $(PROJECT_ASM_SRCS))
+
+C_OBJS = $(addprefix $(OBJ_DIR)/,$(C_SRCS:.c=.o))
+ASM_OBJS = $(addprefix $(OBJ_DIR)/,$(ASM_SRCS:.S=.o))
+
+OBJS = $(C_OBJS) $(ASM_OBJS)
+
+#C_ASM_OUTPUTS = $(addprefix $(OBJ_DIR)/,$(C_SRCS:.c=.asm))
+
+CC = avr-gcc
+OBJCOPY = avr-objcopy
+OBJSIZE = avr-size
+OBJDUMP = avr-objdump
+
+CFLAGS =
+CFLAGS += -mmcu=atmega32u4
+CFLAGS += -Os
+CFLAGS += -g
+CFLAGS += -Wall
+CFLAGS += $(INC_PATHS)
+CFLAGS += -D__AVR_ATmega32U4__
+CFLAGS += -MMD
+CFLAGS += -DF_CPU=16000000UL
+#CFLAGS += -std=c99
+# CFLAGS += -funsigned-char
+# CFLAGS += -funsigned-bitfields
+# CFLAGS += -ffunction-sections
+# CFLAGS += -fno-inline-small-functions
+# CFLAGS += -fpack-struct
+# CFLAGS += -fshort-enums
+# CFLAGS += -fno-strict-aliasing
+# CFLAGS += -Wstrict-prototypes
+
+#CFLAGS += -mrelax
+
+
+ASFLAGS =
+#ASFLAGS += -Wa,-adhlns=$(<:.S=.lst)
+ASFLAGS += -gstabs 
+ASFLAGS += -mmcu=atmega32u4
+ASFLAGS += -Isrc
+ASFLAGS += -x assembler-with-cpp
+
+
+LDFLAGS =
+LDFLAGS += -mmcu=atmega32u4
+LDFLAGS += -Os
+LDFLAGS += -g
+LDFLAGS += -Wall
+
+#LDFLAGS += -mrelax
+
+
+all: build
+
+build: $(HEX) $(LST)
+#build: $(HEX) $(LST) $(C_ASM_OUTPUTS)
+
+
+#$(ASM_OUTPUTS)
+
+force: clean all
+
+# $(OBJ_DIR):
+# 	mkdir $(BUILD_DIR)
+# 	mkdir -p $(OBJ_DIR)
+
+$(OBJ_DIR)/%.o: %.c
+	@echo "compiling $<"
+	@mkdir -p $(dir $@)
+	$(CC) -c $(CFLAGS) -o $@ $<
+
+$(OBJ_DIR)/%.o: %.S
+	@echo "compiling $<"
+	@mkdir -p $(dir $@)
+	$(CC) -c $(ASFLAGS) $< -o $@
+
+$(ELF): $(OBJS)
+	@echo "linking"
+	$(CC) $(LDFLAGS) -o $(ELF) $(OBJS)
+	$(OBJSIZE) $(ELF)
+
+$(HEX) : $(ELF)
+	$(OBJCOPY) -O ihex $(ELF) $(HEX)
+
+$(LST): $(ELF)
+	$(OBJDUMP) -h -S $< > $@
+
+size: $(ELF)
+	$(OBJSIZE) $(ELF)
+
+$(OBJ_DIR)/%.asm: %.c
+	$(CC) -S $(CFLAGS) -o $@ $<
+	
+DEP_FILES = $(filter %.d,$(OBJS:%.o=%.d))
+-include $(DEP_FILES)
+
+
+
+
+
+
+
+flash: build
+	avrdude -p m32u4 -P $(COM_PORT) -c avr109 -U flash:w:$(HEX)
+	
+run: flash size
+
+#asm_out_dev: $(OBJ_DIR)/eeprom.S
+
+clean:
+	rm -rf $(BUILD_DIR)
+
+%\:build:
+	@make --no-print-directory PROJECT=$*
+
+%\:flash:
+	@make --no-print-directory PROJECT=$* flash
+
+%\:run:
+	@make --no-print-directory PROJECT=$* run
+
+%\:clean:
+	@make --no-print-directory clean
+
+
+
+.PHONY: all
+	
+
+
+
+
+

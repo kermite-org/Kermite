@@ -1,0 +1,38 @@
+{
+  "env": {
+    "myCompilerBaseDirectory__windows_example": "C:/tools/avr8-gnu-toolchain-win32_x86",
+    "myCompilerExecutablePath__windows_example": "C:/tools/avr8-gnu-toolchain-win32_x86/bin/avr-gcc.exe",
+    "myCompilerBaseDirectory": "/usr/local/Cellar/avr-gcc/9.3.0",
+    "myCompilerExecutablePath": "/usr/local/bin/avr-gcc"
+  },
+  "configurations": [
+    {
+      "name": "Mac",
+      "includePath": [
+        "${myCompilerBaseDirectory}/avr/include",
+        "${workspaceFolder}/src",
+        "${workspaceFolder}/src/modules"
+      ],
+      "defines": [
+        "_DEBUG",
+        "UNICODE",
+        "_UNICODE",
+        "__AVR_ATmega32U4__",
+        "F_CPU=16000000UL"
+      ],
+      "compilerPath": "${myCompilerExecutablePath} -mmcu=atmega32u4",
+      "cStandard": "c11",
+      "cppStandard": "c++17",
+      "intelliSenseMode": "clang-x64",
+      "browse": {
+        "path": [
+          "${workspaceFolder}/src",
+          "${myCompilerBaseDirectory}/avr/include"
+        ],
+        "limitSymbolsToIncludedHeaders": true,
+        "databaseFilename": ""
+      }
+    }
+  ],
+  "version": 4
+}
