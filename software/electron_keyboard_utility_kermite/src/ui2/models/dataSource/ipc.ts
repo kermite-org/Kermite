@@ -1,9 +1,4 @@
-import {
-  IpcPacket,
-  IBackendAgent,
-  IProfileManagerCommand,
-  IWindowManagerCommand
-} from '~defs/ipc';
+import { IpcPacket, IBackendAgent, IProfileManagerCommand } from '~defs/ipc';
 import { createXpcRenderer } from '~funcs/xpc/xpcRenderer';
 import { IpcRenderer } from 'electron';
 
@@ -33,8 +28,4 @@ export function sendProfileManagerCommands(
     'profileManagerCommands',
     commands.filter((c) => c !== undefined)
   );
-}
-
-export function sendWindowManagerCommand(cmd: IWindowManagerCommand) {
-  ipcRenderer.send('windowManagerCommand', cmd);
 }

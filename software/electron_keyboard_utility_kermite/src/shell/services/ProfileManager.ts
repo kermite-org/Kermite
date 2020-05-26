@@ -126,6 +126,10 @@ export class ProfileManager {
 
   private savingProfileData: IProfileData | undefined = undefined;
 
+  getCurrentProfile(): IProfileData | undefined {
+    return this.status.loadedProfileData;
+  }
+
   subscribeStatus(listener: StatusListener) {
     this.statusListeners.push(listener);
     listener(this.status);

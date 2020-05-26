@@ -1,13 +1,9 @@
 import { ipcMain } from 'electron';
-import {
-  IBackendAgent,
-  IpcPacket,
-  IProfileManagerCommand,
-  IWindowManagerCommand
-} from '~defs/ipc';
+import { IBackendAgent, IpcPacket, IProfileManagerCommand } from '~defs/ipc';
 import { xpcMain } from '~funcs/xpc/xpcMain';
 import { appWindowManager } from '~shell/AppWindowManager';
 import { appGlobal } from './appGlobal';
+import { KeyMappingEmitter } from './EmitDataBuilder/KeyMappingEmitter';
 
 export class IpcBridge {
   async initialize() {
@@ -49,6 +45,15 @@ export class IpcBridge {
         appWindowManager.adjustWindowSize(packet.widgetModeChanged);
         event.returnValue = true;
       }
+
+      //async messages
+
+      if (packet.writeKeymappingToDevice) {
+        const profile = appGlobal.profileManager.getCurrentProfile();
+        if (profile) {
+          KeyMappingEmitter.emitKeyAssignsToDevice(profile);
+        }
+      }
     });
 
     ipcMain.on(
@@ -57,12 +62,6 @@ export class IpcBridge {
         appGlobal.profileManager.executeCommands(commands);
       }
     );
-
-    ipcMain.on('windowManagerCommand', (event, cmd: IWindowManagerCommand) => {
-      if (cmd.widgetModeChanged) {
-        appWindowManager.adjustWindowSize(cmd.widgetModeChanged.isWidgetMode);
-      }
-    });
 
     const backendAgent: IBackendAgent = {
       keyEvents: {

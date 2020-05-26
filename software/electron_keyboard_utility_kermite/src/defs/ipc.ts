@@ -29,10 +29,6 @@ export interface IBackendAgent {
   appWindowEvents: IEventSource<IAppWindowEvent>;
 }
 
-export interface IWindowManagerCommand {
-  widgetModeChanged?: { isWidgetMode: boolean };
-}
-
 export interface IProfileManagerCommand {
   creatProfile?: { name: string; breedName: string };
   loadProfile?: { name: string };
@@ -50,4 +46,5 @@ export interface IpcPacket {
   maximizeWindow?: boolean;
   reserveSaveProfileTask?: IProfileData;
   widgetModeChanged?: boolean;
+  writeKeymappingToDevice?: boolean;
 }
