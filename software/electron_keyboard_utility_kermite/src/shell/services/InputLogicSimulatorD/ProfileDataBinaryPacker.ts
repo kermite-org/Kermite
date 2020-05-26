@@ -233,9 +233,5 @@ export function converProfileDataToBlobBytes(profile: IProfileData): number[] {
 
   console.log(`len: ${buf.length}`);
 
-  if (buf.length >= 1024) {
-    //too bad
-  }
-
   return buf;
 }

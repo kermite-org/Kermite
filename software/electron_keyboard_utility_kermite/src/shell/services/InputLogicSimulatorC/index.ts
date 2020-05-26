@@ -15,7 +15,7 @@ import { ModuleN_VirtualKeyEventAligner } from './ModuleN_VirtualKeyEventAligner
 import { ModuleR_VirtualKeyBinder } from './ModuleR_VirtualKeyBinder';
 import { ModuleT_OutputKeyStateCombiner } from './ModuleT_OutputKeyStateCombiner';
 import { ModuleW_HidReportOutputBuffer } from './ModuleW_HidReportOutputBuffer';
-import { delayMs } from '../DeviceService/Helpers';
+import { delayMs } from '~funcs/Utils';
 
 export namespace InputLogicSimulatorC {
   const tickerTimer = new IntervalTimerWrapper();

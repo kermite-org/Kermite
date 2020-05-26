@@ -103,4 +103,12 @@ export class DeviceService {
   emitLayerChangedEvent(layerIndex: number) {
     this.emitRealtimeEvent({ type: 'layerChanged', layerIndex });
   }
+
+  writeSingleFrame(bytes: number[]) {
+    this.deviceWrapper?.writeSingleFrame(bytes);
+  }
+
+  async writeFrames(frames: number[][]) {
+    await this.deviceWrapper?.writeFrames(frames);
+  }
 }

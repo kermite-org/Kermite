@@ -21,6 +21,7 @@ export namespace InputLogicSimulatorD {
     changedStatus: Partial<IProfileManagerStatus>
   ) {
     if (changedStatus.loadedProfileData) {
+      console.log(`logicSimulator, profile data received`);
       const bytes = converProfileDataToBlobBytes(
         changedStatus.loadedProfileData
       );

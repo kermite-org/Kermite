@@ -185,3 +185,7 @@ export function thinningListenerCall(targetProc: () => void, ms: number) {
     timerId = setTimeout(targetProc, ms);
   };
 }
+
+export function delayMs(n: number) {
+  return new Promise((resolve) => setTimeout(resolve, n));
+}
