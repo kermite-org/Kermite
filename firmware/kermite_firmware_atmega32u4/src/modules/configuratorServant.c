@@ -61,7 +61,7 @@ static uint16_t readKeyAssignMemory(uint16_t wordIndex) {
 static uint8_t keyNum = 0;
 static void (*stateNotificationCallback)(uint8_t state) = 0;
 
-void emitStateNotification(uint8_t state) {
+static void emitStateNotification(uint8_t state) {
   if (stateNotificationCallback) {
     stateNotificationCallback(state);
   }
