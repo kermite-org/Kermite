@@ -64,6 +64,8 @@ static const uint8_t columnPins[NumColumns] = { P_C6, P_D4, P_F7, P_F6, P_F5, P_
 //static bool EmitHidKeys = true;
 static bool EmitHidKeys = false;
 
+static bool isSideBrainModeEnabled = false;
+
 //---------------------------------------------
 //variables
 
@@ -169,7 +171,7 @@ void onPhysicalKeyStateChanged(uint8_t keySlotIndex, bool isDown) {
     pressedKeyCount--;
   }
 
-  if (1) {
+  if (!isSideBrainModeEnabled) {
     keyInputLogicModel_issuePhysicalKeyStateChanged(keyIndex, isDown);
   }
   configuratorServant_emitRealtimeKeyEvent(keyIndex, isDown);
@@ -183,6 +185,12 @@ void configuratorServantStateHandler(uint8_t state) {
   }
   if (state == ConfiguratorServentState_KeyMemoryUpdationDone) {
     configurationMemoryReader_initialize();
+  }
+  if (state == ConfiguratorServentState_SideBrainModeEnabled) {
+    isSideBrainModeEnabled = true;
+  }
+  if (state == ConfiguratorServentState_SideBrainModeDisabled) {
+    isSideBrainModeEnabled = false;
   }
 }
 

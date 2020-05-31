@@ -99,6 +99,15 @@ set keyboard side configuration
   F0 20 SS
     SS: keyboard side (0:unset, 1:left, 2:right)
 
+Host --> Device
+set sidebrain mode
+  D0 10 MM
+    MM: (0:normal, 1:sidebrain)
+
+Host --> Device
+sidebrain mode, set hid report
+  D0 20 RR RR RR RR RR RR RR RR
+    RR: hid report
 
 
 DEPRECATED```

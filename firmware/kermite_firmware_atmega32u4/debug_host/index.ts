@@ -137,6 +137,26 @@ function dev1() {
       }
     })()
   }
+
+  if (1) {
+    //side brain
+    ;(async () => {
+      try {
+        console.log(`test sidebrain mode`)
+        await delayMs(1000)
+        dw.writeSingleFrame([0xd0, 0x10, 0x1])
+        await delayMs(1000)
+        dw.writeSingleFrame([0xd0, 0x20, 0, 0, 5, 0, 0, 0, 0, 0]) //down
+        await delayMs(1000)
+        dw.writeSingleFrame([0xd0, 0x20, 0, 0, 0, 0, 0, 0, 0, 0]) //up
+        await delayMs(3000)
+        dw.writeSingleFrame([0xd0, 0x10, 0x0])
+        console.log('done')
+      } catch (err) {
+        console.log(err)
+      }
+    })()
+  }
 }
 
 dev1()

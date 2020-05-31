@@ -173,6 +173,21 @@ static void processReadGenericHidData() {
         emitDeviceAttributesResponse();
       }
     }
+
+    if (category == 0xD0) {
+      uint8_t command = p[1];
+      if (command == 0x10) {
+        bool enabled = p[2] == 1;
+        if (enabled) {
+          emitStateNotification(ConfiguratorServentState_SideBrainModeEnabled);
+        } else {
+          emitStateNotification(ConfiguratorServentState_SideBrainModeDisabled);
+        }
+      }
+      if (command == 0x20) {
+        usbioCore_hidKeyboard_writeReport(&p[2]);
+      }
+    }
   }
 }
 

@@ -5,7 +5,9 @@
 
 enum {
   ConfiguratorServantState_KeyMemoryUpdationStarted = 1,
-  ConfiguratorServentState_KeyMemoryUpdationDone = 2
+  ConfiguratorServentState_KeyMemoryUpdationDone = 2,
+  ConfiguratorServentState_SideBrainModeEnabled = 10,
+  ConfiguratorServentState_SideBrainModeDisabled = 11
 };
 
 void configuratorServant_initialize(
