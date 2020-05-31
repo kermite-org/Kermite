@@ -4,10 +4,6 @@
 #include "configuratorServant.h"
 #include "debug_uart.h"
 #include "generalUtils.h"
-// #include "keyboardCore/dominant/LocalizationKeyMapper/localizationKeyMapper.h"
-// #include "keyboardCore/dominant/LogicalKeycodes.h"
-// #include "keyboardCore/dominant/keyInputLogicModel.h"
-// #include "keyboardCore/hidKeyCombinationManager.h"
 #include "keyboardCoreLogic.h"
 #include "pio.h"
 #include "usbiocore.h"
@@ -92,33 +88,6 @@ static void debugDumpReport(uint8_t *report) {
 
 //---------------------------------------------
 
-//callbacks for logic model
-
-// static uint16_t keyAssignMemoryReadHandler(uint16_t wordIndex) {
-//   return configurationMemoryReader_readKeyAssignMemoryWord(wordIndex);
-// }
-/*
-static void onLayerChanged(uint8_t layerIndex) {
-  // printf("change layer %d\n", layerIndex);
-  configuratorServant_emitRelatimeLayerEvent(layerIndex);
-}
-
-static void onLogicalKeyIssued(uint16_t logicalKey, bool isDown) {
-  // printf("onLogicalKeyIssued %d %d\n", logicalKey, isDown);
-  if (K_Special_0 <= logicalKey && logicalKey < K_Special_15) {
-    return;
-  }
-  uint16_t hidKey = localizationKeyMapper_logicalKeyToHidKey(logicalKey);
-  printf("hidKey: %d, isDown: %d\n", hidKey, isDown);
-  if (hidKey && EmitHidKeys) {
-    uint8_t *report = hidKeyCombinationManager_updateReport(hidKey, isDown);
-
-    debugDumpReport(report);
-    emitHidKeyStateReport(report);
-  }
-}
-*/
-
 static uint8_t local_layerIndex = 0;
 static uint8_t local_hidReport[8] = { 0 };
 
@@ -191,7 +160,6 @@ void onPhysicalKeyStateChanged(uint8_t keySlotIndex, bool isDown) {
   }
 
   if (!isSideBrainModeEnabled) {
-    // keyInputLogicModel_issuePhysicalKeyStateChanged(keyIndex, isDown);
     keyboardCoreLogic_issuePhysicalKeyStateChanged(keyIndex, isDown);
     processKeyboardCoreLogicOutput();
   }
@@ -239,10 +207,6 @@ void processKeyStatesUpdate() {
 void runAsMaster() {
   keyMatrixScanner_initialize(
       NumRows, NumColumns, rowPins, columnPins, nextKeyStateFlags);
-  // keyInputLogicModel_initialize(
-  //     false, NumPhysicalKeys, onLogicalKeyIssued,
-  //     keyAssignMemoryReadHandler, onLayerChanged);
-  // localizationKeyMapper_configureKeyboardLanguage(LocalizationKeyboardLanguage_JP);
   configurationMemoryReader_initialize();
   configuratorServant_initialize(
       NumPhysicalKeys,
