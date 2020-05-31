@@ -80,7 +80,7 @@ function encodeAssignOperation(op: IAssignOperation | undefined): number[] {
     } else {
       const mods = makeAttachedModifiersBits(op.attachedModifiers);
       const hidKey = HidKeyCodes[vk];
-      return [(tt << 6) | (mods << 2), hidKey];
+      return [(tt << 6) | (mods << 2) | ((hidKey >> 8) & 0x03), hidKey];
     }
   }
   if (op?.type === 'layerCall') {

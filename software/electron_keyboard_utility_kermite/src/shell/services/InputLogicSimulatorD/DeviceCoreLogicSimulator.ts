@@ -87,6 +87,7 @@ function getAssignOperationWord(
   const pos0 = getKeyBoundAssignSetHeaderPos(keyIndex);
   if (pos0 >= 0) {
     const pos1 = getLayerBoundAssignEntryHeaderPos(pos0, layerIndex);
+    // console.log({ keyIndex, layerIndex, pos0: pos0 + 24, pos1: pos1 + 24 });
     if (pos1 >= 0) {
       const entryHeaderByte = buf[pos1];
       const tt = (entryHeaderByte >> 4) & 0b11;
