@@ -48,15 +48,14 @@ export namespace InputLogicSimulatorD {
 
   async function initialize() {
     appGlobal.profileManager.subscribeStatus(onProfileStatusChanged);
-    appGlobal.deviceService.setSideBrainMode(true);
+    // appGlobal.deviceService.setSideBrainMode(true);
     appGlobal.deviceService.subscribe(onRealtimeKeyboardEvent);
     tickerTimer.start(processTicker, 5);
   }
 
   async function terminate() {
-    appGlobal.deviceService.writeSideBrainHidReport([0, 0, 0, 0, 0, 0, 0, 0]);
     appGlobal.deviceService.unsubscribe(onRealtimeKeyboardEvent);
-    appGlobal.deviceService.setSideBrainMode(false);
+    // appGlobal.deviceService.setSideBrainMode(false);
     tickerTimer.stop();
   }
 

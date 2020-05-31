@@ -83,19 +83,27 @@ export class DeviceService {
     removeArrayItems(this.handlers, proc);
   }
 
+  private isSideBrainMode = false;
+
   setSideBrainMode(enabled: boolean) {
     console.log(`writeSideBrainMode ${enabled ? 1 : 0}`);
+    if (!enabled) {
+      this.writeSideBrainHidReport([0, 0, 0, 0, 0, 0, 0, 0]);
+    }
     const buf = [0xd0, 0x10, enabled ? 1 : 0];
     this.deviceWrapper?.writeSingleFrame(buf);
+    this.isSideBrainMode = enabled;
   }
 
   writeSideBrainHidReport(report: number[]) {
-    console.log(JSON.stringify(report));
-
     //report must be 8bytes
     if (report.length !== 8) {
       return;
     }
+    if (!this.isSideBrainMode) {
+      return;
+    }
+    console.log(JSON.stringify(report));
     const buf = [0xd0, 0x20, ...report];
     this.deviceWrapper?.writeSingleFrame(buf);
   }
