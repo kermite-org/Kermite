@@ -6,31 +6,42 @@
 //configurations
 
 //追加のピンにタイミングデバッグ用の信号を出力する
-#define SINGLEWIRE_DEBUG
+//#define SINGLEWIRE_DEBUG
 
 //High/LowではなくHi-ZとLowでピンを駆動する
 //#define SINGLEWIRE_SIMULATE_OPEN_DRAIN
 
-//信号ピン(PD2固定)
-//signal pin, PD2
+//信号ピン
+#define SW_PIN_PD0
+//#define SW_PIN_PD2
+
+
+//信号ピン(PD0 or PD2)
+//signal pin, PD0 or PD2
 #define PORT_Signal _SFR_IO_ADDR(PORTD)
 #define DDR_Signal _SFR_IO_ADDR(DDRD)
 #define PIN_Signal _SFR_IO_ADDR(PIND)
-#define BIT_Signal 2
+#ifdef SW_PIN_PD0
+	#define BIT_Signal 0
+#endif
+#ifdef SW_PIN_PD2
+	#define BIT_Signal 2
+#endif
+
 
 //デバッグ用ピン(任意のピンを指定可)
-//debug transactin pin, PE6
-#define PORT_Debug1 _SFR_IO_ADDR(PORTE)
-#define DDR_Debug1 _SFR_IO_ADDR(DDRE)
-#define PIN_Debug1 _SFR_IO_ADDR(PINE)
-#define BIT_Debug1 6
+//debug transactin pin
+#define PORT_Debug1 _SFR_IO_ADDR(PORTF)
+#define DDR_Debug1 _SFR_IO_ADDR(DDRF)
+#define PIN_Debug1 _SFR_IO_ADDR(PINF)
+#define BIT_Debug1 4
 
 //デバッグ用ピン(任意のピンを指定可)
-//debug secondary pin, PB2
-#define PORT_Debug2 _SFR_IO_ADDR(PORTB)
-#define DDR_Debug2 _SFR_IO_ADDR(DDRB)
-#define PIN_Debug2 _SFR_IO_ADDR(PINB)
-#define BIT_Debug2 4
+//debug secondary pin
+#define PORT_Debug2 _SFR_IO_ADDR(PORTF)
+#define DDR_Debug2 _SFR_IO_ADDR(DDRF)
+#define PIN_Debug2 _SFR_IO_ADDR(PINF)
+#define BIT_Debug2 5
 
 //---------------------------------------------
 //module local variables
@@ -124,12 +135,12 @@ receivedCount: .dc.b 0
 	#define debug2Pin_toggle sbi PIN_Debug2, BIT_Debug2
 #else
 	#define debug1Pin_init nop
-	#define debug1Pin_setHigh nopn 2
+	#define debug1Pin_setLow nopn 2
 	#define debug1Pin_setHigh nopn 2
 
 	#define debug2Pin_init nop
 	#define debug2Pin_setLow nopn 2
-	#define debug2Pin_setLow nopn 2
+	#define debug2Pin_setHigh nopn 2
 #endif
 
 
@@ -155,8 +166,13 @@ configureSingleWirePins:
 
 //---------------------------------------------
 
+#ifdef SW_PIN_PD0
+	#define clearInterruptTriggerFlags sbi _SFR_IO_ADDR(EIFR), INTF0
+#endif
 
-#define clearInterruptTriggerFlags sbi _SFR_IO_ADDR(EIFR), INTF2
+#ifdef SW_PIN_PD2
+	#define clearInterruptTriggerFlags sbi _SFR_IO_ADDR(EIFR), INTF2
+#endif
 
 
 #define LOW_DUR_CNT 7
@@ -583,10 +599,21 @@ receiveBytesN_debugMeasureHeadPulseWidth:
 
 .func configureSingalReceivePinChangeInterruption
 configureSingalReceivePinChangeInterruption:
-  //INT2(PD2)ピンがHIGHからLOWに変化したときに割り込みを生成
+
+#ifdef SW_PIN_PD0
+  //INT0(PD0)ピンがHIGHからLOWに変化したときに割り込みを生成
 	ldi r24, 0b00000010
 	sts EICRA, r24
+	sbi _SFR_IO_ADDR(EIMSK), INT0
+#endif
+
+#ifdef SW_PIN_PD2
+  //INT2(PD2)ピンがHIGHからLOWに変化したときに割り込みを生成
+	ldi r24, 0b00100000
+	sts EICRA, r24
 	sbi _SFR_IO_ADDR(EIMSK), INT2
+#endif
+
 	ret
 .endfunc
 
@@ -596,9 +623,16 @@ ISR(INT2_vect) {
   clearInterruptTriggerFlags()
 }
 */
+#ifdef SW_PIN_PD0
+.global INT0_vect
+.func INT0_vect
+INT0_vect:
+#endif
+#ifdef SW_PIN_PD2
 .global INT2_vect
 .func INT2_vect
 INT2_vect:
+#endif
 	push r0
 	push r1
 	in r0, _SFR_IO_ADDR(SREG)
