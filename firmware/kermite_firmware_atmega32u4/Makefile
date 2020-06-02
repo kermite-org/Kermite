@@ -21,6 +21,10 @@ PROJECT_SRCS =
 MODULE_ASM_SRCS =
 PROJECT_ASM_SRCS =
 
+CFLAGS =
+ASFLAGS =
+LDFLAGS =
+
 include src/projects/$(PROJECT)/rules.mk
 
 C_SRCS = $(addprefix src/modules/,$(MODULE_SRCS)) $(addprefix src/projects/$(PROJECT)/, $(PROJECT_SRCS))
@@ -38,7 +42,6 @@ OBJCOPY = avr-objcopy
 OBJSIZE = avr-size
 OBJDUMP = avr-objdump
 
-CFLAGS =
 CFLAGS += -mmcu=atmega32u4
 CFLAGS += -Os
 CFLAGS += -g
@@ -59,16 +62,12 @@ CFLAGS += -DF_CPU=16000000UL
 
 #CFLAGS += -mrelax
 
-
-ASFLAGS =
 #ASFLAGS += -Wa,-adhlns=$(<:.S=.lst)
 ASFLAGS += -gstabs 
 ASFLAGS += -mmcu=atmega32u4
 ASFLAGS += -Isrc
 ASFLAGS += -x assembler-with-cpp
 
-
-LDFLAGS =
 LDFLAGS += -mmcu=atmega32u4
 LDFLAGS += -Os
 LDFLAGS += -g

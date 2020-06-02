@@ -5,16 +5,18 @@
 //---------------------------------------------
 //configurations
 
-//追加のピンにタイミングデバッグ用の信号を出力する
-//#define SINGLEWIRE_DEBUG
+//信号ピン(PD0 or PD2)
+//以下のいずれかをコンパイル時のフラグで注入して指定
+//MODULE_OPTIONS_SINGLEWIRE2_SIGNAL_PIN_PD0
+//MODULE_OPTIONS_SINGLEWIRE2_SIGNAL_PIN_PD2
 
-//High/LowではなくHi-ZとLowでピンを駆動する
-//#define SINGLEWIRE_SIMULATE_OPEN_DRAIN
+#ifdef MODULE_OPTIONS_SINGLEWIRE2_SIGNAL_PIN_PD0
+	#define SW_PIN_PD0
+#endif
 
-//信号ピン
-#define SW_PIN_PD0
-//#define SW_PIN_PD2
-
+#ifdef MODULE_OPTIONS_SINGLEWIRE2_SIGNAL_PIN_PD2
+	#define SW_PIN_PD2
+#endif
 
 //信号ピン(PD0 or PD2)
 //signal pin, PD0 or PD2
@@ -28,6 +30,16 @@
 	#define BIT_Signal 2
 #endif
 
+#ifndef BIT_Signal
+	#error Single wire pin configuration option MODULE_OPTIONS_SINGLEWIRE2_SIGNAL_PIN_PDx is not provided.
+#endif
+
+
+//追加のピンにタイミングデバッグ用の信号を出力する
+//#define SINGLEWIRE_DEBUG
+
+//High/LowではなくHi-ZとLowでピンを駆動する
+//#define SINGLEWIRE_SIMULATE_OPEN_DRAIN
 
 //デバッグ用ピン(任意のピンを指定可)
 //debug transactin pin

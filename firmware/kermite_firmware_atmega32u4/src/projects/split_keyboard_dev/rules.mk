@@ -8,6 +8,7 @@ MODULE_SRCS += generalUtils.c
 MODULE_SRCS += ConfigurationMemoryReader.c
 MODULE_SRCS += keyboardCoreLogic.c
 
+ASFLAGS += -DMODULE_OPTIONS_SINGLEWIRE2_SIGNAL_PIN_PD2
 MODULE_ASM_SRCS += singlewire2.S
 
 PROJECT_SRCS += main.c
