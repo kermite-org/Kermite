@@ -127,9 +127,16 @@ DEP_FILES = $(filter %.d,$(OBJS:%.o=%.d))
 
 
 flash: build
+ifndef COM_PORT
+	$(error variable COM_PORT is not set)
+endif
+ifdef COM_PORT_ALT
+	-avrdude -p m32u4 -P $(COM_PORT_ALT) -c avr109 -U flash:w:$(HEX)
+endif
 	avrdude -p m32u4 -P $(COM_PORT) -c avr109 -U flash:w:$(HEX)
-	
-run: flash size
+
+run: flash 
+#size
 
 #asm_out_dev: $(OBJ_DIR)/eeprom.S
 
