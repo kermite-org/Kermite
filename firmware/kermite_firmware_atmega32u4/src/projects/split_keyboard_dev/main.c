@@ -44,6 +44,8 @@ void toggleLED1() {
 //---------------------------------------------
 //definitions
 
+#if 0
+
 #define NumRows 4
 #define NumColumns 6
 
@@ -75,8 +77,49 @@ const int8_t keySlotIndexToKeyIndexMap[NumKeySlots] PROGMEM = {
 
 #define SingleWireMaxPacketSize 6
 
-//const bool EmitHidKeys = false;
-const bool EmitHidKeys = true;
+#endif
+
+#if 1
+
+#define NumRows 5
+#define NumColumns 6
+
+static const uint8_t rowPins[NumRows] = { P_C6, P_D7, P_E6, P_B4, P_B5 };
+static const uint8_t columnPins[NumColumns] = { P_F6, P_F7, P_B1, P_B3, P_B2, P_B6 };
+
+#define NumKeySlots 60
+#define NumKeySlotsHalf 30 //NumRows * NumColumns
+
+#define NumKeySlotBytes 8
+#define NumKeySlotBytesHalf 4 //Ceil(NumRows * NumColumns / 8);
+
+#define SingleWireMaxPacketSize 6 //NumKeySlotBytesHalf + 2
+
+#define KeyIndexRange 48
+
+const int8_t xx = -1;
+
+// clang-format off
+const int8_t keySlotIndexToKeyIndexMap[NumKeySlots] PROGMEM = {
+  //left
+  xx, xx, xx, xx, xx, xx,
+  5, 4, 3, 2, 1, 0,
+  11, 10, 9, 8, 7, 6,
+  17, 16, 15, 14, 13, 12,
+  xx, 21, 20, 19, 18, 23,
+  //right
+  xx, xx, xx, xx, xx, xx,
+  29, 28, 27, 26, 25, 24,
+  35, 34, 33, 32, 31, 30,
+  41, 40, 39, 38, 37, 36,
+  xx, 45, 44, 43, 42, 47,
+};
+// clang-format on
+
+#endif
+
+//const bool EmitHidKeys = true;
+const bool EmitHidKeys = false;
 
 //---------------------------------------------
 //variables
@@ -134,7 +177,7 @@ void onPhysicalKeyStateChanged(uint8_t keySlotIndex, bool isDown) {
     return;
   }
   int8_t keyIndex = pgm_read_byte(keySlotIndexToKeyIndexMap + keySlotIndex);
-  if (!(0 <= keyIndex && keyIndex < NumPhysicalKeys)) {
+  if (!(0 <= keyIndex && keyIndex < KeyIndexRange)) {
     return;
   }
   if (isDown) {
@@ -184,11 +227,11 @@ void checkSinglewireReceivedData() {
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
     if (cmd == 0x41 && sz == 1 + NumKeySlotBytesHalf) {
+      uint8_t *payloadBytes = sw_rxbuf + 1;
       //子-->親, キー状態応答パケット受信, 子のキー状態を受け取り保持
-      //nextKeyStateFlagsの後ろ半分に子のキー状態を格納
-      generalUtils_copyBytes(nextKeyStateFlags + NumKeySlotBytesHalf, sw_rxbuf + 1, NumKeySlotBytesHalf);
-      // toggleLED1();
-      // generalUtils_debugShowBytes(sw_rxbuf, 4);
+      generalUtils_copyBitFlagsBuf(nextKeyStateFlags, NumKeySlotsHalf, payloadBytes, 0, NumKeySlotsHalf);
+      toggleLED0();
+      // generalUtils_debugShowBytes(sw_rxbuf, sz);
     }
   }
 }
@@ -199,6 +242,9 @@ void processKeyStatesUpdate() {
     uint8_t byte1 = nextKeyStateFlags[i];
     for (uint8_t j = 0; j < 8; j++) {
       uint8_t keySlotIndex = i * 8 + j;
+      if (keySlotIndex >= NumKeySlots) {
+        break;
+      }
       bool state0 = bit_read(byte0, j);
       bool state1 = bit_read(byte1, j);
       if (!state0 && state1) {
@@ -221,7 +267,7 @@ void runAsMaster() {
 
   configurationMemoryReader_initialize();
   configuratorServant_initialize(
-      NumPhysicalKeys,
+      KeyIndexRange,
       configuratorServantStateHandler);
 
   uint16_t cnt = 0;
@@ -234,12 +280,13 @@ void runAsMaster() {
     }
     if (cnt % 10 == 5) {
       sendKeyStateRequestPacketToSlave();
+      // toggleLED0();
     }
     if (cnt % 2000 == 0) {
-      outputLED0(true);
+      // outputLED0(true);
     }
     if (cnt % 2000 == 1) {
-      outputLED0(false);
+      // outputLED0(false);
     }
     _delay_ms(1);
     configuratorServant_processUpdate();
@@ -264,7 +311,7 @@ void checkSinglewireReceivedData_Slave() {
     if (cmd == 0x40 && sz == 1) {
       //親-->子, キー状態要求パケット受信, キー状態応答パケットを返す
       sendKeyStateResponsePacketToMaster();
-      // toggleLED1();
+      toggleLED0();
     }
   }
 }
@@ -295,10 +342,10 @@ void runAsSlave() {
       outputLED1(pressedKeyCount > 0);
     }
     if (cnt % 4000 == 0) {
-      outputLED0(true);
+      // outputLED0(true);
     }
     if (cnt % 4000 == 1) {
-      outputLED0(false);
+      // outputLED0(false);
     }
 
     _delay_ms(1);
