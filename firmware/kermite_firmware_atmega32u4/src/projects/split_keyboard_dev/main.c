@@ -61,7 +61,7 @@ static const uint8_t columnPins[NumColumns] = { P_F6, P_F7, P_B1, P_B3, P_B2, P_
 #define NumPhysicalKeys 48
 
 // clang-format off
-const int8_t keySlotIndexToKeyIndexMap[NumKeySlots] PROGMEM = {
+static const int8_t keySlotIndexToKeyIndexMap[NumKeySlots] PROGMEM = {
   //left
   5, 4, 3, 2, 1, 0,
   11, 10, 9, 8, 7, 6,
@@ -97,10 +97,10 @@ static const uint8_t columnPins[NumColumns] = { P_F6, P_F7, P_B1, P_B3, P_B2, P_
 
 #define KeyIndexRange 48
 
-const int8_t xx = -1;
+#define xx -1
 
 // clang-format off
-const int8_t keySlotIndexToKeyIndexMap[NumKeySlots] PROGMEM = {
+static const int8_t keySlotIndexToKeyIndexMap[NumKeySlots] PROGMEM = {
   //left
   xx, xx, xx, xx, xx, xx,
   5, 4, 3, 2, 1, 0,
