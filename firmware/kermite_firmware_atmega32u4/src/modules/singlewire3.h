@@ -3,8 +3,6 @@
 
 #include "types.h"
 
-extern uint16_t singlewire3_debugValue;
-
 void singlewire_sendFrame(uint8_t *txbuf, uint8_t len);
 uint8_t singlewire_receiveFrame(uint8_t *rxbuf, uint8_t capacity);
 

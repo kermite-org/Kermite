@@ -10,6 +10,8 @@
 #include "singlewire3.h"
 #include "xf_eeprom.h"
 
+extern uint16_t singlewire3_debugValue;
+
 //---------------------------------------------
 //board IO
 
