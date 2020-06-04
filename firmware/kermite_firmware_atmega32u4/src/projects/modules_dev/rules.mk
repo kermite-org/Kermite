@@ -53,8 +53,8 @@ MODULE_SRCS += generalUtils.c
 # PROJECT_ASM_SRCS += asmdev.S
 
 CFLAGS += -DSINGLEWIRE_SIGNAL_PIN_PD2
-MODULE_SRCS += singlewire3.c
-PROJECT_SRCS += main_singlewire3_dev.c
+MODULE_SRCS += singlewire3a.c
+PROJECT_SRCS += main_singlewire3a_dev.c
 
 endif
 

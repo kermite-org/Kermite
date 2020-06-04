@@ -1,11 +1,11 @@
-#include "singlewire3.h"
 #include "bit_operations.h"
 #include "pio.h"
+#include "singlewire3.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <util/delay.h>
 
-uint16_t singlewire3_debugValue = 0;
+uint8_t singlewire3a_debugValues[4] = { 0 };
 
 //---------------------------------------------
 
@@ -66,7 +66,7 @@ static inline uint8_t signalPin_read() {
 //---------------------------------------------
 //timing debug pin
 
-//#define EnableTimingDebugPin
+#define EnableTimingDebugPin
 
 #ifdef EnableTimingDebugPin
 
@@ -74,15 +74,15 @@ static inline uint8_t signalPin_read() {
 #define pinDebug_PORT PORTF
 #define pinDebug_Bit 4
 
-static void debug_initTimeDebugPin() {
+static inline void debug_initTimeDebugPin() {
   pio_setOutput(pinDebug);
 }
 
-static void debug_timingPinHigh() {
+static inline void debug_timingPinHigh() {
   bit_on(pinDebug_PORT, pinDebug_Bit);
 }
 
-static void debug_timingPinLow() {
+static inline void debug_timingPinLow() {
   bit_off(pinDebug_PORT, pinDebug_Bit);
 }
 #else
@@ -96,111 +96,130 @@ static void debug_timingPinLow() {}
 //---------------------------------------------
 
 static inline void delayUnit(uint8_t t) {
-  // _delay_loop_1(t);     //200us/byte, 40kbps
-  _delay_loop_1(t * 2); //400us/byte, 20kbps
+  // _delay_loop_1(t * 12); //about 80kbps
+  _delay_loop_1(t * 31); //about 40kbps
 }
 
 /*
-HighとLowの時間の比で0/1を表す
-high8, low2 ... 1
-high3, low7 ... 0
+Highのパルス幅で0/1を表す
 */
 static void writeLogical(uint8_t val) {
   if (val > 0) {
     signalPin_setHigh();
-    delayUnit(80);
+    delayUnit(3);
     signalPin_setLow();
-    delayUnit(20);
   } else {
     signalPin_setHigh();
-    delayUnit(30);
+    delayUnit(1);
     signalPin_setLow();
-    delayUnit(70);
   }
+}
+
+static inline void waitBlank() {
+  delayUnit(1);
 }
 
 void singlewire_sendFrame(uint8_t *txbuf, uint8_t len) {
   cli();
 
+  waitBlank();
+  waitBlank();
+
   signalPin_startTransmit();
   signalPin_setLow();
-  delayUnit(100);
-  delayUnit(100);
+  waitBlank();
+  waitBlank();
+  waitBlank();
+  waitBlank();
+
+  //send reference zero
+  writeLogical(0);
+  waitBlank();
+  //send reference one
+  writeLogical(1);
+  waitBlank();
+  waitBlank();
 
   for (uint8_t i = 0; i < len; i++) {
     bool isLast = i == len - 1;
     for (int8_t j = 7; j >= 0; j--) {
       uint8_t val = (txbuf[i] >> j) & 1;
       writeLogical(val);
+      waitBlank();
     }
     writeLogical(isLast);
+    waitBlank();
+    waitBlank();
   }
 
   signalPin_endTransmit_standby();
-  delayUnit(100);
+  waitBlank();
+  waitBlank();
   bit_on(EIFR, dINTx);
   sei();
 }
 
-#define ReadAbort 2
-
-static uint8_t readFragment() {
+static uint8_t skipLow() {
   uint8_t t0 = 0;
-  uint8_t t1 = 0;
+  while (signalPin_read() == 0 && ++t0 != 0) {}
+  return t0;
+}
 
+static uint8_t measureHigh() {
+  uint8_t t0 = 0;
   debug_timingPinHigh();
-  while (signalPin_read() == 1 && ++t0 != 0) {
-    delayUnit(1);
-  }
-  if (t0 == 0) {
-    return ReadAbort;
-  }
-
+  while (signalPin_read() != 0 && ++t0 != 0) {}
   debug_timingPinLow();
-  while (signalPin_read() == 0 && ++t1 != 0) {
-    delayUnit(1);
-  }
-  if (t1 == 0) {
-    return ReadAbort;
-  }
-  uint8_t dur = t0 + t1;
-  // singlewire3_debugValue = dur;
-  uint8_t mid = dur >> 1;
-  return t0 > mid ? 1 : 0;
+  return t0;
 }
 
 uint8_t singlewire_receiveFrame(uint8_t *rxbuf, uint8_t capacity) {
-  debug_timingPinLow();
   uint8_t bi = 0;
+  uint8_t t0, t1, TH;
 
-  uint8_t t0 = 0;
-  while (signalPin_read() == 0 && ++t0 != 0) {
-    delayUnit(1);
-  }
-  // singlewire3_debugValue = t0;
+  measureHigh();
+  skipLow();
+  //measure reference zero
+  t0 = measureHigh();
   if (t0 == 0) {
     goto escape;
   }
+  singlewire3a_debugValues[0] = t0;
+  skipLow();
+  //measure reference one
+  t1 = measureHigh();
+  if (t1 == 0) {
+    goto escape;
+  }
+  singlewire3a_debugValues[1] = t1;
+
+  TH = (t0 + t1) >> 1;
+  singlewire3a_debugValues[2] = TH;
 
   while (bi < capacity) {
     uint8_t value = 0;
     for (int8_t j = 7; j >= 0; j--) {
-      uint8_t f = readFragment();
-      if (f == ReadAbort) {
+      skipLow();
+      uint8_t m = measureHigh();
+      if (m == 0) {
         goto escape;
       }
+      uint8_t f = m > TH;
       value |= f << j;
     }
     rxbuf[bi++] = value;
-
-    uint8_t isEnd = readFragment();
-    if (isEnd == ReadAbort) {
+    skipLow();
+    uint8_t m1 = measureHigh();
+    if (m1 == 0) {
       goto escape;
     }
-    if (isEnd == 1) {
+    uint8_t isEnd = m1 > TH;
+    if (isEnd) {
       break;
     }
   }
+  skipLow();
+
   debug_timingPinHigh();
   bit_on(EIFR, dINTx);
   return bi;
