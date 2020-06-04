@@ -4,7 +4,7 @@
 
 void generalUtils_debugShowBytes(uint8_t *buf, uint16_t len) {
   for (uint16_t i = 0; i < len; i++) {
-    printf("%02x ", buf[i]);
+    printf("%02X ", buf[i]);
   }
   printf("\n");
 }

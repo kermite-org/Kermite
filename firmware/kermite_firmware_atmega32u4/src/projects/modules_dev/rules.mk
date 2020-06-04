@@ -1,7 +1,7 @@
-DevTarget := blink
+#DevTarget := blink
 #DevTarget := DebugUartTest
 #DevTarget := KeyboardMatrix
-#DevTarget := singlewire
+DevTarget := singlewire
 #DevTarget := neopixel
 #DevTarget := singlekey
 #DevTarget := eeprom
@@ -35,6 +35,9 @@ endif
 ifeq ($(DevTarget), singlewire)
 MODULE_SRCS += pio.c
 MODULE_SRCS += debug_uart.c
+MODULE_SRCS += xf_eeprom.c
+MODULE_SRCS += generalUtils.c
+
 #v0
 #MODULE_SRCS += singlewire_impl_pulseratio.c
 #PROJECT_SRCS += main_singlewire_dev.c
@@ -43,11 +46,16 @@ MODULE_SRCS += debug_uart.c
 #PROJECT_SRCS += main_singlewire_dev.c
 #v2
 # MODULE_SRCS += singlewire2_cpart.c
-MODULE_ASM_SRCS += singlewire2.S
-PROJECT_SRCS += main_singlewire_dev2.c
+#MODULE_ASM_SRCS += singlewire2.S
+#PROJECT_SRCS += main_singlewire_dev2.c
 
 # PROJECT_SRCS += main_singlewire_devC.c
 # PROJECT_ASM_SRCS += asmdev.S
+
+CFLAGS += -DSINGLEWIRE_SIGNAL_PIN_PD2
+MODULE_SRCS += singlewire3.c
+PROJECT_SRCS += main_singlewire3_dev.c
+
 endif
 
 
