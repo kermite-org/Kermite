@@ -6,7 +6,7 @@
 #include "generalUtils.h"
 #include "keyboardCoreLogic.h"
 #include "pio.h"
-#include "singlewire2.h"
+#include "singlewire3.h"
 #include "usbiocore.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
@@ -118,8 +118,8 @@ static const int8_t keySlotIndexToKeyIndexMap[NumKeySlots] PROGMEM = {
 
 #endif
 
-//const bool EmitHidKeys = true;
-const bool EmitHidKeys = false;
+const bool EmitHidKeys = true;
+//const bool EmitHidKeys = false;
 
 //---------------------------------------------
 //variables
@@ -215,22 +215,17 @@ void configuratorServantStateHandler(uint8_t state) {
 //---------------------------------------------
 //master
 
-//親から子に対してキー状態要求パケットを送る
-void sendKeyStateRequestPacketToSlave() {
+void pullAltSideKeyStates() {
   sw_txbuf[0] = 0x40;
-  singleWire_sendBytes(sw_txbuf, 1);
-  // toggleLED1();
-}
-
-void checkSinglewireReceivedData() {
-  uint8_t sz = singleWire_peekReceivedCount();
+  singlewire_sendFrame(sw_txbuf, 1);
+  uint8_t sz = singlewire_receiveFrame(sw_rxbuf, SingleWireMaxPacketSize);
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
     if (cmd == 0x41 && sz == 1 + NumKeySlotBytesHalf) {
       uint8_t *payloadBytes = sw_rxbuf + 1;
       //子-->親, キー状態応答パケット受信, 子のキー状態を受け取り保持
       generalUtils_copyBitFlagsBuf(nextKeyStateFlags, NumKeySlotsHalf, payloadBytes, 0, NumKeySlotsHalf);
-      toggleLED0();
+      // toggleLED0();
       // generalUtils_debugShowBytes(sw_rxbuf, sz);
     }
   }
@@ -262,8 +257,7 @@ void runAsMaster() {
   keyMatrixScanner_initialize(
       NumRows, NumColumns, rowPins, columnPins, nextKeyStateFlags);
 
-  singleWire_registerReceiveBuffer(sw_rxbuf, SingleWireMaxPacketSize);
-  singleWire_initialize();
+  singlewire_initialize();
 
   configurationMemoryReader_initialize();
   configuratorServant_initialize(
@@ -279,18 +273,16 @@ void runAsMaster() {
       outputLED1(pressedKeyCount > 0);
     }
     if (cnt % 10 == 5) {
-      sendKeyStateRequestPacketToSlave();
-      // toggleLED0();
+      pullAltSideKeyStates();
     }
     if (cnt % 2000 == 0) {
-      // outputLED0(true);
+      outputLED0(true);
     }
     if (cnt % 2000 == 1) {
-      // outputLED0(false);
+      outputLED0(false);
     }
     _delay_ms(1);
     configuratorServant_processUpdate();
-    checkSinglewireReceivedData();
   }
 }
 
@@ -301,17 +293,17 @@ void runAsMaster() {
 void sendKeyStateResponsePacketToMaster() {
   sw_txbuf[0] = 0x41;
   generalUtils_copyBytes(sw_txbuf + 1, nextKeyStateFlags, NumKeySlotBytesHalf);
-  singleWire_sendBytes(sw_txbuf, 1 + NumKeySlotBytesHalf);
+  singlewire_sendFrame(sw_txbuf, 1 + NumKeySlotBytesHalf);
 }
 
-void checkSinglewireReceivedData_Slave() {
-  uint8_t sz = singleWire_peekReceivedCount();
+void onRecevierInterruption() {
+  uint8_t sz = singlewire_receiveFrame(sw_rxbuf, SingleWireMaxPacketSize);
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
     if (cmd == 0x40 && sz == 1) {
       //親-->子, キー状態要求パケット受信, キー状態応答パケットを返す
       sendKeyStateResponsePacketToMaster();
-      toggleLED0();
+      // toggleLED0();
     }
   }
 }
@@ -330,8 +322,8 @@ void runAsSlave() {
   keyMatrixScanner_initialize(
       NumRows, NumColumns, rowPins, columnPins, nextKeyStateFlags);
 
-  singleWire_registerReceiveBuffer(sw_rxbuf, SingleWireMaxPacketSize);
-  singleWire_initialize();
+  singlewire_initialize();
+  singlewire_setupInterruptedReceiver(onRecevierInterruption);
 
   uint16_t cnt = 0;
   while (1) {
@@ -342,14 +334,13 @@ void runAsSlave() {
       outputLED1(pressedKeyCount > 0);
     }
     if (cnt % 4000 == 0) {
-      // outputLED0(true);
+      outputLED0(true);
     }
     if (cnt % 4000 == 1) {
-      // outputLED0(false);
+      outputLED0(false);
     }
 
     _delay_ms(1);
-    checkSinglewireReceivedData_Slave();
   }
 }
 
