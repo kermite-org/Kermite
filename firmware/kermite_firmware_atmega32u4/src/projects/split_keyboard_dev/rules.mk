@@ -9,6 +9,6 @@ MODULE_SRCS += ConfigurationMemoryReader.c
 MODULE_SRCS += keyboardCoreLogic.c
 
 CFLAGS += -DSINGLEWIRE_SIGNAL_PIN_PD2
-MODULE_SRCS += singlewire3.c
+MODULE_SRCS += singlewire3a.c
 
 PROJECT_SRCS += main.c
