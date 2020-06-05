@@ -54,10 +54,15 @@ MODULE_SRCS += generalUtils.c
 
 CFLAGS += -DSINGLEWIRE_SIGNAL_PIN_PD2
 CFLAGS += -DSINGLEWIRE_ENABLE_TIMING_DEBUG_PINS
+ASFLAGS += -DSINGLEWIRE_SIGNAL_PIN_PD2
+ASFLAGS += -DSINGLEWIRE_ENABLE_TIMING_DEBUG_PINS
+
 #MODULE_SRCS += singlewire3.c
 # MODULE_SRCS += singlewire3a.c
 #MODULE_SRCS += singlewire3b.c
-MODULE_SRCS += singlewire3c.c
+#MODULE_SRCS += singlewire3c.c
+MODULE_ASM_SRCS += singlewire3d.S
+
 PROJECT_SRCS += main_singlewire3_dev.c
 
 endif

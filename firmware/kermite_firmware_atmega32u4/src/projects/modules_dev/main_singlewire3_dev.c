@@ -11,7 +11,19 @@
 #include "singlewire3.h"
 #include "xf_eeprom.h"
 
+#if 0
 extern uint8_t singlewire3_debugValues[4];
+
+uint8_t* getDebugValuesPointer(){
+  return singlewire3_debugValues;
+}
+#else
+extern uint8_t *signlewire3_getDebugValuesPtr();
+
+uint8_t *getDebugValuesPointer() {
+  return signlewire3_getDebugValuesPtr();
+}
+#endif
 
 //---------------------------------------------
 //board IO
@@ -69,11 +81,14 @@ void emitDev() {
   txbuf[4] = 0x12;
 
   uint8_t n = 5;
+  cli();
   singlewire_sendFrame(txbuf, n);
+  // _delay_us(10);
   uint8_t len = singlewire_receiveFrame(rxbuf, n);
+  sei();
   if (len > 0) {
     generalUtils_debugShowBytes(rxbuf, len);
-    generalUtils_debugShowBytesDec(singlewire3_debugValues, 4);
+    generalUtils_debugShowBytesDec(getDebugValuesPointer(), 4);
   }
 }
 
@@ -103,7 +118,10 @@ void runAsMaster() {
 //development slave
 
 void onRecevierInterruption() {
+
   uint8_t len = singlewire_receiveFrame(rxbuf, NumMaxDataBytes);
+
+  // printf("len: %d\n", len);
   if (len > 0) {
     generalUtils_copyBytes(txbuf, rxbuf, len);
     txbuf[2] += 0x10;
@@ -111,6 +129,8 @@ void onRecevierInterruption() {
     singlewire_sendFrame(txbuf, len);
     generalUtils_debugShowBytes(rxbuf, len);
   }
+  // uint8_t *pDebugValues = signlewire3_getDebugValuesPtr();
+  //generalUtils_debugShowBytesDec(getDebugValuesPointer(), 4);
   // generalUtils_debugShowBytesDec(singlewire3a_debugValues, 4);
 }
 
@@ -129,6 +149,9 @@ void runAsSlave() {
     }
     if (cnt % 4000 == 1) {
       outputLED0(false);
+    }
+    if (cnt % 1000 == 0) {
+      // printf("cnt: %d\n", cnt);
     }
     _delay_ms(1);
     cnt++;
