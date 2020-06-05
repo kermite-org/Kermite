@@ -36,10 +36,6 @@ uint8_t singlewire3_debugValues[4] = { 0 };
 #define dINTx_vect INT2_vect
 #else
 #error Singlewire pin configuration option SINGLEWIRE_SIGNAL_PIN_PDx is not provided.
-#define dBit 0
-#define dISCx0 ISC20
-#define dINTx INT0
-#define dINTx_vect INT0_vect
 #endif
 
 //---------------------------------------------

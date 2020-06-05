@@ -18,7 +18,8 @@
         "UNICODE",
         "_UNICODE",
         "__AVR_ATmega32U4__",
-        "F_CPU=16000000UL"
+        "F_CPU=16000000UL",
+        "SINGLEWIRE_SIGNAL_PIN_PD0"
       ],
       "compilerPath": "${myCompilerExecutablePath} -mmcu=atmega32u4",
       "cStandard": "c11",
