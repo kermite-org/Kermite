@@ -5,7 +5,13 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-uint8_t singlewire3a_debugValues[4] = { 0 };
+//単線通信
+//パルス幅で0/1を表す
+//立ち上がり一定時間後の信号サンプリングによる受信
+//140kpbs
+//細かい調整が必要な割にたいして速度が上がらず
+
+uint8_t singlewire3_debugValues[4] = { 0 };
 
 //---------------------------------------------
 
@@ -66,9 +72,7 @@ static inline uint8_t signalPin_read() {
 //---------------------------------------------
 //timing debug pin
 
-#define EnableTimingDebugPin
-
-#ifdef EnableTimingDebugPin
+#ifdef SINGLEWIRE_ENABLE_TIMING_DEBUG_PINS
 
 #define pinDebug P_F4
 #define pinDebug_PORT PORTF
@@ -86,21 +90,21 @@ static inline void debug_timingPinLow() {
   bit_off(pinDebug_PORT, pinDebug_Bit);
 }
 
-#define pinDebug2 P_F5
-#define pinDebug2_PORT PORTF
-#define pinDebug2_Bit 5
+// #define pinDebug2 P_F5
+// #define pinDebug2_PORT PORTF
+// #define pinDebug2_Bit 5
 
-static inline void debug_initTimeDebugPin2() {
-  pio_setOutput(pinDebug2);
-}
+// static inline void debug_initTimeDebugPin2() {
+//   pio_setOutput(pinDebug2);
+// }
 
-static inline void debug_timingPin2High() {
-  bit_on(pinDebug2_PORT, pinDebug2_Bit);
-}
+// static inline void debug_timingPin2High() {
+//   bit_on(pinDebug2_PORT, pinDebug2_Bit);
+// }
 
-static inline void debug_timingPin2Low() {
-  bit_off(pinDebug2_PORT, pinDebug2_Bit);
-}
+// static inline void debug_timingPin2Low() {
+//   bit_off(pinDebug2_PORT, pinDebug2_Bit);
+// }
 
 #else
 
@@ -108,9 +112,9 @@ static void debug_initTimeDebugPin() {}
 static void debug_timingPinHigh() {}
 static void debug_timingPinLow() {}
 
-static void debug_initTimeDebugPin2() {}
-static void debug_timingPin2High() {}
-static void debug_timingPin2Low() {}
+// static void debug_initTimeDebugPin2() {}
+// static void debug_timingPin2High() {}
+// static void debug_timingPin2Low() {}
 
 #endif
 
@@ -223,7 +227,6 @@ escape:
 void singlewire_initialize() {
   signalPin_endTransmit_standby();
   debug_initTimeDebugPin();
-  debug_initTimeDebugPin2();
 }
 
 //---------------------------------------------

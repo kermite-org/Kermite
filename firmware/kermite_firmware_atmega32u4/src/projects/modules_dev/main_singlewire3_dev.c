@@ -1,3 +1,4 @@
+
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <stdio.h>
@@ -10,7 +11,7 @@
 #include "singlewire3.h"
 #include "xf_eeprom.h"
 
-extern uint16_t singlewire3_debugValue;
+extern uint8_t singlewire3_debugValues[4];
 
 //---------------------------------------------
 //board IO
@@ -53,7 +54,7 @@ void writeIsMaster(bool isMaster) {
 //---------------------------------------------
 //development master
 
-#define NumMaxDataBytes 6
+#define NumMaxDataBytes 5
 
 uint8_t txbuf[NumMaxDataBytes];
 uint8_t rxbuf[NumMaxDataBytes];
@@ -66,11 +67,11 @@ void emitDev() {
   txbuf[2] = 0x0F;
   txbuf[3] = 0x3D;
   txbuf[4] = 0x12;
-  txbuf[5] = 0x34;
-  singlewire_sendFrame(txbuf, 6);
-  uint8_t len = singlewire_receiveFrame(rxbuf, 6);
+  singlewire_sendFrame(txbuf, 5);
+  uint8_t len = singlewire_receiveFrame(rxbuf, 5);
   if (len > 0) {
     generalUtils_debugShowBytes(rxbuf, len);
+    // generalUtils_debugShowBytesDec(singlewire3a_debugValues, 4);
   }
 }
 
@@ -101,7 +102,6 @@ void runAsMaster() {
 
 void onRecevierInterruption() {
   uint8_t len = singlewire_receiveFrame(rxbuf, NumMaxDataBytes);
-  // printf("len: %d\n", len);
   if (len > 0) {
     generalUtils_copyBytes(txbuf, rxbuf, len);
     txbuf[2] += 0x10;
@@ -109,8 +109,7 @@ void onRecevierInterruption() {
     singlewire_sendFrame(txbuf, len);
     generalUtils_debugShowBytes(rxbuf, len);
   }
-
-  printf("debugValue: %d\n", singlewire3_debugValue);
+  // generalUtils_debugShowBytesDec(singlewire3a_debugValues, 4);
 }
 
 void runAsSlave() {

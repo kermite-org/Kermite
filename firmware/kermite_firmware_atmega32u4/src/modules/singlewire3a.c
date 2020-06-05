@@ -5,7 +5,13 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-uint8_t singlewire3a_debugValues[4] = { 0 };
+//単線通信
+//パルス幅で0/1を表す
+//パルス幅計測による受信
+//100kpbs
+//安定
+
+uint8_t singlewire3_debugValues[4] = { 0 };
 
 //---------------------------------------------
 
@@ -66,9 +72,7 @@ static inline uint8_t signalPin_read() {
 //---------------------------------------------
 //timing debug pin
 
-#define EnableTimingDebugPin
-
-#ifdef EnableTimingDebugPin
+#ifdef SINGLEWIRE_ENABLE_TIMING_DEBUG_PINS
 
 #define pinDebug P_F4
 #define pinDebug_PORT PORTF
@@ -96,8 +100,10 @@ static void debug_timingPinLow() {}
 //---------------------------------------------
 
 static inline void delayUnit(uint8_t t) {
-  // _delay_loop_1(t * 12); //about 80kbps
-  _delay_loop_1(t * 31); //about 40kbps
+
+  // _delay_loop_1(t * 31); //about 40kbps
+  //_delay_loop_1(t * 12); //about 80kbps
+  _delay_loop_1(t * 8); //about 100kbps
 }
 
 /*
@@ -184,17 +190,17 @@ uint8_t singlewire_receiveFrame(uint8_t *rxbuf, uint8_t capacity) {
   if (t0 == 0) {
     goto escape;
   }
-  singlewire3a_debugValues[0] = t0;
+  singlewire3_debugValues[0] = t0;
   skipLow();
   //measure reference one
   t1 = measureHigh();
   if (t1 == 0) {
     goto escape;
   }
-  singlewire3a_debugValues[1] = t1;
+  singlewire3_debugValues[1] = t1;
 
   TH = (t0 + t1) >> 1;
-  singlewire3a_debugValues[2] = TH;
+  singlewire3_debugValues[2] = TH;
 
   while (bi < capacity) {
     uint8_t value = 0;

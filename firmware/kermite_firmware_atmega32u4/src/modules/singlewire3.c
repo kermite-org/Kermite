@@ -5,7 +5,11 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-uint16_t singlewire3_debugValue = 0;
+//単線通信
+//パルスのDuty比で0/1を表す
+//20kbps
+
+uint8_t singlewire3_debugValues[4] = { 0 };
 
 //---------------------------------------------
 
@@ -66,9 +70,7 @@ static inline uint8_t signalPin_read() {
 //---------------------------------------------
 //timing debug pin
 
-//#define EnableTimingDebugPin
-
-#ifdef EnableTimingDebugPin
+#ifdef SINGLEWIRE_ENABLE_TIMING_DEBUG_PINS
 
 #define pinDebug P_F4
 #define pinDebug_PORT PORTF
@@ -96,8 +98,8 @@ static void debug_timingPinLow() {}
 //---------------------------------------------
 
 static inline void delayUnit(uint8_t t) {
-  // _delay_loop_1(t);     //200us/byte, 40kbps
-  _delay_loop_1(t * 2); //400us/byte, 20kbps
+  // _delay_loop_1(t);     //about 40kbps
+  _delay_loop_1(t * 2); //about 20kbps
 }
 
 /*
