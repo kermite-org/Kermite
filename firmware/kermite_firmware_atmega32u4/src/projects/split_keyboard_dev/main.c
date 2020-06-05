@@ -267,12 +267,12 @@ void runAsMaster() {
   uint16_t cnt = 0;
   while (1) {
     cnt++;
-    if (cnt % 6 == 0) {
+    if (cnt % 4 == 0) {
       keyMatrixScanner_update();
       processKeyStatesUpdate();
       outputLED1(pressedKeyCount > 0);
     }
-    if (cnt % 6 == 3) {
+    if (cnt % 4 == 2) {
       pullAltSideKeyStates();
     }
     if (cnt % 2000 == 0) {
@@ -328,7 +328,7 @@ void runAsSlave() {
   uint16_t cnt = 0;
   while (1) {
     cnt++;
-    if (cnt % 6 == 0) {
+    if (cnt % 4 == 0) {
       keyMatrixScanner_update();
       pressedKeyCount = checkIfSomeKeyPressed();
       outputLED1(pressedKeyCount > 0);
