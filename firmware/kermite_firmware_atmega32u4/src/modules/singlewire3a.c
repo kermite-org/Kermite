@@ -96,10 +96,9 @@ static void debug_timingPinLow() {}
 //---------------------------------------------
 
 static inline void delayUnit(uint8_t t) {
-
-  // _delay_loop_1(t * 31); //about 40kbps
-  //_delay_loop_1(t * 12); //about 80kbps
-  _delay_loop_1(t * 8); //about 100kbps
+  // _delay_loop_1(t * 31); //40kbps
+  //_delay_loop_1(t * 12); //80kbps
+  _delay_loop_1(t * 8); //100kbps
 }
 
 /*

@@ -1,13 +1,15 @@
-#include "singlewire3.h"
 #include "bit_operations.h"
 #include "pio.h"
+#include "singlewire3.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <util/delay.h>
 
 //単線通信
-//パルスのDuty比で0/1を表す
-//20kbps
+//singlewire3aの改良版
+//パルス幅で0/1を表す
+//パルス幅計測による受信
+//100kbps
 
 uint8_t singlewire3_debugValues[4] = { 0 };
 
@@ -24,11 +26,13 @@ uint8_t singlewire3_debugValues[4] = { 0 };
 
 #if defined(SINGLEWIRE_SIGNAL_PIN_PD0)
 #define dBit 0
+#define dBitMask 0x01
 #define dISCx0 ISC00
 #define dINTx INT0
 #define dINTx_vect INT0_vect
 #elif defined(SINGLEWIRE_SIGNAL_PIN_PD2)
 #define dBit 2
+#define dBitMask 0x04
 #define dISCx0 ISC20
 #define dINTx INT2
 #define dINTx_vect INT2_vect
@@ -72,15 +76,15 @@ static inline uint8_t signalPin_read() {
 #define pinDebug_PORT PORTF
 #define pinDebug_Bit 4
 
-static void debug_initTimeDebugPin() {
+static inline void debug_initTimeDebugPin() {
   pio_setOutput(pinDebug);
 }
 
-static void debug_timingPinHigh() {
+static inline void debug_timingPinHigh() {
   bit_on(pinDebug_PORT, pinDebug_Bit);
 }
 
-static void debug_timingPinLow() {
+static inline void debug_timingPinLow() {
   bit_off(pinDebug_PORT, pinDebug_Bit);
 }
 #else
@@ -93,27 +97,40 @@ static void debug_timingPinLow() {}
 
 //---------------------------------------------
 
-static inline void delayUnit(uint8_t t) {
-  //_delay_loop_1(t);     //40kbps
-  _delay_loop_1(t * 2); // 20kbps
+static inline void delayCore(uint8_t t) {
+  _delay_loop_1(t);
 }
 
-/*
-HighとLowの時間の比で0/1を表す
-high8, low2 ... 1
-high3, low7 ... 0
-*/
-static void writeLogical(uint8_t val) {
-  if (val > 0) {
-    signalPin_setHigh();
-    delayUnit(80);
-    signalPin_setLow();
-    delayUnit(20);
-  } else {
-    signalPin_setHigh();
-    delayUnit(30);
-    signalPin_setLow();
-    delayUnit(70);
+static inline void delayUnit(uint8_t t) {
+  //_delay_loop_1(t * 27); //50kbps
+  _delay_loop_1(t * 10); //100kbps
+  //_delay_loop_1(t * 7); //130kbps
+}
+
+//Highのパルス幅で0/1を表す
+
+static inline void emitLogicalOne() {
+  signalPin_setHigh();
+  delayUnit(3);
+  signalPin_setLow();
+  delayUnit(1);
+}
+
+static inline void emitLogicalZero() {
+  signalPin_setHigh();
+  delayUnit(1);
+  signalPin_setLow();
+  delayUnit(1);
+}
+
+static void emitByte(uint8_t value) {
+  for (int8_t j = 7; j >= 0; j--) {
+    uint8_t f = (value >> j) & 1;
+    if (f) {
+      emitLogicalOne();
+    } else {
+      emitLogicalZero();
+    }
   }
 }
 
@@ -122,84 +139,91 @@ void singlewire_sendFrame(uint8_t *txbuf, uint8_t len) {
 
   signalPin_startTransmit();
   signalPin_setLow();
-  delayUnit(100);
-  delayUnit(100);
+  delayCore(50);
 
-  for (uint8_t i = 0; i < len; i++) {
-    bool isLast = i == len - 1;
-    for (int8_t j = 7; j >= 0; j--) {
-      uint8_t val = (txbuf[i] >> j) & 1;
-      writeLogical(val);
+  emitLogicalZero(); //reference zero
+  emitLogicalOne();  //reference one
+
+  uint8_t *p = txbuf;
+  uint8_t *p_end = txbuf + len;
+  while (1) {
+    emitByte(*p++);
+    if (p == p_end) {
+      break;
     }
-    writeLogical(isLast);
+    emitLogicalZero();
   }
-
+  emitLogicalOne();
   signalPin_endTransmit_standby();
-  delayUnit(100);
   bit_on(EIFR, dINTx);
   sei();
 }
 
-#define ReadAbort 2
+//信号がLOWのときに次にパルスが立ち上がるまで待つ
+//信号線は非通信状態でinput pullupなので、LOWの状態が続いて無限ループになることは考慮しない
+static inline void skipLow() {
+  while (!(dPIN & dBitMask)) {}
+}
 
-static uint8_t readFragment() {
+static uint8_t measureHigh() {
   uint8_t t0 = 0;
-  uint8_t t1 = 0;
-
   debug_timingPinHigh();
-  while (signalPin_read() == 1 && ++t0 != 0) {
-    delayUnit(1);
-  }
-  if (t0 == 0) {
-    return ReadAbort;
-  }
-
+  while (signalPin_read() != 0 && ++t0 != 0) {}
   debug_timingPinLow();
-  while (signalPin_read() == 0 && ++t1 != 0) {
-    delayUnit(1);
-  }
-  if (t1 == 0) {
-    return ReadAbort;
-  }
-  uint8_t dur = t0 + t1;
-  // singlewire3_debugValue = dur;
-  uint8_t mid = dur >> 1;
-  return t0 > mid ? 1 : 0;
+  return t0;
 }
 
 uint8_t singlewire_receiveFrame(uint8_t *rxbuf, uint8_t capacity) {
-  debug_timingPinLow();
   uint8_t bi = 0;
+  uint8_t t0, t1, TH;
+  uint8_t value, m, f, m1, isEnd;
 
-  uint8_t t0 = 0;
-  while (signalPin_read() == 0 && ++t0 != 0) {
-    delayUnit(1);
-  }
-  // singlewire3_debugValue = t0;
+  //相手がまだ送信を開始していない場合、送信開始を待つ
+  measureHigh();
+
+  skipLow();
+  //measure reference zero
+  t0 = measureHigh();
   if (t0 == 0) {
     goto escape;
   }
+  skipLow();
+  //measure reference one
+  t1 = measureHigh();
+  if (t1 == 0) {
+    goto escape;
+  }
+  TH = (t0 + t1) >> 1;
 
   while (bi < capacity) {
-    uint8_t value = 0;
+    value = 0;
     for (int8_t j = 7; j >= 0; j--) {
-      uint8_t f = readFragment();
-      if (f == ReadAbort) {
+      skipLow();
+      m = measureHigh();
+      if (m == 0) {
         goto escape;
       }
+      f = m > TH;
       value |= f << j;
     }
     rxbuf[bi++] = value;
-
-    uint8_t isEnd = readFragment();
-    if (isEnd == ReadAbort) {
+    skipLow();
+    m1 = measureHigh();
+    if (m1 == 0) {
       goto escape;
     }
-    if (isEnd == 1) {
+    isEnd = m1 > TH;
+    if (isEnd) {
       break;
     }
   }
+  skipLow();
+
   debug_timingPinHigh();
+
+  singlewire3_debugValues[0] = t0;
+  singlewire3_debugValues[1] = t1;
+  singlewire3_debugValues[2] = TH;
   bit_on(EIFR, dINTx);
   return bi;
 escape:

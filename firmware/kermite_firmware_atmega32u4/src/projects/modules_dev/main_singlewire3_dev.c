@@ -67,11 +67,13 @@ void emitDev() {
   txbuf[2] = 0x0F;
   txbuf[3] = 0x3D;
   txbuf[4] = 0x12;
-  singlewire_sendFrame(txbuf, 5);
-  uint8_t len = singlewire_receiveFrame(rxbuf, 5);
+
+  uint8_t n = 5;
+  singlewire_sendFrame(txbuf, n);
+  uint8_t len = singlewire_receiveFrame(rxbuf, n);
   if (len > 0) {
     generalUtils_debugShowBytes(rxbuf, len);
-    // generalUtils_debugShowBytesDec(singlewire3a_debugValues, 4);
+    generalUtils_debugShowBytesDec(singlewire3_debugValues, 4);
   }
 }
 
