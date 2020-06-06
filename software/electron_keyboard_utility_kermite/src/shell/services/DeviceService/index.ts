@@ -71,7 +71,7 @@ export class DeviceService {
     }
   }
 
-  get IsOpen(): boolean {
+  get isOpen(): boolean {
     return !!this.deviceWrapper;
   }
 

@@ -6,6 +6,7 @@ import { IntervalTimerWrapper } from '../InputLogicSimulator/IntervalTimerWrappe
 import * as CL from './DeviceCoreLogicSimulator';
 import { converProfileDataToBlobBytes } from './ProfileDataBinaryPacker';
 import { generateNumberSequence } from '~funcs/Utils';
+import { IKeyboardConfig } from '~defs/ConfigTypes';
 
 function compareArray(ar0: any[], ar1: any[]): boolean {
   return (
@@ -17,15 +18,41 @@ function compareArray(ar0: any[], ar1: any[]): boolean {
 export namespace InputLogicSimulatorD {
   const tickerTimer = new IntervalTimerWrapper();
 
+  const local = new (class {
+    isSideBranMode: boolean = false;
+  })();
+
+  function updateProfileDataBlob() {
+    const prof = appGlobal.profileManager.getCurrentProfile();
+    const lang =
+      appGlobal.keyboardConfigProvider.keyboardConfig.keyboardLanguage;
+    if (prof && lang) {
+      const bytes = converProfileDataToBlobBytes(prof, lang);
+      CL.coreLogic_writeProfileDataBlob(bytes);
+    }
+  }
+
   function onProfileStatusChanged(
     changedStatus: Partial<IProfileManagerStatus>
   ) {
     if (changedStatus.loadedProfileData) {
       console.log(`logicSimulator, profile data received`);
-      const bytes = converProfileDataToBlobBytes(
-        changedStatus.loadedProfileData
-      );
-      CL.coreLogic_writeProfileDataBlob(bytes);
+      updateProfileDataBlob();
+    }
+  }
+
+  function onKeyboardConfigChanged(changedConfig: Partial<IKeyboardConfig>) {
+    if (changedConfig.behaviorMode) {
+      const isSideBrainMode = changedConfig.behaviorMode === 'SideBrain';
+      if (local.isSideBranMode !== isSideBrainMode) {
+        console.log({ isSideBrainMode });
+        appGlobal.deviceService.setSideBrainMode(isSideBrainMode);
+        local.isSideBranMode = isSideBrainMode;
+      }
+    }
+    if (changedConfig.keyboardLanguage) {
+      console.log({ lang: changedConfig.keyboardLanguage });
+      updateProfileDataBlob();
     }
   }
 
@@ -46,24 +73,18 @@ export namespace InputLogicSimulatorD {
     }
   }
 
-  let useSideBrainMode = false;
-
   async function initialize() {
-    useSideBrainMode = true;
-
     appGlobal.profileManager.subscribeStatus(onProfileStatusChanged);
-    if (useSideBrainMode) {
-      appGlobal.deviceService.setSideBrainMode(true);
-    }
-
+    appGlobal.keyboardConfigProvider.subscribeStatus(onKeyboardConfigChanged);
     appGlobal.deviceService.subscribe(onRealtimeKeyboardEvent);
     tickerTimer.start(processTicker, 5);
   }
 
   async function terminate() {
     appGlobal.deviceService.unsubscribe(onRealtimeKeyboardEvent);
-    if (useSideBrainMode) {
+    if (local.isSideBranMode) {
       appGlobal.deviceService.setSideBrainMode(false);
+      local.isSideBranMode = false;
     }
     tickerTimer.stop();
   }

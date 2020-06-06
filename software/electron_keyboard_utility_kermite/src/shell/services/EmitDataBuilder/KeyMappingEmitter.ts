@@ -10,6 +10,7 @@ import { appGlobal } from '../appGlobal';
 import { writeUint16LE, writeUint8 } from './Helpers';
 import { converProfileDataToBlobBytes } from '../InputLogicSimulatorD/ProfileDataBinaryPacker';
 import { delayMs } from '~funcs/Utils';
+import { IKeyboardLanguage, IKeyboardBehaviorMode } from '~defs/ConfigTypes';
 
 /*
 Data format for the keymapping data stored in AVR's EEPROM
@@ -59,20 +60,30 @@ export namespace KeyMappingEmitter {
   }
 
   function createLowLevelKeyAssignsDataSet(
-    profileData: IProfileData
+    profileData: IProfileData,
+    lang: IKeyboardLanguage
   ): ILowLevelKeyAssignsDataSet {
     return {
       keyNum: profileData.keyboardShape.keyUnits.length,
       layerNum: profileData.layers.length,
-      assignsDataBytes: converProfileDataToBlobBytes(profileData)
+      assignsDataBytes: converProfileDataToBlobBytes(profileData, lang)
     };
   }
 
-  export function emitKeyAssignsToDevice(editModel: IProfileData) {
+  export function emitKeyAssignsToDevice(
+    editModel: IProfileData,
+    lang: IKeyboardLanguage
+  ) {
+    const ds = appGlobal.deviceService;
+
+    if (!ds.isOpen) {
+      console.log(`device is not connected`);
+      return;
+    }
     console.log(emitKeyAssignsToDevice.name);
 
     const data = makeKeyAssignsTransmitData(
-      createLowLevelKeyAssignsDataSet(editModel)
+      createLowLevelKeyAssignsDataSet(editModel, lang)
     );
     const checksum = calcChecksum(data);
     const dataLength = data.length;
@@ -92,7 +103,7 @@ export namespace KeyMappingEmitter {
       0,
       dataLength
     );
-    const ds = appGlobal.deviceService;
+
     (async () => {
       try {
         console.log('writing...');

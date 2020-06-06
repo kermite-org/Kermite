@@ -11,6 +11,7 @@ import {
 } from '~funcs/Utils';
 import { ModifierVirtualKey, isModifierVirtualKey } from '~defs/VirtualKeys';
 import { HidKeyCodes } from '~defs/HidKeyCodes';
+import { IKeyboardLanguage } from '~defs/ConfigTypes';
 
 /*
 Key Assigns Restriction
@@ -34,6 +35,7 @@ interface IRawLayerInfo {
 }
 
 const localContext = new (class {
+  keyboardLanguage: IKeyboardLanguage = 'US';
   layersDict: { [layerId: string]: IRawLayerInfo } = {};
 })();
 
@@ -79,6 +81,8 @@ function encodeAssignOperation(op: IAssignOperation | undefined): number[] {
       return [(tt << 6) | (mods << 2), 0];
     } else {
       const mods = makeAttachedModifiersBits(op.attachedModifiers);
+      const lang = localContext.keyboardLanguage;
+      //todo: US/JP対応
       const hidKey = HidKeyCodes[vk];
       return [(tt << 6) | (mods << 2) | ((hidKey >> 8) & 0x03), hidKey];
     }
@@ -202,7 +206,11 @@ function hexBytes(bytes: number[]) {
   return bytes.map((b) => `00${b.toString(16)}`.slice(-2)).join(' ');
 }
 
-export function converProfileDataToBlobBytes(profile: IProfileData): number[] {
+export function converProfileDataToBlobBytes(
+  profile: IProfileData,
+  keyboardLanguage: IKeyboardLanguage
+): number[] {
+  localContext.keyboardLanguage = keyboardLanguage;
   localContext.layersDict = createDictionaryFromKeyValues(
     profile.layers.map((la, idx) => [
       la.layerId,
