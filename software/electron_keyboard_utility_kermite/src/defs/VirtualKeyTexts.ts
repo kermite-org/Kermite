@@ -84,7 +84,7 @@ export const VirtualKeyTexts: { [key in VirtualKey]?: string } = {
   K_Minus: '-',
   K_Underscore: '_',
   K_BackSlash: '\\',
-  K_Yen: '\\',
+  K_Yen: '¥',
   K_DoubleQuote: '"',
   K_Sharp: '#',
   K_Dollar: '$',
