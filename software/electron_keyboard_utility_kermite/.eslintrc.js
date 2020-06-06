@@ -29,6 +29,7 @@ module.exports = {
     '@typescript-eslint/ban-ts-ignore': 0,
     'react/display-name': 0,
     'prefer-const': 0,
-    'no-console': 1
+    'no-console': 1,
+    'react/no-unknown-property': 0
   }
 };

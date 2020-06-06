@@ -4,27 +4,40 @@ import { h } from '~ui2/views/basis/qx';
 import { ProfileManagementPart } from './KeyAssingEditPage/ProfilesSection/ProfileManagementPart';
 import { CustomWindowFrame } from './WindowFrame/CustomWindowFrame';
 import { UiTheme } from '~ui2/views/common/UiTheme';
+import { DeviceControlSection } from './KeyAssingEditPage/DeviceControlSection';
 
 export function ConfiguratorSiteRootContent() {
   const cssPageRoot = css`
     height: 100%;
     display: flex;
     flex-direction: column;
-  `;
 
-  const KeyAssignsEditPageFrame = css`
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    > * {
+    > .topRow {
+      flex-shrink: 0;
+      display: flex;
+      justify-content: space-between;
+      background: #000;
+      height: 40px;
+      align-items: center;
+    }
+
+    > .mainRow {
       flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      > * {
+        flex-grow: 1;
+      }
     }
   `;
 
   return (
     <div css={cssPageRoot}>
-      <ProfileManagementPart />
-      <div css={KeyAssignsEditPageFrame}>
+      <div className="topRow">
+        <ProfileManagementPart />
+        <DeviceControlSection />
+      </div>
+      <div className="mainRow">
         <KeyAssignEditPage />
       </div>
     </div>
