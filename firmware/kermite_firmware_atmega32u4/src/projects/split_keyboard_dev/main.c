@@ -14,6 +14,12 @@
 #include <stdio.h>
 #include <util/delay.h>
 
+extern uint8_t singlewire3_debugValues[4];
+
+uint8_t *getDebugValuesPointer() {
+  return singlewire3_debugValues;
+}
+
 //---------------------------------------------
 //board io
 
@@ -215,11 +221,18 @@ void configuratorServantStateHandler(uint8_t state) {
 //---------------------------------------------
 //master
 
+uint16_t tryCount = 0;
+uint16_t okCount = 0;
+
 void pullAltSideKeyStates() {
   sw_txbuf[0] = 0x40;
+  tryCount++;
+  cli();
   singlewire_sendFrame(sw_txbuf, 1);
   uint8_t sz = singlewire_receiveFrame(sw_rxbuf, SingleWireMaxPacketSize);
+  sei();
   if (sz > 0) {
+
     uint8_t cmd = sw_rxbuf[0];
     if (cmd == 0x41 && sz == 1 + NumKeySlotBytesHalf) {
       uint8_t *payloadBytes = sw_rxbuf + 1;
@@ -227,6 +240,7 @@ void pullAltSideKeyStates() {
       generalUtils_copyBitFlagsBuf(nextKeyStateFlags, NumKeySlotsHalf, payloadBytes, 0, NumKeySlotsHalf);
       // toggleLED0();
       // generalUtils_debugShowBytes(sw_rxbuf, sz);
+      okCount++;
     }
   }
 }
@@ -275,6 +289,10 @@ void runAsMaster() {
     if (cnt % 4 == 2) {
       pullAltSideKeyStates();
     }
+    if (cnt % 1000 == 0) {
+      uint8_t rate = (uint32_t)okCount * 100 / tryCount;
+      // printf("%d/%d, %d%%\n", okCount, tryCount, rate);
+    }
     if (cnt % 2000 == 0) {
       outputLED0(true);
     }
@@ -297,6 +315,7 @@ void sendKeyStateResponsePacketToMaster() {
 }
 
 void onRecevierInterruption() {
+  tryCount++;
   uint8_t sz = singlewire_receiveFrame(sw_rxbuf, SingleWireMaxPacketSize);
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
@@ -304,8 +323,11 @@ void onRecevierInterruption() {
       //親-->子, キー状態要求パケット受信, キー状態応答パケットを返す
       sendKeyStateResponsePacketToMaster();
       // toggleLED0();
+      okCount++;
     }
   }
+  // printf("sz: %d\n", sz);
+  // generalUtils_debugShowBytesDec(getDebugValuesPointer(), 4);
 }
 
 bool checkIfSomeKeyPressed() {
@@ -324,6 +346,7 @@ void runAsSlave() {
 
   singlewire_initialize();
   singlewire_setupInterruptedReceiver(onRecevierInterruption);
+  sei();
 
   uint16_t cnt = 0;
   while (1) {
@@ -333,6 +356,11 @@ void runAsSlave() {
       pressedKeyCount = checkIfSomeKeyPressed();
       outputLED1(pressedKeyCount > 0);
     }
+    if (cnt % 1000 == 0) {
+      uint8_t rate = (uint32_t)okCount * 100 / tryCount;
+      // printf("%d/%d, %d%%\n", okCount, tryCount, rate);
+    }
+
     if (cnt % 4000 == 0) {
       outputLED0(true);
     }

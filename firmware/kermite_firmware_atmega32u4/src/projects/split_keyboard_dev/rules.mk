@@ -9,6 +9,14 @@ MODULE_SRCS += ConfigurationMemoryReader.c
 MODULE_SRCS += keyboardCoreLogic.c
 
 CFLAGS += -DSINGLEWIRE_SIGNAL_PIN_PD2
-MODULE_SRCS += singlewire3a.c
+CFLAGS += -DSINGLEWIRE_ENABLE_TIMING_DEBUG_PINS
+#MODULE_SRCS += singlewire3.c
+#MODULE_SRCS += singlewire3a.c
+#MODULE_SRCS += singlewire3b.c
+#MODULE_SRCS += singlewire3c.c
+
+ASFLAGS += -DSINGLEWIRE_SIGNAL_PIN_PD2
+#ASFLAGS += -DSINGLEWIRE_ENABLE_TIMING_DEBUG_PINS
+MODULE_ASM_SRCS += singlewire3d.S
 
 PROJECT_SRCS += main.c
