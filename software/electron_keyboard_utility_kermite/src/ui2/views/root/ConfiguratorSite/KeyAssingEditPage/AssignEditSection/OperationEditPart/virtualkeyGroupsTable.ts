@@ -155,5 +155,6 @@ export const virtualKeyGroupsTable2: VirtualKey[][] = [
   [...assignKeysGroup3],
   assignKeysGroup4,
   [...assignKeysGroup2, ...assignKeysGroup6],
-  [...assignKeysGroup5, ...assignKeysGroup7]
+  assignKeysGroup5
+  // assignKeysGroup7
 ];
