@@ -10,6 +10,7 @@
 //パルス幅で0/1を表す
 //パルス幅計測による受信
 //100kbps
+//安定
 
 uint8_t singlewire3_debugValues[4] = { 0 };
 
@@ -26,13 +27,11 @@ uint8_t singlewire3_debugValues[4] = { 0 };
 
 #if defined(SINGLEWIRE_SIGNAL_PIN_PD0)
 #define dBit 0
-#define dBitMask 0x01
 #define dISCx0 ISC00
 #define dINTx INT0
 #define dINTx_vect INT0_vect
 #elif defined(SINGLEWIRE_SIGNAL_PIN_PD2)
 #define dBit 2
-#define dBitMask 0x04
 #define dISCx0 ISC20
 #define dINTx INT2
 #define dINTx_vect INT2_vect
@@ -135,8 +134,6 @@ static void emitByte(uint8_t value) {
 }
 
 void singlewire_sendFrame(uint8_t *txbuf, uint8_t len) {
-  cli();
-
   signalPin_startTransmit();
   signalPin_setLow();
   delayCore(50);
@@ -152,23 +149,24 @@ void singlewire_sendFrame(uint8_t *txbuf, uint8_t len) {
       break;
     }
     emitLogicalZero();
+    delayUnit(1);
   }
+  delayUnit(1);
   emitLogicalOne();
   signalPin_endTransmit_standby();
   bit_on(EIFR, dINTx);
-  sei();
 }
 
 //信号がLOWのときに次にパルスが立ち上がるまで待つ
 //信号線は非通信状態でinput pullupなので、LOWの状態が続いて無限ループになることは考慮しない
 static inline void skipLow() {
-  while (!(dPIN & dBitMask)) {}
+  while (!signalPin_read()) {}
 }
 
 static uint8_t measureHigh() {
   uint8_t t0 = 0;
   debug_timingPinHigh();
-  while (signalPin_read() != 0 && ++t0 != 0) {}
+  while (signalPin_read() && ++t0 != 0) {}
   debug_timingPinLow();
   return t0;
 }
@@ -249,7 +247,6 @@ void singlewire_setupInterruptedReceiver(void (*_pReceiverCallback)(void)) {
   //信号ピンがHIGHからLOWに変化したときに割り込みを生成
   bits_spec(EICRA, dISCx0, 0b11, 0b10);
   bit_on(EIMSK, dINTx);
-  sei();
 }
 
 ISR(dINTx_vect) {

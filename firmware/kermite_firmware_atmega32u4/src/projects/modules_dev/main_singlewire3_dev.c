@@ -11,19 +11,7 @@
 #include "singlewire3.h"
 #include "xf_eeprom.h"
 
-#if 0
 extern uint8_t singlewire3_debugValues[4];
-
-uint8_t* getDebugValuesPointer(){
-  return singlewire3_debugValues;
-}
-#else
-extern uint8_t *signlewire3_getDebugValuesPtr();
-
-uint8_t *getDebugValuesPointer() {
-  return signlewire3_getDebugValuesPtr();
-}
-#endif
 
 //---------------------------------------------
 //board IO
@@ -73,6 +61,9 @@ uint8_t rxbuf[NumMaxDataBytes];
 
 uint8_t cntVal = 0;
 
+uint16_t tryCount = 0;
+uint16_t okCount = 0;
+
 void emitDev() {
   txbuf[0] = 0xCA;
   txbuf[1] = cntVal++;
@@ -80,7 +71,8 @@ void emitDev() {
   txbuf[3] = 0x3D;
   txbuf[4] = 0x12;
 
-  uint8_t n = 5;
+  uint8_t n = 2;
+  tryCount++;
   cli();
   singlewire_sendFrame(txbuf, n);
   // _delay_us(10);
@@ -88,7 +80,8 @@ void emitDev() {
   sei();
   if (len > 0) {
     generalUtils_debugShowBytes(rxbuf, len);
-    generalUtils_debugShowBytesDec(getDebugValuesPointer(), 4);
+    // generalUtils_debugShowBytesDec(singlewire3_debugValues, 4);
+    okCount++;
   }
 }
 
@@ -109,6 +102,10 @@ void runAsMaster() {
     if (cnt % 1000 == 0) {
       emitDev();
     }
+    if (cnt % 1000 == 100) {
+      uint8_t rate = (uint32_t)okCount * 100 / tryCount;
+      printf("%d/%d, %d%%\n", okCount, tryCount, rate);
+    }
     _delay_ms(1);
     cnt++;
   }
@@ -118,9 +115,8 @@ void runAsMaster() {
 //development slave
 
 void onRecevierInterruption() {
-
+  tryCount++;
   uint8_t len = singlewire_receiveFrame(rxbuf, NumMaxDataBytes);
-
   // printf("len: %d\n", len);
   if (len > 0) {
     generalUtils_copyBytes(txbuf, rxbuf, len);
@@ -128,7 +124,10 @@ void onRecevierInterruption() {
     txbuf[3] += 1;
     singlewire_sendFrame(txbuf, len);
     generalUtils_debugShowBytes(rxbuf, len);
+    okCount++;
   }
+  printf("len: %d\n", len);
+  generalUtils_debugShowBytesDec(singlewire3_debugValues, 4);
   // uint8_t *pDebugValues = signlewire3_getDebugValuesPtr();
   //generalUtils_debugShowBytesDec(getDebugValuesPointer(), 4);
   // generalUtils_debugShowBytesDec(singlewire3a_debugValues, 4);
@@ -150,8 +149,9 @@ void runAsSlave() {
     if (cnt % 4000 == 1) {
       outputLED0(false);
     }
-    if (cnt % 1000 == 0) {
-      // printf("cnt: %d\n", cnt);
+    if (cnt % 1000 == 100) {
+      uint8_t rate = (uint32_t)okCount * 100 / tryCount;
+      // printf("%d/%d, %d%%\n", okCount, tryCount, rate);
     }
     _delay_ms(1);
     cnt++;

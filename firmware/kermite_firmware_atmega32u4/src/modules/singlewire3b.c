@@ -8,8 +8,7 @@
 //単線通信
 //パルス幅で0/1を表す
 //立ち上がり一定時間後の信号サンプリングによる受信
-//140kpbs
-//細かい調整が必要な割にたいして速度が上がらず
+//160kpbs
 
 uint8_t singlewire3_debugValues[4] = { 0 };
 
@@ -86,31 +85,11 @@ static inline void debug_timingPinLow() {
   bit_off(pinDebug_PORT, pinDebug_Bit);
 }
 
-// #define pinDebug2 P_F5
-// #define pinDebug2_PORT PORTF
-// #define pinDebug2_Bit 5
-
-// static inline void debug_initTimeDebugPin2() {
-//   pio_setOutput(pinDebug2);
-// }
-
-// static inline void debug_timingPin2High() {
-//   bit_on(pinDebug2_PORT, pinDebug2_Bit);
-// }
-
-// static inline void debug_timingPin2Low() {
-//   bit_off(pinDebug2_PORT, pinDebug2_Bit);
-// }
-
 #else
 
 static void debug_initTimeDebugPin() {}
 static void debug_timingPinHigh() {}
 static void debug_timingPinLow() {}
-
-// static void debug_initTimeDebugPin2() {}
-// static void debug_timingPin2High() {}
-// static void debug_timingPin2Low() {}
 
 #endif
 
@@ -124,21 +103,30 @@ static inline void delayUnit(uint8_t t) {
   _delay_loop_1(t * 5);
 }
 
-//通信速度140kbps程度で調整
+static inline void skipLow() {
+  while (signalPin_read() == 0) {}
+}
+
+static void skipHigh() {
+  uint8_t t0 = 0;
+  debug_timingPinHigh();
+  while (signalPin_read() != 0 && ++t0) {}
+  debug_timingPinLow();
+}
 
 //ビット送信
 //Highのパルス幅で0/1を表す
 static void writeLogical(uint8_t val) {
   if (val > 0) {
     signalPin_setHigh();
-    delayCore(15);
+    delayUnit(3);
     signalPin_setLow();
-    delayCore(7);
+    delayUnit(1);
   } else {
     signalPin_setHigh();
-    delayCore(2);
+    delayUnit(1);
     signalPin_setLow();
-    delayCore(10);
+    delayUnit(1);
   }
 }
 
@@ -146,21 +134,20 @@ static void writeLogical(uint8_t val) {
 //各パルスに対して、信号が立ち上がってから一定時間後にレベルを見て、そのパルスが表現しているビットの論理値を判別する
 static uint8_t readFragment() {
   debug_timingPinHigh();
-  delayCore(5);
+  delayUnit(1);
   debug_timingPinLow();
   uint8_t val = signalPin_read() ? 1 : 0;
   if (val) {
-    delayCore(10);
+    skipHigh();
   }
   return val;
 }
 
 void singlewire_sendFrame(uint8_t *txbuf, uint8_t len) {
-  cli();
-
   signalPin_startTransmit();
   signalPin_setLow();
-  delayUnit(2);
+  // delayUnit(2);
+  delayCore(30);
 
   for (uint8_t i = 0; i < len; i++) {
     bool isLast = i == len - 1;
@@ -173,19 +160,6 @@ void singlewire_sendFrame(uint8_t *txbuf, uint8_t len) {
 
   signalPin_endTransmit_standby();
   bit_on(EIFR, dINTx);
-  sei();
-}
-
-static void skipLow() {
-  uint8_t t0 = 255;
-  while (signalPin_read() == 0 && --t0 > 0) {}
-}
-
-static void skipHigh() {
-  uint8_t t0 = 255;
-  debug_timingPinHigh();
-  while (signalPin_read() != 0 && --t0 > 0) {}
-  debug_timingPinLow();
 }
 
 uint8_t singlewire_receiveFrame(uint8_t *rxbuf, uint8_t capacity) {
@@ -237,7 +211,6 @@ void singlewire_setupInterruptedReceiver(void (*_pReceiverCallback)(void)) {
   //信号ピンがHIGHからLOWに変化したときに割り込みを生成
   bits_spec(EICRA, dISCx0, 0b11, 0b10);
   bit_on(EIMSK, dINTx);
-  sei();
 }
 
 ISR(dINTx_vect) {

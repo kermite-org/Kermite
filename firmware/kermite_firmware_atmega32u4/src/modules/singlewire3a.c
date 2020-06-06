@@ -9,7 +9,6 @@
 //パルス幅で0/1を表す
 //パルス幅計測による受信
 //100kpbs
-//安定
 
 uint8_t singlewire3_debugValues[4] = { 0 };
 
@@ -121,8 +120,6 @@ static inline void waitBlank() {
 }
 
 void singlewire_sendFrame(uint8_t *txbuf, uint8_t len) {
-  cli();
-
   waitBlank();
   waitBlank();
 
@@ -157,7 +154,6 @@ void singlewire_sendFrame(uint8_t *txbuf, uint8_t len) {
   waitBlank();
   waitBlank();
   bit_on(EIFR, dINTx);
-  sei();
 }
 
 static uint8_t skipLow() {
@@ -247,7 +243,6 @@ void singlewire_setupInterruptedReceiver(void (*_pReceiverCallback)(void)) {
   //信号ピンがHIGHからLOWに変化したときに割り込みを生成
   bits_spec(EICRA, dISCx0, 0b11, 0b10);
   bit_on(EIMSK, dINTx);
-  sei();
 }
 
 ISR(dINTx_vect) {

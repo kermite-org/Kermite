@@ -5,7 +5,7 @@
 //単線通信
 //パルス幅で0/1を表す
 //singlewire2, singlewire3cをベースに調整
-//280kbps
+//240kbps
 
 //---------------------------------------------
 //module local variables
@@ -18,7 +18,8 @@ pReceiverCallback: .dc.w 0
 .section .bss
 
 //uint8_t signlewire3_debugValues[4]
-signlewire3_debugValues: .ds.b	4
+.global singlewire3_debugValues
+singlewire3_debugValues: .ds.b	4
 
 
 //---------------------------------------------
@@ -59,7 +60,7 @@ signlewire3_debugValues: .ds.b	4
   #define dBitMask 0x04
   #define dISCx0 ISC20
   #define dINTx INT2
-  #define dINTFx INTF0
+  #define dINTFx INTF2
 	#define dIsrRegConf_EICRA 0b00100000
   #define dINTx_vect INT2_vect
 #else
@@ -133,7 +134,7 @@ signlewire3_debugValues: .ds.b	4
 
 .macro nopn cnt:req
 	nop
-	.if \cnt
+	.if \cnt-1
 		nopn (\cnt-1),
 	.endif
 .endm
@@ -158,7 +159,7 @@ signlewire3_debugValues: .ds.b	4
 
 .macro emitLogicalOne
 	signalPin_setHigh
-	nopn 21
+	nopn 23
 	signalPin_setLow
 	delayCount CntLowDuration, r19
 .endm
@@ -231,8 +232,6 @@ void singlewire_sendFrame(uint8_t *buf, uint8_t len){
 .global singlewire_sendFrame
 .func singlewire_sendFrame
 singlewire_sendFrame:
-	;cli
-	//debug1Pin_setLow
 	
 	signalPin_startTransmit
 	signalPin_setLow
@@ -418,7 +417,7 @@ skipLow:
 void waitWhileHigh(){
 	w = 0
 	while(is_Hieh(PIN_SIGNAL)){
-		if(w > 60){
+		if(w > 200){
 			goto :abort
 		}
 		w++
@@ -447,6 +446,7 @@ uint8_t singlewire_receiveFrame(uint8_t* buf, uint8_t maxlen){
 	p = buf
 	p_end = buf + maxlen
 	cnt = 0
+	waitWhileHigh()
 	while(p < p_end){
 		//1バイト受信
 		[val, err] = receiveByteOne()
@@ -521,8 +521,7 @@ singlewire_receiveFrame:
 
 //abort:
 40:
-	delayCount 50
-	debug_timingPinHigh
+	delayCount 20
 	clearInterruptTriggerFlags
   ldi r24, 0
 	ret
@@ -561,7 +560,6 @@ singlewire_setupInterruptedReceiver:
 	sts EICRA, r24
 	sbi _SFR_IO_ADDR(EIMSK), dINTx
 
-  sei
 	ret
 .endfunc
 
@@ -598,22 +596,4 @@ dINTx_vect:
 	pop r0
 	reti
 .endfunc
-
-
-/*
-uint8_t* signlewire3_getDebugValuesPtr(){
-  return signlewire3_debugValues
-}
-*/
-.global signlewire3_getDebugValuesPtr
-.func signlewire3_getDebugValuesPtr
-signlewire3_getDebugValuesPtr:
-  lds r24, signlewire3_debugValues
-  lds r25, signlewire3_getDebugValuesPtr + 1
-  ret
-.endfunc
-
-
-
-
 
