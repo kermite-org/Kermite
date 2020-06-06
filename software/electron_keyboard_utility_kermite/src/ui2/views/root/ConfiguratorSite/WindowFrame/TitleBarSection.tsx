@@ -1,5 +1,5 @@
 import { css } from 'goober';
-import { sendIpcPacketSync } from '~ui2/models/dataSource/ipc';
+import { backendAgent } from '~ui2/models/dataSource/ipc';
 import { siteModel } from '~ui2/models/zAppDomain';
 import { h } from '~ui2/views/basis/qx';
 
@@ -31,7 +31,7 @@ const ReloadButtonPart = () => {
     cursor: pointer;
   `;
   const onReloadButton = () => {
-    sendIpcPacketSync({ reloadApplication: true });
+    backendAgent.reloadApplication();
   };
   const isDevelopment = location.protocol === 'http:';
   return (
@@ -51,15 +51,15 @@ const ControlButtonsPart = () => {
   };
 
   const onMinimizeButton = () => {
-    sendIpcPacketSync({ minimizeWindow: true });
+    backendAgent.minimizeWindow();
   };
 
   const onMaximizeButton = () => {
-    sendIpcPacketSync({ maximizeWindow: true });
+    backendAgent.maximizeWindow();
   };
 
   const onCloseButton = () => {
-    sendIpcPacketSync({ closeWindow: true });
+    backendAgent.closeWindow();
   };
 
   const cssButtonsBox = css`

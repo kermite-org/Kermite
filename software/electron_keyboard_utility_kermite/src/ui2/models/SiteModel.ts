@@ -16,7 +16,7 @@ export class SiteModel {
 
   setWidgetMode = (isWidgetMode: boolean) => {
     this._isWidgetMode = isWidgetMode;
-    sendIpcPacketSync({ widgetModeChanged: isWidgetMode });
+    backendAgent.widgetModeChanged(isWidgetMode);
   };
 
   onAppWindowEvents = (ev: IAppWindowEvent) => {

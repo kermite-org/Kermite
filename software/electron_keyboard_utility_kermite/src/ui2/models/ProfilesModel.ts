@@ -1,9 +1,8 @@
 import { ProfileProvider2 } from './dataSource/ProfileProvider2';
-import { IProfileManagerStatus } from '~defs/ipc';
+import { IProfileManagerStatus, IProfileManagerCommand } from '~defs/ipc';
 import { EditorModel } from './EditorModel';
-import { sendProfileManagerCommands } from '~ui2/models/dataSource/ipc';
+import { backendAgent } from '~ui2/models/dataSource/ipc';
 import { appUi } from './appGlobal';
-import { removeInvalidProfileAssigns } from './ProfileDataHelper';
 
 export class ProfilesModel {
   private profileProvider = new ProfileProvider2();
@@ -58,12 +57,20 @@ export class ProfilesModel {
     return undefined;
   }
 
+  private sendProfileManagerCommands(
+    ...commands: (IProfileManagerCommand | undefined)[]
+  ) {
+    backendAgent.executeProfileManagerCommands(
+      commands.filter((c) => c !== undefined) as IProfileManagerCommand[]
+    );
+  }
+
   createProfile = (newProfileName: string, breedName: string) => {
     const saveCommand = this.getSaveCommandIfDirty();
     const createCommand = {
       creatProfile: { name: newProfileName, breedName }
     };
-    sendProfileManagerCommands(saveCommand, createCommand);
+    this.sendProfileManagerCommands(saveCommand, createCommand);
   };
 
   loadProfile = (profileName: string) => {
@@ -72,7 +79,7 @@ export class ProfilesModel {
     }
     const saveCommand = this.getSaveCommandIfDirty();
     const loadCommand = { loadProfile: { name: profileName } };
-    sendProfileManagerCommands(saveCommand, loadCommand);
+    this.sendProfileManagerCommands(saveCommand, loadCommand);
   };
 
   renameProfile = (newProfileName: string) => {
@@ -81,7 +88,7 @@ export class ProfilesModel {
     const renameCommand = {
       renameProfile: { name: curProfName, newName: newProfileName }
     };
-    sendProfileManagerCommands(saveCommand, renameCommand);
+    this.sendProfileManagerCommands(saveCommand, renameCommand);
   };
 
   copyProfile = (newProfileName: string) => {
@@ -90,19 +97,19 @@ export class ProfilesModel {
     const copyCommand = {
       copyProfile: { name: curProfName, newName: newProfileName }
     };
-    sendProfileManagerCommands(saveCommand, copyCommand);
+    this.sendProfileManagerCommands(saveCommand, copyCommand);
   };
 
   saveProfile = () => {
     const saveCommand = this.getSaveCommandIfDirty();
     if (saveCommand) {
-      sendProfileManagerCommands(saveCommand);
+      this.sendProfileManagerCommands(saveCommand);
     }
   };
 
   deleteProfile = async () => {
     const curProfName = this.currentProfileName;
     const deleteCommand = { deleteProfile: { name: curProfName } };
-    sendProfileManagerCommands(deleteCommand);
+    this.sendProfileManagerCommands(deleteCommand);
   };
 }

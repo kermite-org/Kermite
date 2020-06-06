@@ -6,7 +6,7 @@ import {
 } from './ProfileManagementPart.model';
 import { reflectValue } from '~ui2/views/common/FormHelpers';
 import { ProfileSelectionMenuPart } from './ProfileSelectionMenu';
-import { sendIpcPacket } from '~ui2/models/dataSource/ipc';
+import { backendAgent } from '~ui2/models/dataSource/ipc';
 
 const ProfileSelectorView = (props: { vm: IProfileManagerViewModel }) => {
   const { vm } = props;
@@ -43,7 +43,7 @@ export const ProfileManagementPart = () => {
   const vm = makeProfileManagementViewModel();
 
   const onClickWrite = () => {
-    sendIpcPacket({ writeKeymappingToDevice: true });
+    backendAgent.writeKeyMappingToDevice();
   };
   return (
     <div css={cssProfileSelectionRow}>

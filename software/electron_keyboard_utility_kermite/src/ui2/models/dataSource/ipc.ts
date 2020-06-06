@@ -1,15 +1,15 @@
-import { IpcPacket, IBackendAgent, IProfileManagerCommand } from '~defs/ipc';
+import {
+  ISynchronousIpcPacket,
+  IBackendAgent,
+  IProfileManagerCommand
+} from '~defs/ipc';
 import { createXpcRenderer } from '~funcs/xpc/xpcRenderer';
 import { IpcRenderer } from 'electron';
 
 const ipcRenderer: IpcRenderer = (window as any).ipcRenderer;
 
-export function sendIpcPacketSync(packet: IpcPacket) {
-  ipcRenderer.sendSync('message', packet);
-}
-
-export function sendIpcPacket(packet: IpcPacket) {
-  ipcRenderer.send('message', packet);
+export function sendIpcPacketSync(packet: ISynchronousIpcPacket) {
+  ipcRenderer.sendSync('synchronousMessage', packet);
 }
 
 export function debugTrace(message: string) {
@@ -17,15 +17,7 @@ export function debugTrace(message: string) {
 }
 
 const xpcRenderer = createXpcRenderer((window as any).ipcRenderer);
+
 export const backendAgent = xpcRenderer.getBackendAgent<IBackendAgent>(
   'default'
 );
-
-export function sendProfileManagerCommands(
-  ...commands: (IProfileManagerCommand | undefined)[]
-) {
-  ipcRenderer.send(
-    'profileManagerCommands',
-    commands.filter((c) => c !== undefined)
-  );
-}
