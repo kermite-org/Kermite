@@ -46,16 +46,25 @@ export namespace InputLogicSimulatorD {
     }
   }
 
+  let useSideBrainMode = false;
+
   async function initialize() {
+    useSideBrainMode = true;
+
     appGlobal.profileManager.subscribeStatus(onProfileStatusChanged);
-    // appGlobal.deviceService.setSideBrainMode(true);
+    if (useSideBrainMode) {
+      appGlobal.deviceService.setSideBrainMode(true);
+    }
+
     appGlobal.deviceService.subscribe(onRealtimeKeyboardEvent);
     tickerTimer.start(processTicker, 5);
   }
 
   async function terminate() {
     appGlobal.deviceService.unsubscribe(onRealtimeKeyboardEvent);
-    // appGlobal.deviceService.setSideBrainMode(false);
+    if (useSideBrainMode) {
+      appGlobal.deviceService.setSideBrainMode(false);
+    }
     tickerTimer.stop();
   }
 
