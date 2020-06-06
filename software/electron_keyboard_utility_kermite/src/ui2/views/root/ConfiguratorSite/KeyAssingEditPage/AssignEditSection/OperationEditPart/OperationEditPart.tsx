@@ -104,11 +104,7 @@ export function OpertionEditPart() {
           <div>
             <div css={cssGroupBoxV}>
               {attachedModifierEntries.map((model) => (
-                <OperationCard
-                  model={model}
-                  key={model.sig}
-                  qxOptimizer="deepEqualExFn"
-                />
+                <OperationCard model={model} key={model.sig} />
               ))}
             </div>
           </div>
