@@ -1,6 +1,7 @@
 import * as path from 'path';
+import { IEnvironmentConfig } from '~defs/ConfigTypes';
 
-export const appConfig = {
+export const environmentConfig: IEnvironmentConfig = {
   isDevelopment: process.env.NODE_ENV === 'development'
 };
 

@@ -1,6 +1,6 @@
 import { appGlobal } from './appGlobal';
 import { IProfileManagerStatus } from '~defs/ipc';
-import { resolveFilePath } from '~shell/AppConfig';
+import { resolveFilePath } from '~shell/AppEnvironment';
 import {
   duplicateObjectByJsonStringifyParse,
   clampValue,

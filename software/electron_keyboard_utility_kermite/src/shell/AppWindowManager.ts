@@ -1,6 +1,6 @@
 import { BrowserWindow, Menu, Tray } from 'electron';
 import * as path from 'path';
-import { appConfig } from '~shell/AppConfig';
+import { environmentConfig } from '~shell/AppEnvironment';
 
 export class AppWindowManager {
   private mainWindow: BrowserWindow | null = null;
@@ -24,7 +24,7 @@ export class AppWindowManager {
 
     this.mainWindow = new BrowserWindow(options);
 
-    if (appConfig.isDevelopment) {
+    if (environmentConfig.isDevelopment) {
       this.mainWindow.loadURL('http://localhost:3700');
       this.mainWindow?.webContents.openDevTools();
     } else {

@@ -1,4 +1,4 @@
-import { resolveFilePath } from '~shell/AppConfig';
+import { resolveFilePath } from '~shell/AppEnvironment';
 import {
   fsIsFileExists,
   fsxReadJsonFile,
@@ -8,11 +8,11 @@ import {
 export class ApplicationStorage {
   readonly configFilePath = resolveFilePath('data/config.json');
   private data: any = {};
-  getItem(key: string): any {
+  getItem<T>(key: string): T | undefined {
     return this.data[key];
   }
 
-  setItem(key: string, value: any) {
+  setItem<T>(key: string, value: T) {
     this.data[key] = value;
   }
 
