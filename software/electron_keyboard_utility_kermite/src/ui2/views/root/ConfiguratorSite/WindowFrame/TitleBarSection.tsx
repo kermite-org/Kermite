@@ -33,7 +33,7 @@ const ReloadButtonPart = () => {
   const onReloadButton = () => {
     backendAgent.reloadApplication();
   };
-  const isDevelopment = location.protocol === 'http:';
+  const { isDevelopment } = siteModel;
   return (
     <div>
       {isDevelopment && (
