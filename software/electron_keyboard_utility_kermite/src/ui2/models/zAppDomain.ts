@@ -3,12 +3,16 @@ import { PlayerModel } from './PlayerModel';
 import { ProfilesModel } from './ProfilesModel';
 import { SiteModel } from './SiteModel';
 import { backendAgent } from './dataSource/ipc';
+import { KeyboardConfigModel } from './KeyboardConfigModel';
+import { ApplicationSettingsModel } from './ApplicationSettingsModel';
 
 export const appDomain = new (class {
   readonly editorModel = new EditorModel();
   readonly playerModel = new PlayerModel(this.editorModel);
   readonly profilesModel = new ProfilesModel(this.editorModel);
   readonly siteModel = new SiteModel();
+  readonly keyboardConfigModel = new KeyboardConfigModel();
+  readonly settingsModel = new ApplicationSettingsModel();
 
   initialize() {
     //debug
@@ -26,9 +30,13 @@ export const appDomain = new (class {
     this.profilesModel.initialize();
     // editorModel.loadProfileData(testProfileData);
     this.siteModel.initialize();
+    this.keyboardConfigModel.intialize();
+    this.settingsModel.initialize();
   }
 
   terminate() {
+    this.settingsModel.finalize();
+    this.keyboardConfigModel.finalize();
     this.playerModel.finalize();
     this.profilesModel.finalize();
     // debugTrace('end appDomain terminate');

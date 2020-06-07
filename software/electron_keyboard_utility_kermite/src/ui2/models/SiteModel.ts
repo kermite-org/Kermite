@@ -1,4 +1,4 @@
-import { sendIpcPacketSync, backendAgent } from './dataSource/ipc';
+import { backendAgent } from './dataSource/ipc';
 import { IAppWindowEvent } from '~defs/ipc';
 import { appUi } from './appGlobal';
 
