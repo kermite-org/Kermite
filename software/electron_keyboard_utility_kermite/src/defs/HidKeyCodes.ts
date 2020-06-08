@@ -1,5 +1,5 @@
 import { VirtualKey } from './VirtualKeys';
-import { IKeyboardLanguage } from './ConfigTypes';
+import { IKeyboardLayoutStandard } from './ConfigTypes';
 
 //HIDのキーコード定義, キーボードの言語やレイアウトによらない共通部分
 const enum HidKey {
@@ -379,9 +379,9 @@ const virutalKeyToHidKeyMapper_JP: {
 
 export function getHidKeyCodeEx(
   vk: VirtualKey,
-  lang: IKeyboardLanguage
+  layout: IKeyboardLayoutStandard
 ): number {
-  if (lang === 'US') {
+  if (layout === 'US') {
     return (
       virutalKeyToHidKeyMapper_Core[vk] || virutalKeyToHidKeyMapper_US[vk] || 0
     );

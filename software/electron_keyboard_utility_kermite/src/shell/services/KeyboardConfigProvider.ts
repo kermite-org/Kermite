@@ -1,6 +1,10 @@
 import { appGlobal } from './appGlobal';
 import { IKeyboardConfig, fallbackKeyboardConfig } from '~defs/ConfigTypes';
-import { removeArrayItems } from '~funcs/Utils';
+import {
+  removeArrayItems,
+  compareObjectByJsonStringify,
+  overwriteObjectProps
+} from '~funcs/Utils';
 
 type IStatusListener = (config: Partial<IKeyboardConfig>) => void;
 
@@ -30,19 +34,26 @@ export class KeyboardConfigProvider {
   }
 
   writeKeyboardConfig(config: IKeyboardConfig) {
-    const { behaviorMode, keyboardLanguage } = config;
+    const { behaviorMode, layoutStandard } = config;
     if (this.keyboardConfig.behaviorMode !== behaviorMode) {
       this.setStatus({ behaviorMode });
     }
-    if (this.keyboardConfig.keyboardLanguage !== keyboardLanguage) {
-      this.setStatus({ keyboardLanguage });
+    if (this.keyboardConfig.layoutStandard !== layoutStandard) {
+      this.setStatus({ layoutStandard });
     }
   }
 
+  private loadConfig(): IKeyboardConfig {
+    const config: IKeyboardConfig = { ...fallbackKeyboardConfig };
+    const loaded = appGlobal.applicationStorage.getItem(this.storageKey);
+    if (loaded) {
+      overwriteObjectProps(config, loaded);
+    }
+    return config;
+  }
+
   async initialize() {
-    this._keyboardConfig =
-      appGlobal.applicationStorage.getItem(this.storageKey) ||
-      fallbackKeyboardConfig;
+    this._keyboardConfig = this.loadConfig();
   }
 
   async terminate() {

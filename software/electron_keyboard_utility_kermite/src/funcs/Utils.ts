@@ -189,3 +189,11 @@ export function thinningListenerCall(targetProc: () => void, ms: number) {
 export function delayMs(n: number) {
   return new Promise((resolve) => setTimeout(resolve, n));
 }
+
+export function overwriteObjectProps<T>(dst: T, src: T) {
+  for (let key in dst) {
+    if (src[key]) {
+      dst[key] = src[key];
+    }
+  }
+}

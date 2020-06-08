@@ -24,10 +24,10 @@ export namespace InputLogicSimulatorD {
 
   function updateProfileDataBlob() {
     const prof = appGlobal.profileManager.getCurrentProfile();
-    const lang =
-      appGlobal.keyboardConfigProvider.keyboardConfig.keyboardLanguage;
-    if (prof && lang) {
-      const bytes = converProfileDataToBlobBytes(prof, lang);
+    const layoutStandard =
+      appGlobal.keyboardConfigProvider.keyboardConfig.layoutStandard;
+    if (prof && layoutStandard) {
+      const bytes = converProfileDataToBlobBytes(prof, layoutStandard);
       CL.coreLogic_writeProfileDataBlob(bytes);
     }
   }
@@ -50,8 +50,8 @@ export namespace InputLogicSimulatorD {
         local.isSideBranMode = isSideBrainMode;
       }
     }
-    if (changedConfig.keyboardLanguage) {
-      console.log({ lang: changedConfig.keyboardLanguage });
+    if (changedConfig.layoutStandard) {
+      console.log({ layout: changedConfig.layoutStandard });
       updateProfileDataBlob();
     }
   }

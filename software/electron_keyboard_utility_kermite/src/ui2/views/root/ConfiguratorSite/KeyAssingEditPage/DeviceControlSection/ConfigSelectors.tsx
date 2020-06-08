@@ -2,7 +2,10 @@
 import { css } from 'goober';
 import { h } from '~ui2/views/basis/qx';
 import { appDomain } from '~ui2/models/zAppDomain';
-import { IKeyboardLanguage, IKeyboardBehaviorMode } from '~defs/ConfigTypes';
+import {
+  IKeyboardLayoutStandard,
+  IKeyboardBehaviorMode
+} from '~defs/ConfigTypes';
 
 interface IDualItemsHoverSelectorProps<T extends string> {
   items: T[];
@@ -90,21 +93,21 @@ export const BehaviorSelector = () => {
   );
 };
 
-export const LangSelector = () => {
+export const LayoutStandardSelector = () => {
   const { keyboardConfigModel } = appDomain;
-  const langs: IKeyboardLanguage[] = ['US', 'JP'];
-  const currentLang = keyboardConfigModel.keyboardLanguage;
-  const setCurrent = (lang: IKeyboardLanguage) => {
-    keyboardConfigModel.keyboardLanguage = lang;
+  const layouts: IKeyboardLayoutStandard[] = ['US', 'JIS'];
+  const currentLayout = keyboardConfigModel.layoutStandard;
+  const setCurrent = (layout: IKeyboardLayoutStandard) => {
+    keyboardConfigModel.layoutStandard = layout;
   };
-  const textDictionary: { [key in IKeyboardLanguage]: string } = {
+  const textDictionary: { [key in IKeyboardLayoutStandard]: string } = {
     US: 'US',
-    JP: 'JP'
+    JIS: 'JIS'
   };
   return (
     <DualItemsHoverSelector
-      items={langs}
-      currentItem={currentLang}
+      items={layouts}
+      currentItem={currentLayout}
       setCurrentItem={setCurrent}
       textDictionary={textDictionary}
     />

@@ -15,14 +15,14 @@ export const fallabackApplicationSettings: IApplicationSettings = {
 };
 
 export type IKeyboardBehaviorMode = 'Standalone' | 'SideBrain';
-export type IKeyboardLanguage = 'US' | 'JP';
+export type IKeyboardLayoutStandard = 'US' | 'JIS';
 
 export interface IKeyboardConfig {
   behaviorMode: IKeyboardBehaviorMode;
-  keyboardLanguage: IKeyboardLanguage;
+  layoutStandard: IKeyboardLayoutStandard;
 }
 
 export const fallbackKeyboardConfig: IKeyboardConfig = {
   behaviorMode: 'Standalone',
-  keyboardLanguage: 'US'
+  layoutStandard: 'US'
 };

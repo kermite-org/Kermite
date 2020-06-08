@@ -10,7 +10,7 @@ import { appGlobal } from '../appGlobal';
 import { writeUint16LE, writeUint8 } from './Helpers';
 import { converProfileDataToBlobBytes } from '../InputLogicSimulatorD/ProfileDataBinaryPacker';
 import { delayMs } from '~funcs/Utils';
-import { IKeyboardLanguage } from '~defs/ConfigTypes';
+import { IKeyboardLayoutStandard } from '~defs/ConfigTypes';
 
 /*
 Data format for the keymapping data stored in AVR's EEPROM
@@ -61,18 +61,18 @@ export namespace KeyMappingEmitter {
 
   function createLowLevelKeyAssignsDataSet(
     profileData: IProfileData,
-    lang: IKeyboardLanguage
+    layout: IKeyboardLayoutStandard
   ): ILowLevelKeyAssignsDataSet {
     return {
       keyNum: profileData.keyboardShape.keyUnits.length,
       layerNum: profileData.layers.length,
-      assignsDataBytes: converProfileDataToBlobBytes(profileData, lang)
+      assignsDataBytes: converProfileDataToBlobBytes(profileData, layout)
     };
   }
 
   export function emitKeyAssignsToDevice(
     editModel: IProfileData,
-    lang: IKeyboardLanguage
+    layout: IKeyboardLayoutStandard
   ) {
     const ds = appGlobal.deviceService;
 
@@ -83,7 +83,7 @@ export namespace KeyMappingEmitter {
     console.log(emitKeyAssignsToDevice.name);
 
     const data = makeKeyAssignsTransmitData(
-      createLowLevelKeyAssignsDataSet(editModel, lang)
+      createLowLevelKeyAssignsDataSet(editModel, layout)
     );
     const checksum = calcChecksum(data);
     const dataLength = data.length;

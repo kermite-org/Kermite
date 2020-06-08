@@ -63,10 +63,10 @@ export class IpcBridge {
       },
       async writeKeyMappingToDevice(): Promise<void> {
         const profile = appGlobal.profileManager.getCurrentProfile();
-        const lang =
-          appGlobal.keyboardConfigProvider.keyboardConfig.keyboardLanguage;
+        const layoutStandard =
+          appGlobal.keyboardConfigProvider.keyboardConfig.layoutStandard;
         if (profile) {
-          KeyMappingEmitter.emitKeyAssignsToDevice(profile, lang);
+          KeyMappingEmitter.emitKeyAssignsToDevice(profile, layoutStandard);
         }
       },
       async executeProfileManagerCommands(

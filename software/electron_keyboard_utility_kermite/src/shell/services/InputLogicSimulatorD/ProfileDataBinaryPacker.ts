@@ -12,7 +12,10 @@ import {
 } from '~funcs/Utils';
 import { ModifierVirtualKey, isModifierVirtualKey } from '~defs/VirtualKeys';
 import { getHidKeyCodeEx } from '~defs/HidKeyCodes';
-import { IKeyboardLanguage, IKeyboardBehaviorMode } from '~defs/ConfigTypes';
+import {
+  IKeyboardLayoutStandard,
+  IKeyboardBehaviorMode
+} from '~defs/ConfigTypes';
 
 /*
 Key Assigns Restriction
@@ -36,7 +39,7 @@ interface IRawLayerInfo {
 }
 
 const localContext = new (class {
-  keyboardLanguage: IKeyboardLanguage = 'US';
+  layoutStandard: IKeyboardLayoutStandard = 'US';
   layersDict: { [layerId: string]: IRawLayerInfo } = {};
 })();
 
@@ -81,9 +84,9 @@ function encodeAssignOperation(op: IAssignOperation | undefined): number[] {
       const mods = makeAttachedModifiersBits([vk]);
       return [(tt << 6) | (mods << 2), 0];
     } else {
-      const lang = localContext.keyboardLanguage;
+      const layoutStandard = localContext.layoutStandard;
       const mods = makeAttachedModifiersBits(op.attachedModifiers);
-      const hidKey = getHidKeyCodeEx(vk, lang);
+      const hidKey = getHidKeyCodeEx(vk, layoutStandard);
       return [(tt << 6) | (mods << 2) | ((hidKey >> 8) & 0x03), hidKey];
     }
   }
@@ -206,7 +209,10 @@ function hexBytes(bytes: number[]) {
   return bytes.map((b) => `00${b.toString(16)}`.slice(-2)).join(' ');
 }
 
-function fixAssignOperation(op: IAssignOperation, lang: IKeyboardLanguage) {
+function fixAssignOperation(
+  op: IAssignOperation,
+  layout: IKeyboardLayoutStandard
+) {
   if (op.type === 'keyInput') {
     let vk = op.virtualKey;
     let mods = op.attachedModifiers;
@@ -214,7 +220,7 @@ function fixAssignOperation(op: IAssignOperation, lang: IKeyboardLanguage) {
     const isMacOS = true;
     if (isMacOS) {
       //MACでJIS配列の場合,バックスラッシュをAlt+¥で入力する
-      if (lang === 'JP' && vk === 'K_BackSlash') {
+      if (layout === 'JIS' && vk === 'K_BackSlash') {
         if (!mods) {
           mods = ['K_Alt'];
         }
@@ -228,19 +234,22 @@ function fixAssignOperation(op: IAssignOperation, lang: IKeyboardLanguage) {
   }
 }
 
-function fixProfileData(profile: IProfileData, lang: IKeyboardLanguage) {
+function fixProfileData(
+  profile: IProfileData,
+  layout: IKeyboardLayoutStandard
+) {
   for (let key in profile.assigns) {
     const assign = profile.assigns[key];
     if (assign) {
       if (assign.type === 'single' && assign.op) {
-        fixAssignOperation(assign.op, lang);
+        fixAssignOperation(assign.op, layout);
       }
       if (assign.type === 'dual') {
         if (assign.primaryOp) {
-          fixAssignOperation(assign.primaryOp, lang);
+          fixAssignOperation(assign.primaryOp, layout);
         }
         if (assign.secondaryOp) {
-          fixAssignOperation(assign.secondaryOp, lang);
+          fixAssignOperation(assign.secondaryOp, layout);
         }
       }
     }
@@ -249,12 +258,12 @@ function fixProfileData(profile: IProfileData, lang: IKeyboardLanguage) {
 
 export function converProfileDataToBlobBytes(
   profile0: IProfileData,
-  keyboardLanguage: IKeyboardLanguage
+  layoutStandard: IKeyboardLayoutStandard
 ): number[] {
   const profile = duplicateObjectByJsonStringifyParse(profile0);
-  fixProfileData(profile, keyboardLanguage);
+  fixProfileData(profile, layoutStandard);
 
-  localContext.keyboardLanguage = keyboardLanguage;
+  localContext.layoutStandard = layoutStandard;
   localContext.layersDict = createDictionaryFromKeyValues(
     profile.layers.map((la, idx) => [
       la.layerId,

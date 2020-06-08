@@ -30,7 +30,7 @@ export namespace KeyAssignToLogicalKeyActionResolver {
     virtualKey: VirtualKey,
     modifiers?: ModifierVirtualKey[]
   ): LogicalKeyAction | undefined {
-    const vkSet = extractVkSet(getHidKeyCodeEx(virtualKey, 'JP'));
+    const vkSet = extractVkSet(getHidKeyCodeEx(virtualKey, 'JIS'));
     if (vkSet) {
       const { vkCode, adhocShift } = vkSet;
       const attachedModifierKeyCodes = modifiers?.map((m) => HidKeyCodes[m]);

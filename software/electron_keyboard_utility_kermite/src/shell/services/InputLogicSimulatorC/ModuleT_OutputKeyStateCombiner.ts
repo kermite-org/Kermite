@@ -33,7 +33,7 @@ export namespace ModuleT_OutputKeyStateCombiner {
             modFlags[modVk] = true;
           });
         }
-        const hk = getHidKeyCodeEx(vk, 'JP');
+        const hk = getHidKeyCodeEx(vk, 'JIS');
         const withShift = (hk & 0x100) > 0;
         const cancelShift = (hk & 0x200) > 0;
         if (withShift) {

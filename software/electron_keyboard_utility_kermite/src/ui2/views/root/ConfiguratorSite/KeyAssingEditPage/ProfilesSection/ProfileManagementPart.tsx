@@ -8,7 +8,7 @@ import { reflectValue } from '~ui2/views/common/FormHelpers';
 import { ProfileSelectionMenuPart } from './ProfileSelectionMenu';
 import {
   BehaviorSelector,
-  LangSelector
+  LayoutStandardSelector
 } from '../DeviceControlSection/ConfigSelectors';
 import { LaunchButton } from '../DeviceControlSection/LaunchButton';
 
@@ -51,7 +51,7 @@ export const ProfileManagementPart = () => {
       <ProfileSelectionMenuPart vm={vm} />
       <ProfileSelectorView vm={vm} />
       <BehaviorSelector />
-      <LangSelector />
+      <LayoutStandardSelector />
       <LaunchButton />
     </div>
   );

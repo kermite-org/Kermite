@@ -1,22 +1,28 @@
 import { backendAgent } from './dataSource/ipc';
 import { appUi } from './appGlobal';
-import { IKeyboardBehaviorMode, IKeyboardLanguage } from '~defs/ConfigTypes';
+import {
+  IKeyboardBehaviorMode,
+  IKeyboardLayoutStandard
+} from '~defs/ConfigTypes';
 
 export class KeyboardConfigModel {
   behaviorMode: IKeyboardBehaviorMode = 'Standalone';
-  keyboardLanguage: IKeyboardLanguage = 'US';
+  layoutStandard: IKeyboardLayoutStandard = 'US';
 
   async loadKeyboardConfig() {
     const keyboardConfig = await backendAgent.getKeyboardConfig();
-    const { behaviorMode, keyboardLanguage } = keyboardConfig;
+    const { behaviorMode, layoutStandard } = keyboardConfig;
     this.behaviorMode = behaviorMode;
-    this.keyboardLanguage = keyboardLanguage;
+    this.layoutStandard = layoutStandard;
     appUi.rerender();
   }
 
   writeConfigurationToDevice() {
-    const { behaviorMode, keyboardLanguage } = this;
-    backendAgent.writeKeyboardConfig({ behaviorMode, keyboardLanguage });
+    const { behaviorMode, layoutStandard } = this;
+    backendAgent.writeKeyboardConfig({
+      behaviorMode,
+      layoutStandard
+    });
     if (behaviorMode === 'Standalone') {
       backendAgent.writeKeyMappingToDevice();
     }
