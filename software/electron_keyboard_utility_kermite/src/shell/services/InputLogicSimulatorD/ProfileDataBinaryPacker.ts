@@ -10,7 +10,7 @@ import {
   createGroupedArrayByKey
 } from '~funcs/Utils';
 import { ModifierVirtualKey, isModifierVirtualKey } from '~defs/VirtualKeys';
-import { HidKeyCodes } from '~defs/HidKeyCodes';
+import { getHidKeyCodeEx } from '~defs/HidKeyCodes';
 import { IKeyboardLanguage } from '~defs/ConfigTypes';
 
 /*
@@ -82,8 +82,7 @@ function encodeAssignOperation(op: IAssignOperation | undefined): number[] {
     } else {
       const mods = makeAttachedModifiersBits(op.attachedModifiers);
       const lang = localContext.keyboardLanguage;
-      //todo: US/JP対応
-      const hidKey = HidKeyCodes[vk];
+      const hidKey = getHidKeyCodeEx(vk, lang);
       return [(tt << 6) | (mods << 2) | ((hidKey >> 8) & 0x03), hidKey];
     }
   }

@@ -1,4 +1,4 @@
-import { HidKeyCodes } from '~defs/HidKeyCodes';
+import { getHidKeyCodeEx } from '~defs/HidKeyCodes';
 import { VirtualKey } from '~defs/VirtualKeys';
 
 interface IOutputKeyEvent {
@@ -53,8 +53,8 @@ const virtualKeyPriorityOrders: VirtualKey[] = [
 
   'K_Minus'
 ];
-const hidKeyPriorityOrders = virtualKeyPriorityOrders.map(
-  (vk) => HidKeyCodes[vk]
+const hidKeyPriorityOrders = virtualKeyPriorityOrders.map((vk) =>
+  getHidKeyCodeEx(vk, 'JP')
 );
 
 export class OutputKeyPrioritySorter implements IOutputKeyPrioritySorter {

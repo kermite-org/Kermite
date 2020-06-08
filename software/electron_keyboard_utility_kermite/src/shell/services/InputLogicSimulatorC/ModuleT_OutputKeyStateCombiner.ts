@@ -1,4 +1,4 @@
-import { HidKeyCodes } from '~defs/HidKeyCodes';
+import { HidKeyCodes, getHidKeyCodeEx } from '~defs/HidKeyCodes';
 import { ModifierVirtualKey } from '~defs/VirtualKeys';
 import { IHoldKeySet, createModuleIo } from './LogicSimulatorCCommon';
 
@@ -33,7 +33,7 @@ export namespace ModuleT_OutputKeyStateCombiner {
             modFlags[modVk] = true;
           });
         }
-        const hk = HidKeyCodes[vk];
+        const hk = getHidKeyCodeEx(vk, 'JP');
         const withShift = (hk & 0x100) > 0;
         const cancelShift = (hk & 0x200) > 0;
         if (withShift) {

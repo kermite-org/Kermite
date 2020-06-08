@@ -1,5 +1,5 @@
 import { LogicalKeyAction, TAdhocShift } from './Types';
-import { HidKeyCodes } from '~defs/HidKeyCodes';
+import { HidKeyCodes, getHidKeyCodeEx } from '~defs/HidKeyCodes';
 import { VirtualKey, ModifierVirtualKey } from '~defs/VirtualKeys';
 import { IAssignOperation } from '~defs/ProfileData';
 
@@ -30,7 +30,7 @@ export namespace KeyAssignToLogicalKeyActionResolver {
     virtualKey: VirtualKey,
     modifiers?: ModifierVirtualKey[]
   ): LogicalKeyAction | undefined {
-    const vkSet = extractVkSet(HidKeyCodes[virtualKey]);
+    const vkSet = extractVkSet(getHidKeyCodeEx(virtualKey, 'JP'));
     if (vkSet) {
       const { vkCode, adhocShift } = vkSet;
       const attachedModifierKeyCodes = modifiers?.map((m) => HidKeyCodes[m]);
