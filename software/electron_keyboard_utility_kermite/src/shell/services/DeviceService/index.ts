@@ -2,14 +2,14 @@ import { DeviceWrapper } from './DeviceWrapper';
 import { IRealtimeKeyboardEvent } from '~defs/ipc';
 import { removeArrayItems } from '~funcs/Utils';
 
-type IRealtimeEventHandlerFunc = (event: IRealtimeKeyboardEvent) => void;
+type IRealtimeEventListenerFunc = (event: IRealtimeKeyboardEvent) => void;
 
 export class DeviceService {
-  private handlers: IRealtimeEventHandlerFunc[] = [];
+  private listeners: IRealtimeEventListenerFunc[] = [];
   private deviceWrapper: DeviceWrapper | null = null;
 
   private emitRealtimeEvent(ev: IRealtimeKeyboardEvent) {
-    this.handlers.forEach((h) => h(ev));
+    this.listeners.forEach((h) => h(ev));
   }
 
   private decodeReceivedBytes(buf: Uint8Array) {
@@ -75,12 +75,12 @@ export class DeviceService {
     return !!this.deviceWrapper;
   }
 
-  subscribe(proc: (ev: IRealtimeKeyboardEvent) => void) {
-    this.handlers.push(proc);
+  subscribe(proc: IRealtimeEventListenerFunc) {
+    this.listeners.push(proc);
   }
 
-  unsubscribe(proc: (ev: IRealtimeKeyboardEvent) => void) {
-    removeArrayItems(this.handlers, proc);
+  unsubscribe(proc: IRealtimeEventListenerFunc) {
+    removeArrayItems(this.listeners, proc);
   }
 
   private isSideBrainMode = false;
