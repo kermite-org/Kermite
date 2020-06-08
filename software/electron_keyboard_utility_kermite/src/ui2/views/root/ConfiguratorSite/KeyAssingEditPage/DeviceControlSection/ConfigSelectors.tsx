@@ -19,13 +19,18 @@ function DualItemsHoverSelector<T extends string>(
   const onMouseLeave = () => (isHover = false);
 
   const cssDualItemsSelector = css`
-    width: 30px;
+    width: 36px;
     user-select: none;
     > .fixedView {
+      text-align: center;
       cursor: pointer;
     }
 
     > .selectable {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
       > div {
         cursor: pointer;
         opacity: 0.5;
@@ -98,7 +103,6 @@ export const LangSelector = () => {
   };
   return (
     <DualItemsHoverSelector
-      key="A"
       items={langs}
       currentItem={currentLang}
       setCurrentItem={setCurrent}

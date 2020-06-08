@@ -7,7 +7,7 @@ export class AppWindowManager {
 
   openMainWindow() {
     const options: Electron.BrowserWindowConstructorOptions = {
-      width: 1200,
+      width: 1280,
       height: 800,
       webPreferences: {
         nodeIntegration: false,

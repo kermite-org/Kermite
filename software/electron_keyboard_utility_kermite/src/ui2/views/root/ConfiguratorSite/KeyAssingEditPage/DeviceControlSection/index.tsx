@@ -16,9 +16,6 @@ export const DeviceControlSection = () => {
 
   return (
     <div css={cssDeviceControlSection}>
-      <LaunchButton />
-      <BehaviorSelector />
-      <LangSelector />
       <LinkIndicator />
     </div>
   );

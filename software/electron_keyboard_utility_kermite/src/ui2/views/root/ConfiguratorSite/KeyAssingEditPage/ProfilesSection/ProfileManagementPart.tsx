@@ -6,7 +6,11 @@ import {
 } from './ProfileManagementPart.model';
 import { reflectValue } from '~ui2/views/common/FormHelpers';
 import { ProfileSelectionMenuPart } from './ProfileSelectionMenu';
-import { backendAgent } from '~ui2/models/dataSource/ipc';
+import {
+  BehaviorSelector,
+  LangSelector
+} from '../DeviceControlSection/ConfigSelectors';
+import { LaunchButton } from '../DeviceControlSection/LaunchButton';
 
 const ProfileSelectorView = (props: { vm: IProfileManagerViewModel }) => {
   const { vm } = props;
@@ -28,7 +32,7 @@ const ProfileSelectorView = (props: { vm: IProfileManagerViewModel }) => {
 
 export const ProfileManagementPart = () => {
   const cssProfileSelectionRow = css`
-    background: #024;
+    /* background: #024; */
     display: flex;
     align-items: center;
     padding: 4px;
@@ -36,22 +40,19 @@ export const ProfileManagementPart = () => {
       padding: 0 4px;
     }
     > * + * {
-      margin-left: 5px;
+      margin-left: 10px;
     }
   `;
 
   const vm = makeProfileManagementViewModel();
 
-  const onClickWrite = () => {
-    backendAgent.writeKeyMappingToDevice();
-  };
   return (
     <div css={cssProfileSelectionRow}>
       <ProfileSelectionMenuPart vm={vm} />
       <ProfileSelectorView vm={vm} />
-      <button onClick={vm.saveProfile}>save</button>
-
-      <button onClick={onClickWrite}>write</button>
+      <BehaviorSelector />
+      <LangSelector />
+      <LaunchButton />
     </div>
   );
 };
