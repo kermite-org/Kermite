@@ -44,15 +44,6 @@ export class IpcBridge {
       }
     });
 
-    /*
-    ipcMain.on(
-      'profileManagerCommands',
-      (event, commands: IProfileManagerCommand[]) => {
-        appGlobal.profileManager.executeCommands(commands);
-      }
-    );
-    */
-
     const backendAgent: IBackendAgent = {
       async getEnvironmentConfig(): Promise<
         IEnvironmentConfigForRendererProcess
@@ -123,6 +114,14 @@ export class IpcBridge {
         },
         unsubscribe(listener) {
           appGlobal.eventBus.off('appWindowEvent', listener);
+        }
+      },
+      keyboardDeviceStatusEvents: {
+        subscribe(listener) {
+          appGlobal.deviceService.deviceStatus.subscribe(listener);
+        },
+        unsubscribe(listener) {
+          appGlobal.deviceService.deviceStatus.unsubscribe(listener);
         }
       }
     };

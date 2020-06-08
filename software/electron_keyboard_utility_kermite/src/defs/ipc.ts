@@ -13,6 +13,10 @@ export interface IProfileManagerStatus {
   errorMessage: string;
 }
 
+export interface IKeyboardDeviceStatus {
+  isConnected: boolean;
+}
+
 export type IRealtimeKeyboardEvent =
   | {
       type: 'keyStateChanged';
@@ -56,6 +60,7 @@ export interface IBackendAgent {
   keyEvents: IEventSource<IRealtimeKeyboardEvent>;
   profileStatusEvents: IEventSource<Partial<IProfileManagerStatus>>;
   appWindowEvents: IEventSource<IAppWindowEvent>;
+  keyboardDeviceStatusEvents: IEventSource<Partial<IKeyboardDeviceStatus>>;
 }
 
 export interface ISynchronousIpcPacket {
