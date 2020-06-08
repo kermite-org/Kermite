@@ -5,6 +5,7 @@ import { SiteModel } from './SiteModel';
 import { backendAgent } from './dataSource/ipc';
 import { KeyboardConfigModel } from './KeyboardConfigModel';
 import { ApplicationSettingsModel } from './ApplicationSettingsModel';
+import { DeviceStatusModel } from './DeviceStatusModel';
 
 export const appDomain = new (class {
   readonly editorModel = new EditorModel();
@@ -13,6 +14,7 @@ export const appDomain = new (class {
   readonly siteModel = new SiteModel();
   readonly keyboardConfigModel = new KeyboardConfigModel();
   readonly settingsModel = new ApplicationSettingsModel();
+  readonly deviceStatusModel = new DeviceStatusModel();
 
   initialize() {
     //debug
@@ -32,9 +34,11 @@ export const appDomain = new (class {
     this.siteModel.initialize();
     this.keyboardConfigModel.intialize();
     this.settingsModel.initialize();
+    this.deviceStatusModel.initialize();
   }
 
   terminate() {
+    this.deviceStatusModel.finalinze();
     this.settingsModel.finalize();
     this.keyboardConfigModel.finalize();
     this.playerModel.finalize();
