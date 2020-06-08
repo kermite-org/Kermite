@@ -1,5 +1,3 @@
-import { removeArrayItems } from './Utils';
-
 export class TypedEventEmitter<T> {
   private handlers: Map<keyof T, Function[]> = new Map();
 
