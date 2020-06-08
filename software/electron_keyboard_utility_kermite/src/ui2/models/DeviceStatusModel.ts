@@ -1,5 +1,6 @@
 import { backendAgent } from './dataSource/ipc';
 import { IKeyboardDeviceStatus } from '~defs/ipc';
+import { appUi } from './appGlobal';
 
 export class DeviceStatusModel {
   private _isConnected: boolean = false;
@@ -11,6 +12,7 @@ export class DeviceStatusModel {
   private onDeviceStatusChanged = (status: Partial<IKeyboardDeviceStatus>) => {
     if (status.isConnected !== undefined) {
       this._isConnected = status.isConnected;
+      appUi.rerender();
     }
   };
 

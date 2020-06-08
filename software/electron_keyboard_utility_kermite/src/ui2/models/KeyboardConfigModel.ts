@@ -14,9 +14,12 @@ export class KeyboardConfigModel {
     appUi.rerender();
   }
 
-  sendConfigToBackend() {
+  writeConfigurationToDevice() {
     const { behaviorMode, keyboardLanguage } = this;
     backendAgent.writeKeyboardConfig({ behaviorMode, keyboardLanguage });
+    if (behaviorMode === 'Standalone') {
+      backendAgent.writeKeyMappingToDevice();
+    }
   }
 
   intialize() {
