@@ -11,6 +11,7 @@ type IReceiverFunc = (buf: Uint8Array) => void;
 export class DeviceWrapper {
   private device?: HID.HID | null = null;
   private receiverFunc?: IReceiverFunc;
+  private closedCallback?: () => void;
 
   private static openTargetDevice(
     venderId: number,
@@ -61,6 +62,7 @@ export class DeviceWrapper {
       this.device.on('error', (error) => {
         // eslint-disable-next-line no-console
         console.log(`error occured: ${error}`);
+        this.closedCallback?.();
       });
       return true;
     } else {
@@ -73,6 +75,10 @@ export class DeviceWrapper {
       this.device.close();
       this.device = null;
     }
+  }
+
+  onClosed(callback: () => void) {
+    this.closedCallback = callback;
   }
 
   setReceiverFunc(func: IReceiverFunc) {

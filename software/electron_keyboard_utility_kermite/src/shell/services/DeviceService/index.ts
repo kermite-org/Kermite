@@ -1,12 +1,17 @@
 import { DeviceWrapper } from './DeviceWrapper';
 import { IRealtimeKeyboardEvent } from '~defs/ipc';
 import { removeArrayItems } from '~funcs/Utils';
+import { StatusSource } from '../../../funcs/StatusSource';
 
 type IRealtimeEventListenerFunc = (event: IRealtimeKeyboardEvent) => void;
 
 export class DeviceService {
   private listeners: IRealtimeEventListenerFunc[] = [];
   private deviceWrapper: DeviceWrapper | null = null;
+
+  deviceStatus = new StatusSource<{ isConnected: boolean }>({
+    isConnected: false
+  });
 
   private emitRealtimeEvent(ev: IRealtimeKeyboardEvent) {
     this.listeners.forEach((h) => h(ev));
@@ -54,6 +59,7 @@ export class DeviceService {
     // const isOpen = dw.open(0xf055, 0xa57a, 'mi_03');
     if (isOpen) {
       console.log('device opened');
+      this.deviceStatus.set({ isConnected: true });
     } else {
       console.log(`failed to open device`);
       return;
@@ -61,6 +67,9 @@ export class DeviceService {
     this.deviceWrapper = dw;
     dw.setReceiverFunc((buf) => {
       this.decodeReceivedBytes(buf);
+    });
+    dw.onClosed(() => {
+      this.deviceStatus.set({ isConnected: false });
     });
   }
 
