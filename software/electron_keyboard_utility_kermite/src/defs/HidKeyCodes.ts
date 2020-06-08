@@ -1,4 +1,5 @@
 import { VirtualKey } from './VirtualKeys';
+import { IKeyboardLanguage } from './ConfigTypes';
 
 //HIDのキーコード定義, キーボードの言語やレイアウトによらない共通部分
 const enum HidKey {
@@ -128,8 +129,34 @@ const enum HidKey {
   KU_Gui
 }
 
+const enum HidKeyUS {
+  KU__US_Num1_Exclamation = 30,
+  KU__US_Num2_Atmark,
+  KU__US_Num3_Sharp,
+  KU__US_Num4_Dollars,
+  KU__US_Num5_Percent,
+  KU__US_Num6_Circumflex,
+  KU__US_Num7_Ampersand,
+  KU__US_Num8_Asterisk,
+  KU__US_Num9_LeftParenthesis,
+  KU__US_Num0_RightParenthesis,
+
+  KU__US_Minus_Undersocre = 45,
+  KU__US_Equal_Plus = 46,
+  KU__US_LeftSquareBracket_LeftCurlyBrace = 47,
+  KU__US_RightSquareBracket_RightCurlyBrace = 48,
+  KU__US_Backslash_Verticalbar = 49,
+  KU__US_Sharp_Tilde = 50,
+  KU__US_Semicolon_Colon = 51,
+  KU__US_SingleQuote_DoubleQuote = 52,
+  KU__US_BackQuote_Tilde = 53,
+  KU__US_Comma_LessThan = 54,
+  KU__US_Dot_GreaterThan = 55,
+  KU__US_Slash_Question = 56
+}
+
 //日本語キーボード向けの定義
-const enum HidKeyJp {
+const enum HidKeyJP {
   KU__JP_Num1_Exclamation = 30,
   KU__JP_Num2_DoubleQuote,
   KU__JP_Num3_Sharp,
@@ -138,7 +165,8 @@ const enum HidKeyJp {
   KU__JP_Num6_Ampersand,
   KU__JP_Num7_SingleQuote,
   KU__JP_Num8_LeftParenthesis,
-  KU__JP_Num9_RightParenesis,
+  KU__JP_Num9_RightParenethesis,
+  KU__JP_Num0,
 
   KU__JP_Minus_Equal = 45,
   KU__JP_Circumflex_Tilde,
@@ -165,12 +193,25 @@ const enum HidKeyJp {
 const OUT_SHIFT = 0x100;
 const OUT_NOSHIFT = 0x200;
 
-// @ts-ignore
-export const HidKeyCodes: {
-  [vk in VirtualKey]: number;
+export const HidKeyCodes = {
+  K_Shift: HidKey.KU_Shift,
+  K_Ctrl: HidKey.KU_Ctrl,
+  K_Alt: HidKey.KU_Alt,
+  K_OS: HidKey.KU_Gui,
+  K_LShift: HidKey.KU_LShift,
+  K_LCtrl: HidKey.KU_LCtrl,
+  K_LAlt: HidKey.KU_LAlt,
+  K_LOS: HidKey.KU_LGui,
+  K_RShift: HidKey.KU_RShift,
+  K_RCtrl: HidKey.KU_RCtrl,
+  K_RAlt: HidKey.KU_RAlt,
+  K_ROS: HidKey.KU_RGui
+};
+
+const virutalKeyToHidKeyMapper_Core: {
+  [vk in VirtualKey]?: number;
 } = {
   //todo: define hid keycodes for all virtualkeys
-
   K_A: HidKey.KU_A,
   K_B: HidKey.KU_B,
   K_C: HidKey.KU_C,
@@ -224,43 +265,6 @@ export const HidKeyCodes: {
   K_F10: HidKey.KU_F10,
   K_F11: HidKey.KU_F11,
   K_F12: HidKey.KU_F12,
-  K_Dot: HidKeyJp.KU__JP_Dot_GreaterThan | OUT_NOSHIFT,
-  K_Comma: HidKeyJp.KU__JP_Comma_LessThan | OUT_NOSHIFT,
-  K_Exclamation: HidKeyJp.KU__JP_Num1_Exclamation | OUT_SHIFT,
-  K_Question: HidKeyJp.KU__JP_Slash_Question | OUT_SHIFT,
-  K_Colon: HidKeyJp.KU__JP_Colon_Asterisk | OUT_NOSHIFT,
-  K_Semicolon: HidKeyJp.KU__JP_Semicolon_Plus | OUT_NOSHIFT,
-  K_Underscore: HidKeyJp.KU__JP_BackSlash_Underscore | OUT_SHIFT,
-  K_Plus: HidKeyJp.KU__JP_Semicolon_Plus | OUT_SHIFT,
-  K_Minus: HidKeyJp.KU__JP_Minus_Equal | OUT_NOSHIFT,
-  K_Asterisk: HidKeyJp.KU__JP_Colon_Asterisk | OUT_SHIFT,
-  K_Slash: HidKeyJp.KU__JP_Slash_Question | OUT_NOSHIFT,
-  K_Equal: HidKeyJp.KU__JP_Minus_Equal | OUT_SHIFT,
-  K_Ampersand: HidKeyJp.KU__JP_Num6_Ampersand | OUT_SHIFT,
-  K_VerticalBar: HidKeyJp.KU__JP_Yen_VertiacalBar | OUT_SHIFT,
-  K_Hat: HidKeyJp.KU__JP_Circumflex_Tilde | OUT_NOSHIFT,
-  K_Tilde: HidKeyJp.KU__JP_Circumflex_Tilde | OUT_SHIFT,
-  K_AtMark: HidKeyJp.KU__JP_Atmark_BackQuote | OUT_NOSHIFT,
-  K_Sharp: HidKeyJp.KU__JP_Num3_Sharp | OUT_SHIFT,
-  K_Dollar: HidKeyJp.KU__JP_Num4_Dollars | OUT_SHIFT,
-  K_Yen: HidKeyJp.KU__JP_Yen_VertiacalBar | OUT_NOSHIFT,
-  K_Percent: HidKeyJp.KU__JP_Num5_Percent | OUT_SHIFT,
-  K_BackSlash: HidKeyJp.KU__JP_BackSlash_Underscore | OUT_NOSHIFT,
-  K_SingleQuote: HidKeyJp.KU__JP_Num7_SingleQuote | OUT_SHIFT,
-  K_DoubleQuote: HidKeyJp.KU__JP_Num2_DoubleQuote | OUT_SHIFT,
-  K_BackQuote: HidKeyJp.KU__JP_Atmark_BackQuote | OUT_SHIFT,
-  K_LeftParenthesis: HidKeyJp.KU__JP_Num8_LeftParenthesis | OUT_SHIFT,
-  K_RightParenthesis: HidKeyJp.KU__JP_Num9_RightParenesis | OUT_SHIFT,
-  K_LeftSquareBracket:
-    HidKeyJp.KU__JP_LeftSquareBracket_LeftCurlyBrace | OUT_NOSHIFT,
-  K_RightSquareBracket:
-    HidKeyJp.KU__JP_RightSquareBracket_RightCurlyBrace | OUT_NOSHIFT,
-  K_LeftCurlyBrace:
-    HidKeyJp.KU__JP_LeftSquareBracket_LeftCurlyBrace | OUT_SHIFT,
-  K_RightCurlyBrace:
-    HidKeyJp.KU__JP_RightSquareBracket_RightCurlyBrace | OUT_SHIFT,
-  K_LessThan: HidKeyJp.KU__JP_Comma_LessThan | OUT_SHIFT,
-  K_GreaterThan: HidKeyJp.KU__JP_Dot_GreaterThan | OUT_SHIFT,
   K_Shift: HidKey.KU_Shift,
   K_Ctrl: HidKey.KU_Ctrl,
   K_Alt: HidKey.KU_Alt,
@@ -283,8 +287,107 @@ export const HidKeyCodes: {
   K_RightArrow: HidKey.KU_RightArrow,
   K_UpArrow: HidKey.KU_UpArrow,
   K_DownArrow: HidKey.KU_DownArrow,
-  K_HankakuZenkaku: HidKeyJp.KU_HankakuZenkaku,
-  K_KatakanaHiragana: HidKeyJp.KU_KatakanaHiragana,
-  K_Henkan: HidKeyJp.KU_Henkan,
-  K_Muhenkan: HidKeyJp.KU_Muhenkan
+  K_HankakuZenkaku: HidKeyJP.KU_HankakuZenkaku,
+  K_KatakanaHiragana: HidKeyJP.KU_KatakanaHiragana,
+  K_Henkan: HidKeyJP.KU_Henkan,
+  K_Muhenkan: HidKeyJP.KU_Muhenkan
 };
+
+const virutalKeyToHidKeyMapper_US: {
+  [vk in VirtualKey]?: number;
+} = {
+  K_Dot: HidKeyUS.KU__US_Dot_GreaterThan | OUT_NOSHIFT,
+  K_Comma: HidKeyUS.KU__US_Comma_LessThan | OUT_NOSHIFT,
+  K_Exclamation: HidKeyUS.KU__US_Num1_Exclamation | OUT_SHIFT,
+  K_Question: HidKeyUS.KU__US_Slash_Question | OUT_SHIFT,
+  K_Colon: HidKeyUS.KU__US_Semicolon_Colon | OUT_SHIFT,
+  K_Semicolon: HidKeyUS.KU__US_Semicolon_Colon | OUT_NOSHIFT,
+  K_Underscore: HidKeyUS.KU__US_Minus_Undersocre | OUT_SHIFT,
+  K_Plus: HidKeyUS.KU__US_Equal_Plus | OUT_SHIFT,
+  K_Minus: HidKeyUS.KU__US_Minus_Undersocre | OUT_NOSHIFT,
+  K_Asterisk: HidKeyUS.KU__US_Num8_Asterisk | OUT_SHIFT,
+  K_Slash: HidKeyUS.KU__US_Slash_Question | OUT_NOSHIFT,
+  K_Equal: HidKeyUS.KU__US_Equal_Plus | OUT_NOSHIFT,
+  K_Ampersand: HidKeyUS.KU__US_Num7_Ampersand | OUT_SHIFT,
+  K_VerticalBar: HidKeyUS.KU__US_Backslash_Verticalbar | OUT_SHIFT,
+  K_Hat: HidKeyUS.KU__US_Num6_Circumflex | OUT_SHIFT,
+  K_Tilde: HidKeyUS.KU__US_BackQuote_Tilde | OUT_SHIFT,
+  K_AtMark: HidKeyUS.KU__US_Num2_Atmark | OUT_SHIFT,
+  K_Sharp: HidKeyUS.KU__US_Num3_Sharp | OUT_SHIFT,
+  K_Dollar: HidKeyUS.KU__US_Num4_Dollars | OUT_SHIFT,
+  K_Yen: HidKeyUS.KU__US_Backslash_Verticalbar | OUT_NOSHIFT,
+  K_Percent: HidKeyUS.KU__US_Num5_Percent | OUT_SHIFT,
+  K_BackSlash: HidKeyUS.KU__US_Backslash_Verticalbar | OUT_NOSHIFT,
+  K_SingleQuote: HidKeyUS.KU__US_SingleQuote_DoubleQuote | OUT_NOSHIFT,
+  K_DoubleQuote: HidKeyUS.KU__US_SingleQuote_DoubleQuote | OUT_SHIFT,
+  K_BackQuote: HidKeyUS.KU__US_BackQuote_Tilde | OUT_NOSHIFT,
+  K_LeftParenthesis: HidKeyUS.KU__US_Num9_LeftParenthesis | OUT_SHIFT,
+  K_RightParenthesis: HidKeyUS.KU__US_Num0_RightParenthesis | OUT_SHIFT,
+  K_LeftSquareBracket:
+    HidKeyUS.KU__US_LeftSquareBracket_LeftCurlyBrace | OUT_NOSHIFT,
+  K_RightSquareBracket:
+    HidKeyUS.KU__US_RightSquareBracket_RightCurlyBrace | OUT_NOSHIFT,
+  K_LeftCurlyBrace:
+    HidKeyUS.KU__US_LeftSquareBracket_LeftCurlyBrace | OUT_SHIFT,
+  K_RightCurlyBrace:
+    HidKeyUS.KU__US_RightSquareBracket_RightCurlyBrace | OUT_SHIFT,
+  K_LessThan: HidKeyUS.KU__US_Comma_LessThan | OUT_SHIFT,
+  K_GreaterThan: HidKeyUS.KU__US_Dot_GreaterThan | OUT_SHIFT
+};
+
+const virutalKeyToHidKeyMapper_JP: {
+  [vk in VirtualKey]?: number;
+} = {
+  K_Dot: HidKeyJP.KU__JP_Dot_GreaterThan | OUT_NOSHIFT,
+  K_Comma: HidKeyJP.KU__JP_Comma_LessThan | OUT_NOSHIFT,
+  K_Exclamation: HidKeyJP.KU__JP_Num1_Exclamation | OUT_SHIFT,
+  K_Question: HidKeyJP.KU__JP_Slash_Question | OUT_SHIFT,
+  K_Colon: HidKeyJP.KU__JP_Colon_Asterisk | OUT_NOSHIFT,
+  K_Semicolon: HidKeyJP.KU__JP_Semicolon_Plus | OUT_NOSHIFT,
+  K_Underscore: HidKeyJP.KU__JP_BackSlash_Underscore | OUT_SHIFT,
+  K_Plus: HidKeyJP.KU__JP_Semicolon_Plus | OUT_SHIFT,
+  K_Minus: HidKeyJP.KU__JP_Minus_Equal | OUT_NOSHIFT,
+  K_Asterisk: HidKeyJP.KU__JP_Colon_Asterisk | OUT_SHIFT,
+  K_Slash: HidKeyJP.KU__JP_Slash_Question | OUT_NOSHIFT,
+  K_Equal: HidKeyJP.KU__JP_Minus_Equal | OUT_SHIFT,
+  K_Ampersand: HidKeyJP.KU__JP_Num6_Ampersand | OUT_SHIFT,
+  K_VerticalBar: HidKeyJP.KU__JP_Yen_VertiacalBar | OUT_SHIFT,
+  K_Hat: HidKeyJP.KU__JP_Circumflex_Tilde | OUT_NOSHIFT,
+  K_Tilde: HidKeyJP.KU__JP_Circumflex_Tilde | OUT_SHIFT,
+  K_AtMark: HidKeyJP.KU__JP_Atmark_BackQuote | OUT_NOSHIFT,
+  K_Sharp: HidKeyJP.KU__JP_Num3_Sharp | OUT_SHIFT,
+  K_Dollar: HidKeyJP.KU__JP_Num4_Dollars | OUT_SHIFT,
+  K_Yen: HidKeyJP.KU__JP_Yen_VertiacalBar | OUT_NOSHIFT,
+  K_Percent: HidKeyJP.KU__JP_Num5_Percent | OUT_SHIFT,
+  K_BackSlash: HidKeyJP.KU__JP_BackSlash_Underscore | OUT_NOSHIFT,
+  K_SingleQuote: HidKeyJP.KU__JP_Num7_SingleQuote | OUT_SHIFT,
+  K_DoubleQuote: HidKeyJP.KU__JP_Num2_DoubleQuote | OUT_SHIFT,
+  K_BackQuote: HidKeyJP.KU__JP_Atmark_BackQuote | OUT_SHIFT,
+  K_LeftParenthesis: HidKeyJP.KU__JP_Num8_LeftParenthesis | OUT_SHIFT,
+  K_RightParenthesis: HidKeyJP.KU__JP_Num9_RightParenethesis | OUT_SHIFT,
+  K_LeftSquareBracket:
+    HidKeyJP.KU__JP_LeftSquareBracket_LeftCurlyBrace | OUT_NOSHIFT,
+  K_RightSquareBracket:
+    HidKeyJP.KU__JP_RightSquareBracket_RightCurlyBrace | OUT_NOSHIFT,
+  K_LeftCurlyBrace:
+    HidKeyJP.KU__JP_LeftSquareBracket_LeftCurlyBrace | OUT_SHIFT,
+  K_RightCurlyBrace:
+    HidKeyJP.KU__JP_RightSquareBracket_RightCurlyBrace | OUT_SHIFT,
+  K_LessThan: HidKeyJP.KU__JP_Comma_LessThan | OUT_SHIFT,
+  K_GreaterThan: HidKeyJP.KU__JP_Dot_GreaterThan | OUT_SHIFT
+};
+
+export function getHidKeyCodeEx(
+  vk: VirtualKey,
+  lang: IKeyboardLanguage
+): number {
+  if (lang === 'US') {
+    return (
+      virutalKeyToHidKeyMapper_Core[vk] || virutalKeyToHidKeyMapper_US[vk] || 0
+    );
+  } else {
+    return (
+      virutalKeyToHidKeyMapper_Core[vk] || virutalKeyToHidKeyMapper_JP[vk] || 0
+    );
+  }
+}

@@ -10,7 +10,7 @@ import { appGlobal } from '../appGlobal';
 import { writeUint16LE, writeUint8 } from './Helpers';
 import { converProfileDataToBlobBytes } from '../InputLogicSimulatorD/ProfileDataBinaryPacker';
 import { delayMs } from '~funcs/Utils';
-import { IKeyboardLanguage, IKeyboardBehaviorMode } from '~defs/ConfigTypes';
+import { IKeyboardLanguage } from '~defs/ConfigTypes';
 
 /*
 Data format for the keymapping data stored in AVR's EEPROM
