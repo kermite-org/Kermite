@@ -7,11 +7,12 @@ import {
   createDictionaryFromKeyValues,
   sortOrderBy,
   flattenArray,
-  createGroupedArrayByKey
+  createGroupedArrayByKey,
+  duplicateObjectByJsonStringifyParse
 } from '~funcs/Utils';
 import { ModifierVirtualKey, isModifierVirtualKey } from '~defs/VirtualKeys';
 import { getHidKeyCodeEx } from '~defs/HidKeyCodes';
-import { IKeyboardLanguage } from '~defs/ConfigTypes';
+import { IKeyboardLanguage, IKeyboardBehaviorMode } from '~defs/ConfigTypes';
 
 /*
 Key Assigns Restriction
@@ -80,8 +81,8 @@ function encodeAssignOperation(op: IAssignOperation | undefined): number[] {
       const mods = makeAttachedModifiersBits([vk]);
       return [(tt << 6) | (mods << 2), 0];
     } else {
-      const mods = makeAttachedModifiersBits(op.attachedModifiers);
       const lang = localContext.keyboardLanguage;
+      const mods = makeAttachedModifiersBits(op.attachedModifiers);
       const hidKey = getHidKeyCodeEx(vk, lang);
       return [(tt << 6) | (mods << 2) | ((hidKey >> 8) & 0x03), hidKey];
     }
@@ -205,10 +206,54 @@ function hexBytes(bytes: number[]) {
   return bytes.map((b) => `00${b.toString(16)}`.slice(-2)).join(' ');
 }
 
+function fixAssignOperation(op: IAssignOperation, lang: IKeyboardLanguage) {
+  if (op.type === 'keyInput') {
+    let vk = op.virtualKey;
+    let mods = op.attachedModifiers;
+
+    const isMacOS = true;
+    if (isMacOS) {
+      //MACでJIS配列の場合,バックスラッシュをAlt+¥で入力する
+      if (lang === 'JP' && vk === 'K_BackSlash') {
+        if (!mods) {
+          mods = ['K_Alt'];
+        }
+        if (mods && !mods.includes('K_Alt')) {
+          mods.push('K_Alt');
+        }
+        op.virtualKey = 'K_Yen';
+        op.attachedModifiers = mods;
+      }
+    }
+  }
+}
+
+function fixProfileData(profile: IProfileData, lang: IKeyboardLanguage) {
+  for (let key in profile.assigns) {
+    const assign = profile.assigns[key];
+    if (assign) {
+      if (assign.type === 'single' && assign.op) {
+        fixAssignOperation(assign.op, lang);
+      }
+      if (assign.type === 'dual') {
+        if (assign.primaryOp) {
+          fixAssignOperation(assign.primaryOp, lang);
+        }
+        if (assign.secondaryOp) {
+          fixAssignOperation(assign.secondaryOp, lang);
+        }
+      }
+    }
+  }
+}
+
 export function converProfileDataToBlobBytes(
-  profile: IProfileData,
+  profile0: IProfileData,
   keyboardLanguage: IKeyboardLanguage
 ): number[] {
+  const profile = duplicateObjectByJsonStringifyParse(profile0);
+  fixProfileData(profile, keyboardLanguage);
+
   localContext.keyboardLanguage = keyboardLanguage;
   localContext.layersDict = createDictionaryFromKeyValues(
     profile.layers.map((la, idx) => [
