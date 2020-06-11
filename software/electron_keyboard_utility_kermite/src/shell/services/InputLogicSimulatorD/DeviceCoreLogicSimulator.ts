@@ -110,6 +110,23 @@ const state = new (class {
 const OpType_keyInput = 0b01;
 const OpType_layerCall = 0b10;
 
+const ModFlag_Ctrl = 1;
+const ModFlag_Shift = 2;
+const ModFlag_Alt = 4;
+const ModFlag_OS = 8;
+
+function setModifiers(modFlags: u8) {
+  hidReportBuf[0] |= modFlags;
+}
+
+function clearModifiers(modFlags: u8) {
+  hidReportBuf[0] &= ~modFlags;
+}
+
+function setOutputKeyCode(kc: u8) {
+  hidReportBuf[2] = kc;
+}
+
 function handleKeyInputDown(keyIndex: u8) {
   let opWord = getAssignOperationWord(state.layerIndex, keyIndex, false);
   if (!opWord) {
@@ -120,9 +137,9 @@ function handleKeyInputDown(keyIndex: u8) {
     const opType = (opWord >> 14) & 0b11;
     if (opType === OpType_keyInput) {
       const hidKey = opWord & 0x3ff;
-      const modFlag = (opWord >> 10) & 0b1111;
-      if (modFlag) {
-        hidReportBuf[0] |= modFlag;
+      const modFlags = (opWord >> 10) & 0b1111;
+      if (modFlags) {
+        setModifiers(modFlags);
       }
       if (hidKey) {
         const keyCode = hidKey & 0xff;
@@ -131,13 +148,14 @@ function handleKeyInputDown(keyIndex: u8) {
 
         const isOtherModifiersClean = (hidReportBuf[0] & 0b1101) === 0;
         if (shiftOn) {
-          hidReportBuf[0] = 2;
+          setModifiers(ModFlag_Shift);
         }
         if (shiftOff && isOtherModifiersClean) {
-          hidReportBuf[0] = 0;
+          //shift cancel
+          clearModifiers(ModFlag_Shift);
         }
         if (keyCode) {
-          hidReportBuf[2] = keyCode;
+          setOutputKeyCode(keyCode);
         }
       }
     }
@@ -147,7 +165,7 @@ function handleKeyInputDown(keyIndex: u8) {
       state.layerIndex = layerIndex;
       appGlobal.deviceService.emitLayerChangedEvent(layerIndex);
       if (withShift) {
-        hidReportBuf[0] = 2;
+        setModifiers(ModFlag_Shift);
       }
       // console.log(`la`, state.layerIndex);
     }
@@ -161,21 +179,21 @@ function handleKeyInputUp(keyIndex: u8) {
     const opType = (opWord >> 14) & 0b11;
     if (opType === OpType_keyInput) {
       const hidKey = opWord & 0x3ff;
-      const modFlag = (opWord >> 10) & 0b1111;
-      if (modFlag) {
-        hidReportBuf[0] &= ~modFlag;
+      const modFlags = (opWord >> 10) & 0b1111;
+      if (modFlags) {
+        clearModifiers(modFlags);
       }
       if (hidKey) {
         const keyCode = hidKey & 0xff;
         const shiftOn = hidKey & 0x100;
         const shiftOff = hidKey & 0x200;
         if (shiftOn) {
-          hidReportBuf[0] = 0;
+          clearModifiers(ModFlag_Shift);
         }
         if (shiftOff) {
         }
         if (keyCode) {
-          hidReportBuf[2] = 0;
+          setOutputKeyCode(0);
         }
       }
     }
@@ -184,7 +202,7 @@ function handleKeyInputUp(keyIndex: u8) {
       appGlobal.deviceService.emitLayerChangedEvent(0);
       const withShift = (opWord >> 13) & 0b1;
       if (withShift) {
-        hidReportBuf[0] = 0;
+        clearModifiers(ModFlag_Shift);
       }
       // console.log(`la`, state.layerIndex);
     }
