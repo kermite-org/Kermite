@@ -3,7 +3,7 @@ import { appGlobal } from '../appGlobal';
 import { IInputLogicSimulator } from '../InputLogicSimulator.interface';
 import { IntervalTimerWrapper } from '../InputLogicSimulator/IntervalTimerWrapper';
 
-import * as CL from './DeviceCoreLogicSimulator';
+import * as CL from './DeviceCoreLogicSimulator0_Single';
 import { converProfileDataToBlobBytes } from './ProfileDataBinaryPacker';
 import { generateNumberSequence } from '~funcs/Utils';
 import { IKeyboardConfig } from '~defs/ConfigTypes';
