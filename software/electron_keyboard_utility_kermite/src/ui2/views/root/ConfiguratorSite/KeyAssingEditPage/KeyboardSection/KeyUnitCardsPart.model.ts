@@ -65,7 +65,10 @@ function getAssignEntryTexts(
     }
     if (assign.type === 'dual') {
       return {
-        primaryText: getAssignOperationText(assign.primaryOp),
+        primaryText:
+          getAssignOperationText(assign.primaryOp) +
+          '.' +
+          getAssignOperationText(assign.tertiaryOp),
         secondaryText: getAssignOperationText(assign.secondaryOp)
       };
     }

@@ -11,13 +11,14 @@ export type IOperationSlotsPartViewModel = {
   slots: IOperationSlotViewModel[];
 };
 
-const targetSlotSigs: IDualModeEditTargetOperationSig[] = ['pri', 'sec'];
+const targetSlotSigs: IDualModeEditTargetOperationSig[] = ['pri', 'sec', 'ter'];
 
 const targetSlotSigToTextMap: {
   [key in IDualModeEditTargetOperationSig]: string;
 } = {
   pri: 'pri',
-  sec: 'sec'
+  sec: 'sec',
+  ter: 'ter'
 };
 
 export function makeOperationSlotsPartViewModel(): IOperationSlotsPartViewModel {

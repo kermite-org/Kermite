@@ -14,8 +14,16 @@ import {
   removeInvalidProfileAssigns
 } from './ProfileDataHelper';
 
-export type IDualModeEditTargetOperationSig = 'pri' | 'sec';
-export type IDualModeOperationPath = 'primaryOp' | 'secondaryOp';
+export type IDualModeEditTargetOperationSig = 'pri' | 'sec' | 'ter';
+export type IDualModeOperationPath = 'primaryOp' | 'secondaryOp' | 'tertiaryOp';
+
+const dualModeEditTargetOperationSigToOperationPathMap: {
+  [key in IDualModeEditTargetOperationSig]: IDualModeOperationPath;
+} = {
+  pri: 'primaryOp',
+  sec: 'secondaryOp',
+  ter: 'tertiaryOp'
+};
 
 export class EditorModel {
   //state
@@ -72,11 +80,8 @@ export class EditorModel {
   };
 
   private get dualModeOperationPath(): IDualModeOperationPath {
-    if (this.dualModeEditTargetOperationSig === 'pri') {
-      return 'primaryOp';
-    } else {
-      return 'secondaryOp';
-    }
+    const sig = this.dualModeEditTargetOperationSig;
+    return dualModeEditTargetOperationSigToOperationPathMap[sig];
   }
 
   get editOperation(): IAssignOperation | undefined {

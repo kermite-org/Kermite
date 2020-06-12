@@ -74,8 +74,9 @@ function checkAssignValid(assign?: IAssignEntry): boolean {
     return !!assign.op;
   }
   if (assign.type === 'dual') {
-    return !!assign.primaryOp || !!assign.secondaryOp;
+    return !!assign.primaryOp || !!assign.secondaryOp || !!assign.tertiaryOp;
   }
+
   return false;
 }
 
