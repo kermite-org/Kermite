@@ -32,10 +32,13 @@ const modifierVirtualKeys: ModifierVirtualKey[] = [
   'K_OS'
 ];
 
+const RestrictDualSecondaryAssigns = false;
+
 export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
   const { editOperation, writeEditOperation, isSlotSelected } = editorModel;
 
   const isDualSecondary =
+    RestrictDualSecondaryAssigns &&
     editorModel.isDualMode &&
     editorModel.dualModeEditTargetOperationSig === 'sec';
 
