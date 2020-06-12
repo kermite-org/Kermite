@@ -12,10 +12,7 @@ import {
 } from '~funcs/Utils';
 import { ModifierVirtualKey, isModifierVirtualKey } from '~defs/VirtualKeys';
 import { getHidKeyCodeEx } from '~defs/HidKeyCodes';
-import {
-  IKeyboardLayoutStandard,
-  IKeyboardBehaviorMode
-} from '~defs/ConfigTypes';
+import { IKeyboardLayoutStandard } from '~defs/ConfigTypes';
 
 /*
 Key Assigns Restriction
@@ -36,6 +33,7 @@ interface IRawAssignEntry {
 interface IRawLayerInfo {
   layerIndex: number;
   isShiftLayer: boolean;
+  defaultScheme: 'block' | 'transparent';
 }
 
 const localContext = new (class {
@@ -70,10 +68,10 @@ MMMM: modifiers, [os, alt, shift, ctrl] for msb-lsb
 KK_KKKK_KKKK: hid keycode with adhocShift flags
 
 layerCall
-0bTTSR_LLLL 0bXXXX_XXXX
+0bTTSD_LLLL 0bXXXX_XXXX
 TT: type, 0b10 for layerCall
 S: is shift layer
-R: reserved
+D: default scheme, 0 for transparent, 1 for block
 LLLL: layerIndex
 */
 function encodeAssignOperation(op: IAssignOperation | undefined): number[] {
@@ -94,9 +92,10 @@ function encodeAssignOperation(op: IAssignOperation | undefined): number[] {
     const tt = 0b10;
     const layerInfo = localContext.layersDict[op.targetLayerId];
     if (layerInfo) {
-      const { layerIndex, isShiftLayer } = layerInfo;
+      const { layerIndex, isShiftLayer, defaultScheme } = layerInfo;
       const fShift = isShiftLayer ? 1 : 0;
-      return [(tt << 6) | (fShift << 5) | layerIndex, 0];
+      const fDS = defaultScheme === 'block' ? 1 : 0;
+      return [(tt << 6) | (fShift << 5) | (fDS << 4) | layerIndex, 0];
     }
   }
   return [0, 0];
@@ -110,14 +109,18 @@ TT: type
  0b00: reserved
  0b01: single
  0b10: dual
- 0b11: reserved
+ 0b11: triple
 LLLL: layerIndex
 */
 function encodeRawAssignEntryHeaderByte(
-  type: 'single' | 'dual',
+  type: 'single' | 'dual' | 'triple',
   layerIndex: number
 ): number {
-  const tt = type === 'single' ? 0b01 : 0b10;
+  const tt = {
+    single: 0b01,
+    dual: 0b10,
+    triple: 0b11
+  }[type];
   return (1 << 7) | (tt << 4) | layerIndex;
 }
 
@@ -125,28 +128,39 @@ function encodeRawAssignEntryHeaderByte(
 rawAssignEntry
 0x~ HH PP PP, for single assign entry
 0x~ HH PP PP SS SS, for dual assign entry
+0x~ HH PP PP SS SS TT, for triple assign entry
 HH: assign entry header
 PP: primary operation
 SS: secondary oepration
+TT: tertiary operation
 */
 function encodeRawAssignEntry(ra: IRawAssignEntry): number[] {
   const { entry } = ra;
   if (entry.type === 'single') {
+    //single
     return [
       encodeRawAssignEntryHeaderByte('single', ra.layerIndex),
       ...encodeAssignOperation(entry.op)
     ];
   } else {
-    if (!entry.secondaryOp) {
+    //dual
+    if (entry.tertiaryOp) {
       return [
-        encodeRawAssignEntryHeaderByte('single', ra.layerIndex),
-        ...encodeAssignOperation(entry.primaryOp)
+        encodeRawAssignEntryHeaderByte('triple', ra.layerIndex),
+        ...encodeAssignOperation(entry.primaryOp),
+        ...encodeAssignOperation(entry.secondaryOp),
+        ...encodeAssignOperation(entry.tertiaryOp)
       ];
-    } else {
+    } else if (entry.secondaryOp) {
       return [
         encodeRawAssignEntryHeaderByte('dual', ra.layerIndex),
         ...encodeAssignOperation(entry.primaryOp),
         ...encodeAssignOperation(entry.secondaryOp)
+      ];
+    } else {
+      return [
+        encodeRawAssignEntryHeaderByte('single', ra.layerIndex),
+        ...encodeAssignOperation(entry.primaryOp)
       ];
     }
   }
@@ -158,7 +172,7 @@ KKK_KKKK: keyIndex
 RRR: reserved
 S_SSSS: body length
 */
-function encodeKeyBounAssignsSetHeder(
+function encodeKeyBoundAssignsSetHeder(
   keyIndex: number,
   bodyLength: number
 ): number[] {
@@ -170,10 +184,10 @@ function encodeKeyBounAssignsSetHeder(
 HH HH: header bytes
 VV VV ...: body bytes, variable length
 */
-function encodeKeyBounAssignsSet(assigns: IRawAssignEntry[]): number[] {
+function encodeKeyBoundAssignsSet(assigns: IRawAssignEntry[]): number[] {
   const { keyIndex } = assigns[0];
   const bodyBytes = [...flattenArray(assigns.map(encodeRawAssignEntry))];
-  const headBytes = encodeKeyBounAssignsSetHeder(keyIndex, bodyBytes.length);
+  const headBytes = encodeKeyBoundAssignsSetHeder(keyIndex, bodyBytes.length);
   return [...headBytes, ...bodyBytes];
 }
 
@@ -219,7 +233,7 @@ function fixAssignOperation(
 
     const isMacOS = true;
     if (isMacOS) {
-      //MACでJIS配列の場合,バックスラッシュをAlt+¥で入力する
+      //MACでJIS配列の場合,バックスラッシュをAlt+¥に置き換える
       if (layout === 'JIS' && vk === 'K_BackSlash') {
         if (!mods) {
           mods = ['K_Alt'];
@@ -251,6 +265,9 @@ function fixProfileData(
         if (assign.secondaryOp) {
           fixAssignOperation(assign.secondaryOp, layout);
         }
+        if (assign.tertiaryOp) {
+          fixAssignOperation(assign.tertiaryOp, layout);
+        }
       }
     }
   }
@@ -269,7 +286,8 @@ export function converProfileDataToBlobBytes(
       la.layerId,
       {
         layerIndex: idx,
-        isShiftLayer: la.isShiftLayer || false
+        isShiftLayer: la.isShiftLayer || false,
+        defaultScheme: la.defaultScheme
       }
     ])
   );
@@ -285,7 +303,7 @@ export function converProfileDataToBlobBytes(
   const groupedAssignBytes = createGroupedArrayByKey(
     rawAssigns,
     'keyIndex'
-  ).map(encodeKeyBounAssignsSet);
+  ).map(encodeKeyBoundAssignsSet);
 
   console.log(groupedAssignBytes.map(hexBytes));
 

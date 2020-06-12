@@ -78,8 +78,7 @@ function getLayerBoundAssignEntryHeaderPos(
     }
     pos++;
     const tt = (data >> 4) & 0b11;
-    const isDual = tt === 0b10;
-    const numBlockBytes = isDual ? 4 : 2;
+    const numBlockBytes = tt * 2;
     pos += numBlockBytes;
   }
   return -1;
@@ -91,27 +90,14 @@ const AssignType_Dual = 2;
 const AssignType_Tri = 3;
 type AssignType = 0 | 1 | 2 | 3;
 
-function getAssignType(layerIndex: u8, keyIndex: u8): AssignType {
-  const buf = storageBuf;
-  const pos0 = getKeyBoundAssignSetHeaderPos(keyIndex);
-  if (pos0 >= 0) {
-    const pos1 = getLayerBoundAssignEntryHeaderPos(pos0, layerIndex);
-    // console.log({ keyIndex, layerIndex, pos0: pos0 + 24, pos1: pos1 + 24 });
-    if (pos1 >= 0) {
-      const entryHeaderByte = buf[pos1];
-      const tt = (entryHeaderByte >> 4) & 0b11;
-      const isDual = tt === 0b10;
-      return isDual ? AssignType_Dual : AssignType_Single;
-    }
-  }
-  return AssignType_None;
+interface IAssignSet {
+  assignType: AssignType;
+  pri?: u16;
+  sec?: u16;
+  ter?: u16;
 }
 
-function getAssignOperationWord(
-  layerIndex: u8,
-  keyIndex: u8,
-  readSecondary: boolean
-): u16 {
+function getAssignSet(layerIndex: u8, keyIndex: u8): IAssignSet | undefined {
   const buf = storageBuf;
   const pos0 = getKeyBoundAssignSetHeaderPos(keyIndex);
   if (pos0 >= 0) {
@@ -121,18 +107,23 @@ function getAssignOperationWord(
       const entryHeaderByte = buf[pos1];
       const tt = (entryHeaderByte >> 4) & 0b11;
       const isDual = tt === 0b10;
-      if (readSecondary) {
-        if (isDual) {
-          return (buf[pos1 + 3] << 8) | buf[pos1 + 4];
-        } else {
-          return 0;
-        }
-      } else {
-        return (buf[pos1 + 1] << 8) | buf[pos1 + 2];
-      }
+      const isTriple = tt === 0b11;
+      const assignType = tt as AssignType;
+      const pri = (buf[pos1 + 1] << 8) | buf[pos1 + 2];
+      const sec =
+        ((isDual || isTriple) && (buf[pos1 + 3] << 8) | buf[pos1 + 4]) ||
+        undefined;
+      const ter =
+        (isTriple && (buf[pos1 + 5] << 8) | buf[pos1 + 6]) || undefined;
+      return {
+        assignType,
+        pri,
+        sec,
+        ter
+      };
     }
   }
-  return 0;
+  return undefined;
 }
 
 //--------------------------------------------------------------------------------
@@ -166,6 +157,8 @@ function setOutputKeyCode(kc: u8) {
 
 const state = new (class {
   layerIndex: u8 = 0;
+  layerHoldFlags: boolean[] = Array(16).fill(false);
+  layerDefaultSchemeFlags: boolean[] = Array(16).fill(false);
 })();
 
 const OpType_keyInput = 0b01;
@@ -200,12 +193,15 @@ function handleOperationOn(opWord: u16) {
   if (opType === OpType_layerCall) {
     const layerIndex = (opWord >> 8) & 0b1111;
     const withShift = (opWord >> 13) & 0b1;
+    const fDS = (opWord >> 12) & 0b1;
     state.layerIndex = layerIndex;
     appGlobal.deviceService.emitLayerChangedEvent(layerIndex);
+    state.layerHoldFlags[layerIndex] = true;
+    state.layerDefaultSchemeFlags[layerIndex] = !!fDS;
     if (withShift) {
       setModifiers(ModFlag_Shift);
     }
-    // console.log(`la`, state.layerIndex);
+    console.log(`la`, state.layerIndex);
   }
 }
 
@@ -234,11 +230,13 @@ function handleOperationOff(opWord: u16) {
   if (opType === OpType_layerCall) {
     state.layerIndex = 0;
     appGlobal.deviceService.emitLayerChangedEvent(0);
+    const layerIndex = (opWord >> 8) & 0b1111;
+    state.layerHoldFlags[layerIndex] = false;
     const withShift = (opWord >> 13) & 0b1;
     if (withShift) {
       clearModifiers(ModFlag_Shift);
     }
-    // console.log(`la`, state.layerIndex);
+    console.log(`la`, state.layerIndex);
   }
 }
 
@@ -283,32 +281,40 @@ function recallKeyOff(keyIndex: u8) {
   }
 }
 
-function getAssignTypeL(keyIndex: u8): AssignType {
-  //todo: 多階層対応
-  let assignType = getAssignType(state.layerIndex, keyIndex);
-  if (!assignType) {
-    assignType = getAssignType(0, keyIndex);
+function getAssignSetL(keyIndex: u8): IAssignSet | undefined {
+  for (let i = 15; i >= 0; i--) {
+    if (state.layerHoldFlags[i] || i === 0) {
+      const res = getAssignSet(i, keyIndex);
+      const isDefaultSchemeBlock = state.layerDefaultSchemeFlags[i];
+      //レイヤキー,downで自身のonによってレイヤが変わるため, up時に戻ってこれない
+      // if (!res && isDefaultSchemeBlock) {
+      //   return undefined;
+      // }
+      if (res) {
+        return res;
+      }
+    }
   }
-  return assignType;
 }
 
 function assignBinder_issueInputTrigger(keyIndex: u8, trigger: string) {
-  let assignType = getAssignTypeL(keyIndex);
-
-  // if (keyIndex > 24) {
-  //   assignType = AssignType_Tri;
-  // }
+  //レイヤキー,downで自身のonによってレイヤが変わるため, up時に戻ってこれない
+  const assignSet = getAssignSetL(keyIndex);
+  if (!assignSet) {
+    return;
+  }
+  const { assignType } = assignSet;
 
   if (assignType === AssignType_Tri) {
-    const pri = getAssignOperationWord(state.layerIndex, keyIndex, false);
-    const sec =
-      getAssignOperationWord(state.layerIndex, keyIndex, false) && undefined; //debug
-    const trd = getAssignOperationWord(state.layerIndex, keyIndex, true);
+    const { pri, sec, ter } = assignSet;
 
     if (pri) {
       if (trigger === Trigger.SingleTap) {
         handleKeyOn(keyIndex, pri);
         recallKeyOff(keyIndex);
+      }
+      if (trigger === Trigger.Hold2) {
+        handleKeyOn(keyIndex, pri);
       }
     }
     if (sec) {
@@ -316,9 +322,9 @@ function assignBinder_issueInputTrigger(keyIndex: u8, trigger: string) {
         handleKeyOn(keyIndex, sec);
       }
     }
-    if (trd) {
+    if (ter) {
       if (trigger === Trigger.DoubleTap) {
-        handleKeyOn(keyIndex, trd);
+        handleKeyOn(keyIndex, ter);
         recallKeyOff(keyIndex);
       }
     }
@@ -329,9 +335,7 @@ function assignBinder_issueInputTrigger(keyIndex: u8, trigger: string) {
   }
 
   if (assignType === AssignType_Dual) {
-    const pri = getAssignOperationWord(state.layerIndex, keyIndex, false);
-    const sec = getAssignOperationWord(state.layerIndex, keyIndex, true);
-
+    const { pri, sec } = assignSet;
     if (pri) {
       if (trigger === Trigger.Tap) {
         handleKeyOn(keyIndex, pri);
@@ -353,9 +357,11 @@ function assignBinder_issueInputTrigger(keyIndex: u8, trigger: string) {
   }
 
   if (assignType === AssignType_Single) {
-    const pri = getAssignOperationWord(state.layerIndex, keyIndex, false);
-    if (trigger === Trigger.Down || trigger === Trigger.Rehold) {
-      handleKeyOn(keyIndex, pri);
+    const { pri } = assignSet;
+    if (pri) {
+      if (trigger === Trigger.Down || trigger === Trigger.Rehold) {
+        handleKeyOn(keyIndex, pri);
+      }
     }
     if (
       trigger === Trigger.Up ||
@@ -387,6 +393,7 @@ const Trigger = {
   Hold: 'D_', //キーを押した状態で若干待ち
   SingleTap: 'DU_', //1回タップ後若干待ち
   Rehold: 'DUD', //タップした後すぐ同じキーを押下
+  Hold2: 'DUD_', //タップした後すぐ同じキーを押下し若干待ち
   DoubleTap: 'DUDU', //2回タップ
   Up: 'U'
 };
@@ -423,7 +430,7 @@ const keySlots: KeySlot[] = Array(128)
     tick: 0
   }));
 
-const TH = 300;
+const TH = 200;
 
 function clearSteps(slot: KeySlot) {
   slot.steps = '';
@@ -471,6 +478,11 @@ function keySlot_tick(slot: KeySlot, ms: number) {
 
   if (hold && steps === 'D' && tick >= TH) {
     //hold
+    pushStep(slot, '_');
+  }
+
+  if (hold && steps === 'DUD' && tick >= TH) {
+    //hold2
     pushStep(slot, '_');
   }
 
