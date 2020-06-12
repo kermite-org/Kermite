@@ -137,6 +137,7 @@ export type IAssignEntry_Dual = {
   // mode: 'dual';
   primaryOp?: IAssignOperation; //down, tap(if secondaryOp exists)
   secondaryOp?: IAssignOperation; //hold
+  tertiaryOp?: IAssignOperation; //double-tap
 };
 // export type ISingleAssignEntry_SingleVersatile1 = {
 //   type: 'singleVersatile1';
