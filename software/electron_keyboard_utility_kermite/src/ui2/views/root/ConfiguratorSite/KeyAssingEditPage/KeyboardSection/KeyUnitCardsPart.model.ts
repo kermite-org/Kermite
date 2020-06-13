@@ -57,6 +57,7 @@ function getAssignEntryTexts(
     //     secondaryText: ''
     //   };
     // }
+
     if (assign.type === 'single') {
       return {
         primaryText: getAssignOperationText(assign.op),
@@ -64,13 +65,20 @@ function getAssignEntryTexts(
       };
     }
     if (assign.type === 'dual') {
-      return {
-        primaryText:
-          getAssignOperationText(assign.primaryOp) +
-          '.' +
-          getAssignOperationText(assign.tertiaryOp),
-        secondaryText: getAssignOperationText(assign.secondaryOp)
-      };
+      const prmText = getAssignOperationText(assign.primaryOp);
+      const secText = getAssignOperationText(assign.secondaryOp);
+      const terText = getAssignOperationText(assign.tertiaryOp);
+      if (assign.tertiaryOp) {
+        return {
+          primaryText: `${prmText} ${terText}`,
+          secondaryText: secText
+        };
+      } else {
+        return {
+          primaryText: prmText,
+          secondaryText: secText
+        };
+      }
     }
   }
   return {
