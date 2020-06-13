@@ -256,6 +256,7 @@ const state1 = new (class {
       keyIndex: -1,
       tick: 0
     }));
+  preBoundAssignSets: (IAssignSet | undefined)[] = Array(128).fill(undefined);
 })();
 
 function handleKeyOn(keyIndex: u8, opWord: u16) {
@@ -286,10 +287,9 @@ function getAssignSetL(keyIndex: u8): IAssignSet | undefined {
     if (state.layerHoldFlags[i] || i === 0) {
       const res = getAssignSet(i, keyIndex);
       const isDefaultSchemeBlock = state.layerDefaultSchemeFlags[i];
-      //レイヤキー,downで自身のonによってレイヤが変わるため, up時に戻ってこれない
-      // if (!res && isDefaultSchemeBlock) {
-      //   return undefined;
-      // }
+      if (!res && isDefaultSchemeBlock) {
+        return undefined;
+      }
       if (res) {
         return res;
       }
@@ -298,11 +298,15 @@ function getAssignSetL(keyIndex: u8): IAssignSet | undefined {
 }
 
 function assignBinder_issueInputTrigger(keyIndex: u8, trigger: string) {
-  //レイヤキー,downで自身のonによってレイヤが変わるため, up時に戻ってこれない
-  const assignSet = getAssignSetL(keyIndex);
+  if (trigger === Trigger.Down) {
+    state1.preBoundAssignSets[keyIndex] = getAssignSetL(keyIndex);
+  }
+
+  const assignSet = state1.preBoundAssignSets[keyIndex];
   if (!assignSet) {
     return;
   }
+
   const { assignType } = assignSet;
 
   if (assignType === AssignType_Tri) {
