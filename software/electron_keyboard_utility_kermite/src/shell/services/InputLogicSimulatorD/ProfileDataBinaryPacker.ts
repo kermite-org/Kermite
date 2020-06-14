@@ -128,7 +128,7 @@ function encodeRawAssignEntryHeaderByte(
 rawAssignEntry
 0x~ HH PP PP, for single assign entry
 0x~ HH PP PP SS SS, for dual assign entry
-0x~ HH PP PP SS SS TT, for triple assign entry
+0x~ HH PP PP SS SS TT TT, for triple assign entry
 HH: assign entry header
 PP: primary operation
 SS: secondary oepration
