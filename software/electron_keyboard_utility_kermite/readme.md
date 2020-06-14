@@ -1,3 +1,5 @@
+# Kermite ユーティリティソフトウェア
+
 ## 動作環境
 
 ### 対象 OS
@@ -7,14 +9,14 @@
 
 ### 実行環境
 
-- node.js
+- Node.js
 - Electron
 
 ## 環境構築
 
 ビルド/実行には以下が必要です
 
-- node.js 13
+- Node.js 13
 - yarn
 
 ## 導入
@@ -33,10 +35,4 @@ yarn start
 
 ```
 yarn start:dev
-```
-
-### 起動時に node-hid のバージョンがおかしいエラーが出る場合の workaround
-
-```
-  yarn fixlib
 ```
