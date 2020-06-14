@@ -5,6 +5,7 @@ import { ProfileManagementPart } from './KeyAssingEditPage/ProfilesSection/Profi
 import { CustomWindowFrame } from './WindowFrame/CustomWindowFrame';
 import { UiTheme } from '~ui2/views/common/UiTheme';
 import { DeviceControlSection } from './KeyAssingEditPage/DeviceControlSection';
+import { GlobalMenuPart } from './GlobalMenu';
 
 export function ConfiguratorSiteRootContent() {
   const cssPageRoot = css`
@@ -55,6 +56,7 @@ export const ConfiguratorSiteRoot = () => {
     width: 50px;
     flex-shrink: 0;
     background: ${UiTheme.clNavigationColumn};
+    padding: 10px;
   `;
 
   const cssMainColumn = css`
@@ -64,7 +66,9 @@ export const ConfiguratorSiteRoot = () => {
   return (
     <CustomWindowFrame>
       <div css={cssContentRow}>
-        <div css={cssNavigationColumn}></div>
+        <div css={cssNavigationColumn}>
+          <GlobalMenuPart />
+        </div>
         <div css={cssMainColumn}>
           <ConfiguratorSiteRootContent />
         </div>

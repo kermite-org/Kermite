@@ -6,6 +6,7 @@ import { KeyboardSection } from './KeyboardSection';
 import { LayersSection } from './LayersSection';
 import { TestInputArea } from './TestInputArea';
 import { ProfileConfigurationPart } from './ProfileConfigurationPart';
+import { appDomain } from '~ui2/models/zAppDomain';
 
 export const KeyAssignEditPage = () => {
   const { clPanelBox, editorPartMargin: mm } = UiTheme;
@@ -94,7 +95,10 @@ export const KeyAssignEditPage = () => {
 
   return (
     <div css={cssKeyAssignEditPageRoot}>
-      <div css={cssEditTopBarBox}>
+      <div
+        css={cssEditTopBarBox}
+        qxIf={appDomain.settingsModel.showTestInputArea}
+      >
         <TestInputArea />
       </div>
       <div css={cssEditMainRow}>
