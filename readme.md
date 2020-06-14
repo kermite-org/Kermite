@@ -6,7 +6,7 @@
 ProMicro(マイコンボード)を使用した自作キーボードに対応しています。
 GUIで配列を設定するためのユーティリティソフトが付属しています。
 
-<img src=https://i.gyazo.com/614fe1b005a323ae6d080fdb1f37cdc4.png width="400px"/>
+<img src=https://i.gyazo.com/614fe1b005a323ae6d080fdb1f37cdc4.png width="500px"/>
 
 (画像は2020年6月時点のものです。現在の表示とは異なります。)
 
