@@ -27,6 +27,25 @@ function copyBytes(dst: u8[], src: u8[], len: size_t) {
   }
 }
 
+function getFieldNameByValue(obj: any, value: string) {
+  for (const key in obj) {
+    if (obj[key] === value) {
+      return key;
+    }
+  }
+  return undefined;
+}
+
+function createTimeIntervalCounter() {
+  let prevTick = Date.now();
+  return () => {
+    const tick = Date.now();
+    const elapsedMs = tick - prevTick;
+    prevTick = tick;
+    return elapsedMs;
+  };
+}
+
 //--------------------------------------------------------------------------------
 //assign memory storage
 
@@ -92,9 +111,9 @@ type AssignType = 0 | 1 | 2 | 3;
 
 interface IAssignSet {
   assignType: AssignType;
-  pri?: u16;
-  sec?: u16;
-  ter?: u16;
+  pri: u16;
+  sec: u16;
+  ter: u16;
 }
 
 function getAssignSet(layerIndex: u8, keyIndex: u8): IAssignSet | undefined {
@@ -111,10 +130,8 @@ function getAssignSet(layerIndex: u8, keyIndex: u8): IAssignSet | undefined {
       const assignType = tt as AssignType;
       const pri = (buf[pos1 + 1] << 8) | buf[pos1 + 2];
       const sec =
-        ((isDual || isTriple) && (buf[pos1 + 3] << 8) | buf[pos1 + 4]) ||
-        undefined;
-      const ter =
-        (isTriple && (buf[pos1 + 5] << 8) | buf[pos1 + 6]) || undefined;
+        ((isDual || isTriple) && (buf[pos1 + 3] << 8) | buf[pos1 + 4]) || 0;
+      const ter = (isTriple && (buf[pos1 + 5] << 8) | buf[pos1 + 6]) || 0;
       return {
         assignType,
         pri,
@@ -201,7 +218,7 @@ function handleOperationOn(opWord: u16) {
     if (withShift) {
       setModifiers(ModFlag_Shift);
     }
-    console.log(`la`, state.layerIndex);
+    // console.log(`la`, state.layerIndex);
   }
 }
 
@@ -236,12 +253,12 @@ function handleOperationOff(opWord: u16) {
     if (withShift) {
       clearModifiers(ModFlag_Shift);
     }
-    console.log(`la`, state.layerIndex);
+    // console.log(`la`, state.layerIndex);
   }
 }
 
 //--------------------------------------------------------------------------------
-//input handlers
+//assign handlers
 
 interface RecallKeyEntry {
   keyIndex: s8;
@@ -256,11 +273,10 @@ const state1 = new (class {
       keyIndex: -1,
       tick: 0
     }));
-  preBoundAssignSets: (IAssignSet | undefined)[] = Array(128).fill(undefined);
 })();
 
 function handleKeyOn(keyIndex: u8, opWord: u16) {
-  console.log(`keyOn ${keyIndex} ${opWord}`);
+  // console.log(`keyOn ${keyIndex} ${opWord}`);
   handleOperationOn(opWord);
   state1.boundAssigns[keyIndex] = opWord;
 }
@@ -268,7 +284,7 @@ function handleKeyOn(keyIndex: u8, opWord: u16) {
 function handleKeyOff(keyIndex: u8) {
   const opWord = state1.boundAssigns[keyIndex];
   if (opWord) {
-    console.log(`keyOff ${keyIndex} ${opWord}`);
+    // console.log(`keyOff ${keyIndex} ${opWord}`);
     handleOperationOff(opWord);
     state1.boundAssigns[keyIndex] = 0;
   }
@@ -295,86 +311,7 @@ function getAssignSetL(keyIndex: u8): IAssignSet | undefined {
       }
     }
   }
-}
-
-function assignBinder_issueInputTrigger(keyIndex: u8, trigger: string) {
-  if (trigger === Trigger.Down) {
-    state1.preBoundAssignSets[keyIndex] = getAssignSetL(keyIndex);
-  }
-
-  const assignSet = state1.preBoundAssignSets[keyIndex];
-  if (!assignSet) {
-    return;
-  }
-
-  const { assignType } = assignSet;
-
-  if (assignType === AssignType_Tri) {
-    const { pri, sec, ter } = assignSet;
-
-    if (pri) {
-      if (trigger === Trigger.SingleTap) {
-        handleKeyOn(keyIndex, pri);
-        recallKeyOff(keyIndex);
-      }
-      if (trigger === Trigger.Hold2) {
-        handleKeyOn(keyIndex, pri);
-      }
-    }
-    if (sec) {
-      if (trigger === Trigger.Hold) {
-        handleKeyOn(keyIndex, sec);
-      }
-    }
-    if (ter) {
-      if (trigger === Trigger.DoubleTap) {
-        handleKeyOn(keyIndex, ter);
-        recallKeyOff(keyIndex);
-      }
-    }
-
-    if (trigger === Trigger.Up) {
-      handleKeyOff(keyIndex);
-    }
-  }
-
-  if (assignType === AssignType_Dual) {
-    const { pri, sec } = assignSet;
-    if (pri) {
-      if (trigger === Trigger.Tap) {
-        handleKeyOn(keyIndex, pri);
-        recallKeyOff(keyIndex);
-      }
-      if (trigger === Trigger.Rehold) {
-        handleKeyOn(keyIndex, pri);
-      }
-    }
-    if (sec) {
-      if (trigger === Trigger.Hold) {
-        handleKeyOn(keyIndex, sec);
-      }
-    }
-
-    if (trigger === Trigger.Up || trigger === Trigger.DoubleTap) {
-      handleKeyOff(keyIndex);
-    }
-  }
-
-  if (assignType === AssignType_Single) {
-    const { pri } = assignSet;
-    if (pri) {
-      if (trigger === Trigger.Down || trigger === Trigger.Rehold) {
-        handleKeyOn(keyIndex, pri);
-      }
-    }
-    if (
-      trigger === Trigger.Up ||
-      trigger === Trigger.Tap ||
-      trigger === Trigger.DoubleTap
-    ) {
-      handleKeyOff(keyIndex);
-    }
-  }
+  return undefined;
 }
 
 function assignBinder_ticker(ms: u16) {
@@ -390,27 +327,14 @@ function assignBinder_ticker(ms: u16) {
 }
 
 //--------------------------------------------------------------------------------
+//resolver common
 
-const Trigger = {
-  Down: 'D',
-  Tap: 'DU', //素早くタップ
-  Hold: 'D_', //キーを押した状態で若干待ち
-  SingleTap: 'DU_', //1回タップ後若干待ち
-  Rehold: 'DUD', //タップした後すぐ同じキーを押下
-  Hold2: 'DUD_', //タップした後すぐ同じキーを押下し若干待ち
-  DoubleTap: 'DUDU', //2回タップ
-  Up: 'U'
+const resolverConfig = {
+  debugShowTrigger: false,
+  emitOutputStroke: true
 };
-const triggerValues = Object.values(Trigger);
-
-function getTriggerName(value: string) {
-  for (const key in Trigger) {
-    if ((Trigger as any)[key] === value) {
-      return key;
-    }
-  }
-  return undefined;
-}
+//resolverConfig.debugShowTrigger = true;
+// resolverConfig.emitOutputStroke = false;
 
 interface KeySlot {
   keyIndex: u8;
@@ -418,11 +342,23 @@ interface KeySlot {
   hold: boolean;
   nextHold: boolean;
   tick: u16;
+  interrupted: boolean;
+  resolving: boolean;
+  assignSet: IAssignSet;
+  resolverProc: ((slot: KeySlot) => boolean) | undefined;
+  inputEdge: 'down' | 'up' | undefined;
 }
 
 const local = new (class {
-  inerruptKeyIndex: number = -1;
+  interruptKeyIndex: number = -1;
 })();
+
+const fallbackAssignSet: IAssignSet = {
+  assignType: AssignType_None,
+  pri: 0,
+  sec: 0,
+  ter: 0
+};
 
 const keySlots: KeySlot[] = Array(128)
   .fill(0)
@@ -431,97 +367,335 @@ const keySlots: KeySlot[] = Array(128)
     steps: '',
     hold: false,
     nextHold: false,
-    tick: 0
+    tick: 0,
+    interrupted: false,
+    resolving: false,
+    assignSet: fallbackAssignSet,
+    resolverProc: undefined,
+    inputEdge: undefined
   }));
 
 const TH = 200;
 
-function clearSteps(slot: KeySlot) {
+function keySlot_clearSteps(slot: KeySlot) {
   slot.steps = '';
 }
 
-function pushStep(slot: KeySlot, s: string) {
-  slot.steps += s;
-
-  const isTrigger = triggerValues.some((tr) => slot.steps === tr);
-  if (isTrigger) {
-    const trigger = slot.steps;
-    const triggerName = getTriggerName(trigger);
-    console.log(`[TRIGGER] ${slot.keyIndex} ${trigger} ${triggerName}`);
-    assignBinder_issueInputTrigger(slot.keyIndex, trigger);
-  }
-  slot.tick = 0;
+function keySlot_debugShowSlotTrigger(slot: KeySlot, triggerObj: any) {
+  const trigger = getFieldNameByValue(triggerObj, slot.steps) || '--';
+  console.log(`[TRIGGER] ${slot.keyIndex} ${slot.steps} ${trigger}`);
 }
 
-function keySlot_tick(slot: KeySlot, ms: number) {
-  slot.tick += ms;
+//--------------------------------------------------------------------------------
 
-  if (local.inerruptKeyIndex !== -1) {
-    for (const slot of keySlots) {
-      if (slot.steps === 'D' && slot.hold && slot.tick < TH) {
-        //interrupt hold
-        pushStep(slot, '_');
-      }
-    }
-    local.inerruptKeyIndex = -1;
+function keySlot_dummyResolver(slot: KeySlot): boolean {
+  if (slot.inputEdge === 'up') {
+    return true;
+  }
+  return false;
+}
+
+//--------------------------------------------------------------------------------
+
+const TriggerA = {
+  Down: 'D',
+  Up: 'U'
+};
+
+function keySlot_pushStepA(slot: KeySlot, step: 'D' | 'U' | '_') {
+  slot.steps += step;
+
+  if (resolverConfig.debugShowTrigger) {
+    keySlot_debugShowSlotTrigger(slot, TriggerA);
   }
 
-  const { steps, tick, hold, nextHold } = slot;
+  const { keyIndex, assignSet, steps } = slot;
 
-  if (!hold && nextHold) {
-    slot.hold = true;
+  if (resolverConfig.emitOutputStroke) {
+    if (steps === TriggerA.Down) {
+      handleKeyOn(keyIndex, assignSet.pri);
+    }
+
+    if (steps === TriggerA.Up) {
+      handleKeyOff(keyIndex);
+    }
+  }
+}
+
+function keySlot_singleResolverA(slot: KeySlot): boolean {
+  const { inputEdge } = slot;
+
+  if (inputEdge === 'down') {
+    keySlot_clearSteps(slot);
+    keySlot_pushStepA(slot, 'D');
+  }
+  if (inputEdge === 'up') {
+    keySlot_clearSteps(slot);
+    keySlot_pushStepA(slot, 'U');
+    return true;
+  }
+  return false;
+}
+
+//--------------------------------------------------------------------------------
+
+const TriggerB = {
+  Down: 'D',
+  Tap: 'DU',
+  Hold: 'D_',
+  Rehold: 'DUD',
+  Up: 'U'
+};
+
+function keySlot_pushStepB(slot: KeySlot, step: 'D' | 'U' | '_') {
+  slot.steps += step;
+  slot.tick = 0;
+
+  if (resolverConfig.debugShowTrigger) {
+    keySlot_debugShowSlotTrigger(slot, TriggerB);
+  }
+
+  const { steps, keyIndex, assignSet } = slot;
+
+  if (resolverConfig.emitOutputStroke) {
+    if (steps === TriggerB.Down) {
+    }
+
+    if (steps === TriggerB.Tap) {
+      handleKeyOn(keyIndex, assignSet.pri);
+      recallKeyOff(keyIndex);
+    }
+
+    if (steps === TriggerB.Hold) {
+      handleKeyOn(keyIndex, assignSet.sec);
+    }
+
+    if (steps === TriggerB.Rehold) {
+      handleKeyOn(keyIndex, assignSet.pri);
+    }
+
+    if (steps === TriggerB.Up) {
+      handleKeyOff(keyIndex);
+    }
+  }
+}
+
+function keySlot_tapHoldResolverB(slot: KeySlot): boolean {
+  const { inputEdge, hold, steps, tick, interrupted } = slot;
+
+  if (inputEdge === 'down') {
     if (steps === 'DU' && tick < TH) {
-      //rehold
-      pushStep(slot, 'D');
+      //tap-rehold
+      keySlot_pushStepB(slot, 'D');
     } else {
       //down
-      clearSteps(slot);
-      pushStep(slot, 'D');
+      keySlot_clearSteps(slot);
+      keySlot_pushStepB(slot, 'D');
     }
   }
 
-  if (hold && steps === 'D' && tick >= TH) {
+  if (steps === 'D' && hold && tick >= TH) {
     //hold
-    pushStep(slot, '_');
+    keySlot_pushStepB(slot, '_');
+  }
+
+  if (steps === 'D' && hold && tick < TH && interrupted) {
+    //interrupt hold
+    keySlot_pushStepB(slot, '_');
+  }
+
+  if (steps === 'DU' && !hold && tick >= TH) {
+    //slient after tap
+    keySlot_pushStepB(slot, '_');
+    return true;
+  }
+
+  if (inputEdge === 'up') {
+    if (steps === 'D' && tick < TH) {
+      //tap
+      keySlot_pushStepB(slot, 'U');
+    }
+    if (steps === 'D_' || steps === 'DUD') {
+      //hold up, rehold up
+      keySlot_clearSteps(slot);
+      keySlot_pushStepB(slot, 'U');
+      return true;
+    }
+  }
+  return false;
+}
+
+//--------------------------------------------------------------------------------
+
+const TriggerC = {
+  Down: 'D',
+  Hold: 'D_',
+  Tap: 'DU_',
+  Hold2: 'DUD_',
+  Tap2: 'DUDU',
+  Up: 'U'
+};
+
+function keySlot_pushStepC(slot: KeySlot, step: 'D' | 'U' | '_') {
+  slot.steps += step;
+  slot.tick = 0;
+
+  if (resolverConfig.debugShowTrigger) {
+    keySlot_debugShowSlotTrigger(slot, TriggerC);
+  }
+
+  const { steps, keyIndex, assignSet } = slot;
+
+  if (resolverConfig.emitOutputStroke) {
+    if (steps === TriggerC.Down) {
+    }
+
+    if (steps === TriggerC.Tap) {
+      handleKeyOn(keyIndex, assignSet.pri);
+      recallKeyOff(keyIndex);
+    }
+
+    if (steps === TriggerC.Hold) {
+      handleKeyOn(keyIndex, assignSet.sec);
+    }
+
+    if (steps === TriggerC.Hold2) {
+      handleKeyOn(keyIndex, assignSet.pri);
+    }
+
+    if (steps === TriggerC.Tap2) {
+      handleKeyOn(keyIndex, assignSet.ter);
+      recallKeyOff(keyIndex);
+    }
+
+    if (steps === TriggerC.Up) {
+      handleKeyOff(keyIndex);
+    }
+  }
+}
+function keySlot_doubleTapResolverC(slot: KeySlot): boolean {
+  const { inputEdge, steps, tick, hold, interrupted } = slot;
+
+  if (inputEdge === 'down') {
+    if (steps === 'DU' && tick < TH) {
+      //down2
+      keySlot_pushStepC(slot, 'D');
+    } else {
+      //down
+      keySlot_clearSteps(slot);
+      keySlot_pushStepC(slot, 'D');
+    }
+  }
+
+  if (steps === 'D' && hold && tick >= TH) {
+    //hold
+    keySlot_pushStepC(slot, '_');
+  }
+
+  if (steps === 'D' && hold && tick < TH && interrupted) {
+    //interrupt hold
+    keySlot_pushStepC(slot, '_');
   }
 
   if (hold && steps === 'DUD' && tick >= TH) {
     //hold2
-    pushStep(slot, '_');
+    keySlot_pushStepC(slot, '_');
   }
 
   if (!hold && steps === 'DU' && tick >= TH) {
     //silent after single tap
-    pushStep(slot, '_');
+    keySlot_pushStepC(slot, '_');
+    return true;
   }
 
-  if (hold && !nextHold) {
-    slot.hold = false;
-    if ((steps === 'D' || steps === 'DUD') && tick < TH) {
-      //tap, dtap
-      pushStep(slot, 'U');
+  if (inputEdge === 'up') {
+    if (steps === 'DUD' && tick < TH) {
+      //dtap
+      keySlot_pushStepC(slot, 'U');
+      return true;
+    } else if (steps === 'D' && tick < TH) {
+      //tap
+      keySlot_pushStepC(slot, 'U');
     } else {
       //up
-      clearSteps(slot);
-      pushStep(slot, 'U');
+      keySlot_clearSteps(slot);
+      keySlot_pushStepC(slot, 'U');
+      return true;
     }
   }
+
+  return false;
+}
+
+//--------------------------------------------------------------------------------
+
+const keySlotResolverFuncs = [
+  keySlot_dummyResolver,
+  keySlot_singleResolverA,
+  keySlot_tapHoldResolverB,
+  keySlot_doubleTapResolverC
+];
+
+function keySlot_tick(slot: KeySlot, ms: number) {
+  slot.tick += ms;
+
+  slot.inputEdge = undefined;
+  if (!slot.hold && slot.nextHold) {
+    slot.hold = true;
+    slot.inputEdge = 'down';
+  }
+  if (slot.hold && !slot.nextHold) {
+    slot.hold = false;
+    slot.inputEdge = 'up';
+  }
+
+  const intrrupt_kidx = local.interruptKeyIndex;
+  slot.interrupted = intrrupt_kidx !== -1 && intrrupt_kidx !== slot.keyIndex;
+
+  if (!slot.resolverProc && slot.inputEdge === 'down') {
+    slot.assignSet = getAssignSetL(slot.keyIndex) || fallbackAssignSet;
+    slot.resolverProc = keySlotResolverFuncs[slot.assignSet.assignType];
+    if (resolverConfig.debugShowTrigger) {
+      console.log(
+        `resolver attached ${slot.keyIndex} ${slot.assignSet.assignType}`
+      );
+    }
+  }
+
+  if (slot.resolverProc) {
+    const done = slot.resolverProc(slot);
+    if (done) {
+      slot.resolverProc = undefined;
+      if (resolverConfig.debugShowTrigger) {
+        console.log(`resolver detached ${slot.keyIndex}`);
+      }
+    }
+  }
+}
+
+function triggerResolver_tick(ms: number) {
+  const hotSlot = keySlots[local.interruptKeyIndex];
+  keySlots.forEach((slot) => {
+    if (slot !== hotSlot) {
+      keySlot_tick(slot, ms);
+    }
+  });
+  if (hotSlot) {
+    keySlot_tick(hotSlot, ms);
+  }
+  local.interruptKeyIndex = -1;
 }
 
 function triggerResolver_handleKeyInput(keyIndex: u8, isDown: boolean) {
   const slot = keySlots[keyIndex];
   if (isDown) {
     console.log(`down ${keyIndex}`);
-    local.inerruptKeyIndex = keyIndex;
+    local.interruptKeyIndex = keyIndex;
     slot.nextHold = true;
   } else {
     console.log(`up ${keyIndex}`);
     slot.nextHold = false;
   }
-}
-
-function triggerResolver_tick(ms: number) {
-  keySlots.forEach((slot) => keySlot_tick(slot, ms));
 }
 
 //--------------------------------------------------------------------------------
@@ -531,11 +705,10 @@ export function coreLogic_handleKeyInput(keyIndex: u8, isDown: boolean) {
   triggerResolver_handleKeyInput(keyIndex, isDown);
 }
 
-let prevTick = Date.now();
+const tickUpdator = createTimeIntervalCounter();
+
 export function coreLogic_processTicker() {
-  const tick = Date.now();
-  const ms = tick - prevTick;
-  prevTick = tick;
-  triggerResolver_tick(ms);
-  assignBinder_ticker(ms);
+  const elapsedMs = tickUpdator();
+  triggerResolver_tick(elapsedMs);
+  assignBinder_ticker(elapsedMs);
 }
