@@ -7,7 +7,7 @@ import { UiTheme } from '~ui2/views/common/UiTheme';
 import { DeviceControlSection } from './KeyAssignEditPage/DeviceControlSection';
 import { GlobalMenuPart } from './GlobalMenu';
 import { appDomain } from '~ui2/models/zAppDomain';
-import { KeyboardShapePreviewPage } from './KeyboardShapePreviewPage';
+import { KeyboardShapePreviewPage } from './ShapePreviewPage/ShapePreviewPage';
 
 export function ConfiguratorSiteRootContent() {
   const cssPageRoot = css`

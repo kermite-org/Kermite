@@ -6,6 +6,7 @@ import { appDomain } from '~ui2/models/zAppDomain';
 import { backendAgent } from '~ui2/models/dataSource/ipc';
 import { IKeyboardShape } from '~defs/ProfileData';
 import { appUi } from '~ui2/models/appGlobal';
+import { KeyboardShapeView } from './KeyboardShapeView';
 
 function BreedSelector() {
   const breedNames = getAvailableBreedNames();
@@ -26,32 +27,40 @@ function BreedSelector() {
   );
 }
 
-export const KeyboardShapePreviewPage = () => {
-  const cssBase = css`
-    padding: 10px;
-  `;
-
-  let curBreedName = '';
+function makeShapeLoader() {
+  let loadedBreedName = '';
   let loadedShape: IKeyboardShape | undefined;
 
-  function updateModel() {
-    const breedName = appDomain.uiStatusModel.settings.shapeViewBreedName;
-    if (breedName !== curBreedName) {
-      curBreedName = breedName;
+  return (breedName: string) => {
+    if (breedName !== loadedBreedName) {
+      loadedBreedName = breedName;
       backendAgent.getKeyboardShape(breedName).then((shape) => {
         loadedShape = shape;
         appUi.rerender();
       });
     }
-  }
+    return loadedShape;
+  };
+}
+
+export const KeyboardShapePreviewPage = () => {
+  const cssBase = css`
+    padding: 10px;
+    > * + * {
+      margin-top: 5px;
+    }
+  `;
+
+  const shapeLoader = makeShapeLoader();
 
   return () => {
-    updateModel();
+    const breedName = appDomain.uiStatusModel.settings.shapeViewBreedName;
+    const loadedShape = shapeLoader(breedName);
     return (
       <div css={cssBase}>
         <div>keyboard shape preview</div>
         <BreedSelector />
-        <div>{loadedShape && JSON.stringify(loadedShape)}</div>
+        {loadedShape && <KeyboardShapeView shape={loadedShape} />}
       </div>
     );
   };
