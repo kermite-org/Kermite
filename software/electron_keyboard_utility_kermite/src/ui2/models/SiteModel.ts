@@ -16,7 +16,12 @@ export class SiteModel {
   }
 
   get isDevelopment() {
-    return this._isDevelopment;
+    //バックエンドから環境変数を取得する場合、グローバルスコープで参照したり、
+    //バックエンドから値が帰ってくる前に参照すると正しい値が得られない問題がある
+    // return this._isDevelopment;
+    //代替としてlocation.protocolでデバッグ実行中かを判定
+    return location.protocol === 'http:';
+    //todo: preload.jsでBE-->FEに環境変数を受け渡す?
   }
 
   setWidgetMode = (isWidgetMode: boolean) => {

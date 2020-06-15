@@ -1,7 +1,8 @@
 // import { IProfileManagerViewModel } from './ProfileManagementPart.model';
 import { css } from 'goober';
 import { h } from '~ui2/views/basis/qx';
-import { appDomain } from '~ui2/models/zAppDomain';
+import { appDomain, siteModel } from '~ui2/models/zAppDomain';
+import { UiStatusModel } from '~ui2/models/UiStatusModel';
 
 export function makeGlobalMenuModel() {
   const self = {
@@ -74,17 +75,37 @@ interface IMenuItem {
 }
 
 function createMenuItems(): IMenuItem[] {
-  const { settingsModel } = appDomain;
-  return [
-    {
-      key: 'mi_toggleTestInputAreaVisible',
-      text: 'Show test input area',
-      handler: () => {
-        settingsModel.showTestInputArea = !settingsModel.showTestInputArea;
-      },
-      active: settingsModel.showTestInputArea
-    }
-  ];
+  const {
+    uiStatusModel: { settings }
+  } = appDomain;
+
+  const miShowInputArea: IMenuItem = {
+    key: 'miShowInputArea',
+    text: 'Show test input area',
+    handler() {
+      settings.showTestInputArea = !settings.showTestInputArea;
+    },
+    active: settings.showTestInputArea
+  };
+
+  const miShowShapePreview: IMenuItem = {
+    key: 'miShowShapePreview',
+    text: 'Show shape preview page',
+    handler() {
+      if (settings.page !== 'shapePreview') {
+        settings.page = 'shapePreview';
+      } else {
+        settings.page = 'editor';
+      }
+    },
+    active: settings.page === 'shapePreview'
+  };
+
+  if (siteModel.isDevelopment) {
+    return [miShowInputArea, miShowShapePreview];
+  } else {
+    return [miShowInputArea];
+  }
 }
 
 export const GlobalMenuPart = () => {

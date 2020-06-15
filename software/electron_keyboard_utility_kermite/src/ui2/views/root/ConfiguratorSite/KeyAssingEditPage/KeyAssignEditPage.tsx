@@ -97,7 +97,7 @@ export const KeyAssignEditPage = () => {
     <div css={cssKeyAssignEditPageRoot}>
       <div
         css={cssEditTopBarBox}
-        qxIf={appDomain.settingsModel.showTestInputArea}
+        qxIf={appDomain.uiStatusModel.settings.showTestInputArea}
       >
         <TestInputArea />
       </div>

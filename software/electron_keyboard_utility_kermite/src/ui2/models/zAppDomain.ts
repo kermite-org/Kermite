@@ -6,6 +6,7 @@ import { backendAgent } from './dataSource/ipc';
 import { KeyboardConfigModel } from './KeyboardConfigModel';
 import { ApplicationSettingsModel } from './ApplicationSettingsModel';
 import { DeviceStatusModel } from './DeviceStatusModel';
+import { UiStatusModel } from './UiStatusModel';
 
 export const appDomain = new (class {
   readonly editorModel = new EditorModel();
@@ -15,6 +16,7 @@ export const appDomain = new (class {
   readonly keyboardConfigModel = new KeyboardConfigModel();
   readonly settingsModel = new ApplicationSettingsModel();
   readonly deviceStatusModel = new DeviceStatusModel();
+  readonly uiStatusModel = new UiStatusModel();
 
   initialize() {
     //debug
@@ -35,9 +37,11 @@ export const appDomain = new (class {
     this.keyboardConfigModel.intialize();
     this.settingsModel.initialize();
     this.deviceStatusModel.initialize();
+    this.uiStatusModel.initialize();
   }
 
   terminate() {
+    this.uiStatusModel.finalize();
     this.deviceStatusModel.finalinze();
     this.settingsModel.finalize();
     this.keyboardConfigModel.finalize();
