@@ -4,7 +4,7 @@ import { h } from '~ui2/views/basis/qx';
 import {
   IKeyUnitCardViewModel,
   makeKeyUnitCardsPartViewModel
-} from '../ConfiguratorSite/KeyAssingEditPage/KeyboardSection/KeyUnitCardsPart.model';
+} from '../ConfiguratorSite/KeyAssignEditPage/KeyboardSection/KeyUnitCardsPart.model';
 
 function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
   const { keyUnitId, pos, primaryText, secondaryText, isHold } = keyUnit;

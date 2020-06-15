@@ -1,10 +1,10 @@
 import { css } from 'goober';
-import { KeyAssignEditPage } from './KeyAssingEditPage/KeyAssignEditPage';
+import { KeyAssignEditPage } from './KeyAssignEditPage/KeyAssignEditPage';
 import { h } from '~ui2/views/basis/qx';
-import { ProfileManagementPart } from './KeyAssingEditPage/ProfilesSection/ProfileManagementPart';
+import { ProfileManagementPart } from './KeyAssignEditPage/ProfilesSection/ProfileManagementPart';
 import { CustomWindowFrame } from './WindowFrame/CustomWindowFrame';
 import { UiTheme } from '~ui2/views/common/UiTheme';
-import { DeviceControlSection } from './KeyAssingEditPage/DeviceControlSection';
+import { DeviceControlSection } from './KeyAssignEditPage/DeviceControlSection';
 import { GlobalMenuPart } from './GlobalMenu';
 import { appDomain } from '~ui2/models/zAppDomain';
 import { KeyboardShapePreviewPage } from './KeyboardShapePreviewPage';
