@@ -6,6 +6,8 @@ import { CustomWindowFrame } from './WindowFrame/CustomWindowFrame';
 import { UiTheme } from '~ui2/views/common/UiTheme';
 import { DeviceControlSection } from './KeyAssingEditPage/DeviceControlSection';
 import { GlobalMenuPart } from './GlobalMenu';
+import { appDomain } from '~ui2/models/zAppDomain';
+import { KeyboardShapePreviewPage } from './KeyboardShapePreviewPage';
 
 export function ConfiguratorSiteRootContent() {
   const cssPageRoot = css`
@@ -63,6 +65,9 @@ export const ConfiguratorSiteRoot = () => {
     flex-grow: 1;
   `;
 
+  const showEditor = appDomain.uiStatusModel.settings.page === 'editor';
+  const showShapePreview =
+    appDomain.uiStatusModel.settings.page === 'shapePreview';
   return (
     <CustomWindowFrame>
       <div css={cssContentRow}>
@@ -70,7 +75,8 @@ export const ConfiguratorSiteRoot = () => {
           <GlobalMenuPart />
         </div>
         <div css={cssMainColumn}>
-          <ConfiguratorSiteRootContent />
+          {showEditor && <ConfiguratorSiteRootContent />}
+          {showShapePreview && <KeyboardShapePreviewPage />}
         </div>
       </div>
     </CustomWindowFrame>
