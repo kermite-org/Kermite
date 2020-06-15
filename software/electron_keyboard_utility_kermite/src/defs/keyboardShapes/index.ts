@@ -9,9 +9,8 @@ export function getAvailableBreedNames(): string[] {
   return keyboardShapes.map((shape) => shape.breedName);
 }
 
-export function getKeyboardShapeByBreedName(breedName: string): IKeyboardShape {
-  return (
-    keyboardShapes.find((shape) => shape.breedName === breedName) ||
-    keyboardShape_fallbackData
-  );
+export function getKeyboardShapeByBreedName(
+  breedName: string
+): IKeyboardShape | undefined {
+  return keyboardShapes.find((shape) => shape.breedName === breedName);
 }

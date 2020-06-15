@@ -1,5 +1,5 @@
 import { IEventSource } from '~funcs/xpc/types';
-import { IProfileData } from './ProfileData';
+import { IProfileData, IKeyboardShape } from './ProfileData';
 import {
   IKeyboardConfig,
   IEnvironmentConfigForRendererProcess,
@@ -56,6 +56,7 @@ export interface IBackendAgent {
   minimizeWindow(): Promise<void>;
   maximizeWindow(): Promise<void>;
   widgetModeChanged(isWidgetMode: boolean): Promise<void>;
+  getKeyboardShape(breedName: string): Promise<IKeyboardShape | undefined>;
 
   keyEvents: IEventSource<IRealtimeKeyboardEvent>;
   profileStatusEvents: IEventSource<Partial<IProfileManagerStatus>>;
