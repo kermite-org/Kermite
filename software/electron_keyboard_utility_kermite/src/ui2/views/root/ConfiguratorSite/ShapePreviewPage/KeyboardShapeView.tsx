@@ -17,8 +17,9 @@ const cssContent = css`
 
 export function KeyboardShapeView(props: { shape: IKeyboardShape }) {
   const { shape } = props;
-  const sw = shape.displayArea.width;
-  const sh = shape.displayArea.height;
+  const SC = 2;
+  const sw = shape.displayArea.width * SC;
+  const sh = shape.displayArea.height * SC;
   return (
     <div css={cssBase}>
       <ScalerBox contentWidth={sw} contentHeight={sh}>

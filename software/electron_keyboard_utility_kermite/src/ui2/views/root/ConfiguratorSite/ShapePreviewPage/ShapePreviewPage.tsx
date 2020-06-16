@@ -17,7 +17,7 @@ function BreedSelector() {
     <select
       value={currentBreedName}
       onChange={reflectFieldValue(settings, 'shapeViewBreedName')}
-      style={{ width: '150px' }}
+      style={{ minWidth: '100px' }}
     >
       {breedNames.map((breedName) => (
         <option value={breedName} key={breedName}>
@@ -59,7 +59,14 @@ const cssBase = css`
     flex-shrink: 0;
   }
 
-  > .majorRow {
+  > .keyboardRow {
+    flex-shrink: 1;
+    flex-grow: 1;
+    height: 50%;
+    /* border: solid 2px yellow; */
+  }
+
+  > .restRow {
     flex-shrink: 1;
     flex-grow: 1;
     height: 50%;
@@ -79,10 +86,10 @@ export const KeyboardShapePreviewPage = () => {
         <div>
           <BreedSelector />
         </div>
-        <div className="majorRow">
+        <div className="keyboardRow">
           {loadedShape && <KeyboardShapeView shape={loadedShape} />}
         </div>
-        <div className="majorRow"></div>
+        <div className="restRow"></div>
       </div>
     );
   };
