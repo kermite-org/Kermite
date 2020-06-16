@@ -1,10 +1,14 @@
 import { qxGlobal } from './qxGlobal';
 
+function camelCaseToHyphenCase(str: string) {
+  return str.replace(/[A-Z]/g, (s) => '-' + s.charAt(0).toLowerCase());
+}
 function styleObjectToString(obj: { [key: string]: any }) {
   return Object.keys(obj)
     .map((key) => {
       const value = obj[key];
-      return `${key}:${value};`;
+      const key1 = camelCaseToHyphenCase(key);
+      return `${key1}:${value};`;
     })
     .join(' ');
 }
