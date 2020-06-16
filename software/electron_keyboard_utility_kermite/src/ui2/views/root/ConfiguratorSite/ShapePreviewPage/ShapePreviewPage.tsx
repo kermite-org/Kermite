@@ -17,6 +17,7 @@ function BreedSelector() {
     <select
       value={currentBreedName}
       onChange={reflectFieldValue(settings, 'shapeViewBreedName')}
+      style={{ width: '150px' }}
     >
       {breedNames.map((breedName) => (
         <option value={breedName} key={breedName}>
@@ -43,14 +44,30 @@ function makeShapeLoader() {
   };
 }
 
-export const KeyboardShapePreviewPage = () => {
-  const cssBase = css`
-    padding: 10px;
-    > * + * {
-      margin-top: 5px;
-    }
-  `;
+const cssBase = css`
+  height: 100%;
+  padding: 10px;
+  > * + * {
+    margin-top: 5px;
+  }
+  /* border: solid 2px #08f; */
 
+  display: flex;
+  flex-direction: column;
+
+  > * {
+    flex-shrink: 0;
+  }
+
+  > .majorRow {
+    flex-shrink: 1;
+    flex-grow: 1;
+    height: 50%;
+    /* border: solid 2px yellow; */
+  }
+`;
+
+export const KeyboardShapePreviewPage = () => {
   const shapeLoader = makeShapeLoader();
 
   return () => {
@@ -59,8 +76,13 @@ export const KeyboardShapePreviewPage = () => {
     return (
       <div css={cssBase}>
         <div>keyboard shape preview</div>
-        <BreedSelector />
-        {loadedShape && <KeyboardShapeView shape={loadedShape} />}
+        <div>
+          <BreedSelector />
+        </div>
+        <div className="majorRow">
+          {loadedShape && <KeyboardShapeView shape={loadedShape} />}
+        </div>
+        <div className="majorRow"></div>
       </div>
     );
   };
