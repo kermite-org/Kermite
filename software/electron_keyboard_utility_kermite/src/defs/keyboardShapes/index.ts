@@ -1,6 +1,6 @@
 import { keyboardShape_astalia } from './astelia';
 import { keyboardShape_4x3pad } from './4x3pad';
-import { IKeyboardShape, keyboardShape_fallbackData } from '~defs/ProfileData';
+import { IKeyboardShape } from '~defs/ProfileData';
 
 export const keyboardShapes = [keyboardShape_astalia, keyboardShape_4x3pad];
 

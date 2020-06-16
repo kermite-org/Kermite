@@ -2,6 +2,12 @@ import { IProfileData, IKeyboardShape } from './ProfileData';
 
 const keyboardShape_4x3pad: IKeyboardShape = {
   breedName: '4x3pad',
+  displayArea: {
+    centerX: 0,
+    centerY: 0,
+    width: 300,
+    height: 110
+  },
   keyUnits: [
     { id: 'ku3', x: 0, y: 19, r: 0, keyIndex: 0 },
     { id: 'ku2', x: 19, y: 19, r: 0, keyIndex: 1 },

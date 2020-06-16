@@ -2,6 +2,12 @@ import { IKeyboardShape } from '~defs/ProfileData';
 
 export const keyboardShape_astalia: IKeyboardShape = {
   breedName: 'astelia',
+  displayArea: {
+    centerX: 0,
+    centerY: 0,
+    width: 300,
+    height: 110
+  },
   keyUnits: [
     { id: 'ku0', x: -21.259478, y: 25.185357, r: 9, keyIndex: 0 },
     { id: 'ku1', x: -40.027745, y: 22.233922, r: 9, keyIndex: 1 },

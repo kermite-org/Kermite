@@ -202,12 +202,24 @@ export interface IKeyboardShape {
   breedName: string;
   keyUnits: IKeyUnitEntry[];
   bodyPathMarkupText: string;
+  displayArea: {
+    centerX: number;
+    centerY: number;
+    width: number;
+    height: number;
+  };
 }
 
 export const keyboardShape_fallbackData: IKeyboardShape = {
   breedName: 'none',
   keyUnits: [],
-  bodyPathMarkupText: ''
+  bodyPathMarkupText: '',
+  displayArea: {
+    centerX: 0,
+    centerY: 0,
+    width: 100,
+    height: 100
+  }
 };
 
 export type IProfileData = {
