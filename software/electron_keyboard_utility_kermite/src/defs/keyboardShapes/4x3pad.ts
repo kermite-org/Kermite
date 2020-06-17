@@ -3,10 +3,10 @@ import { IKeyboardShape } from '~defs/ProfileData';
 export const keyboardShape_4x3pad: IKeyboardShape = {
   breedName: '4x3pad',
   displayArea: {
-    centerX: 0,
-    centerY: 0,
-    width: 300,
-    height: 110
+    centerX: 40,
+    centerY: 40,
+    width: 120,
+    height: 80
   },
   keyUnits: [
     { id: 'ku1', x: 57, y: 19, r: 0, keyIndex: 3 },
@@ -24,7 +24,7 @@ export const keyboardShape_4x3pad: IKeyboardShape = {
     { id: 'ku15', x: 19, y: 57, r: 0, keyIndex: 9 },
     { id: 'ku16', x: 0, y: 57, r: 0, keyIndex: 8 }
   ],
-  bodyPathMarkupText: ['M -20,0', 'L 100,0', 'L 100,80', 'L -20,80', 'z'].join(
+  bodyPathMarkupText: ['M -20,0', 'L 80,0', 'L 80,80', 'L -20,80', 'z'].join(
     ' '
   )
 };
