@@ -1,11 +1,12 @@
 import { css } from 'goober';
-import { h } from '~ui2/views/basis/qx';
-import { getAvailableBreedNames } from '~defs/keyboardShapes';
-import { reflectFieldValue } from '~ui2/views/common/FormHelpers';
-import { appDomain } from '~ui2/models/zAppDomain';
-import { backendAgent } from '~ui2/models/dataSource/ipc';
+import {
+  getAvailableBreedNames,
+  getKeyboardShapeByBreedName
+} from '~defs/keyboardShapes';
 import { IKeyboardShape } from '~defs/ProfileData';
-import { appUi } from '~ui2/models/appGlobal';
+import { appDomain } from '~ui2/models/zAppDomain';
+import { h } from '~ui2/views/basis/qx';
+import { reflectFieldValue } from '~ui2/views/common/FormHelpers';
 import { KeyboardShapeView } from './KeyboardShapeView';
 
 function BreedSelector() {
@@ -35,10 +36,13 @@ function makeShapeLoader() {
   return (breedName: string) => {
     if (breedName !== loadedBreedName) {
       loadedBreedName = breedName;
-      backendAgent.getKeyboardShape(breedName).then((shape) => {
-        loadedShape = shape;
-        appUi.rerender();
-      });
+      //RPC経由でバックエンドからKeyboardShapeを取得した場合, ソースコードの変更を反映できない
+      // backendAgent.getKeyboardShape(breedName).then((shape) => {
+      //   loadedShape = shape;
+      //   appUi.rerender();
+      // });
+      //KeyboardShapeの定義を直接参照
+      loadedShape = getKeyboardShapeByBreedName(breedName);
     }
     return loadedShape;
   };
@@ -50,7 +54,6 @@ const cssBase = css`
   > * + * {
     margin-top: 5px;
   }
-  /* border: solid 2px #08f; */
 
   display: flex;
   flex-direction: column;
@@ -63,14 +66,12 @@ const cssBase = css`
     flex-shrink: 1;
     flex-grow: 1;
     height: 50%;
-    /* border: solid 2px yellow; */
   }
 
   > .restRow {
     flex-shrink: 1;
     flex-grow: 1;
     height: 50%;
-    /* border: solid 2px yellow; */
   }
 `;
 

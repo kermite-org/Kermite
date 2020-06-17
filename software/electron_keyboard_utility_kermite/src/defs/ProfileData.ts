@@ -198,16 +198,18 @@ export interface IKeyUnitEntry {
   keyIndex: number;
 }
 
+export interface IKeyboardShapeDisplayArea {
+  centerX: number;
+  centerY: number;
+  width: number;
+  height: number;
+}
+
 export interface IKeyboardShape {
   breedName: string;
   keyUnits: IKeyUnitEntry[];
   bodyPathMarkupText: string;
-  displayArea: {
-    centerX: number;
-    centerY: number;
-    width: number;
-    height: number;
-  };
+  displayArea: IKeyboardShapeDisplayArea;
 }
 
 export const keyboardShape_fallbackData: IKeyboardShape = {
