@@ -1,12 +1,13 @@
 import { overwriteObjectProps } from '~funcs/Utils';
 import { siteModel } from './zAppDomain';
 
-interface IUiSettings {
+export interface IUiSettings {
   showTestInputArea: boolean;
   page: 'editor' | 'shapePreview';
   shapeViewBreedName: string;
   shapeViewShowKeyId: boolean;
   shapeViewShowKeyIndex: boolean;
+  shapeViewShowBoundingBox: boolean;
 }
 
 const defaultUiSettins: IUiSettings = {
@@ -14,7 +15,8 @@ const defaultUiSettins: IUiSettings = {
   page: 'editor',
   shapeViewBreedName: '',
   shapeViewShowKeyId: false,
-  shapeViewShowKeyIndex: false
+  shapeViewShowKeyIndex: false,
+  shapeViewShowBoundingBox: false
 };
 
 export class UiStatusModel {

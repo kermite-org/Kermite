@@ -49,6 +49,23 @@ const KeyboardBodyShape = (props: { outerPaths: string }) => {
   return <path d={props.outerPaths} css={cssBody} />;
 };
 
+const BoundingBox = (props: { displayArea: IKeyboardShapeDisplayArea }) => {
+  const da = props.displayArea;
+  const left = da.centerX - da.width / 2;
+  const top = da.centerY - da.height / 2;
+  const { width, height } = da;
+  return (
+    <rect
+      x={left}
+      y={top}
+      width={width}
+      height={height}
+      stroke="#0F0"
+      fill="transparent"
+    />
+  );
+};
+
 export const KeyUnitCardsPart = (props: { keyUnits: IKeyUnitEntry[] }) => {
   const settings = appDomain.uiStatusModel.settings;
   const showKeyId = settings.shapeViewShowKeyId;
@@ -91,6 +108,9 @@ export function KeyboardShapeView(props: { shape: IKeyboardShape }) {
     align-items: center;
   `;
 
+  const showBoundingBox =
+    appDomain.uiStatusModel.settings.shapeViewShowBoundingBox;
+
   return (
     <div css={cssKeyboardShapeView}>
       <ScalerBox contentWidth={contentWidth} contentHeight={contentHeight}>
@@ -98,6 +118,10 @@ export function KeyboardShapeView(props: { shape: IKeyboardShape }) {
           <KeyboardSvgFrame displayArea={shape.displayArea} dpiScale={dpiScale}>
             <KeyboardBodyShape outerPaths={shape.bodyPathMarkupText} />
             <KeyUnitCardsPart keyUnits={shape.keyUnits} />
+            <BoundingBox
+              displayArea={shape.displayArea}
+              qxIf={showBoundingBox}
+            />
           </KeyboardSvgFrame>
         </div>
       </ScalerBox>

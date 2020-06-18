@@ -11,6 +11,7 @@ import {
   reflectFieldChecked
 } from '~ui2/views/common/FormHelpers';
 import { KeyboardShapeView } from './KeyboardShapeView';
+import { IUiSettings } from '~ui2/models/UiStatusModel';
 
 function BreedSelector() {
   const breedNames = getAvailableBreedNames();
@@ -31,6 +32,25 @@ function BreedSelector() {
     </select>
   );
 }
+
+interface IDisplayOptionSource {
+  fieldKey: keyof IUiSettings;
+  label: string;
+}
+const displayOptionsSource: IDisplayOptionSource[] = [
+  {
+    fieldKey: 'shapeViewShowKeyId',
+    label: 'keyId'
+  },
+  {
+    fieldKey: 'shapeViewShowKeyIndex',
+    label: 'keyId'
+  },
+  {
+    fieldKey: 'shapeViewShowBoundingBox',
+    label: 'box'
+  }
+];
 
 function OptionsBox() {
   const cssOptionsBox = css`
@@ -59,27 +79,18 @@ function OptionsBox() {
 
   return (
     <div css={cssOptionsBox}>
-      <div>
-        <label>
-          <input
-            type="checkbox"
-            checked={settings.shapeViewShowKeyId}
-            onChange={reflectFieldChecked(settings, 'shapeViewShowKeyId')}
-          />
-          <span>keyId</span>
-        </label>
-      </div>
-
-      <div>
-        <label>
-          <input
-            type="checkbox"
-            checked={settings.shapeViewShowKeyIndex}
-            onChange={reflectFieldChecked(settings, 'shapeViewShowKeyIndex')}
-          />
-          <span>keyIndex</span>
-        </label>
-      </div>
+      {displayOptionsSource.map((om) => (
+        <div key={om.fieldKey}>
+          <label>
+            <input
+              type="checkbox"
+              checked={settings[om.fieldKey] as boolean}
+              onChange={reflectFieldChecked(settings, om.fieldKey)}
+            />
+            <span>{om.label}</span>
+          </label>
+        </div>
+      ))}
     </div>
   );
 }
