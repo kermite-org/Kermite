@@ -5,12 +5,16 @@ interface IUiSettings {
   showTestInputArea: boolean;
   page: 'editor' | 'shapePreview';
   shapeViewBreedName: string;
+  shapeViewShowKeyId: boolean;
+  shapeViewShowKeyIndex: boolean;
 }
 
 const defaultUiSettins: IUiSettings = {
   showTestInputArea: false,
   page: 'editor',
-  shapeViewBreedName: ''
+  shapeViewBreedName: '',
+  shapeViewShowKeyId: false,
+  shapeViewShowKeyIndex: false
 };
 
 export class UiStatusModel {

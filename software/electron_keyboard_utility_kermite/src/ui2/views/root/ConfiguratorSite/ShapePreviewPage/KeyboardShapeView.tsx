@@ -7,6 +7,7 @@ import {
 } from '~defs/ProfileData';
 import { ScalerBox } from './ScalerBox';
 import { KeyUnitCard } from './KeyUnitCard';
+import { appDomain } from '~ui2/models/zAppDomain';
 
 function getViewBox(da: IKeyboardShapeDisplayArea) {
   const left = da.centerX - da.width / 2;
@@ -49,12 +50,18 @@ const KeyboardBodyShape = (props: { outerPaths: string }) => {
 };
 
 export const KeyUnitCardsPart = (props: { keyUnits: IKeyUnitEntry[] }) => {
+  const settings = appDomain.uiStatusModel.settings;
+  const showKeyId = settings.shapeViewShowKeyId;
+  const showKeyIndex = settings.shapeViewShowKeyIndex;
+
   return (
     <g>
       {props.keyUnits.map((keyUnit) => (
         <KeyUnitCard
           keyUnit={keyUnit}
           key={keyUnit.id}
+          showKeyId={showKeyId}
+          showKeyIndex={showKeyIndex}
           qxOptimizer="deepEqual"
         />
       ))}

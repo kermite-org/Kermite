@@ -1,8 +1,13 @@
 import { css } from 'goober';
 import { h } from '~ui2/views/basis/qx';
 import { IKeyUnitEntry } from '~defs/ProfileData';
+import { appDomain } from '~ui2/models/zAppDomain';
 
-export const KeyUnitCard = (props: { keyUnit: IKeyUnitEntry }) => {
+export const KeyUnitCard = (props: {
+  keyUnit: IKeyUnitEntry;
+  showKeyId: boolean;
+  showKeyIndex: boolean;
+}) => {
   const kp = props.keyUnit;
   const pos = { x: kp.x, y: kp.y, r: kp.r };
   const { id: keyUnitId, keyIndex } = kp;
@@ -29,6 +34,7 @@ export const KeyUnitCard = (props: { keyUnit: IKeyUnitEntry }) => {
         y={-2}
         text-anchor="middle"
         dominant-baseline="center"
+        qxIf={props.showKeyId}
       >
         {keyUnitId}
       </text>
@@ -39,6 +45,7 @@ export const KeyUnitCard = (props: { keyUnit: IKeyUnitEntry }) => {
         y={4}
         text-anchor="middle"
         dominant-baseline="center"
+        qxIf={props.showKeyIndex}
       >
         {keyIndex}
       </text>

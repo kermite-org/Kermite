@@ -6,7 +6,10 @@ import {
 import { IKeyboardShape } from '~defs/ProfileData';
 import { appDomain } from '~ui2/models/zAppDomain';
 import { h } from '~ui2/views/basis/qx';
-import { reflectFieldValue } from '~ui2/views/common/FormHelpers';
+import {
+  reflectFieldValue,
+  reflectFieldChecked
+} from '~ui2/views/common/FormHelpers';
 import { KeyboardShapeView } from './KeyboardShapeView';
 
 function BreedSelector() {
@@ -26,6 +29,58 @@ function BreedSelector() {
         </option>
       ))}
     </select>
+  );
+}
+
+function OptionsBox() {
+  const cssOptionsBox = css`
+    display: flex;
+    align-items: center;
+    > * + * {
+      margin-left: 10px;
+    }
+
+    > div {
+      > label {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        user-select: none;
+
+        > span {
+          display: inline-block;
+          margin-left: 2px;
+        }
+      }
+    }
+  `;
+
+  const settings = appDomain.uiStatusModel.settings;
+
+  return (
+    <div css={cssOptionsBox}>
+      <div>
+        <label>
+          <input
+            type="checkbox"
+            checked={settings.shapeViewShowKeyId}
+            onChange={reflectFieldChecked(settings, 'shapeViewShowKeyId')}
+          />
+          <span>keyId</span>
+        </label>
+      </div>
+
+      <div>
+        <label>
+          <input
+            type="checkbox"
+            checked={settings.shapeViewShowKeyIndex}
+            onChange={reflectFieldChecked(settings, 'shapeViewShowKeyIndex')}
+          />
+          <span>keyIndex</span>
+        </label>
+      </div>
+    </div>
   );
 }
 
@@ -62,6 +117,11 @@ const cssBase = css`
     flex-shrink: 0;
   }
 
+  > .topRow {
+    display: flex;
+    justify-content: space-between;
+  }
+
   > .keyboardRow {
     flex-shrink: 1;
     flex-grow: 1;
@@ -84,13 +144,14 @@ export const KeyboardShapePreviewPage = () => {
     return (
       <div css={cssBase}>
         <div>keyboard shape preview</div>
-        <div>
+        <div class="topRow">
           <BreedSelector />
+          <OptionsBox />
         </div>
-        <div className="keyboardRow">
+        <div class="keyboardRow">
           {loadedShape && <KeyboardShapeView shape={loadedShape} />}
         </div>
-        <div className="restRow"></div>
+        <div class="restRow"></div>
       </div>
     );
   };
