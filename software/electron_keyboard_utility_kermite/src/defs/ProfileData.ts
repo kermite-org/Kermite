@@ -194,7 +194,7 @@ export interface IKeyUnitEntry {
   id: string;
   x: number;
   y: number;
-  r: number;
+  r?: number;
   keyIndex: number;
 }
 

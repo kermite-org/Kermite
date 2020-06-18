@@ -101,7 +101,7 @@ function makeKeyUnitCardViewModel(
   isEdit: boolean
 ): IKeyUnitCardViewModel {
   const keyUnitId = kp.id;
-  const pos = { x: kp.x, y: kp.y, r: kp.r };
+  const pos = { x: kp.x, y: kp.y, r: kp.r || 0 };
 
   const { isKeyUnitCurrent, setCurrentKeyUnitId } = editorModel;
 

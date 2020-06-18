@@ -9,7 +9,7 @@ export const KeyUnitCard = (props: {
   showKeyIndex: boolean;
 }) => {
   const kp = props.keyUnit;
-  const pos = { x: kp.x, y: kp.y, r: kp.r };
+  const pos = { x: kp.x, y: kp.y, r: kp.r || 0 };
   const { id: keyUnitId, keyIndex } = kp;
 
   const cssKeyRect = css`
