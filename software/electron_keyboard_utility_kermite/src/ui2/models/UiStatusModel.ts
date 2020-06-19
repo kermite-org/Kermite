@@ -19,8 +19,18 @@ const defaultUiSettins: IUiSettings = {
   shapeViewShowBoundingBox: false
 };
 
+export interface IUiStatus {
+  profileConfigModalVisible: boolean;
+}
+
+const defaultUiStatus: IUiStatus = {
+  profileConfigModalVisible: false
+};
+
 export class UiStatusModel {
   readonly settings: IUiSettings = defaultUiSettins;
+
+  readonly status: IUiStatus = defaultUiStatus;
 
   initialize() {
     const settingsText = localStorage.getItem('uiSettings');

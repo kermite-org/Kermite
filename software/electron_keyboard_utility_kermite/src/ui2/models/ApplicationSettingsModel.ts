@@ -1,7 +1,7 @@
 import { backendAgent, sendIpcPacketSync } from './dataSource/ipc';
 import { appUi } from './appGlobal';
 
-export class ApplicationSettingsModel {
+export class ApplicationSettingsModel__Deprecated {
   showTestInputArea: boolean = false;
 
   private async loadSettings() {

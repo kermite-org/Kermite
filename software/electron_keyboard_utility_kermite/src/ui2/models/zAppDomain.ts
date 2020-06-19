@@ -2,9 +2,7 @@ import { EditorModel } from './EditorModel';
 import { PlayerModel } from './PlayerModel';
 import { ProfilesModel } from './ProfilesModel';
 import { SiteModel } from './SiteModel';
-import { backendAgent } from './dataSource/ipc';
 import { KeyboardConfigModel } from './KeyboardConfigModel';
-import { ApplicationSettingsModel } from './ApplicationSettingsModel';
 import { DeviceStatusModel } from './DeviceStatusModel';
 import { UiStatusModel } from './UiStatusModel';
 
@@ -14,19 +12,10 @@ export const appDomain = new (class {
   readonly profilesModel = new ProfilesModel(this.editorModel);
   readonly siteModel = new SiteModel();
   readonly keyboardConfigModel = new KeyboardConfigModel();
-  readonly settingsModel = new ApplicationSettingsModel();
   readonly deviceStatusModel = new DeviceStatusModel();
   readonly uiStatusModel = new UiStatusModel();
 
   initialize() {
-    //debug
-    (async () => {
-      const kbd = await backendAgent.getKeyboardConfig();
-      const env = await backendAgent.getEnvironmentConfig();
-      const st = await backendAgent.getSettings();
-      console.log({ kbd, env, st });
-    })();
-
     // this.siteModel.isWidgetMode = true;
 
     // debugTrace('start appDomain initialize');
@@ -35,7 +24,6 @@ export const appDomain = new (class {
     // editorModel.loadProfileData(testProfileData);
     this.siteModel.initialize();
     this.keyboardConfigModel.intialize();
-    this.settingsModel.initialize();
     this.deviceStatusModel.initialize();
     this.uiStatusModel.initialize();
   }
@@ -43,7 +31,6 @@ export const appDomain = new (class {
   terminate() {
     this.uiStatusModel.finalize();
     this.deviceStatusModel.finalinze();
-    this.settingsModel.finalize();
     this.keyboardConfigModel.finalize();
     this.playerModel.finalize();
     this.profilesModel.finalize();
