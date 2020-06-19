@@ -16,6 +16,9 @@ const AssignTypeSelectionPartViewModel = () => {
 export const AssignTypeSelectionPart = () => {
   const cssAttrsRow = css`
     display: flex;
+    > * + * {
+      margin-left: 10px;
+    }
   `;
 
   const {

@@ -32,7 +32,7 @@ export const ProfileConfigratuionModalLayer = () => {
   const cssDialogContent = css`
     margin: 10px;
     color: black;
-    min-height: 150px;
+    min-height: 140px;
   `;
 
   return (

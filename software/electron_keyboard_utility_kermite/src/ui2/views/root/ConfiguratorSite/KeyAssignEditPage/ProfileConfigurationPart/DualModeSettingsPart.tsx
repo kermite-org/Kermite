@@ -5,6 +5,7 @@ import {
   reflectFieldValue,
   reflectValue
 } from '~ui2/views/common/FormHelpers';
+import { css } from 'goober';
 
 export const DualModeSettingsPart = () => {
   if (editorModel.profileData.assignType === 'single') {
@@ -22,38 +23,70 @@ export const DualModeSettingsPart = () => {
     }
   };
 
+  const cssBase = css`
+    margin-top: 15px;
+
+    table.settingsTable {
+      margin-top: 3px;
+      margin-left: 10px;
+
+      td {
+        padding: 2px 0;
+      }
+
+      td + td {
+        padding-left: 5px;
+      }
+    }
+
+    .msInput {
+      width: 60px;
+      text-align: center;
+    }
+  `;
+
   return (
-    <div>
-      <div>dual settings</div>
+    <div css={cssBase}>
+      <div>dual mode settings</div>
 
-      <div>
-        primary default trigger
-        <select
-          value={settings.primaryDefaultTrigger}
-          onChange={reflectFieldValue(settings, 'primaryDefaultTrigger')}
-        >
-          <option value="down">down</option>
-          <option value="tap">tap</option>
-        </select>
-      </div>
-      <div>
-        tap hold threshold
-        <input
-          type="number"
-          value={settings.tapHoldThresholdMs}
-          onChange={reflectValue(onTapHoldThresholdValueChanged)}
-        />
-        ms
-      </div>
-
-      <div>
-        use interrupt hold
-        <input
-          type="checkbox"
-          checked={settings.useInterruptHold}
-          onChange={reflectFieldChecked(settings, 'useInterruptHold')}
-        />
-      </div>
+      <table class="settingsTable">
+        <tbody>
+          <tr>
+            <td> primary default trigger</td>
+            <td>
+              <select
+                value={settings.primaryDefaultTrigger}
+                onChange={reflectFieldValue(settings, 'primaryDefaultTrigger')}
+              >
+                <option value="down">down</option>
+                <option value="tap">tap</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td> tap hold threshold</td>
+            <td>
+              <input
+                type="number"
+                class="msInput"
+                value={settings.tapHoldThresholdMs}
+                onChange={reflectValue(onTapHoldThresholdValueChanged)}
+              />
+              ms
+            </td>
+          </tr>
+          <tr>
+            <td> use interrupt hold</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={settings.useInterruptHold}
+                onChange={reflectFieldChecked(settings, 'useInterruptHold')}
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 };
