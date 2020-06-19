@@ -11,6 +11,7 @@ import {
   LayoutStandardSelector
 } from '../DeviceControlSection/ConfigSelectors';
 import { LaunchButton } from '../DeviceControlSection/LaunchButton';
+import { ConfigurationButton } from '../DeviceControlSection/ConfigurationButton';
 
 const ProfileSelectorView = (props: { vm: IProfileManagerViewModel }) => {
   const { vm } = props;
@@ -50,6 +51,7 @@ export const ProfileManagementPart = () => {
     <div css={cssProfileSelectionRow}>
       <ProfileSelectionMenuPart vm={vm} />
       <ProfileSelectorView vm={vm} />
+      <ConfigurationButton />
       <BehaviorSelector />
       <LayoutStandardSelector />
       <LaunchButton />
