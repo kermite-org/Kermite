@@ -8,6 +8,7 @@ import { DeviceControlSection } from './KeyAssignEditPage/DeviceControlSection';
 import { GlobalMenuPart } from './GlobalMenu';
 import { appDomain } from '~ui2/models/zAppDomain';
 import { KeyboardShapePreviewPage } from './ShapePreviewPage/ShapePreviewPage';
+import { ProfileConfigratuionModalLayer } from './KeyAssignEditPage/ProfileConfigurationPart';
 
 export function ConfiguratorSiteRootContent() {
   const cssPageRoot = css`
@@ -43,6 +44,7 @@ export function ConfiguratorSiteRootContent() {
       <div className="mainRow">
         <KeyAssignEditPage />
       </div>
+      <ProfileConfigratuionModalLayer />
     </div>
   );
 }
