@@ -1,22 +1,20 @@
 import { css } from 'goober';
 import { h } from '~ui2/views/basis/qx';
-import { UiTheme } from '~ui2/views/common/UiTheme';
 import {
   ILayerListViewModel,
   makeLayerListBoxPartViewModel
 } from './LayersListBoxPart.model';
+import { uiTheme } from '~ui2/models/UiTheme';
 
 const LayerCard = (props: { layerModel: ILayerListViewModel }) => {
   const cssLayerCard = css`
-    border: solid 1px #444;
-
     &[data-current] {
-      background: ${UiTheme.clSelectHighlight};
+      background: ${uiTheme.colors.clSelectHighlight};
     }
     padding: 4px;
     cursor: pointer;
     user-select: none;
-    color: #fff;
+    color: ${uiTheme.colors.clMainText};
   `;
 
   const { layerId, layerName, isCurrent, setCurrent } = props.layerModel;
@@ -36,6 +34,8 @@ export function LayersListBoxPart() {
   const cssLayersListBox = css`
     height: 240px;
     overflow-y: scroll;
+    border: solid 1px ${uiTheme.colors.clCommonFrame};
+    margin: 0 5px;
   `;
 
   const layerListBoxPartViewModel = makeLayerListBoxPartViewModel();

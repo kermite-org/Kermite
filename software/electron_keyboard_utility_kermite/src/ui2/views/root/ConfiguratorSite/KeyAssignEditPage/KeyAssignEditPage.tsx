@@ -1,21 +1,27 @@
 import { css } from 'goober';
 import { h } from '~ui2/views/basis/qx';
-import { UiTheme } from '~ui2/views/common/UiTheme';
 import { AssignEditSection } from './AssignEditSection';
 import { KeyboardSection } from './KeyboardSection';
 import { LayersSection } from './LayersSection';
 import { TestInputArea } from './TestInputArea';
 import { ProfileConfigurationPart } from './ProfileConfigurationPart';
 import { appDomain } from '~ui2/models/zAppDomain';
+import { uiTheme } from '~ui2/models/UiTheme';
+
+const localStyleConstants = {
+  editorPartMargin: '4px',
+  panelBoxBorderRadius: '3px'
+};
 
 export const KeyAssignEditPage = () => {
-  const { clPanelBox, editorPartMargin: mm } = UiTheme;
+  const { editorPartMargin: mm, panelBoxBorderRadius } = localStyleConstants;
+  const { clPanelBox } = uiTheme.colors;
 
   const cssKeyAssignEditPageRoot = css`
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    color: #fff;
+    color: ${uiTheme.colors.clMainText};
 
     > div {
       margin-left: ${mm};
@@ -34,6 +40,7 @@ export const KeyAssignEditPage = () => {
 
   const cssEditTopBarBox = css`
     background: ${clPanelBox};
+    border-radius: ${panelBoxBorderRadius};
     height: 40px;
     flex-shrink: 0;
   `;
@@ -58,6 +65,7 @@ export const KeyAssignEditPage = () => {
 
   const cssKeyboardPartBox = css`
     background: ${clPanelBox};
+    border-radius: ${panelBoxBorderRadius};
     display: flex;
     flex-direction: column;
     min-width: 200px;
@@ -67,6 +75,7 @@ export const KeyAssignEditPage = () => {
 
   const cssAssignPartBox = css`
     background: ${clPanelBox};
+    border-radius: ${panelBoxBorderRadius};
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -84,12 +93,14 @@ export const KeyAssignEditPage = () => {
 
   const cssLayersPartBox = css`
     background: ${clPanelBox};
+    border-radius: ${panelBoxBorderRadius};
     height: 300px;
     flex-shrink: 0;
   `;
 
   const cssRestPartBox = css`
     background: ${clPanelBox};
+    border-radius: ${panelBoxBorderRadius};
     flex-grow: 1;
   `;
 

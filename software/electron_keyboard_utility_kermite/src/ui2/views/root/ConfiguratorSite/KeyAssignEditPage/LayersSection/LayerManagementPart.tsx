@@ -1,6 +1,7 @@
 import { css } from 'goober';
 import { h } from '~ui2/views/basis/qx';
 import { LayerManagementPartViewModel } from './LayerManagementPart.model';
+import { uiTheme } from '~ui2/models/UiTheme';
 
 const LayerOperationButtton = (props: {
   icon: string;
@@ -24,7 +25,7 @@ const LayerOperationButtton = (props: {
       opacity: 0.3;
       pointer-events: none;
     }
-    color: #fff;
+    color: ${uiTheme.colors.clMainText};
   `;
   return (
     <div css={cssButton} onClick={props.handler} data-disabled={!props.enabled}>

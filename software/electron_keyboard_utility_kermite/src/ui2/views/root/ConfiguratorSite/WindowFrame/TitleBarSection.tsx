@@ -2,6 +2,7 @@ import { css } from 'goober';
 import { backendAgent } from '~ui2/models/dataSource/ipc';
 import { siteModel } from '~ui2/models/zAppDomain';
 import { h } from '~ui2/views/basis/qx';
+import { uiTheme } from '~ui2/models/UiTheme';
 
 const ControlButton = (props: { icon: string; onClick: () => void }) => {
   const cssButton = css`
@@ -11,9 +12,9 @@ const ControlButton = (props: { icon: string; onClick: () => void }) => {
     cursor: pointer;
     width: 40px;
     height: 30px;
-    color: #fff;
+    color: ${uiTheme.colors.clWindowButtonFace};
     &:hover {
-      background: #f8b;
+      background: ${uiTheme.colors.clWindowButtonHoverBack};
     }
     -webkit-app-region: no-drag;
   `;
@@ -122,7 +123,7 @@ export const TitleBarSection = () => {
     justify-content: space-between;
     align-items: center;
     -webkit-app-region: drag;
-    background: #f08;
+    background: ${uiTheme.colors.clTitleBar};
   `;
 
   return (

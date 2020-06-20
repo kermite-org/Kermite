@@ -1,10 +1,10 @@
 import { h } from '~ui2/views/basis/qx';
 import { css } from 'goober';
-import { UiTheme } from '~ui2/views/common/UiTheme';
 import {
   makeOperationEditPartViewModel,
   IOperationCardViewModel
 } from './OperationEditPart.model';
+import { uiTheme } from '~ui2/models/UiTheme';
 
 const OperationCard = (props: { model: IOperationCardViewModel }) => {
   const { text, isCurrent, setCurrent, isEnabled } = props.model;
@@ -14,7 +14,8 @@ const OperationCard = (props: { model: IOperationCardViewModel }) => {
   const cssCard = css`
     min-width: 28px;
     height: 28px;
-    background: #383838;
+    background: ${uiTheme.colors.clAssignCardFace};
+    color: ${uiTheme.colors.clAssignCardText};
     display: flex;
     justify-content: center;
     align-items: center;
@@ -23,7 +24,7 @@ const OperationCard = (props: { model: IOperationCardViewModel }) => {
     font-size: ${isTextLong ? '12px' : '15px'};
 
     &[data-current] {
-      background: ${UiTheme.clSelectHighlight};
+      background: ${uiTheme.colors.clSelectHighlight};
     }
 
     &[data-disabled] {

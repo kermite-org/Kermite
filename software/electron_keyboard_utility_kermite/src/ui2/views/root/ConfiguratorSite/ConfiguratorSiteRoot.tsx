@@ -3,12 +3,12 @@ import { KeyAssignEditPage } from './KeyAssignEditPage/KeyAssignEditPage';
 import { h } from '~ui2/views/basis/qx';
 import { ProfileManagementPart } from './KeyAssignEditPage/ProfilesSection/ProfileManagementPart';
 import { CustomWindowFrame } from './WindowFrame/CustomWindowFrame';
-import { UiTheme } from '~ui2/views/common/UiTheme';
 import { DeviceControlSection } from './KeyAssignEditPage/DeviceControlSection';
 import { GlobalMenuPart } from './GlobalMenu';
 import { appDomain } from '~ui2/models/zAppDomain';
 import { KeyboardShapePreviewPage } from './ShapePreviewPage/ShapePreviewPage';
 import { ProfileConfigratuionModalLayer } from './KeyAssignEditPage/ProfileConfigurationPart';
+import { uiTheme } from '~ui2/models/UiTheme';
 
 export function ConfiguratorSiteRootContent() {
   const cssPageRoot = css`
@@ -20,7 +20,7 @@ export function ConfiguratorSiteRootContent() {
       flex-shrink: 0;
       display: flex;
       justify-content: space-between;
-      background: #000;
+      background: ${uiTheme.colors.clPanelBox};
       height: 40px;
       align-items: center;
     }
@@ -51,15 +51,15 @@ export function ConfiguratorSiteRootContent() {
 
 export const ConfiguratorSiteRoot = () => {
   const cssContentRow = css`
-    background: ${UiTheme.clBackground};
-    color: #fff;
+    background: ${uiTheme.colors.clBackground};
+    color: ${uiTheme.colors.clMainText};
     display: flex;
   `;
 
   const cssNavigationColumn = css`
     width: 50px;
     flex-shrink: 0;
-    background: ${UiTheme.clNavigationColumn};
+    background: ${uiTheme.colors.clNavigationColumn};
     padding: 10px;
   `;
 

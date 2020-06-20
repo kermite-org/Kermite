@@ -1,11 +1,11 @@
 /* eslint-disable react/no-unknown-property */
 import { css } from 'goober';
 import { h } from '~ui2/views/basis/qx';
-import { UiTheme } from '~ui2/views/common/UiTheme';
 import {
   IKeyUnitCardViewModel,
   makeKeyUnitCardsPartViewModel
 } from './KeyUnitCardsPart.model';
+import { uiTheme } from '~ui2/models/UiTheme';
 
 export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
   const {
@@ -20,9 +20,10 @@ export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
 
   const cssKeyRect = css`
     cursor: pointer;
-    fill: rgba(0, 0, 0, 0.5);
+    fill: ${uiTheme.colors.clKeyUnitFace};
+
     &[data-current] {
-      fill: ${UiTheme.clSelectHighlight};
+      fill: ${uiTheme.colors.clSelectHighlight};
     }
     &[data-hold] {
       fill: #f80;
@@ -30,7 +31,7 @@ export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
   `;
 
   const cssKeyText = css`
-    fill: #fff;
+    fill: ${uiTheme.colors.clKeyUnitLegend};
     pointer-events: none;
   `;
 

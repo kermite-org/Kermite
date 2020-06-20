@@ -3,6 +3,7 @@ import { editorModel } from '~ui2/models/zAppDomain';
 import { h } from '~ui2/views/basis/qx';
 import { OpertionEditPart } from './OperationEditPart/OperationEditPart';
 import { OerationSlotsPart } from './EntryEditPart/OperationSlotsPart';
+import { uiTheme } from '~ui2/models/UiTheme';
 
 export function AssignEditSection() {
   const cssBase = css`
@@ -18,7 +19,7 @@ export function AssignEditSection() {
       opacity: 0.3;
       pointer-events: none;
     }
-    border: solid 1px #333;
+    /* border: solid 1px ${uiTheme.colors.clCommonFrame}; */
     padding: 8px;
   `;
 

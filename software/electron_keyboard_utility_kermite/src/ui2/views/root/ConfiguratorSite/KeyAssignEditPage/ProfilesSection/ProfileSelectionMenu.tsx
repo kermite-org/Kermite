@@ -2,6 +2,7 @@ import { css } from 'goober';
 import { h } from '~ui2/views/basis/qx';
 import { IProfileManagerViewModel } from './ProfileManagementPart.model';
 import { makeProfileSelectionMenuPartModel } from './ProfileSelectionMenu.model';
+import { uiTheme } from '~ui2/models/UiTheme';
 
 const cssBase = css``;
 
@@ -23,6 +24,7 @@ const cssMenuButton = css`
   width: 20px;
   height: 20px;
   background: #888;
+  color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -37,7 +39,7 @@ const cssMenuPopup = css`
   width: 100px;
   background: #fff;
   position: absolute;
-  color: #000;
+  color: ${uiTheme.colors.clAltText};
   z-index: 20;
   user-select: none;
   border: solid 1px #248;

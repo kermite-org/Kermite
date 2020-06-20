@@ -2,6 +2,7 @@ import { css } from 'goober';
 import { h } from '~ui2/views/basis/qx';
 import { KeyUnitCardsPart } from './KeyUnitCardsPart';
 import { editorModel } from '~ui2/models/zAppDomain';
+import { uiTheme } from '~ui2/models/UiTheme';
 
 export const KeyboardBasePlane = (props: { children: any }) => {
   const { clearAssignSlotSelection } = editorModel;
@@ -34,7 +35,7 @@ export const KeyboardBasePlane = (props: { children: any }) => {
 export const KeyboardBodyShape = () => {
   const outerPaths = editorModel.bodyPathMarkupText;
   const cssBody = css`
-    fill: #54566f;
+    fill: ${uiTheme.colors.clKeyboardBodyFace};
   `;
   return <path d={outerPaths} css={cssBody} />;
 };

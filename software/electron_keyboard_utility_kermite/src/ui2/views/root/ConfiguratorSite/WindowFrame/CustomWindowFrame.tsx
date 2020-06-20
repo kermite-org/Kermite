@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from '~ui2/views/basis/qx';
-import { UiTheme } from '~ui2/views/common/UiTheme';
 import { TitleBarSection } from './TitleBarSection';
+import { uiTheme } from '~ui2/models/UiTheme';
 
 export const CustomWindowFrame = (props: { children: JSX.Element }) => {
   const cssRoot = css`
@@ -25,7 +25,7 @@ export const CustomWindowFrame = (props: { children: JSX.Element }) => {
   `;
 
   const cssStatusBar = css`
-    background: ${UiTheme.clStatusBar};
+    background: ${uiTheme.colors.clStatusBar};
     height: 28px;
     flex-shrink: 0;
   `;

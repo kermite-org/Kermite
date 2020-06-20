@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from '~ui2/views/basis/qx';
-import { UiTheme } from '~ui2/views/common/UiTheme';
 import { makeKeyAssignTypeSelectionPartViewModel } from './AssignTypeSelectionPart.model';
+import { uiTheme } from '~ui2/models/UiTheme';
 
 export function AssingTypeSelectionPart() {
   const cssAssignTypeSlotsBox = css`
@@ -19,7 +19,7 @@ export function AssingTypeSelectionPart() {
     cursor: pointer;
 
     &[data-current] {
-      background: ${UiTheme.clSelectHighlight};
+      background: ${uiTheme.colors.clSelectHighlight};
     }
   `;
 

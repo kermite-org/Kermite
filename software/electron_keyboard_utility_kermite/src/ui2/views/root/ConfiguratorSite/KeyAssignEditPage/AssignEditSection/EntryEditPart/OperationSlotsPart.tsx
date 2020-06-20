@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from '~ui2/views/basis/qx';
-import { UiTheme } from '~ui2/views/common/UiTheme';
 import { makeOperationSlotsPartViewModel } from './OperationSlotsPart.model';
+import { uiTheme } from '~ui2/models/UiTheme';
 
 function OperationSlotCard(props: {
   text: string;
@@ -16,10 +16,11 @@ function OperationSlotCard(props: {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #444;
+    background: ${uiTheme.colors.clAssignCardFace};
+    color: ${uiTheme.colors.clAssignCardText};
 
     &[data-current] {
-      background: ${UiTheme.clSelectHighlight};
+      background: ${uiTheme.colors.clSelectHighlight};
     }
   `;
   return (

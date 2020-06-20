@@ -5,7 +5,7 @@ import { appDomain } from '~ui2/models/zAppDomain';
 
 export const LinkIndicator = () => {
   const cssLinkIndicator = css`
-    color: #fff;
+    color: #aaa;
     opacity: 0.5;
 
     &[data-active] {
