@@ -37,6 +37,7 @@ const cssMenuButton = css`
   width: 20px;
   height: 20px;
   background: #888;
+  color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -79,32 +80,49 @@ function createMenuItems(): IMenuItem[] {
     uiStatusModel: { settings }
   } = appDomain;
 
-  const miShowInputArea: IMenuItem = {
-    key: 'miShowInputArea',
-    text: 'Show test input area',
-    handler() {
-      settings.showTestInputArea = !settings.showTestInputArea;
+  const menuItems: IMenuItem[] = [
+    {
+      key: 'miShowInputArea',
+      text: 'Show test input area',
+      handler() {
+        settings.showTestInputArea = !settings.showTestInputArea;
+      },
+      active: settings.showTestInputArea
     },
-    active: settings.showTestInputArea
-  };
-
-  const miShowShapePreview: IMenuItem = {
-    key: 'miShowShapePreview',
-    text: 'Show shape preview page',
-    handler() {
-      if (settings.page !== 'shapePreview') {
-        settings.page = 'shapePreview';
-      } else {
-        settings.page = 'editor';
-      }
+    {
+      key: 'miShowShapePreview',
+      text: 'Show shape preview page',
+      handler() {
+        if (settings.page !== 'shapePreview') {
+          settings.page = 'shapePreview';
+        } else {
+          settings.page = 'editor';
+        }
+      },
+      active: settings.page === 'shapePreview'
     },
-    active: settings.page === 'shapePreview'
-  };
+    {
+      key: 'miThemeLight',
+      text: 'Light Theme',
+      handler() {
+        appDomain.themeSelectionModel.changeTheme('light');
+      },
+      active: appDomain.themeSelectionModel.currentTheme === 'light'
+    },
+    {
+      key: 'miThemeDark',
+      text: 'Dark Theme',
+      handler() {
+        appDomain.themeSelectionModel.changeTheme('dark');
+      },
+      active: appDomain.themeSelectionModel.currentTheme === 'dark'
+    }
+  ];
 
   if (siteModel.isDevelopment) {
-    return [miShowInputArea, miShowShapePreview];
+    return menuItems;
   } else {
-    return [miShowInputArea];
+    return menuItems.filter((mi) => mi.key !== 'miShowShapePreview');
   }
 }
 
