@@ -26,7 +26,7 @@ export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
       fill: ${uiTheme.colors.clSelectHighlight};
     }
     &[data-hold] {
-      fill: #f80;
+      fill: ${uiTheme.colors.clHoldHighlight};
     }
   `;
 

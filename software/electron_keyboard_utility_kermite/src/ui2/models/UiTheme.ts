@@ -5,6 +5,7 @@ type ThemeColorKey =
   | 'clNavigationColumn'
   | 'clPanelBox'
   | 'clSelectHighlight'
+  | 'clHoldHighlight'
   | 'clMainText'
   | 'clAltText'
   | 'clWindowButtonFace'
@@ -29,6 +30,7 @@ export const themeColors: { [key in ThemeKey]: IThemeColorSet } = {
     clNavigationColumn: '#1d1d1d',
     clPanelBox: '#181C23',
     clSelectHighlight: '#22967d',
+    clHoldHighlight: '#f90',
     clMainText: '#FFF',
     clAltText: '#000',
     clWindowButtonFace: '#FFF',
@@ -49,6 +51,7 @@ export const themeColors: { [key in ThemeKey]: IThemeColorSet } = {
     clPanelBox: '#FFF',
     // clSelectHighlight: '#80c8ff',
     clSelectHighlight: '#af0',
+    clHoldHighlight: '#0CF',
     clMainText: '#268EC9',
     clAltText: '#000',
     clWindowButtonFace: '#FFF',
