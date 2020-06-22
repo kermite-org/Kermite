@@ -1,5 +1,4 @@
 #PROJECT = astelia
-#PROJECT = lets_split_dev
 #PROJECT = modules_dev
 #COM_PORT = COM1
 #COM_PORT = /dev/tty.usbmodem123456
