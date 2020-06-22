@@ -50,7 +50,7 @@ void toggleLED1() {
 //---------------------------------------------
 //definitions
 
-#if 0
+#if 1
 
 #define NumRows 4
 #define NumColumns 6
@@ -64,7 +64,9 @@ static const uint8_t columnPins[NumColumns] = { P_F6, P_F7, P_B1, P_B3, P_B2, P_
 #define NumKeySlotBytes 6
 #define NumKeySlotBytesHalf 3 //Ceil(NumRows * NumColumns / 8);
 
-#define NumPhysicalKeys 48
+#define SingleWireMaxPacketSize 6
+
+#define KeyIndexRange 48
 
 // clang-format off
 static const int8_t keySlotIndexToKeyIndexMap[NumKeySlots] PROGMEM = {
@@ -81,11 +83,9 @@ static const int8_t keySlotIndexToKeyIndexMap[NumKeySlots] PROGMEM = {
 };
 // clang-format on
 
-#define SingleWireMaxPacketSize 6
-
 #endif
 
-#if 1
+#if 0
 
 #define NumRows 5
 #define NumColumns 6

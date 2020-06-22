@@ -1,7 +1,7 @@
-#DevTarget := blink
+DevTarget := blink
 #DevTarget := DebugUartTest
 #DevTarget := KeyboardMatrix
-DevTarget := singlewire
+#DevTarget := singlewire
 #DevTarget := neopixel
 #DevTarget := singlekey
 #DevTarget := eeprom
