@@ -113,10 +113,16 @@ function runProduction() {
   }
 
   async function bootEntry() {
-    await bundleMain();
-    await bundleRenderer();
-    await copyFileAsync('./src/preload.js', './dist/preload.js');
-    startElectronProcess();
+    const bundle = process.argv.includes('bundle');
+    const start = process.argv.includes('start');
+    if (bundle) {
+      await bundleMain();
+      await bundleRenderer();
+      await copyFileAsync('./src/preload.js', './dist/preload.js');
+    }
+    if (start) {
+      startElectronProcess();
+    }
   }
   bootEntry();
 }

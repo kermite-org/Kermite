@@ -13,3 +13,6 @@ yarn start:dev
 ・devtoolがデフォルトで表示されます。
 
 
+[パッケージ化]
+yarn build
+yarn packaging
