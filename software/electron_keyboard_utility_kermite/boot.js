@@ -128,8 +128,8 @@ function runProduction() {
   bootEntry();
 }
 
-if (process.env.NODE_ENV === 'production') {
-  runProduction();
-} else {
+if (process.env.NODE_ENV === 'development') {
   runDevelopment();
+} else {
+  runProduction();
 }

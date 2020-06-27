@@ -31,8 +31,8 @@
   "scripts": {
     "postinstall": "electron-rebuild -o node-hid",
     "fixlib": "electron-rebuild -o node-hid -f",
-    "build": "cross-env NODE_ENV=production node ./boot.js bundle",
-    "start": "cross-env NODE_ENV=production node ./boot.js bundle start",
+    "build": "node ./boot.js bundle",
+    "start": "node ./boot.js bundle start",
     "start:dev": "cross-env NODE_ENV=development node ./boot.js bundle start",
     "typecheck": "tsc --noEmit",
     "lint": "npx eslint src/ --ext .ts,.tsx",
