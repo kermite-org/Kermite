@@ -15,8 +15,8 @@ export class AppWindowManager {
       }
     };
 
-    const isProd = process.env.NODE_ENV === 'production';
-    if (isProd) {
+    const isDev = environmentConfig.isDevelopment;
+    if (!isDev) {
       options.frame = false;
       options.transparent = true;
       options.hasShadow = false;
@@ -24,7 +24,7 @@ export class AppWindowManager {
 
     this.mainWindow = new BrowserWindow(options);
 
-    if (environmentConfig.isDevelopment) {
+    if (isDev) {
       this.mainWindow.loadURL('http://localhost:3700');
       this.mainWindow?.webContents.openDevTools();
     } else {
