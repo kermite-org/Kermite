@@ -44,10 +44,11 @@ function runDevelopment() {
   function startElectronProcess() {
     let reqReboot = false;
 
-    const sub = childProcess.spawn(path.resolve('node_modules/.bin/electron'), [
-      '--inspect=5880',
-      './dist'
-    ]);
+    let ep = path.resolve('node_modules/.bin/electron.cmd');
+    if (!fs.existsSync(ep)) {
+      ep = path.resolve('node_modules/.bin/electron');
+    }
+    const sub = childProcess.spawn(ep, ['--inspect=5880', '.']);
 
     sub.stdout.on('data', (text) => {
       if (text.includes('##REBOOT_ME_AFTER_CLOSE')) {
@@ -106,7 +107,7 @@ function runProduction() {
   }
 
   function startElectronProcess() {
-    childProcess.spawn('electron', ['./dist'], {
+    childProcess.spawn('electron', ['.'], {
       stdio: 'inherit',
       shell: true
     });
