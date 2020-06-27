@@ -14,6 +14,13 @@
         "dmg"
       ]
     },
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
     "files": [
       "dist/**/*"
     ],
@@ -31,7 +38,8 @@
     "lint": "npx eslint src/ --ext .ts,.tsx",
     "lint:fix": "npx eslint src/ --ext .ts,.tsx --fix",
     "clean": "rm -rf dist .cache",
-    "packaging": "electron-builder --mac --x64"
+    "packaging_mac": "electron-builder --mac --x64",
+    "packaging_win": "electron-builder --win --x64"
   },
   "dependencies": {
     "fast-equals": "^2.0.0",
