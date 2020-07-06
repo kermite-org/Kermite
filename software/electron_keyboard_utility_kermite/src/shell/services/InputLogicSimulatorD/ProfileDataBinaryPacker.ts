@@ -74,7 +74,10 @@ S: is shift layer
 D: default scheme, 0 for transparent, 1 for block
 LLLL: layerIndex
 */
-function encodeAssignOperation(op: IAssignOperation | undefined): number[] {
+function encodeAssignOperation(
+  op: IAssignOperation | undefined,
+  layer: IRawLayerInfo
+): number[] {
   if (op?.type === 'keyInput') {
     const tt = 0b01;
     const vk = op.virtualKey;
@@ -84,7 +87,11 @@ function encodeAssignOperation(op: IAssignOperation | undefined): number[] {
     } else {
       const layoutStandard = localContext.layoutStandard;
       const mods = makeAttachedModifiersBits(op.attachedModifiers);
-      const hidKey = getHidKeyCodeEx(vk, layoutStandard);
+      let hidKey = getHidKeyCodeEx(vk, layoutStandard);
+      if (!layer.isShiftLayer) {
+        //shiftレイヤ上のアサインのみshift cancelが効くようにする
+        hidKey = hidKey & 0x1ff;
+      }
       return [(tt << 6) | (mods << 2) | ((hidKey >> 8) & 0x03), hidKey];
     }
   }
@@ -136,31 +143,33 @@ TT: tertiary operation
 */
 function encodeRawAssignEntry(ra: IRawAssignEntry): number[] {
   const { entry } = ra;
+
+  const layer = localContext.layersDict[ra.layerId];
   if (entry.type === 'single') {
     //single
     return [
       encodeRawAssignEntryHeaderByte('single', ra.layerIndex),
-      ...encodeAssignOperation(entry.op)
+      ...encodeAssignOperation(entry.op, layer)
     ];
   } else {
     //dual
     if (entry.tertiaryOp) {
       return [
         encodeRawAssignEntryHeaderByte('triple', ra.layerIndex),
-        ...encodeAssignOperation(entry.primaryOp),
-        ...encodeAssignOperation(entry.secondaryOp),
-        ...encodeAssignOperation(entry.tertiaryOp)
+        ...encodeAssignOperation(entry.primaryOp, layer),
+        ...encodeAssignOperation(entry.secondaryOp, layer),
+        ...encodeAssignOperation(entry.tertiaryOp, layer)
       ];
     } else if (entry.secondaryOp) {
       return [
         encodeRawAssignEntryHeaderByte('dual', ra.layerIndex),
-        ...encodeAssignOperation(entry.primaryOp),
-        ...encodeAssignOperation(entry.secondaryOp)
+        ...encodeAssignOperation(entry.primaryOp, layer),
+        ...encodeAssignOperation(entry.secondaryOp, layer)
       ];
     } else {
       return [
         encodeRawAssignEntryHeaderByte('single', ra.layerIndex),
-        ...encodeAssignOperation(entry.primaryOp)
+        ...encodeAssignOperation(entry.primaryOp, layer)
       ];
     }
   }
