@@ -318,7 +318,7 @@ function assignBinder_ticker(ms: u16) {
   for (const ke of state1.recallKeyEntries) {
     if (ke.keyIndex !== -1) {
       ke.tick += ms;
-      if (ke.tick > 10) {
+      if (ke.tick > 50) {
         handleKeyOff(ke.keyIndex);
         ke.keyIndex = -1;
       }
