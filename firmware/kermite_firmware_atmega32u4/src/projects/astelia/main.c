@@ -28,9 +28,11 @@ static void outputLED0(bool val) {
   pio_output(pin_LED0, !val);
 }
 
+#if 0
 static void toggleLED0() {
   pio_toggleOutput(pin_LED0);
 }
+#endif
 
 static void outputLED1(bool val) {
   pio_output(pin_LED1, val);
@@ -161,7 +163,6 @@ void onPhysicalKeyStateChanged(uint8_t keySlotIndex, bool isDown) {
 
   if (!isSideBrainModeEnabled) {
     keyboardCoreLogic_issuePhysicalKeyStateChanged(keyIndex, isDown);
-    processKeyboardCoreLogicOutput();
   }
   configuratorServant_emitRealtimeKeyEvent(keyIndex, isDown);
 }
@@ -211,6 +212,7 @@ void runAsMaster() {
   configuratorServant_initialize(
       NumPhysicalKeys,
       configuratorServantStateHandler);
+  keyboardCoreLogic_initialize();
 
   uint16_t cnt = 0;
   sei();
@@ -219,6 +221,8 @@ void runAsMaster() {
     if (cnt % 10 == 0) {
       keyMatrixScanner_update();
       processKeyStatesUpdate();
+      keyboardCoreLogic_processTicker(10);
+      processKeyboardCoreLogicOutput();
       outputLED1(!(pressedKeyCount > 0));
     }
     if (cnt % 1000 == 0) {
