@@ -212,6 +212,8 @@ static void handleOperationOff(uint16_t opWord) {
 
 #define NumRecallKeyEntries 4
 
+static const uint8_t ImmediateReleaseStrokeDuration = 50;
+
 typedef struct {
   int8_t keyIndex;
   uint8_t tick;
@@ -260,7 +262,7 @@ static void assignBinder_ticker(uint8_t ms) {
     RecallKeyEntry *ke = &recallKeyEntries[i];
     if (ke->keyIndex != -1) {
       ke->tick += ms;
-      if (ke->tick > 10) {
+      if (ke->tick > ImmediateReleaseStrokeDuration) {
         //printf("exec recall %d\n", ke->keyIndex);
         handleKeyOff(ke->keyIndex);
         ke->keyIndex = -1;
