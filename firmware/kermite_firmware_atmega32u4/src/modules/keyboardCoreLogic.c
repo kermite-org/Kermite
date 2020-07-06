@@ -163,6 +163,8 @@ static void handleKeyInputUp(uint8_t keyIndex) {
   }
 }
 
+void keyboardCoreLogic_initialize() {}
+
 void keyboardCoreLogic_issuePhysicalKeyStateChanged(uint8_t keyIndex, bool isDown) {
   if (isDown) {
     handleKeyInputDown(keyIndex);
@@ -171,5 +173,5 @@ void keyboardCoreLogic_issuePhysicalKeyStateChanged(uint8_t keyIndex, bool isDow
   }
 }
 
-void keyboardCoreLogic_processTicker() {
+void keyboardCoreLogic_processTicker(uint8_t ms) {
 }

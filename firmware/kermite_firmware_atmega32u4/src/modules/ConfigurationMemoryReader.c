@@ -14,7 +14,7 @@
 static bool assignMemoryValid = false;
 static uint16_t assignDataSize = 0;
 
-uint8_t eepromTempBuf[8];
+uint8_t eepromTempBuf[10];
 
 #define decode_byte(p) (*(p))
 #define decode_word_le(p) ((*((p) + 1) << 8) | (*(p)))
@@ -43,7 +43,7 @@ static void initKeyAssignsReader() {
   uint8_t numKeys = decode_byte(p + 7);
   uint8_t numLayers = decode_byte(p + 8);
 
-  printf("%x %x %x %d %d %d\n", magicNumber, reserved0xFFFF, logicModelType, numKeys, numLayers);
+  printf("%x %x %x %d %d\n", magicNumber, reserved0xFFFF, logicModelType, numKeys, numLayers);
 
   assignMemoryValid =
       magicNumber == 0xFE03 &&

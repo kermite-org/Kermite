@@ -50,7 +50,7 @@ function createTimeIntervalCounter() {
 //assign memory storage
 
 const StorageBufCapacity = 1024;
-const storageBuf: u8[] = new Array(StorageBufCapacity).fill(0);
+const storageBuf: u8[] = Array(StorageBufCapacity).fill(0);
 let storageBufLength = 0;
 
 export function coreLogic_writeProfileDataBlob(bytes: u8[]) {
@@ -62,9 +62,35 @@ export function coreLogic_writeProfileDataBlob(bytes: u8[]) {
 }
 
 //--------------------------------------------------------------------------------
+//hid report
+
+const ModFlag_Ctrl = 1;
+const ModFlag_Shift = 2;
+const ModFlag_Alt = 4;
+const ModFlag_OS = 8;
+
+const hidReportBuf: u8[] = Array(8).fill(0);
+
+export function coreLogic_getOutputHidReport(): u8[] {
+  return hidReportBuf;
+}
+
+function setModifiers(modFlags: u8) {
+  hidReportBuf[0] |= modFlags;
+}
+
+function clearModifiers(modFlags: u8) {
+  hidReportBuf[0] &= ~modFlags;
+}
+
+function setOutputKeyCode(hidKeyCode: u8) {
+  hidReportBuf[2] = hidKeyCode;
+}
+
+//--------------------------------------------------------------------------------
 //assign memory reader
 
-function getKeyBoundAssignSetHeaderPos(keyIndex: u8): s16 {
+function getAssignsBlockAddressForKey(keyIndex: u8): s16 {
   let pos = 0;
   while (pos < storageBufLength) {
     const data = storageBuf[pos];
@@ -81,10 +107,7 @@ function getKeyBoundAssignSetHeaderPos(keyIndex: u8): s16 {
   return -1;
 }
 
-function getLayerBoundAssignEntryHeaderPos(
-  basePos: u8,
-  targetLayerIndex: u8
-): s16 {
+function getAssignBlockAddressForLayer(basePos: u8, targetLayerIndex: u8): s16 {
   const buf = storageBuf;
   const len = buf[basePos + 1];
   let pos = basePos + 2;
@@ -118,9 +141,9 @@ interface IAssignSet {
 
 function getAssignSet(layerIndex: u8, keyIndex: u8): IAssignSet | undefined {
   const buf = storageBuf;
-  const pos0 = getKeyBoundAssignSetHeaderPos(keyIndex);
+  const pos0 = getAssignsBlockAddressForKey(keyIndex);
   if (pos0 >= 0) {
-    const pos1 = getLayerBoundAssignEntryHeaderPos(pos0, layerIndex);
+    const pos1 = getAssignBlockAddressForLayer(pos0, layerIndex);
     // console.log({ keyIndex, layerIndex, pos0: pos0 + 24, pos1: pos1 + 24 });
     if (pos1 >= 0) {
       const entryHeaderByte = buf[pos1];
@@ -143,30 +166,20 @@ function getAssignSet(layerIndex: u8, keyIndex: u8): IAssignSet | undefined {
   return undefined;
 }
 
-//--------------------------------------------------------------------------------
-//hid report
-
-const ModFlag_Ctrl = 1;
-const ModFlag_Shift = 2;
-const ModFlag_Alt = 4;
-const ModFlag_OS = 8;
-
-const hidReportBuf: u8[] = new Array(8).fill(0);
-
-export function coreLogic_getOutputHidReport(): u8[] {
-  return hidReportBuf;
-}
-
-function setModifiers(modFlags: u8) {
-  hidReportBuf[0] |= modFlags;
-}
-
-function clearModifiers(modFlags: u8) {
-  hidReportBuf[0] &= ~modFlags;
-}
-
-function setOutputKeyCode(kc: u8) {
-  hidReportBuf[2] = kc;
+function getAssignSetL(keyIndex: u8): IAssignSet | undefined {
+  for (let i = 15; i >= 0; i--) {
+    if (state.layerHoldFlags[i] || i === 0) {
+      const res = getAssignSet(i, keyIndex);
+      const isDefaultSchemeBlock = state.layerDefaultSchemeFlags[i];
+      if (!res && isDefaultSchemeBlock) {
+        return undefined;
+      }
+      if (res) {
+        return res;
+      }
+    }
+  }
+  return undefined;
 }
 
 //--------------------------------------------------------------------------------
@@ -258,7 +271,7 @@ function handleOperationOff(opWord: u16) {
 }
 
 //--------------------------------------------------------------------------------
-//assign handlers
+//assign binder
 
 interface RecallKeyEntry {
   keyIndex: s8;
@@ -266,7 +279,7 @@ interface RecallKeyEntry {
 }
 
 const state1 = new (class {
-  boundAssigns: u16[] = Array(128).fill(0);
+  keyAttachedOperationWords: u16[] = Array(128).fill(0);
   recallKeyEntries: RecallKeyEntry[] = Array(4)
     .fill(0)
     .map(() => ({
@@ -278,15 +291,15 @@ const state1 = new (class {
 function handleKeyOn(keyIndex: u8, opWord: u16) {
   // console.log(`keyOn ${keyIndex} ${opWord}`);
   handleOperationOn(opWord);
-  state1.boundAssigns[keyIndex] = opWord;
+  state1.keyAttachedOperationWords[keyIndex] = opWord;
 }
 
 function handleKeyOff(keyIndex: u8) {
-  const opWord = state1.boundAssigns[keyIndex];
+  const opWord = state1.keyAttachedOperationWords[keyIndex];
   if (opWord) {
     // console.log(`keyOff ${keyIndex} ${opWord}`);
     handleOperationOff(opWord);
-    state1.boundAssigns[keyIndex] = 0;
+    state1.keyAttachedOperationWords[keyIndex] = 0;
   }
 }
 
@@ -296,22 +309,6 @@ function recallKeyOff(keyIndex: u8) {
     ke.keyIndex = keyIndex;
     ke.tick = 0;
   }
-}
-
-function getAssignSetL(keyIndex: u8): IAssignSet | undefined {
-  for (let i = 15; i >= 0; i--) {
-    if (state.layerHoldFlags[i] || i === 0) {
-      const res = getAssignSet(i, keyIndex);
-      const isDefaultSchemeBlock = state.layerDefaultSchemeFlags[i];
-      if (!res && isDefaultSchemeBlock) {
-        return undefined;
-      }
-      if (res) {
-        return res;
-      }
-    }
-  }
-  return undefined;
 }
 
 function assignBinder_ticker(ms: u16) {
@@ -387,6 +384,7 @@ function keySlot_debugShowSlotTrigger(slot: KeySlot, triggerObj: any) {
 }
 
 //--------------------------------------------------------------------------------
+//resolver dummy
 
 function keySlot_dummyResolver(slot: KeySlot): boolean {
   if (slot.inputEdge === 'up') {
@@ -396,6 +394,7 @@ function keySlot_dummyResolver(slot: KeySlot): boolean {
 }
 
 //--------------------------------------------------------------------------------
+//resolver single
 
 const TriggerA = {
   Down: 'D',
@@ -438,6 +437,7 @@ function keySlot_singleResolverA(slot: KeySlot): boolean {
 }
 
 //--------------------------------------------------------------------------------
+//resolver dual
 
 const TriggerB = {
   Down: 'D',
@@ -480,7 +480,7 @@ function keySlot_pushStepB(slot: KeySlot, step: 'D' | 'U' | '_') {
   }
 }
 
-function keySlot_tapHoldResolverB(slot: KeySlot): boolean {
+function keySlot_dualResolverB(slot: KeySlot): boolean {
   const { inputEdge, hold, steps, tick, interrupted } = slot;
 
   if (inputEdge === 'down') {
@@ -526,6 +526,7 @@ function keySlot_tapHoldResolverB(slot: KeySlot): boolean {
 }
 
 //--------------------------------------------------------------------------------
+//resolver triple
 
 const TriggerC = {
   Down: 'D',
@@ -573,7 +574,7 @@ function keySlot_pushStepC(slot: KeySlot, step: 'D' | 'U' | '_') {
     }
   }
 }
-function keySlot_doubleTapResolverC(slot: KeySlot): boolean {
+function keySlot_tripleResolverC(slot: KeySlot): boolean {
   const { inputEdge, steps, tick, hold, interrupted } = slot;
 
   if (inputEdge === 'down') {
@@ -597,12 +598,12 @@ function keySlot_doubleTapResolverC(slot: KeySlot): boolean {
     keySlot_pushStepC(slot, '_');
   }
 
-  if (hold && steps === 'DUD' && tick >= TH) {
+  if (steps === 'DUD' && hold && tick >= TH) {
     //hold2
     keySlot_pushStepC(slot, '_');
   }
 
-  if (!hold && steps === 'DU' && tick >= TH) {
+  if (steps === 'DU' && !hold && tick >= TH) {
     //silent after single tap
     keySlot_pushStepC(slot, '_');
     return true;
@@ -628,12 +629,13 @@ function keySlot_doubleTapResolverC(slot: KeySlot): boolean {
 }
 
 //--------------------------------------------------------------------------------
+//resolver root
 
 const keySlotResolverFuncs = [
   keySlot_dummyResolver,
   keySlot_singleResolverA,
-  keySlot_tapHoldResolverB,
-  keySlot_doubleTapResolverC
+  keySlot_dualResolverB,
+  keySlot_tripleResolverC
 ];
 
 function keySlot_tick(slot: KeySlot, ms: number) {

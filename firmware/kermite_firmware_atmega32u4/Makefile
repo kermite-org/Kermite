@@ -93,7 +93,7 @@ force: clean all
 $(OBJ_DIR)/%.o: %.c
 	@echo "compiling $<"
 	@mkdir -p $(dir $@)
-	$(CC) -c $(CFLAGS) -o $@ $<
+	@$(CC) -c $(CFLAGS) -o $@ $<
 
 $(OBJ_DIR)/%.o: %.S
 	@echo "compiling $<"
@@ -102,7 +102,7 @@ $(OBJ_DIR)/%.o: %.S
 
 $(ELF): $(OBJS)
 	@echo "linking"
-	$(CC) $(LDFLAGS) -o $(ELF) $(OBJS)
+	@$(CC) $(LDFLAGS) -o $(ELF) $(OBJS)
 	$(OBJSIZE) $(ELF)
 
 $(HEX) : $(ELF)
