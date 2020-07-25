@@ -5,6 +5,8 @@ PROJECT ?= modules_dev
 BUILD_DIR = build
 OBJ_DIR = build/obj
 
+APP_BINARIES_DIR = ../../software/electron_keyboard_utility_kermite/dist/binaries
+
 APP = $(PROJECT)
 ELF = $(BUILD_DIR)/$(APP).elf
 HEX = $(BUILD_DIR)/$(APP).hex
@@ -137,6 +139,10 @@ endif
 
 run: flash 
 #size
+
+deploy:
+	@mkdir -p $(APP_BINARIES_DIR)
+	cp build/*.hex $(APP_BINARIES_DIR)/
 
 #asm_out_dev: $(OBJ_DIR)/eeprom.S
 
