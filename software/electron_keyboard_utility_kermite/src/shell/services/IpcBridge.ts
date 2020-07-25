@@ -7,7 +7,7 @@ import {
 import { xpcMain } from '~funcs/xpc/xpcMain';
 import { appWindowManager } from '~shell/AppWindowManager';
 import { appGlobal } from './appGlobal';
-import { KeyMappingEmitter } from './EmitDataBuilder/KeyMappingEmitter';
+import { KeyMappingEmitter } from './KeyMappingEmitter';
 import {
   IKeyboardConfig,
   IEnvironmentConfigForRendererProcess,

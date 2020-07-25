@@ -1,6 +1,6 @@
 import * as HID from 'node-hid';
 import { delayMs } from '~funcs/Utils';
-import { zeros } from '../EmitDataBuilder/Helpers';
+import { zeros } from '../KeyMappingEmitter/Helpers';
 
 function getArrayFromBuffer(data: any) {
   return new Uint8Array(Buffer.from(data));

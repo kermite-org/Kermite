@@ -1,5 +1,5 @@
 import { ApplicationStorage } from './ApplicationStorage';
-import { DeviceService } from './DeviceService';
+import { KeyboardDeviceService } from './KeyboardDevice';
 import { IInputLogicSimulator } from './InputLogicSimulator.interface';
 import { InputLogicSimulatorC } from './InputLogicSimulatorC';
 import { IpcBridge } from './IpcBridge';
@@ -9,7 +9,7 @@ import { TypedEventEmitter } from '~funcs/TypedEventEmitter';
 import { IAppWindowEvent } from '~defs/ipc';
 import { KeyboardConfigProvider } from './KeyboardConfigProvider';
 import { ApplicationSettingsProvider } from './ApplicationSettingsProvider';
-import { FirmwareUpdationService } from './FirmwareUpdation/FirmwareUpdationService';
+import { FirmwareUpdationService } from './FirmwareUpdation';
 
 interface TypedApplicationEvent {
   mainWindowClosed: true;
@@ -20,7 +20,7 @@ interface TypedApplicationEvent {
 export const appGlobal = new (class {
   applicationStorage = new ApplicationStorage();
   profileManager = new ProfileManager();
-  deviceService = new DeviceService();
+  deviceService = new KeyboardDeviceService();
   // inputLogicSimulator = InputLogicSimulatorC.getInterface();
   inputLogicSimulator = InputLogicSimulatorD.getInterface();
   ipcBridge = new IpcBridge();

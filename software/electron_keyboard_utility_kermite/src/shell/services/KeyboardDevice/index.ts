@@ -5,7 +5,7 @@ import { StatusSource } from '../../../funcs/StatusSource';
 
 type IRealtimeEventListenerFunc = (event: IRealtimeKeyboardEvent) => void;
 
-export class DeviceService {
+export class KeyboardDeviceService {
   private listeners: IRealtimeEventListenerFunc[] = [];
   private deviceWrapper: DeviceWrapper | null = null;
 
