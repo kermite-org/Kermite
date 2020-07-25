@@ -18,6 +18,7 @@
 
 - Node.js 13
 - yarn
+- node-gyp
 
 ## 導入
 
