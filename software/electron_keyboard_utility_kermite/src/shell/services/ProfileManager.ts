@@ -1,6 +1,6 @@
 import { appGlobal } from './appGlobal';
 import { IProfileManagerStatus } from '~defs/ipc';
-import { resolveFilePath } from '~shell/AppEnvironment';
+import { resolveUserDataFilePath } from '~shell/AppEnvironment';
 import {
   duplicateObjectByJsonStringifyParse,
   clampValue,
@@ -25,15 +25,15 @@ type StatusListener = (partialStatus: Partial<IProfileManagerStatus>) => void;
 
 class ProfileManagerCore {
   static getDataFilePath(profName: string): string {
-    return resolveFilePath(`data/profiles/${profName}.json`);
+    return resolveUserDataFilePath(`data/profiles/${profName}.json`);
   }
 
   static async ensureProfilesDirectoryExists() {
-    const dataDirPath = resolveFilePath('data');
+    const dataDirPath = resolveUserDataFilePath('data');
     if (!fsIsFileExists(dataDirPath)) {
       await fsCreateDirectory(dataDirPath);
     }
-    const profilesDirPath = resolveFilePath('data/profiles');
+    const profilesDirPath = resolveUserDataFilePath('data/profiles');
     if (!fsIsFileExists(profilesDirPath)) {
       await fsCreateDirectory(profilesDirPath);
     }
@@ -41,7 +41,7 @@ class ProfileManagerCore {
 
   static async listAllProfileNames(): Promise<string[]> {
     const fileNames = await fsListFilesInDirectory(
-      resolveFilePath(`data/profiles`)
+      resolveUserDataFilePath(`data/profiles`)
     );
     return fileNames.map((fname) => fname.replace('.json', ''));
   }
