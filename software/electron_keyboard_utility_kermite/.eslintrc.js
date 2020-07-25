@@ -28,6 +28,7 @@ module.exports = {
     '@typescript-eslint/class-name-casing': 0,
     '@typescript-eslint/no-non-null-assertion': 0,
     '@typescript-eslint/ban-ts-ignore': 0,
+    '@typescript-eslint/explicit-module-boundary-types': 0,
     'react/jsx-key': 1
     // 'react/react-in-jsx-scope': 0,
     // 'react/display-name': 0,
