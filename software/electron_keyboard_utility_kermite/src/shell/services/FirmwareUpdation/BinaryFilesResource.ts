@@ -5,7 +5,7 @@ import {
   fsListFilesInDirectory
 } from '~funcs/Files';
 
-export class BinaryFileResource {
+export class BinaryFilesResource {
   static async ensureBinariesDirectoryExists() {
     const binariesDirPath = resolveAssetsPath('dist/binaries');
     if (!fsIsFileExists(binariesDirPath)) {

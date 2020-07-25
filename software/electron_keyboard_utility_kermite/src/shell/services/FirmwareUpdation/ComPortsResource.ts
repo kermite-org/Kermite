@@ -1,6 +1,6 @@
 import * as SerialPort from 'serialport';
 
-export class SerialPortResource {
+export class ComPortsResource {
   static async getComPortNames() {
     const ports = await SerialPort.list();
     return ports.map((port) => port.path);
