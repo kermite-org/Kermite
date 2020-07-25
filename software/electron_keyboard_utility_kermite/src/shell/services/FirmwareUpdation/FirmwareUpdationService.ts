@@ -1,4 +1,5 @@
 import { BinaryFileResource } from './BinaryFileResource';
+import { SerialPortResource } from './SerialPortResource';
 
 export class FirmwareUpdationService {
   private binaryFileNames: string[] = [];
@@ -15,6 +16,9 @@ export class FirmwareUpdationService {
 
   async initialize(): Promise<void> {
     this.listBinaryFileNames();
+
+    const comPorts = await SerialPortResource.getComPortNames();
+    console.log({ comPorts });
   }
 
   async terminate(): Promise<void> {}
