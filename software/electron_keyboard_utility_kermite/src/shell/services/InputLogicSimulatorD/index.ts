@@ -37,7 +37,7 @@ export namespace InputLogicSimulatorD {
     changedStatus: Partial<IProfileManagerStatus>
   ) {
     if (changedStatus.loadedProfileData) {
-      console.log(`logicSimulator, profile data received`);
+      // console.log(`logicSimulator, profile data received`);
       updateProfileDataBlob();
     }
   }
@@ -52,7 +52,7 @@ export namespace InputLogicSimulatorD {
       }
     }
     if (changedConfig.layoutStandard) {
-      console.log({ layout: changedConfig.layoutStandard });
+      // console.log({ layout: changedConfig.layoutStandard });
       updateProfileDataBlob();
     }
   }

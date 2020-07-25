@@ -314,12 +314,12 @@ export function converProfileDataToBlobBytes(
     'keyIndex'
   ).map(encodeKeyBoundAssignsSet);
 
-  console.log(groupedAssignBytes.map(hexBytes));
+  // console.log(groupedAssignBytes.map(hexBytes));
 
   const keyAssignsBufferBytes = flattenArray(groupedAssignBytes);
   const buf = [...keyAssignsBufferBytes];
 
-  console.log(`len: ${buf.length}`);
+  // console.log(`len: ${buf.length}`);
 
   return buf;
 }
