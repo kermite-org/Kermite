@@ -9,6 +9,7 @@ import { TypedEventEmitter } from '~funcs/TypedEventEmitter';
 import { IAppWindowEvent } from '~defs/ipc';
 import { KeyboardConfigProvider } from './KeyboardConfigProvider';
 import { ApplicationSettingsProvider } from './ApplicationSettingsProvider';
+import { FirmwareUpdationService } from './FirmwareUpdation/FirmwareUpdationService';
 
 interface TypedApplicationEvent {
   mainWindowClosed: true;
@@ -26,6 +27,7 @@ export const appGlobal = new (class {
   eventBus = new TypedEventEmitter<TypedApplicationEvent>();
   keyboardConfigProvider = new KeyboardConfigProvider();
   settingsProvider = new ApplicationSettingsProvider();
+  firmwareUpdationService = new FirmwareUpdationService();
 
   async initialize() {
     // eslint-disable-next-line no-console
@@ -35,6 +37,7 @@ export const appGlobal = new (class {
     await this.keyboardConfigProvider.initialize();
     await this.profileManager.initialize();
     await this.deviceService.initialize();
+    await this.firmwareUpdationService.initialize();
     await this.inputLogicSimulator.initialize();
     await this.ipcBridge.initialize();
   }
@@ -44,6 +47,7 @@ export const appGlobal = new (class {
     console.log(`terminate services`);
     await this.ipcBridge.terminate();
     await this.inputLogicSimulator.terminate();
+    await this.firmwareUpdationService.terminate();
     await this.deviceService.terminate();
     await this.profileManager.terminate();
     await this.keyboardConfigProvider.terminate();
