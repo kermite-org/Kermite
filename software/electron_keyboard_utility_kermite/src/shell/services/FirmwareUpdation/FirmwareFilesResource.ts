@@ -5,18 +5,24 @@ import {
   fsListFilesInDirectory
 } from '~funcs/Files';
 
-export class BinaryFilesResource {
+const relBinariesFolderPath = 'dist/binaries';
+
+export class FirmwareFilesResource {
   static async ensureBinariesDirectoryExists() {
-    const binariesDirPath = resolveAssetsPath('dist/binaries');
+    const binariesDirPath = resolveAssetsPath(relBinariesFolderPath);
     if (!fsIsFileExists(binariesDirPath)) {
       await fsCreateDirectory(binariesDirPath);
     }
   }
 
-  static async listAllBinaryFileNames(): Promise<string[]> {
+  static async listAllFirmwareNames(): Promise<string[]> {
     const fileNames = await fsListFilesInDirectory(
-      resolveAssetsPath('dist/binaries')
+      resolveAssetsPath(relBinariesFolderPath)
     );
     return fileNames.map((fname) => fname.replace('.hex', ''));
+  }
+
+  static getHexFilePath(firmwareName: string): string {
+    return resolveAssetsPath(`${relBinariesFolderPath}/${firmwareName}.hex`);
   }
 }
