@@ -1,4 +1,4 @@
-import { BinaryFileManager } from './BinaryFileManager';
+import { BinaryFileResource } from './BinaryFileResource';
 
 export class FirmwareUpdationService {
   private binaryFileNames: string[] = [];
@@ -8,8 +8,8 @@ export class FirmwareUpdationService {
   }
 
   private async listBinaryFileNames() {
-    await BinaryFileManager.ensureBinariesDirectoryExists();
-    this.binaryFileNames = await BinaryFileManager.listAllBinaryFileNames();
+    await BinaryFileResource.ensureBinariesDirectoryExists();
+    this.binaryFileNames = await BinaryFileResource.listAllBinaryFileNames();
     console.log({ fnames: this.binaryFileNames });
   }
 
