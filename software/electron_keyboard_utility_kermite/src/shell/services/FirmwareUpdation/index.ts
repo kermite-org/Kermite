@@ -1,12 +1,14 @@
 import { ComPortsMonitor, ComPortsListener } from './ComPortsMonitor';
-import { BinaryFilesManager } from './BinaryFilesManager';
+import { FirmwareFilesManager } from './FirmwareFilesManager';
+import { FlashCommander } from './FlashCommander';
+import { FirmwareFilesResource } from './FirmwareFilesResource';
 
 export class FirmwareUpdationService {
   private comPortsMonitor = new ComPortsMonitor();
-  private binaryFilesManager = new BinaryFilesManager();
+  private binaryFilesManager = new FirmwareFilesManager();
 
   getFirmwareNamesAvailable(): string[] {
-    return this.binaryFilesManager.binaryFileNames;
+    return this.binaryFilesManager.firmwareNames;
   }
 
   subscribeComPorts(listener: ComPortsListener) {
@@ -17,13 +19,27 @@ export class FirmwareUpdationService {
     this.comPortsMonitor.unsubscribeComPorts(listener);
   }
 
+  async writeFirmware(firmwareName: string, comPortName: string) {
+    const hexFilePath = FirmwareFilesResource.getHexFilePath(firmwareName);
+    const flashResult = await FlashCommander.uploadFirmware(
+      hexFilePath,
+      comPortName
+    );
+    console.log({ flashResult });
+  }
+
   async initialize(): Promise<void> {
-    this.binaryFilesManager.loadBinaryFileNames();
+    this.binaryFilesManager.loadFirmwareFileNames();
     this.comPortsMonitor.initializeTicker();
 
     //debug
-    this.subscribeComPorts((portName) => {
-      console.log('com port detected', { portName });
+    this.subscribeComPorts((comPortName: string | undefined) => {
+      console.log('com port detected', { comPortName });
+      if (comPortName) {
+        const firmwareName = this.getFirmwareNamesAvailable()[1];
+        console.log(`write firmware ${firmwareName} to ${comPortName}`);
+        this.writeFirmware(firmwareName, comPortName);
+      }
     });
   }
 
