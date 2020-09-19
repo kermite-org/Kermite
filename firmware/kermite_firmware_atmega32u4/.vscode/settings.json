@@ -7,30 +7,8 @@
       "fileMatch": ["layout.json"],
       "schema": {
         "type": "object",
-        "definitions": {
-          "IKeyUnitEntry": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string"
-              },
-              "x": {
-                "type": "number"
-              },
-              "y": {
-                "type": "number"
-              },
-              "r": {
-                "type": "number"
-              },
-              "keyIndex": {
-                "type": "number"
-              }
-            },
-            "additionalProperties": false,
-            "required": ["id", "x", "y", "r", "keyIndex"]
-          },
-          "IKeyboardShapeDisplayArea": {
+        "properties": {
+          "displayArea": {
             "type": "object",
             "properties": {
               "centerX": {
@@ -48,20 +26,31 @@
             },
             "required": ["centerX", "centerY", "width", "height"],
             "additionalProperties": false
-          }
-        },
-        "properties": {
-          "breedName": {
-            "type": "string"
-          },
-          "displayArea": {
-            "$ref": "#/definitions/IKeyboardShapeDisplayArea"
           },
           "keyUnits": {
+            "type": "array",
             "items": {
-              "$ref": "#/definitions/IKeyUnitEntry"
-            },
-            "type": "array"
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                },
+                "r": {
+                  "type": "number"
+                },
+                "keyIndex": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false,
+              "required": ["id", "x", "y", "r", "keyIndex"]
+            }
           },
           "bodyPathMarkups": {
             "type": "array",
@@ -70,7 +59,7 @@
             }
           }
         },
-        "required": ["bodyPathMarkups", "breedName", "displayArea", "keyUnits"],
+        "required": ["displayArea", "keyUnits", "bodyPathMarkups"],
         "additionalProperties": false
       }
     }
