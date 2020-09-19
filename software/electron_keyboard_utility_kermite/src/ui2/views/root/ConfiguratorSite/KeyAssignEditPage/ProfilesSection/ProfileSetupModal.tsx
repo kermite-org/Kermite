@@ -1,6 +1,5 @@
 import { h } from '~ui2/views/basis/qx';
 import { createModal } from '~ui2/views/basis/ForegroundModalLayer';
-import { getAvailableBreedNames } from '~defs/keyboardShapes';
 import { reflectFieldValue } from '~ui2/views/common/FormHelpers';
 import {
   CommonDialogFrame,
@@ -13,6 +12,7 @@ import {
   cssCommonPropertiesTable,
   cssCommonTextInput
 } from '~ui2/views/common/commonStyles';
+import { appDomain } from '~ui2/models/zAppDomain';
 
 interface ICreateProfileDialogEditValues {
   profileName: string;
@@ -71,7 +71,7 @@ const ProfileSetupModalContent = (props: {
 };
 
 export const callProfileSetupModal = createModal(() => {
-  const breedNames = getAvailableBreedNames();
+  const breedNames = appDomain.keyboardShapedModel.getAllBreedNames();
   const editValues: ICreateProfileDialogEditValues = {
     profileName: '',
     breedName: breedNames[0]

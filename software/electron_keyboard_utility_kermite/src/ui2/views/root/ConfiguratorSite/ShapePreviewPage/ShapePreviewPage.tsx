@@ -1,8 +1,4 @@
 import { css } from 'goober';
-import {
-  getAvailableBreedNames,
-  getKeyboardShapeByBreedName
-} from '~defs/keyboardShapes';
 import { IKeyboardShape } from '~defs/ProfileData';
 import { appDomain } from '~ui2/models/zAppDomain';
 import { h } from '~ui2/views/basis/qx';
@@ -12,9 +8,10 @@ import {
 } from '~ui2/views/common/FormHelpers';
 import { KeyboardShapeView } from './KeyboardShapeView';
 import { IUiSettings } from '~ui2/models/UiStatusModel';
+import { appUi } from '~ui2/models/appGlobal';
 
 function BreedSelector() {
-  const breedNames = getAvailableBreedNames();
+  const breedNames = appDomain.keyboardShapedModel.getAllBreedNames();
   const settings = appDomain.uiStatusModel.settings;
   const currentBreedName = settings.shapeViewBreedName || breedNames[0];
 
@@ -102,13 +99,13 @@ function makeShapeLoader() {
   return (breedName: string) => {
     if (breedName !== loadedBreedName) {
       loadedBreedName = breedName;
-      //RPC経由でバックエンドからKeyboardShapeを取得した場合, ソースコードの変更を反映できない
-      // backendAgent.getKeyboardShape(breedName).then((shape) => {
-      //   loadedShape = shape;
-      //   appUi.rerender();
-      // });
-      //KeyboardShapeの定義を直接参照
-      loadedShape = getKeyboardShapeByBreedName(breedName);
+      appDomain.keyboardShapedModel
+        .getKeyboardShapeByBreedName(breedName)
+        .then((shape) => {
+          loadedShape = shape;
+          appUi.rerender();
+        });
+      //todo: バックエンドでレイアウト定義ファイルの変更を監視して, コードの変更を表示に反映する
     }
     return loadedShape;
   };
