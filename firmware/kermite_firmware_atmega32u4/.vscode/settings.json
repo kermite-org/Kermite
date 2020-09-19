@@ -1,5 +1,78 @@
 {
   "files.associations": {
     "*.c": "cpp"
-  }
+  },
+  "json.schemas": [
+    {
+      "fileMatch": ["layout.json"],
+      "schema": {
+        "type": "object",
+        "definitions": {
+          "IKeyUnitEntry": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              },
+              "r": {
+                "type": "number"
+              },
+              "keyIndex": {
+                "type": "number"
+              }
+            },
+            "additionalProperties": false,
+            "required": ["id", "x", "y", "r", "keyIndex"]
+          },
+          "IKeyboardShapeDisplayArea": {
+            "type": "object",
+            "properties": {
+              "centerX": {
+                "type": "number"
+              },
+              "centerY": {
+                "type": "number"
+              },
+              "width": {
+                "type": "number"
+              },
+              "height": {
+                "type": "number"
+              }
+            },
+            "required": ["centerX", "centerY", "width", "height"],
+            "additionalProperties": false
+          }
+        },
+        "properties": {
+          "breedName": {
+            "type": "string"
+          },
+          "displayArea": {
+            "$ref": "#/definitions/IKeyboardShapeDisplayArea"
+          },
+          "keyUnits": {
+            "items": {
+              "$ref": "#/definitions/IKeyUnitEntry"
+            },
+            "type": "array"
+          },
+          "bodyPathMarkups": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["bodyPathMarkups", "breedName", "displayArea", "keyUnits"],
+        "additionalProperties": false
+      }
+    }
+  ]
 }
