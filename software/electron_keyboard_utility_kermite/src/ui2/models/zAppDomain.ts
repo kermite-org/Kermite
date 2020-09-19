@@ -6,6 +6,7 @@ import { KeyboardConfigModel } from './KeyboardConfigModel';
 import { DeviceStatusModel } from './DeviceStatusModel';
 import { UiStatusModel } from './UiStatusModel';
 import { ThemeSelectionModel } from './ThemeSelectionModel';
+import { KeyboardShapesModel } from './KeyboardShapesModel';
 
 export const appDomain = new (class {
   readonly editorModel = new EditorModel();
@@ -16,6 +17,7 @@ export const appDomain = new (class {
   readonly deviceStatusModel = new DeviceStatusModel();
   readonly uiStatusModel = new UiStatusModel();
   readonly themeSelectionModel = new ThemeSelectionModel();
+  readonly keyboardShapedModel = new KeyboardShapesModel();
 
   initialize() {
     // this.siteModel.isWidgetMode = true;
@@ -28,9 +30,11 @@ export const appDomain = new (class {
     this.deviceStatusModel.initialize();
     this.uiStatusModel.initialize();
     this.themeSelectionModel.initialize();
+    this.keyboardShapedModel.initialize();
   }
 
   terminate() {
+    this.keyboardShapedModel.finalize();
     this.themeSelectionModel.finalize();
     this.uiStatusModel.finalize();
     this.deviceStatusModel.finalinze();
