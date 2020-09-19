@@ -15,7 +15,10 @@ import {
 } from '~defs/ConfigTypes';
 import { environmentConfig } from '~shell/AppEnvironment';
 import { IKeyboardShape } from '~defs/ProfileData';
-import { getKeyboardShapeByBreedName } from '~defs/keyboardShapes';
+import {
+  getAvailableBreedNames,
+  getKeyboardShapeByBreedName
+} from '~defs/keyboardShapes';
 
 export class IpcBridge {
   async initialize() {
@@ -93,6 +96,9 @@ export class IpcBridge {
       },
       async widgetModeChanged(isWidgetMode: boolean): Promise<void> {
         appWindowManager.adjustWindowSize(isWidgetMode);
+      },
+      async getKeyboardBreedNamesAvailable(): Promise<string[]> {
+        return getAvailableBreedNames();
       },
       async getKeyboardShape(
         breedName: string

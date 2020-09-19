@@ -56,6 +56,8 @@ export interface IBackendAgent {
   minimizeWindow(): Promise<void>;
   maximizeWindow(): Promise<void>;
   widgetModeChanged(isWidgetMode: boolean): Promise<void>;
+
+  getKeyboardBreedNamesAvailable(): Promise<string[]>;
   getKeyboardShape(breedName: string): Promise<IKeyboardShape | undefined>;
 
   keyEvents: IEventSource<IRealtimeKeyboardEvent>;
