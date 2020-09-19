@@ -25,13 +25,19 @@ export class FirmwareUpdationService {
       hexFilePath,
       comPortName
     );
-    console.log({ flashResult });
+    if (flashResult !== 'ok') {
+      console.log(`firmwre upload error`);
+    }
+    console.log(flashResult);
   }
 
   async initialize(): Promise<void> {
     this.binaryFilesManager.loadFirmwareFileNames();
     this.comPortsMonitor.initializeTicker();
 
+    console.log(
+      `firmware updation debug enabled, double press reset button to upload firmware`
+    );
     //debug
     this.subscribeComPorts((comPortName: string | undefined) => {
       console.log('com port detected', { comPortName });

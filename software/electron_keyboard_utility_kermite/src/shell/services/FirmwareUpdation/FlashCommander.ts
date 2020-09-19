@@ -3,7 +3,36 @@ import SerialPort = require('serialport');
 import { readHexFileBytesBlocks } from './HexFileReader';
 import { bytesToHexString, bhi, blo } from './helpers';
 
+export function bytesToHexStringWithOmit(bytes: number[], maxLen: number) {
+  if (bytes.length > maxLen) {
+    const core = bytes.slice(0, maxLen);
+    return bytesToHexString(core) + ` ... (${bytes.length}bytes)`;
+  } else {
+    return bytesToHexString(bytes);
+  }
+}
+
 export namespace FlashCommander {
+  const logger = new (class {
+    logText: string = '';
+
+    reset() {
+      this.logText = '';
+    }
+
+    log(text: string) {
+      // eslint-disable-next-line no-console
+      console.log(text);
+      this.logText += `${text}\r\n`;
+    }
+
+    flush(): string {
+      return this.logText;
+    }
+  })();
+
+  const queryTimeoutMs = 3000;
+
   class SerialPortBridge {
     port: SerialPort;
 
@@ -17,48 +46,96 @@ export namespace FlashCommander {
 
     query(op: string, ...args: number[]): Promise<number[]> {
       if (args.length > 0) {
-        console.log(`>${op} ${bytesToHexString(args)}`);
+        logger.log(`>${op} ${bytesToHexStringWithOmit(args, 8)}`);
       } else {
-        console.log(`>${op}`);
+        logger.log(`>${op}`);
       }
       const command = [op.charCodeAt(0), ...args];
-      // console.log(command)
-      return new Promise((resolve) => {
-        this.port.once('data', (data) => {
-          // console.log({data})
+      // logger.log(command)
+      return new Promise((resolve, reject) => {
+        let received = false;
+
+        let timerId: NodeJS.Timeout | undefined = undefined;
+        const clearTimer = () => {
+          if (timerId) {
+            clearTimeout(timerId);
+            timerId = undefined;
+          }
+        };
+
+        const onData = (data: Buffer) => {
+          // logger.log({data})
           const ar = new Uint8Array(data);
           const ar1 = [...ar];
-          console.log(bytesToHexString(ar1));
+          logger.log(bytesToHexString(ar1));
+          received = true;
+
+          this.port.off('data', onData);
+          clearTimer();
           resolve(ar1);
-        });
+        };
+
+        const onTimeout = () => {
+          if (!received) {
+            this.port.off('data', onData);
+            clearTimer();
+            reject('read command response timed out');
+          }
+        };
+
+        this.port.on('data', onData);
+        timerId = setTimeout(onTimeout, queryTimeoutMs);
+
         this.port.write(command);
       });
     }
 
-    queryEx(
+    queryWithFixedSizeRead(
       op: string,
       args: number[],
       lengthToRead: number
     ): Promise<number[]> {
       if (args.length > 0) {
-        console.log(`>${op} ${bytesToHexString(args)}`);
+        logger.log(`>${op} ${bytesToHexString(args)}`);
       } else {
-        console.log(`>${op}`);
+        logger.log(`>${op}`);
       }
       const command = [op.charCodeAt(0), ...args];
-      // console.log(command)
-      return new Promise((resolve) => {
+      // logger.log(command)
+      return new Promise((resolve, reject) => {
         const resBytes: number[] = [];
+
+        let timerId: NodeJS.Timeout | undefined = undefined;
+        const clearTimer = () => {
+          if (timerId) {
+            clearTimeout(timerId);
+            timerId = undefined;
+          }
+        };
+
         const onData = (data: any) => {
           const ar = [...new Uint8Array(data)];
-          console.log(bytesToHexString(ar));
+          // logger.log(bytesToHexString(ar));
           resBytes.push(...ar);
           if (resBytes.length >= lengthToRead) {
+            logger.log(`... ${resBytes.length}bytes read`);
             this.port.off('data', onData);
+            clearTimer();
             resolve(resBytes);
           }
         };
+        const onTimeout = () => {
+          if (resBytes.length < lengthToRead) {
+            //abort
+            logger.log(bytesToHexString(resBytes));
+            logger.log(`read ${resBytes.length} / ${lengthToRead} bytes`);
+            this.port.off('data', onData);
+            clearTimer();
+            reject('read command response timed out');
+          }
+        };
         this.port.on('data', onData);
+        timerId = setTimeout(onTimeout, queryTimeoutMs);
         this.port.write(command);
       });
     }
@@ -95,7 +172,7 @@ export namespace FlashCommander {
     serial: SerialPortBridge,
     sourceBlocks: number[][]
   ) {
-    console.log('start');
+    logger.log('start');
     const resSoftwareIdentifier = await serial.query('S');
     const resBootloaderVersion = await serial.query('V');
     const resHardwareVersion = await serial.query('v');
@@ -162,9 +239,11 @@ export namespace FlashCommander {
     checkAck(resEnterProgramimgMode, 'enter programing mode');
 
     if (1) {
-      const resErase = await serial.query('e');
-      checkAck(resErase, 'erase');
-      console.log(`erase done`);
+      if (1) {
+        const resErase = await serial.query('e');
+        checkAck(resErase, 'erase');
+        logger.log(`erase done`);
+      }
 
       for (let i = 0; i < sourceBlocks.length; i++) {
         //write one block, 64words, 128bytes
@@ -179,11 +258,11 @@ export namespace FlashCommander {
           ...sourceBlocks[i]
         );
         checkAck(resWriteBlock, 'write block');
-        console.log(`block ${i} written`);
+        logger.log(`block ${i + 1}/${sourceBlocks.length} written`);
       }
     }
 
-    const readBlocks: number[][] = [];
+    logger.log(`verifying...`);
 
     for (let i = 0; i < sourceBlocks.length; i++) {
       //read one block, 64words, 128bytes
@@ -191,35 +270,29 @@ export namespace FlashCommander {
       const resSetAddress = await serial.query('A', bhi(addr), blo(addr));
       checkAck(resSetAddress, 'set address');
       // const blockBytes = await query('g', 0x00, 0x80, 0x46)
-      const blockBytes = await serial.queryEx('g', [0x00, 0x80, 0x46], 128);
-      // console.log({blockBytes})
-      readBlocks.push(blockBytes);
+      const blockBytes = await serial.queryWithFixedSizeRead(
+        'g',
+        [0x00, 0x80, 0x46],
+        128
+      );
+      // logger.log({blockBytes})
+      const isVarid =
+        JSON.stringify(sourceBlocks[i]) === JSON.stringify(blockBytes);
+
+      logger.log(
+        `block ${i + 1}/${sourceBlocks.length} ${
+          isVarid ? 'verified' : 'verify failed'
+        }`
+      );
+      if (!isVarid) {
+        throw new Error('verify failed');
+      }
     }
+
+    logger.log(`verification complete!`);
 
     const resLeaveProgramingMode = await serial.query('L');
     checkAck(resLeaveProgramingMode, 'leave programing mode');
-
-    // console.log({sourceBlocks})
-    // console.log({readBlocks})
-
-    console.log(`verifying...`);
-
-    for (let i = 0; i < sourceBlocks.length; i++) {
-      const isVarid =
-        JSON.stringify(sourceBlocks[i]) === JSON.stringify(readBlocks[i]);
-      // console.log('--------');
-      // console.log(bytesToHexString(sourceBlocks[i]));
-      // console.log(bytesToHexString(readBlocks[i]));
-      console.log(`block ${i}, isValid:${isVarid}`);
-    }
-
-    const verifyOk = readBlocks.every(
-      (blk, i) => JSON.stringify(blk) === JSON.stringify(sourceBlocks[i])
-    );
-    console.log(`verify ${verifyOk ? 'ok' : 'ng'}`);
-    if (!verifyOk) {
-      throw new Error('verify failed');
-    }
 
     await serial.query('E'); //exit
 
@@ -230,13 +303,23 @@ export namespace FlashCommander {
     hexFilePath: string,
     comPortName: string
   ): Promise<'ok' | string> {
+    let serial: SerialPortBridge | undefined = undefined;
+
+    logger.reset();
     try {
+      logger.log(`#### start firmware upload`);
       const sourceBlocks = readHexFileBytesBlocks(hexFilePath);
-      const serial = new SerialPortBridge(comPortName);
+      serial = new SerialPortBridge(comPortName);
       await executeFlashCommandSequence(serial, sourceBlocks);
+      logger.log(`#### firmware upload complete`);
       return 'ok';
     } catch (err) {
-      return err;
+      logger.log(`#### an error occured while writing firmware`);
+      logger.log(`error: ${err}`);
+      if (serial) {
+        serial.close();
+      }
+      return logger.flush();
     }
   }
 }
