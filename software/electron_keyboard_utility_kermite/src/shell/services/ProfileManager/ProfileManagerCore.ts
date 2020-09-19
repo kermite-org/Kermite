@@ -13,7 +13,6 @@ import {
   fsCopyFile,
   fsxReadJsonFile
 } from '~funcs/Files';
-import { getKeyboardShapeByBreedName } from '~defs/keyboardShapes';
 
 export class ProfileManagerCore {
   static getDataFilePath(profName: string): string {
@@ -70,7 +69,9 @@ export class ProfileManagerCore {
     const profileData: IProfileData = duplicateObjectByJsonStringifyParse(
       fallbackProfileData
     );
-    const keyboardShape = getKeyboardShapeByBreedName(breedName);
+    const keyboardShape = appGlobal.shapeProvider.getKeyboardShapeByBreedName(
+      breedName
+    );
     if (keyboardShape) {
       profileData.keyboardShape = keyboardShape;
     }
