@@ -208,14 +208,14 @@ export interface IKeyboardShapeDisplayArea {
 export interface IKeyboardShape {
   breedName: string;
   keyUnits: IKeyUnitEntry[];
-  bodyPathMarkups: string[];
+  bodyPathMarkupText: string;
   displayArea: IKeyboardShapeDisplayArea;
 }
 
 export const keyboardShape_fallbackData: IKeyboardShape = {
   breedName: 'none',
   keyUnits: [],
-  bodyPathMarkups: [],
+  bodyPathMarkupText: '',
   displayArea: {
     centerX: 0,
     centerY: 0,

@@ -22,7 +22,9 @@ const keyboardShape_4x3pad: IKeyboardShape = {
     { id: 'ku14', x: 38, y: 57, r: 0, keyIndex: 10 },
     { id: 'ku13', x: 57, y: 57, r: 0, keyIndex: 11 }
   ],
-  bodyPathMarkups: ['M -20,0', 'L 100,0', 'L 100,80', 'L -20,80', 'z']
+  bodyPathMarkupText: ['M -20,0', 'L 100,0', 'L 100,80', 'L -20,80', 'z'].join(
+    ' '
+  )
 };
 
 export const testProfileData: IProfileData = {

@@ -42,11 +42,11 @@ const KeyboardSvgFrame = (props: {
   );
 };
 
-const KeyboardBodyShape = (props: { outerPaths: string[] }) => {
+const KeyboardBodyShape = (props: { outerPaths: string }) => {
   const cssBody = css`
     fill: #54566f;
   `;
-  return <path d={props.outerPaths.join(' ')} css={cssBody} />;
+  return <path d={props.outerPaths} css={cssBody} />;
 };
 
 const BoundingBox = (props: { displayArea: IKeyboardShapeDisplayArea }) => {
@@ -116,7 +116,7 @@ export function KeyboardShapeView(props: { shape: IKeyboardShape }) {
       <ScalerBox contentWidth={contentWidth} contentHeight={contentHeight}>
         <div css={cssScalerContent}>
           <KeyboardSvgFrame displayArea={shape.displayArea} dpiScale={dpiScale}>
-            <KeyboardBodyShape outerPaths={shape.bodyPathMarkups} />
+            <KeyboardBodyShape outerPaths={shape.bodyPathMarkupText} />
             <KeyUnitCardsPart keyUnits={shape.keyUnits} />
             <BoundingBox
               displayArea={shape.displayArea}
