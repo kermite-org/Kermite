@@ -78,6 +78,9 @@ LDFLAGS += -Wall
 #LDFLAGS += -mrelax
 
 
+SRC_LAYOUT_JSON = src/projects/$(PROJECT)/layout.json
+
+
 all: build
 
 build: $(HEX) $(LST)
@@ -104,6 +107,7 @@ $(OBJ_DIR)/%.o: %.S
 
 $(ELF): $(OBJS)
 	@echo "linking"
+	@mkdir -p $(dir $@)
 	@$(CC) $(LDFLAGS) -o $(ELF) $(OBJS)
 	$(OBJSIZE) $(ELF)
 
@@ -118,12 +122,10 @@ size: $(ELF)
 
 $(OBJ_DIR)/%.asm: %.c
 	$(CC) -S $(CFLAGS) -o $@ $<
-	
+
+
 DEP_FILES = $(filter %.d,$(OBJS:%.o=%.d))
 -include $(DEP_FILES)
-
-
-
 
 
 
@@ -140,9 +142,12 @@ endif
 run: flash 
 #size
 
-deploy:
+deploy: $(HEX) $(SRC_LAYOUT_JSON)
 	@mkdir -p $(APP_BINARIES_DIR)
-	cp build/*.hex $(APP_BINARIES_DIR)/
+	@mkdir -p $(dir $(APP_BINARIES_DIR)/binary/$(PROJECT))
+	cp $(HEX) $(APP_BINARIES_DIR)/binary/$(PROJECT).hex
+	@mkdir -p $(dir $(APP_BINARIES_DIR)/config/$(PROJECT))
+	cp $(SRC_LAYOUT_JSON) $(APP_BINARIES_DIR)/config/$(PROJECT).layout.json
 
 #asm_out_dev: $(OBJ_DIR)/eeprom.S
 
