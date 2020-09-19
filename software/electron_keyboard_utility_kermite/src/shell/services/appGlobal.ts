@@ -10,7 +10,7 @@ import { IAppWindowEvent } from '~defs/ipc';
 import { KeyboardConfigProvider } from './KeyboardConfigProvider';
 import { ApplicationSettingsProvider } from './ApplicationSettingsProvider';
 import { FirmwareUpdationService } from './FirmwareUpdation';
-import { initKeyboardShapeProvider } from '~defs/keyboardShapes';
+import { KeyboardShapesProvider } from './KeyboardShapesProvider';
 
 interface TypedApplicationEvent {
   mainWindowClosed: true;
@@ -29,6 +29,7 @@ export const appGlobal = new (class {
   keyboardConfigProvider = new KeyboardConfigProvider();
   settingsProvider = new ApplicationSettingsProvider();
   firmwareUpdationService = new FirmwareUpdationService();
+  shapeProvider = new KeyboardShapesProvider();
 
   async initialize() {
     // eslint-disable-next-line no-console
@@ -41,13 +42,13 @@ export const appGlobal = new (class {
     await this.firmwareUpdationService.initialize();
     await this.inputLogicSimulator.initialize();
     await this.ipcBridge.initialize();
-
-    initKeyboardShapeProvider();
+    await this.shapeProvider.initialize();
   }
 
   async terminate() {
     // eslint-disable-next-line no-console
     console.log(`terminate services`);
+    await this.shapeProvider.terminate();
     await this.ipcBridge.terminate();
     await this.inputLogicSimulator.terminate();
     await this.firmwareUpdationService.terminate();
