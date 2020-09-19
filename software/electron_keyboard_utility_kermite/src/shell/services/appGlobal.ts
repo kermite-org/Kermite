@@ -10,6 +10,7 @@ import { IAppWindowEvent } from '~defs/ipc';
 import { KeyboardConfigProvider } from './KeyboardConfigProvider';
 import { ApplicationSettingsProvider } from './ApplicationSettingsProvider';
 import { FirmwareUpdationService } from './FirmwareUpdation';
+import { initKeyboardShapeProvider } from '~defs/keyboardShapes';
 
 interface TypedApplicationEvent {
   mainWindowClosed: true;
@@ -40,6 +41,8 @@ export const appGlobal = new (class {
     await this.firmwareUpdationService.initialize();
     await this.inputLogicSimulator.initialize();
     await this.ipcBridge.initialize();
+
+    initKeyboardShapeProvider();
   }
 
   async terminate() {

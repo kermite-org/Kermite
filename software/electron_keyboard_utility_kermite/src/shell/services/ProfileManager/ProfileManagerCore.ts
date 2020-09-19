@@ -3,7 +3,6 @@ import { resolveUserDataFilePath } from '~shell/AppEnvironment';
 import { duplicateObjectByJsonStringifyParse } from '~funcs/Utils';
 import * as path from 'path';
 import { IProfileData, fallbackProfileData } from '~defs/ProfileData';
-import { keyboardShapes } from '~defs/keyboardShapes';
 import {
   fsIsFileExists,
   fsCreateDirectory,
@@ -14,6 +13,7 @@ import {
   fsCopyFile,
   fsxReadJsonFile
 } from '~funcs/Files';
+import { getKeyboardShapeByBreedName } from '~defs/keyboardShapes';
 
 export class ProfileManagerCore {
   static getDataFilePath(profName: string): string {
@@ -70,9 +70,7 @@ export class ProfileManagerCore {
     const profileData: IProfileData = duplicateObjectByJsonStringifyParse(
       fallbackProfileData
     );
-    const keyboardShape = keyboardShapes.find(
-      (it) => it.breedName === breedName
-    );
+    const keyboardShape = getKeyboardShapeByBreedName(breedName);
     if (keyboardShape) {
       profileData.keyboardShape = keyboardShape;
     }
