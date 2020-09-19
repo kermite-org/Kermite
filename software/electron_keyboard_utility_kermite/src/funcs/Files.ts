@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import { glob } from 'glob';
 
 export function fsCreateDirectory(fpath: string) {
   return fs.promises.mkdir(fpath);
@@ -36,4 +37,15 @@ export async function fsxReadJsonFile(fpath: string): Promise<any> {
 export async function fsxWriteJsonFile(fpath: string, obj: any): Promise<void> {
   const text = JSON.stringify(obj, null, '  ');
   return fs.promises.writeFile(fpath, text);
+}
+
+export function globAsync(pattern: string): Promise<string[]> {
+  return new Promise((resolve, reject) =>
+    glob(pattern, (err, matches) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(matches);
+    })
+  );
 }

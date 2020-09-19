@@ -1,11 +1,6 @@
 import { resolveAssetsPath } from '~shell/AppEnvironment';
-import {
-  fsIsFileExists,
-  fsCreateDirectory,
-  fsListFilesInDirectory
-} from '~funcs/Files';
-
-const relBinariesFolderPath = 'dist/binaries';
+import { fsIsFileExists, fsCreateDirectory, globAsync } from '~funcs/Files';
+const relBinariesFolderPath = 'dist/binaries/binary';
 
 export class FirmwareFilesResource {
   static async ensureBinariesDirectoryExists() {
@@ -16,10 +11,11 @@ export class FirmwareFilesResource {
   }
 
   static async listAllFirmwareNames(): Promise<string[]> {
-    const fileNames = await fsListFilesInDirectory(
-      resolveAssetsPath(relBinariesFolderPath)
+    const filePaths = await globAsync(`${relBinariesFolderPath}/**/*.hex`);
+    const relFileNames = filePaths.map((fpath) =>
+      fpath.replace(relBinariesFolderPath + '/', '')
     );
-    return fileNames.map((fname) => fname.replace('.hex', ''));
+    return relFileNames.map((fname) => fname.replace('.hex', ''));
   }
 
   static getHexFilePath(firmwareName: string): string {

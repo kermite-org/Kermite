@@ -10,6 +10,5 @@ export class FirmwareFilesManager {
   async loadFirmwareFileNames() {
     await FirmwareFilesResource.ensureBinariesDirectoryExists();
     this._firmwareNames = await FirmwareFilesResource.listAllFirmwareNames();
-    // console.log({ fnames: this.binaryFileNames });
   }
 }
