@@ -39,18 +39,20 @@ export class FirmwareUpdationService {
     this.binaryFilesManager.loadFirmwareFileNames();
     this.comPortsMonitor.initializeTicker();
 
-    console.log(
-      `firmware updation debug enabled, double press reset button to upload firmware`
-    );
-    //debug
-    this.subscribeComPorts((comPortName: string | undefined) => {
-      console.log('com port detected', { comPortName });
-      if (comPortName) {
-        const firmwareName = this.getFirmwareNamesAvailable()[1];
-        console.log(`write firmware ${firmwareName} to ${comPortName}`);
-        this.writeFirmware(firmwareName, comPortName);
-      }
-    });
+    if (0) {
+      //debug
+      console.log(
+        `firmware updation debug enabled, double press reset button to upload firmware`
+      );
+      this.subscribeComPorts((comPortName: string | undefined) => {
+        console.log('com port detected', { comPortName });
+        if (comPortName) {
+          const firmwareName = this.getFirmwareNamesAvailable()[1];
+          console.log(`write firmware ${firmwareName} to ${comPortName}`);
+          this.writeFirmware(firmwareName, comPortName);
+        }
+      });
+    }
   }
 
   async terminate() {
