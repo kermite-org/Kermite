@@ -29,8 +29,10 @@ export class FirmwareUpdationService {
       comPortName
     );
     if (flashResult !== 'ok') {
+      // eslint-disable-next-line no-console
       console.log(`firmwre upload error`);
     }
+    // eslint-disable-next-line no-console
     console.log(flashResult);
     return flashResult;
   }
@@ -38,21 +40,6 @@ export class FirmwareUpdationService {
   async initialize() {
     this.binaryFilesManager.loadFirmwareFileNames();
     this.comPortsMonitor.initializeTicker();
-
-    if (0) {
-      //debug
-      console.log(
-        `firmware updation debug enabled, double press reset button to upload firmware`
-      );
-      this.subscribeComPorts(({ comPortName }) => {
-        console.log('com port detected', { comPortName });
-        if (comPortName) {
-          const firmwareName = this.getFirmwareNamesAvailable()[1];
-          console.log(`write firmware ${firmwareName} to ${comPortName}`);
-          this.writeFirmware(firmwareName, comPortName);
-        }
-      });
-    }
   }
 
   async terminate() {
