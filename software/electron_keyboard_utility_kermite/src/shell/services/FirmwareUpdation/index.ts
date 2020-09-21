@@ -44,7 +44,7 @@ export class FirmwareUpdationService {
       console.log(
         `firmware updation debug enabled, double press reset button to upload firmware`
       );
-      this.subscribeComPorts((comPortName: string | undefined) => {
+      this.subscribeComPorts(({ comPortName }) => {
         console.log('com port detected', { comPortName });
         if (comPortName) {
           const firmwareName = this.getFirmwareNamesAvailable()[1];

@@ -2,7 +2,7 @@ import { removeArrayItems } from '~funcs/Utils';
 import { ComPortsResource } from './ComPortsResource';
 
 export interface ComPortsListener {
-  (comPortName: string | undefined): void;
+  (event: { comPortName: string | undefined }): void;
 }
 
 export class ComPortsMonitor {
@@ -33,7 +33,7 @@ export class ComPortsMonitor {
       if (elapsed > 2000 && !this.activeComPortName && newlyAppearedPortName) {
         // console.log(`COM PORT ${newlyAppearedPortName} appeared`);
         this.comPortListeners.forEach((listener) =>
-          listener(newlyAppearedPortName)
+          listener({ comPortName: newlyAppearedPortName })
         );
         this.activeComPortName = newlyAppearedPortName;
       }
@@ -43,7 +43,9 @@ export class ComPortsMonitor {
         !newComPortNames.includes(this.activeComPortName)
       ) {
         // console.log(`COM PORT ${this.activeComPortName} disappeared`);
-        this.comPortListeners.forEach((listener) => listener(undefined));
+        this.comPortListeners.forEach((listener) =>
+          listener({ comPortName: undefined })
+        );
         this.activeComPortName = undefined;
       }
 
