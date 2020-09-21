@@ -19,7 +19,10 @@ export class FirmwareUpdationService {
     this.comPortsMonitor.unsubscribeComPorts(listener);
   }
 
-  async writeFirmware(firmwareName: string, comPortName: string) {
+  async writeFirmware(
+    firmwareName: string,
+    comPortName: string
+  ): Promise<'ok' | string> {
     const hexFilePath = FirmwareFilesResource.getHexFilePath(firmwareName);
     const flashResult = await FlashCommander.uploadFirmware(
       hexFilePath,
@@ -29,9 +32,10 @@ export class FirmwareUpdationService {
       console.log(`firmwre upload error`);
     }
     console.log(flashResult);
+    return flashResult;
   }
 
-  async initialize(): Promise<void> {
+  async initialize() {
     this.binaryFilesManager.loadFirmwareFileNames();
     this.comPortsMonitor.initializeTicker();
 
@@ -49,7 +53,7 @@ export class FirmwareUpdationService {
     });
   }
 
-  async terminate(): Promise<void> {
+  async terminate() {
     this.comPortsMonitor.terminateTicker();
   }
 }
