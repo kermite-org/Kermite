@@ -7,6 +7,7 @@ import { DeviceStatusModel } from './DeviceStatusModel';
 import { UiStatusModel } from './UiStatusModel';
 import { ThemeSelectionModel } from './ThemeSelectionModel';
 import { KeyboardShapesModel } from './KeyboardShapesModel';
+import { FirmwareUpdationModel } from './FirmwareUpdationModel';
 
 export const appDomain = new (class {
   readonly editorModel = new EditorModel();
@@ -18,6 +19,7 @@ export const appDomain = new (class {
   readonly uiStatusModel = new UiStatusModel();
   readonly themeSelectionModel = new ThemeSelectionModel();
   readonly keyboardShapedModel = new KeyboardShapesModel();
+  readonly firmwareUpdationModel = new FirmwareUpdationModel();
 
   initialize() {
     // this.siteModel.isWidgetMode = true;
@@ -31,9 +33,11 @@ export const appDomain = new (class {
     this.uiStatusModel.initialize();
     this.themeSelectionModel.initialize();
     this.keyboardShapedModel.initialize();
+    this.firmwareUpdationModel.initialize();
   }
 
   terminate() {
+    this.firmwareUpdationModel.finalize();
     this.keyboardShapedModel.finalize();
     this.themeSelectionModel.finalize();
     this.uiStatusModel.finalize();
