@@ -1,9 +1,11 @@
 import { overwriteObjectProps } from '~funcs/Utils';
 import { siteModel } from './zAppDomain';
 
+export type PageSignature = 'editor' | 'shapePreview' | 'firmwareUpdation';
+
 export interface IUiSettings {
   showTestInputArea: boolean;
-  page: 'editor' | 'shapePreview';
+  page: PageSignature;
   shapeViewBreedName: string;
   shapeViewShowKeyId: boolean;
   shapeViewShowKeyIndex: boolean;
