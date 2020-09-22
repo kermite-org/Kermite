@@ -14,7 +14,7 @@ const displayOptionsSource: IDisplayOptionSource[] = [
   },
   {
     fieldKey: 'shapeViewShowKeyIndex',
-    label: 'keyId'
+    label: 'keyIndex'
   },
   {
     fieldKey: 'shapeViewShowBoundingBox',
