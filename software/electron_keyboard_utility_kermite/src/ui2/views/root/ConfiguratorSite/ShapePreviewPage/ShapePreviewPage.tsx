@@ -1,9 +1,9 @@
 import { css } from 'goober';
 import { h } from '~ui2/views/basis/qx';
-import { KeyboardShapeView } from './KeyboardShapeView';
+import { KeyboardShapeView } from './ShapeView/KeyboardShapeView';
 import { ShapePreviewPageModel } from './ShapePreviewPage.model';
-import { BreedSelector } from './BreedSelector';
-import { PreviewOptionsBox } from './PreviewOptionsBox';
+import { BreedSelector } from './Controls/BreedSelector';
+import { PreviewOptionsBox } from './Controls/PreviewOptionsBox';
 
 const cssShapePreviewPage = css`
   height: 100%;
