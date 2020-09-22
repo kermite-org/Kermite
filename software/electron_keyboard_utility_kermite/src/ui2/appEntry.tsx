@@ -1,10 +1,10 @@
 import { appDomain } from './models/zAppDomain';
 import { initialzeView } from './views';
 
-function start() {
+async function start() {
   console.log('start');
 
-  appDomain.initialize();
+  await appDomain.initialize();
   initialzeView();
 
   window.addEventListener('beforeunload', () => appDomain.terminate());

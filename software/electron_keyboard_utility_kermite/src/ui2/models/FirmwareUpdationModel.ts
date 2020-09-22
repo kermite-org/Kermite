@@ -60,10 +60,8 @@ export class FirmwareUpdationModel {
   }
 
   async initialize() {
-    const firmwareNames = await backendAgent.getFirmwareNamesAvailable();
-    this.firmwareNames = firmwareNames;
-    appUi.rerender();
+    this.firmwareNames = await backendAgent.getFirmwareNamesAvailable();
   }
 
-  finalize() {}
+  async finalize() {}
 }

@@ -10,8 +10,8 @@ export class AppEntry {
     console.log('debug v0126a');
 
     app.on('ready', async () => {
-      appWindowManager.openMainWindow();
       await appGlobal.initialize();
+      appWindowManager.openMainWindow();
     });
 
     app.on('window-all-closed', async () => {

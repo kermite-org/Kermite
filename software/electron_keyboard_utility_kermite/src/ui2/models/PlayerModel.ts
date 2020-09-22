@@ -50,12 +50,12 @@ export class PlayerModel {
     appUi.rerender();
   };
 
-  initialize = () => {
+  async initialize() {
     this.keyEventProvider.setListener(this.handlekeyEvents);
     this.keyEventProvider.start();
-  };
+  }
 
-  finalize = () => {
+  async finalize() {
     this.keyEventProvider.stop();
-  };
+  }
 }

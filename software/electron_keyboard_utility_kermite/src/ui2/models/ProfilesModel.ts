@@ -33,12 +33,12 @@ export class ProfilesModel {
     appUi.rerender();
   };
 
-  initialize() {
+  async initialize() {
     this.profileProvider.setListener(this.handleProfileStatusChange);
     this.profileProvider.initialize();
   }
 
-  finalize() {
+  async finalize() {
     if (this.editorModel.checkDirty()) {
       this.profileProvider.saveProfileOnClosing(this.editorModel.profileData);
     }

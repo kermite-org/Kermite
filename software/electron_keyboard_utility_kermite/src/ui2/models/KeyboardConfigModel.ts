@@ -28,9 +28,9 @@ export class KeyboardConfigModel {
     }
   }
 
-  intialize() {
+  async intialize() {
     this.loadKeyboardConfig();
   }
 
-  finalize() {}
+  async finalize() {}
 }

@@ -21,32 +21,31 @@ export const appDomain = new (class {
   readonly keyboardShapesModel = new KeyboardShapesModel();
   readonly firmwareUpdationModel = new FirmwareUpdationModel();
 
-  initialize() {
+  async initialize() {
     // this.siteModel.isWidgetMode = true;
-
     // debugTrace('start appDomain initialize');
-    this.playerModel.initialize();
-    this.profilesModel.initialize();
-    this.siteModel.initialize();
-    this.keyboardConfigModel.intialize();
-    this.deviceStatusModel.initialize();
-    this.uiStatusModel.initialize();
-    this.themeSelectionModel.initialize();
-    this.keyboardShapesModel.initialize();
-    this.firmwareUpdationModel.initialize();
+    await this.playerModel.initialize();
+    await this.profilesModel.initialize();
+    await this.siteModel.initialize();
+    await this.keyboardConfigModel.intialize();
+    await this.deviceStatusModel.initialize();
+    await this.uiStatusModel.initialize();
+    await this.themeSelectionModel.initialize();
+    await this.keyboardShapesModel.initialize();
+    await this.firmwareUpdationModel.initialize();
   }
 
-  terminate() {
-    this.firmwareUpdationModel.finalize();
-    this.keyboardShapesModel.finalize();
-    this.themeSelectionModel.finalize();
-    this.uiStatusModel.finalize();
-    this.deviceStatusModel.finalinze();
-    this.keyboardConfigModel.finalize();
-    this.playerModel.finalize();
-    this.profilesModel.finalize();
+  async terminate() {
+    await this.firmwareUpdationModel.finalize();
+    await this.keyboardShapesModel.finalize();
+    await this.themeSelectionModel.finalize();
+    await this.uiStatusModel.finalize();
+    await this.deviceStatusModel.finalinze();
+    await this.keyboardConfigModel.finalize();
+    await this.playerModel.finalize();
+    await this.profilesModel.finalize();
+    await this.siteModel.finalize();
     // debugTrace('end appDomain terminate');
-    this.siteModel.finalize();
   }
 })();
 

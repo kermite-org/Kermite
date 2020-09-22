@@ -1,5 +1,4 @@
 import { IKeyboardShape } from '~defs/ProfileData';
-import { appUi } from './appGlobal';
 import { backendAgent } from './dataSource/ipc';
 
 export class KeyboardShapesModel {
@@ -15,10 +14,9 @@ export class KeyboardShapesModel {
     return await backendAgent.getKeyboardShape(breedName);
   }
 
-  initialize = async () => {
+  async initialize() {
     this.allBreedNames = await backendAgent.getKeyboardBreedNamesAvailable();
-    appUi.rerender();
-  };
+  }
 
-  finalize = () => {};
+  async finalize() {}
 }

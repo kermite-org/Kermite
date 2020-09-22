@@ -16,13 +16,13 @@ export class DeviceStatusModel {
     }
   };
 
-  initialize() {
+  async initialize() {
     backendAgent.keyboardDeviceStatusEvents.subscribe(
       this.onDeviceStatusChanged
     );
   }
 
-  finalinze() {
+  async finalinze() {
     backendAgent.keyboardDeviceStatusEvents.unsubscribe(
       this.onDeviceStatusChanged
     );

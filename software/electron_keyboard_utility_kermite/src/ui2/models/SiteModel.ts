@@ -39,15 +39,14 @@ export class SiteModel {
   private async loadEnvironmenConfig() {
     const env = await backendAgent.getEnvironmentConfig();
     this._isDevelopment = env.isDevelopment;
-    appUi.rerender();
   }
 
-  initialize() {
+  async initialize() {
     backendAgent.appWindowEvents.subscribe(this.onAppWindowEvents);
-    this.loadEnvironmenConfig();
+    await this.loadEnvironmenConfig();
   }
 
-  finalize() {
+  async finalize() {
     backendAgent.appWindowEvents.unsubscribe(this.onAppWindowEvents);
   }
 }
