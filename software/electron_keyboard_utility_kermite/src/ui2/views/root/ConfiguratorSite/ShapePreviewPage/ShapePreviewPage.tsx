@@ -11,7 +11,7 @@ import { IUiSettings } from '~ui2/models/UiStatusModel';
 import { appUi } from '~ui2/models/appGlobal';
 
 function BreedSelector() {
-  const breedNames = appDomain.keyboardShapedModel.getAllBreedNames();
+  const breedNames = appDomain.keyboardShapesModel.getAllBreedNames();
   const settings = appDomain.uiStatusModel.settings;
   const currentBreedName = settings.shapeViewBreedName || breedNames[0];
 
@@ -99,7 +99,7 @@ function makeShapeLoader() {
   return (breedName: string) => {
     if (breedName !== loadedBreedName) {
       loadedBreedName = breedName;
-      appDomain.keyboardShapedModel
+      appDomain.keyboardShapesModel
         .getKeyboardShapeByBreedName(breedName)
         .then((shape) => {
           loadedShape = shape;

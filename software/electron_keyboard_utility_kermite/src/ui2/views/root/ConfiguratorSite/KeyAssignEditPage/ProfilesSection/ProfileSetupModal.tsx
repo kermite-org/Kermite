@@ -71,7 +71,7 @@ const ProfileSetupModalContent = (props: {
 };
 
 export const callProfileSetupModal = createModal(() => {
-  const breedNames = appDomain.keyboardShapedModel.getAllBreedNames();
+  const breedNames = appDomain.keyboardShapesModel.getAllBreedNames();
   const editValues: ICreateProfileDialogEditValues = {
     profileName: '',
     breedName: breedNames[0]

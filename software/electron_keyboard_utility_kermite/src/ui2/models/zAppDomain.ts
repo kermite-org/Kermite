@@ -18,7 +18,7 @@ export const appDomain = new (class {
   readonly deviceStatusModel = new DeviceStatusModel();
   readonly uiStatusModel = new UiStatusModel();
   readonly themeSelectionModel = new ThemeSelectionModel();
-  readonly keyboardShapedModel = new KeyboardShapesModel();
+  readonly keyboardShapesModel = new KeyboardShapesModel();
   readonly firmwareUpdationModel = new FirmwareUpdationModel();
 
   initialize() {
@@ -32,13 +32,13 @@ export const appDomain = new (class {
     this.deviceStatusModel.initialize();
     this.uiStatusModel.initialize();
     this.themeSelectionModel.initialize();
-    this.keyboardShapedModel.initialize();
+    this.keyboardShapesModel.initialize();
     this.firmwareUpdationModel.initialize();
   }
 
   terminate() {
     this.firmwareUpdationModel.finalize();
-    this.keyboardShapedModel.finalize();
+    this.keyboardShapesModel.finalize();
     this.themeSelectionModel.finalize();
     this.uiStatusModel.finalize();
     this.deviceStatusModel.finalinze();
