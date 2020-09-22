@@ -3,25 +3,66 @@ import { IKeyboardShape } from '~defs/ProfileData';
 import { appDomain } from '~ui2/models/zAppDomain';
 import { h } from '~ui2/views/basis/qx';
 import {
-  reflectFieldValue,
-  reflectFieldChecked
+  reflectFieldChecked,
+  reflectValue
 } from '~ui2/views/common/FormHelpers';
 import { KeyboardShapeView } from './KeyboardShapeView';
 import { IUiSettings } from '~ui2/models/UiStatusModel';
 import { appUi } from '~ui2/models/appGlobal';
 
-function BreedSelector() {
-  const breedNames = appDomain.keyboardShapesModel.getAllBreedNames();
-  const settings = appDomain.uiStatusModel.settings;
-  const currentBreedName = settings.shapeViewBreedName || breedNames[0];
+class ShapePreviewPageModel {
+  loadedBreedName: string = '';
+  loadedShape: IKeyboardShape | undefined;
 
-  return () => (
+  get settings(): IUiSettings {
+    return appDomain.uiStatusModel.settings;
+  }
+
+  get allBreedNames(): string[] {
+    return appDomain.keyboardShapesModel.getAllBreedNames();
+  }
+
+  get currentBreedName(): string {
+    return (
+      appDomain.uiStatusModel.settings.shapeViewBreedName ||
+      this.allBreedNames[0]
+    );
+  }
+
+  setCurrentBreedName = async (breedName: string) => {
+    appDomain.uiStatusModel.settings.shapeViewBreedName = breedName;
+    if (breedName !== this.loadedBreedName) {
+      this.loadShape(breedName);
+    }
+  };
+
+  private async loadShape(nextBreedName: string) {
+    this.loadedBreedName = nextBreedName;
+    this.loadedShape = await appDomain.keyboardShapesModel.getKeyboardShapeByBreedName(
+      nextBreedName
+    );
+    appUi.rerender();
+    //todo: バックエンドでレイアウト定義ファイルの変更を監視して, コードの変更を表示に反映する
+  }
+
+  initialize() {
+    this.loadShape(this.currentBreedName);
+  }
+}
+
+function BreedSelector(props: {
+  allBreedNames: string[];
+  currentBreedName: string;
+  setCurrentBreedName(breedName: string): void;
+}) {
+  const { allBreedNames, currentBreedName, setCurrentBreedName } = props;
+  return (
     <select
       value={currentBreedName}
-      onChange={reflectFieldValue(settings, 'shapeViewBreedName')}
+      onChange={reflectValue(setCurrentBreedName)}
       style={{ minWidth: '100px' }}
     >
-      {breedNames.map((breedName) => (
+      {allBreedNames.map((breedName) => (
         <option value={breedName} key={breedName}>
           {breedName}
         </option>
@@ -49,7 +90,7 @@ const displayOptionsSource: IDisplayOptionSource[] = [
   }
 ];
 
-function OptionsBox() {
+function OptionsBox(props: { settings: IUiSettings }) {
   const cssOptionsBox = css`
     display: flex;
     align-items: center;
@@ -72,7 +113,7 @@ function OptionsBox() {
     }
   `;
 
-  const settings = appDomain.uiStatusModel.settings;
+  const { settings } = props;
 
   return (
     <div css={cssOptionsBox}>
@@ -92,75 +133,70 @@ function OptionsBox() {
   );
 }
 
-function makeShapeLoader() {
-  let loadedBreedName = '';
-  let loadedShape: IKeyboardShape | undefined;
-
-  return (breedName: string) => {
-    if (breedName !== loadedBreedName) {
-      loadedBreedName = breedName;
-      appDomain.keyboardShapesModel
-        .getKeyboardShapeByBreedName(breedName)
-        .then((shape) => {
-          loadedShape = shape;
-          appUi.rerender();
-        });
-      //todo: バックエンドでレイアウト定義ファイルの変更を監視して, コードの変更を表示に反映する
-    }
-    return loadedShape;
-  };
-}
-
-const cssBase = css`
-  height: 100%;
-  padding: 10px;
-  > * + * {
-    margin-top: 5px;
-  }
-
-  display: flex;
-  flex-direction: column;
-
-  > * {
-    flex-shrink: 0;
-  }
-
-  > .topRow {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  > .keyboardRow {
-    flex-shrink: 1;
-    flex-grow: 1;
-    height: 50%;
-  }
-
-  > .restRow {
-    flex-shrink: 1;
-    flex-grow: 1;
-    height: 50%;
-  }
-`;
-
 export const KeyboardShapePreviewPage = () => {
-  const shapeLoader = makeShapeLoader();
+  const model = new ShapePreviewPageModel();
 
-  return () => {
-    const breedName = appDomain.uiStatusModel.settings.shapeViewBreedName;
-    const loadedShape = shapeLoader(breedName);
-    return (
-      <div css={cssBase}>
-        <div>keyboard shape preview</div>
-        <div class="topRow">
-          <BreedSelector />
-          <OptionsBox />
+  const cssShapePreviewPage = css`
+    height: 100%;
+    padding: 10px;
+    > * + * {
+      margin-top: 5px;
+    }
+
+    display: flex;
+    flex-direction: column;
+
+    > * {
+      flex-shrink: 0;
+    }
+
+    > .topRow {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    > .keyboardRow {
+      flex-shrink: 1;
+      flex-grow: 1;
+      height: 50%;
+    }
+
+    > .restRow {
+      flex-shrink: 1;
+      flex-grow: 1;
+      height: 50%;
+    }
+  `;
+
+  return {
+    didMount() {
+      model.initialize();
+    },
+    render() {
+      const {
+        loadedShape,
+        allBreedNames,
+        currentBreedName,
+        setCurrentBreedName,
+        settings
+      } = model;
+      return (
+        <div css={cssShapePreviewPage}>
+          <div>keyboard shape preview</div>
+          <div class="topRow">
+            <BreedSelector
+              allBreedNames={allBreedNames}
+              currentBreedName={currentBreedName}
+              setCurrentBreedName={setCurrentBreedName}
+            />
+            <OptionsBox settings={settings} />
+          </div>
+          <div class="keyboardRow">
+            {loadedShape && <KeyboardShapeView shape={loadedShape} />}
+          </div>
+          <div class="restRow"></div>
         </div>
-        <div class="keyboardRow">
-          {loadedShape && <KeyboardShapeView shape={loadedShape} />}
-        </div>
-        <div class="restRow"></div>
-      </div>
-    );
+      );
+    }
   };
 };
