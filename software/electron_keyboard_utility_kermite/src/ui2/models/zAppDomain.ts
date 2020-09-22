@@ -27,7 +27,7 @@ export const appDomain = new (class {
     await this.playerModel.initialize();
     await this.profilesModel.initialize();
     await this.siteModel.initialize();
-    await this.keyboardConfigModel.intialize();
+    await this.keyboardConfigModel.initialize();
     await this.deviceStatusModel.initialize();
     await this.uiStatusModel.initialize();
     await this.themeSelectionModel.initialize();
@@ -40,7 +40,7 @@ export const appDomain = new (class {
     await this.keyboardShapesModel.finalize();
     await this.themeSelectionModel.finalize();
     await this.uiStatusModel.finalize();
-    await this.deviceStatusModel.finalinze();
+    await this.deviceStatusModel.finalize();
     await this.keyboardConfigModel.finalize();
     await this.playerModel.finalize();
     await this.profilesModel.finalize();

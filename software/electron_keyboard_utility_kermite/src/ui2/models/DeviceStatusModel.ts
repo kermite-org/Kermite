@@ -22,7 +22,7 @@ export class DeviceStatusModel {
     );
   }
 
-  async finalinze() {
+  async finalize() {
     backendAgent.keyboardDeviceStatusEvents.unsubscribe(
       this.onDeviceStatusChanged
     );
