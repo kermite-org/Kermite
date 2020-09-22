@@ -1,0 +1,65 @@
+import { css } from 'goober';
+import { reflectFieldChecked } from '~ui2/views/common/FormHelpers';
+import { IUiSettings } from '~ui2/models/UiStatusModel';
+import { h } from '~ui2/views/basis/qx';
+
+interface IDisplayOptionSource {
+  fieldKey: keyof IUiSettings;
+  label: string;
+}
+const displayOptionsSource: IDisplayOptionSource[] = [
+  {
+    fieldKey: 'shapeViewShowKeyId',
+    label: 'keyId'
+  },
+  {
+    fieldKey: 'shapeViewShowKeyIndex',
+    label: 'keyId'
+  },
+  {
+    fieldKey: 'shapeViewShowBoundingBox',
+    label: 'box'
+  }
+];
+export function PreviewOptionsBox(props: { settings: IUiSettings }) {
+  const cssPreviewOptionsBox = css`
+    display: flex;
+    align-items: center;
+    > * + * {
+      margin-left: 10px;
+    }
+
+    > div {
+      > label {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        user-select: none;
+
+        > span {
+          display: inline-block;
+          margin-left: 2px;
+        }
+      }
+    }
+  `;
+
+  const { settings } = props;
+
+  return (
+    <div css={cssPreviewOptionsBox}>
+      {displayOptionsSource.map((om) => (
+        <div key={om.fieldKey}>
+          <label>
+            <input
+              type="checkbox"
+              checked={settings[om.fieldKey] as boolean}
+              onChange={reflectFieldChecked(settings, om.fieldKey)}
+            />
+            <span>{om.label}</span>
+          </label>
+        </div>
+      ))}
+    </div>
+  );
+}
