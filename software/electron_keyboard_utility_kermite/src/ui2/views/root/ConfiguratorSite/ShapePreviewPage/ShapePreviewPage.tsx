@@ -5,40 +5,40 @@ import { ShapePreviewPageModel } from './ShapePreviewPage.model';
 import { BreedSelector } from './BreedSelector';
 import { PreviewOptionsBox } from './PreviewOptionsBox';
 
+const cssShapePreviewPage = css`
+  height: 100%;
+  padding: 10px;
+  > * + * {
+    margin-top: 5px;
+  }
+
+  display: flex;
+  flex-direction: column;
+
+  > * {
+    flex-shrink: 0;
+  }
+
+  > .topRow {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  > .keyboardRow {
+    flex-shrink: 1;
+    flex-grow: 1;
+    height: 50%;
+  }
+
+  > .restRow {
+    flex-shrink: 1;
+    flex-grow: 1;
+    height: 50%;
+  }
+`;
+
 export const KeyboardShapePreviewPage = () => {
   const model = new ShapePreviewPageModel();
-
-  const cssShapePreviewPage = css`
-    height: 100%;
-    padding: 10px;
-    > * + * {
-      margin-top: 5px;
-    }
-
-    display: flex;
-    flex-direction: column;
-
-    > * {
-      flex-shrink: 0;
-    }
-
-    > .topRow {
-      display: flex;
-      justify-content: space-between;
-    }
-
-    > .keyboardRow {
-      flex-shrink: 1;
-      flex-grow: 1;
-      height: 50%;
-    }
-
-    > .restRow {
-      flex-shrink: 1;
-      flex-grow: 1;
-      height: 50%;
-    }
-  `;
 
   return {
     didMount() {

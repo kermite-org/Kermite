@@ -21,31 +21,31 @@ const displayOptionsSource: IDisplayOptionSource[] = [
     label: 'box'
   }
 ];
-export function PreviewOptionsBox(props: { settings: IUiSettings }) {
-  const cssPreviewOptionsBox = css`
-    display: flex;
-    align-items: center;
-    > * + * {
-      margin-left: 10px;
-    }
 
-    > div {
-      > label {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        user-select: none;
+const cssPreviewOptionsBox = css`
+  display: flex;
+  align-items: center;
+  > * + * {
+    margin-left: 10px;
+  }
 
-        > span {
-          display: inline-block;
-          margin-left: 2px;
-        }
+  > div {
+    > label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+
+      > span {
+        display: inline-block;
+        margin-left: 2px;
       }
     }
-  `;
+  }
+`;
 
+export function PreviewOptionsBox(props: { settings: IUiSettings }) {
   const { settings } = props;
-
   return (
     <div css={cssPreviewOptionsBox}>
       {displayOptionsSource.map((om) => (
