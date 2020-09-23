@@ -20,7 +20,7 @@ export class TypedEventEmitter<T> {
   }
 
   off<K extends keyof T>(op: K, proc: (arg: T[K]) => void) {
-    let procs = this.handlers.get(op);
+    const procs = this.handlers.get(op);
     if (procs) {
       for (let i = 0; i < procs.length; i++) {
         if (procs[i] === proc) {

@@ -53,7 +53,6 @@
     "no-empty": 0,
     "no-prototype-builtins": 0,
     "eqeqeq": [1, "always"],
-    "prefer-const": 0,
     "no-console": 0
   }
 }

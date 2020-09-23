@@ -237,7 +237,7 @@ function fixAssignOperation(
   layout: IKeyboardLayoutStandard
 ) {
   if (op.type === 'keyInput') {
-    let vk = op.virtualKey;
+    const vk = op.virtualKey;
     let mods = op.attachedModifiers;
 
     const isMacOS = true;
@@ -261,7 +261,7 @@ function fixProfileData(
   profile: IProfileData,
   layout: IKeyboardLayoutStandard
 ) {
-  for (let key in profile.assigns) {
+  for (const key in profile.assigns) {
     const assign = profile.assigns[key];
     if (assign) {
       if (assign.type === 'single' && assign.op) {

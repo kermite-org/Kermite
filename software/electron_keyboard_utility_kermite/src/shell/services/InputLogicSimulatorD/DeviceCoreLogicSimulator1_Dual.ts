@@ -283,7 +283,7 @@ sec:
 */
 function assignBinder_issueInputTrigger(keyIndex: u8, trigger: Trigger) {
   //todo: 多階層対応
-  let assignType = getAssignType(state.layerIndex, keyIndex);
+  const assignType = getAssignType(state.layerIndex, keyIndex);
 
   if (assignType === AssignType_Dual) {
     const pri = getAssignOperationWord(state.layerIndex, keyIndex, false);
