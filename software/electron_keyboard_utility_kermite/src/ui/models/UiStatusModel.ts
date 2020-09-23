@@ -1,5 +1,5 @@
 import { overwriteObjectProps } from '~funcs/Utils';
-import { siteModel } from '.';
+import { appUi } from './appUi';
 
 export type PageSignature = 'editor' | 'shapePreview' | 'firmwareUpdation';
 
@@ -40,7 +40,7 @@ export class UiStatusModel {
       const settings = JSON.parse(settingsText);
       overwriteObjectProps(this.settings, settings);
     }
-    if (!siteModel.isDevelopment || !this.settings.page) {
+    if (!appUi.isDevelopment || !this.settings.page) {
       this.settings.page = 'editor';
     }
   }
