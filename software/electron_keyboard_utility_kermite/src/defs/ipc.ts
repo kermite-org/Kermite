@@ -68,7 +68,7 @@ export interface IBackendAgent {
   getFirmwareNamesAvailable(): Promise<string[]>;
   uploadFirmware(firmwareName: string, comPortName: string): Promise<string>;
   comPortPlugEvents: IEventSource<{ comPortName: string | undefined }>;
-  layoutFileUpdationEvents: IEventSource<{}>;
+  layoutFileUpdationEvents: IEventSource<{ breedName: string }>;
 }
 
 export interface ISynchronousIpcPacket {
