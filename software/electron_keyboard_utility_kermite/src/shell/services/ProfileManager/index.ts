@@ -3,6 +3,8 @@ import { clampValue, removeArrayItems } from '~funcs/Utils';
 import { IProfileManagerCommand } from '~defs/IpcContract';
 import { IProfileData } from '~defs/ProfileData';
 import { ProfileManagerCore } from './ProfileManagerCore';
+import { ApplicationStorage } from '../ApplicationStorage';
+import { KeyboardShapesProvider } from '../KeyboardShapesProvider';
 
 type StatusListener = (partialStatus: Partial<IProfileManagerStatus>) => void;
 
@@ -19,6 +21,14 @@ export class ProfileManager {
   private statusListeners: StatusListener[] = [];
 
   private savingProfileData: IProfileData | undefined = undefined;
+
+  private core: ProfileManagerCore;
+  constructor(
+    applicationStorage: ApplicationStorage,
+    shapeProvider: KeyboardShapesProvider
+  ) {
+    this.core = new ProfileManagerCore(applicationStorage, shapeProvider);
+  }
 
   getCurrentProfile(): IProfileData | undefined {
     return this.status.loadedProfileData;
@@ -38,17 +48,17 @@ export class ProfileManager {
   }
 
   private async initializeProfileList(): Promise<string[]> {
-    const allProfileNames = await ProfileManagerCore.listAllProfileNames();
+    const allProfileNames = await this.core.listAllProfileNames();
     if (allProfileNames.length === 0) {
       const profName = this.defaultProfileName;
-      await ProfileManagerCore.createProfile(profName, '__default');
+      await this.core.createProfile(profName, '__default');
       allProfileNames.push(profName);
     }
     return allProfileNames;
   }
 
   private getInitialProfileName(allProfileNames: string[]): string {
-    let profName = ProfileManagerCore.loadCurrentProfileName();
+    let profName = this.core.loadCurrentProfileName();
     if (profName && !allProfileNames.includes(profName)) {
       profName = undefined;
     }
@@ -60,7 +70,7 @@ export class ProfileManager {
 
   async initialize() {
     try {
-      await ProfileManagerCore.ensureProfilesDirectoryExists();
+      await this.core.ensureProfilesDirectoryExists();
       const allProfileNames = await this.initializeProfileList();
       const initialProfileName = this.getInitialProfileName(allProfileNames);
       this.setStatus({ allProfileNames });
@@ -73,7 +83,7 @@ export class ProfileManager {
 
   async terminate() {
     await this.executeSaveProfileTask();
-    ProfileManagerCore.storeCurrentProfileName(this.status.currentProfileName);
+    this.core.storeCurrentProfileName(this.status.currentProfileName);
   }
 
   private fixProfileData(profileData: IProfileData) {
@@ -107,7 +117,7 @@ export class ProfileManager {
 
   async loadProfile(profName: string): Promise<boolean> {
     try {
-      const profileData = await ProfileManagerCore.loadProfile(profName);
+      const profileData = await this.core.loadProfile(profName);
       this.fixProfileData(profileData);
       this.setStatus({
         currentProfileName: profName,
@@ -122,10 +132,7 @@ export class ProfileManager {
 
   async saveCurrentProfile(profileData: IProfileData): Promise<boolean> {
     try {
-      ProfileManagerCore.saveProfile(
-        this.status.currentProfileName,
-        profileData
-      );
+      this.core.saveProfile(this.status.currentProfileName, profileData);
       this.setStatus({
         loadedProfileData: profileData
       });
@@ -155,11 +162,8 @@ export class ProfileManager {
       return false;
     }
     try {
-      const profileData = await ProfileManagerCore.createProfile(
-        profName,
-        breedName
-      );
-      const allProfileNames = await ProfileManagerCore.listAllProfileNames();
+      const profileData = await this.core.createProfile(profName, breedName);
+      const allProfileNames = await this.core.listAllProfileNames();
       this.setStatus({
         allProfileNames,
         currentProfileName: profName,
@@ -180,14 +184,11 @@ export class ProfileManager {
       const isCurrent = this.status.currentProfileName === profName;
       const currentProfileIndex = this.status.allProfileNames.indexOf(profName);
       const isLastOne = this.status.allProfileNames.length === 1;
-      await ProfileManagerCore.deleteProfile(profName);
+      await this.core.deleteProfile(profName);
       if (isLastOne) {
-        await ProfileManagerCore.createProfile(
-          this.defaultProfileName,
-          '__default'
-        );
+        await this.core.createProfile(this.defaultProfileName, '__default');
       }
-      const allProfileNames = await ProfileManagerCore.listAllProfileNames();
+      const allProfileNames = await this.core.listAllProfileNames();
       this.setStatus({ allProfileNames });
       if (isCurrent) {
         const newIndex = clampValue(
@@ -213,8 +214,8 @@ export class ProfileManager {
     }
     try {
       const isCurrent = this.status.currentProfileName === profName;
-      await ProfileManagerCore.renameProfile(profName, newProfName);
-      const allProfileNames = await ProfileManagerCore.listAllProfileNames();
+      await this.core.renameProfile(profName, newProfName);
+      const allProfileNames = await this.core.listAllProfileNames();
       this.setStatus({ allProfileNames });
       if (isCurrent) {
         await this.loadProfile(newProfName);
@@ -234,8 +235,8 @@ export class ProfileManager {
       return false;
     }
     try {
-      await ProfileManagerCore.copyProfile(profName, newProfName);
-      const allProfileNames = await ProfileManagerCore.listAllProfileNames();
+      await this.core.copyProfile(profName, newProfName);
+      const allProfileNames = await this.core.listAllProfileNames();
       this.setStatus({ allProfileNames });
       await this.loadProfile(newProfName);
       return true;

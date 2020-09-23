@@ -1,4 +1,3 @@
-import { services } from '..';
 import { resolveUserDataFilePath } from '~shell/AppEnvironment';
 import { duplicateObjectByJsonStringifyParse } from '~funcs/Utils';
 import * as path from 'path';
@@ -13,13 +12,20 @@ import {
   fsCopyFile,
   fsxReadJsonFile
 } from '~funcs/Files';
+import { ApplicationStorage } from '../ApplicationStorage';
+import { KeyboardShapesProvider } from '../KeyboardShapesProvider';
 
 export class ProfileManagerCore {
-  static getDataFilePath(profName: string): string {
+  constructor(
+    private applicationStorage: ApplicationStorage,
+    private shapeProvider: KeyboardShapesProvider
+  ) {}
+
+  getDataFilePath(profName: string): string {
     return resolveUserDataFilePath(`data/profiles/${profName}.json`);
   }
 
-  static async ensureProfilesDirectoryExists() {
+  async ensureProfilesDirectoryExists() {
     const dataDirPath = resolveUserDataFilePath('data');
     if (!fsIsFileExists(dataDirPath)) {
       await fsCreateDirectory(dataDirPath);
@@ -30,29 +36,29 @@ export class ProfileManagerCore {
     }
   }
 
-  static async listAllProfileNames(): Promise<string[]> {
+  async listAllProfileNames(): Promise<string[]> {
     const fileNames = await fsListFilesInDirectory(
       resolveUserDataFilePath(`data/profiles`)
     );
     return fileNames.map((fname) => fname.replace('.json', ''));
   }
 
-  static loadCurrentProfileName(): string | undefined {
-    return services.applicationStorage.getItem('currentProfileName') as
+  loadCurrentProfileName(): string | undefined {
+    return this.applicationStorage.getItem('currentProfileName') as
       | string
       | undefined;
   }
 
-  static storeCurrentProfileName(profName: string) {
-    services.applicationStorage.setItem('currentProfileName', profName);
+  storeCurrentProfileName(profName: string) {
+    this.applicationStorage.setItem('currentProfileName', profName);
   }
 
-  static async loadProfile(profName: string): Promise<IProfileData> {
+  async loadProfile(profName: string): Promise<IProfileData> {
     const fpath = this.getDataFilePath(profName);
     return (await fsxReadJsonFile(fpath)) as IProfileData;
   }
 
-  static async saveProfile(
+  async saveProfile(
     profName: string,
     profileData: IProfileData
   ): Promise<void> {
@@ -61,14 +67,14 @@ export class ProfileManagerCore {
     await fsxWriteJsonFile(fpath, profileData);
   }
 
-  static async createProfile(
+  async createProfile(
     profName: string,
     breedName: string
   ): Promise<IProfileData> {
     const profileData: IProfileData = duplicateObjectByJsonStringifyParse(
       fallbackProfileData
     );
-    const keyboardShape = services.shapeProvider.getKeyboardShapeByBreedName(
+    const keyboardShape = this.shapeProvider.getKeyboardShapeByBreedName(
       breedName
     );
     if (keyboardShape) {
@@ -78,24 +84,18 @@ export class ProfileManagerCore {
     return profileData;
   }
 
-  static async deleteProfile(profName: string): Promise<void> {
+  async deleteProfile(profName: string): Promise<void> {
     const fpath = this.getDataFilePath(profName);
     await fsDeleteFile(fpath);
   }
 
-  static async renameProfile(
-    profName: string,
-    newProfName: string
-  ): Promise<void> {
+  async renameProfile(profName: string, newProfName: string): Promise<void> {
     const srcPath = this.getDataFilePath(profName);
     const dstPath = this.getDataFilePath(newProfName);
     await fsRenameFile(srcPath, dstPath);
   }
 
-  static async copyProfile(
-    profName: string,
-    newProfName: string
-  ): Promise<void> {
+  async copyProfile(profName: string, newProfName: string): Promise<void> {
     const srcPath = this.getDataFilePath(profName);
     const dstPath = this.getDataFilePath(newProfName);
     await fsCopyFile(srcPath, dstPath);
