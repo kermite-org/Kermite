@@ -2,7 +2,7 @@ import {
   IRealtimeKeyboardEvent,
   IProfileManagerStatus
 } from '~defs/IpcContract';
-import { appGlobal } from '../appGlobal';
+import { services } from '..';
 import {
   completeEditModelForShiftLayer,
   createKeyIndexToKeyUnitIdTable
@@ -60,7 +60,7 @@ export class InputLogicSimulator {
 
     const report = [this.modifierBits, 0, outKeyCode, 0, 0, 0, 0, 0];
     console.log(JSON.stringify(report));
-    appGlobal.deviceService.writeSideBrainHidReport(report);
+    services.deviceService.writeSideBrainHidReport(report);
   };
 
   private onProfileManagerStatusChanged = (
@@ -104,10 +104,8 @@ export class InputLogicSimulator {
   };
 
   async initialize() {
-    appGlobal.profileManager.subscribeStatus(
-      this.onProfileManagerStatusChanged
-    );
-    appGlobal.deviceService.subscribe(this.onRealtimeKeyboardEvent);
+    services.profileManager.subscribeStatus(this.onProfileManagerStatusChanged);
+    services.deviceService.subscribe(this.onRealtimeKeyboardEvent);
 
     LogicalKeyActionDriver.setKeyDestinationProc((ev) => {
       this.outputKeyPrioritySorter.pushInputEvent({
@@ -118,7 +116,7 @@ export class InputLogicSimulator {
     });
     VirtualKeyStateManager2.start();
 
-    appGlobal.deviceService.setSideBrainMode(true);
+    services.deviceService.setSideBrainMode(true);
 
     this.outputKeyPrioritySorter.setDesinationProc(
       this.updateSideBrainHidReport
@@ -131,9 +129,9 @@ export class InputLogicSimulator {
   }
 
   async terminate() {
-    appGlobal.deviceService.unsubscribe(this.onRealtimeKeyboardEvent);
+    services.deviceService.unsubscribe(this.onRealtimeKeyboardEvent);
 
-    appGlobal.deviceService.setSideBrainMode(false);
+    services.deviceService.setSideBrainMode(false);
 
     this.sorterIntervalTimer.stop();
   }

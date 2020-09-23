@@ -18,7 +18,7 @@ interface TypedApplicationEvent {
   appWindowEvent: IAppWindowEvent;
 }
 
-export const appGlobal = new (class {
+export const services = new (class {
   applicationStorage = new ApplicationStorage();
   profileManager = new ProfileManager();
   deviceService = new KeyboardDeviceService();

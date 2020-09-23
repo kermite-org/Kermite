@@ -1,4 +1,4 @@
-import { appGlobal } from './appGlobal';
+import { services } from '.';
 import { IKeyboardConfig, fallbackKeyboardConfig } from '~defs/ConfigTypes';
 import {
   removeArrayItems,
@@ -45,7 +45,7 @@ export class KeyboardConfigProvider {
 
   private loadConfig(): IKeyboardConfig {
     const config: IKeyboardConfig = { ...fallbackKeyboardConfig };
-    const loaded = appGlobal.applicationStorage.getItem(this.storageKey);
+    const loaded = services.applicationStorage.getItem(this.storageKey);
     if (loaded) {
       overwriteObjectProps(config, loaded);
     }
@@ -57,6 +57,6 @@ export class KeyboardConfigProvider {
   }
 
   async terminate() {
-    appGlobal.applicationStorage.setItem(this.storageKey, this._keyboardConfig);
+    services.applicationStorage.setItem(this.storageKey, this._keyboardConfig);
   }
 }

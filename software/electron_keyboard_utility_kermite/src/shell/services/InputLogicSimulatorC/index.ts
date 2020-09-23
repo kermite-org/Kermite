@@ -2,7 +2,7 @@ import {
   IProfileManagerStatus,
   IRealtimeKeyboardEvent
 } from '~defs/IpcContract';
-import { appGlobal } from '../appGlobal';
+import { services } from '..';
 import { IInputLogicSimulator } from '../InputLogicSimulator.interface';
 import { IntervalTimerWrapper } from '../InputLogicSimulator/IntervalTimerWrapper';
 import {
@@ -32,13 +32,13 @@ export namespace InputLogicSimulatorC {
   }
 
   async function hidReportExperiment() {
-    appGlobal.deviceService.writeSideBrainHidReport([2, 0, 0, 30, 0, 0, 0, 0]);
+    services.deviceService.writeSideBrainHidReport([2, 0, 0, 30, 0, 0, 0, 0]);
     await delayMs(100);
-    appGlobal.deviceService.writeSideBrainHidReport([0, 0, 0, 0, 0, 0, 0, 0]);
+    services.deviceService.writeSideBrainHidReport([0, 0, 0, 0, 0, 0, 0, 0]);
     await delayMs(100);
-    appGlobal.deviceService.writeSideBrainHidReport([0, 0, 30, 0, 0, 0, 0, 0]);
+    services.deviceService.writeSideBrainHidReport([0, 0, 30, 0, 0, 0, 0, 0]);
     await delayMs(100);
-    appGlobal.deviceService.writeSideBrainHidReport([0, 0, 0, 0, 0, 0, 0, 0]);
+    services.deviceService.writeSideBrainHidReport([0, 0, 0, 0, 0, 0, 0, 0]);
     await delayMs(100);
   }
 
@@ -67,7 +67,7 @@ export namespace InputLogicSimulatorC {
       .chain(ModuleT_OutputKeyStateCombiner.io)
       .chain(ModuleW_HidReportOutputBuffer.io);
     ModuleW_HidReportOutputBuffer.io.chainTo((report) =>
-      appGlobal.deviceService.writeSideBrainHidReport(report)
+      services.deviceService.writeSideBrainHidReport(report)
     );
   }
 
@@ -80,16 +80,16 @@ export namespace InputLogicSimulatorC {
 
   async function initialize() {
     setupWiring();
-    appGlobal.profileManager.subscribeStatus(onProfileStatusChanged);
-    appGlobal.deviceService.setSideBrainMode(true);
-    appGlobal.deviceService.subscribe(onRealtimeKeyboardEvent);
+    services.profileManager.subscribeStatus(onProfileStatusChanged);
+    services.deviceService.setSideBrainMode(true);
+    services.deviceService.subscribe(onRealtimeKeyboardEvent);
     tickerTimer.start(processTicker, 5);
   }
 
   async function terminate() {
-    appGlobal.deviceService.writeSideBrainHidReport([0, 0, 0, 0, 0, 0, 0, 0]);
-    appGlobal.deviceService.unsubscribe(onRealtimeKeyboardEvent);
-    appGlobal.deviceService.setSideBrainMode(false);
+    services.deviceService.writeSideBrainHidReport([0, 0, 0, 0, 0, 0, 0, 0]);
+    services.deviceService.unsubscribe(onRealtimeKeyboardEvent);
+    services.deviceService.setSideBrainMode(false);
     tickerTimer.stop();
   }
 

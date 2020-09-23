@@ -6,7 +6,7 @@ import {
 } from '~defs/IpcContract';
 import { xpcMain } from '~lib/xpc/xpcMain';
 import { appWindowManager } from '~shell/AppWindowManager';
-import { appGlobal } from './appGlobal';
+import { services } from '.';
 import { KeyMappingEmitter } from './KeyMappingEmitter';
 import {
   IKeyboardConfig,
@@ -27,18 +27,18 @@ function createBackendAgent(): IBackendAgent {
       };
     },
     async getSettings(): Promise<IApplicationSettings> {
-      return appGlobal.settingsProvider.getSettings();
+      return services.settingsProvider.getSettings();
     },
     async getKeyboardConfig(): Promise<IKeyboardConfig> {
-      return appGlobal.keyboardConfigProvider.keyboardConfig;
+      return services.keyboardConfigProvider.keyboardConfig;
     },
     async writeKeyboardConfig(config: IKeyboardConfig): Promise<void> {
-      appGlobal.keyboardConfigProvider.writeKeyboardConfig(config);
+      services.keyboardConfigProvider.writeKeyboardConfig(config);
     },
     async writeKeyMappingToDevice(): Promise<void> {
-      const profile = appGlobal.profileManager.getCurrentProfile();
+      const profile = services.profileManager.getCurrentProfile();
       const layoutStandard =
-        appGlobal.keyboardConfigProvider.keyboardConfig.layoutStandard;
+        services.keyboardConfigProvider.keyboardConfig.layoutStandard;
       if (profile) {
         KeyMappingEmitter.emitKeyAssignsToDevice(profile, layoutStandard);
       }
@@ -46,7 +46,7 @@ function createBackendAgent(): IBackendAgent {
     async executeProfileManagerCommands(
       commands: IProfileManagerCommand[]
     ): Promise<void> {
-      appGlobal.profileManager.executeCommands(commands);
+      services.profileManager.executeCommands(commands);
     },
 
     async reloadApplication(): Promise<void> {
@@ -66,71 +66,71 @@ function createBackendAgent(): IBackendAgent {
       appWindowManager.adjustWindowSize(isWidgetMode);
     },
     async getKeyboardBreedNamesAvailable(): Promise<string[]> {
-      return appGlobal.shapeProvider.getAvailableBreedNames();
+      return services.shapeProvider.getAvailableBreedNames();
     },
     async getKeyboardShape(
       breedName: string
     ): Promise<IKeyboardShape | undefined> {
-      return appGlobal.shapeProvider.getKeyboardShapeByBreedName(breedName);
+      return services.shapeProvider.getKeyboardShapeByBreedName(breedName);
     },
     keyEvents: {
       subscribe(listener) {
-        appGlobal.deviceService.subscribe(listener);
+        services.deviceService.subscribe(listener);
       },
       unsubscribe(listener) {
-        appGlobal.deviceService.unsubscribe(listener);
+        services.deviceService.unsubscribe(listener);
       }
     },
     profileStatusEvents: {
       subscribe(listener) {
-        appGlobal.profileManager.subscribeStatus(listener);
+        services.profileManager.subscribeStatus(listener);
       },
       unsubscribe(listener) {
-        appGlobal.profileManager.unsubscribeStatus(listener);
+        services.profileManager.unsubscribeStatus(listener);
       }
     },
     appWindowEvents: {
       subscribe(listener) {
-        appGlobal.eventBus.on('appWindowEvent', listener);
+        services.eventBus.on('appWindowEvent', listener);
       },
       unsubscribe(listener) {
-        appGlobal.eventBus.off('appWindowEvent', listener);
+        services.eventBus.off('appWindowEvent', listener);
       }
     },
     keyboardDeviceStatusEvents: {
       subscribe(listener) {
-        appGlobal.deviceService.deviceStatus.subscribe(listener);
+        services.deviceService.deviceStatus.subscribe(listener);
       },
       unsubscribe(listener) {
-        appGlobal.deviceService.deviceStatus.unsubscribe(listener);
+        services.deviceService.deviceStatus.unsubscribe(listener);
       }
     },
     async getFirmwareNamesAvailable(): Promise<string[]> {
-      return appGlobal.firmwareUpdationService.getFirmwareNamesAvailable();
+      return services.firmwareUpdationService.getFirmwareNamesAvailable();
     },
     async uploadFirmware(
       firmwareName: string,
       comPortName: string
     ): Promise<string> {
-      return appGlobal.firmwareUpdationService.writeFirmware(
+      return services.firmwareUpdationService.writeFirmware(
         firmwareName,
         comPortName
       );
     },
     comPortPlugEvents: {
       subscribe(listener) {
-        appGlobal.firmwareUpdationService.subscribeComPorts(listener);
+        services.firmwareUpdationService.subscribeComPorts(listener);
       },
       unsubscribe(listener) {
-        appGlobal.firmwareUpdationService.unsubscribeComPorts(listener);
+        services.firmwareUpdationService.unsubscribeComPorts(listener);
       }
     },
     layoutFileUpdationEvents: {
       subscribe(listener) {
-        appGlobal.shapeProvider.subscribeFileUpdation(listener);
+        services.shapeProvider.subscribeFileUpdation(listener);
       },
       unsubscribe(listener) {
-        appGlobal.shapeProvider.unsubscribeFileUpdation(listener);
+        services.shapeProvider.unsubscribeFileUpdation(listener);
       }
     }
   };
@@ -145,19 +145,19 @@ export class IpcBridge {
       }
 
       if (packet.reserveSaveProfileTask) {
-        appGlobal.profileManager.reserveSaveProfileTask(
+        services.profileManager.reserveSaveProfileTask(
           packet.reserveSaveProfileTask
         );
         event.returnValue = true;
       }
 
       if (packet.saveSettingsOnClosing) {
-        appGlobal.settingsProvider.writeSettings(packet.saveSettingsOnClosing);
+        services.settingsProvider.writeSettings(packet.saveSettingsOnClosing);
         event.returnValue = true;
       }
 
       if (packet.saveKeyboardConfigOnClosing) {
-        appGlobal.keyboardConfigProvider.writeKeyboardConfig(
+        services.keyboardConfigProvider.writeKeyboardConfig(
           packet.saveKeyboardConfigOnClosing
         );
         event.returnValue = true;

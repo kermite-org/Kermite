@@ -2,7 +2,7 @@ import {
   IProfileManagerStatus,
   IRealtimeKeyboardEvent
 } from '~defs/IpcContract';
-import { appGlobal } from '../appGlobal';
+import { services } from '..';
 import { IInputLogicSimulator } from '../InputLogicSimulator.interface';
 import { IntervalTimerWrapper } from '../InputLogicSimulator/IntervalTimerWrapper';
 
@@ -27,9 +27,9 @@ export namespace InputLogicSimulatorD {
   })();
 
   function updateProfileDataBlob() {
-    const prof = appGlobal.profileManager.getCurrentProfile();
+    const prof = services.profileManager.getCurrentProfile();
     const layoutStandard =
-      appGlobal.keyboardConfigProvider.keyboardConfig.layoutStandard;
+      services.keyboardConfigProvider.keyboardConfig.layoutStandard;
     if (prof && layoutStandard) {
       const bytes = converProfileDataToBlobBytes(prof, layoutStandard);
       CL.coreLogic_writeProfileDataBlob(bytes);
@@ -50,7 +50,7 @@ export namespace InputLogicSimulatorD {
       const isSideBrainMode = changedConfig.behaviorMode === 'SideBrain';
       if (local.isSideBranMode !== isSideBrainMode) {
         console.log({ isSideBrainMode });
-        appGlobal.deviceService.setSideBrainMode(isSideBrainMode);
+        services.deviceService.setSideBrainMode(isSideBrainMode);
         local.isSideBranMode = isSideBrainMode;
       }
     }
@@ -72,22 +72,22 @@ export namespace InputLogicSimulatorD {
     CL.coreLogic_processTicker();
     const report = CL.coreLogic_getOutputHidReport();
     if (!compareArray(prevHidReport, report)) {
-      appGlobal.deviceService.writeSideBrainHidReport(report);
+      services.deviceService.writeSideBrainHidReport(report);
       prevHidReport = report.slice(0);
     }
   }
 
   async function initialize() {
-    appGlobal.profileManager.subscribeStatus(onProfileStatusChanged);
-    appGlobal.keyboardConfigProvider.subscribeStatus(onKeyboardConfigChanged);
-    appGlobal.deviceService.subscribe(onRealtimeKeyboardEvent);
+    services.profileManager.subscribeStatus(onProfileStatusChanged);
+    services.keyboardConfigProvider.subscribeStatus(onKeyboardConfigChanged);
+    services.deviceService.subscribe(onRealtimeKeyboardEvent);
     tickerTimer.start(processTicker, 5);
   }
 
   async function terminate() {
-    appGlobal.deviceService.unsubscribe(onRealtimeKeyboardEvent);
+    services.deviceService.unsubscribe(onRealtimeKeyboardEvent);
     if (local.isSideBranMode) {
-      appGlobal.deviceService.setSideBrainMode(false);
+      services.deviceService.setSideBrainMode(false);
       local.isSideBranMode = false;
     }
     tickerTimer.stop();

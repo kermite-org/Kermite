@@ -6,7 +6,7 @@ import {
 } from './MemoryOperationFrameBuilder';
 import { calcChecksum } from './Helpers';
 import { IProfileData } from '~defs/ProfileData';
-import { appGlobal } from '../appGlobal';
+import { services } from '..';
 import { writeUint16LE, writeUint8 } from './Helpers';
 import { converProfileDataToBlobBytes } from '../InputLogicSimulatorD/ProfileDataBinaryPacker';
 import { delayMs } from '~funcs/Utils';
@@ -74,7 +74,7 @@ export namespace KeyMappingEmitter {
     editModel: IProfileData,
     layout: IKeyboardLayoutStandard
   ) {
-    const ds = appGlobal.deviceService;
+    const ds = services.deviceService;
 
     if (!ds.isOpen) {
       console.log(`device is not connected`);

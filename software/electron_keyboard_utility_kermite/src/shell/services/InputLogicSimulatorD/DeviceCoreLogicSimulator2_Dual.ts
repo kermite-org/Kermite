@@ -1,4 +1,4 @@
-import { appGlobal } from '../appGlobal';
+import { services } from '..';
 
 //--------------------------------------------------------------------------------
 //types
@@ -224,7 +224,7 @@ function handleOperationOn(opWord: u16) {
     const withShift = (opWord >> 13) & 0b1;
     const fDS = (opWord >> 12) & 0b1;
     state.layerIndex = layerIndex;
-    appGlobal.deviceService.emitLayerChangedEvent(layerIndex);
+    services.deviceService.emitLayerChangedEvent(layerIndex);
     state.layerHoldFlags[layerIndex] = true;
     state.layerDefaultSchemeFlags[layerIndex] = !!fDS;
     if (withShift) {
@@ -258,7 +258,7 @@ function handleOperationOff(opWord: u16) {
   }
   if (opType === OpType_layerCall) {
     state.layerIndex = 0;
-    appGlobal.deviceService.emitLayerChangedEvent(0);
+    services.deviceService.emitLayerChangedEvent(0);
     const layerIndex = (opWord >> 8) & 0b1111;
     state.layerHoldFlags[layerIndex] = false;
     const withShift = (opWord >> 13) & 0b1;

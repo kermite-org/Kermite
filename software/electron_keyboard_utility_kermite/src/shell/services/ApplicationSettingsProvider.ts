@@ -1,4 +1,4 @@
-import { appGlobal } from './appGlobal';
+import { services } from '.';
 import {
   IApplicationSettings,
   fallabackApplicationSettings
@@ -19,11 +19,11 @@ export class ApplicationSettingsProvider {
 
   async initialize() {
     this._settings =
-      appGlobal.applicationStorage.getItem(this.stroageKey) ||
+      services.applicationStorage.getItem(this.stroageKey) ||
       fallabackApplicationSettings;
   }
 
   async terminate() {
-    appGlobal.applicationStorage.setItem(this.stroageKey, this._settings);
+    services.applicationStorage.setItem(this.stroageKey, this._settings);
   }
 }

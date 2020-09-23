@@ -1,4 +1,4 @@
-import { appGlobal } from '../appGlobal';
+import { services } from '..';
 import { resolveUserDataFilePath } from '~shell/AppEnvironment';
 import { duplicateObjectByJsonStringifyParse } from '~funcs/Utils';
 import * as path from 'path';
@@ -38,13 +38,13 @@ export class ProfileManagerCore {
   }
 
   static loadCurrentProfileName(): string | undefined {
-    return appGlobal.applicationStorage.getItem('currentProfileName') as
+    return services.applicationStorage.getItem('currentProfileName') as
       | string
       | undefined;
   }
 
   static storeCurrentProfileName(profName: string) {
-    appGlobal.applicationStorage.setItem('currentProfileName', profName);
+    services.applicationStorage.setItem('currentProfileName', profName);
   }
 
   static async loadProfile(profName: string): Promise<IProfileData> {
@@ -68,7 +68,7 @@ export class ProfileManagerCore {
     const profileData: IProfileData = duplicateObjectByJsonStringifyParse(
       fallbackProfileData
     );
-    const keyboardShape = appGlobal.shapeProvider.getKeyboardShapeByBreedName(
+    const keyboardShape = services.shapeProvider.getKeyboardShapeByBreedName(
       breedName
     );
     if (keyboardShape) {
