@@ -1,4 +1,4 @@
-import { appUi } from '~ui/models/appGlobal';
+import { appUi } from '~ui/models/appUi';
 import { h, render, rerender as qxRerender } from '~lib/qx';
 import { SiteRoot } from './root/SiteRoot';
 import { thinningListenerCall } from '~funcs/Utils';

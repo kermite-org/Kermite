@@ -1,7 +1,7 @@
 import { IKeyboardShape } from '~defs/ProfileData';
 import { appDomain } from '~ui/models/zAppDomain';
 import { IUiSettings } from '~ui/models/UiStatusModel';
-import { appUi } from '~ui/models/appGlobal';
+import { appUi } from '~ui/models/appUi';
 import { backendAgent } from '~ui/models/dataSource/ipc';
 
 export class ShapePreviewPageModel {

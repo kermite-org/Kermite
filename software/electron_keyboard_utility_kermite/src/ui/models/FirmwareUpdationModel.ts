@@ -1,4 +1,4 @@
-import { appUi } from './appGlobal';
+import { appUi } from './appUi';
 import { backendAgent } from './dataSource/ipc';
 
 type FirmwareUpdationPhase =

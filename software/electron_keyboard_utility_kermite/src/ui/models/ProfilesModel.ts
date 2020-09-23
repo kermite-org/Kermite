@@ -5,7 +5,7 @@ import {
 } from '~defs/IpcContract';
 import { EditorModel } from './EditorModel';
 import { backendAgent } from '~ui/models/dataSource/ipc';
-import { appUi } from './appGlobal';
+import { appUi } from './appUi';
 
 export class ProfilesModel {
   private profileProvider = new ProfileProvider2();

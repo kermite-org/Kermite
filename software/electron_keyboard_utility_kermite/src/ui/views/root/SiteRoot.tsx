@@ -1,7 +1,7 @@
 import { h } from '~lib/qx';
 import { ConfiguratorSiteRoot } from './ConfiguratorSite/ConfiguratorSiteRoot';
 import { glob, setup, css } from 'goober';
-import { appUi } from '~ui/models/appGlobal';
+import { appUi } from '~ui/models/appUi';
 import { DebugOverlay } from '../basis/DebugOverlay';
 import { ForegroundModalLayerRoot } from '../basis/ForegroundModalLayer';
 import { siteModel } from '~ui/models/zAppDomain';

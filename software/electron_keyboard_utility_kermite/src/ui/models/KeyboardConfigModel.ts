@@ -1,5 +1,5 @@
 import { backendAgent } from './dataSource/ipc';
-import { appUi } from './appGlobal';
+import { appUi } from './appUi';
 import {
   IKeyboardBehaviorMode,
   IKeyboardLayoutStandard

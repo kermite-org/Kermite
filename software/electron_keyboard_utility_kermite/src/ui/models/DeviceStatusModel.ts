@@ -1,6 +1,6 @@
 import { backendAgent } from './dataSource/ipc';
 import { IKeyboardDeviceStatus } from '~defs/IpcContract';
-import { appUi } from './appGlobal';
+import { appUi } from './appUi';
 
 export class DeviceStatusModel {
   private _isConnected: boolean = false;

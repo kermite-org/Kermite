@@ -1,4 +1,4 @@
-import { appUi } from './appGlobal';
+import { appUi } from './appUi';
 import { RealtimeKeyboardEventProvider_RealDevice } from './dataSource/RealtimeKeyboardEventProvider_RealDevice';
 import { EditorModel } from './EditorModel';
 import { IRealtimeKeyboardEvent } from '~defs/IpcContract';

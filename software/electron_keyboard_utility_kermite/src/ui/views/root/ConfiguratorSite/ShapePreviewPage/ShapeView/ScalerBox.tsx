@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { appUi } from '~ui/models/appGlobal';
+import { appUi } from '~ui/models/appUi';
 import { Component } from '~lib/qx/qxinternal_petit_dom/Component';
 
 const cssBase = css`
