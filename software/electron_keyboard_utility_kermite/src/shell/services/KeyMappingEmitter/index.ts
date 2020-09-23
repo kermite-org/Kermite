@@ -4,10 +4,9 @@ import {
   memoryWriteTransactionStartFrame,
   memoryWriteTransactionEndFrame
 } from './MemoryOperationFrameBuilder';
-import { calcChecksum } from './Helpers';
+import { calcChecksum, writeUint16LE, writeUint8 } from './Helpers';
 import { IProfileData } from '~defs/ProfileData';
 import { services } from '..';
-import { writeUint16LE, writeUint8 } from './Helpers';
 import { converProfileDataToBlobBytes } from '../InputLogicSimulatorD/ProfileDataBinaryPacker';
 import { delayMs } from '~funcs/Utils';
 import { IKeyboardLayoutStandard } from '~defs/ConfigTypes';

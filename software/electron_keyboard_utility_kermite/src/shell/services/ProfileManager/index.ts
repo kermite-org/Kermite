@@ -1,6 +1,8 @@
-import { IProfileManagerStatus } from '~defs/IpcContract';
+import {
+  IProfileManagerStatus,
+  IProfileManagerCommand
+} from '~defs/IpcContract';
 import { clampValue, removeArrayItems } from '~funcs/Utils';
-import { IProfileManagerCommand } from '~defs/IpcContract';
 import { IProfileData } from '~defs/ProfileData';
 import { ProfileManagerCore } from './ProfileManagerCore';
 import { ApplicationStorage } from '../ApplicationStorage';
