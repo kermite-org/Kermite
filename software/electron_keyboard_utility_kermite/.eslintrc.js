@@ -4,13 +4,23 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module'
   },
+  settings: {
+    'import/resolver': {
+      typescript: {}
+    }
+  },
   extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     // 'plugin:react/recommended',
+    'plugin:import/errors',
+    'plugin:import/warnings',
+    'plugin:import/typescript',
     'prettier/@typescript-eslint',
     'plugin:prettier/recommended'
   ],
-  plugins: ['react', 'prettier'],
+  plugins: ['react', 'prettier', 'import'],
   rules: {
     eqeqeq: [1, 'always'],
     'prefer-const': 0,
@@ -28,15 +38,19 @@ module.exports = {
     '@typescript-eslint/camelcase': 0,
     '@typescript-eslint/class-name-casing': 0,
     '@typescript-eslint/no-non-null-assertion': 0,
-    '@typescript-eslint/ban-ts-ignore': 0,
     '@typescript-eslint/explicit-module-boundary-types': 0,
     '@typescript-eslint/ban-types': 0,
+    '@typescript-eslint/ban-ts-ignore': 0,
     '@typescript-eslint/ban-ts-comment': 0,
-    '@typescript-eslint/no-use-before-define': 0,
 
-    'react/jsx-key': 1
+    'react/jsx-key': 1,
     // 'react/react-in-jsx-scope': 0,
     // 'react/display-name': 0,
     // 'react/no-unknown-property': 0
+    'import/no-cycle': [1, { maxDepth: 1 }],
+
+    'no-inner-declarations': 0,
+    'no-constant-condition': 0,
+    'no-empty': 0
   }
 };
