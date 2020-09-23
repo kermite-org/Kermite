@@ -27,7 +27,6 @@
   "rules": {
     "@typescript-eslint/explicit-function-return-type": 0,
     "@typescript-eslint/no-use-before-define": [1, "nofunc"],
-    "@typescript-eslint/no-unused-vars": 0,
     "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/no-empty-function": 0,
     "@typescript-eslint/no-inferrable-types": 0,
@@ -41,6 +40,7 @@
     "@typescript-eslint/ban-types": 0,
     "@typescript-eslint/ban-ts-ignore": 0,
     "@typescript-eslint/ban-ts-comment": 0,
+    "@typescript-eslint/no-unused-vars": [1, { "argsIgnorePattern": "^_" }],
 
     "react/jsx-key": 1,
     "react/display-name": 0,
@@ -48,11 +48,11 @@
 
     "import/no-cycle": [1, { "maxDepth": 1 }],
 
+    "eqeqeq": [1, "always"],
+    "no-empty": 0,
     "no-inner-declarations": 0,
     "no-constant-condition": 0,
-    "no-empty": 0,
     "no-prototype-builtins": 0,
-    "eqeqeq": [1, "always"],
     "no-console": 0
   }
 }

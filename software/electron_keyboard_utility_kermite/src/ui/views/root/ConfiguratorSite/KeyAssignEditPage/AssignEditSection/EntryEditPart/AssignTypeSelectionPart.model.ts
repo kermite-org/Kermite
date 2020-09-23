@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { IAssignEntryType } from '~defs/ProfileData';
 import { editorModel } from '~ui/models';
 

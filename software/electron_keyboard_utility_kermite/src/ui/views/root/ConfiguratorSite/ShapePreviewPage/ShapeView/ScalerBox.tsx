@@ -1,7 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { appUi } from '~ui/models/appUi';
-import { Component } from '~lib/qx/qxinternal_petit_dom/Component';
 
 const cssBase = css`
   width: 100%;
@@ -27,7 +26,7 @@ interface IScalerBoxProps {
   children: any;
 }
 
-export function ScalerBox(initalProps: IScalerBoxProps) {
+export function ScalerBox(_initialProps: IScalerBoxProps) {
   const domBaseElementId = `scalerBox-${(Math.random() * 10000) >> 0}`;
   let scale = 1.0;
   let mh = 0;

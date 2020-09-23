@@ -15,7 +15,6 @@ import {
 } from '~defs/ConfigTypes';
 import { environmentConfig } from '~shell/AppEnvironment';
 import { IKeyboardShape } from '~defs/ProfileData';
-import { backendAgent } from '~ui/models/dataSource/ipc';
 
 function createBackendAgent(): IBackendAgent {
   return {

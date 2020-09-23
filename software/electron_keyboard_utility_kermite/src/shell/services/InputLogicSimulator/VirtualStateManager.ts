@@ -2,7 +2,6 @@ import { KeyAssignToLogicalKeyActionResolver } from './KeyAssignToLogicalKeyActi
 import { LogicalKeyActionDriver } from './LogicalKeyActionDriver';
 import {
   IModelKeyAssignsProvider,
-  IStrokeEmitterFunction,
   LayerState,
   LogicalKeyAction
 } from './Types';

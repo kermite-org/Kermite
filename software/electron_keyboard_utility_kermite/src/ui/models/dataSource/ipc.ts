@@ -1,8 +1,4 @@
-import {
-  ISynchronousIpcPacket,
-  IBackendAgent,
-  IProfileManagerCommand
-} from '~defs/IpcContract';
+import { ISynchronousIpcPacket, IBackendAgent } from '~defs/IpcContract';
 import { createXpcRenderer } from '~lib/xpc/xpcRenderer';
 import { IpcRenderer } from 'electron';
 

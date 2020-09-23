@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react/prop-types */
 import { h, rerender, render } from '~lib/qx';
 import { DebugOverlay } from './basis/DebugOverlay';
 import { appUi } from '~ui/models/appUi';

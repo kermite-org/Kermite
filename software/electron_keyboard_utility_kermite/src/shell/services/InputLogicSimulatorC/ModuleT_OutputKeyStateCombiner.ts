@@ -1,4 +1,4 @@
-import { HidKeyCodes, getHidKeyCodeEx } from '~defs/HidKeyCodes';
+import { getHidKeyCodeEx } from '~defs/HidKeyCodes';
 import { ModifierVirtualKey } from '~defs/VirtualKeys';
 import { IHoldKeySet, createModuleIo } from './LogicSimulatorCCommon';
 

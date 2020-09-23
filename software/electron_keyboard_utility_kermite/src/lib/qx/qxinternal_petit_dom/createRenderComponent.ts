@@ -121,7 +121,7 @@ function createRenderComponent<P extends {}>({
 
 function shouldRetainCurrentDomNode<
   P extends { qxOptimizer?: QxOptimizerSpec; [key: string]: any }
->(props0: P, props1: P, funcName: string) {
+>(props0: P, props1: P, _funcName: string) {
   if (props1.qxOptimizer === 'shallowEqual') {
     for (const key in props1) {
       if (props1[key] !== props0[key]) {

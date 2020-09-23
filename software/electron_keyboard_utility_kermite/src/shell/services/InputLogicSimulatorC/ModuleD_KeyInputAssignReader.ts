@@ -4,8 +4,7 @@ import {
   IKeyTrigger,
   logicSimulatorStateC,
   IKeyTriggerEvent,
-  IKeyStrokeAssignEvent,
-  logicSimulatorCConfig
+  IKeyStrokeAssignEvent
 } from './LogicSimulatorCCommon';
 
 export namespace KeyInputAssignReaderCore {

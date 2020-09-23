@@ -228,9 +228,9 @@ function makeRawAssignEntries(profile: IProfileData): IRawAssignEntry[] {
     .filter((ra) => !!ra);
 }
 
-function hexBytes(bytes: number[]) {
-  return bytes.map((b) => `00${b.toString(16)}`.slice(-2)).join(' ');
-}
+// function hexBytes(bytes: number[]) {
+//   return bytes.map((b) => `00${b.toString(16)}`.slice(-2)).join(' ');
+// }
 
 function fixAssignOperation(
   op: IAssignOperation,

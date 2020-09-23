@@ -1,4 +1,4 @@
-import { BrowserWindow, Menu, Tray } from 'electron';
+import { BrowserWindow } from 'electron';
 import * as path from 'path';
 import { environmentConfig } from '~shell/AppEnvironment';
 

@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { models, uiStatusModel } from '~ui/models';
+import { uiStatusModel } from '~ui/models';
 
 export const ConfigurationButton = () => {
   const cssConfigurationButton = css`

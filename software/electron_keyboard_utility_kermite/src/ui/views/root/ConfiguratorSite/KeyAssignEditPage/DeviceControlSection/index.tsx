@@ -1,7 +1,5 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { LaunchButton } from './LaunchButton';
-import { BehaviorSelector, LayoutStandardSelector } from './ConfigSelectors';
 import { LinkIndicator } from './LinkIndicator';
 
 export const DeviceControlSection = () => {

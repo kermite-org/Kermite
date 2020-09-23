@@ -1,7 +1,4 @@
-import {
-  virtualKeyGroupsTable,
-  virtualKeyGroupsTable2
-} from './virtualkeyGroupsTable';
+import { virtualKeyGroupsTable2 } from './virtualkeyGroupsTable';
 import { VirtualKeyTexts } from '~defs/VirtualKeyTexts';
 import { editorModel } from '~ui/models';
 import { ModifierVirtualKey } from '~defs/VirtualKeys';

@@ -14,7 +14,7 @@ interface IDualItemsHoverSelectorProps<T extends string> {
 }
 
 function DualItemsHoverSelector<T extends string>(
-  props: IDualItemsHoverSelectorProps<T>
+  _props: IDualItemsHoverSelectorProps<T>
 ) {
   let isHover = false;
   const onMouseEnter = () => (isHover = true);
