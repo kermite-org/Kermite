@@ -28,7 +28,7 @@ export function makeProfileManagementViewModel(): IProfileManagerViewModel {
   const checkValidNewProfileName = async (
     newProfileName: string
   ): Promise<boolean> => {
-    if (!newProfileName.match(/^[^/./\\:*?\"<>|]+$/)) {
+    if (!newProfileName.match(/^[^/./\\:*?"<>|]+$/)) {
       await modalAlert(
         `${newProfileName} is not for valid filename. operation cancelled.`
       );
