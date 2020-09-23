@@ -1,4 +1,4 @@
-import * as SerialPort from 'serialport';
+import SerialPort = require('serialport');
 
 export class ComPortsResource {
   static async getComPortNames() {
