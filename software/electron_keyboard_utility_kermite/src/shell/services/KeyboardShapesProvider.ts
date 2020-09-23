@@ -40,7 +40,6 @@ async function loadKeyboardShapes(): Promise<IKeyboardShape[]> {
 function setupFilesWatcher(callback: (filePath: string) => void) {
   if (environmentConfig.isDevelopment) {
     fs.watch(baseDir, { recursive: true }, async (eventType, relPath) => {
-      console.log(`file changed`, eventType, relPath);
       if (eventType === 'change') {
         if (relPath.endsWith('/layout.json')) {
           const filePath = `${baseDir}/${relPath}`;
@@ -81,7 +80,6 @@ export class KeyboardShapesProvider {
     );
     if (index !== -1) {
       this.keyboardShapes[index] = shape;
-      console.log(`shape changed`, breedName, shape);
       this.listeners.forEach((listener) => listener({ breedName }));
     }
   };

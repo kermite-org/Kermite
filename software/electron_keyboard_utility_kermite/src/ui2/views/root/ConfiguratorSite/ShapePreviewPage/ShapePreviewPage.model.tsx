@@ -2,7 +2,7 @@ import { IKeyboardShape } from '~defs/ProfileData';
 import { appDomain } from '~ui2/models/zAppDomain';
 import { IUiSettings } from '~ui2/models/UiStatusModel';
 import { appUi } from '~ui2/models/appGlobal';
-import { backendAgent, debugTrace } from '~ui2/models/dataSource/ipc';
+import { backendAgent } from '~ui2/models/dataSource/ipc';
 
 export class ShapePreviewPageModel {
   loadedBreedName: string = '';
@@ -40,7 +40,6 @@ export class ShapePreviewPageModel {
 
   private onFileUpdated = (args: { breedName: string }) => {
     if (args.breedName === this.currentBreedName) {
-      console.log(`reaload shape`);
       this.loadShape(this.loadedBreedName);
     }
   };
@@ -48,11 +47,13 @@ export class ShapePreviewPageModel {
   initialize() {
     this.loadShape(this.currentBreedName);
     backendAgent.layoutFileUpdationEvents.subscribe(this.onFileUpdated);
-    debugTrace('listen layoutFileUpdationEvents');
+    //debugTrace('listen layoutFileUpdationEvents');
   }
 
   finalize() {
     backendAgent.layoutFileUpdationEvents.unsubscribe(this.onFileUpdated);
-    debugTrace('unlisten layoutFileUpdationEvents');
+    //debugTrace('unlisten layoutFileUpdationEvents');
+    //開発時、devserverで自動リロードが発生した場合にcomponent.willUnmountが呼ばれないため、イベントリークする
+    //このページで実害はないが設計上の問題があり改善が必要
   }
 }
