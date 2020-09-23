@@ -1,5 +1,5 @@
 import { css } from 'goober';
-import { h } from '~ui2/views/basis/qx';
+import { h } from '~lib/qx';
 import { IProfileManagerViewModel } from './ProfileManagementPart.model';
 import { makeProfileSelectionMenuPartModel } from './ProfileSelectionMenu.model';
 import { uiTheme } from '~ui2/models/UiTheme';

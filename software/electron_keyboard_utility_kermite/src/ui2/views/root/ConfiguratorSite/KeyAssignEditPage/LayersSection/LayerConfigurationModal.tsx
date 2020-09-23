@@ -1,6 +1,6 @@
 import { createModal } from '~ui2/views/basis/ForegroundModalLayer';
 import { ILayerDefaultScheme } from '~defs/ProfileData';
-import { h } from '~ui2/views/basis/qx';
+import { h } from '~lib/qx';
 import { css } from 'goober';
 import {
   reflectFieldValue,

@@ -1,5 +1,5 @@
 import { editorModel } from '~ui2/models/zAppDomain';
-import { h } from '~ui2/views/basis/qx';
+import { h } from '~lib/qx';
 import {
   reflectFieldChecked,
   reflectFieldValue,

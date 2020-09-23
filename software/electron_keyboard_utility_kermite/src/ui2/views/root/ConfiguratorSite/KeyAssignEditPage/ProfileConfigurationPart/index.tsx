@@ -1,5 +1,5 @@
 import { css } from 'goober';
-import { h } from '~ui2/views/basis/qx';
+import { h } from '~lib/qx';
 import { AssignTypeSelectionPart } from './AssignTypeSelectionPart';
 import { DualModeSettingsPart } from './DualModeSettingsPart';
 import { appDomain, editorModel } from '~ui2/models/zAppDomain';

@@ -1,5 +1,5 @@
 import { css } from 'goober';
-import { h } from '~ui2/views/basis/qx';
+import { h } from '~lib/qx';
 import { IKeyUnitEntry } from '~defs/ProfileData';
 import { appDomain } from '~ui2/models/zAppDomain';
 

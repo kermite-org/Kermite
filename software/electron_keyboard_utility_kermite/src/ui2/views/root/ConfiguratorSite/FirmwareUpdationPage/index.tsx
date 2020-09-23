@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { appDomain } from '~ui2/models/zAppDomain';
 import { createModal } from '~ui2/views/basis/ForegroundModalLayer';
-import { h } from '~ui2/views/basis/qx';
+import { h } from '~lib/qx';
 import {
   ClosableOverlay,
   CommonDialogFrame,

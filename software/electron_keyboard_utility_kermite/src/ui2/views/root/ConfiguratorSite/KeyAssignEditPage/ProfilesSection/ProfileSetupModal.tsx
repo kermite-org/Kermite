@@ -1,4 +1,4 @@
-import { h } from '~ui2/views/basis/qx';
+import { h } from '~lib/qx';
 import { createModal } from '~ui2/views/basis/ForegroundModalLayer';
 import { reflectFieldValue } from '~ui2/views/common/FormHelpers';
 import {

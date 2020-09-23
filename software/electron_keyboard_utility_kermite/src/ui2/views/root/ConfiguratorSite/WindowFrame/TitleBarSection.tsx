@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { backendAgent } from '~ui2/models/dataSource/ipc';
 import { siteModel } from '~ui2/models/zAppDomain';
-import { h } from '~ui2/views/basis/qx';
+import { h } from '~lib/qx';
 import { uiTheme } from '~ui2/models/UiTheme';
 
 const ControlButton = (props: { icon: string; onClick: () => void }) => {

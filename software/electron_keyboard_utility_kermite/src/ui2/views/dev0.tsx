@@ -1,4 +1,4 @@
-import { h, rerender, render } from './basis/qx';
+import { h, rerender, render } from '~lib/qx';
 import { DebugOverlay } from './basis/DebugOverlay';
 import { appUi } from '~ui2/models/appGlobal';
 import { modalAlert, modalTextEdit } from './common/basicModals';

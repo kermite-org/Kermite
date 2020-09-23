@@ -1,4 +1,4 @@
-import { h } from '~ui2/views/basis/qx';
+import { h } from '~lib/qx';
 import { css } from 'goober';
 import {
   makeOperationEditPartViewModel,

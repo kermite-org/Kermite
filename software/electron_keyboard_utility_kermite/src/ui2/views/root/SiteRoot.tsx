@@ -1,4 +1,4 @@
-import { h } from '../basis/qx';
+import { h } from '~lib/qx';
 import { ConfiguratorSiteRoot } from './ConfiguratorSite/ConfiguratorSiteRoot';
 import { glob, setup, css } from 'goober';
 import { appUi } from '~ui2/models/appGlobal';

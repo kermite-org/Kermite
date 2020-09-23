@@ -1,4 +1,4 @@
-import { h } from './qx';
+import { h } from '~lib/qx';
 
 export namespace ForegroundModalLayerDomain {
   type JsxElement = any;

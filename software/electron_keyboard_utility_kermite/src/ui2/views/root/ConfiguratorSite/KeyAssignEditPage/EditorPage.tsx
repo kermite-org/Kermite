@@ -4,7 +4,7 @@ import { ProfileManagementPart } from './ProfilesSection/ProfileManagementPart';
 import { DeviceControlSection } from './DeviceControlSection';
 import { ProfileConfigratuionModalLayer } from './ProfileConfigurationPart';
 import { uiTheme } from '~ui2/models/UiTheme';
-import { h } from '~ui2/views/basis/qx';
+import { h } from '~lib/qx';
 
 export function EditorPage() {
   const cssEditorPage = css`

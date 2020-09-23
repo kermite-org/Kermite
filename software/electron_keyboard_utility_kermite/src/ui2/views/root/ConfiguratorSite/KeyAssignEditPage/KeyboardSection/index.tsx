@@ -1,5 +1,5 @@
 import { css } from 'goober';
-import { h } from '~ui2/views/basis/qx';
+import { h } from '~lib/qx';
 import { KeyUnitCardsPart } from './KeyUnitCardsPart';
 import { editorModel } from '~ui2/models/zAppDomain';
 import { uiTheme } from '~ui2/models/UiTheme';

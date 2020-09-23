@@ -1,7 +1,7 @@
 import { css } from 'goober';
-import { h } from '~ui2/views/basis/qx';
+import { h } from '~lib/qx';
 import { appUi } from '~ui2/models/appGlobal';
-import { Component } from '~ui2/views/basis/qx/qxinternal_petit_dom/Component';
+import { Component } from '~lib/qx/qxinternal_petit_dom/Component';
 
 const cssBase = css`
   width: 100%;

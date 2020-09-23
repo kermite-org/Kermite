@@ -1,5 +1,5 @@
 import { appUi } from '~ui2/models/appGlobal';
-import { h, render, rerender as qxRerender } from './basis/qx';
+import { h, render, rerender as qxRerender } from '~lib/qx';
 import { SiteRoot } from './root/SiteRoot';
 import { thinningListenerCall } from '~funcs/Utils';
 
