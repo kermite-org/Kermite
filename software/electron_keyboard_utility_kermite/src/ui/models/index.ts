@@ -54,6 +54,5 @@ export const {
   playerModel,
   profilesModel,
   siteModel,
-  uiStatusModel,
-  keyboardConfigModel
+  uiStatusModel
 } = models;

@@ -2,13 +2,13 @@ import { css } from 'goober';
 import { h } from '~lib/qx';
 import { CustomWindowFrame } from './WindowFrame/CustomWindowFrame';
 import { GlobalMenuPart } from './GlobalMenu';
-import { models } from '~ui/models';
 import { KeyboardShapePreviewPage } from './ShapePreviewPage/ShapePreviewPage';
 import { uiTheme } from '~ui/models/UiTheme';
 import { PageSignature } from '~ui/models/UiStatusModel';
 import { FirmwareUpdationPage } from './FirmwareUpdationPage';
 import { EditorPage } from './KeyAssignEditPage/EditorPage';
 import { NavigationButtonsArea } from './NavigationButtonsArea';
+import { uiStatusModel } from '~ui/models';
 
 function getPageComponent(pageSig: PageSignature): () => JSX.Element {
   const pageComponentMap: {
@@ -22,7 +22,7 @@ function getPageComponent(pageSig: PageSignature): () => JSX.Element {
 }
 
 export const ConfiguratorSiteRoot = () => {
-  const PageComponent = getPageComponent(models.uiStatusModel.settings.page);
+  const PageComponent = getPageComponent(uiStatusModel.settings.page);
 
   const cssContentRow = css`
     background: ${uiTheme.colors.clBackground};

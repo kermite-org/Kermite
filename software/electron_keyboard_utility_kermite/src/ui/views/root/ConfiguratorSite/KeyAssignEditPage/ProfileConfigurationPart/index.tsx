@@ -2,7 +2,7 @@ import { css } from 'goober';
 import { h } from '~lib/qx';
 import { AssignTypeSelectionPart } from './AssignTypeSelectionPart';
 import { DualModeSettingsPart } from './DualModeSettingsPart';
-import { models, editorModel } from '~ui/models';
+import { editorModel, uiStatusModel } from '~ui/models';
 import {
   ClosableOverlay,
   CommonDialogFrame
@@ -19,7 +19,7 @@ export const ProfileConfigurationPart = () => {
 };
 
 export const ProfileConfigratuionModalLayer = () => {
-  const uiStatus = models.uiStatusModel.status;
+  const uiStatus = uiStatusModel.status;
   const visible = uiStatus.profileConfigModalVisible;
   const closeModal = () => {
     uiStatus.profileConfigModalVisible = false;

@@ -7,7 +7,7 @@ import {
 } from '~defs/ProfileData';
 import { ScalerBox } from './ScalerBox';
 import { KeyUnitCard } from './KeyUnitCard';
-import { models } from '~ui/models';
+import { uiStatusModel } from '~ui/models';
 
 function getViewBox(da: IKeyboardShapeDisplayArea) {
   const left = da.centerX - da.width / 2;
@@ -67,7 +67,7 @@ const BoundingBox = (props: { displayArea: IKeyboardShapeDisplayArea }) => {
 };
 
 export const KeyUnitCardsPart = (props: { keyUnits: IKeyUnitEntry[] }) => {
-  const settings = models.uiStatusModel.settings;
+  const settings = uiStatusModel.settings;
   const showKeyId = settings.shapeViewShowKeyId;
   const showKeyIndex = settings.shapeViewShowKeyIndex;
 
@@ -108,8 +108,7 @@ export function KeyboardShapeView(props: { shape: IKeyboardShape }) {
     align-items: center;
   `;
 
-  const showBoundingBox =
-    models.uiStatusModel.settings.shapeViewShowBoundingBox;
+  const showBoundingBox = uiStatusModel.settings.shapeViewShowBoundingBox;
 
   return (
     <div css={cssKeyboardShapeView}>

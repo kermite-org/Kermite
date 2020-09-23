@@ -1,7 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { IKeyUnitEntry } from '~defs/ProfileData';
-import { models } from '~ui/models';
 
 export const KeyUnitCard = (props: {
   keyUnit: IKeyUnitEntry;
