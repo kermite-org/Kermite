@@ -1,5 +1,5 @@
 import { overwriteObjectProps } from '~funcs/Utils';
-import { siteModel } from './zAppDomain';
+import { siteModel } from '.';
 
 export type PageSignature = 'editor' | 'shapePreview' | 'firmwareUpdation';
 

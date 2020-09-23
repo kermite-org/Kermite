@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { appDomain } from '~ui/models/zAppDomain';
+import { models } from '~ui/models';
 
 export const LinkIndicator = () => {
   const cssLinkIndicator = css`
@@ -13,7 +13,7 @@ export const LinkIndicator = () => {
     }
   `;
 
-  const { isConnected } = appDomain.deviceStatusModel;
+  const { isConnected } = models.deviceStatusModel;
 
   return (
     <div css={cssLinkIndicator} data-active={isConnected}>

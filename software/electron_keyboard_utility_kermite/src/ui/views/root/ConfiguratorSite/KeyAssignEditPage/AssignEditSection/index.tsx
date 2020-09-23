@@ -1,5 +1,5 @@
 import { css } from 'goober';
-import { editorModel } from '~ui/models/zAppDomain';
+import { editorModel } from '~ui/models';
 import { h } from '~lib/qx';
 import { OpertionEditPart } from './OperationEditPart/OperationEditPart';
 import { OerationSlotsPart } from './EntryEditPart/OperationSlotsPart';

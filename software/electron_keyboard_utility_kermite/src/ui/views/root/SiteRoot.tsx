@@ -4,7 +4,7 @@ import { glob, setup, css } from 'goober';
 import { appUi } from '~ui/models/appUi';
 import { DebugOverlay } from '../basis/DebugOverlay';
 import { ForegroundModalLayerRoot } from '../basis/ForegroundModalLayer';
-import { siteModel } from '~ui/models/zAppDomain';
+import { siteModel } from '~ui/models';
 import { WidgetSiteRoot } from './WidgetSite/WidgetSiteRoot';
 
 setup(h);

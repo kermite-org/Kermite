@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { appDomain } from '~ui/models/zAppDomain';
+import { models } from '~ui/models';
 import {
   IKeyboardLayoutStandard,
   IKeyboardBehaviorMode
@@ -71,7 +71,7 @@ function DualItemsHoverSelector<T extends string>(
 }
 
 export const BehaviorSelector = () => {
-  const { keyboardConfigModel } = appDomain;
+  const { keyboardConfigModel } = models;
   const modes: IKeyboardBehaviorMode[] = ['Standalone', 'SideBrain'];
   const currentMode = keyboardConfigModel.behaviorMode;
   const setCurrent = (mode: IKeyboardBehaviorMode) => {
@@ -93,7 +93,7 @@ export const BehaviorSelector = () => {
 };
 
 export const LayoutStandardSelector = () => {
-  const { keyboardConfigModel } = appDomain;
+  const { keyboardConfigModel } = models;
   const layouts: IKeyboardLayoutStandard[] = ['US', 'JIS'];
   const currentLayout = keyboardConfigModel.layoutStandard;
   const setCurrent = (layout: IKeyboardLayoutStandard) => {

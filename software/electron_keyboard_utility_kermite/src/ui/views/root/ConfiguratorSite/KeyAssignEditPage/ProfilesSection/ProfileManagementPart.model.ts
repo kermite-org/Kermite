@@ -1,4 +1,4 @@
-import { profilesModel } from '~ui/models/zAppDomain';
+import { profilesModel } from '~ui/models';
 import { callProfileSetupModal } from './ProfileSetupModal';
 import {
   modalTextEdit,

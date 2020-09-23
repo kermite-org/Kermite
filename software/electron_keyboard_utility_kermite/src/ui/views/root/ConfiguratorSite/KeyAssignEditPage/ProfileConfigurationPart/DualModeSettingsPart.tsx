@@ -1,4 +1,4 @@
-import { editorModel } from '~ui/models/zAppDomain';
+import { editorModel } from '~ui/models';
 import { h } from '~lib/qx';
 import {
   reflectFieldChecked,

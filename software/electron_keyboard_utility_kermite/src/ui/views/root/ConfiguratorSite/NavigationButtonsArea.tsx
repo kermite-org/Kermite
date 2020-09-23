@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { PageSignature } from '~ui/models/UiStatusModel';
-import { appDomain } from '~ui/models/zAppDomain';
+import { models } from '~ui/models';
 import { h } from '~lib/qx';
 
 const NavigationButton = (props: {
@@ -8,7 +8,7 @@ const NavigationButton = (props: {
   pageSig: PageSignature;
 }) => {
   const { faIconName, pageSig } = props;
-  const { settings } = appDomain.uiStatusModel;
+  const { settings } = models.uiStatusModel;
   const isCurrent = settings.page === pageSig;
 
   const onClick = () => {

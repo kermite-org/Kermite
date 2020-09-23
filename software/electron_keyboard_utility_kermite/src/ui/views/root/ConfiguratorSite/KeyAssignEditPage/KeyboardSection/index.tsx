@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { KeyUnitCardsPart } from './KeyUnitCardsPart';
-import { editorModel } from '~ui/models/zAppDomain';
+import { editorModel } from '~ui/models';
 import { uiTheme } from '~ui/models/UiTheme';
 
 export const KeyboardBasePlane = (props: { children: any }) => {

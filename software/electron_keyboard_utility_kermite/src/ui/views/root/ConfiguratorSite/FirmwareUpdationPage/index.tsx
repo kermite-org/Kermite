@@ -1,5 +1,5 @@
 import { css } from 'goober';
-import { appDomain } from '~ui/models/zAppDomain';
+import { models } from '~ui/models';
 import { createModal } from '~ui/views/basis/ForegroundModalLayer';
 import { h } from '~lib/qx';
 import {
@@ -71,7 +71,7 @@ export const FirmwareUpdationPage = () => {
     }
   `;
 
-  const model = appDomain.firmwareUpdationModel;
+  const model = models.firmwareUpdationModel;
 
   let selectedFirmwareName = '';
 

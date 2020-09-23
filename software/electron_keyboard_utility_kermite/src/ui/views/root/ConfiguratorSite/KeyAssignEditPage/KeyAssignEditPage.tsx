@@ -5,7 +5,7 @@ import { KeyboardSection } from './KeyboardSection';
 import { LayersSection } from './LayersSection';
 import { TestInputArea } from './TestInputArea';
 import { ProfileConfigurationPart } from './ProfileConfigurationPart';
-import { appDomain } from '~ui/models/zAppDomain';
+import { models } from '~ui/models';
 import { uiTheme } from '~ui/models/UiTheme';
 
 const localStyleConstants = {
@@ -108,7 +108,7 @@ export const KeyAssignEditPage = () => {
     <div css={cssKeyAssignEditPageRoot}>
       <div
         css={cssEditTopBarBox}
-        qxIf={appDomain.uiStatusModel.settings.showTestInputArea}
+        qxIf={models.uiStatusModel.settings.showTestInputArea}
       >
         <TestInputArea />
       </div>

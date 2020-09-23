@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { IKeyUnitEntry } from '~defs/ProfileData';
-import { appDomain } from '~ui/models/zAppDomain';
+import { models } from '~ui/models';
 
 export const KeyUnitCard = (props: {
   keyUnit: IKeyUnitEntry;

@@ -1,5 +1,5 @@
 import { ILayer } from '~defs/ProfileData';
-import { editorModel } from '~ui/models/zAppDomain';
+import { editorModel } from '~ui/models';
 import { callLayerConfigurationModal } from './LayerConfigurationModal';
 import { modalConfirm } from '~ui/views/common/basicModals';
 import { removeArrayItems } from '~funcs/Utils';

@@ -1,5 +1,5 @@
 import { ILayer } from '~defs/ProfileData';
-import { editorModel } from '~ui/models/zAppDomain';
+import { editorModel } from '~ui/models';
 
 export interface ILayerListViewModel {
   layerId: string;

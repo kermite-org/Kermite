@@ -2,7 +2,7 @@ import { css } from 'goober';
 import { h } from '~lib/qx';
 import { CustomWindowFrame } from './WindowFrame/CustomWindowFrame';
 import { GlobalMenuPart } from './GlobalMenu';
-import { appDomain } from '~ui/models/zAppDomain';
+import { models } from '~ui/models';
 import { KeyboardShapePreviewPage } from './ShapePreviewPage/ShapePreviewPage';
 import { uiTheme } from '~ui/models/UiTheme';
 import { PageSignature } from '~ui/models/UiStatusModel';
@@ -22,7 +22,7 @@ function getPageComponent(pageSig: PageSignature): () => JSX.Element {
 }
 
 export const ConfiguratorSiteRoot = () => {
-  const PageComponent = getPageComponent(appDomain.uiStatusModel.settings.page);
+  const PageComponent = getPageComponent(models.uiStatusModel.settings.page);
 
   const cssContentRow = css`
     background: ${uiTheme.colors.clBackground};

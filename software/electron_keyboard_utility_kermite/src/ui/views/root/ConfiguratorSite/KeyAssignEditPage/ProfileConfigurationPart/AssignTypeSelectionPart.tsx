@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { IProfileAssignType } from '~defs/ProfileData';
-import { editorModel } from '~ui/models/zAppDomain';
+import { editorModel } from '~ui/models';
 import { h } from '~lib/qx';
 import { reflectValue } from '~ui/views/common/FormHelpers';
 

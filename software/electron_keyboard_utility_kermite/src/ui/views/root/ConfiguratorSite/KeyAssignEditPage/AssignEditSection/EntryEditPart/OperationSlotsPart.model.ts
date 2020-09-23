@@ -1,5 +1,5 @@
 import { IDualModeEditTargetOperationSig } from '~ui/models/EditorModel';
-import { editorModel } from '~ui/models/zAppDomain';
+import { editorModel } from '~ui/models';
 
 export interface IOperationSlotViewModel {
   text: string;

@@ -9,7 +9,7 @@ import { ThemeSelectionModel } from './ThemeSelectionModel';
 import { KeyboardShapesModel } from './KeyboardShapesModel';
 import { FirmwareUpdationModel } from './FirmwareUpdationModel';
 
-export const appDomain = new (class {
+export const models = new (class {
   readonly editorModel = new EditorModel();
   readonly playerModel = new PlayerModel(this.editorModel);
   readonly profilesModel = new ProfilesModel(this.editorModel);
@@ -49,4 +49,11 @@ export const appDomain = new (class {
   }
 })();
 
-export const { editorModel, playerModel, profilesModel, siteModel } = appDomain;
+export const {
+  editorModel,
+  playerModel,
+  profilesModel,
+  siteModel,
+  uiStatusModel,
+  keyboardConfigModel
+} = models;

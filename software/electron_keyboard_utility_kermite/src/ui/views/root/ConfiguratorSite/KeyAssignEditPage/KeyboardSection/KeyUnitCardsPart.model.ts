@@ -4,7 +4,7 @@ import {
   IAssignEntry
 } from '~defs/ProfileData';
 import { VirtualKeyTexts } from '~defs/VirtualKeyTexts';
-import { editorModel, appDomain, playerModel } from '~ui/models/zAppDomain';
+import { editorModel, models, playerModel } from '~ui/models';
 
 export interface IKeyUnitCardViewModel {
   keyUnitId: string;
@@ -110,7 +110,7 @@ function makeKeyUnitCardViewModel(
   const assign = getAssignForKeyUnit(keyUnitId, isEdit);
   const { primaryText, secondaryText } = getAssignEntryTexts(assign);
 
-  const isHold = appDomain.playerModel.keyStates[kp.id];
+  const isHold = models.playerModel.keyStates[kp.id];
 
   return {
     keyUnitId,

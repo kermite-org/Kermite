@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { appDomain } from '~ui/models/zAppDomain';
+import { models } from '~ui/models';
 
 export const ConfigurationButton = () => {
   const cssConfigurationButton = css`
@@ -12,7 +12,7 @@ export const ConfigurationButton = () => {
   `;
 
   const onClick = () => {
-    appDomain.uiStatusModel.status.profileConfigModalVisible = true;
+    models.uiStatusModel.status.profileConfigModalVisible = true;
   };
 
   return (

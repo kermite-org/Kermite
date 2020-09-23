@@ -1,5 +1,5 @@
 import { IAssignEntryType } from '~defs/ProfileData';
-import { editorModel } from '~ui/models/zAppDomain';
+import { editorModel } from '~ui/models';
 
 interface IAssignTypeSlotViewModel {
   assignType: IAssignEntryType;

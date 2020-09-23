@@ -1,13 +1,13 @@
-import { appDomain } from './models/zAppDomain';
+import { models } from './models';
 import { initialzeView } from './views';
 
 async function start() {
   console.log('start');
 
-  await appDomain.initialize();
+  await models.initialize();
   initialzeView();
 
-  window.addEventListener('beforeunload', () => appDomain.terminate());
+  window.addEventListener('beforeunload', () => models.terminate());
 }
 
 window.addEventListener('load', start);
