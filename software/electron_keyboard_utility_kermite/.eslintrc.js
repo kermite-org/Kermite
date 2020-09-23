@@ -15,6 +15,7 @@ module.exports = {
     eqeqeq: [1, 'always'],
     'prefer-const': 0,
     'no-console': 1,
+
     '@typescript-eslint/explicit-function-return-type': 0,
     '@typescript-eslint/no-use-before-define': [1, 'nofunc'],
     '@typescript-eslint/no-unused-vars': 0,
@@ -29,6 +30,8 @@ module.exports = {
     '@typescript-eslint/no-non-null-assertion': 0,
     '@typescript-eslint/ban-ts-ignore': 0,
     '@typescript-eslint/explicit-module-boundary-types': 0,
+    '@typescript-eslint/ban-types': 0,
+
     'react/jsx-key': 1
     // 'react/react-in-jsx-scope': 0,
     // 'react/display-name': 0,
