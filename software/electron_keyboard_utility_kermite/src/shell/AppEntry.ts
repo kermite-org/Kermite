@@ -6,7 +6,6 @@ app.allowRendererProcessReuse = true;
 
 export class AppEntry {
   start() {
-    // eslint-disable-next-line no-console
     console.log('debug v0126a');
 
     app.on('ready', async () => {

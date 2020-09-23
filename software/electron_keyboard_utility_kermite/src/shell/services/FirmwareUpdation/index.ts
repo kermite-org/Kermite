@@ -29,10 +29,8 @@ export class FirmwareUpdationService {
       comPortName
     );
     if (flashResult !== 'ok') {
-      // eslint-disable-next-line no-console
       console.log(`firmwre upload error`);
     }
-    // eslint-disable-next-line no-console
     console.log(flashResult);
     return flashResult;
   }

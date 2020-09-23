@@ -20,14 +20,12 @@ export class ApplicationStorage {
     if (fsIsFileExists(this.configFilePath)) {
       this.data = await fsxReadJsonFile(this.configFilePath);
     } else {
-      // eslint-disable-next-line no-console
       console.log('config file not found!');
     }
   }
 
   async terminate(): Promise<void> {
     await fsxWriteJsonFile(this.configFilePath, this.data);
-    // eslint-disable-next-line no-console
     console.log('config file saved');
   }
 }

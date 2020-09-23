@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { css } from 'goober';
 import { h } from '~ui2/views/basis/qx';
 import { LaunchButton } from './LaunchButton';

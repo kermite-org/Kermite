@@ -172,7 +172,6 @@ function setAttributes(
 ) {
   const props = [];
   for (const key in newAttrs) {
-    /* eslint-disable no-prototype-builtins */
     if (key.startsWith('on') || INTERACTIVE_PROPS.hasOwnProperty(key)) {
       props.push(key);
       continue;

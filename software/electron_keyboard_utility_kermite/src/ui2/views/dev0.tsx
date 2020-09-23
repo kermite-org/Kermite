@@ -134,7 +134,6 @@ export const SiteRootD = () => {
       defaultText: 'profile1',
       caption: 'hello'
     });
-    // eslint-disable-next-line no-console
     console.log(val);
   };
 

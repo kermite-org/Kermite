@@ -91,7 +91,6 @@ export function removeInvalidProfileAssigns(profile: IProfileData) {
     }
   }
   if (cnt > 0) {
-    // eslint-disable-next-line no-console
     console.log(`${cnt} invalid assigns removed`);
   }
 }

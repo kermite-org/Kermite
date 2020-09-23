@@ -57,7 +57,6 @@ export class ProfileManagerCore {
     profileData: IProfileData
   ): Promise<void> {
     const fpath = this.getDataFilePath(profName);
-    // eslint-disable-next-line no-console
     console.log(`saving current profile to ${path.basename(fpath)}`);
     await fsxWriteJsonFile(fpath, profileData);
   }

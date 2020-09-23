@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { IRealtimeKeyboardEvent, IProfileManagerStatus } from '~defs/ipc';
 import { appGlobal } from '../appGlobal';
 import {

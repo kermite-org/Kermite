@@ -50,7 +50,6 @@ function createBackendAgent(): IBackendAgent {
     },
 
     async reloadApplication(): Promise<void> {
-      // eslint-disable-next-line no-console
       console.log('##REBOOT_ME_AFTER_CLOSE');
       appWindowManager.closeMainWindow();
     },
@@ -141,7 +140,6 @@ export class IpcBridge {
   async initialize() {
     ipcMain.on('synchronousMessage', (event, packet: ISynchronousIpcPacket) => {
       if (packet.debugMessage) {
-        // eslint-disable-next-line no-console
         console.log(packet.debugMessage);
         event.returnValue = true;
       }

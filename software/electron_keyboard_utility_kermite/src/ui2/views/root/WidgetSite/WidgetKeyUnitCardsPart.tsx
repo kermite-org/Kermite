@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unknown-property */
 import { css } from 'goober';
 import { h } from '~ui2/views/basis/qx';
 import {

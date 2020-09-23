@@ -57,7 +57,6 @@ export namespace ModuleK_KeyStrokeAssignDispatcher {
     const { operationBindMap } = local;
     if (ev.type === 'down') {
       const { keyId, op } = ev;
-      // eslint-disable-next-line no-console
       console.log('[K]down', ev.keyId, op);
 
       if (op.type === 'keyInput') {
@@ -107,7 +106,6 @@ export namespace ModuleK_KeyStrokeAssignDispatcher {
     const { operationBindMap } = local;
     if (ev.type === 'up') {
       const { keyId } = ev;
-      // eslint-disable-next-line no-console
       console.log('[K]up', ev.keyId);
       const op = operationBindMap[keyId];
       if (op) {

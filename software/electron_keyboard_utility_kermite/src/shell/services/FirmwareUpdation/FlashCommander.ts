@@ -21,7 +21,6 @@ export namespace FlashCommander {
     }
 
     log(text: string) {
-      // eslint-disable-next-line no-console
       console.log(text);
       this.logText += `${text}\r\n`;
     }

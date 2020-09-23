@@ -32,7 +32,6 @@ export const appGlobal = new (class {
   shapeProvider = new KeyboardShapesProvider();
 
   async initialize() {
-    // eslint-disable-next-line no-console
     console.log(`initialize services`);
     await this.applicationStorage.initialize();
     await this.settingsProvider.initialize();
@@ -46,7 +45,6 @@ export const appGlobal = new (class {
   }
 
   async terminate() {
-    // eslint-disable-next-line no-console
     console.log(`terminate services`);
     await this.shapeProvider.terminate();
     await this.ipcBridge.terminate();

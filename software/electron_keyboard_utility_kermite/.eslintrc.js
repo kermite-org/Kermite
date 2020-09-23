@@ -14,7 +14,7 @@ module.exports = {
   rules: {
     eqeqeq: [1, 'always'],
     'prefer-const': 0,
-    'no-console': 1,
+    'no-console': 0,
 
     '@typescript-eslint/explicit-function-return-type': 0,
     '@typescript-eslint/no-use-before-define': [1, 'nofunc'],
@@ -31,6 +31,8 @@ module.exports = {
     '@typescript-eslint/ban-ts-ignore': 0,
     '@typescript-eslint/explicit-module-boundary-types': 0,
     '@typescript-eslint/ban-types': 0,
+    '@typescript-eslint/ban-ts-comment': 0,
+    '@typescript-eslint/no-use-before-define': 0,
 
     'react/jsx-key': 1
     // 'react/react-in-jsx-scope': 0,
