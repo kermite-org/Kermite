@@ -6,8 +6,8 @@ import {
 } from '~defs/IpcContract';
 import { xpcMain } from '~lib/xpc/xpcMain';
 import { appWindowManager } from '~shell/AppWindowManager';
-import { services } from '.';
-import { KeyMappingEmitter } from './KeyMappingEmitter';
+import { services } from './services';
+import { KeyMappingEmitter } from './services/KeyMappingEmitter';
 import {
   IKeyboardConfig,
   IEnvironmentConfigForRendererProcess,

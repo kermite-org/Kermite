@@ -2,7 +2,7 @@ import { ApplicationStorage } from './ApplicationStorage';
 import { KeyboardDeviceService } from './KeyboardDevice';
 import { IInputLogicSimulator } from './InputLogicSimulator.interface';
 import { InputLogicSimulatorC } from './InputLogicSimulatorC';
-import { IpcBridge } from './IpcBridge';
+import { IpcBridge } from '../IpcBridge';
 import { ProfileManager } from './ProfileManager';
 import { InputLogicSimulatorD } from './InputLogicSimulatorD';
 import { TypedEventEmitter } from '~funcs/TypedEventEmitter';
