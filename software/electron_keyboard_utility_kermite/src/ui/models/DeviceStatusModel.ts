@@ -1,5 +1,5 @@
 import { backendAgent } from './dataSource/ipc';
-import { IKeyboardDeviceStatus } from '~defs/ipc';
+import { IKeyboardDeviceStatus } from '~defs/IpcContract';
 import { appUi } from './appGlobal';
 
 export class DeviceStatusModel {

@@ -1,5 +1,5 @@
 import { DeviceWrapper } from './DeviceWrapper';
-import { IRealtimeKeyboardEvent } from '~defs/ipc';
+import { IRealtimeKeyboardEvent } from '~defs/IpcContract';
 import { removeArrayItems } from '~funcs/Utils';
 import { StatusSource } from '../../../funcs/StatusSource';
 

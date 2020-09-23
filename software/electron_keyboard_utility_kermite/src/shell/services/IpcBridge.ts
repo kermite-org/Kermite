@@ -3,7 +3,7 @@ import {
   IBackendAgent,
   ISynchronousIpcPacket,
   IProfileManagerCommand
-} from '~defs/ipc';
+} from '~defs/IpcContract';
 import { xpcMain } from '~lib/xpc/xpcMain';
 import { appWindowManager } from '~shell/AppWindowManager';
 import { appGlobal } from './appGlobal';

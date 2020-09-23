@@ -1,5 +1,5 @@
 import { IUiRealtimeKeyboardEventProvider } from '../interfaces/IRealtimeKeyboardEventProvider';
-import { IRealtimeKeyboardEvent } from '~defs/ipc';
+import { IRealtimeKeyboardEvent } from '~defs/IpcContract';
 
 type IRealtimetimeKeyboardEventListener = (
   event: IRealtimeKeyboardEvent

@@ -1,6 +1,6 @@
 import { IUiRealtimeKeyboardEventProvider } from './interfaces/IRealtimeKeyboardEventProvider';
 import { backendAgent } from '~ui/models/dataSource/ipc';
-import { IRealtimeKeyboardEvent } from '~defs/ipc';
+import { IRealtimeKeyboardEvent } from '~defs/IpcContract';
 
 type IUiRealtimetimeKeyboardEventListener = (
   event: IRealtimeKeyboardEvent

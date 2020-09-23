@@ -1,4 +1,7 @@
-import { IProfileManagerStatus, IRealtimeKeyboardEvent } from '~defs/ipc';
+import {
+  IProfileManagerStatus,
+  IRealtimeKeyboardEvent
+} from '~defs/IpcContract';
 import { appGlobal } from '../appGlobal';
 import { IInputLogicSimulator } from '../InputLogicSimulator.interface';
 import { IntervalTimerWrapper } from '../InputLogicSimulator/IntervalTimerWrapper';

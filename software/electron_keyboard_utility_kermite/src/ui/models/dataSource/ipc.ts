@@ -2,7 +2,7 @@ import {
   ISynchronousIpcPacket,
   IBackendAgent,
   IProfileManagerCommand
-} from '~defs/ipc';
+} from '~defs/IpcContract';
 import { createXpcRenderer } from '~lib/xpc/xpcRenderer';
 import { IpcRenderer } from 'electron';
 

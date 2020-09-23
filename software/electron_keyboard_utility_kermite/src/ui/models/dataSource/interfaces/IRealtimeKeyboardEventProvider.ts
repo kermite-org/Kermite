@@ -1,4 +1,4 @@
-import { IRealtimeKeyboardEvent } from '~defs/ipc';
+import { IRealtimeKeyboardEvent } from '~defs/IpcContract';
 
 export interface IUiRealtimeKeyboardEventProvider {
   setListener(listener: (event: IRealtimeKeyboardEvent) => void): void;

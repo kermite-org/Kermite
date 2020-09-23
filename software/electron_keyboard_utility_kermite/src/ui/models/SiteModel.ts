@@ -1,5 +1,5 @@
 import { backendAgent } from './dataSource/ipc';
-import { IAppWindowEvent } from '~defs/ipc';
+import { IAppWindowEvent } from '~defs/IpcContract';
 import { appUi } from './appGlobal';
 
 export class SiteModel {

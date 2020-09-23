@@ -6,7 +6,7 @@ import { IpcBridge } from './IpcBridge';
 import { ProfileManager } from './ProfileManager';
 import { InputLogicSimulatorD } from './InputLogicSimulatorD';
 import { TypedEventEmitter } from '~funcs/TypedEventEmitter';
-import { IAppWindowEvent } from '~defs/ipc';
+import { IAppWindowEvent } from '~defs/IpcContract';
 import { KeyboardConfigProvider } from './KeyboardConfigProvider';
 import { ApplicationSettingsProvider } from './ApplicationSettingsProvider';
 import { FirmwareUpdationService } from './FirmwareUpdation';

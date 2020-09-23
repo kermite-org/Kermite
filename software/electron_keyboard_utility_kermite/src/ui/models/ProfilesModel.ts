@@ -1,5 +1,8 @@
 import { ProfileProvider2 } from './dataSource/ProfileProvider2';
-import { IProfileManagerStatus, IProfileManagerCommand } from '~defs/ipc';
+import {
+  IProfileManagerStatus,
+  IProfileManagerCommand
+} from '~defs/IpcContract';
 import { EditorModel } from './EditorModel';
 import { backendAgent } from '~ui/models/dataSource/ipc';
 import { appUi } from './appGlobal';

@@ -1,4 +1,7 @@
-import { IRealtimeKeyboardEvent, IProfileManagerStatus } from '~defs/ipc';
+import {
+  IRealtimeKeyboardEvent,
+  IProfileManagerStatus
+} from '~defs/IpcContract';
 import { appGlobal } from '../appGlobal';
 import {
   completeEditModelForShiftLayer,
