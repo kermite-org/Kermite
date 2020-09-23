@@ -44,6 +44,9 @@ export const KeyboardShapePreviewPage = () => {
     didMount() {
       model.initialize();
     },
+    willUnmount() {
+      model.finalize();
+    },
     render() {
       const {
         loadedShape,

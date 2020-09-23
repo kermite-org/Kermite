@@ -2,6 +2,7 @@ import { IKeyboardShape } from '~defs/ProfileData';
 import { appDomain } from '~ui2/models/zAppDomain';
 import { IUiSettings } from '~ui2/models/UiStatusModel';
 import { appUi } from '~ui2/models/appGlobal';
+import { backendAgent, debugTrace } from '~ui2/models/dataSource/ipc';
 
 export class ShapePreviewPageModel {
   loadedBreedName: string = '';
@@ -35,10 +36,23 @@ export class ShapePreviewPageModel {
       nextBreedName
     );
     appUi.rerender();
-    //todo: バックエンドでレイアウト定義ファイルの変更を監視して, コードの変更を表示に反映する
   }
+
+  private onFileUpdated = (args: { breedName: string }) => {
+    if (args.breedName === this.currentBreedName) {
+      console.log(`reaload shape`);
+      this.loadShape(this.loadedBreedName);
+    }
+  };
 
   initialize() {
     this.loadShape(this.currentBreedName);
+    backendAgent.layoutFileUpdationEvents.subscribe(this.onFileUpdated);
+    debugTrace('listen layoutFileUpdationEvents');
+  }
+
+  finalize() {
+    backendAgent.layoutFileUpdationEvents.unsubscribe(this.onFileUpdated);
+    debugTrace('unlisten layoutFileUpdationEvents');
   }
 }
