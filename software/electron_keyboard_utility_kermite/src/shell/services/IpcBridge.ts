@@ -125,6 +125,14 @@ function createBackendAgent(): IBackendAgent {
       unsubscribe(listener) {
         appGlobal.firmwareUpdationService.unsubscribeComPorts(listener);
       }
+    },
+    layoutFileUpdationEvents: {
+      subscribe(listener) {
+        appGlobal.shapeProvider.subscribeFileUpdation(listener);
+      },
+      unsubscribe(listener) {
+        appGlobal.shapeProvider.unsubscribeFileUpdation(listener);
+      }
     }
   };
 }

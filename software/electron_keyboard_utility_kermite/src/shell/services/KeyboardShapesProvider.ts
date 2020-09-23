@@ -51,7 +51,7 @@ function setupFilesWatcher(callback: (filePath: string) => void) {
   }
 }
 
-type IFileUpdationListener = () => void;
+type IFileUpdationListener = ({}) => void;
 
 export class KeyboardShapesProvider {
   private keyboardShapes: IKeyboardShape[] = [];
@@ -82,7 +82,7 @@ export class KeyboardShapesProvider {
     if (index !== -1) {
       this.keyboardShapes[index] = shape;
       console.log(`shape changed`, breedName, shape);
-      this.listeners.forEach((listener) => listener());
+      this.listeners.forEach((listener) => listener({}));
     }
   };
 
