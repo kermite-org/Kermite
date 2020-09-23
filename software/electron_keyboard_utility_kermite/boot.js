@@ -32,7 +32,7 @@ function runDevelopment() {
 
   function bundleRenderer() {
     const entryFile = path.join(rootDir, 'src', 'index.html');
-    const outDir = path.join(rootDir, 'dist/xui');
+    const outDir = path.join(rootDir, 'dist/ui');
     return new Bundler(entryFile, {
       outDir,
       watch: true,
@@ -96,7 +96,7 @@ function runProduction() {
 
   function bundleRenderer() {
     const entryFile = path.join(rootDir, 'src', 'index.html');
-    const outDir = path.join(rootDir, 'dist/xui');
+    const outDir = path.join(rootDir, 'dist/ui');
     return new Bundler(entryFile, {
       outDir,
       watch: false,

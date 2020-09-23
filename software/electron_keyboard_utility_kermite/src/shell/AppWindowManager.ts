@@ -28,7 +28,7 @@ export class AppWindowManager {
       this.mainWindow.loadURL('http://localhost:3700');
       this.mainWindow?.webContents.openDevTools();
     } else {
-      this.mainWindow.loadURL(`file://${__dirname}/xui/index.html`);
+      this.mainWindow.loadURL(`file://${__dirname}/ui/index.html`);
     }
 
     this.mainWindow.on('closed', () => {
