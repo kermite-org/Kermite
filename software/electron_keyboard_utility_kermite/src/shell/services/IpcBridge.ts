@@ -4,7 +4,7 @@ import {
   ISynchronousIpcPacket,
   IProfileManagerCommand
 } from '~defs/ipc';
-import { xpcMain } from '~funcs/xpc/xpcMain';
+import { xpcMain } from '~lib/xpc/xpcMain';
 import { appWindowManager } from '~shell/AppWindowManager';
 import { appGlobal } from './appGlobal';
 import { KeyMappingEmitter } from './KeyMappingEmitter';

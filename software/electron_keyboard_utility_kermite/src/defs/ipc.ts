@@ -1,4 +1,4 @@
-import { IEventSource } from '~funcs/xpc/types';
+import { IEventSource } from '~lib/xpc/types';
 import { IProfileData, IKeyboardShape } from './ProfileData';
 import {
   IKeyboardConfig,

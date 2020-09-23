@@ -3,7 +3,7 @@ import {
   IBackendAgent,
   IProfileManagerCommand
 } from '~defs/ipc';
-import { createXpcRenderer } from '~funcs/xpc/xpcRenderer';
+import { createXpcRenderer } from '~lib/xpc/xpcRenderer';
 import { IpcRenderer } from 'electron';
 
 const ipcRenderer: IpcRenderer = (window as any).ipcRenderer;
