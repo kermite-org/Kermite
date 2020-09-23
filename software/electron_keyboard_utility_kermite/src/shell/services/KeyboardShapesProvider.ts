@@ -5,6 +5,9 @@ import {
 } from '~defs/ProfileData';
 import * as path from 'path';
 import { fsxReadJsonFile, globAsync } from '~funcs/Files';
+import { removeArrayItems } from '~funcs/Utils';
+import * as fs from 'fs';
+import { environmentConfig } from '~shell/AppEnvironment';
 
 interface IKeyboardShapeSourceJson {
   keyUnits: IKeyUnitEntry[];
@@ -34,8 +37,24 @@ async function loadKeyboardShapes(): Promise<IKeyboardShape[]> {
   return await Promise.all(files.map(loadShapeFromFile));
 }
 
+function setupFilesWatcher(callback: (filePath: string) => void) {
+  if (environmentConfig.isDevelopment) {
+    fs.watch(baseDir, { recursive: true }, async (eventType, relPath) => {
+      console.log(`file changed`, eventType, relPath);
+      if (eventType === 'change') {
+        if (relPath.endsWith('/layout.json')) {
+          const filePath = `${baseDir}/${relPath}`;
+          callback(filePath);
+        }
+      }
+    });
+  }
+}
+
+type IFileUpdationListener = () => void;
+
 export class KeyboardShapesProvider {
-  keyboardShapes: IKeyboardShape[] = [];
+  private keyboardShapes: IKeyboardShape[] = [];
 
   getAvailableBreedNames(): string[] {
     return this.keyboardShapes.map((shape) => shape.breedName);
@@ -45,8 +64,31 @@ export class KeyboardShapesProvider {
     return this.keyboardShapes.find((shape) => shape.breedName === breedName);
   }
 
+  private listeners: IFileUpdationListener[] = [];
+
+  subscribeFileUpdation(listener: IFileUpdationListener) {
+    this.listeners.push(listener);
+  }
+  unsubscribeFileUpdation(listener: IFileUpdationListener) {
+    removeArrayItems(this.listeners, listener);
+  }
+
+  onFileUpdated = async (filePath: string) => {
+    const shape = await loadShapeFromFile(filePath);
+    const { breedName } = shape;
+    const index = this.keyboardShapes.findIndex(
+      (ks) => ks.breedName === breedName
+    );
+    if (index !== -1) {
+      this.keyboardShapes[index] = shape;
+      console.log(`shape changed`, breedName, shape);
+      this.listeners.forEach((listener) => listener());
+    }
+  };
+
   async initialize() {
     this.keyboardShapes = await loadKeyboardShapes();
+    setupFilesWatcher(this.onFileUpdated);
   }
 
   async terminate() {}
