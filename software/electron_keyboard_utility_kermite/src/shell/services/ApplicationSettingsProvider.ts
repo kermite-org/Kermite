@@ -1,13 +1,15 @@
-import { services } from '.';
 import {
   IApplicationSettings,
   fallabackApplicationSettings
 } from '~defs/ConfigTypes';
+import { ApplicationStorage } from './ApplicationStorage';
 
 export class ApplicationSettingsProvider {
   private readonly stroageKey = 'applicationSettings';
 
   _settings: IApplicationSettings = fallabackApplicationSettings;
+
+  constructor(private applicationStorage: ApplicationStorage) {}
 
   getSettings(): IApplicationSettings {
     return this._settings;
@@ -19,11 +21,11 @@ export class ApplicationSettingsProvider {
 
   async initialize() {
     this._settings =
-      services.applicationStorage.getItem(this.stroageKey) ||
+      this.applicationStorage.getItem(this.stroageKey) ||
       fallabackApplicationSettings;
   }
 
   async terminate() {
-    services.applicationStorage.setItem(this.stroageKey, this._settings);
+    this.applicationStorage.setItem(this.stroageKey, this._settings);
   }
 }

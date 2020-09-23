@@ -20,16 +20,19 @@ interface TypedApplicationEvent {
 
 export const services = new (class {
   applicationStorage = new ApplicationStorage();
-  profileManager = new ProfileManager();
+  shapeProvider = new KeyboardShapesProvider();
+  profileManager = new ProfileManager(
+    this.applicationStorage,
+    this.shapeProvider
+  );
   deviceService = new KeyboardDeviceService();
   // inputLogicSimulator = InputLogicSimulatorC.getInterface();
   inputLogicSimulator = InputLogicSimulatorD.getInterface();
   ipcBridge = new IpcBridge();
   eventBus = new TypedEventEmitter<TypedApplicationEvent>();
-  keyboardConfigProvider = new KeyboardConfigProvider();
-  settingsProvider = new ApplicationSettingsProvider();
+  keyboardConfigProvider = new KeyboardConfigProvider(this.applicationStorage);
+  settingsProvider = new ApplicationSettingsProvider(this.applicationStorage);
   firmwareUpdationService = new FirmwareUpdationService();
-  shapeProvider = new KeyboardShapesProvider();
 
   async initialize() {
     console.log(`initialize services`);
