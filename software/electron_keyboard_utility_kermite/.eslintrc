@@ -7,13 +7,16 @@
   "settings": {
     "import/resolver": {
       "typescript": {}
+    },
+    "react": {
+      "pragma": "h"
     }
   },
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
-    // 'plugin:react/recommended',
+    "plugin:react/recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
     "plugin:import/typescript",
@@ -22,10 +25,6 @@
   ],
   "plugins": ["react", "prettier", "import"],
   "rules": {
-    "eqeqeq": [1, "always"],
-    "prefer-const": 0,
-    "no-console": 0,
-
     "@typescript-eslint/explicit-function-return-type": 0,
     "@typescript-eslint/no-use-before-define": [1, "nofunc"],
     "@typescript-eslint/no-unused-vars": 0,
@@ -44,14 +43,17 @@
     "@typescript-eslint/ban-ts-comment": 0,
 
     "react/jsx-key": 1,
-    // 'react/react-in-jsx-scope': 0,
-    // 'react/display-name': 0,
-    // 'react/no-unknown-property': 0
+    "react/display-name": 0,
+    "react/no-unknown-property": 0,
+
     "import/no-cycle": [1, { "maxDepth": 1 }],
 
     "no-inner-declarations": 0,
     "no-constant-condition": 0,
     "no-empty": 0,
-    "no-prototype-builtins": 0
+    "no-prototype-builtins": 0,
+    "eqeqeq": [1, "always"],
+    "prefer-const": 0,
+    "no-console": 0
   }
 }
