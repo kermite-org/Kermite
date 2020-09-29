@@ -1,7 +1,7 @@
 import { app } from 'electron';
 import { appWindowManager } from './base/AppWindowManager';
-import { eventBus } from './base/AppEnvironment';
 import { services } from './services';
+import { appEventBus } from './base/AppEventBus';
 
 function startApplication() {
   console.log('debug v0126a');
@@ -19,10 +19,10 @@ function startApplication() {
   });
 
   app.on('browser-window-focus', () => {
-    eventBus.emit('appWindowEvent', { activeChanged: true });
+    appEventBus.emit('appWindowEvent', { activeChanged: true });
   });
   app.on('browser-window-blur', () => {
-    eventBus.emit('appWindowEvent', { activeChanged: false });
+    appEventBus.emit('appWindowEvent', { activeChanged: false });
   });
 }
 

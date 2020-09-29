@@ -12,7 +12,7 @@ import {
   IEnvironmentConfigForRendererProcess,
   IApplicationSettings
 } from '~defs/ConfigTypes';
-import { eventBus, appEnv } from '../base/AppEnvironment';
+import { appEnv } from '../base/AppEnvironment';
 import { IKeyboardShape } from '~defs/ProfileData';
 import { keyboardConfigProvider } from './KeyboardConfigProvider';
 import { profileManager } from './ProfileManager';
@@ -20,6 +20,7 @@ import { deviceService } from './KeyboardDevice';
 import { firmwareUpdationService } from './FirmwareUpdation';
 import { applicationSettingsProvider } from './ApplicationSettingsProvider';
 import { keyboardShapesProvider } from './KeyboardShapesProvider';
+import { appEventBus } from '~shell/base/AppEventBus';
 
 function setupSynchronousMessageHandler() {
   ipcMain.on('synchronousMessage', (event, packet: ISynchronousIpcPacket) => {
@@ -121,10 +122,10 @@ function createBackendAgent(): IBackendAgent {
     },
     appWindowEvents: {
       subscribe(listener) {
-        eventBus.on('appWindowEvent', listener);
+        appEventBus.on('appWindowEvent', listener);
       },
       unsubscribe(listener) {
-        eventBus.off('appWindowEvent', listener);
+        appEventBus.off('appWindowEvent', listener);
       }
     },
     keyboardDeviceStatusEvents: {
