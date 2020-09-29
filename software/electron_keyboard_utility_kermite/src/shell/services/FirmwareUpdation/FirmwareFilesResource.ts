@@ -1,4 +1,4 @@
-import { resolveAssetsPath } from '~shell/AppEnvironment';
+import { resolveAssetsPath } from '~shell/base/AppEnvironment';
 import { fsIsFileExists, fsCreateDirectory, globAsync } from '~funcs/Files';
 const relBinariesFolderPath = 'dist/binaries/binary';
 

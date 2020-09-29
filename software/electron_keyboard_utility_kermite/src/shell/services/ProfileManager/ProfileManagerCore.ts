@@ -1,4 +1,4 @@
-import { resolveUserDataFilePath } from '~shell/AppEnvironment';
+import { resolveUserDataFilePath } from '~shell/base/AppEnvironment';
 import { duplicateObjectByJsonStringifyParse } from '~funcs/Utils';
 import * as path from 'path';
 import { IProfileData, fallbackProfileData } from '~defs/ProfileData';

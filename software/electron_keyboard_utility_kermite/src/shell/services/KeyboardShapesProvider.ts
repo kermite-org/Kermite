@@ -7,7 +7,7 @@ import * as path from 'path';
 import { fsxReadJsonFile, globAsync } from '~funcs/Files';
 import { removeArrayItems } from '~funcs/Utils';
 import * as fs from 'fs';
-import { environmentConfig } from '~shell/AppEnvironment';
+import { environmentConfig } from '~shell/base/AppEnvironment';
 
 interface IKeyboardShapeSourceJson {
   keyUnits: IKeyUnitEntry[];

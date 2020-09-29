@@ -1,4 +1,4 @@
-import { resolveUserDataFilePath } from '~shell/AppEnvironment';
+import { resolveUserDataFilePath } from '~shell/base/AppEnvironment';
 import {
   fsIsFileExists,
   fsxReadJsonFile,
