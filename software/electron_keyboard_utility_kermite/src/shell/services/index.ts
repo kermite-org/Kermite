@@ -4,7 +4,7 @@ import { KeyboardDeviceService } from './KeyboardDevice';
 // import { InputLogicSimulatorC } from './InputLogicSimulatorC';
 import { IpcBridge } from '../IpcBridge';
 import { ProfileManager } from './ProfileManager';
-import { InputLogicSimulatorD } from './InputLogicSimulatorD';
+import { InputLogicSimulatorD } from './KeyboardLogic/InputLogicSimulatorD';
 import { TypedEventEmitter } from '~funcs/TypedEventEmitter';
 import { IAppWindowEvent } from '~defs/IpcContract';
 import { KeyboardConfigProvider } from './KeyboardConfigProvider';
