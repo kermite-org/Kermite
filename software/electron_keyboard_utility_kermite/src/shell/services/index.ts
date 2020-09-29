@@ -1,53 +1,37 @@
-import { ApplicationStorage } from './ApplicationStorage';
-import { KeyboardDeviceService } from './KeyboardDevice';
-// import { IInputLogicSimulator } from './InputLogicSimulator.interface';
-// import { InputLogicSimulatorC } from './InputLogicSimulatorC';
-import { IpcBridge } from '../IpcBridge';
-import { ProfileManager } from './ProfileManager';
-import { InputLogicSimulatorD } from './KeyboardLogic/InputLogicSimulatorD';
-import { KeyboardConfigProvider } from './KeyboardConfigProvider';
-import { ApplicationSettingsProvider } from './ApplicationSettingsProvider';
-import { FirmwareUpdationService } from './FirmwareUpdation';
-import { KeyboardShapesProvider } from './KeyboardShapesProvider';
+import { applicationStorage } from './ApplicationStorage';
+import { applicationSettingsProvider } from './ApplicationSettingsProvider';
+import { keyboardShapesProvider } from './KeyboardShapesProvider';
+import { keyboardConfigProvider } from './KeyboardConfigProvider';
+import { profileManager } from './ProfileManager';
+import { deviceService } from './KeyboardDevice';
+import { firmwareUpdationService } from './FirmwareUpdation';
+import { ipcBridge } from '~shell/IpcBridge';
+import { inputLogicSimulator } from './KeyboardLogic';
 
 export const services = new (class {
-  applicationStorage = new ApplicationStorage();
-  shapeProvider = new KeyboardShapesProvider();
-  profileManager = new ProfileManager(
-    this.applicationStorage,
-    this.shapeProvider
-  );
-  deviceService = new KeyboardDeviceService();
-  // inputLogicSimulator = InputLogicSimulatorC.getInterface();
-  inputLogicSimulator = InputLogicSimulatorD.getInterface();
-  ipcBridge = new IpcBridge();
-  keyboardConfigProvider = new KeyboardConfigProvider(this.applicationStorage);
-  settingsProvider = new ApplicationSettingsProvider(this.applicationStorage);
-  firmwareUpdationService = new FirmwareUpdationService();
-
   async initialize() {
     console.log(`initialize services`);
-    await this.applicationStorage.initialize();
-    await this.settingsProvider.initialize();
-    await this.keyboardConfigProvider.initialize();
-    await this.profileManager.initialize();
-    await this.deviceService.initialize();
-    await this.firmwareUpdationService.initialize();
-    await this.inputLogicSimulator.initialize();
-    await this.ipcBridge.initialize();
-    await this.shapeProvider.initialize();
+    await applicationStorage.initialize();
+    await applicationSettingsProvider.initialize();
+    await keyboardConfigProvider.initialize();
+    await keyboardShapesProvider.initialize();
+    await profileManager.initialize();
+    await deviceService.initialize();
+    await firmwareUpdationService.initialize();
+    await inputLogicSimulator.initialize();
+    await ipcBridge.initialize();
   }
 
   async terminate() {
     console.log(`terminate services`);
-    await this.shapeProvider.terminate();
-    await this.ipcBridge.terminate();
-    await this.inputLogicSimulator.terminate();
-    await this.firmwareUpdationService.terminate();
-    await this.deviceService.terminate();
-    await this.profileManager.terminate();
-    await this.keyboardConfigProvider.terminate();
-    await this.settingsProvider.terminate();
-    await this.applicationStorage.terminate();
+    await ipcBridge.terminate();
+    await inputLogicSimulator.terminate();
+    await firmwareUpdationService.terminate();
+    await deviceService.terminate();
+    await profileManager.terminate();
+    await keyboardShapesProvider.terminate();
+    await keyboardConfigProvider.terminate();
+    await applicationSettingsProvider.terminate();
+    await applicationStorage.terminate();
   }
 })();
