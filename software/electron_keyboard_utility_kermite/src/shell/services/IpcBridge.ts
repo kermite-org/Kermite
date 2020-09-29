@@ -12,7 +12,7 @@ import {
   IEnvironmentConfigForRendererProcess,
   IApplicationSettings
 } from '~defs/ConfigTypes';
-import { environmentConfig, eventBus } from '../base/AppEnvironment';
+import { eventBus, appEnv } from '../base/AppEnvironment';
 import { IKeyboardShape } from '~defs/ProfileData';
 import { keyboardConfigProvider } from './KeyboardConfigProvider';
 import { profileManager } from './ProfileManager';
@@ -53,7 +53,7 @@ function createBackendAgent(): IBackendAgent {
       IEnvironmentConfigForRendererProcess
     > {
       return {
-        isDevelopment: environmentConfig.isDevelopment
+        isDevelopment: appEnv.isDevelopment
       };
     },
     async getSettings(): Promise<IApplicationSettings> {

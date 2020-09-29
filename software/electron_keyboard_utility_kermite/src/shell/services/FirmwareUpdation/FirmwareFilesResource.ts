@@ -1,10 +1,10 @@
-import { resolveAssetsPath } from '~shell/base/AppEnvironment';
+import { appEnv } from '~shell/base/AppEnvironment';
 import { fsIsFileExists, fsCreateDirectory, globAsync } from '~funcs/Files';
 const relBinariesFolderPath = 'dist/binaries/binary';
 
 export class FirmwareFilesResource {
   static async ensureBinariesDirectoryExists() {
-    const binariesDirPath = resolveAssetsPath(relBinariesFolderPath);
+    const binariesDirPath = appEnv.resolveAssetsPath(relBinariesFolderPath);
     if (!fsIsFileExists(binariesDirPath)) {
       await fsCreateDirectory(binariesDirPath);
     }
@@ -19,6 +19,8 @@ export class FirmwareFilesResource {
   }
 
   static getHexFilePath(firmwareName: string): string {
-    return resolveAssetsPath(`${relBinariesFolderPath}/${firmwareName}.hex`);
+    return appEnv.resolveAssetsPath(
+      `${relBinariesFolderPath}/${firmwareName}.hex`
+    );
   }
 }

@@ -1,6 +1,6 @@
 import { BrowserWindow } from 'electron';
 import * as path from 'path';
-import { environmentConfig } from './AppEnvironment';
+import { appEnv } from './AppEnvironment';
 
 export class AppWindowManager {
   private mainWindow: BrowserWindow | null = null;
@@ -15,7 +15,7 @@ export class AppWindowManager {
       }
     };
 
-    const isDev = environmentConfig.isDevelopment;
+    const isDev = appEnv.isDevelopment;
     if (!isDev) {
       options.frame = false;
       options.transparent = true;

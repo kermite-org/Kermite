@@ -7,7 +7,7 @@ import * as path from 'path';
 import { fsxReadJsonFile, globAsync } from '~funcs/Files';
 import { removeArrayItems } from '~funcs/Utils';
 import * as fs from 'fs';
-import { environmentConfig } from '~shell/base/AppEnvironment';
+import { appEnv } from '~shell/base/AppEnvironment';
 
 interface IKeyboardShapeSourceJson {
   keyUnits: IKeyUnitEntry[];
@@ -38,7 +38,7 @@ async function loadKeyboardShapes(): Promise<IKeyboardShape[]> {
 }
 
 function setupFilesWatcher(callback: (filePath: string) => void) {
-  if (environmentConfig.isDevelopment) {
+  if (appEnv.isDevelopment) {
     fs.watch(baseDir, { recursive: true }, async (eventType, relPath) => {
       if (eventType === 'change') {
         if (relPath.endsWith('/layout.json')) {

@@ -1,4 +1,4 @@
-import { resolveUserDataFilePath } from '~shell/base/AppEnvironment';
+import { appEnv } from '~shell/base/AppEnvironment';
 import { duplicateObjectByJsonStringifyParse } from '~funcs/Utils';
 import * as path from 'path';
 import { IProfileData, fallbackProfileData } from '~defs/ProfileData';
@@ -19,15 +19,15 @@ export class ProfileManagerCore {
   constructor() {}
 
   getDataFilePath(profName: string): string {
-    return resolveUserDataFilePath(`data/profiles/${profName}.json`);
+    return appEnv.resolveUserDataFilePath(`data/profiles/${profName}.json`);
   }
 
   async ensureProfilesDirectoryExists() {
-    const dataDirPath = resolveUserDataFilePath('data');
+    const dataDirPath = appEnv.resolveUserDataFilePath('data');
     if (!fsIsFileExists(dataDirPath)) {
       await fsCreateDirectory(dataDirPath);
     }
-    const profilesDirPath = resolveUserDataFilePath('data/profiles');
+    const profilesDirPath = appEnv.resolveUserDataFilePath('data/profiles');
     if (!fsIsFileExists(profilesDirPath)) {
       await fsCreateDirectory(profilesDirPath);
     }
@@ -35,7 +35,7 @@ export class ProfileManagerCore {
 
   async listAllProfileNames(): Promise<string[]> {
     const fileNames = await fsListFilesInDirectory(
-      resolveUserDataFilePath(`data/profiles`)
+      appEnv.resolveUserDataFilePath(`data/profiles`)
     );
     return fileNames.map((fname) => fname.replace('.json', ''));
   }

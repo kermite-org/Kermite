@@ -1,4 +1,4 @@
-import { resolveUserDataFilePath } from '~shell/base/AppEnvironment';
+import { appEnv } from '~shell/base/AppEnvironment';
 import {
   fsIsFileExists,
   fsxReadJsonFile,
@@ -6,7 +6,7 @@ import {
 } from '~funcs/Files';
 
 export class ApplicationStorage {
-  readonly configFilePath = resolveUserDataFilePath('data/config.json');
+  readonly configFilePath = appEnv.resolveUserDataFilePath('data/config.json');
   private data: any = {};
   getItem<T>(key: string): T | undefined {
     return this.data[key];
