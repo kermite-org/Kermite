@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { services } from '../..';
+
+import { deviceService } from '~shell/services/KeyboardDevice';
 
 type u8 = number;
 type s8 = number;
@@ -164,7 +165,7 @@ function handleKeyInputDown(keyIndex: u8) {
       const layerIndex = (opWord >> 8) & 0b1111;
       const withShift = (opWord >> 13) & 0b1;
       state.layerIndex = layerIndex;
-      services.deviceService.emitLayerChangedEvent(layerIndex);
+      deviceService.emitLayerChangedEvent(layerIndex);
       if (withShift) {
         setModifiers(ModFlag_Shift);
       }
@@ -200,7 +201,7 @@ function handleKeyInputUp(keyIndex: u8) {
     }
     if (opType === OpType_layerCall) {
       state.layerIndex = 0;
-      services.deviceService.emitLayerChangedEvent(0);
+      deviceService.emitLayerChangedEvent(0);
       const withShift = (opWord >> 13) & 0b1;
       if (withShift) {
         clearModifiers(ModFlag_Shift);

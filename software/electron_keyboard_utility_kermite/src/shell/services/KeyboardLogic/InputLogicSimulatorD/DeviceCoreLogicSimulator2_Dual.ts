@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { services } from '../..';
+import { deviceService } from '~shell/services/KeyboardDevice';
 
 //--------------------------------------------------------------------------------
 //types
@@ -226,7 +226,7 @@ function handleOperationOn(opWord: u16) {
     const withShift = (opWord >> 13) & 0b1;
     const fDS = (opWord >> 12) & 0b1;
     state.layerIndex = layerIndex;
-    services.deviceService.emitLayerChangedEvent(layerIndex);
+    deviceService.emitLayerChangedEvent(layerIndex);
     state.layerHoldFlags[layerIndex] = true;
     state.layerDefaultSchemeFlags[layerIndex] = !!fDS;
     if (withShift) {
@@ -260,7 +260,7 @@ function handleOperationOff(opWord: u16) {
   }
   if (opType === OpType_layerCall) {
     state.layerIndex = 0;
-    services.deviceService.emitLayerChangedEvent(0);
+    deviceService.emitLayerChangedEvent(0);
     const layerIndex = (opWord >> 8) & 0b1111;
     state.layerHoldFlags[layerIndex] = false;
     const withShift = (opWord >> 13) & 0b1;
