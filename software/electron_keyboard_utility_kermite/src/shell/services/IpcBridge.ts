@@ -164,6 +164,7 @@ function createBackendAgent(): IBackendAgent {
   };
 }
 
+// 画面からサービスを呼び出すRPCのバックエンド実装
 class IpcBridge {
   async initialize() {
     setupSynchronousMessageHandler();

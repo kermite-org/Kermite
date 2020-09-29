@@ -5,6 +5,7 @@ import {
   fsxWriteJsonFile
 } from '~funcs/Files';
 
+// 永続化状態を<UserDataDir>/data/config.jsonに保存・復元
 export class ApplicationStorage {
   readonly configFilePath = appEnv.resolveUserDataFilePath('data/config.json');
   private data: any = {};

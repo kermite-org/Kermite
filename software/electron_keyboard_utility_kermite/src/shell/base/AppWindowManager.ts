@@ -2,6 +2,7 @@ import { BrowserWindow } from 'electron';
 import * as path from 'path';
 import { appEnv } from './AppEnvironment';
 
+// Electronのウインドウを管理するクラス
 export class AppWindowManager {
   private mainWindow: BrowserWindow | null = null;
 

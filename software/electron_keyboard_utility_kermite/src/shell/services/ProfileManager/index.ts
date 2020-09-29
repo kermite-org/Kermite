@@ -8,6 +8,7 @@ import { ProfileManagerCore } from './ProfileManagerCore';
 
 type StatusListener = (partialStatus: Partial<IProfileManagerStatus>) => void;
 
+// プロファイルを<UserDataDir>/data/profiles以下でファイルとして管理
 class ProfileManager {
   private status: IProfileManagerStatus = {
     currentProfileName: '',

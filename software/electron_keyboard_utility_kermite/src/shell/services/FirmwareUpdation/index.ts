@@ -3,6 +3,8 @@ import { FirmwareFilesManager } from './FirmwareFilesManager';
 import { FlashCommander } from './FlashCommander';
 import { FirmwareFilesResource } from './FirmwareFilesResource';
 
+// 仮想COMポートでProMicroのブートローダ(Caterina)と通信しファームウェアを書き込む
+// 仮想COMポートの列挙や出現監視も行う
 class FirmwareUpdationService {
   private comPortsMonitor = new ComPortsMonitor();
   private binaryFilesManager = new FirmwareFilesManager();

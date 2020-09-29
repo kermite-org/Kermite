@@ -4,6 +4,7 @@ import {
 } from '~defs/ConfigTypes';
 import { applicationStorage } from './ApplicationStorage';
 
+// 永続化する設定やUI状態などを管理
 class ApplicationSettingsProvider {
   private readonly stroageKey = 'applicationSettings';
 

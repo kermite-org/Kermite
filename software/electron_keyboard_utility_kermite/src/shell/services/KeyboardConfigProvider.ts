@@ -4,6 +4,7 @@ import { applicationStorage } from './ApplicationStorage';
 
 type IStatusListener = (config: Partial<IKeyboardConfig>) => void;
 
+// 環境に関連したキーボードの設定を保存する, レイアウト(US/JP)など
 export class KeyboardConfigProvider {
   private readonly storageKey = 'keyboardConfig';
 
