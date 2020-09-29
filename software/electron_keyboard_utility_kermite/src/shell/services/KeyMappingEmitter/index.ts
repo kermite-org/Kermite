@@ -6,10 +6,10 @@ import {
 } from './MemoryOperationFrameBuilder';
 import { calcChecksum, writeUint16LE, writeUint8 } from './Helpers';
 import { IProfileData } from '~defs/ProfileData';
-import { services } from '..';
 import { converProfileDataToBlobBytes } from '../KeyboardLogic/InputLogicSimulatorD/ProfileDataBinaryPacker';
 import { delayMs } from '~funcs/Utils';
 import { IKeyboardLayoutStandard } from '~defs/ConfigTypes';
+import { deviceService } from '../KeyboardDevice';
 
 /*
 Data format for the keymapping data stored in AVR's EEPROM
@@ -73,7 +73,7 @@ export namespace KeyMappingEmitter {
     editModel: IProfileData,
     layout: IKeyboardLayoutStandard
   ) {
-    const ds = services.deviceService;
+    const ds = deviceService;
 
     if (!ds.isOpen) {
       console.log(`device is not connected`);
