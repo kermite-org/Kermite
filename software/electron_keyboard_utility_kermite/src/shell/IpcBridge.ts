@@ -6,15 +6,46 @@ import {
 } from '~defs/IpcContract';
 import { xpcMain } from '~lib/xpc/xpcMain';
 import { appWindowManager } from '~shell/AppWindowManager';
-import { services } from './services';
 import { KeyMappingEmitter } from './services/KeyMappingEmitter';
 import {
   IKeyboardConfig,
   IEnvironmentConfigForRendererProcess,
   IApplicationSettings
 } from '~defs/ConfigTypes';
-import { environmentConfig } from '~shell/AppEnvironment';
+import { environmentConfig, eventBus } from '~shell/AppEnvironment';
 import { IKeyboardShape } from '~defs/ProfileData';
+import { keyboardConfigProvider } from './services/KeyboardConfigProvider';
+import { profileManager } from './services/ProfileManager';
+import { deviceService } from './services/KeyboardDevice';
+import { firmwareUpdationService } from './services/FirmwareUpdation';
+import { applicationSettingsProvider } from './services/ApplicationSettingsProvider';
+import { keyboardShapesProvider } from './services/KeyboardShapesProvider';
+
+function setupSynchronousMessageHandler() {
+  ipcMain.on('synchronousMessage', (event, packet: ISynchronousIpcPacket) => {
+    if (packet.debugMessage) {
+      console.log(packet.debugMessage);
+      event.returnValue = true;
+    }
+
+    if (packet.reserveSaveProfileTask) {
+      profileManager.reserveSaveProfileTask(packet.reserveSaveProfileTask);
+      event.returnValue = true;
+    }
+
+    if (packet.saveSettingsOnClosing) {
+      applicationSettingsProvider.writeSettings(packet.saveSettingsOnClosing);
+      event.returnValue = true;
+    }
+
+    if (packet.saveKeyboardConfigOnClosing) {
+      keyboardConfigProvider.writeKeyboardConfig(
+        packet.saveKeyboardConfigOnClosing
+      );
+      event.returnValue = true;
+    }
+  });
+}
 
 function createBackendAgent(): IBackendAgent {
   return {
@@ -26,18 +57,18 @@ function createBackendAgent(): IBackendAgent {
       };
     },
     async getSettings(): Promise<IApplicationSettings> {
-      return services.settingsProvider.getSettings();
+      return applicationSettingsProvider.getSettings();
     },
     async getKeyboardConfig(): Promise<IKeyboardConfig> {
-      return services.keyboardConfigProvider.keyboardConfig;
+      return keyboardConfigProvider.keyboardConfig;
     },
     async writeKeyboardConfig(config: IKeyboardConfig): Promise<void> {
-      services.keyboardConfigProvider.writeKeyboardConfig(config);
+      keyboardConfigProvider.writeKeyboardConfig(config);
     },
     async writeKeyMappingToDevice(): Promise<void> {
-      const profile = services.profileManager.getCurrentProfile();
+      const profile = profileManager.getCurrentProfile();
       const layoutStandard =
-        services.keyboardConfigProvider.keyboardConfig.layoutStandard;
+        keyboardConfigProvider.keyboardConfig.layoutStandard;
       if (profile) {
         KeyMappingEmitter.emitKeyAssignsToDevice(profile, layoutStandard);
       }
@@ -45,7 +76,7 @@ function createBackendAgent(): IBackendAgent {
     async executeProfileManagerCommands(
       commands: IProfileManagerCommand[]
     ): Promise<void> {
-      services.profileManager.executeCommands(commands);
+      profileManager.executeCommands(commands);
     },
 
     async reloadApplication(): Promise<void> {
@@ -65,106 +96,81 @@ function createBackendAgent(): IBackendAgent {
       appWindowManager.adjustWindowSize(isWidgetMode);
     },
     async getKeyboardBreedNamesAvailable(): Promise<string[]> {
-      return services.shapeProvider.getAvailableBreedNames();
+      return keyboardShapesProvider.getAvailableBreedNames();
     },
     async getKeyboardShape(
       breedName: string
     ): Promise<IKeyboardShape | undefined> {
-      return services.shapeProvider.getKeyboardShapeByBreedName(breedName);
+      return keyboardShapesProvider.getKeyboardShapeByBreedName(breedName);
     },
     keyEvents: {
       subscribe(listener) {
-        services.deviceService.subscribe(listener);
+        deviceService.subscribe(listener);
       },
       unsubscribe(listener) {
-        services.deviceService.unsubscribe(listener);
+        deviceService.unsubscribe(listener);
       }
     },
     profileStatusEvents: {
       subscribe(listener) {
-        services.profileManager.subscribeStatus(listener);
+        profileManager.subscribeStatus(listener);
       },
       unsubscribe(listener) {
-        services.profileManager.unsubscribeStatus(listener);
+        profileManager.unsubscribeStatus(listener);
       }
     },
     appWindowEvents: {
       subscribe(listener) {
-        services.eventBus.on('appWindowEvent', listener);
+        eventBus.on('appWindowEvent', listener);
       },
       unsubscribe(listener) {
-        services.eventBus.off('appWindowEvent', listener);
+        eventBus.off('appWindowEvent', listener);
       }
     },
     keyboardDeviceStatusEvents: {
       subscribe(listener) {
-        services.deviceService.deviceStatus.subscribe(listener);
+        deviceService.deviceStatus.subscribe(listener);
       },
       unsubscribe(listener) {
-        services.deviceService.deviceStatus.unsubscribe(listener);
+        deviceService.deviceStatus.unsubscribe(listener);
       }
     },
     async getFirmwareNamesAvailable(): Promise<string[]> {
-      return services.firmwareUpdationService.getFirmwareNamesAvailable();
+      return firmwareUpdationService.getFirmwareNamesAvailable();
     },
     async uploadFirmware(
       firmwareName: string,
       comPortName: string
     ): Promise<string> {
-      return services.firmwareUpdationService.writeFirmware(
-        firmwareName,
-        comPortName
-      );
+      return firmwareUpdationService.writeFirmware(firmwareName, comPortName);
     },
     comPortPlugEvents: {
       subscribe(listener) {
-        services.firmwareUpdationService.subscribeComPorts(listener);
+        firmwareUpdationService.subscribeComPorts(listener);
       },
       unsubscribe(listener) {
-        services.firmwareUpdationService.unsubscribeComPorts(listener);
+        firmwareUpdationService.unsubscribeComPorts(listener);
       }
     },
     layoutFileUpdationEvents: {
       subscribe(listener) {
-        services.shapeProvider.subscribeFileUpdation(listener);
+        keyboardShapesProvider.subscribeFileUpdation(listener);
       },
       unsubscribe(listener) {
-        services.shapeProvider.unsubscribeFileUpdation(listener);
+        keyboardShapesProvider.unsubscribeFileUpdation(listener);
       }
     }
   };
 }
 
-export class IpcBridge {
+class IpcBridge {
   async initialize() {
-    ipcMain.on('synchronousMessage', (event, packet: ISynchronousIpcPacket) => {
-      if (packet.debugMessage) {
-        console.log(packet.debugMessage);
-        event.returnValue = true;
-      }
-
-      if (packet.reserveSaveProfileTask) {
-        services.profileManager.reserveSaveProfileTask(
-          packet.reserveSaveProfileTask
-        );
-        event.returnValue = true;
-      }
-
-      if (packet.saveSettingsOnClosing) {
-        services.settingsProvider.writeSettings(packet.saveSettingsOnClosing);
-        event.returnValue = true;
-      }
-
-      if (packet.saveKeyboardConfigOnClosing) {
-        services.keyboardConfigProvider.writeKeyboardConfig(
-          packet.saveKeyboardConfigOnClosing
-        );
-        event.returnValue = true;
-      }
-    });
+    setupSynchronousMessageHandler();
     const backendAgent = createBackendAgent();
     xpcMain.supplyBackendAgent('default', backendAgent);
   }
 
   async terminate() {}
 }
+
+export const ipcBridge = new IpcBridge();
