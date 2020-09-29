@@ -5,18 +5,10 @@ import { KeyboardDeviceService } from './KeyboardDevice';
 import { IpcBridge } from '../IpcBridge';
 import { ProfileManager } from './ProfileManager';
 import { InputLogicSimulatorD } from './KeyboardLogic/InputLogicSimulatorD';
-import { TypedEventEmitter } from '~funcs/TypedEventEmitter';
-import { IAppWindowEvent } from '~defs/IpcContract';
 import { KeyboardConfigProvider } from './KeyboardConfigProvider';
 import { ApplicationSettingsProvider } from './ApplicationSettingsProvider';
 import { FirmwareUpdationService } from './FirmwareUpdation';
 import { KeyboardShapesProvider } from './KeyboardShapesProvider';
-
-interface TypedApplicationEvent {
-  mainWindowClosed: true;
-  reloadApplicationRequested: true;
-  appWindowEvent: IAppWindowEvent;
-}
 
 export const services = new (class {
   applicationStorage = new ApplicationStorage();
@@ -29,7 +21,6 @@ export const services = new (class {
   // inputLogicSimulator = InputLogicSimulatorC.getInterface();
   inputLogicSimulator = InputLogicSimulatorD.getInterface();
   ipcBridge = new IpcBridge();
-  eventBus = new TypedEventEmitter<TypedApplicationEvent>();
   keyboardConfigProvider = new KeyboardConfigProvider(this.applicationStorage);
   settingsProvider = new ApplicationSettingsProvider(this.applicationStorage);
   firmwareUpdationService = new FirmwareUpdationService();

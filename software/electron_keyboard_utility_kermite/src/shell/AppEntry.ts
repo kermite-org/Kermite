@@ -1,6 +1,7 @@
 import { app } from 'electron';
 import { services } from './services';
 import { appWindowManager } from './AppWindowManager';
+import { eventBus } from './AppEnvironment';
 
 app.allowRendererProcessReuse = true;
 
@@ -19,10 +20,10 @@ export class AppEntry {
     });
 
     app.on('browser-window-focus', () => {
-      services.eventBus.emit('appWindowEvent', { activeChanged: true });
+      eventBus.emit('appWindowEvent', { activeChanged: true });
     });
     app.on('browser-window-blur', () => {
-      services.eventBus.emit('appWindowEvent', { activeChanged: false });
+      eventBus.emit('appWindowEvent', { activeChanged: false });
     });
   }
 }
