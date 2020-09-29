@@ -1,6 +1,6 @@
 import { IKeyboardConfig, fallbackKeyboardConfig } from '~defs/ConfigTypes';
 import { removeArrayItems, overwriteObjectProps } from '~funcs/Utils';
-import { ApplicationStorage } from './ApplicationStorage';
+import { applicationStorage } from './ApplicationStorage';
 
 type IStatusListener = (config: Partial<IKeyboardConfig>) => void;
 
@@ -15,7 +15,7 @@ export class KeyboardConfigProvider {
     return this._keyboardConfig;
   }
 
-  constructor(private applicationStorage: ApplicationStorage) {}
+  constructor() {}
 
   subscribeStatus(listener: IStatusListener) {
     listener(this.keyboardConfig);
@@ -43,7 +43,7 @@ export class KeyboardConfigProvider {
 
   private loadConfig(): IKeyboardConfig {
     const config: IKeyboardConfig = { ...fallbackKeyboardConfig };
-    const loaded = this.applicationStorage.getItem(this.storageKey);
+    const loaded = applicationStorage.getItem(this.storageKey);
     if (loaded) {
       overwriteObjectProps(config, loaded);
     }
@@ -55,6 +55,8 @@ export class KeyboardConfigProvider {
   }
 
   async terminate() {
-    this.applicationStorage.setItem(this.storageKey, this._keyboardConfig);
+    applicationStorage.setItem(this.storageKey, this._keyboardConfig);
   }
 }
+
+export const keyboardConfigProvider = new KeyboardConfigProvider();

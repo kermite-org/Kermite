@@ -91,3 +91,5 @@ export class KeyboardShapesProvider {
 
   async terminate() {}
 }
+
+export const keyboardShapesProvider = new KeyboardShapesProvider();

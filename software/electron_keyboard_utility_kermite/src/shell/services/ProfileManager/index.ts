@@ -1,16 +1,14 @@
 import {
-  IProfileManagerStatus,
-  IProfileManagerCommand
+  IProfileManagerCommand,
+  IProfileManagerStatus
 } from '~defs/IpcContract';
-import { clampValue, removeArrayItems } from '~funcs/Utils';
 import { IProfileData } from '~defs/ProfileData';
+import { clampValue, removeArrayItems } from '~funcs/Utils';
 import { ProfileManagerCore } from './ProfileManagerCore';
-import { ApplicationStorage } from '../ApplicationStorage';
-import { KeyboardShapesProvider } from '../KeyboardShapesProvider';
 
 type StatusListener = (partialStatus: Partial<IProfileManagerStatus>) => void;
 
-export class ProfileManager {
+class ProfileManager {
   private status: IProfileManagerStatus = {
     currentProfileName: '',
     allProfileNames: [],
@@ -24,13 +22,7 @@ export class ProfileManager {
 
   private savingProfileData: IProfileData | undefined = undefined;
 
-  private core: ProfileManagerCore;
-  constructor(
-    applicationStorage: ApplicationStorage,
-    shapeProvider: KeyboardShapesProvider
-  ) {
-    this.core = new ProfileManagerCore(applicationStorage, shapeProvider);
-  }
+  private core: ProfileManagerCore = new ProfileManagerCore();
 
   getCurrentProfile(): IProfileData | undefined {
     return this.status.loadedProfileData;
@@ -283,3 +275,5 @@ export class ProfileManager {
     }
   }
 }
+
+export const profileManager = new ProfileManager();

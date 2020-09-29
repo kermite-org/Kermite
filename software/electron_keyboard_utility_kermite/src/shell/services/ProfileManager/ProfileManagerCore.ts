@@ -12,14 +12,11 @@ import {
   fsCopyFile,
   fsxReadJsonFile
 } from '~funcs/Files';
-import { ApplicationStorage } from '../ApplicationStorage';
-import { KeyboardShapesProvider } from '../KeyboardShapesProvider';
+import { keyboardShapesProvider } from '../KeyboardShapesProvider';
+import { applicationStorage } from '../ApplicationStorage';
 
 export class ProfileManagerCore {
-  constructor(
-    private applicationStorage: ApplicationStorage,
-    private shapeProvider: KeyboardShapesProvider
-  ) {}
+  constructor() {}
 
   getDataFilePath(profName: string): string {
     return resolveUserDataFilePath(`data/profiles/${profName}.json`);
@@ -44,13 +41,13 @@ export class ProfileManagerCore {
   }
 
   loadCurrentProfileName(): string | undefined {
-    return this.applicationStorage.getItem('currentProfileName') as
+    return applicationStorage.getItem('currentProfileName') as
       | string
       | undefined;
   }
 
   storeCurrentProfileName(profName: string) {
-    this.applicationStorage.setItem('currentProfileName', profName);
+    applicationStorage.setItem('currentProfileName', profName);
   }
 
   async loadProfile(profName: string): Promise<IProfileData> {
@@ -74,7 +71,7 @@ export class ProfileManagerCore {
     const profileData: IProfileData = duplicateObjectByJsonStringifyParse(
       fallbackProfileData
     );
-    const keyboardShape = this.shapeProvider.getKeyboardShapeByBreedName(
+    const keyboardShape = keyboardShapesProvider.getKeyboardShapeByBreedName(
       breedName
     );
     if (keyboardShape) {

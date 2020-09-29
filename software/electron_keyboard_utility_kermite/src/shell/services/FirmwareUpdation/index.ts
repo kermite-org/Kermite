@@ -3,7 +3,7 @@ import { FirmwareFilesManager } from './FirmwareFilesManager';
 import { FlashCommander } from './FlashCommander';
 import { FirmwareFilesResource } from './FirmwareFilesResource';
 
-export class FirmwareUpdationService {
+class FirmwareUpdationService {
   private comPortsMonitor = new ComPortsMonitor();
   private binaryFilesManager = new FirmwareFilesManager();
 
@@ -44,3 +44,5 @@ export class FirmwareUpdationService {
     this.comPortsMonitor.terminateTicker();
   }
 }
+
+export const firmwareUpdationService = new FirmwareUpdationService();

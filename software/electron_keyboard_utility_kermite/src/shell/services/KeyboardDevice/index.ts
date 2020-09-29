@@ -129,3 +129,4 @@ export class KeyboardDeviceService {
     await this.deviceWrapper?.writeFrames(frames);
   }
 }
+export const deviceService = new KeyboardDeviceService();

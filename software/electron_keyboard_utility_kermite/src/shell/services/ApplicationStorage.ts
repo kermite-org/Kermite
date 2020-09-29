@@ -29,3 +29,5 @@ export class ApplicationStorage {
     console.log('config file saved');
   }
 }
+
+export const applicationStorage = new ApplicationStorage();
