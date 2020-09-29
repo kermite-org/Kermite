@@ -1,6 +1,6 @@
 import { BrowserWindow } from 'electron';
 import * as path from 'path';
-import { environmentConfig } from '~shell/AppEnvironment';
+import { environmentConfig } from './AppEnvironment';
 
 export class AppWindowManager {
   private mainWindow: BrowserWindow | null = null;

@@ -5,21 +5,21 @@ import {
   IProfileManagerCommand
 } from '~defs/IpcContract';
 import { xpcMain } from '~lib/xpc/xpcMain';
-import { appWindowManager } from '~shell/AppWindowManager';
-import { KeyMappingEmitter } from './services/KeyMappingEmitter';
+import { appWindowManager } from '../base/AppWindowManager';
+import { KeyMappingEmitter } from './KeyMappingEmitter';
 import {
   IKeyboardConfig,
   IEnvironmentConfigForRendererProcess,
   IApplicationSettings
 } from '~defs/ConfigTypes';
-import { environmentConfig, eventBus } from '~shell/AppEnvironment';
+import { environmentConfig, eventBus } from '../base/AppEnvironment';
 import { IKeyboardShape } from '~defs/ProfileData';
-import { keyboardConfigProvider } from './services/KeyboardConfigProvider';
-import { profileManager } from './services/ProfileManager';
-import { deviceService } from './services/KeyboardDevice';
-import { firmwareUpdationService } from './services/FirmwareUpdation';
-import { applicationSettingsProvider } from './services/ApplicationSettingsProvider';
-import { keyboardShapesProvider } from './services/KeyboardShapesProvider';
+import { keyboardConfigProvider } from './KeyboardConfigProvider';
+import { profileManager } from './ProfileManager';
+import { deviceService } from './KeyboardDevice';
+import { firmwareUpdationService } from './FirmwareUpdation';
+import { applicationSettingsProvider } from './ApplicationSettingsProvider';
+import { keyboardShapesProvider } from './KeyboardShapesProvider';
 
 function setupSynchronousMessageHandler() {
   ipcMain.on('synchronousMessage', (event, packet: ISynchronousIpcPacket) => {

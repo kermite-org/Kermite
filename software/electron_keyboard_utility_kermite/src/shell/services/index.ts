@@ -5,7 +5,7 @@ import { keyboardConfigProvider } from './KeyboardConfigProvider';
 import { profileManager } from './ProfileManager';
 import { deviceService } from './KeyboardDevice';
 import { firmwareUpdationService } from './FirmwareUpdation';
-import { ipcBridge } from '~shell/IpcBridge';
+import { ipcBridge } from '~shell/services/IpcBridge';
 import { inputLogicSimulator } from './KeyboardLogic';
 
 export const services = new (class {

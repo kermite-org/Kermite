@@ -5,7 +5,7 @@ import {
 } from './Types';
 import { KeyAssignToLogicalKeyActionResolver } from './KeyAssignToLogicalKeyActionResolver';
 import { LogicalKeyActionDriver } from './LogicalKeyActionDriver';
-import { coloredLog } from '~shell/ColoredLog';
+import { coloredLog } from '~shell/base/ColoredLog';
 import { IAssignOperation } from '~defs/ProfileData';
 
 interface IGateEvent {
