@@ -2,9 +2,8 @@ import {
   IProfileManagerStatus,
   IRealtimeKeyboardEvent
 } from '~defs/IpcContract';
-import { services } from '..';
 import { IInputLogicSimulator } from '../InputLogicSimulator.interface';
-import { IntervalTimerWrapper } from '../InputLogicSimulator/IntervalTimerWrapper';
+import { IntervalTimerWrapper } from '../InputLogicSimulatorA/IntervalTimerWrapper';
 import {
   logicSimulatorStateC,
   createModuleFlow
@@ -19,6 +18,8 @@ import { ModuleR_VirtualKeyBinder } from './ModuleR_VirtualKeyBinder';
 import { ModuleT_OutputKeyStateCombiner } from './ModuleT_OutputKeyStateCombiner';
 import { ModuleW_HidReportOutputBuffer } from './ModuleW_HidReportOutputBuffer';
 import { delayMs } from '~funcs/Utils';
+import { deviceService } from '~shell/services/KeyboardDevice';
+import { profileManager } from '~shell/services/ProfileManager';
 
 export namespace InputLogicSimulatorC {
   const tickerTimer = new IntervalTimerWrapper();
@@ -32,13 +33,13 @@ export namespace InputLogicSimulatorC {
   }
 
   async function hidReportExperiment() {
-    services.deviceService.writeSideBrainHidReport([2, 0, 0, 30, 0, 0, 0, 0]);
+    deviceService.writeSideBrainHidReport([2, 0, 0, 30, 0, 0, 0, 0]);
     await delayMs(100);
-    services.deviceService.writeSideBrainHidReport([0, 0, 0, 0, 0, 0, 0, 0]);
+    deviceService.writeSideBrainHidReport([0, 0, 0, 0, 0, 0, 0, 0]);
     await delayMs(100);
-    services.deviceService.writeSideBrainHidReport([0, 0, 30, 0, 0, 0, 0, 0]);
+    deviceService.writeSideBrainHidReport([0, 0, 30, 0, 0, 0, 0, 0]);
     await delayMs(100);
-    services.deviceService.writeSideBrainHidReport([0, 0, 0, 0, 0, 0, 0, 0]);
+    deviceService.writeSideBrainHidReport([0, 0, 0, 0, 0, 0, 0, 0]);
     await delayMs(100);
   }
 
@@ -67,7 +68,7 @@ export namespace InputLogicSimulatorC {
       .chain(ModuleT_OutputKeyStateCombiner.io)
       .chain(ModuleW_HidReportOutputBuffer.io);
     ModuleW_HidReportOutputBuffer.io.chainTo((report) =>
-      services.deviceService.writeSideBrainHidReport(report)
+      deviceService.writeSideBrainHidReport(report)
     );
   }
 
@@ -80,16 +81,16 @@ export namespace InputLogicSimulatorC {
 
   async function initialize() {
     setupWiring();
-    services.profileManager.subscribeStatus(onProfileStatusChanged);
-    services.deviceService.setSideBrainMode(true);
-    services.deviceService.subscribe(onRealtimeKeyboardEvent);
+    profileManager.subscribeStatus(onProfileStatusChanged);
+    deviceService.setSideBrainMode(true);
+    deviceService.subscribe(onRealtimeKeyboardEvent);
     tickerTimer.start(processTicker, 5);
   }
 
   async function terminate() {
-    services.deviceService.writeSideBrainHidReport([0, 0, 0, 0, 0, 0, 0, 0]);
-    services.deviceService.unsubscribe(onRealtimeKeyboardEvent);
-    services.deviceService.setSideBrainMode(false);
+    deviceService.writeSideBrainHidReport([0, 0, 0, 0, 0, 0, 0, 0]);
+    deviceService.unsubscribe(onRealtimeKeyboardEvent);
+    deviceService.setSideBrainMode(false);
     tickerTimer.stop();
   }
 

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { services } from '..';
+import { services } from '../..';
 
 //--------------------------------------------------------------------------------
 //types

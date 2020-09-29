@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { services } from '..';
+import { services } from '../..';
 
 type u8 = number;
 type s8 = number;

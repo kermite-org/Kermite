@@ -2,7 +2,6 @@ import {
   IRealtimeKeyboardEvent,
   IProfileManagerStatus
 } from '~defs/IpcContract';
-import { services } from '..';
 import {
   completeEditModelForShiftLayer,
   createKeyIndexToKeyUnitIdTable
@@ -14,6 +13,8 @@ import { LogicalKeyActionDriver } from './LogicalKeyActionDriver';
 import { HidKeyCodes } from '~defs/HidKeyCodes';
 import { OutputKeyPrioritySorter } from './OutputKeyPrioritySorter';
 import { IntervalTimerWrapper } from './IntervalTimerWrapper';
+import { deviceService } from '~shell/services/KeyboardDevice';
+import { profileManager } from '~shell/services/ProfileManager';
 
 const modifierBitPositionMap: {
   [hidKeyCode: number]: number;
@@ -60,7 +61,7 @@ export class InputLogicSimulator {
 
     const report = [this.modifierBits, 0, outKeyCode, 0, 0, 0, 0, 0];
     console.log(JSON.stringify(report));
-    services.deviceService.writeSideBrainHidReport(report);
+    deviceService.writeSideBrainHidReport(report);
   };
 
   private onProfileManagerStatusChanged = (
@@ -104,8 +105,8 @@ export class InputLogicSimulator {
   };
 
   async initialize() {
-    services.profileManager.subscribeStatus(this.onProfileManagerStatusChanged);
-    services.deviceService.subscribe(this.onRealtimeKeyboardEvent);
+    profileManager.subscribeStatus(this.onProfileManagerStatusChanged);
+    deviceService.subscribe(this.onRealtimeKeyboardEvent);
 
     LogicalKeyActionDriver.setKeyDestinationProc((ev) => {
       this.outputKeyPrioritySorter.pushInputEvent({
@@ -116,7 +117,7 @@ export class InputLogicSimulator {
     });
     VirtualKeyStateManager2.start();
 
-    services.deviceService.setSideBrainMode(true);
+    deviceService.setSideBrainMode(true);
 
     this.outputKeyPrioritySorter.setDesinationProc(
       this.updateSideBrainHidReport
@@ -129,9 +130,9 @@ export class InputLogicSimulator {
   }
 
   async terminate() {
-    services.deviceService.unsubscribe(this.onRealtimeKeyboardEvent);
+    deviceService.unsubscribe(this.onRealtimeKeyboardEvent);
 
-    services.deviceService.setSideBrainMode(false);
+    deviceService.setSideBrainMode(false);
 
     this.sorterIntervalTimer.stop();
   }

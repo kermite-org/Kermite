@@ -2,15 +2,17 @@ import {
   IProfileManagerStatus,
   IRealtimeKeyboardEvent
 } from '~defs/IpcContract';
-import { services } from '..';
 import { IInputLogicSimulator } from '../InputLogicSimulator.interface';
-import { IntervalTimerWrapper } from '../InputLogicSimulator/IntervalTimerWrapper';
+import { IntervalTimerWrapper } from '../InputLogicSimulatorA/IntervalTimerWrapper';
 
 // import * as CL from './DeviceCoreLogicSimulator0_Single';
 import * as CL from './DeviceCoreLogicSimulator2_Dual';
 import { converProfileDataToBlobBytes } from './ProfileDataBinaryPacker';
 import { generateNumberSequence } from '~funcs/Utils';
 import { IKeyboardConfig } from '~defs/ConfigTypes';
+import { profileManager } from '~shell/services/ProfileManager';
+import { keyboardConfigProvider } from '~shell/services/KeyboardConfigProvider';
+import { deviceService } from '~shell/services/KeyboardDevice';
 
 function compareArray(ar0: any[], ar1: any[]): boolean {
   return (
@@ -27,9 +29,8 @@ export namespace InputLogicSimulatorD {
   })();
 
   function updateProfileDataBlob() {
-    const prof = services.profileManager.getCurrentProfile();
-    const layoutStandard =
-      services.keyboardConfigProvider.keyboardConfig.layoutStandard;
+    const prof = profileManager.getCurrentProfile();
+    const layoutStandard = keyboardConfigProvider.keyboardConfig.layoutStandard;
     if (prof && layoutStandard) {
       const bytes = converProfileDataToBlobBytes(prof, layoutStandard);
       CL.coreLogic_writeProfileDataBlob(bytes);
@@ -50,7 +51,7 @@ export namespace InputLogicSimulatorD {
       const isSideBrainMode = changedConfig.behaviorMode === 'SideBrain';
       if (local.isSideBranMode !== isSideBrainMode) {
         console.log({ isSideBrainMode });
-        services.deviceService.setSideBrainMode(isSideBrainMode);
+        deviceService.setSideBrainMode(isSideBrainMode);
         local.isSideBranMode = isSideBrainMode;
       }
     }
@@ -72,22 +73,22 @@ export namespace InputLogicSimulatorD {
     CL.coreLogic_processTicker();
     const report = CL.coreLogic_getOutputHidReport();
     if (!compareArray(prevHidReport, report)) {
-      services.deviceService.writeSideBrainHidReport(report);
+      deviceService.writeSideBrainHidReport(report);
       prevHidReport = report.slice(0);
     }
   }
 
   async function initialize() {
-    services.profileManager.subscribeStatus(onProfileStatusChanged);
-    services.keyboardConfigProvider.subscribeStatus(onKeyboardConfigChanged);
-    services.deviceService.subscribe(onRealtimeKeyboardEvent);
+    profileManager.subscribeStatus(onProfileStatusChanged);
+    keyboardConfigProvider.subscribeStatus(onKeyboardConfigChanged);
+    deviceService.subscribe(onRealtimeKeyboardEvent);
     tickerTimer.start(processTicker, 5);
   }
 
   async function terminate() {
-    services.deviceService.unsubscribe(onRealtimeKeyboardEvent);
+    deviceService.unsubscribe(onRealtimeKeyboardEvent);
     if (local.isSideBranMode) {
-      services.deviceService.setSideBrainMode(false);
+      deviceService.setSideBrainMode(false);
       local.isSideBranMode = false;
     }
     tickerTimer.stop();

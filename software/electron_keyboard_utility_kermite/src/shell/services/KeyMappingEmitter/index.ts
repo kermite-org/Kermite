@@ -7,7 +7,7 @@ import {
 import { calcChecksum, writeUint16LE, writeUint8 } from './Helpers';
 import { IProfileData } from '~defs/ProfileData';
 import { services } from '..';
-import { converProfileDataToBlobBytes } from '../InputLogicSimulatorD/ProfileDataBinaryPacker';
+import { converProfileDataToBlobBytes } from '../KeyboardLogic/InputLogicSimulatorD/ProfileDataBinaryPacker';
 import { delayMs } from '~funcs/Utils';
 import { IKeyboardLayoutStandard } from '~defs/ConfigTypes';
 
