@@ -1,15 +1,15 @@
 import { models } from './models';
-import { initialzeView, finalizeView } from './pages';
+import { initialzeRenderer, finalizeRenderer } from './rendererSetup';
 import { dumpXpcSubscriptionsRemained } from './models/dataSource/ipc';
 
 async function start() {
   console.log('start');
 
   models.initialize();
-  initialzeView();
+  initialzeRenderer();
 
   window.addEventListener('beforeunload', async () => {
-    finalizeView();
+    finalizeRenderer();
     models.finalize();
     dumpXpcSubscriptionsRemained();
   });
