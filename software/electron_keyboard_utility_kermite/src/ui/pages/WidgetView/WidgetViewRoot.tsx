@@ -120,7 +120,7 @@ const WindowActiveChrome = () => {
   );
 };
 
-export const WidgetSiteRoot = () => {
+export const WidgetViewRoot = () => {
   const cssRoot = css`
     height: 100%;
     overflow: hidden;

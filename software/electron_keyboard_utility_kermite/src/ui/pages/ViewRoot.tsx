@@ -1,11 +1,11 @@
 import { h } from '~lib/qx';
-import { ConfiguratorSiteRoot } from './ConfiguratorView/ConfiguratorViewRoot';
+import { ConfiguratorViewRoot } from './ConfiguratorView/ConfiguratorViewRoot';
 import { glob, setup, css } from 'goober';
 import { appUi } from '~ui/models/appUi';
 import { DebugOverlay } from '../basis/DebugOverlay';
 import { ForegroundModalLayerRoot } from '../basis/ForegroundModalLayer';
 import { siteModel } from '~ui/models';
-import { WidgetSiteRoot } from './WidgetView/WidgetViewRoot';
+import { WidgetViewRoot } from './WidgetView/WidgetViewRoot';
 
 setup(h);
 
@@ -31,18 +31,18 @@ glob`
   }
 `;
 
-export const SiteRoot = () => {
-  const cssSiteRoot = css`
+export const ViewRoot = () => {
+  const cssRoot = css`
     height: 100%;
   `;
 
   const { isWidgetMode } = siteModel;
 
   return (
-    <div css={cssSiteRoot}>
+    <div css={cssRoot}>
       {/* {!isWidgetMode && <ConfiguratorSiteRoot />}
       {isWidgetMode && <WidgetSiteRoot />} */}
-      {!isWidgetMode ? <ConfiguratorSiteRoot /> : <WidgetSiteRoot />}
+      {!isWidgetMode ? <ConfiguratorViewRoot /> : <WidgetViewRoot />}
       <ForegroundModalLayerRoot />
       <DebugOverlay debugObj={appUi.debugObject} />
     </div>

@@ -21,7 +21,7 @@ function getPageComponent(pageSig: PageSignature): () => JSX.Element {
   return pageComponentMap[pageSig];
 }
 
-export const ConfiguratorSiteRoot = () => {
+export const ConfiguratorViewRoot = () => {
   const PageComponent = getPageComponent(uiStatusModel.settings.page);
 
   const cssContentRow = css`
