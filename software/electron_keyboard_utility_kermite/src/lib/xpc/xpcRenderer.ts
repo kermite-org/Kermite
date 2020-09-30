@@ -1,4 +1,4 @@
-import { generateRandomUid } from '~funcs/Utils';
+import { generateRandomUid, removeArrayItemOne } from '~funcs/Utils';
 
 interface IRpcInvokerObject {
   (...params: any[]): Promise<any>;
@@ -15,17 +15,24 @@ interface ISubscriptionHandlerInfo {
   ipcEventHandler: IpcRendererEventHandler;
 }
 
+// IPCのラッパ, レンダラプロセス側
+// メインプロセスで用意した関数を、レンダラプロセスから同一のシグニチャで呼べるようにする
 export function createXpcRenderer(ipcRenderer: Electron.IpcRenderer) {
+  const allSubscriptionCodes: string[] = [];
+
   function createBackendAgent<T>(realm: string) {
     function createInvokerObject(name: string) {
       const sig = name.toString();
       //invoker object can be treated as well as both a promise function and an eventSource
       const invoker: IRpcInvokerObject = (...params: any[]) => {
         return new Promise((resolve) => {
-          ipcRenderer.once(`XPC__${realm}__${sig}__reply`, (event, response) =>
-            resolve(response)
-          );
-          ipcRenderer.send(`XPC__${realm}__${sig}__call`, ...params);
+          const xpcCode = `XPC__${realm}__${sig}`;
+          ipcRenderer.once(`${xpcCode}__reply`, (event, response) => {
+            resolve(response);
+            removeArrayItemOne(allSubscriptionCodes, xpcCode);
+          });
+          ipcRenderer.send(`${xpcCode}__call`, ...params);
+          allSubscriptionCodes.push(xpcCode);
         });
       };
       const ipcEventHandlerMap = new Map<Function, ISubscriptionHandlerInfo>();
@@ -33,23 +40,24 @@ export function createXpcRenderer(ipcRenderer: Electron.IpcRenderer) {
         const subscriptionUuid = generateRandomUid();
         const ipcEventHandler: IpcRendererEventHandler = (event, args) =>
           listener(args);
-        ipcRenderer.on(`XPC__${realm}__${sig}__event`, ipcEventHandler);
-        ipcRenderer.send(`XPC__${realm}__${sig}__subscribe`, subscriptionUuid);
+        const xpcCode = `XPC__${realm}__${sig}`;
+        ipcRenderer.on(`${xpcCode}__event`, ipcEventHandler);
+        ipcRenderer.send(`${xpcCode}__subscribe`, subscriptionUuid);
         ipcEventHandlerMap.set(listener, {
           ipcEventHandler,
           subscriptionUuid
         });
+        allSubscriptionCodes.push(xpcCode);
       };
       invoker.unsubscribe = (listener: Function) => {
         const entry = ipcEventHandlerMap.get(listener);
         if (entry) {
           const { ipcEventHandler, subscriptionUuid } = entry;
-          ipcRenderer.off(`XPC__${realm}__${sig}__event`, ipcEventHandler);
-          ipcRenderer.send(
-            `XPC__${realm}__${sig}__unsubscribe`,
-            subscriptionUuid
-          );
+          const xpcCode = `XPC__${realm}__${sig}`;
+          ipcRenderer.off(`${xpcCode}__event`, ipcEventHandler);
+          ipcRenderer.send(`${xpcCode}__unsubscribe`, subscriptionUuid);
           ipcEventHandlerMap.delete(listener);
+          removeArrayItemOne(allSubscriptionCodes, xpcCode);
         }
       };
       return invoker;
@@ -89,7 +97,12 @@ export function createXpcRenderer(ipcRenderer: Electron.IpcRenderer) {
     }
   }
 
+  function debugGetAllSubscriptionCodes() {
+    return allSubscriptionCodes;
+  }
+
   return {
-    getBackendAgent
+    getBackendAgent,
+    debugGetAllSubscriptionCodes
   };
 }
