@@ -5,12 +5,12 @@ import { dumpXpcSubscriptionsRemained } from './models/dataSource/ipc';
 async function start() {
   console.log('start');
 
-  await models.initialize();
+  models.initialize();
   initialzeView();
 
   window.addEventListener('beforeunload', async () => {
     finalizeView();
-    await models.terminate();
+    models.finalize();
     dumpXpcSubscriptionsRemained();
   });
 }
