@@ -1,11 +1,11 @@
 import { h } from '~lib/qx';
-import { ConfiguratorSiteRoot } from './ConfiguratorSite/ConfiguratorSiteRoot';
+import { ConfiguratorSiteRoot } from './ConfiguratorView/ConfiguratorViewRoot';
 import { glob, setup, css } from 'goober';
 import { appUi } from '~ui/models/appUi';
 import { DebugOverlay } from '../basis/DebugOverlay';
 import { ForegroundModalLayerRoot } from '../basis/ForegroundModalLayer';
 import { siteModel } from '~ui/models';
-import { WidgetSiteRoot } from './WidgetSite/WidgetSiteRoot';
+import { WidgetSiteRoot } from './WidgetView/WidgetViewRoot';
 
 setup(h);
 

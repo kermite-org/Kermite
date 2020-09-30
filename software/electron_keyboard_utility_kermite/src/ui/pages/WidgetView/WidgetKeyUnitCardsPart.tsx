@@ -3,7 +3,7 @@ import { h } from '~lib/qx';
 import {
   IKeyUnitCardViewModel,
   makeKeyUnitCardsPartViewModel
-} from '../ConfiguratorSite/KeyAssignEditPage/KeyboardSection/KeyUnitCardsPart.model';
+} from '../ConfiguratorView/KeyAssignEditPage/KeyboardSection/KeyUnitCardsPart.model';
 
 function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
   const { keyUnitId, pos, primaryText, secondaryText, isHold } = keyUnit;
