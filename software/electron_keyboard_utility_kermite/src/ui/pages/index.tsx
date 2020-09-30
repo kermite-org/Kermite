@@ -1,6 +1,6 @@
 import { appUi } from '~ui/models/appUi';
 import { h, render, rerender as qxRerender } from '~lib/qx';
-import { SiteRoot } from './root/SiteRoot';
+import { SiteRoot } from './SiteRoot';
 import { thinningListenerCall } from '~funcs/Utils';
 
 export function initialzeView() {

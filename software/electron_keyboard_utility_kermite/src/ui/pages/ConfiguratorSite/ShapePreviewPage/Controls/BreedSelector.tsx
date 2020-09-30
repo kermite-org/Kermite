@@ -1,5 +1,5 @@
 import { h } from '~lib/qx';
-import { reflectValue } from '~ui/views/common/FormHelpers';
+import { reflectValue } from '~ui/common/FormHelpers';
 
 export function BreedSelector(props: {
   allBreedNames: string[];

@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { models } from '~ui/models';
-import { createModal } from '~ui/views/basis/ForegroundModalLayer';
+import { createModal } from '~ui/basis/ForegroundModalLayer';
 import { h } from '~lib/qx';
 import {
   ClosableOverlay,
@@ -8,8 +8,8 @@ import {
   DialogButton,
   DialogButtonsRow,
   DialogContentRow
-} from '~ui/views/common/CommonDialogParts';
-import { reflectValue } from '~ui/views/common/FormHelpers';
+} from '~ui/common/CommonDialogParts';
+import { reflectValue } from '~ui/common/FormHelpers';
 
 export const callErrorLogModal = createModal((logText: string) => {
   const cssContentBody = css`

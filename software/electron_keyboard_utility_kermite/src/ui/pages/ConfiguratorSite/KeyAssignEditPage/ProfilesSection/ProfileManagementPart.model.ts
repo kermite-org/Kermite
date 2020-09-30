@@ -4,7 +4,7 @@ import {
   modalTextEdit,
   modalConfirm,
   modalAlert
-} from '~ui/views/common/basicModals';
+} from '~ui/common/basicModals';
 
 export interface IProfileManagerViewModel {
   currentProfileName: string;

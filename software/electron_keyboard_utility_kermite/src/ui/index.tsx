@@ -1,5 +1,5 @@
 import { models } from './models';
-import { initialzeView, finalizeView } from './views';
+import { initialzeView, finalizeView } from './pages';
 import { dumpXpcSubscriptionsRemained } from './models/dataSource/ipc';
 
 async function start() {

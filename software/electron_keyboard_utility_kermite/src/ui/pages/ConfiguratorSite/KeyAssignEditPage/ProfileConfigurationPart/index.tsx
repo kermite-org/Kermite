@@ -6,7 +6,7 @@ import { editorModel, uiStatusModel } from '~ui/models';
 import {
   ClosableOverlay,
   CommonDialogFrame
-} from '~ui/views/common/CommonDialogParts';
+} from '~ui/common/CommonDialogParts';
 
 export const ProfileConfigurationPart = () => {
   const cssBase = css`
