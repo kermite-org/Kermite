@@ -10,5 +10,5 @@ export function initialzeView() {
 }
 
 export function finalizeView() {
-  render(() => <div></div>, document.getElementById('app'));
+  render(() => <div />, document.getElementById('app'));
 }
