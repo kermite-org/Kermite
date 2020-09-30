@@ -1,7 +1,7 @@
 import { VirtualKey } from '~defs/VirtualKeys';
 import { createDictionaryFromKeyValues } from '~funcs/Utils';
 import { IProfileData, keyboardShape_fallbackData } from '~defs/ProfileData';
-import { services } from '..';
+import { keyboardShapesProvider } from '~shell/services/KeyboardShapesProvider';
 
 const alphabetVirtualKeys: VirtualKey[] = [
   'K_A',
@@ -63,7 +63,7 @@ export function createKeyIndexToKeyUnitIdTable(
   editModel: IProfileData
 ): { [KeyIndex: number]: string } {
   const keyboardShape =
-    services.shapeProvider.getKeyboardShapeByBreedName(
+    keyboardShapesProvider.getKeyboardShapeByBreedName(
       editModel.keyboardShape.breedName
     ) || keyboardShape_fallbackData;
   return createDictionaryFromKeyValues(
