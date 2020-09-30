@@ -1,5 +1,5 @@
 import { models } from './models';
-import { initialzeRenderer, finalizeRenderer } from './rendererSetup';
+import { initialzeRenderer, finalizeRenderer } from './domSetup';
 import { dumpXpcSubscriptionsRemained } from './models/dataSource/ipc';
 
 async function start() {
