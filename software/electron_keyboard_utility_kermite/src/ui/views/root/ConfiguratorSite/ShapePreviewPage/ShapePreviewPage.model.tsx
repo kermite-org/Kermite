@@ -46,13 +46,9 @@ export class ShapePreviewPageModel {
   initialize() {
     this.loadShape(this.currentBreedName);
     backendAgent.layoutFileUpdationEvents.subscribe(this.onFileUpdated);
-    //debugTrace('listen layoutFileUpdationEvents');
   }
 
   finalize() {
     backendAgent.layoutFileUpdationEvents.unsubscribe(this.onFileUpdated);
-    //debugTrace('unlisten layoutFileUpdationEvents');
-    //開発時、devserverで自動リロードが発生した場合にcomponent.willUnmountが呼ばれないため、イベントリークする
-    //このページで実害はないが設計上の問題があり改善が必要
   }
 }
