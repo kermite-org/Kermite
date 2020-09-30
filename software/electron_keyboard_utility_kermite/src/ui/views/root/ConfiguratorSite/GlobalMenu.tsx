@@ -1,6 +1,7 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { models, siteModel } from '~ui/models';
+import { models } from '~ui/models';
+import { appEnv } from '~shell/base/AppEnvironment';
 
 export function makeGlobalMenuModel() {
   const self = {
@@ -117,7 +118,7 @@ function createMenuItems(): IMenuItem[] {
     }
   ];
 
-  if (siteModel.isDevelopment) {
+  if (appEnv.isDevelopment) {
     return menuItems;
   } else {
     return menuItems.filter((mi) => mi.key !== 'miShowShapePreview');
