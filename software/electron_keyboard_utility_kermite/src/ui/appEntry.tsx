@@ -1,5 +1,5 @@
 import { models } from './models';
-import { initialzeView } from './views';
+import { initialzeView, finalizeView } from './views';
 import { dumpXpcSubscriptionsRemained } from './models/dataSource/ipc';
 
 async function start() {
@@ -9,6 +9,7 @@ async function start() {
   initialzeView();
 
   window.addEventListener('beforeunload', async () => {
+    finalizeView();
     await models.terminate();
     dumpXpcSubscriptionsRemained();
   });
