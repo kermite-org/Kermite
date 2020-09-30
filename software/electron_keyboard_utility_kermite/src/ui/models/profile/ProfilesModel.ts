@@ -4,8 +4,8 @@ import {
   IProfileManagerCommand
 } from '~defs/IpcContract';
 import { EditorModel } from '../editor/EditorModel';
-import { backendAgent } from '~ui/models/dataSource/ipc';
-import { appUi } from '../appUi';
+import { backendAgent } from '~ui/core/ipc';
+import { appUi } from '../../core/appUi';
 
 export class ProfilesModel {
   private profileProvider = new ProfileProvider();

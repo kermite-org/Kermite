@@ -1,8 +1,8 @@
 import { IKeyboardShape } from '~defs/ProfileData';
 import { models } from '~ui/models';
 import { IUiSettings } from '~ui/models/UiStatusModel';
-import { appUi } from '~ui/models/appUi';
-import { backendAgent } from '~ui/models/dataSource/ipc';
+import { appUi } from '~ui/core/appUi';
+import { backendAgent } from '~ui/core/ipc';
 
 export class ShapePreviewPageModel {
   loadedBreedName: string = '';

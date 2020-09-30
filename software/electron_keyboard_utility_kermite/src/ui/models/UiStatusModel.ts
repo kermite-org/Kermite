@@ -1,5 +1,5 @@
 import { overwriteObjectProps } from '~funcs/Utils';
-import { appUi } from './appUi';
+import { appUi } from '../core/appUi';
 
 export type PageSignature = 'editor' | 'shapePreview' | 'firmwareUpdation';
 

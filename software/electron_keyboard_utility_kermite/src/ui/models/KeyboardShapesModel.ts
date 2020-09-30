@@ -1,6 +1,6 @@
 import { IKeyboardShape } from '~defs/ProfileData';
-import { backendAgent } from './dataSource/ipc';
-import { appUi } from './appUi';
+import { backendAgent } from '../core/ipc';
+import { appUi } from '../core/appUi';
 
 export class KeyboardShapesModel {
   allBreedNames: string[] = [];

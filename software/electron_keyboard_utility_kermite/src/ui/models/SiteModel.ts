@@ -1,6 +1,6 @@
-import { backendAgent } from './dataSource/ipc';
+import { backendAgent } from '../core/ipc';
 import { IAppWindowEvent } from '~defs/IpcContract';
-import { appUi } from './appUi';
+import { appUi } from '../core/appUi';
 
 export class SiteModel {
   private _isWidgetMode: boolean = false;

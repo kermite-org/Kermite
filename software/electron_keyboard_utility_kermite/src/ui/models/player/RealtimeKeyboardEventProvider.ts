@@ -1,4 +1,4 @@
-import { backendAgent } from '~ui/models/dataSource/ipc';
+import { backendAgent } from '~ui/core/ipc';
 import { IRealtimeKeyboardEvent } from '~defs/IpcContract';
 
 type IUiRealtimetimeKeyboardEventListener = (

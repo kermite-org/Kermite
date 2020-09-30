@@ -1,5 +1,5 @@
 import { css } from 'goober';
-import { backendAgent } from '~ui/models/dataSource/ipc';
+import { backendAgent } from '~ui/core/ipc';
 import { siteModel } from '~ui/models';
 import { h } from '~lib/qx';
 import { uiTheme } from '~ui/models/UiTheme';

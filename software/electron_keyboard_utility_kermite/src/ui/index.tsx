@@ -1,6 +1,6 @@
 import { models } from './models';
 import { initialzeRenderer, finalizeRenderer } from './domSetup';
-import { dumpXpcSubscriptionsRemained } from './models/dataSource/ipc';
+import { dumpXpcSubscriptionsRemained } from './core/ipc';
 
 async function start() {
   console.log('start');
