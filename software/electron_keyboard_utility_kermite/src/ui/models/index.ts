@@ -1,6 +1,6 @@
-import { EditorModel } from './EditorModel';
-import { PlayerModel } from './PlayerModel';
-import { ProfilesModel } from './ProfilesModel';
+import { EditorModel } from './editor/EditorModel';
+import { PlayerModel } from './player/PlayerModel';
+import { ProfilesModel } from './profile/ProfilesModel';
 import { SiteModel } from './SiteModel';
 import { KeyboardConfigModel } from './KeyboardConfigModel';
 import { DeviceStatusModel } from './DeviceStatusModel';

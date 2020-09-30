@@ -1,4 +1,3 @@
-import { IUiRealtimeKeyboardEventProvider } from './interfaces/IRealtimeKeyboardEventProvider';
 import { backendAgent } from '~ui/models/dataSource/ipc';
 import { IRealtimeKeyboardEvent } from '~defs/IpcContract';
 
@@ -6,8 +5,7 @@ type IUiRealtimetimeKeyboardEventListener = (
   event: IRealtimeKeyboardEvent
 ) => void;
 
-export class RealtimeKeyboardEventProvider_RealDevice
-  implements IUiRealtimeKeyboardEventProvider {
+export class RealtimeKeyboardEventProvider {
   private listener!: IUiRealtimetimeKeyboardEventListener;
 
   setListener(listener: IUiRealtimetimeKeyboardEventListener) {

@@ -1,14 +1,14 @@
-import { ProfileProvider2 } from './dataSource/ProfileProvider2';
+import { ProfileProvider } from './ProfileProvider';
 import {
   IProfileManagerStatus,
   IProfileManagerCommand
 } from '~defs/IpcContract';
-import { EditorModel } from './EditorModel';
+import { EditorModel } from '../editor/EditorModel';
 import { backendAgent } from '~ui/models/dataSource/ipc';
-import { appUi } from './appUi';
+import { appUi } from '../appUi';
 
 export class ProfilesModel {
-  private profileProvider = new ProfileProvider2();
+  private profileProvider = new ProfileProvider();
 
   constructor(private editorModel: EditorModel) {}
 

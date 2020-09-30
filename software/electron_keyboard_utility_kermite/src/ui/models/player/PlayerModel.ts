@@ -1,11 +1,11 @@
-import { appUi } from './appUi';
-import { RealtimeKeyboardEventProvider_RealDevice } from './dataSource/RealtimeKeyboardEventProvider_RealDevice';
-import { EditorModel } from './EditorModel';
+import { appUi } from '../appUi';
+import { RealtimeKeyboardEventProvider } from './RealtimeKeyboardEventProvider';
+import { EditorModel } from '../editor/EditorModel';
 import { IRealtimeKeyboardEvent } from '~defs/IpcContract';
 
 export class PlayerModel {
   constructor(private editorModel: EditorModel) {}
-  private keyEventProvider = new RealtimeKeyboardEventProvider_RealDevice();
+  private keyEventProvider = new RealtimeKeyboardEventProvider();
   private _keyStates: { [keyId: string]: boolean } = {};
   private _currentLayerIndex: number = 0;
 

@@ -4,7 +4,7 @@ import { IProfileData } from '~defs/ProfileData';
 
 type IListener = (profile: Partial<IProfileManagerStatus>) => void;
 
-export const ProfileProvider2 = class {
+export class ProfileProvider {
   private listener?: IListener;
 
   setListener(listener: IListener) {
@@ -26,4 +26,4 @@ export const ProfileProvider2 = class {
   finalize() {
     backendAgent.profileStatusEvents.unsubscribe(this.onProfileChanged);
   }
-};
+}
