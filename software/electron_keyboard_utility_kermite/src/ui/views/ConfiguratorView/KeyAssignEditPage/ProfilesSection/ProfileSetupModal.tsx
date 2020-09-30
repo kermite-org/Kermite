@@ -1,17 +1,17 @@
 import { h } from '~lib/qx';
-import { createModal } from '~ui/base/ForegroundModalLayer';
-import { reflectFieldValue } from '~ui/base/FormHelpers';
+import { createModal } from '~ui/views/base/ForegroundModalLayer';
+import { reflectFieldValue } from '~ui/views/base/FormHelpers';
 import {
   CommonDialogFrame,
   DialogContentRow,
   DialogButton,
   DialogButtonsRow,
   ClosableOverlay
-} from '~ui/base/CommonDialogParts';
+} from '~ui/views/base/CommonDialogParts';
 import {
   cssCommonPropertiesTable,
   cssCommonTextInput
-} from '~ui/base/commonStyles';
+} from '~ui/views/base/commonStyles';
 import { models } from '~ui/models';
 
 interface ICreateProfileDialogEditValues {

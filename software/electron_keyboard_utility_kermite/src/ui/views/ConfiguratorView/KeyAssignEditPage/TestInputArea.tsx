@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { reflectValue } from '~ui/base/FormHelpers';
+import { reflectValue } from '~ui/views/base/FormHelpers';
 
 export const TestInputArea = () => {
   let text = '';

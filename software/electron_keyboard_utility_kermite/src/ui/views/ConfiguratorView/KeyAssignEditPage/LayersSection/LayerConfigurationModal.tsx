@@ -1,19 +1,22 @@
-import { createModal } from '~ui/base/ForegroundModalLayer';
+import { createModal } from '~ui/views/base/ForegroundModalLayer';
 import { ILayerDefaultScheme } from '~defs/ProfileData';
 import { h } from '~lib/qx';
 import { css } from 'goober';
-import { reflectFieldValue, reflectFieldChecked } from '~ui/base/FormHelpers';
+import {
+  reflectFieldValue,
+  reflectFieldChecked
+} from '~ui/views/base/FormHelpers';
 import {
   CommonDialogFrame,
   DialogContentRow,
   DialogButton,
   DialogButtonsRow,
   ClosableOverlay
-} from '~ui/base/CommonDialogParts';
+} from '~ui/views/base/CommonDialogParts';
 import {
   cssCommonPropertiesTable,
   cssCommonTextInput
-} from '~ui/base/commonStyles';
+} from '~ui/views/base/commonStyles';
 
 interface ILayerConfigurationModelEditValues {
   layerName: string;

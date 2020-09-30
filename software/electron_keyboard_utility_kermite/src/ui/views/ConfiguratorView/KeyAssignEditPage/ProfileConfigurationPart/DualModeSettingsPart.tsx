@@ -4,7 +4,7 @@ import {
   reflectFieldChecked,
   reflectFieldValue,
   reflectValue
-} from '~ui/base/FormHelpers';
+} from '~ui/views/base/FormHelpers';
 import { css } from 'goober';
 
 export const DualModeSettingsPart = () => {

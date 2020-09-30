@@ -1,6 +1,10 @@
 import { profilesModel } from '~ui/models';
 import { callProfileSetupModal } from './ProfileSetupModal';
-import { modalTextEdit, modalConfirm, modalAlert } from '~ui/base/BasicModals';
+import {
+  modalTextEdit,
+  modalConfirm,
+  modalAlert
+} from '~ui/views/base/BasicModals';
 
 export interface IProfileManagerViewModel {
   currentProfileName: string;
