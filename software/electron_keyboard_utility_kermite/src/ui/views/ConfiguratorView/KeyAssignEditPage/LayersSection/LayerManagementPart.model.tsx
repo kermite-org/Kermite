@@ -1,7 +1,7 @@
 import { ILayer } from '~defs/ProfileData';
 import { editorModel } from '~ui/models';
 import { callLayerConfigurationModal } from './LayerConfigurationModal';
-import { modalConfirm } from '~ui/common/basicModals';
+import { modalConfirm } from '~ui/base/BasicModals';
 import { removeArrayItems } from '~funcs/Utils';
 
 export class LayerManagementPartViewModel {

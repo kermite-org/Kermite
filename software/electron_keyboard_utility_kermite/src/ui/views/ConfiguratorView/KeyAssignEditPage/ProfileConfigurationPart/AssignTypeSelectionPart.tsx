@@ -2,7 +2,7 @@ import { css } from 'goober';
 import { IProfileAssignType } from '~defs/ProfileData';
 import { editorModel } from '~ui/models';
 import { h } from '~lib/qx';
-import { reflectValue } from '~ui/common/FormHelpers';
+import { reflectValue } from '~ui/base/FormHelpers';
 
 const AssignTypeSelectionPartViewModel = () => {
   const assignTypeOptions: IProfileAssignType[] = ['single', 'dual'];

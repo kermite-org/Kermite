@@ -3,10 +3,7 @@ import { h } from '~lib/qx';
 import { AssignTypeSelectionPart } from './AssignTypeSelectionPart';
 import { DualModeSettingsPart } from './DualModeSettingsPart';
 import { editorModel, uiStatusModel } from '~ui/models';
-import {
-  ClosableOverlay,
-  CommonDialogFrame
-} from '~ui/common/CommonDialogParts';
+import { ClosableOverlay, CommonDialogFrame } from '~ui/base/CommonDialogParts';
 
 export const ProfileConfigurationPart = () => {
   const cssBase = css`

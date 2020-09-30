@@ -4,7 +4,7 @@ import {
   makeProfileManagementViewModel,
   IProfileManagerViewModel
 } from './ProfileManagementPart.model';
-import { reflectValue } from '~ui/common/FormHelpers';
+import { reflectValue } from '~ui/base/FormHelpers';
 import { ProfileSelectionMenuPart } from './ProfileSelectionMenu';
 import {
   BehaviorSelector,

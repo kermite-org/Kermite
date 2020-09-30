@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { createModal } from '~ui/basis/ForegroundModalLayer';
+import { createModal } from './ForegroundModalLayer';
 import {
   CommonDialogFrame,
   ClosableOverlay,

@@ -1,5 +1,5 @@
 import { css } from 'goober';
-import { reflectFieldChecked } from '~ui/common/FormHelpers';
+import { reflectFieldChecked } from '~ui/base/FormHelpers';
 import { IUiSettings } from '~ui/models/UiStatusModel';
 import { h } from '~lib/qx';
 
