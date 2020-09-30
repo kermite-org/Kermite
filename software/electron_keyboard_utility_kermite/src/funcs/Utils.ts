@@ -25,6 +25,17 @@ export function removeArrayItems<T>(ar: T[], a: T) {
   }
 }
 
+export function removeArrayItemOne<T>(ar: T[], a: T) {
+  let i = 0;
+  while (i < ar.length) {
+    if (ar[i] === a) {
+      ar.splice(i, 1);
+      break;
+    }
+    i++;
+  }
+}
+
 export function removeArrayItemsMatched<T>(
   ar: T[],
   cond: (a: T) => boolean
