@@ -1,6 +1,8 @@
 import { ipcMain } from 'electron';
 import { IEventSource } from './types';
 
+// IPCのラッパ, メインプロセス側
+// メインプロセスで用意した関数を、レンダラプロセスから同一のシグニチャで呼べるようにする
 export namespace xpcMain {
   type BackendAgentResourceEntry =
     | ((...args: any) => Promise<any | void>)
@@ -16,9 +18,7 @@ export namespace xpcMain {
         //create async call rpc entries
         ipcMain.on(`XPC__${realm}__${sig}__call`, (event, ...args) => {
           entry(...args).then((result: any) => {
-            if (result !== undefined) {
-              event.sender.send(`XPC__${realm}__${sig}__reply`, result);
-            }
+            event.sender.send(`XPC__${realm}__${sig}__reply`, result);
           });
         });
       } else if (entry.subscribe && entry.unsubscribe) {
