@@ -42,12 +42,12 @@ export class SiteModel {
   //   // this._isDevelopment = env.isDevelopment;
   // }
 
-  async initialize() {
+  initialize() {
     backendAgent.appWindowEvents.subscribe(this.onAppWindowEvents);
     //await this.loadEnvironmenConfig();
   }
 
-  async finalize() {
+  finalize() {
     backendAgent.appWindowEvents.unsubscribe(this.onAppWindowEvents);
   }
 }

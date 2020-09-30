@@ -34,7 +34,7 @@ export class UiStatusModel {
 
   readonly status: IUiStatus = defaultUiStatus;
 
-  async initialize() {
+  initialize() {
     const settingsText = localStorage.getItem('uiSettings');
     if (settingsText) {
       const settings = JSON.parse(settingsText);
@@ -50,7 +50,7 @@ export class UiStatusModel {
     localStorage.setItem('uiSettings', settingsText);
   }
 
-  async finalize() {
+  finalize() {
     this.save();
   }
 }

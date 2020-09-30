@@ -61,7 +61,8 @@ export class FirmwareUpdationModel {
 
   async initialize() {
     this.firmwareNames = await backendAgent.getFirmwareNamesAvailable();
+    appUi.rerender();
   }
 
-  async finalize() {}
+  finalize() {}
 }

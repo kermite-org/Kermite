@@ -36,11 +36,11 @@ export class ThemeSelectionModel {
     return 'light';
   }
 
-  async initialize() {
+  initialize() {
     this.applyTheme(this.loadThemeKey());
   }
 
-  async finalize() {
+  finalize() {
     localStorage.setItem('themeKey', this.currentThemeKey || 'light');
   }
 }
