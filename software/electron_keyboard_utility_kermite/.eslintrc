@@ -27,7 +27,7 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    //"standard-with-typescript",
+    "standard-with-typescript",
     "plugin:react/recommended",
     // "airbnb-typescript",
     // "plugin:import/errors",
@@ -37,13 +37,13 @@
     "plugin:prettier/recommended"
   ],
   "rules": {
+    //plugin:@typescript-eslint/recommended
     "@typescript-eslint/no-namespace": 0,
     "@typescript-eslint/camelcase": 0,
     "@typescript-eslint/class-name-casing": 0,
     "@typescript-eslint/interface-name-prefix": 0,
     "@typescript-eslint/no-empty-function": 0,
     "@typescript-eslint/no-empty-interface": 0,
-
     "@typescript-eslint/explicit-module-boundary-types": 0,
     "@typescript-eslint/explicit-function-return-type": 0,
     "@typescript-eslint/no-explicit-any": 0,
@@ -52,10 +52,10 @@
     "@typescript-eslint/ban-types": 0,
     "@typescript-eslint/ban-ts-ignore": 0,
     "@typescript-eslint/ban-ts-comment": 0,
-
     "@typescript-eslint/no-use-before-define": [1, "nofunc"],
     "@typescript-eslint/no-unused-vars": [1, { "argsIgnorePattern": "^_" }],
 
+    //@typescript-eslint/recommended-requiring-type-checking
     "@typescript-eslint/unbound-method": 0,
     "@typescript-eslint/no-unsafe-assignment": 0,
     "@typescript-eslint/no-unsafe-member-access": 0,
@@ -68,6 +68,34 @@
     "@typescript-eslint/await-thenable": 1,
     "@typescript-eslint/no-unnecessary-type-assertion": 1,
     "@typescript-eslint/no-unsafe-call": 1,
+
+    //standard-with-typescript
+    "@typescript-eslint/naming-convention": 0,
+    "@typescript-eslint/strict-boolean-expressions": 0,
+    "@typescript-eslint/prefer-nullish-coalescing": 0,
+    "@typescript-eslint/method-signature-style": 0,
+    "@typescript-eslint/prefer-readonly": 0,
+    "@typescript-eslint/prefer-optional-chain": 1,
+    "@typescript-eslint/prefer-function-type": 0,
+    "@typescript-eslint/lines-between-class-members": 1,
+    "@typescript-eslint/no-dynamic-delete": 0,
+    "@typescript-eslint/prefer-includes": 1,
+    "@typescript-eslint/no-useless-constructor": 1,
+    "@typescript-eslint/consistent-type-definitions": 1,
+    "no-undef-init": 0,
+    "spaced-comment": 1,
+    "@typescript-eslint/promise-function-async": 1,
+    "@typescript-eslint/array-type": [1, { "default": "array-simple" }],
+    "@typescript-eslint/default-param-last": 1,
+    "yoda": 0,
+    "@typescript-eslint/consistent-type-assertions": 0,
+    "@typescript-eslint/return-await": 1,
+    "import/first": 1,
+    "prefer-promise-reject-errors": 0,
+    "one-var": 1,
+    "@typescript-eslint/no-invalid-void-type": 1,
+    "@typescript-eslint/no-extraneous-class": 0,
+    //
 
     "react/jsx-key": 1,
     "react/display-name": 0,
