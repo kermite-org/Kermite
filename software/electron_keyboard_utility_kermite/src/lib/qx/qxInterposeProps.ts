@@ -29,6 +29,7 @@ export function qxInterposeProps(
 
         props[key1] = originalProc
           ? (...a: any) => {
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-call
               originalProc?.(...a);
               qxGlobal.rerender();
             }

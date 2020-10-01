@@ -57,6 +57,7 @@ export function createGroupedArrayByKey<
 >(arr: T[], keyPropName: K): T[][] {
   const bins: { [key: string]: T[] } = {} as any;
   for (const obj of arr) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     const key = obj[keyPropName].toString();
     if (!bins[key]) {
       bins[key] = [];

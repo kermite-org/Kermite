@@ -41,9 +41,7 @@ export class ProfileManagerCore {
   }
 
   loadCurrentProfileName(): string | undefined {
-    return applicationStorage.getItem('currentProfileName') as
-      | string
-      | undefined;
+    return applicationStorage.getItem('currentProfileName');
   }
 
   storeCurrentProfileName(profName: string) {

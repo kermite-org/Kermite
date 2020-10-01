@@ -106,13 +106,13 @@ export namespace KeyMappingEmitter {
     (async () => {
       try {
         console.log('writing...');
-        await ds.writeSingleFrame(memoryWriteTransactionStartFrame);
+        ds.writeSingleFrame(memoryWriteTransactionStartFrame);
         delayMs(50);
         await ds.writeFrames(keyAssingnDataFrames);
 
         ds.writeSingleFrame(checksumRequestFrame);
         delayMs(50);
-        await ds.writeSingleFrame(memoryWriteTransactionEndFrame);
+        ds.writeSingleFrame(memoryWriteTransactionEndFrame);
         console.log('write done');
       } catch (err) {
         console.log(err);
