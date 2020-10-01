@@ -3,7 +3,7 @@ import { backendAgent } from '~ui/core/ipc';
 import { siteModel } from '~ui/models';
 import { h } from '~lib/qx';
 import { uiTheme } from '~ui/models/UiTheme';
-import { appEnv } from '~shell/base/AppEnvironment';
+import { appUi } from '~ui/core/appUi';
 
 const ControlButton = (props: { icon: string; onClick: () => void }) => {
   const cssButton = css`
@@ -35,7 +35,7 @@ const ReloadButtonPart = () => {
   const onReloadButton = () => {
     backendAgent.reloadApplication();
   };
-  const { isDevelopment } = appEnv;
+  const { isDevelopment } = appUi;
   return (
     <div>
       {isDevelopment && (
