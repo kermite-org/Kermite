@@ -71,30 +71,30 @@
 
     //standard-with-typescript
     "@typescript-eslint/naming-convention": 0,
-    "@typescript-eslint/strict-boolean-expressions": 0,
-    "@typescript-eslint/prefer-nullish-coalescing": 0,
     "@typescript-eslint/method-signature-style": 0,
-    "@typescript-eslint/prefer-readonly": 0,
-    "@typescript-eslint/prefer-optional-chain": 1,
-    "@typescript-eslint/prefer-function-type": 0,
-    "@typescript-eslint/lines-between-class-members": 1,
+    "@typescript-eslint/strict-boolean-expressions": 0,
+    "@typescript-eslint/no-extraneous-class": 0,
     "@typescript-eslint/no-dynamic-delete": 0,
-    "@typescript-eslint/prefer-includes": 1,
-    "@typescript-eslint/no-useless-constructor": 1,
+    "@typescript-eslint/prefer-readonly": 0,
+    "@typescript-eslint/prefer-nullish-coalescing": 0,
+    "@typescript-eslint/prefer-function-type": 0,
     "@typescript-eslint/consistent-type-definitions": 0,
-    "no-undef-init": 0,
-    "spaced-comment": 1,
+    "@typescript-eslint/consistent-type-assertions": 0,
     "@typescript-eslint/promise-function-async": 0,
     "@typescript-eslint/array-type": [1, { "default": "array" }],
-    "@typescript-eslint/default-param-last": 1,
-    "yoda": 0,
-    "@typescript-eslint/consistent-type-assertions": 0,
-    "@typescript-eslint/return-await": 1,
-    "import/first": 1,
-    "prefer-promise-reject-errors": 0,
-    "one-var": 1,
+    "@typescript-eslint/no-useless-constructor": 1,
+    "@typescript-eslint/lines-between-class-members": 1,
     "@typescript-eslint/no-invalid-void-type": 1,
-    "@typescript-eslint/no-extraneous-class": 0,
+    "@typescript-eslint/prefer-includes": 1,
+    "@typescript-eslint/prefer-optional-chain": 1,
+    "@typescript-eslint/default-param-last": 1,
+    "@typescript-eslint/return-await": 1,
+    "yoda": 0,
+    "no-undef-init": 0,
+    "prefer-promise-reject-errors": 0,
+    "spaced-comment": 1,
+    "one-var": 1,
+    "import/first": 1,
 
     //
 
@@ -104,11 +104,15 @@
 
     "import/no-cycle": [1, { "maxDepth": 1 }],
 
-    "eqeqeq": [1, "always"],
+    //eslint:recommended
     "no-empty": 0,
     "no-inner-declarations": 0,
     "no-constant-condition": 0,
-    "no-prototype-builtins": 0,
-    "no-console": 0
+    "no-prototype-builtins": 0
+
+    //
+
+    // "eqeqeq": [1, "always"],
+    // "no-console": 0
   }
 }
