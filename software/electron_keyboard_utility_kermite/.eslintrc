@@ -81,11 +81,11 @@
     "@typescript-eslint/no-dynamic-delete": 0,
     "@typescript-eslint/prefer-includes": 1,
     "@typescript-eslint/no-useless-constructor": 1,
-    "@typescript-eslint/consistent-type-definitions": 1,
+    "@typescript-eslint/consistent-type-definitions": 0,
     "no-undef-init": 0,
     "spaced-comment": 1,
-    "@typescript-eslint/promise-function-async": 1,
-    "@typescript-eslint/array-type": [1, { "default": "array-simple" }],
+    "@typescript-eslint/promise-function-async": 0,
+    "@typescript-eslint/array-type": [1, { "default": "array" }],
     "@typescript-eslint/default-param-last": 1,
     "yoda": 0,
     "@typescript-eslint/consistent-type-assertions": 0,
@@ -95,6 +95,7 @@
     "one-var": 1,
     "@typescript-eslint/no-invalid-void-type": 1,
     "@typescript-eslint/no-extraneous-class": 0,
+
     //
 
     "react/jsx-key": 1,
