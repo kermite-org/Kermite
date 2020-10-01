@@ -93,7 +93,7 @@ export class LayerManagementPartViewModel {
       caption: 'Add Layer'
     });
     if (layerAttrs && layerAttrs.layerName) {
-      //todo: use sequential layer number
+      // todo: use sequential layer number
       const layerId = `la${(Math.random() * 1000) >> 0}`;
       const { layerName, defaultScheme, isShiftLayer } = layerAttrs;
       this.layers.push({

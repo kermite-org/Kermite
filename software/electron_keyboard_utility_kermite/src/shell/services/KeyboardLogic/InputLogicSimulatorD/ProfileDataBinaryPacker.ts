@@ -89,7 +89,7 @@ function encodeAssignOperation(
       const mods = makeAttachedModifiersBits(op.attachedModifiers);
       let hidKey = getHidKeyCodeEx(vk, layoutStandard);
       if (!layer.isShiftLayer) {
-        //shiftレイヤ上のアサインのみshift cancelが効くようにする
+        // shiftレイヤ上のアサインのみshift cancelが効くようにする
         hidKey = hidKey & 0x1ff;
       }
       return [(tt << 6) | (mods << 2) | ((hidKey >> 8) & 0x03), hidKey];
@@ -146,13 +146,13 @@ function encodeRawAssignEntry(ra: IRawAssignEntry): number[] {
 
   const layer = localContext.layersDict[ra.layerId];
   if (entry.type === 'single') {
-    //single
+    // single
     return [
       encodeRawAssignEntryHeaderByte('single', ra.layerIndex),
       ...encodeAssignOperation(entry.op, layer)
     ];
   } else {
-    //dual
+    // dual
     if (entry.tertiaryOp) {
       return [
         encodeRawAssignEntryHeaderByte('triple', ra.layerIndex),
@@ -242,7 +242,7 @@ function fixAssignOperation(
 
     const isMacOS = true;
     if (isMacOS) {
-      //MACでJIS配列の場合,バックスラッシュをAlt+¥に置き換える
+      // MACでJIS配列の場合,バックスラッシュをAlt+¥に置き換える
       if (layout === 'JIS' && vk === 'K_BackSlash') {
         if (!mods) {
           mods = ['K_Alt'];

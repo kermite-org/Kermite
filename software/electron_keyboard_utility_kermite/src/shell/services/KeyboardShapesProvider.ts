@@ -71,6 +71,7 @@ export class KeyboardShapesProvider {
   subscribeFileUpdation(listener: IFileUpdationListener) {
     this.listeners.push(listener);
   }
+
   unsubscribeFileUpdation(listener: IFileUpdationListener) {
     removeArrayItems(this.listeners, listener);
   }

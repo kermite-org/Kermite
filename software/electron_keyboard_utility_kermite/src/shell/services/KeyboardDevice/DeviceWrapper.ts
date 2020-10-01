@@ -26,11 +26,10 @@ export class DeviceWrapper {
         d.vendorId === venderId &&
         d.productId === productId &&
         (pathSearchWords
-          ? d.path && pathSearchWords.some((word) => d.path!.indexOf(word) >= 0)
+          ? d.path && pathSearchWords.some((word) => d.path!.includes(word))
           : true) &&
         (serialNumberSearchWord
-          ? d.serialNumber &&
-            d.serialNumber.indexOf(serialNumberSearchWord) >= 0
+          ? d.serialNumber && d.serialNumber.includes(serialNumberSearchWord)
           : true)
     );
     if (targetDeviceInfo && targetDeviceInfo.path) {
@@ -91,11 +90,11 @@ export class DeviceWrapper {
     const padding = zeros(64 - bytes.length);
     const buf = [...bytes, ...padding];
 
-    //console.log(`sending ${buf.length} bytes:`);
-    //console.log(buf.map(v => ('00' + v.toString(16)).slice(-2)).join(' '));
+    // console.log(`sending ${buf.length} bytes:`);
+    // console.log(buf.map(v => ('00' + v.toString(16)).slice(-2)).join(' '));
     // console.log(bytes.map((v) => ('00' + v.toString(16)).slice(-2)).join(' '));
 
-    buf.unshift(0); //先頭に0を付加して送信
+    buf.unshift(0); // 先頭に0を付加して送信
 
     this.device && this.device.write(buf);
   }
@@ -103,8 +102,8 @@ export class DeviceWrapper {
   async writeFrames(frames: number[][]) {
     for (let i = 0; i < frames.length; i++) {
       this.writeSingleFrame(frames[i]);
-      //await delayMs(10);
-      await delayMs(50); //debug
+      // await delayMs(10);
+      await delayMs(50); // debug
     }
   }
 }

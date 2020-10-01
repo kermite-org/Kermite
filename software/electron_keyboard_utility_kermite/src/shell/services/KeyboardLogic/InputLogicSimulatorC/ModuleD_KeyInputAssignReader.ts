@@ -59,7 +59,7 @@ export namespace KeyInputAssignReaderCore {
       const { primaryDefaultTrigger } = profileData.settings;
       const pri = assign?.primaryOp;
       const sec = assign?.secondaryOp;
-      //tap-primary-hold-secondary
+      // tap-primary-hold-secondary
       if (pri && sec) {
         if (trigger === 'tap') {
           return pri;

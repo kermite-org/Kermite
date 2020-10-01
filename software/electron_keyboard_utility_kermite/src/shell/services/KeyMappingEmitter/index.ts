@@ -49,7 +49,7 @@ export namespace KeyMappingEmitter {
     return buffer;
   }
 
-  //KeyAssignsDataSet --> data byte array
+  // KeyAssignsDataSet --> data byte array
   export function makeKeyAssignsTransmitData(
     data: ILowLevelKeyAssignsDataSet
   ): number[] {

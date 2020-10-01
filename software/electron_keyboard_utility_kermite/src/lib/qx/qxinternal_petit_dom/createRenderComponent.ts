@@ -27,7 +27,7 @@ interface IComponentStateRef {
 
 function createRenderComponent<P extends {}>({
   componentFn
-}: //shouldUpdate = shallowCompare
+}: // shouldUpdate = shallowCompare
 {
   componentFn: IComponentFunction<P>;
   // shouldUpdate?: (p1: P, p2: P) => boolean;
@@ -41,7 +41,7 @@ function createRenderComponent<P extends {}>({
         'render' in res &&
         typeof res.render === 'function'
       ) {
-        //full closure component
+        // full closure component
         // console.log(`initialize full closure component ${componentFn.name}`);
         const renderFn = res.render;
         const vnode = renderFn(props);
@@ -55,7 +55,7 @@ function createRenderComponent<P extends {}>({
         }
         return node;
       } else if (typeof res === 'function') {
-        //simple closure component
+        // simple closure component
         // console.log(`initialize simple closure component ${componentFn.name}`);
         const renderFn = res;
         // const durablePropObject = { ...props };
@@ -68,7 +68,7 @@ function createRenderComponent<P extends {}>({
         stateRef.node = node;
         return node;
       } else if ((res && 'vtype' in res) || !res) {
-        //function component
+        // function component
         // console.log(`initialize function component ${componentFn.name}`);
         const vnode = res;
         stateRef.vnode = vnode;

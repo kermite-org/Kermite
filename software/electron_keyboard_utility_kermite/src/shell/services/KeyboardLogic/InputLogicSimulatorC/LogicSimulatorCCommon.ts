@@ -15,8 +15,8 @@ export interface IKeyIdKeyEvent {
   isDown: boolean;
 }
 
-//down-tap-up
-//down-hold-up
+// down-tap-up
+// down-hold-up
 export type IKeyTrigger = 'down' | 'tap' | 'hold' | 'up';
 
 export interface IKeyTriggerEvent {

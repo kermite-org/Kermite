@@ -47,14 +47,14 @@ export class KeyboardDeviceService {
   async initialize(): Promise<void> {
     const dw = new DeviceWrapper();
     const isOpen = dw.open(
-      0xf055, //vid
-      0xa577, //pid
+      0xf055, // vid
+      0xa577, // pid
       [
-        //find interface 0 by searching words in device.path
-        'mi_00', //Windows
-        'IOUSBHostInterface@0' //Mac
+        // find interface 0 by searching words in device.path
+        'mi_00', // Windows
+        'IOUSBHostInterface@0' // Mac
       ],
-      '74F3AC2E' //serial number fixed part
+      '74F3AC2E' // serial number fixed part
     );
 
     // const isOpen = dw.open(0xf055, 0xa57a, 'mi_03');
@@ -106,7 +106,7 @@ export class KeyboardDeviceService {
   }
 
   writeSideBrainHidReport(report: number[]) {
-    //report must be 8bytes
+    // report must be 8bytes
     if (report.length !== 8) {
       return;
     }

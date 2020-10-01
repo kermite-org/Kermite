@@ -36,7 +36,7 @@ export async function fsxReadJsonFile(fpath: string): Promise<any> {
 
 export async function fsxWriteJsonFile(fpath: string, obj: any): Promise<void> {
   const text = JSON.stringify(obj, null, '  ');
-  return fs.promises.writeFile(fpath, text);
+  return await fs.promises.writeFile(fpath, text);
 }
 
 export function globAsync(pattern: string): Promise<string[]> {

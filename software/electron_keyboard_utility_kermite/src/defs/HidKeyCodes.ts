@@ -1,7 +1,7 @@
 import { VirtualKey } from './VirtualKeys';
 import { IKeyboardLayoutStandard } from './ConfigTypes';
 
-//HIDのキーコード定義, キーボードの言語やレイアウトによらない共通部分
+// HIDのキーコード定義, キーボードの言語やレイアウトによらない共通部分
 const enum HidKey {
   KU_RESERVED = 0,
   KU_A = 4,
@@ -155,7 +155,7 @@ const enum HidKeyUS {
   KU__US_Slash_Question = 56
 }
 
-//日本語キーボード向けの定義
+// 日本語キーボード向けの定義
 const enum HidKeyJP {
   KU__JP_Num1_Exclamation = 30,
   KU__JP_Num2_DoubleQuote,
@@ -211,7 +211,7 @@ export const HidKeyCodes = {
 const virutalKeyToHidKeyMapper_Core: {
   [vk in VirtualKey]?: number;
 } = {
-  //todo: define hid keycodes for all virtualkeys
+  // todo: define hid keycodes for all virtualkeys
   K_A: HidKey.KU_A,
   K_B: HidKey.KU_B,
   K_C: HidKey.KU_C,

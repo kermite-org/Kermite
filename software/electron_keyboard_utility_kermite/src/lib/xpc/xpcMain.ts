@@ -15,14 +15,14 @@ export namespace xpcMain {
       const sig = key;
       const entry = backendAgentSource[key] as BackendAgentResourceEntry;
       if (typeof entry === 'function') {
-        //create async call rpc entries
+        // create async call rpc entries
         ipcMain.on(`XPC__${realm}__${sig}__call`, (event, ...args) => {
           entry(...args).then((result: any) => {
             event.sender.send(`XPC__${realm}__${sig}__reply`, result);
           });
         });
       } else if (entry.subscribe && entry.unsubscribe) {
-        //create event subscriber rpc entries
+        // create event subscriber rpc entries
         const handlersMap = new Map<string, (payload: any) => void>();
         ipcMain.on(
           `XPC__${realm}__${sig}__subscribe`,

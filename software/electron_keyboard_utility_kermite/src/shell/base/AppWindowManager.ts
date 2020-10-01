@@ -50,7 +50,7 @@ export class AppWindowManager {
   maximizeMainWindow() {
     if (this.mainWindow) {
       // const isMaximized = this.mainWindow.isMaximized()
-      //...always returns false for transparent window
+      // ...always returns false for transparent window
 
       if (this._isMaximized) {
         this.mainWindow.unmaximize();
@@ -70,7 +70,7 @@ export class AppWindowManager {
 
       if (isWidgetMode) {
         this._winHeight = h;
-        //todo: 現在選択されているプロファイルのキーボード形状データから縦横比を計算
+        // todo: 現在選択されているプロファイルのキーボード形状データから縦横比を計算
         const asr = 0.4;
         const [w1, h1] = [w, (w * asr) >> 0];
         this.mainWindow.setSize(w1, h1);

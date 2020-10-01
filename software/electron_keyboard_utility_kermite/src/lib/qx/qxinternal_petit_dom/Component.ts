@@ -74,7 +74,7 @@ export class Component<P, S> {
     stateRef.node = patch(newVNode, oldVNode, stateRef.node, stateRef.env);
 
     if (instance.componentDidUpdate) {
-      doLater(() => instance.componentDidUpdate()); //oldProps, instance.state));
+      doLater(() => instance.componentDidUpdate()); // oldProps, instance.state));
     }
     return stateRef.node;
   }

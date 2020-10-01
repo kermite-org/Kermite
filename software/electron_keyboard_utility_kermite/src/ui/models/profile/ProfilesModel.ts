@@ -12,11 +12,11 @@ export class ProfilesModel {
 
   constructor(private editorModel: EditorModel) {}
 
-  //state
+  // state
   currentProfileName: string = '';
   allProfileNames: string[] = [];
 
-  //listeners
+  // listeners
 
   private handleProfileStatusChange = (
     payload: Partial<IProfileManagerStatus>
@@ -48,7 +48,7 @@ export class ProfilesModel {
     this.profileProvider.finalize();
   }
 
-  //actions
+  // actions
 
   private getSaveCommandIfDirty() {
     const isDirty = this.editorModel.checkDirty();

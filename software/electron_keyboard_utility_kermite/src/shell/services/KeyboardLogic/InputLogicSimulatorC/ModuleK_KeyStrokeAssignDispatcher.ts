@@ -23,6 +23,7 @@ export namespace ModuleK_KeyStrokeAssignDispatcher {
     operationBindMap: {
       [keyId: string]: IAssignOperation;
     } = {};
+
     nextDoubleReserved: boolean = false;
     lastInputVirtualKey: VirtualKey = 'K_NONE';
   })();
@@ -126,7 +127,7 @@ export namespace ModuleK_KeyStrokeAssignDispatcher {
 
   function handleLogicalStroke(ev: IKeyStrokeAssignEvent) {
     if (1) {
-      //dirty fix for layer + sorter combination problem
+      // dirty fix for layer + sorter combination problem
       if (ev.type === 'down') {
         const assignType = logicSimulatorStateC.profileData.assignType;
         const op = KeyInputAssignReaderCore.getAssignOperation(

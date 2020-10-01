@@ -72,7 +72,7 @@ export namespace ModuleT_OutputKeyStateCombiner {
 
   function updateSlots(holdKeyCodes: number[]) {
     const { slots } = local;
-    //remove released keys from slots
+    // remove released keys from slots
     for (let i = 0; i < slots.length; i++) {
       const kc = slots[i];
       if (!holdKeyCodes.includes(kc)) {
@@ -80,11 +80,11 @@ export namespace ModuleT_OutputKeyStateCombiner {
       }
     }
 
-    //add pressed keys to slots
+    // add pressed keys to slots
     for (const kc of holdKeyCodes) {
       if (!slots.includes(kc)) {
         // const pos = slots.indexOf(0);  //seek from head
-        const idx = findNextSlotIndex(); //round robin
+        const idx = findNextSlotIndex(); // round robin
         if (idx !== -1) {
           slots[idx] = kc;
         }

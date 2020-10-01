@@ -1,7 +1,7 @@
 import { bhi, blo } from './Helpers';
 import { generateNumberSequence } from '~funcs/Utils';
 
-//------------------------------------------------------------
+// ------------------------------------------------------------
 
 export const memoryWriteTransactionStartFrame = [0xb0, 0x01, 0x10];
 
@@ -47,4 +47,4 @@ export function makeMemoryChecksumRequestFrame(
   ];
 }
 
-//------------------------------------------------------------
+// ------------------------------------------------------------

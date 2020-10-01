@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 /* eslint-disable */
 
 export const PATCH = 2; // =;

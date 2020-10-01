@@ -27,11 +27,11 @@ export function render(
         `render c${d.nUpdated}/${d.nAll}, ` +
           `p${d.nPatchCall}, n${nel}, ${dur.toFixed(2)}ms`
       );
-      //render stats
-      //c: component patched count,
-      //p: component/z--zizia0zia0zia00aizzia0zia0zi00aizzia0zi0azia00aizzia0zia0zia0element patch count
-      //n: dom nodes count
-      //ms: time elapsed
+      // render stats
+      // c: component patched count,
+      // p: component/z--zizia0zia0zia00aizzia0zia0zi00aizzia0zi0azia00aizzia0zia0zia0element patch count
+      // n: dom nodes count
+      // ms: time elapsed
     }
   };
 

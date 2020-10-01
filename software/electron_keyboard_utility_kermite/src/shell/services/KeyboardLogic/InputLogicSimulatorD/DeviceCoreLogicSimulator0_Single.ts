@@ -153,7 +153,7 @@ function handleKeyInputDown(keyIndex: u8) {
           setModifiers(ModFlag_Shift);
         }
         if (shiftOff && isOtherModifiersClean) {
-          //shift cancel
+          // shift cancel
           clearModifiers(ModFlag_Shift);
         }
         if (keyCode) {

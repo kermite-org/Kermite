@@ -9,7 +9,7 @@ export class PlayerModel {
   private _keyStates: { [keyId: string]: boolean } = {};
   private _currentLayerIndex: number = 0;
 
-  //getters
+  // getters
   get keyStates() {
     return this._keyStates;
   }
@@ -33,7 +33,7 @@ export class PlayerModel {
     return undefined;
   };
 
-  //listeners
+  // listeners
   private handlekeyEvents = (ev: IRealtimeKeyboardEvent) => {
     if (ev.type === 'keyStateChanged') {
       const { keyIndex, isDown } = ev;

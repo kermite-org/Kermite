@@ -22,13 +22,16 @@ export namespace VirtualKeyStateManager2 {
       keyUnitIdTable: [],
       keyAssigns: {}
     };
+
     boundLogicalKeyActions: {
       [keyId: string]: LogicalKeyAction;
     } = {};
+
     recallTask?: {
       keyId: string;
       downTick: number;
     };
+
     gateEvents: IGateEvent[] = [];
   })();
 
@@ -144,12 +147,12 @@ export namespace VirtualKeyStateManager2 {
     const targetLayerId = getTargetLayerId(layerState);
 
     const primary = keyAssigns[`${targetLayerId}.${keyId}`]?.op;
-    const secondary = keyAssigns[`${targetLayerId}.${keyId}`]?.op && undefined; //glue
+    const secondary = keyAssigns[`${targetLayerId}.${keyId}`]?.op && undefined; // glue
 
     if (trigger === 'D') {
       if (secondary) {
-        //reserveRecall(keyIndex, 60);
-        reserveRecall(keyId, 200); //debug
+        // reserveRecall(keyIndex, 60);
+        reserveRecall(keyId, 200); // debug
       } else if (primary) {
         resolveAssign(keyId, primary, 'down');
       }

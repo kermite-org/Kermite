@@ -2,8 +2,8 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { deviceService } from '~shell/services/KeyboardDevice';
 
-//--------------------------------------------------------------------------------
-//types
+// --------------------------------------------------------------------------------
+// types
 
 type u8 = number;
 type s8 = number;
@@ -11,8 +11,8 @@ type u16 = number;
 type s16 = number;
 type size_t = number;
 
-//--------------------------------------------------------------------------------
-//helpers
+// --------------------------------------------------------------------------------
+// helpers
 
 function strU16Bin(val: u16) {
   return `0000000000000000${val.toString(2)}`.slice(-16);
@@ -47,8 +47,8 @@ function createTimeIntervalCounter() {
   };
 }
 
-//--------------------------------------------------------------------------------
-//assign memory storage
+// --------------------------------------------------------------------------------
+// assign memory storage
 
 const StorageBufCapacity = 1024;
 const storageBuf: u8[] = Array(StorageBufCapacity).fill(0);
@@ -62,8 +62,8 @@ export function coreLogic_writeProfileDataBlob(bytes: u8[]) {
   }
 }
 
-//--------------------------------------------------------------------------------
-//hid report
+// --------------------------------------------------------------------------------
+// hid report
 
 const ModFlag_Ctrl = 1;
 const ModFlag_Shift = 2;
@@ -88,8 +88,8 @@ function setOutputKeyCode(hidKeyCode: u8) {
   hidReportBuf[2] = hidKeyCode;
 }
 
-//--------------------------------------------------------------------------------
-//assign memory reader
+// --------------------------------------------------------------------------------
+// assign memory reader
 
 function getAssignsBlockAddressForKey(keyIndex: u8): s16 {
   let pos = 0;
@@ -183,8 +183,8 @@ function getAssignSetL(keyIndex: u8): IAssignSet | undefined {
   return undefined;
 }
 
-//--------------------------------------------------------------------------------
-//operation handlers
+// --------------------------------------------------------------------------------
+// operation handlers
 
 const state = new (class {
   layerIndex: u8 = 0;
@@ -213,7 +213,7 @@ function handleOperationOn(opWord: u16) {
         setModifiers(ModFlag_Shift);
       }
       if (shiftOff && isOtherModifiersClean) {
-        //shift cancel
+        // shift cancel
         clearModifiers(ModFlag_Shift);
       }
       if (keyCode) {
@@ -271,8 +271,8 @@ function handleOperationOff(opWord: u16) {
   }
 }
 
-//--------------------------------------------------------------------------------
-//assign binder
+// --------------------------------------------------------------------------------
+// assign binder
 
 interface RecallKeyEntry {
   keyIndex: s8;
@@ -324,14 +324,14 @@ function assignBinder_ticker(ms: u16) {
   }
 }
 
-//--------------------------------------------------------------------------------
-//resolver common
+// --------------------------------------------------------------------------------
+// resolver common
 
 const resolverConfig = {
   debugShowTrigger: false,
   emitOutputStroke: true
 };
-//resolverConfig.debugShowTrigger = true;
+// resolverConfig.debugShowTrigger = true;
 // resolverConfig.emitOutputStroke = false;
 
 interface KeySlot {
@@ -384,8 +384,8 @@ function keySlot_debugShowSlotTrigger(slot: KeySlot, triggerObj: any) {
   console.log(`[TRIGGER] ${slot.keyIndex} ${slot.steps} ${trigger}`);
 }
 
-//--------------------------------------------------------------------------------
-//resolver dummy
+// --------------------------------------------------------------------------------
+// resolver dummy
 
 function keySlot_dummyResolver(slot: KeySlot): boolean {
   if (slot.inputEdge === 'up') {
@@ -394,8 +394,8 @@ function keySlot_dummyResolver(slot: KeySlot): boolean {
   return false;
 }
 
-//--------------------------------------------------------------------------------
-//resolver single
+// --------------------------------------------------------------------------------
+// resolver single
 
 const TriggerA = {
   Down: 'D',
@@ -437,8 +437,8 @@ function keySlot_singleResolverA(slot: KeySlot): boolean {
   return false;
 }
 
-//--------------------------------------------------------------------------------
-//resolver dual
+// --------------------------------------------------------------------------------
+// resolver dual
 
 const TriggerB = {
   Down: 'D',
@@ -486,38 +486,38 @@ function keySlot_dualResolverB(slot: KeySlot): boolean {
 
   if (inputEdge === 'down') {
     if (steps === 'DU' && tick < TH) {
-      //tap-rehold
+      // tap-rehold
       keySlot_pushStepB(slot, 'D');
     } else {
-      //down
+      // down
       keySlot_clearSteps(slot);
       keySlot_pushStepB(slot, 'D');
     }
   }
 
   if (steps === 'D' && hold && tick >= TH) {
-    //hold
+    // hold
     keySlot_pushStepB(slot, '_');
   }
 
   if (steps === 'D' && hold && tick < TH && interrupted) {
-    //interrupt hold
+    // interrupt hold
     keySlot_pushStepB(slot, '_');
   }
 
   if (steps === 'DU' && !hold && tick >= TH) {
-    //slient after tap
+    // slient after tap
     keySlot_pushStepB(slot, '_');
     return true;
   }
 
   if (inputEdge === 'up') {
     if (steps === 'D' && tick < TH) {
-      //tap
+      // tap
       keySlot_pushStepB(slot, 'U');
     }
     if (steps === 'D_' || steps === 'DUD') {
-      //hold up, rehold up
+      // hold up, rehold up
       keySlot_clearSteps(slot);
       keySlot_pushStepB(slot, 'U');
       return true;
@@ -526,8 +526,8 @@ function keySlot_dualResolverB(slot: KeySlot): boolean {
   return false;
 }
 
-//--------------------------------------------------------------------------------
-//resolver triple
+// --------------------------------------------------------------------------------
+// resolver triple
 
 const TriggerC = {
   Down: 'D',
@@ -580,46 +580,46 @@ function keySlot_tripleResolverC(slot: KeySlot): boolean {
 
   if (inputEdge === 'down') {
     if (steps === 'DU' && tick < TH) {
-      //down2
+      // down2
       keySlot_pushStepC(slot, 'D');
     } else {
-      //down
+      // down
       keySlot_clearSteps(slot);
       keySlot_pushStepC(slot, 'D');
     }
   }
 
   if (steps === 'D' && hold && tick >= TH) {
-    //hold
+    // hold
     keySlot_pushStepC(slot, '_');
   }
 
   if (steps === 'D' && hold && tick < TH && interrupted) {
-    //interrupt hold
+    // interrupt hold
     keySlot_pushStepC(slot, '_');
   }
 
   if (steps === 'DUD' && hold && tick >= TH) {
-    //hold2
+    // hold2
     keySlot_pushStepC(slot, '_');
   }
 
   if (steps === 'DU' && !hold && tick >= TH) {
-    //silent after single tap
+    // silent after single tap
     keySlot_pushStepC(slot, '_');
     return true;
   }
 
   if (inputEdge === 'up') {
     if (steps === 'DUD' && tick < TH) {
-      //dtap
+      // dtap
       keySlot_pushStepC(slot, 'U');
       return true;
     } else if (steps === 'D' && tick < TH) {
-      //tap
+      // tap
       keySlot_pushStepC(slot, 'U');
     } else {
-      //up
+      // up
       keySlot_clearSteps(slot);
       keySlot_pushStepC(slot, 'U');
       return true;
@@ -629,8 +629,8 @@ function keySlot_tripleResolverC(slot: KeySlot): boolean {
   return false;
 }
 
-//--------------------------------------------------------------------------------
-//resolver root
+// --------------------------------------------------------------------------------
+// resolver root
 
 const keySlotResolverFuncs = [
   keySlot_dummyResolver,
@@ -701,8 +701,8 @@ function triggerResolver_handleKeyInput(keyIndex: u8, isDown: boolean) {
   }
 }
 
-//--------------------------------------------------------------------------------
-//entries
+// --------------------------------------------------------------------------------
+// entries
 
 export function coreLogic_handleKeyInput(keyIndex: u8, isDown: boolean) {
   triggerResolver_handleKeyInput(keyIndex, isDown);

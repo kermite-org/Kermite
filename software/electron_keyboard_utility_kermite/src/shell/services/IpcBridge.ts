@@ -143,7 +143,10 @@ function createBackendAgent(): IBackendAgent {
       firmwareName: string,
       comPortName: string
     ): Promise<string> {
-      return firmwareUpdationService.writeFirmware(firmwareName, comPortName);
+      return await firmwareUpdationService.writeFirmware(
+        firmwareName,
+        comPortName
+      );
     },
     comPortPlugEvents: {
       subscribe(listener) {

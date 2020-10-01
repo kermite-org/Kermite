@@ -1,4 +1,4 @@
-//based on type definition of preact
+// based on type definition of preact
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { VNode } from './qxinternal_petit_dom/types';
@@ -906,7 +906,7 @@ declare global {
       video: HTMLAttributes<HTMLVideoElement>;
       wbr: HTMLAttributes<HTMLElement>;
 
-      //SVG
+      // SVG
       svg: SVGAttributes<SVGSVGElement>;
       animate: SVGAttributes<SVGAnimateElement>;
       circle: SVGAttributes<SVGCircleElement>;

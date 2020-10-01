@@ -7,8 +7,8 @@ export function indexOf<T>(
   subaEnd: number,
   eq: (a: T, b: T) => boolean
 ) {
-  let j = subaStart,
-    k = -1;
+  let j = subaStart;
+  let k = -1;
   const subaLen = subaEnd - subaStart + 1;
   while (aStart <= aEnd) {
     if (eq(a[aStart], suba[j])) {

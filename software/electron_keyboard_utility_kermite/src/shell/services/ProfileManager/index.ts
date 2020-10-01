@@ -33,6 +33,7 @@ class ProfileManager {
     this.statusListeners.push(listener);
     listener(this.status);
   }
+
   unsubscribeStatus(listener: StatusListener) {
     removeArrayItems(this.statusListeners, listener);
   }
@@ -71,8 +72,8 @@ class ProfileManager {
       this.setStatus({ allProfileNames });
       await this.loadProfile(initialProfileName);
     } catch (error) {
-      //todo: check various cases
-      //todo: check error when data or data/profiles is not exists
+      // todo: check various cases
+      // todo: check error when data or data/profiles is not exists
     }
   }
 
@@ -139,16 +140,16 @@ class ProfileManager {
   }
 
   reserveSaveProfileTask(prof: IProfileData) {
-    //console.log(`reserveSaveProfileTask`)
+    // console.log(`reserveSaveProfileTask`)
     this.savingProfileData = prof;
   }
 
   private async executeSaveProfileTask() {
-    //console.log(`execute save profile task ${!!this.savingEditModel}`)
+    // console.log(`execute save profile task ${!!this.savingEditModel}`)
     if (this.savingProfileData) {
       await this.saveCurrentProfile(this.savingProfileData);
       this.savingProfileData = undefined;
-      //console.log(`execute save done`)
+      // console.log(`execute save done`)
     }
   }
 

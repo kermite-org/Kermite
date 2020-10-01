@@ -119,11 +119,11 @@ export namespace ModuleC_InputTriggerDetector {
     if (profileData.assignType === 'dual') {
       const { useInterruptHold, primaryDefaultTrigger } = profileData.settings;
       if (useInterruptHold) {
-        //down interrupt hold
+        // down interrupt hold
         if (primaryDefaultTrigger === 'down' && isDown) {
           resolveInterruptHold(keyId, Date.now());
         }
-        //tap interrupt hold
+        // tap interrupt hold
         if (primaryDefaultTrigger === 'tap' && resolver.resolving && !isDown) {
           resolveInterruptHold(keyId, resolver.downTick);
         }

@@ -45,7 +45,7 @@ export type IAssignOperationModifierCall = {
 };
 
 export type IAssignOperation =
-  //invocationMode: HoldFunctionInvocationMode;
+  // invocationMode: HoldFunctionInvocationMode;
   // | {
   //     type: 'none';
   //   }
@@ -135,9 +135,9 @@ export type IAssignEntry_Dual = {
   type: 'dual';
   // mode: 'single' | 'dual';
   // mode: 'dual';
-  primaryOp?: IAssignOperation; //down, tap(if secondaryOp exists)
-  secondaryOp?: IAssignOperation; //hold
-  tertiaryOp?: IAssignOperation; //double-tap
+  primaryOp?: IAssignOperation; // down, tap(if secondaryOp exists)
+  secondaryOp?: IAssignOperation; // hold
+  tertiaryOp?: IAssignOperation; // double-tap
 };
 // export type ISingleAssignEntry_SingleVersatile1 = {
 //   type: 'singleVersatile1';
@@ -241,7 +241,7 @@ export type IProfileData = {
       assignType: 'single';
       settings: {};
       assigns: {
-        //laX.kuY
+        // laX.kuY
         [address: string]: IAssignEntry_Single | undefined;
       };
     }
@@ -254,7 +254,7 @@ export type IProfileData = {
         tapHoldThresholdMs: number;
       };
       assigns: {
-        //laX.kuY
+        // laX.kuY
         [address: string]: IAssignEntry_Dual | undefined;
       };
     }

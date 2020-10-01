@@ -3,8 +3,8 @@
 
 import { deviceService } from '~shell/services/KeyboardDevice';
 
-//--------------------------------------------------------------------------------
-//types
+// --------------------------------------------------------------------------------
+// types
 
 type u8 = number;
 type s8 = number;
@@ -12,8 +12,8 @@ type u16 = number;
 type s16 = number;
 type size_t = number;
 
-//--------------------------------------------------------------------------------
-//helpers
+// --------------------------------------------------------------------------------
+// helpers
 
 function strU16Bin(val: u16) {
   return `0000000000000000${val.toString(2)}`.slice(-16);
@@ -29,8 +29,8 @@ function copyBytes(dst: u8[], src: u8[], len: size_t) {
   }
 }
 
-//--------------------------------------------------------------------------------
-//assign memory storage
+// --------------------------------------------------------------------------------
+// assign memory storage
 
 const StorageBufCapacity = 1024;
 const storageBuf: u8[] = new Array(StorageBufCapacity).fill(0);
@@ -44,8 +44,8 @@ export function coreLogic_writeProfileDataBlob(bytes: u8[]) {
   }
 }
 
-//--------------------------------------------------------------------------------
-//assign memory reader
+// --------------------------------------------------------------------------------
+// assign memory reader
 
 function getKeyBoundAssignSetHeaderPos(keyIndex: u8): s16 {
   let pos = 0;
@@ -136,8 +136,8 @@ function getAssignOperationWord(
   return 0;
 }
 
-//--------------------------------------------------------------------------------
-//hid report
+// --------------------------------------------------------------------------------
+// hid report
 
 const ModFlag_Ctrl = 1;
 const ModFlag_Shift = 2;
@@ -162,8 +162,8 @@ function setOutputKeyCode(kc: u8) {
   hidReportBuf[2] = kc;
 }
 
-//--------------------------------------------------------------------------------
-//operation handlers
+// --------------------------------------------------------------------------------
+// operation handlers
 
 const state = new (class {
   layerIndex: u8 = 0;
@@ -190,7 +190,7 @@ function handleOperationOn(opWord: u16) {
         setModifiers(ModFlag_Shift);
       }
       if (shiftOff && isOtherModifiersClean) {
-        //shift cancel
+        // shift cancel
         clearModifiers(ModFlag_Shift);
       }
       if (keyCode) {
@@ -243,8 +243,8 @@ function handleOperationOff(opWord: u16) {
   }
 }
 
-//--------------------------------------------------------------------------------
-//input handlers
+// --------------------------------------------------------------------------------
+// input handlers
 
 const state1 = new (class {
   boundAssigns: u16[] = new Array(128).fill(0);
@@ -284,7 +284,7 @@ sec:
  input Trigger.Up --> output Up (bind)
 */
 function assignBinder_issueInputTrigger(keyIndex: u8, trigger: Trigger) {
-  //todo: 多階層対応
+  // todo: 多階層対応
   const assignType = getAssignType(state.layerIndex, keyIndex);
 
   if (assignType === AssignType_Dual) {
@@ -324,10 +324,10 @@ function assignBinder_issueInputTrigger(keyIndex: u8, trigger: Trigger) {
   }
 }
 
-//--------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
 
-//Down-Tap-TapRelease(-Rehold-Up)
-//Down-Hold-Up
+// Down-Tap-TapRelease(-Rehold-Up)
+// Down-Hold-Up
 enum Trigger {
   Down = 'D',
   Up = 'U',
@@ -337,16 +337,16 @@ enum Trigger {
   TapDelayedRelease = 'V'
 }
 
-//event sequence state transition patterns
+// event sequence state transition patterns
 type TriggerSequenceStr =
-  | '' //none
-  | 'D' //down
-  | 'DT' //down-tap
-  | 'DTV' //down-tap-tapRelease
-  | 'DH' //down-hold
-  | 'DHU' //down-hold-up
-  | 'DTVR' //down-tap-tapRelease-rehold
-  | 'DTVRU'; //down-tap-tapRelease-rehold-up
+  | '' // none
+  | 'D' // down
+  | 'DT' // down-tap
+  | 'DTV' // down-tap-tapRelease
+  | 'DH' // down-hold
+  | 'DHU' // down-hold-up
+  | 'DTVR' // down-tap-tapRelease-rehold
+  | 'DTVRU'; // down-tap-tapRelease-rehold-up
 
 interface KeySlot {
   keyIndex: u8;
@@ -459,8 +459,8 @@ function triggerResolver_tick(ms: number) {
   keySlots.forEach((slot) => keySlot_tick(slot, ms));
 }
 
-//--------------------------------------------------------------------------------
-//entries
+// --------------------------------------------------------------------------------
+// entries
 
 export function coreLogic_handleKeyInput(keyIndex: u8, isDown: boolean) {
   triggerResolver_handleKeyInput(keyIndex, isDown);

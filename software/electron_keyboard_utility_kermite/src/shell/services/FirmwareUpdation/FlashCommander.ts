@@ -1,7 +1,7 @@
-import SerialPort = require('serialport');
-
 import { readHexFileBytesBlocks } from './HexFileReader';
 import { bytesToHexString, bhi, blo } from './helpers';
+
+import SerialPort = require('serialport');
 
 export function bytesToHexStringWithOmit(bytes: number[], maxLen: number) {
   if (bytes.length > maxLen) {
@@ -125,7 +125,7 @@ export namespace FlashCommander {
         };
         const onTimeout = () => {
           if (resBytes.length < lengthToRead) {
-            //abort
+            // abort
             logger.log(bytesToHexString(resBytes));
             logger.log(`read ${resBytes.length} / ${lengthToRead} bytes`);
             this.port.off('data', onData);
@@ -141,7 +141,7 @@ export namespace FlashCommander {
   }
 
   const expectedValues = {
-    softwareIdentifier: [0x43, 0x41, 0x54, 0x45, 0x52, 0x49, 0x4e], //CATERIN
+    softwareIdentifier: [0x43, 0x41, 0x54, 0x45, 0x52, 0x49, 0x4e], // CATERIN
     bootloaderVersion: [0x31, 0x30],
     hardwareVersion: [0x3f],
     programmerType: [0x53],
@@ -245,7 +245,7 @@ export namespace FlashCommander {
       }
 
       for (let i = 0; i < sourceBlocks.length; i++) {
-        //write one block, 64words, 128bytes
+        // write one block, 64words, 128bytes
         const addr = i * 64;
         const resSetAddress = await serial.query('A', bhi(addr), blo(addr));
         checkAck(resSetAddress, 'set address');
@@ -264,7 +264,7 @@ export namespace FlashCommander {
     logger.log(`verifying...`);
 
     for (let i = 0; i < sourceBlocks.length; i++) {
-      //read one block, 64words, 128bytes
+      // read one block, 64words, 128bytes
       const addr = i * 64;
       const resSetAddress = await serial.query('A', bhi(addr), blo(addr));
       checkAck(resSetAddress, 'set address');
@@ -293,7 +293,7 @@ export namespace FlashCommander {
     const resLeaveProgramingMode = await serial.query('L');
     checkAck(resLeaveProgramingMode, 'leave programing mode');
 
-    await serial.query('E'); //exit
+    await serial.query('E'); // exit
 
     serial.close();
   }

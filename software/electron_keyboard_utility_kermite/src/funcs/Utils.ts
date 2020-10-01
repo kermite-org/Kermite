@@ -181,7 +181,7 @@ export function clampValue(val: number, lo: number, hi: number): number {
 }
 
 export function generateRandomUid(): string {
-  //generate guid like identification string
+  // generate guid like identification string
   return 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'.replace(/x/g, (_m) =>
     ((Math.random() * 16) >> 0).toString(16)
   );

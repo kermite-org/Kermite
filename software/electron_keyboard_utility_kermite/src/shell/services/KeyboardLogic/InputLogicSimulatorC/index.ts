@@ -47,7 +47,7 @@ export namespace InputLogicSimulatorC {
     if (event.type === 'keyStateChanged') {
       const { keyIndex, isDown } = event;
       if (0) {
-        //experiment
+        // experiment
         if (isDown) {
           hidReportExperiment();
           return;

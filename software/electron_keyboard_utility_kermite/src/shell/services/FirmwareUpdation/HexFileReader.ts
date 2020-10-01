@@ -77,7 +77,7 @@ function checkEndOfFileRecord(record: IHexRecord) {
 }
 
 function checkHexLineRecordsValid(records: IHexRecord[]) {
-  //ensure hex file contains only one sequential data block
+  // ensure hex file contains only one sequential data block
   let pos = 0;
   for (let i = 0; i < records.length - 1; i++) {
     const record = records[i];
@@ -103,8 +103,8 @@ function sliceCodeBytesIntoBlocks(bytes: number[], n: number) {
     .map((a) => (a.length < n ? [...a, ...Array(n - a.length).fill(0xff)] : a));
 }
 
-//Hexファイルを読み込み機械語を128バイト毎に区切った2次元配列で返す
-//末尾ブロックの余りは0xFFでパディング
+// Hexファイルを読み込み機械語を128バイト毎に区切った2次元配列で返す
+// 末尾ブロックの余りは0xFFでパディング
 export function readHexFileBytesBlocks(filePath: string): number[][] {
   const hexFileRecords = fs
     .readFileSync(filePath, { encoding: 'utf-8' })

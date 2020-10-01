@@ -26,7 +26,7 @@ const dualModeEditTargetOperationSigToOperationPathMap: {
 };
 
 export class EditorModel {
-  //state
+  // state
 
   loadedPorfileData: IProfileData = fallbackProfileData;
   profileData: IProfileData = fallbackProfileData;
@@ -35,7 +35,7 @@ export class EditorModel {
   slotAddress: string = '';
   dualModeEditTargetOperationSig: IDualModeEditTargetOperationSig = 'pri';
 
-  //getters
+  // getters
 
   private get profileAssignType(): IProfileAssignType {
     return this.profileData.assignType;
@@ -107,7 +107,7 @@ export class EditorModel {
     );
   }
 
-  //mutations
+  // mutations
 
   loadProfileData = (profileData: IProfileData) => {
     this.loadedPorfileData = profileData;
