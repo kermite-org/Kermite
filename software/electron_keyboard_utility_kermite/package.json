@@ -34,8 +34,8 @@
     "start": "node ./boot.js bundle start",
     "start:dev": "cross-env NODE_ENV=development node ./boot.js bundle start",
     "typecheck": "tsc --noEmit",
-    "lint": "npx eslint src/ --ext .ts,.tsx",
-    "lint:fix": "npx eslint src/ --ext .ts,.tsx --fix",
+    "lint": "eslint src/ --ext .ts,.tsx",
+    "lint:fix": "eslint src/ --ext .ts,.tsx --fix",
     "clean": "rm -rf dist .cache",
     "packaging_mac": "electron-builder --mac --x64",
     "packaging_win": "electron-builder --win --x64"
