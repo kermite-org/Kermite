@@ -5,7 +5,7 @@ import { IEventSource } from './types';
 // メインプロセスで用意した関数を、レンダラプロセスから同一のシグニチャで呼べるようにする
 export namespace xpcMain {
   type BackendAgentResourceEntry =
-    | ((...args: any) => Promise<any | void>)
+    | ((...args: any) => Promise<any>)
     | IEventSource<any>;
 
   export function supplyBackendAgent<

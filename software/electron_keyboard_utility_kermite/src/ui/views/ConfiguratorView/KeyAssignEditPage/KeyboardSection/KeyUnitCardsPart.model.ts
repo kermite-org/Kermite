@@ -39,7 +39,7 @@ function getAssignOperationText(op?: IAssignOperation): string {
     const layer = editorModel.layers.find(
       (la) => la.layerId === op.targetLayerId
     );
-    return (layer && layer.layerName) || '';
+    return layer?.layerName || '';
   }
   if (op?.type === 'modifierCall') {
     return VirtualKeyTexts[op.modifierKey] || '';

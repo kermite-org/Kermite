@@ -16,8 +16,6 @@ import { keyboardShapesProvider } from '../KeyboardShapesProvider';
 import { applicationStorage } from '../ApplicationStorage';
 
 export class ProfileManagerCore {
-  constructor() {}
-
   getDataFilePath(profName: string): string {
     return appEnv.resolveUserDataFilePath(`data/profiles/${profName}.json`);
   }

@@ -29,10 +29,10 @@ export class DeviceWrapper {
           ? d.path && pathSearchWords.some((word) => d.path!.includes(word))
           : true) &&
         (serialNumberSearchWord
-          ? d.serialNumber && d.serialNumber.includes(serialNumberSearchWord)
+          ? d.serialNumber?.includes(serialNumberSearchWord)
           : true)
     );
-    if (targetDeviceInfo && targetDeviceInfo.path) {
+    if (targetDeviceInfo?.path) {
       return new HID.HID(targetDeviceInfo.path);
     } else {
       return null;
@@ -96,7 +96,7 @@ export class DeviceWrapper {
 
     buf.unshift(0); // 先頭に0を付加して送信
 
-    this.device && this.device.write(buf);
+    this.device?.write(buf);
   }
 
   async writeFrames(frames: number[][]) {

@@ -14,7 +14,7 @@ export namespace ModuleA_KeyIdReader {
     const kp = logicSimulatorStateC.profileData.keyboardShape.keyUnits.find(
       (key) => key.keyIndex === keyIndex
     );
-    return kp && kp.id;
+    return kp?.id;
   }
 
   function processEvent(ev: IKeyIndexKeyEvent) {

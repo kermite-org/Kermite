@@ -10,8 +10,6 @@ class ApplicationSettingsProvider {
 
   _settings: IApplicationSettings = fallabackApplicationSettings;
 
-  constructor() {}
-
   getSettings(): IApplicationSettings {
     return this._settings;
   }

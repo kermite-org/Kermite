@@ -16,8 +16,6 @@ export class KeyboardConfigProvider {
     return this._keyboardConfig;
   }
 
-  constructor() {}
-
   subscribeStatus(listener: IStatusListener) {
     listener(this.keyboardConfig);
     this.listeners.push(listener);

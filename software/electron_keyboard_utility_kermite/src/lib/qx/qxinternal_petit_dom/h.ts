@@ -21,7 +21,7 @@ export const isVComponent = (c: VNode): c is VComponent =>
   c?.vtype === VTYPE_COMPONENT;
 
 const isValidComponentType = (c: any): c is IComponentObject<any> =>
-  c && c.mount && c.patch && c.unmount;
+  c?.mount && c.patch && c.unmount;
 
 export function h(
   type: string | IComponentFunction<any>,

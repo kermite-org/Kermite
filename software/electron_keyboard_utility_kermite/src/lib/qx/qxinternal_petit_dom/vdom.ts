@@ -136,7 +136,9 @@ export function unmount(vnode: VNode, domNode: Node, env?: IEnv) {
 function mountChildren(
   parentDomNode: Node,
   vnodes: VNode[],
+  // eslint-disable-next-line @typescript-eslint/default-param-last
   start: number = 0,
+  // eslint-disable-next-line @typescript-eslint/default-param-last
   end: number = vnodes.length - 1,
   beforeNode: Node | null,
   env: IEnv
@@ -156,7 +158,7 @@ function setProps(
   let key;
   for (let i = 0; i < keys.length; i++) {
     key = keys[i];
-    const oldv = oldProps && oldProps[key];
+    const oldv = oldProps?.[key];
     const newv = props[key];
     if (oldv !== newv) {
       el[key] = newv;
@@ -252,8 +254,8 @@ function patchInPlace(
 }
 
 function canPatch(newVNode: VNode, oldVNode?: VNode) {
-  const newKey = newVNode && newVNode.key ? newVNode.key : null;
-  const oldKey = oldVNode && oldVNode.key ? oldVNode.key : null;
+  const newKey = newVNode?.key || null;
+  const oldKey = oldVNode?.key || null;
   return newKey === oldKey;
 }
 
