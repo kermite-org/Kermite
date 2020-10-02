@@ -1,4 +1,5 @@
 import { deviceStatusModel } from './DeviceStatusModel';
+import { editorModel } from './editor/EditorModel';
 import { firmwareUpdationModel } from './FirmwareUpdationModel';
 import { keyboardConfigModel } from './KeyboardConfigModel';
 import { keyboardShapesModel } from './KeyboardShapesModel';
@@ -38,6 +39,7 @@ export const models = new (class {
 })();
 
 export {
+  editorModel,
   playerModel,
   profilesModel,
   siteModel,

@@ -1,10 +1,10 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { models } from '~ui/models';
 import {
   IKeyboardLayoutStandard,
   IKeyboardBehaviorMode
 } from '~defs/ConfigTypes';
+import { keyboardConfigModel } from '~ui/models';
 
 interface IDualItemsHoverSelectorProps<T extends string> {
   items: T[];
@@ -71,7 +71,6 @@ function DualItemsHoverSelector<T extends string>(
 }
 
 export const BehaviorSelector = () => {
-  const { keyboardConfigModel } = models;
   const modes: IKeyboardBehaviorMode[] = ['Standalone', 'SideBrain'];
   const currentMode = keyboardConfigModel.behaviorMode;
   const setCurrent = (mode: IKeyboardBehaviorMode) => {
@@ -93,7 +92,6 @@ export const BehaviorSelector = () => {
 };
 
 export const LayoutStandardSelector = () => {
-  const { keyboardConfigModel } = models;
   const layouts: IKeyboardLayoutStandard[] = ['US', 'JIS'];
   const currentLayout = keyboardConfigModel.layoutStandard;
   const setCurrent = (layout: IKeyboardLayoutStandard) => {

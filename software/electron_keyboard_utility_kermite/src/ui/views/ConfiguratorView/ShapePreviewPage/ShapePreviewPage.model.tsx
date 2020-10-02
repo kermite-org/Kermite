@@ -1,29 +1,27 @@
 import { IKeyboardShape } from '~defs/ProfileData';
-import { models } from '~ui/models';
-import { IUiSettings } from '~ui/models/UiStatusModel';
+import { IUiSettings, uiStatusModel } from '~ui/models/UiStatusModel';
 import { appUi } from '~ui/core/appUi';
 import { backendAgent } from '~ui/core/ipc';
+import { keyboardShapesModel } from '~ui/models';
 
 export class ShapePreviewPageModel {
   loadedBreedName: string = '';
   loadedShape: IKeyboardShape | undefined;
 
   get settings(): IUiSettings {
-    return models.uiStatusModel.settings;
+    return uiStatusModel.settings;
   }
 
   get allBreedNames(): string[] {
-    return models.keyboardShapesModel.getAllBreedNames();
+    return keyboardShapesModel.getAllBreedNames();
   }
 
   get currentBreedName(): string {
-    return (
-      models.uiStatusModel.settings.shapeViewBreedName || this.allBreedNames[0]
-    );
+    return uiStatusModel.settings.shapeViewBreedName || this.allBreedNames[0];
   }
 
   setCurrentBreedName = async (breedName: string) => {
-    models.uiStatusModel.settings.shapeViewBreedName = breedName;
+    uiStatusModel.settings.shapeViewBreedName = breedName;
     if (breedName !== this.loadedBreedName) {
       this.loadShape(breedName);
     }
@@ -31,7 +29,7 @@ export class ShapePreviewPageModel {
 
   private async loadShape(nextBreedName: string) {
     this.loadedBreedName = nextBreedName;
-    this.loadedShape = await models.keyboardShapesModel.getKeyboardShapeByBreedName(
+    this.loadedShape = await keyboardShapesModel.getKeyboardShapeByBreedName(
       nextBreedName
     );
     appUi.rerender();

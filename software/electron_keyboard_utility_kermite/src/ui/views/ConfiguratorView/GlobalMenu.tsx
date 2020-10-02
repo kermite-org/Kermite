@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { appUi } from '~ui/core/appUi';
-import { models } from '~ui/models';
+import { themeSelectionModel, uiStatusModel } from '~ui/models';
 
 export function makeGlobalMenuModel() {
   const self = {
@@ -75,9 +75,7 @@ interface IMenuItem {
 }
 
 function createMenuItems(): IMenuItem[] {
-  const {
-    uiStatusModel: { settings }
-  } = models;
+  const { settings } = uiStatusModel;
 
   const menuItems: IMenuItem[] = [
     {
@@ -104,17 +102,17 @@ function createMenuItems(): IMenuItem[] {
       key: 'miThemeLight',
       text: 'Light Theme',
       handler() {
-        models.themeSelectionModel.changeTheme('light');
+        themeSelectionModel.changeTheme('light');
       },
-      active: models.themeSelectionModel.currentTheme === 'light'
+      active: themeSelectionModel.currentTheme === 'light'
     },
     {
       key: 'miThemeDark',
       text: 'Dark Theme',
       handler() {
-        models.themeSelectionModel.changeTheme('dark');
+        themeSelectionModel.changeTheme('dark');
       },
-      active: models.themeSelectionModel.currentTheme === 'dark'
+      active: themeSelectionModel.currentTheme === 'dark'
     }
   ];
 

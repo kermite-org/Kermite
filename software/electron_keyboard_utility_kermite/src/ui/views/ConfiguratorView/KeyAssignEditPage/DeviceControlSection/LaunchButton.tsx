@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { profilesModel, models } from '~ui/models';
+import { keyboardConfigModel, profilesModel } from '~ui/models';
 
 export const LaunchButton = () => {
   const cssLaunchButton = css`
@@ -28,7 +28,7 @@ export const LaunchButton = () => {
 
   const onClick = () => {
     profilesModel.saveProfile();
-    models.keyboardConfigModel.writeConfigurationToDevice();
+    keyboardConfigModel.writeConfigurationToDevice();
   };
 
   return (

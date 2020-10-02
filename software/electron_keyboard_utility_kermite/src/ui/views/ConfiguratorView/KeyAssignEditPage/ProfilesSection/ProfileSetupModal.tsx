@@ -12,7 +12,7 @@ import {
   cssCommonPropertiesTable,
   cssCommonTextInput
 } from '~ui/views/base/commonStyles';
-import { models } from '~ui/models';
+import { keyboardShapesModel } from '~ui/models';
 
 interface ICreateProfileDialogEditValues {
   profileName: string;
@@ -71,7 +71,7 @@ const ProfileSetupModalContent = (props: {
 };
 
 export const callProfileSetupModal = createModal(() => {
-  const breedNames = models.keyboardShapesModel.getAllBreedNames();
+  const breedNames = keyboardShapesModel.getAllBreedNames();
   const editValues: ICreateProfileDialogEditValues = {
     profileName: '',
     breedName: breedNames[0]
