@@ -3,14 +3,12 @@ import {
   IProfileManagerStatus,
   IProfileManagerCommand
 } from '~defs/IpcContract';
-import { EditorModel } from '../editor/EditorModel';
 import { backendAgent } from '~ui/core/ipc';
 import { appUi } from '../../core/appUi';
+import { editorModel } from '../editor/EditorModel';
 
-export class ProfilesModel {
+class ProfilesModel {
   private profileProvider = new ProfileProvider();
-
-  constructor(private editorModel: EditorModel) {}
 
   // state
   currentProfileName: string = '';
@@ -28,7 +26,7 @@ export class ProfilesModel {
       this.allProfileNames = payload.allProfileNames;
     }
     if (payload.loadedProfileData) {
-      this.editorModel.loadProfileData(payload.loadedProfileData);
+      editorModel.loadProfileData(payload.loadedProfileData);
     }
     if (payload.errorMessage) {
       alert(payload.errorMessage);
@@ -42,8 +40,8 @@ export class ProfilesModel {
   }
 
   finalize() {
-    if (this.editorModel.checkDirty()) {
-      this.profileProvider.saveProfileOnClosing(this.editorModel.profileData);
+    if (editorModel.checkDirty()) {
+      this.profileProvider.saveProfileOnClosing(editorModel.profileData);
     }
     this.profileProvider.finalize();
   }
@@ -51,10 +49,10 @@ export class ProfilesModel {
   // actions
 
   private getSaveCommandIfDirty() {
-    const isDirty = this.editorModel.checkDirty();
+    const isDirty = editorModel.checkDirty();
     if (isDirty) {
       return {
-        saveCurrentProfile: { profileData: this.editorModel.profileData }
+        saveCurrentProfile: { profileData: editorModel.profileData }
       };
     }
     return undefined;
@@ -116,3 +114,5 @@ export class ProfilesModel {
     this.sendProfileManagerCommands(deleteCommand);
   };
 }
+
+export const profilesModel = new ProfilesModel();

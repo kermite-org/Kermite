@@ -2,7 +2,7 @@ import { backendAgent } from '../core/ipc';
 import { IAppWindowEvent } from '~defs/IpcContract';
 import { appUi } from '../core/appUi';
 
-export class SiteModel {
+class SiteModel {
   private _isWidgetMode: boolean = false;
   private _isWindowActive: boolean = true;
 
@@ -34,3 +34,5 @@ export class SiteModel {
     backendAgent.appWindowEvents.unsubscribe(this.onAppWindowEvents);
   }
 }
+
+export const siteModel = new SiteModel();

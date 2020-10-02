@@ -29,7 +29,7 @@ const defaultUiStatus: IUiStatus = {
   profileConfigModalVisible: false
 };
 
-export class UiStatusModel {
+class UiStatusModel {
   readonly settings: IUiSettings = defaultUiSettins;
 
   readonly status: IUiStatus = defaultUiStatus;
@@ -54,3 +54,5 @@ export class UiStatusModel {
     this.save();
   }
 }
+
+export const uiStatusModel = new UiStatusModel();

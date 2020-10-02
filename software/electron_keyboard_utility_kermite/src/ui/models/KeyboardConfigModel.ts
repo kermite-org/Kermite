@@ -5,7 +5,7 @@ import {
   IKeyboardLayoutStandard
 } from '~defs/ConfigTypes';
 
-export class KeyboardConfigModel {
+class KeyboardConfigModel {
   behaviorMode: IKeyboardBehaviorMode = 'Standalone';
   layoutStandard: IKeyboardLayoutStandard = 'US';
 
@@ -34,3 +34,5 @@ export class KeyboardConfigModel {
 
   finalize() {}
 }
+
+export const keyboardConfigModel = new KeyboardConfigModel();

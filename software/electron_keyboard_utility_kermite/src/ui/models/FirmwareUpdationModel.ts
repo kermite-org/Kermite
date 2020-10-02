@@ -8,7 +8,7 @@ type FirmwareUpdationPhase =
   | 'UploadSuccess'
   | 'UploadFailure';
 
-export class FirmwareUpdationModel {
+class FirmwareUpdationModel {
   firmwareNames: string[] = [];
   phase: FirmwareUpdationPhase = 'WaitingReset';
   comPortName: string | undefined = undefined;
@@ -66,3 +66,5 @@ export class FirmwareUpdationModel {
 
   finalize() {}
 }
+
+export const firmwareUpdationModel = new FirmwareUpdationModel();

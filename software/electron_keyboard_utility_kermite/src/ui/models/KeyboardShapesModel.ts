@@ -2,7 +2,7 @@ import { IKeyboardShape } from '~defs/ProfileData';
 import { backendAgent } from '../core/ipc';
 import { appUi } from '../core/appUi';
 
-export class KeyboardShapesModel {
+class KeyboardShapesModel {
   allBreedNames: string[] = [];
 
   getAllBreedNames(): string[] {
@@ -22,3 +22,5 @@ export class KeyboardShapesModel {
 
   finalize() {}
 }
+
+export const keyboardShapesModel = new KeyboardShapesModel();

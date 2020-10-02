@@ -2,7 +2,7 @@ import { backendAgent } from '../core/ipc';
 import { IKeyboardDeviceStatus } from '~defs/IpcContract';
 import { appUi } from '../core/appUi';
 
-export class DeviceStatusModel {
+class DeviceStatusModel {
   private _isConnected: boolean = false;
 
   get isConnected() {
@@ -28,3 +28,5 @@ export class DeviceStatusModel {
     );
   }
 }
+
+export const deviceStatusModel = new DeviceStatusModel();
