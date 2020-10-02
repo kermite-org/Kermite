@@ -1,9 +1,7 @@
 import { css } from 'goober';
-import { backendAgent } from '~ui/core/ipc';
+import { backendAgent, uiTheme, appUi } from '~ui/core';
 import { siteModel } from '~ui/models';
 import { h } from '~lib/qx';
-import { uiTheme } from '~ui/core/UiTheme';
-import { appUi } from '~ui/core/appUi';
 
 const ControlButton = (props: { icon: string; onClick: () => void }) => {
   const cssButton = css`

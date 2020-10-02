@@ -1,7 +1,6 @@
 import { IKeyboardShape } from '~defs/ProfileData';
 import { IUiSettings, uiStatusModel } from '~ui/models/UiStatusModel';
-import { appUi } from '~ui/core/appUi';
-import { backendAgent } from '~ui/core/ipc';
+import { appUi, backendAgent } from '~ui/core';
 import { keyboardShapesModel } from '~ui/models';
 
 export class ShapePreviewPageModel {

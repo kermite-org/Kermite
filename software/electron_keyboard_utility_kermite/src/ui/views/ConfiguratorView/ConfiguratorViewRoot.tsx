@@ -3,7 +3,7 @@ import { h } from '~lib/qx';
 import { CustomWindowFrame } from './WindowFrame/CustomWindowFrame';
 import { GlobalMenuPart } from './GlobalMenu';
 import { KeyboardShapePreviewPage } from './ShapePreviewPage/ShapePreviewPage';
-import { uiTheme } from '~ui/core/UiTheme';
+import { uiTheme } from '~ui/core';
 import { PageSignature } from '~ui/models/UiStatusModel';
 import { FirmwareUpdationPage } from './FirmwareUpdationPage';
 import { EditorPage } from './KeyAssignEditPage/EditorPage';

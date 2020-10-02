@@ -1,5 +1,4 @@
-import { appUi } from '../core/appUi';
-import { backendAgent } from '../core/ipc';
+import { appUi, backendAgent } from '~ui/core';
 
 type FirmwareUpdationPhase =
   | 'WaitingReset'

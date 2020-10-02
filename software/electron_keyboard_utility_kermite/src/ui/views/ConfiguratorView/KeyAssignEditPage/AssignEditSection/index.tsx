@@ -3,7 +3,7 @@ import { editorModel } from '~ui/models';
 import { h } from '~lib/qx';
 import { OpertionEditPart } from './OperationEditPart/OperationEditPart';
 import { OerationSlotsPart } from './EntryEditPart/OperationSlotsPart';
-import { uiTheme } from '~ui/core/UiTheme';
+import { uiTheme } from '~ui/core';
 
 export function AssignEditSection() {
   const cssBase = css`

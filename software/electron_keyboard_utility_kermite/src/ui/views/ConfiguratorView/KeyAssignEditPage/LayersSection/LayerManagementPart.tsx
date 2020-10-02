@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { LayerManagementPartViewModel } from './LayerManagementPart.model';
-import { uiTheme } from '~ui/core/UiTheme';
+import { uiTheme } from '~ui/core';
 
 const LayerOperationButtton = (props: {
   icon: string;

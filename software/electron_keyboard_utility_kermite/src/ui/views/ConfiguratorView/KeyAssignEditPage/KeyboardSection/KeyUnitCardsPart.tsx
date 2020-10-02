@@ -4,7 +4,7 @@ import {
   IKeyUnitCardViewModel,
   makeKeyUnitCardsPartViewModel
 } from './KeyUnitCardsPart.model';
-import { uiTheme } from '~ui/core/UiTheme';
+import { uiTheme } from '~ui/core';
 
 export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
   const {

@@ -3,8 +3,7 @@ import {
   IProfileManagerStatus,
   IProfileManagerCommand
 } from '~defs/IpcContract';
-import { backendAgent } from '~ui/core/ipc';
-import { appUi } from '../../core/appUi';
+import { backendAgent, appUi } from '~ui/core';
 import { editorModel } from '../editor/EditorModel';
 
 class ProfilesModel {

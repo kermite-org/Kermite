@@ -1,4 +1,4 @@
-import { appUi } from '~ui/core/appUi';
+import { appUi } from '~ui/core';
 import { h, render, rerender as qxRerender } from '~lib/qx';
 import { ViewRoot } from './views/ViewRoot';
 import { thinningListenerCall } from '~funcs/Utils';

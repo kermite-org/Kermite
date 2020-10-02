@@ -3,7 +3,7 @@ import { KeyAssignEditPage } from './KeyAssignEditPage';
 import { ProfileManagementPart } from './ProfilesSection/ProfileManagementPart';
 import { DeviceControlSection } from './DeviceControlSection';
 import { ProfileConfigratuionModalLayer } from './ProfileConfigurationPart';
-import { uiTheme } from '~ui/core/UiTheme';
+import { uiTheme } from '~ui/core';
 import { h } from '~lib/qx';
 
 export function EditorPage() {

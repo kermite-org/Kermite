@@ -6,7 +6,7 @@ import { LayersSection } from './LayersSection';
 import { TestInputArea } from './TestInputArea';
 import { ProfileConfigurationPart } from './ProfileConfigurationPart';
 import { uiStatusModel } from '~ui/models';
-import { uiTheme } from '~ui/core/UiTheme';
+import { uiTheme } from '~ui/core';
 
 const localStyleConstants = {
   editorPartMargin: '4px',

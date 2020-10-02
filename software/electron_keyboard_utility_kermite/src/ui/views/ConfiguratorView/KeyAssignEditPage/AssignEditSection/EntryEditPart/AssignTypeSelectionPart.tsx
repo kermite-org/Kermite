@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { makeKeyAssignTypeSelectionPartViewModel } from './AssignTypeSelectionPart.model';
-import { uiTheme } from '~ui/core/UiTheme';
+import { uiTheme } from '~ui/core';
 
 export function AssingTypeSelectionPart() {
   const cssAssignTypeSlotsBox = css`
