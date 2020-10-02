@@ -27,12 +27,9 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "standard-with-typescript",
     "plugin:react/recommended",
+    "standard-with-typescript",
     // "airbnb-typescript",
-    // "plugin:import/errors",
-    // "plugin:import/warnings",
-    // "plugin:import/typescript",
     "prettier/@typescript-eslint",
     "plugin:prettier/recommended"
   ],
@@ -96,23 +93,16 @@
     "one-var": 1,
     "import/first": 1,
 
-    //
-
+    //others
     "react/jsx-key": 1,
     "react/display-name": 0,
     "react/no-unknown-property": 0,
-
     "import/no-cycle": [1, { "maxDepth": 1 }],
-
-    //eslint:recommended
     "no-empty": 0,
     "no-inner-declarations": 0,
     "no-constant-condition": 0,
-    "no-prototype-builtins": 0
-
-    //
-
-    // "eqeqeq": [1, "always"],
-    // "no-console": 0
+    "no-prototype-builtins": 0,
+    "no-console": 0,
+    "eqeqeq": [1, "always"]
   }
 }
