@@ -2,7 +2,7 @@ import { css } from 'goober';
 import { h } from '~lib/qx';
 import { IProfileManagerViewModel } from './ProfileManagementPart.model';
 import { makeProfileSelectionMenuPartModel } from './ProfileSelectionMenu.model';
-import { uiTheme } from '~ui/models/UiTheme';
+import { uiTheme } from '~ui/core/UiTheme';
 
 const cssBase = css``;
 

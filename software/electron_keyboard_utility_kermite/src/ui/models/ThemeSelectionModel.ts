@@ -1,4 +1,4 @@
-import { themeColors, uiTheme, ThemeKey } from './UiTheme';
+import { themeColors, uiTheme, ThemeKey } from '../core/UiTheme';
 
 const allThemeKeys = Object.keys(themeColors) as ThemeKey[];
 

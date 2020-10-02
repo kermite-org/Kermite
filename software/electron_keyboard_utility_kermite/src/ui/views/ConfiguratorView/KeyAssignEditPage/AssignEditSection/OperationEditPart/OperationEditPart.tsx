@@ -4,7 +4,7 @@ import {
   makeOperationEditPartViewModel,
   IOperationCardViewModel
 } from './OperationEditPart.model';
-import { uiTheme } from '~ui/models/UiTheme';
+import { uiTheme } from '~ui/core/UiTheme';
 
 const OperationCard = (props: { model: IOperationCardViewModel }) => {
   const { text, isCurrent, setCurrent, isEnabled } = props.model;

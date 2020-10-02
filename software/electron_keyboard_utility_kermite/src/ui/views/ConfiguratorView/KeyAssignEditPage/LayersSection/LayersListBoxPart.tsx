@@ -4,7 +4,7 @@ import {
   ILayerListViewModel,
   makeLayerListBoxPartViewModel
 } from './LayersListBoxPart.model';
-import { uiTheme } from '~ui/models/UiTheme';
+import { uiTheme } from '~ui/core/UiTheme';
 
 const LayerCard = (props: { layerModel: ILayerListViewModel }) => {
   const cssLayerCard = css`

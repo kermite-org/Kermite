@@ -2,7 +2,7 @@ import { css } from 'goober';
 import { h } from '~lib/qx';
 import { KeyUnitCardsPart } from './KeyUnitCardsPart';
 import { editorModel } from '~ui/models';
-import { uiTheme } from '~ui/models/UiTheme';
+import { uiTheme } from '~ui/core/UiTheme';
 
 export const KeyboardBasePlane = (props: { children: any }) => {
   const { clearAssignSlotSelection } = editorModel;
