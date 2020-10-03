@@ -98,6 +98,33 @@
     "react/display-name": 0,
     "react/no-unknown-property": 0,
     "import/no-cycle": [1, { "maxDepth": 1 }],
+    "import/order": [
+      1,
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index",
+          "object"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "~lib/qx",
+            "group": "external"
+          },
+          {
+            "pattern": "~*/**",
+            "group": "internal"
+          }
+        ],
+        "alphabetize": { "order": "asc" },
+        "newlines-between": "never"
+      }
+    ],
+    "import/newline-after-import": 1,
     "no-restricted-imports": [1, { "patterns": ["../../*"] }],
     "no-empty": 0,
     "no-inner-declarations": 0,
