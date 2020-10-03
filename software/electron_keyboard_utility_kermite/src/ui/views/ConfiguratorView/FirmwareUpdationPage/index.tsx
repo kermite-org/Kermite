@@ -1,7 +1,6 @@
 import { css } from 'goober';
-import { firmwareUpdationModel } from '~ui/models';
-import { createModal } from '~ui/views/base/ForegroundModalLayer';
 import { h } from '~lib/qx';
+import { firmwareUpdationModel } from '~ui/models';
 import {
   ClosableOverlay,
   CommonDialogFrame,
@@ -9,6 +8,7 @@ import {
   DialogButtonsRow,
   DialogContentRow
 } from '~ui/views/base/CommonDialogParts';
+import { createModal } from '~ui/views/base/ForegroundModalLayer';
 import { reflectValue } from '~ui/views/base/FormHelpers';
 
 export const callErrorLogModal = createModal((logText: string) => {

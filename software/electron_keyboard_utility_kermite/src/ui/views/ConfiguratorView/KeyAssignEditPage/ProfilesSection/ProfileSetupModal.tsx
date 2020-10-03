@@ -1,6 +1,5 @@
 import { h } from '~lib/qx';
-import { createModal } from '~ui/views/base/ForegroundModalLayer';
-import { reflectFieldValue } from '~ui/views/base/FormHelpers';
+import { keyboardShapesModel } from '~ui/models';
 import {
   CommonDialogFrame,
   DialogContentRow,
@@ -8,11 +7,12 @@ import {
   DialogButtonsRow,
   ClosableOverlay
 } from '~ui/views/base/CommonDialogParts';
+import { createModal } from '~ui/views/base/ForegroundModalLayer';
+import { reflectFieldValue } from '~ui/views/base/FormHelpers';
 import {
   cssCommonPropertiesTable,
   cssCommonTextInput
 } from '~ui/views/base/commonStyles';
-import { keyboardShapesModel } from '~ui/models';
 
 interface ICreateProfileDialogEditValues {
   profileName: string;

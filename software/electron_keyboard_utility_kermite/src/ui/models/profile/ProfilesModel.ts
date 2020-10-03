@@ -1,10 +1,10 @@
-import { ProfileProvider } from './ProfileProvider';
 import {
   IProfileManagerStatus,
   IProfileManagerCommand
 } from '~defs/IpcContract';
 import { backendAgent, appUi } from '~ui/core';
 import { editorModel } from '~ui/models/editor/EditorModel';
+import { ProfileProvider } from './ProfileProvider';
 
 class ProfilesModel {
   private profileProvider = new ProfileProvider();

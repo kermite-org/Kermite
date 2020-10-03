@@ -2,8 +2,11 @@ import {
   IProfileManagerStatus,
   IRealtimeKeyboardEvent
 } from '~defs/IpcContract';
+import { delayMs } from '~funcs/Utils';
+import { deviceService } from '~shell/services/KeyboardDevice';
 import { IInputLogicSimulator } from '~shell/services/KeyboardLogic/InputLogicSimulator.interface';
 import { IntervalTimerWrapper } from '~shell/services/KeyboardLogic/InputLogicSimulatorA/IntervalTimerWrapper';
+import { profileManager } from '~shell/services/ProfileManager';
 import {
   logicSimulatorStateC,
   createModuleFlow
@@ -17,9 +20,6 @@ import { ModuleN_VirtualKeyEventAligner } from './ModuleN_VirtualKeyEventAligner
 import { ModuleR_VirtualKeyBinder } from './ModuleR_VirtualKeyBinder';
 import { ModuleT_OutputKeyStateCombiner } from './ModuleT_OutputKeyStateCombiner';
 import { ModuleW_HidReportOutputBuffer } from './ModuleW_HidReportOutputBuffer';
-import { delayMs } from '~funcs/Utils';
-import { deviceService } from '~shell/services/KeyboardDevice';
-import { profileManager } from '~shell/services/ProfileManager';
 
 export namespace InputLogicSimulatorC {
   const tickerTimer = new IntervalTimerWrapper();

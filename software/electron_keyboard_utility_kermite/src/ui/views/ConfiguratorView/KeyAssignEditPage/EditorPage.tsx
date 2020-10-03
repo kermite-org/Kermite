@@ -1,10 +1,10 @@
 import { css } from 'goober';
-import { KeyAssignEditPage } from './KeyAssignEditPage';
-import { ProfileManagementPart } from './ProfilesSection/ProfileManagementPart';
-import { DeviceControlSection } from './DeviceControlSection';
-import { ProfileConfigratuionModalLayer } from './ProfileConfigurationPart';
-import { uiTheme } from '~ui/core';
 import { h } from '~lib/qx';
+import { uiTheme } from '~ui/core';
+import { DeviceControlSection } from './DeviceControlSection';
+import { KeyAssignEditPage } from './KeyAssignEditPage';
+import { ProfileConfigratuionModalLayer } from './ProfileConfigurationPart';
+import { ProfileManagementPart } from './ProfilesSection/ProfileManagementPart';
 
 export function EditorPage() {
   const cssEditorPage = css`

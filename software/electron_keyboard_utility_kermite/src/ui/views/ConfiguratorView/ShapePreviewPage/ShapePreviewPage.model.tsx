@@ -1,7 +1,7 @@
 import { IKeyboardShape } from '~defs/ProfileData';
-import { IUiSettings, uiStatusModel } from '~ui/models/UiStatusModel';
 import { appUi, backendAgent } from '~ui/core';
 import { keyboardShapesModel } from '~ui/models';
+import { IUiSettings, uiStatusModel } from '~ui/models/UiStatusModel';
 
 export class ShapePreviewPageModel {
   loadedBreedName: string = '';

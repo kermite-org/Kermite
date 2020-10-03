@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { TitleBarSection } from './TitleBarSection';
 import { uiTheme } from '~ui/core';
+import { TitleBarSection } from './TitleBarSection';
 
 export const CustomWindowFrame = (props: { children: JSX.Element }) => {
   const cssRoot = css`

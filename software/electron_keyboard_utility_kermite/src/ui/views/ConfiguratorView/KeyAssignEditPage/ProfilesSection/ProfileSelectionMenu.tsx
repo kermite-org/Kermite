@@ -1,8 +1,8 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
+import { uiTheme } from '~ui/core';
 import { IProfileManagerViewModel } from './ProfileManagementPart.model';
 import { makeProfileSelectionMenuPartModel } from './ProfileSelectionMenu.model';
-import { uiTheme } from '~ui/core';
 
 const cssBase = css``;
 

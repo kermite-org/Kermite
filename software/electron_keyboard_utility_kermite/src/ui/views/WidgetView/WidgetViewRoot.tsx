@@ -1,8 +1,8 @@
-import { h } from '~lib/qx';
 import { css } from 'goober';
+import { h } from '~lib/qx';
+import { linerInterpolateValue } from '~funcs/Utils';
 import { siteModel, editorModel } from '~ui/models';
 import { WidgetKeyUnitCardsPart } from './WidgetKeyUnitCardsPart';
-import { linerInterpolateValue } from '~funcs/Utils';
 
 function KeyboardSvgView() {
   const cssSvg = css``;

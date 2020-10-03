@@ -1,5 +1,5 @@
-import { TypedEventEmitter } from '~funcs/TypedEventEmitter';
 import { IAppWindowEvent } from '~defs/IpcContract';
+import { TypedEventEmitter } from '~funcs/TypedEventEmitter';
 
 interface TypedApplicationEvent {
   appWindowEvent: IAppWindowEvent;

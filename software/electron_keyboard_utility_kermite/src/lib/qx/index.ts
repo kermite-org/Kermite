@@ -1,6 +1,7 @@
 import { qxGlobal } from './qxGlobal';
 import { render as petitDomRender } from './qxinternal_petit_dom';
 import { VNode } from './qxinternal_petit_dom/types';
+
 export { h } from './qxinternal_petit_dom/h';
 
 export function rerender() {

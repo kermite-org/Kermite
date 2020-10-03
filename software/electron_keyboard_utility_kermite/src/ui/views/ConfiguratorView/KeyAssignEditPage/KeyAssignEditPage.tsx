@@ -1,12 +1,12 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
+import { uiTheme } from '~ui/core';
+import { uiStatusModel } from '~ui/models';
 import { AssignEditSection } from './AssignEditSection';
 import { KeyboardSection } from './KeyboardSection';
 import { LayersSection } from './LayersSection';
-import { TestInputArea } from './TestInputArea';
 import { ProfileConfigurationPart } from './ProfileConfigurationPart';
-import { uiStatusModel } from '~ui/models';
-import { uiTheme } from '~ui/core';
+import { TestInputArea } from './TestInputArea';
 
 const localStyleConstants = {
   editorPartMargin: '4px',

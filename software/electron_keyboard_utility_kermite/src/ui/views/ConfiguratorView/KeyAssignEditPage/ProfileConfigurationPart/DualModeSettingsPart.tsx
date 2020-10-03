@@ -1,11 +1,11 @@
-import { editorModel } from '~ui/models';
+import { css } from 'goober';
 import { h } from '~lib/qx';
+import { editorModel } from '~ui/models';
 import {
   reflectFieldChecked,
   reflectFieldValue,
   reflectValue
 } from '~ui/views/base/FormHelpers';
-import { css } from 'goober';
 
 export const DualModeSettingsPart = () => {
   if (editorModel.profileData.assignType === 'single') {

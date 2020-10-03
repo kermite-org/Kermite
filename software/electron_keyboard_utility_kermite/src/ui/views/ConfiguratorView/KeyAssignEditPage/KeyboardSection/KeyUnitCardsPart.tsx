@@ -1,10 +1,10 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
+import { uiTheme } from '~ui/core';
 import {
   IKeyUnitCardViewModel,
   makeKeyUnitCardsPartViewModel
 } from './KeyUnitCardsPart.model';
-import { uiTheme } from '~ui/core';
 
 export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
   const {

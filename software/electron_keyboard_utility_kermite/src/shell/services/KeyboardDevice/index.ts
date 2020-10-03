@@ -1,7 +1,7 @@
-import { DeviceWrapper } from './DeviceWrapper';
 import { IRealtimeKeyboardEvent } from '~defs/IpcContract';
-import { removeArrayItems } from '~funcs/Utils';
 import { StatusSource } from '~funcs/StatusSource';
+import { removeArrayItems } from '~funcs/Utils';
+import { DeviceWrapper } from './DeviceWrapper';
 
 type IRealtimeEventListenerFunc = (event: IRealtimeKeyboardEvent) => void;
 

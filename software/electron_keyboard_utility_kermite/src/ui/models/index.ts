@@ -1,13 +1,13 @@
 import { deviceStatusModel } from './DeviceStatusModel';
-import { editorModel } from './editor/EditorModel';
 import { firmwareUpdationModel } from './FirmwareUpdationModel';
 import { keyboardConfigModel } from './KeyboardConfigModel';
 import { keyboardShapesModel } from './KeyboardShapesModel';
-import { playerModel } from './player/PlayerModel';
-import { profilesModel } from './profile/ProfilesModel';
 import { siteModel } from './SiteModel';
 import { themeSelectionModel } from './ThemeSelectionModel';
 import { uiStatusModel } from './UiStatusModel';
+import { editorModel } from './editor/EditorModel';
+import { playerModel } from './player/PlayerModel';
+import { profilesModel } from './profile/ProfilesModel';
 
 export const models = new (class {
   initialize() {

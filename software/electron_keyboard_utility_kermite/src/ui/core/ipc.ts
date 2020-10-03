@@ -1,6 +1,6 @@
+import { IpcRenderer } from 'electron';
 import { ISynchronousIpcPacket, IBackendAgent } from '~defs/IpcContract';
 import { createXpcRenderer } from '~lib/xpc/xpcRenderer';
-import { IpcRenderer } from 'electron';
 
 const ipcRenderer: IpcRenderer = (window as any).ipcRenderer;
 

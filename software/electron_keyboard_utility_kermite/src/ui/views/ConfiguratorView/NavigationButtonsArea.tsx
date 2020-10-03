@@ -1,7 +1,7 @@
 import { css } from 'goober';
-import { PageSignature } from '~ui/models/UiStatusModel';
-import { uiStatusModel } from '~ui/models';
 import { h } from '~lib/qx';
+import { uiStatusModel } from '~ui/models';
+import { PageSignature } from '~ui/models/UiStatusModel';
 
 const NavigationButton = (props: {
   faIconName: string;

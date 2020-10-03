@@ -1,5 +1,6 @@
-import { appEnv } from '~shell/base/AppEnvironment';
 import { fsIsFileExists, fsCreateDirectory, globAsync } from '~funcs/Files';
+import { appEnv } from '~shell/base/AppEnvironment';
+
 const relBinariesFolderPath = 'dist/binaries/binary';
 
 export class FirmwareFilesResource {

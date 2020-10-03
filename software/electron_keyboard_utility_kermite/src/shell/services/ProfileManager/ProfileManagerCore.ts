@@ -1,5 +1,3 @@
-import { appEnv } from '~shell/base/AppEnvironment';
-import { duplicateObjectByJsonStringifyParse } from '~funcs/Utils';
 import * as path from 'path';
 import { IProfileData, fallbackProfileData } from '~defs/ProfileData';
 import {
@@ -12,8 +10,10 @@ import {
   fsCopyFile,
   fsxReadJsonFile
 } from '~funcs/Files';
-import { keyboardShapesProvider } from '~shell/services/KeyboardShapesProvider';
+import { duplicateObjectByJsonStringifyParse } from '~funcs/Utils';
+import { appEnv } from '~shell/base/AppEnvironment';
 import { applicationStorage } from '~shell/services/ApplicationStorage';
+import { keyboardShapesProvider } from '~shell/services/KeyboardShapesProvider';
 
 export class ProfileManagerCore {
   getDataFilePath(profName: string): string {

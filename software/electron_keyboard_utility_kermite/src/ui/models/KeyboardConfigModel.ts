@@ -1,9 +1,8 @@
-import { backendAgent, appUi } from '~ui/core';
-
 import {
   IKeyboardBehaviorMode,
   IKeyboardLayoutStandard
 } from '~defs/ConfigTypes';
+import { backendAgent, appUi } from '~ui/core';
 
 class KeyboardConfigModel {
   behaviorMode: IKeyboardBehaviorMode = 'Standalone';

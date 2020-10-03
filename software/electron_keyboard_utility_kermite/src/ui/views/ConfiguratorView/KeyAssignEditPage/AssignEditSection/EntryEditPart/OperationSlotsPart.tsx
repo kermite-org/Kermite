@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { makeOperationSlotsPartViewModel } from './OperationSlotsPart.model';
 import { uiTheme } from '~ui/core';
+import { makeOperationSlotsPartViewModel } from './OperationSlotsPart.model';
 
 function OperationSlotCard(props: {
   text: string;

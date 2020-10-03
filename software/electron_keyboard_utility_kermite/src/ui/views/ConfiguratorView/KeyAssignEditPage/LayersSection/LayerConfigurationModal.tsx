@@ -1,11 +1,6 @@
-import { createModal } from '~ui/views/base/ForegroundModalLayer';
-import { ILayerDefaultScheme } from '~defs/ProfileData';
-import { h } from '~lib/qx';
 import { css } from 'goober';
-import {
-  reflectFieldValue,
-  reflectFieldChecked
-} from '~ui/views/base/FormHelpers';
+import { h } from '~lib/qx';
+import { ILayerDefaultScheme } from '~defs/ProfileData';
 import {
   CommonDialogFrame,
   DialogContentRow,
@@ -13,6 +8,11 @@ import {
   DialogButtonsRow,
   ClosableOverlay
 } from '~ui/views/base/CommonDialogParts';
+import { createModal } from '~ui/views/base/ForegroundModalLayer';
+import {
+  reflectFieldValue,
+  reflectFieldChecked
+} from '~ui/views/base/FormHelpers';
 import {
   cssCommonPropertiesTable,
   cssCommonTextInput

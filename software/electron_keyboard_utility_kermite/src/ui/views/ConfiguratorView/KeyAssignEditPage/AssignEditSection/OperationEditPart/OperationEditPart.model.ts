@@ -1,11 +1,11 @@
-import { virtualKeyGroupsTable2 } from './virtualkeyGroupsTable';
 import { VirtualKeyTexts } from '~defs/VirtualKeyTexts';
-import { editorModel } from '~ui/models';
 import { ModifierVirtualKey } from '~defs/VirtualKeys';
 import {
   addOptionToOptionsArray,
   removeOptionFromOptionsArray
 } from '~funcs/Utils';
+import { editorModel } from '~ui/models';
+import { virtualKeyGroupsTable2 } from './virtualkeyGroupsTable';
 
 export interface IOperationCardViewModel {
   sig: string;

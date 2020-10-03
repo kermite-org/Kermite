@@ -1,10 +1,10 @@
 import { IEventSource } from '~lib/xpc/types';
-import { IProfileData, IKeyboardShape } from './ProfileData';
 import {
   IKeyboardConfig,
   IEnvironmentConfigForRendererProcess,
   IApplicationSettings
 } from './ConfigTypes';
+import { IProfileData, IKeyboardShape } from './ProfileData';
 
 export interface IProfileManagerStatus {
   currentProfileName: string;

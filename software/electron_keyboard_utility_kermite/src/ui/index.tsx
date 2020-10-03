@@ -1,6 +1,6 @@
-import { models } from './models';
-import { initialzeRenderer, finalizeRenderer } from './domSetup';
 import { dumpXpcSubscriptionsRemained } from '~ui/core';
+import { initialzeRenderer, finalizeRenderer } from './domSetup';
+import { models } from './models';
 
 async function start() {
   console.log('start');

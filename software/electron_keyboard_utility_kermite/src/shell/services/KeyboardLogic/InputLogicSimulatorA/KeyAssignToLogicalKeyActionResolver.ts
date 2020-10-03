@@ -1,7 +1,7 @@
-import { LogicalKeyAction, TAdhocShift } from './Types';
 import { HidKeyCodes, getHidKeyCodeEx } from '~defs/HidKeyCodes';
-import { VirtualKey, ModifierVirtualKey } from '~defs/VirtualKeys';
 import { IAssignOperation } from '~defs/ProfileData';
+import { VirtualKey, ModifierVirtualKey } from '~defs/VirtualKeys';
+import { LogicalKeyAction, TAdhocShift } from './Types';
 
 export namespace KeyAssignToLogicalKeyActionResolver {
   function extractVkSet(

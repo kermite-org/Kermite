@@ -1,7 +1,7 @@
+/* eslint-disable import/first */
+import SerialPort = require('serialport');
 import { readHexFileBytesBlocks } from './HexFileReader';
 import { bytesToHexString, bhi, blo } from './helpers';
-
-import SerialPort = require('serialport');
 
 export function bytesToHexStringWithOmit(bytes: number[], maxLen: number) {
   if (bytes.length > maxLen) {

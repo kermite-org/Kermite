@@ -1,26 +1,26 @@
 import { ipcMain } from 'electron';
 import {
-  IBackendAgent,
-  ISynchronousIpcPacket,
-  IProfileManagerCommand
-} from '~defs/IpcContract';
-import { xpcMain } from '~lib/xpc/xpcMain';
-import { appWindowManager } from '~shell/base/AppWindowManager';
-import { KeyMappingEmitter } from './KeyMappingEmitter';
-import {
   IKeyboardConfig,
   IEnvironmentConfigForRendererProcess,
   IApplicationSettings
 } from '~defs/ConfigTypes';
-import { appEnv } from '~shell/base/AppEnvironment';
+import {
+  IBackendAgent,
+  ISynchronousIpcPacket,
+  IProfileManagerCommand
+} from '~defs/IpcContract';
 import { IKeyboardShape } from '~defs/ProfileData';
-import { keyboardConfigProvider } from './KeyboardConfigProvider';
-import { profileManager } from './ProfileManager';
-import { deviceService } from './KeyboardDevice';
-import { firmwareUpdationService } from './FirmwareUpdation';
-import { applicationSettingsProvider } from './ApplicationSettingsProvider';
-import { keyboardShapesProvider } from './KeyboardShapesProvider';
+import { xpcMain } from '~lib/xpc/xpcMain';
+import { appEnv } from '~shell/base/AppEnvironment';
 import { appEventBus } from '~shell/base/AppEventBus';
+import { appWindowManager } from '~shell/base/AppWindowManager';
+import { applicationSettingsProvider } from './ApplicationSettingsProvider';
+import { firmwareUpdationService } from './FirmwareUpdation';
+import { KeyMappingEmitter } from './KeyMappingEmitter';
+import { keyboardConfigProvider } from './KeyboardConfigProvider';
+import { deviceService } from './KeyboardDevice';
+import { keyboardShapesProvider } from './KeyboardShapesProvider';
+import { profileManager } from './ProfileManager';
 
 function setupSynchronousMessageHandler() {
   ipcMain.on('synchronousMessage', (event, packet: ISynchronousIpcPacket) => {

@@ -1,8 +1,8 @@
 // based on type definition of preact
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { VNode } from './qxinternal_petit_dom/types';
 import { Component } from './qxinternal_petit_dom/Component';
+import { VNode } from './qxinternal_petit_dom/types';
 
 export type QxOptimizerSpec = 'shallowEqual' | 'deepEqual' | 'deepEqualExFn';
 

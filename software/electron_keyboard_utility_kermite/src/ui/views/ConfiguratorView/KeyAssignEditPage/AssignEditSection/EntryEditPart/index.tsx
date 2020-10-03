@@ -1,7 +1,7 @@
 import { h } from '~lib/qx';
+import { editorModel } from '~ui/models';
 import { AssingTypeSelectionPart } from './AssignTypeSelectionPart';
 import { OerationSlotsPart } from './OperationSlotsPart';
-import { editorModel } from '~ui/models';
 
 export function EntryEditPart() {
   if (!editorModel.isSlotSelected) {

@@ -1,9 +1,9 @@
 import { css } from 'goober';
-import { editorModel } from '~ui/models';
 import { h } from '~lib/qx';
-import { OpertionEditPart } from './OperationEditPart/OperationEditPart';
-import { OerationSlotsPart } from './EntryEditPart/OperationSlotsPart';
 import { uiTheme } from '~ui/core';
+import { editorModel } from '~ui/models';
+import { OerationSlotsPart } from './EntryEditPart/OperationSlotsPart';
+import { OpertionEditPart } from './OperationEditPart/OperationEditPart';
 
 export function AssignEditSection() {
   const cssBase = css`

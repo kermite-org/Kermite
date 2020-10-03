@@ -1,20 +1,20 @@
+import { HidKeyCodes } from '~defs/HidKeyCodes';
 import {
   IRealtimeKeyboardEvent,
   IProfileManagerStatus
 } from '~defs/IpcContract';
+import { deviceService } from '~shell/services/KeyboardDevice';
+import { profileManager } from '~shell/services/ProfileManager';
 import {
   completeEditModelForShiftLayer,
   createKeyIndexToKeyUnitIdTable
 } from './EditModelFixer';
-import { VirtualKeyStateManager2 } from './VirtualStateManager2';
-import { VirtualStateManager } from './VirtualStateManager';
-import { IModelKeyAssignsProvider, IKeyAssignsSet_Single } from './Types';
-import { LogicalKeyActionDriver } from './LogicalKeyActionDriver';
-import { HidKeyCodes } from '~defs/HidKeyCodes';
-import { OutputKeyPrioritySorter } from './OutputKeyPrioritySorter';
 import { IntervalTimerWrapper } from './IntervalTimerWrapper';
-import { deviceService } from '~shell/services/KeyboardDevice';
-import { profileManager } from '~shell/services/ProfileManager';
+import { LogicalKeyActionDriver } from './LogicalKeyActionDriver';
+import { OutputKeyPrioritySorter } from './OutputKeyPrioritySorter';
+import { IModelKeyAssignsProvider, IKeyAssignsSet_Single } from './Types';
+import { VirtualStateManager } from './VirtualStateManager';
+import { VirtualKeyStateManager2 } from './VirtualStateManager2';
 
 const modifierBitPositionMap: {
   [hidKeyCode: number]: number;

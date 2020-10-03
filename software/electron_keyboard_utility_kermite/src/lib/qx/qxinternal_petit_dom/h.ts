@@ -1,6 +1,5 @@
-import { maybeFlattenArray } from './utils';
-import { createFunctionComponent } from './createRenderComponent';
 import { qxInterposeProps } from '../qxInterposeProps';
+import { createFunctionComponent } from './createRenderComponent';
 import {
   VNode,
   VTYPE_ELEMENT,
@@ -10,6 +9,7 @@ import {
   VComponent,
   IComponentObject
 } from './types';
+import { maybeFlattenArray } from './utils';
 
 export const isVNull = (c: VNode | null | false | undefined) =>
   c === null || c === false || c === undefined;

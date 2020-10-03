@@ -1,12 +1,12 @@
+import { IAssignOperation } from '~defs/ProfileData';
+import { coloredLog } from '~shell/base/ColoredLog';
+import { KeyAssignToLogicalKeyActionResolver } from './KeyAssignToLogicalKeyActionResolver';
+import { LogicalKeyActionDriver } from './LogicalKeyActionDriver';
 import {
   IModelKeyAssignsProvider,
   LayerState,
   LogicalKeyAction
 } from './Types';
-import { KeyAssignToLogicalKeyActionResolver } from './KeyAssignToLogicalKeyActionResolver';
-import { LogicalKeyActionDriver } from './LogicalKeyActionDriver';
-import { coloredLog } from '~shell/base/ColoredLog';
-import { IAssignOperation } from '~defs/ProfileData';
 
 interface IGateEvent {
   trigger: 'D' | 'U' | 'R';

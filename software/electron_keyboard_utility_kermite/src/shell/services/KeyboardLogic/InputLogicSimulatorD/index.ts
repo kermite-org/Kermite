@@ -1,18 +1,17 @@
+import { IKeyboardConfig } from '~defs/ConfigTypes';
 import {
   IProfileManagerStatus,
   IRealtimeKeyboardEvent
 } from '~defs/IpcContract';
+import { generateNumberSequence } from '~funcs/Utils';
+import { keyboardConfigProvider } from '~shell/services/KeyboardConfigProvider';
+import { deviceService } from '~shell/services/KeyboardDevice';
+import { profileManager } from '~shell/services/ProfileManager';
 import { IInputLogicSimulator } from '../InputLogicSimulator.interface';
 import { IntervalTimerWrapper } from '../InputLogicSimulatorA/IntervalTimerWrapper';
-
 // import * as CL from './DeviceCoreLogicSimulator0_Single';
 import * as CL from './DeviceCoreLogicSimulator2_Dual';
 import { converProfileDataToBlobBytes } from './ProfileDataBinaryPacker';
-import { generateNumberSequence } from '~funcs/Utils';
-import { IKeyboardConfig } from '~defs/ConfigTypes';
-import { profileManager } from '~shell/services/ProfileManager';
-import { keyboardConfigProvider } from '~shell/services/KeyboardConfigProvider';
-import { deviceService } from '~shell/services/KeyboardDevice';
 
 function compareArray(ar0: any[], ar1: any[]): boolean {
   return (

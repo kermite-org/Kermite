@@ -1,7 +1,7 @@
 import { css } from 'goober';
+import { h } from '~lib/qx';
 import { LayerManagementPart } from './LayerManagementPart';
 import { LayersListBoxPart } from './LayersListBoxPart';
-import { h } from '~lib/qx';
 
 function LayerSectionHeaderPart() {
   const cssSectionHeader = css`

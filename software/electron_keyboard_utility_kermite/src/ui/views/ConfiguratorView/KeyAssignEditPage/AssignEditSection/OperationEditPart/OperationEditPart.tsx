@@ -1,10 +1,10 @@
-import { h } from '~lib/qx';
 import { css } from 'goober';
+import { h } from '~lib/qx';
+import { uiTheme } from '~ui/core';
 import {
   makeOperationEditPartViewModel,
   IOperationCardViewModel
 } from './OperationEditPart.model';
-import { uiTheme } from '~ui/core';
 
 const OperationCard = (props: { model: IOperationCardViewModel }) => {
   const { text, isCurrent, setCurrent, isEnabled } = props.model;

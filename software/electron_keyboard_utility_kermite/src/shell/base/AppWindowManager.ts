@@ -1,5 +1,5 @@
-import { BrowserWindow } from 'electron';
 import * as path from 'path';
+import { BrowserWindow } from 'electron';
 import { appEnv } from './AppEnvironment';
 
 // Electronのウインドウを管理するクラス

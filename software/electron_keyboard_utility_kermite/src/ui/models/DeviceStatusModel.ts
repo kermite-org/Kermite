@@ -1,5 +1,5 @@
-import { backendAgent, appUi } from '~ui/core';
 import { IKeyboardDeviceStatus } from '~defs/IpcContract';
+import { backendAgent, appUi } from '~ui/core';
 
 class DeviceStatusModel {
   private _isConnected: boolean = false;

@@ -1,7 +1,7 @@
 import { ComPortsMonitor, ComPortsListener } from './ComPortsMonitor';
 import { FirmwareFilesManager } from './FirmwareFilesManager';
-import { FlashCommander } from './FlashCommander';
 import { FirmwareFilesResource } from './FirmwareFilesResource';
+import { FlashCommander } from './FlashCommander';
 
 // 仮想COMポートでProMicroのブートローダ(Caterina)と通信しファームウェアを書き込む
 // 仮想COMポートの列挙や出現監視も行う

@@ -1,8 +1,8 @@
-import { indexOf } from './utils';
-import { isVNull, isVLeaf, isVElement, isVComponent } from './h';
-import { diff, INSERTION, DELETION, PATCH } from './diff';
-import { VNode, IEnv } from './types';
 import { qxGlobal } from '../qxGlobal';
+import { diff, INSERTION, DELETION, PATCH } from './diff';
+import { isVNull, isVLeaf, isVElement, isVComponent } from './h';
+import { VNode, IEnv } from './types';
+import { indexOf } from './utils';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const INTERACTIVE_PROPS = {

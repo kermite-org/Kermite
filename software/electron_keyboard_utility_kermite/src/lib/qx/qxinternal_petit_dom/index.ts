@@ -1,5 +1,6 @@
-import { mount, patch, unmount } from './vdom';
 import { VNode } from './types';
+import { mount, patch, unmount } from './vdom';
+
 export { h } from './h';
 export { mount, patch, unmount } from './vdom';
 

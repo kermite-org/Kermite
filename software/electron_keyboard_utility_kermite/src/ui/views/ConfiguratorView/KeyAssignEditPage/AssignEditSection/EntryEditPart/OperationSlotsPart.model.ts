@@ -1,5 +1,5 @@
-import { IDualModeEditTargetOperationSig } from '~ui/models/editor/EditorModel';
 import { editorModel } from '~ui/models';
+import { IDualModeEditTargetOperationSig } from '~ui/models/editor/EditorModel';
 
 export interface IOperationSlotViewModel {
   text: string;

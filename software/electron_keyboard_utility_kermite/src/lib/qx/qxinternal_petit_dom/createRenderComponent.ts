@@ -1,9 +1,9 @@
-import { mount, patch, unmount } from './vdom';
-import { IEnv, VNode, IComponentFunction, IComponentObject } from './types';
-import { qxGlobal } from '../qxGlobal';
-import { deepEqualValuesBesidesFunction } from '../qxUtils';
 import { deepEqual } from 'fast-equals';
 import { QxOptimizerSpec } from '../qx';
+import { qxGlobal } from '../qxGlobal';
+import { deepEqualValuesBesidesFunction } from '../qxUtils';
+import { IEnv, VNode, IComponentFunction, IComponentObject } from './types';
+import { mount, patch, unmount } from './vdom';
 
 const promise = Promise.resolve();
 function doLater(fn: () => void) {

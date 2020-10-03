@@ -1,6 +1,6 @@
+import { IProfileData, keyboardShape_fallbackData } from '~defs/ProfileData';
 import { VirtualKey } from '~defs/VirtualKeys';
 import { createDictionaryFromKeyValues } from '~funcs/Utils';
-import { IProfileData, keyboardShape_fallbackData } from '~defs/ProfileData';
 import { keyboardShapesProvider } from '~shell/services/KeyboardShapesProvider';
 
 const alphabetVirtualKeys: VirtualKey[] = [

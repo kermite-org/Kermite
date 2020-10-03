@@ -1,5 +1,5 @@
-import { backendAgent, appUi } from '~ui/core';
 import { IAppWindowEvent } from '~defs/IpcContract';
+import { backendAgent, appUi } from '~ui/core';
 
 class SiteModel {
   private _isWidgetMode: boolean = false;

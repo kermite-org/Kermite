@@ -1,3 +1,4 @@
+import { IAssignOperation } from '~defs/ProfileData';
 import { KeyAssignToLogicalKeyActionResolver } from './KeyAssignToLogicalKeyActionResolver';
 import { LogicalKeyActionDriver } from './LogicalKeyActionDriver';
 import {
@@ -5,7 +6,6 @@ import {
   LayerState,
   LogicalKeyAction
 } from './Types';
-import { IAssignOperation } from '~defs/ProfileData';
 
 function mapKeyIndexToAssignOperation(
   keyIndex: number,

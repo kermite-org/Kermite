@@ -1,8 +1,11 @@
+import { IKeyboardLayoutStandard } from '~defs/ConfigTypes';
+import { getHidKeyCodeEx } from '~defs/HidKeyCodes';
 import {
   IProfileData,
   IAssignEntry,
   IAssignOperation
 } from '~defs/ProfileData';
+import { ModifierVirtualKey, isModifierVirtualKey } from '~defs/VirtualKeys';
 import {
   createDictionaryFromKeyValues,
   sortOrderBy,
@@ -10,9 +13,6 @@ import {
   createGroupedArrayByKey,
   duplicateObjectByJsonStringifyParse
 } from '~funcs/Utils';
-import { ModifierVirtualKey, isModifierVirtualKey } from '~defs/VirtualKeys';
-import { getHidKeyCodeEx } from '~defs/HidKeyCodes';
-import { IKeyboardLayoutStandard } from '~defs/ConfigTypes';
 
 /*
 Key Assigns Restriction

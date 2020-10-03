@@ -1,12 +1,12 @@
-import { applicationStorage } from './ApplicationStorage';
-import { applicationSettingsProvider } from './ApplicationSettingsProvider';
-import { keyboardShapesProvider } from './KeyboardShapesProvider';
-import { keyboardConfigProvider } from './KeyboardConfigProvider';
-import { profileManager } from './ProfileManager';
-import { deviceService } from './KeyboardDevice';
-import { firmwareUpdationService } from './FirmwareUpdation';
 import { ipcBridge } from '~shell/services/IpcBridge';
+import { applicationSettingsProvider } from './ApplicationSettingsProvider';
+import { applicationStorage } from './ApplicationStorage';
+import { firmwareUpdationService } from './FirmwareUpdation';
+import { keyboardConfigProvider } from './KeyboardConfigProvider';
+import { deviceService } from './KeyboardDevice';
 import { inputLogicSimulator } from './KeyboardLogic';
+import { keyboardShapesProvider } from './KeyboardShapesProvider';
+import { profileManager } from './ProfileManager';
 
 export const services = new (class {
   async initialize() {

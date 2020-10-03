@@ -1,12 +1,12 @@
+import * as fs from 'fs';
+import * as path from 'path';
 import {
   IKeyboardShape,
   IKeyboardShapeDisplayArea,
   IKeyUnitEntry
 } from '~defs/ProfileData';
-import * as path from 'path';
 import { fsxReadJsonFile, globAsync } from '~funcs/Files';
 import { removeArrayItems } from '~funcs/Utils';
-import * as fs from 'fs';
 import { appEnv } from '~shell/base/AppEnvironment';
 
 interface IKeyboardShapeSourceJson {

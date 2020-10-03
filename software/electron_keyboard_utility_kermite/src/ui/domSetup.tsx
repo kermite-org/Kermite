@@ -1,7 +1,7 @@
-import { appUi } from '~ui/core';
 import { h, render, rerender as qxRerender } from '~lib/qx';
-import { ViewRoot } from './views/ViewRoot';
 import { thinningListenerCall } from '~funcs/Utils';
+import { appUi } from '~ui/core';
+import { ViewRoot } from './views/ViewRoot';
 
 export function initialzeRenderer() {
   appUi.rerender = qxRerender;

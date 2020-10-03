@@ -1,7 +1,7 @@
 import { css } from 'goober';
+import { h } from '~lib/qx';
 import { IProfileAssignType } from '~defs/ProfileData';
 import { editorModel } from '~ui/models';
-import { h } from '~lib/qx';
 import { reflectValue } from '~ui/views/base/FormHelpers';
 
 const AssignTypeSelectionPartViewModel = () => {

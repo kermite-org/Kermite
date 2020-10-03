@@ -1,7 +1,7 @@
 import { app } from 'electron';
+import { appEventBus } from './base/AppEventBus';
 import { appWindowManager } from './base/AppWindowManager';
 import { services } from './services';
-import { appEventBus } from './base/AppEventBus';
 
 function startApplication() {
   console.log('debug v0126a');

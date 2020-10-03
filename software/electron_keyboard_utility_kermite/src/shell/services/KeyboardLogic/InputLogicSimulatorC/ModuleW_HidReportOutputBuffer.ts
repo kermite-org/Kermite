@@ -1,5 +1,5 @@
-import { createModuleIo } from './LogicSimulatorCCommon';
 import { generateNumberSequence } from '~funcs/Utils';
+import { createModuleIo } from './LogicSimulatorCCommon';
 
 export namespace ModuleW_HidReportOutputBuffer {
   export const io = createModuleIo<number[], number[]>(commitHidReport);

@@ -5,9 +5,9 @@ import {
   IKeyboardShapeDisplayArea,
   IKeyUnitEntry
 } from '~defs/ProfileData';
-import { ScalerBox } from './ScalerBox';
-import { KeyUnitCard } from './KeyUnitCard';
 import { uiStatusModel } from '~ui/models';
+import { KeyUnitCard } from './KeyUnitCard';
+import { ScalerBox } from './ScalerBox';
 
 function getViewBox(da: IKeyboardShapeDisplayArea) {
   const left = da.centerX - da.width / 2;

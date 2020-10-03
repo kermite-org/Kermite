@@ -1,5 +1,5 @@
-import { backendAgent } from '~ui/core';
 import { IRealtimeKeyboardEvent } from '~defs/IpcContract';
+import { backendAgent } from '~ui/core';
 
 type IUiRealtimetimeKeyboardEventListener = (
   event: IRealtimeKeyboardEvent

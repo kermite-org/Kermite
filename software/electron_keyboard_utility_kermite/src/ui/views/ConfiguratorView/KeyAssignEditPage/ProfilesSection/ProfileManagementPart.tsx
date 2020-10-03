@@ -1,17 +1,17 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import {
-  makeProfileManagementViewModel,
-  IProfileManagerViewModel
-} from './ProfileManagementPart.model';
 import { reflectValue } from '~ui/views/base/FormHelpers';
-import { ProfileSelectionMenuPart } from './ProfileSelectionMenu';
 import {
   BehaviorSelector,
   LayoutStandardSelector
 } from '../DeviceControlSection/ConfigSelectors';
-import { LaunchButton } from '../DeviceControlSection/LaunchButton';
 import { ConfigurationButton } from '../DeviceControlSection/ConfigurationButton';
+import { LaunchButton } from '../DeviceControlSection/LaunchButton';
+import {
+  makeProfileManagementViewModel,
+  IProfileManagerViewModel
+} from './ProfileManagementPart.model';
+import { ProfileSelectionMenuPart } from './ProfileSelectionMenu';
 
 const ProfileSelectorView = (props: { vm: IProfileManagerViewModel }) => {
   const { vm } = props;

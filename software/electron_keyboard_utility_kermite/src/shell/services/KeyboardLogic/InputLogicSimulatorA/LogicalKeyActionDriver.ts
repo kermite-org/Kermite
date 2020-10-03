@@ -1,6 +1,6 @@
+import { HidKeyCodes } from '~defs/HidKeyCodes';
 import { OutputKeyStateUpdator } from './OutputKeyStateUpdator';
 import { IStrokeEmitterFunction, LogicalKeyAction, LayerState } from './Types';
-import { HidKeyCodes } from '~defs/HidKeyCodes';
 
 export namespace LogicalKeyActionDriver {
   const outputKeyStateUpdator = OutputKeyStateUpdator.getInterface();

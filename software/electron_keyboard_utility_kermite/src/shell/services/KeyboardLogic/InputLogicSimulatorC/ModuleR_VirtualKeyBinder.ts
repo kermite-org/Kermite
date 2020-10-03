@@ -1,10 +1,10 @@
 import { ModifierVirtualKey, VirtualKey } from '~defs/VirtualKeys';
+import { removeArrayItemsMatched } from '~funcs/Utils';
 import {
   createModuleIo,
   IVirtualKeyEvent,
   IHoldKeySet
 } from './LogicSimulatorCCommon';
-import { removeArrayItemsMatched } from '~funcs/Utils';
 
 export namespace ModuleR_VirtualKeyBinder {
   export const io = createModuleIo<IVirtualKeyEvent, IHoldKeySet[]>(

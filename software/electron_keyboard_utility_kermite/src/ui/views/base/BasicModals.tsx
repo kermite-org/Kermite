@@ -1,6 +1,5 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { createModal } from './ForegroundModalLayer';
 import {
   CommonDialogFrame,
   ClosableOverlay,
@@ -8,6 +7,7 @@ import {
   DialogButtonsRow,
   DialogButton
 } from './CommonDialogParts';
+import { createModal } from './ForegroundModalLayer';
 import { reflectFieldValue } from './FormHelpers';
 import { cssCommonTextInput } from './commonStyles';
 

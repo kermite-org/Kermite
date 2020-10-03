@@ -1,15 +1,15 @@
+import { IKeyboardLayoutStandard } from '~defs/ConfigTypes';
+import { IProfileData } from '~defs/ProfileData';
+import { delayMs } from '~funcs/Utils';
+import { deviceService } from '~shell/services/KeyboardDevice';
+import { converProfileDataToBlobBytes } from '~shell/services/KeyboardLogic/InputLogicSimulatorD/ProfileDataBinaryPacker';
+import { calcChecksum, writeUint16LE, writeUint8 } from './Helpers';
 import {
   makeMemoryChecksumRequestFrame,
   makeMemoryWriteOperationFrames,
   memoryWriteTransactionStartFrame,
   memoryWriteTransactionEndFrame
 } from './MemoryOperationFrameBuilder';
-import { calcChecksum, writeUint16LE, writeUint8 } from './Helpers';
-import { IProfileData } from '~defs/ProfileData';
-import { converProfileDataToBlobBytes } from '~shell/services/KeyboardLogic/InputLogicSimulatorD/ProfileDataBinaryPacker';
-import { delayMs } from '~funcs/Utils';
-import { IKeyboardLayoutStandard } from '~defs/ConfigTypes';
-import { deviceService } from '~shell/services/KeyboardDevice';
 
 /*
 Data format for the keymapping data stored in AVR's EEPROM
