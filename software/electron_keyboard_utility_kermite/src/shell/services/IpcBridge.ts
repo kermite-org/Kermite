@@ -5,14 +5,14 @@ import {
   IProfileManagerCommand
 } from '~defs/IpcContract';
 import { xpcMain } from '~lib/xpc/xpcMain';
-import { appWindowManager } from '../base/AppWindowManager';
+import { appWindowManager } from '~shell/base/AppWindowManager';
 import { KeyMappingEmitter } from './KeyMappingEmitter';
 import {
   IKeyboardConfig,
   IEnvironmentConfigForRendererProcess,
   IApplicationSettings
 } from '~defs/ConfigTypes';
-import { appEnv } from '../base/AppEnvironment';
+import { appEnv } from '~shell/base/AppEnvironment';
 import { IKeyboardShape } from '~defs/ProfileData';
 import { keyboardConfigProvider } from './KeyboardConfigProvider';
 import { profileManager } from './ProfileManager';

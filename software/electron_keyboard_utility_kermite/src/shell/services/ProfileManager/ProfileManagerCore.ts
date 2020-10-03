@@ -12,8 +12,8 @@ import {
   fsCopyFile,
   fsxReadJsonFile
 } from '~funcs/Files';
-import { keyboardShapesProvider } from '../KeyboardShapesProvider';
-import { applicationStorage } from '../ApplicationStorage';
+import { keyboardShapesProvider } from '~shell/services/KeyboardShapesProvider';
+import { applicationStorage } from '~shell/services/ApplicationStorage';
 
 export class ProfileManagerCore {
   getDataFilePath(profName: string): string {

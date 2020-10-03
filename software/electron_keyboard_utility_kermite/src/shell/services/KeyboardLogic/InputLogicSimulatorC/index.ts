@@ -2,8 +2,8 @@ import {
   IProfileManagerStatus,
   IRealtimeKeyboardEvent
 } from '~defs/IpcContract';
-import { IInputLogicSimulator } from '../InputLogicSimulator.interface';
-import { IntervalTimerWrapper } from '../InputLogicSimulatorA/IntervalTimerWrapper';
+import { IInputLogicSimulator } from '~shell/services/KeyboardLogic/InputLogicSimulator.interface';
+import { IntervalTimerWrapper } from '~shell/services/KeyboardLogic/InputLogicSimulatorA/IntervalTimerWrapper';
 import {
   logicSimulatorStateC,
   createModuleFlow

@@ -1,7 +1,7 @@
 import { appUi } from '~ui/core';
 import { RealtimeKeyboardEventProvider } from './RealtimeKeyboardEventProvider';
 import { IRealtimeKeyboardEvent } from '~defs/IpcContract';
-import { editorModel } from '../editor/EditorModel';
+import { editorModel } from '~ui/models/editor/EditorModel';
 
 class PlayerModel {
   private keyEventProvider = new RealtimeKeyboardEventProvider();
