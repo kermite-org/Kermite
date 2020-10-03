@@ -1,5 +1,8 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
+import { reflectFieldValue } from '../FormHelpers';
+import { cssCommonTextInput } from '../commonStyles';
+import { createModal } from '../layout/ForegroundModalLayer';
 import {
   CommonDialogFrame,
   ClosableOverlay,
@@ -7,9 +10,6 @@ import {
   DialogButtonsRow,
   DialogButton
 } from './CommonDialogParts';
-import { createModal } from './ForegroundModalLayer';
-import { reflectFieldValue } from './FormHelpers';
-import { cssCommonTextInput } from './commonStyles';
 
 export const modalAlert = createModal((message: string) => {
   return (props: { close: () => void }) => {

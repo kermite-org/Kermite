@@ -1,11 +1,8 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import {
-  IKeyUnitCardViewModel,
-  makeKeyUnitCardsPartViewModel
-} from '../ConfiguratorView/KeyAssignEditPage/KeyboardSection/KeyUnitCardsPart.model';
+import { IKeyUnitCardViewModel } from '~ui/views/ConfiguratorZone/pages/KeyAssignEditPage/KeyboardSection/KeyUnitCardsPart.model';
 
-function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
+export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
   const { keyUnitId, pos, primaryText, secondaryText, isHold } = keyUnit;
 
   const cssKeyRect = css`
@@ -62,21 +59,6 @@ function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
       >
         {secondaryText}
       </text>
-    </g>
-  );
-}
-
-export function WidgetKeyUnitCardsPart() {
-  const keyUnitCardsPartViewModel = makeKeyUnitCardsPartViewModel(false);
-  return (
-    <g>
-      {keyUnitCardsPartViewModel.cards.map((keyUnit) => (
-        <KeyUnitCard
-          keyUnit={keyUnit}
-          key={keyUnit.keyUnitId}
-          qxOptimizer="deepEqualExFn"
-        />
-      ))}
     </g>
   );
 }

@@ -2,21 +2,21 @@ import { css } from 'goober';
 import { h } from '~lib/qx';
 import { ILayerDefaultScheme } from '~defs/ProfileData';
 import {
-  CommonDialogFrame,
-  DialogContentRow,
-  DialogButton,
-  DialogButtonsRow,
-  ClosableOverlay
-} from '~ui/views/base/CommonDialogParts';
-import { createModal } from '~ui/views/base/ForegroundModalLayer';
-import {
-  reflectFieldValue,
-  reflectFieldChecked
+  reflectFieldChecked,
+  reflectFieldValue
 } from '~ui/views/base/FormHelpers';
 import {
   cssCommonPropertiesTable,
   cssCommonTextInput
 } from '~ui/views/base/commonStyles';
+import {
+  CommonDialogFrame,
+  DialogContentRow,
+  DialogButton,
+  DialogButtonsRow,
+  ClosableOverlay
+} from '~ui/views/base/dialog/CommonDialogParts';
+import { createModal } from '~ui/views/base/layout/ForegroundModalLayer';
 
 interface ILayerConfigurationModelEditValues {
   layerName: string;

@@ -4,7 +4,7 @@ import { editorModel, uiStatusModel } from '~ui/models';
 import {
   ClosableOverlay,
   CommonDialogFrame
-} from '~ui/views/base/CommonDialogParts';
+} from '~ui/views/base/dialog/CommonDialogParts';
 import { AssignTypeSelectionPart } from './AssignTypeSelectionPart';
 import { DualModeSettingsPart } from './DualModeSettingsPart';
 

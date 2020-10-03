@@ -6,7 +6,7 @@ import { AssignEditSection } from './AssignEditSection';
 import { KeyboardSection } from './KeyboardSection';
 import { LayersSection } from './LayersSection';
 import { ProfileConfigurationPart } from './ProfileConfigurationPart';
-import { TestInputArea } from './TestInputArea';
+import { TestInputArea } from './TestInput/TestInputArea';
 
 const localStyleConstants = {
   editorPartMargin: '4px',

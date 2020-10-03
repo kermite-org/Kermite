@@ -2,10 +2,10 @@ import { glob, setup, css } from 'goober';
 import { h } from '~lib/qx';
 import { appUi } from '~ui/core';
 import { siteModel } from '~ui/models';
-import { DebugOverlay } from '~ui/views/base/DebugOverlay';
-import { ForegroundModalLayerRoot } from '~ui/views/base/ForegroundModalLayer';
-import { ConfiguratorViewRoot } from './ConfiguratorView/ConfiguratorViewRoot';
-import { WidgetViewRoot } from './WidgetView/WidgetViewRoot';
+import { DebugOverlay } from '~ui/views/base/layout/DebugOverlay';
+import { ForegroundModalLayerRoot } from '~ui/views/base/layout/ForegroundModalLayer';
+import { ConfiguratorZoneRoot } from './ConfiguratorZone/ConfiguratorZoneRoot';
+import { WidgetZoneRoot } from './WidgetZone/WidgetZoneRoot';
 
 setup(h);
 
@@ -31,7 +31,7 @@ glob`
   }
 `;
 
-export const ViewRoot = () => {
+export const SiteRoot = () => {
   const cssRoot = css`
     height: 100%;
   `;
@@ -42,7 +42,7 @@ export const ViewRoot = () => {
     <div css={cssRoot}>
       {/* {!isWidgetMode && <ConfiguratorSiteRoot />}
       {isWidgetMode && <WidgetSiteRoot />} */}
-      {!isWidgetMode ? <ConfiguratorViewRoot /> : <WidgetViewRoot />}
+      {!isWidgetMode ? <ConfiguratorZoneRoot /> : <WidgetZoneRoot />}
       <ForegroundModalLayerRoot />
       <DebugOverlay debugObj={appUi.debugObject} />
     </div>

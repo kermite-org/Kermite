@@ -3,7 +3,7 @@ import {
   modalTextEdit,
   modalConfirm,
   modalAlert
-} from '~ui/views/base/BasicModals';
+} from '~ui/views/base/dialog/BasicModals';
 import { callProfileSetupModal } from './ProfileSetupModal';
 
 export interface IProfileManagerViewModel {
