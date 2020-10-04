@@ -1,6 +1,6 @@
-export function reflectValue(proc: (value: string) => void) {
+export function reflectValue<T extends string>(proc: (value: T) => void) {
   return (e: Event) => {
-    proc((e.currentTarget as HTMLInputElement).value);
+    proc((e.currentTarget as HTMLInputElement).value as T);
   };
 }
 
