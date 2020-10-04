@@ -7,6 +7,7 @@ class PlayerModel {
   private keyEventProvider = new RealtimeKeyboardEventProvider();
   private _keyStates: { [keyId: string]: boolean } = {};
   private _currentLayerIndex: number = 0;
+  private _layerActiveStates: boolean[] = [];
 
   // getters
   get keyStates() {
@@ -41,6 +42,7 @@ class PlayerModel {
       }
     } else if (ev.type === 'layerChanged') {
       this._currentLayerIndex = ev.layerIndex;
+      this._layerActiveStates = ev.layerActiveStates;
     }
 
     appUi.rerender();

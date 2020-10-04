@@ -118,8 +118,12 @@ export class KeyboardDeviceService {
     this.deviceWrapper?.writeSingleFrame(buf);
   }
 
-  emitLayerChangedEvent(layerIndex: number) {
-    this.emitRealtimeEvent({ type: 'layerChanged', layerIndex });
+  emitLayerChangedEvent(layerIndex: number, layerActiveStates: boolean[]) {
+    this.emitRealtimeEvent({
+      type: 'layerChanged',
+      layerIndex,
+      layerActiveStates
+    });
   }
 
   writeSingleFrame(bytes: number[]) {
