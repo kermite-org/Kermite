@@ -16,7 +16,9 @@ export type IHoldFunctionInvocationMode =
   | 'turnOff'
   | 'toggle'
   | 'base'
-  | 'oneshot';
+  | 'oneshot'
+  | 'exclusive'
+  | 'clearExclusive';
 
 export type IAssignOperationType =
   | 'none'
