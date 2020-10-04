@@ -36,12 +36,12 @@ export namespace LogicalKeyActionDriver {
           outputKeyStateUpdator.handleModifier(HidKeyCodes.K_Shift, isDown);
         }
         state.holdLayerId = isDown ? targetLayerId : 'la0';
-      } else if (action.layerInvocationMode === 'modal') {
+      } else if (action.layerInvocationMode === 'turnOn') {
         if (isDown) {
           // console.log(`modal ${action.targetLayerId}`);
           state.modalLayerId = action.targetLayerId;
         }
-      } else if (action.layerInvocationMode === 'unmodal') {
+      } else if (action.layerInvocationMode === 'turnOff') {
         if (isDown) {
           // console.log(`unmodal`);
           state.modalLayerId = '';

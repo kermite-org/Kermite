@@ -12,8 +12,8 @@ export interface ILayer {
 
 export type IHoldFunctionInvocationMode =
   | 'hold'
-  | 'modal'
-  | 'unmodal'
+  | 'turnOn'
+  | 'turnOff'
   | 'toggle'
   | 'base'
   | 'oneshot';

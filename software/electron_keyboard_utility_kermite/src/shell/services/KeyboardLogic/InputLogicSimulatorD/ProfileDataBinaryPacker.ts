@@ -60,8 +60,8 @@ function makeAttachedModifiersBits(
 function makeLayerInvocationModeBits(mode: LayerInvocationMode): number {
   const mapper: { [key in LayerInvocationMode]: number } = {
     hold: 1,
-    modal: 2,
-    unmodal: 3,
+    turnOn: 2,
+    turnOff: 3,
     toggle: 4,
     base: 5,
     oneshot: 6
@@ -88,8 +88,8 @@ D: default scheme, 0 for transparent, 1 for block
 LLLL: layerIndex
 III: invocation mode
  1: hold
- 2: modal
- 3: unmodal
+ 2: turnOn
+ 3: turnOff
  4: toggle
  5: base
  6: oneshot

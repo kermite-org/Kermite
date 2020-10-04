@@ -10,8 +10,8 @@ export interface LayerOptionEditViewModel {
 
 const invocationModes: LayerInvocationMode[] = [
   'hold',
-  'modal',
-  'unmodal',
+  'turnOn',
+  'turnOff',
   'toggle',
   'base'
   // 'oneshot'

@@ -200,8 +200,8 @@ const OpType_layerCall = 0b10;
 
 const InvocationMode = {
   Hold: 1,
-  Modal: 2,
-  Unmodal: 3,
+  TurnOn: 2,
+  TurnOff: 3,
   Toggle: 4,
   Base: 5,
   Oneshot: 6
@@ -294,9 +294,9 @@ function handleOperationOn(opWord: u16) {
 
     if (fInvocationMode === InvocationMode.Hold) {
       layerMutations.activate(layerIndex, withShift);
-    } else if (fInvocationMode === InvocationMode.Modal) {
+    } else if (fInvocationMode === InvocationMode.TurnOn) {
       layerMutations.activate(layerIndex, withShift);
-    } else if (fInvocationMode === InvocationMode.Unmodal) {
+    } else if (fInvocationMode === InvocationMode.TurnOff) {
       layerMutations.deactivate(layerIndex, withShift);
     } else if (fInvocationMode === InvocationMode.Toggle) {
       layerMutations.toggle(layerIndex, withShift);
