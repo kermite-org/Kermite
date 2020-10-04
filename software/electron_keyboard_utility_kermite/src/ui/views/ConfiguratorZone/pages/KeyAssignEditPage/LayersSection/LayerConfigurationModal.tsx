@@ -62,7 +62,7 @@ const LayerConfigurationModalContent = (props: {
   caption: string;
 }) => {
   const { editValues, submit, close, caption } = props;
-  const defaultSchemeOptions: ILayerDefaultScheme[] = ['block', 'transparent'];
+  const defaultSchemeOptions: ILayerDefaultScheme[] = ['transparent', 'block'];
   const cssDefaultSchemeButtonsRow = css`
     display: flex;
   `;

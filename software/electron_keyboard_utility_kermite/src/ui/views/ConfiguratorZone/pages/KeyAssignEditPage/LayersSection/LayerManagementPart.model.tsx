@@ -87,7 +87,7 @@ export class LayerManagementPartViewModel {
     const layerAttrs = await callLayerConfigurationModal({
       sourceValues: {
         layerName: '',
-        defaultScheme: 'block',
+        defaultScheme: 'transparent',
         isShiftLayer: false
       },
       caption: 'Add Layer'
