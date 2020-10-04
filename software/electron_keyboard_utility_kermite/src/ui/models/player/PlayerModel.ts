@@ -7,7 +7,7 @@ class PlayerModel {
   private keyEventProvider = new RealtimeKeyboardEventProvider();
   private _keyStates: { [keyId: string]: boolean } = {};
   private _currentLayerIndex: number = 0;
-  private _layerActiveStates: boolean[] = [];
+  private _layerActiveStates: boolean[] = [true];
 
   // getters
   get keyStates() {

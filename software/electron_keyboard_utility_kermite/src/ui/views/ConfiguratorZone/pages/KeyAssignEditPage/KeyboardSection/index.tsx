@@ -3,6 +3,7 @@ import { h } from '~lib/qx';
 import { uiTheme } from '~ui/core';
 import { editorModel } from '~ui/models';
 import { KeyUnitCardsPart } from './KeyUnitCardsPart';
+import { LayerStateView } from './LayerStateView';
 
 export const KeyboardBasePlane = (props: { children: any }) => {
   const { clearAssignSlotSelection } = editorModel;
@@ -43,6 +44,7 @@ export const KeyboardBodyShape = () => {
 export function KeyboardSection() {
   const cssSvgOuter = css`
     object-fit: contain;
+    position: relative;
   `;
 
   return (
@@ -51,6 +53,7 @@ export function KeyboardSection() {
         <KeyboardBodyShape />
         <KeyUnitCardsPart />
       </KeyboardBasePlane>
+      <LayerStateView />
     </div>
   );
 }
