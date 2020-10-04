@@ -271,6 +271,11 @@ function patchChildren(
   let oldStart = 0;
   let oldEnd = oldChildren.length - 1;
   let newVNode, oldVNode, domNode;
+
+  if (parentDomNode === undefined) {
+    console.log(`parentDomNode undefined @patchInPlace`);
+    console.log({ newChildren, oldChildren, env });
+  }
   const childDomNodes = Array.from(parentDomNode.childNodes);
 
   /**
