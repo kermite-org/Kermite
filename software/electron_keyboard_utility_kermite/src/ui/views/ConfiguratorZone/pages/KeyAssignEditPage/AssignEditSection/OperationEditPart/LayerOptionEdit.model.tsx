@@ -13,14 +13,18 @@ const invocationModes: LayerInvocationMode[] = [
   'turnOn',
   'turnOff',
   'toggle',
-  'base'
+  'base',
   // 'oneshot'
+  'exclusive'
 ];
 
 export function makeLayerOptionEditViewModel(): LayerOptionEditViewModel {
   const { editOperation } = editorModel;
 
-  if (editOperation?.type === 'layerCall') {
+  if (
+    editOperation?.type === 'layerCall' &&
+    editOperation.invocationMode !== 'clearExclusive'
+  ) {
     return {
       enabled: true,
       allValues: invocationModes,

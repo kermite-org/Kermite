@@ -106,6 +106,23 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
       isEnabled: true
     }));
 
+  const layerCallEntryClearExclusive: IOperationCardViewModel = {
+    sig: 'ClearExclusive',
+    text: 'ex-clear',
+    isCurrent:
+      editOperation?.type === 'layerCall' &&
+      editOperation.invocationMode === 'clearExclusive',
+    setCurrent: () =>
+      writeEditOperation({
+        type: 'layerCall',
+        targetLayerId: 'la0',
+        invocationMode: 'clearExclusive'
+      }),
+    isEnabled: true
+  };
+
+  layerCallEntries.push(layerCallEntryClearExclusive);
+
   return {
     noAssignEntry,
     virtualKeyEntryGroups,

@@ -36,10 +36,14 @@ function getAssignOperationText(op?: IAssignOperation): string {
     return keyText;
   }
   if (op?.type === 'layerCall') {
-    const layer = editorModel.layers.find(
-      (la) => la.layerId === op.targetLayerId
-    );
-    return layer?.layerName || '';
+    if (op.invocationMode === 'clearExclusive') {
+      return 'ex-clear';
+    } else {
+      const layer = editorModel.layers.find(
+        (la) => la.layerId === op.targetLayerId
+      );
+      return layer?.layerName || '';
+    }
   }
   if (op?.type === 'modifierCall') {
     return VirtualKeyTexts[op.modifierKey] || '';
