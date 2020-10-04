@@ -169,7 +169,7 @@ function getAssignSet(layerIndex: u8, keyIndex: u8): IAssignSet | undefined {
 
 function getAssignSetL(keyIndex: u8): IAssignSet | undefined {
   for (let i = 15; i >= 0; i--) {
-    if (state.layerHoldFlags[i] || i === 0) {
+    if (state.layerHoldFlags[i]) {
       const res = getAssignSet(i, keyIndex);
       const isDefaultSchemeBlock = state.layerDefaultSchemeFlags[i];
       if (!res && isDefaultSchemeBlock) {
@@ -187,13 +187,71 @@ function getAssignSetL(keyIndex: u8): IAssignSet | undefined {
 // operation handlers
 
 const state = new (class {
-  layerIndex: u8 = 0;
+  baseLayerIndex: u8 = 0;
+  baseLayerWithShift: boolean = false;
   layerHoldFlags: boolean[] = Array(16).fill(false);
   layerDefaultSchemeFlags: boolean[] = Array(16).fill(false);
 })();
 
+state.layerHoldFlags[0] = true;
+
 const OpType_keyInput = 0b01;
 const OpType_layerCall = 0b10;
+
+const InvocationMode = {
+  Hold: 1,
+  Modal: 2,
+  Unmodal: 3,
+  Toggle: 4,
+  Base: 5,
+  Oneshot: 6
+};
+
+// binaryPackerでアサイン情報とは別に各レイヤの属性を保持して、そこにwithShiftとdefaultSchemeを加える。
+// レイヤ起動アクションにこれらのデータを含めない
+
+const layerMutations = new (class {
+  isActive(layerIndex: number) {
+    return state.layerHoldFlags[layerIndex];
+  }
+
+  activate(layerIndex: number, withShift: boolean) {
+    if (!this.isActive(layerIndex)) {
+      // state.layerIndex = layerIndex;
+      state.layerHoldFlags[layerIndex] = true;
+      deviceService.emitLayerChangedEvent(layerIndex, state.layerHoldFlags);
+      // console.log(`la`, state.layerIndex);
+      if (withShift) {
+        setModifiers(ModFlag_Shift);
+      }
+    }
+  }
+
+  deactivate(layerIndex: number, withShift: boolean) {
+    if (this.isActive(layerIndex)) {
+      // state.layerIndex = 0;
+      state.layerHoldFlags[layerIndex] = false;
+      deviceService.emitLayerChangedEvent(0, state.layerHoldFlags);
+      // console.log(`la`, state.layerIndex);
+      if (withShift) {
+        clearModifiers(ModFlag_Shift);
+      }
+    }
+  }
+
+  toggle(layerIndex: number, withShift: boolean) {
+    !this.isActive(layerIndex)
+      ? this.activate(layerIndex, withShift)
+      : this.deactivate(layerIndex, withShift);
+  }
+
+  base(layerIndex: number, withShift: boolean) {
+    this.deactivate(state.baseLayerIndex, state.baseLayerWithShift);
+    this.activate(layerIndex, withShift);
+    state.baseLayerIndex = layerIndex;
+    state.baseLayerWithShift = withShift;
+  }
+})();
 
 function handleOperationOn(opWord: u16) {
   const opType = (opWord >> 14) & 0b11;
@@ -223,16 +281,22 @@ function handleOperationOn(opWord: u16) {
   }
   if (opType === OpType_layerCall) {
     const layerIndex = (opWord >> 8) & 0b1111;
-    const withShift = (opWord >> 13) & 0b1;
-    const fDS = (opWord >> 12) & 0b1;
-    state.layerIndex = layerIndex;
-    deviceService.emitLayerChangedEvent(layerIndex);
-    state.layerHoldFlags[layerIndex] = true;
-    state.layerDefaultSchemeFlags[layerIndex] = !!fDS;
-    if (withShift) {
-      setModifiers(ModFlag_Shift);
+    const withShift = ((opWord >> 13) & 0b1) > 0;
+    const fDefaultScheme = (opWord >> 12) & 0b1;
+    const fInvocationMode = (opWord >> 4) & 0b111;
+    state.layerDefaultSchemeFlags[layerIndex] = !!fDefaultScheme;
+
+    if (fInvocationMode === InvocationMode.Hold) {
+      layerMutations.activate(layerIndex, withShift);
+    } else if (fInvocationMode === InvocationMode.Modal) {
+      layerMutations.activate(layerIndex, withShift);
+    } else if (fInvocationMode === InvocationMode.Unmodal) {
+      layerMutations.deactivate(layerIndex, withShift);
+    } else if (fInvocationMode === InvocationMode.Toggle) {
+      layerMutations.toggle(layerIndex, withShift);
+    } else if (fInvocationMode === InvocationMode.Base) {
+      layerMutations.base(layerIndex, withShift);
     }
-    // console.log(`la`, state.layerIndex);
   }
 }
 
@@ -259,15 +323,12 @@ function handleOperationOff(opWord: u16) {
     }
   }
   if (opType === OpType_layerCall) {
-    state.layerIndex = 0;
-    deviceService.emitLayerChangedEvent(0);
     const layerIndex = (opWord >> 8) & 0b1111;
-    state.layerHoldFlags[layerIndex] = false;
-    const withShift = (opWord >> 13) & 0b1;
-    if (withShift) {
-      clearModifiers(ModFlag_Shift);
+    const withShift = ((opWord >> 13) & 0b1) > 0;
+    const fInvocationMode = (opWord >> 4) & 0b111;
+    if (fInvocationMode === InvocationMode.Hold) {
+      layerMutations.deactivate(layerIndex, withShift);
     }
-    // console.log(`la`, state.layerIndex);
   }
 }
 
