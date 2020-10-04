@@ -64,7 +64,9 @@ function makeLayerInvocationModeBits(mode: LayerInvocationMode): number {
     turnOff: 3,
     toggle: 4,
     base: 5,
-    oneshot: 6
+    oneshot: 6,
+    exclusive: 7,
+    clearExclusive: 8
   };
   return mapper[mode] || 0;
 }
@@ -81,18 +83,20 @@ MMMM: modifiers, [os, alt, shift, ctrl] for msb-lsb
 KK_KKKK_KKKK: hid keycode with adhocShift flags
 
 layerCall
-0bTTSD_LLLL 0bXIII_XXXX
+0bTTSD_LLLL 0bIIII_XXXX
 TT: type, 0b10 for layerCall
 S: is shift layer
 D: default scheme, 0 for transparent, 1 for block
 LLLL: layerIndex
-III: invocation mode
+IIII: invocation mode
  1: hold
  2: turnOn
  3: turnOff
  4: toggle
  5: base
  6: oneshot
+ 7: exclusive
+ 8: clearExclusive
 */
 function encodeAssignOperation(
   op: IAssignOperation | undefined,

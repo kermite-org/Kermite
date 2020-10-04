@@ -189,6 +189,8 @@ function getAssignSetL(keyIndex: u8): IAssignSet | undefined {
 const state = new (class {
   baseLayerIndex: u8 = 0;
   baseLayerWithShift: boolean = false;
+  excLayerIndex: s8 = -1;
+  excLayerWithShift: boolean = false;
   layerHoldFlags: boolean[] = Array(16).fill(false);
   layerDefaultSchemeFlags: boolean[] = Array(16).fill(false);
 })();
@@ -204,7 +206,9 @@ const InvocationMode = {
   TurnOff: 3,
   Toggle: 4,
   Base: 5,
-  Oneshot: 6
+  Oneshot: 6,
+  Exclusive: 7,
+  ClearExclusive: 8
 };
 
 // binaryPackerでアサイン情報とは別に各レイヤの属性を保持して、そこにwithShiftとdefaultSchemeを加える。
@@ -257,6 +261,25 @@ const layerMutations = new (class {
       state.baseLayerWithShift = withShift;
     }
   }
+
+  exclusive(layerIndex: number, withShift: boolean) {
+    if (layerIndex !== state.excLayerIndex) {
+      if (state.excLayerIndex !== -1) {
+        this.deactivate(state.excLayerIndex, state.excLayerWithShift);
+      }
+      this.activate(layerIndex, withShift);
+      state.excLayerIndex = layerIndex;
+      state.excLayerWithShift = withShift;
+    }
+  }
+
+  clearExclusive() {
+    if (this.isActive(state.excLayerIndex)) {
+      this.deactivate(state.excLayerIndex, state.excLayerWithShift);
+      state.excLayerIndex = -1;
+      state.excLayerWithShift = false;
+    }
+  }
 })();
 
 function handleOperationOn(opWord: u16) {
@@ -289,7 +312,7 @@ function handleOperationOn(opWord: u16) {
     const layerIndex = (opWord >> 8) & 0b1111;
     const withShift = ((opWord >> 13) & 0b1) > 0;
     const fDefaultScheme = (opWord >> 12) & 0b1;
-    const fInvocationMode = (opWord >> 4) & 0b111;
+    const fInvocationMode = (opWord >> 4) & 0b1111;
     state.layerDefaultSchemeFlags[layerIndex] = !!fDefaultScheme;
 
     if (fInvocationMode === InvocationMode.Hold) {
@@ -302,6 +325,10 @@ function handleOperationOn(opWord: u16) {
       layerMutations.toggle(layerIndex, withShift);
     } else if (fInvocationMode === InvocationMode.Base) {
       layerMutations.base(layerIndex, withShift);
+    } else if (fInvocationMode === InvocationMode.Exclusive) {
+      layerMutations.exclusive(layerIndex, withShift);
+    } else if (fInvocationMode === InvocationMode.ClearExclusive) {
+      layerMutations.clearExclusive();
     }
   }
 }
@@ -331,7 +358,7 @@ function handleOperationOff(opWord: u16) {
   if (opType === OpType_layerCall) {
     const layerIndex = (opWord >> 8) & 0b1111;
     const withShift = ((opWord >> 13) & 0b1) > 0;
-    const fInvocationMode = (opWord >> 4) & 0b111;
+    const fInvocationMode = (opWord >> 4) & 0b1111;
     if (fInvocationMode === InvocationMode.Hold) {
       layerMutations.deactivate(layerIndex, withShift);
     }
