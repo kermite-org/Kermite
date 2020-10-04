@@ -18,6 +18,18 @@ class PlayerModel {
     return editorModel.layers[this._currentLayerIndex].layerId;
   }
 
+  get layerStackViewSource(): {
+    layerId: string;
+    layerName: string;
+    isActive: boolean;
+  }[] {
+    return editorModel.layers.map((la, index) => ({
+      layerId: la.layerId,
+      layerName: la.layerName,
+      isActive: this._layerActiveStates[index]
+    }));
+  }
+
   getDynamicKeyAssign = (keyUnitId: string) => {
     const layer = editorModel.getLayerById(this.currentLayerId);
     if (layer) {
