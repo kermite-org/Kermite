@@ -220,7 +220,9 @@ const layerMutations = new (class {
       // state.layerIndex = layerIndex;
       state.layerHoldFlags[layerIndex] = true;
       deviceService.emitLayerChangedEvent(layerIndex, state.layerHoldFlags);
+      // console.log(state.layerHoldFlags.map((a) => (a ? 1 : 0)).join(''));
       // console.log(`la`, state.layerIndex);
+      console.log(`layer on ${layerIndex}`);
       if (withShift) {
         setModifiers(ModFlag_Shift);
       }
@@ -232,7 +234,9 @@ const layerMutations = new (class {
       // state.layerIndex = 0;
       state.layerHoldFlags[layerIndex] = false;
       deviceService.emitLayerChangedEvent(0, state.layerHoldFlags);
+      // console.log(state.layerHoldFlags.map((a) => (a ? 1 : 0)).join(''));
       // console.log(`la`, state.layerIndex);
+      console.log(`layer off ${layerIndex}`);
       if (withShift) {
         clearModifiers(ModFlag_Shift);
       }
@@ -246,10 +250,12 @@ const layerMutations = new (class {
   }
 
   base(layerIndex: number, withShift: boolean) {
-    this.deactivate(state.baseLayerIndex, state.baseLayerWithShift);
-    this.activate(layerIndex, withShift);
-    state.baseLayerIndex = layerIndex;
-    state.baseLayerWithShift = withShift;
+    if (layerIndex !== state.baseLayerIndex) {
+      this.deactivate(state.baseLayerIndex, state.baseLayerWithShift);
+      this.activate(layerIndex, withShift);
+      state.baseLayerIndex = layerIndex;
+      state.baseLayerWithShift = withShift;
+    }
   }
 })();
 
