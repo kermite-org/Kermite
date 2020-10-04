@@ -13,6 +13,7 @@ import {
   createGroupedArrayByKey,
   duplicateObjectByJsonStringifyParse
 } from '~funcs/Utils';
+import { LayerInvocationMode } from '../InputLogicSimulatorA/Types';
 
 /*
 Key Assigns Restriction
@@ -56,6 +57,18 @@ function makeAttachedModifiersBits(
   return bits;
 }
 
+function makeLayerInvocationModeBits(mode: LayerInvocationMode): number {
+  const mapper: { [key in LayerInvocationMode]: number } = {
+    hold: 1,
+    modal: 2,
+    unmodal: 3,
+    toggle: 4,
+    base: 5,
+    oneshot: 6
+  };
+  return mapper[mode] || 0;
+}
+
 /*
 noOperation
 0bTTXX_XXXX 0bXXXX_XXXX
@@ -68,11 +81,18 @@ MMMM: modifiers, [os, alt, shift, ctrl] for msb-lsb
 KK_KKKK_KKKK: hid keycode with adhocShift flags
 
 layerCall
-0bTTSD_LLLL 0bXXXX_XXXX
+0bTTSD_LLLL 0bXIII_XXXX
 TT: type, 0b10 for layerCall
 S: is shift layer
 D: default scheme, 0 for transparent, 1 for block
 LLLL: layerIndex
+III: invocation mode
+ 1: hold
+ 2: modal
+ 3: unmodal
+ 4: toggle
+ 5: base
+ 6: oneshot
 */
 function encodeAssignOperation(
   op: IAssignOperation | undefined,
@@ -101,8 +121,12 @@ function encodeAssignOperation(
     if (layerInfo) {
       const { layerIndex, isShiftLayer, defaultScheme } = layerInfo;
       const fShift = isShiftLayer ? 1 : 0;
-      const fDS = defaultScheme === 'block' ? 1 : 0;
-      return [(tt << 6) | (fShift << 5) | (fDS << 4) | layerIndex, 0];
+      const fDefaultScheme = defaultScheme === 'block' ? 1 : 0;
+      const fInvocationMode = makeLayerInvocationModeBits(op.invocationMode);
+      return [
+        (tt << 6) | (fShift << 5) | (fDefaultScheme << 4) | layerIndex,
+        fInvocationMode << 4
+      ];
     }
   }
   return [0, 0];
