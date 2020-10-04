@@ -12,9 +12,11 @@ export interface ILayer {
 
 export type IHoldFunctionInvocationMode =
   | 'hold'
-  | 'oneshot'
   | 'modal'
-  | 'unmodal';
+  | 'unmodal'
+  | 'toggle'
+  | 'base'
+  | 'oneshot';
 
 export type IAssignOperationType =
   | 'none'
