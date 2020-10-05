@@ -105,12 +105,12 @@ function initAssignMemoryReader() {
 
 function isLayerDefaultSchemeBlock(layerIndex: u8) {
   const attrByte = assignMemoryLayerAttributeBytes[layerIndex];
-  return attrByte >> 7 > 0;
+  return ((attrByte >> 7) & 1) === 1;
 }
 
 function isLayerWithShift(layerIndex: u8) {
   const attrByte = assignMemoryLayerAttributeBytes[layerIndex];
-  return attrByte >> 6 > 0;
+  return ((attrByte >> 6) & 1) === 1;
 }
 
 function getAssignsBlockAddressForKey(keyIndex: u8): s16 {
@@ -257,7 +257,6 @@ const layerMutations = new (class {
       state.layerHoldFlags[layerIndex] = true;
       notifyLayerStateChanged();
       // console.log(state.layerHoldFlags.map((a) => (a ? 1 : 0)).join(''));
-      // console.log(`la`, state.layerIndex);
       console.log(`layer on ${layerIndex}`);
       const withShift = isLayerWithShift(layerIndex);
       if (withShift) {
@@ -271,7 +270,6 @@ const layerMutations = new (class {
       state.layerHoldFlags[layerIndex] = false;
       notifyLayerStateChanged();
       // console.log(state.layerHoldFlags.map((a) => (a ? 1 : 0)).join(''));
-      // console.log(`la`, state.layerIndex);
       console.log(`layer off ${layerIndex}`);
       const withShift = isLayerWithShift(layerIndex);
       if (withShift) {
