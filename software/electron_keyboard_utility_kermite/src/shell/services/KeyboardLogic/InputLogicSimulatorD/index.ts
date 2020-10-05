@@ -8,8 +8,7 @@ import { keyboardConfigProvider } from '~shell/services/KeyboardConfigProvider';
 import { deviceService } from '~shell/services/KeyboardDevice';
 import { profileManager } from '~shell/services/ProfileManager';
 import { IInputLogicSimulator } from '../InputLogicSimulator.interface';
-import { IntervalTimerWrapper } from '../InputLogicSimulatorA/IntervalTimerWrapper';
-// import * as CL from './DeviceCoreLogicSimulator0_Single';
+import { IntervalTimerWrapper } from '../helpers/IntervalTimerWrapper';
 import * as CL from './DeviceCoreLogicSimulator2_Dual';
 import { converProfileDataToBlobBytes } from './ProfileDataBinaryPacker';
 
