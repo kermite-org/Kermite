@@ -1,12 +1,21 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
+import { editorModel } from '~ui/models';
 import { LayerOptionEdit } from './LayerOptionEdit';
 import { OperationCard } from './OperationCard';
-import { makeOperationEditPartViewModel } from './OperationEditPart.model';
+import {
+  makeOperationEditPartViewModel,
+  makePlainOperationEditCardsViewModel
+} from './OperationEditPart.model';
 
 export function OpertionEditPart() {
   const {
     noAssignEntry,
+    transparentEntry,
+    blockEntry
+  } = makePlainOperationEditCardsViewModel();
+
+  const {
     virtualKeyEntryGroups,
     attachedModifierEntries,
     layerCallEntries
@@ -40,10 +49,14 @@ export function OpertionEditPart() {
     margin-top: 8px;
   `;
 
+  const { isSingleMode } = editorModel;
+
   return (
     <div css={cssAssignPanel}>
       <div css={cssGroupBoxV}>
         <OperationCard model={noAssignEntry} />
+        {isSingleMode && <OperationCard model={blockEntry} />}
+        {isSingleMode && <OperationCard model={transparentEntry} />}
       </div>
       <div>
         <div css={cssKeyAssignsRow}>

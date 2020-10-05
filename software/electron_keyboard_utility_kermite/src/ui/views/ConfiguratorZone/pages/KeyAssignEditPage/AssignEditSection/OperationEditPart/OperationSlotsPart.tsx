@@ -1,6 +1,8 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { uiTheme } from '~ui/core';
+import { OperationCard } from './OperationCard';
+import { makePlainOperationEditCardsViewModel } from './OperationEditPart.model';
 import { makeOperationSlotsPartViewModel } from './OperationSlotsPart.model';
 
 function OperationSlotCard(props: {
@@ -37,6 +39,11 @@ function OperationSlotCard(props: {
 export function OerationSlotsPart() {
   const operationSlotsPartViewModel = makeOperationSlotsPartViewModel();
 
+  const {
+    transparentEntry,
+    blockEntry
+  } = makePlainOperationEditCardsViewModel();
+
   const cssBox = css`
     > * {
       margin: 2px;
@@ -45,6 +52,10 @@ export function OerationSlotsPart() {
       margin-top: 4px;
     }
     margin-right: 6px;
+
+    .spacer {
+      height: 10px;
+    }
   `;
 
   return (
@@ -57,6 +68,9 @@ export function OerationSlotsPart() {
           setCurrent={slot.setCurrent}
         />
       ))}
+      <div class="spacer" />
+      <OperationCard model={blockEntry} />
+      <OperationCard model={transparentEntry} />
     </div>
   );
 }

@@ -1,15 +1,18 @@
 import {
-  IProfileData,
-  IAssignEntry_Single,
-  IAssignEntry_Dual,
+  IAssignEntry,
+  IAssignEntry_DualEx,
+  IAssignEntry_SingleEx,
   IProfileAssignType,
-  IAssignEntry
+  IProfileData
 } from '~defs/ProfileData';
 import { mapObjectValues } from '~funcs/Utils';
 
 function convertSignleAssignToDualAssign(
-  src: IAssignEntry_Single
-): IAssignEntry_Dual {
+  src: IAssignEntry_SingleEx
+): IAssignEntry_DualEx {
+  if (src.type === 'block' || src.type === 'transparent') {
+    return src;
+  }
   return {
     type: 'dual',
     primaryOp: src.op
@@ -17,8 +20,11 @@ function convertSignleAssignToDualAssign(
 }
 
 function convertDualAssignToSingleAssign(
-  src: IAssignEntry_Dual
-): IAssignEntry_Single {
+  src: IAssignEntry_DualEx
+): IAssignEntry_SingleEx {
+  if (src.type === 'block' || src.type === 'transparent') {
+    return src;
+  }
   return {
     type: 'single',
     op: src.primaryOp
@@ -70,6 +76,13 @@ function checkAssignValid(assign?: IAssignEntry): boolean {
   if (assign.type === undefined) {
     return false;
   }
+  if (assign.type === 'block') {
+    return true;
+  }
+  if (assign.type === 'transparent') {
+    return true;
+  }
+
   if (assign.type === 'single') {
     return !!assign.op;
   }

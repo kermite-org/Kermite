@@ -55,12 +55,19 @@ function getAssignEntryTexts(
   assign?: IAssignEntry
 ): { primaryText: string; secondaryText: string } {
   if (assign) {
-    // if (assign.type === 'transparent') {
-    //   return {
-    //     primaryText: 'TR',
-    //     secondaryText: ''
-    //   };
-    // }
+    if (assign.type === 'block') {
+      return {
+        primaryText: '□',
+        // primaryTest: '⬡',
+        secondaryText: ''
+      };
+    }
+    if (assign.type === 'transparent') {
+      return {
+        primaryText: '↡',
+        secondaryText: ''
+      };
+    }
 
     if (assign.type === 'single') {
       return {

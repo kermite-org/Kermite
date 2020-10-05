@@ -41,6 +41,10 @@ class EditorModel {
     return this.profileData.assignType;
   }
 
+  get isSingleMode() {
+    return this.profileAssignType === 'single';
+  }
+
   get isDualMode() {
     return this.profileAssignType === 'dual';
   }
@@ -50,7 +54,7 @@ class EditorModel {
     return !!(currentLayerId && currentKeyUnitId);
   }
 
-  private get assignEntry() {
+  get assignEntry() {
     return this.profileData.assigns[this.slotAddress];
   }
 
@@ -134,6 +138,10 @@ class EditorModel {
     sig: IDualModeEditTargetOperationSig
   ) => {
     this.dualModeEditTargetOperationSig = sig;
+    const assign = this.assignEntry;
+    if (assign?.type === 'block' || assign?.type === 'transparent') {
+      this.writeAssignEntry(undefined);
+    }
   };
 
   clearAssignSlotSelection = () => {

@@ -15,13 +15,6 @@ export interface IOperationCardViewModel {
   isEnabled: boolean;
 }
 
-interface IOperationEditPartViewModel {
-  noAssignEntry: IOperationCardViewModel;
-  virtualKeyEntryGroups: IOperationCardViewModel[][];
-  attachedModifierEntries: IOperationCardViewModel[];
-  layerCallEntries: IOperationCardViewModel[];
-}
-
 const modifierVirtualKeys: ModifierVirtualKey[] = [
   'K_Shift',
   'K_Ctrl',
@@ -31,21 +24,65 @@ const modifierVirtualKeys: ModifierVirtualKey[] = [
 
 const RestrictDualSecondaryAssigns = false;
 
-export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
-  const { editOperation, writeEditOperation, isSlotSelected } = editorModel;
+export function makePlainOperationEditCardsViewModel(): {
+  noAssignEntry: IOperationCardViewModel;
+  transparentEntry: IOperationCardViewModel;
+  blockEntry: IOperationCardViewModel;
+} {
+  const {
+    assignEntry,
+    writeAssignEntry,
+    editOperation,
+    writeEditOperation,
+    isSlotSelected
+  } = editorModel;
+
+  const noAssignEntry: IOperationCardViewModel = {
+    sig: 'none',
+    text: 'none',
+    isCurrent:
+      isSlotSelected &&
+      assignEntry?.type !== 'block' &&
+      assignEntry?.type !== 'transparent' &&
+      editOperation === undefined,
+    setCurrent: () => writeEditOperation(undefined),
+    isEnabled: true
+  };
+
+  const transparentEntry: IOperationCardViewModel = {
+    sig: 'transparent',
+    text: 'trans',
+    isCurrent: isSlotSelected && assignEntry?.type === 'transparent',
+    setCurrent: () => writeAssignEntry({ type: 'transparent' }),
+    isEnabled: true
+  };
+
+  const blockEntry: IOperationCardViewModel = {
+    sig: 'block',
+    text: 'block',
+    isCurrent: isSlotSelected && assignEntry?.type === 'block',
+    setCurrent: () => writeAssignEntry({ type: 'block' }),
+    isEnabled: true
+  };
+
+  return {
+    noAssignEntry,
+    transparentEntry,
+    blockEntry
+  };
+}
+
+export function makeOperationEditPartViewModel(): {
+  virtualKeyEntryGroups: IOperationCardViewModel[][];
+  attachedModifierEntries: IOperationCardViewModel[];
+  layerCallEntries: IOperationCardViewModel[];
+} {
+  const { editOperation, writeEditOperation } = editorModel;
 
   const isDualSecondary =
     RestrictDualSecondaryAssigns &&
     editorModel.isDualMode &&
     editorModel.dualModeEditTargetOperationSig === 'sec';
-
-  const noAssignEntry: IOperationCardViewModel = {
-    sig: 'none',
-    text: 'none',
-    isCurrent: isSlotSelected && editOperation === undefined,
-    setCurrent: () => writeEditOperation(undefined),
-    isEnabled: true
-  };
 
   const virtualKeyEntryGroups: IOperationCardViewModel[][] = virtualKeyGroupsTable2.map(
     (group) =>
@@ -124,7 +161,6 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
   layerCallEntries.push(layerCallEntryClearExclusive);
 
   return {
-    noAssignEntry,
     virtualKeyEntryGroups,
     attachedModifierEntries,
     layerCallEntries
