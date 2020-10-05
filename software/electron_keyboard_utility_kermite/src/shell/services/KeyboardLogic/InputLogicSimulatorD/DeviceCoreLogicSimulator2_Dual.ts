@@ -340,8 +340,6 @@ function handleOperationOn(opWord: u16) {
   }
   if (opType === OpType_layerCall) {
     const layerIndex = (opWord >> 8) & 0b1111;
-    const withShift = ((opWord >> 13) & 0b1) > 0;
-    const fDefaultScheme = (opWord >> 12) & 0b1;
     const fInvocationMode = (opWord >> 4) & 0b1111;
 
     if (fInvocationMode === InvocationMode.Hold) {
@@ -386,7 +384,6 @@ function handleOperationOff(opWord: u16) {
   }
   if (opType === OpType_layerCall) {
     const layerIndex = (opWord >> 8) & 0b1111;
-    const withShift = ((opWord >> 13) & 0b1) > 0;
     const fInvocationMode = (opWord >> 4) & 0b1111;
     if (fInvocationMode === InvocationMode.Hold) {
       layerMutations.deactivate(layerIndex);

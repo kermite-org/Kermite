@@ -83,10 +83,8 @@ MMMM: modifiers, [os, alt, shift, ctrl] for msb-lsb
 KK_KKKK_KKKK: hid keycode with adhocShift flags
 
 layerCall
-0bTTSD_LLLL 0bIIII_XXXX
+0bTTxx_LLLL 0bIIII_xxxx
 TT: type, 0b10 for layerCall
-S: is shift layer
-D: default scheme, 0 for transparent, 1 for block
 LLLL: layerIndex
 IIII: invocation mode
  1: hold
@@ -123,14 +121,9 @@ function encodeAssignOperation(
     const tt = 0b10;
     const layerInfo = localContext.layersDict[op.targetLayerId];
     if (layerInfo) {
-      const { layerIndex, isShiftLayer, defaultScheme } = layerInfo;
-      const fShift = isShiftLayer ? 1 : 0;
-      const fDefaultScheme = defaultScheme === 'block' ? 1 : 0;
+      const { layerIndex } = layerInfo;
       const fInvocationMode = makeLayerInvocationModeBits(op.invocationMode);
-      return [
-        (tt << 6) | (fShift << 5) | (fDefaultScheme << 4) | layerIndex,
-        fInvocationMode << 4
-      ];
+      return [(tt << 6) | layerIndex, fInvocationMode << 4];
     }
   }
   return [0, 0];
