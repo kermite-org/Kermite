@@ -53,8 +53,8 @@ class PlayerModel {
         this._keyStates[keyUnit.id] = isDown;
       }
     } else if (ev.type === 'layerChanged') {
-      this._currentLayerIndex = ev.layerIndex;
       this._layerActiveStates = ev.layerActiveStates;
+      this._currentLayerIndex = ev.layerActiveStates.lastIndexOf(true) || 0;
     }
 
     appUi.rerender();
