@@ -58,6 +58,8 @@ export type IAssignOperation =
   // |
   // | undefined
   // | IAssingOperationNone
+  // | { type: 'transparent' }
+  // | { type: 'block' }
   | IAssingOperationKeyInput
   | IAssignOperationLayerCall
   | IAssignOperationModifierCall;
@@ -145,6 +147,15 @@ export type IAssignEntry_Dual = {
   secondaryOp?: IAssignOperation; // hold
   tertiaryOp?: IAssignOperation; // double-tap
 };
+
+export type IAssingEntry_Block = {
+  type: 'block';
+};
+
+export type IAssignEntry_Transparent = {
+  type: 'transparent';
+};
+
 // export type ISingleAssignEntry_SingleVersatile1 = {
 //   type: 'singleVersatile1';
 //   slots: {
@@ -153,7 +164,22 @@ export type IAssignEntry_Dual = {
 //     cancelPreviousInput?: boolean;
 //   }[];
 // };
-export type IAssignEntry = IAssignEntry_Single | IAssignEntry_Dual;
+export type IAssignEntry =
+  | IAssignEntry_Single
+  | IAssignEntry_Dual
+  | IAssingEntry_Block
+  | IAssignEntry_Transparent;
+
+export type IAssignEntry_SingleEx =
+  | IAssignEntry_Single
+  | IAssingEntry_Block
+  | IAssignEntry_Transparent;
+
+export type IAssignEntry_DualEx =
+  | IAssignEntry_Dual
+  | IAssingEntry_Block
+  | IAssignEntry_Transparent;
+
 // | ISingleAssignEntry_None
 // | ISingleAssignEntry_Transparent
 // | ISingleAssignEntry_Single2;
@@ -248,7 +274,11 @@ export type IProfileData = {
       settings: {};
       assigns: {
         // laX.kuY
-        [address: string]: IAssignEntry_Single | undefined;
+        [address: string]:
+          | IAssignEntry_Single
+          | IAssingEntry_Block
+          | IAssignEntry_Transparent
+          | undefined;
       };
     }
   | {
@@ -261,7 +291,11 @@ export type IProfileData = {
       };
       assigns: {
         // laX.kuY
-        [address: string]: IAssignEntry_Dual | undefined;
+        [address: string]:
+          | IAssignEntry_Dual
+          | IAssingEntry_Block
+          | IAssignEntry_Transparent
+          | undefined;
       };
     }
 );

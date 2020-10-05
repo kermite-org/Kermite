@@ -131,29 +131,33 @@ function encodeAssignOperation(
 
 /*
 rawAssignEntryHeader
-0b1RTT_LLLL
-R: reserved
-TT: type
- 0b00: reserved
- 0b01: single
- 0b10: dual
- 0b11: triple
+0b1TTT_LLLL
+TTT: type
+ 0: reserved
+ 1: single
+ 2: dual
+ 3: triple
+ 4: block
+ 5: transparent
 LLLL: layerIndex
 */
 function encodeRawAssignEntryHeaderByte(
-  type: 'single' | 'dual' | 'triple',
+  type: 'single' | 'dual' | 'triple' | 'block' | 'transparent',
   layerIndex: number
 ): number {
-  const tt = {
-    single: 0b01,
-    dual: 0b10,
-    triple: 0b11
+  const assignType = {
+    single: 1,
+    dual: 2,
+    triple: 3,
+    block: 4,
+    transparent: 5
   }[type];
-  return (1 << 7) | (tt << 4) | layerIndex;
+  return (1 << 7) | (assignType << 4) | layerIndex;
 }
 
 /*
 rawAssignEntry
+0x~ HH, for block and transparent assign entry
 0x~ HH PP PP, for single assign entry
 0x~ HH PP PP SS SS, for dual assign entry
 0x~ HH PP PP SS SS TT TT, for triple assign entry
@@ -166,7 +170,12 @@ function encodeRawAssignEntry(ra: IRawAssignEntry): number[] {
   const { entry } = ra;
 
   const layer = localContext.layersDict[ra.layerId];
-  if (entry.type === 'single') {
+
+  if (entry.type === 'block') {
+    return [encodeRawAssignEntryHeaderByte('block', ra.layerIndex)];
+  } else if (entry.type === 'transparent') {
+    return [encodeRawAssignEntryHeaderByte('transparent', ra.layerIndex)];
+  } else if (entry.type === 'single') {
     // single
     return [
       encodeRawAssignEntryHeaderByte('single', ra.layerIndex),

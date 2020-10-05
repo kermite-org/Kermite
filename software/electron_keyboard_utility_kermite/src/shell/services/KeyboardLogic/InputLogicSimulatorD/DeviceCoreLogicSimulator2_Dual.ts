@@ -130,6 +130,24 @@ function getAssignsBlockAddressForKey(keyIndex: u8): s16 {
   return -1;
 }
 
+const AssignType = {
+  None: 0,
+  Signle: 1,
+  Dual: 2,
+  Tri: 3,
+  Block: 4,
+  Transparent: 5
+};
+
+const assignTypeToBodyByteSizeMap: { [key in number]: number } = {
+  [AssignType.None]: 0,
+  [AssignType.Signle]: 2,
+  [AssignType.Dual]: 4,
+  [AssignType.Tri]: 6,
+  [AssignType.Block]: 0,
+  [AssignType.Transparent]: 0
+};
+
 function getAssignBlockAddressForLayer(basePos: u8, targetLayerIndex: u8): s16 {
   const buf = storageBuf;
   const len = buf[basePos + 1];
@@ -142,21 +160,15 @@ function getAssignBlockAddressForLayer(basePos: u8, targetLayerIndex: u8): s16 {
       return pos;
     }
     pos++;
-    const tt = (data >> 4) & 0b11;
-    const numBlockBytes = tt * 2;
+    const assignType = (data >> 4) & 0b111;
+    const numBlockBytes = assignTypeToBodyByteSizeMap[assignType];
     pos += numBlockBytes;
   }
   return -1;
 }
 
-const AssignType_None = 0;
-const AssignType_Single = 1;
-const AssignType_Dual = 2;
-const AssignType_Tri = 3;
-type AssignType = 0 | 1 | 2 | 3;
-
 interface IAssignSet {
-  assignType: AssignType;
+  assignType: u8;
   pri: u16;
   sec: u16;
   ter: u16;
@@ -170,10 +182,14 @@ function getAssignSet(layerIndex: u8, keyIndex: u8): IAssignSet | undefined {
     // console.log({ keyIndex, layerIndex, pos0: pos0 + 24, pos1: pos1 + 24 });
     if (pos1 >= 0) {
       const entryHeaderByte = buf[pos1];
-      const tt = (entryHeaderByte >> 4) & 0b11;
-      const isDual = tt === 0b10;
-      const isTriple = tt === 0b11;
-      const assignType = tt as AssignType;
+      const assignType = (entryHeaderByte >> 4) & 0b111;
+      const isBlock = assignType === 4;
+      const isTrans = assignType === 5;
+      if (isBlock || isTrans) {
+        return { assignType, pri: 0, sec: 0, ter: 0 };
+      }
+      const isDual = assignType === 2;
+      const isTriple = assignType === 3;
       const pri = (buf[pos1 + 1] << 8) | buf[pos1 + 2];
       const sec =
         ((isDual || isTriple) && (buf[pos1 + 3] << 8) | buf[pos1 + 4]) || 0;
@@ -194,6 +210,12 @@ function getAssignSetL(keyIndex: u8): IAssignSet | undefined {
     if (state.layerHoldFlags[i]) {
       const res = getAssignSet(i, keyIndex);
       const isDefaultSchemeBlock = isLayerDefaultSchemeBlock(i);
+      if (res?.assignType === AssignType.Transparent) {
+        continue;
+      }
+      if (res?.assignType === AssignType.Block) {
+        return undefined;
+      }
       if (!res && isDefaultSchemeBlock) {
         return undefined;
       }
@@ -480,7 +502,7 @@ const local = new (class {
 })();
 
 const fallbackAssignSet: IAssignSet = {
-  assignType: AssignType_None,
+  assignType: AssignType.None,
   pri: 0,
   sec: 0,
   ter: 0
