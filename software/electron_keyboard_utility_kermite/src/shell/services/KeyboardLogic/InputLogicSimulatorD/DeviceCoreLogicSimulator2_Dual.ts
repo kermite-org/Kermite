@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { deviceService } from '~shell/services/KeyboardDevice';
 
 // --------------------------------------------------------------------------------
 // types
@@ -236,6 +235,18 @@ function resetLayerState() {
   state.layerHoldFlags[0] = true;
 }
 
+let layerStateCallback = (flags: boolean[]) => {};
+
+export function coreLogic_setLayerStateCallback(
+  proc: (flags: boolean[]) => void
+) {
+  layerStateCallback = proc;
+}
+
+function notifyLayerStateChanged() {
+  layerStateCallback(state.layerHoldFlags);
+}
+
 const layerMutations = new (class {
   isActive(layerIndex: number) {
     return state.layerHoldFlags[layerIndex];
@@ -243,9 +254,8 @@ const layerMutations = new (class {
 
   activate(layerIndex: number) {
     if (!this.isActive(layerIndex)) {
-      // state.layerIndex = layerIndex;
       state.layerHoldFlags[layerIndex] = true;
-      deviceService.emitLayerChangedEvent(layerIndex, state.layerHoldFlags);
+      notifyLayerStateChanged();
       // console.log(state.layerHoldFlags.map((a) => (a ? 1 : 0)).join(''));
       // console.log(`la`, state.layerIndex);
       console.log(`layer on ${layerIndex}`);
@@ -258,9 +268,8 @@ const layerMutations = new (class {
 
   deactivate(layerIndex: number) {
     if (this.isActive(layerIndex)) {
-      // state.layerIndex = 0;
       state.layerHoldFlags[layerIndex] = false;
-      deviceService.emitLayerChangedEvent(0, state.layerHoldFlags);
+      notifyLayerStateChanged();
       // console.log(state.layerHoldFlags.map((a) => (a ? 1 : 0)).join(''));
       // console.log(`la`, state.layerIndex);
       console.log(`layer off ${layerIndex}`);
@@ -833,7 +842,7 @@ export function coreLogic_reset() {
   resetHidReportBuf();
   resetLayerState();
   resetAssignBinder();
-  deviceService.emitLayerChangedEvent(0, state.layerHoldFlags);
+  notifyLayerStateChanged();
 }
 
 export function coreLogic_handleKeyInput(keyIndex: u8, isDown: boolean) {

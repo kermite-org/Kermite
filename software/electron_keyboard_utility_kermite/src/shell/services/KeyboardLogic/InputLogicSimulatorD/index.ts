@@ -82,6 +82,10 @@ export namespace InputLogicSimulatorD {
     keyboardConfigProvider.subscribeStatus(onKeyboardConfigChanged);
     deviceService.subscribe(onRealtimeKeyboardEvent);
     tickerTimer.start(processTicker, 5);
+
+    CL.coreLogic_setLayerStateCallback(
+      deviceService.emitLayerChangedEvent.bind(deviceService)
+    );
   }
 
   async function terminate() {
