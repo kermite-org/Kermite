@@ -90,7 +90,7 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
   );
 
   const layerCallEntries: IOperationCardViewModel[] = editorModel.profileData.layers
-    .filter((la) => la.layerId !== 'la0')
+    // .filter((la) => la.layerId !== 'la0')
     .map((la) => ({
       sig: la.layerId,
       text: la.layerName,
