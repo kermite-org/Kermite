@@ -91,8 +91,27 @@ function setOutputKeyCode(hidKeyCode: u8) {
 // --------------------------------------------------------------------------------
 // assign memory reader
 
+let assignMemoryKeyAssignsDataOffset = 0;
+let assignMemoryLayerAttributeBytes: number[] = [];
+
+function initAssignMemoryReader() {
+  const numLayers = storageBuf[0];
+  assignMemoryLayerAttributeBytes = storageBuf.slice(1, 1 + numLayers);
+  assignMemoryKeyAssignsDataOffset = 1 + numLayers;
+}
+
+function isLayerDefaultSchemeBlock(layerIndex: u8) {
+  const attrByte = assignMemoryLayerAttributeBytes[layerIndex];
+  return attrByte >> 7 > 0;
+}
+
+function isLayerWithShift(layerIndex: u8) {
+  const attrByte = assignMemoryLayerAttributeBytes[layerIndex];
+  return attrByte >> 6 > 0;
+}
+
 function getAssignsBlockAddressForKey(keyIndex: u8): s16 {
-  let pos = 0;
+  let pos = assignMemoryKeyAssignsDataOffset;
   while (pos < storageBufLength) {
     const data = storageBuf[pos];
     if (data === 0) {
@@ -171,7 +190,7 @@ function getAssignSetL(keyIndex: u8): IAssignSet | undefined {
   for (let i = 15; i >= 0; i--) {
     if (state.layerHoldFlags[i]) {
       const res = getAssignSet(i, keyIndex);
-      const isDefaultSchemeBlock = state.layerDefaultSchemeFlags[i];
+      const isDefaultSchemeBlock = isLayerDefaultSchemeBlock(i);
       if (!res && isDefaultSchemeBlock) {
         return undefined;
       }
@@ -188,11 +207,8 @@ function getAssignSetL(keyIndex: u8): IAssignSet | undefined {
 
 const state = new (class {
   baseLayerIndex: u8 = 0;
-  baseLayerWithShift: boolean = false;
   excLayerIndex: s8 = -1;
-  excLayerWithShift: boolean = false;
   layerHoldFlags: boolean[] = Array(16).fill(false);
-  layerDefaultSchemeFlags: boolean[] = Array(16).fill(false);
 })();
 
 state.layerHoldFlags[0] = true;
@@ -219,7 +235,7 @@ const layerMutations = new (class {
     return state.layerHoldFlags[layerIndex];
   }
 
-  activate(layerIndex: number, withShift: boolean) {
+  activate(layerIndex: number) {
     if (!this.isActive(layerIndex)) {
       // state.layerIndex = layerIndex;
       state.layerHoldFlags[layerIndex] = true;
@@ -227,13 +243,14 @@ const layerMutations = new (class {
       // console.log(state.layerHoldFlags.map((a) => (a ? 1 : 0)).join(''));
       // console.log(`la`, state.layerIndex);
       console.log(`layer on ${layerIndex}`);
+      const withShift = isLayerWithShift(layerIndex);
       if (withShift) {
         setModifiers(ModFlag_Shift);
       }
     }
   }
 
-  deactivate(layerIndex: number, withShift: boolean) {
+  deactivate(layerIndex: number) {
     if (this.isActive(layerIndex)) {
       // state.layerIndex = 0;
       state.layerHoldFlags[layerIndex] = false;
@@ -241,43 +258,41 @@ const layerMutations = new (class {
       // console.log(state.layerHoldFlags.map((a) => (a ? 1 : 0)).join(''));
       // console.log(`la`, state.layerIndex);
       console.log(`layer off ${layerIndex}`);
+      const withShift = isLayerWithShift(layerIndex);
       if (withShift) {
         clearModifiers(ModFlag_Shift);
       }
     }
   }
 
-  toggle(layerIndex: number, withShift: boolean) {
+  toggle(layerIndex: number) {
     !this.isActive(layerIndex)
-      ? this.activate(layerIndex, withShift)
-      : this.deactivate(layerIndex, withShift);
+      ? this.activate(layerIndex)
+      : this.deactivate(layerIndex);
   }
 
-  base(layerIndex: number, withShift: boolean) {
+  base(layerIndex: number) {
     if (layerIndex !== state.baseLayerIndex) {
-      this.deactivate(state.baseLayerIndex, state.baseLayerWithShift);
-      this.activate(layerIndex, withShift);
+      this.deactivate(state.baseLayerIndex);
+      this.activate(layerIndex);
       state.baseLayerIndex = layerIndex;
-      state.baseLayerWithShift = withShift;
     }
   }
 
-  exclusive(layerIndex: number, withShift: boolean) {
+  exclusive(layerIndex: number) {
     if (layerIndex !== state.excLayerIndex) {
       if (state.excLayerIndex !== -1) {
-        this.deactivate(state.excLayerIndex, state.excLayerWithShift);
+        this.deactivate(state.excLayerIndex);
       }
-      this.activate(layerIndex, withShift);
+      this.activate(layerIndex);
       state.excLayerIndex = layerIndex;
-      state.excLayerWithShift = withShift;
     }
   }
 
   clearExclusive() {
     if (this.isActive(state.excLayerIndex)) {
-      this.deactivate(state.excLayerIndex, state.excLayerWithShift);
+      this.deactivate(state.excLayerIndex);
       state.excLayerIndex = -1;
-      state.excLayerWithShift = false;
     }
   }
 })();
@@ -313,20 +328,19 @@ function handleOperationOn(opWord: u16) {
     const withShift = ((opWord >> 13) & 0b1) > 0;
     const fDefaultScheme = (opWord >> 12) & 0b1;
     const fInvocationMode = (opWord >> 4) & 0b1111;
-    state.layerDefaultSchemeFlags[layerIndex] = !!fDefaultScheme;
 
     if (fInvocationMode === InvocationMode.Hold) {
-      layerMutations.activate(layerIndex, withShift);
+      layerMutations.activate(layerIndex);
     } else if (fInvocationMode === InvocationMode.TurnOn) {
-      layerMutations.activate(layerIndex, withShift);
+      layerMutations.activate(layerIndex);
     } else if (fInvocationMode === InvocationMode.TurnOff) {
-      layerMutations.deactivate(layerIndex, withShift);
+      layerMutations.deactivate(layerIndex);
     } else if (fInvocationMode === InvocationMode.Toggle) {
-      layerMutations.toggle(layerIndex, withShift);
+      layerMutations.toggle(layerIndex);
     } else if (fInvocationMode === InvocationMode.Base) {
-      layerMutations.base(layerIndex, withShift);
+      layerMutations.base(layerIndex);
     } else if (fInvocationMode === InvocationMode.Exclusive) {
-      layerMutations.exclusive(layerIndex, withShift);
+      layerMutations.exclusive(layerIndex);
     } else if (fInvocationMode === InvocationMode.ClearExclusive) {
       layerMutations.clearExclusive();
     }
@@ -360,7 +374,7 @@ function handleOperationOff(opWord: u16) {
     const withShift = ((opWord >> 13) & 0b1) > 0;
     const fInvocationMode = (opWord >> 4) & 0b1111;
     if (fInvocationMode === InvocationMode.Hold) {
-      layerMutations.deactivate(layerIndex, withShift);
+      layerMutations.deactivate(layerIndex);
     }
   }
 }
@@ -797,6 +811,10 @@ function triggerResolver_handleKeyInput(keyIndex: u8, isDown: boolean) {
 
 // --------------------------------------------------------------------------------
 // entries
+
+export function coreLogic_reset() {
+  initAssignMemoryReader();
+}
 
 export function coreLogic_handleKeyInput(keyIndex: u8, isDown: boolean) {
   triggerResolver_handleKeyInput(keyIndex, isDown);

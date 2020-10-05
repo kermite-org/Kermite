@@ -32,6 +32,7 @@ export namespace InputLogicSimulatorD {
     if (prof && layoutStandard) {
       const bytes = converProfileDataToBlobBytes(prof, layoutStandard);
       CL.coreLogic_writeProfileDataBlob(bytes);
+      CL.coreLogic_reset();
     }
   }
 

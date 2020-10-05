@@ -312,6 +312,22 @@ function fixProfileData(
   }
 }
 
+// LayerAttributeByte
+// 0bDSxx_xxxx
+// D: default scheme, 0 for transparent, 1 for block
+// S: isShiftLayer
+function makeLayerAttributeBytes(profile: IProfileData): number[] {
+  return profile.layers.map((la) => {
+    const fShift = la.isShiftLayer ? 1 : 0;
+    const fDefaultScheme = la.defaultScheme === 'block' ? 1 : 0;
+    return (fDefaultScheme << 7) | (fShift << 6);
+  });
+}
+
+// デバイスのEEPROMに書き込むキーアサインバイナリデータを生成する
+// [0:1]: numLayers
+// [1:1+numLayers]: layer attributes
+// [1+numLayers:~] key assings data
 export function converProfileDataToBlobBytes(
   profile0: IProfileData,
   layoutStandard: IKeyboardLayoutStandard
@@ -331,6 +347,8 @@ export function converProfileDataToBlobBytes(
     ])
   );
 
+  const layerAttributeBytes = makeLayerAttributeBytes(profile);
+
   const rawAssigns = makeRawAssignEntries(profile);
   const numLayers = profile.layers.length;
   rawAssigns.sort(
@@ -347,7 +365,8 @@ export function converProfileDataToBlobBytes(
   // console.log(groupedAssignBytes.map(hexBytes));
 
   const keyAssignsBufferBytes = flattenArray(groupedAssignBytes);
-  const buf = [...keyAssignsBufferBytes];
+
+  const buf = [numLayers, ...layerAttributeBytes, ...keyAssignsBufferBytes];
 
   // console.log(`len: ${buf.length}`);
 
