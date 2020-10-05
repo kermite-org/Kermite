@@ -72,6 +72,10 @@ const ModFlag_OS = 8;
 
 const hidReportBuf: u8[] = Array(8).fill(0);
 
+function resetHidReportBuf() {
+  hidReportBuf.fill(0);
+}
+
 export function coreLogic_getOutputHidReport(): u8[] {
   return hidReportBuf;
 }
@@ -205,14 +209,6 @@ function getAssignSetL(keyIndex: u8): IAssignSet | undefined {
 // --------------------------------------------------------------------------------
 // operation handlers
 
-const state = new (class {
-  baseLayerIndex: u8 = 0;
-  excLayerIndex: s8 = -1;
-  layerHoldFlags: boolean[] = Array(16).fill(false);
-})();
-
-state.layerHoldFlags[0] = true;
-
 const OpType_keyInput = 0b01;
 const OpType_layerCall = 0b10;
 
@@ -227,8 +223,18 @@ const InvocationMode = {
   ClearExclusive: 8
 };
 
-// binaryPackerでアサイン情報とは別に各レイヤの属性を保持して、そこにwithShiftとdefaultSchemeを加える。
-// レイヤ起動アクションにこれらのデータを含めない
+const state = new (class {
+  baseLayerIndex: u8 = 0;
+  excLayerIndex: s8 = -1;
+  layerHoldFlags: boolean[] = Array(16).fill(false);
+})();
+
+function resetLayerState() {
+  state.baseLayerIndex = 0;
+  state.excLayerIndex = -1;
+  state.layerHoldFlags.fill(false);
+  state.layerHoldFlags[0] = true;
+}
 
 const layerMutations = new (class {
   isActive(layerIndex: number) {
@@ -396,6 +402,16 @@ const state1 = new (class {
       tick: 0
     }));
 })();
+
+function resetAssignBinder() {
+  state1.keyAttachedOperationWords.fill(0);
+  state1.recallKeyEntries = Array(4)
+    .fill(0)
+    .map(() => ({
+      keyIndex: -1,
+      tick: 0
+    }));
+}
 
 function handleKeyOn(keyIndex: u8, opWord: u16) {
   // console.log(`keyOn ${keyIndex} ${opWord}`);
@@ -814,6 +830,10 @@ function triggerResolver_handleKeyInput(keyIndex: u8, isDown: boolean) {
 
 export function coreLogic_reset() {
   initAssignMemoryReader();
+  resetHidReportBuf();
+  resetLayerState();
+  resetAssignBinder();
+  deviceService.emitLayerChangedEvent(0, state.layerHoldFlags);
 }
 
 export function coreLogic_handleKeyInput(keyIndex: u8, isDown: boolean) {
