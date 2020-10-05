@@ -20,6 +20,8 @@ export type IHoldFunctionInvocationMode =
   | 'exclusive'
   | 'clearExclusive';
 
+export type LayerInvocationMode = IHoldFunctionInvocationMode;
+
 export type IAssignOperationType =
   | 'none'
   | 'keyInput'

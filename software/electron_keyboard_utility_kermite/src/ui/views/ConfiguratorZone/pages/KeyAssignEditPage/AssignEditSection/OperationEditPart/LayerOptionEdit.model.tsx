@@ -1,4 +1,4 @@
-import { LayerInvocationMode } from '~shell/services/KeyboardLogic/InputLogicSimulatorA/Types';
+import { LayerInvocationMode } from '~defs/ProfileData';
 import { editorModel } from '~ui/models';
 
 export interface LayerOptionEditViewModel {

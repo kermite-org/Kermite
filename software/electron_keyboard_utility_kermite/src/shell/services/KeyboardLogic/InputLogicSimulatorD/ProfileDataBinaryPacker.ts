@@ -4,7 +4,7 @@ import {
   IProfileData,
   IAssignEntry,
   IAssignOperation,
-  IHoldFunctionInvocationMode
+  LayerInvocationMode
 } from '~defs/ProfileData';
 import { ModifierVirtualKey, isModifierVirtualKey } from '~defs/VirtualKeys';
 import {
@@ -14,8 +14,6 @@ import {
   createGroupedArrayByKey,
   duplicateObjectByJsonStringifyParse
 } from '~funcs/Utils';
-
-type LayerInvocationMode = IHoldFunctionInvocationMode;
 
 /*
 Key Assigns Restriction
