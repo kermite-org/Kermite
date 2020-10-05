@@ -3,7 +3,8 @@ import { getHidKeyCodeEx } from '~defs/HidKeyCodes';
 import {
   IProfileData,
   IAssignEntry,
-  IAssignOperation
+  IAssignOperation,
+  IHoldFunctionInvocationMode
 } from '~defs/ProfileData';
 import { ModifierVirtualKey, isModifierVirtualKey } from '~defs/VirtualKeys';
 import {
@@ -13,7 +14,8 @@ import {
   createGroupedArrayByKey,
   duplicateObjectByJsonStringifyParse
 } from '~funcs/Utils';
-import { LayerInvocationMode } from '../InputLogicSimulatorA/Types';
+
+type LayerInvocationMode = IHoldFunctionInvocationMode;
 
 /*
 Key Assigns Restriction
