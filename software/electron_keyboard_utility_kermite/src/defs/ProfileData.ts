@@ -4,9 +4,8 @@ export type ILayerDefaultScheme = 'block' | 'transparent';
 export interface ILayer {
   layerId: string;
   layerName: string;
-  // layerRole: 'root' | 'main' | 'custom';
-  // attachedModifiers?: ModifierVirtualKey[];
   isShiftLayer?: boolean;
+  // attachedModifiers?: ModifierVirtualKey[];
   defaultScheme: ILayerDefaultScheme;
 }
 
@@ -28,9 +27,6 @@ export type IAssignOperationType =
   | 'layerCall'
   | 'modifierCall';
 
-// export type IAssingOperationNone = {
-//   type: 'none';
-// };
 export type IAssingOperationKeyInput = {
   type: 'keyInput';
   virtualKey: VirtualKey;
@@ -51,98 +47,29 @@ export type IAssignOperationModifierCall = {
 };
 
 export type IAssignOperation =
-  // invocationMode: HoldFunctionInvocationMode;
-  // | {
-  //     type: 'none';
-  //   }
-  // |
-  // | undefined
-  // | IAssingOperationNone
-  // | { type: 'transparent' }
-  // | { type: 'block' }
   | IAssingOperationKeyInput
   | IAssignOperationLayerCall
   | IAssignOperationModifierCall;
-
-// | {
-//     type: 'repeatedKeyInput';
-//     key: VirtualKey;
-//     intervalMs: number;
-//   }
 // | {
 //     type: 'fixedText';
 //     text: string;
-//   }
-// | {
-//     type: 'sequenceMacro';
-//   }
-// | {
-//     type: 'mouseGesture';
 //   }
 // | {
 //     type: 'mouseOperation';
 //     action: 'leftdown' | 'leftup' | 'leftclick';
 //   };
 
-// export type InputTrigger =
-//   | 'down'
-//   | 'downLazy'
-//   | 'tap'
-//   | 'hold'
-//   | 'doubleTap'
-//   | 'up';
-
-// export type IAssignOperationTypeMap = {
-//   // none: IAssingOperationNone | undefined;
-//   none: undefined;
-//   keyInput: IAssingOperationKeyInput;
-//   layerCall: IAssignOperationLayerCall;
-//   modifierCall: IAssignOperationModifierCall;
-// };
-
-// export type IInputTriggersA =
-//   | 'down'
-//   | 'down_w'
-//   | 'up'
-//   | 'up_w'
-//   | 'tap'
-//   | 'tap_w'
-//   | 'tap_redown'
-//   | 'tap_rehold'
-//   | 'hold'
-//   | 'dtap'
-//   | 'dtap_w'
-//   | 'tritap'
-//   | 'tap_dtap'
-//   | 'tap_dtap_tritap'
-//   | 'tap_drill_d'
-//   | 'tap_drill_dd'
-//   | 'tap_drill_ddd';
-
 export type IProfileAssignType = 'single' | 'dual';
 
 export type IAssignEntryType = 'none' | 'single' | 'dual';
-// | 'transparent'
-// | 'single1'
-// | 'single2';
-// | 'singleVersatile1';
 
-// export type ISingleAssignEntry_None = {
-//   type: 'none';
-// };
-// export type IAssignEntry_Transparent = {
-//   type: 'transparent';
-// };
 export type IAssignEntry_Single = {
   type: 'single';
   op?: IAssignOperation;
 };
 
-// export type ISingleAssignEntry_Single2_Mode = 'single' | 'dual';
 export type IAssignEntry_Dual = {
   type: 'dual';
-  // mode: 'single' | 'dual';
-  // mode: 'dual';
   primaryOp?: IAssignOperation; // down, tap(if secondaryOp exists)
   secondaryOp?: IAssignOperation; // hold
   tertiaryOp?: IAssignOperation; // double-tap
@@ -156,14 +83,6 @@ export type IAssignEntry_Transparent = {
   type: 'transparent';
 };
 
-// export type ISingleAssignEntry_SingleVersatile1 = {
-//   type: 'singleVersatile1';
-//   slots: {
-//     trigger: IInputTriggersA;
-//     op: IAssignOperation;
-//     cancelPreviousInput?: boolean;
-//   }[];
-// };
 export type IAssignEntry =
   | IAssignEntry_Single
   | IAssignEntry_Dual
@@ -179,48 +98,6 @@ export type IAssignEntry_DualEx =
   | IAssignEntry_Dual
   | IAssingEntry_Block
   | IAssignEntry_Transparent;
-
-// | ISingleAssignEntry_None
-// | ISingleAssignEntry_Transparent
-// | ISingleAssignEntry_Single2;
-// | ISingleAssignEntry_SingleVersatile1;
-
-// export type IAssignEntryTypeMap = {
-//   // none: ISingleAssignEntry_None | undefined;
-//   none: undefined;
-//   single: IAssignEntry_Single;
-//   double: IAssignEntry_Dual;
-//   // transparent: ISingleAssignEntry_Transparent;
-//   // single1: ISingleAssignEntry_Single1;
-//   // single2: ISingleAssignEntry_Single2;
-//   // singleVersatile1: ISingleAssignEntry_SingleVersatile1;
-// };
-
-// export type ICombinationAssignEntry =
-//   | {
-//       type: 'combination1';
-//       keyIds: string[];
-//       op: IAssignOperation;
-//       // combinationMode: MultiSourceKeyAssignMode;
-//     }
-//   | {
-//       type: 'sequence1';
-//       keyIds: string[];
-//       op: IAssignOperation;
-//     };
-
-// export type ISingleKeyAssignsDict = {
-//   [keyId: string]: ISingleAssignEntry;
-// };
-
-// export type IKeyAssignsSet = {
-//   [layerId: string]: {
-//     //assigns for single key
-//     singles: ISingleKeyAssignsDict;
-//     //assigns for key combination
-//     combinations?: ICombinationAssignEntry[];
-//   };
-// };
 
 export interface IKeyUnitEntry {
   id: string;
@@ -260,14 +137,9 @@ export type IProfileData = {
   revision: 'PRF02';
   // keyboardBreedName: string;
   keyboardShape: IKeyboardShape;
-  /*
-    strong fallback layer is checked after when there aren't any assigns found
-    */
+  // strong fallback layer is checked after when there aren't any assigns found
   strongFallbackLayerId?: string;
   layers: ILayer[];
-  // multiAssigns?: {
-  //   [layerId: string]: ICombinationAssignEntry[];
-  // };
 } & (
   | {
       assignType: 'single';
@@ -302,7 +174,6 @@ export type IProfileData = {
 
 export const fallbackProfileData: IProfileData = {
   revision: 'PRF02',
-  // featureLevel: 3,
   keyboardShape: keyboardShape_fallbackData,
   assignType: 'single',
   settings: {},
@@ -311,13 +182,7 @@ export const fallbackProfileData: IProfileData = {
       layerId: 'la0',
       layerName: 'main',
       defaultScheme: 'block'
-      // layerRole: 'main'
     }
-    // {
-    //   layerId: 'la1',
-    //   // layerRole: 'shift',
-    //   layerName: 'shift'
-    // }
   ],
   assigns: {}
 };
