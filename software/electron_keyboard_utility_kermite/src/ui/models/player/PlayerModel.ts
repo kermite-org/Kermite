@@ -54,7 +54,8 @@ class PlayerModel {
       }
     } else if (ev.type === 'layerChanged') {
       this._layerActiveStates = ev.layerActiveStates;
-      this._currentLayerIndex = ev.layerActiveStates.lastIndexOf(true) || 0;
+      const layerIndex = ev.layerActiveStates.lastIndexOf(true);
+      this._currentLayerIndex = layerIndex >= 0 ? layerIndex : 0;
     }
 
     appUi.rerender();
