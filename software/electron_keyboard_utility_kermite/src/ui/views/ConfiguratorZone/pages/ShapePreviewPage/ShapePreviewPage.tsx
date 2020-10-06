@@ -1,5 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
+import { playerModel } from '~ui/models';
 import { BreedSelector } from './Controls/BreedSelector';
 import { PreviewOptionsBox } from './Controls/PreviewOptionsBox';
 import { ShapePreviewPageModel } from './ShapePreviewPage.model';
@@ -69,7 +70,9 @@ export const KeyboardShapePreviewPage = () => {
           <div class="keyboardRow">
             {loadedShape && <KeyboardShapeView shape={loadedShape} />}
           </div>
-          <div class="restRow"></div>
+          <div class="restRow">
+            hold key indices: {JSON.stringify([...playerModel.holdKeyIndices])}
+          </div>
         </div>
       );
     }
