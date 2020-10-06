@@ -258,9 +258,10 @@ function makeRawAssignEntries(profile: IProfileData): IRawAssignEntry[] {
     .filter((ra) => !!ra);
 }
 
-// function hexBytes(bytes: number[]) {
-//   return bytes.map((b) => `00${b.toString(16)}`.slice(-2)).join(' ');
-// }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function hexBytes(bytes: number[], splitter = ',') {
+  return bytes.map((b) => ('00' + b.toString(16)).slice(-2)).join(splitter);
+}
 
 function fixAssignOperation(
   op: IAssignOperation,
@@ -362,13 +363,15 @@ export function converProfileDataToBlobBytes(
     'keyIndex'
   ).map(encodeKeyBoundAssignsSet);
 
-  // console.log(groupedAssignBytes.map(hexBytes));
+  // console.log(groupedAssignBytes.map((a) => hexBytes(a, ' ')));
 
   const keyAssignsBufferBytes = flattenArray(groupedAssignBytes);
 
   const buf = [numLayers, ...layerAttributeBytes, ...keyAssignsBufferBytes];
 
   // console.log(`len: ${buf.length}`);
+
+  // console.log(hexBytes(buf));
 
   return buf;
 }
