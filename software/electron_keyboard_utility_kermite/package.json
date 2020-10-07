@@ -4,9 +4,6 @@
   "version": "1.0.0",
   "main": "dist/index.js",
   "license": "MIT",
-  "engines": {
-    "node": "^13.0.0"
-  },
   "build": {
     "appId": "com.electron.yourapp",
     "mac": {
