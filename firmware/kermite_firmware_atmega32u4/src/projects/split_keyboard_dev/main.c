@@ -50,7 +50,7 @@ void toggleLED1() {
 //---------------------------------------------
 //definitions
 
-#if 1
+#if 0
 
 #define NumRows 4
 #define NumColumns 6
@@ -119,6 +119,43 @@ static const int8_t keySlotIndexToKeyIndexMap[NumKeySlots] PROGMEM = {
   35, 34, 33, 32, 31, 30,
   41, 40, 39, 38, 37, 36,
   xx, 45, 44, 43, 42, 47,
+};
+// clang-format on
+
+#endif
+
+#if 1
+
+#define NumRows 5
+#define NumColumns 8
+
+static const uint8_t rowPins[NumRows] = { P_C6, P_D7, P_E6, P_B4, P_B5 };
+static const uint8_t columnPins[NumColumns] = { P_F4, P_F5, P_F6, P_F7, P_B1, P_B3, P_B2, P_B6 };
+
+#define NumKeySlots 80
+#define NumKeySlotsHalf 40 //NumRows * NumColumns
+
+#define NumKeySlotBytes 10
+#define NumKeySlotBytesHalf 5 //Ceil(NumRows * NumColumns / 8);
+
+#define SingleWireMaxPacketSize 6 //NumKeySlotBytesHalf + 1
+
+#define KeyIndexRange 78
+
+// clang-format off
+static const int8_t keySlotIndexToKeyIndexMap[NumKeySlots] PROGMEM = {
+  //left
+   0,  1,  2,  3,  4,  5,  6,  7,
+   8,  9, 10, 11, 12, 13, 14, 15,
+  16, 17, 18, 19, 20, 21, 22, 23,
+  24, 25, 26, 27, 28, 29, 30, 31,
+  32, 33, 34, 35, -1, 36, 37, 38,
+  //right
+  39, 40, 41, 42, 43, 44, 45, 46, 
+  47, 48, 49, 50, 51, 52, 53, 54, 
+  55, 56, 57, 58, 59, 60, 61, 62, 
+  63, 64, 65, 66, 67, 68, 69, 70,
+  71, 72, 73, 74, -1, 75, 76, 77
 };
 // clang-format on
 
