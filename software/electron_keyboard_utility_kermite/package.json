@@ -3,7 +3,7 @@
   "productName": "Kermite",
   "version": "1.0.0",
   "main": "dist/index.js",
-  "license": "MIT",
+  "license": "Undetermined",
   "build": {
     "appId": "com.electron.yourapp",
     "mac": {
