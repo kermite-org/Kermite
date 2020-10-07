@@ -50,82 +50,6 @@ void toggleLED1() {
 //---------------------------------------------
 //definitions
 
-#if 0
-
-#define NumRows 4
-#define NumColumns 6
-
-static const uint8_t rowPins[NumRows] = { P_D7, P_E6, P_B4, P_B5 };
-static const uint8_t columnPins[NumColumns] = { P_F6, P_F7, P_B1, P_B3, P_B2, P_B6 };
-
-#define NumKeySlots 48
-#define NumKeySlotsHalf 24 //NumRows * NumColumns
-
-#define NumKeySlotBytes 6
-#define NumKeySlotBytesHalf 3 //Ceil(NumRows * NumColumns / 8);
-
-#define SingleWireMaxPacketSize 6
-
-#define KeyIndexRange 48
-
-// clang-format off
-static const int8_t keySlotIndexToKeyIndexMap[NumKeySlots] PROGMEM = {
-  //left
-  5, 4, 3, 2, 1, 0,
-  11, 10, 9, 8, 7, 6,
-  17, 16, 15, 14, 13, 12,
-  23, 22, 21, 20, 19, 18,
-  //right
-  29, 28, 27, 26, 25, 24,
-  35, 34, 33, 32, 31, 30,
-  41, 40, 39, 38, 37, 36,
-  47, 46, 45, 44, 43, 42,
-};
-// clang-format on
-
-#endif
-
-#if 0
-
-#define NumRows 5
-#define NumColumns 6
-
-static const uint8_t rowPins[NumRows] = { P_C6, P_D7, P_E6, P_B4, P_B5 };
-static const uint8_t columnPins[NumColumns] = { P_F6, P_F7, P_B1, P_B3, P_B2, P_B6 };
-
-#define NumKeySlots 60
-#define NumKeySlotsHalf 30 //NumRows * NumColumns
-
-#define NumKeySlotBytes 8
-#define NumKeySlotBytesHalf 4 //Ceil(NumRows * NumColumns / 8);
-
-#define SingleWireMaxPacketSize 6 //NumKeySlotBytesHalf + 2
-
-#define KeyIndexRange 48
-
-#define xx -1
-
-// clang-format off
-static const int8_t keySlotIndexToKeyIndexMap[NumKeySlots] PROGMEM = {
-  //left
-  xx, xx, xx, xx, xx, xx,
-  5, 4, 3, 2, 1, 0,
-  11, 10, 9, 8, 7, 6,
-  17, 16, 15, 14, 13, 12,
-  xx, 21, 20, 19, 18, 23,
-  //right
-  xx, xx, xx, xx, xx, xx,
-  29, 28, 27, 26, 25, 24,
-  35, 34, 33, 32, 31, 30,
-  41, 40, 39, 38, 37, 36,
-  xx, 45, 44, 43, 42, 47,
-};
-// clang-format on
-
-#endif
-
-#if 1
-
 #define NumRows 5
 #define NumColumns 8
 
@@ -158,8 +82,6 @@ static const int8_t keySlotIndexToKeyIndexMap[NumKeySlots] PROGMEM = {
   72, 73, 74, 75, -1, 76, 77, 78
 };
 // clang-format on
-
-#endif
 
 const bool EmitHidKeys = true;
 //const bool EmitHidKeys = false;
@@ -327,7 +249,7 @@ void runAsMaster() {
       pullAltSideKeyStates();
     }
     if (cnt % 1000 == 0) {
-      uint8_t rate = (uint32_t)okCount * 100 / tryCount;
+      // uint8_t rate = (uint32_t)okCount * 100 / tryCount;
       // printf("%d/%d, %d%%\n", okCount, tryCount, rate);
     }
     if (cnt % 2000 == 0) {
@@ -394,7 +316,7 @@ void runAsSlave() {
       outputLED1(pressedKeyCount > 0);
     }
     if (cnt % 1000 == 0) {
-      uint8_t rate = (uint32_t)okCount * 100 / tryCount;
+      // uint8_t rate = (uint32_t)okCount * 100 / tryCount;
       // printf("%d/%d, %d%%\n", okCount, tryCount, rate);
     }
 

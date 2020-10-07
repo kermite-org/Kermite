@@ -25,6 +25,10 @@ export function fsRenameFile(src: string, dst: string): Promise<void> {
   return fs.promises.rename(src, dst);
 }
 
+export function fsxReadTextFile(fpath: string): Promise<string> {
+  return fs.promises.readFile(fpath, { encoding: 'utf-8' });
+}
+
 export async function fsxReadJsonFile(fpath: string): Promise<any> {
   const text = await fs.promises.readFile(fpath, { encoding: 'utf-8' });
   if (text) {

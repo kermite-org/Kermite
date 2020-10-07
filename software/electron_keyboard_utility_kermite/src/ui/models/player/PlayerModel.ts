@@ -9,6 +9,8 @@ class PlayerModel {
   private _currentLayerIndex: number = 0;
   private _layerActiveStates: boolean[] = [true];
 
+  holdKeyIndices: Set<number> = new Set();
+
   // getters
   get keyStates() {
     return this._keyStates;
@@ -46,6 +48,12 @@ class PlayerModel {
   private handlekeyEvents = (ev: IRealtimeKeyboardEvent) => {
     if (ev.type === 'keyStateChanged') {
       const { keyIndex, isDown } = ev;
+      if (isDown) {
+        this.holdKeyIndices.add(keyIndex);
+      } else {
+        this.holdKeyIndices.delete(keyIndex);
+      }
+
       const keyUnit = editorModel.profileData.keyboardShape.keyUnits.find(
         (kp) => kp.keyIndex === keyIndex
       );

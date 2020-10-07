@@ -3,9 +3,10 @@ import * as path from 'path';
 import {
   IKeyboardShape,
   IKeyboardShapeDisplayArea,
-  IKeyUnitEntry
+  IKeyUnitEntry,
+  keyboardShape_fallbackData
 } from '~defs/ProfileData';
-import { fsxReadJsonFile, globAsync } from '~funcs/Files';
+import { fsxReadTextFile, globAsync } from '~funcs/Files';
 import { removeArrayItems } from '~funcs/Utils';
 import { appEnv } from '~shell/base/AppEnvironment';
 
@@ -19,22 +20,44 @@ const baseDir = path.resolve(
   '../../firmware/kermite_firmware_atmega32u4/src/projects'
 );
 
-async function loadShapeFromFile(filePath: string): Promise<IKeyboardShape> {
+async function loadShapeFromFile(
+  filePath: string
+): Promise<IKeyboardShape | undefined> {
   const relPath = filePath.replace(baseDir + '/', '');
   const breedName = relPath.replace('/layout.json', '');
-  const source = (await fsxReadJsonFile(filePath)) as IKeyboardShapeSourceJson;
+
+  console.log(`loading ${relPath}`);
+  let fileText: string;
+  try {
+    fileText = await fsxReadTextFile(filePath);
+  } catch (error) {
+    console.log(`cannot read file ${relPath}`);
+    return undefined;
+  }
+  let souceObj: IKeyboardShapeSourceJson;
+  try {
+    souceObj = JSON.parse(fileText);
+  } catch (error) {
+    console.log(`cannot parse content of file ${relPath}`);
+    return undefined;
+  }
+
+  const fallbackDisplayArea = keyboardShape_fallbackData.displayArea;
+
+  // todo: データの内容を検証しながら値を抽出する
   return {
     breedName,
-    keyUnits: source.keyUnits,
-    displayArea: source.displayArea,
-    bodyPathMarkupText: source.bodyPathMarkups.join(' ')
+    keyUnits: souceObj.keyUnits || [],
+    displayArea: souceObj.displayArea || { ...fallbackDisplayArea },
+    bodyPathMarkupText: souceObj.bodyPathMarkups?.join(' ') || ''
   };
 }
 
 async function loadKeyboardShapes(): Promise<IKeyboardShape[]> {
   const pattern = `${baseDir}/**/*/layout.json`;
   const files = await globAsync(pattern);
-  return await Promise.all(files.map(loadShapeFromFile));
+  const loaded = await Promise.all(files.map(loadShapeFromFile));
+  return loaded.filter((a) => !!a) as IKeyboardShape[];
 }
 
 function setupFilesWatcher(callback: (filePath: string) => void) {
@@ -78,13 +101,15 @@ export class KeyboardShapesProvider {
 
   onFileUpdated = async (filePath: string) => {
     const shape = await loadShapeFromFile(filePath);
-    const { breedName } = shape;
-    const index = this.keyboardShapes.findIndex(
-      (ks) => ks.breedName === breedName
-    );
-    if (index !== -1) {
-      this.keyboardShapes[index] = shape;
-      this.listeners.forEach((listener) => listener({ breedName }));
+    if (shape) {
+      const { breedName } = shape;
+      const index = this.keyboardShapes.findIndex(
+        (ks) => ks.breedName === breedName
+      );
+      if (index !== -1) {
+        this.keyboardShapes[index] = shape;
+        this.listeners.forEach((listener) => listener({ breedName }));
+      }
     }
   };
 
