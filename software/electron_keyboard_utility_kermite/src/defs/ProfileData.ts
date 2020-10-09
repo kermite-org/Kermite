@@ -149,7 +149,9 @@ export type IProfileData = {
 } & (
   | {
       assignType: 'single';
-      settings: {};
+      settings: {
+        useShiftCancel: boolean;
+      };
       assigns: {
         // laX.kuY
         [address: string]:
@@ -163,6 +165,7 @@ export type IProfileData = {
       assignType: 'dual';
       settings: {
         type: 'dual';
+        useShiftCancel: boolean;
         primaryDefaultTrigger: 'down' | 'tap';
         useInterruptHold: boolean;
         tapHoldThresholdMs: number;
@@ -182,7 +185,9 @@ export const fallbackProfileData: IProfileData = {
   revision: 'PRF02',
   keyboardShape: keyboardShape_fallbackData,
   assignType: 'single',
-  settings: {},
+  settings: {
+    useShiftCancel: false
+  },
   layers: [
     {
       layerId: 'la0',

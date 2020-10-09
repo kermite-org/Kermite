@@ -39,6 +39,7 @@ interface IRawLayerInfo {
 const localContext = new (class {
   layoutStandard: IKeyboardLayoutStandard = 'US';
   layersDict: { [layerId: string]: IRawLayerInfo } = {};
+  useShiftCancel: boolean = false;
 })();
 
 function makeAttachedModifiersBits(
@@ -109,11 +110,13 @@ function encodeAssignOperation(
       const mods = makeAttachedModifiersBits([vk]);
       return [(fAssignType << 6) | (mods << 2), 0];
     } else {
-      const layoutStandard = localContext.layoutStandard;
+      const { layoutStandard, useShiftCancel } = localContext;
       const mods = makeAttachedModifiersBits(op.attachedModifiers);
       let hidKey = getHidKeyCodeEx(vk, layoutStandard);
-      if (!layer.isShiftLayer) {
-        // shiftレイヤ上のアサインのみshift cancelが効くようにする
+
+      if (!(useShiftCancel && layer.isShiftLayer)) {
+        // ShiftCancelオプションが有効で、shiftレイヤの場合のみ、shift cancel bitを維持
+        // そうでない場合はshift cancel bitを削除
         hidKey = hidKey & 0x1ff;
       }
       return [
@@ -366,6 +369,7 @@ export function converProfileDataToBlobBytes(
       }
     ])
   );
+  localContext.useShiftCancel = profile.settings.useShiftCancel;
 
   const layerAttributeBytes = makeLayerAttributeBytes(profile);
 

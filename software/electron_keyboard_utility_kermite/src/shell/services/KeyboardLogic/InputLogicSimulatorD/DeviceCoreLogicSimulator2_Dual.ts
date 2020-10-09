@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
-const useShiftCancel = true;
-
 // --------------------------------------------------------------------------------
 // types
 
@@ -94,7 +92,7 @@ export function coreLogic_getOutputHidReport(): u8[] {
     hidKeyCode
   } = reportState;
   hidReportBuf[0] = layerModFlags | modFlags | adhocModFlags;
-  if (useShiftCancel && shiftCancelActive) {
+  if (shiftCancelActive) {
     hidReportBuf[0] &= ~ModFlag_Shift;
   }
   hidReportBuf[2] = hidKeyCode;
@@ -435,7 +433,7 @@ function handleOperationOn(opWord: u16) {
       if (shiftOn) {
         setAdhocModifiers(ModFlag_Shift);
       }
-      if (useShiftCancel && shiftOff && isOtherModifiersClean) {
+      if (shiftOff && isOtherModifiersClean) {
         // shift cancel
         startShiftCancel();
       }
@@ -485,7 +483,7 @@ function handleOperationOff(opWord: u16) {
       if (shiftOn) {
         clearAdhocModifiers(ModFlag_Shift);
       }
-      if (useShiftCancel && shiftOff) {
+      if (shiftOff) {
         endShiftCancel();
       }
       if (keyCode) {
