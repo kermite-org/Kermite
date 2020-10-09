@@ -8,6 +8,7 @@ export interface ILayer {
   // attachedModifiers?: ModifierVirtualKey[];
   defaultScheme: ILayerDefaultScheme;
   exclusionGroup: number;
+  initialActive: boolean;
 }
 
 export type IHoldFunctionInvocationMode =
@@ -188,7 +189,8 @@ export const fallbackProfileData: IProfileData = {
       layerId: 'la0',
       layerName: 'main',
       defaultScheme: 'block',
-      exclusionGroup: 0
+      exclusionGroup: 0,
+      initialActive: true
     }
   ],
   assigns: {}

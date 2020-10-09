@@ -110,6 +110,9 @@ class ProfileManager {
       if (la.exclusionGroup === undefined) {
         la.exclusionGroup = 0;
       }
+      if (la.initialActive === undefined) {
+        la.initialActive = false;
+      }
     });
   }
 

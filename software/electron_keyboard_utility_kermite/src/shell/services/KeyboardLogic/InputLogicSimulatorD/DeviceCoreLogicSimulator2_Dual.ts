@@ -117,6 +117,11 @@ function isLayerWithShift(layerIndex: u8) {
   return ((attrByte >> 6) & 1) === 1;
 }
 
+function getLayerInitialActive(layerIndex: u8) {
+  const attrByte = assignMemoryLayerAttributeBytes[layerIndex * 2];
+  return ((attrByte >> 5) & 1) === 1;
+}
+
 function getLayerExclusionGroup(layerIndex: u8) {
   const attrByte = assignMemoryLayerAttributeBytes[layerIndex * 2 + 1];
   return attrByte & 0b111;
@@ -264,7 +269,10 @@ const state = new (class {
 function resetLayerState() {
   state.baseLayerIndex = 0;
   state.layerHoldFlags.fill(false);
-  state.layerHoldFlags[0] = true;
+  for (let i = 0; i < numLayers; i++) {
+    const initialActive = getLayerInitialActive(i);
+    state.layerHoldFlags[i] = initialActive;
+  }
 }
 
 let layerStateCallback = (flags: boolean[]) => {};
