@@ -24,6 +24,7 @@ export interface ILayerConfigurationModelEditValues {
   defaultScheme: ILayerDefaultScheme;
   isShiftLayer: boolean;
   exclusionGroup: number;
+  initialActive: boolean;
 }
 
 const DefaultSchemeButton = (props: {
@@ -152,6 +153,21 @@ const LayerConfigurationModalContent = (props: {
                       </option>
                     ))}
                   </select>
+                </td>
+              </tr>
+              <tr>
+                <td>Initial Active</td>
+                <td>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={editValues.initialActive}
+                      onChange={reflectFieldChecked(
+                        editValues,
+                        'initialActive'
+                      )}
+                    />
+                  </label>
                 </td>
               </tr>
             </tbody>

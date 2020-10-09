@@ -69,13 +69,15 @@ export class LayerManagementPartViewModel {
       layerName,
       isShiftLayer,
       defaultScheme,
-      exclusionGroup
+      exclusionGroup,
+      initialActive
     } = this.curLayer;
     const sourceValues: ILayerConfigurationModelEditValues = {
       layerName,
       isShiftLayer: !!isShiftLayer,
       defaultScheme,
-      exclusionGroup
+      exclusionGroup,
+      initialActive
     };
     const editValues = await callLayerConfigurationModal({
       sourceValues,
@@ -87,6 +89,7 @@ export class LayerManagementPartViewModel {
       this.curLayer.isShiftLayer = editValues.isShiftLayer;
       this.curLayer.defaultScheme = editValues.defaultScheme;
       this.curLayer.exclusionGroup = editValues.exclusionGroup;
+      this.curLayer.initialActive = editValues.initialActive;
     }
   };
 
@@ -96,7 +99,8 @@ export class LayerManagementPartViewModel {
         layerName: '',
         defaultScheme: 'transparent',
         isShiftLayer: false,
-        exclusionGroup: 0
+        exclusionGroup: 0,
+        initialActive: false
       },
       caption: 'Add Layer',
       isRootLayer: false
@@ -108,14 +112,16 @@ export class LayerManagementPartViewModel {
         layerName,
         defaultScheme,
         isShiftLayer,
-        exclusionGroup
+        exclusionGroup,
+        initialActive
       } = layerAttrs;
       this.layers.push({
         layerId,
         layerName,
         defaultScheme,
         isShiftLayer,
-        exclusionGroup
+        exclusionGroup,
+        initialActive
       });
     }
   };
