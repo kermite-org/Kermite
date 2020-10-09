@@ -58,7 +58,7 @@ const DefaultSchemeButton = (props: {
 };
 
 const defaultSchemeOptions: ILayerDefaultScheme[] = ['transparent', 'block'];
-const exclusionGroupOptions: number[] = Array(10)
+const exclusionGroupOptions: number[] = Array(8)
   .fill(undefined)
   .map((_, idx) => idx);
 
