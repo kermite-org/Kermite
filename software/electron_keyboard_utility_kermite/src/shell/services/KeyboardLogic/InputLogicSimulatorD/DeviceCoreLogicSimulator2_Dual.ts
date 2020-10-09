@@ -94,11 +94,13 @@ function setOutputKeyCode(hidKeyCode: u8) {
 // --------------------------------------------------------------------------------
 // assign memory reader
 
+let numLayers = 0;
 let assignMemoryKeyAssignsDataOffset = 0;
 let assignMemoryLayerAttributeBytes: number[] = [];
 
 function initAssignMemoryReader() {
-  const numLayers = storageBuf[0];
+  // const
+  numLayers = storageBuf[0];
   assignMemoryLayerAttributeBytes = storageBuf.slice(1, 1 + numLayers * 2);
   assignMemoryKeyAssignsDataOffset = 1 + numLayers * 2;
 }
@@ -251,13 +253,11 @@ const InvocationMode = {
 
 const state = new (class {
   baseLayerIndex: u8 = 0;
-  excLayerIndex: s8 = -1;
   layerHoldFlags: boolean[] = Array(16).fill(false);
 })();
 
 function resetLayerState() {
   state.baseLayerIndex = 0;
-  state.excLayerIndex = -1;
   state.layerHoldFlags.fill(false);
   state.layerHoldFlags[0] = true;
 }
@@ -320,19 +320,21 @@ const layerMutations = new (class {
   }
 
   exclusive(layerIndex: number) {
-    if (layerIndex !== state.excLayerIndex) {
-      if (state.excLayerIndex !== -1) {
-        this.deactivate(state.excLayerIndex);
-      }
-      this.activate(layerIndex);
-      state.excLayerIndex = layerIndex;
-    }
+    const targetExclusionGroup = getLayerExclusionGroup(layerIndex);
+    this.clearExclusive(targetExclusionGroup, layerIndex);
+    this.activate(layerIndex);
   }
 
-  clearExclusive() {
-    if (this.isActive(state.excLayerIndex)) {
-      this.deactivate(state.excLayerIndex);
-      state.excLayerIndex = -1;
+  clearExclusive(targetExclusiveGroup: number, skipLayerIndex: number = -1) {
+    for (let i = 0; i < numLayers; i++) {
+      if (i === skipLayerIndex) {
+        continue;
+      }
+      const groupIndex = getLayerExclusionGroup(i);
+      const inGroup = groupIndex === targetExclusiveGroup;
+      if (inGroup) {
+        this.deactivate(i);
+      }
     }
   }
 })();
@@ -380,7 +382,7 @@ function handleOperationOn(opWord: u16) {
     } else if (fInvocationMode === InvocationMode.Exclusive) {
       layerMutations.exclusive(layerIndex);
     } else if (fInvocationMode === InvocationMode.ClearExclusive) {
-      layerMutations.clearExclusive();
+      // layerMutations.clearExclusive();
     }
   }
 }
