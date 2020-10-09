@@ -1,7 +1,14 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { ILayerDefaultScheme } from '~defs/ProfileData';
+import { VirtualKeyTexts } from '~defs/VirtualKeyTexts';
+import { ModifierVirtualKey } from '~defs/VirtualKeys';
 import {
+  addOptionToOptionsArray,
+  removeOptionFromOptionsArray
+} from '~funcs/Utils';
+import {
+  reflectChecked,
   reflectFieldChecked,
   reflectFieldValue,
   reflectValue
@@ -22,7 +29,7 @@ import { createModal } from '~ui/views/base/layout/ForegroundModalLayer';
 export interface ILayerConfigurationModelEditValues {
   layerName: string;
   defaultScheme: ILayerDefaultScheme;
-  isShiftLayer: boolean;
+  attachedModifiers?: ModifierVirtualKey[];
   exclusionGroup: number;
   initialActive: boolean;
 }
@@ -76,6 +83,37 @@ const exclusionGroupOptions: number[] = Array(8)
   .fill(undefined)
   .map((_, idx) => idx);
 
+type AttachedModifierModel = {
+  sig: ModifierVirtualKey;
+  isEnabled: boolean;
+  setEnabled(enabled: boolean): void;
+}[];
+
+function makeAttachedModifiersModel(
+  editValues: ILayerConfigurationModelEditValues
+): AttachedModifierModel {
+  const mods = editValues.attachedModifiers || [];
+
+  const modifierVirtualKeys: ModifierVirtualKey[] = [
+    'K_Shift',
+    'K_Ctrl',
+    'K_Alt',
+    'K_OS'
+  ];
+
+  return modifierVirtualKeys.map((vk) => {
+    return {
+      sig: vk,
+      isEnabled: mods.includes(vk),
+      setEnabled(enabled) {
+        editValues.attachedModifiers = enabled
+          ? addOptionToOptionsArray(mods, vk)
+          : removeOptionFromOptionsArray(mods, vk);
+      }
+    };
+  });
+}
+
 const LayerConfigurationModalContent = (props: {
   editValues: ILayerConfigurationModelEditValues;
   submit(): void;
@@ -89,8 +127,17 @@ const LayerConfigurationModalContent = (props: {
     display: flex;
   `;
 
+  const cssAttachedModifiersBox = css`
+    > * + * {
+      margin-left: 5px;
+    }
+  `;
+
   const canEditDefaultScheme = !isRootLayer;
   const canEditAttachedModifiers = !isRootLayer;
+
+  const modsModel = makeAttachedModifiersModel(editValues);
+
   return (
     <ClosableOverlay close={close}>
       <CommonDialogFrame caption={caption}>
@@ -127,15 +174,21 @@ const LayerConfigurationModalContent = (props: {
               <tr>
                 <td>Attached Modifiers</td>
                 <td>
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={editValues.isShiftLayer}
-                      onChange={reflectFieldChecked(editValues, 'isShiftLayer')}
-                      disabled={!canEditAttachedModifiers}
-                    />
-                    <span>shift</span>
-                  </label>
+                  <div css={cssAttachedModifiersBox}>
+                    {modsModel.map((mod) => {
+                      return (
+                        <label key={mod.sig}>
+                          <input
+                            type="checkbox"
+                            checked={mod.isEnabled}
+                            onChange={reflectChecked(mod.setEnabled)}
+                            disabled={!canEditAttachedModifiers}
+                          />
+                          <span>{VirtualKeyTexts[mod.sig]}</span>
+                        </label>
+                      );
+                    })}
+                  </div>
                 </td>
               </tr>
               <tr>
