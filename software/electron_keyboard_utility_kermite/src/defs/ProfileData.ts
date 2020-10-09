@@ -17,8 +17,7 @@ export type IHoldFunctionInvocationMode =
   | 'toggle'
   | 'base'
   | 'oneshot'
-  | 'exclusive'
-  | 'clearExclusive';
+  | 'exclusive';
 
 export type LayerInvocationMode = IHoldFunctionInvocationMode;
 
@@ -47,10 +46,16 @@ export type IAssignOperationModifierCall = {
   isOneShot: boolean;
 };
 
+export type IAssignOperationClearExclusiveLayers = {
+  type: 'layerClearExclusive';
+  targetExclusionGroup: number;
+};
+
 export type IAssignOperation =
   | IAssingOperationKeyInput
   | IAssignOperationLayerCall
-  | IAssignOperationModifierCall;
+  | IAssignOperationModifierCall
+  | IAssignOperationClearExclusiveLayers;
 // | {
 //     type: 'fixedText';
 //     text: string;

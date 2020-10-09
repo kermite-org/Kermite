@@ -239,7 +239,8 @@ function getAssignSetL(keyIndex: u8): IAssignSet | undefined {
 
 const OpType = {
   KeyInput: 1,
-  LayerCall: 2
+  LayerCall: 2,
+  LayerClaerExclusive: 3
 };
 
 const InvocationMode = {
@@ -383,9 +384,11 @@ function handleOperationOn(opWord: u16) {
       layerMutations.base(layerIndex);
     } else if (fInvocationMode === InvocationMode.Exclusive) {
       layerMutations.exclusive(layerIndex);
-    } else if (fInvocationMode === InvocationMode.ClearExclusive) {
-      // layerMutations.clearExclusive();
     }
+  }
+  if (opType === OpType.LayerClaerExclusive) {
+    const targetGroup = (opWord >> 8) & 0b111;
+    layerMutations.clearExclusive(targetGroup);
   }
 }
 

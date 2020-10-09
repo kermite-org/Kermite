@@ -65,8 +65,7 @@ function makeLayerInvocationModeBits(mode: LayerInvocationMode): number {
     toggle: 4,
     base: 5,
     oneshot: 6,
-    exclusive: 7,
-    clearExclusive: 8
+    exclusive: 7
   };
   return mapper[mode] || 0;
 }
@@ -94,18 +93,22 @@ IIII: invocation mode
  5: base
  6: oneshot
  7: exclusive
- 8: clearExclusive
+
+layerClearExclusive
+0bTTxx_xQQQ 0bxxx_xxxx
+TT: type, 0b11 for layerClearExclusive
+QQQ: target exclusion group
 */
 function encodeAssignOperation(
   op: IAssignOperation | undefined,
   layer: IRawLayerInfo
 ): number[] {
   if (op?.type === 'keyInput') {
-    const tt = 0b01;
+    const fAssignType = 0b01;
     const vk = op.virtualKey;
     if (isModifierVirtualKey(vk)) {
       const mods = makeAttachedModifiersBits([vk]);
-      return [(tt << 6) | (mods << 2), 0];
+      return [(fAssignType << 6) | (mods << 2), 0];
     } else {
       const layoutStandard = localContext.layoutStandard;
       const mods = makeAttachedModifiersBits(op.attachedModifiers);
@@ -114,17 +117,25 @@ function encodeAssignOperation(
         // shiftレイヤ上のアサインのみshift cancelが効くようにする
         hidKey = hidKey & 0x1ff;
       }
-      return [(tt << 6) | (mods << 2) | ((hidKey >> 8) & 0x03), hidKey];
+      return [
+        (fAssignType << 6) | (mods << 2) | ((hidKey >> 8) & 0x03),
+        hidKey
+      ];
     }
   }
   if (op?.type === 'layerCall') {
-    const tt = 0b10;
+    const fAssignType = 0b10;
     const layerInfo = localContext.layersDict[op.targetLayerId];
     if (layerInfo) {
       const { layerIndex } = layerInfo;
       const fInvocationMode = makeLayerInvocationModeBits(op.invocationMode);
-      return [(tt << 6) | layerIndex, fInvocationMode << 4];
+      return [(fAssignType << 6) | layerIndex, fInvocationMode << 4];
     }
+  }
+  if (op?.type === 'layerClearExclusive') {
+    const fAssingType = 0b11;
+    const targetGroup = op.targetExclusionGroup;
+    return [(fAssingType << 6) | targetGroup];
   }
   return [0, 0];
 }
