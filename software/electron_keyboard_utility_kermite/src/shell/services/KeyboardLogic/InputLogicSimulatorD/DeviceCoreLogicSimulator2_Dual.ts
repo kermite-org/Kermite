@@ -237,8 +237,10 @@ function getAssignSetL(keyIndex: u8): IAssignSet | undefined {
 // --------------------------------------------------------------------------------
 // operation handlers
 
-const OpType_keyInput = 0b01;
-const OpType_layerCall = 0b10;
+const OpType = {
+  KeyInput: 1,
+  LayerCall: 2
+};
 
 const InvocationMode = {
   Hold: 1,
@@ -341,7 +343,7 @@ const layerMutations = new (class {
 
 function handleOperationOn(opWord: u16) {
   const opType = (opWord >> 14) & 0b11;
-  if (opType === OpType_keyInput) {
+  if (opType === OpType.KeyInput) {
     const hidKey = opWord & 0x3ff;
     const modFlags = (opWord >> 10) & 0b1111;
     if (modFlags) {
@@ -365,7 +367,7 @@ function handleOperationOn(opWord: u16) {
       }
     }
   }
-  if (opType === OpType_layerCall) {
+  if (opType === OpType.LayerCall) {
     const layerIndex = (opWord >> 8) & 0b1111;
     const fInvocationMode = (opWord >> 4) & 0b1111;
 
@@ -389,7 +391,7 @@ function handleOperationOn(opWord: u16) {
 
 function handleOperationOff(opWord: u16) {
   const opType = (opWord >> 14) & 0b11;
-  if (opType === OpType_keyInput) {
+  if (opType === OpType.KeyInput) {
     const hidKey = opWord & 0x3ff;
     const modFlags = (opWord >> 10) & 0b1111;
     if (modFlags) {
@@ -409,7 +411,7 @@ function handleOperationOff(opWord: u16) {
       }
     }
   }
-  if (opType === OpType_layerCall) {
+  if (opType === OpType.LayerCall) {
     const layerIndex = (opWord >> 8) & 0b1111;
     const fInvocationMode = (opWord >> 4) & 0b1111;
     if (fInvocationMode === InvocationMode.Hold) {
