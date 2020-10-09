@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
-import { generateNumberSequence } from '~funcs/Utils';
-
 // --------------------------------------------------------------------------------
 // types
 
@@ -101,7 +99,6 @@ let assignMemoryKeyAssignsDataOffset = 0;
 let assignMemoryLayerAttributeBytes: number[] = [];
 
 function initAssignMemoryReader() {
-  // const
   numLayers = storageBuf[0];
   assignMemoryLayerAttributeBytes = storageBuf.slice(1, 1 + numLayers * 2);
   assignMemoryKeyAssignsDataOffset = 1 + numLayers * 2;
@@ -112,9 +109,9 @@ function isLayerDefaultSchemeBlock(layerIndex: u8) {
   return ((attrByte >> 7) & 1) === 1;
 }
 
-function isLayerWithShift(layerIndex: u8) {
+function getLayerAttachedModifiers(layerIndex: u8) {
   const attrByte = assignMemoryLayerAttributeBytes[layerIndex * 2];
-  return ((attrByte >> 6) & 1) === 1;
+  return attrByte & 0b1111;
 }
 
 function getLayerInitialActive(layerIndex: u8) {
@@ -306,9 +303,9 @@ const layerMutations = new (class {
       notifyLayerStateChanged();
       // console.log(state.layerHoldFlags.map((a) => (a ? 1 : 0)).join(''));
       console.log(`layer on ${layerIndex}`);
-      const withShift = isLayerWithShift(layerIndex);
-      if (withShift) {
-        setModifiers(ModFlag_Shift);
+      const modifiers = getLayerAttachedModifiers(layerIndex);
+      if (modifiers) {
+        setModifiers(modifiers);
       }
     }
   }
@@ -319,9 +316,9 @@ const layerMutations = new (class {
       notifyLayerStateChanged();
       // console.log(state.layerHoldFlags.map((a) => (a ? 1 : 0)).join(''));
       console.log(`layer off ${layerIndex}`);
-      const withShift = isLayerWithShift(layerIndex);
-      if (withShift) {
-        clearModifiers(ModFlag_Shift);
+      const modifiers = getLayerAttachedModifiers(layerIndex);
+      if (modifiers) {
+        clearModifiers(modifiers);
       }
     }
   }

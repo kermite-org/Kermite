@@ -4,8 +4,7 @@ export type ILayerDefaultScheme = 'block' | 'transparent';
 export interface ILayer {
   layerId: string;
   layerName: string;
-  isShiftLayer?: boolean;
-  // attachedModifiers?: ModifierVirtualKey[];
+  attachedModifiers?: ModifierVirtualKey[];
   defaultScheme: ILayerDefaultScheme;
   exclusionGroup: number;
   initialActive: boolean;

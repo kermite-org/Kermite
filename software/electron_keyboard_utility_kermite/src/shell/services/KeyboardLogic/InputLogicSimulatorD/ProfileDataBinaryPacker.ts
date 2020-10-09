@@ -34,7 +34,6 @@ interface IRawAssignEntry {
 interface IRawLayerInfo {
   layerIndex: number;
   isShiftLayer: boolean;
-  defaultScheme: 'block' | 'transparent';
 }
 
 const localContext = new (class {
@@ -325,19 +324,21 @@ function fixProfileData(
 }
 
 // LayerAttributeByte
-// 0bDSIx_xxxx 0bxxxx_xQQQ
+// 0bDxIx_MMMM 0bxxxx_xQQQ
 // D: default scheme, 0 for transparent, 1 for block
-// S: isShiftLayer
 // I: initialActive
+// MMMM: attachedModifiers
 // QQQ: exclusion group, 0~7
 function makeLayerAttributeBytes(profile: IProfileData): number[] {
   return flattenArray(
     profile.layers.map((la) => {
-      const fShift = la.isShiftLayer ? 1 : 0;
       const fDefaultScheme = la.defaultScheme === 'block' ? 1 : 0;
       const fInitialActive = la.initialActive ? 1 : 0;
+      const fAttachedModifiers = makeAttachedModifiersBits(
+        la.attachedModifiers
+      );
       return [
-        (fDefaultScheme << 7) | (fShift << 6) | (fInitialActive << 5),
+        (fDefaultScheme << 7) | (fInitialActive << 5) | fAttachedModifiers,
         la.exclusionGroup
       ];
     })
@@ -361,8 +362,7 @@ export function converProfileDataToBlobBytes(
       la.layerId,
       {
         layerIndex: idx,
-        isShiftLayer: la.isShiftLayer || false,
-        defaultScheme: la.defaultScheme
+        isShiftLayer: la.attachedModifiers?.includes('K_Shift') || false
       }
     ])
   );
