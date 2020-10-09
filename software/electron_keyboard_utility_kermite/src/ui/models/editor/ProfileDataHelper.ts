@@ -45,6 +45,7 @@ export function changeProfileDataAssignType(
       assignType: 'dual',
       settings: {
         type: 'dual',
+        useShiftCancel: profile.settings.useShiftCancel,
         primaryDefaultTrigger: 'down',
         tapHoldThresholdMs: 200,
         useInterruptHold: true
@@ -59,7 +60,9 @@ export function changeProfileDataAssignType(
     return {
       ...profile,
       assignType: 'single',
-      settings: {},
+      settings: {
+        useShiftCancel: profile.settings.useShiftCancel
+      },
       assigns: mapObjectValues(
         profile.assigns,
         (it) => it && convertDualAssignToSingleAssign(it)
