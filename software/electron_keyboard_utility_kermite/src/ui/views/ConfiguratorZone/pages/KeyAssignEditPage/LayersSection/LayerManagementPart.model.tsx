@@ -96,7 +96,7 @@ export class LayerManagementPartViewModel {
         layerName: '',
         defaultScheme: 'transparent',
         isShiftLayer: false,
-        exclusionGroup: 1
+        exclusionGroup: 0
       },
       caption: 'Add Layer',
       isRootLayer: false
