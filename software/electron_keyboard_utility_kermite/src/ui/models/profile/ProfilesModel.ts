@@ -6,6 +6,8 @@ import { backendAgent, appUi } from '~ui/core';
 import { editorModel } from '~ui/models/editor/EditorModel';
 import { ProfileProvider } from './ProfileProvider';
 
+const useAutoSave = false;
+
 class ProfilesModel {
   private profileProvider = new ProfileProvider();
 
@@ -39,7 +41,7 @@ class ProfilesModel {
   }
 
   finalize() {
-    if (editorModel.checkDirty()) {
+    if (useAutoSave && editorModel.checkDirty()) {
       this.profileProvider.saveProfileOnClosing(editorModel.profileData);
     }
     this.profileProvider.finalize();
@@ -66,7 +68,8 @@ class ProfilesModel {
   }
 
   createProfile = (newProfileName: string, breedName: string) => {
-    const saveCommand = this.getSaveCommandIfDirty();
+    const saveCommand =
+      (useAutoSave && this.getSaveCommandIfDirty()) || undefined;
     const createCommand = {
       creatProfile: { name: newProfileName, breedName }
     };
@@ -77,7 +80,8 @@ class ProfilesModel {
     if (profileName === this.currentProfileName) {
       return;
     }
-    const saveCommand = this.getSaveCommandIfDirty();
+    const saveCommand =
+      (useAutoSave && this.getSaveCommandIfDirty()) || undefined;
     const loadCommand = { loadProfile: { name: profileName } };
     this.sendProfileManagerCommands(saveCommand, loadCommand);
   };
