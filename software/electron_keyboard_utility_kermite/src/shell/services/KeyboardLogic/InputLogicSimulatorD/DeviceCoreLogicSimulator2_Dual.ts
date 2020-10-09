@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
+import { generateNumberSequence } from '~funcs/Utils';
+
 // --------------------------------------------------------------------------------
 // types
 
@@ -282,8 +284,16 @@ const layerMutations = new (class {
     return state.layerHoldFlags[layerIndex];
   }
 
+  private turnOffSiblingLayersIfNeed(layerIndex: number) {
+    const targetExclusionGroup = getLayerExclusionGroup(layerIndex);
+    if (targetExclusionGroup !== 0) {
+      this.clearExclusive(targetExclusionGroup, layerIndex);
+    }
+  }
+
   activate(layerIndex: number) {
     if (!this.isActive(layerIndex)) {
+      this.turnOffSiblingLayersIfNeed(layerIndex);
       state.layerHoldFlags[layerIndex] = true;
       notifyLayerStateChanged();
       // console.log(state.layerHoldFlags.map((a) => (a ? 1 : 0)).join(''));
@@ -340,6 +350,13 @@ const layerMutations = new (class {
       }
     }
   }
+
+  recoverMainLayerIfAllLayeresDisabled() {
+    const isAllOff = state.layerHoldFlags.every((a) => !a);
+    if (isAllOff) {
+      this.activate(0);
+    }
+  }
 })();
 
 function handleOperationOn(opWord: u16) {
@@ -385,10 +402,12 @@ function handleOperationOn(opWord: u16) {
     } else if (fInvocationMode === InvocationMode.Exclusive) {
       layerMutations.exclusive(layerIndex);
     }
+    layerMutations.recoverMainLayerIfAllLayeresDisabled();
   }
   if (opType === OpType.LayerClaerExclusive) {
     const targetGroup = (opWord >> 8) & 0b111;
     layerMutations.clearExclusive(targetGroup);
+    layerMutations.recoverMainLayerIfAllLayeresDisabled();
   }
 }
 
