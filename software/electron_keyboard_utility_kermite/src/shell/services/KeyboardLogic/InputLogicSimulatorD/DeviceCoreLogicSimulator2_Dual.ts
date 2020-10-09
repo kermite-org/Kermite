@@ -304,19 +304,14 @@ const InvocationMode = {
   TurnOn: 2,
   TurnOff: 3,
   Toggle: 4,
-  Base: 5,
-  Oneshot: 6,
-  Exclusive: 7,
-  ClearExclusive: 8
+  Oneshot: 5
 };
 
 const state = new (class {
-  baseLayerIndex: u8 = 0;
   layerHoldFlags: boolean[] = Array(16).fill(false);
 })();
 
 function resetLayerState() {
-  state.baseLayerIndex = 0;
   state.layerHoldFlags.fill(false);
   for (let i = 0; i < numLayers; i++) {
     const initialActive = getLayerInitialActive(i);
@@ -381,20 +376,6 @@ const layerMutations = new (class {
       : this.deactivate(layerIndex);
   }
 
-  base(layerIndex: number) {
-    if (layerIndex !== state.baseLayerIndex) {
-      this.deactivate(state.baseLayerIndex);
-      this.activate(layerIndex);
-      state.baseLayerIndex = layerIndex;
-    }
-  }
-
-  exclusive(layerIndex: number) {
-    const targetExclusionGroup = getLayerExclusionGroup(layerIndex);
-    this.clearExclusive(targetExclusionGroup, layerIndex);
-    this.activate(layerIndex);
-  }
-
   clearExclusive(targetExclusiveGroup: number, skipLayerIndex: number = -1) {
     for (let i = 0; i < numLayers; i++) {
       if (i === skipLayerIndex) {
@@ -454,10 +435,6 @@ function handleOperationOn(opWord: u16) {
       layerMutations.deactivate(layerIndex);
     } else if (fInvocationMode === InvocationMode.Toggle) {
       layerMutations.toggle(layerIndex);
-    } else if (fInvocationMode === InvocationMode.Base) {
-      layerMutations.base(layerIndex);
-    } else if (fInvocationMode === InvocationMode.Exclusive) {
-      layerMutations.exclusive(layerIndex);
     }
     layerMutations.recoverMainLayerIfAllLayeresDisabled();
   }

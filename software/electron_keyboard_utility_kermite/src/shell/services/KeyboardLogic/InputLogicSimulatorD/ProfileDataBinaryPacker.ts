@@ -63,9 +63,7 @@ function makeLayerInvocationModeBits(mode: LayerInvocationMode): number {
     turnOn: 2,
     turnOff: 3,
     toggle: 4,
-    base: 5,
-    oneshot: 6,
-    exclusive: 7
+    oneshot: 5
   };
   return mapper[mode] || 0;
 }
@@ -90,9 +88,7 @@ IIII: invocation mode
  2: turnOn
  3: turnOff
  4: toggle
- 5: base
- 6: oneshot
- 7: exclusive
+ 5: oneshot
 
 layerClearExclusive
 0bTTxx_xQQQ 0bxxx_xxxx

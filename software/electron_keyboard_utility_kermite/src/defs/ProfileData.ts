@@ -15,9 +15,7 @@ export type IHoldFunctionInvocationMode =
   | 'turnOn'
   | 'turnOff'
   | 'toggle'
-  | 'base'
-  | 'oneshot'
-  | 'exclusive';
+  | 'oneshot';
 
 export type LayerInvocationMode = IHoldFunctionInvocationMode;
 
