@@ -314,15 +314,16 @@ function fixProfileData(
 }
 
 // LayerAttributeByte
-// 0bDSxx_xxxx 0bxxxx_xxxx
+// 0bDSxx_xxxx 0bxxxx_xQQQ
 // D: default scheme, 0 for transparent, 1 for block
 // S: isShiftLayer
+// QQQ: exclusion group, 0~7
 function makeLayerAttributeBytes(profile: IProfileData): number[] {
   return flattenArray(
     profile.layers.map((la) => {
       const fShift = la.isShiftLayer ? 1 : 0;
       const fDefaultScheme = la.defaultScheme === 'block' ? 1 : 0;
-      return [(fDefaultScheme << 7) | (fShift << 6), 0];
+      return [(fDefaultScheme << 7) | (fShift << 6), la.exclusionGroup];
     })
   );
 }

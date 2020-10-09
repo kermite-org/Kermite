@@ -113,6 +113,11 @@ function isLayerWithShift(layerIndex: u8) {
   return ((attrByte >> 6) & 1) === 1;
 }
 
+function getLayerExclusionGroup(layerIndex: u8) {
+  const attrByte = assignMemoryLayerAttributeBytes[layerIndex * 2 + 1];
+  return attrByte & 0b111;
+}
+
 function getAssignsBlockAddressForKey(keyIndex: u8): s16 {
   let pos = assignMemoryKeyAssignsDataOffset;
   while (pos < storageBufLength) {
