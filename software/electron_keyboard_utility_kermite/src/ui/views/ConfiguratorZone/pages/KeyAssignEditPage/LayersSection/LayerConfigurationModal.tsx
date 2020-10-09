@@ -30,8 +30,9 @@ const DefaultSchemeButton = (props: {
   value: ILayerDefaultScheme;
   isCurrent: boolean;
   setCurrent: () => void;
+  disabled: boolean;
 }) => {
-  const { value, isCurrent, setCurrent } = props;
+  const { value, isCurrent, setCurrent, disabled } = props;
 
   const cssButton = css`
     min-width: 80px;
@@ -49,9 +50,21 @@ const DefaultSchemeButton = (props: {
     &:hover {
       opacity: 0.8;
     }
+
+    &[data-disabled] {
+      pointer-events: none;
+      color: #888;
+      background: #ddd;
+      border: solid 1px #666;
+    }
   `;
   return (
-    <div css={cssButton} data-current={isCurrent} onClick={setCurrent}>
+    <div
+      css={cssButton}
+      data-current={isCurrent}
+      onClick={setCurrent}
+      data-disabled={disabled}
+    >
       {value}
     </div>
   );
@@ -67,13 +80,16 @@ const LayerConfigurationModalContent = (props: {
   submit(): void;
   close(): void;
   caption: string;
+  isRootLayer: boolean;
 }) => {
-  const { editValues, submit, close, caption } = props;
+  const { editValues, submit, close, caption, isRootLayer } = props;
 
   const cssDefaultSchemeButtonsRow = css`
     display: flex;
   `;
 
+  const canEditDefaultScheme = !isRootLayer;
+  const canEditAttachedModifiers = !isRootLayer;
   return (
     <ClosableOverlay close={close}>
       <CommonDialogFrame caption={caption}>
@@ -101,6 +117,7 @@ const LayerConfigurationModalContent = (props: {
                         value={ds}
                         isCurrent={editValues.defaultScheme === ds}
                         setCurrent={() => (editValues.defaultScheme = ds)}
+                        disabled={!canEditDefaultScheme}
                       />
                     ))}
                   </div>
@@ -114,6 +131,7 @@ const LayerConfigurationModalContent = (props: {
                       type="checkbox"
                       checked={editValues.isShiftLayer}
                       onChange={reflectFieldChecked(editValues, 'isShiftLayer')}
+                      disabled={!canEditAttachedModifiers}
                     />
                     <span>shift</span>
                   </label>
@@ -151,6 +169,7 @@ export const callLayerConfigurationModal = createModal(
   (args: {
     sourceValues: ILayerConfigurationModelEditValues;
     caption: string;
+    isRootLayer: boolean;
   }) => {
     const editValues = args.sourceValues;
     return (props: {
@@ -164,6 +183,7 @@ export const callLayerConfigurationModal = createModal(
           submit={submit}
           close={close}
           caption={args.caption}
+          isRootLayer={args.isRootLayer}
         />
       );
     };

@@ -43,7 +43,6 @@ export const LayerManagementPart = () => {
 
   return () => {
     const {
-      canModifyCurrentLayer,
       canShiftBackCurrentLayer,
       canShiftForwardCurrentLayer,
       shiftBackCurrentLayer,
@@ -63,13 +62,13 @@ export const LayerManagementPart = () => {
         />
         <LayerOperationButtton
           icon="fa fa-pen-square"
-          enabled={canModifyCurrentLayer}
+          enabled={true}
           handler={editCurrentLayer}
           qxOptimizer="deepEqual"
         />
         <LayerOperationButtton
           icon="fa fa-times"
-          enabled={canModifyCurrentLayer}
+          enabled={true}
           handler={deleteCurrentLayer}
           qxOptimizer="deepEqual"
         />

@@ -37,10 +37,6 @@ export class LayerManagementPartViewModel {
     [layers[si], layers[di]] = [layers[di], layers[si]];
   }
 
-  get canModifyCurrentLayer() {
-    return this.isCurrentLayerCustom;
-  }
-
   get canShiftBackCurrentLayer() {
     return this.canShiftCurrentLayerOrder(-1);
   }
@@ -83,7 +79,8 @@ export class LayerManagementPartViewModel {
     };
     const editValues = await callLayerConfigurationModal({
       sourceValues,
-      caption: 'Edit Layer Properties'
+      caption: 'Edit Layer Properties',
+      isRootLayer: !this.isCurrentLayerCustom
     });
     if (editValues) {
       this.curLayer.layerName = editValues.layerName;
@@ -101,7 +98,8 @@ export class LayerManagementPartViewModel {
         isShiftLayer: false,
         exclusionGroup: 1
       },
-      caption: 'Add Layer'
+      caption: 'Add Layer',
+      isRootLayer: false
     });
     if (layerAttrs?.layerName) {
       // todo: use sequential layer number
