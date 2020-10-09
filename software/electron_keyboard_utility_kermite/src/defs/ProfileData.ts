@@ -7,6 +7,7 @@ export interface ILayer {
   isShiftLayer?: boolean;
   // attachedModifiers?: ModifierVirtualKey[];
   defaultScheme: ILayerDefaultScheme;
+  exclusionGroup: number;
 }
 
 export type IHoldFunctionInvocationMode =
@@ -181,7 +182,8 @@ export const fallbackProfileData: IProfileData = {
     {
       layerId: 'la0',
       layerName: 'main',
-      defaultScheme: 'block'
+      defaultScheme: 'block',
+      exclusionGroup: 0
     }
   ],
   assigns: {}

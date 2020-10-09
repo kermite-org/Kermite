@@ -105,6 +105,12 @@ class ProfileManager {
         };
       }
     }
+
+    profileData.layers.forEach((la) => {
+      if (la.exclusionGroup === undefined) {
+        la.exclusionGroup = 0;
+      }
+    });
   }
 
   private raiseErrorMessage(errorMessage: string) {
