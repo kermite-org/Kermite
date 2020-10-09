@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
+const useShiftCancel = true;
+
 // --------------------------------------------------------------------------------
 // types
 
@@ -75,20 +77,72 @@ function resetHidReportBuf() {
   hidReportBuf.fill(0);
 }
 
+const reportState = new (class {
+  layerModFlags: u8 = 0;
+  modFlags: u8 = 0;
+  adhocModFlags: u8 = 0;
+  shiftCancelActive: boolean = false;
+  hidKeyCode: u8 = 0;
+})();
+
 export function coreLogic_getOutputHidReport(): u8[] {
+  const {
+    layerModFlags,
+    modFlags,
+    adhocModFlags,
+    shiftCancelActive,
+    hidKeyCode
+  } = reportState;
+  hidReportBuf[0] = layerModFlags | modFlags | adhocModFlags;
+  if (useShiftCancel && shiftCancelActive) {
+    hidReportBuf[0] &= ~ModFlag_Shift;
+  }
+  hidReportBuf[2] = hidKeyCode;
   return hidReportBuf;
 }
 
+function setLayerModifiers(modFlags: u8) {
+  reportState.layerModFlags |= modFlags;
+}
+
+function clearLayerModifiers(modFlags: u8) {
+  reportState.layerModFlags &= ~modFlags;
+}
+
 function setModifiers(modFlags: u8) {
-  hidReportBuf[0] |= modFlags;
+  reportState.modFlags |= modFlags;
 }
 
 function clearModifiers(modFlags: u8) {
-  hidReportBuf[0] &= ~modFlags;
+  reportState.modFlags &= ~modFlags;
+}
+
+function setAdhocModifiers(modFlags: u8) {
+  reportState.adhocModFlags |= modFlags;
+}
+
+function clearAdhocModifiers(modFlags: u8) {
+  reportState.adhocModFlags &= ~modFlags;
 }
 
 function setOutputKeyCode(hidKeyCode: u8) {
-  hidReportBuf[2] = hidKeyCode;
+  reportState.hidKeyCode = hidKeyCode;
+}
+
+function startShiftCancel() {
+  reportState.shiftCancelActive = true;
+}
+
+function endShiftCancel() {
+  reportState.shiftCancelActive = false;
+}
+
+function resetReportState() {
+  reportState.layerModFlags = 0;
+  reportState.modFlags = 0;
+  reportState.adhocModFlags = 0;
+  reportState.shiftCancelActive = false;
+  reportState.hidKeyCode = 0;
 }
 
 // --------------------------------------------------------------------------------
@@ -305,7 +359,7 @@ const layerMutations = new (class {
       console.log(`layer on ${layerIndex}`);
       const modifiers = getLayerAttachedModifiers(layerIndex);
       if (modifiers) {
-        setModifiers(modifiers);
+        setLayerModifiers(modifiers);
       }
     }
   }
@@ -318,7 +372,7 @@ const layerMutations = new (class {
       console.log(`layer off ${layerIndex}`);
       const modifiers = getLayerAttachedModifiers(layerIndex);
       if (modifiers) {
-        clearModifiers(modifiers);
+        clearLayerModifiers(modifiers);
       }
     }
   }
@@ -379,11 +433,11 @@ function handleOperationOn(opWord: u16) {
 
       const isOtherModifiersClean = (hidReportBuf[0] & 0b1101) === 0;
       if (shiftOn) {
-        setModifiers(ModFlag_Shift);
+        setAdhocModifiers(ModFlag_Shift);
       }
-      if (shiftOff && isOtherModifiersClean) {
+      if (useShiftCancel && shiftOff && isOtherModifiersClean) {
         // shift cancel
-        clearModifiers(ModFlag_Shift);
+        startShiftCancel();
       }
       if (keyCode) {
         setOutputKeyCode(keyCode);
@@ -429,9 +483,10 @@ function handleOperationOff(opWord: u16) {
       const shiftOn = hidKey & 0x100;
       const shiftOff = hidKey & 0x200;
       if (shiftOn) {
-        clearModifiers(ModFlag_Shift);
+        clearAdhocModifiers(ModFlag_Shift);
       }
-      if (shiftOff) {
+      if (useShiftCancel && shiftOff) {
+        endShiftCancel();
       }
       if (keyCode) {
         setOutputKeyCode(0);
@@ -896,6 +951,7 @@ export function coreLogic_reset() {
   resetLayerState();
   resetAssignBinder();
   notifyLayerStateChanged();
+  resetReportState();
 }
 
 export function coreLogic_handleKeyInput(keyIndex: u8, isDown: boolean) {
