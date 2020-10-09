@@ -99,17 +99,17 @@ let assignMemoryLayerAttributeBytes: number[] = [];
 
 function initAssignMemoryReader() {
   const numLayers = storageBuf[0];
-  assignMemoryLayerAttributeBytes = storageBuf.slice(1, 1 + numLayers);
-  assignMemoryKeyAssignsDataOffset = 1 + numLayers;
+  assignMemoryLayerAttributeBytes = storageBuf.slice(1, 1 + numLayers * 2);
+  assignMemoryKeyAssignsDataOffset = 1 + numLayers * 2;
 }
 
 function isLayerDefaultSchemeBlock(layerIndex: u8) {
-  const attrByte = assignMemoryLayerAttributeBytes[layerIndex];
+  const attrByte = assignMemoryLayerAttributeBytes[layerIndex * 2];
   return ((attrByte >> 7) & 1) === 1;
 }
 
 function isLayerWithShift(layerIndex: u8) {
-  const attrByte = assignMemoryLayerAttributeBytes[layerIndex];
+  const attrByte = assignMemoryLayerAttributeBytes[layerIndex * 2];
   return ((attrByte >> 6) & 1) === 1;
 }
 
