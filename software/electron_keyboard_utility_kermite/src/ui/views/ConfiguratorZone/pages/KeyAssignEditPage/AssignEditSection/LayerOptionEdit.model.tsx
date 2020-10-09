@@ -13,10 +13,8 @@ const invocationModes: LayerInvocationMode[] = [
   'hold',
   'turnOn',
   'turnOff',
-  'toggle',
-  'base',
+  'toggle'
   // 'oneshot'
-  'exclusive'
 ];
 
 const exclusionGroupValues = generateNumberSequence(7).map((a) =>
