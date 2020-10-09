@@ -99,7 +99,7 @@ export class LayerManagementPartViewModel {
         layerName: '',
         defaultScheme: 'transparent',
         isShiftLayer: false,
-        exclusionGroup: 0
+        exclusionGroup: 1
       },
       caption: 'Add Layer'
     });
