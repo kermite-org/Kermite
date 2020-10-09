@@ -2,7 +2,10 @@ import { ILayer } from '~defs/ProfileData';
 import { removeArrayItems } from '~funcs/Utils';
 import { editorModel } from '~ui/models';
 import { modalConfirm } from '~ui/views/base/dialog/BasicModals';
-import { callLayerConfigurationModal } from './LayerConfigurationModal';
+import {
+  callLayerConfigurationModal,
+  ILayerConfigurationModelEditValues
+} from './LayerConfigurationModal';
 
 export class LayerManagementPartViewModel {
   private get layers() {
@@ -66,11 +69,17 @@ export class LayerManagementPartViewModel {
   };
 
   editCurrentLayer = async () => {
-    const { layerName, isShiftLayer, defaultScheme } = this.curLayer;
-    const sourceValues = {
+    const {
+      layerName,
+      isShiftLayer,
+      defaultScheme,
+      exclusionGroup
+    } = this.curLayer;
+    const sourceValues: ILayerConfigurationModelEditValues = {
       layerName,
       isShiftLayer: !!isShiftLayer,
-      defaultScheme
+      defaultScheme,
+      exclusionGroup
     };
     const editValues = await callLayerConfigurationModal({
       sourceValues,
@@ -80,6 +89,7 @@ export class LayerManagementPartViewModel {
       this.curLayer.layerName = editValues.layerName;
       this.curLayer.isShiftLayer = editValues.isShiftLayer;
       this.curLayer.defaultScheme = editValues.defaultScheme;
+      this.curLayer.exclusionGroup = editValues.exclusionGroup;
     }
   };
 
@@ -88,19 +98,26 @@ export class LayerManagementPartViewModel {
       sourceValues: {
         layerName: '',
         defaultScheme: 'transparent',
-        isShiftLayer: false
+        isShiftLayer: false,
+        exclusionGroup: 0
       },
       caption: 'Add Layer'
     });
     if (layerAttrs?.layerName) {
       // todo: use sequential layer number
       const layerId = `la${(Math.random() * 1000) >> 0}`;
-      const { layerName, defaultScheme, isShiftLayer } = layerAttrs;
+      const {
+        layerName,
+        defaultScheme,
+        isShiftLayer,
+        exclusionGroup
+      } = layerAttrs;
       this.layers.push({
         layerId,
         layerName,
         defaultScheme,
-        isShiftLayer
+        isShiftLayer,
+        exclusionGroup
       });
     }
   };

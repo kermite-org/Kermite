@@ -3,7 +3,8 @@ import { h } from '~lib/qx';
 import { ILayerDefaultScheme } from '~defs/ProfileData';
 import {
   reflectFieldChecked,
-  reflectFieldValue
+  reflectFieldValue,
+  reflectValue
 } from '~ui/views/base/FormHelpers';
 import {
   cssCommonPropertiesTable,
@@ -18,10 +19,11 @@ import {
 } from '~ui/views/base/dialog/CommonDialogParts';
 import { createModal } from '~ui/views/base/layout/ForegroundModalLayer';
 
-interface ILayerConfigurationModelEditValues {
+export interface ILayerConfigurationModelEditValues {
   layerName: string;
   defaultScheme: ILayerDefaultScheme;
   isShiftLayer: boolean;
+  exclusionGroup: number;
 }
 
 const DefaultSchemeButton = (props: {
@@ -55,6 +57,11 @@ const DefaultSchemeButton = (props: {
   );
 };
 
+const defaultSchemeOptions: ILayerDefaultScheme[] = ['transparent', 'block'];
+const exclusionGroupOptions: number[] = Array(10)
+  .fill(undefined)
+  .map((_, idx) => idx);
+
 const LayerConfigurationModalContent = (props: {
   editValues: ILayerConfigurationModelEditValues;
   submit(): void;
@@ -62,7 +69,7 @@ const LayerConfigurationModalContent = (props: {
   caption: string;
 }) => {
   const { editValues, submit, close, caption } = props;
-  const defaultSchemeOptions: ILayerDefaultScheme[] = ['transparent', 'block'];
+
   const cssDefaultSchemeButtonsRow = css`
     display: flex;
   `;
@@ -110,6 +117,23 @@ const LayerConfigurationModalContent = (props: {
                     />
                     <span>shift</span>
                   </label>
+                </td>
+              </tr>
+              <tr>
+                <td>Exclusion Group</td>
+                <td>
+                  <select
+                    value={editValues.exclusionGroup.toString()}
+                    onChange={reflectValue((strValue) => {
+                      editValues.exclusionGroup = parseInt(strValue);
+                    })}
+                  >
+                    {exclusionGroupOptions.map((groupIndex) => (
+                      <option key={groupIndex} value={groupIndex.toString()}>
+                        {groupIndex}
+                      </option>
+                    ))}
+                  </select>
                 </td>
               </tr>
             </tbody>
