@@ -1,6 +1,7 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { editorModel, uiStatusModel } from '~ui/models';
+import { reflectFieldChecked } from '~ui/views/base/FormHelpers';
 import {
   ClosableOverlay,
   CommonDialogFrame
@@ -16,6 +17,26 @@ export const ProfileConfigurationPart = () => {
   const currentAssignType = editorModel.profileData.assignType;
 
   return <div css={cssBase}>assign model: {currentAssignType}</div>;
+};
+
+const ShiftCancelOptionPart = () => {
+  const { settings } = editorModel.profileData;
+  return (
+    <div
+      css={css`
+        margin-top: 10px;
+      `}
+    >
+      <label>
+        use shift cancel feature
+        <input
+          type="checkbox"
+          checked={settings.useShiftCancel}
+          onChange={reflectFieldChecked(settings, 'useShiftCancel')}
+        />
+      </label>
+    </div>
+  );
 };
 
 export const ProfileConfigratuionModalLayer = () => {
@@ -41,6 +62,7 @@ export const ProfileConfigratuionModalLayer = () => {
         <div css={cssDialogContent}>
           <AssignTypeSelectionPart />
           <DualModeSettingsPart />
+          <ShiftCancelOptionPart />
         </div>
       </CommonDialogFrame>
     </ClosableOverlay>
