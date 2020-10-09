@@ -3,9 +3,9 @@ import { editorModel } from '~ui/models';
 
 export interface LayerOptionEditViewModel {
   enabled: boolean;
-  allValues: LayerInvocationMode[];
-  selectedValue: LayerInvocationMode;
-  onValueChanged(value: LayerInvocationMode): void;
+  allValues: string[];
+  selectedValue: string;
+  onValueChanged(value: string): void;
 }
 
 const invocationModes: LayerInvocationMode[] = [
@@ -18,19 +18,30 @@ const invocationModes: LayerInvocationMode[] = [
   'exclusive'
 ];
 
+const exclusionGroupValues = Array(8)
+  .fill(undefined)
+  .map((_i, idx) => idx)
+  .map((a) => a.toString());
+
 export function makeLayerOptionEditViewModel(): LayerOptionEditViewModel {
   const { editOperation } = editorModel;
 
-  if (
-    editOperation?.type === 'layerCall' &&
-    editOperation.invocationMode !== 'clearExclusive'
-  ) {
+  if (editOperation?.type === 'layerCall') {
     return {
       enabled: true,
       allValues: invocationModes,
       selectedValue: editOperation.invocationMode || 'hold',
-      onValueChanged: (value: LayerInvocationMode) => {
+      onValueChanged(value: LayerInvocationMode) {
         editOperation.invocationMode = value;
+      }
+    };
+  } else if (editOperation?.type === 'layerClearExclusive') {
+    return {
+      enabled: true,
+      allValues: exclusionGroupValues,
+      selectedValue: editOperation.targetExclusionGroup.toString(),
+      onValueChanged(value: string) {
+        editOperation.targetExclusionGroup = parseInt(value);
       }
     };
   } else {
@@ -38,7 +49,7 @@ export function makeLayerOptionEditViewModel(): LayerOptionEditViewModel {
       enabled: false,
       allValues: invocationModes,
       selectedValue: 'hold',
-      onValueChanged: () => {}
+      onValueChanged() {}
     };
   }
 }

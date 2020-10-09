@@ -146,14 +146,11 @@ export function makeOperationEditPartViewModel(): {
   const layerCallEntryClearExclusive: IOperationCardViewModel = {
     sig: 'ClearExclusive',
     text: 'ex-clear',
-    isCurrent:
-      editOperation?.type === 'layerCall' &&
-      editOperation.invocationMode === 'clearExclusive',
+    isCurrent: editOperation?.type === 'layerClearExclusive',
     setCurrent: () =>
       writeEditOperation({
-        type: 'layerCall',
-        targetLayerId: 'la0',
-        invocationMode: 'clearExclusive'
+        type: 'layerClearExclusive',
+        targetExclusionGroup: 1
       }),
     isEnabled: true
   };
