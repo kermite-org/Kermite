@@ -1,4 +1,5 @@
 import { LayerInvocationMode } from '~defs/ProfileData';
+import { generateNumberSequence } from '~funcs/Utils';
 import { editorModel } from '~ui/models';
 
 export interface LayerOptionEditViewModel {
@@ -18,10 +19,9 @@ const invocationModes: LayerInvocationMode[] = [
   'exclusive'
 ];
 
-const exclusionGroupValues = Array(8)
-  .fill(undefined)
-  .map((_i, idx) => idx)
-  .map((a) => a.toString());
+const exclusionGroupValues = generateNumberSequence(7).map((a) =>
+  (a + 1).toString()
+);
 
 export function makeLayerOptionEditViewModel(): LayerOptionEditViewModel {
   const { editOperation } = editorModel;
