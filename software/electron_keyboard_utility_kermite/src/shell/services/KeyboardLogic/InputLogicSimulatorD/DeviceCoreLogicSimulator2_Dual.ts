@@ -309,6 +309,8 @@ const InvocationMode = {
 
 const state = new (class {
   layerHoldFlags: boolean[] = Array(16).fill(false);
+  oneshotLayerIndex: s8 = -1;
+  oneshotCancelTick: s8 = -1;
 })();
 
 function resetLayerState() {
@@ -317,6 +319,8 @@ function resetLayerState() {
     const initialActive = getLayerInitialActive(i);
     state.layerHoldFlags[i] = initialActive;
   }
+  state.oneshotLayerIndex = -1;
+  state.oneshotCancelTick = -1;
 }
 
 let layerStateCallback = (flags: boolean[]) => {};
@@ -374,6 +378,31 @@ const layerMutations = new (class {
     !this.isActive(layerIndex)
       ? this.activate(layerIndex)
       : this.deactivate(layerIndex);
+  }
+
+  oneshot(layerIndex: number) {
+    this.activate(layerIndex);
+    state.oneshotLayerIndex = layerIndex;
+    state.oneshotCancelTick = -1;
+    console.log('oneshot');
+  }
+
+  clearOneshot() {
+    if (state.oneshotLayerIndex !== -1 && state.oneshotCancelTick === -1) {
+      state.oneshotCancelTick = 0;
+    }
+  }
+
+  oneshotCancellerTicker(ms: u16) {
+    if (state.oneshotLayerIndex !== -1 && state.oneshotCancelTick >= 0) {
+      state.oneshotCancelTick += ms;
+      if (state.oneshotCancelTick > 50) {
+        console.log(`cancel oneshot`);
+        this.deactivate(state.oneshotLayerIndex);
+        state.oneshotLayerIndex = -1;
+        state.oneshotCancelTick = -1;
+      }
+    }
   }
 
   clearExclusive(targetExclusiveGroup: number, skipLayerIndex: number = -1) {
@@ -435,14 +464,19 @@ function handleOperationOn(opWord: u16) {
       layerMutations.deactivate(layerIndex);
     } else if (fInvocationMode === InvocationMode.Toggle) {
       layerMutations.toggle(layerIndex);
+    } else if (fInvocationMode === InvocationMode.Oneshot) {
+      layerMutations.oneshot(layerIndex);
     }
-    layerMutations.recoverMainLayerIfAllLayeresDisabled();
   }
   if (opType === OpType.LayerClaerExclusive) {
     const targetGroup = (opWord >> 8) & 0b111;
     layerMutations.clearExclusive(targetGroup);
-    layerMutations.recoverMainLayerIfAllLayeresDisabled();
   }
+
+  if (opType !== OpType.LayerCall) {
+    layerMutations.clearOneshot();
+  }
+  layerMutations.recoverMainLayerIfAllLayeresDisabled();
 }
 
 function handleOperationOff(opWord: u16) {
@@ -475,6 +509,7 @@ function handleOperationOff(opWord: u16) {
       layerMutations.deactivate(layerIndex);
     }
   }
+  layerMutations.recoverMainLayerIfAllLayeresDisabled();
 }
 
 // --------------------------------------------------------------------------------
@@ -939,4 +974,5 @@ export function coreLogic_processTicker() {
   const elapsedMs = tickUpdator();
   triggerResolver_tick(elapsedMs);
   assignBinder_ticker(elapsedMs);
+  layerMutations.oneshotCancellerTicker(elapsedMs);
 }
