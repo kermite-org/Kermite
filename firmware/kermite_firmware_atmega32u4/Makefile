@@ -5,8 +5,6 @@ PROJECT ?= modules_dev
 BUILD_DIR = build
 OBJ_DIR = build/obj
 
-APP_BINARIES_DIR = ../../software/electron_keyboard_utility_kermite/dist/binaries
-
 APP = $(PROJECT)
 CORE_NAME = $(notdir $(PROJECT))
 ELF = $(BUILD_DIR)/$(APP)/$(CORE_NAME).elf
@@ -80,9 +78,6 @@ LDFLAGS += -Wall
 #LDFLAGS += -mrelax
 
 
-SRC_LAYOUT_JSON = src/projects/$(PROJECT)/layout.json
-
-
 all: build
 
 build: $(HEX) $(LST)
@@ -141,17 +136,7 @@ ifdef COM_PORT_ALT
 endif
 	avrdude -p m32u4 -P $(COM_PORT) -c avr109 -U flash:w:$(HEX)
 
-run: flash 
-#size
-
-deploy: $(HEX) $(SRC_LAYOUT_JSON)
-	@mkdir -p $(APP_BINARIES_DIR)
-	@mkdir -p $(dir $(APP_BINARIES_DIR)/binary/$(PROJECT))
-	cp $(HEX) $(APP_BINARIES_DIR)/binary/$(PROJECT).hex
-	@mkdir -p $(dir $(APP_BINARIES_DIR)/config/$(PROJECT))
-	cp $(SRC_LAYOUT_JSON) $(APP_BINARIES_DIR)/config/$(PROJECT).layout.json
-
-#asm_out_dev: $(OBJ_DIR)/eeprom.S
+run: flash
 
 clean:
 	rm -rf $(BUILD_DIR)
