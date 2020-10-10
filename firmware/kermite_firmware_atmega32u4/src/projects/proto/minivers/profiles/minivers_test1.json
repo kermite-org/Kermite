@@ -1,0 +1,618 @@
+{
+  "revision": "PRF02",
+  "keyboardShape": {
+    "breedName": "proto/minivers",
+    "keyUnits": [
+      {
+        "id": "key0",
+        "x": -30,
+        "y": 17,
+        "r": 0,
+        "keyIndex": 0
+      },
+      {
+        "id": "key1",
+        "x": -47,
+        "y": 17,
+        "r": 0,
+        "keyIndex": 1
+      },
+      {
+        "id": "key2",
+        "x": -64,
+        "y": 17,
+        "r": 0,
+        "keyIndex": 2
+      },
+      {
+        "id": "key3",
+        "x": -81,
+        "y": 17,
+        "r": 0,
+        "keyIndex": 3
+      },
+      {
+        "id": "key4",
+        "x": -98,
+        "y": 17,
+        "r": 0,
+        "keyIndex": 4
+      },
+      {
+        "id": "key5",
+        "x": -115,
+        "y": 17,
+        "r": 0,
+        "keyIndex": 5
+      },
+      {
+        "id": "key6",
+        "x": -132,
+        "y": 17,
+        "r": 0,
+        "keyIndex": 6
+      },
+      {
+        "id": "key7",
+        "x": -149,
+        "y": 17,
+        "r": 0,
+        "keyIndex": 7
+      },
+      {
+        "id": "key8",
+        "x": -30,
+        "y": 34,
+        "r": 0,
+        "keyIndex": 8
+      },
+      {
+        "id": "key9",
+        "x": -47,
+        "y": 34,
+        "r": 0,
+        "keyIndex": 9
+      },
+      {
+        "id": "key10",
+        "x": -64,
+        "y": 34,
+        "r": 0,
+        "keyIndex": 10
+      },
+      {
+        "id": "key11",
+        "x": -81,
+        "y": 34,
+        "r": 0,
+        "keyIndex": 11
+      },
+      {
+        "id": "key12",
+        "x": -98,
+        "y": 34,
+        "r": 0,
+        "keyIndex": 12
+      },
+      {
+        "id": "key13",
+        "x": -115,
+        "y": 34,
+        "r": 0,
+        "keyIndex": 13
+      },
+      {
+        "id": "key14",
+        "x": -132,
+        "y": 34,
+        "r": 0,
+        "keyIndex": 14
+      },
+      {
+        "id": "key15",
+        "x": -149,
+        "y": 34,
+        "r": 0,
+        "keyIndex": 15
+      },
+      {
+        "id": "key16",
+        "x": -30,
+        "y": 51,
+        "r": 0,
+        "keyIndex": 16
+      },
+      {
+        "id": "key17",
+        "x": -47,
+        "y": 51,
+        "r": 0,
+        "keyIndex": 17
+      },
+      {
+        "id": "key18",
+        "x": -64,
+        "y": 51,
+        "r": 0,
+        "keyIndex": 18
+      },
+      {
+        "id": "key19",
+        "x": -81,
+        "y": 51,
+        "r": 0,
+        "keyIndex": 19
+      },
+      {
+        "id": "key20",
+        "x": -98,
+        "y": 51,
+        "r": 0,
+        "keyIndex": 20
+      },
+      {
+        "id": "key21",
+        "x": -115,
+        "y": 51,
+        "r": 0,
+        "keyIndex": 21
+      },
+      {
+        "id": "key22",
+        "x": -132,
+        "y": 51,
+        "r": 0,
+        "keyIndex": 22
+      },
+      {
+        "id": "key23",
+        "x": -149,
+        "y": 51,
+        "r": 0,
+        "keyIndex": 23
+      },
+      {
+        "id": "key24",
+        "x": -30,
+        "y": 68,
+        "r": 0,
+        "keyIndex": 24
+      },
+      {
+        "id": "key25",
+        "x": -47,
+        "y": 68,
+        "r": 0,
+        "keyIndex": 25
+      },
+      {
+        "id": "key26",
+        "x": -64,
+        "y": 68,
+        "r": 0,
+        "keyIndex": 26
+      },
+      {
+        "id": "key27",
+        "x": -81,
+        "y": 68,
+        "r": 0,
+        "keyIndex": 27
+      },
+      {
+        "id": "key28",
+        "x": -98,
+        "y": 68,
+        "r": 0,
+        "keyIndex": 28
+      },
+      {
+        "id": "key29",
+        "x": -115,
+        "y": 68,
+        "r": 0,
+        "keyIndex": 29
+      },
+      {
+        "id": "key30",
+        "x": -132,
+        "y": 68,
+        "r": 0,
+        "keyIndex": 30
+      },
+      {
+        "id": "key31",
+        "x": -149,
+        "y": 68,
+        "r": 0,
+        "keyIndex": 31
+      },
+      {
+        "id": "key32",
+        "x": -30,
+        "y": 90,
+        "r": 0,
+        "keyIndex": 32
+      },
+      {
+        "id": "key33",
+        "x": -47,
+        "y": 90,
+        "r": 0,
+        "keyIndex": 33
+      },
+      {
+        "id": "key34",
+        "x": -64,
+        "y": 90,
+        "r": 0,
+        "keyIndex": 34
+      },
+      {
+        "id": "key35",
+        "x": -89.5,
+        "y": 90,
+        "r": 0,
+        "keyIndex": 35
+      },
+      {
+        "id": "key36",
+        "x": -115,
+        "y": 90,
+        "r": 0,
+        "keyIndex": 36
+      },
+      {
+        "id": "key37",
+        "x": -132,
+        "y": 90,
+        "r": 0,
+        "keyIndex": 37
+      },
+      {
+        "id": "key38",
+        "x": -149,
+        "y": 90,
+        "r": 0,
+        "keyIndex": 38
+      },
+      {
+        "id": "key40",
+        "x": 30,
+        "y": 17,
+        "r": 0,
+        "keyIndex": 40
+      },
+      {
+        "id": "key41",
+        "x": 47,
+        "y": 17,
+        "r": 0,
+        "keyIndex": 41
+      },
+      {
+        "id": "key42",
+        "x": 64,
+        "y": 17,
+        "r": 0,
+        "keyIndex": 42
+      },
+      {
+        "id": "key43",
+        "x": 81,
+        "y": 17,
+        "r": 0,
+        "keyIndex": 43
+      },
+      {
+        "id": "key44",
+        "x": 98,
+        "y": 17,
+        "r": 0,
+        "keyIndex": 44
+      },
+      {
+        "id": "key45",
+        "x": 115,
+        "y": 17,
+        "r": 0,
+        "keyIndex": 45
+      },
+      {
+        "id": "key46",
+        "x": 132,
+        "y": 17,
+        "r": 0,
+        "keyIndex": 46
+      },
+      {
+        "id": "key47",
+        "x": 149,
+        "y": 17,
+        "r": 0,
+        "keyIndex": 47
+      },
+      {
+        "id": "key48",
+        "x": 30,
+        "y": 34,
+        "r": 0,
+        "keyIndex": 48
+      },
+      {
+        "id": "key49",
+        "x": 47,
+        "y": 34,
+        "r": 0,
+        "keyIndex": 49
+      },
+      {
+        "id": "key50",
+        "x": 64,
+        "y": 34,
+        "r": 0,
+        "keyIndex": 50
+      },
+      {
+        "id": "key51",
+        "x": 81,
+        "y": 34,
+        "r": 0,
+        "keyIndex": 51
+      },
+      {
+        "id": "key52",
+        "x": 98,
+        "y": 34,
+        "r": 0,
+        "keyIndex": 52
+      },
+      {
+        "id": "key53",
+        "x": 115,
+        "y": 34,
+        "r": 0,
+        "keyIndex": 53
+      },
+      {
+        "id": "key54",
+        "x": 132,
+        "y": 34,
+        "r": 0,
+        "keyIndex": 54
+      },
+      {
+        "id": "key55",
+        "x": 149,
+        "y": 34,
+        "r": 0,
+        "keyIndex": 55
+      },
+      {
+        "id": "key56",
+        "x": 30,
+        "y": 51,
+        "r": 0,
+        "keyIndex": 56
+      },
+      {
+        "id": "key57",
+        "x": 47,
+        "y": 51,
+        "r": 0,
+        "keyIndex": 57
+      },
+      {
+        "id": "key58",
+        "x": 64,
+        "y": 51,
+        "r": 0,
+        "keyIndex": 58
+      },
+      {
+        "id": "key59",
+        "x": 81,
+        "y": 51,
+        "r": 0,
+        "keyIndex": 59
+      },
+      {
+        "id": "key60",
+        "x": 98,
+        "y": 51,
+        "r": 0,
+        "keyIndex": 60
+      },
+      {
+        "id": "key61",
+        "x": 115,
+        "y": 51,
+        "r": 0,
+        "keyIndex": 61
+      },
+      {
+        "id": "key62",
+        "x": 132,
+        "y": 51,
+        "r": 0,
+        "keyIndex": 62
+      },
+      {
+        "id": "key63",
+        "x": 149,
+        "y": 51,
+        "r": 0,
+        "keyIndex": 63
+      },
+      {
+        "id": "key64",
+        "x": 30,
+        "y": 68,
+        "r": 0,
+        "keyIndex": 64
+      },
+      {
+        "id": "key65",
+        "x": 47,
+        "y": 68,
+        "r": 0,
+        "keyIndex": 65
+      },
+      {
+        "id": "key66",
+        "x": 64,
+        "y": 68,
+        "r": 0,
+        "keyIndex": 66
+      },
+      {
+        "id": "key67",
+        "x": 81,
+        "y": 68,
+        "r": 0,
+        "keyIndex": 67
+      },
+      {
+        "id": "key68",
+        "x": 98,
+        "y": 68,
+        "r": 0,
+        "keyIndex": 68
+      },
+      {
+        "id": "key69",
+        "x": 115,
+        "y": 68,
+        "r": 0,
+        "keyIndex": 69
+      },
+      {
+        "id": "key70",
+        "x": 132,
+        "y": 68,
+        "r": 0,
+        "keyIndex": 70
+      },
+      {
+        "id": "key71",
+        "x": 149,
+        "y": 68,
+        "r": 0,
+        "keyIndex": 71
+      },
+      {
+        "id": "key72",
+        "x": 30,
+        "y": 90,
+        "r": 0,
+        "keyIndex": 72
+      },
+      {
+        "id": "key73",
+        "x": 47,
+        "y": 90,
+        "r": 0,
+        "keyIndex": 73
+      },
+      {
+        "id": "key74",
+        "x": 64,
+        "y": 90,
+        "r": 0,
+        "keyIndex": 74
+      },
+      {
+        "id": "key75",
+        "x": 89.5,
+        "y": 90,
+        "r": 0,
+        "keyIndex": 75
+      },
+      {
+        "id": "key76",
+        "x": 115,
+        "y": 90,
+        "r": 0,
+        "keyIndex": 76
+      },
+      {
+        "id": "key77",
+        "x": 132,
+        "y": 90,
+        "r": 0,
+        "keyIndex": 77
+      },
+      {
+        "id": "key78",
+        "x": 149,
+        "y": 90,
+        "r": 0,
+        "keyIndex": 78
+      }
+    ],
+    "displayArea": {
+      "centerX": 0,
+      "centerY": 52,
+      "width": 335,
+      "height": 110
+    },
+    "bodyPathMarkupText": "M -13,0 L -166,0 L -166,105 L -13,105 z M 13,0 L 166,0 L 166,105 L 13,105 z"
+  },
+  "assignType": "single",
+  "settings": {
+    "useShiftCancel": false
+  },
+  "layers": [
+    {
+      "layerId": "la0",
+      "layerName": "main",
+      "defaultScheme": "block",
+      "exclusionGroup": 0,
+      "initialActive": true
+    }
+  ],
+  "assigns": {
+    "la0.key40": {
+      "type": "single",
+      "op": {
+        "type": "keyInput",
+        "virtualKey": "K_A"
+      }
+    },
+    "la0.key41": {
+      "type": "single",
+      "op": {
+        "type": "keyInput",
+        "virtualKey": "K_B"
+      }
+    },
+    "la0.key42": {
+      "type": "single",
+      "op": {
+        "type": "keyInput",
+        "virtualKey": "K_C"
+      }
+    },
+    "la0.key43": {
+      "type": "single",
+      "op": {
+        "type": "keyInput",
+        "virtualKey": "K_D"
+      }
+    },
+    "la0.key44": {
+      "type": "single",
+      "op": {
+        "type": "keyInput",
+        "virtualKey": "K_E"
+      }
+    },
+    "la0.key45": {
+      "type": "single",
+      "op": {
+        "type": "keyInput",
+        "virtualKey": "K_F"
+      }
+    }
+  }
+}
