@@ -8,9 +8,11 @@ OBJ_DIR = build/obj
 APP_BINARIES_DIR = ../../software/electron_keyboard_utility_kermite/dist/binaries
 
 APP = $(PROJECT)
-ELF = $(BUILD_DIR)/$(APP).elf
-HEX = $(BUILD_DIR)/$(APP).hex
-LST = $(BUILD_DIR)/$(APP).lst
+CORE_NAME = $(notdir $(PROJECT))
+ELF = $(BUILD_DIR)/$(APP)/$(CORE_NAME).elf
+HEX = $(BUILD_DIR)/$(APP)/$(CORE_NAME).hex
+LST = $(BUILD_DIR)/$(APP)/$(CORE_NAME).lst
+
 
 INC_PATHS =
 INC_PATHS += -Isrc/modules
