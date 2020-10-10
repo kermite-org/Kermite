@@ -335,7 +335,7 @@ const virutalKeyToHidKeyMapper_US: {
   K_GreaterThan: HidKeyUS.KU__US_Dot_GreaterThan | OUT_SHIFT
 };
 
-const virutalKeyToHidKeyMapper_JP: {
+const virutalKeyToHidKeyMapper_JIS: {
   [vk in VirtualKey]?: number;
 } = {
   K_Dot: HidKeyJP.KU__JP_Dot_GreaterThan | OUT_NOSHIFT,
@@ -387,7 +387,7 @@ export function getHidKeyCodeEx(
     );
   } else {
     return (
-      virutalKeyToHidKeyMapper_Core[vk] || virutalKeyToHidKeyMapper_JP[vk] || 0
+      virutalKeyToHidKeyMapper_Core[vk] || virutalKeyToHidKeyMapper_JIS[vk] || 0
     );
   }
 }
