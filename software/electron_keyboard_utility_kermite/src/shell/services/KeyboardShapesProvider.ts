@@ -26,7 +26,7 @@ async function loadShapeFromFile(
   const relPath = filePath.replace(baseDir + '/', '');
   const breedName = relPath.replace('/layout.json', '');
 
-  console.log(`loading ${relPath}`);
+  // console.log(`loading ${relPath}`);
   let fileText: string;
   try {
     fileText = await fsxReadTextFile(filePath);
