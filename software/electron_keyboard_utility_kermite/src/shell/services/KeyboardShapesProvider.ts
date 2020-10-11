@@ -16,9 +16,17 @@ interface IKeyboardShapeSourceJson {
   bodyPathMarkups: string[];
 }
 
-const baseDir = path.resolve(
-  '../../firmware/kermite_firmware_atmega32u4/src/projects'
-);
+function getBaseDir() {
+  if (appEnv.isDevelopment) {
+    return path.resolve(
+      '../../firmware/kermite_firmware_atmega32u4/src/projects'
+    );
+  } else {
+    return appEnv.resolveUserDataFilePath('resources/variants');
+  }
+}
+
+const baseDir = getBaseDir();
 
 async function loadShapeFromFile(
   filePath: string

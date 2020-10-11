@@ -1,27 +1,33 @@
+import * as path from 'path';
 import { fsIsFileExists, fsCreateDirectory, globAsync } from '~funcs/Files';
 import { appEnv } from '~shell/base/AppEnvironment';
 
-const relBinariesFolderPath = 'dist/binaries/binary';
-
 export class FirmwareFilesResource {
+  static get baseDir() {
+    if (appEnv.isDevelopment) {
+      return path.resolve(
+        '../../firmware/kermite_firmware_atmega32u4/src/build'
+      );
+    } else {
+      return appEnv.resolveUserDataFilePath('resources/variants');
+    }
+  }
+
   static async ensureBinariesDirectoryExists() {
-    const binariesDirPath = appEnv.resolveAssetsPath(relBinariesFolderPath);
-    if (!fsIsFileExists(binariesDirPath)) {
-      await fsCreateDirectory(binariesDirPath);
+    if (!fsIsFileExists(this.baseDir)) {
+      await fsCreateDirectory(this.baseDir);
     }
   }
 
   static async listAllFirmwareNames(): Promise<string[]> {
-    const filePaths = await globAsync(`${relBinariesFolderPath}/**/*.hex`);
+    const filePaths = await globAsync(`${this.baseDir}/**/*.hex`);
     const relFileNames = filePaths.map((fpath) =>
-      fpath.replace(relBinariesFolderPath + '/', '')
+      fpath.replace(this.baseDir + '/', '')
     );
     return relFileNames.map((fname) => fname.replace('.hex', ''));
   }
 
   static getHexFilePath(firmwareName: string): string {
-    return appEnv.resolveAssetsPath(
-      `${relBinariesFolderPath}/${firmwareName}.hex`
-    );
+    return appEnv.resolveAssetsPath(`${this.baseDir}/${firmwareName}.hex`);
   }
 }
