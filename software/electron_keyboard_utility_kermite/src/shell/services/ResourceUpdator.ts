@@ -7,12 +7,12 @@ import { appEnv } from '~shell/base/AppEnvironment';
 
 async function fetchJson(url: string): Promise<any> {
   const res = await fetch(url);
-  return res.json();
+  return await res.json();
 }
 
 async function fetchText(url: string): Promise<string> {
   const res = await fetch(url);
-  return res.text();
+  return await res.text();
 }
 
 async function ensureDirectoryExists(fpath: string) {
