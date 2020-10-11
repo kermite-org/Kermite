@@ -7,12 +7,14 @@ import { deviceService } from './KeyboardDevice';
 import { inputLogicSimulator } from './KeyboardLogic';
 import { keyboardShapesProvider } from './KeyboardShapesProvider';
 import { profileManager } from './ProfileManager';
+import { resourceUpdator_syncRemoteResourcesToLocal } from './ResourceUpdator';
 
 export const services = new (class {
   async initialize() {
     console.log(`initialize services`);
     await applicationStorage.initialize();
     await applicationSettingsProvider.initialize();
+    await resourceUpdator_syncRemoteResourcesToLocal();
     await keyboardConfigProvider.initialize();
     await keyboardShapesProvider.initialize();
     await profileManager.initialize();
