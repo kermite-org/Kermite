@@ -3,6 +3,7 @@ import { h } from '~lib/qx';
 import { uiTheme } from '~ui/core';
 import { uiStatusModel } from '~ui/models';
 import { AssignEditSection } from './AssignEditSection';
+import { BehaviorOptionsPart } from './BehaviorOptionsPart';
 import { KeyboardSection } from './KeyboardSection';
 import { LayersSection } from './LayersSection';
 import { ProfileConfigurationPart } from './ProfileConfigurationPart';
@@ -127,6 +128,7 @@ export const KeyAssignEditPage = () => {
           </div>
           <div css={cssRestPartBox}>
             <ProfileConfigurationPart />
+            <BehaviorOptionsPart />
           </div>
         </div>
       </div>
