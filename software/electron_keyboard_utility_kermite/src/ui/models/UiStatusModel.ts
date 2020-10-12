@@ -10,6 +10,7 @@ export interface IUiSettings {
   shapeViewShowKeyId: boolean;
   shapeViewShowKeyIndex: boolean;
   shapeViewShowBoundingBox: boolean;
+  showLayersDynamic: boolean;
 }
 
 const defaultUiSettins: IUiSettings = {
@@ -18,7 +19,8 @@ const defaultUiSettins: IUiSettings = {
   shapeViewBreedName: '',
   shapeViewShowKeyId: false,
   shapeViewShowKeyIndex: false,
-  shapeViewShowBoundingBox: false
+  shapeViewShowBoundingBox: false,
+  showLayersDynamic: false
 };
 
 export interface IUiStatus {
