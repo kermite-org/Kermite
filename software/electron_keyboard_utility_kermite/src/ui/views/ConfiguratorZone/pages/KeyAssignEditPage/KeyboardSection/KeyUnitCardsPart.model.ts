@@ -1,7 +1,6 @@
 import {
   IAssignOperation,
   IKeyUnitEntry,
-  IAssignEntry,
   IAssignEntryWithLayerFallback
 } from '~defs/ProfileData';
 import { VirtualKeyTexts } from '~defs/VirtualKeyTexts';
@@ -104,10 +103,15 @@ function getAssignEntryTexts(
   };
 }
 
-function getAssignForKeyUnit(keyUnitId: string, isEdit: boolean) {
+function getAssignForKeyUnit(
+  keyUnitId: string,
+  isEdit: boolean
+): IAssignEntryWithLayerFallback | undefined {
   const dynamic = !isEdit || uiStatusModel.settings.showLayersDynamic;
   return dynamic
-    ? playerModel.getDynamicKeyAssign(keyUnitId)
+    ? playerModel.getDynamicKeyAssign(keyUnitId) || {
+        type: 'layerFallbackBlock'
+      }
     : editorModel.getAssignForKeyUnitWithLayerFallback(keyUnitId);
 }
 

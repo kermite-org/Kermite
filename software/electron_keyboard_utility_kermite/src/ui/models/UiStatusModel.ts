@@ -11,16 +11,18 @@ export interface IUiSettings {
   shapeViewShowKeyIndex: boolean;
   shapeViewShowBoundingBox: boolean;
   showLayersDynamic: boolean;
+  showLayerDefaultAssign: boolean;
 }
 
-const defaultUiSettins: IUiSettings = {
+const defaultUiSettings: IUiSettings = {
   showTestInputArea: false,
   page: 'editor',
   shapeViewBreedName: '',
   shapeViewShowKeyId: false,
   shapeViewShowKeyIndex: false,
   shapeViewShowBoundingBox: false,
-  showLayersDynamic: false
+  showLayersDynamic: false,
+  showLayerDefaultAssign: false
 };
 
 export interface IUiStatus {
@@ -32,7 +34,7 @@ const defaultUiStatus: IUiStatus = {
 };
 
 class UiStatusModel {
-  readonly settings: IUiSettings = defaultUiSettins;
+  readonly settings: IUiSettings = defaultUiSettings;
 
   readonly status: IUiStatus = defaultUiStatus;
 
