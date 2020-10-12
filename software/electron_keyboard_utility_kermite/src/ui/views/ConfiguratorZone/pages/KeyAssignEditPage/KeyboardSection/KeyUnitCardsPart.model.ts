@@ -1,7 +1,8 @@
 import {
   IAssignOperation,
   IKeyUnitEntry,
-  IAssignEntry
+  IAssignEntry,
+  IAssignEntryWithLayerFallback
 } from '~defs/ProfileData';
 import { VirtualKeyTexts } from '~defs/VirtualKeyTexts';
 import { editorModel, playerModel, uiStatusModel } from '~ui/models';
@@ -17,6 +18,7 @@ export interface IKeyUnitCardViewModel {
   setCurrent: () => void;
   primaryText: string;
   secondaryText: string;
+  isLayerFallback: boolean;
   isHold: boolean;
 }
 
@@ -51,20 +53,25 @@ function getAssignOperationText(op?: IAssignOperation): string {
 }
 
 function getAssignEntryTexts(
-  assign?: IAssignEntry
-): { primaryText: string; secondaryText: string } {
+  assign?: IAssignEntryWithLayerFallback
+): { primaryText: string; secondaryText: string; isLayerFallback?: boolean } {
   if (assign) {
-    if (assign.type === 'block') {
+    if (assign.type === 'block' || assign.type === 'layerFallbackBlock') {
       return {
         primaryText: '□',
         // primaryTest: '⬡',
-        secondaryText: ''
+        secondaryText: '',
+        isLayerFallback: assign.type === 'layerFallbackBlock'
       };
     }
-    if (assign.type === 'transparent') {
+    if (
+      assign.type === 'transparent' ||
+      assign.type === 'layerFallbackTransparent'
+    ) {
       return {
         primaryText: '↡',
-        secondaryText: ''
+        secondaryText: '',
+        isLayerFallback: assign.type === 'layerFallbackTransparent'
       };
     }
 
@@ -101,7 +108,7 @@ function getAssignForKeyUnit(keyUnitId: string, isEdit: boolean) {
   const dynamic = !isEdit || uiStatusModel.settings.showLayersDynamic;
   return dynamic
     ? playerModel.getDynamicKeyAssign(keyUnitId)
-    : editorModel.getAssignForKeyUnit(keyUnitId);
+    : editorModel.getAssignForKeyUnitWithLayerFallback(keyUnitId);
 }
 
 function makeKeyUnitCardViewModel(
@@ -115,7 +122,9 @@ function makeKeyUnitCardViewModel(
   const isCurrent = isKeyUnitCurrent(keyUnitId);
   const setCurrent = () => setCurrentKeyUnitId(keyUnitId);
   const assign = getAssignForKeyUnit(keyUnitId, isEdit);
-  const { primaryText, secondaryText } = getAssignEntryTexts(assign);
+  const { primaryText, secondaryText, isLayerFallback } = getAssignEntryTexts(
+    assign
+  );
 
   const isHold = playerModel.keyStates[kp.id];
 
@@ -126,6 +135,7 @@ function makeKeyUnitCardViewModel(
     setCurrent,
     primaryText,
     secondaryText,
+    isLayerFallback: isLayerFallback || false,
     isHold
   };
 }

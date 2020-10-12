@@ -6,6 +6,28 @@ import {
   makeKeyUnitCardsPartViewModel
 } from './KeyUnitCardsPart.model';
 
+const cssKeyRect = css`
+  cursor: pointer;
+  fill: ${uiTheme.colors.clKeyUnitFace};
+
+  &[data-current] {
+    fill: ${uiTheme.colors.clSelectHighlight};
+  }
+  &[data-hold] {
+    fill: ${uiTheme.colors.clHoldHighlight};
+  }
+`;
+
+const cssKeyText = css`
+  fill: ${uiTheme.colors.clKeyUnitLegend};
+
+  &[data-is-weak] {
+    fill: ${uiTheme.colors.clKeyUnitLegendWeak};
+  }
+
+  pointer-events: none;
+`;
+
 export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
   const {
     keyUnitId,
@@ -14,25 +36,9 @@ export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
     setCurrent,
     primaryText,
     secondaryText,
+    isLayerFallback,
     isHold
   } = keyUnit;
-
-  const cssKeyRect = css`
-    cursor: pointer;
-    fill: ${uiTheme.colors.clKeyUnitFace};
-
-    &[data-current] {
-      fill: ${uiTheme.colors.clSelectHighlight};
-    }
-    &[data-hold] {
-      fill: ${uiTheme.colors.clHoldHighlight};
-    }
-  `;
-
-  const cssKeyText = css`
-    fill: ${uiTheme.colors.clKeyUnitLegend};
-    pointer-events: none;
-  `;
 
   const onMouseDown = (e: MouseEvent) => {
     setCurrent();
@@ -69,6 +75,7 @@ export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
         font-size={getFontSize(primaryText)}
         text-anchor="middle"
         dominant-baseline="center"
+        data-is-weak={isLayerFallback}
       >
         {primaryText}
       </text>
