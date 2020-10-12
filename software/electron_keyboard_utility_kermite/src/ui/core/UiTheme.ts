@@ -1,3 +1,7 @@
+// todo
+// UIのテキスト項目を追加するたび3箇所の変更が必要なためUI実装時の手間が多い
+// 一箇所のみの変更で色を追加できるようにし、他をあとから調整できるような方法を考える
+
 type ThemeColorKey =
   | 'clBackground'
   | 'clTitleBar'
