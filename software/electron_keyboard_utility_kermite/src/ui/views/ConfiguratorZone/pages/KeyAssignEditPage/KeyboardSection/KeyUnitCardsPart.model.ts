@@ -43,6 +43,9 @@ function getAssignOperationText(op?: IAssignOperation): string {
     const layer = editorModel.layers.find(
       (la) => la.layerId === op.targetLayerId
     );
+    if (layer && op.invocationMode === 'turnOff') {
+      return layer.layerName + '-off';
+    }
     return layer?.layerName || '';
   }
   if (op?.type === 'modifierCall') {
