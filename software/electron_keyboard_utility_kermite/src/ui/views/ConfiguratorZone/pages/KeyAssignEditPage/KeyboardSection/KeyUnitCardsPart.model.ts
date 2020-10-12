@@ -4,7 +4,7 @@ import {
   IAssignEntry
 } from '~defs/ProfileData';
 import { VirtualKeyTexts } from '~defs/VirtualKeyTexts';
-import { editorModel, playerModel } from '~ui/models';
+import { editorModel, playerModel, uiStatusModel } from '~ui/models';
 
 export interface IKeyUnitCardViewModel {
   keyUnitId: string;
@@ -98,12 +98,10 @@ function getAssignEntryTexts(
 }
 
 function getAssignForKeyUnit(keyUnitId: string, isEdit: boolean) {
-  const exLayerHold = playerModel.currentLayerId !== 'la0';
-  if (!isEdit || exLayerHold) {
-    return playerModel.getDynamicKeyAssign(keyUnitId);
-  } else {
-    return editorModel.getAssignForKeyUnit(keyUnitId);
-  }
+  const dynamic = !isEdit || uiStatusModel.settings.showLayersDynamic;
+  return dynamic
+    ? playerModel.getDynamicKeyAssign(keyUnitId)
+    : editorModel.getAssignForKeyUnit(keyUnitId);
 }
 
 function makeKeyUnitCardViewModel(
@@ -114,7 +112,6 @@ function makeKeyUnitCardViewModel(
   const pos = { x: kp.x, y: kp.y, r: kp.r || 0 };
 
   const { isKeyUnitCurrent, setCurrentKeyUnitId } = editorModel;
-
   const isCurrent = isKeyUnitCurrent(keyUnitId);
   const setCurrent = () => setCurrentKeyUnitId(keyUnitId);
   const assign = getAssignForKeyUnit(keyUnitId, isEdit);
