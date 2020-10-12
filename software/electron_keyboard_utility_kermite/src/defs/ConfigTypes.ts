@@ -7,7 +7,8 @@ export interface IEnvironmentConfigForRendererProcess {
 }
 
 export interface IApplicationSettings {
-  showTestInputArea: boolean;
+  // メインプロセスで保持・永続化するべきデータがあればここに追加する
+  // レンダラプロセスで扱うデータはui/models/UiStatusModelで永続化する
 }
 
 export const fallabackApplicationSettings: IApplicationSettings = {

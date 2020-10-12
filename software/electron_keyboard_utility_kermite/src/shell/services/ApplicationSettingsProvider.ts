@@ -5,7 +5,8 @@ import {
 import { overwriteObjectProps } from '~funcs/Utils';
 import { applicationStorage } from './ApplicationStorage';
 
-// 永続化する設定やUI状態などを管理
+// メインプロセスで永続化する設定を管理
+// UI側で永続化する設定はui/models/UiStatusModelに格納
 class ApplicationSettingsProvider {
   private readonly stroageKey = 'applicationSettings';
 
