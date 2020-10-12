@@ -1,6 +1,7 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { uiTheme } from '~ui/core';
+import { uiStatusModel } from '~ui/models';
 import {
   IKeyUnitCardViewModel,
   makeKeyUnitCardsPartViewModel
@@ -23,6 +24,10 @@ const cssKeyText = css`
 
   &[data-is-weak] {
     fill: ${uiTheme.colors.clKeyUnitLegendWeak};
+  }
+
+  &[data-hidden] {
+    display: none;
   }
 
   pointer-events: none;
@@ -53,6 +58,10 @@ export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
     }
   };
 
+  const textShown = isLayerFallback
+    ? uiStatusModel.settings.showLayerDefaultAssign
+    : true;
+
   return (
     <g
       transform={`translate(${pos.x}, ${pos.y}) rotate(${pos.r}) `}
@@ -76,6 +85,7 @@ export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
         text-anchor="middle"
         dominant-baseline="center"
         data-is-weak={isLayerFallback}
+        data-hidden={!textShown}
       >
         {primaryText}
       </text>
@@ -99,11 +109,7 @@ export function KeyUnitCardsPart() {
   return (
     <g>
       {keyUnitCardsPartViewModel.cards.map((keyUnit) => (
-        <KeyUnitCard
-          keyUnit={keyUnit}
-          key={keyUnit.keyUnitId}
-          qxOptimizer="deepEqualExFn"
-        />
+        <KeyUnitCard keyUnit={keyUnit} key={keyUnit.keyUnitId} />
       ))}
     </g>
   );
