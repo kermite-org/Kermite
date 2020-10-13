@@ -93,6 +93,14 @@ export type IAssignEntry =
   | IAssingEntry_Block
   | IAssignEntry_Transparent;
 
+export type IAssignEntryWithLayerFallback =
+  | IAssignEntry_Single
+  | IAssignEntry_Dual
+  | IAssingEntry_Block
+  | IAssignEntry_Transparent
+  | { type: 'layerFallbackTransparent' }
+  | { type: 'layerFallbackBlock' };
+
 export type IAssignEntry_SingleEx =
   | IAssignEntry_Single
   | IAssingEntry_Block

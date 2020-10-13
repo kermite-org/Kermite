@@ -2,9 +2,11 @@ import {
   IApplicationSettings,
   fallabackApplicationSettings
 } from '~defs/ConfigTypes';
+import { overwriteObjectProps } from '~funcs/Utils';
 import { applicationStorage } from './ApplicationStorage';
 
-// 永続化する設定やUI状態などを管理
+// メインプロセスで永続化する設定を管理
+// UI側で永続化する設定はui/models/UiStatusModelに格納
 class ApplicationSettingsProvider {
   private readonly stroageKey = 'applicationSettings';
 
@@ -19,9 +21,12 @@ class ApplicationSettingsProvider {
   }
 
   async initialize() {
-    this._settings =
-      applicationStorage.getItem(this.stroageKey) ||
-      fallabackApplicationSettings;
+    const loaded = applicationStorage.getItem<IApplicationSettings>(
+      this.stroageKey
+    );
+    if (loaded) {
+      overwriteObjectProps(this._settings, loaded);
+    }
   }
 
   async terminate() {

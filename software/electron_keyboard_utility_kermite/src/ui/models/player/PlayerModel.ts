@@ -33,13 +33,28 @@ class PlayerModel {
   }
 
   getDynamicKeyAssign = (keyUnitId: string) => {
-    const layer = editorModel.getLayerById(this.currentLayerId);
-    if (layer) {
-      let assign = editorModel.getAssignForKeyUnit(keyUnitId, layer.layerId);
-      if (!assign && layer.defaultScheme === 'transparent') {
-        assign = editorModel.getAssignForKeyUnit(keyUnitId, 'la0');
+    const { layers } = editorModel;
+    for (let i = layers.length - 1; i >= 0; i--) {
+      if (this._layerActiveStates[i]) {
+        const layer = layers[i];
+        const assign = editorModel.getAssignForKeyUnit(
+          keyUnitId,
+          layer.layerId
+        );
+
+        if (assign?.type === 'transparent') {
+          continue;
+        }
+        if (assign?.type === 'block') {
+          return undefined;
+        }
+        if (!assign && layer.defaultScheme === 'block') {
+          return undefined;
+        }
+        if (assign) {
+          return assign;
+        }
       }
-      return assign;
     }
     return undefined;
   };

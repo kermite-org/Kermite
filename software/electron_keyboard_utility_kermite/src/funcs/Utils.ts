@@ -204,7 +204,7 @@ export function delayMs(n: number) {
 
 export function overwriteObjectProps<T>(dst: T, src: T) {
   for (const key in dst) {
-    if (src[key]) {
+    if (src[key] !== undefined) {
       dst[key] = src[key];
     }
   }

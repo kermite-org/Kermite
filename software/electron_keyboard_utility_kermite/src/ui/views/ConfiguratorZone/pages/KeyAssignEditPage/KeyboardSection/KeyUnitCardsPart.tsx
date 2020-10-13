@@ -6,7 +6,36 @@ import {
   makeKeyUnitCardsPartViewModel
 } from './KeyUnitCardsPart.model';
 
-export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
+const cssKeyRect = css`
+  cursor: pointer;
+  fill: ${uiTheme.colors.clKeyUnitFace};
+
+  &[data-current] {
+    fill: ${uiTheme.colors.clSelectHighlight};
+  }
+  &[data-hold] {
+    fill: ${uiTheme.colors.clHoldHighlight};
+  }
+`;
+
+const cssKeyText = css`
+  fill: ${uiTheme.colors.clKeyUnitLegend};
+
+  &[data-is-weak] {
+    fill: ${uiTheme.colors.clKeyUnitLegendWeak};
+  }
+
+  &[data-hidden] {
+    display: none;
+  }
+
+  pointer-events: none;
+`;
+
+export function KeyUnitCard(props: {
+  keyUnit: IKeyUnitCardViewModel;
+  showLayerDefaultAssign: boolean;
+}) {
   const {
     keyUnitId,
     pos,
@@ -14,25 +43,12 @@ export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
     setCurrent,
     primaryText,
     secondaryText,
+    isLayerFallback,
     isHold
-  } = keyUnit;
+  } = props.keyUnit;
+  const { showLayerDefaultAssign } = props;
 
-  const cssKeyRect = css`
-    cursor: pointer;
-    fill: ${uiTheme.colors.clKeyUnitFace};
-
-    &[data-current] {
-      fill: ${uiTheme.colors.clSelectHighlight};
-    }
-    &[data-hold] {
-      fill: ${uiTheme.colors.clHoldHighlight};
-    }
-  `;
-
-  const cssKeyText = css`
-    fill: ${uiTheme.colors.clKeyUnitLegend};
-    pointer-events: none;
-  `;
+  const textShown = isLayerFallback ? showLayerDefaultAssign : true;
 
   const onMouseDown = (e: MouseEvent) => {
     setCurrent();
@@ -69,6 +85,8 @@ export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
         font-size={getFontSize(primaryText)}
         text-anchor="middle"
         dominant-baseline="center"
+        data-is-weak={isLayerFallback}
+        data-hidden={!textShown}
       >
         {primaryText}
       </text>
@@ -88,13 +106,14 @@ export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
 }
 
 export function KeyUnitCardsPart() {
-  const keyUnitCardsPartViewModel = makeKeyUnitCardsPartViewModel(true);
+  const vm = makeKeyUnitCardsPartViewModel(true);
   return (
     <g>
-      {keyUnitCardsPartViewModel.cards.map((keyUnit) => (
+      {vm.cards.map((keyUnit) => (
         <KeyUnitCard
           keyUnit={keyUnit}
           key={keyUnit.keyUnitId}
+          showLayerDefaultAssign={vm.showLayerDefaultAssign}
           qxOptimizer="deepEqualExFn"
         />
       ))}

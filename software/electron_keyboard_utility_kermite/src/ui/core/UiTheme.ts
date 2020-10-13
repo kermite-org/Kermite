@@ -1,3 +1,7 @@
+// todo
+// UIのテキスト項目を追加するたび3箇所の変更が必要なためUI実装時の手間が多い
+// 一箇所のみの変更で色を追加できるようにし、他をあとから調整できるような方法を考える
+
 type ThemeColorKey =
   | 'clBackground'
   | 'clTitleBar'
@@ -13,6 +17,7 @@ type ThemeColorKey =
   | 'clKeyboardBodyFace'
   | 'clKeyUnitFace'
   | 'clKeyUnitLegend'
+  | 'clKeyUnitLegendWeak'
   | 'clAssignCardFace'
   | 'clAssignCardText'
   | 'clCommonFrame'
@@ -38,6 +43,7 @@ export const themeColors: { [key in ThemeKey]: IThemeColorSet } = {
     clKeyboardBodyFace: '#54566f',
     clKeyUnitFace: 'rgba(0, 0, 0, 0.5)',
     clKeyUnitLegend: '#fff',
+    clKeyUnitLegendWeak: 'rgba(128, 128, 128, 0.2)',
     clAssignCardFace: '#383838',
     clAssignCardText: '#FFF',
     clCommonFrame: '#444',
@@ -59,6 +65,7 @@ export const themeColors: { [key in ThemeKey]: IThemeColorSet } = {
     clKeyboardBodyFace: '#9aadd8',
     clKeyUnitFace: 'rgba(255, 255, 255, 0.9)',
     clKeyUnitLegend: '#568',
+    clKeyUnitLegendWeak: 'rgba(128, 128, 128, 0.2)',
     clAssignCardFace: '#EEE',
     clAssignCardText: '#348',
     clCommonFrame: '#08d',

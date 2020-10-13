@@ -1,10 +1,10 @@
 import {
   IAssignOperation,
   IKeyUnitEntry,
-  IAssignEntry
+  IAssignEntryWithLayerFallback
 } from '~defs/ProfileData';
 import { VirtualKeyTexts } from '~defs/VirtualKeyTexts';
-import { editorModel, playerModel } from '~ui/models';
+import { editorModel, playerModel, uiStatusModel } from '~ui/models';
 
 export interface IKeyUnitCardViewModel {
   keyUnitId: string;
@@ -17,11 +17,13 @@ export interface IKeyUnitCardViewModel {
   setCurrent: () => void;
   primaryText: string;
   secondaryText: string;
+  isLayerFallback: boolean;
   isHold: boolean;
 }
 
 export interface IKeyUnitCardPartViewModel {
   cards: IKeyUnitCardViewModel[];
+  showLayerDefaultAssign: boolean;
 }
 
 function getAssignOperationText(op?: IAssignOperation): string {
@@ -42,6 +44,9 @@ function getAssignOperationText(op?: IAssignOperation): string {
     const layer = editorModel.layers.find(
       (la) => la.layerId === op.targetLayerId
     );
+    if (layer && op.invocationMode === 'turnOff') {
+      return layer.layerName + '-off';
+    }
     return layer?.layerName || '';
   }
   if (op?.type === 'modifierCall') {
@@ -51,20 +56,25 @@ function getAssignOperationText(op?: IAssignOperation): string {
 }
 
 function getAssignEntryTexts(
-  assign?: IAssignEntry
-): { primaryText: string; secondaryText: string } {
+  assign?: IAssignEntryWithLayerFallback
+): { primaryText: string; secondaryText: string; isLayerFallback?: boolean } {
   if (assign) {
-    if (assign.type === 'block') {
+    if (assign.type === 'block' || assign.type === 'layerFallbackBlock') {
       return {
         primaryText: '□',
         // primaryTest: '⬡',
-        secondaryText: ''
+        secondaryText: '',
+        isLayerFallback: assign.type === 'layerFallbackBlock'
       };
     }
-    if (assign.type === 'transparent') {
+    if (
+      assign.type === 'transparent' ||
+      assign.type === 'layerFallbackTransparent'
+    ) {
       return {
         primaryText: '↡',
-        secondaryText: ''
+        secondaryText: '',
+        isLayerFallback: assign.type === 'layerFallbackTransparent'
       };
     }
 
@@ -97,13 +107,16 @@ function getAssignEntryTexts(
   };
 }
 
-function getAssignForKeyUnit(keyUnitId: string, isEdit: boolean) {
-  const exLayerHold = playerModel.currentLayerId !== 'la0';
-  if (!isEdit || exLayerHold) {
-    return playerModel.getDynamicKeyAssign(keyUnitId);
-  } else {
-    return editorModel.getAssignForKeyUnit(keyUnitId);
-  }
+function getAssignForKeyUnit(
+  keyUnitId: string,
+  isEdit: boolean
+): IAssignEntryWithLayerFallback | undefined {
+  const dynamic = !isEdit || uiStatusModel.settings.showLayersDynamic;
+  return dynamic
+    ? playerModel.getDynamicKeyAssign(keyUnitId) || {
+        type: 'layerFallbackBlock'
+      }
+    : editorModel.getAssignForKeyUnitWithLayerFallback(keyUnitId);
 }
 
 function makeKeyUnitCardViewModel(
@@ -114,11 +127,12 @@ function makeKeyUnitCardViewModel(
   const pos = { x: kp.x, y: kp.y, r: kp.r || 0 };
 
   const { isKeyUnitCurrent, setCurrentKeyUnitId } = editorModel;
-
   const isCurrent = isKeyUnitCurrent(keyUnitId);
   const setCurrent = () => setCurrentKeyUnitId(keyUnitId);
   const assign = getAssignForKeyUnit(keyUnitId, isEdit);
-  const { primaryText, secondaryText } = getAssignEntryTexts(assign);
+  const { primaryText, secondaryText, isLayerFallback } = getAssignEntryTexts(
+    assign
+  );
 
   const isHold = playerModel.keyStates[kp.id];
 
@@ -129,6 +143,7 @@ function makeKeyUnitCardViewModel(
     setCurrent,
     primaryText,
     secondaryText,
+    isLayerFallback: isLayerFallback || false,
     isHold
   };
 }
@@ -136,9 +151,11 @@ function makeKeyUnitCardViewModel(
 export function makeKeyUnitCardsPartViewModel(
   isEdit: boolean
 ): IKeyUnitCardPartViewModel {
+  const { showLayerDefaultAssign } = uiStatusModel.settings;
   return {
     cards: editorModel.keyPositions.map((kp) =>
       makeKeyUnitCardViewModel(kp, isEdit)
-    )
+    ),
+    showLayerDefaultAssign
   };
 }

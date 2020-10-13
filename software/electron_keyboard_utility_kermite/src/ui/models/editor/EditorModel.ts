@@ -3,7 +3,8 @@ import {
   IProfileData,
   IAssignEntry,
   IAssignOperation,
-  IProfileAssignType
+  IProfileAssignType,
+  IAssignEntryWithLayerFallback
 } from '~/defs/ProfileData';
 import {
   duplicateObjectByJsonStringifyParse,
@@ -70,6 +71,12 @@ class EditorModel {
     return this.profileData.keyboardShape.bodyPathMarkupText;
   }
 
+  get currentLayer() {
+    return this.profileData.layers.find(
+      (la) => la.layerId === this.currentLayerId
+    );
+  }
+
   isLayerCurrent = (layerId: string) => {
     return this.currentLayerId === layerId;
   };
@@ -78,9 +85,30 @@ class EditorModel {
     return this.currentKeyUnitId === keyUnitId;
   };
 
-  getAssignForKeyUnit = (keyUnitId: string, targetLayerId?: string) => {
+  getAssignForKeyUnit = (
+    keyUnitId: string,
+    targetLayerId?: string
+  ): IAssignEntry | undefined => {
     const layerId = targetLayerId || this.currentLayerId;
     return this.profileData.assigns[`${layerId}.${keyUnitId}`];
+  };
+
+  getAssignForKeyUnitWithLayerFallback = (
+    keyUnitId: string,
+    targetLayerId?: string
+  ): IAssignEntryWithLayerFallback | undefined => {
+    const layerId = targetLayerId || this.currentLayerId;
+    const assign = this.profileData.assigns[`${layerId}.${keyUnitId}`];
+    if (!assign) {
+      const defaultScheme = this.currentLayer?.defaultScheme;
+      if (defaultScheme === 'transparent') {
+        return { type: 'layerFallbackTransparent' };
+      }
+      if (defaultScheme === 'block') {
+        return { type: 'layerFallbackBlock' };
+      }
+    }
+    return assign;
   };
 
   private get dualModeOperationPath(): IDualModeOperationPath {
