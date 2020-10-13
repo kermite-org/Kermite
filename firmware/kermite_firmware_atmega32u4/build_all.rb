@@ -90,6 +90,7 @@ end
 def copyToResourceStoreDirectory
   resourceStoreDir = '../../../KermiteResourceStore'
   if Dir.exists?(resourceStoreDir)
+    FileUtils.rm_rf("#{resourceStoreDir}/resources")
     FileUtils.copy_entry("./dist", "#{resourceStoreDir}/resources")
   end
 end
