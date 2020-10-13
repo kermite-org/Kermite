@@ -78,7 +78,7 @@ def makeSummary(stats)
       },
       environment: getEnvVersions(),
       executedAt: Time.now.to_s,
-      revision: 0
+      filesRevision: 0
     },
     files: filesMd5Dict
   }
