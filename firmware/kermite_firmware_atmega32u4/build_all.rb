@@ -45,6 +45,17 @@ def buildProjects()
   [numTotal, numSuccess]
 end
 
+def getEnvVersions()
+  osVersion = "#{`sw_vers -productName`.strip} #{`sw_vers -productVersion`.strip}"
+  avrGccVersion = `avr-gcc -v 2>&1 >/dev/null | grep "gcc version"`.strip.match(/\((.*)\)/)[1]
+  makeVersion = `make -v | grep "GNU Make"`.strip
+  {
+    OS: osVersion,
+    'avr-gcc': avrGccVersion,
+    make: makeVersion 
+  }
+end
+
 def makeSummary(stats)
   filePaths = Dir.glob("./dist/variants/**/*").select{|f| File.file?(f)}
   filesMd5Dict = filePaths.map{|filePath|
@@ -54,13 +65,16 @@ def makeSummary(stats)
   }.to_h
 
   root = {
-    :info => {
-      :numTotal => stats[0],
-      :numSuccess => stats[1],
-      :timeStamp => Time.now.to_s,
-      :revision => 0
+    info: {
+      buildStats:{
+        success: stats[1],
+        total: stats[0],
+      },
+      environment: getEnvVersions(),
+      executedAt: Time.now.to_s,
+      revision: 0
     },
-    :files => filesMd5Dict
+    files: filesMd5Dict
   }
 
   summaryJsonText = JSON.pretty_generate(root)
