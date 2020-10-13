@@ -23,6 +23,7 @@ export interface IKeyUnitCardViewModel {
 
 export interface IKeyUnitCardPartViewModel {
   cards: IKeyUnitCardViewModel[];
+  showLayerDefaultAssign: boolean;
 }
 
 function getAssignOperationText(op?: IAssignOperation): string {
@@ -150,9 +151,11 @@ function makeKeyUnitCardViewModel(
 export function makeKeyUnitCardsPartViewModel(
   isEdit: boolean
 ): IKeyUnitCardPartViewModel {
+  const { showLayerDefaultAssign } = uiStatusModel.settings;
   return {
     cards: editorModel.keyPositions.map((kp) =>
       makeKeyUnitCardViewModel(kp, isEdit)
-    )
+    ),
+    showLayerDefaultAssign
   };
 }

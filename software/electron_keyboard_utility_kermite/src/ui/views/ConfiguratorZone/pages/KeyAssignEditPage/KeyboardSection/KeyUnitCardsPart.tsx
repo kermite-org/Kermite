@@ -1,7 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { uiTheme } from '~ui/core';
-import { uiStatusModel } from '~ui/models';
 import {
   IKeyUnitCardViewModel,
   makeKeyUnitCardsPartViewModel
@@ -33,7 +32,10 @@ const cssKeyText = css`
   pointer-events: none;
 `;
 
-export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
+export function KeyUnitCard(props: {
+  keyUnit: IKeyUnitCardViewModel;
+  showLayerDefaultAssign: boolean;
+}) {
   const {
     keyUnitId,
     pos,
@@ -43,7 +45,10 @@ export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
     secondaryText,
     isLayerFallback,
     isHold
-  } = keyUnit;
+  } = props.keyUnit;
+  const { showLayerDefaultAssign } = props;
+
+  const textShown = isLayerFallback ? showLayerDefaultAssign : true;
 
   const onMouseDown = (e: MouseEvent) => {
     setCurrent();
@@ -57,10 +62,6 @@ export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
       return '5px';
     }
   };
-
-  const textShown = isLayerFallback
-    ? uiStatusModel.settings.showLayerDefaultAssign
-    : true;
 
   return (
     <g
@@ -105,11 +106,16 @@ export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
 }
 
 export function KeyUnitCardsPart() {
-  const keyUnitCardsPartViewModel = makeKeyUnitCardsPartViewModel(true);
+  const vm = makeKeyUnitCardsPartViewModel(true);
   return (
     <g>
-      {keyUnitCardsPartViewModel.cards.map((keyUnit) => (
-        <KeyUnitCard keyUnit={keyUnit} key={keyUnit.keyUnitId} />
+      {vm.cards.map((keyUnit) => (
+        <KeyUnitCard
+          keyUnit={keyUnit}
+          key={keyUnit.keyUnitId}
+          showLayerDefaultAssign={vm.showLayerDefaultAssign}
+          qxOptimizer="deepEqualExFn"
+        />
       ))}
     </g>
   );
