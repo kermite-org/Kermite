@@ -349,10 +349,27 @@ void keyboardEntry() {
   initDebugUART(38400);
   printf("start1\n");
   initBoardIo();
+  outputLED0(false);
+  outputLED1(false);
+
   usbioCore_initialize();
   sei();
   bool isMaster = checkIsMaster();
   printf("isMaster:%d\n", isMaster);
+  if (isMaster) {
+    for (uint8_t i = 0; i < 4; i++) {
+      outputLED0(true);
+      outputLED1(true);
+      _delay_ms(2);
+      outputLED0(false);
+      outputLED1(false);
+      _delay_ms(100);
+    }
+  } else {
+    outputLED0(true);
+    _delay_ms(1000);
+    outputLED0(false);
+  }
   if (isMaster) {
     runAsMaster();
   } else {
