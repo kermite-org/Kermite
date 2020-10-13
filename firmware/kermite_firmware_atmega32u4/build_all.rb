@@ -48,7 +48,7 @@ def buildProjects()
     numSuccess += 1 if success
     numTotal += 1
   }
-  [numTotal, numSuccess]
+  {total: numTotal, success: numSuccess}
 end
 
 def getEnvVersions()
@@ -72,10 +72,7 @@ def makeSummary(stats)
 
   root = {
     info: {
-      buildStats:{
-        success: stats[1],
-        total: stats[0],
-      },
+      buildStats: stats,
       environment: getEnvVersions(),
       executedAt: Time.now.to_s,
       filesRevision: 0
