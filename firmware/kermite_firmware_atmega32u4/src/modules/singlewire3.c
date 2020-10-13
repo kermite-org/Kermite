@@ -228,6 +228,12 @@ void singlewire_setupInterruptedReceiver(void (*_pReceiverCallback)(void)) {
   sei();
 }
 
+void singlewire_clearInterruptedReceiver() {
+  pReceiverCallback = 0;
+  bits_spec(EICRA, dISCx0, 0b11, 0b00);
+  bit_off(EIMSK, dINTx);
+}
+
 ISR(dINTx_vect) {
   if (pReceiverCallback) {
     pReceiverCallback();

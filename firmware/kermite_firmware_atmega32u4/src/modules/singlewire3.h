@@ -8,5 +8,6 @@ uint8_t singlewire_receiveFrame(uint8_t *rxbuf, uint8_t capacity);
 
 void singlewire_initialize();
 void singlewire_setupInterruptedReceiver(void (*pReceiverCallback)(void));
+void singlewire_clearInterruptedReceiver();
 
 #endif
