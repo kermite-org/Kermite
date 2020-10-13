@@ -26,11 +26,6 @@ uint8_t *getDebugValuesPointer() {
 #define pin_LED0 P_D5 //TXLED on ProMicro
 #define pin_LED1 P_B0 //RXLED on ProMicro
 
-void initBoardIo() {
-  pio_setOutput(pin_LED0);
-  pio_setOutput(pin_LED1);
-}
-
 void outputLED0(bool val) {
   pio_output(pin_LED0, !val);
 }
@@ -45,6 +40,13 @@ void outputLED1(bool val) {
 
 void toggleLED1() {
   pio_toggleOutput(pin_LED1);
+}
+
+void initBoardIo() {
+  pio_setOutput(pin_LED0);
+  pio_setOutput(pin_LED1);
+  outputLED0(false);
+  outputLED1(false);
 }
 
 //---------------------------------------------
@@ -230,8 +232,6 @@ void runAsMaster() {
   keyMatrixScanner_initialize(
       NumRows, NumColumns, rowPins, columnPins, nextKeyStateFlags);
 
-  singlewire_initialize();
-
   configurationMemoryReader_initialize();
   configuratorServant_initialize(
       KeyIndexRange,
@@ -302,10 +302,7 @@ void runAsSlave() {
 
   keyMatrixScanner_initialize(
       NumRows, NumColumns, rowPins, columnPins, nextKeyStateFlags);
-
-  singlewire_initialize();
   singlewire_setupInterruptedReceiver(onRecevierInterruption);
-  sei();
 
   uint16_t cnt = 0;
   while (1) {
@@ -333,29 +330,41 @@ void runAsSlave() {
 
 //---------------------------------------------
 
-bool checkIsMaster() {
+bool hasMasterOathReceived = false;
+
+void masterSlaveDetectionMode_onRecevierInterruption() {
+  uint8_t sz = singlewire_receiveFrame(sw_rxbuf, SingleWireMaxPacketSize);
+  if (sz > 0) {
+    uint8_t cmd = sw_rxbuf[0];
+    if (cmd == 0xA0 && sz == 1) {
+      //親-->子, Master確定通知パケット受信
+      hasMasterOathReceived = true;
+    }
+  }
+}
+bool runMasterSlaveDetectionMode() {
+  singlewire_initialize();
+  singlewire_setupInterruptedReceiver(masterSlaveDetectionMode_onRecevierInterruption);
+  sei();
   uint16_t cnt = 0;
-  while (cnt < 500) {
+  while (true) {
     if (usbioCore_isConnectedToHost()) {
+      singlewire_clearInterruptedReceiver();
+      sw_txbuf[0] = 0xA0;
+      singlewire_sendFrame(sw_txbuf, 1); //Master確定通知パケットを送信
       return true;
+    }
+    if (hasMasterOathReceived) {
+      return false;
     }
     _delay_ms(1);
     cnt++;
   }
-  return false;
 }
 
-void keyboardEntry() {
-  initDebugUART(38400);
-  printf("start1\n");
-  initBoardIo();
-  outputLED0(false);
-  outputLED1(false);
+//---------------------------------------------
 
-  usbioCore_initialize();
-  sei();
-  bool isMaster = checkIsMaster();
-  printf("isMaster:%d\n", isMaster);
+void showModeByLedBlinkPattern(bool isMaster) {
   if (isMaster) {
     for (uint8_t i = 0; i < 4; i++) {
       outputLED0(true);
@@ -367,9 +376,24 @@ void keyboardEntry() {
     }
   } else {
     outputLED0(true);
-    _delay_ms(1000);
+    outputLED1(true);
+    _delay_ms(500);
     outputLED0(false);
+    outputLED1(false);
   }
+}
+
+//---------------------------------------------
+
+void keyboardEntry() {
+  initDebugUART(38400);
+  printf("start1\n");
+  initBoardIo();
+
+  usbioCore_initialize();
+  bool isMaster = runMasterSlaveDetectionMode();
+  printf("isMaster:%d\n", isMaster);
+  showModeByLedBlinkPattern(isMaster);
   if (isMaster) {
     runAsMaster();
   } else {
