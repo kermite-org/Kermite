@@ -5,6 +5,10 @@ require 'json'
 
 #build all firmware resources and copy them to KermiteResourceStore project directory
 
+def deleteFileIfExist(fpath)
+  File.delete(fpath) if File.exist?(fpath)
+end
+
 def buildProject(projectName)
   coreName = File.basename(projectName)
   srcDir = "./src/projects/#{projectName}"
@@ -17,7 +21,9 @@ def buildProject(projectName)
   buildSuccess = status == 0
   if buildSuccess
     FileUtils.copy("#{midDir}/#{coreName}.hex", "#{destDir}/#{coreName}.hex")
+    deleteFileIfExist("#{destDir}/build_error.log")
   else
+    deleteFileIfExist("#{destDir}/#{coreName}.hex")
     File.write("#{destDir}/build_error.log",">#{command}\r\n#{stdout}#{stderr}")
   end
 
