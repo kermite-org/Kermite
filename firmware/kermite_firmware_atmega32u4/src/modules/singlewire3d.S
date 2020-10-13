@@ -563,6 +563,9 @@ singlewire_setupInterruptedReceiver:
 	ret
 .endfunc
 
+
+//todo singlewire_clearInterruptedReceiver を実装
+
 /*
 ISR(dINTx_vect) {
   if (pReceiverCallback) {
