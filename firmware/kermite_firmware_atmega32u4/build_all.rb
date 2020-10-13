@@ -14,7 +14,8 @@ def buildProject(projectName)
 
   command = "make #{projectName}:build"
   stdout, stderr, status = Open3.capture3(command);
-  if status == 0
+  buildSuccess = status == 0
+  if buildSuccess
     FileUtils.copy("#{midDir}/#{coreName}.hex", "#{destDir}/#{coreName}.hex")
   else
     File.write("#{destDir}/build_error.log",">#{command}\r\n#{stdout}#{stderr}")
@@ -24,6 +25,8 @@ def buildProject(projectName)
   if File.exists?("#{srcDir}/profiles")
     FileUtils.copy_entry("#{srcDir}/profiles", "#{destDir}/profiles")
   end
+
+  buildSuccess
 end
 
 def buildProjects()
@@ -32,19 +35,35 @@ def buildProjects()
     .filter{|path| File.exists?(File.join(path, 'layout.json'))}
     .map{|path| path.sub('./src/projects/', '') }
 
+  numTotal = 0
+  numSuccess = 0
   projectNames.each{|projectName| 
-    buildProject(projectName)
+    success = buildProject(projectName)
+    numSuccess += 1 if success
+    numTotal += 1
   }
+  [numTotal, numSuccess]
 end
 
-def makeSummary()
+def makeSummary(stats)
   filePaths = Dir.glob("./dist/variants/**/*").select{|f| File.file?(f)}
   filesMd5Dict = filePaths.map{|filePath|
     relPath = filePath.sub("./dist/", "")
     md5 = Digest::MD5.file(filePath).to_s
     [relPath, md5]
   }.to_h
-  summaryJsonText = JSON.pretty_generate(filesMd5Dict)
+
+  root = {
+    :info => {
+      :numTotal => stats[0],
+      :numSuccess => stats[1],
+      :timeStamp => Time.now.to_s,
+      :revision => 0
+    },
+    :files => filesMd5Dict
+  }
+
+  summaryJsonText = JSON.pretty_generate(root)
   File.write("./dist/summary.json", summaryJsonText)
 end
 
@@ -55,8 +74,12 @@ def copyToResourceStoreDirectory
   end
 end
 
-if __FILE__ == $0
-  buildProjects()
-  makeSummary()
+def buildAndDeploy
+  stats = buildProjects()
+  makeSummary(stats)
   copyToResourceStoreDirectory()
+end
+
+if __FILE__ == $0
+  buildAndDeploy()
 end
