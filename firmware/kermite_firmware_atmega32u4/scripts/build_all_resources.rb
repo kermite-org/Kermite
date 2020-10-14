@@ -1,3 +1,6 @@
+#assuming executed in parent directory
+#ruby scripts/build_add_resources.rb
+
 require 'open3'
 require 'fileutils'
 require 'digest/md5'
@@ -65,19 +68,19 @@ def getEnvVersions()
   }
 end
 
-def makeLocalSummary(stats)
+def makeCurrentSummary(stats)
   filePaths = Dir.glob("./dist/variants/**/*").select{|f| File.file?(f)}
   filesMd5Dict = filePaths.map{|filePath|
     relPath = filePath.sub("./dist/", "")
     md5 = Digest::MD5.file(filePath).to_s
-    [relPath, md5]
+    [relPath.intern, md5]
   }.to_h
 
   {
     info: {
       buildStats: stats,
       environment: getEnvVersions(),
-      executedAt: Time.now.to_s,
+      updatedAt: Time.now.to_s,
       filesRevision: 0
     },
     files: filesMd5Dict
@@ -93,38 +96,61 @@ def fetchJson(url)
   res.code == '200' ? JSON.parse(res.body, {:symbolize_names => true}) : nil
 end
 
-def mergeSummary(local, remote)
+def mergeSummary(current, source)
   {
     info: {
-      buildStats: local[:info][:buildStats],
-      environment: local[:info][:environment],
-      executedAt: local[:info][:executedAt],
-      filesRevision: remote[:info][:filesRevision] + 1
+      buildStats: current[:info][:buildStats],
+      environment: current[:info][:environment],
+      updatedAt: current[:info][:updatedAt],
+      filesRevision: source[:info][:filesRevision] + 1
     },
-    files: local[:files]
+    files: current[:files]
   }
 end
 
-def updateSummaryIfFilesChanged(localSummary)
+def loadLocalSummary()
+  localSummaryFilePath = "./dist/summary.json"
+  if(File.exists?(localSummaryFilePath))
+    text = File.read(localSummaryFilePath)
+    return JSON.parse(text, {:symbolize_names => true})
+  end
+  nil
+end
+
+def loadSourceSummary()
   remoteSummaryUrl = 'https://raw.githubusercontent.com/yahiro07/KermiteResourceStore/master/resources/summary.json'
   remoteSummary = fetchJson(remoteSummaryUrl)
-  raise 'failed to fetch remote summary' if remoteSummary == nil
+  puts 'failed to fetch remote summary' if remoteSummary == nil
 
-  filesChanged = JSON.generate(localSummary[:files]) != 
-    JSON.generate(remoteSummary[:files])
+  localSummary = loadLocalSummary()
+
+  if remoteSummary && localSummary
+    remoteRevision = remoteSummary[:info][:filesRevision]
+    localRevision = localSummary[:info][:filesRevision]
+    return remoteRevision > localRevision ? remoteSummary : localSummary
+  end
+  return remoteSummary if remoteSummary
+  return localSummary if localSummary
+
+  raise 'No source summary, both remote and local summaries are unavailable.'
+end
+
+def updateSummaryIfFilesChanged(currentSummary)
+  sourceSummary = loadSourceSummary()
+  filesChanged = (currentSummary[:files] != sourceSummary[:files])
 
   puts "filesChanged: #{filesChanged}"
 
   if filesChanged
-    remoteRevision = remoteSummary[:info][:filesRevision]
-    puts "filesRevision: #{remoteRevision} --> #{remoteRevision + 1}" 
-    updatedSummary = mergeSummary(localSummary, remoteSummary)
+    sourceRevision = sourceSummary[:info][:filesRevision]
+    puts "filesRevision: #{sourceRevision} --> #{sourceRevision + 1}"
+    updatedSummary = mergeSummary(currentSummary, sourceSummary)
     summaryJsonText = JSON.pretty_generate(updatedSummary)
     File.write("./dist/summary.json", summaryJsonText)
   end
 end
 
-def copyToResourceStoreDirectory
+def copyToResourceStoreDirectory()
   resourceStoreDir = '../../../KermiteResourceStore'
   if Dir.exists?(resourceStoreDir)
     FileUtils.rm_rf("#{resourceStoreDir}/resources")
@@ -132,10 +158,10 @@ def copyToResourceStoreDirectory
   end
 end
 
-def buildAndDeploy
+def buildAndDeploy()
   stats = buildProjects()
-  localSummary = makeLocalSummary(stats)
-  updated = updateSummaryIfFilesChanged(localSummary)
+  currentSummary = makeCurrentSummary(stats)
+  updated = updateSummaryIfFilesChanged(currentSummary)
   copyToResourceStoreDirectory() if updated
 end
 
