@@ -70,7 +70,7 @@ def makeCurrentSummary(stats)
   filesMd5Dict = filePaths.map{|filePath|
     relPath = filePath.sub("./dist/", "")
     md5 = Digest::MD5.file(filePath).to_s
-    [relPath, md5]
+    [relPath.intern, md5]
   }.to_h
 
   {
@@ -134,9 +134,7 @@ end
 
 def updateSummaryIfFilesChanged(currentSummary)
   sourceSummary = loadSourceSummary()
-
-  filesChanged = JSON.generate(currentSummary[:files]) != 
-    JSON.generate(sourceSummary[:files])
+  filesChanged = (currentSummary[:files] != sourceSummary[:files])
 
   puts "filesChanged: #{filesChanged}"
 
