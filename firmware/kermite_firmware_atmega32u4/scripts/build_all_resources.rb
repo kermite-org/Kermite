@@ -1,3 +1,6 @@
+#assuming executed in parent directory
+#ruby scripts/build_add_resources.rb
+
 require 'open3'
 require 'fileutils'
 require 'digest/md5'
