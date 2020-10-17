@@ -236,6 +236,7 @@ void runAsMaster() {
   configuratorServant_initialize(
       KeyIndexRange,
       configuratorServantStateHandler);
+  keyboardCoreLogic_initialize();
 
   uint16_t cnt = 0;
   while (1) {
