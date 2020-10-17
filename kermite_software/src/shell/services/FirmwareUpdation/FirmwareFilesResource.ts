@@ -6,7 +6,7 @@ export class FirmwareFilesResource {
   static get baseDir() {
     if (appEnv.isDevelopment) {
       return path.resolve(
-        '../../firmware/kermite_firmware_atmega32u4/src/build'
+        '../kermite_firmware/src/build'
       );
     } else {
       return appEnv.resolveUserDataFilePath('resources/variants');

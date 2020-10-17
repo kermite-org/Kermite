@@ -19,7 +19,7 @@ interface IKeyboardShapeSourceJson {
 function getBaseDir() {
   if (appEnv.isDevelopment) {
     return path.resolve(
-      '../../firmware/kermite_firmware_atmega32u4/src/projects'
+      '../kermite_firmware/src/projects'
     );
   } else {
     return appEnv.resolveUserDataFilePath('resources/variants');
@@ -84,7 +84,7 @@ function setupFilesWatcher(callback: (filePath: string) => void) {
 type IFileUpdationListener = (args: { breedName: string }) => void;
 
 // キーボード品種ごとのレイアウトファイルを読み込み提供する
-// デバッグビルド時 glob ../../firmware/kermite_firmware_atmega32u4/src/projects/**/layout.json でレイアウトファイルを列挙
+// デバッグビルド時 glob ../kermite_firmware/src/projects/**/layout.json でレイアウトファイルを列挙
 // リリースビルド時 glob ./binaris/config/**/layout.json でレイアウトファイルを列挙
 export class KeyboardShapesProvider {
   private keyboardShapes: IKeyboardShape[] = [];
