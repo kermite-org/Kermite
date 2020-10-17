@@ -20,7 +20,7 @@ namespace AssignStroageBinaryFormat {
   type b7 = number;
 
   // n bytes
-  type byte1 = number[];
+  type bytes1 = number[];
   type bytes2 = number[];
   type bytes3 = number[];
   type bytes4 = number[];
@@ -43,23 +43,6 @@ namespace AssignStroageBinaryFormat {
     bit2: { fAlt: b1 };
     bit1: { fShift: b1 };
     bit0: { fCtrl: b1 };
-  };
-
-  // --------------------
-  // layer attributes
-
-  type LayerDefaultSchemeValues = DefineValues<b1> & {
-    transparent: 0;
-    block: 1;
-  };
-
-  type LayerAttributeByte = BasedOn<u16> & {
-    bit15: { fDefaultScheme: OneOf<b1, LayerDefaultSchemeValues> };
-    bit14: Reserved;
-    bit13: { fInitialActive: b1 };
-    bit12_8: { fAttachedModifiers: AttachedModifiers };
-    bit7_3: Reserved;
-    bit2_0: { fExclusionGroup: b3 };
   };
 
   // --------------------
@@ -121,30 +104,30 @@ namespace AssignStroageBinaryFormat {
     bit3_0: { fLayerIndex: b4 }; // 0~15
   };
 
-  type BlockAssignEntry = BasedOn<byte1> & {
-    header: AssignEntryHeader<AssignTypeValues['block']>;
+  type BlockAssignEntry = BasedOn<bytes1> & {
+    byte0: { header: AssignEntryHeader<AssignTypeValues['block']> };
   };
 
-  type TransparentAssignEntry = BasedOn<byte1> & {
-    header: AssignEntryHeader<AssignTypeValues['transparent']>;
+  type TransparentAssignEntry = BasedOn<bytes1> & {
+    byte0: { header: AssignEntryHeader<AssignTypeValues['transparent']> };
   };
 
   type SingleAssignEntry = BasedOn<bytes3> & {
-    header: AssignEntryHeader<AssignTypeValues['single']>;
-    operation: AssignOpeartion;
+    byte0: { header: AssignEntryHeader<AssignTypeValues['single']> };
+    byte1_2: { operation: AssignOpeartion };
   };
 
   type DualAssignEntry = BasedOn<bytes5> & {
-    header: AssignEntryHeader<AssignTypeValues['dual']>;
-    opPrimary: AssignOpeartion;
-    opSecondary: AssignOpeartion;
+    byte0: { header: AssignEntryHeader<AssignTypeValues['dual']> };
+    byte1_2: { opPrimary: AssignOpeartion };
+    byte3_4: { opSecondary: AssignOpeartion };
   };
 
   type TripleAssignEntry = BasedOn<bytes7> & {
-    header: AssignEntryHeader<AssignTypeValues['triple']>;
-    opPrimary: AssignOpeartion;
-    opSecondary: AssignOpeartion;
-    opTertially: AssignOpeartion;
+    byte0: { header: AssignEntryHeader<AssignTypeValues['triple']> };
+    byte1_2: { opPrimary: AssignOpeartion };
+    byte3_4: { opSecondary: AssignOpeartion };
+    byte5_6: { opTertially: AssignOpeartion };
   };
 
   type AssignEntry =
@@ -165,16 +148,43 @@ namespace AssignStroageBinaryFormat {
   };
 
   type KeyBoundAssignDataSet = {
-    header: KeyBoundAssignDataSetHeader;
-    assigns: AssignEntry[]; // max 31bytes of assigns body
+    byte0_1: { header: KeyBoundAssignDataSetHeader };
+    byte2__: { assigns: AssignEntry[] }; // max 31bytes of assigns body
+  };
+
+  // --------------------
+  // layer attributes
+
+  type LayerDefaultSchemeValues = DefineValues<b1> & {
+    transparent: 0;
+    block: 1;
+  };
+
+  type LayerAttributeWord = BasedOn<u16> & {
+    bit15: { fDefaultScheme: OneOf<b1, LayerDefaultSchemeValues> };
+    bit14: Reserved;
+    bit13: { fInitialActive: b1 };
+    bit12_8: { fAttachedModifiers: AttachedModifiers };
+    bit7_3: Reserved;
+    bit2_0: { fExclusionGroup: b3 };
   };
 
   // --------------------
 
-  type AssignStorageBinarBlobBytes = {
-    // assignFormatRevision: u8; // 0x20~0xff
-    numLayers: u8; // 1~16
-    layerAttributes: LayerAttributeByte[]; // numLayers length
-    keyAssigns: KeyBoundAssignDataSet[];
+  type ConfigStorageHeaderBytes = {
+    byte0_1: { magicNumber: Fixed<u16, 0xfe03> };
+    byte2_3: { reservedWord: Fixed<u16, Reserved> };
+    byte4: { logicModelType: Fixed<u8, 1> };
+    byte5: { formatRevision: u8 };
+    byte6: { assignDataStartLocation: Fixed<u8, 24> };
+    byte7: { numKeys: u8 }; // 1~128
+    byte8: { numLayers: u8 }; // 1~16
+    byte9_23: Reserved;
+  };
+
+  type ConfigStorageDataBlobBytes = {
+    byte0_23: { headerBytes: ConfigStorageHeaderBytes };
+    'byte24_24+N*2-1': { layerAttributes: LayerAttributeWord[] }; // numLayers length
+    'byte24+N*2__': { keyAssigns: KeyBoundAssignDataSet[] };
   };
 }
