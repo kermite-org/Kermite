@@ -390,7 +390,7 @@ export function converProfileDataToBlobBytes(
 
   const keyAssignsBufferBytes = flattenArray(groupedAssignBytes);
 
-  const buf = [numLayers, ...layerAttributeBytes, ...keyAssignsBufferBytes];
+  const buf = [...layerAttributeBytes, ...keyAssignsBufferBytes];
 
   // console.log(`len: ${buf.length}`);
 
