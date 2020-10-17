@@ -127,7 +127,7 @@ namespace AssignStroageBinaryFormat {
     byte0: { header: AssignEntryHeader<AssignTypeValues['triple']> };
     byte1_2: { opPrimary: AssignOpeartion };
     byte3_4: { opSecondary: AssignOpeartion };
-    byte5_6: { opTertially: AssignOpeartion };
+    byte5_6: { opTertiary: AssignOpeartion };
   };
 
   type AssignEntry =
