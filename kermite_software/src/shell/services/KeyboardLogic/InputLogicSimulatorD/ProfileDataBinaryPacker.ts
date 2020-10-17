@@ -19,6 +19,8 @@ import {
   writeUint8
 } from '~shell/services/KeyMappingEmitter/Helpers';
 
+export const StorageFormatRevision = 1;
+
 /*
 Key Assigns Restriction
 supports max 16 Layers
@@ -427,7 +429,7 @@ function encodeHeaderBytes(
   writeUint16BE(buffer, 0, 0xfe03);
   writeUint16BE(buffer, 2, 0xffff);
   writeUint8(buffer, 4, 0x01);
-  writeUint8(buffer, 5, 0x01);
+  writeUint8(buffer, 5, StorageFormatRevision);
   writeUint8(buffer, 6, headerLength);
   writeUint8(buffer, 7, numKeys);
   writeUint8(buffer, 8, numLayers);
