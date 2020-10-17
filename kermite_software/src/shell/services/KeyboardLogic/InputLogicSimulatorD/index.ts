@@ -9,10 +9,7 @@ import { deviceService } from '~shell/services/KeyboardDevice';
 import { profileManager } from '~shell/services/ProfileManager';
 import { IInputLogicSimulator } from '../InputLogicSimulator.interface';
 import { IntervalTimerWrapper } from '../helpers/IntervalTimerWrapper';
-import {
-  coreLogic_writeProfileDataBlob,
-  getKeyboardCoreLogicInterface
-} from './DeviceCoreLogicSimulator2_Dual';
+import { getKeyboardCoreLogicInterface } from './DeviceCoreLogicSimulator2_Dual';
 import { converProfileDataToBlobBytes } from './ProfileDataBinaryPacker';
 
 function compareArray(ar0: any[], ar1: any[]): boolean {
@@ -32,6 +29,29 @@ function createTimeIntervalCounter() {
   };
 }
 
+function copyBytes(dst: number[], src: number[], len: number) {
+  for (let i = 0; i < len; i++) {
+    dst[i] = src[i];
+  }
+}
+
+class ConfigDataStorage {
+  readonly StorageBufCapacity = 1024;
+  storageBuf: number[] = Array(this.StorageBufCapacity).fill(0);
+
+  writeProfileDataBlob(bytes: number[]) {
+    const len = bytes.length;
+    if (len < this.StorageBufCapacity) {
+      this.storageBuf.fill(0);
+      copyBytes(this.storageBuf, bytes, len);
+    }
+  }
+
+  readByte(addr: number) {
+    return this.storageBuf[addr];
+  }
+}
+
 export namespace InputLogicSimulatorD {
   const CL = getKeyboardCoreLogicInterface();
 
@@ -41,13 +61,18 @@ export namespace InputLogicSimulatorD {
     isSideBranMode: boolean = false;
   })();
 
+  const configDataStorage = new ConfigDataStorage();
+
   function updateProfileDataBlob() {
     const prof = profileManager.getCurrentProfile();
     const layoutStandard = keyboardConfigProvider.keyboardConfig.layoutStandard;
     if (prof && layoutStandard) {
       const bytes = converProfileDataToBlobBytes(prof, layoutStandard);
-      coreLogic_writeProfileDataBlob(bytes);
+      configDataStorage.writeProfileDataBlob(bytes);
       CL.keyboardCoreLogic_initialize();
+      CL.keyboardCoreLogic_setAssignStorageReaderFunc((addr) =>
+        configDataStorage.readByte(addr)
+      );
     }
   }
 

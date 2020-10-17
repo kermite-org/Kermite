@@ -23,12 +23,6 @@ function strU16Hex(val: u16) {
   return `0000${val.toString(16)}`.slice(-4);
 }
 
-function copyBytes(dst: u8[], src: u8[], len: size_t) {
-  for (let i = 0; i < len; i++) {
-    dst[i] = src[i];
-  }
-}
-
 function getFieldNameByValue(obj: any, value: string) {
   for (const key in obj) {
     if (obj[key] === value) {
@@ -47,16 +41,14 @@ function setConfigStorageReaderProc(proc: (addr: u16) => u8) {
   procConfigStorageReadByte = proc;
 }
 
-const StorageBufCapacity = 1024;
-const storageBuf: u8[] = Array(StorageBufCapacity).fill(0);
-let storageBufLength = 0;
+function readStorageByte(addr: u16): u8 {
+  return procConfigStorageReadByte(addr);
+}
 
-export function coreLogic_writeProfileDataBlob(bytes: u8[]) {
-  const len = bytes.length;
-  if (len < StorageBufCapacity) {
-    copyBytes(storageBuf, bytes, len);
-    storageBufLength = len;
-  }
+function readStorageWordBE(addr: u16): u16 {
+  const a = readStorageByte(addr);
+  const b = readStorageByte(addr + 1);
+  return (a << 8) | b;
 }
 
 // --------------------------------------------------------------------------------
@@ -145,39 +137,40 @@ function resetReportState() {
 // assign memory reader
 
 let numLayers = 0;
-let assignMemoryKeyAssignsDataOffset = 0;
-let assignMemoryLayerAttributeBytes: number[] = [];
+const layerAttributeWords: u16[] = Array(16).fill(0);
 
 function initAssignMemoryReader() {
-  numLayers = storageBuf[0];
-  assignMemoryLayerAttributeBytes = storageBuf.slice(1, 1 + numLayers * 2);
-  assignMemoryKeyAssignsDataOffset = 1 + numLayers * 2;
+  numLayers = readStorageByte(0);
+  for (let i = 0; i < numLayers; i++) {
+    layerAttributeWords[i] = readStorageWordBE(1 + i * 2);
+  }
 }
 
 function isLayerDefaultSchemeBlock(layerIndex: u8) {
-  const attrByte = assignMemoryLayerAttributeBytes[layerIndex * 2];
-  return ((attrByte >> 7) & 1) === 1;
+  const attrWord = layerAttributeWords[layerIndex];
+  return ((attrWord >> 15) & 1) === 1;
 }
 
 function getLayerAttachedModifiers(layerIndex: u8) {
-  const attrByte = assignMemoryLayerAttributeBytes[layerIndex * 2];
-  return attrByte & 0b1111;
+  const attrWord = layerAttributeWords[layerIndex];
+  return (attrWord >> 8) & 0b1111;
 }
 
 function getLayerInitialActive(layerIndex: u8) {
-  const attrByte = assignMemoryLayerAttributeBytes[layerIndex * 2];
-  return ((attrByte >> 5) & 1) === 1;
+  const attrWord = layerAttributeWords[layerIndex];
+  return ((attrWord >> 13) & 1) === 1;
 }
 
 function getLayerExclusionGroup(layerIndex: u8) {
-  const attrByte = assignMemoryLayerAttributeBytes[layerIndex * 2 + 1];
-  return attrByte & 0b111;
+  const attrWord = layerAttributeWords[layerIndex];
+  return attrWord & 0b111;
 }
 
 function getAssignsBlockAddressForKey(keyIndex: u8): s16 {
+  const assignMemoryKeyAssignsDataOffset = 1 + numLayers * 2;
   let pos = assignMemoryKeyAssignsDataOffset;
-  while (pos < storageBufLength) {
-    const data = storageBuf[pos];
+  while (true) {
+    const data = readStorageByte(pos);
     if (data === 0) {
       break;
     }
@@ -185,7 +178,7 @@ function getAssignsBlockAddressForKey(keyIndex: u8): s16 {
       return pos;
     }
     pos++;
-    const bodyLength = storageBuf[pos++];
+    const bodyLength = readStorageByte(pos++);
     pos += bodyLength;
   }
   return -1;
@@ -210,12 +203,11 @@ const assignTypeToBodyByteSizeMap: { [key in number]: number } = {
 };
 
 function getAssignBlockAddressForLayer(basePos: u8, targetLayerIndex: u8): s16 {
-  const buf = storageBuf;
-  const len = buf[basePos + 1];
+  const len = readStorageByte(basePos + 1);
   let pos = basePos + 2;
   const endPos = pos + len;
   while (pos < endPos) {
-    const data = buf[pos];
+    const data = readStorageByte(pos);
     const layerIndex = data & 0b1111;
     if (layerIndex === targetLayerIndex) {
       return pos;
@@ -236,13 +228,12 @@ interface IAssignSet {
 }
 
 function getAssignSet(layerIndex: u8, keyIndex: u8): IAssignSet | undefined {
-  const buf = storageBuf;
   const pos0 = getAssignsBlockAddressForKey(keyIndex);
   if (pos0 >= 0) {
     const pos1 = getAssignBlockAddressForLayer(pos0, layerIndex);
     // console.log({ keyIndex, layerIndex, pos0: pos0 + 24, pos1: pos1 + 24 });
     if (pos1 >= 0) {
-      const entryHeaderByte = buf[pos1];
+      const entryHeaderByte = readStorageByte(pos1);
       const assignType = (entryHeaderByte >> 4) & 0b111;
       const isBlock = assignType === 4;
       const isTrans = assignType === 5;
@@ -251,10 +242,9 @@ function getAssignSet(layerIndex: u8, keyIndex: u8): IAssignSet | undefined {
       }
       const isDual = assignType === 2;
       const isTriple = assignType === 3;
-      const pri = (buf[pos1 + 1] << 8) | buf[pos1 + 2];
-      const sec =
-        ((isDual || isTriple) && (buf[pos1 + 3] << 8) | buf[pos1 + 4]) || 0;
-      const ter = (isTriple && (buf[pos1 + 5] << 8) | buf[pos1 + 6]) || 0;
+      const pri = readStorageWordBE(pos1 + 1);
+      const sec = ((isDual || isTriple) && readStorageWordBE(pos1 + 3)) || 0;
+      const ter = (isTriple && readStorageWordBE(pos1 + 5)) || 0;
       return {
         assignType,
         pri,
