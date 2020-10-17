@@ -9,7 +9,10 @@ import { deviceService } from '~shell/services/KeyboardDevice';
 import { profileManager } from '~shell/services/ProfileManager';
 import { IInputLogicSimulator } from '../InputLogicSimulator.interface';
 import { IntervalTimerWrapper } from '../helpers/IntervalTimerWrapper';
-import * as CL from './DeviceCoreLogicSimulator2_Dual';
+import {
+  coreLogic_writeProfileDataBlob,
+  getKeyboardCoreLogicInterface
+} from './DeviceCoreLogicSimulator2_Dual';
 import { converProfileDataToBlobBytes } from './ProfileDataBinaryPacker';
 
 function compareArray(ar0: any[], ar1: any[]): boolean {
@@ -19,7 +22,19 @@ function compareArray(ar0: any[], ar1: any[]): boolean {
   );
 }
 
+function createTimeIntervalCounter() {
+  let prevTick = Date.now();
+  return () => {
+    const tick = Date.now();
+    const elapsedMs = tick - prevTick;
+    prevTick = tick;
+    return elapsedMs;
+  };
+}
+
 export namespace InputLogicSimulatorD {
+  const CL = getKeyboardCoreLogicInterface();
+
   const tickerTimer = new IntervalTimerWrapper();
 
   const local = new (class {
@@ -31,8 +46,8 @@ export namespace InputLogicSimulatorD {
     const layoutStandard = keyboardConfigProvider.keyboardConfig.layoutStandard;
     if (prof && layoutStandard) {
       const bytes = converProfileDataToBlobBytes(prof, layoutStandard);
-      CL.coreLogic_writeProfileDataBlob(bytes);
-      CL.coreLogic_reset();
+      coreLogic_writeProfileDataBlob(bytes);
+      CL.keyboardCoreLogic_initialize();
     }
   }
 
@@ -63,17 +78,30 @@ export namespace InputLogicSimulatorD {
   function onRealtimeKeyboardEvent(event: IRealtimeKeyboardEvent) {
     if (event.type === 'keyStateChanged') {
       const { keyIndex, isDown } = event;
-      CL.coreLogic_handleKeyInput(keyIndex, isDown);
+      CL.keyboardCoreLogic_issuePhysicalKeyStateChanged(keyIndex, isDown);
     }
   }
 
+  let layerActiveFlags: number = 0;
   let prevHidReport: number[] = new Array(8).fill(0);
+
+  const tickUpdator = createTimeIntervalCounter();
+
   function processTicker() {
-    CL.coreLogic_processTicker();
-    const report = CL.coreLogic_getOutputHidReport();
+    const elapsedMs = tickUpdator();
+    CL.keyboardCoreLogic_processTicker(elapsedMs);
+    const report = CL.keyboardCoreLogic_getOutputHidReportBytes();
     if (!compareArray(prevHidReport, report)) {
       deviceService.writeSideBrainHidReport(report);
       prevHidReport = report.slice(0);
+    }
+    const newLayerActiveFlags = CL.keyboardCoreLogic_getLayerActiveFlags();
+    if (newLayerActiveFlags !== layerActiveFlags) {
+      const flagsArray = generateNumberSequence(16).map(
+        (i) => ((newLayerActiveFlags >> i) & 1) > 0
+      );
+      deviceService.emitLayerChangedEvent(flagsArray);
+      layerActiveFlags = newLayerActiveFlags;
     }
   }
 
@@ -82,10 +110,6 @@ export namespace InputLogicSimulatorD {
     keyboardConfigProvider.subscribeStatus(onKeyboardConfigChanged);
     deviceService.subscribe(onRealtimeKeyboardEvent);
     tickerTimer.start(processTicker, 5);
-
-    CL.coreLogic_setLayerStateCallback(
-      deviceService.emitLayerChangedEvent.bind(deviceService)
-    );
   }
 
   async function terminate() {

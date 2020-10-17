@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
+import { KeyboardCoreLogicInterface } from './KeyboardCoreLogicInterface';
+
 // --------------------------------------------------------------------------------
 // types
 
@@ -36,18 +38,14 @@ function getFieldNameByValue(obj: any, value: string) {
   return undefined;
 }
 
-function createTimeIntervalCounter() {
-  let prevTick = Date.now();
-  return () => {
-    const tick = Date.now();
-    const elapsedMs = tick - prevTick;
-    prevTick = tick;
-    return elapsedMs;
-  };
-}
-
 // --------------------------------------------------------------------------------
 // assign memory storage
+
+let procConfigStorageReadByte = (addr: u16) => 0;
+
+function setConfigStorageReaderProc(proc: (addr: u16) => u8) {
+  procConfigStorageReadByte = proc;
+}
 
 const StorageBufCapacity = 1024;
 const storageBuf: u8[] = Array(StorageBufCapacity).fill(0);
@@ -83,7 +81,7 @@ const reportState = new (class {
   hidKeyCode: u8 = 0;
 })();
 
-export function coreLogic_getOutputHidReport(): u8[] {
+function coreLogic_getOutputHidReport(): u8[] {
   const {
     layerModFlags,
     modFlags,
@@ -323,16 +321,14 @@ function resetLayerState() {
   state.oneshotCancelTick = -1;
 }
 
-let layerStateCallback = (flags: boolean[]) => {};
-
-export function coreLogic_setLayerStateCallback(
-  proc: (flags: boolean[]) => void
-) {
-  layerStateCallback = proc;
-}
-
-function notifyLayerStateChanged() {
-  layerStateCallback(state.layerHoldFlags);
+function getLayerActiveFlags() {
+  let flags = 0;
+  for (let i = 0; i < 16; i++) {
+    if (state.layerHoldFlags[i]) {
+      flags |= 1 << i;
+    }
+  }
+  return flags;
 }
 
 const layerMutations = new (class {
@@ -351,7 +347,6 @@ const layerMutations = new (class {
     if (!this.isActive(layerIndex)) {
       this.turnOffSiblingLayersIfNeed(layerIndex);
       state.layerHoldFlags[layerIndex] = true;
-      notifyLayerStateChanged();
       // console.log(state.layerHoldFlags.map((a) => (a ? 1 : 0)).join(''));
       console.log(`layer on ${layerIndex}`);
       const modifiers = getLayerAttachedModifiers(layerIndex);
@@ -364,7 +359,6 @@ const layerMutations = new (class {
   deactivate(layerIndex: number) {
     if (this.isActive(layerIndex)) {
       state.layerHoldFlags[layerIndex] = false;
-      notifyLayerStateChanged();
       // console.log(state.layerHoldFlags.map((a) => (a ? 1 : 0)).join(''));
       console.log(`layer off ${layerIndex}`);
       const modifiers = getLayerAttachedModifiers(layerIndex);
@@ -955,24 +949,31 @@ function triggerResolver_handleKeyInput(keyIndex: u8, isDown: boolean) {
 // --------------------------------------------------------------------------------
 // entries
 
-export function coreLogic_reset() {
+function coreLogic_reset() {
   initAssignMemoryReader();
   resetHidReportBuf();
   resetLayerState();
   resetAssignBinder();
-  notifyLayerStateChanged();
   resetReportState();
 }
 
-export function coreLogic_handleKeyInput(keyIndex: u8, isDown: boolean) {
+function coreLogic_handleKeyInput(keyIndex: u8, isDown: boolean) {
   triggerResolver_handleKeyInput(keyIndex, isDown);
 }
 
-const tickUpdator = createTimeIntervalCounter();
+function coreLogic_processTicker(ms: number) {
+  triggerResolver_tick(ms);
+  assignBinder_ticker(ms);
+  layerMutations.oneshotCancellerTicker(ms);
+}
 
-export function coreLogic_processTicker() {
-  const elapsedMs = tickUpdator();
-  triggerResolver_tick(elapsedMs);
-  assignBinder_ticker(elapsedMs);
-  layerMutations.oneshotCancellerTicker(elapsedMs);
+export function getKeyboardCoreLogicInterface(): KeyboardCoreLogicInterface {
+  return {
+    keyboardCoreLogic_setAssignStorageReaderFunc: setConfigStorageReaderProc,
+    keyboardCoreLogic_initialize: coreLogic_reset,
+    keyboardCoreLogic_getLayerActiveFlags: getLayerActiveFlags,
+    keyboardCoreLogic_getOutputHidReportBytes: coreLogic_getOutputHidReport,
+    keyboardCoreLogic_issuePhysicalKeyStateChanged: coreLogic_handleKeyInput,
+    keyboardCoreLogic_processTicker: coreLogic_processTicker
+  };
 }
