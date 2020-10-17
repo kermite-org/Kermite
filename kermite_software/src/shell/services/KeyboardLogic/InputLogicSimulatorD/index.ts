@@ -10,7 +10,7 @@ import { profileManager } from '~shell/services/ProfileManager';
 import { IInputLogicSimulator } from '../InputLogicSimulator.interface';
 import { IntervalTimerWrapper } from '../helpers/IntervalTimerWrapper';
 import { getKeyboardCoreLogicInterface } from './DeviceCoreLogicSimulator2_Dual';
-import { converProfileDataToBlobBytes } from './ProfileDataBinaryPacker';
+import { makeKeyAssignsConfigStorageData } from './ProfileDataBinaryPacker';
 
 function compareArray(ar0: any[], ar1: any[]): boolean {
   return (
@@ -39,7 +39,7 @@ class ConfigDataStorage {
   readonly StorageBufCapacity = 1024;
   storageBuf: number[] = Array(this.StorageBufCapacity).fill(0);
 
-  writeProfileDataBlob(bytes: number[]) {
+  writeConfigStorageData(bytes: number[]) {
     const len = bytes.length;
     if (len < this.StorageBufCapacity) {
       this.storageBuf.fill(0);
@@ -67,8 +67,8 @@ export namespace InputLogicSimulatorD {
     const prof = profileManager.getCurrentProfile();
     const layoutStandard = keyboardConfigProvider.keyboardConfig.layoutStandard;
     if (prof && layoutStandard) {
-      const bytes = converProfileDataToBlobBytes(prof, layoutStandard);
-      configDataStorage.writeProfileDataBlob(bytes);
+      const bytes = makeKeyAssignsConfigStorageData(prof, layoutStandard);
+      configDataStorage.writeConfigStorageData(bytes);
       CL.keyboardCoreLogic_initialize();
       CL.keyboardCoreLogic_setAssignStorageReaderFunc((addr) =>
         configDataStorage.readByte(addr)
@@ -108,7 +108,7 @@ export namespace InputLogicSimulatorD {
   }
 
   let layerActiveFlags: number = 0;
-  let prevHidReport: number[] = new Array(8).fill(0);
+  let hidReportBytes: number[] = new Array(8).fill(0);
 
   const tickUpdator = createTimeIntervalCounter();
 
@@ -116,9 +116,9 @@ export namespace InputLogicSimulatorD {
     const elapsedMs = tickUpdator();
     CL.keyboardCoreLogic_processTicker(elapsedMs);
     const report = CL.keyboardCoreLogic_getOutputHidReportBytes();
-    if (!compareArray(prevHidReport, report)) {
+    if (!compareArray(hidReportBytes, report)) {
       deviceService.writeSideBrainHidReport(report);
-      prevHidReport = report.slice(0);
+      hidReportBytes = report.slice(0);
     }
     const newLayerActiveFlags = CL.keyboardCoreLogic_getLayerActiveFlags();
     if (newLayerActiveFlags !== layerActiveFlags) {

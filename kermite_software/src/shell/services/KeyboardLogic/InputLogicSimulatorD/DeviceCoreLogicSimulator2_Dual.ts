@@ -139,10 +139,14 @@ function resetReportState() {
 let numLayers = 0;
 const layerAttributeWords: u16[] = Array(16).fill(0);
 
+const AssignStorageHeaderSize = 24;
+
 function initAssignMemoryReader() {
-  numLayers = readStorageByte(0);
+  numLayers = readStorageByte(AssignStorageHeaderSize);
   for (let i = 0; i < numLayers; i++) {
-    layerAttributeWords[i] = readStorageWordBE(1 + i * 2);
+    layerAttributeWords[i] = readStorageWordBE(
+      AssignStorageHeaderSize + 1 + i * 2
+    );
   }
 }
 
@@ -167,7 +171,8 @@ function getLayerExclusionGroup(layerIndex: u8) {
 }
 
 function getAssignsBlockAddressForKey(keyIndex: u8): s16 {
-  const assignMemoryKeyAssignsDataOffset = 1 + numLayers * 2;
+  const assignMemoryKeyAssignsDataOffset =
+    AssignStorageHeaderSize + 1 + numLayers * 2;
   let pos = assignMemoryKeyAssignsDataOffset;
   while (true) {
     const data = readStorageByte(pos);

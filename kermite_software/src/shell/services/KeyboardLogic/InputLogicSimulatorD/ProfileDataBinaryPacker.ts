@@ -14,6 +14,10 @@ import {
   createGroupedArrayByKey,
   duplicateObjectByJsonStringifyParse
 } from '~funcs/Utils';
+import {
+  writeUint16LE,
+  writeUint8
+} from '~shell/services/KeyMappingEmitter/Helpers';
 
 /*
 Key Assigns Restriction
@@ -393,4 +397,45 @@ export function converProfileDataToBlobBytes(
   // console.log(hexBytes(buf));
 
   return buf;
+}
+
+/*
+Data format for the keymapping data stored in AVR's EEPROM
+EEPROM 1KB
+[0-23] header 24bytes
+[24-1023] keymapping data, 1000bytes
+
+Header 24bytes
+[0-1] 0xFE03(LE), magic number
+[2-3] 0xFFFF(LE), reserved
+[4] logic model type
+  0x01 for dominant
+[5] format revision, increment when format changed
+[6] assign data start location, 24
+[7] numKeys
+[8] numLayers
+[9-23]: padding
+*/
+function encodeHeaderBytes(numKeys: number, numLayers: number): number[] {
+  const headerLength = 24;
+  const buffer = Array(headerLength).fill(0);
+  writeUint16LE(buffer, 0, 0xfe03);
+  writeUint16LE(buffer, 2, 0xffff);
+  writeUint8(buffer, 4, 0x01);
+  writeUint8(buffer, 5, 0x01);
+  writeUint8(buffer, 6, headerLength);
+  writeUint8(buffer, 7, numKeys);
+  writeUint8(buffer, 8, numLayers);
+  return buffer;
+}
+
+export function makeKeyAssignsConfigStorageData(
+  profileData: IProfileData,
+  layout: IKeyboardLayoutStandard
+): number[] {
+  const keyNum = profileData.keyboardShape.keyUnits.length;
+  const layerNum = profileData.layers.length;
+  const assignsDataBytes = converProfileDataToBlobBytes(profileData, layout);
+  const headerBytes = encodeHeaderBytes(keyNum, layerNum);
+  return [...headerBytes, ...assignsDataBytes];
 }
