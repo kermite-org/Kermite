@@ -12,7 +12,6 @@ namespace CommunicationDataBinaryForamt {
 
   type VariableLength = any;
   type Bytes<N> = number[];
-  type ZeroPadding = number[];
 
   type PacketHostToDevice = {};
   type PacketDeviceToHost = {};
@@ -116,40 +115,4 @@ namespace CommunicationDataBinaryForamt {
     [1]: { command: 0x20 }; // 0x20 for set sidebrain hid report
     [2_9]: { hidReportBuf: Bytes<8> };
   };
-
-  // DEPRECATED
-  // --------------------
-  // framing layer
-  // --------------------
-  // type OnelinerSingleData = {
-  //   [0]: { opcode: 0xe0 };
-  //   [1]: { reserved: 0x00 };
-  //   [2]: { length: u8 }; // length of data bytes
-  //   '3__': { dataBytes: VariableLength };
-  //   __63: ZeroPadding; // fill to 64bytes
-  // };
-
-  // type __draft__OnelinerMultipleData = {
-  //   [0]: { opcode: 0xe1 };
-  //   '1__': {
-  //     [0]: { length: u8 };
-  //     '1__': { dataBytes: VariableLength };
-  //   }[];
-  //   __63: ZeroPadding; // fill to 64bytes
-  // };
-
-  // type StartOfFrame = {
-  //   [0]: { opcode: 0xf0 };
-  //   [1]: { numberOfFrames: u8 };
-  //   [2_3]: { totalDataBytesLength: u16 }; // length of whole data bytes
-  //   __63: ZeroPadding; // fill to 64bytes
-  // };
-
-  // type FrameBody = {
-  //   [0]: { opcode: 0xf1 };
-  //   [1]: { frameIndex: u8 };
-  //   [2]: { dataLength: u8 }; // length of data bytes in this frame
-  //   '3__': { dataBytes: VariableLength };
-  //   __63: ZeroPadding; // fill to 64bytes
-  // };
 }
