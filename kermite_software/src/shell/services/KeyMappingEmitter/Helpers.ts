@@ -22,6 +22,11 @@ export function writeUint16LE(buf: number[], pos: number, val: number) {
   buf[pos + 1] = ar[1];
 }
 
+export function writeUint16BE(buf: number[], pos: number, val: number) {
+  buf[pos] = (val >> 8) & 0xff;
+  buf[pos + 1] = val & 0xff;
+}
+
 export function bhi(val: number) {
   return (val >> 8) & 0xff;
 }

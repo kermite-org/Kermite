@@ -15,7 +15,7 @@ import {
   duplicateObjectByJsonStringifyParse
 } from '~funcs/Utils';
 import {
-  writeUint16LE,
+  writeUint16BE,
   writeUint8
 } from '~shell/services/KeyMappingEmitter/Helpers';
 
@@ -406,8 +406,8 @@ EEPROM 1KB
 [24-1023] keymapping data, 1000bytes
 
 Header 24bytes
-[0-1] 0xFE03(LE), magic number
-[2-3] 0xFFFF(LE), reserved
+[0-1] 0xFE03(BE), magic number
+[2-3] 0xFFFF(BE), reserved
 [4] logic model type
   0x01 for dominant
 [5] format revision, increment when format changed
@@ -419,8 +419,8 @@ Header 24bytes
 function encodeHeaderBytes(numKeys: number, numLayers: number): number[] {
   const headerLength = 24;
   const buffer = Array(headerLength).fill(0);
-  writeUint16LE(buffer, 0, 0xfe03);
-  writeUint16LE(buffer, 2, 0xffff);
+  writeUint16BE(buffer, 0, 0xfe03);
+  writeUint16BE(buffer, 2, 0xffff);
   writeUint8(buffer, 4, 0x01);
   writeUint8(buffer, 5, 0x01);
   writeUint8(buffer, 6, headerLength);
