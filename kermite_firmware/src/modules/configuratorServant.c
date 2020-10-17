@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "ConfigurationMemoryReader.h"
+
 //---------------------------------------------
 //key assign buffer stub
 
@@ -110,8 +112,9 @@ static void emitDeviceAttributesResponse() {
   uint8_t *p = rawHidSendBuf;
   p[0] = 0xF0;
   p[1] = 0x11;
-  p[2] = keyNum;
-  p[3] = 0; //todo: read side configuration from eeprom
+  p[2] = CONFIG_STORAGE_FORMAT_REVISION;
+  p[3] = keyNum;
+  p[4] = 0; //todo: read side configuration from eeprom
   emitGenericHidData(rawHidSendBuf);
 }
 
