@@ -144,9 +144,7 @@ const AssignStorageHeaderSize = 24;
 
 function initAssignMemoryReader() {
   numLayers = readStorageByte(8);
-  console.log({ numLayers });
   strogeBufBodyLength = readStorageWordBE(9);
-  console.log({ bodyLength: strogeBufBodyLength });
   for (let i = 0; i < numLayers; i++) {
     layerAttributeWords[i] = readStorageWordBE(AssignStorageHeaderSize + i * 2);
   }
