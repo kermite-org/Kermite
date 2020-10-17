@@ -4,8 +4,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "ConfigurationMemoryReader.h"
-
 //---------------------------------------------
 //key assign buffer stub
 
@@ -200,9 +198,6 @@ void configuratorServant_initialize(
   keyNum = _keyNum;
   stateNotificationCallback = _stateNotificationCallback;
 }
-
-// void configuratorServant_initialize() {
-// }
 
 void configuratorServant_processUpdate() {
   processReadGenericHidData();

@@ -5,9 +5,9 @@
 
 #define CONFIG_STORAGE_FORMAT_REVISION 2
 
-void configurationMemoryReader_initialize(); //uint8_t numKeys);
+void configurationMemoryReader_initialize();
 
-uint16_t configurationMemoryReader_readKeyAssignMemoryWord(uint16_t wordIndex);
+uint8_t configurationMemoryReader_readConfigStorageByte(uint16_t addr);
 
 void configurationMemoryReader_stop();
 
