@@ -1,26 +1,26 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
 name: CI for kermite_software
 
 on:
   push:
+    branches: [master]
     paths:
-      - "software/**"
+      - "kermite_software/**"
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: '14.x'
-    - uses: bahmutov/npm-install@HEAD
-      with:
-        working-directory: kermite_software
-    - run: yarn lint
-      working-directory: kermite_software
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+      - run: node -v
+      # - run: yarn install
+      #   working-directory: kermite_software
+      # - uses: bahmutov/npm-install@HEAD
+      #   with:
+      #     working-directory: kermite_software
+      # - run: yarn lint
+      #   working-directory: kermite_software
