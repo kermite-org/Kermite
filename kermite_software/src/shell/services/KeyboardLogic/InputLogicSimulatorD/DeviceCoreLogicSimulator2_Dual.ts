@@ -258,7 +258,7 @@ function getAssignSet(layerIndex: u8, keyIndex: u8): IAssignSet | undefined {
 
 function getAssignSetL(keyIndex: u8): IAssignSet | undefined {
   for (let i = 15; i >= 0; i--) {
-    if (state.layerHoldFlags[i]) {
+    if ((state.layerActiveFlags >> i) & 1) {
       const res = getAssignSet(i, keyIndex);
       const isDefaultSchemeBlock = isLayerDefaultSchemeBlock(i);
       if (res?.assignType === AssignType.Transparent) {
@@ -296,34 +296,30 @@ const InvocationMode = {
 };
 
 const state = new (class {
-  layerHoldFlags: boolean[] = Array(16).fill(false);
+  layerActiveFlags: u16 = 0;
   oneshotLayerIndex: s8 = -1;
   oneshotCancelTick: s8 = -1;
 })();
 
 function resetLayerState() {
-  state.layerHoldFlags.fill(false);
+  state.layerActiveFlags = 0;
   for (let i = 0; i < numLayers; i++) {
     const initialActive = getLayerInitialActive(i);
-    state.layerHoldFlags[i] = initialActive;
+    if (initialActive) {
+      state.layerActiveFlags |= 1 << i;
+    }
   }
   state.oneshotLayerIndex = -1;
   state.oneshotCancelTick = -1;
 }
 
 function getLayerActiveFlags() {
-  let flags = 0;
-  for (let i = 0; i < 16; i++) {
-    if (state.layerHoldFlags[i]) {
-      flags |= 1 << i;
-    }
-  }
-  return flags;
+  return state.layerActiveFlags;
 }
 
 const layerMutations = new (class {
   isActive(layerIndex: number) {
-    return state.layerHoldFlags[layerIndex];
+    return ((state.layerActiveFlags >> layerIndex) & 1) > 0;
   }
 
   private turnOffSiblingLayersIfNeed(layerIndex: number) {
@@ -336,7 +332,7 @@ const layerMutations = new (class {
   activate(layerIndex: number) {
     if (!this.isActive(layerIndex)) {
       this.turnOffSiblingLayersIfNeed(layerIndex);
-      state.layerHoldFlags[layerIndex] = true;
+      state.layerActiveFlags |= 1 << layerIndex;
       // console.log(state.layerHoldFlags.map((a) => (a ? 1 : 0)).join(''));
       console.log(`layer on ${layerIndex}`);
       const modifiers = getLayerAttachedModifiers(layerIndex);
@@ -348,7 +344,7 @@ const layerMutations = new (class {
 
   deactivate(layerIndex: number) {
     if (this.isActive(layerIndex)) {
-      state.layerHoldFlags[layerIndex] = false;
+      state.layerActiveFlags &= ~(1 << layerIndex);
       // console.log(state.layerHoldFlags.map((a) => (a ? 1 : 0)).join(''));
       console.log(`layer off ${layerIndex}`);
       const modifiers = getLayerAttachedModifiers(layerIndex);
@@ -403,7 +399,7 @@ const layerMutations = new (class {
   }
 
   recoverMainLayerIfAllLayeresDisabled() {
-    const isAllOff = state.layerHoldFlags.every((a) => !a);
+    const isAllOff = state.layerActiveFlags === 0;
     if (isAllOff) {
       this.activate(0);
     }
