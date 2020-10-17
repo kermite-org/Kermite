@@ -19,7 +19,7 @@ import {
   writeUint8
 } from '~shell/services/KeyMappingEmitter/Helpers';
 
-export const StorageFormatRevision = 1;
+export const StorageFormatRevision = 2;
 
 /*
 Key Assigns Restriction
