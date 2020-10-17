@@ -86,17 +86,50 @@ async function removeBlankDirectoriesInTree(baseDir: string) {
   }
 }
 
-// const stubRemoteTable: any = {
-//   "variants/proto/minivers/minivers.hex": "2cd35ea73e4bb1e85b8a880a5a846905",
-//   // "variants/proto/minivers/layout.json": "f520e23b6874986f3f7550a5bdeacc27",
-//   "variants/proto/minivers/profiles/minivers_test1.json":
-//     "a7b9c80b2a7bc5429ba57188722ade93",
-//   // "variants/csp/astelia_dev/layout.json": "176f00e13f346f0bd440984a5041ad89",
-//   // "variants/csp/astelia_dev/build_error.log":
-//   //   "ee8007f920f4eb35e938bedb5e7678e6",
-//   "variants/astelia/astelia.hex": "b13fe2d3629ac845096e8a419ad06a27",
-//   "variants/astelia/layout.json": "176f00e13f346f0bd440984a5041ad89",
-// };
+interface ISummaryObject {
+  info: {
+    buildStats: {
+      total: number;
+      success: number;
+    };
+    environment: {
+      OS: string;
+      'avr-gcc': string;
+      make: string;
+    };
+    updatedAt: string;
+    filesRevision: number;
+  };
+  files: { [key: string]: string };
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const stubSummaryObjectForDevelopment: ISummaryObject = {
+  info: {
+    buildStats: {
+      total: 3,
+      success: 3
+    },
+    environment: {
+      OS: 'Mac OS X 10.15.7',
+      'avr-gcc': 'Homebrew AVR GCC 9.3.0',
+      make: 'GNU Make 3.81'
+    },
+    updatedAt: '2020-10-14 22:02:05 +0900',
+    filesRevision: 8
+  },
+  files: {
+    // 'variants/proto/minivers/minivers.hex': 'd39fb9cb072f7b58184ddd7123df2307',
+    // 'variants/proto/minivers/layout.json': 'f520e23b6874986f3f7550a5bdeacc27',
+    'variants/proto/minivers/profiles/minivers_test1.json':
+      'a7b9c80b2a7bc5429ba57188722ade94',
+    'variants/csp/astelia_dev/layout.json': '176f00e13f346f0bd440984a5041ad89',
+    'variants/csp/astelia_dev/astelia_dev.hex':
+      '2c4b93fe0abb575af8524933cac6adbe',
+    'variants/astelia/astelia.hex': 'b13fe2d3629ac845096e8a419ad06a27',
+    'variants/astelia/layout.json': '176f00e13f346f0bd440984a5041ad89'
+  }
+};
 
 async function syncRemoteResourcesToLocalImpl(
   remoteBaseUrl: string,
@@ -106,46 +139,57 @@ async function syncRemoteResourcesToLocalImpl(
     console.log('updating resources');
     await ensureDirectoryExists(localBaseDir);
 
-    const localEntriesTablePath = `${localBaseDir}/summary.json`;
-    const localEntriesTable =
-      (await readJsonFileIfExists(localEntriesTablePath)) || {};
-    // console.log('fetch summary');
-    const remoteEntriesTable = await fetchJson(`${remoteBaseUrl}/summary.json`);
-    // const remoteEntriesTable = stubRemoteTable;
-    // console.log({ localEntriesTable, remoteEntriesTable });
+    const localSummaryFilePath = `${localBaseDir}/summary.json`;
+    const localSummary: ISummaryObject = (await readJsonFileIfExists(
+      localSummaryFilePath
+    )) || {
+      files: {},
+      info: {
+        filesRevision: 0
+      }
+    };
 
-    const remoteEntries = Object.keys(remoteEntriesTable);
-    const localEntries = Object.keys(localEntriesTable);
+    const remoteSummary = (await fetchJson(
+      `${remoteBaseUrl}/summary.json`
+    )) as ISummaryObject;
+    // const remoteSummary = stubSummaryObjectForDevelopment;
 
-    const entriesRemoved = excludeArrayItems(localEntries, remoteEntries);
-    console.log(`${entriesRemoved.length} entries will be removed`);
+    if (remoteSummary.info.filesRevision !== localSummary.info.filesRevision) {
+      const remoteEntries = Object.keys(remoteSummary.files);
+      const localEntries = Object.keys(localSummary.files);
 
-    await Promise.all(
-      entriesRemoved.map(async (it) => {
-        console.log(`remove ${it}`);
-        const filePath = `${localBaseDir}/${it}`;
-        await deleteFile(filePath);
-      })
-    );
+      const entriesRemoved = excludeArrayItems(localEntries, remoteEntries);
+      console.log(`${entriesRemoved.length} entries will be removed`);
 
-    const entriesUpdated = remoteEntries.filter(
-      (it) =>
-        localEntriesTable[it] !== remoteEntriesTable[it] ||
-        !isFileExists(`${localBaseDir}/${it}`)
-    );
-    console.log(`${entriesUpdated.length} entries will be updated`);
-    for (const it of entriesUpdated) {
-      console.log(`fetch ${it}`);
-      const content = await fetchText(`${remoteBaseUrl}/${it}`);
-      const localFilePath = `${localBaseDir}/${it}`;
-      await ensureDirectoryExists(path.dirname(localFilePath));
-      await writeTextFile(localFilePath, content);
+      await Promise.all(
+        entriesRemoved.map(async (it) => {
+          console.log(`remove ${it}`);
+          const filePath = `${localBaseDir}/${it}`;
+          await deleteFile(filePath);
+        })
+      );
+
+      const entriesUpdated = remoteEntries.filter(
+        (it) =>
+          localSummary.files[it] !== remoteSummary.files[it] ||
+          !isFileExists(`${localBaseDir}/${it}`)
+      );
+      console.log(`${entriesUpdated.length} entries will be updated`);
+      for (const it of entriesUpdated) {
+        console.log(`fetch ${it}`);
+        const content = await fetchText(`${remoteBaseUrl}/${it}`);
+        const localFilePath = `${localBaseDir}/${it}`;
+        await ensureDirectoryExists(path.dirname(localFilePath));
+        await writeTextFile(localFilePath, content);
+      }
+
+      await removeBlankDirectoriesInTree(localBaseDir);
+
+      await writeJsonFile(localSummaryFilePath, remoteSummary);
+      console.log('now resources are up to date');
+    } else {
+      console.log('resources are up to date');
     }
-
-    await removeBlankDirectoriesInTree(localBaseDir);
-
-    await writeJsonFile(localEntriesTablePath, remoteEntriesTable);
-    console.log('now resources are up to date');
   } catch (error) {
     console.log(error);
   }
