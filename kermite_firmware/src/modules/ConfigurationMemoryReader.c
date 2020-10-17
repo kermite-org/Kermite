@@ -18,6 +18,7 @@ uint8_t eepromTempBuf[10];
 
 #define decode_byte(p) (*(p))
 #define decode_word_le(p) ((*((p) + 1) << 8) | (*(p)))
+#define decode_word_be(p) ((*(p) << 8) | (*(p + 1)))
 
 //---------------------------------------------
 
@@ -35,22 +36,26 @@ static uint16_t readEepRomWordLE(uint16_t addr) {
 static void initKeyAssignsReader() {
   xf_eeprom_read_block(0, eepromTempBuf, 8);
   uint8_t *p = eepromTempBuf;
-  uint16_t magicNumber = decode_word_le(p + 0);
-  uint16_t reserved0xFFFF = decode_word_le(p + 2);
+  uint16_t magicNumber = decode_word_be(p + 0);
+  uint16_t reserved0xFFFF = decode_word_be(p + 2);
   uint8_t logicModelType = decode_byte(p + 4);
   uint8_t formatRevision = decode_byte(p + 5);
   uint8_t assignDataStartLocation = decode_byte(p + 6);
   uint8_t numKeys = decode_byte(p + 7);
   uint8_t numLayers = decode_byte(p + 8);
+  uint16_t bodyLength = decode_word_be(p + 9);
 
   printf("%x %x %x %d %d\n", magicNumber, reserved0xFFFF, logicModelType, numKeys, numLayers);
 
   assignMemoryValid =
       magicNumber == 0xFE03 &&
-      reserved0xFFFF == 0xFFff &&
+      reserved0xFFFF == 0xFFFF &&
       logicModelType == 0x01 &&
-      formatRevision == 0x01 &&
-      assignDataStartLocation == ASSIGN_HEADER_LENGTH;
+      formatRevision == CONFIG_STORAGE_FORMAT_REVISION &&
+      assignDataStartLocation == ASSIGN_HEADER_LENGTH &&
+      numKeys <= 128 &&
+      numLayers <= 16 &&
+      bodyLength < ASSIGN_DATA_LENGTH_MAX;
 
   if (!assignMemoryValid) {
     printf("invalid config memory data\n");

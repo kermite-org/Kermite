@@ -3,8 +3,6 @@
 
 #include "types.h"
 
-#define ConfigStorageFormatRevision 2
-
 enum {
   ConfiguratorServantState_KeyMemoryUpdationStarted = 1,
   ConfiguratorServentState_KeyMemoryUpdationDone = 2,
