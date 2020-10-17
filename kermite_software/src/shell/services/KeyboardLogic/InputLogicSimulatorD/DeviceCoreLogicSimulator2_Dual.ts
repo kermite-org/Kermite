@@ -137,6 +137,7 @@ function resetReportState() {
 // assign memory reader
 
 let numLayers = 0;
+let strogeBufBodyLength = 0;
 const layerAttributeWords: u16[] = Array(16).fill(0);
 
 const AssignStorageHeaderSize = 24;
@@ -144,6 +145,8 @@ const AssignStorageHeaderSize = 24;
 function initAssignMemoryReader() {
   numLayers = readStorageByte(8);
   console.log({ numLayers });
+  strogeBufBodyLength = readStorageWordBE(9);
+  console.log({ bodyLength: strogeBufBodyLength });
   for (let i = 0; i < numLayers; i++) {
     layerAttributeWords[i] = readStorageWordBE(AssignStorageHeaderSize + i * 2);
   }
@@ -170,10 +173,10 @@ function getLayerExclusionGroup(layerIndex: u8) {
 }
 
 function getAssignsBlockAddressForKey(keyIndex: u8): s16 {
-  const assignMemoryKeyAssignsDataOffset =
-    AssignStorageHeaderSize + numLayers * 2;
-  let pos = assignMemoryKeyAssignsDataOffset;
-  while (true) {
+  const startAddr = AssignStorageHeaderSize + numLayers * 2;
+  const endAddr = AssignStorageHeaderSize + strogeBufBodyLength;
+  let pos = startAddr;
+  while (pos < endAddr) {
     const data = readStorageByte(pos);
     if (data === 0) {
       break;

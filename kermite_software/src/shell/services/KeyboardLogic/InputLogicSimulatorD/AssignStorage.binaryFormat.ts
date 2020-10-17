@@ -179,12 +179,13 @@ namespace AssignStroageBinaryFormat {
     byte6: { assignDataStartLocation: Fixed<u8, 24> };
     byte7: { numKeys: u8 }; // 1~128
     byte8: { numLayers: u8 }; // 1~16
-    byte9_23: Reserved;
+    byte9_10: { bodyLength: u8 };
+    byte11_23: Reserved;
   };
 
   type ConfigStorageDataBlobBytes = {
     byte0_23: { headerBytes: ConfigStorageHeaderBytes };
-    'byte24_24+N*2-1': { layerAttributes: LayerAttributeWord[] }; // numLayers length
-    'byte24+N*2__': { keyAssigns: KeyBoundAssignDataSet[] };
+    'byte24_24+N*2-1': { layerAttributes: LayerAttributeWord[] }; // numLayers*2 bytes
+    'byte24+N*2__': { keyAssigns: KeyBoundAssignDataSet[] }; // bodyLength bytes
   };
 }

@@ -414,9 +414,14 @@ Header 24bytes
 [6] assign data start location, 24
 [7] numKeys
 [8] numLayers
-[9-23]: padding
+[9-10] bodyLength
+[11-23]: padding
 */
-function encodeHeaderBytes(numKeys: number, numLayers: number): number[] {
+function encodeHeaderBytes(
+  numKeys: number,
+  numLayers: number,
+  bodyLength: number
+): number[] {
   const headerLength = 24;
   const buffer = Array(headerLength).fill(0);
   writeUint16BE(buffer, 0, 0xfe03);
@@ -426,6 +431,7 @@ function encodeHeaderBytes(numKeys: number, numLayers: number): number[] {
   writeUint8(buffer, 6, headerLength);
   writeUint8(buffer, 7, numKeys);
   writeUint8(buffer, 8, numLayers);
+  writeUint16BE(buffer, 9, bodyLength);
   return buffer;
 }
 
@@ -436,6 +442,10 @@ export function makeKeyAssignsConfigStorageData(
   const keyNum = profileData.keyboardShape.keyUnits.length;
   const layerNum = profileData.layers.length;
   const assignsDataBytes = converProfileDataToBlobBytes(profileData, layout);
-  const headerBytes = encodeHeaderBytes(keyNum, layerNum);
+  const headerBytes = encodeHeaderBytes(
+    keyNum,
+    layerNum,
+    assignsDataBytes.length
+  );
   return [...headerBytes, ...assignsDataBytes];
 }
