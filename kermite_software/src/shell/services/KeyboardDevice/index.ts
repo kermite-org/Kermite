@@ -36,10 +36,10 @@ export class KeyboardDeviceService {
     }
 
     if (buf[0] === 0xe0 && buf[1] === 0x91) {
-      const layerIndex = buf[2];
+      const layerActiveFlags = (buf[2] << 8) | buf[3];
       this.emitRealtimeEvent({
         type: 'layerChanged',
-        layerIndex
+        layerActiveFlags
       });
     }
   }
@@ -118,8 +118,8 @@ export class KeyboardDeviceService {
     this.deviceWrapper?.writeSingleFrame(buf);
   }
 
-  emitLayerChangedEvent(layerActiveStates: boolean[]) {
-    this.emitRealtimeEvent({ type: 'layerChanged', layerActiveStates });
+  emitLayerChangedEvent(layerActiveFlags: number) {
+    this.emitRealtimeEvent({ type: 'layerChanged', layerActiveFlags });
   }
 
   writeSingleFrame(bytes: number[]) {

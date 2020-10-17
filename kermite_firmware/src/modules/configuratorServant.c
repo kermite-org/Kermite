@@ -87,11 +87,12 @@ static void emitRealtimePhysicalKeyStateEvent(uint8_t keyIndex, bool isDown) {
   emitGenericHidData(p);
 }
 
-static void emitRealtimeLayerStateEvent(uint8_t layerIndex) {
+static void emitRealtimeLayerStateEvent(uint16_t layerFlags) {
   uint8_t *p = rawHidSendBuf;
   p[0] = 0xE0;
   p[1] = 0x91;
-  p[2] = layerIndex;
+  p[2] = layerFlags >> 8 & 0xFF;
+  p[3] = layerFlags & 0xFF;
   emitGenericHidData(p);
 }
 
@@ -207,6 +208,6 @@ void configuratorServant_emitRealtimeKeyEvent(uint8_t keyIndex, bool isDown) {
   emitRealtimePhysicalKeyStateEvent(keyIndex, isDown);
 }
 
-void configuratorServant_emitRelatimeLayerEvent(uint8_t layerIndex) {
-  emitRealtimeLayerStateEvent(layerIndex);
+void configuratorServant_emitRelatimeLayerEvent(uint16_t layerFlags) {
+  emitRealtimeLayerStateEvent(layerFlags);
 }

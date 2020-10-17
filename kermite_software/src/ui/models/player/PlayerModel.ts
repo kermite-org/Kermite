@@ -6,8 +6,7 @@ import { RealtimeKeyboardEventProvider } from './RealtimeKeyboardEventProvider';
 class PlayerModel {
   private keyEventProvider = new RealtimeKeyboardEventProvider();
   private _keyStates: { [keyId: string]: boolean } = {};
-  private _currentLayerIndex: number = 0;
-  private _layerActiveStates: boolean[] = [true];
+  private _layerActiveFlags: number = 1;
 
   holdKeyIndices: Set<number> = new Set();
 
@@ -16,8 +15,8 @@ class PlayerModel {
     return this._keyStates;
   }
 
-  get currentLayerId(): string {
-    return editorModel.layers[this._currentLayerIndex].layerId;
+  private isLayerActive(layerIndex: number) {
+    return ((this._layerActiveFlags >> layerIndex) & 1) > 0;
   }
 
   get layerStackViewSource(): {
@@ -28,14 +27,14 @@ class PlayerModel {
     return editorModel.layers.map((la, index) => ({
       layerId: la.layerId,
       layerName: la.layerName,
-      isActive: this._layerActiveStates[index]
+      isActive: this.isLayerActive(index)
     }));
   }
 
   getDynamicKeyAssign = (keyUnitId: string) => {
     const { layers } = editorModel;
     for (let i = layers.length - 1; i >= 0; i--) {
-      if (this._layerActiveStates[i]) {
+      if (this.isLayerActive(i)) {
         const layer = layers[i];
         const assign = editorModel.getAssignForKeyUnit(
           keyUnitId,
@@ -76,9 +75,7 @@ class PlayerModel {
         this._keyStates[keyUnit.id] = isDown;
       }
     } else if (ev.type === 'layerChanged') {
-      this._layerActiveStates = ev.layerActiveStates;
-      const layerIndex = ev.layerActiveStates.lastIndexOf(true);
-      this._currentLayerIndex = layerIndex >= 0 ? layerIndex : 0;
+      this._layerActiveFlags = ev.layerActiveFlags;
     }
 
     appUi.rerender();

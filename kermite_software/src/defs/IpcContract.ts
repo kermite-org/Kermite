@@ -25,7 +25,7 @@ export type IRealtimeKeyboardEvent =
     }
   | {
       type: 'layerChanged';
-      layerActiveStates: boolean[];
+      layerActiveFlags: number;
     };
 
 export type IAppWindowEvent = {

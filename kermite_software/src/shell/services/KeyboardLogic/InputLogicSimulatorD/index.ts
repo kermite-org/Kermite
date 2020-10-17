@@ -122,10 +122,7 @@ export namespace InputLogicSimulatorD {
     }
     const newLayerActiveFlags = CL.keyboardCoreLogic_getLayerActiveFlags();
     if (newLayerActiveFlags !== layerActiveFlags) {
-      const flagsArray = generateNumberSequence(16).map(
-        (i) => ((newLayerActiveFlags >> i) & 1) > 0
-      );
-      deviceService.emitLayerChangedEvent(flagsArray);
+      deviceService.emitLayerChangedEvent(newLayerActiveFlags);
       layerActiveFlags = newLayerActiveFlags;
     }
   }

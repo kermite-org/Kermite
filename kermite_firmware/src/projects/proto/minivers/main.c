@@ -103,7 +103,7 @@ uint8_t nextKeyStateFlags[NumKeySlotBytes] = { 0 };
 
 bool isSideBrainModeEnabled = false;
 
-uint8_t local_layerIndex = 0;
+uint16_t local_layerFlags = 0;
 uint8_t local_hidReport[8] = { 0 };
 
 //---------------------------------------------
@@ -121,11 +121,11 @@ void debugDumpReport(uint8_t *report) {
 }
 
 void processKeyboardCoreLogicOutput() {
-  uint8_t layerIndex = keyboardCoreLogic_getCurrentLayerIndex();
+  uint16_t layerFlags = keyboardCoreLogic_getLayerActiveFlags();
   uint8_t *hidReport = keyboardCoreLogic_getOutputHidReportBytes();
-  if (layerIndex != local_layerIndex) {
-    configuratorServant_emitRelatimeLayerEvent(layerIndex);
-    local_layerIndex = layerIndex;
+  if (layerFlags != local_layerFlags) {
+    configuratorServant_emitRelatimeLayerEvent(layerFlags);
+    local_layerFlags = layerFlags;
   }
   if (!generalUtils_compareBytes(hidReport, local_hidReport, 8)) {
     debugDumpReport(hidReport);

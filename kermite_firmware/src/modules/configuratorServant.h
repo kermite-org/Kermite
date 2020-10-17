@@ -15,6 +15,6 @@ void configuratorServant_initialize(
     void (*stateNotificationCallback)(uint8_t state));
 void configuratorServant_processUpdate();
 void configuratorServant_emitRealtimeKeyEvent(uint8_t keyIndex, bool isDown);
-void configuratorServant_emitRelatimeLayerEvent(uint8_t layerIndex);
+void configuratorServant_emitRelatimeLayerEvent(uint16_t layerFlags);
 
 #endif

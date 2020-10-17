@@ -664,8 +664,8 @@ uint8_t *keyboardCoreLogic_getOutputHidReportBytes() {
   return hidReportBuf;
 }
 
-uint8_t keyboardCoreLogic_getCurrentLayerIndex() {
-  return currentLayerIndex;
+uint16_t keyboardCoreLogic_getLayerActiveFlags() {
+  return 0;
 }
 
 void keyboardCoreLogic_issuePhysicalKeyStateChanged(uint8_t keyIndex, bool isDown) {
