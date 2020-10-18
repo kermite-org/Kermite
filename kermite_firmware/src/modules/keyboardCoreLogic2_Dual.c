@@ -3,6 +3,10 @@
 #include "xf_eeprom.h"
 #include <stdio.h>
 
+#ifndef CORELOGIC_KEYSLOTS_NUM
+#error corelogic option CORELOGIC_KEYSLOTS_NUM is not provided.
+#endif
+
 /*
 kermite_software/src/shell/services/KeyboardLogic/InputLogicSimulatorD/DeviceCoreLogicSimulator2_Dual.ts
 プロトタイプ/シミュレータ実装のコードを元にC言語に移植
@@ -489,7 +493,7 @@ static void handleOperationOff(uint16_t opWord) {
 //--------------------------------------------------------------------------------
 //assign binder
 
-#define NumKeySlotsMax 128
+#define NumKeySlotsMax CORELOGIC_KEYSLOTS_NUM
 #define NumRecallKeyEntries 4
 #define ImmediateReleaseStrokeDuration 50
 
