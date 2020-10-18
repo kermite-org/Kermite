@@ -191,8 +191,7 @@ function getLayerExclusionGroup(layerIndex: u8) {
   return attrWord & 0b111;
 }
 
-function getAssignsBlockAddressForKey(targetKeyIndex: u8): s16 {
-  // todo: 戻り値u16にする
+function getAssignsBlockAddressForKey(targetKeyIndex: u8): u16 {
   let pos = assignMemoryReaderState.assignsStartAddress;
   while (pos < assignMemoryReaderState.assignsEndAddress) {
     const data = readStorageByte(pos);
@@ -206,7 +205,7 @@ function getAssignsBlockAddressForKey(targetKeyIndex: u8): s16 {
     const bodyLength = readStorageByte(pos++);
     pos += bodyLength;
   }
-  return -1; // todo: 0にして動作チェック
+  return 0;
 }
 
 const AssignType = {
@@ -230,8 +229,7 @@ const assignTypeToBodyByteSizeMap: { [key in number]: number } = {
 function getAssignBlockAddressForLayer(
   baseAddr: u8,
   targetLayerIndex: u8
-): s16 {
-  // u16にする
+): u16 {
   const len = readStorageByte(baseAddr + 1);
   let addr = baseAddr + 2;
   const endPos = addr + len;
@@ -246,7 +244,7 @@ function getAssignBlockAddressForLayer(
     const numBlockBytes = assignTypeToBodyByteSizeMap[assignType];
     addr += numBlockBytes;
   }
-  return -1; // 0にする
+  return 0;
 }
 
 interface IAssignSet {
@@ -261,10 +259,10 @@ function getAssignSetInLayer(
   layerIndex: u8
 ): IAssignSet | undefined {
   const addr0 = getAssignsBlockAddressForKey(keyIndex);
-  if (addr0 >= 0) {
+  if (addr0 > 0) {
     const addr1 = getAssignBlockAddressForLayer(addr0, layerIndex);
     // console.log({ keyIndex, layerIndex, pos0: pos0 + 24, pos1: pos1 + 24 });
-    if (addr1 >= 0) {
+    if (addr1 > 0) {
       const entryHeaderByte = readStorageByte(addr1);
       const assignType = (entryHeaderByte >> 4) & 0b111;
       const isBlock = assignType === 4;
