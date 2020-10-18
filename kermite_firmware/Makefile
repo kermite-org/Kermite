@@ -106,16 +106,16 @@ $(ELF): $(OBJS)
 	@echo "linking"
 	@mkdir -p $(dir $@)
 	@$(CC) $(LDFLAGS) -o $(ELF) $(OBJS)
-	$(OBJSIZE) -C --mcu=atmega32u4 $(ELF)
+	@$(OBJSIZE) -C --mcu=atmega32u4 $(ELF)
 
 $(HEX) : $(ELF)
-	$(OBJCOPY) -O ihex $(ELF) $(HEX)
+	@$(OBJCOPY) -O ihex $(ELF) $(HEX)
 
 $(LST): $(ELF)
-	$(OBJDUMP) -h -S $< > $@
+	@$(OBJDUMP) -h -S $< > $@
 
 size: $(ELF)
-	$(OBJSIZE) $(ELF)
+	$(OBJSIZE) -C --mcu=atmega32u4 $(ELF)
 
 $(OBJ_DIR)/%.asm: %.c
 	$(CC) -S $(CFLAGS) -o $@ $<
