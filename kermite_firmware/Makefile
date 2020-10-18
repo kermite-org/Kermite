@@ -106,7 +106,7 @@ $(ELF): $(OBJS)
 	@echo "linking"
 	@mkdir -p $(dir $@)
 	@$(CC) $(LDFLAGS) -o $(ELF) $(OBJS)
-	$(OBJSIZE) $(ELF)
+	$(OBJSIZE) -C --mcu=atmega32u4 $(ELF)
 
 $(HEX) : $(ELF)
 	$(OBJCOPY) -O ihex $(ELF) $(HEX)
