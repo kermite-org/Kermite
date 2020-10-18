@@ -566,8 +566,8 @@ static void assignBinder_ticker(uint8_t ms) {
 
 #define TH 200
 
-//static const bool DebugShowTrigger = false;
-static const bool DebugShowTrigger = true;
+static const bool DebugShowTrigger = false;
+// static const bool DebugShowTrigger = true;
 
 enum {
   InputEdge_None = 0,
