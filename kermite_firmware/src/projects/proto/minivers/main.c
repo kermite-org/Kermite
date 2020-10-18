@@ -157,7 +157,6 @@ void onPhysicalKeyStateChanged(uint8_t keySlotIndex, bool isDown) {
 
   if (!isSideBrainModeEnabled) {
     keyboardCoreLogic_issuePhysicalKeyStateChanged(keyIndex, isDown);
-    processKeyboardCoreLogicOutput();
   }
   configuratorServant_emitRealtimeKeyEvent(keyIndex, isDown);
 }
@@ -244,6 +243,8 @@ void runAsMaster() {
     if (cnt % 4 == 0) {
       keyMatrixScanner_update();
       processKeyStatesUpdate();
+      keyboardCoreLogic_processTicker(5);
+      processKeyboardCoreLogicOutput();
       outputLED1(pressedKeyCount > 0);
     }
     if (cnt % 4 == 2) {

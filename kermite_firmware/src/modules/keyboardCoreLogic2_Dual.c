@@ -566,6 +566,9 @@ static void assignBinder_ticker(uint8_t ms) {
 
 #define TH 200
 
+//static const bool DebugShowTrigger = false;
+static const bool DebugShowTrigger = true;
+
 enum {
   InputEdge_None = 0,
   InputEdge_Down = 1,
@@ -620,9 +623,16 @@ static void initResolverState() {
   for (uint8_t i = 0; i < NumKeySlotsMax; i++) {
     KeySlot *slot = &resolverState.keySlots[i];
     slot->keyIndex = i;
-    slot->assignSet = fallbackAssignSet;
+    slot->steps = 0;
+    slot->hold = false;
+    slot->nextHold = false;
     slot->tick = 0;
-    //todo:各フィールドを明示的に初期化
+    slot->interrupted = false;
+    slot->resolving = false;
+    slot->assignSet = fallbackAssignSet;
+    slot->resolverProc = NULL;
+    slot->inputEdge = 0;
+    slot->tick = 0;
   }
 }
 
@@ -904,9 +914,9 @@ static void keySlot_tick(KeySlot *slot, uint8_t ms) {
   if (!slot->resolverProc && slot->inputEdge == InputEdge_Down) {
     AssignSet *pAssignSet = findAssignInLayerStack(slot->keyIndex);
     slot->assignSet = (pAssignSet != NULL) ? *pAssignSet : fallbackAssignSet;
-
-    //printf("check assignSet pri, %d, %d　%d\n", pAssignSet != NULL, slot->assignSet.pri, slot->assignSet.assignType);
-
+    if (DebugShowTrigger) {
+      printf("resolver attached %d %d\n", slot->keyIndex, slot->assignSet.assignType);
+    }
     slot->resolverProc = keySlotResolverFuncs[slot->assignSet.assignType];
   }
 
@@ -914,7 +924,9 @@ static void keySlot_tick(KeySlot *slot, uint8_t ms) {
     bool done = slot->resolverProc(slot);
     if (done) {
       slot->resolverProc = NULL;
-      //printf("release\n");
+      if (DebugShowTrigger) {
+        printf("resolver detached %d\n", slot->keyIndex);
+      }
     }
   }
 }
