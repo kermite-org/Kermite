@@ -54,18 +54,17 @@ function readStorageWordBE(addr: u16): u16 {
 // --------------------------------------------------------------------------------
 // hid report
 
-const ModFlag_Ctrl = 1;
-const ModFlag_Shift = 2;
-const ModFlag_Alt = 4;
-const ModFlag_OS = 8;
+const ModFlag = {
+  Ctrl: 1,
+  Shift: 2,
+  Alt: 4,
+  OS: 8
+};
 
-const hidReportBuf: u8[] = Array(8).fill(0);
+const NumHidReportBytes = 8;
 
-function resetHidReportBuf() {
-  hidReportBuf.fill(0);
-}
-
-const reportState = new (class {
+const hidReportState = new (class {
+  hidReportBuf: u8[] = Array(NumHidReportBytes).fill(0);
   layerModFlags: u8 = 0;
   modFlags: u8 = 0;
   adhocModFlags: u8 = 0;
@@ -73,120 +72,141 @@ const reportState = new (class {
   hidKeyCode: u8 = 0;
 })();
 
-function coreLogic_getOutputHidReport(): u8[] {
+function resetHidReportState() {
+  const rs = hidReportState;
+  rs.hidReportBuf.fill(0);
+  rs.layerModFlags = 0;
+  rs.modFlags = 0;
+  rs.adhocModFlags = 0;
+  rs.shiftCancelActive = false;
+  rs.hidKeyCode = 0;
+}
+
+function getOutputHidReport(): u8[] {
   const {
+    hidReportBuf,
     layerModFlags,
     modFlags,
     adhocModFlags,
     shiftCancelActive,
     hidKeyCode
-  } = reportState;
+  } = hidReportState;
+
   hidReportBuf[0] = layerModFlags | modFlags | adhocModFlags;
   if (shiftCancelActive) {
-    hidReportBuf[0] &= ~ModFlag_Shift;
+    hidReportBuf[0] &= ~ModFlag.Shift;
   }
   hidReportBuf[2] = hidKeyCode;
   return hidReportBuf;
 }
 
 function setLayerModifiers(modFlags: u8) {
-  reportState.layerModFlags |= modFlags;
+  hidReportState.layerModFlags |= modFlags;
 }
 
 function clearLayerModifiers(modFlags: u8) {
-  reportState.layerModFlags &= ~modFlags;
+  hidReportState.layerModFlags &= ~modFlags;
 }
 
 function setModifiers(modFlags: u8) {
-  reportState.modFlags |= modFlags;
+  hidReportState.modFlags |= modFlags;
 }
 
 function clearModifiers(modFlags: u8) {
-  reportState.modFlags &= ~modFlags;
+  hidReportState.modFlags &= ~modFlags;
 }
 
 function setAdhocModifiers(modFlags: u8) {
-  reportState.adhocModFlags |= modFlags;
+  hidReportState.adhocModFlags |= modFlags;
 }
 
 function clearAdhocModifiers(modFlags: u8) {
-  reportState.adhocModFlags &= ~modFlags;
+  hidReportState.adhocModFlags &= ~modFlags;
 }
 
 function setOutputKeyCode(hidKeyCode: u8) {
-  reportState.hidKeyCode = hidKeyCode;
+  hidReportState.hidKeyCode = hidKeyCode;
 }
 
 function startShiftCancel() {
-  reportState.shiftCancelActive = true;
+  hidReportState.shiftCancelActive = true;
 }
 
 function endShiftCancel() {
-  reportState.shiftCancelActive = false;
+  hidReportState.shiftCancelActive = false;
 }
 
-function resetReportState() {
-  reportState.layerModFlags = 0;
-  reportState.modFlags = 0;
-  reportState.adhocModFlags = 0;
-  reportState.shiftCancelActive = false;
-  reportState.hidKeyCode = 0;
+function getOutputModifiers() {
+  return hidReportState.hidReportBuf[0];
 }
 
 // --------------------------------------------------------------------------------
 // assign memory reader
 
-let numLayers = 0;
-let strogeBufBodyLength = 0;
-const layerAttributeWords: u16[] = Array(16).fill(0);
-
+const NumLayersMax = 16;
 const AssignStorageHeaderSize = 24;
 
+const assignMemoryReaderState = new (class {
+  numLayers: u8 = 0;
+  assignsStartAddress: u16 = 0;
+  assignsEndAddress: u16 = 0;
+  layerAttributeWords: u16[] = Array(NumLayersMax).fill(0);
+})();
+
 function initAssignMemoryReader() {
-  numLayers = readStorageByte(8);
-  strogeBufBodyLength = readStorageWordBE(9);
-  for (let i = 0; i < numLayers; i++) {
-    layerAttributeWords[i] = readStorageWordBE(AssignStorageHeaderSize + i * 2);
+  const state = assignMemoryReaderState;
+  const numLayers = readStorageByte(8);
+  const bodyLength = readStorageWordBE(9);
+  state.numLayers = numLayers;
+  state.assignsStartAddress = AssignStorageHeaderSize + numLayers * 2;
+  state.assignsEndAddress = AssignStorageHeaderSize + bodyLength;
+  for (let i = 0; i < NumLayersMax; i++) {
+    state.layerAttributeWords[i] =
+      (i < numLayers && readStorageWordBE(AssignStorageHeaderSize + i * 2)) ||
+      0;
   }
 }
 
+function getNumLayers() {
+  return assignMemoryReaderState.numLayers;
+}
+
 function isLayerDefaultSchemeBlock(layerIndex: u8) {
-  const attrWord = layerAttributeWords[layerIndex];
+  const attrWord = assignMemoryReaderState.layerAttributeWords[layerIndex];
   return ((attrWord >> 15) & 1) === 1;
 }
 
 function getLayerAttachedModifiers(layerIndex: u8) {
-  const attrWord = layerAttributeWords[layerIndex];
+  const attrWord = assignMemoryReaderState.layerAttributeWords[layerIndex];
   return (attrWord >> 8) & 0b1111;
 }
 
 function getLayerInitialActive(layerIndex: u8) {
-  const attrWord = layerAttributeWords[layerIndex];
+  const attrWord = assignMemoryReaderState.layerAttributeWords[layerIndex];
   return ((attrWord >> 13) & 1) === 1;
 }
 
 function getLayerExclusionGroup(layerIndex: u8) {
-  const attrWord = layerAttributeWords[layerIndex];
+  const attrWord = assignMemoryReaderState.layerAttributeWords[layerIndex];
   return attrWord & 0b111;
 }
 
-function getAssignsBlockAddressForKey(keyIndex: u8): s16 {
-  const startAddr = AssignStorageHeaderSize + numLayers * 2;
-  const endAddr = AssignStorageHeaderSize + strogeBufBodyLength;
-  let pos = startAddr;
-  while (pos < endAddr) {
+function getAssignsBlockAddressForKey(targetKeyIndex: u8): s16 {
+  // todo: 戻り値u16にする
+  let pos = assignMemoryReaderState.assignsStartAddress;
+  while (pos < assignMemoryReaderState.assignsEndAddress) {
     const data = readStorageByte(pos);
     if (data === 0) {
       break;
     }
-    if ((data & 0x80) > 0 && (data & 0x7f) === keyIndex) {
+    if ((data & 0x80) > 0 && (data & 0x7f) === targetKeyIndex) {
       return pos;
     }
     pos++;
     const bodyLength = readStorageByte(pos++);
     pos += bodyLength;
   }
-  return -1;
+  return -1; // todo: 0にして動作チェック
 }
 
 const AssignType = {
@@ -207,22 +227,26 @@ const assignTypeToBodyByteSizeMap: { [key in number]: number } = {
   [AssignType.Transparent]: 0
 };
 
-function getAssignBlockAddressForLayer(basePos: u8, targetLayerIndex: u8): s16 {
-  const len = readStorageByte(basePos + 1);
-  let pos = basePos + 2;
-  const endPos = pos + len;
-  while (pos < endPos) {
-    const data = readStorageByte(pos);
+function getAssignBlockAddressForLayer(
+  baseAddr: u8,
+  targetLayerIndex: u8
+): s16 {
+  // u16にする
+  const len = readStorageByte(baseAddr + 1);
+  let addr = baseAddr + 2;
+  const endPos = addr + len;
+  while (addr < endPos) {
+    const data = readStorageByte(addr);
     const layerIndex = data & 0b1111;
     if (layerIndex === targetLayerIndex) {
-      return pos;
+      return addr;
     }
-    pos++;
+    addr++;
     const assignType = (data >> 4) & 0b111;
     const numBlockBytes = assignTypeToBodyByteSizeMap[assignType];
-    pos += numBlockBytes;
+    addr += numBlockBytes;
   }
-  return -1;
+  return -1; // 0にする
 }
 
 interface IAssignSet {
@@ -232,13 +256,16 @@ interface IAssignSet {
   ter: u16;
 }
 
-function getAssignSet(layerIndex: u8, keyIndex: u8): IAssignSet | undefined {
-  const pos0 = getAssignsBlockAddressForKey(keyIndex);
-  if (pos0 >= 0) {
-    const pos1 = getAssignBlockAddressForLayer(pos0, layerIndex);
+function getAssignSetInLayer(
+  keyIndex: u8,
+  layerIndex: u8
+): IAssignSet | undefined {
+  const addr0 = getAssignsBlockAddressForKey(keyIndex);
+  if (addr0 >= 0) {
+    const addr1 = getAssignBlockAddressForLayer(addr0, layerIndex);
     // console.log({ keyIndex, layerIndex, pos0: pos0 + 24, pos1: pos1 + 24 });
-    if (pos1 >= 0) {
-      const entryHeaderByte = readStorageByte(pos1);
+    if (addr1 >= 0) {
+      const entryHeaderByte = readStorageByte(addr1);
       const assignType = (entryHeaderByte >> 4) & 0b111;
       const isBlock = assignType === 4;
       const isTrans = assignType === 5;
@@ -247,9 +274,9 @@ function getAssignSet(layerIndex: u8, keyIndex: u8): IAssignSet | undefined {
       }
       const isDual = assignType === 2;
       const isTriple = assignType === 3;
-      const pri = readStorageWordBE(pos1 + 1);
-      const sec = ((isDual || isTriple) && readStorageWordBE(pos1 + 3)) || 0;
-      const ter = (isTriple && readStorageWordBE(pos1 + 5)) || 0;
+      const pri = readStorageWordBE(addr1 + 1);
+      const sec = ((isDual || isTriple) && readStorageWordBE(addr1 + 3)) || 0;
+      const ter = (isTriple && readStorageWordBE(addr1 + 5)) || 0;
       return {
         assignType,
         pri,
@@ -261,10 +288,50 @@ function getAssignSet(layerIndex: u8, keyIndex: u8): IAssignSet | undefined {
   return undefined;
 }
 
-function getAssignSetL(keyIndex: u8): IAssignSet | undefined {
+// --------------------------------------------------------------------------------
+// operation handlers
+
+const OpType = {
+  KeyInput: 1,
+  LayerCall: 2,
+  LayerClearExclusive: 3
+};
+
+const InvocationMode = {
+  Hold: 1,
+  TurnOn: 2,
+  TurnOff: 3,
+  Toggle: 4,
+  Oneshot: 5
+};
+
+const layerState = new (class {
+  layerActiveFlags: u16 = 0;
+  oneshotLayerIndex: s8 = -1;
+  oneshotCancelTick: s8 = -1;
+})();
+
+function resetLayerState() {
+  layerState.layerActiveFlags = 0;
+  const numLayers = getNumLayers();
+  for (let i = 0; i < numLayers; i++) {
+    const initialActive = getLayerInitialActive(i);
+    if (initialActive) {
+      layerState.layerActiveFlags |= 1 << i;
+    }
+  }
+  layerState.oneshotLayerIndex = -1;
+  layerState.oneshotCancelTick = -1;
+}
+
+function getLayerActiveFlags() {
+  return layerState.layerActiveFlags;
+}
+
+function findAssignInLayerStack(keyIndex: u8): IAssignSet | undefined {
   for (let i = 15; i >= 0; i--) {
-    if ((state.layerActiveFlags >> i) & 1) {
-      const res = getAssignSet(i, keyIndex);
+    if ((layerState.layerActiveFlags >> i) & 1) {
+      const res = getAssignSetInLayer(keyIndex, i);
       const isDefaultSchemeBlock = isLayerDefaultSchemeBlock(i);
       if (res?.assignType === AssignType.Transparent) {
         continue;
@@ -283,48 +350,9 @@ function getAssignSetL(keyIndex: u8): IAssignSet | undefined {
   return undefined;
 }
 
-// --------------------------------------------------------------------------------
-// operation handlers
-
-const OpType = {
-  KeyInput: 1,
-  LayerCall: 2,
-  LayerClaerExclusive: 3
-};
-
-const InvocationMode = {
-  Hold: 1,
-  TurnOn: 2,
-  TurnOff: 3,
-  Toggle: 4,
-  Oneshot: 5
-};
-
-const state = new (class {
-  layerActiveFlags: u16 = 0;
-  oneshotLayerIndex: s8 = -1;
-  oneshotCancelTick: s8 = -1;
-})();
-
-function resetLayerState() {
-  state.layerActiveFlags = 0;
-  for (let i = 0; i < numLayers; i++) {
-    const initialActive = getLayerInitialActive(i);
-    if (initialActive) {
-      state.layerActiveFlags |= 1 << i;
-    }
-  }
-  state.oneshotLayerIndex = -1;
-  state.oneshotCancelTick = -1;
-}
-
-function getLayerActiveFlags() {
-  return state.layerActiveFlags;
-}
-
 const layerMutations = new (class {
   isActive(layerIndex: number) {
-    return ((state.layerActiveFlags >> layerIndex) & 1) > 0;
+    return ((layerState.layerActiveFlags >> layerIndex) & 1) > 0;
   }
 
   private turnOffSiblingLayersIfNeed(layerIndex: number) {
@@ -337,7 +365,7 @@ const layerMutations = new (class {
   activate(layerIndex: number) {
     if (!this.isActive(layerIndex)) {
       this.turnOffSiblingLayersIfNeed(layerIndex);
-      state.layerActiveFlags |= 1 << layerIndex;
+      layerState.layerActiveFlags |= 1 << layerIndex;
       // console.log(state.layerHoldFlags.map((a) => (a ? 1 : 0)).join(''));
       console.log(`layer on ${layerIndex}`);
       const modifiers = getLayerAttachedModifiers(layerIndex);
@@ -349,7 +377,7 @@ const layerMutations = new (class {
 
   deactivate(layerIndex: number) {
     if (this.isActive(layerIndex)) {
-      state.layerActiveFlags &= ~(1 << layerIndex);
+      layerState.layerActiveFlags &= ~(1 << layerIndex);
       // console.log(state.layerHoldFlags.map((a) => (a ? 1 : 0)).join(''));
       console.log(`layer off ${layerIndex}`);
       const modifiers = getLayerAttachedModifiers(layerIndex);
@@ -367,30 +395,37 @@ const layerMutations = new (class {
 
   oneshot(layerIndex: number) {
     this.activate(layerIndex);
-    state.oneshotLayerIndex = layerIndex;
-    state.oneshotCancelTick = -1;
+    layerState.oneshotLayerIndex = layerIndex;
+    layerState.oneshotCancelTick = -1;
     console.log('oneshot');
   }
 
   clearOneshot() {
-    if (state.oneshotLayerIndex !== -1 && state.oneshotCancelTick === -1) {
-      state.oneshotCancelTick = 0;
+    if (
+      layerState.oneshotLayerIndex !== -1 &&
+      layerState.oneshotCancelTick === -1
+    ) {
+      layerState.oneshotCancelTick = 0;
     }
   }
 
   oneshotCancellerTicker(ms: u16) {
-    if (state.oneshotLayerIndex !== -1 && state.oneshotCancelTick >= 0) {
-      state.oneshotCancelTick += ms;
-      if (state.oneshotCancelTick > 50) {
+    if (
+      layerState.oneshotLayerIndex !== -1 &&
+      layerState.oneshotCancelTick >= 0
+    ) {
+      layerState.oneshotCancelTick += ms;
+      if (layerState.oneshotCancelTick > 50) {
         console.log(`cancel oneshot`);
-        this.deactivate(state.oneshotLayerIndex);
-        state.oneshotLayerIndex = -1;
-        state.oneshotCancelTick = -1;
+        this.deactivate(layerState.oneshotLayerIndex);
+        layerState.oneshotLayerIndex = -1;
+        layerState.oneshotCancelTick = -1;
       }
     }
   }
 
   clearExclusive(targetExclusiveGroup: number, skipLayerIndex: number = -1) {
+    const numLayers = getNumLayers();
     for (let i = 0; i < numLayers; i++) {
       if (i === skipLayerIndex) {
         continue;
@@ -404,7 +439,7 @@ const layerMutations = new (class {
   }
 
   recoverMainLayerIfAllLayeresDisabled() {
-    const isAllOff = state.layerActiveFlags === 0;
+    const isAllOff = layerState.layerActiveFlags === 0;
     if (isAllOff) {
       this.activate(0);
     }
@@ -422,13 +457,14 @@ function handleOperationOn(opWord: u16) {
     if (hidKey) {
       const keyCode = hidKey & 0xff;
       const shiftOn = hidKey & 0x100;
-      const shiftOff = hidKey & 0x200;
+      const shiftCancel = hidKey & 0x200;
 
-      const isOtherModifiersClean = (hidReportBuf[0] & 0b1101) === 0;
+      const outputModifiers = getOutputModifiers();
+      const isOtherModifiersClean = (outputModifiers & 0b1101) === 0;
       if (shiftOn) {
-        setAdhocModifiers(ModFlag_Shift);
+        setAdhocModifiers(ModFlag.Shift);
       }
-      if (shiftOff && isOtherModifiersClean) {
+      if (shiftCancel && isOtherModifiersClean) {
         // shift cancel
         startShiftCancel();
       }
@@ -453,7 +489,7 @@ function handleOperationOn(opWord: u16) {
       layerMutations.oneshot(layerIndex);
     }
   }
-  if (opType === OpType.LayerClaerExclusive) {
+  if (opType === OpType.LayerClearExclusive) {
     const targetGroup = (opWord >> 8) & 0b111;
     layerMutations.clearExclusive(targetGroup);
   }
@@ -475,11 +511,11 @@ function handleOperationOff(opWord: u16) {
     if (hidKey) {
       const keyCode = hidKey & 0xff;
       const shiftOn = hidKey & 0x100;
-      const shiftOff = hidKey & 0x200;
+      const shiftCancel = hidKey & 0x200;
       if (shiftOn) {
-        clearAdhocModifiers(ModFlag_Shift);
+        clearAdhocModifiers(ModFlag.Shift);
       }
-      if (shiftOff) {
+      if (shiftCancel) {
         endShiftCancel();
       }
       if (keyCode) {
@@ -505,19 +541,18 @@ interface RecallKeyEntry {
   tick: u8;
 }
 
-const state1 = new (class {
-  keyAttachedOperationWords: u16[] = Array(128).fill(0);
-  recallKeyEntries: RecallKeyEntry[] = Array(4)
-    .fill(0)
-    .map(() => ({
-      keyIndex: -1,
-      tick: 0
-    }));
+const NumKeySlotsMax = 128;
+const NumRecallKeyEntries = 4;
+const ImmediateReleaseStrokeDuration = 50;
+
+const assignBinderState = new (class {
+  keyAttachedOperationWords: u16[] = Array(NumKeySlotsMax).fill(0);
+  recallKeyEntries: RecallKeyEntry[] = [];
 })();
 
 function resetAssignBinder() {
-  state1.keyAttachedOperationWords.fill(0);
-  state1.recallKeyEntries = Array(4)
+  assignBinderState.keyAttachedOperationWords.fill(0);
+  assignBinderState.recallKeyEntries = Array(NumRecallKeyEntries)
     .fill(0)
     .map(() => ({
       keyIndex: -1,
@@ -528,20 +563,20 @@ function resetAssignBinder() {
 function handleKeyOn(keyIndex: u8, opWord: u16) {
   // console.log(`keyOn ${keyIndex} ${opWord}`);
   handleOperationOn(opWord);
-  state1.keyAttachedOperationWords[keyIndex] = opWord;
+  assignBinderState.keyAttachedOperationWords[keyIndex] = opWord;
 }
 
 function handleKeyOff(keyIndex: u8) {
-  const opWord = state1.keyAttachedOperationWords[keyIndex];
+  const opWord = assignBinderState.keyAttachedOperationWords[keyIndex];
   if (opWord) {
     // console.log(`keyOff ${keyIndex} ${opWord}`);
     handleOperationOff(opWord);
-    state1.keyAttachedOperationWords[keyIndex] = 0;
+    assignBinderState.keyAttachedOperationWords[keyIndex] = 0;
   }
 }
 
 function recallKeyOff(keyIndex: u8) {
-  const ke = state1.recallKeyEntries.find((a) => a.keyIndex === -1);
+  const ke = assignBinderState.recallKeyEntries.find((a) => a.keyIndex === -1);
   if (ke) {
     ke.keyIndex = keyIndex;
     ke.tick = 0;
@@ -549,10 +584,10 @@ function recallKeyOff(keyIndex: u8) {
 }
 
 function assignBinder_ticker(ms: u16) {
-  for (const ke of state1.recallKeyEntries) {
+  for (const ke of assignBinderState.recallKeyEntries) {
     if (ke.keyIndex !== -1) {
       ke.tick += ms;
-      if (ke.tick > 50) {
+      if (ke.tick > ImmediateReleaseStrokeDuration) {
         handleKeyOff(ke.keyIndex);
         ke.keyIndex = -1;
       }
@@ -562,6 +597,8 @@ function assignBinder_ticker(ms: u16) {
 
 // --------------------------------------------------------------------------------
 // resolver common
+
+const TH = 200;
 
 const resolverConfig = {
   debugShowTrigger: false,
@@ -583,8 +620,9 @@ interface KeySlot {
   inputEdge: 'down' | 'up' | undefined;
 }
 
-const local = new (class {
+const resolverState = new (class {
   interruptKeyIndex: number = -1;
+  keySlots: KeySlot[] = [];
 })();
 
 const fallbackAssignSet: IAssignSet = {
@@ -594,22 +632,23 @@ const fallbackAssignSet: IAssignSet = {
   ter: 0
 };
 
-const keySlots: KeySlot[] = Array(128)
-  .fill(0)
-  .map((_, i) => ({
-    keyIndex: i,
-    steps: '',
-    hold: false,
-    nextHold: false,
-    tick: 0,
-    interrupted: false,
-    resolving: false,
-    assignSet: fallbackAssignSet,
-    resolverProc: undefined,
-    inputEdge: undefined
-  }));
-
-const TH = 200;
+function initResolverState() {
+  resolverState.interruptKeyIndex = -1;
+  resolverState.keySlots = Array(NumKeySlotsMax)
+    .fill(0)
+    .map((_, i) => ({
+      keyIndex: i,
+      steps: '',
+      hold: false,
+      nextHold: false,
+      tick: 0,
+      interrupted: false,
+      resolving: false,
+      assignSet: fallbackAssignSet,
+      resolverProc: undefined,
+      inputEdge: undefined
+    }));
+}
 
 function keySlot_clearSteps(slot: KeySlot) {
   slot.steps = '';
@@ -888,11 +927,11 @@ function keySlot_tick(slot: KeySlot, ms: number) {
     slot.inputEdge = 'up';
   }
 
-  const intrrupt_kidx = local.interruptKeyIndex;
+  const intrrupt_kidx = resolverState.interruptKeyIndex;
   slot.interrupted = intrrupt_kidx !== -1 && intrrupt_kidx !== slot.keyIndex;
 
   if (!slot.resolverProc && slot.inputEdge === 'down') {
-    slot.assignSet = getAssignSetL(slot.keyIndex) || fallbackAssignSet;
+    slot.assignSet = findAssignInLayerStack(slot.keyIndex) || fallbackAssignSet;
     slot.resolverProc = keySlotResolverFuncs[slot.assignSet.assignType];
     if (resolverConfig.debugShowTrigger) {
       console.log(
@@ -913,7 +952,8 @@ function keySlot_tick(slot: KeySlot, ms: number) {
 }
 
 function triggerResolver_tick(ms: number) {
-  const hotSlot = keySlots[local.interruptKeyIndex];
+  const { keySlots } = resolverState;
+  const hotSlot = keySlots[resolverState.interruptKeyIndex];
   keySlots.forEach((slot) => {
     if (slot !== hotSlot) {
       keySlot_tick(slot, ms);
@@ -922,14 +962,14 @@ function triggerResolver_tick(ms: number) {
   if (hotSlot) {
     keySlot_tick(hotSlot, ms);
   }
-  local.interruptKeyIndex = -1;
+  resolverState.interruptKeyIndex = -1;
 }
 
 function triggerResolver_handleKeyInput(keyIndex: u8, isDown: boolean) {
-  const slot = keySlots[keyIndex];
+  const slot = resolverState.keySlots[keyIndex];
   if (isDown) {
     console.log(`down ${keyIndex}`);
-    local.interruptKeyIndex = keyIndex;
+    resolverState.interruptKeyIndex = keyIndex;
     slot.nextHold = true;
   } else {
     console.log(`up ${keyIndex}`);
@@ -940,16 +980,12 @@ function triggerResolver_handleKeyInput(keyIndex: u8, isDown: boolean) {
 // --------------------------------------------------------------------------------
 // entries
 
-function coreLogic_reset() {
+function coreLogic_initialize() {
   initAssignMemoryReader();
-  resetHidReportBuf();
+  resetHidReportState();
   resetLayerState();
   resetAssignBinder();
-  resetReportState();
-}
-
-function coreLogic_handleKeyInput(keyIndex: u8, isDown: boolean) {
-  triggerResolver_handleKeyInput(keyIndex, isDown);
+  initResolverState();
 }
 
 function coreLogic_processTicker(ms: number) {
@@ -961,10 +997,10 @@ function coreLogic_processTicker(ms: number) {
 export function getKeyboardCoreLogicInterface(): KeyboardCoreLogicInterface {
   return {
     keyboardCoreLogic_setAssignStorageReaderFunc: setConfigStorageReaderProc,
-    keyboardCoreLogic_initialize: coreLogic_reset,
+    keyboardCoreLogic_initialize: coreLogic_initialize,
     keyboardCoreLogic_getLayerActiveFlags: getLayerActiveFlags,
-    keyboardCoreLogic_getOutputHidReportBytes: coreLogic_getOutputHidReport,
-    keyboardCoreLogic_issuePhysicalKeyStateChanged: coreLogic_handleKeyInput,
+    keyboardCoreLogic_getOutputHidReportBytes: getOutputHidReport,
+    keyboardCoreLogic_issuePhysicalKeyStateChanged: triggerResolver_handleKeyInput,
     keyboardCoreLogic_processTicker: coreLogic_processTicker
   };
 }
