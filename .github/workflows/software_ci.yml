@@ -2,9 +2,8 @@ name: CI for kermite_software
 
 on:
   push:
-    branches: [master, "cidev/**"]
+    branches: [master]
     paths:
-      - ".github/workflows/software_ci.yml"
       - "kermite_software/src/**"
 
   pull_request:
