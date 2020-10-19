@@ -2,13 +2,13 @@ name: CI for kermite_software
 
 on:
   push:
-    branches: [master]
+    branches: [master, develop]
     paths:
       - "kermite_software/src/**"
 
   pull_request:
     types: [opened, synchronize]
-    branches: [master]
+    branches: [master, develop]
     paths:
       - "kermite_software/src/**"
 
