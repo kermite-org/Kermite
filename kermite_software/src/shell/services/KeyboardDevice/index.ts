@@ -36,10 +36,9 @@ export class KeyboardDeviceService {
     }
 
     if (buf[0] === 0xe0 && buf[1] === 0x91) {
-      const layerIndex = buf[2];
       this.emitRealtimeEvent({
         type: 'layerChanged',
-        layerIndex
+        layerActiveStates: [true] // CIのデバッグのため仮修正
       });
     }
   }

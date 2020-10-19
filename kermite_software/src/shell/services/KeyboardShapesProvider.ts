@@ -18,9 +18,7 @@ interface IKeyboardShapeSourceJson {
 
 function getBaseDir() {
   if (appEnv.isDevelopment) {
-    return path.resolve(
-      '../kermite_firmware/src/projects'
-    );
+    return path.resolve('../kermite_firmware/src/projects');
   } else {
     return appEnv.resolveUserDataFilePath('resources/variants');
   }
