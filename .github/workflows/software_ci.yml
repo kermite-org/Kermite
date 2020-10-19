@@ -4,8 +4,8 @@ on:
   push:
     branches: [master, "cidev/**"]
     paths:
-      - ".github/workflows/**"
-      - "kermite_software/**"
+      - ".github/workflows/software_ci.yml"
+      - "kermite_software/src/**"
 
 jobs:
   build:
