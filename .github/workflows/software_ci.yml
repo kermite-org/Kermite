@@ -2,8 +2,9 @@ name: CI for kermite_software
 
 on:
   push:
-    branches: [master]
+    branches: [master, "cidev/**"]
     paths:
+      - ".github/workflows/**"
       - "kermite_software/**"
 
 jobs:
@@ -16,9 +17,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: "14.x"
-      - run: node -v
-      # - run: yarn install
-      #   working-directory: kermite_software
+      # - run: node -v
+      - run: yarn install
+        working-directory: kermite_software
       # - uses: bahmutov/npm-install@HEAD
       #   with:
       #     working-directory: kermite_software
