@@ -80,8 +80,8 @@ export class Component<P, S> {
   }
 
   static unmount(stateRef: IStateRef, domNode: Node, env: IEnv) {
-    delete stateRef.instance.setState;
-    delete stateRef.instance.forceUpdate;
+    // delete stateRef.instance.setState;
+    // delete stateRef.instance.forceUpdate;
     if (stateRef.instance.componentWillUnmount) {
       stateRef.instance.componentWillUnmount();
     }

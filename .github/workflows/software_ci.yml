@@ -2,9 +2,15 @@ name: CI for kermite_software
 
 on:
   push:
-    branches: [master]
+    branches: [master, develop]
     paths:
-      - "kermite_software/**"
+      - "kermite_software/src/**"
+
+  pull_request:
+    types: [opened, synchronize]
+    branches: [master, develop]
+    paths:
+      - "kermite_software/src/**"
 
 jobs:
   build:
@@ -16,11 +22,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: "14.x"
-      - run: node -v
-      # - run: yarn install
-      #   working-directory: kermite_software
-      # - uses: bahmutov/npm-install@HEAD
-      #   with:
-      #     working-directory: kermite_software
-      # - run: yarn lint
-      #   working-directory: kermite_software
+      - name: Install Dependencies
+        run: sudo apt install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
+      - uses: bahmutov/npm-install@v1
+        with:
+          working-directory: kermite_software
+      - run: yarn lint
+        working-directory: kermite_software
