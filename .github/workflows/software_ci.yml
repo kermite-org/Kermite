@@ -17,6 +17,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: "12.x"
+      - name: Install Dependencies
+        run: sudo apt install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
       # - run: node -v
       - run: yarn install
         working-directory: kermite_software
