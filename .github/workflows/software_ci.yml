@@ -19,10 +19,8 @@ jobs:
           node-version: "14.x"
       - name: Install Dependencies
         run: sudo apt install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
-      - run: yarn install
-        working-directory: kermite_software
-      # - uses: bahmutov/npm-install@HEAD
-      #   with:
-      #     working-directory: kermite_software
+      - uses: bahmutov/npm-install@v1
+        with:
+          working-directory: kermite_software
       - run: yarn lint
         working-directory: kermite_software
