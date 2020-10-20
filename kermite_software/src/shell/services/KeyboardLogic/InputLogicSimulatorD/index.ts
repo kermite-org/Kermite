@@ -9,8 +9,8 @@ import { deviceService } from '~shell/services/KeyboardDevice';
 import { profileManager } from '~shell/services/ProfileManager';
 import { IInputLogicSimulator } from '../InputLogicSimulator.interface';
 import { IntervalTimerWrapper } from '../helpers/IntervalTimerWrapper';
-import * as CL from './DeviceCoreLogicSimulator2_Dual';
-import { converProfileDataToBlobBytes } from './ProfileDataBinaryPacker';
+import { getKeyboardCoreLogicInterface } from './DeviceCoreLogicSimulator2_Dual';
+import { makeKeyAssignsConfigStorageData } from './ProfileDataBinaryPacker';
 
 function compareArray(ar0: any[], ar1: any[]): boolean {
   return (
@@ -19,20 +19,60 @@ function compareArray(ar0: any[], ar1: any[]): boolean {
   );
 }
 
+function createTimeIntervalCounter() {
+  let prevTick = Date.now();
+  return () => {
+    const tick = Date.now();
+    const elapsedMs = tick - prevTick;
+    prevTick = tick;
+    return elapsedMs;
+  };
+}
+
+function copyBytes(dst: number[], src: number[], len: number) {
+  for (let i = 0; i < len; i++) {
+    dst[i] = src[i];
+  }
+}
+
+class ConfigDataStorage {
+  readonly StorageBufCapacity = 1024;
+  storageBuf: number[] = Array(this.StorageBufCapacity).fill(0);
+
+  writeConfigStorageData(bytes: number[]) {
+    const len = bytes.length;
+    if (len < this.StorageBufCapacity) {
+      this.storageBuf.fill(0);
+      copyBytes(this.storageBuf, bytes, len);
+    }
+  }
+
+  readByte(addr: number) {
+    return this.storageBuf[addr];
+  }
+}
+
 export namespace InputLogicSimulatorD {
+  const CL = getKeyboardCoreLogicInterface();
+
   const tickerTimer = new IntervalTimerWrapper();
 
   const local = new (class {
     isSideBranMode: boolean = false;
   })();
 
+  const configDataStorage = new ConfigDataStorage();
+
   function updateProfileDataBlob() {
     const prof = profileManager.getCurrentProfile();
     const layoutStandard = keyboardConfigProvider.keyboardConfig.layoutStandard;
     if (prof && layoutStandard) {
-      const bytes = converProfileDataToBlobBytes(prof, layoutStandard);
-      CL.coreLogic_writeProfileDataBlob(bytes);
-      CL.coreLogic_reset();
+      const bytes = makeKeyAssignsConfigStorageData(prof, layoutStandard);
+      configDataStorage.writeConfigStorageData(bytes);
+      CL.keyboardCoreLogic_initialize();
+      CL.keyboardCoreLogic_setAssignStorageReaderFunc((addr) =>
+        configDataStorage.readByte(addr)
+      );
     }
   }
 
@@ -63,17 +103,27 @@ export namespace InputLogicSimulatorD {
   function onRealtimeKeyboardEvent(event: IRealtimeKeyboardEvent) {
     if (event.type === 'keyStateChanged') {
       const { keyIndex, isDown } = event;
-      CL.coreLogic_handleKeyInput(keyIndex, isDown);
+      CL.keyboardCoreLogic_issuePhysicalKeyStateChanged(keyIndex, isDown);
     }
   }
 
-  let prevHidReport: number[] = new Array(8).fill(0);
+  let layerActiveFlags: number = 0;
+  let hidReportBytes: number[] = new Array(8).fill(0);
+
+  const tickUpdator = createTimeIntervalCounter();
+
   function processTicker() {
-    CL.coreLogic_processTicker();
-    const report = CL.coreLogic_getOutputHidReport();
-    if (!compareArray(prevHidReport, report)) {
+    const elapsedMs = tickUpdator();
+    CL.keyboardCoreLogic_processTicker(elapsedMs);
+    const report = CL.keyboardCoreLogic_getOutputHidReportBytes();
+    if (!compareArray(hidReportBytes, report)) {
       deviceService.writeSideBrainHidReport(report);
-      prevHidReport = report.slice(0);
+      hidReportBytes = report.slice(0);
+    }
+    const newLayerActiveFlags = CL.keyboardCoreLogic_getLayerActiveFlags();
+    if (newLayerActiveFlags !== layerActiveFlags) {
+      deviceService.emitLayerChangedEvent(newLayerActiveFlags);
+      layerActiveFlags = newLayerActiveFlags;
     }
   }
 
@@ -82,10 +132,6 @@ export namespace InputLogicSimulatorD {
     keyboardConfigProvider.subscribeStatus(onKeyboardConfigChanged);
     deviceService.subscribe(onRealtimeKeyboardEvent);
     tickerTimer.start(processTicker, 5);
-
-    CL.coreLogic_setLayerStateCallback(
-      deviceService.emitLayerChangedEvent.bind(deviceService)
-    );
   }
 
   async function terminate() {

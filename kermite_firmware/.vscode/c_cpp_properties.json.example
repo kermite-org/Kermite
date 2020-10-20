@@ -18,7 +18,8 @@
         "UNICODE",
         "_UNICODE",
         "__AVR_ATmega32U4__",
-        "SINGLEWIRE_SIGNAL_PIN_PD0"
+        "SINGLEWIRE_SIGNAL_PIN_PD0",
+        "CORELOGIC_KEYSLOTS_NUM=64"
       ],
       "compilerPath": "${myCompilerExecutablePath} -mmcu=atmega32u4",
       "cStandard": "c11",

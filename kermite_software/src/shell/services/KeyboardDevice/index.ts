@@ -1,6 +1,7 @@
 import { IRealtimeKeyboardEvent } from '~defs/IpcContract';
 import { StatusSource } from '~funcs/StatusSource';
 import { removeArrayItems } from '~funcs/Utils';
+import { StorageFormatRevision } from '../KeyboardLogic/InputLogicSimulatorD/ProfileDataBinaryPacker';
 import { DeviceWrapper } from './DeviceWrapper';
 
 type IRealtimeEventListenerFunc = (event: IRealtimeKeyboardEvent) => void;
@@ -20,9 +21,19 @@ export class KeyboardDeviceService {
 
   private decodeReceivedBytes(buf: Uint8Array) {
     if (buf[0] === 0xf0 && buf[1] === 0x11) {
-      const keyNum = buf[2];
-      const side = buf[3];
-      console.log(`device attrs received`, { keyNum, side });
+      const firmwareConfigStorageRevision = buf[2];
+      const keyIndexRange = buf[3];
+      const side = buf[4];
+      console.log(`device attrs received`, {
+        firmwareConfigStorageRevision,
+        keyIndexRange,
+        side
+      });
+      if (firmwareConfigStorageRevision !== StorageFormatRevision) {
+        console.log(
+          `incompatible config storage revision (software:${StorageFormatRevision} firmware:${firmwareConfigStorageRevision})`
+        );
+      }
     }
 
     if (buf[0] === 0xe0 && buf[1] === 0x90) {
@@ -36,9 +47,10 @@ export class KeyboardDeviceService {
     }
 
     if (buf[0] === 0xe0 && buf[1] === 0x91) {
+      const layerActiveFlags = (buf[2] << 8) | buf[3];
       this.emitRealtimeEvent({
         type: 'layerChanged',
-        layerActiveStates: [true] // CIのデバッグのため仮修正
+        layerActiveFlags
       });
     }
   }
@@ -71,6 +83,8 @@ export class KeyboardDeviceService {
     dw.onClosed(() => {
       this.deviceStatus.set({ isConnected: false });
     });
+
+    dw.writeSingleFrame([0xf0, 0x10]); // device attributes request
   }
 
   async terminate(): Promise<void> {
@@ -117,8 +131,8 @@ export class KeyboardDeviceService {
     this.deviceWrapper?.writeSingleFrame(buf);
   }
 
-  emitLayerChangedEvent(layerActiveStates: boolean[]) {
-    this.emitRealtimeEvent({ type: 'layerChanged', layerActiveStates });
+  emitLayerChangedEvent(layerActiveFlags: number) {
+    this.emitRealtimeEvent({ type: 'layerChanged', layerActiveFlags });
   }
 
   writeSingleFrame(bytes: number[]) {

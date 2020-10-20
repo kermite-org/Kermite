@@ -3,9 +3,11 @@
 
 #include "types.h"
 
-void configurationMemoryReader_initialize(); //uint8_t numKeys);
+#define CONFIG_STORAGE_FORMAT_REVISION 2
 
-uint16_t configurationMemoryReader_readKeyAssignMemoryWord(uint16_t wordIndex);
+void configurationMemoryReader_initialize();
+
+uint8_t configurationMemoryReader_readConfigStorageByte(uint16_t addr);
 
 void configurationMemoryReader_stop();
 

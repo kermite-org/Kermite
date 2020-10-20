@@ -3,56 +3,44 @@
 #include "xf_eeprom.h"
 #include <stdio.h>
 
-//---------------------------------------------
-//keyassigns memory reader
-
 //EEPROMの先頭24バイトを配列データのヘッダ領域, 24~1023番地を配列データ本体に使用
-
-#define ASSIGN_HEADER_LENGTH 24
-#define ASSIGN_DATA_LENGTH_MAX (1024 - ASSIGN_HEADER_LENGTH)
-
-static bool assignMemoryValid = false;
-static uint16_t assignDataSize = 0;
-
-uint8_t eepromTempBuf[10];
+#define CONFIG_DATA_HEADER_LENGTH 24
+#define CONFIG_DATA_BODY_LENGTH_MAX (1024 - CONFIG_DATA_HEADER_LENGTH)
 
 #define decode_byte(p) (*(p))
-#define decode_word_le(p) ((*((p) + 1) << 8) | (*(p)))
+#define decode_word_be(p) ((*(p) << 8) | (*(p + 1)))
 
-//---------------------------------------------
+static bool configDataValid = false;
+static uint16_t configDataEndAddress = 0;
+static uint8_t eepromTempBuf[12];
 
-// static uint8_t readEepRomByte(uint16_t addr) {
-//   return eeprom_read_byte(addr);
-// }
-
-static uint16_t readEepRomWordLE(uint16_t addr) {
-  uint8_t lowByte = xf_eeprom_read_byte(addr);
-  uint8_t highByte = xf_eeprom_read_byte(addr + 1);
-  return highByte << 8 | lowByte;
-  //return xf_eeprom_read_word(addr);
-}
-
-static void initKeyAssignsReader() {
-  xf_eeprom_read_block(0, eepromTempBuf, 8);
+void configurationMemoryReader_initialize() {
+  xf_eeprom_read_block(0, eepromTempBuf, 12);
   uint8_t *p = eepromTempBuf;
-  uint16_t magicNumber = decode_word_le(p + 0);
-  uint16_t reserved0xFFFF = decode_word_le(p + 2);
+  uint16_t magicNumber = decode_word_be(p + 0);
+  uint16_t reserved0xFFFF = decode_word_be(p + 2);
   uint8_t logicModelType = decode_byte(p + 4);
   uint8_t formatRevision = decode_byte(p + 5);
-  uint8_t assignDataStartLocation = decode_byte(p + 6);
+  uint8_t configBodyStartLocation = decode_byte(p + 6);
   uint8_t numKeys = decode_byte(p + 7);
   uint8_t numLayers = decode_byte(p + 8);
+  uint16_t configBodyLength = decode_word_be(p + 9);
 
   printf("%x %x %x %d %d\n", magicNumber, reserved0xFFFF, logicModelType, numKeys, numLayers);
 
-  assignMemoryValid =
+  configDataValid =
       magicNumber == 0xFE03 &&
-      reserved0xFFFF == 0xFFff &&
+      reserved0xFFFF == 0xFFFF &&
       logicModelType == 0x01 &&
-      formatRevision == 0x01 &&
-      assignDataStartLocation == ASSIGN_HEADER_LENGTH;
+      formatRevision == CONFIG_STORAGE_FORMAT_REVISION &&
+      configBodyStartLocation == CONFIG_DATA_HEADER_LENGTH &&
+      numKeys <= 128 &&
+      numLayers <= 16 &&
+      configBodyLength < CONFIG_DATA_BODY_LENGTH_MAX;
 
-  if (!assignMemoryValid) {
+  configDataEndAddress = configBodyStartLocation + configBodyLength;
+
+  if (!configDataValid) {
     printf("invalid config memory data\n");
     generalUtils_debugShowBytes(eepromTempBuf, 8);
   } else {
@@ -60,25 +48,13 @@ static void initKeyAssignsReader() {
   }
 }
 
-static uint16_t readKeyAssignMemory(uint16_t wordIndex) {
-  uint16_t byteIndex = wordIndex * 2;
-  if (assignMemoryValid && byteIndex < assignDataSize) {
-    return readEepRomWordLE(ASSIGN_HEADER_LENGTH + byteIndex);
+uint8_t configurationMemoryReader_readConfigStorageByte(uint16_t addr) {
+  if (configDataValid && addr < configDataEndAddress) {
+    return xf_eeprom_read_byte(addr);
   }
   return 0;
 }
 
-//---------------------------------------------
-//exports
-
-void configurationMemoryReader_initialize() {
-  initKeyAssignsReader();
-}
-
-uint16_t configurationMemoryReader_readKeyAssignMemoryWord(uint16_t wordIndex) {
-  return readKeyAssignMemory(wordIndex);
-}
-
 void configurationMemoryReader_stop() {
-  assignMemoryValid = false;
+  configDataValid = false;
 }

@@ -89,11 +89,12 @@ static void emitRealtimePhysicalKeyStateEvent(uint8_t keyIndex, bool isDown) {
   emitGenericHidData(p);
 }
 
-static void emitRealtimeLayerStateEvent(uint8_t layerIndex) {
+static void emitRealtimeLayerStateEvent(uint16_t layerFlags) {
   uint8_t *p = rawHidSendBuf;
   p[0] = 0xE0;
   p[1] = 0x91;
-  p[2] = layerIndex;
+  p[2] = layerFlags >> 8 & 0xFF;
+  p[3] = layerFlags & 0xFF;
   emitGenericHidData(p);
 }
 
@@ -111,8 +112,9 @@ static void emitDeviceAttributesResponse() {
   uint8_t *p = rawHidSendBuf;
   p[0] = 0xF0;
   p[1] = 0x11;
-  p[2] = keyNum;
-  p[3] = 0; //todo: read side configuration from eeprom
+  p[2] = CONFIG_STORAGE_FORMAT_REVISION;
+  p[3] = keyNum;
+  p[4] = 0; //todo: read side configuration from eeprom
   emitGenericHidData(rawHidSendBuf);
 }
 
@@ -201,9 +203,6 @@ void configuratorServant_initialize(
   stateNotificationCallback = _stateNotificationCallback;
 }
 
-// void configuratorServant_initialize() {
-// }
-
 void configuratorServant_processUpdate() {
   processReadGenericHidData();
 }
@@ -212,6 +211,6 @@ void configuratorServant_emitRealtimeKeyEvent(uint8_t keyIndex, bool isDown) {
   emitRealtimePhysicalKeyStateEvent(keyIndex, isDown);
 }
 
-void configuratorServant_emitRelatimeLayerEvent(uint8_t layerIndex) {
-  emitRealtimeLayerStateEvent(layerIndex);
+void configuratorServant_emitRelatimeLayerEvent(uint16_t layerFlags) {
+  emitRealtimeLayerStateEvent(layerFlags);
 }
