@@ -1,5 +1,5 @@
 #assuming executed in parent directory
-#ruby scripts/build_add_resources.rb
+#ruby scripts/build_all_projects.rb
 
 require 'open3'
 require 'fileutils'
@@ -7,11 +7,32 @@ require 'digest/md5'
 require 'json'
 require 'net/https'
 require 'uri'
+require 'rbconfig'
 
-#build all firmware resources and copy them to KermiteResourceStore project directory
+#build all firmware projects
+
+ResourceStoreRepositoryBaseUrl = "https://yahiro07.github.io/KermiteResourceStore"
+
+RegardSizeExcessAsError = true
 
 def deleteFileIfExist(fpath)
   File.delete(fpath) if File.exist?(fpath)
+end
+
+def checkFirmwareSizeValid(logText)
+  mProg = logText.match(/^Program.*\(([\d\.]+)\% Full\)/)
+  mData = logText.match(/^Data.*\(([\d\.]+)\% Full\)/)
+  if mProg && mData
+    usegeProg = mProg[1].to_f
+    usegeData = mData[1].to_f
+    return usegeProg < 100.0 && usegeData < 100.0
+  end
+  false
+end
+
+def cleanPreviousFiles()
+  variantsDir = "./dist/variants"
+  FileUtils.rm_rf(variantsDir) if File.exist?(variantsDir)
 end
 
 def buildProject(projectName)
@@ -24,11 +45,23 @@ def buildProject(projectName)
   command = "make #{projectName}:build"
   stdout, stderr, status = Open3.capture3(command);
   buildSuccess = status == 0
+
+  if buildSuccess && RegardSizeExcessAsError
+    sizeCommand = "make #{projectName}:size"
+    sizeOutputLines = `#{sizeCommand}`
+    sizeValid = checkFirmwareSizeValid(sizeOutputLines)
+    if !sizeValid
+      buildSuccess = false
+      command = sizeCommand
+      stdout = ""
+      stdout += "#{sizeOutputLines.strip()}\n\n"
+      stdout += "firmware footprint overrun\n"
+    end
+  end
+
   if buildSuccess
     FileUtils.copy("#{midDir}/#{coreName}.hex", "#{destDir}/#{coreName}.hex")
-    deleteFileIfExist("#{destDir}/build_error.log")
   else
-    deleteFileIfExist("#{destDir}/#{coreName}.hex")
     File.write("#{destDir}/build_error.log",">#{command}\r\n#{stdout}#{stderr}")
   end
 
@@ -43,7 +76,7 @@ end
 def buildProjects()
   projectNames = Dir.glob("./src/projects/**/rules.mk")
     .map{|path| File.dirname(path)}
-    .filter{|path| File.exists?(File.join(path, 'layout.json'))}
+    .select{|path| File.exists?(File.join(path, 'layout.json'))}
     .map{|path| path.sub('./src/projects/', '') }
 
   numTotal = 0
@@ -57,9 +90,25 @@ def buildProjects()
   {total: numTotal, success: numSuccess}
 end
 
+
+def getOsVersion()
+  isMacOs = RUBY_PLATFORM.include?("darwin")
+  isLinux = RUBY_PLATFORM.include?("linux")
+  isWindows = RUBY_PLATFORM.include?("windows")
+  if isMacOs
+    return "#{`sw_vers -productName`.strip} #{`sw_vers -productVersion`.strip}"
+  elsif isLinux
+    return `lsb_release -d`.sub("Description:", "").strip
+  elsif isWindows
+    return `ver`
+  end
+  ''
+end
+
+
 def getEnvVersions()
-  osVersion = "#{`sw_vers -productName`.strip} #{`sw_vers -productVersion`.strip}"
-  avrGccVersion = `avr-gcc -v 2>&1 >/dev/null | grep "gcc version"`.strip.match(/\((.*)\)/)[1]
+  osVersion = getOsVersion()
+  avrGccVersion = `avr-gcc -v 2>&1 >/dev/null | grep "gcc version"`.strip
   makeVersion = `make -v | grep "GNU Make"`.strip
   {
     OS: osVersion,
@@ -117,8 +166,21 @@ def loadLocalSummary()
   nil
 end
 
+FallbackInitialSummary = {
+  info: {
+    buildStats: {
+      success: 0,
+      total: 0
+    },
+    environment: "",
+    updatedAt: Time.now.to_s,
+    filesRevision: 0
+  },
+  files: {}
+}
+
 def loadSourceSummary()
-  remoteSummaryUrl = 'https://raw.githubusercontent.com/yahiro07/KermiteResourceStore/master/resources/summary.json'
+  remoteSummaryUrl = "#{ResourceStoreRepositoryBaseUrl}/resources/summary.json"
   remoteSummary = fetchJson(remoteSummaryUrl)
   puts 'failed to fetch remote summary' if remoteSummary == nil
 
@@ -132,7 +194,7 @@ def loadSourceSummary()
   return remoteSummary if remoteSummary
   return localSummary if localSummary
 
-  raise 'No source summary, both remote and local summaries are unavailable.'
+  FallbackInitialSummary
 end
 
 def updateSummaryIfFilesChanged(currentSummary)
@@ -147,24 +209,19 @@ def updateSummaryIfFilesChanged(currentSummary)
     updatedSummary = mergeSummary(currentSummary, sourceSummary)
     summaryJsonText = JSON.pretty_generate(updatedSummary)
     File.write("./dist/summary.json", summaryJsonText)
+  else
+    summaryJsonText = JSON.pretty_generate(sourceSummary)
+    File.write("./dist/summary.json", summaryJsonText)
   end
 end
 
-def copyToResourceStoreDirectory()
-  resourceStoreDir = '../../../KermiteResourceStore'
-  if Dir.exists?(resourceStoreDir)
-    FileUtils.rm_rf("#{resourceStoreDir}/resources")
-    FileUtils.copy_entry("./dist", "#{resourceStoreDir}/resources")
-  end
-end
-
-def buildAndDeploy()
+def buildAllProjects()
+  cleanPreviousFiles()
   stats = buildProjects()
   currentSummary = makeCurrentSummary(stats)
-  updated = updateSummaryIfFilesChanged(currentSummary)
-  copyToResourceStoreDirectory() if updated
+  updateSummaryIfFilesChanged(currentSummary)
 end
 
 if __FILE__ == $0
-  buildAndDeploy()
+  buildAllProjects()
 end
