@@ -74,6 +74,9 @@ static uint8_t pressedKeyCount = 0;
 static uint8_t keyStateFlags[NumKeySlotBytes] = { 0 };
 static uint8_t nextKeyStateFlags[NumKeySlotBytes] = { 0 };
 
+uint16_t local_layerFlags = 0;
+uint8_t local_hidReport[8] = { 0 };
+
 //---------------------------------------------
 
 static void emitHidKeyStateReport(uint8_t *pReportBytes8) {
@@ -88,17 +91,12 @@ static void debugDumpReport(uint8_t *report) {
   generalUtils_debugShowBytes(report, 8);
 }
 
-//---------------------------------------------
-
-static uint8_t local_layerIndex = 0;
-static uint8_t local_hidReport[8] = { 0 };
-
 static void processKeyboardCoreLogicOutput() {
-  uint8_t layerIndex = keyboardCoreLogic_getCurrentLayerIndex();
+  uint16_t layerFlags = keyboardCoreLogic_getLayerActiveFlags();
   uint8_t *hidReport = keyboardCoreLogic_getOutputHidReportBytes();
-  if (layerIndex != local_layerIndex) {
-    configuratorServant_emitRelatimeLayerEvent(layerIndex);
-    local_layerIndex = layerIndex;
+  if (layerFlags != local_layerFlags) {
+    configuratorServant_emitRelatimeLayerEvent(layerFlags);
+    local_layerFlags = layerFlags;
   }
   if (!generalUtils_compareBytes(hidReport, local_hidReport, 8)) {
     debugDumpReport(hidReport);
