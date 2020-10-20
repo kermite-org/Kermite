@@ -150,6 +150,9 @@ clean:
 %\:run:
 	@make --no-print-directory PROJECT=$* run
 
+%\:size:
+	@make --no-print-directory PROJECT=$* size
+
 %\:clean:
 	@make --no-print-directory clean
 
