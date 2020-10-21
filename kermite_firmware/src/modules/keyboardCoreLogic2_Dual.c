@@ -1,10 +1,11 @@
 #include "bit_operations.h"
+#include "config.h"
 #include "keyboardCoreLogic.h"
 #include "xf_eeprom.h"
 #include <stdio.h>
 
-#ifndef CORELOGIC_KEYSLOTS_NUM
-#error corelogic option CORELOGIC_KEYSLOTS_NUM is not provided.
+#ifndef CORELOGIC_NUM_KEYSLOTS
+#error corelogic option CORELOGIC_NUM_KEYSLOTS is not provided.
 #endif
 
 /*
@@ -493,7 +494,7 @@ static void handleOperationOff(uint16_t opWord) {
 //--------------------------------------------------------------------------------
 //assign binder
 
-#define NumKeySlotsMax CORELOGIC_KEYSLOTS_NUM
+#define NumKeySlotsMax CORELOGIC_NUM_KEYSLOTS
 #define NumRecallKeyEntries 4
 #define ImmediateReleaseStrokeDuration 50
 

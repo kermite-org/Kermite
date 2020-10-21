@@ -1,0 +1,6 @@
+#ifndef __CONFIG_H__
+
+#define SINGLEWIRE_SIGNAL_PIN_PD2
+#define CORELOGIC_NUM_KEYSLOTS 80
+
+#endif

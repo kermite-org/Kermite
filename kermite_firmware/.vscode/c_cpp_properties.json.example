@@ -11,15 +11,14 @@
       "includePath": [
         "${myCompilerBaseDirectory}/avr/include",
         "${workspaceFolder}/src",
-        "${workspaceFolder}/src/modules"
+        "${workspaceFolder}/src/modules",
+        "${workspaceFolder}/src/projects/proto/minivers_gsk"
       ],
       "defines": [
         "_DEBUG",
         "UNICODE",
         "_UNICODE",
-        "__AVR_ATmega32U4__",
-        "SINGLEWIRE_SIGNAL_PIN_PD0",
-        "CORELOGIC_KEYSLOTS_NUM=64"
+        "__AVR_ATmega32U4__"
       ],
       "compilerPath": "${myCompilerExecutablePath} -mmcu=atmega32u4",
       "cStandard": "c11",
