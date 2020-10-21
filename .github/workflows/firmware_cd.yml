@@ -32,13 +32,13 @@ jobs:
           repository: yahiro07/KermiteResourceStore
           path: "./kermite_firmware/krs"
 
-      - name: remove repo current resources
+      - name: Remove current resources
         run: rm -rf ./kermite_firmware/krs/resources
 
-      - name: copy new resources
+      - name: Copy new resources
         run: cp -r ./kermite_firmware/dist ./kermite_firmware/krs/resources
 
-      - name: Push store repo
+      - name: Push resources to store repo
         uses: cpina/github-action-push-to-another-repository@master
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
