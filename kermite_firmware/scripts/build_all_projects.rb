@@ -36,6 +36,9 @@ def cleanPreviousFiles()
 end
 
 def buildProject(projectName)
+
+  puts "building #{projectName} ..."
+
   coreName = File.basename(projectName)
   srcDir = "./src/projects/#{projectName}"
   midDir = "./build/#{projectName}"
@@ -43,9 +46,12 @@ def buildProject(projectName)
   FileUtils.mkdir_p(destDir)
 
   `make clean`
+  #`touch #{srcDir}/rules.mk`
   command = "make #{projectName}:build"
   stdout, stderr, status = Open3.capture3(command);
   buildSuccess = status == 0
+
+  #puts stdout
 
   if buildSuccess && RegardSizeExcessAsError
     sizeCommand = "make #{projectName}:size"
@@ -70,6 +76,9 @@ def buildProject(projectName)
   if File.exists?("#{srcDir}/profiles")
     FileUtils.copy_entry("#{srcDir}/profiles", "#{destDir}/profiles")
   end
+
+  print "\e[A\e[K"
+  puts "build #{projectName} ... #{buildSuccess ? 'ok': 'ng'}"
 
   buildSuccess
 end

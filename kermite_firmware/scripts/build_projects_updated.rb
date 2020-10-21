@@ -33,7 +33,9 @@ def buildUpdateProjects()
     puts "building #{projectName} ..."
 
     `make clean`
-    `make #{projectName}:build`
+    #`touch src/projects/#{projectName}/rules.mk`
+    makeRes = `make #{projectName}:build`
+    #puts makeRes
     if $? != 0
       puts
       puts "error while building #{projectName}"
@@ -53,7 +55,7 @@ def buildUpdateProjects()
     puts "build #{projectName} ... ok"
   }
 
-  puts "complete!"
+  puts "done"
 end
 
 if __FILE__ == $0
