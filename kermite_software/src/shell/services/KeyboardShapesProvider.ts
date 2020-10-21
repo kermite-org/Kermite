@@ -83,7 +83,7 @@ type IFileUpdationListener = (args: { breedName: string }) => void;
 
 // キーボード品種ごとのレイアウトファイルを読み込み提供する
 // デバッグビルド時 glob ../kermite_firmware/src/projects/**/layout.json でレイアウトファイルを列挙
-// リリースビルド時 glob ./binaris/config/**/layout.json でレイアウトファイルを列挙
+// リリースビルド時 glob <userData>/resources/variants/**/layout.json でレイアウトファイルを列挙
 export class KeyboardShapesProvider {
   private keyboardShapes: IKeyboardShape[] = [];
 
