@@ -42,6 +42,7 @@ def buildProject(projectName)
   destDir = "./dist/variants/#{projectName}"
   FileUtils.mkdir_p(destDir)
 
+  `make clean`
   command = "make #{projectName}:build"
   stdout, stderr, status = Open3.capture3(command);
   buildSuccess = status == 0
