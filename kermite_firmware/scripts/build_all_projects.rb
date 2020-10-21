@@ -31,8 +31,8 @@ def checkFirmwareSizeValid(logText)
 end
 
 def cleanPreviousFiles()
-  variantsDir = "./dist/variants"
-  FileUtils.rm_rf(variantsDir) if File.exist?(variantsDir)
+  distDir = "./dist"
+  FileUtils.rm_rf(distDir) if File.exist?(distDir)
 end
 
 def buildProject(projectName)
@@ -49,9 +49,10 @@ def buildProject(projectName)
   #`touch #{srcDir}/rules.mk`
   command = "make #{projectName}:build"
   stdout, stderr, status = Open3.capture3(command);
-  buildSuccess = status == 0
-
   #puts stdout
+  puts(stderr) if stderr
+
+  buildSuccess = status == 0
 
   if buildSuccess && RegardSizeExcessAsError
     sizeCommand = "make #{projectName}:size"
@@ -167,14 +168,14 @@ def mergeSummary(current, source)
   }
 end
 
-def loadLocalSummary()
-  localSummaryFilePath = "./dist/summary.json"
-  if(File.exists?(localSummaryFilePath))
-    text = File.read(localSummaryFilePath)
-    return JSON.parse(text, {:symbolize_names => true})
-  end
-  nil
-end
+# def loadLocalSummary()
+#   localSummaryFilePath = "./dist/summary.json"
+#   if(File.exists?(localSummaryFilePath))
+#     text = File.read(localSummaryFilePath)
+#     return JSON.parse(text, {:symbolize_names => true})
+#   end
+#   nil
+# end
 
 FallbackInitialSummary = {
   info: {
@@ -192,19 +193,21 @@ FallbackInitialSummary = {
 def loadSourceSummary()
   remoteSummaryUrl = "#{ResourceStoreRepositoryBaseUrl}/resources/summary.json"
   remoteSummary = fetchJson(remoteSummaryUrl)
-  puts 'failed to fetch remote summary' if remoteSummary == nil
-
-  localSummary = loadLocalSummary()
-
-  if remoteSummary && localSummary
-    remoteRevision = remoteSummary[:info][:filesRevision]
-    localRevision = localSummary[:info][:filesRevision]
-    return remoteRevision > localRevision ? remoteSummary : localSummary
+  if remoteSummary == nil
+    STDERR.puts 'failed to fetch remote summary' 
+    exit(1)
   end
-  return remoteSummary if remoteSummary
-  return localSummary if localSummary
+  remoteSummary
+  # localSummary = loadLocalSummary()
 
-  FallbackInitialSummary
+  # if remoteSummary && localSummary
+  #   remoteRevision = remoteSummary[:info][:filesRevision]
+  #   localRevision = localSummary[:info][:filesRevision]
+  #   return remoteRevision > localRevision ? remoteSummary : localSummary
+  # end
+  #return remoteSummary if remoteSummary
+  # return localSummary if localSummary
+  #FallbackInitialSummary
 end
 
 def updateSummaryIfFilesChanged(currentSummary)
@@ -220,18 +223,23 @@ def updateSummaryIfFilesChanged(currentSummary)
     summaryJsonText = JSON.pretty_generate(updatedSummary)
     File.write("./dist/summary.json", summaryJsonText)
   else
+    sourceRevision = sourceSummary[:info][:filesRevision]
+    puts "filesRevision: #{sourceRevision}"
     summaryJsonText = JSON.pretty_generate(sourceSummary)
     File.write("./dist/summary.json", summaryJsonText)
   end
 end
 
 def buildAllProjects()
+  reqUpdateSummary = ARGV[0] == '--updateSummary'
   cleanPreviousFiles()
   stats = buildProjects()
-  currentSummary = makeCurrentSummary(stats)
-  updateSummaryIfFilesChanged(currentSummary)
+  if reqUpdateSummary
+    currentSummary = makeCurrentSummary(stats)
+    updateSummaryIfFilesChanged(currentSummary)
+  end
 end
 
 if __FILE__ == $0
-  buildAllProjects()
+  buildAllProjects() 
 end
