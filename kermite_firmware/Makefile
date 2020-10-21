@@ -93,12 +93,12 @@ force: clean all
 # 	mkdir $(BUILD_DIR)
 # 	mkdir -p $(OBJ_DIR)
 
-$(OBJ_DIR)/%.o: %.c $(RULES_MK)
+$(OBJ_DIR)/%.o: %.c
 	@echo "compiling $<"
 	@mkdir -p $(dir $@)
 	@$(CC) -c $(CFLAGS) -o $@ $<
 
-$(OBJ_DIR)/%.o: %.S $(RULES_MK)
+$(OBJ_DIR)/%.o: %.S
 	@echo "compiling $<"
 	@mkdir -p $(dir $@)
 	$(CC) -c $(ASFLAGS) $< -o $@
