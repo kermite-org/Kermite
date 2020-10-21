@@ -137,7 +137,7 @@ static void processReadGenericHidData() {
         if (cmd == 0x20) {
 
           //write keymapping data to ROM
-          uint16_t addr = p[4] << 8 | p[3];
+          uint16_t addr = p[3] << 8 | p[4];
           uint8_t len = p[5];
           uint8_t *src = p + 6;
           //uint8_t *dst = dummyStorage + addr;
@@ -149,8 +149,8 @@ static void processReadGenericHidData() {
         }
         if (cmd == 0x21) {
           //read memory checksum for keymapping data
-          uint16_t addr = p[4] << 8 | p[3];
-          uint16_t len = p[6] << 8 | p[5];
+          uint16_t addr = p[3] << 8 | p[4];
+          uint16_t len = p[5] << 8 | p[6];
           uint8_t ck = 0;
           printf("check, addr %d, len %d\n", addr, len);
           for (uint16_t i = 0; i < len; i++) {

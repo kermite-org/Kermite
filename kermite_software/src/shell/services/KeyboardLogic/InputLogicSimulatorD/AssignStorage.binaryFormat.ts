@@ -6,9 +6,8 @@ namespace AssignStroageBinaryFormat {
   // --------------------
   // types
 
-  // unsigend byte, unsigned short
-  type u8 = number;
-  type u16 = number;
+  type u8 = number; // unsigend byte
+  type u16 = number; // unsigned short, big endian
 
   // bits
   type b1 = number;
