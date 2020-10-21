@@ -26,6 +26,9 @@ def buildUpdateProjects()
     .uniq
     .filter{|path| path.start_with?(ProjectsDir) }
     .map{|path| path.sub(ProjectsDir, "")}
+    .filter{|dir|
+      ['rules.mk', 'layout.json'].all?{|fileName| File.exists?(File.join("src/projects", dir, fileName)) }
+    }
 
   puts "projects updated: " + projectNames.to_s
 
