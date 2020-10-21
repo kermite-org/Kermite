@@ -1,11 +1,18 @@
-name: CI for kermite_firmware
+name: Firmware ErrorCheck
 
 on:
   push:
-    branches: [master, develop, "cidev/**"]
+    branches: [variants]
     paths:
-      - ".github/workflows/**"
-      - "kermite_firmware/scripts/**"
+      - ".github/workflows/firmware_ci.yml"
+      - "kermite_firmware/scripts/build_projects_updated.rb"
+      - "kermite_firmware/Makefile"
+      - "kermite_firmware/src/**"
+
+  pull_request:
+    branches: [variants]
+    types: [opened, synchronize]
+    paths:
       - "kermite_firmware/Makefile"
       - "kermite_firmware/src/**"
 
@@ -15,32 +22,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: "2.6"
 
       - name: Install Dependencies
         run: sudo apt install gcc-avr avr-libc binutils-avr
 
-      - run: ruby scripts/build_all_projects.rb
+      - name: Check Firmware Build Errors
+        run: ruby scripts/build_projects_updated.rb
         working-directory: "./kermite_firmware"
-
-      - name: Checkout store repo
-        uses: actions/checkout@v2
-        with:
-          repository: yahiro07/KermiteResourceStore
-          path: "./kermite_firmware/krs"
-
-      - name: remove repo current resources
-        run: rm -rf ./kermite_firmware/krs/resources
-
-      - name: copy new resources
-        run: cp -r ./kermite_firmware/dist ./kermite_firmware/krs/resources
-
-      - name: Push store repo
-        uses: cpina/github-action-push-to-another-repository@master
-        env:
-          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
-        with:
-          source-directory: "./kermite_firmware/krs"
-          destination-github-username: "yahiro07"
-          destination-repository-name: "KermiteResourceStore"
-          target-branch: "master"
-          user-email: yahiro07@users.noreply.github.com
