@@ -143,7 +143,7 @@ clean:
 	rm -rf $(ELF) $(HEX) $(LIST) $(OBJS)
 
 purge:
-	rm -rf $(BUILD_DIR)
+	rm -rf $(BUILD_DIR) dist
 
 %\:build:
 	@make --no-print-directory PROJECT=$* build
