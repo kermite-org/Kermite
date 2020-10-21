@@ -16,6 +16,14 @@
 #include <stdio.h>
 #include <util/delay.h>
 
+#ifndef GSK_NUM_ROWS
+#error GSK_NUM_ROWS is not defined
+#endif
+
+#ifndef GSK_NUM_COLUMNS
+#error GSK_NUM_COLUMNS is not defined
+#endif
+
 //---------------------------------------------
 //definitions
 
