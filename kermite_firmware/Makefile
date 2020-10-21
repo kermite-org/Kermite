@@ -139,10 +139,10 @@ endif
 
 run: flash
 
-clean:
+purge:
 	rm -rf $(ELF) $(HEX) $(LIST) $(OBJS)
 
-purge:
+clean:
 	rm -rf $(BUILD_DIR) dist
 
 %\:build:
@@ -157,9 +157,11 @@ purge:
 %\:size:
 	@make --no-print-directory PROJECT=$* size
 
+%\:purge:
+	@make --no-print-directory PROJECT=$* purge
+
 %\:clean:
 	@make --no-print-directory PROJECT=$* clean
-
 
 
 .PHONY: all

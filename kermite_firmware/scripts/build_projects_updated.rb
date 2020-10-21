@@ -35,7 +35,7 @@ def buildUpdateProjects()
   projectNames.each{|projectName|
     puts "building #{projectName} ..."
 
-    `make clean`
+    `make purge`
     #`touch src/projects/#{projectName}/rules.mk`
     makeRes = `make #{projectName}:build`
     #puts makeRes

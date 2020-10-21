@@ -45,7 +45,7 @@ def buildProject(projectName)
   destDir = "./dist/variants/#{projectName}"
   FileUtils.mkdir_p(destDir)
 
-  `make clean`
+  `make purge`
   #`touch #{srcDir}/rules.mk`
   command = "make #{projectName}:build"
   stdout, stderr, status = Open3.capture3(command);
