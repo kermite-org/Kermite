@@ -9,5 +9,3 @@ MODULE_SRCS += ConfigurationMemoryReader.c
 MODULE_SRCS += keyboardCoreLogic2_Dual.c
 
 PROJECT_SRCS += main.c
-
-CFLAGS += -DCORELOGIC_KEYSLOTS_NUM=48

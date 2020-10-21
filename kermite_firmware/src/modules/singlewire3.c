@@ -1,5 +1,6 @@
 #include "singlewire3.h"
 #include "bit_operations.h"
+#include "config.h"
 #include "pio.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
