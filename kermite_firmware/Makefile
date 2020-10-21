@@ -27,7 +27,8 @@ CFLAGS =
 ASFLAGS =
 LDFLAGS =
 
-include src/projects/$(PROJECT)/rules.mk
+RULES_MK = src/projects/$(PROJECT)/rules.mk
+include $(RULES_MK)
 
 C_SRCS = $(addprefix src/modules/,$(MODULE_SRCS)) $(addprefix src/projects/$(PROJECT)/, $(PROJECT_SRCS))
 ASM_SRCS = $(addprefix src/modules/,$(MODULE_ASM_SRCS)) $(addprefix src/projects/$(PROJECT)/, $(PROJECT_ASM_SRCS))
@@ -92,12 +93,12 @@ force: clean all
 # 	mkdir $(BUILD_DIR)
 # 	mkdir -p $(OBJ_DIR)
 
-$(OBJ_DIR)/%.o: %.c
+$(OBJ_DIR)/%.o: %.c $(RULES_MK)
 	@echo "compiling $<"
 	@mkdir -p $(dir $@)
 	@$(CC) -c $(CFLAGS) -o $@ $<
 
-$(OBJ_DIR)/%.o: %.S
+$(OBJ_DIR)/%.o: %.S $(RULES_MK)
 	@echo "compiling $<"
 	@mkdir -p $(dir $@)
 	$(CC) -c $(ASFLAGS) $< -o $@
@@ -139,10 +140,13 @@ endif
 run: flash
 
 clean:
+	rm -rf $(ELF) $(HEX) $(LIST) $(OBJS)
+
+purge:
 	rm -rf $(BUILD_DIR)
 
 %\:build:
-	@make --no-print-directory PROJECT=$*
+	@make --no-print-directory PROJECT=$* build
 
 %\:flash:
 	@make --no-print-directory PROJECT=$* flash
@@ -154,7 +158,7 @@ clean:
 	@make --no-print-directory PROJECT=$* size
 
 %\:clean:
-	@make --no-print-directory clean
+	@make --no-print-directory PROJECT=$* clean
 
 
 
