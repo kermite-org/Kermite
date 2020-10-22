@@ -5,11 +5,11 @@
 #include <util/delay.h>
 
 #include "bitOperations.h"
-#include "debug_uart.h"
+#include "debugUart.h"
 #include "eeprom.h"
-#include "generalUtils.h"
 #include "pio.h"
 #include "singlewire3.h"
+#include "utils.h"
 
 extern uint8_t singlewire3_debugValues[4];
 
@@ -44,11 +44,11 @@ void toggleLED1() {
 //master slave configuration
 
 bool checkIsMaster() {
-  return xf_eeprom_read_byte(0) > 0;
+  return eeprom_readByte(0) > 0;
 }
 
 void writeIsMaster(bool isMaster) {
-  xf_eeprom_write_byte(0, isMaster ? 1 : 0);
+  eeprom_writeByte(0, isMaster ? 1 : 0);
 }
 
 //---------------------------------------------
@@ -79,7 +79,7 @@ void emitDev() {
   uint8_t len = singlewire_receiveFrame(rxbuf, n);
   sei();
   if (len > 0) {
-    generalUtils_debugShowBytes(rxbuf, len);
+    utils_debugShowBytes(rxbuf, len);
     // generalUtils_debugShowBytesDec(singlewire3_debugValues, 4);
     okCount++;
   }
@@ -119,15 +119,15 @@ void onRecevierInterruption() {
   uint8_t len = singlewire_receiveFrame(rxbuf, NumMaxDataBytes);
   // printf("len: %d\n", len);
   if (len > 0) {
-    generalUtils_copyBytes(txbuf, rxbuf, len);
+    utils_copyBytes(txbuf, rxbuf, len);
     txbuf[2] += 0x10;
     txbuf[3] += 1;
     singlewire_sendFrame(txbuf, len);
-    generalUtils_debugShowBytes(rxbuf, len);
+    utils_debugShowBytes(rxbuf, len);
     okCount++;
   }
   printf("len: %d\n", len);
-  generalUtils_debugShowBytesDec(singlewire3_debugValues, 4);
+  utils_debugShowBytesDec(singlewire3_debugValues, 4);
   // uint8_t *pDebugValues = signlewire3_getDebugValuesPtr();
   //generalUtils_debugShowBytesDec(getDebugValuesPointer(), 4);
   // generalUtils_debugShowBytesDec(singlewire3a_debugValues, 4);
@@ -161,7 +161,7 @@ void runAsSlave() {
 //---------------------------------------------
 
 void devEntry() {
-  initDebugUART(38400);
+  debugUart_setup(38400);
   printf("start\n");
   initBoardIo();
   bool isMaster = checkIsMaster();

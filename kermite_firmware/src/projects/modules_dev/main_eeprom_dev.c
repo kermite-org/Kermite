@@ -3,7 +3,7 @@
 #include <util/delay.h>
 
 #include "bitOperations.h"
-#include "debug_uart.h"
+#include "debugUart.h"
 #include "eeprom.h"
 #include "pio.h"
 
@@ -24,7 +24,7 @@ void debugShowBytes(char *name, uint8_t *buf, int len) {
 }
 
 void eepromDev() {
-  initDebugUART(38400);
+  debugUart_setup(38400);
   printf("start\n");
 
   uint16_t addr = 40;
@@ -32,7 +32,7 @@ void eepromDev() {
 
 #if 1
   debugShowBytes("write", buf, 4);
-  xf_eeprom_write_block(addr, buf, 4);
+  eeprom_writeBlock(addr, buf, 4);
 #endif
 
   for (int i = 0; i < 4; i++) {
@@ -40,7 +40,7 @@ void eepromDev() {
   }
   debugShowBytes("cleard", buf, 4);
 
-  xf_eeprom_read_block(addr, buf, 4);
+  eeprom_readBlock(addr, buf, 4);
 
   debugShowBytes("read", buf, 4);
 
