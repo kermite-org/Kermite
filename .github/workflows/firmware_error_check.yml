@@ -5,7 +5,7 @@ on:
     branches: [master, variants]
     paths:
       - ".github/workflows/firmware_ci.yml"
-      - "kermite_firmware/scripts/build_projects_updated.rb"
+      - "kermite_firmware/scripts/build_all.rb"
       - "kermite_firmware/Makefile"
       - "kermite_firmware/src/**"
 
@@ -33,5 +33,5 @@ jobs:
         run: sudo apt install gcc-avr avr-libc binutils-avr
 
       - name: Check Firmware Build Errors
-        run: ruby scripts/build_projects_updated.rb
+        run: ruby scripts/build_all.rb --abortOnError
         working-directory: "./kermite_firmware"

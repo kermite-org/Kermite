@@ -15,6 +15,7 @@ ResourceStoreRepositoryBaseUrl = "https://yahiro07.github.io/KermiteResourceStor
 
 RegardSizeExcessAsError = true
 
+
 def deleteFileIfExist(fpath)
   File.delete(fpath) if File.exist?(fpath)
 end
@@ -52,7 +53,6 @@ def buildProject(projectName)
   FileUtils.mkdir_p(destDir)
 
   `make purge`
-  #`touch #{srcDir}/rules.mk`
   command = "make #{projectName}:build"
   stdout, stderr, status = Open3.capture3(command);
 
@@ -101,6 +101,7 @@ def buildProjects()
     .select{|path| File.exists?(File.join(path, 'layout.json'))}
     .map{|path| path.sub('./src/projects/', '') }
 
+  puts "projects: " + projectNames.to_s
   numTotal = 0
   numSuccess = 0
   projectNames.each{|projectName| 
@@ -179,15 +180,6 @@ def mergeSummary(current, source)
   }
 end
 
-# def loadLocalSummary()
-#   localSummaryFilePath = "./dist/summary.json"
-#   if(File.exists?(localSummaryFilePath))
-#     text = File.read(localSummaryFilePath)
-#     return JSON.parse(text, {:symbolize_names => true})
-#   end
-#   nil
-# end
-
 FallbackInitialSummary = {
   info: {
     buildStats: {
@@ -209,16 +201,6 @@ def loadSourceSummary()
     exit(1)
   end
   remoteSummary
-  # localSummary = loadLocalSummary()
-
-  # if remoteSummary && localSummary
-  #   remoteRevision = remoteSummary[:info][:filesRevision]
-  #   localRevision = localSummary[:info][:filesRevision]
-  #   return remoteRevision > localRevision ? remoteSummary : localSummary
-  # end
-  #return remoteSummary if remoteSummary
-  # return localSummary if localSummary
-  #FallbackInitialSummary
 end
 
 def updateSummaryIfFilesChanged(currentSummary)
@@ -242,13 +224,11 @@ def updateSummaryIfFilesChanged(currentSummary)
 end
 
 def buildAllProjects()
-  reqUpdateSummary = ARGV[0] == '--updateSummary'
   cleanPreviousFiles()
   stats = buildProjects()
-  if reqUpdateSummary
-    currentSummary = makeCurrentSummary(stats)
-    updateSummaryIfFilesChanged(currentSummary)
-  end
+  currentSummary = makeCurrentSummary(stats)
+  updateSummaryIfFilesChanged(currentSummary)
+  puts "done"
 end
 
 if __FILE__ == $0

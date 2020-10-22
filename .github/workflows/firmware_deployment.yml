@@ -5,7 +5,7 @@ on:
     branches: [master, variants]
     paths:
       - ".github/workflows/firmware_cd.yml"
-      - "kermite_firmware/scripts/build_all_projects.rb"
+      - "kermite_firmware/scripts/update_all_project_distributions.rb"
       - "kermite_firmware/Makefile"
       - "kermite_firmware/src/**"
 
@@ -23,7 +23,7 @@ jobs:
       - name: Install Dependencies
         run: sudo apt install gcc-avr avr-libc binutils-avr
 
-      - run: ruby scripts/build_all_projects.rb --updateSummary
+      - run: ruby scripts/update_all_project_distributions.rb
         working-directory: "./kermite_firmware"
 
       - name: Checkout store repo
