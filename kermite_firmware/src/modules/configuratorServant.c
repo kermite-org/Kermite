@@ -1,10 +1,9 @@
 #include "configuratorServant.h"
+#include "ConfigStorageValidator.h"
 #include "usbiocore.h"
 #include "xf_eeprom.h"
 #include <stdio.h>
 #include <string.h>
-
-#include "ConfigurationMemoryReader.h"
 
 //---------------------------------------------
 //key assign buffer stub

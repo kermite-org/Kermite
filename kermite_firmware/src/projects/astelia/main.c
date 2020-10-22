@@ -1,4 +1,4 @@
-#include "ConfigurationMemoryReader.h"
+#include "ConfigStorageValidator.h"
 #include "KeyMatrixScanner2.h"
 #include "bit_operations.h"
 #include "configuratorServant.h"
@@ -167,12 +167,21 @@ void onPhysicalKeyStateChanged(uint8_t keySlotIndex, bool isDown) {
 
 //---------------------------------------------
 
+static void resetKeyboardCoreLogic() {
+  bool configMemoryValid = configStorageValidator_checkDataHeader();
+  if (configMemoryValid) {
+    keyboardCoreLogic_initialize();
+  } else {
+    keyboardCoreLogic_halt();
+  }
+}
+
 void configuratorServantStateHandler(uint8_t state) {
   if (state == ConfiguratorServantState_KeyMemoryUpdationStarted) {
-    configurationMemoryReader_stop();
+    keyboardCoreLogic_halt();
   }
   if (state == ConfiguratorServentState_KeyMemoryUpdationDone) {
-    configurationMemoryReader_initialize();
+    resetKeyboardCoreLogic();
   }
   if (state == ConfiguratorServentState_SideBrainModeEnabled) {
     isSideBrainModeEnabled = true;
@@ -206,7 +215,7 @@ void processKeyStatesUpdate() {
 void runAsMaster() {
   keyMatrixScanner_initialize(
       NumRows, NumColumns, rowPins, columnPins, nextKeyStateFlags);
-  configurationMemoryReader_initialize();
+  resetKeyboardCoreLogic();
   configuratorServant_initialize(
       NumPhysicalKeys,
       configuratorServantStateHandler);
