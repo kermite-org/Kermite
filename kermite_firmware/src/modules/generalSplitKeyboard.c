@@ -3,7 +3,7 @@
 #include "config.h"
 #include "configStorageValidator.h"
 #include "configuratorServant.h"
-#include "debug_uart.h"
+#include "debugUart.h"
 #include "generalUtils.h"
 #include "keyMatrixScanner2.h"
 #include "keyboardCoreLogic2.h"
@@ -385,7 +385,7 @@ void generalSplitKeyboard_useOnboardLeds() {
 }
 
 void generalSplitKeyboard_useDebugUART(uint16_t baud) {
-  initDebugUART(baud);
+  debugUart_setup(baud);
 }
 
 void generalSplitKeyboard_start() {

@@ -3,6 +3,6 @@
 
 #include "types.h"
 
-void initDebugUART(uint32_t baud);
+void debugUart_setup(uint32_t baud);
 
 #endif

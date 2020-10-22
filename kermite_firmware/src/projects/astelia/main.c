@@ -2,7 +2,7 @@
 #include "KeyMatrixScanner2.h"
 #include "bit_operations.h"
 #include "configuratorServant.h"
-#include "debug_uart.h"
+#include "debugUart.h"
 #include "generalUtils.h"
 #include "keyboardCoreLogic2.h"
 #include "pio.h"
@@ -246,7 +246,7 @@ void runAsMaster() {
 //---------------------------------------------
 
 void keyboardEntry() {
-  initDebugUART(38400);
+  debugUart_setup(38400);
   printf("start1\n");
   initBoardIo();
   usbioCore_initialize();
