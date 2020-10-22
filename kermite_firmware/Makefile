@@ -13,6 +13,7 @@ LST = $(BUILD_DIR)/$(APP)/$(CORE_NAME).lst
 
 INC_PATHS =
 INC_PATHS += -Isrc/modules
+INC_PATHS += -Isrc/modules/deprecated
 INC_PATHS += -Isrc/projects/$(PROJECT)
 
 
