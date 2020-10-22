@@ -22,8 +22,8 @@ export function makeMemoryWriteOperationFrames(
       0xb0,
       dataKindByte,
       0x20,
-      blo(addr),
       bhi(addr),
+      blo(addr),
       data.length,
       ...data
     ];
@@ -40,10 +40,10 @@ export function makeMemoryChecksumRequestFrame(
     0xb0,
     dataKindByte,
     0x21,
-    blo(addr),
     bhi(addr),
-    blo(length),
-    bhi(length)
+    blo(addr),
+    bhi(length),
+    blo(length)
   ];
 }
 
