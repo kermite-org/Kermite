@@ -1,7 +1,7 @@
 #include "splitKeyboard.h"
 #include "bitOperations.h"
 #include "config.h"
-#include "configStorageValidator.h"
+#include "configValidator.h"
 #include "configuratorServant.h"
 #include "debugUart.h"
 #include "keyMatrixScanner2.h"
@@ -153,7 +153,7 @@ static void onPhysicalKeyStateChanged(uint8_t keySlotIndex, bool isDown) {
 }
 
 static void resetKeyboardCoreLogic() {
-  bool configMemoryValid = configStorageValidator_checkDataHeader();
+  bool configMemoryValid = configValidator_checkDataHeader();
   if (configMemoryValid) {
     keyboardCoreLogic_initialize();
   } else {

@@ -5,7 +5,7 @@ MODULE_SRCS += usbioCore.c
 MODULE_SRCS += configuratorServant.c
 MODULE_SRCS += eeprom.c
 MODULE_SRCS += utils.c
-MODULE_SRCS += configStorageValidator.c
+MODULE_SRCS += configValidator.c
 MODULE_SRCS += keyboardCoreLogic2.c
 
 PROJECT_SRCS += main.c

@@ -1,4 +1,4 @@
-#include "configStorageValidator.h"
+#include "configValidator.h"
 
 #include "eeprom.h"
 #include "utils.h"
@@ -14,7 +14,7 @@
 
 static uint8_t eepromTempBuf[12];
 
-bool configStorageValidator_checkDataHeader() {
+bool configValidator_checkDataHeader() {
   eeprom_readBlock(0, eepromTempBuf, 12);
   uint8_t *p = eepromTempBuf;
   uint16_t magicNumber = decode_word_be(p + 0);

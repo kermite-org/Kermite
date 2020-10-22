@@ -1,5 +1,5 @@
 #include "configuratorServant.h"
-#include "ConfigStorageValidator.h"
+#include "configValidator.h"
 #include "eeprom.h"
 #include "usbiocore.h"
 #include <stdio.h>
