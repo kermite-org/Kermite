@@ -4,8 +4,8 @@
 
 #include "bit_operations.h"
 #include "debug_uart.h"
+#include "eeprom.h"
 #include "pio.h"
-#include "xf_eeprom.h"
 
 static void initLED0() {
   pio_setOutput(P_B0);

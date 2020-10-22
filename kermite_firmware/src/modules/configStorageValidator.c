@@ -1,7 +1,7 @@
 #include "configStorageValidator.h"
 
+#include "eeprom.h"
 #include "generalUtils.h"
-#include "xf_eeprom.h"
 #include <stdio.h>
 
 //EEPROMの先頭24バイトを配列データのヘッダ領域, 24~1023番地を配列データ本体に使用
@@ -15,7 +15,7 @@
 static uint8_t eepromTempBuf[12];
 
 bool configStorageValidator_checkDataHeader() {
-  xf_eeprom_read_block(0, eepromTempBuf, 12);
+  eeprom_readBlock(0, eepromTempBuf, 12);
   uint8_t *p = eepromTempBuf;
   uint16_t magicNumber = decode_word_be(p + 0);
   uint16_t reserved0xFFFF = decode_word_be(p + 2);

@@ -1,7 +1,7 @@
 #include "keyboardCoreLogic2.h"
 #include "bit_operations.h"
 #include "config.h"
-#include "xf_eeprom.h"
+#include "eeprom.h"
 #include <stdio.h>
 
 #ifndef CORELOGIC_NUM_KEYSLOTS
@@ -17,12 +17,12 @@ kermite_software/src/shell/services/KeyboardLogic/InputLogicSimulatorD/DeviceCor
 //assing memory storage
 
 static uint8_t readStorageByte(uint16_t addr) {
-  return xf_eeprom_read_byte(addr);
+  return eeprom_readByte(addr);
 }
 
 static uint16_t readStorageWordBE(uint16_t addr) {
-  uint8_t a = xf_eeprom_read_byte(addr);
-  uint8_t b = xf_eeprom_read_byte(addr + 1);
+  uint8_t a = eeprom_readByte(addr);
+  uint8_t b = eeprom_readByte(addr + 1);
   return a << 8 | b;
 }
 

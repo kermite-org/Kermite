@@ -6,10 +6,10 @@
 
 #include "bit_operations.h"
 #include "debug_uart.h"
+#include "eeprom.h"
 #include "generalUtils.h"
 #include "pio.h"
 #include "singlewire3.h"
-#include "xf_eeprom.h"
 
 extern uint8_t singlewire3_debugValues[4];
 

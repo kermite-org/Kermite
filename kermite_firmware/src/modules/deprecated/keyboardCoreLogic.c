@@ -1,5 +1,5 @@
 #include "keyboardCoreLogic.h"
-#include "xf_eeprom.h"
+#include "eeprom.h"
 #include <stdio.h>
 
 static uint8_t currentLayerIndex = 0;

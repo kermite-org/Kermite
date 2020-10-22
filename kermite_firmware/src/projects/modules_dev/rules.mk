@@ -35,7 +35,7 @@ endif
 ifeq ($(DevTarget), singlewire)
 MODULE_SRCS += pio.c
 MODULE_SRCS += debug_uart.c
-MODULE_SRCS += xf_eeprom.c
+MODULE_SRCS += eeprom.c
 MODULE_SRCS += generalUtils.c
 
 #v0
@@ -85,7 +85,7 @@ endif
 ifeq ($(DevTarget), eeprom)
 MODULE_SRCS += pio.c
 MODULE_SRCS += debug_uart.c
-MODULE_SRCS += xf_eeprom.c
+MODULE_SRCS += eeprom.c
 PROJECT_SRCS += main_eeprom_dev.c
 endif
 
