@@ -23,7 +23,7 @@ jobs:
       - name: Install Dependencies
         run: sudo apt install gcc-avr avr-libc binutils-avr
 
-      - run: ruby scripts/build_all_projects.rb
+      - run: ruby scripts/build_all_projects.rb --updateSummary
         working-directory: "./kermite_firmware"
 
       - name: Checkout store repo
