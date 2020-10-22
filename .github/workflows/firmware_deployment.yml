@@ -4,7 +4,7 @@ on:
   push:
     branches: [master, variants]
     paths:
-      - ".github/workflows/firmware_cd.yml"
+      - ".github/workflows/firmware_deployment.yml"
       - "kermite_firmware/scripts/update_all_project_distributions.rb"
       - "kermite_firmware/Makefile"
       - "kermite_firmware/src/**"
