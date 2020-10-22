@@ -3,10 +3,10 @@
 #include "bit_operations.h"
 #include "configuratorServant.h"
 #include "debugUart.h"
-#include "generalUtils.h"
 #include "keyboardCoreLogic2.h"
 #include "pio.h"
 #include "usbioCore.h"
+#include "utils.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <avr/pgmspace.h>
@@ -88,7 +88,7 @@ static void emitHidKeyStateReport(uint8_t *pReportBytes8) {
 }
 
 static void debugDumpReport(uint8_t *report) {
-  generalUtils_debugShowBytes(report, 8);
+  utils_debugShowBytes(report, 8);
 }
 
 static void processKeyboardCoreLogicOutput() {
@@ -98,12 +98,12 @@ static void processKeyboardCoreLogicOutput() {
     configuratorServant_emitRelatimeLayerEvent(layerFlags);
     local_layerFlags = layerFlags;
   }
-  if (!generalUtils_compareBytes(hidReport, local_hidReport, 8)) {
+  if (!utils_compareBytes(hidReport, local_hidReport, 8)) {
     debugDumpReport(hidReport);
     if (EmitHidKeys) {
       emitHidKeyStateReport(hidReport);
     }
-    generalUtils_copyBytes(local_hidReport, hidReport, 8);
+    utils_copyBytes(local_hidReport, hidReport, 8);
   }
 }
 

@@ -3,11 +3,11 @@
 #include "bit_operations.h"
 #include "configuratorServant.h"
 #include "debugUart.h"
-#include "generalUtils.h"
 #include "keyboardCoreLogic2.h"
 #include "pio.h"
 #include "singlewire3.h"
 #include "usbioCore.h"
+#include "utils.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <avr/pgmspace.h>
@@ -117,7 +117,7 @@ void emitHidKeyStateReport(uint8_t *pReportBytes8) {
 }
 
 void debugDumpReport(uint8_t *report) {
-  generalUtils_debugShowBytes(report, 8);
+  utils_debugShowBytes(report, 8);
 }
 
 void processKeyboardCoreLogicOutput() {
@@ -127,12 +127,12 @@ void processKeyboardCoreLogicOutput() {
     configuratorServant_emitRelatimeLayerEvent(layerFlags);
     local_layerFlags = layerFlags;
   }
-  if (!generalUtils_compareBytes(hidReport, local_hidReport, 8)) {
+  if (!utils_compareBytes(hidReport, local_hidReport, 8)) {
     debugDumpReport(hidReport);
     if (EmitHidKeys) {
       emitHidKeyStateReport(hidReport);
     }
-    generalUtils_copyBytes(local_hidReport, hidReport, 8);
+    utils_copyBytes(local_hidReport, hidReport, 8);
   }
 }
 
@@ -206,9 +206,9 @@ void pullAltSideKeyStates() {
     if (cmd == 0x41 && sz == 1 + NumKeySlotBytesHalf) {
       uint8_t *payloadBytes = sw_rxbuf + 1;
       //子-->親, キー状態応答パケット受信, 子のキー状態を受け取り保持
-      generalUtils_copyBitFlagsBuf(nextKeyStateFlags, NumKeySlotsHalf, payloadBytes, 0, NumKeySlotsHalf);
+      utils_copyBitFlagsBuf(nextKeyStateFlags, NumKeySlotsHalf, payloadBytes, 0, NumKeySlotsHalf);
       // toggleLED0();
-      // generalUtils_debugShowBytes(sw_rxbuf, sz);
+      // utils_debugShowBytes(sw_rxbuf, sz);
       okCount++;
     }
   }
@@ -280,7 +280,7 @@ void runAsMaster() {
 //子から親に対してキー状態応答パケットを送る
 void sendKeyStateResponsePacketToMaster() {
   sw_txbuf[0] = 0x41;
-  generalUtils_copyBytes(sw_txbuf + 1, nextKeyStateFlags, NumKeySlotBytesHalf);
+  utils_copyBytes(sw_txbuf + 1, nextKeyStateFlags, NumKeySlotBytesHalf);
   singlewire_sendFrame(sw_txbuf, 1 + NumKeySlotBytesHalf);
 }
 
@@ -297,7 +297,7 @@ void onRecevierInterruption() {
     }
   }
   // printf("sz: %d\n", sz);
-  // generalUtils_debugShowBytesDec(getDebugValuesPointer(), 4);
+  // utils_debugShowBytesDec(getDebugValuesPointer(), 4);
 }
 
 bool checkIfSomeKeyPressed() {

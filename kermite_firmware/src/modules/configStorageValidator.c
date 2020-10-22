@@ -1,7 +1,7 @@
 #include "configStorageValidator.h"
 
 #include "eeprom.h"
-#include "generalUtils.h"
+#include "utils.h"
 #include <stdio.h>
 
 //EEPROMの先頭24バイトを配列データのヘッダ領域, 24~1023番地を配列データ本体に使用
@@ -40,7 +40,7 @@ bool configStorageValidator_checkDataHeader() {
 
   if (!storageHeaderValid) {
     printf("invalid config memory data\n");
-    generalUtils_debugShowBytes(eepromTempBuf, 8);
+    utils_debugShowBytes(eepromTempBuf, 8);
   } else {
     printf("config memory is valied\n");
   }
