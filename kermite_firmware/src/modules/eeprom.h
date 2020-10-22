@@ -1,5 +1,5 @@
-#ifndef __XF_EEPROM_H__
-#define __XF_EEPROM_H__
+#ifndef __EEPROM_H__
+#define __EEPROM_H__
 
 #include "types.h"
 

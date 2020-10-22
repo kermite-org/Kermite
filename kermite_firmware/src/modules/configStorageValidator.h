@@ -1,4 +1,4 @@
-#ifndef __CONFIG_STORAGE_VALIDATOR__
+#ifndef __CONFIG_STORAGE_VALIDATOR_H__
 
 #include "types.h"
 
