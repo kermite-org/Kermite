@@ -2,7 +2,7 @@ name: Firmware Deployment
 
 on:
   push:
-    branches: [variants]
+    branches: [master, variants]
     paths:
       - ".github/workflows/firmware_cd.yml"
       - "kermite_firmware/scripts/build_all_projects.rb"

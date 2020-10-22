@@ -31,6 +31,7 @@ static const int8_t __keySlotIndexToKeyIndexMap[NumKeySlots] PROGMEM = {
 
 int main() {
   generalSplitKeyboard_useOnboardLeds();
+  generalSplitKeyboard_useDebugUART(38400);
   generalSplitKeyboard_setup(__rowPins, __columnPins, __keySlotIndexToKeyIndexMap);
   generalSplitKeyboard_start();
   return 0;

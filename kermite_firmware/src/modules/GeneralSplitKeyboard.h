@@ -4,6 +4,8 @@
 
 void generalSplitKeyboard_useOnboardLeds();
 
+void generalSplitKeyboard_useDebugUART(uint16_t baud);
+
 void generalSplitKeyboard_setup(
     const uint8_t *_rowPins,
     const uint8_t *_columnPins,

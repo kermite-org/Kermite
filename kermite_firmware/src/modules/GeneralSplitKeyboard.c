@@ -357,9 +357,12 @@ void generalSplitKeyboard_useOnboardLeds() {
   initBoardLeds();
 }
 
+void generalSplitKeyboard_useDebugUART(uint16_t baud) {
+  initDebugUART(baud);
+}
+
 void generalSplitKeyboard_start() {
   USBCON = 0;
-  initDebugUART(38400);
   printf("start1\n");
 
   usbioCore_initialize();
