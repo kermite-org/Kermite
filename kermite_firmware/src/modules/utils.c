@@ -1,5 +1,5 @@
 #include "utils.h"
-#include "bit_operations.h"
+#include "bitOperations.h"
 #include <stdio.h>
 
 void utils_debugShowBytes(uint8_t *buf, uint16_t len) {

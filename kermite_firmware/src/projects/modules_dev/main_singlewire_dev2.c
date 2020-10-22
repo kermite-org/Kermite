@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <util/delay.h>
 
-#include "bit_operations.h"
+#include "bitOperations.h"
 #include "singlewire2.h"
 
 //---------------------------------------------

@@ -1,6 +1,6 @@
 #include "ConfigurationMemoryReader.h"
 #include "KeyMatrixScanner2.h"
-#include "bit_operations.h"
+#include "bitOperations.h"
 #include "configuratorServant.h"
 #include "debug_uart.h"
 #include "generalUtils.h"

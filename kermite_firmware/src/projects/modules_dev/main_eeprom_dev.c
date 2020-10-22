@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <util/delay.h>
 
-#include "bit_operations.h"
+#include "bitOperations.h"
 #include "debug_uart.h"
 #include "eeprom.h"
 #include "pio.h"

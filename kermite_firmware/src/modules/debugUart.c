@@ -1,7 +1,7 @@
 #include <avr/io.h>
 #include <stdio.h>
 
-#include "bit_operations.h"
+#include "bitOperations.h"
 #include "debugUart.h"
 
 static void uart_init(uint32_t baud) {

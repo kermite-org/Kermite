@@ -1,6 +1,6 @@
 #include "singlewire.h"
 
-#include "bit_operations.h"
+#include "bitOperations.h"
 
 #include "pio.h"
 #include "types.h"

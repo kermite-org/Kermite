@@ -1,6 +1,6 @@
 #include "pio.h"
 
-#include "bit_operations.h"
+#include "bitOperations.h"
 #include <avr/io.h>
 
 #define portIndex(p) ((p) >> 3)

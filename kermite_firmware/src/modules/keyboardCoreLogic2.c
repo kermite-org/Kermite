@@ -1,5 +1,5 @@
 #include "keyboardCoreLogic2.h"
-#include "bit_operations.h"
+#include "bitOperations.h"
 #include "config.h"
 #include "eeprom.h"
 #include <stdio.h>

@@ -1,6 +1,6 @@
 #include "ConfigStorageValidator.h"
 #include "KeyMatrixScanner2.h"
-#include "bit_operations.h"
+#include "bitOperations.h"
 #include "configuratorServant.h"
 #include "debugUart.h"
 #include "keyboardCoreLogic2.h"

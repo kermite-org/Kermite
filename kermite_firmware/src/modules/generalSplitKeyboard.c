@@ -1,5 +1,5 @@
 #include "generalSplitKeyboard.h"
-#include "bit_operations.h"
+#include "bitOperations.h"
 #include "config.h"
 #include "configStorageValidator.h"
 #include "configuratorServant.h"

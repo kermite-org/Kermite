@@ -25,7 +25,7 @@
 
 #include "usbiocore.h"
 
-#include "bit_operations.h"
+#include "bitOperations.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <avr/pgmspace.h>

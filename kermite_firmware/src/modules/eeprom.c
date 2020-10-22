@@ -1,5 +1,5 @@
 #include "eeprom.h"
-#include "bit_operations.h"
+#include "bitOperations.h"
 #include <avr/eeprom.h>
 
 uint8_t eeprom_readByte(uint16_t addr) {

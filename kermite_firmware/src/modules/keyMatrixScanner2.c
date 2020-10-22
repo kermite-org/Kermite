@@ -1,5 +1,5 @@
 #include "keyMatrixScanner2.h"
-#include "bit_operations.h"
+#include "bitOperations.h"
 #include "pio.h"
 #include <avr/io.h>
 

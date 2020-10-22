@@ -7,7 +7,7 @@
 
 #include "debug_uart.h"
 
-#include "bit_operations.h"
+#include "bitOperations.h"
 
 //---------------------------------------------
 //board IO
