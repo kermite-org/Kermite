@@ -1,34 +1,34 @@
-#include "GeneralSplitKeyboard.h"
-#include "ConfigurationMemoryReader.h"
-#include "KeyMatrixScanner2.h"
-#include "bit_operations.h"
+#include "splitKeyboard.h"
+#include "bitOperations.h"
 #include "config.h"
+#include "configValidator.h"
 #include "configuratorServant.h"
-#include "debug_uart.h"
-#include "generalUtils.h"
-#include "keyboardCoreLogic.h"
+#include "debugUart.h"
+#include "keyMatrixScanner2.h"
+#include "keyboardCoreLogic2.h"
 #include "pio.h"
 #include "singlewire3.h"
-#include "usbiocore.h"
+#include "usbioCore.h"
+#include "utils.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <avr/pgmspace.h>
 #include <stdio.h>
 #include <util/delay.h>
 
-#ifndef GSK_NUM_ROWS
+#ifndef SK_NUM_ROWS
 #error GSK_NUM_ROWS is not defined
 #endif
 
-#ifndef GSK_NUM_COLUMNS
+#ifndef SK_NUM_COLUMNS
 #error GSK_NUM_COLUMNS is not defined
 #endif
 
 //---------------------------------------------
 //definitions
 
-#define NumRows GSK_NUM_ROWS
-#define NumColumns GSK_NUM_COLUMNS
+#define NumRows SK_NUM_ROWS
+#define NumColumns SK_NUM_COLUMNS
 
 #define NumKeySlots (NumRows * NumColumns * 2)
 #define NumKeySlotsHalf (NumRows * NumColumns)
@@ -65,7 +65,6 @@ static uint8_t localHidReport[8] = { 0 };
 static bool isSideBrainModeEnabled = false;
 
 static bool hasMasterOathReceived = false;
-
 static bool useBoardLeds = false;
 
 //---------------------------------------------
@@ -96,17 +95,34 @@ static void initBoardLeds() {
 
 //---------------------------------------------
 
+static void debugDumpLocalOutputState() {
+  printf("HID report:[");
+  for (uint16_t i = 0; i < 8; i++) {
+    printf("%02X ", localHidReport[i]);
+  }
+  printf("], ");
+  printf("layers: %02X\n", localLayerFlags);
+}
+
 //ロジック結果出力処理
 static void processKeyboardCoreLogicOutput() {
   uint16_t layerFlags = keyboardCoreLogic_getLayerActiveFlags();
   uint8_t *hidReport = keyboardCoreLogic_getOutputHidReportBytes();
+
+  bool changed = false;
   if (layerFlags != localLayerFlags) {
     configuratorServant_emitRelatimeLayerEvent(layerFlags);
     localLayerFlags = layerFlags;
+    changed = true;
   }
-  if (!generalUtils_compareBytes(hidReport, localHidReport, 8)) {
+  if (!utils_compareBytes(hidReport, localHidReport, 8)) {
     usbioCore_hidKeyboard_writeReport(hidReport);
-    generalUtils_copyBytes(localHidReport, hidReport, 8);
+    utils_copyBytes(localHidReport, hidReport, 8);
+    changed = true;
+  }
+
+  if (changed) {
+    debugDumpLocalOutputState();
   }
 }
 
@@ -127,21 +143,31 @@ static void onPhysicalKeyStateChanged(uint8_t keySlotIndex, bool isDown) {
     pressedKeyCount--;
   }
 
+  //ユーティリティにキー状態変化イベントを送信
+  configuratorServant_emitRealtimeKeyEvent(keyIndex, isDown);
+
   if (!isSideBrainModeEnabled) {
+    //メインロジックでキー入力を処理
     keyboardCoreLogic_issuePhysicalKeyStateChanged(keyIndex, isDown);
   }
-  configuratorServant_emitRealtimeKeyEvent(keyIndex, isDown);
+}
+
+static void resetKeyboardCoreLogic() {
+  bool configMemoryValid = configValidator_checkDataHeader();
+  if (configMemoryValid) {
+    keyboardCoreLogic_initialize();
+  } else {
+    keyboardCoreLogic_halt();
+  }
 }
 
 //ユーティリティによる設定書き込み時に呼ばれるハンドラ
 static void configuratorServantStateHandler(uint8_t state) {
   if (state == ConfiguratorServantState_KeyMemoryUpdationStarted) {
-    configurationMemoryReader_stop();
-    //todo: configurationMemoryReaderではなくcoreLogicに処理の一時停止を要求
+    keyboardCoreLogic_halt();
   }
   if (state == ConfiguratorServentState_KeyMemoryUpdationDone) {
-    configurationMemoryReader_initialize();
-    //todo: configurationMemoryReaderではなくcoreLogicで処理の一時停止を解除
+    resetKeyboardCoreLogic();
   }
   if (state == ConfiguratorServentState_SideBrainModeEnabled) {
     isSideBrainModeEnabled = true;
@@ -168,7 +194,7 @@ static void pullAltSideKeyStates() {
     if (cmd == 0x41 && sz == 1 + NumKeySlotBytesHalf) {
       uint8_t *payloadBytes = sw_rxbuf + 1;
       //子-->親, キー状態応答パケット受信, 子のキー状態を受け取り保持
-      generalUtils_copyBitFlagsBuf(nextKeyStateFlags, NumKeySlotsHalf, payloadBytes, 0, NumKeySlotsHalf);
+      utils_copyBitFlagsBuf(nextKeyStateFlags, NumKeySlotsHalf, payloadBytes, 0, NumKeySlotsHalf);
     }
   }
 }
@@ -200,7 +226,8 @@ static void runAsMaster() {
   keyMatrixScanner_initialize(
       NumRows, NumColumns, rowPins, columnPins, nextKeyStateFlags);
 
-  configurationMemoryReader_initialize();
+  resetKeyboardCoreLogic();
+
   configuratorServant_initialize(
       KeyIndexRange,
       configuratorServantStateHandler);
@@ -236,7 +263,7 @@ static void runAsMaster() {
 //子から親に対してキー状態応答パケットを送る
 static void sendKeyStateResponsePacketToMaster() {
   sw_txbuf[0] = 0x41;
-  generalUtils_copyBytes(sw_txbuf + 1, nextKeyStateFlags, NumKeySlotBytesHalf);
+  utils_copyBytes(sw_txbuf + 1, nextKeyStateFlags, NumKeySlotBytesHalf);
   singlewire_sendFrame(sw_txbuf, 1 + NumKeySlotBytesHalf);
 }
 
@@ -346,22 +373,22 @@ static void showModeByLedBlinkPattern(bool isMaster) {
 
 //---------------------------------------------
 
-void generalSplitKeyboard_setup(
+void splitKeyboard_setup(
     const uint8_t *_rowPins, const uint8_t *_columnPins, const int8_t *_keySlotIndexToKeyIndexMap) {
   rowPins = (uint8_t *)_rowPins;
   columnPins = (uint8_t *)_columnPins;
   keySlotIndexToKeyIndexMap = (int8_t *)_keySlotIndexToKeyIndexMap;
 }
 
-void generalSplitKeyboard_useOnboardLeds() {
+void splitKeyboard_useOnboardLeds() {
   initBoardLeds();
 }
 
-void generalSplitKeyboard_useDebugUART(uint16_t baud) {
-  initDebugUART(baud);
+void splitKeyboard_useDebugUART(uint16_t baud) {
+  debugUart_setup(baud);
 }
 
-void generalSplitKeyboard_start() {
+void splitKeyboard_start() {
   USBCON = 0;
   printf("start1\n");
 

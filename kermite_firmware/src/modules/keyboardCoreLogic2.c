@@ -1,7 +1,7 @@
-#include "bit_operations.h"
+#include "keyboardCoreLogic2.h"
+#include "bitOperations.h"
 #include "config.h"
-#include "keyboardCoreLogic.h"
-#include "xf_eeprom.h"
+#include "eeprom.h"
 #include <stdio.h>
 
 #ifndef CORELOGIC_NUM_KEYSLOTS
@@ -17,12 +17,12 @@ kermite_software/src/shell/services/KeyboardLogic/InputLogicSimulatorD/DeviceCor
 //assing memory storage
 
 static uint8_t readStorageByte(uint16_t addr) {
-  return xf_eeprom_read_byte(addr);
+  return eeprom_readByte(addr);
 }
 
 static uint16_t readStorageWordBE(uint16_t addr) {
-  uint8_t a = xf_eeprom_read_byte(addr);
-  uint8_t b = xf_eeprom_read_byte(addr + 1);
+  uint8_t a = eeprom_readByte(addr);
+  uint8_t b = eeprom_readByte(addr + 1);
   return a << 8 | b;
 }
 
@@ -39,6 +39,7 @@ enum {
 #define NumHidReportBytes 8
 
 typedef struct {
+  uint8_t hidReportZerosBuf[NumHidReportBytes];
   uint8_t hidReportBuf[NumHidReportBytes];
   uint8_t layerModFlags;
   uint8_t modFlags;
@@ -52,6 +53,7 @@ static HidReportState hidReportState;
 static void resetHidReportState() {
   HidReportState *rs = &hidReportState;
   for (uint8_t i = 0; i < NumHidReportBytes; i++) {
+    rs->hidReportZerosBuf[i] = 0;
     rs->hidReportBuf[i] = 0;
   }
   rs->layerModFlags = 0;
@@ -70,6 +72,10 @@ static uint8_t *getOutputHidReport() {
   }
   reportBuf[2] = rs->hidKeyCode;
   return reportBuf;
+}
+
+static uint8_t *getOutputHidReportZeros() {
+  return hidReportState.hidReportZerosBuf;
 }
 
 static void setLayerModifiers(uint8_t modFlags) {
@@ -967,28 +973,47 @@ static void triggerResolver_handleKeyInput(uint8_t keyIndex, bool isDown) {
 //--------------------------------------------------------------------------------
 //exports
 
+static bool logicActive = false;
+
 void keyboardCoreLogic_initialize() {
   initAssignMemoryReader();
   resetHidReportState();
   resetLayerState();
   resetAssignBinder();
   initResolverState();
+  logicActive = true;
 }
 
 uint8_t *keyboardCoreLogic_getOutputHidReportBytes() {
-  return getOutputHidReport();
+  if (logicActive) {
+    return getOutputHidReport();
+  } else {
+    return getOutputHidReportZeros();
+  }
 }
 
 uint16_t keyboardCoreLogic_getLayerActiveFlags() {
-  return getLayerActiveFlags();
+  if (logicActive) {
+    return getLayerActiveFlags();
+  } else {
+    return 0;
+  }
 }
 
 void keyboardCoreLogic_issuePhysicalKeyStateChanged(uint8_t keyIndex, bool isDown) {
-  triggerResolver_handleKeyInput(keyIndex, isDown);
+  if (logicActive) {
+    triggerResolver_handleKeyInput(keyIndex, isDown);
+  }
 }
 
 void keyboardCoreLogic_processTicker(uint8_t ms) {
-  triggerResolver_tick(ms);
-  assignBinder_ticker(ms);
-  layerMutations_oneshotCancellerTicker(ms);
+  if (logicActive) {
+    triggerResolver_tick(ms);
+    assignBinder_ticker(ms);
+    layerMutations_oneshotCancellerTicker(ms);
+  }
+}
+
+void keyboardCoreLogic_halt() {
+  logicActive = false;
 }

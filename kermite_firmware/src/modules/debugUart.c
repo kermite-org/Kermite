@@ -1,7 +1,8 @@
 #include <avr/io.h>
 #include <stdio.h>
 
-#include "bit_operations.h"
+#include "bitOperations.h"
+#include "debugUart.h"
 
 static void uart_init(uint32_t baud) {
   UBRR1 = (F_CPU / 16 / baud - 1);         //ボーレート設定
@@ -21,7 +22,7 @@ static void uart_putchar(char byte) {
 
 static FILE mystdout = FDEV_SETUP_STREAM((void *)uart_putchar, NULL, _FDEV_SETUP_WRITE);
 
-void initDebugUART(uint32_t baud) {
+void debugUart_setup(uint32_t baud) {
   uart_init(baud);
   stdout = &mystdout;
 }

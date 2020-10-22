@@ -90,7 +90,7 @@ end
 def buildProjects()
 
   projectNames = BuildUpdatedOnly ? getUpdatedProjectNames() : getAllProjectNames()
-
+  `make clean`
   puts "target projects: " + projectNames.to_s
   numTotal = 0
   numSuccess = 0

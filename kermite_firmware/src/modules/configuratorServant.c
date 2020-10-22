@@ -1,10 +1,9 @@
 #include "configuratorServant.h"
+#include "configValidator.h"
+#include "eeprom.h"
 #include "usbiocore.h"
-#include "xf_eeprom.h"
 #include <stdio.h>
 #include <string.h>
-
-#include "ConfigurationMemoryReader.h"
 
 //---------------------------------------------
 //key assign buffer stub
@@ -143,7 +142,7 @@ static void processReadGenericHidData() {
           //uint8_t *dst = dummyStorage + addr;
           //memcpy(dst, src, len);
           for (uint8_t i = 0; i < len; i++) {
-            xf_eeprom_write_byte(addr + i, src[i]);
+            eeprom_writeByte(addr + i, src[i]);
           }
           printf("%d bytes written at %d\n", len, addr);
         }
@@ -154,7 +153,7 @@ static void processReadGenericHidData() {
           uint8_t ck = 0;
           printf("check, addr %d, len %d\n", addr, len);
           for (uint16_t i = 0; i < len; i++) {
-            ck ^= xf_eeprom_read_byte(addr + i); //dummyStorage[addr + i];
+            ck ^= eeprom_readByte(addr + i); //dummyStorage[addr + i];
           }
           printf("ck: %d\n", ck);
           emitMemoryChecksumResult(0x01, ck);

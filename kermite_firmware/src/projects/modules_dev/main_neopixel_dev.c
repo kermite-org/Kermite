@@ -1,11 +1,11 @@
 #include <avr/io.h>
 
-#include "debug_uart.h"
+#include "debugUart.h"
 #include "pio.h"
 
 #include <util/delay.h>
 
-#include "bit_operations.h"
+#include "bitOperations.h"
 #include <avr/interrupt.h>
 #include <util/delay_basic.h>
 
@@ -148,7 +148,7 @@ void emitLedColorSpec() {
 }
 
 void neopixel_dev() {
-  initDebugUART(38400);
+  debugUart_setup(38400);
 
   printf("start\n");
   uint8_t c = sum(10, 20);

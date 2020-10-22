@@ -1,19 +1,19 @@
-#include "GeneralSplitKeyboard.h"
 #include "config.h"
 #include "pio.h"
+#include "splitKeyboard.h"
 #include <avr/pgmspace.h>
 
 //---------------------------------------------
 
-#define NumRows GSK_NUM_ROWS
-#define NumColumns GSK_NUM_COLUMNS
+#define NumRows SK_NUM_ROWS
+#define NumColumns SK_NUM_COLUMNS
 #define NumKeySlots (NumRows * NumColumns * 2)
 
-static const uint8_t __rowPins[NumRows] = { P_C6, P_D7, P_E6, P_B4, P_B5 };
-static const uint8_t __columnPins[NumColumns] = { P_F4, P_F5, P_F6, P_F7, P_B1, P_B3, P_B2, P_B6 };
+static const uint8_t rowPins[NumRows] = { P_C6, P_D7, P_E6, P_B4, P_B5 };
+static const uint8_t columnPins[NumColumns] = { P_F4, P_F5, P_F6, P_F7, P_B1, P_B3, P_B2, P_B6 };
 
 // clang-format off
-static const int8_t __keySlotIndexToKeyIndexMap[NumKeySlots] PROGMEM = {
+static const int8_t keySlotIndexToKeyIndexMap[NumKeySlots] PROGMEM = {
   //left
    0,  1,  2,  3,  4,  5,  6,  7,
    8,  9, 10, 11, 12, 13, 14, 15,
@@ -30,9 +30,9 @@ static const int8_t __keySlotIndexToKeyIndexMap[NumKeySlots] PROGMEM = {
 // clang-format on
 
 int main() {
-  generalSplitKeyboard_useOnboardLeds();
-  generalSplitKeyboard_useDebugUART(38400);
-  generalSplitKeyboard_setup(__rowPins, __columnPins, __keySlotIndexToKeyIndexMap);
-  generalSplitKeyboard_start();
+  splitKeyboard_useOnboardLeds();
+  splitKeyboard_useDebugUART(38400);
+  splitKeyboard_setup(rowPins, columnPins, keySlotIndexToKeyIndexMap);
+  splitKeyboard_start();
   return 0;
 }
