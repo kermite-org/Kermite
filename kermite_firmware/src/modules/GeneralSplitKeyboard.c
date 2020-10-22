@@ -1,5 +1,5 @@
 #include "GeneralSplitKeyboard.h"
-#include "ConfigurationMemoryReader.h"
+#include "ConfigStorageValidator.h"
 #include "KeyMatrixScanner2.h"
 #include "bit_operations.h"
 #include "config.h"
@@ -65,7 +65,6 @@ static uint8_t localHidReport[8] = { 0 };
 static bool isSideBrainModeEnabled = false;
 
 static bool hasMasterOathReceived = false;
-
 static bool useBoardLeds = false;
 
 //---------------------------------------------
@@ -127,21 +126,31 @@ static void onPhysicalKeyStateChanged(uint8_t keySlotIndex, bool isDown) {
     pressedKeyCount--;
   }
 
+  //ユーティリティにキー状態変化イベントを送信
+  configuratorServant_emitRealtimeKeyEvent(keyIndex, isDown);
+
   if (!isSideBrainModeEnabled) {
+    //メインロジックでキー入力を処理
     keyboardCoreLogic_issuePhysicalKeyStateChanged(keyIndex, isDown);
   }
-  configuratorServant_emitRealtimeKeyEvent(keyIndex, isDown);
+}
+
+static void resetKeyboardCoreLogic() {
+  bool configMemoryValid = configStorageValidator_checkDataHeader();
+  if (configMemoryValid) {
+    keyboardCoreLogic_initialize();
+  } else {
+    keyboardCoreLogic_halt();
+  }
 }
 
 //ユーティリティによる設定書き込み時に呼ばれるハンドラ
 static void configuratorServantStateHandler(uint8_t state) {
   if (state == ConfiguratorServantState_KeyMemoryUpdationStarted) {
-    configurationMemoryReader_stop();
-    //todo: configurationMemoryReaderではなくcoreLogicに処理の一時停止を要求
+    keyboardCoreLogic_halt();
   }
   if (state == ConfiguratorServentState_KeyMemoryUpdationDone) {
-    configurationMemoryReader_initialize();
-    //todo: configurationMemoryReaderではなくcoreLogicで処理の一時停止を解除
+    resetKeyboardCoreLogic();
   }
   if (state == ConfiguratorServentState_SideBrainModeEnabled) {
     isSideBrainModeEnabled = true;
@@ -200,7 +209,8 @@ static void runAsMaster() {
   keyMatrixScanner_initialize(
       NumRows, NumColumns, rowPins, columnPins, nextKeyStateFlags);
 
-  configurationMemoryReader_initialize();
+  resetKeyboardCoreLogic();
+
   configuratorServant_initialize(
       KeyIndexRange,
       configuratorServantStateHandler);
