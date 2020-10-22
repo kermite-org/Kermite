@@ -2,7 +2,7 @@ name: Firmware ErrorCheck
 
 on:
   push:
-    branches: [variants]
+    branches: [master, variants]
     paths:
       - ".github/workflows/firmware_ci.yml"
       - "kermite_firmware/scripts/build_projects_updated.rb"
@@ -10,7 +10,7 @@ on:
       - "kermite_firmware/src/**"
 
   pull_request:
-    branches: [variants]
+    branches: [master, variants]
     types: [opened, synchronize]
     paths:
       - "kermite_firmware/Makefile"
