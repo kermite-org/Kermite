@@ -1,7 +1,4 @@
 {
-  "files.associations": {
-    "*.c": "cpp"
-  },
   "json.schemas": [
     {
       "fileMatch": ["layout.json"],
