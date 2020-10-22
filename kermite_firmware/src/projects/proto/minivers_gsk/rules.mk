@@ -1,5 +1,5 @@
 MODULE_SRCS += pio.c
-MODULE_SRCS += usbiocore.c
+MODULE_SRCS += usbioCore.c
 MODULE_SRCS += xf_eeprom.c
 MODULE_SRCS += debug_uart.c
 MODULE_SRCS += generalUtils.c

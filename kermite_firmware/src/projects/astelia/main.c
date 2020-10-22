@@ -6,7 +6,7 @@
 #include "generalUtils.h"
 #include "keyboardCoreLogic2.h"
 #include "pio.h"
-#include "usbiocore.h"
+#include "usbioCore.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <avr/pgmspace.h>
