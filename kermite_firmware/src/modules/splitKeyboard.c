@@ -1,4 +1,4 @@
-#include "generalSplitKeyboard.h"
+#include "splitKeyboard.h"
 #include "bitOperations.h"
 #include "config.h"
 #include "configStorageValidator.h"
@@ -16,19 +16,19 @@
 #include <stdio.h>
 #include <util/delay.h>
 
-#ifndef GSK_NUM_ROWS
+#ifndef SK_NUM_ROWS
 #error GSK_NUM_ROWS is not defined
 #endif
 
-#ifndef GSK_NUM_COLUMNS
+#ifndef SK_NUM_COLUMNS
 #error GSK_NUM_COLUMNS is not defined
 #endif
 
 //---------------------------------------------
 //definitions
 
-#define NumRows GSK_NUM_ROWS
-#define NumColumns GSK_NUM_COLUMNS
+#define NumRows SK_NUM_ROWS
+#define NumColumns SK_NUM_COLUMNS
 
 #define NumKeySlots (NumRows * NumColumns * 2)
 #define NumKeySlotsHalf (NumRows * NumColumns)
@@ -373,22 +373,22 @@ static void showModeByLedBlinkPattern(bool isMaster) {
 
 //---------------------------------------------
 
-void generalSplitKeyboard_setup(
+void splitKeyboard_setup(
     const uint8_t *_rowPins, const uint8_t *_columnPins, const int8_t *_keySlotIndexToKeyIndexMap) {
   rowPins = (uint8_t *)_rowPins;
   columnPins = (uint8_t *)_columnPins;
   keySlotIndexToKeyIndexMap = (int8_t *)_keySlotIndexToKeyIndexMap;
 }
 
-void generalSplitKeyboard_useOnboardLeds() {
+void splitKeyboard_useOnboardLeds() {
   initBoardLeds();
 }
 
-void generalSplitKeyboard_useDebugUART(uint16_t baud) {
+void splitKeyboard_useDebugUART(uint16_t baud) {
   debugUart_setup(baud);
 }
 
-void generalSplitKeyboard_start() {
+void splitKeyboard_start() {
   USBCON = 0;
   printf("start1\n");
 

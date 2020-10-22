@@ -8,6 +8,6 @@ MODULE_SRCS += configuratorServant.c
 MODULE_SRCS += configStorageValidator.c
 MODULE_SRCS += singlewire3.c
 MODULE_SRCS += keyboardCoreLogic2.c
-MODULE_SRCS += generalSplitKeyboard.c
+MODULE_SRCS += splitKeyboard.c
 
 PROJECT_SRCS += main.c

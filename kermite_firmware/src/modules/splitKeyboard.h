@@ -2,15 +2,15 @@
 
 #include <stdint.h>
 
-void generalSplitKeyboard_useOnboardLeds();
+void splitKeyboard_useOnboardLeds();
 
-void generalSplitKeyboard_useDebugUART(uint16_t baud);
+void splitKeyboard_useDebugUART(uint16_t baud);
 
-void generalSplitKeyboard_setup(
+void splitKeyboard_setup(
     const uint8_t *_rowPins,
     const uint8_t *_columnPins,
     const int8_t *_keySlotIndexToKeyIndexMap);
 
-void generalSplitKeyboard_start();
+void splitKeyboard_start();
 
 #endif
