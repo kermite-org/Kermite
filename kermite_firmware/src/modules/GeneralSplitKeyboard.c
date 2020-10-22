@@ -95,17 +95,34 @@ static void initBoardLeds() {
 
 //---------------------------------------------
 
+static void debugDumpLocalOutputState() {
+  printf("HID report:[");
+  for (uint16_t i = 0; i < 8; i++) {
+    printf("%02X ", localHidReport[i]);
+  }
+  printf("], ");
+  printf("layers: %02X\n", localLayerFlags);
+}
+
 //ロジック結果出力処理
 static void processKeyboardCoreLogicOutput() {
   uint16_t layerFlags = keyboardCoreLogic_getLayerActiveFlags();
   uint8_t *hidReport = keyboardCoreLogic_getOutputHidReportBytes();
+
+  bool changed = false;
   if (layerFlags != localLayerFlags) {
     configuratorServant_emitRelatimeLayerEvent(layerFlags);
     localLayerFlags = layerFlags;
+    changed = true;
   }
   if (!generalUtils_compareBytes(hidReport, localHidReport, 8)) {
     usbioCore_hidKeyboard_writeReport(hidReport);
     generalUtils_copyBytes(localHidReport, hidReport, 8);
+    changed = true;
+  }
+
+  if (changed) {
+    debugDumpLocalOutputState();
   }
 }
 
