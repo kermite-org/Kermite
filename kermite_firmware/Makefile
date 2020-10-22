@@ -1,5 +1,4 @@
-PROJECT ?= modules_dev
-#PROJECT = astelia
+PROJECT =
 -include Makefile.user
 
 BUILD_DIR = build
@@ -38,7 +37,8 @@ ASM_OBJS = $(addprefix $(OBJ_DIR)/,$(ASM_SRCS:.S=.o))
 
 OBJS = $(C_OBJS) $(ASM_OBJS)
 
-#C_ASM_OUTPUTS = $(addprefix $(OBJ_DIR)/,$(C_SRCS:.c=.asm))
+DEP_FILES = $(filter %.d,$(OBJS:%.o=%.d))
+-include $(DEP_FILES)
 
 CC = avr-gcc
 OBJCOPY = avr-objcopy
@@ -53,19 +53,7 @@ CFLAGS += $(INC_PATHS)
 CFLAGS += -D__AVR_ATmega32U4__
 CFLAGS += -MMD
 CFLAGS += -DF_CPU=16000000UL
-#CFLAGS += -std=c99
-# CFLAGS += -funsigned-char
-# CFLAGS += -funsigned-bitfields
-# CFLAGS += -ffunction-sections
-# CFLAGS += -fno-inline-small-functions
-# CFLAGS += -fpack-struct
-# CFLAGS += -fshort-enums
-# CFLAGS += -fno-strict-aliasing
-# CFLAGS += -Wstrict-prototypes
 
-#CFLAGS += -mrelax
-
-#ASFLAGS += -Wa,-adhlns=$(<:.S=.lst)
 ASFLAGS += -gstabs 
 ASFLAGS += -mmcu=atmega32u4
 ASFLAGS += -Isrc
@@ -76,22 +64,10 @@ LDFLAGS += -Os
 LDFLAGS += -g
 LDFLAGS += -Wall
 
-#LDFLAGS += -mrelax
-
 
 all: build
 
 build: $(HEX) $(LST)
-#build: $(HEX) $(LST) $(C_ASM_OUTPUTS)
-
-
-#$(ASM_OUTPUTS)
-
-force: clean all
-
-# $(OBJ_DIR):
-# 	mkdir $(BUILD_DIR)
-# 	mkdir -p $(OBJ_DIR)
 
 $(OBJ_DIR)/%.o: %.c
 	@echo "compiling $<"
@@ -118,15 +94,6 @@ $(LST): $(ELF)
 size: $(ELF)
 	$(OBJSIZE) -C --mcu=atmega32u4 $(ELF)
 
-$(OBJ_DIR)/%.asm: %.c
-	$(CC) -S $(CFLAGS) -o $@ $<
-
-
-DEP_FILES = $(filter %.d,$(OBJS:%.o=%.d))
--include $(DEP_FILES)
-
-
-
 
 flash: build
 ifndef COM_PORT
@@ -136,8 +103,6 @@ ifdef COM_PORT_ALT
 	-avrdude -p m32u4 -P $(COM_PORT_ALT) -c avr109 -U flash:w:$(HEX)
 endif
 	avrdude -p m32u4 -P $(COM_PORT) -c avr109 -U flash:w:$(HEX)
-
-run: flash
 
 purge:
 	rm -rf $(ELF) $(HEX) $(LIST) $(OBJS)
@@ -150,9 +115,6 @@ clean:
 
 %\:flash:
 	@make --no-print-directory PROJECT=$* flash
-
-%\:run:
-	@make --no-print-directory PROJECT=$* run
 
 %\:size:
 	@make --no-print-directory PROJECT=$* size

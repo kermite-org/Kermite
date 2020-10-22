@@ -1,4 +1,4 @@
 #PROJECT = astelia
-#PROJECT = modules_dev
+#PROJECT = proto/minivers_gsk
 #COM_PORT = COM1
 #COM_PORT = /dev/tty.usbmodem123456
