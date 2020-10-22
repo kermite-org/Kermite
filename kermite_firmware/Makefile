@@ -1,5 +1,5 @@
 PROJECT ?=
--include Makefile.user1
+-include Makefile.user
 
 BUILD_DIR = build
 OBJ_DIR = build/obj
