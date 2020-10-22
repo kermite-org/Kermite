@@ -1,4 +1,4 @@
-#ifndef __GENERAL_SPLIT_KEYBOARD_H__
+#ifndef __SPLIT_KEYBOARD_H__
 
 #include <stdint.h>
 
