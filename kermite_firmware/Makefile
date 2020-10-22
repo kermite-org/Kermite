@@ -1,5 +1,5 @@
-PROJECT =
--include Makefile.user
+PROJECT ?=
+-include Makefile.user1
 
 BUILD_DIR = build
 OBJ_DIR = build/obj
@@ -27,7 +27,7 @@ ASFLAGS =
 LDFLAGS =
 
 RULES_MK = src/projects/$(PROJECT)/rules.mk
-include $(RULES_MK)
+-include $(RULES_MK)
 
 C_SRCS = $(addprefix src/modules/,$(MODULE_SRCS)) $(addprefix src/projects/$(PROJECT)/, $(PROJECT_SRCS))
 ASM_SRCS = $(addprefix src/modules/,$(MODULE_ASM_SRCS)) $(addprefix src/projects/$(PROJECT)/, $(PROJECT_ASM_SRCS))
