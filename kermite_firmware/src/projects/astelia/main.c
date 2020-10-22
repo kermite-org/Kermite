@@ -4,7 +4,7 @@
 #include "configuratorServant.h"
 #include "debug_uart.h"
 #include "generalUtils.h"
-#include "keyboardCoreLogic.h"
+#include "keyboardCoreLogic2.h"
 #include "pio.h"
 #include "usbiocore.h"
 #include <avr/interrupt.h>

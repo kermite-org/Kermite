@@ -1,6 +1,6 @@
+#include "keyboardCoreLogic2.h"
 #include "bit_operations.h"
 #include "config.h"
-#include "keyboardCoreLogic.h"
 #include "xf_eeprom.h"
 #include <stdio.h>
 

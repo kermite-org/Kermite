@@ -6,6 +6,6 @@ MODULE_SRCS += configuratorServant.c
 MODULE_SRCS += xf_eeprom.c
 MODULE_SRCS += generalUtils.c
 MODULE_SRCS += configStorageValidator.c
-MODULE_SRCS += keyboardCoreLogic2_Dual.c
+MODULE_SRCS += keyboardCoreLogic2.c
 
 PROJECT_SRCS += main.c

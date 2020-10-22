@@ -7,7 +7,7 @@ MODULE_SRCS += keyMatrixScanner2.c
 MODULE_SRCS += configuratorServant.c
 MODULE_SRCS += configStorageValidator.c
 MODULE_SRCS += singlewire3.c
-MODULE_SRCS += keyboardCoreLogic2_Dual.c
+MODULE_SRCS += keyboardCoreLogic2.c
 MODULE_SRCS += generalSplitKeyboard.c
 
 PROJECT_SRCS += main.c
