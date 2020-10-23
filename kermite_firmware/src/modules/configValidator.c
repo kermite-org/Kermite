@@ -2,6 +2,7 @@
 
 #include "eeprom.h"
 #include "utils.h"
+#include "versions.h"
 #include <stdio.h>
 
 //EEPROMの先頭24バイトを配列データのヘッダ領域, 24~1023番地を配列データ本体に使用

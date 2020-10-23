@@ -1,7 +1,7 @@
 #include "configuratorServant.h"
-#include "configValidator.h"
 #include "eeprom.h"
 #include "usbiocore.h"
+#include "versions.h"
 #include <stdio.h>
 #include <string.h>
 
