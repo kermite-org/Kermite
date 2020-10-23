@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-#include "usbiocore.h"
+#include "usbioCore.h"
 
 #include "bitOperations.h"
 #include <avr/interrupt.h>
