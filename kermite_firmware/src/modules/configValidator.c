@@ -27,6 +27,7 @@ bool configValidator_checkDataHeader() {
   uint8_t numLayers = decode_byte(p + 8);
   uint16_t configBodyLength = decode_word_be(p + 9);
 
+  // printf("versions: %d %d %d\n", PROJECT_RELEASE_BUILD_REVISION, RAWHID_MESSAGE_PROTOCOL_REVISION, CONFIG_STORAGE_FORMAT_REVISION);
   printf("%x %x %x %d %d\n", magicNumber, reserved0xFFFF, logicModelType, numKeys, numLayers);
 
   bool storageHeaderValid =
