@@ -4,11 +4,12 @@ PROJECT ?=
 BUILD_DIR = build
 OBJ_DIR = build/obj
 
-APP = $(PROJECT)
+OUT_DIR = $(BUILD_DIR)/$(PROJECT)
 CORE_NAME = $(notdir $(PROJECT))
-ELF = $(BUILD_DIR)/$(APP)/$(CORE_NAME).elf
-HEX = $(BUILD_DIR)/$(APP)/$(CORE_NAME).hex
-LST = $(BUILD_DIR)/$(APP)/$(CORE_NAME).lst
+ELF = $(OUT_DIR)/$(CORE_NAME).elf
+HEX = $(OUT_DIR)/$(CORE_NAME).hex
+LST = $(OUT_DIR)/$(CORE_NAME).lst
+MAP = $(OUT_DIR)/$(CORE_NAME).map
 
 
 INC_PATHS =
@@ -64,6 +65,7 @@ LDFLAGS += -mmcu=atmega32u4
 LDFLAGS += -Os
 LDFLAGS += -g
 LDFLAGS += -Wall
+LDFLAGS += -Wl,-Map=$(MAP),--cref
 
 
 all: build
