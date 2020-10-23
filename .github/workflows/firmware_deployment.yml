@@ -23,27 +23,21 @@ jobs:
       - name: Install Dependencies
         run: sudo apt install gcc-avr avr-libc binutils-avr
 
-      - run: ruby scripts/update_all_project_distributions.rb
-        working-directory: "./kermite_firmware"
-
       - name: Checkout store repo
         uses: actions/checkout@v2
         with:
           repository: yahiro07/KermiteResourceStore
-          path: "./kermite_firmware/krs"
+          path: "./kermite_firmware/KRS"
 
-      - name: Remove current resources
-        run: rm -rf ./kermite_firmware/krs/resources
-
-      - name: Copy new resources
-        run: cp -r ./kermite_firmware/dist ./kermite_firmware/krs/resources
+      - run: ruby scripts/update_all_project_distributions.rb
+        working-directory: "./kermite_firmware"
 
       - name: Push resources to store repo
         uses: cpina/github-action-push-to-another-repository@master
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
-          source-directory: "./kermite_firmware/krs"
+          source-directory: "./kermite_firmware/KRS"
           destination-github-username: "yahiro07"
           destination-repository-name: "KermiteResourceStore"
           target-branch: "master"
