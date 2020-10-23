@@ -1,6 +1,6 @@
 #include "configuratorServant.h"
 #include "eeprom.h"
-#include "usbiocore.h"
+#include "usbioCore.h"
 #include "versions.h"
 #include <stdio.h>
 #include <string.h>

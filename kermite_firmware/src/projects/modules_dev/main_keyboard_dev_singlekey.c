@@ -1,5 +1,5 @@
 #include "pio.h"
-#include "usbiocore.h"
+#include "usbioCore.h"
 
 #include <avr/io.h>
 #include <stdio.h>

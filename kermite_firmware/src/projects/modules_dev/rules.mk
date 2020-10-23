@@ -21,7 +21,7 @@ ifeq ($(DevTarget), KeyboardMatrix)
 MODULE_SRCS += pio.c
 MODULE_SRCS += debug_uart.c
 MODULE_SRCS += keyMatrixScanner8x8.c
-MODULE_SRCS += usbiocore.c
+MODULE_SRCS += usbioore.c
 MODULE_SRCS += keyboardCore/hidKeyCombinationManager.c
 MODULE_SRCS += keyboardCore/dominant/keyInputLogicModel.c
 MODULE_SRCS += keyboardCore/dominant/LocalizationKeyMapper/LocalizationKeyMapper.c
@@ -78,7 +78,7 @@ endif
 ifeq ($(DevTarget), singlekey)
 MODULE_SRCS += pio.c
 MODULE_SRCS += debug_uart.c
-MODULE_SRCS += usbiocore.c
+MODULE_SRCS += usbioCore.c
 PROJECT_SRCS += main_keyboard_dev_singlekey.c
 endif
 

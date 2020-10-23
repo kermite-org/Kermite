@@ -7,7 +7,7 @@
 #include <util/delay.h>
 
 #include "keyMatrixScanner8x8.h"
-#include "usbiocore.h"
+#include "usbioCore.h"
 
 #include "./keyboardCore/dominant/LocalizationKeyMapper/localizationKeyMapper.h"
 #include "./keyboardCore/dominant/LogicalKeycodes.h"
