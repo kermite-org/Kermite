@@ -3,12 +3,12 @@
 #include "pio.h"
 #include <avr/io.h>
 
-uint8_t numRows;
-uint8_t numColumns;
-const uint8_t *rowPins;
-const uint8_t *columnPins;
-uint8_t *keyStateBitFlags;
-bool initialized = false;
+static uint8_t numRows;
+static uint8_t numColumns;
+static const uint8_t *rowPins;
+static const uint8_t *columnPins;
+static uint8_t *keyStateBitFlags;
+static bool initialized = false;
 
 void keyMatrixScanner_initialize(
     uint8_t _numRows,
