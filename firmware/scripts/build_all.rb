@@ -1,101 +1,82 @@
-require 'open3'
+# frozen_string_literal: true
 
-ProjectsDir = 'firmware/src/projects/'.freeze
-RegardSizeExcessAsError = true
+require 'open3'
 
 BuildUpdatedOnly = ARGV.include?('--updatedOnly')
 AbortOnError = ARGV.include?('--abortOnError')
 
-def checkFirmwareSize(logText)
-  mProg = logText.match(/^Program.*\(([\d.]+)% Full\)/)
-  mData = logText.match(/^Data.*\(([\d.]+)% Full\)/)
-  if mProg && mData
-    usageProg = mProg[1].to_f
-    usageData = mData[1].to_f
-    if usageProg < 100.0 && usageData < 100.0
-      return { res: :ok }
-    else
-      return { res: :ng, detail: "FLASH:#{usageProg}%, RAM:#{usageData}%" }
-    end
-  end
-
-  { res: :unknown }
-end
-
-def getAllProjectNames
+def get_all_project_names
   Dir.glob('./src/projects/**/rules.mk')
      .map { |path| File.dirname(path) }
      .select { |path| File.exist?(File.join(path, 'layout.json')) }
      .map { |path| path.sub('./src/projects/', '') }
 end
 
-def getUpdatedProjectNames
+def get_updated_project_names
   `git diff --name-only HEAD~`
     .split(/\R/)
     .map { |path| File.dirname(path) }
     .uniq
-    .filter { |path| path.start_with?(ProjectsDir) }
-    .map { |path| path.sub(ProjectsDir, '') }
+    .filter { |path| path.start_with?(Projects_dir) }
+    .map { |path| path.sub(Projects_dir, '') }
     .filter do |dir|
-    ['rules.mk', 'layout.json'].all? { |fileName| File.exist?(File.join('src/projects', dir, fileName)) }
+    ['rules.mk', 'layout.json'].all? { |file_name| File.exist?(File.join('src/projects', dir, file_name)) }
   end
 end
 
-def buildProject(projectName)
-  puts "building #{projectName} ..."
+def make_project_build(project_name)
+  command = "make #{project_name}:build"
+  _stdout, stderr, status = Open3.capture3(command)
+  return { result: :ok } if status == 0
 
-  srcDir = "./src/projects/#{projectName}"
+  { result: :ng, error_log: ">#{command}\n#{stderr}" }
+end
 
-  `make purge`
-  command = "make #{projectName}:build"
-  stdout, stderr, status = Open3.capture3(command)
-
-  buildSuccess = status == 0
-
-  if buildSuccess && RegardSizeExcessAsError
-    sizeCommand = "make #{projectName}:size"
-    sizeOutputLines = `#{sizeCommand}`
-
-    sizeRes = checkFirmwareSize(sizeOutputLines)
-    if sizeRes[:res] == :ng
-      buildSuccess = false
-      command = sizeCommand
-      stdout = "#{sizeOutputLines.strip}\n\n"
-      stderr = "firmware footprint overrun (#{sizeRes[:detail]})\n"
-    end
-  end
-
-  # puts stdout
-
-  if stderr != ''
-    puts(stderr)
+def check_binary_size(project_name)
+  size_command = "make #{project_name}:size"
+  size_output_lines = `#{size_command}`
+  usage_prog = size_output_lines.match(/^Program.*\(([\d.]+)% Full\)/)[1].to_f
+  usage_data = size_output_lines.match(/^Data.*\(([\d.]+)% Full\)/)[1].to_f
+  if usage_prog < 100.0 && usage_data < 100.0
+    { result: :ok }
   else
-    print "\e[A\e[K"
+    { result: :ng, error_log: "firmware footprint overrun (FLASH: #{usage_prog}, RAM: #{usage_data})" }
   end
-  puts "build #{projectName} ... #{buildSuccess ? 'OK' : 'NG'}"
-  puts unless buildSuccess
-
-  if !buildSuccess && AbortOnError
-    warn "abort: failed to build #{projectName}"
-    exit(1)
-  end
-
-  buildSuccess
 end
 
-def buildProjects
-  projectNames = BuildUpdatedOnly ? getUpdatedProjectNames : getAllProjectNames
-  `make clean`
-  puts 'target projects: ' + projectNames.to_s
-  numTotal = 0
-  numSuccess = 0
-  projectNames.each do |projectName|
-    success = buildProject(projectName)
-    numSuccess += 1 if success
-    numTotal += 1
+def build_project(project_name)
+  puts "building #{project_name} ..."
+
+  `make #{project_name}:purge`
+
+  res = make_project_build(project_name)
+  res = check_binary_size(project_name) if res[:result] == :ok
+
+  if res[:result] == :ok
+    print "\e[A\e[K"
+    puts "build #{project_name} ... OK"
+    true
+  else
+    puts(res[:error_log])
+    if AbortOnError
+      warn("abort: failed to build #{project_name}")
+      exit(1)
+    end
+    puts "build #{project_name} ... NG"
+    puts
+    false
   end
-  puts "buildStats #{numSuccess}/#{numTotal}" if numTotal > 0
+end
+
+def build_projects
+  project_names = BuildUpdatedOnly ? get_updated_project_names : get_all_project_names
+  `make clean`
+  puts "target projects: #{project_names}"
+  results = project_names.map { |project_name| build_project(project_name) }
+  num_success = results.count(true)
+  num_total = results.length
+  puts "build_stats #{num_success}/#{num_total}" if num_total > 0
   puts 'done'
 end
 
-buildProjects if __FILE__ == $0
+build_projects if __FILE__ == $0
