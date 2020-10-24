@@ -8,19 +8,7 @@ require 'digest/md5'
 #------------------------------------------------------------
 
 def pull_resource_store_repo
-  puts 'pulling resource store repo ...'
   `git clone https://github.com/yahiro07/KermiteResourceStore.git KRS` unless File.exist?('KRS')
-  Dir.chdir('KRS')
-  dirty = !`git status`.include?('nothing to commit, working tree clean')
-  if dirty
-    `git checkout .`
-    `git clean -df .`
-  end
-  `git pull`
-  Dir.chdir('..')
-  print "\e[A\e[K" unless dirty
-  puts 'pulling resource store repo ... ok'
-  puts
 end
 
 def copy_resources_to_local_resource_store_repo
@@ -56,7 +44,10 @@ def load_project_source_attributes(project_name)
   end
   {
     releaseBuildRevision: obj[:releaseBuildRevision] || 0,
-    hexFileMD5: obj[:hexFileMD5] || ''
+    hexFileMD5: obj[:hexFileMD5] || '',
+    buildTimestamp: obj[:buildTimestamp] || '',
+    flashUsage: obj[:flashUsage] || -1,
+    ramUsage: obj[:ramUsage] || -1
   }
 end
 
@@ -100,7 +91,15 @@ def project_build_pipeline(project_name, source_attrs)
 
   new_hex_file_md5 = read_output_hex_md5(project_name)
 
-  return { result: :ok, updated_attrs: {} } if new_hex_file_md5 == hex_file_md5
+  if new_hex_file_md5 == hex_file_md5
+    return { result: :ok, updated_attrs: {
+      releaseBuildRevision: build_revision,
+      buildTimestamp: source_attrs[:buildTimestamp],
+      flashUsage: size_res[:flash],
+      ramUsage: size_res[:ram],
+      hexFileMD5: hex_file_md5
+    } }
+  end
 
   build_revision += 1
   _touch_res = `touch ./src/modules/versions.h`
@@ -108,9 +107,10 @@ def project_build_pipeline(project_name, source_attrs)
 
   { result: :ok, updated_attrs: {
     releaseBuildRevision: build_revision,
-    hexFileMD5: new_hex_file_md5,
+    buildTimestamp: source_attrs[:buildTimestamp],
     flashUsage: size_res[:flash],
-    ramUsage: size_res[:ram]
+    ramUsage: size_res[:ram],
+    hexFileMD5: new_hex_file_md5
   } }
 end
 
@@ -118,7 +118,7 @@ def make_failure_metadata_content(source_attrs)
   {
     buildResult: 'failure',
     releaseBuildRevision: source_attrs[:releaseBuildRevision],
-    buildTimestamp: Time.now.to_s
+    buildTimestamp: source_attrs[:buildTimestamp]
   }
 end
 
@@ -128,7 +128,7 @@ def make_success_metadata_content(source_attrs, updated_attrs, common_revisions)
   {
     buildResult: 'success',
     releaseBuildRevision: ua[:releaseBuildRevision] || sa[:releaseBuildRevision],
-    buildTimestamp: Time.now.to_s,
+    buildTimestamp: ua[:buildTimestamp] || sa[:buildTimestamp],
     storageFormatRevision: common_revisions[:storageFormatRevision],
     messageProtocolRevision: common_revisions[:messageProtocolRevision],
     flashUsage: ua[:flashUsage] || sa[:flashUsage],
