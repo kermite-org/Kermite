@@ -1,14 +1,14 @@
 require 'open3'
 
-ProjectsDir = "kermite_firmware/src/projects/"
+ProjectsDir = 'firmware/src/projects/'.freeze
 RegardSizeExcessAsError = true
 
-BuildUpdatedOnly = ARGV.include?("--updatedOnly")
-AbortOnError = ARGV.include?("--abortOnError")
+BuildUpdatedOnly = ARGV.include?('--updatedOnly')
+AbortOnError = ARGV.include?('--abortOnError')
 
 def checkFirmwareSize(logText)
-  mProg = logText.match(/^Program.*\(([\d\.]+)\% Full\)/)
-  mData = logText.match(/^Data.*\(([\d\.]+)\% Full\)/)
+  mProg = logText.match(/^Program.*\(([\d.]+)% Full\)/)
+  mData = logText.match(/^Data.*\(([\d.]+)% Full\)/)
   if mProg && mData
     usageProg = mProg[1].to_f
     usageData = mData[1].to_f
@@ -18,39 +18,37 @@ def checkFirmwareSize(logText)
       return { res: :ng, detail: "FLASH:#{usageProg}%, RAM:#{usageData}%" }
     end
   end
-  
-  return { res: :unknown }
+
+  { res: :unknown }
 end
 
-def getAllProjectNames()
-  return Dir.glob("./src/projects/**/rules.mk")
-    .map{|path| File.dirname(path)}
-    .select{|path| File.exists?(File.join(path, 'layout.json'))}
-    .map{|path| path.sub('./src/projects/', '') }
+def getAllProjectNames
+  Dir.glob('./src/projects/**/rules.mk')
+     .map { |path| File.dirname(path) }
+     .select { |path| File.exist?(File.join(path, 'layout.json')) }
+     .map { |path| path.sub('./src/projects/', '') }
 end
 
-def getUpdatedProjectNames()
-  return `git diff --name-only HEAD~`
+def getUpdatedProjectNames
+  `git diff --name-only HEAD~`
     .split(/\R/)
-    .map{|path| File.dirname(path)}
+    .map { |path| File.dirname(path) }
     .uniq
-    .filter{|path| path.start_with?(ProjectsDir) }
-    .map{|path| path.sub(ProjectsDir, "")}
-    .filter{|dir|
-      ['rules.mk', 'layout.json'].all?{|fileName| File.exists?(File.join("src/projects", dir, fileName)) }
-    }
+    .filter { |path| path.start_with?(ProjectsDir) }
+    .map { |path| path.sub(ProjectsDir, '') }
+    .filter do |dir|
+    ['rules.mk', 'layout.json'].all? { |fileName| File.exist?(File.join('src/projects', dir, fileName)) }
+  end
 end
-
 
 def buildProject(projectName)
-
   puts "building #{projectName} ..."
 
   srcDir = "./src/projects/#{projectName}"
 
   `make purge`
   command = "make #{projectName}:build"
-  stdout, stderr, status = Open3.capture3(command);
+  stdout, stderr, status = Open3.capture3(command)
 
   buildSuccess = status == 0
 
@@ -62,47 +60,42 @@ def buildProject(projectName)
     if sizeRes[:res] == :ng
       buildSuccess = false
       command = sizeCommand
-      stdout = "#{sizeOutputLines.strip()}\n\n"
+      stdout = "#{sizeOutputLines.strip}\n\n"
       stderr = "firmware footprint overrun (#{sizeRes[:detail]})\n"
     end
   end
 
-  #puts stdout
+  # puts stdout
 
-  if stderr != ""
+  if stderr != ''
     puts(stderr)
   else
     print "\e[A\e[K"
   end
-  puts "build #{projectName} ... #{buildSuccess ? 'OK': 'NG'}"
-  puts if !buildSuccess
-
+  puts "build #{projectName} ... #{buildSuccess ? 'OK' : 'NG'}"
+  puts unless buildSuccess
 
   if !buildSuccess && AbortOnError
-    STDERR.puts "abort: failed to build #{projectName}"
+    warn "abort: failed to build #{projectName}"
     exit(1)
   end
 
   buildSuccess
 end
 
-
-def buildProjects()
-
-  projectNames = BuildUpdatedOnly ? getUpdatedProjectNames() : getAllProjectNames()
+def buildProjects
+  projectNames = BuildUpdatedOnly ? getUpdatedProjectNames : getAllProjectNames
   `make clean`
-  puts "target projects: " + projectNames.to_s
+  puts 'target projects: ' + projectNames.to_s
   numTotal = 0
   numSuccess = 0
-  projectNames.each{|projectName| 
+  projectNames.each do |projectName|
     success = buildProject(projectName)
     numSuccess += 1 if success
     numTotal += 1
-  }
+  end
   puts "buildStats #{numSuccess}/#{numTotal}" if numTotal > 0
-  puts "done"
+  puts 'done'
 end
 
-if __FILE__ == $0
-  buildProjects()
-end
+buildProjects if __FILE__ == $0
