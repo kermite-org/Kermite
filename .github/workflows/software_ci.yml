@@ -1,4 +1,4 @@
-name: CI for software
+name: Software CI
 
 on:
   push:
