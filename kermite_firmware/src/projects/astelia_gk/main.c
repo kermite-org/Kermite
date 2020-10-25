@@ -31,7 +31,7 @@ static const uint8_t columnPins[NumColumns] = { P_C6, P_D4, P_F7, P_F6, P_F5, P_
 
 #if BOARD_REVISION == 4
 // clang-format off
-static const int8_t keySlotIndexToKeyIndexMap[NumKeySlots] PROGMEM = {
+static const int8_t keyIndexTable[NumKeySlots] PROGMEM = {
   //right
   24, 25, 26, 27, 28, 29,
   30, 31, 32, 33, 34, 35,
@@ -46,7 +46,7 @@ static const int8_t keySlotIndexToKeyIndexMap[NumKeySlots] PROGMEM = {
 // clang-format on
 #else
 // clang-format off
-static const int8_t keySlotIndexToKeyIndexMap[NumKeySlots] PROGMEM = {
+static const int8_t keyIndexTable[NumKeySlots] PROGMEM = {
   //left
    0,  1,  2,  3,  4,  5, 
    6,  7,  8,  9, 10, 11, 
@@ -65,7 +65,7 @@ static const int8_t keySlotIndexToKeyIndexMap[NumKeySlots] PROGMEM = {
 int main() {
   generalKeyboard_useOnboardLeds();
   generalKeyboard_useDebugUART(38400);
-  generalKeyboard_setup(rowPins, columnPins, keySlotIndexToKeyIndexMap);
+  generalKeyboard_setup(rowPins, columnPins, keyIndexTable);
   generalKeyboard_start();
   return 0;
 }
