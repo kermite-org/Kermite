@@ -90,7 +90,7 @@ namespace CommunicationDataBinaryForamt {
     [0]: { category: 0xf0 }; // 0xf0 for general
     [1]: { command: 0x11 }; // 0x10 for device attributes response
     [2]: { configStorageRevision: u8 };
-    [3]: { numberOfKeys: u8 };
+    [3]: { keyIndexRange: 128 };
     [4]: { keyboardSide: u8 }; // (0:unset, 1:left, 2:right)
   };
 
