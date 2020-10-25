@@ -17,11 +17,11 @@
 #include <util/delay.h>
 
 #ifndef SK_NUM_ROWS
-#error GSK_NUM_ROWS is not defined
+#error SK_NUM_ROWS is not defined
 #endif
 
 #ifndef SK_NUM_COLUMNS
-#error GSK_NUM_COLUMNS is not defined
+#error SK_NUM_COLUMNS is not defined
 #endif
 
 //---------------------------------------------
@@ -390,7 +390,7 @@ void splitKeyboard_useDebugUART(uint16_t baud) {
 
 void splitKeyboard_start() {
   USBCON = 0;
-  printf("start1\n");
+  printf("start\n");
 
   usbioCore_initialize();
   bool isMaster = runMasterSlaveDetectionMode();
