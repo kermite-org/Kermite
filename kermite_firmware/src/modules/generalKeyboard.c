@@ -35,8 +35,6 @@
 //#define NumKeySlotBytes Ceil(NumRows * NumColumns / 8)
 #define NumKeySlotBytes ((NumRows * NumColumns + 7) >> 3)
 
-#define KeyIndexRange 128
-
 //---------------------------------------------
 //variables
 
@@ -123,7 +121,7 @@ static void onPhysicalKeyStateChanged(uint8_t keySlotIndex, bool isDown) {
     return;
   }
   int8_t keyIndex = pgm_read_byte(keySlotIndexToKeyIndexMap + keySlotIndex);
-  if (!(0 <= keyIndex && keyIndex < KeyIndexRange)) {
+  if (keyIndex < 0) {
     return;
   }
   if (isDown) {
@@ -199,9 +197,7 @@ static void keyboardEntry() {
   keyMatrixScanner_initialize(
       NumRows, NumColumns, rowPins, columnPins, nextKeyStateFlags);
   resetKeyboardCoreLogic();
-  configuratorServant_initialize(
-      KeyIndexRange,
-      configuratorServantStateHandler);
+  configuratorServant_initialize(configuratorServantStateHandler);
 
   sei();
 

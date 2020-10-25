@@ -39,8 +39,6 @@
 
 #define SingleWireMaxPacketSize (NumKeySlotBytesHalf + 1)
 
-#define KeyIndexRange 128
-
 //---------------------------------------------
 //variables
 
@@ -132,7 +130,7 @@ static void onPhysicalKeyStateChanged(uint8_t keySlotIndex, bool isDown) {
     return;
   }
   int8_t keyIndex = pgm_read_byte(keySlotIndexToKeyIndexMap + keySlotIndex);
-  if (!(0 <= keyIndex && keyIndex < KeyIndexRange)) {
+  if (keyIndex < 0) {
     return;
   }
   if (isDown) {
@@ -228,9 +226,7 @@ static void runAsMaster() {
 
   resetKeyboardCoreLogic();
 
-  configuratorServant_initialize(
-      KeyIndexRange,
-      configuratorServantStateHandler);
+  configuratorServant_initialize(configuratorServantStateHandler);
   keyboardCoreLogic_initialize();
 
   uint16_t cnt = 0;

@@ -144,7 +144,7 @@ void onPhysicalKeyStateChanged(uint8_t keySlotIndex, bool isDown) {
     return;
   }
   int8_t keyIndex = pgm_read_byte(keySlotIndexToKeyIndexMap + keySlotIndex);
-  if (!(0 <= keyIndex && keyIndex < KeyIndexRange)) {
+  if (keyIndex < 0) {
     return;
   }
   if (isDown) {
@@ -241,9 +241,7 @@ void runAsMaster() {
       NumRows, NumColumns, rowPins, columnPins, nextKeyStateFlags);
 
   resetKeyboardCoreLogic();
-  configuratorServant_initialize(
-      KeyIndexRange,
-      configuratorServantStateHandler);
+  configuratorServant_initialize(configuratorServantStateHandler);
   keyboardCoreLogic_initialize();
 
   uint16_t cnt = 0;
