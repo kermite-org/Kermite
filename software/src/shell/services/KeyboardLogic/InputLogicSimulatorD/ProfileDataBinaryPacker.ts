@@ -6,6 +6,7 @@ import {
   IAssignOperation,
   LayerInvocationMode
 } from '~defs/ProfileData';
+import { ConfigStorageFormatRevision } from '~defs/Versions';
 import { ModifierVirtualKey, isModifierVirtualKey } from '~defs/VirtualKeys';
 import {
   createDictionaryFromKeyValues,
@@ -19,7 +20,7 @@ import {
   writeUint8
 } from '~shell/services/KeyMappingEmitter/Helpers';
 
-export const StorageFormatRevision = 2;
+
 
 /*
 Key Assigns Restriction
@@ -429,7 +430,7 @@ function encodeHeaderBytes(
   writeUint16BE(buffer, 0, 0xfe03);
   writeUint16BE(buffer, 2, 0xffff);
   writeUint8(buffer, 4, 0x01);
-  writeUint8(buffer, 5, StorageFormatRevision);
+  writeUint8(buffer, 5, ConfigStorageFormatRevision);
   writeUint8(buffer, 6, headerLength);
   writeUint8(buffer, 7, numKeys);
   writeUint8(buffer, 8, numLayers);
