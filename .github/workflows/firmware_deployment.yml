@@ -5,9 +5,9 @@ on:
     branches: [master, variants]
     paths:
       - ".github/workflows/firmware_deployment.yml"
-      - "kermite_firmware/scripts/update_all_project_distributions.rb"
-      - "kermite_firmware/Makefile"
-      - "kermite_firmware/src/**"
+      - "firmware/scripts/update_all_project_distributions.rb"
+      - "firmware/Makefile"
+      - "firmware/src/**"
 
 jobs:
   build:
@@ -27,17 +27,17 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: yahiro07/KermiteResourceStore
-          path: "./kermite_firmware/KRS"
+          path: "./firmware/KRS"
 
       - run: ruby scripts/update_all_project_distributions.rb
-        working-directory: "./kermite_firmware"
+        working-directory: "./firmware"
 
       - name: Push resources to store repo
         uses: cpina/github-action-push-to-another-repository@master
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
-          source-directory: "./kermite_firmware/KRS"
+          source-directory: "./firmware/KRS"
           destination-github-username: "yahiro07"
           destination-repository-name: "KermiteResourceStore"
           target-branch: "master"

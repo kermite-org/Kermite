@@ -5,16 +5,16 @@ on:
     branches: [master, variants]
     paths:
       - ".github/workflows/firmware_error_check.yml"
-      - "kermite_firmware/scripts/build_all.rb"
-      - "kermite_firmware/Makefile"
-      - "kermite_firmware/src/**"
+      - "firmware/scripts/build_all.rb"
+      - "firmware/Makefile"
+      - "firmware/src/**"
 
   pull_request:
     branches: [master, variants]
     types: [opened, synchronize]
     paths:
-      - "kermite_firmware/Makefile"
-      - "kermite_firmware/src/**"
+      - "firmware/Makefile"
+      - "firmware/src/**"
 
 jobs:
   build:
@@ -34,4 +34,4 @@ jobs:
 
       - name: Check Firmware Build Errors
         run: ruby scripts/build_all.rb --abortOnError
-        working-directory: "./kermite_firmware"
+        working-directory: "./firmware"

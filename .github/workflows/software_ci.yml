@@ -1,16 +1,16 @@
-name: CI for kermite_software
+name: Software CI
 
 on:
   push:
     branches: [master, develop]
     paths:
-      - "kermite_software/src/**"
+      - "software/src/**"
 
   pull_request:
     types: [opened, synchronize]
     branches: [master, develop]
     paths:
-      - "kermite_software/src/**"
+      - "software/src/**"
 
 jobs:
   build:
@@ -26,6 +26,6 @@ jobs:
         run: sudo apt install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
       - uses: bahmutov/npm-install@v1
         with:
-          working-directory: kermite_software
+          working-directory: software
       - run: yarn lint
-        working-directory: kermite_software
+        working-directory: software

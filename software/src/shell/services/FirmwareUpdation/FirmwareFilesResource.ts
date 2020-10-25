@@ -5,7 +5,7 @@ import { appEnv } from '~shell/base/AppEnvironment';
 export class FirmwareFilesResource {
   static get baseDir() {
     if (appEnv.isDevelopment) {
-      return path.resolve('../kermite_firmware/src/build');
+      return path.resolve('../firmware/src/build');
     } else {
       return appEnv.resolveUserDataFilePath('resources/variants');
     }
