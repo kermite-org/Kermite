@@ -1,7 +1,7 @@
 import { IRealtimeKeyboardEvent } from '~defs/IpcContract';
+import { ConfigStorageFormatRevision } from '~defs/Versions';
 import { StatusSource } from '~funcs/StatusSource';
 import { removeArrayItems } from '~funcs/Utils';
-import { StorageFormatRevision } from '../KeyboardLogic/InputLogicSimulatorD/ProfileDataBinaryPacker';
 import { DeviceWrapper } from './DeviceWrapper';
 
 type IRealtimeEventListenerFunc = (event: IRealtimeKeyboardEvent) => void;
@@ -29,9 +29,9 @@ export class KeyboardDeviceService {
         keyIndexRange,
         side
       });
-      if (firmwareConfigStorageRevision !== StorageFormatRevision) {
+      if (firmwareConfigStorageRevision !== ConfigStorageFormatRevision) {
         console.log(
-          `incompatible config storage revision (software:${StorageFormatRevision} firmware:${firmwareConfigStorageRevision})`
+          `incompatible config storage revision (software:${ConfigStorageFormatRevision} firmware:${firmwareConfigStorageRevision})`
         );
       }
     }
