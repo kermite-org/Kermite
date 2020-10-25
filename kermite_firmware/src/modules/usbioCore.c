@@ -267,7 +267,7 @@ static uint8_t const PROGMEM keyboard_hid_report_desc[] = {
   0xc0              // End Collection
 };
 
-const uint8_t PROGMEM mouse_hid_report_desc[] = {
+static const uint8_t PROGMEM mouse_hid_report_desc[] = {
   0x05, 0x01, // Usage Page (Generic Desktop)
   0x09, 0x02, // Usage (Mouse)
   0xa1, 0x01, // Collection (Application)
@@ -501,7 +501,7 @@ static uint8_t keyboard_idle_config = 125;
 static uint8_t keyboard_idle_count = 0;
 
 // 1=num lock, 2=caps lock, 4=scroll lock, 8=compose, 16=kana
-volatile uint8_t keyboard_leds = 0;
+static volatile uint8_t keyboard_leds = 0;
 
 // these are a more reliable timeout than polling the
 // frame counter (UDFNUML)
@@ -945,7 +945,7 @@ ISR(USB_COM_vect) {
 //------------------------------------------------------------
 //endpoint accessors
 
-bool hidKeyboard_writeReport(uint8_t *pReportBytes8) {
+static bool hidKeyboard_writeReport(uint8_t *pReportBytes8) {
   if (!usb_configuration) {
     return false;
   }

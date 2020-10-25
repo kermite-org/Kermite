@@ -273,7 +273,7 @@ static void resetLayerState() {
   ls->oneshotCancelTick = -1;
 }
 
-uint16_t getLayerActiveFlags() {
+static uint16_t getLayerActiveFlags() {
   return layerState.layerActiveFlags;
 }
 
@@ -514,7 +514,7 @@ typedef struct {
   RecallKeyEntry recallKeyEntries[NumRecallKeyEntries];
 } AssignBinderState;
 
-AssignBinderState assignBinderState;
+static AssignBinderState assignBinderState;
 
 static void resetAssignBinder() {
   for (uint8_t i = 0; i < NumKeySlotsMax; i++) {
@@ -616,7 +616,7 @@ typedef struct {
   KeySlot keySlots[NumKeySlotsMax];
 } ResolverState;
 
-ResolverState resolverState;
+static ResolverState resolverState;
 
 static AssignSet fallbackAssignSet = {
   assignType : 0,
