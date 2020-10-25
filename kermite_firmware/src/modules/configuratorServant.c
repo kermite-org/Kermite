@@ -57,7 +57,6 @@ static uint16_t readKeyAssignMemory(uint16_t wordIndex) {
 }
 #endif
 
-static uint8_t keyNum = 0;
 static void (*stateNotificationCallback)(uint8_t state) = 0;
 
 static void emitStateNotification(uint8_t state) {
@@ -112,7 +111,7 @@ static void emitDeviceAttributesResponse() {
   p[0] = 0xF0;
   p[1] = 0x11;
   p[2] = CONFIG_STORAGE_FORMAT_REVISION;
-  p[3] = keyNum;
+  p[3] = 128;
   p[4] = 0; //todo: read side configuration from eeprom
   emitGenericHidData(rawHidSendBuf);
 }
@@ -196,9 +195,7 @@ static void processReadGenericHidData() {
 //exports
 
 void configuratorServant_initialize(
-    uint8_t _keyNum,
     void (*_stateNotificationCallback)(uint8_t state)) {
-  keyNum = _keyNum;
   stateNotificationCallback = _stateNotificationCallback;
 }
 
