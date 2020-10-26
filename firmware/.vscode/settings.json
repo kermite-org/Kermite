@@ -8,6 +8,12 @@
       "schema": {
         "type": "object",
         "properties": {
+          "projectId": {
+            "type": "string"
+          },
+          "projectName": {
+            "type": "string"
+          },
           "displayArea": {
             "type": "object",
             "properties": {
