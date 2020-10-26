@@ -65,7 +65,7 @@
             }
           }
         },
-        "required": ["displayArea", "keyUnits", "bodyPathMarkups"],
+        "required": ["projectId", "projectName", "displayArea", "keyUnits", "bodyPathMarkups"],
         "additionalProperties": false
       }
     }
