@@ -1,11 +1,17 @@
 import { IRealtimeKeyboardEvent } from '~defs/IpcContract';
-import { ConfigStorageFormatRevision } from '~defs/Versions';
+import {
+  ConfigStorageFormatRevision,
+  RawHidMessageProtocolRevision
+} from '~defs/Versions';
 import { StatusSource } from '~funcs/StatusSource';
 import { removeArrayItems } from '~funcs/Utils';
 import { DeviceWrapper } from './DeviceWrapper';
 
 type IRealtimeEventListenerFunc = (event: IRealtimeKeyboardEvent) => void;
 
+function bytesToString(bytes: number[]) {
+  return bytes.reduce((str, chr) => str + String.fromCharCode(chr), '');
+}
 // 接続中のキーボードとRawHIDでやりとりを行うためのブリッジ
 export class KeyboardDeviceService {
   private listeners: IRealtimeEventListenerFunc[] = [];
@@ -21,17 +27,28 @@ export class KeyboardDeviceService {
 
   private decodeReceivedBytes(buf: Uint8Array) {
     if (buf[0] === 0xf0 && buf[1] === 0x11) {
-      const firmwareConfigStorageRevision = buf[2];
-      const keyIndexRange = buf[3];
-      const side = buf[4];
+      const firmwareReleaseBuildRevision = (buf[2] << 8) | buf[3];
+      const firmwareConfigStorageRevision = buf[4];
+      const firmwareMessageProtocolRevision = buf[5];
+      const keyIndexRange = buf[6];
+      const side = buf[7];
+      const projectId = bytesToString([...buf].slice(8, 16));
       console.log(`device attrs received`, {
+        firmwareReleaseBuildRevision,
         firmwareConfigStorageRevision,
+        firmwareMessageProtocolRevision,
         keyIndexRange,
-        side
+        side,
+        projectId
       });
       if (firmwareConfigStorageRevision !== ConfigStorageFormatRevision) {
         console.log(
           `incompatible config storage revision (software:${ConfigStorageFormatRevision} firmware:${firmwareConfigStorageRevision})`
+        );
+      }
+      if (firmwareMessageProtocolRevision !== RawHidMessageProtocolRevision) {
+        console.log(
+          `incompatible message protocol revision (software:${RawHidMessageProtocolRevision} firmware:${firmwareMessageProtocolRevision})`
         );
       }
     }
