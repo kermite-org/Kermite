@@ -18,7 +18,7 @@ end
 
 #------------------------------------------------------------
 
-def gather_target_project_names
+def gather_target_project_paths
   Dir.glob('./src/projects/**/rules.mk')
      .map { |path| File.dirname(path) }
      .select { |path| File.exist?(File.join(path, 'layout.json')) }
@@ -34,8 +34,8 @@ def load_firmware_common_revisions
   }
 end
 
-def load_project_source_attributes(project_name)
-  metadata_file_path = "./KRS/resources/variants/#{project_name}/metadata.json"
+def load_project_source_attributes(project_path)
+  metadata_file_path = "./KRS/resources/variants/#{project_path}/metadata.json"
 
   obj = {}
   if File.exist?(metadata_file_path)
@@ -51,16 +51,16 @@ def load_project_source_attributes(project_name)
   }
 end
 
-def make_project_build(project_name, build_revision)
-  command = "make #{project_name}:build RELEASE_REVISION=#{build_revision}"
+def make_project_build(project_path, build_revision)
+  command = "make #{project_path}:build RELEASE_REVISION=#{build_revision}"
   _stdout, stderr, status = Open3.capture3(command)
   return { result: :ok } if status == 0
 
   { result: :ng, error_log: ">#{command}\n#{stderr}" }
 end
 
-def check_binary_size(project_name)
-  size_command = "make #{project_name}:size"
+def check_binary_size(project_path)
+  size_command = "make #{project_path}:size"
   size_output_lines = `#{size_command}`
   usage_prog = size_output_lines.match(/^Program.*\(([\d.]+)% Full\)/)[1].to_f
   usage_data = size_output_lines.match(/^Data.*\(([\d.]+)% Full\)/)[1].to_f
@@ -71,25 +71,25 @@ def check_binary_size(project_name)
   end
 end
 
-def read_output_hex_md5(project_name)
-  core_name = File.basename(project_name)
-  hex_file_path = "./build/#{project_name}/#{core_name}.hex"
+def read_output_hex_md5(project_path)
+  core_name = File.basename(project_path)
+  hex_file_path = "./build/#{project_path}/#{core_name}.hex"
   Digest::MD5.file(hex_file_path).to_s
 end
 
-def project_build_pipeline(project_name, source_attrs)
+def project_build_pipeline(project_path, source_attrs)
   build_revision = source_attrs[:releaseBuildRevision]
   hex_file_md5 = source_attrs[:hexFileMD5]
 
-  `make #{project_name}:purge`
+  `make #{project_path}:purge`
 
-  build_res = make_project_build(project_name, build_revision)
+  build_res = make_project_build(project_path, build_revision)
   return build_res if build_res[:result] == :ng
 
-  size_res = check_binary_size(project_name)
+  size_res = check_binary_size(project_path)
   return size_res if size_res[:result] == :ng
 
-  new_hex_file_md5 = read_output_hex_md5(project_name)
+  new_hex_file_md5 = read_output_hex_md5(project_path)
 
   if new_hex_file_md5 == hex_file_md5
     return { result: :ok, updated_attrs: {
@@ -103,7 +103,7 @@ def project_build_pipeline(project_name, source_attrs)
 
   build_revision += 1
   _touch_res = `touch ./src/modules/versions.h`
-  make_project_build(project_name, build_revision)
+  make_project_build(project_path, build_revision)
 
   { result: :ok, updated_attrs: {
     releaseBuildRevision: build_revision,
@@ -137,19 +137,19 @@ def make_success_metadata_content(source_attrs, updated_attrs, common_revisions)
   }
 end
 
-def build_project_entry(project_name, common_revisions)
-  puts "building #{project_name} ..."
+def build_project_entry(project_path, common_revisions)
+  puts "building #{project_path} ..."
 
-  core_name = File.basename(project_name)
-  src_dir = "./src/projects/#{project_name}"
-  mid_dir = "./build/#{project_name}"
-  dest_dir = "./dist/variants/#{project_name}"
+  core_name = File.basename(project_path)
+  src_dir = "./src/projects/#{project_path}"
+  mid_dir = "./build/#{project_path}"
+  dest_dir = "./dist/variants/#{project_path}"
 
   FileUtils.mkdir_p(dest_dir)
 
-  source_attrs = load_project_source_attributes(project_name)
+  source_attrs = load_project_source_attributes(project_path)
 
-  build_res = project_build_pipeline(project_name, source_attrs)
+  build_res = project_build_pipeline(project_path, source_attrs)
 
   FileUtils.copy("#{src_dir}/layout.json", "#{dest_dir}/layout.json")
   FileUtils.copy_entry("#{src_dir}/profiles", "#{dest_dir}/profiles") if File.exist?("#{src_dir}/profiles")
@@ -160,7 +160,7 @@ def build_project_entry(project_name, common_revisions)
     File.write("#{dest_dir}/build_error.log", error_log)
     metadata_obj = make_failure_metadata_content(source_attrs)
     File.write("#{dest_dir}/metadata.json", JSON.pretty_generate(metadata_obj))
-    puts "build #{project_name} ... NG"
+    puts "build #{project_path} ... NG"
     puts
     false
   else
@@ -169,7 +169,7 @@ def build_project_entry(project_name, common_revisions)
     metadata_obj = make_success_metadata_content(source_attrs, updated_attrs, common_revisions)
     File.write("#{dest_dir}/metadata.json", JSON.pretty_generate(metadata_obj))
     print "\e[A\e[K"
-    puts "build #{project_name} ... OK"
+    puts "build #{project_path} ... OK"
     true
   end
 end
@@ -177,10 +177,10 @@ end
 def build_projects
   `make clean`
   FileUtils.mkdir('./dist')
-  project_names = gather_target_project_names
-  puts "projects: #{project_names}"
+  project_paths = gather_target_project_paths
+  puts "projects: #{project_paths}"
   common_revisions = load_firmware_common_revisions
-  results = project_names.map { |project_name| build_project_entry(project_name, common_revisions) }
+  results = project_paths.map { |project_path| build_project_entry(project_path, common_revisions) }
   num_success = results.count(true)
   num_total = results.length
   puts "build stats: #{num_success}/#{num_total}"
@@ -225,11 +225,11 @@ def make_current_summary(stats)
 
   layout_file_paths = file_paths.filter { |f| f.end_with?('layout.json') }
   projects_dict = layout_file_paths.map do |file_path|
-    project_name = File.dirname(file_path.sub('./dist/variants/', ''))
+    project_path = File.dirname(file_path.sub('./dist/variants/', ''))
     layout_content = JSON.parse(File.read(file_path), { symbolize_names: true })
     breed_id = layout_content[:breedId]
     breed_name = layout_content[:breedName]
-    [project_name, "#{breed_id}:#{breed_name}"]
+    [project_path, "#{breed_id}:#{breed_name}"]
   end.to_h
 
   {
