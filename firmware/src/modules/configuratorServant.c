@@ -1,6 +1,8 @@
 #include "configuratorServant.h"
+#include "config.h"
 #include "eeprom.h"
 #include "usbioCore.h"
+#include "utils.h"
 #include "versions.h"
 #include <stdio.h>
 #include <string.h>
@@ -110,9 +112,14 @@ static void emitDeviceAttributesResponse() {
   uint8_t *p = rawHidSendBuf;
   p[0] = 0xF0;
   p[1] = 0x11;
-  p[2] = CONFIG_STORAGE_FORMAT_REVISION;
-  p[3] = 128;
-  p[4] = 0; //todo: read side configuration from eeprom
+  p[2] = PROJECT_RELEASE_BUILD_REVISION >> 8 & 0xFF;
+  p[3] = PROJECT_RELEASE_BUILD_REVISION & 0xFF;
+  p[4] = CONFIG_STORAGE_FORMAT_REVISION;
+  p[5] = RAWHID_MESSAGE_PROTOCOL_REVISION;
+  p[6] = 128;
+  p[7] = 0; //todo: read side configuration from eeprom
+  utils_copyBytes(p + 8, (uint8_t *)PROJECT_ID, 8);
+
   emitGenericHidData(rawHidSendBuf);
 }
 

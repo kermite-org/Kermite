@@ -1,23 +1,23 @@
 def read_software_common_versions
   text = File.read('../software/src/defs/Versions.ts')
 
-  configStorageFormatRevision = text.match(/^export const ConfigStorageFormatRevision = (\d+);$/)[1].to_i
-  rawHidMessageProtocolRevision = text.match(/^export const RawHidMessageProtocolRevision = (\d+);$/)[1].to_i
+  config_storage_format_revision = text.match(/^export const ConfigStorageFormatRevision = (\d+);$/)[1].to_i
+  rawhid_message_protocol_revision = text.match(/^export const RawHidMessageProtocolRevision = (\d+);$/)[1].to_i
 
   {
-    configStorageFormatRevision: configStorageFormatRevision,
-    rawHidMessageProtocolRevision: rawHidMessageProtocolRevision
+    config_storage_format_revision: config_storage_format_revision,
+    rawhid_message_protocol_revision: rawhid_message_protocol_revision
   }
 end
 
 def read_firmware_common_versions
   text = File.read('src/modules/versions.h')
 
-  configStorageFormatRevision = text.match(/^#define CONFIG_STORAGE_FORMAT_REVISION (\d+)$/)[1].to_i
-  rawHidMessageProtocolRevision = text.match(/^#define RAWHID_MESSAGE_PROTOCOL_REVISION (\d+)$/)[1].to_i
+  config_storage_format_revision = text.match(/^#define CONFIG_STORAGE_FORMAT_REVISION (\d+)$/)[1].to_i
+  rawhid_message_protocol_revision = text.match(/^#define RAWHID_MESSAGE_PROTOCOL_REVISION (\d+)$/)[1].to_i
   {
-    configStorageFormatRevision: configStorageFormatRevision,
-    rawHidMessageProtocolRevision: rawHidMessageProtocolRevision
+    config_storage_format_revision: config_storage_format_revision,
+    rawhid_message_protocol_revision: rawhid_message_protocol_revision
   }
 end
 

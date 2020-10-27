@@ -7,5 +7,6 @@ MODULE_SRCS += eeprom.c
 MODULE_SRCS += utils.c
 MODULE_SRCS += configValidator.c
 MODULE_SRCS += keyboardCoreLogic2.c
+MODULE_SRCS += generalKeyboard.c
 
 PROJECT_SRCS += main.c

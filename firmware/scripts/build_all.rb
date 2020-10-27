@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'open3'
+require 'json'
 
 BuildUpdatedOnly = ARGV.include?('--updatedOnly')
 AbortOnError = ARGV.include?('--abortOnError')
@@ -68,6 +69,26 @@ def build_project(project_name)
   end
 end
 
+def check_breed_ids
+  layout_file_paths = Dir.glob('./src/projects/**/layout.json')
+  breed_names_dict = layout_file_paths.map do |file_path|
+    project_name = File.dirname(file_path.sub('./src/projects/', ''))
+    layout_content = JSON.parse(File.read(file_path), { symbolize_names: true })
+    breed_id = layout_content[:breedId]
+    [project_name, breed_id]
+  end.to_h
+
+  all_breed_ids = breed_names_dict.values
+  duprecated_breed_ids = all_breed_ids.select { |e| all_breed_ids.count(e) > 1 }.uniq
+
+  if duprecated_breed_ids.length > 0
+    bad_breed_id = duprecated_breed_ids[0]
+    bad_project_names = breed_names_dict.keys.filter { |key| breed_names_dict[key] == bad_breed_id }
+    puts "breedId confliction! #{bad_breed_id} is used for #{bad_project_names}"
+    exit(1) if AbortOnError
+  end
+end
+
 def build_projects
   project_names = BuildUpdatedOnly ? get_updated_project_names : get_all_project_names
   `make clean`
@@ -76,6 +97,7 @@ def build_projects
   num_success = results.count(true)
   num_total = results.length
   puts "build_stats #{num_success}/#{num_total}" if num_total > 0
+  check_breed_ids
   puts 'done'
 end
 
