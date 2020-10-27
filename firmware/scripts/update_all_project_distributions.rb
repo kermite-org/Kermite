@@ -223,6 +223,15 @@ def make_current_summary(stats)
     [rel_path.intern, md5]
   end.to_h
 
+  layout_file_paths = file_paths.filter { |f| f.end_with?('layout.json') }
+  projects_dict = layout_file_paths.map do |file_path|
+    project_name = File.dirname(file_path.sub('./dist/variants/', ''))
+    layout_content = JSON.parse(File.read(file_path), { symbolize_names: true })
+    breed_id = layout_content[:breedId]
+    breed_name = layout_content[:breedName]
+    [project_name, "#{breed_id}:#{breed_name}"]
+  end.to_h
+
   {
     info: {
       buildStats: stats,
@@ -230,7 +239,8 @@ def make_current_summary(stats)
       updatedAt: Time.now.to_s,
       filesRevision: 0
     },
-    files: files_md5_dict
+    files: files_md5_dict,
+    projects: projects_dict
   }
 end
 
@@ -242,7 +252,8 @@ def merge_summary(current, source)
       updatedAt: current[:info][:updatedAt],
       filesRevision: source[:info][:filesRevision] + 1
     },
-    files: current[:files]
+    files: current[:files],
+    projects: current[:projects]
   }
 end
 
