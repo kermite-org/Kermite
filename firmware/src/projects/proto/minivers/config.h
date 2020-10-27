@@ -1,6 +1,6 @@
 #ifndef __CONFIG_H__
 
-#define BREED_ID "Di6V4KvF"
+#define PROJECT_ID "Di6V4KvF"
 #define SINGLEWIRE_SIGNAL_PIN_PD2
 #define CORELOGIC_NUM_KEYSLOTS 80
 

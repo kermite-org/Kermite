@@ -6,7 +6,7 @@ on:
     paths:
       - ".github/workflows/firmware_error_check.yml"
       - "firmware/scripts/check_hardcoded_versions.rb"
-      - "firmware/scripts/check_breed_ids.rb"
+      - "firmware/scripts/check_project_ids.rb"
       - "firmware/scripts/build_all.rb"
       - "firmware/Makefile"
       - "firmware/src/**"
@@ -38,8 +38,8 @@ jobs:
         run: ruby scripts/check_hardcoded_versions.rb
         working-directory: "./firmware"
 
-      - name: Check Breed IDs
-        run: ruby scripts/check_breed_ids.rb --abortOnError
+      - name: Check Project IDs
+        run: ruby scripts/check_project_ids.rb --abortOnError
         working-directory: "./firmware"
 
       - name: Check Firmware Build Errors
