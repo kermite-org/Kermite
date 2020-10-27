@@ -6,6 +6,7 @@ on:
     paths:
       - ".github/workflows/firmware_deployment.yml"
       - "firmware/scripts/update_all_project_distributions.rb"
+      - "firmware/scripts/check_breed_ids.rb"
       - "firmware/Makefile"
       - "firmware/src/**"
 
