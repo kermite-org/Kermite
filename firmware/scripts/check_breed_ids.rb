@@ -2,7 +2,7 @@ require 'json'
 
 AbortOnError = ARGV.include?('--abortOnError')
 
-def get_all_project_names
+def get_all_project_paths
   Dir.glob('./src/projects/**/rules.mk')
      .map { |path| File.dirname(path) }
      .select do |path|
@@ -12,10 +12,10 @@ def get_all_project_names
 end
 
 def check_breed_ids
-  project_names = get_all_project_names
-  project_infos = project_names.map do |project_name|
-    layout_file_path = "./src/projects/#{project_name}/layout.json"
-    config_file_path = "./src/projects/#{project_name}/config.h"
+  project_paths = get_all_project_paths
+  project_infos = project_paths.map do |project_path|
+    layout_file_path = "./src/projects/#{project_path}/layout.json"
+    config_file_path = "./src/projects/#{project_path}/config.h"
     layout_content = JSON.parse(File.read(layout_file_path), { symbolize_names: true })
     breed_id = layout_content[:breedId]
     breed_name = layout_content[:breedName]
@@ -24,32 +24,32 @@ def check_breed_ids
     config_breed_id = config_content.match(/^#define BREED_ID "([a-zA-Z0-9]+)"$/) ? Regexp.last_match(1) : nil
 
     unless breed_name
-      puts "breedName is not defined in #{project_name}/layout.json"
+      puts "breedName is not defined in #{project_path}/layout.json"
       exit(1) if AbortOnError
     end
 
     unless breed_id
-      puts "breedId is not defined in #{project_name}/layout.json"
+      puts "breedId is not defined in #{project_path}/layout.json"
       exit(1) if AbortOnError
     end
 
     unless config_breed_id
-      puts "breedId is not defined in #{project_name}/config.h"
+      puts "breedId is not defined in #{project_path}/config.h"
       exit(1) if AbortOnError
     end
 
     unless breed_id.match(/^[a-zA-Z0-9]{8}$/)
-      puts "invalid breed id #{breed_id} for #{project_name}"
+      puts "invalid breed id #{breed_id} for #{project_path}"
       exit(1) if AbortOnError
     end
 
     if breed_id != config_breed_id
-      puts "inconsistent breed ids in #{project_name}/config.h and #{project_name}/layout.json"
+      puts "inconsistent breed ids in #{project_path}/config.h and #{project_path}/layout.json"
       exit(1) if AbortOnError
     end
 
     {
-      project_name: project_name,
+      project_path: project_path,
       breed_id: breed_id,
       breed_name: breed_name
     }
@@ -60,9 +60,9 @@ def check_breed_ids
 
   if duprecated_breed_ids.length > 0
     bad_breed_id = duprecated_breed_ids[0]
-    bad_project_names = project_infos.filter { |info| info[:breed_id] == bad_breed_id }
-                                     .map { |info| info[:project_name] }
-    puts "breed id confliction. #{bad_breed_id} is used for #{bad_project_names}"
+    bad_project_paths = project_infos.filter { |info| info[:breed_id] == bad_breed_id }
+                                     .map { |info| info[:project_path] }
+    puts "breed id confliction. #{bad_breed_id} is used for #{bad_project_paths}"
     exit(1) if AbortOnError
   end
 end

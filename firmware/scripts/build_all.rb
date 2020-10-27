@@ -5,14 +5,14 @@ require 'open3'
 BuildUpdatedOnly = ARGV.include?('--updatedOnly')
 AbortOnError = ARGV.include?('--abortOnError')
 
-def get_all_project_names
+def get_all_project_paths
   Dir.glob('./src/projects/**/rules.mk')
      .map { |path| File.dirname(path) }
      .select { |path| File.exist?(File.join(path, 'layout.json')) }
      .map { |path| path.sub('./src/projects/', '') }
 end
 
-def get_updated_project_names
+def get_updated_project_paths
   `git diff --name-only HEAD~`
     .split(/\R/)
     .map { |path| File.dirname(path) }
@@ -24,16 +24,16 @@ def get_updated_project_names
   end
 end
 
-def make_project_build(project_name)
-  command = "make #{project_name}:build"
+def make_project_build(project_path)
+  command = "make #{project_path}:build"
   _stdout, stderr, status = Open3.capture3(command)
   return { result: :ok } if status == 0
 
   { result: :ng, error_log: ">#{command}\n#{stderr}" }
 end
 
-def check_binary_size(project_name)
-  size_command = "make #{project_name}:size"
+def check_binary_size(project_path)
+  size_command = "make #{project_path}:size"
   size_output_lines = `#{size_command}`
   usage_prog = size_output_lines.match(/^Program.*\(([\d.]+)% Full\)/)[1].to_f
   usage_data = size_output_lines.match(/^Data.*\(([\d.]+)% Full\)/)[1].to_f
@@ -44,35 +44,35 @@ def check_binary_size(project_name)
   end
 end
 
-def build_project(project_name)
-  puts "building #{project_name} ..."
+def build_project(project_path)
+  puts "building #{project_path} ..."
 
-  `make #{project_name}:purge`
+  `make #{project_path}:purge`
 
-  res = make_project_build(project_name)
-  res = check_binary_size(project_name) if res[:result] == :ok
+  res = make_project_build(project_path)
+  res = check_binary_size(project_path) if res[:result] == :ok
 
   if res[:result] == :ok
     print "\e[A\e[K"
-    puts "build #{project_name} ... OK"
+    puts "build #{project_path} ... OK"
     true
   else
     puts(res[:error_log])
     if AbortOnError
-      warn("abort: failed to build #{project_name}")
+      warn("abort: failed to build #{project_path}")
       exit(1)
     end
-    puts "build #{project_name} ... NG"
+    puts "build #{project_path} ... NG"
     puts
     false
   end
 end
 
 def build_projects
-  project_names = BuildUpdatedOnly ? get_updated_project_names : get_all_project_names
+  project_paths = BuildUpdatedOnly ? get_updated_project_paths : get_all_project_paths
   `make clean`
-  puts "target projects: #{project_names}"
-  results = project_names.map { |project_name| build_project(project_name) }
+  puts "target projects: #{project_paths}"
+  results = project_paths.map { |project_path| build_project(project_path) }
   num_success = results.count(true)
   num_total = results.length
   puts "build_stats #{num_success}/#{num_total}" if num_total > 0
