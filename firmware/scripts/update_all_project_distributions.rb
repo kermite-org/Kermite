@@ -231,9 +231,9 @@ def make_current_summary(stats)
   projects_dict = layout_file_paths.map do |file_path|
     project_path = File.dirname(file_path.sub('./dist/variants/', ''))
     layout_content = JSON.parse(File.read(file_path), { symbolize_names: true })
-    breed_id = layout_content[:breedId]
-    breed_name = layout_content[:breedName]
-    [project_path, "#{breed_id}:#{breed_name}"]
+    project_id = layout_content[:projectId]
+    project_name = layout_content[:projectName]
+    [project_path, "#{project_id}:#{project_name}"]
   end.to_h
 
   {

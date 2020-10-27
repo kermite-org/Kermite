@@ -6,7 +6,7 @@ on:
     paths:
       - ".github/workflows/firmware_deployment.yml"
       - "firmware/scripts/update_all_project_distributions.rb"
-      - "firmware/scripts/check_breed_ids.rb"
+      - "firmware/scripts/check_project_ids.rb"
       - "firmware/Makefile"
       - "firmware/src/**"
 
@@ -30,8 +30,8 @@ jobs:
           repository: yahiro07/KermiteResourceStore
           path: "./firmware/KRS"
 
-      - name: Check Breed IDs
-        run: ruby scripts/check_breed_ids.rb --abortOnError
+      - name: Check Project IDs
+        run: ruby scripts/check_project_ids.rb --abortOnError
         working-directory: "./firmware"
 
       - run: ruby scripts/update_all_project_distributions.rb

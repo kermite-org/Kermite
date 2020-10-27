@@ -8,10 +8,10 @@
       "schema": {
         "type": "object",
         "properties": {
-          "breedId": {
+          "projectId": {
             "type": "string"
           },
-          "breedName": {
+          "projectName": {
             "type": "string"
           },
           "displayArea": {
@@ -65,7 +65,7 @@
             }
           }
         },
-        "required": ["breedId", "breedName", "displayArea", "keyUnits", "bodyPathMarkups"],
+        "required": ["projectId", "projectName", "displayArea", "keyUnits", "bodyPathMarkups"],
         "additionalProperties": false
       }
     }
