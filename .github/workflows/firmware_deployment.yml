@@ -29,6 +29,10 @@ jobs:
           repository: yahiro07/KermiteResourceStore
           path: "./firmware/KRS"
 
+      - name: Check Breed IDs
+        run: ruby scripts/check_breed_ids.rb --abortOnError
+        working-directory: "./firmware"
+
       - run: ruby scripts/update_all_project_distributions.rb
         working-directory: "./firmware"
 

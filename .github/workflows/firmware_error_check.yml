@@ -37,6 +37,10 @@ jobs:
         run: ruby scripts/check_hardcoded_versions.rb
         working-directory: "./firmware"
 
+      - name: Check Breed IDs
+        run: ruby scripts/check_breed_ids.rb --abortOnError
+        working-directory: "./firmware"
+
       - name: Check Firmware Build Errors
         run: ruby scripts/build_all.rb --abortOnError
         working-directory: "./firmware"
