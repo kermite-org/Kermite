@@ -5,6 +5,7 @@ on:
     branches: [master, variants]
     paths:
       - ".github/workflows/firmware_error_check.yml"
+      - "firmware/scripts/check_hardcoded_versions.rb"
       - "firmware/scripts/build_all.rb"
       - "firmware/Makefile"
       - "firmware/src/**"

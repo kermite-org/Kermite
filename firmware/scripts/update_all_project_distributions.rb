@@ -105,12 +105,14 @@ def project_build_pipeline(project_path, source_attrs)
   _touch_res = `touch ./src/modules/versions.h`
   make_project_build(project_path, build_revision)
 
+  new_hex_file_md5_2 = read_output_hex_md5(project_name)
+
   { result: :ok, updated_attrs: {
     releaseBuildRevision: build_revision,
     buildTimestamp: source_attrs[:buildTimestamp],
     flashUsage: size_res[:flash],
     ramUsage: size_res[:ram],
-    hexFileMD5: new_hex_file_md5
+    hexFileMD5: new_hex_file_md5_2
   } }
 end
 
@@ -168,8 +170,8 @@ def build_project_entry(project_path, common_revisions)
     updated_attrs = build_res[:updated_attrs]
     metadata_obj = make_success_metadata_content(source_attrs, updated_attrs, common_revisions)
     File.write("#{dest_dir}/metadata.json", JSON.pretty_generate(metadata_obj))
-    print "\e[A\e[K"
-    puts "build #{project_path} ... OK"
+    # print "\e[A\e[K"
+    puts "build #{project_name} ... OK"
     true
   end
 end
