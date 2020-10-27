@@ -102,10 +102,12 @@ def project_build_pipeline(project_path, source_attrs)
   end
 
   build_revision += 1
-  _touch_res = `touch ./src/modules/versions.h`
+
+  # _touch_res = `touch ./src/modules/versions.h`
+  _purge_res = `make #{project_path}:purge`
   make_project_build(project_path, build_revision)
 
-  new_hex_file_md5_2 = read_output_hex_md5(project_name)
+  new_hex_file_md5_2 = read_output_hex_md5(project_path)
 
   { result: :ok, updated_attrs: {
     releaseBuildRevision: build_revision,
@@ -171,7 +173,7 @@ def build_project_entry(project_path, common_revisions)
     metadata_obj = make_success_metadata_content(source_attrs, updated_attrs, common_revisions)
     File.write("#{dest_dir}/metadata.json", JSON.pretty_generate(metadata_obj))
     # print "\e[A\e[K"
-    puts "build #{project_name} ... OK"
+    puts "build #{project_path} ... OK"
     true
   end
 end
