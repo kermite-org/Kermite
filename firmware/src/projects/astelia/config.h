@@ -1,6 +1,6 @@
 #ifndef __CONFIG_H__
 
-#define PROJECT_ID "79xv6ZbA"
+#define BREED_ID "79xv6ZbA"
 
 #define CORELOGIC_NUM_KEYSLOTS 48
 

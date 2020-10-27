@@ -118,7 +118,7 @@ static void emitDeviceAttributesResponse() {
   p[5] = RAWHID_MESSAGE_PROTOCOL_REVISION;
   p[6] = 128;
   p[7] = 0; //todo: read side configuration from eeprom
-  utils_copyBytes(p + 8, (uint8_t *)PROJECT_ID, 8);
+  utils_copyBytes(p + 8, (uint8_t *)BREED_ID, 8);
 
   emitGenericHidData(rawHidSendBuf);
 }
