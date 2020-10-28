@@ -10,4 +10,5 @@ export interface KeyboardCoreLogicInterface {
     isDown: boolean
   ): void;
   keyboardCoreLogic_processTicker(ms: number): void;
+  keyboardCoreLogic_halt(): void;
 }

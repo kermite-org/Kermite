@@ -64,6 +64,7 @@ const ModFlag = {
 const NumHidReportBytes = 8;
 
 const hidReportState = new (class {
+  hidReportZerosBuf: u8[] = Array(NumHidReportBytes).fill(0);
   hidReportBuf: u8[] = Array(NumHidReportBytes).fill(0);
   layerModFlags: u8 = 0;
   modFlags: u8 = 0;
@@ -98,6 +99,10 @@ function getOutputHidReport(): u8[] {
   }
   hidReportBuf[2] = hidKeyCode;
   return hidReportBuf;
+}
+
+function getOutputHidReportZeros(): u8[] {
+  return hidReportState.hidReportZerosBuf;
 }
 
 function setLayerModifiers(modFlags: u8) {
@@ -982,27 +987,61 @@ function triggerResolver_handleKeyInput(keyIndex: u8, isDown: boolean) {
 // --------------------------------------------------------------------------------
 // entries
 
-function coreLogic_initialize() {
+let logicActive: boolean = false;
+
+function keyboardCoreLogic_initialize() {
   initAssignMemoryReader();
   resetHidReportState();
   resetLayerState();
   resetAssignBinder();
   initResolverState();
+  logicActive = true;
 }
 
-function coreLogic_processTicker(ms: number) {
-  triggerResolver_tick(ms);
-  assignBinder_ticker(ms);
-  layerMutations.oneshotCancellerTicker(ms);
+function keyboardCoreLogic_getOutputHidReportBytes(): number[] {
+  if (logicActive) {
+    return getOutputHidReport();
+  } else {
+    return getOutputHidReportZeros();
+  }
+}
+
+function keyboardCoreLogic_getLayerActiveFlags(): number {
+  if (logicActive) {
+    getLayerActiveFlags();
+  }
+  return 0;
+}
+
+function keyboardCoreLogic_issuePhysicalKeyStateChanged(
+  keyIndex: number,
+  isDown: boolean
+) {
+  if (logicActive) {
+    triggerResolver_handleKeyInput(keyIndex, isDown);
+  }
+}
+
+function keyboardCoreLogic_processTicker(ms: number) {
+  if (logicActive) {
+    triggerResolver_tick(ms);
+    assignBinder_ticker(ms);
+    layerMutations.oneshotCancellerTicker(ms);
+  }
+}
+
+function keyboardCoreLogic_halt() {
+  logicActive = false;
 }
 
 export function getKeyboardCoreLogicInterface(): KeyboardCoreLogicInterface {
   return {
     keyboardCoreLogic_setAssignStorageReaderFunc: setConfigStorageReaderProc,
-    keyboardCoreLogic_initialize: coreLogic_initialize,
-    keyboardCoreLogic_getLayerActiveFlags: getLayerActiveFlags,
-    keyboardCoreLogic_getOutputHidReportBytes: getOutputHidReport,
-    keyboardCoreLogic_issuePhysicalKeyStateChanged: triggerResolver_handleKeyInput,
-    keyboardCoreLogic_processTicker: coreLogic_processTicker
+    keyboardCoreLogic_initialize,
+    keyboardCoreLogic_getOutputHidReportBytes,
+    keyboardCoreLogic_getLayerActiveFlags,
+    keyboardCoreLogic_issuePhysicalKeyStateChanged,
+    keyboardCoreLogic_processTicker,
+    keyboardCoreLogic_halt
   };
 }
