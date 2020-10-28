@@ -543,7 +543,7 @@ interface RecallKeyEntry {
   tick: u8;
 }
 
-const NumKeySlotsMax = 128;
+const NumKeySlotsMax = 255;
 const NumRecallKeyEntries = 4;
 const ImmediateReleaseStrokeDuration = 50;
 

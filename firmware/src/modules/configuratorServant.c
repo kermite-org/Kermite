@@ -116,7 +116,7 @@ static void emitDeviceAttributesResponse() {
   p[3] = PROJECT_RELEASE_BUILD_REVISION & 0xFF;
   p[4] = CONFIG_STORAGE_FORMAT_REVISION;
   p[5] = RAWHID_MESSAGE_PROTOCOL_REVISION;
-  p[6] = 128;
+  p[6] = 255;
   p[7] = 0; //todo: read side configuration from eeprom
   utils_copyBytes(p + 8, (uint8_t *)PROJECT_ID, 8);
 

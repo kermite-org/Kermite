@@ -36,7 +36,7 @@ bool configValidator_checkDataHeader() {
       logicModelType == 0x01 &&
       formatRevision == CONFIG_STORAGE_FORMAT_REVISION &&
       configBodyStartAddress == CONFIG_DATA_HEADER_LENGTH &&
-      numKeys <= 128 &&
+      numKeys <= 255 &&
       numLayers <= 16 &&
       configBodyLength < CONFIG_DATA_BODY_LENGTH_MAX;
 

@@ -177,7 +177,7 @@ namespace AssignStroageBinaryFormat {
     byte4: { logicModelType: Fixed<u8, 1> };
     byte5: { formatRevision: u8 };
     byte6: { assignDataStartLocation: Fixed<u8, 24> };
-    byte7: { numKeys: u8 }; // 1~128
+    byte7: { numKeys: u8 }; // 1~255
     byte8: { numLayers: u8 }; // 1~16
     byte9_10: { bodyLength: u8 };
     byte11_23: Reserved;

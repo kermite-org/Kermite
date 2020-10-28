@@ -23,7 +23,7 @@ import {
 /*
 Key Assigns Restriction
 supports max 16 Layers
-supports max 128 Keys
+supports max 255 Keys
 layerIndex: 0~15
 keyIndex: 0~127
 */
