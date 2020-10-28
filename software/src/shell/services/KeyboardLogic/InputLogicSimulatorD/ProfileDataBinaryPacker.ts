@@ -20,8 +20,6 @@ import {
   writeUint8
 } from '~shell/services/KeyMappingEmitter/Helpers';
 
-
-
 /*
 Key Assigns Restriction
 supports max 16 Layers
@@ -231,7 +229,12 @@ function encodeKeyBoundAssignsSetHeder(
   keyIndex: number,
   bodyLength: number
 ): number[] {
-  return [(1 << 7) | keyIndex, bodyLength];
+  if (bodyLength > 63) {
+    throw new Error(
+      `key bound assign size overrun, keyIndex: ${keyIndex}, bodyLength: ${bodyLength}/63`
+    );
+  }
+  return [(1 << 7) | bodyLength, keyIndex];
 }
 
 /*

@@ -173,16 +173,19 @@ static uint8_t getLayerExclusionGroup(uint8_t layerIndex) {
 static uint16_t getAssignsBlockAddressForKey(uint8_t targetKeyIndex) {
   uint16_t addr = assignMemoryReaderState.assignsStartAddress;
   while (addr < assignMemoryReaderState.assignsEndAddress) {
-    uint8_t data = readStorageByte(addr);
-    if (data == 0) {
+    uint16_t data = readStorageWordBE(addr);
+    bool fIsAssign = ((data >> 15) & 1) > 0;
+    uint8_t fBodyLength = (data >> 8) & 0x3f;
+    uint8_t fKeyIndex = data & 0xff;
+
+    if (!fIsAssign) {
       break;
     }
-    if ((data & 0x80) > 0 && (data & 0x7f) == targetKeyIndex) {
+    if (fKeyIndex == targetKeyIndex) {
       return addr;
     }
-    addr++;
-    uint8_t bodyLength = readStorageByte(addr++);
-    addr += bodyLength;
+    addr += 2;
+    addr += fBodyLength;
   }
   return 0;
 }

@@ -192,18 +192,22 @@ function getLayerExclusionGroup(layerIndex: u8) {
 }
 
 function getAssignsBlockAddressForKey(targetKeyIndex: u8): u16 {
-  let pos = assignMemoryReaderState.assignsStartAddress;
-  while (pos < assignMemoryReaderState.assignsEndAddress) {
-    const data = readStorageByte(pos);
-    if (data === 0) {
+  let addr = assignMemoryReaderState.assignsStartAddress;
+  while (addr < assignMemoryReaderState.assignsEndAddress) {
+    const data = readStorageWordBE(addr);
+    const fIsAssign = ((data >> 15) & 1) > 0;
+    const fBodyLength = (data >> 8) & 0x3f;
+    const fKeyIndex = data & 0xff;
+
+    if (!fIsAssign) {
       break;
     }
-    if ((data & 0x80) > 0 && (data & 0x7f) === targetKeyIndex) {
-      return pos;
+    if (fKeyIndex === targetKeyIndex) {
+      return addr;
     }
-    pos++;
-    const bodyLength = readStorageByte(pos++);
-    pos += bodyLength;
+
+    addr += 2;
+    addr += fBodyLength;
   }
   return 0;
 }
