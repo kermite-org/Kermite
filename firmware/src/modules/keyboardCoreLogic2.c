@@ -193,7 +193,7 @@ static uint16_t getAssignsBlockAddressForKey(uint8_t targetKeyIndex) {
 static uint8_t assignTypeToBodyByteSizeMap[6] = { 0, 2, 4, 6, 0, 0 };
 
 static uint16_t getAssignBlockAddressForLayer(uint16_t baseAddr, uint8_t targetLayerIndex) {
-  uint8_t len = readStorageByte(baseAddr + 1);
+  uint8_t len = readStorageByte(baseAddr) & 0x3F;
   uint16_t addr = baseAddr + 2;
   uint16_t endAddr = baseAddr + 2 + len;
   while (addr < endAddr) {

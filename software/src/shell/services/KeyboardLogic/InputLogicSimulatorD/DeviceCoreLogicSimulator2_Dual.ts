@@ -234,7 +234,7 @@ function getAssignBlockAddressForLayer(
   baseAddr: u8,
   targetLayerIndex: u8
 ): u16 {
-  const len = readStorageByte(baseAddr + 1);
+  const len = readStorageByte(baseAddr) & 0x3f;
   let addr = baseAddr + 2;
   const endPos = addr + len;
   while (addr < endPos) {
