@@ -40,7 +40,7 @@
 
 static uint8_t *rowPins;
 static uint8_t *columnPins;
-static int8_t *keySlotIndexToKeyIndexMap;
+static uint8_t *keySlotIndexToKeyIndexMap;
 
 //キー状態
 static uint8_t keyStateFlags[NumKeySlotBytes] = { 0 };
@@ -120,8 +120,8 @@ static void onPhysicalKeyStateChanged(uint8_t keySlotIndex, bool isDown) {
   if (keySlotIndex >= NumKeySlots) {
     return;
   }
-  int8_t keyIndex = pgm_read_byte(keySlotIndexToKeyIndexMap + keySlotIndex);
-  if (keyIndex < 0) {
+  uint8_t keyIndex = pgm_read_byte(keySlotIndexToKeyIndexMap + keySlotIndex);
+  if (keyIndex == 0xFF) {
     return;
   }
   if (isDown) {
@@ -228,7 +228,7 @@ void generalKeyboard_setup(
     const uint8_t *_rowPins, const uint8_t *_columnPins, const int8_t *_keySlotIndexToKeyIndexMap) {
   rowPins = (uint8_t *)_rowPins;
   columnPins = (uint8_t *)_columnPins;
-  keySlotIndexToKeyIndexMap = (int8_t *)_keySlotIndexToKeyIndexMap;
+  keySlotIndexToKeyIndexMap = (uint8_t *)_keySlotIndexToKeyIndexMap;
 }
 
 void generalKeyboard_useOnboardLeds() {
