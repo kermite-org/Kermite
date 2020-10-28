@@ -92,7 +92,7 @@ namespace CommunicationDataBinaryForamt {
     [2_3]: { projectReleaseBuildRevision: u16 };
     [4]: { configStorageFormatRevision: u8 };
     [5]: { rawHidMessageProtocolRevision: u8 };
-    [6]: { keyIndexRange: 128 };
+    [6]: { keyIndexRange: 255 };
     [7]: { keyboardSide: u8 }; // (0:unset, 1:left, 2:right)
     [8_15]: { projectId: Bytes<8> };
   };

@@ -17,6 +17,7 @@ namespace AssignStroageBinaryFormat {
   type b5 = number;
   type b6 = number;
   type b7 = number;
+  type b8 = number;
 
   // n bytes
   type bytes1 = number[];
@@ -141,14 +142,14 @@ namespace AssignStroageBinaryFormat {
 
   type KeyBoundAssignDataSetHeader = BasedOn<u16> & {
     bit15: Fixed<b1, 1>;
-    bit14_8: { fKeyIndex: b7 }; // 0~127
-    bit7_5: Reserved;
-    bit4_0: { fBodyLength: b5 }; // 1~31
+    bit14_13: Reserved;
+    bit12_8: { fBodyLength: b6 }; // 1~63
+    bit7_0: { fKeyIndex: b8 }; // 0~255
   };
 
   type KeyBoundAssignDataSet = {
     byte0_1: { header: KeyBoundAssignDataSetHeader };
-    byte2__: { assigns: AssignEntry[] }; // max 31bytes of assigns body
+    byte2__: { assigns: AssignEntry[] }; // max 63bytes of assigns body
   };
 
   // --------------------
@@ -176,7 +177,7 @@ namespace AssignStroageBinaryFormat {
     byte4: { logicModelType: Fixed<u8, 1> };
     byte5: { formatRevision: u8 };
     byte6: { assignDataStartLocation: Fixed<u8, 24> };
-    byte7: { numKeys: u8 }; // 1~128
+    byte7: { numKeys: u8 }; // 1~255
     byte8: { numLayers: u8 }; // 1~16
     byte9_10: { bodyLength: u8 };
     byte11_23: Reserved;
