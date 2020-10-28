@@ -23,9 +23,13 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   puts 'check version defintions ...'
-  valid = read_software_common_versions == read_firmware_common_versions
+  v_soft = read_software_common_versions
+  v_firm = read_firmware_common_versions
+  valid = v_soft == v_firm
   unless valid
     warn 'incompatibe version definitions'
+    puts 'software:', v_soft
+    puts 'firmware:', v_firm
     exit(1)
   end
   print "\e[A\e[K"
