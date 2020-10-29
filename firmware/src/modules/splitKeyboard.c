@@ -44,7 +44,7 @@
 
 static uint8_t *rowPins;
 static uint8_t *columnPins;
-static int8_t *keySlotIndexToKeyIndexMap;
+static uint8_t *keySlotIndexToKeyIndexMap;
 
 //左右間通信用バッファ
 static uint8_t sw_txbuf[SingleWireMaxPacketSize];
@@ -118,9 +118,13 @@ static void processKeyboardCoreLogicOutput() {
     utils_copyBytes(localHidReport, hidReport, 8);
     changed = true;
   }
-
   if (changed) {
     debugDumpLocalOutputState();
+  }
+
+  uint16_t assignHitResult = keyboardCoreLogic_peekAssignHitResult();
+  if (assignHitResult != 0) {
+    configuratorServant_emitRelatimeAssignHitEvent(assignHitResult);
   }
 }
 
@@ -129,8 +133,8 @@ static void onPhysicalKeyStateChanged(uint8_t keySlotIndex, bool isDown) {
   if (keySlotIndex >= NumKeySlots) {
     return;
   }
-  int8_t keyIndex = pgm_read_byte(keySlotIndexToKeyIndexMap + keySlotIndex);
-  if (keyIndex < 0) {
+  uint8_t keyIndex = pgm_read_byte(keySlotIndexToKeyIndexMap + keySlotIndex);
+  if (keyIndex == 0xFF) {
     return;
   }
   if (isDown) {
@@ -227,7 +231,6 @@ static void runAsMaster() {
   resetKeyboardCoreLogic();
 
   configuratorServant_initialize(configuratorServantStateHandler);
-  keyboardCoreLogic_initialize();
 
   uint16_t cnt = 0;
   while (1) {
