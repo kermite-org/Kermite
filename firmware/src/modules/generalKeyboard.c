@@ -109,9 +109,13 @@ static void processKeyboardCoreLogicOutput() {
     utils_copyBytes(localHidReport, hidReport, 8);
     changed = true;
   }
-
   if (changed) {
     debugDumpLocalOutputState();
+  }
+
+  uint16_t assignHitResult = keyboardCoreLogic_peekAssignHitResult();
+  if (assignHitResult != 0) {
+    configuratorServant_emitRelatimeAssignHitEvent(assignHitResult);
   }
 }
 
