@@ -15,6 +15,9 @@ namespace CommunicationDataBinaryForamt {
   type PacketHostToDevice = {};
   type PacketDeviceToHost = {};
 
+  type bits<N> = number;
+  type Reserved = any;
+
   // --------------------
   // config storage data writing
 
@@ -68,6 +71,18 @@ namespace CommunicationDataBinaryForamt {
     [0]: { category: 0xe0 }; // 0xe0 for realtime event
     [1]: { command: 0x91 }; // 0x91 for layer changed
     [2_3]: { layerActiveFlags: u16 };
+  };
+
+  type PktRealtimeAssignHitEvent = PacketDeviceToHost & {
+    [0]: { category: 0xe0 }; // 0xe0 for realtime event
+    [1]: { command: 0x92 }; // 0x92 for assign hit
+    [2_3]: {
+      bit15: 1;
+      bit14: Reserved;
+      bit13_12: { fSlotSpec: bits<2> }; // (1:pri, 2:sec, 3:ter)
+      bit11_8: { fLayerIndex: bits<4> };
+      bit7_0: { fKeyIndex: bits<8> };
+    };
   };
 
   type __draft__PktRealtimeOperationHitEvent = PacketDeviceToHost & {
