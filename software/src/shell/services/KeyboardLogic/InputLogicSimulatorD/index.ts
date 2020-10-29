@@ -125,6 +125,13 @@ export namespace InputLogicSimulatorD {
       deviceService.emitLayerChangedEvent(newLayerActiveFlags);
       layerActiveFlags = newLayerActiveFlags;
     }
+    const assignHitResult = CL.keyboardCoreLogic_peekAssignHitResult();
+    if (assignHitResult !== 0) {
+      const keyIndex = assignHitResult & 0xff;
+      const layerIndex = (assignHitResult >> 8) & 0x0f;
+      const slotSpec = (assignHitResult >> 12) & 0x03;
+      console.log(`simulator assign hit ${layerIndex} ${keyIndex} ${slotSpec}`);
+    }
   }
 
   async function initialize() {

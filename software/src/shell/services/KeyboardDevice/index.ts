@@ -70,6 +70,15 @@ export class KeyboardDeviceService {
         layerActiveFlags
       });
     }
+
+    if (buf[0] === 0xe0 && buf[1] === 0x92) {
+      const assignHitResultWord = (buf[2] << 8) | buf[3];
+      console.log({ assignHitResultWord });
+      const keyIndex = assignHitResultWord & 0xff;
+      const layerIndex = (assignHitResultWord >> 8) & 0x0f;
+      const slotSpec = (assignHitResultWord >> 12) & 0x03;
+      console.log(`assing hit ${layerIndex} ${keyIndex} ${slotSpec}`);
+    }
   }
 
   async initialize(): Promise<void> {
