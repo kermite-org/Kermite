@@ -503,12 +503,14 @@ static void handleOperationOff(uint16_t opWord) {
 //--------------------------------------------------------------------------------
 //assign binder
 
+#define KIDX_NONE 255
+
 #define NumKeySlotsMax CORELOGIC_NUM_KEYSLOTS
 #define NumRecallKeyEntries 4
 #define ImmediateReleaseStrokeDuration 50
 
 typedef struct {
-  int8_t keyIndex;
+  uint8_t keyIndex;
   uint8_t tick;
 } RecallKeyEntry;
 
@@ -525,7 +527,7 @@ static void resetAssignBinder() {
   }
   for (uint8_t i = 0; i < NumRecallKeyEntries; i++) {
     RecallKeyEntry *ke = &assignBinderState.recallKeyEntries[i];
-    ke->keyIndex = -1;
+    ke->keyIndex = KIDX_NONE;
     ke->tick = 0;
   }
 }
@@ -548,7 +550,7 @@ static void handleKeyOff(uint8_t keyIndex) {
 static void recallKeyOff(uint8_t keyIndex) {
   for (uint8_t i = 0; i < NumRecallKeyEntries; i++) {
     RecallKeyEntry *ke = &assignBinderState.recallKeyEntries[i];
-    if (ke->keyIndex == -1) {
+    if (ke->keyIndex == KIDX_NONE) {
       //printf("reserve recall %d\n", keyIndex);
       ke->keyIndex = keyIndex;
       ke->tick = 0;
@@ -560,12 +562,12 @@ static void recallKeyOff(uint8_t keyIndex) {
 static void assignBinder_ticker(uint8_t ms) {
   for (uint8_t i = 0; i < NumRecallKeyEntries; i++) {
     RecallKeyEntry *ke = &assignBinderState.recallKeyEntries[i];
-    if (ke->keyIndex != -1) {
+    if (ke->keyIndex != KIDX_NONE) {
       ke->tick += ms;
       if (ke->tick > ImmediateReleaseStrokeDuration) {
         //printf("exec recall %d\n", ke->keyIndex);
         handleKeyOff(ke->keyIndex);
-        ke->keyIndex = -1;
+        ke->keyIndex = KIDX_NONE;
       }
     }
   }
@@ -615,7 +617,7 @@ typedef struct _KeySlot {
 } KeySlot;
 
 typedef struct {
-  int8_t interruptKeyIndex;
+  uint8_t interruptKeyIndex;
   KeySlot keySlots[NumKeySlotsMax];
 } ResolverState;
 
@@ -629,7 +631,7 @@ static AssignSet fallbackAssignSet = {
 };
 
 static void initResolverState() {
-  resolverState.interruptKeyIndex = -1;
+  resolverState.interruptKeyIndex = KIDX_NONE;
   for (uint8_t i = 0; i < NumKeySlotsMax; i++) {
     KeySlot *slot = &resolverState.keySlots[i];
     slot->keyIndex = i;
@@ -919,7 +921,7 @@ static void keySlot_tick(KeySlot *slot, uint8_t ms) {
   }
 
   ResolverState *rs = &resolverState;
-  slot->interrupted = rs->interruptKeyIndex != -1 && rs->interruptKeyIndex != slot->keyIndex;
+  slot->interrupted = rs->interruptKeyIndex != KIDX_NONE && rs->interruptKeyIndex != slot->keyIndex;
 
   if (!slot->resolverProc && slot->inputEdge == InputEdge_Down) {
     AssignSet *pAssignSet = findAssignInLayerStack(slot->keyIndex);
@@ -949,11 +951,11 @@ static void triggerResolver_tick(uint8_t ms) {
       keySlot_tick(slot, ms);
     }
   }
-  if (rs->interruptKeyIndex != -1) {
+  if (rs->interruptKeyIndex != KIDX_NONE) {
     KeySlot *slot = &rs->keySlots[rs->interruptKeyIndex];
     keySlot_tick(slot, ms);
   }
-  rs->interruptKeyIndex = -1;
+  rs->interruptKeyIndex = KIDX_NONE;
 }
 
 static void triggerResolver_handleKeyInput(uint8_t keyIndex, bool isDown) {
