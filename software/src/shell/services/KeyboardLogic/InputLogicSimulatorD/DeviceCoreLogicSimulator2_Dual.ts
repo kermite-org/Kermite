@@ -261,6 +261,7 @@ interface IAssignSet {
   pri: u16;
   sec: u16;
   ter: u16;
+  layerIndex: s8;
 }
 
 function getAssignSetInLayer(
@@ -277,7 +278,7 @@ function getAssignSetInLayer(
       const isBlock = assignType === 4;
       const isTrans = assignType === 5;
       if (isBlock || isTrans) {
-        return { assignType, pri: 0, sec: 0, ter: 0 };
+        return { assignType, pri: 0, sec: 0, ter: 0, layerIndex: -1 };
       }
       const isDual = assignType === 2;
       const isTriple = assignType === 3;
@@ -288,7 +289,8 @@ function getAssignSetInLayer(
         assignType,
         pri,
         sec,
-        ter
+        ter,
+        layerIndex
       };
     }
   }
@@ -630,17 +632,20 @@ interface KeySlot {
 const resolverState = new (class {
   interruptKeyIndex: number = -1;
   keySlots: KeySlot[] = [];
+  assignHitResultWord: number = 0;
 })();
 
 const fallbackAssignSet: IAssignSet = {
   assignType: AssignType.None,
   pri: 0,
   sec: 0,
-  ter: 0
+  ter: 0,
+  layerIndex: -1
 };
 
 function initResolverState() {
   resolverState.interruptKeyIndex = -1;
+  resolverState.assignHitResultWord = 0;
   resolverState.keySlots = Array(NumKeySlotsMax)
     .fill(0)
     .map((_, i) => ({
@@ -655,6 +660,26 @@ function initResolverState() {
       resolverProc: undefined,
       inputEdge: undefined
     }));
+}
+
+function storeAssignHitResult(
+  slot: KeySlot,
+  prioritySpec: number // 1:pri, 2:sec, 3:ter
+) {
+  const fKeyIndex = slot.keyIndex;
+  const fLayerIndex = slot.assignSet.layerIndex;
+  const fSlotSpec = prioritySpec;
+  resolverState.assignHitResultWord =
+    (1 << 15) | (fSlotSpec << 12) | (fLayerIndex << 8) | fKeyIndex;
+}
+
+function peekAssignHitResult() {
+  if (resolverState.assignHitResultWord !== 0) {
+    const res = resolverState.assignHitResultWord;
+    resolverState.assignHitResultWord = 0;
+    return res;
+  }
+  return 0;
 }
 
 function keySlot_clearSteps(slot: KeySlot) {
@@ -696,6 +721,7 @@ function keySlot_pushStepA(slot: KeySlot, step: 'D' | 'U' | '_') {
   if (resolverConfig.emitOutputStroke) {
     if (steps === TriggerA.Down) {
       handleKeyOn(keyIndex, assignSet.pri);
+      storeAssignHitResult(slot, 1);
     }
 
     if (steps === TriggerA.Up) {
@@ -747,10 +773,12 @@ function keySlot_pushStepB(slot: KeySlot, step: 'D' | 'U' | '_') {
     if (steps === TriggerB.Tap) {
       handleKeyOn(keyIndex, assignSet.pri);
       recallKeyOff(keyIndex);
+      storeAssignHitResult(slot, 1);
     }
 
     if (steps === TriggerB.Hold) {
       handleKeyOn(keyIndex, assignSet.sec);
+      storeAssignHitResult(slot, 2);
     }
 
     if (steps === TriggerB.Rehold) {
@@ -837,10 +865,12 @@ function keySlot_pushStepC(slot: KeySlot, step: 'D' | 'U' | '_') {
     if (steps === TriggerC.Tap) {
       handleKeyOn(keyIndex, assignSet.pri);
       recallKeyOff(keyIndex);
+      storeAssignHitResult(slot, 1);
     }
 
     if (steps === TriggerC.Hold) {
       handleKeyOn(keyIndex, assignSet.sec);
+      storeAssignHitResult(slot, 2);
     }
 
     if (steps === TriggerC.Hold2) {
@@ -850,6 +880,7 @@ function keySlot_pushStepC(slot: KeySlot, step: 'D' | 'U' | '_') {
     if (steps === TriggerC.Tap2) {
       handleKeyOn(keyIndex, assignSet.ter);
       recallKeyOff(keyIndex);
+      storeAssignHitResult(slot, 3);
     }
 
     if (steps === TriggerC.Up) {
@@ -1008,9 +1039,18 @@ function keyboardCoreLogic_getOutputHidReportBytes(): number[] {
 
 function keyboardCoreLogic_getLayerActiveFlags(): number {
   if (logicActive) {
-    getLayerActiveFlags();
+    return getLayerActiveFlags();
+  } else {
+    return 0;
   }
-  return 0;
+}
+
+function keyboardCoreLogic_peekAssignHitResult(): number {
+  if (logicActive) {
+    return peekAssignHitResult();
+  } else {
+    return 0;
+  }
 }
 
 function keyboardCoreLogic_issuePhysicalKeyStateChanged(
@@ -1040,6 +1080,7 @@ export function getKeyboardCoreLogicInterface(): KeyboardCoreLogicInterface {
     keyboardCoreLogic_initialize,
     keyboardCoreLogic_getOutputHidReportBytes,
     keyboardCoreLogic_getLayerActiveFlags,
+    keyboardCoreLogic_peekAssignHitResult,
     keyboardCoreLogic_issuePhysicalKeyStateChanged,
     keyboardCoreLogic_processTicker,
     keyboardCoreLogic_halt

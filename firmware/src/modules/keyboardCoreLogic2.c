@@ -215,6 +215,7 @@ typedef struct {
   uint16_t pri;
   uint16_t sec;
   uint16_t ter;
+  int8_t layerIndex;
 } AssignSet;
 
 static AssignSet assignSetRes;
@@ -233,6 +234,7 @@ static AssignSet *getAssignSetInLayer(uint8_t keyIndex, uint8_t layerIndex) {
         assignSetRes.pri = 0;
         assignSetRes.sec = 0;
         assignSetRes.ter = 0;
+        assignSetRes.layerIndex = -1;
         return &assignSetRes;
       }
       bool isDual = assignType == 2;
@@ -244,6 +246,7 @@ static AssignSet *getAssignSetInLayer(uint8_t keyIndex, uint8_t layerIndex) {
       assignSetRes.pri = pri;
       assignSetRes.sec = sec;
       assignSetRes.ter = ter;
+      assignSetRes.layerIndex = layerIndex;
       return &assignSetRes;
     }
   }
@@ -619,6 +622,7 @@ typedef struct _KeySlot {
 typedef struct {
   uint8_t interruptKeyIndex;
   KeySlot keySlots[NumKeySlotsMax];
+  uint16_t assignHitResultWord;
 } ResolverState;
 
 static ResolverState resolverState;
@@ -628,10 +632,12 @@ static AssignSet fallbackAssignSet = {
   pri : 0,
   sec : 0,
   ter : 0,
+  layerIndex : -1
 };
 
 static void initResolverState() {
   resolverState.interruptKeyIndex = KIDX_NONE;
+  resolverState.assignHitResultWord = 0;
   for (uint8_t i = 0; i < NumKeySlotsMax; i++) {
     KeySlot *slot = &resolverState.keySlots[i];
     slot->keyIndex = i;
@@ -646,6 +652,26 @@ static void initResolverState() {
     slot->inputEdge = 0;
     slot->tick = 0;
   }
+}
+
+static void storeAssignHitResult(
+    KeySlot *slot,
+    uint8_t prioritySpec // 1:pri, 2:sec, 3:ter
+) {
+  uint8_t fKeyIndex = slot->keyIndex;
+  uint8_t fLayerIndex = slot->assignSet.layerIndex;
+  uint8_t fSlotSpec = prioritySpec;
+  resolverState.assignHitResultWord =
+      (1 << 15) | (fSlotSpec << 12) | (fLayerIndex << 8) | fKeyIndex;
+}
+
+static uint16_t peekAssignHitResult() {
+  if (resolverState.assignHitResultWord != 0) {
+    uint16_t res = resolverState.assignHitResultWord;
+    resolverState.assignHitResultWord = 0;
+    return res;
+  }
+  return 0;
 }
 
 static void keySlot_clearSteps(KeySlot *slot) {
@@ -683,6 +709,7 @@ static void keySlot_pushStepA(KeySlot *slot, uint8_t step) {
 
   if (steps == TriggerA_Down) {
     handleKeyOn(keyIndex, assignSet->pri);
+    storeAssignHitResult(slot, 1);
   }
 
   if (steps == TriggerA_Up) {
@@ -730,10 +757,12 @@ static void keySlot_pushStepB(KeySlot *slot, uint8_t step) {
   if (steps == TriggerB_Tap) {
     handleKeyOn(keyIndex, assignSet->pri);
     recallKeyOff(keyIndex);
+    storeAssignHitResult(slot, 1);
   }
 
   if (steps == TriggerB_Hold) {
     handleKeyOn(keyIndex, assignSet->sec);
+    storeAssignHitResult(slot, 2);
   }
 
   if (steps == TriggerB_Rehold) {
@@ -820,10 +849,12 @@ static void keySlot_pushStepC(KeySlot *slot, uint8_t step) {
   if (steps == TriggerC_Tap) {
     handleKeyOn(keyIndex, assignSet->pri);
     recallKeyOff(keyIndex);
+    storeAssignHitResult(slot, 1);
   }
 
   if (steps == TriggerC_Hold) {
     handleKeyOn(keyIndex, assignSet->sec);
+    storeAssignHitResult(slot, 2);
   }
 
   if (steps == TriggerC_Hold2) {
@@ -833,6 +864,7 @@ static void keySlot_pushStepC(KeySlot *slot, uint8_t step) {
   if (steps == TriggerC_Tap2) {
     handleKeyOn(keyIndex, assignSet->ter);
     recallKeyOff(keyIndex);
+    storeAssignHitResult(slot, 3);
   }
 
   if (steps == TriggerC_Up) {
@@ -1000,6 +1032,14 @@ uint8_t *keyboardCoreLogic_getOutputHidReportBytes() {
 uint16_t keyboardCoreLogic_getLayerActiveFlags() {
   if (logicActive) {
     return getLayerActiveFlags();
+  } else {
+    return 0;
+  }
+}
+
+uint16_t keyboardCoreLogic_peekAssignHitResult() {
+  if (logicActive) {
+    return peekAssignHitResult();
   } else {
     return 0;
   }
