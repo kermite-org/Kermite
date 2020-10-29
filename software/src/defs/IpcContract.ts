@@ -26,6 +26,12 @@ export type IRealtimeKeyboardEvent =
   | {
       type: 'layerChanged';
       layerActiveFlags: number;
+    }
+  | {
+      type: 'assignHit';
+      layerIndex: number;
+      keyIndex: number;
+      prioritySpec: number;
     };
 
 export type IAppWindowEvent = {

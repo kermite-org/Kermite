@@ -115,22 +115,33 @@ export namespace InputLogicSimulatorD {
   function processTicker() {
     const elapsedMs = tickUpdator();
     CL.keyboardCoreLogic_processTicker(elapsedMs);
-    const report = CL.keyboardCoreLogic_getOutputHidReportBytes();
-    if (!compareArray(hidReportBytes, report)) {
-      deviceService.writeSideBrainHidReport(report);
-      hidReportBytes = report.slice(0);
-    }
-    const newLayerActiveFlags = CL.keyboardCoreLogic_getLayerActiveFlags();
-    if (newLayerActiveFlags !== layerActiveFlags) {
-      deviceService.emitLayerChangedEvent(newLayerActiveFlags);
-      layerActiveFlags = newLayerActiveFlags;
-    }
-    const assignHitResult = CL.keyboardCoreLogic_peekAssignHitResult();
-    if (assignHitResult !== 0) {
-      const keyIndex = assignHitResult & 0xff;
-      const layerIndex = (assignHitResult >> 8) & 0x0f;
-      const slotSpec = (assignHitResult >> 12) & 0x03;
-      console.log(`simulator assign hit ${layerIndex} ${keyIndex} ${slotSpec}`);
+
+    if (local.isSideBranMode) {
+      const report = CL.keyboardCoreLogic_getOutputHidReportBytes();
+      if (!compareArray(hidReportBytes, report)) {
+        deviceService.writeSideBrainHidReport(report);
+        hidReportBytes = report.slice(0);
+      }
+      const newLayerActiveFlags = CL.keyboardCoreLogic_getLayerActiveFlags();
+      if (newLayerActiveFlags !== layerActiveFlags) {
+        deviceService.emitRealtimeEventFromSimulator({
+          type: 'layerChanged',
+          layerActiveFlags: newLayerActiveFlags
+        });
+        layerActiveFlags = newLayerActiveFlags;
+      }
+      const assignHitResult = CL.keyboardCoreLogic_peekAssignHitResult();
+      if (assignHitResult !== 0) {
+        const keyIndex = assignHitResult & 0xff;
+        const layerIndex = (assignHitResult >> 8) & 0x0f;
+        const prioritySpec = (assignHitResult >> 12) & 0x03;
+        deviceService.emitRealtimeEventFromSimulator({
+          type: 'assignHit',
+          layerIndex,
+          keyIndex,
+          prioritySpec
+        });
+      }
     }
   }
 
