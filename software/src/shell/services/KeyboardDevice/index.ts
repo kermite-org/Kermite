@@ -76,7 +76,7 @@ export class KeyboardDeviceService {
       const keyIndex = assignHitResultWord & 0xff;
       const layerIndex = (assignHitResultWord >> 8) & 0x0f;
       const prioritySpec = (assignHitResultWord >> 12) & 0x03;
-      console.log(`assign hit @ device ${keyIndex} ${layerIndex}`);
+      // console.log(`assign hit @ device ${keyIndex} ${layerIndex}`);
       this.emitRealtimeEvent({
         type: 'assignHit',
         layerIndex,
