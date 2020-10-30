@@ -86,38 +86,16 @@ async function removeBlankDirectoriesInTree(baseDir: string) {
   }
 }
 
-interface ISummaryObject {
-  info: {
-    buildStats: {
-      total: number;
-      success: number;
-    };
-    environment: {
-      OS: string;
-      'avr-gcc': string;
-      make: string;
-    };
-    updatedAt: string;
-    filesRevision: number;
-  };
+interface IIndexObject {
+  updatedAt: string;
+  filesRevision: number;
   files: { [key: string]: string };
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const stubSummaryObjectForDevelopment: ISummaryObject = {
-  info: {
-    buildStats: {
-      total: 3,
-      success: 3
-    },
-    environment: {
-      OS: 'Mac OS X 10.15.7',
-      'avr-gcc': 'Homebrew AVR GCC 9.3.0',
-      make: 'GNU Make 3.81'
-    },
-    updatedAt: '2020-10-14 22:02:05 +0900',
-    filesRevision: 8
-  },
+const stubIndexObjectForDevelopment: IIndexObject = {
+  updatedAt: '2020-10-14 22:02:05 +0900',
+  filesRevision: 8,
   files: {
     // 'variants/proto/minivers/minivers.hex': 'd39fb9cb072f7b58184ddd7123df2307',
     // 'variants/proto/minivers/layout.json': 'f520e23b6874986f3f7550a5bdeacc27',
@@ -139,24 +117,22 @@ async function syncRemoteResourcesToLocalImpl(
     console.log('updating resources');
     await ensureDirectoryExists(localBaseDir);
 
-    const localSummaryFilePath = `${localBaseDir}/summary.json`;
-    const localSummary: ISummaryObject = (await readJsonFileIfExists(
-      localSummaryFilePath
+    const localIndexFilePath = `${localBaseDir}/index.json`;
+    const localIndex: IIndexObject = (await readJsonFileIfExists(
+      localIndexFilePath
     )) || {
-      files: {},
-      info: {
-        filesRevision: 0
-      }
+      filesRevision: 0,
+      files: {}
     };
 
-    const remoteSummary = (await fetchJson(
-      `${remoteBaseUrl}/summary.json`
-    )) as ISummaryObject;
-    // const remoteSummary = stubSummaryObjectForDevelopment;
+    const remoteIndex = (await fetchJson(
+      `${remoteBaseUrl}/index.json`
+    )) as IIndexObject;
+    // const remoteIndex = stubIndexObjectForDevelopment;
 
-    if (remoteSummary.info.filesRevision !== localSummary.info.filesRevision) {
-      const remoteEntries = Object.keys(remoteSummary.files);
-      const localEntries = Object.keys(localSummary.files);
+    if (remoteIndex.filesRevision !== localIndex.filesRevision) {
+      const remoteEntries = Object.keys(remoteIndex.files);
+      const localEntries = Object.keys(localIndex.files);
 
       const entriesRemoved = excludeArrayItems(localEntries, remoteEntries);
       console.log(`${entriesRemoved.length} entries will be removed`);
@@ -171,7 +147,7 @@ async function syncRemoteResourcesToLocalImpl(
 
       const entriesUpdated = remoteEntries.filter(
         (it) =>
-          localSummary.files[it] !== remoteSummary.files[it] ||
+          localIndex.files[it] !== remoteIndex.files[it] ||
           !isFileExists(`${localBaseDir}/${it}`)
       );
       console.log(`${entriesUpdated.length} entries will be updated`);
@@ -185,7 +161,7 @@ async function syncRemoteResourcesToLocalImpl(
 
       await removeBlankDirectoriesInTree(localBaseDir);
 
-      await writeJsonFile(localSummaryFilePath, remoteSummary);
+      await writeJsonFile(localIndexFilePath, remoteIndex);
       console.log('now resources are up to date');
     } else {
       console.log('resources are up to date');
