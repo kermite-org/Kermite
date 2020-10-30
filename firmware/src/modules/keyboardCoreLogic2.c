@@ -37,6 +37,7 @@ enum {
 };
 
 #define NumHidReportBytes 8
+#define NumHidHoldKeySlots 6
 
 typedef struct {
   uint8_t hidReportZerosBuf[NumHidReportBytes];
@@ -45,7 +46,8 @@ typedef struct {
   uint8_t modFlags;
   uint8_t adhocModFlags;
   bool shiftCancelActive;
-  uint8_t hidKeyCode;
+  uint8_t hidKeyCodes[NumHidHoldKeySlots];
+  uint8_t nextKeyPos;
 } HidReportState;
 
 static HidReportState hidReportState;
@@ -60,18 +62,23 @@ static void resetHidReportState() {
   rs->modFlags = 0;
   rs->adhocModFlags = 0;
   rs->shiftCancelActive = false;
-  rs->hidKeyCode = 0;
+  for (uint8_t i = 0; i < NumHidHoldKeySlots; i++) {
+    rs->hidKeyCodes[i] = 0;
+  }
+  rs->nextKeyPos = 0;
 }
 
 static uint8_t *getOutputHidReport() {
   HidReportState *rs = &hidReportState;
-  uint8_t *reportBuf = rs->hidReportBuf;
-  reportBuf[0] = rs->layerModFlags | rs->modFlags | rs->adhocModFlags;
+  uint8_t modifiers = rs->layerModFlags | rs->modFlags | rs->adhocModFlags;
   if (rs->shiftCancelActive) {
-    reportBuf[0] &= ~ModFlag_Shift;
+    modifiers &= ~ModFlag_Shift;
   }
-  reportBuf[2] = rs->hidKeyCode;
-  return reportBuf;
+  rs->hidReportBuf[0] = modifiers;
+  for (uint8_t i = 0; i < NumHidHoldKeySlots; i++) {
+    rs->hidReportBuf[i + 2] = rs->hidKeyCodes[i];
+  }
+  return rs->hidReportBuf;
 }
 
 static uint8_t *getOutputHidReportZeros() {
@@ -102,8 +109,32 @@ static void clearAdhocModifiers(uint8_t modFlags) {
   hidReportState.adhocModFlags &= ~modFlags;
 }
 
+static uint8_t rollNextKeyPos() {
+  HidReportState *rs = &hidReportState;
+  for (uint8_t i = 0; i < NumHidHoldKeySlots; i++) {
+    rs->nextKeyPos++;
+    if (rs->nextKeyPos == NumHidHoldKeySlots) {
+      rs->nextKeyPos = 0;
+    }
+    if (rs->hidKeyCodes[rs->nextKeyPos] == 0) {
+      break;
+    }
+  }
+  return rs->nextKeyPos;
+}
+
 static void setOutputKeyCode(uint8_t hidKeyCode) {
-  hidReportState.hidKeyCode = hidKeyCode;
+  uint8_t pos = rollNextKeyPos();
+  hidReportState.hidKeyCodes[pos] = hidKeyCode;
+}
+
+static void clearOutputKeyCode(uint8_t hidKeyCode) {
+  HidReportState *rs = &hidReportState;
+  for (uint8_t i = 0; i < NumHidHoldKeySlots; i++) {
+    if (rs->hidKeyCodes[i] == hidKeyCode) {
+      rs->hidKeyCodes[i] = 0;
+    }
+  }
 }
 
 static void startShiftCancel() {
@@ -489,7 +520,7 @@ static void handleOperationOff(uint16_t opWord) {
         endShiftCancel();
       }
       if (keyCode) {
-        setOutputKeyCode(0);
+        clearOutputKeyCode(keyCode);
       }
     }
   }

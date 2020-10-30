@@ -62,6 +62,7 @@ const ModFlag = {
 };
 
 const NumHidReportBytes = 8;
+const NumHidHoldKeySlots = 6;
 
 const hidReportState = new (class {
   hidReportZerosBuf: u8[] = Array(NumHidReportBytes).fill(0);
@@ -70,7 +71,8 @@ const hidReportState = new (class {
   modFlags: u8 = 0;
   adhocModFlags: u8 = 0;
   shiftCancelActive: boolean = false;
-  hidKeyCode: u8 = 0;
+  hidKeyCodes: u8[] = Array(NumHidHoldKeySlots).fill(0);
+  nextKeyPos: u8 = 0;
 })();
 
 function resetHidReportState() {
@@ -80,25 +82,22 @@ function resetHidReportState() {
   rs.modFlags = 0;
   rs.adhocModFlags = 0;
   rs.shiftCancelActive = false;
-  rs.hidKeyCode = 0;
+  rs.hidKeyCodes.fill(0);
+  rs.nextKeyPos = 0;
 }
 
 function getOutputHidReport(): u8[] {
-  const {
-    hidReportBuf,
-    layerModFlags,
-    modFlags,
-    adhocModFlags,
-    shiftCancelActive,
-    hidKeyCode
-  } = hidReportState;
+  const rs = hidReportState;
 
-  hidReportBuf[0] = layerModFlags | modFlags | adhocModFlags;
-  if (shiftCancelActive) {
-    hidReportBuf[0] &= ~ModFlag.Shift;
+  let modifiers = rs.layerModFlags | rs.modFlags | rs.adhocModFlags;
+  if (rs.shiftCancelActive) {
+    modifiers &= ~ModFlag.Shift;
   }
-  hidReportBuf[2] = hidKeyCode;
-  return hidReportBuf;
+  rs.hidReportBuf[0] = modifiers;
+  for (let i = 0; i < NumHidHoldKeySlots; i++) {
+    rs.hidReportBuf[i + 2] = rs.hidKeyCodes[i];
+  }
+  return rs.hidReportBuf;
 }
 
 function getOutputHidReportZeros(): u8[] {
@@ -129,8 +128,29 @@ function clearAdhocModifiers(modFlags: u8) {
   hidReportState.adhocModFlags &= ~modFlags;
 }
 
+function rollNextKeyPos() {
+  const rs = hidReportState;
+  for (let i = 0; i < NumHidHoldKeySlots; i++) {
+    rs.nextKeyPos = (rs.nextKeyPos + 1) % NumHidHoldKeySlots;
+    if (rs.hidKeyCodes[rs.nextKeyPos] === 0) {
+      break;
+    }
+  }
+  return rs.nextKeyPos;
+}
+
 function setOutputKeyCode(hidKeyCode: u8) {
-  hidReportState.hidKeyCode = hidKeyCode;
+  const pos = rollNextKeyPos();
+  hidReportState.hidKeyCodes[pos] = hidKeyCode;
+}
+
+function clearOutputKeyCode(hidKeyCode: u8) {
+  const rs = hidReportState;
+  for (let i = 0; i < NumHidHoldKeySlots; i++) {
+    if (rs.hidKeyCodes[i] === hidKeyCode) {
+      rs.hidKeyCodes[i] = 0;
+    }
+  }
 }
 
 function startShiftCancel() {
@@ -528,7 +548,7 @@ function handleOperationOff(opWord: u16) {
         endShiftCancel();
       }
       if (keyCode) {
-        setOutputKeyCode(0);
+        clearOutputKeyCode(keyCode);
       }
     }
   }
