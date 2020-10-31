@@ -5,7 +5,7 @@ import { appEnv } from '~shell/base/AppEnvironment';
 export class FirmwareFilesResource {
   static get baseDir() {
     if (appEnv.isDevelopment) {
-      return path.resolve('../firmware/src/build');
+      return path.resolve('../firmware/build');
     } else {
       return appEnv.resolveUserDataFilePath('resources/variants');
     }
@@ -19,13 +19,14 @@ export class FirmwareFilesResource {
 
   static async listAllFirmwareNames(): Promise<string[]> {
     const filePaths = await globAsync(`${this.baseDir}/**/*.hex`);
-    const relFileNames = filePaths.map((fpath) =>
-      fpath.replace(this.baseDir + '/', '')
+    const projectPaths = filePaths.map((filePath) =>
+      path.dirname(filePath).replace(`${this.baseDir}/`, '')
     );
-    return relFileNames.map((fname) => fname.replace('.hex', ''));
+    return projectPaths;
   }
 
-  static getHexFilePath(firmwareName: string): string {
-    return appEnv.resolveAssetsPath(`${this.baseDir}/${firmwareName}.hex`);
+  static getHexFilePath(projectPath: string): string {
+    const coreName = path.basename(projectPath);
+    return `${this.baseDir}/${projectPath}/${coreName}.hex`;
   }
 }
