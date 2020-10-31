@@ -12,7 +12,7 @@ import {
 } from '~defs/IpcContract';
 import { IKeyboardShape } from '~defs/ProfileData';
 import { IEventSource } from '~lib/xpc/types';
-import { xpcMain } from '~lib/xpc/xpcMain';
+import { RpcEventSource, RpcFunction, xpcMain } from '~lib/xpc/xpcMain';
 import { appEnv } from '~shell/base/AppEnvironment';
 import { appEventBus } from '~shell/base/AppEventBus';
 import { appWindowManager } from '~shell/base/AppWindowManager';
@@ -40,27 +40,29 @@ export class Services implements IBackendAgent {
     this.deviceService
   );
 
-  // ------------------------------------------------------------
-  // PRC METHODS CALLED FROM RENDERER PROCESS
-
+  @RpcFunction
   async getEnvironmentConfig(): Promise<IEnvironmentConfigForRendererProcess> {
     return {
       isDevelopment: appEnv.isDevelopment
     };
   }
 
+  @RpcFunction
   async getSettings(): Promise<IApplicationSettings> {
     return this.applicationSettingsProvider.getSettings();
   }
 
+  @RpcFunction
   async getKeyboardConfig(): Promise<IKeyboardConfig> {
     return this.keyboardConfigProvider.keyboardConfig;
   }
 
+  @RpcFunction
   async writeKeyboardConfig(config: IKeyboardConfig): Promise<void> {
     this.keyboardConfigProvider.writeKeyboardConfig(config);
   }
 
+  @RpcFunction
   async writeKeyMappingToDevice(): Promise<void> {
     const profile = this.profileManager.getCurrentProfile();
     const layoutStandard = this.keyboardConfigProvider.keyboardConfig
@@ -74,53 +76,64 @@ export class Services implements IBackendAgent {
     }
   }
 
+  @RpcFunction
   async executeProfileManagerCommands(
     commands: IProfileManagerCommand[]
   ): Promise<void> {
     this.profileManager.executeCommands(commands);
   }
 
+  @RpcFunction
   async reloadApplication(): Promise<void> {
     console.log('##REBOOT_ME_AFTER_CLOSE');
     appWindowManager.closeMainWindow();
   }
 
+  @RpcFunction
   async closeWindow(): Promise<void> {
     appWindowManager.closeMainWindow();
   }
 
+  @RpcFunction
   async minimizeWindow(): Promise<void> {
     appWindowManager.minimizeMainWindow();
   }
 
+  @RpcFunction
   async maximizeWindow(): Promise<void> {
     appWindowManager.maximizeMainWindow();
   }
 
+  @RpcFunction
   async widgetModeChanged(isWidgetMode: boolean): Promise<void> {
     appWindowManager.adjustWindowSize(isWidgetMode);
   }
 
+  @RpcFunction
   async getKeyboardBreedNamesAvailable(): Promise<string[]> {
     return this.keyboardShapesProvider.getAvailableBreedNames();
   }
 
+  @RpcFunction
   async getKeyboardShape(
     breedName: string
   ): Promise<IKeyboardShape | undefined> {
     return this.keyboardShapesProvider.getKeyboardShapeByBreedName(breedName);
   }
 
+  @RpcEventSource
   keyEvents = {
     subscribe: this.deviceService.subscribe,
     unsubscribe: this.deviceService.unsubscribe
   };
 
+  @RpcEventSource
   profileStatusEvents = {
     subscribe: this.profileManager.subscribeStatus,
     unsubscribe: this.profileManager.unsubscribeStatus
   };
 
+  @RpcEventSource
   appWindowEvents: IEventSource<IAppWindowEvent> = {
     subscribe(listener) {
       appEventBus.on('appWindowEvent', listener);
@@ -130,15 +143,18 @@ export class Services implements IBackendAgent {
     }
   };
 
+  @RpcEventSource
   keyboardDeviceStatusEvents = {
     subscribe: this.deviceService.deviceStatus.subscribe,
     unsubscribe: this.deviceService.deviceStatus.unsubscribe
   };
 
+  @RpcFunction
   async getFirmwareNamesAvailable(): Promise<string[]> {
     return this.firmwareUpdationService.getFirmwareNamesAvailable();
   }
 
+  @RpcFunction
   async uploadFirmware(
     firmwareName: string,
     comPortName: string
@@ -149,17 +165,17 @@ export class Services implements IBackendAgent {
     );
   }
 
+  @RpcEventSource
   comPortPlugEvents = {
     subscribe: this.firmwareUpdationService.subscribeComPorts,
     unsubscribe: this.firmwareUpdationService.unsubscribeComPorts
   };
 
+  @RpcEventSource
   layoutFileUpdationEvents = {
     subscribe: this.keyboardShapesProvider.subscribeFileUpdation,
     unsubscribe: this.keyboardShapesProvider.unsubscribeFileUpdation
   };
-
-  // ------------------------------------------------------------
 
   private handleSynchronousMessagePacket(packet: ISynchronousIpcPacket) {
     if (packet.debugMessage) {
