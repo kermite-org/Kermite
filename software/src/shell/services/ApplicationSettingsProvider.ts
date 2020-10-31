@@ -7,7 +7,7 @@ import { applicationStorage } from './ApplicationStorage';
 
 // メインプロセスで永続化する設定を管理
 // UI側で永続化する設定はui/models/UiStatusModelに格納
-class ApplicationSettingsProvider {
+export class ApplicationSettingsProvider {
   private readonly stroageKey = 'applicationSettings';
 
   _settings: IApplicationSettings = fallabackApplicationSettings;
@@ -33,4 +33,3 @@ class ApplicationSettingsProvider {
     applicationStorage.setItem(this.stroageKey, this._settings);
   }
 }
-export const applicationSettingsProvider = new ApplicationSettingsProvider();

@@ -57,5 +57,3 @@ export class KeyboardConfigProvider {
     applicationStorage.setItem(this.storageKey, this._keyboardConfig);
   }
 }
-
-export const keyboardConfigProvider = new KeyboardConfigProvider();

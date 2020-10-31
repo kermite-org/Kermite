@@ -1,8 +1,8 @@
 import { IKeyboardLayoutStandard } from '~defs/ConfigTypes';
 import { IProfileData } from '~defs/ProfileData';
 import { delayMs } from '~funcs/Utils';
-import { deviceService } from '~shell/services/KeyboardDevice';
 import { makeKeyAssignsConfigStorageData } from '~shell/services/KeyboardLogic/InputLogicSimulatorD/ProfileDataBinaryPacker';
+import { KeyboardDeviceService } from '../KeyboardDevice';
 import { calcChecksum } from './Helpers';
 import {
   makeMemoryChecksumRequestFrame,
@@ -14,7 +14,8 @@ import {
 export namespace KeyMappingEmitter {
   export function emitKeyAssignsToDevice(
     editModel: IProfileData,
-    layout: IKeyboardLayoutStandard
+    layout: IKeyboardLayoutStandard,
+    deviceService: KeyboardDeviceService
   ) {
     const ds = deviceService;
 
