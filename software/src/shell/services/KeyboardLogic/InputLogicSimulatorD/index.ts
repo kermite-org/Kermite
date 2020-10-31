@@ -4,10 +4,9 @@ import {
   IRealtimeKeyboardEvent
 } from '~defs/IpcContract';
 import { generateNumberSequence } from '~funcs/Utils';
-import { keyboardConfigProvider } from '~shell/services/KeyboardConfigProvider';
-import { deviceService } from '~shell/services/KeyboardDevice';
-import { profileManager } from '~shell/services/ProfileManager';
-import { IInputLogicSimulator } from '../InputLogicSimulator.interface';
+import { KeyboardConfigProvider } from '~shell/services/KeyboardConfigProvider';
+import { KeyboardDeviceService } from '~shell/services/KeyboardDevice';
+import { ProfileManager } from '~shell/services/ProfileManager';
 import { IntervalTimerWrapper } from '../helpers/IntervalTimerWrapper';
 import { getKeyboardCoreLogicInterface } from './DeviceCoreLogicSimulator2_Dual';
 import { makeKeyAssignsConfigStorageData } from './ProfileDataBinaryPacker';
@@ -52,90 +51,94 @@ class ConfigDataStorage {
   }
 }
 
-export namespace InputLogicSimulatorD {
-  const CL = getKeyboardCoreLogicInterface();
+export class InputLogicSimulatorD {
+  private CL = getKeyboardCoreLogicInterface();
+  private tickerTimer = new IntervalTimerWrapper();
+  private isSideBranMode: boolean = false;
+  private configDataStorage = new ConfigDataStorage();
 
-  const tickerTimer = new IntervalTimerWrapper();
+  private layerActiveFlags: number = 0;
+  private hidReportBytes: number[] = new Array(8).fill(0);
 
-  const local = new (class {
-    isSideBranMode: boolean = false;
-  })();
+  private tickUpdator = createTimeIntervalCounter();
 
-  const configDataStorage = new ConfigDataStorage();
+  constructor(
+    private profileManager: ProfileManager,
+    private keyboardConfigProvider: KeyboardConfigProvider,
+    private deviceService: KeyboardDeviceService
+  ) {}
 
-  function updateProfileDataBlob() {
-    const prof = profileManager.getCurrentProfile();
-    const layoutStandard = keyboardConfigProvider.keyboardConfig.layoutStandard;
+  private updateProfileDataBlob() {
+    const prof = this.profileManager.getCurrentProfile();
+    const layoutStandard = this.keyboardConfigProvider.keyboardConfig
+      .layoutStandard;
     if (prof && layoutStandard) {
       const bytes = makeKeyAssignsConfigStorageData(prof, layoutStandard);
-      configDataStorage.writeConfigStorageData(bytes);
-      CL.keyboardCoreLogic_initialize();
-      CL.keyboardCoreLogic_setAssignStorageReaderFunc((addr) =>
-        configDataStorage.readByte(addr)
+      this.configDataStorage.writeConfigStorageData(bytes);
+      this.CL.keyboardCoreLogic_initialize();
+      this.CL.keyboardCoreLogic_setAssignStorageReaderFunc((addr) =>
+        this.configDataStorage.readByte(addr)
       );
     }
   }
 
-  function onProfileStatusChanged(
+  private onProfileStatusChanged = (
     changedStatus: Partial<IProfileManagerStatus>
-  ) {
+  ) => {
     if (changedStatus.loadedProfileData) {
       console.log(`logicSimulator, profile data received`);
-      updateProfileDataBlob();
+      this.updateProfileDataBlob();
     }
-  }
+  };
 
-  function onKeyboardConfigChanged(changedConfig: Partial<IKeyboardConfig>) {
+  private onKeyboardConfigChanged = (
+    changedConfig: Partial<IKeyboardConfig>
+  ) => {
     if (changedConfig.behaviorMode) {
       const isSideBrainMode = changedConfig.behaviorMode === 'SideBrain';
-      if (local.isSideBranMode !== isSideBrainMode) {
+      if (this.isSideBranMode !== isSideBrainMode) {
         console.log({ isSideBrainMode });
-        deviceService.setSideBrainMode(isSideBrainMode);
-        local.isSideBranMode = isSideBrainMode;
+        this.deviceService.setSideBrainMode(isSideBrainMode);
+        this.isSideBranMode = isSideBrainMode;
       }
     }
     if (changedConfig.layoutStandard) {
       // console.log({ layout: changedConfig.layoutStandard });
-      updateProfileDataBlob();
+      this.updateProfileDataBlob();
     }
-  }
+  };
 
-  function onRealtimeKeyboardEvent(event: IRealtimeKeyboardEvent) {
+  private onRealtimeKeyboardEvent = (event: IRealtimeKeyboardEvent) => {
     if (event.type === 'keyStateChanged') {
       const { keyIndex, isDown } = event;
-      CL.keyboardCoreLogic_issuePhysicalKeyStateChanged(keyIndex, isDown);
+      this.CL.keyboardCoreLogic_issuePhysicalKeyStateChanged(keyIndex, isDown);
     }
-  }
+  };
 
-  let layerActiveFlags: number = 0;
-  let hidReportBytes: number[] = new Array(8).fill(0);
+  processTicker = () => {
+    const elapsedMs = this.tickUpdator();
+    this.CL.keyboardCoreLogic_processTicker(elapsedMs);
 
-  const tickUpdator = createTimeIntervalCounter();
-
-  function processTicker() {
-    const elapsedMs = tickUpdator();
-    CL.keyboardCoreLogic_processTicker(elapsedMs);
-
-    if (local.isSideBranMode) {
-      const report = CL.keyboardCoreLogic_getOutputHidReportBytes();
-      if (!compareArray(hidReportBytes, report)) {
-        deviceService.writeSideBrainHidReport(report);
-        hidReportBytes = report.slice(0);
+    if (this.isSideBranMode) {
+      const report = this.CL.keyboardCoreLogic_getOutputHidReportBytes();
+      if (!compareArray(this.hidReportBytes, report)) {
+        this.deviceService.writeSideBrainHidReport(report);
+        this.hidReportBytes = report.slice(0);
       }
-      const newLayerActiveFlags = CL.keyboardCoreLogic_getLayerActiveFlags();
-      if (newLayerActiveFlags !== layerActiveFlags) {
-        deviceService.emitRealtimeEventFromSimulator({
+      const newLayerActiveFlags = this.CL.keyboardCoreLogic_getLayerActiveFlags();
+      if (newLayerActiveFlags !== this.layerActiveFlags) {
+        this.deviceService.emitRealtimeEventFromSimulator({
           type: 'layerChanged',
           layerActiveFlags: newLayerActiveFlags
         });
-        layerActiveFlags = newLayerActiveFlags;
+        this.layerActiveFlags = newLayerActiveFlags;
       }
-      const assignHitResult = CL.keyboardCoreLogic_peekAssignHitResult();
+      const assignHitResult = this.CL.keyboardCoreLogic_peekAssignHitResult();
       if (assignHitResult !== 0) {
         const keyIndex = assignHitResult & 0xff;
         const layerIndex = (assignHitResult >> 8) & 0x0f;
         const prioritySpec = (assignHitResult >> 12) & 0x03;
-        deviceService.emitRealtimeEventFromSimulator({
+        this.deviceService.emitRealtimeEventFromSimulator({
           type: 'assignHit',
           layerIndex,
           keyIndex,
@@ -143,28 +146,21 @@ export namespace InputLogicSimulatorD {
         });
       }
     }
+  };
+
+  async initialize() {
+    this.profileManager.subscribeStatus(this.onProfileStatusChanged);
+    this.keyboardConfigProvider.subscribeStatus(this.onKeyboardConfigChanged);
+    this.deviceService.subscribe(this.onRealtimeKeyboardEvent);
+    this.tickerTimer.start(this.processTicker, 5);
   }
 
-  async function initialize() {
-    profileManager.subscribeStatus(onProfileStatusChanged);
-    keyboardConfigProvider.subscribeStatus(onKeyboardConfigChanged);
-    deviceService.subscribe(onRealtimeKeyboardEvent);
-    tickerTimer.start(processTicker, 5);
-  }
-
-  async function terminate() {
-    deviceService.unsubscribe(onRealtimeKeyboardEvent);
-    if (local.isSideBranMode) {
-      deviceService.setSideBrainMode(false);
-      local.isSideBranMode = false;
+  async terminate() {
+    this.deviceService.unsubscribe(this.onRealtimeKeyboardEvent);
+    if (this.isSideBranMode) {
+      this.deviceService.setSideBrainMode(false);
+      this.isSideBranMode = false;
     }
-    tickerTimer.stop();
-  }
-
-  export function getInterface(): IInputLogicSimulator {
-    return {
-      initialize,
-      terminate
-    };
+    this.tickerTimer.stop();
   }
 }

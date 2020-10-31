@@ -4,12 +4,13 @@ import {
 } from '~defs/IpcContract';
 import { IProfileData } from '~defs/ProfileData';
 import { clampValue, removeArrayItems } from '~funcs/Utils';
+import { KeyboardShapesProvider } from '../KeyboardShapesProvider';
 import { ProfileManagerCore } from './ProfileManagerCore';
 
 type StatusListener = (partialStatus: Partial<IProfileManagerStatus>) => void;
 
 // プロファイルを<UserDataDir>/data/profiles以下でファイルとして管理
-class ProfileManager {
+export class ProfileManager {
   private status: IProfileManagerStatus = {
     currentProfileName: '',
     allProfileNames: [],
@@ -23,20 +24,24 @@ class ProfileManager {
 
   private savingProfileData: IProfileData | undefined = undefined;
 
-  private core: ProfileManagerCore = new ProfileManagerCore();
+  private core: ProfileManagerCore;
+
+  constructor(shapesProvider: KeyboardShapesProvider) {
+    this.core = new ProfileManagerCore(shapesProvider);
+  }
 
   getCurrentProfile(): IProfileData | undefined {
     return this.status.loadedProfileData;
   }
 
-  subscribeStatus(listener: StatusListener) {
+  subscribeStatus = (listener: StatusListener) => {
     this.statusListeners.push(listener);
     listener(this.status);
-  }
+  };
 
-  unsubscribeStatus(listener: StatusListener) {
+  unsubscribeStatus = (listener: StatusListener) => {
     removeArrayItems(this.statusListeners, listener);
-  }
+  };
 
   private setStatus(newStatePartial: Partial<IProfileManagerStatus>) {
     this.status = { ...this.status, ...newStatePartial };
@@ -292,5 +297,3 @@ class ProfileManager {
     }
   }
 }
-
-export const profileManager = new ProfileManager();

@@ -97,13 +97,13 @@ export class KeyboardShapesProvider {
 
   private listeners: IFileUpdationListener[] = [];
 
-  subscribeFileUpdation(listener: IFileUpdationListener) {
+  subscribeFileUpdation = (listener: IFileUpdationListener) => {
     this.listeners.push(listener);
-  }
+  };
 
-  unsubscribeFileUpdation(listener: IFileUpdationListener) {
+  unsubscribeFileUpdation = (listener: IFileUpdationListener) => {
     removeArrayItems(this.listeners, listener);
-  }
+  };
 
   onFileUpdated = async (filePath: string) => {
     const shape = await loadShapeFromFile(filePath);
@@ -126,5 +126,3 @@ export class KeyboardShapesProvider {
 
   async terminate() {}
 }
-
-export const keyboardShapesProvider = new KeyboardShapesProvider();

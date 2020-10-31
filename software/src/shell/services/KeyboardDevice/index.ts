@@ -129,13 +129,13 @@ export class KeyboardDeviceService {
     return !!this.deviceWrapper;
   }
 
-  subscribe(proc: IRealtimeEventListenerFunc) {
+  subscribe = (proc: IRealtimeEventListenerFunc) => {
     this.listeners.push(proc);
-  }
+  };
 
-  unsubscribe(proc: IRealtimeEventListenerFunc) {
+  unsubscribe = (proc: IRealtimeEventListenerFunc) => {
     removeArrayItems(this.listeners, proc);
-  }
+  };
 
   private isSideBrainMode = false;
 
@@ -174,4 +174,3 @@ export class KeyboardDeviceService {
     await this.deviceWrapper?.writeFrames(frames);
   }
 }
-export const deviceService = new KeyboardDeviceService();

@@ -1,12 +1,14 @@
 import { app } from 'electron';
 import { appEventBus } from './base/AppEventBus';
 import { appWindowManager } from './base/AppWindowManager';
-import { services } from './services';
+import { Services } from './services';
 
 function startApplication() {
   console.log('debug v0126a');
 
   app.allowRendererProcessReuse = true;
+
+  const services = new Services();
 
   app.on('ready', async () => {
     await services.initialize();

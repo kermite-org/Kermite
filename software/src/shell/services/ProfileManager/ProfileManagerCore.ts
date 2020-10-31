@@ -13,9 +13,11 @@ import {
 import { duplicateObjectByJsonStringifyParse } from '~funcs/Utils';
 import { appEnv } from '~shell/base/AppEnvironment';
 import { applicationStorage } from '~shell/services/ApplicationStorage';
-import { keyboardShapesProvider } from '~shell/services/KeyboardShapesProvider';
+import { KeyboardShapesProvider } from '../KeyboardShapesProvider';
 
 export class ProfileManagerCore {
+  constructor(private shapesProvider: KeyboardShapesProvider) {}
+
   getDataFilePath(profName: string): string {
     return appEnv.resolveUserDataFilePath(`data/profiles/${profName}.json`);
   }
@@ -67,7 +69,7 @@ export class ProfileManagerCore {
     const profileData: IProfileData = duplicateObjectByJsonStringifyParse(
       fallbackProfileData
     );
-    const keyboardShape = keyboardShapesProvider.getKeyboardShapeByBreedName(
+    const keyboardShape = this.shapesProvider.getKeyboardShapeByBreedName(
       breedName
     );
     if (keyboardShape) {

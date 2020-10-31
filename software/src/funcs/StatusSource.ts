@@ -19,12 +19,12 @@ export class StatusSource<T> {
     this.listeners.forEach((li) => li(partialStatus));
   }
 
-  subscribe(listener: IStatusListener<T>) {
+  subscribe = (listener: IStatusListener<T>) => {
     listener(this.status);
     this.listeners.push(listener);
-  }
+  };
 
-  unsubscribe(listener: IStatusListener<T>) {
+  unsubscribe = (listener: IStatusListener<T>) => {
     removeArrayItems(this.listeners, listener);
-  }
+  };
 }

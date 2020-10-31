@@ -5,7 +5,7 @@ import { FlashCommander } from './FlashCommander';
 
 // 仮想COMポートでProMicroのブートローダ(Caterina)と通信しファームウェアを書き込む
 // 仮想COMポートの列挙や出現監視も行う
-class FirmwareUpdationService {
+export class FirmwareUpdationService {
   private comPortsMonitor = new ComPortsMonitor();
   private binaryFilesManager = new FirmwareFilesManager();
 
@@ -13,13 +13,13 @@ class FirmwareUpdationService {
     return this.binaryFilesManager.firmwareNames;
   }
 
-  subscribeComPorts(listener: ComPortsListener) {
+  subscribeComPorts = (listener: ComPortsListener) => {
     this.comPortsMonitor.subscribeComPorts(listener);
-  }
+  };
 
-  unsubscribeComPorts(listener: ComPortsListener) {
+  unsubscribeComPorts = (listener: ComPortsListener) => {
     this.comPortsMonitor.unsubscribeComPorts(listener);
-  }
+  };
 
   async writeFirmware(
     firmwareName: string,
@@ -46,5 +46,3 @@ class FirmwareUpdationService {
     this.comPortsMonitor.terminateTicker();
   }
 }
-
-export const firmwareUpdationService = new FirmwareUpdationService();
