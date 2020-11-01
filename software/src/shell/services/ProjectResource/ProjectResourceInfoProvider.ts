@@ -1,5 +1,6 @@
 import { IProjectResourceInfo } from '~defs/ProfileData';
 import { pathJoin } from '~funcs/Files';
+import { appEnv } from '~shell/base/AppEnvironment';
 import { IProjectResourceInfoProvider } from '../serviceInterfaces';
 import {
   IProjectResourceInfoSource,
@@ -57,6 +58,9 @@ export class ProjectResourceInfoProvider
   }
 
   async initialize(): Promise<void> {
-    this.projectResourceInfoSources = await ProjectResourceInfoSourceLoader.loadProjectResourceInfoSources();
+    const resourceOrigin = appEnv.isDevelopment ? 'local' : 'central';
+    this.projectResourceInfoSources = await ProjectResourceInfoSourceLoader.loadProjectResourceInfoSources(
+      resourceOrigin
+    );
   }
 }
