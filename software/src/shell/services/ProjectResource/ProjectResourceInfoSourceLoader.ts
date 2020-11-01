@@ -63,7 +63,7 @@ export namespace ProjectResourceInfoSourceLoader {
       const pattern = `${presetsFolderPath}/*.json`;
       const presetFilePaths = await globAsync(pattern);
       presetNames = presetFilePaths.map((fpath) =>
-        pathBaseName(fpath).replace('.json', '')
+        pathBaseName(fpath, '.json')
       );
     }
 

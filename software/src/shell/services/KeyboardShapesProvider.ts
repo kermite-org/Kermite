@@ -5,7 +5,13 @@ import {
   IKeyUnitEntry,
   keyboardShape_fallbackData
 } from '~defs/ProfileData';
-import { fsxReadTextFile, globAsync, pathResolve } from '~funcs/Files';
+import {
+  fsxReadTextFile,
+  globAsync,
+  pathDirName,
+  pathRelative,
+  pathResolve
+} from '~funcs/Files';
 import { removeArrayItems } from '~funcs/Utils';
 import { appEnv } from '~shell/base/AppEnvironment';
 
@@ -28,8 +34,8 @@ const baseDir = getBaseDir();
 async function loadShapeFromFile(
   filePath: string
 ): Promise<IKeyboardShape | undefined> {
-  const relPath = filePath.replace(baseDir + '/', '');
-  const breedName = relPath.replace('/layout.json', '');
+  const relPath = pathRelative(baseDir, filePath);
+  const breedName = pathDirName(relPath);
 
   // console.log(`loading ${relPath}`);
   let fileText: string;

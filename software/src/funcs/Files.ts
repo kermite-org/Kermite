@@ -63,8 +63,8 @@ export function pathDirName(fpath: string) {
   return path.dirname(fpath);
 }
 
-export function pathBaseName(fpath: string) {
-  return path.basename(fpath);
+export function pathBaseName(fpath: string, ext?: string) {
+  return path.basename(fpath, ext);
 }
 
 export function pathJoin(...parts: string[]) {

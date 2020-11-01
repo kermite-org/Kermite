@@ -4,7 +4,8 @@ import {
   globAsync,
   pathDirName,
   pathBaseName,
-  pathResolve
+  pathResolve,
+  pathRelative
 } from '~funcs/Files';
 import { appEnv } from '~shell/base/AppEnvironment';
 
@@ -26,7 +27,7 @@ export class FirmwareFilesResource {
   static async listAllFirmwareNames(): Promise<string[]> {
     const filePaths = await globAsync(`${this.baseDir}/**/*.hex`);
     const projectPaths = filePaths.map((filePath) =>
-      pathDirName(filePath).replace(`${this.baseDir}/`, '')
+      pathRelative(this.baseDir, pathDirName(filePath))
     );
     return projectPaths;
   }
