@@ -205,3 +205,11 @@ export const fallbackProfileData: IProfileData = {
   ],
   assigns: {}
 };
+export interface IProjectResourceInfo {
+  projectId: string;
+  projectName: string;
+  projectPath: string;
+  presetNames: string[];
+  hasLayout: boolean;
+  hasFirmwareBinary: boolean;
+}
