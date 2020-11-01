@@ -5,7 +5,7 @@ import { models } from './models';
 async function start() {
   console.log('start');
 
-  await models.initialize();
+  models.initialize();
   initialzeRenderer();
 
   window.addEventListener('beforeunload', async () => {

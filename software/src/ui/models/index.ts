@@ -11,10 +11,10 @@ import { playerModel } from './player/PlayerModel';
 import { profilesModel } from './profile/ProfilesModel';
 
 export const models = new (class {
-  async initialize() {
+  initialize() {
     // siteModel.isWidgetMode = true;
     // debugTrace('start appDomain initialize');
-    await projectResourceModel.initializeAsync();
+    projectResourceModel.initialize();
     siteModel.initialize();
     profilesModel.initialize();
     playerModel.initialize();
