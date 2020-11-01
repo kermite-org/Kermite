@@ -31,12 +31,12 @@ export class FirmwareUpdationService {
     return flashResult;
   }
 
-  async initialize() {
-    this.binaryFilesManager.loadFirmwareFileNames();
+  async initializeAsync() {
+    await this.binaryFilesManager.loadFirmwareFileNames();
     this.comPortsMonitor.initializeTicker();
   }
 
-  async terminate() {
+  terminate() {
     this.comPortsMonitor.terminateTicker();
   }
 }

@@ -12,7 +12,7 @@ export interface IProjectResourceInfoProvider {
   ): string | undefined;
   getHexFilePath(projectId: string): string | undefined;
   getLayoutFilePath(projectId: string): string | undefined;
-  initialize(): Promise<void>;
+  initializeAsync(): Promise<void>;
 }
 
 export interface IKeyboardShapeBulkLoader {

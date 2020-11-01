@@ -14,12 +14,12 @@ class KeyboardShapesModel {
     return await backendAgent.getKeyboardShape(breedName);
   }
 
-  async initialize() {
-    this.allBreedNames = await backendAgent.getKeyboardBreedNamesAvailable();
-    appUi.rerender();
+  initialize() {
+    (async () => {
+      this.allBreedNames = await backendAgent.getKeyboardBreedNamesAvailable();
+      appUi.rerender();
+    })();
   }
-
-  finalize() {}
 }
 
 export const keyboardShapesModel = new KeyboardShapesModel();

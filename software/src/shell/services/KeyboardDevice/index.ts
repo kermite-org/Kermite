@@ -86,7 +86,7 @@ export class KeyboardDeviceService {
     }
   }
 
-  async initialize(): Promise<void> {
+  initialize() {
     const dw = new DeviceWrapper();
     const isOpen = dw.open(
       0xf055, // vid
@@ -118,7 +118,7 @@ export class KeyboardDeviceService {
     dw.writeSingleFrame([0xf0, 0x10]); // device attributes request
   }
 
-  async terminate(): Promise<void> {
+  terminate() {
     if (this.deviceWrapper) {
       this.deviceWrapper.close();
       this.deviceWrapper = null;

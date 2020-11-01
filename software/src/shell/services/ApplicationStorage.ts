@@ -17,7 +17,7 @@ export class ApplicationStorage {
     this.data[key] = value;
   }
 
-  async initialize(): Promise<void> {
+  async initializeAsync(): Promise<void> {
     if (fsIsFileExists(this.configFilePath)) {
       this.data = await fsxReadJsonFile(this.configFilePath);
     } else {
@@ -25,7 +25,7 @@ export class ApplicationStorage {
     }
   }
 
-  async terminate(): Promise<void> {
+  async terminateAsync(): Promise<void> {
     await fsxWriteJsonFile(this.configFilePath, this.data);
     console.log('config file saved');
   }

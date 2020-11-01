@@ -71,7 +71,7 @@ export class ProfileManager {
     return profName;
   }
 
-  async initialize() {
+  async initializeAsync() {
     try {
       await this.core.ensureProfilesDirectoryExists();
       const allProfileNames = await this.initializeProfileList();
@@ -84,7 +84,7 @@ export class ProfileManager {
     }
   }
 
-  async terminate() {
+  async terminateAsync() {
     await this.executeSaveProfileTask();
     this.core.storeCurrentProfileName(this.status.currentProfileName);
   }

@@ -130,6 +130,4 @@ export class KeyboardShapesProvider {
     this.keyboardShapes = await loadKeyboardShapes();
     setupFilesWatcher(this.onFileUpdated);
   }
-
-  async terminate() {}
 }

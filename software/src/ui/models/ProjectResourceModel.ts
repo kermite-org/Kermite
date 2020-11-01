@@ -4,7 +4,7 @@ import { backendAgent } from '~ui/core';
 class ProjectResourceModel {
   projectResourceInfos: IProjectResourceInfo[] = [];
 
-  async initialize() {
+  async initializeAsync() {
     this.projectResourceInfos = await backendAgent.getAllProjectResourceInfos();
   }
 }

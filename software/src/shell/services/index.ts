@@ -32,16 +32,16 @@ export class Services implements IBackendAgent {
   private applicationSettingsProvider = new ApplicationSettingsProvider();
   private keyboardConfigProvider = new KeyboardConfigProvider();
   private keyboardShapesProvider = new KeyboardShapesProvider();
-  private profileManager = new ProfileManager(this.keyboardShapesProvider);
   private deviceService = new KeyboardDeviceService();
   private firmwareUpdationService = new FirmwareUpdationService();
+  private projectResourceInfoProvider = new ProjectResourceInfoProvider();
+
+  private profileManager = new ProfileManager(this.keyboardShapesProvider);
   private inputLogicSimulator = new InputLogicSimulatorD(
     this.profileManager,
     this.keyboardConfigProvider,
     this.deviceService
   );
-
-  private projectResourceInfoProvider = new ProjectResourceInfoProvider();
 
   @RpcFunction
   async getEnvironmentConfig(): Promise<IEnvironmentConfigForRendererProcess> {
@@ -194,15 +194,18 @@ export class Services implements IBackendAgent {
   async initialize() {
     console.log(`initialize services`);
     await resourceUpdator_syncRemoteResourcesToLocal();
-    await applicationStorage.initialize();
-    await this.projectResourceInfoProvider.initialize();
-    await this.applicationSettingsProvider.initialize();
-    await this.keyboardConfigProvider.initialize();
+    await applicationStorage.initializeAsync();
+    this.applicationSettingsProvider.initialize();
+
+    await this.projectResourceInfoProvider.initializeAsync();
     await this.keyboardShapesProvider.initialize();
-    await this.profileManager.initialize();
-    await this.deviceService.initialize();
-    await this.firmwareUpdationService.initialize();
-    await this.inputLogicSimulator.initialize();
+    await this.firmwareUpdationService.initializeAsync();
+
+    this.keyboardConfigProvider.initialize();
+    this.deviceService.initialize();
+
+    await this.profileManager.initializeAsync();
+    this.inputLogicSimulator.initialize();
 
     ipcMain.on('synchronousMessage', (event, packet: ISynchronousIpcPacket) => {
       this.handleSynchronousMessagePacket(packet);
@@ -213,13 +216,13 @@ export class Services implements IBackendAgent {
 
   async terminate() {
     console.log(`terminate services`);
-    await this.inputLogicSimulator.terminate();
-    await this.firmwareUpdationService.terminate();
-    await this.deviceService.terminate();
-    await this.profileManager.terminate();
-    await this.keyboardShapesProvider.terminate();
-    await this.keyboardConfigProvider.terminate();
-    await this.applicationSettingsProvider.terminate();
-    await applicationStorage.terminate();
+    this.inputLogicSimulator.terminate();
+    await this.profileManager.terminateAsync();
+
+    this.deviceService.terminate();
+    this.keyboardConfigProvider.terminate();
+
+    this.applicationSettingsProvider.terminate();
+    await applicationStorage.terminateAsync();
   }
 }
