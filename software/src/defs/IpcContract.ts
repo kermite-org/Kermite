@@ -19,6 +19,10 @@ export interface IProfileManagerStatus {
 
 export interface IKeyboardDeviceStatus {
   isConnected: boolean;
+  deviceAttrs?: {
+    projectId: string;
+    projectName: string;
+  };
 }
 
 export type IRealtimeKeyboardEvent =

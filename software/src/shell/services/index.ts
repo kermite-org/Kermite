@@ -31,10 +31,13 @@ import { resourceUpdator_syncRemoteResourcesToLocal } from './ResourceUpdator';
 export class Services implements IBackendAgent {
   private applicationSettingsProvider = new ApplicationSettingsProvider();
   private keyboardConfigProvider = new KeyboardConfigProvider();
-  private keyboardShapesProvider = new KeyboardShapesProvider();
-  private deviceService = new KeyboardDeviceService();
-  private firmwareUpdationService = new FirmwareUpdationService();
   private projectResourceInfoProvider = new ProjectResourceInfoProvider();
+  private keyboardShapesProvider = new KeyboardShapesProvider();
+  private firmwareUpdationService = new FirmwareUpdationService();
+
+  private deviceService = new KeyboardDeviceService(
+    this.projectResourceInfoProvider
+  );
 
   private profileManager = new ProfileManager(this.keyboardShapesProvider);
   private inputLogicSimulator = new InputLogicSimulatorD(
@@ -200,11 +203,10 @@ export class Services implements IBackendAgent {
     await this.projectResourceInfoProvider.initializeAsync();
     await this.keyboardShapesProvider.initialize();
     await this.firmwareUpdationService.initializeAsync();
+    await this.profileManager.initializeAsync();
 
     this.keyboardConfigProvider.initialize();
     this.deviceService.initialize();
-
-    await this.profileManager.initializeAsync();
     this.inputLogicSimulator.initialize();
 
     ipcMain.on('synchronousMessage', (event, packet: ISynchronousIpcPacket) => {
@@ -217,10 +219,9 @@ export class Services implements IBackendAgent {
   async terminate() {
     console.log(`terminate services`);
     this.inputLogicSimulator.terminate();
-    await this.profileManager.terminateAsync();
-
     this.deviceService.terminate();
     this.keyboardConfigProvider.terminate();
+    await this.profileManager.terminateAsync();
 
     this.applicationSettingsProvider.terminate();
     await applicationStorage.terminateAsync();

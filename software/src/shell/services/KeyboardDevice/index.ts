@@ -1,10 +1,14 @@
-import { IRealtimeKeyboardEvent } from '~defs/IpcContract';
+import {
+  IKeyboardDeviceStatus,
+  IRealtimeKeyboardEvent
+} from '~defs/IpcContract';
 import {
   ConfigStorageFormatRevision,
   RawHidMessageProtocolRevision
 } from '~defs/Versions';
 import { StatusSource } from '~funcs/StatusSource';
 import { removeArrayItems } from '~funcs/Utils';
+import { ProjectResourceInfoProvider } from '../ProjectResource/ProjectResourceInfoProvider';
 import { DeviceWrapper } from './DeviceWrapper';
 
 type IRealtimeEventListenerFunc = (event: IRealtimeKeyboardEvent) => void;
@@ -17,9 +21,13 @@ export class KeyboardDeviceService {
   private listeners: IRealtimeEventListenerFunc[] = [];
   private deviceWrapper: DeviceWrapper | null = null;
 
-  deviceStatus = new StatusSource<{ isConnected: boolean }>({
+  deviceStatus = new StatusSource<IKeyboardDeviceStatus>({
     isConnected: false
   });
+
+  constructor(
+    private projectResourceInfoProvider: ProjectResourceInfoProvider
+  ) {}
 
   private emitRealtimeEvent(ev: IRealtimeKeyboardEvent) {
     this.listeners.forEach((h) => h(ev));
@@ -50,6 +58,19 @@ export class KeyboardDeviceService {
         console.log(
           `incompatible message protocol revision (software:${RawHidMessageProtocolRevision} firmware:${firmwareMessageProtocolRevision})`
         );
+      }
+
+      const info = this.projectResourceInfoProvider.getProjectResourceInfoById(
+        projectId
+      );
+      if (info) {
+        this.deviceStatus.set({
+          isConnected: true,
+          deviceAttrs: {
+            projectId,
+            projectName: info.projectName
+          }
+        });
       }
     }
 
@@ -102,7 +123,6 @@ export class KeyboardDeviceService {
     // const isOpen = dw.open(0xf055, 0xa57a, 'mi_03');
     if (isOpen) {
       console.log('device opened');
-      this.deviceStatus.set({ isConnected: true });
     } else {
       console.log(`failed to open device`);
       return;
@@ -112,7 +132,7 @@ export class KeyboardDeviceService {
       this.decodeReceivedBytes(buf);
     });
     dw.onClosed(() => {
-      this.deviceStatus.set({ isConnected: false });
+      this.deviceStatus.set({ isConnected: false, deviceAttrs: undefined });
     });
 
     dw.writeSingleFrame([0xf0, 0x10]); // device attributes request
