@@ -45,6 +45,10 @@ export class LayerManagementPartViewModel {
     return this.canShiftCurrentLayerOrder(1);
   }
 
+  get canDeleteCurrentLayer() {
+    return this.isCurrentLayerCustom;
+  }
+
   shiftBackCurrentLayer = () => {
     this.shiftCurrentLayerOrder(-1);
   };

@@ -49,7 +49,8 @@ export const LayerManagementPart = () => {
       shiftForwardCurrentLayer,
       editCurrentLayer,
       deleteCurrentLayer,
-      addNewLayer
+      addNewLayer,
+      canDeleteCurrentLayer
     } = layerManagementPartViewModel;
 
     return (
@@ -68,7 +69,7 @@ export const LayerManagementPart = () => {
         />
         <LayerOperationButtton
           icon="fa fa-times"
-          enabled={true}
+          enabled={canDeleteCurrentLayer}
           handler={deleteCurrentLayer}
           qxOptimizer="deepEqual"
         />
