@@ -20,9 +20,7 @@ const profileMenuCommandTexts: { [key in IProfileMenuCommand]: string } = {
   deleteProfile: 'delete'
 };
 
-export function makeProfileSelectionMenuPartModel(
-  vm: IProfileManagerViewModel
-) {
+export function makeProfileSelectionMenuPartModel() {
   const self = {
     isOpen: false,
     openMenu() {
@@ -31,14 +29,16 @@ export function makeProfileSelectionMenuPartModel(
     closeMenu() {
       self.isOpen = false;
     },
-    menuItems: profileMenuCommands.map((cmd, index) => ({
-      key: `cmd${index}`,
-      text: profileMenuCommandTexts[cmd],
-      handler() {
-        vm[cmd]();
-        self.isOpen = false;
-      }
-    }))
+    getMenuItems(vm: IProfileManagerViewModel) {
+      return profileMenuCommands.map((cmd, index) => ({
+        key: `cmd${index}`,
+        text: profileMenuCommandTexts[cmd],
+        handler() {
+          vm[cmd]();
+          self.isOpen = false;
+        }
+      }));
+    }
   };
   return self;
 }

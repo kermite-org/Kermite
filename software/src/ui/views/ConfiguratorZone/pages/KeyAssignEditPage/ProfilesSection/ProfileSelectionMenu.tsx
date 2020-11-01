@@ -54,13 +54,14 @@ const cssMenuPopup = css`
   }
 `;
 
-export const ProfileSelectionMenuPart = (props: {
+export const ProfileSelectionMenuPart = (_: {
   vm: IProfileManagerViewModel;
 }) => {
-  const menuModel = makeProfileSelectionMenuPartModel(props.vm);
+  const menuModel = makeProfileSelectionMenuPartModel();
 
-  return () => {
-    const { isOpen, openMenu, closeMenu, menuItems } = menuModel;
+  return (props: { vm: IProfileManagerViewModel }) => {
+    const { isOpen, openMenu, closeMenu, getMenuItems } = menuModel;
+    const menuItems = getMenuItems(props.vm);
     return (
       <div css={cssBase}>
         <div css={cssOverlay} qxIf={isOpen} onClick={closeMenu} />
