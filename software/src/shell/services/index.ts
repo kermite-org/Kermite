@@ -10,7 +10,7 @@ import {
   IProfileManagerCommand,
   ISynchronousIpcPacket
 } from '~defs/IpcContract';
-import { IKeyboardShape } from '~defs/ProfileData';
+import { IKeyboardShape, IProjectResourceInfo } from '~defs/ProfileData';
 import { IEventSource } from '~lib/xpc/types';
 import { RpcEventSource, RpcFunction, xpcMain } from '~lib/xpc/xpcMain';
 import { appEnv } from '~shell/base/AppEnvironment';
@@ -25,6 +25,7 @@ import { KeyboardDeviceService } from './KeyboardDevice';
 import { InputLogicSimulatorD } from './KeyboardLogic/InputLogicSimulatorD';
 import { KeyboardShapesProvider } from './KeyboardShapesProvider';
 import { ProfileManager } from './ProfileManager';
+import { ProjectResourceInfoProvider } from './ProjectResource/ProjectResourceInfoProvider';
 import { resourceUpdator_syncRemoteResourcesToLocal } from './ResourceUpdator';
 
 export class Services implements IBackendAgent {
@@ -39,6 +40,8 @@ export class Services implements IBackendAgent {
     this.keyboardConfigProvider,
     this.deviceService
   );
+
+  private projectResourceInfoProvider = new ProjectResourceInfoProvider();
 
   @RpcFunction
   async getEnvironmentConfig(): Promise<IEnvironmentConfigForRendererProcess> {
@@ -177,6 +180,11 @@ export class Services implements IBackendAgent {
     unsubscribe: this.keyboardShapesProvider.unsubscribeFileUpdation
   };
 
+  @RpcFunction
+  async getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]> {
+    return this.projectResourceInfoProvider.getAllProjectResourceInfos();
+  }
+
   private handleSynchronousMessagePacket(packet: ISynchronousIpcPacket) {
     if (packet.debugMessage) {
       console.log(packet.debugMessage);
@@ -202,6 +210,7 @@ export class Services implements IBackendAgent {
     console.log(`initialize services`);
     await resourceUpdator_syncRemoteResourcesToLocal();
     await applicationStorage.initialize();
+    await this.projectResourceInfoProvider.initialize();
     await this.applicationSettingsProvider.initialize();
     await this.keyboardConfigProvider.initialize();
     await this.keyboardShapesProvider.initialize();

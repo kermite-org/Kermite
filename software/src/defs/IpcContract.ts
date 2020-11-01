@@ -4,7 +4,11 @@ import {
   IEnvironmentConfigForRendererProcess,
   IApplicationSettings
 } from './ConfigTypes';
-import { IProfileData, IKeyboardShape } from './ProfileData';
+import {
+  IProfileData,
+  IKeyboardShape,
+  IProjectResourceInfo
+} from './ProfileData';
 
 export interface IProfileManagerStatus {
   currentProfileName: string;
@@ -75,6 +79,8 @@ export interface IBackendAgent {
   uploadFirmware(firmwareName: string, comPortName: string): Promise<string>;
   comPortPlugEvents: IEventSource<{ comPortName: string | undefined }>;
   layoutFileUpdationEvents: IEventSource<{ breedName: string }>;
+
+  getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
 }
 
 export interface ISynchronousIpcPacket {
