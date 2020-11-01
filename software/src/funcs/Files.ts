@@ -44,15 +44,19 @@ export async function fsxWriteJsonFile(fpath: string, obj: any): Promise<void> {
   return await fs.promises.writeFile(fpath, text);
 }
 
-export function globAsync(pattern: string): Promise<string[]> {
-  return new Promise((resolve, reject) =>
-    glob(pattern, (err, matches) => {
+export function globAsync(
+  pattern: string,
+  baseDir?: string
+): Promise<string[]> {
+  return new Promise((resolve, reject) => {
+    const options = baseDir ? { cwd: baseDir } : {};
+    return glob(pattern, options, (err, matches) => {
       if (err) {
         reject(err);
       }
       resolve(matches);
-    })
-  );
+    });
+  });
 }
 
 export function pathDirName(fpath: string) {
@@ -69,4 +73,8 @@ export function pathJoin(...parts: string[]) {
 
 export function pathResolve(...segments: string[]) {
   return path.resolve(...segments);
+}
+
+export function pathRelative(from: string, to: string) {
+  return path.relative(from, to);
 }
