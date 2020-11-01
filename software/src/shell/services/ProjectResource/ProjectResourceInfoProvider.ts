@@ -1,5 +1,5 @@
-import * as path from 'path';
 import { IProjectResourceInfo } from '~defs/ProfileData';
+import { pathJoin } from '~funcs/Files';
 import { IProjectResourceInfoProvider } from '../serviceInterfaces';
 import {
   IProjectResourceInfoSource,
@@ -43,7 +43,7 @@ export class ProjectResourceInfoProvider
   ): string | undefined {
     const info = this.getProjectResourceInfoById(projectId);
     const folder = info?.presetsFolderPath;
-    return folder && path.join(folder, `${presetName}.json`);
+    return folder && pathJoin(folder, `${presetName}.json`);
   }
 
   getHexFilePath(projectId: string): string | undefined {

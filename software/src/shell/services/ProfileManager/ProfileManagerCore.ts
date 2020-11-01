@@ -1,4 +1,3 @@
-import * as path from 'path';
 import { IProfileData, fallbackProfileData } from '~defs/ProfileData';
 import {
   fsIsFileExists,
@@ -8,7 +7,8 @@ import {
   fsRenameFile,
   fsDeleteFile,
   fsCopyFile,
-  fsxReadJsonFile
+  fsxReadJsonFile,
+  pathBaseName
 } from '~funcs/Files';
 import { duplicateObjectByJsonStringifyParse } from '~funcs/Utils';
 import { appEnv } from '~shell/base/AppEnvironment';
@@ -58,7 +58,7 @@ export class ProfileManagerCore {
     profileData: IProfileData
   ): Promise<void> {
     const fpath = this.getDataFilePath(profName);
-    console.log(`saving current profile to ${path.basename(fpath)}`);
+    console.log(`saving current profile to ${pathBaseName(fpath)}`);
     await fsxWriteJsonFile(fpath, profileData);
   }
 

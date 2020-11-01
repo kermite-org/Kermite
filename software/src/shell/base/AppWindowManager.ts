@@ -1,5 +1,5 @@
-import * as path from 'path';
 import { BrowserWindow } from 'electron';
+import { pathJoin } from '~funcs/Files';
 import { appEnv } from './AppEnvironment';
 
 // Electronのウインドウを管理するクラス
@@ -12,7 +12,7 @@ export class AppWindowManager {
       height: 800,
       webPreferences: {
         nodeIntegration: false,
-        preload: path.join(__dirname, 'preload.js')
+        preload: pathJoin(__dirname, 'preload.js')
       }
     };
 

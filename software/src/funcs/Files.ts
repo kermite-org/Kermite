@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as path from 'path';
 import { glob } from 'glob';
 
 export function fsCreateDirectory(fpath: string) {
@@ -52,4 +53,20 @@ export function globAsync(pattern: string): Promise<string[]> {
       resolve(matches);
     })
   );
+}
+
+export function pathDirName(fpath: string) {
+  return path.dirname(fpath);
+}
+
+export function pathBaseName(fpath: string) {
+  return path.basename(fpath);
+}
+
+export function pathJoin(...parts: string[]) {
+  return path.join(...parts);
+}
+
+export function pathResolve(...segments: string[]) {
+  return path.resolve(...segments);
 }

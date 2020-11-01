@@ -1,6 +1,12 @@
-import * as path from 'path';
 import { IKeyboardShapeDisplayArea, IKeyUnitEntry } from '~defs/ProfileData';
-import { fsIsFileExists, fsxReadJsonFile, globAsync } from '~funcs/Files';
+import {
+  fsIsFileExists,
+  fsxReadJsonFile,
+  globAsync,
+  pathBaseName,
+  pathDirName,
+  pathJoin
+} from '~funcs/Files';
 import { appEnv } from '~shell/base/AppEnvironment';
 
 export interface IProjectResourceInfoSource {
@@ -29,14 +35,14 @@ export namespace ProjectResourceInfoSourceLoader {
 
     return await Promise.all(
       metadataFilePaths.map(async (metadataFilePath) => {
-        const projectBaseDir = path.dirname(metadataFilePath);
-        const coreName = path.basename(projectBaseDir);
+        const projectBaseDir = pathDirName(metadataFilePath);
+        const coreName = pathBaseName(projectBaseDir);
 
         const projectPath = projectBaseDir.replace(`${baseDir}/`, '');
 
-        const layoutFilePath = path.join(projectBaseDir, 'layout.json');
-        const _hexFilePath = path.join(projectBaseDir, `${coreName}.hex`);
-        const _presetsFolderPath = path.join(projectBaseDir, 'profiles');
+        const layoutFilePath = pathJoin(projectBaseDir, 'layout.json');
+        const _hexFilePath = pathJoin(projectBaseDir, `${coreName}.hex`);
+        const _presetsFolderPath = pathJoin(projectBaseDir, 'profiles');
 
         const hexFilePath =
           (fsIsFileExists(_hexFilePath) && _hexFilePath) || undefined;
@@ -55,7 +61,7 @@ export namespace ProjectResourceInfoSourceLoader {
           const pattern = `${presetsFolderPath}/*.json`;
           const presetFilePaths = await globAsync(pattern);
           presetNames = presetFilePaths.map((fpath) =>
-            path.basename(fpath).replace('.json', '')
+            pathBaseName(fpath).replace('.json', '')
           );
         }
 
@@ -74,8 +80,8 @@ export namespace ProjectResourceInfoSourceLoader {
 
   async function loadLocalResources(): Promise<IProjectResourceInfoSource[]> {
     // read local resources from
-    // path.resolve('../firmware/src/projects');
-    // path.resolve('../firmware/build');
+    // pathResolve('../firmware/src/projects');
+    // pathResolve('../firmware/build');
     return [];
   }
 

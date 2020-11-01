@@ -1,12 +1,11 @@
 import * as fs from 'fs';
-import * as path from 'path';
 import {
   IKeyboardShape,
   IKeyboardShapeDisplayArea,
   IKeyUnitEntry,
   keyboardShape_fallbackData
 } from '~defs/ProfileData';
-import { fsxReadTextFile, globAsync } from '~funcs/Files';
+import { fsxReadTextFile, globAsync, pathResolve } from '~funcs/Files';
 import { removeArrayItems } from '~funcs/Utils';
 import { appEnv } from '~shell/base/AppEnvironment';
 
@@ -18,7 +17,7 @@ interface IKeyboardShapeSourceJson {
 
 function getBaseDir() {
   if (appEnv.isDevelopment) {
-    return path.resolve('../firmware/src/projects');
+    return pathResolve('../firmware/src/projects');
   } else {
     return appEnv.resolveUserDataFilePath('resources/variants');
   }
