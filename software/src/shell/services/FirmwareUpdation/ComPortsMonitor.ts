@@ -13,14 +13,15 @@ export class ComPortsMonitor {
   private activeComPortName: string | undefined = undefined;
   private comPortEnumerationStartTime: number = 0;
 
-  subscribeComPorts(listener: ComPortsListener) {
-    this.comPortListeners.push(listener);
-    this.comPortEnumerationStartTime = Date.now();
-  }
-
-  unsubscribeComPorts(listener: ComPortsListener) {
-    removeArrayItems(this.comPortListeners, listener);
-  }
+  comPortPlugEvents = {
+    subscribe: (listener: ComPortsListener) => {
+      this.comPortListeners.push(listener);
+      this.comPortEnumerationStartTime = Date.now();
+    },
+    unsubscribe: (listener: ComPortsListener) => {
+      removeArrayItems(this.comPortListeners, listener);
+    }
+  };
 
   private updateComPortsMonitor = async () => {
     if (this.comPortListeners.length > 0) {

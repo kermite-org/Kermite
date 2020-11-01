@@ -34,13 +34,15 @@ export class ProfileManager {
     return this.status.loadedProfileData;
   }
 
-  subscribeStatus = (listener: StatusListener) => {
-    this.statusListeners.push(listener);
-    listener(this.status);
-  };
+  statusEvents = {
+    subscribe: (listener: StatusListener) => {
+      this.statusListeners.push(listener);
+      listener(this.status);
+    },
 
-  unsubscribeStatus = (listener: StatusListener) => {
-    removeArrayItems(this.statusListeners, listener);
+    unsubscribe: (listener: StatusListener) => {
+      removeArrayItems(this.statusListeners, listener);
+    }
   };
 
   private setStatus(newStatePartial: Partial<IProfileManagerStatus>) {

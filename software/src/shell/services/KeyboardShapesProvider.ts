@@ -102,12 +102,14 @@ export class KeyboardShapesProvider {
 
   private listeners: IFileUpdationListener[] = [];
 
-  subscribeFileUpdation = (listener: IFileUpdationListener) => {
-    this.listeners.push(listener);
-  };
+  fileUpdationEvents = {
+    subscribe: (listener: IFileUpdationListener) => {
+      this.listeners.push(listener);
+    },
 
-  unsubscribeFileUpdation = (listener: IFileUpdationListener) => {
-    removeArrayItems(this.listeners, listener);
+    unsubscribe: (listener: IFileUpdationListener) => {
+      removeArrayItems(this.listeners, listener);
+    }
   };
 
   onFileUpdated = async (filePath: string) => {

@@ -1,4 +1,4 @@
-import { ComPortsMonitor, ComPortsListener } from './ComPortsMonitor';
+import { ComPortsMonitor } from './ComPortsMonitor';
 import { FirmwareFilesManager } from './FirmwareFilesManager';
 import { FirmwareFilesResource } from './FirmwareFilesResource';
 import { FlashCommander } from './FlashCommander';
@@ -13,13 +13,7 @@ export class FirmwareUpdationService {
     return this.binaryFilesManager.firmwareNames;
   }
 
-  subscribeComPorts = (listener: ComPortsListener) => {
-    this.comPortsMonitor.subscribeComPorts(listener);
-  };
-
-  unsubscribeComPorts = (listener: ComPortsListener) => {
-    this.comPortsMonitor.unsubscribeComPorts(listener);
-  };
+  comPortPlugEvents = this.comPortsMonitor.comPortPlugEvents;
 
   async writeFirmware(
     firmwareName: string,

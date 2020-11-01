@@ -125,16 +125,10 @@ export class Services implements IBackendAgent {
   }
 
   @RpcEventSource
-  keyEvents = {
-    subscribe: this.deviceService.subscribe,
-    unsubscribe: this.deviceService.unsubscribe
-  };
+  keyEvents = this.deviceService.realtimeEvents;
 
   @RpcEventSource
-  profileStatusEvents = {
-    subscribe: this.profileManager.subscribeStatus,
-    unsubscribe: this.profileManager.unsubscribeStatus
-  };
+  profileStatusEvents = this.profileManager.statusEvents;
 
   @RpcEventSource
   appWindowEvents: IEventSource<IAppWindowEvent> = {
@@ -147,10 +141,7 @@ export class Services implements IBackendAgent {
   };
 
   @RpcEventSource
-  keyboardDeviceStatusEvents = {
-    subscribe: this.deviceService.deviceStatus.subscribe,
-    unsubscribe: this.deviceService.deviceStatus.unsubscribe
-  };
+  keyboardDeviceStatusEvents = this.deviceService.deviceStatus;
 
   @RpcFunction
   async getFirmwareNamesAvailable(): Promise<string[]> {
@@ -169,16 +160,10 @@ export class Services implements IBackendAgent {
   }
 
   @RpcEventSource
-  comPortPlugEvents = {
-    subscribe: this.firmwareUpdationService.subscribeComPorts,
-    unsubscribe: this.firmwareUpdationService.unsubscribeComPorts
-  };
+  comPortPlugEvents = this.firmwareUpdationService.comPortPlugEvents;
 
   @RpcEventSource
-  layoutFileUpdationEvents = {
-    subscribe: this.keyboardShapesProvider.subscribeFileUpdation,
-    unsubscribe: this.keyboardShapesProvider.unsubscribeFileUpdation
-  };
+  layoutFileUpdationEvents = this.keyboardShapesProvider.fileUpdationEvents;
 
   @RpcFunction
   async getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]> {

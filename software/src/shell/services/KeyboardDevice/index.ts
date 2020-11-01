@@ -129,12 +129,14 @@ export class KeyboardDeviceService {
     return !!this.deviceWrapper;
   }
 
-  subscribe = (proc: IRealtimeEventListenerFunc) => {
-    this.listeners.push(proc);
-  };
+  realtimeEvents = {
+    subscribe: (proc: IRealtimeEventListenerFunc) => {
+      this.listeners.push(proc);
+    },
 
-  unsubscribe = (proc: IRealtimeEventListenerFunc) => {
-    removeArrayItems(this.listeners, proc);
+    unsubscribe: (proc: IRealtimeEventListenerFunc) => {
+      removeArrayItems(this.listeners, proc);
+    }
   };
 
   private isSideBrainMode = false;
