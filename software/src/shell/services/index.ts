@@ -135,25 +135,6 @@ export class Services implements IBackendAgent {
     );
   }
 
-  @RpcEventSource
-  keyEvents = this.deviceService.realtimeEventPort;
-
-  @RpcEventSource
-  profileStatusEvents = this.profileManager.statusEvents;
-
-  @RpcEventSource
-  appWindowEvents: IEventSource<IAppWindowEvent> = {
-    subscribe(listener) {
-      appEventBus.on('appWindowEvent', listener);
-    },
-    unsubscribe(listener) {
-      appEventBus.off('appWindowEvent', listener);
-    }
-  };
-
-  @RpcEventSource
-  keyboardDeviceStatusEvents = this.deviceService.deviceStatus;
-
   @RpcFunction
   async getFirmwareNamesAvailable(): Promise<string[]> {
     return this.firmwareUpdationService.getFirmwareNamesAvailable();
@@ -170,6 +151,20 @@ export class Services implements IBackendAgent {
     );
   }
 
+  @RpcFunction
+  async getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]> {
+    return this.projectResourceInfoProvider.getAllProjectResourceInfos();
+  }
+
+  @RpcEventSource
+  keyboardDeviceStatusEvents = this.deviceService.deviceStatus;
+
+  @RpcEventSource
+  keyEvents = this.deviceService.realtimeEventPort;
+
+  @RpcEventSource
+  profileStatusEvents = this.profileManager.statusEvents;
+
   @RpcEventSource
   comPortPlugEvents = this.firmwareUpdationService.comPortPlugEvents;
 
@@ -177,10 +172,15 @@ export class Services implements IBackendAgent {
   layoutFileUpdationEvents = this.keyboardLayoutFilesWatcher
     .fileUpdationEventPort;
 
-  @RpcFunction
-  async getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]> {
-    return this.projectResourceInfoProvider.getAllProjectResourceInfos();
-  }
+  @RpcEventSource
+  appWindowEvents: IEventSource<IAppWindowEvent> = {
+    subscribe(listener) {
+      appEventBus.on('appWindowEvent', listener);
+    },
+    unsubscribe(listener) {
+      appEventBus.off('appWindowEvent', listener);
+    }
+  };
 
   private handleSynchronousMessagePacket(packet: ISynchronousIpcPacket) {
     if (packet.debugMessage) {
