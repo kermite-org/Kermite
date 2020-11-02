@@ -1,18 +1,5 @@
 import { appUi } from '~ui/core';
-import { models } from '~ui/models';
-
-export function makeGlobalMenuModel() {
-  const self = {
-    isOpen: false,
-    openMenu() {
-      self.isOpen = true;
-    },
-    closeMenu() {
-      self.isOpen = false;
-    }
-  };
-  return self;
-}
+import { Models } from '~ui/models';
 
 interface IMenuItem {
   key: string;
@@ -21,7 +8,7 @@ interface IMenuItem {
   active: boolean;
 }
 
-export function createMenuItems(): IMenuItem[] {
+function createMenuItems(models: Models): IMenuItem[] {
   const { settings } = models.uiStatusModel;
 
   const menuItems: IMenuItem[] = [
@@ -33,18 +20,6 @@ export function createMenuItems(): IMenuItem[] {
       },
       active: settings.showTestInputArea
     },
-    // {
-    //   key: 'miShowShapePreview',
-    //   text: 'Show shape preview page',
-    //   handler() {
-    //     if (settings.page !== 'shapePreview') {
-    //       settings.page = 'shapePreview';
-    //     } else {
-    //       settings.page = 'editor';
-    //     }
-    //   },
-    //   active: settings.page === 'shapePreview'
-    // },
     {
       key: 'miThemeLight',
       text: 'Light Theme',
@@ -67,5 +42,23 @@ export function createMenuItems(): IMenuItem[] {
     return menuItems;
   } else {
     return menuItems.filter((mi) => mi.key !== 'miShowShapePreview');
+  }
+}
+
+export class GlobalMenuViewModel {
+  isOpen: boolean = false;
+
+  constructor(private models: Models) {}
+
+  openMenu = () => {
+    this.isOpen = true;
+  };
+
+  closeMenu = () => {
+    this.isOpen = false;
+  };
+
+  get menuItems() {
+    return createMenuItems(this.models);
   }
 }

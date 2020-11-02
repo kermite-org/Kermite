@@ -46,7 +46,7 @@ export const ConfiguratorZoneRoot = () => {
     <CustomWindowFrame renderTitleBar={() => <TitleBarSection />}>
       <div css={cssContentRow}>
         <div css={cssNavigationColumn}>
-          <GlobalMenuPart />
+          <GlobalMenuPart vm={viewModels.globalMenu} />
           <NavigationButtonsArea />
         </div>
         <div css={cssMainColumn}>

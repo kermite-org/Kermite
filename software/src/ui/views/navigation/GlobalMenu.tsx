@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { createMenuItems, makeGlobalMenuModel } from './GlobalMenu.model';
+import { GlobalMenuViewModel } from '~ui/viewModels/GlobalMenuViewModel';
 
 const cssBase = css``;
 
@@ -53,29 +53,24 @@ const cssMenuPopup = css`
   }
 `;
 
-export const GlobalMenuPart = () => {
-  const menuModel = makeGlobalMenuModel();
+export const GlobalMenuPart = (props: { vm: GlobalMenuViewModel }) => {
+  const { isOpen, openMenu, closeMenu, menuItems } = props.vm;
 
-  return () => {
-    const { isOpen, openMenu, closeMenu } = menuModel;
-
-    const menuItems = createMenuItems();
-    return (
-      <div css={cssBase}>
-        <div css={cssOverlay} qxIf={isOpen} onClick={closeMenu} />
-        <div css={cssMenuArea}>
-          <div css={cssMenuButton} onMouseDown={openMenu}>
-            <i className="fa fa-bars" />
-          </div>
-          <div css={cssMenuPopup} qxIf={isOpen}>
-            {menuItems.map((mi) => (
-              <div key={mi.key} onMouseUp={mi.handler}>
-                {mi.active ? '✓' : ''} {mi.text}
-              </div>
-            ))}
-          </div>
+  return (
+    <div css={cssBase}>
+      <div css={cssOverlay} qxIf={isOpen} onClick={closeMenu} />
+      <div css={cssMenuArea}>
+        <div css={cssMenuButton} onMouseDown={openMenu}>
+          <i className="fa fa-bars" />
+        </div>
+        <div css={cssMenuPopup} qxIf={isOpen}>
+          {menuItems.map((mi) => (
+            <div key={mi.key} onMouseUp={mi.handler}>
+              {mi.active ? '✓' : ''} {mi.text}
+            </div>
+          ))}
         </div>
       </div>
-    );
-  };
+    </div>
+  );
 };
