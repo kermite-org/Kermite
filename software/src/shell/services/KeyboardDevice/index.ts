@@ -97,7 +97,7 @@ export class KeyboardDeviceService {
     // const isOpen = dw.open(0xf055, 0xa57a, 'mi_03');
     if (isOpen) {
       console.log('device opened');
-      this.deviceStatus.patch({ isConnected: true });
+      this.deviceStatus.set({ isConnected: true });
     } else {
       console.log(`failed to open device`);
       return;
@@ -107,7 +107,7 @@ export class KeyboardDeviceService {
       this.decodeReceivedBytes(buf);
     });
     dw.onClosed(() => {
-      this.deviceStatus.patch({ isConnected: false });
+      this.deviceStatus.set({ isConnected: false });
     });
 
     dw.writeSingleFrame([0xf0, 0x10]); // device attributes request

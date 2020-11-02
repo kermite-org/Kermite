@@ -1,27 +1,42 @@
-import { fallbackKeyboardConfig, IKeyboardConfig } from '~defs/ConfigTypes';
-import { StatusSource } from '~funcs/StatusSource';
-import { overwriteObjectProps } from '~funcs/Utils';
+import { IKeyboardConfig, fallbackKeyboardConfig } from '~defs/ConfigTypes';
+import { removeArrayItems, overwriteObjectProps } from '~funcs/Utils';
 import { applicationStorage } from './ApplicationStorage';
+
+type IStatusListener = (config: Partial<IKeyboardConfig>) => void;
 
 // 環境に関連したキーボードの設定を保存する, レイアウト(US/JP)など
 export class KeyboardConfigProvider {
   private readonly storageKey = 'keyboardConfig';
 
-  readonly configStatus = new StatusSource<IKeyboardConfig>(
-    fallbackKeyboardConfig
-  );
+  private _keyboardConfig: IKeyboardConfig = fallbackKeyboardConfig;
+
+  private listeners: IStatusListener[] = [];
 
   get keyboardConfig() {
-    return this.configStatus.value;
+    return this._keyboardConfig;
+  }
+
+  subscribeStatus(listener: IStatusListener) {
+    listener(this.keyboardConfig);
+    this.listeners.push(listener);
+  }
+
+  unsubscribeStatus(listener: IStatusListener) {
+    removeArrayItems(this.listeners, listener);
+  }
+
+  private setStatus(newStatePartial: Partial<IKeyboardConfig>) {
+    this._keyboardConfig = { ...this.keyboardConfig, ...newStatePartial };
+    this.listeners.forEach((listener) => listener(newStatePartial));
   }
 
   writeKeyboardConfig(config: IKeyboardConfig) {
     const { behaviorMode, layoutStandard } = config;
     if (this.keyboardConfig.behaviorMode !== behaviorMode) {
-      this.configStatus.patch({ behaviorMode });
+      this.setStatus({ behaviorMode });
     }
     if (this.keyboardConfig.layoutStandard !== layoutStandard) {
-      this.configStatus.patch({ layoutStandard });
+      this.setStatus({ layoutStandard });
     }
   }
 
@@ -35,10 +50,10 @@ export class KeyboardConfigProvider {
   }
 
   initialize() {
-    this.configStatus.replace(this.loadConfig());
+    this._keyboardConfig = this.loadConfig();
   }
 
   terminate() {
-    applicationStorage.setItem(this.storageKey, this.configStatus.value);
+    applicationStorage.setItem(this.storageKey, this._keyboardConfig);
   }
 }
