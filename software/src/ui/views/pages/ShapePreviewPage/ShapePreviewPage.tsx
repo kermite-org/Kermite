@@ -1,6 +1,5 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { models } from '~ui/models';
 import { ShapePreviewPageViewModel } from '~ui/viewModels/ShapePreviewPageViewModel';
 import { BreedSelector } from './Controls/BreedSelector';
 import { PreviewOptionsBox } from './Controls/PreviewOptionsBox';
@@ -41,30 +40,21 @@ const cssShapePreviewPage = css`
 export const KeyboardShapePreviewPage = (props: {
   vm: ShapePreviewPageViewModel;
 }) => {
-  const {
-    loadedShape,
-    allBreedNames,
-    currentBreedName,
-    setCurrentBreedName,
-    settings
-  } = props.vm;
+  const { loadedShape, settings, breedSelectorVM, holdKeyIndices } = props.vm;
   return (
     <div css={cssShapePreviewPage}>
       <div>keyboard shape preview</div>
       <div class="topRow">
-        <BreedSelector
-          allBreedNames={allBreedNames}
-          currentBreedName={currentBreedName}
-          setCurrentBreedName={setCurrentBreedName}
-        />
+        <BreedSelector vm={breedSelectorVM} />
         <PreviewOptionsBox settings={settings} />
       </div>
       <div class="keyboardRow">
-        {loadedShape && <KeyboardShapeView shape={loadedShape} />}
+        {loadedShape && (
+          <KeyboardShapeView shape={loadedShape} settings={settings} />
+        )}
       </div>
       <div class="restRow">
-        hold key indices:{' '}
-        {JSON.stringify([...models.playerModel.holdKeyIndices])}
+        hold key indices: {JSON.stringify(holdKeyIndices)}
       </div>
     </div>
   );

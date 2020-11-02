@@ -3,11 +3,17 @@ import { appUi, backendAgent } from '~ui/core';
 import { Models } from '~ui/models';
 import { IUiSettings } from '~ui/models/UiStatusModel';
 
+export interface IBreedSelectorViewModel {
+  allBreedNames: string[];
+  currentBreedName: string;
+  setCurrentBreedName: (beedName: string) => void;
+}
+
 export class ShapePreviewPageViewModel {
   loadedBreedName: string = '';
   loadedShape: IKeyboardShape | undefined;
 
-  constructor(private models: Models) {}
+  constructor(public models: Models) {}
 
   get settings(): IUiSettings {
     return this.models.uiStatusModel.settings;
@@ -31,12 +37,24 @@ export class ShapePreviewPageViewModel {
     }
   };
 
+  get breedSelectorVM(): IBreedSelectorViewModel {
+    return {
+      allBreedNames: this.allBreedNames,
+      currentBreedName: this.currentBreedName,
+      setCurrentBreedName: this.setCurrentBreedName
+    };
+  }
+
   private async loadShape(nextBreedName: string) {
     this.loadedBreedName = nextBreedName;
     this.loadedShape = await this.models.keyboardShapesModel.getKeyboardShapeByBreedName(
       nextBreedName
     );
     appUi.rerender();
+  }
+
+  get holdKeyIndices(): number[] {
+    return [...this.models.playerModel.holdKeyIndices];
   }
 
   private onFileUpdated = (args: { breedName: string }) => {

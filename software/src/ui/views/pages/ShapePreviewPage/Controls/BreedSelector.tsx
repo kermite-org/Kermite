@@ -1,12 +1,9 @@
 import { h } from '~lib/qx';
 import { reflectValue } from '~ui/base/FormHelpers';
+import { IBreedSelectorViewModel } from '~ui/viewModels/ShapePreviewPageViewModel';
 
-export function BreedSelector(props: {
-  allBreedNames: string[];
-  currentBreedName: string;
-  setCurrentBreedName(breedName: string): void;
-}) {
-  const { allBreedNames, currentBreedName, setCurrentBreedName } = props;
+export function BreedSelector(props: { vm: IBreedSelectorViewModel }) {
+  const { allBreedNames, currentBreedName, setCurrentBreedName } = props.vm;
   return (
     <select
       value={currentBreedName}

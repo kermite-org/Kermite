@@ -5,7 +5,7 @@ import {
   IKeyboardShapeDisplayArea,
   IKeyUnitEntry
 } from '~defs/ProfileData';
-import { models } from '~ui/models';
+import { IUiSettings } from '~ui/models/UiStatusModel';
 import { KeyUnitCard } from './KeyUnitCard';
 import { ScalerBox } from './ScalerBox';
 
@@ -66,14 +66,17 @@ const BoundingBox = (props: { displayArea: IKeyboardShapeDisplayArea }) => {
   );
 };
 
-export const KeyUnitCardsPart = (props: { keyUnits: IKeyUnitEntry[] }) => {
-  const settings = models.uiStatusModel.settings;
+export const KeyUnitCardsPart = (props: {
+  keyUnits: IKeyUnitEntry[];
+  settings: IUiSettings;
+}) => {
+  const { keyUnits, settings } = props;
   const showKeyId = settings.shapeViewShowKeyId;
   const showKeyIndex = settings.shapeViewShowKeyIndex;
 
   return (
     <g>
-      {props.keyUnits.map((keyUnit) => (
+      {keyUnits.map((keyUnit) => (
         <KeyUnitCard
           keyUnit={keyUnit}
           key={keyUnit.id}
@@ -86,8 +89,11 @@ export const KeyUnitCardsPart = (props: { keyUnits: IKeyUnitEntry[] }) => {
   );
 };
 
-export function KeyboardShapeView(props: { shape: IKeyboardShape }) {
-  const { shape } = props;
+export function KeyboardShapeView(props: {
+  shape: IKeyboardShape;
+  settings: IUiSettings;
+}) {
+  const { shape, settings } = props;
   const dpiScale = 2;
   const da = shape.displayArea;
   const marginRatio = 0.06;
@@ -108,8 +114,7 @@ export function KeyboardShapeView(props: { shape: IKeyboardShape }) {
     align-items: center;
   `;
 
-  const showBoundingBox =
-    models.uiStatusModel.settings.shapeViewShowBoundingBox;
+  const showBoundingBox = settings.shapeViewShowBoundingBox;
 
   return (
     <div css={cssKeyboardShapeView}>
@@ -117,7 +122,7 @@ export function KeyboardShapeView(props: { shape: IKeyboardShape }) {
         <div css={cssScalerContent}>
           <KeyboardSvgFrame displayArea={shape.displayArea} dpiScale={dpiScale}>
             <KeyboardBodyShape outerPaths={shape.bodyPathMarkupText} />
-            <KeyUnitCardsPart keyUnits={shape.keyUnits} />
+            <KeyUnitCardsPart keyUnits={shape.keyUnits} settings={settings} />
             <BoundingBox
               displayArea={shape.displayArea}
               qxIf={showBoundingBox}
