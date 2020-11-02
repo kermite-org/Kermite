@@ -16,7 +16,7 @@ export class KeyboardDeviceService {
 
   private deviceWrapper: DeviceWrapper | null = null;
 
-  deviceStatus = new StatusSource<{ isConnected: boolean }>({
+  readonly deviceStatus = new StatusSource<{ isConnected: boolean }>({
     isConnected: false
   });
 

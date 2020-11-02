@@ -34,7 +34,7 @@ export class ProfileManager {
     return this.status.loadedProfileData;
   }
 
-  statusEvents = {
+  readonly statusEvents = {
     subscribe: (listener: StatusListener) => {
       this.statusListeners.push(listener);
       listener(this.status);
