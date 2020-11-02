@@ -23,7 +23,7 @@ import { KeyMappingEmitter } from './KeyMappingEmitter';
 import { KeyboardConfigProvider } from './KeyboardConfigProvider';
 import { KeyboardDeviceService } from './KeyboardDevice';
 import { InputLogicSimulatorD } from './KeyboardLogic/InputLogicSimulatorD';
-import { KeyboardShapesProvider } from './KeyboardShapesProvider';
+import { KeyboardShapesProvider } from './KeyboardShape/KeyboardShapesProvider';
 import { ProfileManager } from './ProfileManager';
 import { ProjectResourceInfoProvider } from './ProjectResource/ProjectResourceInfoProvider';
 import { resourceUpdator_syncRemoteResourcesToLocal } from './ResourceUpdator';

@@ -13,7 +13,7 @@ import {
 import { duplicateObjectByJsonStringifyParse } from '~funcs/Utils';
 import { appEnv } from '~shell/base/AppEnvironment';
 import { applicationStorage } from '~shell/services/ApplicationStorage';
-import { KeyboardShapesProvider } from '../KeyboardShapesProvider';
+import { KeyboardShapesProvider } from '../KeyboardShape/KeyboardShapesProvider';
 
 export class ProfileManagerCore {
   constructor(private shapesProvider: KeyboardShapesProvider) {}

@@ -4,7 +4,7 @@ import {
 } from '~defs/IpcContract';
 import { IProfileData } from '~defs/ProfileData';
 import { clampValue, removeArrayItems } from '~funcs/Utils';
-import { KeyboardShapesProvider } from '../KeyboardShapesProvider';
+import { KeyboardShapesProvider } from '../KeyboardShape/KeyboardShapesProvider';
 import { ProfileManagerCore } from './ProfileManagerCore';
 
 type StatusListener = (partialStatus: Partial<IProfileManagerStatus>) => void;
