@@ -348,9 +348,9 @@ INDEX_JSON_SCHEME_DESC = {
   }
 }.freeze
 
-def make_index_json_content(revision, files_md5_dict)
+def make_index_json_content(revision, files_md5_dict, updated_at)
   {
-    updatedAt: Time.now.to_s,
+    updatedAt: updated_at,
     filesRevision: revision,
     files: files_md5_dict
   }
@@ -371,16 +371,18 @@ def update_index_if_files_changed
 
   files_changed = !source_index || source_index[:files] != files_md5_dict
   files_revision = source_index && source_index[:filesRevision] || 0
+  updated_at = source_index && source_index[:updatedAt] || Time.now.to_s
 
   puts "filesChanged: #{files_changed}"
   if files_changed
-    files_revision += 1
     puts "filesRevision: #{files_revision} --> #{files_revision + 1}"
+    files_revision += 1
+    updated_at = Time.now.to_s
   else
     puts "filesRevision: #{files_revision}"
   end
 
-  saving_index_obj = make_index_json_content(files_revision, files_md5_dict)
+  saving_index_obj = make_index_json_content(files_revision, files_md5_dict, updated_at)
   saving_index_text = JSON.pretty_generate(saving_index_obj)
   File.write('./dist/index.json', saving_index_text)
 
