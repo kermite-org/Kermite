@@ -150,7 +150,9 @@ export class InputLogicSimulatorD {
 
   initialize() {
     this.profileManager.statusEventPort.subscribe(this.onProfileStatusChanged);
-    this.keyboardConfigProvider.subscribeStatus(this.onKeyboardConfigChanged);
+    this.keyboardConfigProvider.statusEventPort.subscribe(
+      this.onKeyboardConfigChanged
+    );
     this.deviceService.realtimeEventPort.subscribe(
       this.onRealtimeKeyboardEvent
     );
@@ -161,7 +163,9 @@ export class InputLogicSimulatorD {
     this.profileManager.statusEventPort.unsubscribe(
       this.onProfileStatusChanged
     );
-    this.keyboardConfigProvider.unsubscribeStatus(this.onKeyboardConfigChanged);
+    this.keyboardConfigProvider.statusEventPort.unsubscribe(
+      this.onKeyboardConfigChanged
+    );
     this.deviceService.realtimeEventPort.unsubscribe(
       this.onRealtimeKeyboardEvent
     );
