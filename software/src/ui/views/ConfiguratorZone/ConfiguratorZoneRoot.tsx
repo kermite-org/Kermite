@@ -16,7 +16,9 @@ const pageComponentMap: {
 } = {
   editor: EditorPage,
   shapePreview: () => <KeyboardShapePreviewPage vm={viewModels.shapePreview} />,
-  firmwareUpdation: FirmwareUpdationPage
+  firmwareUpdation: () => (
+    <FirmwareUpdationPage vm={viewModels.firmwareUpdation} />
+  )
 };
 
 export const ConfiguratorZoneRoot = () => {
