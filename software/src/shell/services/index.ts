@@ -30,11 +30,14 @@ import { resourceUpdator_syncRemoteResourcesToLocal } from './ResourceUpdator';
 
 export class Services implements IBackendAgent {
   private applicationSettingsProvider = new ApplicationSettingsProvider();
+  private projectResourceInfoProvider = new ProjectResourceInfoProvider();
   private keyboardConfigProvider = new KeyboardConfigProvider();
   private keyboardShapesProvider = new KeyboardShapesProvider();
   private deviceService = new KeyboardDeviceService();
-  private firmwareUpdationService = new FirmwareUpdationService();
-  private projectResourceInfoProvider = new ProjectResourceInfoProvider();
+
+  private firmwareUpdationService = new FirmwareUpdationService(
+    this.projectResourceInfoProvider
+  );
 
   private profileManager = new ProfileManager(this.keyboardShapesProvider);
   private inputLogicSimulator = new InputLogicSimulatorD(
@@ -199,7 +202,7 @@ export class Services implements IBackendAgent {
 
     await this.projectResourceInfoProvider.initializeAsync();
     await this.keyboardShapesProvider.initialize();
-    await this.firmwareUpdationService.initializeAsync();
+    this.firmwareUpdationService.initialize();
 
     this.keyboardConfigProvider.initialize();
     this.deviceService.initialize();
@@ -221,6 +224,7 @@ export class Services implements IBackendAgent {
 
     this.deviceService.terminate();
     this.keyboardConfigProvider.terminate();
+    this.firmwareUpdationService.terminate();
 
     this.applicationSettingsProvider.terminate();
     await applicationStorage.terminateAsync();
