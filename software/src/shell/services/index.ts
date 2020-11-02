@@ -163,7 +163,7 @@ export class Services implements IBackendAgent {
   keyEvents = this.deviceService.realtimeEventPort;
 
   @RpcEventSource
-  profileStatusEvents = this.profileManager.statusEvents;
+  profileStatusEvents = this.profileManager.statusEventPort;
 
   @RpcEventSource
   comPortPlugEvents = this.firmwareUpdationService.comPortPlugEvents;

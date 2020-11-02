@@ -3,11 +3,10 @@ import {
   IProfileManagerStatus
 } from '~defs/IpcContract';
 import { IProfileData } from '~defs/ProfileData';
-import { clampValue, removeArrayItems } from '~funcs/Utils';
+import { EventPort } from '~funcs/EventPort';
+import { clampValue } from '~funcs/Utils';
 import { KeyboardShapesProvider } from '../KeyboardShape/KeyboardShapesProvider';
 import { ProfileManagerCore } from './ProfileManagerCore';
-
-type StatusListener = (partialStatus: Partial<IProfileManagerStatus>) => void;
 
 // プロファイルを<UserDataDir>/data/profiles以下でファイルとして管理
 export class ProfileManager {
@@ -19,8 +18,6 @@ export class ProfileManager {
   };
 
   private defaultProfileName = 'default';
-
-  private statusListeners: StatusListener[] = [];
 
   private savingProfileData: IProfileData | undefined = undefined;
 
@@ -34,20 +31,13 @@ export class ProfileManager {
     return this.status.loadedProfileData;
   }
 
-  readonly statusEvents = {
-    subscribe: (listener: StatusListener) => {
-      this.statusListeners.push(listener);
-      listener(this.status);
-    },
-
-    unsubscribe: (listener: StatusListener) => {
-      removeArrayItems(this.statusListeners, listener);
-    }
-  };
+  readonly statusEventPort = new EventPort<Partial<IProfileManagerStatus>>({
+    initialValueGetter: () => this.status
+  });
 
   private setStatus(newStatePartial: Partial<IProfileManagerStatus>) {
     this.status = { ...this.status, ...newStatePartial };
-    this.statusListeners.forEach((listener) => listener(newStatePartial));
+    this.statusEventPort.emit(newStatePartial);
   }
 
   private async initializeProfileList(): Promise<string[]> {
