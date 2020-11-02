@@ -5,16 +5,14 @@ import {
   IKeyboardConfig
 } from '~defs/ConfigTypes';
 import {
-  IAppWindowEvent,
   IBackendAgent,
   IProfileManagerCommand,
   ISynchronousIpcPacket
 } from '~defs/IpcContract';
 import { IKeyboardShape, IProjectResourceInfo } from '~defs/ProfileData';
-import { IEventSource } from '~lib/xpc/types';
 import { RpcEventSource, RpcFunction, xpcMain } from '~lib/xpc/xpcMain';
 import { appEnv } from '~shell/base/AppEnvironment';
-import { appEventBus } from '~shell/base/AppEventBus';
+import { appWindowEventHub } from '~shell/base/AppEventBus';
 import { appWindowManager } from '~shell/base/AppWindowManager';
 import { ApplicationSettingsProvider } from './ApplicationSettingsProvider';
 import { applicationStorage } from './ApplicationStorage';
@@ -176,14 +174,7 @@ export class Services implements IBackendAgent {
     .fileUpdationEventPort;
 
   @RpcEventSource
-  appWindowEvents: IEventSource<IAppWindowEvent> = {
-    subscribe(listener) {
-      appEventBus.on('appWindowEvent', listener);
-    },
-    unsubscribe(listener) {
-      appEventBus.off('appWindowEvent', listener);
-    }
-  };
+  appWindowEvents = appWindowEventHub;
 
   private handleSynchronousMessagePacket(packet: ISynchronousIpcPacket) {
     if (packet.debugMessage) {

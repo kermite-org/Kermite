@@ -1,9 +1,5 @@
 import { IAppWindowEvent } from '~defs/IpcContract';
-import { TypedEventEmitter } from '~funcs/TypedEventEmitter';
+import { EventPort } from '~funcs/EventPort';
 
-interface TypedApplicationEvent {
-  appWindowEvent: IAppWindowEvent;
-}
-
-// アプリケーションで扱うイベントを中継するためのEventEmitter
-export const appEventBus = new TypedEventEmitter<TypedApplicationEvent>();
+// ウインドウに関するイベントを中継するためのEventPort
+export const appWindowEventHub = new EventPort<IAppWindowEvent>();
