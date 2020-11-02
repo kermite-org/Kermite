@@ -33,7 +33,6 @@ export class Services implements IBackendAgent {
   private applicationSettingsProvider = new ApplicationSettingsProvider();
   private projectResourceInfoProvider = new ProjectResourceInfoProvider();
   private keyboardConfigProvider = new KeyboardConfigProvider();
-  private deviceService = new KeyboardDeviceService();
   private keyboardLayoutFilesWatcher = new KeyboardLayoutFilesWatcher();
 
   private keyboardShapesProvider = new KeyboardShapesProvider(
@@ -41,6 +40,10 @@ export class Services implements IBackendAgent {
   );
 
   private firmwareUpdationService = new FirmwareUpdationService(
+    this.projectResourceInfoProvider
+  );
+
+  private deviceService = new KeyboardDeviceService(
     this.projectResourceInfoProvider
   );
 
@@ -212,11 +215,10 @@ export class Services implements IBackendAgent {
     await this.projectResourceInfoProvider.initializeAsync();
     this.firmwareUpdationService.initialize();
     this.keyboardLayoutFilesWatcher.initialize();
+    await this.profileManager.initializeAsync();
 
     this.keyboardConfigProvider.initialize();
     this.deviceService.initialize();
-
-    await this.profileManager.initializeAsync();
     this.inputLogicSimulator.initialize();
 
     ipcMain.on('synchronousMessage', (event, packet: ISynchronousIpcPacket) => {
@@ -229,12 +231,11 @@ export class Services implements IBackendAgent {
   async terminate() {
     console.log(`terminate services`);
     this.inputLogicSimulator.terminate();
-    await this.profileManager.terminateAsync();
-
     this.deviceService.terminate();
     this.keyboardConfigProvider.terminate();
     this.keyboardLayoutFilesWatcher.terminate();
     this.firmwareUpdationService.terminate();
+    await this.profileManager.terminateAsync();
 
     this.applicationSettingsProvider.terminate();
     await applicationStorage.terminateAsync();

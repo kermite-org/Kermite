@@ -1,10 +1,14 @@
-import { IRealtimeKeyboardEvent } from '~defs/IpcContract';
+import {
+  IKeyboardDeviceStatus,
+  IRealtimeKeyboardEvent
+} from '~defs/IpcContract';
 import {
   ConfigStorageFormatRevision,
   RawHidMessageProtocolRevision
 } from '~defs/Versions';
 import { EventPort } from '~funcs/EventPort';
 import { StatusSource } from '~funcs/StatusSource';
+import { ProjectResourceInfoProvider } from '../ProjectResource/ProjectResourceInfoProvider';
 import { DeviceWrapper } from './DeviceWrapper';
 
 function bytesToString(bytes: number[]) {
@@ -16,9 +20,13 @@ export class KeyboardDeviceService {
 
   private deviceWrapper: DeviceWrapper | null = null;
 
-  readonly deviceStatus = new StatusSource<{ isConnected: boolean }>({
+  deviceStatus = new StatusSource<IKeyboardDeviceStatus>({
     isConnected: false
   });
+
+  constructor(
+    private projectResourceInfoProvider: ProjectResourceInfoProvider
+  ) {}
 
   private decodeReceivedBytes(buf: Uint8Array) {
     if (buf[0] === 0xf0 && buf[1] === 0x11) {
@@ -45,6 +53,19 @@ export class KeyboardDeviceService {
         console.log(
           `incompatible message protocol revision (software:${RawHidMessageProtocolRevision} firmware:${firmwareMessageProtocolRevision})`
         );
+      }
+
+      const info = this.projectResourceInfoProvider.getProjectResourceInfoById(
+        projectId
+      );
+      if (info) {
+        this.deviceStatus.set({
+          isConnected: true,
+          deviceAttrs: {
+            projectId,
+            projectName: info.projectName
+          }
+        });
       }
     }
 
@@ -97,7 +118,6 @@ export class KeyboardDeviceService {
     // const isOpen = dw.open(0xf055, 0xa57a, 'mi_03');
     if (isOpen) {
       console.log('device opened');
-      this.deviceStatus.set({ isConnected: true });
     } else {
       console.log(`failed to open device`);
       return;
@@ -107,7 +127,7 @@ export class KeyboardDeviceService {
       this.decodeReceivedBytes(buf);
     });
     dw.onClosed(() => {
-      this.deviceStatus.set({ isConnected: false });
+      this.deviceStatus.set({ isConnected: false, deviceAttrs: undefined });
     });
 
     dw.writeSingleFrame([0xf0, 0x10]); // device attributes request

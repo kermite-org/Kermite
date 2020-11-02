@@ -32,7 +32,7 @@ export class ProjectResourceInfoProvider
     });
   }
 
-  private getProjectResourceInfoById(projectId: string) {
+  getProjectResourceInfoById(projectId: string) {
     return this.projectResourceInfoSources.find(
       (info) => info.projectId === projectId
     );
