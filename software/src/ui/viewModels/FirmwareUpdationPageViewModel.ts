@@ -1,6 +1,6 @@
 import { Models } from '~ui/models';
 import { FirmwareUpdationModel } from '~ui/models/FirmwareUpdationModel';
-import { callErrorLogModal } from '~ui/views/ConfiguratorZone/pages/FirmwareUpdationPage/ErrorLogModal';
+import { callErrorLogModal } from '~ui/views/pages/FirmwareUpdationPage/ErrorLogModal';
 
 export class FirmwareUpdationPageViewModel {
   selectedFirmwareName: string = '';

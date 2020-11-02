@@ -1,11 +1,11 @@
 import { glob, setup, css } from 'goober';
 import { h } from '~lib/qx';
+import { DebugOverlay } from '~ui/base/layout/DebugOverlay';
+import { ForegroundModalLayerRoot } from '~ui/base/layout/ForegroundModalLayer';
 import { appUi } from '~ui/core';
 import { models } from '~ui/models';
-import { DebugOverlay } from '~ui/views/base/layout/DebugOverlay';
-import { ForegroundModalLayerRoot } from '~ui/views/base/layout/ForegroundModalLayer';
-import { ConfiguratorZoneRoot } from './ConfiguratorZone/ConfiguratorZoneRoot';
-import { WidgetZoneRoot } from './WidgetZone/WidgetZoneRoot';
+import { ConfiguratorZoneRoot } from './zones/ConfiguratorZoneRoot';
+import { WidgetZoneRoot } from './zones/WidgetZoneRoot';
 
 setup(h);
 

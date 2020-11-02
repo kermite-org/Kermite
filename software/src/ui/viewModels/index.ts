@@ -6,7 +6,7 @@ export class ViewModels {
   shapePreview: ShapePreviewPageViewModel;
   firmwareUpdation: FirmwareUpdationPageViewModel;
 
-  constructor(private models: Models) {
+  constructor(models: Models) {
     this.shapePreview = new ShapePreviewPageViewModel(models);
     this.firmwareUpdation = new FirmwareUpdationPageViewModel(models);
   }
