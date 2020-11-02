@@ -10,7 +10,7 @@ import { EditorModel } from './editor/EditorModel';
 import { PlayerModel } from './player/PlayerModel';
 import { ProfilesModel } from './profile/ProfilesModel';
 
-class Models {
+export class Models {
   deviceStatusModel = new DeviceStatusModel();
   editorModel = new EditorModel();
   playerModel = new PlayerModel(this.editorModel);

@@ -1,9 +1,9 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { playerModel } from '~ui/models';
+import { ShapePreviewPageViewModel } from '~ui/viewModels/ShapePreviewPageViewModel';
 import { BreedSelector } from './Controls/BreedSelector';
 import { PreviewOptionsBox } from './Controls/PreviewOptionsBox';
-import { ShapePreviewPageModel } from './ShapePreviewPage.model';
 import { KeyboardShapeView } from './ShapeView/KeyboardShapeView';
 
 const cssShapePreviewPage = css`
@@ -38,43 +38,33 @@ const cssShapePreviewPage = css`
   }
 `;
 
-export const KeyboardShapePreviewPage = () => {
-  const model = new ShapePreviewPageModel();
-
-  return {
-    didMount() {
-      model.initialize();
-    },
-    willUnmount() {
-      model.finalize();
-    },
-    render() {
-      const {
-        loadedShape,
-        allBreedNames,
-        currentBreedName,
-        setCurrentBreedName,
-        settings
-      } = model;
-      return (
-        <div css={cssShapePreviewPage}>
-          <div>keyboard shape preview</div>
-          <div class="topRow">
-            <BreedSelector
-              allBreedNames={allBreedNames}
-              currentBreedName={currentBreedName}
-              setCurrentBreedName={setCurrentBreedName}
-            />
-            <PreviewOptionsBox settings={settings} />
-          </div>
-          <div class="keyboardRow">
-            {loadedShape && <KeyboardShapeView shape={loadedShape} />}
-          </div>
-          <div class="restRow">
-            hold key indices: {JSON.stringify([...playerModel.holdKeyIndices])}
-          </div>
-        </div>
-      );
-    }
-  };
+export const KeyboardShapePreviewPage = (props: {
+  vm: ShapePreviewPageViewModel;
+}) => {
+  const {
+    loadedShape,
+    allBreedNames,
+    currentBreedName,
+    setCurrentBreedName,
+    settings
+  } = props.vm;
+  return (
+    <div css={cssShapePreviewPage}>
+      <div>keyboard shape preview</div>
+      <div class="topRow">
+        <BreedSelector
+          allBreedNames={allBreedNames}
+          currentBreedName={currentBreedName}
+          setCurrentBreedName={setCurrentBreedName}
+        />
+        <PreviewOptionsBox settings={settings} />
+      </div>
+      <div class="keyboardRow">
+        {loadedShape && <KeyboardShapeView shape={loadedShape} />}
+      </div>
+      <div class="restRow">
+        hold key indices: {JSON.stringify([...playerModel.holdKeyIndices])}
+      </div>
+    </div>
+  );
 };
