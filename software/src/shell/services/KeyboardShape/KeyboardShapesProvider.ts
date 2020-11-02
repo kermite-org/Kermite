@@ -2,8 +2,6 @@ import { IKeyboardShape } from '~defs/ProfileData';
 import { ProjectResourceInfoProvider } from '../ProjectResource/ProjectResourceInfoProvider';
 import { KeyboardLayoutFileLoader } from './KeyboardLayoutFileLoader';
 
-export type IFileUpdationListener = (args: { breedName: string }) => void;
-
 // キーボード品種ごとのレイアウトファイルを読み込み提供する
 export class KeyboardShapesProvider {
   constructor(

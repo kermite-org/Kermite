@@ -3,27 +3,22 @@ import {
   ConfigStorageFormatRevision,
   RawHidMessageProtocolRevision
 } from '~defs/Versions';
+import { EventPort } from '~funcs/EventPort';
 import { StatusSource } from '~funcs/StatusSource';
-import { removeArrayItems } from '~funcs/Utils';
 import { DeviceWrapper } from './DeviceWrapper';
-
-type IRealtimeEventListenerFunc = (event: IRealtimeKeyboardEvent) => void;
 
 function bytesToString(bytes: number[]) {
   return bytes.reduce((str, chr) => str + String.fromCharCode(chr), '');
 }
 // 接続中のキーボードとRawHIDでやりとりを行うためのブリッジ
 export class KeyboardDeviceService {
-  private listeners: IRealtimeEventListenerFunc[] = [];
+  readonly realtimeEventPort = new EventPort<IRealtimeKeyboardEvent>();
+
   private deviceWrapper: DeviceWrapper | null = null;
 
   deviceStatus = new StatusSource<{ isConnected: boolean }>({
     isConnected: false
   });
-
-  private emitRealtimeEvent(ev: IRealtimeKeyboardEvent) {
-    this.listeners.forEach((h) => h(ev));
-  }
 
   private decodeReceivedBytes(buf: Uint8Array) {
     if (buf[0] === 0xf0 && buf[1] === 0x11) {
@@ -56,7 +51,7 @@ export class KeyboardDeviceService {
     if (buf[0] === 0xe0 && buf[1] === 0x90) {
       const keyIndex = buf[2];
       const isDown = buf[3] !== 0;
-      this.emitRealtimeEvent({
+      this.realtimeEventPort.emit({
         type: 'keyStateChanged',
         keyIndex: keyIndex,
         isDown
@@ -65,7 +60,7 @@ export class KeyboardDeviceService {
 
     if (buf[0] === 0xe0 && buf[1] === 0x91) {
       const layerActiveFlags = (buf[2] << 8) | buf[3];
-      this.emitRealtimeEvent({
+      this.realtimeEventPort.emit({
         type: 'layerChanged',
         layerActiveFlags
       });
@@ -77,7 +72,7 @@ export class KeyboardDeviceService {
       const layerIndex = (assignHitResultWord >> 8) & 0x0f;
       const prioritySpec = (assignHitResultWord >> 12) & 0x03;
       // console.log(`assign hit @ device ${keyIndex} ${layerIndex}`);
-      this.emitRealtimeEvent({
+      this.realtimeEventPort.emit({
         type: 'assignHit',
         layerIndex,
         keyIndex,
@@ -129,16 +124,6 @@ export class KeyboardDeviceService {
     return !!this.deviceWrapper;
   }
 
-  realtimeEvents = {
-    subscribe: (proc: IRealtimeEventListenerFunc) => {
-      this.listeners.push(proc);
-    },
-
-    unsubscribe: (proc: IRealtimeEventListenerFunc) => {
-      removeArrayItems(this.listeners, proc);
-    }
-  };
-
   private isSideBrainMode = false;
 
   setSideBrainMode(enabled: boolean) {
@@ -165,7 +150,7 @@ export class KeyboardDeviceService {
   }
 
   emitRealtimeEventFromSimulator(event: IRealtimeKeyboardEvent) {
-    this.emitRealtimeEvent(event);
+    this.realtimeEventPort.emit(event);
   }
 
   writeSingleFrame(bytes: number[]) {

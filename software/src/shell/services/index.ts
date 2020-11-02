@@ -136,7 +136,7 @@ export class Services implements IBackendAgent {
   }
 
   @RpcEventSource
-  keyEvents = this.deviceService.realtimeEvents;
+  keyEvents = this.deviceService.realtimeEventPort;
 
   @RpcEventSource
   profileStatusEvents = this.profileManager.statusEvents;
@@ -174,7 +174,8 @@ export class Services implements IBackendAgent {
   comPortPlugEvents = this.firmwareUpdationService.comPortPlugEvents;
 
   @RpcEventSource
-  layoutFileUpdationEvents = this.keyboardLayoutFilesWatcher.fileUpdationEvents;
+  layoutFileUpdationEvents = this.keyboardLayoutFilesWatcher
+    .fileUpdationEventPort;
 
   @RpcFunction
   async getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]> {

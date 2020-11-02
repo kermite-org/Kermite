@@ -1,4 +1,5 @@
 import { FSWatcher } from 'fs';
+import { EventPort } from '~funcs/EventPort';
 import {
   fsIsFileExists,
   fsxWtachFilesChange,
@@ -6,31 +7,21 @@ import {
   pathRelative,
   pathResolve
 } from '~funcs/Files';
-import { removeArrayItems } from '~funcs/Utils';
 import { appEnv } from '~shell/base/AppEnvironment';
-import { IFileUpdationListener } from './KeyboardShapesProvider';
+
+type IFileUpdationEvent = { breedName: string };
 
 export class KeyboardLayoutFilesWatcher {
-  private listeners: IFileUpdationListener[] = [];
-
   private baseDir = pathResolve('../firmware/src/projects');
 
   private watcher: FSWatcher | undefined;
 
-  fileUpdationEvents = {
-    subscribe: (listener: IFileUpdationListener) => {
-      this.listeners.push(listener);
-    },
+  readonly fileUpdationEventPort = new EventPort<IFileUpdationEvent>();
 
-    unsubscribe: (listener: IFileUpdationListener) => {
-      removeArrayItems(this.listeners, listener);
-    }
-  };
-
-  onFileUpdated = async (filePath: string) => {
+  private onFileUpdated = async (filePath: string) => {
     if (filePath.endsWith('/layout.json')) {
       const breedName = pathRelative(this.baseDir, pathDirName(filePath));
-      this.listeners.forEach((listener) => listener({ breedName }));
+      this.fileUpdationEventPort.emit({ breedName });
     }
   };
 

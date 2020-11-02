@@ -151,14 +151,18 @@ export class InputLogicSimulatorD {
   initialize() {
     this.profileManager.statusEvents.subscribe(this.onProfileStatusChanged);
     this.keyboardConfigProvider.subscribeStatus(this.onKeyboardConfigChanged);
-    this.deviceService.realtimeEvents.subscribe(this.onRealtimeKeyboardEvent);
+    this.deviceService.realtimeEventPort.subscribe(
+      this.onRealtimeKeyboardEvent
+    );
     this.tickerTimer.start(this.processTicker, 5);
   }
 
   terminate() {
     this.profileManager.statusEvents.unsubscribe(this.onProfileStatusChanged);
     this.keyboardConfigProvider.unsubscribeStatus(this.onKeyboardConfigChanged);
-    this.deviceService.realtimeEvents.unsubscribe(this.onRealtimeKeyboardEvent);
+    this.deviceService.realtimeEventPort.unsubscribe(
+      this.onRealtimeKeyboardEvent
+    );
     if (this.isSideBranMode) {
       this.deviceService.setSideBrainMode(false);
       this.isSideBranMode = false;
