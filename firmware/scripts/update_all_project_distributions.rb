@@ -29,8 +29,8 @@ def load_firmware_common_revisions
   version_file_path = './src/modules/versions.h'
   content = File.read(version_file_path)
   {
-    storageFormatRevision: content.match(/^\#define CONFIG_STORAGE_FORMAT_REVISION (\d+)$/)[1],
-    messageProtocolRevision: content.match(/^\#define RAWHID_MESSAGE_PROTOCOL_REVISION (\d+)$/)[1]
+    storageFormatRevision: content.match(/^\#define CONFIG_STORAGE_FORMAT_REVISION (\d+)$/)[1].to_i,
+    messageProtocolRevision: content.match(/^\#define RAWHID_MESSAGE_PROTOCOL_REVISION (\d+)$/)[1].to_i
   }
 end
 
