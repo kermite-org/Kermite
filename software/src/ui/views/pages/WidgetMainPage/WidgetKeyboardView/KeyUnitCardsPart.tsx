@@ -1,12 +1,13 @@
 import { h } from '~lib/qx';
-import { makeKeyUnitCardsPartViewModel } from '~ui/views/pages/KeyAssignEditPage/KeyboardSection/KeyUnitCardsPart.model';
+import { IKeyUnitCardPartViewModel } from '~ui/views/pages/KeyAssignEditPage/KeyboardSection/KeyUnitCardsPart.model';
 import { KeyUnitCard } from './KeyUnitCard';
 
-export function WidgetKeyUnitCardsPart() {
-  const keyUnitCardsPartViewModel = makeKeyUnitCardsPartViewModel(false);
+export function WidgetKeyUnitCardsPart(props: {
+  vm: IKeyUnitCardPartViewModel;
+}) {
   return (
     <g>
-      {keyUnitCardsPartViewModel.cards.map((keyUnit) => (
+      {props.vm.cards.map((keyUnit) => (
         <KeyUnitCard
           keyUnit={keyUnit}
           key={keyUnit.keyUnitId}

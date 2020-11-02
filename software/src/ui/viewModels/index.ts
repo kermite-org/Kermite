@@ -1,9 +1,10 @@
-import { models, Models } from '~ui/models';
+import { Models } from '~ui/models';
 import { FirmwareUpdationPageViewModel } from './FirmwareUpdationPageViewModel';
 import { GlobalMenuViewModel } from './GlobalMenuViewModel';
 import { NavigationViewModel } from './NavigationViewModel';
 import { ShapePreviewPageViewModel } from './ShapePreviewPageViewModel';
 import { TitleBarViewModel } from './TitleBarViewModel';
+import { WidgetMainPageViewModel } from './WidgetMainPageViewModel';
 
 export class ViewModels {
   shapePreview: ShapePreviewPageViewModel;
@@ -11,6 +12,7 @@ export class ViewModels {
   globalMenu: GlobalMenuViewModel;
   titleBar: TitleBarViewModel;
   navigation: NavigationViewModel;
+  wdigetMainPage: WidgetMainPageViewModel;
 
   constructor(public models: Models) {
     this.shapePreview = new ShapePreviewPageViewModel(models);
@@ -18,6 +20,7 @@ export class ViewModels {
     this.globalMenu = new GlobalMenuViewModel(models);
     this.titleBar = new TitleBarViewModel(models);
     this.navigation = new NavigationViewModel(models);
+    this.wdigetMainPage = new WidgetMainPageViewModel();
   }
 
   initialize() {
@@ -30,5 +33,3 @@ export class ViewModels {
     this.firmwareUpdation.finalize();
   }
 }
-
-export const viewModels = new ViewModels(models);

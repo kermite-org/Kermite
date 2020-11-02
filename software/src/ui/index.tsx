@@ -1,14 +1,15 @@
 import { dumpXpcSubscriptionsRemained } from '~ui/core';
 import { initialzeRenderer, finalizeRenderer } from './domSetup';
 import { models } from './models';
-import { viewModels } from './viewModels';
+import { ViewModels } from './viewModels';
 
 async function start() {
   console.log('start');
 
   models.initialize();
+  const viewModels = new ViewModels(models);
   viewModels.initialize();
-  initialzeRenderer();
+  initialzeRenderer(viewModels);
 
   window.addEventListener('beforeunload', async () => {
     finalizeRenderer();

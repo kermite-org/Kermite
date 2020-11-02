@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { models } from '~ui/models';
+import { WidgetMainPageViewModel } from '~ui/viewModels/WidgetMainPageViewModel';
 import { SvgKeyboardView } from './WidgetKeyboardView/SvgKeyboardView';
 
 const styles = {
@@ -33,19 +33,15 @@ const styles = {
   `
 };
 
-export function MainPanel() {
+export function MainPanel({ vm }: { vm: WidgetMainPageViewModel }) {
   const contentScale = window.innerWidth / 600;
-
-  const onOpenButton = () => {
-    models.siteModel.setWidgetMode(false);
-  };
 
   return (
     <div css={styles.cssPanel(contentScale)}>
-      <div css={styles.cssConfigButton} onClick={onOpenButton}>
+      <div css={styles.cssConfigButton} onClick={vm.onOpenButton}>
         <i className="fa fa-cog" />
       </div>
-      <SvgKeyboardView />
+      <SvgKeyboardView vm={vm.keyboardVM} />
     </div>
   );
 }
