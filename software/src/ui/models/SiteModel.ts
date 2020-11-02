@@ -1,7 +1,7 @@
 import { IAppWindowEvent } from '~defs/IpcContract';
 import { backendAgent, appUi } from '~ui/core';
 
-class SiteModel {
+export class SiteModel {
   private _isWidgetMode: boolean = false;
   private _isWindowActive: boolean = true;
 
@@ -33,5 +33,3 @@ class SiteModel {
     backendAgent.appWindowEvents.unsubscribe(this.onAppWindowEvents);
   }
 }
-
-export const siteModel = new SiteModel();

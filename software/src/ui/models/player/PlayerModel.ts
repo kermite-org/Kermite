@@ -1,14 +1,16 @@
 import { IRealtimeKeyboardEvent } from '~defs/IpcContract';
 import { appUi } from '~ui/core';
-import { editorModel } from '~ui/models/editor/EditorModel';
+import { EditorModel } from '../editor/EditorModel';
 import { RealtimeKeyboardEventProvider } from './RealtimeKeyboardEventProvider';
 
-class PlayerModel {
+export class PlayerModel {
   private keyEventProvider = new RealtimeKeyboardEventProvider();
   private _keyStates: { [keyId: string]: boolean } = {};
   private _layerActiveFlags: number = 1;
 
   holdKeyIndices: Set<number> = new Set();
+
+  constructor(private editorModel: EditorModel) {}
 
   // getters
   get keyStates() {
@@ -24,7 +26,7 @@ class PlayerModel {
     layerName: string;
     isActive: boolean;
   }[] {
-    return editorModel.layers.map((la, index) => ({
+    return this.editorModel.layers.map((la, index) => ({
       layerId: la.layerId,
       layerName: la.layerName,
       isActive: this.isLayerActive(index)
@@ -32,11 +34,11 @@ class PlayerModel {
   }
 
   getDynamicKeyAssign = (keyUnitId: string) => {
-    const { layers } = editorModel;
+    const { layers } = this.editorModel;
     for (let i = layers.length - 1; i >= 0; i--) {
       if (this.isLayerActive(i)) {
         const layer = layers[i];
-        const assign = editorModel.getAssignForKeyUnit(
+        const assign = this.editorModel.getAssignForKeyUnit(
           keyUnitId,
           layer.layerId
         );
@@ -68,7 +70,7 @@ class PlayerModel {
         this.holdKeyIndices.delete(keyIndex);
       }
 
-      const keyUnit = editorModel.profileData.keyboardShape.keyUnits.find(
+      const keyUnit = this.editorModel.profileData.keyboardShape.keyUnits.find(
         (kp) => kp.keyIndex === keyIndex
       );
       if (keyUnit) {
@@ -90,5 +92,3 @@ class PlayerModel {
     this.keyEventProvider.stop();
   }
 }
-
-export const playerModel = new PlayerModel();
