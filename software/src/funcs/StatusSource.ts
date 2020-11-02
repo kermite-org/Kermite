@@ -10,11 +10,16 @@ export class StatusSource<T> {
     this.status = status;
   }
 
-  getStatus(): T {
+  get value(): T {
     return this.status;
   }
 
-  set(partialStatus: Partial<T>) {
+  replace(status: T) {
+    this.status = status;
+    this.listeners.forEach((li) => li(status));
+  }
+
+  patch(partialStatus: Partial<T>) {
     this.status = { ...this.status, ...partialStatus };
     this.listeners.forEach((li) => li(partialStatus));
   }

@@ -86,7 +86,7 @@ export class InputLogicSimulatorD {
     changedStatus: Partial<IProfileManagerStatus>
   ) => {
     if (changedStatus.loadedProfileData) {
-      console.log(`logicSimulator, profile data received`);
+      // console.log(`logicSimulator, profile data received`);
       this.updateProfileDataBlob();
     }
   };
@@ -97,13 +97,14 @@ export class InputLogicSimulatorD {
     if (changedConfig.behaviorMode) {
       const isSideBrainMode = changedConfig.behaviorMode === 'SideBrain';
       if (this.isSideBranMode !== isSideBrainMode) {
-        console.log({ isSideBrainMode });
+        console.log(
+          `logic mode: ${isSideBrainMode ? 'SideBrain' : 'Standalone'}`
+        );
         this.deviceService.setSideBrainMode(isSideBrainMode);
         this.isSideBranMode = isSideBrainMode;
       }
     }
     if (changedConfig.layoutStandard) {
-      // console.log({ layout: changedConfig.layoutStandard });
       this.updateProfileDataBlob();
     }
   };
@@ -150,7 +151,9 @@ export class InputLogicSimulatorD {
 
   initialize() {
     this.profileManager.statusEvents.subscribe(this.onProfileStatusChanged);
-    this.keyboardConfigProvider.subscribeStatus(this.onKeyboardConfigChanged);
+    this.keyboardConfigProvider.configStatus.subscribe(
+      this.onKeyboardConfigChanged
+    );
     this.deviceService.realtimeEventPort.subscribe(
       this.onRealtimeKeyboardEvent
     );
@@ -159,7 +162,9 @@ export class InputLogicSimulatorD {
 
   terminate() {
     this.profileManager.statusEvents.unsubscribe(this.onProfileStatusChanged);
-    this.keyboardConfigProvider.unsubscribeStatus(this.onKeyboardConfigChanged);
+    this.keyboardConfigProvider.configStatus.subscribe(
+      this.onKeyboardConfigChanged
+    );
     this.deviceService.realtimeEventPort.unsubscribe(
       this.onRealtimeKeyboardEvent
     );
