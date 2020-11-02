@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { uiStatusModel } from '~ui/models';
+import { models } from '~ui/models';
 import { reflectFieldChecked } from '~ui/views/base/FormHelpers';
 
 const cssBase = css`
@@ -10,7 +10,7 @@ const cssBase = css`
   }
 `;
 export const BehaviorOptionsPart = () => {
-  const { settings } = uiStatusModel;
+  const { settings } = models.uiStatusModel;
 
   return (
     <div css={cssBase}>

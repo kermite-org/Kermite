@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { editorModel } from '~ui/models';
+import { models } from '~ui/models';
 import {
   reflectFieldChecked,
   reflectFieldValue,
@@ -8,11 +8,11 @@ import {
 } from '~ui/views/base/FormHelpers';
 
 export const DualModeSettingsPart = () => {
-  if (editorModel.profileData.assignType === 'single') {
+  if (models.editorModel.profileData.assignType === 'single') {
     return null;
   }
 
-  const { settings } = editorModel.profileData;
+  const { settings } = models.editorModel.profileData;
 
   const onTapHoldThresholdValueChanged = (value: string) => {
     const val = parseInt(value);

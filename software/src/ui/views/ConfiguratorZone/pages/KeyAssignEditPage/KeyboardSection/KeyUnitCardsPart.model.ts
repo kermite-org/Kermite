@@ -4,7 +4,7 @@ import {
   IAssignEntryWithLayerFallback
 } from '~defs/ProfileData';
 import { VirtualKeyTexts } from '~defs/VirtualKeyTexts';
-import { editorModel, playerModel, uiStatusModel } from '~ui/models';
+import { models } from '~ui/models';
 
 export interface IKeyUnitCardViewModel {
   keyUnitId: string;
@@ -41,7 +41,7 @@ function getAssignOperationText(op?: IAssignOperation): string {
     return 'ex-clear';
   }
   if (op?.type === 'layerCall') {
-    const layer = editorModel.layers.find(
+    const layer = models.editorModel.layers.find(
       (la) => la.layerId === op.targetLayerId
     );
     if (layer && op.invocationMode === 'turnOff') {
@@ -111,12 +111,12 @@ function getAssignForKeyUnit(
   keyUnitId: string,
   isEdit: boolean
 ): IAssignEntryWithLayerFallback | undefined {
-  const dynamic = !isEdit || uiStatusModel.settings.showLayersDynamic;
+  const dynamic = !isEdit || models.uiStatusModel.settings.showLayersDynamic;
   return dynamic
-    ? playerModel.getDynamicKeyAssign(keyUnitId) || {
+    ? models.playerModel.getDynamicKeyAssign(keyUnitId) || {
         type: 'layerFallbackBlock'
       }
-    : editorModel.getAssignForKeyUnitWithLayerFallback(keyUnitId);
+    : models.editorModel.getAssignForKeyUnitWithLayerFallback(keyUnitId);
 }
 
 function makeKeyUnitCardViewModel(
@@ -126,7 +126,7 @@ function makeKeyUnitCardViewModel(
   const keyUnitId = kp.id;
   const pos = { x: kp.x, y: kp.y, r: kp.r || 0 };
 
-  const { isKeyUnitCurrent, setCurrentKeyUnitId } = editorModel;
+  const { isKeyUnitCurrent, setCurrentKeyUnitId } = models.editorModel;
   const isCurrent = isKeyUnitCurrent(keyUnitId);
   const setCurrent = () => setCurrentKeyUnitId(keyUnitId);
   const assign = getAssignForKeyUnit(keyUnitId, isEdit);
@@ -134,7 +134,7 @@ function makeKeyUnitCardViewModel(
     assign
   );
 
-  const isHold = playerModel.keyStates[kp.id];
+  const isHold = models.playerModel.keyStates[kp.id];
 
   return {
     keyUnitId,
@@ -151,9 +151,9 @@ function makeKeyUnitCardViewModel(
 export function makeKeyUnitCardsPartViewModel(
   isEdit: boolean
 ): IKeyUnitCardPartViewModel {
-  const { showLayerDefaultAssign } = uiStatusModel.settings;
+  const { showLayerDefaultAssign } = models.uiStatusModel.settings;
   return {
-    cards: editorModel.keyPositions.map((kp) =>
+    cards: models.editorModel.keyPositions.map((kp) =>
       makeKeyUnitCardViewModel(kp, isEdit)
     ),
     showLayerDefaultAssign

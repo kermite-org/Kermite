@@ -1,5 +1,5 @@
 import { h } from '~lib/qx';
-import { keyboardShapesModel } from '~ui/models';
+import { models } from '~ui/models';
 import { reflectFieldValue } from '~ui/views/base/FormHelpers';
 import {
   cssCommonPropertiesTable,
@@ -71,7 +71,7 @@ const ProfileSetupModalContent = (props: {
 };
 
 export const callProfileSetupModal = createModal(() => {
-  const breedNames = keyboardShapesModel.getAllBreedNames();
+  const breedNames = models.keyboardShapesModel.getAllBreedNames();
   const editValues: ICreateProfileDialogEditValues = {
     profileName: '',
     breedName: breedNames[0]

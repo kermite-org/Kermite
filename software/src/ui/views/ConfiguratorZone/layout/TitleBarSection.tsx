@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { backendAgent, uiTheme, appUi } from '~ui/core';
-import { siteModel } from '~ui/models';
+import { models } from '~ui/models';
 
 const ControlButton = (props: { icon: string; onClick: () => void }) => {
   const cssButton = css`
@@ -47,7 +47,7 @@ const ReloadButtonPart = () => {
 
 const ControlButtonsPart = () => {
   const onWidgetButton = () => {
-    siteModel.setWidgetMode(true);
+    models.siteModel.setWidgetMode(true);
   };
 
   const onMinimizeButton = () => {

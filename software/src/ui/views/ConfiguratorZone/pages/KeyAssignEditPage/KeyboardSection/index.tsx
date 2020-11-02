@@ -1,12 +1,12 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { uiTheme } from '~ui/core';
-import { editorModel } from '~ui/models';
+import { models } from '~ui/models';
 import { KeyUnitCardsPart } from './KeyUnitCardsPart';
 import { LayerStateView } from './LayerStateView';
 
 export const KeyboardBasePlane = (props: { children: any }) => {
-  const { clearAssignSlotSelection } = editorModel;
+  const { clearAssignSlotSelection } = models.editorModel;
   const { children } = props;
   const cssSvg = css`
     user-select: none;
@@ -34,7 +34,7 @@ export const KeyboardBasePlane = (props: { children: any }) => {
 };
 
 export const KeyboardBodyShape = () => {
-  const outerPaths = editorModel.bodyPathMarkupText;
+  const outerPaths = models.editorModel.bodyPathMarkupText;
   const cssBody = css`
     fill: ${uiTheme.colors.clKeyboardBodyFace};
   `;

@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { deviceStatusModel } from '~ui/models';
+import { models } from '~ui/models';
 import { LinkIndicator } from './LinkIndicator';
 
 export const DeviceControlSection = () => {
@@ -15,7 +15,7 @@ export const DeviceControlSection = () => {
   `;
 
   const currentDeviceProjectName =
-    deviceStatusModel.deviceAttrs?.projectName || '';
+    models.deviceStatusModel.deviceAttrs?.projectName || '';
 
   return (
     <div css={cssDeviceControlSection}>

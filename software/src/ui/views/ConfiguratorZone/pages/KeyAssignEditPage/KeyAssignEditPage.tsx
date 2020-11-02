@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { uiTheme } from '~ui/core';
-import { uiStatusModel } from '~ui/models';
+import { models } from '~ui/models';
 import { AssignEditSection } from './AssignEditSection';
 import { BehaviorOptionsPart } from './BehaviorOptionsPart';
 import { KeyboardSection } from './KeyboardSection';
@@ -109,7 +109,7 @@ export const KeyAssignEditPage = () => {
     <div css={cssKeyAssignEditPageRoot}>
       <div
         css={cssEditTopBarBox}
-        qxIf={uiStatusModel.settings.showTestInputArea}
+        qxIf={models.uiStatusModel.settings.showTestInputArea}
       >
         <TestInputArea />
       </div>

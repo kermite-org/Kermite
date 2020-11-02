@@ -4,7 +4,7 @@ import {
   IKeyboardLayoutStandard,
   IKeyboardBehaviorMode
 } from '~defs/ConfigTypes';
-import { keyboardConfigModel } from '~ui/models';
+import { models } from '~ui/models';
 
 interface IDualItemsHoverSelectorProps<T extends string> {
   items: T[];
@@ -72,9 +72,9 @@ function DualItemsHoverSelector<T extends string>(
 
 export const BehaviorSelector = () => {
   const modes: IKeyboardBehaviorMode[] = ['Standalone', 'SideBrain'];
-  const currentMode = keyboardConfigModel.behaviorMode;
+  const currentMode = models.keyboardConfigModel.behaviorMode;
   const setCurrent = (mode: IKeyboardBehaviorMode) => {
-    keyboardConfigModel.behaviorMode = mode;
+    models.keyboardConfigModel.behaviorMode = mode;
   };
   const textDictionary: { [key in IKeyboardBehaviorMode]: string } = {
     Standalone: 'STD',
@@ -93,9 +93,9 @@ export const BehaviorSelector = () => {
 
 export const LayoutStandardSelector = () => {
   const layouts: IKeyboardLayoutStandard[] = ['US', 'JIS'];
-  const currentLayout = keyboardConfigModel.layoutStandard;
+  const currentLayout = models.keyboardConfigModel.layoutStandard;
   const setCurrent = (layout: IKeyboardLayoutStandard) => {
-    keyboardConfigModel.layoutStandard = layout;
+    models.keyboardConfigModel.layoutStandard = layout;
   };
   const textDictionary: { [key in IKeyboardLayoutStandard]: string } = {
     US: 'US',

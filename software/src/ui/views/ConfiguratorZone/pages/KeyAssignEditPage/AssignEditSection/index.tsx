@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { uiTheme } from '~ui/core';
-import { editorModel } from '~ui/models';
+import { models } from '~ui/models';
 import { OpertionEditPart } from './OperationEditPart';
 import { OerationSlotsPart } from './OperationSlotsPart';
 
@@ -23,8 +23,8 @@ export function AssignEditSection() {
     padding: 8px;
   `;
 
-  const isDisabled = !editorModel.isSlotSelected;
-  const isDualMode = editorModel.isDualMode;
+  const isDisabled = !models.editorModel.isSlotSelected;
+  const isDualMode = models.editorModel.isDualMode;
 
   return (
     <div css={cssBase}>

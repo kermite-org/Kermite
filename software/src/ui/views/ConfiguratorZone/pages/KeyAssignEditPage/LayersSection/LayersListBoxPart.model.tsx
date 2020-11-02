@@ -1,5 +1,5 @@
 import { ILayer } from '~defs/ProfileData';
-import { editorModel } from '~ui/models';
+import { models } from '~ui/models';
 
 export interface ILayerListViewModel {
   layerId: string;
@@ -13,7 +13,7 @@ export interface ILayerListBoxPartViewModel {
 }
 
 function makeLayerListViewModel(layer: ILayer): ILayerListViewModel {
-  const { isLayerCurrent, setCurrentLayerId } = editorModel;
+  const { isLayerCurrent, setCurrentLayerId } = models.editorModel;
   const { layerId, layerName } = layer;
   const isCurrent = isLayerCurrent(layerId);
   const setCurrent = () => setCurrentLayerId(layerId);
@@ -27,6 +27,6 @@ function makeLayerListViewModel(layer: ILayer): ILayerListViewModel {
 
 export function makeLayerListBoxPartViewModel(): ILayerListBoxPartViewModel {
   return {
-    layers: editorModel.layers.map(makeLayerListViewModel)
+    layers: models.editorModel.layers.map(makeLayerListViewModel)
   };
 }

@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { uiTheme } from '~ui/core';
-import { uiStatusModel } from '~ui/models';
+import { models } from '~ui/models';
 import { PageSignature } from '~ui/models/UiStatusModel';
 import { viewModels } from '~ui/viewModels';
 import { CustomWindowFrame } from './layout/CustomWindowFrame';
@@ -20,7 +20,7 @@ const pageComponentMap: {
 };
 
 export const ConfiguratorZoneRoot = () => {
-  const PageComponent = pageComponentMap[uiStatusModel.settings.page];
+  const PageComponent = pageComponentMap[models.uiStatusModel.settings.page];
 
   const cssContentRow = css`
     background: ${uiTheme.colors.clBackground};

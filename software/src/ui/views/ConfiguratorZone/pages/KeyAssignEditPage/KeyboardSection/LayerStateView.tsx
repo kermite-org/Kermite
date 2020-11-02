@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { deviceStatusModel, playerModel } from '~ui/models';
+import { models } from '~ui/models';
 
 export const LayerStateView = () => {
   const cssBase = css`
@@ -30,11 +30,11 @@ export const LayerStateView = () => {
     overflow: hidden;
   `;
 
-  const { isConnected } = deviceStatusModel;
+  const { isConnected } = models.deviceStatusModel;
 
   return (
     <div css={cssBase}>
-      {playerModel.layerStackViewSource.map((la) => {
+      {models.playerModel.layerStackViewSource.map((la) => {
         return (
           <div
             key={la.layerId}

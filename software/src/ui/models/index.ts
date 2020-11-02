@@ -47,29 +47,3 @@ export class Models {
 }
 
 export const models = new Models();
-
-const {
-  deviceStatusModel,
-  editorModel,
-  playerModel,
-  profilesModel,
-  siteModel,
-  keyboardConfigModel,
-  uiStatusModel,
-  themeSelectionModel,
-  keyboardShapesModel,
-  firmwareUpdationModel
-} = models;
-
-export {
-  deviceStatusModel,
-  editorModel,
-  playerModel,
-  profilesModel,
-  siteModel,
-  keyboardConfigModel,
-  uiStatusModel,
-  themeSelectionModel,
-  keyboardShapesModel,
-  firmwareUpdationModel
-};

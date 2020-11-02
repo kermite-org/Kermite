@@ -1,4 +1,4 @@
-import { profilesModel } from '~ui/models';
+import { models } from '~ui/models';
 import {
   modalTextEdit,
   modalConfirm,
@@ -23,7 +23,7 @@ export function makeProfileManagementViewModel(): IProfileManagerViewModel {
     allProfileNames,
     loadProfile,
     saveProfile
-  } = profilesModel;
+  } = models.profilesModel;
 
   const checkValidNewProfileName = async (
     newProfileName: string
@@ -34,7 +34,7 @@ export function makeProfileManagementViewModel(): IProfileManagerViewModel {
       );
       return false;
     }
-    if (profilesModel.allProfileNames.includes(newProfileName)) {
+    if (models.profilesModel.allProfileNames.includes(newProfileName)) {
       await modalAlert(
         `${newProfileName} is already exists. operation cancelled.`
       );
@@ -50,7 +50,7 @@ export function makeProfileManagementViewModel(): IProfileManagerViewModel {
       const { profileName, breedName } = res;
       const nameValid = await checkValidNewProfileName(profileName);
       if (nameValid) {
-        profilesModel.createProfile(profileName, breedName);
+        models.profilesModel.createProfile(profileName, breedName);
       }
     }
   };
@@ -75,14 +75,14 @@ export function makeProfileManagementViewModel(): IProfileManagerViewModel {
   const renameProfile = async () => {
     const newProfileName = await inputNewProfileName('Rename Profile');
     if (newProfileName) {
-      profilesModel.renameProfile(newProfileName);
+      models.profilesModel.renameProfile(newProfileName);
     }
   };
 
   const copyProfile = async () => {
     const newProfileName = await inputNewProfileName('Copy Profile');
     if (newProfileName) {
-      profilesModel.copyProfile(newProfileName);
+      models.profilesModel.copyProfile(newProfileName);
     }
   };
 
@@ -92,7 +92,7 @@ export function makeProfileManagementViewModel(): IProfileManagerViewModel {
       caption: 'Delete Profile'
     });
     if (ok) {
-      profilesModel.deleteProfile();
+      models.profilesModel.deleteProfile();
     }
   };
 

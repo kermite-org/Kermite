@@ -1,5 +1,5 @@
 import { appUi } from '~ui/core';
-import { uiStatusModel, themeSelectionModel } from '~ui/models';
+import { models } from '~ui/models';
 
 export function makeGlobalMenuModel() {
   const self = {
@@ -22,7 +22,7 @@ interface IMenuItem {
 }
 
 export function createMenuItems(): IMenuItem[] {
-  const { settings } = uiStatusModel;
+  const { settings } = models.uiStatusModel;
 
   const menuItems: IMenuItem[] = [
     {
@@ -49,17 +49,17 @@ export function createMenuItems(): IMenuItem[] {
       key: 'miThemeLight',
       text: 'Light Theme',
       handler() {
-        themeSelectionModel.changeTheme('light');
+        models.themeSelectionModel.changeTheme('light');
       },
-      active: themeSelectionModel.currentTheme === 'light'
+      active: models.themeSelectionModel.currentTheme === 'light'
     },
     {
       key: 'miThemeDark',
       text: 'Dark Theme',
       handler() {
-        themeSelectionModel.changeTheme('dark');
+        models.themeSelectionModel.changeTheme('dark');
       },
-      active: themeSelectionModel.currentTheme === 'dark'
+      active: models.themeSelectionModel.currentTheme === 'dark'
     }
   ];
 

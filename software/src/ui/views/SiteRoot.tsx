@@ -1,7 +1,7 @@
 import { glob, setup, css } from 'goober';
 import { h } from '~lib/qx';
 import { appUi } from '~ui/core';
-import { siteModel } from '~ui/models';
+import { models } from '~ui/models';
 import { DebugOverlay } from '~ui/views/base/layout/DebugOverlay';
 import { ForegroundModalLayerRoot } from '~ui/views/base/layout/ForegroundModalLayer';
 import { ConfiguratorZoneRoot } from './ConfiguratorZone/ConfiguratorZoneRoot';
@@ -36,7 +36,7 @@ export const SiteRoot = () => {
     height: 100%;
   `;
 
-  const { isWidgetMode } = siteModel;
+  const { isWidgetMode } = models.siteModel;
 
   return (
     <div css={cssRoot}>

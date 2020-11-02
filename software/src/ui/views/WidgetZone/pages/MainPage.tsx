@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { siteModel } from '~ui/models';
+import { models } from '~ui/models';
 import { SvgKeyboardView } from './KeyboardView/SvgKeyboardView';
 
 const styles = {
@@ -37,7 +37,7 @@ export function MainPanel() {
   const contentScale = window.innerWidth / 600;
 
   const onOpenButton = () => {
-    siteModel.setWidgetMode(false);
+    models.siteModel.setWidgetMode(false);
   };
 
   return (

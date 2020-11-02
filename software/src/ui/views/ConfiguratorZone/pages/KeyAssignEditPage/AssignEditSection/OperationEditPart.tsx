@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { editorModel } from '~ui/models';
+import { models } from '~ui/models';
 import { LayerOptionEdit } from './LayerOptionEdit';
 import { OperationCard } from './OperationCard';
 import {
@@ -49,7 +49,7 @@ export function OpertionEditPart() {
     margin-top: 8px;
   `;
 
-  const { isSingleMode } = editorModel;
+  const { isSingleMode } = models.editorModel;
 
   return (
     <div css={cssAssignPanel}>

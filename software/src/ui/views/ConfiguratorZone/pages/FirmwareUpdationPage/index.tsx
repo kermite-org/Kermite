@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { firmwareUpdationModel } from '~ui/models';
+import { models } from '~ui/models';
 import { reflectValue } from '~ui/views/base/FormHelpers';
 import { callErrorLogModal } from './ErrorLogModal';
 
@@ -38,7 +38,7 @@ export const FirmwareUpdationPage = () => {
     }
   `;
 
-  const model = firmwareUpdationModel;
+  const model = models.firmwareUpdationModel;
 
   let selectedFirmwareName = '';
 

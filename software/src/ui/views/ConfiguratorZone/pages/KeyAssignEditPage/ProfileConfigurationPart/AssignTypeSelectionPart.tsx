@@ -1,14 +1,14 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { IProfileAssignType } from '~defs/ProfileData';
-import { editorModel } from '~ui/models';
+import { models } from '~ui/models';
 import { reflectValue } from '~ui/views/base/FormHelpers';
 
 const AssignTypeSelectionPartViewModel = () => {
   const assignTypeOptions: IProfileAssignType[] = ['single', 'dual'];
-  const currentAssignType = editorModel.profileData.assignType;
+  const currentAssignType = models.editorModel.profileData.assignType;
   const setAssignType = (value: string) => {
-    editorModel.changeProfileAssignType(value as IProfileAssignType);
+    models.editorModel.changeProfileAssignType(value as IProfileAssignType);
   };
   return { assignTypeOptions, currentAssignType, setAssignType };
 };
