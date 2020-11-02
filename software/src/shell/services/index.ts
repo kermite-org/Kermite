@@ -23,6 +23,7 @@ import { KeyMappingEmitter } from './KeyMappingEmitter';
 import { KeyboardConfigProvider } from './KeyboardConfigProvider';
 import { KeyboardDeviceService } from './KeyboardDevice';
 import { InputLogicSimulatorD } from './KeyboardLogic/InputLogicSimulatorD';
+import { KeyboardLayoutFilesWatcher } from './KeyboardShape/KeyboardLayoutFilesWatcher';
 import { KeyboardShapesProvider } from './KeyboardShape/KeyboardShapesProvider';
 import { ProfileManager } from './ProfileManager';
 import { ProjectResourceInfoProvider } from './ProjectResource/ProjectResourceInfoProvider';
@@ -32,14 +33,19 @@ export class Services implements IBackendAgent {
   private applicationSettingsProvider = new ApplicationSettingsProvider();
   private projectResourceInfoProvider = new ProjectResourceInfoProvider();
   private keyboardConfigProvider = new KeyboardConfigProvider();
-  private keyboardShapesProvider = new KeyboardShapesProvider();
   private deviceService = new KeyboardDeviceService();
+  private keyboardLayoutFilesWatcher = new KeyboardLayoutFilesWatcher();
+
+  private keyboardShapesProvider = new KeyboardShapesProvider(
+    this.projectResourceInfoProvider
+  );
 
   private firmwareUpdationService = new FirmwareUpdationService(
     this.projectResourceInfoProvider
   );
 
   private profileManager = new ProfileManager(this.keyboardShapesProvider);
+
   private inputLogicSimulator = new InputLogicSimulatorD(
     this.profileManager,
     this.keyboardConfigProvider,
@@ -124,7 +130,9 @@ export class Services implements IBackendAgent {
   async getKeyboardShape(
     breedName: string
   ): Promise<IKeyboardShape | undefined> {
-    return this.keyboardShapesProvider.getKeyboardShapeByBreedName(breedName);
+    return await this.keyboardShapesProvider.loadKeyboardShapeByBreedName(
+      breedName
+    );
   }
 
   @RpcEventSource
@@ -166,7 +174,7 @@ export class Services implements IBackendAgent {
   comPortPlugEvents = this.firmwareUpdationService.comPortPlugEvents;
 
   @RpcEventSource
-  layoutFileUpdationEvents = this.keyboardShapesProvider.fileUpdationEvents;
+  layoutFileUpdationEvents = this.keyboardLayoutFilesWatcher.fileUpdationEvents;
 
   @RpcFunction
   async getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]> {
@@ -201,8 +209,8 @@ export class Services implements IBackendAgent {
     this.applicationSettingsProvider.initialize();
 
     await this.projectResourceInfoProvider.initializeAsync();
-    await this.keyboardShapesProvider.initialize();
     this.firmwareUpdationService.initialize();
+    this.keyboardLayoutFilesWatcher.initialize();
 
     this.keyboardConfigProvider.initialize();
     this.deviceService.initialize();
@@ -224,6 +232,7 @@ export class Services implements IBackendAgent {
 
     this.deviceService.terminate();
     this.keyboardConfigProvider.terminate();
+    this.keyboardLayoutFilesWatcher.terminate();
     this.firmwareUpdationService.terminate();
 
     this.applicationSettingsProvider.terminate();

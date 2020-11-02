@@ -1,133 +1,45 @@
-import * as fs from 'fs';
-import {
-  IKeyboardShape,
-  IKeyboardShapeDisplayArea,
-  IKeyUnitEntry,
-  keyboardShape_fallbackData
-} from '~defs/ProfileData';
-import {
-  fsxReadTextFile,
-  globAsync,
-  pathDirName,
-  pathRelative,
-  pathResolve
-} from '~funcs/Files';
-import { removeArrayItems } from '~funcs/Utils';
-import { appEnv } from '~shell/base/AppEnvironment';
+import { IKeyboardShape } from '~defs/ProfileData';
+import { ProjectResourceInfoProvider } from '../ProjectResource/ProjectResourceInfoProvider';
+import { KeyboardLayoutFileLoader } from './KeyboardLayoutFileLoader';
 
-interface IKeyboardShapeSourceJson {
-  keyUnits: IKeyUnitEntry[];
-  displayArea: IKeyboardShapeDisplayArea;
-  bodyPathMarkups: string[];
-}
-
-function getBaseDir() {
-  if (appEnv.isDevelopment) {
-    return pathResolve('../firmware/src/projects');
-  } else {
-    return appEnv.resolveUserDataFilePath('resources/variants');
-  }
-}
-
-const baseDir = getBaseDir();
-
-async function loadShapeFromFile(
-  filePath: string
-): Promise<IKeyboardShape | undefined> {
-  const relPath = pathRelative(baseDir, filePath);
-  const breedName = pathDirName(relPath);
-
-  // console.log(`loading ${relPath}`);
-  let fileText: string;
-  try {
-    fileText = await fsxReadTextFile(filePath);
-  } catch (error) {
-    console.log(`cannot read file ${relPath}`);
-    return undefined;
-  }
-  let souceObj: IKeyboardShapeSourceJson;
-  try {
-    souceObj = JSON.parse(fileText);
-  } catch (error) {
-    console.log(`cannot parse content of file ${relPath}`);
-    return undefined;
-  }
-
-  const fallbackDisplayArea = keyboardShape_fallbackData.displayArea;
-
-  // todo: データの内容を検証しながら値を抽出する
-  return {
-    breedName,
-    keyUnits: souceObj.keyUnits || [],
-    displayArea: souceObj.displayArea || { ...fallbackDisplayArea },
-    bodyPathMarkupText: souceObj.bodyPathMarkups?.join(' ') || ''
-  };
-}
-
-async function loadKeyboardShapes(): Promise<IKeyboardShape[]> {
-  const pattern = `${baseDir}/**/*/layout.json`;
-  const files = await globAsync(pattern);
-  const loaded = await Promise.all(files.map(loadShapeFromFile));
-  return loaded.filter((a) => !!a) as IKeyboardShape[];
-}
-
-function setupFilesWatcher(callback: (filePath: string) => void) {
-  if (appEnv.isDevelopment) {
-    fs.watch(baseDir, { recursive: true }, async (eventType, relPath) => {
-      if (eventType === 'change') {
-        if (relPath.endsWith('/layout.json')) {
-          const filePath = `${baseDir}/${relPath}`;
-          callback(filePath);
-        }
-      }
-    });
-  }
-}
-
-type IFileUpdationListener = (args: { breedName: string }) => void;
+export type IFileUpdationListener = (args: { breedName: string }) => void;
 
 // キーボード品種ごとのレイアウトファイルを読み込み提供する
-// デバッグビルド時 glob ../firmware/src/projects/**/layout.json でレイアウトファイルを列挙
-// リリースビルド時 glob <userData>/resources/variants/**/layout.json でレイアウトファイルを列挙
 export class KeyboardShapesProvider {
-  private keyboardShapes: IKeyboardShape[] = [];
+  constructor(
+    private projectResourceInfoProvider: ProjectResourceInfoProvider
+  ) {}
 
   getAvailableBreedNames(): string[] {
-    return this.keyboardShapes.map((shape) => shape.breedName);
+    return this.projectResourceInfoProvider
+      .getAllProjectResourceInfos()
+      .filter((info) => info.hasLayout)
+      .map((info) => info.projectPath);
   }
 
-  getKeyboardShapeByBreedName(breedName: string): IKeyboardShape | undefined {
-    return this.keyboardShapes.find((shape) => shape.breedName === breedName);
-  }
-
-  private listeners: IFileUpdationListener[] = [];
-
-  fileUpdationEvents = {
-    subscribe: (listener: IFileUpdationListener) => {
-      this.listeners.push(listener);
-    },
-
-    unsubscribe: (listener: IFileUpdationListener) => {
-      removeArrayItems(this.listeners, listener);
+  private getLayoutFilePathByProjectPath(
+    projectPath: string
+  ): string | undefined {
+    const info = this.projectResourceInfoProvider
+      .getAllProjectResourceInfos()
+      .find((info) => info.projectPath === projectPath);
+    if (info) {
+      return this.projectResourceInfoProvider.getLayoutFilePath(info.projectId);
     }
-  };
+    return undefined;
+  }
 
-  onFileUpdated = async (filePath: string) => {
-    const shape = await loadShapeFromFile(filePath);
-    if (shape) {
-      const { breedName } = shape;
-      const index = this.keyboardShapes.findIndex(
-        (ks) => ks.breedName === breedName
+  async loadKeyboardShapeByBreedName(
+    breedName: string
+  ): Promise<IKeyboardShape | undefined> {
+    const projectPath = breedName;
+    const layoutFilePath = this.getLayoutFilePathByProjectPath(projectPath);
+    if (layoutFilePath) {
+      return await KeyboardLayoutFileLoader.loadShapeFromFile(
+        layoutFilePath,
+        projectPath
       );
-      if (index !== -1) {
-        this.keyboardShapes[index] = shape;
-        this.listeners.forEach((listener) => listener({ breedName }));
-      }
     }
-  };
-
-  async initialize() {
-    this.keyboardShapes = await loadKeyboardShapes();
-    setupFilesWatcher(this.onFileUpdated);
+    return undefined;
   }
 }

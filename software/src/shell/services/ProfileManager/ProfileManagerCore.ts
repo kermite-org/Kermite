@@ -69,7 +69,7 @@ export class ProfileManagerCore {
     const profileData: IProfileData = duplicateObjectByJsonStringifyParse(
       fallbackProfileData
     );
-    const keyboardShape = this.shapesProvider.getKeyboardShapeByBreedName(
+    const keyboardShape = await this.shapesProvider.loadKeyboardShapeByBreedName(
       breedName
     );
     if (keyboardShape) {
