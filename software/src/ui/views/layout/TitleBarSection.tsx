@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { backendAgent, uiTheme, appUi } from '~ui/core';
-import { models } from '~ui/models';
+import { uiTheme } from '~ui/core';
+import { TitleBarViewModel } from '~ui/viewModels/TitleBarViewModel';
 
 const ControlButton = (props: { icon: string; onClick: () => void }) => {
   const cssButton = css`
@@ -24,20 +24,16 @@ const ControlButton = (props: { icon: string; onClick: () => void }) => {
   );
 };
 
-const ReloadButtonPart = () => {
+const ReloadButtonPart = ({ vm }: { vm: TitleBarViewModel }) => {
   const cssReloadButton = css`
     padding: 3px 6px;
     margin-right: 10px;
     cursor: pointer;
   `;
-  const onReloadButton = () => {
-    backendAgent.reloadApplication();
-  };
-  const { isDevelopment } = appUi;
   return (
     <div>
-      {isDevelopment && (
-        <button css={cssReloadButton} onClick={onReloadButton}>
+      {vm.showReloadButton && (
+        <button css={cssReloadButton} onClick={vm.onReloadButton}>
           Restart
         </button>
       )}
@@ -45,50 +41,34 @@ const ReloadButtonPart = () => {
   );
 };
 
-const ControlButtonsPart = () => {
-  const onWidgetButton = () => {
-    models.siteModel.setWidgetMode(true);
-  };
-
-  const onMinimizeButton = () => {
-    backendAgent.minimizeWindow();
-  };
-
-  const onMaximizeButton = () => {
-    backendAgent.maximizeWindow();
-  };
-
-  const onCloseButton = () => {
-    backendAgent.closeWindow();
-  };
-
+const ControlButtonsPart = ({ vm }: { vm: TitleBarViewModel }) => {
   const cssButtonsBox = css`
     display: flex;
     align-items: center;
     height: 100%;
   `;
 
-  return () => (
+  return (
     <div css={cssButtonsBox}>
-      <ReloadButtonPart />
+      <ReloadButtonPart vm={vm} />
       <ControlButton
         icon="fa fa-feather-alt"
-        onClick={onWidgetButton}
+        onClick={vm.onWidgetButton}
         qxOptimizer="deepEqual"
       />
       <ControlButton
         icon="fa fa-window-minimize"
-        onClick={onMinimizeButton}
+        onClick={vm.onMinimizeButton}
         qxOptimizer="deepEqual"
       />
       <ControlButton
         icon="fa fa-window-maximize"
-        onClick={onMaximizeButton}
+        onClick={vm.onMaximizeButton}
         qxOptimizer="deepEqual"
       />
       <ControlButton
         icon="fa fa-times"
-        onClick={onCloseButton}
+        onClick={vm.onCloseButton}
         qxOptimizer="deepEqual"
       />
     </div>
@@ -116,7 +96,7 @@ const TitlePart = () => {
   );
 };
 
-export const TitleBarSection = () => {
+export const TitleBarSection = ({ vm }: { vm: TitleBarViewModel }) => {
   const cssTitleBarDiv = css`
     display: flex;
     justify-content: space-between;
@@ -128,7 +108,7 @@ export const TitleBarSection = () => {
   return (
     <div css={cssTitleBarDiv}>
       <TitlePart />
-      <ControlButtonsPart />
+      <ControlButtonsPart vm={vm} />
     </div>
   );
 };

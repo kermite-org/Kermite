@@ -1,3 +1,4 @@
+import { backendAgent } from '~ui/core';
 import { DeviceStatusModel } from './DeviceStatusModel';
 import { FirmwareUpdationModel } from './FirmwareUpdationModel';
 import { KeyboardConfigModel } from './KeyboardConfigModel';
@@ -22,6 +23,8 @@ export class Models {
   siteModel = new SiteModel();
   themeSelectionModel = new ThemeSelectionModel();
   uiStatusModel = new UiStatusModel();
+
+  backend = backendAgent;
 
   initialize() {
     this.projectResourceModel.initialize();
