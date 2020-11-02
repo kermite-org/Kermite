@@ -5,16 +5,14 @@ import {
   IKeyboardConfig
 } from '~defs/ConfigTypes';
 import {
-  IAppWindowEvent,
   IBackendAgent,
   IProfileManagerCommand,
   ISynchronousIpcPacket
 } from '~defs/IpcContract';
 import { IKeyboardShape, IProjectResourceInfo } from '~defs/ProfileData';
-import { IEventSource } from '~lib/xpc/types';
 import { RpcEventSource, RpcFunction, xpcMain } from '~lib/xpc/xpcMain';
 import { appEnv } from '~shell/base/AppEnvironment';
-import { appEventBus } from '~shell/base/AppEventBus';
+import { appWindowEventHub } from '~shell/base/AppEventBus';
 import { appWindowManager } from '~shell/base/AppWindowManager';
 import { ApplicationSettingsProvider } from './ApplicationSettingsProvider';
 import { applicationStorage } from './ApplicationStorage';
@@ -33,7 +31,6 @@ export class Services implements IBackendAgent {
   private applicationSettingsProvider = new ApplicationSettingsProvider();
   private projectResourceInfoProvider = new ProjectResourceInfoProvider();
   private keyboardConfigProvider = new KeyboardConfigProvider();
-  private deviceService = new KeyboardDeviceService();
   private keyboardLayoutFilesWatcher = new KeyboardLayoutFilesWatcher();
 
   private keyboardShapesProvider = new KeyboardShapesProvider(
@@ -41,6 +38,10 @@ export class Services implements IBackendAgent {
   );
 
   private firmwareUpdationService = new FirmwareUpdationService(
+    this.projectResourceInfoProvider
+  );
+
+  private deviceService = new KeyboardDeviceService(
     this.projectResourceInfoProvider
   );
 
@@ -135,25 +136,6 @@ export class Services implements IBackendAgent {
     );
   }
 
-  @RpcEventSource
-  keyEvents = this.deviceService.realtimeEventPort;
-
-  @RpcEventSource
-  profileStatusEvents = this.profileManager.statusEvents;
-
-  @RpcEventSource
-  appWindowEvents: IEventSource<IAppWindowEvent> = {
-    subscribe(listener) {
-      appEventBus.on('appWindowEvent', listener);
-    },
-    unsubscribe(listener) {
-      appEventBus.off('appWindowEvent', listener);
-    }
-  };
-
-  @RpcEventSource
-  keyboardDeviceStatusEvents = this.deviceService.deviceStatus;
-
   @RpcFunction
   async getFirmwareNamesAvailable(): Promise<string[]> {
     return this.firmwareUpdationService.getFirmwareNamesAvailable();
@@ -170,6 +152,20 @@ export class Services implements IBackendAgent {
     );
   }
 
+  @RpcFunction
+  async getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]> {
+    return this.projectResourceInfoProvider.getAllProjectResourceInfos();
+  }
+
+  @RpcEventSource
+  keyboardDeviceStatusEvents = this.deviceService.statusEventPort;
+
+  @RpcEventSource
+  keyEvents = this.deviceService.realtimeEventPort;
+
+  @RpcEventSource
+  profileStatusEvents = this.profileManager.statusEventPort;
+
   @RpcEventSource
   comPortPlugEvents = this.firmwareUpdationService.comPortPlugEvents;
 
@@ -177,10 +173,8 @@ export class Services implements IBackendAgent {
   layoutFileUpdationEvents = this.keyboardLayoutFilesWatcher
     .fileUpdationEventPort;
 
-  @RpcFunction
-  async getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]> {
-    return this.projectResourceInfoProvider.getAllProjectResourceInfos();
-  }
+  @RpcEventSource
+  appWindowEvents = appWindowEventHub;
 
   private handleSynchronousMessagePacket(packet: ISynchronousIpcPacket) {
     if (packet.debugMessage) {
@@ -212,11 +206,10 @@ export class Services implements IBackendAgent {
     await this.projectResourceInfoProvider.initializeAsync();
     this.firmwareUpdationService.initialize();
     this.keyboardLayoutFilesWatcher.initialize();
+    await this.profileManager.initializeAsync();
 
     this.keyboardConfigProvider.initialize();
     this.deviceService.initialize();
-
-    await this.profileManager.initializeAsync();
     this.inputLogicSimulator.initialize();
 
     ipcMain.on('synchronousMessage', (event, packet: ISynchronousIpcPacket) => {
@@ -229,12 +222,11 @@ export class Services implements IBackendAgent {
   async terminate() {
     console.log(`terminate services`);
     this.inputLogicSimulator.terminate();
-    await this.profileManager.terminateAsync();
-
     this.deviceService.terminate();
     this.keyboardConfigProvider.terminate();
     this.keyboardLayoutFilesWatcher.terminate();
     this.firmwareUpdationService.terminate();
+    await this.profileManager.terminateAsync();
 
     this.applicationSettingsProvider.terminate();
     await applicationStorage.terminateAsync();

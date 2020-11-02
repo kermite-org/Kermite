@@ -1,5 +1,5 @@
 import { app } from 'electron';
-import { appEventBus } from './base/AppEventBus';
+import { appWindowEventHub } from './base/AppEventBus';
 import { appWindowManager } from './base/AppWindowManager';
 import { Services } from './services';
 
@@ -21,10 +21,10 @@ function startApplication() {
   });
 
   app.on('browser-window-focus', () => {
-    appEventBus.emit('appWindowEvent', { activeChanged: true });
+    appWindowEventHub.emit({ activeChanged: true });
   });
   app.on('browser-window-blur', () => {
-    appEventBus.emit('appWindowEvent', { activeChanged: false });
+    appWindowEventHub.emit({ activeChanged: false });
   });
 }
 

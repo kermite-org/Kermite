@@ -18,7 +18,7 @@ export class FirmwareUpdationService {
       .map((info) => info.projectPath);
   }
 
-  comPortPlugEvents = this.comPortsMonitor.comPortPlugEvents;
+  readonly comPortPlugEvents = this.comPortsMonitor.comPortPlugEvents;
 
   private getHexFilePathByProjectPath(projectPath: string): string | undefined {
     const info = this.projectResourceInfoProvider
