@@ -1,24 +1,28 @@
 import { IKeyboardShape } from '~defs/ProfileData';
-import { models } from '~ui/models';
+import { Models } from '~ui/models';
 import {
   IKeyUnitCardPartViewModel,
   makeKeyUnitCardsPartViewModel
-} from '~ui/views/pages/KeyAssignEditPage/KeyboardSection/KeyUnitCardsPart.model';
+} from '~ui/viewModels/KeyUnitCardsPartViewModel';
 
 export class WidgetKeyboardViewViewModel {
+  constructor(private models: Models) {}
+
   get keyboardShape(): IKeyboardShape {
-    return models.editorModel.profileData.keyboardShape;
+    return this.models.editorModel.profileData.keyboardShape;
   }
 
   get cardsPartVM(): IKeyUnitCardPartViewModel {
-    return makeKeyUnitCardsPartViewModel(false);
+    return makeKeyUnitCardsPartViewModel(false, this.models);
   }
 }
 
 export class WidgetMainPageViewModel {
-  keyboardVM = new WidgetKeyboardViewViewModel();
+  constructor(private models: Models) {}
+
+  keyboardVM = new WidgetKeyboardViewViewModel(this.models);
 
   onOpenButton = () => {
-    models.siteModel.setWidgetMode(false);
+    this.models.siteModel.setWidgetMode(false);
   };
 }

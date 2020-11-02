@@ -1,5 +1,5 @@
 import { h } from '~lib/qx';
-import { IKeyUnitCardPartViewModel } from '~ui/views/pages/KeyAssignEditPage/KeyboardSection/KeyUnitCardsPart.model';
+import { IKeyUnitCardPartViewModel } from '~ui/viewModels/KeyUnitCardsPartViewModel';
 import { KeyUnitCard } from './KeyUnitCard';
 
 export function WidgetKeyUnitCardsPart(props: {

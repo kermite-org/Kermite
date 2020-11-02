@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { IKeyUnitCardViewModel } from '~ui/views/pages/KeyAssignEditPage/KeyboardSection/KeyUnitCardsPart.model';
+import { IKeyUnitCardViewModel } from '~ui/viewModels/KeyUnitCardsPartViewModel';
 
 export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
   const { keyUnitId, pos, primaryText, secondaryText, isHold } = keyUnit;

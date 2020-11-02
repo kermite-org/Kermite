@@ -20,7 +20,7 @@ export class ViewModels {
     this.globalMenu = new GlobalMenuViewModel(models);
     this.titleBar = new TitleBarViewModel(models);
     this.navigation = new NavigationViewModel(models);
-    this.wdigetMainPage = new WidgetMainPageViewModel();
+    this.wdigetMainPage = new WidgetMainPageViewModel(models);
   }
 
   initialize() {

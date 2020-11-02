@@ -1,10 +1,11 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { uiTheme } from '~ui/core';
+import { models } from '~ui/models';
 import {
   IKeyUnitCardViewModel,
   makeKeyUnitCardsPartViewModel
-} from './KeyUnitCardsPart.model';
+} from '~ui/viewModels/KeyUnitCardsPartViewModel';
 
 const cssKeyRect = css`
   cursor: pointer;
@@ -106,7 +107,7 @@ export function KeyUnitCard(props: {
 }
 
 export function KeyUnitCardsPart() {
-  const vm = makeKeyUnitCardsPartViewModel(true);
+  const vm = makeKeyUnitCardsPartViewModel(true, models);
   return (
     <g>
       {vm.cards.map((keyUnit) => (

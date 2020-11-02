@@ -4,7 +4,7 @@ import {
   IAssignEntryWithLayerFallback
 } from '~defs/ProfileData';
 import { VirtualKeyTexts } from '~defs/VirtualKeyTexts';
-import { models } from '~ui/models';
+import { Models } from '~ui/models';
 
 export interface IKeyUnitCardViewModel {
   keyUnitId: string;
@@ -26,7 +26,10 @@ export interface IKeyUnitCardPartViewModel {
   showLayerDefaultAssign: boolean;
 }
 
-function getAssignOperationText(op?: IAssignOperation): string {
+function getAssignOperationText(
+  op: IAssignOperation | undefined,
+  models: Models
+): string {
   if (op?.type === 'keyInput') {
     const keyText = VirtualKeyTexts[op.virtualKey] || '';
     if (op.attachedModifiers) {
@@ -56,7 +59,8 @@ function getAssignOperationText(op?: IAssignOperation): string {
 }
 
 function getAssignEntryTexts(
-  assign?: IAssignEntryWithLayerFallback
+  assign: IAssignEntryWithLayerFallback | undefined,
+  models: Models
 ): { primaryText: string; secondaryText: string; isLayerFallback?: boolean } {
   if (assign) {
     if (assign.type === 'block' || assign.type === 'layerFallbackBlock') {
@@ -80,14 +84,14 @@ function getAssignEntryTexts(
 
     if (assign.type === 'single') {
       return {
-        primaryText: getAssignOperationText(assign.op),
+        primaryText: getAssignOperationText(assign.op, models),
         secondaryText: ''
       };
     }
     if (assign.type === 'dual') {
-      const prmText = getAssignOperationText(assign.primaryOp);
-      const secText = getAssignOperationText(assign.secondaryOp);
-      const terText = getAssignOperationText(assign.tertiaryOp);
+      const prmText = getAssignOperationText(assign.primaryOp, models);
+      const secText = getAssignOperationText(assign.secondaryOp, models);
+      const terText = getAssignOperationText(assign.tertiaryOp, models);
       if (assign.tertiaryOp) {
         return {
           primaryText: `${prmText} ${terText}`,
@@ -109,7 +113,8 @@ function getAssignEntryTexts(
 
 function getAssignForKeyUnit(
   keyUnitId: string,
-  isEdit: boolean
+  isEdit: boolean,
+  models: Models
 ): IAssignEntryWithLayerFallback | undefined {
   const dynamic = !isEdit || models.uiStatusModel.settings.showLayersDynamic;
   return dynamic
@@ -121,7 +126,8 @@ function getAssignForKeyUnit(
 
 function makeKeyUnitCardViewModel(
   kp: IKeyUnitEntry,
-  isEdit: boolean
+  isEdit: boolean,
+  models: Models
 ): IKeyUnitCardViewModel {
   const keyUnitId = kp.id;
   const pos = { x: kp.x, y: kp.y, r: kp.r || 0 };
@@ -129,9 +135,10 @@ function makeKeyUnitCardViewModel(
   const { isKeyUnitCurrent, setCurrentKeyUnitId } = models.editorModel;
   const isCurrent = isKeyUnitCurrent(keyUnitId);
   const setCurrent = () => setCurrentKeyUnitId(keyUnitId);
-  const assign = getAssignForKeyUnit(keyUnitId, isEdit);
+  const assign = getAssignForKeyUnit(keyUnitId, isEdit, models);
   const { primaryText, secondaryText, isLayerFallback } = getAssignEntryTexts(
-    assign
+    assign,
+    models
   );
 
   const isHold = models.playerModel.keyStates[kp.id];
@@ -149,12 +156,13 @@ function makeKeyUnitCardViewModel(
 }
 
 export function makeKeyUnitCardsPartViewModel(
-  isEdit: boolean
+  isEdit: boolean,
+  models: Models
 ): IKeyUnitCardPartViewModel {
   const { showLayerDefaultAssign } = models.uiStatusModel.settings;
   return {
     cards: models.editorModel.keyPositions.map((kp) =>
-      makeKeyUnitCardViewModel(kp, isEdit)
+      makeKeyUnitCardViewModel(kp, isEdit, models)
     ),
     showLayerDefaultAssign
   };
