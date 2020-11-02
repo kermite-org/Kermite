@@ -7,7 +7,6 @@ import {
   RawHidMessageProtocolRevision
 } from '~defs/Versions';
 import { EventPort } from '~funcs/EventPort';
-import { StatusSource } from '~funcs/StatusSource';
 import { ProjectResourceInfoProvider } from '../ProjectResource/ProjectResourceInfoProvider';
 import { DeviceWrapper } from './DeviceWrapper';
 
@@ -20,9 +19,18 @@ export class KeyboardDeviceService {
 
   private deviceWrapper: DeviceWrapper | null = null;
 
-  deviceStatus = new StatusSource<IKeyboardDeviceStatus>({
+  private deviceStatus: IKeyboardDeviceStatus = {
     isConnected: false
+  };
+
+  readonly statusEventPort = new EventPort<IKeyboardDeviceStatus>({
+    initialValueGetter: () => this.deviceStatus
   });
+
+  setStatus(newStatus: IKeyboardDeviceStatus) {
+    this.deviceStatus = newStatus;
+    this.statusEventPort.emit(newStatus);
+  }
 
   constructor(
     private projectResourceInfoProvider: ProjectResourceInfoProvider
@@ -59,7 +67,7 @@ export class KeyboardDeviceService {
         projectId
       );
       if (info) {
-        this.deviceStatus.set({
+        this.setStatus({
           isConnected: true,
           deviceAttrs: {
             projectId,
@@ -127,7 +135,7 @@ export class KeyboardDeviceService {
       this.decodeReceivedBytes(buf);
     });
     dw.onClosed(() => {
-      this.deviceStatus.set({ isConnected: false, deviceAttrs: undefined });
+      this.setStatus({ isConnected: false, deviceAttrs: undefined });
     });
 
     dw.writeSingleFrame([0xf0, 0x10]); // device attributes request

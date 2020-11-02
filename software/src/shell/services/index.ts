@@ -160,7 +160,7 @@ export class Services implements IBackendAgent {
   }
 
   @RpcEventSource
-  keyboardDeviceStatusEvents = this.deviceService.deviceStatus;
+  keyboardDeviceStatusEvents = this.deviceService.statusEventPort;
 
   @RpcEventSource
   keyEvents = this.deviceService.realtimeEventPort;
