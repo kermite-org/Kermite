@@ -30,8 +30,6 @@ class KeyboardConfigModel {
   initialize() {
     this.loadKeyboardConfig();
   }
-
-  finalize() {}
 }
 
 export const keyboardConfigModel = new KeyboardConfigModel();

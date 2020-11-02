@@ -1,31 +1,45 @@
-import { ComPortsMonitor, ComPortsListener } from './ComPortsMonitor';
-import { FirmwareFilesManager } from './FirmwareFilesManager';
-import { FirmwareFilesResource } from './FirmwareFilesResource';
+import { IProjectResourceInfoProvider } from '../serviceInterfaces';
+import { ComPortsMonitor } from './ComPortsMonitor';
 import { FlashCommander } from './FlashCommander';
 
 // 仮想COMポートでProMicroのブートローダ(Caterina)と通信しファームウェアを書き込む
 // 仮想COMポートの列挙や出現監視も行う
 export class FirmwareUpdationService {
   private comPortsMonitor = new ComPortsMonitor();
-  private binaryFilesManager = new FirmwareFilesManager();
+
+  constructor(
+    private projectResourceInfoProvider: IProjectResourceInfoProvider
+  ) {}
 
   getFirmwareNamesAvailable(): string[] {
-    return this.binaryFilesManager.firmwareNames;
+    return this.projectResourceInfoProvider
+      .getAllProjectResourceInfos()
+      .filter((info) => info.hasFirmwareBinary)
+      .map((info) => info.projectPath);
   }
 
-  subscribeComPorts = (listener: ComPortsListener) => {
-    this.comPortsMonitor.subscribeComPorts(listener);
-  };
+  comPortPlugEvents = this.comPortsMonitor.comPortPlugEvents;
 
-  unsubscribeComPorts = (listener: ComPortsListener) => {
-    this.comPortsMonitor.unsubscribeComPorts(listener);
-  };
+  private getHexFilePathByProjectPath(projectPath: string): string | undefined {
+    const info = this.projectResourceInfoProvider
+      .getAllProjectResourceInfos()
+      .find((info) => info.projectPath === projectPath);
+    if (info) {
+      return this.projectResourceInfoProvider.getHexFilePath(info.projectId);
+    }
+    return undefined;
+  }
 
   async writeFirmware(
-    firmwareName: string,
+    projectPath: string,
     comPortName: string
   ): Promise<'ok' | string> {
-    const hexFilePath = FirmwareFilesResource.getHexFilePath(firmwareName);
+    const hexFilePath = this.getHexFilePathByProjectPath(projectPath);
+
+    if (!hexFilePath) {
+      return `cannot find firmware for ${projectPath}`;
+    }
+
     const flashResult = await FlashCommander.uploadFirmware(
       hexFilePath,
       comPortName
@@ -37,12 +51,11 @@ export class FirmwareUpdationService {
     return flashResult;
   }
 
-  async initialize() {
-    this.binaryFilesManager.loadFirmwareFileNames();
+  initialize() {
     this.comPortsMonitor.initializeTicker();
   }
 
-  async terminate() {
+  terminate() {
     this.comPortsMonitor.terminateTicker();
   }
 }

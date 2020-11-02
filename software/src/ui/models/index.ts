@@ -2,6 +2,7 @@ import { deviceStatusModel } from './DeviceStatusModel';
 import { firmwareUpdationModel } from './FirmwareUpdationModel';
 import { keyboardConfigModel } from './KeyboardConfigModel';
 import { keyboardShapesModel } from './KeyboardShapesModel';
+import { projectResourceModel } from './ProjectResourceModel';
 import { siteModel } from './SiteModel';
 import { themeSelectionModel } from './ThemeSelectionModel';
 import { uiStatusModel } from './UiStatusModel';
@@ -13,9 +14,10 @@ export const models = new (class {
   initialize() {
     // siteModel.isWidgetMode = true;
     // debugTrace('start appDomain initialize');
-    playerModel.initialize();
-    profilesModel.initialize();
+    projectResourceModel.initialize();
     siteModel.initialize();
+    profilesModel.initialize();
+    playerModel.initialize();
     keyboardConfigModel.initialize();
     deviceStatusModel.initialize();
     uiStatusModel.initialize();
@@ -25,12 +27,9 @@ export const models = new (class {
   }
 
   finalize() {
-    firmwareUpdationModel.finalize();
-    keyboardShapesModel.finalize();
     themeSelectionModel.finalize();
     uiStatusModel.finalize();
     deviceStatusModel.finalize();
-    keyboardConfigModel.finalize();
     playerModel.finalize();
     profilesModel.finalize();
     siteModel.finalize();

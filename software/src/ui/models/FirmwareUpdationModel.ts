@@ -58,12 +58,12 @@ class FirmwareUpdationModel {
     backendAgent.comPortPlugEvents.unsubscribe(this.onComPortPlugEvent);
   }
 
-  async initialize() {
-    this.firmwareNames = await backendAgent.getFirmwareNamesAvailable();
-    appUi.rerender();
+  initialize() {
+    (async () => {
+      this.firmwareNames = await backendAgent.getFirmwareNamesAvailable();
+      appUi.rerender();
+    })();
   }
-
-  finalize() {}
 }
 
 export const firmwareUpdationModel = new FirmwareUpdationModel();

@@ -49,11 +49,11 @@ export class KeyboardConfigProvider {
     return config;
   }
 
-  async initialize() {
+  initialize() {
     this._keyboardConfig = this.loadConfig();
   }
 
-  async terminate() {
+  terminate() {
     applicationStorage.setItem(this.storageKey, this._keyboardConfig);
   }
 }

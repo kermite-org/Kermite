@@ -1,5 +1,26 @@
 import * as fs from 'fs';
+import * as path from 'path';
 import { glob } from 'glob';
+
+export function pathDirName(fpath: string) {
+  return path.dirname(fpath);
+}
+
+export function pathBaseName(fpath: string, ext?: string) {
+  return path.basename(fpath, ext);
+}
+
+export function pathJoin(...parts: string[]) {
+  return path.join(...parts);
+}
+
+export function pathResolve(...segments: string[]) {
+  return path.resolve(...segments);
+}
+
+export function pathRelative(from: string, to: string) {
+  return path.relative(from, to);
+}
 
 export function fsCreateDirectory(fpath: string) {
   return fs.promises.mkdir(fpath);
@@ -43,13 +64,29 @@ export async function fsxWriteJsonFile(fpath: string, obj: any): Promise<void> {
   return await fs.promises.writeFile(fpath, text);
 }
 
-export function globAsync(pattern: string): Promise<string[]> {
-  return new Promise((resolve, reject) =>
-    glob(pattern, (err, matches) => {
+export function fsxWtachFilesChange(
+  baseDir: string,
+  callback: (filePath: string) => void
+) {
+  return fs.watch(baseDir, { recursive: true }, async (eventType, relPath) => {
+    if (eventType === 'change') {
+      const filePath = `${baseDir}/${relPath}`;
+      callback(filePath);
+    }
+  });
+}
+
+export function globAsync(
+  pattern: string,
+  baseDir?: string
+): Promise<string[]> {
+  return new Promise((resolve, reject) => {
+    const options = baseDir ? { cwd: baseDir } : {};
+    return glob(pattern, options, (err, matches) => {
       if (err) {
         reject(err);
       }
       resolve(matches);
-    })
-  );
+    });
+  });
 }

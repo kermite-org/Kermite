@@ -20,7 +20,7 @@ export class ApplicationSettingsProvider {
     this._settings = settings;
   }
 
-  async initialize() {
+  initialize() {
     const loaded = applicationStorage.getItem<IApplicationSettings>(
       this.stroageKey
     );
@@ -29,7 +29,7 @@ export class ApplicationSettingsProvider {
     }
   }
 
-  async terminate() {
+  terminate() {
     applicationStorage.setItem(this.stroageKey, this._settings);
   }
 }

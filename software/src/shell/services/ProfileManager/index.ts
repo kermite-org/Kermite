@@ -4,7 +4,7 @@ import {
 } from '~defs/IpcContract';
 import { IProfileData } from '~defs/ProfileData';
 import { clampValue, removeArrayItems } from '~funcs/Utils';
-import { KeyboardShapesProvider } from '../KeyboardShapesProvider';
+import { KeyboardShapesProvider } from '../KeyboardShape/KeyboardShapesProvider';
 import { ProfileManagerCore } from './ProfileManagerCore';
 
 type StatusListener = (partialStatus: Partial<IProfileManagerStatus>) => void;
@@ -34,13 +34,15 @@ export class ProfileManager {
     return this.status.loadedProfileData;
   }
 
-  subscribeStatus = (listener: StatusListener) => {
-    this.statusListeners.push(listener);
-    listener(this.status);
-  };
+  statusEvents = {
+    subscribe: (listener: StatusListener) => {
+      this.statusListeners.push(listener);
+      listener(this.status);
+    },
 
-  unsubscribeStatus = (listener: StatusListener) => {
-    removeArrayItems(this.statusListeners, listener);
+    unsubscribe: (listener: StatusListener) => {
+      removeArrayItems(this.statusListeners, listener);
+    }
   };
 
   private setStatus(newStatePartial: Partial<IProfileManagerStatus>) {
@@ -69,7 +71,7 @@ export class ProfileManager {
     return profName;
   }
 
-  async initialize() {
+  async initializeAsync() {
     try {
       await this.core.ensureProfilesDirectoryExists();
       const allProfileNames = await this.initializeProfileList();
@@ -82,7 +84,7 @@ export class ProfileManager {
     }
   }
 
-  async terminate() {
+  async terminateAsync() {
     await this.executeSaveProfileTask();
     this.core.storeCurrentProfileName(this.status.currentProfileName);
   }
