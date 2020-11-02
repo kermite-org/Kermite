@@ -4,6 +4,7 @@ import { DebugOverlay } from '~ui/base/layout/DebugOverlay';
 import { ForegroundModalLayerRoot } from '~ui/base/layout/ForegroundModalLayer';
 import { appUi } from '~ui/core';
 import { models } from '~ui/models';
+import { viewModels } from '~ui/viewModels';
 import { ConfiguratorZoneRoot } from './zones/ConfiguratorZoneRoot';
 import { WidgetZoneRoot } from './zones/WidgetZoneRoot';
 
@@ -42,7 +43,11 @@ export const SiteRoot = () => {
     <div css={cssRoot}>
       {/* {!isWidgetMode && <ConfiguratorSiteRoot />}
       {isWidgetMode && <WidgetSiteRoot />} */}
-      {!isWidgetMode ? <ConfiguratorZoneRoot /> : <WidgetZoneRoot />}
+      {!isWidgetMode ? (
+        <ConfiguratorZoneRoot viewModels={viewModels} />
+      ) : (
+        <WidgetZoneRoot />
+      )}
       <ForegroundModalLayerRoot />
       <DebugOverlay debugObj={appUi.debugObject} />
     </div>

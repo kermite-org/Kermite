@@ -1,9 +1,8 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { uiTheme } from '~ui/core';
-import { models } from '~ui/models';
 import { PageSignature } from '~ui/models/UiStatusModel';
-import { viewModels } from '~ui/viewModels';
+import { ViewModels } from '~ui/viewModels';
 import { CustomWindowFrame } from '~ui/views/layout/CustomWindowFrame';
 import { TitleBarSection } from '../layout/TitleBarSection';
 import { GlobalMenuPart } from '../navigation/GlobalMenu';
@@ -13,17 +12,22 @@ import { EditorPage } from '../pages/KeyAssignEditPage/EditorPage';
 import { KeyboardShapePreviewPage } from '../pages/ShapePreviewPage/ShapePreviewPage';
 
 const pageComponentMap: {
-  [key in PageSignature]: () => JSX.Element;
+  [key in PageSignature]: (props: { vm: ViewModels }) => JSX.Element;
 } = {
-  editor: EditorPage,
-  shapePreview: () => <KeyboardShapePreviewPage vm={viewModels.shapePreview} />,
-  firmwareUpdation: () => (
-    <FirmwareUpdationPage vm={viewModels.firmwareUpdation} />
+  editor: () => <EditorPage />,
+  shapePreview: (props: { vm: ViewModels }) => (
+    <KeyboardShapePreviewPage vm={props.vm.shapePreview} />
+  ),
+  firmwareUpdation: (props: { vm: ViewModels }) => (
+    <FirmwareUpdationPage vm={props.vm.firmwareUpdation} />
   )
 };
 
-export const ConfiguratorZoneRoot = () => {
-  const PageComponent = pageComponentMap[models.uiStatusModel.settings.page];
+export const ConfiguratorZoneRoot = (props: { viewModels: ViewModels }) => {
+  const { viewModels } = props;
+
+  const PageComponent =
+    pageComponentMap[viewModels.models.uiStatusModel.settings.page];
 
   const cssContentRow = css`
     background: ${uiTheme.colors.clBackground};
@@ -49,10 +53,10 @@ export const ConfiguratorZoneRoot = () => {
       <div css={cssContentRow}>
         <div css={cssNavigationColumn}>
           <GlobalMenuPart vm={viewModels.globalMenu} />
-          <NavigationButtonsArea />
+          <NavigationButtonsArea vm={viewModels.navigation} />
         </div>
         <div css={cssMainColumn}>
-          <PageComponent />
+          <PageComponent vm={viewModels} />
         </div>
       </div>
     </CustomWindowFrame>
