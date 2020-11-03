@@ -1,7 +1,7 @@
 import { IKeyboardDeviceStatus } from '~defs/IpcContract';
 import { backendAgent, appUi } from '~ui/core';
 
-class DeviceStatusModel {
+export class DeviceStatusModel {
   isConnected: boolean = false;
 
   deviceAttrs:
@@ -34,5 +34,3 @@ class DeviceStatusModel {
     );
   }
 }
-
-export const deviceStatusModel = new DeviceStatusModel();

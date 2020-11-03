@@ -26,7 +26,7 @@ const dualModeEditTargetOperationSigToOperationPathMap: {
   ter: 'tertiaryOp'
 };
 
-class EditorModel {
+export class EditorModel {
   // state
 
   loadedPorfileData: IProfileData = fallbackProfileData;
@@ -208,5 +208,3 @@ class EditorModel {
     );
   };
 }
-
-export const editorModel = new EditorModel();

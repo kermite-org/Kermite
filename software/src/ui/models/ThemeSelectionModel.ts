@@ -2,7 +2,7 @@ import { themeColors, uiTheme, ThemeKey } from '~ui/core';
 
 const allThemeKeys = Object.keys(themeColors) as ThemeKey[];
 
-class ThemeSelectionModel {
+export class ThemeSelectionModel {
   private currentThemeKey: ThemeKey | undefined;
 
   private applyTheme(themeKey: ThemeKey) {
@@ -44,5 +44,3 @@ class ThemeSelectionModel {
     localStorage.setItem('themeKey', this.currentThemeKey || 'light');
   }
 }
-
-export const themeSelectionModel = new ThemeSelectionModel();

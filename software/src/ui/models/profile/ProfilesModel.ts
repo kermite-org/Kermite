@@ -3,13 +3,16 @@ import {
   IProfileManagerCommand
 } from '~defs/IpcContract';
 import { backendAgent, appUi } from '~ui/core';
-import { editorModel } from '~ui/models/editor/EditorModel';
+import { EditorModel } from '../editor/EditorModel';
+// import { editorModel } from '~ui/models/editor/EditorModel';
 import { ProfileProvider } from './ProfileProvider';
 
 const useAutoSave = false;
 
-class ProfilesModel {
+export class ProfilesModel {
   private profileProvider = new ProfileProvider();
+
+  constructor(private editorModel: EditorModel) {}
 
   // state
   currentProfileName: string = '';
@@ -27,7 +30,7 @@ class ProfilesModel {
       this.allProfileNames = payload.allProfileNames;
     }
     if (payload.loadedProfileData) {
-      editorModel.loadProfileData(payload.loadedProfileData);
+      this.editorModel.loadProfileData(payload.loadedProfileData);
     }
     if (payload.errorMessage) {
       alert(payload.errorMessage);
@@ -41,8 +44,8 @@ class ProfilesModel {
   }
 
   finalize() {
-    if (useAutoSave && editorModel.checkDirty()) {
-      this.profileProvider.saveProfileOnClosing(editorModel.profileData);
+    if (useAutoSave && this.editorModel.checkDirty()) {
+      this.profileProvider.saveProfileOnClosing(this.editorModel.profileData);
     }
     this.profileProvider.finalize();
   }
@@ -50,10 +53,10 @@ class ProfilesModel {
   // actions
 
   private getSaveCommandIfDirty() {
-    const isDirty = editorModel.checkDirty();
+    const isDirty = this.editorModel.checkDirty();
     if (isDirty) {
       return {
-        saveCurrentProfile: { profileData: editorModel.profileData }
+        saveCurrentProfile: { profileData: this.editorModel.profileData }
       };
     }
     return undefined;
@@ -117,5 +120,3 @@ class ProfilesModel {
     this.sendProfileManagerCommands(deleteCommand);
   };
 }
-
-export const profilesModel = new ProfilesModel();

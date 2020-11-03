@@ -1,51 +1,52 @@
-import { deviceStatusModel } from './DeviceStatusModel';
-import { firmwareUpdationModel } from './FirmwareUpdationModel';
-import { keyboardConfigModel } from './KeyboardConfigModel';
-import { keyboardShapesModel } from './KeyboardShapesModel';
-import { projectResourceModel } from './ProjectResourceModel';
-import { siteModel } from './SiteModel';
-import { themeSelectionModel } from './ThemeSelectionModel';
-import { uiStatusModel } from './UiStatusModel';
-import { editorModel } from './editor/EditorModel';
-import { playerModel } from './player/PlayerModel';
-import { profilesModel } from './profile/ProfilesModel';
+import { backendAgent } from '~ui/core';
+import { DeviceStatusModel } from './DeviceStatusModel';
+import { FirmwareUpdationModel } from './FirmwareUpdationModel';
+import { KeyboardConfigModel } from './KeyboardConfigModel';
+import { KeyboardShapesModel } from './KeyboardShapesModel';
+import { ProjectResourceModel } from './ProjectResourceModel';
+import { SiteModel } from './SiteModel';
+import { ThemeSelectionModel } from './ThemeSelectionModel';
+import { UiStatusModel } from './UiStatusModel';
+import { EditorModel } from './editor/EditorModel';
+import { PlayerModel } from './player/PlayerModel';
+import { ProfilesModel } from './profile/ProfilesModel';
 
-export const models = new (class {
+export class Models {
+  deviceStatusModel = new DeviceStatusModel();
+  editorModel = new EditorModel();
+  playerModel = new PlayerModel(this.editorModel);
+  profilesModel = new ProfilesModel(this.editorModel);
+  firmwareUpdationModel = new FirmwareUpdationModel();
+  keyboardConfigModel = new KeyboardConfigModel();
+  keyboardShapesModel = new KeyboardShapesModel();
+  projectResourceModel = new ProjectResourceModel();
+  siteModel = new SiteModel();
+  themeSelectionModel = new ThemeSelectionModel();
+  uiStatusModel = new UiStatusModel();
+
+  backend = backendAgent;
+
   initialize() {
-    // siteModel.isWidgetMode = true;
-    // debugTrace('start appDomain initialize');
-    projectResourceModel.initialize();
-    siteModel.initialize();
-    profilesModel.initialize();
-    playerModel.initialize();
-    keyboardConfigModel.initialize();
-    deviceStatusModel.initialize();
-    uiStatusModel.initialize();
-    themeSelectionModel.initialize();
-    keyboardShapesModel.initialize();
-    firmwareUpdationModel.initialize();
+    this.projectResourceModel.initialize();
+    this.siteModel.initialize();
+    this.profilesModel.initialize();
+    this.playerModel.initialize();
+    this.keyboardConfigModel.initialize();
+    this.deviceStatusModel.initialize();
+    this.uiStatusModel.initialize();
+    this.themeSelectionModel.initialize();
+    this.keyboardShapesModel.initialize();
+    this.firmwareUpdationModel.initialize();
   }
 
   finalize() {
-    themeSelectionModel.finalize();
-    uiStatusModel.finalize();
-    deviceStatusModel.finalize();
-    playerModel.finalize();
-    profilesModel.finalize();
-    siteModel.finalize();
-    // debugTrace('end appDomain terminate');
+    this.themeSelectionModel.finalize();
+    this.uiStatusModel.finalize();
+    this.deviceStatusModel.finalize();
+    this.playerModel.finalize();
+    this.profilesModel.finalize();
+    this.siteModel.finalize();
   }
-})();
+}
 
-export {
-  editorModel,
-  playerModel,
-  profilesModel,
-  siteModel,
-  keyboardConfigModel,
-  deviceStatusModel,
-  uiStatusModel,
-  themeSelectionModel,
-  keyboardShapesModel,
-  firmwareUpdationModel
-};
+export const models = new Models();

@@ -1,11 +1,11 @@
 import { glob, setup, css } from 'goober';
 import { h } from '~lib/qx';
+import { DebugOverlay } from '~ui/base/layout/DebugOverlay';
+import { ForegroundModalLayerRoot } from '~ui/base/layout/ForegroundModalLayer';
 import { appUi } from '~ui/core';
-import { siteModel } from '~ui/models';
-import { DebugOverlay } from '~ui/views/base/layout/DebugOverlay';
-import { ForegroundModalLayerRoot } from '~ui/views/base/layout/ForegroundModalLayer';
-import { ConfiguratorZoneRoot } from './ConfiguratorZone/ConfiguratorZoneRoot';
-import { WidgetZoneRoot } from './WidgetZone/WidgetZoneRoot';
+import { ViewModels } from '~ui/viewModels';
+import { ConfiguratorZoneRoot } from './zones/ConfiguratorZoneRoot';
+import { WidgetZoneRoot } from './zones/WidgetZoneRoot';
 
 setup(h);
 
@@ -31,18 +31,22 @@ glob`
   }
 `;
 
-export const SiteRoot = () => {
+export const SiteRoot = (props: { viewModels: ViewModels }) => {
   const cssRoot = css`
     height: 100%;
   `;
 
-  const { isWidgetMode } = siteModel;
+  const { isWidgetMode } = props.viewModels.models.siteModel;
 
   return (
     <div css={cssRoot}>
       {/* {!isWidgetMode && <ConfiguratorSiteRoot />}
       {isWidgetMode && <WidgetSiteRoot />} */}
-      {!isWidgetMode ? <ConfiguratorZoneRoot /> : <WidgetZoneRoot />}
+      {!isWidgetMode ? (
+        <ConfiguratorZoneRoot viewModels={props.viewModels} />
+      ) : (
+        <WidgetZoneRoot viewModels={props.viewModels} />
+      )}
       <ForegroundModalLayerRoot />
       <DebugOverlay debugObj={appUi.debugObject} />
     </div>

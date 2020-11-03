@@ -4,7 +4,7 @@ import {
 } from '~defs/ConfigTypes';
 import { backendAgent, appUi } from '~ui/core';
 
-class KeyboardConfigModel {
+export class KeyboardConfigModel {
   behaviorMode: IKeyboardBehaviorMode = 'Standalone';
   layoutStandard: IKeyboardLayoutStandard = 'US';
 
@@ -31,5 +31,3 @@ class KeyboardConfigModel {
     this.loadKeyboardConfig();
   }
 }
-
-export const keyboardConfigModel = new KeyboardConfigModel();
