@@ -9,6 +9,7 @@ import {
   IKeyboardBreedSelectorProps,
   KeyboardBreedSelector
 } from '../fabric/KeyboardBreedSelector';
+import { ProfileSelector } from '../fabric/ProfileSelector';
 
 const testOptions: IGeneralSelector2Props['options'] = [
   { id: '', text: 'no-user' },
@@ -31,6 +32,8 @@ const projectOptions: IKeyboardBreedSelectorProps['projectOptions'] = [
   }
 ];
 
+const profileNames: string[] = ['blank', 'qwerty', 'dvorak', 'profile1'];
+
 const cssBase = css`
   margin: 20px;
 
@@ -39,6 +42,9 @@ const cssBase = css`
   }
   > .buttonsRow {
     display: flex;
+    > * + * {
+      margin-left: 10px;
+    }
   }
 `;
 
@@ -65,13 +71,31 @@ export const ComponentCatalog = () => {
     console.log({ projectId });
   };
 
+  let selectedProfileName = 'blank';
+
+  const setSelectedProfileName = (profileName: string) => {
+    selectedProfileName = profileName;
+    console.log({ profileName });
+  };
+
   return () => (
     <div css={cssBase}>
       <div class="buttonsRow">
-        <GeneralButton icon="fa fa-cog" handler={buttonHandler} />
-        <GeneralButton text="foo" icon="fa fa-cog" className={buttonExtraCss} />
-        <GeneralButton icon="fa fa-cog" disabled />
-        <GeneralButton text="OK" />
+        <GeneralButton
+          icon="fa fa-cog"
+          handler={buttonHandler}
+          form="unitSquare"
+        />
+        <GeneralButton
+          text="foo"
+          icon="fa fa-cog"
+          className={buttonExtraCss}
+          form="unit"
+        />
+        <GeneralButton icon="fa fa-cog" disabled form="unitSquare" />
+        <GeneralButton text="OK" form="unit" />
+        <GeneralButton text="Edit this" form="unit" />
+        <GeneralButton text="Edit this" form="large" />
       </div>
 
       <GeneralSelector2
@@ -84,8 +108,13 @@ export const ComponentCatalog = () => {
         projectOptions={projectOptions}
         selectedProjectId={selectedProjectId}
         setSelectedProjectId={setSelectedProjectId}
-        // connectedDeviceProjectId={undefined}
         connectedDeviceProjectId="proj002"
+      />
+
+      <ProfileSelector
+        optionProfileNames={profileNames}
+        selectedProfileName={selectedProfileName}
+        setSelectedProfileName={setSelectedProfileName}
       />
     </div>
   );

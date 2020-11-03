@@ -1,6 +1,9 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
+import { uiTheme } from '~ui/core';
 import { combineClasses } from '../helpers/viewHelpers';
+
+type IGeneralButtonForm = 'unit' | 'unitSquare' | 'large';
 
 interface IGeneralButtonProps {
   text?: string;
@@ -8,13 +11,13 @@ interface IGeneralButtonProps {
   handler?(): void;
   disabled?: boolean;
   className?: string;
+  form?: IGeneralButtonForm;
 }
 
+const { unitHeight } = uiTheme;
 const cssGeneralButton = css`
-  /* display: inline-block; */
-
   background: #08a;
-  border-radius: 2px;
+  border-radius: 1px;
   color: #fff;
   padding: 2px 4px;
   cursor: pointer;
@@ -32,6 +35,22 @@ const cssGeneralButton = css`
     cursor: inherit;
     opacity: 0.3;
   }
+
+  &[data-form='unit'] {
+    height: ${unitHeight}px;
+    padding: 2px 10px;
+  }
+
+  &[data-form='unitSquare'] {
+    width: ${unitHeight}px;
+    height: ${unitHeight}px;
+  }
+
+  &[data-form='large'] {
+    height: 36px;
+    padding: 2px 15px;
+    border-radius: 5px;
+  }
 `;
 
 export const GeneralButton = ({
@@ -39,13 +58,15 @@ export const GeneralButton = ({
   icon,
   handler,
   disabled,
-  className
+  className,
+  form
 }: IGeneralButtonProps) => {
   return (
     <div
       class={combineClasses(cssGeneralButton, className)}
       onClick={handler}
       data-disabled={disabled}
+      data-form={form}
     >
       {icon && <i class={icon} />}
       {text}

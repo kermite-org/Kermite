@@ -17,19 +17,6 @@ export interface IKeyboardBreedSelectorProps {
   connectedDeviceProjectId: string | undefined;
 }
 
-const cssKeyboardBreedSelector = css`
-  display: flex;
-
-  > .selector {
-    width: 150px;
-  }
-
-  > .linkButton {
-    width: 28px;
-    height: 28px;
-  }
-`;
-
 function makeKeyboardBreedSelectorLocalModel(
   props: IKeyboardBreedSelectorProps
 ) {
@@ -64,6 +51,10 @@ function makeKeyboardBreedSelectorLocalModel(
   };
 }
 
+const cssKeyboardBreedSelector = css`
+  display: flex;
+`;
+
 export const KeyboardBreedSelector = (props: IKeyboardBreedSelectorProps) => {
   const {
     selectorProjectOptions,
@@ -79,13 +70,14 @@ export const KeyboardBreedSelector = (props: IKeyboardBreedSelectorProps) => {
         options={selectorProjectOptions}
         choiceId={selectedProjectId}
         setChoiceId={setSelectedProjectId}
-        className="selector"
+        width={170}
       />
       <GeneralButton
         icon="fas fa-link"
         disabled={!linkButtonActive}
         handler={onLinkButton}
         className="linkButton"
+        form="unitSquare"
       />
     </div>
   );
