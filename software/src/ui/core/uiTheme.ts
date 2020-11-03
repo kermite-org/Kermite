@@ -50,7 +50,8 @@ export const themeColors: { [key in ThemeKey]: IThemeColorSet } = {
     dummy: '0'
   },
   light: {
-    clBackground: '#c8d3e3',
+    // clBackground: '#c8d3e3',
+    clBackground: '#fff',
     clTitleBar: '#02cee1',
     clStatusBar: '#02cee1',
     clNavigationColumn: '#3870A3',
