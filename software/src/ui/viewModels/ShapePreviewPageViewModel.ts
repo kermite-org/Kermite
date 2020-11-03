@@ -2,12 +2,7 @@ import { IKeyboardShape } from '~defs/ProfileData';
 import { appUi, backendAgent } from '~ui/core';
 import { Models } from '~ui/models';
 import { IUiSettings } from '~ui/models/UiStatusModel';
-
-export interface IBreedSelectorViewModel {
-  allBreedNames: string[];
-  currentBreedName: string;
-  setCurrentBreedName: (beedName: string) => void;
-}
+import { IGeneralSelectorViewModel } from '~ui/views/controls/GeneralSelector';
 
 export class ShapePreviewPageViewModel {
   loadedBreedName: string = '';
@@ -19,29 +14,29 @@ export class ShapePreviewPageViewModel {
     return this.models.uiStatusModel.settings;
   }
 
-  get allBreedNames(): string[] {
+  private get allBreedNames(): string[] {
     return this.models.keyboardShapesModel.getAllBreedNames();
   }
 
-  get currentBreedName(): string {
+  private get currentBreedName(): string {
     return (
       this.models.uiStatusModel.settings.shapeViewBreedName ||
       this.allBreedNames[0]
     );
   }
 
-  setCurrentBreedName = async (breedName: string) => {
+  private setCurrentBreedName = async (breedName: string) => {
     this.models.uiStatusModel.settings.shapeViewBreedName = breedName;
     if (breedName !== this.loadedBreedName) {
       this.loadShape(breedName);
     }
   };
 
-  get breedSelectorVM(): IBreedSelectorViewModel {
+  get breedSelectorVM(): IGeneralSelectorViewModel {
     return {
-      allBreedNames: this.allBreedNames,
-      currentBreedName: this.currentBreedName,
-      setCurrentBreedName: this.setCurrentBreedName
+      allOptionTexts: this.allBreedNames,
+      currentOptionText: this.currentBreedName,
+      setCurrentOptionText: this.setCurrentBreedName
     };
   }
 
