@@ -1,3 +1,3 @@
-export function classes(...classNames: (string | undefined)[]) {
+export function combineClasses(...classNames: (string | undefined)[]) {
   return classNames.filter((a) => !!a).join(' ');
 }

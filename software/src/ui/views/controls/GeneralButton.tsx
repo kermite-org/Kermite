@@ -1,13 +1,13 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { classes } from '../helpers/viewHelpers';
+import { combineClasses } from '../helpers/viewHelpers';
 
 interface IGeneralButtonProps {
   text?: string;
   icon?: string;
   handler?(): void;
   disabled?: boolean;
-  extraCss?: string;
+  className?: string;
 }
 
 const cssGeneralButton = css`
@@ -39,11 +39,11 @@ export const GeneralButton = ({
   icon,
   handler,
   disabled,
-  extraCss
+  className
 }: IGeneralButtonProps) => {
   return (
     <div
-      class={classes(cssGeneralButton, extraCss)}
+      class={combineClasses(cssGeneralButton, className)}
       onClick={handler}
       data-disabled={disabled}
     >
