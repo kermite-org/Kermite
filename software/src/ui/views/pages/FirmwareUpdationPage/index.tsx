@@ -40,10 +40,7 @@ export const FirmwareUpdationPage = (props: {
   vm: FirmwareUpdationPageViewModel;
 }) => {
   const { vm } = props;
-
-  const { phase, firmwareNames, comPortName } = vm.model;
-  const canSelectTargetFirmware =
-    phase === 'WaitingReset' || phase === 'WaitingUploadOrder';
+  const { phase } = vm;
 
   return (
     <div css={cssBase}>
@@ -55,14 +52,14 @@ export const FirmwareUpdationPage = (props: {
 
       <div className="mainRow">
         <select
-          disabled={!canSelectTargetFirmware}
+          disabled={!vm.canSelectTargetFirmware}
           value={vm.selectedFirmwareName}
           onChange={reflectValue(vm.setSelectedFirmwareName)}
         >
           <option key="" value="">
             select firmware
           </option>
-          {firmwareNames.map((firmwareName) => (
+          {vm.firmwareNames.map((firmwareName) => (
             <option key={firmwareName} value={firmwareName}>
               {firmwareName}
             </option>
@@ -77,7 +74,7 @@ export const FirmwareUpdationPage = (props: {
 
         {phase === 'WaitingUploadOrder' && (
           <div>
-            <div>{comPortName} detected. Ready to flash.</div>
+            <div>{vm.comPortName} detected. Ready to flash.</div>
             <button onClick={vm.onWriteButton}>write</button>
           </div>
         )}

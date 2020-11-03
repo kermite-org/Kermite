@@ -1,6 +1,6 @@
 import { Models } from '~ui/models';
 import { FirmwareUpdationModel } from '~ui/models/FirmwareUpdationModel';
-import { callErrorLogModal } from '~ui/views/pages/FirmwareUpdationPage/ErrorLogModal';
+import { showCommandOutputLogModal } from '~ui/views/modals/CommandOutputLogModal';
 
 export class FirmwareUpdationPageViewModel {
   selectedFirmwareName: string = '';
@@ -9,6 +9,23 @@ export class FirmwareUpdationPageViewModel {
 
   constructor(models: Models) {
     this.model = models.firmwareUpdationModel;
+  }
+
+  get phase() {
+    return this.model.phase;
+  }
+
+  get firmwareNames() {
+    return this.model.firmwareNames;
+  }
+
+  get comPortName() {
+    return this.model.comPortName;
+  }
+
+  get canSelectTargetFirmware() {
+    const { phase } = this.model;
+    return phase === 'WaitingReset' || phase === 'WaitingUploadOrder';
   }
 
   setSelectedFirmwareName = (firmwareName: string) => {
@@ -28,7 +45,10 @@ export class FirmwareUpdationPageViewModel {
   };
 
   onLogButton = () => {
-    callErrorLogModal(this.model.firmwareUploadResult || '');
+    showCommandOutputLogModal({
+      caption: 'Operation Command Log',
+      logText: this.model.firmwareUploadResult || ''
+    });
   };
 
   initialize() {
