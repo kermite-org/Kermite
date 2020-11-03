@@ -1,7 +1,11 @@
 import { overwriteObjectProps } from '~funcs/Utils';
 import { appUi } from '~ui/core';
 
-export type PageSignature = 'editor' | 'shapePreview' | 'firmwareUpdation';
+export type PageSignature =
+  | 'editor'
+  | 'shapePreview'
+  | 'firmwareUpdation'
+  | 'presetBrowser';
 
 export interface IUiSettings {
   showTestInputArea: boolean;

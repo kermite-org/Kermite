@@ -16,7 +16,8 @@ interface NavigationEntrySource {
 const entrySources: NavigationEntrySource[] = [
   { pageSig: 'editor', faIconName: 'fa-keyboard' },
   { pageSig: 'firmwareUpdation', faIconName: 'fa-microchip' },
-  { pageSig: 'shapePreview', faIconName: 'fa-book' }
+  { pageSig: 'shapePreview', faIconName: 'fa-file-code' },
+  { pageSig: 'presetBrowser', faIconName: 'fa-book' }
 ];
 
 export class NavigationViewModel {
