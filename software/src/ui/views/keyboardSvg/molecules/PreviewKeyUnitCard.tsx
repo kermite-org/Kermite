@@ -2,7 +2,7 @@ import { css } from 'goober';
 import { h } from '~lib/qx';
 import { IKeyUnitEntry } from '~defs/ProfileData';
 
-export const KeyUnitCard = (props: {
+export const PreviewKeyUnitCard = (props: {
   keyUnit: IKeyUnitEntry;
   showKeyId: boolean;
   showKeyIndex: boolean;

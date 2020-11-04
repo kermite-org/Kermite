@@ -2,9 +2,13 @@ import { css } from 'goober';
 import { h } from '~lib/qx';
 import { linerInterpolateValue } from '~funcs/Utils';
 import { WidgetKeyboardViewViewModel } from '~ui/viewModels/WidgetMainPageViewModel';
-import { WidgetKeyUnitCardsPart } from './KeyUnitCardsPart';
+import { WidgetKeyUnitCardsPart } from '../organisms/WidgetKeyUnitCardsPart';
 
-export function SvgKeyboardView({ vm }: { vm: WidgetKeyboardViewViewModel }) {
+export function WidgetSvgKeyboardView({
+  vm
+}: {
+  vm: WidgetKeyboardViewViewModel;
+}) {
   const cssSvg = css``;
   const winw = window.innerWidth;
   const sw = linerInterpolateValue(winw, 200, 900, 0.8, 0.3, true);

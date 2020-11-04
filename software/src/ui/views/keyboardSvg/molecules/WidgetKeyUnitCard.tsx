@@ -2,7 +2,11 @@ import { css } from 'goober';
 import { h } from '~lib/qx';
 import { IKeyUnitCardViewModel } from '~ui/viewModels/KeyUnitCardsPartViewModel';
 
-export function KeyUnitCard({ keyUnit }: { keyUnit: IKeyUnitCardViewModel }) {
+export function WidgetKeyUnitCard({
+  keyUnit
+}: {
+  keyUnit: IKeyUnitCardViewModel;
+}) {
   const { keyUnitId, pos, primaryText, secondaryText, isHold } = keyUnit;
 
   const cssKeyRect = css`

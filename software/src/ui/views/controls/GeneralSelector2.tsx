@@ -1,8 +1,8 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { reflectValue } from '~ui/base/FormHelpers';
+import { combineClasses } from '~ui/base/viewHelpers';
 import { uiTheme } from '~ui/core';
-import { combineClasses } from '../helpers/viewHelpers';
 
 const { unitHeight } = uiTheme;
 

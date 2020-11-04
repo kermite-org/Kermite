@@ -1,11 +1,7 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { uiTheme } from '~ui/core';
-import { models } from '~ui/models';
-import {
-  IKeyUnitCardViewModel,
-  makeKeyUnitCardsPartViewModel
-} from '~ui/viewModels/KeyUnitCardsPartViewModel';
+import { IKeyUnitCardViewModel } from '~ui/viewModels/KeyUnitCardsPartViewModel';
 
 const cssKeyRect = css`
   cursor: pointer;
@@ -33,7 +29,7 @@ const cssKeyText = css`
   pointer-events: none;
 `;
 
-export function KeyUnitCard(props: {
+export function EditKeyUnitCard(props: {
   keyUnit: IKeyUnitCardViewModel;
   showLayerDefaultAssign: boolean;
 }) {
@@ -102,22 +98,6 @@ export function KeyUnitCard(props: {
       >
         {secondaryText}
       </text>
-    </g>
-  );
-}
-
-export function KeyUnitCardsPart() {
-  const vm = makeKeyUnitCardsPartViewModel(true, models);
-  return (
-    <g>
-      {vm.cards.map((keyUnit) => (
-        <KeyUnitCard
-          keyUnit={keyUnit}
-          key={keyUnit.keyUnitId}
-          showLayerDefaultAssign={vm.showLayerDefaultAssign}
-          qxOptimizer="deepEqualExFn"
-        />
-      ))}
     </g>
   );
 }

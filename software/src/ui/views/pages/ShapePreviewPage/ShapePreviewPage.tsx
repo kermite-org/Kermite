@@ -2,8 +2,8 @@ import { css } from 'goober';
 import { h } from '~lib/qx';
 import { ShapePreviewPageViewModel } from '~ui/viewModels/ShapePreviewPageViewModel';
 import { GeneralSelector } from '~ui/views/controls/GeneralSelector';
-import { PreviewOptionsBox } from './Controls/PreviewOptionsBox';
-import { KeyboardShapeView } from './ShapeView/KeyboardShapeView';
+import { ShapePreviewOptionsBox } from '~ui/views/fabric/ShapePreviewOptionsBox';
+import { KeyboardShapeView } from '~ui/views/keyboardSvg/panels/KeyboardShapeView';
 
 const cssShapePreviewPage = css`
   height: 100%;
@@ -46,7 +46,7 @@ export const KeyboardShapePreviewPage = (props: {
       <div>keyboard shape preview</div>
       <div class="topRow">
         <GeneralSelector vm={breedSelectorVM} />
-        <PreviewOptionsBox settings={settings} />
+        <ShapePreviewOptionsBox settings={settings} />
       </div>
       <div class="keyboardRow">
         {loadedShape && (

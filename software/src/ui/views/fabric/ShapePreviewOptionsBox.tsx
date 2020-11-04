@@ -44,7 +44,7 @@ const cssPreviewOptionsBox = css`
   }
 `;
 
-export function PreviewOptionsBox(props: { settings: IUiSettings }) {
+export function ShapePreviewOptionsBox(props: { settings: IUiSettings }) {
   const { settings } = props;
   return (
     <div css={cssPreviewOptionsBox}>

@@ -10,6 +10,7 @@ import {
   KeyboardBreedSelector
 } from '../fabric/KeyboardBreedSelector';
 import { ProfileSelector } from '../fabric/ProfileSelector';
+import { PresetKeyboardSection } from './PresetKeyboardSection';
 
 const testOptions: IGeneralSelector2Props['options'] = [
   { id: '', text: 'no-user' },
@@ -116,6 +117,8 @@ export const ComponentCatalog = () => {
         selectedProfileName={selectedProfileName}
         setSelectedProfileName={setSelectedProfileName}
       />
+
+      <PresetKeyboardSection />
     </div>
   );
 };
