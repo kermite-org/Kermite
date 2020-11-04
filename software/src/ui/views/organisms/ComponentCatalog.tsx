@@ -10,7 +10,6 @@ import {
   KeyboardBreedSelector
 } from '../fabric/KeyboardBreedSelector';
 import { ProfileSelector } from '../fabric/ProfileSelector';
-import { PresetKeyboardSection } from './PresetKeyboardSection';
 
 const testOptions: IGeneralSelector2Props['options'] = [
   { id: '', text: 'no-user' },
@@ -36,7 +35,7 @@ const projectOptions: IKeyboardBreedSelectorProps['projectOptions'] = [
 const profileNames: string[] = ['blank', 'qwerty', 'dvorak', 'profile1'];
 
 const cssBase = css`
-  margin: 20px;
+  /* margin: 20px; */
 
   > * + * {
     margin-top: 10px;
@@ -117,8 +116,6 @@ export const ComponentCatalog = () => {
         selectedProfileName={selectedProfileName}
         setSelectedProfileName={setSelectedProfileName}
       />
-
-      <PresetKeyboardSection />
     </div>
   );
 };

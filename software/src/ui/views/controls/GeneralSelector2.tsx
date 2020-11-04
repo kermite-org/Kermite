@@ -10,6 +10,13 @@ export interface IGeneralSelector2Option {
   id: string;
   text: string;
 }
+
+export interface IGeneralSelector2ViewModel {
+  options: IGeneralSelector2Option[];
+  choiceId: string;
+  setChoiceId(key: string): void;
+}
+
 export interface IGeneralSelector2Props {
   options: IGeneralSelector2Option[];
   choiceId: string;

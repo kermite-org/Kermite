@@ -2,7 +2,7 @@ import { IKeyboardShape } from '~defs/ProfileData';
 import { appUi, backendAgent } from '~ui/core';
 import { Models } from '~ui/models';
 import { IUiSettings } from '~ui/models/UiStatusModel';
-import { IGeneralSelectorViewModel } from '~ui/views/controls/GeneralSelector';
+import { IGeneralSelector2ViewModel } from '~ui/views/controls/GeneralSelector2';
 
 export class ShapePreviewPageViewModel {
   loadedBreedName: string = '';
@@ -32,11 +32,14 @@ export class ShapePreviewPageViewModel {
     }
   };
 
-  get breedSelectorVM(): IGeneralSelectorViewModel {
+  get breedSelectorVM(): IGeneralSelector2ViewModel {
     return {
-      allOptionTexts: this.allBreedNames,
-      currentOptionText: this.currentBreedName,
-      setCurrentOptionText: this.setCurrentBreedName
+      options: this.allBreedNames.map((it) => ({
+        id: it,
+        text: it
+      })),
+      choiceId: this.currentBreedName,
+      setChoiceId: this.setCurrentBreedName
     };
   }
 

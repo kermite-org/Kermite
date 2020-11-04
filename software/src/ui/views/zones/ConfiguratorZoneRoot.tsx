@@ -9,8 +9,8 @@ import { GlobalMenuPart } from '../navigation/GlobalMenu';
 import { NavigationButtonsArea } from '../navigation/NavigationButtonsArea';
 import { FirmwareUpdationPage } from '../pages/FirmwareUpdationPage';
 import { EditorPage } from '../pages/KeyAssignEditPage/EditorPage';
-import { PresetBrowserPage } from '../pages/PresetBrowser/PresetBrowserPage';
-import { KeyboardShapePreviewPage } from '../pages/ShapePreviewPage/ShapePreviewPage';
+import { PresetBrowserPage } from '../pages/PresetBrowserPage';
+import { KeyboardShapePreviewPage } from '../pages/ShapePreviewPage';
 
 const pageComponentMap: {
   [key in PageSignature]: (props: { vm: ViewModels }) => JSX.Element;
@@ -22,7 +22,7 @@ const pageComponentMap: {
   firmwareUpdation: (props: { vm: ViewModels }) => (
     <FirmwareUpdationPage vm={props.vm.firmwareUpdation} />
   ),
-  presetBrowser: (props: { vm: ViewModels }) => <PresetBrowserPage />
+  presetBrowser: (_props: { vm: ViewModels }) => <PresetBrowserPage />
 };
 
 export const ConfiguratorZoneRoot = (props: { viewModels: ViewModels }) => {
