@@ -2,7 +2,7 @@ import { css } from 'goober';
 import { h } from '~lib/qx';
 import { ShapePreviewPageViewModel } from '~ui/viewModels/ShapePreviewPageViewModel';
 import { GeneralSelector } from '~ui/views/controls/GeneralSelector';
-import { ShapePreviewOptionsBox } from '~ui/views/fabric/ShapePreviewOptionsBox';
+import { ShapePreviewOptionsBox } from '~ui/views/fabrics/ShapePreviewOptionsBox';
 import { KeyboardShapeView } from '~ui/views/keyboardSvg/panels/KeyboardShapeView';
 
 const cssShapePreviewPage = css`

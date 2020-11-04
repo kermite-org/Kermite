@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { ViewModels } from '~ui/viewModels';
-import { WidgetWindowActiveChrome } from '~ui/views/layout/WidgetWindowActiveChrome';
+import { WidgetWindowActiveChrome } from '~ui/views/base/window/WidgetWindowActiveChrome';
 import { MainPanel } from '~ui/views/pages/WidgetMainPage';
 
 export const WidgetZoneRoot = (props: { viewModels: ViewModels }) => {

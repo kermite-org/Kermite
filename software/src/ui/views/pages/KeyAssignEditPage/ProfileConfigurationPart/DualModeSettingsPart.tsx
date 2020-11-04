@@ -4,7 +4,7 @@ import {
   reflectFieldChecked,
   reflectFieldValue,
   reflectValue
-} from '~ui/base/FormHelpers';
+} from '~ui/base/helper/FormHelpers';
 import { models } from '~ui/models';
 
 export const DualModeSettingsPart = () => {

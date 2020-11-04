@@ -4,9 +4,9 @@ import { IKeyboardShape } from '~defs/ProfileData';
 import { IUiSettings } from '~ui/models/UiStatusModel';
 import { KeyboardBodyShape } from '~ui/views/keyboardSvg/atoms/KeyboardBodyShape';
 import { PreviewBoundingBox } from '~ui/views/keyboardSvg/atoms/PreviewBoundingBox';
-import { KeyboardSvgFrame } from '~ui/views/keyboardSvg/frames/KeyboardSvgFrame';
-import { ScalerBox } from '~ui/views/keyboardSvg/frames/ScalerBox';
 import { PreviewKeyUnitCardsPart } from '~ui/views/keyboardSvg/organisms/PreviewKeyUnitCardsPart';
+import { KeyboardSvgFrame } from '~ui/views/keyboardSvg/outlines/KeyboardSvgFrame';
+import { ScalerBox } from '~ui/views/keyboardSvg/outlines/ScalerBox';
 
 export function KeyboardShapeView(props: {
   shape: IKeyboardShape;

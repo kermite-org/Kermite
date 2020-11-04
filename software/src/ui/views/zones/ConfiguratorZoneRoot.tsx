@@ -3,10 +3,9 @@ import { h } from '~lib/qx';
 import { uiTheme } from '~ui/core';
 import { PageSignature } from '~ui/models/UiStatusModel';
 import { ViewModels } from '~ui/viewModels';
-import { CustomWindowFrame } from '~ui/views/layout/CustomWindowFrame';
-import { TitleBarSection } from '../layout/TitleBarSection';
-import { GlobalMenuPart } from '../navigation/GlobalMenu';
-import { NavigationButtonsArea } from '../navigation/NavigationButtonsArea';
+import { CustomWindowFrame } from '~ui/views/base/window/CustomWindowFrame';
+import { NavigationColumn } from '../base/navigation/NavigationColumn';
+import { WindowTitleBarSection } from '../base/titleBar/WindowTitleBarSection';
 import { FirmwareUpdationPage } from '../pages/FirmwareUpdationPage';
 import { EditorPage } from '../pages/KeyAssignEditPage/EditorPage';
 import { PresetBrowserPage } from '../pages/PresetBrowserPage';
@@ -37,26 +36,16 @@ export const ConfiguratorZoneRoot = (props: { viewModels: ViewModels }) => {
     display: flex;
   `;
 
-  const cssNavigationColumn = css`
-    width: 50px;
-    flex-shrink: 0;
-    background: ${uiTheme.colors.clNavigationColumn};
-    padding: 10px;
-  `;
-
   const cssMainColumn = css`
     flex-grow: 1;
   `;
 
   return (
     <CustomWindowFrame
-      renderTitleBar={() => <TitleBarSection vm={viewModels.titleBar} />}
+      renderTitleBar={() => <WindowTitleBarSection vm={viewModels.titleBar} />}
     >
       <div css={cssContentRow}>
-        <div css={cssNavigationColumn}>
-          <GlobalMenuPart vm={viewModels.globalMenu} />
-          <NavigationButtonsArea vm={viewModels.navigation} />
-        </div>
+        <NavigationColumn vm={viewModels} />
         <div css={cssMainColumn}>
           <PageComponent vm={viewModels} />
         </div>

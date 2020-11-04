@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { reflectFieldChecked } from '~ui/base/FormHelpers';
+import { reflectFieldChecked } from '~ui/base/helper/FormHelpers';
 import { models } from '~ui/models';
 
 const cssBase = css`

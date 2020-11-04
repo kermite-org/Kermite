@@ -1,6 +1,6 @@
 import { Models } from '~ui/models';
 import { FirmwareUpdationModel } from '~ui/models/FirmwareUpdationModel';
-import { showCommandOutputLogModal } from '~ui/views/modals/CommandOutputLogModal';
+import { showCommandOutputLogModal } from '~ui/views/base/modal/CommandOutputLogModal';
 
 export class FirmwareUpdationPageViewModel {
   selectedFirmwareName: string = '';

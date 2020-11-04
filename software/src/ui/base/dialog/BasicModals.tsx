@@ -1,8 +1,7 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { reflectFieldValue } from '../FormHelpers';
-import { cssCommonTextInput } from '../commonStyles';
-import { createModal } from '../layout/ForegroundModalLayer';
+import { reflectFieldValue } from '../helper/FormHelpers';
+import { createModal } from '../overlay/ForegroundModalLayer';
 import {
   CommonDialogFrame,
   ClosableOverlay,
@@ -60,6 +59,13 @@ export const modalTextEdit = createModal(
 
       const cssInputRow = css`
         margin-top: 5px;
+      `;
+
+      const cssCommonTextInput = css`
+        width: 100%;
+        height: 26px;
+        font-size: 14px;
+        padding-left: 4px;
       `;
 
       return (

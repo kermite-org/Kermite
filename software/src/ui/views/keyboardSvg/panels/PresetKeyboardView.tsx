@@ -2,9 +2,9 @@ import { css } from 'goober';
 import { h } from '~lib/qx';
 import { IProfileData } from '~defs/ProfileData';
 import { KeyboardBodyShape } from '~ui/views/keyboardSvg/atoms/KeyboardBodyShape';
-import { KeyboardSvgFrame } from '~ui/views/keyboardSvg/frames/KeyboardSvgFrame';
-import { ScalerBox } from '~ui/views/keyboardSvg/frames/ScalerBox';
 import { PreviewKeyUnitCardsPart } from '~ui/views/keyboardSvg/organisms/PreviewKeyUnitCardsPart';
+import { KeyboardSvgFrame } from '~ui/views/keyboardSvg/outlines/KeyboardSvgFrame';
+import { ScalerBox } from '~ui/views/keyboardSvg/outlines/ScalerBox';
 
 export const PresetKeyboardView = (props: { profileData: IProfileData }) => {
   const shape = props.profileData.keyboardShape;

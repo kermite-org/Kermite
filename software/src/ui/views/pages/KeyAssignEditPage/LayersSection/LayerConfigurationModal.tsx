@@ -8,23 +8,23 @@ import {
   removeOptionFromOptionsArray
 } from '~funcs/Utils';
 import {
-  reflectChecked,
-  reflectFieldChecked,
-  reflectFieldValue,
-  reflectValue
-} from '~ui/base/FormHelpers';
-import {
-  cssCommonPropertiesTable,
-  cssCommonTextInput
-} from '~ui/base/commonStyles';
-import {
   CommonDialogFrame,
   DialogContentRow,
   DialogButton,
   DialogButtonsRow,
   ClosableOverlay
 } from '~ui/base/dialog/CommonDialogParts';
-import { createModal } from '~ui/base/layout/ForegroundModalLayer';
+import {
+  reflectChecked,
+  reflectFieldChecked,
+  reflectFieldValue,
+  reflectValue
+} from '~ui/base/helper/FormHelpers';
+import { createModal } from '~ui/base/overlay/ForegroundModalLayer';
+import {
+  cssCommonPropertiesTable,
+  cssCommonTextInput
+} from '~ui/views/pages/KeyAssignEditPage/CommonStyles';
 
 export interface ILayerConfigurationModelEditValues {
   layerName: string;

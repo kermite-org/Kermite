@@ -8,8 +8,8 @@ import {
 import {
   IKeyboardBreedSelectorProps,
   KeyboardBreedSelector
-} from '../fabric/KeyboardBreedSelector';
-import { ProfileSelector } from '../fabric/ProfileSelector';
+} from '../fabrics/KeyboardBreedSelector';
+import { ProfileSelector } from '../fabrics/ProfileSelector';
 
 const testOptions: IGeneralSelectorProps['options'] = [
   { id: '', text: 'no-user' },

@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { reflectValue } from '~ui/base/FormHelpers';
+import { reflectValue } from '~ui/base/helper/FormHelpers';
 import { FirmwareUpdationPageViewModel } from '~ui/viewModels/FirmwareUpdationPageViewModel';
 
 const cssBase = css`
