@@ -2,16 +2,16 @@ import { css } from 'goober';
 import { h } from '~lib/qx';
 import { GeneralButton } from '../controls/GeneralButton';
 import {
-  GeneralSelector2,
-  IGeneralSelector2Props
-} from '../controls/GeneralSelector2';
+  GeneralSelector,
+  IGeneralSelectorProps
+} from '../controls/GeneralSelector';
 import {
   IKeyboardBreedSelectorProps,
   KeyboardBreedSelector
 } from '../fabric/KeyboardBreedSelector';
 import { ProfileSelector } from '../fabric/ProfileSelector';
 
-const testOptions: IGeneralSelector2Props['options'] = [
+const testOptions: IGeneralSelectorProps['options'] = [
   { id: '', text: 'no-user' },
   { id: 'user001', text: 'yamada' },
   { id: 'user002', text: 'tanaka' },
@@ -98,7 +98,7 @@ export const ComponentCatalog = () => {
         <GeneralButton text="Edit this" form="large" />
       </div>
 
-      <GeneralSelector2
+      <GeneralSelector
         options={testOptions}
         choiceId={curUserId}
         setChoiceId={setCurrentUserId}

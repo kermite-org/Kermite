@@ -6,19 +6,19 @@ import { uiTheme } from '~ui/core';
 
 const { unitHeight } = uiTheme;
 
-export interface IGeneralSelector2Option {
+export interface IGeneralSelectorOption {
   id: string;
   text: string;
 }
 
-export interface IGeneralSelector2ViewModel {
-  options: IGeneralSelector2Option[];
+export interface IGeneralSelectorViewModel {
+  options: IGeneralSelectorOption[];
   choiceId: string;
   setChoiceId(key: string): void;
 }
 
-export interface IGeneralSelector2Props {
-  options: IGeneralSelector2Option[];
+export interface IGeneralSelectorProps {
+  options: IGeneralSelectorOption[];
   choiceId: string;
   setChoiceId(key: string): void;
   width?: number;
@@ -36,7 +36,7 @@ const cssGeneralSelector2 = (width: number | undefined) => css`
   }
 `;
 
-export const GeneralSelector2 = (props: IGeneralSelector2Props) => {
+export const GeneralSelector = (props: IGeneralSelectorProps) => {
   const { options, choiceId, setChoiceId, className, width } = props;
   return (
     <select

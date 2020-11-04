@@ -2,9 +2,9 @@ import { css } from 'goober';
 import { h } from '~lib/qx';
 import { GeneralButton } from '../controls/GeneralButton';
 import {
-  GeneralSelector2,
-  IGeneralSelector2Option
-} from '../controls/GeneralSelector2';
+  GeneralSelector,
+  IGeneralSelectorOption
+} from '../controls/GeneralSelector';
 
 export interface IKeyboardBreedSelectorProps {
   projectOptions: {
@@ -26,7 +26,7 @@ function makeKeyboardBreedSelectorLocalModel(
     setSelectedProjectId,
     connectedDeviceProjectId
   } = props;
-  const selectorProjectOptions: IGeneralSelector2Option[] = projectOptions.map(
+  const selectorProjectOptions: IGeneralSelectorOption[] = projectOptions.map(
     (it) => ({
       id: it.projectId,
       text: it.projectName
@@ -66,7 +66,7 @@ export const KeyboardBreedSelector = (props: IKeyboardBreedSelectorProps) => {
 
   return (
     <div css={cssKeyboardBreedSelector}>
-      <GeneralSelector2
+      <GeneralSelector
         options={selectorProjectOptions}
         choiceId={selectedProjectId}
         setChoiceId={setSelectedProjectId}

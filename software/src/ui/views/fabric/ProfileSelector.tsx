@@ -1,5 +1,5 @@
 import { h } from '~lib/qx';
-import { GeneralSelector2 } from '../controls/GeneralSelector2';
+import { GeneralSelector } from '../controls/GeneralSelector';
 
 export interface IProfileSelectorProps {
   optionProfileNames: string[];
@@ -18,7 +18,7 @@ export const ProfileSelector = ({
   }));
 
   return (
-    <GeneralSelector2
+    <GeneralSelector
       options={selectorOptions}
       choiceId={selectedProfileName}
       setChoiceId={setSelectedProfileName}
