@@ -63,7 +63,7 @@ export class KeyboardDeviceService {
         );
       }
 
-      const info = this.projectResourceInfoProvider.getProjectResourceInfoById(
+      const info = this.projectResourceInfoProvider.internal_getProjectInfoSourceById(
         projectId
       );
       if (info) {

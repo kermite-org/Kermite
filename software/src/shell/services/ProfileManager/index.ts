@@ -6,6 +6,7 @@ import { IProfileData } from '~defs/ProfileData';
 import { EventPort } from '~funcs/EventPort';
 import { clampValue } from '~funcs/Utils';
 import { KeyboardShapesProvider } from '../KeyboardShape/KeyboardShapesProvider';
+import { ProfileHelper } from './ProfileHelper';
 import { ProfileManagerCore } from './ProfileManagerCore';
 
 // プロファイルを<UserDataDir>/data/profiles以下でファイルとして管理
@@ -79,46 +80,6 @@ export class ProfileManager {
     this.core.storeCurrentProfileName(this.status.currentProfileName);
   }
 
-  private fixProfileData(profileData: IProfileData) {
-    for (const la of profileData.layers) {
-      if (la.defaultScheme === undefined) {
-        la.defaultScheme = 'block';
-      }
-    }
-    if (!profileData.assignType) {
-      (profileData as any).assignType = 'single';
-    }
-
-    if (!profileData.settings) {
-      if (profileData.assignType === 'single') {
-        profileData.settings = {
-          useShiftCancel: false
-        };
-      }
-      if (profileData.assignType === 'dual') {
-        profileData.settings = {
-          type: 'dual',
-          useShiftCancel: false,
-          primaryDefaultTrigger: 'down',
-          tapHoldThresholdMs: 200,
-          useInterruptHold: true
-        };
-      }
-    }
-    if (profileData.settings.useShiftCancel === undefined) {
-      profileData.settings.useShiftCancel = false;
-    }
-
-    profileData.layers.forEach((la) => {
-      if (la.exclusionGroup === undefined) {
-        la.exclusionGroup = 0;
-      }
-      if (la.initialActive === undefined) {
-        la.initialActive = false;
-      }
-    });
-  }
-
   private raiseErrorMessage(errorMessage: string) {
     this.setStatus({ errorMessage });
   }
@@ -126,7 +87,7 @@ export class ProfileManager {
   async loadProfile(profName: string): Promise<boolean> {
     try {
       const profileData = await this.core.loadProfile(profName);
-      this.fixProfileData(profileData);
+      ProfileHelper.fixProfileData(profileData);
       this.setStatus({
         currentProfileName: profName,
         loadedProfileData: profileData

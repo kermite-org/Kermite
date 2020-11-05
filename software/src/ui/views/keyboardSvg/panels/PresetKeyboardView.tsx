@@ -1,15 +1,17 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { IProfileData } from '~defs/ProfileData';
+import { ViewModelProps } from '~ui/base/helper/mvvmHelpers';
+import { IPresetKeyboardViewModel } from '~ui/viewModels/PresetKeyboardViewModel';
 import { KeyboardBodyShape } from '~ui/views/keyboardSvg/atoms/KeyboardBodyShape';
-import { PreviewKeyUnitCardsPart } from '~ui/views/keyboardSvg/organisms/PreviewKeyUnitCardsPart';
+import { PresetKeyUnitCard } from '~ui/views/keyboardSvg/molecules/PresetKeyUnitCard';
 import { KeyboardSvgFrame } from '~ui/views/keyboardSvg/outlines/KeyboardSvgFrame';
 import { ScalerBox } from '~ui/views/keyboardSvg/outlines/ScalerBox';
 
-export const PresetKeyboardView = (props: { profileData: IProfileData }) => {
-  const shape = props.profileData.keyboardShape;
+export const PresetKeyboardView = ({
+  vm
+}: ViewModelProps<IPresetKeyboardViewModel>) => {
   const dpiScale = 2;
-  const da = shape.displayArea;
+  const da = vm.displayArea;
   const marginRatio = 0.06;
   const margin = Math.min(da.width, da.height) * marginRatio;
   const contentWidth = (da.width + margin * 2) * dpiScale;
@@ -33,17 +35,21 @@ export const PresetKeyboardView = (props: { profileData: IProfileData }) => {
     <div css={cssKeyboardShapeView}>
       <ScalerBox contentWidth={contentWidth} contentHeight={contentHeight}>
         <div css={cssScalerContent}>
-          <KeyboardSvgFrame displayArea={shape.displayArea} dpiScale={dpiScale}>
+          <KeyboardSvgFrame displayArea={vm.displayArea} dpiScale={dpiScale}>
             <KeyboardBodyShape
-              outerPaths={shape.bodyPathMarkupText}
+              outerPaths={vm.bodyPathMarkupText}
               fillColor={fillColor}
               strokeColor={strokeColor}
             />
-            <PreviewKeyUnitCardsPart
-              keyUnits={shape.keyUnits}
-              showKeyId={false}
-              showKeyIndex={false}
-            />
+            <g>
+              {vm.keyUnits.map((keyUnit) => (
+                <PresetKeyUnitCard
+                  model={keyUnit}
+                  key={keyUnit.keyUnitId}
+                  qxOptimizer="deepEqual"
+                />
+              ))}
+            </g>
           </KeyboardSvgFrame>
         </div>
       </ScalerBox>

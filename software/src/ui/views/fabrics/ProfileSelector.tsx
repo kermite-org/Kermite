@@ -1,5 +1,5 @@
 import { h } from '~lib/qx';
-import { GeneralSelector } from '../controls/GeneralSelector';
+import { GeneralSelector } from '~ui/views/controls/GeneralSelector';
 
 export interface IProfileSelectorProps {
   optionProfileNames: string[];

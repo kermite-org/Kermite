@@ -9,7 +9,11 @@ import {
   IProfileManagerCommand,
   ISynchronousIpcPacket
 } from '~defs/IpcContract';
-import { IKeyboardShape, IProjectResourceInfo } from '~defs/ProfileData';
+import {
+  IKeyboardShape,
+  IProfileData,
+  IProjectResourceInfo
+} from '~defs/ProfileData';
 import { RpcEventSource, RpcFunction, xpcMain } from '~lib/xpc/xpcMain';
 import { appEnv } from '~shell/base/AppEnvironment';
 import { appWindowEventHub } from '~shell/base/AppEventBus';
@@ -23,6 +27,7 @@ import { KeyboardDeviceService } from './KeyboardDevice';
 import { InputLogicSimulatorD } from './KeyboardLogic/InputLogicSimulatorD';
 import { KeyboardLayoutFilesWatcher } from './KeyboardShape/KeyboardLayoutFilesWatcher';
 import { KeyboardShapesProvider } from './KeyboardShape/KeyboardShapesProvider';
+import { PresetProfileLoader } from './PresetProfileLoader';
 import { ProfileManager } from './ProfileManager';
 import { ProjectResourceInfoProvider } from './ProjectResource/ProjectResourceInfoProvider';
 import { resourceUpdator_syncRemoteResourcesToLocal } from './ResourceUpdator';
@@ -51,6 +56,10 @@ export class Services implements IBackendAgent {
     this.profileManager,
     this.keyboardConfigProvider,
     this.deviceService
+  );
+
+  private presetProfileLoader = new PresetProfileLoader(
+    this.projectResourceInfoProvider
   );
 
   @RpcFunction
@@ -155,6 +164,17 @@ export class Services implements IBackendAgent {
   @RpcFunction
   async getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]> {
     return this.projectResourceInfoProvider.getAllProjectResourceInfos();
+  }
+
+  @RpcFunction
+  async loadPresetProfile(
+    profileId: string,
+    presetName: string | undefined
+  ): Promise<IProfileData | undefined> {
+    return await this.presetProfileLoader.loadPresetProfileData(
+      profileId,
+      presetName
+    );
   }
 
   @RpcEventSource

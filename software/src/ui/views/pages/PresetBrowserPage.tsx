@@ -1,7 +1,8 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { ComponentCatalog } from '~ui/views/organisms/ComponentCatalog';
+import { IPresetBrowserViewModel } from '~ui/viewModels/PresetBrowserViewModel';
 import { PresetKeyboardSection } from '../organisms/PresetKeyboardSection';
+import { PresetSelectionSection } from '../organisms/PresetSelectionSection';
 
 const cssBase = css`
   background: #fff;
@@ -11,12 +12,13 @@ const cssBase = css`
     margin-top: 10px;
   }
 `;
-export const PresetBrowserPage = () => {
+
+export const PresetBrowserPage = (props: { vm: IPresetBrowserViewModel }) => {
   return (
     <div css={cssBase}>
-      <div>preset browser</div>
-      <ComponentCatalog />
-      <PresetKeyboardSection />
+      <div>Preset Browser</div>
+      <PresetSelectionSection vm={props.vm} />
+      <PresetKeyboardSection vm={props.vm} />
     </div>
   );
 };

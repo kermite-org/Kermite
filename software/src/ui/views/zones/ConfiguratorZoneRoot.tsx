@@ -21,7 +21,9 @@ const pageComponentMap: {
   firmwareUpdation: (props: { vm: ViewModels }) => (
     <FirmwareUpdationPage vm={props.vm.firmwareUpdation} />
   ),
-  presetBrowser: (_props: { vm: ViewModels }) => <PresetBrowserPage />
+  presetBrowser: (props: { vm: ViewModels }) => (
+    <PresetBrowserPage vm={props.vm.presetBrowser} />
+  )
 };
 
 export const ConfiguratorZoneRoot = (props: { viewModels: ViewModels }) => {

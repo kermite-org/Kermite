@@ -1,9 +1,9 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { models } from '~ui/models';
+import { IPresetBrowserViewModel } from '~ui/viewModels/PresetBrowserViewModel';
 import { PresetKeyboardView } from '../keyboardSvg/panels/PresetKeyboardView';
 
-const cssBase = css`
+const cssPresetKeyboardSection = css`
   border: solid 1px blue;
   height: 300px;
   display: flex;
@@ -18,13 +18,14 @@ const cssBase = css`
     border: solid 1px blue;
   }
 `;
-export const PresetKeyboardSection = () => {
-  const { profileData } = models.editorModel;
-  // console.log(profileData);
+
+export const PresetKeyboardSection = (props: {
+  vm: IPresetBrowserViewModel;
+}) => {
   return (
-    <div css={cssBase}>
+    <div css={cssPresetKeyboardSection}>
       <div class="keyboardPart">
-        <PresetKeyboardView profileData={profileData} />
+        <PresetKeyboardView vm={props.vm.keyboard} />
       </div>
       <div class="layersPart" />
     </div>
