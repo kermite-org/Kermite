@@ -62,14 +62,30 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
     }
   }
 
-  async loadPresetProfileData(
+  private async loadPresetProfileDataImpl(
     projectId: string,
     presetName: string | undefined
-  ): Promise<IProfileData | undefined> {
+  ) {
     if (presetName) {
       return await this.loadPresetProfileFromPresetFile(projectId, presetName);
     } else {
       return await this.createBlankProfileFromLayoutFile(projectId);
     }
+  }
+
+  private profileDataCache: { [key in string]: IProfileData | undefined } = {};
+
+  async loadPresetProfileData(
+    projectId: string,
+    presetName: string | undefined
+  ): Promise<IProfileData | undefined> {
+    const profileKey = `${projectId}__${presetName || 'blank'}`;
+    const cache = this.profileDataCache;
+    if (profileKey in cache) {
+      return cache[profileKey];
+    }
+    const profile = await this.loadPresetProfileDataImpl(projectId, presetName);
+    cache[profileKey] = profile;
+    return profile;
   }
 }
