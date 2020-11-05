@@ -26,29 +26,31 @@ const pageComponentMap: {
   )
 };
 
+const styles = {
+  cssContentRow: css`
+    background: ${uiTheme.colors.clBackground};
+    color: ${uiTheme.colors.clMainText};
+    display: flex;
+  `,
+
+  cssMainColumn: css`
+    flex-grow: 1;
+  `
+};
+
 export const ConfiguratorZoneRoot = (props: { viewModels: ViewModels }) => {
   const { viewModels } = props;
 
   const PageComponent =
     pageComponentMap[viewModels.models.uiStatusModel.settings.page];
 
-  const cssContentRow = css`
-    background: ${uiTheme.colors.clBackground};
-    color: ${uiTheme.colors.clMainText};
-    display: flex;
-  `;
-
-  const cssMainColumn = css`
-    flex-grow: 1;
-  `;
-
   return (
     <CustomWindowFrame
       renderTitleBar={() => <WindowTitleBarSection vm={viewModels.titleBar} />}
     >
-      <div css={cssContentRow}>
+      <div css={styles.cssContentRow}>
         <NavigationColumn vm={viewModels} />
-        <div css={cssMainColumn}>
+        <div css={styles.cssMainColumn}>
           <PageComponent vm={viewModels} />
         </div>
       </div>

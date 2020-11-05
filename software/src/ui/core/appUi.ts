@@ -1,3 +1,5 @@
+import { rerender as qxRerender } from '~lib/qx';
+
 export const appUi = new (class {
   private _debugObject?: any;
 
@@ -7,10 +9,8 @@ export const appUi = new (class {
   // todo: preload.jsでBE-->FEに環境変数を受け渡す?
   isDevelopment = location.protocol === 'http:';
 
-  reqRerender: boolean = false;
-
   rerender() {
-    this.reqRerender = true;
+    qxRerender();
   }
 
   get debugObject() {
@@ -19,6 +19,5 @@ export const appUi = new (class {
 
   setDebugObject(obj: any) {
     this._debugObject = obj;
-    this.reqRerender = true;
   }
 })();

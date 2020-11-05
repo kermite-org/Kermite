@@ -3,7 +3,7 @@ import { h } from '~lib/qx';
 import { reflectValue } from '~ui/base/helper/FormHelpers';
 import { FirmwareUpdationPageViewModel } from '~ui/viewModels/FirmwareUpdationPageViewModel';
 
-const cssBase = css`
+const cssFirmwareUpdationPage = css`
   background: #fff;
   color: #444;
   height: 100%;
@@ -43,7 +43,7 @@ export const FirmwareUpdationPage = (props: {
   const { phase } = vm;
 
   return (
-    <div css={cssBase}>
+    <div css={cssFirmwareUpdationPage}>
       <div className="titleRow">Firmware Updation</div>
 
       <div className="operationAlert">

@@ -1,6 +1,5 @@
 import { glob, setup, css } from 'goober';
 import { h } from '~lib/qx';
-// import { ForegroundModalLayerRoot } from '~ui/base/overlay/ForegroundModalLayer';
 import { DebugOverlay } from '~ui/base/overlay/DebugOverlay';
 import { appUi } from '~ui/core';
 import { ViewModels } from '~ui/viewModels';
@@ -32,20 +31,20 @@ glob`
   }
 `;
 
-export const SiteRoot = (props: { viewModels: ViewModels }) => {
-  const cssRoot = css`
-    height: 100%;
-  `;
+const cssSiteRoot = css`
+  height: 100%;
+`;
 
+export const SiteRoot = (props: { viewModels: ViewModels }) => {
   const { isWidgetMode } = props.viewModels.models.siteModel;
 
+  const ZoneRootComponent = isWidgetMode
+    ? WidgetZoneRoot
+    : ConfiguratorZoneRoot;
+
   return (
-    <div css={cssRoot}>
-      {!isWidgetMode ? (
-        <ConfiguratorZoneRoot viewModels={props.viewModels} />
-      ) : (
-        <WidgetZoneRoot viewModels={props.viewModels} />
-      )}
+    <div css={cssSiteRoot}>
+      <ZoneRootComponent viewModels={props.viewModels} />
       <ForegroundModalLayerRoot />
       <DebugOverlay debugObj={appUi.debugObject} />
     </div>

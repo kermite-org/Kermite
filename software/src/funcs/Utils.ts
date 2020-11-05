@@ -187,7 +187,7 @@ export function generateRandomUid(): string {
   );
 }
 
-export function thinningListenerCall(targetProc: () => void, ms: number) {
+export function debounce(targetProc: () => void, ms: number) {
   let timerId: any;
   return () => {
     if (timerId) {

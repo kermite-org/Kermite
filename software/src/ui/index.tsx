@@ -1,25 +1,19 @@
-import { h, render, rerender as qxRerender } from '~lib/qx';
-import { thinningListenerCall } from '~funcs/Utils';
-import { dumpXpcSubscriptionsRemained, appUi } from '~ui/core';
+import { dumpXpcSubscriptionsRemained } from '~ui/core';
+import { Views } from '~ui/views/ViewIndex';
 import { models } from './models';
 import { ViewModels } from './viewModels';
-import { SiteRoot } from './views/SiteRoot';
 
 function start() {
   console.log('start');
 
-  models.initialize();
   const viewModels = new ViewModels(models);
+  const views = new Views(viewModels);
+  models.initialize();
   viewModels.initialize();
-
-  appUi.rerender = qxRerender;
-
-  const appDiv = document.getElementById('app');
-  render(() => <SiteRoot viewModels={viewModels} />, appDiv);
-  window.addEventListener('resize', thinningListenerCall(appUi.rerender, 100));
+  views.initialize();
 
   window.addEventListener('beforeunload', () => {
-    render(() => <div />, document.getElementById('app'));
+    views.finalize();
     viewModels.finalize();
     models.finalize();
     dumpXpcSubscriptionsRemained();
