@@ -13,13 +13,17 @@ export interface IPresetKeyboardLayerViewModel {
   layerName: string;
 }
 
+export interface IPrsetLayerListViewModel {
+  layers: IPresetKeyboardLayerViewModel[];
+  currentLayerId: string;
+  setCurrentLayerId(layerId: string): void;
+}
+
 export interface IPresetKeyboardViewModel {
   keyUnits: IPresetKeyUnitViewModel[];
   displayArea: IKeyboardShapeDisplayArea;
   bodyPathMarkupText: string;
-  layers: IPresetKeyboardLayerViewModel[];
-  currentLayerId: string;
-  setCurrentLayerId(layerId: string): void;
+  layerList: IPrsetLayerListViewModel;
   setProfileData(profileData: IProfileData): void;
 }
 
@@ -32,12 +36,17 @@ export class PresetKeyboardViewModel implements IPresetKeyboardViewModel {
     this._currentLayerId = profileData.layers[0].layerId;
   }
 
-  get currentLayerId() {
-    return this._currentLayerId;
-  }
-
-  setCurrentLayerId(layerId: string) {
-    this._currentLayerId = layerId;
+  get layerList() {
+    return {
+      layers: this.profileData.layers.map((la) => ({
+        layerId: la.layerId,
+        layerName: la.layerName
+      })),
+      currentLayerId: this._currentLayerId,
+      setCurrentLayerId: (layerId: string) => {
+        this._currentLayerId = layerId;
+      }
+    };
   }
 
   get displayArea(): IKeyboardShapeDisplayArea {
@@ -46,13 +55,6 @@ export class PresetKeyboardViewModel implements IPresetKeyboardViewModel {
 
   get bodyPathMarkupText(): string {
     return this.profileData.keyboardShape.bodyPathMarkupText;
-  }
-
-  get layers(): IPresetKeyboardLayerViewModel[] {
-    return this.profileData.layers.map((la) => ({
-      layerId: la.layerId,
-      layerName: la.layerName
-    }));
   }
 
   get keyUnits(): IPresetKeyUnitViewModel[] {
