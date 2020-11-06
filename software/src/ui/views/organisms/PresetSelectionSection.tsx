@@ -35,8 +35,8 @@ export const PresetSelectionSection = ({
           <div>Keyboard</div>
           <KeyboardBreedSelector3
             selectorSource={vm.projectSelectorSource}
-            isLinkButtonActive={false}
-            linkButtonHandler={() => {}}
+            isLinkButtonActive={vm.isLinkButtonActive}
+            linkButtonHandler={vm.linkButtonHandler}
           />
         </div>
         <div className="selectorBlock">

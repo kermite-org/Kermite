@@ -11,6 +11,9 @@ export interface IPresetBrowserViewModel {
   keyboard: IPresetKeyboardViewModel;
   projectSelectorSource: ISelectorSource;
   presetSelectorSource: ISelectorSource;
+
+  isLinkButtonActive: boolean;
+  linkButtonHandler(): void;
 }
 
 export class PresetBrowserViewModel implements IPresetBrowserViewModel {
@@ -24,23 +27,7 @@ export class PresetBrowserViewModel implements IPresetBrowserViewModel {
 
   private selectedPresetName: string = 'blank';
 
-  get projectSelectorSource() {
-    const projectOptions = this.resourceInfos.map((info) => ({
-      id: info.projectId,
-      text: info.projectName
-    }));
-    return {
-      options: projectOptions,
-      choiceId: this.selectedProjectId,
-      setChoiceId: (id: string) => {
-        this.selectedProjectId = id;
-        this.selectedPresetName = 'blank';
-        this.loadSelectedProfile();
-      }
-    };
-  }
-
-  async loadSelectedProfile() {
+  private async loadSelectedProfile() {
     const loadedProfileData = await this.models.backend.loadPresetProfile(
       this.selectedProjectId,
       this.selectedPresetName === 'blank' ? undefined : this.selectedPresetName
@@ -51,6 +38,21 @@ export class PresetBrowserViewModel implements IPresetBrowserViewModel {
       console.error(`errro while loading preset profile`);
     }
     appUi.rerender();
+  }
+
+  get projectSelectorSource() {
+    return {
+      options: this.resourceInfos.map((info) => ({
+        id: info.projectId,
+        text: info.projectName
+      })),
+      choiceId: this.selectedProjectId,
+      setChoiceId: (id: string) => {
+        this.selectedProjectId = id;
+        this.selectedPresetName = 'blank';
+        this.loadSelectedProfile();
+      }
+    };
   }
 
   get presetSelectorSource() {
@@ -69,6 +71,20 @@ export class PresetBrowserViewModel implements IPresetBrowserViewModel {
       }
     };
   }
+
+  get isLinkButtonActive() {
+    return (
+      this.models.deviceStatusModel.isConnected &&
+      this.models.deviceStatusModel.deviceAttrs?.projectId !==
+        this.selectedProjectId
+    );
+  }
+
+  linkButtonHandler = () => {
+    const deviceProjectId =
+      this.models.deviceStatusModel.deviceAttrs?.projectId || '';
+    this.projectSelectorSource.setChoiceId(deviceProjectId);
+  };
 
   private onResourceModelLoaded = () => {
     this.resourceInfos = this.models.projectResourceModel.projectResourceInfos;
