@@ -14,6 +14,7 @@ export class Views {
   initialize() {
     render(() => <SiteRoot viewModels={this.viewModels} />, this.appDiv);
     window.addEventListener('resize', debounce(appUi.rerender, 100));
+    appUi.startAsyncRenderLoop();
   }
 
   finalize() {

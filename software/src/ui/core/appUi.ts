@@ -9,8 +9,22 @@ export const appUi = new (class {
   // todo: preload.jsでBE-->FEに環境変数を受け渡す?
   isDevelopment = location.protocol === 'http:';
 
-  rerender() {
-    qxRerender();
+  private reqRenderAsync: boolean = false;
+
+  rerender = () => {
+    // qxRerender();
+    this.reqRenderAsync = true;
+  };
+
+  startAsyncRenderLoop() {
+    const renderLoop = () => {
+      if (this.reqRenderAsync) {
+        qxRerender();
+        this.reqRenderAsync = false;
+      }
+      requestAnimationFrame(renderLoop);
+    };
+    renderLoop();
   }
 
   get debugObject() {
