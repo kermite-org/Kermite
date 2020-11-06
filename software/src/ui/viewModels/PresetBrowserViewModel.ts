@@ -1,19 +1,11 @@
 import { IProjectResourceInfo } from '~defs/ProfileData';
 import { appUi } from '~ui/core';
 import { Models } from '~ui/models';
+import { ISelectorSource } from '~ui/viewModels/viewModelInterfaces';
 import {
   IPresetKeyboardViewModel,
   PresetKeyboardViewModel
 } from './PresetKeyboardViewModel';
-
-export interface ISelectorSource {
-  options: {
-    id: string;
-    text: string;
-  }[];
-  choiceId: string;
-  setChoiceId(id: string): void;
-}
 
 export interface IPresetBrowserViewModel {
   keyboard: IPresetKeyboardViewModel;

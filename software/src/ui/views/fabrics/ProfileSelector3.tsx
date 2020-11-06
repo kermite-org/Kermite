@@ -1,5 +1,5 @@
 import { h } from '~lib/qx';
-import { ISelectorSource } from '~ui/viewModels/PresetBrowserViewModel';
+import { ISelectorSource } from '~ui/viewModels/viewModelInterfaces';
 import { GeneralSelector } from '~ui/views/controls/GeneralSelector';
 
 export interface IProfileSelectorProps {
