@@ -1,20 +1,12 @@
 import {
   fallbackProfileData,
   IKeyboardShapeDisplayArea,
-  IKeyUnitEntry,
   IProfileData
 } from '~defs/ProfileData';
-
-export interface IPresetKeyUnitViewModel {
-  keyUnitId: string;
-  pos: {
-    x: number;
-    y: number;
-    r: number;
-  };
-  primaryText: string;
-  secondaryText: string;
-}
+import {
+  makePresetKeyUnitViewModels,
+  IPresetKeyUnitViewModel
+} from '~ui/viewModels/PresetKeyUnitViewModelCreator';
 
 export interface IPresetKeyboardLayerViewModel {
   layerId: string;
@@ -29,24 +21,6 @@ export interface IPresetKeyboardViewModel {
   currentLayerId: string;
   setCurrentLayerId(layerId: string): void;
   setProfileData(profileData: IProfileData): void;
-}
-
-function createKeyUnitViewModel(ku: IKeyUnitEntry): IPresetKeyUnitViewModel {
-  const keyUnitId = ku.id;
-  const pos = {
-    x: ku.x,
-    y: ku.y,
-    r: ku.r || 0
-  };
-  const primaryText = 'pri';
-  const secondaryText = 'sec';
-
-  return {
-    keyUnitId,
-    pos,
-    primaryText,
-    secondaryText
-  };
 }
 
 export class PresetKeyboardViewModel implements IPresetKeyboardViewModel {
@@ -66,22 +40,22 @@ export class PresetKeyboardViewModel implements IPresetKeyboardViewModel {
     this._currentLayerId = layerId;
   }
 
-  get displayArea() {
+  get displayArea(): IKeyboardShapeDisplayArea {
     return this.profileData.keyboardShape.displayArea;
   }
 
-  get bodyPathMarkupText() {
+  get bodyPathMarkupText(): string {
     return this.profileData.keyboardShape.bodyPathMarkupText;
   }
 
-  get layers() {
+  get layers(): IPresetKeyboardLayerViewModel[] {
     return this.profileData.layers.map((la) => ({
       layerId: la.layerId,
       layerName: la.layerName
     }));
   }
 
-  get keyUnits() {
-    return this.profileData.keyboardShape.keyUnits.map(createKeyUnitViewModel);
+  get keyUnits(): IPresetKeyUnitViewModel[] {
+    return makePresetKeyUnitViewModels(this.profileData, this._currentLayerId);
   }
 }

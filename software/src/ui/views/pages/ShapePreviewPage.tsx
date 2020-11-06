@@ -3,7 +3,7 @@ import { h } from '~lib/qx';
 import { ShapePreviewPageViewModel } from '~ui/viewModels/ShapePreviewPageViewModel';
 import { GeneralSelector } from '~ui/views/controls/GeneralSelector';
 import { ShapePreviewOptionsBox } from '~ui/views/fabrics/ShapePreviewOptionsBox';
-import { KeyboardShapeView } from '~ui/views/keyboardSvg/panels/KeyboardShapeView';
+import { PreviewKeyboardShapeView } from '~ui/views/keyboardSvg/panels/PreviewKeyboardShapeView';
 
 const cssShapePreviewPage = css`
   height: 100%;
@@ -50,7 +50,7 @@ export const KeyboardShapePreviewPage = (props: {
       </div>
       <div class="keyboardRow">
         {loadedShape && (
-          <KeyboardShapeView shape={loadedShape} settings={settings} />
+          <PreviewKeyboardShapeView shape={loadedShape} settings={settings} />
         )}
       </div>
       <div class="restRow">

@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { mvvmView } from '~ui/base/helper/mvvmHelpers';
-import { IPresetKeyUnitViewModel } from '~ui/viewModels/PresetKeyboardViewModel';
+import { IPresetKeyUnitViewModel } from '~ui/viewModels/PresetKeyUnitViewModelCreator';
 
 const cssKeyRect = css`
   fill: transparent;
@@ -15,7 +15,7 @@ const cssKeyText = css`
 `;
 
 export const PresetKeyUnitCard = mvvmView((ku: IPresetKeyUnitViewModel) => {
-  const { keyUnitId, pos } = ku;
+  const { keyUnitId, pos, primaryText, secondaryText, isLayerFallback } = ku;
 
   return (
     <g
@@ -24,12 +24,12 @@ export const PresetKeyUnitCard = mvvmView((ku: IPresetKeyUnitViewModel) => {
     >
       <rect x={-9} y={-9} width={18} height={18} css={cssKeyRect} />
 
-      <text css={cssKeyText} x={0} y={-2}>
-        {ku.primaryText}
+      <text css={cssKeyText} x={0} y={-2} qxIf={!isLayerFallback}>
+        {primaryText}
       </text>
 
-      <text css={cssKeyText} x={0} y={4}>
-        {ku.secondaryText}
+      <text css={cssKeyText} x={0} y={4} qxIf={!isLayerFallback}>
+        {secondaryText}
       </text>
     </g>
   );
