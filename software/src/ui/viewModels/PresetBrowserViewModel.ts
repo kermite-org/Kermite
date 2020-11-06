@@ -1,5 +1,4 @@
 import { IProjectResourceInfo } from '~defs/ProfileData';
-import { appUi } from '~ui/core';
 import { Models } from '~ui/models';
 import { ISelectorSource } from '~ui/viewModels/viewModelInterfaces';
 import {
@@ -37,7 +36,6 @@ export class PresetBrowserViewModel implements IPresetBrowserViewModel {
     } else {
       console.error(`errro while loading preset profile`);
     }
-    appUi.rerender();
   }
 
   get projectSelectorSource() {

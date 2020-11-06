@@ -1,5 +1,4 @@
 import { IRealtimeKeyboardEvent } from '~defs/IpcContract';
-import { appUi } from '~ui/core';
 import { EditorModel } from '../editor/EditorModel';
 import { RealtimeKeyboardEventProvider } from './RealtimeKeyboardEventProvider';
 
@@ -79,8 +78,6 @@ export class PlayerModel {
     } else if (ev.type === 'layerChanged') {
       this._layerActiveFlags = ev.layerActiveFlags;
     }
-
-    appUi.rerender();
   };
 
   initialize() {

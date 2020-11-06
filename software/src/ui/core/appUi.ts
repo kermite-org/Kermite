@@ -12,7 +12,6 @@ export const appUi = new (class {
   private reqRenderAsync: boolean = false;
 
   rerender = () => {
-    // qxRerender();
     this.reqRenderAsync = true;
   };
 

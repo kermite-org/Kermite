@@ -1,4 +1,4 @@
-import { appUi, backendAgent } from '~ui/core';
+import { backendAgent } from '~ui/core';
 
 type FirmwareUpdationPhase =
   | 'WaitingReset'
@@ -16,7 +16,6 @@ export class FirmwareUpdationModel {
   async uploadFirmware(firmwareName: string) {
     if (this.phase === 'WaitingUploadOrder' && this.comPortName) {
       this.phase = 'Uploading';
-      appUi.rerender();
       const res = await backendAgent.uploadFirmware(
         firmwareName,
         this.comPortName
@@ -27,7 +26,6 @@ export class FirmwareUpdationModel {
       } else {
         this.phase = 'UploadFailure';
       }
-      appUi.rerender();
     }
   }
 
@@ -43,7 +41,6 @@ export class FirmwareUpdationModel {
     if (this.phase === 'WaitingUploadOrder' && !this.comPortName) {
       this.phase = 'WaitingReset';
     }
-    appUi.rerender();
   };
 
   backToInitialPhase() {
@@ -61,7 +58,6 @@ export class FirmwareUpdationModel {
   initialize() {
     (async () => {
       this.firmwareNames = await backendAgent.getFirmwareNamesAvailable();
-      appUi.rerender();
     })();
   }
 }
