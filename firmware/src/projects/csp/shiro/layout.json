@@ -1,0 +1,32 @@
+{
+  "projectId": "dx5kE9SU",
+  "projectName": "Shiro",
+  "displayArea": {
+    "centerX": 20,
+    "centerY": 60,
+    "width": 112,
+    "height": 112
+  },
+  "keyUnits": [
+    { "id": "key0", "x": 0, "y": 20, "r": 0, "keyIndex": 0 },
+    { "id": "key1", "x": 20, "y": 20, "r": 0, "keyIndex": 1 },
+    { "id": "key2", "x": 40, "y": 20, "r": 0, "keyIndex": 2 },
+
+    { "id": "key3", "x": 0, "y": 40, "r": 0, "keyIndex": 3 },
+    { "id": "key4", "x": 20, "y": 40, "r": 0, "keyIndex": 4 },
+    { "id": "key5", "x": 40, "y": 40, "r": 0, "keyIndex": 5 },
+
+    { "id": "key6", "x": 0, "y": 60, "r": 0, "keyIndex": 6 },
+    { "id": "key7", "x": 20, "y": 60, "r": 0, "keyIndex": 7 },
+    { "id": "key8", "x": 40, "y": 60, "r": 0, "keyIndex": 8 },
+
+    { "id": "key9", "x": 0, "y": 80, "r": 0, "keyIndex": 9 },
+    { "id": "key10", "x": 20, "y": 80, "r": 0, "keyIndex": 10 },
+    { "id": "key11", "x": 40, "y": 80, "r": 0, "keyIndex": 11 },
+
+    { "id": "key12", "x": 0, "y": 100, "r": 0, "keyIndex": 12 },
+    { "id": "key13", "x": 20, "y": 100, "r": 0, "keyIndex": 13 },
+    { "id": "key14", "x": 40, "y": 100, "r": 0, "keyIndex": 14 }
+  ],
+  "bodyPathMarkups": ["M -15,5", "L 55,5", "L 55,115", "L -15,115", "z"]
+}
