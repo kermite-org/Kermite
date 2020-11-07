@@ -1,5 +1,5 @@
 import { IAppWindowEvent } from '~defs/IpcContract';
-import { backendAgent, appUi } from '~ui/core';
+import { backendAgent } from '~ui/core';
 
 export class SiteModel {
   private _isWidgetMode: boolean = false;
@@ -21,7 +21,6 @@ export class SiteModel {
   private onAppWindowEvents = (ev: IAppWindowEvent) => {
     if (ev.activeChanged !== undefined) {
       this._isWindowActive = ev.activeChanged;
-      appUi.rerender();
     }
   };
 

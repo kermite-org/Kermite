@@ -64,7 +64,7 @@
     "@typescript-eslint/prefer-regexp-exec": 0,
     "@typescript-eslint/await-thenable": 1,
     "@typescript-eslint/no-unnecessary-type-assertion": 1,
-    "@typescript-eslint/no-unsafe-call": 1,
+    "@typescript-eslint/no-unsafe-call": 0,
 
     //standard-with-typescript
     "@typescript-eslint/naming-convention": 0,

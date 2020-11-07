@@ -1,6 +1,7 @@
 import { IpcRenderer } from 'electron';
 import { ISynchronousIpcPacket, IBackendAgent } from '~defs/IpcContract';
 import { createXpcRenderer } from '~lib/xpc/xpcRenderer';
+import { appUi } from '~ui/core/appUi';
 
 const ipcRenderer: IpcRenderer = (window as any).ipcRenderer;
 
@@ -12,7 +13,10 @@ export function debugTrace(message: string) {
   sendIpcPacketSync({ debugMessage: message });
 }
 
-const xpcRenderer = createXpcRenderer((window as any).ipcRenderer);
+const xpcRenderer = createXpcRenderer(
+  (window as any).ipcRenderer,
+  appUi.rerender
+);
 
 export const backendAgent = xpcRenderer.getBackendAgent<IBackendAgent>(
   'default'

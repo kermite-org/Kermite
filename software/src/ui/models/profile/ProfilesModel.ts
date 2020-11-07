@@ -1,10 +1,9 @@
 import {
-  IProfileManagerStatus,
-  IProfileManagerCommand
+  IProfileManagerCommand,
+  IProfileManagerStatus
 } from '~defs/IpcContract';
-import { backendAgent, appUi } from '~ui/core';
+import { backendAgent } from '~ui/core';
 import { EditorModel } from '../editor/EditorModel';
-// import { editorModel } from '~ui/models/editor/EditorModel';
 import { ProfileProvider } from './ProfileProvider';
 
 const useAutoSave = false;
@@ -35,7 +34,6 @@ export class ProfilesModel {
     if (payload.errorMessage) {
       alert(payload.errorMessage);
     }
-    appUi.rerender();
   };
 
   initialize() {

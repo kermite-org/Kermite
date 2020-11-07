@@ -1,5 +1,5 @@
 import { IKeyboardShape } from '~defs/ProfileData';
-import { appUi, backendAgent } from '~ui/core';
+import { backendAgent } from '~ui/core';
 import { Models } from '~ui/models';
 import { IUiSettings } from '~ui/models/UiStatusModel';
 import { IGeneralSelectorViewModel } from '~ui/views/controls/GeneralSelector';
@@ -48,7 +48,6 @@ export class ShapePreviewPageViewModel {
     this.loadedShape = await this.models.keyboardShapesModel.getKeyboardShapeByBreedName(
       nextBreedName
     );
-    appUi.rerender();
   }
 
   get holdKeyIndices(): number[] {

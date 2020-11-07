@@ -2,7 +2,7 @@ import {
   IKeyboardBehaviorMode,
   IKeyboardLayoutStandard
 } from '~defs/ConfigTypes';
-import { backendAgent, appUi } from '~ui/core';
+import { backendAgent } from '~ui/core';
 
 export class KeyboardConfigModel {
   behaviorMode: IKeyboardBehaviorMode = 'Standalone';
@@ -13,7 +13,6 @@ export class KeyboardConfigModel {
     const { behaviorMode, layoutStandard } = keyboardConfig;
     this.behaviorMode = behaviorMode;
     this.layoutStandard = layoutStandard;
-    appUi.rerender();
   }
 
   writeConfigurationToDevice() {

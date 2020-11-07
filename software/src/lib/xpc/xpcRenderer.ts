@@ -17,7 +17,10 @@ interface ISubscriptionHandlerInfo {
 
 // IPCのラッパ, レンダラプロセス側
 // メインプロセスで用意した関数を、レンダラプロセスから同一のシグニチャで呼べるようにする
-export function createXpcRenderer(ipcRenderer: Electron.IpcRenderer) {
+export function createXpcRenderer(
+  ipcRenderer: Electron.IpcRenderer,
+  shuttleCompletionHook?: () => void
+) {
   const allSubscriptionCodes: string[] = [];
 
   function createBackendAgent<T>(realm: string) {
@@ -29,6 +32,7 @@ export function createXpcRenderer(ipcRenderer: Electron.IpcRenderer) {
           const xpcCode = `XPC__${realm}__${sig}`;
           ipcRenderer.once(`${xpcCode}__reply`, (event, response) => {
             resolve(response);
+            shuttleCompletionHook?.();
             removeArrayItemOne(allSubscriptionCodes, xpcCode);
           });
           ipcRenderer.send(`${xpcCode}__call`, ...params);
@@ -38,8 +42,10 @@ export function createXpcRenderer(ipcRenderer: Electron.IpcRenderer) {
       const ipcEventHandlerMap = new Map<Function, ISubscriptionHandlerInfo>();
       invoker.subscribe = (listener: Function) => {
         const subscriptionUuid = generateRandomUid();
-        const ipcEventHandler: IpcRendererEventHandler = (event, args) =>
+        const ipcEventHandler: IpcRendererEventHandler = (event, args) => {
           listener(args);
+          shuttleCompletionHook?.();
+        };
         const xpcCode = `XPC__${realm}__${sig}`;
         ipcRenderer.on(`${xpcCode}__event`, ipcEventHandler);
         ipcRenderer.send(`${xpcCode}__subscribe`, subscriptionUuid);
