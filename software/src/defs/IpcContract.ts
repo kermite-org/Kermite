@@ -85,6 +85,10 @@ export interface IBackendAgent {
   layoutFileUpdationEvents: IEventSource<{ breedName: string }>;
 
   getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
+  loadPresetProfile(
+    projectId: string,
+    presetName: string | undefined
+  ): Promise<IProfileData | undefined>;
 }
 
 export interface ISynchronousIpcPacket {

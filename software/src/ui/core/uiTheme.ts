@@ -51,6 +51,7 @@ export const themeColors: { [key in ThemeKey]: IThemeColorSet } = {
   },
   light: {
     clBackground: '#c8d3e3',
+    // clBackground: '#fff',
     clTitleBar: '#02cee1',
     clStatusBar: '#02cee1',
     clNavigationColumn: '#3870A3',
@@ -73,6 +74,7 @@ export const themeColors: { [key in ThemeKey]: IThemeColorSet } = {
   }
 };
 
-export const uiTheme: { colors: IThemeColorSet } = {
+export const uiTheme: { unitHeight: number; colors: IThemeColorSet } = {
+  unitHeight: 26,
   colors: themeColors.light
 };

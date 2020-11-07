@@ -9,10 +9,10 @@ import {
 
 export class ProjectResourceInfoProvider
   implements IProjectResourceInfoProvider {
-  projectResourceInfoSources: IProjectResourceInfoSource[] = [];
+  projectInfoSources: IProjectResourceInfoSource[] = [];
 
   getAllProjectResourceInfos(): IProjectResourceInfo[] {
-    return this.projectResourceInfoSources.map((it) => {
+    return this.projectInfoSources.map((it) => {
       const {
         projectId,
         projectName,
@@ -32,34 +32,36 @@ export class ProjectResourceInfoProvider
     });
   }
 
-  getProjectResourceInfoById(projectId: string) {
-    return this.projectResourceInfoSources.find(
-      (info) => info.projectId === projectId
-    );
+  private getProjectInfoSourceById(
+    projectId: string
+  ): IProjectResourceInfoSource | undefined {
+    return this.projectInfoSources.find((info) => info.projectId === projectId);
   }
+
+  internal_getProjectInfoSourceById = this.getProjectInfoSourceById;
 
   getPresetProfileFilePath(
     projectId: string,
     presetName: string
   ): string | undefined {
-    const info = this.getProjectResourceInfoById(projectId);
+    const info = this.getProjectInfoSourceById(projectId);
     const folder = info?.presetsFolderPath;
     return folder && pathJoin(folder, `${presetName}.json`);
   }
 
   getHexFilePath(projectId: string): string | undefined {
-    const info = this.getProjectResourceInfoById(projectId);
+    const info = this.getProjectInfoSourceById(projectId);
     return info?.hexFilePath;
   }
 
   getLayoutFilePath(projectId: string): string | undefined {
-    const info = this.getProjectResourceInfoById(projectId);
+    const info = this.getProjectInfoSourceById(projectId);
     return info?.layoutFilePath;
   }
 
   async initializeAsync(): Promise<void> {
     const resourceOrigin = appEnv.isDevelopment ? 'local' : 'central';
-    this.projectResourceInfoSources = await ProjectResourceInfoSourceLoader.loadProjectResourceInfoSources(
+    this.projectInfoSources = await ProjectResourceInfoSourceLoader.loadProjectResourceInfoSources(
       resourceOrigin
     );
   }

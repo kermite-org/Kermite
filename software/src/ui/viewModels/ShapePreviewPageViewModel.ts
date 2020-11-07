@@ -34,9 +34,12 @@ export class ShapePreviewPageViewModel {
 
   get breedSelectorVM(): IGeneralSelectorViewModel {
     return {
-      allOptionTexts: this.allBreedNames,
-      currentOptionText: this.currentBreedName,
-      setCurrentOptionText: this.setCurrentBreedName
+      options: this.allBreedNames.map((it) => ({
+        id: it,
+        text: it
+      })),
+      choiceId: this.currentBreedName,
+      setChoiceId: this.setCurrentBreedName
     };
   }
 

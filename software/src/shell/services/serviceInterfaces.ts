@@ -3,6 +3,7 @@ import {
   IProfileData,
   IProjectResourceInfo
 } from '~defs/ProfileData';
+import { IProjectResourceInfoSource } from '~shell/services/ProjectResource/ProjectResourceInfoSourceLoader';
 
 export interface IProjectResourceInfoProvider {
   getAllProjectResourceInfos(): IProjectResourceInfo[];
@@ -13,6 +14,10 @@ export interface IProjectResourceInfoProvider {
   getHexFilePath(projectId: string): string | undefined;
   getLayoutFilePath(projectId: string): string | undefined;
   initializeAsync(): Promise<void>;
+
+  internal_getProjectInfoSourceById(
+    projectId: string
+  ): IProjectResourceInfoSource | undefined;
 }
 
 export interface IKeyboardShapeBulkLoader {
@@ -24,9 +29,9 @@ export interface IKeyboardShapeBulkLoader {
   }>;
 }
 
-export interface IProjectManagerPresetLoadingFeature {
+export interface IPresetProfileLoadingFeature {
   loadPresetProfileData(
     projectId: string,
-    presetName: string
-  ): Promise<IProfileData>;
+    presetName: string | undefined
+  ): Promise<IProfileData | undefined>;
 }

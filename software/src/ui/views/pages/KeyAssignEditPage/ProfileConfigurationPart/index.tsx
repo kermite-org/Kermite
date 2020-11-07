@@ -1,10 +1,10 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { reflectFieldChecked } from '~ui/base/FormHelpers';
 import {
   ClosableOverlay,
   CommonDialogFrame
 } from '~ui/base/dialog/CommonDialogParts';
+import { reflectFieldChecked } from '~ui/base/helper/FormHelpers';
 import { models } from '~ui/models';
 import { AssignTypeSelectionPart } from './AssignTypeSelectionPart';
 import { DualModeSettingsPart } from './DualModeSettingsPart';

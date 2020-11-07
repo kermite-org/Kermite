@@ -1,31 +1,54 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { reflectValue } from '~ui/base/FormHelpers';
+import { reflectValue } from '~ui/base/helper/FormHelpers';
+import { combineClasses } from '~ui/base/helper/ViewHelpers';
+import { uiTheme } from '~ui/core';
 
-export interface IGeneralSelectorViewModel {
-  allOptionTexts: string[];
-  currentOptionText: string;
-  setCurrentOptionText: (text: string) => void;
+const { unitHeight } = uiTheme;
+
+export interface IGeneralSelectorOption {
+  id: string;
+  text: string;
 }
 
-const cssBase = css`
-  border: solid 1px blue;
-  min-width: '100px';
+export interface IGeneralSelectorViewModel {
+  options: IGeneralSelectorOption[];
+  choiceId: string;
+  setChoiceId(key: string): void;
+}
+
+export interface IGeneralSelectorProps {
+  options: IGeneralSelectorOption[];
+  choiceId: string;
+  setChoiceId(key: string): void;
+  width?: number;
+  className?: string;
+}
+
+const cssGeneralSelector2 = (width: number | undefined) => css`
+  border: solid 1px #08a;
+  min-width: 100px;
+  height: ${unitHeight}px;
+  width: ${width ? `${width}px` : 'inherit'};
+  font-size: 16px;
+  &:focus {
+    outline: none;
+  }
 `;
 
-export function GeneralSelector(props: { vm: IGeneralSelectorViewModel }) {
-  const { allOptionTexts, currentOptionText, setCurrentOptionText } = props.vm;
+export const GeneralSelector = (props: IGeneralSelectorProps) => {
+  const { options, choiceId, setChoiceId, className, width } = props;
   return (
     <select
-      value={currentOptionText}
-      onChange={reflectValue(setCurrentOptionText)}
-      css={cssBase}
+      value={choiceId}
+      onChange={reflectValue(setChoiceId)}
+      css={combineClasses(cssGeneralSelector2(width), className)}
     >
-      {allOptionTexts.map((optionText, idx) => (
-        <option value={optionText} key={idx}>
-          {optionText}
+      {options.map((it, idx) => (
+        <option value={it.id} key={`${idx}_${it.id}`}>
+          {it.text}
         </option>
       ))}
     </select>
   );
-}
+};

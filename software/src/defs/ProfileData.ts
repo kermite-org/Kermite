@@ -187,6 +187,15 @@ export type IProfileData = {
     }
 );
 
+export type IProfileDataAssigns = {
+  [address: string]:
+    | IAssignEntry_Single
+    | IAssignEntry_Dual
+    | IAssingEntry_Block
+    | IAssignEntry_Transparent
+    | undefined;
+};
+
 export const fallbackProfileData: IProfileData = {
   revision: 'PRF02',
   keyboardShape: keyboardShape_fallbackData,

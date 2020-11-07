@@ -2,10 +2,11 @@ import { css } from 'goober';
 import { h } from '~lib/qx';
 import { uiTheme } from '~ui/core';
 import { models } from '~ui/models';
-import { KeyUnitCardsPart } from './KeyUnitCardsPart';
+import { KeyboardBodyShape } from '~ui/views/keyboardSvg/atoms/KeyboardBodyShape';
+import { EditKeyUnitCardsPart } from '~ui/views/keyboardSvg/organisms/EditKeyUnitCardsPart';
 import { LayerStateView } from './LayerStateView';
 
-export const KeyboardBasePlane = (props: { children: any }) => {
+const EditKeyboardBasePlane = (props: { children: any }) => {
   const { clearAssignSlotSelection } = models.editorModel;
   const { children } = props;
   const cssSvg = css`
@@ -33,26 +34,30 @@ export const KeyboardBasePlane = (props: { children: any }) => {
   );
 };
 
-export const KeyboardBodyShape = () => {
-  const outerPaths = models.editorModel.bodyPathMarkupText;
-  const cssBody = css`
-    fill: ${uiTheme.colors.clKeyboardBodyFace};
-  `;
-  return <path d={outerPaths} css={cssBody} />;
+const EditKeyboardView = () => {
+  const bodyOuterPaths = models.editorModel.bodyPathMarkupText;
+  const bodyFillColor = uiTheme.colors.clKeyboardBodyFace;
+  return (
+    <EditKeyboardBasePlane>
+      <KeyboardBodyShape
+        outerPaths={bodyOuterPaths}
+        fillColor={bodyFillColor}
+        strokeColor="transparent"
+      />
+      <EditKeyUnitCardsPart />
+    </EditKeyboardBasePlane>
+  );
 };
 
 export function KeyboardSection() {
-  const cssSvgOuter = css`
+  const cssKeyboardSection = css`
     object-fit: contain;
     position: relative;
   `;
 
   return (
-    <div css={cssSvgOuter}>
-      <KeyboardBasePlane>
-        <KeyboardBodyShape />
-        <KeyUnitCardsPart />
-      </KeyboardBasePlane>
+    <div css={cssKeyboardSection}>
+      <EditKeyboardView />
       <LayerStateView />
     </div>
   );

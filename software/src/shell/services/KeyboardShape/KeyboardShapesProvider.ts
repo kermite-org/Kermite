@@ -1,11 +1,11 @@
 import { IKeyboardShape } from '~defs/ProfileData';
-import { ProjectResourceInfoProvider } from '../ProjectResource/ProjectResourceInfoProvider';
+import { IProjectResourceInfoProvider } from '~shell/services/serviceInterfaces';
 import { KeyboardLayoutFileLoader } from './KeyboardLayoutFileLoader';
 
 // キーボード品種ごとのレイアウトファイルを読み込み提供する
 export class KeyboardShapesProvider {
   constructor(
-    private projectResourceInfoProvider: ProjectResourceInfoProvider
+    private projectResourceInfoProvider: IProjectResourceInfoProvider
   ) {}
 
   getAvailableBreedNames(): string[] {
