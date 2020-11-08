@@ -21,9 +21,7 @@ export class KeyboardShapesModel {
   }
 
   get optionProjectInfos() {
-    return this.projectResourceModel.projectResourceInfos.filter(
-      (info) => info.hasLayout
-    );
+    return this.projectResourceModel.getProjectsWithLayout();
   }
 
   private async loadCurrentProjectLayout() {

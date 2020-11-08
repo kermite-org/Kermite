@@ -64,13 +64,13 @@ export class ProfileManagerCore {
 
   async createProfile(
     profName: string,
-    breedName: string
+    targetProjectId: string
   ): Promise<IProfileData> {
     const profileData: IProfileData = duplicateObjectByJsonStringifyParse(
       fallbackProfileData
     );
-    const keyboardShape = await this.shapesProvider.loadKeyboardShapeByBreedName_Deprecated(
-      breedName
+    const keyboardShape = await this.shapesProvider.loadKeyboardShapeByProjectId(
+      targetProjectId
     );
     if (keyboardShape) {
       profileData.keyboardShape = keyboardShape;

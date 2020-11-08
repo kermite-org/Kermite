@@ -6,6 +6,10 @@ export class ProjectResourceModel {
   projectResourceInfos: IProjectResourceInfo[] = [];
   loadedNotifier = new OneTimeNotifier();
 
+  getProjectsWithLayout() {
+    return this.projectResourceInfos.filter((info) => info.hasLayout);
+  }
+
   initialize() {
     (async () => {
       this.projectResourceInfos = await backendAgent.getAllProjectResourceInfos();

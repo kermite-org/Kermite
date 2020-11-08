@@ -9,6 +9,8 @@ import {
 import { reflectFieldValue } from '~ui/base/helper/FormHelpers';
 import { createModal } from '~ui/base/overlay/ForegroundModalLayer';
 import { models } from '~ui/models';
+import { ISelectorOption } from '~ui/viewModels/viewModelInterfaces';
+import { GeneralSelector } from '~ui/views/controls/GeneralSelector';
 import {
   cssCommonPropertiesTable,
   cssCommonTextInput
@@ -16,16 +18,16 @@ import {
 
 interface ICreateProfileDialogEditValues {
   profileName: string;
-  breedName: string;
+  targetProjectId: string;
 }
 
 const ProfileSetupModalContent = (props: {
   editValues: ICreateProfileDialogEditValues;
-  breedNames: string[];
+  projectOptions: ISelectorOption[];
   submit(): void;
   close(): void;
 }) => {
-  const { editValues, submit, close, breedNames } = props;
+  const { editValues, submit, close, projectOptions } = props;
 
   return (
     <ClosableOverlay close={close}>
@@ -47,16 +49,12 @@ const ProfileSetupModalContent = (props: {
               <tr>
                 <td>Target Keyboard</td>
                 <td>
-                  <select
-                    value={editValues.breedName}
-                    onChange={reflectFieldValue(editValues, 'breedName')}
-                  >
-                    {breedNames.map((breedName) => (
-                      <option value={breedName} key={breedName}>
-                        {breedName}
-                      </option>
-                    ))}
-                  </select>
+                  <GeneralSelector
+                    options={projectOptions}
+                    choiceId={editValues.targetProjectId}
+                    setChoiceId={(id) => (editValues.targetProjectId = id)}
+                    width={150}
+                  />
                 </td>
               </tr>
             </tbody>
@@ -71,10 +69,16 @@ const ProfileSetupModalContent = (props: {
 };
 
 export const callProfileSetupModal = createModal(() => {
-  const breedNames = models.keyboardShapesModel.getAllBreedNames();
+  const projectOptions = models.projectResourceModel
+    .getProjectsWithLayout()
+    .map((info) => ({
+      id: info.projectId,
+      text: info.projectPath
+    }));
+
   const editValues: ICreateProfileDialogEditValues = {
     profileName: '',
-    breedName: breedNames[0]
+    targetProjectId: projectOptions?.[0].id || ''
   };
   return (props: {
     close: (result: ICreateProfileDialogEditValues | undefined) => void;
@@ -86,7 +90,7 @@ export const callProfileSetupModal = createModal(() => {
         editValues={editValues}
         submit={submit}
         close={close}
-        breedNames={breedNames}
+        projectOptions={projectOptions}
       />
     );
   };

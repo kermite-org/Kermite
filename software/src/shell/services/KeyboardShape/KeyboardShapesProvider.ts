@@ -8,7 +8,7 @@ export class KeyboardShapesProvider {
     private projectResourceInfoProvider: IProjectResourceInfoProvider
   ) {}
 
-  private getLayoutFilePathByProjectPath(
+  private getLayoutFilePathByProjectPath__NotUsed(
     projectPath: string
   ): string | undefined {
     const info = this.projectResourceInfoProvider
@@ -31,16 +31,6 @@ export class KeyboardShapesProvider {
       if (layoutFilePath) {
         return await KeyboardLayoutFileLoader.loadShapeFromFile(layoutFilePath);
       }
-    }
-    return undefined;
-  }
-
-  async loadKeyboardShapeByBreedName_Deprecated(
-    projectPath: string
-  ): Promise<IKeyboardShape | undefined> {
-    const layoutFilePath = this.getLayoutFilePathByProjectPath(projectPath);
-    if (layoutFilePath) {
-      return await KeyboardLayoutFileLoader.loadShapeFromFile(layoutFilePath);
     }
     return undefined;
   }
