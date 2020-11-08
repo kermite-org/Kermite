@@ -20,10 +20,15 @@ export class Models {
   keyboardConfigModel = new KeyboardConfigModel();
 
   projectResourceModel = new ProjectResourceModel();
-  keyboardShapesModel = new KeyboardShapesModel(this.projectResourceModel);
+  uiStatusModel = new UiStatusModel();
+
+  keyboardShapesModel = new KeyboardShapesModel(
+    this.projectResourceModel,
+    this.uiStatusModel
+  );
+
   siteModel = new SiteModel();
   themeSelectionModel = new ThemeSelectionModel();
-  uiStatusModel = new UiStatusModel();
 
   backend = backendAgent;
 
@@ -41,6 +46,7 @@ export class Models {
   }
 
   finalize() {
+    this.keyboardShapesModel.finalize();
     this.themeSelectionModel.finalize();
     this.uiStatusModel.finalize();
     this.deviceStatusModel.finalize();

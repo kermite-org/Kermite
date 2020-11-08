@@ -40,12 +40,17 @@ const cssShapePreviewPage = css`
 export const KeyboardShapePreviewPage = (props: {
   vm: ShapePreviewPageViewModel;
 }) => {
-  const { loadedShape, settings, breedSelectorVM, holdKeyIndices } = props.vm;
+  const {
+    loadedShape,
+    settings,
+    projectSelectorSource,
+    holdKeyIndices
+  } = props.vm;
   return (
     <div css={cssShapePreviewPage}>
       <div>keyboard shape preview</div>
       <div class="topRow">
-        <GeneralSelector {...breedSelectorVM} width={160} />
+        <GeneralSelector {...projectSelectorSource} width={160} />
         <ShapePreviewOptionsBox settings={settings} />
       </div>
       <div class="keyboardRow">

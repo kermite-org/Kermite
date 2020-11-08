@@ -94,7 +94,7 @@ export class PresetBrowserViewModel implements IPresetBrowserViewModel {
   };
 
   initialize() {
-    this.models.projectResourceModel.loadCompletionNotifer.listen(
+    this.models.projectResourceModel.loadedNotifier.listen(
       this.onResourceModelLoaded
     );
   }

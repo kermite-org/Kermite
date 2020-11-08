@@ -20,16 +20,27 @@ export class KeyboardShapesProvider {
     return undefined;
   }
 
-  async loadKeyboardShapeByBreedName(
-    breedName: string
+  async loadKeyboardShapeByProjectId(
+    projectId: string
   ): Promise<IKeyboardShape | undefined> {
-    const projectPath = breedName;
+    const info = this.projectResourceInfoProvider.internal_getProjectInfoSourceById(
+      projectId
+    );
+    if (info) {
+      const { layoutFilePath } = info;
+      if (layoutFilePath) {
+        return await KeyboardLayoutFileLoader.loadShapeFromFile(layoutFilePath);
+      }
+    }
+    return undefined;
+  }
+
+  async loadKeyboardShapeByBreedName_Deprecated(
+    projectPath: string
+  ): Promise<IKeyboardShape | undefined> {
     const layoutFilePath = this.getLayoutFilePathByProjectPath(projectPath);
     if (layoutFilePath) {
-      return await KeyboardLayoutFileLoader.loadShapeFromFile(
-        layoutFilePath,
-        projectPath
-      );
+      return await KeyboardLayoutFileLoader.loadShapeFromFile(layoutFilePath);
     }
     return undefined;
   }

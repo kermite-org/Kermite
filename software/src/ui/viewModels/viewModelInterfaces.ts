@@ -1,8 +1,9 @@
+export interface ISelectorOption {
+  id: string;
+  text: string;
+}
 export interface ISelectorSource {
-  options: {
-    id: string;
-    text: string;
-  }[];
+  options: ISelectorOption[];
   choiceId: string;
   setChoiceId(id: string): void;
 }

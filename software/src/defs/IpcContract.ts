@@ -71,7 +71,7 @@ export interface IBackendAgent {
   maximizeWindow(): Promise<void>;
   widgetModeChanged(isWidgetMode: boolean): Promise<void>;
 
-  getKeyboardShape(breedName: string): Promise<IKeyboardShape | undefined>;
+  loadKeyboardShape(projectId: string): Promise<IKeyboardShape | undefined>;
 
   keyEvents: IEventSource<IRealtimeKeyboardEvent>;
   profileStatusEvents: IEventSource<Partial<IProfileManagerStatus>>;
@@ -81,7 +81,7 @@ export interface IBackendAgent {
   getFirmwareNamesAvailable(): Promise<string[]>;
   uploadFirmware(firmwareName: string, comPortName: string): Promise<string>;
   comPortPlugEvents: IEventSource<{ comPortName: string | undefined }>;
-  layoutFileUpdationEvents: IEventSource<{ breedName: string }>;
+  layoutFileUpdationEvents: IEventSource<{ projectId: string }>;
 
   getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
   loadPresetProfile(

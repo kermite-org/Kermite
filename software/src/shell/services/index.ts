@@ -36,7 +36,10 @@ export class Services implements IBackendAgent {
   private applicationSettingsProvider = new ApplicationSettingsProvider();
   private projectResourceInfoProvider = new ProjectResourceInfoProvider();
   private keyboardConfigProvider = new KeyboardConfigProvider();
-  private keyboardLayoutFilesWatcher = new KeyboardLayoutFilesWatcher();
+
+  private keyboardLayoutFilesWatcher = new KeyboardLayoutFilesWatcher(
+    this.projectResourceInfoProvider
+  );
 
   private keyboardShapesProvider = new KeyboardShapesProvider(
     this.projectResourceInfoProvider
@@ -132,11 +135,11 @@ export class Services implements IBackendAgent {
   }
 
   @RpcFunction
-  async getKeyboardShape(
-    breedName: string
+  async loadKeyboardShape(
+    projectId: string
   ): Promise<IKeyboardShape | undefined> {
-    return await this.keyboardShapesProvider.loadKeyboardShapeByBreedName(
-      breedName
+    return await this.keyboardShapesProvider.loadKeyboardShapeByProjectId(
+      projectId
     );
   }
 
