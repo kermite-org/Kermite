@@ -1,16 +1,15 @@
 import { IProjectResourceInfo } from '~defs/ProfileData';
-import { EventPort } from '~funcs/EventPort';
+import { OneTimeNotifier } from '~funcs/OneTimeNotifier';
 import { backendAgent } from '~ui/core';
 
 export class ProjectResourceModel {
   projectResourceInfos: IProjectResourceInfo[] = [];
-
-  loadedEvents = new EventPort<{}>();
+  loadCompletionNotifer = new OneTimeNotifier();
 
   initialize() {
     (async () => {
       this.projectResourceInfos = await backendAgent.getAllProjectResourceInfos();
-      this.loadedEvents.emit({});
+      this.loadCompletionNotifer.notify();
     })();
   }
 }

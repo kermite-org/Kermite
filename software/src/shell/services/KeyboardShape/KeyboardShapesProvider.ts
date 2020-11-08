@@ -8,13 +8,6 @@ export class KeyboardShapesProvider {
     private projectResourceInfoProvider: IProjectResourceInfoProvider
   ) {}
 
-  getAvailableBreedNames(): string[] {
-    return this.projectResourceInfoProvider
-      .getAllProjectResourceInfos()
-      .filter((info) => info.hasLayout)
-      .map((info) => info.projectPath);
-  }
-
   private getLayoutFilePathByProjectPath(
     projectPath: string
   ): string | undefined {

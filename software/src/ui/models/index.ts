@@ -18,8 +18,9 @@ export class Models {
   profilesModel = new ProfilesModel(this.editorModel);
   firmwareUpdationModel = new FirmwareUpdationModel();
   keyboardConfigModel = new KeyboardConfigModel();
-  keyboardShapesModel = new KeyboardShapesModel();
+
   projectResourceModel = new ProjectResourceModel();
+  keyboardShapesModel = new KeyboardShapesModel(this.projectResourceModel);
   siteModel = new SiteModel();
   themeSelectionModel = new ThemeSelectionModel();
   uiStatusModel = new UiStatusModel();

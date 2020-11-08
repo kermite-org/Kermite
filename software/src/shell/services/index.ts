@@ -132,11 +132,6 @@ export class Services implements IBackendAgent {
   }
 
   @RpcFunction
-  async getKeyboardBreedNamesAvailable(): Promise<string[]> {
-    return this.keyboardShapesProvider.getAvailableBreedNames();
-  }
-
-  @RpcFunction
   async getKeyboardShape(
     breedName: string
   ): Promise<IKeyboardShape | undefined> {

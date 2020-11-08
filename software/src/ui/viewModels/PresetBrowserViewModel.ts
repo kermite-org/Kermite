@@ -91,13 +91,10 @@ export class PresetBrowserViewModel implements IPresetBrowserViewModel {
       this.selectedPresetName = 'blank';
       this.loadSelectedProfile();
     }
-    this.models.projectResourceModel.loadedEvents.unsubscribe(
-      this.onResourceModelLoaded
-    );
   };
 
   initialize() {
-    this.models.projectResourceModel.loadedEvents.subscribe(
+    this.models.projectResourceModel.loadCompletionNotifer.listen(
       this.onResourceModelLoaded
     );
   }
