@@ -78,8 +78,7 @@ export interface IBackendAgent {
   appWindowEvents: IEventSource<IAppWindowEvent>;
   keyboardDeviceStatusEvents: IEventSource<Partial<IKeyboardDeviceStatus>>;
 
-  getFirmwareNamesAvailable(): Promise<string[]>;
-  uploadFirmware(firmwareName: string, comPortName: string): Promise<string>;
+  uploadFirmware(projectId: string, comPortName: string): Promise<string>;
   comPortPlugEvents: IEventSource<{ comPortName: string | undefined }>;
   layoutFileUpdationEvents: IEventSource<{ projectId: string }>;
 

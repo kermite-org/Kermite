@@ -144,17 +144,12 @@ export class Services implements IBackendAgent {
   }
 
   @RpcFunction
-  async getFirmwareNamesAvailable(): Promise<string[]> {
-    return this.firmwareUpdationService.getFirmwareNamesAvailable();
-  }
-
-  @RpcFunction
   async uploadFirmware(
-    firmwareName: string,
+    projectId: string,
     comPortName: string
   ): Promise<string> {
     return await this.firmwareUpdationService.writeFirmware(
-      firmwareName,
+      projectId,
       comPortName
     );
   }

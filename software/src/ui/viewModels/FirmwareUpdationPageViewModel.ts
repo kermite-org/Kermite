@@ -1,22 +1,18 @@
 import { Models } from '~ui/models';
 import { FirmwareUpdationModel } from '~ui/models/FirmwareUpdationModel';
+import { ISelectorSource } from '~ui/viewModels/viewModelInterfaces';
 import { showCommandOutputLogModal } from '~ui/views/base/modal/CommandOutputLogModal';
 
 export class FirmwareUpdationPageViewModel {
-  selectedFirmwareName: string = '';
+  private currentProjectId: string = '';
+  private model: FirmwareUpdationModel;
 
-  model: FirmwareUpdationModel;
-
-  constructor(models: Models) {
+  constructor(private models: Models) {
     this.model = models.firmwareUpdationModel;
   }
 
   get phase() {
     return this.model.phase;
-  }
-
-  get firmwareNames() {
-    return this.model.firmwareNames;
   }
 
   get comPortName() {
@@ -28,16 +24,29 @@ export class FirmwareUpdationPageViewModel {
     return phase === 'WaitingReset' || phase === 'WaitingUploadOrder';
   }
 
-  setSelectedFirmwareName = (firmwareName: string) => {
-    this.selectedFirmwareName = firmwareName;
-  };
+  get projectSelectorSource(): ISelectorSource {
+    const blankOption = { id: '', text: 'select firmware' };
+    const projectOptions = this.models.projectResourceModel
+      .getProjectsWithFirmware()
+      .map((info) => ({
+        id: info.projectId,
+        text: info.projectPath
+      }));
+    return {
+      options: [blankOption, ...projectOptions],
+      choiceId: this.currentProjectId,
+      setChoiceId: (id) => {
+        this.currentProjectId = id;
+      }
+    };
+  }
 
   onWriteButton = () => {
-    if (!this.selectedFirmwareName) {
+    if (!this.currentProjectId) {
       alert('please select the firmware');
       return;
     }
-    this.model.uploadFirmware(this.selectedFirmwareName);
+    this.model.uploadFirmware(this.currentProjectId);
   };
 
   onResetButton = () => {
@@ -50,12 +59,4 @@ export class FirmwareUpdationPageViewModel {
       logText: this.model.firmwareUploadResult || ''
     });
   };
-
-  initialize() {
-    this.model.startComPortListener();
-  }
-
-  finalize() {
-    this.model.endComPortListener();
-  }
 }

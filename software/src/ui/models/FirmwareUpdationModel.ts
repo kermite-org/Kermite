@@ -8,16 +8,15 @@ type FirmwareUpdationPhase =
   | 'UploadFailure';
 
 export class FirmwareUpdationModel {
-  firmwareNames: string[] = [];
   phase: FirmwareUpdationPhase = 'WaitingReset';
   comPortName: string | undefined = undefined;
   firmwareUploadResult: string | undefined = undefined;
 
-  async uploadFirmware(firmwareName: string) {
+  async uploadFirmware(projectId: string) {
     if (this.phase === 'WaitingUploadOrder' && this.comPortName) {
       this.phase = 'Uploading';
       const res = await backendAgent.uploadFirmware(
-        firmwareName,
+        projectId,
         this.comPortName
       );
       this.firmwareUploadResult = res;
@@ -47,17 +46,11 @@ export class FirmwareUpdationModel {
     this.phase = 'WaitingReset';
   }
 
-  startComPortListener() {
+  initialize() {
     backendAgent.comPortPlugEvents.subscribe(this.onComPortPlugEvent);
   }
 
-  endComPortListener() {
+  finalize() {
     backendAgent.comPortPlugEvents.unsubscribe(this.onComPortPlugEvent);
-  }
-
-  initialize() {
-    (async () => {
-      this.firmwareNames = await backendAgent.getFirmwareNamesAvailable();
-    })();
   }
 }

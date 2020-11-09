@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { reflectValue } from '~ui/base/helper/FormHelpers';
 import { FirmwareUpdationPageViewModel } from '~ui/viewModels/FirmwareUpdationPageViewModel';
+import { GeneralSelector } from '~ui/views/controls/GeneralSelector';
 
 const cssFirmwareUpdationPage = css`
   background: #fff;
@@ -51,20 +51,11 @@ export const FirmwareUpdationPage = (props: {
       </div>
 
       <div className="mainRow">
-        <select
+        <GeneralSelector
+          {...vm.projectSelectorSource}
+          width={170}
           disabled={!vm.canSelectTargetFirmware}
-          value={vm.selectedFirmwareName}
-          onChange={reflectValue(vm.setSelectedFirmwareName)}
-        >
-          <option key="" value="">
-            select firmware
-          </option>
-          {vm.firmwareNames.map((firmwareName) => (
-            <option key={firmwareName} value={firmwareName}>
-              {firmwareName}
-            </option>
-          ))}
-        </select>
+        />
       </div>
 
       <div className="statusRow">

@@ -10,6 +10,10 @@ export class ProjectResourceModel {
     return this.projectResourceInfos.filter((info) => info.hasLayout);
   }
 
+  getProjectsWithFirmware() {
+    return this.projectResourceInfos.filter((info) => info.hasFirmwareBinary);
+  }
+
   initialize() {
     (async () => {
       this.projectResourceInfos = await backendAgent.getAllProjectResourceInfos();
