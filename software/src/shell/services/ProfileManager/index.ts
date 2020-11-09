@@ -126,12 +126,18 @@ export class ProfileManager {
     }
   }
 
-  async createProfile(profName: string, breedName: string): Promise<boolean> {
+  async createProfile(
+    profName: string,
+    targetProjectId: string
+  ): Promise<boolean> {
     if (this.status.allProfileNames.includes(profName)) {
       return false;
     }
     try {
-      const profileData = await this.core.createProfile(profName, breedName);
+      const profileData = await this.core.createProfile(
+        profName,
+        targetProjectId
+      );
       const allProfileNames = await this.core.listAllProfileNames();
       this.setStatus({
         allProfileNames,
@@ -219,7 +225,7 @@ export class ProfileManager {
     if (cmd.creatProfile) {
       return await this.createProfile(
         cmd.creatProfile.name,
-        cmd.creatProfile.breedName
+        cmd.creatProfile.targetProjectId
       );
     } else if (cmd.deleteProfile) {
       return await this.deleteProfile(cmd.deleteProfile.name);

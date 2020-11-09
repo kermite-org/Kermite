@@ -6,6 +6,8 @@ export interface IProfileSelectorProps {
   selectorSource: ISelectorSource;
 }
 
-export const ProfileSelector3 = ({ selectorSource }: IProfileSelectorProps) => {
+export const KeyboardProfileSelector = ({
+  selectorSource
+}: IProfileSelectorProps) => {
   return <GeneralSelector {...selectorSource} width={170} />;
 };

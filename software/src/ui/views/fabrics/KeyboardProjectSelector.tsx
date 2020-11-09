@@ -4,19 +4,21 @@ import { ISelectorSource } from '~ui/viewModels/viewModelInterfaces';
 import { GeneralButton } from '../controls/GeneralButton';
 import { GeneralSelector } from '../controls/GeneralSelector';
 
-interface IKeyboardBreedSelector3Props {
+interface IKeyboardProjectSelectorProps {
   selectorSource: ISelectorSource;
   isLinkButtonActive: boolean;
   linkButtonHandler(): void;
 }
 
-const cssKeyboardBreedSelector = css`
+const cssKeyboardProjectSelector = css`
   display: flex;
 `;
 
-export const KeyboardBreedSelector3 = (props: IKeyboardBreedSelector3Props) => {
+export const KeyboardProjectSelector = (
+  props: IKeyboardProjectSelectorProps
+) => {
   return (
-    <div css={cssKeyboardBreedSelector}>
+    <div css={cssKeyboardProjectSelector}>
       <GeneralSelector {...props.selectorSource} width={170} />
       <GeneralButton
         icon="fas fa-link"

@@ -18,11 +18,17 @@ export class Models {
   profilesModel = new ProfilesModel(this.editorModel);
   firmwareUpdationModel = new FirmwareUpdationModel();
   keyboardConfigModel = new KeyboardConfigModel();
-  keyboardShapesModel = new KeyboardShapesModel();
+
   projectResourceModel = new ProjectResourceModel();
+  uiStatusModel = new UiStatusModel();
+
+  keyboardShapesModel = new KeyboardShapesModel(
+    this.projectResourceModel,
+    this.uiStatusModel
+  );
+
   siteModel = new SiteModel();
   themeSelectionModel = new ThemeSelectionModel();
-  uiStatusModel = new UiStatusModel();
 
   backend = backendAgent;
 
@@ -40,6 +46,7 @@ export class Models {
   }
 
   finalize() {
+    this.keyboardShapesModel.finalize();
     this.themeSelectionModel.finalize();
     this.uiStatusModel.finalize();
     this.deviceStatusModel.finalize();

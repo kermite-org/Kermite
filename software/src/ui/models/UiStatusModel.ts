@@ -10,7 +10,7 @@ export type PageSignature =
 export interface IUiSettings {
   showTestInputArea: boolean;
   page: PageSignature;
-  shapeViewBreedName: string;
+  shapeViewProjectId: string;
   shapeViewShowKeyId: boolean;
   shapeViewShowKeyIndex: boolean;
   shapeViewShowBoundingBox: boolean;
@@ -21,7 +21,7 @@ export interface IUiSettings {
 const defaultUiSettings: IUiSettings = {
   showTestInputArea: false,
   page: 'editor',
-  shapeViewBreedName: '',
+  shapeViewProjectId: '',
   shapeViewShowKeyId: false,
   shapeViewShowKeyIndex: false,
   shapeViewShowBoundingBox: false,

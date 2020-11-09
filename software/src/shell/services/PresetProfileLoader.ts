@@ -44,8 +44,7 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
     if (info?.layoutFilePath) {
       try {
         const keyboardShape = await KeyboardLayoutFileLoader.loadShapeFromFile(
-          info.layoutFilePath,
-          info.projectPath
+          info.layoutFilePath
         );
         if (keyboardShape) {
           const profileData: IProfileData = duplicateObjectByJsonStringifyParse(

@@ -3,8 +3,8 @@ import { h } from '~lib/qx';
 import { ViewModelProps } from '~ui/base/helper/mvvmHelpers';
 import { IPresetBrowserViewModel } from '~ui/viewModels/PresetBrowserViewModel';
 import { GeneralButton } from '~ui/views/controls/GeneralButton';
-import { KeyboardBreedSelector3 } from '~ui/views/fabrics/KeyboardBreedSelector3';
-import { ProfileSelector3 } from '~ui/views/fabrics/ProfileSelector3';
+import { KeyboardProfileSelector } from '~ui/views/fabrics/KeyboardProfileSelector';
+import { KeyboardProjectSelector } from '~ui/views/fabrics/KeyboardProjectSelector';
 
 const cssPresetSelectionSection = css`
   display: flex;
@@ -33,7 +33,7 @@ export const PresetSelectionSection = ({
       <div class="selectorsPart">
         <div className="selectorBlock">
           <div>Keyboard</div>
-          <KeyboardBreedSelector3
+          <KeyboardProjectSelector
             selectorSource={vm.projectSelectorSource}
             isLinkButtonActive={vm.isLinkButtonActive}
             linkButtonHandler={vm.linkButtonHandler}
@@ -41,7 +41,7 @@ export const PresetSelectionSection = ({
         </div>
         <div className="selectorBlock">
           <div>Profile</div>
-          <ProfileSelector3 selectorSource={vm.presetSelectorSource} />
+          <KeyboardProfileSelector selectorSource={vm.presetSelectorSource} />
         </div>
       </div>
       <GeneralButton text="Edit this" form="large" />

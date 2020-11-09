@@ -23,6 +23,7 @@ export interface IGeneralSelectorProps {
   setChoiceId(key: string): void;
   width?: number;
   className?: string;
+  disabled?: boolean;
 }
 
 const cssGeneralSelector2 = (width: number | undefined) => css`
@@ -37,12 +38,13 @@ const cssGeneralSelector2 = (width: number | undefined) => css`
 `;
 
 export const GeneralSelector = (props: IGeneralSelectorProps) => {
-  const { options, choiceId, setChoiceId, className, width } = props;
+  const { options, choiceId, setChoiceId, className, width, disabled } = props;
   return (
     <select
       value={choiceId}
       onChange={reflectValue(setChoiceId)}
       css={combineClasses(cssGeneralSelector2(width), className)}
+      disabled={disabled}
     >
       {options.map((it, idx) => (
         <option value={it.id} key={`${idx}_${it.id}`}>

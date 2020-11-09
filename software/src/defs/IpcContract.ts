@@ -47,7 +47,7 @@ export type IAppWindowEvent = {
 };
 
 export interface IProfileManagerCommand {
-  creatProfile?: { name: string; breedName: string };
+  creatProfile?: { name: string; targetProjectId: string };
   loadProfile?: { name: string };
   saveCurrentProfile?: { profileData: IProfileData };
   deleteProfile?: { name: string };
@@ -71,18 +71,16 @@ export interface IBackendAgent {
   maximizeWindow(): Promise<void>;
   widgetModeChanged(isWidgetMode: boolean): Promise<void>;
 
-  getKeyboardBreedNamesAvailable(): Promise<string[]>;
-  getKeyboardShape(breedName: string): Promise<IKeyboardShape | undefined>;
+  loadKeyboardShape(projectId: string): Promise<IKeyboardShape | undefined>;
 
   keyEvents: IEventSource<IRealtimeKeyboardEvent>;
   profileStatusEvents: IEventSource<Partial<IProfileManagerStatus>>;
   appWindowEvents: IEventSource<IAppWindowEvent>;
   keyboardDeviceStatusEvents: IEventSource<Partial<IKeyboardDeviceStatus>>;
 
-  getFirmwareNamesAvailable(): Promise<string[]>;
-  uploadFirmware(firmwareName: string, comPortName: string): Promise<string>;
+  uploadFirmware(projectId: string, comPortName: string): Promise<string>;
   comPortPlugEvents: IEventSource<{ comPortName: string | undefined }>;
-  layoutFileUpdationEvents: IEventSource<{ breedName: string }>;
+  layoutFileUpdationEvents: IEventSource<{ projectId: string }>;
 
   getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
   loadPresetProfile(

@@ -46,11 +46,11 @@ export function makeProfileManagementViewModel(): IProfileManagerViewModel {
   const createProfile = async () => {
     const res = await callProfileSetupModal(undefined);
     // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-    if (res && res.profileName && res.breedName) {
-      const { profileName, breedName } = res;
+    if (res && res.profileName && res.targetProjectId) {
+      const { profileName, targetProjectId } = res;
       const nameValid = await checkValidNewProfileName(profileName);
       if (nameValid) {
-        models.profilesModel.createProfile(profileName, breedName);
+        models.profilesModel.createProfile(profileName, targetProjectId);
       }
     }
   };

@@ -1,16 +1,23 @@
 import { IProjectResourceInfo } from '~defs/ProfileData';
-import { EventPort } from '~funcs/EventPort';
+import { OneTimeNotifier } from '~funcs/OneTimeNotifier';
 import { backendAgent } from '~ui/core';
 
 export class ProjectResourceModel {
   projectResourceInfos: IProjectResourceInfo[] = [];
+  loadedNotifier = new OneTimeNotifier();
 
-  loadedEvents = new EventPort<{}>();
+  getProjectsWithLayout() {
+    return this.projectResourceInfos.filter((info) => info.hasLayout);
+  }
+
+  getProjectsWithFirmware() {
+    return this.projectResourceInfos.filter((info) => info.hasFirmwareBinary);
+  }
 
   initialize() {
     (async () => {
       this.projectResourceInfos = await backendAgent.getAllProjectResourceInfos();
-      this.loadedEvents.emit({});
+      this.loadedNotifier.notify();
     })();
   }
 }

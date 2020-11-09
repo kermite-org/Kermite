@@ -14,8 +14,7 @@ export namespace KeyboardLayoutFileLoader {
   }
 
   export async function loadShapeFromFile(
-    filePath: string,
-    breedName: string
+    filePath: string
   ): Promise<IKeyboardShape | undefined> {
     let fileText: string;
     try {
@@ -36,7 +35,6 @@ export namespace KeyboardLayoutFileLoader {
 
     // todo: データの内容を検証しながら値を抽出する
     return {
-      breedName,
       keyUnits: souceObj.keyUnits || [],
       displayArea: souceObj.displayArea || { ...fallbackDisplayArea },
       bodyPathMarkupText: souceObj.bodyPathMarkups?.join(' ') || ''

@@ -8,8 +8,9 @@ import {
   pathResolve
 } from '~funcs/Files';
 import { appEnv } from '~shell/base/AppEnvironment';
+import { IProjectResourceInfoProvider } from '~shell/services/serviceInterfaces';
 
-type IFileUpdationEvent = { breedName: string };
+type IFileUpdationEvent = { projectId: string };
 
 export class KeyboardLayoutFilesWatcher {
   private baseDir = pathResolve('../firmware/src/projects');
@@ -18,10 +19,23 @@ export class KeyboardLayoutFilesWatcher {
 
   readonly fileUpdationEventPort = new EventPort<IFileUpdationEvent>();
 
+  constructor(
+    private projectResourceInfoProvider: IProjectResourceInfoProvider
+  ) {}
+
+  private getProjectIdFromFilePath(projectPath: string) {
+    const infos = this.projectResourceInfoProvider.getAllProjectResourceInfos();
+    const info = infos.find((info) => info.projectPath === projectPath);
+    return info?.projectId;
+  }
+
   private onFileUpdated = async (filePath: string) => {
     if (filePath.endsWith('/layout.json')) {
-      const breedName = pathRelative(this.baseDir, pathDirName(filePath));
-      this.fileUpdationEventPort.emit({ breedName });
+      const projectPath = pathRelative(this.baseDir, pathDirName(filePath));
+      const projectId = this.getProjectIdFromFilePath(projectPath);
+      if (projectId) {
+        this.fileUpdationEventPort.emit({ projectId });
+      }
     }
   };
 

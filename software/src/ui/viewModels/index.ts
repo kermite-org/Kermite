@@ -27,13 +27,8 @@ export class ViewModels {
   }
 
   initialize() {
-    this.shapePreview.initialize();
-    this.firmwareUpdation.initialize();
     this.presetBrowser.initialize();
   }
 
-  finalize() {
-    this.shapePreview.finalize();
-    this.firmwareUpdation.finalize();
-  }
+  finalize() {}
 }
