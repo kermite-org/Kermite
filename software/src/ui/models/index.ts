@@ -1,4 +1,5 @@
 import { backendAgent } from '~ui/core';
+import { PresetBrowserModel } from '~ui/models/PresetBrowserModel';
 import { DeviceStatusModel } from './DeviceStatusModel';
 import { FirmwareUpdationModel } from './FirmwareUpdationModel';
 import { KeyboardConfigModel } from './KeyboardConfigModel';
@@ -30,6 +31,8 @@ export class Models {
   siteModel = new SiteModel();
   themeSelectionModel = new ThemeSelectionModel();
 
+  presetBrowserModel = new PresetBrowserModel(this.projectResourceModel);
+
   backend = backendAgent;
 
   initialize() {
@@ -43,6 +46,7 @@ export class Models {
     this.themeSelectionModel.initialize();
     this.keyboardShapesModel.initialize();
     this.firmwareUpdationModel.initialize();
+    this.presetBrowserModel.initialize();
   }
 
   finalize() {
