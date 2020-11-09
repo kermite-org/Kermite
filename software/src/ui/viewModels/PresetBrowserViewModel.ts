@@ -13,6 +13,8 @@ export interface IPresetBrowserViewModel {
 
   isLinkButtonActive: boolean;
   linkButtonHandler(): void;
+
+  editPresetButtonHandler(): void;
 }
 
 export class PresetBrowserViewModel implements IPresetBrowserViewModel {
@@ -82,6 +84,20 @@ export class PresetBrowserViewModel implements IPresetBrowserViewModel {
     const deviceProjectId =
       this.models.deviceStatusModel.deviceAttrs?.projectId || '';
     this.projectSelectorSource.setChoiceId(deviceProjectId);
+  };
+
+  editPresetButtonHandler = () => {
+    const { selectedProjectId, selectedPresetName } = this;
+    console.log({ selectedProjectId, selectedPresetName });
+    const info = this.models.projectResourceModel.getProjectResourceInfo(
+      selectedProjectId
+    );
+    if (!info) {
+      console.log(`invalid project selection`);
+      return;
+    }
+    // const projectName = info?.projectName;
+    const { allProfileNames } = this.models.profilesModel;
   };
 
   private onResourceModelLoaded = () => {
