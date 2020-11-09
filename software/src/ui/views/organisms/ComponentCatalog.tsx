@@ -5,11 +5,6 @@ import {
   GeneralSelector,
   IGeneralSelectorProps
 } from '../controls/GeneralSelector';
-import {
-  IKeyboardBreedSelectorProps,
-  KeyboardBreedSelector
-} from '../fabrics/KeyboardBreedSelector';
-import { ProfileSelector } from '../fabrics/ProfileSelector';
 
 const testOptions: IGeneralSelectorProps['options'] = [
   { id: '', text: 'no-user' },
@@ -17,22 +12,6 @@ const testOptions: IGeneralSelectorProps['options'] = [
   { id: 'user002', text: 'tanaka' },
   { id: 'user003', text: 'suzuki' }
 ];
-
-const projectOptions: IKeyboardBreedSelectorProps['projectOptions'] = [
-  { projectId: 'none', projectName: 'no selection', projectPath: '' },
-  {
-    projectId: 'proj001',
-    projectName: 'MyKbd',
-    projectPath: 'mykbd'
-  },
-  {
-    projectId: 'proj002',
-    projectPath: 'TestKeyboard',
-    projectName: 'proto/testkbd'
-  }
-];
-
-const profileNames: string[] = ['blank', 'qwerty', 'dvorak', 'profile1'];
 
 const cssBase = css`
   /* margin: 20px; */
@@ -64,20 +43,6 @@ export const ComponentCatalog = () => {
     curUserId = userId;
   };
 
-  let selectedProjectId = 'none';
-
-  const setSelectedProjectId = (projectId: string) => {
-    selectedProjectId = projectId;
-    console.log({ projectId });
-  };
-
-  let selectedProfileName = 'blank';
-
-  const setSelectedProfileName = (profileName: string) => {
-    selectedProfileName = profileName;
-    console.log({ profileName });
-  };
-
   return () => (
     <div css={cssBase}>
       <div class="buttonsRow">
@@ -102,19 +67,6 @@ export const ComponentCatalog = () => {
         options={testOptions}
         choiceId={curUserId}
         setChoiceId={setCurrentUserId}
-      />
-
-      <KeyboardBreedSelector
-        projectOptions={projectOptions}
-        selectedProjectId={selectedProjectId}
-        setSelectedProjectId={setSelectedProjectId}
-        connectedDeviceProjectId="proj002"
-      />
-
-      <ProfileSelector
-        optionProfileNames={profileNames}
-        selectedProfileName={selectedProfileName}
-        setSelectedProfileName={setSelectedProfileName}
       />
     </div>
   );
