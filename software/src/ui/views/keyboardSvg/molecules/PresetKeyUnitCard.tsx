@@ -10,7 +10,8 @@ const cssKeyRect = css`
 `;
 
 const cssKeyText = css`
-  font-size: 4px;
+  font-size: 5px;
+  color: #222;
   text-anchor: middle;
 `;
 
