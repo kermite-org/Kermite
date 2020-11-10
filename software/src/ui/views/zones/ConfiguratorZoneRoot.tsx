@@ -1,7 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { uiTheme } from '~ui/core';
-import { PageSignature } from '~ui/models/UiStatusModel';
 import { ViewModels } from '~ui/viewModels';
 import { CustomWindowFrame } from '~ui/views/base/window/CustomWindowFrame';
 import { NavigationColumn } from '../base/navigation/NavigationColumn';
@@ -10,21 +9,6 @@ import { FirmwareUpdationPage } from '../pages/FirmwareUpdationPage';
 import { EditorPage } from '../pages/KeyAssignEditPage/EditorPage';
 import { PresetBrowserPage } from '../pages/PresetBrowserPage';
 import { KeyboardShapePreviewPage } from '../pages/ShapePreviewPage';
-
-const pageComponentMap: {
-  [key in PageSignature]: (props: { vm: ViewModels }) => JSX.Element;
-} = {
-  editor: () => <EditorPage />,
-  shapePreview: (props: { vm: ViewModels }) => (
-    <KeyboardShapePreviewPage vm={props.vm.shapePreview} />
-  ),
-  firmwareUpdation: (props: { vm: ViewModels }) => (
-    <FirmwareUpdationPage vm={props.vm.firmwareUpdation} />
-  ),
-  presetBrowser: (props: { vm: ViewModels }) => (
-    <PresetBrowserPage vm={props.vm.presetBrowser} />
-  )
-};
 
 const styles = {
   cssContentRow: css`
@@ -39,19 +23,27 @@ const styles = {
 };
 
 export const ConfiguratorZoneRoot = (props: { viewModels: ViewModels }) => {
-  const { viewModels } = props;
+  const { viewModels: vm } = props;
 
-  const PageComponent =
-    pageComponentMap[viewModels.models.uiStatusModel.settings.page];
+  const { page } = vm.models.uiStatusModel.settings;
 
   return (
     <CustomWindowFrame
-      renderTitleBar={() => <WindowTitleBarSection vm={viewModels.titleBar} />}
+      renderTitleBar={() => <WindowTitleBarSection vm={vm.titleBar} />}
     >
       <div css={styles.cssContentRow}>
-        <NavigationColumn vm={viewModels} />
+        <NavigationColumn vm={vm} />
         <div css={styles.cssMainColumn}>
-          <PageComponent vm={viewModels} />
+          {page === 'editor' && <EditorPage />}
+          {page === 'shapePreview' && (
+            <KeyboardShapePreviewPage vm={vm.shapePreview} />
+          )}
+          {page === 'firmwareUpdation' && (
+            <FirmwareUpdationPage vm={vm.firmwareUpdation} />
+          )}
+          {page === 'presetBrowser' && (
+            <PresetBrowserPage vm={vm.presetBrowser} />
+          )}
         </div>
       </div>
     </CustomWindowFrame>
