@@ -3,12 +3,12 @@ import { Views } from '~ui/views/ViewIndex';
 import { models } from './models';
 import { ViewModels } from './viewModels';
 
-function start() {
+async function start() {
   console.log('start');
 
   const viewModels = new ViewModels(models);
   const views = new Views(viewModels);
-  models.initialize();
+  await models.initialize();
   viewModels.initialize();
   views.initialize();
 

@@ -121,16 +121,12 @@ export class PresetBrowserModel {
     }
   };
 
-  private onResourceModelLoaded = () => {
+  initialize() {
     const resourceInfos = this.projectResourceModel.projectResourceInfos;
     if (resourceInfos.length > 0) {
       this._currentProjectId = resourceInfos[0].projectId;
       this._currentPresetName = 'blank';
       this.loadSelectedProfile();
     }
-  };
-
-  initialize() {
-    this.projectResourceModel.loadedNotifier.listen(this.onResourceModelLoaded);
   }
 }

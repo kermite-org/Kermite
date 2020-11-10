@@ -39,8 +39,8 @@ export class Models {
 
   backend = backendAgent;
 
-  initialize() {
-    this.projectResourceModel.initialize();
+  async initialize() {
+    await this.projectResourceModel.initializeAsync();
     this.siteModel.initialize();
     this.profilesModel.initialize();
     this.playerModel.initialize();
