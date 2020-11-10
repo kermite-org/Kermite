@@ -1,5 +1,5 @@
-import { IProjectResourceInfo } from '~defs/ProfileData';
 import { Models } from '~ui/models';
+import { PresetBrowserModel } from '~ui/models/PresetBrowserModel';
 import { ISelectorSource } from '~ui/viewModels/viewModelInterfaces';
 import {
   IPresetKeyboardViewModel,
@@ -10,63 +10,41 @@ export interface IPresetBrowserViewModel {
   keyboard: IPresetKeyboardViewModel;
   projectSelectorSource: ISelectorSource;
   presetSelectorSource: ISelectorSource;
-
   isLinkButtonActive: boolean;
   linkButtonHandler(): void;
+  editPresetButtonHandler(): void;
 }
 
 export class PresetBrowserViewModel implements IPresetBrowserViewModel {
-  keyboard = new PresetKeyboardViewModel();
+  private _keyboard = new PresetKeyboardViewModel();
 
   constructor(private models: Models) {}
 
-  private resourceInfos: IProjectResourceInfo[] = [];
+  private get model(): PresetBrowserModel {
+    return this.models.presetBrowserModel;
+  }
 
-  private selectedProjectId: string = '';
-
-  private selectedPresetName: string = 'blank';
-
-  private async loadSelectedProfile() {
-    const loadedProfileData = await this.models.backend.loadPresetProfile(
-      this.selectedProjectId,
-      this.selectedPresetName === 'blank' ? undefined : this.selectedPresetName
-    );
-    if (loadedProfileData) {
-      this.keyboard.setProfileData(loadedProfileData);
-    } else {
-      console.error(`errro while loading preset profile`);
-    }
+  get keyboard() {
+    this._keyboard.updateProfileData(this.model.loadedProfileData);
+    return this._keyboard;
   }
 
   get projectSelectorSource() {
     return {
-      options: this.resourceInfos.map((info) => ({
+      options: this.model.optionProjectInfos.map((info) => ({
         id: info.projectId,
         text: info.projectName
       })),
-      choiceId: this.selectedProjectId,
-      setChoiceId: (id: string) => {
-        this.selectedProjectId = id;
-        this.selectedPresetName = 'blank';
-        this.loadSelectedProfile();
-      }
+      choiceId: this.model.currentProjectId,
+      setChoiceId: this.model.setCurrentProjectId
     };
   }
 
   get presetSelectorSource() {
-    const info = this.resourceInfos.find(
-      (info) => info.projectId === this.selectedProjectId
-    );
-    const presetNames = info?.presetNames
-      ? ['blank', ...info.presetNames]
-      : ['blank'];
     return {
-      options: presetNames.map((it) => ({ id: it, text: it })),
-      choiceId: this.selectedPresetName,
-      setChoiceId: (id: string) => {
-        this.selectedPresetName = id;
-        this.loadSelectedProfile();
-      }
+      options: this.model.optionPresetNames.map((it) => ({ id: it, text: it })),
+      choiceId: this.model.currentPresetName,
+      setChoiceId: this.model.setCurrentPresetName
     };
   }
 
@@ -74,7 +52,7 @@ export class PresetBrowserViewModel implements IPresetBrowserViewModel {
     return (
       this.models.deviceStatusModel.isConnected &&
       this.models.deviceStatusModel.deviceAttrs?.projectId !==
-        this.selectedProjectId
+        this.model.currentProjectId
     );
   }
 
@@ -84,18 +62,7 @@ export class PresetBrowserViewModel implements IPresetBrowserViewModel {
     this.projectSelectorSource.setChoiceId(deviceProjectId);
   };
 
-  private onResourceModelLoaded = () => {
-    this.resourceInfos = this.models.projectResourceModel.projectResourceInfos;
-    if (this.resourceInfos.length > 0) {
-      this.selectedProjectId = this.resourceInfos[0].projectId;
-      this.selectedPresetName = 'blank';
-      this.loadSelectedProfile();
-    }
+  editPresetButtonHandler = () => {
+    this.model.editSelectedProjectPreset();
   };
-
-  initialize() {
-    this.models.projectResourceModel.loadedNotifier.listen(
-      this.onResourceModelLoaded
-    );
-  }
 }

@@ -47,7 +47,11 @@ export type IAppWindowEvent = {
 };
 
 export interface IProfileManagerCommand {
-  creatProfile?: { name: string; targetProjectId: string };
+  creatProfile?: {
+    name: string;
+    targetProjectId: string;
+    presetName: string | undefined;
+  };
   loadProfile?: { name: string };
   saveCurrentProfile?: { profileData: IProfileData };
   deleteProfile?: { name: string };

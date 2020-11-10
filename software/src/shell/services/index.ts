@@ -53,16 +53,16 @@ export class Services implements IBackendAgent {
     this.projectResourceInfoProvider
   );
 
-  private profileManager = new ProfileManager(this.keyboardShapesProvider);
+  private presetProfileLoader = new PresetProfileLoader(
+    this.projectResourceInfoProvider
+  );
+
+  private profileManager = new ProfileManager(this.presetProfileLoader);
 
   private inputLogicSimulator = new InputLogicSimulatorD(
     this.profileManager,
     this.keyboardConfigProvider,
     this.deviceService
-  );
-
-  private presetProfileLoader = new PresetProfileLoader(
-    this.projectResourceInfoProvider
   );
 
   @RpcFunction

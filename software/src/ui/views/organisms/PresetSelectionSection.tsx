@@ -44,7 +44,11 @@ export const PresetSelectionSection = ({
           <KeyboardProfileSelector selectorSource={vm.presetSelectorSource} />
         </div>
       </div>
-      <GeneralButton text="Edit this" form="large" />
+      <GeneralButton
+        text="Edit this"
+        form="large"
+        handler={vm.editPresetButtonHandler}
+      />
     </div>
   );
 };

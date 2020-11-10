@@ -24,16 +24,18 @@ export interface IPresetKeyboardViewModel {
   displayArea: IKeyboardShapeDisplayArea;
   bodyPathMarkupText: string;
   layerList: IPrsetLayerListViewModel;
-  setProfileData(profileData: IProfileData): void;
+  updateProfileData(profileData: IProfileData): void;
 }
 
 export class PresetKeyboardViewModel implements IPresetKeyboardViewModel {
   private profileData: IProfileData = fallbackProfileData;
   private _currentLayerId: string = '';
 
-  setProfileData(profileData: IProfileData) {
-    this.profileData = profileData;
-    this._currentLayerId = profileData.layers[0].layerId;
+  updateProfileData(newProfileData: IProfileData) {
+    if (this.profileData !== newProfileData && newProfileData) {
+      this.profileData = newProfileData;
+      this._currentLayerId = newProfileData.layers[0].layerId;
+    }
   }
 
   get layerList() {

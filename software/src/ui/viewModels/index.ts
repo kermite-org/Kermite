@@ -26,9 +26,7 @@ export class ViewModels {
     this.presetBrowser = new PresetBrowserViewModel(models);
   }
 
-  initialize() {
-    this.presetBrowser.initialize();
-  }
+  initialize() {}
 
   finalize() {}
 }
