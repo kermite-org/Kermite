@@ -1,9 +1,16 @@
 import { fallbackProfileData, IProfileData } from '~defs/ProfileData';
+import { modalAlert, modalTextEdit } from '~ui/base/dialog/BasicModals';
 import { backendAgent } from '~ui/core';
 import { ProjectResourceModel } from '~ui/models/ProjectResourceModel';
+import { UiStatusModel } from '~ui/models/UiStatusModel';
+import { ProfilesModel } from '~ui/models/profile/ProfilesModel';
 
 export class PresetBrowserModel {
-  constructor(private projectResourceModel: ProjectResourceModel) {}
+  constructor(
+    private projectResourceModel: ProjectResourceModel,
+    private profilesModel: ProfilesModel,
+    private uiStatusModel: UiStatusModel
+  ) {}
 
   private _currentProjectId: string = '';
   private _currentPresetName: string = 'blank';
@@ -55,20 +62,63 @@ export class PresetBrowserModel {
     this._loadedProfileData = profileData;
   }
 
-  editSelectedProjectPreset = () => {
+  private checkValidNewProfileName = async (
+    newProfileName: string
+  ): Promise<boolean> => {
+    if (!newProfileName.match(/^[^/./\\:*?"<>|]+$/)) {
+      await modalAlert(
+        `${newProfileName} is not for valid filename. operation cancelled.`
+      );
+      return false;
+    }
+    if (this.profilesModel.allProfileNames.includes(newProfileName)) {
+      await modalAlert(
+        `${newProfileName} is already exists. operation cancelled.`
+      );
+      return false;
+    }
+    return true;
+  };
+
+  editSelectedProjectPreset = async () => {
     const {
-      _currentProjectId: selectedProjectId,
-      _currentPresetName: selectedPresetName
+      _currentProjectId: projectId,
+      _currentPresetName: presetName
     } = this;
-    console.log({ selectedProjectId, selectedPresetName });
-    const info = this.projectResourceModel.getProjectResourceInfo(
-      selectedProjectId
-    );
+    const info = this.projectResourceModel.getProjectResourceInfo(projectId);
     if (!info) {
       console.log(`invalid project selection`);
+      return;
     }
-    // const projectName = info?.projectName;
-    // const { allProfileNames } = this.profilesModel;
+    const { projectName } = info;
+
+    const presetNameIncluesProjectName = presetName
+      .toLowerCase()
+      .includes(projectName.toLowerCase());
+    let newProfileNameBase = presetNameIncluesProjectName
+      ? presetName
+      : `${projectName}_${presetName}`.toLowerCase();
+    if (this.profilesModel.allProfileNames.includes(newProfileNameBase)) {
+      newProfileNameBase += '1';
+      // todo: すでにファイルがある場合連番にする
+    }
+    const newProfileName = await modalTextEdit({
+      message: 'new profile name',
+      defaultText: newProfileNameBase,
+      caption: 'create profile'
+    });
+    if (!newProfileName) {
+      return;
+    }
+    const nameValid = await this.checkValidNewProfileName(newProfileName);
+    if (nameValid) {
+      this.profilesModel.createProfile(
+        newProfileName,
+        projectId,
+        presetName === 'blank' ? undefined : presetName
+      );
+      this.uiStatusModel.navigateTo('editor');
+    }
   };
 
   private onResourceModelLoaded = () => {

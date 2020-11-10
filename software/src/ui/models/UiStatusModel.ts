@@ -53,6 +53,10 @@ export class UiStatusModel {
     }
   }
 
+  navigateTo(page: PageSignature) {
+    this.settings.page = page;
+  }
+
   save() {
     const settingsText = JSON.stringify(this.settings);
     localStorage.setItem('uiSettings', settingsText);

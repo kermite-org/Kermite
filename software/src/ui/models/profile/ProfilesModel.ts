@@ -68,11 +68,15 @@ export class ProfilesModel {
     );
   }
 
-  createProfile = (newProfileName: string, targetProjectId: string) => {
+  createProfile = (
+    newProfileName: string,
+    targetProjectId: string,
+    presetName?: string
+  ) => {
     const saveCommand =
       (useAutoSave && this.getSaveCommandIfDirty()) || undefined;
     const createCommand = {
-      creatProfile: { name: newProfileName, targetProjectId }
+      creatProfile: { name: newProfileName, targetProjectId, presetName }
     };
     this.sendProfileManagerCommands(saveCommand, createCommand);
   };

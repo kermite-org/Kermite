@@ -31,7 +31,11 @@ export class Models {
   siteModel = new SiteModel();
   themeSelectionModel = new ThemeSelectionModel();
 
-  presetBrowserModel = new PresetBrowserModel(this.projectResourceModel);
+  presetBrowserModel = new PresetBrowserModel(
+    this.projectResourceModel,
+    this.profilesModel,
+    this.uiStatusModel
+  );
 
   backend = backendAgent;
 
