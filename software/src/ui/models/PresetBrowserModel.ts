@@ -5,6 +5,41 @@ import { ProjectResourceModel } from '~ui/models/ProjectResourceModel';
 import { UiStatusModel } from '~ui/models/UiStatusModel';
 import { ProfilesModel } from '~ui/models/profile/ProfilesModel';
 
+class PresetBrowserModelHelper {
+  static getNewProfileNameBase(
+    projectName: string,
+    presetName: string,
+    allProfileNames: string[]
+  ): string {
+    const presetNameIncluesProjectName = presetName
+      .toLowerCase()
+      .includes(projectName.toLowerCase());
+
+    let newProfileNameBase = presetNameIncluesProjectName
+      ? presetName
+      : `${projectName}_${presetName}`.toLowerCase();
+
+    if (allProfileNames.includes(newProfileNameBase)) {
+      newProfileNameBase += '1';
+      // todo: すでにファイルがある場合連番にする
+    }
+    return newProfileNameBase;
+  }
+
+  static checkValidNewProfileName(
+    newProfileName: string,
+    allProfileNames: string[]
+  ): 'ok' | string {
+    if (!newProfileName.match(/^[^/./\\:*?"<>|]+$/)) {
+      return `${newProfileName} is not for valid filename.`;
+    }
+    if (allProfileNames.includes(newProfileName)) {
+      return `${newProfileName} is already exists.`;
+    }
+    return 'ok';
+  }
+}
+
 export class PresetBrowserModel {
   constructor(
     private projectResourceModel: ProjectResourceModel,
@@ -56,52 +91,31 @@ export class PresetBrowserModel {
       this._currentPresetName === 'blank' ? undefined : this._currentPresetName
     );
     if (!profileData) {
-      console.error(`errro while loading preset profile`);
+      console.error(`error while loading preset profile`);
       return;
     }
     this._loadedProfileData = profileData;
   }
-
-  private checkValidNewProfileName = async (
-    newProfileName: string
-  ): Promise<boolean> => {
-    if (!newProfileName.match(/^[^/./\\:*?"<>|]+$/)) {
-      await modalAlert(
-        `${newProfileName} is not for valid filename. operation cancelled.`
-      );
-      return false;
-    }
-    if (this.profilesModel.allProfileNames.includes(newProfileName)) {
-      await modalAlert(
-        `${newProfileName} is already exists. operation cancelled.`
-      );
-      return false;
-    }
-    return true;
-  };
 
   editSelectedProjectPreset = async () => {
     const {
       _currentProjectId: projectId,
       _currentPresetName: presetName
     } = this;
+    const { allProfileNames } = this.profilesModel;
+
     const info = this.projectResourceModel.getProjectResourceInfo(projectId);
     if (!info) {
       console.log(`invalid project selection`);
       return;
     }
-    const { projectName } = info;
 
-    const presetNameIncluesProjectName = presetName
-      .toLowerCase()
-      .includes(projectName.toLowerCase());
-    let newProfileNameBase = presetNameIncluesProjectName
-      ? presetName
-      : `${projectName}_${presetName}`.toLowerCase();
-    if (this.profilesModel.allProfileNames.includes(newProfileNameBase)) {
-      newProfileNameBase += '1';
-      // todo: すでにファイルがある場合連番にする
-    }
+    const newProfileNameBase = PresetBrowserModelHelper.getNewProfileNameBase(
+      info.projectName,
+      presetName,
+      allProfileNames
+    );
+
     const newProfileName = await modalTextEdit({
       message: 'new profile name',
       defaultText: newProfileNameBase,
@@ -110,15 +124,21 @@ export class PresetBrowserModel {
     if (!newProfileName) {
       return;
     }
-    const nameValid = await this.checkValidNewProfileName(newProfileName);
-    if (nameValid) {
-      this.profilesModel.createProfile(
-        newProfileName,
-        projectId,
-        presetName === 'blank' ? undefined : presetName
-      );
-      this.uiStatusModel.navigateTo('editor');
+    const checkRes = PresetBrowserModelHelper.checkValidNewProfileName(
+      newProfileName,
+      allProfileNames
+    );
+    if (checkRes !== 'ok') {
+      await modalAlert(`${checkRes} operation cancelled.`);
+      return;
     }
+
+    this.profilesModel.createProfile(
+      newProfileName,
+      projectId,
+      presetName === 'blank' ? undefined : presetName
+    );
+    this.uiStatusModel.navigateTo('editor');
   };
 
   initialize() {
