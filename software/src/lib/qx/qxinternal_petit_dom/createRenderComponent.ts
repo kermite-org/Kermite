@@ -2,7 +2,12 @@ import { deepEqual } from 'fast-equals';
 import { QxOptimizerSpec } from '../qx';
 import { qxGlobal } from '../qxGlobal';
 import { deepEqualValuesBesidesFunction } from '../qxUtils';
-import { IEnv, VNode, IComponentFunction, IComponentObject } from './types';
+import {
+  createHookInstance,
+  IHook,
+  switchGlobalHookInstance
+} from './hookImpl';
+import { IComponentFunction, IComponentObject, IEnv, VNode } from './types';
 import { mount, patch, unmount } from './vdom';
 
 const promise = Promise.resolve();
@@ -23,6 +28,7 @@ interface IComponentStateRef {
   };
   // durablePropObject: any;
   wasUnmounted: boolean;
+  hook?: IHook;
 }
 
 function createRenderComponent<P extends {}>({
@@ -34,6 +40,8 @@ function createRenderComponent<P extends {}>({
 }): IComponentObject<P> {
   return {
     mount(props: P, stateRef: IComponentStateRef, env: IEnv) {
+      const hook = createHookInstance();
+      switchGlobalHookInstance(hook);
       const res = componentFn(props);
       if (
         res &&
@@ -70,10 +78,23 @@ function createRenderComponent<P extends {}>({
       } else if ((res && 'vtype' in res) || !res) {
         // function component
         // console.log(`initialize function component ${componentFn.name}`);
-        const vnode = res;
-        stateRef.vnode = vnode;
-        stateRef.renderFn = componentFn as any;
-        return mount(vnode, env);
+        if (0) {
+          // no hooks integration
+          const vnode = res;
+          stateRef.vnode = vnode;
+          stateRef.renderFn = componentFn as any;
+          return mount(vnode, env);
+        } else {
+          // with hooks integration
+          const vnode = res;
+          stateRef.vnode = vnode;
+          stateRef.hook = hook;
+          stateRef.renderFn = ((props: any) => {
+            switchGlobalHookInstance(stateRef.hook!);
+            return componentFn(props);
+          }) as any;
+          return mount(vnode, env);
+        }
       }
       throw new Error('invalid component function');
     },
