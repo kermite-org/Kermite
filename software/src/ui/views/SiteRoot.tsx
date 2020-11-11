@@ -1,8 +1,8 @@
-import { glob, setup, css } from 'goober';
+import { css, glob, setup } from 'goober';
 import { h } from '~lib/qx';
 import { DebugOverlay } from '~ui/base/overlay/DebugOverlay';
 import { appUi } from '~ui/core';
-import { ViewModels } from '~ui/viewModels';
+import { models } from '~ui/models';
 import { ForegroundModalLayerRoot } from '../base/overlay/ForegroundModalLayer';
 import { ConfiguratorZoneRoot } from './zones/ConfiguratorZoneRoot';
 import { WidgetZoneRoot } from './zones/WidgetZoneRoot';
@@ -35,8 +35,8 @@ const cssSiteRoot = css`
   height: 100%;
 `;
 
-export const SiteRoot = (props: { viewModels: ViewModels }) => {
-  const { isWidgetMode } = props.viewModels.models.siteModel;
+export const SiteRoot = () => {
+  const { isWidgetMode } = models.siteModel;
 
   const ZoneRootComponent = isWidgetMode
     ? WidgetZoneRoot
@@ -44,7 +44,7 @@ export const SiteRoot = (props: { viewModels: ViewModels }) => {
 
   return (
     <div css={cssSiteRoot}>
-      <ZoneRootComponent viewModels={props.viewModels} />
+      <ZoneRootComponent />
       <ForegroundModalLayerRoot />
       <DebugOverlay debugObj={appUi.debugObject} />
     </div>

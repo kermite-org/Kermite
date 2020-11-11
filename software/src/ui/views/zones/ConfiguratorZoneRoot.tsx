@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { uiTheme } from '~ui/core';
-import { ViewModels } from '~ui/viewModels';
+import { models } from '~ui/models';
 import { CustomWindowFrame } from '~ui/views/base/window/CustomWindowFrame';
 import { NavigationColumn } from '../base/navigation/NavigationColumn';
 import { WindowTitleBarSection } from '../base/titleBar/WindowTitleBarSection';
@@ -22,15 +22,11 @@ const styles = {
   `
 };
 
-export const ConfiguratorZoneRoot = (props: { viewModels: ViewModels }) => {
-  const { viewModels: vm } = props;
-
-  const { page } = vm.models.uiStatusModel.settings;
+export const ConfiguratorZoneRoot = () => {
+  const { page } = models.uiStatusModel.settings;
 
   return (
-    <CustomWindowFrame
-      renderTitleBar={() => <WindowTitleBarSection vm={vm.titleBar} />}
-    >
+    <CustomWindowFrame renderTitleBar={() => <WindowTitleBarSection />}>
       <div css={styles.cssContentRow}>
         <NavigationColumn />
         <div css={styles.cssMainColumn}>
