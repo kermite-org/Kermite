@@ -2,17 +2,17 @@ import { Hook } from '~lib/qx';
 import { appUi } from '~ui/core';
 import { models } from '~ui/models';
 
-interface IMenuItem {
+export interface IGlobalMenuItem {
   key: string;
   text: string;
   handler: () => void;
   active: boolean;
 }
 
-function createMenuItems(): IMenuItem[] {
+function createMenuItems(): IGlobalMenuItem[] {
   const { settings } = models.uiStatusModel;
 
-  const menuItems: IMenuItem[] = [
+  const menuItems: IGlobalMenuItem[] = [
     {
       key: 'miShowInputArea',
       text: 'Show test input area',
@@ -50,7 +50,7 @@ export interface IGlobalMenuViewModel {
   isOpen: boolean;
   openMenu(): void;
   closeMenu(): void;
-  menuItems: IMenuItem[];
+  menuItems: IGlobalMenuItem[];
 }
 
 export function makeGlobalMenuViewModel(): IGlobalMenuViewModel {

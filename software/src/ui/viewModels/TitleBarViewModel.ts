@@ -1,7 +1,16 @@
 import { appUi, backendAgent } from '~ui/core';
 import { models } from '~ui/models';
 
-export function makeTitleBarViewModel() {
+export interface ITitleBarViewModel {
+  showReloadButton: boolean;
+  onReloadButton(): void;
+  onWidgetButton(): void;
+  onMinimizeButton(): void;
+  onMaximizeButton(): void;
+  onCloseButton(): void;
+}
+
+export function makeTitleBarViewModel(): ITitleBarViewModel {
   return {
     showReloadButton: appUi.isDevelopment,
     onReloadButton() {
