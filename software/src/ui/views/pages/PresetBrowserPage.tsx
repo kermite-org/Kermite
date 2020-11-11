@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { IPresetBrowserViewModel } from '~ui/viewModels/PresetBrowserViewModel';
+import { makePresetBrowserViewModel } from '~ui/viewModels/PresetBrowserViewModel';
 import { PresetKeyboardSection } from '../organisms/PresetKeyboardSection';
 import { PresetSelectionSection } from '../organisms/PresetSelectionSection';
 
@@ -13,12 +13,13 @@ const cssPresetBrowserPage = css`
   }
 `;
 
-export const PresetBrowserPage = (props: { vm: IPresetBrowserViewModel }) => {
+export const PresetBrowserPage = () => {
+  const vm = makePresetBrowserViewModel();
   return (
     <div css={cssPresetBrowserPage}>
       <div>Preset Browser</div>
-      <PresetSelectionSection vm={props.vm} />
-      <PresetKeyboardSection vm={props.vm} />
+      <PresetSelectionSection vm={vm} />
+      <PresetKeyboardSection vm={vm} />
     </div>
   );
 };

@@ -39,9 +39,7 @@ export const ConfiguratorZoneRoot = (props: { viewModels: ViewModels }) => {
           {page === 'firmwareUpdation' && (
             <FirmwareUpdationPage vm={vm.firmwareUpdation} />
           )}
-          {page === 'presetBrowser' && (
-            <PresetBrowserPage vm={vm.presetBrowser} />
-          )}
+          {page === 'presetBrowser' && <PresetBrowserPage />}
         </div>
       </div>
     </CustomWindowFrame>
