@@ -36,9 +36,7 @@ export const ConfiguratorZoneRoot = (props: { viewModels: ViewModels }) => {
         <div css={styles.cssMainColumn}>
           {page === 'editor' && <EditorPage />}
           {page === 'shapePreview' && <KeyboardShapePreviewPage />}
-          {page === 'firmwareUpdation' && (
-            <FirmwareUpdationPage vm={vm.firmwareUpdation} />
-          )}
+          {page === 'firmwareUpdation' && <FirmwareUpdationPage />}
           {page === 'presetBrowser' && <PresetBrowserPage />}
         </div>
       </div>
