@@ -3,12 +3,10 @@ import { FirmwareUpdationPageViewModel } from './FirmwareUpdationPageViewModel';
 import { GlobalMenuViewModel } from './GlobalMenuViewModel';
 import { NavigationViewModel } from './NavigationViewModel';
 import { PresetBrowserViewModel } from './PresetBrowserViewModel';
-import { ShapePreviewPageViewModel } from './ShapePreviewPageViewModel';
 import { TitleBarViewModel } from './TitleBarViewModel';
 import { WidgetMainPageViewModel } from './WidgetMainPageViewModel';
 
 export class ViewModels {
-  shapePreview: ShapePreviewPageViewModel;
   firmwareUpdation: FirmwareUpdationPageViewModel;
   globalMenu: GlobalMenuViewModel;
   titleBar: TitleBarViewModel;
@@ -17,7 +15,6 @@ export class ViewModels {
   presetBrowser: PresetBrowserViewModel;
 
   constructor(public models: Models) {
-    this.shapePreview = new ShapePreviewPageViewModel(models);
     this.firmwareUpdation = new FirmwareUpdationPageViewModel(models);
     this.globalMenu = new GlobalMenuViewModel(models);
     this.titleBar = new TitleBarViewModel(models);
