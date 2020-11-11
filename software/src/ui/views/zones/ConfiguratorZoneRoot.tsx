@@ -32,7 +32,7 @@ export const ConfiguratorZoneRoot = (props: { viewModels: ViewModels }) => {
       renderTitleBar={() => <WindowTitleBarSection vm={vm.titleBar} />}
     >
       <div css={styles.cssContentRow}>
-        <NavigationColumn vm={vm} />
+        <NavigationColumn />
         <div css={styles.cssMainColumn}>
           {page === 'editor' && <EditorPage />}
           {page === 'shapePreview' && <KeyboardShapePreviewPage />}

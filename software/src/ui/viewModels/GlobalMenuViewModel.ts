@@ -1,5 +1,6 @@
+import { Hook } from '~lib/qx';
 import { appUi } from '~ui/core';
-import { Models } from '~ui/models';
+import { models } from '~ui/models';
 
 interface IMenuItem {
   key: string;
@@ -8,7 +9,7 @@ interface IMenuItem {
   active: boolean;
 }
 
-function createMenuItems(models: Models): IMenuItem[] {
+function createMenuItems(): IMenuItem[] {
   const { settings } = models.uiStatusModel;
 
   const menuItems: IMenuItem[] = [
@@ -45,20 +46,19 @@ function createMenuItems(models: Models): IMenuItem[] {
   }
 }
 
-export class GlobalMenuViewModel {
-  isOpen: boolean = false;
+export interface IGlobalMenuViewModel {
+  isOpen: boolean;
+  openMenu(): void;
+  closeMenu(): void;
+  menuItems: IMenuItem[];
+}
 
-  constructor(private models: Models) {}
-
-  openMenu = () => {
-    this.isOpen = true;
+export function makeGlobalMenuViewModel(): IGlobalMenuViewModel {
+  const state = Hook.useLocal(() => ({ isOpen: false }));
+  return {
+    isOpen: state.isOpen,
+    openMenu: () => (state.isOpen = true),
+    closeMenu: () => (state.isOpen = false),
+    menuItems: createMenuItems()
   };
-
-  closeMenu = () => {
-    this.isOpen = false;
-  };
-
-  get menuItems() {
-    return createMenuItems(this.models);
-  }
 }

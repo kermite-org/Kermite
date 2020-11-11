@@ -1,8 +1,8 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { GlobalMenuViewModel } from '~ui/viewModels/GlobalMenuViewModel';
+import { makeGlobalMenuViewModel } from '~ui/viewModels/GlobalMenuViewModel';
 
-const cssBase = css``;
+const cssGlobalMenuPart = css``;
 
 const cssOverlay = css`
   position: absolute;
@@ -53,11 +53,10 @@ const cssMenuPopup = css`
   }
 `;
 
-export const GlobalMenuPart = (props: { vm: GlobalMenuViewModel }) => {
-  const { isOpen, openMenu, closeMenu, menuItems } = props.vm;
-
+export const GlobalMenuPart = () => {
+  const { isOpen, openMenu, closeMenu, menuItems } = makeGlobalMenuViewModel();
   return (
-    <div css={cssBase}>
+    <div css={cssGlobalMenuPart}>
       <div css={cssOverlay} qxIf={isOpen} onClick={closeMenu} />
       <div css={cssMenuArea}>
         <div css={cssMenuButton} onMouseDown={openMenu}>
