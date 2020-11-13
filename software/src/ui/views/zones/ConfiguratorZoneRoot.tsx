@@ -5,8 +5,8 @@ import { models } from '~ui/models';
 import { CustomWindowFrame } from '~ui/views/base/window/CustomWindowFrame';
 import { NavigationColumn } from '../base/navigation/NavigationColumn';
 import { WindowTitleBarSection } from '../base/titleBar/WindowTitleBarSection';
+import { EditorPage } from '../pages/EditorPage';
 import { FirmwareUpdationPage } from '../pages/FirmwareUpdationPage';
-import { EditorPage } from '../pages/KeyAssignEditPage/EditorPage';
 import { PresetBrowserPage } from '../pages/PresetBrowserPage';
 import { KeyboardShapePreviewPage } from '../pages/ShapePreviewPage';
 

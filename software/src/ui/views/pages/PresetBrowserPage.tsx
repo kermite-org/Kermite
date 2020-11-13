@@ -1,8 +1,8 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { makePresetBrowserViewModel } from '~ui/viewModels/PresetBrowserViewModel';
-import { PresetKeyboardSection } from '../organisms/PresetKeyboardSection';
-import { PresetSelectionSection } from '../organisms/PresetSelectionSection';
+import { PresetKeyboardSection } from '~ui/views/organisms/PresetBrowser/PresetKeyboardSection';
+import { PresetSelectionSection } from '~ui/views/organisms/PresetBrowser/PresetSelectionSection';
 
 const cssPresetBrowserPage = css`
   background: #fff;
