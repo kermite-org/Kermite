@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { WidgetMainPageViewModel } from '~ui/viewModels/WidgetMainPageViewModel';
+import { makeWidgetMainPageViewModel } from '~ui/viewModels/WidgetMainPageViewModel';
 import { WidgetSvgKeyboardView } from '~ui/views/keyboardSvg/panels/WidgetSvgKeyboardView';
 
 const styles = {
@@ -33,9 +33,9 @@ const styles = {
   `
 };
 
-export function MainPanel({ vm }: { vm: WidgetMainPageViewModel }) {
+export function MainPanel() {
+  const vm = makeWidgetMainPageViewModel();
   const contentScale = window.innerWidth / 600;
-
   return (
     <div css={styles.cssPanel(contentScale)}>
       <div css={styles.cssConfigButton} onClick={vm.onOpenButton}>

@@ -1,10 +1,14 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { TitleBarViewModel } from '~ui/viewModels/TitleBarViewModel';
+import { ITitleBarViewModel } from '~ui/viewModels/TitleBarViewModel';
 import { WindowControlButton } from './WindowControlButton';
 import { WindowRestartButton } from './WindowRestartButton';
 
-export const WindowControlButtonsPart = ({ vm }: { vm: TitleBarViewModel }) => {
+export const WindowControlButtonsPart = ({
+  vm
+}: {
+  vm: ITitleBarViewModel;
+}) => {
   const cssButtonsBox = css`
     display: flex;
     align-items: center;

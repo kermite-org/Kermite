@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { ViewModels } from '~ui/viewModels';
+import { models } from '~ui/models';
 import { WidgetWindowActiveChrome } from '~ui/views/base/window/WidgetWindowActiveChrome';
 import { MainPanel } from '~ui/views/pages/WidgetMainPage';
 
@@ -16,13 +16,11 @@ const cssWidgetZoneRoot = css`
   }
 `;
 
-export const WidgetZoneRoot = (props: { viewModels: ViewModels }) => {
+export const WidgetZoneRoot = () => {
   return (
     <div css={cssWidgetZoneRoot}>
-      <WidgetWindowActiveChrome
-        qxIf={props.viewModels.models.siteModel.isWindowActive}
-      />
-      <MainPanel vm={props.viewModels.wdigetMainPage} />
+      <WidgetWindowActiveChrome qxIf={models.siteModel.isWindowActive} />
+      <MainPanel />
     </div>
   );
 };

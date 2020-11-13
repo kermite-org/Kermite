@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { FirmwareUpdationPageViewModel } from '~ui/viewModels/FirmwareUpdationPageViewModel';
+import { makeFirmwareUpdationPageViewModel } from '~ui/viewModels/FirmwareUpdationPageViewModel';
 import { GeneralSelector } from '~ui/views/controls/GeneralSelector';
 
 const cssFirmwareUpdationPage = css`
@@ -36,10 +36,8 @@ const cssFirmwareUpdationPage = css`
   }
 `;
 
-export const FirmwareUpdationPage = (props: {
-  vm: FirmwareUpdationPageViewModel;
-}) => {
-  const { vm } = props;
+export const FirmwareUpdationPage = () => {
+  const vm = makeFirmwareUpdationPageViewModel();
   const { phase } = vm;
 
   return (

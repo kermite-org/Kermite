@@ -38,13 +38,6 @@ export class KeyboardShapesModel {
     }
   };
 
-  private onResourcesLoaded = () => {
-    this._currentProjectId =
-      this.uiStatusModel.settings.shapeViewProjectId ||
-      this.optionProjectInfos[0].projectId;
-    this.loadCurrentProjectLayout();
-  };
-
   private onLayoutFileUpdated = (args: { projectId: string }) => {
     if (args.projectId === this._currentProjectId) {
       this.loadCurrentProjectLayout();
@@ -52,8 +45,11 @@ export class KeyboardShapesModel {
   };
 
   initialize() {
-    this.projectResourceModel.loadedNotifier.listen(this.onResourcesLoaded);
     backendAgent.layoutFileUpdationEvents.subscribe(this.onLayoutFileUpdated);
+    this._currentProjectId =
+      this.uiStatusModel.settings.shapeViewProjectId ||
+      this.optionProjectInfos[0].projectId;
+    this.loadCurrentProjectLayout();
   }
 
   finalize() {
