@@ -8,5 +8,7 @@ data/
 run.sh
 .sub/
 release
-.vscode
+.vscode/settings.json
+.vscode/launch.json
+
 .node-version

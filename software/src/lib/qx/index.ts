@@ -4,6 +4,8 @@ import { VNode } from './qxinternal_petit_dom/types';
 
 export { h } from './qxinternal_petit_dom/h';
 
+export { Hook } from './qxinternal_petit_dom/hookImpl';
+
 export function rerender() {
   qxGlobal.rerender();
 }

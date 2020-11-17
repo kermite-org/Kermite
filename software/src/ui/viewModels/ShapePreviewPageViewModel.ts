@@ -1,36 +1,33 @@
 import { IKeyboardShape } from '~defs/ProfileData';
-import { Models } from '~ui/models';
-import { KeyboardShapesModel } from '~ui/models/KeyboardShapesModel';
+import { models } from '~ui/models';
 import { IUiSettings } from '~ui/models/UiStatusModel';
 import { ISelectorSource } from '~ui/viewModels/viewModelInterfaces';
 
-export class ShapePreviewPageViewModel {
-  constructor(public models: Models) {}
+export interface IShapePreviewPageViewModel {
+  settings: IUiSettings;
+  loadedShape: IKeyboardShape | undefined;
+  holdKeyIndices: number[];
+  projectSelectorSource: ISelectorSource;
+}
 
-  private get shapesModel(): KeyboardShapesModel {
-    return this.models.keyboardShapesModel;
-  }
+export function makeShapePreviewPageViewModel(): IShapePreviewPageViewModel {
+  const {
+    uiStatusModel,
+    keyboardShapesModel: shapesModel,
+    playerModel
+  } = models;
 
-  get settings(): IUiSettings {
-    return this.models.uiStatusModel.settings;
-  }
-
-  get loadedShape(): IKeyboardShape | undefined {
-    return this.shapesModel.loadedShape;
-  }
-
-  get holdKeyIndices(): number[] {
-    return [...this.models.playerModel.holdKeyIndices];
-  }
-
-  get projectSelectorSource(): ISelectorSource {
-    return {
-      options: this.shapesModel.optionProjectInfos.map((info) => ({
+  return {
+    settings: uiStatusModel.settings,
+    loadedShape: shapesModel.loadedShape,
+    holdKeyIndices: playerModel.holdKeyIndices,
+    projectSelectorSource: {
+      options: shapesModel.optionProjectInfos.map((info) => ({
         id: info.projectId,
         text: info.projectPath
       })),
-      choiceId: this.shapesModel.currentProjectId,
-      setChoiceId: this.shapesModel.setCurrentProjectId
-    };
-  }
+      choiceId: shapesModel.currentProjectId,
+      setChoiceId: shapesModel.setCurrentProjectId
+    }
+  };
 }

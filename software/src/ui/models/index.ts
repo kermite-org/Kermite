@@ -17,10 +17,10 @@ export class Models {
   editorModel = new EditorModel();
   playerModel = new PlayerModel(this.editorModel);
   profilesModel = new ProfilesModel(this.editorModel);
-  firmwareUpdationModel = new FirmwareUpdationModel();
   keyboardConfigModel = new KeyboardConfigModel();
 
   projectResourceModel = new ProjectResourceModel();
+  firmwareUpdationModel = new FirmwareUpdationModel(this.projectResourceModel);
   uiStatusModel = new UiStatusModel();
 
   keyboardShapesModel = new KeyboardShapesModel(
@@ -39,8 +39,8 @@ export class Models {
 
   backend = backendAgent;
 
-  initialize() {
-    this.projectResourceModel.initialize();
+  async initialize() {
+    await this.projectResourceModel.initializeAsync();
     this.siteModel.initialize();
     this.profilesModel.initialize();
     this.playerModel.initialize();
@@ -54,6 +54,7 @@ export class Models {
   }
 
   finalize() {
+    this.firmwareUpdationModel.finalize();
     this.keyboardShapesModel.finalize();
     this.themeSelectionModel.finalize();
     this.uiStatusModel.finalize();
