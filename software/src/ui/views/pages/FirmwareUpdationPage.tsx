@@ -1,11 +1,12 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
+import { uiTheme } from '~ui/core';
 import { makeFirmwareUpdationPageViewModel } from '~ui/viewModels/FirmwareUpdationPageViewModel';
 import { GeneralSelector } from '~ui/views/controls/GeneralSelector';
 
 const cssFirmwareUpdationPage = css`
-  background: #fff;
-  color: #444;
+  background: ${uiTheme.colors.clBackground};
+  color: ${uiTheme.colors.clMainText};
   height: 100%;
   padding: 10px;
 

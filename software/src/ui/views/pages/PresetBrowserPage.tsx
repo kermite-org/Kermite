@@ -1,11 +1,14 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
+import { uiTheme } from '~ui/core';
 import { makePresetBrowserViewModel } from '~ui/viewModels/PresetBrowserViewModel';
 import { PresetKeyboardSection } from '~ui/views/organisms/PresetBrowser/PresetKeyboardSection';
 import { PresetSelectionSection } from '~ui/views/organisms/PresetBrowser/PresetSelectionSection';
 
 const cssPresetBrowserPage = css`
-  background: #fff;
+  background: ${uiTheme.colors.clBackground};
+  color: ${uiTheme.colors.clMainText};
+
   height: 100%;
   padding: 20px;
   > * + * {
