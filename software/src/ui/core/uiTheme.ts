@@ -39,7 +39,7 @@ export const themeColors: { [key in ThemeKey]: IThemeColorSet } = {
     clSelectHighlight: '#22967d',
     clHoldHighlight: '#f90',
     clMainText: '#FFF',
-    clAltText: '#000',
+    clAltText: '#FFF',
     clWindowButtonFace: '#FFF',
     clWindowButtonHoverBack: '#f8b',
     clKeyboardBodyFace: '#54566f',
