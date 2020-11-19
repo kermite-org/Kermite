@@ -16,7 +16,7 @@
 
 ビルド/実行には以下が必要です
 
-- Node.js 13
+- Node.js
 - yarn
 - node-gyp
 
