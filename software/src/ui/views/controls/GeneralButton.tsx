@@ -59,7 +59,7 @@ export const GeneralButton = ({
   handler,
   disabled,
   className,
-  form
+  form = 'unit'
 }: IGeneralButtonProps) => {
   return (
     <div

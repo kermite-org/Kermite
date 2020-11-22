@@ -1,61 +1,40 @@
-import { Models } from '~ui/models';
-import { FirmwareUpdationModel } from '~ui/models/FirmwareUpdationModel';
+import { models } from '~ui/models';
+import { FirmwareUpdationPhase } from '~ui/models/FirmwareUpdationModel';
+import { ISelectorSource } from '~ui/viewModels/viewModelInterfaces';
 import { showCommandOutputLogModal } from '~ui/views/base/modal/CommandOutputLogModal';
 
-export class FirmwareUpdationPageViewModel {
-  selectedFirmwareName: string = '';
+interface IFirmwareUpdationPageViewModel {
+  phase: FirmwareUpdationPhase;
+  comPortName: string | undefined;
+  canSelectTargetFirmware: boolean;
+  projectSelectorSource: ISelectorSource;
+  onWriteButton(): void;
+  onResetButton(): void;
+  onLogButton(): void;
+}
 
-  model: FirmwareUpdationModel;
-
-  constructor(models: Models) {
-    this.model = models.firmwareUpdationModel;
-  }
-
-  get phase() {
-    return this.model.phase;
-  }
-
-  get firmwareNames() {
-    return this.model.firmwareNames;
-  }
-
-  get comPortName() {
-    return this.model.comPortName;
-  }
-
-  get canSelectTargetFirmware() {
-    const { phase } = this.model;
-    return phase === 'WaitingReset' || phase === 'WaitingUploadOrder';
-  }
-
-  setSelectedFirmwareName = (firmwareName: string) => {
-    this.selectedFirmwareName = firmwareName;
-  };
-
-  onWriteButton = () => {
-    if (!this.selectedFirmwareName) {
-      alert('please select the firmware');
-      return;
+export function makeFirmwareUpdationPageViewModel(): IFirmwareUpdationPageViewModel {
+  const model = models.firmwareUpdationModel;
+  return {
+    phase: model.phase,
+    comPortName: model.comPortName,
+    canSelectTargetFirmware: model.canSelectTargetFirmware,
+    projectSelectorSource: {
+      options: model.projectOptions,
+      choiceId: model.currentProjectId,
+      setChoiceId: model.setCurrentProjectId
+    },
+    onWriteButton() {
+      model.uploadFirmware();
+    },
+    onResetButton() {
+      model.backToInitialPhase();
+    },
+    onLogButton() {
+      showCommandOutputLogModal({
+        caption: 'Operation Command Log',
+        logText: model.firmwareUploadResult || ''
+      });
     }
-    this.model.uploadFirmware(this.selectedFirmwareName);
   };
-
-  onResetButton = () => {
-    this.model.backToInitialPhase();
-  };
-
-  onLogButton = () => {
-    showCommandOutputLogModal({
-      caption: 'Operation Command Log',
-      logText: this.model.firmwareUploadResult || ''
-    });
-  };
-
-  initialize() {
-    this.model.startComPortListener();
-  }
-
-  finalize() {
-    this.model.endComPortListener();
-  }
 }

@@ -1,22 +1,58 @@
 import { IKeyboardShape } from '~defs/ProfileData';
 import { backendAgent } from '~ui/core';
+import { ProjectResourceModel } from '~ui/models/ProjectResourceModel';
+import { UiStatusModel } from '~ui/models/UiStatusModel';
 
 export class KeyboardShapesModel {
-  allBreedNames: string[] = [];
+  constructor(
+    private projectResourceModel: ProjectResourceModel,
+    private uiStatusModel: UiStatusModel
+  ) {}
 
-  getAllBreedNames(): string[] {
-    return this.allBreedNames;
+  private _currentProjectId: string = '';
+  private _loadedShape: IKeyboardShape | undefined;
+
+  get currentProjectId() {
+    return this._currentProjectId;
   }
 
-  async getKeyboardShapeByBreedName(
-    breedName: string
-  ): Promise<IKeyboardShape | undefined> {
-    return await backendAgent.getKeyboardShape(breedName);
+  get loadedShape() {
+    return this._loadedShape;
   }
+
+  get optionProjectInfos() {
+    return this.projectResourceModel.getProjectsWithLayout();
+  }
+
+  private async loadCurrentProjectLayout() {
+    this._loadedShape = await backendAgent.loadKeyboardShape(
+      this._currentProjectId
+    );
+  }
+
+  setCurrentProjectId = (projectId: string) => {
+    if (projectId !== this._currentProjectId) {
+      this._currentProjectId = projectId;
+      this.uiStatusModel.settings.shapeViewProjectId = projectId;
+      this.loadCurrentProjectLayout();
+    }
+  };
+
+  private onLayoutFileUpdated = (args: { projectId: string }) => {
+    if (args.projectId === this._currentProjectId) {
+      this.loadCurrentProjectLayout();
+    }
+  };
 
   initialize() {
-    (async () => {
-      this.allBreedNames = await backendAgent.getKeyboardBreedNamesAvailable();
-    })();
+    backendAgent.layoutFileUpdationEvents.subscribe(this.onLayoutFileUpdated);
+    this._currentProjectId =
+      this.uiStatusModel.settings.shapeViewProjectId ||
+      this.optionProjectInfos[0].projectId;
+    this.loadCurrentProjectLayout();
+  }
+
+  finalize() {
+    backendAgent.layoutFileUpdationEvents.unsubscribe(this.onLayoutFileUpdated);
   }
 }

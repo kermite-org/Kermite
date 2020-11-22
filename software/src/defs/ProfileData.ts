@@ -127,14 +127,12 @@ export interface IKeyboardShapeDisplayArea {
 }
 
 export interface IKeyboardShape {
-  breedName: string;
   keyUnits: IKeyUnitEntry[];
   bodyPathMarkupText: string;
   displayArea: IKeyboardShapeDisplayArea;
 }
 
 export const keyboardShape_fallbackData: IKeyboardShape = {
-  breedName: 'none',
   keyUnits: [],
   bodyPathMarkupText: '',
   displayArea: {

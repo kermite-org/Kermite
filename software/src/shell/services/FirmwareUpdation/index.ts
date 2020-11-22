@@ -11,33 +11,18 @@ export class FirmwareUpdationService {
     private projectResourceInfoProvider: IProjectResourceInfoProvider
   ) {}
 
-  getFirmwareNamesAvailable(): string[] {
-    return this.projectResourceInfoProvider
-      .getAllProjectResourceInfos()
-      .filter((info) => info.hasFirmwareBinary)
-      .map((info) => info.projectPath);
-  }
-
   readonly comPortPlugEvents = this.comPortsMonitor.comPortPlugEvents;
 
-  private getHexFilePathByProjectPath(projectPath: string): string | undefined {
-    const info = this.projectResourceInfoProvider
-      .getAllProjectResourceInfos()
-      .find((info) => info.projectPath === projectPath);
-    if (info) {
-      return this.projectResourceInfoProvider.getHexFilePath(info.projectId);
-    }
-    return undefined;
-  }
-
   async writeFirmware(
-    projectPath: string,
+    projectId: string,
     comPortName: string
   ): Promise<'ok' | string> {
-    const hexFilePath = this.getHexFilePathByProjectPath(projectPath);
+    const hexFilePath = this.projectResourceInfoProvider.getHexFilePath(
+      projectId
+    );
 
     if (!hexFilePath) {
-      return `cannot find firmware for ${projectPath}`;
+      return `cannot find firmware`;
     }
 
     const flashResult = await FlashCommander.uploadFirmware(

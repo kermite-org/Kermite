@@ -6,8 +6,11 @@ export class PlayerModel {
   private keyEventProvider = new RealtimeKeyboardEventProvider();
   private _keyStates: { [keyId: string]: boolean } = {};
   private _layerActiveFlags: number = 1;
+  private _holdKeyIndices: Set<number> = new Set();
 
-  holdKeyIndices: Set<number> = new Set();
+  get holdKeyIndices(): number[] {
+    return [...this._holdKeyIndices];
+  }
 
   constructor(private editorModel: EditorModel) {}
 
@@ -64,9 +67,9 @@ export class PlayerModel {
     if (ev.type === 'keyStateChanged') {
       const { keyIndex, isDown } = ev;
       if (isDown) {
-        this.holdKeyIndices.add(keyIndex);
+        this._holdKeyIndices.add(keyIndex);
       } else {
-        this.holdKeyIndices.delete(keyIndex);
+        this._holdKeyIndices.delete(keyIndex);
       }
 
       const keyUnit = this.editorModel.profileData.keyboardShape.keyUnits.find(

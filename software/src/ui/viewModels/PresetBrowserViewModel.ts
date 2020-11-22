@@ -1,104 +1,49 @@
-import { IProjectResourceInfo } from '~defs/ProfileData';
-import { Models } from '~ui/models';
+import { models } from '~ui/models';
 import { ISelectorSource } from '~ui/viewModels/viewModelInterfaces';
 import {
   IPresetKeyboardViewModel,
-  PresetKeyboardViewModel
+  makePresetKeyboardViewModel
 } from './PresetKeyboardViewModel';
 
 export interface IPresetBrowserViewModel {
   keyboard: IPresetKeyboardViewModel;
   projectSelectorSource: ISelectorSource;
   presetSelectorSource: ISelectorSource;
-
   isLinkButtonActive: boolean;
   linkButtonHandler(): void;
+  editPresetButtonHandler(): void;
 }
 
-export class PresetBrowserViewModel implements IPresetBrowserViewModel {
-  keyboard = new PresetKeyboardViewModel();
-
-  constructor(private models: Models) {}
-
-  private resourceInfos: IProjectResourceInfo[] = [];
-
-  private selectedProjectId: string = '';
-
-  private selectedPresetName: string = 'blank';
-
-  private async loadSelectedProfile() {
-    const loadedProfileData = await this.models.backend.loadPresetProfile(
-      this.selectedProjectId,
-      this.selectedPresetName === 'blank' ? undefined : this.selectedPresetName
-    );
-    if (loadedProfileData) {
-      this.keyboard.setProfileData(loadedProfileData);
-    } else {
-      console.error(`errro while loading preset profile`);
-    }
-  }
-
-  get projectSelectorSource() {
-    return {
-      options: this.resourceInfos.map((info) => ({
-        id: info.projectId,
-        text: info.projectName
+export function makePresetBrowserViewModel(): IPresetBrowserViewModel {
+  const { presetBrowserModel, deviceStatusModel } = models;
+  return {
+    keyboard: makePresetKeyboardViewModel(presetBrowserModel.loadedProfileData),
+    projectSelectorSource: {
+      options: presetBrowserModel.optionProjectInfos.map((it) => ({
+        id: it.projectId,
+        text: it.projectName
       })),
-      choiceId: this.selectedProjectId,
-      setChoiceId: (id: string) => {
-        this.selectedProjectId = id;
-        this.selectedPresetName = 'blank';
-        this.loadSelectedProfile();
-      }
-    };
-  }
-
-  get presetSelectorSource() {
-    const info = this.resourceInfos.find(
-      (info) => info.projectId === this.selectedProjectId
-    );
-    const presetNames = info?.presetNames
-      ? ['blank', ...info.presetNames]
-      : ['blank'];
-    return {
-      options: presetNames.map((it) => ({ id: it, text: it })),
-      choiceId: this.selectedPresetName,
-      setChoiceId: (id: string) => {
-        this.selectedPresetName = id;
-        this.loadSelectedProfile();
-      }
-    };
-  }
-
-  get isLinkButtonActive() {
-    return (
-      this.models.deviceStatusModel.isConnected &&
-      this.models.deviceStatusModel.deviceAttrs?.projectId !==
-        this.selectedProjectId
-    );
-  }
-
-  linkButtonHandler = () => {
-    const deviceProjectId =
-      this.models.deviceStatusModel.deviceAttrs?.projectId || '';
-    this.projectSelectorSource.setChoiceId(deviceProjectId);
-  };
-
-  private onResourceModelLoaded = () => {
-    this.resourceInfos = this.models.projectResourceModel.projectResourceInfos;
-    if (this.resourceInfos.length > 0) {
-      this.selectedProjectId = this.resourceInfos[0].projectId;
-      this.selectedPresetName = 'blank';
-      this.loadSelectedProfile();
+      choiceId: presetBrowserModel.currentProjectId,
+      setChoiceId: presetBrowserModel.setCurrentProjectId
+    },
+    presetSelectorSource: {
+      options: presetBrowserModel.optionPresetNames.map((it) => ({
+        id: it,
+        text: it
+      })),
+      choiceId: presetBrowserModel.currentPresetName,
+      setChoiceId: presetBrowserModel.setCurrentPresetName
+    },
+    isLinkButtonActive:
+      deviceStatusModel.isConnected &&
+      deviceStatusModel.deviceAttrs?.projectId !==
+        presetBrowserModel.currentProjectId,
+    linkButtonHandler() {
+      const deviceProjectId = deviceStatusModel.deviceAttrs?.projectId || '';
+      presetBrowserModel.setCurrentProjectId(deviceProjectId);
+    },
+    editPresetButtonHandler() {
+      presetBrowserModel.editSelectedProjectPreset();
     }
-    this.models.projectResourceModel.loadedEvents.unsubscribe(
-      this.onResourceModelLoaded
-    );
   };
-
-  initialize() {
-    this.models.projectResourceModel.loadedEvents.subscribe(
-      this.onResourceModelLoaded
-    );
-  }
 }

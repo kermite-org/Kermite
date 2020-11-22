@@ -36,7 +36,10 @@ export class Services implements IBackendAgent {
   private applicationSettingsProvider = new ApplicationSettingsProvider();
   private projectResourceInfoProvider = new ProjectResourceInfoProvider();
   private keyboardConfigProvider = new KeyboardConfigProvider();
-  private keyboardLayoutFilesWatcher = new KeyboardLayoutFilesWatcher();
+
+  private keyboardLayoutFilesWatcher = new KeyboardLayoutFilesWatcher(
+    this.projectResourceInfoProvider
+  );
 
   private keyboardShapesProvider = new KeyboardShapesProvider(
     this.projectResourceInfoProvider
@@ -50,16 +53,16 @@ export class Services implements IBackendAgent {
     this.projectResourceInfoProvider
   );
 
-  private profileManager = new ProfileManager(this.keyboardShapesProvider);
+  private presetProfileLoader = new PresetProfileLoader(
+    this.projectResourceInfoProvider
+  );
+
+  private profileManager = new ProfileManager(this.presetProfileLoader);
 
   private inputLogicSimulator = new InputLogicSimulatorD(
     this.profileManager,
     this.keyboardConfigProvider,
     this.deviceService
-  );
-
-  private presetProfileLoader = new PresetProfileLoader(
-    this.projectResourceInfoProvider
   );
 
   @RpcFunction
@@ -132,31 +135,21 @@ export class Services implements IBackendAgent {
   }
 
   @RpcFunction
-  async getKeyboardBreedNamesAvailable(): Promise<string[]> {
-    return this.keyboardShapesProvider.getAvailableBreedNames();
-  }
-
-  @RpcFunction
-  async getKeyboardShape(
-    breedName: string
+  async loadKeyboardShape(
+    projectId: string
   ): Promise<IKeyboardShape | undefined> {
-    return await this.keyboardShapesProvider.loadKeyboardShapeByBreedName(
-      breedName
+    return await this.keyboardShapesProvider.loadKeyboardShapeByProjectId(
+      projectId
     );
   }
 
   @RpcFunction
-  async getFirmwareNamesAvailable(): Promise<string[]> {
-    return this.firmwareUpdationService.getFirmwareNamesAvailable();
-  }
-
-  @RpcFunction
   async uploadFirmware(
-    firmwareName: string,
+    projectId: string,
     comPortName: string
   ): Promise<string> {
     return await this.firmwareUpdationService.writeFirmware(
-      firmwareName,
+      projectId,
       comPortName
     );
   }

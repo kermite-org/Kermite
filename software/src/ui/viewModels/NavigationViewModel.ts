@@ -1,5 +1,5 @@
-import { Models } from '~ui/models';
-import { IUiSettings, PageSignature } from '~ui/models/UiStatusModel';
+import { models } from '~ui/models';
+import { PageSignature } from '~ui/models/UiStatusModel';
 
 export interface NavigationEntryViewModel {
   pageSig: PageSignature;
@@ -20,19 +20,18 @@ const entrySources: NavigationEntrySource[] = [
   { pageSig: 'presetBrowser', faIconName: 'fa-book' }
 ];
 
-export class NavigationViewModel {
-  constructor(private models: Models) {}
+export interface INavigationViewModel {
+  entries: NavigationEntryViewModel[];
+}
 
-  private get settings(): IUiSettings {
-    return this.models.uiStatusModel.settings;
-  }
-
-  get entries(): NavigationEntryViewModel[] {
-    return entrySources.map((it) => ({
+export function makeNavigationViewModel(): INavigationViewModel {
+  const { settings } = models.uiStatusModel;
+  return {
+    entries: entrySources.map((it) => ({
       pageSig: it.pageSig,
       faIconName: it.faIconName,
-      isCurrent: this.settings.page === it.pageSig,
-      onClick: () => (this.settings.page = it.pageSig)
-    }));
-  }
+      isCurrent: settings.page === it.pageSig,
+      onClick: () => (settings.page = it.pageSig)
+    }))
+  };
 }

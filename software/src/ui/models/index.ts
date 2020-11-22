@@ -1,4 +1,5 @@
 import { backendAgent } from '~ui/core';
+import { PresetBrowserModel } from '~ui/models/PresetBrowserModel';
 import { DeviceStatusModel } from './DeviceStatusModel';
 import { FirmwareUpdationModel } from './FirmwareUpdationModel';
 import { KeyboardConfigModel } from './KeyboardConfigModel';
@@ -16,18 +17,30 @@ export class Models {
   editorModel = new EditorModel();
   playerModel = new PlayerModel(this.editorModel);
   profilesModel = new ProfilesModel(this.editorModel);
-  firmwareUpdationModel = new FirmwareUpdationModel();
   keyboardConfigModel = new KeyboardConfigModel();
-  keyboardShapesModel = new KeyboardShapesModel();
+
   projectResourceModel = new ProjectResourceModel();
+  firmwareUpdationModel = new FirmwareUpdationModel(this.projectResourceModel);
+  uiStatusModel = new UiStatusModel();
+
+  keyboardShapesModel = new KeyboardShapesModel(
+    this.projectResourceModel,
+    this.uiStatusModel
+  );
+
   siteModel = new SiteModel();
   themeSelectionModel = new ThemeSelectionModel();
-  uiStatusModel = new UiStatusModel();
+
+  presetBrowserModel = new PresetBrowserModel(
+    this.projectResourceModel,
+    this.profilesModel,
+    this.uiStatusModel
+  );
 
   backend = backendAgent;
 
-  initialize() {
-    this.projectResourceModel.initialize();
+  async initialize() {
+    await this.projectResourceModel.initializeAsync();
     this.siteModel.initialize();
     this.profilesModel.initialize();
     this.playerModel.initialize();
@@ -37,9 +50,12 @@ export class Models {
     this.themeSelectionModel.initialize();
     this.keyboardShapesModel.initialize();
     this.firmwareUpdationModel.initialize();
+    this.presetBrowserModel.initialize();
   }
 
   finalize() {
+    this.firmwareUpdationModel.finalize();
+    this.keyboardShapesModel.finalize();
     this.themeSelectionModel.finalize();
     this.uiStatusModel.finalize();
     this.deviceStatusModel.finalize();

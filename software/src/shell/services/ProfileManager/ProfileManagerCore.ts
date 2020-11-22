@@ -1,23 +1,19 @@
-import { IProfileData, fallbackProfileData } from '~defs/ProfileData';
+import { IProfileData } from '~defs/ProfileData';
 import {
-  fsIsFileExists,
-  fsCreateDirectory,
-  fsListFilesInDirectory,
-  fsxWriteJsonFile,
-  fsRenameFile,
-  fsDeleteFile,
   fsCopyFile,
+  fsCreateDirectory,
+  fsDeleteFile,
+  fsIsFileExists,
+  fsListFilesInDirectory,
+  fsRenameFile,
   fsxReadJsonFile,
+  fsxWriteJsonFile,
   pathBaseName
 } from '~funcs/Files';
-import { duplicateObjectByJsonStringifyParse } from '~funcs/Utils';
 import { appEnv } from '~shell/base/AppEnvironment';
 import { applicationStorage } from '~shell/services/ApplicationStorage';
-import { KeyboardShapesProvider } from '../KeyboardShape/KeyboardShapesProvider';
 
 export class ProfileManagerCore {
-  constructor(private shapesProvider: KeyboardShapesProvider) {}
-
   getDataFilePath(profName: string): string {
     return appEnv.resolveUserDataFilePath(`data/profiles/${profName}.json`);
   }
@@ -60,23 +56,6 @@ export class ProfileManagerCore {
     const fpath = this.getDataFilePath(profName);
     console.log(`saving current profile to ${pathBaseName(fpath)}`);
     await fsxWriteJsonFile(fpath, profileData);
-  }
-
-  async createProfile(
-    profName: string,
-    breedName: string
-  ): Promise<IProfileData> {
-    const profileData: IProfileData = duplicateObjectByJsonStringifyParse(
-      fallbackProfileData
-    );
-    const keyboardShape = await this.shapesProvider.loadKeyboardShapeByBreedName(
-      breedName
-    );
-    if (keyboardShape) {
-      profileData.keyboardShape = keyboardShape;
-    }
-    await this.saveProfile(profName, profileData);
-    return profileData;
   }
 
   async deleteProfile(profName: string): Promise<void> {

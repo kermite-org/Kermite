@@ -5,7 +5,7 @@ import {
 import { IProfileData } from '~defs/ProfileData';
 import { EventPort } from '~funcs/EventPort';
 import { clampValue } from '~funcs/Utils';
-import { KeyboardShapesProvider } from '../KeyboardShape/KeyboardShapesProvider';
+import { PresetProfileLoader } from '~shell/services/PresetProfileLoader';
 import { ProfileHelper } from './ProfileHelper';
 import { ProfileManagerCore } from './ProfileManagerCore';
 
@@ -24,8 +24,8 @@ export class ProfileManager {
 
   private core: ProfileManagerCore;
 
-  constructor(shapesProvider: KeyboardShapesProvider) {
-    this.core = new ProfileManagerCore(shapesProvider);
+  constructor(private presetProfileLoader: PresetProfileLoader) {
+    this.core = new ProfileManagerCore();
   }
 
   getCurrentProfile(): IProfileData | undefined {
@@ -45,7 +45,7 @@ export class ProfileManager {
     const allProfileNames = await this.core.listAllProfileNames();
     if (allProfileNames.length === 0) {
       const profName = this.defaultProfileName;
-      await this.core.createProfile(profName, '__default');
+      await this.createProfileImpl(profName, '__default');
       allProfileNames.push(profName);
     }
     return allProfileNames;
@@ -126,12 +126,36 @@ export class ProfileManager {
     }
   }
 
-  async createProfile(profName: string, breedName: string): Promise<boolean> {
+  private async createProfileImpl(
+    profName: string,
+    targetProjectId: string,
+    presetName?: string
+  ): Promise<IProfileData> {
+    const profile = await this.presetProfileLoader.loadPresetProfileData(
+      targetProjectId,
+      presetName
+    );
+    if (!profile) {
+      throw new Error('failed to load profile');
+    }
+    await this.core.saveProfile(profName, profile);
+    return profile;
+  }
+
+  async createProfile(
+    profName: string,
+    targetProjectId: string,
+    presetName: string | undefined
+  ): Promise<boolean> {
     if (this.status.allProfileNames.includes(profName)) {
       return false;
     }
     try {
-      const profileData = await this.core.createProfile(profName, breedName);
+      const profileData = await this.createProfileImpl(
+        profName,
+        targetProjectId,
+        presetName
+      );
       const allProfileNames = await this.core.listAllProfileNames();
       this.setStatus({
         allProfileNames,
@@ -155,7 +179,7 @@ export class ProfileManager {
       const isLastOne = this.status.allProfileNames.length === 1;
       await this.core.deleteProfile(profName);
       if (isLastOne) {
-        await this.core.createProfile(this.defaultProfileName, '__default');
+        await this.createProfileImpl(this.defaultProfileName, '__default');
       }
       const allProfileNames = await this.core.listAllProfileNames();
       this.setStatus({ allProfileNames });
@@ -219,7 +243,8 @@ export class ProfileManager {
     if (cmd.creatProfile) {
       return await this.createProfile(
         cmd.creatProfile.name,
-        cmd.creatProfile.breedName
+        cmd.creatProfile.targetProjectId,
+        cmd.creatProfile.presetName
       );
     } else if (cmd.deleteProfile) {
       return await this.deleteProfile(cmd.deleteProfile.name);

@@ -1,20 +1,16 @@
 import { dumpXpcSubscriptionsRemained } from '~ui/core';
 import { Views } from '~ui/views/ViewIndex';
 import { models } from './models';
-import { ViewModels } from './viewModels';
 
-function start() {
+async function start() {
   console.log('start');
 
-  const viewModels = new ViewModels(models);
-  const views = new Views(viewModels);
-  models.initialize();
-  viewModels.initialize();
+  const views = new Views();
+  await models.initialize();
   views.initialize();
 
   window.addEventListener('beforeunload', () => {
     views.finalize();
-    viewModels.finalize();
     models.finalize();
     dumpXpcSubscriptionsRemained();
   });

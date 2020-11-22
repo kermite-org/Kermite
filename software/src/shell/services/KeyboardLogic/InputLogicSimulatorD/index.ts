@@ -86,7 +86,7 @@ export class InputLogicSimulatorD {
     changedStatus: Partial<IProfileManagerStatus>
   ) => {
     if (changedStatus.loadedProfileData) {
-      console.log(`logicSimulator, profile data received`);
+      // console.log(`logicSimulator, profile data received`);
       this.updateProfileDataBlob();
     }
   };

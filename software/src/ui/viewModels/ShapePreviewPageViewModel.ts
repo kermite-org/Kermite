@@ -1,71 +1,33 @@
 import { IKeyboardShape } from '~defs/ProfileData';
-import { backendAgent } from '~ui/core';
-import { Models } from '~ui/models';
+import { models } from '~ui/models';
 import { IUiSettings } from '~ui/models/UiStatusModel';
-import { IGeneralSelectorViewModel } from '~ui/views/controls/GeneralSelector';
+import { ISelectorSource } from '~ui/viewModels/viewModelInterfaces';
 
-export class ShapePreviewPageViewModel {
-  loadedBreedName: string = '';
+export interface IShapePreviewPageViewModel {
+  settings: IUiSettings;
   loadedShape: IKeyboardShape | undefined;
+  holdKeyIndices: number[];
+  projectSelectorSource: ISelectorSource;
+}
 
-  constructor(public models: Models) {}
+export function makeShapePreviewPageViewModel(): IShapePreviewPageViewModel {
+  const {
+    uiStatusModel,
+    keyboardShapesModel: shapesModel,
+    playerModel
+  } = models;
 
-  get settings(): IUiSettings {
-    return this.models.uiStatusModel.settings;
-  }
-
-  private get allBreedNames(): string[] {
-    return this.models.keyboardShapesModel.getAllBreedNames();
-  }
-
-  private get currentBreedName(): string {
-    return (
-      this.models.uiStatusModel.settings.shapeViewBreedName ||
-      this.allBreedNames[0]
-    );
-  }
-
-  private setCurrentBreedName = async (breedName: string) => {
-    this.models.uiStatusModel.settings.shapeViewBreedName = breedName;
-    if (breedName !== this.loadedBreedName) {
-      this.loadShape(breedName);
-    }
-  };
-
-  get breedSelectorVM(): IGeneralSelectorViewModel {
-    return {
-      options: this.allBreedNames.map((it) => ({
-        id: it,
-        text: it
+  return {
+    settings: uiStatusModel.settings,
+    loadedShape: shapesModel.loadedShape,
+    holdKeyIndices: playerModel.holdKeyIndices,
+    projectSelectorSource: {
+      options: shapesModel.optionProjectInfos.map((info) => ({
+        id: info.projectId,
+        text: info.projectPath
       })),
-      choiceId: this.currentBreedName,
-      setChoiceId: this.setCurrentBreedName
-    };
-  }
-
-  private async loadShape(nextBreedName: string) {
-    this.loadedBreedName = nextBreedName;
-    this.loadedShape = await this.models.keyboardShapesModel.getKeyboardShapeByBreedName(
-      nextBreedName
-    );
-  }
-
-  get holdKeyIndices(): number[] {
-    return [...this.models.playerModel.holdKeyIndices];
-  }
-
-  private onFileUpdated = (args: { breedName: string }) => {
-    if (args.breedName === this.currentBreedName) {
-      this.loadShape(this.loadedBreedName);
+      choiceId: shapesModel.currentProjectId,
+      setChoiceId: shapesModel.setCurrentProjectId
     }
   };
-
-  initialize() {
-    this.loadShape(this.currentBreedName);
-    backendAgent.layoutFileUpdationEvents.subscribe(this.onFileUpdated);
-  }
-
-  finalize() {
-    backendAgent.layoutFileUpdationEvents.unsubscribe(this.onFileUpdated);
-  }
 }

@@ -1,13 +1,13 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { linerInterpolateValue } from '~funcs/Utils';
-import { WidgetKeyboardViewViewModel } from '~ui/viewModels/WidgetMainPageViewModel';
+import { IWidgetKeyboardViewViewModel } from '~ui/viewModels/WidgetMainPageViewModel';
 import { WidgetKeyUnitCardsPart } from '../organisms/WidgetKeyUnitCardsPart';
 
 export function WidgetSvgKeyboardView({
   vm
 }: {
-  vm: WidgetKeyboardViewViewModel;
+  vm: IWidgetKeyboardViewViewModel;
 }) {
   const cssSvg = css``;
   const winw = window.innerWidth;

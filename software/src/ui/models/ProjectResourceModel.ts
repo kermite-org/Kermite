@@ -1,16 +1,24 @@
 import { IProjectResourceInfo } from '~defs/ProfileData';
-import { EventPort } from '~funcs/EventPort';
 import { backendAgent } from '~ui/core';
 
 export class ProjectResourceModel {
   projectResourceInfos: IProjectResourceInfo[] = [];
 
-  loadedEvents = new EventPort<{}>();
+  getProjectsWithLayout() {
+    return this.projectResourceInfos.filter((info) => info.hasLayout);
+  }
 
-  initialize() {
-    (async () => {
-      this.projectResourceInfos = await backendAgent.getAllProjectResourceInfos();
-      this.loadedEvents.emit({});
-    })();
+  getProjectsWithFirmware() {
+    return this.projectResourceInfos.filter((info) => info.hasFirmwareBinary);
+  }
+
+  getProjectResourceInfo(projectId: string) {
+    return this.projectResourceInfos.find(
+      (info) => info.projectId === projectId
+    );
+  }
+
+  async initializeAsync() {
+    this.projectResourceInfos = await backendAgent.getAllProjectResourceInfos();
   }
 }
