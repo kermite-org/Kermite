@@ -5,7 +5,6 @@ on:
     branches: [master, variants]
     paths:
       - ".github/workflows/firmware_error_check.yml"
-      # - "firmware/scripts/check_hardcoded_versions.rb"
       - "firmware/scripts/check_project_ids.rb"
       - "firmware/scripts/build_all.rb"
       - "firmware/Makefile"
@@ -33,10 +32,6 @@ jobs:
 
       - name: Install Dependencies
         run: sudo apt install gcc-avr avr-libc binutils-avr
-
-      # - name: Check Hardcoded Versions
-      #   run: ruby scripts/check_hardcoded_versions.rb
-      #   working-directory: "./firmware"
 
       - name: Check Project IDs
         run: ruby scripts/check_project_ids.rb --abortOnError
