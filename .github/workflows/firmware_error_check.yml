@@ -6,7 +6,6 @@ on:
     paths:
       - ".github/workflows/firmware_error_check.yml"
       - "firmware/scripts/check_project_ids.rb"
-      - "firmware/scripts/build_all.rb"
       - "firmware/Makefile"
       - "firmware/src/**"
 
@@ -35,8 +34,4 @@ jobs:
 
       - name: Check Project IDs
         run: ruby scripts/check_project_ids.rb --abortOnError
-        working-directory: "./firmware"
-
-      - name: Check Firmware Build Errors
-        run: ruby scripts/build_all.rb --abortOnError
         working-directory: "./firmware"
