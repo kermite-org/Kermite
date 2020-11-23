@@ -25,6 +25,9 @@ jobs:
         with:
           fetch-depth: 2
 
+      - name: Install Dependencies
+        run: sudo apt install gcc-avr avr-libc binutils-avr
+
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
