@@ -1,14 +1,3 @@
-import * as fs from "fs";
-
-export function fsxReadTextFile(fpath: string) {
-  return fs.readFileSync(fpath, { encoding: "utf-8" });
-}
-
-export function fsxReadJsonFile(fpath: string) {
-  const content = fs.readFileSync(fpath, { encoding: "utf-8" });
-  return JSON.parse(content);
-}
-
 export function getMatched(text: string, pattern: RegExp): string | undefined {
   const m = text.match(pattern);
   return (m && m[1]) || undefined;
@@ -32,4 +21,12 @@ export function createObjectFromKeyValues<K extends string | number, V>(
     obj[key] = value;
   });
   return obj;
+}
+
+export function uniqueArrayItems<T>(arr: T[]): T[] {
+  return arr.filter((a, idx) => arr.indexOf(a) === idx);
+}
+
+export function stringifyArray(ar: any[]) {
+  return `[${ar.join(", ")}]`;
 }
