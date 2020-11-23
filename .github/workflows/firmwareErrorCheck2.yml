@@ -36,3 +36,6 @@ jobs:
 
       - run: yarn checkHardcodedVersions
         working-directory: ./firmware/scripts2
+
+      - run: yarn checkProjectJsonSchemas
+        working-directory: ./firmware/scripts2
