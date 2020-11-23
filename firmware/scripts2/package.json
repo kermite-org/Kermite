@@ -4,9 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "checkProjectJsonSchemas": "ts-node checkProjectJsonSchemas.ts",
+    "buildAll": "ts-node buildAll.ts",
     "checkHardcodedVersions": "ts-node checkHardcodedVersions.ts",
-    "buildAll": "ts-node buildAll.ts"
+    "checkProjectJsonSchemas": "ts-node checkProjectJsonSchemas.ts",
+    "checkProjectIds": "ts-node checkProjectIds.ts"
   },
   "dependencies": {
     "@types/glob": "^7.1.3",
