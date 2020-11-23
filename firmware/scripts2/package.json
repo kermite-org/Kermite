@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "checkProjectJsonSchemas": "ts-node checkProjectJsonSchemas.ts",
-    "checkHardcodedVersions": "ts-node checkHardcodedVersions.ts"
+    "checkHardcodedVersions": "ts-node checkHardcodedVersions.ts",
+    "buildAll": "ts-node buildAll.ts"
   },
   "dependencies": {
     "@types/glob": "^7.1.3",

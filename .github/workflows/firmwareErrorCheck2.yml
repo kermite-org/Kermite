@@ -39,3 +39,7 @@ jobs:
 
       - run: yarn checkProjectJsonSchemas
         working-directory: ./firmware/scripts2
+
+      - name: Check Firmware Build Errors
+        run: yarn buildAll --abortOnError
+        working-directory: ./firmware/scripts2

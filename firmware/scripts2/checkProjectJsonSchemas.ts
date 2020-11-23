@@ -1,5 +1,5 @@
 import * as glob from "glob";
-import { fsxReadJsonFile } from "./helpers";
+import { fsxReadJsonFile } from "./osHelpers";
 import {
   vArray,
   vNumber,
