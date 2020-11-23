@@ -56,11 +56,11 @@ function checkVersions() {
   const firmwareVersions = readFirmwareCommonVersions();
   const vSoftOk = checkHasFields(softwareVersions, requiredFields);
   const vFirmOk = checkHasFields(firmwareVersions, requiredFields);
-  const same = compareObjectByJsonStringifyParse(
+  const equivalent = compareObjectByJsonStringifyParse(
     softwareVersions,
     firmwareVersions
   );
-  const valid = vSoftOk && vFirmOk && same;
+  const valid = vSoftOk && vFirmOk && equivalent;
   if (!valid) {
     console.error("incompatibe version definitions");
     console.error({ softwareVersions, firmwareVersions });
