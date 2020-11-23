@@ -46,3 +46,7 @@ jobs:
       - name: Check Firmware Build Errors
         run: yarn buildAll --abortOnError
         working-directory: ./firmware/scripts2
+
+      - name: Check Project IDs
+        run: yarn checkProjectIds --failureStatusIfError
+        working-directory: ./firmware/scripts2
