@@ -1,7 +1,12 @@
-import { glob } from "glob";
-import * as path from "path";
-import * as fs from "fs";
-import { fsxReadJsonFile, fsxReadTextFile } from "./osHelpers";
+import {
+  fsExistsSync,
+  fsxReadJsonFile,
+  fsxReadTextFile,
+  globSync,
+  pathDirname,
+  pathJoin,
+  pathRelative,
+} from "./osHelpers";
 import { getMatched, stringifyArray, uniqueArrayItems } from "./helpers";
 
 process.chdir("..");
@@ -9,15 +14,14 @@ process.chdir("..");
 const AbortOnError = process.argv.includes("--abortOnError");
 
 function getAllProjectPaths() {
-  return glob
-    .sync("src/projects/**/rules.mk")
-    .map((fpath) => path.dirname(fpath))
+  return globSync("src/projects/**/rules.mk")
+    .map((fpath) => pathDirname(fpath))
     .filter((fpath) =>
-      ["layout.json", "config.h"].every((fileName) =>
-        fs.existsSync(path.join(fpath, fileName))
+      ["project.json", "config.h"].every((fileName) =>
+        fsExistsSync(pathJoin(fpath, fileName))
       )
     )
-    .map((fpath) => path.relative("src/projects", fpath));
+    .map((fpath) => pathRelative("src/projects", fpath));
 }
 
 interface IProjectInfo {
@@ -26,10 +30,10 @@ interface IProjectInfo {
 }
 
 function loadProjectInfo(projectPath: string): IProjectInfo {
-  const layoutFilePath = `./src/projects/${projectPath}/layout.json`;
+  const projectFilePath = `./src/projects/${projectPath}/project.json`;
   const configFilePath = `./src/projects/${projectPath}/config.h`;
-  const layoutObj = fsxReadJsonFile(layoutFilePath);
-  const projectId = layoutObj.projectId as string;
+  const projectObj = fsxReadJsonFile(projectFilePath);
+  const projectId = projectObj.projectId as string;
 
   const configContent = fsxReadTextFile(configFilePath);
   const configProjectId = getMatched(
@@ -39,7 +43,7 @@ function loadProjectInfo(projectPath: string): IProjectInfo {
 
   try {
     if (!projectId) {
-      throw `projectId is not defined in ${projectPath}/layout.json`;
+      throw `projectId is not defined in ${projectPath}/project.json`;
     }
 
     if (!configProjectId) {
@@ -51,7 +55,7 @@ function loadProjectInfo(projectPath: string): IProjectInfo {
     }
 
     if (projectId !== configProjectId) {
-      throw `inconsistent Project IDs in ${projectPath}/config.h and ${projectPath}/layout.json`;
+      throw `inconsistent Project IDs in ${projectPath}/config.h and ${projectPath}/project.json`;
     }
   } catch (error) {
     console.log(error);

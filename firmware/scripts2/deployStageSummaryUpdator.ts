@@ -45,7 +45,8 @@ interface IProjectInfo {
   revision: number;
   updatedAt: string;
   hexFileSize: number;
-  presetNames?: string[];
+  layoutNames: string[];
+  presetNames: string[];
 }
 
 interface IEnvironmentVersions {
@@ -100,17 +101,19 @@ function makeSummaryFileContent(
   buildStats: IBuildStats,
   filesRevision: number
 ): ISummaryData {
-  const layoutFilePahts = globSync("./dist/variants/**/layout.json");
+  const projectJsonFilePahts = globSync("./dist/variants/**/project.json");
   const projectInfos = createObjectFromKeyValues(
-    layoutFilePahts.map((filePath) => {
+    projectJsonFilePahts.map((projectJsonFilePath) => {
       const projectPath = pathDirname(
-        pathRelative("./dist/variants", filePath)
+        pathRelative("./dist/variants", projectJsonFilePath)
       );
-      const layout = fsxReadJsonFile(filePath) as ILayoutJsonPartial;
+      const projectObj = fsxReadJsonFile(
+        projectJsonFilePath
+      ) as ILayoutJsonPartial;
       const metadataFilePath = `./dist/variants/${projectPath}/metadata.json`;
       const meta = fsxReadJsonFile(metadataFilePath) as IMetadataJson;
 
-      let presetNames: string[] | undefined;
+      let presetNames: string[] = [];
 
       const profilesDir = `./dist/variants/${projectPath}/profiles`;
       if (fsExistsSync(profilesDir)) {
@@ -119,16 +122,25 @@ function makeSummaryFileContent(
           .map((fileName) => pathBasename(fileName, ".json"));
       }
 
+      const layoutNames = fsReaddirSync(`./dist/variants/${projectPath}`)
+        .filter((fileName) => fileName.endsWith("layout.json"))
+        .map((fileName) =>
+          fileName === "layout.json"
+            ? "default"
+            : pathBasename(fileName, ".layout.json")
+        );
+
       return [
         projectPath,
         {
           path: projectPath,
-          id: layout.projectId,
-          name: layout.projectName,
+          id: projectObj.projectId,
+          name: projectObj.projectName,
           status: meta.buildResult,
           revision: meta.releaseBuildRevision,
           updatedAt: meta.buildTimestamp,
           hexFileSize: meta.hexFileSize,
+          layoutNames,
           presetNames,
         },
       ];
