@@ -17,7 +17,7 @@ import { appEnv } from '~shell/base/AppEnvironment';
 
 export interface IProjectResourceInfoSource {
   projectId: string;
-  projectName: string;
+  keyboardName: string;
   projectPath: string;
   presetNames: string[];
   presetsFolderPath?: string;
@@ -27,7 +27,7 @@ export interface IProjectResourceInfoSource {
 
 interface ILayoutFileJson {
   projectId: string;
-  projectName: string;
+  keyboardName: string;
   keyUnits: IKeyUnitEntry[];
   displayArea: IKeyboardShapeDisplayArea;
   bodyPathMarkups: string[];
@@ -56,7 +56,7 @@ export namespace ProjectResourceInfoSourceLoader {
       layoutFilePath
     )) as ILayoutFileJson;
 
-    const { projectId, projectName } = layoutContent;
+    const { projectId, keyboardName } = layoutContent;
 
     let presetNames: string[] = [];
     if (presetsFolderPath) {
@@ -69,7 +69,7 @@ export namespace ProjectResourceInfoSourceLoader {
 
     return {
       projectId,
-      projectName,
+      keyboardName,
       projectPath,
       presetNames,
       presetsFolderPath,
