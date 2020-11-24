@@ -2,9 +2,12 @@ import { createObjectFromKeyValues } from "./helpers";
 import {
   execueteOneliner,
   fsCopyFileSync,
+  fsExistsSync,
+  fsReaddirSync,
   fsxReadJsonFile,
   fsxWriteJsonFile,
   globSync,
+  pathBasename,
   pathDirname,
   pathRelative,
   timeNow,
@@ -42,6 +45,7 @@ interface IProjectInfo {
   revision: number;
   updatedAt: string;
   hexFileSize: number;
+  presetNames?: string[];
 }
 
 interface IEnvironmentVersions {
@@ -102,27 +106,30 @@ function makeSummaryFileContent(
       const projectPath = pathDirname(
         pathRelative("./dist/variants", filePath)
       );
-      const layoutObj = fsxReadJsonFile(filePath) as ILayoutJsonPartial;
-      const { projectId, projectName } = layoutObj;
+      const layout = fsxReadJsonFile(filePath) as ILayoutJsonPartial;
       const metadataFilePath = `./dist/variants/${projectPath}/metadata.json`;
-      const metadataObj = fsxReadJsonFile(metadataFilePath) as IMetadataJson;
-      const {
-        buildResult: buildStatus,
-        releaseBuildRevision: buildRevision,
-        buildTimestamp: updatedAt,
-        hexFileSize,
-      } = metadataObj;
+      const meta = fsxReadJsonFile(metadataFilePath) as IMetadataJson;
+
+      let presetNames: string[] | undefined;
+
+      const profilesDir = `./dist/variants/${projectPath}/profiles`;
+      if (fsExistsSync(profilesDir)) {
+        presetNames = fsReaddirSync(profilesDir)
+          .filter((fileName) => fileName.endsWith(".json"))
+          .map((fileName) => pathBasename(fileName, ".json"));
+      }
 
       return [
         projectPath,
         {
           path: projectPath,
-          id: projectId,
-          name: projectName,
-          status: buildStatus,
-          revision: buildRevision,
-          updatedAt,
-          hexFileSize,
+          id: layout.projectId,
+          name: layout.projectName,
+          status: meta.buildResult,
+          revision: meta.releaseBuildRevision,
+          updatedAt: meta.buildTimestamp,
+          hexFileSize: meta.hexFileSize,
+          presetNames,
         },
       ];
     })

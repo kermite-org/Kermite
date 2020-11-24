@@ -72,3 +72,5 @@ export const fsExistsSync = fs.existsSync;
 export const fsRmdirSync = fs.rmdirSync;
 
 export const fsStatSync = fs.statSync;
+
+export const fsReaddirSync = fs.readdirSync;
