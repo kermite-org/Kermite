@@ -5,8 +5,7 @@ on:
     branches: [master, variants]
     paths:
       - ".github/workflows/firmware_deployment.yml"
-      - "firmware/scripts/update_all_project_distributions.rb"
-      - "firmware/scripts/check_project_ids.rb"
+      - "firmware/scripts2/**/*.ts"
       - "firmware/Makefile"
       - "firmware/src/**"
 
@@ -17,12 +16,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions/setup-ruby@v1
-        with:
-          ruby-version: "2.6"
-
       - name: Install Dependencies
         run: sudo apt install gcc-avr avr-libc binutils-avr
+
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+
+      - uses: bahmutov/npm-install@v1
+        with:
+          working-directory: ./firmware/scripts2
 
       - name: Checkout store repo
         uses: actions/checkout@v2
@@ -31,11 +35,12 @@ jobs:
           path: "./firmware/KRS"
 
       - name: Check Project IDs
-        run: ruby scripts/check_project_ids.rb --abortOnError
-        working-directory: "./firmware"
+        run: yarn checkProjectIds --abortOnError
+        working-directory: ./firmware/scripts2
 
-      - run: ruby scripts/update_all_project_distributions.rb
-        working-directory: "./firmware"
+      - name: Update All Project Distributions
+        run: yarn updateAllProjectDistributions
+        working-directory: ./firmware/scripts2
 
       - name: Push resources to store repo
         uses: cpina/github-action-push-to-another-repository@master
