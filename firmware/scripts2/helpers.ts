@@ -30,3 +30,9 @@ export function uniqueArrayItems<T>(arr: T[]): T[] {
 export function stringifyArray(ar: any[]) {
   return `[${ar.join(", ")}]`;
 }
+
+export function arrayCount<T>(ar: T[], cond: (arg: T) => boolean) {
+  return ar.filter(cond).length;
+}
+
+export const puts = console.log;
