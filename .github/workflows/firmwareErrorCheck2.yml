@@ -48,7 +48,7 @@ jobs:
         working-directory: ./firmware/scripts2
 
       - name: Check Project IDs
-        run: yarn checkProjectIds --failureStatusIfError
+        run: yarn checkProjectIds --abortOnError
         working-directory: ./firmware/scripts2
 
       - name: Check Preset Profile Schemas
