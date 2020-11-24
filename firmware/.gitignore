@@ -6,4 +6,5 @@ build/
 Makefile.user
 dist/
 KRS/
+scripts2/node_modules/
 

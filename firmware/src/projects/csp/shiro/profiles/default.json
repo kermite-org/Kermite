@@ -115,7 +115,7 @@
       "width": 112,
       "height": 112
     },
-    "bodyPathMarkupText": "M -15,5 L 55,5 L 55,115 L -15,115 z"
+    "bodyPathMarkups": ["M -15,5", "L 55,5", "L 55,115", "L -15,115", "z"]
   },
   "assignType": "single",
   "settings": {
@@ -335,9 +335,7 @@
       "op": {
         "type": "keyInput",
         "virtualKey": "K_X",
-        "attachedModifiers": [
-          "K_Ctrl"
-        ]
+        "attachedModifiers": ["K_Ctrl"]
       }
     },
     "la498.key4": {
@@ -345,9 +343,7 @@
       "op": {
         "type": "keyInput",
         "virtualKey": "K_C",
-        "attachedModifiers": [
-          "K_Ctrl"
-        ]
+        "attachedModifiers": ["K_Ctrl"]
       }
     },
     "la498.key5": {
@@ -355,9 +351,7 @@
       "op": {
         "type": "keyInput",
         "virtualKey": "K_V",
-        "attachedModifiers": [
-          "K_Ctrl"
-        ]
+        "attachedModifiers": ["K_Ctrl"]
       }
     },
     "la498.key6": {
@@ -365,9 +359,7 @@
       "op": {
         "type": "keyInput",
         "virtualKey": "K_Z",
-        "attachedModifiers": [
-          "K_Ctrl"
-        ]
+        "attachedModifiers": ["K_Ctrl"]
       }
     },
     "la498.key7": {
@@ -375,9 +367,7 @@
       "op": {
         "type": "keyInput",
         "virtualKey": "K_F",
-        "attachedModifiers": [
-          "K_Ctrl"
-        ]
+        "attachedModifiers": ["K_Ctrl"]
       }
     },
     "la498.key9": {
