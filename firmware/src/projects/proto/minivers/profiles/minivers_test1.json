@@ -556,7 +556,18 @@
       "width": 335,
       "height": 110
     },
-    "bodyPathMarkupText": "M -13,0 L -166,0 L -166,105 L -13,105 z M 13,0 L 166,0 L 166,105 L 13,105 z"
+    "bodyPathMarkups": [
+      "M -13,0",
+      "L -166,0",
+      "L -166,105",
+      "L -13,105",
+      "z",
+      "M 13,0",
+      "L 166,0",
+      "L 166,105",
+      "L 13,105",
+      "z"
+    ]
   },
   "assignType": "single",
   "settings": {

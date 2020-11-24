@@ -1,3 +1,5 @@
+import { stringifyArray } from "./helpers";
+
 type Checker = (value: any) => { [key in string]: string } | string | undefined;
 
 type CheckerEx = Checker & {
@@ -28,6 +30,15 @@ export function createChecker<
 >(checkerImpl: TCheckerSource) {
   return (...args: Parameters<TCheckerSource>) => {
     const checker = checkerImpl(...args);
+    return withRequiredOption(checker);
+  };
+}
+
+export function createCheckerWithArrrayArguments<T>(
+  checkerImpl: (args: T[]) => Checker
+) {
+  return (args: T[]) => {
+    const checker = checkerImpl(args);
     return withRequiredOption(checker);
   };
 }
@@ -68,6 +79,28 @@ export const vArray = createChecker((itemChecker: Checker) => {
   };
 });
 
+export const vObejectDictionary = createChecker(
+  (itemChecker: Checker, keyChecker?: Checker) => {
+    return (itemsDict: { [key in string]: any }) => {
+      const errors: { [indexKey: string]: any } = {};
+      for (const key in itemsDict) {
+        const value = itemsDict[key];
+        let error = itemChecker(value);
+        if (!error && keyChecker) {
+          error = keyChecker(key);
+        }
+        if (error) {
+          errors[`[${key}]`] = error;
+        }
+      }
+      if (Object.keys(errors).length === 0) {
+        return undefined;
+      }
+      return errors;
+    };
+  }
+);
+
 export const vString = createChecker((len?: number) => {
   return (text: string) => {
     if (typeof text !== "string") {
@@ -87,6 +120,57 @@ export const vNumber = createChecker(() => {
     }
   };
 });
+
+export const vBoolean = createChecker(() => {
+  return (value: boolean) => {
+    if (!(value === true || value === false)) {
+      return "must be a boolean";
+    }
+  };
+});
+
+export const vNumberRanged = createChecker((lo: number, hi: number) => {
+  return (value: number) => {
+    if (!isFinite(value)) {
+      return "must be a number";
+    }
+    if (lo <= value && value <= hi) {
+      return `must be a value in the range ${lo} to ${hi}`;
+    }
+  };
+});
+
+export const vSchemaOneOf = createCheckerWithArrrayArguments(
+  (checkers: Checker[]) => {
+    return (value: any) => {
+      const errors = checkers.map((checker) => checker(value));
+      if (!errors.includes(undefined)) {
+        return "invalid value";
+      }
+      return undefined;
+    };
+  }
+);
+
+export const vValueEquals = createChecker((refValue: any) => {
+  return (value: any) => {
+    if (value !== refValue) {
+      return `must be ${refValue}`;
+    }
+    return undefined;
+  };
+});
+
+export const vValueOneOf = createCheckerWithArrrayArguments(
+  (refValues: any[]) => {
+    return (value: any) => {
+      if (!refValues.includes(value)) {
+        return `must be one of ${stringifyArray(refValues)}`;
+      }
+      return undefined;
+    };
+  }
+);
 
 export const vStringProjectId = createChecker(() => {
   return (text: string) => {

@@ -50,3 +50,7 @@ jobs:
       - name: Check Project IDs
         run: yarn checkProjectIds --failureStatusIfError
         working-directory: ./firmware/scripts2
+
+      - name: Check Preset Profile Schemas
+        run: yarn checkPresetProfileSchemas --failureStatusIfError
+        working-directory: ./firmware/scripts2
