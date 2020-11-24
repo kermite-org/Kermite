@@ -21,7 +21,7 @@ export function makePresetBrowserViewModel(): IPresetBrowserViewModel {
     projectSelectorSource: {
       options: presetBrowserModel.optionProjectInfos.map((it) => ({
         id: it.projectId,
-        text: it.projectName
+        text: it.keyboardName
       })),
       choiceId: presetBrowserModel.currentProjectId,
       setChoiceId: presetBrowserModel.setCurrentProjectId

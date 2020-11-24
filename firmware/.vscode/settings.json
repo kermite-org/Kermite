@@ -11,7 +11,7 @@
           "projectId": {
             "type": "string"
           },
-          "projectName": {
+          "keyboardName": {
             "type": "string"
           },
           "displayArea": {
@@ -65,7 +65,13 @@
             }
           }
         },
-        "required": ["projectId", "projectName", "displayArea", "keyUnits", "bodyPathMarkups"],
+        "required": [
+          "projectId",
+          "keyboardName",
+          "displayArea",
+          "keyUnits",
+          "bodyPathMarkups"
+        ],
         "additionalProperties": false
       }
     }

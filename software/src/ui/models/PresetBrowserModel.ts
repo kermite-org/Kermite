@@ -7,17 +7,17 @@ import { ProfilesModel } from '~ui/models/profile/ProfilesModel';
 
 class PresetBrowserModelHelper {
   static getNewProfileNameBase(
-    projectName: string,
+    keyboardName: string,
     presetName: string,
     allProfileNames: string[]
   ): string {
-    const presetNameIncluesProjectName = presetName
+    const presetNameIncluesKeyboardName = presetName
       .toLowerCase()
-      .includes(projectName.toLowerCase());
+      .includes(keyboardName.toLowerCase());
 
-    let newProfileNameBase = presetNameIncluesProjectName
+    let newProfileNameBase = presetNameIncluesKeyboardName
       ? presetName
-      : `${projectName}_${presetName}`.toLowerCase();
+      : `${keyboardName}_${presetName}`.toLowerCase();
 
     if (allProfileNames.includes(newProfileNameBase)) {
       newProfileNameBase += '1';
@@ -111,7 +111,7 @@ export class PresetBrowserModel {
     }
 
     const newProfileNameBase = PresetBrowserModelHelper.getNewProfileNameBase(
-      info.projectName,
+      info.keyboardName,
       presetName,
       allProfileNames
     );

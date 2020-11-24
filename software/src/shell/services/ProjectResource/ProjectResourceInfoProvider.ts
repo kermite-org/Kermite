@@ -15,7 +15,7 @@ export class ProjectResourceInfoProvider
     return this.projectInfoSources.map((it) => {
       const {
         projectId,
-        projectName,
+        keyboardName,
         projectPath,
         hexFilePath,
         layoutFilePath,
@@ -23,7 +23,7 @@ export class ProjectResourceInfoProvider
       } = it;
       return {
         projectId,
-        projectName,
+        keyboardName,
         projectPath,
         presetNames,
         hasLayout: !!layoutFilePath,

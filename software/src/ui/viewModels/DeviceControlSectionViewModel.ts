@@ -2,8 +2,8 @@ import { models } from '~ui/models';
 
 export function makeDeviceControlSectionViewModel() {
   return {
-    currentDeviceProjectName:
-      models.deviceStatusModel.deviceAttrs?.projectName || '',
+    currentDeviceKeyboardName:
+      models.deviceStatusModel.deviceAttrs?.keyboardName || '',
     isDeviceConnected: models.deviceStatusModel.isConnected
   };
 }

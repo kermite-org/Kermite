@@ -217,7 +217,7 @@ export type IProjectResourceOrigin = 'central' | 'local';
 
 export interface IProjectResourceInfo {
   projectId: string;
-  projectName: string;
+  keyboardName: string;
   projectPath: string;
   presetNames: string[];
   hasLayout: boolean;

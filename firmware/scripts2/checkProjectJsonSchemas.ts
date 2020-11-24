@@ -12,7 +12,7 @@ process.chdir("..");
 
 const layoutJsonDataValidator = vObject({
   projectId: vStringProjectId(),
-  projectName: vString(20),
+  keyboardName: vString(20),
   displayArea: vObject({
     centerX: vNumber(),
     centerY: vNumber(),
