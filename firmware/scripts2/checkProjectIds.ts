@@ -6,9 +6,7 @@ import { getMatched, stringifyArray, uniqueArrayItems } from "./helpers";
 
 process.chdir("..");
 
-const puts = console.log;
-
-const failureStatusIfError = process.argv.includes("--failureStatusIfError");
+const AbortOnError = process.argv.includes("--abortOnError");
 
 function getAllProjectPaths() {
   return glob
@@ -27,13 +25,6 @@ interface IProjectInfo {
   projectId: string;
 }
 
-const errors: string[] = [];
-
-function putError(text: string) {
-  console.log(text);
-  errors.push(text);
-}
-
 function loadProjectInfo(projectPath: string): IProjectInfo {
   const layoutFilePath = `./src/projects/${projectPath}/layout.json`;
   const configFilePath = `./src/projects/${projectPath}/config.h`;
@@ -46,23 +37,27 @@ function loadProjectInfo(projectPath: string): IProjectInfo {
     /^#define PROJECT_ID "([a-zA-Z0-9]+)"$/m
   );
 
-  if (!projectId) {
-    putError(`projectId is not defined in ${projectPath}/layout.json`);
-  }
+  try {
+    if (!projectId) {
+      throw `projectId is not defined in ${projectPath}/layout.json`;
+    }
 
-  if (!configProjectId) {
-    putError(`PROJECT_ID is not defined in ${projectPath}/config.h`);
-  }
+    if (!configProjectId) {
+      throw `PROJECT_ID is not defined in ${projectPath}/config.h`;
+    }
 
-  const projectIdValid = projectId?.match(/^[a-zA-Z0-9]{8}$/);
-  if (projectId && !projectIdValid) {
-    putError(`invalid Project ID ${projectId} for ${projectPath}`);
-  }
+    if (!projectId?.match(/^[a-zA-Z0-9]{8}$/)) {
+      throw `invalid Project ID ${projectId} for ${projectPath}`;
+    }
 
-  if (projectIdValid && configProjectId && projectId !== configProjectId) {
-    putError(
-      `inconsistent Project IDs in ${projectPath}/config.h and ${projectPath}/layout.json`
-    );
+    if (projectId !== configProjectId) {
+      throw `inconsistent Project IDs in ${projectPath}/config.h and ${projectPath}/layout.json`;
+    }
+  } catch (error) {
+    console.log(error);
+    if (AbortOnError) {
+      process.exit(1);
+    }
   }
 
   return {
@@ -83,12 +78,15 @@ function checkAllProjectIds(projectInfos: IProjectInfo[]) {
       const badProjectPath = projectInfos
         .filter((info) => info.projectId === badProjectId)
         .map((info) => info.projectPath);
-      putError(
+      console.log(
         `Project ID confliction. ${badProjectId} is used for ${stringifyArray(
           badProjectPath
         )}`
       );
     });
+    if (AbortOnError) {
+      process.exit(1);
+    }
   }
 }
 
@@ -96,11 +94,10 @@ function checkProjectIds() {
   const projectPaths = getAllProjectPaths();
   const projectInfos = projectPaths.map(loadProjectInfo);
   checkAllProjectIds(projectInfos);
-  if (failureStatusIfError && errors.length > 0) {
-    process.exit(1);
-  }
-  if (errors.length === 0) {
-    puts("ok");
+  if (AbortOnError) {
+    console.log("ok");
+  } else {
+    console.log("done");
   }
 }
 

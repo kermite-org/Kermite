@@ -40,7 +40,7 @@ jobs:
           path: "./firmware/KRS"
 
       - name: Check Project IDs
-        run: yarn checkProjectIds --failureStatusIfError
+        run: yarn checkProjectIds --abortOnError
         working-directory: ./firmware/scripts2
 
       - run: ruby scripts/update_all_project_distributions.rb
