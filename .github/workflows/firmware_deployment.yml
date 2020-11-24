@@ -6,7 +6,7 @@ on:
     paths:
       - ".github/workflows/firmware_deployment.yml"
       - "firmware/scripts/update_all_project_distributions.rb"
-      - "firmware/scripts/check_project_ids.rb"
+      - "firmware/scripts2/**/*.ts"
       - "firmware/Makefile"
       - "firmware/src/**"
 
@@ -24,6 +24,15 @@ jobs:
       - name: Install Dependencies
         run: sudo apt install gcc-avr avr-libc binutils-avr
 
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+
+      - uses: bahmutov/npm-install@v1
+        with:
+          working-directory: ./firmware/scripts2
+
       - name: Checkout store repo
         uses: actions/checkout@v2
         with:
@@ -31,8 +40,8 @@ jobs:
           path: "./firmware/KRS"
 
       - name: Check Project IDs
-        run: ruby scripts/check_project_ids.rb --abortOnError
-        working-directory: "./firmware"
+        run: yarn checkProjectIds --failureStatusIfError
+        working-directory: ./firmware/scripts2
 
       - run: ruby scripts/update_all_project_distributions.rb
         working-directory: "./firmware"
