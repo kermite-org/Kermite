@@ -1,6 +1,6 @@
-import * as glob from "glob";
-import { fsxReadJsonFile } from "./osHelpers";
+import { fsxReadJsonFile, globSync } from "./osHelpers";
 import {
+  Checker,
   vArray,
   vNumber,
   vObject,
@@ -10,9 +10,12 @@ import {
 
 process.chdir("..");
 
-const layoutJsonDataValidator = vObject({
+const projectJsonDataValidator = vObject({
   projectId: vStringProjectId(),
-  projectName: vString(20),
+  keyboardName: vString(20),
+});
+
+const layoutJsonDataValidator = vObject({
   displayArea: vObject({
     centerX: vNumber(),
     centerY: vNumber(),
@@ -31,15 +34,16 @@ const layoutJsonDataValidator = vObject({
   bodyPathMarkups: vArray(vString()),
 });
 
-function checkProjects() {
-  console.log("cheking project json schemas ...");
+function checkFiles(target: string, globPttern: string, validator: Checker) {
+  console.log(`cheking ${target} json schemas ...`);
 
-  const filePaths = glob.sync("src/projects/**/*/*layout.json");
+  const filePaths = globSync(globPttern);
+  // console.log("target files", filePaths);
 
   const results = filePaths
     .map((filePath) => {
       const obj = fsxReadJsonFile(filePath);
-      const errors = layoutJsonDataValidator(obj);
+      const errors = validator(obj);
       return errors ? { filePath, errors } : undefined;
     })
     .filter((a) => !!a);
@@ -50,7 +54,20 @@ function checkProjects() {
     process.exit(1);
   }
 
-  console.log("cheking project json schemas ... ok");
+  console.log(`cheking ${target} json schemas ... ok`);
 }
 
-checkProjects();
+function projectJsonSchemaCheckerEntry() {
+  checkFiles(
+    "project",
+    "src/projects/**/*/project.json",
+    projectJsonDataValidator
+  );
+  checkFiles(
+    "layout",
+    "src/projects/**/*/*layout.json",
+    layoutJsonDataValidator
+  );
+}
+
+projectJsonSchemaCheckerEntry();

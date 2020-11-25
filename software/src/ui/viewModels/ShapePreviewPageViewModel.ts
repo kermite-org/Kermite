@@ -8,6 +8,7 @@ export interface IShapePreviewPageViewModel {
   loadedShape: IKeyboardShape | undefined;
   holdKeyIndices: number[];
   projectSelectorSource: ISelectorSource;
+  layoutSelectorSource: ISelectorSource;
 }
 
 export function makeShapePreviewPageViewModel(): IShapePreviewPageViewModel {
@@ -28,6 +29,14 @@ export function makeShapePreviewPageViewModel(): IShapePreviewPageViewModel {
       })),
       choiceId: shapesModel.currentProjectId,
       setChoiceId: shapesModel.setCurrentProjectId
+    },
+    layoutSelectorSource: {
+      options: shapesModel.optionLayoutNames.map((layoutName) => ({
+        id: layoutName,
+        text: layoutName
+      })),
+      choiceId: shapesModel.currentLayoutName,
+      setChoiceId: shapesModel.setCurrentLayoutName
     }
   };
 }

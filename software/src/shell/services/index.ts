@@ -136,10 +136,12 @@ export class Services implements IBackendAgent {
 
   @RpcFunction
   async loadKeyboardShape(
-    projectId: string
+    projectId: string,
+    layoutName: string
   ): Promise<IKeyboardShape | undefined> {
-    return await this.keyboardShapesProvider.loadKeyboardShapeByProjectId(
-      projectId
+    return await this.keyboardShapesProvider.loadKeyboardShapeByProjectIdAndLayoutName(
+      projectId,
+      layoutName
     );
   }
 
@@ -162,7 +164,7 @@ export class Services implements IBackendAgent {
   @RpcFunction
   async loadPresetProfile(
     profileId: string,
-    presetName: string | undefined
+    presetName: string
   ): Promise<IProfileData | undefined> {
     return await this.presetProfileLoader.loadPresetProfileData(
       profileId,

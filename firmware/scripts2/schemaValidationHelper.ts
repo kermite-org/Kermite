@@ -1,8 +1,10 @@
 import { stringifyArray } from "./helpers";
 
-type Checker = (value: any) => { [key in string]: string } | string | undefined;
+export type Checker = (
+  value: any
+) => { [key in string]: string } | string | undefined;
 
-type CheckerEx = Checker & {
+export type CheckerEx = Checker & {
   optional: Checker;
 };
 

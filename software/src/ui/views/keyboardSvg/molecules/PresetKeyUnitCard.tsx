@@ -1,6 +1,7 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { mvvmView } from '~ui/base/helper/mvvmHelpers';
+import { uiTheme } from '~ui/core';
 import { IPresetKeyUnitViewModel } from '~ui/viewModels/PresetKeyUnitViewModelCreator';
 
 const cssKeyRect = css`
@@ -11,7 +12,7 @@ const cssKeyRect = css`
 
 const cssKeyText = css`
   font-size: 5px;
-  color: #222;
+  fill: ${uiTheme.colors.clAltText};
   text-anchor: middle;
 `;
 

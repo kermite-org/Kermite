@@ -40,12 +40,12 @@ export const PresetSelectionSection = ({
           />
         </div>
         <div className="selectorBlock">
-          <div>Profile</div>
+          <div>Preset</div>
           <KeyboardProfileSelector selectorSource={vm.presetSelectorSource} />
         </div>
       </div>
       <GeneralButton
-        text="Edit this"
+        text="Create Profile"
         form="large"
         handler={vm.editPresetButtonHandler}
       />

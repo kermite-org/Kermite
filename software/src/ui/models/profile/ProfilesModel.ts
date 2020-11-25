@@ -71,7 +71,7 @@ export class ProfilesModel {
   createProfile = (
     newProfileName: string,
     targetProjectId: string,
-    presetName?: string
+    presetName: string
   ) => {
     const saveCommand =
       (useAutoSave && this.getSaveCommandIfDirty()) || undefined;

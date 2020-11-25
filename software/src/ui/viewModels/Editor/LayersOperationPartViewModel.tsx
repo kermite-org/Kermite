@@ -99,6 +99,15 @@ export class LayerManagementPartViewModel {
     }
   };
 
+  private getNewLayerId() {
+    const layerIdNumbers = this.layers.map((la) => {
+      const m = la.layerId.match(/^la(\d+)$/);
+      return (m && parseInt(m[1])) || 0;
+    });
+    const newLayerNumber = Math.max(...layerIdNumbers) + 1;
+    return `la${newLayerNumber}`;
+  }
+
   addNewLayer = async () => {
     const layerAttrs = await callLayerConfigurationModal({
       sourceValues: {
@@ -112,8 +121,7 @@ export class LayerManagementPartViewModel {
       isRootLayer: false
     });
     if (layerAttrs?.layerName) {
-      // todo: use sequential layer number
-      const layerId = `la${(Math.random() * 1000) >> 0}`;
+      const layerId = this.getNewLayerId();
       const {
         layerName,
         defaultScheme,

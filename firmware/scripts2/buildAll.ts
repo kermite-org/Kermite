@@ -16,7 +16,7 @@ function getAllProjectPaths() {
   return glob
     .sync("src/projects/**/rules.mk")
     .map((fpath) => path.dirname(fpath))
-    .filter((fpath) => fs.existsSync(path.join(fpath, "layout.json")))
+    .filter((fpath) => fs.existsSync(path.join(fpath, "project.json")))
     .map((fpath) => path.relative("src/projects", fpath));
 }
 
@@ -29,7 +29,7 @@ function getUpdatedProjectPaths() {
     .filter((fpath) => fpath.startsWith(FirmwareProjectsDir))
     .map((fpath) => path.relative(FirmwareProjectsDir, fpath))
     .filter((projectPath) =>
-      ["rules.mk", "layout.json"].every((fileName) =>
+      ["rules.mk", "project.json"].every((fileName) =>
         fs.existsSync(path.join("src/projects", projectPath, fileName))
       )
     );

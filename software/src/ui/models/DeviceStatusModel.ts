@@ -7,7 +7,7 @@ export class DeviceStatusModel {
   deviceAttrs:
     | {
         projectId: string;
-        projectName: string;
+        keyboardName: string;
       }
     | undefined;
 

@@ -2,6 +2,7 @@ import {
   executeCommand,
   fsCopyFileSync,
   fsExistsSync,
+  fsReaddirSync,
   fsStatSync,
   fsxCopyDirectory,
   fsxMakeDirectory,
@@ -22,7 +23,7 @@ import { arrayCount, getMatched, puts, stringifyArray } from "./helpers";
 function gatherTargetProjectPaths() {
   return globSync("./src/projects/**/rules.mk")
     .map((fpath) => pathDirname(fpath))
-    .filter((fpath) => fsExistsSync(pathJoin(fpath, "layout.json")))
+    .filter((fpath) => fsExistsSync(pathJoin(fpath, "project.json")))
     .map((fpath) => pathRelative("src/projects", fpath));
 }
 
@@ -197,7 +198,15 @@ function buildProjectEntry(
 
   const sourceAttrs = loadProjectSourceAttributes(projectPath);
 
-  fsCopyFileSync(`${srcDir}/layout.json`, `${destDir}/layout.json`);
+  fsCopyFileSync(`${srcDir}/project.json`, `${destDir}/project.json`);
+
+  const layoutFileNames = fsReaddirSync(srcDir).filter((fileName) =>
+    fileName.endsWith("layout.json")
+  );
+  layoutFileNames.forEach((fileName) =>
+    fsCopyFileSync(`${srcDir}/${fileName}`, `${destDir}/${fileName}`)
+  );
+
   if (fsExistsSync(`${srcDir}/profiles`)) {
     fsxCopyDirectory(`${srcDir}/profiles`, `${destDir}/profiles`);
   }

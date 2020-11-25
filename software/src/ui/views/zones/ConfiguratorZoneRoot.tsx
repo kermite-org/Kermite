@@ -12,7 +12,7 @@ import { KeyboardShapePreviewPage } from '../pages/ShapePreviewPage';
 
 const styles = {
   cssContentRow: css`
-    background: ${uiTheme.colors.clBackground};
+    background: ${uiTheme.colors.clPageBackground};
     color: ${uiTheme.colors.clMainText};
     display: flex;
   `,

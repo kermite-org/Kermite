@@ -11,6 +11,7 @@ export interface IUiSettings {
   showTestInputArea: boolean;
   page: PageSignature;
   shapeViewProjectId: string;
+  shapeViewLayoutName: string;
   shapeViewShowKeyId: boolean;
   shapeViewShowKeyIndex: boolean;
   shapeViewShowBoundingBox: boolean;
@@ -22,6 +23,7 @@ const defaultUiSettings: IUiSettings = {
   showTestInputArea: false,
   page: 'editor',
   shapeViewProjectId: '',
+  shapeViewLayoutName: '',
   shapeViewShowKeyId: false,
   shapeViewShowKeyIndex: false,
   shapeViewShowBoundingBox: false,

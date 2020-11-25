@@ -1,11 +1,14 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
+import { uiTheme } from '~ui/core';
 import { makeShapePreviewPageViewModel } from '~ui/viewModels/ShapePreviewPageViewModel';
 import { GeneralSelector } from '~ui/views/controls/GeneralSelector';
 import { ShapePreviewOptionsBox } from '~ui/views/fabrics/ShapePreviewOptionsBox';
 import { PreviewKeyboardShapeView } from '~ui/views/keyboardSvg/panels/PreviewKeyboardShapeView';
 
 const cssShapePreviewPage = css`
+  background: ${uiTheme.colors.clBackground};
+  color: ${uiTheme.colors.clMainText};
   height: 100%;
   padding: 10px;
   > * + * {
@@ -39,12 +42,19 @@ const cssShapePreviewPage = css`
 
 export const KeyboardShapePreviewPage = () => {
   const vm = makeShapePreviewPageViewModel();
-  const { loadedShape, settings, projectSelectorSource, holdKeyIndices } = vm;
+  const {
+    loadedShape,
+    settings,
+    projectSelectorSource,
+    layoutSelectorSource,
+    holdKeyIndices
+  } = vm;
   return (
     <div css={cssShapePreviewPage}>
       <div>keyboard shape preview</div>
       <div class="topRow">
         <GeneralSelector {...projectSelectorSource} width={160} />
+        <GeneralSelector {...layoutSelectorSource} width={160} />
         <ShapePreviewOptionsBox settings={settings} />
       </div>
       <div class="keyboardRow">

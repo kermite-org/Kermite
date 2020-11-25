@@ -4,7 +4,7 @@ import {
   IKeyUnitEntry,
   keyboardShape_fallbackData
 } from '~defs/ProfileData';
-import { fsxReadTextFile } from '~funcs/Files';
+import { fsExistsSync, fsxReadTextFile } from '~funcs/Files';
 
 export namespace KeyboardLayoutFileLoader {
   interface IKeyboardShapeSourceJson {
@@ -16,6 +16,12 @@ export namespace KeyboardLayoutFileLoader {
   export async function loadShapeFromFile(
     filePath: string
   ): Promise<IKeyboardShape | undefined> {
+    // default.layout.jsonがない場合layout.jsonがあればそれを読み込む
+    const fileExists = fsExistsSync(filePath);
+    if (!fileExists && filePath.endsWith('default.layout.json')) {
+      filePath = filePath.replace('default.layout.json', 'layout.json');
+    }
+
     let fileText: string;
     try {
       fileText = await fsxReadTextFile(filePath);

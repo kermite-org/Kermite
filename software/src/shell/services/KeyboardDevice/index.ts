@@ -71,7 +71,7 @@ export class KeyboardDeviceService {
           isConnected: true,
           deviceAttrs: {
             projectId,
-            projectName: info.projectName
+            keyboardName: info.keyboardName
           }
         });
       }
