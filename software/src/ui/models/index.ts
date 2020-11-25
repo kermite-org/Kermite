@@ -56,7 +56,6 @@ export class Models {
   finalize() {
     this.firmwareUpdationModel.finalize();
     this.keyboardShapesModel.finalize();
-    this.themeSelectionModel.finalize();
     this.uiStatusModel.finalize();
     this.deviceStatusModel.finalize();
     this.playerModel.finalize();

@@ -117,7 +117,12 @@ async function syncRemoteResourcesToLocalImpl(
     console.log('updating resources');
     await ensureDirectoryExists(localBaseDir);
 
+    const localSummaryFilePath = `${localBaseDir}/summary.json`;
+    const remoteSummary = await fetchJson(`${remoteBaseUrl}/summary.json`);
+    await writeJsonFile(localSummaryFilePath, remoteSummary);
+
     const localIndexFilePath = `${localBaseDir}/index.json`;
+
     const localIndex: IIndexObject = (await readJsonFileIfExists(
       localIndexFilePath
     )) || {
@@ -162,6 +167,7 @@ async function syncRemoteResourcesToLocalImpl(
       await removeBlankDirectoriesInTree(localBaseDir);
 
       await writeJsonFile(localIndexFilePath, remoteIndex);
+
       console.log('now resources are up to date');
     } else {
       console.log('resources are up to date');

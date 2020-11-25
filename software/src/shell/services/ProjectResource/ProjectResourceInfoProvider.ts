@@ -65,6 +65,7 @@ export class ProjectResourceInfoProvider
 
   async initializeAsync(): Promise<void> {
     const resourceOrigin = appEnv.isDevelopment ? 'local' : 'central';
+    // const resourceOrigin = 'central';
     this.projectInfoSources = await ProjectResourceInfoSourceLoader.loadProjectResourceInfoSources(
       resourceOrigin
     );

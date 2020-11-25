@@ -4,8 +4,8 @@ import {
   fspReaddir,
   fsxReadJsonFile,
   globAsync,
-  pathBaseName,
-  pathDirName,
+  pathBasename,
+  pathDirname,
   pathJoin,
   pathRelative,
   pathResolve
@@ -27,10 +27,10 @@ interface IPorjectFileJson {
   keyboardName: string;
 }
 interface IProjectInfo {
-  path: string;
-  id: string;
-  name: string;
-  status: 'success' | 'failure';
+  projectPath: string;
+  projectId: string;
+  keyboardName: string;
+  buildStatus: 'success' | 'failure';
   revision: number;
   updatedAt: string;
   hexFileSize: number;
@@ -52,7 +52,7 @@ interface ISummaryJsonData {
     updateAt: string;
     filesRevision: number;
   };
-  projects: { [key in string]: IProjectInfo };
+  projects: IProjectInfo[];
 }
 
 export namespace ProjectResourceInfoSourceLoader {
@@ -64,7 +64,7 @@ export namespace ProjectResourceInfoSourceLoader {
     if (fsExistsSync(presetsFolderPath)) {
       return (await fspReaddir(presetsFolderPath))
         .filter((fpath) => fpath.endsWith('.json'))
-        .map((fpath) => pathBaseName(fpath, '.json'));
+        .map((fpath) => pathBasename(fpath, '.json'));
     } else {
       return [];
     }
@@ -76,7 +76,7 @@ export namespace ProjectResourceInfoSourceLoader {
       .map((fileName) =>
         fileName === 'layout.json'
           ? 'default'
-          : pathBaseName(fileName, '.layout.json')
+          : pathBasename(fileName, '.layout.json')
       );
   }
 
@@ -86,7 +86,6 @@ export namespace ProjectResourceInfoSourceLoader {
     return (await fsxReadJsonFile(projectFilePath)) as IPorjectFileJson;
   }
 
-  // not tested yet
   async function loadCentralResourcesFromSummaryJson(): Promise<
     IProjectResourceInfoSource[]
   > {
@@ -98,55 +97,67 @@ export namespace ProjectResourceInfoSourceLoader {
       summaryFilePath
     )) as ISummaryJsonData;
 
-    return Object.values(summaryObj.projects).map((info) => {
-      const projectPath = info.path;
+    return summaryObj.projects.map((info) => {
+      const {
+        projectId,
+        keyboardName,
+        projectPath,
+        layoutNames,
+        presetNames
+      } = info;
       const projectFolderPath = pathJoin(variantsDir, projectPath);
-      const coreName = pathBaseName(projectPath);
+      const coreName = pathBasename(projectPath);
       const hexFilePath =
-        (info.status === 'success' &&
+        (info.buildStatus === 'success' &&
           pathJoin(projectFolderPath, `${coreName}.hex`)) ||
         undefined;
       return {
-        projectId: info.id,
-        keyboardName: info.path, // todo: summary.jsonの生成時にkeyboardNameを追加してここで利用
+        projectId,
+        keyboardName,
         projectPath,
         projectFolderPath,
-        layoutNames: info.layoutNames,
-        presetNames: info.presetNames,
+        layoutNames,
+        presetNames,
         hexFilePath
       };
     });
   }
 
-  async function loadCentralResources(): Promise<IProjectResourceInfoSource[]> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async function loadCentralResourcesFromResourceFiles_deprecated(): Promise<
+    IProjectResourceInfoSource[]
+  > {
     const baseDir = appEnv.resolveUserDataFilePath('resources/variants');
     const pattern = `${baseDir}/**/*/metadata.json`;
     const metadataFilePaths = await globAsync(pattern);
 
     return await Promise.all(
       metadataFilePaths.map(async (metadataFilePath) => {
-        const projectBaseDir = pathDirName(metadataFilePath);
-        const coreName = pathBaseName(projectBaseDir);
+        const projectBaseDir = pathDirname(metadataFilePath);
+        const coreName = pathBasename(projectBaseDir);
 
         const projectPath = projectBaseDir.replace(`${baseDir}/`, '');
 
         const projectFilePath = pathJoin(projectBaseDir, 'project.json');
+
+        const { projectId, keyboardName } = await readProjectFile(
+          projectFilePath
+        );
+
         const hexFilePath = checkFileExistsOrBlank(
           pathJoin(projectBaseDir, `${coreName}.hex`)
         );
         const presetFolderPath = pathJoin(projectBaseDir, 'profiles');
         const presetNames = await readPresetNames(presetFolderPath);
 
-        const { projectId, keyboardName } = await readProjectFile(
-          projectFilePath
-        );
+        const layoutNames = await readLayoutNames(projectBaseDir);
 
         return {
           projectId,
           keyboardName,
           projectPath,
           projectFolderPath: projectBaseDir,
-          layoutNames: [],
+          layoutNames,
           presetNames,
           hexFilePath
         };
@@ -165,11 +176,11 @@ export namespace ProjectResourceInfoSourceLoader {
       projectFilePaths.map(async (projectFilePath) => {
         const projectPath = pathRelative(
           projectsRoot,
-          pathDirName(projectFilePath)
+          pathDirname(projectFilePath)
         );
-        const projectBaseDir = pathDirName(projectFilePath);
+        const projectBaseDir = pathDirname(projectFilePath);
 
-        const coreName = pathBaseName(projectPath);
+        const coreName = pathBasename(projectPath);
         const hexFilePath = checkFileExistsOrBlank(
           pathJoin(buildsRoot, projectPath, `${coreName}.hex`)
         );
@@ -201,7 +212,7 @@ export namespace ProjectResourceInfoSourceLoader {
     resourceOrigin: IProjectResourceOrigin
   ): Promise<IProjectResourceInfoSource[]> {
     if (resourceOrigin === 'central') {
-      return await loadCentralResources();
+      return await loadCentralResourcesFromSummaryJson();
     } else {
       return await loadLocalResources();
     }
