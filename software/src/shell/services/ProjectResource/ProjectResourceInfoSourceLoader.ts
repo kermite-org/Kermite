@@ -1,10 +1,7 @@
+import { IProjectResourceOrigin } from '~defs/ProfileData';
 import {
-  IKeyboardShapeDisplayArea,
-  IKeyUnitEntry,
-  IProjectResourceOrigin
-} from '~defs/ProfileData';
-import {
-  fsIsFileExists,
+  fsExistsSync,
+  fspReaddir,
   fsxReadJsonFile,
   globAsync,
   pathBaseName,
@@ -17,88 +14,142 @@ import { appEnv } from '~shell/base/AppEnvironment';
 
 export interface IProjectResourceInfoSource {
   projectId: string;
-  projectName: string;
+  keyboardName: string;
   projectPath: string;
+  projectFolderPath: string;
+  layoutNames: string[];
   presetNames: string[];
-  presetsFolderPath?: string;
   hexFilePath?: string;
-  layoutFilePath?: string;
 }
 
-interface ILayoutFileJson {
+interface IPorjectFileJson {
   projectId: string;
-  projectName: string;
-  keyUnits: IKeyUnitEntry[];
-  displayArea: IKeyboardShapeDisplayArea;
-  bodyPathMarkups: string[];
+  keyboardName: string;
+}
+interface IProjectInfo {
+  path: string;
+  id: string;
+  name: string;
+  status: 'success' | 'failure';
+  revision: number;
+  updatedAt: string;
+  hexFileSize: number;
+  layoutNames: string[];
+  presetNames: string[];
+}
+
+interface ISummaryJsonData {
+  info: {
+    buildStats: {
+      numSuccess: number;
+      numTotal: number;
+    };
+    environment: {
+      OS: string;
+      'avr-gcc': string;
+      make: string;
+    };
+    updateAt: string;
+    filesRevision: number;
+  };
+  projects: { [key in string]: IProjectInfo };
 }
 
 export namespace ProjectResourceInfoSourceLoader {
-  async function loadProjectInfoFromFiles(args: {
-    projectPath: string;
-    layoutFilePath: string;
-    _hexFilePath: string;
-    _presetsFolderPath: string;
-  }) {
-    const {
-      projectPath,
-      layoutFilePath,
-      _hexFilePath,
-      _presetsFolderPath
-    } = args;
-
-    const hexFilePath =
-      (fsIsFileExists(_hexFilePath) && _hexFilePath) || undefined;
-    const presetsFolderPath =
-      (fsIsFileExists(_presetsFolderPath) && _presetsFolderPath) || undefined;
-
-    const layoutContent = (await fsxReadJsonFile(
-      layoutFilePath
-    )) as ILayoutFileJson;
-
-    const { projectId, projectName } = layoutContent;
-
-    let presetNames: string[] = [];
-    if (presetsFolderPath) {
-      const pattern = `${presetsFolderPath}/*.json`;
-      const presetFilePaths = await globAsync(pattern);
-      presetNames = presetFilePaths.map((fpath) =>
-        pathBaseName(fpath, '.json')
-      );
-    }
-
-    return {
-      projectId,
-      projectName,
-      projectPath,
-      presetNames,
-      presetsFolderPath,
-      hexFilePath,
-      layoutFilePath
-    };
+  function checkFileExistsOrBlank(filePath: string): string | undefined {
+    return (fsExistsSync(filePath) && filePath) || undefined;
   }
+
+  async function readPresetNames(presetsFolderPath: string): Promise<string[]> {
+    if (fsExistsSync(presetsFolderPath)) {
+      return (await fspReaddir(presetsFolderPath))
+        .filter((fpath) => fpath.endsWith('.json'))
+        .map((fpath) => pathBaseName(fpath, '.json'));
+    } else {
+      return [];
+    }
+  }
+
+  async function readLayoutNames(projectFolderPath: string): Promise<string[]> {
+    return (await fspReaddir(projectFolderPath))
+      .filter((fileName) => fileName.endsWith('layout.json'))
+      .map((fileName) =>
+        fileName === 'layout.json'
+          ? 'default'
+          : pathBaseName(fileName, '.layout.json')
+      );
+  }
+
+  async function readProjectFile(
+    projectFilePath: string
+  ): Promise<IPorjectFileJson> {
+    return (await fsxReadJsonFile(projectFilePath)) as IPorjectFileJson;
+  }
+
+  // not tested yet
+  async function loadCentralResourcesFromSummaryJson(): Promise<
+    IProjectResourceInfoSource[]
+  > {
+    const variantsDir = appEnv.resolveUserDataFilePath('resources/variants');
+    const summaryFilePath = appEnv.resolveUserDataFilePath(
+      'resources/summary.json'
+    );
+    const summaryObj = (await fsxReadJsonFile(
+      summaryFilePath
+    )) as ISummaryJsonData;
+
+    return Object.values(summaryObj.projects).map((info) => {
+      const projectPath = info.path;
+      const projectFolderPath = pathJoin(variantsDir, projectPath);
+      const coreName = pathBaseName(projectPath);
+      const hexFilePath =
+        (info.status === 'success' &&
+          pathJoin(projectFolderPath, `${coreName}.hex`)) ||
+        undefined;
+      return {
+        projectId: info.id,
+        keyboardName: info.path, // todo: summary.jsonの生成時にkeyboardNameを追加してここで利用
+        projectPath,
+        projectFolderPath,
+        layoutNames: info.layoutNames,
+        presetNames: info.presetNames,
+        hexFilePath
+      };
+    });
+  }
+
   async function loadCentralResources(): Promise<IProjectResourceInfoSource[]> {
     const baseDir = appEnv.resolveUserDataFilePath('resources/variants');
     const pattern = `${baseDir}/**/*/metadata.json`;
     const metadataFilePaths = await globAsync(pattern);
 
     return await Promise.all(
-      metadataFilePaths.map((metadataFilePath) => {
+      metadataFilePaths.map(async (metadataFilePath) => {
         const projectBaseDir = pathDirName(metadataFilePath);
         const coreName = pathBaseName(projectBaseDir);
 
         const projectPath = projectBaseDir.replace(`${baseDir}/`, '');
 
-        const layoutFilePath = pathJoin(projectBaseDir, 'layout.json');
-        const _hexFilePath = pathJoin(projectBaseDir, `${coreName}.hex`);
-        const _presetsFolderPath = pathJoin(projectBaseDir, 'profiles');
+        const projectFilePath = pathJoin(projectBaseDir, 'project.json');
+        const hexFilePath = checkFileExistsOrBlank(
+          pathJoin(projectBaseDir, `${coreName}.hex`)
+        );
+        const presetFolderPath = pathJoin(projectBaseDir, 'profiles');
+        const presetNames = await readPresetNames(presetFolderPath);
 
-        return loadProjectInfoFromFiles({
+        const { projectId, keyboardName } = await readProjectFile(
+          projectFilePath
+        );
+
+        return {
+          projectId,
+          keyboardName,
           projectPath,
-          layoutFilePath,
-          _hexFilePath,
-          _presetsFolderPath
-        });
+          projectFolderPath: projectBaseDir,
+          layoutNames: [],
+          presetNames,
+          hexFilePath
+        };
       })
     );
   }
@@ -106,32 +157,42 @@ export namespace ProjectResourceInfoSourceLoader {
   async function loadLocalResources(): Promise<IProjectResourceInfoSource[]> {
     const projectsRoot = pathResolve('../firmware/src/projects');
     const buildsRoot = pathResolve('../firmware/build');
-    const layoutFilePaths = await globAsync(`${projectsRoot}/**/*/layout.json`);
+    const projectFilePaths = await globAsync(
+      `${projectsRoot}/**/*/project.json`
+    );
 
     return await Promise.all(
-      layoutFilePaths.map((layoutFilePath) => {
+      projectFilePaths.map(async (projectFilePath) => {
         const projectPath = pathRelative(
           projectsRoot,
-          pathDirName(layoutFilePath)
+          pathDirName(projectFilePath)
         );
+        const projectBaseDir = pathDirName(projectFilePath);
+
         const coreName = pathBaseName(projectPath);
-        const _hexFilePath = pathJoin(
-          buildsRoot,
-          projectPath,
-          `${coreName}.hex`
-        );
-        const _presetsFolderPath = pathJoin(
-          projectsRoot,
-          projectPath,
-          'profiles'
+        const hexFilePath = checkFileExistsOrBlank(
+          pathJoin(buildsRoot, projectPath, `${coreName}.hex`)
         );
 
-        return loadProjectInfoFromFiles({
+        const { projectId, keyboardName } = await readProjectFile(
+          projectFilePath
+        );
+
+        const presetsFolderPath = pathJoin(projectBaseDir, 'profiles');
+
+        const presetNames = await readPresetNames(presetsFolderPath);
+
+        const layoutNames = await readLayoutNames(projectBaseDir);
+
+        return {
+          projectId,
+          keyboardName,
           projectPath,
-          layoutFilePath,
-          _hexFilePath,
-          _presetsFolderPath
-        });
+          projectFolderPath: projectBaseDir,
+          layoutNames,
+          presetNames,
+          hexFilePath
+        };
       })
     );
   }

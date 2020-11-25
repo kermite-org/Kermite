@@ -28,6 +28,9 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
           | undefined;
         if (profileData) {
           ProfileHelper.fixProfileData(profileData);
+          ProfileHelper.patchProfileKeyboardShapeBodyPathMarkupText(
+            profileData
+          );
           return profileData;
         }
       } catch (error) {
@@ -37,14 +40,18 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
     return undefined;
   }
 
-  private async createBlankProfileFromLayoutFile(projectId: string) {
-    const info = this.projectResourceInfoProvider.internal_getProjectInfoSourceById(
-      projectId
+  private async createBlankProfileFromLayoutFile(
+    projectId: string,
+    layoutName: string
+  ) {
+    const layoutFilePath = this.projectResourceInfoProvider.getLayoutFilePath(
+      projectId,
+      layoutName
     );
-    if (info?.layoutFilePath) {
+    if (layoutFilePath) {
       try {
         const keyboardShape = await KeyboardLayoutFileLoader.loadShapeFromFile(
-          info.layoutFilePath
+          layoutFilePath
         );
         if (keyboardShape) {
           const profileData: IProfileData = duplicateObjectByJsonStringifyParse(
@@ -63,12 +70,13 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
 
   private async loadPresetProfileDataImpl(
     projectId: string,
-    presetName: string | undefined
+    presetName: string
   ) {
-    if (presetName) {
+    if (!presetName.startsWith('@')) {
       return await this.loadPresetProfileFromPresetFile(projectId, presetName);
     } else {
-      return await this.createBlankProfileFromLayoutFile(projectId);
+      const layoutName = presetName.slice(1);
+      return await this.createBlankProfileFromLayoutFile(projectId, layoutName);
     }
   }
 
@@ -76,9 +84,9 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
 
   async loadPresetProfileData(
     projectId: string,
-    presetName: string | undefined
+    presetName: string
   ): Promise<IProfileData | undefined> {
-    const profileKey = `${projectId}__${presetName || 'blank'}`;
+    const profileKey = `${projectId}__${presetName}`;
     const cache = this.profileDataCache;
     if (profileKey in cache) {
       return cache[profileKey];

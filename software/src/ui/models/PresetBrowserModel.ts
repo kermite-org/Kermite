@@ -7,17 +7,17 @@ import { ProfilesModel } from '~ui/models/profile/ProfilesModel';
 
 class PresetBrowserModelHelper {
   static getNewProfileNameBase(
-    projectName: string,
+    keyboardName: string,
     presetName: string,
     allProfileNames: string[]
   ): string {
-    const presetNameIncluesProjectName = presetName
+    const presetNameIncluesKeyboardName = presetName
       .toLowerCase()
-      .includes(projectName.toLowerCase());
+      .includes(keyboardName.toLowerCase());
 
-    let newProfileNameBase = presetNameIncluesProjectName
+    let newProfileNameBase = presetNameIncluesKeyboardName
       ? presetName
-      : `${projectName}_${presetName}`.toLowerCase();
+      : `${keyboardName}_${presetName}`.toLowerCase();
 
     if (allProfileNames.includes(newProfileNameBase)) {
       newProfileNameBase += '1';
@@ -48,7 +48,7 @@ export class PresetBrowserModel {
   ) {}
 
   private _currentProjectId: string = '';
-  private _currentPresetName: string = 'blank';
+  private _currentPresetName: string = '';
   private _loadedProfileData: IProfileData = fallbackProfileData;
 
   get currentProjectId() {
@@ -71,12 +71,19 @@ export class PresetBrowserModel {
     const info = this.projectResourceModel.getProjectResourceInfo(
       this._currentProjectId
     );
-    return info?.presetNames ? ['blank', ...info.presetNames] : ['blank'];
+    if (info) {
+      return [
+        ...info.layoutNames.map((layoutName) => `@${layoutName}`),
+        ...info.presetNames
+      ];
+    } else {
+      return ['@default'];
+    }
   }
 
   setCurrentProjectId = (projectId: string) => {
     this._currentProjectId = projectId;
-    this._currentPresetName = 'blank';
+    this._currentPresetName = this.optionPresetNames[0];
     this.loadSelectedProfile();
   };
 
@@ -88,7 +95,7 @@ export class PresetBrowserModel {
   private async loadSelectedProfile() {
     const profileData = await backendAgent.loadPresetProfile(
       this._currentProjectId,
-      this._currentPresetName === 'blank' ? undefined : this._currentPresetName
+      this._currentPresetName
     );
     if (!profileData) {
       console.error(`error while loading preset profile`);
@@ -111,7 +118,7 @@ export class PresetBrowserModel {
     }
 
     const newProfileNameBase = PresetBrowserModelHelper.getNewProfileNameBase(
-      info.projectName,
+      info.keyboardName,
       presetName,
       allProfileNames
     );
@@ -133,11 +140,7 @@ export class PresetBrowserModel {
       return;
     }
 
-    this.profilesModel.createProfile(
-      newProfileName,
-      projectId,
-      presetName === 'blank' ? undefined : presetName
-    );
+    this.profilesModel.createProfile(newProfileName, projectId, presetName);
     this.uiStatusModel.navigateTo('editor');
   };
 
@@ -145,7 +148,7 @@ export class PresetBrowserModel {
     const resourceInfos = this.projectResourceModel.projectResourceInfos;
     if (resourceInfos.length > 0) {
       this._currentProjectId = resourceInfos[0].projectId;
-      this._currentPresetName = 'blank';
+      this._currentPresetName = this.optionPresetNames[0];
       this.loadSelectedProfile();
     }
   }

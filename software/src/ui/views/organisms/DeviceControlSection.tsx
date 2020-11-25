@@ -17,7 +17,7 @@ export const DeviceControlSection = () => {
   const vm = makeDeviceControlSectionViewModel();
   return (
     <div css={cssDeviceControlSection}>
-      <div>{vm.currentDeviceProjectName}</div>
+      <div>{vm.currentDeviceKeyboardName}</div>
       <LinkIndicator isActive={vm.isDeviceConnected} />
     </div>
   );

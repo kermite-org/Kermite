@@ -8,26 +8,18 @@ export class KeyboardShapesProvider {
     private projectResourceInfoProvider: IProjectResourceInfoProvider
   ) {}
 
-  private getLayoutFilePathByProjectPath__NotUsed(
-    projectPath: string
-  ): string | undefined {
-    const info = this.projectResourceInfoProvider
-      .getAllProjectResourceInfos()
-      .find((info) => info.projectPath === projectPath);
-    if (info) {
-      return this.projectResourceInfoProvider.getLayoutFilePath(info.projectId);
-    }
-    return undefined;
-  }
-
-  async loadKeyboardShapeByProjectId(
-    projectId: string
+  async loadKeyboardShapeByProjectIdAndLayoutName(
+    projectId: string,
+    layoutName: string
   ): Promise<IKeyboardShape | undefined> {
     const info = this.projectResourceInfoProvider.internal_getProjectInfoSourceById(
       projectId
     );
     if (info) {
-      const { layoutFilePath } = info;
+      const layoutFilePath = this.projectResourceInfoProvider.getLayoutFilePath(
+        projectId,
+        layoutName
+      );
       if (layoutFilePath) {
         return await KeyboardLayoutFileLoader.loadShapeFromFile(layoutFilePath);
       }

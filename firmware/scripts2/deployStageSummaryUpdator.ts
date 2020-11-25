@@ -1,10 +1,12 @@
-import { createObjectFromKeyValues } from "./helpers";
 import {
   execueteOneliner,
   fsCopyFileSync,
+  fsExistsSync,
+  fsReaddirSync,
   fsxReadJsonFile,
   fsxWriteJsonFile,
   globSync,
+  pathBasename,
   pathDirname,
   pathRelative,
   timeNow,
@@ -19,9 +21,9 @@ interface IIndexUpdatorResult {
   filesRevision: number;
 }
 
-interface ILayoutJsonPartial {
+interface IProjectJsonPartial {
   projectId: string;
-  projectName: string;
+  keyboardName: string;
 }
 
 interface IMetadataJson {
@@ -35,13 +37,15 @@ interface IMetadataJson {
 }
 
 interface IProjectInfo {
-  path: string;
-  id: string;
-  name: string;
-  status: "success" | "failure";
+  projectPath: string;
+  projectId: string;
+  keyboardName: string;
+  buildStatus: "success" | "failure";
   revision: number;
   updatedAt: string;
   hexFileSize: number;
+  layoutNames: string[];
+  presetNames: string[];
 }
 
 interface IEnvironmentVersions {
@@ -57,7 +61,7 @@ interface ISummaryData {
     updateAt: string;
     filesRevision: number;
   };
-  projects: { [key in string]: IProjectInfo };
+  projects: IProjectInfo[];
 }
 
 function readOsVersion(): string {
@@ -96,37 +100,46 @@ function makeSummaryFileContent(
   buildStats: IBuildStats,
   filesRevision: number
 ): ISummaryData {
-  const layoutFilePahts = globSync("./dist/variants/**/layout.json");
-  const projectInfos = createObjectFromKeyValues(
-    layoutFilePahts.map((filePath) => {
-      const projectPath = pathDirname(
-        pathRelative("./dist/variants", filePath)
-      );
-      const layoutObj = fsxReadJsonFile(filePath) as ILayoutJsonPartial;
-      const { projectId, projectName } = layoutObj;
-      const metadataFilePath = `./dist/variants/${projectPath}/metadata.json`;
-      const metadataObj = fsxReadJsonFile(metadataFilePath) as IMetadataJson;
-      const {
-        buildResult: buildStatus,
-        releaseBuildRevision: buildRevision,
-        buildTimestamp: updatedAt,
-        hexFileSize,
-      } = metadataObj;
+  const projectJsonFilePahts = globSync("./dist/variants/**/project.json");
+  const projectInfos = projectJsonFilePahts.map((projectJsonFilePath) => {
+    const projectPath = pathDirname(
+      pathRelative("./dist/variants", projectJsonFilePath)
+    );
+    const projectObj = fsxReadJsonFile(
+      projectJsonFilePath
+    ) as IProjectJsonPartial;
+    const metadataFilePath = `./dist/variants/${projectPath}/metadata.json`;
+    const meta = fsxReadJsonFile(metadataFilePath) as IMetadataJson;
 
-      return [
-        projectPath,
-        {
-          path: projectPath,
-          id: projectId,
-          name: projectName,
-          status: buildStatus,
-          revision: buildRevision,
-          updatedAt,
-          hexFileSize,
-        },
-      ];
-    })
-  );
+    let presetNames: string[] = [];
+
+    const profilesDir = `./dist/variants/${projectPath}/profiles`;
+    if (fsExistsSync(profilesDir)) {
+      presetNames = fsReaddirSync(profilesDir)
+        .filter((fileName) => fileName.endsWith(".json"))
+        .map((fileName) => pathBasename(fileName, ".json"));
+    }
+
+    const layoutNames = fsReaddirSync(`./dist/variants/${projectPath}`)
+      .filter((fileName) => fileName.endsWith("layout.json"))
+      .map((fileName) =>
+        fileName === "layout.json"
+          ? "default"
+          : pathBasename(fileName, ".layout.json")
+      );
+
+    return {
+      projectPath: projectPath,
+      projectId: projectObj.projectId,
+      keyboardName: projectObj.keyboardName,
+      buildStatus: meta.buildResult,
+      revision: meta.releaseBuildRevision,
+      updatedAt: meta.buildTimestamp,
+      hexFileSize: meta.hexFileSize,
+      layoutNames,
+      presetNames,
+    };
+  });
   return {
     info: {
       buildStats,

@@ -1,10 +1,10 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
-import { LayerManagementPartViewModel } from '~ui/viewModels/Editor/LayersOperationPartViewModel';
+import { ILayerManagementPartViewModel } from '~ui/viewModels/Editor/LayersManagementPartViewModel';
 import { LayerOperationButtton } from '~ui/views/elements/LayerOperationButtton';
 
 export const LayerManagementPart = (props: {
-  vm: LayerManagementPartViewModel;
+  vm: ILayerManagementPartViewModel;
 }) => {
   const cssButtonsRow = css`
     display: flex;
@@ -27,32 +27,26 @@ export const LayerManagementPart = (props: {
         icon="fa fa-plus"
         enabled={true}
         handler={addNewLayer}
-        qxOptimizer="deepEqual"
       />
       <LayerOperationButtton
         icon="fa fa-pen-square"
         enabled={true}
         handler={editCurrentLayer}
-        qxOptimizer="deepEqual"
       />
       <LayerOperationButtton
         icon="fa fa-times"
         enabled={canDeleteCurrentLayer}
         handler={deleteCurrentLayer}
-        qxOptimizer="deepEqual"
       />
-
       <LayerOperationButtton
         icon="fa fa-long-arrow-alt-up"
         enabled={canShiftBackCurrentLayer}
         handler={shiftBackCurrentLayer}
-        qxOptimizer="deepEqual"
       />
       <LayerOperationButtton
         icon="fa fa-long-arrow-alt-down"
         enabled={canShiftForwardCurrentLayer}
         handler={shiftForwardCurrentLayer}
-        qxOptimizer="deepEqual"
       />
     </div>
   );

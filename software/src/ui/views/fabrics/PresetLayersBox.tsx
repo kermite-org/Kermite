@@ -1,6 +1,7 @@
 import { css } from 'goober';
 import { h } from '~lib/qx';
 import { ViewModelProps } from '~ui/base/helper/mvvmHelpers';
+import { uiTheme } from '~ui/core';
 import { IPrsetLayerListViewModel } from '~ui/viewModels/PresetKeyboardViewModel';
 
 const PresetLayerItem = (props: {
@@ -11,7 +12,7 @@ const PresetLayerItem = (props: {
   const { layerName, isActive, onClick } = props;
 
   const style = css`
-    color: #444;
+    color: ${uiTheme.colors.clAltText};
     padding: 0 4px;
     user-select: none;
     cursor: pointer;

@@ -1,6 +1,4 @@
 {
-  "projectId": "Di6V4KvF",
-  "projectName": "Minivers",
   "displayArea": {
     "centerX": 0,
     "centerY": 52,
@@ -8,15 +6,6 @@
     "height": 110
   },
   "keyUnits": [
-    { "id": "key0", "x": -30, "y": 17, "r": 0, "keyIndex": 0 },
-    { "id": "key1", "x": -47, "y": 17, "r": 0, "keyIndex": 1 },
-    { "id": "key2", "x": -64, "y": 17, "r": 0, "keyIndex": 2 },
-    { "id": "key3", "x": -81, "y": 17, "r": 0, "keyIndex": 3 },
-    { "id": "key4", "x": -98, "y": 17, "r": 0, "keyIndex": 4 },
-    { "id": "key5", "x": -115, "y": 17, "r": 0, "keyIndex": 5 },
-    { "id": "key6", "x": -132, "y": 17, "r": 0, "keyIndex": 6 },
-    { "id": "key7", "x": -149, "y": 17, "r": 0, "keyIndex": 7 },
-
     { "id": "key8", "x": -30, "y": 34, "r": 0, "keyIndex": 8 },
     { "id": "key9", "x": -47, "y": 34, "r": 0, "keyIndex": 9 },
     { "id": "key10", "x": -64, "y": 34, "r": 0, "keyIndex": 10 },
@@ -51,15 +40,6 @@
     { "id": "key36", "x": -115, "y": 90, "r": 0, "keyIndex": 36 },
     { "id": "key37", "x": -132, "y": 90, "r": 0, "keyIndex": 37 },
     { "id": "key38", "x": -149, "y": 90, "r": 0, "keyIndex": 38 },
-
-    { "id": "key40", "x": 30, "y": 17, "r": 0, "keyIndex": 40 },
-    { "id": "key41", "x": 47, "y": 17, "r": 0, "keyIndex": 41 },
-    { "id": "key42", "x": 64, "y": 17, "r": 0, "keyIndex": 42 },
-    { "id": "key43", "x": 81, "y": 17, "r": 0, "keyIndex": 43 },
-    { "id": "key44", "x": 98, "y": 17, "r": 0, "keyIndex": 44 },
-    { "id": "key45", "x": 115, "y": 17, "r": 0, "keyIndex": 45 },
-    { "id": "key46", "x": 132, "y": 17, "r": 0, "keyIndex": 46 },
-    { "id": "key47", "x": 149, "y": 17, "r": 0, "keyIndex": 47 },
 
     { "id": "key48", "x": 30, "y": 34, "r": 0, "keyIndex": 48 },
     { "id": "key49", "x": 47, "y": 34, "r": 0, "keyIndex": 49 },

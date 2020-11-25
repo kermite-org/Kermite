@@ -4,16 +4,26 @@
   },
   "json.schemas": [
     {
-      "fileMatch": ["layout.json"],
+      "fileMatch": ["project.json"],
       "schema": {
         "type": "object",
         "properties": {
           "projectId": {
             "type": "string"
           },
-          "projectName": {
+          "keyboardName": {
             "type": "string"
-          },
+          }
+        },
+        "required": ["projectId", "keyboardName"],
+        "additionalProperties": false
+      }
+    },
+    {
+      "fileMatch": ["layout.json"],
+      "schema": {
+        "type": "object",
+        "properties": {
           "displayArea": {
             "type": "object",
             "properties": {
@@ -65,7 +75,7 @@
             }
           }
         },
-        "required": ["projectId", "projectName", "displayArea", "keyUnits", "bodyPathMarkups"],
+        "required": ["displayArea", "keyUnits", "bodyPathMarkups"],
         "additionalProperties": false
       }
     }
