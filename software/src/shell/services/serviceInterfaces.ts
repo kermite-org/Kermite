@@ -12,7 +12,7 @@ export interface IProjectResourceInfoProvider {
     presetName: string
   ): string | undefined;
   getHexFilePath(projectId: string): string | undefined;
-  getLayoutFilePath(projectId: string): string | undefined;
+  getLayoutFilePath(projectId: string, layoutName: string): string | undefined;
   initializeAsync(): Promise<void>;
 
   internal_getProjectInfoSourceById(
@@ -32,6 +32,6 @@ export interface IKeyboardShapeBulkLoader {
 export interface IPresetProfileLoadingFeature {
   loadPresetProfileData(
     projectId: string,
-    presetName: string | undefined
+    presetName: string
   ): Promise<IProfileData | undefined>;
 }

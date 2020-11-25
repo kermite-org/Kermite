@@ -220,6 +220,7 @@ export interface IProjectResourceInfo {
   keyboardName: string;
   projectPath: string;
   presetNames: string[];
+  layoutNames: string[];
   hasLayout: boolean;
   hasFirmwareBinary: boolean;
 }

@@ -38,9 +38,13 @@ export function fsIsFileExists(fpath: string): boolean {
   return fs.existsSync(fpath);
 }
 
+export const fsExistsSync = fs.existsSync;
+
 export function fsListFilesInDirectory(dirPath: string): Promise<string[]> {
   return fs.promises.readdir(dirPath);
 }
+
+export const fspReaddir = fs.promises.readdir;
 
 export function fsRenameFile(src: string, dst: string): Promise<void> {
   return fs.promises.rename(src, dst);

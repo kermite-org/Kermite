@@ -18,15 +18,16 @@ export class ProjectResourceInfoProvider
         keyboardName,
         projectPath,
         hexFilePath,
-        layoutFilePath,
-        presetNames
+        presetNames,
+        layoutNames
       } = it;
       return {
         projectId,
         keyboardName,
         projectPath,
         presetNames,
-        hasLayout: !!layoutFilePath,
+        layoutNames,
+        hasLayout: layoutNames.length > 0,
         hasFirmwareBinary: !!hexFilePath
       };
     });
@@ -45,8 +46,9 @@ export class ProjectResourceInfoProvider
     presetName: string
   ): string | undefined {
     const info = this.getProjectInfoSourceById(projectId);
-    const folder = info?.presetsFolderPath;
-    return folder && pathJoin(folder, `${presetName}.json`);
+    if (info) {
+      return pathJoin(info.projectFolderPath, 'profiles', `${presetName}.json`);
+    }
   }
 
   getHexFilePath(projectId: string): string | undefined {
@@ -54,9 +56,11 @@ export class ProjectResourceInfoProvider
     return info?.hexFilePath;
   }
 
-  getLayoutFilePath(projectId: string): string | undefined {
+  getLayoutFilePath(projectId: string, layoutName: string): string | undefined {
     const info = this.getProjectInfoSourceById(projectId);
-    return info?.layoutFilePath;
+    if (info) {
+      return pathJoin(info.projectFolderPath, `${layoutName}.layout.json`);
+    }
   }
 
   async initializeAsync(): Promise<void> {
