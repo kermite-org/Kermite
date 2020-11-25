@@ -11,9 +11,14 @@ export class KeyboardShapesModel {
 
   private _currentProjectId: string = '';
   private _loadedShape: IKeyboardShape | undefined;
+  private _currentLayoutName: string = '';
 
   get currentProjectId() {
     return this._currentProjectId;
+  }
+
+  get currentLayoutName() {
+    return this._currentLayoutName;
   }
 
   get loadedShape() {
@@ -24,9 +29,17 @@ export class KeyboardShapesModel {
     return this.projectResourceModel.getProjectsWithLayout();
   }
 
+  get optionLayoutNames() {
+    const info = this.optionProjectInfos.find(
+      (info) => info.projectId === this._currentProjectId
+    );
+    return info?.layoutNames || [];
+  }
+
   private async loadCurrentProjectLayout() {
     this._loadedShape = await backendAgent.loadKeyboardShape(
-      this._currentProjectId
+      this._currentProjectId,
+      this._currentLayoutName
     );
   }
 
@@ -34,6 +47,15 @@ export class KeyboardShapesModel {
     if (projectId !== this._currentProjectId) {
       this._currentProjectId = projectId;
       this.uiStatusModel.settings.shapeViewProjectId = projectId;
+      this._currentLayoutName = this.optionLayoutNames[0];
+      this.loadCurrentProjectLayout();
+    }
+  };
+
+  setCurrentLayoutName = (layoutName: string) => {
+    if (layoutName !== this._currentLayoutName) {
+      this._currentLayoutName = layoutName;
+      this.uiStatusModel.settings.shapeViewLayoutName = layoutName;
       this.loadCurrentProjectLayout();
     }
   };
@@ -46,9 +68,19 @@ export class KeyboardShapesModel {
 
   initialize() {
     backendAgent.layoutFileUpdationEvents.subscribe(this.onLayoutFileUpdated);
+
     this._currentProjectId =
       this.uiStatusModel.settings.shapeViewProjectId ||
       this.optionProjectInfos[0].projectId;
+
+    this._currentLayoutName =
+      this.uiStatusModel.settings.shapeViewLayoutName ||
+      this.optionProjectInfos[0].layoutNames[0];
+
+    if (!this.optionLayoutNames.includes(this._currentLayoutName)) {
+      this._currentLayoutName = this.optionLayoutNames[0];
+    }
+
     this.loadCurrentProjectLayout();
   }
 
