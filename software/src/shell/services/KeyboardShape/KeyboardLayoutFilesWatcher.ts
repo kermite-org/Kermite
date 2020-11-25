@@ -1,9 +1,9 @@
 import { FSWatcher } from 'fs';
 import { EventPort } from '~funcs/EventPort';
 import {
-  fsIsFileExists,
+  fsExistsSync,
   fsxWtachFilesChange,
-  pathDirName,
+  pathDirname,
   pathRelative,
   pathResolve
 } from '~funcs/Files';
@@ -31,7 +31,7 @@ export class KeyboardLayoutFilesWatcher {
 
   private onFileUpdated = async (filePath: string) => {
     if (filePath.endsWith('/layout.json')) {
-      const projectPath = pathRelative(this.baseDir, pathDirName(filePath));
+      const projectPath = pathRelative(this.baseDir, pathDirname(filePath));
       const projectId = this.getProjectIdFromFilePath(projectPath);
       if (projectId) {
         this.fileUpdationEventPort.emit({ projectId });
@@ -41,7 +41,7 @@ export class KeyboardLayoutFilesWatcher {
 
   initialize() {
     if (appEnv.isDevelopment) {
-      if (fsIsFileExists(this.baseDir)) {
+      if (fsExistsSync(this.baseDir)) {
         this.watcher = fsxWtachFilesChange(this.baseDir, this.onFileUpdated);
       }
     }

@@ -4,8 +4,8 @@ import {
   fspReaddir,
   fsxReadJsonFile,
   globAsync,
-  pathBaseName,
-  pathDirName,
+  pathBasename,
+  pathDirname,
   pathJoin,
   pathRelative,
   pathResolve
@@ -64,7 +64,7 @@ export namespace ProjectResourceInfoSourceLoader {
     if (fsExistsSync(presetsFolderPath)) {
       return (await fspReaddir(presetsFolderPath))
         .filter((fpath) => fpath.endsWith('.json'))
-        .map((fpath) => pathBaseName(fpath, '.json'));
+        .map((fpath) => pathBasename(fpath, '.json'));
     } else {
       return [];
     }
@@ -76,7 +76,7 @@ export namespace ProjectResourceInfoSourceLoader {
       .map((fileName) =>
         fileName === 'layout.json'
           ? 'default'
-          : pathBaseName(fileName, '.layout.json')
+          : pathBasename(fileName, '.layout.json')
       );
   }
 
@@ -101,7 +101,7 @@ export namespace ProjectResourceInfoSourceLoader {
     return Object.values(summaryObj.projects).map((info) => {
       const projectPath = info.path;
       const projectFolderPath = pathJoin(variantsDir, projectPath);
-      const coreName = pathBaseName(projectPath);
+      const coreName = pathBasename(projectPath);
       const hexFilePath =
         (info.status === 'success' &&
           pathJoin(projectFolderPath, `${coreName}.hex`)) ||
@@ -125,8 +125,8 @@ export namespace ProjectResourceInfoSourceLoader {
 
     return await Promise.all(
       metadataFilePaths.map(async (metadataFilePath) => {
-        const projectBaseDir = pathDirName(metadataFilePath);
-        const coreName = pathBaseName(projectBaseDir);
+        const projectBaseDir = pathDirname(metadataFilePath);
+        const coreName = pathBasename(projectBaseDir);
 
         const projectPath = projectBaseDir.replace(`${baseDir}/`, '');
 
@@ -165,11 +165,11 @@ export namespace ProjectResourceInfoSourceLoader {
       projectFilePaths.map(async (projectFilePath) => {
         const projectPath = pathRelative(
           projectsRoot,
-          pathDirName(projectFilePath)
+          pathDirname(projectFilePath)
         );
-        const projectBaseDir = pathDirName(projectFilePath);
+        const projectBaseDir = pathDirname(projectFilePath);
 
-        const coreName = pathBaseName(projectPath);
+        const coreName = pathBasename(projectPath);
         const hexFilePath = checkFileExistsOrBlank(
           pathJoin(buildsRoot, projectPath, `${coreName}.hex`)
         );
