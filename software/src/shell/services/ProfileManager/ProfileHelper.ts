@@ -40,4 +40,22 @@ export namespace ProfileHelper {
       }
     });
   }
+
+  interface IProfileDataWithKeyboardShapeBodyPathMarks {
+    keyboardShape: {
+      bodyPathMarkups?: string[];
+      bodyPathMarkupText: string;
+    };
+  }
+  export function patchProfileKeyboardShapeBodyPathMarkupText(
+    profileData: IProfileData
+  ) {
+    const tmpProfileData = profileData as IProfileDataWithKeyboardShapeBodyPathMarks;
+    if (tmpProfileData.keyboardShape.bodyPathMarkups) {
+      tmpProfileData.keyboardShape.bodyPathMarkupText = tmpProfileData.keyboardShape.bodyPathMarkups.join(
+        ' '
+      );
+      delete tmpProfileData.keyboardShape.bodyPathMarkups;
+    }
+  }
 }

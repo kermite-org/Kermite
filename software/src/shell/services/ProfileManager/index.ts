@@ -2,12 +2,14 @@ import {
   IProfileManagerCommand,
   IProfileManagerStatus
 } from '~defs/IpcContract';
-import { IProfileData } from '~defs/ProfileData';
+import { fallbackProfileData, IProfileData } from '~defs/ProfileData';
 import { EventPort } from '~funcs/EventPort';
-import { clampValue } from '~funcs/Utils';
+import { clampValue, duplicateObjectByJsonStringifyParse } from '~funcs/Utils';
 import { PresetProfileLoader } from '~shell/services/PresetProfileLoader';
 import { ProfileHelper } from './ProfileHelper';
 import { ProfileManagerCore } from './ProfileManagerCore';
+
+const defaultProfileName = 'default';
 
 // プロファイルを<UserDataDir>/data/profiles以下でファイルとして管理
 export class ProfileManager {
@@ -17,8 +19,6 @@ export class ProfileManager {
     loadedProfileData: undefined,
     errorMessage: ''
   };
-
-  private defaultProfileName = 'default';
 
   private savingProfileData: IProfileData | undefined = undefined;
 
@@ -44,8 +44,8 @@ export class ProfileManager {
   private async initializeProfileList(): Promise<string[]> {
     const allProfileNames = await this.core.listAllProfileNames();
     if (allProfileNames.length === 0) {
-      const profName = this.defaultProfileName;
-      await this.createProfileImpl(profName, '__default');
+      const profName = defaultProfileName;
+      this.createDefaultProfile(profName);
       allProfileNames.push(profName);
     }
     return allProfileNames;
@@ -126,10 +126,15 @@ export class ProfileManager {
     }
   }
 
+  private async createDefaultProfile(profName: string) {
+    const profile = duplicateObjectByJsonStringifyParse(fallbackProfileData);
+    await this.core.saveProfile(profName, profile);
+  }
+
   private async createProfileImpl(
     profName: string,
     targetProjectId: string,
-    presetName?: string
+    presetName: string
   ): Promise<IProfileData> {
     const profile = await this.presetProfileLoader.loadPresetProfileData(
       targetProjectId,
@@ -145,7 +150,7 @@ export class ProfileManager {
   async createProfile(
     profName: string,
     targetProjectId: string,
-    presetName: string | undefined
+    presetName: string
   ): Promise<boolean> {
     if (this.status.allProfileNames.includes(profName)) {
       return false;
@@ -179,7 +184,7 @@ export class ProfileManager {
       const isLastOne = this.status.allProfileNames.length === 1;
       await this.core.deleteProfile(profName);
       if (isLastOne) {
-        await this.createProfileImpl(this.defaultProfileName, '__default');
+        await this.createDefaultProfile(defaultProfileName);
       }
       const allProfileNames = await this.core.listAllProfileNames();
       this.setStatus({ allProfileNames });

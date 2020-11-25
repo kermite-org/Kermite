@@ -8,7 +8,7 @@ AbortOnError = ARGV.include?('--abortOnError')
 def get_all_project_paths
   Dir.glob('./src/projects/**/rules.mk')
      .map { |path| File.dirname(path) }
-     .select { |path| File.exist?(File.join(path, 'layout.json')) }
+     .select { |path| File.exist?(File.join(path, 'project.json')) }
      .map { |path| path.sub('./src/projects/', '') }
 end
 
@@ -20,7 +20,7 @@ def get_updated_project_paths
     .filter { |path| path.start_with?(Projects_dir) }
     .map { |path| path.sub(Projects_dir, '') }
     .filter do |dir|
-    ['rules.mk', 'layout.json'].all? { |file_name| File.exist?(File.join('src/projects', dir, file_name)) }
+    ['rules.mk', 'project.json'].all? { |file_name| File.exist?(File.join('src/projects', dir, file_name)) }
   end
 end
 

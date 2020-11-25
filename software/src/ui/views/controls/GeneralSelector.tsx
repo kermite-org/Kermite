@@ -47,7 +47,7 @@ export const GeneralSelector = (props: IGeneralSelectorProps) => {
       disabled={disabled}
     >
       {options.map((it, idx) => (
-        <option value={it.id} key={`${idx}_${it.id}`}>
+        <option value={it.id} key={idx}>
           {it.text}
         </option>
       ))}

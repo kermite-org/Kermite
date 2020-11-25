@@ -19,15 +19,55 @@ import { GeneralSelector } from '~ui/views/controls/GeneralSelector';
 interface ICreateProfileDialogEditValues {
   profileName: string;
   targetProjectId: string;
+  presetName: string;
+}
+
+function makeProfileSetupModalViewModel() {
+  const projectOptions = models.projectResourceModel
+    .getProjectsWithLayout()
+    .map((info) => ({
+      id: info.projectId,
+      text: info.projectPath
+    }));
+
+  const defaultProjectId = projectOptions[0].id || '';
+
+  function getLayoutNameOptions(projectId: string) {
+    const info = models.projectResourceModel
+      .getProjectsWithLayout()
+      .find((info) => info.projectId === projectId);
+    return info!.layoutNames.map((it) => ({ id: `@${it}`, text: `@${it}` }));
+  }
+
+  const editValues: ICreateProfileDialogEditValues = {
+    profileName: '',
+    targetProjectId: defaultProjectId,
+    presetName: getLayoutNameOptions(defaultProjectId)[0].id
+  };
+
+  return {
+    projectOptions,
+    get presetOptions() {
+      return getLayoutNameOptions(editValues.targetProjectId);
+    },
+    editValues,
+    sync() {
+      const options = getLayoutNameOptions(editValues.targetProjectId);
+      if (!options.find((opt) => opt.id === editValues.presetName)) {
+        editValues.presetName = options[0].id;
+      }
+    }
+  };
 }
 
 const ProfileSetupModalContent = (props: {
   editValues: ICreateProfileDialogEditValues;
   projectOptions: ISelectorOption[];
+  presetOptions: ISelectorOption[];
   submit(): void;
   close(): void;
 }) => {
-  const { editValues, submit, close, projectOptions } = props;
+  const { editValues, submit, close, projectOptions, presetOptions } = props;
 
   return (
     <ClosableOverlay close={close}>
@@ -57,6 +97,17 @@ const ProfileSetupModalContent = (props: {
                   />
                 </td>
               </tr>
+              <tr>
+                <td>Preset</td>
+                <td>
+                  <GeneralSelector
+                    options={presetOptions}
+                    choiceId={editValues.presetName}
+                    setChoiceId={(id) => (editValues.presetName = id)}
+                    width={150}
+                  />
+                </td>
+              </tr>
             </tbody>
           </table>
         </DialogContentRow>
@@ -69,28 +120,23 @@ const ProfileSetupModalContent = (props: {
 };
 
 export const callProfileSetupModal = createModal(() => {
-  const projectOptions = models.projectResourceModel
-    .getProjectsWithLayout()
-    .map((info) => ({
-      id: info.projectId,
-      text: info.projectPath
-    }));
+  const vm = makeProfileSetupModalViewModel();
 
-  const editValues: ICreateProfileDialogEditValues = {
-    profileName: '',
-    targetProjectId: projectOptions?.[0].id || ''
-  };
   return (props: {
     close: (result: ICreateProfileDialogEditValues | undefined) => void;
   }) => {
-    const submit = () => props.close(editValues);
+    vm.sync();
+    const submit = () => {
+      props.close(vm.editValues);
+    };
     const close = () => props.close(undefined);
     return (
       <ProfileSetupModalContent
-        editValues={editValues}
+        editValues={vm.editValues}
         submit={submit}
         close={close}
-        projectOptions={projectOptions}
+        projectOptions={vm.projectOptions}
+        presetOptions={vm.presetOptions}
       />
     );
   };

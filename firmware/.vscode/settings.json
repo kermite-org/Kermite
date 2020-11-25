@@ -4,7 +4,7 @@
   },
   "json.schemas": [
     {
-      "fileMatch": ["layout.json"],
+      "fileMatch": ["project.json"],
       "schema": {
         "type": "object",
         "properties": {
@@ -13,7 +13,17 @@
           },
           "keyboardName": {
             "type": "string"
-          },
+          }
+        },
+        "required": ["projectId", "keyboardName"],
+        "additionalProperties": false
+      }
+    },
+    {
+      "fileMatch": ["layout.json"],
+      "schema": {
+        "type": "object",
+        "properties": {
           "displayArea": {
             "type": "object",
             "properties": {
@@ -65,13 +75,7 @@
             }
           }
         },
-        "required": [
-          "projectId",
-          "keyboardName",
-          "displayArea",
-          "keyUnits",
-          "bodyPathMarkups"
-        ],
+        "required": ["displayArea", "keyUnits", "bodyPathMarkups"],
         "additionalProperties": false
       }
     }

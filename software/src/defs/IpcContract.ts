@@ -50,7 +50,7 @@ export interface IProfileManagerCommand {
   creatProfile?: {
     name: string;
     targetProjectId: string;
-    presetName: string | undefined;
+    presetName: string;
   };
   loadProfile?: { name: string };
   saveCurrentProfile?: { profileData: IProfileData };
@@ -75,7 +75,10 @@ export interface IBackendAgent {
   maximizeWindow(): Promise<void>;
   widgetModeChanged(isWidgetMode: boolean): Promise<void>;
 
-  loadKeyboardShape(projectId: string): Promise<IKeyboardShape | undefined>;
+  loadKeyboardShape(
+    projectId: string,
+    layoutName: string
+  ): Promise<IKeyboardShape | undefined>;
 
   keyEvents: IEventSource<IRealtimeKeyboardEvent>;
   profileStatusEvents: IEventSource<Partial<IProfileManagerStatus>>;
