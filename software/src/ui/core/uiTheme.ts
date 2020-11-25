@@ -3,6 +3,7 @@
 // 一箇所のみの変更で色を追加できるようにし、他をあとから調整できるような方法を考える
 
 type ThemeColorKey =
+  | 'clPageBackground'
   | 'clBackground'
   | 'clTitleBar'
   | 'clStatusBar'
@@ -29,6 +30,7 @@ export type ThemeKey = 'dark' | 'light';
 
 export const themeColors: { [key in ThemeKey]: IThemeColorSet } = {
   dark: {
+    clPageBackground: '#333',
     clBackground: '#2E323E',
     clTitleBar: '#F61189',
     clStatusBar: '#3563b7',
@@ -37,7 +39,7 @@ export const themeColors: { [key in ThemeKey]: IThemeColorSet } = {
     clSelectHighlight: '#22967d',
     clHoldHighlight: '#f90',
     clMainText: '#FFF',
-    clAltText: '#000',
+    clAltText: '#FFF',
     clWindowButtonFace: '#FFF',
     clWindowButtonHoverBack: '#f8b',
     clKeyboardBodyFace: '#54566f',
@@ -50,8 +52,8 @@ export const themeColors: { [key in ThemeKey]: IThemeColorSet } = {
     dummy: '0'
   },
   light: {
-    clBackground: '#c8d3e3',
-    // clBackground: '#fff',
+    clPageBackground: '#c8d3e3',
+    clBackground: '#f8fAfC',
     clTitleBar: '#02cee1',
     clStatusBar: '#02cee1',
     clNavigationColumn: '#3870A3',
@@ -74,7 +76,27 @@ export const themeColors: { [key in ThemeKey]: IThemeColorSet } = {
   }
 };
 
-export const uiTheme: { unitHeight: number; colors: IThemeColorSet } = {
+interface IUiTheme {
+  unitHeight: number;
+  colors: IThemeColorSet;
+}
+
+export const uiThemeConfigLoader = {
+  loadThemeKey() {
+    const themeKey = localStorage.getItem('themeKey') as ThemeKey;
+    if (Object.keys(themeColors).includes(themeKey)) {
+      return themeKey;
+    }
+    return 'light';
+  },
+  saveThemeKey(themeKey: ThemeKey) {
+    localStorage.setItem('themeKey', themeKey);
+  }
+};
+
+const currentThemeKey = uiThemeConfigLoader.loadThemeKey();
+
+export const uiTheme: IUiTheme = {
   unitHeight: 26,
-  colors: themeColors.light
+  colors: themeColors[currentThemeKey]
 };
