@@ -1,9 +1,8 @@
 import { IRealtimeKeyboardEvent } from '~defs/IpcContract';
+import { backendAgent } from '~ui/core';
 import { EditorModel } from '../editor/EditorModel';
-import { RealtimeKeyboardEventProvider } from './RealtimeKeyboardEventProvider';
 
 export class PlayerModel {
-  private keyEventProvider = new RealtimeKeyboardEventProvider();
   private _keyStates: { [keyId: string]: boolean } = {};
   private _layerActiveFlags: number = 1;
   private _holdKeyIndices: Set<number> = new Set();
@@ -82,11 +81,10 @@ export class PlayerModel {
   };
 
   initialize() {
-    this.keyEventProvider.setListener(this.handlekeyEvents);
-    this.keyEventProvider.start();
+    backendAgent.keyEvents.subscribe(this.handlekeyEvents);
   }
 
   finalize() {
-    this.keyEventProvider.stop();
+    backendAgent.keyEvents.unsubscribe(this.handlekeyEvents);
   }
 }
