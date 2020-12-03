@@ -1,5 +1,6 @@
 import { backendAgent } from '~ui/core';
 import { PresetBrowserModel } from '~ui/models/PresetBrowserModel';
+import { RealtimeHeatmapModel } from '~ui/models/RealtimeHeatmapModel';
 import { DeviceStatusModel } from './DeviceStatusModel';
 import { FirmwareUpdationModel } from './FirmwareUpdationModel';
 import { KeyboardConfigModel } from './KeyboardConfigModel';
@@ -37,6 +38,8 @@ export class Models {
     this.uiStatusModel
   );
 
+  realtimeHeatmapModel = new RealtimeHeatmapModel(this.editorModel);
+
   backend = backendAgent;
 
   async initialize() {
@@ -51,12 +54,13 @@ export class Models {
     this.keyboardShapesModel.initialize();
     this.firmwareUpdationModel.initialize();
     this.presetBrowserModel.initialize();
+    this.realtimeHeatmapModel.initialize();
   }
 
   finalize() {
+    this.realtimeHeatmapModel.finalize();
     this.firmwareUpdationModel.finalize();
     this.keyboardShapesModel.finalize();
-    this.themeSelectionModel.finalize();
     this.uiStatusModel.finalize();
     this.deviceStatusModel.finalize();
     this.playerModel.finalize();

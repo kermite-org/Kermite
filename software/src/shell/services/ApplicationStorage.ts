@@ -1,8 +1,4 @@
-import {
-  fsIsFileExists,
-  fsxReadJsonFile,
-  fsxWriteJsonFile
-} from '~funcs/Files';
+import { fsExistsSync, fsxReadJsonFile, fsxWriteJsonFile } from '~funcs/Files';
 import { appEnv } from '~shell/base/AppEnvironment';
 
 // 永続化状態を<UserDataDir>/data/config.jsonに保存・復元
@@ -18,7 +14,7 @@ export class ApplicationStorage {
   }
 
   async initializeAsync(): Promise<void> {
-    if (fsIsFileExists(this.configFilePath)) {
+    if (fsExistsSync(this.configFilePath)) {
       this.data = await fsxReadJsonFile(this.configFilePath);
     } else {
       console.log('config file not found!');

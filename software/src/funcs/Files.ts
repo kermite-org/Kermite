@@ -2,53 +2,27 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { glob } from 'glob';
 
-export function pathDirName(fpath: string) {
-  return path.dirname(fpath);
-}
+export const pathDirname = path.dirname;
 
-export function pathBaseName(fpath: string, ext?: string) {
-  return path.basename(fpath, ext);
-}
+export const pathBasename = path.basename;
 
-export function pathJoin(...parts: string[]) {
-  return path.join(...parts);
-}
+export const pathJoin = path.join;
 
-export function pathResolve(...segments: string[]) {
-  return path.resolve(...segments);
-}
+export const pathResolve = path.resolve;
 
-export function pathRelative(from: string, to: string) {
-  return path.relative(from, to);
-}
+export const pathRelative = path.relative;
 
-export function fsCreateDirectory(fpath: string) {
-  return fs.promises.mkdir(fpath);
-}
+export const fspMkdir = fs.promises.mkdir;
 
-export function fsCopyFile(src: string, dst: string): Promise<void> {
-  return fs.promises.copyFile(src, dst);
-}
+export const fspCopyFile = fs.promises.copyFile;
 
-export function fsDeleteFile(fpath: string): Promise<void> {
-  return fs.promises.unlink(fpath);
-}
-
-export function fsIsFileExists(fpath: string): boolean {
-  return fs.existsSync(fpath);
-}
+export const fspUnlink = fs.promises.unlink;
 
 export const fsExistsSync = fs.existsSync;
 
-export function fsListFilesInDirectory(dirPath: string): Promise<string[]> {
-  return fs.promises.readdir(dirPath);
-}
-
 export const fspReaddir = fs.promises.readdir;
 
-export function fsRenameFile(src: string, dst: string): Promise<void> {
-  return fs.promises.rename(src, dst);
-}
+export const fspRename = fs.promises.rename;
 
 export function fsxReadTextFile(fpath: string): Promise<string> {
   return fs.promises.readFile(fpath, { encoding: 'utf-8' });

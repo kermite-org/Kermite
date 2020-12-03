@@ -1,14 +1,14 @@
 import { IProfileData } from '~defs/ProfileData';
 import {
-  fsCopyFile,
-  fsCreateDirectory,
-  fsDeleteFile,
-  fsIsFileExists,
-  fsListFilesInDirectory,
-  fsRenameFile,
+  fsExistsSync,
+  fspCopyFile,
+  fspMkdir,
+  fspReaddir,
+  fspRename,
+  fspUnlink,
   fsxReadJsonFile,
   fsxWriteJsonFile,
-  pathBaseName
+  pathBasename
 } from '~funcs/Files';
 import { appEnv } from '~shell/base/AppEnvironment';
 import { applicationStorage } from '~shell/services/ApplicationStorage';
@@ -20,20 +20,20 @@ export class ProfileManagerCore {
 
   async ensureProfilesDirectoryExists() {
     const dataDirPath = appEnv.resolveUserDataFilePath('data');
-    if (!fsIsFileExists(dataDirPath)) {
-      await fsCreateDirectory(dataDirPath);
+    if (!fsExistsSync(dataDirPath)) {
+      await fspMkdir(dataDirPath);
     }
     const profilesDirPath = appEnv.resolveUserDataFilePath('data/profiles');
-    if (!fsIsFileExists(profilesDirPath)) {
-      await fsCreateDirectory(profilesDirPath);
+    if (!fsExistsSync(profilesDirPath)) {
+      await fspMkdir(profilesDirPath);
     }
   }
 
   async listAllProfileNames(): Promise<string[]> {
-    const fileNames = await fsListFilesInDirectory(
+    const fileNames = await fspReaddir(
       appEnv.resolveUserDataFilePath(`data/profiles`)
     );
-    return fileNames.map((fname) => pathBaseName(fname, '.json'));
+    return fileNames.map((fname) => pathBasename(fname, '.json'));
   }
 
   loadCurrentProfileName(): string | undefined {
@@ -54,24 +54,24 @@ export class ProfileManagerCore {
     profileData: IProfileData
   ): Promise<void> {
     const fpath = this.getDataFilePath(profName);
-    console.log(`saving current profile to ${pathBaseName(fpath)}`);
+    console.log(`saving current profile to ${pathBasename(fpath)}`);
     await fsxWriteJsonFile(fpath, profileData);
   }
 
   async deleteProfile(profName: string): Promise<void> {
     const fpath = this.getDataFilePath(profName);
-    await fsDeleteFile(fpath);
+    await fspUnlink(fpath);
   }
 
   async renameProfile(profName: string, newProfName: string): Promise<void> {
     const srcPath = this.getDataFilePath(profName);
     const dstPath = this.getDataFilePath(newProfName);
-    await fsRenameFile(srcPath, dstPath);
+    await fspRename(srcPath, dstPath);
   }
 
   async copyProfile(profName: string, newProfName: string): Promise<void> {
     const srcPath = this.getDataFilePath(profName);
     const dstPath = this.getDataFilePath(newProfName);
-    await fsCopyFile(srcPath, dstPath);
+    await fspCopyFile(srcPath, dstPath);
   }
 }

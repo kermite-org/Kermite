@@ -5,7 +5,8 @@ export type PageSignature =
   | 'editor'
   | 'shapePreview'
   | 'firmwareUpdation'
-  | 'presetBrowser';
+  | 'presetBrowser'
+  | 'heatmap';
 
 export interface IUiSettings {
   showTestInputArea: boolean;
