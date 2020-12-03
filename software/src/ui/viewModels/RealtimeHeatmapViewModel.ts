@@ -18,6 +18,7 @@ export interface IHeatmapCustomKeyUnitViewModel {
   isLayerFallback: boolean;
   typeCount: number;
   weight: number;
+  hold: boolean;
 }
 
 export interface IRealtimeHeatmapKeyboardViewModel {
@@ -52,13 +53,15 @@ export function makeRealtimeHeatmapViewModel(): IRealtimeHeatmapViewModel {
   const cardsVM = makeCustomKeyUnitViewModels(
     models.editorModel.profileData,
     'la0',
-    (source: ICustomKeyUnitViewModelBase) => {
+    (source: ICustomKeyUnitViewModelBase): IHeatmapCustomKeyUnitViewModel => {
       const typeCount = typeStats[source.keyUnitId];
       const weight = (typeCount || 0) / maxKeyTypeCount;
+      const hold = models.playerModel.keyStates[source.keyUnitId];
       return {
         ...source,
         typeCount,
-        weight
+        weight,
+        hold
       };
     }
   );

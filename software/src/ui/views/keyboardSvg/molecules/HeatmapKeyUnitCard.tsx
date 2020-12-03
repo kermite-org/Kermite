@@ -14,6 +14,10 @@ const cssKeyRectCover = css`
   fill: #f09;
 `;
 
+const cssKeyRectHold = css`
+  fill: #f90;
+`;
+
 const cssKeyText = css`
   font-size: 5px;
   fill: ${uiTheme.colors.clAltText};
@@ -35,7 +39,8 @@ export const HeatmapKeyUnitCard = mvvmView(
       secondaryText,
       isLayerFallback,
       typeCount,
-      weight
+      weight,
+      hold
     } = ku;
 
     return (
@@ -45,14 +50,20 @@ export const HeatmapKeyUnitCard = mvvmView(
       >
         <rect x={-9} y={-9} width={18} height={18} css={cssKeyRect} />
 
-        <rect
-          x={-9}
-          y={-9}
-          width={18}
-          height={18}
-          css={cssKeyRectCover}
-          opacity={weight}
-        />
+        {!hold && (
+          <rect
+            x={-9}
+            y={-9}
+            width={18}
+            height={18}
+            css={cssKeyRectCover}
+            opacity={weight}
+          />
+        )}
+
+        {hold && (
+          <rect x={-9} y={-9} width={18} height={18} css={cssKeyRectHold} />
+        )}
 
         <text css={cssKeyText} x={0} y={-2} qxIf={!isLayerFallback}>
           {primaryText}
