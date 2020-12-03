@@ -3,6 +3,7 @@ import { h } from '~lib/qx';
 import { uiTheme } from '~ui/core';
 import { models } from '~ui/models';
 import { CustomWindowFrame } from '~ui/views/base/window/CustomWindowFrame';
+import { HeatmapPage } from '~ui/views/pages/HeatmapPage';
 import { NavigationColumn } from '../base/navigation/NavigationColumn';
 import { WindowTitleBarSection } from '../base/titleBar/WindowTitleBarSection';
 import { EditorPage } from '../pages/EditorPage';
@@ -34,6 +35,7 @@ export const ConfiguratorZoneRoot = () => {
           {page === 'shapePreview' && <KeyboardShapePreviewPage />}
           {page === 'firmwareUpdation' && <FirmwareUpdationPage />}
           {page === 'presetBrowser' && <PresetBrowserPage />}
+          {page === 'heatmap' && <HeatmapPage />}
         </div>
       </div>
     </CustomWindowFrame>
