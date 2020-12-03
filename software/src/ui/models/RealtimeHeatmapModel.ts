@@ -41,10 +41,19 @@ export class RealtimeHeatmapModel {
     this.timer.stop();
   };
 
+  prevTimestamp: number = 0;
+
   handleKeyboardEvent = (e: IRealtimeKeyboardEvent) => {
-    // 1キーごとに2回呼ばれるバグあり?
+    // 1キーごとに2回呼ばれるバグあり
+    // xpcRendererで、同じイベントを複数箇所から購読した場合に、それぞれが複数回ずつ呼ばれるバグがある
+    // これを回避するため、前回のイベントからの経過時間が短い場合には新しいイベントを無視する
+    const timeStamp = Date.now();
+    if (timeStamp - this.prevTimestamp < 20) {
+      return;
+    }
+    this.prevTimestamp = timeStamp;
+
     if (e.type === 'keyStateChanged' && e.isDown && this.isRecording) {
-      console.log(`keydown ${e.keyIndex}`);
       const keyUnitId = this.editorModel.translateKeyIndexToKeyUnitId(
         e.keyIndex
       );
