@@ -32,6 +32,7 @@ const cssGeneralButton = css`
   }
 
   &[data-disabled] {
+    pointer-events: none;
     cursor: inherit;
     opacity: 0.3;
   }

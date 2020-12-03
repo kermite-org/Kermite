@@ -3,7 +3,7 @@ import { IKeyboardShapeDisplayArea, IProfileData } from '~defs/ProfileData';
 import {
   IPresetKeyUnitViewModel,
   makePresetKeyUnitViewModels
-} from '~ui/viewModels/PresetKeyUnitViewModelCreator';
+} from '~ui/viewModels/KeyUnitCard/PresetKeyUnitViewModelCreator';
 
 export interface IPresetKeyboardLayerViewModel {
   layerId: string;

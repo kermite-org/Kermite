@@ -3,7 +3,7 @@ import {
   IKeyUnitEntry
 } from '~defs/ProfileData';
 import { Models } from '~ui/models';
-import { getAssignEntryTexts } from '~ui/viewModels/KeyUnitCardViewModelCommon';
+import { getAssignEntryTexts } from '~ui/viewModels/KeyUnitCard/KeyUnitCardViewModelCommon';
 
 export interface IKeyUnitCardViewModel {
   keyUnitId: string;

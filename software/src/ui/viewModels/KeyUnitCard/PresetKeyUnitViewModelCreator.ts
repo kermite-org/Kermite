@@ -7,7 +7,7 @@ import {
 import {
   getAssignEntryTexts,
   getAssignForKeyUnitWithLayerFallback
-} from '~ui/viewModels/KeyUnitCardViewModelCommon';
+} from '~ui/viewModels/KeyUnitCard/KeyUnitCardViewModelCommon';
 
 export interface IPresetKeyUnitViewModel {
   keyUnitId: string;
