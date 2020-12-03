@@ -13,6 +13,10 @@ export class RealtimeHeatmapModel {
   elapsedTimeMs: number = 0;
   typeStats: { [keyId: string]: number } = {};
 
+  get maxKeyTypeCount() {
+    return Math.max(...Object.values(this.typeStats));
+  }
+
   reset = () => {
     this.numTotalTypes = 0;
     this.elapsedTimeMs = 0;
