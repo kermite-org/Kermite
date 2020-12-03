@@ -30,6 +30,8 @@ export interface IRealtimeHeatmapViewModel {
   isRecording: boolean;
   startRecording: () => void;
   stopRecording: () => void;
+  clearRecord: () => void;
+  hasRecord: boolean;
   numTotalTypes: number;
   timeText: string;
   keyboardVM: IRealtimeHeatmapKeyboardViewModel;
@@ -40,6 +42,7 @@ export function makeRealtimeHeatmapViewModel(): IRealtimeHeatmapViewModel {
     isRecording,
     startRecording,
     stopRecording,
+    clearRecord,
     elapsedTimeMs,
     numTotalTypes
   } = models.realtimeHeatmapModel;
@@ -69,6 +72,8 @@ export function makeRealtimeHeatmapViewModel(): IRealtimeHeatmapViewModel {
     isRecording,
     startRecording,
     stopRecording,
+    clearRecord,
+    hasRecord: numTotalTypes > 0,
     timeText: formatTimeMsToMinSecMs(elapsedTimeMs),
     numTotalTypes,
     keyboardVM: { cardsVM, displayArea, bodyPathMarkupText }

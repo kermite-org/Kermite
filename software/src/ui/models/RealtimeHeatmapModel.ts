@@ -17,7 +17,7 @@ export class RealtimeHeatmapModel {
     return Math.max(...Object.values(this.typeStats));
   }
 
-  reset = () => {
+  clearRecord = () => {
     this.numTotalTypes = 0;
     this.elapsedTimeMs = 0;
     this.typeStats = {};
@@ -25,7 +25,7 @@ export class RealtimeHeatmapModel {
 
   startRecording = () => {
     this.isRecording = true;
-    this.reset();
+    this.clearRecord();
 
     let t0 = Date.now();
     this.timer.start(() => {

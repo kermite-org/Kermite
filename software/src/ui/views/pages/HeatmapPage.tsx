@@ -43,12 +43,18 @@ export const HeatmapPage = () => {
         <GeneralButton
           handler={vm.startRecording}
           text="start"
-          disabled={vm.isRecording}
+          disabled={vm.isRecording || vm.hasRecord}
         />
         <GeneralButton
           handler={vm.stopRecording}
           text="stop"
           disabled={!vm.isRecording}
+        />
+
+        <GeneralButton
+          handler={vm.clearRecord}
+          text="clear"
+          disabled={!(!vm.isRecording && vm.hasRecord)}
         />
         <div class="text">{vm.timeText}</div>
         <div class="text">{vm.numTotalTypes}</div>
