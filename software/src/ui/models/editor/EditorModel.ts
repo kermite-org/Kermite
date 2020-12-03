@@ -207,4 +207,11 @@ export class EditorModel {
       dstAssignType
     );
   };
+
+  translateKeyIndexToKeyUnitId(keyIndex: number): string | undefined {
+    const keyUnit = this.profileData.keyboardShape.keyUnits.find(
+      (kp) => kp.keyIndex === keyIndex
+    );
+    return keyUnit?.id;
+  }
 }

@@ -209,3 +209,15 @@ export function overwriteObjectProps<T>(dst: T, src: T) {
     }
   }
 }
+
+function deg2(value: number) {
+  return `0${value}`.slice(-2);
+}
+
+export function formatTimeMsToMinSecMs(ms: number) {
+  let sec = (ms / 1000) >> 0;
+  ms -= sec * 1000;
+  const min = (sec / 60) >> 0;
+  sec -= min * 60;
+  return `${deg2(min)}:${deg2(sec)}:${deg2((ms / 100) >> 0)}`;
+}

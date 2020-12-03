@@ -72,11 +72,9 @@ export class PlayerModel {
         this._holdKeyIndices.delete(keyIndex);
       }
 
-      const keyUnit = this.editorModel.profileData.keyboardShape.keyUnits.find(
-        (kp) => kp.keyIndex === keyIndex
-      );
-      if (keyUnit) {
-        this._keyStates[keyUnit.id] = isDown;
+      const keyUnitId = this.editorModel.translateKeyIndexToKeyUnitId(keyIndex);
+      if (keyUnitId) {
+        this._keyStates[keyUnitId] = isDown;
       }
     } else if (ev.type === 'layerChanged') {
       this._layerActiveFlags = ev.layerActiveFlags;
