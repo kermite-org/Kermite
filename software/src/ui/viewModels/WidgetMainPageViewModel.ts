@@ -3,7 +3,7 @@ import { models } from '~ui/models';
 import {
   IKeyUnitCardPartViewModel,
   makeKeyUnitCardsPartViewModel
-} from '~ui/viewModels/KeyUnitCardsPartViewModel';
+} from '~ui/viewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
 
 export interface IWidgetKeyboardViewViewModel {
   keyboardShape: IKeyboardShape;

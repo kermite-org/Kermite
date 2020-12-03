@@ -1,5 +1,5 @@
 import { h } from '~lib/qx';
-import { IKeyUnitCardPartViewModel } from '~ui/viewModels/KeyUnitCardsPartViewModel';
+import { IKeyUnitCardPartViewModel } from '~ui/viewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
 import { WidgetKeyUnitCard } from '../molecules/WidgetKeyUnitCard';
 
 export function WidgetKeyUnitCardsPart(props: {
