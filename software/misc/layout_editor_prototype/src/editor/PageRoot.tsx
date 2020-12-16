@@ -1,6 +1,6 @@
 import { css } from 'goober';
-import { EditSvgView } from '~/EditSvgView';
-import { PropertiesPanel } from '~/PropertiesPanel';
+import { EditSvgView } from '~/editor/EditSvgView';
+import { PropertiesPanel } from '~/editor/PropertiesPanel';
 import { h } from '~/qx';
 
 export const PageRoot = () => {

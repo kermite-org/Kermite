@@ -1,6 +1,6 @@
-import { IKeyEntity } from '~/DataSchema';
+import { IKeyEntity } from '~/editor/DataSchema';
+import { store } from '~/editor/store';
 import { Hook } from '~/qx';
-import { store } from '~/store';
 
 interface IAttributeSlotViewModel {
   propKey: string;

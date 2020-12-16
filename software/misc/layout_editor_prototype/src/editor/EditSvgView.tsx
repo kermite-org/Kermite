@@ -1,7 +1,7 @@
 import { css } from 'goober';
-import { IKeyEntity } from '~/DataSchema';
+import { IKeyEntity } from '~/editor/DataSchema';
+import { store } from '~/editor/store';
 import { h, Hook, rerender } from '~/qx';
-import { store } from '~/store';
 
 function makeEntityCardBehaviorModel(ke: IKeyEntity) {
   let prevPos = { x: 0, y: 0 };

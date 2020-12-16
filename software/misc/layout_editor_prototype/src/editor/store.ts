@@ -1,4 +1,4 @@
-import { IKeyboardDesign } from '~/DataSchema';
+import { IKeyboardDesign } from '~/editor/DataSchema';
 
 const initialDesign: IKeyboardDesign = {
   keyEntities: [

@@ -1,4 +1,4 @@
-import { reflectValue } from '~/FormHelpers';
+import { reflectValue } from '~/base/FormHelpers';
 import { h, Hook } from '~/qx';
 
 interface ITextInputProps {

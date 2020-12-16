@@ -1,5 +1,5 @@
-import { PageRoot } from '~/PageRoot';
-import { initializeCss } from '~/cssInitializer';
+import { initializeCss } from '~/base/cssInitializer';
+import { PageRoot } from '~/editor/PageRoot';
 import { h, render } from '~/qx';
 
 window.addEventListener('load', () => {

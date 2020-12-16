@@ -1,6 +1,6 @@
 import { h, render } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
-import { reflectValue } from '~/FormHelpers';
+import { reflectValue } from '~/base/FormHelpers';
 
 const Counter = () => {
   const [count, setCount] = useState(0);
