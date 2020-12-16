@@ -16,6 +16,7 @@ interface IAttributeSlotViewModel {
 interface IAttributeSlotViewModelEx extends IAttributeSlotViewModel {
   onFocused(cb: () => void): void;
   onValueChanged(cb: (value: any) => void): void;
+  update(): void;
 }
 
 interface IAttributeSlotSource<T> {
@@ -59,13 +60,21 @@ function makeAttributeSlotViewModel(
 ): IAttributeSlotViewModelEx {
   const { propKey, label } = source;
 
-  let originalText = source.reader(keyEntity[propKey]);
-  let editText = originalText;
+  let originalValue: any;
+  let originalText: string = '';
+  let editText: string = '';
   let errorText: string | undefined;
+
+  function pullModelValue() {
+    originalValue = keyEntity[propKey];
+    originalText = source.reader(originalValue);
+    editText = originalText;
+  }
+
   let focusedCallback: (() => void) | undefined;
   let valueChangedCallback: ((value: any) => void) | undefined;
 
-  function affectEditTextToKeyEntityAttribute() {
+  function affectEditTextToModelValue() {
     errorText = source.validator(editText);
     if (!errorText) {
       const newValue = source.writer(editText);
@@ -76,6 +85,8 @@ function makeAttributeSlotViewModel(
     }
   }
 
+  pullModelValue();
+
   return {
     propKey,
     label,
@@ -84,7 +95,7 @@ function makeAttributeSlotViewModel(
     },
     setEditText(text: string) {
       editText = text;
-      affectEditTextToKeyEntityAttribute();
+      affectEditTextToModelValue();
     },
     get errorText() {
       return errorText || '';
@@ -107,6 +118,12 @@ function makeAttributeSlotViewModel(
     onValueChanged(cb) {
       valueChangedCallback = cb;
     },
+    update() {
+      const currentValue = keyEntity[propKey];
+      if (originalValue !== currentValue) {
+        pullModelValue();
+      }
+    },
   };
 }
 
@@ -114,6 +131,7 @@ interface IKeyEntityAttrsEditorViewModel {
   errorText: string;
   resetError(): void;
   slots: IAttributeSlotViewModel[];
+  update(): void;
 }
 
 export function makePropertyEditorViewModel(
@@ -156,6 +174,9 @@ export function makePropertyEditorViewModel(
     resetError() {
       currentSlot?.resetError();
     },
+    update() {
+      allSlots.forEach((slot) => slot.update());
+    },
   };
 }
 
@@ -172,6 +193,8 @@ export function usePropertyPanelModel(): IPropertyPanelModel {
     );
     return makePropertyEditorViewModel(selectedKeyEntity!);
   }, [currentkeyId]);
+
+  keyEntityAttrsVm.update();
 
   return {
     keyEntityAttrsVm,
