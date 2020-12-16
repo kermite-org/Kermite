@@ -1,3 +1,5 @@
+import { qxGlobal } from '~/qx/qxGlobal';
+
 type IPlainFunc = () => void;
 
 export interface IHook {
@@ -42,7 +44,7 @@ interface IHookStateHolder<T> {
 }
 
 export function createHookInstance(): IHook {
-  let holders: any[] = [];
+  const holders: any[] = [];
   let idx = 0;
 
   // let funcOnMount: IPlainFunc | undefined;
@@ -56,7 +58,7 @@ export function createHookInstance(): IHook {
       if (changed) {
         holders[idx] = {
           value: func(),
-          deps: deps || []
+          deps: deps || [],
         };
       }
       return holders[idx++].value;
@@ -66,8 +68,9 @@ export function createHookInstance(): IHook {
       const changed = !holder || !compareArrayShallow(holder.deps, deps);
       if (changed) {
         func();
+        qxGlobal.hookRerenderFlag = true;
         holders[idx] = {
-          deps: deps || []
+          deps: deps || [],
         };
       }
       idx++;
@@ -77,7 +80,7 @@ export function createHookInstance(): IHook {
       if (!holder) {
         holder = holders[idx] = {
           value: initialValue,
-          setValue: (v: T) => (holder.value = v)
+          setValue: (v: T) => (holder.value = v),
         };
       }
       idx++;
@@ -100,7 +103,7 @@ export function createHookInstance(): IHook {
     },
     internal_resetIndex() {
       idx = 0;
-    }
+    },
     // useOnMount: (func: IPlainFunc) => (funcOnMount = func),
     // useOnUnmount: (func: IPlainFunc) => (funcOnUnmount = func),
     // useOnUpdate: (func: IPlainFunc) => (funcOnUpdate = func)
@@ -161,5 +164,5 @@ export const Hook: IHook = {
   // useOnUpdate(func: IPlainFunc): void {
   //   return gHookInstance.useOnUpdate(func);
   // }
-  internal_resetIndex() {}
+  internal_resetIndex() {},
 };

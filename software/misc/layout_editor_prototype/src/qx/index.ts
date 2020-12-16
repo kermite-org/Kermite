@@ -36,6 +36,10 @@ export function render(
       // n: dom nodes count
       // ms: time elapsed
     }
+    if (qxGlobal.hookRerenderFlag) {
+      qxGlobal.hookRerenderFlag = false;
+      requestAnimationFrame(executeRender);
+    }
   };
 
   qxGlobal.rerender = executeRender;
