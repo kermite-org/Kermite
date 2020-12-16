@@ -3,7 +3,7 @@ import { IKeyEntity } from '~/DataSchema';
 import { h, Hook, rerender } from '~/qx';
 import { store } from '~/store';
 
-function makeEntryCardBehaviorModel(ke: IKeyEntity) {
+function makeEntityCardBehaviorModel(ke: IKeyEntity) {
   let prevPos = { x: 0, y: 0 };
 
   const viewScale = 0.5;
@@ -51,7 +51,7 @@ const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
     }
   `;
 
-  const behavior = Hook.useMemo(() => makeEntryCardBehaviorModel(ke), [ke.id]);
+  const behavior = Hook.useMemo(() => makeEntityCardBehaviorModel(ke), [ke.id]);
 
   const sz = 20;
   const hsz = sz / 2;
