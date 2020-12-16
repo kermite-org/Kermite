@@ -1,9 +1,46 @@
 import { css } from 'goober';
 import { IKeyEntity } from '~/DataSchema';
-import { h } from '~/qx';
+import { h, Hook, rerender } from '~/qx';
 import { store } from '~/store';
 
-const KeyEntityCard = ({ entity: ke }: { entity: IKeyEntity }) => {
+function makeEntryCardBehaviorModel(ke: IKeyEntity) {
+  let prevPos = { x: 0, y: 0 };
+
+  const viewScale = 0.5;
+
+  const onMouseMove = (e: MouseEvent) => {
+    const deltaX = e.clientX - prevPos.x;
+    const deltaY = e.clientY - prevPos.y;
+    ke.x += deltaX * viewScale;
+    ke.y += deltaY * viewScale;
+    prevPos.x = e.clientX;
+    prevPos.y = e.clientY;
+    rerender();
+  };
+
+  const onMouseUp = () => {
+    window.removeEventListener('mousemove', onMouseMove);
+    window.removeEventListener('mouseup', onMouseUp);
+    rerender();
+  };
+
+  const onMouseDown = (e: MouseEvent) => {
+    store.currentkeyId = ke.id;
+
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+    prevPos = {
+      x: e.clientX,
+      y: e.clientY,
+    };
+  };
+
+  return {
+    onMouseDown,
+  };
+}
+
+const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
   const cssKeyRect = css`
     fill: rgba(255, 255, 255, 0.3);
     stroke: #666;
@@ -14,12 +51,10 @@ const KeyEntityCard = ({ entity: ke }: { entity: IKeyEntity }) => {
     }
   `;
 
+  const behavior = Hook.useMemo(() => makeEntryCardBehaviorModel(ke), [ke.id]);
+
   const sz = 20;
   const hsz = sz / 2;
-
-  const onClick = () => {
-    store.currentkeyId = ke.id;
-  };
 
   return (
     <rect
@@ -30,8 +65,8 @@ const KeyEntityCard = ({ entity: ke }: { entity: IKeyEntity }) => {
       height={sz}
       css={cssKeyRect}
       data-selected={ke.id === store.currentkeyId}
-      onClick={onClick}
-    ></rect>
+      onMouseDown={behavior.onMouseDown}
+    />
   );
 };
 
@@ -43,7 +78,7 @@ export const EditSvgView = () => {
   return (
     <svg width={600} height={400} css={cssSvg} viewBox="-150 -100 300 200">
       {store.design.keyEntities.map((ke) => (
-        <KeyEntityCard entity={ke} key={ke.id} />
+        <KeyEntityCard ke={ke} key={ke.id} />
       ))}
     </svg>
   );
