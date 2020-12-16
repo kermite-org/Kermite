@@ -4063,6 +4063,11 @@ posthtml@^0.13.4:
     posthtml-parser "^0.5.0"
     posthtml-render "^1.2.3"
 
+preact@^10.5.7:
+  version "10.5.7"
+  resolved "https://registry.yarnpkg.com/preact/-/preact-10.5.7.tgz#f1d84725539e18f7ccbea937cf3db5895661dbd3"
+  integrity sha512-4oEpz75t/0UNcwmcsjk+BIcDdk68oao+7kxcpc1hQPNs2Oo3ZL9xFz8UBf350mxk/VEdD41L5b4l2dE3Ug3RYg==
+
 prelude-ls@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"

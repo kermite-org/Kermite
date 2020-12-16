@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "goober": "^2.0.18",
-    "parcel": "^1.12.4"
+    "parcel": "^1.12.4",
+    "preact": "^10.5.7"
   }
 }
