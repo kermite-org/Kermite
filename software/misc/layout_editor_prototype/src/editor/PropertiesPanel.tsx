@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { reflectValue } from '~/base/FormHelpers';
-import { usePropertyPanelModel } from '~/editor/PropertiesPanel.model';
+import { usePropertyPanelModel } from '~/editor/PropertiesPanel.model2.mvvm';
 import { h } from '~/qx';
 
 interface IDesignAttributeTextInputLineProps {
@@ -12,19 +12,15 @@ interface IDesignAttributeTextInputLineProps {
   resetError(): void;
 }
 
-const DesignAttributeTextInputLine = ({
-  label,
-  editText,
-  setEditText,
-  hasError,
-  onFocus,
-  resetError,
-}: IDesignAttributeTextInputLineProps) => {
+const DesignAttributeTextInputLine = (
+  props: IDesignAttributeTextInputLineProps
+) => {
   const cssInput = css`
     &[data-has-error] {
       background: rgba(255, 0, 0, 0.3);
     }
   `;
+  const { label, editText, setEditText, hasError, onFocus, resetError } = props;
 
   return (
     <div>
