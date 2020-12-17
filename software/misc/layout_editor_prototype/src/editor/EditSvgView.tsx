@@ -1,9 +1,9 @@
 import { css } from 'goober';
 import { IKeyEntity } from '~/editor/DataSchema';
 import { store } from '~/editor/store';
-import { h, Hook, rerender } from '~/qx';
+import { h, rerender } from '~/qx';
 
-function makeEntityCardBehaviorModel(ke: IKeyEntity) {
+function startKeyEntityDragOperation(ke: IKeyEntity, e: MouseEvent) {
   let prevPos = { x: 0, y: 0 };
 
   const viewScale = 0.5;
@@ -25,8 +25,6 @@ function makeEntityCardBehaviorModel(ke: IKeyEntity) {
   };
 
   const onMouseDown = (e: MouseEvent) => {
-    store.currentkeyEntityId = ke.id;
-
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseup', onMouseUp);
     prevPos = {
@@ -35,9 +33,7 @@ function makeEntityCardBehaviorModel(ke: IKeyEntity) {
     };
   };
 
-  return {
-    onMouseDown,
-  };
+  onMouseDown(e);
 }
 
 const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
@@ -51,10 +47,13 @@ const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
     }
   `;
 
-  const behavior = Hook.useMemo(() => makeEntityCardBehaviorModel(ke), [ke.id]);
-
   const sz = 20;
   const hsz = sz / 2;
+
+  const onMouseDown = (e: MouseEvent) => {
+    store.currentkeyEntityId = ke.id;
+    startKeyEntityDragOperation(ke, e);
+  };
 
   return (
     <rect
@@ -65,7 +64,7 @@ const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
       height={sz}
       css={cssKeyRect}
       data-selected={ke.id === store.currentkeyEntityId}
-      onMouseDown={behavior.onMouseDown}
+      onMouseDown={onMouseDown}
     />
   );
 };
