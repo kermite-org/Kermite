@@ -29,7 +29,7 @@ interface IAttributeSlotSource<T> {
 
 const slotSources: IAttributeSlotSource<any>[] = [
   {
-    propKey: 'id',
+    propKey: 'keyId',
     label: 'KEY ID',
     validator: (text: string) =>
       text.length < 6 ? undefined : 'must be within 6 characters',
@@ -156,11 +156,6 @@ export function makePropertyEditorViewModel(
 
   allSlots.forEach((slot) => {
     slot.onFocused(() => onSlotFocused(slot));
-    slot.onValueChanged((newValue) => {
-      if (slot.propKey === 'id') {
-        store.currentkeyId = newValue;
-      }
-    });
   });
 
   return {
@@ -184,15 +179,22 @@ interface IPropertyPanelModel {
   keyEntityAttrsVm: IKeyEntityAttrsEditorViewModel;
 }
 
+const fallbackKeyEntity: IKeyEntity = {
+  id: '--',
+  keyId: '--',
+  x: 0,
+  y: 0,
+};
+
 export function usePropertyPanelModel(): IPropertyPanelModel {
-  const { design, currentkeyId } = store;
+  const { design, currentkeyEntityId } = store;
 
   const keyEntityAttrsVm = Hook.useMemo(() => {
-    const selectedKeyEntity = design.keyEntities.find(
-      (ke) => ke.id === currentkeyId
-    );
-    return makePropertyEditorViewModel(selectedKeyEntity!);
-  }, [currentkeyId]);
+    const selectedKeyEntity =
+      design.keyEntities.find((ke) => ke.id === currentkeyEntityId) ||
+      fallbackKeyEntity;
+    return makePropertyEditorViewModel(selectedKeyEntity);
+  }, [currentkeyEntityId]);
 
   keyEntityAttrsVm.update();
 

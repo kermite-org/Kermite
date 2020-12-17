@@ -25,7 +25,7 @@ function makeEntityCardBehaviorModel(ke: IKeyEntity) {
   };
 
   const onMouseDown = (e: MouseEvent) => {
-    store.currentkeyId = ke.id;
+    store.currentkeyEntityId = ke.id;
 
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseup', onMouseUp);
@@ -64,7 +64,7 @@ const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
       width={sz}
       height={sz}
       css={cssKeyRect}
-      data-selected={ke.id === store.currentkeyId}
+      data-selected={ke.id === store.currentkeyEntityId}
       onMouseDown={behavior.onMouseDown}
     />
   );
