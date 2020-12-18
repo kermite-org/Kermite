@@ -119,7 +119,7 @@ const mutations = new (class {
     }
   }
 
-  setEditTargetKeyEntityKeyId(keyEntityId: string) {
+  setEditTargetKeyEntityKeyId(keyEntityId: string | undefined) {
     editorState.editTargetKeyEntityId = keyEntityId;
     editPropKeys.forEach(this.pullModelValue);
   }

@@ -23,7 +23,11 @@ const initialDesign: IKeyboardDesign = {
   ],
 };
 
-export const store = {
+interface IStore {
+  design: IKeyboardDesign;
+  currentkeyEntityId: string | undefined;
+}
+export const store: IStore = {
   design: initialDesign,
   currentkeyEntityId: 'jFR1eLdvkUSY9M65cmyAIQ',
 };

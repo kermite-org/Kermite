@@ -53,6 +53,7 @@ const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
   const onMouseDown = (e: MouseEvent) => {
     store.currentkeyEntityId = ke.id;
     startKeyEntityDragOperation(ke, e);
+    e.stopPropagation();
   };
 
   return (
@@ -74,8 +75,18 @@ export const EditSvgView = () => {
     border: solid 1px #888;
   `;
 
+  const onSvgClick = () => {
+    store.currentkeyEntityId = '';
+  };
+
   return (
-    <svg width={600} height={400} css={cssSvg} viewBox="-150 -100 300 200">
+    <svg
+      width={600}
+      height={400}
+      css={cssSvg}
+      viewBox="-150 -100 300 200"
+      onMouseDown={onSvgClick}
+    >
       {store.design.keyEntities.map((ke) => (
         <KeyEntityCard ke={ke} key={ke.id} />
       ))}
