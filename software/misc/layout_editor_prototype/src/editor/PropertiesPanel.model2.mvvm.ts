@@ -2,16 +2,9 @@ import { IKeyEntity } from '~/editor/DataSchema';
 import { store } from '~/editor/store';
 import { Hook } from '~/qx';
 
-const fallbackKeyEntity: IKeyEntity = {
-  id: '--',
-  keyId: '--',
-  x: 0,
-  y: 0,
-};
-
 function getKeyEntityById(id: string) {
   const { design } = store;
-  return design.keyEntities.find((ke) => ke.id === id) || fallbackKeyEntity;
+  return design.keyEntities.find((ke) => ke.id === id);
 }
 
 interface IAttributeSlotSource<T> {
@@ -50,7 +43,7 @@ const slotSources: IAttributeSlotSource<any>[] = [
 ];
 
 class AttributeSlotModel {
-  private targetObject: { [key in string]: any } = fallbackKeyEntity;
+  private targetObject: { [key in string]: any } | undefined = undefined;
 
   private _originalValue: any;
   private _editText: string = '';
@@ -75,21 +68,29 @@ class AttributeSlotModel {
   constructor(private source: IAttributeSlotSource<any>) {}
 
   private pullModelValue() {
-    this._originalValue = this.targetObject[this.propKey];
-    this._editText = this.source.reader(this._originalValue);
-    this._errorText = '';
-  }
-
-  private pushEditTextToModelValue() {
-    this._errorText = this.source.validator(this._editText) || '';
-    if (!this._errorText) {
-      const newValue = this.source.writer(this._editText);
-      this.targetObject[this.propKey] = newValue;
-      this.pullModelValue();
+    if (this.targetObject) {
+      this._originalValue = this.targetObject[this.propKey];
+      this._editText = this.source.reader(this._originalValue);
+      this._errorText = '';
+    } else {
+      this._errorText = '';
+      this._errorText = '';
     }
   }
 
-  setKeyEntity(ke: IKeyEntity) {
+  private pushEditTextToModelValue() {
+    if (this.targetObject) {
+      this._errorText = this.source.validator(this._editText) || '';
+      if (!this._errorText) {
+        const newValue = this.source.writer(this._editText);
+        this.targetObject[this.propKey] = newValue;
+        this._originalValue = newValue;
+        this._errorText = '';
+      }
+    }
+  }
+
+  setKeyEntity(ke: IKeyEntity | undefined) {
     this.targetObject = ke;
     this.pullModelValue();
   }
@@ -100,9 +101,11 @@ class AttributeSlotModel {
   };
 
   update(): void {
-    const currentValue = this.targetObject[this.propKey];
-    if (this._originalValue !== currentValue) {
-      this.pullModelValue();
+    if (this.targetObject) {
+      const currentValue = this.targetObject[this.propKey];
+      if (this._originalValue !== currentValue) {
+        this.pullModelValue();
+      }
     }
   }
 
@@ -131,7 +134,7 @@ class KeyEntityAttrsEditorModel {
     this.allSlots.forEach((slot) => slot.update());
   }
 
-  setTargetKeyEntity(targetKeyEntity: IKeyEntity) {
+  setTargetKeyEntity(targetKeyEntity: IKeyEntity | undefined) {
     this.allSlots.forEach((slot) => slot.setKeyEntity(targetKeyEntity));
   }
 
@@ -151,26 +154,39 @@ interface IAttributeSlotViewModel {
   readonly label: string;
   readonly editText: string;
   setEditText(text: string): void;
-  readonly errorText: string;
+  // readonly errorText: string;
   readonly hasError: boolean;
   onFocus(): void;
   resetError(): void;
+  canEdit: boolean;
 }
 
 function createAttributeSlotViewModel(
   slot: AttributeSlotModel,
   onSlotFocused: (slot: AttributeSlotModel) => void
 ): IAttributeSlotViewModel {
-  return {
-    propKey: slot.propKey,
-    label: slot.label,
-    editText: slot.editText,
-    setEditText: slot.setEditText,
-    errorText: slot.errorText,
-    hasError: !!slot.errorText,
-    onFocus: () => onSlotFocused(slot),
-    resetError: slot.resetError,
-  };
+  const canEdit = store.currentkeyEntityId !== undefined;
+  return canEdit
+    ? {
+        propKey: slot.propKey,
+        label: slot.label,
+        editText: slot.editText,
+        setEditText: slot.setEditText,
+        hasError: !!slot.errorText,
+        onFocus: () => onSlotFocused(slot),
+        resetError: slot.resetError,
+        canEdit,
+      }
+    : {
+        propKey: slot.propKey,
+        label: slot.label,
+        editText: '',
+        setEditText: () => {},
+        hasError: !!slot.errorText,
+        onFocus: () => {},
+        resetError: () => {},
+        canEdit,
+      };
 }
 
 interface IKeyEntityAttrsEditorViewModel {
@@ -197,7 +213,7 @@ interface IPropertyPanelModel {
 
 export function usePropertyPanelModel(): IPropertyPanelModel {
   Hook.useEffect(() => {
-    const ke = getKeyEntityById(store.currentkeyEntityId);
+    const ke = getKeyEntityById(store.currentkeyEntityId!);
     keyEntityAttrsModel.setTargetKeyEntity(ke);
   }, [store.currentkeyEntityId]);
 

@@ -76,7 +76,7 @@ export const EditSvgView = () => {
   `;
 
   const onSvgClick = () => {
-    store.currentkeyEntityId = '';
+    store.currentkeyEntityId = undefined;
   };
 
   return (

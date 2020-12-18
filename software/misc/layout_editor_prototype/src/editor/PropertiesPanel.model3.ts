@@ -3,13 +3,6 @@ import { IKeyEntity } from '~/editor/DataSchema';
 import { store } from '~/editor/store';
 import { Hook } from '~/qx';
 
-const fallbackKeyEntity: IKeyEntity = {
-  id: '--',
-  keyId: '--',
-  x: 0,
-  y: 0,
-};
-
 interface IAttributeSlotSource<T> {
   label: string;
   validator(text: string): string | undefined;
@@ -75,11 +68,15 @@ const initialState: IEditorState = {
 const editorState = initialState;
 
 const reader = new (class {
-  get editKeyEntity(): any {
-    return (
-      store.design.keyEntities.find(
-        (ke) => ke.id === editorState.editTargetKeyEntityId
-      ) || fallbackKeyEntity
+  get selectedKeyEntity(): IKeyEntity | undefined {
+    return store.design.keyEntities.find(
+      (ke) => ke.id === editorState.editTargetKeyEntityId
+    );
+  }
+
+  get editKeyEntity(): { [key: string]: any } | undefined {
+    return store.design.keyEntities.find(
+      (ke) => ke.id === editorState.editTargetKeyEntityId
     );
   }
 
@@ -98,22 +95,32 @@ const reader = new (class {
 
 const mutations = new (class {
   pullModelValue(propKey: string) {
+    const { editKeyEntity } = reader;
     const ss = slotSources[propKey];
     const slot = editorState.slots[propKey];
-    const value = reader.editKeyEntity[propKey];
-    slot.originalValue = value;
-    slot.editText = ss.reader(value);
-    slot.errorText = '';
+    if (editKeyEntity) {
+      const value = editKeyEntity[propKey];
+      slot.originalValue = value;
+      slot.editText = ss.reader(value);
+      slot.errorText = '';
+    } else {
+      slot.editText = '';
+      slot.errorText = '';
+    }
   }
 
   setEditText(propKey: string, editText: string) {
+    const { editKeyEntity } = reader;
+    if (!editKeyEntity) {
+      return;
+    }
     const slot = editorState.slots[propKey];
     const ss = slotSources[propKey];
     slot.editText = editText;
     slot.errorText = ss.validator(editText) || '';
     if (!slot.errorText) {
       const newValue = ss.writer(editText);
-      reader.editKeyEntity[propKey] = newValue;
+      editKeyEntity[propKey] = newValue;
       slot.originalValue = newValue;
       slot.errorText = '';
     }
@@ -132,11 +139,14 @@ const mutations = new (class {
   }
 
   updateAllSlots() {
-    editPropKeys.forEach((pk) => {
-      if (editorState.slots[pk].originalValue !== reader.editKeyEntity[pk]) {
-        this.pullModelValue(pk);
-      }
-    });
+    const { editKeyEntity } = reader;
+    if (editKeyEntity) {
+      editPropKeys.forEach((pk) => {
+        if (editorState.slots[pk].originalValue !== editKeyEntity[pk]) {
+          this.pullModelValue(pk);
+        }
+      });
+    }
   }
 })();
 
@@ -149,10 +159,10 @@ interface IAttributeSlotViewModel {
   label: string;
   editText: string;
   setEditText(text: string): void;
-  errorText: string;
   hasError: boolean;
   onFocus(): void;
   resetError(): void;
+  canEdit: boolean;
 }
 
 interface IKeyEntityAttrsEditorViewModel {
@@ -169,7 +179,8 @@ function useKeyEntityAttrsEditorViewModel(): IKeyEntityAttrsEditorViewModel {
 
   mutations.updateAllSlots();
 
-  const slots: IAttributeSlotViewModel[] = editPropKeys.map((propKey) => {
+  const canEdit = reader.selectedKeyEntity !== undefined;
+  const editSlots: IAttributeSlotViewModel[] = editPropKeys.map((propKey) => {
     const ss = slotSources[propKey];
     const slot = editorState.slots[propKey];
     return {
@@ -177,15 +188,15 @@ function useKeyEntityAttrsEditorViewModel(): IKeyEntityAttrsEditorViewModel {
       label: ss.label,
       editText: slot.editText,
       setEditText: (text: string) => mutations.setEditText(propKey, text),
-      errorText: slot.errorText,
       hasError: !!slot.errorText,
       onFocus: () => mutations.setEditTargetPropKey(propKey),
       resetError: () => mutations.pullModelValue(propKey),
+      canEdit,
     };
   });
 
   return {
-    slots,
+    slots: editSlots,
     errorText: reader.editSlotErrorText,
   };
 }
