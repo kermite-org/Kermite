@@ -1,10 +1,5 @@
 import { IKeyEntity } from '~/editor/DataSchema';
 import { appState, editManager } from '~/editor/store';
-import { Hook } from '~/qx';
-
-function getKeyEntityById(id: string | undefined) {
-  return appState.editor.design.keyEntities.find((ke) => ke.id === id);
-}
 
 interface IAttributeSlotSource<T> {
   propKey: keyof IKeyEntity;
@@ -41,9 +36,6 @@ const slotSources: IAttributeSlotSource<any>[] = [
   },
 ];
 
-interface IAttributeSlotFocusListener {
-  onSlotFocused(slot: AttributeSlotModel): void;
-}
 class AttributeSlotModel {
   private targetObject: { [key in string]: any } | undefined = undefined;
 
@@ -67,9 +59,17 @@ class AttributeSlotModel {
     return this._errorText;
   }
 
+  get canEdit() {
+    return this.targetObject !== undefined;
+  }
+
+  get hasError() {
+    return !!this._errorText;
+  }
+
   constructor(
     private source: IAttributeSlotSource<any>,
-    private focusListener: IAttributeSlotFocusListener
+    private slotFocusedCallback: (slot: AttributeSlotModel) => void
   ) {}
 
   private pullModelValue() {
@@ -78,6 +78,7 @@ class AttributeSlotModel {
       this._editText = this.source.reader(this._originalValue);
       this._errorText = '';
     } else {
+      this._originalValue = undefined;
       this._editText = '';
       this._errorText = '';
     }
@@ -96,9 +97,14 @@ class AttributeSlotModel {
     }
   }
 
-  setKeyEntity(ke: IKeyEntity | undefined) {
-    this.targetObject = ke;
-    this.pullModelValue();
+  updateSource(keyEntity: IKeyEntity | undefined) {
+    const sourceChanged =
+      this.targetObject !== keyEntity ||
+      this._originalValue !== (keyEntity as any)?.[this.propKey];
+    this.targetObject = keyEntity;
+    if (sourceChanged) {
+      this.pullModelValue();
+    }
   }
 
   setEditText = (text: string) => {
@@ -106,53 +112,57 @@ class AttributeSlotModel {
     this.pushEditTextToModelValue();
   };
 
-  update() {
-    if (this.targetObject) {
-      const currentValue = this.targetObject[this.propKey];
-      if (this._originalValue !== currentValue) {
-        this.pullModelValue();
-      }
-    }
-  }
-
   resetError = () => {
     this.pullModelValue();
   };
 
   onFocus = () => {
-    this.focusListener.onSlotFocused(this);
+    console.log({ this: this });
+    this.slotFocusedCallback?.(this);
     editManager.enterEditSession();
   };
 
   onBlur = () => {
-    this.pullModelValue();
+    // this.pullModelValue();
     editManager.leaveEditSession();
   };
 }
 
+function getStoreCurrentKeyEntity() {
+  const { design, currentkeyEntityId } = appState.editor;
+  return design.keyEntities.find((ke) => ke.id === currentkeyEntityId);
+}
+
 class KeyEntityAttrsEditorModel {
-  allSlots: AttributeSlotModel[] = slotSources.map(
-    (ss) => new AttributeSlotModel(ss, this)
-  );
+  private _allSlots: AttributeSlotModel[];
+  private _currentSlot: AttributeSlotModel | undefined;
 
-  private currentSlot: AttributeSlotModel | undefined;
-
-  onSlotFocused = (targetSlot: AttributeSlotModel): void => {
-    this.currentSlot = targetSlot;
-  };
-
-  update() {
-    this.allSlots.forEach((slot) => slot.update());
-  }
-
-  setTargetKeyEntity(targetKeyEntity: IKeyEntity | undefined) {
-    this.allSlots.forEach((slot) => slot.setKeyEntity(targetKeyEntity));
+  get allSlots() {
+    return this._allSlots;
   }
 
   get errorText() {
-    return this.currentSlot?.errorText
-      ? `${this.currentSlot.label} ${this.currentSlot.errorText}`
+    return this._currentSlot?.errorText
+      ? `${this._currentSlot.label} ${this._currentSlot.errorText}`
       : '';
+  }
+
+  constructor() {
+    this._allSlots = slotSources.map(
+      (ss) => new AttributeSlotModel(ss, this.onSlotFocused)
+    );
+  }
+
+  onSlotFocused = (targetSlot: AttributeSlotModel): void => {
+    this._currentSlot = targetSlot;
+    this._allSlots
+      .filter((slot) => slot !== targetSlot)
+      .forEach((slot) => slot.resetError());
+  };
+
+  update() {
+    const ke = getStoreCurrentKeyEntity();
+    this._allSlots.forEach((slot) => slot.updateSource(ke));
   }
 }
 
@@ -171,54 +181,22 @@ interface IAttributeSlotViewModel {
   resetError(): void;
   canEdit: boolean;
 }
-
-function createAttributeSlotViewModel(
-  slot: AttributeSlotModel
-): IAttributeSlotViewModel {
-  const canEdit = appState.editor.currentkeyEntityId !== undefined;
-  return {
-    propKey: slot.propKey,
-    label: slot.label,
-    editText: slot.editText,
-    setEditText: slot.setEditText,
-    hasError: !!slot.errorText,
-    onFocus: slot.onFocus,
-    onBlur: slot.onBlur,
-    resetError: slot.resetError,
-    canEdit,
-  };
-}
-
-interface IKeyEntityAttrsEditorViewModel {
-  readonly slots: IAttributeSlotViewModel[];
-  readonly errorText: string;
-}
-
-function createKeyEntityAttrsEditorViewModel(
-  model: KeyEntityAttrsEditorModel
-): IKeyEntityAttrsEditorViewModel {
-  return {
-    slots: model.allSlots.map(createAttributeSlotViewModel),
-    errorText: model.errorText,
+interface IPropertyPanelModel {
+  keyEntityAttrsVm: {
+    slots: IAttributeSlotViewModel[];
+    errorText: string;
   };
 }
 
 const keyEntityAttrsModel = new KeyEntityAttrsEditorModel();
 
-interface IPropertyPanelModel {
-  readonly keyEntityAttrsVm: IKeyEntityAttrsEditorViewModel;
-}
-
 export function usePropertyPanelModel(): IPropertyPanelModel {
-  const { editor } = appState;
-  Hook.useEffect(() => {
-    const ke = getKeyEntityById(editor.currentkeyEntityId);
-    keyEntityAttrsModel.setTargetKeyEntity(ke);
-  }, [editor, editor.currentkeyEntityId]);
-
-  keyEntityAttrsModel.update();
-
+  const model = keyEntityAttrsModel;
+  model.update();
   return {
-    keyEntityAttrsVm: createKeyEntityAttrsEditorViewModel(keyEntityAttrsModel),
+    keyEntityAttrsVm: {
+      slots: model.allSlots,
+      errorText: model.errorText,
+    },
   };
 }

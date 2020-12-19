@@ -4,14 +4,16 @@ import { usePropertyPanelModel } from '~/editor/PropertiesPanel.model2.mvvm';
 import { h } from '~/qx';
 
 interface IDesignAttributeTextInputLineProps {
-  label: string;
-  editText: string;
-  setEditText(text: string): void;
-  hasError: boolean;
-  onFocus(): void;
-  onBlur(): void;
-  resetError(): void;
-  canEdit: boolean;
+  model: {
+    label: string;
+    editText: string;
+    setEditText(text: string): void;
+    hasError: boolean;
+    onFocus(): void;
+    onBlur(): void;
+    resetError(): void;
+    canEdit: boolean;
+  };
 }
 
 const DesignAttributeTextInputLine = (
@@ -31,7 +33,7 @@ const DesignAttributeTextInputLine = (
     onBlur,
     resetError,
     canEdit,
-  } = props;
+  } = props.model;
 
   return (
     <div>
@@ -82,7 +84,7 @@ export const PropertiesPanel = () => {
     <div css={cssPropertiesPanel}>
       <div className="editZone">
         {vm.slots.map((slot) => (
-          <DesignAttributeTextInputLine key={slot.propKey} {...slot} />
+          <DesignAttributeTextInputLine key={slot.propKey} model={slot} />
         ))}
       </div>
       <div qxIf={!!vm.errorText} className="errorZone">
