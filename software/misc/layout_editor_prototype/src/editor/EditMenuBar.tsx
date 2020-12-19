@@ -1,4 +1,5 @@
 import { css } from 'goober';
+import { editManager } from '~/editor/store';
 import { h } from '~/qx';
 
 const cssEditMenuBar = css`
@@ -14,10 +15,16 @@ const cssEditMenuBar = css`
 `;
 
 export const EditMenuBar = () => {
+  const { canUndo, canRedo, undo, redo } = editManager;
+
   return (
     <div class={cssEditMenuBar}>
-      <button>undo</button>
-      <button>redo</button>
+      <button disabled={!canUndo} onClick={undo}>
+        undo
+      </button>
+      <button disabled={!canRedo} onClick={redo}>
+        redo
+      </button>
     </div>
   );
 };
