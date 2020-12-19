@@ -56,6 +56,21 @@ export const editManager = new (class {
     appState.redoStack = [];
   }
 
+  private hasCommitInSession = false;
+
+  enterEditSession() {
+    this.hasCommitInSession = false;
+  }
+
+  pushEditSnapShotInSession() {
+    if (!this.hasCommitInSession) {
+      this.pushEditSnapshot();
+    }
+    this.hasCommitInSession = true;
+  }
+
+  leaveEditSession() {}
+
   private temporaryEditSnapshot: IEditState | undefined;
 
   preserveTemporaryEditSnapshot() {

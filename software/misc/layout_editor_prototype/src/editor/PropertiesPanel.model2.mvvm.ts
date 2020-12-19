@@ -1,5 +1,5 @@
 import { IKeyEntity } from '~/editor/DataSchema';
-import { appState } from '~/editor/store';
+import { appState, editManager } from '~/editor/store';
 import { Hook } from '~/qx';
 
 function getKeyEntityById(id: string | undefined) {
@@ -88,6 +88,7 @@ class AttributeSlotModel {
       this._errorText = this.source.validator(this._editText) || '';
       if (!this._errorText) {
         const newValue = this.source.writer(this._editText);
+        editManager.pushEditSnapShotInSession();
         this.targetObject[this.propKey] = newValue;
         this._originalValue = newValue;
         this._errorText = '';
@@ -120,10 +121,12 @@ class AttributeSlotModel {
 
   onFocus = () => {
     this.focusListener.onSlotFocused(this);
+    editManager.enterEditSession();
   };
 
   onBlur = () => {
     this.pullModelValue();
+    editManager.leaveEditSession();
   };
 }
 
@@ -211,7 +214,7 @@ export function usePropertyPanelModel(): IPropertyPanelModel {
   Hook.useEffect(() => {
     const ke = getKeyEntityById(editor.currentkeyEntityId);
     keyEntityAttrsModel.setTargetKeyEntity(ke);
-  }, [editor.currentkeyEntityId]);
+  }, [editor, editor.currentkeyEntityId]);
 
   keyEntityAttrsModel.update();
 
