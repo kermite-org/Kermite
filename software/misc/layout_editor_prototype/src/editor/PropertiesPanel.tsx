@@ -9,6 +9,7 @@ interface IDesignAttributeTextInputLineProps {
   setEditText(text: string): void;
   hasError: boolean;
   onFocus(): void;
+  onBlur(): void;
   resetError(): void;
   canEdit: boolean;
 }
@@ -27,6 +28,7 @@ const DesignAttributeTextInputLine = (
     setEditText,
     hasError,
     onFocus,
+    onBlur,
     resetError,
     canEdit,
   } = props;
@@ -40,6 +42,7 @@ const DesignAttributeTextInputLine = (
         value={editText}
         onInput={reflectValue(setEditText)}
         onFocus={onFocus}
+        onBlur={onBlur}
         data-has-error={hasError}
         readOnly={!canEdit}
       />
