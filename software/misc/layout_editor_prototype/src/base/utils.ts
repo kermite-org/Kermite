@@ -7,3 +7,11 @@ export function createDictionaryFromKeyValues<T>(
   });
   return obj;
 }
+
+export function compareObjectByJsonStringify(a: any, b: any) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+export function duplicateObjectByJsonStringifyParse<T>(obj: T): T {
+  return JSON.parse(JSON.stringify(obj));
+}
