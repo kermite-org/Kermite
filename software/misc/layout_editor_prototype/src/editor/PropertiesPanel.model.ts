@@ -1,5 +1,5 @@
 import { IKeyEntity } from '~/editor/DataSchema';
-import { store } from '~/editor/store';
+import { appState } from '~/editor/store';
 import { Hook } from '~/qx';
 
 interface IAttributeSlotViewModel {
@@ -187,7 +187,7 @@ const fallbackKeyEntity: IKeyEntity = {
 };
 
 export function usePropertyPanelModel(): IPropertyPanelModel {
-  const { design, currentkeyEntityId } = store;
+  const { design, currentkeyEntityId } = appState.editor;
 
   const keyEntityAttrsVm = Hook.useMemo(() => {
     const selectedKeyEntity =

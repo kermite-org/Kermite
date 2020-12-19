@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { IKeyEntity } from '~/editor/DataSchema';
-import { store } from '~/editor/store';
+import { appState } from '~/editor/store';
 import { h, rerender } from '~/qx';
 
 function startKeyEntityDragOperation(ke: IKeyEntity, e: MouseEvent) {
@@ -50,8 +50,10 @@ const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
   const sz = 20;
   const hsz = sz / 2;
 
+  const { editor } = appState;
+
   const onMouseDown = (e: MouseEvent) => {
-    store.currentkeyEntityId = ke.id;
+    editor.currentkeyEntityId = ke.id;
     startKeyEntityDragOperation(ke, e);
     e.stopPropagation();
   };
@@ -64,19 +66,21 @@ const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
       width={sz}
       height={sz}
       css={cssKeyRect}
-      data-selected={ke.id === store.currentkeyEntityId}
+      data-selected={ke.id === editor.currentkeyEntityId}
       onMouseDown={onMouseDown}
     />
   );
 };
 
 export const EditSvgView = () => {
+  const { editor } = appState;
+
   const cssSvg = css`
     border: solid 1px #888;
   `;
 
   const onSvgClick = () => {
-    store.currentkeyEntityId = undefined;
+    editor.currentkeyEntityId = undefined;
   };
 
   return (
@@ -87,7 +91,7 @@ export const EditSvgView = () => {
       viewBox="-150 -100 300 200"
       onMouseDown={onSvgClick}
     >
-      {store.design.keyEntities.map((ke) => (
+      {editor.design.keyEntities.map((ke) => (
         <KeyEntityCard ke={ke} key={ke.id} />
       ))}
     </svg>

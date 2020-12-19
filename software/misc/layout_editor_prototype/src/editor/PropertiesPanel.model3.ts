@@ -1,6 +1,6 @@
 import { createDictionaryFromKeyValues } from '~/base/utils';
 import { IKeyEntity } from '~/editor/DataSchema';
-import { store } from '~/editor/store';
+import { appState } from '~/editor/store';
 import { Hook } from '~/qx';
 
 interface IAttributeSlotSource<T> {
@@ -69,13 +69,13 @@ const editorState = initialState;
 
 const reader = new (class {
   get selectedKeyEntity(): IKeyEntity | undefined {
-    return store.design.keyEntities.find(
+    return appState.editor.design.keyEntities.find(
       (ke) => ke.id === editorState.editTargetKeyEntityId
     );
   }
 
   get editKeyEntity(): { [key: string]: any } | undefined {
-    return store.design.keyEntities.find(
+    return appState.editor.design.keyEntities.find(
       (ke) => ke.id === editorState.editTargetKeyEntityId
     );
   }
@@ -171,7 +171,7 @@ interface IKeyEntityAttrsEditorViewModel {
 }
 
 function useKeyEntityAttrsEditorViewModel(): IKeyEntityAttrsEditorViewModel {
-  const { currentkeyEntityId } = store;
+  const { currentkeyEntityId } = appState.editor;
   Hook.useEffect(
     () => mutations.setEditTargetKeyEntityKeyId(currentkeyEntityId),
     [currentkeyEntityId]

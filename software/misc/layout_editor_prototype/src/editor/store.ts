@@ -23,11 +23,16 @@ const initialDesign: IKeyboardDesign = {
   ],
 };
 
-interface IStore {
-  design: IKeyboardDesign;
-  currentkeyEntityId: string | undefined;
+interface IAppState {
+  editor: {
+    design: IKeyboardDesign;
+    currentkeyEntityId: string | undefined;
+  };
 }
-export const store: IStore = {
-  design: initialDesign,
-  currentkeyEntityId: 'jFR1eLdvkUSY9M65cmyAIQ',
+
+export const appState: IAppState = {
+  editor: {
+    design: initialDesign,
+    currentkeyEntityId: 'jFR1eLdvkUSY9M65cmyAIQ',
+  },
 };

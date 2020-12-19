@@ -1,10 +1,9 @@
 import { IKeyEntity } from '~/editor/DataSchema';
-import { store } from '~/editor/store';
+import { appState } from '~/editor/store';
 import { Hook } from '~/qx';
 
 function getKeyEntityById(id: string) {
-  const { design } = store;
-  return design.keyEntities.find((ke) => ke.id === id);
+  return appState.editor.design.keyEntities.find((ke) => ke.id === id);
 }
 
 interface IAttributeSlotSource<T> {
@@ -165,7 +164,7 @@ function createAttributeSlotViewModel(
   slot: AttributeSlotModel,
   onSlotFocused: (slot: AttributeSlotModel) => void
 ): IAttributeSlotViewModel {
-  const canEdit = store.currentkeyEntityId !== undefined;
+  const canEdit = appState.editor.currentkeyEntityId !== undefined;
   return canEdit
     ? {
         propKey: slot.propKey,
@@ -212,10 +211,11 @@ interface IPropertyPanelModel {
 }
 
 export function usePropertyPanelModel(): IPropertyPanelModel {
+  const { editor } = appState;
   Hook.useEffect(() => {
-    const ke = getKeyEntityById(store.currentkeyEntityId!);
+    const ke = getKeyEntityById(editor.currentkeyEntityId!);
     keyEntityAttrsModel.setTargetKeyEntity(ke);
-  }, [store.currentkeyEntityId]);
+  }, [editor.currentkeyEntityId]);
 
   keyEntityAttrsModel.update();
 
