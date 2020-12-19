@@ -50,23 +50,23 @@ export const editManager = new (class {
     return duplicateObjectByJsonStringifyParse(appState.editor);
   }
 
-  pushEditHistory() {
+  pushEditSnapshot() {
     const copied = this.getCurrentStateCloned();
     appState.undoStack.push(copied);
     appState.redoStack = [];
   }
 
-  private editSnapshot: IEditState | undefined;
+  private temporaryEditSnapshot: IEditState | undefined;
 
-  preserveEditSnapshot() {
-    this.editSnapshot = this.getCurrentStateCloned();
+  preserveTemporaryEditSnapshot() {
+    this.temporaryEditSnapshot = this.getCurrentStateCloned();
   }
 
-  commitEditSnapshot() {
-    if (this.editSnapshot) {
-      appState.undoStack.push(this.editSnapshot);
+  commitTemporaryEditSnapshot() {
+    if (this.temporaryEditSnapshot) {
+      appState.undoStack.push(this.temporaryEditSnapshot);
       appState.redoStack = [];
-      this.editSnapshot = undefined;
+      this.temporaryEditSnapshot = undefined;
     }
   }
 
