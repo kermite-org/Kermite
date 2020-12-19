@@ -1,3 +1,5 @@
+import { produce } from 'immer';
+
 interface ICard {
   x: number;
 }
@@ -20,26 +22,85 @@ const state: IState = {
   },
 };
 
+interface IModification {
+  oldState: IEditState;
+  newState: IEditState;
+}
+
+function stringifyEditState(editState: IEditState) {
+  return `${editState.cards.map((c) => c.x).join('-')}$${editState.cidx}`;
+}
+
+function stringifyModification(modification: IModification) {
+  return `${stringifyEditState(modification.oldState)} --> ${stringifyEditState(
+    modification.newState
+  )}`;
+}
+
 const editor = new (class {
+  private undoStack: IModification[] = [];
+  private redoStack: IModification[] = [];
+
   get canUndo() {
-    return false;
+    return this.undoStack.length > 0;
   }
 
   get canRedo() {
-    return false;
+    return this.redoStack.length > 0;
   }
 
-  undo = () => {};
+  private dumpStacks() {
+    console.log(
+      JSON.stringify(
+        {
+          undoStack: this.undoStack.map(stringifyModification),
+          current: stringifyEditState(state.edit),
+          redoStack: this.redoStack.map(stringifyModification),
+        },
+        null,
+        ' '
+      )
+    );
+  }
 
-  redo = () => {};
+  undo = () => {
+    if (this.undoStack.length > 0) {
+      const modification = this.undoStack.pop()!;
+      this.redoStack.push(modification);
+      state.edit = modification.oldState;
+      console.log('undo');
+      this.dumpStacks();
+    }
+  };
+
+  redo = () => {
+    if (this.redoStack.length > 0) {
+      const modificatin = this.redoStack.pop()!;
+      this.undoStack.push(modificatin);
+      state.edit = modificatin.newState;
+      console.log('redo');
+      this.dumpStacks();
+    }
+  };
 
   changeCardXValue(cardIndex: number, x: number) {
-    state.edit.cards[cardIndex].x = x;
-    console.log(JSON.stringify(state.edit));
+    const oldState = state.edit;
+    const newState = produce(state.edit, (draft) => {
+      draft.cards[cardIndex].x = x;
+    });
+    state.edit = newState;
+
+    this.undoStack.push({ oldState, newState });
+    this.redoStack = [];
+
+    console.log('edit');
+    this.dumpStacks();
   }
 
   selectCard(cardIndex: number) {
-    state.edit.cidx = cardIndex;
+    state.edit = produce(state.edit, (draft) => {
+      draft.cidx = cardIndex;
+    });
   }
 })();
 
