@@ -1,12 +1,14 @@
 import { css } from 'goober';
 import { IKeyEntity } from '~/editor/DataSchema';
-import { appState } from '~/editor/store';
+import { appState, editManager } from '~/editor/store';
 import { h, rerender } from '~/qx';
 
 function startKeyEntityDragOperation(ke: IKeyEntity, e: MouseEvent) {
   let prevPos = { x: 0, y: 0 };
 
   const viewScale = 0.5;
+
+  let moved = false;
 
   const onMouseMove = (e: MouseEvent) => {
     const deltaX = e.clientX - prevPos.x;
@@ -15,16 +17,24 @@ function startKeyEntityDragOperation(ke: IKeyEntity, e: MouseEvent) {
     ke.y += deltaY * viewScale;
     prevPos.x = e.clientX;
     prevPos.y = e.clientY;
+    moved = true;
     rerender();
   };
 
   const onMouseUp = () => {
     window.removeEventListener('mousemove', onMouseMove);
     window.removeEventListener('mouseup', onMouseUp);
+    if (moved) {
+      editManager.commitTemporaryEditSnapshot();
+    }
     rerender();
   };
 
   const onMouseDown = (e: MouseEvent) => {
+    editManager.preserveTemporaryEditSnapshot();
+
+    appState.editor.currentkeyEntityId = ke.id;
+
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseup', onMouseUp);
     prevPos = {
@@ -50,10 +60,7 @@ const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
   const sz = 20;
   const hsz = sz / 2;
 
-  const { editor } = appState;
-
   const onMouseDown = (e: MouseEvent) => {
-    editor.currentkeyEntityId = ke.id;
     startKeyEntityDragOperation(ke, e);
     e.stopPropagation();
   };
@@ -66,7 +73,7 @@ const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
       width={sz}
       height={sz}
       css={cssKeyRect}
-      data-selected={ke.id === editor.currentkeyEntityId}
+      data-selected={ke.id === appState.editor.currentkeyEntityId}
       onMouseDown={onMouseDown}
     />
   );
