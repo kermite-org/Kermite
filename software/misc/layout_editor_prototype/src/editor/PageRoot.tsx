@@ -1,4 +1,5 @@
 import { css } from 'goober';
+import { EditMenuBar } from '~/editor/EditMenuBar';
 import { EditSvgView } from '~/editor/EditSvgView';
 import { PropertiesPanel } from '~/editor/PropertiesPanel';
 import { h } from '~/qx';
@@ -8,6 +9,10 @@ export const PageRoot = () => {
     border: solid 2px #f08;
     padding: 10px;
     height: 100%;
+
+    > .topRow {
+      margin: 10px 0;
+    }
 
     > .mainRow {
       display: flex;
@@ -22,6 +27,10 @@ export const PageRoot = () => {
   return (
     <div css={cssPageRoot}>
       <div>layout editor proto</div>
+      <div class="topRow">
+        <EditMenuBar />
+      </div>
+
       <div class="mainRow">
         <EditSvgView />
         <div class="sideColumn">
