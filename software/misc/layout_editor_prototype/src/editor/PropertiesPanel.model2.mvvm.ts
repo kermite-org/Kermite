@@ -43,6 +43,8 @@ class AttributeSlotModel {
   private _editText: string = '';
   private _errorText: string = '';
 
+  private modifiedInFocus: boolean = false;
+
   get propKey() {
     return this.source.propKey;
   }
@@ -89,7 +91,7 @@ class AttributeSlotModel {
       this._errorText = this.source.validator(this._editText) || '';
       if (!this._errorText) {
         const newValue = this.source.writer(this._editText);
-        editManager.pushEditSnapShotInSession();
+        this.modifiedInFocus = true;
         this.targetObject[this.propKey] = newValue;
         this._originalValue = newValue;
         this._errorText = '';
@@ -117,14 +119,14 @@ class AttributeSlotModel {
   };
 
   onFocus = () => {
-    console.log({ this: this });
-    this.slotFocusedCallback?.(this);
-    editManager.enterEditSession();
+    this.slotFocusedCallback(this);
+    editManager.startEditSession();
+    this.modifiedInFocus = false;
   };
 
   onBlur = () => {
-    // this.pullModelValue();
-    editManager.leaveEditSession();
+    editManager.endEditSession(this.modifiedInFocus);
+    this.modifiedInFocus = false;
   };
 }
 

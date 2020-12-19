@@ -1,4 +1,4 @@
-import { duplicateObjectByJsonStringifyParse } from '~/base/utils';
+import { duplicateObjectByJsonStringifyParse as cloneObject } from '~/base/utils';
 import { IKeyboardDesign } from '~/editor/DataSchema';
 
 const initialDesign: IKeyboardDesign = {
@@ -30,8 +30,6 @@ interface IEditState {
 }
 interface IAppState {
   editor: IEditState;
-  undoStack: IEditState[];
-  redoStack: IEditState[];
 }
 
 const initialEditState: IEditState = {
@@ -41,71 +39,58 @@ const initialEditState: IEditState = {
 
 export const appState: IAppState = {
   editor: initialEditState,
-  undoStack: [],
-  redoStack: [],
 };
 
+interface IModification {
+  oldState: IEditState;
+  newState: IEditState;
+}
+
 export const editManager = new (class {
-  private getCurrentStateCloned() {
-    return duplicateObjectByJsonStringifyParse(appState.editor);
+  private undoStack: IModification[] = [];
+  private redoStack: IModification[] = [];
+
+  private editStartState: IEditState | undefined;
+
+  startEditSession() {
+    this.editStartState = cloneObject(appState.editor);
   }
 
-  pushEditSnapshot() {
-    const copied = this.getCurrentStateCloned();
-    appState.undoStack.push(copied);
-    appState.redoStack = [];
-  }
-
-  private hasCommitInSession = false;
-
-  enterEditSession() {
-    this.hasCommitInSession = false;
-  }
-
-  pushEditSnapShotInSession() {
-    if (!this.hasCommitInSession) {
-      this.pushEditSnapshot();
-    }
-    this.hasCommitInSession = true;
-  }
-
-  leaveEditSession() {}
-
-  private temporaryEditSnapshot: IEditState | undefined;
-
-  preserveTemporaryEditSnapshot() {
-    this.temporaryEditSnapshot = this.getCurrentStateCloned();
-  }
-
-  commitTemporaryEditSnapshot() {
-    if (this.temporaryEditSnapshot) {
-      appState.undoStack.push(this.temporaryEditSnapshot);
-      appState.redoStack = [];
-      this.temporaryEditSnapshot = undefined;
+  endEditSession(edited: boolean) {
+    if (this.editStartState) {
+      if (edited) {
+        const editEndState = cloneObject(appState.editor);
+        this.undoStack.push({
+          oldState: this.editStartState,
+          newState: editEndState,
+        });
+        this.redoStack = [];
+      }
+      this.editStartState = undefined;
     }
   }
 
   get canUndo() {
-    return appState.undoStack.length > 0;
+    return this.undoStack.length > 0;
   }
 
   get canRedo() {
-    return appState.redoStack.length > 0;
+    return this.redoStack.length > 0;
   }
 
   undo = () => {
-    if (appState.undoStack.length > 0) {
-      const copied = this.getCurrentStateCloned();
-      appState.redoStack.push(copied);
-      appState.editor = appState.undoStack.pop()!;
+    if (this.undoStack.length > 0) {
+      const modification = this.undoStack.pop()!;
+      this.redoStack.push(modification);
+      appState.editor = cloneObject(modification.oldState);
     }
   };
 
   redo = () => {
-    if (appState.redoStack.length > 0) {
-      const copied = this.getCurrentStateCloned();
-      appState.undoStack.push(copied);
-      appState.editor = appState.redoStack.pop()!;
+    if (this.redoStack.length > 0) {
+      const modificatin = this.redoStack.pop()!;
+      this.undoStack.push(modificatin);
+      appState.editor = cloneObject(modificatin.newState);
     }
   };
 })();

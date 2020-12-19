@@ -24,16 +24,13 @@ function startKeyEntityDragOperation(ke: IKeyEntity, e: MouseEvent) {
   const onMouseUp = () => {
     window.removeEventListener('mousemove', onMouseMove);
     window.removeEventListener('mouseup', onMouseUp);
-    if (moved) {
-      editManager.commitTemporaryEditSnapshot();
-    }
+    editManager.endEditSession(moved);
     rerender();
   };
 
   const onMouseDown = (e: MouseEvent) => {
-    editManager.preserveTemporaryEditSnapshot();
-
     appState.editor.currentkeyEntityId = ke.id;
+    editManager.startEditSession();
 
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseup', onMouseUp);
