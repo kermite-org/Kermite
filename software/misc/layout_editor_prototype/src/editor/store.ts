@@ -24,9 +24,13 @@ const initialDesign: IKeyboardDesign = {
   ],
 };
 
-interface IEditState {
+export type IEditorTarget = 'key' | 'outline' | 'viewbox';
+export type IEditMode = 'add' | 'move' | 'split';
+export interface IEditState {
   design: IKeyboardDesign;
   currentkeyEntityId: string | undefined;
+  editorTarget: IEditorTarget;
+  editMode: IEditMode;
 }
 interface IAppState {
   editor: IEditState;
@@ -35,6 +39,8 @@ interface IAppState {
 const initialEditState: IEditState = {
   design: initialDesign,
   currentkeyEntityId: 'jFR1eLdvkUSY9M65cmyAIQ',
+  editorTarget: 'key',
+  editMode: 'move',
 };
 
 export const appState: IAppState = {

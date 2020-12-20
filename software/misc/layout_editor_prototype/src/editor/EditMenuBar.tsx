@@ -1,12 +1,21 @@
 import { css } from 'goober';
-import { editManager } from '~/editor/store';
+import { ExclusiveButtonGroup } from '~/controls/ExclusiveButtonGroup';
+import { appState, editManager, IEditState } from '~/editor/store';
 import { h } from '~/qx';
 
 const cssEditMenuBar = css`
+  width: 800px;
   display: flex;
   > * + * {
-    margin-left: 5px;
+    margin-left: 40px;
   }
+
+  > .buttonsBox {
+    > * + * {
+      margin-left: 5px;
+    }
+  }
+
   button {
     width: 50px;
     padding: 5px;
@@ -14,17 +23,63 @@ const cssEditMenuBar = css`
   }
 `;
 
+function createModeSelectionViewModel<K extends 'editorTarget' | 'editMode'>(
+  taretKey: K,
+  sources: { [key in IEditState[K]]?: string }
+) {
+  const options = Object.keys(sources).map((key) => ({
+    id: key,
+    text: sources[key as IEditState[K]] as string,
+  }));
+  const choiceId = appState.editor[taretKey];
+  const setChoiceId = (value: string) => {
+    appState.editor[taretKey] = value as any;
+  };
+  return {
+    options,
+    choiceId,
+    setChoiceId,
+  };
+}
+
 export const EditMenuBar = () => {
   const { canUndo, canRedo, undo, redo } = editManager;
 
+  const editorTargetVm = createModeSelectionViewModel('editorTarget', {
+    key: 'key',
+    outline: 'outline',
+    viewbox: 'sight',
+  });
+
+  const editModeVm = createModeSelectionViewModel('editMode', {
+    add: 'add',
+    move: 'move',
+  });
+
   return (
     <div class={cssEditMenuBar}>
-      <button disabled={!canUndo} onClick={undo}>
-        undo
-      </button>
-      <button disabled={!canRedo} onClick={redo}>
-        redo
-      </button>
+      <ExclusiveButtonGroup
+        options={editorTargetVm.options}
+        choiceId={editorTargetVm.choiceId}
+        setChoiceId={editorTargetVm.setChoiceId}
+        buttonWidth={55}
+      />
+
+      <ExclusiveButtonGroup
+        options={editModeVm.options}
+        choiceId={editModeVm.choiceId}
+        setChoiceId={editModeVm.setChoiceId}
+        buttonWidth={55}
+      />
+
+      <div class="buttonsBox">
+        <button disabled={!canUndo} onClick={undo}>
+          undo
+        </button>
+        <button disabled={!canRedo} onClick={redo}>
+          redo
+        </button>
+      </div>
     </div>
   );
 };
