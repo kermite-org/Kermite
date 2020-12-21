@@ -1,20 +1,25 @@
 import { css } from 'goober';
 import { IKeyEntity } from '~/editor/DataSchema';
-import { appState, editManager } from '~/editor/store';
+import { appState, editManager, editMutations } from '~/editor/store';
 import { h, rerender } from '~/qx';
+
+// coord configuration
+const cc = {
+  baseW: 600,
+  baseH: 400,
+  viewScale: 0.5,
+};
 
 function startKeyEntityDragOperation(ke: IKeyEntity, e: MouseEvent) {
   let prevPos = { x: 0, y: 0 };
-
-  const viewScale = 0.5;
 
   let moved = false;
 
   const onMouseMove = (e: MouseEvent) => {
     const deltaX = e.clientX - prevPos.x;
     const deltaY = e.clientY - prevPos.y;
-    ke.x += deltaX * viewScale;
-    ke.y += deltaY * viewScale;
+    ke.x += deltaX * cc.viewScale;
+    ke.y += deltaY * cc.viewScale;
     prevPos.x = e.clientX;
     prevPos.y = e.clientY;
     moved = true;
@@ -76,26 +81,41 @@ const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
   );
 };
 
-export const EditSvgView = () => {
-  const { editor } = appState;
+function getViewBoxSpec() {
+  const w = cc.baseW * cc.viewScale;
+  const h = cc.baseH * cc.viewScale;
+  return `${-w / 2} ${-h / 2} ${w} ${h}`;
+}
 
+const onSvgClick = (e: MouseEvent) => {
+  if (appState.editor.editMode === 'move') {
+    appState.editor.currentkeyEntityId = undefined;
+  } else if (appState.editor.editMode === 'add') {
+    const svgElement = document.getElementById('domEditSvg')!;
+    const rect = svgElement.getBoundingClientRect();
+    const x = (e.pageX - rect.left - cc.baseW / 2) * cc.viewScale;
+    const y = (e.pageY - rect.top - cc.baseH / 2) * cc.viewScale;
+    editMutations.addKeyEntity(x, y);
+  }
+};
+
+export const EditSvgView = () => {
   const cssSvg = css`
     border: solid 1px #888;
   `;
 
-  const onSvgClick = () => {
-    editor.currentkeyEntityId = undefined;
-  };
+  const viewBoxSpec = getViewBoxSpec();
 
   return (
     <svg
-      width={600}
-      height={400}
+      width={cc.baseW}
+      height={cc.baseH}
       css={cssSvg}
-      viewBox="-150 -100 300 200"
+      viewBox={viewBoxSpec}
       onMouseDown={onSvgClick}
+      id="domEditSvg"
     >
-      {editor.design.keyEntities.map((ke) => (
+      {appState.editor.design.keyEntities.map((ke) => (
         <KeyEntityCard ke={ke} key={ke.id} />
       ))}
     </svg>

@@ -1,5 +1,5 @@
 import { duplicateObjectByJsonStringifyParse as cloneObject } from '~/base/utils';
-import { IKeyboardDesign } from '~/editor/DataSchema';
+import { IKeyboardDesign, IKeyEntity } from '~/editor/DataSchema';
 
 const initialDesign: IKeyboardDesign = {
   keyEntities: [
@@ -76,6 +76,12 @@ export const editManager = new (class {
     }
   }
 
+  commit(callback: () => void) {
+    this.startEditSession();
+    callback();
+    this.endEditSession(true);
+  }
+
   get canUndo() {
     return this.undoStack.length > 0;
   }
@@ -99,4 +105,20 @@ export const editManager = new (class {
       appState.editor = cloneObject(modificatin.newState);
     }
   };
+})();
+
+export const editMutations = new (class {
+  addKeyEntity(x: number, y: number) {
+    const id = `ke-${(Math.random() * 1000) >> 0}`;
+    const keyEntity: IKeyEntity = {
+      id,
+      keyId: id,
+      x,
+      y,
+    };
+    editManager.commit(() => {
+      appState.editor.design.keyEntities.push(keyEntity);
+      appState.editor.currentkeyEntityId = id;
+    });
+  }
 })();
