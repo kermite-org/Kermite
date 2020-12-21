@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { IKeyEntity } from '~/editor/DataSchema';
-import { appState, editManager, editMutations } from '~/editor/store';
+import { appState, editMutations } from '~/editor/store';
 import { h, rerender } from '~/qx';
 
 // coord configuration
@@ -13,29 +13,25 @@ const cc = {
 function startKeyEntityDragOperation(ke: IKeyEntity, e: MouseEvent) {
   let prevPos = { x: 0, y: 0 };
 
-  let moved = false;
-
   const onMouseMove = (e: MouseEvent) => {
-    const deltaX = e.clientX - prevPos.x;
-    const deltaY = e.clientY - prevPos.y;
-    ke.x += deltaX * cc.viewScale;
-    ke.y += deltaY * cc.viewScale;
+    const deltaX = (e.clientX - prevPos.x) * cc.viewScale;
+    const deltaY = (e.clientY - prevPos.y) * cc.viewScale;
+    editMutations.moveKeyDelta(ke.id, deltaX, deltaY);
     prevPos.x = e.clientX;
     prevPos.y = e.clientY;
-    moved = true;
     rerender();
   };
 
   const onMouseUp = () => {
     window.removeEventListener('mousemove', onMouseMove);
     window.removeEventListener('mouseup', onMouseUp);
-    editManager.endEditSession(moved);
+    editMutations.endEdit();
     rerender();
   };
 
   const onMouseDown = (e: MouseEvent) => {
-    appState.editor.currentkeyEntityId = ke.id;
-    editManager.startEditSession();
+    editMutations.setCurrentKeyEntity(ke.id);
+    editMutations.startEdit();
 
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseup', onMouseUp);
@@ -89,7 +85,7 @@ function getViewBoxSpec() {
 
 const onSvgClick = (e: MouseEvent) => {
   if (appState.editor.editMode === 'move') {
-    appState.editor.currentkeyEntityId = undefined;
+    editMutations.setCurrentKeyEntity(undefined);
   } else if (appState.editor.editMode === 'add') {
     const svgElement = document.getElementById('domEditSvg')!;
     const rect = svgElement.getBoundingClientRect();

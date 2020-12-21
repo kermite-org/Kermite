@@ -1,5 +1,5 @@
 import { IKeyEntity } from '~/editor/DataSchema';
-import { appState, editManager } from '~/editor/store';
+import { editMutations, editReader } from '~/editor/store';
 
 interface IAttributeSlotSource<T> {
   propKey: keyof IKeyEntity;
@@ -42,8 +42,6 @@ class AttributeSlotModel {
   private _originalValue: any;
   private _editText: string = '';
   private _errorText: string = '';
-
-  private modifiedInFocus: boolean = false;
 
   get propKey() {
     return this.source.propKey;
@@ -91,8 +89,12 @@ class AttributeSlotModel {
       this._errorText = this.source.validator(this._editText) || '';
       if (!this._errorText) {
         const newValue = this.source.writer(this._editText);
-        this.modifiedInFocus = true;
-        this.targetObject[this.propKey] = newValue;
+        // this.targetObject[this.propKey] = newValue;  //direct modification
+        editMutations.changeKeyProperty(
+          this.targetObject.id,
+          this.propKey,
+          newValue
+        );
         this._originalValue = newValue;
         this._errorText = '';
       }
@@ -120,19 +122,12 @@ class AttributeSlotModel {
 
   onFocus = () => {
     this.slotFocusedCallback(this);
-    editManager.startEditSession();
-    this.modifiedInFocus = false;
+    editMutations.startEdit();
   };
 
   onBlur = () => {
-    editManager.endEditSession(this.modifiedInFocus);
-    this.modifiedInFocus = false;
+    editMutations.endEdit();
   };
-}
-
-function getStoreCurrentKeyEntity() {
-  const { design, currentkeyEntityId } = appState.editor;
-  return design.keyEntities.find((ke) => ke.id === currentkeyEntityId);
 }
 
 class KeyEntityAttrsEditorModel {
@@ -163,7 +158,7 @@ class KeyEntityAttrsEditorModel {
   };
 
   update() {
-    const ke = getStoreCurrentKeyEntity();
+    const ke = editReader.getCurrentKeyEntity();
     this._allSlots.forEach((slot) => slot.updateSource(ke));
   }
 }

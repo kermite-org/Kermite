@@ -52,6 +52,17 @@ interface IModification {
   newState: IEditState;
 }
 
+export const editReader = new (class {
+  getCurrentKeyEntity() {
+    const { design, currentkeyEntityId } = appState.editor;
+    return design.keyEntities.find((ke) => ke.id === currentkeyEntityId);
+  }
+
+  getKeyEntityById(id: string) {
+    return appState.editor.design.keyEntities.find((ke) => ke.id === id);
+  }
+})();
+
 export const editManager = new (class {
   private undoStack: IModification[] = [];
   private redoStack: IModification[] = [];
@@ -120,5 +131,41 @@ export const editMutations = new (class {
       appState.editor.design.keyEntities.push(keyEntity);
       appState.editor.currentkeyEntityId = id;
     });
+  }
+
+  setCurrentKeyEntity(keyEntityId: string | undefined) {
+    appState.editor.currentkeyEntityId = keyEntityId;
+  }
+
+  private modified = false;
+
+  startEdit() {
+    editManager.startEditSession();
+    this.modified = false;
+  }
+
+  moveKeyDelta(keyEntityId: string, deltaX: number, deltaY: number) {
+    const ke = editReader.getKeyEntityById(keyEntityId);
+    if (ke) {
+      ke.x += deltaX;
+      ke.y += deltaY;
+      this.modified = true;
+    }
+  }
+
+  changeKeyProperty(
+    keyEntityId: string,
+    fieldName: keyof IKeyEntity,
+    value: any
+  ) {
+    const ke = editReader.getKeyEntityById(keyEntityId);
+    if (ke) {
+      (ke as any)[fieldName] = value;
+      this.modified = true;
+    }
+  }
+
+  endEdit() {
+    editManager.endEditSession(this.modified);
   }
 })();
