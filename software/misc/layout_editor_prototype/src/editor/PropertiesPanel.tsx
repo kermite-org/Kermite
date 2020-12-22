@@ -11,7 +11,6 @@ interface IDesignAttributeTextInputLineProps {
     hasError: boolean;
     onFocus(): void;
     onBlur(): void;
-    resetError(): void;
     canEdit: boolean;
   };
 }
@@ -31,7 +30,6 @@ const DesignAttributeTextInputLine = (
     hasError,
     onFocus,
     onBlur,
-    resetError,
     canEdit,
   } = props.model;
 
@@ -48,7 +46,6 @@ const DesignAttributeTextInputLine = (
         data-has-error={hasError}
         readOnly={!canEdit}
       />
-      {hasError && <button onClick={resetError}>x</button>}
     </div>
   );
 };

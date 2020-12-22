@@ -1,5 +1,5 @@
-import { duplicateObjectByJsonStringifyParse as cloneObject } from '~/base/utils';
-import { IKeyboardDesign, IKeyEntity, IEditPropKey } from '~/editor/DataSchema';
+import { produce } from 'immer';
+import { IEditPropKey, IKeyboardDesign, IKeyEntity } from '~/editor/DataSchema';
 
 const initialDesign: IKeyboardDesign = {
   keyEntities: [
@@ -26,6 +26,7 @@ const initialDesign: IKeyboardDesign = {
 
 export type IEditorTarget = 'key' | 'outline' | 'viewbox';
 export type IEditMode = 'add' | 'move' | 'split';
+
 export interface IEditState {
   design: IKeyboardDesign;
   ghost: IKeyEntity | undefined;
@@ -48,6 +49,22 @@ const initialEditState: IEditState = {
 export const appState: IAppState = {
   editor: initialEditState,
 };
+
+export const updator = new (class {
+  patchEditor(callback: (draft: IEditState) => void) {
+    appState.editor = produce(appState.editor, (draft) => {
+      callback(draft);
+    });
+  }
+
+  patchGhost(callback: (ghost: IKeyEntity) => void) {
+    this.patchEditor((draft) => {
+      if (draft.ghost) {
+        callback(draft.ghost);
+      }
+    });
+  }
+})();
 
 interface IModification {
   oldState: IEditState;
@@ -72,16 +89,15 @@ export const editManager = new (class {
   private editStartState: IEditState | undefined;
 
   startEditSession() {
-    this.editStartState = cloneObject(appState.editor);
+    this.editStartState = appState.editor;
   }
 
   endEditSession(edited: boolean) {
     if (this.editStartState) {
       if (edited) {
-        const editEndState = cloneObject(appState.editor);
         this.undoStack.push({
           oldState: this.editStartState,
-          newState: editEndState,
+          newState: appState.editor,
         });
         this.redoStack = [];
       }
@@ -107,15 +123,15 @@ export const editManager = new (class {
     if (this.undoStack.length > 0) {
       const modification = this.undoStack.pop()!;
       this.redoStack.push(modification);
-      appState.editor = cloneObject(modification.oldState);
+      appState.editor = modification.oldState;
     }
   };
 
   redo = () => {
     if (this.redoStack.length > 0) {
-      const modificatin = this.redoStack.pop()!;
-      this.undoStack.push(modificatin);
-      appState.editor = cloneObject(modificatin.newState);
+      const modification = this.redoStack.pop()!;
+      this.undoStack.push(modification);
+      appState.editor = modification.newState;
     }
   };
 })();
@@ -130,54 +146,55 @@ export const editMutations = new (class {
       y,
     };
     editManager.commit(() => {
-      appState.editor.design.keyEntities.push(keyEntity);
-      appState.editor.currentkeyEntityId = id;
+      updator.patchEditor((draft) => {
+        draft.design.keyEntities.push(keyEntity);
+        draft.currentkeyEntityId = id;
+      });
     });
   }
 
   setMode<K extends 'editorTarget' | 'editMode'>(key: K, mode: IEditState[K]) {
-    appState.editor[key] = mode;
+    updator.patchEditor((draft) => (draft[key] = mode));
   }
 
   setCurrentKeyEntity(keyEntityId: string | undefined) {
-    appState.editor.currentkeyEntityId = keyEntityId;
+    updator.patchEditor((draft) => (draft.currentkeyEntityId = keyEntityId));
   }
 
   private modified = false;
 
   startEdit() {
     editManager.startEditSession();
-    const ke = editReader.getCurrentKeyEntity();
-    appState.editor.ghost = ke ? cloneObject(ke) : undefined;
+    updator.patchEditor((draft) => {
+      draft.ghost = editReader.getCurrentKeyEntity();
+    });
     this.modified = false;
   }
 
   moveKeyDelta(deltaX: number, deltaY: number) {
-    const ke = appState.editor.ghost;
-    if (ke) {
+    updator.patchGhost((ke) => {
       ke.x += deltaX;
       ke.y += deltaY;
-      this.modified = true;
-    }
+    });
+    this.modified = true;
   }
 
   changeKeyProperty<K extends IEditPropKey>(propKey: K, value: IKeyEntity[K]) {
-    const ke = appState.editor.ghost;
-    if (ke) {
-      ke[propKey] = value;
-      this.modified = true;
-    }
+    updator.patchGhost((ke) => (ke[propKey] = value));
+    this.modified = true;
   }
 
   endEdit() {
-    const ghost = appState.editor.ghost;
-    if (ghost) {
-      const index = appState.editor.design.keyEntities.findIndex(
-        (ke) => ke.id === ghost.id
-      );
-      appState.editor.design.keyEntities[index] = ghost;
-      appState.editor.ghost = undefined;
-    }
+    updator.patchEditor((draft) => {
+      const { ghost } = appState.editor;
+      if (ghost) {
+        const index = appState.editor.design.keyEntities.findIndex(
+          (ke) => ke.id === ghost.id
+        );
+        draft.design.keyEntities[index] = ghost;
+        draft.ghost = undefined;
+      }
+    });
     editManager.endEditSession(this.modified);
   }
 })();
