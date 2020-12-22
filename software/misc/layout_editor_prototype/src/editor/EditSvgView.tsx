@@ -61,9 +61,11 @@ const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
   const hsz = sz / 2;
 
   const onMouseDown = (e: MouseEvent) => {
-    editMutations.setCurrentKeyEntity(ke.id);
-    startKeyEntityDragOperation(e);
-    e.stopPropagation();
+    if (appState.editor.editMode === 'move') {
+      editMutations.setCurrentKeyEntity(ke.id);
+      startKeyEntityDragOperation(e);
+      e.stopPropagation();
+    }
   };
 
   const isSelected = ke.id === appState.editor.currentkeyEntityId;
@@ -101,6 +103,7 @@ const onSvgClick = (e: MouseEvent) => {
     const x = (e.pageX - rect.left - cc.baseW / 2) * cc.viewScale;
     const y = (e.pageY - rect.top - cc.baseH / 2) * cc.viewScale;
     editMutations.addKeyEntity(x, y);
+    startKeyEntityDragOperation(e);
   }
 };
 
