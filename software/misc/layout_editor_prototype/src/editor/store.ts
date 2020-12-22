@@ -1,28 +1,48 @@
 import { produce } from 'immer';
-import { IEditPropKey, IKeyboardDesign, IKeyEntity } from '~/editor/DataSchema';
+import {
+  compareObjectByJsonStringify,
+  createDictionaryFromKeyValues,
+} from '~/base/utils';
+import {
+  IEditPropKey,
+  IKeyboardDesign,
+  IKeyEntity,
+  IPersistentKeyboardDesign,
+} from '~/editor/DataSchema';
 
-const initialDesign: IKeyboardDesign = {
+const initialDesign: IPersistentKeyboardDesign = {
   keyEntities: [
     {
-      id: 'jFR1eLdvkUSY9M65cmyAIQ',
       keyId: 'key0',
       x: 0,
       y: 0,
     },
     {
-      id: 'dNpoO1Uu_ECWZNCi4G8wyw',
       keyId: 'key1',
       x: 22,
       y: 0,
     },
     {
-      id: 'athTNtYrwUmfDRqzyK1yrg',
       keyId: 'key2',
       x: 44,
       y: 0,
     },
   ],
 };
+
+function loadKeyboardDesign(
+  source: IPersistentKeyboardDesign
+): IKeyboardDesign {
+  let cnt = 0;
+  return {
+    keyEntities: createDictionaryFromKeyValues(
+      source.keyEntities.map((ke) => {
+        const id = `ke-${cnt++}`;
+        return [id, { ...ke, id }];
+      })
+    ),
+  };
+}
 
 export type IEditorTarget = 'key' | 'outline' | 'viewbox';
 export type IEditMode = 'add' | 'move' | 'split';
@@ -39,9 +59,9 @@ interface IAppState {
 }
 
 const initialEditState: IEditState = {
-  design: initialDesign,
+  design: loadKeyboardDesign(initialDesign),
   ghost: undefined,
-  currentkeyEntityId: 'jFR1eLdvkUSY9M65cmyAIQ',
+  currentkeyEntityId: undefined,
   editorTarget: 'key',
   editMode: 'move',
 };
@@ -50,35 +70,23 @@ export const appState: IAppState = {
   editor: initialEditState,
 };
 
-export const updator = new (class {
-  patchEditor(callback: (draft: IEditState) => void) {
-    appState.editor = produce(appState.editor, (draft) => {
-      callback(draft);
-    });
-  }
-
-  patchGhost(callback: (ghost: IKeyEntity) => void) {
-    this.patchEditor((draft) => {
-      if (draft.ghost) {
-        callback(draft.ghost);
-      }
-    });
-  }
-})();
-
 interface IModification {
   oldState: IEditState;
   newState: IEditState;
 }
 
 export const editReader = new (class {
-  getCurrentKeyEntity() {
+  get currentKeyEntity(): IKeyEntity | undefined {
     const { design, currentkeyEntityId } = appState.editor;
-    return design.keyEntities.find((ke) => ke.id === currentkeyEntityId);
+    return design.keyEntities[currentkeyEntityId || ''];
   }
 
-  getKeyEntityById(id: string) {
-    return appState.editor.design.keyEntities.find((ke) => ke.id === id);
+  getKeyEntityById(id: string): IKeyEntity | undefined {
+    return appState.editor.design.keyEntities[id];
+  }
+
+  get allKeyEntities(): IKeyEntity[] {
+    return Object.values(appState.editor.design.keyEntities);
   }
 })();
 
@@ -86,29 +94,12 @@ export const editManager = new (class {
   private undoStack: IModification[] = [];
   private redoStack: IModification[] = [];
 
-  private editStartState: IEditState | undefined;
-
-  startEditSession() {
-    this.editStartState = appState.editor;
-  }
-
-  endEditSession(edited: boolean) {
-    if (this.editStartState) {
-      if (edited) {
-        this.undoStack.push({
-          oldState: this.editStartState,
-          newState: appState.editor,
-        });
-        this.redoStack = [];
-      }
-      this.editStartState = undefined;
-    }
-  }
-
-  commit(callback: () => void) {
-    this.startEditSession();
-    callback();
-    this.endEditSession(true);
+  pushUndoStack(oldState: IEditState, newState: IEditState) {
+    this.undoStack.push({
+      oldState,
+      newState,
+    });
+    this.redoStack = [];
   }
 
   get canUndo() {
@@ -136,7 +127,71 @@ export const editManager = new (class {
   };
 })();
 
+export const editUpdator = new (class {
+  patchEditor(callback: (draft: IEditState) => void) {
+    appState.editor = produce(appState.editor, (draft) => {
+      callback(draft);
+    });
+  }
+
+  patchGhost(callback: (ghost: IKeyEntity) => void) {
+    this.patchEditor((draft) => {
+      if (draft.ghost) {
+        callback(draft.ghost);
+      }
+    });
+  }
+
+  commitEditor(callback: (draft: IEditState) => void) {
+    const prevState = appState.editor;
+    this.patchEditor(callback);
+    editManager.pushUndoStack(prevState, appState.editor);
+  }
+
+  private editStartState: IEditState | undefined;
+  private originalGhost: IKeyEntity | undefined;
+
+  startEditSession() {
+    this.editStartState = appState.editor;
+    this.patchEditor((editor) => {
+      editor.ghost = editor.design.keyEntities[editor.currentkeyEntityId || ''];
+    });
+    this.originalGhost = appState.editor.ghost;
+  }
+
+  endEditSession() {
+    const ghostModified =
+      this.originalGhost !== appState.editor.ghost &&
+      !compareObjectByJsonStringify(this.originalGhost, appState.editor.ghost);
+
+    if (this.editStartState && ghostModified) {
+      this.patchEditor((editor) => {
+        const { ghost } = editor;
+        if (ghost) {
+          editor.design.keyEntities[ghost.id] = ghost;
+          editor.ghost = undefined;
+        }
+      });
+      editManager.pushUndoStack(this.editStartState, appState.editor);
+    } else {
+      this.patchEditor((editor) => {
+        editor.ghost = undefined;
+      });
+    }
+    this.originalGhost = undefined;
+    this.editStartState = undefined;
+  }
+})();
+
 export const editMutations = new (class {
+  startEdit() {
+    editUpdator.startEditSession();
+  }
+
+  endEdit() {
+    editUpdator.endEditSession();
+  }
+
   addKeyEntity(x: number, y: number) {
     const id = `ke-${(Math.random() * 1000) >> 0}`;
     const keyEntity: IKeyEntity = {
@@ -145,56 +200,30 @@ export const editMutations = new (class {
       x,
       y,
     };
-    editManager.commit(() => {
-      updator.patchEditor((draft) => {
-        draft.design.keyEntities.push(keyEntity);
-        draft.currentkeyEntityId = id;
-      });
+    editUpdator.commitEditor((editor) => {
+      editor.design.keyEntities[id] = keyEntity;
+      editor.currentkeyEntityId = id;
     });
   }
 
   setMode<K extends 'editorTarget' | 'editMode'>(key: K, mode: IEditState[K]) {
-    updator.patchEditor((draft) => (draft[key] = mode));
+    editUpdator.patchEditor((editor) => (editor[key] = mode));
   }
 
   setCurrentKeyEntity(keyEntityId: string | undefined) {
-    updator.patchEditor((draft) => (draft.currentkeyEntityId = keyEntityId));
-  }
-
-  private modified = false;
-
-  startEdit() {
-    editManager.startEditSession();
-    updator.patchEditor((draft) => {
-      draft.ghost = editReader.getCurrentKeyEntity();
-    });
-    this.modified = false;
+    editUpdator.patchEditor(
+      (editor) => (editor.currentkeyEntityId = keyEntityId)
+    );
   }
 
   moveKeyDelta(deltaX: number, deltaY: number) {
-    updator.patchGhost((ke) => {
-      ke.x += deltaX;
-      ke.y += deltaY;
+    editUpdator.patchGhost((ghost) => {
+      ghost.x += deltaX;
+      ghost.y += deltaY;
     });
-    this.modified = true;
   }
 
   changeKeyProperty<K extends IEditPropKey>(propKey: K, value: IKeyEntity[K]) {
-    updator.patchGhost((ke) => (ke[propKey] = value));
-    this.modified = true;
-  }
-
-  endEdit() {
-    updator.patchEditor((draft) => {
-      const { ghost } = appState.editor;
-      if (ghost) {
-        const index = appState.editor.design.keyEntities.findIndex(
-          (ke) => ke.id === ghost.id
-        );
-        draft.design.keyEntities[index] = ghost;
-        draft.ghost = undefined;
-      }
-    });
-    editManager.endEditSession(this.modified);
+    editUpdator.patchGhost((ghost) => (ghost[propKey] = value));
   }
 })();

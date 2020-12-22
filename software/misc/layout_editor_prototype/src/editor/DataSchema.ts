@@ -1,11 +1,21 @@
-export interface IKeyEntity {
-  id: string; // 編集中のみGUIDのような値を保持,永続化の際には保存しない
+export interface IPersistentKeyEntity {
   keyId: string;
   x: number;
   y: number;
 }
 
-export type IEditPropKey = 'keyId' | 'x' | 'y';
-export interface IKeyboardDesign {
-  keyEntities: IKeyEntity[];
+export interface IPersistentKeyboardDesign {
+  keyEntities: IPersistentKeyEntity[];
 }
+
+export interface IKeyEntity {
+  id: string; // 編集中のみ一意の値を保持,永続化の際には保存しない
+  keyId: string;
+  x: number;
+  y: number;
+}
+export interface IKeyboardDesign {
+  keyEntities: { [id: string]: IKeyEntity };
+}
+
+export type IEditPropKey = 'keyId' | 'x' | 'y';

@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { IKeyEntity } from '~/editor/DataSchema';
-import { appState, editMutations } from '~/editor/store';
+import { appState, editMutations, editReader } from '~/editor/store';
 import { h, rerender } from '~/qx';
 
 // coord configuration
@@ -111,7 +111,7 @@ export const EditSvgView = () => {
 
   const viewBoxSpec = getViewBoxSpec();
 
-  const { design, ghost } = appState.editor;
+  const { ghost } = appState.editor;
 
   return (
     <svg
@@ -122,7 +122,7 @@ export const EditSvgView = () => {
       onMouseDown={onSvgClick}
       id="domEditSvg"
     >
-      {design.keyEntities.map((ke) => (
+      {editReader.allKeyEntities.map((ke) => (
         <KeyEntityCard ke={ke} key={ke.id} />
       ))}
       {ghost && <KeyEntityCard ke={ghost} />}
