@@ -89,12 +89,7 @@ class AttributeSlotModel {
       this._errorText = this.source.validator(this._editText) || '';
       if (!this._errorText) {
         const newValue = this.source.writer(this._editText);
-        // this.targetObject[this.propKey] = newValue;  //direct modification
-        editMutations.changeKeyProperty(
-          this.targetObject.id,
-          this.propKey,
-          newValue
-        );
+        editMutations.changeKeyProperty(this.propKey, newValue);
         this._originalValue = newValue;
         this._errorText = '';
       }

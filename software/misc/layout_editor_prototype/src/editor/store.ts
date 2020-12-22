@@ -28,6 +28,7 @@ export type IEditorTarget = 'key' | 'outline' | 'viewbox';
 export type IEditMode = 'add' | 'move' | 'split';
 export interface IEditState {
   design: IKeyboardDesign;
+  ghost: IKeyEntity | undefined;
   currentkeyEntityId: string | undefined;
   editorTarget: IEditorTarget;
   editMode: IEditMode;
@@ -38,6 +39,7 @@ interface IAppState {
 
 const initialEditState: IEditState = {
   design: initialDesign,
+  ghost: undefined,
   currentkeyEntityId: 'jFR1eLdvkUSY9M65cmyAIQ',
   editorTarget: 'key',
   editMode: 'move',
@@ -141,11 +143,13 @@ export const editMutations = new (class {
 
   startEdit() {
     editManager.startEditSession();
+    const ke = editReader.getCurrentKeyEntity();
+    appState.editor.ghost = ke ? cloneObject(ke) : undefined;
     this.modified = false;
   }
 
-  moveKeyDelta(keyEntityId: string, deltaX: number, deltaY: number) {
-    const ke = editReader.getKeyEntityById(keyEntityId);
+  moveKeyDelta(deltaX: number, deltaY: number) {
+    const ke = appState.editor.ghost;
     if (ke) {
       ke.x += deltaX;
       ke.y += deltaY;
@@ -153,12 +157,8 @@ export const editMutations = new (class {
     }
   }
 
-  changeKeyProperty(
-    keyEntityId: string,
-    fieldName: keyof IKeyEntity,
-    value: any
-  ) {
-    const ke = editReader.getKeyEntityById(keyEntityId);
+  changeKeyProperty(fieldName: keyof IKeyEntity, value: any) {
+    const ke = appState.editor.ghost;
     if (ke) {
       (ke as any)[fieldName] = value;
       this.modified = true;
@@ -166,6 +166,14 @@ export const editMutations = new (class {
   }
 
   endEdit() {
+    const ghost = appState.editor.ghost;
+    if (ghost) {
+      const index = appState.editor.design.keyEntities.findIndex(
+        (ke) => ke.id === ghost.id
+      );
+      appState.editor.design.keyEntities[index] = ghost;
+      appState.editor.ghost = undefined;
+    }
     editManager.endEditSession(this.modified);
   }
 })();

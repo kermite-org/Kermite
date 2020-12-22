@@ -10,13 +10,13 @@ const cc = {
   viewScale: 0.5,
 };
 
-function startKeyEntityDragOperation(ke: IKeyEntity, e: MouseEvent) {
+function startKeyEntityDragOperation(e: MouseEvent) {
   let prevPos = { x: 0, y: 0 };
 
   const onMouseMove = (e: MouseEvent) => {
     const deltaX = (e.clientX - prevPos.x) * cc.viewScale;
     const deltaY = (e.clientY - prevPos.y) * cc.viewScale;
-    editMutations.moveKeyDelta(ke.id, deltaX, deltaY);
+    editMutations.moveKeyDelta(deltaX, deltaY);
     prevPos.x = e.clientX;
     prevPos.y = e.clientY;
     rerender();
@@ -30,9 +30,7 @@ function startKeyEntityDragOperation(ke: IKeyEntity, e: MouseEvent) {
   };
 
   const onMouseDown = (e: MouseEvent) => {
-    editMutations.setCurrentKeyEntity(ke.id);
     editMutations.startEdit();
-
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseup', onMouseUp);
     prevPos = {
@@ -53,15 +51,25 @@ const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
     &[data-selected] {
       stroke: #4bb;
     }
+
+    &[data-editing] {
+      opacity: 0.2;
+    }
   `;
 
   const sz = 20;
   const hsz = sz / 2;
 
   const onMouseDown = (e: MouseEvent) => {
-    startKeyEntityDragOperation(ke, e);
+    editMutations.setCurrentKeyEntity(ke.id);
+    startKeyEntityDragOperation(e);
     e.stopPropagation();
   };
+
+  const isSelected = ke.id === appState.editor.currentkeyEntityId;
+
+  const isEditing =
+    ke !== appState.editor.ghost && ke.id === appState.editor.ghost?.id;
 
   return (
     <rect
@@ -71,7 +79,8 @@ const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
       width={sz}
       height={sz}
       css={cssKeyRect}
-      data-selected={ke.id === appState.editor.currentkeyEntityId}
+      data-selected={isSelected}
+      data-editing={isEditing}
       onMouseDown={onMouseDown}
     />
   );
@@ -102,6 +111,8 @@ export const EditSvgView = () => {
 
   const viewBoxSpec = getViewBoxSpec();
 
+  const { design, ghost } = appState.editor;
+
   return (
     <svg
       width={cc.baseW}
@@ -111,9 +122,10 @@ export const EditSvgView = () => {
       onMouseDown={onSvgClick}
       id="domEditSvg"
     >
-      {appState.editor.design.keyEntities.map((ke) => (
+      {design.keyEntities.map((ke) => (
         <KeyEntityCard ke={ke} key={ke.id} />
       ))}
+      {ghost && <KeyEntityCard ke={ghost} />}
     </svg>
   );
 };
