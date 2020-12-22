@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { reflectValue } from '~/base/FormHelpers';
-import { usePropertyPanelModel } from '~/editor/PropertiesPanel.model2.mvvm';
+import { usePropertyPanelModel } from '~/editor/PropertiesPanel.model2';
 import { h } from '~/qx';
 
 interface IDesignAttributeTextInputLineProps {
