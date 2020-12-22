@@ -40,6 +40,7 @@ class AttributeSlotModel<K extends IEditPropKey = IEditPropKey> {
   private _originalValue: IKeyEntity[K] | undefined;
   private _editText: string = '';
   private _errorText: string = '';
+  private _hasFocus: boolean = false;
 
   get propKey() {
     return this.source.propKey;
@@ -65,10 +66,11 @@ class AttributeSlotModel<K extends IEditPropKey = IEditPropKey> {
     return !!this._errorText;
   }
 
-  constructor(
-    private source: IAttributeSlotSource<K>,
-    private slotFocusedCallback: (slot: AttributeSlotModel) => void
-  ) {}
+  get hasFocus() {
+    return this._hasFocus;
+  }
+
+  constructor(private source: IAttributeSlotSource<K>) {}
 
   private pullModelValue(targetKeyEntity: IKeyEntity | undefined) {
     this._originalValue = targetKeyEntity?.[this.propKey];
@@ -105,39 +107,32 @@ class AttributeSlotModel<K extends IEditPropKey = IEditPropKey> {
   };
 
   onFocus = () => {
-    this.slotFocusedCallback(this);
     editMutations.startEdit();
+    this._hasFocus = true;
   };
 
   onBlur = () => {
     editMutations.endEdit();
     this.resetEditText();
+    this._hasFocus = false;
   };
 }
 
 class KeyEntityAttrsEditorModel {
-  private _allSlots: AttributeSlotModel[];
-  private _currentSlot: AttributeSlotModel | undefined;
+  private _allSlots: AttributeSlotModel[] = slotSources.map(
+    (ss) => new AttributeSlotModel(ss)
+  );
 
   get allSlots() {
     return this._allSlots;
   }
 
   get errorText() {
-    return this._currentSlot?.errorText
-      ? `${this._currentSlot.label} ${this._currentSlot.errorText}`
+    const currentSlot = this._allSlots.find((slot) => slot.hasFocus);
+    return currentSlot?.errorText
+      ? `${currentSlot.label} ${currentSlot.errorText}`
       : '';
   }
-
-  constructor() {
-    this._allSlots = slotSources.map(
-      (ss) => new AttributeSlotModel(ss, this.onSlotFocused)
-    );
-  }
-
-  onSlotFocused = (targetSlot: AttributeSlotModel): void => {
-    this._currentSlot = targetSlot;
-  };
 
   update() {
     const targetKeyEntity =
