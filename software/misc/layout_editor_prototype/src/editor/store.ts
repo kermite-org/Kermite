@@ -135,6 +135,10 @@ export const editMutations = new (class {
     });
   }
 
+  setMode<K extends 'editorTarget' | 'editMode'>(key: K, mode: IEditState[K]) {
+    appState.editor[key] = mode;
+  }
+
   setCurrentKeyEntity(keyEntityId: string | undefined) {
     appState.editor.currentkeyEntityId = keyEntityId;
   }
