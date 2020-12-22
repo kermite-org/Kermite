@@ -5,6 +5,7 @@ export interface IKeyEntity {
   y: number;
 }
 
+export type IEditPropKey = 'keyId' | 'x' | 'y';
 export interface IKeyboardDesign {
   keyEntities: IKeyEntity[];
 }

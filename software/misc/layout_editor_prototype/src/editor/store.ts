@@ -1,5 +1,5 @@
 import { duplicateObjectByJsonStringifyParse as cloneObject } from '~/base/utils';
-import { IKeyboardDesign, IKeyEntity } from '~/editor/DataSchema';
+import { IKeyboardDesign, IKeyEntity, IEditPropKey } from '~/editor/DataSchema';
 
 const initialDesign: IKeyboardDesign = {
   keyEntities: [
@@ -157,10 +157,10 @@ export const editMutations = new (class {
     }
   }
 
-  changeKeyProperty(fieldName: keyof IKeyEntity, value: any) {
+  changeKeyProperty<K extends IEditPropKey>(propKey: K, value: IKeyEntity[K]) {
     const ke = appState.editor.ghost;
     if (ke) {
-      (ke as any)[fieldName] = value;
+      ke[propKey] = value;
       this.modified = true;
     }
   }

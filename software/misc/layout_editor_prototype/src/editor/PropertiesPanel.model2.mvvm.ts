@@ -1,15 +1,15 @@
-import { IKeyEntity } from '~/editor/DataSchema';
+import { IKeyEntity, IEditPropKey } from '~/editor/DataSchema';
 import { editMutations, editReader } from '~/editor/store';
 
-interface IAttributeSlotSource<T> {
-  propKey: keyof IKeyEntity;
+interface IAttributeSlotSource<K extends IEditPropKey> {
+  propKey: K;
   label: string;
   validator(text: string): string | undefined;
-  reader(value: T): string;
-  writer(text: string): T;
+  reader(value: IKeyEntity[K]): string;
+  writer(text: string): IKeyEntity[K];
 }
 
-const slotSources: IAttributeSlotSource<any>[] = [
+const slotSources: IAttributeSlotSource<IEditPropKey>[] = [
   {
     propKey: 'keyId',
     label: 'KEY ID',
@@ -36,10 +36,10 @@ const slotSources: IAttributeSlotSource<any>[] = [
   },
 ];
 
-class AttributeSlotModel {
-  private targetObject: { [key in string]: any } | undefined = undefined;
+class AttributeSlotModel<K extends IEditPropKey = IEditPropKey> {
+  private targetObject: IKeyEntity | undefined = undefined;
 
-  private _originalValue: any;
+  private _originalValue: IKeyEntity[K] | undefined;
   private _editText: string = '';
   private _errorText: string = '';
 
@@ -68,7 +68,7 @@ class AttributeSlotModel {
   }
 
   constructor(
-    private source: IAttributeSlotSource<any>,
+    private source: IAttributeSlotSource<K>,
     private slotFocusedCallback: (slot: AttributeSlotModel) => void
   ) {}
 
@@ -99,7 +99,7 @@ class AttributeSlotModel {
   updateSource(keyEntity: IKeyEntity | undefined) {
     const sourceChanged =
       this.targetObject !== keyEntity ||
-      this._originalValue !== (keyEntity as any)?.[this.propKey];
+      this._originalValue !== keyEntity?.[this.propKey];
     this.targetObject = keyEntity;
     if (sourceChanged) {
       this.pullModelValue();
