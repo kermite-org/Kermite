@@ -185,11 +185,13 @@ export const editUpdator = new (class {
 
   private originalEditState: IEditState | undefined;
 
-  startEditSession() {
+  startEditSession(useGhost: boolean) {
     this.originalEditState = appState.editor;
-    this.patchEnvState((state) => {
-      state.ghost = this.getEditKeyEntity(appState.editor);
-    });
+    if (useGhost) {
+      this.patchEnvState((state) => {
+        state.ghost = this.getEditKeyEntity(appState.editor);
+      });
+    }
   }
 
   endEditSession() {
@@ -211,8 +213,8 @@ export const editUpdator = new (class {
 })();
 
 export const editMutations = new (class {
-  startEdit() {
-    editUpdator.startEditSession();
+  startEdit(useGhost: boolean = true) {
+    editUpdator.startEditSession(useGhost);
   }
 
   endEdit() {

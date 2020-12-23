@@ -10,7 +10,7 @@ const cc = {
   viewScale: 0.5,
 };
 
-function startKeyEntityDragOperation(e: MouseEvent) {
+function startKeyEntityDragOperation(e: MouseEvent, useGhost: boolean) {
   let prevPos = { x: 0, y: 0 };
 
   const onMouseMove = (e: MouseEvent) => {
@@ -30,7 +30,7 @@ function startKeyEntityDragOperation(e: MouseEvent) {
   };
 
   const onMouseDown = (e: MouseEvent) => {
-    editMutations.startEdit();
+    editMutations.startEdit(useGhost);
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseup', onMouseUp);
     prevPos = {
@@ -63,7 +63,7 @@ const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
   const onMouseDown = (e: MouseEvent) => {
     if (editReader.editMode === 'move') {
       editMutations.setCurrentKeyEntity(ke.id);
-      startKeyEntityDragOperation(e);
+      startKeyEntityDragOperation(e, true);
       e.stopPropagation();
     }
   };
@@ -101,7 +101,7 @@ const onSvgClick = (e: MouseEvent) => {
     const x = (e.pageX - rect.left - cc.baseW / 2) * cc.viewScale;
     const y = (e.pageY - rect.top - cc.baseH / 2) * cc.viewScale;
     editMutations.addKeyEntity(x, y);
-    startKeyEntityDragOperation(e);
+    startKeyEntityDragOperation(e, false);
   }
 };
 
