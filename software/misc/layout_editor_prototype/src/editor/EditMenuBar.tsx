@@ -1,10 +1,11 @@
 import { css } from 'goober';
 import { ExclusiveButtonGroup } from '~/controls/ExclusiveButtonGroup';
+import { ISelectOption } from '~/controls/interfaces';
 import {
-  appState,
   editManager,
   editMutations,
-  IEditState,
+  editReader,
+  IModeState,
 } from '~/editor/store';
 import { h } from '~/qx';
 
@@ -30,15 +31,17 @@ const cssEditMenuBar = css`
 
 function createModeSelectionViewModel<K extends 'editorTarget' | 'editMode'>(
   targetKey: K,
-  sources: { [key in IEditState[K]]?: string }
+  sources: { [key in IModeState[K]]?: string }
 ) {
-  const options = Object.keys(sources).map((key) => ({
+  const options: ISelectOption[] = (Object.keys(
+    sources
+  ) as IModeState[K][]).map((key) => ({
     id: key,
-    text: sources[key as IEditState[K]] as string,
+    text: sources[key]!,
   }));
-  const choiceId = appState.editor[targetKey];
-  const setChoiceId = (value: string) => {
-    editMutations.setMode(targetKey, value as any);
+  const choiceId = editReader.getMode(targetKey);
+  const setChoiceId = (value: Extract<IModeState[K], string>) => {
+    editMutations.setMode(targetKey, value);
   };
   return {
     options,

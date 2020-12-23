@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { IKeyEntity } from '~/editor/DataSchema';
-import { appState, editMutations, editReader } from '~/editor/store';
+import { editMutations, editReader } from '~/editor/store';
 import { h, rerender } from '~/qx';
 
 // coord configuration
@@ -61,15 +61,15 @@ const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
   const hsz = sz / 2;
 
   const onMouseDown = (e: MouseEvent) => {
-    if (appState.editor.editMode === 'move') {
+    if (editReader.editMode === 'move') {
       editMutations.setCurrentKeyEntity(ke.id);
       startKeyEntityDragOperation(e);
       e.stopPropagation();
     }
   };
 
-  const isSelected = ke.id === appState.editor.currentkeyEntityId;
-  const isGhost = ke === appState.editor.ghost;
+  const isSelected = ke.id === editReader.currentKeyEntity?.id;
+  const isGhost = ke === editReader.ghost;
 
   return (
     <rect
@@ -93,9 +93,9 @@ function getViewBoxSpec() {
 }
 
 const onSvgClick = (e: MouseEvent) => {
-  if (appState.editor.editMode === 'move') {
+  if (editReader.editMode === 'move') {
     editMutations.setCurrentKeyEntity(undefined);
-  } else if (appState.editor.editMode === 'add') {
+  } else if (editReader.editMode === 'add') {
     const svgElement = document.getElementById('domEditSvg')!;
     const rect = svgElement.getBoundingClientRect();
     const x = (e.pageX - rect.left - cc.baseW / 2) * cc.viewScale;
@@ -112,7 +112,7 @@ export const EditSvgView = () => {
 
   const viewBoxSpec = getViewBoxSpec();
 
-  const { ghost } = appState.editor;
+  const { ghost } = editReader;
 
   return (
     <svg

@@ -1,5 +1,5 @@
 import { IKeyEntity, IEditPropKey } from '~/editor/DataSchema';
-import { appState, editMutations, editReader } from '~/editor/store';
+import { editMutations, editReader } from '~/editor/store';
 
 interface IAttributeSlotSource<K extends IEditPropKey> {
   propKey: K;
