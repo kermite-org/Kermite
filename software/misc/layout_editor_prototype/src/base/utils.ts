@@ -15,3 +15,13 @@ export function compareObjectByJsonStringify(a: any, b: any) {
 export function duplicateObjectByJsonStringifyParse<T>(obj: T): T {
   return JSON.parse(JSON.stringify(obj));
 }
+
+export function clamp(val: number, lo: number, hi: number) {
+  if (val < lo) {
+    return lo;
+  } else if (val > hi) {
+    return hi;
+  } else {
+    return val;
+  }
+}

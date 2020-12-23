@@ -1,4 +1,5 @@
 import { css } from 'goober';
+import { clamp } from '~/base/utils';
 import { IKeyEntity } from '~/editor/DataSchema';
 import { editMutations, editReader } from '~/editor/store';
 import { h, rerender } from '~/qx';
@@ -7,15 +8,22 @@ import { h, rerender } from '~/qx';
 const cc = {
   baseW: 600,
   baseH: 400,
-  viewScale: 0.5,
+};
+
+const sight = {
+  pos: {
+    x: 0,
+    y: 0,
+  },
+  scale: 2,
 };
 
 function startKeyEntityDragOperation(e: MouseEvent, useGhost: boolean) {
   let prevPos = { x: 0, y: 0 };
 
   const onMouseMove = (e: MouseEvent) => {
-    const deltaX = (e.clientX - prevPos.x) * cc.viewScale;
-    const deltaY = (e.clientY - prevPos.y) * cc.viewScale;
+    const deltaX = (e.clientX - prevPos.x) / sight.scale;
+    const deltaY = (e.clientY - prevPos.y) / sight.scale;
     editMutations.moveKeyDelta(deltaX, deltaY);
     prevPos.x = e.clientX;
     prevPos.y = e.clientY;
@@ -31,6 +39,37 @@ function startKeyEntityDragOperation(e: MouseEvent, useGhost: boolean) {
 
   const onMouseDown = (e: MouseEvent) => {
     editMutations.startEdit(useGhost);
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+    prevPos = {
+      x: e.clientX,
+      y: e.clientY,
+    };
+  };
+
+  onMouseDown(e);
+}
+
+function startSightDragOperation(e: MouseEvent) {
+  let prevPos = { x: 0, y: 0 };
+
+  const onMouseMove = (e: MouseEvent) => {
+    const deltaX = (e.clientX - prevPos.x) / sight.scale;
+    const deltaY = (e.clientY - prevPos.y) / sight.scale;
+    sight.pos.x -= deltaX;
+    sight.pos.y -= deltaY;
+    prevPos.x = e.clientX;
+    prevPos.y = e.clientY;
+    rerender();
+  };
+
+  const onMouseUp = () => {
+    window.removeEventListener('mousemove', onMouseMove);
+    window.removeEventListener('mouseup', onMouseUp);
+    rerender();
+  };
+
+  const onMouseDown = (e: MouseEvent) => {
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseup', onMouseUp);
     prevPos = {
@@ -87,22 +126,52 @@ const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
 };
 
 function getViewBoxSpec() {
-  const w = cc.baseW * cc.viewScale;
-  const h = cc.baseH * cc.viewScale;
-  return `${-w / 2} ${-h / 2} ${w} ${h}`;
+  const w = cc.baseW;
+  const h = cc.baseH;
+  return `0 0 ${w} ${h}`;
 }
 
-const onSvgClick = (e: MouseEvent) => {
-  if (editReader.editMode === 'move') {
-    editMutations.setCurrentKeyEntity(undefined);
-  } else if (editReader.editMode === 'add') {
-    const svgElement = document.getElementById('domEditSvg')!;
-    const rect = svgElement.getBoundingClientRect();
-    const x = (e.pageX - rect.left - cc.baseW / 2) * cc.viewScale;
-    const y = (e.pageY - rect.top - cc.baseH / 2) * cc.viewScale;
-    editMutations.addKeyEntity(x, y);
-    startKeyEntityDragOperation(e, false);
+function getTransformSpec() {
+  const sc = sight.scale;
+  const cx = cc.baseW / 2 - sight.pos.x * sc;
+  const cy = cc.baseH / 2 - sight.pos.y * sc;
+  return `translate(${cx}, ${cy}) scale(${sc})`;
+}
+
+const onSvgMouseDown = (e: MouseEvent) => {
+  if (e.button === 0) {
+    if (editReader.editMode === 'move') {
+      editMutations.setCurrentKeyEntity(undefined);
+    } else if (editReader.editMode === 'add') {
+      const svgElement = document.getElementById('domEditSvg')!;
+      const rect = svgElement.getBoundingClientRect();
+      const x =
+        (e.pageX - rect.left - cc.baseW / 2) / sight.scale + sight.pos.x;
+      const y = (e.pageY - rect.top - cc.baseH / 2) / sight.scale + sight.pos.y;
+      editMutations.addKeyEntity(x, y);
+      startKeyEntityDragOperation(e, false);
+    }
   }
+  if (e.button === 1) {
+    startSightDragOperation(e);
+  }
+};
+
+const onSvgScroll = (e: WheelEvent) => {
+  const dir = -e.deltaY / 120;
+
+  const svgElement = document.getElementById('domEditSvg')!;
+  const rect = svgElement.getBoundingClientRect();
+
+  const px = e.pageX - rect.left - cc.baseW / 2;
+  const py = e.pageY - rect.top - cc.baseH / 2;
+
+  const sza = 1 + dir * 0.05;
+  const oldScale = sight.scale;
+  const newScale = clamp(sight.scale * sza, 0.1, 10);
+  sight.scale = newScale;
+  sight.pos.x += px / oldScale - px / newScale;
+  sight.pos.y += py / oldScale - py / newScale;
 };
 
 export const EditSvgView = () => {
@@ -111,7 +180,7 @@ export const EditSvgView = () => {
   `;
 
   const viewBoxSpec = getViewBoxSpec();
-
+  const transformSpec = getTransformSpec();
   const { ghost } = editReader;
 
   return (
@@ -120,13 +189,16 @@ export const EditSvgView = () => {
       height={cc.baseH}
       css={cssSvg}
       viewBox={viewBoxSpec}
-      onMouseDown={onSvgClick}
+      onMouseDown={onSvgMouseDown}
+      onWheel={onSvgScroll}
       id="domEditSvg"
     >
-      {editReader.allKeyEntities.map((ke) => (
-        <KeyEntityCard ke={ke} key={ke.id} />
-      ))}
-      {ghost && <KeyEntityCard ke={ghost} />}
+      <g transform={transformSpec}>
+        {editReader.allKeyEntities.map((ke) => (
+          <KeyEntityCard ke={ke} key={ke.id} />
+        ))}
+        {ghost && <KeyEntityCard ke={ghost} />}
+      </g>
     </svg>
   );
 };
