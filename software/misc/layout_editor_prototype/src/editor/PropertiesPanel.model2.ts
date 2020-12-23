@@ -135,8 +135,7 @@ class KeyEntityAttrsEditorModel {
   }
 
   update() {
-    const targetKeyEntity =
-      appState.editor.ghost || editReader.currentKeyEntity;
+    const targetKeyEntity = editReader.currentKeyEntity;
     this._allSlots.forEach((slot) => slot.updateSource(targetKeyEntity));
   }
 }

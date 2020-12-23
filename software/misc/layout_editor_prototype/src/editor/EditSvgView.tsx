@@ -52,8 +52,8 @@ const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
       stroke: #4bb;
     }
 
-    &[data-editing] {
-      opacity: 0.2;
+    &[data-ghost] {
+      opacity: 0.3;
     }
   `;
 
@@ -69,9 +69,7 @@ const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
   };
 
   const isSelected = ke.id === appState.editor.currentkeyEntityId;
-
-  const isEditing =
-    ke !== appState.editor.ghost && ke.id === appState.editor.ghost?.id;
+  const isGhost = ke === appState.editor.ghost;
 
   return (
     <rect
@@ -82,7 +80,7 @@ const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
       height={sz}
       css={cssKeyRect}
       data-selected={isSelected}
-      data-editing={isEditing}
+      data-ghost={isGhost}
       onMouseDown={onMouseDown}
     />
   );
