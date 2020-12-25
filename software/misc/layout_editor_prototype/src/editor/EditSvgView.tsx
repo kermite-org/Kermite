@@ -1,4 +1,9 @@
 import { css } from 'goober';
+import {
+  getRelativeMousePosition,
+  IPosition,
+  startDragSession,
+} from '~/base/UiInteractionHelpers';
 import { clamp } from '~/base/utils';
 import { IKeyEntity } from '~/editor/DataSchema';
 import { editMutations, editReader } from '~/editor/store';
@@ -19,66 +24,33 @@ const sight = {
 };
 
 function startKeyEntityDragOperation(e: MouseEvent, useGhost: boolean) {
-  let prevPos = { x: 0, y: 0 };
-
-  const onMouseMove = (e: MouseEvent) => {
-    const deltaX = (e.clientX - prevPos.x) * sight.scale;
-    const deltaY = (e.clientY - prevPos.y) * sight.scale;
+  const moveCallback = (pos: IPosition, prevPos: IPosition) => {
+    const deltaX = (pos.x - prevPos.x) * sight.scale;
+    const deltaY = (pos.y - prevPos.y) * sight.scale;
     editMutations.moveKeyDelta(deltaX, deltaY);
-    prevPos.x = e.clientX;
-    prevPos.y = e.clientY;
     rerender();
   };
-
-  const onMouseUp = () => {
-    window.removeEventListener('mousemove', onMouseMove);
-    window.removeEventListener('mouseup', onMouseUp);
+  const upCallback = () => {
     editMutations.endEdit();
     rerender();
   };
 
-  const onMouseDown = (e: MouseEvent) => {
-    editMutations.startEdit(useGhost);
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mouseup', onMouseUp);
-    prevPos = {
-      x: e.clientX,
-      y: e.clientY,
-    };
-  };
-
-  onMouseDown(e);
+  editMutations.startEdit(useGhost);
+  startDragSession(e, moveCallback, upCallback);
 }
 
 function startSightDragOperation(e: MouseEvent) {
-  let prevPos = { x: 0, y: 0 };
-
-  const onMouseMove = (e: MouseEvent) => {
-    const deltaX = (e.clientX - prevPos.x) * sight.scale;
-    const deltaY = (e.clientY - prevPos.y) * sight.scale;
+  const moveCallback = (pos: IPosition, prevPos: IPosition) => {
+    const deltaX = (pos.x - prevPos.x) * sight.scale;
+    const deltaY = (pos.y - prevPos.y) * sight.scale;
     sight.pos.x -= deltaX;
     sight.pos.y -= deltaY;
-    prevPos.x = e.clientX;
-    prevPos.y = e.clientY;
     rerender();
   };
 
-  const onMouseUp = () => {
-    window.removeEventListener('mousemove', onMouseMove);
-    window.removeEventListener('mouseup', onMouseUp);
-    rerender();
-  };
+  const upCallback = () => {};
 
-  const onMouseDown = (e: MouseEvent) => {
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mouseup', onMouseUp);
-    prevPos = {
-      x: e.clientX,
-      y: e.clientY,
-    };
-  };
-
-  onMouseDown(e);
+  startDragSession(e, moveCallback, upCallback);
 }
 
 const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
@@ -138,16 +110,19 @@ function getTransformSpec() {
   return `translate(${cx}, ${cy}) scale(${sc})`;
 }
 
+function screenToWorld(sx: number, sy: number) {
+  const x = (sx - cc.baseW / 2) * sight.scale + sight.pos.x;
+  const y = (sy - cc.baseH / 2) * sight.scale + sight.pos.y;
+  return [x, y];
+}
+
 const onSvgMouseDown = (e: MouseEvent) => {
   if (e.button === 0) {
     if (editReader.editMode === 'move') {
       editMutations.setCurrentKeyEntity(undefined);
     } else if (editReader.editMode === 'add') {
-      const svgElement = document.getElementById('domEditSvg')!;
-      const rect = svgElement.getBoundingClientRect();
-      const x =
-        (e.pageX - rect.left - cc.baseW / 2) * sight.scale + sight.pos.x;
-      const y = (e.pageY - rect.top - cc.baseH / 2) * sight.scale + sight.pos.y;
+      const [sx, sy] = getRelativeMousePosition(e);
+      const [x, y] = screenToWorld(sx, sy);
       editMutations.addKeyEntity(x, y);
       startKeyEntityDragOperation(e, false);
     }
@@ -160,11 +135,10 @@ const onSvgMouseDown = (e: MouseEvent) => {
 const onSvgScroll = (e: WheelEvent) => {
   const dir = e.deltaY / 120;
 
-  const svgElement = document.getElementById('domEditSvg')!;
-  const rect = svgElement.getBoundingClientRect();
+  const [sx, sy] = getRelativeMousePosition(e);
 
-  const px = e.pageX - rect.left - cc.baseW / 2;
-  const py = e.pageY - rect.top - cc.baseH / 2;
+  const px = sx - cc.baseW / 2;
+  const py = sy - cc.baseH / 2;
 
   const sza = 1 + dir * 0.05;
   const oldScale = sight.scale;
@@ -192,7 +166,7 @@ export const EditSvgView = () => {
       viewBox={viewBoxSpec}
       onMouseDown={onSvgMouseDown}
       onWheel={onSvgScroll}
-      id="domEditSvg"
+      // id="domEditSvg"
     >
       <g transform={transformSpec}>
         {editReader.allKeyEntities.map((ke) => (
