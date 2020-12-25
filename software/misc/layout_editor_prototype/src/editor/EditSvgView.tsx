@@ -15,15 +15,15 @@ const sight = {
     x: 0,
     y: 0,
   },
-  scale: 2,
+  scale: 0.5,
 };
 
 function startKeyEntityDragOperation(e: MouseEvent, useGhost: boolean) {
   let prevPos = { x: 0, y: 0 };
 
   const onMouseMove = (e: MouseEvent) => {
-    const deltaX = (e.clientX - prevPos.x) / sight.scale;
-    const deltaY = (e.clientY - prevPos.y) / sight.scale;
+    const deltaX = (e.clientX - prevPos.x) * sight.scale;
+    const deltaY = (e.clientY - prevPos.y) * sight.scale;
     editMutations.moveKeyDelta(deltaX, deltaY);
     prevPos.x = e.clientX;
     prevPos.y = e.clientY;
@@ -54,8 +54,8 @@ function startSightDragOperation(e: MouseEvent) {
   let prevPos = { x: 0, y: 0 };
 
   const onMouseMove = (e: MouseEvent) => {
-    const deltaX = (e.clientX - prevPos.x) / sight.scale;
-    const deltaY = (e.clientY - prevPos.y) / sight.scale;
+    const deltaX = (e.clientX - prevPos.x) * sight.scale;
+    const deltaY = (e.clientY - prevPos.y) * sight.scale;
     sight.pos.x -= deltaX;
     sight.pos.y -= deltaY;
     prevPos.x = e.clientX;
@@ -132,7 +132,7 @@ function getViewBoxSpec() {
 }
 
 function getTransformSpec() {
-  const sc = sight.scale;
+  const sc = 1 / sight.scale;
   const cx = cc.baseW / 2 - sight.pos.x * sc;
   const cy = cc.baseH / 2 - sight.pos.y * sc;
   return `translate(${cx}, ${cy}) scale(${sc})`;
@@ -146,8 +146,8 @@ const onSvgMouseDown = (e: MouseEvent) => {
       const svgElement = document.getElementById('domEditSvg')!;
       const rect = svgElement.getBoundingClientRect();
       const x =
-        (e.pageX - rect.left - cc.baseW / 2) / sight.scale + sight.pos.x;
-      const y = (e.pageY - rect.top - cc.baseH / 2) / sight.scale + sight.pos.y;
+        (e.pageX - rect.left - cc.baseW / 2) * sight.scale + sight.pos.x;
+      const y = (e.pageY - rect.top - cc.baseH / 2) * sight.scale + sight.pos.y;
       editMutations.addKeyEntity(x, y);
       startKeyEntityDragOperation(e, false);
     }
@@ -158,7 +158,7 @@ const onSvgMouseDown = (e: MouseEvent) => {
 };
 
 const onSvgScroll = (e: WheelEvent) => {
-  const dir = -e.deltaY / 120;
+  const dir = e.deltaY / 120;
 
   const svgElement = document.getElementById('domEditSvg')!;
   const rect = svgElement.getBoundingClientRect();
@@ -170,8 +170,9 @@ const onSvgScroll = (e: WheelEvent) => {
   const oldScale = sight.scale;
   const newScale = clamp(sight.scale * sza, 0.1, 10);
   sight.scale = newScale;
-  sight.pos.x += px / oldScale - px / newScale;
-  sight.pos.y += py / oldScale - py / newScale;
+  const scaleDiff = newScale - oldScale;
+  sight.pos.x -= px * scaleDiff;
+  sight.pos.y -= py * scaleDiff;
 };
 
 export const EditSvgView = () => {
