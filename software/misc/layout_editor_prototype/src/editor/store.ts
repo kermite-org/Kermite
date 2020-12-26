@@ -68,6 +68,9 @@ export interface ISight {
 export interface IEnvState {
   ghost: IKeyEntity | undefined;
   sight: ISight;
+  showAxis: boolean;
+  showGrid: boolean;
+  snapToGrid: boolean;
 }
 interface IAppState {
   editor: IEditState;
@@ -90,6 +93,9 @@ export const appState: IAppState = {
       },
       scale: 0.5,
     },
+    showAxis: false,
+    showGrid: false,
+    snapToGrid: false,
   },
 };
 

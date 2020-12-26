@@ -1,7 +1,9 @@
 import { css } from 'goober';
 import { ExclusiveButtonGroup } from '~/controls/ExclusiveButtonGroup';
+import { ToggleButton } from '~/controls/ToggleButton';
 import { ISelectOption } from '~/controls/interfaces';
 import {
+  appState,
   editManager,
   editMutations,
   editReader,
@@ -17,6 +19,7 @@ const cssEditMenuBar = css`
   }
 
   > .buttonsBox {
+    display: flex;
     > * + * {
       margin-left: 5px;
     }
@@ -50,6 +53,14 @@ function createModeSelectionViewModel<K extends 'editorTarget' | 'editMode'>(
   };
 }
 
+function createToggleOptionViewModel<
+  K extends 'showAxis' | 'showGrid' | 'snapToGrid'
+>(targetKey: K) {
+  const active = appState.env[targetKey];
+  const setActive = (state: boolean) => (appState.env[targetKey] = state);
+  return { active, setActive };
+}
+
 export const EditMenuBar = () => {
   const { canUndo, canRedo, undo, redo } = editManager;
 
@@ -64,6 +75,10 @@ export const EditMenuBar = () => {
     add: 'add',
     move: 'move',
   });
+
+  const vmShowAxis = createToggleOptionViewModel('showAxis');
+  const vmShowGrid = createToggleOptionViewModel('showGrid');
+  const vmSnapToGrid = createToggleOptionViewModel('snapToGrid');
 
   return (
     <div class={cssEditMenuBar}>
@@ -88,6 +103,27 @@ export const EditMenuBar = () => {
         <button disabled={!canRedo} onClick={redo}>
           redo
         </button>
+      </div>
+
+      <div class="buttonsBox">
+        <ToggleButton
+          text="axis"
+          width={45}
+          active={vmShowAxis.active}
+          setActive={vmShowAxis.setActive}
+        />
+        <ToggleButton
+          text="grid"
+          width={45}
+          active={vmShowGrid.active}
+          setActive={vmShowGrid.setActive}
+        />
+        <ToggleButton
+          text="snap"
+          width={45}
+          active={vmSnapToGrid.active}
+          setActive={vmSnapToGrid.setActive}
+        />
       </div>
     </div>
   );
