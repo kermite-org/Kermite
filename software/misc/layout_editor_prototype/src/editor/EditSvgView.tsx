@@ -259,12 +259,13 @@ export const EditSvgView = () => {
       // id="domEditSvg"
     >
       <g transform={transformSpec}>
+        {showGrid && <FieldGrid />}
+        {showAxis && <FieldAxis />}
+        {ghost && <KeyEntityCard ke={ghost} />}
+
         {editReader.allKeyEntities.map((ke) => (
           <KeyEntityCard ke={ke} key={ke.id} />
         ))}
-        {ghost && <KeyEntityCard ke={ghost} />}
-        {showAxis && <FieldAxis />}
-        {showGrid && <FieldGrid />}
       </g>
     </svg>
   );
