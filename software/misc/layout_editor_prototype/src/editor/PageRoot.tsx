@@ -1,4 +1,5 @@
 import { css } from 'goober';
+import { ConfigPanel } from '~/editor/ConfigPanel';
 import { EditMenuBar } from '~/editor/EditMenuBar';
 import { EditSvgView } from '~/editor/EditSvgView';
 import { PropertiesPanel } from '~/editor/PropertiesPanel';
@@ -36,6 +37,7 @@ export const PageRoot = () => {
         <EditSvgView />
         <div class="sideColumn">
           <PropertiesPanel />
+          <ConfigPanel />
         </div>
       </div>
 

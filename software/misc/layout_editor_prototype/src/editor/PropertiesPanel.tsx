@@ -68,7 +68,7 @@ export const PropertiesPanel = () => {
 
     display: flex;
     flex-direction: column;
-    height: 100%;
+    /* height: 100%; */
 
     > .editZone {
       flex-grow: 1;
