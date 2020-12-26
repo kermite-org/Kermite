@@ -206,15 +206,15 @@ function makeRange(lo: number, hi: number) {
 
 const FieldGrid = () => {
   const { left, top, right, bottom } = getWorldViewBounds();
-  const gridPitch = 10;
+  const [gpx, gpy] = editReader.gridPitches;
 
-  const nl = (left / gridPitch) >> 0;
-  const nt = (top / gridPitch) >> 0;
-  const nr = (right / gridPitch) >> 0;
-  const nb = (bottom / gridPitch) >> 0;
+  const nl = (left / gpx) >> 0;
+  const nt = (top / gpy) >> 0;
+  const nr = (right / gpx) >> 0;
+  const nb = (bottom / gpy) >> 0;
 
-  const xs = makeRange(nl, nr).map((ix) => ix * gridPitch);
-  const ys = makeRange(nt, nb).map((iy) => iy * gridPitch);
+  const xs = makeRange(nl, nr).map((ix) => ix * gpx);
+  const ys = makeRange(nt, nb).map((iy) => iy * gpy);
 
   return (
     <g>

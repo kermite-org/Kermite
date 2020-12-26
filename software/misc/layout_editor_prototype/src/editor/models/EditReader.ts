@@ -30,6 +30,15 @@ export const editReader = new (class {
     return appState.editor.design.placementUnit.split(' ')[0] as 'mm' | 'KP';
   }
 
+  get gridPitches(): [number, number] {
+    const cu = this.coordUnit;
+    if (cu.mode === 'KP') {
+      return [cu.x, cu.y];
+    } else {
+      return [10, 10];
+    }
+  }
+
   getMode<K extends 'editorTarget' | 'editMode'>(fieldKey: K): IModeState[K] {
     return appState.editor[fieldKey];
   }

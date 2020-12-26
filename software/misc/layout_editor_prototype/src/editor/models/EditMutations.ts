@@ -73,14 +73,15 @@ export const editMutations = new (class {
   }
 
   setKeyPosition(px: number, py: number) {
-    const { coordUnit } = editReader;
+    const { coordUnit, snapToGrid, gridPitches } = editReader;
+    const [gpx, gpy] = gridPitches;
+    const snapDist = 1;
+
     editUpdator.patchEditKeyEntity((ke) => {
       let [kx, ky] = unitValueToMm(ke.x, ke.y, coordUnit);
-      if (editReader.snapToGrid) {
-        const gridPitch = 10;
-        const snapDist = 1;
-        const snappedX = Math.round(px / gridPitch) * gridPitch;
-        const snappedY = Math.round(py / gridPitch) * gridPitch;
+      if (snapToGrid) {
+        const snappedX = Math.round(px / gpx) * gpx;
+        const snappedY = Math.round(py / gpy) * gpy;
         if (getDist(kx, ky, snappedX, snappedY) < snapDist) {
           kx = snappedX;
           ky = snappedY;
