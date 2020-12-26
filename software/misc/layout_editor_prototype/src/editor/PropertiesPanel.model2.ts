@@ -4,6 +4,7 @@ import { editMutations, editReader } from '~/editor/store';
 interface IAttributeSlotSource<K extends IEditPropKey> {
   propKey: K;
   label: string;
+  getUnit(): string;
   validator(text: string): string | undefined;
   reader(value: IKeyEntity[K]): string;
   writer(text: string): IKeyEntity[K];
@@ -13,6 +14,7 @@ const slotSources: IAttributeSlotSource<IEditPropKey>[] = [
   {
     propKey: 'keyId',
     label: 'keyID',
+    getUnit: () => '',
     validator: (text: string) =>
       text.length < 6 ? undefined : 'must be within 6 characters',
     reader: (value: string) => value,
@@ -21,6 +23,7 @@ const slotSources: IAttributeSlotSource<IEditPropKey>[] = [
   {
     propKey: 'x',
     label: 'x',
+    getUnit: () => 'mm',
     validator: (text: string) =>
       text.match(/^-?[0-9.]+$/) ? undefined : 'must be a number',
     reader: (value: number) => value.toString(),
@@ -29,6 +32,16 @@ const slotSources: IAttributeSlotSource<IEditPropKey>[] = [
   {
     propKey: 'y',
     label: 'y',
+    getUnit: () => 'mm',
+    validator: (text: string) =>
+      text.match(/^-?[0-9.]+$/) ? undefined : 'must be a number',
+    reader: (value: number) => value.toString(),
+    writer: (text: string) => parseFloat(text),
+  },
+  {
+    propKey: 'r',
+    label: 'r',
+    getUnit: () => 'deg',
     validator: (text: string) =>
       text.match(/^-?[0-9.]+$/) ? undefined : 'must be a number',
     reader: (value: number) => value.toString(),
@@ -37,6 +50,7 @@ const slotSources: IAttributeSlotSource<IEditPropKey>[] = [
   {
     propKey: 'keyIndex',
     label: 'keyIndex',
+    getUnit: () => '',
     validator(text: string) {
       if (text === '') {
         return undefined;
@@ -70,6 +84,10 @@ class AttributeSlotModel<K extends IEditPropKey = IEditPropKey> {
 
   get label() {
     return this.source.label;
+  }
+
+  get unit() {
+    return this.source.getUnit();
   }
 
   get editText() {
@@ -169,6 +187,7 @@ class KeyEntityAttrsEditorModel {
 interface IAttributeSlotViewModel {
   propKey: string;
   label: string;
+  unit: string;
   editText: string;
   setEditText(text: string): void;
   hasError: boolean;

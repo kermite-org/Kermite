@@ -6,6 +6,7 @@ import { h } from '~/qx';
 interface IDesignAttributeTextInputLineProps {
   model: {
     label: string;
+    unit: string;
     editText: string;
     setEditText(text: string): void;
     hasError: boolean;
@@ -25,6 +26,7 @@ const DesignAttributeTextInputLine = (
   `;
   const {
     label,
+    unit,
     editText,
     setEditText,
     hasError,
@@ -46,6 +48,7 @@ const DesignAttributeTextInputLine = (
         data-has-error={hasError}
         readOnly={!canEdit}
       />
+      <span>{unit}</span>
     </div>
   );
 };

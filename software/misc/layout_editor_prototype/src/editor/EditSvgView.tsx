@@ -87,18 +87,22 @@ const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
   const isSelected = ke.id === editReader.currentKeyEntity?.id;
   const isGhost = ke === editReader.ghost;
 
+  const transformSpec = `translate(${ke.x}, ${ke.y}) rotate(${ke.r})`;
+
   return (
-    <rect
-      key={ke.id}
-      x={ke.x - hsz}
-      y={ke.y - hsz}
-      width={sz}
-      height={sz}
-      css={cssKeyRect}
-      data-selected={isSelected}
-      data-ghost={isGhost}
-      onMouseDown={onMouseDown}
-    />
+    <g transform={transformSpec}>
+      <rect
+        key={ke.id}
+        x={-hsz}
+        y={-hsz}
+        width={sz}
+        height={sz}
+        css={cssKeyRect}
+        data-selected={isSelected}
+        data-ghost={isGhost}
+        onMouseDown={onMouseDown}
+      />
+    </g>
   );
 };
 
