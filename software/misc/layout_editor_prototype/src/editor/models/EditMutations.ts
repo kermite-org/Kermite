@@ -1,4 +1,4 @@
-import { clamp, getDist } from '~/base/utils';
+import { clamp } from '~/base/utils';
 import { IModeState } from '~/editor/models/AppState';
 import { IEditPropKey, IKeyEntity } from '~/editor/models/DataSchema';
 import { editReader } from '~/editor/models/EditReader';
@@ -74,21 +74,15 @@ export const editMutations = new (class {
 
   setKeyPosition(px: number, py: number) {
     const { coordUnit, snapToGrid, gridPitches } = editReader;
-    const [gpx, gpy] = gridPitches;
-    const snapDist = 1;
+    let [gpx, gpy] = gridPitches;
+    gpx /= 4;
+    gpy /= 4;
 
     editUpdator.patchEditKeyEntity((ke) => {
       let [kx, ky] = unitValueToMm(ke.x, ke.y, coordUnit);
       if (snapToGrid) {
-        const snappedX = Math.round(px / gpx) * gpx;
-        const snappedY = Math.round(py / gpy) * gpy;
-        if (getDist(kx, ky, snappedX, snappedY) < snapDist) {
-          kx = snappedX;
-          ky = snappedY;
-        } else {
-          kx = px;
-          ky = py;
-        }
+        kx = Math.round(px / gpx) * gpx;
+        ky = Math.round(py / gpy) * gpy;
       } else {
         kx = px;
         ky = py;
