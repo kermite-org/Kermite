@@ -1,7 +1,5 @@
 import { css } from 'goober';
-import { ExclusiveButtonGroup } from '~/controls/ExclusiveButtonGroup';
-import { ToggleButton } from '~/controls/ToggleButton';
-import { ISelectOption } from '~/controls/interfaces';
+import { ExclusiveButtonGroup, ToggleButton, ISelectOption } from '~/controls';
 import {
   editManager,
   editMutations,
