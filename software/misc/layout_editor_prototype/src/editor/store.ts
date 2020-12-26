@@ -121,6 +121,10 @@ export const editReader = new (class {
     return appState.editor[fieldKey];
   }
 
+  getBoolOption<K extends 'showAxis' | 'showGrid' | 'snapToGrid'>(fieldKey: K) {
+    return appState.env[fieldKey];
+  }
+
   get currentKeyEntity(): IKeyEntity | undefined {
     const { design, currentkeyEntityId } = appState.editor;
     return design.keyEntities[currentkeyEntityId || ''];
@@ -266,6 +270,15 @@ export const editMutations = new (class {
   ) {
     editUpdator.patchEditor((state) => {
       (state as any)[fieldKey] = mode;
+    });
+  }
+
+  setBoolOption<K extends 'showAxis' | 'showGrid' | 'snapToGrid'>(
+    fieldKey: K,
+    value: boolean
+  ) {
+    editUpdator.patchEnvState((env) => {
+      env[fieldKey] = value;
     });
   }
 

@@ -3,7 +3,6 @@ import { ExclusiveButtonGroup } from '~/controls/ExclusiveButtonGroup';
 import { ToggleButton } from '~/controls/ToggleButton';
 import { ISelectOption } from '~/controls/interfaces';
 import {
-  appState,
   editManager,
   editMutations,
   editReader,
@@ -56,8 +55,9 @@ function createModeSelectionViewModel<K extends 'editorTarget' | 'editMode'>(
 function createToggleOptionViewModel<
   K extends 'showAxis' | 'showGrid' | 'snapToGrid'
 >(targetKey: K) {
-  const active = appState.env[targetKey];
-  const setActive = (state: boolean) => (appState.env[targetKey] = state);
+  const active = editReader.getBoolOption(targetKey);
+  const setActive = (value: boolean) =>
+    editMutations.setBoolOption(targetKey, value);
   return { active, setActive };
 }
 
