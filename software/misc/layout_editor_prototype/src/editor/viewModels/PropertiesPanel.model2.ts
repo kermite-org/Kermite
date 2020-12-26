@@ -1,11 +1,11 @@
-import { IEditPropKey } from '~/editor/models/DataSchema';
-import { editReader } from '~/editor/models/store';
+import { IEditPropKey, IKeyEntity } from '~/editor/models/DataSchema';
+import { editMutations, editReader } from '~/editor/models/store';
 import {
   AttributeSlotModel,
   IAttributeSlotSource,
 } from '~/editor/viewModels/AttributeSlotModel';
 
-const slotSources: IAttributeSlotSource<IEditPropKey>[] = [
+const slotSources: IAttributeSlotSource<IKeyEntity, IEditPropKey>[] = [
   {
     propKey: 'keyId',
     label: 'keyID',
@@ -107,8 +107,17 @@ const slotSources: IAttributeSlotSource<IEditPropKey>[] = [
 ];
 
 class KeyEntityAttrsEditorModel {
-  private _allSlots: AttributeSlotModel[] = slotSources.map(
-    (ss) => new AttributeSlotModel(ss)
+  private _allSlots: AttributeSlotModel<
+    IKeyEntity,
+    IEditPropKey
+  >[] = slotSources.map(
+    (ss) =>
+      new AttributeSlotModel(
+        ss,
+        editMutations.startEdit,
+        editMutations.changeKeyProperty,
+        editMutations.endEdit
+      )
   );
 
   get allSlots() {

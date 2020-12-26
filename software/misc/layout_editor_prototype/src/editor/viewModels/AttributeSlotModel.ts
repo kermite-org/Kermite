@@ -1,17 +1,14 @@
-import { IEditPropKey, IKeyEntity } from '~/editor/models/DataSchema';
-import { editMutations } from '~/editor/models/store';
-
-export interface IAttributeSlotSource<K extends IEditPropKey> {
+export interface IAttributeSlotSource<T, K extends keyof T> {
   propKey: K;
   label: string;
   getUnit(): string;
   validator(text: string): string | undefined;
-  reader(value: IKeyEntity[K]): string;
-  writer(text: string): IKeyEntity[K];
+  reader(value: T[K]): string;
+  writer(text: string): T[K];
 }
 
-export class AttributeSlotModel<K extends IEditPropKey = IEditPropKey> {
-  private _originalValue: IKeyEntity[K] | undefined;
+export class AttributeSlotModel<T, K extends keyof T = keyof T> {
+  private _originalValue: T[K] | undefined;
   private _editText: string = '';
   private _errorText: string = '';
   private _hasFocus: boolean = false;
@@ -48,10 +45,15 @@ export class AttributeSlotModel<K extends IEditPropKey = IEditPropKey> {
     return this._hasFocus;
   }
 
-  constructor(private source: IAttributeSlotSource<K>) {}
+  constructor(
+    private source: IAttributeSlotSource<T, K>,
+    private procStartEdit: () => void,
+    private procChangeEditValue: (propKey: K, value: T[K]) => void,
+    private procEndEdit: () => void
+  ) {}
 
-  private pullModelValue(targetKeyEntity: IKeyEntity | undefined) {
-    this._originalValue = targetKeyEntity?.[this.propKey];
+  private pullModelValue(targetObject: T | undefined) {
+    this._originalValue = targetObject?.[this.propKey];
   }
 
   private resetEditText() {
@@ -66,15 +68,15 @@ export class AttributeSlotModel<K extends IEditPropKey = IEditPropKey> {
     this._errorText = this.source.validator(this._editText) || '';
     if (!this._errorText) {
       const newValue = this.source.writer(this._editText);
-      editMutations.changeKeyProperty(this.propKey, newValue);
+      this.procChangeEditValue(this.propKey, newValue);
       this._originalValue = newValue;
       this._errorText = '';
     }
   }
 
-  updateSource(targetKeyEntity: IKeyEntity | undefined) {
-    if (this._originalValue !== targetKeyEntity?.[this.propKey]) {
-      this.pullModelValue(targetKeyEntity);
+  updateSource(targetObject: T | undefined) {
+    if (this._originalValue !== targetObject?.[this.propKey]) {
+      this.pullModelValue(targetObject);
       this.resetEditText();
     }
   }
@@ -85,12 +87,12 @@ export class AttributeSlotModel<K extends IEditPropKey = IEditPropKey> {
   };
 
   onFocus = () => {
-    editMutations.startEdit();
+    this.procStartEdit();
     this._hasFocus = true;
   };
 
   onBlur = () => {
-    editMutations.endEdit();
+    this.procEndEdit();
     this.resetEditText();
     this._hasFocus = false;
   };

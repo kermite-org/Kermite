@@ -265,13 +265,13 @@ export const editUpdator = new (class {
 })();
 
 export const editMutations = new (class {
-  startEdit(useGhost: boolean = true) {
+  startEdit = (useGhost: boolean = true) => {
     editUpdator.startEditSession(useGhost);
-  }
+  };
 
-  endEdit() {
+  endEdit = () => {
     editUpdator.endEditSession();
-  }
+  };
 
   addKeyEntity(x: number, y: number) {
     const id = `ke-${(Math.random() * 1000) >> 0}`;
@@ -342,11 +342,14 @@ export const editMutations = new (class {
     });
   }
 
-  changeKeyProperty<K extends IEditPropKey>(propKey: K, value: IKeyEntity[K]) {
+  changeKeyProperty = <K extends IEditPropKey>(
+    propKey: K,
+    value: IKeyEntity[K]
+  ) => {
     editUpdator.patchEditKeyEntity((ke) => {
       ke[propKey] = value;
     });
-  }
+  };
 
   moveSight(deltaX: number, deltaY: number) {
     editUpdator.patchEnvState((env) => {
