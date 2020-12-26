@@ -31,3 +31,16 @@ export function getDist(x0: number, y0: number, x1: number, y1: number) {
   const dy = y1 - y0;
   return Math.sqrt(dx * dx + dy * dy);
 }
+
+export function mapObjectValues<P, Q>(
+  src: {
+    [key: string]: P;
+  },
+  proc: (value: P) => Q
+): { [key: string]: Q } {
+  const dst: { [key: string]: Q } = {};
+  for (const key in src) {
+    dst[key] = proc(src[key]);
+  }
+  return dst;
+}

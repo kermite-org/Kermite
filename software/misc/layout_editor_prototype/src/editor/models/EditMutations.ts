@@ -3,6 +3,7 @@ import { IModeState } from '~/editor/models/AppState';
 import { IEditPropKey, IKeyEntity } from '~/editor/models/DataSchema';
 import { editReader } from '~/editor/models/EditReader';
 import { editUpdator } from '~/editor/models/EditUpdator';
+import { changePlacementCoordUnit } from '~/editor/models/PlacementUnitHelper';
 
 export const editMutations = new (class {
   startEdit = (useGhost: boolean = true) => {
@@ -32,7 +33,7 @@ export const editMutations = new (class {
 
   setPlacementUnit(unitSpec: string) {
     editUpdator.commitEditor((editor) => {
-      editor.design.placementUnit = unitSpec;
+      changePlacementCoordUnit(editor.design, unitSpec);
     });
   }
 
