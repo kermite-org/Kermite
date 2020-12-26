@@ -4,9 +4,8 @@ import {
   IPosition,
   startDragSession,
 } from '~/base/UiInteractionHelpers';
-import { clamp } from '~/base/utils';
 import { IKeyEntity } from '~/editor/DataSchema';
-import { appState, editMutations, editReader } from '~/editor/store';
+import { editMutations, editReader } from '~/editor/store';
 import { h, rerender } from '~/qx';
 
 // coord configuration
@@ -16,7 +15,7 @@ const cc = {
 };
 
 function startKeyEntityDragOperation(e: MouseEvent, useGhost: boolean) {
-  const { sight } = appState.env;
+  const { sight } = editReader;
 
   const moveCallback = (pos: IPosition, prevPos: IPosition) => {
     const deltaX = (pos.x - prevPos.x) * sight.scale;
@@ -34,13 +33,12 @@ function startKeyEntityDragOperation(e: MouseEvent, useGhost: boolean) {
 }
 
 function startSightDragOperation(e: MouseEvent) {
-  const { sight } = appState.env;
+  const { sight } = editReader;
 
   const moveCallback = (pos: IPosition, prevPos: IPosition) => {
-    const deltaX = (pos.x - prevPos.x) * sight.scale;
-    const deltaY = (pos.y - prevPos.y) * sight.scale;
-    sight.pos.x -= deltaX;
-    sight.pos.y -= deltaY;
+    const deltaX = -(pos.x - prevPos.x) * sight.scale;
+    const deltaY = -(pos.y - prevPos.y) * sight.scale;
+    editMutations.moveSight(deltaX, deltaY);
     rerender();
   };
 
@@ -69,13 +67,15 @@ const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
 
   const onMouseDown = (e: MouseEvent) => {
     const { editMode } = editReader;
-    if (editMode === 'select') {
-      editMutations.setCurrentKeyEntity(ke.id);
-    } else if (editMode === 'move') {
-      editMutations.setCurrentKeyEntity(ke.id);
-      startKeyEntityDragOperation(e, true);
+    if (e.button === 0) {
+      if (editMode === 'select') {
+        editMutations.setCurrentKeyEntity(ke.id);
+      } else if (editMode === 'move') {
+        editMutations.setCurrentKeyEntity(ke.id);
+        startKeyEntityDragOperation(e, true);
+      }
+      e.stopPropagation();
     }
-    e.stopPropagation();
   };
 
   const isSelected = ke.id === editReader.currentKeyEntity?.id;
@@ -103,7 +103,7 @@ function getViewBoxSpec() {
 }
 
 function getTransformSpec() {
-  const { sight } = appState.env;
+  const { sight } = editReader;
   const sc = 1 / sight.scale;
   const cx = cc.baseW / 2 - sight.pos.x * sc;
   const cy = cc.baseH / 2 - sight.pos.y * sc;
@@ -111,7 +111,7 @@ function getTransformSpec() {
 }
 
 function screenToWorld(sx: number, sy: number) {
-  const { sight } = appState.env;
+  const { sight } = editReader;
   const x = (sx - cc.baseW / 2) * sight.scale + sight.pos.x;
   const y = (sy - cc.baseH / 2) * sight.scale + sight.pos.y;
   return [x, y];
@@ -135,21 +135,11 @@ const onSvgMouseDown = (e: MouseEvent) => {
 };
 
 const onSvgScroll = (e: WheelEvent) => {
-  const { sight } = appState.env;
   const dir = e.deltaY / 120;
-
   const [sx, sy] = getRelativeMousePosition(e);
-
   const px = sx - cc.baseW / 2;
   const py = sy - cc.baseH / 2;
-
-  const sza = 1 + dir * 0.05;
-  const oldScale = sight.scale;
-  const newScale = clamp(sight.scale * sza, 0.1, 10);
-  sight.scale = newScale;
-  const scaleDiff = newScale - oldScale;
-  sight.pos.x -= px * scaleDiff;
-  sight.pos.y -= py * scaleDiff;
+  editMutations.scaleSight(dir, px, py);
 };
 
 export const EditSvgView = () => {

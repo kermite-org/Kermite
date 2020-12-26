@@ -1,5 +1,6 @@
 import { produce } from 'immer';
 import {
+  clamp,
   compareObjectByJsonStringify,
   createDictionaryFromKeyValues,
 } from '~/base/utils';
@@ -98,7 +99,6 @@ export const appState: IAppState = {
     snapToGrid: false,
   },
 };
-
 interface IModification {
   oldState: IEditState;
   newState: IEditState;
@@ -111,6 +111,10 @@ export const editReader = new (class {
 
   get ghost() {
     return appState.env.ghost;
+  }
+
+  get sight() {
+    return appState.env.sight;
   }
 
   getMode<K extends 'editorTarget' | 'editMode'>(fieldKey: K): IModeState[K] {
@@ -209,8 +213,8 @@ export const editUpdator = new (class {
   startEditSession(useGhost: boolean) {
     this.originalEditState = appState.editor;
     if (useGhost) {
-      this.patchEnvState((state) => {
-        state.ghost = this.getEditKeyEntity(appState.editor);
+      this.patchEnvState((env) => {
+        env.ghost = this.getEditKeyEntity(appState.editor);
       });
     }
   }
@@ -226,8 +230,8 @@ export const editUpdator = new (class {
       }
 
       this.originalEditState = undefined;
-      this.patchEnvState((state) => {
-        state.ghost = undefined;
+      this.patchEnvState((env) => {
+        env.ghost = undefined;
       });
     }
   }
@@ -281,6 +285,26 @@ export const editMutations = new (class {
   changeKeyProperty<K extends IEditPropKey>(propKey: K, value: IKeyEntity[K]) {
     editUpdator.patchEditKeyEntity((ke) => {
       ke[propKey] = value;
+    });
+  }
+
+  moveSight(deltaX: number, deltaY: number) {
+    editUpdator.patchEnvState((env) => {
+      env.sight.pos.x += deltaX;
+      env.sight.pos.y += deltaY;
+    });
+  }
+
+  scaleSight(dir: number, px: number, py: number) {
+    editUpdator.patchEnvState((env) => {
+      const { sight } = env;
+      const sza = 1 + dir * 0.05;
+      const oldScale = sight.scale;
+      const newScale = clamp(sight.scale * sza, 0.1, 10);
+      sight.scale = newScale;
+      const scaleDiff = newScale - oldScale;
+      sight.pos.x -= px * scaleDiff;
+      sight.pos.y -= py * scaleDiff;
     });
   }
 })();
