@@ -18,7 +18,8 @@ export const editMutations = new (class {
     editUpdator.endEditSession();
   };
 
-  addKeyEntity(x: number, y: number) {
+  addKeyEntity(px: number, py: number) {
+    const [x, y] = mmToUnitValue(px, py, editReader.coordUnit);
     const id = `ke-${(Math.random() * 1000) >> 0}`;
     const keyEntity: IKeyEntity = {
       id,
