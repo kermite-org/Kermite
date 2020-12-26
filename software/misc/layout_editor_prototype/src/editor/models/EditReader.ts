@@ -26,6 +26,10 @@ export const editReader = new (class {
     return getCoordUnitFromUnitSpec(appState.editor.design.placementUnit);
   }
 
+  get coordUnitSuffix(): 'mm' | 'KP' {
+    return appState.editor.design.placementUnit.split(' ')[0] as 'mm' | 'KP';
+  }
+
   getMode<K extends 'editorTarget' | 'editMode'>(fieldKey: K): IModeState[K] {
     return appState.editor[fieldKey];
   }

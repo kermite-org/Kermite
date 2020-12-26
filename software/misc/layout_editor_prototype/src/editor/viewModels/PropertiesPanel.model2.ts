@@ -22,7 +22,7 @@ const slotSources: IAttributeSlotSource<IKeyEntity, IEditPropKey>[] = [
   {
     propKey: 'x',
     label: 'x',
-    getUnit: () => 'mm',
+    getUnit: () => editReader.coordUnitSuffix,
     validator: (text: string) =>
       text.match(/^-?[0-9.]+$/) ? undefined : 'must be a number',
     reader: (value: number) => value.toString(),
@@ -31,7 +31,7 @@ const slotSources: IAttributeSlotSource<IKeyEntity, IEditPropKey>[] = [
   {
     propKey: 'y',
     label: 'y',
-    getUnit: () => 'mm',
+    getUnit: () => editReader.coordUnitSuffix,
     validator: (text: string) =>
       text.match(/^-?[0-9.]+$/) ? undefined : 'must be a number',
     reader: (value: number) => value.toString(),

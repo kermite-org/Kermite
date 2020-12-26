@@ -17,7 +17,7 @@ const initialDesign: IPersistentKeyboardDesign = {
     },
     {
       keyId: 'key1',
-      x: 22,
+      x: 20,
       y: 0,
       r: 0,
       shape: 'std 1',
@@ -25,7 +25,7 @@ const initialDesign: IPersistentKeyboardDesign = {
     },
     {
       keyId: 'key2',
-      x: 44,
+      x: 40,
       y: 0,
       r: 0,
       shape: 'ref circle',
