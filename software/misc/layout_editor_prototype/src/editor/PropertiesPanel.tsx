@@ -54,9 +54,10 @@ export const PropertiesPanel = () => {
   const vm = usePropertyPanelModel().keyEntityAttrsVm;
 
   const cssPropertiesPanel = css`
+    padding: 10px;
     label {
       display: inline-block;
-      width: 60px;
+      width: 80px;
     }
     input {
       width: 60px;

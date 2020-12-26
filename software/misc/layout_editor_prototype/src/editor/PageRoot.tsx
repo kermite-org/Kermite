@@ -2,6 +2,7 @@ import { css } from 'goober';
 import { EditMenuBar } from '~/editor/EditMenuBar';
 import { EditSvgView } from '~/editor/EditSvgView';
 import { PropertiesPanel } from '~/editor/PropertiesPanel';
+import { appState } from '~/editor/store';
 import { h } from '~/qx';
 
 export const PageRoot = () => {
@@ -37,6 +38,8 @@ export const PageRoot = () => {
           <PropertiesPanel />
         </div>
       </div>
+
+      <div>{JSON.stringify(appState.editor.design, null, ' ')}</div>
     </div>
   );
 };

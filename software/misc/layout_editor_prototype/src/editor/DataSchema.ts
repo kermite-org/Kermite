@@ -24,4 +24,4 @@ export interface IKeyboardDesign {
   keyEntities: { [id: string]: IKeyEntity };
 }
 
-export type IEditPropKey = 'keyId' | 'x' | 'y';
+export type IEditPropKey = 'keyId' | 'x' | 'y' | 'r' | 'keyIndex';

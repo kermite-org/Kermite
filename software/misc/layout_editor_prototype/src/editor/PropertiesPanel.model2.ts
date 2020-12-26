@@ -12,7 +12,7 @@ interface IAttributeSlotSource<K extends IEditPropKey> {
 const slotSources: IAttributeSlotSource<IEditPropKey>[] = [
   {
     propKey: 'keyId',
-    label: 'KEY ID',
+    label: 'keyID',
     validator: (text: string) =>
       text.length < 6 ? undefined : 'must be within 6 characters',
     reader: (value: string) => value,
@@ -20,7 +20,7 @@ const slotSources: IAttributeSlotSource<IEditPropKey>[] = [
   },
   {
     propKey: 'x',
-    label: 'X',
+    label: 'x',
     validator: (text: string) =>
       text.match(/^-?[0-9.]+$/) ? undefined : 'must be a number',
     reader: (value: number) => value.toString(),
@@ -28,11 +28,33 @@ const slotSources: IAttributeSlotSource<IEditPropKey>[] = [
   },
   {
     propKey: 'y',
-    label: 'Y',
+    label: 'y',
     validator: (text: string) =>
       text.match(/^-?[0-9.]+$/) ? undefined : 'must be a number',
     reader: (value: number) => value.toString(),
     writer: (text: string) => parseFloat(text),
+  },
+  {
+    propKey: 'keyIndex',
+    label: 'keyIndex',
+    validator(text: string) {
+      if (text === '') {
+        return undefined;
+      }
+      return text.match(/^[0-9]+$/) ? undefined : 'must be an integer >= 0';
+    },
+    reader(value: number) {
+      if (value === -1) {
+        return '';
+      }
+      return value.toString();
+    },
+    writer(text: string) {
+      if (text === '') {
+        return -1;
+      }
+      return parseFloat(text);
+    },
   },
 ];
 
