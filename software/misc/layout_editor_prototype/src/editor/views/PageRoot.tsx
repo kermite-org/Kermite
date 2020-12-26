@@ -1,5 +1,5 @@
 import { css } from 'goober';
-import { appState } from '~/editor/models/store';
+import { appState } from '~/editor/models';
 import { ConfigPanel } from '~/editor/views/ConfigPanel';
 import { EditMenuBar } from '~/editor/views/EditMenuBar';
 import { EditSvgView } from '~/editor/views/EditSvgView';

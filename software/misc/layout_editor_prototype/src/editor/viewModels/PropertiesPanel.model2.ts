@@ -1,5 +1,9 @@
-import { IEditPropKey, IKeyEntity } from '~/editor/models/DataSchema';
-import { editMutations, editReader } from '~/editor/models/store';
+import {
+  editMutations,
+  editReader,
+  IEditPropKey,
+  IKeyEntity,
+} from '~/editor/models';
 import {
   AttributeSlotModel,
   IAttributeSlotSource,

@@ -5,8 +5,7 @@ import {
   IPosition,
   startDragSession,
 } from '~/base/UiInteractionHelpers';
-import { IKeyEntity } from '~/editor/models/DataSchema';
-import { editMutations, editReader } from '~/editor/models/store';
+import { editMutations, editReader, IKeyEntity } from '~/editor/models';
 import { h, rerender } from '~/qx';
 
 // coord configuration
