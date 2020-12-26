@@ -7,7 +7,7 @@ import {
   editMutations,
   editReader,
   IModeState,
-} from '~/editor/store';
+} from '~/editor/models/store';
 import { h } from '~/qx';
 
 const cssEditMenuBar = css`

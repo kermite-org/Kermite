@@ -10,7 +10,7 @@ import {
   IKeyboardDesign,
   IKeyEntity,
   IPersistentKeyboardDesign,
-} from '~/editor/DataSchema';
+} from '~/editor/models/DataSchema';
 
 const initialDesign: IPersistentKeyboardDesign = {
   keyEntities: [
