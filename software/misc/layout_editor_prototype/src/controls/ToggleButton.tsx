@@ -30,6 +30,7 @@ const cssToggleButton = (buttonWidth: number | undefined) => css`
   &[data-disabled] {
     cursor: inherit;
     pointer-events: none;
+    opacity: 0.4;
   }
 `;
 
