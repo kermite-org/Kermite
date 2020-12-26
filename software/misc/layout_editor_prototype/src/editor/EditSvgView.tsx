@@ -120,8 +120,9 @@ function screenToWorld(sx: number, sy: number) {
 }
 
 const axisColor = makeCssColor(0x444444, 0.2);
+const gridColor = makeCssColor(0x444444, 0.1);
 
-const FieldAxis = () => {
+function getWorldViewBounds() {
   const { sight } = editReader;
   const d = 1;
   const ew = (cc.baseW / 2) * sight.scale;
@@ -130,10 +131,82 @@ const FieldAxis = () => {
   const top = -eh + sight.pos.y + d;
   const right = ew + sight.pos.x - d;
   const bottom = eh + sight.pos.y - d;
+  return {
+    left,
+    top,
+    right,
+    bottom,
+  };
+}
+
+const FieldAxis = () => {
+  const { left, top, right, bottom } = getWorldViewBounds();
   return (
     <g>
-      <line x1={left} y1={0} x2={right} y2={0} stroke={axisColor} />
-      <line x1={0} y1={top} x2={0} y2={bottom} stroke={axisColor} />
+      <line
+        x1={left}
+        y1={0}
+        x2={right}
+        y2={0}
+        stroke={axisColor}
+        stroke-width={0.5}
+      />
+      <line
+        x1={0}
+        y1={top}
+        x2={0}
+        y2={bottom}
+        stroke={axisColor}
+        stroke-width={0.5}
+      />
+    </g>
+  );
+};
+
+function makeRange(lo: number, hi: number) {
+  return new Array(hi - lo + 1).fill(0).map((_, i) => lo + i);
+}
+
+const FieldGrid = () => {
+  const { left, top, right, bottom } = getWorldViewBounds();
+  const gridPitch = 10;
+
+  const nl = (left / gridPitch) >> 0;
+  const nt = (top / gridPitch) >> 0;
+  const nr = (right / gridPitch) >> 0;
+  const nb = (bottom / gridPitch) >> 0;
+
+  const xs = makeRange(nl, nr).map((ix) => ix * gridPitch);
+  const ys = makeRange(nt, nb).map((iy) => iy * gridPitch);
+
+  return (
+    <g>
+      <g>
+        {ys.map((y) => (
+          <line
+            key={y}
+            x1={left}
+            y1={y}
+            x2={right}
+            y2={y}
+            stroke={gridColor}
+            stroke-width={0.5}
+          />
+        ))}
+      </g>
+      <g>
+        {xs.map((x) => (
+          <line
+            key={x}
+            x1={x}
+            y1={top}
+            x2={x}
+            y2={bottom}
+            stroke={gridColor}
+            stroke-width={0.5}
+          />
+        ))}
+      </g>
     </g>
   );
 };
@@ -173,6 +246,7 @@ export const EditSvgView = () => {
   const { ghost } = editReader;
 
   const showAxis = editReader.getBoolOption('showAxis');
+  const showGrid = editReader.getBoolOption('showGrid');
 
   return (
     <svg
@@ -190,6 +264,7 @@ export const EditSvgView = () => {
         ))}
         {ghost && <KeyEntityCard ke={ghost} />}
         {showAxis && <FieldAxis />}
+        {showGrid && <FieldGrid />}
       </g>
     </svg>
   );

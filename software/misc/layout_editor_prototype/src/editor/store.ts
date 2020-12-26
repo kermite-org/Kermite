@@ -95,7 +95,7 @@ export const appState: IAppState = {
       scale: 0.5,
     },
     showAxis: true,
-    showGrid: false,
+    showGrid: true,
     snapToGrid: false,
   },
 };
