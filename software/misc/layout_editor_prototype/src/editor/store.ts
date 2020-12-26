@@ -46,6 +46,7 @@ function loadKeyboardDesign(
 ): IKeyboardDesign {
   let cnt = 0;
   return {
+    placementUnit: 'mm',
     keyEntities: createDictionaryFromKeyValues(
       source.keyEntities.map((ke) => {
         const id = `ke-${cnt++}`;

@@ -17,10 +17,11 @@ export interface IKeyEntity {
   x: number;
   y: number;
   r: number;
-  shape: string;
+  shape: string; // `std ${width}` | `ref ${shapeName}`
   keyIndex: number;
 }
 export interface IKeyboardDesign {
+  placementUnit: string; // `mm` | `KP ${baseKeyPitch}`
   keyEntities: { [id: string]: IKeyEntity };
 }
 
