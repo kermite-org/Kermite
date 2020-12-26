@@ -6,6 +6,7 @@ import {
   startDragSession,
 } from '~/base/UiInteractionHelpers';
 import { editMutations, editReader, IKeyEntity } from '~/editor/models';
+import { ICoordUnit, unitValueToMm } from '~/editor/models/PlacementUnitHelper';
 import { h, rerender } from '~/qx';
 
 // coord configuration
@@ -15,9 +16,10 @@ const cc = {
 };
 
 function startKeyEntityDragOperation(e: MouseEvent, useGhost: boolean) {
-  const { sight, currentKeyEntity } = editReader;
+  const { sight, currentKeyEntity: ck, coordUnit } = editReader;
 
-  const destPos = { x: currentKeyEntity!.x, y: currentKeyEntity!.y };
+  const [kx, ky] = unitValueToMm(ck!.x, ck!.y, coordUnit);
+  const destPos = { x: kx, y: ky };
 
   const moveCallback = (pos: IPosition, prevPos: IPosition) => {
     const deltaX = (pos.x - prevPos.x) * sight.scale;
@@ -51,7 +53,13 @@ function startSightDragOperation(e: MouseEvent) {
   startDragSession(e, moveCallback, upCallback);
 }
 
-const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
+const KeyEntityCard = ({
+  ke,
+  coordUnit,
+}: {
+  ke: IKeyEntity;
+  coordUnit: ICoordUnit;
+}) => {
   const cssKeyRect = css`
     fill: rgba(255, 255, 255, 0.3);
     stroke: #666;
@@ -83,7 +91,10 @@ const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
   const isSelected = ke.id === editReader.currentKeyEntity?.id;
   const isGhost = ke === editReader.ghost;
 
-  const transformSpec = `translate(${ke.x}, ${ke.y}) rotate(${ke.r})`;
+  const x = coordUnit.mode === 'KP' ? ke.x * coordUnit.x : ke.x;
+  const y = coordUnit.mode === 'KP' ? ke.y * coordUnit.y : ke.y;
+
+  const transformSpec = `translate(${x}, ${y}) rotate(${ke.r})`;
 
   if (ke.shape === 'ref circle') {
     // カスタム定義形状表示の例
@@ -271,6 +282,8 @@ export const EditSvgView = () => {
   const transformSpec = getTransformSpec();
   const { ghost, showAxis, showGrid } = editReader;
 
+  const { coordUnit } = editReader;
+
   return (
     <svg
       width={cc.baseW}
@@ -284,10 +297,10 @@ export const EditSvgView = () => {
       <g transform={transformSpec}>
         {showGrid && <FieldGrid />}
         {showAxis && <FieldAxis />}
-        {ghost && <KeyEntityCard ke={ghost} />}
+        {ghost && <KeyEntityCard ke={ghost} coordUnit={coordUnit} />}
 
         {editReader.allKeyEntities.map((ke) => (
-          <KeyEntityCard ke={ke} key={ke.id} />
+          <KeyEntityCard ke={ke} key={ke.id} coordUnit={coordUnit} />
         ))}
       </g>
     </svg>

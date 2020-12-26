@@ -3,7 +3,11 @@ import { IModeState } from '~/editor/models/AppState';
 import { IEditPropKey, IKeyEntity } from '~/editor/models/DataSchema';
 import { editReader } from '~/editor/models/EditReader';
 import { editUpdator } from '~/editor/models/EditUpdator';
-import { changePlacementCoordUnit } from '~/editor/models/PlacementUnitHelper';
+import {
+  changePlacementCoordUnit,
+  mmToUnitValue,
+  unitValueToMm,
+} from '~/editor/models/PlacementUnitHelper';
 
 export const editMutations = new (class {
   startEdit = (useGhost: boolean = true) => {
@@ -69,23 +73,26 @@ export const editMutations = new (class {
   }
 
   setKeyPosition(px: number, py: number) {
+    const { coordUnit } = editReader;
     editUpdator.patchEditKeyEntity((ke) => {
+      let [kx, ky] = unitValueToMm(ke.x, ke.y, coordUnit);
       if (editReader.snapToGrid) {
         const gridPitch = 10;
         const snapDist = 1;
         const snappedX = Math.round(px / gridPitch) * gridPitch;
         const snappedY = Math.round(py / gridPitch) * gridPitch;
-        if (getDist(ke.x, ke.y, snappedX, snappedY) < snapDist) {
-          ke.x = snappedX;
-          ke.y = snappedY;
+        if (getDist(kx, ky, snappedX, snappedY) < snapDist) {
+          kx = snappedX;
+          ky = snappedY;
         } else {
-          ke.x = px;
-          ke.y = py;
+          kx = px;
+          ky = py;
         }
       } else {
-        ke.x = px;
-        ke.y = py;
+        kx = px;
+        ky = py;
       }
+      [ke.x, ke.y] = mmToUnitValue(kx, ky, coordUnit);
     });
   }
 

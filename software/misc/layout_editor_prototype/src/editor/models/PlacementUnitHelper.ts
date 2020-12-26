@@ -11,7 +11,7 @@ export type ICoordUnit =
       y: number;
     };
 
-export function getCoordUnit(unitSpec: string): ICoordUnit {
+export function getCoordUnitFromUnitSpec(unitSpec: string): ICoordUnit {
   if (unitSpec === 'mm') {
     return { mode: 'mm' };
   }
@@ -24,19 +24,19 @@ export function getCoordUnit(unitSpec: string): ICoordUnit {
   throw new Error('invalid unit spec');
 }
 
-function unitValueToMm(x: number, y: number, cu: ICoordUnit) {
-  if (cu.mode === 'mm') {
+export function unitValueToMm(x: number, y: number, coordUnit: ICoordUnit) {
+  if (coordUnit.mode === 'mm') {
     return [x, y];
   } else {
-    return [x * cu.x, y * cu.y];
+    return [x * coordUnit.x, y * coordUnit.y];
   }
 }
 
-function mmToUnitValue(mmX: number, mmY: number, cu: ICoordUnit) {
-  if (cu.mode === 'mm') {
+export function mmToUnitValue(mmX: number, mmY: number, coordUnit: ICoordUnit) {
+  if (coordUnit.mode === 'mm') {
     return [mmX, mmY];
   } else {
-    return [mmX / cu.x, mmY / cu.y];
+    return [mmX / coordUnit.x, mmY / coordUnit.y];
   }
 }
 
@@ -47,8 +47,8 @@ export function changePlacementCoordUnit(
   if (design.placementUnit === newUnitSpec) {
     return design;
   }
-  const srcCoordUnit = getCoordUnit(design.placementUnit);
-  const dstCoordUnit = getCoordUnit(newUnitSpec);
+  const srcCoordUnit = getCoordUnitFromUnitSpec(design.placementUnit);
+  const dstCoordUnit = getCoordUnitFromUnitSpec(newUnitSpec);
 
   design.keyEntities = mapObjectValues(design.keyEntities, (ke) => {
     const [tmpX, tmpY] = unitValueToMm(ke.x, ke.y, srcCoordUnit);

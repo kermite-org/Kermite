@@ -1,5 +1,9 @@
 import { appState, IModeState } from '~/editor/models/AppState';
 import { IKeyEntity } from '~/editor/models/DataSchema';
+import {
+  getCoordUnitFromUnitSpec,
+  ICoordUnit,
+} from '~/editor/models/PlacementUnitHelper';
 
 export const editReader = new (class {
   get editMode() {
@@ -16,6 +20,10 @@ export const editReader = new (class {
 
   get design() {
     return appState.editor.design;
+  }
+
+  get coordUnit(): ICoordUnit {
+    return getCoordUnitFromUnitSpec(appState.editor.design.placementUnit);
   }
 
   getMode<K extends 'editorTarget' | 'editMode'>(fieldKey: K): IModeState[K] {
