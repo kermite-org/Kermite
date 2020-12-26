@@ -1,4 +1,5 @@
 import { css } from 'goober';
+import { makeCssColor } from '~/base/ColorHelper';
 import {
   getRelativeMousePosition,
   IPosition,
@@ -118,6 +119,25 @@ function screenToWorld(sx: number, sy: number) {
   return [x, y];
 }
 
+const axisColor = makeCssColor(0x444444, 0.2);
+
+const FieldAxis = () => {
+  const { sight } = editReader;
+  const d = 1;
+  const ew = (cc.baseW / 2) * sight.scale;
+  const eh = (cc.baseH / 2) * sight.scale;
+  const left = -ew + sight.pos.x + d;
+  const top = -eh + sight.pos.y + d;
+  const right = ew + sight.pos.x - d;
+  const bottom = eh + sight.pos.y - d;
+  return (
+    <g>
+      <line x1={left} y1={0} x2={right} y2={0} stroke={axisColor} />
+      <line x1={0} y1={top} x2={0} y2={bottom} stroke={axisColor} />
+    </g>
+  );
+};
+
 const onSvgMouseDown = (e: MouseEvent) => {
   if (e.button === 0) {
     const { editMode } = editReader;
@@ -152,6 +172,8 @@ export const EditSvgView = () => {
   const transformSpec = getTransformSpec();
   const { ghost } = editReader;
 
+  const showAxis = editReader.getBoolOption('showAxis');
+
   return (
     <svg
       width={cc.baseW}
@@ -167,6 +189,7 @@ export const EditSvgView = () => {
           <KeyEntityCard ke={ke} key={ke.id} />
         ))}
         {ghost && <KeyEntityCard ke={ghost} />}
+        {showAxis && <FieldAxis />}
       </g>
     </svg>
   );
