@@ -40,7 +40,7 @@ const slotSources: IAttributeSlotSource<IEditPropKey>[] = [
   },
   {
     propKey: 'r',
-    label: 'r',
+    label: 'angle',
     getUnit: () => 'deg',
     validator: (text: string) =>
       text.match(/^-?[0-9.]+$/) ? undefined : 'must be a number',
