@@ -46,7 +46,8 @@ export const editUpdator = new (class {
     this.originalEditState = appState.editor;
     if (useGhost) {
       this.patchEnvState((env) => {
-        env.ghost = this.getEditKeyEntity(appState.editor);
+        const ke = this.getEditKeyEntity(appState.editor);
+        env.ghost = (ke && { ...ke }) || undefined;
       });
     }
   }
