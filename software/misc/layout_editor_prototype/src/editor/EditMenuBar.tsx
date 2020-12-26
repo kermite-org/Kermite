@@ -60,6 +60,7 @@ export const EditMenuBar = () => {
   });
 
   const editModeVm = createModeSelectionViewModel('editMode', {
+    select: 'select',
     add: 'add',
     move: 'move',
   });

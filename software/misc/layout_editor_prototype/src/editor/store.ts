@@ -45,7 +45,7 @@ function loadKeyboardDesign(
 }
 
 export type IEditorTarget = 'key' | 'outline' | 'viewbox';
-export type IEditMode = 'add' | 'move' | 'split';
+export type IEditMode = 'select' | 'add' | 'move' | 'split';
 
 export interface IModeState {
   editMode: IEditMode;

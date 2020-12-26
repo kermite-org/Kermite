@@ -68,11 +68,14 @@ const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
   const hsz = sz / 2;
 
   const onMouseDown = (e: MouseEvent) => {
-    if (editReader.editMode === 'move') {
+    const { editMode } = editReader;
+    if (editMode === 'select') {
+      editMutations.setCurrentKeyEntity(ke.id);
+    } else if (editMode === 'move') {
       editMutations.setCurrentKeyEntity(ke.id);
       startKeyEntityDragOperation(e, true);
-      e.stopPropagation();
     }
+    e.stopPropagation();
   };
 
   const isSelected = ke.id === editReader.currentKeyEntity?.id;
@@ -116,9 +119,10 @@ function screenToWorld(sx: number, sy: number) {
 
 const onSvgMouseDown = (e: MouseEvent) => {
   if (e.button === 0) {
-    if (editReader.editMode === 'move') {
+    const { editMode } = editReader;
+    if (editMode === 'select' || editMode === 'move') {
       editMutations.setCurrentKeyEntity(undefined);
-    } else if (editReader.editMode === 'add') {
+    } else if (editMode === 'add') {
       const [sx, sy] = getRelativeMousePosition(e);
       const [x, y] = screenToWorld(sx, sy);
       editMutations.addKeyEntity(x, y);
