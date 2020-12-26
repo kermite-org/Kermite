@@ -3,6 +3,7 @@ import {
   clamp,
   compareObjectByJsonStringify,
   createDictionaryFromKeyValues,
+  getDist,
 } from '~/base/utils';
 import {
   IEditPropKey,
@@ -123,6 +124,18 @@ export const editReader = new (class {
 
   getBoolOption<K extends 'showAxis' | 'showGrid' | 'snapToGrid'>(fieldKey: K) {
     return appState.env[fieldKey];
+  }
+
+  get showAxis() {
+    return appState.env.showAxis;
+  }
+
+  get showGrid() {
+    return appState.env.showGrid;
+  }
+
+  get snapToGrid() {
+    return appState.env.snapToGrid;
   }
 
   get currentKeyEntity(): IKeyEntity | undefined {
@@ -292,6 +305,27 @@ export const editMutations = new (class {
     editUpdator.patchEditKeyEntity((ke) => {
       ke.x += deltaX;
       ke.y += deltaY;
+    });
+  }
+
+  setKeyPosition(px: number, py: number) {
+    editUpdator.patchEditKeyEntity((ke) => {
+      if (editReader.snapToGrid) {
+        const gridPitch = 10;
+        const snapDist = 1;
+        const snappedX = Math.round(px / gridPitch) * gridPitch;
+        const snappedY = Math.round(py / gridPitch) * gridPitch;
+        if (getDist(ke.x, ke.y, snappedX, snappedY) < snapDist) {
+          ke.x = snappedX;
+          ke.y = snappedY;
+        } else {
+          ke.x = px;
+          ke.y = py;
+        }
+      } else {
+        ke.x = px;
+        ke.y = py;
+      }
     });
   }
 

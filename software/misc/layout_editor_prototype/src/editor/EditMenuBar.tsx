@@ -123,7 +123,6 @@ export const EditMenuBar = () => {
           width={45}
           active={vmSnapToGrid.active}
           setActive={vmSnapToGrid.setActive}
-          disabled={true}
         />
       </div>
     </div>

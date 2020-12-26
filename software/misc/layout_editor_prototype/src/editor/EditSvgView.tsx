@@ -16,12 +16,16 @@ const cc = {
 };
 
 function startKeyEntityDragOperation(e: MouseEvent, useGhost: boolean) {
-  const { sight } = editReader;
+  const { sight, currentKeyEntity } = editReader;
+
+  const destPos = { x: currentKeyEntity!.x, y: currentKeyEntity!.y };
 
   const moveCallback = (pos: IPosition, prevPos: IPosition) => {
     const deltaX = (pos.x - prevPos.x) * sight.scale;
     const deltaY = (pos.y - prevPos.y) * sight.scale;
-    editMutations.moveKeyDelta(deltaX, deltaY);
+    destPos.x += deltaX;
+    destPos.y += deltaY;
+    editMutations.setKeyPosition(destPos.x, destPos.y);
     rerender();
   };
   const upCallback = () => {
@@ -243,10 +247,7 @@ export const EditSvgView = () => {
 
   const viewBoxSpec = getViewBoxSpec();
   const transformSpec = getTransformSpec();
-  const { ghost } = editReader;
-
-  const showAxis = editReader.getBoolOption('showAxis');
-  const showGrid = editReader.getBoolOption('showGrid');
+  const { ghost, showAxis, showGrid } = editReader;
 
   return (
     <svg
