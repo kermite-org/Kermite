@@ -14,6 +14,10 @@ export const editReader = new (class {
     return appState.env.sight;
   }
 
+  get design() {
+    return appState.editor.design;
+  }
+
   getMode<K extends 'editorTarget' | 'editMode'>(fieldKey: K): IModeState[K] {
     return appState.editor[fieldKey];
   }

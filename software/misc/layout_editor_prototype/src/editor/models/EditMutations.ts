@@ -30,6 +30,12 @@ export const editMutations = new (class {
     });
   }
 
+  setPlacementUnit(unitSpec: string) {
+    editUpdator.commitEditor((editor) => {
+      editor.design.placementUnit = unitSpec;
+    });
+  }
+
   setMode<K extends 'editorTarget' | 'editMode'>(
     fieldKey: K,
     mode: IModeState[K]
