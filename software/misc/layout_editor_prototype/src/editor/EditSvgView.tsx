@@ -6,7 +6,7 @@ import {
 } from '~/base/UiInteractionHelpers';
 import { clamp } from '~/base/utils';
 import { IKeyEntity } from '~/editor/DataSchema';
-import { editMutations, editReader } from '~/editor/store';
+import { appState, editMutations, editReader } from '~/editor/store';
 import { h, rerender } from '~/qx';
 
 // coord configuration
@@ -15,15 +15,9 @@ const cc = {
   baseH: 400,
 };
 
-const sight = {
-  pos: {
-    x: 0,
-    y: 0,
-  },
-  scale: 0.5,
-};
-
 function startKeyEntityDragOperation(e: MouseEvent, useGhost: boolean) {
+  const { sight } = appState.env;
+
   const moveCallback = (pos: IPosition, prevPos: IPosition) => {
     const deltaX = (pos.x - prevPos.x) * sight.scale;
     const deltaY = (pos.y - prevPos.y) * sight.scale;
@@ -40,6 +34,8 @@ function startKeyEntityDragOperation(e: MouseEvent, useGhost: boolean) {
 }
 
 function startSightDragOperation(e: MouseEvent) {
+  const { sight } = appState.env;
+
   const moveCallback = (pos: IPosition, prevPos: IPosition) => {
     const deltaX = (pos.x - prevPos.x) * sight.scale;
     const deltaY = (pos.y - prevPos.y) * sight.scale;
@@ -104,6 +100,7 @@ function getViewBoxSpec() {
 }
 
 function getTransformSpec() {
+  const { sight } = appState.env;
   const sc = 1 / sight.scale;
   const cx = cc.baseW / 2 - sight.pos.x * sc;
   const cy = cc.baseH / 2 - sight.pos.y * sc;
@@ -111,6 +108,7 @@ function getTransformSpec() {
 }
 
 function screenToWorld(sx: number, sy: number) {
+  const { sight } = appState.env;
   const x = (sx - cc.baseW / 2) * sight.scale + sight.pos.x;
   const y = (sy - cc.baseH / 2) * sight.scale + sight.pos.y;
   return [x, y];
@@ -133,6 +131,7 @@ const onSvgMouseDown = (e: MouseEvent) => {
 };
 
 const onSvgScroll = (e: WheelEvent) => {
+  const { sight } = appState.env;
   const dir = e.deltaY / 120;
 
   const [sx, sy] = getRelativeMousePosition(e);

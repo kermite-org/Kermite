@@ -58,8 +58,16 @@ export interface IEditState {
   editorTarget: IEditorTarget;
 }
 
+export interface ISight {
+  pos: {
+    x: number;
+    y: number;
+  };
+  scale: number;
+}
 export interface IEnvState {
   ghost: IKeyEntity | undefined;
+  sight: ISight;
 }
 interface IAppState {
   editor: IEditState;
@@ -75,6 +83,13 @@ export const appState: IAppState = {
   },
   env: {
     ghost: undefined,
+    sight: {
+      pos: {
+        x: 0,
+        y: 0,
+      },
+      scale: 0.5,
+    },
   },
 };
 
