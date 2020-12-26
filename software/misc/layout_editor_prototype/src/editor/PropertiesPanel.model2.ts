@@ -48,6 +48,45 @@ const slotSources: IAttributeSlotSource<IEditPropKey>[] = [
     writer: (text: string) => parseFloat(text),
   },
   {
+    propKey: 'shape',
+    label: 'shape std',
+    getUnit: () => 'U',
+    validator(text: string) {
+      if (text === '0') {
+        return 'must be a number > 0';
+      }
+      return text.match(/^[0-9.]+$/) ? undefined : 'must be a number';
+    },
+    reader(value: string) {
+      if (value.startsWith('std')) {
+        return value.split(' ')[1];
+      }
+      return '';
+    },
+    writer(text: string) {
+      return 'std ' + parseFloat(text);
+    },
+  },
+  {
+    propKey: 'shape',
+    label: 'shape ref',
+    getUnit: () => '',
+    validator(text: string) {
+      if (text.length === 0) {
+        return 'must be a text';
+      }
+    },
+    reader(value: string) {
+      if (value.startsWith('ref')) {
+        return value.split(' ')[1];
+      }
+      return '';
+    },
+    writer(text: string) {
+      return 'ref ' + text;
+    },
+  },
+  {
     propKey: 'keyIndex',
     label: 'keyIndex',
     getUnit: () => '',
@@ -67,7 +106,7 @@ const slotSources: IAttributeSlotSource<IEditPropKey>[] = [
       if (text === '') {
         return -1;
       }
-      return parseFloat(text);
+      return parseInt(text);
     },
   },
 ];

@@ -67,9 +67,6 @@ const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
     }
   `;
 
-  const sz = 20;
-  const hsz = sz / 2;
-
   const onMouseDown = (e: MouseEvent) => {
     const { editMode } = editReader;
     if (e.button === 0) {
@@ -89,14 +86,36 @@ const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
 
   const transformSpec = `translate(${ke.x}, ${ke.y}) rotate(${ke.r})`;
 
+  if (ke.shape === 'ref circle') {
+    // カスタム定義形状表示の例
+    // todo: モデルで保持しているパスを取得して表示
+    return (
+      <g transform={transformSpec}>
+        <circle
+          cx={0}
+          cy={0}
+          r={9}
+          css={cssKeyRect}
+          data-selected={isSelected}
+          data-ghost={isGhost}
+          onMouseDown={onMouseDown}
+        />
+      </g>
+    );
+  }
+
+  const unitW = ke.shape.startsWith('std')
+    ? parseFloat(ke.shape.split(' ')[1])!
+    : 1;
+  const keyW = unitW * 18;
+  const keyH = 18;
   return (
     <g transform={transformSpec}>
       <rect
-        key={ke.id}
-        x={-hsz}
-        y={-hsz}
-        width={sz}
-        height={sz}
+        x={-keyW / 2}
+        y={-keyH / 2}
+        width={keyW}
+        height={keyH}
         css={cssKeyRect}
         data-selected={isSelected}
         data-ghost={isGhost}
