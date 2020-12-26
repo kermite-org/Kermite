@@ -18,16 +18,25 @@ const initialDesign: IPersistentKeyboardDesign = {
       keyId: 'key0',
       x: 0,
       y: 0,
+      r: 0,
+      shape: 'std 1',
+      keyIndex: -1,
     },
     {
       keyId: 'key1',
       x: 22,
       y: 0,
+      r: 0,
+      shape: 'std 1',
+      keyIndex: -1,
     },
     {
       keyId: 'key2',
       x: 44,
       y: 0,
+      r: 0,
+      shape: 'std 1',
+      keyIndex: -1,
     },
   ],
 };
@@ -270,6 +279,9 @@ export const editMutations = new (class {
       keyId: id,
       x,
       y,
+      r: 0,
+      shape: 'std 1',
+      keyIndex: -1,
     };
     editUpdator.commitEditor((editor) => {
       editor.design.keyEntities[id] = keyEntity;

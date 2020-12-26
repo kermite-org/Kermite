@@ -2,6 +2,9 @@ export interface IPersistentKeyEntity {
   keyId: string;
   x: number;
   y: number;
+  r: number;
+  shape: string;
+  keyIndex: number;
 }
 
 export interface IPersistentKeyboardDesign {
@@ -13,6 +16,9 @@ export interface IKeyEntity {
   keyId: string;
   x: number;
   y: number;
+  r: number;
+  shape: string;
+  keyIndex: number;
 }
 export interface IKeyboardDesign {
   keyEntities: { [id: string]: IKeyEntity };
