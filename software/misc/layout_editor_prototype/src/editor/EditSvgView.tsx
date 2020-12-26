@@ -70,11 +70,12 @@ const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
     if (e.button === 0) {
       if (editMode === 'select') {
         editMutations.setCurrentKeyEntity(ke.id);
+        e.stopPropagation();
       } else if (editMode === 'move') {
         editMutations.setCurrentKeyEntity(ke.id);
         startKeyEntityDragOperation(e, true);
+        e.stopPropagation();
       }
-      e.stopPropagation();
     }
   };
 
