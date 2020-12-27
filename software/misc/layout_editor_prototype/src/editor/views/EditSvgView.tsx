@@ -63,6 +63,28 @@ function getStdKeyUnitSize(shapeSpec: string) {
   return [1, 1];
 }
 
+// no shrink
+// const isoEnterPathMarkupText = [
+//   'M -16.625, -19',
+//   'L -16.625, 0',
+//   'L -11.875, 0',
+//   'L -11.875, 19',
+//   'L 11.875, 19',
+//   'L 11.875, -19',
+//   'z',
+// ].join(' ');
+
+// shrink 0.5
+const isoEnterPathMarkupText = [
+  'M -16.125, -18.5',
+  'L -16.125, -0.5',
+  'L -11.375, -0.5',
+  'L -11.375, 18.5',
+  'L 11.375, 18.5',
+  'L 11.375, -18.5',
+  'z',
+].join(' ');
+
 const KeyEntityCard = ({
   ke,
   coordUnit,
@@ -123,7 +145,19 @@ const KeyEntityCard = ({
     );
   }
 
-  // todo: ext isoEnterを対応
+  if (ke.shape === 'ext isoEnter') {
+    return (
+      <g transform={transformSpec}>
+        <path
+          d={isoEnterPathMarkupText}
+          css={cssKeyRect}
+          data-selected={isSelected}
+          data-ghost={isGhost}
+          onMouseDown={onMouseDown}
+        />
+      </g>
+    );
+  }
 
   const [uw, uh] = getStdKeyUnitSize(ke.shape);
   const keyW = 19 * uw - 1;
