@@ -9,10 +9,13 @@ export const DebugOverlay = () => {
     left: 0;
     pointer-events: none;
     opacity: 0.5;
+
+    word-break: break-all;
   `;
   return (
     <div css={cssDebugOverlay}>
-      <div>{JSON.stringify(appState.editor.design, null, ' ')}</div>
+      <div>{JSON.stringify(appState.editor.design)}</div>
+      <div>{JSON.stringify(appState.env)}</div>
     </div>
   );
 };
