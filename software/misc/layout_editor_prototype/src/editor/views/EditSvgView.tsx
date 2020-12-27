@@ -53,14 +53,16 @@ function startSightDragOperation(e: MouseEvent) {
   startDragSession(e, moveCallback, upCallback);
 }
 
-function getStdKeyUnitSize(shapeSpec: string) {
+function getStdKeySize(shapeSpec: string, coordUnit: ICoordUnit) {
+  const baseW = coordUnit.mode === 'KP' ? coordUnit.x : 19;
+  const baseH = coordUnit.mode === 'KP' ? coordUnit.y : 19;
   if (shapeSpec.startsWith('std')) {
     const [, p1, p2] = shapeSpec.split(' ');
     const uw = (p1 && parseFloat(p1)) || 1;
     const uh = (p2 && parseFloat(p2)) || 1;
-    return [uw, uh];
+    return [uw * baseW - 1, uh * baseH - 1];
   }
-  return [1, 1];
+  return [baseW - 1, baseH - 1];
 }
 
 // no shrink
@@ -159,9 +161,7 @@ const KeyEntityCard = ({
     );
   }
 
-  const [uw, uh] = getStdKeyUnitSize(ke.shape);
-  const keyW = 19 * uw - 1;
-  const keyH = 19 * uh - 1;
+  const [keyW, keyH] = getStdKeySize(ke.shape, coordUnit);
   return (
     <g transform={transformSpec}>
       <rect
