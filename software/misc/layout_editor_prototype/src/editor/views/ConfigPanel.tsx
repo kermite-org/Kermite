@@ -1,56 +1,43 @@
 import { css } from 'goober';
 import { reflectValue } from '~/base/FormHelpers';
-import { editMutations, editReader } from '~/editor/models';
+import { ExclusiveButtonGroup } from '~/controls';
+import { makePlacementUnitEditRowViewModel } from '~/editor/views/ConfigPanel.model';
 import { h } from '~/qx';
 
-class PlacementUnitEditViewModel {
-  originalValue: string = '';
-  editText: string = '';
-  valid: boolean = false;
+const PlacementUnitEditPart = () => {
+  const { vmUnitInput, vmUnitMode } = makePlacementUnitEditRowViewModel();
 
-  onValueChanged = (text: string) => {
-    const patterns = [
-      /^mm$/,
-      /^KP [0-9][0-9.]*$/,
-      /^KP [0-9][0-9.]* [0-9][0-9.]*$/,
-    ];
+  const cssUnitEditPart = css`
+    > .editRow {
+      display: flex;
+      align-items: center;
 
-    this.editText = text;
-    this.valid = patterns.some((p) => text.match(p));
-  };
-
-  onBlur = () => {
-    if (this.valid) {
-      editMutations.setPlacementUnit(this.editText);
+      > input {
+        width: 90px;
+        margin-left: 4px;
+      }
     }
-  };
-
-  update(modelValue: string) {
-    if (this.originalValue !== modelValue) {
-      this.originalValue = modelValue;
-      this.editText = this.originalValue;
-      this.valid = true;
+    > .errorRow {
+      color: red;
     }
-  }
-}
-
-const vm = new PlacementUnitEditViewModel();
-
-const PlacementUnitEditRow = () => {
-  vm.update(editReader.design.placementUnit);
-
+  `;
   return (
-    <div>
-      <div>
-        <label>coord unit</label>
+    <div css={cssUnitEditPart}>
+      <div>unit</div>
+      <div className="editRow">
+        <ExclusiveButtonGroup {...vmUnitMode} buttonWidth={40} />
         <input
           type="text"
-          value={vm.editText}
-          onInput={reflectValue(vm.onValueChanged)}
-          onBlur={vm.onBlur}
+          value={vmUnitInput.editText}
+          onInput={reflectValue(vmUnitInput.onValueChanged)}
+          onBlur={vmUnitInput.onBlur}
+          disabled={vmUnitInput.disabled}
         />
+        <span>mm</span>
       </div>
-      <div>{!vm.valid && 'invalid unitSpec'}</div>
+      <div className="errorRow">
+        {!vmUnitInput.valid && 'invalid keypitch specificaion'}
+      </div>
     </div>
   );
 };
@@ -58,18 +45,11 @@ const PlacementUnitEditRow = () => {
 export const ConfigPanel = () => {
   const cssConfigPanel = css`
     padding: 10px;
-    label {
-      display: inline-block;
-      width: 90px;
-    }
-    input {
-      width: 100px;
-    }
   `;
 
   return (
     <div css={cssConfigPanel}>
-      <PlacementUnitEditRow />
+      <PlacementUnitEditPart />
     </div>
   );
 };
