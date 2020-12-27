@@ -62,6 +62,7 @@ const KeyEntityCard = ({
 }) => {
   const cssKeyRect = css`
     fill: rgba(255, 255, 255, 0.3);
+    stroke-width: 0.5;
     stroke: #666;
     cursor: pointer;
 
