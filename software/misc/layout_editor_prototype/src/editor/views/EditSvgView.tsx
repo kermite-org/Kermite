@@ -118,7 +118,7 @@ const KeyEntityCard = ({
   const unitW = ke.shape.startsWith('std')
     ? parseFloat(ke.shape.split(' ')[1])!
     : 1;
-  const keyW = unitW * 18;
+  const keyW = 19 * unitW - 1;
   const keyH = 18;
   return (
     <g transform={transformSpec}>
