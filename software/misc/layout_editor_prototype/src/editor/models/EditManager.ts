@@ -25,19 +25,19 @@ export const editManager = new (class {
     return this.redoStack.length > 0;
   }
 
-  undo = () => {
+  undo() {
     if (this.undoStack.length > 0) {
       const modification = this.undoStack.pop()!;
       this.redoStack.push(modification);
       appState.editor = modification.oldState;
     }
-  };
+  }
 
-  redo = () => {
+  redo() {
     if (this.redoStack.length > 0) {
       const modification = this.redoStack.pop()!;
       this.undoStack.push(modification);
       appState.editor = modification.newState;
     }
-  };
+  }
 })();

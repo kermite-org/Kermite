@@ -1,11 +1,6 @@
 import { css } from 'goober';
-import { ExclusiveButtonGroup, ToggleButton, ISelectOption } from '~/controls';
-import {
-  editManager,
-  editMutations,
-  editReader,
-  IModeState,
-} from '~/editor/models';
+import { ExclusiveButtonGroup, ToggleButton } from '~/controls';
+import { makeEditMenuBarViewModel } from '~/editor/views/EditMenuBar.model';
 import { h } from '~/qx';
 
 const cssEditMenuBar = css`
@@ -29,54 +24,18 @@ const cssEditMenuBar = css`
   }
 `;
 
-function createModeSelectionViewModel<K extends 'editorTarget' | 'editMode'>(
-  targetKey: K,
-  sources: { [key in IModeState[K]]?: string }
-) {
-  const options: ISelectOption[] = (Object.keys(
-    sources
-  ) as IModeState[K][]).map((key) => ({
-    id: key,
-    text: sources[key]!,
-  }));
-  const choiceId = editReader.getMode(targetKey);
-  const setChoiceId = (value: Extract<IModeState[K], string>) => {
-    editMutations.setMode(targetKey, value);
-  };
-  return {
-    options,
-    choiceId,
-    setChoiceId,
-  };
-}
-
-function createToggleOptionViewModel<
-  K extends 'showAxis' | 'showGrid' | 'snapToGrid'
->(targetKey: K) {
-  const active = editReader.getBoolOption(targetKey);
-  const setActive = (value: boolean) =>
-    editMutations.setBoolOption(targetKey, value);
-  return { active, setActive };
-}
-
 export const EditMenuBar = () => {
-  const { canUndo, canRedo, undo, redo } = editManager;
-
-  const editorTargetVm = createModeSelectionViewModel('editorTarget', {
-    key: 'key',
-    outline: 'outline',
-    viewbox: 'sight',
-  });
-
-  const editModeVm = createModeSelectionViewModel('editMode', {
-    select: 'select',
-    add: 'add',
-    move: 'move',
-  });
-
-  const vmShowAxis = createToggleOptionViewModel('showAxis');
-  const vmShowGrid = createToggleOptionViewModel('showGrid');
-  const vmSnapToGrid = createToggleOptionViewModel('snapToGrid');
+  const {
+    canUndo,
+    canRedo,
+    undo,
+    redo,
+    editorTargetVm,
+    editModeVm,
+    vmShowAxis,
+    vmShowGrid,
+    vmSnapToGrid,
+  } = makeEditMenuBarViewModel();
 
   return (
     <div class={cssEditMenuBar}>
