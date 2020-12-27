@@ -44,3 +44,14 @@ export function mapObjectValues<P, Q>(
   }
   return dst;
 }
+
+export function debounce(targetProc: () => void, ms: number) {
+  let timerId: any;
+  return () => {
+    if (timerId) {
+      clearTimeout(timerId);
+      timerId = 0;
+    }
+    timerId = setTimeout(targetProc, ms);
+  };
+}

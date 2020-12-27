@@ -10,12 +10,18 @@ const cssPageRoot = css`
   border: solid 2px #f08;
   padding: 10px;
   height: 100%;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
 
   > .topRow {
     margin: 10px 0;
+    flex-shrink: 0;
   }
 
   > .mainRow {
+    flex-grow: 1;
     display: flex;
 
     > .sideColumn {
@@ -41,7 +47,7 @@ export const PageRoot = () => {
         </div>
       </div>
 
-      <div>{JSON.stringify(appState.editor.design, null, ' ')}</div>
+      {/* <div>{JSON.stringify(appState.editor.design, null, ' ')}</div> */}
     </div>
   );
 };

@@ -7,7 +7,7 @@ import {
 } from '~/base/UiInteractionHelpers';
 import { editMutations, editReader, IKeyEntity } from '~/editor/models';
 import { ICoordUnit, unitValueToMm } from '~/editor/models/PlacementUnitHelper';
-import { h, rerender } from '~/qx';
+import { h, Hook, rerender } from '~/qx';
 
 // coord configuration
 const cc = {
@@ -316,10 +316,9 @@ const onSvgScroll = (e: WheelEvent) => {
   editMutations.scaleSight(dir, px, py);
 };
 
-export const EditSvgView = () => {
-  const cssSvg = css`
-    border: solid 1px #888;
-  `;
+const EditSvgViewInternal = (props: { baseW: number; baseH: number }) => {
+  cc.baseW = props.baseW;
+  cc.baseH = props.baseH;
 
   const viewBoxSpec = getViewBoxSpec();
   const transformSpec = getTransformSpec();
@@ -331,11 +330,10 @@ export const EditSvgView = () => {
     <svg
       width={cc.baseW}
       height={cc.baseH}
-      css={cssSvg}
       viewBox={viewBoxSpec}
       onMouseDown={onSvgMouseDown}
       onWheel={onSvgScroll}
-      // id="domEditSvg"
+      id="domEditSvg"
     >
       <g transform={transformSpec}>
         {showGrid && <FieldGrid />}
@@ -347,5 +345,34 @@ export const EditSvgView = () => {
         ))}
       </g>
     </svg>
+  );
+};
+
+export const EditSvgView = () => {
+  const cssSvgView = css`
+    border: solid 1px #888;
+    flex-grow: 1;
+    overflow: hidden;
+    max-height: calc(100vh - 97px);
+  `;
+
+  const [areaSize, setAreaSize] = Hook.useState({ w: 100, h: 100 });
+
+  Hook.useSideEffect(() => {
+    const el = document.getElementById('domEditSvgOuterDiv');
+    if (el) {
+      const cw = el.clientWidth;
+      const ch = el.clientHeight;
+      if (!(cw === areaSize.w && ch === areaSize.h)) {
+        setAreaSize({ w: cw, h: ch });
+        return true;
+      }
+    }
+  });
+
+  return (
+    <div css={cssSvgView} id="domEditSvgOuterDiv">
+      <EditSvgViewInternal baseW={areaSize.w} baseH={areaSize.h} />
+    </div>
   );
 };
