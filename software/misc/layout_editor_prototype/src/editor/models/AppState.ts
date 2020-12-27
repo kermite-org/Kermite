@@ -76,6 +76,7 @@ export interface IEnvState {
   showAxis: boolean;
   showGrid: boolean;
   snapToGrid: boolean;
+  snapDivision: number;
 }
 interface IAppState {
   editor: IEditState;
@@ -100,6 +101,7 @@ export const appState: IAppState = {
     },
     showAxis: true,
     showGrid: true,
-    snapToGrid: false,
+    snapToGrid: true,
+    snapDivision: 4,
   },
 };

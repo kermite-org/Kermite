@@ -1,5 +1,6 @@
 import { css } from 'goober';
 import { ExclusiveButtonGroup, ToggleButton } from '~/controls';
+import { GeneralSelector } from '~/controls/GeneralSelector';
 import { makeEditMenuBarViewModel } from '~/editor/views/EditMenuBar.model';
 import { h } from '~/qx';
 
@@ -35,6 +36,7 @@ export const EditMenuBar = () => {
     vmShowAxis,
     vmShowGrid,
     vmSnapToGrid,
+    vmSnapDivision,
   } = makeEditMenuBarViewModel();
 
   return (
@@ -80,6 +82,12 @@ export const EditMenuBar = () => {
           width={45}
           active={vmSnapToGrid.active}
           setActive={vmSnapToGrid.setActive}
+        />
+
+        <GeneralSelector
+          options={vmSnapDivision.options}
+          choiceId={vmSnapDivision.choiceId}
+          setChoiceId={vmSnapDivision.setChoiceId}
         />
       </div>
     </div>

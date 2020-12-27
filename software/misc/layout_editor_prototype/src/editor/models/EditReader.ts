@@ -39,6 +39,10 @@ export const editReader = new (class {
     }
   }
 
+  get snapDivision(): number {
+    return appState.env.snapDivision;
+  }
+
   getMode<K extends 'editorTarget' | 'editMode'>(fieldKey: K): IModeState[K] {
     return appState.editor[fieldKey];
   }

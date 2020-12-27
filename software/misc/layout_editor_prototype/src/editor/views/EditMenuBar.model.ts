@@ -36,6 +36,23 @@ function createToggleOptionViewModel<
   return { active, setActive };
 }
 
+function makeSnapDivisionViewModel() {
+  const divs = [1, 2, 3, 4, 5, 6, 8, 10, 20];
+  const options = divs.map((d) => ({
+    id: d.toString(),
+    text: d === 1 ? '1' : `1/${d}`,
+  }));
+  const choiceId = editReader.snapDivision.toString();
+  const setChoiceId = (id: string) => {
+    editMutations.setSnapDivision(parseInt(id));
+  };
+  return {
+    options,
+    choiceId,
+    setChoiceId,
+  };
+}
+
 export function makeEditMenuBarViewModel() {
   const editorTargetVm = createModeSelectionViewModel('editorTarget', {
     key: 'key',
@@ -53,6 +70,8 @@ export function makeEditMenuBarViewModel() {
   const vmShowGrid = createToggleOptionViewModel('showGrid');
   const vmSnapToGrid = createToggleOptionViewModel('snapToGrid');
 
+  const vmSnapDivision = makeSnapDivisionViewModel();
+
   return {
     canUndo: editManager.canUndo,
     canRedo: editManager.canRedo,
@@ -63,5 +82,6 @@ export function makeEditMenuBarViewModel() {
     vmShowAxis,
     vmShowGrid,
     vmSnapToGrid,
+    vmSnapDivision,
   };
 }

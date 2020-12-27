@@ -42,6 +42,12 @@ export const editMutations = new (class {
     });
   }
 
+  setSnapDivision(sd: number) {
+    editUpdator.patchEnvState((env) => {
+      env.snapDivision = sd;
+    });
+  }
+
   setMode<K extends 'editorTarget' | 'editMode'>(
     fieldKey: K,
     mode: IModeState[K]
@@ -74,10 +80,10 @@ export const editMutations = new (class {
   }
 
   setKeyPosition(px: number, py: number) {
-    const { coordUnit, snapToGrid, gridPitches } = editReader;
+    const { coordUnit, snapToGrid, gridPitches, snapDivision } = editReader;
     let [gpx, gpy] = gridPitches;
-    gpx /= 4;
-    gpy /= 4;
+    gpx /= snapDivision;
+    gpy /= snapDivision;
 
     editUpdator.patchEditKeyEntity((ke) => {
       let [kx, ky] = unitValueToMm(ke.x, ke.y, coordUnit);
