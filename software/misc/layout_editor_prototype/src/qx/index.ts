@@ -36,6 +36,8 @@ export function render(
       // n: dom nodes count
       // ms: time elapsed
     }
+    qxGlobal.hookEffectFuncs.forEach((func) => func());
+    qxGlobal.hookEffectFuncs = [];
     if (qxGlobal.hookRerenderFlag) {
       qxGlobal.hookRerenderFlag = false;
       requestAnimationFrame(executeRender);

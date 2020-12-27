@@ -6,8 +6,8 @@ export interface IHook {
   useMemo<T>(func: () => T, deps: any[]): T;
   useEffect(func: IPlainFunc, deps: any[]): void;
   useState<T>(initialValue: T): [T, (value: T) => void];
-  useLocal<T>(func: () => T): T;
-  useChecker<T>(value: T, func: IPlainFunc): void;
+  // useLocal<T>(func: () => T): T;
+  // useChecker<T>(value: T, func: IPlainFunc): void;
   // useOnMount(func: IPlainFunc): void;
   // useOnUnmount(func: IPlainFunc): void;
   // useOnUpdate(func: IPlainFunc): void;
@@ -16,7 +16,7 @@ export interface IHook {
 
 function compareArrayShallow(ar1: any[], ar2: any[]): boolean {
   if (!Array.isArray(ar1) || !Array.isArray(ar2)) {
-    return ar1 == ar2;
+    return ar1 === ar2;
   }
   if (ar1.length !== ar2.length) {
     return false;
@@ -87,20 +87,20 @@ export function createHookInstance(): IHook {
       const { value, setValue } = holder;
       return [value, setValue];
     },
-    useLocal<T>(func: () => T): T {
-      if (!(idx in holders)) {
-        holders[idx] = func();
-      }
-      return holders[idx++];
-    },
-    useChecker<T>(value: T, func: IPlainFunc) {
-      if (value !== holders[idx]) {
-        // (idx in values) && func()
-        func();
-        holders[idx] = value;
-      }
-      idx++;
-    },
+    // useLocal<T>(func: () => T): T {
+    //   if (!(idx in holders)) {
+    //     holders[idx] = func();
+    //   }
+    //   return holders[idx++];
+    // },
+    // useChecker<T>(value: T, func: IPlainFunc) {
+    //   if (value !== holders[idx]) {
+    //     // (idx in values) && func()
+    //     func();
+    //     holders[idx] = value;
+    //   }
+    //   idx++;
+    // },
     internal_resetIndex() {
       idx = 0;
     },
@@ -144,17 +144,18 @@ export const Hook: IHook = {
     return gHookInstance.useMemo(func, deps);
   },
   useEffect(func: IPlainFunc, deps: any[]): void {
-    return gHookInstance.useEffect(func, deps);
+    // gHookInstance.useEffect(func, deps);
+    qxGlobal.hookEffectFuncs.push(() => gHookInstance.useEffect(func, deps));
   },
   useState<T>(initialValue: T): [T, (value: T) => void] {
     return gHookInstance.useState(initialValue);
   },
-  useLocal<T>(func: () => T): T {
-    return gHookInstance.useLocal(func);
-  },
-  useChecker<T>(value: T, func: IPlainFunc): void {
-    return gHookInstance.useChecker(value, func);
-  },
+  // useLocal<T>(func: () => T): T {
+  //   return gHookInstance.useLocal(func);
+  // },
+  // useChecker<T>(value: T, func: IPlainFunc): void {
+  //   return gHookInstance.useChecker(value, func);
+  // },
   // useOnMount(func: IPlainFunc): void {
   //   return gHookInstance.useOnMount(func);
   // },
