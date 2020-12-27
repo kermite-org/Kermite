@@ -7,6 +7,7 @@ import {
 } from '~/base/UiInteractionHelpers';
 import { editMutations, editReader, IKeyEntity } from '~/editor/models';
 import { ICoordUnit, unitValueToMm } from '~/editor/models/PlacementUnitHelper';
+import { DebugOverlay } from '~/editor/views/DebugOverlay';
 import { h, Hook, rerender } from '~/qx';
 
 // coord configuration
@@ -354,6 +355,7 @@ export const EditSvgView = () => {
     flex-grow: 1;
     overflow: hidden;
     max-height: calc(100vh - 97px);
+    position: relative;
   `;
 
   const [areaSize, setAreaSize] = Hook.useState({ w: 100, h: 100 });
@@ -373,6 +375,7 @@ export const EditSvgView = () => {
   return (
     <div css={cssSvgView} id="domEditSvgOuterDiv">
       <EditSvgViewInternal baseW={areaSize.w} baseH={areaSize.h} />
+      <DebugOverlay />
     </div>
   );
 };

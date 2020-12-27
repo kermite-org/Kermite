@@ -46,8 +46,6 @@ export const PageRoot = () => {
           <ConfigPanel />
         </div>
       </div>
-
-      {/* <div>{JSON.stringify(appState.editor.design, null, ' ')}</div> */}
     </div>
   );
 };
