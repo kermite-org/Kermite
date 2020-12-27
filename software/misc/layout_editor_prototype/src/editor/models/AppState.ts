@@ -28,7 +28,7 @@ const initialDesign: IPersistentKeyboardDesign = {
       x: 40,
       y: 0,
       r: 0,
-      shape: 'ref circle',
+      shape: 'ext circle',
       keyIndex: -1,
     },
   ],

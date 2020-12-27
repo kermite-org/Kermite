@@ -48,41 +48,32 @@ const slotSources: IAttributeSlotSource<IKeyEntity, IEditPropKey>[] = [
   },
   {
     propKey: 'shape',
-    label: 'shape std',
-    getUnit: () => 'U',
+    label: 'shape',
+    getUnit: () =>
+      (editReader.currentKeyEntity?.shape.startsWith('std') && 'U') || '',
     validator(text: string) {
-      if (text === '0') {
-        return 'must be a number > 0';
-      }
-      return text.match(/^[0-9.]+$/) ? undefined : 'must be a number';
+      const patterns = [
+        /^[0-9][0-9.]*$/,
+        /^[0-9][0-9.]* [0-9][0-9.]*$/,
+        /^circle$/,
+        /^isoEnter$/,
+      ];
+      const valid = patterns.some((p) => text.match(p));
+      return valid ? undefined : 'invalid specification';
     },
     reader(value: string) {
-      if (value.startsWith('std')) {
-        return value.split(' ')[1];
+      if (value.startsWith('std') || value.startsWith('ext')) {
+        return value.split(' ').slice(1).join(' ');
       }
       return '';
     },
     writer(text: string) {
-      return 'std ' + parseFloat(text);
-    },
-  },
-  {
-    propKey: 'shape',
-    label: 'shape ref',
-    getUnit: () => '',
-    validator(text: string) {
-      if (text.length === 0) {
-        return 'must be a text';
+      if (text === 'circle' || text === 'isoEnter') {
+        return `ext ${text}`;
       }
-    },
-    reader(value: string) {
-      if (value.startsWith('ref')) {
-        return value.split(' ')[1];
-      }
-      return '';
-    },
-    writer(text: string) {
-      return 'ref ' + text;
+      const values = text.split(' ');
+      const floatValues = values.map((v) => parseFloat(v)).join(' ');
+      return `std ${floatValues}`;
     },
   },
   {

@@ -53,6 +53,16 @@ function startSightDragOperation(e: MouseEvent) {
   startDragSession(e, moveCallback, upCallback);
 }
 
+function getStdKeyUnitSize(shapeSpec: string) {
+  if (shapeSpec.startsWith('std')) {
+    const [, p1, p2] = shapeSpec.split(' ');
+    const uw = (p1 && parseFloat(p1)) || 1;
+    const uh = (p2 && parseFloat(p2)) || 1;
+    return [uw, uh];
+  }
+  return [1, 1];
+}
+
 const KeyEntityCard = ({
   ke,
   coordUnit,
@@ -97,9 +107,7 @@ const KeyEntityCard = ({
 
   const transformSpec = `translate(${x}, ${y}) rotate(${ke.r})`;
 
-  if (ke.shape === 'ref circle') {
-    // カスタム定義形状表示の例
-    // todo: モデルで保持しているパスを取得して表示
+  if (ke.shape === 'ext circle') {
     return (
       <g transform={transformSpec}>
         <circle
@@ -115,11 +123,11 @@ const KeyEntityCard = ({
     );
   }
 
-  const unitW = ke.shape.startsWith('std')
-    ? parseFloat(ke.shape.split(' ')[1])!
-    : 1;
-  const keyW = 19 * unitW - 1;
-  const keyH = 18;
+  // todo: ext isoEnterを対応
+
+  const [uw, uh] = getStdKeyUnitSize(ke.shape);
+  const keyW = 19 * uw - 1;
+  const keyH = 19 * uh - 1;
   return (
     <g transform={transformSpec}>
       <rect
