@@ -6,6 +6,10 @@ import {
 } from '~/editor/models/PlacementUnitHelper';
 
 export const editReader = new (class {
+  get editorTarget() {
+    return appState.editor.editorTarget;
+  }
+
   get editMode() {
     return appState.editor.editMode;
   }

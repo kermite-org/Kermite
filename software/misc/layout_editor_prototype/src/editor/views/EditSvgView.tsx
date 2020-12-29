@@ -111,15 +111,17 @@ const KeyEntityCard = ({
   `;
 
   const onMouseDown = (e: MouseEvent) => {
-    const { editMode } = editReader;
+    const { editorTarget, editMode } = editReader;
     if (e.button === 0) {
-      if (editMode === 'select') {
-        editMutations.setCurrentKeyEntity(ke.id);
-        e.stopPropagation();
-      } else if (editMode === 'move') {
-        editMutations.setCurrentKeyEntity(ke.id);
-        startKeyEntityDragOperation(e, true);
-        e.stopPropagation();
+      if (editorTarget === 'key') {
+        if (editMode === 'select') {
+          editMutations.setCurrentKeyEntity(ke.id);
+          e.stopPropagation();
+        } else if (editMode === 'move') {
+          editMutations.setCurrentKeyEntity(ke.id);
+          startKeyEntityDragOperation(e, true);
+          e.stopPropagation();
+        }
       }
     }
   };
@@ -294,14 +296,16 @@ const FieldGrid = () => {
 
 const onSvgMouseDown = (e: MouseEvent) => {
   if (e.button === 0) {
-    const { editMode } = editReader;
-    if (editMode === 'select' || editMode === 'move') {
-      editMutations.setCurrentKeyEntity(undefined);
-    } else if (editMode === 'add') {
-      const [sx, sy] = getRelativeMousePosition(e);
-      const [x, y] = screenToWorld(sx, sy);
-      editMutations.addKeyEntity(x, y);
-      startKeyEntityDragOperation(e, false);
+    const { editorTarget, editMode } = editReader;
+    if (editorTarget === 'key') {
+      if (editMode === 'select' || editMode === 'move') {
+        editMutations.setCurrentKeyEntity(undefined);
+      } else if (editMode === 'add') {
+        const [sx, sy] = getRelativeMousePosition(e);
+        const [x, y] = screenToWorld(sx, sy);
+        editMutations.addKeyEntity(x, y);
+        startKeyEntityDragOperation(e, false);
+      }
     }
   }
   if (e.button === 1) {
