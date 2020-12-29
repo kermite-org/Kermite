@@ -354,8 +354,10 @@ export const EditSvgView = () => {
     border: solid 1px #888;
     flex-grow: 1;
     overflow: hidden;
-    max-height: calc(100vh - 97px);
     position: relative;
+    > svg {
+      position: absolute;
+    }
   `;
 
   const [areaSize, setAreaSize] = Hook.useState({ w: 100, h: 100 });
