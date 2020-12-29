@@ -107,6 +107,13 @@ export const editMutations = new (class {
     });
   };
 
+  setEditScreenSize(w: number, h: number) {
+    editUpdator.patchEnvState((env) => {
+      env.sight.screenW = w;
+      env.sight.screenH = h;
+    });
+  }
+
   moveSight(deltaX: number, deltaY: number) {
     editUpdator.patchEnvState((env) => {
       env.sight.pos.x += deltaX;

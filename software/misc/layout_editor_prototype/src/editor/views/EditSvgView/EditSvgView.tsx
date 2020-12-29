@@ -13,30 +13,23 @@ import {
 } from '~/editor/views/EditSvgView/KeyEntityCard';
 import { h, Hook, rerender } from '~/qx';
 
-// coord configuration
-const cc = {
-  baseW: 600,
-  baseH: 400,
-};
-
 function getViewBoxSpec() {
-  const w = cc.baseW;
-  const h = cc.baseH;
-  return `0 0 ${w} ${h}`;
+  const { screenW, screenH } = editReader.sight;
+  return `0 0 ${screenW} ${screenH}`;
 }
 
 function getTransformSpec() {
   const { sight } = editReader;
   const sc = 1 / sight.scale;
-  const cx = cc.baseW / 2 - sight.pos.x * sc;
-  const cy = cc.baseH / 2 - sight.pos.y * sc;
+  const cx = sight.screenW / 2 - sight.pos.x * sc;
+  const cy = sight.screenH / 2 - sight.pos.y * sc;
   return `translate(${cx}, ${cy}) scale(${sc})`;
 }
 
 function screenToWorld(sx: number, sy: number) {
   const { sight } = editReader;
-  const x = (sx - cc.baseW / 2) * sight.scale + sight.pos.x;
-  const y = (sy - cc.baseH / 2) * sight.scale + sight.pos.y;
+  const x = (sx - sight.screenW / 2) * sight.scale + sight.pos.x;
+  const y = (sy - sight.screenH / 2) * sight.scale + sight.pos.y;
   return [x, y];
 }
 
@@ -46,8 +39,8 @@ const gridColor = makeCssColor(0x444444, 0.1);
 function getWorldViewBounds() {
   const { sight } = editReader;
   const d = 1;
-  const ew = (cc.baseW / 2) * sight.scale;
-  const eh = (cc.baseH / 2) * sight.scale;
+  const ew = (sight.screenW / 2) * sight.scale;
+  const eh = (sight.screenH / 2) * sight.scale;
   const left = -ew + sight.pos.x + d;
   const top = -eh + sight.pos.y + d;
   const right = ew + sight.pos.x - d;
@@ -167,16 +160,16 @@ const onSvgMouseDown = (e: MouseEvent) => {
 };
 
 const onSvgScroll = (e: WheelEvent) => {
+  const { screenW, screenH } = editReader.sight;
   const dir = e.deltaY / 120;
   const [sx, sy] = getRelativeMousePosition(e);
-  const px = sx - cc.baseW / 2;
-  const py = sy - cc.baseH / 2;
+  const px = sx - screenW / 2;
+  const py = sy - screenH / 2;
   editMutations.scaleSight(dir, px, py);
 };
 
-const EditSvgViewInternal = (props: { baseW: number; baseH: number }) => {
-  cc.baseW = props.baseW;
-  cc.baseH = props.baseH;
+const EditSvgViewInternal = () => {
+  const { sight } = editReader;
 
   const viewBoxSpec = getViewBoxSpec();
   const transformSpec = getTransformSpec();
@@ -186,8 +179,8 @@ const EditSvgViewInternal = (props: { baseW: number; baseH: number }) => {
 
   return (
     <svg
-      width={cc.baseW}
-      height={cc.baseH}
+      width={sight.screenW}
+      height={sight.screenH}
       viewBox={viewBoxSpec}
       onMouseDown={onSvgMouseDown}
       onWheel={onSvgScroll}
@@ -217,15 +210,15 @@ export const EditSvgView = () => {
     }
   `;
 
-  const [areaSize, setAreaSize] = Hook.useState({ w: 100, h: 100 });
+  const { screenW, screenH } = editReader.sight;
 
   Hook.useSideEffect(() => {
     const el = document.getElementById('domEditSvgOuterDiv');
     if (el) {
       const cw = el.clientWidth;
       const ch = el.clientHeight;
-      if (!(cw === areaSize.w && ch === areaSize.h)) {
-        setAreaSize({ w: cw, h: ch });
+      if (!(cw === screenW && ch === screenH)) {
+        editMutations.setEditScreenSize(cw, ch);
         return true;
       }
     }
@@ -233,7 +226,7 @@ export const EditSvgView = () => {
 
   return (
     <div css={cssSvgView} id="domEditSvgOuterDiv">
-      <EditSvgViewInternal baseW={areaSize.w} baseH={areaSize.h} />
+      <EditSvgViewInternal />
       <DebugOverlay />
     </div>
   );

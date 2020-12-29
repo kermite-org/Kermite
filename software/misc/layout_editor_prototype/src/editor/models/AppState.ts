@@ -69,6 +69,8 @@ export interface ISight {
     y: number;
   };
   scale: number;
+  screenW: number;
+  screenH: number;
 }
 export interface IEnvState {
   ghost: IKeyEntity | undefined;
@@ -98,6 +100,8 @@ export const appState: IAppState = {
         y: 0,
       },
       scale: 0.5,
+      screenW: 600,
+      screenH: 400,
     },
     showAxis: true,
     showGrid: true,
