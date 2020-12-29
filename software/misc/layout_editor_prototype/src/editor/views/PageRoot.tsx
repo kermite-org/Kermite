@@ -3,6 +3,7 @@ import { ConfigPanel } from '~/editor/views/ConfigPanel';
 import { EditMenuBar } from '~/editor/views/EditMenuBar';
 import { EditSvgViewContainer } from '~/editor/views/EditSvgView';
 import { PropertiesPanel } from '~/editor/views/PropertiesPanel';
+import { SightEditPanel } from '~/editor/views/SightEditPanel';
 import { h } from '~/qx';
 
 const cssPageRoot = css`
@@ -43,6 +44,7 @@ export const PageRoot = () => {
         <div class="sideColumn">
           <PropertiesPanel />
           <ConfigPanel />
+          <SightEditPanel />
         </div>
       </div>
     </div>

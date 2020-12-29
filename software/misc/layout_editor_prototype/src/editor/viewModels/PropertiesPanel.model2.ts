@@ -109,9 +109,9 @@ class KeyEntityAttrsEditorModel {
     (ss) =>
       new AttributeSlotModel(
         ss,
-        editMutations.startEdit,
+        editMutations.startKeyEdit,
         editMutations.changeKeyProperty,
-        editMutations.endEdit
+        editMutations.endKeyEdit
       )
   );
 

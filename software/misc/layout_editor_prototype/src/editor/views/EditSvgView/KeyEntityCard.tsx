@@ -19,11 +19,11 @@ export function startKeyEntityDragOperation(e: MouseEvent, useGhost: boolean) {
     rerender();
   };
   const upCallback = () => {
-    editMutations.endEdit();
+    editMutations.endKeyEdit();
     rerender();
   };
 
-  editMutations.startEdit(useGhost);
+  editMutations.startKeyEdit(useGhost);
   startDragSession(e, moveCallback, upCallback);
 }
 

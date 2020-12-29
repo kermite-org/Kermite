@@ -42,8 +42,27 @@ export const editUpdator = new (class {
 
   private originalEditState: IEditState | undefined;
 
-  startEditSession(useGhost: boolean) {
+  startEditSession() {
     this.originalEditState = appState.editor;
+  }
+
+  endEditSession() {
+    if (this.originalEditState) {
+      const de0 = this.originalEditState.design;
+      const de1 = appState.editor.design;
+      const modified = !compareObjectByJsonStringify(de0, de1);
+      console.log({ de0, de1, modified });
+      if (modified) {
+        editManager.pushUndoStack(this.originalEditState, appState.editor);
+      }
+      this.originalEditState = undefined;
+    }
+  }
+
+  private originalKeyEditState: IEditState | undefined;
+
+  startKeyEditSession(useGhost: boolean) {
+    this.originalKeyEditState = appState.editor;
     if (useGhost) {
       this.patchEnvState((env) => {
         const ke = this.getEditKeyEntity(appState.editor);
@@ -52,17 +71,17 @@ export const editUpdator = new (class {
     }
   }
 
-  endEditSession() {
-    if (this.originalEditState) {
-      const ke0 = this.getEditKeyEntity(this.originalEditState);
+  endKeyEditSession() {
+    if (this.originalKeyEditState) {
+      const ke0 = this.getEditKeyEntity(this.originalKeyEditState);
       const ke1 = this.getEditKeyEntity(appState.editor);
       const modified = ke0 !== ke1 && !compareObjectByJsonStringify(ke0, ke1);
 
       if (modified) {
-        editManager.pushUndoStack(this.originalEditState, appState.editor);
+        editManager.pushUndoStack(this.originalKeyEditState, appState.editor);
       }
 
-      this.originalEditState = undefined;
+      this.originalKeyEditState = undefined;
       this.patchEnvState((env) => {
         env.ghost = undefined;
       });
