@@ -79,4 +79,8 @@ export const editReader = new (class {
   get allKeyEntities(): IKeyEntity[] {
     return Object.values(appState.editor.design.keyEntities);
   }
+
+  get dispalyArea() {
+    return appState.editor.design.displayArea;
+  }
 })();

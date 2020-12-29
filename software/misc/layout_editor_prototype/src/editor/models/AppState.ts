@@ -6,6 +6,13 @@ import {
 } from '~/editor/models/DataSchema';
 
 const initialDesign: IPersistentKeyboardDesign = {
+  placementUnit: 'mm',
+  displayArea: {
+    top: -50,
+    left: -100,
+    bottom: 50,
+    right: 100,
+  },
   keyEntities: [
     {
       keyId: 'key0',
@@ -39,7 +46,8 @@ function loadKeyboardDesign(
 ): IKeyboardDesign {
   let cnt = 0;
   return {
-    placementUnit: 'mm',
+    placementUnit: source.placementUnit,
+    displayArea: source.displayArea,
     keyEntities: createDictionaryFromKeyValues(
       source.keyEntities.map((ke) => {
         const id = `ke-${cnt++}`;

@@ -8,9 +8,17 @@ export interface IPersistentKeyEntity {
 }
 
 export interface IPersistentKeyboardDesign {
+  placementUnit: string; // `mm` | `KP ${baseKeyPitch}`
+  displayArea: IDisplayArea;
   keyEntities: IPersistentKeyEntity[];
 }
 
+export interface IDisplayArea {
+  top: number;
+  left: number;
+  bottom: number;
+  right: number;
+}
 export interface IKeyEntity {
   id: string; // 編集中のみ一意の値を保持,永続化の際には保存しない
   keyId: string;
@@ -22,6 +30,7 @@ export interface IKeyEntity {
 }
 export interface IKeyboardDesign {
   placementUnit: string; // `mm` | `KP ${baseKeyPitch}`
+  displayArea: IDisplayArea;
   keyEntities: { [id: string]: IKeyEntity };
 }
 
