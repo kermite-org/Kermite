@@ -5,6 +5,7 @@ import {
 } from '~/base/UiInteractionHelpers';
 import { editMutations, editReader } from '~/editor/models';
 import { screenToWorld } from '~/editor/views/EditSvgView/CoordHelpers';
+import { DisplayAreaFrame } from '~/editor/views/EditSvgView/DisplayAreaFrame';
 import { FieldAxis, FieldGrid } from '~/editor/views/EditSvgView/FieldParts';
 import {
   KeyEntityCard,
@@ -86,6 +87,8 @@ export const EditSvgView = () => {
         {showGrid && <FieldGrid />}
         {showAxis && <FieldAxis />}
         {ghost && <KeyEntityCard ke={ghost} coordUnit={coordUnit} />}
+
+        <DisplayAreaFrame />
 
         {editReader.allKeyEntities.map((ke) => (
           <KeyEntityCard ke={ke} key={ke.id} coordUnit={coordUnit} />
