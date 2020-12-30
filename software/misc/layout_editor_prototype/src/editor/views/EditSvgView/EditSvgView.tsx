@@ -11,6 +11,10 @@ import {
   KeyEntityCard,
   startKeyEntityDragOperation,
 } from '~/editor/views/EditSvgView/KeyEntityCard';
+import {
+  KeyboardOutline,
+  startOutlinePointDragOperation,
+} from '~/editor/views/EditSvgView/KeyboardOutline';
 import { h, rerender } from '~/qx';
 
 function getViewBoxSpec() {
@@ -44,14 +48,24 @@ function startSightDragOperation(e: MouseEvent) {
 const onSvgMouseDown = (e: MouseEvent) => {
   if (e.button === 0) {
     const { editorTarget, editMode } = editReader;
+    if (editMode === 'select' || editMode === 'move') {
+      editMutations.setCurrentKeyEntity(undefined);
+      editMutations.setCurrentPointIndex(-1);
+    }
     if (editorTarget === 'key') {
-      if (editMode === 'select' || editMode === 'move') {
-        editMutations.setCurrentKeyEntity(undefined);
-      } else if (editMode === 'add') {
+      if (editMode === 'add') {
         const [sx, sy] = getRelativeMousePosition(e);
         const [x, y] = screenToWorld(sx, sy);
         editMutations.addKeyEntity(x, y);
         startKeyEntityDragOperation(e, false);
+      }
+    }
+    if (editorTarget === 'outline') {
+      if (editMode === 'add') {
+        const [sx, sy] = getRelativeMousePosition(e);
+        const [x, y] = screenToWorld(sx, sy);
+        editMutations.addOutlinePoint(x, y);
+        startOutlinePointDragOperation(e);
       }
     }
   }
@@ -93,6 +107,8 @@ export const EditSvgView = () => {
         {editReader.allKeyEntities.map((ke) => (
           <KeyEntityCard ke={ke} key={ke.id} coordUnit={coordUnit} />
         ))}
+
+        <KeyboardOutline />
       </g>
     </svg>
   );

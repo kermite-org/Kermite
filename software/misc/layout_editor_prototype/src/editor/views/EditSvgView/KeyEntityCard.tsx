@@ -84,14 +84,20 @@ export const KeyEntityCard = ({
   `;
 
   const onMouseDown = (e: MouseEvent) => {
-    const { editorTarget, editMode } = editReader;
     if (e.button === 0) {
+      if (editReader.editorTarget !== 'key') {
+        editMutations.setEditorTarget('key');
+      }
+      const { editorTarget, editMode } = editReader;
+
       if (editorTarget === 'key') {
         if (editMode === 'select') {
           editMutations.setCurrentKeyEntity(ke.id);
+          editMutations.setCurrentPointIndex(-1);
           e.stopPropagation();
         } else if (editMode === 'move') {
           editMutations.setCurrentKeyEntity(ke.id);
+          editMutations.setCurrentPointIndex(-1);
           startKeyEntityDragOperation(e, true);
           e.stopPropagation();
         }

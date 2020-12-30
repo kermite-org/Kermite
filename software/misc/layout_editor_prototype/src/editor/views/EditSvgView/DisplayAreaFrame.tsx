@@ -5,8 +5,8 @@ import { h } from '~/qx';
 
 const cssDisplayAreaFrame = css`
   fill: transparent;
-  stroke: ${makeCssColor(0x8888ee, 0.4)};
-  stroke-width: 0.5;
+  stroke: ${makeCssColor(0x444444, 0.4)};
+  stroke-width: 0.3;
 `;
 
 export const DisplayAreaFrame = () => {

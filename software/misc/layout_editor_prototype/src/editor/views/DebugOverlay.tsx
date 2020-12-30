@@ -11,6 +11,7 @@ export const DebugOverlay = () => {
     opacity: 0.5;
 
     word-break: break-all;
+    font-size: 12px;
   `;
   return (
     <div css={cssDebugOverlay}>
