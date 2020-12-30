@@ -102,7 +102,7 @@ export const appState: IAppState = {
     design: loadKeyboardDesign(initialDesign),
     currentkeyEntityId: undefined,
     currentPointIndex: -1,
-    editorTarget: 'outline',
+    editorTarget: 'key',
     editMode: 'move',
   },
   env: {
@@ -120,6 +120,6 @@ export const appState: IAppState = {
     showGrid: true,
     snapToGrid: true,
     snapDivision: 4,
-    showConfig: false,
+    showConfig: true,
   },
 };

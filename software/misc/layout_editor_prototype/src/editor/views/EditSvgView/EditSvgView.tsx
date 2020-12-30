@@ -84,7 +84,7 @@ const onSvgScroll = (e: WheelEvent) => {
 };
 
 export const EditSvgView = () => {
-  const { ghost, showAxis, showGrid, sight, coordUnit } = editReader;
+  const { ghost, showAxis, showGrid, sight } = editReader;
   const viewBoxSpec = getViewBoxSpec();
   const transformSpec = getTransformSpec();
 
@@ -100,12 +100,12 @@ export const EditSvgView = () => {
       <g transform={transformSpec}>
         {showGrid && <FieldGrid />}
         {showAxis && <FieldAxis />}
-        {ghost && <KeyEntityCard ke={ghost} coordUnit={coordUnit} />}
+        {ghost && <KeyEntityCard ke={ghost} />}
 
         <DisplayAreaFrame />
 
         {editReader.allKeyEntities.map((ke) => (
-          <KeyEntityCard ke={ke} key={ke.id} coordUnit={coordUnit} />
+          <KeyEntityCard ke={ke} key={ke.id} />
         ))}
 
         <KeyboardOutline />

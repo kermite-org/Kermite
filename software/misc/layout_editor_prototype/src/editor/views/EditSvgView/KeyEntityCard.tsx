@@ -3,7 +3,6 @@ import { IPosition, startDragSession } from '~/base/UiInteractionHelpers';
 import { editMutations, editReader, IKeyEntity } from '~/editor/models';
 import {
   getStdKeySize,
-  ICoordUnit,
   unitValueToMm,
 } from '~/editor/models/PlacementUnitHelper';
 import { h, rerender } from '~/qx';
@@ -53,13 +52,7 @@ const isoEnterPathMarkupText = [
   'z',
 ].join(' ');
 
-export const KeyEntityCard = ({
-  ke,
-  coordUnit,
-}: {
-  ke: IKeyEntity;
-  coordUnit: ICoordUnit;
-}) => {
+export const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
   const cssKeyRect = css`
     fill: rgba(255, 255, 255, 0.3);
     stroke-width: 0.5;
@@ -101,6 +94,8 @@ export const KeyEntityCard = ({
   const isSelected = ke.id === editReader.currentKeyEntity?.id;
   const isGhost = ke === editReader.ghost;
 
+  const { coordUnit, keySizeUnit } = editReader;
+
   const x = coordUnit.mode === 'KP' ? ke.x * coordUnit.x : ke.x;
   const y = coordUnit.mode === 'KP' ? ke.y * coordUnit.y : ke.y;
 
@@ -136,7 +131,7 @@ export const KeyEntityCard = ({
     );
   }
 
-  const [keyW, keyH] = getStdKeySize(ke.shape, coordUnit);
+  const [keyW, keyH] = getStdKeySize(ke.shape, coordUnit, keySizeUnit);
   return (
     <g transform={transformSpec}>
       <rect

@@ -4,6 +4,7 @@ import { IEditPropKey, IKeyEntity } from '~/editor/models/DataSchema';
 import { editReader } from '~/editor/models/EditReader';
 import { editUpdator } from '~/editor/models/EditUpdator';
 import {
+  changeKeySizeUnit,
   changePlacementCoordUnit,
   mmToUnitValue,
   unitValueToMm,
@@ -58,8 +59,9 @@ export const editMutations = new (class {
   }
 
   setSizeUnit(unit: 'U' | 'mm' | 'KP') {
+    const { coordUnit } = editReader;
     editUpdator.commitEditor((editor) => {
-      editor.design.keySizeUnit = unit;
+      changeKeySizeUnit(editor.design, unit, coordUnit);
     });
   }
 

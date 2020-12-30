@@ -49,8 +49,13 @@ const slotSources: IAttributeSlotSource<IKeyEntity, IEditPropKey>[] = [
   {
     propKey: 'shape',
     label: 'shape',
-    getUnit: () =>
-      (editReader.currentKeyEntity?.shape.startsWith('std') && 'U') || '',
+    getUnit: () => {
+      const shape = editReader.currentKeyEntity?.shape;
+      if (shape?.startsWith('std')) {
+        return editReader.keySizeUnit;
+      }
+      return '';
+    },
     validator(text: string) {
       const patterns = [
         /^[0-9][0-9.]*$/,

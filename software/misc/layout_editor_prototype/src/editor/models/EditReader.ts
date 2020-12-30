@@ -28,8 +28,13 @@ export const editReader = new (class {
     return appState.editor.design;
   }
 
+  private coordUnitSelector = createSimpleSelector(
+    () => appState.editor.design.placementUnit,
+    getCoordUnitFromUnitSpec
+  );
+
   get coordUnit(): ICoordUnit {
-    return getCoordUnitFromUnitSpec(appState.editor.design.placementUnit);
+    return this.coordUnitSelector();
   }
 
   get coordUnitSuffix(): 'mm' | 'KP' {
