@@ -62,8 +62,8 @@ export function makeEditMenuBarViewModel() {
 
   const editModeVm = createModeSelectionViewModel('editMode', {
     select: 'select',
-    add: 'add',
     move: 'move',
+    add: 'add',
   });
 
   const vmShowAxis = createToggleOptionViewModel('showAxis');

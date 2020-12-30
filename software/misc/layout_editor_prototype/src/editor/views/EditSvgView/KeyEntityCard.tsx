@@ -88,14 +88,15 @@ export const KeyEntityCard = ({
       if (editReader.editorTarget !== 'key') {
         editMutations.setEditorTarget('key');
       }
-      const { editorTarget, editMode } = editReader;
+      const { editorTarget } = editReader;
 
       if (editorTarget === 'key') {
+        const { editMode } = editReader;
         if (editMode === 'select') {
           editMutations.setCurrentKeyEntity(ke.id);
           editMutations.setCurrentPointIndex(-1);
           e.stopPropagation();
-        } else if (editMode === 'move') {
+        } else if (editMode === 'move' || editMode === 'add') {
           editMutations.setCurrentKeyEntity(ke.id);
           editMutations.setCurrentPointIndex(-1);
           startKeyEntityDragOperation(e, true);
