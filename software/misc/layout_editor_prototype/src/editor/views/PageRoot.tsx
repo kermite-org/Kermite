@@ -33,15 +33,14 @@ const cssPageRoot = css`
 `;
 
 function getPanelContentComponent() {
-  const { editorTarget, showConfig } = editReader;
-  if (showConfig) {
-    return ConfigPanel;
-  } else {
-    return {
-      key: PropertiesPanel,
-      outline: OutlineEditPanel,
-    }[editorTarget];
-  }
+  const { editorTarget } = editReader;
+  // if (editReader.showConfig) {
+  //   return ConfigPanel;
+  // }
+  return {
+    key: PropertiesPanel,
+    outline: OutlineEditPanel,
+  }[editorTarget];
 }
 
 export const PageRoot = () => {
@@ -56,7 +55,10 @@ export const PageRoot = () => {
 
       <div class="mainRow">
         <EditSvgViewContainer />
-        <div class="sideColumn">{PanelContent && <PanelContent />}</div>
+        <div class="sideColumn">
+          {editReader.showConfig && <ConfigPanel />}
+          {PanelContent && <PanelContent />}
+        </div>
       </div>
     </div>
   );
