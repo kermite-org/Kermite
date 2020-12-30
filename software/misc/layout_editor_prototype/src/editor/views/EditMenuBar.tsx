@@ -5,7 +5,6 @@ import { makeEditMenuBarViewModel } from '~/editor/views/EditMenuBar.model';
 import { h } from '~/qx';
 
 const cssEditMenuBar = css`
-  width: 800px;
   display: flex;
   > * + * {
     margin-left: 40px;
@@ -16,6 +15,10 @@ const cssEditMenuBar = css`
     > * + * {
       margin-left: 5px;
     }
+  }
+
+  > .spacer {
+    flex-grow: 1;
   }
 
   button {
@@ -37,6 +40,7 @@ export const EditMenuBar = () => {
     vmShowGrid,
     vmSnapToGrid,
     vmSnapDivision,
+    vmShowConfig,
   } = makeEditMenuBarViewModel();
 
   return (
@@ -88,6 +92,17 @@ export const EditMenuBar = () => {
           options={vmSnapDivision.options}
           choiceId={vmSnapDivision.choiceId}
           setChoiceId={vmSnapDivision.setChoiceId}
+        />
+      </div>
+
+      <div class="spacer" />
+
+      <div>
+        <ToggleButton
+          text="config"
+          width={60}
+          active={vmShowConfig.active}
+          setActive={vmShowConfig.setActive}
         />
       </div>
     </div>

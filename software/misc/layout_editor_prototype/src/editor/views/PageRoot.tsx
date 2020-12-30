@@ -1,9 +1,10 @@
 import { css } from 'goober';
-import { ConfigPanel } from '~/editor/views/ConfigPanel';
+import { editReader } from '~/editor/models';
 import { EditMenuBar } from '~/editor/views/EditMenuBar';
 import { EditSvgViewContainer } from '~/editor/views/EditSvgView';
-import { PropertiesPanel } from '~/editor/views/PropertiesPanel';
-import { SightEditPanel } from '~/editor/views/SightEditPanel';
+import { ConfigPanel } from '~/editor/views/SidePanels/ConfigPanel';
+import { PropertiesPanel } from '~/editor/views/SidePanels/PropertiesPanel';
+import { SightEditPanel } from '~/editor/views/SidePanels/SightEditPanel';
 import { h } from '~/qx';
 
 const cssPageRoot = css`
@@ -31,7 +32,22 @@ const cssPageRoot = css`
   }
 `;
 
+function getPanelContentComponent() {
+  const { editorTarget, showConfig } = editReader;
+  if (showConfig) {
+    return ConfigPanel;
+  } else {
+    return {
+      key: PropertiesPanel,
+      viewbox: SightEditPanel,
+      outline: undefined,
+    }[editorTarget];
+  }
+}
+
 export const PageRoot = () => {
+  const PanelContent = getPanelContentComponent();
+
   return (
     <div css={cssPageRoot}>
       <div>layout editor proto</div>
@@ -41,11 +57,7 @@ export const PageRoot = () => {
 
       <div class="mainRow">
         <EditSvgViewContainer />
-        <div class="sideColumn">
-          <PropertiesPanel />
-          <ConfigPanel />
-          <SightEditPanel />
-        </div>
+        <div class="sideColumn">{PanelContent && <PanelContent />}</div>
       </div>
     </div>
   );

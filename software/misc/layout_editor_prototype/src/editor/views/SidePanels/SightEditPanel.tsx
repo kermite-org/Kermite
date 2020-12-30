@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { IDisplayArea } from '~/editor/models';
-import { GeneralConfigTextEditRow } from '~/editor/views/GeneralConfigTextEditRow';
-import { useDisplayAreaValueTextEditViewModel } from '~/editor/views/SightEditPanel.model';
+import { GeneralConfigTextEditRow } from '~/editor/views/SidePanels/GeneralConfigTextEditRow';
+import { useDisplayAreaValueTextEditViewModel } from '~/editor/views/SidePanels/SightEditPanel.model';
 import { h } from '~/qx';
 
 const displayAreaKeys: (keyof IDisplayArea)[] = [

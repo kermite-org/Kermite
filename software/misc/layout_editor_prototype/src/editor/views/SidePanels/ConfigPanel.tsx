@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { reflectValue } from '~/base/FormHelpers';
 import { ExclusiveButtonGroup } from '~/controls';
-import { makePlacementUnitEditRowViewModel } from '~/editor/views/ConfigPanel.model';
+import { makePlacementUnitEditRowViewModel } from '~/editor/views/SidePanels/ConfigPanel.model';
 import { h } from '~/qx';
 
 const PlacementUnitEditPart = () => {

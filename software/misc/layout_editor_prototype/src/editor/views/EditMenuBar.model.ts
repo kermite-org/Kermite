@@ -28,7 +28,7 @@ function createModeSelectionViewModel<K extends 'editorTarget' | 'editMode'>(
 }
 
 function createToggleOptionViewModel<
-  K extends 'showAxis' | 'showGrid' | 'snapToGrid'
+  K extends 'showAxis' | 'showGrid' | 'snapToGrid' | 'showConfig'
 >(targetKey: K) {
   const active = editReader.getBoolOption(targetKey);
   const setActive = (value: boolean) =>
@@ -72,6 +72,8 @@ export function makeEditMenuBarViewModel() {
 
   const vmSnapDivision = makeSnapDivisionViewModel();
 
+  const vmShowConfig = createToggleOptionViewModel('showConfig');
+
   return {
     canUndo: editManager.canUndo,
     canRedo: editManager.canRedo,
@@ -83,5 +85,6 @@ export function makeEditMenuBarViewModel() {
     vmShowGrid,
     vmSnapToGrid,
     vmSnapDivision,
+    vmShowConfig,
   };
 }
