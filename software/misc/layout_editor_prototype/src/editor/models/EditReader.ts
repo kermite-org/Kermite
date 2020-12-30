@@ -94,6 +94,10 @@ export const editReader = new (class {
     return appState.editor.currentPointIndex;
   }
 
+  get currentOutlinePoint() {
+    return this.outlinePoints[this.currentPointIndex];
+  }
+
   get showConfig() {
     return appState.env.showConfig;
   }

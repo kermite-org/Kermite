@@ -5,7 +5,7 @@ export interface IConfigTextEditModel {
   onValueChanged(text: string): void;
   onFocus(): void;
   onBlur(): void;
-  update(sourceText: string): void;
+  update(sourceText: string | undefined): void;
 }
 
 export class ConfigTextEditModel implements IConfigTextEditModel {
@@ -67,6 +67,7 @@ export class ConfigTextEditModelDynamic implements IConfigTextEditModel {
     this.editText = text;
     this.valid = this.patterns.some((p) => text.match(p));
     if (this.valid) {
+      this.originalValue = this.editText;
       this.procEmitValidText(this.editText);
     }
   };
@@ -91,3 +92,53 @@ export class ConfigTextEditModelDynamic implements IConfigTextEditModel {
     }
   }
 }
+
+/*
+closure version
+export function createConfigTextEditModelDynamic(
+  patterns: RegExp[],
+  procStartEdit: () => void,
+  procEmitValidText: (text: string) => void,
+  procEndEdit: () => void
+): IConfigTextEditModel {
+  let originalText: string | undefined;
+  let editText: string = '';
+  let valid: boolean = true;
+  return {
+    get editText() {
+      return editText;
+    },
+    get valid() {
+      return valid;
+    },
+    get disabled() {
+      return originalText === undefined;
+    },
+    onValueChanged(text: string) {
+      editText = text;
+      valid = patterns.some((p) => text.match(p));
+      if (valid) {
+        originalText = editText;
+        procEmitValidText(editText);
+      }
+    },
+    onFocus() {
+      procStartEdit();
+    },
+    onBlur() {
+      procEndEdit();
+      if (!valid) {
+        editText = originalText || '';
+        valid = true;
+      }
+    },
+    update(sourceText: string | undefined) {
+      if (originalText !== sourceText) {
+        originalText = sourceText;
+        editText = originalText || '';
+        valid = true;
+      }
+    },
+  };
+}
+*/

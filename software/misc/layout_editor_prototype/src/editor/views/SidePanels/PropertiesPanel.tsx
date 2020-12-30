@@ -66,30 +66,29 @@ export const PropertiesPanel = () => {
       width: 60px;
     }
 
-    display: flex;
-    flex-direction: column;
-    /* height: 100%; */
+    > .content {
+      margin-left: 10px;
 
-    > .editZone {
-      flex-grow: 1;
-    }
-
-    > .errorZone {
-      > .errorText {
-        color: red;
+      > .errorZone {
+        > .errorText {
+          color: red;
+        }
       }
     }
   `;
 
   return (
     <div css={cssPropertiesPanel}>
-      <div className="editZone">
-        {vm.slots.map((slot) => (
-          <DesignAttributeTextInputLine key={slot.propKey} model={slot} />
-        ))}
-      </div>
-      <div qxIf={!!vm.errorText} className="errorZone">
-        <span className="errorText">{vm.errorText}</span>
+      <div>key properties</div>
+      <div class="content">
+        <div className="editZone">
+          {vm.slots.map((slot) => (
+            <DesignAttributeTextInputLine key={slot.propKey} model={slot} />
+          ))}
+        </div>
+        <div qxIf={!!vm.errorText} className="errorZone">
+          <span className="errorText">{vm.errorText}</span>
+        </div>
       </div>
     </div>
   );

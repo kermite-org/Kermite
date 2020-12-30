@@ -130,6 +130,14 @@ export const editMutations = new (class {
     });
   }
 
+  setOutlinePointProp(propIndex: number, value: number) {
+    const { currentPointIndex } = editReader;
+    editUpdator.patchEditor((editor) => {
+      const p = editor.design.outlinePoints[currentPointIndex];
+      p[propIndex] = value;
+    });
+  }
+
   setOutlinePointPosition(px: number, py: number) {
     const { currentPointIndex, snapDivision, snapToGrid } = editReader;
     const gp = 10 / snapDivision;
