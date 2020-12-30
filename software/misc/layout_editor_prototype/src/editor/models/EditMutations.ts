@@ -1,6 +1,10 @@
 import { clamp } from '~/base/utils';
 import { IEditMode, IEditorTarget, IModeState } from '~/editor/models/AppState';
-import { IEditPropKey, IKeyEntity } from '~/editor/models/DataSchema';
+import {
+  IEditPropKey,
+  IKeyEntity,
+  IKeySizeUnit,
+} from '~/editor/models/DataSchema';
 import { editReader } from '~/editor/models/EditReader';
 import { editUpdator } from '~/editor/models/EditUpdator';
 import {
@@ -58,7 +62,7 @@ export const editMutations = new (class {
     });
   }
 
-  setSizeUnit(unit: 'U' | 'mm' | 'KP') {
+  setSizeUnit(unit: IKeySizeUnit) {
     const { coordUnit } = editReader;
     editUpdator.commitEditor((editor) => {
       changeKeySizeUnit(editor.design, unit, coordUnit);

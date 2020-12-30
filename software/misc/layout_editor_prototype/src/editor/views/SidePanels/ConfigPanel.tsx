@@ -32,7 +32,7 @@ const PlacementUnitEditPart = () => {
 
   return (
     <div css={cssUnitEditPart}>
-      <div className="headerRow">key coordinate unit</div>
+      <div className="headerRow">key alignment unit</div>
       <div className="editRow">
         <ExclusiveButtonGroup {...vmUnitMode} buttonWidth={40} />
         <input

@@ -1,5 +1,5 @@
 import { ICommonSelectorViewModel } from '~/controls';
-import { editMutations, editReader } from '~/editor/models';
+import { editMutations, editReader, IKeySizeUnit } from '~/editor/models';
 import { ConfigTextEditModel } from '~/editor/viewModels/ConfigTextEditModel';
 
 function getUnitInputTextFromModel() {
@@ -11,7 +11,10 @@ function getUnitInputTextFromModel() {
 }
 
 function makeUnitModeSelectorViewModel(): ICommonSelectorViewModel {
-  const options = ['mm', 'KP'].map((v) => ({ id: v, text: v }));
+  const options = ['mm', 'KP'].map((v) => ({
+    id: v,
+    text: v,
+  }));
 
   const choiceId = editReader.coordUnitSuffix;
   const setChoiceId = (newChoiceId: 'mm' | 'KP') => {
@@ -44,10 +47,13 @@ export function makePlacementUnitEditRowViewModel() {
 }
 
 export function makeSizeUnitSelectorViewModel(): ICommonSelectorViewModel {
-  const options = ['U', 'mm', 'KP'].map((v) => ({ id: v, text: v }));
+  const options = ['KP', 'mm'].map((v) => ({
+    id: v,
+    text: v === 'KP' ? 'U' : v,
+  }));
 
   const choiceId = editReader.keySizeUnit;
-  const setChoiceId = (newChoiceId: 'U' | 'mm' | 'KP') => {
+  const setChoiceId = (newChoiceId: IKeySizeUnit) => {
     editMutations.setSizeUnit(newChoiceId);
   };
   return {

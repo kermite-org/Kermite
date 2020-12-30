@@ -52,7 +52,7 @@ const slotSources: IAttributeSlotSource<IKeyEntity, IEditPropKey>[] = [
     getUnit: () => {
       const shape = editReader.currentKeyEntity?.shape;
       if (shape?.startsWith('std')) {
-        return editReader.keySizeUnit;
+        return editReader.keySizeUnit === 'KP' ? 'U' : editReader.keySizeUnit;
       }
       return '';
     },

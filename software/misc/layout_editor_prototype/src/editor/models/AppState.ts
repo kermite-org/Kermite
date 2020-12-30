@@ -7,7 +7,7 @@ import {
 
 const initialDesign: IPersistentKeyboardDesign = {
   placementUnit: 'mm',
-  keySizeUnit: 'U',
+  keySizeUnit: 'KP',
   outlinePoints: [
     [80, -40],
     [80, 40],

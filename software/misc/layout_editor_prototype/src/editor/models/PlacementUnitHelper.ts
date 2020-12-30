@@ -70,8 +70,6 @@ export function keySizeValueToMm(
 ) {
   if (keySizeUnit === 'mm') {
     return [w, h];
-  } else if (keySizeUnit === 'U') {
-    return [w * 19 - 1, h * 19 - 1];
   } else if (keySizeUnit === 'KP') {
     if (coordUnit.mode === 'KP') {
       return [w * coordUnit.x - 1, h * coordUnit.y - 1];
@@ -90,8 +88,6 @@ export function mmToKeySizeValue(
 ) {
   if (keySizeUnit === 'mm') {
     return [mmW, mmH];
-  } else if (keySizeUnit === 'U') {
-    return [(mmW + 1) / 19, (mmH + 1) / 19];
   } else if (keySizeUnit === 'KP') {
     if (coordUnit.mode === 'KP') {
       return [(mmW + 1) / coordUnit.x, (mmH + 1) / coordUnit.y];
@@ -122,16 +118,14 @@ export function changeKeySizeUnit(
       if (!ph) {
         if (oldUnit === 'mm') {
           ph = pw;
-        } else if (oldUnit === 'KP' || 'U') {
+        } else if (oldUnit === 'KP') {
           ph = 1;
         }
       }
       const [tmpW, tmpH] = keySizeValueToMm(pw, ph!, oldUnit, coordUnit);
       const [dstW, dstH] = mmToKeySizeValue(tmpW, tmpH, newUnit, coordUnit);
-      console.log({ pw, tmpW, dstW });
       const omitH =
-        (newUnit === 'mm' && dstH === dstW) ||
-        ((newUnit === 'U' || newUnit === 'KP') && dstH === 1);
+        (newUnit === 'mm' && dstH === dstW) || (newUnit === 'KP' && dstH === 1);
       ke.shape = omitH ? `std ${dstW}` : `std ${dstW} ${dstH}`;
     }
   });
@@ -152,11 +146,6 @@ export function getStdKeySize(
       const w = pw || 10;
       const h = ph || pw || 10;
       return [w, h];
-    } else if (sizeUnit === 'U') {
-      const baseSize = 19;
-      const uw = pw || 1;
-      const uh = ph || 1;
-      return [uw * baseSize - 1, uh * baseSize - 1];
     } else if (sizeUnit === 'KP') {
       const baseW = (coordUnit.mode === 'KP' && coordUnit.x) || 19;
       const baseH = (coordUnit.mode === 'KP' && coordUnit.y) || 19;

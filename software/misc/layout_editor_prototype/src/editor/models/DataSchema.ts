@@ -1,4 +1,4 @@
-export type IKeySizeUnit = 'U' | 'mm' | 'KP';
+export type IKeySizeUnit = 'mm' | 'KP';
 export interface IPersistentKeyEntity {
   keyId: string;
   x: number;
