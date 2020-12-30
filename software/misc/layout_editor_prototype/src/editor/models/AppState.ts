@@ -14,10 +14,10 @@ const initialDesign: IPersistentKeyboardDesign = {
     right: 100,
   },
   outlinePoints: [
-    [-80, -40],
     [80, -40],
     [80, 40],
     [-80, 40],
+    [-80, -40],
   ],
   keyEntities: [
     {
