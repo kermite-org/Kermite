@@ -1,11 +1,11 @@
 import { css } from 'goober';
 import { editReader } from '~/editor/models';
-import { EditMenuBar } from '~/editor/views/EditMenuBar';
 import { EditSvgViewContainer } from '~/editor/views/EditSvgView';
 import { ConfigPanel } from '~/editor/views/SidePanels/ConfigPanel';
 import { OutlineEditPanel } from '~/editor/views/SidePanels/OutlineEditPanel';
 import { PropertiesPanel } from '~/editor/views/SidePanels/PropertiesPanel';
 import { SightEditPanel } from '~/editor/views/SidePanels/SightEditPanel';
+import { EditMenuBar } from '~/editor/views/ToolBar/EditMenuBar';
 import { h } from '~/qx';
 
 const cssPageRoot = css`
