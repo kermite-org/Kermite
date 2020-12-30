@@ -13,6 +13,12 @@ const initialDesign: IPersistentKeyboardDesign = {
     bottom: 50,
     right: 100,
   },
+  outlinePoints: [
+    [-80, -40],
+    [80, -40],
+    [80, 40],
+    [-80, 40],
+  ],
   keyEntities: [
     {
       keyId: 'key0',
@@ -48,6 +54,7 @@ function loadKeyboardDesign(
   return {
     placementUnit: source.placementUnit,
     displayArea: source.displayArea,
+    outlinePoints: source.outlinePoints,
     keyEntities: createDictionaryFromKeyValues(
       source.keyEntities.map((ke) => {
         const id = `ke-${cnt++}`;
@@ -67,6 +74,7 @@ export interface IModeState {
 export interface IEditState {
   design: IKeyboardDesign;
   currentkeyEntityId: string | undefined;
+  currentPointIndex: number;
   editMode: IEditMode;
   editorTarget: IEditorTarget;
 }
@@ -97,8 +105,9 @@ export const appState: IAppState = {
   editor: {
     design: loadKeyboardDesign(initialDesign),
     currentkeyEntityId: undefined,
+    currentPointIndex: -1,
+    editorTarget: 'outline',
     editMode: 'move',
-    editorTarget: 'key',
   },
   env: {
     ghost: undefined,
@@ -107,7 +116,7 @@ export const appState: IAppState = {
         x: 0,
         y: 0,
       },
-      scale: 0.5,
+      scale: 0.3,
       screenW: 600,
       screenH: 400,
     },

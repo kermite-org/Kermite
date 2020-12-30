@@ -1,5 +1,5 @@
 import { clamp } from '~/base/utils';
-import { IModeState } from '~/editor/models/AppState';
+import { IEditMode, IEditorTarget, IModeState } from '~/editor/models/AppState';
 import {
   IDisplayArea,
   IEditPropKey,
@@ -48,6 +48,13 @@ export const editMutations = new (class {
     });
   }
 
+  addOutlinePoint(px: number, py: number) {
+    editUpdator.commitEditor((editor) => {
+      editor.design.outlinePoints.push([px, py]);
+      editor.currentPointIndex = editor.design.outlinePoints.length - 1;
+    });
+  }
+
   setPlacementUnit(unitSpec: string) {
     editUpdator.commitEditor((editor) => {
       changePlacementCoordUnit(editor.design, unitSpec);
@@ -58,6 +65,14 @@ export const editMutations = new (class {
     editUpdator.patchEnvState((env) => {
       env.snapDivision = sd;
     });
+  }
+
+  setEditorTarget(target: IEditorTarget) {
+    editUpdator.patchEditor((editor) => (editor.editorTarget = target));
+  }
+
+  setEditMode(mode: IEditMode) {
+    editUpdator.patchEditor((editor) => (editor.editMode = mode));
   }
 
   setMode<K extends 'editorTarget' | 'editMode'>(
@@ -84,6 +99,12 @@ export const editMutations = new (class {
     });
   }
 
+  setCurrentPointIndex(index: number) {
+    editUpdator.patchEditor((editor) => {
+      editor.currentPointIndex = index;
+    });
+  }
+
   moveKeyDelta(deltaX: number, deltaY: number) {
     editUpdator.patchEditKeyEntity((ke) => {
       ke.x += deltaX;
@@ -107,6 +128,21 @@ export const editMutations = new (class {
         ky = py;
       }
       [ke.x, ke.y] = mmToUnitValue(kx, ky, coordUnit);
+    });
+  }
+
+  setOutlinePointPosition(px: number, py: number) {
+    const { currentPointIndex, snapDivision, snapToGrid } = editReader;
+    const gp = 10 / snapDivision;
+    if (snapToGrid) {
+      px = Math.round(px / gp) * gp;
+      py = Math.round(py / gp) * gp;
+    }
+
+    editUpdator.patchEditor((editor) => {
+      const p = editor.design.outlinePoints[currentPointIndex];
+      p[0] = px;
+      p[1] = py;
     });
   }
 

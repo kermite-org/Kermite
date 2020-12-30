@@ -51,7 +51,6 @@ export const editUpdator = new (class {
       const de0 = this.originalEditState.design;
       const de1 = appState.editor.design;
       const modified = !compareObjectByJsonStringify(de0, de1);
-      console.log({ de0, de1, modified });
       if (modified) {
         editManager.pushUndoStack(this.originalEditState, appState.editor);
       }

@@ -36,7 +36,7 @@ export const editReader = new (class {
 
   get gridPitches(): [number, number] {
     const cu = this.coordUnit;
-    if (cu.mode === 'KP') {
+    if (this.editorTarget === 'key' && cu.mode === 'KP') {
       return [cu.x, cu.y];
     } else {
       return [10, 10];
@@ -82,5 +82,13 @@ export const editReader = new (class {
 
   get dispalyArea() {
     return appState.editor.design.displayArea;
+  }
+
+  get outlinePoints() {
+    return appState.editor.design.outlinePoints;
+  }
+
+  get currentPointIndex() {
+    return appState.editor.currentPointIndex;
   }
 })();
