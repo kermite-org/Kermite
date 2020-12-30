@@ -9,7 +9,8 @@ export interface IPersistentKeyEntity {
 
 export type IOutlinePoint = [x: number, y: number];
 export interface IPersistentKeyboardDesign {
-  placementUnit: string; // `mm` | `KP ${baseKeyPitch}`
+  placementUnit: string;
+  keySizeUnit: string;
   outlinePoints: IOutlinePoint[];
   keyEntities: IPersistentKeyEntity[];
 }
@@ -24,6 +25,7 @@ export interface IKeyEntity {
 }
 export interface IKeyboardDesign {
   placementUnit: string; // `mm` | `KP ${baseKeyPitch}`
+  keySizeUnit: string; // 'U' | 'mm' | 'KP'
   outlinePoints: IOutlinePoint[];
   keyEntities: { [id: string]: IKeyEntity };
 }

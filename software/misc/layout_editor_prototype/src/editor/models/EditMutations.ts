@@ -57,6 +57,12 @@ export const editMutations = new (class {
     });
   }
 
+  setSizeUnit(unit: 'U' | 'mm' | 'KP') {
+    editUpdator.commitEditor((editor) => {
+      editor.design.keySizeUnit = unit;
+    });
+  }
+
   setSnapDivision(sd: number) {
     editUpdator.patchEnvState((env) => {
       env.snapDivision = sd;

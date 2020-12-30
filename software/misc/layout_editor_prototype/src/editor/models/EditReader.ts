@@ -108,4 +108,8 @@ export const editReader = new (class {
   get showConfig() {
     return appState.env.showConfig;
   }
+
+  get keySizeUnit() {
+    return appState.editor.design.keySizeUnit;
+  }
 })();

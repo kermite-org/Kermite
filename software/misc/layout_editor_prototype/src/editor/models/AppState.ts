@@ -7,6 +7,7 @@ import {
 
 const initialDesign: IPersistentKeyboardDesign = {
   placementUnit: 'mm',
+  keySizeUnit: 'U',
   outlinePoints: [
     [80, -40],
     [80, 40],
@@ -47,6 +48,7 @@ function loadKeyboardDesign(
   let cnt = 0;
   return {
     placementUnit: source.placementUnit,
+    keySizeUnit: source.keySizeUnit,
     outlinePoints: source.outlinePoints,
     keyEntities: createDictionaryFromKeyValues(
       source.keyEntities.map((ke) => {

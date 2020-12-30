@@ -34,12 +34,25 @@ const vmUnitInput = new ConfigTextEditModel(
 
 export function makePlacementUnitEditRowViewModel() {
   const vmUnitMode = makeUnitModeSelectorViewModel();
-
   const unitInputText = getUnitInputTextFromModel();
   vmUnitInput.update(unitInputText);
 
   return {
     vmUnitMode,
     vmUnitInput,
+  };
+}
+
+export function makeSizeUnitSelectorViewModel(): ICommonSelectorViewModel {
+  const options = ['U', 'mm', 'KP'].map((v) => ({ id: v, text: v }));
+
+  const choiceId = editReader.keySizeUnit;
+  const setChoiceId = (newChoiceId: 'U' | 'mm' | 'KP') => {
+    editMutations.setSizeUnit(newChoiceId);
+  };
+  return {
+    options,
+    choiceId,
+    setChoiceId,
   };
 }
