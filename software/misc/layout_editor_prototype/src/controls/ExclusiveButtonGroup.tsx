@@ -1,4 +1,5 @@
 import { css } from 'goober';
+import { makeCssColor } from '~/base/ColorHelper';
 import { uiTheme } from '~/base/uiTheme';
 import { h } from '~/qx';
 
@@ -37,6 +38,9 @@ const cssExclusiveButtonGroup = (buttonWidth: number | undefined) => css`
     }
 
     &[data-disabled] {
+      background: ${makeCssColor(0xaaaaaa, 0.2)};
+      color: ${makeCssColor(0x888888, 0.5)};
+      border-color: ${makeCssColor(0x888888, 0.5)};
       cursor: inherit;
       pointer-events: none;
     }

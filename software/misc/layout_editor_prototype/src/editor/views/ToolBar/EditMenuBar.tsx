@@ -41,6 +41,7 @@ export const EditMenuBar = () => {
     vmSnapToGrid,
     vmSnapDivision,
     vmShowConfig,
+    canSelectEditMode,
   } = makeEditMenuBarViewModel();
 
   return (
@@ -57,6 +58,7 @@ export const EditMenuBar = () => {
         choiceId={editModeVm.choiceId}
         setChoiceId={editModeVm.setChoiceId}
         buttonWidth={55}
+        disabled={!canSelectEditMode}
       />
 
       <div class="buttonsBox">

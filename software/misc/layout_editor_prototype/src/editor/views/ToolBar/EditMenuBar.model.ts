@@ -74,6 +74,10 @@ export function makeEditMenuBarViewModel() {
 
   const vmShowConfig = createToggleOptionViewModel('showConfig');
 
+  const { editorTarget } = editReader;
+  const canSelectEditMode =
+    editorTarget === 'key' || editorTarget === 'outline';
+
   return {
     canUndo: editManager.canUndo,
     canRedo: editManager.canRedo,
@@ -86,5 +90,6 @@ export function makeEditMenuBarViewModel() {
     vmSnapToGrid,
     vmSnapDivision,
     vmShowConfig,
+    canSelectEditMode,
   };
 }
