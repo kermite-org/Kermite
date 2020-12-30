@@ -4,7 +4,6 @@ import { EditSvgViewContainer } from '~/editor/views/EditSvgView';
 import { ConfigPanel } from '~/editor/views/SidePanels/ConfigPanel';
 import { OutlineEditPanel } from '~/editor/views/SidePanels/OutlineEditPanel';
 import { PropertiesPanel } from '~/editor/views/SidePanels/PropertiesPanel';
-import { SightEditPanel } from '~/editor/views/SidePanels/SightEditPanel';
 import { EditMenuBar } from '~/editor/views/ToolBar/EditMenuBar';
 import { h } from '~/qx';
 
@@ -40,7 +39,6 @@ function getPanelContentComponent() {
   } else {
     return {
       key: PropertiesPanel,
-      viewbox: SightEditPanel,
       outline: OutlineEditPanel,
     }[editorTarget];
   }

@@ -5,7 +5,7 @@ import { h } from '~/qx';
 
 const cssDisplayAreaFrame = css`
   fill: transparent;
-  stroke: ${makeCssColor(0x444444, 0.4)};
+  stroke: ${makeCssColor(0x444444, 0.3)};
   stroke-width: 0.3;
 `;
 

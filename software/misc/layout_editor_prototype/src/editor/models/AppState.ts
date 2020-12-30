@@ -7,12 +7,6 @@ import {
 
 const initialDesign: IPersistentKeyboardDesign = {
   placementUnit: 'mm',
-  displayArea: {
-    top: -50,
-    left: -100,
-    bottom: 50,
-    right: 100,
-  },
   outlinePoints: [
     [80, -40],
     [80, 40],
@@ -53,7 +47,6 @@ function loadKeyboardDesign(
   let cnt = 0;
   return {
     placementUnit: source.placementUnit,
-    displayArea: source.displayArea,
     outlinePoints: source.outlinePoints,
     keyEntities: createDictionaryFromKeyValues(
       source.keyEntities.map((ke) => {
@@ -64,7 +57,7 @@ function loadKeyboardDesign(
   };
 }
 
-export type IEditorTarget = 'key' | 'outline' | 'viewbox';
+export type IEditorTarget = 'key' | 'outline';
 export type IEditMode = 'select' | 'add' | 'move' | 'split';
 
 export interface IModeState {

@@ -57,7 +57,6 @@ export function makeEditMenuBarViewModel() {
   const editorTargetVm = createModeSelectionViewModel('editorTarget', {
     key: 'key',
     outline: 'outline',
-    viewbox: 'sight',
   });
 
   const editModeVm = createModeSelectionViewModel('editMode', {

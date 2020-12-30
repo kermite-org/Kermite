@@ -1,10 +1,6 @@
 import { clamp } from '~/base/utils';
 import { IEditMode, IEditorTarget, IModeState } from '~/editor/models/AppState';
-import {
-  IDisplayArea,
-  IEditPropKey,
-  IKeyEntity,
-} from '~/editor/models/DataSchema';
+import { IEditPropKey, IKeyEntity } from '~/editor/models/DataSchema';
 import { editReader } from '~/editor/models/EditReader';
 import { editUpdator } from '~/editor/models/EditUpdator';
 import {
@@ -159,15 +155,6 @@ export const editMutations = new (class {
   ) => {
     editUpdator.patchEditKeyEntity((ke) => {
       ke[propKey] = value;
-    });
-  };
-
-  setDisplayAreaValue = <K extends keyof IDisplayArea>(
-    propsKey: K,
-    value: number
-  ) => {
-    editUpdator.patchEditor((editor) => {
-      editor.design.displayArea[propsKey] = value;
     });
   };
 
