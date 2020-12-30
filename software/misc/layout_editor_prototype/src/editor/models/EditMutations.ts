@@ -84,10 +84,9 @@ export const editMutations = new (class {
     });
   }
 
-  setBoolOption<K extends 'showAxis' | 'showGrid' | 'snapToGrid'>(
-    fieldKey: K,
-    value: boolean
-  ) {
+  setBoolOption<
+    K extends 'showAxis' | 'showGrid' | 'snapToGrid' | 'showConfig'
+  >(fieldKey: K, value: boolean) {
     editUpdator.patchEnvState((env) => {
       env[fieldKey] = value;
     });

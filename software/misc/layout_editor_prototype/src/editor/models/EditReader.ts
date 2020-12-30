@@ -51,7 +51,9 @@ export const editReader = new (class {
     return appState.editor[fieldKey];
   }
 
-  getBoolOption<K extends 'showAxis' | 'showGrid' | 'snapToGrid'>(fieldKey: K) {
+  getBoolOption<
+    K extends 'showAxis' | 'showGrid' | 'snapToGrid' | 'showConfig'
+  >(fieldKey: K) {
     return appState.env[fieldKey];
   }
 
@@ -90,5 +92,9 @@ export const editReader = new (class {
 
   get currentPointIndex() {
     return appState.editor.currentPointIndex;
+  }
+
+  get showConfig() {
+    return appState.env.showConfig;
   }
 })();
