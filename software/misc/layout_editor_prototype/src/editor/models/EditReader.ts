@@ -1,5 +1,7 @@
 import { appState, IModeState } from '~/editor/models/AppState';
+import { getKeyboardDesignBoundingBox } from '~/editor/models/BoundingBoxCalculator';
 import { IKeyEntity } from '~/editor/models/DataSchema';
+import { createSimpleSelector } from '~/editor/models/ModelUtils';
 import {
   getCoordUnitFromUnitSpec,
   ICoordUnit,
@@ -82,8 +84,13 @@ export const editReader = new (class {
     return Object.values(appState.editor.design.keyEntities);
   }
 
+  private displayAreaSelector = createSimpleSelector(
+    () => appState.editor.design,
+    getKeyboardDesignBoundingBox
+  );
+
   get dispalyArea() {
-    return appState.editor.design.displayArea;
+    return this.displayAreaSelector();
   }
 
   get outlinePoints() {

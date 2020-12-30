@@ -1,7 +1,11 @@
 import { css } from 'goober';
 import { IPosition, startDragSession } from '~/base/UiInteractionHelpers';
 import { editMutations, editReader, IKeyEntity } from '~/editor/models';
-import { ICoordUnit, unitValueToMm } from '~/editor/models/PlacementUnitHelper';
+import {
+  getStdKeySize,
+  ICoordUnit,
+  unitValueToMm,
+} from '~/editor/models/PlacementUnitHelper';
 import { h, rerender } from '~/qx';
 
 export function startKeyEntityDragOperation(e: MouseEvent, useGhost: boolean) {
@@ -25,18 +29,6 @@ export function startKeyEntityDragOperation(e: MouseEvent, useGhost: boolean) {
 
   editMutations.startKeyEdit(useGhost);
   startDragSession(e, moveCallback, upCallback);
-}
-
-function getStdKeySize(shapeSpec: string, coordUnit: ICoordUnit) {
-  const baseW = coordUnit.mode === 'KP' ? coordUnit.x : 19;
-  const baseH = coordUnit.mode === 'KP' ? coordUnit.y : 19;
-  if (shapeSpec.startsWith('std')) {
-    const [, p1, p2] = shapeSpec.split(' ');
-    const uw = (p1 && parseFloat(p1)) || 1;
-    const uh = (p2 && parseFloat(p2)) || 1;
-    return [uw * baseW - 1, uh * baseH - 1];
-  }
-  return [baseW - 1, baseH - 1];
 }
 
 // no shrink
