@@ -16,12 +16,15 @@ function getKeySize(shapeSpec: string, coordUnit: ICoordUnit) {
 }
 
 export function getKeyboardDesignBoundingBox(design: IKeyboardDesign) {
-  console.log('calc');
   const coordUnit = getCoordUnitFromUnitSpec(design.placementUnit);
   const xs: number[] = [];
   const ys: number[] = [];
   Object.values(design.keyEntities).forEach((ke) => {
-    const { x, y, r } = ke;
+    let { x, y, r } = ke;
+    if (coordUnit.mode === 'KP') {
+      x *= coordUnit.x;
+      y *= coordUnit.y;
+    }
     const [w, h] = getKeySize(ke.shape, coordUnit);
     const dx = w / 2;
     const dy = h / 2;
