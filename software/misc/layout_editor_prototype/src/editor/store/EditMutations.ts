@@ -9,6 +9,7 @@ import {
 import {
   IEditPropKey,
   IKeyEntity,
+  IKeyPlacementAnchor,
   IKeySizeUnit,
 } from '~/editor/store/DataSchema';
 import { editReader } from '~/editor/store/EditReader';
@@ -98,6 +99,12 @@ export const editMutations = new (class {
   setPlacementUnit(unitSpec: string) {
     editUpdator.commitEditor((editor) => {
       changePlacementCoordUnit(editor.design, unitSpec);
+    });
+  }
+
+  setPlacementAnchor(anchor: IKeyPlacementAnchor) {
+    editUpdator.commitEditor((editor) => {
+      editor.design.placementAnchor = anchor;
     });
   }
 

@@ -117,4 +117,8 @@ export const editReader = new (class {
   get keySizeUnit() {
     return appState.editor.design.keySizeUnit;
   }
+
+  get placementAnchor() {
+    return appState.editor.design.placementAnchor;
+  }
 })();

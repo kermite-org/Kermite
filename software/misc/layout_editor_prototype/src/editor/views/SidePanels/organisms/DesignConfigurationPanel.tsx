@@ -36,7 +36,7 @@ const PlacementUnitEditPart = (props: {
 
   return (
     <div css={cssUnitEditPart}>
-      <div className="headerRow">key alignment unit</div>
+      <div className="headerRow">key placement unit</div>
       <div className="editRow">
         <ExclusiveButtonGroup {...vmUnitMode} buttonWidth={40} />
         <GeneralConfigTextEditRow
@@ -49,6 +49,20 @@ const PlacementUnitEditPart = (props: {
       </div>
       <div className="errorRow">
         {!vmUnitText.valid && 'invalid keypitch specificaion'}
+      </div>
+    </div>
+  );
+};
+
+const PlacementAnchorEditPart = (props: {
+  vmPlacementAnchorMode: ICommonSelectorViewModel;
+}) => {
+  const { vmPlacementAnchorMode } = props;
+  return (
+    <div css={cssUnitEditPart}>
+      <div className="headerRow">key placement anchor</div>
+      <div className="editRow">
+        <ExclusiveButtonGroup {...vmPlacementAnchorMode} buttonWidth={60} />
       </div>
     </div>
   );
@@ -80,6 +94,7 @@ export const DesignConfigurationPanel = () => {
     vmPlacementUnitMode,
     vmPlacementUnitText,
     vmSizeUnitMode,
+    vmPlacementAnchorMode,
   } = useDesignConfigurationPanelModel();
 
   return (
@@ -88,6 +103,7 @@ export const DesignConfigurationPanel = () => {
         vmPlacementUnitMode={vmPlacementUnitMode}
         vmPlacementUnitText={vmPlacementUnitText}
       />
+      <PlacementAnchorEditPart vmPlacementAnchorMode={vmPlacementAnchorMode} />
       <SizeUnitEditPart vmUnitSizeMode={vmSizeUnitMode} />
     </div>
   );

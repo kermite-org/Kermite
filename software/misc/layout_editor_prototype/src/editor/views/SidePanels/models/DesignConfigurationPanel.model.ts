@@ -1,6 +1,11 @@
 import { useClosureModel } from '~/base/hooks';
 import { ICommonSelectorViewModel } from '~/controls';
-import { editMutations, editReader } from '~/editor/store';
+import {
+  editMutations,
+  editReader,
+  IKeyPlacementAnchor,
+  IKeySizeUnit,
+} from '~/editor/store';
 import {
   createConfigTextEditModel,
   IConfigTextEditModel,
@@ -50,10 +55,16 @@ function createModels() {
     }
   );
 
-  const vmSizeUnitMode = makeSelectorModel<'KP' | 'mm'>({
+  const vmSizeUnitMode = makeSelectorModel<IKeySizeUnit>({
     sources: { KP: 'U', mm: 'mm' },
     reader: () => editReader.keySizeUnit,
     writer: (sizeUnit) => editMutations.setSizeUnit(sizeUnit),
+  });
+
+  const vmPlacementAnchorMode = makeSelectorModel<IKeyPlacementAnchor>({
+    sources: { topLeft: 'top-left', center: 'center' },
+    reader: () => editReader.placementAnchor,
+    writer: (anchor) => editMutations.setPlacementAnchor(anchor),
   });
 
   return () => {
@@ -64,6 +75,7 @@ function createModels() {
       vmPlacementUnitMode,
       vmPlacementUnitText,
       vmSizeUnitMode,
+      vmPlacementAnchorMode,
     };
   };
 }
@@ -72,6 +84,7 @@ export function useDesignConfigurationPanelModel(): {
   vmPlacementUnitMode: ICommonSelectorViewModel;
   vmPlacementUnitText: IConfigTextEditModel;
   vmSizeUnitMode: ICommonSelectorViewModel;
+  vmPlacementAnchorMode: ICommonSelectorViewModel;
 } {
   return useClosureModel(createModels);
 }
