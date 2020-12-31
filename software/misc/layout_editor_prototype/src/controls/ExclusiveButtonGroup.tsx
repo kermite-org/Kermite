@@ -30,6 +30,7 @@ const cssExclusiveButtonGroup = (buttonWidth: number | undefined) => css`
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    user-select: none;
 
     &[data-active] {
       background: ${uiTheme.colors.primaryWeaken};

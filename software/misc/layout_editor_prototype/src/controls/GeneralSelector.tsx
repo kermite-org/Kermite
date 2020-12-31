@@ -21,6 +21,8 @@ const cssGeneralSelector = (width: number | undefined) => css`
   height: ${unitHeight}px;
   width: ${width ? `${width}px` : 'inherit'};
   font-size: 16px;
+  user-select: none;
+
   &:focus {
     outline: none;
   }

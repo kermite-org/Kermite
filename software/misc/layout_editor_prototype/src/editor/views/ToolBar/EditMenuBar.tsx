@@ -28,6 +28,7 @@ const cssEditMenuBar = css`
     width: 50px;
     padding: 5px;
     cursor: pointer;
+    user-select: none;
   }
 `;
 
