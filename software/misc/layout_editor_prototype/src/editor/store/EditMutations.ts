@@ -43,15 +43,18 @@ export const editMutations = new (class {
   };
 
   addKeyEntity(px: number, py: number) {
-    const [x, y] = mmToUnitValue(px, py, editReader.coordUnit);
+    const { coordUnit, keySizeUnit } = editReader;
+    const [x, y] = mmToUnitValue(px, py, coordUnit);
     const id = `ke-${(Math.random() * 1000) >> 0}`;
+    const keySize = keySizeUnit === 'KP' ? 1 : 18;
+
     const keyEntity: IKeyEntity = {
       id,
       keyId: id,
       x,
       y,
       r: 0,
-      shape: 'std 1',
+      shape: `std ${keySize}`,
       keyIndex: -1,
     };
     editUpdator.commitEditor((editor) => {
