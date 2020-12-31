@@ -239,4 +239,14 @@ export const editMutations = new (class {
       editor.design = createDefaultKeyboardDesign();
     });
   }
+
+  resetSitePosition() {
+    const bb = editReader.dispalyArea;
+    const cx = (bb.left + bb.right) / 2;
+    const cy = (bb.top + bb.bottom) / 2;
+    editUpdator.patchEnvState((env) => {
+      env.sight.pos.x = cx;
+      env.sight.pos.y = cy;
+    });
+  }
 })();

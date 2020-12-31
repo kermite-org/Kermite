@@ -1,12 +1,14 @@
 import { initializeCss } from '~/base/cssInitializer';
 import { debounce } from '~/base/utils';
-import { saveEditKeyboardDesign } from '~/editor/store';
+import { editMutations, saveEditKeyboardDesign } from '~/editor/store';
 import { setupKeyboardOperationHander } from '~/editor/store/KeyboardOperationHandler';
 import { PageRoot } from '~/editor/views/PageRoot';
 import { h, render, rerender } from '~/qx';
 
 window.addEventListener('load', () => {
   console.log('start');
+
+  editMutations.resetSitePosition();
 
   initializeCss();
 
