@@ -10,24 +10,24 @@ export function createOutlineEditpanelModel(): () => {
 } {
   const patterns = [/^-?[0-9.]+$/];
 
-  const createModel = (propIndex: number) =>
+  const createModel = (propKey: 'x' | 'y') =>
     createConfigTextEditModelDynamic(
       patterns,
       editMutations.startEdit,
       (text) => {
         const value = parseFloat(text);
-        editMutations.setOutlinePointProp(propIndex, value);
+        editMutations.setOutlinePointProp(propKey, value);
       },
       editMutations.endEdit
     );
 
-  const vmX = createModel(0);
-  const vmY = createModel(1);
+  const vmX = createModel('x');
+  const vmY = createModel('y');
 
   return () => {
     const p = editReader.currentOutlinePoint;
-    vmX.update(p ? p[0].toString() : undefined);
-    vmY.update(p ? p[1].toString() : undefined);
+    vmX.update(p ? p.x.toString() : undefined);
+    vmY.update(p ? p.y.toString() : undefined);
     return { vmX, vmY };
   };
 }

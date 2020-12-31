@@ -8,11 +8,12 @@ export interface IPersistentKeyEntity {
   keyIndex: number;
 }
 
-export type IOutlinePoint = [x: number, y: number];
+export type IPersistOutlinePoint = [x: number, y: number];
+
 export interface IPersistentKeyboardDesign {
   placementUnit: string;
   keySizeUnit: IKeySizeUnit;
-  outlinePoints: IOutlinePoint[];
+  outlinePoints: IPersistOutlinePoint[];
   keyEntities: IPersistentKeyEntity[];
 }
 export interface IKeyEntity {
@@ -24,9 +25,11 @@ export interface IKeyEntity {
   shape: string; // `std ${width}` | `ref ${shapeName}`
   keyIndex: number;
 }
+export type IOutlinePoint = { x: number; y: number };
+
 export interface IKeyboardDesign {
   placementUnit: string; // `mm` | `KP ${baseKeyPitch}`
-  keySizeUnit: IKeySizeUnit; // 'U' | 'mm' | 'KP'
+  keySizeUnit: IKeySizeUnit; // 'mm' | 'KP'
   outlinePoints: IOutlinePoint[];
   keyEntities: { [id: string]: IKeyEntity };
 }

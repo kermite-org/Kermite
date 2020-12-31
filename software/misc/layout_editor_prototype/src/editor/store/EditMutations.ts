@@ -49,9 +49,9 @@ export const editMutations = new (class {
     });
   }
 
-  addOutlinePoint(px: number, py: number) {
+  addOutlinePoint(x: number, y: number) {
     editUpdator.commitEditor((editor) => {
-      editor.design.outlinePoints.push([px, py]);
+      editor.design.outlinePoints.push({ x, y });
       editor.currentPointIndex = editor.design.outlinePoints.length - 1;
     });
   }
@@ -138,11 +138,11 @@ export const editMutations = new (class {
     });
   }
 
-  setOutlinePointProp(propIndex: number, value: number) {
+  setOutlinePointProp(propKey: 'x' | 'y', value: number) {
     const { currentPointIndex } = editReader;
     editUpdator.patchEditor((editor) => {
       const p = editor.design.outlinePoints[currentPointIndex];
-      p[propIndex] = value;
+      p[propKey] = value;
     });
   }
 
@@ -155,9 +155,7 @@ export const editMutations = new (class {
     }
 
     editUpdator.patchEditor((editor) => {
-      const p = editor.design.outlinePoints[currentPointIndex];
-      p[0] = px;
-      p[1] = py;
+      editor.design.outlinePoints[currentPointIndex] = { x: px, y: py };
     });
   }
 

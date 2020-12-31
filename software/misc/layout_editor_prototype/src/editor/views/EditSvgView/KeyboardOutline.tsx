@@ -29,7 +29,7 @@ export function startOutlinePointDragOperation(e: MouseEvent) {
 
   const point = outlinePoints[currentPointIndex];
 
-  const destPos = { x: point[0], y: point[1] };
+  const destPos = { ...point };
 
   const moveCallback = (pos: IPosition, prevPos: IPosition) => {
     const deltaX = (pos.x - prevPos.x) * sight.scale;
@@ -97,11 +97,11 @@ const OutlinePoint = (props: { x: number; y: number; index: number }) => {
 
 export const KeyboardOutline = () => {
   const { outlinePoints } = editReader;
-  const pointsSpec = outlinePoints.map(([x, y]) => `${x}, ${y}`).join(' ');
+  const pointsSpec = outlinePoints.map(({ x, y }) => `${x}, ${y}`).join(' ');
   return (
     <g>
       <polygon points={pointsSpec} css={cssKeyboardOutline} />
-      {outlinePoints.map(([x, y], index) => (
+      {outlinePoints.map(({ x, y }, index) => (
         <OutlinePoint x={x} y={y} key={index} index={index} />
       ))}
     </g>

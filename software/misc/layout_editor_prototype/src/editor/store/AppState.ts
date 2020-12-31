@@ -49,7 +49,7 @@ function loadKeyboardDesign(
   return {
     placementUnit: source.placementUnit,
     keySizeUnit: source.keySizeUnit,
-    outlinePoints: source.outlinePoints,
+    outlinePoints: source.outlinePoints.map(([x, y]) => ({ x, y })),
     keyEntities: createDictionaryFromKeyValues(
       source.keyEntities.map((ke) => {
         const id = `ke-${cnt++}`;

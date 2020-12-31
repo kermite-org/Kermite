@@ -48,7 +48,7 @@ export function getKeyboardDesignBoundingBox(design: IKeyboardDesign) {
     });
   });
 
-  design.outlinePoints.forEach(([x, y]) => {
+  design.outlinePoints.forEach(({ x, y }) => {
     xs.push(x);
     ys.push(y);
   });
