@@ -40,6 +40,12 @@ export function getKeyboardDesignBoundingBox(design: IKeyboardDesign) {
       [dx, -dy],
       [dx, dy],
     ];
+    if (design.placementAnchor === 'topLeft') {
+      points.forEach((p) => {
+        p[0] += w / 2 + 0.5;
+        p[1] += h / 2 + 0.5;
+      });
+    }
     points.forEach(([px, py]) => {
       const ax = px * Math.cos(theta) - py * Math.sin(theta);
       const ay = px * Math.sin(theta) + py * Math.cos(theta);

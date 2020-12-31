@@ -108,14 +108,17 @@ export const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
   const isSelected = ke.id === editReader.currentKeyEntity?.id;
   const isGhost = ke === editReader.ghost;
 
-  const { coordUnit, keySizeUnit } = editReader;
+  const { coordUnit, keySizeUnit, placementAnchor } = editReader;
 
   const x = coordUnit.mode === 'KP' ? ke.x * coordUnit.x : ke.x;
   const y = coordUnit.mode === 'KP' ? ke.y * coordUnit.y : ke.y;
 
-  const transformSpec = `translate(${x}, ${y}) rotate(${ke.r})`;
+  const d = placementAnchor === 'topLeft' ? 1 : 0;
 
   if (ke.shape === 'ext circle') {
+    const transformSpec = `translate(${x + d * 9.5}, ${y + d * 9.5}) rotate(${
+      ke.r
+    })`;
     return (
       <g transform={transformSpec}>
         <circle
@@ -132,6 +135,9 @@ export const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
   }
 
   if (ke.shape === 'ext isoEnter') {
+    const transformSpec = `translate(${x + d * 16.25}, ${y + d * 19}) rotate(${
+      ke.r
+    })`;
     return (
       <g transform={transformSpec}>
         <path
@@ -146,6 +152,9 @@ export const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
   }
 
   const [keyW, keyH] = getStdKeySize(ke.shape, coordUnit, keySizeUnit);
+  const transformSpec = `translate(${x + d * (keyW / 2 + 0.5)}, ${
+    y + d * (keyH / 2 + 0.5)
+  }) rotate(${ke.r})`;
   return (
     <g transform={transformSpec}>
       <rect
