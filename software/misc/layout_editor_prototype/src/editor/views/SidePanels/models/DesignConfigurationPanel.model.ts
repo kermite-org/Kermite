@@ -1,18 +1,10 @@
+import { useClosureModel } from '~/base/hooks';
 import { ICommonSelectorViewModel } from '~/controls';
-import { editMutations, editReader, IKeySizeUnit } from '~/editor/store';
+import { editMutations, editReader } from '~/editor/store';
 import {
   createConfigTextEditModel,
   IConfigTextEditModel,
 } from '~/editor/views/SidePanels/models/slots/ConfigTextEditModel';
-import { Hook } from '~/qx';
-
-const makePlacementUnitTextModel = (): IConfigTextEditModel =>
-  createConfigTextEditModel(
-    [/^[0-9][0-9.]*$/, /^[0-9][0-9.]* [0-9][0-9.]*$/],
-    (text) => {
-      editMutations.setPlacementUnit(`KP ${text}`);
-    }
-  );
 
 function getPlacementUnitInputTextFromModel(): string | undefined {
   const mode = editReader.coordUnitSuffix;
@@ -22,52 +14,64 @@ function getPlacementUnitInputTextFromModel(): string | undefined {
   return undefined;
 }
 
-function makePlacementUnitModeModel(): ICommonSelectorViewModel {
-  const options = ['mm', 'KP'].map((v) => ({
-    id: v,
-    text: v,
+function makeSelectorModel<T extends string>(props: {
+  sources: { [key in T]: string };
+  reader: () => T;
+  writer: (choiceId: T) => void;
+}): ICommonSelectorViewModel {
+  const { sources, reader, writer } = props;
+  const options = (Object.keys(sources) as T[]).map((key) => ({
+    id: key,
+    text: sources[key],
   }));
-
-  const choiceId = editReader.coordUnitSuffix;
-  const setChoiceId = (newChoiceId: 'mm' | 'KP') => {
-    const unitSpec = newChoiceId === 'mm' ? 'mm' : 'KP 19';
-    editMutations.setPlacementUnit(unitSpec);
-  };
   return {
     options,
-    choiceId,
-    setChoiceId,
+    get choiceId() {
+      return reader();
+    },
+    setChoiceId: writer,
   };
 }
 
-function makeSizeUnitModeModel(): ICommonSelectorViewModel {
-  const options = ['KP', 'mm'].map((v) => ({
-    id: v,
-    text: v === 'KP' ? 'U' : v,
-  }));
+function createModels() {
+  const vmPlacementUnitMode = makeSelectorModel<'mm' | 'KP'>({
+    sources: { mm: 'mm', KP: 'KP' },
+    reader: () => editReader.coordUnitSuffix,
+    writer: (newChoiceId: 'mm' | 'KP') => {
+      const unitSpec = newChoiceId === 'mm' ? 'mm' : 'KP 19';
+      editMutations.setPlacementUnit(unitSpec);
+    },
+  });
 
-  const choiceId = editReader.keySizeUnit;
-  const setChoiceId = (newChoiceId: IKeySizeUnit) => {
-    editMutations.setSizeUnit(newChoiceId);
-  };
-  return {
-    options,
-    choiceId,
-    setChoiceId,
+  const vmPlacementUnitText = createConfigTextEditModel(
+    [/^[0-9][0-9.]*$/, /^[0-9][0-9.]* [0-9][0-9.]*$/],
+    (text) => {
+      editMutations.setPlacementUnit(`KP ${text}`);
+    }
+  );
+
+  const vmSizeUnitMode = makeSelectorModel<'KP' | 'mm'>({
+    sources: { KP: 'U', mm: 'mm' },
+    reader: () => editReader.keySizeUnit,
+    writer: (sizeUnit) => editMutations.setSizeUnit(sizeUnit),
+  });
+
+  return () => {
+    const unitInputText = getPlacementUnitInputTextFromModel();
+    vmPlacementUnitText.update(unitInputText);
+
+    return {
+      vmPlacementUnitMode,
+      vmPlacementUnitText,
+      vmSizeUnitMode,
+    };
   };
 }
 
-export function useDesignConfigurationPanelModel() {
-  const vmPlacementUnitText = Hook.useMemo(makePlacementUnitTextModel, []);
-  const unitInputText = getPlacementUnitInputTextFromModel();
-  vmPlacementUnitText.update(unitInputText);
-
-  const vmPlacementUnitMode = makePlacementUnitModeModel();
-  const vmSizeUnitMode = makeSizeUnitModeModel();
-
-  return {
-    vmPlacementUnitMode,
-    vmPlacementUnitText,
-    vmSizeUnitMode,
-  };
+export function useDesignConfigurationPanelModel(): {
+  vmPlacementUnitMode: ICommonSelectorViewModel;
+  vmPlacementUnitText: IConfigTextEditModel;
+  vmSizeUnitMode: ICommonSelectorViewModel;
+} {
+  return useClosureModel(createModels);
 }
