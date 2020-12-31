@@ -85,6 +85,9 @@ export class AttributeSlotModel<T, K extends keyof T = keyof T> {
   }
 
   updateSource(targetObject: T | undefined) {
+    if (this._hasFocus) {
+      return;
+    }
     if (this._originalValue !== targetObject?.[this.propKey]) {
       this.pullModelValue(targetObject);
       this.resetEditText();

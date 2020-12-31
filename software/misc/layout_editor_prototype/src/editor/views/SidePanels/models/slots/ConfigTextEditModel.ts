@@ -14,8 +14,9 @@ export function createConfigTextEditModel(
   textOutputFunc: (text: string) => void
 ): IConfigTextEditModel {
   let originalText: string | undefined;
-  let editText: string = '';
-  let valid: boolean = true;
+  let editText = '';
+  let valid = true;
+  let hasFocus = false;
   return {
     get editText() {
       return editText;
@@ -26,12 +27,15 @@ export function createConfigTextEditModel(
     get disabled() {
       return originalText === undefined;
     },
-    onFocus() {},
+    onFocus() {
+      hasFocus = true;
+    },
     onValueChanged(text: string) {
       editText = text;
       valid = patterns.some((p) => text.match(p));
     },
     onBlur() {
+      hasFocus = false;
       if (valid) {
         textOutputFunc(editText);
       } else {
@@ -40,6 +44,9 @@ export function createConfigTextEditModel(
       }
     },
     update(sourceText: string | undefined) {
+      if (hasFocus) {
+        return;
+      }
       if (originalText !== sourceText) {
         originalText = sourceText;
         editText = originalText || '';
@@ -99,8 +106,9 @@ export function createConfigTextEditModelDynamic(
   procEndEdit: () => void
 ): IConfigTextEditModel {
   let originalText: string | undefined;
-  let editText: string = '';
-  let valid: boolean = true;
+  let editText = '';
+  let valid = true;
+  let hasFocus = false;
   return {
     get editText() {
       return editText;
@@ -121,6 +129,7 @@ export function createConfigTextEditModelDynamic(
     },
     onFocus() {
       procStartEdit();
+      hasFocus = true;
     },
     onBlur() {
       procEndEdit();
@@ -128,8 +137,12 @@ export function createConfigTextEditModelDynamic(
         editText = originalText || '';
         valid = true;
       }
+      hasFocus = false;
     },
     update(sourceText: string | undefined) {
+      if (hasFocus) {
+        return;
+      }
       if (originalText !== sourceText) {
         originalText = sourceText;
         editText = originalText || '';
