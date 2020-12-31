@@ -7,6 +7,8 @@ import {
 } from '~/editor/store/PlacementUnitHelper';
 import { h, rerender } from '~/qx';
 
+let temporaryChangingModeAddToMove = false;
+
 export function startKeyEntityDragOperation(e: MouseEvent, useGhost: boolean) {
   const { sight, currentKeyEntity: ck, coordUnit } = editReader;
 
@@ -27,6 +29,10 @@ export function startKeyEntityDragOperation(e: MouseEvent, useGhost: boolean) {
   };
   const upCallback = () => {
     editMutations.endKeyEdit();
+    if (temporaryChangingModeAddToMove) {
+      editMutations.setEditMode('add');
+      temporaryChangingModeAddToMove = false;
+    }
     rerender();
   };
 
@@ -86,6 +92,10 @@ export const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
           editMutations.setCurrentPointIndex(-1);
           e.stopPropagation();
         } else if (editMode === 'move' || editMode === 'add') {
+          if (editMode === 'add') {
+            editMutations.setEditMode('move');
+            temporaryChangingModeAddToMove = true;
+          }
           editMutations.setCurrentKeyEntity(ke.id);
           editMutations.setCurrentPointIndex(-1);
           startKeyEntityDragOperation(e, true);
