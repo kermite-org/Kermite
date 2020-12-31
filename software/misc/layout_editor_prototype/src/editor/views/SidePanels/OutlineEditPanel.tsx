@@ -20,14 +20,14 @@ export const OutlineEditPanel = () => {
       <div>point properties</div>
       <div class="content">
         <GeneralConfigTextEditRow
-          model={vmX}
+          {...vmX}
           label={'x'}
           labelWidth={70}
           inputWidth={60}
           unit="mm"
         />
         <GeneralConfigTextEditRow
-          model={vmY}
+          {...vmY}
           label={'y'}
           labelWidth={70}
           inputWidth={60}

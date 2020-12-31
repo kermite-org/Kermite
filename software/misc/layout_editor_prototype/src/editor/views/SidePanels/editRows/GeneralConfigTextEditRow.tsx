@@ -1,8 +1,20 @@
 import { css } from 'goober';
 import { reflectValue } from '~/base/FormHelpers';
 import { styleWidthSpec } from '~/base/ViewHelpers';
-import { IConfigTextEditModel } from '~/editor/views/SidePanels/commonViewModels/ConfigTextEditModel';
 import { h } from '~/qx';
+
+interface IProps {
+  editText: string;
+  valid: boolean;
+  disabled: boolean;
+  onValueChanged(text: string): void;
+  onFocus(): void;
+  onBlur(): void;
+  label: string;
+  labelWidth: number;
+  inputWidth: number;
+  unit?: string;
+}
 
 const cssEditRow = css`
   display: flex;
@@ -19,25 +31,29 @@ const cssEditRow = css`
   }
 `;
 
-export const GeneralConfigTextEditRow = (props: {
-  model: IConfigTextEditModel;
-  label: string;
-  labelWidth: number;
-  inputWidth: number;
-  unit?: string;
-}) => {
-  const { model, label, labelWidth, inputWidth, unit } = props;
+export const GeneralConfigTextEditRow = ({
+  editText,
+  valid,
+  disabled,
+  onValueChanged,
+  onFocus,
+  onBlur,
+  label,
+  labelWidth,
+  inputWidth,
+  unit,
+}: IProps) => {
   return (
     <div css={cssEditRow}>
       <label style={styleWidthSpec(labelWidth)}>{label}</label>
       <input
         type="text"
-        value={model.editText}
-        onInput={reflectValue(model.onValueChanged)}
-        onFocus={model.onFocus}
-        onBlur={model.onBlur}
-        disabled={model.disabled}
-        data-invalid={!model.valid}
+        value={editText}
+        onInput={reflectValue(onValueChanged)}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        disabled={disabled}
+        data-invalid={!valid}
         style={styleWidthSpec(inputWidth)}
       />
       <span class="unit">{unit}</span>

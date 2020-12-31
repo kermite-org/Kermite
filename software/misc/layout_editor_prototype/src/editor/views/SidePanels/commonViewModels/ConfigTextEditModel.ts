@@ -47,9 +47,10 @@ export class ConfigTextEditModel implements IConfigTextEditModel {
   }
 }
 
+/*
 export class ConfigTextEditModelDynamic implements IConfigTextEditModel {
   originalValue: string | undefined;
-  editText: string = '';
+  _editText: string = '';
   valid: boolean = true;
 
   constructor(
@@ -59,12 +60,16 @@ export class ConfigTextEditModelDynamic implements IConfigTextEditModel {
     private procEndEdit: () => void
   ) {}
 
+  get editText() {
+    return this._editText;
+  }
+
   get disabled() {
     return this.originalValue === undefined;
   }
 
   onValueChanged = (text: string) => {
-    this.editText = text;
+    this._editText = text;
     this.valid = this.patterns.some((p) => text.match(p));
     if (this.valid) {
       this.originalValue = this.editText;
@@ -79,22 +84,22 @@ export class ConfigTextEditModelDynamic implements IConfigTextEditModel {
   onBlur = () => {
     this.procEndEdit();
     if (!this.valid) {
-      this.editText = this.originalValue || '';
+      this._editText = this.originalValue || '';
       this.valid = true;
     }
   };
 
-  update(modelValue: string | undefined) {
+  update = (modelValue: string | undefined) => {
     if (this.originalValue !== modelValue) {
       this.originalValue = modelValue;
-      this.editText = this.originalValue || '';
+      this._editText = this.originalValue || '';
       this.valid = true;
     }
-  }
+  };
 }
+*/
 
-/*
-closure version
+// closure version
 export function createConfigTextEditModelDynamic(
   patterns: RegExp[],
   procStartEdit: () => void,
@@ -141,4 +146,3 @@ export function createConfigTextEditModelDynamic(
     },
   };
 }
-*/

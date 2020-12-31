@@ -1,11 +1,17 @@
 import { editMutations, editReader } from '~/editor/store';
-import { ConfigTextEditModelDynamic } from '~/editor/views/SidePanels/commonViewModels/ConfigTextEditModel';
+import {
+  createConfigTextEditModelDynamic,
+  IConfigTextEditModel,
+} from '~/editor/views/SidePanels/commonViewModels/ConfigTextEditModel';
 
-export function createOutlineEditpanelModel() {
+export function createOutlineEditpanelModel(): () => {
+  vmX: IConfigTextEditModel;
+  vmY: IConfigTextEditModel;
+} {
   const patterns = [/^-?[0-9.]+$/];
 
   const createModel = (propIndex: number) =>
-    new ConfigTextEditModelDynamic(
+    createConfigTextEditModelDynamic(
       patterns,
       editMutations.startEdit,
       (text) => {
@@ -14,6 +20,7 @@ export function createOutlineEditpanelModel() {
       },
       editMutations.endEdit
     );
+
   const vmX = createModel(0);
   const vmY = createModel(1);
 
