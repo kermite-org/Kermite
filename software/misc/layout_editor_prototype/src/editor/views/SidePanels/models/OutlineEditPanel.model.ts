@@ -1,18 +1,22 @@
+import { filterProps } from '~/base/utils';
 import { editMutations, editReader } from '~/editor/store';
 import {
   createConfigTextEditModelDynamic,
   IConfigTextEditModel,
 } from '~/editor/views/SidePanels/models/slots/ConfigTextEditModel';
+import { Hook } from '~/qx';
 
-export function createOutlineEditpanelModel(): () => {
+interface IOutlineEditPanelModel {
   vmX: IConfigTextEditModel;
   vmY: IConfigTextEditModel;
-} {
-  const patterns = [/^-?[0-9.]+$/];
+}
 
-  const createModel = (propKey: 'x' | 'y') =>
-    createConfigTextEditModelDynamic(
-      patterns,
+function createOutlineEditPanelModel() {
+  const numberPatterns = [/^-?[0-9.]+$/];
+
+  function createOulineEditPropModel(propKey: 'x' | 'y') {
+    return createConfigTextEditModelDynamic(
+      numberPatterns,
       editMutations.startEdit,
       (text) => {
         const value = parseFloat(text);
@@ -20,14 +24,24 @@ export function createOutlineEditpanelModel(): () => {
       },
       editMutations.endEdit
     );
+  }
 
-  const vmX = createModel('x');
-  const vmY = createModel('y');
+  const vmX = createOulineEditPropModel('x');
+  const vmY = createOulineEditPropModel('y');
 
-  return () => {
-    const p = editReader.currentOutlinePoint;
-    vmX.update(p ? p.x.toString() : undefined);
-    vmY.update(p ? p.y.toString() : undefined);
-    return { vmX, vmY };
+  return {
+    vmX,
+    vmY,
+    update() {
+      const p = editReader.currentOutlinePoint;
+      vmX.update(p ? p.x.toString() : undefined);
+      vmY.update(p ? p.y.toString() : undefined);
+    },
   };
+}
+
+export function useOutlineEditPanelModel(): IOutlineEditPanelModel {
+  const model = Hook.useMemo(createOutlineEditPanelModel, []);
+  model.update();
+  return filterProps(model, ['vmX', 'vmY']);
 }

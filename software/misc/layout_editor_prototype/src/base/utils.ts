@@ -58,3 +58,14 @@ export function debounce(targetProc: () => void, ms: number) {
 
 export const degToRad = (deg: number) => (deg * Math.PI) / 180;
 export const radToDeg = (rad: number) => (rad * 180) / Math.PI;
+
+export function filterProps<T, K extends keyof T>(
+  source: T,
+  propKeys: K[]
+): Pick<T, K> {
+  const obj: Pick<T, K> = {} as any;
+  propKeys.forEach((propKey) => {
+    obj[propKey] = source[propKey];
+  });
+  return obj;
+}

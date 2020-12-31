@@ -1,7 +1,6 @@
 import { css } from 'goober';
-import { useClosureModel } from '~/base/hooks';
 import { GeneralConfigTextEditRow } from '~/editor/views/SidePanels/controls/GeneralConfigTextEditRow';
-import { createOutlineEditpanelModel } from '~/editor/views/SidePanels/models/OutlineEditPanel.model';
+import { useOutlineEditPanelModel } from '~/editor/views/SidePanels/models/OutlineEditPanel.model';
 import { h } from '~/qx';
 
 const cssSightEditPanel = css`
@@ -13,7 +12,7 @@ const cssSightEditPanel = css`
 `;
 
 export const OutlineEditPanel = () => {
-  const { vmX, vmY } = useClosureModel(createOutlineEditpanelModel);
+  const { vmX, vmY } = useOutlineEditPanelModel();
 
   return (
     <div css={cssSightEditPanel}>
