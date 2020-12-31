@@ -77,6 +77,8 @@ export function makeEditMenuBarViewModel() {
   const canSelectEditMode =
     editorTarget === 'key' || editorTarget === 'outline';
 
+  const resetKeyboardDesign = () => editMutations.resetKeyboardDesign();
+
   return {
     canUndo: editManager.canUndo,
     canRedo: editManager.canRedo,
@@ -90,5 +92,6 @@ export function makeEditMenuBarViewModel() {
     vmSnapDivision,
     vmShowConfig,
     canSelectEditMode,
+    resetKeyboardDesign,
   };
 }

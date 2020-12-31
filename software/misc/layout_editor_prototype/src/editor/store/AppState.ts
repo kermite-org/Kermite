@@ -5,7 +5,7 @@ import {
   IPersistentKeyboardDesign,
 } from '~/editor/store/DataSchema';
 
-const initialDesign: IPersistentKeyboardDesign = {
+const initialDesignSource: IPersistentKeyboardDesign = {
   placementUnit: 'mm',
   keySizeUnit: 'KP',
   outlinePoints: [
@@ -15,36 +15,35 @@ const initialDesign: IPersistentKeyboardDesign = {
     [-80, -40],
   ],
   keyEntities: [
-    {
-      keyId: 'key0',
-      x: 0,
-      y: 0,
-      r: 0,
-      shape: 'std 1',
-      keyIndex: -1,
-    },
-    {
-      keyId: 'key1',
-      x: 20,
-      y: 0,
-      r: 0,
-      shape: 'std 1',
-      keyIndex: -1,
-    },
-    {
-      keyId: 'key2',
-      x: 40,
-      y: 0,
-      r: 0,
-      shape: 'ext circle',
-      keyIndex: -1,
-    },
+    // {
+    //   keyId: 'key0',
+    //   x: 0,
+    //   y: 0,
+    //   r: 0,
+    //   shape: 'std 1',
+    //   keyIndex: -1,
+    // },
+    // {
+    //   keyId: 'key1',
+    //   x: 20,
+    //   y: 0,
+    //   r: 0,
+    //   shape: 'std 1',
+    //   keyIndex: -1,
+    // },
+    // {
+    //   keyId: 'key2',
+    //   x: 40,
+    //   y: 0,
+    //   r: 0,
+    //   shape: 'ext circle',
+    //   keyIndex: -1,
+    // },
   ],
 };
 
-function loadKeyboardDesign(
-  source: IPersistentKeyboardDesign
-): IKeyboardDesign {
+export function createDefaultKeyboardDesign(): IKeyboardDesign {
+  const source = initialDesignSource;
   let cnt = 0;
   return {
     placementUnit: source.placementUnit,
@@ -57,6 +56,23 @@ function loadKeyboardDesign(
       })
     ),
   };
+}
+
+function loadKeyboardDesignOrDefault(): IKeyboardDesign {
+  const text = localStorage.getItem('savedDesign');
+  if (text) {
+    const obj = JSON.parse(text);
+    return obj;
+  } else {
+    return createDefaultKeyboardDesign();
+  }
+}
+
+export function saveEditKeyboardDesign() {
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  const obj = appState.editor.design;
+  const text = JSON.stringify(obj);
+  localStorage.setItem('savedDesign', text);
 }
 
 export type IEditorTarget = 'key' | 'outline';
@@ -99,7 +115,7 @@ interface IAppState {
 
 export const appState: IAppState = {
   editor: {
-    design: loadKeyboardDesign(initialDesign),
+    design: loadKeyboardDesignOrDefault(),
     currentkeyEntityId: undefined,
     currentPointIndex: -1,
     editorTarget: 'key',

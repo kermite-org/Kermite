@@ -1,6 +1,7 @@
 import { clamp } from '~/base/utils';
 import {
   appState,
+  createDefaultKeyboardDesign,
   IEditMode,
   IEditorTarget,
   IModeState,
@@ -230,6 +231,12 @@ export const editMutations = new (class {
       const scaleDiff = newScale - oldScale;
       sight.pos.x -= px * scaleDiff;
       sight.pos.y -= py * scaleDiff;
+    });
+  }
+
+  resetKeyboardDesign() {
+    editUpdator.patchEditor((editor) => {
+      editor.design = createDefaultKeyboardDesign();
     });
   }
 })();

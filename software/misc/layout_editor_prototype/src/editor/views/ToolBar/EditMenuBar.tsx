@@ -45,6 +45,7 @@ export const EditMenuBar = () => {
     vmSnapDivision,
     vmShowConfig,
     canSelectEditMode,
+    resetKeyboardDesign,
   } = makeEditMenuBarViewModel();
 
   return (
@@ -98,6 +99,10 @@ export const EditMenuBar = () => {
           choiceId={vmSnapDivision.choiceId}
           setChoiceId={vmSnapDivision.setChoiceId}
         />
+      </div>
+
+      <div>
+        <button onClick={resetKeyboardDesign}>reset</button>
       </div>
 
       <div class="spacer" />
