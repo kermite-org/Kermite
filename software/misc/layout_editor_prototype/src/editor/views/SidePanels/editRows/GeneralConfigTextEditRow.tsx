@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { reflectValue } from '~/base/FormHelpers';
 import { styleWidthSpec } from '~/base/ViewHelpers';
-import { IConfigTextEditModel } from '~/editor/viewModels/ConfigTextEditModel';
+import { IConfigTextEditModel } from '~/editor/views/SidePanels/commonViewModels/ConfigTextEditModel';
 import { h } from '~/qx';
 
 const cssEditRow = css`

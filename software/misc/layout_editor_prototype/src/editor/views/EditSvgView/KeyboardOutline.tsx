@@ -2,7 +2,7 @@ import { css } from 'goober';
 import { makeCssColor } from '~/base/ColorHelper';
 import { IPosition, startDragSession } from '~/base/UiInteractionHelpers';
 import { uiTheme } from '~/base/uiTheme';
-import { editMutations, editReader } from '~/editor/models';
+import { editMutations, editReader } from '~/editor/store';
 import { h, rerender } from '~/qx';
 
 const cssKeyboardOutline = css`

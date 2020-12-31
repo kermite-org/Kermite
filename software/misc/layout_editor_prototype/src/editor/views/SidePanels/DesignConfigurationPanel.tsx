@@ -4,7 +4,7 @@ import { ExclusiveButtonGroup } from '~/controls';
 import {
   makePlacementUnitEditRowViewModel,
   makeSizeUnitSelectorViewModel,
-} from '~/editor/views/SidePanels/ConfigPanel.model';
+} from '~/editor/views/SidePanels/DesignConfigurationPanel.model';
 import { h } from '~/qx';
 
 const cssUnitEditPart = css`
@@ -51,7 +51,7 @@ const PlacementUnitEditPart = () => {
   );
 };
 
-const SizeUnitPart = () => {
+const SizeUnitEditPart = () => {
   const vm = makeSizeUnitSelectorViewModel();
 
   return (
@@ -64,8 +64,8 @@ const SizeUnitPart = () => {
   );
 };
 
-export const ConfigPanel = () => {
-  const cssConfigPanel = css`
+export const DesignConfigurationPanel = () => {
+  const cssDesignConfigurationPanel = css`
     padding: 10px;
 
     > * + * {
@@ -74,9 +74,9 @@ export const ConfigPanel = () => {
   `;
 
   return (
-    <div css={cssConfigPanel}>
+    <div css={cssDesignConfigurationPanel}>
       <PlacementUnitEditPart />
-      <SizeUnitPart />
+      <SizeUnitEditPart />
     </div>
   );
 };

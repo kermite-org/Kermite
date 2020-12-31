@@ -3,7 +3,7 @@ import {
   IKeyboardDesign,
   IKeyEntity,
   IPersistentKeyboardDesign,
-} from '~/editor/models/DataSchema';
+} from '~/editor/store/DataSchema';
 
 const initialDesign: IPersistentKeyboardDesign = {
   placementUnit: 'mm',

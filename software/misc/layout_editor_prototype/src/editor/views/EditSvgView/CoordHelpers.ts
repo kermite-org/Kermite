@@ -1,4 +1,4 @@
-import { editReader } from '~/editor/models';
+import { editReader } from '~/editor/store';
 
 export function screenToWorld(sx: number, sy: number) {
   const { sight } = editReader;

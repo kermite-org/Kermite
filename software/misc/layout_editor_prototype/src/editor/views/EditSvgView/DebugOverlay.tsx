@@ -1,5 +1,5 @@
 import { css } from 'goober';
-import { appState } from '~/editor/models';
+import { appState } from '~/editor/store';
 import { h } from '~/qx';
 
 export const DebugOverlay = () => {

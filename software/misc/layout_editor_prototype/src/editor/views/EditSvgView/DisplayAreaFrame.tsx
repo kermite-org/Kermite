@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { makeCssColor } from '~/base/ColorHelper';
-import { editReader } from '~/editor/models';
+import { editReader } from '~/editor/store';
 import { h } from '~/qx';
 
 const cssDisplayAreaFrame = css`

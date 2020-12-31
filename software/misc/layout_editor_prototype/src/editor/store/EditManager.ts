@@ -1,4 +1,4 @@
-import { appState, IEditState } from '~/editor/models/AppState';
+import { appState, IEditState } from '~/editor/store/AppState';
 
 interface IModification {
   oldState: IEditState;

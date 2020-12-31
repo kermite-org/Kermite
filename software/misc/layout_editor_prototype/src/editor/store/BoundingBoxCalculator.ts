@@ -1,10 +1,10 @@
 import { degToRad } from '~/base/utils';
-import { IKeyboardDesign, IKeySizeUnit } from '~/editor/models/DataSchema';
+import { IKeyboardDesign, IKeySizeUnit } from '~/editor/store/DataSchema';
 import {
   getCoordUnitFromUnitSpec,
   getStdKeySize,
   ICoordUnit,
-} from '~/editor/models/PlacementUnitHelper';
+} from '~/editor/store/PlacementUnitHelper';
 
 function getKeySize(
   shapeSpec: string,

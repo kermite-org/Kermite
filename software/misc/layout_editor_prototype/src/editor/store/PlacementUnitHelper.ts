@@ -1,5 +1,5 @@
 import { mapObjectValues } from '~/base/utils';
-import { IKeyboardDesign, IKeySizeUnit } from '~/editor/models/DataSchema';
+import { IKeyboardDesign, IKeySizeUnit } from '~/editor/store/DataSchema';
 
 export type ICoordUnit =
   | {

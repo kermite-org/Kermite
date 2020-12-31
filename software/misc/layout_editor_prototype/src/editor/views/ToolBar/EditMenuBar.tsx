@@ -1,6 +1,9 @@
 import { css } from 'goober';
-import { ExclusiveButtonGroup, ToggleButton } from '~/controls';
-import { GeneralSelector } from '~/controls/GeneralSelector';
+import {
+  ExclusiveButtonGroup,
+  ToggleButton,
+  GeneralSelector,
+} from '~/controls';
 import { makeEditMenuBarViewModel } from '~/editor/views/ToolBar/EditMenuBar.model';
 import { h } from '~/qx';
 

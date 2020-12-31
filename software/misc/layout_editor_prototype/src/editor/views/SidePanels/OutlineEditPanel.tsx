@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { useClosureModel } from '~/base/hooks';
-import { GeneralConfigTextEditRow } from '~/editor/views/SidePanels/GeneralConfigTextEditRow';
 import { createOutlineEditpanelModel } from '~/editor/views/SidePanels/OutlineEditPanel.model';
+import { GeneralConfigTextEditRow } from '~/editor/views/SidePanels/editRows/GeneralConfigTextEditRow';
 import { h } from '~/qx';
 
 const cssSightEditPanel = css`

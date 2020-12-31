@@ -1,13 +1,11 @@
 import { css } from 'goober';
 import { makeCssColor } from '~/base/ColorHelper';
 import { uiTheme } from '~/base/uiTheme';
+import { ISelectOption } from '~/controls/interfaces';
 import { h } from '~/qx';
 
 export interface IExclusiveButtonGroup {
-  options: {
-    id: string;
-    text: string;
-  }[];
+  options: ISelectOption[];
   choiceId: string;
   setChoiceId(key: string): void;
   buttonWidth?: number;

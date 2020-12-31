@@ -1,5 +1,5 @@
-import { editMutations, editReader } from '~/editor/models';
-import { ConfigTextEditModelDynamic } from '~/editor/viewModels/ConfigTextEditModel';
+import { editMutations, editReader } from '~/editor/store';
+import { ConfigTextEditModelDynamic } from '~/editor/views/SidePanels/commonViewModels/ConfigTextEditModel';
 
 export function createOutlineEditpanelModel() {
   const patterns = [/^-?[0-9.]+$/];

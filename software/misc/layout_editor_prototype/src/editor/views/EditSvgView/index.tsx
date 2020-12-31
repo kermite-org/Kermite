@@ -1,5 +1,5 @@
 import { css } from 'goober';
-import { editMutations, editReader } from '~/editor/models';
+import { editMutations, editReader } from '~/editor/store';
 import { DebugOverlay } from '~/editor/views/EditSvgView/DebugOverlay';
 import { h, Hook } from '~/qx';
 import { EditSvgView } from './EditSvgView';

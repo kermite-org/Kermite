@@ -3,7 +3,7 @@ import {
   IPosition,
   startDragSession,
 } from '~/base/UiInteractionHelpers';
-import { editMutations, editReader } from '~/editor/models';
+import { editMutations, editReader } from '~/editor/store';
 import { screenToWorld } from '~/editor/views/EditSvgView/CoordHelpers';
 import { DisplayAreaFrame } from '~/editor/views/EditSvgView/DisplayAreaFrame';
 import { FieldAxis, FieldGrid } from '~/editor/views/EditSvgView/FieldParts';

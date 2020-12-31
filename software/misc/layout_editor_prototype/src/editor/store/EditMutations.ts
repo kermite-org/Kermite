@@ -1,18 +1,18 @@
 import { clamp } from '~/base/utils';
-import { IEditMode, IEditorTarget, IModeState } from '~/editor/models/AppState';
+import { IEditMode, IEditorTarget, IModeState } from '~/editor/store/AppState';
 import {
   IEditPropKey,
   IKeyEntity,
   IKeySizeUnit,
-} from '~/editor/models/DataSchema';
-import { editReader } from '~/editor/models/EditReader';
-import { editUpdator } from '~/editor/models/EditUpdator';
+} from '~/editor/store/DataSchema';
+import { editReader } from '~/editor/store/EditReader';
+import { editUpdator } from '~/editor/store/EditUpdator';
 import {
   changeKeySizeUnit,
   changePlacementCoordUnit,
   mmToUnitValue,
   unitValueToMm,
-} from '~/editor/models/PlacementUnitHelper';
+} from '~/editor/store/PlacementUnitHelper';
 
 export const editMutations = new (class {
   startEdit = () => {

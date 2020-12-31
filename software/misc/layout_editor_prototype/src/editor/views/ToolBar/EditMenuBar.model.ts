@@ -4,7 +4,7 @@ import {
   editMutations,
   editReader,
   IModeState,
-} from '~/editor/models';
+} from '~/editor/store';
 
 function createModeSelectionViewModel<K extends 'editorTarget' | 'editMode'>(
   targetKey: K,

@@ -3,11 +3,11 @@ import {
   editReader,
   IEditPropKey,
   IKeyEntity,
-} from '~/editor/models';
+} from '~/editor/store';
 import {
   AttributeSlotModel,
   IAttributeSlotSource,
-} from '~/editor/viewModels/AttributeSlotModel';
+} from '~/editor/views/SidePanels/commonViewModels/AttributeSlotModel';
 
 const slotSources: IAttributeSlotSource<IKeyEntity, IEditPropKey>[] = [
   {
@@ -161,7 +161,7 @@ interface IPropertyPanelModel {
 
 const keyEntityAttrsModel = new KeyEntityAttrsEditorModel();
 
-export function usePropertyPanelModel(): IPropertyPanelModel {
+export function useKeyEntityEditPanelModel(): IPropertyPanelModel {
   const model = keyEntityAttrsModel;
   model.update();
   return {

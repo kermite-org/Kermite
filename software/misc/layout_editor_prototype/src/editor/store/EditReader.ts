@@ -1,11 +1,11 @@
-import { appState, IModeState } from '~/editor/models/AppState';
-import { getKeyboardDesignBoundingBox } from '~/editor/models/BoundingBoxCalculator';
-import { IKeyEntity } from '~/editor/models/DataSchema';
-import { createSimpleSelector } from '~/editor/models/ModelUtils';
+import { appState, IModeState } from '~/editor/store/AppState';
+import { getKeyboardDesignBoundingBox } from '~/editor/store/BoundingBoxCalculator';
+import { IKeyEntity } from '~/editor/store/DataSchema';
 import {
   getCoordUnitFromUnitSpec,
   ICoordUnit,
-} from '~/editor/models/PlacementUnitHelper';
+} from '~/editor/store/PlacementUnitHelper';
+import { createSimpleSelector } from '~/editor/store/StoreUtils';
 
 export const editReader = new (class {
   get editorTarget() {

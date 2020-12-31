@@ -1,16 +1,20 @@
 import { css } from 'goober';
 import { IPosition, startDragSession } from '~/base/UiInteractionHelpers';
-import { editMutations, editReader, IKeyEntity } from '~/editor/models';
+import { editMutations, editReader, IKeyEntity } from '~/editor/store';
 import {
   getStdKeySize,
   unitValueToMm,
-} from '~/editor/models/PlacementUnitHelper';
+} from '~/editor/store/PlacementUnitHelper';
 import { h, rerender } from '~/qx';
 
 export function startKeyEntityDragOperation(e: MouseEvent, useGhost: boolean) {
   const { sight, currentKeyEntity: ck, coordUnit } = editReader;
 
-  const [kx, ky] = unitValueToMm(ck!.x, ck!.y, coordUnit);
+  if (!ck) {
+    return;
+  }
+
+  const [kx, ky] = unitValueToMm(ck.x, ck.y, coordUnit);
   const destPos = { x: kx, y: ky };
 
   const moveCallback = (pos: IPosition, prevPos: IPosition) => {
