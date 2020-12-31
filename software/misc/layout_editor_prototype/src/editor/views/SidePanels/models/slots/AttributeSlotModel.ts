@@ -7,6 +7,16 @@ export interface IAttributeSlotSource<T, K extends keyof T> {
   writer(text: string): T[K];
 }
 
+export interface IAttributeSlotViewModel {
+  editText: string;
+  valid: boolean;
+  disabled: boolean;
+  onValueChanged(text: string): void;
+  onFocus(): void;
+  onBlur(): void;
+  label: string;
+  unit: string;
+}
 export class AttributeSlotModel<T, K extends keyof T = keyof T> {
   private _originalValue: T[K] | undefined;
   private _editText: string = '';
@@ -96,4 +106,17 @@ export class AttributeSlotModel<T, K extends keyof T = keyof T> {
     this.resetEditText();
     this._hasFocus = false;
   };
+
+  emitViewModel(): IAttributeSlotViewModel {
+    return {
+      editText: this.editText,
+      valid: !this.hasError,
+      disabled: !this.canEdit,
+      onValueChanged: this.setEditText,
+      onFocus: this.onFocus,
+      onBlur: this.onBlur,
+      label: this.label,
+      unit: this.unit,
+    };
+  }
 }

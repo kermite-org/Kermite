@@ -1,24 +1,17 @@
 import { css } from 'goober';
+import { GeneralConfigTextEditRow } from '~/editor/views/SidePanels/controls/GeneralConfigTextEditRow';
 import { useKeyEntityEditPanelModel } from '~/editor/views/SidePanels/models/KeyEntityEditPanel.model';
 import { h } from '~/qx';
-import { DesignAttributeTextInputRow } from '../controls/DesignAttributeTextInputRow';
 
 const cssKeyEntityEditPanel = css`
   padding: 10px;
-  label {
-    display: inline-block;
-    width: 80px;
-  }
-  input {
-    width: 60px;
-  }
-
   > .content {
     margin-left: 10px;
 
     > .errorZone {
       > .errorText {
         color: red;
+        font-size: 14px;
       }
     }
   }
@@ -31,8 +24,13 @@ export const KeyEntityEditPanel = () => {
       <div>key properties</div>
       <div class="content">
         <div className="editZone">
-          {vm.slots.map((slot) => (
-            <DesignAttributeTextInputRow key={slot.propKey} model={slot} />
+          {vm.slots.map((slot, index) => (
+            <GeneralConfigTextEditRow
+              key={index}
+              {...slot}
+              labelWidth={80}
+              inputWidth={60}
+            />
           ))}
         </div>
         <div qxIf={!!vm.errorText} className="errorZone">

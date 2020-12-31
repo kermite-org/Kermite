@@ -7,7 +7,9 @@ import {
 import {
   AttributeSlotModel,
   IAttributeSlotSource,
+  IAttributeSlotViewModel,
 } from '~/editor/views/SidePanels/models/slots/AttributeSlotModel';
+import { Hook } from '~/qx';
 
 const slotSources: IAttributeSlotSource<IKeyEntity, IEditPropKey>[] = [
   {
@@ -140,18 +142,6 @@ class KeyEntityAttrsEditorModel {
 // M
 // ----
 // VM
-
-interface IAttributeSlotViewModel {
-  propKey: string;
-  label: string;
-  unit: string;
-  editText: string;
-  setEditText(text: string): void;
-  hasError: boolean;
-  onFocus(): void;
-  onBlur(): void;
-  canEdit: boolean;
-}
 interface IPropertyPanelModel {
   keyEntityAttrsVm: {
     slots: IAttributeSlotViewModel[];
@@ -159,14 +149,12 @@ interface IPropertyPanelModel {
   };
 }
 
-const keyEntityAttrsModel = new KeyEntityAttrsEditorModel();
-
 export function useKeyEntityEditPanelModel(): IPropertyPanelModel {
-  const model = keyEntityAttrsModel;
+  const model = Hook.useMemo(() => new KeyEntityAttrsEditorModel(), []);
   model.update();
   return {
     keyEntityAttrsVm: {
-      slots: model.allSlots,
+      slots: model.allSlots.map((slot) => slot.emitViewModel()),
       errorText: model.errorText,
     },
   };
