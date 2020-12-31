@@ -1,5 +1,10 @@
 import { clamp } from '~/base/utils';
-import { IEditMode, IEditorTarget, IModeState } from '~/editor/store/AppState';
+import {
+  appState,
+  IEditMode,
+  IEditorTarget,
+  IModeState,
+} from '~/editor/store/AppState';
 import {
   IEditPropKey,
   IKeyEntity,
@@ -61,6 +66,25 @@ export const editMutations = new (class {
       editor.design.keyEntities[id] = keyEntity;
       editor.currentkeyEntityId = id;
     });
+  }
+
+  deleteCurrentKeyEntity() {
+    const { currentkeyEntityId } = appState.editor;
+    if (currentkeyEntityId) {
+      editUpdator.commitEditor((editor) => {
+        delete editor.design.keyEntities[currentkeyEntityId];
+        editor.currentkeyEntityId = undefined;
+      });
+    }
+  }
+
+  deleteCurrentOutlinePoint() {
+    const idx = editReader.currentPointIndex;
+    if (idx !== -1) {
+      editUpdator.commitEditor((editor) => {
+        editor.design.outlinePoints.splice(idx, 1);
+      });
+    }
   }
 
   addOutlinePoint(x: number, y: number) {
