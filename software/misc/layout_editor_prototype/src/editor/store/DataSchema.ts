@@ -1,4 +1,6 @@
 export type IKeySizeUnit = 'mm' | 'KP';
+
+export type IKeyPlacementAnchor = 'topLeft' | 'center';
 export interface IPersistentKeyEntity {
   keyId: string;
   x: number;
@@ -12,6 +14,7 @@ export type IPersistOutlinePoint = [x: number, y: number];
 
 export interface IPersistentKeyboardDesign {
   placementUnit: string;
+  placementAnchor: IKeyPlacementAnchor;
   keySizeUnit: IKeySizeUnit;
   outlinePoints: IPersistOutlinePoint[];
   keyEntities: IPersistentKeyEntity[];
@@ -29,6 +32,7 @@ export type IOutlinePoint = { x: number; y: number };
 
 export interface IKeyboardDesign {
   placementUnit: string; // `mm` | `KP ${baseKeyPitch}`
+  placementAnchor: IKeyPlacementAnchor;
   keySizeUnit: IKeySizeUnit; // 'mm' | 'KP'
   outlinePoints: IOutlinePoint[];
   keyEntities: { [id: string]: IKeyEntity };

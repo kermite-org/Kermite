@@ -7,6 +7,7 @@ import {
 
 const initialDesignSource: IPersistentKeyboardDesign = {
   placementUnit: 'mm',
+  placementAnchor: 'center',
   keySizeUnit: 'KP',
   outlinePoints: [
     [80, -40],
@@ -47,6 +48,7 @@ export function createDefaultKeyboardDesign(): IKeyboardDesign {
   let cnt = 0;
   return {
     placementUnit: source.placementUnit,
+    placementAnchor: source.placementAnchor,
     keySizeUnit: source.keySizeUnit,
     outlinePoints: source.outlinePoints.map(([x, y]) => ({ x, y })),
     keyEntities: createDictionaryFromKeyValues(
@@ -61,7 +63,10 @@ export function createDefaultKeyboardDesign(): IKeyboardDesign {
 function loadKeyboardDesignOrDefault(): IKeyboardDesign {
   const text = localStorage.getItem('savedDesign');
   if (text) {
-    const obj = JSON.parse(text);
+    const obj = JSON.parse(text) as IKeyboardDesign;
+    if (!obj.placementAnchor) {
+      obj.placementAnchor = 'center';
+    }
     return obj;
   } else {
     return createDefaultKeyboardDesign();
