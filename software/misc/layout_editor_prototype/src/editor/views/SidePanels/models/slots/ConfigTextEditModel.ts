@@ -8,6 +8,49 @@ export interface IConfigTextEditModel {
   update(sourceText: string | undefined): void;
 }
 
+// reflect edit value to model on blur
+export function createConfigTextEditModel(
+  patterns: RegExp[],
+  textOutputFunc: (text: string) => void
+): IConfigTextEditModel {
+  let originalText: string | undefined;
+  let editText: string = '';
+  let valid: boolean = true;
+  return {
+    get editText() {
+      return editText;
+    },
+    get valid() {
+      return valid;
+    },
+    get disabled() {
+      return originalText === undefined;
+    },
+    onFocus() {},
+    onValueChanged(text: string) {
+      editText = text;
+      valid = patterns.some((p) => text.match(p));
+    },
+    onBlur() {
+      if (valid) {
+        textOutputFunc(editText);
+      } else {
+        editText = originalText || '';
+        valid = true;
+      }
+    },
+    update(sourceText: string | undefined) {
+      if (originalText !== sourceText) {
+        originalText = sourceText;
+        editText = originalText || '';
+        valid = true;
+      }
+    },
+  };
+}
+
+/*
+//class version
 export class ConfigTextEditModel implements IConfigTextEditModel {
   originalValue: string | undefined;
   editText: string = '';
@@ -46,8 +89,58 @@ export class ConfigTextEditModel implements IConfigTextEditModel {
     }
   }
 }
+*/
+
+// reflect edit value to model on each type
+export function createConfigTextEditModelDynamic(
+  patterns: RegExp[],
+  procStartEdit: () => void,
+  procEmitValidText: (text: string) => void,
+  procEndEdit: () => void
+): IConfigTextEditModel {
+  let originalText: string | undefined;
+  let editText: string = '';
+  let valid: boolean = true;
+  return {
+    get editText() {
+      return editText;
+    },
+    get valid() {
+      return valid;
+    },
+    get disabled() {
+      return originalText === undefined;
+    },
+    onValueChanged(text: string) {
+      editText = text;
+      valid = patterns.some((p) => text.match(p));
+      if (valid) {
+        originalText = editText;
+        procEmitValidText(editText);
+      }
+    },
+    onFocus() {
+      procStartEdit();
+    },
+    onBlur() {
+      procEndEdit();
+      if (!valid) {
+        editText = originalText || '';
+        valid = true;
+      }
+    },
+    update(sourceText: string | undefined) {
+      if (originalText !== sourceText) {
+        originalText = sourceText;
+        editText = originalText || '';
+        valid = true;
+      }
+    },
+  };
+}
 
 /*
+//class version
 export class ConfigTextEditModelDynamic implements IConfigTextEditModel {
   originalValue: string | undefined;
   _editText: string = '';
@@ -98,51 +191,3 @@ export class ConfigTextEditModelDynamic implements IConfigTextEditModel {
   };
 }
 */
-
-// closure version
-export function createConfigTextEditModelDynamic(
-  patterns: RegExp[],
-  procStartEdit: () => void,
-  procEmitValidText: (text: string) => void,
-  procEndEdit: () => void
-): IConfigTextEditModel {
-  let originalText: string | undefined;
-  let editText: string = '';
-  let valid: boolean = true;
-  return {
-    get editText() {
-      return editText;
-    },
-    get valid() {
-      return valid;
-    },
-    get disabled() {
-      return originalText === undefined;
-    },
-    onValueChanged(text: string) {
-      editText = text;
-      valid = patterns.some((p) => text.match(p));
-      if (valid) {
-        originalText = editText;
-        procEmitValidText(editText);
-      }
-    },
-    onFocus() {
-      procStartEdit();
-    },
-    onBlur() {
-      procEndEdit();
-      if (!valid) {
-        editText = originalText || '';
-        valid = true;
-      }
-    },
-    update(sourceText: string | undefined) {
-      if (originalText !== sourceText) {
-        originalText = sourceText;
-        editText = originalText || '';
-        valid = true;
-      }
-    },
-  };
-}

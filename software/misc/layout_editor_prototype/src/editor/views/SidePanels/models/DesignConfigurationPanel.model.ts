@@ -1,8 +1,20 @@
 import { ICommonSelectorViewModel } from '~/controls';
 import { editMutations, editReader, IKeySizeUnit } from '~/editor/store';
-import { ConfigTextEditModel } from '~/editor/views/SidePanels/models/slots/ConfigTextEditModel';
+import {
+  createConfigTextEditModel,
+  IConfigTextEditModel,
+} from '~/editor/views/SidePanels/models/slots/ConfigTextEditModel';
+import { Hook } from '~/qx';
 
-function getUnitInputTextFromModel() {
+const makePlacementUnitTextModel = (): IConfigTextEditModel =>
+  createConfigTextEditModel(
+    [/^[0-9][0-9.]*$/, /^[0-9][0-9.]* [0-9][0-9.]*$/],
+    (text) => {
+      editMutations.setPlacementUnit(`KP ${text}`);
+    }
+  );
+
+function getPlacementUnitInputTextFromModel(): string | undefined {
   const mode = editReader.coordUnitSuffix;
   if (mode === 'KP') {
     return editReader.design.placementUnit.replace('KP ', '');
@@ -10,7 +22,7 @@ function getUnitInputTextFromModel() {
   return undefined;
 }
 
-function makeUnitModeSelectorViewModel(): ICommonSelectorViewModel {
+function makePlacementUnitModeModel(): ICommonSelectorViewModel {
   const options = ['mm', 'KP'].map((v) => ({
     id: v,
     text: v,
@@ -28,25 +40,7 @@ function makeUnitModeSelectorViewModel(): ICommonSelectorViewModel {
   };
 }
 
-const vmUnitInput = new ConfigTextEditModel(
-  [/^[0-9][0-9.]*$/, /^[0-9][0-9.]* [0-9][0-9.]*$/],
-  (text) => {
-    editMutations.setPlacementUnit(`KP ${text}`);
-  }
-);
-
-export function makePlacementUnitEditRowViewModel() {
-  const vmUnitMode = makeUnitModeSelectorViewModel();
-  const unitInputText = getUnitInputTextFromModel();
-  vmUnitInput.update(unitInputText);
-
-  return {
-    vmUnitMode,
-    vmUnitInput,
-  };
-}
-
-export function makeSizeUnitSelectorViewModel(): ICommonSelectorViewModel {
+function makeSizeUnitModeModel(): ICommonSelectorViewModel {
   const options = ['KP', 'mm'].map((v) => ({
     id: v,
     text: v === 'KP' ? 'U' : v,
@@ -60,5 +54,20 @@ export function makeSizeUnitSelectorViewModel(): ICommonSelectorViewModel {
     options,
     choiceId,
     setChoiceId,
+  };
+}
+
+export function useDesignConfigurationPanelModel() {
+  const vmPlacementUnitText = Hook.useMemo(makePlacementUnitTextModel, []);
+  const unitInputText = getPlacementUnitInputTextFromModel();
+  vmPlacementUnitText.update(unitInputText);
+
+  const vmPlacementUnitMode = makePlacementUnitModeModel();
+  const vmSizeUnitMode = makeSizeUnitModeModel();
+
+  return {
+    vmPlacementUnitMode,
+    vmPlacementUnitText,
+    vmSizeUnitMode,
   };
 }

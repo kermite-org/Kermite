@@ -1,10 +1,8 @@
 import { css } from 'goober';
-import { reflectValue } from '~/base/FormHelpers';
-import { ExclusiveButtonGroup } from '~/controls';
-import {
-  makePlacementUnitEditRowViewModel,
-  makeSizeUnitSelectorViewModel,
-} from '~/editor/views/SidePanels/models/DesignConfigurationPanel.model';
+import { ExclusiveButtonGroup, ICommonSelectorViewModel } from '~/controls';
+import { GeneralConfigTextEditRow } from '~/editor/views/SidePanels/controls/GeneralConfigTextEditRow';
+import { useDesignConfigurationPanelModel } from '~/editor/views/SidePanels/models/DesignConfigurationPanel.model';
+import { IConfigTextEditModel } from '~/editor/views/SidePanels/models/slots/ConfigTextEditModel';
 import { h } from '~/qx';
 
 const cssUnitEditPart = css`
@@ -17,48 +15,54 @@ const cssUnitEditPart = css`
     display: flex;
     align-items: center;
 
-    > input {
-      width: 90px;
+    > * + * {
       margin-left: 4px;
     }
   }
   > .errorRow {
     color: red;
+    font-size: 14px;
   }
 `;
 
-const PlacementUnitEditPart = () => {
-  const { vmUnitInput, vmUnitMode } = makePlacementUnitEditRowViewModel();
+const PlacementUnitEditPart = (props: {
+  vmPlacementUnitMode: ICommonSelectorViewModel;
+  vmPlacementUnitText: IConfigTextEditModel;
+}) => {
+  const {
+    vmPlacementUnitMode: vmUnitMode,
+    vmPlacementUnitText: vmUnitText,
+  } = props;
 
   return (
     <div css={cssUnitEditPart}>
       <div className="headerRow">key alignment unit</div>
       <div className="editRow">
         <ExclusiveButtonGroup {...vmUnitMode} buttonWidth={40} />
-        <input
-          type="text"
-          value={vmUnitInput.editText}
-          onInput={reflectValue(vmUnitInput.onValueChanged)}
-          onBlur={vmUnitInput.onBlur}
-          disabled={vmUnitInput.disabled}
+        <GeneralConfigTextEditRow
+          {...vmUnitText}
+          label=""
+          labelWidth={0}
+          inputWidth={90}
+          unit="mm"
         />
-        <span>mm</span>
       </div>
       <div className="errorRow">
-        {!vmUnitInput.valid && 'invalid keypitch specificaion'}
+        {!vmUnitText.valid && 'invalid keypitch specificaion'}
       </div>
     </div>
   );
 };
 
-const SizeUnitEditPart = () => {
-  const vm = makeSizeUnitSelectorViewModel();
-
+const SizeUnitEditPart = (props: {
+  vmUnitSizeMode: ICommonSelectorViewModel;
+}) => {
+  const { vmUnitSizeMode } = props;
   return (
     <div css={cssUnitEditPart}>
       <div className="headerRow">key size unit</div>
       <div className="editRow">
-        <ExclusiveButtonGroup {...vm} buttonWidth={40} />
+        <ExclusiveButtonGroup {...vmUnitSizeMode} buttonWidth={40} />
       </div>
     </div>
   );
@@ -67,16 +71,24 @@ const SizeUnitEditPart = () => {
 export const DesignConfigurationPanel = () => {
   const cssDesignConfigurationPanel = css`
     padding: 10px;
-
     > * + * {
       margin-top: 10px;
     }
   `;
 
+  const {
+    vmPlacementUnitMode,
+    vmPlacementUnitText,
+    vmSizeUnitMode,
+  } = useDesignConfigurationPanelModel();
+
   return (
     <div css={cssDesignConfigurationPanel}>
-      <PlacementUnitEditPart />
-      <SizeUnitEditPart />
+      <PlacementUnitEditPart
+        vmPlacementUnitMode={vmPlacementUnitMode}
+        vmPlacementUnitText={vmPlacementUnitText}
+      />
+      <SizeUnitEditPart vmUnitSizeMode={vmSizeUnitMode} />
     </div>
   );
 };
