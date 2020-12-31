@@ -1,6 +1,6 @@
 import { ICommonSelectorViewModel } from '~/controls';
 import { editMutations, editReader, IKeySizeUnit } from '~/editor/store';
-import { ConfigTextEditModel } from '~/editor/views/SidePanels/commonViewModels/ConfigTextEditModel';
+import { ConfigTextEditModel } from '~/editor/views/SidePanels/models/slots/ConfigTextEditModel';
 
 function getUnitInputTextFromModel() {
   const mode = editReader.coordUnitSuffix;

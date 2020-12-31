@@ -1,7 +1,7 @@
 import { css } from 'goober';
-import { useKeyEntityEditPanelModel } from '~/editor/views/SidePanels/KeyEntityEditPanel.model';
+import { useKeyEntityEditPanelModel } from '~/editor/views/SidePanels/models/KeyEntityEditPanel.model';
 import { h } from '~/qx';
-import { DesignAttributeTextInputRow } from './editRows/DesignAttributeTextInputRow';
+import { DesignAttributeTextInputRow } from '../controls/DesignAttributeTextInputRow';
 
 const cssKeyEntityEditPanel = css`
   padding: 10px;
@@ -25,7 +25,7 @@ const cssKeyEntityEditPanel = css`
 `;
 
 export const KeyEntityEditPanel = () => {
-  const vm = useKeyEntityEditPanelModel().keyEntityAttrsVm;
+  const { keyEntityAttrsVm: vm } = useKeyEntityEditPanelModel();
   return (
     <div css={cssKeyEntityEditPanel}>
       <div>key properties</div>

@@ -1,7 +1,7 @@
 import { editReader } from '~/editor/store';
-import { DesignConfigurationPanel } from '~/editor/views/SidePanels/DesignConfigurationPanel';
-import { KeyEntityEditPanel } from '~/editor/views/SidePanels/KeyEntityEditPanel';
-import { OutlineEditPanel } from '~/editor/views/SidePanels/OutlineEditPanel';
+import { DesignConfigurationPanel } from '~/editor/views/SidePanels/organisms/DesignConfigurationPanel';
+import { KeyEntityEditPanel } from '~/editor/views/SidePanels/organisms/KeyEntityEditPanel';
+import { OutlineEditPanel } from '~/editor/views/SidePanels/organisms/OutlineEditPanel';
 import { h } from '~/qx';
 
 function getPanelContentComponent() {

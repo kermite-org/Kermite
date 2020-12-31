@@ -7,7 +7,7 @@ import {
 import {
   AttributeSlotModel,
   IAttributeSlotSource,
-} from '~/editor/views/SidePanels/commonViewModels/AttributeSlotModel';
+} from '~/editor/views/SidePanels/models/slots/AttributeSlotModel';
 
 const slotSources: IAttributeSlotSource<IKeyEntity, IEditPropKey>[] = [
   {

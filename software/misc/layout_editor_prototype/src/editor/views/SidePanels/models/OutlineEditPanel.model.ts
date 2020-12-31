@@ -2,7 +2,7 @@ import { editMutations, editReader } from '~/editor/store';
 import {
   createConfigTextEditModelDynamic,
   IConfigTextEditModel,
-} from '~/editor/views/SidePanels/commonViewModels/ConfigTextEditModel';
+} from '~/editor/views/SidePanels/models/slots/ConfigTextEditModel';
 
 export function createOutlineEditpanelModel(): () => {
   vmX: IConfigTextEditModel;

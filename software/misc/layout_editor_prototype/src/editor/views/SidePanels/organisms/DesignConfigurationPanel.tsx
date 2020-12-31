@@ -4,7 +4,7 @@ import { ExclusiveButtonGroup } from '~/controls';
 import {
   makePlacementUnitEditRowViewModel,
   makeSizeUnitSelectorViewModel,
-} from '~/editor/views/SidePanels/DesignConfigurationPanel.model';
+} from '~/editor/views/SidePanels/models/DesignConfigurationPanel.model';
 import { h } from '~/qx';
 
 const cssUnitEditPart = css`
