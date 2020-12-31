@@ -22,8 +22,9 @@ const TextInput = (props: {
   const sourceValue = props.value;
   const [editText, setEditText] = Hook.useState(sourceValue);
 
-  Hook.useEffect(() => {
+  Hook.useSideEffect(() => {
     setEditText(sourceValue);
+    return true;
   }, [sourceValue]);
 
   const onChange = () => {

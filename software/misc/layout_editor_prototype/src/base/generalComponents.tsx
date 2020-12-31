@@ -11,8 +11,9 @@ export const TextInput = (props: ITextInputProps) => {
 
   const [editValue, setEditValue] = Hook.useState(sourceValue);
 
-  Hook.useEffect(() => {
+  Hook.useSideEffect(() => {
     setEditValue(sourceValue);
+    return true;
   }, [sourceValue]);
 
   const onChange = () => {

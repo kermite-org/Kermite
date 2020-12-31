@@ -4,7 +4,7 @@ const PageRoot = () => {
   console.log(`render`);
   console.log('aa');
 
-  Hook.useEffect(() => {
+  Hook.useSideEffect(() => {
     console.log('bb');
     const el = document.getElementById('domHello');
     console.log({ el });

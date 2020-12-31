@@ -1,18 +1,22 @@
 import { degToRad } from '~/base/utils';
-import { IKeyboardDesign } from '~/editor/models/DataSchema';
+import { IKeyboardDesign, IKeySizeUnit } from '~/editor/models/DataSchema';
 import {
   getCoordUnitFromUnitSpec,
   getStdKeySize,
   ICoordUnit,
 } from '~/editor/models/PlacementUnitHelper';
 
-function getKeySize(shapeSpec: string, coordUnit: ICoordUnit) {
+function getKeySize(
+  shapeSpec: string,
+  coordUnit: ICoordUnit,
+  keySizeUnit: IKeySizeUnit
+) {
   if (shapeSpec === 'ext circle') {
     return [18, 18];
   } else if (shapeSpec === 'ext isoEnter') {
     return [27, 37];
   }
-  return getStdKeySize(shapeSpec, coordUnit);
+  return getStdKeySize(shapeSpec, coordUnit, keySizeUnit);
 }
 
 export function getKeyboardDesignBoundingBox(design: IKeyboardDesign) {
@@ -25,7 +29,7 @@ export function getKeyboardDesignBoundingBox(design: IKeyboardDesign) {
       x *= coordUnit.x;
       y *= coordUnit.y;
     }
-    const [w, h] = getKeySize(ke.shape, coordUnit);
+    const [w, h] = getKeySize(ke.shape, coordUnit, design.keySizeUnit);
     const dx = w / 2;
     const dy = h / 2;
     const theta = degToRad(r);
