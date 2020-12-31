@@ -93,7 +93,9 @@ export const EditSvgView = () => {
       width={sight.screenW}
       height={sight.screenH}
       viewBox={viewBoxSpec}
-      onMouseDown={onSvgMouseDown}
+      // setTimeout: テキスト編集のonBlurが呼ばれる前にonMouseDownが呼ばれ
+      // モデルの内部状態がおかしくなってしまう問題を回避
+      onMouseDown={(e) => setTimeout(() => onSvgMouseDown(e), 1)}
       onWheel={onSvgScroll}
       id="domEditSvg"
     >
