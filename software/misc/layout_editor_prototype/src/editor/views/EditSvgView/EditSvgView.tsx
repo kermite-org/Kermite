@@ -15,7 +15,7 @@ import {
   KeyboardOutline,
   startOutlinePointDragOperation,
 } from '~/editor/views/EditSvgView/KeyboardOutline';
-import { h, rerender } from '~/qx';
+import { h, Hook, rerender } from '~/qx';
 
 function getViewBoxSpec() {
   const { screenW, screenH } = editReader.sight;
@@ -87,6 +87,13 @@ export const EditSvgView = () => {
   const { ghost, showAxis, showGrid, sight } = editReader;
   const viewBoxSpec = getViewBoxSpec();
   const transformSpec = getTransformSpec();
+
+  Hook.useSideEffect(() => {
+    const el = document.getElementById('domEditSvg');
+    if (el) {
+      el.addEventListener('contextmenu', (e) => e.preventDefault());
+    }
+  }, []);
 
   return (
     <svg
