@@ -33,13 +33,6 @@ export const editUpdator = new (class {
     editManager.pushUndoStack(prevState, appState.editor);
   }
 
-  private getEditKeyEntity(editState: IEditState) {
-    if (editState.currentkeyEntityId) {
-      return editState.design.keyEntities[editState.currentkeyEntityId];
-    }
-    return undefined;
-  }
-
   private originalEditState: IEditState | undefined;
 
   startEditSession() {
@@ -55,35 +48,6 @@ export const editUpdator = new (class {
         editManager.pushUndoStack(this.originalEditState, appState.editor);
       }
       this.originalEditState = undefined;
-    }
-  }
-
-  private originalKeyEditState: IEditState | undefined;
-
-  startKeyEditSession(useGhost: boolean) {
-    this.originalKeyEditState = appState.editor;
-    if (useGhost) {
-      this.patchEnvState((env) => {
-        const ke = this.getEditKeyEntity(appState.editor);
-        env.ghost = (ke && { ...ke }) || undefined;
-      });
-    }
-  }
-
-  endKeyEditSession() {
-    if (this.originalKeyEditState) {
-      const ke0 = this.getEditKeyEntity(this.originalKeyEditState);
-      const ke1 = this.getEditKeyEntity(appState.editor);
-      const modified = ke0 !== ke1 && !compareObjectByJsonStringify(ke0, ke1);
-
-      if (modified) {
-        editManager.pushUndoStack(this.originalKeyEditState, appState.editor);
-      }
-
-      this.originalKeyEditState = undefined;
-      this.patchEnvState((env) => {
-        env.ghost = undefined;
-      });
     }
   }
 })();

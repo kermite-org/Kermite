@@ -24,11 +24,22 @@ export const editMutations = new (class {
   };
 
   startKeyEdit = (useGhost: boolean = true) => {
-    editUpdator.startKeyEditSession(useGhost);
+    editUpdator.startEditSession();
+    if (useGhost) {
+      editUpdator.patchEnvState((env) => {
+        const ke = editReader.currentKeyEntity;
+        env.ghost = (ke && { ...ke }) || undefined;
+      });
+    }
   };
 
   endKeyEdit = () => {
-    editUpdator.endKeyEditSession();
+    editUpdator.endEditSession();
+    if (editReader.ghost) {
+      editUpdator.patchEnvState((env) => {
+        env.ghost = undefined;
+      });
+    }
   };
 
   addKeyEntity(px: number, py: number) {
