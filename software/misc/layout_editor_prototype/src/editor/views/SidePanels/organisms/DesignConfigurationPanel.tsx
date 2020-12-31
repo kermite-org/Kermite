@@ -10,7 +10,7 @@ const cssUnitEditPart = css`
   }
 
   > .editRow {
-    margin-top: 5px;
+    margin-top: 4px;
     margin-left: 5px;
     display: flex;
     align-items: center;
@@ -86,7 +86,7 @@ export const DesignConfigurationPanel = () => {
   const cssDesignConfigurationPanel = css`
     padding: 10px;
     > * + * {
-      margin-top: 10px;
+      margin-top: 5px;
     }
   `;
 
