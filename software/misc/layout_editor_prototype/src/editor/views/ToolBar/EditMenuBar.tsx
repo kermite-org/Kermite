@@ -47,6 +47,8 @@ export const EditMenuBar = () => {
     vmShowConfig,
     canSelectEditMode,
     resetKeyboardDesign,
+    vmShowKeyId,
+    vmShowKeyIndex,
   } = makeEditMenuBarViewModel();
 
   return (
@@ -99,6 +101,21 @@ export const EditMenuBar = () => {
           options={vmSnapDivision.options}
           choiceId={vmSnapDivision.choiceId}
           setChoiceId={vmSnapDivision.setChoiceId}
+        />
+      </div>
+
+      <div class="buttonsBox">
+        <ToggleButton
+          text="id"
+          width={45}
+          active={vmShowKeyId.active}
+          setActive={vmShowKeyId.setActive}
+        />
+        <ToggleButton
+          text="index"
+          width={45}
+          active={vmShowKeyIndex.active}
+          setActive={vmShowKeyIndex.setActive}
         />
       </div>
 

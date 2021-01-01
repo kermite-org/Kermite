@@ -3,6 +3,7 @@ import {
   editManager,
   editMutations,
   editReader,
+  IEnvBoolPropKey,
   IModeState,
 } from '~/editor/store';
 
@@ -27,9 +28,7 @@ function createModeSelectionViewModel<K extends 'editorTarget' | 'editMode'>(
   };
 }
 
-function createToggleOptionViewModel<
-  K extends 'showAxis' | 'showGrid' | 'snapToGrid' | 'showConfig'
->(targetKey: K) {
+function createToggleOptionViewModel<K extends IEnvBoolPropKey>(targetKey: K) {
   const active = editReader.getBoolOption(targetKey);
   const setActive = (value: boolean) =>
     editMutations.setBoolOption(targetKey, value);
@@ -79,6 +78,9 @@ export function makeEditMenuBarViewModel() {
 
   const resetKeyboardDesign = () => editMutations.resetKeyboardDesign();
 
+  const vmShowKeyId = createToggleOptionViewModel('showKeyId');
+  const vmShowKeyIndex = createToggleOptionViewModel('showKeyIndex');
+
   return {
     canUndo: editManager.canUndo,
     canRedo: editManager.canRedo,
@@ -93,5 +95,7 @@ export function makeEditMenuBarViewModel() {
     vmShowConfig,
     canSelectEditMode,
     resetKeyboardDesign,
+    vmShowKeyId,
+    vmShowKeyIndex,
   };
 }

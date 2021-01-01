@@ -1,4 +1,4 @@
-import { appState, IModeState } from '~/editor/store/AppState';
+import { appState, IEnvBoolPropKey, IModeState } from '~/editor/store/AppState';
 import { getKeyboardDesignBoundingBox } from '~/editor/store/BoundingBoxCalculator';
 import { IKeyEntity } from '~/editor/store/DataSchema';
 import {
@@ -58,10 +58,8 @@ export const editReader = new (class {
     return appState.editor[fieldKey];
   }
 
-  getBoolOption<
-    K extends 'showAxis' | 'showGrid' | 'snapToGrid' | 'showConfig'
-  >(fieldKey: K) {
-    return appState.env[fieldKey];
+  getBoolOption<K extends IEnvBoolPropKey>(propKey: K) {
+    return appState.env[propKey];
   }
 
   get showAxis() {
@@ -120,5 +118,13 @@ export const editReader = new (class {
 
   get placementAnchor() {
     return appState.editor.design.placementAnchor;
+  }
+
+  get showKeyId() {
+    return appState.env.showKeyId;
+  }
+
+  get showKeyIndex() {
+    return appState.env.showKeyIndex;
   }
 })();

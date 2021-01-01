@@ -112,7 +112,18 @@ export interface IEnvState {
   snapToGrid: boolean;
   snapDivision: number;
   showConfig: boolean;
+  showKeyId: boolean;
+  showKeyIndex: boolean;
 }
+
+export type IEnvBoolPropKey =
+  | 'showAxis'
+  | 'showGrid'
+  | 'snapToGrid'
+  | 'showConfig'
+  | 'showKeyId'
+  | 'showKeyIndex';
+
 interface IAppState {
   editor: IEditState;
   env: IEnvState;
@@ -142,5 +153,7 @@ export const appState: IAppState = {
     snapToGrid: true,
     snapDivision: 4,
     showConfig: true,
+    showKeyId: true,
+    showKeyIndex: true,
   },
 };

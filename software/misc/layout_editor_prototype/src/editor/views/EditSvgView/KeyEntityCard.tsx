@@ -108,12 +108,50 @@ export const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
   const isSelected = ke.id === editReader.currentKeyEntity?.id;
   const isGhost = ke === editReader.ghost;
 
-  const { coordUnit, keySizeUnit, placementAnchor } = editReader;
+  const {
+    coordUnit,
+    keySizeUnit,
+    placementAnchor,
+    showKeyId,
+    showKeyIndex,
+  } = editReader;
 
   const x = coordUnit.mode === 'KP' ? ke.x * coordUnit.x : ke.x;
   const y = coordUnit.mode === 'KP' ? ke.y * coordUnit.y : ke.y;
 
   const d = placementAnchor === 'topLeft' ? 1 : 0;
+
+  const cssText = css`
+    text-anchor: middle;
+    dominant-baseline: central;
+    user-select: none;
+    pointer-events: none;
+    &[data-selected] {
+      fill: #4bb;
+    }
+  `;
+
+  const showBoth = showKeyId && showKeyIndex;
+  const idTexts = (
+    <g transform="scale(0.2)">
+      <text
+        y={showBoth ? -10 : 0}
+        css={cssText}
+        qxIf={showKeyId && !isGhost}
+        data-selected={isSelected}
+      >
+        {ke.keyId}
+      </text>
+      <text
+        y={showBoth ? 10 : 0}
+        css={cssText}
+        qxIf={showKeyIndex && !isGhost}
+        data-selected={isSelected}
+      >
+        {ke.keyIndex === -1 ? '--' : ke.keyIndex}
+      </text>
+    </g>
+  );
 
   if (ke.shape === 'ext circle') {
     const transformSpec = `translate(${x + d * 9.5}, ${y + d * 9.5}) rotate(${
@@ -130,6 +168,7 @@ export const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
           data-ghost={isGhost}
           onMouseDown={onMouseDown}
         />
+        {idTexts}
       </g>
     );
   }
@@ -147,6 +186,7 @@ export const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
           data-ghost={isGhost}
           onMouseDown={onMouseDown}
         />
+        {idTexts}
       </g>
     );
   }
@@ -167,6 +207,7 @@ export const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
         data-ghost={isGhost}
         onMouseDown={onMouseDown}
       />
+      {idTexts}
     </g>
   );
 };
