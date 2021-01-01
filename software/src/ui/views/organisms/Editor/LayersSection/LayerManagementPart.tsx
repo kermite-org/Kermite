@@ -1,7 +1,7 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
 import { ILayerManagementPartViewModel } from '~ui/viewModels/Editor/LayersManagementPartViewModel';
 import { LayerOperationButtton } from '~ui/views/elements/LayerOperationButtton';
+import { h } from '~qx';
 
 export const LayerManagementPart = (props: {
   vm: ILayerManagementPartViewModel;

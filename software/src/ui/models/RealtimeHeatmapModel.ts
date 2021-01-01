@@ -1,4 +1,4 @@
-import { IRealtimeKeyboardEvent } from '~defs/IpcContract';
+import { IRealtimeKeyboardEvent } from '~shared/defs/IpcContract';
 import { IntervalTimerWrapper } from '~shell/services/KeyboardLogic/helpers/IntervalTimerWrapper';
 import { appUi, backendAgent } from '~ui/core';
 import { EditorModel } from '~ui/models/editor/EditorModel';

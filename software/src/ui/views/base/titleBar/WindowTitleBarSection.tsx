@@ -1,9 +1,9 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
 import { uiTheme } from '~ui/core';
 import { makeTitleBarViewModel } from '~ui/viewModels/TitleBarViewModel';
 import { WindowControlButtonsPart } from './WindowControlButtonsPart';
 import { WindowTitlePart } from './WindowTitlePart';
+import { h } from '~qx';
 
 const cssWindowTitleBarSection = css`
   display: flex;

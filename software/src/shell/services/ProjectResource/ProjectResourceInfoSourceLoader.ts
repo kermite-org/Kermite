@@ -1,4 +1,4 @@
-import { IProjectResourceOrigin } from '~defs/ProfileData';
+import { IProjectResourceOrigin } from '~shared/defs/ProfileData';
 import {
   fsExistsSync,
   fspReaddir,
@@ -9,7 +9,7 @@ import {
   pathJoin,
   pathRelative,
   pathResolve
-} from '~funcs/Files';
+} from '~shared/funcs/Files';
 import { appEnv } from '~shell/base/AppEnvironment';
 
 export interface IProjectResourceInfoSource {

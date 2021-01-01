@@ -1,7 +1,7 @@
 import {
   IAssignEntryWithLayerFallback,
   IKeyUnitEntry
-} from '~defs/ProfileData';
+} from '~shared/defs/ProfileData';
 import { Models } from '~ui/models';
 import { getAssignEntryTexts } from '~ui/viewModels/KeyUnitCard/KeyUnitCardViewModelCommon';
 

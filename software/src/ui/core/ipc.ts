@@ -1,6 +1,6 @@
 import { IpcRenderer } from 'electron';
-import { ISynchronousIpcPacket, IBackendAgent } from '~defs/IpcContract';
-import { createXpcRenderer } from '~lib/xpc/xpcRenderer';
+import { ISynchronousIpcPacket, IBackendAgent } from '~shared/defs/IpcContract';
+import { createXpcRenderer } from '~shared/xpc/xpcRenderer';
 import { appUi } from '~ui/core/appUi';
 
 const ipcRenderer: IpcRenderer = (window as any).ipcRenderer;

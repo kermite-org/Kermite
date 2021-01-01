@@ -1,5 +1,4 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
 import { makeProfileManagementPartViewModel } from '~ui/viewModels/ProfileManagementPartViewModel';
 import { makeProfileSelectionMenuPartViewModel } from '~ui/viewModels/ProfileSelectionMenuPartViewModel';
 import { ConfigurationButton } from '~ui/views/controls/ConfigurationButton';
@@ -10,6 +9,7 @@ import {
   LayoutStandardSelector
 } from '~ui/views/organisms/ProfilesSection/ConfigSelectors';
 import { ProfileSelectionMenuPart } from './ProfileSelectionMenu';
+import { h } from '~qx';
 
 const cssProfileManagementPart = css`
   /* background: #024; */

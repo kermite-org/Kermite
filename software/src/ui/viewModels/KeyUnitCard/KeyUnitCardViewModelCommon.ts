@@ -3,8 +3,8 @@ import {
   IAssignOperation,
   ILayer,
   IProfileDataAssigns
-} from '~defs/ProfileData';
-import { VirtualKeyTexts } from '~defs/VirtualKeyTexts';
+} from '~shared/defs/ProfileData';
+import { VirtualKeyTexts } from '~shared/defs/VirtualKeyTexts';
 
 function getAssignOperationText(
   op: IAssignOperation | undefined,

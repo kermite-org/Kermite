@@ -1,4 +1,4 @@
-import { IProfileData } from '~defs/ProfileData';
+import { IProfileData } from '~shared/defs/ProfileData';
 import {
   getAssignEntryTexts,
   getAssignForKeyUnitWithLayerFallback

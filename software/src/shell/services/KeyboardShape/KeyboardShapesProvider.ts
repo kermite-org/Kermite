@@ -1,4 +1,4 @@
-import { IKeyboardShape } from '~defs/ProfileData';
+import { IKeyboardShape } from '~shared/defs/ProfileData';
 import { IProjectResourceInfoProvider } from '~shell/services/serviceInterfaces';
 import { KeyboardLayoutFileLoader } from './KeyboardLayoutFileLoader';
 

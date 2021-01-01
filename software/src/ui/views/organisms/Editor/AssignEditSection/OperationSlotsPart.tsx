@@ -1,9 +1,9 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
 import { IPlainOperationEditCardsViewModel } from '~ui/viewModels/Editor/OperationEditPartViewModel';
 import { IOperationSlotsPartViewModel } from '~ui/viewModels/Editor/OperationSlotsPartViewModel';
 import { OperationCard } from '~ui/views/elements/OperationCard';
 import { OperationSlotCard } from '~ui/views/elements/OperationSlotCard';
+import { h } from '~qx';
 
 const cssOerationSlotsPart = css`
   > * {

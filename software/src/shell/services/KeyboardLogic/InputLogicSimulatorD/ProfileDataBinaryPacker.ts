@@ -1,20 +1,23 @@
-import { IKeyboardLayoutStandard } from '~defs/ConfigTypes';
-import { getHidKeyCodeEx } from '~defs/HidKeyCodes';
+import { IKeyboardLayoutStandard } from '~shared/defs/ConfigTypes';
+import { getHidKeyCodeEx } from '~shared/defs/HidKeyCodes';
 import {
   IProfileData,
   IAssignEntry,
   IAssignOperation,
   LayerInvocationMode
-} from '~defs/ProfileData';
-import { ConfigStorageFormatRevision } from '~defs/Versions';
-import { ModifierVirtualKey, isModifierVirtualKey } from '~defs/VirtualKeys';
+} from '~shared/defs/ProfileData';
+import { ConfigStorageFormatRevision } from '~shared/defs/Versions';
+import {
+  ModifierVirtualKey,
+  isModifierVirtualKey
+} from '~shared/defs/VirtualKeys';
 import {
   createDictionaryFromKeyValues,
   sortOrderBy,
   flattenArray,
   createGroupedArrayByKey,
   duplicateObjectByJsonStringifyParse
-} from '~funcs/Utils';
+} from '~shared/funcs/Utils';
 import {
   writeUint16BE,
   writeUint8

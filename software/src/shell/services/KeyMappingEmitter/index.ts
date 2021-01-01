@@ -1,6 +1,6 @@
-import { IKeyboardLayoutStandard } from '~defs/ConfigTypes';
-import { IProfileData } from '~defs/ProfileData';
-import { delayMs } from '~funcs/Utils';
+import { IKeyboardLayoutStandard } from '~shared/defs/ConfigTypes';
+import { IProfileData } from '~shared/defs/ProfileData';
+import { delayMs } from '~shared/funcs/Utils';
 import { makeKeyAssignsConfigStorageData } from '~shell/services/KeyboardLogic/InputLogicSimulatorD/ProfileDataBinaryPacker';
 import { KeyboardDeviceService } from '../KeyboardDevice';
 import { calcChecksum } from './Helpers';

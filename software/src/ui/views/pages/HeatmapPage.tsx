@@ -1,9 +1,9 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
 import { uiTheme } from '~ui/core';
 import { makeRealtimeHeatmapViewModel } from '~ui/viewModels/RealtimeHeatmapViewModel';
 import { GeneralButton } from '~ui/views/controls/GeneralButton';
 import { HeatmapKeyboardView } from '~ui/views/keyboardSvg/panels/HeatmapKeyboardView';
+import { h } from '~qx';
 
 const cssHeatmapPage = css`
   background: ${uiTheme.colors.clBackground};

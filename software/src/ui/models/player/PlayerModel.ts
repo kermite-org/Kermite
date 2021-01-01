@@ -1,4 +1,4 @@
-import { IRealtimeKeyboardEvent } from '~defs/IpcContract';
+import { IRealtimeKeyboardEvent } from '~shared/defs/IpcContract';
 import { backendAgent } from '~ui/core';
 import { EditorModel } from '../editor/EditorModel';
 

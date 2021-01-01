@@ -1,4 +1,4 @@
-import { ILayer } from '~defs/ProfileData';
+import { ILayer } from '~shared/defs/ProfileData';
 import { models } from '~ui/models';
 
 export interface ILayerListViewModel {

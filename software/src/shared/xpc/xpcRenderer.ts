@@ -1,4 +1,4 @@
-import { generateRandomUid, removeArrayItemOne } from '~funcs/Utils';
+import { generateRandomUid, removeArrayItemOne } from '~shared/funcs/Utils';
 
 interface IRpcInvokerObject {
   (...params: any[]): Promise<any>;

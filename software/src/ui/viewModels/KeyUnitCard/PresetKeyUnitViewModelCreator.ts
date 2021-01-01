@@ -3,7 +3,7 @@ import {
   ILayer,
   IProfileData,
   IProfileDataAssigns
-} from '~defs/ProfileData';
+} from '~shared/defs/ProfileData';
 import {
   getAssignEntryTexts,
   getAssignForKeyUnitWithLayerFallback

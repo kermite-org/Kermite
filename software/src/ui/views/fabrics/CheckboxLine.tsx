@@ -1,5 +1,5 @@
-import { h } from '~lib/qx';
 import { reflectChecked } from '~ui/base/helper/FormHelpers';
+import { h } from '~qx';
 
 export const CheckboxLine = (props: {
   text: string;

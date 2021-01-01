@@ -1,8 +1,8 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
-import { IProfileAssignType } from '~defs/ProfileData';
+import { IProfileAssignType } from '~shared/defs/ProfileData';
 import { reflectValue } from '~ui/base/helper/FormHelpers';
 import { models } from '~ui/models';
+import { h } from '~qx';
 
 const AssignTypeSelectionPartViewModel = () => {
   const assignTypeOptions: IProfileAssignType[] = ['single', 'dual'];

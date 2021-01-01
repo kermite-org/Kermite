@@ -1,6 +1,6 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
 import { models } from '~ui/models';
+import { h } from '~qx';
 
 const cssLayerStateView = css`
   position: absolute;

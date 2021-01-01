@@ -1,9 +1,9 @@
-import { VirtualKeyTexts } from '~defs/VirtualKeyTexts';
-import { ModifierVirtualKey } from '~defs/VirtualKeys';
+import { VirtualKeyTexts } from '~shared/defs/VirtualKeyTexts';
+import { ModifierVirtualKey } from '~shared/defs/VirtualKeys';
 import {
   addOptionToOptionsArray,
   removeOptionFromOptionsArray
-} from '~funcs/Utils';
+} from '~shared/funcs/Utils';
 import { models } from '~ui/models';
 import { virtualKeyGroupsTable2 } from './virtualkeyGroupsTable';
 

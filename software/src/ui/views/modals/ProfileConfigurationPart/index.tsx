@@ -1,5 +1,4 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
 import {
   ClosableOverlay,
   CommonDialogFrame
@@ -8,6 +7,7 @@ import { reflectFieldChecked } from '~ui/base/helper/FormHelpers';
 import { models } from '~ui/models';
 import { AssignTypeSelectionPart } from './AssignTypeSelectionPart';
 import { DualModeSettingsPart } from './DualModeSettingsPart';
+import { h } from '~qx';
 
 const ShiftCancelOptionPart = () => {
   const { settings } = models.editorModel.profileData;

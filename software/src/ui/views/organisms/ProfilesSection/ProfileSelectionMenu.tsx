@@ -1,7 +1,7 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
 import { uiTheme } from '~ui/core';
 import { IProfileSelectionMenuPartViewModel } from '~ui/viewModels/ProfileSelectionMenuPartViewModel';
+import { h } from '~qx';
 
 const cssProfileSelectionMenuPart = css``;
 

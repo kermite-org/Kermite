@@ -1,4 +1,4 @@
-import { removeArrayItems } from '~funcs/Utils';
+import { removeArrayItems } from '~shared/funcs/Utils';
 
 type IEventListener<T> = (event: T) => void;
 

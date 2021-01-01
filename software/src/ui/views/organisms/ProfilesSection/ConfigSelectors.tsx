@@ -1,10 +1,10 @@
-import { h } from '~lib/qx';
 import {
   IKeyboardBehaviorMode,
   IKeyboardLayoutStandard
-} from '~defs/ConfigTypes';
+} from '~shared/defs/ConfigTypes';
 import { models } from '~ui/models';
 import { DualItemsHoverSelector } from '~ui/views/fabrics/DualItemHoverSelector';
+import { h } from '~qx';
 
 export const BehaviorSelector = () => {
   const modes: IKeyboardBehaviorMode[] = ['Standalone', 'SideBrain'];

@@ -1,8 +1,8 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
 import { mvvmView } from '~ui/base/helper/mvvmHelpers';
 import { uiTheme } from '~ui/core';
 import { IPresetKeyUnitViewModel } from '~ui/viewModels/KeyUnitCard/PresetKeyUnitViewModelCreator';
+import { h } from '~qx';
 
 const cssKeyRect = css`
   fill: transparent;

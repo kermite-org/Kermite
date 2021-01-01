@@ -5,11 +5,11 @@ import {
   IAssignOperation,
   IProfileAssignType,
   IAssignEntryWithLayerFallback
-} from '~/defs/ProfileData';
+} from '~shared/defs/ProfileData';
 import {
   duplicateObjectByJsonStringifyParse,
   compareObjectByJsonStringify
-} from '~funcs/Utils';
+} from '~shared/funcs/Utils';
 import {
   changeProfileDataAssignType,
   removeInvalidProfileAssigns

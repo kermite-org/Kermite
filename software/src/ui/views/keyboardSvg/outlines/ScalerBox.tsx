@@ -1,6 +1,6 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
 import { appUi } from '~ui/core';
+import { h } from '~qx';
 
 const cssBase = css`
   width: 100%;

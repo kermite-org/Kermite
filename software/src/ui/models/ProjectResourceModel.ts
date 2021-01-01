@@ -1,4 +1,4 @@
-import { IProjectResourceInfo } from '~defs/ProfileData';
+import { IProjectResourceInfo } from '~shared/defs/ProfileData';
 import { backendAgent } from '~ui/core';
 
 export class ProjectResourceModel {

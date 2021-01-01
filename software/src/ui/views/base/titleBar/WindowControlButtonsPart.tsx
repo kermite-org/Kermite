@@ -1,8 +1,8 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
 import { ITitleBarViewModel } from '~ui/viewModels/TitleBarViewModel';
 import { WindowControlButton } from './WindowControlButton';
 import { WindowRestartButton } from './WindowRestartButton';
+import { h } from '~qx';
 
 export const WindowControlButtonsPart = ({
   vm

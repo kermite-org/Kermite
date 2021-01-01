@@ -1,7 +1,7 @@
 import {
   IKeyboardBehaviorMode,
   IKeyboardLayoutStandard
-} from '~defs/ConfigTypes';
+} from '~shared/defs/ConfigTypes';
 import { backendAgent } from '~ui/core';
 
 export class KeyboardConfigModel {

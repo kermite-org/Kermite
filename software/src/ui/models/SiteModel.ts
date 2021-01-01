@@ -1,4 +1,4 @@
-import { IAppWindowEvent } from '~defs/IpcContract';
+import { IAppWindowEvent } from '~shared/defs/IpcContract';
 import { backendAgent } from '~ui/core';
 
 export class SiteModel {

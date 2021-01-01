@@ -1,6 +1,6 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
-import { ILayerDefaultScheme } from '~defs/ProfileData';
+import { ILayerDefaultScheme } from '~shared/defs/ProfileData';
+import { h } from '~qx';
 
 export const DefaultSchemeButton = (props: {
   value: ILayerDefaultScheme;

@@ -1,9 +1,9 @@
-import { IKeyboardConfig } from '~defs/ConfigTypes';
+import { IKeyboardConfig } from '~shared/defs/ConfigTypes';
 import {
   IProfileManagerStatus,
   IRealtimeKeyboardEvent
-} from '~defs/IpcContract';
-import { generateNumberSequence } from '~funcs/Utils';
+} from '~shared/defs/IpcContract';
+import { generateNumberSequence } from '~shared/funcs/Utils';
 import { KeyboardConfigProvider } from '~shell/services/KeyboardConfigProvider';
 import { KeyboardDeviceService } from '~shell/services/KeyboardDevice';
 import { ProfileManager } from '~shell/services/ProfileManager';

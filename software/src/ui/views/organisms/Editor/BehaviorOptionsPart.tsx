@@ -1,8 +1,8 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
 import { fieldSetter } from '~ui/base/helper/ViewHelpers';
 import { models } from '~ui/models';
 import { CheckboxLine } from '~ui/views/fabrics/CheckboxLine';
+import { h } from '~qx';
 
 const cssBehaviorOptionsPart = css`
   margin: 0 5px;

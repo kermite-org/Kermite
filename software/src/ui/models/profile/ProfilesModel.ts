@@ -1,7 +1,7 @@
 import {
   IProfileManagerCommand,
   IProfileManagerStatus
-} from '~defs/IpcContract';
+} from '~shared/defs/IpcContract';
 import { backendAgent } from '~ui/core';
 import { EditorModel } from '../editor/EditorModel';
 import { ProfileProvider } from './ProfileProvider';

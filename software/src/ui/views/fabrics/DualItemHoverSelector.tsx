@@ -1,5 +1,5 @@
 import { css } from 'goober';
-import { h, Hook } from '~lib/qx';
+import { h, Hook } from '~qx';
 
 interface IDualItemsHoverSelectorProps<T extends string> {
   items: T[];

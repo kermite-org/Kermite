@@ -1,10 +1,10 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
 import { uiTheme } from '~ui/core';
 import { makeShapePreviewPageViewModel } from '~ui/viewModels/ShapePreviewPageViewModel';
 import { GeneralSelector } from '~ui/views/controls/GeneralSelector';
 import { ShapePreviewOptionsBox } from '~ui/views/fabrics/ShapePreviewOptionsBox';
 import { PreviewKeyboardShapeView } from '~ui/views/keyboardSvg/panels/PreviewKeyboardShapeView';
+import { h } from '~qx';
 
 const cssShapePreviewPage = css`
   background: ${uiTheme.colors.clBackground};

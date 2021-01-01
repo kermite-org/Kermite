@@ -1,5 +1,5 @@
 import { BrowserWindow } from 'electron';
-import { pathJoin } from '~funcs/Files';
+import { pathJoin } from '~shared/funcs/Files';
 import { appEnv } from './AppEnvironment';
 
 // Electronのウインドウを管理するクラス

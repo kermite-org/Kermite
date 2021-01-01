@@ -1,12 +1,11 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
-import { ILayerDefaultScheme } from '~defs/ProfileData';
-import { VirtualKeyTexts } from '~defs/VirtualKeyTexts';
-import { ModifierVirtualKey } from '~defs/VirtualKeys';
+import { ILayerDefaultScheme } from '~shared/defs/ProfileData';
+import { VirtualKeyTexts } from '~shared/defs/VirtualKeyTexts';
+import { ModifierVirtualKey } from '~shared/defs/VirtualKeys';
 import {
   addOptionToOptionsArray,
   removeOptionFromOptionsArray
-} from '~funcs/Utils';
+} from '~shared/funcs/Utils';
 import {
   CommonDialogFrame,
   DialogContentRow,
@@ -26,6 +25,7 @@ import {
   cssCommonTextInput
 } from '~ui/views/controls/CommonStyles';
 import { DefaultSchemeButton } from '../controls/DefaultSchemeButton';
+import { h } from '~qx';
 
 export interface ILayerConfigurationModelEditValues {
   layerName: string;

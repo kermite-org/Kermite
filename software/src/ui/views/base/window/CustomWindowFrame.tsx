@@ -1,6 +1,6 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
 import { uiTheme } from '~ui/core';
+import { h } from '~qx';
 
 export const CustomWindowFrame = (props: {
   children: JSX.Element;

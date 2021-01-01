@@ -1,4 +1,4 @@
-import { IProfileData } from '~defs/ProfileData';
+import { IProfileData } from '~shared/defs/ProfileData';
 
 export namespace ProfileHelper {
   export function fixProfileData(profileData: IProfileData) {

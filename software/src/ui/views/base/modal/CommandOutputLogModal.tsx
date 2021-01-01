@@ -1,5 +1,4 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
 import {
   ClosableOverlay,
   CommonDialogFrame,
@@ -8,6 +7,7 @@ import {
   DialogContentRow
 } from '~ui/base/dialog/CommonDialogParts';
 import { createModal } from '~ui/base/overlay/ForegroundModalLayer';
+import { h } from '~qx';
 
 export const showCommandOutputLogModal = createModal(
   (args: { caption: string; logText: string }) => {

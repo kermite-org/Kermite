@@ -1,4 +1,4 @@
-import { rerender as qxRerender } from '~lib/qx';
+import { rerender as qxRerender } from '~qx';
 
 export const appUi = new (class {
   private _debugObject?: any;

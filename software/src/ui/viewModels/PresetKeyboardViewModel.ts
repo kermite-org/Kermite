@@ -1,9 +1,12 @@
-import { Hook } from '~lib/qx';
-import { IKeyboardShapeDisplayArea, IProfileData } from '~defs/ProfileData';
+import {
+  IKeyboardShapeDisplayArea,
+  IProfileData
+} from '~shared/defs/ProfileData';
 import {
   IPresetKeyUnitViewModel,
   makePresetKeyUnitViewModels
 } from '~ui/viewModels/KeyUnitCard/PresetKeyUnitViewModelCreator';
+import { Hook } from '~qx';
 
 export interface IPresetKeyboardLayerViewModel {
   layerId: string;

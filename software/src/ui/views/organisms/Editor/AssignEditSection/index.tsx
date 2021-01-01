@@ -1,9 +1,9 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
 import { uiTheme } from '~ui/core';
 import { makeAssignEditSectionViewModel } from '~ui/viewModels/Editor/AssignEditSectionViewModel';
 import { OpertionEditPart } from './OperationEditPart';
 import { OerationSlotsPart } from './OperationSlotsPart';
+import { h } from '~qx';
 
 const cssAssignEditSection = css`
   flex-grow: 1;

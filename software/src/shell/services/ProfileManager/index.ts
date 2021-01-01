@@ -1,10 +1,13 @@
 import {
   IProfileManagerCommand,
   IProfileManagerStatus
-} from '~defs/IpcContract';
-import { fallbackProfileData, IProfileData } from '~defs/ProfileData';
-import { EventPort } from '~funcs/EventPort';
-import { clampValue, duplicateObjectByJsonStringifyParse } from '~funcs/Utils';
+} from '~shared/defs/IpcContract';
+import { fallbackProfileData, IProfileData } from '~shared/defs/ProfileData';
+import { EventPort } from '~shared/funcs/EventPort';
+import {
+  clampValue,
+  duplicateObjectByJsonStringifyParse
+} from '~shared/funcs/Utils';
 import { PresetProfileLoader } from '~shell/services/PresetProfileLoader';
 import { ProfileHelper } from './ProfileHelper';
 import { ProfileManagerCore } from './ProfileManagerCore';

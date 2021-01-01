@@ -1,5 +1,4 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
 import { uiTheme } from '~ui/core';
 import { models } from '~ui/models';
 import { CustomWindowFrame } from '~ui/views/base/window/CustomWindowFrame';
@@ -10,6 +9,7 @@ import { EditorPage } from '../pages/EditorPage';
 import { FirmwareUpdationPage } from '../pages/FirmwareUpdationPage';
 import { PresetBrowserPage } from '../pages/PresetBrowserPage';
 import { KeyboardShapePreviewPage } from '../pages/ShapePreviewPage';
+import { h } from '~qx';
 
 const styles = {
   cssContentRow: css`

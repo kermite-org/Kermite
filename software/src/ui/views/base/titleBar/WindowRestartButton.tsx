@@ -1,5 +1,5 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
+import { h } from '~qx';
 
 export const WindowRestartButton = (props: { handler: () => void }) => {
   const cssReloadButton = css`

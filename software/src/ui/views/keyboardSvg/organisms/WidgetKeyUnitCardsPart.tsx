@@ -1,6 +1,6 @@
-import { h } from '~lib/qx';
 import { IKeyUnitCardPartViewModel } from '~ui/viewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
 import { WidgetKeyUnitCard } from '../molecules/WidgetKeyUnitCard';
+import { h } from '~qx';
 
 export function WidgetKeyUnitCardsPart(props: {
   vm: IKeyUnitCardPartViewModel;

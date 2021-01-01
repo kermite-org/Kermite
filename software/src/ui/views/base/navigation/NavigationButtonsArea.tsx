@@ -1,7 +1,7 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
 import { makeNavigationViewModel } from '~ui/viewModels/NavigationViewModel';
 import { NavigationButton } from './NavigationButton';
+import { h } from '~qx';
 
 const cssNavigationButtonsArea = css`
   margin-top: 10px;

@@ -1,5 +1,5 @@
-import { LayerInvocationMode } from '~defs/ProfileData';
-import { generateNumberSequence } from '~funcs/Utils';
+import { LayerInvocationMode } from '~shared/defs/ProfileData';
+import { generateNumberSequence } from '~shared/funcs/Utils';
 import { models } from '~ui/models';
 
 export interface IOperationLayerOptionEditViewModel {

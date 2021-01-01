@@ -2,7 +2,7 @@ import {
   IKeyboardShape,
   IProfileData,
   IProjectResourceInfo
-} from '~defs/ProfileData';
+} from '~shared/defs/ProfileData';
 import { IProjectResourceInfoSource } from '~shell/services/ProjectResource/ProjectResourceInfoSourceLoader';
 
 export interface IProjectResourceInfoProvider {

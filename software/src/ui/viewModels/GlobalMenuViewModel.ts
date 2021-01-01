@@ -1,6 +1,6 @@
-import { Hook } from '~lib/qx';
 import { appUi } from '~ui/core';
 import { models } from '~ui/models';
+import { Hook } from '~qx';
 
 export interface IGlobalMenuItem {
   key: string;

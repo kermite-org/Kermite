@@ -1,12 +1,12 @@
 import { FSWatcher } from 'fs';
-import { EventPort } from '~funcs/EventPort';
+import { EventPort } from '~shared/funcs/EventPort';
 import {
   fsExistsSync,
   fsxWtachFilesChange,
   pathDirname,
   pathRelative,
   pathResolve
-} from '~funcs/Files';
+} from '~shared/funcs/Files';
 import { appEnv } from '~shell/base/AppEnvironment';
 import { IProjectResourceInfoProvider } from '~shell/services/serviceInterfaces';
 

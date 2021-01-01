@@ -1,4 +1,4 @@
-import { IKeyboardShape } from '~defs/ProfileData';
+import { IKeyboardShape } from '~shared/defs/ProfileData';
 import { models } from '~ui/models';
 import {
   IKeyUnitCardPartViewModel,

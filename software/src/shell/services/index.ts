@@ -3,18 +3,18 @@ import {
   IApplicationSettings,
   IEnvironmentConfigForRendererProcess,
   IKeyboardConfig
-} from '~defs/ConfigTypes';
+} from '~shared/defs/ConfigTypes';
 import {
   IBackendAgent,
   IProfileManagerCommand,
   ISynchronousIpcPacket
-} from '~defs/IpcContract';
+} from '~shared/defs/IpcContract';
 import {
   IKeyboardShape,
   IProfileData,
   IProjectResourceInfo
-} from '~defs/ProfileData';
-import { RpcEventSource, RpcFunction, xpcMain } from '~lib/xpc/xpcMain';
+} from '~shared/defs/ProfileData';
+import { RpcEventSource, RpcFunction, xpcMain } from '~shared/xpc/xpcMain';
 import { appEnv } from '~shell/base/AppEnvironment';
 import { appWindowEventHub } from '~shell/base/AppEventBus';
 import { appWindowManager } from '~shell/base/AppWindowManager';

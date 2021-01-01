@@ -1,5 +1,5 @@
-import { h } from '~lib/qx';
-import { IKeyboardShapeDisplayArea } from '~defs/ProfileData';
+import { IKeyboardShapeDisplayArea } from '~shared/defs/ProfileData';
+import { h } from '~qx';
 
 export const PreviewBoundingBox = (props: {
   displayArea: IKeyboardShapeDisplayArea;

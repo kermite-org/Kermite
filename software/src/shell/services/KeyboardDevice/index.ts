@@ -1,12 +1,12 @@
 import {
   IKeyboardDeviceStatus,
   IRealtimeKeyboardEvent
-} from '~defs/IpcContract';
+} from '~shared/defs/IpcContract';
 import {
   ConfigStorageFormatRevision,
   RawHidMessageProtocolRevision
-} from '~defs/Versions';
-import { EventPort } from '~funcs/EventPort';
+} from '~shared/defs/Versions';
+import { EventPort } from '~shared/funcs/EventPort';
 import { ProjectResourceInfoProvider } from '../ProjectResource/ProjectResourceInfoProvider';
 import { DeviceWrapper } from './DeviceWrapper';
 

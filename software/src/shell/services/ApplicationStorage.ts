@@ -1,4 +1,8 @@
-import { fsExistsSync, fsxReadJsonFile, fsxWriteJsonFile } from '~funcs/Files';
+import {
+  fsExistsSync,
+  fsxReadJsonFile,
+  fsxWriteJsonFile
+} from '~shared/funcs/Files';
 import { appEnv } from '~shell/base/AppEnvironment';
 
 // 永続化状態を<UserDataDir>/data/config.jsonに保存・復元

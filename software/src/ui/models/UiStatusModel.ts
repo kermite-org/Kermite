@@ -1,4 +1,4 @@
-import { overwriteObjectProps } from '~funcs/Utils';
+import { overwriteObjectProps } from '~shared/funcs/Utils';
 import { appUi } from '~ui/core';
 
 export type PageSignature =

@@ -1,5 +1,5 @@
-import { IKeyboardShapeDisplayArea } from '~defs/ProfileData';
-import { formatTimeMsToMinSecMs } from '~funcs/Utils';
+import { IKeyboardShapeDisplayArea } from '~shared/defs/ProfileData';
+import { formatTimeMsToMinSecMs } from '~shared/funcs/Utils';
 import { models } from '~ui/models';
 import {
   ICustomKeyUnitViewModelBase,

@@ -1,4 +1,4 @@
-import { removeArrayItems } from '~funcs/Utils';
+import { removeArrayItems } from '~shared/funcs/Utils';
 import { ComPortsResource } from './ComPortsResource';
 
 export interface ComPortsListener {

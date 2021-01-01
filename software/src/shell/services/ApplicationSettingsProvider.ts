@@ -1,8 +1,8 @@
 import {
   IApplicationSettings,
   fallabackApplicationSettings
-} from '~defs/ConfigTypes';
-import { overwriteObjectProps } from '~funcs/Utils';
+} from '~shared/defs/ConfigTypes';
+import { overwriteObjectProps } from '~shared/funcs/Utils';
 import { applicationStorage } from './ApplicationStorage';
 
 // メインプロセスで永続化する設定を管理

@@ -1,8 +1,8 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
-import { linerInterpolateValue } from '~funcs/Utils';
+import { linerInterpolateValue } from '~shared/funcs/Utils';
 import { IWidgetKeyboardViewViewModel } from '~ui/viewModels/WidgetMainPageViewModel';
 import { WidgetKeyUnitCardsPart } from '../organisms/WidgetKeyUnitCardsPart';
+import { h } from '~qx';
 
 export function WidgetSvgKeyboardView({
   vm

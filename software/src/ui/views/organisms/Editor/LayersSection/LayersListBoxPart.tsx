@@ -1,10 +1,10 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
 import { uiTheme } from '~ui/core';
 import {
   ILayerListBoxPartViewModel,
   ILayerListViewModel
 } from '~ui/viewModels/Editor/LayersListBoxPartViewModel';
+import { h } from '~qx';
 
 const LayerCard = (props: { layerModel: ILayerListViewModel }) => {
   const cssLayerCard = css`

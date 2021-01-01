@@ -1,6 +1,6 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
-import { IKeyUnitEntry } from '~defs/ProfileData';
+import { IKeyUnitEntry } from '~shared/defs/ProfileData';
+import { h } from '~qx';
 
 export const PreviewKeyUnitCard = (props: {
   keyUnit: IKeyUnitEntry;

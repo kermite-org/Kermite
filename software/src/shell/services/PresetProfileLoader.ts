@@ -1,6 +1,6 @@
-import { fallbackProfileData, IProfileData } from '~defs/ProfileData';
-import { fsxReadJsonFile } from '~funcs/Files';
-import { duplicateObjectByJsonStringifyParse } from '~funcs/Utils';
+import { fallbackProfileData, IProfileData } from '~shared/defs/ProfileData';
+import { fsxReadJsonFile } from '~shared/funcs/Files';
+import { duplicateObjectByJsonStringifyParse } from '~shared/funcs/Utils';
 import { KeyboardLayoutFileLoader } from '~shell/services/KeyboardShape/KeyboardLayoutFileLoader';
 import { ProfileHelper } from './ProfileManager/ProfileHelper';
 import {

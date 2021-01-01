@@ -1,8 +1,8 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
 import { uiTheme } from '~ui/core';
 import { GlobalMenuPart } from './GlobalMenuPart';
 import { NavigationButtonsArea } from './NavigationButtonsArea';
+import { h } from '~qx';
 
 const cssNavigationColumn = css`
   width: 50px;

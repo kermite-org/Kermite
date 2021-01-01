@@ -1,4 +1,4 @@
-import { generateNumberSequence } from '~funcs/Utils';
+import { generateNumberSequence } from '~shared/funcs/Utils';
 import { bhi, blo } from './Helpers';
 
 // ------------------------------------------------------------

@@ -1,4 +1,3 @@
-import { h } from '~lib/qx';
 import {
   CommonDialogFrame,
   DialogContentRow,
@@ -15,6 +14,7 @@ import {
   cssCommonTextInput
 } from '~ui/views/controls/CommonStyles';
 import { GeneralSelector } from '~ui/views/controls/GeneralSelector';
+import { h } from '~qx';
 
 interface ICreateProfileDialogEditValues {
   profileName: string;

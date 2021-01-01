@@ -1,4 +1,4 @@
-import { removeArrayItems } from '~funcs/Utils';
+import { removeArrayItems } from '~shared/funcs/Utils';
 import { modalConfirm } from '~ui/base/dialog/BasicModals';
 import { models } from '~ui/models';
 import {

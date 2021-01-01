@@ -1,4 +1,4 @@
-import { fallbackProfileData, IProfileData } from '~defs/ProfileData';
+import { fallbackProfileData, IProfileData } from '~shared/defs/ProfileData';
 import { modalAlert, modalTextEdit } from '~ui/base/dialog/BasicModals';
 import { backendAgent } from '~ui/core';
 import { ProjectResourceModel } from '~ui/models/ProjectResourceModel';

@@ -1,5 +1,5 @@
-import { IProjectResourceInfo } from '~defs/ProfileData';
-import { pathJoin } from '~funcs/Files';
+import { IProjectResourceInfo } from '~shared/defs/ProfileData';
+import { pathJoin } from '~shared/funcs/Files';
 import { appEnv } from '~shell/base/AppEnvironment';
 import { IProjectResourceInfoProvider } from '../serviceInterfaces';
 import {

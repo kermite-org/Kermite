@@ -1,6 +1,6 @@
-import { h } from '~lib/qx';
-import { IKeyUnitEntry } from '~defs/ProfileData';
+import { IKeyUnitEntry } from '~shared/defs/ProfileData';
 import { PreviewKeyUnitCard } from '../molecules/PreviewKeyUnitCard';
+import { h } from '~qx';
 
 export const PreviewKeyUnitCardsPart = (props: {
   keyUnits: IKeyUnitEntry[];

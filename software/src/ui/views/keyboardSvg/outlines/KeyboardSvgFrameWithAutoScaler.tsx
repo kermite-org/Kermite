@@ -1,8 +1,8 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
-import { IKeyboardShapeDisplayArea } from '~defs/ProfileData';
+import { IKeyboardShapeDisplayArea } from '~shared/defs/ProfileData';
 import { KeyboardSvgFrame } from '~ui/views/keyboardSvg/outlines/KeyboardSvgFrame';
 import { ScalerBox } from '~ui/views/keyboardSvg/outlines/ScalerBox';
+import { h } from '~qx';
 
 export const cssScalerContent = css`
   height: 100%;

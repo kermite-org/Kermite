@@ -1,11 +1,11 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
 import {
   reflectFieldChecked,
   reflectFieldValue,
   reflectValue
 } from '~ui/base/helper/FormHelpers';
 import { models } from '~ui/models';
+import { h } from '~qx';
 
 const cssDualModeSettingsPart = css`
   margin-top: 15px;

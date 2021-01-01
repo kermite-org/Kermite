@@ -1,4 +1,4 @@
-import { IProfileData } from '~defs/ProfileData';
+import { IProfileData } from '~shared/defs/ProfileData';
 import {
   fsExistsSync,
   fspCopyFile,
@@ -9,7 +9,7 @@ import {
   fsxReadJsonFile,
   fsxWriteJsonFile,
   pathBasename
-} from '~funcs/Files';
+} from '~shared/funcs/Files';
 import { appEnv } from '~shell/base/AppEnvironment';
 import { applicationStorage } from '~shell/services/ApplicationStorage';
 

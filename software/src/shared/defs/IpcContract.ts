@@ -1,4 +1,4 @@
-import { IEventSource } from '~lib/xpc/types';
+import { IEventSource } from '~shared/xpc/types';
 import {
   IKeyboardConfig,
   IEnvironmentConfigForRendererProcess,

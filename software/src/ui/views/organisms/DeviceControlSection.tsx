@@ -1,7 +1,7 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
 import { makeDeviceControlSectionViewModel } from '~ui/viewModels/DeviceControlSectionViewModel';
 import { LinkIndicator } from '~ui/views/controls/LinkIndicator';
+import { h } from '~qx';
 
 const cssDeviceControlSection = css`
   display: flex;

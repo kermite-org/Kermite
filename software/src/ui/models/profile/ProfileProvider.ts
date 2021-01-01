@@ -1,5 +1,5 @@
-import { IProfileManagerStatus } from '~defs/IpcContract';
-import { IProfileData } from '~defs/ProfileData';
+import { IProfileManagerStatus } from '~shared/defs/IpcContract';
+import { IProfileData } from '~shared/defs/ProfileData';
 import { backendAgent, sendIpcPacketSync } from '~ui/core';
 
 type IListener = (profile: Partial<IProfileManagerStatus>) => void;

@@ -1,11 +1,11 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
-import { IKeyboardShape } from '~defs/ProfileData';
+import { IKeyboardShape } from '~shared/defs/ProfileData';
 import { IUiSettings } from '~ui/models/UiStatusModel';
 import { KeyboardBodyShape } from '~ui/views/keyboardSvg/atoms/KeyboardBodyShape';
 import { PreviewBoundingBox } from '~ui/views/keyboardSvg/atoms/PreviewBoundingBox';
 import { PreviewKeyUnitCardsPart } from '~ui/views/keyboardSvg/organisms/PreviewKeyUnitCardsPart';
 import { KeyboardSvgFrameWithAutoScaler } from '../outlines/KeyboardSvgFrameWithAutoScaler';
+import { h } from '~qx';
 
 export function PreviewKeyboardShapeView(props: {
   shape: IKeyboardShape;

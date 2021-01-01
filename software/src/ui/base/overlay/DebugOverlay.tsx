@@ -1,5 +1,5 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
+import { h } from '~qx';
 
 interface IDebugOverlayProps {
   debugObj: any | undefined;

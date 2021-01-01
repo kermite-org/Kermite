@@ -1,7 +1,7 @@
-import { h, render } from '~lib/qx';
-import { debounce } from '~funcs/Utils';
+import { debounce } from '~shared/funcs/Utils';
 import { appUi } from '~ui/core';
 import { SiteRoot } from '~ui/views/SiteRoot';
+import { h, render } from '~qx';
 
 export class Views {
   get appDiv() {

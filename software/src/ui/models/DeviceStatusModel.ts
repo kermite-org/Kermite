@@ -1,4 +1,4 @@
-import { IKeyboardDeviceStatus } from '~defs/IpcContract';
+import { IKeyboardDeviceStatus } from '~shared/defs/IpcContract';
 import { backendAgent } from '~ui/core';
 
 export class DeviceStatusModel {

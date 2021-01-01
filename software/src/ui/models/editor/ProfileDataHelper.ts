@@ -4,8 +4,8 @@ import {
   IAssignEntry_SingleEx,
   IProfileAssignType,
   IProfileData
-} from '~defs/ProfileData';
-import { mapObjectValues } from '~funcs/Utils';
+} from '~shared/defs/ProfileData';
+import { mapObjectValues } from '~shared/funcs/Utils';
 
 function convertSignleAssignToDualAssign(
   src: IAssignEntry_SingleEx

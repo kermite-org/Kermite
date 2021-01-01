@@ -1,4 +1,4 @@
-import { VirtualKey } from '~defs/VirtualKeys';
+import { VirtualKey } from '~shared/defs/VirtualKeys';
 
 // const assignKeysGroup00: VirtualKey[] = ['K_NONE'];
 

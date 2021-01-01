@@ -1,6 +1,9 @@
-import { fallbackKeyboardConfig, IKeyboardConfig } from '~defs/ConfigTypes';
-import { EventPort } from '~funcs/EventPort';
-import { overwriteObjectProps } from '~funcs/Utils';
+import {
+  fallbackKeyboardConfig,
+  IKeyboardConfig
+} from '~shared/defs/ConfigTypes';
+import { EventPort } from '~shared/funcs/EventPort';
+import { overwriteObjectProps } from '~shared/funcs/Utils';
 import { applicationStorage } from './ApplicationStorage';
 
 // 環境に関連したキーボードの設定を保存する, レイアウト(US/JP)など

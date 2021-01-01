@@ -1,5 +1,4 @@
 import { css } from 'goober';
-import { h } from '~lib/qx';
 import {
   IOperationEditPartViewModel,
   IPlainOperationEditCardsViewModel
@@ -7,6 +6,7 @@ import {
 import { IOperationLayerOptionEditViewModel } from '~ui/viewModels/Editor/OperationLayerOptionEditViewModel';
 import { OperationCard } from '~ui/views/elements/OperationCard';
 import { OperationLayerOptionSelector } from '~ui/views/fabrics/OperationLayerOptionSelector';
+import { h } from '~qx';
 
 const cssAssignPanel = css`
   display: flex;

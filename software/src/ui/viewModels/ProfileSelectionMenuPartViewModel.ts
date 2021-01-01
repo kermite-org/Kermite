@@ -1,5 +1,5 @@
-import { Hook } from '~lib/qx';
 import { IProfileManagementPartViewModel } from './ProfileManagementPartViewModel';
+import { Hook } from '~qx';
 
 export interface IProfileSelectionMenuPartViewModel {
   isOpen: boolean;

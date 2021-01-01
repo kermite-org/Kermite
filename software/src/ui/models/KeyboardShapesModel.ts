@@ -1,4 +1,4 @@
-import { IKeyboardShape } from '~defs/ProfileData';
+import { IKeyboardShape } from '~shared/defs/ProfileData';
 import { backendAgent } from '~ui/core';
 import { ProjectResourceModel } from '~ui/models/ProjectResourceModel';
 import { UiStatusModel } from '~ui/models/UiStatusModel';

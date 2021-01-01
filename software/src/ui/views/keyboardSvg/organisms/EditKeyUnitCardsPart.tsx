@@ -1,7 +1,7 @@
-import { h } from '~lib/qx';
 import { models } from '~ui/models';
 import { makeKeyUnitCardsPartViewModel } from '~ui/viewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
 import { EditKeyUnitCard } from '../molecules/EditKeyUnitCard';
+import { h } from '~qx';
 
 export function EditKeyUnitCardsPart() {
   const vm = makeKeyUnitCardsPartViewModel(true, models);
