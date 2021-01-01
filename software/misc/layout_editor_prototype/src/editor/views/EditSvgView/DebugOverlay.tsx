@@ -1,5 +1,5 @@
 import { css } from 'goober';
-import { appState } from '~/editor/store';
+import { appGlobal } from '~/editor/base/AppGlobal';
 import { h } from '~/qx';
 
 export const DebugOverlay = () => {
@@ -13,11 +13,18 @@ export const DebugOverlay = () => {
     word-break: break-all;
     font-size: 12px;
   `;
-  const show = false;
+
+  const { debugObject, hasDebugValue } = appGlobal;
   return (
-    <div css={cssDebugOverlay} qxIf={show}>
-      <div>{JSON.stringify(appState.editor.design)}</div>
-      <div>{JSON.stringify(appState.env)}</div>
+    <div css={cssDebugOverlay} qxIf={hasDebugValue}>
+      {Object.keys(debugObject).map((key) => {
+        const value = debugObject[key];
+        return (
+          <div key={key}>
+            {key}: {JSON.stringify(value)}
+          </div>
+        );
+      })}
     </div>
   );
 };
