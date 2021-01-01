@@ -2,7 +2,8 @@ import { css } from 'goober';
 import { makeCssColor } from '~/base/ColorHelper';
 import { IPosition, startDragSession } from '~/base/UiInteractionHelpers';
 import { uiTheme } from '~/base/uiTheme';
-import { editMutations, editReader } from '~/editor/store';
+import { editMutations, editReader, IOutlinePoint } from '~/editor/store';
+import { getWorldMousePositionOnEditSvg } from '~/editor/views/EditSvgView/CoordHelpers';
 import { h, rerender } from '~/qx';
 
 const cssKeyboardOutline = css`
@@ -24,7 +25,10 @@ const cssOutlinePoint = css`
   }
 `;
 
-export function startOutlinePointDragOperation(e: MouseEvent) {
+export function startOutlinePointDragOperation(
+  e: MouseEvent,
+  emitStartEdit: boolean = true
+) {
   const { sight, outlinePoints, currentPointIndex } = editReader;
 
   const point = outlinePoints[currentPointIndex];
@@ -43,7 +47,10 @@ export function startOutlinePointDragOperation(e: MouseEvent) {
     editMutations.endEdit();
     rerender();
   };
-  editMutations.startEdit();
+  if (emitStartEdit) {
+    editMutations.startEdit();
+  }
+
   startDragSession(e, moveCallback, upCallback);
 }
 
@@ -95,15 +102,74 @@ const OutlinePoint = (props: { x: number; y: number; index: number }) => {
   );
 };
 
+interface IHittestLineViewModel {
+  dstPointIndex: number;
+  p0: IOutlinePoint;
+  p1: IOutlinePoint;
+}
+
+function makeHittestLineViewModel(pointIndex: number, points: IOutlinePoint[]) {
+  const dstPointIndex = (pointIndex + 1) % points.length;
+  const p0 = points[pointIndex];
+  const p1 = points[dstPointIndex];
+  return {
+    dstPointIndex,
+    p0,
+    p1,
+  };
+}
+
+const cssHittestLine = css`
+  stroke-width: 1;
+  stroke: transparent;
+  cursor: crosshair;
+`;
+
+const HittestLine = (props: { vm: IHittestLineViewModel }) => {
+  const { p0, p1, dstPointIndex } = props.vm;
+
+  const onMouseDown = (e: MouseEvent) => {
+    const [x, y] = getWorldMousePositionOnEditSvg(e);
+
+    editMutations.startEdit();
+    editMutations.setCurrentKeyEntity(undefined);
+    editMutations.splitOutlineLine(dstPointIndex, x, y);
+    editMutations.setCurrentPointIndex(dstPointIndex);
+    startOutlinePointDragOperation(e, false);
+    e.stopPropagation();
+  };
+
+  return (
+    <line
+      x1={p0.x}
+      y1={p0.y}
+      x2={p1.x}
+      y2={p1.y}
+      css={cssHittestLine}
+      onMouseDown={onMouseDown}
+    />
+  );
+};
+
 export const KeyboardOutline = () => {
   const { outlinePoints } = editReader;
   const pointsSpec = outlinePoints.map(({ x, y }) => `${x}, ${y}`).join(' ');
+  const vmLines = outlinePoints.map((_, idx) =>
+    makeHittestLineViewModel(idx, outlinePoints)
+  );
   return (
     <g>
       <polygon points={pointsSpec} css={cssKeyboardOutline} />
-      {outlinePoints.map(({ x, y }, index) => (
-        <OutlinePoint x={x} y={y} key={index} index={index} />
-      ))}
+      <g>
+        {vmLines.map((vm) => (
+          <HittestLine key={vm.dstPointIndex} vm={vm} />
+        ))}
+      </g>
+      <g>
+        {outlinePoints.map(({ x, y }, index) => (
+          <OutlinePoint x={x} y={y} key={index} index={index} />
+        ))}
+      </g>
     </g>
   );
 };

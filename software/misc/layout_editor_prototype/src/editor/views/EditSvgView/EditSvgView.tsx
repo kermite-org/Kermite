@@ -64,8 +64,9 @@ const onSvgMouseDown = (e: MouseEvent) => {
       if (editMode === 'add') {
         const [sx, sy] = getRelativeMousePosition(e);
         const [x, y] = screenToWorld(sx, sy);
+        editMutations.startEdit();
         editMutations.addOutlinePoint(x, y);
-        startOutlinePointDragOperation(e);
+        startOutlinePointDragOperation(e, false);
       }
     }
   }

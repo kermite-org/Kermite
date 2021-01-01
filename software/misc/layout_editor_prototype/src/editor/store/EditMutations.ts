@@ -90,6 +90,13 @@ export const editMutations = new (class {
     }
   }
 
+  splitOutlineLine(dstPointIndex: number, x: number, y: number) {
+    editUpdator.patchEditor((editor) => {
+      const { outlinePoints } = editor.design;
+      outlinePoints.splice(dstPointIndex, 0, { x, y });
+    });
+  }
+
   addOutlinePoint(x: number, y: number) {
     editUpdator.commitEditor((editor) => {
       editor.design.outlinePoints.push({ x, y });
