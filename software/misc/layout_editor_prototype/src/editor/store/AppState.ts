@@ -53,7 +53,7 @@ export function createDefaultKeyboardDesign(): IKeyboardDesign {
     outlinePoints: source.outlinePoints.map(([x, y]) => ({ x, y })),
     keyEntities: createDictionaryFromKeyValues(
       source.keyEntities.map((ke) => {
-        const id = `ke-${cnt++}`;
+        const id = `ke${cnt++}`;
         return [id, { ...ke, id }];
       })
     ),

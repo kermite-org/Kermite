@@ -53,7 +53,7 @@ export const editMutations = new (class {
   addKeyEntity(px: number, py: number) {
     const { coordUnit, keySizeUnit } = editReader;
     const [x, y] = mmToUnitValue(px, py, coordUnit);
-    const id = `ke-${(Math.random() * 1000) >> 0}`;
+    const id = `ke${(Math.random() * 1000) >> 0}`;
     const keySize = keySizeUnit === 'KP' ? 1 : 18;
 
     const keyEntity: IKeyEntity = {
