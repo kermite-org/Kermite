@@ -81,7 +81,7 @@ export function saveEditKeyboardDesign() {
 }
 
 export type IEditorTarget = 'key' | 'outline';
-export type IEditMode = 'select' | 'add' | 'move' | 'split';
+export type IEditMode = 'select' | 'add' | 'move' | 'delete';
 
 export interface IModeState {
   editMode: IEditMode;

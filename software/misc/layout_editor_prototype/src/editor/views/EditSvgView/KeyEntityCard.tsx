@@ -100,6 +100,9 @@ export const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
           editMutations.setCurrentPointIndex(-1);
           startKeyEntityDragOperation(e, true);
           e.stopPropagation();
+        } else if (editMode === 'delete') {
+          editMutations.setCurrentKeyEntity(ke.id);
+          editMutations.deleteCurrentKeyEntity();
         }
       }
     }

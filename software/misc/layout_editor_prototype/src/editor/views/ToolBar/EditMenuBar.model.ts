@@ -62,6 +62,7 @@ export function makeEditMenuBarViewModel() {
     select: 'select',
     move: 'move',
     add: 'add',
+    delete: 'delete',
   });
 
   const vmShowAxis = createToggleOptionViewModel('showAxis');

@@ -74,11 +74,14 @@ const OutlinePoint = (props: { x: number; y: number; index: number }) => {
           editMutations.setCurrentPointIndex(index);
           editMutations.setCurrentKeyEntity(undefined);
           e.stopPropagation();
-        } else if (editMode === 'move') {
+        } else if (editMode === 'move' || editMode === 'add') {
           editMutations.setCurrentPointIndex(index);
           editMutations.setCurrentKeyEntity(undefined);
           startOutlinePointDragOperation(e);
           e.stopPropagation();
+        } else if (editMode === 'delete') {
+          editMutations.setCurrentPointIndex(index);
+          editMutations.deleteCurrentOutlinePoint();
         }
       }
     }
