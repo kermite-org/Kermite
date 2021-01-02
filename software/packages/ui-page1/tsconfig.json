@@ -2,6 +2,8 @@
   "extends": "../tsconfig.settings.json",
   "compilerOptions": {
     "noEmit": true,
+    "jsx": "react",
+    "jsxFactory": "h",
     "baseUrl": ".",
     "paths": {
       "~/*": ["./src/*"]

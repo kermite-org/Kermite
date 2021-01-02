@@ -1,18 +1,26 @@
 import { addNumber, showVersion } from '@kermite/shared';
+import { css } from 'goober';
+import { h, render } from 'qx';
+import { initializeCss } from '~/cssInitializer';
 import { greet } from '~/local';
 
-console.log('hello');
+const cssRoot = css`
+  border: solid 4px orange;
+  height: 100%;
+`;
 
-const el = document.getElementById('app');
-if (el) {
-  el.innerHTML = 'page1';
-}
+window.addEventListener('load', () => {
+  initializeCss();
 
-const c = addNumber(100, 200);
-console.log({ c });
+  console.log('hello');
+  const c = addNumber(100, 200);
+  console.log({ c });
+  showVersion();
+  greet();
+  document.body.style.background = '#FFF';
 
-showVersion();
-
-greet();
-
-document.body.style.background = '#FFF';
+  render(
+    () => <div css={cssRoot}>hello qx</div>,
+    document.getElementById('app'),
+  );
+});

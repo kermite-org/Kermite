@@ -1,0 +1,10 @@
+{
+  "name": "qx",
+  "version": "0.0.0",
+  "main": "lib/index.js",
+  "types": "src/qx.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  }
+}
