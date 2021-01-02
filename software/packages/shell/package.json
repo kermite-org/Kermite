@@ -1,0 +1,11 @@
+{
+  "name": "@kermite/shell",
+  "version": "0.0.0",
+  "scripts": {
+    "build": "parcel build src/index.ts --no-autoinstall --out-dir ../../dist/shell --target node",
+    "watch": "parcel watch src/index.ts --no-autoinstall --out-dir ../../dist/shell --target node"
+  },
+  "dependencies": {
+    "@kermite/shared": "*"
+  }
+}

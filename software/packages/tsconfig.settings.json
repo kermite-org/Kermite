@@ -1,27 +1,19 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "esnext",
     "module": "commonjs",
     "moduleResolution": "node",
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
     "strict": true,
-    "lib": [
-      "dom",
-      "esnext"
-    ],
+    "esModuleInterop": true,
+    "lib": ["dom", "esnext"],
     "jsx": "react",
     "jsxFactory": "h",
-    "baseUrl": ".",
-    "paths": {
-      "~*": [
-        "./src/*"
-      ]
-    },
-    "noEmit": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true
-  },
-  "include": [
-    "src/**/*"
-  ]
+  }
 }
