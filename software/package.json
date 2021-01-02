@@ -42,9 +42,10 @@
     "_packaging_mac": "electron-builder --mac --x64",
     "_packaging_win": "electron-builder --win --x64",
     "watch": "lerna run --parallel watch",
-    "start": "node ./dist/shell"
+    "start": "cross-env NODE_ENV=development electron ./dist/shell"
   },
   "dependencies": {
+    "electron-store": "^6.0.1",
     "fast-equals": "^2.0.0",
     "glob": "^7.1.6",
     "goober": "^2.0.6",

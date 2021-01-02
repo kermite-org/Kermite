@@ -2,8 +2,8 @@
   "name": "@kermite/shell",
   "version": "0.0.0",
   "scripts": {
-    "build": "parcel build src/index.ts --no-autoinstall --out-dir ../../dist/shell --target node",
-    "watch": "parcel watch src/index.ts --no-autoinstall --out-dir ../../dist/shell --target node"
+    "build": "parcel build src/index.ts --no-autoinstall --out-dir ../../dist/shell --target node --cache-dir ../../.cache/shell",
+    "watch": "parcel watch src/index.ts --no-autoinstall --out-dir ../../dist/shell --target node --cache-dir ../../.cache/shell"
   },
   "dependencies": {
     "@kermite/shared": "*"

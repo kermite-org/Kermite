@@ -1,0 +1,7 @@
+{
+  "name": "@kermite/preload",
+  "version": "0.0.0",
+  "scripts": {
+    "watch": "cp preload.js ../../dist/preload.js"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "@kermite/ui-editor",
+  "version": "0.0.0",
+  "scripts": {
+    "build": "parcel build src/index.html --no-autoinstall --out-dir ../../dist/ui/editor --cache-dir ../../dist/.cache/ui-editor --public-url . --no-hmr",
+    "watch": "parcel watch src/index.html --no-autoinstall --out-dir ../../dist/ui/editor --cache-dir ../../dist/.cache/ui-editor --public-url . --no-hmr",
+    "_watch": "parcel src/index.html --no-autoinstall --out-dir ../../dist/ui/editor -p 3000"
+  },
+  "dependencies": {
+    "@kermite/shared": "*"
+  }
+}

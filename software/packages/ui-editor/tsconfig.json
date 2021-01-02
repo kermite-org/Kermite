@@ -5,7 +5,6 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["./src/*"]
-      // "@kermite/shared*": ["../shared*"]
     }
   },
   "references": [{ "path": "../shared" }]

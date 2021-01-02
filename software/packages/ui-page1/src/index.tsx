@@ -5,7 +5,7 @@ console.log('hello');
 
 const el = document.getElementById('app');
 if (el) {
-  el.innerHTML = 'hello';
+  el.innerHTML = 'page1';
 }
 
 const c = addNumber(100, 200);
@@ -14,3 +14,5 @@ console.log({ c });
 showVersion();
 
 greet();
+
+document.body.style.background = '#FFF';
