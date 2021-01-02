@@ -1,7 +1,7 @@
 import { addNumber, showVersion } from '@kermite/shared';
+import { initializeCss } from '@kermite/ui';
 import { css } from 'goober';
 import { h, render } from 'qx';
-import { initializeCss } from '~/cssInitializer';
 import { greet } from '~/local';
 
 const cssRoot = css`

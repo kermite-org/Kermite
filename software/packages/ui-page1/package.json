@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@kermite/shared": "*",
+    "@kermite/ui": "*",
     "qx": "*"
   }
 }
