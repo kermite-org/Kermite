@@ -1,0 +1,12 @@
+{
+  "name": "@kermite/ui-page2",
+  "version": "0.0.0",
+  "scripts": {
+    "watch": "parcel watch src/index.html --no-autoinstall --out-dir ../../dist/ui/editor/page2 --cache-dir ../../dist/.cache/ui-page2 --public-url . --no-hmr"
+  },
+  "dependencies": {
+    "@kermite/shared": "*",
+    "@kermite/ui": "*",
+    "qx": "*"
+  }
+}
