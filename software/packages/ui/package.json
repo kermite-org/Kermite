@@ -6,5 +6,9 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w"
+  },
+  "dependencies": {
+    "@kermite/shared": "*",
+    "qx": "*"
   }
 }
