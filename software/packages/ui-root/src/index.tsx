@@ -17,14 +17,14 @@ const cssIframe = css`
 let pageTag = 'page1';
 
 function loadState() {
-  const _pageTag = localStorage.getItem('pageTag');
+  const _pageTag = localStorage.getItem('ui-root#pageTag');
   if (_pageTag) {
     pageTag = _pageTag;
   }
 }
 
 function saveState() {
-  localStorage.setItem('pageTag', pageTag);
+  localStorage.setItem('ui-root#pageTag', pageTag);
 }
 
 const PageRoot = () => {
