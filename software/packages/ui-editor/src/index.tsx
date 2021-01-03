@@ -1,6 +1,7 @@
 import { initializeCss } from '@kermite/ui';
 import { css } from 'goober';
 import { h, render } from 'qx';
+import { ipcExample } from '~/ipcExample';
 
 const cssPageRoot = css`
   background: #ddd;
@@ -36,6 +37,6 @@ const PageRoot = () => {
 window.addEventListener('load', () => {
   const isDevelopment = (window as any).debugConfig?.isDevelopment;
   console.log({ isDevelopment });
-
+  ipcExample();
   render(() => <PageRoot />, document.getElementById('app'));
 });

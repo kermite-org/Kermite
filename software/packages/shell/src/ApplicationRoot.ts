@@ -4,6 +4,7 @@ import {
   enumeratePagePaths,
   preparePreloadJsFile,
 } from '~/modules/WindowsFunctionalities';
+import { setupIpcBackend } from '~/services/IpcBackend';
 import {
   PageStateManager,
   AppWindowWrapper,
@@ -59,15 +60,19 @@ export class ApplicationRoot {
 
   initialize() {
     preparePreloadJsFile(appConfig.preloadFilePath);
-    appGlobal.mainWindow = this.windowWrapper.openMainWindow({
+    const win = this.windowWrapper.openMainWindow({
       preloadFilePath: appConfig.preloadFilePath,
       publicRootPath: appConfig.publicRootPath,
       pageTitle: appConfig.pageTitle,
       initialPageWidth: appConfig.initialPageWidth,
       initialPageHeight: appConfig.initialPageHeight,
     });
+    appGlobal.mainWindow = win;
+    appGlobal.icpMainAgent.setWebcontents(win.webContents);
     this.setupPageManager();
     this.setupMenu();
+
+    setupIpcBackend();
   }
 
   terminate() {
