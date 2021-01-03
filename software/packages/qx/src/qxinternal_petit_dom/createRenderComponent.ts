@@ -7,7 +7,7 @@ import {
   IHook,
   switchGlobalHookInstance,
 } from './hookImpl';
-import { IComponentFunction, IComponentObject, IEnv, VNode } from './types';
+import { IEnv, VNode, IComponentFunction, IComponentObject } from './types';
 import { mount, patch, unmount } from './vdom';
 
 const promise = Promise.resolve();

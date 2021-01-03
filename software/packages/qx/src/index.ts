@@ -32,9 +32,15 @@ export function render(
       );
       // render stats
       // c: component patched count,
-      // p: component/z--zizia0zia0zia00aizzia0zia0zi00aizzia0zi0azia00aizzia0zia0zia0element patch count
+      // p: component/element patch count
       // n: dom nodes count
       // ms: time elapsed
+    }
+    qxGlobal.hookEffectFuncs.forEach((func) => func());
+    qxGlobal.hookEffectFuncs = [];
+    if (qxGlobal.hookRerenderFlag) {
+      qxGlobal.hookRerenderFlag = false;
+      requestAnimationFrame(executeRender);
     }
   };
 
