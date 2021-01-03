@@ -2,7 +2,6 @@ import { css } from 'goober';
 import { h } from 'qx';
 import { makeWindowControlButtonsModel } from '~/views/titleBar/WindowControlButtonsPart.model';
 import { WindowControlButton } from '~/views/titleBar/elements/WindowControlButton';
-import { WindowRestartButton } from '~/views/titleBar/elements/WindowRestartButton';
 
 export const WindowControlButtonsPart = () => {
   const cssButtonsBox = css`
@@ -15,10 +14,10 @@ export const WindowControlButtonsPart = () => {
 
   return (
     <div css={cssButtonsBox}>
-      <WindowRestartButton
+      {/* <WindowRestartButton
         handler={vm.onReloadButton}
         qxIf={vm.showReloadButton}
-      />
+      /> */}
       <WindowControlButton
         icon="fa fa-feather-alt"
         onClick={vm.onWidgetButton}

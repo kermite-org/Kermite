@@ -1,11 +1,10 @@
+import { applicationStorage } from '~/base/ApplicationStorage';
+import { appConfig } from '~/base/appConfig';
 import { makeListnerPort } from '~/funcs';
+import { enumeratePagePaths } from '~/modules';
+import { IPageStateManager } from '~/windowServices/serviceInterfaces';
 
-interface IAppPersistDataPageStatePartial {
-  currentPagePath: string;
-  isDevToolsVisible: boolean;
-}
-
-export class PageStateManager {
+export class PageStateManager implements IPageStateManager {
   private _allPagePaths: string[] = [];
   private _currentPagePath: string = '/';
   private _isDevToolsVisible: boolean = false;
@@ -35,21 +34,21 @@ export class PageStateManager {
     this.onDevToolVisibilityChanged.emit(visible);
   }
 
-  initialize(
-    loadedState: IAppPersistDataPageStatePartial | undefined,
-    allPagePaths: string[],
-  ) {
-    this._allPagePaths = allPagePaths;
-    const tmpPagePath = loadedState?.currentPagePath;
-    const initialPagePath =
-      (tmpPagePath && allPagePaths.includes(tmpPagePath) && tmpPagePath) || '/';
-    const initialDevToolsVisible = loadedState?.isDevToolsVisible || false;
-    this._currentPagePath = initialPagePath;
-    this._isDevToolsVisible = initialDevToolsVisible;
+  initialize() {
+    this._allPagePaths = enumeratePagePaths(appConfig.publicRootPath);
+    const loadedState = applicationStorage.getItem('pageState');
+    const tmpPagePath = loadedState.currentPagePath;
+    this._currentPagePath =
+      (tmpPagePath && this.allPagePaths.includes(tmpPagePath) && tmpPagePath) ||
+      '/';
+    this._isDevToolsVisible = loadedState.isDevToolsVisible || false;
   }
 
-  terminate(): IAppPersistDataPageStatePartial {
+  terminate() {
     const { currentPagePath, isDevToolsVisible } = this;
-    return { currentPagePath, isDevToolsVisible };
+    applicationStorage.setItem('pageState', {
+      currentPagePath,
+      isDevToolsVisible,
+    });
   }
 }

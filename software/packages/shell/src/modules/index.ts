@@ -1,2 +1,2 @@
 export * from './PageSourceWatcher';
-export * from './WindowWrapperCore';
+export * from './WindowFunctionalities';

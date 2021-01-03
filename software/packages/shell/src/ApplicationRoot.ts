@@ -1,64 +1,22 @@
+import { applicationStorage } from '~/base/ApplicationStorage';
 import { appConfig } from '~/base/appConfig';
 import { appGlobal } from '~/base/appGlobal';
-import {
-  enumeratePagePaths,
-  preparePreloadJsFile,
-} from '~/modules/WindowsFunctionalities';
+import { preparePreloadJsFile } from '~/modules';
 import {
   PageStateManager,
   AppWindowWrapper,
   MenuManager,
 } from '~/windowServices';
-import { AppStatePersistence } from '~/windowServices/AppStatePersistence';
 
 export class ApplicationRoot {
-  private persistence = new AppStatePersistence();
   private pageManager = new PageStateManager();
   private windowWrapper = new AppWindowWrapper();
   private menuManager = new MenuManager();
 
-  private setupPageManager() {
-    const allPagePaths = enumeratePagePaths(appConfig.publicRootPath);
-    const loadedState = this.persistence.load();
-    this.pageManager.initialize(loadedState, allPagePaths);
-    this.pageManager.onPagePathChanged(this.windowWrapper.loadPage);
-    this.pageManager.onDevToolVisibilityChanged(
-      this.windowWrapper.setDevToolsVisibility,
-    );
-    const { currentPagePath, isDevToolsVisible } = this.pageManager;
-    this.windowWrapper.setDevToolsVisibility(isDevToolsVisible);
-    this.windowWrapper.loadPage(currentPagePath);
-    if (isDevToolsVisible) {
-      setTimeout(() => this.windowWrapper.reloadPage(), 500);
-    }
-  }
-
-  private setupMenu() {
-    const { menuManager, pageManager: pm } = this;
-    menuManager.buildMenu({
-      allPagePaths: pm.allPagePaths,
-      currentPagePath: pm.currentPagePath,
-      isDevToolVisible: pm.isDevToolsVisible,
-    });
-    menuManager.handleEvents((event) => {
-      if (event.changeCurrentPagePath) {
-        const { pagePath } = event.changeCurrentPagePath;
-        pm.setCurrentPagePath(pagePath);
-      }
-      if (event.requestReload) {
-        this.windowWrapper.reloadPage();
-      }
-      if (event.toggleDevtoolVisibility) {
-        pm.setDevToolVisiblity(!pm.isDevToolsVisible);
-      }
-      if (event.closeMainWindow) {
-        this.windowWrapper.closeMainWindow();
-      }
-    });
-  }
-
   initialize() {
     preparePreloadJsFile(appConfig.preloadFilePath);
+    applicationStorage.initialize();
+
     const win = this.windowWrapper.openMainWindow({
       preloadFilePath: appConfig.preloadFilePath,
       publicRootPath: appConfig.publicRootPath,
@@ -74,23 +32,61 @@ export class ApplicationRoot {
     this.setupIpcBackend();
   }
 
-  terminate() {
-    console.log(`saving window persist state`);
-    const persiteData = this.pageManager.terminate();
-    this.persistence.save(persiteData);
+  private setupPageManager() {
+    const { pageManager: pm, windowWrapper: ww } = this;
+    pm.initialize();
+    pm.onPagePathChanged((pagePath) => ww.loadPage(pagePath));
+    pm.onDevToolVisibilityChanged((visible) =>
+      ww.setDevToolsVisibility(visible),
+    );
+    const { currentPagePath, isDevToolsVisible } = pm;
+    ww.setDevToolsVisibility(isDevToolsVisible);
+    ww.loadPage(currentPagePath);
+    if (isDevToolsVisible) {
+      setTimeout(() => this.windowWrapper.reloadPage(), 500);
+    }
+  }
+
+  private setupMenu() {
+    const { menuManager: mm, pageManager: pm, windowWrapper: ww } = this;
+    mm.buildMenu({
+      allPagePaths: pm.allPagePaths,
+      currentPagePath: pm.currentPagePath,
+      isDevToolVisible: pm.isDevToolsVisible,
+    });
+    mm.onMenuCloseMainWindow(() => ww.closeMainWindow());
+    mm.onMenuChangeCurrentPagePath((pagePath) =>
+      pm.setCurrentPagePath(pagePath),
+    );
+    mm.onMenuRequestReload(() => ww.reloadPage());
+    mm.onMenuToggleDevtoolVisibility(() =>
+      pm.setDevToolVisiblity(!pm.isDevToolsVisible),
+    );
   }
 
   setupIpcBackend() {
+    const ww = this.windowWrapper;
+
     appGlobal.icpMainAgent.supplySyncHandlers({
       getVersionSync: () => 'v100',
+      debugMessage: (msg) => console.log(`[renderer] ${msg}`),
     });
     appGlobal.icpMainAgent.supplyAsyncHandlers({
       getVersion: async () => 'v100',
       addNumber: async (a: number, b: number) => a + b,
+      closeWindow: async () => ww.closeMainWindow(),
+      minimizeWindow: async () => ww.minimizeMainWindow(),
+      maximizeWindow: async () => ww.maximizeMainWindow(),
     });
 
     setTimeout(() => {
       appGlobal.icpMainAgent.emitEvent('testEvent', { type: 'test' });
     }, 2000);
+  }
+
+  terminate() {
+    this.pageManager.terminate();
+    console.log(`saving persist state`);
+    applicationStorage.terminate();
   }
 }

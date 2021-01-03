@@ -1,23 +1,23 @@
+import { BrowserWindow } from 'electron';
 import { appConfig } from '~/base/appConfig';
 import { pathJoin, pathRelative } from '~/funcs';
-import { WindowWrapperCore, PageSourceWatcher } from '~/modules';
-import { setupWebContentSourceChecker } from '~/modules/WindowsFunctionalities';
+import { PageSourceWatcher, setupWebContentSourceChecker } from '~/modules';
+import { IAppWindowWrapper } from '~/windowServices/serviceInterfaces';
 
-type IPacketMainToRenderer = { [key in string]: any };
-
-export class AppWindowWrapper {
-  private core = new WindowWrapperCore();
+export class AppWindowWrapper implements IAppWindowWrapper {
   private pageSourceWatcher = new PageSourceWatcher();
 
   private publicRootPath: string | undefined;
 
-  openMainWindow = (params: {
+  private mainWindow: BrowserWindow | undefined;
+
+  openMainWindow(params: {
     preloadFilePath: string;
     publicRootPath: string;
     pageTitle: string;
     initialPageWidth: number;
     initialPageHeight: number;
-  }): Electron.BrowserWindow => {
+  }): Electron.BrowserWindow {
     const {
       preloadFilePath,
       publicRootPath,
@@ -25,55 +25,82 @@ export class AppWindowWrapper {
       initialPageWidth,
       initialPageHeight,
     } = params;
-    const win = this.core.openMainWindow({
-      preloadFilePath,
-      pageTitle,
+    const options: Electron.BrowserWindowConstructorOptions = {
       width: initialPageWidth,
       height: initialPageHeight,
-    });
+      title: pageTitle,
+      webPreferences: {
+        nodeIntegration: false,
+        contextIsolation: true,
+        webSecurity: true,
+        worldSafeExecuteJavaScript: true,
+        preload: preloadFilePath,
+      },
+    };
+    const win = new BrowserWindow(options);
+    this.mainWindow = win;
     setupWebContentSourceChecker(win.webContents, publicRootPath);
     this.publicRootPath = publicRootPath;
     return win;
-  };
+  }
 
-  closeMainWindow = () => {
-    this.core.closeMainWindow();
-  };
+  closeMainWindow() {
+    this.mainWindow?.close();
+  }
 
-  loadPage = (pagePath: string) => {
-    const rootDir = this.publicRootPath;
-    if (!rootDir) {
+  loadPage(pagePath: string) {
+    if (!this.publicRootPath) {
       return;
     }
-    const pageDir = pathJoin(rootDir, pagePath !== '/' ? pagePath : '');
+    const pageDir = pathJoin(
+      this.publicRootPath,
+      pagePath !== '/' ? pagePath : '',
+    );
     const uri = `file://${pageDir}/index.html`;
     const relativeFilePathFromProjectRoot = pathRelative(
       process.cwd(),
       `${pageDir}/index.html`,
     );
     console.log(`loading ${relativeFilePathFromProjectRoot}`);
-    this.core.loadUri(uri);
+    this.mainWindow?.loadURL(uri);
 
     if (appConfig.isDevelopment) {
       const includeSubFolders = true;
       this.pageSourceWatcher.observeFiles(pageDir, includeSubFolders, () =>
-        this.core.reloadPage(),
+        this.mainWindow?.reload(),
       );
     }
-  };
+  }
 
-  reloadPage = () => {
-    this.core.reloadPage();
-  };
+  reloadPage() {
+    this.mainWindow?.reload();
+  }
 
-  setDevToolsVisibility = (visible: boolean) => {
-    this.core.setDevToolsVisibility(visible);
-  };
+  setDevToolsVisibility(visible: boolean) {
+    if (visible) {
+      this.mainWindow?.webContents.openDevTools();
+    } else {
+      this.mainWindow?.webContents.closeDevTools();
+    }
+  }
 
-  sendWebContentsIpcPacket = <K extends keyof IPacketMainToRenderer>(
-    key: K,
-    data: IPacketMainToRenderer[K],
-  ) => {
-    this.core.webcontentsSend(key, data);
-  };
+  minimizeMainWindow() {
+    this.mainWindow?.minimize();
+  }
+
+  private _isMaximized = false;
+
+  maximizeMainWindow() {
+    if (this.mainWindow) {
+      // const isMaximized = this.mainWindow.isMaximized()
+      // ...always returns false for transparent window
+      if (this._isMaximized) {
+        this.mainWindow.unmaximize();
+        this._isMaximized = false;
+      } else {
+        this.mainWindow.maximize();
+        this._isMaximized = true;
+      }
+    }
+  }
 }

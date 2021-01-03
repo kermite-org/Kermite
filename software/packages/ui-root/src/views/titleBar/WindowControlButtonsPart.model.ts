@@ -1,8 +1,8 @@
 import { appUi } from '@kermite/ui';
 
 export interface ITitleBarViewModel {
-  showReloadButton: boolean;
-  onReloadButton(): void;
+  // showReloadButton: boolean;
+  // onReloadButton(): void;
   onWidgetButton(): void;
   onMinimizeButton(): void;
   onMaximizeButton(): void;
@@ -11,10 +11,11 @@ export interface ITitleBarViewModel {
 
 export function makeWindowControlButtonsModel(): ITitleBarViewModel {
   return {
-    showReloadButton: appUi.isDevelopment,
-    onReloadButton() {
-      appUi.backendAgent.async.reloadApplication();
-    },
+    // showReloadButton: appUi.isDevelopment,
+    // showReloadButton: false,
+    // onReloadButton() {
+    //   appUi.backendAgent.async.reloadApplication();
+    // },
     onWidgetButton() {
       appUi.backendAgent.async.widgetModeChanged(true);
       appUi.navigateTo('./widget/index.html');

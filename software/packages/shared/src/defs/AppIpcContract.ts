@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { IKeyboardConfig } from './ConfigTypes';
 import {
   IKeyboardShape,
@@ -58,48 +59,47 @@ export interface IAppIpcContract {
   sync: {
     getVersionSync(): string;
     debugMessage(message: string): void;
-    reserveSaveProfileTask(data: IProfileData): void;
+    // reserveSaveProfileTask(data: IProfileData): void;
     // saveSettingsOnClosing?: IApplicationSettings;
-    saveKeyboardConfigOnClosing(data: IKeyboardConfig): void;
+    // saveKeyboardConfigOnClosing(data: IKeyboardConfig): void;
   };
   async: {
     getVersion(): Promise<string>;
     addNumber(a: number, b: number): Promise<number>;
 
-    getKeyboardConfig(): Promise<IKeyboardConfig>;
-    writeKeyboardConfig(config: IKeyboardConfig): Promise<void>;
-    writeKeyMappingToDevice(): Promise<void>;
-    executeProfileManagerCommands(
-      commands: IProfileManagerCommand[],
-    ): Promise<void>;
-
-    reloadApplication(): Promise<void>;
+    // reloadApplication(): Promise<void>;
     closeWindow(): Promise<void>;
     minimizeWindow(): Promise<void>;
     maximizeWindow(): Promise<void>;
-    widgetModeChanged(isWidgetMode: boolean): Promise<void>;
+    // widgetModeChanged(isWidgetMode: boolean): Promise<void>;
 
-    loadKeyboardShape(
-      projectId: string,
-      layoutName: string,
-    ): Promise<IKeyboardShape | undefined>;
+    // getKeyboardConfig(): Promise<IKeyboardConfig>;
+    // writeKeyboardConfig(config: IKeyboardConfig): Promise<void>;
+    // writeKeyMappingToDevice(): Promise<void>;
+    // executeProfileManagerCommands(
+    //   commands: IProfileManagerCommand[],
+    // ): Promise<void>;
+    // loadKeyboardShape(
+    //   projectId: string,
+    //   layoutName: string,
+    // ): Promise<IKeyboardShape | undefined>;
 
-    uploadFirmware(projectId: string, comPortName: string): Promise<string>;
+    // uploadFirmware(projectId: string, comPortName: string): Promise<string>;
 
-    getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
-    loadPresetProfile(
-      projectId: string,
-      presetName: string | undefined,
-    ): Promise<IProfileData | undefined>;
+    // getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
+    // loadPresetProfile(
+    //   projectId: string,
+    //   presetName: string | undefined,
+    // ): Promise<IProfileData | undefined>;
   };
   events: {
     testEvent: { type: string };
-
-    keyEvents: IRealtimeKeyboardEvent;
-    profileStatusEvents: Partial<IProfileManagerStatus>;
     appWindowEvents: IAppWindowEvent;
-    keyboardDeviceStatusEvents: Partial<IKeyboardDeviceStatus>;
-    comPortPlugEvents: { comPortName: string | undefined };
-    layoutFileUpdationEvents: { projectId: string };
+
+    // keyEvents: IRealtimeKeyboardEvent;
+    // profileStatusEvents: Partial<IProfileManagerStatus>;
+    // keyboardDeviceStatusEvents: Partial<IKeyboardDeviceStatus>;
+    // comPortPlugEvents: { comPortName: string | undefined };
+    // layoutFileUpdationEvents: { projectId: string };
   };
 }

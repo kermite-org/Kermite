@@ -1,9 +1,6 @@
 import { app, Menu } from 'electron';
 import { makeListnerPort } from '~/funcs';
-import {
-  IMenuCallbackEvent,
-  IMenuManager,
-} from '~/windowServices/serviceInterfaces';
+import { IMenuManager } from '~/windowServices/serviceInterfaces';
 
 function makePageMenuItem(
   label: string,
@@ -19,11 +16,10 @@ function makePageMenuItem(
 }
 
 export class MenuManager implements IMenuManager {
-  handleEvents = makeListnerPort<IMenuCallbackEvent>();
-
-  private emitEvent(event: IMenuCallbackEvent) {
-    this.handleEvents.emit(event);
-  }
+  onMenuChangeCurrentPagePath = makeListnerPort<string>();
+  onMenuRequestReload = makeListnerPort<void>();
+  onMenuToggleDevtoolVisibility = makeListnerPort<void>();
+  onMenuCloseMainWindow = makeListnerPort<void>();
 
   buildMenu(initailState: {
     allPagePaths: string[];
@@ -44,23 +40,23 @@ export class MenuManager implements IMenuManager {
             label: 'Page',
             submenu: allPagePaths.map((pagePath) =>
               makePageMenuItem(pagePath, pagePath === currentPagePath, () =>
-                this.emitEvent({ changeCurrentPagePath: { pagePath } }),
+                this.onMenuChangeCurrentPagePath.emit(pagePath),
               ),
             ),
           },
           {
             label: 'Reload Page',
-            click: () => this.emitEvent({ requestReload: true }),
+            click: () => this.onMenuRequestReload.emit(),
           },
           {
             label: 'Show DevTool',
             type: 'checkbox',
             checked: isDevToolVisible,
-            click: () => this.emitEvent({ toggleDevtoolVisibility: true }),
+            click: () => this.onMenuToggleDevtoolVisibility.emit(),
           },
           {
             label: 'Quit',
-            click: () => this.emitEvent({ closeMainWindow: true }),
+            click: () => this.onMenuCloseMainWindow.emit(),
           },
           // {
           //   label: 'Restart Application',

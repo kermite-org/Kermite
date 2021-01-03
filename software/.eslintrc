@@ -81,7 +81,7 @@
     "@typescript-eslint/array-type": [1, { "default": "array" }],
     "@typescript-eslint/no-useless-constructor": 1,
     "@typescript-eslint/lines-between-class-members": 1,
-    "@typescript-eslint/no-invalid-void-type": 1,
+    "@typescript-eslint/no-invalid-void-type": 0,
     "@typescript-eslint/prefer-includes": 1,
     "@typescript-eslint/prefer-optional-chain": 1,
     "@typescript-eslint/default-param-last": 1,
