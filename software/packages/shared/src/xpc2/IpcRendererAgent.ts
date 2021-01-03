@@ -1,6 +1,6 @@
 import { IIpcContractBase } from './IpcContractBase';
 
-interface IIpcRendererAgent<T extends IIpcContractBase> {
+export interface IIpcRendererAgent<T extends IIpcContractBase> {
   sync: T['sync'];
   async: T['async'];
   invoke<K extends keyof T['async']>(
