@@ -4,7 +4,6 @@ import {
   enumeratePagePaths,
   preparePreloadJsFile,
 } from '~/modules/WindowsFunctionalities';
-import { setupIpcBackend } from '~/services/IpcBackend';
 import {
   PageStateManager,
   AppWindowWrapper,
@@ -72,12 +71,26 @@ export class ApplicationRoot {
     this.setupPageManager();
     this.setupMenu();
 
-    setupIpcBackend();
+    this.setupIpcBackend();
   }
 
   terminate() {
     console.log(`saving window persist state`);
     const persiteData = this.pageManager.terminate();
     this.persistence.save(persiteData);
+  }
+
+  setupIpcBackend() {
+    appGlobal.icpMainAgent.supplySyncHandlers({
+      getVersionSync: () => 'v100',
+    });
+    appGlobal.icpMainAgent.supplyAsyncHandlers({
+      getVersion: async () => 'v100',
+      addNumber: async (a: number, b: number) => a + b,
+    });
+
+    setTimeout(() => {
+      appGlobal.icpMainAgent.emitEvent('testEvent', { type: 'test' });
+    }, 2000);
   }
 }
