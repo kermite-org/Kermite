@@ -20,7 +20,7 @@ interface IIpcRendererAgent<T extends IIpcContractBase> {
 export function getIpcRendererAgent<
   T extends IIpcContractBase
 >(): IIpcRendererAgent<T> {
-  const ipcRenderer = (window as any).ipcRenderer;
+  const ipcRenderer = (window.top as any).ipcRenderer;
   return {
     sync: new Proxy(
       {},

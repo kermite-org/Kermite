@@ -2,6 +2,7 @@ import { addNumber, showVersion } from '@kermite/shared';
 import { initializeCss } from '@kermite/ui';
 import { css } from 'goober';
 import { h, render } from 'qx';
+import { ipcExample } from '~/ipcExample';
 import { greet } from '~/local';
 
 const cssRoot = css`
@@ -18,6 +19,8 @@ window.addEventListener('load', () => {
   showVersion();
   greet();
   document.body.style.background = '#FFF';
+
+  ipcExample();
 
   render(
     () => <div css={cssRoot}>hello qx</div>,
