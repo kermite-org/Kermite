@@ -34,5 +34,8 @@ const PageRoot = () => {
 };
 
 window.addEventListener('load', () => {
+  const isDevelopment = (window as any).debugConfig?.isDevelopment;
+  console.log({ isDevelopment });
+
   render(() => <PageRoot />, document.getElementById('app'));
 });

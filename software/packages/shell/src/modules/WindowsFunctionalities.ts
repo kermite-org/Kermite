@@ -41,8 +41,8 @@ export function preparePreloadJsFile(preloadFilePath: string) {
   // dirty patch preload.json to expose isDevelopment
   const preloadText = fsReadFileSync(preloadFilePath, { encoding: 'utf-8' });
   const modPreloadText = preloadText.replace(
-    /isDevelopment: (true|false),/,
-    `isDevelopment: ${isDevelopment},`,
+    /isDevelopment: (true|false)/g,
+    `isDevelopment: ${isDevelopment}`,
   );
   fsWriteFileSync(preloadFilePath, modPreloadText, {
     encoding: 'utf-8',
