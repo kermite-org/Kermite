@@ -13,13 +13,31 @@ const cssIframe = css`
   width: 400px;
   height: 400px;
 `;
+
+let pageTag = 'page1';
+
+function loadState() {
+  const _pageTag = localStorage.getItem('pageTag');
+  if (_pageTag) {
+    pageTag = _pageTag;
+  }
+}
+
+function saveState() {
+  localStorage.setItem('pageTag', pageTag);
+}
+
 const PageRoot = () => {
   initializeCss();
 
   return (
     <div css={cssPageRoot}>
       <div>UI APP ROOT</div>
-      <iframe src="./page1/index.html" css={cssIframe}></iframe>
+      <div>
+        <button onClick={() => (pageTag = 'page1')}>page1</button>
+        <button onClick={() => (pageTag = 'page2')}>page2</button>
+      </div>
+      <iframe src={`./${pageTag}/index.html`} css={cssIframe}></iframe>
       <div>
         <div>
           <a href="./page1/index.html">move to page1</a>
@@ -35,8 +53,12 @@ const PageRoot = () => {
 };
 
 window.addEventListener('load', () => {
+  loadState();
+
   const isDevelopment = (window as any).debugConfig?.isDevelopment;
   console.log({ isDevelopment });
   ipcExample();
   render(() => <PageRoot />, document.getElementById('app'));
+
+  window.addEventListener('beforeunload', saveState);
 });
