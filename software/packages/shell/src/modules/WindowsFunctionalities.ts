@@ -30,8 +30,8 @@ export function setupWebContentSourceChecker(
 export function enumeratePagePaths(baseDir: string): string[] {
   const subPagePaths = glob
     .sync('**/index.html', { cwd: baseDir })
-    .map((path) => path.replace('/index.html', ''))
-    .map((path) => `/${path}`);
+    .map((path) => path.replace('index.html', ''))
+    .map((path) => (path === '' && '/') || path);
   return subPagePaths;
 }
 

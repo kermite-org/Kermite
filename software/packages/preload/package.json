@@ -2,6 +2,6 @@
   "name": "@kermite/preload",
   "version": "0.0.0",
   "scripts": {
-    "watch": "cp preload.js ../../dist/preload.js"
+    "watch": "mkdir -p ../../dist/shell && cp preload.js ../../dist/shell/preload.js"
   }
 }
