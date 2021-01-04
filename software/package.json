@@ -44,7 +44,8 @@
     "watch": "lerna run --parallel watch",
     "start": "cross-env NODE_ENV=development electron ./dist/shell",
     "clean": "rm -rf .cache",
-    "typecheck": "tsc -b packages/*/tsconfig.json"
+    "typecheck": "tsc -b packages/*/tsconfig.json",
+    "lint": "eslint packages --ext .ts,.tsx"
   },
   "dependencies": {
     "electron-store": "^6.0.1",
