@@ -43,7 +43,8 @@
     "_packaging_win": "electron-builder --win --x64",
     "watch": "lerna run --parallel watch",
     "start": "cross-env NODE_ENV=development electron ./dist/shell",
-    "clean": "rm -rf .cache"
+    "clean": "rm -rf .cache",
+    "typecheck": "tsc -b packages/*/tsconfig.json"
   },
   "dependencies": {
     "electron-store": "^6.0.1",
