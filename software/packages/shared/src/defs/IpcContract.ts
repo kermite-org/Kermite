@@ -57,20 +57,20 @@ export interface IProfileManagerCommand {
 
 export interface IAppIpcContract {
   sync: {
-    getVersionSync(): string;
-    debugMessage(message: string): void;
+    dev_getVersionSync(): string;
+    dev_debugMessage(message: string): void;
     // reserveSaveProfileTask(data: IProfileData): void;
     // saveSettingsOnClosing?: IApplicationSettings;
     // saveKeyboardConfigOnClosing(data: IKeyboardConfig): void;
   };
   async: {
-    getVersion(): Promise<string>;
-    addNumber(a: number, b: number): Promise<number>;
+    dev_getVersion(): Promise<string>;
+    dev_addNumber(a: number, b: number): Promise<number>;
 
     // reloadApplication(): Promise<void>;
-    closeWindow(): Promise<void>;
-    minimizeWindow(): Promise<void>;
-    maximizeWindow(): Promise<void>;
+    window_closeWindow(): Promise<void>;
+    window_minimizeWindow(): Promise<void>;
+    window_maximizeWindow(): Promise<void>;
     // widgetModeChanged(isWidgetMode: boolean): Promise<void>;
 
     // getKeyboardConfig(): Promise<IKeyboardConfig>;
@@ -93,8 +93,8 @@ export interface IAppIpcContract {
     // ): Promise<IProfileData | undefined>;
   };
   events: {
-    testEvent: { type: string };
-    appWindowEvents: IAppWindowEvent;
+    dev_testEvent: { type: string };
+    window_appWindowEvents: IAppWindowEvent;
 
     // keyEvents: IRealtimeKeyboardEvent;
     // profileStatusEvents: Partial<IProfileManagerStatus>;

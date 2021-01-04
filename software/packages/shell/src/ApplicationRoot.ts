@@ -9,19 +9,19 @@ export class ApplicationRoot {
     const ww = this.windowService.getWindowWrapper();
 
     appGlobal.icpMainAgent.supplySyncHandlers({
-      getVersionSync: () => 'v100',
-      debugMessage: (msg) => console.log(`[renderer] ${msg}`),
+      dev_getVersionSync: () => 'v100',
+      dev_debugMessage: (msg) => console.log(`[renderer] ${msg}`),
     });
     appGlobal.icpMainAgent.supplyAsyncHandlers({
-      getVersion: async () => 'v100',
-      addNumber: async (a: number, b: number) => a + b,
-      closeWindow: async () => ww.closeMainWindow(),
-      minimizeWindow: async () => ww.minimizeMainWindow(),
-      maximizeWindow: async () => ww.maximizeMainWindow(),
+      dev_getVersion: async () => 'v100',
+      dev_addNumber: async (a: number, b: number) => a + b,
+      window_closeWindow: async () => ww.closeMainWindow(),
+      window_minimizeWindow: async () => ww.minimizeMainWindow(),
+      window_maximizeWindow: async () => ww.maximizeMainWindow(),
     });
 
     setTimeout(() => {
-      appGlobal.icpMainAgent.emitEvent('testEvent', { type: 'test' });
+      appGlobal.icpMainAgent.emitEvent('dev_testEvent', { type: 'test' });
     }, 2000);
   }
 
