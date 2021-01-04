@@ -91,13 +91,17 @@ export interface IAppIpcContract {
     //   projectId: string,
     //   presetName: string | undefined,
     // ): Promise<IProfileData | undefined>;
+    profile_getCurrentProfile(): Promise<IProfileData | undefined>;
   };
   events: {
     dev_testEvent: { type: string };
     window_appWindowEvents: IAppWindowEvent;
 
+    // profile_currentProfile: IProfileData | undefined;
+    profile_currentProfileChanged: void;
     // keyEvents: IRealtimeKeyboardEvent;
-    // profileStatusEvents: Partial<IProfileManagerStatus>;
+    // profile_selectionStatus: Partial<IProfileManagerStatus>;
+    // profile_loadedProfileChanged: IProfileData | undefined;
     // keyboardDeviceStatusEvents: Partial<IKeyboardDeviceStatus>;
     // comPortPlugEvents: { comPortName: string | undefined };
     // layoutFileUpdationEvents: { projectId: string };

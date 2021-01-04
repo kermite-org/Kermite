@@ -1,5 +1,5 @@
 import { BrowserWindow } from 'electron';
-import { appConfig } from '~/base/appConfig';
+import { appConfig } from '~/base';
 import { pathJoin, pathRelative } from '~/funcs';
 import { IAppWindowWrapper } from './interfaces';
 import { PageSourceWatcher, setupWebContentSourceChecker } from './modules';
@@ -10,6 +10,8 @@ export class AppWindowWrapper implements IAppWindowWrapper {
   private publicRootPath: string | undefined;
 
   private mainWindow: BrowserWindow | undefined;
+
+  // onPageLoaded = makeListnerPort<string>();
 
   openMainWindow(params: {
     preloadFilePath: string;
@@ -70,6 +72,8 @@ export class AppWindowWrapper implements IAppWindowWrapper {
         this.mainWindow?.reload(),
       );
     }
+
+    // this.onPageLoaded.emit(pagePath);
   }
 
   reloadPage() {

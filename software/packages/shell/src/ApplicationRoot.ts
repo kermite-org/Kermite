@@ -1,12 +1,14 @@
-import { applicationStorage } from '~/base/ApplicationStorage';
-import { appGlobal } from '~/base/appGlobal';
+import { appGlobal, applicationStorage } from '~/base';
+import { ProfileService } from '~/services/profile';
 import { WindowService } from '~/services/window';
 
 export class ApplicationRoot {
   private windowService = new WindowService();
 
+  private profileService = new ProfileService();
+
   private setupIpcBackend() {
-    const ww = this.windowService.getWindowWrapper();
+    const windowWrapper = this.windowService.getWindowWrapper();
 
     appGlobal.icpMainAgent.supplySyncHandlers({
       dev_getVersionSync: () => 'v100',
@@ -15,9 +17,11 @@ export class ApplicationRoot {
     appGlobal.icpMainAgent.supplyAsyncHandlers({
       dev_getVersion: async () => 'v100',
       dev_addNumber: async (a: number, b: number) => a + b,
-      window_closeWindow: async () => ww.closeMainWindow(),
-      window_minimizeWindow: async () => ww.minimizeMainWindow(),
-      window_maximizeWindow: async () => ww.maximizeMainWindow(),
+      window_closeWindow: async () => windowWrapper.closeMainWindow(),
+      window_minimizeWindow: async () => windowWrapper.minimizeMainWindow(),
+      window_maximizeWindow: async () => windowWrapper.maximizeMainWindow(),
+      profile_getCurrentProfile: async () =>
+        this.profileService.getCurrentProfile(),
     });
 
     setTimeout(() => {
@@ -25,14 +29,23 @@ export class ApplicationRoot {
     }, 2000);
   }
 
-  initialize() {
-    applicationStorage.initialize();
-    this.windowService.initialize();
-    this.setupIpcBackend();
+  private setupProfileStatusFeeder() {
+    this.profileService.onCurrentProfileChanged(() =>
+      appGlobal.icpMainAgent.emitEvent('profile_currentProfileChanged'),
+    );
   }
 
-  terminate() {
+  async initialize() {
+    applicationStorage.initialize();
+    await this.profileService.initialize();
+    this.setupIpcBackend();
+    this.setupProfileStatusFeeder();
+    this.windowService.initialize();
+  }
+
+  async terminate() {
     this.windowService.terminate();
+    await this.profileService.terminate();
     applicationStorage.terminate();
   }
 }

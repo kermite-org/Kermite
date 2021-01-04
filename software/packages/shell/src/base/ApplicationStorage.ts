@@ -6,6 +6,7 @@ export interface IApplicationPersistData {
     currentPagePath: string;
     isDevToolsVisible: boolean;
   };
+  currentProfileName: string | undefined;
 }
 
 class ApplicationStorage {
@@ -16,6 +17,7 @@ class ApplicationStorage {
       currentPagePath: '/',
       isDevToolsVisible: false,
     },
+    currentProfileName: undefined,
   };
 
   getItem<K extends keyof IApplicationPersistData>(

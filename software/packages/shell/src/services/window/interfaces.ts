@@ -1,4 +1,4 @@
-export type IListenerPort<T> = (listener: (payload: T) => void) => void;
+import { IListenerPort } from '~/base';
 
 export interface IMenuManager {
   buildMenu(initailState: {
@@ -26,6 +26,7 @@ export interface IAppWindowWrapper {
   setDevToolsVisibility(visible: boolean): void;
   minimizeMainWindow(): void;
   maximizeMainWindow(): void;
+  // onPageLoaded: IListenerPort<string>;
 }
 
 export interface IPageStateManager {
