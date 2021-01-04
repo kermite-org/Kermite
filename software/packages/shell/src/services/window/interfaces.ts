@@ -39,3 +39,9 @@ export interface IPageStateManager {
   initialize(): void;
   terminate(): void;
 }
+
+export interface IWindowService {
+  getWindowWrapper(): IAppWindowWrapper;
+  initialize(): void;
+  terminate(): void;
+}

@@ -3,10 +3,10 @@ import { appGlobal } from '~/base/appGlobal';
 import { AppWindowWrapper } from './AppWindowWrapper';
 import { MenuManager } from './MenuManager';
 import { PageStateManager } from './PageStateManager';
-import { IAppWindowWrapper } from './interfaces';
+import { IAppWindowWrapper, IWindowService } from './interfaces';
 import { preparePreloadJsFile } from './modules';
 
-export class WindowService {
+export class WindowService implements IWindowService {
   private pageManager = new PageStateManager();
   private windowWrapper = new AppWindowWrapper();
   private menuManager = new MenuManager();
