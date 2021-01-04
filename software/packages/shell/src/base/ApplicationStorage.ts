@@ -40,6 +40,7 @@ class ApplicationStorage {
   }
 
   terminate() {
+    console.log(`saving persist state`);
     const dataText = JSON.stringify(this._settings);
     this.store.set('persistData', dataText);
   }

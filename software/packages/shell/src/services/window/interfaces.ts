@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-invalid-void-type */
 export type IListenerPort<T> = (listener: (payload: T) => void) => void;
+
 export interface IMenuManager {
   buildMenu(initailState: {
     allPagePaths: string[];
@@ -27,6 +27,7 @@ export interface IAppWindowWrapper {
   minimizeMainWindow(): void;
   maximizeMainWindow(): void;
 }
+
 export interface IPageStateManager {
   allPagePaths: string[];
   currentPagePath: string;

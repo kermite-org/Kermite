@@ -1,8 +1,8 @@
 import { applicationStorage } from '~/base/ApplicationStorage';
 import { appConfig } from '~/base/appConfig';
 import { makeListnerPort } from '~/funcs';
-import { enumeratePagePaths } from '~/modules';
-import { IPageStateManager } from '~/windowServices/serviceInterfaces';
+import { IPageStateManager } from './interfaces';
+import { enumeratePagePaths } from './modules';
 
 export class PageStateManager implements IPageStateManager {
   private _allPagePaths: string[] = [];

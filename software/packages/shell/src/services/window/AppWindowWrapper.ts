@@ -1,8 +1,8 @@
 import { BrowserWindow } from 'electron';
 import { appConfig } from '~/base/appConfig';
 import { pathJoin, pathRelative } from '~/funcs';
-import { PageSourceWatcher, setupWebContentSourceChecker } from '~/modules';
-import { IAppWindowWrapper } from '~/windowServices/serviceInterfaces';
+import { IAppWindowWrapper } from './interfaces';
+import { PageSourceWatcher, setupWebContentSourceChecker } from './modules';
 
 export class AppWindowWrapper implements IAppWindowWrapper {
   private pageSourceWatcher = new PageSourceWatcher();

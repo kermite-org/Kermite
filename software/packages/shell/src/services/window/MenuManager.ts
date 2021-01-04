@@ -1,6 +1,6 @@
 import { app, Menu } from 'electron';
 import { makeListnerPort } from '~/funcs';
-import { IMenuManager } from '~/windowServices/serviceInterfaces';
+import { IMenuManager } from './interfaces';
 
 function makePageMenuItem(
   label: string,

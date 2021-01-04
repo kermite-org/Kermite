@@ -1,4 +1,4 @@
-const Bundler = require('parcel-bundler');
+const Bundler = require('parcel');
 const path = require('path');
 const childProcess = require('child_process');
 const fs = require('fs');
@@ -26,7 +26,7 @@ function runDevelopment() {
       outDir,
       watch: true,
       target: 'node',
-      autoInstall: false
+      autoInstall: false,
     }).bundle();
   }
 
@@ -37,7 +37,7 @@ function runDevelopment() {
       outDir,
       watch: true,
       target: 'browser',
-      autoInstall: false
+      autoInstall: false,
     }).serve(3700, false, 'localhost');
   }
 
@@ -90,7 +90,7 @@ function runProduction() {
       outDir,
       watch: false,
       target: 'node',
-      autoInstall: false
+      autoInstall: false,
     }).bundle();
   }
 
@@ -102,14 +102,14 @@ function runProduction() {
       watch: false,
       target: 'browser',
       publicUrl: '.',
-      autoInstall: false
+      autoInstall: false,
     }).bundle();
   }
 
   function startElectronProcess() {
     childProcess.spawn('electron', ['.'], {
       stdio: 'inherit',
-      shell: true
+      shell: true,
     });
   }
 
