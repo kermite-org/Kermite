@@ -1,23 +1,42 @@
 import { ipcMain } from 'electron';
 import { IIpcContractBase } from './IpcContractBase';
 
+type IEmitEventArgs<
+  T extends IIpcContractBase,
+  K extends keyof T['events']
+> = T['events'][K] extends void ? [] : [T['events'][K]];
 export interface IIpcMainAgent<T extends IIpcContractBase> {
   emitEvent<K extends keyof T['events']>(
     key: K,
-    ...arg: T['events'][K] extends void ? [] : [T['events'][K]]
+    ...arg: IEmitEventArgs<T, K>
   ): void;
   setWebcontents(webContents: Electron.webContents): void;
   supplySyncHandlers(handlers: T['sync']): void;
   supplyAsyncHandlers(handlers: T['async']): void;
+  setSubscriptionStartCallback(key: keyof T['events'], cb: () => void): void;
 }
 
 export class IpcMainAgent<T extends IIpcContractBase>
   implements IIpcMainAgent<T> {
   private webContents: Electron.webContents | undefined;
 
+  private subscriptionStartCallbacks: {
+    [key in keyof T['events']]?: () => void;
+  } = {};
+
+  constructor() {
+    ipcMain.handle('__subscriptionStarted', (event, key) => {
+      this.subscriptionStartCallbacks?.[key]?.();
+    });
+  }
+
+  setSubscriptionStartCallback(key: keyof T['events'], cb: () => void) {
+    this.subscriptionStartCallbacks[key] = cb;
+  }
+
   emitEvent<K extends keyof T['events']>(
     key: Extract<K, string>,
-    ...arg: T['events'][K] extends void ? [] : [T['events'][K]]
+    ...arg: IEmitEventArgs<T, K>
   ): void {
     this.webContents?.send(key, ...arg);
   }

@@ -20,8 +20,6 @@ export class ApplicationRoot {
       window_closeWindow: async () => windowWrapper.closeMainWindow(),
       window_minimizeWindow: async () => windowWrapper.minimizeMainWindow(),
       window_maximizeWindow: async () => windowWrapper.maximizeMainWindow(),
-      profile_getCurrentProfile: async () =>
-        this.profileService.getCurrentProfile(),
     });
 
     setTimeout(() => {
@@ -29,17 +27,25 @@ export class ApplicationRoot {
     }, 2000);
   }
 
-  private setupProfileStatusFeeder() {
-    this.profileService.onCurrentProfileChanged(() =>
-      appGlobal.icpMainAgent.emitEvent('profile_currentProfileChanged'),
+  private setupCurrentProfileEmitter() {
+    const emitCurrentProfile = () => {
+      appGlobal.icpMainAgent.emitEvent(
+        'profile_currentProfile',
+        this.profileService.getCurrentProfile(),
+      );
+    };
+    appGlobal.icpMainAgent.setSubscriptionStartCallback(
+      'profile_currentProfile',
+      emitCurrentProfile,
     );
+    this.profileService.onCurrentProfileChanged(emitCurrentProfile);
   }
 
   async initialize() {
     applicationStorage.initialize();
     await this.profileService.initialize();
     this.setupIpcBackend();
-    this.setupProfileStatusFeeder();
+    this.setupCurrentProfileEmitter();
     this.windowService.initialize();
   }
 

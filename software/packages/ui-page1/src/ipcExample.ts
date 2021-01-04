@@ -10,15 +10,8 @@ export async function ipcExample() {
     console.log(`[page1] test event received: ${ev.type}`);
   });
 
-  async function loadProfile() {
-    const curProf = await agent.async.profile_getCurrentProfile();
-    console.log({ curProf });
-  }
-
-  loadProfile();
-
-  agent.subscribe('profile_currentProfileChanged', () => {
-    console.log('profile changed');
-    loadProfile();
+  agent.subscribe('profile_currentProfile', (profile) => {
+    console.log('profile loaded');
+    console.log({ profile });
   });
 }

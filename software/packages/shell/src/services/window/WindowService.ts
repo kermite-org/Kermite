@@ -41,7 +41,7 @@ export class WindowService implements IWindowService {
     ww.setDevToolsVisibility(isDevToolsVisible);
     ww.loadPage(currentPagePath);
     if (isDevToolsVisible) {
-      setTimeout(() => this.windowWrapper.reloadPage(), 500);
+      // setTimeout(() => this.windowWrapper.reloadPage(), 500);
     }
   }
 

@@ -41,6 +41,7 @@ export function getIpcRendererAgent<
     subscribe: ((key: string, listener: any) => {
       const wrapper = (event: any, value: any) => listener(value);
       ipcRenderer.on(key, wrapper);
+      ipcRenderer.invoke('__subscriptionStarted', key);
       return () => ipcRenderer.removeListener(key, wrapper);
     }) as any,
   };
