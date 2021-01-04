@@ -18,7 +18,7 @@ export class SiteModel {
 
   initialize() {
     this.unsubscribe = appUi.backendAgent.subscribe(
-      'appWindowEvents',
+      'window_appWindowEvents',
       this.onAppWindowEvents,
     );
   }

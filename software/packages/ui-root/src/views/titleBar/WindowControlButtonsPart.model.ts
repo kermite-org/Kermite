@@ -17,17 +17,17 @@ export function makeWindowControlButtonsModel(): ITitleBarViewModel {
     //   appUi.backendAgent.async.reloadApplication();
     // },
     onWidgetButton() {
-      appUi.backendAgent.async.widgetModeChanged(true);
+      // appUi.backendAgent.async.window_widgetModeChanged(true);
       appUi.navigateTo('./widget/index.html');
     },
     onMinimizeButton() {
-      appUi.backendAgent.async.minimizeWindow();
+      appUi.backendAgent.async.window_minimizeWindow();
     },
     onMaximizeButton() {
-      appUi.backendAgent.async.maximizeWindow();
+      appUi.backendAgent.async.window_maximizeWindow();
     },
     onCloseButton() {
-      appUi.backendAgent.async.closeWindow();
+      appUi.backendAgent.async.window_closeWindow();
     },
   };
 }
