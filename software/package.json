@@ -2,7 +2,7 @@
   "name": "kermite",
   "productName": "Kermite",
   "version": "1.0.0",
-  "main": "dist/index.js",
+  "main": "dist/shell/index.js",
   "license": "MIT",
   "build": {
     "appId": "com.electron.yourapp",
@@ -42,7 +42,7 @@
     "_packaging_mac": "electron-builder --mac --x64",
     "_packaging_win": "electron-builder --win --x64",
     "watch": "lerna run --parallel watch",
-    "start": "cross-env NODE_ENV=development electron ./dist/shell",
+    "start": "cross-env NODE_ENV=development electron .",
     "clean": "rm -rf .cache",
     "typecheck": "tsc -b packages/*/tsconfig.json",
     "lint": "eslint packages --ext .ts,.tsx"
