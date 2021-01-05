@@ -1,7 +1,13 @@
-import { addNumber, showVersion } from '@kermite/shared';
+import {
+  addNumber,
+  getIpcRendererAgent,
+  IAppIpcContract,
+  IProfileData,
+  showVersion,
+} from '@kermite/shared';
 import { initializeCss } from '@kermite/ui';
 import { css } from 'goober';
-import { h, render, Hook } from 'qx';
+import { h, render, Hook, rerender } from 'qx';
 import { ipcExample } from '~/ipcExample';
 import { greet } from '~/local';
 
@@ -47,6 +53,30 @@ const Counter1 = () => {
   );
 };
 
+const agent = getIpcRendererAgent<IAppIpcContract>();
+let gProfile: IProfileData | undefined;
+
+const cssJsonDiv = css`
+  font-size: 3px;
+`;
+
+const ProfileView = () => {
+  Hook.useEffect(() => {
+    const unsub = agent.subscribe('profile_currentProfile', (profile) => {
+      console.log('profile loaded');
+      console.log({ profile });
+      gProfile = profile;
+      rerender();
+    });
+    return () => {
+      agent.sync.dev_debugMessage('subscription cleaned');
+      unsub();
+    };
+  }, []);
+
+  return <div css={cssJsonDiv}>{JSON.stringify(gProfile)}</div>;
+};
+
 const PageRoot = () => {
   renderIndex++;
 
@@ -62,6 +92,7 @@ const PageRoot = () => {
     <div css={cssRoot}>
       hello page1
       <Counter1 />
+      <ProfileView />
       <div>
         <button onClick={() => (broken = true)}>break</button>
       </div>
@@ -82,4 +113,9 @@ window.addEventListener('load', () => {
   ipcExample();
 
   render(() => <PageRoot />, document.getElementById('app'));
+});
+
+window.addEventListener('beforeunload', () => {
+  console.log('beforeunload');
+  render(() => <div />, document.getElementById('app'));
 });

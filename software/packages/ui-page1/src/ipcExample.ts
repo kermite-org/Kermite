@@ -10,8 +10,8 @@ export async function ipcExample() {
     console.log(`[page1] test event received: ${ev.type}`);
   });
 
-  agent.subscribe('profile_currentProfile', (profile) => {
-    console.log('profile loaded');
-    console.log({ profile });
-  });
+  // agent.subscribe('profile_currentProfile', (profile) => {
+  //   console.log('profile loaded');
+  //   console.log({ profile });
+  // });
 }
