@@ -1,3 +1,4 @@
+import { IProfileManagerStatus } from '@kermite/shared';
 import { appGlobal, applicationStorage } from '~/base';
 import { ProfileService } from '~/services/profile';
 import { WindowService } from '~/services/window';
@@ -21,6 +22,8 @@ export class ApplicationCore {
       window_closeWindow: async () => windowWrapper.closeMainWindow(),
       window_minimizeWindow: async () => windowWrapper.minimizeMainWindow(),
       window_maximizeWindow: async () => windowWrapper.maximizeMainWindow(),
+      profile_executeProfileManagerCommands: async (commands) =>
+        await this.profileService.profileManager.executeCommands(commands),
     });
 
     setTimeout(() => {
@@ -42,11 +45,30 @@ export class ApplicationCore {
     this.profileService.onCurrentProfileChanged(emitCurrentProfile);
   }
 
+  private setupProfileManagerStatusEmitter() {
+    const emitProfileManagerStatus = (
+      status: Partial<IProfileManagerStatus>,
+    ) => {
+      appGlobal.icpMainAgent.emitEvent('profile_profileManagerStatus', status);
+    };
+    appGlobal.icpMainAgent.setSubscriptionStartCallback(
+      'profile_profileManagerStatus',
+      () =>
+        emitProfileManagerStatus(
+          this.profileService.profileManager.getStatus(),
+        ),
+    );
+    this.profileService.profileManager.statusEventPort.subscribe(
+      emitProfileManagerStatus,
+    );
+  }
+
   async initialize() {
     applicationStorage.initialize();
     await this.profileService.initialize();
     this.setupIpcBackend();
     this.setupCurrentProfileEmitter();
+    this.setupProfileManagerStatusEmitter();
     this.windowService.initialize();
   }
 
