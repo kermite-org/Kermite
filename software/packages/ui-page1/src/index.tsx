@@ -50,6 +50,7 @@ const Counter1 = () => {
 const PageRoot = () => {
   renderIndex++;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const b = Hook.useMemo(() => 100, []);
 
   if (broken) {

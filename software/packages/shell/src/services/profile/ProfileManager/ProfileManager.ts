@@ -140,9 +140,9 @@ export class ProfileManager {
   }
 
   private async createProfileImpl(
-    profName: string,
-    targetProjectId: string,
-    presetName: string,
+    _profName: string,
+    _targetProjectId: string,
+    _presetName: string,
   ): Promise<IProfileData> {
     throw new Error('not implemented yet');
     // const profile = await this.presetProfileLoader.loadPresetProfileData(

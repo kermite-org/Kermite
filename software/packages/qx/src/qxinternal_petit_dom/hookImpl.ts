@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { qxGlobal } from '../qxGlobal';
 
 // type IPlainFunc = () => void;
