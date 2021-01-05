@@ -11,6 +11,7 @@ export type VComponent = {
   readonly key: IKey;
   readonly props: { [key: string]: any };
   _state: any;
+  label: string;
 };
 
 export type VElement = {
@@ -19,6 +20,7 @@ export type VElement = {
   readonly key: IKey;
   readonly props: { [key: string]: any };
   children: VNode[];
+  label: string;
 };
 
 export type VNode = VComponent | VElement;
@@ -31,21 +33,20 @@ export type IEnv = {
 
 type IFunctionalComponent<P> = (props: P) => VNode;
 
-type IClosureComponentSimple<P> = (props: P) => (props: P) => VNode;
+// type IClosureComponentSimple__Deprecated<P> = (props: P) => (props: P) => VNode;
 
-type IClosureComponent<P> = (
-  props: P,
-) => {
-  render: (props: P) => VNode;
-  didUdate?(): void;
-  didMount?(): void;
-  willUnmount?(): void;
-};
+// type IClosureComponent__Deprecated<P> = (
+//   props: P,
+// ) => {
+//   render: (props: P) => VNode;
+//   didUdate?(): void;
+//   didMount?(): void;
+//   willUnmount?(): void;
+// };
 
-export type IComponentFunction<P> =
-  | IFunctionalComponent<P>
-  | IClosureComponentSimple<P>
-  | IClosureComponent<P>;
+export type IComponentFunction<P> = IFunctionalComponent<P>;
+// | IClosureComponentSimple__Deprecated<P>
+// | IClosureComponent__Deprecated<P>;
 
 export interface IComponentObject<P> {
   mount(props: P, stateRef: any, env: IEnv | undefined): Node;

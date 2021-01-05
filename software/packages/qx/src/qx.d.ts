@@ -5,7 +5,7 @@ import { Component } from './qxinternal_petit_dom/Component';
 import { VNode } from './qxinternal_petit_dom/types';
 
 export { h } from './qxinternal_petit_dom/h';
-export { Hook } from './qxinternal_petit_dom/hookImpl';
+export { Hook } from './qxinternal_petit_dom/hookImpl2';
 export declare function rerender(): void;
 export declare function render(
   renderFn: () => JSX.Element,
@@ -20,6 +20,7 @@ declare namespace JsxLocal {
     jsx?: boolean;
     css?: string;
     qxIf?: boolean;
+    ref?: ((el: Element) => void) | { current: any };
   };
 
   type ComponentChild =
@@ -41,18 +42,16 @@ declare global {
     interface IntrinsicAttributes {
       key?: any;
       qxIf?: boolean;
-      qxOptimizer?: QxOptimizerSpec;
+      // qxOptimizer?: QxOptimizerSpec;
     }
 
-    type Element =
-      | VNode
-      | ((props?: any) => Element | null)
-      | {
-          didMount?(): void;
-          didUpdate?(): void;
-          willUnmount?(): void;
-          render(): Element;
-        };
+    type Element = VNode | ((props?: any) => Element | null);
+    // | {
+    //     didMount?(): void;
+    //     didUpdate?(): void;
+    //     willUnmount?(): void;
+    //     render(): Element;
+    //   };
 
     interface ElementClass extends Component<any, any> {}
 

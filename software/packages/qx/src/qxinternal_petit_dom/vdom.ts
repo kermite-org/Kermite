@@ -53,6 +53,13 @@ export function mount(vnode: VNode, env: IEnv = DEFAULT_ENV): Node {
     if (delayedProps) {
       setProps(node, props, undefined, delayedProps);
     }
+    if (vnode.props?.ref) {
+      if (typeof vnode.props.ref === 'function') {
+        vnode.props.ref(node);
+      } else {
+        vnode.props.ref.current = node;
+      }
+    }
     return node;
   } else if (isVComponent(vnode)) {
     vnode._state = {};
@@ -119,6 +126,7 @@ export function patch(
 }
 
 export function unmount(vnode: VNode, domNode: Node, env?: IEnv) {
+  // console.log(`unmount`, vnode, domNode);
   if (isVNull(vnode) || isVLeaf(vnode)) {
     return;
   }
@@ -185,7 +193,7 @@ function setAttributes(
     }
   }
   for (const key in oldAttrs) {
-    if (!(key in newAttrs)) {
+    if (newAttrs && !(key in newAttrs)) {
       domElement.removeAttribute(key);
     }
   }

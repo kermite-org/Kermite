@@ -21,23 +21,16 @@ export const WindowControlButtonsPart = () => {
       <WindowControlButton
         icon="fa fa-feather-alt"
         onClick={vm.onWidgetButton}
-        qxOptimizer="deepEqual"
       />
       <WindowControlButton
         icon="fa fa-window-minimize"
         onClick={vm.onMinimizeButton}
-        qxOptimizer="deepEqual"
       />
       <WindowControlButton
         icon="fa fa-window-maximize"
         onClick={vm.onMaximizeButton}
-        qxOptimizer="deepEqual"
       />
-      <WindowControlButton
-        icon="fa fa-times"
-        onClick={vm.onCloseButton}
-        qxOptimizer="deepEqual"
-      />
+      <WindowControlButton icon="fa fa-times" onClick={vm.onCloseButton} />
     </div>
   );
 };
