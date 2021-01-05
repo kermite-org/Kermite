@@ -53,7 +53,10 @@ function createRenderComponent<P extends {}>({
       const renderFn = (_props: any) => {
         startHooks(hook);
         const res = componentFn(_props);
-        if (typeof res === 'function' || 'render' in res) {
+        if (
+          typeof res === 'function' ||
+          (typeof res === 'object' && 'render' in res)
+        ) {
           throw new Error('closure component is not supported anymore');
         }
         endHooks();
