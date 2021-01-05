@@ -3,7 +3,8 @@ import { qxGlobal } from '../qxGlobal';
 // type IPlainFunc = () => void;
 type IUseSideEffectFunc = (() => void) | (() => boolean);
 
-export interface IHook {
+// export
+interface IHook {
   useMemo<T>(func: () => T, deps: any[]): T;
   useSideEffect(func: IUseSideEffectFunc, deps?: any[]): void;
   useState<T>(initialValue: T): [T, (value: T) => void];
@@ -44,7 +45,8 @@ interface IHookStateHolder<T> {
   setValue: (value: T) => void;
 }
 
-export function createHookInstance(): IHook {
+// export
+function createHookInstance(): IHook {
   const holders: any[] = [];
   let idx = 0;
 
@@ -140,12 +142,14 @@ export function createHookInstance(): IHook {
 
 let gHookInstance: IHook;
 
-export function switchGlobalHookInstance(hook: IHook) {
+// export
+function switchGlobalHookInstance(hook: IHook) {
   gHookInstance = hook;
   hook.internal_resetIndex();
 }
 
-export const Hook: IHook = {
+// export
+const Hook: IHook = {
   useMemo<T>(func: () => T, deps: any[]): T {
     return gHookInstance.useMemo(func, deps);
   },

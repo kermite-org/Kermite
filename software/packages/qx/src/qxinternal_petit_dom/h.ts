@@ -39,6 +39,7 @@ export function h(
 
   if (typeof type === 'string') {
     return {
+      label: type,
       vtype: VTYPE_ELEMENT,
       type,
       key,
@@ -47,6 +48,7 @@ export function h(
     };
   } else if (isValidComponentType(type)) {
     return {
+      label: 'componentObject',
       vtype: VTYPE_COMPONENT,
       type,
       key,
@@ -55,6 +57,7 @@ export function h(
     };
   } else if (typeof type === 'function') {
     return {
+      label: type.name,
       vtype: VTYPE_COMPONENT,
       type: createFunctionComponent(type),
       key,

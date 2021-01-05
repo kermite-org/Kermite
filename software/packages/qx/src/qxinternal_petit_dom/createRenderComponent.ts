@@ -1,12 +1,20 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { deepEqual } from 'fast-equals';
 import { QxOptimizerSpec } from '../qx';
 import { qxGlobal } from '../qxGlobal';
 import { deepEqualValuesBesidesFunction } from '../qxUtils';
 import {
   createHookInstance,
-  IHook,
-  switchGlobalHookInstance,
-} from './hookImpl';
+  endHooks,
+  flushHookEffects,
+  IHookInstance,
+  startHooks,
+} from './hookImpl2';
+// import {
+//   createHookInstance,
+//   IHook,
+//   switchGlobalHookInstance,
+// } from './hookImpl';
 import { IEnv, VNode, IComponentFunction, IComponentObject } from './types';
 import { mount, patch, unmount } from './vdom';
 
@@ -21,14 +29,14 @@ interface IComponentStateRef {
   node: Node;
   vnode: VNode;
   renderFn: (props: any) => VNode;
-  closureObject?: {
-    didMount?(): void;
-    didUpdate?(): void;
-    willUnmount?(): void;
-  };
+  // closureObject?: {
+  //   didMount?(): void;
+  //   didUpdate?(): void;
+  //   willUnmount?(): void;
+  // };
   // durablePropObject: any;
   wasUnmounted: boolean;
-  hook?: IHook;
+  hook?: IHookInstance;
 }
 
 function createRenderComponent<P extends {}>({
@@ -41,8 +49,38 @@ function createRenderComponent<P extends {}>({
   return {
     mount(props: P, stateRef: IComponentStateRef, env: IEnv) {
       const hook = createHookInstance();
-      switchGlobalHookInstance(hook);
+
+      const renderFn = (_props: any) => {
+        startHooks(hook);
+        const res = componentFn(_props);
+        if (typeof res === 'function' || 'render' in res) {
+          throw new Error('closure component is not supported anymore');
+        }
+        endHooks();
+        doLater(() => flushHookEffects(hook));
+
+        return res;
+      };
+      // with hooks integration
+      const vnode = renderFn(props);
+      stateRef.vnode = vnode;
+      stateRef.hook = hook;
+      stateRef.renderFn = renderFn;
+      // stateRef.renderFn = ((props: any) => {
+      //   // switchGlobalHookInstance(stateRef.hook!);
+      //   startHooks(stateRef.hook!);
+      //   const res = componentFn(props);
+      //   endHooks();
+      //   flushHookEffects(stateRef.hook!);
+      //   return res;
+      // }) as any;
+      return mount(vnode, env);
+      /*
+      // switchGlobalHookInstance(hook);
+      startHooks(hook);
       const res = componentFn(props);
+      endHooks();
+      flushHookEffects(hook);
       if (
         res &&
         typeof res === 'object' &&
@@ -90,13 +128,21 @@ function createRenderComponent<P extends {}>({
           stateRef.vnode = vnode;
           stateRef.hook = hook;
           stateRef.renderFn = ((props: any) => {
-            switchGlobalHookInstance(stateRef.hook!);
-            return componentFn(props);
+            // switchGlobalHookInstance(stateRef.hook!);
+            startHooks(stateRef.hook!);
+            const res = componentFn(props);
+            if (typeof res === 'function' || 'render' in res) {
+              throw new Error('closure component is not supported anymore');
+            }
+            endHooks();
+            flushHookEffects(stateRef.hook!);
+            return res;
           }) as any;
           return mount(vnode, env);
         }
       }
-      throw new Error('invalid component function');
+      */
+      // throw new Error('invalid component function');
     },
     patch(
       newProps: P,
@@ -105,11 +151,12 @@ function createRenderComponent<P extends {}>({
       domNode: Node,
       env: IEnv,
     ) {
-      const keep = shouldRetainCurrentDomNode(
-        oldProps,
-        newProps,
-        componentFn.name,
-      );
+      // const keep = shouldRetainCurrentDomNode(
+      //   oldProps,
+      //   newProps,
+      //   componentFn.name,
+      // );
+      const keep = false;
       qxGlobal.debug.nAll++;
 
       if (keep) {
@@ -124,52 +171,54 @@ function createRenderComponent<P extends {}>({
         const newVNode = stateRef.renderFn(newProps);
         const oldVNode = stateRef.vnode;
         stateRef.vnode = newVNode;
-        if (stateRef.closureObject?.didUpdate) {
-          doLater(stateRef.closureObject.didUpdate);
-        }
+        // if (stateRef.closureObject?.didUpdate) {
+        //   doLater(stateRef.closureObject.didUpdate);
+        // }
         return patch(newVNode, oldVNode, domNode, env);
       }
     },
     unmount(stateRef: IComponentStateRef, domNode: Node, env: IEnv) {
       stateRef.wasUnmounted = true;
-      if (stateRef.closureObject?.willUnmount) {
-        stateRef.closureObject.willUnmount();
-      }
+      // if (stateRef.closureObject?.willUnmount) {
+      //   stateRef.closureObject.willUnmount();
+      // }
+      // console.log(`unmount component`);
+      flushHookEffects(stateRef.hook!, true);
       unmount(stateRef.vnode, domNode, env);
     },
   };
 }
 
-function shouldRetainCurrentDomNode<
-  P extends { qxOptimizer?: QxOptimizerSpec; [key: string]: any }
->(props0: P, props1: P, _funcName: string) {
-  if (props1.qxOptimizer === 'shallowEqual') {
-    for (const key in props1) {
-      if (props1[key] !== props0[key]) {
-        return true;
-      }
-    }
-    return false;
-  }
+// function shouldRetainCurrentDomNode<
+//   P extends { qxOptimizer?: QxOptimizerSpec; [key: string]: any }
+// >(props0: P, props1: P, _funcName: string) {
+//   if (props1.qxOptimizer === 'shallowEqual') {
+//     for (const key in props1) {
+//       if (props1[key] !== props0[key]) {
+//         return true;
+//       }
+//     }
+//     return false;
+//   }
 
-  if (props1.qxOptimizer === 'deepEqual') {
-    const res = deepEqual(props0, props1);
-    // console.log('deepEqual', funcName, res);
-    return res;
-  }
+//   if (props1.qxOptimizer === 'deepEqual') {
+//     const res = deepEqual(props0, props1);
+//     // console.log('deepEqual', funcName, res);
+//     return res;
+//   }
 
-  if (props1.qxOptimizer === 'deepEqualExFn') {
-    const res = deepEqualValuesBesidesFunction(props0, props1);
-    // console.log('deepEqualExFn', funcName, res);
-    return res;
-  }
-  return false;
-}
+//   if (props1.qxOptimizer === 'deepEqualExFn') {
+//     const res = deepEqualValuesBesidesFunction(props0, props1);
+//     // console.log('deepEqualExFn', funcName, res);
+//     return res;
+//   }
+//   return false;
+// }
 
 const PD_COMPONENT = Symbol('@petit-dom/component');
 
 type IRenderFunction<P> = IComponentFunction<P> & {
-  shouldUpdate?: (a: P, b: P, c1?: any, c2?: any) => boolean;
+  // shouldUpdate?: (a: P, b: P, c1?: any, c2?: any) => boolean;
   [PD_COMPONENT]?: IComponentObject<P>;
 };
 
