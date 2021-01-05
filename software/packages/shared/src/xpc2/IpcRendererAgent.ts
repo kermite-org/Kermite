@@ -4,14 +4,6 @@ import { IIpcContractBase } from './IpcContractBase';
 export interface IIpcRendererAgent<T extends IIpcContractBase> {
   sync: T['sync'];
   async: T['async'];
-  invoke<K extends keyof T['async']>(
-    key: K,
-    ...args: Parameters<T['async'][K]>
-  ): ReturnType<T['async'][K]>;
-  sendSync<K extends keyof T['sync']>(
-    key: K,
-    ...args: Parameters<T['sync'][K]>
-  ): ReturnType<T['sync'][K]>;
   subscribe<K extends keyof T['events']>(
     key: K,
     handler: (value: T['events'][K]) => void,
@@ -45,8 +37,6 @@ export function getIpcRendererAgent<
         },
       },
     ) as T['async'],
-    invoke: ipcRenderer.invoke,
-    sendSync: ipcRenderer.sendSync,
     subscribe: ((key: string, listener: any) => {
       const wrapper = (event: any, value: any) => {
         listener(value);
