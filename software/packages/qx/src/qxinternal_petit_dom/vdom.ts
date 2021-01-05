@@ -193,7 +193,7 @@ function setAttributes(
     }
   }
   for (const key in oldAttrs) {
-    if (!(key in newAttrs)) {
+    if (newAttrs && !(key in newAttrs)) {
       domElement.removeAttribute(key);
     }
   }

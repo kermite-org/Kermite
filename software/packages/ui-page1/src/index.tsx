@@ -50,10 +50,11 @@ const Counter1 = () => {
 const PageRoot = () => {
   renderIndex++;
 
-  const a = Hook.useMemo(() => 100, []);
+  const b = Hook.useMemo(() => 100, []);
 
   if (broken) {
-    return null; // <div>broken</div>;
+    return <div />;
+    // return null; // 子階層のvdomがunmountされない
   }
 
   return (
