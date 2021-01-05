@@ -1,7 +1,7 @@
 import { IProfileData, IProfileManagerStatus } from '@kermite/shared';
 import { makeListnerPort } from '~/funcs';
+import { IProfileService } from '~/main/ports';
 import { ProfileManager } from './ProfileManager/ProfileManager';
-import { IProfileService } from './interfaces';
 
 export class ProfileService implements IProfileService {
   profileManager = new ProfileManager();

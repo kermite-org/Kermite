@@ -1,8 +1,9 @@
 import { appGlobal, appConfig } from '~/base';
+import { IWindowService } from '~/main/ports';
 import { AppWindowWrapper } from './AppWindowWrapper';
 import { MenuManager } from './MenuManager';
 import { PageStateManager } from './PageStateManager';
-import { IAppWindowWrapper, IWindowService } from './interfaces';
+import { IAppWindowWrapper } from './interfaces';
 import { preparePreloadJsFile } from './modules';
 
 export class WindowService implements IWindowService {
