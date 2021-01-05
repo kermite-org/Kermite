@@ -54,7 +54,10 @@ const Counter1 = () => {
 };
 
 const agent = getIpcRendererAgent<IAppIpcContract>();
+agent.setPropsProcessHook(rerender);
+
 let gProfile: IProfileData | undefined;
+let gVersion = '';
 
 const cssJsonDiv = css`
   font-size: 3px;
@@ -66,7 +69,7 @@ const ProfileView = () => {
       console.log('profile loaded');
       console.log({ profile });
       gProfile = profile;
-      rerender();
+      // rerender();
     });
     return () => {
       agent.sync.dev_debugMessage('subscription cleaned');
@@ -74,7 +77,18 @@ const ProfileView = () => {
     };
   }, []);
 
-  return <div css={cssJsonDiv}>{JSON.stringify(gProfile)}</div>;
+  Hook.useEffect(() => {
+    (async () => {
+      gVersion = await agent.async.dev_getVersion();
+    })();
+  }, []);
+
+  return (
+    <div>
+      <div> {gVersion}</div>
+      <div css={cssJsonDiv}>{JSON.stringify(gProfile)}</div>
+    </div>
+  );
 };
 
 const PageRoot = () => {
