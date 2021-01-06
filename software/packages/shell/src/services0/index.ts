@@ -6,7 +6,7 @@ import {
   IProfileData,
 } from '@kermite/shared';
 import { ipcMain } from 'electron';
-import { appEnv, applicationStorage } from '~/base';
+import { applicationStorage } from '~/base';
 import { ProfileManager } from '~/services/profile/ProfileManager/ProfileManager';
 import { FirmwareUpdationService } from './FirmwareUpdation';
 import { KeyMappingEmitter } from './KeyMappingEmitter';
@@ -19,8 +19,7 @@ import { PresetProfileLoader } from './PresetProfileLoader';
 import { ProjectResourceInfoProvider } from './ProjectResource/ProjectResourceInfoProvider';
 import { resourceUpdator_syncRemoteResourcesToLocal } from './ResourceUpdator';
 
-export class Services implements IBackendAgent {
-  // private applicationSettingsProvider = new ApplicationSettingsProvider();
+export class Services {
   private projectResourceInfoProvider = new ProjectResourceInfoProvider();
   private keyboardConfigProvider = new KeyboardConfigProvider();
 
@@ -52,29 +51,14 @@ export class Services implements IBackendAgent {
     this.deviceService,
   );
 
-  @RpcFunction
-  async getEnvironmentConfig(): Promise<IEnvironmentConfigForRendererProcess> {
-    return {
-      isDevelopment: appEnv.isDevelopment,
-    };
-  }
-
-  @RpcFunction
-  async getSettings(): Promise<IApplicationSettings> {
-    return this.applicationSettingsProvider.getSettings();
-  }
-
-  @RpcFunction
   async getKeyboardConfig(): Promise<IKeyboardConfig> {
     return this.keyboardConfigProvider.keyboardConfig;
   }
 
-  @RpcFunction
   async writeKeyboardConfig(config: IKeyboardConfig): Promise<void> {
     this.keyboardConfigProvider.writeKeyboardConfig(config);
   }
 
-  @RpcFunction
   async writeKeyMappingToDevice(): Promise<void> {
     const profile = this.profileManager.getCurrentProfile();
     const layoutStandard = this.keyboardConfigProvider.keyboardConfig
@@ -88,40 +72,33 @@ export class Services implements IBackendAgent {
     }
   }
 
-  @RpcFunction
   async executeProfileManagerCommands(
     commands: IProfileManagerCommand[],
   ): Promise<void> {
     this.profileManager.executeCommands(commands);
   }
 
-  @RpcFunction
   async reloadApplication(): Promise<void> {
     console.log('##REBOOT_ME_AFTER_CLOSE');
     appWindowManager.closeMainWindow();
   }
 
-  @RpcFunction
   async closeWindow(): Promise<void> {
     appWindowManager.closeMainWindow();
   }
 
-  @RpcFunction
   async minimizeWindow(): Promise<void> {
     appWindowManager.minimizeMainWindow();
   }
 
-  @RpcFunction
   async maximizeWindow(): Promise<void> {
     appWindowManager.maximizeMainWindow();
   }
 
-  @RpcFunction
   async widgetModeChanged(isWidgetMode: boolean): Promise<void> {
     appWindowManager.adjustWindowSize(isWidgetMode);
   }
 
-  @RpcFunction
   async loadKeyboardShape(
     projectId: string,
     layoutName: string,
@@ -132,7 +109,6 @@ export class Services implements IBackendAgent {
     );
   }
 
-  @RpcFunction
   async uploadFirmware(
     projectId: string,
     comPortName: string,
@@ -143,12 +119,10 @@ export class Services implements IBackendAgent {
     );
   }
 
-  @RpcFunction
   async getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]> {
     return this.projectResourceInfoProvider.getAllProjectResourceInfos();
   }
 
-  @RpcFunction
   async loadPresetProfile(
     profileId: string,
     presetName: string,
@@ -159,23 +133,17 @@ export class Services implements IBackendAgent {
     );
   }
 
-  @RpcEventSource
   keyboardDeviceStatusEvents = this.deviceService.statusEventPort;
 
-  @RpcEventSource
   keyEvents = this.deviceService.realtimeEventPort;
 
-  @RpcEventSource
   profileStatusEvents = this.profileManager.statusEventPort;
 
-  @RpcEventSource
   comPortPlugEvents = this.firmwareUpdationService.comPortPlugEvents;
 
-  @RpcEventSource
   layoutFileUpdationEvents = this.keyboardLayoutFilesWatcher
     .fileUpdationEventPort;
 
-  @RpcEventSource
   appWindowEvents = appWindowEventHub;
 
   private handleSynchronousMessagePacket(packet: ISynchronousIpcPacket) {
