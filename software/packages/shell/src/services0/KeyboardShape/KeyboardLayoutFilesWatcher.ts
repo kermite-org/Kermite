@@ -1,14 +1,14 @@
 import { FSWatcher } from 'fs';
-import { EventPort } from '~shared/funcs/EventPort';
+import { appEnv } from '~/base';
 import {
+  pathResolve,
+  EventPort,
+  pathRelative,
+  pathDirname,
   fsExistsSync,
   fsxWtachFilesChange,
-  pathDirname,
-  pathRelative,
-  pathResolve,
-} from '~shared/funcs/Files';
-import { appEnv } from '~shell/base/AppEnvironment';
-import { IProjectResourceInfoProvider } from '~shell/services/serviceInterfaces';
+} from '~/funcs';
+import { IProjectResourceInfoProvider } from '~/services0/serviceInterfaces';
 
 type IFileUpdationEvent = { projectId: string };
 

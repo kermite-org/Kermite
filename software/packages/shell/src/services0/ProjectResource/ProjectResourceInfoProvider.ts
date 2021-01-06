@@ -1,6 +1,6 @@
-import { IProjectResourceInfo } from '~shared/defs/ProfileData';
-import { pathJoin } from '~shared/funcs/Files';
-import { appEnv } from '~shell/base/AppEnvironment';
+import { IProjectResourceInfo } from '@kermite/shared';
+import { appEnv } from '~/base';
+import { pathJoin } from '~/funcs';
 import { IProjectResourceInfoProvider } from '../serviceInterfaces';
 import {
   IProjectResourceInfoSource,

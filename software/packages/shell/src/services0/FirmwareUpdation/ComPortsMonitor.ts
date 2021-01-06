@@ -1,4 +1,4 @@
-import { removeArrayItems } from '~shared/funcs/Utils';
+import { removeArrayItems } from '@kermite/shared';
 import { ComPortsResource } from './ComPortsResource';
 
 export interface ComPortsListener {

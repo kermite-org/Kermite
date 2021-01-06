@@ -1,12 +1,10 @@
 import {
+  ConfigStorageFormatRevision,
   IKeyboardDeviceStatus,
   IRealtimeKeyboardEvent,
-} from '~shared/defs/IpcContract';
-import {
-  ConfigStorageFormatRevision,
   RawHidMessageProtocolRevision,
-} from '~shared/defs/Versions';
-import { EventPort } from '~shared/funcs/EventPort';
+} from '@kermite/shared';
+import { EventPort } from '~/funcs';
 import { ProjectResourceInfoProvider } from '../ProjectResource/ProjectResourceInfoProvider';
 import { DeviceWrapper } from './DeviceWrapper';
 

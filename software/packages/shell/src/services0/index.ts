@@ -1,25 +1,13 @@
-import { ipcMain } from 'electron';
 import {
-  IApplicationSettings,
-  IEnvironmentConfigForRendererProcess,
   IKeyboardConfig,
-} from '~shared/defs/ConfigTypes';
-import {
-  IBackendAgent,
   IProfileManagerCommand,
-  ISynchronousIpcPacket,
-} from '~shared/defs/IpcContract';
-import {
   IKeyboardShape,
-  IProfileData,
   IProjectResourceInfo,
-} from '~shared/defs/ProfileData';
-import { RpcEventSource, RpcFunction, xpcMain } from '~shared/xpc/xpcMain';
-import { appEnv } from '~shell/base/AppEnvironment';
-import { appWindowEventHub } from '~shell/base/AppEventBus';
-import { appWindowManager } from '~shell/base/AppWindowManager';
-import { ApplicationSettingsProvider } from './ApplicationSettingsProvider';
-import { applicationStorage } from './ApplicationStorage';
+  IProfileData,
+} from '@kermite/shared';
+import { ipcMain } from 'electron';
+import { appEnv, applicationStorage } from '~/base';
+import { ProfileManager } from '~/services/profile/ProfileManager/ProfileManager';
 import { FirmwareUpdationService } from './FirmwareUpdation';
 import { KeyMappingEmitter } from './KeyMappingEmitter';
 import { KeyboardConfigProvider } from './KeyboardConfigProvider';
@@ -28,12 +16,11 @@ import { InputLogicSimulatorD } from './KeyboardLogic/InputLogicSimulatorD';
 import { KeyboardLayoutFilesWatcher } from './KeyboardShape/KeyboardLayoutFilesWatcher';
 import { KeyboardShapesProvider } from './KeyboardShape/KeyboardShapesProvider';
 import { PresetProfileLoader } from './PresetProfileLoader';
-import { ProfileManager } from './ProfileManager';
 import { ProjectResourceInfoProvider } from './ProjectResource/ProjectResourceInfoProvider';
 import { resourceUpdator_syncRemoteResourcesToLocal } from './ResourceUpdator';
 
 export class Services implements IBackendAgent {
-  private applicationSettingsProvider = new ApplicationSettingsProvider();
+  // private applicationSettingsProvider = new ApplicationSettingsProvider();
   private projectResourceInfoProvider = new ProjectResourceInfoProvider();
   private keyboardConfigProvider = new KeyboardConfigProvider();
 

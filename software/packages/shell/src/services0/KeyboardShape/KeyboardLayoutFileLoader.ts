@@ -1,10 +1,10 @@
 import {
-  IKeyboardShape,
-  IKeyboardShapeDisplayArea,
   IKeyUnitEntry,
+  IKeyboardShapeDisplayArea,
+  IKeyboardShape,
   keyboardShape_fallbackData,
-} from '~shared/defs/ProfileData';
-import { fsExistsSync, fsxReadTextFile } from '~shared/funcs/Files';
+} from '@kermite/shared';
+import { fsExistsSync, fsxReadTextFile } from '~/funcs';
 
 export namespace KeyboardLayoutFileLoader {
   interface IKeyboardShapeSourceJson {

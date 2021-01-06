@@ -1,27 +1,23 @@
-import { IKeyboardLayoutStandard } from '~shared/defs/ConfigTypes';
-import { getHidKeyCodeEx } from '~shared/defs/HidKeyCodes';
 import {
-  IProfileData,
   IAssignEntry,
-  IAssignOperation,
-  LayerInvocationMode,
-} from '~shared/defs/ProfileData';
-import { ConfigStorageFormatRevision } from '~shared/defs/Versions';
-import {
+  IKeyboardLayoutStandard,
   ModifierVirtualKey,
+  LayerInvocationMode,
+  IAssignOperation,
   isModifierVirtualKey,
-} from '~shared/defs/VirtualKeys';
-import {
+  getHidKeyCodeEx,
+  flattenArray,
+  IProfileData,
+  duplicateObjectByJsonStringifyParse,
   createDictionaryFromKeyValues,
   sortOrderBy,
-  flattenArray,
   createGroupedArrayByKey,
-  duplicateObjectByJsonStringifyParse,
-} from '~shared/funcs/Utils';
+  ConfigStorageFormatRevision,
+} from '@kermite/shared';
 import {
   writeUint16BE,
   writeUint8,
-} from '~shell/services/KeyMappingEmitter/Helpers';
+} from '~/services0/KeyMappingEmitter/Helpers';
 
 /*
 Key Assigns Restriction

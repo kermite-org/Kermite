@@ -1,10 +1,10 @@
 import {
   fallbackKeyboardConfig,
   IKeyboardConfig,
-} from '~shared/defs/ConfigTypes';
-import { EventPort } from '~shared/funcs/EventPort';
-import { overwriteObjectProps } from '~shared/funcs/Utils';
-import { applicationStorage } from './ApplicationStorage';
+  overwriteObjectProps,
+} from '@kermite/shared';
+import { applicationStorage } from '~/base';
+import { EventPort } from '~/funcs';
 
 // 環境に関連したキーボードの設定を保存する, レイアウト(US/JP)など
 export class KeyboardConfigProvider {

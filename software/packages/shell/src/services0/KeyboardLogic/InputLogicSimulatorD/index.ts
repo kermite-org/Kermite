@@ -1,12 +1,12 @@
-import { IKeyboardConfig } from '~shared/defs/ConfigTypes';
 import {
+  generateNumberSequence,
   IProfileManagerStatus,
+  IKeyboardConfig,
   IRealtimeKeyboardEvent,
-} from '~shared/defs/IpcContract';
-import { generateNumberSequence } from '~shared/funcs/Utils';
-import { KeyboardConfigProvider } from '~shell/services/KeyboardConfigProvider';
-import { KeyboardDeviceService } from '~shell/services/KeyboardDevice';
-import { ProfileManager } from '~shell/services/ProfileManager';
+} from '@kermite/shared';
+import { ProfileManager } from '~/services/profile/ProfileManager/ProfileManager';
+import { KeyboardConfigProvider } from '~/services0/KeyboardConfigProvider';
+import { KeyboardDeviceService } from '~/services0/KeyboardDevice';
 import { IntervalTimerWrapper } from '../helpers/IntervalTimerWrapper';
 import { getKeyboardCoreLogicInterface } from './DeviceCoreLogicSimulator2_Dual';
 import { makeKeyAssignsConfigStorageData } from './ProfileDataBinaryPacker';

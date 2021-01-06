@@ -1,6 +1,6 @@
+import { delayMs } from '@kermite/shared';
 import * as HID from 'node-hid';
-import { delayMs } from '~shared/funcs/Utils';
-import { zeros } from '~shell/services/KeyMappingEmitter/Helpers';
+import { zeros } from '~/services0/KeyMappingEmitter/Helpers';
 
 function getArrayFromBuffer(data: any) {
   return new Uint8Array(Buffer.from(data));

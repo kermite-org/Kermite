@@ -1,8 +1,11 @@
-import { fallbackProfileData, IProfileData } from '~shared/defs/ProfileData';
-import { fsxReadJsonFile } from '~shared/funcs/Files';
-import { duplicateObjectByJsonStringifyParse } from '~shared/funcs/Utils';
-import { KeyboardLayoutFileLoader } from '~shell/services/KeyboardShape/KeyboardLayoutFileLoader';
-import { ProfileHelper } from './ProfileManager/ProfileHelper';
+import {
+  IProfileData,
+  duplicateObjectByJsonStringifyParse,
+  fallbackProfileData,
+} from '@kermite/shared';
+import { fsxReadJsonFile } from '~/funcs';
+import { ProfileHelper } from '~/services/profile/ProfileManager/ProfileHelper';
+import { KeyboardLayoutFileLoader } from '~/services0/KeyboardShape/KeyboardLayoutFileLoader';
 import {
   IPresetProfileLoadingFeature,
   IProjectResourceInfoProvider,

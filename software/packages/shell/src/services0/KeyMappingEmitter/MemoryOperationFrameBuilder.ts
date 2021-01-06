@@ -1,4 +1,4 @@
-import { generateNumberSequence } from '~shared/funcs/Utils';
+import { generateNumberSequence } from '@kermite/shared';
 import { bhi, blo } from './Helpers';
 
 // ------------------------------------------------------------

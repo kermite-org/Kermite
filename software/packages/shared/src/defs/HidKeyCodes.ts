@@ -126,7 +126,7 @@ const enum HidKey {
   KU_Ctrl = 224,
   KU_Shift,
   KU_Alt,
-  KU_Gui
+  KU_Gui,
 }
 
 const enum HidKeyUS {
@@ -152,7 +152,7 @@ const enum HidKeyUS {
   KU__US_BackQuote_Tilde = 53,
   KU__US_Comma_LessThan = 54,
   KU__US_Dot_GreaterThan = 55,
-  KU__US_Slash_Question = 56
+  KU__US_Slash_Question = 56,
 }
 
 // 日本語キーボード向けの定義
@@ -187,7 +187,7 @@ const enum HidKeyJP {
   KU_KatakanaHiragana = 136,
   KU__JP_Yen_VertiacalBar = 137,
   KU_Henkan = 138,
-  KU_Muhenkan = 139
+  KU_Muhenkan = 139,
 }
 
 const OUT_SHIFT = 0x100;
@@ -205,7 +205,7 @@ export const HidKeyCodes = {
   K_RShift: HidKey.KU_RShift,
   K_RCtrl: HidKey.KU_RCtrl,
   K_RAlt: HidKey.KU_RAlt,
-  K_ROS: HidKey.KU_RGui
+  K_ROS: HidKey.KU_RGui,
 };
 
 const virutalKeyToHidKeyMapper_Core: {
@@ -290,7 +290,7 @@ const virutalKeyToHidKeyMapper_Core: {
   K_HankakuZenkaku: HidKeyJP.KU_HankakuZenkaku,
   K_KatakanaHiragana: HidKeyJP.KU_KatakanaHiragana,
   K_Henkan: HidKeyJP.KU_Henkan,
-  K_Muhenkan: HidKeyJP.KU_Muhenkan
+  K_Muhenkan: HidKeyJP.KU_Muhenkan,
 };
 
 const virutalKeyToHidKeyMapper_US: {
@@ -332,7 +332,7 @@ const virutalKeyToHidKeyMapper_US: {
   K_RightCurlyBrace:
     HidKeyUS.KU__US_RightSquareBracket_RightCurlyBrace | OUT_SHIFT,
   K_LessThan: HidKeyUS.KU__US_Comma_LessThan | OUT_SHIFT,
-  K_GreaterThan: HidKeyUS.KU__US_Dot_GreaterThan | OUT_SHIFT
+  K_GreaterThan: HidKeyUS.KU__US_Dot_GreaterThan | OUT_SHIFT,
 };
 
 const virutalKeyToHidKeyMapper_JIS: {
@@ -374,12 +374,12 @@ const virutalKeyToHidKeyMapper_JIS: {
   K_RightCurlyBrace:
     HidKeyJP.KU__JP_RightSquareBracket_RightCurlyBrace | OUT_SHIFT,
   K_LessThan: HidKeyJP.KU__JP_Comma_LessThan | OUT_SHIFT,
-  K_GreaterThan: HidKeyJP.KU__JP_Dot_GreaterThan | OUT_SHIFT
+  K_GreaterThan: HidKeyJP.KU__JP_Dot_GreaterThan | OUT_SHIFT,
 };
 
 export function getHidKeyCodeEx(
   vk: VirtualKey,
-  layout: IKeyboardLayoutStandard
+  layout: IKeyboardLayoutStandard,
 ): number {
   if (layout === 'US') {
     return (

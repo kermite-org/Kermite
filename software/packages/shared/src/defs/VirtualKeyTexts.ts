@@ -115,5 +115,5 @@ export const VirtualKeyTexts: { [key in VirtualKey]?: string } = {
   K_LTU: 'LTU',
   K_UU: 'UU',
   K_NextDouble: 'ND',
-  K_PostDouble: 'RP'
+  K_PostDouble: 'RP',
 };

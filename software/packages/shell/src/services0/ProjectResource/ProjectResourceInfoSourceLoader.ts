@@ -1,16 +1,16 @@
-import { IProjectResourceOrigin } from '~shared/defs/ProfileData';
+import { IProjectResourceOrigin } from '@kermite/shared';
+import { appEnv } from '~/base';
 import {
   fsExistsSync,
   fspReaddir,
-  fsxReadJsonFile,
-  globAsync,
   pathBasename,
-  pathDirname,
+  fsxReadJsonFile,
   pathJoin,
-  pathRelative,
+  globAsync,
+  pathDirname,
   pathResolve,
-} from '~shared/funcs/Files';
-import { appEnv } from '~shell/base/AppEnvironment';
+  pathRelative,
+} from '~/funcs';
 
 export interface IProjectResourceInfoSource {
   projectId: string;

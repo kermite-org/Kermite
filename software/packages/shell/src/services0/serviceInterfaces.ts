@@ -1,9 +1,9 @@
 import {
+  IProjectResourceInfo,
   IKeyboardShape,
   IProfileData,
-  IProjectResourceInfo,
-} from '~shared/defs/ProfileData';
-import { IProjectResourceInfoSource } from '~shell/services/ProjectResource/ProjectResourceInfoSourceLoader';
+} from '@kermite/shared';
+import { IProjectResourceInfoSource } from '~/services0/ProjectResource/ProjectResourceInfoSourceLoader';
 
 export interface IProjectResourceInfoProvider {
   getAllProjectResourceInfos(): IProjectResourceInfo[];
