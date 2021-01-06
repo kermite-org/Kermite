@@ -20,7 +20,7 @@ export class ComPortsMonitor {
     },
     unsubscribe: (listener: ComPortsListener) => {
       removeArrayItems(this.comPortListeners, listener);
-    }
+    },
   };
 
   private updateComPortsMonitor = async () => {
@@ -28,13 +28,13 @@ export class ComPortsMonitor {
       const newComPortNames = await ComPortsResource.getComPortNames();
       // console.log({ newComPortNames });
       const newlyAppearedPortName = newComPortNames.find(
-        (portName) => !this.comPortNames.includes(portName)
+        (portName) => !this.comPortNames.includes(portName),
       );
       const elapsed = Date.now() - this.comPortEnumerationStartTime;
       if (elapsed > 2000 && !this.activeComPortName && newlyAppearedPortName) {
         // console.log(`COM PORT ${newlyAppearedPortName} appeared`);
         this.comPortListeners.forEach((listener) =>
-          listener({ comPortName: newlyAppearedPortName })
+          listener({ comPortName: newlyAppearedPortName }),
         );
         this.activeComPortName = newlyAppearedPortName;
       }
@@ -45,7 +45,7 @@ export class ComPortsMonitor {
       ) {
         // console.log(`COM PORT ${this.activeComPortName} disappeared`);
         this.comPortListeners.forEach((listener) =>
-          listener({ comPortName: undefined })
+          listener({ comPortName: undefined }),
         );
         this.activeComPortName = undefined;
       }

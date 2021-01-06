@@ -1,10 +1,10 @@
 import {
   IKeyboardDeviceStatus,
-  IRealtimeKeyboardEvent
+  IRealtimeKeyboardEvent,
 } from '~shared/defs/IpcContract';
 import {
   ConfigStorageFormatRevision,
-  RawHidMessageProtocolRevision
+  RawHidMessageProtocolRevision,
 } from '~shared/defs/Versions';
 import { EventPort } from '~shared/funcs/EventPort';
 import { ProjectResourceInfoProvider } from '../ProjectResource/ProjectResourceInfoProvider';
@@ -20,11 +20,11 @@ export class KeyboardDeviceService {
   private deviceWrapper: DeviceWrapper | null = null;
 
   private deviceStatus: IKeyboardDeviceStatus = {
-    isConnected: false
+    isConnected: false,
   };
 
   readonly statusEventPort = new EventPort<IKeyboardDeviceStatus>({
-    initialValueGetter: () => this.deviceStatus
+    initialValueGetter: () => this.deviceStatus,
   });
 
   setStatus(newStatus: IKeyboardDeviceStatus) {
@@ -33,7 +33,7 @@ export class KeyboardDeviceService {
   }
 
   constructor(
-    private projectResourceInfoProvider: ProjectResourceInfoProvider
+    private projectResourceInfoProvider: ProjectResourceInfoProvider,
   ) {}
 
   private decodeReceivedBytes(buf: Uint8Array) {
@@ -50,29 +50,29 @@ export class KeyboardDeviceService {
         firmwareMessageProtocolRevision,
         keyIndexRange,
         side,
-        projectId
+        projectId,
       });
       if (firmwareConfigStorageRevision !== ConfigStorageFormatRevision) {
         console.log(
-          `incompatible config storage revision (software:${ConfigStorageFormatRevision} firmware:${firmwareConfigStorageRevision})`
+          `incompatible config storage revision (software:${ConfigStorageFormatRevision} firmware:${firmwareConfigStorageRevision})`,
         );
       }
       if (firmwareMessageProtocolRevision !== RawHidMessageProtocolRevision) {
         console.log(
-          `incompatible message protocol revision (software:${RawHidMessageProtocolRevision} firmware:${firmwareMessageProtocolRevision})`
+          `incompatible message protocol revision (software:${RawHidMessageProtocolRevision} firmware:${firmwareMessageProtocolRevision})`,
         );
       }
 
       const info = this.projectResourceInfoProvider.internal_getProjectInfoSourceById(
-        projectId
+        projectId,
       );
       if (info) {
         this.setStatus({
           isConnected: true,
           deviceAttrs: {
             projectId,
-            keyboardName: info.keyboardName
-          }
+            keyboardName: info.keyboardName,
+          },
         });
       }
     }
@@ -83,7 +83,7 @@ export class KeyboardDeviceService {
       this.realtimeEventPort.emit({
         type: 'keyStateChanged',
         keyIndex: keyIndex,
-        isDown
+        isDown,
       });
     }
 
@@ -91,7 +91,7 @@ export class KeyboardDeviceService {
       const layerActiveFlags = (buf[2] << 8) | buf[3];
       this.realtimeEventPort.emit({
         type: 'layerChanged',
-        layerActiveFlags
+        layerActiveFlags,
       });
     }
 
@@ -105,7 +105,7 @@ export class KeyboardDeviceService {
         type: 'assignHit',
         layerIndex,
         keyIndex,
-        prioritySpec
+        prioritySpec,
       });
     }
   }
@@ -118,9 +118,9 @@ export class KeyboardDeviceService {
       [
         // find interface 0 by searching words in device.path
         'mi_00', // Windows
-        'IOUSBHostInterface@0' // Mac
+        'IOUSBHostInterface@0', // Mac
       ],
-      '74F3AC2E' // serial number fixed part
+      '74F3AC2E', // serial number fixed part
     );
 
     // const isOpen = dw.open(0xf055, 0xa57a, 'mi_03');

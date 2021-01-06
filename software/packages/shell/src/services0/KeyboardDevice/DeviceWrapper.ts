@@ -17,7 +17,7 @@ export class DeviceWrapper {
     venderId: number,
     productId: number,
     pathSearchWords?: string[],
-    serialNumberSearchWord?: string
+    serialNumberSearchWord?: string,
   ): HID.HID | null {
     const allDeviceInfos = HID.devices();
     // console.log(allDeviceInfos);
@@ -30,7 +30,7 @@ export class DeviceWrapper {
           : true) &&
         (serialNumberSearchWord
           ? d.serialNumber?.includes(serialNumberSearchWord)
-          : true)
+          : true),
     );
     if (targetDeviceInfo?.path) {
       return new HID.HID(targetDeviceInfo.path);
@@ -43,13 +43,13 @@ export class DeviceWrapper {
     venderId: number,
     productId: number,
     pathSearchWords?: string[],
-    serialNumberSearchWord?: string
+    serialNumberSearchWord?: string,
   ): boolean {
     this.device = DeviceWrapper.openTargetDevice(
       venderId,
       productId,
       pathSearchWords,
-      serialNumberSearchWord
+      serialNumberSearchWord,
     );
     if (this.device) {
       this.device.on('data', (data) => {

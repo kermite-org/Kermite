@@ -32,7 +32,7 @@ async function readJsonFile(fpath: string) {
 
 async function writeJsonFile(fpath: string, obj: any) {
   return await fs.promises.writeFile(fpath, JSON.stringify(obj, null, '  '), {
-    encoding: 'utf8'
+    encoding: 'utf8',
   });
 }
 
@@ -74,7 +74,7 @@ function globAsync(pattern: string): Promise<string[]> {
         reject(err);
       }
       resolve(matches);
-    })
+    }),
   );
 }
 
@@ -105,13 +105,13 @@ const stubIndexObjectForDevelopment: IIndexObject = {
     'variants/csp/astelia_dev/astelia_dev.hex':
       '2c4b93fe0abb575af8524933cac6adbe',
     'variants/astelia/astelia.hex': 'b13fe2d3629ac845096e8a419ad06a27',
-    'variants/astelia/layout.json': '176f00e13f346f0bd440984a5041ad89'
-  }
+    'variants/astelia/layout.json': '176f00e13f346f0bd440984a5041ad89',
+  },
 };
 
 async function syncRemoteResourcesToLocalImpl(
   remoteBaseUrl: string,
-  localBaseDir: string
+  localBaseDir: string,
 ) {
   try {
     console.log('updating resources');
@@ -124,14 +124,14 @@ async function syncRemoteResourcesToLocalImpl(
     const localIndexFilePath = `${localBaseDir}/index.json`;
 
     const localIndex: IIndexObject = (await readJsonFileIfExists(
-      localIndexFilePath
+      localIndexFilePath,
     )) || {
       filesRevision: 0,
-      files: {}
+      files: {},
     };
 
     const remoteIndex = (await fetchJson(
-      `${remoteBaseUrl}/index.json`
+      `${remoteBaseUrl}/index.json`,
     )) as IIndexObject;
     // const remoteIndex = stubIndexObjectForDevelopment;
 
@@ -147,13 +147,13 @@ async function syncRemoteResourcesToLocalImpl(
           console.log(`remove ${it}`);
           const filePath = `${localBaseDir}/${it}`;
           await deleteFile(filePath);
-        })
+        }),
       );
 
       const entriesUpdated = remoteEntries.filter(
         (it) =>
           localIndex.files[it] !== remoteIndex.files[it] ||
-          !isFileExists(`${localBaseDir}/${it}`)
+          !isFileExists(`${localBaseDir}/${it}`),
       );
       console.log(`${entriesUpdated.length} entries will be updated`);
       for (const it of entriesUpdated) {

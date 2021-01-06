@@ -4,23 +4,23 @@ import {
   IProfileData,
   IAssignEntry,
   IAssignOperation,
-  LayerInvocationMode
+  LayerInvocationMode,
 } from '~shared/defs/ProfileData';
 import { ConfigStorageFormatRevision } from '~shared/defs/Versions';
 import {
   ModifierVirtualKey,
-  isModifierVirtualKey
+  isModifierVirtualKey,
 } from '~shared/defs/VirtualKeys';
 import {
   createDictionaryFromKeyValues,
   sortOrderBy,
   flattenArray,
   createGroupedArrayByKey,
-  duplicateObjectByJsonStringifyParse
+  duplicateObjectByJsonStringifyParse,
 } from '~shared/funcs/Utils';
 import {
   writeUint16BE,
-  writeUint8
+  writeUint8,
 } from '~shell/services/KeyMappingEmitter/Helpers';
 
 /*
@@ -51,7 +51,7 @@ const localContext = new (class {
 })();
 
 function makeAttachedModifiersBits(
-  attachedModifiers?: ModifierVirtualKey[]
+  attachedModifiers?: ModifierVirtualKey[],
 ): number {
   let bits = 0;
   if (attachedModifiers) {
@@ -71,7 +71,7 @@ function makeLayerInvocationModeBits(mode: LayerInvocationMode): number {
     turnOn: 2,
     turnOff: 3,
     toggle: 4,
-    oneshot: 5
+    oneshot: 5,
   };
   return mapper[mode] || 0;
 }
@@ -105,7 +105,7 @@ QQQ: target exclusion group
 */
 function encodeAssignOperation(
   op: IAssignOperation | undefined,
-  layer: IRawLayerInfo
+  layer: IRawLayerInfo,
 ): number[] {
   if (op?.type === 'keyInput') {
     const fAssignType = 0b01;
@@ -125,7 +125,7 @@ function encodeAssignOperation(
       }
       return [
         (fAssignType << 6) | (mods << 2) | ((hidKey >> 8) & 0x03),
-        hidKey
+        hidKey,
       ];
     }
   }
@@ -160,14 +160,14 @@ LLLL: layerIndex
 */
 function encodeRawAssignEntryHeaderByte(
   type: 'single' | 'dual' | 'triple' | 'block' | 'transparent',
-  layerIndex: number
+  layerIndex: number,
 ): number {
   const assignType = {
     single: 1,
     dual: 2,
     triple: 3,
     block: 4,
-    transparent: 5
+    transparent: 5,
   }[type];
   return (1 << 7) | (assignType << 4) | layerIndex;
 }
@@ -196,7 +196,7 @@ function encodeRawAssignEntry(ra: IRawAssignEntry): number[] {
     // single
     return [
       encodeRawAssignEntryHeaderByte('single', ra.layerIndex),
-      ...encodeAssignOperation(entry.op, layer)
+      ...encodeAssignOperation(entry.op, layer),
     ];
   } else {
     // dual
@@ -205,18 +205,18 @@ function encodeRawAssignEntry(ra: IRawAssignEntry): number[] {
         encodeRawAssignEntryHeaderByte('triple', ra.layerIndex),
         ...encodeAssignOperation(entry.primaryOp, layer),
         ...encodeAssignOperation(entry.secondaryOp, layer),
-        ...encodeAssignOperation(entry.tertiaryOp, layer)
+        ...encodeAssignOperation(entry.tertiaryOp, layer),
       ];
     } else if (entry.secondaryOp) {
       return [
         encodeRawAssignEntryHeaderByte('dual', ra.layerIndex),
         ...encodeAssignOperation(entry.primaryOp, layer),
-        ...encodeAssignOperation(entry.secondaryOp, layer)
+        ...encodeAssignOperation(entry.secondaryOp, layer),
       ];
     } else {
       return [
         encodeRawAssignEntryHeaderByte('single', ra.layerIndex),
-        ...encodeAssignOperation(entry.primaryOp, layer)
+        ...encodeAssignOperation(entry.primaryOp, layer),
       ];
     }
   }
@@ -230,11 +230,11 @@ S_SSSS: body length
 */
 function encodeKeyBoundAssignsSetHeder(
   keyIndex: number,
-  bodyLength: number
+  bodyLength: number,
 ): number[] {
   if (bodyLength > 63) {
     throw new Error(
-      `key bound assign size overrun, keyIndex: ${keyIndex}, bodyLength: ${bodyLength}/63`
+      `key bound assign size overrun, keyIndex: ${keyIndex}, bodyLength: ${bodyLength}/63`,
     );
   }
   return [(1 << 7) | bodyLength, keyIndex];
@@ -256,7 +256,7 @@ function makeRawAssignEntries(profile: IProfileData): IRawAssignEntry[] {
   const {
     assigns,
     layers,
-    keyboardShape: { keyUnits }
+    keyboardShape: { keyUnits },
   } = profile;
 
   return Object.keys(assigns)
@@ -272,7 +272,7 @@ function makeRawAssignEntries(profile: IProfileData): IRawAssignEntry[] {
           keyIndex,
           layerId,
           layerIndex,
-          entry
+          entry,
         };
       }
       return undefined!;
@@ -287,7 +287,7 @@ function hexBytes(bytes: number[], splitter = ',') {
 
 function fixAssignOperation(
   op: IAssignOperation,
-  layout: IKeyboardLayoutStandard
+  layout: IKeyboardLayoutStandard,
 ) {
   if (op.type === 'keyInput') {
     const vk = op.virtualKey;
@@ -312,7 +312,7 @@ function fixAssignOperation(
 
 function fixProfileData(
   profile: IProfileData,
-  layout: IKeyboardLayoutStandard
+  layout: IKeyboardLayoutStandard,
 ) {
   for (const key in profile.assigns) {
     const assign = profile.assigns[key];
@@ -347,13 +347,13 @@ function makeLayerAttributeBytes(profile: IProfileData): number[] {
       const fDefaultScheme = la.defaultScheme === 'block' ? 1 : 0;
       const fInitialActive = la.initialActive ? 1 : 0;
       const fAttachedModifiers = makeAttachedModifiersBits(
-        la.attachedModifiers
+        la.attachedModifiers,
       );
       return [
         (fDefaultScheme << 7) | (fInitialActive << 5) | fAttachedModifiers,
-        la.exclusionGroup
+        la.exclusionGroup,
       ];
-    })
+    }),
   );
 }
 
@@ -363,7 +363,7 @@ function makeLayerAttributeBytes(profile: IProfileData): number[] {
 // [1+numLayers:~] key assings data
 export function converProfileDataToBlobBytes(
   profile0: IProfileData,
-  layoutStandard: IKeyboardLayoutStandard
+  layoutStandard: IKeyboardLayoutStandard,
 ): number[] {
   const profile = duplicateObjectByJsonStringifyParse(profile0);
   fixProfileData(profile, layoutStandard);
@@ -374,9 +374,9 @@ export function converProfileDataToBlobBytes(
       la.layerId,
       {
         layerIndex: idx,
-        isShiftLayer: la.attachedModifiers?.includes('K_Shift') || false
-      }
-    ])
+        isShiftLayer: la.attachedModifiers?.includes('K_Shift') || false,
+      },
+    ]),
   );
   localContext.useShiftCancel = profile.settings.useShiftCancel;
 
@@ -385,14 +385,14 @@ export function converProfileDataToBlobBytes(
   const rawAssigns = makeRawAssignEntries(profile);
   const numLayers = profile.layers.length;
   rawAssigns.sort(
-    sortOrderBy((ra) => ra.keyIndex * 100 + (numLayers - ra.layerIndex))
+    sortOrderBy((ra) => ra.keyIndex * 100 + (numLayers - ra.layerIndex)),
   );
 
   // console.log(rawAssigns);
 
   const groupedAssignBytes = createGroupedArrayByKey(
     rawAssigns,
-    'keyIndex'
+    'keyIndex',
   ).map(encodeKeyBoundAssignsSet);
 
   // console.log(groupedAssignBytes.map((a) => hexBytes(a, ' ')));
@@ -429,7 +429,7 @@ Header 24bytes
 function encodeHeaderBytes(
   numKeys: number,
   numLayers: number,
-  bodyLength: number
+  bodyLength: number,
 ): number[] {
   const headerLength = 24;
   const buffer = Array(headerLength).fill(0);
@@ -446,7 +446,7 @@ function encodeHeaderBytes(
 
 export function makeKeyAssignsConfigStorageData(
   profileData: IProfileData,
-  layout: IKeyboardLayoutStandard
+  layout: IKeyboardLayoutStandard,
 ): number[] {
   const keyNum = profileData.keyboardShape.keyUnits.length;
   const layerNum = profileData.layers.length;
@@ -454,7 +454,7 @@ export function makeKeyAssignsConfigStorageData(
   const headerBytes = encodeHeaderBytes(
     keyNum,
     layerNum,
-    assignsDataBytes.length
+    assignsDataBytes.length,
   );
   return [...headerBytes, ...assignsDataBytes];
 }

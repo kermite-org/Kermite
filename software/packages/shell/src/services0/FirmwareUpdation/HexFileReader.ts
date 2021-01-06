@@ -63,7 +63,7 @@ function createHexRecord(line: string): IHexRecord {
     address,
     recordType,
     data,
-    checksum
+    checksum,
   };
 }
 

@@ -92,7 +92,7 @@ export namespace FlashCommander {
     queryWithFixedSizeRead(
       op: string,
       args: number[],
-      lengthToRead: number
+      lengthToRead: number,
     ): Promise<number[]> {
       if (args.length > 0) {
         logger.log(`>${op} ${bytesToHexString(args)}`);
@@ -151,7 +151,7 @@ export namespace FlashCommander {
     blockSize: [0x59, 0x00, 0x80],
     fuseLow: [0xff],
     fuseHigh: [0xd8],
-    fuseEx: [0xfb]
+    fuseEx: [0xfb],
   };
 
   function checkValue(res: number[], expected: number[], fieldSig: string) {
@@ -169,7 +169,7 @@ export namespace FlashCommander {
 
   async function executeFlashCommandSequence(
     serial: SerialPortBridge,
-    sourceBlocks: number[][]
+    sourceBlocks: number[][],
   ) {
     logger.log('start');
     const resSoftwareIdentifier = await serial.query('S');
@@ -180,39 +180,39 @@ export namespace FlashCommander {
     checkValue(
       resSoftwareIdentifier,
       expectedValues.softwareIdentifier,
-      'software identifier'
+      'software identifier',
     );
     checkValue(
       resBootloaderVersion,
       expectedValues.bootloaderVersion,
-      'bootloader version'
+      'bootloader version',
     );
     checkValue(
       resHardwareVersion,
       expectedValues.hardwareVersion,
-      'hardware version'
+      'hardware version',
     );
     checkValue(
       resProgrammerType,
       expectedValues.programmerType,
-      'programmer type'
+      'programmer type',
     );
     checkValue(
       resSignatureBytes,
       expectedValues.signatureBytes,
-      'signature bytes'
+      'signature bytes',
     );
 
     const resSupportedDeviceTypes = await serial.query('t');
     checkValue(
       resSupportedDeviceTypes,
       expectedValues.supportedDeviceTypes,
-      'supported devices types'
+      'supported devices types',
     );
 
     const resSelectDeviceType = await serial.query(
       'T',
-      resSupportedDeviceTypes[0]
+      resSupportedDeviceTypes[0],
     );
     checkAck(resSelectDeviceType, 'select device type');
 
@@ -221,7 +221,7 @@ export namespace FlashCommander {
     checkValue(
       resAutoIncrementSupported,
       expectedValues.autoIncrementSupported,
-      'auto increment supported'
+      'auto increment supported',
     );
     checkValue(resBlockSize, expectedValues.blockSize, 'block size');
 
@@ -254,7 +254,7 @@ export namespace FlashCommander {
           0x00,
           0x80,
           0x46,
-          ...sourceBlocks[i]
+          ...sourceBlocks[i],
         );
         checkAck(resWriteBlock, 'write block');
         logger.log(`block ${i + 1}/${sourceBlocks.length} written`);
@@ -272,7 +272,7 @@ export namespace FlashCommander {
       const blockBytes = await serial.queryWithFixedSizeRead(
         'g',
         [0x00, 0x80, 0x46],
-        128
+        128,
       );
       // logger.log({blockBytes})
       const isVarid =
@@ -281,7 +281,7 @@ export namespace FlashCommander {
       logger.log(
         `block ${i + 1}/${sourceBlocks.length} ${
           isVarid ? 'verified' : 'verify failed'
-        }`
+        }`,
       );
       if (!isVarid) {
         throw new Error('verify failed');
@@ -300,7 +300,7 @@ export namespace FlashCommander {
 
   export async function uploadFirmware(
     hexFilePath: string,
-    comPortName: string
+    comPortName: string,
   ): Promise<'ok' | string> {
     let serial: SerialPortBridge | undefined = undefined;
 

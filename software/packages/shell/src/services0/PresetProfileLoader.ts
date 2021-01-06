@@ -5,21 +5,21 @@ import { KeyboardLayoutFileLoader } from '~shell/services/KeyboardShape/Keyboard
 import { ProfileHelper } from './ProfileManager/ProfileHelper';
 import {
   IPresetProfileLoadingFeature,
-  IProjectResourceInfoProvider
+  IProjectResourceInfoProvider,
 } from './serviceInterfaces';
 
 export class PresetProfileLoader implements IPresetProfileLoadingFeature {
   constructor(
-    private projectResourceInfoProvider: IProjectResourceInfoProvider
+    private projectResourceInfoProvider: IProjectResourceInfoProvider,
   ) {}
 
   private async loadPresetProfileFromPresetFile(
     projectId: string,
-    presetName: string
+    presetName: string,
   ) {
     const presetFilePath = this.projectResourceInfoProvider.getPresetProfileFilePath(
       projectId,
-      presetName
+      presetName,
     );
     if (presetFilePath) {
       try {
@@ -29,7 +29,7 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
         if (profileData) {
           ProfileHelper.fixProfileData(profileData);
           ProfileHelper.patchProfileKeyboardShapeBodyPathMarkupText(
-            profileData
+            profileData,
           );
           return profileData;
         }
@@ -42,20 +42,20 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
 
   private async createBlankProfileFromLayoutFile(
     projectId: string,
-    layoutName: string
+    layoutName: string,
   ) {
     const layoutFilePath = this.projectResourceInfoProvider.getLayoutFilePath(
       projectId,
-      layoutName
+      layoutName,
     );
     if (layoutFilePath) {
       try {
         const keyboardShape = await KeyboardLayoutFileLoader.loadShapeFromFile(
-          layoutFilePath
+          layoutFilePath,
         );
         if (keyboardShape) {
           const profileData: IProfileData = duplicateObjectByJsonStringifyParse(
-            fallbackProfileData
+            fallbackProfileData,
           );
           if (keyboardShape) {
             profileData.keyboardShape = keyboardShape;
@@ -70,7 +70,7 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
 
   private async loadPresetProfileDataImpl(
     projectId: string,
-    presetName: string
+    presetName: string,
   ) {
     if (!presetName.startsWith('@')) {
       return await this.loadPresetProfileFromPresetFile(projectId, presetName);
@@ -84,7 +84,7 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
 
   async loadPresetProfileData(
     projectId: string,
-    presetName: string
+    presetName: string,
   ): Promise<IProfileData | undefined> {
     const profileKey = `${projectId}__${presetName}`;
     const cache = this.profileDataCache;

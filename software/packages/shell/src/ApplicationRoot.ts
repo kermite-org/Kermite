@@ -22,7 +22,7 @@ export class ApplicationRoot {
       window_minimizeWindow: async () => windowWrapper.minimizeMainWindow(),
       window_maximizeWindow: async () => windowWrapper.maximizeMainWindow(),
       profile_executeProfileManagerCommands: async (commands) =>
-        await this.profileService.profileManager.executeCommands(commands),
+        this.profileService.profileManager.executeCommands(commands),
     });
 
     setTimeout(() => {

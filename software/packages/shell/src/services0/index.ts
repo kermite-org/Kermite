@@ -2,17 +2,17 @@ import { ipcMain } from 'electron';
 import {
   IApplicationSettings,
   IEnvironmentConfigForRendererProcess,
-  IKeyboardConfig
+  IKeyboardConfig,
 } from '~shared/defs/ConfigTypes';
 import {
   IBackendAgent,
   IProfileManagerCommand,
-  ISynchronousIpcPacket
+  ISynchronousIpcPacket,
 } from '~shared/defs/IpcContract';
 import {
   IKeyboardShape,
   IProfileData,
-  IProjectResourceInfo
+  IProjectResourceInfo,
 } from '~shared/defs/ProfileData';
 import { RpcEventSource, RpcFunction, xpcMain } from '~shared/xpc/xpcMain';
 import { appEnv } from '~shell/base/AppEnvironment';
@@ -38,23 +38,23 @@ export class Services implements IBackendAgent {
   private keyboardConfigProvider = new KeyboardConfigProvider();
 
   private keyboardLayoutFilesWatcher = new KeyboardLayoutFilesWatcher(
-    this.projectResourceInfoProvider
+    this.projectResourceInfoProvider,
   );
 
   private keyboardShapesProvider = new KeyboardShapesProvider(
-    this.projectResourceInfoProvider
+    this.projectResourceInfoProvider,
   );
 
   private firmwareUpdationService = new FirmwareUpdationService(
-    this.projectResourceInfoProvider
+    this.projectResourceInfoProvider,
   );
 
   private deviceService = new KeyboardDeviceService(
-    this.projectResourceInfoProvider
+    this.projectResourceInfoProvider,
   );
 
   private presetProfileLoader = new PresetProfileLoader(
-    this.projectResourceInfoProvider
+    this.projectResourceInfoProvider,
   );
 
   private profileManager = new ProfileManager(this.presetProfileLoader);
@@ -62,13 +62,13 @@ export class Services implements IBackendAgent {
   private inputLogicSimulator = new InputLogicSimulatorD(
     this.profileManager,
     this.keyboardConfigProvider,
-    this.deviceService
+    this.deviceService,
   );
 
   @RpcFunction
   async getEnvironmentConfig(): Promise<IEnvironmentConfigForRendererProcess> {
     return {
-      isDevelopment: appEnv.isDevelopment
+      isDevelopment: appEnv.isDevelopment,
     };
   }
 
@@ -96,14 +96,14 @@ export class Services implements IBackendAgent {
       KeyMappingEmitter.emitKeyAssignsToDevice(
         profile,
         layoutStandard,
-        this.deviceService
+        this.deviceService,
       );
     }
   }
 
   @RpcFunction
   async executeProfileManagerCommands(
-    commands: IProfileManagerCommand[]
+    commands: IProfileManagerCommand[],
   ): Promise<void> {
     this.profileManager.executeCommands(commands);
   }
@@ -137,22 +137,22 @@ export class Services implements IBackendAgent {
   @RpcFunction
   async loadKeyboardShape(
     projectId: string,
-    layoutName: string
+    layoutName: string,
   ): Promise<IKeyboardShape | undefined> {
     return await this.keyboardShapesProvider.loadKeyboardShapeByProjectIdAndLayoutName(
       projectId,
-      layoutName
+      layoutName,
     );
   }
 
   @RpcFunction
   async uploadFirmware(
     projectId: string,
-    comPortName: string
+    comPortName: string,
   ): Promise<string> {
     return await this.firmwareUpdationService.writeFirmware(
       projectId,
-      comPortName
+      comPortName,
     );
   }
 
@@ -164,11 +164,11 @@ export class Services implements IBackendAgent {
   @RpcFunction
   async loadPresetProfile(
     profileId: string,
-    presetName: string
+    presetName: string,
   ): Promise<IProfileData | undefined> {
     return await this.presetProfileLoader.loadPresetProfileData(
       profileId,
-      presetName
+      presetName,
     );
   }
 
@@ -200,12 +200,12 @@ export class Services implements IBackendAgent {
     }
     if (packet.saveSettingsOnClosing) {
       this.applicationSettingsProvider.writeSettings(
-        packet.saveSettingsOnClosing
+        packet.saveSettingsOnClosing,
       );
     }
     if (packet.saveKeyboardConfigOnClosing) {
       this.keyboardConfigProvider.writeKeyboardConfig(
-        packet.saveKeyboardConfigOnClosing
+        packet.saveKeyboardConfigOnClosing,
       );
     }
   }

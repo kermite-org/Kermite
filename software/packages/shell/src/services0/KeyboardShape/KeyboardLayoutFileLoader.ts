@@ -2,7 +2,7 @@ import {
   IKeyboardShape,
   IKeyboardShapeDisplayArea,
   IKeyUnitEntry,
-  keyboardShape_fallbackData
+  keyboardShape_fallbackData,
 } from '~shared/defs/ProfileData';
 import { fsExistsSync, fsxReadTextFile } from '~shared/funcs/Files';
 
@@ -14,7 +14,7 @@ export namespace KeyboardLayoutFileLoader {
   }
 
   export async function loadShapeFromFile(
-    filePath: string
+    filePath: string,
   ): Promise<IKeyboardShape | undefined> {
     // default.layout.jsonがない場合layout.jsonがあればそれを読み込む
     const fileExists = fsExistsSync(filePath);
@@ -43,7 +43,7 @@ export namespace KeyboardLayoutFileLoader {
     return {
       keyUnits: souceObj.keyUnits || [],
       displayArea: souceObj.displayArea || { ...fallbackDisplayArea },
-      bodyPathMarkupText: souceObj.bodyPathMarkups?.join(' ') || ''
+      bodyPathMarkupText: souceObj.bodyPathMarkups?.join(' ') || '',
     };
   }
 }

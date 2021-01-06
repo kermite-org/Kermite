@@ -9,7 +9,7 @@ export const memoryWriteTransactionEndFrame = [0xb0, 0x01, 0x11];
 
 export function makeMemoryWriteOperationFrames(
   bytes: number[],
-  dataKind: 'keyMapping'
+  dataKind: 'keyMapping',
 ): number[][] {
   const sz = 64 - 6;
   const numFrames = Math.ceil(bytes.length / sz);
@@ -25,7 +25,7 @@ export function makeMemoryWriteOperationFrames(
       bhi(addr),
       blo(addr),
       data.length,
-      ...data
+      ...data,
     ];
   });
 }
@@ -33,7 +33,7 @@ export function makeMemoryWriteOperationFrames(
 export function makeMemoryChecksumRequestFrame(
   dataKind: 'keyMapping',
   addr: number,
-  length: number
+  length: number,
 ): number[] {
   const dataKindByte = (dataKind === 'keyMapping' && 0x01) || 0;
   return [
@@ -43,7 +43,7 @@ export function makeMemoryChecksumRequestFrame(
     bhi(addr),
     blo(addr),
     bhi(length),
-    blo(length)
+    blo(length),
   ];
 }
 

@@ -4,7 +4,7 @@ import { appEnv } from '~shell/base/AppEnvironment';
 import { IProjectResourceInfoProvider } from '../serviceInterfaces';
 import {
   IProjectResourceInfoSource,
-  ProjectResourceInfoSourceLoader
+  ProjectResourceInfoSourceLoader,
 } from './ProjectResourceInfoSourceLoader';
 
 export class ProjectResourceInfoProvider
@@ -19,7 +19,7 @@ export class ProjectResourceInfoProvider
         projectPath,
         hexFilePath,
         presetNames,
-        layoutNames
+        layoutNames,
       } = it;
       return {
         projectId,
@@ -28,13 +28,13 @@ export class ProjectResourceInfoProvider
         presetNames,
         layoutNames,
         hasLayout: layoutNames.length > 0,
-        hasFirmwareBinary: !!hexFilePath
+        hasFirmwareBinary: !!hexFilePath,
       };
     });
   }
 
   private getProjectInfoSourceById(
-    projectId: string
+    projectId: string,
   ): IProjectResourceInfoSource | undefined {
     return this.projectInfoSources.find((info) => info.projectId === projectId);
   }
@@ -43,7 +43,7 @@ export class ProjectResourceInfoProvider
 
   getPresetProfileFilePath(
     projectId: string,
-    presetName: string
+    presetName: string,
   ): string | undefined {
     const info = this.getProjectInfoSourceById(projectId);
     if (info) {
@@ -67,7 +67,7 @@ export class ProjectResourceInfoProvider
     const resourceOrigin = appEnv.isDevelopment ? 'local' : 'central';
     // const resourceOrigin = 'central';
     this.projectInfoSources = await ProjectResourceInfoSourceLoader.loadProjectResourceInfoSources(
-      resourceOrigin
+      resourceOrigin,
     );
   }
 }

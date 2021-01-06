@@ -8,17 +8,17 @@ export class FirmwareUpdationService {
   private comPortsMonitor = new ComPortsMonitor();
 
   constructor(
-    private projectResourceInfoProvider: IProjectResourceInfoProvider
+    private projectResourceInfoProvider: IProjectResourceInfoProvider,
   ) {}
 
   readonly comPortPlugEvents = this.comPortsMonitor.comPortPlugEvents;
 
   async writeFirmware(
     projectId: string,
-    comPortName: string
+    comPortName: string,
   ): Promise<'ok' | string> {
     const hexFilePath = this.projectResourceInfoProvider.getHexFilePath(
-      projectId
+      projectId,
     );
 
     if (!hexFilePath) {
@@ -27,7 +27,7 @@ export class FirmwareUpdationService {
 
     const flashResult = await FlashCommander.uploadFirmware(
       hexFilePath,
-      comPortName
+      comPortName,
     );
     if (flashResult !== 'ok') {
       console.log(`firmwre upload error`);

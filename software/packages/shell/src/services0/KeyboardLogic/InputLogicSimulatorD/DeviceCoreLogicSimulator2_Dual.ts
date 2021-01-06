@@ -58,7 +58,7 @@ const ModFlag = {
   Ctrl: 1,
   Shift: 2,
   Alt: 4,
-  OS: 8
+  OS: 8,
 };
 
 const NumHidReportBytes = 8;
@@ -243,7 +243,7 @@ const AssignType = {
   Dual: 2,
   Tri: 3,
   Block: 4,
-  Transparent: 5
+  Transparent: 5,
 };
 
 const assignTypeToBodyByteSizeMap: { [key in number]: number } = {
@@ -252,12 +252,12 @@ const assignTypeToBodyByteSizeMap: { [key in number]: number } = {
   [AssignType.Dual]: 4,
   [AssignType.Tri]: 6,
   [AssignType.Block]: 0,
-  [AssignType.Transparent]: 0
+  [AssignType.Transparent]: 0,
 };
 
 function getAssignBlockAddressForLayer(
   baseAddr: u8,
-  targetLayerIndex: u8
+  targetLayerIndex: u8,
 ): u16 {
   const len = readStorageByte(baseAddr) & 0x3f;
   let addr = baseAddr + 2;
@@ -286,7 +286,7 @@ interface IAssignSet {
 
 function getAssignSetInLayer(
   keyIndex: u8,
-  layerIndex: u8
+  layerIndex: u8,
 ): IAssignSet | undefined {
   const addr0 = getAssignsBlockAddressForKey(keyIndex);
   if (addr0 > 0) {
@@ -310,7 +310,7 @@ function getAssignSetInLayer(
         pri,
         sec,
         ter,
-        layerIndex
+        layerIndex,
       };
     }
   }
@@ -323,7 +323,7 @@ function getAssignSetInLayer(
 const OpType = {
   KeyInput: 1,
   LayerCall: 2,
-  LayerClearExclusive: 3
+  LayerClearExclusive: 3,
 };
 
 const InvocationMode = {
@@ -331,7 +331,7 @@ const InvocationMode = {
   TurnOn: 2,
   TurnOff: 3,
   Toggle: 4,
-  Oneshot: 5
+  Oneshot: 5,
 };
 
 const layerState = new (class {
@@ -585,7 +585,7 @@ function resetAssignBinder() {
     .fill(0)
     .map(() => ({
       keyIndex: -1,
-      tick: 0
+      tick: 0,
     }));
 }
 
@@ -631,7 +631,7 @@ const TH = 200;
 
 const resolverConfig = {
   debugShowTrigger: false,
-  emitOutputStroke: true
+  emitOutputStroke: true,
 };
 // resolverConfig.debugShowTrigger = true;
 // resolverConfig.emitOutputStroke = false;
@@ -660,7 +660,7 @@ const fallbackAssignSet: IAssignSet = {
   pri: 0,
   sec: 0,
   ter: 0,
-  layerIndex: -1
+  layerIndex: -1,
 };
 
 function initResolverState() {
@@ -678,13 +678,13 @@ function initResolverState() {
       resolving: false,
       assignSet: fallbackAssignSet,
       resolverProc: undefined,
-      inputEdge: undefined
+      inputEdge: undefined,
     }));
 }
 
 function storeAssignHitResult(
   slot: KeySlot,
-  prioritySpec: number // 1:pri, 2:sec, 3:ter
+  prioritySpec: number, // 1:pri, 2:sec, 3:ter
 ) {
   const fKeyIndex = slot.keyIndex;
   const fLayerIndex = slot.assignSet.layerIndex;
@@ -726,7 +726,7 @@ function keySlot_dummyResolver(slot: KeySlot): boolean {
 
 const TriggerA = {
   Down: 'D',
-  Up: 'U'
+  Up: 'U',
 };
 
 function keySlot_pushStepA(slot: KeySlot, step: 'D' | 'U' | '_') {
@@ -773,7 +773,7 @@ const TriggerB = {
   Tap: 'DU',
   Hold: 'D_',
   Rehold: 'DUD',
-  Up: 'U'
+  Up: 'U',
 };
 
 function keySlot_pushStepB(slot: KeySlot, step: 'D' | 'U' | '_') {
@@ -865,7 +865,7 @@ const TriggerC = {
   Tap: 'DU_',
   Hold2: 'DUD_',
   Tap2: 'DUDU',
-  Up: 'U'
+  Up: 'U',
 };
 
 function keySlot_pushStepC(slot: KeySlot, step: 'D' | 'U' | '_') {
@@ -969,7 +969,7 @@ const keySlotResolverFuncs = [
   keySlot_dummyResolver,
   keySlot_singleResolverA,
   keySlot_dualResolverB,
-  keySlot_tripleResolverC
+  keySlot_tripleResolverC,
 ];
 
 function keySlot_tick(slot: KeySlot, ms: number) {
@@ -993,7 +993,7 @@ function keySlot_tick(slot: KeySlot, ms: number) {
     slot.resolverProc = keySlotResolverFuncs[slot.assignSet.assignType];
     if (resolverConfig.debugShowTrigger) {
       console.log(
-        `resolver attached ${slot.keyIndex} ${slot.assignSet.assignType}`
+        `resolver attached ${slot.keyIndex} ${slot.assignSet.assignType}`,
       );
     }
   }
@@ -1075,7 +1075,7 @@ function keyboardCoreLogic_peekAssignHitResult(): number {
 
 function keyboardCoreLogic_issuePhysicalKeyStateChanged(
   keyIndex: number,
-  isDown: boolean
+  isDown: boolean,
 ) {
   if (logicActive) {
     triggerResolver_handleKeyInput(keyIndex, isDown);
@@ -1103,6 +1103,6 @@ export function getKeyboardCoreLogicInterface(): KeyboardCoreLogicInterface {
     keyboardCoreLogic_peekAssignHitResult,
     keyboardCoreLogic_issuePhysicalKeyStateChanged,
     keyboardCoreLogic_processTicker,
-    keyboardCoreLogic_halt
+    keyboardCoreLogic_halt,
   };
 }

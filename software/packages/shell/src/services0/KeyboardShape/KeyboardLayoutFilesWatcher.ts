@@ -5,7 +5,7 @@ import {
   fsxWtachFilesChange,
   pathDirname,
   pathRelative,
-  pathResolve
+  pathResolve,
 } from '~shared/funcs/Files';
 import { appEnv } from '~shell/base/AppEnvironment';
 import { IProjectResourceInfoProvider } from '~shell/services/serviceInterfaces';
@@ -20,7 +20,7 @@ export class KeyboardLayoutFilesWatcher {
   readonly fileUpdationEventPort = new EventPort<IFileUpdationEvent>();
 
   constructor(
-    private projectResourceInfoProvider: IProjectResourceInfoProvider
+    private projectResourceInfoProvider: IProjectResourceInfoProvider,
   ) {}
 
   private getProjectIdFromFilePath(projectPath: string) {

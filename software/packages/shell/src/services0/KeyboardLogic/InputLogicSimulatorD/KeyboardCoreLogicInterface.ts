@@ -1,6 +1,6 @@
 export interface KeyboardCoreLogicInterface {
   keyboardCoreLogic_setAssignStorageReaderFunc(
-    func: (addr: number) => number
+    func: (addr: number) => number,
   ): void;
   keyboardCoreLogic_initialize(): void;
   keyboardCoreLogic_getLayerActiveFlags(): number;
@@ -8,7 +8,7 @@ export interface KeyboardCoreLogicInterface {
   keyboardCoreLogic_peekAssignHitResult(): number;
   keyboardCoreLogic_issuePhysicalKeyStateChanged(
     keyIndex: number,
-    isDown: boolean
+    isDown: boolean,
   ): void;
   keyboardCoreLogic_processTicker(ms: number): void;
   keyboardCoreLogic_halt(): void;

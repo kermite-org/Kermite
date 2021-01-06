@@ -1,7 +1,7 @@
 import { IKeyboardConfig } from '~shared/defs/ConfigTypes';
 import {
   IProfileManagerStatus,
-  IRealtimeKeyboardEvent
+  IRealtimeKeyboardEvent,
 } from '~shared/defs/IpcContract';
 import { generateNumberSequence } from '~shared/funcs/Utils';
 import { KeyboardConfigProvider } from '~shell/services/KeyboardConfigProvider';
@@ -65,7 +65,7 @@ export class InputLogicSimulatorD {
   constructor(
     private profileManager: ProfileManager,
     private keyboardConfigProvider: KeyboardConfigProvider,
-    private deviceService: KeyboardDeviceService
+    private deviceService: KeyboardDeviceService,
   ) {}
 
   private updateProfileDataBlob() {
@@ -77,13 +77,13 @@ export class InputLogicSimulatorD {
       this.configDataStorage.writeConfigStorageData(bytes);
       this.CL.keyboardCoreLogic_initialize();
       this.CL.keyboardCoreLogic_setAssignStorageReaderFunc((addr) =>
-        this.configDataStorage.readByte(addr)
+        this.configDataStorage.readByte(addr),
       );
     }
   }
 
   private onProfileStatusChanged = (
-    changedStatus: Partial<IProfileManagerStatus>
+    changedStatus: Partial<IProfileManagerStatus>,
   ) => {
     if (changedStatus.loadedProfileData) {
       // console.log(`logicSimulator, profile data received`);
@@ -92,7 +92,7 @@ export class InputLogicSimulatorD {
   };
 
   private onKeyboardConfigChanged = (
-    changedConfig: Partial<IKeyboardConfig>
+    changedConfig: Partial<IKeyboardConfig>,
   ) => {
     if (changedConfig.behaviorMode) {
       const isSideBrainMode = changedConfig.behaviorMode === 'SideBrain';
@@ -129,7 +129,7 @@ export class InputLogicSimulatorD {
       if (newLayerActiveFlags !== this.layerActiveFlags) {
         this.deviceService.emitRealtimeEventFromSimulator({
           type: 'layerChanged',
-          layerActiveFlags: newLayerActiveFlags
+          layerActiveFlags: newLayerActiveFlags,
         });
         this.layerActiveFlags = newLayerActiveFlags;
       }
@@ -142,7 +142,7 @@ export class InputLogicSimulatorD {
           type: 'assignHit',
           layerIndex,
           keyIndex,
-          prioritySpec
+          prioritySpec,
         });
       }
     }
@@ -151,23 +151,23 @@ export class InputLogicSimulatorD {
   initialize() {
     this.profileManager.statusEventPort.subscribe(this.onProfileStatusChanged);
     this.keyboardConfigProvider.statusEventPort.subscribe(
-      this.onKeyboardConfigChanged
+      this.onKeyboardConfigChanged,
     );
     this.deviceService.realtimeEventPort.subscribe(
-      this.onRealtimeKeyboardEvent
+      this.onRealtimeKeyboardEvent,
     );
     this.tickerTimer.start(this.processTicker, 5);
   }
 
   terminate() {
     this.profileManager.statusEventPort.unsubscribe(
-      this.onProfileStatusChanged
+      this.onProfileStatusChanged,
     );
     this.keyboardConfigProvider.statusEventPort.unsubscribe(
-      this.onKeyboardConfigChanged
+      this.onKeyboardConfigChanged,
     );
     this.deviceService.realtimeEventPort.unsubscribe(
-      this.onRealtimeKeyboardEvent
+      this.onRealtimeKeyboardEvent,
     );
     if (this.isSideBranMode) {
       this.deviceService.setSideBrainMode(false);

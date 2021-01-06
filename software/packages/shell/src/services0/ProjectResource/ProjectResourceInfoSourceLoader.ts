@@ -8,7 +8,7 @@ import {
   pathDirname,
   pathJoin,
   pathRelative,
-  pathResolve
+  pathResolve,
 } from '~shared/funcs/Files';
 import { appEnv } from '~shell/base/AppEnvironment';
 
@@ -76,12 +76,12 @@ export namespace ProjectResourceInfoSourceLoader {
       .map((fileName) =>
         fileName === 'layout.json'
           ? 'default'
-          : pathBasename(fileName, '.layout.json')
+          : pathBasename(fileName, '.layout.json'),
       );
   }
 
   async function readProjectFile(
-    projectFilePath: string
+    projectFilePath: string,
   ): Promise<IPorjectFileJson> {
     return (await fsxReadJsonFile(projectFilePath)) as IPorjectFileJson;
   }
@@ -91,10 +91,10 @@ export namespace ProjectResourceInfoSourceLoader {
   > {
     const variantsDir = appEnv.resolveUserDataFilePath('resources/variants');
     const summaryFilePath = appEnv.resolveUserDataFilePath(
-      'resources/summary.json'
+      'resources/summary.json',
     );
     const summaryObj = (await fsxReadJsonFile(
-      summaryFilePath
+      summaryFilePath,
     )) as ISummaryJsonData;
 
     return summaryObj.projects.map((info) => {
@@ -103,7 +103,7 @@ export namespace ProjectResourceInfoSourceLoader {
         keyboardName,
         projectPath,
         layoutNames,
-        presetNames
+        presetNames,
       } = info;
       const projectFolderPath = pathJoin(variantsDir, projectPath);
       const coreName = pathBasename(projectPath);
@@ -118,7 +118,7 @@ export namespace ProjectResourceInfoSourceLoader {
         projectFolderPath,
         layoutNames,
         presetNames,
-        hexFilePath
+        hexFilePath,
       };
     });
   }
@@ -141,11 +141,11 @@ export namespace ProjectResourceInfoSourceLoader {
         const projectFilePath = pathJoin(projectBaseDir, 'project.json');
 
         const { projectId, keyboardName } = await readProjectFile(
-          projectFilePath
+          projectFilePath,
         );
 
         const hexFilePath = checkFileExistsOrBlank(
-          pathJoin(projectBaseDir, `${coreName}.hex`)
+          pathJoin(projectBaseDir, `${coreName}.hex`),
         );
         const presetFolderPath = pathJoin(projectBaseDir, 'profiles');
         const presetNames = await readPresetNames(presetFolderPath);
@@ -159,9 +159,9 @@ export namespace ProjectResourceInfoSourceLoader {
           projectFolderPath: projectBaseDir,
           layoutNames,
           presetNames,
-          hexFilePath
+          hexFilePath,
         };
-      })
+      }),
     );
   }
 
@@ -169,24 +169,24 @@ export namespace ProjectResourceInfoSourceLoader {
     const projectsRoot = pathResolve('../firmware/src/projects');
     const buildsRoot = pathResolve('../firmware/build');
     const projectFilePaths = await globAsync(
-      `${projectsRoot}/**/*/project.json`
+      `${projectsRoot}/**/*/project.json`,
     );
 
     return await Promise.all(
       projectFilePaths.map(async (projectFilePath) => {
         const projectPath = pathRelative(
           projectsRoot,
-          pathDirname(projectFilePath)
+          pathDirname(projectFilePath),
         );
         const projectBaseDir = pathDirname(projectFilePath);
 
         const coreName = pathBasename(projectPath);
         const hexFilePath = checkFileExistsOrBlank(
-          pathJoin(buildsRoot, projectPath, `${coreName}.hex`)
+          pathJoin(buildsRoot, projectPath, `${coreName}.hex`),
         );
 
         const { projectId, keyboardName } = await readProjectFile(
-          projectFilePath
+          projectFilePath,
         );
 
         const presetsFolderPath = pathJoin(projectBaseDir, 'profiles');
@@ -202,14 +202,14 @@ export namespace ProjectResourceInfoSourceLoader {
           projectFolderPath: projectBaseDir,
           layoutNames,
           presetNames,
-          hexFilePath
+          hexFilePath,
         };
-      })
+      }),
     );
   }
 
   export async function loadProjectResourceInfoSources(
-    resourceOrigin: IProjectResourceOrigin
+    resourceOrigin: IProjectResourceOrigin,
   ): Promise<IProjectResourceInfoSource[]> {
     if (resourceOrigin === 'central') {
       return await loadCentralResourcesFromSummaryJson();

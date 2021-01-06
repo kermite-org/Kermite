@@ -5,20 +5,20 @@ import { KeyboardLayoutFileLoader } from './KeyboardLayoutFileLoader';
 // キーボード品種ごとのレイアウトファイルを読み込み提供する
 export class KeyboardShapesProvider {
   constructor(
-    private projectResourceInfoProvider: IProjectResourceInfoProvider
+    private projectResourceInfoProvider: IProjectResourceInfoProvider,
   ) {}
 
   async loadKeyboardShapeByProjectIdAndLayoutName(
     projectId: string,
-    layoutName: string
+    layoutName: string,
   ): Promise<IKeyboardShape | undefined> {
     const info = this.projectResourceInfoProvider.internal_getProjectInfoSourceById(
-      projectId
+      projectId,
     );
     if (info) {
       const layoutFilePath = this.projectResourceInfoProvider.getLayoutFilePath(
         projectId,
-        layoutName
+        layoutName,
       );
       if (layoutFilePath) {
         return await KeyboardLayoutFileLoader.loadShapeFromFile(layoutFilePath);

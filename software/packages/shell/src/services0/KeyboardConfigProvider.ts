@@ -1,6 +1,6 @@
 import {
   fallbackKeyboardConfig,
-  IKeyboardConfig
+  IKeyboardConfig,
 } from '~shared/defs/ConfigTypes';
 import { EventPort } from '~shared/funcs/EventPort';
 import { overwriteObjectProps } from '~shared/funcs/Utils';
@@ -17,7 +17,7 @@ export class KeyboardConfigProvider {
   }
 
   readonly statusEventPort = new EventPort<Partial<IKeyboardConfig>>({
-    initialValueGetter: () => this._keyboardConfig
+    initialValueGetter: () => this._keyboardConfig,
   });
 
   private setStatus(newStatePartial: Partial<IKeyboardConfig>) {

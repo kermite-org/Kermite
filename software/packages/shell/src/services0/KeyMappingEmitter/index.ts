@@ -8,14 +8,14 @@ import {
   makeMemoryChecksumRequestFrame,
   makeMemoryWriteOperationFrames,
   memoryWriteTransactionEndFrame,
-  memoryWriteTransactionStartFrame
+  memoryWriteTransactionStartFrame,
 } from './MemoryOperationFrameBuilder';
 
 export namespace KeyMappingEmitter {
   export function emitKeyAssignsToDevice(
     editModel: IProfileData,
     layout: IKeyboardLayoutStandard,
-    deviceService: KeyboardDeviceService
+    deviceService: KeyboardDeviceService,
   ) {
     const ds = deviceService;
 
@@ -37,12 +37,12 @@ export namespace KeyMappingEmitter {
 
     const keyAssingnDataFrames = makeMemoryWriteOperationFrames(
       data,
-      'keyMapping'
+      'keyMapping',
     );
     const checksumRequestFrame = makeMemoryChecksumRequestFrame(
       'keyMapping',
       0,
-      dataLength
+      dataLength,
     );
 
     (async () => {
