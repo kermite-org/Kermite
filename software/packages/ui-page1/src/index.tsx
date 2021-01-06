@@ -8,6 +8,7 @@ import {
 import { initializeCss } from '@kermite/ui';
 import { css } from 'goober';
 import { h, render, Hook, rerender } from 'qx';
+import { ProfileSelector } from '~/ProfileSelector';
 import { ipcExample } from '~/ipcExample';
 import { greet } from '~/local';
 
@@ -110,6 +111,7 @@ const PageRoot = () => {
       <div>
         <button onClick={() => (broken = true)}>break</button>
       </div>
+      <ProfileSelector />
     </div>
   );
 };
