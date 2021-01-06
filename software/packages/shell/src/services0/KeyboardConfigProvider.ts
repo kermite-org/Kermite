@@ -8,8 +8,6 @@ import { EventPort } from '~/funcs';
 
 // 環境に関連したキーボードの設定を保存する, レイアウト(US/JP)など
 export class KeyboardConfigProvider {
-  private readonly storageKey = 'keyboardConfig';
-
   private _keyboardConfig: IKeyboardConfig = fallbackKeyboardConfig;
 
   get keyboardConfig() {
@@ -37,7 +35,7 @@ export class KeyboardConfigProvider {
 
   private loadConfig(): IKeyboardConfig {
     const config: IKeyboardConfig = { ...fallbackKeyboardConfig };
-    const loaded = applicationStorage.getItem(this.storageKey);
+    const loaded = applicationStorage.getItem('keyboardConfig');
     if (loaded) {
       overwriteObjectProps(config, loaded);
     }
@@ -49,6 +47,6 @@ export class KeyboardConfigProvider {
   }
 
   terminate() {
-    applicationStorage.setItem(this.storageKey, this._keyboardConfig);
+    applicationStorage.setItem('keyboardConfig', this._keyboardConfig);
   }
 }

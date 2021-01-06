@@ -1,4 +1,4 @@
-import { overwriteObjectProps } from '@kermite/shared';
+import { IKeyboardConfig, overwriteObjectProps } from '@kermite/shared';
 import Store from 'electron-store';
 
 export interface IApplicationPersistData {
@@ -7,6 +7,7 @@ export interface IApplicationPersistData {
     isDevToolsVisible: boolean;
   };
   currentProfileName: string | undefined;
+  keyboardConfig: IKeyboardConfig;
 }
 
 class ApplicationStorage {
@@ -18,6 +19,10 @@ class ApplicationStorage {
       isDevToolsVisible: false,
     },
     currentProfileName: undefined,
+    keyboardConfig: {
+      behaviorMode: 'Standalone',
+      layoutStandard: 'US',
+    },
   };
 
   getItem<K extends keyof IApplicationPersistData>(
