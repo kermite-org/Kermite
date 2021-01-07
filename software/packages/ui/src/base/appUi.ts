@@ -1,10 +1,7 @@
-import { getIpcRendererAgent, IAppIpcContract } from '@kermite/shared';
 import { rerender as qxRerender } from 'qx';
 
 class AppUi {
   isDevelopment = (window as any).debugConfig?.isDevelopment;
-
-  backendAgent = getIpcRendererAgent<IAppIpcContract>();
 
   private _debugObject: any = {};
 
