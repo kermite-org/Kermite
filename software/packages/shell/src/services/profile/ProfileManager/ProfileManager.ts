@@ -7,6 +7,7 @@ import {
   IProfileManagerCommand,
 } from '@kermite/shared';
 import { EventPort } from '~/funcs';
+import { PresetProfileLoader } from '~/services0/PresetProfileLoader';
 import { ProfileHelper } from './ProfileHelper';
 import { ProfileManagerCore } from './ProfileManagerCore';
 
@@ -25,7 +26,7 @@ export class ProfileManager {
 
   private core: ProfileManagerCore;
 
-  constructor(/* private presetProfileLoader: PresetProfileLoader */) {
+  constructor(private presetProfileLoader: PresetProfileLoader) {
     this.core = new ProfileManagerCore();
   }
 
@@ -144,20 +145,19 @@ export class ProfileManager {
   }
 
   private async createProfileImpl(
-    _profName: string,
-    _targetProjectId: string,
-    _presetName: string,
+    profName: string,
+    targetProjectId: string,
+    presetName: string,
   ): Promise<IProfileData> {
-    throw new Error('not implemented yet');
-    // const profile = await this.presetProfileLoader.loadPresetProfileData(
-    //   targetProjectId,
-    //   presetName,
-    // );
-    // if (!profile) {
-    //   throw new Error('failed to load profile');
-    // }
-    // await this.core.saveProfile(profName, profile);
-    // return profile;
+    const profile = await this.presetProfileLoader.loadPresetProfileData(
+      targetProjectId,
+      presetName,
+    );
+    if (!profile) {
+      throw new Error('failed to load profile');
+    }
+    await this.core.saveProfile(profName, profile);
+    return profile;
   }
 
   async createProfile(

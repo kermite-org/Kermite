@@ -1,10 +1,15 @@
 import { IProfileData, IProfileManagerStatus } from '@kermite/shared';
 import { makeListnerPort } from '~/funcs';
+import { PresetProfileLoader } from '~/services0/PresetProfileLoader';
 import { ProfileManager } from './ProfileManager/ProfileManager';
 import { IProfileService } from './interfaces';
 
 export class ProfileService implements IProfileService {
-  profileManager = new ProfileManager();
+  profileManager: ProfileManager;
+
+  constructor(presetProfileLoader: PresetProfileLoader) {
+    this.profileManager = new ProfileManager(presetProfileLoader);
+  }
 
   onCurrentProfileChanged = makeListnerPort<void>();
 
