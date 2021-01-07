@@ -5,7 +5,7 @@ import {
   IProfileData,
   showVersion,
 } from '@kermite/shared';
-import { initializeCss } from '@kermite/ui';
+import { initializeCss, ipcAgent } from '@kermite/ui';
 import { css } from 'goober';
 import { h, render, Hook, rerender } from 'qx';
 import { ProfileSelector } from '~/ProfileSelector';
@@ -92,6 +92,20 @@ const ProfileView = () => {
   );
 };
 
+const ActiveChecker = () => {
+  const [isActive, setActive] = Hook.useState(true);
+
+  Hook.useEffect(() => {
+    ipcAgent.subscribe('window_appWindowEvents', (ev) => {
+      if (ev.activeChanged !== undefined) {
+        setActive(ev.activeChanged);
+      }
+    });
+  }, []);
+
+  return <div>isActive: {isActive.toString()}</div>;
+};
+
 const PageRoot = () => {
   renderIndex++;
 
@@ -107,6 +121,7 @@ const PageRoot = () => {
     <div css={cssRoot}>
       hello page1
       <Counter1 />
+      <ActiveChecker />
       <ProfileView />
       <div>
         <button onClick={() => (broken = true)}>break</button>

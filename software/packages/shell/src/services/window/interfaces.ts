@@ -1,3 +1,4 @@
+import { IAppWindowEvent } from '@kermite/shared';
 import { IListenerPort } from '~/base';
 
 export interface IMenuManager {
@@ -26,6 +27,7 @@ export interface IAppWindowWrapper {
   setDevToolsVisibility(visible: boolean): void;
   minimizeMainWindow(): void;
   maximizeMainWindow(): void;
+  onAppWindowEvent: IListenerPort<IAppWindowEvent>;
   // onPageLoaded: IListenerPort<string>;
 }
 

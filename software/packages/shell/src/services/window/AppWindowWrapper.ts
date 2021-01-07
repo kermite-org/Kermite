@@ -1,6 +1,7 @@
-import { BrowserWindow } from 'electron';
+import { IAppWindowEvent } from '@kermite/shared';
+import { app, BrowserWindow } from 'electron';
 import { appConfig } from '~/base';
-import { pathJoin, pathRelative } from '~/funcs';
+import { makeListnerPort, pathJoin, pathRelative } from '~/funcs';
 import { IAppWindowWrapper } from './interfaces';
 import { PageSourceWatcher, setupWebContentSourceChecker } from './modules';
 
@@ -12,6 +13,8 @@ export class AppWindowWrapper implements IAppWindowWrapper {
   private mainWindow: BrowserWindow | undefined;
 
   // onPageLoaded = makeListnerPort<string>();
+
+  onAppWindowEvent = makeListnerPort<IAppWindowEvent>();
 
   openMainWindow(params: {
     preloadFilePath: string;
@@ -43,6 +46,14 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     this.mainWindow = win;
     setupWebContentSourceChecker(win.webContents, publicRootPath);
     this.publicRootPath = publicRootPath;
+
+    app.on('browser-window-focus', () => {
+      this.onAppWindowEvent.emit({ activeChanged: true });
+    });
+    app.on('browser-window-blur', () => {
+      this.onAppWindowEvent.emit({ activeChanged: false });
+    });
+
     return win;
   }
 

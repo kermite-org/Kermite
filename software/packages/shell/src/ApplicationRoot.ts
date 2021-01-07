@@ -1,5 +1,5 @@
 import { IProfileManagerStatus } from '@kermite/shared';
-import { appGlobal, applicationStorage, appWindowEventHub } from '~/base';
+import { appGlobal, applicationStorage } from '~/base';
 import { ProfileService } from '~/services/profile';
 import { WindowService } from '~/services/window';
 import { FirmwareUpdationService } from '~/services0/FirmwareUpdation';
@@ -142,10 +142,7 @@ export class ApplicationRoot {
         return () =>
           this.keyboardLayoutFilesWatcher.fileUpdationEventPort.unsubscribe(cb);
       },
-      window_appWindowEvents: (cb) => {
-        appWindowEventHub.subscribe(cb);
-        return () => appWindowEventHub.unsubscribe(cb);
-      },
+      window_appWindowEvents: windowWrapper.onAppWindowEvent,
     });
   }
 
