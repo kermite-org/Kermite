@@ -16,7 +16,7 @@ const LogColorTable: { [color in TLogColor]: string } = {
   blue: '\u001b[34m',
   magenta: '\u001b[35m',
   cyan: '\u001b[36m',
-  white: '\u001b[37m'
+  white: '\u001b[37m',
 };
 const resetCode = '\u001b[0m';
 
