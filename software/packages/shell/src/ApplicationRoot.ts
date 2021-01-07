@@ -148,7 +148,7 @@ export class ApplicationRoot {
 
   async initialize() {
     console.log(`initialize services`);
-    applicationStorage.initialize();
+    await applicationStorage.initialize();
     await resourceUpdator_syncRemoteResourcesToLocal();
     await this.projectResourceInfoProvider.initializeAsync();
     await this.profileService.initialize();
@@ -171,6 +171,6 @@ export class ApplicationRoot {
     this.keyboardLayoutFilesWatcher.terminate();
     this.firmwareUpdationService.terminate();
     await this.profileService.terminate();
-    applicationStorage.terminate();
+    await applicationStorage.terminate();
   }
 }
