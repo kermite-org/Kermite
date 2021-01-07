@@ -105,65 +105,48 @@ export class ApplicationRoot {
       },
     });
 
-    setTimeout(() => {
-      appGlobal.icpMainAgent.emitEvent('dev_testEvent', { type: 'test' });
-    }, 2000);
-  }
-
-  private setupCurrentProfileEmitter() {
-    const emitCurrentProfile = () => {
-      appGlobal.icpMainAgent.emitEvent(
-        'profile_currentProfile',
-        this.profileService.getCurrentProfile(),
-      );
-    };
-    appGlobal.icpMainAgent.setSubscriptionStartCallback(
-      'profile_currentProfile',
-      emitCurrentProfile,
-    );
-    this.profileService.onCurrentProfileChanged(emitCurrentProfile);
-  }
-
-  private setupProfileManagerStatusEmitter() {
-    const emitProfileManagerStatus = (
-      status: Partial<IProfileManagerStatus>,
-    ) => {
-      appGlobal.icpMainAgent.emitEvent('profile_profileManagerStatus', status);
-    };
-    appGlobal.icpMainAgent.setSubscriptionStartCallback(
-      'profile_profileManagerStatus',
-      () =>
-        emitProfileManagerStatus(
-          this.profileService.profileManager.getStatus(),
-        ),
-    );
-    this.profileService.profileManager.statusEventPort.subscribe(
-      emitProfileManagerStatus,
-    );
-  }
-
-  private setupEventSources() {
-    const agent = appGlobal.icpMainAgent;
-    this.deviceService.realtimeEventPort.subscribe((ev) =>
-      agent.emitEvent('device_keyEvents', ev),
-    );
-
-    // todo: emit initial value
-    this.deviceService.statusEventPort.subscribe((ev) =>
-      agent.emitEvent('device_keyboardDeviceStatusEvents', ev),
-    );
-
-    this.firmwareUpdationService.comPortPlugEvents.subscribe((ev) =>
-      agent.emitEvent('firmup_comPortPlugEvents', ev),
-    );
-
-    this.keyboardLayoutFilesWatcher.fileUpdationEventPort.subscribe((ev) =>
-      agent.emitEvent('projects_layoutFileUpdationEvents', ev),
-    );
-
-    appWindowEventHub.subscribe((ev) =>
-      agent.emitEvent('window_appWindowEvents', ev),
-    );
+    appGlobal.icpMainAgent.supplySubscriptionHandlers({
+      dev_testEvent: (cb) => {
+        // eslint-disable-next-line standard/no-callback-literal
+        cb({ type: 'test_event_with_supplySubscriptionHandlers' });
+        return () => {};
+      },
+      profile_profileManagerStatus: (cb) => {
+        this.profileManager.statusEventPort.subscribe(cb);
+        return () => this.profileManager.statusEventPort.unsubscribe(cb);
+      },
+      profile_currentProfile: (cb) => {
+        const cb2 = (value: Partial<IProfileManagerStatus>) => {
+          if ('loadedProfileData' in value) {
+            cb(value.loadedProfileData);
+          }
+        };
+        this.profileManager.statusEventPort.subscribe(cb2);
+        return () => this.profileManager.statusEventPort.unsubscribe(cb2);
+      },
+      device_keyEvents: (cb) => {
+        this.deviceService.realtimeEventPort.subscribe(cb);
+        return () => this.deviceService.realtimeEventPort.unsubscribe(cb);
+      },
+      device_keyboardDeviceStatusEvents: (cb) => {
+        this.deviceService.statusEventPort.subscribe(cb);
+        return () => this.deviceService.statusEventPort.unsubscribe(cb);
+      },
+      firmup_comPortPlugEvents: (cb) => {
+        this.firmwareUpdationService.comPortPlugEvents.subscribe(cb);
+        return () =>
+          this.firmwareUpdationService.comPortPlugEvents.unsubscribe(cb);
+      },
+      projects_layoutFileUpdationEvents: (cb) => {
+        this.keyboardLayoutFilesWatcher.fileUpdationEventPort.subscribe(cb);
+        return () =>
+          this.keyboardLayoutFilesWatcher.fileUpdationEventPort.unsubscribe(cb);
+      },
+      window_appWindowEvents: (cb) => {
+        appWindowEventHub.subscribe(cb);
+        return () => appWindowEventHub.unsubscribe(cb);
+      },
+    });
   }
 
   async initialize() {
@@ -179,10 +162,6 @@ export class ApplicationRoot {
     this.inputLogicSimulator.initialize();
 
     this.setupIpcBackend();
-    this.setupCurrentProfileEmitter();
-    this.setupProfileManagerStatusEmitter();
-    this.setupEventSources();
-
     this.windowService.initialize();
   }
 
