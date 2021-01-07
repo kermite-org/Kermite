@@ -4,7 +4,7 @@ import { modalConfirm } from '~ui/base/dialog/BasicModals';
 import { models } from '~ui/models';
 import {
   callLayerConfigurationModal,
-  ILayerConfigurationModelEditValues
+  ILayerConfigurationModelEditValues,
 } from '~ui/views/modals/LayerConfigurationModal';
 
 export class LayerManagementPartViewModel {
@@ -14,7 +14,7 @@ export class LayerManagementPartViewModel {
 
   private get curLayer(): ILayer {
     return this.layers.find(
-      (la) => la.layerId === models.editorModel.currentLayerId
+      (la) => la.layerId === models.editorModel.currentLayerId,
     )!;
   }
 
@@ -62,7 +62,7 @@ export class LayerManagementPartViewModel {
   deleteCurrentLayer = async () => {
     const ok = await modalConfirm({
       message: `Layer ${this.curLayer.layerName} is removed. Are you sure?`,
-      caption: 'Delete Layer'
+      caption: 'Delete Layer',
     });
     if (ok) {
       removeArrayItems(this.layers, this.curLayer);
@@ -76,19 +76,19 @@ export class LayerManagementPartViewModel {
       defaultScheme,
       attachedModifiers,
       exclusionGroup,
-      initialActive
+      initialActive,
     } = this.curLayer;
     const sourceValues: ILayerConfigurationModelEditValues = {
       layerName,
       attachedModifiers,
       defaultScheme,
       exclusionGroup,
-      initialActive
+      initialActive,
     };
     const editValues = await callLayerConfigurationModal({
       sourceValues,
       caption: 'Edit Layer Properties',
-      isRootLayer: !this.isCurrentLayerCustom
+      isRootLayer: !this.isCurrentLayerCustom,
     });
     if (editValues) {
       this.curLayer.layerName = editValues.layerName;
@@ -115,10 +115,10 @@ export class LayerManagementPartViewModel {
         defaultScheme: 'transparent',
         attachedModifiers: undefined,
         exclusionGroup: 0,
-        initialActive: false
+        initialActive: false,
       },
       caption: 'Add Layer',
-      isRootLayer: false
+      isRootLayer: false,
     });
     if (layerAttrs?.layerName) {
       const layerId = this.getNewLayerId();
@@ -127,7 +127,7 @@ export class LayerManagementPartViewModel {
         defaultScheme,
         attachedModifiers,
         exclusionGroup,
-        initialActive
+        initialActive,
       } = layerAttrs;
       this.layers.push({
         layerId,
@@ -135,7 +135,7 @@ export class LayerManagementPartViewModel {
         defaultScheme,
         attachedModifiers,
         exclusionGroup,
-        initialActive
+        initialActive,
       });
     }
   };

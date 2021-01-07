@@ -15,7 +15,7 @@ export function makeShapePreviewPageViewModel(): IShapePreviewPageViewModel {
   const {
     uiStatusModel,
     keyboardShapesModel: shapesModel,
-    playerModel
+    playerModel,
   } = models;
 
   return {
@@ -25,18 +25,18 @@ export function makeShapePreviewPageViewModel(): IShapePreviewPageViewModel {
     projectSelectorSource: {
       options: shapesModel.optionProjectInfos.map((info) => ({
         id: info.projectId,
-        text: info.projectPath
+        text: info.projectPath,
       })),
       choiceId: shapesModel.currentProjectId,
-      setChoiceId: shapesModel.setCurrentProjectId
+      setChoiceId: shapesModel.setCurrentProjectId,
     },
     layoutSelectorSource: {
       options: shapesModel.optionLayoutNames.map((layoutName) => ({
         id: layoutName,
-        text: layoutName
+        text: layoutName,
       })),
       choiceId: shapesModel.currentLayoutName,
-      setChoiceId: shapesModel.setCurrentLayoutName
-    }
+      setChoiceId: shapesModel.setCurrentLayoutName,
+    },
   };
 }

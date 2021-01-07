@@ -19,7 +19,7 @@ function createMenuItems(): IGlobalMenuItem[] {
       handler() {
         settings.showTestInputArea = !settings.showTestInputArea;
       },
-      active: settings.showTestInputArea
+      active: settings.showTestInputArea,
     },
     {
       key: 'miThemeLight',
@@ -27,7 +27,7 @@ function createMenuItems(): IGlobalMenuItem[] {
       handler() {
         models.themeSelectionModel.changeTheme('light');
       },
-      active: models.themeSelectionModel.currentTheme === 'light'
+      active: models.themeSelectionModel.currentTheme === 'light',
     },
     {
       key: 'miThemeDark',
@@ -35,8 +35,8 @@ function createMenuItems(): IGlobalMenuItem[] {
       handler() {
         models.themeSelectionModel.changeTheme('dark');
       },
-      active: models.themeSelectionModel.currentTheme === 'dark'
-    }
+      active: models.themeSelectionModel.currentTheme === 'dark',
+    },
   ];
 
   if (appUi.isDevelopment) {
@@ -59,6 +59,6 @@ export function makeGlobalMenuViewModel(): IGlobalMenuViewModel {
     isOpen: state.isOpen,
     openMenu: () => (state.isOpen = true),
     closeMenu: () => (state.isOpen = false),
-    menuItems: createMenuItems()
+    menuItems: createMenuItems(),
   };
 }

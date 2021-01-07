@@ -7,7 +7,7 @@ export interface IProfileSelectorProps {
 }
 
 export const KeyboardProfileSelector = ({
-  selectorSource
+  selectorSource,
 }: IProfileSelectorProps) => {
   return <GeneralSelector {...selectorSource} width={170} />;
 };

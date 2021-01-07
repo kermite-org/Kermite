@@ -55,7 +55,7 @@ export function ScalerBox(_initialProps: IScalerBoxProps) {
             height: `${contentHeight}px`,
             transform: `scale(${scale}, ${scale})`,
             marginLeft: `${mh}px`,
-            marginTop: `${mv}px`
+            marginTop: `${mv}px`,
           }}
         >
           {children}

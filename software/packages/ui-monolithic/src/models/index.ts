@@ -26,7 +26,7 @@ export class Models {
 
   keyboardShapesModel = new KeyboardShapesModel(
     this.projectResourceModel,
-    this.uiStatusModel
+    this.uiStatusModel,
   );
 
   siteModel = new SiteModel();
@@ -35,7 +35,7 @@ export class Models {
   presetBrowserModel = new PresetBrowserModel(
     this.projectResourceModel,
     this.profilesModel,
-    this.uiStatusModel
+    this.uiStatusModel,
   );
 
   realtimeHeatmapModel = new RealtimeHeatmapModel(this.editorModel);

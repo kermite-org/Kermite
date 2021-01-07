@@ -1,6 +1,6 @@
 import {
   IKeyboardBehaviorMode,
-  IKeyboardLayoutStandard
+  IKeyboardLayoutStandard,
 } from '~shared/defs/ConfigTypes';
 import { backendAgent } from '~ui/core';
 
@@ -19,7 +19,7 @@ export class KeyboardConfigModel {
     const { behaviorMode, layoutStandard } = this;
     backendAgent.writeKeyboardConfig({
       behaviorMode,
-      layoutStandard
+      layoutStandard,
     });
     if (behaviorMode === 'Standalone') {
       backendAgent.writeKeyMappingToDevice();

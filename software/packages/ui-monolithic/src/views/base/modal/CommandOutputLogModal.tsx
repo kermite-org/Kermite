@@ -4,7 +4,7 @@ import {
   CommonDialogFrame,
   DialogButton,
   DialogButtonsRow,
-  DialogContentRow
+  DialogContentRow,
 } from '~ui/base/dialog/CommonDialogParts';
 import { createModal } from '~ui/base/overlay/ForegroundModalLayer';
 import { h } from '~qx';
@@ -34,5 +34,5 @@ export const showCommandOutputLogModal = createModal(
         </ClosableOverlay>
       );
     };
-  }
+  },
 );

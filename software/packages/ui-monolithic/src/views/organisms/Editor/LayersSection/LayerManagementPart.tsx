@@ -18,7 +18,7 @@ export const LayerManagementPart = (props: {
     editCurrentLayer,
     deleteCurrentLayer,
     addNewLayer,
-    canDeleteCurrentLayer
+    canDeleteCurrentLayer,
   } = props.vm;
 
   return (

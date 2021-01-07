@@ -15,6 +15,6 @@ export function makeTestInputAreaViewModel(): ITestInputAreaViewModel {
     },
     clearText() {
       text = '';
-    }
+    },
   };
 }

@@ -15,7 +15,7 @@ const cssKeyboardProjectSelector = css`
 `;
 
 export const KeyboardProjectSelector = (
-  props: IKeyboardProjectSelectorProps
+  props: IKeyboardProjectSelectorProps,
 ) => {
   return (
     <div css={cssKeyboardProjectSelector}>

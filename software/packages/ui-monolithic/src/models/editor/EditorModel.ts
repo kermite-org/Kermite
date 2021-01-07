@@ -4,15 +4,15 @@ import {
   IAssignEntry,
   IAssignOperation,
   IProfileAssignType,
-  IAssignEntryWithLayerFallback
+  IAssignEntryWithLayerFallback,
 } from '~shared/defs/ProfileData';
 import {
   duplicateObjectByJsonStringifyParse,
-  compareObjectByJsonStringify
+  compareObjectByJsonStringify,
 } from '~shared/funcs/Utils';
 import {
   changeProfileDataAssignType,
-  removeInvalidProfileAssigns
+  removeInvalidProfileAssigns,
 } from './ProfileDataHelper';
 
 export type IDualModeEditTargetOperationSig = 'pri' | 'sec' | 'ter';
@@ -23,7 +23,7 @@ const dualModeEditTargetOperationSigToOperationPathMap: {
 } = {
   pri: 'primaryOp',
   sec: 'secondaryOp',
-  ter: 'tertiaryOp'
+  ter: 'tertiaryOp',
 };
 
 export class EditorModel {
@@ -73,7 +73,7 @@ export class EditorModel {
 
   get currentLayer() {
     return this.profileData.layers.find(
-      (la) => la.layerId === this.currentLayerId
+      (la) => la.layerId === this.currentLayerId,
     );
   }
 
@@ -87,7 +87,7 @@ export class EditorModel {
 
   getAssignForKeyUnit = (
     keyUnitId: string,
-    targetLayerId?: string
+    targetLayerId?: string,
   ): IAssignEntry | undefined => {
     const layerId = targetLayerId || this.currentLayerId;
     return this.profileData.assigns[`${layerId}.${keyUnitId}`];
@@ -95,7 +95,7 @@ export class EditorModel {
 
   getAssignForKeyUnitWithLayerFallback = (
     keyUnitId: string,
-    targetLayerId?: string
+    targetLayerId?: string,
   ): IAssignEntryWithLayerFallback | undefined => {
     const layerId = targetLayerId || this.currentLayerId;
     const assign = this.profileData.assigns[`${layerId}.${keyUnitId}`];
@@ -135,7 +135,7 @@ export class EditorModel {
     removeInvalidProfileAssigns(this.profileData);
     return !compareObjectByJsonStringify(
       this.loadedPorfileData,
-      this.profileData
+      this.profileData,
     );
   }
 
@@ -163,7 +163,7 @@ export class EditorModel {
   };
 
   setDualModeEditTargetOperationSig = (
-    sig: IDualModeEditTargetOperationSig
+    sig: IDualModeEditTargetOperationSig,
   ) => {
     this.dualModeEditTargetOperationSig = sig;
     const assign = this.assignEntry;
@@ -195,7 +195,7 @@ export class EditorModel {
       } else {
         this.writeAssignEntry({
           type: 'dual',
-          [this.dualModeOperationPath]: op
+          [this.dualModeOperationPath]: op,
         });
       }
     }
@@ -204,13 +204,13 @@ export class EditorModel {
   changeProfileAssignType = (dstAssignType: IProfileAssignType) => {
     this.profileData = changeProfileDataAssignType(
       this.profileData,
-      dstAssignType
+      dstAssignType,
     );
   };
 
   translateKeyIndexToKeyUnitId(keyIndex: number): string | undefined {
     const keyUnit = this.profileData.keyboardShape.keyUnits.find(
-      (kp) => kp.keyIndex === keyIndex
+      (kp) => kp.keyIndex === keyIndex,
     );
     return keyUnit?.id;
   }

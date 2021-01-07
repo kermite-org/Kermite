@@ -7,7 +7,7 @@ import { KeyboardSvgFrameWithAutoScaler } from '~ui/views/keyboardSvg/outlines/K
 import { h } from '~qx';
 
 export const PresetKeyboardView = ({
-  vm
+  vm,
 }: ViewModelProps<IPresetKeyboardViewModel>) => {
   const cssKeyboardShapeView = css`
     height: 100%;

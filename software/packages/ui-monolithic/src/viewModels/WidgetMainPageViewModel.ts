@@ -2,7 +2,7 @@ import { IKeyboardShape } from '~shared/defs/ProfileData';
 import { models } from '~ui/models';
 import {
   IKeyUnitCardPartViewModel,
-  makeKeyUnitCardsPartViewModel
+  makeKeyUnitCardsPartViewModel,
 } from '~ui/viewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
 
 export interface IWidgetKeyboardViewViewModel {
@@ -21,10 +21,10 @@ export function makeWidgetMainPageViewModel(): IWidgetMainPageViewModel {
     isWindowActive: models.siteModel.isWindowActive,
     keyboardVM: {
       keyboardShape: models.editorModel.profileData.keyboardShape,
-      cardsPartVM: makeKeyUnitCardsPartViewModel(false, models)
+      cardsPartVM: makeKeyUnitCardsPartViewModel(false, models),
     },
     onOpenButton() {
       models.siteModel.setWidgetMode(false);
-    }
+    },
   };
 }

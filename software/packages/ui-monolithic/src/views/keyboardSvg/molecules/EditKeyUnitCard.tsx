@@ -41,7 +41,7 @@ export function EditKeyUnitCard(props: {
     primaryText,
     secondaryText,
     isLayerFallback,
-    isHold
+    isHold,
   } = props.keyUnit;
   const { showLayerDefaultAssign } = props;
 

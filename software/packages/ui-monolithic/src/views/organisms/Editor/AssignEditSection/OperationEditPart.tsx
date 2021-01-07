@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import {
   IOperationEditPartViewModel,
-  IPlainOperationEditCardsViewModel
+  IPlainOperationEditCardsViewModel,
 } from '~ui/viewModels/Editor/OperationEditPartViewModel';
 import { IOperationLayerOptionEditViewModel } from '~ui/viewModels/Editor/OperationLayerOptionEditViewModel';
 import { OperationCard } from '~ui/views/elements/OperationCard';
@@ -45,13 +45,13 @@ export function OpertionEditPart(props: {
   const {
     noAssignEntry,
     transparentEntry,
-    blockEntry
+    blockEntry,
   } = props.plainOperationEditCardsVM;
 
   const {
     virtualKeyEntryGroups,
     attachedModifierEntries,
-    layerCallEntries
+    layerCallEntries,
   } = props.operationEditPartVM;
 
   return (

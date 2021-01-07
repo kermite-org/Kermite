@@ -2,7 +2,7 @@ import { css } from 'goober';
 import { GeneralButton } from '../controls/GeneralButton';
 import {
   GeneralSelector,
-  IGeneralSelectorProps
+  IGeneralSelectorProps,
 } from '../controls/GeneralSelector';
 import { h } from '~qx';
 
@@ -10,7 +10,7 @@ const testOptions: IGeneralSelectorProps['options'] = [
   { id: '', text: 'no-user' },
   { id: 'user001', text: 'yamada' },
   { id: 'user002', text: 'tanaka' },
-  { id: 'user003', text: 'suzuki' }
+  { id: 'user003', text: 'suzuki' },
 ];
 
 const cssBase = css`

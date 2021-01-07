@@ -2,7 +2,7 @@ import { models } from '~ui/models';
 import { ISelectorSource } from '~ui/viewModels/viewModelInterfaces';
 import {
   IPresetKeyboardViewModel,
-  makePresetKeyboardViewModel
+  makePresetKeyboardViewModel,
 } from './PresetKeyboardViewModel';
 
 export interface IPresetBrowserViewModel {
@@ -21,18 +21,18 @@ export function makePresetBrowserViewModel(): IPresetBrowserViewModel {
     projectSelectorSource: {
       options: presetBrowserModel.optionProjectInfos.map((it) => ({
         id: it.projectId,
-        text: it.keyboardName
+        text: it.keyboardName,
       })),
       choiceId: presetBrowserModel.currentProjectId,
-      setChoiceId: presetBrowserModel.setCurrentProjectId
+      setChoiceId: presetBrowserModel.setCurrentProjectId,
     },
     presetSelectorSource: {
       options: presetBrowserModel.optionPresetNames.map((it) => ({
         id: it,
-        text: it
+        text: it,
       })),
       choiceId: presetBrowserModel.currentPresetName,
-      setChoiceId: presetBrowserModel.setCurrentPresetName
+      setChoiceId: presetBrowserModel.setCurrentPresetName,
     },
     isLinkButtonActive:
       deviceStatusModel.isConnected &&
@@ -44,6 +44,6 @@ export function makePresetBrowserViewModel(): IPresetBrowserViewModel {
     },
     editPresetButtonHandler() {
       presetBrowserModel.editSelectedProjectPreset();
-    }
+    },
   };
 }

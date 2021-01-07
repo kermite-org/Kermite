@@ -30,7 +30,7 @@ export function AssignEditSection() {
     operationSlotsVM,
     plainOperationEditCardsVM,
     operationEditPartVM,
-    layoutOptionEditVM
+    layoutOptionEditVM,
   } = makeAssignEditSectionViewModel();
 
   return (

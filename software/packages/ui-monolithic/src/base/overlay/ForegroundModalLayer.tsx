@@ -33,7 +33,7 @@ export namespace ForegroundModalLayerDomain {
   const modalModel = new ForegroundModalModel();
 
   type ModalSource<S, D> = (
-    params: S
+    params: S,
   ) => (props: { close: (result?: D) => void }) => JsxElement;
 
   export function createModal<

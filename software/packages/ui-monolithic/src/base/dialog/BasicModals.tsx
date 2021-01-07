@@ -6,7 +6,7 @@ import {
   ClosableOverlay,
   DialogContentRow,
   DialogButtonsRow,
-  DialogButton
+  DialogButton,
 } from './CommonDialogParts';
 import { h } from '~qx';
 
@@ -44,14 +44,14 @@ export const modalConfirm = createModal(
         </ClosableOverlay>
       );
     };
-  }
+  },
 );
 
 export const modalTextEdit = createModal(
   (args: { message: string; defaultText?: string; caption: string }) => {
     const { message, defaultText, caption } = args;
     const editValues = {
-      text: defaultText || ''
+      text: defaultText || '',
     };
     return (props: { close: (result: string | undefined) => void }) => {
       const close = () => props.close(undefined);
@@ -89,5 +89,5 @@ export const modalTextEdit = createModal(
         </ClosableOverlay>
       );
     };
-  }
+  },
 );

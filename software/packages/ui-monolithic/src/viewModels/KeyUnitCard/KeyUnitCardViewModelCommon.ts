@@ -2,13 +2,13 @@ import {
   IAssignEntryWithLayerFallback,
   IAssignOperation,
   ILayer,
-  IProfileDataAssigns
+  IProfileDataAssigns,
 } from '~shared/defs/ProfileData';
 import { VirtualKeyTexts } from '~shared/defs/VirtualKeyTexts';
 
 function getAssignOperationText(
   op: IAssignOperation | undefined,
-  layers: ILayer[]
+  layers: ILayer[],
 ): string {
   if (op?.type === 'keyInput') {
     const keyText = VirtualKeyTexts[op.virtualKey] || '';
@@ -38,7 +38,7 @@ function getAssignOperationText(
 
 export function getAssignEntryTexts(
   assign: IAssignEntryWithLayerFallback | undefined,
-  layers: ILayer[]
+  layers: ILayer[],
 ): { primaryText: string; secondaryText: string; isLayerFallback: boolean } {
   if (assign) {
     if (assign.type === 'block' || assign.type === 'layerFallbackBlock') {
@@ -46,7 +46,7 @@ export function getAssignEntryTexts(
         primaryText: '□',
         // primaryTest: '⬡',
         secondaryText: '',
-        isLayerFallback: assign.type === 'layerFallbackBlock'
+        isLayerFallback: assign.type === 'layerFallbackBlock',
       };
     }
     if (
@@ -56,7 +56,7 @@ export function getAssignEntryTexts(
       return {
         primaryText: '↡',
         secondaryText: '',
-        isLayerFallback: assign.type === 'layerFallbackTransparent'
+        isLayerFallback: assign.type === 'layerFallbackTransparent',
       };
     }
 
@@ -64,7 +64,7 @@ export function getAssignEntryTexts(
       return {
         primaryText: getAssignOperationText(assign.op, layers),
         secondaryText: '',
-        isLayerFallback: false
+        isLayerFallback: false,
       };
     }
     if (assign.type === 'dual') {
@@ -75,13 +75,13 @@ export function getAssignEntryTexts(
         return {
           primaryText: `${prmText} ${terText}`,
           secondaryText: secText,
-          isLayerFallback: false
+          isLayerFallback: false,
         };
       } else {
         return {
           primaryText: prmText,
           secondaryText: secText,
-          isLayerFallback: false
+          isLayerFallback: false,
         };
       }
     }
@@ -89,7 +89,7 @@ export function getAssignEntryTexts(
   return {
     primaryText: '',
     secondaryText: '',
-    isLayerFallback: false
+    isLayerFallback: false,
   };
 }
 
@@ -97,7 +97,7 @@ export function getAssignForKeyUnitWithLayerFallback(
   keyUnitId: string,
   layerId: string,
   layers: ILayer[],
-  assigns: IProfileDataAssigns
+  assigns: IProfileDataAssigns,
 ): IAssignEntryWithLayerFallback | undefined {
   const assign = assigns[`${layerId}.${keyUnitId}`];
   if (!assign) {

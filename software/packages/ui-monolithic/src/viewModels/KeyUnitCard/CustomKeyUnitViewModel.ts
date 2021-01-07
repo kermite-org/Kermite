@@ -1,7 +1,7 @@
 import { IProfileData } from '~shared/defs/ProfileData';
 import {
   getAssignEntryTexts,
-  getAssignForKeyUnitWithLayerFallback
+  getAssignForKeyUnitWithLayerFallback,
 } from '~ui/viewModels/KeyUnitCard/KeyUnitCardViewModelCommon';
 
 export interface ICustomKeyUnitViewModelBase {
@@ -22,8 +22,8 @@ export function makeCustomKeyUnitViewModels<
   profileData: IProfileData,
   targetLayerId: string,
   propsDecolator: (
-    source: ICustomKeyUnitViewModelBase
-  ) => TCustomKeyUnitViewModel
+    source: ICustomKeyUnitViewModelBase,
+  ) => TCustomKeyUnitViewModel,
 ): TCustomKeyUnitViewModel[] {
   const { layers, assigns, keyboardShape } = profileData;
   return keyboardShape.keyUnits.map((ku) => {
@@ -31,19 +31,19 @@ export function makeCustomKeyUnitViewModels<
     const pos = {
       x: ku.x,
       y: ku.y,
-      r: ku.r || 0
+      r: ku.r || 0,
     };
 
     const assign = getAssignForKeyUnitWithLayerFallback(
       keyUnitId,
       targetLayerId,
       layers,
-      assigns
+      assigns,
     );
 
     const { primaryText, secondaryText, isLayerFallback } = getAssignEntryTexts(
       assign,
-      layers
+      layers,
     );
 
     return propsDecolator({
@@ -51,7 +51,7 @@ export function makeCustomKeyUnitViewModels<
       pos,
       primaryText,
       secondaryText,
-      isLayerFallback
+      isLayerFallback,
     });
   });
 }

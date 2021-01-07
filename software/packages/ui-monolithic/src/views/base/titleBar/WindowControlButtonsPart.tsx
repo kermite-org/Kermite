@@ -5,7 +5,7 @@ import { WindowRestartButton } from './WindowRestartButton';
 import { h } from '~qx';
 
 export const WindowControlButtonsPart = ({
-  vm
+  vm,
 }: {
   vm: ITitleBarViewModel;
 }) => {

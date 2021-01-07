@@ -18,7 +18,7 @@ const targetSlotSigToTextMap: {
 } = {
   pri: 'pri',
   sec: 'sec',
-  ter: 'ter'
+  ter: 'ter',
 };
 
 export function makeOperationSlotsPartViewModel(): IOperationSlotsPartViewModel {
@@ -26,7 +26,7 @@ export function makeOperationSlotsPartViewModel(): IOperationSlotsPartViewModel 
     assignEntry,
     isSlotSelected,
     dualModeEditTargetOperationSig,
-    setDualModeEditTargetOperationSig
+    setDualModeEditTargetOperationSig,
   } = models.editorModel;
 
   const slots = targetSlotSigs.map((sig) => {
@@ -37,7 +37,7 @@ export function makeOperationSlotsPartViewModel(): IOperationSlotsPartViewModel 
         assignEntry?.type !== 'block' &&
         assignEntry?.type !== 'transparent' &&
         dualModeEditTargetOperationSig === sig,
-      setCurrent: () => setDualModeEditTargetOperationSig(sig)
+      setCurrent: () => setDualModeEditTargetOperationSig(sig),
     };
   });
   return { slots };

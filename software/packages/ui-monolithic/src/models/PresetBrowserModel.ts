@@ -9,7 +9,7 @@ class PresetBrowserModelHelper {
   static getNewProfileNameBase(
     keyboardName: string,
     presetName: string,
-    allProfileNames: string[]
+    allProfileNames: string[],
   ): string {
     const presetNameIncluesKeyboardName = presetName
       .toLowerCase()
@@ -28,7 +28,7 @@ class PresetBrowserModelHelper {
 
   static checkValidNewProfileName(
     newProfileName: string,
-    allProfileNames: string[]
+    allProfileNames: string[],
   ): 'ok' | string {
     if (!newProfileName.match(/^[^/./\\:*?"<>|]+$/)) {
       return `${newProfileName} is not for valid filename.`;
@@ -44,7 +44,7 @@ export class PresetBrowserModel {
   constructor(
     private projectResourceModel: ProjectResourceModel,
     private profilesModel: ProfilesModel,
-    private uiStatusModel: UiStatusModel
+    private uiStatusModel: UiStatusModel,
   ) {}
 
   private _currentProjectId: string = '';
@@ -69,12 +69,12 @@ export class PresetBrowserModel {
 
   get optionPresetNames() {
     const info = this.projectResourceModel.getProjectResourceInfo(
-      this._currentProjectId
+      this._currentProjectId,
     );
     if (info) {
       return [
         ...info.layoutNames.map((layoutName) => `@${layoutName}`),
-        ...info.presetNames
+        ...info.presetNames,
       ];
     } else {
       return ['@default'];
@@ -95,7 +95,7 @@ export class PresetBrowserModel {
   private async loadSelectedProfile() {
     const profileData = await backendAgent.loadPresetProfile(
       this._currentProjectId,
-      this._currentPresetName
+      this._currentPresetName,
     );
     if (!profileData) {
       console.error(`error while loading preset profile`);
@@ -107,7 +107,7 @@ export class PresetBrowserModel {
   editSelectedProjectPreset = async () => {
     const {
       _currentProjectId: projectId,
-      _currentPresetName: presetName
+      _currentPresetName: presetName,
     } = this;
     const { allProfileNames } = this.profilesModel;
 
@@ -120,20 +120,20 @@ export class PresetBrowserModel {
     const newProfileNameBase = PresetBrowserModelHelper.getNewProfileNameBase(
       info.keyboardName,
       presetName,
-      allProfileNames
+      allProfileNames,
     );
 
     const newProfileName = await modalTextEdit({
       message: 'new profile name',
       defaultText: newProfileNameBase,
-      caption: 'create profile'
+      caption: 'create profile',
     });
     if (!newProfileName) {
       return;
     }
     const checkRes = PresetBrowserModelHelper.checkValidNewProfileName(
       newProfileName,
-      allProfileNames
+      allProfileNames,
     );
     if (checkRes !== 'ok') {
       await modalAlert(`${checkRes} operation cancelled.`);

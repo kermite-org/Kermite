@@ -27,6 +27,6 @@ export function makeTitleBarViewModel(): ITitleBarViewModel {
     },
     onCloseButton() {
       backendAgent.closeWindow();
-    }
+    },
   };
 }

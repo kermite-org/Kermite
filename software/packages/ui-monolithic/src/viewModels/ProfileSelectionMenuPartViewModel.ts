@@ -22,18 +22,18 @@ const profileMenuCommands: IProfileMenuCommand[] = [
   'createProfile',
   'renameProfile',
   'copyProfile',
-  'deleteProfile'
+  'deleteProfile',
 ];
 
 const profileMenuCommandTexts: { [key in IProfileMenuCommand]: string } = {
   createProfile: 'new',
   renameProfile: 'rename',
   copyProfile: 'copy',
-  deleteProfile: 'delete'
+  deleteProfile: 'delete',
 };
 
 export function makeProfileSelectionMenuPartViewModel(
-  vm: IProfileManagementPartViewModel
+  vm: IProfileManagementPartViewModel,
 ) {
   const state = Hook.useLocal(() => ({ isOpen: false }));
   return {
@@ -53,8 +53,8 @@ export function makeProfileSelectionMenuPartViewModel(
         handler() {
           vm[cmd]();
           state.isOpen = false;
-        }
+        },
       }));
-    }
+    },
   };
 }

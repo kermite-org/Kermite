@@ -33,7 +33,7 @@ const cssDualItemsSelector = css`
 `;
 
 export function DualItemsHoverSelector<T extends string>(
-  props: IDualItemsHoverSelectorProps<T>
+  props: IDualItemsHoverSelectorProps<T>,
 ) {
   const state = Hook.useLocal(() => ({ isHover: false }));
   const onMouseEnter = () => (state.isHover = true);

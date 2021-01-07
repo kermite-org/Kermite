@@ -14,11 +14,11 @@ const invocationModes: LayerInvocationMode[] = [
   'turnOn',
   'turnOff',
   'toggle',
-  'oneshot'
+  'oneshot',
 ];
 
 const exclusionGroupValues = generateNumberSequence(7).map((a) =>
-  (a + 1).toString()
+  (a + 1).toString(),
 );
 
 export function makeOperationLayerOptionEditViewModel(): IOperationLayerOptionEditViewModel {
@@ -31,7 +31,7 @@ export function makeOperationLayerOptionEditViewModel(): IOperationLayerOptionEd
       selectedValue: editOperation.invocationMode || 'hold',
       onValueChanged(value: LayerInvocationMode) {
         editOperation.invocationMode = value;
-      }
+      },
     };
   } else if (editOperation?.type === 'layerClearExclusive') {
     return {
@@ -40,14 +40,14 @@ export function makeOperationLayerOptionEditViewModel(): IOperationLayerOptionEd
       selectedValue: editOperation.targetExclusionGroup.toString(),
       onValueChanged(value: string) {
         editOperation.targetExclusionGroup = parseInt(value);
-      }
+      },
     };
   } else {
     return {
       enabled: false,
       allValues: invocationModes,
       selectedValue: 'hold',
-      onValueChanged() {}
+      onValueChanged() {},
     };
   }
 }

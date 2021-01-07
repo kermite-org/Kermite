@@ -3,7 +3,7 @@ import { IKeyUnitCardViewModel } from '~ui/viewModels/KeyUnitCard/KeyUnitCardsPa
 import { h } from '~qx';
 
 export function WidgetKeyUnitCard({
-  keyUnit
+  keyUnit,
 }: {
   keyUnit: IKeyUnitCardViewModel;
 }) {

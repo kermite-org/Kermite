@@ -3,7 +3,7 @@ import { modalConfirm } from '~ui/base/dialog/BasicModals';
 import { models } from '~ui/models';
 import {
   callLayerConfigurationModal,
-  ILayerConfigurationModelEditValues
+  ILayerConfigurationModelEditValues,
 } from '~ui/views/modals/LayerConfigurationModal';
 
 export interface ILayerManagementPartViewModel {
@@ -47,7 +47,7 @@ export function makeLayerManagementPartViewModel(): ILayerManagementPartViewMode
     deleteCurrentLayer: async () => {
       const ok = await modalConfirm({
         message: `Layer ${curLayer.layerName} is removed. Are you sure?`,
-        caption: 'Delete Layer'
+        caption: 'Delete Layer',
       });
       if (ok) {
         removeArrayItems(layers, curLayer);
@@ -60,19 +60,19 @@ export function makeLayerManagementPartViewModel(): ILayerManagementPartViewMode
         defaultScheme,
         attachedModifiers,
         exclusionGroup,
-        initialActive
+        initialActive,
       } = curLayer;
       const sourceValues: ILayerConfigurationModelEditValues = {
         layerName,
         attachedModifiers,
         defaultScheme,
         exclusionGroup,
-        initialActive
+        initialActive,
       };
       const editValues = await callLayerConfigurationModal({
         sourceValues,
         caption: 'Edit Layer Properties',
-        isRootLayer: !isCurrentLayerCustom
+        isRootLayer: !isCurrentLayerCustom,
       });
       if (editValues) {
         curLayer.layerName = editValues.layerName;
@@ -89,10 +89,10 @@ export function makeLayerManagementPartViewModel(): ILayerManagementPartViewMode
           defaultScheme: 'transparent',
           attachedModifiers: undefined,
           exclusionGroup: 0,
-          initialActive: false
+          initialActive: false,
         },
         caption: 'Add Layer',
-        isRootLayer: false
+        isRootLayer: false,
       });
       if (layerAttrs?.layerName) {
         // todo: use sequential layer number
@@ -102,7 +102,7 @@ export function makeLayerManagementPartViewModel(): ILayerManagementPartViewMode
           defaultScheme,
           attachedModifiers,
           exclusionGroup,
-          initialActive
+          initialActive,
         } = layerAttrs;
         layers.push({
           layerId,
@@ -110,9 +110,9 @@ export function makeLayerManagementPartViewModel(): ILayerManagementPartViewMode
           defaultScheme,
           attachedModifiers,
           exclusionGroup,
-          initialActive
+          initialActive,
         });
       }
-    }
+    },
   };
 }

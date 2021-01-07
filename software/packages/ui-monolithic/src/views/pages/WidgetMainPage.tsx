@@ -30,7 +30,7 @@ const styles = {
     &:hover {
       background: #0cf;
     }
-  `
+  `,
 };
 
 export function MainPanel() {

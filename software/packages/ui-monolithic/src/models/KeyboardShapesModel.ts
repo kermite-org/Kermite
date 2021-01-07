@@ -6,7 +6,7 @@ import { UiStatusModel } from '~ui/models/UiStatusModel';
 export class KeyboardShapesModel {
   constructor(
     private projectResourceModel: ProjectResourceModel,
-    private uiStatusModel: UiStatusModel
+    private uiStatusModel: UiStatusModel,
   ) {}
 
   private _currentProjectId: string = '';
@@ -31,7 +31,7 @@ export class KeyboardShapesModel {
 
   get optionLayoutNames() {
     const info = this.optionProjectInfos.find(
-      (info) => info.projectId === this._currentProjectId
+      (info) => info.projectId === this._currentProjectId,
     );
     return info?.layoutNames || [];
   }
@@ -39,7 +39,7 @@ export class KeyboardShapesModel {
   private async loadCurrentProjectLayout() {
     this._loadedShape = await backendAgent.loadKeyboardShape(
       this._currentProjectId,
-      this._currentLayoutName
+      this._currentLayoutName,
     );
   }
 

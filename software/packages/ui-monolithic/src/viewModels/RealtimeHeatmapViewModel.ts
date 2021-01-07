@@ -3,7 +3,7 @@ import { formatTimeMsToMinSecMs } from '~shared/funcs/Utils';
 import { models } from '~ui/models';
 import {
   ICustomKeyUnitViewModelBase,
-  makeCustomKeyUnitViewModels
+  makeCustomKeyUnitViewModels,
 } from '~ui/viewModels/KeyUnitCard/CustomKeyUnitViewModel';
 
 export interface IHeatmapCustomKeyUnitViewModel {
@@ -45,7 +45,7 @@ export function makeRealtimeHeatmapViewModel(): IRealtimeHeatmapViewModel {
     stopRecording,
     clearRecord,
     elapsedTimeMs,
-    numTotalTypes
+    numTotalTypes,
   } = models.realtimeHeatmapModel;
 
   const { typeStats, maxKeyTypeCount } = models.realtimeHeatmapModel;
@@ -61,14 +61,14 @@ export function makeRealtimeHeatmapViewModel(): IRealtimeHeatmapViewModel {
         ...source,
         typeCount,
         weight,
-        hold
+        hold,
       };
-    }
+    },
   );
 
   const {
     displayArea,
-    bodyPathMarkupText
+    bodyPathMarkupText,
   } = models.editorModel.profileData.keyboardShape;
 
   return {
@@ -79,6 +79,6 @@ export function makeRealtimeHeatmapViewModel(): IRealtimeHeatmapViewModel {
     hasRecord: numTotalTypes > 0,
     timeText: formatTimeMsToMinSecMs(elapsedTimeMs),
     numTotalTypes,
-    keyboardVM: { cardsVM, displayArea, bodyPathMarkupText }
+    keyboardVM: { cardsVM, displayArea, bodyPathMarkupText },
   };
 }

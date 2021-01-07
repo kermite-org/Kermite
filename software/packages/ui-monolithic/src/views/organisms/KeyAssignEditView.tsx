@@ -11,7 +11,7 @@ import { h } from '~qx';
 
 const localStyleConstants = {
   editorPartMargin: '4px',
-  panelBoxBorderRadius: '3px'
+  panelBoxBorderRadius: '3px',
 };
 
 const { editorPartMargin: mm, panelBoxBorderRadius } = localStyleConstants;

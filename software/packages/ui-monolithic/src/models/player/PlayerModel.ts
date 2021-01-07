@@ -30,7 +30,7 @@ export class PlayerModel {
     return this.editorModel.layers.map((la, index) => ({
       layerId: la.layerId,
       layerName: la.layerName,
-      isActive: this.isLayerActive(index)
+      isActive: this.isLayerActive(index),
     }));
   }
 
@@ -41,7 +41,7 @@ export class PlayerModel {
         const layer = layers[i];
         const assign = this.editorModel.getAssignForKeyUnit(
           keyUnitId,
-          layer.layerId
+          layer.layerId,
         );
 
         if (assign?.type === 'transparent') {

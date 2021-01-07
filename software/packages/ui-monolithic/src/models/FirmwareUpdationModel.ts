@@ -26,7 +26,7 @@ export class FirmwareUpdationModel {
       .getProjectsWithFirmware()
       .map((info) => ({
         id: info.projectId,
-        text: info.projectPath
+        text: info.projectPath,
       }));
     return [blankOption, ...projectOptions];
   }
@@ -43,7 +43,7 @@ export class FirmwareUpdationModel {
 
   // 1: WaitingReset --> WaitingUploadOrder
   private onComPortPlugEvent = ({
-    comPortName
+    comPortName,
   }: {
     comPortName: string | undefined;
   }) => {
@@ -66,7 +66,7 @@ export class FirmwareUpdationModel {
       this.phase = 'Uploading';
       const res = await backendAgent.uploadFirmware(
         this.currentProjectId,
-        this.comPortName
+        this.comPortName,
       );
       this.firmwareUploadResult = res;
       if (res === 'ok') {

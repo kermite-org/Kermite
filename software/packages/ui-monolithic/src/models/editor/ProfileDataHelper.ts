@@ -3,37 +3,37 @@ import {
   IAssignEntry_DualEx,
   IAssignEntry_SingleEx,
   IProfileAssignType,
-  IProfileData
+  IProfileData,
 } from '~shared/defs/ProfileData';
 import { mapObjectValues } from '~shared/funcs/Utils';
 
 function convertSignleAssignToDualAssign(
-  src: IAssignEntry_SingleEx
+  src: IAssignEntry_SingleEx,
 ): IAssignEntry_DualEx {
   if (src.type === 'block' || src.type === 'transparent') {
     return src;
   }
   return {
     type: 'dual',
-    primaryOp: src.op
+    primaryOp: src.op,
   };
 }
 
 function convertDualAssignToSingleAssign(
-  src: IAssignEntry_DualEx
+  src: IAssignEntry_DualEx,
 ): IAssignEntry_SingleEx {
   if (src.type === 'block' || src.type === 'transparent') {
     return src;
   }
   return {
     type: 'single',
-    op: src.primaryOp
+    op: src.primaryOp,
   };
 }
 
 export function changeProfileDataAssignType(
   profile: IProfileData,
-  dstAssignType: IProfileAssignType
+  dstAssignType: IProfileAssignType,
 ): IProfileData {
   if (profile.assignType === dstAssignType) {
     return profile;
@@ -48,12 +48,12 @@ export function changeProfileDataAssignType(
         useShiftCancel: profile.settings.useShiftCancel,
         primaryDefaultTrigger: 'down',
         tapHoldThresholdMs: 200,
-        useInterruptHold: true
+        useInterruptHold: true,
       },
       assigns: mapObjectValues(
         profile.assigns,
-        (it) => it && convertSignleAssignToDualAssign(it)
-      )
+        (it) => it && convertSignleAssignToDualAssign(it),
+      ),
     };
   }
   if (profile.assignType === 'dual' && dstAssignType === 'single') {
@@ -61,12 +61,12 @@ export function changeProfileDataAssignType(
       ...profile,
       assignType: 'single',
       settings: {
-        useShiftCancel: profile.settings.useShiftCancel
+        useShiftCancel: profile.settings.useShiftCancel,
       },
       assigns: mapObjectValues(
         profile.assigns,
-        (it) => it && convertDualAssignToSingleAssign(it)
-      )
+        (it) => it && convertDualAssignToSingleAssign(it),
+      ),
     };
   }
   return profile;

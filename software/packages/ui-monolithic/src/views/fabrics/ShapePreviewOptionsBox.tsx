@@ -10,16 +10,16 @@ interface IDisplayOptionSource {
 const displayOptionsSource: IDisplayOptionSource[] = [
   {
     fieldKey: 'shapeViewShowKeyId',
-    label: 'keyId'
+    label: 'keyId',
   },
   {
     fieldKey: 'shapeViewShowKeyIndex',
-    label: 'keyIndex'
+    label: 'keyIndex',
   },
   {
     fieldKey: 'shapeViewShowBoundingBox',
-    label: 'box'
-  }
+    label: 'box',
+  },
 ];
 
 const cssPreviewOptionsBox = css`

@@ -4,6 +4,6 @@ export function makeDeviceControlSectionViewModel() {
   return {
     currentDeviceKeyboardName:
       models.deviceStatusModel.deviceAttrs?.keyboardName || '',
-    isDeviceConnected: models.deviceStatusModel.isConnected
+    isDeviceConnected: models.deviceStatusModel.isConnected,
   };
 }

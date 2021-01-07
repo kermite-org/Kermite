@@ -2,7 +2,7 @@ import { css } from 'goober';
 import { uiTheme } from '~ui/core';
 import {
   ILayerListBoxPartViewModel,
-  ILayerListViewModel
+  ILayerListViewModel,
 } from '~ui/viewModels/Editor/LayersListBoxPartViewModel';
 import { h } from '~qx';
 

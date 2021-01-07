@@ -27,7 +27,7 @@ export const GeneralInput = ({
   value,
   setValue,
   className,
-  width
+  width,
 }: IGeneralInputProps) => {
   return (
     <input

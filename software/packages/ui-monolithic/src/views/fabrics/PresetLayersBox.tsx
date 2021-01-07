@@ -29,7 +29,7 @@ const PresetLayerItem = (props: {
 };
 
 export const PresetLayersBox = ({
-  vm
+  vm,
 }: ViewModelProps<IPrsetLayerListViewModel>) => {
   const cssBase = css`
     padding: 5px;

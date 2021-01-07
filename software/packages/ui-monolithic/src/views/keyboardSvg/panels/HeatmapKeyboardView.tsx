@@ -7,7 +7,7 @@ import { KeyboardSvgFrameWithAutoScaler } from '~ui/views/keyboardSvg/outlines/K
 import { h } from '~qx';
 
 export const HeatmapKeyboardView = ({
-  vm
+  vm,
 }: ViewModelProps<IRealtimeHeatmapKeyboardViewModel>) => {
   const cssKeyboardShapeView = css`
     height: 300px;

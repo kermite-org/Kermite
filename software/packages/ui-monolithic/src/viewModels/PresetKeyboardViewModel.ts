@@ -1,10 +1,10 @@
 import {
   IKeyboardShapeDisplayArea,
-  IProfileData
+  IProfileData,
 } from '~shared/defs/ProfileData';
 import {
   IPresetKeyUnitViewModel,
-  makePresetKeyUnitViewModels
+  makePresetKeyUnitViewModels,
 } from '~ui/viewModels/KeyUnitCard/PresetKeyUnitViewModelCreator';
 import { Hook } from '~qx';
 
@@ -27,7 +27,7 @@ export interface IPresetKeyboardViewModel {
 }
 
 export function makePresetKeyboardViewModel(
-  profileData: IProfileData
+  profileData: IProfileData,
 ): IPresetKeyboardViewModel {
   const state = Hook.useLocal(() => ({ currentLayerId: '' }));
   Hook.useChecker(profileData, () => {
@@ -40,10 +40,10 @@ export function makePresetKeyboardViewModel(
     layerList: {
       layers: profileData.layers.map((la) => ({
         layerId: la.layerId,
-        layerName: la.layerName
+        layerName: la.layerName,
       })),
       currentLayerId: state.currentLayerId,
-      setCurrentLayerId: (id) => (state.currentLayerId = id)
-    }
+      setCurrentLayerId: (id) => (state.currentLayerId = id),
+    },
   };
 }

@@ -23,7 +23,7 @@ export function KeyboardSvgFrameWithAutoScaler(props: {
     children,
     dpiScale,
     marginRatio,
-    baseStrokeWidth
+    baseStrokeWidth,
   } = props;
   const da = displayArea;
   const margin = Math.min(da.width, da.height) * marginRatio;

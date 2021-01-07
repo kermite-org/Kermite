@@ -1,6 +1,6 @@
 import {
   IProfileManagerCommand,
-  IProfileManagerStatus
+  IProfileManagerStatus,
 } from '~shared/defs/IpcContract';
 import { backendAgent } from '~ui/core';
 import { EditorModel } from '../editor/EditorModel';
@@ -20,7 +20,7 @@ export class ProfilesModel {
   // listeners
 
   private handleProfileStatusChange = (
-    payload: Partial<IProfileManagerStatus>
+    payload: Partial<IProfileManagerStatus>,
   ) => {
     if (payload.currentProfileName) {
       this.currentProfileName = payload.currentProfileName;
@@ -54,7 +54,7 @@ export class ProfilesModel {
     const isDirty = this.editorModel.checkDirty();
     if (isDirty) {
       return {
-        saveCurrentProfile: { profileData: this.editorModel.profileData }
+        saveCurrentProfile: { profileData: this.editorModel.profileData },
       };
     }
     return undefined;
@@ -64,19 +64,19 @@ export class ProfilesModel {
     ...commands: (IProfileManagerCommand | undefined)[]
   ) {
     backendAgent.executeProfileManagerCommands(
-      commands.filter((c) => c !== undefined) as IProfileManagerCommand[]
+      commands.filter((c) => c !== undefined) as IProfileManagerCommand[],
     );
   }
 
   createProfile = (
     newProfileName: string,
     targetProjectId: string,
-    presetName: string
+    presetName: string,
   ) => {
     const saveCommand =
       (useAutoSave && this.getSaveCommandIfDirty()) || undefined;
     const createCommand = {
-      creatProfile: { name: newProfileName, targetProjectId, presetName }
+      creatProfile: { name: newProfileName, targetProjectId, presetName },
     };
     this.sendProfileManagerCommands(saveCommand, createCommand);
   };
@@ -95,7 +95,7 @@ export class ProfilesModel {
     const curProfName = this.currentProfileName;
     const saveCommand = this.getSaveCommandIfDirty();
     const renameCommand = {
-      renameProfile: { name: curProfName, newName: newProfileName }
+      renameProfile: { name: curProfName, newName: newProfileName },
     };
     this.sendProfileManagerCommands(saveCommand, renameCommand);
   };
@@ -104,7 +104,7 @@ export class ProfilesModel {
     const curProfName = this.currentProfileName;
     const saveCommand = this.getSaveCommandIfDirty();
     const copyCommand = {
-      copyProfile: { name: curProfName, newName: newProfileName }
+      copyProfile: { name: curProfName, newName: newProfileName },
     };
     this.sendProfileManagerCommands(saveCommand, copyCommand);
   };

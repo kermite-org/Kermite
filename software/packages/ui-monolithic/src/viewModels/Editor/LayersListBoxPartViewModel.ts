@@ -21,12 +21,12 @@ function makeLayerListViewModel(layer: ILayer): ILayerListViewModel {
     layerId,
     layerName,
     isCurrent,
-    setCurrent
+    setCurrent,
   };
 }
 
 export function makeLayerListBoxPartViewModel(): ILayerListBoxPartViewModel {
   return {
-    layers: models.editorModel.layers.map(makeLayerListViewModel)
+    layers: models.editorModel.layers.map(makeLayerListViewModel),
   };
 }

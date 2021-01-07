@@ -55,7 +55,7 @@ export class RealtimeHeatmapModel {
 
     if (e.type === 'keyStateChanged' && e.isDown && this.isRecording) {
       const keyUnitId = this.editorModel.translateKeyIndexToKeyUnitId(
-        e.keyIndex
+        e.keyIndex,
       );
       if (keyUnitId) {
         this.numTotalTypes++;

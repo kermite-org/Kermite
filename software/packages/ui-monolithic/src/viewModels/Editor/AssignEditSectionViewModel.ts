@@ -1,7 +1,7 @@
 import { models } from '~ui/models';
 import {
   makeOperationEditPartViewModel,
-  makePlainOperationEditCardsViewModel
+  makePlainOperationEditCardsViewModel,
 } from '~ui/viewModels/Editor/OperationEditPartViewModel';
 import { makeOperationLayerOptionEditViewModel } from '~ui/viewModels/Editor/OperationLayerOptionEditViewModel';
 import { makeOperationSlotsPartViewModel } from '~ui/viewModels/Editor/OperationSlotsPartViewModel';
@@ -22,6 +22,6 @@ export function makeAssignEditSectionViewModel() {
     operationSlotsVM,
     plainOperationEditCardsVM,
     operationEditPartVM,
-    layoutOptionEditVM
+    layoutOptionEditVM,
   };
 }

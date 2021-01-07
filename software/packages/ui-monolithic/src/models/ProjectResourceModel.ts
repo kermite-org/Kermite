@@ -14,7 +14,7 @@ export class ProjectResourceModel {
 
   getProjectResourceInfo(projectId: string) {
     return this.projectResourceInfos.find(
-      (info) => info.projectId === projectId
+      (info) => info.projectId === projectId,
     );
   }
 

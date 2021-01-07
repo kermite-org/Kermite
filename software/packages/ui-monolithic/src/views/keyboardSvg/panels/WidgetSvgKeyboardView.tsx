@@ -5,7 +5,7 @@ import { WidgetKeyUnitCardsPart } from '../organisms/WidgetKeyUnitCardsPart';
 import { h } from '~qx';
 
 export function WidgetSvgKeyboardView({
-  vm
+  vm,
 }: {
   vm: IWidgetKeyboardViewViewModel;
 }) {

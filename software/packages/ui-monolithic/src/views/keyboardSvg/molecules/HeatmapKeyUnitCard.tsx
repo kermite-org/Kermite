@@ -40,7 +40,7 @@ export const HeatmapKeyUnitCard = mvvmView(
       isLayerFallback,
       typeCount,
       weight,
-      hold
+      hold,
     } = ku;
 
     return (
@@ -77,5 +77,5 @@ export const HeatmapKeyUnitCard = mvvmView(
         </text>
       </g>
     );
-  }
+  },
 );

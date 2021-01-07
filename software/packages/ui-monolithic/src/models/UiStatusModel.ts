@@ -29,7 +29,7 @@ const defaultUiSettings: IUiSettings = {
   shapeViewShowKeyIndex: false,
   shapeViewShowBoundingBox: false,
   showLayersDynamic: false,
-  showLayerDefaultAssign: false
+  showLayerDefaultAssign: false,
 };
 
 export interface IUiStatus {
@@ -37,7 +37,7 @@ export interface IUiStatus {
 }
 
 const defaultUiStatus: IUiStatus = {
-  profileConfigModalVisible: false
+  profileConfigModalVisible: false,
 };
 
 export class UiStatusModel {

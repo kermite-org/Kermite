@@ -22,13 +22,13 @@ export class DeviceStatusModel {
 
   initialize() {
     backendAgent.keyboardDeviceStatusEvents.subscribe(
-      this.onDeviceStatusChanged
+      this.onDeviceStatusChanged,
     );
   }
 
   finalize() {
     backendAgent.keyboardDeviceStatusEvents.unsubscribe(
-      this.onDeviceStatusChanged
+      this.onDeviceStatusChanged,
     );
   }
 }

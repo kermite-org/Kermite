@@ -2,7 +2,7 @@ import { VirtualKeyTexts } from '~shared/defs/VirtualKeyTexts';
 import { ModifierVirtualKey } from '~shared/defs/VirtualKeys';
 import {
   addOptionToOptionsArray,
-  removeOptionFromOptionsArray
+  removeOptionFromOptionsArray,
 } from '~shared/funcs/Utils';
 import { models } from '~ui/models';
 import { virtualKeyGroupsTable2 } from './virtualkeyGroupsTable';
@@ -19,7 +19,7 @@ const modifierVirtualKeys: ModifierVirtualKey[] = [
   'K_Shift',
   'K_Ctrl',
   'K_Alt',
-  'K_OS'
+  'K_OS',
 ];
 
 const RestrictDualSecondaryAssigns = false;
@@ -36,7 +36,7 @@ export function makePlainOperationEditCardsViewModel(): IPlainOperationEditCards
     writeAssignEntry,
     editOperation,
     writeEditOperation,
-    isSlotSelected
+    isSlotSelected,
   } = models.editorModel;
 
   const noAssignEntry: IOperationCardViewModel = {
@@ -48,7 +48,7 @@ export function makePlainOperationEditCardsViewModel(): IPlainOperationEditCards
       assignEntry?.type !== 'transparent' &&
       editOperation === undefined,
     setCurrent: () => writeEditOperation(undefined),
-    isEnabled: true
+    isEnabled: true,
   };
 
   const transparentEntry: IOperationCardViewModel = {
@@ -56,7 +56,7 @@ export function makePlainOperationEditCardsViewModel(): IPlainOperationEditCards
     text: 'trans',
     isCurrent: isSlotSelected && assignEntry?.type === 'transparent',
     setCurrent: () => writeAssignEntry({ type: 'transparent' }),
-    isEnabled: true
+    isEnabled: true,
   };
 
   const blockEntry: IOperationCardViewModel = {
@@ -64,13 +64,13 @@ export function makePlainOperationEditCardsViewModel(): IPlainOperationEditCards
     text: 'block',
     isCurrent: isSlotSelected && assignEntry?.type === 'block',
     setCurrent: () => writeAssignEntry({ type: 'block' }),
-    isEnabled: true
+    isEnabled: true,
   };
 
   return {
     noAssignEntry,
     transparentEntry,
-    blockEntry
+    blockEntry,
   };
 }
 
@@ -100,8 +100,8 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
         isEnabled:
           !isDualSecondary ||
           (isDualSecondary &&
-            modifierVirtualKeys.includes(vk as ModifierVirtualKey))
-      }))
+            modifierVirtualKeys.includes(vk as ModifierVirtualKey)),
+      })),
   );
 
   const attachedModifierEntries: IOperationCardViewModel[] = modifierVirtualKeys.map(
@@ -125,9 +125,9 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
         text: VirtualKeyTexts[vk] || '',
         isCurrent,
         setCurrent,
-        isEnabled: editOperation?.type === 'keyInput' && !isDualSecondary
+        isEnabled: editOperation?.type === 'keyInput' && !isDualSecondary,
       };
-    }
+    },
   );
 
   const layerCallEntries: IOperationCardViewModel[] = models.editorModel.profileData.layers
@@ -142,9 +142,9 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
         writeEditOperation({
           type: 'layerCall',
           targetLayerId: la.layerId,
-          invocationMode: 'hold'
+          invocationMode: 'hold',
         }),
-      isEnabled: true
+      isEnabled: true,
     }));
 
   const layerCallEntryClearExclusive: IOperationCardViewModel = {
@@ -154,9 +154,9 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
     setCurrent: () =>
       writeEditOperation({
         type: 'layerClearExclusive',
-        targetExclusionGroup: 1
+        targetExclusionGroup: 1,
       }),
-    isEnabled: true
+    isEnabled: true,
   };
 
   layerCallEntries.push(layerCallEntryClearExclusive);
@@ -164,6 +164,6 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
   return {
     virtualKeyEntryGroups,
     attachedModifierEntries,
-    layerCallEntries
+    layerCallEntries,
   };
 }

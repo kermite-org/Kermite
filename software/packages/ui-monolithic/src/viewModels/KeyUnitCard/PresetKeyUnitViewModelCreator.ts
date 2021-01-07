@@ -2,11 +2,11 @@ import {
   IKeyUnitEntry,
   ILayer,
   IProfileData,
-  IProfileDataAssigns
+  IProfileDataAssigns,
 } from '~shared/defs/ProfileData';
 import {
   getAssignEntryTexts,
-  getAssignForKeyUnitWithLayerFallback
+  getAssignForKeyUnitWithLayerFallback,
 } from '~ui/viewModels/KeyUnitCard/KeyUnitCardViewModelCommon';
 
 export interface IPresetKeyUnitViewModel {
@@ -25,25 +25,25 @@ function createPresetKeyUnitViewModel(
   ku: IKeyUnitEntry,
   targetLayerId: string,
   layers: ILayer[],
-  assigns: IProfileDataAssigns
+  assigns: IProfileDataAssigns,
 ): IPresetKeyUnitViewModel {
   const keyUnitId = ku.id;
   const pos = {
     x: ku.x,
     y: ku.y,
-    r: ku.r || 0
+    r: ku.r || 0,
   };
 
   const assign = getAssignForKeyUnitWithLayerFallback(
     keyUnitId,
     targetLayerId,
     layers,
-    assigns
+    assigns,
   );
 
   const { primaryText, secondaryText, isLayerFallback } = getAssignEntryTexts(
     assign,
-    layers
+    layers,
   );
 
   return {
@@ -51,13 +51,13 @@ function createPresetKeyUnitViewModel(
     pos,
     primaryText,
     secondaryText,
-    isLayerFallback
+    isLayerFallback,
   };
 }
 
 export function makePresetKeyUnitViewModels(
   profileData: IProfileData,
-  targetLayerId: string
+  targetLayerId: string,
 ): IPresetKeyUnitViewModel[] {
   const { layers, assigns, keyboardShape } = profileData;
   return keyboardShape.keyUnits.map((ku) => {

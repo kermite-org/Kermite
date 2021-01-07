@@ -24,7 +24,7 @@ export const AssignTypeSelectionPart = () => {
   const {
     assignTypeOptions,
     currentAssignType,
-    setAssignType
+    setAssignType,
   } = AssignTypeSelectionPartViewModel();
 
   return (

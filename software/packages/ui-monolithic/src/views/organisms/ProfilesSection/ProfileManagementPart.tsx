@@ -6,7 +6,7 @@ import { LaunchButton } from '~ui/views/controls/LaunchButton';
 import { KeyboardProfileSelector } from '~ui/views/fabrics/KeyboardProfileSelector';
 import {
   BehaviorSelector,
-  LayoutStandardSelector
+  LayoutStandardSelector,
 } from '~ui/views/organisms/ProfilesSection/ConfigSelectors';
 import { ProfileSelectionMenuPart } from './ProfileSelectionMenu';
 import { h } from '~qx';

@@ -2,7 +2,7 @@ import { css } from 'goober';
 import {
   reflectFieldChecked,
   reflectFieldValue,
-  reflectValue
+  reflectValue,
 } from '~ui/base/helper/FormHelpers';
 import { models } from '~ui/models';
 import { h } from '~qx';

@@ -1,7 +1,7 @@
 import {
   modalTextEdit,
   modalConfirm,
-  modalAlert
+  modalAlert,
 } from '~ui/base/dialog/BasicModals';
 import { models } from '~ui/models';
 import { makePlainSelectorOption } from '~ui/viewModels/viewModelHelpers';
@@ -27,21 +27,21 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     currentProfileName,
     allProfileNames,
     loadProfile,
-    saveProfile
+    saveProfile,
   } = models.profilesModel;
 
   const checkValidNewProfileName = async (
-    newProfileName: string
+    newProfileName: string,
   ): Promise<boolean> => {
     if (!newProfileName.match(/^[^/./\\:*?"<>|]+$/)) {
       await modalAlert(
-        `${newProfileName} is not for valid filename. operation cancelled.`
+        `${newProfileName} is not for valid filename. operation cancelled.`,
       );
       return false;
     }
     if (models.profilesModel.allProfileNames.includes(newProfileName)) {
       await modalAlert(
-        `${newProfileName} is already exists. operation cancelled.`
+        `${newProfileName} is already exists. operation cancelled.`,
       );
       return false;
     }
@@ -58,19 +58,19 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
         models.profilesModel.createProfile(
           profileName,
           targetProjectId,
-          presetName
+          presetName,
         );
       }
     }
   };
 
   const inputNewProfileName = async (
-    caption: string
+    caption: string,
   ): Promise<string | undefined> => {
     const newProfileName = await modalTextEdit({
       message: 'New Profile Name',
       defaultText: currentProfileName,
-      caption
+      caption,
     });
     if (newProfileName) {
       const nameValid = await checkValidNewProfileName(newProfileName);
@@ -98,7 +98,7 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
   const deleteProfile = async () => {
     const ok = await modalConfirm({
       message: `Profile ${currentProfileName} will be deleted. Are you sure?`,
-      caption: 'Delete Profile'
+      caption: 'Delete Profile',
     });
     if (ok) {
       models.profilesModel.deleteProfile();
@@ -128,7 +128,7 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     profileSelectorSource: {
       options: allProfileNames.map(makePlainSelectorOption),
       choiceId: currentProfileName,
-      setChoiceId: loadProfile
-    }
+      setChoiceId: loadProfile,
+    },
   };
 }

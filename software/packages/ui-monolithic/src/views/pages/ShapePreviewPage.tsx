@@ -47,7 +47,7 @@ export const KeyboardShapePreviewPage = () => {
     settings,
     projectSelectorSource,
     layoutSelectorSource,
-    holdKeyIndices
+    holdKeyIndices,
   } = vm;
   return (
     <div css={cssShapePreviewPage}>

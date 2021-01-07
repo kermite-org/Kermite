@@ -1,6 +1,6 @@
 import {
   IKeyboardBehaviorMode,
-  IKeyboardLayoutStandard
+  IKeyboardLayoutStandard,
 } from '~shared/defs/ConfigTypes';
 import { models } from '~ui/models';
 import { DualItemsHoverSelector } from '~ui/views/fabrics/DualItemHoverSelector';
@@ -14,7 +14,7 @@ export const BehaviorSelector = () => {
   };
   const textDictionary: { [key in IKeyboardBehaviorMode]: string } = {
     Standalone: 'STD',
-    SideBrain: 'SB'
+    SideBrain: 'SB',
   };
 
   return (
@@ -35,7 +35,7 @@ export const LayoutStandardSelector = () => {
   };
   const textDictionary: { [key in IKeyboardLayoutStandard]: string } = {
     US: 'US',
-    JIS: 'JIS'
+    JIS: 'JIS',
   };
   return (
     <DualItemsHoverSelector

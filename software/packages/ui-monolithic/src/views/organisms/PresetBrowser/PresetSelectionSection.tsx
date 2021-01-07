@@ -26,7 +26,7 @@ const cssPresetSelectionSection = css`
 `;
 
 export const PresetSelectionSection = ({
-  vm
+  vm,
 }: ViewModelProps<IPresetBrowserViewModel>) => {
   return (
     <div css={cssPresetSelectionSection}>

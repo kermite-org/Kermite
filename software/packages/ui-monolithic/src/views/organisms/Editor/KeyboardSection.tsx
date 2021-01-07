@@ -14,7 +14,7 @@ const EditKeyboardBasePlane = (props: { children: any }) => {
   `;
   const maxHeight = Math.max(((window.innerHeight / 2) >> 0) - 60, 200);
   const styleSvg = {
-    'max-height': `${maxHeight}px`
+    'max-height': `${maxHeight}px`,
   };
   return (
     <svg

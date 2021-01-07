@@ -3,7 +3,7 @@ import {
   DialogContentRow,
   DialogButton,
   DialogButtonsRow,
-  ClosableOverlay
+  ClosableOverlay,
 } from '~ui/base/dialog/CommonDialogParts';
 import { reflectFieldValue } from '~ui/base/helper/FormHelpers';
 import { createModal } from '~ui/base/overlay/ForegroundModalLayer';
@@ -11,7 +11,7 @@ import { models } from '~ui/models';
 import { ISelectorOption } from '~ui/viewModels/viewModelInterfaces';
 import {
   cssCommonPropertiesTable,
-  cssCommonTextInput
+  cssCommonTextInput,
 } from '~ui/views/controls/CommonStyles';
 import { GeneralSelector } from '~ui/views/controls/GeneralSelector';
 import { h } from '~qx';
@@ -27,7 +27,7 @@ function makeProfileSetupModalViewModel() {
     .getProjectsWithLayout()
     .map((info) => ({
       id: info.projectId,
-      text: info.projectPath
+      text: info.projectPath,
     }));
 
   const defaultProjectId = projectOptions[0].id || '';
@@ -42,7 +42,7 @@ function makeProfileSetupModalViewModel() {
   const editValues: ICreateProfileDialogEditValues = {
     profileName: '',
     targetProjectId: defaultProjectId,
-    presetName: getLayoutNameOptions(defaultProjectId)[0].id
+    presetName: getLayoutNameOptions(defaultProjectId)[0].id,
   };
 
   return {
@@ -56,7 +56,7 @@ function makeProfileSetupModalViewModel() {
       if (!options.find((opt) => opt.id === editValues.presetName)) {
         editValues.presetName = options[0].id;
       }
-    }
+    },
   };
 }
 

@@ -4,25 +4,25 @@ import { VirtualKeyTexts } from '~shared/defs/VirtualKeyTexts';
 import { ModifierVirtualKey } from '~shared/defs/VirtualKeys';
 import {
   addOptionToOptionsArray,
-  removeOptionFromOptionsArray
+  removeOptionFromOptionsArray,
 } from '~shared/funcs/Utils';
 import {
   CommonDialogFrame,
   DialogContentRow,
   DialogButton,
   DialogButtonsRow,
-  ClosableOverlay
+  ClosableOverlay,
 } from '~ui/base/dialog/CommonDialogParts';
 import {
   reflectChecked,
   reflectFieldChecked,
   reflectFieldValue,
-  reflectValue
+  reflectValue,
 } from '~ui/base/helper/FormHelpers';
 import { createModal } from '~ui/base/overlay/ForegroundModalLayer';
 import {
   cssCommonPropertiesTable,
-  cssCommonTextInput
+  cssCommonTextInput,
 } from '~ui/views/controls/CommonStyles';
 import { DefaultSchemeButton } from '../controls/DefaultSchemeButton';
 import { h } from '~qx';
@@ -47,7 +47,7 @@ type AttachedModifierModel = {
 }[];
 
 function makeAttachedModifiersModel(
-  editValues: ILayerConfigurationModelEditValues
+  editValues: ILayerConfigurationModelEditValues,
 ): AttachedModifierModel {
   const mods = editValues.attachedModifiers || [];
 
@@ -55,7 +55,7 @@ function makeAttachedModifiersModel(
     'K_Shift',
     'K_Ctrl',
     'K_Alt',
-    'K_OS'
+    'K_OS',
   ];
 
   return modifierVirtualKeys.map((vk) => {
@@ -66,7 +66,7 @@ function makeAttachedModifiersModel(
         editValues.attachedModifiers = enabled
           ? addOptionToOptionsArray(mods, vk)
           : removeOptionFromOptionsArray(mods, vk);
-      }
+      },
     };
   });
 }
@@ -174,7 +174,7 @@ const LayerConfigurationModalContent = (props: {
                       checked={editValues.initialActive}
                       onChange={reflectFieldChecked(
                         editValues,
-                        'initialActive'
+                        'initialActive',
                       )}
                     />
                   </label>
@@ -213,5 +213,5 @@ export const callLayerConfigurationModal = createModal(
         />
       );
     };
-  }
+  },
 );

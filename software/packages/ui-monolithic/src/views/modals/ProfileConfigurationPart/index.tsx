@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import {
   ClosableOverlay,
-  CommonDialogFrame
+  CommonDialogFrame,
 } from '~ui/base/dialog/CommonDialogParts';
 import { reflectFieldChecked } from '~ui/base/helper/FormHelpers';
 import { models } from '~ui/models';

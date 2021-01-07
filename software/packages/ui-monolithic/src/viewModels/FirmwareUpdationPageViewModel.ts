@@ -22,7 +22,7 @@ export function makeFirmwareUpdationPageViewModel(): IFirmwareUpdationPageViewMo
     projectSelectorSource: {
       options: model.projectOptions,
       choiceId: model.currentProjectId,
-      setChoiceId: model.setCurrentProjectId
+      setChoiceId: model.setCurrentProjectId,
     },
     onWriteButton() {
       model.uploadFirmware();
@@ -33,8 +33,8 @@ export function makeFirmwareUpdationPageViewModel(): IFirmwareUpdationPageViewMo
     onLogButton() {
       showCommandOutputLogModal({
         caption: 'Operation Command Log',
-        logText: model.firmwareUploadResult || ''
+        logText: model.firmwareUploadResult || '',
       });
-    }
+    },
   };
 }

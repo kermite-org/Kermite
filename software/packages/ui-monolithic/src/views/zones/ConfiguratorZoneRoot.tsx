@@ -20,7 +20,7 @@ const styles = {
 
   cssMainColumn: css`
     flex-grow: 1;
-  `
+  `,
 };
 
 export const ConfiguratorZoneRoot = () => {
