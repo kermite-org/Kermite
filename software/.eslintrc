@@ -93,6 +93,8 @@
     "one-var": 1,
     "import/first": 1,
 
+    "@typescript-eslint/restrict-plus-operands": 0,
+
     //others
     "react/jsx-key": 1,
     "react/display-name": 0,
