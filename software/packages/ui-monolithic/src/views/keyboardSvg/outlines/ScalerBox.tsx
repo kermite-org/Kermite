@@ -1,6 +1,6 @@
 import { appUi } from '@kermite/ui';
 import { css } from 'goober';
-import { h } from 'qx';
+import { h, Hook } from 'qx';
 
 const cssBase = css`
   width: 100%;
@@ -26,41 +26,44 @@ interface IScalerBoxProps {
   children: any;
 }
 
-export function ScalerBox(_initialProps: IScalerBoxProps) {
-  const domBaseElementId = `scalerBox-${(Math.random() * 10000) >> 0}`;
-  let scale = 1.0;
-  let mh = 0;
-  let mv = 0;
+export function ScalerBox(props: IScalerBoxProps) {
+  const local = Hook.useMemo(
+    () => ({
+      domBaseElementId: `scalerBox-${(Math.random() * 10000) >> 0}`,
+      scale: 1.0,
+      mh: 0,
+      mv: 0,
+    }),
+    [],
+  );
 
-  return (props: IScalerBoxProps) => {
-    const { contentWidth, contentHeight, children } = props;
+  const { contentWidth, contentHeight, children } = props;
 
-    const baseEl = document.getElementById(domBaseElementId);
-    if (!baseEl) {
-      setTimeout(appUi.rerender, 1);
-    } else {
-      const { clientWidth: bw, clientHeight: bh } = baseEl;
-      scale = Math.min(bw / contentWidth, bh / contentHeight);
-      mh = Math.max((bw - contentWidth * scale) / 2, 0);
-      mv = Math.max((bh - contentHeight * scale) / 2, 0);
-      // console.log({ scale });
-    }
+  const baseEl = document.getElementById(local.domBaseElementId);
+  if (!baseEl) {
+    setTimeout(appUi.rerender, 1);
+  } else {
+    const { clientWidth: bw, clientHeight: bh } = baseEl;
+    local.scale = Math.min(bw / contentWidth, bh / contentHeight);
+    local.mh = Math.max((bw - contentWidth * local.scale) / 2, 0);
+    local.mv = Math.max((bh - contentHeight * local.scale) / 2, 0);
+    // console.log({ scale });
+  }
 
-    return (
-      <div css={cssBase} id={domBaseElementId}>
-        <div
-          css={cssInner}
-          style={{
-            width: `${contentWidth}px`,
-            height: `${contentHeight}px`,
-            transform: `scale(${scale}, ${scale})`,
-            marginLeft: `${mh}px`,
-            marginTop: `${mv}px`,
-          }}
-        >
-          {children}
-        </div>
+  return (
+    <div css={cssBase} id={local.domBaseElementId}>
+      <div
+        css={cssInner}
+        style={{
+          width: `${contentWidth}px`,
+          height: `${contentHeight}px`,
+          transform: `scale(${local.scale}, ${local.scale})`,
+          marginLeft: `${local.mh}px`,
+          marginTop: `${local.mv}px`,
+        }}
+      >
+        {children}
       </div>
-    );
-  };
+    </div>
+  );
 }

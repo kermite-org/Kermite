@@ -55,7 +55,7 @@ function createRenderComponent<P extends {}>({
         const res = componentFn(_props);
         if (
           typeof res === 'function' ||
-          (typeof res === 'object' && 'render' in res)
+          (res && typeof res === 'object' && 'render' in res)
         ) {
           throw new Error(
             `closure component is not supported anymore, used in: ${componentFn}`,

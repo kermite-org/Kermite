@@ -8,7 +8,7 @@ export class PlayerModel {
   private _holdKeyIndices: Set<number> = new Set();
 
   get holdKeyIndices(): number[] {
-    return [...this._holdKeyIndices];
+    return this._holdKeyIndices.size > 0 ? [...this._holdKeyIndices] : [];
   }
 
   constructor(private editorModel: EditorModel) {}
