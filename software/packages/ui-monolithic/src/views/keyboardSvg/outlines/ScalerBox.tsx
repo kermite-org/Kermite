@@ -1,6 +1,6 @@
+import { appUi } from '@kermite/ui';
 import { css } from 'goober';
-import { appUi } from '~ui/core';
-import { h } from '~qx';
+import { h } from 'qx';
 
 const cssBase = css`
   width: 100%;

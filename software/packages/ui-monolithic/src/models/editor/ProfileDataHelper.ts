@@ -1,11 +1,11 @@
 import {
-  IAssignEntry,
-  IAssignEntry_DualEx,
   IAssignEntry_SingleEx,
-  IProfileAssignType,
+  IAssignEntry_DualEx,
   IProfileData,
-} from '~shared/defs/ProfileData';
-import { mapObjectValues } from '~shared/funcs/Utils';
+  IProfileAssignType,
+  mapObjectValues,
+  IAssignEntry,
+} from '@kermite/shared';
 
 function convertSignleAssignToDualAssign(
   src: IAssignEntry_SingleEx,

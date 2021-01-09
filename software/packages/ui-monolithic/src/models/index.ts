@@ -1,6 +1,5 @@
-import { backendAgent } from '~ui/core';
-import { PresetBrowserModel } from '~ui/models/PresetBrowserModel';
-import { RealtimeHeatmapModel } from '~ui/models/RealtimeHeatmapModel';
+import { PresetBrowserModel } from '~/models/PresetBrowserModel';
+import { RealtimeHeatmapModel } from '~/models/RealtimeHeatmapModel';
 import { DeviceStatusModel } from './DeviceStatusModel';
 import { FirmwareUpdationModel } from './FirmwareUpdationModel';
 import { KeyboardConfigModel } from './KeyboardConfigModel';
@@ -39,8 +38,6 @@ export class Models {
   );
 
   realtimeHeatmapModel = new RealtimeHeatmapModel(this.editorModel);
-
-  backend = backendAgent;
 
   async initialize() {
     await this.projectResourceModel.initializeAsync();

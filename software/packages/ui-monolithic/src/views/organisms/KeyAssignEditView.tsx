@@ -1,13 +1,13 @@
+import { uiTheme } from '@kermite/ui';
 import { css } from 'goober';
-import { uiTheme } from '~ui/core';
-import { models } from '~ui/models';
-import { ProfileConfigurationPart } from '~ui/views/organisms/Editor/ProfileConfigurationPart';
+import { h } from 'qx';
+import { models } from '~/models';
+import { ProfileConfigurationPart } from '~/views/organisms/Editor/ProfileConfigurationPart';
 import { AssignEditSection } from './Editor/AssignEditSection';
 import { BehaviorOptionsPart } from './Editor/BehaviorOptionsPart';
 import { KeyboardSection } from './Editor/KeyboardSection';
 import { LayersSection } from './Editor/LayersSection';
 import { TestInputArea } from './Editor/TestInputArea';
-import { h } from '~qx';
 
 const localStyleConstants = {
   editorPartMargin: '4px',

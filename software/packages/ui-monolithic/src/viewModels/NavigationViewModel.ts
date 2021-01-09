@@ -1,5 +1,5 @@
-import { models } from '~ui/models';
-import { PageSignature } from '~ui/models/UiStatusModel';
+import { models } from '~/models';
+import { PageSignature } from '~/models/UiStatusModel';
 
 export interface NavigationEntryViewModel {
   pageSig: PageSignature;

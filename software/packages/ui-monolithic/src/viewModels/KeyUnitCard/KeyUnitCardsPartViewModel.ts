@@ -1,9 +1,6 @@
-import {
-  IAssignEntryWithLayerFallback,
-  IKeyUnitEntry,
-} from '~shared/defs/ProfileData';
-import { Models } from '~ui/models';
-import { getAssignEntryTexts } from '~ui/viewModels/KeyUnitCard/KeyUnitCardViewModelCommon';
+import { IAssignEntryWithLayerFallback, IKeyUnitEntry } from '@kermite/shared';
+import { Models } from '~/models';
+import { getAssignEntryTexts } from '~/viewModels/KeyUnitCard/KeyUnitCardViewModelCommon';
 
 export interface IKeyUnitCardViewModel {
   keyUnitId: string;

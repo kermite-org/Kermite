@@ -1,5 +1,5 @@
 import { css } from 'goober';
-import { h } from '~qx';
+import { h } from 'qx';
 
 export const LinkIndicator = (props: { isActive: boolean }) => {
   const cssLinkIndicator = css`

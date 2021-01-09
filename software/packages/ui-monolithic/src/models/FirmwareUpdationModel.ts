@@ -1,5 +1,5 @@
-import { backendAgent } from '~ui/core';
-import { ProjectResourceModel } from '~ui/models/ProjectResourceModel';
+import { ipcAgent } from '@kermite/ui';
+import { ProjectResourceModel } from '~/models/ProjectResourceModel';
 
 export type FirmwareUpdationPhase =
   | 'WaitingReset'
@@ -64,7 +64,7 @@ export class FirmwareUpdationModel {
     }
     if (this.phase === 'WaitingUploadOrder' && this.comPortName) {
       this.phase = 'Uploading';
-      const res = await backendAgent.uploadFirmware(
+      const res = await ipcAgent.async.firmup_uploadFirmware(
         this.currentProjectId,
         this.comPortName,
       );
@@ -78,10 +78,10 @@ export class FirmwareUpdationModel {
   };
 
   initialize() {
-    backendAgent.comPortPlugEvents.subscribe(this.onComPortPlugEvent);
+    ipcAgent.subscribe2('firmup_comPortPlugEvents', this.onComPortPlugEvent);
   }
 
   finalize() {
-    backendAgent.comPortPlugEvents.unsubscribe(this.onComPortPlugEvent);
+    ipcAgent.unsubscribe2('firmup_comPortPlugEvents', this.onComPortPlugEvent);
   }
 }

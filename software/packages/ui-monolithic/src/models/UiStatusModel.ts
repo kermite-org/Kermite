@@ -1,5 +1,5 @@
-import { overwriteObjectProps } from '~shared/funcs/Utils';
-import { appUi } from '~ui/core';
+import { overwriteObjectProps } from '@kermite/shared';
+import { appUi } from '@kermite/ui';
 
 export type PageSignature =
   | 'editor'

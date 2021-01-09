@@ -1,9 +1,9 @@
-import { makeLayerListBoxPartViewModel } from '~ui/viewModels/Editor/LayersListBoxPartViewModel';
-import { makeLayerManagementPartViewModel } from '~ui/viewModels/Editor/LayersManagementPartViewModel';
-import { SectionHeaderText } from '~ui/views/elements/SectionHeaderText';
+import { h } from 'qx';
+import { makeLayerListBoxPartViewModel } from '~/viewModels/Editor/LayersListBoxPartViewModel';
+import { makeLayerManagementPartViewModel } from '~/viewModels/Editor/LayersManagementPartViewModel';
+import { SectionHeaderText } from '~/views/elements/SectionHeaderText';
 import { LayerManagementPart } from './LayerManagementPart';
 import { LayersListBoxPart } from './LayersListBoxPart';
-import { h } from '~qx';
 
 export function LayersSection() {
   const layerListBoxPartViewModel = makeLayerListBoxPartViewModel();

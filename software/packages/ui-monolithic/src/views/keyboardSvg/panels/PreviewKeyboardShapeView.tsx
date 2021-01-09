@@ -1,11 +1,11 @@
+import { IKeyboardShape } from '@kermite/shared';
 import { css } from 'goober';
-import { IKeyboardShape } from '~shared/defs/ProfileData';
-import { IUiSettings } from '~ui/models/UiStatusModel';
-import { KeyboardBodyShape } from '~ui/views/keyboardSvg/atoms/KeyboardBodyShape';
-import { PreviewBoundingBox } from '~ui/views/keyboardSvg/atoms/PreviewBoundingBox';
-import { PreviewKeyUnitCardsPart } from '~ui/views/keyboardSvg/organisms/PreviewKeyUnitCardsPart';
+import { h } from 'qx';
+import { IUiSettings } from '~/models/UiStatusModel';
+import { KeyboardBodyShape } from '~/views/keyboardSvg/atoms/KeyboardBodyShape';
+import { PreviewBoundingBox } from '~/views/keyboardSvg/atoms/PreviewBoundingBox';
+import { PreviewKeyUnitCardsPart } from '~/views/keyboardSvg/organisms/PreviewKeyUnitCardsPart';
 import { KeyboardSvgFrameWithAutoScaler } from '../outlines/KeyboardSvgFrameWithAutoScaler';
-import { h } from '~qx';
 
 export function PreviewKeyboardShapeView(props: {
   shape: IKeyboardShape;

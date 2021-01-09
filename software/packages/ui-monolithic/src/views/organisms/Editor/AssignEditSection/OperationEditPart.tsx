@@ -1,12 +1,12 @@
 import { css } from 'goober';
+import { h } from 'qx';
 import {
-  IOperationEditPartViewModel,
   IPlainOperationEditCardsViewModel,
-} from '~ui/viewModels/Editor/OperationEditPartViewModel';
-import { IOperationLayerOptionEditViewModel } from '~ui/viewModels/Editor/OperationLayerOptionEditViewModel';
-import { OperationCard } from '~ui/views/elements/OperationCard';
-import { OperationLayerOptionSelector } from '~ui/views/fabrics/OperationLayerOptionSelector';
-import { h } from '~qx';
+  IOperationEditPartViewModel,
+} from '~/viewModels/Editor/OperationEditPartViewModel';
+import { IOperationLayerOptionEditViewModel } from '~/viewModels/Editor/OperationLayerOptionEditViewModel';
+import { OperationCard } from '~/views/elements/OperationCard';
+import { OperationLayerOptionSelector } from '~/views/fabrics/OperationLayerOptionSelector';
 
 const cssAssignPanel = css`
   display: flex;
@@ -70,7 +70,7 @@ export function OpertionEditPart(props: {
                   <OperationCard
                     model={model}
                     key={model.sig}
-                    qxOptimizer="deepEqualExFn"
+                    // qxOptimizer="deepEqualExFn"
                   />
                 ))}
               </div>
@@ -90,7 +90,7 @@ export function OpertionEditPart(props: {
               <OperationCard
                 model={model}
                 key={model.sig}
-                qxOptimizer="deepEqualExFn"
+                // qxOptimizer="deepEqualExFn"
               />
             ))}
             <OperationLayerOptionSelector {...props.layoutOptionEditVM} />

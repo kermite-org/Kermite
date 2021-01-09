@@ -1,10 +1,10 @@
-import { VirtualKeyTexts } from '~shared/defs/VirtualKeyTexts';
-import { ModifierVirtualKey } from '~shared/defs/VirtualKeys';
 import {
+  ModifierVirtualKey,
+  VirtualKeyTexts,
   addOptionToOptionsArray,
   removeOptionFromOptionsArray,
-} from '~shared/funcs/Utils';
-import { models } from '~ui/models';
+} from '@kermite/shared';
+import { models } from '~/models';
 import { virtualKeyGroupsTable2 } from './virtualkeyGroupsTable';
 
 export interface IOperationCardViewModel {

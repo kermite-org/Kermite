@@ -1,10 +1,10 @@
 import { css } from 'goober';
-import { ViewModelProps } from '~ui/base/helper/mvvmHelpers';
-import { IRealtimeHeatmapKeyboardViewModel } from '~ui/viewModels/RealtimeHeatmapViewModel';
-import { KeyboardBodyShape } from '~ui/views/keyboardSvg/atoms/KeyboardBodyShape';
-import { HeatmapKeyUnitCard } from '~ui/views/keyboardSvg/molecules/HeatmapKeyUnitCard';
-import { KeyboardSvgFrameWithAutoScaler } from '~ui/views/keyboardSvg/outlines/KeyboardSvgFrameWithAutoScaler';
-import { h } from '~qx';
+import { h } from 'qx';
+import { ViewModelProps } from '~/base/helper/mvvmHelpers';
+import { IRealtimeHeatmapKeyboardViewModel } from '~/viewModels/RealtimeHeatmapViewModel';
+import { KeyboardBodyShape } from '~/views/keyboardSvg/atoms/KeyboardBodyShape';
+import { HeatmapKeyUnitCard } from '~/views/keyboardSvg/molecules/HeatmapKeyUnitCard';
+import { KeyboardSvgFrameWithAutoScaler } from '~/views/keyboardSvg/outlines/KeyboardSvgFrameWithAutoScaler';
 
 export const HeatmapKeyboardView = ({
   vm,
@@ -40,7 +40,7 @@ export const HeatmapKeyboardView = ({
             <HeatmapKeyUnitCard
               model={keyUnit}
               key={keyUnit.keyUnitId}
-              qxOptimizer="deepEqual"
+              // qxOptimizer="deepEqual"
             />
           ))}
         </g>

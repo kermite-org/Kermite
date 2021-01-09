@@ -1,10 +1,12 @@
-import { IKeyboardShapeDisplayArea } from '~shared/defs/ProfileData';
-import { formatTimeMsToMinSecMs } from '~shared/funcs/Utils';
-import { models } from '~ui/models';
 import {
-  ICustomKeyUnitViewModelBase,
+  IKeyboardShapeDisplayArea,
+  formatTimeMsToMinSecMs,
+} from '@kermite/shared';
+import { models } from '~/models';
+import {
   makeCustomKeyUnitViewModels,
-} from '~ui/viewModels/KeyUnitCard/CustomKeyUnitViewModel';
+  ICustomKeyUnitViewModelBase,
+} from '~/viewModels/KeyUnitCard/CustomKeyUnitViewModel';
 
 export interface IHeatmapCustomKeyUnitViewModel {
   keyUnitId: string;

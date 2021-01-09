@@ -1,11 +1,11 @@
-import { css } from 'goober';
 import {
-  reflectFieldChecked,
   reflectFieldValue,
   reflectValue,
-} from '~ui/base/helper/FormHelpers';
-import { models } from '~ui/models';
-import { h } from '~qx';
+  reflectFieldChecked,
+} from '@kermite/ui';
+import { css } from 'goober';
+import { h } from 'qx';
+import { models } from '~/models';
 
 const cssDualModeSettingsPart = css`
   margin-top: 15px;

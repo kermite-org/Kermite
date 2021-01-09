@@ -1,4 +1,4 @@
-import { appUi } from '@kermite/ui';
+import { appUi, ipcAgent } from '@kermite/ui';
 
 export interface ITitleBarViewModel {
   // showReloadButton: boolean;
@@ -21,13 +21,13 @@ export function makeWindowControlButtonsModel(): ITitleBarViewModel {
       appUi.navigateTo('./widget/index.html');
     },
     onMinimizeButton() {
-      appUi.backendAgent.async.window_minimizeWindow();
+      ipcAgent.async.window_minimizeWindow();
     },
     onMaximizeButton() {
-      appUi.backendAgent.async.window_maximizeWindow();
+      ipcAgent.async.window_maximizeWindow();
     },
     onCloseButton() {
-      appUi.backendAgent.async.window_closeWindow();
+      ipcAgent.async.window_closeWindow();
     },
   };
 }

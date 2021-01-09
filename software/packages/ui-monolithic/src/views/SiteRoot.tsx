@@ -1,11 +1,11 @@
+import { appUi } from '@kermite/ui';
 import { css, glob, setup } from 'goober';
-import { DebugOverlay } from '~ui/base/overlay/DebugOverlay';
-import { appUi } from '~ui/core';
-import { models } from '~ui/models';
+import { h } from 'qx';
+import { DebugOverlay } from '~/base/overlay/DebugOverlay';
+import { models } from '~/models';
 import { ForegroundModalLayerRoot } from '../base/overlay/ForegroundModalLayer';
 import { ConfiguratorZoneRoot } from './zones/ConfiguratorZoneRoot';
 import { WidgetZoneRoot } from './zones/WidgetZoneRoot';
-import { h } from '~qx';
 
 setup(h);
 

@@ -1,6 +1,6 @@
+import { IKeyUnitEntry } from '@kermite/shared';
 import { css } from 'goober';
-import { IKeyUnitEntry } from '~shared/defs/ProfileData';
-import { h } from '~qx';
+import { h } from 'qx';
 
 export const PreviewKeyUnitCard = (props: {
   keyUnit: IKeyUnitEntry;

@@ -1,6 +1,6 @@
 import { css } from 'goober';
-import { makeGlobalMenuViewModel } from '~ui/viewModels/GlobalMenuViewModel';
-import { h } from '~qx';
+import { h } from 'qx';
+import { makeGlobalMenuViewModel } from '~/viewModels/GlobalMenuViewModel';
 
 const cssGlobalMenuPart = css``;
 

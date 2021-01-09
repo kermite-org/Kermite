@@ -1,5 +1,4 @@
-import { dumpXpcSubscriptionsRemained } from '~ui/core';
-import { Views } from '~ui/views/ViewIndex';
+import { Views } from '~/views/ViewIndex';
 import { models } from './models';
 
 async function start() {
@@ -12,7 +11,6 @@ async function start() {
   window.addEventListener('beforeunload', () => {
     views.finalize();
     models.finalize();
-    dumpXpcSubscriptionsRemained();
   });
 }
 

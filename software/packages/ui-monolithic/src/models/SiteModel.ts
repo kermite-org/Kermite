@@ -1,5 +1,5 @@
-import { IAppWindowEvent } from '~shared/defs/IpcContract';
-import { backendAgent } from '~ui/core';
+import { IAppWindowEvent } from '@kermite/shared';
+import { ipcAgent } from '@kermite/ui';
 
 export class SiteModel {
   private _isWidgetMode: boolean = false;
@@ -15,7 +15,7 @@ export class SiteModel {
 
   setWidgetMode = (isWidgetMode: boolean) => {
     this._isWidgetMode = isWidgetMode;
-    backendAgent.widgetModeChanged(isWidgetMode);
+    // backendAgent.widgetModeChanged(isWidgetMode);
   };
 
   private onAppWindowEvents = (ev: IAppWindowEvent) => {
@@ -25,10 +25,10 @@ export class SiteModel {
   };
 
   initialize() {
-    backendAgent.appWindowEvents.subscribe(this.onAppWindowEvents);
+    ipcAgent.subscribe2('window_appWindowEvents', this.onAppWindowEvents);
   }
 
   finalize() {
-    backendAgent.appWindowEvents.unsubscribe(this.onAppWindowEvents);
+    ipcAgent.unsubscribe2('window_appWindowEvents', this.onAppWindowEvents);
   }
 }

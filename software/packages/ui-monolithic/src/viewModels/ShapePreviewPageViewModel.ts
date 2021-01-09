@@ -1,7 +1,7 @@
-import { IKeyboardShape } from '~shared/defs/ProfileData';
-import { models } from '~ui/models';
-import { IUiSettings } from '~ui/models/UiStatusModel';
-import { ISelectorSource } from '~ui/viewModels/viewModelInterfaces';
+import { IKeyboardShape } from '@kermite/shared';
+import { models } from '~/models';
+import { IUiSettings } from '~/models/UiStatusModel';
+import { ISelectorSource } from '~/viewModels/viewModelInterfaces';
 
 export interface IShapePreviewPageViewModel {
   settings: IUiSettings;

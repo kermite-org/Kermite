@@ -1,5 +1,5 @@
-import { IRealtimeKeyboardEvent } from '~shared/defs/IpcContract';
-import { backendAgent } from '~ui/core';
+import { IRealtimeKeyboardEvent } from '@kermite/shared';
+import { ipcAgent } from '@kermite/ui';
 import { EditorModel } from '../editor/EditorModel';
 
 export class PlayerModel {
@@ -81,10 +81,10 @@ export class PlayerModel {
   };
 
   initialize() {
-    backendAgent.keyEvents.subscribe(this.handlekeyEvents);
+    ipcAgent.subscribe2('device_keyEvents', this.handlekeyEvents);
   }
 
   finalize() {
-    backendAgent.keyEvents.unsubscribe(this.handlekeyEvents);
+    ipcAgent.unsubscribe2('device_keyEvents', this.handlekeyEvents);
   }
 }

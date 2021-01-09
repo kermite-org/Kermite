@@ -1,7 +1,7 @@
-import { models } from '~ui/models';
-import { FirmwareUpdationPhase } from '~ui/models/FirmwareUpdationModel';
-import { ISelectorSource } from '~ui/viewModels/viewModelInterfaces';
-import { showCommandOutputLogModal } from '~ui/views/base/modal/CommandOutputLogModal';
+import { models } from '~/models';
+import { FirmwareUpdationPhase } from '~/models/FirmwareUpdationModel';
+import { ISelectorSource } from '~/viewModels/viewModelInterfaces';
+import { showCommandOutputLogModal } from '~/views/base/modal/CommandOutputLogModal';
 
 interface IFirmwareUpdationPageViewModel {
   phase: FirmwareUpdationPhase;

@@ -1,9 +1,9 @@
-import { fallbackProfileData, IProfileData } from '~shared/defs/ProfileData';
-import { modalAlert, modalTextEdit } from '~ui/base/dialog/BasicModals';
-import { backendAgent } from '~ui/core';
-import { ProjectResourceModel } from '~ui/models/ProjectResourceModel';
-import { UiStatusModel } from '~ui/models/UiStatusModel';
-import { ProfilesModel } from '~ui/models/profile/ProfilesModel';
+import { IProfileData, fallbackProfileData } from '@kermite/shared';
+import { ipcAgent } from '@kermite/ui';
+import { modalTextEdit, modalAlert } from '~/base/dialog/BasicModals';
+import { ProjectResourceModel } from '~/models/ProjectResourceModel';
+import { UiStatusModel } from '~/models/UiStatusModel';
+import { ProfilesModel } from '~/models/profile/ProfilesModel';
 
 class PresetBrowserModelHelper {
   static getNewProfileNameBase(
@@ -93,7 +93,7 @@ export class PresetBrowserModel {
   };
 
   private async loadSelectedProfile() {
-    const profileData = await backendAgent.loadPresetProfile(
+    const profileData = await ipcAgent.async.projects_loadPresetProfile(
       this._currentProjectId,
       this._currentPresetName,
     );

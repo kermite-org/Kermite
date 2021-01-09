@@ -1,4 +1,4 @@
-import { models } from '~ui/models';
+import { models } from '~/models';
 
 export function makeDeviceControlSectionViewModel() {
   return {

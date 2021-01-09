@@ -1,15 +1,13 @@
 import {
-  fallbackProfileData,
   IProfileData,
-  IAssignEntry,
-  IAssignOperation,
+  fallbackProfileData,
   IProfileAssignType,
+  IAssignEntry,
   IAssignEntryWithLayerFallback,
-} from '~shared/defs/ProfileData';
-import {
-  duplicateObjectByJsonStringifyParse,
+  IAssignOperation,
   compareObjectByJsonStringify,
-} from '~shared/funcs/Utils';
+  duplicateObjectByJsonStringifyParse,
+} from '@kermite/shared';
 import {
   changeProfileDataAssignType,
   removeInvalidProfileAssigns,

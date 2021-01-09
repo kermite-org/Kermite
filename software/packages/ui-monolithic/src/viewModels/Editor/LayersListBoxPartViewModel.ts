@@ -1,5 +1,5 @@
-import { ILayer } from '~shared/defs/ProfileData';
-import { models } from '~ui/models';
+import { ILayer } from '@kermite/shared';
+import { models } from '~/models';
 
 export interface ILayerListViewModel {
   layerId: string;

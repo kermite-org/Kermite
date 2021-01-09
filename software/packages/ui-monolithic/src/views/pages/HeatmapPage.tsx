@@ -1,9 +1,9 @@
+import { uiTheme } from '@kermite/ui';
 import { css } from 'goober';
-import { uiTheme } from '~ui/core';
-import { makeRealtimeHeatmapViewModel } from '~ui/viewModels/RealtimeHeatmapViewModel';
-import { GeneralButton } from '~ui/views/controls/GeneralButton';
-import { HeatmapKeyboardView } from '~ui/views/keyboardSvg/panels/HeatmapKeyboardView';
-import { h } from '~qx';
+import { h } from 'qx';
+import { makeRealtimeHeatmapViewModel } from '~/viewModels/RealtimeHeatmapViewModel';
+import { GeneralButton } from '~/views/controls/GeneralButton';
+import { HeatmapKeyboardView } from '~/views/keyboardSvg/panels/HeatmapKeyboardView';
 
 const cssHeatmapPage = css`
   background: ${uiTheme.colors.clBackground};

@@ -1,5 +1,5 @@
-import { IProjectResourceInfo } from '~shared/defs/ProfileData';
-import { backendAgent } from '~ui/core';
+import { IProjectResourceInfo } from '@kermite/shared';
+import { ipcAgent } from '@kermite/ui';
 
 export class ProjectResourceModel {
   projectResourceInfos: IProjectResourceInfo[] = [];
@@ -19,6 +19,6 @@ export class ProjectResourceModel {
   }
 
   async initializeAsync() {
-    this.projectResourceInfos = await backendAgent.getAllProjectResourceInfos();
+    this.projectResourceInfos = await ipcAgent.async.projects_getAllProjectResourceInfos();
   }
 }

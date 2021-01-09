@@ -1,31 +1,31 @@
-import { css } from 'goober';
-import { ILayerDefaultScheme } from '~shared/defs/ProfileData';
-import { VirtualKeyTexts } from '~shared/defs/VirtualKeyTexts';
-import { ModifierVirtualKey } from '~shared/defs/VirtualKeys';
 import {
+  ILayerDefaultScheme,
+  ModifierVirtualKey,
   addOptionToOptionsArray,
   removeOptionFromOptionsArray,
-} from '~shared/funcs/Utils';
+  VirtualKeyTexts,
+} from '@kermite/shared';
 import {
+  reflectFieldValue,
+  reflectChecked,
+  reflectValue,
+  reflectFieldChecked,
+} from '@kermite/ui';
+import { css } from 'goober';
+import { h } from 'qx';
+import {
+  ClosableOverlay,
   CommonDialogFrame,
   DialogContentRow,
-  DialogButton,
   DialogButtonsRow,
-  ClosableOverlay,
-} from '~ui/base/dialog/CommonDialogParts';
-import {
-  reflectChecked,
-  reflectFieldChecked,
-  reflectFieldValue,
-  reflectValue,
-} from '~ui/base/helper/FormHelpers';
-import { createModal } from '~ui/base/overlay/ForegroundModalLayer';
+  DialogButton,
+} from '~/base/dialog/CommonDialogParts';
+import { createModal } from '~/base/overlay/ForegroundModalLayer';
 import {
   cssCommonPropertiesTable,
   cssCommonTextInput,
-} from '~ui/views/controls/CommonStyles';
-import { DefaultSchemeButton } from '../controls/DefaultSchemeButton';
-import { h } from '~qx';
+} from '~/views/controls/CommonStyles';
+import { DefaultSchemeButton } from '~/views/controls/DefaultSchemeButton';
 
 export interface ILayerConfigurationModelEditValues {
   layerName: string;

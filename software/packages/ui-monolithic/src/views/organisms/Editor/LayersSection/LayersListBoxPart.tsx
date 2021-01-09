@@ -1,10 +1,10 @@
+import { uiTheme } from '@kermite/ui';
 import { css } from 'goober';
-import { uiTheme } from '~ui/core';
+import { h } from 'qx';
 import {
-  ILayerListBoxPartViewModel,
   ILayerListViewModel,
-} from '~ui/viewModels/Editor/LayersListBoxPartViewModel';
-import { h } from '~qx';
+  ILayerListBoxPartViewModel,
+} from '~/viewModels/Editor/LayersListBoxPartViewModel';
 
 const LayerCard = (props: { layerModel: ILayerListViewModel }) => {
   const cssLayerCard = css`
@@ -41,11 +41,7 @@ export function LayersListBoxPart(props: { vm: ILayerListBoxPartViewModel }) {
   return (
     <div css={cssLayersListBox}>
       {props.vm.layers.map((la) => (
-        <LayerCard
-          layerModel={la}
-          key={la.layerId}
-          qxOptimizer="deepEqualExFn"
-        />
+        <LayerCard layerModel={la} key={la.layerId} />
       ))}
     </div>
   );

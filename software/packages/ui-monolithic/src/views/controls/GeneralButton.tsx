@@ -1,7 +1,7 @@
+import { uiTheme } from '@kermite/ui';
 import { css } from 'goober';
-import { combineClasses } from '~ui/base/helper/ViewHelpers';
-import { uiTheme } from '~ui/core';
-import { h } from '~qx';
+import { h } from 'qx';
+import { combineClasses } from '~/base/helper/ViewHelpers';
 
 type IGeneralButtonForm = 'unit' | 'unitSquare' | 'large';
 

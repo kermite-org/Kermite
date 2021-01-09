@@ -1,9 +1,9 @@
+import { uiTheme } from '@kermite/ui';
 import { css } from 'goober';
-import { uiTheme } from '~ui/core';
-import { makePresetBrowserViewModel } from '~ui/viewModels/PresetBrowserViewModel';
-import { PresetKeyboardSection } from '~ui/views/organisms/PresetBrowser/PresetKeyboardSection';
-import { PresetSelectionSection } from '~ui/views/organisms/PresetBrowser/PresetSelectionSection';
-import { h } from '~qx';
+import { h } from 'qx';
+import { makePresetBrowserViewModel } from '~/viewModels/PresetBrowserViewModel';
+import { PresetKeyboardSection } from '~/views/organisms/PresetBrowser/PresetKeyboardSection';
+import { PresetSelectionSection } from '~/views/organisms/PresetBrowser/PresetSelectionSection';
 
 const cssPresetBrowserPage = css`
   background: ${uiTheme.colors.clBackground};

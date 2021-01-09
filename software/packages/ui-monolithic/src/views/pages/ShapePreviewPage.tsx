@@ -1,10 +1,10 @@
+import { uiTheme } from '@kermite/ui';
 import { css } from 'goober';
-import { uiTheme } from '~ui/core';
-import { makeShapePreviewPageViewModel } from '~ui/viewModels/ShapePreviewPageViewModel';
-import { GeneralSelector } from '~ui/views/controls/GeneralSelector';
-import { ShapePreviewOptionsBox } from '~ui/views/fabrics/ShapePreviewOptionsBox';
-import { PreviewKeyboardShapeView } from '~ui/views/keyboardSvg/panels/PreviewKeyboardShapeView';
-import { h } from '~qx';
+import { h } from 'qx';
+import { makeShapePreviewPageViewModel } from '~/viewModels/ShapePreviewPageViewModel';
+import { GeneralSelector } from '~/views/controls/GeneralSelector';
+import { ShapePreviewOptionsBox } from '~/views/fabrics/ShapePreviewOptionsBox';
+import { PreviewKeyboardShapeView } from '~/views/keyboardSvg/panels/PreviewKeyboardShapeView';
 
 const cssShapePreviewPage = css`
   background: ${uiTheme.colors.clBackground};

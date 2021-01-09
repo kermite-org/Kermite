@@ -1,8 +1,8 @@
+import { IProfileAssignType } from '@kermite/shared';
+import { reflectValue } from '@kermite/ui';
 import { css } from 'goober';
-import { IProfileAssignType } from '~shared/defs/ProfileData';
-import { reflectValue } from '~ui/base/helper/FormHelpers';
-import { models } from '~ui/models';
-import { h } from '~qx';
+import { h } from 'qx';
+import { models } from '~/models';
 
 const AssignTypeSelectionPartViewModel = () => {
   const assignTypeOptions: IProfileAssignType[] = ['single', 'dual'];

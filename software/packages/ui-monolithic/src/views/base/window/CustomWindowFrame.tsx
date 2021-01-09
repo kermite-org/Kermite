@@ -1,6 +1,6 @@
+import { uiTheme } from '@kermite/ui';
 import { css } from 'goober';
-import { uiTheme } from '~ui/core';
-import { h } from '~qx';
+import { h } from 'qx';
 
 export const CustomWindowFrame = (props: {
   children: JSX.Element;

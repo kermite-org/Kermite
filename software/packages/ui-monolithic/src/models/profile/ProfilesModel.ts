@@ -1,8 +1,5 @@
-import {
-  IProfileManagerCommand,
-  IProfileManagerStatus,
-} from '~shared/defs/IpcContract';
-import { backendAgent } from '~ui/core';
+import { IProfileManagerCommand, IProfileManagerStatus } from '@kermite/shared';
+import { ipcAgent } from '@kermite/ui';
 import { EditorModel } from '../editor/EditorModel';
 import { ProfileProvider } from './ProfileProvider';
 
@@ -63,7 +60,7 @@ export class ProfilesModel {
   private sendProfileManagerCommands(
     ...commands: (IProfileManagerCommand | undefined)[]
   ) {
-    backendAgent.executeProfileManagerCommands(
+    ipcAgent.async.profile_executeProfileManagerCommands(
       commands.filter((c) => c !== undefined) as IProfileManagerCommand[],
     );
   }

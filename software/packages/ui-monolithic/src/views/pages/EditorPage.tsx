@@ -1,10 +1,10 @@
+import { uiTheme } from '@kermite/ui';
 import { css } from 'goober';
-import { uiTheme } from '~ui/core';
+import { h } from 'qx';
 import { ProfileConfigratuionModalLayer } from '../modals/ProfileConfigurationPart';
 import { DeviceControlSection } from '../organisms/DeviceControlSection';
 import { KeyAssignEditView } from '../organisms/KeyAssignEditView';
 import { ProfileManagementPart } from '../organisms/ProfilesSection/ProfileManagementPart';
-import { h } from '~qx';
 
 const cssEditorPage = css`
   height: 100%;

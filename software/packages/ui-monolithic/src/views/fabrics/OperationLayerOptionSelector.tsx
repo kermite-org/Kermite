@@ -1,6 +1,6 @@
+import { reflectValue } from '@kermite/ui';
 import { css } from 'goober';
-import { reflectValue } from '~ui/base/helper/FormHelpers';
-import { h } from '~qx';
+import { h } from 'qx';
 
 const cssOperationLayerOptionSelector = css`
   margin-left: 10px;

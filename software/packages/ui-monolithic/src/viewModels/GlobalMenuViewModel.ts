@@ -1,6 +1,6 @@
-import { appUi } from '~ui/core';
-import { models } from '~ui/models';
-import { Hook } from '~qx';
+import { appUi } from '@kermite/ui';
+import { Hook } from 'qx';
+import { models } from '~/models';
 
 export interface IGlobalMenuItem {
   key: string;
@@ -54,7 +54,7 @@ export interface IGlobalMenuViewModel {
 }
 
 export function makeGlobalMenuViewModel(): IGlobalMenuViewModel {
-  const state = Hook.useLocal(() => ({ isOpen: false }));
+  const state = Hook.useMemo(() => ({ isOpen: false }), []);
   return {
     isOpen: state.isOpen,
     openMenu: () => (state.isOpen = true),

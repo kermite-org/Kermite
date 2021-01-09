@@ -1,6 +1,6 @@
 import { css } from 'goober';
-import { models } from '~ui/models';
-import { h } from '~qx';
+import { h } from 'qx';
+import { models } from '~/models';
 
 const cssLayerStateView = css`
   position: absolute;

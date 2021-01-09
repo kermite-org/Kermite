@@ -1,12 +1,12 @@
 import {
+  modalAlert,
   modalTextEdit,
   modalConfirm,
-  modalAlert,
-} from '~ui/base/dialog/BasicModals';
-import { models } from '~ui/models';
-import { makePlainSelectorOption } from '~ui/viewModels/viewModelHelpers';
-import { ISelectorSource } from '~ui/viewModels/viewModelInterfaces';
-import { callProfileSetupModal } from '~ui/views/modals/ProfileSetupModal';
+} from '~/base/dialog/BasicModals';
+import { models } from '~/models';
+import { makePlainSelectorOption } from '~/viewModels/viewModelHelpers';
+import { ISelectorSource } from '~/viewModels/viewModelInterfaces';
+import { callProfileSetupModal } from '~/views/modals/ProfileSetupModal';
 
 export interface IProfileManagementPartViewModel {
   currentProfileName: string;

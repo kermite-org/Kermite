@@ -1,8 +1,8 @@
+import { IKeyboardShapeDisplayArea } from '@kermite/shared';
 import { css } from 'goober';
-import { IKeyboardShapeDisplayArea } from '~shared/defs/ProfileData';
-import { KeyboardSvgFrame } from '~ui/views/keyboardSvg/outlines/KeyboardSvgFrame';
-import { ScalerBox } from '~ui/views/keyboardSvg/outlines/ScalerBox';
-import { h } from '~qx';
+import { h } from 'qx';
+import { KeyboardSvgFrame } from '~/views/keyboardSvg/outlines/KeyboardSvgFrame';
+import { ScalerBox } from '~/views/keyboardSvg/outlines/ScalerBox';
 
 export const cssScalerContent = css`
   height: 100%;

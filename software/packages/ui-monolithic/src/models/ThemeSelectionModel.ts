@@ -1,4 +1,4 @@
-import { themeColors, ThemeKey, uiThemeConfigLoader } from '~ui/core';
+import { themeColors, ThemeKey, uiThemeConfigLoader } from '@kermite/ui';
 
 const allThemeKeys = Object.keys(themeColors) as ThemeKey[];
 

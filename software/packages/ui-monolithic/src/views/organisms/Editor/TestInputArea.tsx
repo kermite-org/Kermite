@@ -1,8 +1,8 @@
 import { css } from 'goober';
-import { makeTestInputAreaViewModel } from '~ui/viewModels/TestInputAreaViweModel';
-import { GeneralButton } from '~ui/views/controls/GeneralButton';
-import { GeneralInput } from '~ui/views/controls/GeneralInput';
-import { h, Hook } from '~qx';
+import { Hook, h } from 'qx';
+import { makeTestInputAreaViewModel } from '~/viewModels/TestInputAreaViweModel';
+import { GeneralButton } from '~/views/controls/GeneralButton';
+import { GeneralInput } from '~/views/controls/GeneralInput';
 
 const cssTestInputArea = css`
   margin: 5px;
@@ -10,7 +10,7 @@ const cssTestInputArea = css`
 `;
 
 export const TestInputArea = () => {
-  const vm = Hook.useLocal(makeTestInputAreaViewModel);
+  const vm = Hook.useMemo(makeTestInputAreaViewModel, []);
   return (
     <div css={cssTestInputArea}>
       <GeneralInput value={vm.text} setValue={vm.setText} width={300} />

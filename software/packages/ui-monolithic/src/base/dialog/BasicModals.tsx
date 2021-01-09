@@ -1,5 +1,6 @@
+import { reflectFieldValue } from '@kermite/ui';
 import { css } from 'goober';
-import { reflectFieldValue } from '../helper/FormHelpers';
+import { h } from 'qx';
 import { createModal } from '../overlay/ForegroundModalLayer';
 import {
   CommonDialogFrame,
@@ -8,7 +9,6 @@ import {
   DialogButtonsRow,
   DialogButton,
 } from './CommonDialogParts';
-import { h } from '~qx';
 
 export const modalAlert = createModal((message: string) => {
   return (props: { close: () => void }) => {

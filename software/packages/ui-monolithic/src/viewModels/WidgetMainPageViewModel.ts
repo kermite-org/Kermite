@@ -1,9 +1,9 @@
-import { IKeyboardShape } from '~shared/defs/ProfileData';
-import { models } from '~ui/models';
+import { IKeyboardShape } from '@kermite/shared';
+import { models } from '~/models';
 import {
   IKeyUnitCardPartViewModel,
   makeKeyUnitCardsPartViewModel,
-} from '~ui/viewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
+} from '~/viewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
 
 export interface IWidgetKeyboardViewViewModel {
   keyboardShape: IKeyboardShape;

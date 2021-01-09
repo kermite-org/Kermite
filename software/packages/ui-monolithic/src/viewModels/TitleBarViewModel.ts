@@ -1,5 +1,5 @@
-import { appUi, backendAgent } from '~ui/core';
-import { models } from '~ui/models';
+import { appUi, ipcAgent } from '@kermite/ui';
+import { models } from '~/models';
 
 export interface ITitleBarViewModel {
   showReloadButton: boolean;
@@ -14,19 +14,19 @@ export function makeTitleBarViewModel(): ITitleBarViewModel {
   return {
     showReloadButton: appUi.isDevelopment,
     onReloadButton() {
-      backendAgent.reloadApplication();
+      // ipcAgent.async.window_reloadApplication();
     },
     onWidgetButton() {
       models.siteModel.setWidgetMode(true);
     },
     onMinimizeButton() {
-      backendAgent.minimizeWindow();
+      ipcAgent.async.window_minimizeWindow();
     },
     onMaximizeButton() {
-      backendAgent.maximizeWindow();
+      ipcAgent.async.window_maximizeWindow();
     },
     onCloseButton() {
-      backendAgent.closeWindow();
+      ipcAgent.async.window_closeWindow();
     },
   };
 }

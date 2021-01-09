@@ -1,11 +1,10 @@
-import { ILayer } from '~shared/defs/ProfileData';
-import { removeArrayItems } from '~shared/funcs/Utils';
-import { modalConfirm } from '~ui/base/dialog/BasicModals';
-import { models } from '~ui/models';
+import { ILayer, removeArrayItems } from '@kermite/shared';
+import { modalConfirm } from '~/base/dialog/BasicModals';
+import { models } from '~/models';
 import {
-  callLayerConfigurationModal,
   ILayerConfigurationModelEditValues,
-} from '~ui/views/modals/LayerConfigurationModal';
+  callLayerConfigurationModal,
+} from '~/views/modals/LayerConfigurationModal';
 
 export class LayerManagementPartViewModel {
   private get layers() {

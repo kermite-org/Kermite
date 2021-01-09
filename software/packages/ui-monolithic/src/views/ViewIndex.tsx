@@ -1,7 +1,7 @@
-import { debounce } from '~shared/funcs/Utils';
-import { appUi } from '~ui/core';
-import { SiteRoot } from '~ui/views/SiteRoot';
-import { h, render } from '~qx';
+import { debounce } from '@kermite/shared';
+import { appUi } from '@kermite/ui';
+import { h, render } from 'qx';
+import { SiteRoot } from '~/views/SiteRoot';
 
 export class Views {
   get appDiv() {

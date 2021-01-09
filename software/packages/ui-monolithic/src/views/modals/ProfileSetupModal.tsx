@@ -1,20 +1,20 @@
+import { reflectFieldValue } from '@kermite/ui';
+import { h } from 'qx';
 import {
+  ClosableOverlay,
   CommonDialogFrame,
   DialogContentRow,
-  DialogButton,
   DialogButtonsRow,
-  ClosableOverlay,
-} from '~ui/base/dialog/CommonDialogParts';
-import { reflectFieldValue } from '~ui/base/helper/FormHelpers';
-import { createModal } from '~ui/base/overlay/ForegroundModalLayer';
-import { models } from '~ui/models';
-import { ISelectorOption } from '~ui/viewModels/viewModelInterfaces';
+  DialogButton,
+} from '~/base/dialog/CommonDialogParts';
+import { createModal } from '~/base/overlay/ForegroundModalLayer';
+import { models } from '~/models';
+import { ISelectorOption } from '~/viewModels/viewModelInterfaces';
 import {
   cssCommonPropertiesTable,
   cssCommonTextInput,
-} from '~ui/views/controls/CommonStyles';
-import { GeneralSelector } from '~ui/views/controls/GeneralSelector';
-import { h } from '~qx';
+} from '~/views/controls/CommonStyles';
+import { GeneralSelector } from '~/views/controls/GeneralSelector';
 
 interface ICreateProfileDialogEditValues {
   profileName: string;

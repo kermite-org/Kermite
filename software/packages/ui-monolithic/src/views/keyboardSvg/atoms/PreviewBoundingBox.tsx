@@ -1,5 +1,5 @@
-import { IKeyboardShapeDisplayArea } from '~shared/defs/ProfileData';
-import { h } from '~qx';
+import { IKeyboardShapeDisplayArea } from '@kermite/shared';
+import { h } from 'qx';
 
 export const PreviewBoundingBox = (props: {
   displayArea: IKeyboardShapeDisplayArea;

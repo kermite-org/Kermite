@@ -1,13 +1,13 @@
 import {
   IKeyUnitEntry,
   ILayer,
-  IProfileData,
   IProfileDataAssigns,
-} from '~shared/defs/ProfileData';
+  IProfileData,
+} from '@kermite/shared';
 import {
-  getAssignEntryTexts,
   getAssignForKeyUnitWithLayerFallback,
-} from '~ui/viewModels/KeyUnitCard/KeyUnitCardViewModelCommon';
+  getAssignEntryTexts,
+} from '~/viewModels/KeyUnitCard/KeyUnitCardViewModelCommon';
 
 export interface IPresetKeyUnitViewModel {
   keyUnitId: string;

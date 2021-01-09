@@ -1,8 +1,8 @@
+import { uiTheme } from '@kermite/ui';
 import { css } from 'goober';
-import { uiTheme } from '~ui/core';
+import { h } from 'qx';
 import { GlobalMenuPart } from './GlobalMenuPart';
 import { NavigationButtonsArea } from './NavigationButtonsArea';
-import { h } from '~qx';
 
 const cssNavigationColumn = css`
   width: 50px;

@@ -1,12 +1,9 @@
-import {
-  IKeyboardShapeDisplayArea,
-  IProfileData,
-} from '~shared/defs/ProfileData';
+import { IKeyboardShapeDisplayArea, IProfileData } from '@kermite/shared';
+import { Hook } from 'qx';
 import {
   IPresetKeyUnitViewModel,
   makePresetKeyUnitViewModels,
-} from '~ui/viewModels/KeyUnitCard/PresetKeyUnitViewModelCreator';
-import { Hook } from '~qx';
+} from '~/viewModels/KeyUnitCard/PresetKeyUnitViewModelCreator';
 
 export interface IPresetKeyboardLayerViewModel {
   layerId: string;
@@ -29,10 +26,11 @@ export interface IPresetKeyboardViewModel {
 export function makePresetKeyboardViewModel(
   profileData: IProfileData,
 ): IPresetKeyboardViewModel {
-  const state = Hook.useLocal(() => ({ currentLayerId: '' }));
-  Hook.useChecker(profileData, () => {
+  const state = Hook.useMemo(() => ({ currentLayerId: '' }), []);
+  Hook.useEffect(() => {
     state.currentLayerId = profileData.layers[0].layerId;
-  });
+    return true;
+  }, [profileData]);
   return {
     keyUnits: makePresetKeyUnitViewModels(profileData, state.currentLayerId),
     displayArea: profileData.keyboardShape.displayArea,

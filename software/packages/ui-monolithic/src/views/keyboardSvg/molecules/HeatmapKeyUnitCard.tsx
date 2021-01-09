@@ -1,8 +1,8 @@
+import { uiTheme } from '@kermite/ui';
 import { css } from 'goober';
-import { mvvmView } from '~ui/base/helper/mvvmHelpers';
-import { uiTheme } from '~ui/core';
-import { IHeatmapCustomKeyUnitViewModel } from '~ui/viewModels/RealtimeHeatmapViewModel';
-import { h } from '~qx';
+import { h } from 'qx';
+import { mvvmView } from '~/base/helper/mvvmHelpers';
+import { IHeatmapCustomKeyUnitViewModel } from '~/viewModels/RealtimeHeatmapViewModel';
 
 const cssKeyRect = css`
   fill: transparent;

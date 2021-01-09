@@ -1,8 +1,7 @@
+import { uiTheme, reflectValue } from '@kermite/ui';
 import { css } from 'goober';
-import { reflectValue } from '~ui/base/helper/FormHelpers';
-import { combineClasses } from '~ui/base/helper/ViewHelpers';
-import { uiTheme } from '~ui/core';
-import { h } from '~qx';
+import { h } from 'qx';
+import { combineClasses } from '~/base/helper/ViewHelpers';
 
 interface IGeneralInputProps {
   value: string;

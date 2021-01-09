@@ -1,10 +1,10 @@
 import {
-  IAssignEntryWithLayerFallback,
   IAssignOperation,
   ILayer,
+  VirtualKeyTexts,
+  IAssignEntryWithLayerFallback,
   IProfileDataAssigns,
-} from '~shared/defs/ProfileData';
-import { VirtualKeyTexts } from '~shared/defs/VirtualKeyTexts';
+} from '@kermite/shared';
 
 function getAssignOperationText(
   op: IAssignOperation | undefined,

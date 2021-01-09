@@ -1,9 +1,9 @@
+import { uiTheme } from '@kermite/ui';
 import { css } from 'goober';
-import { uiTheme } from '~ui/core';
-import { makeTitleBarViewModel } from '~ui/viewModels/TitleBarViewModel';
+import { h } from 'qx';
+import { makeTitleBarViewModel } from '~/viewModels/TitleBarViewModel';
 import { WindowControlButtonsPart } from './WindowControlButtonsPart';
 import { WindowTitlePart } from './WindowTitlePart';
-import { h } from '~qx';
 
 const cssWindowTitleBarSection = css`
   display: flex;

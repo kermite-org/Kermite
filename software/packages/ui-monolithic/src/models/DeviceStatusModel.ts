@@ -1,5 +1,5 @@
-import { IKeyboardDeviceStatus } from '~shared/defs/IpcContract';
-import { backendAgent } from '~ui/core';
+import { IKeyboardDeviceStatus } from '@kermite/shared';
+import { ipcAgent } from '@kermite/ui';
 
 export class DeviceStatusModel {
   isConnected: boolean = false;
@@ -21,13 +21,15 @@ export class DeviceStatusModel {
   };
 
   initialize() {
-    backendAgent.keyboardDeviceStatusEvents.subscribe(
+    ipcAgent.subscribe2(
+      'device_keyboardDeviceStatusEvents',
       this.onDeviceStatusChanged,
     );
   }
 
   finalize() {
-    backendAgent.keyboardDeviceStatusEvents.unsubscribe(
+    ipcAgent.unsubscribe2(
+      'device_keyboardDeviceStatusEvents',
       this.onDeviceStatusChanged,
     );
   }

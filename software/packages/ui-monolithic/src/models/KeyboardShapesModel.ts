@@ -1,7 +1,7 @@
-import { IKeyboardShape } from '~shared/defs/ProfileData';
-import { backendAgent } from '~ui/core';
-import { ProjectResourceModel } from '~ui/models/ProjectResourceModel';
-import { UiStatusModel } from '~ui/models/UiStatusModel';
+import { IKeyboardShape } from '@kermite/shared';
+import { ipcAgent } from '@kermite/ui';
+import { ProjectResourceModel } from '~/models/ProjectResourceModel';
+import { UiStatusModel } from '~/models/UiStatusModel';
 
 export class KeyboardShapesModel {
   constructor(
@@ -37,7 +37,7 @@ export class KeyboardShapesModel {
   }
 
   private async loadCurrentProjectLayout() {
-    this._loadedShape = await backendAgent.loadKeyboardShape(
+    this._loadedShape = await ipcAgent.async.projects_loadKeyboardShape(
       this._currentProjectId,
       this._currentLayoutName,
     );
@@ -67,7 +67,10 @@ export class KeyboardShapesModel {
   };
 
   initialize() {
-    backendAgent.layoutFileUpdationEvents.subscribe(this.onLayoutFileUpdated);
+    ipcAgent.subscribe2(
+      'projects_layoutFileUpdationEvents',
+      this.onLayoutFileUpdated,
+    );
 
     this._currentProjectId =
       this.uiStatusModel.settings.shapeViewProjectId ||
@@ -85,6 +88,9 @@ export class KeyboardShapesModel {
   }
 
   finalize() {
-    backendAgent.layoutFileUpdationEvents.unsubscribe(this.onLayoutFileUpdated);
+    ipcAgent.unsubscribe2(
+      'projects_layoutFileUpdationEvents',
+      this.onLayoutFileUpdated,
+    );
   }
 }

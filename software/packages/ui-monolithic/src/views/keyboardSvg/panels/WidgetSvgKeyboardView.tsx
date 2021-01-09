@@ -1,8 +1,8 @@
+import { linerInterpolateValue } from '@kermite/shared';
 import { css } from 'goober';
-import { linerInterpolateValue } from '~shared/funcs/Utils';
-import { IWidgetKeyboardViewViewModel } from '~ui/viewModels/WidgetMainPageViewModel';
+import { h } from 'qx';
+import { IWidgetKeyboardViewViewModel } from '~/viewModels/WidgetMainPageViewModel';
 import { WidgetKeyUnitCardsPart } from '../organisms/WidgetKeyUnitCardsPart';
-import { h } from '~qx';
 
 export function WidgetSvgKeyboardView({
   vm,

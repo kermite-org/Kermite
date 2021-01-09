@@ -1,13 +1,13 @@
+import { reflectFieldChecked } from '@kermite/ui';
 import { css } from 'goober';
+import { h } from 'qx';
 import {
   ClosableOverlay,
   CommonDialogFrame,
-} from '~ui/base/dialog/CommonDialogParts';
-import { reflectFieldChecked } from '~ui/base/helper/FormHelpers';
-import { models } from '~ui/models';
+} from '~/base/dialog/CommonDialogParts';
+import { models } from '~/models';
 import { AssignTypeSelectionPart } from './AssignTypeSelectionPart';
 import { DualModeSettingsPart } from './DualModeSettingsPart';
-import { h } from '~qx';
 
 const ShiftCancelOptionPart = () => {
   const { settings } = models.editorModel.profileData;

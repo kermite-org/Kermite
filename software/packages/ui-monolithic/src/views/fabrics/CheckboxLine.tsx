@@ -1,5 +1,5 @@
-import { reflectChecked } from '~ui/base/helper/FormHelpers';
-import { h } from '~qx';
+import { reflectChecked } from '@kermite/ui';
+import { h } from 'qx';
 
 export const CheckboxLine = (props: {
   text: string;

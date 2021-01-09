@@ -1,8 +1,8 @@
+import { uiTheme } from '@kermite/ui';
 import { css } from 'goober';
-import { uiTheme } from '~ui/core';
-import { makeFirmwareUpdationPageViewModel } from '~ui/viewModels/FirmwareUpdationPageViewModel';
-import { GeneralSelector } from '~ui/views/controls/GeneralSelector';
-import { h } from '~qx';
+import { h } from 'qx';
+import { makeFirmwareUpdationPageViewModel } from '~/viewModels/FirmwareUpdationPageViewModel';
+import { GeneralSelector } from '~/views/controls/GeneralSelector';
 
 const cssFirmwareUpdationPage = css`
   background: ${uiTheme.colors.clBackground};

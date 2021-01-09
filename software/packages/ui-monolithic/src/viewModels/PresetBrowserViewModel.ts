@@ -1,5 +1,5 @@
-import { models } from '~ui/models';
-import { ISelectorSource } from '~ui/viewModels/viewModelInterfaces';
+import { models } from '~/models';
+import { ISelectorSource } from '~/viewModels/viewModelInterfaces';
 import {
   IPresetKeyboardViewModel,
   makePresetKeyboardViewModel,

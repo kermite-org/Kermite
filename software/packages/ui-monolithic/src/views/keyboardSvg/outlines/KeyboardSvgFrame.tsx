@@ -1,6 +1,6 @@
+import { IKeyboardShapeDisplayArea } from '@kermite/shared';
 import { css } from 'goober';
-import { IKeyboardShapeDisplayArea } from '~shared/defs/ProfileData';
-import { h } from '~qx';
+import { h } from 'qx';
 
 function getViewBox(da: IKeyboardShapeDisplayArea) {
   const left = da.centerX - da.width / 2;

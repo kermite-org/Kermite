@@ -3,11 +3,11 @@ import {
   IProfileManagerStatus,
   IKeyboardConfig,
   IRealtimeKeyboardEvent,
+  IntervalTimerWrapper,
 } from '@kermite/shared';
 import { ProfileManager } from '~/services/profile/ProfileManager/ProfileManager';
 import { KeyboardConfigProvider } from '~/services0/KeyboardConfigProvider';
 import { KeyboardDeviceService } from '~/services0/KeyboardDevice';
-import { IntervalTimerWrapper } from '../helpers/IntervalTimerWrapper';
 import { getKeyboardCoreLogicInterface } from './DeviceCoreLogicSimulator2_Dual';
 import { makeKeyAssignsConfigStorageData } from './ProfileDataBinaryPacker';
 

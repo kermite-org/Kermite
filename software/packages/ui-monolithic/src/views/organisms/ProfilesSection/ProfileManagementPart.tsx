@@ -1,15 +1,15 @@
 import { css } from 'goober';
-import { makeProfileManagementPartViewModel } from '~ui/viewModels/ProfileManagementPartViewModel';
-import { makeProfileSelectionMenuPartViewModel } from '~ui/viewModels/ProfileSelectionMenuPartViewModel';
-import { ConfigurationButton } from '~ui/views/controls/ConfigurationButton';
-import { LaunchButton } from '~ui/views/controls/LaunchButton';
-import { KeyboardProfileSelector } from '~ui/views/fabrics/KeyboardProfileSelector';
+import { h } from 'qx';
+import { makeProfileManagementPartViewModel } from '~/viewModels/ProfileManagementPartViewModel';
+import { makeProfileSelectionMenuPartViewModel } from '~/viewModels/ProfileSelectionMenuPartViewModel';
+import { ConfigurationButton } from '~/views/controls/ConfigurationButton';
+import { LaunchButton } from '~/views/controls/LaunchButton';
+import { KeyboardProfileSelector } from '~/views/fabrics/KeyboardProfileSelector';
 import {
   BehaviorSelector,
   LayoutStandardSelector,
-} from '~ui/views/organisms/ProfilesSection/ConfigSelectors';
+} from '~/views/organisms/ProfilesSection/ConfigSelectors';
 import { ProfileSelectionMenuPart } from './ProfileSelectionMenu';
-import { h } from '~qx';
 
 const cssProfileManagementPart = css`
   /* background: #024; */

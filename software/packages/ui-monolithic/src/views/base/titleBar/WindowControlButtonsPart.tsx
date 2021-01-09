@@ -1,8 +1,8 @@
 import { css } from 'goober';
-import { ITitleBarViewModel } from '~ui/viewModels/TitleBarViewModel';
+import { h } from 'qx';
+import { ITitleBarViewModel } from '~/viewModels/TitleBarViewModel';
 import { WindowControlButton } from './WindowControlButton';
 import { WindowRestartButton } from './WindowRestartButton';
-import { h } from '~qx';
 
 export const WindowControlButtonsPart = ({
   vm,
@@ -24,23 +24,16 @@ export const WindowControlButtonsPart = ({
       <WindowControlButton
         icon="fa fa-feather-alt"
         onClick={vm.onWidgetButton}
-        qxOptimizer="deepEqual"
       />
       <WindowControlButton
         icon="fa fa-window-minimize"
         onClick={vm.onMinimizeButton}
-        qxOptimizer="deepEqual"
       />
       <WindowControlButton
         icon="fa fa-window-maximize"
         onClick={vm.onMaximizeButton}
-        qxOptimizer="deepEqual"
       />
-      <WindowControlButton
-        icon="fa fa-times"
-        onClick={vm.onCloseButton}
-        qxOptimizer="deepEqual"
-      />
+      <WindowControlButton icon="fa fa-times" onClick={vm.onCloseButton} />
     </div>
   );
 };

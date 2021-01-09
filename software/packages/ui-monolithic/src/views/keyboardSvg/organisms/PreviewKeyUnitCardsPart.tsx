@@ -1,6 +1,6 @@
-import { IKeyUnitEntry } from '~shared/defs/ProfileData';
+import { IKeyUnitEntry } from '@kermite/shared';
+import { h } from 'qx';
 import { PreviewKeyUnitCard } from '../molecules/PreviewKeyUnitCard';
-import { h } from '~qx';
 
 export const PreviewKeyUnitCardsPart = (props: {
   keyUnits: IKeyUnitEntry[];
@@ -17,7 +17,7 @@ export const PreviewKeyUnitCardsPart = (props: {
           key={keyUnit.id}
           showKeyId={showKeyId}
           showKeyIndex={showKeyIndex}
-          qxOptimizer="deepEqual"
+          // qxOptimizer="deepEqual"
         />
       ))}
     </g>

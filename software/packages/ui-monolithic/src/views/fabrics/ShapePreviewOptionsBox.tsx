@@ -1,7 +1,7 @@
+import { reflectFieldChecked } from '@kermite/ui';
 import { css } from 'goober';
-import { reflectFieldChecked } from '~ui/base/helper/FormHelpers';
-import { IUiSettings } from '~ui/models/UiStatusModel';
-import { h } from '~qx';
+import { h } from 'qx';
+import { IUiSettings } from '~/models/UiStatusModel';
 
 interface IDisplayOptionSource {
   fieldKey: keyof IUiSettings;

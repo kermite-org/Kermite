@@ -1,7 +1,7 @@
+import { uiTheme } from '@kermite/ui';
 import { css } from 'goober';
-import { uiTheme } from '~ui/core';
-import { IKeyUnitCardViewModel } from '~ui/viewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
-import { h } from '~qx';
+import { h } from 'qx';
+import { IKeyUnitCardViewModel } from '~/viewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
 
 const cssKeyRect = css`
   cursor: pointer;

@@ -1,7 +1,7 @@
-import { models } from '~ui/models';
-import { makeKeyUnitCardsPartViewModel } from '~ui/viewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
+import { h } from 'qx';
+import { models } from '~/models';
+import { makeKeyUnitCardsPartViewModel } from '~/viewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
 import { EditKeyUnitCard } from '../molecules/EditKeyUnitCard';
-import { h } from '~qx';
 
 export function EditKeyUnitCardsPart() {
   const vm = makeKeyUnitCardsPartViewModel(true, models);
@@ -12,7 +12,7 @@ export function EditKeyUnitCardsPart() {
           keyUnit={keyUnit}
           key={keyUnit.keyUnitId}
           showLayerDefaultAssign={vm.showLayerDefaultAssign}
-          qxOptimizer="deepEqualExFn"
+          // qxOptimizer="deepEqualExFn"
         />
       ))}
     </g>

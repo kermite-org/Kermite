@@ -1,7 +1,6 @@
-import { IRealtimeKeyboardEvent } from '~shared/defs/IpcContract';
-import { IntervalTimerWrapper } from '~shell/services/KeyboardLogic/helpers/IntervalTimerWrapper';
-import { appUi, backendAgent } from '~ui/core';
-import { EditorModel } from '~ui/models/editor/EditorModel';
+import { IntervalTimerWrapper, IRealtimeKeyboardEvent } from '@kermite/shared';
+import { appUi, ipcAgent } from '@kermite/ui';
+import { EditorModel } from '~/models/editor/EditorModel';
 
 export class RealtimeHeatmapModel {
   constructor(private editorModel: EditorModel) {}
@@ -68,10 +67,10 @@ export class RealtimeHeatmapModel {
   };
 
   initialize() {
-    backendAgent.keyEvents.subscribe(this.handleKeyboardEvent);
+    ipcAgent.subscribe2('device_keyEvents', this.handleKeyboardEvent);
   }
 
   finalize() {
-    backendAgent.keyEvents.unsubscribe(this.handleKeyboardEvent);
+    ipcAgent.unsubscribe2('device_keyEvents', this.handleKeyboardEvent);
   }
 }

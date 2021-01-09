@@ -1,9 +1,9 @@
+import { uiTheme } from '@kermite/ui';
 import { css } from 'goober';
-import { uiTheme } from '~ui/core';
-import { makeAssignEditSectionViewModel } from '~ui/viewModels/Editor/AssignEditSectionViewModel';
+import { h } from 'qx';
+import { makeAssignEditSectionViewModel } from '~/viewModels/Editor/AssignEditSectionViewModel';
 import { OpertionEditPart } from './OperationEditPart';
 import { OerationSlotsPart } from './OperationSlotsPart';
-import { h } from '~qx';
 
 const cssAssignEditSection = css`
   flex-grow: 1;

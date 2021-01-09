@@ -1,7 +1,7 @@
+import { uiTheme } from '@kermite/ui';
 import { css } from 'goober';
-import { uiTheme } from '~ui/core';
-import { IProfileSelectionMenuPartViewModel } from '~ui/viewModels/ProfileSelectionMenuPartViewModel';
-import { h } from '~qx';
+import { h } from 'qx';
+import { IProfileSelectionMenuPartViewModel } from '~/viewModels/ProfileSelectionMenuPartViewModel';
 
 const cssProfileSelectionMenuPart = css``;
 

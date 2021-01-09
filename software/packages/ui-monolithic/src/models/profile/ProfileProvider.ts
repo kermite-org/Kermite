@@ -1,6 +1,5 @@
-import { IProfileManagerStatus } from '~shared/defs/IpcContract';
-import { IProfileData } from '~shared/defs/ProfileData';
-import { backendAgent, sendIpcPacketSync } from '~ui/core';
+import { IProfileManagerStatus, IProfileData } from '@kermite/shared';
+import { ipcAgent } from '@kermite/ui';
 
 type IListener = (profile: Partial<IProfileManagerStatus>) => void;
 
@@ -12,7 +11,7 @@ export class ProfileProvider {
   }
 
   saveProfileOnClosing(profileData: IProfileData) {
-    sendIpcPacketSync({ reserveSaveProfileTask: profileData });
+    ipcAgent.sync.profile_reserveSaveProfileTask(profileData);
   }
 
   private onProfileChanged = (payload: Partial<IProfileManagerStatus>) => {
@@ -20,10 +19,13 @@ export class ProfileProvider {
   };
 
   initialize() {
-    backendAgent.profileStatusEvents.subscribe(this.onProfileChanged);
+    ipcAgent.subscribe2('profile_profileManagerStatus', this.onProfileChanged);
   }
 
   finalize() {
-    backendAgent.profileStatusEvents.unsubscribe(this.onProfileChanged);
+    ipcAgent.unsubscribe2(
+      'profile_profileManagerStatus',
+      this.onProfileChanged,
+    );
   }
 }

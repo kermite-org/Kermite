@@ -1,10 +1,10 @@
 import { css } from 'goober';
+import { h } from 'qx';
 import { GeneralButton } from '../controls/GeneralButton';
 import {
   GeneralSelector,
   IGeneralSelectorProps,
 } from '../controls/GeneralSelector';
-import { h } from '~qx';
 
 const testOptions: IGeneralSelectorProps['options'] = [
   { id: '', text: 'no-user' },

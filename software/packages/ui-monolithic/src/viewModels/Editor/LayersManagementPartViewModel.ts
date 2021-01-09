@@ -1,10 +1,10 @@
-import { removeArrayItems } from '~shared/funcs/Utils';
-import { modalConfirm } from '~ui/base/dialog/BasicModals';
-import { models } from '~ui/models';
+import { removeArrayItems } from '@kermite/shared';
+import { modalConfirm } from '~/base/dialog/BasicModals';
+import { models } from '~/models';
 import {
-  callLayerConfigurationModal,
   ILayerConfigurationModelEditValues,
-} from '~ui/views/modals/LayerConfigurationModal';
+  callLayerConfigurationModal,
+} from '~/views/modals/LayerConfigurationModal';
 
 export interface ILayerManagementPartViewModel {
   canShiftBackCurrentLayer: boolean;

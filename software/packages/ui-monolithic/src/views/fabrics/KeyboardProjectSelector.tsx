@@ -1,8 +1,8 @@
 import { css } from 'goober';
-import { ISelectorSource } from '~ui/viewModels/viewModelInterfaces';
+import { h } from 'qx';
+import { ISelectorSource } from '~/viewModels/viewModelInterfaces';
 import { GeneralButton } from '../controls/GeneralButton';
 import { GeneralSelector } from '../controls/GeneralSelector';
-import { h } from '~qx';
 
 interface IKeyboardProjectSelectorProps {
   selectorSource: ISelectorSource;

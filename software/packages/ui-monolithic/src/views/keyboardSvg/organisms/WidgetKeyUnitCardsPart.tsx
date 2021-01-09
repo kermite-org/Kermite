@@ -1,6 +1,6 @@
-import { IKeyUnitCardPartViewModel } from '~ui/viewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
+import { h } from 'qx';
+import { IKeyUnitCardPartViewModel } from '~/viewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
 import { WidgetKeyUnitCard } from '../molecules/WidgetKeyUnitCard';
-import { h } from '~qx';
 
 export function WidgetKeyUnitCardsPart(props: {
   vm: IKeyUnitCardPartViewModel;
@@ -11,7 +11,7 @@ export function WidgetKeyUnitCardsPart(props: {
         <WidgetKeyUnitCard
           keyUnit={keyUnit}
           key={keyUnit.keyUnitId}
-          qxOptimizer="deepEqualExFn"
+          // qxOptimizer="deepEqualExFn"
         />
       ))}
     </g>

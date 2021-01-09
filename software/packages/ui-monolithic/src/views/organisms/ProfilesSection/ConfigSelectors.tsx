@@ -1,10 +1,10 @@
 import {
   IKeyboardBehaviorMode,
   IKeyboardLayoutStandard,
-} from '~shared/defs/ConfigTypes';
-import { models } from '~ui/models';
-import { DualItemsHoverSelector } from '~ui/views/fabrics/DualItemHoverSelector';
-import { h } from '~qx';
+} from '@kermite/shared';
+import { h } from 'qx';
+import { models } from '~/models';
+import { DualItemsHoverSelector } from '~/views/fabrics/DualItemHoverSelector';
 
 export const BehaviorSelector = () => {
   const modes: IKeyboardBehaviorMode[] = ['Standalone', 'SideBrain'];

@@ -1,8 +1,8 @@
+import { uiTheme } from '@kermite/ui';
 import { css } from 'goober';
-import { ViewModelProps } from '~ui/base/helper/mvvmHelpers';
-import { uiTheme } from '~ui/core';
-import { IPrsetLayerListViewModel } from '~ui/viewModels/PresetKeyboardViewModel';
-import { h } from '~qx';
+import { h } from 'qx';
+import { ViewModelProps } from '~/base/helper/mvvmHelpers';
+import { IPrsetLayerListViewModel } from '~/viewModels/PresetKeyboardViewModel';
 
 const PresetLayerItem = (props: {
   layerName: string;

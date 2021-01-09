@@ -1,6 +1,6 @@
+import { ILayerDefaultScheme } from '@kermite/shared';
 import { css } from 'goober';
-import { ILayerDefaultScheme } from '~shared/defs/ProfileData';
-import { h } from '~qx';
+import { h } from 'qx';
 
 export const DefaultSchemeButton = (props: {
   value: ILayerDefaultScheme;

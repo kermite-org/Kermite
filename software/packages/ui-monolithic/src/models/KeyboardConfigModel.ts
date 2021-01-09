@@ -1,15 +1,15 @@
 import {
   IKeyboardBehaviorMode,
   IKeyboardLayoutStandard,
-} from '~shared/defs/ConfigTypes';
-import { backendAgent } from '~ui/core';
+} from '@kermite/shared';
+import { ipcAgent } from '@kermite/ui';
 
 export class KeyboardConfigModel {
   behaviorMode: IKeyboardBehaviorMode = 'Standalone';
   layoutStandard: IKeyboardLayoutStandard = 'US';
 
   async loadKeyboardConfig() {
-    const keyboardConfig = await backendAgent.getKeyboardConfig();
+    const keyboardConfig = await ipcAgent.async.config_getKeyboardConfig();
     const { behaviorMode, layoutStandard } = keyboardConfig;
     this.behaviorMode = behaviorMode;
     this.layoutStandard = layoutStandard;
@@ -17,12 +17,12 @@ export class KeyboardConfigModel {
 
   writeConfigurationToDevice() {
     const { behaviorMode, layoutStandard } = this;
-    backendAgent.writeKeyboardConfig({
+    ipcAgent.async.config_writeKeyboardConfig({
       behaviorMode,
       layoutStandard,
     });
     if (behaviorMode === 'Standalone') {
-      backendAgent.writeKeyMappingToDevice();
+      ipcAgent.async.config_writeKeyMappingToDevice();
     }
   }
 
