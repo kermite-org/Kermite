@@ -57,7 +57,6 @@ export function getIpcRendererAgent<
           return new Promise((resolve) => {
             const res = ipcRenderer.invoke(key, ...args);
             resolve(res);
-            console.log('postProcessHook on async ipc end process');
             postProcessHook?.();
           });
         },
