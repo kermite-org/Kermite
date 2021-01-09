@@ -22,6 +22,12 @@ export const ProfileSelector = () => {
     );
   }, []);
 
+  // Hook.useEffect(() => {
+  //   return ipcAgent.subscribe('profile_currentProfile', (prof) =>
+  //     console.log({ prof }),
+  //   );
+  // }, []);
+
   const onSelectionChange = (selName: string) => {
     ipcAgent.async.profile_executeProfileManagerCommands([
       { loadProfile: { name: selName } },

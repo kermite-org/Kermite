@@ -1,13 +1,19 @@
+import { removeArrayItems } from '@kermite/shared';
+
+type IListener<T> = (payload: T) => void;
 export interface IListnerPort<T> {
-  (listener: (payload: T) => void): void;
+  (listener: IListener<T>): () => void;
   emit(payload: T): void;
 }
 
 export function makeListnerPort<T>(): IListnerPort<T> {
-  let listner: ((payload: T) => void) | undefined;
-  const func = (_listner: (payload: T) => void) => {
-    listner = _listner;
+  const listeners: IListener<T>[] = [];
+  const func = (listener: IListener<T>): (() => void) => {
+    listeners.push(listener);
+    return () => removeArrayItems(listeners, listener);
   };
-  func.emit = (payload: T) => listner?.(payload);
+  func.emit = (payload: T) => {
+    listeners.forEach((listener) => listener(payload));
+  };
   return func;
 }

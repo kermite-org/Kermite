@@ -1,5 +1,6 @@
-import { overwriteObjectProps } from '@kermite/shared';
-import Store from 'electron-store';
+import { IKeyboardConfig, overwriteObjectProps } from '@kermite/shared';
+import { appEnv } from '~/base';
+import { fsExistsSync, fsxReadJsonFile, fsxWriteJsonFile } from '~/funcs';
 
 export interface IApplicationPersistData {
   pageState: {
@@ -7,44 +8,50 @@ export interface IApplicationPersistData {
     isDevToolsVisible: boolean;
   };
   currentProfileName: string | undefined;
+  keyboardConfig: IKeyboardConfig;
 }
 
+const defaultPersistData: IApplicationPersistData = {
+  pageState: {
+    currentPagePath: '/',
+    isDevToolsVisible: false,
+  },
+  currentProfileName: undefined,
+  keyboardConfig: {
+    behaviorMode: 'Standalone',
+    layoutStandard: 'US',
+  },
+};
 class ApplicationStorage {
-  private store = new Store();
-
-  _settings: IApplicationPersistData = {
-    pageState: {
-      currentPagePath: '/',
-      isDevToolsVisible: false,
-    },
-    currentProfileName: undefined,
-  };
+  private configFilePath = appEnv.resolveUserDataFilePath('data/config.json');
+  private data: IApplicationPersistData = defaultPersistData;
 
   getItem<K extends keyof IApplicationPersistData>(
     key: K,
   ): IApplicationPersistData[K] {
-    return this._settings[key];
+    return this.data[key];
   }
 
   setItem<K extends keyof IApplicationPersistData>(
     key: K,
     value: IApplicationPersistData[K],
   ) {
-    this._settings[key] = value;
+    this.data[key] = value;
   }
 
-  initialize() {
-    const dataText = this.store.get('persistData') as string;
-    if (dataText) {
-      const obj = JSON.parse(dataText);
-      overwriteObjectProps(this._settings, obj);
+  async initialize() {
+    if (fsExistsSync(this.configFilePath)) {
+      const obj = await fsxReadJsonFile(this.configFilePath);
+      overwriteObjectProps(this.data, obj);
+    } else {
+      console.log('config file not found!');
     }
   }
 
-  terminate() {
+  async terminate() {
     console.log(`saving persist state`);
-    const dataText = JSON.stringify(this._settings);
-    this.store.set('persistData', dataText);
+    await fsxWriteJsonFile(this.configFilePath, this.data);
   }
 }
+
 export const applicationStorage = new ApplicationStorage();

@@ -1,1 +1,1 @@
-export type IListenerPort<T> = (listener: (payload: T) => void) => void;
+export type IListenerPort<T> = (listener: (payload: T) => void) => () => void;

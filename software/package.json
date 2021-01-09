@@ -45,10 +45,10 @@
     "start": "cross-env NODE_ENV=development electron .",
     "clean": "rm -rf .cache",
     "typecheck": "tsc -b packages/*/tsconfig.json",
-    "lint": "eslint packages --ext .ts,.tsx"
+    "lint": "eslint packages --ext .ts,.tsx",
+    "lint:fix": "eslint packages --ext .ts,.tsx --fix"
   },
   "dependencies": {
-    "electron-store": "^6.0.1",
     "fast-equals": "^2.0.0",
     "glob": "^7.1.6",
     "goober": "^2.0.6",

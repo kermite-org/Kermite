@@ -37,14 +37,20 @@ export function getIpcRendererAgent<
         },
       },
     ) as T['async'],
-    subscribe: ((key: string, listener: any) => {
+    subscribe: ((propKey: string, listener: any) => {
+      const subsciptionKey = `${propKey}_${(Math.random() * 100000) >> 0}`; // todo GUIDのようなものを使う
       const wrapper = (event: any, value: any) => {
         listener(value);
         postProcessHook?.();
       };
-      ipcRenderer.on(key, wrapper);
-      ipcRenderer.invoke('__subscriptionStarted', key);
-      return () => ipcRenderer.removeListener(key, wrapper);
+      // console.log(`[ren] S.S ${subsciptionKey}`);
+      ipcRenderer.on(subsciptionKey, wrapper);
+      ipcRenderer.invoke(`__subscriptionStarted__${propKey}`, subsciptionKey);
+      return () => {
+        // console.log(`[ren] S.E ${subsciptionKey}`);
+        ipcRenderer.removeListener(subsciptionKey, wrapper);
+        ipcRenderer.invoke(`__subscriptionEnded__${propKey}`, subsciptionKey);
+      };
     }) as any,
     setPropsProcessHook(hook: () => void) {
       postProcessHook = hook;
