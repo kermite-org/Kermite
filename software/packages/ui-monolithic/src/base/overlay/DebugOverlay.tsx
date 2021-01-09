@@ -35,7 +35,7 @@ const cssDebugPane = css`
 `;
 
 export const DebugOverlay = (props: IDebugOverlayProps) => {
-  const state = Hook.useMemo(() => ({ visible: true }), []);
+  const state = Hook.useMemo(() => ({ visible: false }), []);
 
   const toggleVisible = () => {
     state.visible = !state.visible;
