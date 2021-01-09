@@ -29,6 +29,10 @@ export class ProfileManager {
     this.core = new ProfileManagerCore();
   }
 
+  getStatus() {
+    return this.status;
+  }
+
   getCurrentProfile(): IProfileData | undefined {
     return this.status.loadedProfileData;
   }

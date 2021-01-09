@@ -73,12 +73,14 @@ export interface IAppIpcContract {
     window_maximizeWindow(): Promise<void>;
     // widgetModeChanged(isWidgetMode: boolean): Promise<void>;
 
+    profile_executeProfileManagerCommands(
+      commands: IProfileManagerCommand[],
+    ): Promise<void>;
+
     // getKeyboardConfig(): Promise<IKeyboardConfig>;
     // writeKeyboardConfig(config: IKeyboardConfig): Promise<void>;
     // writeKeyMappingToDevice(): Promise<void>;
-    // executeProfileManagerCommands(
-    //   commands: IProfileManagerCommand[],
-    // ): Promise<void>;
+
     // loadKeyboardShape(
     //   projectId: string,
     //   layoutName: string,
@@ -98,9 +100,10 @@ export interface IAppIpcContract {
     window_appWindowEvents: IAppWindowEvent;
 
     profile_currentProfile: IProfileData | undefined;
+    profile_profileManagerStatus: Partial<IProfileManagerStatus>;
+
     // profile_currentProfileChanged: void;
     // keyEvents: IRealtimeKeyboardEvent;
-    // profile_selectionStatus: Partial<IProfileManagerStatus>;
     // profile_loadedProfileChanged: IProfileData | undefined;
     // keyboardDeviceStatusEvents: Partial<IKeyboardDeviceStatus>;
     // comPortPlugEvents: { comPortName: string | undefined };

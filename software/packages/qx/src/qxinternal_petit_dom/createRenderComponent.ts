@@ -57,7 +57,9 @@ function createRenderComponent<P extends {}>({
           typeof res === 'function' ||
           (typeof res === 'object' && 'render' in res)
         ) {
-          throw new Error('closure component is not supported anymore');
+          throw new Error(
+            `closure component is not supported anymore, used in: ${componentFn}`,
+          );
         }
         endHooks();
         doLater(() => flushHookEffects(hook));
