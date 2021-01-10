@@ -8,5 +8,8 @@
     "@kermite/shared": "*",
     "@kermite/ui": "*",
     "qx": "*"
-  }
+  },
+  "browserslist": [
+    "last 1 Chrome versions"
+  ]
 }

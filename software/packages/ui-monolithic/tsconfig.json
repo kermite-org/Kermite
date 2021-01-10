@@ -1,9 +1,23 @@
 {
-  "extends": "../tsconfig.settings.json",
+  // "extends": "../tsconfig.settings.json",  //not working with parcel
   "compilerOptions": {
-    "noEmit": true,
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "lib": ["dom", "esnext"],
     "jsx": "react",
     "jsxFactory": "h",
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+
+    "noEmit": true,
     "baseUrl": ".",
     "paths": {
       "~/*": ["./src/*"]
