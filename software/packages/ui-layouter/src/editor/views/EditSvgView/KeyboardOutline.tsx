@@ -1,10 +1,17 @@
 import { css } from 'goober';
-import { makeCssColor } from '~/base/ColorHelper';
-import { IPosition, startDragSession } from '~/base/UiInteractionHelpers';
-import { uiTheme } from '~/base/uiTheme';
-import { editMutations, editReader, IOutlinePoint } from '~/editor/store';
-import { getWorldMousePositionOnEditSvg } from '~/editor/views/EditSvgView/CoordHelpers';
-import { h, rerender } from '~/qx';
+import { rerender, h } from 'qx';
+import {
+  makeCssColor,
+  uiTheme,
+  IPosition,
+  startDragSession,
+} from '@ui-layouter/base';
+import {
+  editReader,
+  editMutations,
+  IOutlinePoint,
+} from '@ui-layouter/editor/store';
+import { getWorldMousePositionOnEditSvg } from './CoordHelpers';
 
 const cssKeyboardOutline = css`
   fill: none;
@@ -27,7 +34,7 @@ const cssOutlinePoint = css`
 
 export function startOutlinePointDragOperation(
   e: MouseEvent,
-  emitStartEdit: boolean = true
+  emitStartEdit: boolean = true,
 ) {
   const { sight, outlinePoints, currentPointIndex } = editReader;
 
@@ -158,7 +165,7 @@ export const KeyboardOutline = () => {
   const { outlinePoints } = editReader;
   const pointsSpec = outlinePoints.map(({ x, y }) => `${x}, ${y}`).join(' ');
   const vmLines = outlinePoints.map((_, idx) =>
-    makeHittestLineViewModel(idx, outlinePoints)
+    makeHittestLineViewModel(idx, outlinePoints),
   );
   return (
     <g>

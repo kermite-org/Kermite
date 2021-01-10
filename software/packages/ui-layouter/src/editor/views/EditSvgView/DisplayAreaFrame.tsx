@@ -1,7 +1,7 @@
 import { css } from 'goober';
-import { makeCssColor } from '~/base/ColorHelper';
-import { editReader } from '~/editor/store';
-import { h } from '~/qx';
+import { h } from 'qx';
+import { makeCssColor } from '@ui-layouter/base';
+import { editReader } from '@ui-layouter/editor/store';
 
 const cssDisplayAreaFrame = css`
   fill: transparent;

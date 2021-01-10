@@ -1,21 +1,18 @@
+import { rerender, Hook, h } from 'qx';
 import {
-  getRelativeMousePosition,
   IPosition,
   startDragSession,
-} from '~/base/UiInteractionHelpers';
-import { editMutations, editReader } from '~/editor/store';
-import { screenToWorld } from '~/editor/views/EditSvgView/CoordHelpers';
-import { DisplayAreaFrame } from '~/editor/views/EditSvgView/DisplayAreaFrame';
-import { FieldAxis, FieldGrid } from '~/editor/views/EditSvgView/FieldParts';
-import {
-  KeyEntityCard,
-  startKeyEntityDragOperation,
-} from '~/editor/views/EditSvgView/KeyEntityCard';
+  getRelativeMousePosition,
+} from '@ui-layouter/base';
+import { editReader, editMutations } from '@ui-layouter/editor/store';
+import { screenToWorld } from './CoordHelpers';
+import { DisplayAreaFrame } from './DisplayAreaFrame';
+import { FieldGrid, FieldAxis } from './FieldParts';
+import { KeyEntityCard, startKeyEntityDragOperation } from './KeyEntityCard';
 import {
   KeyboardOutline,
   startOutlinePointDragOperation,
-} from '~/editor/views/EditSvgView/KeyboardOutline';
-import { h, Hook, rerender } from '~/qx';
+} from './KeyboardOutline';
 
 function getViewBoxSpec() {
   const { screenW, screenH } = editReader.sight;
@@ -89,7 +86,7 @@ export const EditSvgView = () => {
   const viewBoxSpec = getViewBoxSpec();
   const transformSpec = getTransformSpec();
 
-  Hook.useSideEffect(() => {
+  Hook.useEffect(() => {
     const el = document.getElementById('domEditSvg');
     if (el) {
       el.addEventListener('contextmenu', (e) => e.preventDefault());

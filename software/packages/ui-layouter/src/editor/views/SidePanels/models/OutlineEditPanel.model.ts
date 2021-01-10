@@ -1,10 +1,10 @@
-import { filterProps } from '~/base/utils';
-import { editMutations, editReader } from '~/editor/store';
+import { Hook } from 'qx';
+import { filterProps } from '@ui-layouter/base/utils';
+import { editMutations, editReader } from '@ui-layouter/editor/store';
 import {
-  createConfigTextEditModelDynamic,
   IConfigTextEditModel,
-} from '~/editor/views/SidePanels/models/slots/ConfigTextEditModel';
-import { Hook } from '~/qx';
+  createConfigTextEditModelDynamic,
+} from '@ui-layouter/editor/views/SidePanels/models/slots/ConfigTextEditModel';
 
 interface IOutlineEditPanelModel {
   vmX: IConfigTextEditModel;
@@ -22,7 +22,7 @@ function createOutlineEditPanelModel() {
         const value = parseFloat(text);
         editMutations.setOutlinePointProp(propKey, value);
       },
-      editMutations.endEdit
+      editMutations.endEdit,
     );
   }
 

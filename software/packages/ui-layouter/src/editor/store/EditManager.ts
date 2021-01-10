@@ -1,11 +1,11 @@
-import { appState, IEditState } from '~/editor/store/AppState';
+import { appState, IEditState } from './AppState';
 
 interface IModification {
   oldState: IEditState;
   newState: IEditState;
 }
 
-export const editManager = new (class {
+class EditManager {
   private undoStack: IModification[] = [];
   private redoStack: IModification[] = [];
 
@@ -40,4 +40,5 @@ export const editManager = new (class {
       appState.editor = modification.newState;
     }
   }
-})();
+}
+export const editManager = new EditManager();

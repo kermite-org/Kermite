@@ -14,7 +14,7 @@ export interface IPosition {
 export function startDragSession(
   sourceEvent: MouseEvent,
   moveCallback: (pos: IPosition, prevPos: IPosition) => void,
-  upCallback: () => void
+  upCallback: () => void,
 ) {
   let prevPos = { x: sourceEvent.clientX, y: sourceEvent.clientY };
 

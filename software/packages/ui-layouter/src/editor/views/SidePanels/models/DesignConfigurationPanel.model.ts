@@ -1,15 +1,15 @@
-import { useClosureModel } from '~/base/hooks';
-import { ICommonSelectorViewModel } from '~/controls';
+import { useClosureModel } from '@ui-layouter/base';
+import { ICommonSelectorViewModel } from '@ui-layouter/controls';
 import {
-  editMutations,
   editReader,
-  IKeyPlacementAnchor,
+  editMutations,
   IKeySizeUnit,
-} from '~/editor/store';
+  IKeyPlacementAnchor,
+} from '@ui-layouter/editor/store';
 import {
   createConfigTextEditModel,
   IConfigTextEditModel,
-} from '~/editor/views/SidePanels/models/slots/ConfigTextEditModel';
+} from '@ui-layouter/editor/views/SidePanels/models/slots/ConfigTextEditModel';
 
 function getPlacementUnitInputTextFromModel(): string | undefined {
   const mode = editReader.coordUnitSuffix;
@@ -52,7 +52,7 @@ function createModels() {
     [/^[0-9][0-9.]*$/, /^[0-9][0-9.]* [0-9][0-9.]*$/],
     (text) => {
       editMutations.setPlacementUnit(`KP ${text}`);
-    }
+    },
   );
 
   const vmSizeUnitMode = makeSelectorModel<IKeySizeUnit>({

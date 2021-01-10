@@ -1,6 +1,6 @@
 import { css } from 'goober';
-import { uiTheme } from '~/base/uiTheme';
-import { h } from '~/qx';
+import { h } from 'qx';
+import { uiTheme } from '@ui-layouter/base';
 
 export interface IToggleButtonProps {
   active: boolean;

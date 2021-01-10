@@ -1,6 +1,6 @@
 import { css } from 'goober';
-import { appGlobal } from '~/editor/base/AppGlobal';
-import { h } from '~/qx';
+import { h } from 'qx';
+import { appGlobal } from '@ui-layouter/editor/base/AppGlobal';
 
 export const DebugOverlay = () => {
   const cssDebugOverlay = css`

@@ -1,15 +1,15 @@
+import { Hook } from 'qx';
 import {
-  editMutations,
-  editReader,
-  IEditPropKey,
   IKeyEntity,
-} from '~/editor/store';
+  IEditPropKey,
+  editReader,
+  editMutations,
+} from '@ui-layouter/editor/store';
 import {
-  AttributeSlotModel,
   IAttributeSlotSource,
+  AttributeSlotModel,
   IAttributeSlotViewModel,
-} from '~/editor/views/SidePanels/models/slots/AttributeSlotModel';
-import { Hook } from '~/qx';
+} from '@ui-layouter/editor/views/SidePanels/models/slots/AttributeSlotModel';
 
 const slotSources: IAttributeSlotSource<IKeyEntity, IEditPropKey>[] = [
   {
@@ -118,8 +118,8 @@ class KeyEntityAttrsEditorModel {
         ss,
         editMutations.startKeyEdit,
         editMutations.changeKeyProperty,
-        editMutations.endKeyEdit
-      )
+        editMutations.endKeyEdit,
+      ),
   );
 
   get allSlots() {

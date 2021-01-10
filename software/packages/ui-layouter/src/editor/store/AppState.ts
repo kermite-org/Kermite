@@ -1,9 +1,9 @@
-import { createDictionaryFromKeyValues } from '~/base/utils';
+import { createDictionaryFromKeyValues } from '@kermite/shared';
 import {
+  IPersistentKeyboardDesign,
   IKeyboardDesign,
   IKeyEntity,
-  IPersistentKeyboardDesign,
-} from '~/editor/store/DataSchema';
+} from './DataSchema';
 
 const initialDesignSource: IPersistentKeyboardDesign = {
   placementUnit: 'mm',
@@ -55,7 +55,7 @@ export function createDefaultKeyboardDesign(): IKeyboardDesign {
       source.keyEntities.map((ke) => {
         const id = `ke${cnt++}`;
         return [id, { ...ke, id }];
-      })
+      }),
     ),
   };
 }

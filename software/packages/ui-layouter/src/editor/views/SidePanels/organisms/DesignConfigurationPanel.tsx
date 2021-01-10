@@ -1,9 +1,12 @@
 import { css } from 'goober';
-import { ExclusiveButtonGroup, ICommonSelectorViewModel } from '~/controls';
-import { GeneralConfigTextEditRow } from '~/editor/views/SidePanels/controls/GeneralConfigTextEditRow';
-import { useDesignConfigurationPanelModel } from '~/editor/views/SidePanels/models/DesignConfigurationPanel.model';
-import { IConfigTextEditModel } from '~/editor/views/SidePanels/models/slots/ConfigTextEditModel';
-import { h } from '~/qx';
+import { h } from 'qx';
+import {
+  ExclusiveButtonGroup,
+  ICommonSelectorViewModel,
+} from '@ui-layouter/controls';
+import { GeneralConfigTextEditRow } from '@ui-layouter/editor/views/SidePanels/controls/GeneralConfigTextEditRow';
+import { useDesignConfigurationPanelModel } from '@ui-layouter/editor/views/SidePanels/models/DesignConfigurationPanel.model';
+import { IConfigTextEditModel } from '@ui-layouter/editor/views/SidePanels/models/slots/ConfigTextEditModel';
 
 const cssUnitEditPart = css`
   > .headerRow {

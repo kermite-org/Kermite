@@ -1,7 +1,7 @@
 import { css } from 'goober';
-import { GeneralConfigTextEditRow } from '~/editor/views/SidePanels/controls/GeneralConfigTextEditRow';
-import { useKeyEntityEditPanelModel } from '~/editor/views/SidePanels/models/KeyEntityEditPanel.model';
-import { h } from '~/qx';
+import { h } from 'qx';
+import { GeneralConfigTextEditRow } from '@ui-layouter/editor/views/SidePanels/controls/GeneralConfigTextEditRow';
+import { useKeyEntityEditPanelModel } from '@ui-layouter/editor/views/SidePanels/models/KeyEntityEditPanel.model';
 
 const cssKeyEntityEditPanel = css`
   padding: 10px;

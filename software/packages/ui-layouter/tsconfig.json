@@ -4,7 +4,8 @@
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
-      "@ui-layouter/*": ["./*"]
+      "@ui-layouter/*": ["./src/*"]
     }
-  }
+  },
+  "references": [{ "path": "../shared" }, { "path": "../ui" }]
 }

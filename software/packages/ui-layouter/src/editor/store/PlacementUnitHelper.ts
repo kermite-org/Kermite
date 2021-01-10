@@ -1,5 +1,5 @@
-import { mapObjectValues } from '~/base/utils';
-import { IKeyboardDesign, IKeySizeUnit } from '~/editor/store/DataSchema';
+import { mapObjectValues } from '@kermite/shared';
+import { IKeyboardDesign, IKeySizeUnit } from './DataSchema';
 
 export type ICoordUnit =
   | {
@@ -42,7 +42,7 @@ export function mmToUnitValue(mmX: number, mmY: number, coordUnit: ICoordUnit) {
 
 export function changePlacementCoordUnit(
   design: IKeyboardDesign,
-  newUnitSpec: string
+  newUnitSpec: string,
 ) {
   if (design.placementUnit === newUnitSpec) {
     return design;
@@ -66,7 +66,7 @@ export function keySizeValueToMm(
   w: number,
   h: number,
   keySizeUnit: IKeySizeUnit,
-  coordUnit: ICoordUnit
+  coordUnit: ICoordUnit,
 ) {
   if (keySizeUnit === 'mm') {
     return [w, h];
@@ -84,7 +84,7 @@ export function mmToKeySizeValue(
   mmW: number,
   mmH: number,
   keySizeUnit: IKeySizeUnit,
-  coordUnit: ICoordUnit
+  coordUnit: ICoordUnit,
 ) {
   if (keySizeUnit === 'mm') {
     return [mmW, mmH];
@@ -101,7 +101,7 @@ export function mmToKeySizeValue(
 export function changeKeySizeUnit(
   design: IKeyboardDesign,
   newUnit: IKeySizeUnit,
-  coordUnit: ICoordUnit
+  coordUnit: ICoordUnit,
 ) {
   if (design.keySizeUnit === newUnit) {
     return design;
@@ -135,7 +135,7 @@ export function changeKeySizeUnit(
 export function getStdKeySize(
   shapeSpec: string,
   coordUnit: ICoordUnit,
-  sizeUnit: IKeySizeUnit
+  sizeUnit: IKeySizeUnit,
 ) {
   if (shapeSpec.startsWith('std')) {
     const [, p1, p2] = shapeSpec.split(' ');

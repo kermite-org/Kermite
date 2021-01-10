@@ -59,7 +59,7 @@ export class AttributeSlotModel<T, K extends keyof T = keyof T> {
     private source: IAttributeSlotSource<T, K>,
     private procStartEdit: () => void,
     private procChangeEditValue: (propKey: K, value: T[K]) => void,
-    private procEndEdit: () => void
+    private procEndEdit: () => void,
   ) {}
 
   private pullModelValue(targetObject: T | undefined) {

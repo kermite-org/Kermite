@@ -1,5 +1,6 @@
+/*
 export function createDictionaryFromKeyValues<T>(
-  src: [string, T][]
+  src: [string, T][],
 ): { [key in string]: T } {
   const obj: { [key in string]: T } = {};
   src.forEach(([k, v]) => {
@@ -15,6 +16,7 @@ export function compareObjectByJsonStringify(a: any, b: any) {
 export function duplicateObjectByJsonStringifyParse<T>(obj: T): T {
   return JSON.parse(JSON.stringify(obj));
 }
+*/
 
 export function clamp(val: number, lo: number, hi: number) {
   if (val < lo) {
@@ -32,11 +34,12 @@ export function getDist(x0: number, y0: number, x1: number, y1: number) {
   return Math.sqrt(dx * dx + dy * dy);
 }
 
+/*
 export function mapObjectValues<P, Q>(
   src: {
     [key: string]: P;
   },
-  proc: (value: P) => Q
+  proc: (value: P) => Q,
 ): { [key: string]: Q } {
   const dst: { [key: string]: Q } = {};
   for (const key in src) {
@@ -55,13 +58,14 @@ export function debounce(targetProc: () => void, ms: number) {
     timerId = setTimeout(targetProc, ms);
   };
 }
+*/
 
 export const degToRad = (deg: number) => (deg * Math.PI) / 180;
 export const radToDeg = (rad: number) => (rad * 180) / Math.PI;
 
 export function filterProps<T, K extends keyof T>(
   source: T,
-  propKeys: K[]
+  propKeys: K[],
 ): Pick<T, K> {
   const obj: Pick<T, K> = {} as any;
   propKeys.forEach((propKey) => {

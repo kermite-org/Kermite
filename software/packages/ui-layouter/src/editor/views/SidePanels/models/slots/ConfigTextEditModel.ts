@@ -11,7 +11,7 @@ export interface IConfigTextEditModel {
 // reflect edit value to model on blur
 export function createConfigTextEditModel(
   patterns: RegExp[],
-  textOutputFunc: (text: string) => void
+  textOutputFunc: (text: string) => void,
 ): IConfigTextEditModel {
   let originalText: string | undefined;
   let editText = '';
@@ -103,7 +103,7 @@ export function createConfigTextEditModelDynamic(
   patterns: RegExp[],
   procStartEdit: () => void,
   procEmitValidText: (text: string) => void,
-  procEndEdit: () => void
+  procEndEdit: () => void,
 ): IConfigTextEditModel {
   let originalText: string | undefined;
   let editText = '';

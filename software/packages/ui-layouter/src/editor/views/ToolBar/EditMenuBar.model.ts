@@ -1,18 +1,18 @@
-import { ISelectOption } from '~/controls';
+import { ISelectOption } from '@ui-layouter/controls';
 import {
-  editManager,
-  editMutations,
-  editReader,
-  IEnvBoolPropKey,
   IModeState,
-} from '~/editor/store';
+  editReader,
+  editMutations,
+  IEnvBoolPropKey,
+  editManager,
+} from '@ui-layouter/editor/store';
 
 function createModeSelectionViewModel<K extends 'editorTarget' | 'editMode'>(
   targetKey: K,
-  sources: { [key in IModeState[K]]?: string }
+  sources: { [key in IModeState[K]]?: string },
 ) {
   const options: ISelectOption[] = (Object.keys(
-    sources
+    sources,
   ) as IModeState[K][]).map((key) => ({
     id: key,
     text: sources[key]!,

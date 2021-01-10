@@ -1,15 +1,15 @@
-import { degToRad } from '~/base/utils';
-import { IKeyboardDesign, IKeySizeUnit } from '~/editor/store/DataSchema';
+import { degToRad } from '@ui-layouter/base/utils';
+import { IKeyboardDesign, IKeySizeUnit } from './DataSchema';
 import {
   getCoordUnitFromUnitSpec,
   getStdKeySize,
   ICoordUnit,
-} from '~/editor/store/PlacementUnitHelper';
+} from './PlacementUnitHelper';
 
 function getKeySize(
   shapeSpec: string,
   coordUnit: ICoordUnit,
-  keySizeUnit: IKeySizeUnit
+  keySizeUnit: IKeySizeUnit,
 ) {
   if (shapeSpec === 'ext circle') {
     return [18, 18];

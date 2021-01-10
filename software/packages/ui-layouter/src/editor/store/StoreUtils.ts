@@ -1,6 +1,6 @@
 export function createSimpleSelector<TSource, TResult>(
   sourceReader: () => TSource,
-  transformer: (source: TSource) => TResult
+  transformer: (source: TSource) => TResult,
 ): () => TResult {
   let source: TSource | undefined;
   let result: TResult | undefined;

@@ -1,7 +1,7 @@
 import { css } from 'goober';
-import { editMutations, editReader } from '~/editor/store';
-import { DebugOverlay } from '~/editor/views/EditSvgView/DebugOverlay';
-import { h, Hook } from '~/qx';
+import { Hook, h } from 'qx';
+import { editReader, editMutations } from '@ui-layouter/editor/store';
+import { DebugOverlay } from './DebugOverlay';
 import { EditSvgView } from './EditSvgView';
 
 export const EditSvgViewContainer = () => {
@@ -17,7 +17,7 @@ export const EditSvgViewContainer = () => {
 
   const { screenW, screenH } = editReader.sight;
 
-  Hook.useSideEffect(() => {
+  Hook.useEffect(() => {
     const el = document.getElementById('domEditSvgOuterDiv');
     if (el) {
       const cw = el.clientWidth;

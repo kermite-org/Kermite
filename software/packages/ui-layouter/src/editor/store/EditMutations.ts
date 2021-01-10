@@ -1,4 +1,4 @@
-import { clamp } from '~/base/utils';
+import { clamp } from '@ui-layouter/base/utils';
 import {
   appState,
   createDefaultKeyboardDesign,
@@ -6,23 +6,23 @@ import {
   IEditorTarget,
   IEnvBoolPropKey,
   IModeState,
-} from '~/editor/store/AppState';
+} from './AppState';
 import {
   IEditPropKey,
   IKeyEntity,
   IKeyPlacementAnchor,
   IKeySizeUnit,
-} from '~/editor/store/DataSchema';
-import { editReader } from '~/editor/store/EditReader';
-import { editUpdator } from '~/editor/store/EditUpdator';
+} from './DataSchema';
+import { editReader } from './EditReader';
+import { editUpdator } from './EditUpdator';
 import {
   changeKeySizeUnit,
   changePlacementCoordUnit,
   mmToUnitValue,
   unitValueToMm,
-} from '~/editor/store/PlacementUnitHelper';
+} from './PlacementUnitHelper';
 
-export const editMutations = new (class {
+class EditMutations {
   startEdit = () => {
     editUpdator.startEditSession();
   };
@@ -139,7 +139,7 @@ export const editMutations = new (class {
 
   setMode<K extends 'editorTarget' | 'editMode'>(
     fieldKey: K,
-    mode: IModeState[K]
+    mode: IModeState[K],
   ) {
     editUpdator.patchEditor((state) => {
       state[fieldKey] = mode as any;
@@ -213,7 +213,7 @@ export const editMutations = new (class {
 
   changeKeyProperty = <K extends IEditPropKey>(
     propKey: K,
-    value: IKeyEntity[K]
+    value: IKeyEntity[K],
   ) => {
     editUpdator.patchEditKeyEntity((ke) => {
       ke[propKey] = value;
@@ -262,4 +262,5 @@ export const editMutations = new (class {
       env.sight.pos.y = cy;
     });
   }
-})();
+}
+export const editMutations = new EditMutations();

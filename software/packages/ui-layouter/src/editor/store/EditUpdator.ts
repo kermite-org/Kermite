@@ -1,10 +1,10 @@
+import { compareObjectByJsonStringify } from '@kermite/shared';
 import { produce } from 'immer';
-import { compareObjectByJsonStringify } from '~/base/utils';
-import { appState, IEditState, IEnvState } from '~/editor/store/AppState';
-import { IKeyEntity } from '~/editor/store/DataSchema';
-import { editManager } from '~/editor/store/EditManager';
+import { appState, IEditState, IEnvState } from './AppState';
+import { IKeyEntity } from './DataSchema';
+import { editManager } from './EditManager';
 
-export const editUpdator = new (class {
+class EditUpdator {
   patchEnvState(callback: (state: IEnvState) => void) {
     appState.env = produce(appState.env, (draft) => {
       callback(draft);
@@ -50,4 +50,6 @@ export const editUpdator = new (class {
       this.originalEditState = undefined;
     }
   }
-})();
+}
+
+export const editUpdator = new EditUpdator();

@@ -1,7 +1,7 @@
+import { reflectValue } from '@kermite/ui';
 import { css } from 'goober';
-import { reflectValue } from '~/base/FormHelpers';
-import { styleWidthSpec } from '~/base/ViewHelpers';
-import { h } from '~/qx';
+import { h } from 'qx';
+import { styleWidthSpec } from '@ui-layouter/base';
 
 interface IProps {
   editText: string;

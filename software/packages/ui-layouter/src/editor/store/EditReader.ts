@@ -1,13 +1,10 @@
-import { appState, IEnvBoolPropKey, IModeState } from '~/editor/store/AppState';
-import { getKeyboardDesignBoundingBox } from '~/editor/store/BoundingBoxCalculator';
-import { IKeyEntity } from '~/editor/store/DataSchema';
-import {
-  getCoordUnitFromUnitSpec,
-  ICoordUnit,
-} from '~/editor/store/PlacementUnitHelper';
-import { createSimpleSelector } from '~/editor/store/StoreUtils';
+import { appState, IEnvBoolPropKey, IModeState } from './AppState';
+import { getKeyboardDesignBoundingBox } from './BoundingBoxCalculator';
+import { IKeyEntity } from './DataSchema';
+import { getCoordUnitFromUnitSpec, ICoordUnit } from './PlacementUnitHelper';
+import { createSimpleSelector } from './StoreUtils';
 
-export const editReader = new (class {
+class EditReader {
   get editorTarget() {
     return appState.editor.editorTarget;
   }
@@ -30,7 +27,7 @@ export const editReader = new (class {
 
   private coordUnitSelector = createSimpleSelector(
     () => appState.editor.design.placementUnit,
-    getCoordUnitFromUnitSpec
+    getCoordUnitFromUnitSpec,
   );
 
   get coordUnit(): ICoordUnit {
@@ -89,7 +86,7 @@ export const editReader = new (class {
 
   private displayAreaSelector = createSimpleSelector(
     () => appState.editor.design,
-    getKeyboardDesignBoundingBox
+    getKeyboardDesignBoundingBox,
   );
 
   get dispalyArea() {
@@ -127,4 +124,5 @@ export const editReader = new (class {
   get showKeyIndex() {
     return appState.env.showKeyIndex;
   }
-})();
+}
+export const editReader = new EditReader();

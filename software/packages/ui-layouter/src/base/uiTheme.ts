@@ -1,4 +1,4 @@
-import { makeCssColor } from '~/base/ColorHelper';
+import { makeCssColor } from './ColorHelper';
 
 const primaryBase = 0x00aa88;
 // const primaryBase = 0x0088ff;

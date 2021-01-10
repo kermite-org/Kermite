@@ -1,11 +1,13 @@
 import { css } from 'goober';
-import { IPosition, startDragSession } from '~/base/UiInteractionHelpers';
-import { editMutations, editReader, IKeyEntity } from '~/editor/store';
+import { rerender, h } from 'qx';
+import { IPosition, startDragSession } from '@ui-layouter/base';
 import {
-  getStdKeySize,
+  editReader,
   unitValueToMm,
-} from '~/editor/store/PlacementUnitHelper';
-import { h, rerender } from '~/qx';
+  editMutations,
+  IKeyEntity,
+  getStdKeySize,
+} from '@ui-layouter/editor/store';
 
 let temporaryChangingModeAddToMove = false;
 

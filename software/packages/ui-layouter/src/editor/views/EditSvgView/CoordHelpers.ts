@@ -1,4 +1,4 @@
-import { editReader } from '~/editor/store';
+import { editReader } from '@ui-layouter/editor/store';
 
 export function screenToWorld(sx: number, sy: number): [x: number, y: number] {
   const { sight } = editReader;
@@ -8,7 +8,7 @@ export function screenToWorld(sx: number, sy: number): [x: number, y: number] {
 }
 
 export function getWorldMousePositionOnEditSvg(
-  e: MouseEvent
+  e: MouseEvent,
 ): [x: number, y: number] {
   const svg = (e.currentTarget as SVGPolygonElement).closest('svg')!;
   const bounds = svg.getBoundingClientRect();

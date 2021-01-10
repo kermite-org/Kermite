@@ -1,8 +1,8 @@
-import { editReader } from '~/editor/store';
-import { DesignConfigurationPanel } from '~/editor/views/SidePanels/organisms/DesignConfigurationPanel';
-import { KeyEntityEditPanel } from '~/editor/views/SidePanels/organisms/KeyEntityEditPanel';
-import { OutlineEditPanel } from '~/editor/views/SidePanels/organisms/OutlineEditPanel';
-import { h } from '~/qx';
+import { h } from 'qx';
+import { editReader } from '@ui-layouter/editor/store';
+import { DesignConfigurationPanel } from '@ui-layouter/editor/views/SidePanels/organisms/DesignConfigurationPanel';
+import { KeyEntityEditPanel } from '@ui-layouter/editor/views/SidePanels/organisms/KeyEntityEditPanel';
+import { OutlineEditPanel } from '@ui-layouter/editor/views/SidePanels/organisms/OutlineEditPanel';
 
 function getPanelContentComponent() {
   const { editorTarget } = editReader;
