@@ -1,0 +1,2 @@
+based on petit-dom
+https://github.com/yelouafi/petit-dom

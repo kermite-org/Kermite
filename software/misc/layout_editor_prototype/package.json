@@ -1,0 +1,15 @@
+{
+  "name": "layout_editor_proto",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "parcel src/index.html -p 3000 --no-autoinstall"
+  },
+  "dependencies": {
+    "goober": "^2.0.18",
+    "immer": "^8.0.0",
+    "parcel": "^1.12.4",
+    "preact": "^10.5.7"
+  }
+}
