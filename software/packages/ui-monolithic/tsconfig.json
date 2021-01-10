@@ -2,10 +2,13 @@
   "extends": "../tsconfig.settings.json",
   "compilerOptions": {
     "noEmit": true,
+    "rootDir": "..",
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["./src/*"],
+      "@ui-layouter": ["../ui-layouter"]
     }
   },
+  "include": ["./src/**/*", "../ui-layouter/**/*"],
   "references": [{ "path": "../shared" }, { "path": "../ui" }]
 }

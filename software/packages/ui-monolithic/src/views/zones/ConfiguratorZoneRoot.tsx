@@ -1,6 +1,7 @@
 import { uiTheme } from '@kermite/ui';
 import { css } from 'goober';
 import { h } from 'qx';
+import { UiLayouterComponent } from '@ui-layouter';
 import { models } from '~/models';
 import { CustomWindowFrame } from '~/views/base/window/CustomWindowFrame';
 import { HeatmapPage } from '~/views/pages/HeatmapPage';
@@ -31,6 +32,7 @@ export const ConfiguratorZoneRoot = () => {
       <div css={styles.cssContentRow}>
         <NavigationColumn />
         <div css={styles.cssMainColumn}>
+          <UiLayouterComponent />
           {page === 'editor' && <EditorPage />}
           {page === 'shapePreview' && <KeyboardShapePreviewPage />}
           {page === 'firmwareUpdation' && <FirmwareUpdationPage />}
