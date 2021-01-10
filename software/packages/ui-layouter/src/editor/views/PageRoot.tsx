@@ -6,6 +6,8 @@ import { EditMenuBar } from '@ui-layouter/editor/views/ToolBar/EditMenuBar';
 
 const cssPageRoot = css`
   border: solid 2px #f08;
+  background: #fff;
+
   padding: 10px;
   height: 100%;
   overflow: hidden;
