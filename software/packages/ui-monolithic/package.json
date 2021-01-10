@@ -1,0 +1,15 @@
+{
+  "name": "@kermite/ui-monolithic",
+  "version": "0.0.0",
+  "scripts": {
+    "watch": "parcel watch src/index.html --no-autoinstall --out-dir ../../dist/ui/monolithic --cache-dir ../../dist/.cache/ui-monolithic --public-url . --no-hmr"
+  },
+  "dependencies": {
+    "@kermite/shared": "*",
+    "@kermite/ui": "*",
+    "qx": "*"
+  },
+  "browserslist": [
+    "last 1 Chrome versions"
+  ]
+}

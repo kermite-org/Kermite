@@ -1,5 +1,5 @@
 import { IAppWindowEvent } from '@kermite/shared';
-import { appUi } from '@kermite/ui';
+import { ipcAgent } from '@kermite/ui';
 
 export class SiteModel {
   private _isWindowActive: boolean = true;
@@ -14,16 +14,11 @@ export class SiteModel {
     }
   };
 
-  private unsubscribe: (() => void) | undefined;
-
   initialize() {
-    this.unsubscribe = appUi.backendAgent.subscribe(
-      'window_appWindowEvents',
-      this.onAppWindowEvents,
-    );
+    ipcAgent.subscribe2('window_appWindowEvents', this.onAppWindowEvents);
   }
 
   finalize() {
-    this.unsubscribe?.();
+    ipcAgent.unsubscribe2('window_appWindowEvents', this.onAppWindowEvents);
   }
 }
