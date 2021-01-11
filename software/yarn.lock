@@ -9627,6 +9627,11 @@ serialport@^9.0.1:
     "@serialport/stream" "^9.0.1"
     debug "^4.1.1"
 
+serve-http@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/serve-http/-/serve-http-1.0.6.tgz#934f29929ae83c9f5cc83bda6f1984af2da40bad"
+  integrity sha512-0KOoZiW6oAo2L07L2/lbwGK7J90CIhKvU6A8x7hWxECf8J4cUHEiC4OZGxMSmUnLRLgjIzVj4bw5mEwFZnIuHg==
+
 serve-static@^1.12.4:
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/serve-static/-/serve-static-1.14.1.tgz#666e636dc4f010f7ef29970a88a674320898b2f9"
