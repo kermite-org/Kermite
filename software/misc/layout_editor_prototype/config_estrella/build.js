@@ -3,12 +3,16 @@ const { build, cliopts } = require('estrella');
 const fs = require('fs');
 const serveHttp = require('serve-http');
 
-const distDir = `./dist/es/`;
+const rootDir = process.cwd();
+const distDir = `${rootDir}/dist/es`;
 fs.mkdirSync(distDir, { recursive: true });
-fs.copyFileSync('./index.html', `${distDir}/index.html`);
+fs.copyFileSync(
+  `${rootDir}/config_estrella/index.html`,
+  `${distDir}/index.html`
+);
 
 build({
-  entry: './src/index.tsx',
+  entry: `${rootDir}/src/index.tsx`,
   outfile: `${distDir}/index.js`,
   bundle: true,
 });
