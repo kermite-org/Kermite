@@ -4,8 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start0": "parcel src/index.html -p 3000 --no-autoinstall",
-    "start": "node build.js -watch -no-clear -sourcemap"
+    "start_p": "parcel src/index.html -p 3000 --no-autoinstall",
+    "start_e": "node config_estrella/build.js -watch -no-clear -sourcemap",
+    "start_w": "../../node_modules/.bin/webpack serve --config config_webpack/webpack.config.js"
   },
   "dependencies": {
     "goober": "^2.0.18",
