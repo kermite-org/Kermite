@@ -46,7 +46,8 @@
     "clean": "rm -rf .cache",
     "typecheck": "tsc -b packages/*/tsconfig.json",
     "lint": "eslint packages --ext .ts,.tsx",
-    "lint:fix": "eslint packages --ext .ts,.tsx --fix"
+    "lint:fix": "eslint packages --ext .ts,.tsx --fix",
+    "mockview": "cd packages/ui-mockview && yarn start"
   },
   "dependencies": {
     "fast-equals": "^2.0.0",
