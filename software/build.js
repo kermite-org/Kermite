@@ -28,8 +28,8 @@ function makeShell() {
 }
 
 function makeUi() {
-  const srcDir = './src/ui-monolithic';
-  const distDir = `./dist/ui/monolithic`;
+  const srcDir = './src/ui-root';
+  const distDir = `./dist/ui`;
   fs.mkdirSync(distDir, { recursive: true });
   fs.copyFileSync(`${srcDir}/index.html`, `${distDir}/index.html`);
 
