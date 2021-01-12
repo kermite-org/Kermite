@@ -1,9 +1,0 @@
-{
-  "name": "@kermite/ui-layouter",
-  "version": "0.0.0",
-  "dependencies": {
-    "@kermite/shared": "*",
-    "@kermite/ui": "*",
-    "qx": "*"
-  }
-}

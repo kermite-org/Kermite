@@ -1,4 +1,17 @@
 {
-  "files": [],
-  "references": [{ "path": "shared" }]
+  "extends": "./tsconfig.settings.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "qx": ["./qx"],
+      "qx/*": ["./qx/*"],
+      "@kermite/shared": ["./shared"],
+      "@kermite/shared/*": ["./shared/*"],
+      "@kermite/ui": ["./ui"],
+      "@kermite/ui/*": ["./ui/*"],
+      "@ui-layouter": ["./ui-layouter"],
+      "@ui-layouter/*": ["./ui-layouter/*"]
+    }
+  },
+  "include": ["./**/*"]
 }

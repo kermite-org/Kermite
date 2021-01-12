@@ -2,11 +2,13 @@
   "extends": "../tsconfig.settings.json",
   "compilerOptions": {
     "noEmit": true,
+    "rootDir": "..",
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"]
-      // "@kermite/shared*": ["../shared*"]
+      "~/*": ["./*"],
+      "@kermite/shared": ["../shared"],
+      "@kermite/shared/*": ["../shared/*"]
     }
   },
-  "references": [{ "path": "../shared" }]
+  "include": ["./**/*", "../shared/**/*"]
 }

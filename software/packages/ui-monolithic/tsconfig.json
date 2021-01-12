@@ -5,10 +5,22 @@
     "rootDir": "..",
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"],
-      "@ui-layouter": ["../ui-layouter/src"]
+      "~/*": ["./*"],
+      "qx": ["../qx"],
+      "qx/*": ["../qx/*"],
+      "@kermite/shared": ["../shared"],
+      "@kermite/shared/*": ["../shared/*"],
+      "@kermite/ui": ["../ui"],
+      "@kermite/ui/*": ["../ui/*"],
+      "@ui-layouter": ["../ui-layouter"],
+      "@ui-layouter/*": ["../ui-layouter/*"]
     }
   },
-  "include": ["./src/**/*", "../ui-layouter/**/*"],
-  "references": [{ "path": "../shared" }, { "path": "../ui" }]
+  "include": [
+    "./**/*",
+    "../qx/**/*",
+    "../shared/**/*",
+    "../ui/**/*",
+    "../ui-layouter/**/*"
+  ]
 }
