@@ -1,6 +1,8 @@
 {
   "name": "@kermite/ui-monolithic",
   "version": "0.0.0",
+  "license": "UNLICENSED",
+  "private": true,
   "scripts": {
     "watch": "node build.js -watch -no-clear -sourcemap -no-diag"
   },
