@@ -4,7 +4,7 @@ const fs = require('fs');
 // const serveHttp = require('serve-http');
 
 function makeShell() {
-  const shellSrcDir = `./packages/shell`;
+  const shellSrcDir = `./src/shell`;
   const shellDistDir = `./dist/shell`;
 
   fs.mkdirSync(shellDistDir, { recursive: true });
@@ -28,7 +28,7 @@ function makeShell() {
 }
 
 function makeUi() {
-  const srcDir = './packages/ui-monolithic';
+  const srcDir = './src/ui-monolithic';
   const distDir = `./dist/ui/monolithic`;
   fs.mkdirSync(distDir, { recursive: true });
   fs.copyFileSync(`${srcDir}/index.html`, `${distDir}/index.html`);
