@@ -32,8 +32,8 @@ export const ConfiguratorZoneRoot = () => {
       <div css={styles.cssContentRow}>
         <NavigationColumn />
         <div css={styles.cssMainColumn}>
-          {/* {page === 'editor' && <EditorPage />} */}
-          {page === 'editor' && <UiLayouterPageComponent />}
+          {page === 'editor' && <EditorPage />}
+          {page === 'layouter' && <UiLayouterPageComponent />}
           {page === 'shapePreview' && <KeyboardShapePreviewPage />}
           {page === 'firmwareUpdation' && <FirmwareUpdationPage />}
           {page === 'presetBrowser' && <PresetBrowserPage />}
