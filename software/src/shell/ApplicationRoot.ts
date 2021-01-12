@@ -149,7 +149,7 @@ export class ApplicationRoot {
   async initialize() {
     console.log(`initialize services`);
     await applicationStorage.initialize();
-    await resourceUpdator_syncRemoteResourcesToLocal();
+    // await resourceUpdator_syncRemoteResourcesToLocal();
     await this.projectResourceInfoProvider.initializeAsync();
     await this.profileService.initialize();
     this.firmwareUpdationService.initialize();
