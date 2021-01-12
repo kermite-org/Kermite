@@ -10,6 +10,25 @@ export function rerender() {
   qxGlobal.rerender();
 }
 
+export function asyncRerender() {
+  qxGlobal.asyncRerenderFlag = true;
+}
+
+let asyncLoopInitialized = false;
+function setupAsyncRenderLoop() {
+  if (!asyncLoopInitialized) {
+    function asyncRenderLoop() {
+      if (qxGlobal.asyncRerenderFlag) {
+        qxGlobal.rerender();
+        qxGlobal.asyncRerenderFlag = false;
+      }
+      requestAnimationFrame(asyncRenderLoop);
+    }
+    asyncRenderLoop();
+    asyncLoopInitialized = true;
+  }
+}
+
 export function render(
   renderFn: () => JSX.Element,
   parentDomNode: HTMLElement | null,
@@ -46,4 +65,5 @@ export function render(
 
   qxGlobal.rerender = executeRender;
   executeRender();
+  setupAsyncRenderLoop();
 }

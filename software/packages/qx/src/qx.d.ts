@@ -7,6 +7,7 @@ import { VNode } from './qxinternal_petit_dom/types';
 export { h } from './qxinternal_petit_dom/h';
 export { Hook } from './qxinternal_petit_dom/hookImpl2';
 export declare function rerender(): void;
+export declare function asyncRerender(): void;
 export declare function render(
   renderFn: () => JSX.Element,
   parentDomNode: HTMLElement | null,

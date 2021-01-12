@@ -1,4 +1,4 @@
-import { rerender, Hook, h } from 'qx';
+import { Hook, h, asyncRerender } from 'qx';
 import {
   IPosition,
   startDragSession,
@@ -34,7 +34,7 @@ function startSightDragOperation(e: MouseEvent) {
     const deltaX = -(pos.x - prevPos.x) * sight.scale;
     const deltaY = -(pos.y - prevPos.y) * sight.scale;
     editMutations.moveSight(deltaX, deltaY);
-    rerender();
+    asyncRerender();
   };
 
   const upCallback = () => {};
