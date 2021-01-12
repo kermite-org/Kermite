@@ -2,7 +2,7 @@
   "name": "@kermite/ui-mockview",
   "version": "0.0.0",
   "scripts": {
-    "start": "node build.js -watch -no-clear -sourcemap"
+    "start": "node build.js -watch -no-clear -no-diag -sourcemap"
   },
   "dependencies": {
     "@kermite/shared": "*",

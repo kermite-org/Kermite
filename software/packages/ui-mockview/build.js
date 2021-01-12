@@ -11,6 +11,9 @@ build({
   entry: './index.tsx',
   outfile: `${distDir}/index.js`,
   bundle: true,
+  define: {
+    'process.env.NODE_ENV': 'development',
+  },
 });
 
 cliopts.watch &&

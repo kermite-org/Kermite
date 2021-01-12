@@ -10,7 +10,3 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
   on: ipcRenderer.on.bind(ipcRenderer),
   removeListener: ipcRenderer.removeListener.bind(ipcRenderer),
 });
-
-contextBridge.exposeInMainWorld('process', {
-  env: { NODE_ENV: 'development' },
-});
