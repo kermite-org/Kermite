@@ -2,6 +2,7 @@ import { editReader } from '@ui-layouter/editor/store';
 import { DesignConfigurationPanel } from '@ui-layouter/editor/views/SidePanels/organisms/DesignConfigurationPanel';
 import { KeyEntityEditPanel } from '@ui-layouter/editor/views/SidePanels/organisms/KeyEntityEditPanel';
 import { OutlineEditPanel } from '@ui-layouter/editor/views/SidePanels/organisms/OutlineEditPanel';
+import { TransGroupEditPanel } from '@ui-layouter/editor/views/SidePanels/organisms/TransGroupEditPanel';
 import { h } from 'qx';
 
 function getPanelContentComponent() {
@@ -21,6 +22,7 @@ export const EditorSideColumnContent = () => {
     <div>
       {editReader.showConfig && <DesignConfigurationPanel />}
       {PanelContent && <PanelContent />}
+      <TransGroupEditPanel />
     </div>
   );
 };
