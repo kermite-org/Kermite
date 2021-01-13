@@ -1,4 +1,5 @@
 import { IPosition, startDragSession } from '@ui-layouter/base';
+import { degToRad } from '@ui-layouter/base/utils';
 import {
   editReader,
   unitValueToMm,
@@ -24,8 +25,15 @@ export function startKeyEntityDragOperation(e: MouseEvent, useGhost: boolean) {
   const moveCallback = (pos: IPosition, prevPos: IPosition) => {
     const deltaX = (pos.x - prevPos.x) * sight.scale;
     const deltaY = (pos.y - prevPos.y) * sight.scale;
-    destPos.x += deltaX;
-    destPos.y += deltaY;
+
+    const group = editReader.getTransGroupByGroupId(ck.groupId);
+    const theta = -degToRad(group?.angle || 0);
+
+    const deltaXM = deltaX * Math.cos(theta) - deltaY * Math.sin(theta);
+    const deltaYM = deltaX * Math.sin(theta) + deltaY * Math.cos(theta);
+
+    destPos.x += deltaXM;
+    destPos.y += deltaYM;
     editMutations.setKeyPosition(destPos.x, destPos.y);
     rerender();
   };
@@ -158,13 +166,20 @@ export const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
     </g>
   );
 
+  const group = editReader.getTransGroupByGroupId(ke.groupId);
+
+  const ox = group ? group.x : 0;
+  const oy = group ? group.y : 0;
+  const orot = group ? group.angle : 0;
+
+  const outerTransformSpec = `translate(${ox}, ${oy}) rotate(${orot}) translate(${x}, ${y}) rotate(${ke.r})`;
+
   if (ke.shape === 'ext circle') {
-    const transformSpec = `translate(${x + d * 9.5}, ${y + d * 9.5}) rotate(${
-      ke.r
-    })`;
+    const transformSpec = `translate(${d * 9.5}, ${d * 9.5})`;
     return (
-      <g transform={transformSpec}>
+      <g transform={outerTransformSpec}>
         <circle
+          transform={transformSpec}
           cx={0}
           cy={0}
           r={9}
@@ -179,12 +194,11 @@ export const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
   }
 
   if (ke.shape === 'ext isoEnter') {
-    const transformSpec = `translate(${x + d * 16.25}, ${y + d * 19}) rotate(${
-      ke.r
-    })`;
+    const transformSpec = `translate(${d * 16.25}, ${d * 19})`;
     return (
-      <g transform={transformSpec}>
+      <g transform={outerTransformSpec}>
         <path
+          transform={transformSpec}
           d={isoEnterPathMarkupText}
           css={cssKeyRect}
           data-selected={isSelected}
@@ -197,12 +211,12 @@ export const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
   }
 
   const [keyW, keyH] = getStdKeySize(ke.shape, coordUnit, keySizeUnit);
-  const transformSpec = `translate(${x + d * (keyW / 2 + 0.5)}, ${
-    y + d * (keyH / 2 + 0.5)
-  }) rotate(${ke.r})`;
+  const transformSpec = `translate(
+    ${d * (keyW / 2 + 0.5)}, ${d * (keyH / 2 + 0.5)})`;
   return (
-    <g transform={transformSpec}>
+    <g transform={outerTransformSpec}>
       <rect
+        transform={transformSpec}
         x={-keyW / 2}
         y={-keyH / 2}
         width={keyW}

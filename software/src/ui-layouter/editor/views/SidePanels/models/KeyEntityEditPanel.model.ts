@@ -161,7 +161,7 @@ export function useKeyEntityEditPanelModel(): IPropertyPanelModel {
     sources: createDictionaryFromKeyValues(
       editReader.allTransGroups.map((group) => [group.groupId, group.groupId]),
     ),
-    reader: () => editReader.currentKeyEntity?.groupId || undefined,
+    reader: () => editReader.currentKeyEntity?.groupId,
     writer: (newChoiceId: string) => {
       if (editReader.currentKeyEntity) {
         editMutations.changeKeyProperty('groupId', newChoiceId);

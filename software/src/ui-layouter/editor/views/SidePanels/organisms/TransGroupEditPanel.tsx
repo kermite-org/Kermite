@@ -50,7 +50,7 @@ export const TransGroupEditPanel = () => {
           label={'angle'}
           labelWidth={70}
           inputWidth={60}
-          unit="mm"
+          unit="deg"
         />
         <div>
           {allTransGroups.map((group) => (

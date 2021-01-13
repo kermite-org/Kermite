@@ -130,6 +130,10 @@ class EditReader {
     return Object.values(appState.editor.design.transGroups);
   }
 
+  getTransGroupByGroupId(groupId: string): ITransGroup | undefined {
+    return this.allTransGroups.find((group) => group.groupId === groupId);
+  }
+
   get currentTransGroup(): ITransGroup | undefined {
     return appState.editor.design.transGroups[
       appState.editor.currentTransGroupId || ''
