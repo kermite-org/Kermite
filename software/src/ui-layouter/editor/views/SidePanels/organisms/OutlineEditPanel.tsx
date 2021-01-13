@@ -6,8 +6,12 @@ import { h } from 'qx';
 const cssSightEditPanel = css`
   padding: 10px;
 
-  .content {
+  > .content {
     padding-left: 10px;
+
+    > * + * {
+      margin-top: 4px;
+    }
   }
 `;
 

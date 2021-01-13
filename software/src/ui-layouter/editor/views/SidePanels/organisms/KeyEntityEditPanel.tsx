@@ -8,6 +8,12 @@ const cssKeyEntityEditPanel = css`
   > .content {
     margin-left: 10px;
 
+    > .editZone {
+      > * + * {
+        margin-top: 4px;
+      }
+    }
+
     > .errorZone {
       > .errorText {
         color: red;
