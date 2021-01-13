@@ -1,3 +1,4 @@
+import { appUi } from '@kermite/ui';
 import {
   editMutations,
   saveEditKeyboardDesign,
@@ -12,6 +13,8 @@ export const UiLayouterPageComponent = () => {
     editMutations.resetSitePosition();
 
     window.addEventListener('keydown', keyboardOperationHander);
+
+    appUi.rerender();
 
     return () => {
       console.log(`end layouter`);
