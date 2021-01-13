@@ -10,8 +10,8 @@
       "qx/*": ["../qx/*"],
       "@kermite/shared": ["../shared"],
       "@kermite/shared/*": ["../shared/*"],
-      "@kermite/ui": ["../ui"],
-      "@kermite/ui/*": ["../ui/*"],
+      "@kermite/ui": ["../ui-common"],
+      "@kermite/ui/*": ["../ui-common/*"],
       "@ui-layouter": ["../ui-layouter"],
       "@ui-layouter/*": ["../ui-layouter/*"]
     }
@@ -20,7 +20,7 @@
     "./**/*",
     "../qx/**/*",
     "../shared/**/*",
-    "../ui/**/*",
+    "../ui-common/**/*",
     "../ui-layouter/**/*"
   ]
 }
