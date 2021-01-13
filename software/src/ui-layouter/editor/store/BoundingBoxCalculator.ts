@@ -54,10 +54,12 @@ export function getKeyboardDesignBoundingBox(design: IKeyboardDesign) {
     });
   });
 
-  design.outlinePoints.forEach(({ x, y }) => {
-    xs.push(x);
-    ys.push(y);
-  });
+  Object.values(design.outlineShapes).forEach((shape) =>
+    shape.points.forEach(({ x, y }) => {
+      xs.push(x);
+      ys.push(y);
+    }),
+  );
 
   const left = Math.min(...xs);
   const right = Math.max(...xs);

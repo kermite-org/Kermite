@@ -93,6 +93,8 @@ export const EditSvgView = () => {
     }
   }, []);
 
+  // appGlobal.setDebugValue({ appState });
+
   return (
     <svg
       width={sight.screenW}
@@ -113,7 +115,9 @@ export const EditSvgView = () => {
           <KeyEntityCard ke={ke} key={ke.id} />
         ))}
 
-        <KeyboardOutline />
+        {editReader.allOutlineShapes.map((shape, idx) => (
+          <KeyboardOutline shape={shape} key={idx} />
+        ))}
       </g>
     </svg>
   );

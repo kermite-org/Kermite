@@ -82,25 +82,37 @@ class EditMutations {
   }
 
   deleteCurrentOutlinePoint() {
+    const shapeId = editReader.currentShapeId;
     const idx = editReader.currentPointIndex;
-    if (idx !== -1) {
-      editUpdator.commitEditor((editor) => {
-        editor.design.outlinePoints.splice(idx, 1);
-      });
+    if (!shapeId || idx === -1) {
+      return;
     }
+    editUpdator.commitEditor((editor) => {
+      editor.design.outlineShapes[shapeId].points.splice(idx, 1);
+    });
   }
 
   splitOutlineLine(dstPointIndex: number, x: number, y: number) {
+    const shapeId = editReader.currentShapeId;
+    const idx = editReader.currentPointIndex;
+    if (!shapeId || idx === -1) {
+      return;
+    }
     editUpdator.patchEditor((editor) => {
-      const { outlinePoints } = editor.design;
-      outlinePoints.splice(dstPointIndex, 0, { x, y });
+      const shape = editor.design.outlineShapes[shapeId];
+      shape.points.splice(dstPointIndex, 0, { x, y });
     });
   }
 
   addOutlinePoint(x: number, y: number) {
+    const shapeId = editReader.currentShapeId;
+    if (!shapeId) {
+      return;
+    }
     editUpdator.commitEditor((editor) => {
-      editor.design.outlinePoints.push({ x, y });
-      editor.currentPointIndex = editor.design.outlinePoints.length - 1;
+      const shape = editor.design.outlineShapes[shapeId];
+      shape.points.push({ x, y });
+      editor.currentPointIndex = shape.points.length - 1;
     });
   }
 
@@ -158,6 +170,12 @@ class EditMutations {
     });
   }
 
+  setCurrentShapeId(shapeId: string | undefined) {
+    editUpdator.patchEditor((editor) => {
+      editor.currentShapeId = shapeId;
+    });
+  }
+
   setCurrentPointIndex(index: number) {
     editUpdator.patchEditor((editor) => {
       editor.currentPointIndex = index;
@@ -191,15 +209,29 @@ class EditMutations {
   }
 
   setOutlinePointProp(propKey: 'x' | 'y', value: number) {
-    const { currentPointIndex } = editReader;
+    const { currentShapeId, currentPointIndex } = editReader;
+    if (!currentShapeId || currentPointIndex === -1) {
+      return;
+    }
     editUpdator.patchEditor((editor) => {
-      const p = editor.design.outlinePoints[currentPointIndex];
-      p[propKey] = value;
+      const point =
+        editor.design.outlineShapes[currentShapeId].points[currentPointIndex];
+      point[propKey] = value;
     });
   }
 
   setOutlinePointPosition(px: number, py: number) {
-    const { currentPointIndex, snapDivision, snapToGrid } = editReader;
+    const {
+      currentShapeId,
+      currentPointIndex,
+      snapDivision,
+      snapToGrid,
+    } = editReader;
+
+    if (!currentShapeId || currentPointIndex === -1) {
+      return;
+    }
+
     const gp = 10 / snapDivision;
     if (snapToGrid) {
       px = Math.round(px / gp) * gp;
@@ -207,7 +239,8 @@ class EditMutations {
     }
 
     editUpdator.patchEditor((editor) => {
-      editor.design.outlinePoints[currentPointIndex] = { x: px, y: py };
+      const shape = editor.design.outlineShapes[currentShapeId];
+      shape.points[currentPointIndex] = { x: px, y: py };
     });
   }
 

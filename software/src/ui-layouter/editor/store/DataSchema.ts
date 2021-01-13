@@ -12,11 +12,14 @@ export interface IPersistentKeyEntity {
 
 export type IPersistOutlinePoint = [x: number, y: number];
 
+export type IPersistOutlineShape = {
+  points: IPersistOutlinePoint[];
+};
 export interface IPersistentKeyboardDesign {
   placementUnit: string;
   placementAnchor: IKeyPlacementAnchor;
   keySizeUnit: IKeySizeUnit;
-  outlinePoints: IPersistOutlinePoint[];
+  outlineShapes: IPersistOutlineShape[];
   keyEntities: IPersistentKeyEntity[];
 }
 export interface IKeyEntity {
@@ -30,11 +33,15 @@ export interface IKeyEntity {
 }
 export type IOutlinePoint = { x: number; y: number };
 
+export type IOutlineShape = {
+  id: string; // 編集中のみ一意の値を保持,永続化の際には保存しない
+  points: IOutlinePoint[];
+};
 export interface IKeyboardDesign {
   placementUnit: string; // `mm` | `KP ${baseKeyPitch}`
   placementAnchor: IKeyPlacementAnchor;
   keySizeUnit: IKeySizeUnit; // 'mm' | 'KP'
-  outlinePoints: IOutlinePoint[];
+  outlineShapes: { [id: string]: IOutlineShape };
   keyEntities: { [id: string]: IKeyEntity };
 }
 

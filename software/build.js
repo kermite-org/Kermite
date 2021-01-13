@@ -101,7 +101,7 @@ async function startMockView() {
     watch: true,
     clear: false,
     tslint: false,
-    sourcemap: true,
+    sourcemap: 'inline',
   });
 
   serveHttp.createServer({

@@ -8,6 +8,7 @@ import {
   editReader,
   editMutations,
   IOutlinePoint,
+  IOutlineShape,
 } from '@ui-layouter/editor/store';
 import { css } from 'goober';
 import { rerender, h } from 'qx';
@@ -38,7 +39,7 @@ export function startOutlinePointDragOperation(
 ) {
   const { sight, outlinePoints, currentPointIndex } = editReader;
 
-  const point = outlinePoints[currentPointIndex];
+  const point = outlinePoints![currentPointIndex];
 
   const destPos = { ...point };
 
@@ -61,14 +62,19 @@ export function startOutlinePointDragOperation(
   startDragSession(e, moveCallback, upCallback);
 }
 
-const OutlinePoint = (props: { x: number; y: number; index: number }) => {
-  const { x, y, index } = props;
+const OutlinePoint = (props: {
+  x: number;
+  y: number;
+  index: number;
+  shapeId: string;
+}) => {
+  const { x, y, index, shapeId } = props;
 
-  const { currentPointIndex } = editReader;
+  const { currentShapeId, currentPointIndex } = editReader;
 
   const visible = true; // editorTarget === 'outline';
   const editable = true; // editMode === 'move' || editMode === 'select';
-  const isSelected = index === currentPointIndex;
+  const isSelected = shapeId === currentShapeId && index === currentPointIndex;
 
   const onMouseDown = (e: MouseEvent) => {
     if (editReader.editorTarget !== 'outline') {
@@ -78,15 +84,18 @@ const OutlinePoint = (props: { x: number; y: number; index: number }) => {
     if (e.button === 0) {
       if (editorTarget === 'outline') {
         if (editMode === 'select') {
+          editMutations.setCurrentShapeId(shapeId);
           editMutations.setCurrentPointIndex(index);
           editMutations.setCurrentKeyEntity(undefined);
           e.stopPropagation();
         } else if (editMode === 'move' || editMode === 'add') {
+          editMutations.setCurrentShapeId(shapeId);
           editMutations.setCurrentPointIndex(index);
           editMutations.setCurrentKeyEntity(undefined);
           startOutlinePointDragOperation(e);
           e.stopPropagation();
         } else if (editMode === 'delete') {
+          editMutations.setCurrentShapeId(shapeId);
           editMutations.setCurrentPointIndex(index);
           editMutations.deleteCurrentOutlinePoint();
         }
@@ -116,9 +125,14 @@ interface IHittestLineViewModel {
   dstPointIndex: number;
   p0: IOutlinePoint;
   p1: IOutlinePoint;
+  shapeId: string;
 }
 
-function makeHittestLineViewModel(pointIndex: number, points: IOutlinePoint[]) {
+function makeHittestLineViewModel(
+  pointIndex: number,
+  points: IOutlinePoint[],
+  shapeId: string,
+) {
   const dstPointIndex = (pointIndex + 1) % points.length;
   const p0 = points[pointIndex];
   const p1 = points[dstPointIndex];
@@ -126,6 +140,7 @@ function makeHittestLineViewModel(pointIndex: number, points: IOutlinePoint[]) {
     dstPointIndex,
     p0,
     p1,
+    shapeId,
   };
 }
 
@@ -136,13 +151,14 @@ const cssHittestLine = css`
 `;
 
 const HittestLine = (props: { vm: IHittestLineViewModel }) => {
-  const { p0, p1, dstPointIndex } = props.vm;
+  const { p0, p1, dstPointIndex, shapeId } = props.vm;
 
   const onMouseDown = (e: MouseEvent) => {
     const [x, y] = getWorldMousePositionOnEditSvg(e);
 
     editMutations.startEdit();
     editMutations.setCurrentKeyEntity(undefined);
+    editMutations.setCurrentShapeId(shapeId);
     editMutations.splitOutlineLine(dstPointIndex, x, y);
     editMutations.setCurrentPointIndex(dstPointIndex);
     startOutlinePointDragOperation(e, false);
@@ -161,11 +177,12 @@ const HittestLine = (props: { vm: IHittestLineViewModel }) => {
   );
 };
 
-export const KeyboardOutline = () => {
-  const { outlinePoints } = editReader;
-  const pointsSpec = outlinePoints.map(({ x, y }) => `${x}, ${y}`).join(' ');
-  const vmLines = outlinePoints.map((_, idx) =>
-    makeHittestLineViewModel(idx, outlinePoints),
+export const KeyboardOutline = (props: { shape: IOutlineShape }) => {
+  const { shape } = props;
+  const { points, id: shapeId } = shape;
+  const pointsSpec = points.map(({ x, y }) => `${x}, ${y}`).join(' ');
+  const vmLines = points.map((_, idx) =>
+    makeHittestLineViewModel(idx, points, shapeId),
   );
   return (
     <g>
@@ -176,8 +193,14 @@ export const KeyboardOutline = () => {
         ))}
       </g>
       <g>
-        {outlinePoints.map(({ x, y }, index) => (
-          <OutlinePoint x={x} y={y} key={index} index={index} />
+        {points.map(({ x, y }, index) => (
+          <OutlinePoint
+            x={x}
+            y={y}
+            key={index}
+            index={index}
+            shapeId={shapeId}
+          />
         ))}
       </g>
     </g>

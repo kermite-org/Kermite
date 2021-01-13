@@ -9,11 +9,23 @@ const initialDesignSource: IPersistentKeyboardDesign = {
   placementUnit: 'mm',
   placementAnchor: 'center',
   keySizeUnit: 'KP',
-  outlinePoints: [
-    [80, -40],
-    [80, 40],
-    [-80, 40],
-    [-80, -40],
+  outlineShapes: [
+    {
+      points: [
+        [-80, -40],
+        [-80, 40],
+        [-10, 40],
+        [-10, -40],
+      ],
+    },
+    {
+      points: [
+        [10, -40],
+        [10, 40],
+        [80, 40],
+        [80, -40],
+      ],
+    },
   ],
   keyEntities: [
     // {
@@ -45,15 +57,25 @@ const initialDesignSource: IPersistentKeyboardDesign = {
 
 export function createDefaultKeyboardDesign(): IKeyboardDesign {
   const source = initialDesignSource;
-  let cnt = 0;
   return {
     placementUnit: source.placementUnit,
     placementAnchor: source.placementAnchor,
     keySizeUnit: source.keySizeUnit,
-    outlinePoints: source.outlinePoints.map(([x, y]) => ({ x, y })),
+    outlineShapes: createDictionaryFromKeyValues(
+      source.outlineShapes.map((shape, idx) => {
+        const id = `shape!${idx}`;
+        return [
+          id,
+          {
+            id,
+            points: shape.points.map(([x, y]) => ({ x, y })),
+          },
+        ];
+      }),
+    ),
     keyEntities: createDictionaryFromKeyValues(
-      source.keyEntities.map((ke) => {
-        const id = `ke${cnt++}`;
+      source.keyEntities.map((ke, idx) => {
+        const id = `ke!${idx}`;
         return [id, { ...ke, id }];
       }),
     ),
@@ -66,6 +88,9 @@ function loadKeyboardDesignOrDefault(): IKeyboardDesign {
     const obj = JSON.parse(text) as IKeyboardDesign;
     if (!obj.placementAnchor) {
       obj.placementAnchor = 'center';
+    }
+    if (!obj.outlineShapes) {
+      obj.outlineShapes = {};
     }
     return obj;
   } else {
@@ -90,6 +115,7 @@ export interface IModeState {
 export interface IEditState {
   design: IKeyboardDesign;
   currentkeyEntityId: string | undefined;
+  currentShapeId: string | undefined;
   currentPointIndex: number;
   editMode: IEditMode;
   editorTarget: IEditorTarget;
@@ -133,6 +159,7 @@ export const appState: IAppState = {
   editor: {
     design: loadKeyboardDesignOrDefault(),
     currentkeyEntityId: undefined,
+    currentShapeId: undefined,
     currentPointIndex: -1,
     editorTarget: 'key',
     editMode: 'move',

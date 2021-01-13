@@ -3,6 +3,11 @@ import { UiLayouterPageComponent } from '@ui-layouter';
 import { h, render } from 'qx';
 
 window.addEventListener('load', () => {
+  const appDiv = document.getElementById('app');
   initializeCss();
-  render(() => <UiLayouterPageComponent />, document.getElementById('app'));
+  render(() => <UiLayouterPageComponent />, appDiv);
+
+  window.addEventListener('beforeunload', () => {
+    render(() => <div />, appDiv);
+  });
 });

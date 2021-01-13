@@ -1,6 +1,6 @@
 import { appState, IEnvBoolPropKey, IModeState } from './AppState';
 import { getKeyboardDesignBoundingBox } from './BoundingBoxCalculator';
-import { IKeyEntity } from './DataSchema';
+import { IKeyEntity, IOutlinePoint, IOutlineShape } from './DataSchema';
 import { getCoordUnitFromUnitSpec, ICoordUnit } from './PlacementUnitHelper';
 import { createSimpleSelector } from './StoreUtils';
 
@@ -93,16 +93,28 @@ class EditReader {
     return this.displayAreaSelector();
   }
 
-  get outlinePoints() {
-    return appState.editor.design.outlinePoints;
+  get allOutlineShapes() {
+    return Object.values(appState.editor.design.outlineShapes);
+  }
+
+  get currentShapeId() {
+    return appState.editor.currentShapeId;
+  }
+
+  get currentOutlineShape(): IOutlineShape | undefined {
+    return appState.editor.design.outlineShapes[this.currentShapeId || ''];
+  }
+
+  get outlinePoints(): IOutlinePoint[] | undefined {
+    return this.currentOutlineShape?.points;
   }
 
   get currentPointIndex() {
     return appState.editor.currentPointIndex;
   }
 
-  get currentOutlinePoint() {
-    return this.outlinePoints[this.currentPointIndex];
+  get currentOutlinePoint(): IOutlinePoint | undefined {
+    return this.outlinePoints?.[this.currentPointIndex];
   }
 
   get showConfig() {
