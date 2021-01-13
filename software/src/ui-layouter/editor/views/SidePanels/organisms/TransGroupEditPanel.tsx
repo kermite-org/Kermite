@@ -56,7 +56,7 @@ export const TransGroupEditPanel = () => {
           {allTransGroups.map((group) => (
             <div
               key={group.id}
-              onClick={() => editMutations.setCurrentTransGroupId(group.id)}
+              onClick={() => editMutations.setCurrentTransGroupById(group.id)}
               data-active={editReader.currentTransGroupId === group.id}
               css={cssTransGroupListItemCard}
             >

@@ -8,6 +8,7 @@ export interface IPersistentKeyEntity {
   r: number;
   shape: string;
   keyIndex: number;
+  groupId: string;
 }
 
 export type IPersistOutlinePoint = [x: number, y: number];
@@ -38,6 +39,7 @@ export interface IKeyEntity {
   r: number;
   shape: string; // `std ${width}` | `ref ${shapeName}`
   keyIndex: number;
+  groupId: string;
 }
 export type IOutlinePoint = { x: number; y: number };
 
@@ -62,4 +64,11 @@ export interface IKeyboardDesign {
   keyEntities: { [id: string]: IKeyEntity };
 }
 
-export type IEditPropKey = 'keyId' | 'x' | 'y' | 'r' | 'shape' | 'keyIndex';
+export type IEditPropKey =
+  | 'keyId'
+  | 'x'
+  | 'y'
+  | 'r'
+  | 'shape'
+  | 'keyIndex'
+  | 'groupId';

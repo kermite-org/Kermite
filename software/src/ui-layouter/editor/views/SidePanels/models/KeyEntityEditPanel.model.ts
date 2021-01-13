@@ -1,3 +1,5 @@
+import { createDictionaryFromKeyValues } from '@kermite/shared';
+import { ICommonSelectorViewModel } from '@ui-layouter/controls';
 import {
   IKeyEntity,
   IEditPropKey,
@@ -9,6 +11,7 @@ import {
   AttributeSlotModel,
   IAttributeSlotViewModel,
 } from '@ui-layouter/editor/views/SidePanels/models/slots/AttributeSlotModel';
+import { makeSelectorModel } from '@ui-layouter/editor/views/SidePanels/models/slots/SelectorModel';
 import { Hook } from 'qx';
 
 const slotSources: IAttributeSlotSource<IKeyEntity, IEditPropKey>[] = [
@@ -146,16 +149,32 @@ interface IPropertyPanelModel {
   keyEntityAttrsVm: {
     slots: IAttributeSlotViewModel[];
     errorText: string;
+    vmGroupId: ICommonSelectorViewModel;
   };
 }
 
 export function useKeyEntityEditPanelModel(): IPropertyPanelModel {
   const model = Hook.useMemo(() => new KeyEntityAttrsEditorModel(), []);
   model.update();
+
+  const vmGroupId = makeSelectorModel<string>({
+    sources: createDictionaryFromKeyValues(
+      editReader.allTransGroups.map((group) => [group.groupId, group.groupId]),
+    ),
+    reader: () => editReader.currentKeyEntity?.groupId || undefined,
+    writer: (newChoiceId: string) => {
+      if (editReader.currentKeyEntity) {
+        editMutations.changeKeyProperty('groupId', newChoiceId);
+        editMutations.setCurrentTransGroupByGroupId(newChoiceId);
+      }
+    },
+  });
+
   return {
     keyEntityAttrsVm: {
       slots: model.allSlots.map((slot) => slot.emitViewModel()),
       errorText: model.errorText,
+      vmGroupId,
     },
   };
 }

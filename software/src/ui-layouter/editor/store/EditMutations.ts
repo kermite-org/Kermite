@@ -64,6 +64,7 @@ class EditMutations {
       r: 0,
       shape: `std ${keySize}`,
       keyIndex: -1,
+      groupId: '',
     };
     editUpdator.commitEditor((editor) => {
       editor.design.keyEntities[id] = keyEntity;
@@ -172,6 +173,12 @@ class EditMutations {
     editUpdator.patchEditor((editor) => {
       editor.currentkeyEntityId = keyEntityId;
     });
+    const ke = editReader.currentKeyEntity;
+    if (ke?.groupId) {
+      this.setCurrentTransGroupByGroupId(ke?.groupId);
+    } else {
+      this.setCurrentTransGroupById(undefined);
+    }
   }
 
   setCurrentShapeId(shapeId: string | undefined) {
@@ -186,9 +193,21 @@ class EditMutations {
     });
   }
 
-  setCurrentTransGroupId(groupId: string | undefined) {
+  setCurrentTransGroupById(id: string | undefined) {
     editUpdator.patchEditor((editor) => {
-      editor.currentTransGroupId = groupId;
+      editor.currentTransGroupId = id;
+    });
+  }
+
+  setCurrentTransGroupByGroupId(groupId: string) {
+    const group = editReader.allTransGroups.find(
+      (group) => group.groupId === groupId,
+    );
+    if (!group) {
+      return;
+    }
+    editUpdator.patchEditor((editor) => {
+      editor.currentTransGroupId = group.id;
     });
   }
 

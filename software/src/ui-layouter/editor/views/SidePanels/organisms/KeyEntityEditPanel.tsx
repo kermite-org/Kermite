@@ -1,3 +1,4 @@
+import { GeneralSelector } from '@ui-layouter/controls';
 import { GeneralConfigTextEditRow } from '@ui-layouter/editor/views/SidePanels/controls/GeneralConfigTextEditRow';
 import { useKeyEntityEditPanelModel } from '@ui-layouter/editor/views/SidePanels/models/KeyEntityEditPanel.model';
 import { css } from 'goober';
@@ -38,6 +39,12 @@ export const KeyEntityEditPanel = () => {
               inputWidth={60}
             />
           ))}
+          <div>
+            <span style={{ width: '80px', display: 'inline-block' }}>
+              groupId
+            </span>
+            <GeneralSelector {...vm.vmGroupId} />
+          </div>
         </div>
         <div qxIf={!!vm.errorText} className="errorZone">
           <span className="errorText">{vm.errorText}</span>

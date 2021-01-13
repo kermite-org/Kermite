@@ -10,6 +10,7 @@ import {
   createConfigTextEditModel,
   IConfigTextEditModel,
 } from '@ui-layouter/editor/views/SidePanels/models/slots/ConfigTextEditModel';
+import { makeSelectorModel } from '@ui-layouter/editor/views/SidePanels/models/slots/SelectorModel';
 
 function getPlacementUnitInputTextFromModel(): string | undefined {
   const mode = editReader.coordUnitSuffix;
@@ -17,25 +18,6 @@ function getPlacementUnitInputTextFromModel(): string | undefined {
     return editReader.design.placementUnit.replace('KP ', '');
   }
   return undefined;
-}
-
-function makeSelectorModel<T extends string>(props: {
-  sources: { [key in T]: string };
-  reader: () => T;
-  writer: (choiceId: T) => void;
-}): ICommonSelectorViewModel {
-  const { sources, reader, writer } = props;
-  const options = (Object.keys(sources) as T[]).map((key) => ({
-    id: key,
-    text: sources[key],
-  }));
-  return {
-    options,
-    get choiceId() {
-      return reader();
-    },
-    setChoiceId: writer,
-  };
 }
 
 function createModels() {
