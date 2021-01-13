@@ -3,6 +3,7 @@ import {
   startDragSession,
   getRelativeMousePosition,
 } from '@ui-layouter/base';
+import { appGlobal } from '@ui-layouter/editor/base/AppGlobal';
 import { editReader, editMutations } from '@ui-layouter/editor/store';
 import { Hook, h, asyncRerender } from 'qx';
 import { screenToWorld } from './CoordHelpers';
@@ -46,6 +47,7 @@ const onSvgMouseDown = (e: MouseEvent) => {
   if (e.button === 0) {
     const { editorTarget, editMode } = editReader;
     if (editMode === 'select' || editMode === 'move') {
+      editMutations.setCurrentShapeId(undefined);
       editMutations.setCurrentKeyEntity(undefined);
       editMutations.setCurrentPointIndex(-1);
     }
@@ -61,11 +63,22 @@ const onSvgMouseDown = (e: MouseEvent) => {
       if (editMode === 'add') {
         const [sx, sy] = getRelativeMousePosition(e);
         const [x, y] = screenToWorld(sx, sy);
+
         editMutations.startEdit();
+        editMutations.startShapeDrawing();
         editMutations.addOutlinePoint(x, y);
         startOutlinePointDragOperation(e, false);
       }
     }
+  }
+  if (e.button === 2) {
+    const { editorTarget, editMode } = editReader;
+    if (editorTarget === 'outline' && editMode === 'add') {
+      editMutations.endShapeDrawing();
+    }
+    editMutations.setCurrentShapeId(undefined);
+    editMutations.setCurrentKeyEntity(undefined);
+    editMutations.setCurrentPointIndex(-1);
   }
   if (e.button === 1) {
     startSightDragOperation(e);
@@ -94,6 +107,8 @@ export const EditSvgView = () => {
   }, []);
 
   // appGlobal.setDebugValue({ appState });
+
+  appGlobal.setDebugValue({ shapes: editReader.allOutlineShapes });
 
   return (
     <svg

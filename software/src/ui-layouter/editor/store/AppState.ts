@@ -119,6 +119,7 @@ export interface IEditState {
   currentPointIndex: number;
   editMode: IEditMode;
   editorTarget: IEditorTarget;
+  shapeDrawing: boolean;
 }
 
 export interface ISight {
@@ -163,6 +164,7 @@ export const appState: IAppState = {
     currentPointIndex: -1,
     editorTarget: 'key',
     editMode: 'move',
+    shapeDrawing: false,
   },
   env: {
     ghost: undefined,

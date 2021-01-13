@@ -154,15 +154,17 @@ const HittestLine = (props: { vm: IHittestLineViewModel }) => {
   const { p0, p1, dstPointIndex, shapeId } = props.vm;
 
   const onMouseDown = (e: MouseEvent) => {
-    const [x, y] = getWorldMousePositionOnEditSvg(e);
+    if (e.button === 0) {
+      const [x, y] = getWorldMousePositionOnEditSvg(e);
 
-    editMutations.startEdit();
-    editMutations.setCurrentKeyEntity(undefined);
-    editMutations.setCurrentShapeId(shapeId);
-    editMutations.splitOutlineLine(dstPointIndex, x, y);
-    editMutations.setCurrentPointIndex(dstPointIndex);
-    startOutlinePointDragOperation(e, false);
-    e.stopPropagation();
+      editMutations.startEdit();
+      editMutations.setCurrentKeyEntity(undefined);
+      editMutations.setCurrentShapeId(shapeId);
+      editMutations.splitOutlineLine(dstPointIndex, x, y);
+      editMutations.setCurrentPointIndex(dstPointIndex);
+      startOutlinePointDragOperation(e, false);
+      e.stopPropagation();
+    }
   };
 
   return (

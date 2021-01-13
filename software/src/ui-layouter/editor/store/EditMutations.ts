@@ -88,7 +88,11 @@ class EditMutations {
       return;
     }
     editUpdator.commitEditor((editor) => {
-      editor.design.outlineShapes[shapeId].points.splice(idx, 1);
+      const shape = editor.design.outlineShapes[shapeId];
+      shape.points.splice(idx, 1);
+      if (shape.points.length === 0) {
+        delete editor.design.outlineShapes[shapeId];
+      }
     });
   }
 
@@ -294,6 +298,34 @@ class EditMutations {
       env.sight.pos.x = cx;
       env.sight.pos.y = cy;
     });
+  }
+
+  startShapeDrawing() {
+    if (!appState.editor.shapeDrawing) {
+      const allNumbers = editReader.allOutlineShapes.map((shape) =>
+        parseInt(shape.id.split('!')[1]),
+      );
+      const newNumber = Math.max(...allNumbers) + 1;
+      const newId = `shape!${newNumber}`;
+
+      editUpdator.patchEditor((editor) => {
+        editor.design.outlineShapes[newId] = {
+          id: newId,
+          points: [],
+        };
+        editor.currentShapeId = newId;
+        editor.currentPointIndex = -1;
+        editor.shapeDrawing = true;
+      });
+    }
+  }
+
+  endShapeDrawing() {
+    if (appState.editor.shapeDrawing) {
+      editUpdator.patchEditor((editor) => {
+        editor.shapeDrawing = false;
+      });
+    }
   }
 }
 export const editMutations = new EditMutations();
