@@ -9,6 +9,20 @@ const initialDesignSource: IPersistentKeyboardDesign = {
   placementUnit: 'mm',
   placementAnchor: 'center',
   keySizeUnit: 'KP',
+  transGroups: [
+    {
+      groupId: 'trg0',
+      x: 0,
+      y: 0,
+      angle: 0,
+    },
+    {
+      groupId: 'trg1',
+      x: 0,
+      y: 0,
+      angle: 0,
+    },
+  ],
   outlineShapes: [
     {
       points: [
@@ -61,6 +75,12 @@ export function createDefaultKeyboardDesign(): IKeyboardDesign {
     placementUnit: source.placementUnit,
     placementAnchor: source.placementAnchor,
     keySizeUnit: source.keySizeUnit,
+    transGroups: createDictionaryFromKeyValues(
+      source.transGroups.map((group, idx) => {
+        const id = `group!${idx}`;
+        return [id, { ...group, id }];
+      }),
+    ),
     outlineShapes: createDictionaryFromKeyValues(
       source.outlineShapes.map((shape, idx) => {
         const id = `shape!${idx}`;
@@ -92,6 +112,9 @@ function loadKeyboardDesignOrDefault(): IKeyboardDesign {
     if (!obj.outlineShapes) {
       obj.outlineShapes = {};
     }
+    if (!obj.transGroups) {
+      obj.transGroups = {};
+    }
     return obj;
   } else {
     return createDefaultKeyboardDesign();
@@ -120,6 +143,7 @@ export interface IEditState {
   editMode: IEditMode;
   editorTarget: IEditorTarget;
   shapeDrawing: boolean;
+  currentTransGroupId: string | undefined;
 }
 
 export interface ISight {
@@ -165,6 +189,7 @@ export const appState: IAppState = {
     editorTarget: 'key',
     editMode: 'move',
     shapeDrawing: false,
+    currentTransGroupId: undefined,
   },
   env: {
     ghost: undefined,

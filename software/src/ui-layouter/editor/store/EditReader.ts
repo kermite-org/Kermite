@@ -1,6 +1,11 @@
 import { appState, IEnvBoolPropKey, IModeState } from './AppState';
 import { getKeyboardDesignBoundingBox } from './BoundingBoxCalculator';
-import { IKeyEntity, IOutlinePoint, IOutlineShape } from './DataSchema';
+import {
+  IKeyEntity,
+  IOutlinePoint,
+  IOutlineShape,
+  ITransGroup,
+} from './DataSchema';
 import { getCoordUnitFromUnitSpec, ICoordUnit } from './PlacementUnitHelper';
 import { createSimpleSelector } from './StoreUtils';
 
@@ -115,6 +120,20 @@ class EditReader {
 
   get currentOutlinePoint(): IOutlinePoint | undefined {
     return this.outlinePoints?.[this.currentPointIndex];
+  }
+
+  get currentTransGroupId() {
+    return appState.editor.currentTransGroupId;
+  }
+
+  get allTransGroups() {
+    return Object.values(appState.editor.design.transGroups);
+  }
+
+  get currentTransGroup(): ITransGroup | undefined {
+    return appState.editor.design.transGroups[
+      appState.editor.currentTransGroupId || ''
+    ];
   }
 
   get showConfig() {

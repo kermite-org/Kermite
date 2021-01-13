@@ -186,6 +186,12 @@ class EditMutations {
     });
   }
 
+  setCurrentTransGroupId(groupId: string | undefined) {
+    editUpdator.patchEditor((editor) => {
+      editor.currentTransGroupId = groupId;
+    });
+  }
+
   moveKeyDelta(deltaX: number, deltaY: number) {
     editUpdator.patchEditKeyEntity((ke) => {
       ke.x += deltaX;
@@ -245,6 +251,17 @@ class EditMutations {
     editUpdator.patchEditor((editor) => {
       const shape = editor.design.outlineShapes[currentShapeId];
       shape.points[currentPointIndex] = { x: px, y: py };
+    });
+  }
+
+  setTransGroupProp(propKey: 'x' | 'y' | 'angle', value: number) {
+    const { currentTransGroupId } = editReader;
+    if (!currentTransGroupId) {
+      return;
+    }
+    editUpdator.patchEditor((editor) => {
+      const group = editor.design.transGroups[currentTransGroupId];
+      group[propKey] = value;
     });
   }
 
