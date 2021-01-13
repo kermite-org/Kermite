@@ -1,15 +1,19 @@
-import { Views } from '~/views/ViewIndex';
+import { debounce } from '@kermite/shared';
+import { appUi } from '@kermite/ui';
+import { h, render } from 'qx';
+import { SiteRoot } from '~/views/SiteRoot';
 import { models } from './models';
 
 async function start() {
   console.log('start');
+  const appDiv = document.getElementById('app');
 
-  const views = new Views();
   await models.initialize();
-  views.initialize();
+  render(() => <SiteRoot />, appDiv);
+  window.addEventListener('resize', debounce(appUi.rerender, 100));
 
   window.addEventListener('beforeunload', () => {
-    views.finalize();
+    render(() => <div />, appDiv);
     models.finalize();
   });
 }
