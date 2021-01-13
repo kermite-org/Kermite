@@ -11,6 +11,7 @@ export interface IMenuManager {
   onMenuRequestReload: IListenerPort<void>;
   onMenuToggleDevtoolVisibility: IListenerPort<void>;
   onMenuCloseMainWindow: IListenerPort<void>;
+  onMenuRestartApplication: IListenerPort<void>;
 }
 
 export interface IAppWindowWrapper {
@@ -28,6 +29,7 @@ export interface IAppWindowWrapper {
   minimizeMainWindow(): void;
   maximizeMainWindow(): void;
   onAppWindowEvent: IListenerPort<IAppWindowEvent>;
+  restartApplication(): void;
   // onPageLoaded: IListenerPort<string>;
 }
 

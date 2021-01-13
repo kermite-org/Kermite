@@ -1,4 +1,4 @@
-import { appUi, ipcAgent } from '@kermite/ui';
+import { ipcAgent } from '@kermite/ui';
 import { models } from '~/models';
 
 export interface ITitleBarViewModel {
@@ -12,9 +12,10 @@ export interface ITitleBarViewModel {
 
 export function makeTitleBarViewModel(): ITitleBarViewModel {
   return {
-    showReloadButton: appUi.isDevelopment,
+    // showReloadButton: appUi.isDevelopment,
+    showReloadButton: false,
     onReloadButton() {
-      // ipcAgent.async.window_reloadApplication();
+      ipcAgent.async.window_restartApplication();
     },
     onWidgetButton() {
       models.siteModel.setWidgetMode(true);

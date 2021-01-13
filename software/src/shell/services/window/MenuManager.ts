@@ -20,6 +20,7 @@ export class MenuManager implements IMenuManager {
   onMenuRequestReload = makeListnerPort<void>();
   onMenuToggleDevtoolVisibility = makeListnerPort<void>();
   onMenuCloseMainWindow = makeListnerPort<void>();
+  onMenuRestartApplication = makeListnerPort<void>();
 
   buildMenu(initailState: {
     allPagePaths: string[];
@@ -55,16 +56,13 @@ export class MenuManager implements IMenuManager {
             click: () => this.onMenuToggleDevtoolVisibility.emit(),
           },
           {
+            label: 'Restart App',
+            click: () => this.onMenuRestartApplication.emit(),
+          },
+          {
             label: 'Quit',
             click: () => this.onMenuCloseMainWindow.emit(),
           },
-          // {
-          //   label: 'Restart Application',
-          //   click: () => {
-          //     app.relaunch();
-          //     app.exit();
-          //   },
-          // },
         ],
       },
     ];

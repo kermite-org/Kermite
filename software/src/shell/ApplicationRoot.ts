@@ -68,10 +68,7 @@ export class ApplicationRoot {
       window_closeWindow: async () => windowWrapper.closeMainWindow(),
       window_minimizeWindow: async () => windowWrapper.minimizeMainWindow(),
       window_maximizeWindow: async () => windowWrapper.maximizeMainWindow(),
-      // window_reloadApplication: async () => {
-      //   console.log('##REBOOT_ME_AFTER_CLOSE');
-      //   this.appWindowManager.closeMainWindow();
-      // },
+      window_restartApplication: async () => windowWrapper.restartApplication(),
       // window_widgetModeChanged: async (isWidgetMode) =>
       //   this.appWindowManager.adjustWindowSize(isWidgetMode),
       profile_executeProfileManagerCommands: (commands) =>

@@ -60,6 +60,7 @@ export class WindowService implements IWindowService {
     mm.onMenuToggleDevtoolVisibility(() =>
       pm.setDevToolVisiblity(!pm.isDevToolsVisible),
     );
+    mm.onMenuRestartApplication(() => ww.restartApplication());
   }
 
   terminate() {

@@ -71,7 +71,7 @@ export interface IAppIpcContract {
     window_minimizeWindow(): Promise<void>;
     window_maximizeWindow(): Promise<void>;
     // window_widgetModeChanged(isWidgetMode: boolean): Promise<void>;
-    // window_reloadApplication(): Promise<void>;
+    window_restartApplication(): Promise<void>;
 
     // profile_getCurrentProfile(): Promise<IProfileData | undefined>;
     profile_executeProfileManagerCommands(

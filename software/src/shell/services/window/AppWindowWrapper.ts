@@ -119,6 +119,10 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     }
   }
 
+  restartApplication() {
+    console.log('##REBOOT_ME_AFTER_CLOSE');
+    this.closeMainWindow();
+  }
   // private _winHeight = 800;
 
   // adjustWindowSize(isWidgetMode: boolean) {
