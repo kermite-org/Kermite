@@ -11,7 +11,7 @@ import { KeyboardLayoutFilesWatcher } from '~/services0/KeyboardShape/KeyboardLa
 import { KeyboardShapesProvider } from '~/services0/KeyboardShape/KeyboardShapesProvider';
 import { PresetProfileLoader } from '~/services0/PresetProfileLoader';
 import { ProjectResourceInfoProvider } from '~/services0/ProjectResource/ProjectResourceInfoProvider';
-import { resourceUpdator_syncRemoteResourcesToLocal } from '~/services0/ResourceUpdator';
+// import { resourceUpdator_syncRemoteResourcesToLocal } from '~/services0/ResourceUpdator';
 
 export class ApplicationRoot {
   private windowService = new WindowService();

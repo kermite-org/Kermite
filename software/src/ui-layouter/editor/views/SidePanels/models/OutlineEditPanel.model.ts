@@ -1,10 +1,10 @@
-import { Hook } from 'qx';
 import { filterProps } from '@ui-layouter/base/utils';
 import { editMutations, editReader } from '@ui-layouter/editor/store';
 import {
   IConfigTextEditModel,
   createConfigTextEditModelDynamic,
 } from '@ui-layouter/editor/views/SidePanels/models/slots/ConfigTextEditModel';
+import { Hook } from 'qx';
 
 interface IOutlineEditPanelModel {
   vmX: IConfigTextEditModel;

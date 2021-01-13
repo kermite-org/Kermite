@@ -41,7 +41,7 @@ export function ScalerBox(props: IScalerBoxProps) {
 
   const baseEl = document.getElementById(local.domBaseElementId);
   if (!baseEl) {
-    setTimeout(appUi.rerender, 1);
+    setTimeout(() => appUi.rerender, 1);
   } else {
     const { clientWidth: bw, clientHeight: bh } = baseEl;
     local.scale = Math.min(bw / contentWidth, bh / contentHeight);

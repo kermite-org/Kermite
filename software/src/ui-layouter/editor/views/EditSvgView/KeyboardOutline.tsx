@@ -1,5 +1,3 @@
-import { css } from 'goober';
-import { rerender, h } from 'qx';
 import {
   makeCssColor,
   uiTheme,
@@ -11,6 +9,8 @@ import {
   editMutations,
   IOutlinePoint,
 } from '@ui-layouter/editor/store';
+import { css } from 'goober';
+import { rerender, h } from 'qx';
 import { getWorldMousePositionOnEditSvg } from './CoordHelpers';
 
 const cssKeyboardOutline = css`

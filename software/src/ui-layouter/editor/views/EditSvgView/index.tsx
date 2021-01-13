@@ -1,6 +1,6 @@
+import { editReader, editMutations } from '@ui-layouter/editor/store';
 import { css } from 'goober';
 import { Hook, h } from 'qx';
-import { editReader, editMutations } from '@ui-layouter/editor/store';
 import { DebugOverlay } from './DebugOverlay';
 import { EditSvgView } from './EditSvgView';
 

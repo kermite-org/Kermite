@@ -1,10 +1,10 @@
-import { h, Hook } from 'qx';
 import {
   editMutations,
   saveEditKeyboardDesign,
 } from '@ui-layouter/editor/store';
 import { keyboardOperationHander } from '@ui-layouter/editor/store/KeyboardOperationHandler';
 import { PageRoot } from '@ui-layouter/editor/views/PageRoot';
+import { h, Hook } from 'qx';
 
 export const UiLayouterPageComponent = () => {
   Hook.useEffect(() => {

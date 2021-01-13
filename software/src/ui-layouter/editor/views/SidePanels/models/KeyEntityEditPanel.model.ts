@@ -1,4 +1,3 @@
-import { Hook } from 'qx';
 import {
   IKeyEntity,
   IEditPropKey,
@@ -10,6 +9,7 @@ import {
   AttributeSlotModel,
   IAttributeSlotViewModel,
 } from '@ui-layouter/editor/views/SidePanels/models/slots/AttributeSlotModel';
+import { Hook } from 'qx';
 
 const slotSources: IAttributeSlotSource<IKeyEntity, IEditPropKey>[] = [
   {

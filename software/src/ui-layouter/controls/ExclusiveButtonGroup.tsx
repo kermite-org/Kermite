@@ -1,6 +1,6 @@
+import { makeCssColor, uiTheme } from '@ui-layouter/base';
 import { css } from 'goober';
 import { h } from 'qx';
-import { makeCssColor, uiTheme } from '@ui-layouter/base';
 import { ISelectOption } from './interfaces';
 
 export interface IExclusiveButtonGroup {

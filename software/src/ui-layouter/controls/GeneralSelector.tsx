@@ -1,8 +1,8 @@
 import { reflectValue } from '@kermite/ui';
-import { css } from 'goober';
-import { h } from 'qx';
 import { combineClasses, uiTheme } from '@ui-layouter/base';
 import { ISelectOption } from '@ui-layouter/controls';
+import { css } from 'goober';
+import { h } from 'qx';
 
 const { colors, unitHeight } = uiTheme;
 

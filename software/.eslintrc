@@ -127,7 +127,7 @@
       }
     ],
     "import/newline-after-import": 1,
-    "no-restricted-imports": [1, { "patterns": ["../../*"] }],
+    // "no-restricted-imports": [1, { "patterns": ["../../*"] }],
     "no-empty": 0,
     "no-inner-declarations": 0,
     "no-constant-condition": 0,

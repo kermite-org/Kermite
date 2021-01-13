@@ -1,7 +1,7 @@
-import { css } from 'goober';
-import { h } from 'qx';
 import { GeneralConfigTextEditRow } from '@ui-layouter/editor/views/SidePanels/controls/GeneralConfigTextEditRow';
 import { useOutlineEditPanelModel } from '@ui-layouter/editor/views/SidePanels/models/OutlineEditPanel.model';
+import { css } from 'goober';
+import { h } from 'qx';
 
 const cssSightEditPanel = css`
   padding: 10px;

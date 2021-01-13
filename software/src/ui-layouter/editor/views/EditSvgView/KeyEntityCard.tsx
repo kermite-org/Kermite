@@ -1,5 +1,3 @@
-import { css } from 'goober';
-import { rerender, h } from 'qx';
 import { IPosition, startDragSession } from '@ui-layouter/base';
 import {
   editReader,
@@ -8,6 +6,8 @@ import {
   IKeyEntity,
   getStdKeySize,
 } from '@ui-layouter/editor/store';
+import { css } from 'goober';
+import { rerender, h } from 'qx';
 
 let temporaryChangingModeAddToMove = false;
 
