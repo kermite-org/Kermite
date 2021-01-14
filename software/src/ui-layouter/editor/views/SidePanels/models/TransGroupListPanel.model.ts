@@ -18,7 +18,7 @@ export function useTransGroupListPartModel(): ITransGroupListPartModel {
 
   return {
     canAddGroup: true,
-    canDeleteGroup: allTransGroups.length <= 1,
+    canDeleteGroup: allTransGroups.length > 1,
     addGroup: () => editMutations.addTransGroup(),
     deleteGroup: () => editMutations.deleteLastTransGroup(),
     groupItems: allTransGroups.map((group) => ({
