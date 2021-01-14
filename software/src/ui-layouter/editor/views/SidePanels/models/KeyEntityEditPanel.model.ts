@@ -1,4 +1,3 @@
-import { createDictionaryFromKeyValues } from '@kermite/shared';
 import { ICommonSelectorViewModel } from '@ui-layouter/controls';
 import {
   IKeyEntity,
