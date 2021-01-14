@@ -11,13 +11,6 @@ const initialDesignSource: IPersistentKeyboardDesign = {
   keySizeUnit: 'KP',
   transGroups: [
     {
-      // groupId: 'trg0',
-      x: 0,
-      y: 0,
-      angle: 0,
-    },
-    {
-      // groupId: 'trg1',
       x: 0,
       y: 0,
       angle: 0,
