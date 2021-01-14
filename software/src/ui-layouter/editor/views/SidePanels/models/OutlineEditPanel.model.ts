@@ -1,14 +1,16 @@
-import { filterProps } from '@ui-layouter/base/utils';
+import { useClosureModel } from '@ui-layouter/base';
 import { editMutations, editReader } from '@ui-layouter/editor/store';
 import {
-  IConfigTextEditModel,
   createConfigTextEditModelDynamic,
+  IConfigTextEditModel,
 } from '@ui-layouter/editor/views/SidePanels/models/slots/ConfigTextEditModel';
-import { Hook } from 'qx';
 
 interface IOutlineEditPanelModel {
   vmX: IConfigTextEditModel;
   vmY: IConfigTextEditModel;
+  currentShapeId: string | undefined;
+  currentPointIndex: number;
+  numShapePoints: number | undefined;
 }
 
 function createOutlineEditPanelModel() {
@@ -29,19 +31,29 @@ function createOutlineEditPanelModel() {
   const vmX = createOulineEditPropModel('x');
   const vmY = createOulineEditPropModel('y');
 
-  return {
-    vmX,
-    vmY,
-    update() {
-      const p = editReader.currentOutlinePoint;
-      vmX.update(p ? p.x.toString() : undefined);
-      vmY.update(p ? p.y.toString() : undefined);
-    },
+  return () => {
+    const p = editReader.currentOutlinePoint;
+    vmX.update(p?.x.toString());
+    vmY.update(p?.y.toString());
+
+    const {
+      currentShapeId,
+      currentPointIndex,
+      currentOutlineShape,
+    } = editReader;
+
+    const numShapePoints = currentOutlineShape?.points.length;
+
+    return {
+      vmX,
+      vmY,
+      currentShapeId,
+      currentPointIndex,
+      numShapePoints,
+    };
   };
 }
 
 export function useOutlineEditPanelModel(): IOutlineEditPanelModel {
-  const model = Hook.useMemo(createOutlineEditPanelModel, []);
-  model.update();
-  return filterProps(model, ['vmX', 'vmY']);
+  return useClosureModel(createOutlineEditPanelModel);
 }

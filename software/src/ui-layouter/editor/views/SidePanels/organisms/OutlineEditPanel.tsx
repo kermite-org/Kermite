@@ -2,6 +2,8 @@ import {
   ConfigContent,
   ConfigHeader,
   ConfigPanel,
+  ConfigSubContent,
+  ConfigSubHeader,
   ConfigVStack,
 } from '@ui-layouter/editor/views/SidePanels/atoms';
 import { GeneralConfigTextEditRow } from '@ui-layouter/editor/views/SidePanels/controls/GeneralConfigTextEditRow';
@@ -9,28 +11,48 @@ import { useOutlineEditPanelModel } from '@ui-layouter/editor/views/SidePanels/m
 import { h } from 'qx';
 
 export const OutlineEditPanel = () => {
-  const { vmX, vmY } = useOutlineEditPanelModel();
+  const {
+    vmX,
+    vmY,
+    currentShapeId,
+    currentPointIndex,
+    numShapePoints,
+  } = useOutlineEditPanelModel();
+
+  const pointIndexText = currentPointIndex !== -1 ? currentPointIndex : '';
 
   return (
     <ConfigPanel>
-      <ConfigHeader>point properties</ConfigHeader>
+      <ConfigHeader>outline shapes</ConfigHeader>
       <ConfigContent>
-        <ConfigVStack>
-          <GeneralConfigTextEditRow
-            {...vmX}
-            label={'x'}
-            labelWidth={70}
-            inputWidth={60}
-            unit="mm"
-          />
-          <GeneralConfigTextEditRow
-            {...vmY}
-            label={'y'}
-            labelWidth={70}
-            inputWidth={60}
-            unit="mm"
-          />
-        </ConfigVStack>
+        <div>
+          <ConfigSubHeader>point {pointIndexText} properties</ConfigSubHeader>
+          <ConfigSubContent>
+            <ConfigVStack>
+              <GeneralConfigTextEditRow
+                {...vmX}
+                label={'x'}
+                labelWidth={70}
+                inputWidth={60}
+                unit="mm"
+              />
+              <GeneralConfigTextEditRow
+                {...vmY}
+                label={'y'}
+                labelWidth={70}
+                inputWidth={60}
+                unit="mm"
+              />
+            </ConfigVStack>
+          </ConfigSubContent>
+        </div>
+        <div>
+          <ConfigSubHeader>shape properties</ConfigSubHeader>
+          <ConfigSubContent>
+            <div>shapeID: {currentShapeId}</div>
+            <div>numPoints: {numShapePoints}</div>
+          </ConfigSubContent>
+        </div>
       </ConfigContent>
     </ConfigPanel>
   );
