@@ -1,3 +1,4 @@
+import { GeneralSelector } from '@ui-layouter/controls';
 import {
   ConfigContent,
   ConfigHeader,
@@ -17,6 +18,7 @@ export const OutlineEditPanel = () => {
     currentShapeId,
     currentPointIndex,
     numShapePoints,
+    vmGroupId,
   } = useOutlineEditPanelModel();
 
   const pointIndexText = currentPointIndex !== -1 ? currentPointIndex : '';
@@ -51,6 +53,12 @@ export const OutlineEditPanel = () => {
           <ConfigSubContent>
             <div>shapeID: {currentShapeId}</div>
             <div>numPoints: {numShapePoints}</div>
+            <div>
+              <span style={{ width: '80px', display: 'inline-block' }}>
+                group
+              </span>
+              <GeneralSelector {...vmGroupId} width={60} />
+            </div>
           </ConfigSubContent>
         </div>
       </ConfigContent>

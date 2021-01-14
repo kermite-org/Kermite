@@ -15,6 +15,7 @@ export type IPersistOutlinePoint = [x: number, y: number];
 
 export type IPersistOutlineShape = {
   points: IPersistOutlinePoint[];
+  groupId: string;
 };
 
 export type IPersistTransGroup = {
@@ -46,6 +47,7 @@ export type IOutlinePoint = { x: number; y: number };
 export type IOutlineShape = {
   id: string; // 編集中のみ一意の値を保持,永続化の際には保存しない
   points: IOutlinePoint[];
+  groupId: string;
 };
 
 export type ITransGroup = {

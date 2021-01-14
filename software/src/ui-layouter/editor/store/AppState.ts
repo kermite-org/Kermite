@@ -24,6 +24,7 @@ const initialDesignSource: IPersistentKeyboardDesign = {
         [-10, 40],
         [-10, -40],
       ],
+      groupId: '',
     },
     {
       points: [
@@ -32,6 +33,7 @@ const initialDesignSource: IPersistentKeyboardDesign = {
         [80, 40],
         [80, -40],
       ],
+      groupId: '',
     },
   ],
   keyEntities: [
@@ -83,6 +85,7 @@ export function createDefaultKeyboardDesign(): IKeyboardDesign {
           {
             id,
             points: shape.points.map(([x, y]) => ({ x, y })),
+            groupId: shape.groupId,
           },
         ];
       }),

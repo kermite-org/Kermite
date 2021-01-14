@@ -359,6 +359,7 @@ class EditMutations {
         editor.design.outlineShapes[newId] = {
           id: newId,
           points: [],
+          groupId: '',
         };
         editor.currentShapeId = newId;
         editor.currentPointIndex = -1;
@@ -373,6 +374,17 @@ class EditMutations {
         editor.shapeDrawing = false;
       });
     }
+  }
+
+  setCurrentShapeGroupId(groupId: string) {
+    const { currentShapeId } = editReader;
+    if (!currentShapeId) {
+      return;
+    }
+    editUpdator.commitEditor((editor) => {
+      const shape = editor.design.outlineShapes[currentShapeId];
+      shape.groupId = groupId;
+    });
   }
 }
 export const editMutations = new EditMutations();

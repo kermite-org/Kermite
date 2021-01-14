@@ -1,9 +1,11 @@
 import { useClosureModel } from '@ui-layouter/base';
+import { ICommonSelectorViewModel } from '@ui-layouter/controls';
 import { editMutations, editReader } from '@ui-layouter/editor/store';
 import {
   createConfigTextEditModelDynamic,
   IConfigTextEditModel,
 } from '@ui-layouter/editor/views/SidePanels/models/slots/ConfigTextEditModel';
+import { makeSelectorModel } from '@ui-layouter/editor/views/SidePanels/models/slots/SelectorModel';
 
 interface IOutlineEditPanelModel {
   vmX: IConfigTextEditModel;
@@ -11,6 +13,7 @@ interface IOutlineEditPanelModel {
   currentShapeId: string | undefined;
   currentPointIndex: number;
   numShapePoints: number | undefined;
+  vmGroupId: ICommonSelectorViewModel;
 }
 
 function createOutlineEditPanelModel() {
@@ -26,6 +29,27 @@ function createOutlineEditPanelModel() {
       },
       editMutations.endEdit,
     );
+  }
+
+  function makeGroupIdSelectorModel() {
+    const { currentOutlineShape, allTransGroups } = editReader;
+    return makeSelectorModel<string>({
+      sources: currentOutlineShape
+        ? [
+            ['', '--'],
+            ...allTransGroups.map(
+              (group) => [group.id, group.id] as [string, string],
+            ),
+          ]
+        : [],
+      reader: () => currentOutlineShape?.groupId,
+      writer: (newChoiceId: string) => {
+        if (currentOutlineShape) {
+          editMutations.setCurrentShapeGroupId(newChoiceId);
+          editMutations.setCurrentTransGroupById(newChoiceId);
+        }
+      },
+    });
   }
 
   const vmX = createOulineEditPropModel('x');
@@ -44,12 +68,15 @@ function createOutlineEditPanelModel() {
 
     const numShapePoints = currentOutlineShape?.points.length;
 
+    const vmGroupId = makeGroupIdSelectorModel();
+
     return {
       vmX,
       vmY,
       currentShapeId,
       currentPointIndex,
       numShapePoints,
+      vmGroupId,
     };
   };
 }
