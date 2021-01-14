@@ -43,7 +43,7 @@ export const KeyEntityEditPanel = () => {
             <span style={{ width: '80px', display: 'inline-block' }}>
               groupId
             </span>
-            <GeneralSelector {...vm.vmGroupId} />
+            <GeneralSelector {...vm.vmGroupId} width={60} />
           </div>
         </div>
         <div qxIf={!!vm.errorText} className="errorZone">

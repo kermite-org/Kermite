@@ -22,7 +22,10 @@ function getPlacementUnitInputTextFromModel(): string | undefined {
 
 function createModels() {
   const vmPlacementUnitMode = makeSelectorModel<'mm' | 'KP'>({
-    sources: { mm: 'mm', KP: 'KP' },
+    sources: [
+      ['mm', 'mm'],
+      ['KP', 'KP'],
+    ],
     reader: () => editReader.coordUnitSuffix,
     writer: (newChoiceId: 'mm' | 'KP') => {
       const unitSpec = newChoiceId === 'mm' ? 'mm' : 'KP 19';
@@ -38,13 +41,19 @@ function createModels() {
   );
 
   const vmSizeUnitMode = makeSelectorModel<IKeySizeUnit>({
-    sources: { KP: 'U', mm: 'mm' },
+    sources: [
+      ['KP', 'U'],
+      ['mm', 'mm'],
+    ],
     reader: () => editReader.keySizeUnit,
     writer: (sizeUnit) => editMutations.setSizeUnit(sizeUnit),
   });
 
   const vmPlacementAnchorMode = makeSelectorModel<IKeyPlacementAnchor>({
-    sources: { topLeft: 'top-left', center: 'center' },
+    sources: [
+      ['topLeft', 'top-left'],
+      ['center', 'center'],
+    ],
     reader: () => editReader.placementAnchor,
     writer: (anchor) => editMutations.setPlacementAnchor(anchor),
   });

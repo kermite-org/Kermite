@@ -153,28 +153,36 @@ interface IPropertyPanelModel {
   };
 }
 
-export function useKeyEntityEditPanelModel(): IPropertyPanelModel {
-  const model = Hook.useMemo(() => new KeyEntityAttrsEditorModel(), []);
-  model.update();
-
-  const vmGroupId = makeSelectorModel<string>({
-    sources: createDictionaryFromKeyValues(
-      editReader.allTransGroups.map((group) => [group.id, group.id]),
-    ),
-    reader: () => editReader.currentKeyEntity?.groupId,
+function makeGroupIdSelectorModel() {
+  const { currentKeyEntity, allTransGroups } = editReader;
+  return makeSelectorModel<string>({
+    sources: currentKeyEntity
+      ? [
+          ['', '--'],
+          ...allTransGroups.map(
+            (group) => [group.id, group.id] as [string, string],
+          ),
+        ]
+      : [],
+    reader: () => currentKeyEntity?.groupId,
     writer: (newChoiceId: string) => {
-      if (editReader.currentKeyEntity) {
+      if (currentKeyEntity) {
         editMutations.changeKeyProperty('groupId', newChoiceId);
         editMutations.setCurrentTransGroupById(newChoiceId);
       }
     },
   });
+}
+
+export function useKeyEntityEditPanelModel(): IPropertyPanelModel {
+  const model = Hook.useMemo(() => new KeyEntityAttrsEditorModel(), []);
+  model.update();
 
   return {
     keyEntityAttrsVm: {
       slots: model.allSlots.map((slot) => slot.emitViewModel()),
       errorText: model.errorText,
-      vmGroupId,
+      vmGroupId: makeGroupIdSelectorModel(),
     },
   };
 }
