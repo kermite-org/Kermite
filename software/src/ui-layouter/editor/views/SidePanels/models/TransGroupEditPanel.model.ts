@@ -9,6 +9,7 @@ interface ITransGroupEditPanelModel {
   vmX: IConfigTextEditModel;
   vmY: IConfigTextEditModel;
   vmAngle: IConfigTextEditModel;
+  currentGroupId: string;
 }
 
 function createTransGroupEditPanelModel() {
@@ -31,11 +32,12 @@ function createTransGroupEditPanelModel() {
   const vmAngle = createTransGroupEditPropModel('angle');
 
   return () => {
-    const p = editReader.currentTransGroup;
-    vmX.update(p ? p.x.toString() : undefined);
-    vmY.update(p ? p.y.toString() : undefined);
-    vmAngle.update(p ? p.angle.toString() : undefined);
-    return { vmX, vmY, vmAngle };
+    const group = editReader.currentTransGroup;
+    vmX.update(group?.x.toString());
+    vmY.update(group?.y.toString());
+    vmAngle.update(group?.angle.toString());
+    const currentGroupId = group?.id || '';
+    return { vmX, vmY, vmAngle, currentGroupId };
   };
 }
 

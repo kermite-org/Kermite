@@ -46,7 +46,7 @@ export const TransGroupListPart = () => {
   return (
     <div css={cssTransGroupListPart}>
       <div className="headerRow">
-        <span>groups</span>
+        <span>transformation groups</span>
         <div className="buttonsBox">
           <button
             disabled={editReader.allTransGroups.length <= 1}

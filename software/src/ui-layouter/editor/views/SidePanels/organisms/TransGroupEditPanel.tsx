@@ -21,10 +21,10 @@ const cssSightEditPanel = css`
 `;
 
 export const TransGroupEditPanel = () => {
-  const { vmX, vmY, vmAngle } = useTransGroupEditPanelModel();
+  const { vmX, vmY, vmAngle, currentGroupId } = useTransGroupEditPanelModel();
   return (
     <div css={cssSightEditPanel}>
-      <div>transformation group</div>
+      <div>transformation group {currentGroupId} </div>
       <div class="content">
         <GeneralConfigTextEditRow
           {...vmX}
