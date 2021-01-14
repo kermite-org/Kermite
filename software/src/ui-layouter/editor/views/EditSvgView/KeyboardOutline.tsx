@@ -4,6 +4,7 @@ import {
   IPosition,
   startDragSession,
 } from '@ui-layouter/base';
+import { degToRad } from '@ui-layouter/base/utils';
 import {
   editReader,
   editMutations,
@@ -37,17 +38,32 @@ export function startOutlinePointDragOperation(
   e: MouseEvent,
   emitStartEdit: boolean = true,
 ) {
-  const { sight, outlinePoints, currentPointIndex } = editReader;
+  const {
+    sight,
+    outlinePoints,
+    currentPointIndex,
+    currentOutlineShape,
+  } = editReader;
 
-  const point = outlinePoints![currentPointIndex];
+  if (!outlinePoints || !currentOutlineShape) {
+    return;
+  }
+
+  const point = outlinePoints[currentPointIndex];
 
   const destPos = { ...point };
 
   const moveCallback = (pos: IPosition, prevPos: IPosition) => {
     const deltaX = (pos.x - prevPos.x) * sight.scale;
     const deltaY = (pos.y - prevPos.y) * sight.scale;
-    destPos.x += deltaX;
-    destPos.y += deltaY;
+
+    const group = editReader.getTransGroupById(currentOutlineShape.groupId);
+    const theta = -degToRad(group?.angle || 0);
+    const deltaXM = deltaX * Math.cos(theta) - deltaY * Math.sin(theta);
+    const deltaYM = deltaX * Math.sin(theta) + deltaY * Math.cos(theta);
+    destPos.x += deltaXM;
+    destPos.y += deltaYM;
+
     editMutations.setOutlinePointPosition(destPos.x, destPos.y);
     rerender();
   };
@@ -186,8 +202,15 @@ export const KeyboardOutline = (props: { shape: IOutlineShape }) => {
   const vmLines = points.map((_, idx) =>
     makeHittestLineViewModel(idx, points, shapeId),
   );
+
+  const group = editReader.getTransGroupById(shape.groupId);
+  const ox = group ? group.x : 0;
+  const oy = group ? group.y : 0;
+  const orot = group ? group.angle : 0;
+  const outerTransformSpec = `translate(${ox}, ${oy}) rotate(${orot})`;
+
   return (
-    <g>
+    <g transform={outerTransformSpec}>
       <polygon points={pointsSpec} css={cssKeyboardOutline} />
       <g>
         {vmLines.map((vm) => (

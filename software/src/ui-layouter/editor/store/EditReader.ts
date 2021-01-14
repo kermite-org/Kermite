@@ -102,6 +102,10 @@ class EditReader {
     return Object.values(appState.editor.design.outlineShapes);
   }
 
+  getOutlineShapeById(shapeId: string): IOutlineShape | undefined {
+    return appState.editor.design.outlineShapes[shapeId];
+  }
+
   get currentShapeId() {
     return appState.editor.currentShapeId;
   }
