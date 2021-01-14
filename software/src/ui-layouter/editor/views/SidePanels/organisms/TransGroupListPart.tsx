@@ -1,6 +1,7 @@
 import { uiTheme } from '@ui-layouter/base';
-import { editMutations, editReader } from '@ui-layouter/editor/store';
+import { editMutations } from '@ui-layouter/editor/store';
 import { ConfigSubHeader } from '@ui-layouter/editor/views/SidePanels/atoms';
+import { useTransGroupListPartModel } from '@ui-layouter/editor/views/SidePanels/models/TransGroupListPanel.model';
 import { css } from 'goober';
 import { h } from 'qx';
 
@@ -42,20 +43,26 @@ const cssTransGroupListItemCard = css`
 `;
 
 export const TransGroupListPart = () => {
-  const { allTransGroups } = editReader;
+  const {
+    canAddGroup,
+    canDeleteGroup,
+    addGroup,
+    deleteGroup,
+    groupItems,
+  } = useTransGroupListPartModel();
+
   return (
     <div>
       <ConfigSubHeader>
         <div css={cssHeaderRow}>
           <span>groups</span>
           <div className="buttonsBox">
-            <button
-              disabled={editReader.allTransGroups.length <= 1}
-              onClick={() => editMutations.deleteLastTransGroup()}
-            >
+            <button disabled={!canDeleteGroup} onClick={deleteGroup}>
               x
             </button>
-            <button onClick={() => editMutations.addTransGroup()}>+</button>
+            <button disabled={!canAddGroup} onClick={addGroup}>
+              +
+            </button>
           </div>
         </div>
       </ConfigSubHeader>
@@ -63,17 +70,17 @@ export const TransGroupListPart = () => {
         css={cssListFrame}
         onClick={() => editMutations.setCurrentTransGroupById(undefined)}
       >
-        {allTransGroups.map((group) => (
+        {groupItems.map((item) => (
           <div
-            key={group.id}
+            key={item.id}
             onClick={(e) => {
-              editMutations.setCurrentTransGroupById(group.id);
+              item.setActive();
               e.stopPropagation();
             }}
-            data-active={editReader.currentTransGroupId === group.id}
+            data-active={item.isActive}
             css={cssTransGroupListItemCard}
           >
-            {group.id}
+            {item.id}
           </div>
         ))}
       </div>
