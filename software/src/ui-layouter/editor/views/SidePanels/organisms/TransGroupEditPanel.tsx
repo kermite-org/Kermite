@@ -60,7 +60,7 @@ export const TransGroupEditPanel = () => {
               data-active={editReader.currentTransGroupId === group.id}
               css={cssTransGroupListItemCard}
             >
-              {group.groupId}
+              {group.id}
             </div>
           ))}
         </div>

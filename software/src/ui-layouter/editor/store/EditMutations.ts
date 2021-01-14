@@ -174,11 +174,7 @@ class EditMutations {
       editor.currentkeyEntityId = keyEntityId;
     });
     const ke = editReader.currentKeyEntity;
-    if (ke?.groupId) {
-      this.setCurrentTransGroupByGroupId(ke?.groupId);
-    } else {
-      this.setCurrentTransGroupById(undefined);
-    }
+    this.setCurrentTransGroupById(ke?.groupId);
   }
 
   setCurrentShapeId(shapeId: string | undefined) {
@@ -196,18 +192,6 @@ class EditMutations {
   setCurrentTransGroupById(id: string | undefined) {
     editUpdator.patchEditor((editor) => {
       editor.currentTransGroupId = id;
-    });
-  }
-
-  setCurrentTransGroupByGroupId(groupId: string) {
-    const group = editReader.allTransGroups.find(
-      (group) => group.groupId === groupId,
-    );
-    if (!group) {
-      return;
-    }
-    editUpdator.patchEditor((editor) => {
-      editor.currentTransGroupId = group.id;
     });
   }
 

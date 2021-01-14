@@ -18,7 +18,7 @@ export type IPersistOutlineShape = {
 };
 
 export type IPersistTransGroup = {
-  groupId: string;
+  // groupId: string;
   x: number;
   y: number;
   angle: number;
@@ -49,8 +49,8 @@ export type IOutlineShape = {
 };
 
 export type ITransGroup = {
-  id: string; // 編集中のみ一意の値を保持,永続化の際には保存しない
-  groupId: string;
+  id: string; // 編集中のみ一意の値を保持,永続化の際には保存しない, 値はインデクスを文字列化したもの
+  // groupId: string;
   x: number;
   y: number;
   angle: number;

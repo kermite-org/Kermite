@@ -159,13 +159,13 @@ export function useKeyEntityEditPanelModel(): IPropertyPanelModel {
 
   const vmGroupId = makeSelectorModel<string>({
     sources: createDictionaryFromKeyValues(
-      editReader.allTransGroups.map((group) => [group.groupId, group.groupId]),
+      editReader.allTransGroups.map((group) => [group.id, group.id]),
     ),
     reader: () => editReader.currentKeyEntity?.groupId,
     writer: (newChoiceId: string) => {
       if (editReader.currentKeyEntity) {
         editMutations.changeKeyProperty('groupId', newChoiceId);
-        editMutations.setCurrentTransGroupByGroupId(newChoiceId);
+        editMutations.setCurrentTransGroupById(newChoiceId);
       }
     },
   });

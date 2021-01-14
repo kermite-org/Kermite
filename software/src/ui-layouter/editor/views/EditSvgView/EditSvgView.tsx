@@ -107,8 +107,7 @@ export const EditSvgView = () => {
   }, []);
 
   // appGlobal.setDebugValue({ appState });
-
-  appGlobal.setDebugValue({ shapes: editReader.allOutlineShapes });
+  appGlobal.setDebugValue({ design: editReader.design });
 
   return (
     <svg

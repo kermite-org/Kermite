@@ -11,13 +11,13 @@ const initialDesignSource: IPersistentKeyboardDesign = {
   keySizeUnit: 'KP',
   transGroups: [
     {
-      groupId: 'trg0',
+      // groupId: 'trg0',
       x: 0,
       y: 0,
       angle: 0,
     },
     {
-      groupId: 'trg1',
+      // groupId: 'trg1',
       x: 0,
       y: 0,
       angle: 0,
@@ -77,7 +77,8 @@ export function createDefaultKeyboardDesign(): IKeyboardDesign {
     keySizeUnit: source.keySizeUnit,
     transGroups: createDictionaryFromKeyValues(
       source.transGroups.map((group, idx) => {
-        const id = `group!${idx}`;
+        // const id = `group!${idx}`;
+        const id = idx.toString();
         return [id, { ...group, id }];
       }),
     ),

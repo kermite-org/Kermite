@@ -26,7 +26,7 @@ export function startKeyEntityDragOperation(e: MouseEvent, useGhost: boolean) {
     const deltaX = (pos.x - prevPos.x) * sight.scale;
     const deltaY = (pos.y - prevPos.y) * sight.scale;
 
-    const group = editReader.getTransGroupByGroupId(ck.groupId);
+    const group = editReader.getTransGroupById(ck.groupId);
     const theta = -degToRad(group?.angle || 0);
 
     const deltaXM = deltaX * Math.cos(theta) - deltaY * Math.sin(theta);
@@ -166,7 +166,7 @@ export const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
     </g>
   );
 
-  const group = editReader.getTransGroupByGroupId(ke.groupId);
+  const group = editReader.getTransGroupById(ke.groupId);
 
   const ox = group ? group.x : 0;
   const oy = group ? group.y : 0;
