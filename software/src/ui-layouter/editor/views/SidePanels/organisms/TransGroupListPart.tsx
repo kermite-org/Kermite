@@ -1,27 +1,27 @@
 import { uiTheme } from '@ui-layouter/base';
 import { editMutations, editReader } from '@ui-layouter/editor/store';
+import { ConfigSubHeader } from '@ui-layouter/editor/views/SidePanels/atoms';
 import { css } from 'goober';
 import { h } from 'qx';
 
-const cssTransGroupListPart = css`
-  > .headerRow {
+const cssHeaderRow = css`
+  display: flex;
+  justify-content: space-between;
+
+  > .buttonsBox {
     display: flex;
-    justify-content: space-between;
 
-    > .buttonsBox {
-      display: flex;
-
-      > button {
-        width: 20px;
-      }
+    > button {
+      width: 20px;
     }
   }
+`;
 
-  > .listFrame {
-    border: solid 1px #ccc;
-    display: flex;
-    flex-wrap: wrap;
-  }
+const cssListFrame = css`
+  margin-top: 2px;
+  border: solid 1px #ccc;
+  display: flex;
+  flex-wrap: wrap;
 `;
 
 const cssTransGroupListItemCard = css`
@@ -44,21 +44,23 @@ const cssTransGroupListItemCard = css`
 export const TransGroupListPart = () => {
   const { allTransGroups } = editReader;
   return (
-    <div css={cssTransGroupListPart}>
-      <div className="headerRow">
-        <span>transformation groups</span>
-        <div className="buttonsBox">
-          <button
-            disabled={editReader.allTransGroups.length <= 1}
-            onClick={() => editMutations.deleteLastTransGroup()}
-          >
-            x
-          </button>
-          <button onClick={() => editMutations.addTransGroup()}>+</button>
+    <div>
+      <ConfigSubHeader>
+        <div css={cssHeaderRow}>
+          <span>groups</span>
+          <div className="buttonsBox">
+            <button
+              disabled={editReader.allTransGroups.length <= 1}
+              onClick={() => editMutations.deleteLastTransGroup()}
+            >
+              x
+            </button>
+            <button onClick={() => editMutations.addTransGroup()}>+</button>
+          </div>
         </div>
-      </div>
+      </ConfigSubHeader>
       <div
-        className="listFrame"
+        css={cssListFrame}
         onClick={() => editMutations.setCurrentTransGroupById(undefined)}
       >
         {allTransGroups.map((group) => (
