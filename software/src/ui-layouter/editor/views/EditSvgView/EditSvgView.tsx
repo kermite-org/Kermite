@@ -79,6 +79,10 @@ const onSvgMouseDown = (e: MouseEvent) => {
     editMutations.setCurrentShapeId(undefined);
     editMutations.setCurrentKeyEntity(undefined);
     editMutations.setCurrentPointIndex(-1);
+    if (editMode === 'add') {
+      // addで右クリックしたときmoveに切り替える
+      // editMutations.setEditMode('move');
+    }
   }
   if (e.button === 1) {
     startSightDragOperation(e);
