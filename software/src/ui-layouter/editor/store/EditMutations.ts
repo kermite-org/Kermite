@@ -268,6 +268,33 @@ class EditMutations {
     });
   }
 
+  addTransGroup() {
+    const numGroups = editReader.allTransGroups.length;
+    const newGroupId = numGroups.toString();
+
+    editUpdator.commitEditor((editor) => {
+      editor.design.transGroups[newGroupId] = {
+        id: newGroupId,
+        x: 0,
+        y: 0,
+        angle: 0,
+      };
+      editor.currentTransGroupId = newGroupId;
+    });
+  }
+
+  deleteLastTransGroup() {
+    const numGroups = editReader.allTransGroups.length;
+    if (numGroups === 1) {
+      return;
+    }
+    const deletingGroupId = (numGroups - 1).toString();
+    editUpdator.commitEditor((editor) => {
+      delete editor.design.transGroups[deletingGroupId];
+      editor.currentTransGroupId = undefined;
+    });
+  }
+
   changeKeyProperty = <K extends IEditPropKey>(
     propKey: K,
     value: IKeyEntity[K],

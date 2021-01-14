@@ -48,8 +48,13 @@ export const TransGroupListPart = () => {
       <div className="headerRow">
         <span>groups</span>
         <div className="buttonsBox">
-          <button>x</button>
-          <button>+</button>
+          <button
+            disabled={editReader.allTransGroups.length <= 1}
+            onClick={() => editMutations.deleteLastTransGroup()}
+          >
+            x
+          </button>
+          <button onClick={() => editMutations.addTransGroup()}>+</button>
         </div>
       </div>
       <div
