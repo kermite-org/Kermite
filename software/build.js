@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const childProcess = require('child_process');
 const readline = require('readline');
-const serveHttp = require('serve-http');
+const liveServer = require('live-server');
 
 const [opts] = cliopts.parse(
   ['x-build', 'build application'],
@@ -104,9 +104,12 @@ async function startMockView() {
     sourcemap: 'inline',
   });
 
-  serveHttp.createServer({
+  liveServer.start({
+    host: 'localhost',
     port: 3000,
-    pubdir: `${distDir}`,
+    root: distDir,
+    open: true,
+    logLevel: 0,
   });
 }
 
