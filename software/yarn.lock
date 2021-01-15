@@ -4545,6 +4545,11 @@ es6-promisify@^5.0.0:
   dependencies:
     es6-promise "^4.0.3"
 
+"esbuild@>=0.6.0 <1.0.0":
+  version "0.8.31"
+  resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.8.31.tgz#c21e7adb3ad283c951a53de7ad64a5ae2df2ed34"
+  integrity sha512-7EIU0VdUxltwivjVezX3HgeNzeIVR1snkrAo57WdUnuBMykdzin5rTrxwCDM6xQqj0RL/HjOEm3wFr2ijHKeaA==
+
 escalade@^3.0.2:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/escalade/-/escalade-3.1.0.tgz#e8e2d7c7a8b76f6ee64c2181d6b8151441602d4e"
@@ -4873,6 +4878,15 @@ estraverse@^5.1.0, estraverse@^5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/estraverse/-/estraverse-5.2.0.tgz#307df42547e6cc7324d3cf03c155d5cdb8c53880"
   integrity sha512-BxbNGGNm0RyRYvUdHpIwv9IWzeM9XClbOxwoATuFdOE7ZE6wHL+HQ5T8hoPM+zHvmKzzsEqhgy0GrQ5X13afiQ==
+
+estrella@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/estrella/-/estrella-1.3.0.tgz#6fb0061be9e9f4918c8a8496ca4ffd74274e4a2a"
+  integrity sha512-u3rvHWMxRkd1oWg8fy+uahY/PcQKK9gDDDOcfKRnB6rzQbDAByIlEf5vv2LwRY3+koEe+JBZF7F/g9x+Mk/Jeg==
+  dependencies:
+    esbuild ">=0.6.0 <1.0.0"
+  optionalDependencies:
+    fsevents "~2.1.2"
 
 esutils@^2.0.2:
   version "2.0.3"
@@ -5292,6 +5306,11 @@ fsevents@^1.2.7:
   dependencies:
     bindings "^1.5.0"
     nan "^2.12.1"
+
+fsevents@~2.1.2:
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.1.3.tgz#fb738703ae8d2f9fe900c33836ddebee8b97f23e"
+  integrity sha512-Auw9a4AxqWpa9GUfj370BMPzzyncfBABW8Mab7BGWBYDj4Isgq+cDKtx0i6u9jcX9pQDnswsaaOTgTmA5pEjuQ==
 
 function-bind@^1.1.1:
   version "1.1.1"
@@ -5932,6 +5951,11 @@ ignore@^5.1.1, ignore@^5.1.4:
   version "5.1.8"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.1.8.tgz#f150a8b50a34289b33e22f5889abd4d8016f0e57"
   integrity sha512-BMpfD7PpiETpBl/A6S498BaIJ6Y/ABT93ETbby2fP00v4EbvPBXWEoaR1UBPKs3iR53pJY7EtZk5KACI57i1Uw==
+
+immer@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/immer/-/immer-8.0.0.tgz#08763549ba9dd7d5e2eb4bec504a8315bd9440c2"
+  integrity sha512-jm87NNBAIG4fHwouilCHIecFXp5rMGkiFrAuhVO685UnMAlOneEAnOyzPt8OnP47TC11q/E7vpzZe0WvwepFTg==
 
 import-fresh@^2.0.0:
   version "2.0.0"
@@ -9602,6 +9626,11 @@ serialport@^9.0.1:
     "@serialport/parser-regex" "^9.0.1"
     "@serialport/stream" "^9.0.1"
     debug "^4.1.1"
+
+serve-http@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/serve-http/-/serve-http-1.0.6.tgz#934f29929ae83c9f5cc83bda6f1984af2da40bad"
+  integrity sha512-0KOoZiW6oAo2L07L2/lbwGK7J90CIhKvU6A8x7hWxECf8J4cUHEiC4OZGxMSmUnLRLgjIzVj4bw5mEwFZnIuHg==
 
 serve-static@^1.12.4:
   version "1.14.1"

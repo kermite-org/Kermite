@@ -2,7 +2,7 @@
   "name": "@kermite/ui-page1",
   "version": "0.0.0",
   "scripts": {
-    "watch": "parcel watch src/index.html --no-autoinstall --out-dir ../../dist/ui/page1 --cache-dir ../../dist/.cache/ui-page1 --public-url . --no-hmr"
+    "_watch": "parcel watch src/index.html --no-autoinstall --out-dir ../../dist/ui/page1 --cache-dir ../../dist/.cache/ui-page1 --public-url . --no-hmr"
   },
   "dependencies": {
     "@kermite/shared": "*",

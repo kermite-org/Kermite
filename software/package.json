@@ -46,16 +46,16 @@
     "clean": "rm -rf .cache",
     "typecheck": "tsc -b packages/*/tsconfig.json",
     "lint": "eslint packages --ext .ts,.tsx",
-    "lint:fix": "eslint packages --ext .ts,.tsx --fix"
+    "lint:fix": "eslint packages --ext .ts,.tsx --fix",
+    "mockview": "cd packages/ui-mockview && yarn start"
   },
   "dependencies": {
     "fast-equals": "^2.0.0",
     "glob": "^7.1.6",
     "goober": "^2.0.6",
+    "immer": "^8.0.0",
     "node-fetch": "^2.6.1",
     "node-hid": "^1.3.1",
-    "parcel": "^1.12.4",
-    "reflect-metadata": "^0.1.13",
     "serialport": "^9.0.1"
   },
   "devDependencies": {
@@ -83,8 +83,12 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.21.3",
     "eslint-plugin-standard": "^4.0.1",
+    "estrella": "^1.3.0",
     "lerna": "^3.22.1",
+    "parcel": "^1.12.4",
     "prettier": "^2.1.2",
+    "reflect-metadata": "^0.1.13",
+    "serve-http": "^1.0.6",
     "typescript": "^4.0.3"
   }
 }

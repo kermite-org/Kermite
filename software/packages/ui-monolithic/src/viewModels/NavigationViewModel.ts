@@ -15,6 +15,7 @@ interface NavigationEntrySource {
 
 const entrySources: NavigationEntrySource[] = [
   { pageSig: 'editor', faIconName: 'fa-keyboard' },
+  { pageSig: 'layouter', faIconName: 'fa-drafting-compass' },
   { pageSig: 'firmwareUpdation', faIconName: 'fa-microchip' },
   { pageSig: 'shapePreview', faIconName: 'fa-file-code' },
   { pageSig: 'presetBrowser', faIconName: 'fa-book' },

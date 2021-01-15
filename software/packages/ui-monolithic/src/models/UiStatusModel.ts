@@ -3,6 +3,7 @@ import { appUi } from '@kermite/ui';
 
 export type PageSignature =
   | 'editor'
+  | 'layouter'
   | 'shapePreview'
   | 'firmwareUpdation'
   | 'presetBrowser'

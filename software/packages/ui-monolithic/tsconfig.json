@@ -1,27 +1,14 @@
 {
-  // "extends": "../tsconfig.settings.json",  //not working with parcel
+  "extends": "../tsconfig.settings.json",
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "composite": true,
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "strict": true,
-    "esModuleInterop": true,
-    "lib": ["dom", "esnext"],
-    "jsx": "react",
-    "jsxFactory": "h",
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "experimentalDecorators": true,
-
     "noEmit": true,
+    "rootDir": "..",
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["./src/*"],
+      "@ui-layouter": ["../ui-layouter/src"]
     }
   },
+  "include": ["./src/**/*", "../ui-layouter/**/*"],
   "references": [{ "path": "../shared" }, { "path": "../ui" }]
 }

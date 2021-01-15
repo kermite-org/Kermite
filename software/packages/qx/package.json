@@ -3,8 +3,10 @@
   "version": "0.0.0",
   "main": "lib/index.js",
   "types": "src/qx.d.ts",
+  "license": "UNLICENSED",
+  "private": true,
   "scripts": {
     "build": "tsc",
-    "watch": "tsc -w"
+    "watch": "tsc -w --preserveWatchOutput"
   }
 }

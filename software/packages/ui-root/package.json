@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "build": "parcel build src/index.html --no-autoinstall --out-dir ../../dist/ui --cache-dir ../../dist/.cache/ui-root --public-url . --no-hmr",
-    "watch": "parcel watch src/index.html --no-autoinstall --out-dir ../../dist/ui --cache-dir ../../dist/.cache/ui-root --public-url . --no-hmr",
-    "_watch": "parcel src/index.html --no-autoinstall --out-dir ../../dist/ui -p 3000"
+    "_watch": "parcel watch src/index.html --no-autoinstall --out-dir ../../dist/ui --cache-dir ../../dist/.cache/ui-root --public-url . --no-hmr",
+    "_serve": "parcel src/index.html --no-autoinstall --out-dir ../../dist/ui -p 3000"
   },
   "dependencies": {
     "@kermite/shared": "*",
