@@ -63,7 +63,7 @@
     "@typescript-eslint/restrict-template-expressions": 0,
     "@typescript-eslint/prefer-regexp-exec": 0,
     "@typescript-eslint/await-thenable": 1,
-    "@typescript-eslint/no-unnecessary-type-assertion": 1,
+    "@typescript-eslint/no-unnecessary-type-assertion": 0,
     "@typescript-eslint/no-unsafe-call": 0,
 
     //standard-with-typescript
@@ -81,7 +81,7 @@
     "@typescript-eslint/array-type": [1, { "default": "array" }],
     "@typescript-eslint/no-useless-constructor": 1,
     "@typescript-eslint/lines-between-class-members": 1,
-    "@typescript-eslint/no-invalid-void-type": 1,
+    "@typescript-eslint/no-invalid-void-type": 0,
     "@typescript-eslint/prefer-includes": 1,
     "@typescript-eslint/prefer-optional-chain": 1,
     "@typescript-eslint/default-param-last": 1,
@@ -92,6 +92,8 @@
     "spaced-comment": 1,
     "one-var": 1,
     "import/first": 1,
+
+    "@typescript-eslint/restrict-plus-operands": 0,
 
     //others
     "react/jsx-key": 1,
@@ -125,7 +127,7 @@
       }
     ],
     "import/newline-after-import": 1,
-    "no-restricted-imports": [1, { "patterns": ["../../*"] }],
+    // "no-restricted-imports": [1, { "patterns": ["../../*"] }],
     "no-empty": 0,
     "no-inner-declarations": 0,
     "no-constant-condition": 0,

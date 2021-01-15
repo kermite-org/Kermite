@@ -1,31 +1,15 @@
 import { app } from 'electron';
-import { appWindowEventHub } from './base/AppEventBus';
-import { appWindowManager } from './base/AppWindowManager';
-import { Services } from './services';
+import { ApplicationRoot } from '~/ApplicationRoot';
 
 function startApplication() {
-  console.log('debug v0126a');
+  console.log('start');
 
-  app.allowRendererProcessReuse = true;
-
-  const services = new Services();
-
-  app.on('ready', async () => {
-    await services.initialize();
-    appWindowManager.openMainWindow();
-  });
+  const appRoot = new ApplicationRoot();
+  appRoot.initialize();
 
   app.on('window-all-closed', async () => {
-    await services.terminate();
+    appRoot.terminate();
     app.quit();
   });
-
-  app.on('browser-window-focus', () => {
-    appWindowEventHub.emit({ activeChanged: true });
-  });
-  app.on('browser-window-blur', () => {
-    appWindowEventHub.emit({ activeChanged: false });
-  });
 }
-
-startApplication();
+app.on('ready', startApplication);
