@@ -1,7 +1,7 @@
 import { clamp } from '@ui-layouter/base/utils';
 import {
   appState,
-  createDefaultKeyboardDesign,
+  createFallbackKeyboardDesign,
   IEditMode,
   IEditorTarget,
   IEnvBoolPropKey,
@@ -9,6 +9,7 @@ import {
 } from './AppState';
 import {
   IEditPropKey,
+  IKeyboardDesign,
   IKeyEntity,
   IKeyPlacementAnchor,
   IKeySizeUnit,
@@ -333,8 +334,15 @@ class EditMutations {
 
   resetKeyboardDesign() {
     editUpdator.patchEditor((editor) => {
-      editor.design = createDefaultKeyboardDesign();
+      editor.design = createFallbackKeyboardDesign();
     });
+  }
+
+  loadKeyboardDesign(design: IKeyboardDesign) {
+    editUpdator.patchEditor((editor) => {
+      editor.design = design;
+    });
+    this.resetSitePosition();
   }
 
   resetSitePosition() {

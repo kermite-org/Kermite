@@ -61,6 +61,15 @@ export function getKeyboardDesignBoundingBox(design: IKeyboardDesign) {
     }),
   );
 
+  if (xs.length === 0 || ys.length === 0) {
+    return {
+      left: -80,
+      right: 80,
+      top: -60,
+      bottom: 60,
+    };
+  }
+
   const left = Math.min(...xs);
   const right = Math.max(...xs);
   const top = Math.min(...ys);
