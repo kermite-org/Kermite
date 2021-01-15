@@ -16,7 +16,7 @@ const cssPageRoot = css`
   flex-direction: column;
 
   > .topRow {
-    margin: 10px 0;
+    margin-bottom: 5px;
     flex-shrink: 0;
   }
 
@@ -34,11 +34,9 @@ const cssPageRoot = css`
 export const PageRoot = () => {
   return (
     <div css={cssPageRoot}>
-      <div>layout editor proto</div>
       <div class="topRow">
         <EditMenuBar />
       </div>
-
       <div class="mainRow">
         <EditSvgViewContainer />
         <div class="sideColumn">

@@ -10,7 +10,9 @@
       "@ui-common": ["./ui-common"],
       "@ui-common/*": ["./ui-common/*"],
       "@ui-layouter": ["./ui-layouter"],
-      "@ui-layouter/*": ["./ui-layouter/*"]
+      "@ui-layouter/*": ["./ui-layouter/*"],
+      "@ui-layouter-page": ["./ui-layouter-page"],
+      "@ui-layouter-page/*": ["./ui-layouter-page/*"]
     }
   },
   "include": ["./**/*"]
