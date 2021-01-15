@@ -1,5 +1,6 @@
 import { IProfileManagerStatus } from '@shared';
 import { appGlobal, applicationStorage } from '~/base';
+import { JsonFileServiceStatic } from '~/services/file/JsonFileServiceStatic';
 import { ProfileService } from '~/services/profile';
 import { WindowService } from '~/services/window';
 import { FirmwareUpdationService } from '~/services0/FirmwareUpdation';
@@ -100,6 +101,10 @@ export class ApplicationRoot {
           );
         }
       },
+      file_loadObjectFromJsonWithFileDialog:
+        JsonFileServiceStatic.loadObjectFromJsonWithFileDialog,
+      file_saveObjectToJsonWithFileDialog:
+        JsonFileServiceStatic.saveObjectToJsonWithFileDialog,
     });
 
     appGlobal.icpMainAgent.supplySubscriptionHandlers({
