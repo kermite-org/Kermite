@@ -1,7 +1,4 @@
-import {
-  IKeyboardBehaviorMode,
-  IKeyboardLayoutStandard,
-} from '@kermite/shared';
+import { IKeyboardBehaviorMode, IKeyboardLayoutStandard } from '@shared';
 import { h } from 'qx';
 import { models } from '~/models';
 import { DualItemsHoverSelector } from '~/views/fabrics/DualItemHoverSelector';

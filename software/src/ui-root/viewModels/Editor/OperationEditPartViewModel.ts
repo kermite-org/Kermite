@@ -3,7 +3,7 @@ import {
   VirtualKeyTexts,
   addOptionToOptionsArray,
   removeOptionFromOptionsArray,
-} from '@kermite/shared';
+} from '@shared';
 import { models } from '~/models';
 import { virtualKeyGroupsTable2 } from './virtualkeyGroupsTable';
 

@@ -2,7 +2,7 @@ import {
   IProfileData,
   duplicateObjectByJsonStringifyParse,
   fallbackProfileData,
-} from '@kermite/shared';
+} from '@shared';
 import { fsxReadJsonFile } from '~/funcs';
 import { ProfileHelper } from '~/services/profile/ProfileManager/ProfileHelper';
 import { KeyboardLayoutFileLoader } from '~/services0/KeyboardShape/KeyboardLayoutFileLoader';

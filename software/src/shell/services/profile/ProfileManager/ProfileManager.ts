@@ -5,7 +5,7 @@ import {
   fallbackProfileData,
   clampValue,
   IProfileManagerCommand,
-} from '@kermite/shared';
+} from '@shared';
 import { EventPort } from '~/funcs';
 import { PresetProfileLoader } from '~/services0/PresetProfileLoader';
 import { ProfileHelper } from './ProfileHelper';

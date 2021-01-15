@@ -1,4 +1,4 @@
-import { VirtualKey } from '@kermite/shared';
+import { VirtualKey } from '@shared';
 
 // const assignKeysGroup00: VirtualKey[] = ['K_NONE'];
 

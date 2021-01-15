@@ -1,7 +1,4 @@
-import {
-  IKeyboardShapeDisplayArea,
-  formatTimeMsToMinSecMs,
-} from '@kermite/shared';
+import { IKeyboardShapeDisplayArea, formatTimeMsToMinSecMs } from '@shared';
 import { models } from '~/models';
 import {
   makeCustomKeyUnitViewModels,

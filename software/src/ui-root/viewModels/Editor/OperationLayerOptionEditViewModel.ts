@@ -1,4 +1,4 @@
-import { LayerInvocationMode, generateNumberSequence } from '@kermite/shared';
+import { LayerInvocationMode, generateNumberSequence } from '@shared';
 import { models } from '~/models';
 
 export interface IOperationLayerOptionEditViewModel {

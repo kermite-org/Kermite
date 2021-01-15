@@ -1,5 +1,5 @@
-import { IntervalTimerWrapper, IRealtimeKeyboardEvent } from '@kermite/shared';
-import { appUi, ipcAgent } from '@kermite/ui';
+import { IntervalTimerWrapper, IRealtimeKeyboardEvent } from '@shared';
+import { appUi, ipcAgent } from '@ui-common';
 import { EditorModel } from '~/models/editor/EditorModel';
 
 export class RealtimeHeatmapModel {

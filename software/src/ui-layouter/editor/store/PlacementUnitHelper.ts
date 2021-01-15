@@ -1,4 +1,4 @@
-import { mapObjectValues } from '@kermite/shared';
+import { mapObjectValues } from '@shared';
 import { IKeyboardDesign, IKeySizeUnit } from './DataSchema';
 
 export type ICoordUnit =

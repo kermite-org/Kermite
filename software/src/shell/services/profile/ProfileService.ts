@@ -1,4 +1,4 @@
-import { IProfileData, IProfileManagerStatus } from '@kermite/shared';
+import { IProfileData, IProfileManagerStatus } from '@shared';
 import { makeListnerPort } from '~/funcs';
 import { PresetProfileLoader } from '~/services0/PresetProfileLoader';
 import { ProfileManager } from './ProfileManager/ProfileManager';

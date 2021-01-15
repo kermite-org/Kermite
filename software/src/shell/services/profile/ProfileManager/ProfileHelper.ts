@@ -1,4 +1,4 @@
-import { IProfileData } from '@kermite/shared';
+import { IProfileData } from '@shared';
 
 export namespace ProfileHelper {
   export function fixProfileData(profileData: IProfileData) {

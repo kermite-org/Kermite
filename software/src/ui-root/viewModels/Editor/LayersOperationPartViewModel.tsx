@@ -1,4 +1,4 @@
-import { ILayer, removeArrayItems } from '@kermite/shared';
+import { ILayer, removeArrayItems } from '@shared';
 import { modalConfirm } from '~/base/dialog/BasicModals';
 import { models } from '~/models';
 import {

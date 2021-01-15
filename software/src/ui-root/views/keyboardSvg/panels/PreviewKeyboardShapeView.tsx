@@ -1,4 +1,4 @@
-import { IKeyboardShape } from '@kermite/shared';
+import { IKeyboardShape } from '@shared';
 import { css } from 'goober';
 import { h } from 'qx';
 import { IUiSettings } from '~/models/UiStatusModel';

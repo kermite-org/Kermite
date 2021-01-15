@@ -1,5 +1,5 @@
-import { IRealtimeKeyboardEvent } from '@kermite/shared';
-import { ipcAgent } from '@kermite/ui';
+import { IRealtimeKeyboardEvent } from '@shared';
+import { ipcAgent } from '@ui-common';
 import { EditorModel } from '../editor/EditorModel';
 
 export class PlayerModel {

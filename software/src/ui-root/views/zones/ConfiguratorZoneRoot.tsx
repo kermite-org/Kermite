@@ -1,4 +1,4 @@
-import { uiTheme } from '@kermite/ui';
+import { uiTheme } from '@ui-common';
 import { UiLayouterCore } from '@ui-layouter';
 import { css } from 'goober';
 import { h } from 'qx';

@@ -1,4 +1,4 @@
-import { uiTheme, reflectValue } from '@kermite/ui';
+import { uiTheme, reflectValue } from '@ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
 import { combineClasses } from '~/base/helper/ViewHelpers';

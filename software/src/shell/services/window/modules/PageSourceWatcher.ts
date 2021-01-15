@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { debounce } from '@kermite/shared';
+import { debounce } from '@shared';
 import {
   fsWatch,
   pathExtname,

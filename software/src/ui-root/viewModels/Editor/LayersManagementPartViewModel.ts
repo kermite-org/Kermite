@@ -1,4 +1,4 @@
-import { removeArrayItems } from '@kermite/shared';
+import { removeArrayItems } from '@shared';
 import { modalConfirm } from '~/base/dialog/BasicModals';
 import { models } from '~/models';
 import {

@@ -1,4 +1,4 @@
-import { IProfileManagerStatus } from '@kermite/shared';
+import { IProfileManagerStatus } from '@shared';
 import { appGlobal, applicationStorage } from '~/base';
 import { ProfileService } from '~/services/profile';
 import { WindowService } from '~/services/window';

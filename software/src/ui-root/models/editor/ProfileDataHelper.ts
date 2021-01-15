@@ -5,7 +5,7 @@ import {
   IProfileAssignType,
   mapObjectValues,
   IAssignEntry,
-} from '@kermite/shared';
+} from '@shared';
 
 function convertSignleAssignToDualAssign(
   src: IAssignEntry_SingleEx,

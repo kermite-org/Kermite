@@ -1,4 +1,4 @@
-import { IProjectResourceInfo } from '@kermite/shared';
+import { IProjectResourceInfo } from '@shared';
 import { appEnv } from '~/base';
 import { pathJoin } from '~/funcs';
 import { IProjectResourceInfoProvider } from '../serviceInterfaces';

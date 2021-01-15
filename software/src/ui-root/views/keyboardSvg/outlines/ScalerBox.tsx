@@ -1,4 +1,4 @@
-import { appUi } from '@kermite/ui';
+import { appUi } from '@ui-common';
 import { css } from 'goober';
 import { h, Hook } from 'qx';
 

@@ -1,5 +1,5 @@
-import { IKeyboardDeviceStatus } from '@kermite/shared';
-import { ipcAgent } from '@kermite/ui';
+import { IKeyboardDeviceStatus } from '@shared';
+import { ipcAgent } from '@ui-common';
 
 export class DeviceStatusModel {
   isConnected: boolean = false;

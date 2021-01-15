@@ -1,4 +1,4 @@
-import { IKeyboardShapeDisplayArea, IProfileData } from '@kermite/shared';
+import { IKeyboardShapeDisplayArea, IProfileData } from '@shared';
 import { Hook } from 'qx';
 import {
   IPresetKeyUnitViewModel,

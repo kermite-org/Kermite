@@ -1,5 +1,5 @@
-import { IProjectResourceInfo } from '@kermite/shared';
-import { ipcAgent } from '@kermite/ui';
+import { IProjectResourceInfo } from '@shared';
+import { ipcAgent } from '@ui-common';
 
 export class ProjectResourceModel {
   projectResourceInfos: IProjectResourceInfo[] = [];

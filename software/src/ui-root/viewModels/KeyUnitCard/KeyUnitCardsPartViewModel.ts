@@ -1,4 +1,4 @@
-import { IAssignEntryWithLayerFallback, IKeyUnitEntry } from '@kermite/shared';
+import { IAssignEntryWithLayerFallback, IKeyUnitEntry } from '@shared';
 import { Models } from '~/models';
 import { getAssignEntryTexts } from '~/viewModels/KeyUnitCard/KeyUnitCardViewModelCommon';
 

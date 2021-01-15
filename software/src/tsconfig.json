@@ -5,10 +5,10 @@
     "paths": {
       "qx": ["./qx"],
       "qx/*": ["./qx/*"],
-      "@kermite/shared": ["./shared"],
-      "@kermite/shared/*": ["./shared/*"],
-      "@kermite/ui": ["./ui-common"],
-      "@kermite/ui/*": ["./ui-common/*"],
+      "@shared": ["./shared"],
+      "@shared/*": ["./shared/*"],
+      "@ui-common": ["./ui-common"],
+      "@ui-common/*": ["./ui-common/*"],
       "@ui-layouter": ["./ui-layouter"],
       "@ui-layouter/*": ["./ui-layouter/*"]
     }

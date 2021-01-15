@@ -3,7 +3,7 @@ import {
   IKeyboardShapeDisplayArea,
   IKeyboardShape,
   keyboardShape_fallbackData,
-} from '@kermite/shared';
+} from '@shared';
 import { fsExistsSync, fsxReadTextFile } from '~/funcs';
 
 export namespace KeyboardLayoutFileLoader {

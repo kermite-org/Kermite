@@ -1,5 +1,5 @@
-import { IAppWindowEvent } from '@kermite/shared';
-import { ipcAgent } from '@kermite/ui';
+import { IAppWindowEvent } from '@shared';
+import { ipcAgent } from '@ui-common';
 
 export class SiteModel {
   private _isWidgetMode: boolean = false;

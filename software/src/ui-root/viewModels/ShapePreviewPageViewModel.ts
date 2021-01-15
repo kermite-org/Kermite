@@ -1,4 +1,4 @@
-import { IKeyboardShape } from '@kermite/shared';
+import { IKeyboardShape } from '@shared';
 import { models } from '~/models';
 import { IUiSettings } from '~/models/UiStatusModel';
 import { ISelectorSource } from '~/viewModels/viewModelInterfaces';

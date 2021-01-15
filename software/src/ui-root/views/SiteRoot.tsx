@@ -1,4 +1,4 @@
-import { appUi } from '@kermite/ui';
+import { appUi } from '@ui-common';
 import { css, glob, setup } from 'goober';
 import { h } from 'qx';
 import { DebugOverlay } from '~/base/overlay/DebugOverlay';
