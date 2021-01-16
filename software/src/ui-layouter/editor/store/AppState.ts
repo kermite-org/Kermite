@@ -1,6 +1,6 @@
 import {
-  IKeyboardDesign,
-  IKeyEntity,
+  IEditKeyboardDesign,
+  IEditKeyEntity,
   IPersistentKeyboardDesign,
 } from './DataSchema';
 
@@ -12,7 +12,7 @@ export interface IModeState {
   editorTarget: IEditorTarget;
 }
 export interface IEditState {
-  design: IKeyboardDesign;
+  design: IEditKeyboardDesign;
   currentkeyEntityId: string | undefined;
   currentShapeId: string | undefined;
   currentPointIndex: number;
@@ -32,7 +32,7 @@ export interface ISight {
   screenH: number;
 }
 export interface IEnvState {
-  ghost: IKeyEntity | undefined;
+  ghost: IEditKeyEntity | undefined;
   sight: ISight;
   showAxis: boolean;
   showGrid: boolean;
@@ -56,7 +56,7 @@ interface IAppState {
   env: IEnvState;
 }
 
-export function createFallbackKeyboardDesign(): IKeyboardDesign {
+export function createFallbackEditKeyboardDesign(): IEditKeyboardDesign {
   return {
     placementUnit: 'mm',
     placementAnchor: 'center',
@@ -93,7 +93,7 @@ export function createFallbackPersistKeyboardDesign(): IPersistentKeyboardDesign
 
 export const appState: IAppState = {
   editor: {
-    design: createFallbackKeyboardDesign(),
+    design: createFallbackEditKeyboardDesign(),
     currentkeyEntityId: undefined,
     currentShapeId: undefined,
     currentPointIndex: -1,

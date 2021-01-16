@@ -4,7 +4,7 @@ import {
   editReader,
   unitValueToMm,
   editMutations,
-  IKeyEntity,
+  IEditKeyEntity,
   getStdKeySize,
 } from '@ui-layouter/editor/store';
 import { css } from 'goober';
@@ -72,7 +72,7 @@ const isoEnterPathMarkupText = [
   'z',
 ].join(' ');
 
-export const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
+export const KeyEntityCard = ({ ke }: { ke: IEditKeyEntity }) => {
   const cssKeyRect = css`
     fill: rgba(255, 255, 255, 0.3);
     stroke-width: 0.5;

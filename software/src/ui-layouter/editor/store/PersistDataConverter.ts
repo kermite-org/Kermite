@@ -6,14 +6,14 @@ import {
   undefinedToMinusOne,
 } from '@shared';
 import {
-  IKeyboardDesign,
+  IEditKeyboardDesign,
   IPersistentKeyboardDesign,
 } from '@ui-layouter/editor/store/DataSchema';
 
 export namespace LayouterPersistDataConverter {
   export function convertFromPersistData(
     source: IPersistentKeyboardDesign,
-  ): IKeyboardDesign {
+  ): IEditKeyboardDesign {
     return {
       placementUnit: source.placementUnit,
       placementAnchor: source.placementAnchor,
@@ -50,7 +50,7 @@ export namespace LayouterPersistDataConverter {
   }
 
   export function convertToPersistData(
-    design: IKeyboardDesign,
+    design: IEditKeyboardDesign,
   ): IPersistentKeyboardDesign {
     return {
       placementUnit: design.placementUnit,

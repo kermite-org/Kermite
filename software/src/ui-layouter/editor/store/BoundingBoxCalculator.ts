@@ -1,5 +1,5 @@
 import { degToRad } from '@ui-layouter/base/utils';
-import { IKeyboardDesign, IKeySizeUnit } from './DataSchema';
+import { IEditKeyboardDesign, IKeySizeUnit } from './DataSchema';
 import {
   getCoordUnitFromUnitSpec,
   getStdKeySize,
@@ -19,7 +19,7 @@ function getKeySize(
   return getStdKeySize(shapeSpec, coordUnit, keySizeUnit);
 }
 
-export function getKeyboardDesignBoundingBox(design: IKeyboardDesign) {
+export function getKeyboardDesignBoundingBox(design: IEditKeyboardDesign) {
   const coordUnit = getCoordUnitFromUnitSpec(design.placementUnit);
   const xs: number[] = [];
   const ys: number[] = [];

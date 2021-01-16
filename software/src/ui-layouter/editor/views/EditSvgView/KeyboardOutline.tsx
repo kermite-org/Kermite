@@ -9,7 +9,7 @@ import {
   editReader,
   editMutations,
   IOutlinePoint,
-  IOutlineShape,
+  IEditOutlineShape,
 } from '@ui-layouter/editor/store';
 import { css } from 'goober';
 import { rerender, h } from 'qx';
@@ -195,7 +195,7 @@ const HittestLine = (props: { vm: IHittestLineViewModel }) => {
   );
 };
 
-export const KeyboardOutline = (props: { shape: IOutlineShape }) => {
+export const KeyboardOutline = (props: { shape: IEditOutlineShape }) => {
   const { shape } = props;
   const { points, id: shapeId } = shape;
   const pointsSpec = points.map(({ x, y }) => `${x}, ${y}`).join(' ');

@@ -1,6 +1,8 @@
 export type IKeySizeUnit = 'mm' | 'KP';
 
 export type IKeyPlacementAnchor = 'topLeft' | 'center';
+
+// ------------------------------------------------------
 export interface IPersistentKeyEntity {
   keyId: string;
   x: number;
@@ -11,10 +13,11 @@ export interface IPersistentKeyEntity {
   groupId: string | undefined;
 }
 
-export type IPersistOutlinePoint = { x: number; y: number };
+// export type IPersistOutlinePoint = { x: number; y: number };
+export type IOutlinePoint = { x: number; y: number };
 
 export type IPersistOutlineShape = {
-  points: IPersistOutlinePoint[];
+  points: IOutlinePoint[];
   groupId: string | undefined;
 };
 
@@ -32,7 +35,9 @@ export interface IPersistentKeyboardDesign {
   outlineShapes: IPersistOutlineShape[];
   transGroups: IPersistTransGroup[];
 }
-export interface IKeyEntity {
+
+// ------------------------------------------------------
+export interface IEditKeyEntity {
   id: string; // 編集中のみ一意の値を保持,永続化の際には保存しない
   keyId: string;
   x: number;
@@ -42,29 +47,30 @@ export interface IKeyEntity {
   keyIndex: number;
   groupId: string;
 }
-export type IOutlinePoint = { x: number; y: number };
 
-export type IOutlineShape = {
+export type IEditOutlineShape = {
   id: string; // 編集中のみ一意の値を保持,永続化の際には保存しない
   points: IOutlinePoint[];
   groupId: string;
 };
 
-export type ITransGroup = {
+export type IEditTransGroup = {
   id: string; // 編集中のみ一意の値を保持,永続化の際には保存しない, 値はインデクスを文字列化したもの
   // groupId: string;
   x: number;
   y: number;
   angle: number;
 };
-export interface IKeyboardDesign {
+export interface IEditKeyboardDesign {
   placementUnit: string; // `mm` | `KP ${baseKeyPitch}`
   placementAnchor: IKeyPlacementAnchor;
   keySizeUnit: IKeySizeUnit; // 'mm' | 'KP'
-  keyEntities: { [id: string]: IKeyEntity };
-  outlineShapes: { [id: string]: IOutlineShape };
-  transGroups: { [id: string]: ITransGroup };
+  keyEntities: { [id: string]: IEditKeyEntity };
+  outlineShapes: { [id: string]: IEditOutlineShape };
+  transGroups: { [id: string]: IEditTransGroup };
 }
+
+// ------------------------------------------------------
 
 export type IEditPropKey =
   | 'keyId'

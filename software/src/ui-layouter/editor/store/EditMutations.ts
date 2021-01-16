@@ -1,7 +1,7 @@
 import { clamp } from '@ui-layouter/base/utils';
 import {
   appState,
-  createFallbackKeyboardDesign,
+  createFallbackEditKeyboardDesign,
   IEditMode,
   IEditorTarget,
   IEnvBoolPropKey,
@@ -9,8 +9,8 @@ import {
 } from './AppState';
 import {
   IEditPropKey,
-  IKeyboardDesign,
-  IKeyEntity,
+  IEditKeyboardDesign,
+  IEditKeyEntity,
   IKeyPlacementAnchor,
   IKeySizeUnit,
 } from './DataSchema';
@@ -57,7 +57,7 @@ class EditMutations {
     const id = `ke${(Math.random() * 1000) >> 0}`;
     const keySize = keySizeUnit === 'KP' ? 1 : 18;
 
-    const keyEntity: IKeyEntity = {
+    const keyEntity: IEditKeyEntity = {
       id,
       keyId: id,
       x,
@@ -298,7 +298,7 @@ class EditMutations {
 
   changeKeyProperty = <K extends IEditPropKey>(
     propKey: K,
-    value: IKeyEntity[K],
+    value: IEditKeyEntity[K],
   ) => {
     editUpdator.patchEditKeyEntity((ke) => {
       ke[propKey] = value;
@@ -334,11 +334,11 @@ class EditMutations {
 
   resetKeyboardDesign() {
     editUpdator.patchEditor((editor) => {
-      editor.design = createFallbackKeyboardDesign();
+      editor.design = createFallbackEditKeyboardDesign();
     });
   }
 
-  loadKeyboardDesign(design: IKeyboardDesign) {
+  loadKeyboardDesign(design: IEditKeyboardDesign) {
     editUpdator.patchEditor((editor) => {
       editor.design = design;
     });

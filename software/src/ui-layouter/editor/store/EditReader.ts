@@ -1,10 +1,10 @@
 import { appState, IEnvBoolPropKey, IModeState } from './AppState';
 import { getKeyboardDesignBoundingBox } from './BoundingBoxCalculator';
 import {
-  IKeyEntity,
+  IEditKeyEntity,
   IOutlinePoint,
-  IOutlineShape,
-  ITransGroup,
+  IEditOutlineShape,
+  IEditTransGroup,
 } from './DataSchema';
 import { getCoordUnitFromUnitSpec, ICoordUnit } from './PlacementUnitHelper';
 import { createSimpleSelector } from './StoreUtils';
@@ -76,16 +76,16 @@ class EditReader {
     return appState.env.snapToGrid;
   }
 
-  get currentKeyEntity(): IKeyEntity | undefined {
+  get currentKeyEntity(): IEditKeyEntity | undefined {
     const { design, currentkeyEntityId } = appState.editor;
     return design.keyEntities[currentkeyEntityId || ''];
   }
 
-  getKeyEntityById(id: string): IKeyEntity | undefined {
+  getKeyEntityById(id: string): IEditKeyEntity | undefined {
     return appState.editor.design.keyEntities[id];
   }
 
-  get allKeyEntities(): IKeyEntity[] {
+  get allKeyEntities(): IEditKeyEntity[] {
     return Object.values(appState.editor.design.keyEntities);
   }
 
@@ -102,7 +102,7 @@ class EditReader {
     return Object.values(appState.editor.design.outlineShapes);
   }
 
-  getOutlineShapeById(shapeId: string): IOutlineShape | undefined {
+  getOutlineShapeById(shapeId: string): IEditOutlineShape | undefined {
     return appState.editor.design.outlineShapes[shapeId];
   }
 
@@ -110,7 +110,7 @@ class EditReader {
     return appState.editor.currentShapeId;
   }
 
-  get currentOutlineShape(): IOutlineShape | undefined {
+  get currentOutlineShape(): IEditOutlineShape | undefined {
     return appState.editor.design.outlineShapes[this.currentShapeId || ''];
   }
 
@@ -134,11 +134,11 @@ class EditReader {
     return Object.values(appState.editor.design.transGroups);
   }
 
-  getTransGroupById(groupId: string): ITransGroup | undefined {
+  getTransGroupById(groupId: string): IEditTransGroup | undefined {
     return this.allTransGroups.find((group) => group.id === groupId);
   }
 
-  get currentTransGroup(): ITransGroup | undefined {
+  get currentTransGroup(): IEditTransGroup | undefined {
     return appState.editor.design.transGroups[
       appState.editor.currentTransGroupId || ''
     ];
