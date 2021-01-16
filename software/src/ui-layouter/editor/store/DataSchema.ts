@@ -7,15 +7,15 @@ export interface IPersistentKeyEntity {
   y: number;
   r: number;
   shape: string;
-  keyIndex: number;
-  groupId: string;
+  keyIndex: number | undefined;
+  groupId: string | undefined;
 }
 
 export type IPersistOutlinePoint = [x: number, y: number];
 
 export type IPersistOutlineShape = {
   points: IPersistOutlinePoint[];
-  groupId: string;
+  groupId: string | undefined;
 };
 
 export type IPersistTransGroup = {
@@ -28,9 +28,9 @@ export interface IPersistentKeyboardDesign {
   placementUnit: string;
   placementAnchor: IKeyPlacementAnchor;
   keySizeUnit: IKeySizeUnit;
-  transGroups: IPersistTransGroup[];
-  outlineShapes: IPersistOutlineShape[];
   keyEntities: IPersistentKeyEntity[];
+  outlineShapes: IPersistOutlineShape[];
+  transGroups: IPersistTransGroup[];
 }
 export interface IKeyEntity {
   id: string; // 編集中のみ一意の値を保持,永続化の際には保存しない
@@ -61,9 +61,9 @@ export interface IKeyboardDesign {
   placementUnit: string; // `mm` | `KP ${baseKeyPitch}`
   placementAnchor: IKeyPlacementAnchor;
   keySizeUnit: IKeySizeUnit; // 'mm' | 'KP'
-  transGroups: { [id: string]: ITransGroup };
-  outlineShapes: { [id: string]: IOutlineShape };
   keyEntities: { [id: string]: IKeyEntity };
+  outlineShapes: { [id: string]: IOutlineShape };
+  transGroups: { [id: string]: ITransGroup };
 }
 
 export type IEditPropKey =

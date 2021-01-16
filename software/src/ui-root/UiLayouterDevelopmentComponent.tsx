@@ -1,21 +1,21 @@
 import { UiLayouterCore } from '@ui-layouter';
 import {
-  createFallbackKeyboardDesign,
-  IKeyboardDesign,
+  createFallbackPersistKeyboardDesign,
+  IPersistentKeyboardDesign,
 } from '@ui-layouter/editor/store';
 import { h, Hook } from 'qx';
 
-function loadLocalStorageKeyboardDesignOrDefault(): IKeyboardDesign {
+function loadLocalStorageKeyboardDesignOrDefault(): IPersistentKeyboardDesign {
   const text = localStorage.getItem('savedDesign');
   if (text) {
-    const obj = JSON.parse(text) as IKeyboardDesign;
+    const obj = JSON.parse(text) as IPersistentKeyboardDesign;
     return obj;
   } else {
-    return createFallbackKeyboardDesign();
+    return createFallbackPersistKeyboardDesign();
   }
 }
 
-function saveLocalStorageKeyboardDesign(design: IKeyboardDesign) {
+function saveLocalStorageKeyboardDesign(design: IPersistentKeyboardDesign) {
   const text = JSON.stringify(design);
   localStorage.setItem('savedDesign', text);
 }

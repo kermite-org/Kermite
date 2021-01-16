@@ -1,4 +1,8 @@
-import { IKeyboardDesign, IKeyEntity } from './DataSchema';
+import {
+  IKeyboardDesign,
+  IKeyEntity,
+  IPersistentKeyboardDesign,
+} from './DataSchema';
 
 export type IEditorTarget = 'key' | 'outline';
 export type IEditMode = 'select' | 'add' | 'move' | 'delete';
@@ -56,7 +60,7 @@ export function createFallbackKeyboardDesign(): IKeyboardDesign {
   return {
     placementUnit: 'mm',
     placementAnchor: 'center',
-    keySizeUnit: 'mm',
+    keySizeUnit: 'KP',
     keyEntities: {},
     outlineShapes: {},
     transGroups: {
@@ -67,6 +71,23 @@ export function createFallbackKeyboardDesign(): IKeyboardDesign {
         angle: 0,
       },
     },
+  };
+}
+
+export function createFallbackPersistKeyboardDesign(): IPersistentKeyboardDesign {
+  return {
+    placementUnit: 'mm',
+    placementAnchor: 'center',
+    keySizeUnit: 'KP',
+    keyEntities: [],
+    outlineShapes: [],
+    transGroups: [
+      {
+        x: 0,
+        y: 0,
+        angle: 0,
+      },
+    ],
   };
 }
 
