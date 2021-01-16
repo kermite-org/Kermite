@@ -65,6 +65,7 @@ class EditMutations {
       angle: 0,
       shape: `std ${keySize}`,
       keyIndex: -1,
+      mirrorKeyIndex: -1,
       groupId: '',
     };
     editUpdator.commitEditor((editor) => {

@@ -30,9 +30,23 @@ export namespace KeyboardDesignConverter {
         source.keyEntities.map((ke, idx) => {
           const { keyId, x, y, angle, shape } = ke;
           const keyIndex = undefinedToMinusOne(ke.keyIndex);
+          const mirrorKeyIndex = undefinedToMinusOne(ke.mirrorKeyIndex);
           const groupId = groupIndexToGroupId(ke.groupIndex);
           const id = `ke!${idx}`;
-          return [id, { id, keyId, x, y, angle, shape, keyIndex, groupId }];
+          return [
+            id,
+            {
+              id,
+              keyId,
+              x,
+              y,
+              angle,
+              shape,
+              keyIndex,
+              mirrorKeyIndex,
+              groupId,
+            },
+          ];
         }),
       ),
       outlineShapes: createDictionaryFromKeyValues(
@@ -72,6 +86,7 @@ export namespace KeyboardDesignConverter {
         angle: ke.angle,
         shape: ke.shape,
         keyIndex: minusOneToUndefined(ke.keyIndex),
+        mirrorKeyIndex: minusOneToUndefined(ke.keyIndex),
         groupIndex: groupIdToGroupIndex(ke.groupId),
       })),
       outlineShapes: Object.values(design.outlineShapes).map((shape) => ({

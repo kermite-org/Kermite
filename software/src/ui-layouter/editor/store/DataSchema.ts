@@ -10,6 +10,7 @@ export interface IKeyEntity {
   angle: number;
   shape: string;
   keyIndex?: number;
+  mirrorKeyIndex?: number;
   groupIndex?: number;
 }
 
@@ -46,6 +47,7 @@ export interface IEditKeyEntity {
   angle: number;
   shape: string; // `std ${width}` | `ref ${shapeName}`
   keyIndex: number;
+  mirrorKeyIndex: number;
   groupId: string;
 }
 
