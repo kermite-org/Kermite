@@ -125,12 +125,12 @@ const OutlinePoint = (props: {
         if (editMode === 'select') {
           editMutations.setCurrentShapeId(shapeId);
           editMutations.setCurrentPointIndex(index);
-          editMutations.setCurrentKeyEntity(undefined);
+          editMutations.unsetCurrentKeyEntity();
           e.stopPropagation();
         } else if (editMode === 'move' || editMode === 'add') {
           editMutations.setCurrentShapeId(shapeId);
           editMutations.setCurrentPointIndex(index);
-          editMutations.setCurrentKeyEntity(undefined);
+          editMutations.unsetCurrentKeyEntity();
           startOutlinePointDragOperation(e, true, isMirror);
           e.stopPropagation();
         } else if (editMode === 'delete') {
@@ -206,7 +206,7 @@ const HittestLine = (props: {
       const mirrorMultX = isMirror ? -1 : 1;
 
       editMutations.startEdit();
-      editMutations.setCurrentKeyEntity(undefined);
+      editMutations.unsetCurrentKeyEntity();
       editMutations.setCurrentShapeId(shapeId);
       editMutations.splitOutlineLine(dstPointIndex, mx * mirrorMultX, my);
       editMutations.setCurrentPointIndex(dstPointIndex);

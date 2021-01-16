@@ -48,7 +48,7 @@ const onSvgMouseDown = (e: MouseEvent) => {
     const { editorTarget, editMode } = editReader;
     if (editMode === 'select' || editMode === 'move') {
       editMutations.setCurrentShapeId(undefined);
-      editMutations.setCurrentKeyEntity(undefined);
+      editMutations.unsetCurrentKeyEntity();
       editMutations.setCurrentPointIndex(-1);
     }
     if (editorTarget === 'key') {
@@ -56,7 +56,7 @@ const onSvgMouseDown = (e: MouseEvent) => {
         const [sx, sy] = getRelativeMousePosition(e);
         const [x, y] = screenToWorld(sx, sy);
         editMutations.addKeyEntity(x, y);
-        startKeyEntityDragOperation(e, false);
+        startKeyEntityDragOperation(e, false, false);
       }
     }
     if (editorTarget === 'outline') {
@@ -67,7 +67,7 @@ const onSvgMouseDown = (e: MouseEvent) => {
         editMutations.startEdit();
         editMutations.startShapeDrawing();
         editMutations.addOutlinePoint(x, y);
-        startOutlinePointDragOperation(e, false);
+        startOutlinePointDragOperation(e, false, false);
       }
     }
   }
@@ -77,7 +77,7 @@ const onSvgMouseDown = (e: MouseEvent) => {
       editMutations.endShapeDrawing();
     }
     editMutations.setCurrentShapeId(undefined);
-    editMutations.setCurrentKeyEntity(undefined);
+    editMutations.unsetCurrentKeyEntity();
     editMutations.setCurrentPointIndex(-1);
     if (editMode === 'add') {
       // addで右クリックしたときmoveに切り替える
@@ -112,6 +112,8 @@ export const EditSvgView = () => {
 
   // appGlobal.setDebugValue({ appState });
   layouterAppGlobal.setDebugValue({ design: editReader.design });
+  const { isCurrentKeyMirror } = editReader;
+  layouterAppGlobal.setDebugValue({ isCurrentKeyMirror });
 
   return (
     <svg

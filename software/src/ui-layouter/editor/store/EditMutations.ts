@@ -169,9 +169,19 @@ class EditMutations {
     });
   }
 
-  setCurrentKeyEntity(keyEntityId: string | undefined) {
+  setCurrentKeyEntity(keyEntityId: string, isMirror: boolean) {
     editUpdator.patchEditor((editor) => {
       editor.currentkeyEntityId = keyEntityId;
+      editor.isCurrentKeyMirror = isMirror;
+    });
+    const ke = editReader.currentKeyEntity;
+    this.setCurrentTransGroupById(ke?.groupId);
+  }
+
+  unsetCurrentKeyEntity() {
+    editUpdator.patchEditor((editor) => {
+      editor.currentkeyEntityId = undefined;
+      editor.isCurrentKeyMirror = false;
     });
     const ke = editReader.currentKeyEntity;
     this.setCurrentTransGroupById(ke?.groupId);
