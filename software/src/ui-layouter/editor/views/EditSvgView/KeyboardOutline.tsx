@@ -187,7 +187,7 @@ const cssHittestLine = css`
   stroke-width: 1;
   stroke: transparent;
   cursor: crosshair;
-  stroke: rgba(255, 0, 128, 0.2);
+  /* stroke: rgba(255, 0, 128, 0.2); */
 `;
 
 const HittestLine = (props: {
