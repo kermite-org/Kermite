@@ -197,7 +197,7 @@ function createKeyIndexEditViewModel() {
   return createConfigTextEditModelDynamic2({
     procStartEdit: editMutations.startEdit,
     procEmitValidText: (text) => {
-      const value = parseInt(text);
+      const value = text === '' ? -1 : parseInt(text);
       const { isCurrentKeyMirror } = editReader;
       const targetPropKey: keyof IEditKeyEntity = isCurrentKeyMirror
         ? 'mirrorKeyIndex'
@@ -206,15 +206,32 @@ function createKeyIndexEditViewModel() {
     },
     procEndEdit: editMutations.endEdit,
     checker: (text: string) => {
+      if (text === '') {
+        return undefined;
+      }
       if (!text.match(/^[0-9]+$/)) {
         return ''; // 'keyIndex must be a number';
       }
       const newKeyIndex = parseInt(text);
-      const duplicate = editReader.allKeyEntities.some(
-        (ke) =>
-          ke !== editReader.currentKeyEntity &&
-          (ke.keyIndex === newKeyIndex || ke.mirrorKeyIndex === newKeyIndex),
-      );
+
+      const {
+        allKeyEntities,
+        currentKeyEntity,
+        isCurrentKeyMirror,
+      } = editReader;
+
+      const peer = isCurrentKeyMirror
+        ? currentKeyEntity?.keyIndex
+        : currentKeyEntity?.mirrorKeyIndex;
+
+      const duplicate =
+        newKeyIndex === peer ||
+        allKeyEntities.some(
+          (ke) =>
+            ke !== currentKeyEntity &&
+            (ke.keyIndex === newKeyIndex || ke.mirrorKeyIndex === newKeyIndex),
+        );
+
       if (duplicate) {
         return 'keyIndex duplication';
       }
