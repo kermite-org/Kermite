@@ -86,7 +86,7 @@ export namespace KeyboardDesignConverter {
         angle: ke.angle,
         shape: ke.shape,
         keyIndex: minusOneToUndefined(ke.keyIndex),
-        mirrorKeyIndex: minusOneToUndefined(ke.keyIndex),
+        mirrorKeyIndex: minusOneToUndefined(ke.mirrorKeyIndex),
         groupIndex: groupIdToGroupIndex(ke.groupId),
       })),
       outlineShapes: Object.values(design.outlineShapes).map((shape) => ({

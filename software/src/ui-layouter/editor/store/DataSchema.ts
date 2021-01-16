@@ -83,4 +83,5 @@ export type IEditPropKey =
   | 'angle'
   | 'shape'
   | 'keyIndex'
+  | 'mirrorKeyIndex'
   | 'groupId';
