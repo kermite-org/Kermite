@@ -1,7 +1,7 @@
 import {
   createDictionaryFromKeyValues,
-  minusOneToUndefined,
-  undefinedToMinusOne,
+  convertMinusOneToUndefined,
+  convertUndefinedToMinusOne,
 } from '@shared';
 import {
   IEditKeyboardDesign,
@@ -38,8 +38,8 @@ export namespace KeyboardDesignConverter {
               y: ke.y,
               angle: ke.angle,
               shape: ke.shape,
-              keyIndex: undefinedToMinusOne(ke.keyIndex),
-              mirrorKeyIndex: undefinedToMinusOne(ke.mirrorKeyIndex),
+              keyIndex: convertUndefinedToMinusOne(ke.keyIndex),
+              mirrorKeyIndex: convertUndefinedToMinusOne(ke.mirrorKeyIndex),
               groupId: groupIndexToGroupId(ke.groupIndex),
             },
           ];
@@ -81,8 +81,8 @@ export namespace KeyboardDesignConverter {
         y: ke.y,
         angle: ke.angle,
         shape: ke.shape,
-        keyIndex: minusOneToUndefined(ke.keyIndex),
-        mirrorKeyIndex: minusOneToUndefined(ke.mirrorKeyIndex),
+        keyIndex: convertMinusOneToUndefined(ke.keyIndex),
+        mirrorKeyIndex: convertMinusOneToUndefined(ke.mirrorKeyIndex),
         groupIndex: groupIdToGroupIndex(ke.groupId),
       })),
       outlineShapes: Object.values(design.outlineShapes).map((shape) => ({
@@ -93,7 +93,7 @@ export namespace KeyboardDesignConverter {
         x: group.x,
         y: group.y,
         angle: group.angle,
-        mirror: group.mirror,
+        mirror: group.mirror || undefined,
       })),
     };
   }
