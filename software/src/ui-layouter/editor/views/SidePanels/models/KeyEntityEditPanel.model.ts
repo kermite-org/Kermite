@@ -1,20 +1,20 @@
 import { useClosureModel } from '@ui-layouter/base';
 import { ICommonSelectorViewModel } from '@ui-layouter/controls';
 import {
+  editMutations,
+  editReader,
   IEditKeyEntity,
   IEditPropKey,
-  editReader,
-  editMutations,
 } from '@ui-layouter/editor/store';
 import { getKeyIdentifierText } from '@ui-layouter/editor/store/DomainRelatedHelpers';
 import {
-  IAttributeSlotSource,
   AttributeSlotModel,
+  IAttributeSlotSource,
   IAttributeSlotViewModel,
 } from '@ui-layouter/editor/views/SidePanels/models/slots/AttributeSlotModel';
 import {
-  createConfigTextEditModelDynamic,
-  IConfigTextEditModel,
+  createConfigTextEditModelDynamic2,
+  IConfigTextEditModel2,
 } from '@ui-layouter/editor/views/SidePanels/models/slots/ConfigTextEditModel';
 import { makeSelectorModel } from '@ui-layouter/editor/views/SidePanels/models/slots/SelectorModel';
 import { Hook } from 'qx';
@@ -166,7 +166,7 @@ interface IPropertyPanelModel {
   keyEntityAttrsVm: {
     keyIdentificationText: string;
     slots: IAttributeSlotViewModel[];
-    vmKeyIndex: IConfigTextEditModel;
+    vmKeyIndex: IConfigTextEditModel2;
     errorText: string;
     vmGroupId: ICommonSelectorViewModel;
   };
@@ -194,10 +194,9 @@ function makeGroupIdSelectorModel() {
 }
 
 function createKeyIndexEditViewModel() {
-  const vm = createConfigTextEditModelDynamic(
-    [/^[0-9]+$/],
-    editMutations.startEdit,
-    (text) => {
+  return createConfigTextEditModelDynamic2({
+    procStartEdit: editMutations.startEdit,
+    procEmitValidText: (text) => {
       const value = parseInt(text);
       const { isCurrentKeyMirror } = editReader;
       const targetPropKey: keyof IEditKeyEntity = isCurrentKeyMirror
@@ -205,19 +204,32 @@ function createKeyIndexEditViewModel() {
         : 'keyIndex';
       editMutations.changeKeyProperty(targetPropKey, value);
     },
-    editMutations.endEdit,
-  );
-
-  return () => {
-    const { currentKeyEntity: ke, isCurrentKeyMirror } = editReader;
-    if (ke) {
-      const keyIndex = isCurrentKeyMirror ? ke.mirrorKeyIndex : ke.keyIndex;
-      vm.update(keyIndex !== -1 ? keyIndex.toString() : '');
-    } else {
-      vm.update(undefined);
-    }
-    return vm;
-  };
+    procEndEdit: editMutations.endEdit,
+    checker: (text: string) => {
+      if (!text.match(/^[0-9]+$/)) {
+        return ''; // 'keyIndex must be a number';
+      }
+      const newKeyIndex = parseInt(text);
+      const duplicate = editReader.allKeyEntities.some(
+        (ke) =>
+          ke !== editReader.currentKeyEntity &&
+          (ke.keyIndex === newKeyIndex || ke.mirrorKeyIndex === newKeyIndex),
+      );
+      if (duplicate) {
+        return 'keyIndex duplication';
+      }
+      return undefined;
+    },
+    sourceTextFeeder: () => {
+      const { currentKeyEntity: ke, isCurrentKeyMirror } = editReader;
+      if (ke) {
+        const keyIndex = isCurrentKeyMirror ? ke.mirrorKeyIndex : ke.keyIndex;
+        return keyIndex !== -1 ? keyIndex.toString() : '';
+      } else {
+        return undefined;
+      }
+    },
+  });
 }
 
 export function useKeyEntityEditPanelModel(): IPropertyPanelModel {

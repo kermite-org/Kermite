@@ -37,6 +37,7 @@ export const KeyEntityEditPanel = () => {
             labelWidth={80}
             inputWidth={60}
           />
+          <div css={cssErrorText}>{vm.vmKeyIndex.errorText}</div>
           <div>
             <span style={{ width: '80px', display: 'inline-block' }}>
               groupId
