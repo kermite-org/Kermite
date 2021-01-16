@@ -360,7 +360,7 @@ class EditMutations {
       const allNumbers = editReader.allOutlineShapes.map((shape) =>
         parseInt(shape.id.split('!')[1]),
       );
-      const newNumber = Math.max(...allNumbers) + 1;
+      const newNumber = allNumbers.length > 0 ? Math.max(...allNumbers) + 1 : 0;
       const newId = `shape!${newNumber}`;
 
       editUpdator.patchEditor((editor) => {
