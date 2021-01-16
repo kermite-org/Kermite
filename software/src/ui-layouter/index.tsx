@@ -4,8 +4,8 @@ import {
   editReader,
   IKeyboardDesign,
 } from '@ui-layouter/editor/store';
+import { KeyboardDesignConverter } from '@ui-layouter/editor/store/KeyboardDesignConverter';
 import { keyboardOperationHander } from '@ui-layouter/editor/store/KeyboardOperationHandler';
-import { KeyboardDesignConverter } from '@ui-layouter/editor/store/PersistDataConverter';
 import { PageRoot } from '@ui-layouter/editor/views/PageRoot';
 import { h, Hook } from 'qx';
 
