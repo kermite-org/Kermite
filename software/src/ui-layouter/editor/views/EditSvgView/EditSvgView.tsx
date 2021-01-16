@@ -11,7 +11,7 @@ import { DisplayAreaFrame } from './DisplayAreaFrame';
 import { FieldGrid, FieldAxis } from './FieldParts';
 import { KeyEntityCard, startKeyEntityDragOperation } from './KeyEntityCard';
 import {
-  KeyboardOutline,
+  KeyboardOutlineShapeView,
   startOutlinePointDragOperation,
 } from './KeyboardOutline';
 
@@ -134,7 +134,7 @@ export const EditSvgView = () => {
         ))}
 
         {editReader.allOutlineShapes.map((shape, idx) => (
-          <KeyboardOutline shape={shape} key={idx} />
+          <KeyboardOutlineShapeView shape={shape} key={idx} />
         ))}
       </g>
     </svg>
