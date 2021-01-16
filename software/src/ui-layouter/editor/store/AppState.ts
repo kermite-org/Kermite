@@ -1,7 +1,7 @@
 import {
   IEditKeyboardDesign,
   IEditKeyEntity,
-  IPersistentKeyboardDesign,
+  IKeyboardDesign,
 } from './DataSchema';
 
 export type IEditorTarget = 'key' | 'outline';
@@ -74,7 +74,7 @@ export function createFallbackEditKeyboardDesign(): IEditKeyboardDesign {
   };
 }
 
-export function createFallbackPersistKeyboardDesign(): IPersistentKeyboardDesign {
+export function createFallbackKeyboardDesign(): IKeyboardDesign {
   return {
     placementUnit: 'mm',
     placementAnchor: 'center',

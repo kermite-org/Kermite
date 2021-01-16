@@ -3,7 +3,7 @@ export type IKeySizeUnit = 'mm' | 'KP';
 export type IKeyPlacementAnchor = 'topLeft' | 'center';
 
 // ------------------------------------------------------
-export interface IPersistentKeyEntity {
+export interface IKeyEntity {
   keyId: string;
   x: number;
   y: number;
@@ -16,24 +16,24 @@ export interface IPersistentKeyEntity {
 // export type IPersistOutlinePoint = { x: number; y: number };
 export type IOutlinePoint = { x: number; y: number };
 
-export type IPersistOutlineShape = {
+export type IOutlineShape = {
   points: IOutlinePoint[];
   groupId: string | undefined;
 };
 
-export type IPersistTransGroup = {
+export type ITransGroup = {
   // groupId: string;
   x: number;
   y: number;
   angle: number;
 };
-export interface IPersistentKeyboardDesign {
+export interface IKeyboardDesign {
   placementUnit: string;
   placementAnchor: IKeyPlacementAnchor;
   keySizeUnit: IKeySizeUnit;
-  keyEntities: IPersistentKeyEntity[];
-  outlineShapes: IPersistOutlineShape[];
-  transGroups: IPersistTransGroup[];
+  keyEntities: IKeyEntity[];
+  outlineShapes: IOutlineShape[];
+  transGroups: ITransGroup[];
 }
 
 // ------------------------------------------------------

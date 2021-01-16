@@ -7,12 +7,12 @@ import {
 } from '@shared';
 import {
   IEditKeyboardDesign,
-  IPersistentKeyboardDesign,
+  IKeyboardDesign,
 } from '@ui-layouter/editor/store/DataSchema';
 
-export namespace LayouterPersistDataConverter {
-  export function convertFromPersistData(
-    source: IPersistentKeyboardDesign,
+export namespace KeyboardDesignConverter {
+  export function convertKeyboardDesignNonEditToEdit(
+    source: IKeyboardDesign,
   ): IEditKeyboardDesign {
     return {
       placementUnit: source.placementUnit,
@@ -49,9 +49,9 @@ export namespace LayouterPersistDataConverter {
     };
   }
 
-  export function convertToPersistData(
+  export function convertKeyboardDesignEditToNonEdit(
     design: IEditKeyboardDesign,
-  ): IPersistentKeyboardDesign {
+  ): IKeyboardDesign {
     return {
       placementUnit: design.placementUnit,
       placementAnchor: design.placementAnchor,

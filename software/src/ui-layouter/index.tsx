@@ -2,23 +2,25 @@ import { appUi } from '@ui-common';
 import {
   editMutations,
   editReader,
-  IPersistentKeyboardDesign,
+  IKeyboardDesign,
 } from '@ui-layouter/editor/store';
 import { keyboardOperationHander } from '@ui-layouter/editor/store/KeyboardOperationHandler';
-import { LayouterPersistDataConverter } from '@ui-layouter/editor/store/PersistDataConverter';
+import { KeyboardDesignConverter } from '@ui-layouter/editor/store/PersistDataConverter';
 import { PageRoot } from '@ui-layouter/editor/views/PageRoot';
 import { h, Hook } from 'qx';
 
 export namespace UiLayouterCore {
-  export function loadEditDesign(persistDesign: IPersistentKeyboardDesign) {
-    const design = LayouterPersistDataConverter.convertFromPersistData(
+  export function loadEditDesign(persistDesign: IKeyboardDesign) {
+    const design = KeyboardDesignConverter.convertKeyboardDesignNonEditToEdit(
       persistDesign,
     );
     editMutations.loadKeyboardDesign(design);
   }
 
-  export function emitEditDesign(): IPersistentKeyboardDesign {
-    return LayouterPersistDataConverter.convertToPersistData(editReader.design);
+  export function emitEditDesign(): IKeyboardDesign {
+    return KeyboardDesignConverter.convertKeyboardDesignEditToNonEdit(
+      editReader.design,
+    );
   }
 
   export function Component() {
