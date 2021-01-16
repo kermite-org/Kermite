@@ -22,11 +22,11 @@ function applyInverseGroupTransform(
   group: ITransGroup | undefined,
   isMirror: boolean,
 ) {
-  const mirrorXMult = isMirror ? -1 : 1;
+  const mirrorMultX = isMirror ? -1 : 1;
   const ox = group ? group.x : 0;
   const oy = group ? group.y : 0;
-  const theta = -degToRad(group?.angle || 0) * mirrorXMult;
-  const m0x = wx - ox * mirrorXMult;
+  const theta = -degToRad(group?.angle || 0) * mirrorMultX;
+  const m0x = wx - ox * mirrorMultX;
   const m0y = wy - oy;
   const mx = m0x * Math.cos(theta) - m0y * Math.sin(theta);
   const my = m0x * Math.sin(theta) + m0y * Math.cos(theta);
@@ -80,11 +80,11 @@ export function startOutlinePointDragOperation(
     const deltaX = (pos.x - prevPos.x) * sight.scale;
     const deltaY = (pos.y - prevPos.y) * sight.scale;
 
-    const mirrorXMult = isMirror ? -1 : 1;
-    const theta = -degToRad(group?.angle || 0) * mirrorXMult;
+    const mirrorMultX = isMirror ? -1 : 1;
+    const theta = -degToRad(group?.angle || 0) * mirrorMultX;
     const deltaXM = deltaX * Math.cos(theta) - deltaY * Math.sin(theta);
     const deltaYM = deltaX * Math.sin(theta) + deltaY * Math.cos(theta);
-    destPos.x += deltaXM * mirrorXMult;
+    destPos.x += deltaXM * mirrorMultX;
     destPos.y += deltaYM;
 
     editMutations.setOutlinePointPosition(destPos.x, destPos.y);

@@ -12,7 +12,11 @@ import { rerender, h } from 'qx';
 
 let temporaryChangingModeAddToMove = false;
 
-export function startKeyEntityDragOperation(e: MouseEvent, useGhost: boolean) {
+export function startKeyEntityDragOperation(
+  e: MouseEvent,
+  useGhost: boolean,
+  isMirror: boolean,
+) {
   const { sight, currentKeyEntity: ck, coordUnit } = editReader;
 
   if (!ck) {
@@ -26,14 +30,15 @@ export function startKeyEntityDragOperation(e: MouseEvent, useGhost: boolean) {
     const deltaX = (pos.x - prevPos.x) * sight.scale;
     const deltaY = (pos.y - prevPos.y) * sight.scale;
 
+    const mirrorMultX = isMirror ? -1 : 1;
     const group = editReader.getTransGroupById(ck.groupId);
-    const theta = -degToRad(group?.angle || 0);
+    const theta = -degToRad(group?.angle || 0) * mirrorMultX;
 
     const deltaXM = deltaX * Math.cos(theta) - deltaY * Math.sin(theta);
     const deltaYM = deltaX * Math.sin(theta) + deltaY * Math.cos(theta);
-
-    destPos.x += deltaXM;
+    destPos.x += deltaXM * mirrorMultX;
     destPos.y += deltaYM;
+
     editMutations.setKeyPosition(destPos.x, destPos.y);
     rerender();
   };
@@ -72,7 +77,13 @@ const isoEnterPathMarkupText = [
   'z',
 ].join(' ');
 
-export const KeyEntityCard = ({ ke }: { ke: IEditKeyEntity }) => {
+export const KeyEntityCardSingle = (props: {
+  ke: IEditKeyEntity;
+  isMirror: boolean;
+}) => {
+  const { ke, isMirror } = props;
+  const mirrorMultX = isMirror ? -1 : 1;
+
   const cssKeyRect = css`
     fill: rgba(255, 255, 255, 0.3);
     stroke-width: 0.5;
@@ -108,7 +119,7 @@ export const KeyEntityCard = ({ ke }: { ke: IEditKeyEntity }) => {
           }
           editMutations.setCurrentKeyEntity(ke.id);
           editMutations.setCurrentPointIndex(-1);
-          startKeyEntityDragOperation(e, true);
+          startKeyEntityDragOperation(e, true, isMirror);
           e.stopPropagation();
         } else if (editMode === 'delete') {
           editMutations.setCurrentKeyEntity(ke.id);
@@ -168,11 +179,14 @@ export const KeyEntityCard = ({ ke }: { ke: IEditKeyEntity }) => {
 
   const group = editReader.getTransGroupById(ke.groupId);
 
-  const ox = group ? group.x : 0;
+  const ox = (group ? group.x : 0) * mirrorMultX;
   const oy = group ? group.y : 0;
-  const orot = group ? group.angle : 0;
+  const orot = (group ? group.angle : 0) * mirrorMultX;
 
-  const outerTransformSpec = `translate(${ox}, ${oy}) rotate(${orot}) translate(${x}, ${y}) rotate(${ke.angle})`;
+  const x2 = x * mirrorMultX;
+  const angle2 = ke.angle * mirrorMultX;
+
+  const outerTransformSpec = `translate(${ox}, ${oy}) rotate(${orot}) translate(${x2}, ${y}) rotate(${angle2})`;
 
   if (ke.shape === 'ext circle') {
     const transformSpec = `translate(${d * 9.5}, ${d * 9.5})`;
@@ -229,4 +243,18 @@ export const KeyEntityCard = ({ ke }: { ke: IEditKeyEntity }) => {
       {idTexts}
     </g>
   );
+};
+
+export const KeyEntityCard = ({ ke }: { ke: IEditKeyEntity }) => {
+  const group = editReader.getTransGroupById(ke.groupId);
+  if (group?.mirror) {
+    return (
+      <g>
+        <KeyEntityCardSingle ke={ke} isMirror={false} />
+        <KeyEntityCardSingle ke={ke} isMirror={true} />
+      </g>
+    );
+  } else {
+    return <KeyEntityCardSingle ke={ke} isMirror={false} />;
+  }
 };
