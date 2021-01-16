@@ -42,7 +42,7 @@ const slotSources: IAttributeSlotSource<IKeyEntity, IEditPropKey>[] = [
     writer: (text: string) => parseFloat(text),
   },
   {
-    propKey: 'r',
+    propKey: 'angle',
     label: 'angle',
     getUnit: () => 'deg',
     validator: (text: string) =>

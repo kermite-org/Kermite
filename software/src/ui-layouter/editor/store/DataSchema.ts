@@ -5,7 +5,7 @@ export interface IPersistentKeyEntity {
   keyId: string;
   x: number;
   y: number;
-  r: number;
+  angle: number;
   shape: string;
   keyIndex: number | undefined;
   groupId: string | undefined;
@@ -37,7 +37,7 @@ export interface IKeyEntity {
   keyId: string;
   x: number;
   y: number;
-  r: number;
+  angle: number;
   shape: string; // `std ${width}` | `ref ${shapeName}`
   keyIndex: number;
   groupId: string;
@@ -70,7 +70,7 @@ export type IEditPropKey =
   | 'keyId'
   | 'x'
   | 'y'
-  | 'r'
+  | 'angle'
   | 'shape'
   | 'keyIndex'
   | 'groupId';

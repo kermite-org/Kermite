@@ -20,11 +20,11 @@ export namespace LayouterPersistDataConverter {
       keySizeUnit: source.keySizeUnit,
       keyEntities: createDictionaryFromKeyValues(
         source.keyEntities.map((ke, idx) => {
-          const { keyId, x, y, r, shape } = ke;
+          const { keyId, x, y, angle, shape } = ke;
           const keyIndex = undefinedToMinusOne(ke.keyIndex);
           const groupId = undefinedToBlankString(ke.groupId);
           const id = `ke!${idx}`;
-          return [id, { id, keyId, x, y, r, shape, keyIndex, groupId }];
+          return [id, { id, keyId, x, y, angle, shape, keyIndex, groupId }];
         }),
       ),
       outlineShapes: createDictionaryFromKeyValues(
@@ -60,7 +60,7 @@ export namespace LayouterPersistDataConverter {
         keyId: ke.keyId,
         x: ke.x,
         y: ke.y,
-        r: ke.r,
+        angle: ke.angle,
         shape: ke.shape,
         keyIndex: minusOneToUndefined(ke.keyIndex),
         groupId: blankStringToUndefined(ke.groupId),

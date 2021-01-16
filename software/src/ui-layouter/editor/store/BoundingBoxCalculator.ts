@@ -24,7 +24,7 @@ export function getKeyboardDesignBoundingBox(design: IKeyboardDesign) {
   const xs: number[] = [];
   const ys: number[] = [];
   Object.values(design.keyEntities).forEach((ke) => {
-    let { x, y, r } = ke;
+    let { x, y, angle } = ke;
     if (coordUnit.mode === 'KP') {
       x *= coordUnit.x;
       y *= coordUnit.y;
@@ -32,7 +32,7 @@ export function getKeyboardDesignBoundingBox(design: IKeyboardDesign) {
     const [w, h] = getKeySize(ke.shape, coordUnit, design.keySizeUnit);
     const dx = w / 2;
     const dy = h / 2;
-    const theta = degToRad(r);
+    const theta = degToRad(angle);
 
     const points = [
       [-dx, -dy],

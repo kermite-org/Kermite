@@ -172,7 +172,7 @@ export const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
   const oy = group ? group.y : 0;
   const orot = group ? group.angle : 0;
 
-  const outerTransformSpec = `translate(${ox}, ${oy}) rotate(${orot}) translate(${x}, ${y}) rotate(${ke.r})`;
+  const outerTransformSpec = `translate(${ox}, ${oy}) rotate(${orot}) translate(${x}, ${y}) rotate(${ke.angle})`;
 
   if (ke.shape === 'ext circle') {
     const transformSpec = `translate(${d * 9.5}, ${d * 9.5})`;

@@ -62,7 +62,7 @@ class EditMutations {
       keyId: id,
       x,
       y,
-      r: 0,
+      angle: 0,
       shape: `std ${keySize}`,
       keyIndex: -1,
       groupId: '',
