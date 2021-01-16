@@ -1,4 +1,4 @@
-import { appGlobal } from '@ui-layouter/editor/base/AppGlobal';
+import { layouterAppGlobal } from '@ui-layouter/base';
 import { css } from 'goober';
 import { h } from 'qx';
 
@@ -14,7 +14,7 @@ export const DebugOverlay = () => {
     font-size: 12px;
   `;
 
-  const { debugObject, hasDebugValue } = appGlobal;
+  const { debugObject, hasDebugValue } = layouterAppGlobal;
   return (
     <div css={cssDebugOverlay} qxIf={hasDebugValue}>
       {Object.keys(debugObject).map((key) => {

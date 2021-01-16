@@ -1,4 +1,4 @@
-export const appGlobal = new (class {
+export const layouterAppGlobal = new (class {
   debugObject: any = {};
 
   get hasDebugValue() {
