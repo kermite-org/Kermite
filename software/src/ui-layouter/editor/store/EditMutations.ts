@@ -269,6 +269,17 @@ class EditMutations {
     });
   }
 
+  setTransGroupMirror(mirror: boolean) {
+    const { currentTransGroupId } = editReader;
+    if (!currentTransGroupId) {
+      return;
+    }
+    editUpdator.commitEditor((editor) => {
+      const group = editor.design.transGroups[currentTransGroupId];
+      group.mirror = mirror;
+    });
+  }
+
   addTransGroup() {
     const numGroups = editReader.allTransGroups.length;
     const newGroupId = numGroups.toString();
@@ -279,6 +290,7 @@ class EditMutations {
         x: 0,
         y: 0,
         angle: 0,
+        mirror: false,
       };
       editor.currentTransGroupId = newGroupId;
     });

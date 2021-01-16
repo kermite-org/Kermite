@@ -50,8 +50,9 @@ export namespace KeyboardDesignConverter {
       ),
       transGroups: createDictionaryFromKeyValues(
         source.transGroups.map((group, idx) => {
+          const { x, y, angle, mirror } = group;
           const id = idx.toString();
-          return [id, { ...group, id }];
+          return [id, { x, y, angle, mirror: mirror || false, id }];
         }),
       ),
     };
@@ -81,6 +82,7 @@ export namespace KeyboardDesignConverter {
         x: group.x,
         y: group.y,
         angle: group.angle,
+        mirror: group.mirror,
       })),
     };
   }

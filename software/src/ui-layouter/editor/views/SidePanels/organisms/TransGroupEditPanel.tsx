@@ -1,3 +1,4 @@
+import { reflectChecked } from '@ui-common';
 import {
   ConfigContent,
   ConfigHeader,
@@ -12,7 +13,13 @@ import { TransGroupListPart } from '@ui-layouter/editor/views/SidePanels/organis
 import { h } from 'qx';
 
 export const TransGroupEditPanel = () => {
-  const { vmX, vmY, vmAngle, currentGroupId } = useTransGroupEditPanelModel();
+  const {
+    vmX,
+    vmY,
+    vmAngle,
+    currentGroupId,
+    vmMirror,
+  } = useTransGroupEditPanelModel();
   return (
     <ConfigPanel>
       <ConfigHeader>transformation groups</ConfigHeader>
@@ -42,6 +49,17 @@ export const TransGroupEditPanel = () => {
                 inputWidth={60}
                 unit="deg"
               />
+              <div>
+                <span style={{ width: '80px', display: 'inline-block' }}>
+                  mirror
+                </span>
+                <input
+                  type="checkbox"
+                  checked={vmMirror.value}
+                  onChange={reflectChecked(vmMirror.setValue)}
+                  disabled={vmMirror.disabled}
+                />
+              </div>
             </ConfigVStack>
           </ConfigSubContent>
         </div>

@@ -9,3 +9,9 @@ export interface ICommonSelectorViewModel {
   setChoiceId(key: string): void;
   disabled?: boolean;
 }
+
+export interface ICommonCheckboxViewModel {
+  value: boolean;
+  setValue(value: boolean): void;
+  disabled?: boolean;
+}
