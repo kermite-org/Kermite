@@ -1,4 +1,5 @@
 import { clamp } from '@ui-layouter/base/utils';
+import { getNextEntityInstanceId } from '@ui-layouter/editor/store/DomainRelatedHelpers';
 import {
   appState,
   createFallbackEditKeyboardDesign,
@@ -52,14 +53,15 @@ class EditMutations {
   };
 
   addKeyEntity(px: number, py: number) {
-    const { coordUnit, keySizeUnit } = editReader;
+    const { coordUnit, keySizeUnit, allKeyEntities } = editReader;
     const [x, y] = mmToUnitValue(px, py, coordUnit);
-    const id = `ke${(Math.random() * 1000) >> 0}`;
+    const id = getNextEntityInstanceId('key', allKeyEntities);
+    const keyId = `ke${(Math.random() * 1000) >> 0}`;
     const keySize = keySizeUnit === 'KP' ? 1 : 18;
 
     const keyEntity: IEditKeyEntity = {
       id,
-      keyId: id,
+      keyId,
       x,
       y,
       angle: 0,
@@ -379,11 +381,10 @@ class EditMutations {
 
   startShapeDrawing() {
     if (!appState.editor.shapeDrawing) {
-      const allNumbers = editReader.allOutlineShapes.map((shape) =>
-        parseInt(shape.id.split('!')[1]),
+      const newId = getNextEntityInstanceId(
+        'shape',
+        editReader.allOutlineShapes,
       );
-      const newNumber = allNumbers.length > 0 ? Math.max(...allNumbers) + 1 : 0;
-      const newId = `shape!${newNumber}`;
 
       editUpdator.patchEditor((editor) => {
         editor.design.outlineShapes[newId] = {

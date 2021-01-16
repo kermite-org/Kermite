@@ -160,11 +160,7 @@ export const KeyEntityCardSingle = (props: {
 
   const keyIndex = isMirror ? ke.mirrorKeyIndex : ke.keyIndex;
 
-  const identifierText = getKeyIdentifierText(
-    ke,
-    isMirror,
-    editReader.allKeyEntities,
-  );
+  const identifierText = getKeyIdentifierText(ke, isMirror);
   const idTexts = (
     <g transform="scale(0.2)">
       <text

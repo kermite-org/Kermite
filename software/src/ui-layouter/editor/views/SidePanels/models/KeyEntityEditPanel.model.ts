@@ -142,13 +142,9 @@ class KeyEntityAttrsEditorModel {
   }
 
   get keyIdentificationText() {
-    const {
-      currentKeyEntity: ke,
-      isCurrentKeyMirror,
-      allKeyEntities,
-    } = editReader;
+    const { currentKeyEntity: ke, isCurrentKeyMirror } = editReader;
     if (ke) {
-      let text = getKeyIdentifierText(ke, isCurrentKeyMirror, allKeyEntities);
+      let text = getKeyIdentifierText(ke, isCurrentKeyMirror);
       if (isCurrentKeyMirror) {
         text += ' (mirror)';
       }
