@@ -100,8 +100,7 @@ class EditMutations {
 
   splitOutlineLine(dstPointIndex: number, x: number, y: number) {
     const shapeId = editReader.currentShapeId;
-    const idx = editReader.currentPointIndex;
-    if (!shapeId || idx === -1) {
+    if (!shapeId) {
       return;
     }
     editUpdator.patchEditor((editor) => {
