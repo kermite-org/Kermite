@@ -21,8 +21,8 @@ import { Hook } from 'qx';
 
 const slotSources: IAttributeSlotSource<IEditKeyEntity, IEditPropKey>[] = [
   {
-    propKey: 'keyId',
-    label: 'keyID',
+    propKey: 'label',
+    label: 'label',
     getUnit: () => '',
     validator: (text: string) =>
       text.length < 6 ? undefined : 'must be within 6 characters',

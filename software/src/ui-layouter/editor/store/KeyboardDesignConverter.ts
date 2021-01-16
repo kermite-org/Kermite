@@ -28,23 +28,19 @@ export namespace KeyboardDesignConverter {
       keySizeUnit: source.keySizeUnit,
       keyEntities: createDictionaryFromKeyValues(
         source.keyEntities.map((ke, idx) => {
-          const { keyId, x, y, angle, shape } = ke;
-          const keyIndex = undefinedToMinusOne(ke.keyIndex);
-          const mirrorKeyIndex = undefinedToMinusOne(ke.mirrorKeyIndex);
-          const groupId = groupIndexToGroupId(ke.groupIndex);
           const id = `ke!${idx}`;
           return [
             id,
             {
               id,
-              keyId,
-              x,
-              y,
-              angle,
-              shape,
-              keyIndex,
-              mirrorKeyIndex,
-              groupId,
+              label: ke.label,
+              x: ke.x,
+              y: ke.y,
+              angle: ke.angle,
+              shape: ke.shape,
+              keyIndex: undefinedToMinusOne(ke.keyIndex),
+              mirrorKeyIndex: undefinedToMinusOne(ke.mirrorKeyIndex),
+              groupId: groupIndexToGroupId(ke.groupIndex),
             },
           ];
         }),
@@ -80,7 +76,7 @@ export namespace KeyboardDesignConverter {
       placementAnchor: design.placementAnchor,
       keySizeUnit: design.keySizeUnit,
       keyEntities: Object.values(design.keyEntities).map((ke) => ({
-        keyId: ke.keyId,
+        label: ke.label,
         x: ke.x,
         y: ke.y,
         angle: ke.angle,
