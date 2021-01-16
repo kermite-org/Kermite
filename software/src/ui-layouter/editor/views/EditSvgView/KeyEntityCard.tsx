@@ -7,6 +7,7 @@ import {
   IEditKeyEntity,
   getStdKeySize,
 } from '@ui-layouter/editor/store';
+import { getKeyIdentifierText } from '@ui-layouter/editor/store/DomainRelatedHelpers';
 import { css } from 'goober';
 import { rerender, h } from 'qx';
 
@@ -156,6 +157,14 @@ export const KeyEntityCardSingle = (props: {
   `;
 
   const showBoth = showKeyId && showKeyIndex;
+
+  const keyIndex = isMirror ? ke.mirrorKeyIndex : ke.keyIndex;
+
+  const identifierText = getKeyIdentifierText(
+    ke,
+    isMirror,
+    editReader.allKeyEntities,
+  );
   const idTexts = (
     <g transform="scale(0.2)">
       <text
@@ -164,7 +173,7 @@ export const KeyEntityCardSingle = (props: {
         qxIf={showKeyId && !isGhost}
         data-selected={isSelected}
       >
-        {ke.keyId}
+        {identifierText}
       </text>
       <text
         y={showBoth ? 10 : 0}
@@ -172,7 +181,7 @@ export const KeyEntityCardSingle = (props: {
         qxIf={showKeyIndex && !isGhost}
         data-selected={isSelected}
       >
-        {ke.keyIndex === -1 ? '--' : ke.keyIndex}
+        {keyIndex === -1 ? '--' : keyIndex}
       </text>
     </g>
   );

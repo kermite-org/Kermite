@@ -6,6 +6,7 @@ import {
   editReader,
   editMutations,
 } from '@ui-layouter/editor/store';
+import { getKeyIdentifierText } from '@ui-layouter/editor/store/DomainRelatedHelpers';
 import {
   IAttributeSlotSource,
   AttributeSlotModel,
@@ -141,17 +142,13 @@ class KeyEntityAttrsEditorModel {
   }
 
   get keyIdentificationText() {
-    const { currentKeyEntity: ke, isCurrentKeyMirror } = editReader;
+    const {
+      currentKeyEntity: ke,
+      isCurrentKeyMirror,
+      allKeyEntities,
+    } = editReader;
     if (ke) {
-      let text = '';
-      const ki = isCurrentKeyMirror ? ke.mirrorKeyIndex : ke.keyIndex;
-      if (ki !== -1) {
-        text = `key${ki}`;
-      } else {
-        const tmpIndex = editReader.allKeyEntities.indexOf(ke);
-        text = `key?${tmpIndex}`;
-      }
-
+      let text = getKeyIdentifierText(ke, isCurrentKeyMirror, allKeyEntities);
       if (isCurrentKeyMirror) {
         text += ' (mirror)';
       }

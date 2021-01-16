@@ -22,7 +22,7 @@ export const KeyEntityEditPanel = () => {
       <ConfigHeader>key properties</ConfigHeader>
       <ConfigContent>
         <ConfigVStack>
-          <div>identifier: {vm.keyIdentificationText}</div>
+          <div>{vm.keyIdentificationText}&nbsp;</div>
           {vm.slots.map((slot, index) => (
             <GeneralConfigTextEditRow
               key={index}
