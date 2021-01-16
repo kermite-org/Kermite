@@ -135,6 +135,25 @@ class KeyEntityAttrsEditorModel {
       : '';
   }
 
+  get keyIdentificationText() {
+    const { currentKeyEntity: ke, isCurrentKeyMirror } = editReader;
+    if (ke) {
+      let text = '';
+      if (ke.keyIndex !== -1) {
+        text = `key${ke.keyIndex}`;
+      } else {
+        const tmpIndex = editReader.allKeyEntities.indexOf(ke);
+        text = `key?${tmpIndex}`;
+      }
+
+      if (isCurrentKeyMirror) {
+        text += ' (mirror)';
+      }
+      return text;
+    }
+    return '';
+  }
+
   update() {
     const targetKeyEntity = editReader.currentKeyEntity;
     this._allSlots.forEach((slot) => slot.updateSource(targetKeyEntity));
@@ -146,6 +165,7 @@ class KeyEntityAttrsEditorModel {
 // VM
 interface IPropertyPanelModel {
   keyEntityAttrsVm: {
+    keyIdentificationText: string;
     slots: IAttributeSlotViewModel[];
     errorText: string;
     vmGroupId: ICommonSelectorViewModel;
@@ -182,6 +202,7 @@ export function useKeyEntityEditPanelModel(): IPropertyPanelModel {
       slots: model.allSlots.map((slot) => slot.emitViewModel()),
       errorText: model.errorText,
       vmGroupId: makeGroupIdSelectorModel(),
+      keyIdentificationText: model.keyIdentificationText,
     },
   };
 }
