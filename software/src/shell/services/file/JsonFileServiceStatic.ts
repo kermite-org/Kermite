@@ -8,7 +8,7 @@ export namespace JsonFileServiceStatic {
       properties: ['openFile'],
       filters: [
         {
-          name: 'Document',
+          name: 'JSON Documents',
           extensions: ['json'],
         },
       ],
@@ -24,7 +24,7 @@ export namespace JsonFileServiceStatic {
       properties: ['showOverwriteConfirmation'],
       filters: [
         {
-          name: 'Document',
+          name: 'JSON Documents',
           extensions: ['json'],
         },
       ],
