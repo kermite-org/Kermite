@@ -10,7 +10,7 @@ export interface IKeyEntity {
   angle: number;
   shape: string;
   keyIndex: number | undefined;
-  groupId: string | undefined;
+  groupIndex: number | undefined;
 }
 
 // export type IPersistOutlinePoint = { x: number; y: number };
@@ -18,7 +18,7 @@ export type IOutlinePoint = { x: number; y: number };
 
 export type IOutlineShape = {
   points: IOutlinePoint[];
-  groupId: string | undefined;
+  groupIndex: number | undefined;
 };
 
 export type ITransGroup = {
