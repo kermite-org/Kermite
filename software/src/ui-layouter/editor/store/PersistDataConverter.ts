@@ -34,7 +34,7 @@ export namespace LayouterPersistDataConverter {
             id,
             {
               id,
-              points: shape.points.map(([x, y]) => ({ x, y })),
+              points: shape.points.map(({ x, y }) => ({ x, y })),
               groupId: undefinedToBlankString(shape.groupId),
             },
           ];
@@ -66,7 +66,7 @@ export namespace LayouterPersistDataConverter {
         groupId: blankStringToUndefined(ke.groupId),
       })),
       outlineShapes: Object.values(design.outlineShapes).map((shape) => ({
-        points: shape.points.map((p) => [p.x, p.y]),
+        points: shape.points.map((p) => ({ x: p.x, y: p.y })),
         groupId: blankStringToUndefined(shape.groupId),
       })),
       transGroups: Object.values(design.transGroups).map((group) => ({

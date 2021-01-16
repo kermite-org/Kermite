@@ -11,7 +11,7 @@ export interface IPersistentKeyEntity {
   groupId: string | undefined;
 }
 
-export type IPersistOutlinePoint = [x: number, y: number];
+export type IPersistOutlinePoint = { x: number; y: number };
 
 export type IPersistOutlineShape = {
   points: IPersistOutlinePoint[];
