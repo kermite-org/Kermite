@@ -18,6 +18,11 @@ function groupIdToGroupIndex(numberStr: string): number | undefined {
   return numberStr ? parseInt(numberStr, 10) : undefined;
 }
 
+function roundNumber(value: number) {
+  const sc = 10000;
+  return Math.round(value * sc) / sc;
+}
+
 export namespace KeyboardDesignConverter {
   export function convertKeyboardDesignNonEditToEdit(
     source: IKeyboardDesign,
@@ -77,22 +82,25 @@ export namespace KeyboardDesignConverter {
       keySizeUnit: design.keySizeUnit,
       keyEntities: Object.values(design.keyEntities).map((ke) => ({
         // label: ke.label,
-        x: ke.x,
-        y: ke.y,
-        angle: ke.angle,
+        x: roundNumber(ke.x),
+        y: roundNumber(ke.y),
+        angle: roundNumber(ke.angle),
         shape: ke.shape,
         keyIndex: convertMinusOneToUndefined(ke.keyIndex),
         mirrorKeyIndex: convertMinusOneToUndefined(ke.mirrorKeyIndex),
         groupIndex: groupIdToGroupIndex(ke.groupId),
       })),
       outlineShapes: Object.values(design.outlineShapes).map((shape) => ({
-        points: shape.points.map((p) => ({ x: p.x, y: p.y })),
+        points: shape.points.map((p) => ({
+          x: roundNumber(p.x),
+          y: roundNumber(p.y),
+        })),
         groupIndex: groupIdToGroupIndex(shape.groupId),
       })),
       transGroups: Object.values(design.transGroups).map((group) => ({
-        x: group.x,
-        y: group.y,
-        angle: group.angle,
+        x: roundNumber(group.x),
+        y: roundNumber(group.y),
+        angle: roundNumber(group.angle),
         mirror: group.mirror || undefined,
       })),
     };
