@@ -1,5 +1,5 @@
 import { LayerInvocationMode, generateNumberSequence } from '@shared';
-import { models } from '~/models';
+import { models } from '@ui-root/models';
 
 export interface IOperationLayerOptionEditViewModel {
   enabled: boolean;

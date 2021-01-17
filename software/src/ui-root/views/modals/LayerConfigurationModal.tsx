@@ -19,13 +19,13 @@ import {
   DialogContentRow,
   DialogButtonsRow,
   DialogButton,
-} from '~/base/dialog/CommonDialogParts';
-import { createModal } from '~/base/overlay/ForegroundModalLayer';
+} from '@ui-root/base/dialog/CommonDialogParts';
+import { createModal } from '@ui-root/base/overlay/ForegroundModalLayer';
 import {
   cssCommonPropertiesTable,
   cssCommonTextInput,
-} from '~/views/controls/CommonStyles';
-import { DefaultSchemeButton } from '~/views/controls/DefaultSchemeButton';
+} from '@ui-root/views/controls/CommonStyles';
+import { DefaultSchemeButton } from '@ui-root/views/controls/DefaultSchemeButton';
 
 export interface ILayerConfigurationModelEditValues {
   layerName: string;

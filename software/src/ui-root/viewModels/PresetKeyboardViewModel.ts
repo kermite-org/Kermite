@@ -3,7 +3,7 @@ import { Hook } from 'qx';
 import {
   IPresetKeyUnitViewModel,
   makePresetKeyUnitViewModels,
-} from '~/viewModels/KeyUnitCard/PresetKeyUnitViewModelCreator';
+} from '@ui-root/viewModels/KeyUnitCard/PresetKeyUnitViewModelCreator';
 
 export interface IPresetKeyboardLayerViewModel {
   layerId: string;

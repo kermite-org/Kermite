@@ -1,10 +1,10 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { ViewModelProps } from '~/base/helper/mvvmHelpers';
-import { IPresetBrowserViewModel } from '~/viewModels/PresetBrowserViewModel';
-import { GeneralButton } from '~/views/controls/GeneralButton';
-import { KeyboardProfileSelector } from '~/views/fabrics/KeyboardProfileSelector';
-import { KeyboardProjectSelector } from '~/views/fabrics/KeyboardProjectSelector';
+import { ViewModelProps } from '@ui-root/base/helper/mvvmHelpers';
+import { IPresetBrowserViewModel } from '@ui-root/viewModels/PresetBrowserViewModel';
+import { GeneralButton } from '@ui-root/views/controls/GeneralButton';
+import { KeyboardProfileSelector } from '@ui-root/views/fabrics/KeyboardProfileSelector';
+import { KeyboardProjectSelector } from '@ui-root/views/fabrics/KeyboardProjectSelector';
 
 const cssPresetSelectionSection = css`
   display: flex;

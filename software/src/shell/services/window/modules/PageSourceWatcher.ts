@@ -6,7 +6,7 @@ import {
   pathJoin,
   pathRelative,
   pathResolve,
-} from '~/funcs';
+} from '@shell/funcs';
 
 export class PageSourceWatcher {
   private watcher: fs.FSWatcher | undefined;

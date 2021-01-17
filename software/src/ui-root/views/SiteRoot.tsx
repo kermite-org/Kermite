@@ -1,8 +1,8 @@
 import { appUi } from '@ui-common';
 import { css, glob, setup } from 'goober';
 import { h } from 'qx';
-import { DebugOverlay } from '~/base/overlay/DebugOverlay';
-import { models } from '~/models';
+import { DebugOverlay } from '@ui-root/base/overlay/DebugOverlay';
+import { models } from '@ui-root/models';
 import { ForegroundModalLayerRoot } from '../base/overlay/ForegroundModalLayer';
 import { ConfiguratorZoneRoot } from './zones/ConfiguratorZoneRoot';
 import { WidgetZoneRoot } from './zones/WidgetZoneRoot';

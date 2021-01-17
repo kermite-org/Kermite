@@ -1,6 +1,6 @@
 import { dialog } from 'electron';
-import { appGlobal } from '~/base';
-import { fsxReadJsonFile, fsxWriteJsonFile } from '~/funcs';
+import { appGlobal } from '@shell/base';
+import { fsxReadJsonFile, fsxWriteJsonFile } from '@shell/funcs';
 
 export namespace JsonFileServiceStatic {
   async function getOpeningJsonFilePathWithDialog() {

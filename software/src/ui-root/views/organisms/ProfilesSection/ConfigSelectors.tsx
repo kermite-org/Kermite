@@ -1,7 +1,7 @@
 import { IKeyboardBehaviorMode, IKeyboardLayoutStandard } from '@shared';
 import { h } from 'qx';
-import { models } from '~/models';
-import { DualItemsHoverSelector } from '~/views/fabrics/DualItemHoverSelector';
+import { models } from '@ui-root/models';
+import { DualItemsHoverSelector } from '@ui-root/views/fabrics/DualItemHoverSelector';
 
 export const BehaviorSelector = () => {
   const modes: IKeyboardBehaviorMode[] = ['Standalone', 'SideBrain'];

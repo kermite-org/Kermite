@@ -1,8 +1,8 @@
 import { uiTheme } from '@ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
-import { makeFirmwareUpdationPageViewModel } from '~/viewModels/FirmwareUpdationPageViewModel';
-import { GeneralSelector } from '~/views/controls/GeneralSelector';
+import { makeFirmwareUpdationPageViewModel } from '@ui-root/viewModels/FirmwareUpdationPageViewModel';
+import { GeneralSelector } from '@ui-root/views/controls/GeneralSelector';
 
 const cssFirmwareUpdationPage = css`
   background: ${uiTheme.colors.clBackground};

@@ -1,8 +1,8 @@
 import { uiTheme } from '@ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
-import { ViewModelProps } from '~/base/helper/mvvmHelpers';
-import { IPrsetLayerListViewModel } from '~/viewModels/PresetKeyboardViewModel';
+import { ViewModelProps } from '@ui-root/base/helper/mvvmHelpers';
+import { IPrsetLayerListViewModel } from '@ui-root/viewModels/PresetKeyboardViewModel';
 
 const PresetLayerItem = (props: {
   layerName: string;

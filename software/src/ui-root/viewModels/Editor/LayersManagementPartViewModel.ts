@@ -1,10 +1,10 @@
 import { removeArrayItems } from '@shared';
-import { modalConfirm } from '~/base/dialog/BasicModals';
-import { models } from '~/models';
+import { modalConfirm } from '@ui-root/base/dialog/BasicModals';
+import { models } from '@ui-root/models';
 import {
   ILayerConfigurationModelEditValues,
   callLayerConfigurationModal,
-} from '~/views/modals/LayerConfigurationModal';
+} from '@ui-root/views/modals/LayerConfigurationModal';
 
 export interface ILayerManagementPartViewModel {
   canShiftBackCurrentLayer: boolean;

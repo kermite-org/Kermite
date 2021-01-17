@@ -4,7 +4,7 @@ import { h } from 'qx';
 import {
   ILayerListViewModel,
   ILayerListBoxPartViewModel,
-} from '~/viewModels/Editor/LayersListBoxPartViewModel';
+} from '@ui-root/viewModels/Editor/LayersListBoxPartViewModel';
 
 const LayerCard = (props: { layerModel: ILayerListViewModel }) => {
   const cssLayerCard = css`

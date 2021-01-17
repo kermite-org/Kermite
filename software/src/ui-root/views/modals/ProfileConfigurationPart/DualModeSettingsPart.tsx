@@ -5,7 +5,7 @@ import {
 } from '@ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
-import { models } from '~/models';
+import { models } from '@ui-root/models';
 
 const cssDualModeSettingsPart = css`
   margin-top: 15px;

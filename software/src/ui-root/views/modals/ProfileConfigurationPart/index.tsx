@@ -4,8 +4,8 @@ import { h } from 'qx';
 import {
   ClosableOverlay,
   CommonDialogFrame,
-} from '~/base/dialog/CommonDialogParts';
-import { models } from '~/models';
+} from '@ui-root/base/dialog/CommonDialogParts';
+import { models } from '@ui-root/models';
 import { AssignTypeSelectionPart } from './AssignTypeSelectionPart';
 import { DualModeSettingsPart } from './DualModeSettingsPart';
 

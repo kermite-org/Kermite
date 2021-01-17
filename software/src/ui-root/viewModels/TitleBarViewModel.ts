@@ -1,5 +1,5 @@
 import { ipcAgent } from '@ui-common';
-import { models } from '~/models';
+import { models } from '@ui-root/models';
 
 export interface ITitleBarViewModel {
   showReloadButton: boolean;

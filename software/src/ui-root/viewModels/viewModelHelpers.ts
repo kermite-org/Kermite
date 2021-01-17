@@ -1,4 +1,4 @@
-import { ISelectorOption } from '~/viewModels/viewModelInterfaces';
+import { ISelectorOption } from '@ui-root/viewModels/viewModelInterfaces';
 
 export function makePlainSelectorOption(source: string): ISelectorOption {
   return {

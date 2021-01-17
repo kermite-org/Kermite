@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { IKeyUnitCardViewModel } from '~/viewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
+import { IKeyUnitCardViewModel } from '@ui-root/viewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
 
 export function WidgetKeyUnitCard({
   keyUnit,

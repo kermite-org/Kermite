@@ -1,9 +1,9 @@
 import { IProfileData, fallbackProfileData } from '@shared';
 import { ipcAgent } from '@ui-common';
-import { modalTextEdit, modalAlert } from '~/base/dialog/BasicModals';
-import { ProjectResourceModel } from '~/models/ProjectResourceModel';
-import { UiStatusModel } from '~/models/UiStatusModel';
-import { ProfilesModel } from '~/models/profile/ProfilesModel';
+import { modalTextEdit, modalAlert } from '@ui-root/base/dialog/BasicModals';
+import { ProjectResourceModel } from '@ui-root/models/ProjectResourceModel';
+import { UiStatusModel } from '@ui-root/models/UiStatusModel';
+import { ProfilesModel } from '@ui-root/models/profile/ProfilesModel';
 
 class PresetBrowserModelHelper {
   static getNewProfileNameBase(

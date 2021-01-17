@@ -4,7 +4,7 @@ import {
   addOptionToOptionsArray,
   removeOptionFromOptionsArray,
 } from '@shared';
-import { models } from '~/models';
+import { models } from '@ui-root/models';
 import { virtualKeyGroupsTable2 } from './virtualkeyGroupsTable';
 
 export interface IOperationCardViewModel {

@@ -1,6 +1,6 @@
 import { IProjectResourceInfo } from '@shared';
-import { appEnv } from '~/base';
-import { pathJoin } from '~/funcs';
+import { appEnv } from '@shell/base';
+import { pathJoin } from '@shell/funcs';
 import { IProjectResourceInfoProvider } from '../serviceInterfaces';
 import {
   IProjectResourceInfoSource,

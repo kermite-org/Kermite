@@ -6,15 +6,15 @@ import {
   DialogContentRow,
   DialogButtonsRow,
   DialogButton,
-} from '~/base/dialog/CommonDialogParts';
-import { createModal } from '~/base/overlay/ForegroundModalLayer';
-import { models } from '~/models';
-import { ISelectorOption } from '~/viewModels/viewModelInterfaces';
+} from '@ui-root/base/dialog/CommonDialogParts';
+import { createModal } from '@ui-root/base/overlay/ForegroundModalLayer';
+import { models } from '@ui-root/models';
+import { ISelectorOption } from '@ui-root/viewModels/viewModelInterfaces';
 import {
   cssCommonPropertiesTable,
   cssCommonTextInput,
-} from '~/views/controls/CommonStyles';
-import { GeneralSelector } from '~/views/controls/GeneralSelector';
+} from '@ui-root/views/controls/CommonStyles';
+import { GeneralSelector } from '@ui-root/views/controls/GeneralSelector';
 
 interface ICreateProfileDialogEditValues {
   profileName: string;

@@ -1,5 +1,5 @@
-import { appConfig, applicationStorage } from '~/base';
-import { makeListnerPort } from '~/funcs';
+import { appConfig, applicationStorage } from '@shell/base';
+import { makeListnerPort } from '@shell/funcs';
 import { IPageStateManager } from './interfaces';
 import { enumeratePagePaths } from './modules';
 

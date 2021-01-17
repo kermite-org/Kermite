@@ -1,7 +1,7 @@
 import { uiTheme } from '@ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
-import { IOperationCardViewModel } from '~/viewModels/Editor/OperationEditPartViewModel';
+import { IOperationCardViewModel } from '@ui-root/viewModels/Editor/OperationEditPartViewModel';
 
 const cssOperationCard = css`
   min-width: 28px;

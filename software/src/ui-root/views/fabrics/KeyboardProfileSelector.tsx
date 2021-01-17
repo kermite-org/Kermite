@@ -1,6 +1,6 @@
 import { h } from 'qx';
-import { ISelectorSource } from '~/viewModels/viewModelInterfaces';
-import { GeneralSelector } from '~/views/controls/GeneralSelector';
+import { ISelectorSource } from '@ui-root/viewModels/viewModelInterfaces';
+import { GeneralSelector } from '@ui-root/views/controls/GeneralSelector';
 
 export interface IProfileSelectorProps {
   selectorSource: ISelectorSource;

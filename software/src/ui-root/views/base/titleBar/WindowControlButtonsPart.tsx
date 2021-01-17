@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { ITitleBarViewModel } from '~/viewModels/TitleBarViewModel';
+import { ITitleBarViewModel } from '@ui-root/viewModels/TitleBarViewModel';
 import { WindowControlButton } from './WindowControlButton';
 import { WindowRestartButton } from './WindowRestartButton';
 

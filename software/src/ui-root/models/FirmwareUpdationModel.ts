@@ -1,5 +1,5 @@
 import { ipcAgent } from '@ui-common';
-import { ProjectResourceModel } from '~/models/ProjectResourceModel';
+import { ProjectResourceModel } from '@ui-root/models/ProjectResourceModel';
 
 export type FirmwareUpdationPhase =
   | 'WaitingReset'

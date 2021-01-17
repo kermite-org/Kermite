@@ -6,8 +6,8 @@ import {
   clampValue,
   IProfileManagerCommand,
 } from '@shared';
-import { EventPort } from '~/funcs';
-import { PresetProfileLoader } from '~/services0/PresetProfileLoader';
+import { EventPort } from '@shell/funcs';
+import { PresetProfileLoader } from '@shell/services0/PresetProfileLoader';
 import { ProfileHelper } from './ProfileHelper';
 import { ProfileManagerCore } from './ProfileManagerCore';
 

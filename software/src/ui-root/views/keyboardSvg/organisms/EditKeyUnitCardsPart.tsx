@@ -1,6 +1,6 @@
 import { h } from 'qx';
-import { models } from '~/models';
-import { makeKeyUnitCardsPartViewModel } from '~/viewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
+import { models } from '@ui-root/models';
+import { makeKeyUnitCardsPartViewModel } from '@ui-root/viewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
 import { EditKeyUnitCard } from '../molecules/EditKeyUnitCard';
 
 export function EditKeyUnitCardsPart() {

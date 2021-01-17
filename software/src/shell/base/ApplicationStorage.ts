@@ -1,6 +1,6 @@
 import { IKeyboardConfig, overwriteObjectProps } from '@shared';
-import { appEnv } from '~/base';
-import { fsExistsSync, fsxReadJsonFile, fsxWriteJsonFile } from '~/funcs';
+import { appEnv } from '@shell/base';
+import { fsExistsSync, fsxReadJsonFile, fsxWriteJsonFile } from '@shell/funcs';
 
 export interface IApplicationPersistData {
   pageState: {

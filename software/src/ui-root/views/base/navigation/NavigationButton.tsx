@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { NavigationEntryViewModel } from '~/viewModels/NavigationViewModel';
+import { NavigationEntryViewModel } from '@ui-root/viewModels/NavigationViewModel';
 
 const cssNavigationButton = css`
   color: rgba(255, 255, 255, 0.5);

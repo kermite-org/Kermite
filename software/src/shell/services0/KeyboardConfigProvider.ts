@@ -3,8 +3,8 @@ import {
   IKeyboardConfig,
   overwriteObjectProps,
 } from '@shared';
-import { applicationStorage } from '~/base';
-import { EventPort } from '~/funcs';
+import { applicationStorage } from '@shell/base';
+import { EventPort } from '@shell/funcs';
 
 // 環境に関連したキーボードの設定を保存する, レイアウト(US/JP)など
 export class KeyboardConfigProvider {

@@ -1,7 +1,7 @@
 import { IKeyboardShape } from '@shared';
 import { ipcAgent } from '@ui-common';
-import { ProjectResourceModel } from '~/models/ProjectResourceModel';
-import { UiStatusModel } from '~/models/UiStatusModel';
+import { ProjectResourceModel } from '@ui-root/models/ProjectResourceModel';
+import { UiStatusModel } from '@ui-root/models/UiStatusModel';
 
 export class KeyboardShapesModel {
   constructor(

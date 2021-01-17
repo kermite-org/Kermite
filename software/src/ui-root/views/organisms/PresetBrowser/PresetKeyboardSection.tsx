@@ -1,8 +1,8 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { IPresetBrowserViewModel } from '~/viewModels/PresetBrowserViewModel';
-import { PresetLayersBox } from '~/views/fabrics/PresetLayersBox';
-import { PresetKeyboardView } from '~/views/keyboardSvg/panels/PresetKeyboardView';
+import { IPresetBrowserViewModel } from '@ui-root/viewModels/PresetBrowserViewModel';
+import { PresetLayersBox } from '@ui-root/views/fabrics/PresetLayersBox';
+import { PresetKeyboardView } from '@ui-root/views/keyboardSvg/panels/PresetKeyboardView';
 
 const cssPresetKeyboardSection = css`
   height: 300px;

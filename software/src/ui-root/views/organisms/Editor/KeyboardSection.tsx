@@ -1,9 +1,9 @@
 import { uiTheme } from '@ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
-import { models } from '~/models';
-import { KeyboardBodyShape } from '~/views/keyboardSvg/atoms/KeyboardBodyShape';
-import { EditKeyUnitCardsPart } from '~/views/keyboardSvg/organisms/EditKeyUnitCardsPart';
+import { models } from '@ui-root/models';
+import { KeyboardBodyShape } from '@ui-root/views/keyboardSvg/atoms/KeyboardBodyShape';
+import { EditKeyUnitCardsPart } from '@ui-root/views/keyboardSvg/organisms/EditKeyUnitCardsPart';
 import { LayerStateView } from './LayerStateView';
 
 const EditKeyboardBasePlane = (props: { children: any }) => {

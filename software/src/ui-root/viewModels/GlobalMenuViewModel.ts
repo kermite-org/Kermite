@@ -1,6 +1,6 @@
 import { appUi } from '@ui-common';
 import { Hook } from 'qx';
-import { models } from '~/models';
+import { models } from '@ui-root/models';
 
 export interface IGlobalMenuItem {
   key: string;

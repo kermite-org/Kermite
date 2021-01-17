@@ -3,9 +3,9 @@ import {
   duplicateObjectByJsonStringifyParse,
   fallbackProfileData,
 } from '@shared';
-import { fsxReadJsonFile } from '~/funcs';
-import { ProfileHelper } from '~/services/profile/ProfileManager/ProfileHelper';
-import { KeyboardLayoutFileLoader } from '~/services0/KeyboardShape/KeyboardLayoutFileLoader';
+import { fsxReadJsonFile } from '@shell/funcs';
+import { ProfileHelper } from '@shell/services/profile/ProfileManager/ProfileHelper';
+import { KeyboardLayoutFileLoader } from '@shell/services0/KeyboardShape/KeyboardLayoutFileLoader';
 import {
   IPresetProfileLoadingFeature,
   IProjectResourceInfoProvider,
