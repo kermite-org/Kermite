@@ -28,9 +28,9 @@ export namespace KeyboardDesignConverter {
     source: IKeyboardDesign,
   ): IEditKeyboardDesign {
     return {
-      placementUnit: source.placementUnit,
-      placementAnchor: source.placementAnchor,
-      keySizeUnit: source.keySizeUnit,
+      placementUnit: source.setup.placementUnit,
+      placementAnchor: source.setup.placementAnchor,
+      keySizeUnit: source.setup.keySizeUnit,
       keyEntities: createDictionaryFromKeyValues(
         source.keyEntities.map((ke, idx) => {
           const id = `ke!${idx}`;
@@ -77,9 +77,11 @@ export namespace KeyboardDesignConverter {
     design: IEditKeyboardDesign,
   ): IKeyboardDesign {
     return {
-      placementUnit: design.placementUnit,
-      placementAnchor: design.placementAnchor,
-      keySizeUnit: design.keySizeUnit,
+      setup: {
+        placementUnit: design.placementUnit,
+        placementAnchor: design.placementAnchor,
+        keySizeUnit: design.keySizeUnit,
+      },
       keyEntities: Object.values(design.keyEntities).map((ke) => ({
         // label: ke.label,
         x: roundNumber(ke.x),

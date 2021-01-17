@@ -29,10 +29,14 @@ export type ITransGroup = {
   angle: number;
   mirror?: boolean;
 };
-export interface IKeyboardDesign {
+
+export interface IKeyboardDesignSetup {
   placementUnit: string;
   placementAnchor: IKeyPlacementAnchor;
   keySizeUnit: IKeySizeUnit;
+}
+export interface IKeyboardDesign {
+  setup: IKeyboardDesignSetup;
   keyEntities: IKeyEntity[];
   outlineShapes: IOutlineShape[];
   transGroups: ITransGroup[];
