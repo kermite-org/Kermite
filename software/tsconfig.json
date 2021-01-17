@@ -1,1 +1,38 @@
-{}
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "lib": ["dom", "esnext"],
+    "jsx": "react",
+    "jsxFactory": "h",
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "noEmit": true,
+    "baseUrl": "./src",
+    "paths": {
+      "qx": ["./qx"],
+      "qx/*": ["./qx/*"],
+      "@shell": ["./shell"],
+      "@shell/*": ["./shell/*"],
+      "@shared": ["./shared"],
+      "@shared/*": ["./shared/*"],
+      "@ui-common": ["./ui-common"],
+      "@ui-common/*": ["./ui-common/*"],
+      "@ui-layouter": ["./ui-layouter"],
+      "@ui-layouter/*": ["./ui-layouter/*"],
+      "@ui-layouter-page": ["./ui-layouter-page"],
+      "@ui-layouter-page/*": ["./ui-layouter-page/*"],
+      "@ui-root": ["./ui-root"],
+      "@ui-root/*": ["./ui-root/*"]
+    }
+  },
+  "include": ["./src/**/*"]
+}
