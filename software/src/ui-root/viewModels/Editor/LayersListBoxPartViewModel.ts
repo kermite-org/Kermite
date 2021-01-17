@@ -1,4 +1,4 @@
-import { ILayer } from '@kermite/shared';
+import { ILayer } from '@shared';
 import { models } from '~/models';
 
 export interface ILayerListViewModel {

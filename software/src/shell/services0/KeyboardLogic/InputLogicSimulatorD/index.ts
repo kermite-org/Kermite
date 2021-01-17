@@ -4,7 +4,7 @@ import {
   IKeyboardConfig,
   IRealtimeKeyboardEvent,
   IntervalTimerWrapper,
-} from '@kermite/shared';
+} from '@shared';
 import { ProfileManager } from '~/services/profile/ProfileManager/ProfileManager';
 import { KeyboardConfigProvider } from '~/services0/KeyboardConfigProvider';
 import { KeyboardDeviceService } from '~/services0/KeyboardDevice';

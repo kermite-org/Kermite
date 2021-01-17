@@ -1,4 +1,4 @@
-import { IKeyboardConfig, overwriteObjectProps } from '@kermite/shared';
+import { IKeyboardConfig, overwriteObjectProps } from '@shared';
 import { appEnv } from '~/base';
 import { fsExistsSync, fsxReadJsonFile, fsxWriteJsonFile } from '~/funcs';
 

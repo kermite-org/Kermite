@@ -1,4 +1,4 @@
-import { delayMs } from '@kermite/shared';
+import { delayMs } from '@shared';
 import * as HID from 'node-hid';
 import { zeros } from '~/services0/KeyMappingEmitter/Helpers';
 

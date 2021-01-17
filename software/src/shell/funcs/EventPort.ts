@@ -1,4 +1,4 @@
-import { removeArrayItems } from '@kermite/shared';
+import { removeArrayItems } from '@shared';
 
 type IEventListener<T> = (event: T) => void;
 

@@ -2,7 +2,7 @@ import {
   fallbackKeyboardConfig,
   IKeyboardConfig,
   overwriteObjectProps,
-} from '@kermite/shared';
+} from '@shared';
 import { applicationStorage } from '~/base';
 import { EventPort } from '~/funcs';
 

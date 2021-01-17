@@ -2,8 +2,8 @@ import {
   IPosition,
   startDragSession,
   getRelativeMousePosition,
+  layouterAppGlobal,
 } from '@ui-layouter/base';
-import { appGlobal } from '@ui-layouter/editor/base/AppGlobal';
 import { editReader, editMutations } from '@ui-layouter/editor/store';
 import { Hook, h, asyncRerender } from 'qx';
 import { screenToWorld } from './CoordHelpers';
@@ -111,7 +111,7 @@ export const EditSvgView = () => {
   }, []);
 
   // appGlobal.setDebugValue({ appState });
-  appGlobal.setDebugValue({ design: editReader.design });
+  layouterAppGlobal.setDebugValue({ design: editReader.design });
 
   return (
     <svg

@@ -1,4 +1,4 @@
-import { IProfileData } from '@kermite/shared';
+import { IProfileData } from '@shared';
 import { applicationStorage } from '~/base';
 import { appEnv } from '~/base/AppEnv';
 import {

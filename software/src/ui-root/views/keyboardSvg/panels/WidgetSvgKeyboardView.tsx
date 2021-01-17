@@ -1,4 +1,4 @@
-import { linerInterpolateValue } from '@kermite/shared';
+import { linerInterpolateValue } from '@shared';
 import { css } from 'goober';
 import { h } from 'qx';
 import { IWidgetKeyboardViewViewModel } from '~/viewModels/WidgetMainPageViewModel';

@@ -1,5 +1,5 @@
-import { uiTheme } from '@kermite/ui';
-import { UiLayouterPageComponent } from '@ui-layouter';
+import { uiTheme } from '@ui-common';
+import { UiLayouterPageComponent } from '@ui-layouter-page';
 import { css } from 'goober';
 import { h } from 'qx';
 import { models } from '~/models';

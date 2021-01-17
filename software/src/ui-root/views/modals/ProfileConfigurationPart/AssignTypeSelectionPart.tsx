@@ -1,5 +1,5 @@
-import { IProfileAssignType } from '@kermite/shared';
-import { reflectValue } from '@kermite/ui';
+import { IProfileAssignType } from '@shared';
+import { reflectValue } from '@ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
 import { models } from '~/models';

@@ -3,7 +3,7 @@ import {
   IKeyboardDeviceStatus,
   IRealtimeKeyboardEvent,
   RawHidMessageProtocolRevision,
-} from '@kermite/shared';
+} from '@shared';
 import { EventPort } from '~/funcs';
 import { ProjectResourceInfoProvider } from '../ProjectResource/ProjectResourceInfoProvider';
 import { DeviceWrapper } from './DeviceWrapper';

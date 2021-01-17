@@ -1,5 +1,5 @@
-import { mapObjectValues } from '@kermite/shared';
-import { IKeyboardDesign, IKeySizeUnit } from './DataSchema';
+import { mapObjectValues } from '@shared';
+import { IEditKeyboardDesign, IKeySizeUnit } from './DataSchema';
 
 export type ICoordUnit =
   | {
@@ -41,7 +41,7 @@ export function mmToUnitValue(mmX: number, mmY: number, coordUnit: ICoordUnit) {
 }
 
 export function changePlacementCoordUnit(
-  design: IKeyboardDesign,
+  design: IEditKeyboardDesign,
   newUnitSpec: string,
 ) {
   if (design.placementUnit === newUnitSpec) {
@@ -99,7 +99,7 @@ export function mmToKeySizeValue(
 }
 
 export function changeKeySizeUnit(
-  design: IKeyboardDesign,
+  design: IEditKeyboardDesign,
   newUnit: IKeySizeUnit,
   coordUnit: ICoordUnit,
 ) {

@@ -12,9 +12,6 @@ export const ConfigPanel = styledDiv(css`
 
 export const ConfigHeader = styledDiv(css`
   color: ${uiTheme.colors.primary};
-  &::before {
-    content: '✡';
-  }
   border: solid 1px ${uiTheme.colors.primary};
   background: ${uiTheme.colors.primaryWeaken};
   padding: 2px 5px;

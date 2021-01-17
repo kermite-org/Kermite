@@ -1,4 +1,4 @@
-import { IKeyUnitEntry } from '@kermite/shared';
+import { IKeyUnitEntry } from '@shared';
 import { h } from 'qx';
 import { PreviewKeyUnitCard } from '../molecules/PreviewKeyUnitCard';
 

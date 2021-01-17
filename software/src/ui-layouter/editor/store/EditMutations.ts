@@ -1,7 +1,7 @@
 import { clamp } from '@ui-layouter/base/utils';
 import {
   appState,
-  createDefaultKeyboardDesign,
+  createFallbackEditKeyboardDesign,
   IEditMode,
   IEditorTarget,
   IEnvBoolPropKey,
@@ -9,7 +9,8 @@ import {
 } from './AppState';
 import {
   IEditPropKey,
-  IKeyEntity,
+  IEditKeyboardDesign,
+  IEditKeyEntity,
   IKeyPlacementAnchor,
   IKeySizeUnit,
 } from './DataSchema';
@@ -56,12 +57,12 @@ class EditMutations {
     const id = `ke${(Math.random() * 1000) >> 0}`;
     const keySize = keySizeUnit === 'KP' ? 1 : 18;
 
-    const keyEntity: IKeyEntity = {
+    const keyEntity: IEditKeyEntity = {
       id,
       keyId: id,
       x,
       y,
-      r: 0,
+      angle: 0,
       shape: `std ${keySize}`,
       keyIndex: -1,
       groupId: '',
@@ -297,7 +298,7 @@ class EditMutations {
 
   changeKeyProperty = <K extends IEditPropKey>(
     propKey: K,
-    value: IKeyEntity[K],
+    value: IEditKeyEntity[K],
   ) => {
     editUpdator.patchEditKeyEntity((ke) => {
       ke[propKey] = value;
@@ -333,8 +334,15 @@ class EditMutations {
 
   resetKeyboardDesign() {
     editUpdator.patchEditor((editor) => {
-      editor.design = createDefaultKeyboardDesign();
+      editor.design = createFallbackEditKeyboardDesign();
     });
+  }
+
+  loadKeyboardDesign(design: IEditKeyboardDesign) {
+    editUpdator.patchEditor((editor) => {
+      editor.design = design;
+    });
+    this.resetSitePosition();
   }
 
   resetSitePosition() {
@@ -352,7 +360,7 @@ class EditMutations {
       const allNumbers = editReader.allOutlineShapes.map((shape) =>
         parseInt(shape.id.split('!')[1]),
       );
-      const newNumber = Math.max(...allNumbers) + 1;
+      const newNumber = allNumbers.length > 0 ? Math.max(...allNumbers) + 1 : 0;
       const newId = `shape!${newNumber}`;
 
       editUpdator.patchEditor((editor) => {

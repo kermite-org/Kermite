@@ -1,8 +1,4 @@
-import {
-  debounce,
-  getIpcRendererAgent,
-  IAppIpcContract,
-} from '@kermite/shared';
+import { debounce, getIpcRendererAgent, IAppIpcContract } from '@shared';
 import { rerender } from 'qx';
 
 export const ipcAgent = getIpcRendererAgent<IAppIpcContract>();

@@ -3,7 +3,7 @@ import {
   ILayer,
   IProfileDataAssigns,
   IProfileData,
-} from '@kermite/shared';
+} from '@shared';
 import {
   getAssignForKeyUnitWithLayerFallback,
   getAssignEntryTexts,

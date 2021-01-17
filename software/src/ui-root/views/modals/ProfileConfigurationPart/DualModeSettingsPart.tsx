@@ -2,7 +2,7 @@ import {
   reflectFieldValue,
   reflectValue,
   reflectFieldChecked,
-} from '@kermite/ui';
+} from '@ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
 import { models } from '~/models';

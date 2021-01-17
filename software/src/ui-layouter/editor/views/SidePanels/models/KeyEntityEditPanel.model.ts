@@ -1,6 +1,6 @@
 import { ICommonSelectorViewModel } from '@ui-layouter/controls';
 import {
-  IKeyEntity,
+  IEditKeyEntity,
   IEditPropKey,
   editReader,
   editMutations,
@@ -13,7 +13,7 @@ import {
 import { makeSelectorModel } from '@ui-layouter/editor/views/SidePanels/models/slots/SelectorModel';
 import { Hook } from 'qx';
 
-const slotSources: IAttributeSlotSource<IKeyEntity, IEditPropKey>[] = [
+const slotSources: IAttributeSlotSource<IEditKeyEntity, IEditPropKey>[] = [
   {
     propKey: 'keyId',
     label: 'keyID',
@@ -42,7 +42,7 @@ const slotSources: IAttributeSlotSource<IKeyEntity, IEditPropKey>[] = [
     writer: (text: string) => parseFloat(text),
   },
   {
-    propKey: 'r',
+    propKey: 'angle',
     label: 'angle',
     getUnit: () => 'deg',
     validator: (text: string) =>
@@ -112,7 +112,7 @@ const slotSources: IAttributeSlotSource<IKeyEntity, IEditPropKey>[] = [
 
 class KeyEntityAttrsEditorModel {
   private _allSlots: AttributeSlotModel<
-    IKeyEntity,
+    IEditKeyEntity,
     IEditPropKey
   >[] = slotSources.map(
     (ss) =>

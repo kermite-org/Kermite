@@ -210,3 +210,19 @@ export function formatTimeMsToMinSecMs(ms: number) {
   sec -= min * 60;
   return `${deg2(min)}:${deg2(sec)}:${deg2((ms / 100) >> 0)}`;
 }
+
+export function minusOneToUndefined(value: number): number | undefined {
+  return value === -1 ? undefined : value;
+}
+
+export function undefinedToMinusOne(value: number | undefined) {
+  return value === undefined ? -1 : value;
+}
+
+export function blankStringToUndefined(value: string): string | undefined {
+  return value || undefined;
+}
+
+export function undefinedToBlankString(value: string | undefined): string {
+  return value || '';
+}

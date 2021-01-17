@@ -96,6 +96,9 @@ export interface IAppIpcContract {
       projectId: string,
       comPortName: string,
     ): Promise<string>;
+
+    file_loadObjectFromJsonWithFileDialog(): Promise<any | undefined>;
+    file_saveObjectToJsonWithFileDialog(obj: any): Promise<boolean>;
   };
   events: {
     dev_testEvent: { type: string };

@@ -13,7 +13,7 @@ import {
   sortOrderBy,
   createGroupedArrayByKey,
   ConfigStorageFormatRevision,
-} from '@kermite/shared';
+} from '@shared';
 import {
   writeUint16BE,
   writeUint8,

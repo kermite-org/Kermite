@@ -7,7 +7,7 @@ import {
   IAssignOperation,
   compareObjectByJsonStringify,
   duplicateObjectByJsonStringifyParse,
-} from '@kermite/shared';
+} from '@shared';
 import {
   changeProfileDataAssignType,
   removeInvalidProfileAssigns,

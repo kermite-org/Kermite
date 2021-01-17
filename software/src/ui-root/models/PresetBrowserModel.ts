@@ -1,5 +1,5 @@
-import { IProfileData, fallbackProfileData } from '@kermite/shared';
-import { ipcAgent } from '@kermite/ui';
+import { IProfileData, fallbackProfileData } from '@shared';
+import { ipcAgent } from '@ui-common';
 import { modalTextEdit, modalAlert } from '~/base/dialog/BasicModals';
 import { ProjectResourceModel } from '~/models/ProjectResourceModel';
 import { UiStatusModel } from '~/models/UiStatusModel';

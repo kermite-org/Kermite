@@ -1,5 +1,5 @@
 import { degToRad } from '@ui-layouter/base/utils';
-import { IKeyboardDesign, IKeySizeUnit } from './DataSchema';
+import { IEditKeyboardDesign, IKeySizeUnit } from './DataSchema';
 import {
   getCoordUnitFromUnitSpec,
   getStdKeySize,
@@ -19,12 +19,12 @@ function getKeySize(
   return getStdKeySize(shapeSpec, coordUnit, keySizeUnit);
 }
 
-export function getKeyboardDesignBoundingBox(design: IKeyboardDesign) {
+export function getKeyboardDesignBoundingBox(design: IEditKeyboardDesign) {
   const coordUnit = getCoordUnitFromUnitSpec(design.placementUnit);
   const xs: number[] = [];
   const ys: number[] = [];
   Object.values(design.keyEntities).forEach((ke) => {
-    let { x, y, r } = ke;
+    let { x, y, angle } = ke;
     if (coordUnit.mode === 'KP') {
       x *= coordUnit.x;
       y *= coordUnit.y;
@@ -32,7 +32,7 @@ export function getKeyboardDesignBoundingBox(design: IKeyboardDesign) {
     const [w, h] = getKeySize(ke.shape, coordUnit, design.keySizeUnit);
     const dx = w / 2;
     const dy = h / 2;
-    const theta = degToRad(r);
+    const theta = degToRad(angle);
 
     const points = [
       [-dx, -dy],
@@ -60,6 +60,15 @@ export function getKeyboardDesignBoundingBox(design: IKeyboardDesign) {
       ys.push(y);
     }),
   );
+
+  if (xs.length === 0 || ys.length === 0) {
+    return {
+      left: -80,
+      right: 80,
+      top: -60,
+      bottom: 60,
+    };
+  }
 
   const left = Math.min(...xs);
   const right = Math.max(...xs);

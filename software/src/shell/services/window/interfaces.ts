@@ -1,4 +1,4 @@
-import { IAppWindowEvent } from '@kermite/shared';
+import { IAppWindowEvent } from '@shared';
 import { IListenerPort } from '~/base';
 
 export interface IMenuManager {

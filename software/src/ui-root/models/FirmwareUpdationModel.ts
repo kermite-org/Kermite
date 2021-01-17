@@ -1,4 +1,4 @@
-import { ipcAgent } from '@kermite/ui';
+import { ipcAgent } from '@ui-common';
 import { ProjectResourceModel } from '~/models/ProjectResourceModel';
 
 export type FirmwareUpdationPhase =

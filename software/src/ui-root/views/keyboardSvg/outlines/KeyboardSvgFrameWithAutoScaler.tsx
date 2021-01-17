@@ -1,4 +1,4 @@
-import { IKeyboardShapeDisplayArea } from '@kermite/shared';
+import { IKeyboardShapeDisplayArea } from '@shared';
 import { css } from 'goober';
 import { h } from 'qx';
 import { KeyboardSvgFrame } from '~/views/keyboardSvg/outlines/KeyboardSvgFrame';

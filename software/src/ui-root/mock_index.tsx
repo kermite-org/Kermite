@@ -1,11 +1,11 @@
-import { initializeCss } from '@kermite/ui';
-import { UiLayouterPageComponent } from '@ui-layouter';
+import { initializeCss } from '@ui-common';
 import { h, render } from 'qx';
+import { UiLayouterDevelopmentComponent } from './UiLayouterDevelopmentComponent';
 
 window.addEventListener('load', () => {
   const appDiv = document.getElementById('app');
   initializeCss();
-  render(() => <UiLayouterPageComponent />, appDiv);
+  render(() => <UiLayouterDevelopmentComponent />, appDiv);
 
   window.addEventListener('beforeunload', () => {
     render(() => <div />, appDiv);

@@ -1,4 +1,4 @@
-import { IProjectResourceOrigin } from '@kermite/shared';
+import { IProjectResourceOrigin } from '@shared';
 import { appEnv } from '~/base';
 import {
   fsExistsSync,

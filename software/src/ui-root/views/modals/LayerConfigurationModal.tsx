@@ -4,13 +4,13 @@ import {
   addOptionToOptionsArray,
   removeOptionFromOptionsArray,
   VirtualKeyTexts,
-} from '@kermite/shared';
+} from '@shared';
 import {
   reflectFieldValue,
   reflectChecked,
   reflectValue,
   reflectFieldChecked,
-} from '@kermite/ui';
+} from '@ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
 import {

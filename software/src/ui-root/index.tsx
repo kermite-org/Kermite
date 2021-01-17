@@ -1,5 +1,5 @@
-import { debounce } from '@kermite/shared';
-import { appUi } from '@kermite/ui';
+import { debounce } from '@shared';
+import { appUi } from '@ui-common';
 import { h, render } from 'qx';
 import { SiteRoot } from '~/views/SiteRoot';
 import { models } from './models';

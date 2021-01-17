@@ -4,7 +4,7 @@ import {
   editReader,
   unitValueToMm,
   editMutations,
-  IKeyEntity,
+  IEditKeyEntity,
   getStdKeySize,
 } from '@ui-layouter/editor/store';
 import { css } from 'goober';
@@ -72,7 +72,7 @@ const isoEnterPathMarkupText = [
   'z',
 ].join(' ');
 
-export const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
+export const KeyEntityCard = ({ ke }: { ke: IEditKeyEntity }) => {
   const cssKeyRect = css`
     fill: rgba(255, 255, 255, 0.3);
     stroke-width: 0.5;
@@ -172,7 +172,7 @@ export const KeyEntityCard = ({ ke }: { ke: IKeyEntity }) => {
   const oy = group ? group.y : 0;
   const orot = group ? group.angle : 0;
 
-  const outerTransformSpec = `translate(${ox}, ${oy}) rotate(${orot}) translate(${x}, ${y}) rotate(${ke.r})`;
+  const outerTransformSpec = `translate(${ox}, ${oy}) rotate(${orot}) translate(${x}, ${y}) rotate(${ke.angle})`;
 
   if (ke.shape === 'ext circle') {
     const transformSpec = `translate(${d * 9.5}, ${d * 9.5})`;

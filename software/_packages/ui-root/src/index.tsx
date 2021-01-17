@@ -1,4 +1,4 @@
-import { initializeCss } from '@kermite/ui';
+import { initializeCss } from '@ui-common';
 import { css } from 'goober';
 import { h, render } from 'qx';
 import { ipcExample } from '~/ipcExample';

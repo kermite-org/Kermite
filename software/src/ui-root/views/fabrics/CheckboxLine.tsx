@@ -1,4 +1,4 @@
-import { reflectChecked } from '@kermite/ui';
+import { reflectChecked } from '@ui-common';
 import { h } from 'qx';
 
 export const CheckboxLine = (props: {

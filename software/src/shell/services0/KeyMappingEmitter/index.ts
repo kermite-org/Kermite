@@ -1,8 +1,4 @@
-import {
-  IProfileData,
-  IKeyboardLayoutStandard,
-  delayMs,
-} from '@kermite/shared';
+import { IProfileData, IKeyboardLayoutStandard, delayMs } from '@shared';
 import { makeKeyAssignsConfigStorageData } from '~/services0/KeyboardLogic/InputLogicSimulatorD/ProfileDataBinaryPacker';
 import { KeyboardDeviceService } from '../KeyboardDevice';
 import { calcChecksum } from './Helpers';

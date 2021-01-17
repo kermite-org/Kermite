@@ -1,7 +1,7 @@
-import { compareObjectByJsonStringify } from '@kermite/shared';
+import { compareObjectByJsonStringify } from '@shared';
 import { produce } from 'immer';
 import { appState, IEditState, IEnvState } from './AppState';
-import { IKeyEntity } from './DataSchema';
+import { IEditKeyEntity } from './DataSchema';
 import { editManager } from './EditManager';
 
 class EditUpdator {
@@ -17,7 +17,7 @@ class EditUpdator {
     });
   }
 
-  patchEditKeyEntity(callback: (ke: IKeyEntity) => void) {
+  patchEditKeyEntity(callback: (ke: IEditKeyEntity) => void) {
     this.patchEditor((draft) => {
       if (draft.currentkeyEntityId) {
         const editKeyEntity =

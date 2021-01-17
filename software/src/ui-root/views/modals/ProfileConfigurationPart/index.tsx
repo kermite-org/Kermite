@@ -1,4 +1,4 @@
-import { reflectFieldChecked } from '@kermite/ui';
+import { reflectFieldChecked } from '@ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
 import {

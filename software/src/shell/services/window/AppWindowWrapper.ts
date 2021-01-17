@@ -1,4 +1,4 @@
-import { IAppWindowEvent } from '@kermite/shared';
+import { IAppWindowEvent } from '@shared';
 import { app, BrowserWindow } from 'electron';
 import { appConfig } from '~/base';
 import { makeListnerPort, pathJoin, pathRelative } from '~/funcs';

@@ -1,4 +1,4 @@
-import { ipcAgent } from '@kermite/ui';
+import { ipcAgent } from '@ui-common';
 import { models } from '~/models';
 
 export interface ITitleBarViewModel {

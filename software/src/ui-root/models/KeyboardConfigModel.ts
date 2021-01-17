@@ -1,8 +1,5 @@
-import {
-  IKeyboardBehaviorMode,
-  IKeyboardLayoutStandard,
-} from '@kermite/shared';
-import { ipcAgent } from '@kermite/ui';
+import { IKeyboardBehaviorMode, IKeyboardLayoutStandard } from '@shared';
+import { ipcAgent } from '@ui-common';
 
 export class KeyboardConfigModel {
   behaviorMode: IKeyboardBehaviorMode = 'Standalone';
