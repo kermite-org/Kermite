@@ -1,5 +1,5 @@
-import { IProfileData } from '@shared';
-import { IListenerPort } from '@shell/base';
+import { IProfileData } from '~/shared';
+import { IListenerPort } from '~/shell/base';
 
 export interface IProfileService {
   getCurrentProfile(): IProfileData | undefined;

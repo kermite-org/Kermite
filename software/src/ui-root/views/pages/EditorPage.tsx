@@ -1,4 +1,4 @@
-import { uiTheme } from '@ui-common';
+import { uiTheme } from '~/ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
 import { ProfileConfigratuionModalLayer } from '../modals/ProfileConfigurationPart';

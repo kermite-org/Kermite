@@ -1,8 +1,8 @@
-import { uiTheme } from '@ui-common';
+import { uiTheme } from '~/ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
-import { models } from '@ui-root/models';
-import { ProfileConfigurationPart } from '@ui-root/views/organisms/Editor/ProfileConfigurationPart';
+import { models } from '~/ui-root/models';
+import { ProfileConfigurationPart } from '~/ui-root/views/organisms/Editor/ProfileConfigurationPart';
 import { AssignEditSection } from './Editor/AssignEditSection';
 import { BehaviorOptionsPart } from './Editor/BehaviorOptionsPart';
 import { KeyboardSection } from './Editor/KeyboardSection';

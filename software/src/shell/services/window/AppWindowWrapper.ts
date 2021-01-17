@@ -1,7 +1,7 @@
-import { IAppWindowEvent } from '@shared';
 import { app, BrowserWindow } from 'electron';
-import { appConfig } from '@shell/base';
-import { makeListnerPort, pathJoin, pathRelative } from '@shell/funcs';
+import { IAppWindowEvent } from '~/shared';
+import { appConfig } from '~/shell/base';
+import { makeListnerPort, pathJoin, pathRelative } from '~/shell/funcs';
 import { IAppWindowWrapper } from './interfaces';
 import { PageSourceWatcher, setupWebContentSourceChecker } from './modules';
 

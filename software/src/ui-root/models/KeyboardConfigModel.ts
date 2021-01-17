@@ -1,5 +1,5 @@
-import { IKeyboardBehaviorMode, IKeyboardLayoutStandard } from '@shared';
-import { ipcAgent } from '@ui-common';
+import { IKeyboardBehaviorMode, IKeyboardLayoutStandard } from '~/shared';
+import { ipcAgent } from '~/ui-common';
 
 export class KeyboardConfigModel {
   behaviorMode: IKeyboardBehaviorMode = 'Standalone';

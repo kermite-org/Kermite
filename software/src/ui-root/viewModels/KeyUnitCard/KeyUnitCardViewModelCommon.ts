@@ -4,7 +4,7 @@ import {
   VirtualKeyTexts,
   IAssignEntryWithLayerFallback,
   IProfileDataAssigns,
-} from '@shared';
+} from '~/shared';
 
 function getAssignOperationText(
   op: IAssignOperation | undefined,

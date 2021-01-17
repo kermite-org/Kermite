@@ -20,18 +20,7 @@
     "paths": {
       "qx": ["./qx"],
       "qx/*": ["./qx/*"],
-      "@shell": ["./shell"],
-      "@shell/*": ["./shell/*"],
-      "@shared": ["./shared"],
-      "@shared/*": ["./shared/*"],
-      "@ui-common": ["./ui-common"],
-      "@ui-common/*": ["./ui-common/*"],
-      "@ui-layouter": ["./ui-layouter"],
-      "@ui-layouter/*": ["./ui-layouter/*"],
-      "@ui-layouter-page": ["./ui-layouter-page"],
-      "@ui-layouter-page/*": ["./ui-layouter-page/*"],
-      "@ui-root": ["./ui-root"],
-      "@ui-root/*": ["./ui-root/*"]
+      "~/*": ["./*"]
     }
   },
   "include": ["./src/**/*"]

@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { models } from '@ui-root/models';
+import { models } from '~/ui-root/models';
 
 export const ProfileConfigurationPart = () => {
   const cssBase = css`

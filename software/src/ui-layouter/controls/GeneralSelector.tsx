@@ -1,6 +1,6 @@
-import { reflectValue } from '@ui-common';
-import { combineClasses, uiTheme } from '@ui-layouter/base';
-import { ISelectOption } from '@ui-layouter/controls';
+import { reflectValue } from '~/ui-common';
+import { combineClasses, uiTheme } from '~/ui-layouter/base';
+import { ISelectOption } from '~/ui-layouter/controls';
 import { css } from 'goober';
 import { h } from 'qx';
 

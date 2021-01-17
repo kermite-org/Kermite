@@ -1,11 +1,11 @@
-import { ISelectOption } from '@ui-layouter/controls';
+import { ISelectOption } from '~/ui-layouter/controls';
 import {
   IModeState,
   editReader,
   editMutations,
   IEnvBoolPropKey,
   editManager,
-} from '@ui-layouter/editor/store';
+} from '~/ui-layouter/editor/store';
 
 function createModeSelectionViewModel<K extends 'editorTarget' | 'editMode'>(
   targetKey: K,

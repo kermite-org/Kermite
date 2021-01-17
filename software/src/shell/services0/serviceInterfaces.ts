@@ -1,5 +1,5 @@
-import { IProjectResourceInfo, IKeyboardShape, IProfileData } from '@shared';
-import { IProjectResourceInfoSource } from '@shell/services0/ProjectResource/ProjectResourceInfoSourceLoader';
+import { IProjectResourceInfo, IKeyboardShape, IProfileData } from '~/shared';
+import { IProjectResourceInfoSource } from '~/shell/services0/ProjectResource/ProjectResourceInfoSourceLoader';
 
 export interface IProjectResourceInfoProvider {
   getAllProjectResourceInfos(): IProjectResourceInfo[];

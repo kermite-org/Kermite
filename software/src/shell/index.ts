@@ -1,5 +1,5 @@
 import { app } from 'electron';
-import { ApplicationRoot } from '@shell/ApplicationRoot';
+import { ApplicationRoot } from '~/shell/ApplicationRoot';
 
 function startApplication() {
   console.log('start');

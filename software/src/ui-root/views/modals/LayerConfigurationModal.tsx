@@ -4,13 +4,13 @@ import {
   addOptionToOptionsArray,
   removeOptionFromOptionsArray,
   VirtualKeyTexts,
-} from '@shared';
+} from '~/shared';
 import {
   reflectFieldValue,
   reflectChecked,
   reflectValue,
   reflectFieldChecked,
-} from '@ui-common';
+} from '~/ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
 import {
@@ -19,13 +19,13 @@ import {
   DialogContentRow,
   DialogButtonsRow,
   DialogButton,
-} from '@ui-root/base/dialog/CommonDialogParts';
-import { createModal } from '@ui-root/base/overlay/ForegroundModalLayer';
+} from '~/ui-root/base/dialog/CommonDialogParts';
+import { createModal } from '~/ui-root/base/overlay/ForegroundModalLayer';
 import {
   cssCommonPropertiesTable,
   cssCommonTextInput,
-} from '@ui-root/views/controls/CommonStyles';
-import { DefaultSchemeButton } from '@ui-root/views/controls/DefaultSchemeButton';
+} from '~/ui-root/views/controls/CommonStyles';
+import { DefaultSchemeButton } from '~/ui-root/views/controls/DefaultSchemeButton';
 
 export interface ILayerConfigurationModelEditValues {
   layerName: string;

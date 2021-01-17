@@ -3,8 +3,8 @@ import {
   IKeyboardDeviceStatus,
   IRealtimeKeyboardEvent,
   RawHidMessageProtocolRevision,
-} from '@shared';
-import { EventPort } from '@shell/funcs';
+} from '~/shared';
+import { EventPort } from '~/shell/funcs';
 import { ProjectResourceInfoProvider } from '../ProjectResource/ProjectResourceInfoProvider';
 import { DeviceWrapper } from './DeviceWrapper';
 

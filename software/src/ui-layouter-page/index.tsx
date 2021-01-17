@@ -1,5 +1,5 @@
-import { ipcAgent } from '@ui-common';
-import { UiLayouterCore } from '@ui-layouter';
+import { ipcAgent } from '~/ui-common';
+import { UiLayouterCore } from '~/ui-layouter';
 import { css } from 'goober';
 import { h, rerender } from 'qx';
 

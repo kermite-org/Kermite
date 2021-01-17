@@ -1,4 +1,4 @@
-import { makeCssColor, uiTheme } from '@ui-layouter/base';
+import { makeCssColor, uiTheme } from '~/ui-layouter/base';
 import { css } from 'goober';
 import { h } from 'qx';
 import { ISelectOption } from './interfaces';

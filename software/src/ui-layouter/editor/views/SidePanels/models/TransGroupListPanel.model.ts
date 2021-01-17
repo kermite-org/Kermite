@@ -1,4 +1,4 @@
-import { editMutations, editReader } from '@ui-layouter/editor/store';
+import { editMutations, editReader } from '~/ui-layouter/editor/store';
 
 interface ITransGroupListPartModel {
   canAddGroup: boolean;

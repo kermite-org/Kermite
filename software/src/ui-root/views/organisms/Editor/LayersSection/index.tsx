@@ -1,7 +1,7 @@
 import { h } from 'qx';
-import { makeLayerListBoxPartViewModel } from '@ui-root/viewModels/Editor/LayersListBoxPartViewModel';
-import { makeLayerManagementPartViewModel } from '@ui-root/viewModels/Editor/LayersManagementPartViewModel';
-import { SectionHeaderText } from '@ui-root/views/elements/SectionHeaderText';
+import { makeLayerListBoxPartViewModel } from '~/ui-root/viewModels/Editor/LayersListBoxPartViewModel';
+import { makeLayerManagementPartViewModel } from '~/ui-root/viewModels/Editor/LayersManagementPartViewModel';
+import { SectionHeaderText } from '~/ui-root/views/elements/SectionHeaderText';
 import { LayerManagementPart } from './LayerManagementPart';
 import { LayersListBoxPart } from './LayersListBoxPart';
 

@@ -1,5 +1,5 @@
-import { ILayer } from '@shared';
-import { models } from '@ui-root/models';
+import { ILayer } from '~/shared';
+import { models } from '~/ui-root/models';
 
 export interface ILayerListViewModel {
   layerId: string;

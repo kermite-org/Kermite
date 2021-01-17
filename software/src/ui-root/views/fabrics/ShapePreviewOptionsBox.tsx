@@ -1,7 +1,7 @@
-import { reflectFieldChecked } from '@ui-common';
+import { reflectFieldChecked } from '~/ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
-import { IUiSettings } from '@ui-root/models/UiStatusModel';
+import { IUiSettings } from '~/ui-root/models/UiStatusModel';
 
 interface IDisplayOptionSource {
   fieldKey: keyof IUiSettings;

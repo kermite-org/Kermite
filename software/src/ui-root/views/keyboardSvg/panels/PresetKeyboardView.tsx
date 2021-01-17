@@ -1,10 +1,10 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { ViewModelProps } from '@ui-root/base/helper/mvvmHelpers';
-import { IPresetKeyboardViewModel } from '@ui-root/viewModels/PresetKeyboardViewModel';
-import { KeyboardBodyShape } from '@ui-root/views/keyboardSvg/atoms/KeyboardBodyShape';
-import { PresetKeyUnitCard } from '@ui-root/views/keyboardSvg/molecules/PresetKeyUnitCard';
-import { KeyboardSvgFrameWithAutoScaler } from '@ui-root/views/keyboardSvg/outlines/KeyboardSvgFrameWithAutoScaler';
+import { ViewModelProps } from '~/ui-root/base/helper/mvvmHelpers';
+import { IPresetKeyboardViewModel } from '~/ui-root/viewModels/PresetKeyboardViewModel';
+import { KeyboardBodyShape } from '~/ui-root/views/keyboardSvg/atoms/KeyboardBodyShape';
+import { PresetKeyUnitCard } from '~/ui-root/views/keyboardSvg/molecules/PresetKeyUnitCard';
+import { KeyboardSvgFrameWithAutoScaler } from '~/ui-root/views/keyboardSvg/outlines/KeyboardSvgFrameWithAutoScaler';
 
 export const PresetKeyboardView = ({
   vm,

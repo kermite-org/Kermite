@@ -1,7 +1,7 @@
-import { uiTheme } from '@ui-common';
+import { uiTheme } from '~/ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
-import { IKeyUnitCardViewModel } from '@ui-root/viewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
+import { IKeyUnitCardViewModel } from '~/ui-root/viewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
 
 const cssKeyRect = css`
   cursor: pointer;

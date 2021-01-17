@@ -1,8 +1,8 @@
-import { IProfileAssignType } from '@shared';
-import { reflectValue } from '@ui-common';
+import { IProfileAssignType } from '~/shared';
+import { reflectValue } from '~/ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
-import { models } from '@ui-root/models';
+import { models } from '~/ui-root/models';
 
 const AssignTypeSelectionPartViewModel = () => {
   const assignTypeOptions: IProfileAssignType[] = ['single', 'dual'];

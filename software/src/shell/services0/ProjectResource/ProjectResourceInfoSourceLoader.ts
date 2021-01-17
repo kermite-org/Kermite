@@ -1,5 +1,5 @@
-import { IProjectResourceOrigin } from '@shared';
-import { appEnv } from '@shell/base';
+import { IProjectResourceOrigin } from '~/shared';
+import { appEnv } from '~/shell/base';
 import {
   fsExistsSync,
   fspReaddir,
@@ -10,7 +10,7 @@ import {
   pathDirname,
   pathResolve,
   pathRelative,
-} from '@shell/funcs';
+} from '~/shell/funcs';
 
 export interface IProjectResourceInfoSource {
   projectId: string;

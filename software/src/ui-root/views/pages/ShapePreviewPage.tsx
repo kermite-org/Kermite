@@ -1,10 +1,10 @@
-import { uiTheme } from '@ui-common';
+import { uiTheme } from '~/ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
-import { makeShapePreviewPageViewModel } from '@ui-root/viewModels/ShapePreviewPageViewModel';
-import { GeneralSelector } from '@ui-root/views/controls/GeneralSelector';
-import { ShapePreviewOptionsBox } from '@ui-root/views/fabrics/ShapePreviewOptionsBox';
-import { PreviewKeyboardShapeView } from '@ui-root/views/keyboardSvg/panels/PreviewKeyboardShapeView';
+import { makeShapePreviewPageViewModel } from '~/ui-root/viewModels/ShapePreviewPageViewModel';
+import { GeneralSelector } from '~/ui-root/views/controls/GeneralSelector';
+import { ShapePreviewOptionsBox } from '~/ui-root/views/fabrics/ShapePreviewOptionsBox';
+import { PreviewKeyboardShapeView } from '~/ui-root/views/keyboardSvg/panels/PreviewKeyboardShapeView';
 
 const cssShapePreviewPage = css`
   background: ${uiTheme.colors.clBackground};

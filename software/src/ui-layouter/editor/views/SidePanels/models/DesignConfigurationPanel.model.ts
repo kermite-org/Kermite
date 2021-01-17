@@ -1,16 +1,16 @@
-import { useClosureModel } from '@ui-layouter/base';
-import { ICommonSelectorViewModel } from '@ui-layouter/controls';
+import { useClosureModel } from '~/ui-layouter/base';
+import { ICommonSelectorViewModel } from '~/ui-layouter/controls';
 import {
   editReader,
   editMutations,
   IKeySizeUnit,
   IKeyPlacementAnchor,
-} from '@ui-layouter/editor/store';
+} from '~/ui-layouter/editor/store';
 import {
   createConfigTextEditModel,
   IConfigTextEditModel,
-} from '@ui-layouter/editor/views/SidePanels/models/slots/ConfigTextEditModel';
-import { makeSelectorModel } from '@ui-layouter/editor/views/SidePanels/models/slots/SelectorModel';
+} from '~/ui-layouter/editor/views/SidePanels/models/slots/ConfigTextEditModel';
+import { makeSelectorModel } from '~/ui-layouter/editor/views/SidePanels/models/slots/SelectorModel';
 
 function getPlacementUnitInputTextFromModel(): string | undefined {
   const mode = editReader.coordUnitSuffix;

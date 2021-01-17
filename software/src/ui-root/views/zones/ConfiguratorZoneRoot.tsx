@@ -1,10 +1,10 @@
-import { uiTheme } from '@ui-common';
-import { UiLayouterPageComponent } from '@ui-layouter-page';
+import { uiTheme } from '~/ui-common';
+import { UiLayouterPageComponent } from '~/ui-layouter-page';
 import { css } from 'goober';
 import { h } from 'qx';
-import { models } from '@ui-root/models';
-import { CustomWindowFrame } from '@ui-root/views/base/window/CustomWindowFrame';
-import { HeatmapPage } from '@ui-root/views/pages/HeatmapPage';
+import { models } from '~/ui-root/models';
+import { CustomWindowFrame } from '~/ui-root/views/base/window/CustomWindowFrame';
+import { HeatmapPage } from '~/ui-root/views/pages/HeatmapPage';
 import { NavigationColumn } from '../base/navigation/NavigationColumn';
 import { WindowTitleBarSection } from '../base/titleBar/WindowTitleBarSection';
 import { EditorPage } from '../pages/EditorPage';

@@ -1,6 +1,6 @@
-import { delayMs } from '@shared';
+import { delayMs } from '~/shared';
 import * as HID from 'node-hid';
-import { zeros } from '@shell/services0/KeyMappingEmitter/Helpers';
+import { zeros } from '~/shell/services0/KeyMappingEmitter/Helpers';
 
 function getArrayFromBuffer(data: any) {
   return new Uint8Array(Buffer.from(data));

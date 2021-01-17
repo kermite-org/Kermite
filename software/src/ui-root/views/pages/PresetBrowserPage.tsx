@@ -1,9 +1,9 @@
-import { uiTheme } from '@ui-common';
+import { uiTheme } from '~/ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
-import { makePresetBrowserViewModel } from '@ui-root/viewModels/PresetBrowserViewModel';
-import { PresetKeyboardSection } from '@ui-root/views/organisms/PresetBrowser/PresetKeyboardSection';
-import { PresetSelectionSection } from '@ui-root/views/organisms/PresetBrowser/PresetSelectionSection';
+import { makePresetBrowserViewModel } from '~/ui-root/viewModels/PresetBrowserViewModel';
+import { PresetKeyboardSection } from '~/ui-root/views/organisms/PresetBrowser/PresetKeyboardSection';
+import { PresetSelectionSection } from '~/ui-root/views/organisms/PresetBrowser/PresetSelectionSection';
 
 const cssPresetBrowserPage = css`
   background: ${uiTheme.colors.clBackground};

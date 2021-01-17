@@ -1,4 +1,4 @@
-import { layouterAppGlobal } from '@ui-layouter/base';
+import { layouterAppGlobal } from '~/ui-layouter/base';
 import { css } from 'goober';
 import { h } from 'qx';
 

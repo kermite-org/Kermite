@@ -1,10 +1,10 @@
-import { models } from '@ui-root/models';
+import { models } from '~/ui-root/models';
 import {
   makePlainOperationEditCardsViewModel,
   makeOperationEditPartViewModel,
-} from '@ui-root/viewModels/Editor/OperationEditPartViewModel';
-import { makeOperationLayerOptionEditViewModel } from '@ui-root/viewModels/Editor/OperationLayerOptionEditViewModel';
-import { makeOperationSlotsPartViewModel } from '@ui-root/viewModels/Editor/OperationSlotsPartViewModel';
+} from '~/ui-root/viewModels/Editor/OperationEditPartViewModel';
+import { makeOperationLayerOptionEditViewModel } from '~/ui-root/viewModels/Editor/OperationLayerOptionEditViewModel';
+import { makeOperationSlotsPartViewModel } from '~/ui-root/viewModels/Editor/OperationSlotsPartViewModel';
 
 export function makeAssignEditSectionViewModel() {
   const isDisabled = !models.editorModel.isSlotSelected;

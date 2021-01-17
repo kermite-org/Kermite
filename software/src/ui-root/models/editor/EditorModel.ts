@@ -7,7 +7,7 @@ import {
   IAssignOperation,
   compareObjectByJsonStringify,
   duplicateObjectByJsonStringifyParse,
-} from '@shared';
+} from '~/shared';
 import {
   changeProfileDataAssignType,
   removeInvalidProfileAssigns,

@@ -1,4 +1,4 @@
-import { reflectValue } from '@ui-common';
+import { reflectValue } from '~/ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
 

@@ -1,4 +1,4 @@
-import { compareObjectByJsonStringify } from '@shared';
+import { compareObjectByJsonStringify } from '~/shared';
 import { produce } from 'immer';
 import { appState, IEditState, IEnvState } from './AppState';
 import { IEditKeyEntity } from './DataSchema';

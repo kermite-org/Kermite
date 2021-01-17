@@ -2,9 +2,9 @@ import {
   fallbackKeyboardConfig,
   IKeyboardConfig,
   overwriteObjectProps,
-} from '@shared';
-import { applicationStorage } from '@shell/base';
-import { EventPort } from '@shell/funcs';
+} from '~/shared';
+import { applicationStorage } from '~/shell/base';
+import { EventPort } from '~/shell/funcs';
 
 // 環境に関連したキーボードの設定を保存する, レイアウト(US/JP)など
 export class KeyboardConfigProvider {

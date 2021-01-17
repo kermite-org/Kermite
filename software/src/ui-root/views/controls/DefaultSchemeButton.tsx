@@ -1,4 +1,4 @@
-import { ILayerDefaultScheme } from '@shared';
+import { ILayerDefaultScheme } from '~/shared';
 import { css } from 'goober';
 import { h } from 'qx';
 

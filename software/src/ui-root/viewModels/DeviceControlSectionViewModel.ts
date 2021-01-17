@@ -1,4 +1,4 @@
-import { models } from '@ui-root/models';
+import { models } from '~/ui-root/models';
 
 export function makeDeviceControlSectionViewModel() {
   return {

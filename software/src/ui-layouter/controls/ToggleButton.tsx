@@ -1,4 +1,4 @@
-import { uiTheme } from '@ui-layouter/base';
+import { uiTheme } from '~/ui-layouter/base';
 import { css } from 'goober';
 import { h } from 'qx';
 

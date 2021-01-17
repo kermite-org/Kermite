@@ -1,4 +1,4 @@
-import { mapObjectValues } from '@shared';
+import { mapObjectValues } from '~/shared';
 import { IEditKeyboardDesign, IKeySizeUnit } from './DataSchema';
 
 export type ICoordUnit =

@@ -1,22 +1,22 @@
-import { useClosureModel } from '@ui-layouter/base';
-import { ICommonSelectorViewModel } from '@ui-layouter/controls';
+import { useClosureModel } from '~/ui-layouter/base';
+import { ICommonSelectorViewModel } from '~/ui-layouter/controls';
 import {
   editMutations,
   editReader,
   IEditKeyEntity,
   IEditPropKey,
-} from '@ui-layouter/editor/store';
-import { getKeyIdentifierText } from '@ui-layouter/editor/store/DomainRelatedHelpers';
+} from '~/ui-layouter/editor/store';
+import { getKeyIdentifierText } from '~/ui-layouter/editor/store/DomainRelatedHelpers';
 import {
   AttributeSlotModel,
   IAttributeSlotSource,
   IAttributeSlotViewModel,
-} from '@ui-layouter/editor/views/SidePanels/models/slots/AttributeSlotModel';
+} from '~/ui-layouter/editor/views/SidePanels/models/slots/AttributeSlotModel';
 import {
   createConfigTextEditModelDynamic2,
   IConfigTextEditModel2,
-} from '@ui-layouter/editor/views/SidePanels/models/slots/ConfigTextEditModel';
-import { makeSelectorModel } from '@ui-layouter/editor/views/SidePanels/models/slots/SelectorModel';
+} from '~/ui-layouter/editor/views/SidePanels/models/slots/ConfigTextEditModel';
+import { makeSelectorModel } from '~/ui-layouter/editor/views/SidePanels/models/slots/SelectorModel';
 import { Hook } from 'qx';
 
 const slotSources: IAttributeSlotSource<IEditKeyEntity, IEditPropKey>[] = [

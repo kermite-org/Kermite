@@ -1,6 +1,6 @@
-import { EditSvgViewContainer } from '@ui-layouter/editor/views/EditSvgView';
-import { EditorSideColumnContent } from '@ui-layouter/editor/views/SidePanels';
-import { EditMenuBar } from '@ui-layouter/editor/views/ToolBar/EditMenuBar';
+import { EditSvgViewContainer } from '~/ui-layouter/editor/views/EditSvgView';
+import { EditorSideColumnContent } from '~/ui-layouter/editor/views/SidePanels';
+import { EditMenuBar } from '~/ui-layouter/editor/views/ToolBar/EditMenuBar';
 import { css } from 'goober';
 import { h } from 'qx';
 

@@ -1,5 +1,5 @@
-import { IProfileManagerStatus, overwriteObjectProps } from '@shared';
-import { ipcAgent, reflectValue } from '@ui-common';
+import { IProfileManagerStatus, overwriteObjectProps } from '~/shared';
+import { ipcAgent, reflectValue } from '~/ui-common';
 import { css } from 'goober';
 import { h, Hook } from 'qx';
 

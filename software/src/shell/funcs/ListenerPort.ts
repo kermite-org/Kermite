@@ -1,4 +1,4 @@
-import { removeArrayItems } from '@shared';
+import { removeArrayItems } from '~/shared';
 
 type IListener<T> = (payload: T) => void;
 export interface IListnerPort<T> {

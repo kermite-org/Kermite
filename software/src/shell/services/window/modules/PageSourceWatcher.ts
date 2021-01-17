@@ -1,12 +1,12 @@
 import fs from 'fs';
-import { debounce } from '@shared';
+import { debounce } from '~/shared';
 import {
   fsWatch,
   pathExtname,
   pathJoin,
   pathRelative,
   pathResolve,
-} from '@shell/funcs';
+} from '~/shell/funcs';
 
 export class PageSourceWatcher {
   private watcher: fs.FSWatcher | undefined;

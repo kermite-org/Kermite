@@ -1,9 +1,9 @@
-import { IKeyboardShapeDisplayArea, formatTimeMsToMinSecMs } from '@shared';
-import { models } from '@ui-root/models';
+import { IKeyboardShapeDisplayArea, formatTimeMsToMinSecMs } from '~/shared';
+import { models } from '~/ui-root/models';
 import {
   makeCustomKeyUnitViewModels,
   ICustomKeyUnitViewModelBase,
-} from '@ui-root/viewModels/KeyUnitCard/CustomKeyUnitViewModel';
+} from '~/ui-root/viewModels/KeyUnitCard/CustomKeyUnitViewModel';
 
 export interface IHeatmapCustomKeyUnitViewModel {
   keyUnitId: string;

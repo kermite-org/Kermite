@@ -1,5 +1,5 @@
-import { reflectValue } from '@ui-common';
-import { styleWidthSpec } from '@ui-layouter/base';
+import { reflectValue } from '~/ui-common';
+import { styleWidthSpec } from '~/ui-layouter/base';
 import { css } from 'goober';
 import { h } from 'qx';
 

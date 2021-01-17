@@ -1,4 +1,4 @@
-import { GeneralSelector } from '@ui-layouter/controls';
+import { GeneralSelector } from '~/ui-layouter/controls';
 import {
   ConfigContent,
   ConfigHeader,
@@ -6,9 +6,9 @@ import {
   ConfigSubContent,
   ConfigSubHeader,
   ConfigVStack,
-} from '@ui-layouter/editor/views/SidePanels/atoms';
-import { GeneralConfigTextEditRow } from '@ui-layouter/editor/views/SidePanels/controls/GeneralConfigTextEditRow';
-import { useOutlineEditPanelModel } from '@ui-layouter/editor/views/SidePanels/models/OutlineEditPanel.model';
+} from '~/ui-layouter/editor/views/SidePanels/atoms';
+import { GeneralConfigTextEditRow } from '~/ui-layouter/editor/views/SidePanels/controls/GeneralConfigTextEditRow';
+import { useOutlineEditPanelModel } from '~/ui-layouter/editor/views/SidePanels/models/OutlineEditPanel.model';
 import { h } from 'qx';
 
 export const OutlineEditPanel = () => {

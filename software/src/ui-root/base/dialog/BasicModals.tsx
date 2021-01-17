@@ -1,4 +1,4 @@
-import { reflectFieldValue } from '@ui-common';
+import { reflectFieldValue } from '~/ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
 import { createModal } from '../overlay/ForegroundModalLayer';

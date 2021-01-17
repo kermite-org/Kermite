@@ -1,4 +1,4 @@
-import { IKeyboardShapeDisplayArea } from '@shared';
+import { IKeyboardShapeDisplayArea } from '~/shared';
 import { css } from 'goober';
 import { h } from 'qx';
 

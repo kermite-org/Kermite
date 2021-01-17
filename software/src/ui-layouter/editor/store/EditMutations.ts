@@ -1,5 +1,5 @@
-import { clamp } from '@ui-layouter/base/utils';
-import { getNextEntityInstanceId } from '@ui-layouter/editor/store/DomainRelatedHelpers';
+import { clamp } from '~/ui-layouter/base/utils';
+import { getNextEntityInstanceId } from '~/ui-layouter/editor/store/DomainRelatedHelpers';
 import {
   appState,
   createFallbackEditKeyboardDesign,

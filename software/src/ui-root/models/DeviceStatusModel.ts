@@ -1,5 +1,5 @@
-import { IKeyboardDeviceStatus } from '@shared';
-import { ipcAgent } from '@ui-common';
+import { IKeyboardDeviceStatus } from '~/shared';
+import { ipcAgent } from '~/ui-common';
 
 export class DeviceStatusModel {
   isConnected: boolean = false;

@@ -1,12 +1,12 @@
-import { appUi } from '@ui-common';
+import { appUi } from '~/ui-common';
 import {
   editMutations,
   editReader,
   IKeyboardDesign,
-} from '@ui-layouter/editor/store';
-import { KeyboardDesignConverter } from '@ui-layouter/editor/store/KeyboardDesignConverter';
-import { keyboardOperationHander } from '@ui-layouter/editor/store/KeyboardOperationHandler';
-import { PageRoot } from '@ui-layouter/editor/views/PageRoot';
+} from '~/ui-layouter/editor/store';
+import { KeyboardDesignConverter } from '~/ui-layouter/editor/store/KeyboardDesignConverter';
+import { keyboardOperationHander } from '~/ui-layouter/editor/store/KeyboardOperationHandler';
+import { PageRoot } from '~/ui-layouter/editor/views/PageRoot';
 import { h, Hook } from 'qx';
 
 export namespace UiLayouterCore {

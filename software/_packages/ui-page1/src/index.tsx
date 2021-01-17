@@ -4,8 +4,8 @@ import {
   IAppIpcContract,
   IProfileData,
   showVersion,
-} from '@shared';
-import { initializeCss, ipcAgent } from '@ui-common';
+} from '~/shared';
+import { initializeCss, ipcAgent } from '~/ui-common';
 import { css } from 'goober';
 import { h, render, Hook, rerender } from 'qx';
 import { ProfileSelector } from '~/ProfileSelector';

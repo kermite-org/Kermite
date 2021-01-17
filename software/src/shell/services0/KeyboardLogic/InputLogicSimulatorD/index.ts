@@ -4,10 +4,10 @@ import {
   IKeyboardConfig,
   IRealtimeKeyboardEvent,
   IntervalTimerWrapper,
-} from '@shared';
-import { ProfileManager } from '@shell/services/profile/ProfileManager/ProfileManager';
-import { KeyboardConfigProvider } from '@shell/services0/KeyboardConfigProvider';
-import { KeyboardDeviceService } from '@shell/services0/KeyboardDevice';
+} from '~/shared';
+import { ProfileManager } from '~/shell/services/profile/ProfileManager/ProfileManager';
+import { KeyboardConfigProvider } from '~/shell/services0/KeyboardConfigProvider';
+import { KeyboardDeviceService } from '~/shell/services0/KeyboardDevice';
 import { getKeyboardCoreLogicInterface } from './DeviceCoreLogicSimulator2_Dual';
 import { makeKeyAssignsConfigStorageData } from './ProfileDataBinaryPacker';
 

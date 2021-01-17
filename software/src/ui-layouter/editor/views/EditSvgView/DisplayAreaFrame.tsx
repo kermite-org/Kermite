@@ -1,5 +1,5 @@
-import { makeCssColor } from '@ui-layouter/base';
-import { editReader } from '@ui-layouter/editor/store';
+import { makeCssColor } from '~/ui-layouter/base';
+import { editReader } from '~/ui-layouter/editor/store';
 import { css } from 'goober';
 import { h } from 'qx';
 

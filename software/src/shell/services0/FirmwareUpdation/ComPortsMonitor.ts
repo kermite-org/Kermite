@@ -1,4 +1,4 @@
-import { removeArrayItems } from '@shared';
+import { removeArrayItems } from '~/shared';
 import { ComPortsResource } from './ComPortsResource';
 
 export interface ComPortsListener {

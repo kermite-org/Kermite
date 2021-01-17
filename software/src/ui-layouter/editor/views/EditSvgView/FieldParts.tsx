@@ -1,5 +1,5 @@
-import { makeCssColor } from '@ui-layouter/base';
-import { editReader } from '@ui-layouter/editor/store';
+import { makeCssColor } from '~/ui-layouter/base';
+import { editReader } from '~/ui-layouter/editor/store';
 import { h } from 'qx';
 
 const axisColor = makeCssColor(0x444444, 0.2);

@@ -1,5 +1,5 @@
-import { IProjectResourceInfo } from '@shared';
-import { ipcAgent } from '@ui-common';
+import { IProjectResourceInfo } from '~/shared';
+import { ipcAgent } from '~/ui-common';
 
 export class ProjectResourceModel {
   projectResourceInfos: IProjectResourceInfo[] = [];

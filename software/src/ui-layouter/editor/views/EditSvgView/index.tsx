@@ -1,4 +1,4 @@
-import { editReader, editMutations } from '@ui-layouter/editor/store';
+import { editReader, editMutations } from '~/ui-layouter/editor/store';
 import { css } from 'goober';
 import { Hook, h } from 'qx';
 import { DebugOverlay } from './DebugOverlay';

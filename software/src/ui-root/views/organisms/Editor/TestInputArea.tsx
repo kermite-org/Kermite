@@ -1,8 +1,8 @@
 import { css } from 'goober';
 import { Hook, h } from 'qx';
-import { makeTestInputAreaViewModel } from '@ui-root/viewModels/TestInputAreaViweModel';
-import { GeneralButton } from '@ui-root/views/controls/GeneralButton';
-import { GeneralInput } from '@ui-root/views/controls/GeneralInput';
+import { makeTestInputAreaViewModel } from '~/ui-root/viewModels/TestInputAreaViweModel';
+import { GeneralButton } from '~/ui-root/views/controls/GeneralButton';
+import { GeneralInput } from '~/ui-root/views/controls/GeneralInput';
 
 const cssTestInputArea = css`
   margin: 5px;

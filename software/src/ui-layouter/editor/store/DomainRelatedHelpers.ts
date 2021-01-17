@@ -1,4 +1,4 @@
-import { IEditKeyEntity } from '@ui-layouter/editor/store/DataSchema';
+import { IEditKeyEntity } from '~/ui-layouter/editor/store/DataSchema';
 
 export function getKeyIdentifierText(
   ke: IEditKeyEntity,

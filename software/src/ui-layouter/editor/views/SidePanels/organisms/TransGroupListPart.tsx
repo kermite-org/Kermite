@@ -1,7 +1,7 @@
-import { uiTheme } from '@ui-layouter/base';
-import { editMutations } from '@ui-layouter/editor/store';
-import { ConfigSubHeader } from '@ui-layouter/editor/views/SidePanels/atoms';
-import { useTransGroupListPartModel } from '@ui-layouter/editor/views/SidePanels/models/TransGroupListPanel.model';
+import { uiTheme } from '~/ui-layouter/base';
+import { editMutations } from '~/ui-layouter/editor/store';
+import { ConfigSubHeader } from '~/ui-layouter/editor/views/SidePanels/atoms';
+import { useTransGroupListPartModel } from '~/ui-layouter/editor/views/SidePanels/models/TransGroupListPanel.model';
 import { css } from 'goober';
 import { h } from 'qx';
 

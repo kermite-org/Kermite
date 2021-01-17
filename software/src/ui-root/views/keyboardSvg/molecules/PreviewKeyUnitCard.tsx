@@ -1,4 +1,4 @@
-import { IKeyUnitEntry } from '@shared';
+import { IKeyUnitEntry } from '~/shared';
 import { css } from 'goober';
 import { h } from 'qx';
 

@@ -1,6 +1,6 @@
-import { IntervalTimerWrapper, IRealtimeKeyboardEvent } from '@shared';
-import { appUi, ipcAgent } from '@ui-common';
-import { EditorModel } from '@ui-root/models/editor/EditorModel';
+import { IntervalTimerWrapper, IRealtimeKeyboardEvent } from '~/shared';
+import { appUi, ipcAgent } from '~/ui-common';
+import { EditorModel } from '~/ui-root/models/editor/EditorModel';
 
 export class RealtimeHeatmapModel {
   constructor(private editorModel: EditorModel) {}

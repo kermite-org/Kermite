@@ -1,5 +1,5 @@
 import { app, Menu } from 'electron';
-import { makeListnerPort } from '@shell/funcs';
+import { makeListnerPort } from '~/shell/funcs';
 import { IMenuManager } from './interfaces';
 
 function makePageMenuItem(

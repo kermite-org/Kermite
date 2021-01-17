@@ -3,8 +3,8 @@ import {
   startDragSession,
   getRelativeMousePosition,
   layouterAppGlobal,
-} from '@ui-layouter/base';
-import { editReader, editMutations } from '@ui-layouter/editor/store';
+} from '~/ui-layouter/base';
+import { editReader, editMutations } from '~/ui-layouter/editor/store';
 import { Hook, h, asyncRerender } from 'qx';
 import { screenToWorld } from './CoordHelpers';
 import { DisplayAreaFrame } from './DisplayAreaFrame';

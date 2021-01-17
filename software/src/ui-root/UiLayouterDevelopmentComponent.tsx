@@ -1,8 +1,8 @@
-import { UiLayouterCore } from '@ui-layouter';
+import { UiLayouterCore } from '~/ui-layouter';
 import {
   createFallbackKeyboardDesign,
   IKeyboardDesign,
-} from '@ui-layouter/editor/store';
+} from '~/ui-layouter/editor/store';
 import { h, Hook } from 'qx';
 
 function loadLocalStorageKeyboardDesignOrDefault(): IKeyboardDesign {
