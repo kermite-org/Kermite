@@ -1,10 +1,10 @@
+import { css } from 'goober';
+import { h } from 'qx';
 import {
   reflectFieldValue,
   reflectValue,
   reflectFieldChecked,
 } from '~/ui-common';
-import { css } from 'goober';
-import { h } from 'qx';
 import { models } from '~/ui-root/models';
 
 const cssDualModeSettingsPart = css`

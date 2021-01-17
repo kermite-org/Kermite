@@ -1,6 +1,6 @@
-import { uiTheme } from '~/ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
+import { uiTheme } from '~/ui-common';
 import { models } from '~/ui-root/models';
 import { KeyboardBodyShape } from '~/ui-root/views/keyboardSvg/atoms/KeyboardBodyShape';
 import { EditKeyUnitCardsPart } from '~/ui-root/views/keyboardSvg/organisms/EditKeyUnitCardsPart';

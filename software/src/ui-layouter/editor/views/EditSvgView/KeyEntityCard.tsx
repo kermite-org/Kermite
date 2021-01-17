@@ -1,3 +1,5 @@
+import { css } from 'goober';
+import { rerender, h } from 'qx';
 import { IPosition, startDragSession } from '~/ui-layouter/base';
 import { degToRad } from '~/ui-layouter/base/utils';
 import {
@@ -8,8 +10,6 @@ import {
   getStdKeySize,
 } from '~/ui-layouter/editor/store';
 import { getKeyIdentifierText } from '~/ui-layouter/editor/store/DomainRelatedHelpers';
-import { css } from 'goober';
-import { rerender, h } from 'qx';
 
 let temporaryChangingModeAddToMove = false;
 

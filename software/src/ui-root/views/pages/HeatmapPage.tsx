@@ -1,6 +1,6 @@
-import { uiTheme } from '~/ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
+import { uiTheme } from '~/ui-common';
 import { makeRealtimeHeatmapViewModel } from '~/ui-root/viewModels/RealtimeHeatmapViewModel';
 import { GeneralButton } from '~/ui-root/views/controls/GeneralButton';
 import { HeatmapKeyboardView } from '~/ui-root/views/keyboardSvg/panels/HeatmapKeyboardView';

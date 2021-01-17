@@ -1,7 +1,7 @@
-import { ipcAgent } from '~/ui-common';
-import { UiLayouterCore } from '~/ui-layouter';
 import { css } from 'goober';
 import { h, rerender } from 'qx';
+import { ipcAgent } from '~/ui-common';
+import { UiLayouterCore } from '~/ui-layouter';
 
 const cssBase = css`
   height: 100%;

@@ -1,3 +1,4 @@
+import { Hook } from 'qx';
 import { useClosureModel } from '~/ui-layouter/base';
 import { ICommonSelectorViewModel } from '~/ui-layouter/controls';
 import {
@@ -17,7 +18,6 @@ import {
   IConfigTextEditModel2,
 } from '~/ui-layouter/editor/views/SidePanels/models/slots/ConfigTextEditModel';
 import { makeSelectorModel } from '~/ui-layouter/editor/views/SidePanels/models/slots/SelectorModel';
-import { Hook } from 'qx';
 
 const slotSources: IAttributeSlotSource<IEditKeyEntity, IEditPropKey>[] = [
   // {

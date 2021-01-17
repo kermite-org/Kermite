@@ -1,6 +1,6 @@
-import { uiTheme } from '~/ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
+import { uiTheme } from '~/ui-common';
 import { IOperationCardViewModel } from '~/ui-root/viewModels/Editor/OperationEditPartViewModel';
 
 const cssOperationCard = css`

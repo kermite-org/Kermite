@@ -1,5 +1,5 @@
-import { IKeyboardShapeDisplayArea, IProfileData } from '~/shared';
 import { Hook } from 'qx';
+import { IKeyboardShapeDisplayArea, IProfileData } from '~/shared';
 import {
   IPresetKeyUnitViewModel,
   makePresetKeyUnitViewModels,

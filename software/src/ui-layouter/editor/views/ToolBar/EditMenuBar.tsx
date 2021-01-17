@@ -1,11 +1,11 @@
+import { css } from 'goober';
+import { h } from 'qx';
 import {
   ExclusiveButtonGroup,
   ToggleButton,
   GeneralSelector,
 } from '~/ui-layouter/controls';
 import { makeEditMenuBarViewModel } from '~/ui-layouter/editor/views/ToolBar/EditMenuBar.model';
-import { css } from 'goober';
-import { h } from 'qx';
 
 const cssEditMenuBar = css`
   display: flex;

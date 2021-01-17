@@ -1,5 +1,5 @@
-import { IKeyboardBehaviorMode, IKeyboardLayoutStandard } from '~/shared';
 import { h } from 'qx';
+import { IKeyboardBehaviorMode, IKeyboardLayoutStandard } from '~/shared';
 import { models } from '~/ui-root/models';
 import { DualItemsHoverSelector } from '~/ui-root/views/fabrics/DualItemHoverSelector';
 

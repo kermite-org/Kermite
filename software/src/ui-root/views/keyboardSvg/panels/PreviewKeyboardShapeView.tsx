@@ -1,6 +1,6 @@
-import { IKeyboardShape } from '~/shared';
 import { css } from 'goober';
 import { h } from 'qx';
+import { IKeyboardShape } from '~/shared';
 import { IUiSettings } from '~/ui-root/models/UiStatusModel';
 import { KeyboardBodyShape } from '~/ui-root/views/keyboardSvg/atoms/KeyboardBodyShape';
 import { PreviewBoundingBox } from '~/ui-root/views/keyboardSvg/atoms/PreviewBoundingBox';

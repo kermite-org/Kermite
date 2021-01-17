@@ -1,6 +1,6 @@
-import { IKeyboardShapeDisplayArea } from '~/shared';
 import { css } from 'goober';
 import { h } from 'qx';
+import { IKeyboardShapeDisplayArea } from '~/shared';
 
 function getViewBox(da: IKeyboardShapeDisplayArea) {
   const left = da.centerX - da.width / 2;

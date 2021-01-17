@@ -1,6 +1,6 @@
-import { uiTheme } from '~/ui-layouter/base';
 import { css } from 'goober';
 import { h } from 'qx';
+import { uiTheme } from '~/ui-layouter/base';
 
 function styledDiv(cssDiv: string) {
   return (props: { children: any }) => <div css={cssDiv}>{props.children}</div>;

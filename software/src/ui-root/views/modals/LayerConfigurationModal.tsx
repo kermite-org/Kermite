@@ -1,3 +1,5 @@
+import { css } from 'goober';
+import { h } from 'qx';
 import {
   ILayerDefaultScheme,
   ModifierVirtualKey,
@@ -11,8 +13,6 @@ import {
   reflectValue,
   reflectFieldChecked,
 } from '~/ui-common';
-import { css } from 'goober';
-import { h } from 'qx';
 import {
   ClosableOverlay,
   CommonDialogFrame,

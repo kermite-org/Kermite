@@ -1,5 +1,5 @@
-import { delayMs } from '~/shared';
 import * as HID from 'node-hid';
+import { delayMs } from '~/shared';
 import { zeros } from '~/shell/services0/KeyMappingEmitter/Helpers';
 
 function getArrayFromBuffer(data: any) {

@@ -1,5 +1,5 @@
-import { reflectFieldValue } from '~/ui-common';
 import { h } from 'qx';
+import { reflectFieldValue } from '~/ui-common';
 import {
   ClosableOverlay,
   CommonDialogFrame,

@@ -1,6 +1,6 @@
-import { uiTheme } from '~/ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
+import { uiTheme } from '~/ui-common';
 import { makeShapePreviewPageViewModel } from '~/ui-root/viewModels/ShapePreviewPageViewModel';
 import { GeneralSelector } from '~/ui-root/views/controls/GeneralSelector';
 import { ShapePreviewOptionsBox } from '~/ui-root/views/fabrics/ShapePreviewOptionsBox';

@@ -1,5 +1,5 @@
-import { appUi } from '~/ui-common';
 import { Hook } from 'qx';
+import { appUi } from '~/ui-common';
 import { models } from '~/ui-root/models';
 
 export interface IGlobalMenuItem {

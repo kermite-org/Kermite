@@ -1,6 +1,6 @@
-import { IKeyUnitEntry } from '~/shared';
 import { css } from 'goober';
 import { h } from 'qx';
+import { IKeyUnitEntry } from '~/shared';
 
 export const PreviewKeyUnitCard = (props: {
   keyUnit: IKeyUnitEntry;

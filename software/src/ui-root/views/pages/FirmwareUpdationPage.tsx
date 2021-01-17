@@ -1,6 +1,6 @@
-import { uiTheme } from '~/ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
+import { uiTheme } from '~/ui-common';
 import { makeFirmwareUpdationPageViewModel } from '~/ui-root/viewModels/FirmwareUpdationPageViewModel';
 import { GeneralSelector } from '~/ui-root/views/controls/GeneralSelector';
 

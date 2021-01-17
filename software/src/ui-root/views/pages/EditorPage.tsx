@@ -1,6 +1,6 @@
-import { uiTheme } from '~/ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
+import { uiTheme } from '~/ui-common';
 import { ProfileConfigratuionModalLayer } from '../modals/ProfileConfigurationPart';
 import { DeviceControlSection } from '../organisms/DeviceControlSection';
 import { KeyAssignEditView } from '../organisms/KeyAssignEditView';

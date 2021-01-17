@@ -1,8 +1,8 @@
+import { css } from 'goober';
+import { h } from 'qx';
 import { EditSvgViewContainer } from '~/ui-layouter/editor/views/EditSvgView';
 import { EditorSideColumnContent } from '~/ui-layouter/editor/views/SidePanels';
 import { EditMenuBar } from '~/ui-layouter/editor/views/ToolBar/EditMenuBar';
-import { css } from 'goober';
-import { h } from 'qx';
 
 const cssPageRoot = css`
   border: solid 2px #f08;

@@ -1,6 +1,6 @@
-import { uiTheme } from '~/ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
+import { uiTheme } from '~/ui-common';
 import { mvvmView } from '~/ui-root/base/helper/mvvmHelpers';
 import { IPresetKeyUnitViewModel } from '~/ui-root/viewModels/KeyUnitCard/PresetKeyUnitViewModelCreator';
 

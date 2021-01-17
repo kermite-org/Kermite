@@ -1,6 +1,6 @@
-import { uiTheme, reflectValue } from '~/ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
+import { uiTheme, reflectValue } from '~/ui-common';
 import { combineClasses } from '~/ui-root/base/helper/ViewHelpers';
 
 interface IGeneralInputProps {

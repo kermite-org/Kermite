@@ -1,3 +1,5 @@
+import { css } from 'goober';
+import { h } from 'qx';
 import { GeneralSelector } from '~/ui-layouter/controls';
 import {
   ConfigContent,
@@ -7,8 +9,6 @@ import {
 } from '~/ui-layouter/editor/views/SidePanels/atoms';
 import { GeneralConfigTextEditRow } from '~/ui-layouter/editor/views/SidePanels/controls/GeneralConfigTextEditRow';
 import { useKeyEntityEditPanelModel } from '~/ui-layouter/editor/views/SidePanels/models/KeyEntityEditPanel.model';
-import { css } from 'goober';
-import { h } from 'qx';
 
 const cssErrorText = css`
   color: red;

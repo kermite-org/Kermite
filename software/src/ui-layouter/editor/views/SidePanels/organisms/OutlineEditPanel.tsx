@@ -1,3 +1,4 @@
+import { h } from 'qx';
 import { GeneralSelector } from '~/ui-layouter/controls';
 import {
   ConfigContent,
@@ -9,7 +10,6 @@ import {
 } from '~/ui-layouter/editor/views/SidePanels/atoms';
 import { GeneralConfigTextEditRow } from '~/ui-layouter/editor/views/SidePanels/controls/GeneralConfigTextEditRow';
 import { useOutlineEditPanelModel } from '~/ui-layouter/editor/views/SidePanels/models/OutlineEditPanel.model';
-import { h } from 'qx';
 
 export const OutlineEditPanel = () => {
   const {

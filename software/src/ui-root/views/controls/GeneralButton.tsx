@@ -1,6 +1,6 @@
-import { uiTheme } from '~/ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
+import { uiTheme } from '~/ui-common';
 import { combineClasses } from '~/ui-root/base/helper/ViewHelpers';
 
 type IGeneralButtonForm = 'unit' | 'unitSquare' | 'large';

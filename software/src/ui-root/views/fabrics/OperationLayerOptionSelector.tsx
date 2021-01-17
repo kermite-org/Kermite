@@ -1,6 +1,6 @@
-import { reflectValue } from '~/ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
+import { reflectValue } from '~/ui-common';
 
 const cssOperationLayerOptionSelector = css`
   margin-left: 10px;
