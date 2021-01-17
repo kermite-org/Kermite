@@ -10,16 +10,16 @@ import { degToRad } from '~/ui-layouter/base/utils';
 import {
   editReader,
   editMutations,
-  IOutlinePoint,
+  IEditOutlinePoint,
   IEditOutlineShape,
-  ITransGroup,
+  IEditTransGroup,
 } from '~/ui-layouter/editor/store';
 import { getWorldMousePositionOnEditSvg } from './CoordHelpers';
 
 function applyInverseGroupTransform(
   wx: number,
   wy: number,
-  group: ITransGroup | undefined,
+  group: IEditTransGroup | undefined,
   isMirror: boolean,
 ) {
   const mirrorMultX = isMirror ? -1 : 1;
@@ -162,14 +162,14 @@ const OutlinePoint = (props: {
 
 interface IHittestLineViewModel {
   dstPointIndex: number;
-  p0: IOutlinePoint;
-  p1: IOutlinePoint;
+  p0: IEditOutlinePoint;
+  p1: IEditOutlinePoint;
   shapeId: string;
 }
 
 function makeHittestLineViewModel(
   pointIndex: number,
-  points: IOutlinePoint[],
+  points: IEditOutlinePoint[],
   shapeId: string,
 ) {
   const dstPointIndex = (pointIndex + 1) % points.length;

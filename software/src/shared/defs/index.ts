@@ -5,3 +5,4 @@ export * from './ProfileData';
 export * from './Versions';
 export * from './VirtualKeyTexts';
 export * from './VirtualKeys';
+export * from './KeyboardDesign';

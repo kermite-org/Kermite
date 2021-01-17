@@ -1,11 +1,7 @@
+import { IKeyPlacementAnchor, IKeySizeUnit } from '~/shared';
 import { useClosureModel } from '~/ui-layouter/base';
 import { ICommonSelectorViewModel } from '~/ui-layouter/controls';
-import {
-  editReader,
-  editMutations,
-  IKeySizeUnit,
-  IKeyPlacementAnchor,
-} from '~/ui-layouter/editor/store';
+import { editReader, editMutations } from '~/ui-layouter/editor/store';
 import {
   createConfigTextEditModel,
   IConfigTextEditModel,

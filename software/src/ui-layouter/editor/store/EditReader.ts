@@ -2,7 +2,7 @@ import { appState, IEnvBoolPropKey, IModeState } from './AppState';
 import { getKeyboardDesignBoundingBox } from './BoundingBoxCalculator';
 import {
   IEditKeyEntity,
-  IOutlinePoint,
+  IEditOutlinePoint,
   IEditOutlineShape,
   IEditTransGroup,
 } from './DataSchema';
@@ -118,7 +118,7 @@ class EditReader {
     return appState.editor.design.outlineShapes[this.currentShapeId || ''];
   }
 
-  get outlinePoints(): IOutlinePoint[] | undefined {
+  get outlinePoints(): IEditOutlinePoint[] | undefined {
     return this.currentOutlineShape?.points;
   }
 
@@ -126,7 +126,7 @@ class EditReader {
     return appState.editor.currentPointIndex;
   }
 
-  get currentOutlinePoint(): IOutlinePoint | undefined {
+  get currentOutlinePoint(): IEditOutlinePoint | undefined {
     return this.outlinePoints?.[this.currentPointIndex];
   }
 

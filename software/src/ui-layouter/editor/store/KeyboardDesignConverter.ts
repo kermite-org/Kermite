@@ -2,11 +2,9 @@ import {
   createDictionaryFromKeyValues,
   convertMinusOneToUndefined,
   convertUndefinedToMinusOne,
+  IPersistKeyboardDesign,
 } from '~/shared';
-import {
-  IEditKeyboardDesign,
-  IKeyboardDesign,
-} from '~/ui-layouter/editor/store/DataSchema';
+import { IEditKeyboardDesign } from '~/ui-layouter/editor/store/DataSchema';
 
 // groupId: string, ('0', '1', '2', など) 無効値は''
 // groupIndex: number | undefined, 無効値はundefined
@@ -25,7 +23,7 @@ function roundNumber(value: number) {
 
 export namespace KeyboardDesignConverter {
   export function convertKeyboardDesignNonEditToEdit(
-    source: IKeyboardDesign,
+    source: IPersistKeyboardDesign,
   ): IEditKeyboardDesign {
     return {
       placementUnit: source.setup.placementUnit,
@@ -75,7 +73,7 @@ export namespace KeyboardDesignConverter {
 
   export function convertKeyboardDesignEditToNonEdit(
     design: IEditKeyboardDesign,
-  ): IKeyboardDesign {
+  ): IPersistKeyboardDesign {
     return {
       setup: {
         placementUnit: design.placementUnit,

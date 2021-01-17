@@ -1,3 +1,4 @@
+import { IKeyPlacementAnchor, IKeySizeUnit } from '~/shared';
 import { clamp } from '~/ui-layouter/base/utils';
 import { getNextEntityInstanceId } from '~/ui-layouter/editor/store/DomainRelatedHelpers';
 import {
@@ -12,8 +13,6 @@ import {
   IEditPropKey,
   IEditKeyboardDesign,
   IEditKeyEntity,
-  IKeyPlacementAnchor,
-  IKeySizeUnit,
 } from './DataSchema';
 import { editReader } from './EditReader';
 import { editUpdator } from './EditUpdator';

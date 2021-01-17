@@ -1,12 +1,11 @@
+import { IKeyPlacementAnchor, IKeySizeUnit } from '~/shared';
 import { IPosition } from '~/ui-layouter/base';
 import { degToRad } from '~/ui-layouter/base/utils';
 import {
   IEditKeyboardDesign,
   IEditKeyEntity,
   IEditOutlineShape,
-  IKeyPlacementAnchor,
-  IKeySizeUnit,
-  ITransGroup,
+  IEditTransGroup,
 } from './DataSchema';
 import {
   getCoordUnitFromUnitSpec,
@@ -64,7 +63,7 @@ function getKeyCornerPoints(
   return points;
 }
 
-function getGroupTransAmount(group: ITransGroup | undefined) {
+function getGroupTransAmount(group: IEditTransGroup | undefined) {
   const groupX = group ? group.x : 0;
   const groupY = group ? group.y : 0;
   const groupRot = degToRad(group?.angle || 0);

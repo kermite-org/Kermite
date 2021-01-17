@@ -1,5 +1,5 @@
-import { mapObjectValues } from '~/shared';
-import { IEditKeyboardDesign, IKeySizeUnit } from './DataSchema';
+import { IKeySizeUnit, mapObjectValues } from '~/shared';
+import { IEditKeyboardDesign } from './DataSchema';
 
 export type ICoordUnit =
   | {
