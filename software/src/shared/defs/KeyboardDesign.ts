@@ -30,3 +30,46 @@ export interface IPersistKeyboardDesign {
     mirror?: boolean;
   }[];
 }
+
+// ----------------------------------------
+
+export type IDisplayKeyShape =
+  | {
+      type: 'rect';
+      width: number;
+      height: number;
+    }
+  | {
+      type: 'circle';
+      radius: number;
+    }
+  | {
+      type: 'path';
+      points: { x: number; y: number }[];
+    };
+
+export interface IDisplayKeyEntity {
+  keyId: string;
+  x: number;
+  y: number;
+  angle: number;
+  keyIndex: number;
+  shape: IDisplayKeyShape;
+}
+
+export interface IDisplayBoundingBox {
+  centerX: number;
+  centerY: number;
+  width: number;
+  height: number;
+}
+
+export interface IDisplayOutlineShape {
+  points: { x: number; y: number }[];
+}
+
+export interface IDisplayKeyboardDesign {
+  keyEntities: IDisplayKeyEntity[];
+  outlineShapes: IDisplayOutlineShape[];
+  boundingBox: IDisplayBoundingBox;
+}
