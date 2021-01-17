@@ -1,4 +1,5 @@
 import { useClosureModel } from '@ui-layouter/base';
+import { ICommonCheckboxViewModel } from '@ui-layouter/controls';
 import { editMutations, editReader } from '@ui-layouter/editor/store';
 import {
   createConfigTextEditModelDynamic,
@@ -10,6 +11,7 @@ interface ITransGroupEditPanelModel {
   vmY: IConfigTextEditModel;
   vmAngle: IConfigTextEditModel;
   currentGroupId: string;
+  vmMirror: ICommonCheckboxViewModel;
 }
 
 function createTransGroupEditPanelModel() {
@@ -31,13 +33,25 @@ function createTransGroupEditPanelModel() {
   const vmY = createTransGroupEditPropModel('y');
   const vmAngle = createTransGroupEditPropModel('angle');
 
+  const vmMirror = {
+    get value() {
+      return editReader.currentTransGroup?.mirror || false;
+    },
+    setValue(value: boolean) {
+      editMutations.setTransGroupMirror(value);
+    },
+    get disabled() {
+      return !editReader.currentTransGroup;
+    },
+  };
+
   return () => {
     const group = editReader.currentTransGroup;
     vmX.update(group?.x.toString());
     vmY.update(group?.y.toString());
     vmAngle.update(group?.angle.toString());
     const currentGroupId = group?.id || '';
-    return { vmX, vmY, vmAngle, currentGroupId };
+    return { vmX, vmY, vmAngle, currentGroupId, vmMirror };
   };
 }
 

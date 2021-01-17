@@ -1,3 +1,4 @@
+import { useClosureModel } from '@ui-layouter/base';
 import { ICommonSelectorViewModel } from '@ui-layouter/controls';
 import {
   IEditKeyEntity,
@@ -5,11 +6,16 @@ import {
   editReader,
   editMutations,
 } from '@ui-layouter/editor/store';
+import { getKeyIdentifierText } from '@ui-layouter/editor/store/DomainRelatedHelpers';
 import {
   IAttributeSlotSource,
   AttributeSlotModel,
   IAttributeSlotViewModel,
 } from '@ui-layouter/editor/views/SidePanels/models/slots/AttributeSlotModel';
+import {
+  createConfigTextEditModelDynamic,
+  IConfigTextEditModel,
+} from '@ui-layouter/editor/views/SidePanels/models/slots/ConfigTextEditModel';
 import { makeSelectorModel } from '@ui-layouter/editor/views/SidePanels/models/slots/SelectorModel';
 import { Hook } from 'qx';
 
@@ -85,29 +91,29 @@ const slotSources: IAttributeSlotSource<IEditKeyEntity, IEditPropKey>[] = [
       return `std ${floatValues}`;
     },
   },
-  {
-    propKey: 'keyIndex',
-    label: 'keyIndex',
-    getUnit: () => '',
-    validator(text: string) {
-      if (text === '') {
-        return undefined;
-      }
-      return text.match(/^[0-9]+$/) ? undefined : 'must be an integer >= 0';
-    },
-    reader(value: number) {
-      if (value === -1) {
-        return '';
-      }
-      return value.toString();
-    },
-    writer(text: string) {
-      if (text === '') {
-        return -1;
-      }
-      return parseInt(text);
-    },
-  },
+  // {
+  //   propKey: 'keyIndex',
+  //   label: 'keyIndex',
+  //   getUnit: () => '',
+  //   validator(text: string) {
+  //     if (text === '') {
+  //       return undefined;
+  //     }
+  //     return text.match(/^[0-9]+$/) ? undefined : 'must be an integer >= 0';
+  //   },
+  //   reader(value: number) {
+  //     if (value === -1) {
+  //       return '';
+  //     }
+  //     return value.toString();
+  //   },
+  //   writer(text: string) {
+  //     if (text === '') {
+  //       return -1;
+  //     }
+  //     return parseInt(text);
+  //   },
+  // },
 ];
 
 class KeyEntityAttrsEditorModel {
@@ -135,6 +141,18 @@ class KeyEntityAttrsEditorModel {
       : '';
   }
 
+  get keyIdentificationText() {
+    const { currentKeyEntity: ke, isCurrentKeyMirror } = editReader;
+    if (ke) {
+      let text = getKeyIdentifierText(ke, isCurrentKeyMirror);
+      if (isCurrentKeyMirror) {
+        text += ' (mirror)';
+      }
+      return text;
+    }
+    return '';
+  }
+
   update() {
     const targetKeyEntity = editReader.currentKeyEntity;
     this._allSlots.forEach((slot) => slot.updateSource(targetKeyEntity));
@@ -146,7 +164,9 @@ class KeyEntityAttrsEditorModel {
 // VM
 interface IPropertyPanelModel {
   keyEntityAttrsVm: {
+    keyIdentificationText: string;
     slots: IAttributeSlotViewModel[];
+    vmKeyIndex: IConfigTextEditModel;
     errorText: string;
     vmGroupId: ICommonSelectorViewModel;
   };
@@ -173,15 +193,46 @@ function makeGroupIdSelectorModel() {
   });
 }
 
+function createKeyIndexEditViewModel() {
+  const vm = createConfigTextEditModelDynamic(
+    [/^[0-9]+$/],
+    editMutations.startEdit,
+    (text) => {
+      const value = parseInt(text);
+      const { isCurrentKeyMirror } = editReader;
+      const targetPropKey: keyof IEditKeyEntity = isCurrentKeyMirror
+        ? 'mirrorKeyIndex'
+        : 'keyIndex';
+      editMutations.changeKeyProperty(targetPropKey, value);
+    },
+    editMutations.endEdit,
+  );
+
+  return () => {
+    const { currentKeyEntity: ke, isCurrentKeyMirror } = editReader;
+    if (ke) {
+      const keyIndex = isCurrentKeyMirror ? ke.mirrorKeyIndex : ke.keyIndex;
+      vm.update(keyIndex !== -1 ? keyIndex.toString() : '');
+    } else {
+      vm.update(undefined);
+    }
+    return vm;
+  };
+}
+
 export function useKeyEntityEditPanelModel(): IPropertyPanelModel {
   const model = Hook.useMemo(() => new KeyEntityAttrsEditorModel(), []);
   model.update();
+
+  const vmKeyIndex = useClosureModel(createKeyIndexEditViewModel);
 
   return {
     keyEntityAttrsVm: {
       slots: model.allSlots.map((slot) => slot.emitViewModel()),
       errorText: model.errorText,
       vmGroupId: makeGroupIdSelectorModel(),
+      keyIdentificationText: model.keyIdentificationText,
+      vmKeyIndex,
     },
   };
 }

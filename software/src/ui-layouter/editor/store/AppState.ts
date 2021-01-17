@@ -14,6 +14,7 @@ export interface IModeState {
 export interface IEditState {
   design: IEditKeyboardDesign;
   currentkeyEntityId: string | undefined;
+  isCurrentKeyMirror: boolean;
   currentShapeId: string | undefined;
   currentPointIndex: number;
   editMode: IEditMode;
@@ -69,6 +70,7 @@ export function createFallbackEditKeyboardDesign(): IEditKeyboardDesign {
         x: 0,
         y: 0,
         angle: 0,
+        mirror: false,
       },
     },
   };
@@ -95,6 +97,7 @@ export const appState: IAppState = {
   editor: {
     design: createFallbackEditKeyboardDesign(),
     currentkeyEntityId: undefined,
+    isCurrentKeyMirror: false,
     currentShapeId: undefined,
     currentPointIndex: -1,
     editorTarget: 'key',

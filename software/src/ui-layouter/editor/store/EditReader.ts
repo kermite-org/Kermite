@@ -85,6 +85,10 @@ class EditReader {
     return appState.editor.design.keyEntities[id];
   }
 
+  get isCurrentKeyMirror() {
+    return appState.editor.isCurrentKeyMirror;
+  }
+
   get allKeyEntities(): IEditKeyEntity[] {
     return Object.values(appState.editor.design.keyEntities);
   }

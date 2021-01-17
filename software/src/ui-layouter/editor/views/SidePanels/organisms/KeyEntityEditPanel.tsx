@@ -22,6 +22,7 @@ export const KeyEntityEditPanel = () => {
       <ConfigHeader>key properties</ConfigHeader>
       <ConfigContent>
         <ConfigVStack>
+          <div>{vm.keyIdentificationText}&nbsp;</div>
           {vm.slots.map((slot, index) => (
             <GeneralConfigTextEditRow
               key={index}
@@ -30,6 +31,12 @@ export const KeyEntityEditPanel = () => {
               inputWidth={60}
             />
           ))}
+          <GeneralConfigTextEditRow
+            label="keyIndex"
+            {...vm.vmKeyIndex}
+            labelWidth={80}
+            inputWidth={60}
+          />
           <div>
             <span style={{ width: '80px', display: 'inline-block' }}>
               groupId

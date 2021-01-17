@@ -30,9 +30,23 @@ export namespace KeyboardDesignConverter {
         source.keyEntities.map((ke, idx) => {
           const { keyId, x, y, angle, shape } = ke;
           const keyIndex = undefinedToMinusOne(ke.keyIndex);
+          const mirrorKeyIndex = undefinedToMinusOne(ke.mirrorKeyIndex);
           const groupId = groupIndexToGroupId(ke.groupIndex);
           const id = `ke!${idx}`;
-          return [id, { id, keyId, x, y, angle, shape, keyIndex, groupId }];
+          return [
+            id,
+            {
+              id,
+              keyId,
+              x,
+              y,
+              angle,
+              shape,
+              keyIndex,
+              mirrorKeyIndex,
+              groupId,
+            },
+          ];
         }),
       ),
       outlineShapes: createDictionaryFromKeyValues(
@@ -50,8 +64,9 @@ export namespace KeyboardDesignConverter {
       ),
       transGroups: createDictionaryFromKeyValues(
         source.transGroups.map((group, idx) => {
+          const { x, y, angle, mirror } = group;
           const id = idx.toString();
-          return [id, { ...group, id }];
+          return [id, { x, y, angle, mirror: mirror || false, id }];
         }),
       ),
     };
@@ -71,6 +86,7 @@ export namespace KeyboardDesignConverter {
         angle: ke.angle,
         shape: ke.shape,
         keyIndex: minusOneToUndefined(ke.keyIndex),
+        mirrorKeyIndex: minusOneToUndefined(ke.mirrorKeyIndex),
         groupIndex: groupIdToGroupIndex(ke.groupId),
       })),
       outlineShapes: Object.values(design.outlineShapes).map((shape) => ({
@@ -81,6 +97,7 @@ export namespace KeyboardDesignConverter {
         x: group.x,
         y: group.y,
         angle: group.angle,
+        mirror: group.mirror,
       })),
     };
   }

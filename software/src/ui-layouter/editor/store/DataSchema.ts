@@ -9,8 +9,9 @@ export interface IKeyEntity {
   y: number;
   angle: number;
   shape: string;
-  keyIndex: number | undefined;
-  groupIndex: number | undefined;
+  keyIndex?: number;
+  mirrorKeyIndex?: number;
+  groupIndex?: number;
 }
 
 // export type IPersistOutlinePoint = { x: number; y: number };
@@ -18,7 +19,7 @@ export type IOutlinePoint = { x: number; y: number };
 
 export type IOutlineShape = {
   points: IOutlinePoint[];
-  groupIndex: number | undefined;
+  groupIndex?: number;
 };
 
 export type ITransGroup = {
@@ -26,6 +27,7 @@ export type ITransGroup = {
   x: number;
   y: number;
   angle: number;
+  mirror?: boolean;
 };
 export interface IKeyboardDesign {
   placementUnit: string;
@@ -45,6 +47,7 @@ export interface IEditKeyEntity {
   angle: number;
   shape: string; // `std ${width}` | `ref ${shapeName}`
   keyIndex: number;
+  mirrorKeyIndex: number;
   groupId: string;
 }
 
@@ -60,6 +63,7 @@ export type IEditTransGroup = {
   x: number;
   y: number;
   angle: number;
+  mirror: boolean;
 };
 export interface IEditKeyboardDesign {
   placementUnit: string; // `mm` | `KP ${baseKeyPitch}`
@@ -79,4 +83,5 @@ export type IEditPropKey =
   | 'angle'
   | 'shape'
   | 'keyIndex'
+  | 'mirrorKeyIndex'
   | 'groupId';
