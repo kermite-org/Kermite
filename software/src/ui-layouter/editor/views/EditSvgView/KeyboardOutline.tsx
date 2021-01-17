@@ -269,6 +269,56 @@ export const KeyboardOutlineShapeViewSingle = (props: {
   );
 };
 
+// X=0で左右の辺を共有するミラー指定された外形のパスを、左右で結合して描画できるかを確認するための実験
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const KeyboardOutlineJoinedShapeDrawingTest = (props: {
+  shape: IEditOutlineShape;
+}) => {
+  const { shape } = props;
+  const group = editReader.getTransGroupById(shape.groupId);
+  if (!(group?.mirror && group.angle === 0 && group.x === 0)) {
+    return null;
+  }
+  const { points } = shape;
+  if (points.length < 3) {
+    return null;
+  }
+  const sharedEdgePointIndex = points.findIndex((point, idx) => {
+    const nextPoint = points[(idx + 1) % points.length];
+    return point.x === 0 && nextPoint.x === 0;
+  });
+  if (sharedEdgePointIndex === -1) {
+    return null;
+  }
+  const sortedPoints = points.map(
+    (_, idx) => points[(sharedEdgePointIndex + 1 + idx) % points.length],
+  );
+  const altSidePoints = sortedPoints
+    .slice()
+    .reverse()
+    .slice(1, sortedPoints.length - 1)
+    .map((p) => ({ x: -p.x, y: p.y }));
+
+  const allPoints = [...sortedPoints, ...altSidePoints];
+
+  const pointsSpec = allPoints.map(({ x, y }) => `${x}, ${y}`).join(' ');
+
+  const oy = group ? group.y : 0;
+  const outerTransformSpec = `translate(0, ${oy})`;
+
+  const cssTestJoinedShape = css`
+    fill: ${makeCssColor(0x00ff00, 0.5)};
+    stroke: blue;
+    stroke-width: 1.5;
+  `;
+
+  return (
+    <g transform={outerTransformSpec}>
+      <polygon points={pointsSpec} css={cssTestJoinedShape} />
+    </g>
+  );
+};
+
 export const KeyboardOutlineShapeView = (props: {
   shape: IEditOutlineShape;
 }) => {
@@ -279,6 +329,7 @@ export const KeyboardOutlineShapeView = (props: {
       <g>
         <KeyboardOutlineShapeViewSingle shape={shape} isMirror={false} />
         <KeyboardOutlineShapeViewSingle shape={shape} isMirror={true} />
+        {/* <KeyboardOutlineJoinedShapeDrawingTest shape={shape} /> */}
       </g>
     );
   } else {
