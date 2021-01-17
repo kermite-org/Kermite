@@ -243,3 +243,19 @@ export function clamp(val: number, lo: number, hi: number) {
 
 export const degToRad = (deg: number) => (deg * Math.PI) / 180;
 export const radToDeg = (rad: number) => (rad * 180) / Math.PI;
+
+export function rotateCoord(p: { x: number; y: number }, theta: number) {
+  const tmpX = p.x * Math.cos(theta) - p.y * Math.sin(theta);
+  const tmpY = p.x * Math.sin(theta) + p.y * Math.cos(theta);
+  p.x = tmpX;
+  p.y = tmpY;
+}
+
+export function translateCoord(
+  p: { x: number; y: number },
+  ax: number,
+  ay: number,
+) {
+  p.x += ax;
+  p.y += ay;
+}

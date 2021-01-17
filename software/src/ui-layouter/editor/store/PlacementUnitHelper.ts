@@ -156,3 +156,16 @@ export function getStdKeySize(
   }
   return [18, 18];
 }
+
+export function getKeySize(
+  shapeSpec: string,
+  coordUnit: ICoordUnit,
+  keySizeUnit: IKeySizeUnit,
+) {
+  if (shapeSpec === 'ext circle') {
+    return [18, 18];
+  } else if (shapeSpec === 'ext isoEnter') {
+    return [27, 37];
+  }
+  return getStdKeySize(shapeSpec, coordUnit, keySizeUnit);
+}

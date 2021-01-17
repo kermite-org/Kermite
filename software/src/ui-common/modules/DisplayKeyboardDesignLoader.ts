@@ -8,15 +8,15 @@ import {
   IDisplayOutlineShape,
   IKeySizeUnit,
   IPersistKeyboardDesign,
+  rotateCoord,
+  translateCoord,
 } from '~/shared';
 import {
   getCoordUnitFromUnitSpec,
   getKeySize,
   getStdKeySize,
   ICoordUnit,
-  rotateCoord,
-  translateCoord,
-} from '~/ui-layouter/editor/store';
+} from '~/ui-layouter/editor/store/PlacementUnitHelper';
 
 export namespace DisplayKeyboardDesignLoader {
   type ISourceDesign = IPersistKeyboardDesign;
