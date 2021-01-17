@@ -111,7 +111,7 @@ export function changeKeySizeUnit(
     if (ke.shape.startsWith('std')) {
       const [, p1, p2] = ke.shape.split(' ');
       if (p1 === undefined) {
-        throw new Error(`invalid shape spec ${ke.shape} for key ${ke.keyId}`);
+        throw new Error(`invalid shape spec ${ke.shape} for key ${ke.id}`);
       }
       const pw = parseFloat(p1);
       let ph = (p2 && parseFloat(p2)) || undefined;

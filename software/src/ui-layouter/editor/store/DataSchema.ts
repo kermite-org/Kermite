@@ -4,7 +4,7 @@ export type IKeyPlacementAnchor = 'topLeft' | 'center';
 
 // ------------------------------------------------------
 export interface IKeyEntity {
-  keyId: string;
+  // label: string;
   x: number;
   y: number;
   angle: number;
@@ -29,10 +29,14 @@ export type ITransGroup = {
   angle: number;
   mirror?: boolean;
 };
-export interface IKeyboardDesign {
+
+export interface IKeyboardDesignSetup {
   placementUnit: string;
   placementAnchor: IKeyPlacementAnchor;
   keySizeUnit: IKeySizeUnit;
+}
+export interface IKeyboardDesign {
+  setup: IKeyboardDesignSetup;
   keyEntities: IKeyEntity[];
   outlineShapes: IOutlineShape[];
   transGroups: ITransGroup[];
@@ -41,7 +45,7 @@ export interface IKeyboardDesign {
 // ------------------------------------------------------
 export interface IEditKeyEntity {
   id: string; // 編集中のみ一意の値を保持,永続化の際には保存しない
-  keyId: string;
+  // label: string;
   x: number;
   y: number;
   angle: number;
@@ -77,11 +81,5 @@ export interface IEditKeyboardDesign {
 // ------------------------------------------------------
 
 export type IEditPropKey =
-  | 'keyId'
-  | 'x'
-  | 'y'
-  | 'angle'
-  | 'shape'
-  | 'keyIndex'
-  | 'mirrorKeyIndex'
-  | 'groupId';
+  // | 'label'
+  'x' | 'y' | 'angle' | 'shape' | 'keyIndex' | 'mirrorKeyIndex' | 'groupId';

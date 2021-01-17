@@ -1,34 +1,34 @@
 import { useClosureModel } from '@ui-layouter/base';
 import { ICommonSelectorViewModel } from '@ui-layouter/controls';
 import {
+  editMutations,
+  editReader,
   IEditKeyEntity,
   IEditPropKey,
-  editReader,
-  editMutations,
 } from '@ui-layouter/editor/store';
 import { getKeyIdentifierText } from '@ui-layouter/editor/store/DomainRelatedHelpers';
 import {
-  IAttributeSlotSource,
   AttributeSlotModel,
+  IAttributeSlotSource,
   IAttributeSlotViewModel,
 } from '@ui-layouter/editor/views/SidePanels/models/slots/AttributeSlotModel';
 import {
-  createConfigTextEditModelDynamic,
-  IConfigTextEditModel,
+  createConfigTextEditModelDynamic2,
+  IConfigTextEditModel2,
 } from '@ui-layouter/editor/views/SidePanels/models/slots/ConfigTextEditModel';
 import { makeSelectorModel } from '@ui-layouter/editor/views/SidePanels/models/slots/SelectorModel';
 import { Hook } from 'qx';
 
 const slotSources: IAttributeSlotSource<IEditKeyEntity, IEditPropKey>[] = [
-  {
-    propKey: 'keyId',
-    label: 'keyID',
-    getUnit: () => '',
-    validator: (text: string) =>
-      text.length < 6 ? undefined : 'must be within 6 characters',
-    reader: (value: string) => value,
-    writer: (text: string) => text,
-  },
+  // {
+  //   propKey: 'label',
+  //   label: 'label',
+  //   getUnit: () => '',
+  //   validator: (text: string) =>
+  //     text.length < 6 ? undefined : 'must be within 6 characters',
+  //   reader: (value: string) => value,
+  //   writer: (text: string) => text,
+  // },
   {
     propKey: 'x',
     label: 'x',
@@ -166,7 +166,7 @@ interface IPropertyPanelModel {
   keyEntityAttrsVm: {
     keyIdentificationText: string;
     slots: IAttributeSlotViewModel[];
-    vmKeyIndex: IConfigTextEditModel;
+    vmKeyIndex: IConfigTextEditModel2;
     errorText: string;
     vmGroupId: ICommonSelectorViewModel;
   };
@@ -194,30 +194,59 @@ function makeGroupIdSelectorModel() {
 }
 
 function createKeyIndexEditViewModel() {
-  const vm = createConfigTextEditModelDynamic(
-    [/^[0-9]+$/],
-    editMutations.startEdit,
-    (text) => {
-      const value = parseInt(text);
+  return createConfigTextEditModelDynamic2({
+    procStartEdit: editMutations.startEdit,
+    procEmitValidText: (text) => {
+      const value = text === '' ? -1 : parseInt(text);
       const { isCurrentKeyMirror } = editReader;
       const targetPropKey: keyof IEditKeyEntity = isCurrentKeyMirror
         ? 'mirrorKeyIndex'
         : 'keyIndex';
       editMutations.changeKeyProperty(targetPropKey, value);
     },
-    editMutations.endEdit,
-  );
+    procEndEdit: editMutations.endEdit,
+    checker: (text: string) => {
+      if (text === '') {
+        return undefined;
+      }
+      if (!text.match(/^[0-9]+$/)) {
+        return ''; // 'keyIndex must be a number';
+      }
+      const newKeyIndex = parseInt(text);
 
-  return () => {
-    const { currentKeyEntity: ke, isCurrentKeyMirror } = editReader;
-    if (ke) {
-      const keyIndex = isCurrentKeyMirror ? ke.mirrorKeyIndex : ke.keyIndex;
-      vm.update(keyIndex !== -1 ? keyIndex.toString() : '');
-    } else {
-      vm.update(undefined);
-    }
-    return vm;
-  };
+      const {
+        allKeyEntities,
+        currentKeyEntity,
+        isCurrentKeyMirror,
+      } = editReader;
+
+      const peer = isCurrentKeyMirror
+        ? currentKeyEntity?.keyIndex
+        : currentKeyEntity?.mirrorKeyIndex;
+
+      const duplicate =
+        newKeyIndex === peer ||
+        allKeyEntities.some(
+          (ke) =>
+            ke !== currentKeyEntity &&
+            (ke.keyIndex === newKeyIndex || ke.mirrorKeyIndex === newKeyIndex),
+        );
+
+      if (duplicate) {
+        return 'keyIndex duplication';
+      }
+      return undefined;
+    },
+    sourceTextFeeder: () => {
+      const { currentKeyEntity: ke, isCurrentKeyMirror } = editReader;
+      if (ke) {
+        const keyIndex = isCurrentKeyMirror ? ke.mirrorKeyIndex : ke.keyIndex;
+        return keyIndex !== -1 ? keyIndex.toString() : '';
+      } else {
+        return undefined;
+      }
+    },
+  });
 }
 
 export function useKeyEntityEditPanelModel(): IPropertyPanelModel {

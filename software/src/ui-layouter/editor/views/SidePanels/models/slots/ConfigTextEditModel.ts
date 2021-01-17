@@ -204,3 +204,95 @@ export class ConfigTextEditModelDynamic implements IConfigTextEditModel {
   };
 }
 */
+
+export interface IConfigTextEditModel2 {
+  editText: string;
+  valid: boolean;
+  errorText: string;
+  disabled: boolean;
+  onValueChanged(text: string): void;
+  onFocus(): void;
+  onBlur(): void;
+}
+
+export function createConfigTextEditModelDynamic2(props: {
+  procStartEdit: () => void;
+  procEmitValidText: (text: string) => void;
+  procEndEdit: () => void;
+  sourceTextFeeder: () => string | undefined;
+  checker: ((value: string) => string | undefined) | RegExp[];
+}): () => IConfigTextEditModel2 {
+  const {
+    procStartEdit,
+    procEmitValidText,
+    procEndEdit,
+    sourceTextFeeder,
+    checker,
+  } = props;
+
+  let originalText: string | undefined;
+  let editText = '';
+  let valid = true;
+  let hasFocus = false;
+  let errorText: string | undefined;
+
+  function onValueChanged(text: string) {
+    editText = text;
+    if (Array.isArray(checker)) {
+      valid = checker.some((p) => text.match(p));
+      if (!valid) {
+        errorText = 'invalid value';
+      }
+    } else if (typeof checker === 'function') {
+      errorText = checker(text);
+      valid = errorText === undefined;
+    } else {
+      valid = false;
+    }
+    if (valid) {
+      originalText = editText;
+      procEmitValidText(editText);
+    }
+  }
+
+  function onFocus() {
+    procStartEdit();
+    hasFocus = true;
+  }
+
+  function onBlur() {
+    procEndEdit();
+    if (!valid) {
+      editText = originalText || '';
+      valid = true;
+      errorText = undefined;
+    }
+    hasFocus = false;
+  }
+
+  function update() {
+    const sourceText = sourceTextFeeder();
+    if (hasFocus) {
+      return;
+    }
+    if (originalText !== sourceText) {
+      originalText = sourceText;
+      editText = originalText || '';
+      valid = true;
+      errorText = undefined;
+    }
+  }
+
+  return () => {
+    update();
+    return {
+      editText,
+      errorText: errorText || '',
+      valid,
+      disabled: originalText === undefined,
+      onValueChanged,
+      onFocus,
+      onBlur,
+    };
+  };
+}

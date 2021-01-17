@@ -1,7 +1,7 @@
 import {
   createDictionaryFromKeyValues,
-  minusOneToUndefined,
-  undefinedToMinusOne,
+  convertMinusOneToUndefined,
+  convertUndefinedToMinusOne,
 } from '@shared';
 import {
   IEditKeyboardDesign,
@@ -18,33 +18,34 @@ function groupIdToGroupIndex(numberStr: string): number | undefined {
   return numberStr ? parseInt(numberStr, 10) : undefined;
 }
 
+function roundNumber(value: number) {
+  const sc = 10000;
+  return Math.round(value * sc) / sc;
+}
+
 export namespace KeyboardDesignConverter {
   export function convertKeyboardDesignNonEditToEdit(
     source: IKeyboardDesign,
   ): IEditKeyboardDesign {
     return {
-      placementUnit: source.placementUnit,
-      placementAnchor: source.placementAnchor,
-      keySizeUnit: source.keySizeUnit,
+      placementUnit: source.setup.placementUnit,
+      placementAnchor: source.setup.placementAnchor,
+      keySizeUnit: source.setup.keySizeUnit,
       keyEntities: createDictionaryFromKeyValues(
         source.keyEntities.map((ke, idx) => {
-          const { keyId, x, y, angle, shape } = ke;
-          const keyIndex = undefinedToMinusOne(ke.keyIndex);
-          const mirrorKeyIndex = undefinedToMinusOne(ke.mirrorKeyIndex);
-          const groupId = groupIndexToGroupId(ke.groupIndex);
           const id = `ke!${idx}`;
           return [
             id,
             {
               id,
-              keyId,
-              x,
-              y,
-              angle,
-              shape,
-              keyIndex,
-              mirrorKeyIndex,
-              groupId,
+              // label: ke.label,
+              x: ke.x,
+              y: ke.y,
+              angle: ke.angle,
+              shape: ke.shape,
+              keyIndex: convertUndefinedToMinusOne(ke.keyIndex),
+              mirrorKeyIndex: convertUndefinedToMinusOne(ke.mirrorKeyIndex),
+              groupId: groupIndexToGroupId(ke.groupIndex),
             },
           ];
         }),
@@ -76,28 +77,33 @@ export namespace KeyboardDesignConverter {
     design: IEditKeyboardDesign,
   ): IKeyboardDesign {
     return {
-      placementUnit: design.placementUnit,
-      placementAnchor: design.placementAnchor,
-      keySizeUnit: design.keySizeUnit,
+      setup: {
+        placementUnit: design.placementUnit,
+        placementAnchor: design.placementAnchor,
+        keySizeUnit: design.keySizeUnit,
+      },
       keyEntities: Object.values(design.keyEntities).map((ke) => ({
-        keyId: ke.keyId,
-        x: ke.x,
-        y: ke.y,
-        angle: ke.angle,
+        // label: ke.label,
+        x: roundNumber(ke.x),
+        y: roundNumber(ke.y),
+        angle: roundNumber(ke.angle),
         shape: ke.shape,
-        keyIndex: minusOneToUndefined(ke.keyIndex),
-        mirrorKeyIndex: minusOneToUndefined(ke.mirrorKeyIndex),
+        keyIndex: convertMinusOneToUndefined(ke.keyIndex),
+        mirrorKeyIndex: convertMinusOneToUndefined(ke.mirrorKeyIndex),
         groupIndex: groupIdToGroupIndex(ke.groupId),
       })),
       outlineShapes: Object.values(design.outlineShapes).map((shape) => ({
-        points: shape.points.map((p) => ({ x: p.x, y: p.y })),
+        points: shape.points.map((p) => ({
+          x: roundNumber(p.x),
+          y: roundNumber(p.y),
+        })),
         groupIndex: groupIdToGroupIndex(shape.groupId),
       })),
       transGroups: Object.values(design.transGroups).map((group) => ({
-        x: group.x,
-        y: group.y,
-        angle: group.angle,
-        mirror: group.mirror,
+        x: roundNumber(group.x),
+        y: roundNumber(group.y),
+        angle: roundNumber(group.angle),
+        mirror: group.mirror || undefined,
       })),
     };
   }

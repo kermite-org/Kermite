@@ -6,7 +6,7 @@ import {
 import { h, Hook } from 'qx';
 
 function loadLocalStorageKeyboardDesignOrDefault(): IKeyboardDesign {
-  const text = localStorage.getItem('savedDesign');
+  const text = localStorage.getItem('kermite_ui_layouter_mock_savedDesign');
   if (text) {
     const obj = JSON.parse(text) as IKeyboardDesign;
     return obj;
@@ -17,7 +17,7 @@ function loadLocalStorageKeyboardDesignOrDefault(): IKeyboardDesign {
 
 function saveLocalStorageKeyboardDesign(design: IKeyboardDesign) {
   const text = JSON.stringify(design);
-  localStorage.setItem('savedDesign', text);
+  localStorage.setItem('kermite_ui_layouter_mock_savedDesign', text);
 }
 
 export const UiLayouterDevelopmentComponent = () => {
