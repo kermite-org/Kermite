@@ -5,7 +5,7 @@ import {
   saveLocalStorageKeyboardDesign,
 } from '~/ui-mock-view/LocalStoragePersistKeyboardDesign';
 
-export const UiLayouterDevelopmentComponent = () => {
+export const MockPageLayouterDevelopment = () => {
   Hook.useEffect(() => {
     UiLayouterCore.loadEditDesign(loadLocalStorageKeyboardDesignOrDefault());
     return () =>

@@ -1,11 +1,11 @@
 import { h, render } from 'qx';
 import { initializeCss } from '~/ui-common';
-import { UiLayouterDevelopmentComponent } from './UiLayouterDevelopmentComponent';
+import { MockPageLayouterDevelopment } from './MockPageLayouterDevelopment';
 
 const PageRoot = () => {
   return (
     <div style={{ height: '100%' }}>
-      <UiLayouterDevelopmentComponent />
+      <MockPageLayouterDevelopment />
     </div>
   );
 };
