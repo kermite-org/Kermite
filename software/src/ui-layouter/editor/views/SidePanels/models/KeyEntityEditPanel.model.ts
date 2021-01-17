@@ -20,15 +20,15 @@ import { makeSelectorModel } from '@ui-layouter/editor/views/SidePanels/models/s
 import { Hook } from 'qx';
 
 const slotSources: IAttributeSlotSource<IEditKeyEntity, IEditPropKey>[] = [
-  {
-    propKey: 'label',
-    label: 'label',
-    getUnit: () => '',
-    validator: (text: string) =>
-      text.length < 6 ? undefined : 'must be within 6 characters',
-    reader: (value: string) => value,
-    writer: (text: string) => text,
-  },
+  // {
+  //   propKey: 'label',
+  //   label: 'label',
+  //   getUnit: () => '',
+  //   validator: (text: string) =>
+  //     text.length < 6 ? undefined : 'must be within 6 characters',
+  //   reader: (value: string) => value,
+  //   writer: (text: string) => text,
+  // },
   {
     propKey: 'x',
     label: 'x',

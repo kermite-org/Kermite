@@ -33,7 +33,7 @@ export namespace KeyboardDesignConverter {
             id,
             {
               id,
-              label: ke.label,
+              // label: ke.label,
               x: ke.x,
               y: ke.y,
               angle: ke.angle,
@@ -76,7 +76,7 @@ export namespace KeyboardDesignConverter {
       placementAnchor: design.placementAnchor,
       keySizeUnit: design.keySizeUnit,
       keyEntities: Object.values(design.keyEntities).map((ke) => ({
-        label: ke.label,
+        // label: ke.label,
         x: ke.x,
         y: ke.y,
         angle: ke.angle,
