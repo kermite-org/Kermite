@@ -230,3 +230,16 @@ export function convertUndefinedToBlankString(
 ): string {
   return value || '';
 }
+
+export function clamp(val: number, lo: number, hi: number) {
+  if (val < lo) {
+    return lo;
+  } else if (val > hi) {
+    return hi;
+  } else {
+    return val;
+  }
+}
+
+export const degToRad = (deg: number) => (deg * Math.PI) / 180;
+export const radToDeg = (rad: number) => (rad * 180) / Math.PI;

@@ -1,5 +1,4 @@
-import { IKeyPlacementAnchor, IKeySizeUnit } from '~/shared';
-import { clamp } from '~/ui-layouter/base/utils';
+import { clamp, IKeyPlacementAnchor, IKeySizeUnit } from '~/shared';
 import { getNextEntityInstanceId } from '~/ui-layouter/editor/store/DomainRelatedHelpers';
 import {
   appState,

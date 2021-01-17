@@ -1,6 +1,5 @@
-import { IKeyPlacementAnchor, IKeySizeUnit } from '~/shared';
+import { degToRad, IKeyPlacementAnchor, IKeySizeUnit } from '~/shared';
 import { IPosition } from '~/ui-layouter/base';
-import { degToRad } from '~/ui-layouter/base/utils';
 import {
   IEditKeyboardDesign,
   IEditKeyEntity,
@@ -13,7 +12,7 @@ import {
   ICoordUnit,
 } from './PlacementUnitHelper';
 
-function getKeySize(
+export function getKeySize(
   shapeSpec: string,
   coordUnit: ICoordUnit,
   keySizeUnit: IKeySizeUnit,
@@ -26,14 +25,14 @@ function getKeySize(
   return getStdKeySize(shapeSpec, coordUnit, keySizeUnit);
 }
 
-function rotateCoord(p: IPosition, theta: number) {
+export function rotateCoord(p: IPosition, theta: number) {
   const tmpX = p.x * Math.cos(theta) - p.y * Math.sin(theta);
   const tmpY = p.x * Math.sin(theta) + p.y * Math.cos(theta);
   p.x = tmpX;
   p.y = tmpY;
 }
 
-function translateCoord(p: IPosition, ax: number, ay: number) {
+export function translateCoord(p: IPosition, ax: number, ay: number) {
   p.x += ax;
   p.y += ay;
 }

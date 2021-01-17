@@ -18,21 +18,11 @@ export function duplicateObjectByJsonStringifyParse<T>(obj: T): T {
 }
 */
 
-export function clamp(val: number, lo: number, hi: number) {
-  if (val < lo) {
-    return lo;
-  } else if (val > hi) {
-    return hi;
-  } else {
-    return val;
-  }
-}
-
-export function getDist(x0: number, y0: number, x1: number, y1: number) {
-  const dx = x1 - x0;
-  const dy = y1 - y0;
-  return Math.sqrt(dx * dx + dy * dy);
-}
+// export function getDist(x0: number, y0: number, x1: number, y1: number) {
+//   const dx = x1 - x0;
+//   const dy = y1 - y0;
+//   return Math.sqrt(dx * dx + dy * dy);
+// }
 
 /*
 export function mapObjectValues<P, Q>(
@@ -60,16 +50,13 @@ export function debounce(targetProc: () => void, ms: number) {
 }
 */
 
-export const degToRad = (deg: number) => (deg * Math.PI) / 180;
-export const radToDeg = (rad: number) => (rad * 180) / Math.PI;
-
-export function filterProps<T, K extends keyof T>(
-  source: T,
-  propKeys: K[],
-): Pick<T, K> {
-  const obj: Pick<T, K> = {} as any;
-  propKeys.forEach((propKey) => {
-    obj[propKey] = source[propKey];
-  });
-  return obj;
-}
+// export function filterProps<T, K extends keyof T>(
+//   source: T,
+//   propKeys: K[],
+// ): Pick<T, K> {
+//   const obj: Pick<T, K> = {} as any;
+//   propKeys.forEach((propKey) => {
+//     obj[propKey] = source[propKey];
+//   });
+//   return obj;
+// }
