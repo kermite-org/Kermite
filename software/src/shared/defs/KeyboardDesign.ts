@@ -54,6 +54,7 @@ export interface IDisplayKeyEntity {
   y: number;
   angle: number;
   keyIndex: number;
+  shapeSpec: string;
   shape: IDisplayKeyShape;
 }
 
@@ -72,4 +73,17 @@ export interface IDisplayKeyboardDesign {
   keyEntities: IDisplayKeyEntity[];
   outlineShapes: IDisplayOutlineShape[];
   boundingBox: IDisplayBoundingBox;
+}
+
+export function createFallbackDisplayKeyboardDesign(): IDisplayKeyboardDesign {
+  return {
+    keyEntities: [],
+    outlineShapes: [],
+    boundingBox: {
+      centerX: 0,
+      centerY: 0,
+      width: 100,
+      height: 100,
+    },
+  };
 }

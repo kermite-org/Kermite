@@ -55,7 +55,7 @@ export namespace DisplayKeyboardDesignLoader {
   ): string {
     if (ke) {
       const ki = isMirror ? ke.mirrorKeyIndex : ke.keyIndex;
-      if (ki !== -1) {
+      if (ki !== undefined) {
         return `key${ki}`;
       } else {
         return `key0${entityIndex}${isMirror ? 'm' : ''}`;
@@ -119,7 +119,7 @@ export namespace DisplayKeyboardDesignLoader {
     if (placementAnchor === 'topLeft') {
       translateCoord(p, w / 2 + 0.5, h / 2 + 0.5);
     }
-    translateCoord(p, keyX, keyY);
+    translateCoord(p, keyX * mi, keyY);
     rotateCoord(p, groupRot * mi);
     translateCoord(p, groupX * mi, groupY);
 
@@ -129,11 +129,12 @@ export namespace DisplayKeyboardDesignLoader {
       y: p.y,
       angle: (ke.angle + groupAngle) * mi,
       keyIndex,
+      shapeSpec: ke.shape,
       shape: getKeyShape(ke.shape, coordUnit, keySizeUnit),
     };
   }
 
-  export function getBoundingBox(
+  function getBoundingBox(
     keyEntities: IDisplayKeyEntity[],
     outlineShapes: IDisplayOutlineShape[],
   ) {
