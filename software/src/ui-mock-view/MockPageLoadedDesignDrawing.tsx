@@ -43,7 +43,7 @@ export const MockPageLoadedDesignDrawing = () => {
     <div css={cssRootDiv}>
       {/* <pre>{JSON.stringify(state.design, null, ' ')}</pre> */}
       <svg width={600} height={600} viewBox="-100 -100 200 200">
-        <g stroke-width={0.5}>
+        <g stroke-width={0.5} transform="translate(0, 20)">
           {design.keyEntities.map((ke) => (
             <g
               transform={`translate(${ke.x} ${ke.y}) rotate(${ke.angle})`}
@@ -66,6 +66,13 @@ export const MockPageLoadedDesignDrawing = () => {
                   cx={0}
                   cy={0}
                   r={ke.shape.radius}
+                  stroke="#0A0"
+                  fill="transparent"
+                />
+              )}
+              {ke.shape.type === 'polygon' && (
+                <polygon
+                  points={ke.shape.points.map((p) => `${p.x},${p.y}`).join(' ')}
                   stroke="#0A0"
                   fill="transparent"
                 />

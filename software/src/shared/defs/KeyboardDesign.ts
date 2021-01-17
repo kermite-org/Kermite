@@ -44,7 +44,7 @@ export type IDisplayKeyShape =
       radius: number;
     }
   | {
-      type: 'path';
+      type: 'polygon';
       points: { x: number; y: number }[];
     };
 
