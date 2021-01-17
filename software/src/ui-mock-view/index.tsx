@@ -1,11 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { h, render } from 'qx';
 import { initializeCss } from '~/ui-common';
+import { MockPageLoadedDesignDrawing } from '~/ui-mock-view/MockPageLoadedDesignDrawing';
 import { MockPageLayouterDevelopment } from './MockPageLayouterDevelopment';
 
 const PageRoot = () => {
   return (
     <div style={{ height: '100%' }}>
-      <MockPageLayouterDevelopment />
+      {/* <MockPageLayouterDevelopment /> */}
+      <MockPageLoadedDesignDrawing />
     </div>
   );
 };
