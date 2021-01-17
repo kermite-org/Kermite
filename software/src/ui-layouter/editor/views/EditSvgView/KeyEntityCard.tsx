@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { rerender, h } from 'qx';
+import { degToRad } from '~/shared';
 import { IPosition, startDragSession } from '~/ui-layouter/base';
-import { degToRad } from '~/ui-layouter/base/utils';
 import {
   editReader,
   unitValueToMm,
