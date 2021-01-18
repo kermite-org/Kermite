@@ -1,43 +1,21 @@
-import { IPosition } from '~/ui-layouter/base';
-import { degToRad } from '~/ui-layouter/base/utils';
+import {
+  degToRad,
+  IKeyPlacementAnchor,
+  IKeySizeUnit,
+  rotateCoord,
+  translateCoord,
+} from '~/shared';
 import {
   IEditKeyboardDesign,
   IEditKeyEntity,
   IEditOutlineShape,
-  IKeyPlacementAnchor,
-  IKeySizeUnit,
-  ITransGroup,
+  IEditTransGroup,
 } from './DataSchema';
 import {
   getCoordUnitFromUnitSpec,
-  getStdKeySize,
+  getKeySize,
   ICoordUnit,
 } from './PlacementUnitHelper';
-
-function getKeySize(
-  shapeSpec: string,
-  coordUnit: ICoordUnit,
-  keySizeUnit: IKeySizeUnit,
-) {
-  if (shapeSpec === 'ext circle') {
-    return [18, 18];
-  } else if (shapeSpec === 'ext isoEnter') {
-    return [27, 37];
-  }
-  return getStdKeySize(shapeSpec, coordUnit, keySizeUnit);
-}
-
-function rotateCoord(p: IPosition, theta: number) {
-  const tmpX = p.x * Math.cos(theta) - p.y * Math.sin(theta);
-  const tmpY = p.x * Math.sin(theta) + p.y * Math.cos(theta);
-  p.x = tmpX;
-  p.y = tmpY;
-}
-
-function translateCoord(p: IPosition, ax: number, ay: number) {
-  p.x += ax;
-  p.y += ay;
-}
 
 function getKeyCornerPoints(
   ke: IEditKeyEntity,
@@ -64,7 +42,7 @@ function getKeyCornerPoints(
   return points;
 }
 
-function getGroupTransAmount(group: ITransGroup | undefined) {
+function getGroupTransAmount(group: IEditTransGroup | undefined) {
   const groupX = group ? group.x : 0;
   const groupY = group ? group.y : 0;
   const groupRot = degToRad(group?.angle || 0);

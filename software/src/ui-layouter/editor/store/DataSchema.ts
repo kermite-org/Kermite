@@ -1,46 +1,4 @@
-export type IKeySizeUnit = 'mm' | 'KP';
-
-export type IKeyPlacementAnchor = 'topLeft' | 'center';
-
-// ------------------------------------------------------
-export interface IKeyEntity {
-  // label: string;
-  x: number;
-  y: number;
-  angle: number;
-  shape: string;
-  keyIndex?: number;
-  mirrorKeyIndex?: number;
-  groupIndex?: number;
-}
-
-// export type IPersistOutlinePoint = { x: number; y: number };
-export type IOutlinePoint = { x: number; y: number };
-
-export type IOutlineShape = {
-  points: IOutlinePoint[];
-  groupIndex?: number;
-};
-
-export type ITransGroup = {
-  // groupId: string;
-  x: number;
-  y: number;
-  angle: number;
-  mirror?: boolean;
-};
-
-export interface IKeyboardDesignSetup {
-  placementUnit: string;
-  placementAnchor: IKeyPlacementAnchor;
-  keySizeUnit: IKeySizeUnit;
-}
-export interface IKeyboardDesign {
-  setup: IKeyboardDesignSetup;
-  keyEntities: IKeyEntity[];
-  outlineShapes: IOutlineShape[];
-  transGroups: ITransGroup[];
-}
+import { IKeyPlacementAnchor, IKeySizeUnit } from '~/shared';
 
 // ------------------------------------------------------
 export interface IEditKeyEntity {
@@ -55,9 +13,11 @@ export interface IEditKeyEntity {
   groupId: string;
 }
 
+export type IEditOutlinePoint = { x: number; y: number };
+
 export type IEditOutlineShape = {
   id: string; // 編集中のみ一意の値を保持,永続化の際には保存しない
-  points: IOutlinePoint[];
+  points: IEditOutlinePoint[];
   groupId: string;
 };
 
