@@ -72,6 +72,10 @@ export class KeyboardShapesModel {
       this.onLayoutFileUpdated,
     );
 
+    if (this.optionProjectInfos.length === 0) {
+      return;
+    }
+
     this._currentProjectId =
       this.uiStatusModel.settings.shapeViewProjectId ||
       this.optionProjectInfos[0].projectId;
