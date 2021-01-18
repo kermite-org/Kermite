@@ -3,10 +3,10 @@ import { h } from 'qx';
 import {
   IPlainOperationEditCardsViewModel,
   IOperationEditPartViewModel,
-} from '~/viewModels/Editor/OperationEditPartViewModel';
-import { IOperationLayerOptionEditViewModel } from '~/viewModels/Editor/OperationLayerOptionEditViewModel';
-import { OperationCard } from '~/views/elements/OperationCard';
-import { OperationLayerOptionSelector } from '~/views/fabrics/OperationLayerOptionSelector';
+} from '~/ui-root/viewModels/Editor/OperationEditPartViewModel';
+import { IOperationLayerOptionEditViewModel } from '~/ui-root/viewModels/Editor/OperationLayerOptionEditViewModel';
+import { OperationCard } from '~/ui-root/views/elements/OperationCard';
+import { OperationLayerOptionSelector } from '~/ui-root/views/fabrics/OperationLayerOptionSelector';
 
 const cssAssignPanel = css`
   display: flex;

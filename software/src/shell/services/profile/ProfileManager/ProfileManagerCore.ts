@@ -1,6 +1,6 @@
-import { IProfileData } from '@shared';
-import { applicationStorage } from '~/base';
-import { appEnv } from '~/base/AppEnv';
+import { IProfileData } from '~/shared';
+import { applicationStorage } from '~/shell/base';
+import { appEnv } from '~/shell/base/AppEnv';
 import {
   fsExistsSync,
   fspCopyFile,
@@ -11,7 +11,7 @@ import {
   fsxReadJsonFile,
   fsxWriteJsonFile,
   pathBasename,
-} from '~/funcs';
+} from '~/shell/funcs';
 
 export class ProfileManagerCore {
   getDataFilePath(profName: string): string {

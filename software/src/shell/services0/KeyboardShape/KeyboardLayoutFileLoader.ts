@@ -3,8 +3,8 @@ import {
   IKeyboardShapeDisplayArea,
   IKeyboardShape,
   keyboardShape_fallbackData,
-} from '@shared';
-import { fsExistsSync, fsxReadTextFile } from '~/funcs';
+} from '~/shared';
+import { fsExistsSync, fsxReadTextFile } from '~/shell/funcs';
 
 export namespace KeyboardLayoutFileLoader {
   interface IKeyboardShapeSourceJson {

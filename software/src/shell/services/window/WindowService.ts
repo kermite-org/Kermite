@@ -1,4 +1,4 @@
-import { appGlobal, appConfig } from '~/base';
+import { appGlobal, appConfig } from '~/shell/base';
 import { AppWindowWrapper } from './AppWindowWrapper';
 import { MenuManager } from './MenuManager';
 import { PageStateManager } from './PageStateManager';

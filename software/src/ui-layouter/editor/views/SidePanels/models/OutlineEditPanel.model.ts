@@ -1,11 +1,11 @@
-import { useClosureModel } from '@ui-layouter/base';
-import { ICommonSelectorViewModel } from '@ui-layouter/controls';
-import { editMutations, editReader } from '@ui-layouter/editor/store';
+import { useClosureModel } from '~/ui-layouter/base';
+import { ICommonSelectorViewModel } from '~/ui-layouter/controls';
+import { editMutations, editReader } from '~/ui-layouter/editor/store';
 import {
   createConfigTextEditModelDynamic,
   IConfigTextEditModel,
-} from '@ui-layouter/editor/views/SidePanels/models/slots/ConfigTextEditModel';
-import { makeSelectorModel } from '@ui-layouter/editor/views/SidePanels/models/slots/SelectorModel';
+} from '~/ui-layouter/editor/views/SidePanels/models/slots/ConfigTextEditModel';
+import { makeSelectorModel } from '~/ui-layouter/editor/views/SidePanels/models/slots/SelectorModel';
 
 interface IOutlineEditPanelModel {
   vmX: IConfigTextEditModel;

@@ -1,6 +1,6 @@
-import { IAssignEntryWithLayerFallback, IKeyUnitEntry } from '@shared';
-import { Models } from '~/models';
-import { getAssignEntryTexts } from '~/viewModels/KeyUnitCard/KeyUnitCardViewModelCommon';
+import { IAssignEntryWithLayerFallback, IKeyUnitEntry } from '~/shared';
+import { Models } from '~/ui-root/models';
+import { getAssignEntryTexts } from '~/ui-root/viewModels/KeyUnitCard/KeyUnitCardViewModelCommon';
 
 export interface IKeyUnitCardViewModel {
   keyUnitId: string;

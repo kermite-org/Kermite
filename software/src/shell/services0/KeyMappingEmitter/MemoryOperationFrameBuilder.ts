@@ -1,4 +1,4 @@
-import { generateNumberSequence } from '@shared';
+import { generateNumberSequence } from '~/shared';
 import { bhi, blo } from './Helpers';
 
 // ------------------------------------------------------------

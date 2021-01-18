@@ -1,4 +1,4 @@
-import { appUi, ipcAgent } from '@ui-common';
+import { appUi, ipcAgent } from '~/ui-common';
 
 export interface ITitleBarViewModel {
   // showReloadButton: boolean;

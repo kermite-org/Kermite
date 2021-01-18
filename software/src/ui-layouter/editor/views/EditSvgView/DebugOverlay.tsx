@@ -1,6 +1,6 @@
-import { layouterAppGlobal } from '@ui-layouter/base';
 import { css } from 'goober';
 import { h } from 'qx';
+import { layouterAppGlobal } from '~/ui-layouter/base';
 
 export const DebugOverlay = () => {
   const cssDebugOverlay = css`

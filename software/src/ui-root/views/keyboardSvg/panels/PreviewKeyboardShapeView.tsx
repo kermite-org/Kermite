@@ -1,10 +1,10 @@
-import { IKeyboardShape } from '@shared';
 import { css } from 'goober';
 import { h } from 'qx';
-import { IUiSettings } from '~/models/UiStatusModel';
-import { KeyboardBodyShape } from '~/views/keyboardSvg/atoms/KeyboardBodyShape';
-import { PreviewBoundingBox } from '~/views/keyboardSvg/atoms/PreviewBoundingBox';
-import { PreviewKeyUnitCardsPart } from '~/views/keyboardSvg/organisms/PreviewKeyUnitCardsPart';
+import { IKeyboardShape } from '~/shared';
+import { IUiSettings } from '~/ui-root/models/UiStatusModel';
+import { KeyboardBodyShape } from '~/ui-root/views/keyboardSvg/atoms/KeyboardBodyShape';
+import { PreviewBoundingBox } from '~/ui-root/views/keyboardSvg/atoms/PreviewBoundingBox';
+import { PreviewKeyUnitCardsPart } from '~/ui-root/views/keyboardSvg/organisms/PreviewKeyUnitCardsPart';
 import { KeyboardSvgFrameWithAutoScaler } from '../outlines/KeyboardSvgFrameWithAutoScaler';
 
 export function PreviewKeyboardShapeView(props: {

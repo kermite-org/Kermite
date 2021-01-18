@@ -1,6 +1,6 @@
-import { appUi } from '@ui-common';
 import { css } from 'goober';
 import { h, Hook } from 'qx';
+import { appUi } from '~/ui-common';
 
 const cssBase = css`
   width: 100%;

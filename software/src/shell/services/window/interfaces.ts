@@ -1,5 +1,5 @@
-import { IAppWindowEvent } from '@shared';
-import { IListenerPort } from '~/base';
+import { IAppWindowEvent } from '~/shared';
+import { IListenerPort } from '~/shell/base';
 
 export interface IMenuManager {
   buildMenu(initailState: {

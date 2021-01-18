@@ -1,9 +1,9 @@
-import { IKeyboardShape } from '@shared';
-import { models } from '~/models';
+import { IKeyboardShape } from '~/shared';
+import { models } from '~/ui-root/models';
 import {
   IKeyUnitCardPartViewModel,
   makeKeyUnitCardsPartViewModel,
-} from '~/viewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
+} from '~/ui-root/viewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
 
 export interface IWidgetKeyboardViewViewModel {
   keyboardShape: IKeyboardShape;

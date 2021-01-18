@@ -1,5 +1,5 @@
 import { app } from 'electron';
-import { pathJoin } from '~/funcs';
+import { pathJoin } from '~/shell/funcs';
 
 export const appEnv = new (class {
   isDevelopment = process.env.NODE_ENV === 'development';

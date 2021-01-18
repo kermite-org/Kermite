@@ -1,5 +1,5 @@
-import { IKeyboardShape } from '@shared';
-import { IProjectResourceInfoProvider } from '~/services0/serviceInterfaces';
+import { IKeyboardShape } from '~/shared';
+import { IProjectResourceInfoProvider } from '~/shell/services0/serviceInterfaces';
 import { KeyboardLayoutFileLoader } from './KeyboardLayoutFileLoader';
 
 // キーボード品種ごとのレイアウトファイルを読み込み提供する

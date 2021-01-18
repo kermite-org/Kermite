@@ -1,5 +1,5 @@
-import { debounce } from '@shared';
-import { appUi } from '@ui-common';
+import { debounce } from '~/shared';
+import { appUi } from '~/ui-common';
 import { h, render } from 'qx';
 import { models } from '~/models';
 import { SiteRoot } from '~/views/SiteRoot';

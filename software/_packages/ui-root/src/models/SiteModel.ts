@@ -1,5 +1,5 @@
-import { IAppWindowEvent } from '@shared';
-import { ipcAgent } from '@ui-common';
+import { IAppWindowEvent } from '~/shared';
+import { ipcAgent } from '~/ui-common';
 
 export class SiteModel {
   private _isWindowActive: boolean = true;

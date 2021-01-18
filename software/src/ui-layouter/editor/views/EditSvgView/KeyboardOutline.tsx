@@ -1,19 +1,19 @@
+import { css } from 'goober';
+import { rerender, h } from 'qx';
 import {
   makeCssColor,
   uiTheme,
   IPosition,
   startDragSession,
-} from '@ui-layouter/base';
-import { degToRad } from '@ui-layouter/base/utils';
+} from '~/ui-layouter/base';
+import { degToRad } from '~/ui-layouter/base/utils';
 import {
   editReader,
   editMutations,
   IOutlinePoint,
   IEditOutlineShape,
   ITransGroup,
-} from '@ui-layouter/editor/store';
-import { css } from 'goober';
-import { rerender, h } from 'qx';
+} from '~/ui-layouter/editor/store';
 import { getWorldMousePositionOnEditSvg } from './CoordHelpers';
 
 function applyInverseGroupTransform(

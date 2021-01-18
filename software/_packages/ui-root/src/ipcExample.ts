@@ -1,4 +1,4 @@
-import { getIpcRendererAgent, IAppIpcContract } from '@shared';
+import { getIpcRendererAgent, IAppIpcContract } from '~/shared';
 
 export async function ipcExample() {
   const agent = getIpcRendererAgent<IAppIpcContract>();

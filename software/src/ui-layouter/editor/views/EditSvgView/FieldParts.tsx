@@ -1,6 +1,6 @@
-import { makeCssColor } from '@ui-layouter/base';
-import { editReader } from '@ui-layouter/editor/store';
 import { h } from 'qx';
+import { makeCssColor } from '~/ui-layouter/base';
+import { editReader } from '~/ui-layouter/editor/store';
 
 const axisColor = makeCssColor(0x444444, 0.2);
 const gridColor = makeCssColor(0x444444, 0.1);

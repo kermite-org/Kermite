@@ -1,5 +1,5 @@
-import { IKeyboardShapeDisplayArea } from '@shared';
 import { h } from 'qx';
+import { IKeyboardShapeDisplayArea } from '~/shared';
 
 export const PreviewBoundingBox = (props: {
   displayArea: IKeyboardShapeDisplayArea;

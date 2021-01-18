@@ -1,5 +1,5 @@
-import { IProfileManagerStatus, IProfileData } from '@shared';
-import { ipcAgent } from '@ui-common';
+import { IProfileManagerStatus, IProfileData } from '~/shared';
+import { ipcAgent } from '~/ui-common';
 
 type IListener = (profile: Partial<IProfileManagerStatus>) => void;
 

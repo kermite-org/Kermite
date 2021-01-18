@@ -1,11 +1,11 @@
+import { Hook, h, asyncRerender } from 'qx';
 import {
   IPosition,
   startDragSession,
   getRelativeMousePosition,
   layouterAppGlobal,
-} from '@ui-layouter/base';
-import { editReader, editMutations } from '@ui-layouter/editor/store';
-import { Hook, h, asyncRerender } from 'qx';
+} from '~/ui-layouter/base';
+import { editReader, editMutations } from '~/ui-layouter/editor/store';
 import { screenToWorld } from './CoordHelpers';
 import { DisplayAreaFrame } from './DisplayAreaFrame';
 import { FieldGrid, FieldAxis } from './FieldParts';

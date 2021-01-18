@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { glob } from 'glob';
 import fetch from 'node-fetch';
-import { appEnv } from '~/base';
+import { appEnv } from '~/shell/base';
 
 async function fetchJson(url: string): Promise<any> {
   const res = await fetch(url);

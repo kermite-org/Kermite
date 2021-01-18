@@ -1,7 +1,7 @@
-import { uiTheme } from '@ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
-import { IProfileSelectionMenuPartViewModel } from '~/viewModels/ProfileSelectionMenuPartViewModel';
+import { uiTheme } from '~/ui-common';
+import { IProfileSelectionMenuPartViewModel } from '~/ui-root/viewModels/ProfileSelectionMenuPartViewModel';
 
 const cssProfileSelectionMenuPart = css``;
 

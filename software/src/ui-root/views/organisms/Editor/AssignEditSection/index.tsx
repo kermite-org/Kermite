@@ -1,7 +1,7 @@
-import { uiTheme } from '@ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
-import { makeAssignEditSectionViewModel } from '~/viewModels/Editor/AssignEditSectionViewModel';
+import { uiTheme } from '~/ui-common';
+import { makeAssignEditSectionViewModel } from '~/ui-root/viewModels/Editor/AssignEditSectionViewModel';
 import { OpertionEditPart } from './OperationEditPart';
 import { OerationSlotsPart } from './OperationSlotsPart';
 

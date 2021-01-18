@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { makeNavigationViewModel } from '~/viewModels/NavigationViewModel';
+import { makeNavigationViewModel } from '~/ui-root/viewModels/NavigationViewModel';
 import { NavigationButton } from './NavigationButton';
 
 const cssNavigationButtonsArea = css`

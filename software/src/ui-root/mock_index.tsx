@@ -1,5 +1,5 @@
-import { initializeCss } from '@ui-common';
 import { h, render } from 'qx';
+import { initializeCss } from '~/ui-common';
 import { UiLayouterDevelopmentComponent } from './UiLayouterDevelopmentComponent';
 
 window.addEventListener('load', () => {

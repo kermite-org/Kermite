@@ -3,11 +3,11 @@ import {
   ILayer,
   IProfileDataAssigns,
   IProfileData,
-} from '@shared';
+} from '~/shared';
 import {
   getAssignForKeyUnitWithLayerFallback,
   getAssignEntryTexts,
-} from '~/viewModels/KeyUnitCard/KeyUnitCardViewModelCommon';
+} from '~/ui-root/viewModels/KeyUnitCard/KeyUnitCardViewModelCommon';
 
 export interface IPresetKeyUnitViewModel {
   keyUnitId: string;

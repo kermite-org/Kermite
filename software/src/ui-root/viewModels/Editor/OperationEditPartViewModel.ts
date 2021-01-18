@@ -3,8 +3,8 @@ import {
   VirtualKeyTexts,
   addOptionToOptionsArray,
   removeOptionFromOptionsArray,
-} from '@shared';
-import { models } from '~/models';
+} from '~/shared';
+import { models } from '~/ui-root/models';
 import { virtualKeyGroupsTable2 } from './virtualkeyGroupsTable';
 
 export interface IOperationCardViewModel {

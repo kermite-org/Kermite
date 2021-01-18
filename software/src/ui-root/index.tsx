@@ -1,7 +1,7 @@
-import { debounce } from '@shared';
-import { appUi } from '@ui-common';
 import { h, render } from 'qx';
-import { SiteRoot } from '~/views/SiteRoot';
+import { debounce } from '~/shared';
+import { appUi } from '~/ui-common';
+import { SiteRoot } from '~/ui-root/views/SiteRoot';
 import { models } from './models';
 
 async function start() {

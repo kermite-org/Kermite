@@ -1,8 +1,8 @@
-import { uiTheme } from '@ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
-import { mvvmView } from '~/base/helper/mvvmHelpers';
-import { IHeatmapCustomKeyUnitViewModel } from '~/viewModels/RealtimeHeatmapViewModel';
+import { uiTheme } from '~/ui-common';
+import { mvvmView } from '~/ui-root/base/helper/mvvmHelpers';
+import { IHeatmapCustomKeyUnitViewModel } from '~/ui-root/viewModels/RealtimeHeatmapViewModel';
 
 const cssKeyRect = css`
   fill: transparent;

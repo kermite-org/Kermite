@@ -1,7 +1,9 @@
+import { css } from 'goober';
+import { h } from 'qx';
 import {
   ExclusiveButtonGroup,
   ICommonSelectorViewModel,
-} from '@ui-layouter/controls';
+} from '~/ui-layouter/controls';
 import {
   ConfigContent,
   ConfigHeader,
@@ -9,12 +11,10 @@ import {
   ConfigRow,
   ConfigSubContent,
   ConfigSubHeader,
-} from '@ui-layouter/editor/views/SidePanels/atoms';
-import { GeneralConfigTextEditRow } from '@ui-layouter/editor/views/SidePanels/controls/GeneralConfigTextEditRow';
-import { useDesignConfigurationPanelModel } from '@ui-layouter/editor/views/SidePanels/models/DesignConfigurationPanel.model';
-import { IConfigTextEditModel } from '@ui-layouter/editor/views/SidePanels/models/slots/ConfigTextEditModel';
-import { css } from 'goober';
-import { h } from 'qx';
+} from '~/ui-layouter/editor/views/SidePanels/atoms';
+import { GeneralConfigTextEditRow } from '~/ui-layouter/editor/views/SidePanels/controls/GeneralConfigTextEditRow';
+import { useDesignConfigurationPanelModel } from '~/ui-layouter/editor/views/SidePanels/models/DesignConfigurationPanel.model';
+import { IConfigTextEditModel } from '~/ui-layouter/editor/views/SidePanels/models/slots/ConfigTextEditModel';
 
 const cssErrorText = css`
   color: red;

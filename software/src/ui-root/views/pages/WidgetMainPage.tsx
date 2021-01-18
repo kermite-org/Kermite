@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { makeWidgetMainPageViewModel } from '~/viewModels/WidgetMainPageViewModel';
-import { WidgetSvgKeyboardView } from '~/views/keyboardSvg/panels/WidgetSvgKeyboardView';
+import { makeWidgetMainPageViewModel } from '~/ui-root/viewModels/WidgetMainPageViewModel';
+import { WidgetSvgKeyboardView } from '~/ui-root/views/keyboardSvg/panels/WidgetSvgKeyboardView';
 
 const styles = {
   cssPanel: (contentScale: number) => css`

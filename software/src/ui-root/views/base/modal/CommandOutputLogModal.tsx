@@ -6,8 +6,8 @@ import {
   DialogContentRow,
   DialogButtonsRow,
   DialogButton,
-} from '~/base/dialog/CommonDialogParts';
-import { createModal } from '~/base/overlay/ForegroundModalLayer';
+} from '~/ui-root/base/dialog/CommonDialogParts';
+import { createModal } from '~/ui-root/base/overlay/ForegroundModalLayer';
 
 export const showCommandOutputLogModal = createModal(
   (args: { caption: string; logText: string }) => {

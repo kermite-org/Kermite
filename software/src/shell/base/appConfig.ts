@@ -1,4 +1,4 @@
-import { pathResolve } from '~/funcs';
+import { pathResolve } from '~/shell/funcs';
 
 export const appConfig = {
   isDevelopment: process.env.NODE_ENV === 'development',

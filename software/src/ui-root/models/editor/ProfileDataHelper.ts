@@ -5,7 +5,7 @@ import {
   IProfileAssignType,
   mapObjectValues,
   IAssignEntry,
-} from '@shared';
+} from '~/shared';
 
 function convertSignleAssignToDualAssign(
   src: IAssignEntry_SingleEx,

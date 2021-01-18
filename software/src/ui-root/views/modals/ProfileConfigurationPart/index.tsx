@@ -1,11 +1,11 @@
-import { reflectFieldChecked } from '@ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
+import { reflectFieldChecked } from '~/ui-common';
 import {
   ClosableOverlay,
   CommonDialogFrame,
-} from '~/base/dialog/CommonDialogParts';
-import { models } from '~/models';
+} from '~/ui-root/base/dialog/CommonDialogParts';
+import { models } from '~/ui-root/models';
 import { AssignTypeSelectionPart } from './AssignTypeSelectionPart';
 import { DualModeSettingsPart } from './DualModeSettingsPart';
 

@@ -1,4 +1,4 @@
-import { editReader } from '@ui-layouter/editor/store';
+import { editReader } from '~/ui-layouter/editor/store';
 
 export function screenToWorld(sx: number, sy: number): [x: number, y: number] {
   const { sight } = editReader;

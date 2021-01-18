@@ -1,4 +1,4 @@
-import { appUi } from '@ui-common';
+import { appUi } from '~/ui-common';
 import { css, glob, setup } from 'goober';
 import { h } from 'qx';
 import { ConfiguratorZoneRoot } from '~/views/ConfiguratorZoneRoot';

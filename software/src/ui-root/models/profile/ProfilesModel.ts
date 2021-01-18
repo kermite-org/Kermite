@@ -1,5 +1,5 @@
-import { IProfileManagerCommand, IProfileManagerStatus } from '@shared';
-import { ipcAgent } from '@ui-common';
+import { IProfileManagerCommand, IProfileManagerStatus } from '~/shared';
+import { ipcAgent } from '~/ui-common';
 import { EditorModel } from '../editor/EditorModel';
 import { ProfileProvider } from './ProfileProvider';
 

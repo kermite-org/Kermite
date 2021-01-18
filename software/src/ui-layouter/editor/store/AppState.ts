@@ -78,9 +78,11 @@ export function createFallbackEditKeyboardDesign(): IEditKeyboardDesign {
 
 export function createFallbackKeyboardDesign(): IKeyboardDesign {
   return {
-    placementUnit: 'mm',
-    placementAnchor: 'center',
-    keySizeUnit: 'KP',
+    setup: {
+      placementUnit: 'mm',
+      placementAnchor: 'center',
+      keySizeUnit: 'KP',
+    },
     keyEntities: [],
     outlineShapes: [],
     transGroups: [

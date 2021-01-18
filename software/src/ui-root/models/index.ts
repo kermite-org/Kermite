@@ -1,5 +1,5 @@
-import { PresetBrowserModel } from '~/models/PresetBrowserModel';
-import { RealtimeHeatmapModel } from '~/models/RealtimeHeatmapModel';
+import { PresetBrowserModel } from '~/ui-root/models/PresetBrowserModel';
+import { RealtimeHeatmapModel } from '~/ui-root/models/RealtimeHeatmapModel';
 import { DeviceStatusModel } from './DeviceStatusModel';
 import { FirmwareUpdationModel } from './FirmwareUpdationModel';
 import { KeyboardConfigModel } from './KeyboardConfigModel';

@@ -1,6 +1,6 @@
 import { URL } from 'url';
 import { glob } from 'glob';
-import { fsReadFileSync, fsWriteFileSync } from '~/funcs';
+import { fsReadFileSync, fsWriteFileSync } from '~/shell/funcs';
 
 export function setupWebContentSourceChecker(
   webContents: Electron.webContents,

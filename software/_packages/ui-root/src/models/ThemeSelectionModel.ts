@@ -1,4 +1,4 @@
-import { themeColors, ThemeKey, uiThemeConfigLoader } from '@ui-common';
+import { themeColors, ThemeKey, uiThemeConfigLoader } from '~/ui-common';
 
 const allThemeKeys = Object.keys(themeColors) as ThemeKey[];
 

@@ -1,5 +1,5 @@
-import { reflectChecked } from '@ui-common';
 import { h } from 'qx';
+import { reflectChecked } from '~/ui-common';
 
 export const CheckboxLine = (props: {
   text: string;

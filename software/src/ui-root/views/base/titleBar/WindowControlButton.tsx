@@ -1,6 +1,6 @@
-import { uiTheme } from '@ui-common';
 import { css } from 'goober';
 import { h } from 'qx';
+import { uiTheme } from '~/ui-common';
 
 export const WindowControlButton = (props: {
   icon: string;

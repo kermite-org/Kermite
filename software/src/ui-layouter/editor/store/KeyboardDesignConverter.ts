@@ -2,11 +2,11 @@ import {
   createDictionaryFromKeyValues,
   convertMinusOneToUndefined,
   convertUndefinedToMinusOne,
-} from '@shared';
+} from '~/shared';
 import {
   IEditKeyboardDesign,
   IKeyboardDesign,
-} from '@ui-layouter/editor/store/DataSchema';
+} from '~/ui-layouter/editor/store/DataSchema';
 
 // groupId: string, ('0', '1', '2', など) 無効値は''
 // groupIndex: number | undefined, 無効値はundefined

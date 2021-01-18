@@ -1,4 +1,5 @@
-import { reflectChecked } from '@ui-common';
+import { h } from 'qx';
+import { reflectChecked } from '~/ui-common';
 import {
   ConfigContent,
   ConfigHeader,
@@ -6,11 +7,10 @@ import {
   ConfigSubContent,
   ConfigSubHeader,
   ConfigVStack,
-} from '@ui-layouter/editor/views/SidePanels/atoms';
-import { GeneralConfigTextEditRow } from '@ui-layouter/editor/views/SidePanels/controls/GeneralConfigTextEditRow';
-import { useTransGroupEditPanelModel } from '@ui-layouter/editor/views/SidePanels/models/TransGroupEditPanel.model';
-import { TransGroupListPart } from '@ui-layouter/editor/views/SidePanels/organisms/TransGroupListPart';
-import { h } from 'qx';
+} from '~/ui-layouter/editor/views/SidePanels/atoms';
+import { GeneralConfigTextEditRow } from '~/ui-layouter/editor/views/SidePanels/controls/GeneralConfigTextEditRow';
+import { useTransGroupEditPanelModel } from '~/ui-layouter/editor/views/SidePanels/models/TransGroupEditPanel.model';
+import { TransGroupListPart } from '~/ui-layouter/editor/views/SidePanels/organisms/TransGroupListPart';
 
 export const TransGroupEditPanel = () => {
   const {

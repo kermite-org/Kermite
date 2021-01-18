@@ -1,18 +1,18 @@
-import { IProfileManagerStatus } from '@shared';
-import { appGlobal, applicationStorage } from '~/base';
-import { JsonFileServiceStatic } from '~/services/file/JsonFileServiceStatic';
-import { ProfileService } from '~/services/profile';
-import { WindowService } from '~/services/window';
-import { FirmwareUpdationService } from '~/services0/FirmwareUpdation';
-import { KeyMappingEmitter } from '~/services0/KeyMappingEmitter';
-import { KeyboardConfigProvider } from '~/services0/KeyboardConfigProvider';
-import { KeyboardDeviceService } from '~/services0/KeyboardDevice';
-import { InputLogicSimulatorD } from '~/services0/KeyboardLogic/InputLogicSimulatorD';
-import { KeyboardLayoutFilesWatcher } from '~/services0/KeyboardShape/KeyboardLayoutFilesWatcher';
-import { KeyboardShapesProvider } from '~/services0/KeyboardShape/KeyboardShapesProvider';
-import { PresetProfileLoader } from '~/services0/PresetProfileLoader';
-import { ProjectResourceInfoProvider } from '~/services0/ProjectResource/ProjectResourceInfoProvider';
-// import { resourceUpdator_syncRemoteResourcesToLocal } from '~/services0/ResourceUpdator';
+import { IProfileManagerStatus } from '~/shared';
+import { appGlobal, applicationStorage } from '~/shell/base';
+import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStatic';
+import { ProfileService } from '~/shell/services/profile';
+import { WindowService } from '~/shell/services/window';
+import { FirmwareUpdationService } from '~/shell/services0/FirmwareUpdation';
+import { KeyMappingEmitter } from '~/shell/services0/KeyMappingEmitter';
+import { KeyboardConfigProvider } from '~/shell/services0/KeyboardConfigProvider';
+import { KeyboardDeviceService } from '~/shell/services0/KeyboardDevice';
+import { InputLogicSimulatorD } from '~/shell/services0/KeyboardLogic/InputLogicSimulatorD';
+import { KeyboardLayoutFilesWatcher } from '~/shell/services0/KeyboardShape/KeyboardLayoutFilesWatcher';
+import { KeyboardShapesProvider } from '~/shell/services0/KeyboardShape/KeyboardShapesProvider';
+import { PresetProfileLoader } from '~/shell/services0/PresetProfileLoader';
+import { ProjectResourceInfoProvider } from '~/shell/services0/ProjectResource/ProjectResourceInfoProvider';
+// import { resourceUpdator_syncRemoteResourcesToLocal } from '~/shell/services0/ResourceUpdator';
 
 export class ApplicationRoot {
   private windowService = new WindowService();

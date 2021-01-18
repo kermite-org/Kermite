@@ -1,15 +1,15 @@
-import { IPosition, startDragSession } from '@ui-layouter/base';
-import { degToRad } from '@ui-layouter/base/utils';
+import { css } from 'goober';
+import { rerender, h } from 'qx';
+import { IPosition, startDragSession } from '~/ui-layouter/base';
+import { degToRad } from '~/ui-layouter/base/utils';
 import {
   editReader,
   unitValueToMm,
   editMutations,
   IEditKeyEntity,
   getStdKeySize,
-} from '@ui-layouter/editor/store';
-import { getKeyIdentifierText } from '@ui-layouter/editor/store/DomainRelatedHelpers';
-import { css } from 'goober';
-import { rerender, h } from 'qx';
+} from '~/ui-layouter/editor/store';
+import { getKeyIdentifierText } from '~/ui-layouter/editor/store/DomainRelatedHelpers';
 
 let temporaryChangingModeAddToMove = false;
 

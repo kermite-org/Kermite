@@ -1,4 +1,4 @@
-import { ICommonSelectorViewModel } from '@ui-layouter/controls';
+import { ICommonSelectorViewModel } from '~/ui-layouter/controls';
 
 export function makeSelectorModel<T extends string>(props: {
   sources: [string, string][];

@@ -1,5 +1,5 @@
-import { IPosition } from '@ui-layouter/base';
-import { degToRad } from '@ui-layouter/base/utils';
+import { IPosition } from '~/ui-layouter/base';
+import { degToRad } from '~/ui-layouter/base/utils';
 import {
   IEditKeyboardDesign,
   IEditKeyEntity,

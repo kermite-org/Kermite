@@ -1,7 +1,7 @@
-import { IKeyboardShape } from '@shared';
-import { models } from '~/models';
-import { IUiSettings } from '~/models/UiStatusModel';
-import { ISelectorSource } from '~/viewModels/viewModelInterfaces';
+import { IKeyboardShape } from '~/shared';
+import { models } from '~/ui-root/models';
+import { IUiSettings } from '~/ui-root/models/UiStatusModel';
+import { ISelectorSource } from '~/ui-root/viewModels/viewModelInterfaces';
 
 export interface IShapePreviewPageViewModel {
   settings: IUiSettings;
