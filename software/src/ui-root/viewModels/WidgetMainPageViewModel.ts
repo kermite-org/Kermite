@@ -1,4 +1,4 @@
-import { IKeyboardShape } from '~/shared';
+import { IDisplayKeyboardDesign } from '~/shared';
 import { models } from '~/ui-root/models';
 import {
   IKeyUnitCardPartViewModel,
@@ -6,7 +6,7 @@ import {
 } from '~/ui-root/viewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
 
 export interface IWidgetKeyboardViewViewModel {
-  keyboardShape: IKeyboardShape;
+  keyboardDesign: IDisplayKeyboardDesign;
   cardsPartVM: IKeyUnitCardPartViewModel;
 }
 
@@ -20,7 +20,7 @@ export function makeWidgetMainPageViewModel(): IWidgetMainPageViewModel {
   return {
     isWindowActive: models.siteModel.isWindowActive,
     keyboardVM: {
-      keyboardShape: models.editorModel.profileData.keyboardShape,
+      keyboardDesign: models.editorModel.displayDesign,
       cardsPartVM: makeKeyUnitCardsPartViewModel(false, models),
     },
     onOpenButton() {

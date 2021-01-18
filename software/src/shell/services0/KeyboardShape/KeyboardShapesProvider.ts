@@ -1,4 +1,4 @@
-import { IKeyboardShape } from '~/shared';
+import { IPersistKeyboardDesign } from '~/shared';
 import { IProjectResourceInfoProvider } from '~/shell/services0/serviceInterfaces';
 import { KeyboardLayoutFileLoader } from './KeyboardLayoutFileLoader';
 
@@ -11,7 +11,7 @@ export class KeyboardShapesProvider {
   async loadKeyboardShapeByProjectIdAndLayoutName(
     projectId: string,
     layoutName: string,
-  ): Promise<IKeyboardShape | undefined> {
+  ): Promise<IPersistKeyboardDesign | undefined> {
     const info = this.projectResourceInfoProvider.internal_getProjectInfoSourceById(
       projectId,
     );
@@ -21,7 +21,9 @@ export class KeyboardShapesProvider {
         layoutName,
       );
       if (layoutFilePath) {
-        return await KeyboardLayoutFileLoader.loadShapeFromFile(layoutFilePath);
+        return await KeyboardLayoutFileLoader.loadLayoutFromFile(
+          layoutFilePath,
+        );
       }
     }
     return undefined;

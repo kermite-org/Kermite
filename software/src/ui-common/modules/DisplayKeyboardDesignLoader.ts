@@ -301,10 +301,12 @@ export namespace DisplayKeyboardDesignLoader {
 
     const boundingBox = getBoundingBox(keyEntities, outlineShapes);
 
+    // todo: boundinbBoxにマージンを付加してdisplayAreaとする
+
     return {
       keyEntities,
       outlineShapes,
-      boundingBox,
+      displayArea: boundingBox,
     };
   }
 }

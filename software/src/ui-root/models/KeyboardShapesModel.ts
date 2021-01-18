@@ -1,5 +1,6 @@
-import { IKeyboardShape } from '~/shared';
+import { IDisplayKeyboardDesign } from '~/shared';
 import { ipcAgent } from '~/ui-common';
+import { DisplayKeyboardDesignLoader } from '~/ui-common/modules/DisplayKeyboardDesignLoader';
 import { ProjectResourceModel } from '~/ui-root/models/ProjectResourceModel';
 import { UiStatusModel } from '~/ui-root/models/UiStatusModel';
 
@@ -10,7 +11,7 @@ export class KeyboardShapesModel {
   ) {}
 
   private _currentProjectId: string = '';
-  private _loadedShape: IKeyboardShape | undefined;
+  private _loadedDesign: IDisplayKeyboardDesign | undefined;
   private _currentLayoutName: string = '';
 
   get currentProjectId() {
@@ -21,8 +22,8 @@ export class KeyboardShapesModel {
     return this._currentLayoutName;
   }
 
-  get loadedShape() {
-    return this._loadedShape;
+  get loadedDesign() {
+    return this._loadedDesign;
   }
 
   get optionProjectInfos() {
@@ -37,10 +38,17 @@ export class KeyboardShapesModel {
   }
 
   private async loadCurrentProjectLayout() {
-    this._loadedShape = await ipcAgent.async.projects_loadKeyboardShape(
+    const design = await ipcAgent.async.projects_loadKeyboardShape(
       this._currentProjectId,
       this._currentLayoutName,
     );
+    if (design) {
+      this._loadedDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
+        design,
+      );
+    } else {
+      this._loadedDesign = undefined;
+    }
   }
 
   setCurrentProjectId = (projectId: string) => {

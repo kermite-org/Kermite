@@ -31,6 +31,19 @@ export interface IPersistKeyboardDesign {
   }[];
 }
 
+export function createFallbackPersistKeyboardDesign(): IPersistKeyboardDesign {
+  return {
+    setup: {
+      placementUnit: 'mm',
+      placementAnchor: 'center',
+      keySizeUnit: 'KP',
+    },
+    keyEntities: [],
+    outlineShapes: [],
+    transGroups: [],
+  };
+}
+
 // ----------------------------------------
 
 export type IDisplayKeyShape =
@@ -58,7 +71,7 @@ export interface IDisplayKeyEntity {
   shape: IDisplayKeyShape;
 }
 
-export interface IDisplayBoundingBox {
+export interface IDisplayArea {
   centerX: number;
   centerY: number;
   width: number;
@@ -72,14 +85,14 @@ export interface IDisplayOutlineShape {
 export interface IDisplayKeyboardDesign {
   keyEntities: IDisplayKeyEntity[];
   outlineShapes: IDisplayOutlineShape[];
-  boundingBox: IDisplayBoundingBox;
+  displayArea: IDisplayArea;
 }
 
 export function createFallbackDisplayKeyboardDesign(): IDisplayKeyboardDesign {
   return {
     keyEntities: [],
     outlineShapes: [],
-    boundingBox: {
+    displayArea: {
       centerX: 0,
       centerY: 0,
       width: 100,

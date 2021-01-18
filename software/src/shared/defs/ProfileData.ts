@@ -1,3 +1,7 @@
+import {
+  createFallbackPersistKeyboardDesign,
+  IPersistKeyboardDesign,
+} from './KeyboardDesign';
 import { ModifierVirtualKey, VirtualKey } from './VirtualKeys';
 
 export type ILayerDefaultScheme = 'block' | 'transparent';
@@ -111,6 +115,8 @@ export type IAssignEntry_DualEx =
   | IAssingEntry_Block
   | IAssignEntry_Transparent;
 
+/*
+//old keyboardshape scheme
 export interface IKeyUnitEntry {
   id: string;
   x: number;
@@ -142,11 +148,12 @@ export const keyboardShape_fallbackData: IKeyboardShape = {
     height: 100,
   },
 };
+*/
 
 export type IProfileData = {
   revision: 'PRF02';
   // keyboardBreedName: string;
-  keyboardShape: IKeyboardShape;
+  keyboardDesign: IPersistKeyboardDesign;
   // strong fallback layer is checked after when there aren't any assigns found
   strongFallbackLayerId?: string;
   layers: ILayer[];
@@ -196,7 +203,7 @@ export type IProfileDataAssigns = {
 
 export const fallbackProfileData: IProfileData = {
   revision: 'PRF02',
-  keyboardShape: keyboardShape_fallbackData,
+  keyboardDesign: createFallbackPersistKeyboardDesign(),
   assignType: 'single',
   settings: {
     useShiftCancel: false,

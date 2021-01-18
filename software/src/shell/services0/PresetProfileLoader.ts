@@ -31,9 +31,6 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
           | undefined;
         if (profileData) {
           ProfileHelper.fixProfileData(profileData);
-          ProfileHelper.patchProfileKeyboardShapeBodyPathMarkupText(
-            profileData,
-          );
           return profileData;
         }
       } catch (error) {
@@ -54,16 +51,14 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
     );
     if (layoutFilePath) {
       try {
-        const keyboardShape = await KeyboardLayoutFileLoader.loadShapeFromFile(
+        const design = await KeyboardLayoutFileLoader.loadLayoutFromFile(
           layoutFilePath,
         );
-        if (keyboardShape) {
+        if (design) {
           const profileData: IProfileData = duplicateObjectByJsonStringifyParse(
             fallbackProfileData,
           );
-          if (keyboardShape) {
-            profileData.keyboardShape = keyboardShape;
-          }
+          profileData.keyboardDesign = design;
           return profileData;
         }
       } catch (error) {

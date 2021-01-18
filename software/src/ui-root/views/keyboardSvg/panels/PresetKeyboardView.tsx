@@ -30,7 +30,7 @@ export const PresetKeyboardView = ({
         baseStrokeWidth={baseStrokeWidth}
       >
         <KeyboardBodyShape
-          outerPaths={vm.bodyPathMarkupText}
+          outlineShapes={vm.outlineShapes}
           fillColor={fillColor}
           strokeColor={strokeColor}
         />
