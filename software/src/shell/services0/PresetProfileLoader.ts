@@ -37,6 +37,7 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
           return profileData;
         }
       } catch (error) {
+        console.log(`errorr on loading preset file`);
         console.error(error);
       }
     }
@@ -66,6 +67,7 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
           return profileData;
         }
       } catch (error) {
+        console.log(`errorr on loading layout file`);
         console.error(error);
       }
     }
@@ -89,6 +91,9 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
     projectId: string,
     presetName: string,
   ): Promise<IProfileData | undefined> {
+    if (!presetName) {
+      return undefined;
+    }
     const profileKey = `${projectId}__${presetName}`;
     const cache = this.profileDataCache;
     if (profileKey in cache) {
