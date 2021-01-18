@@ -12,3 +12,6 @@ release
 .vscode/launch.json
 
 .node-version
+
+lib/
+tsconfig.tsbuildinfo
