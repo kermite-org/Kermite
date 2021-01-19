@@ -20,62 +20,110 @@
       }
     },
     {
-      "fileMatch": ["layout.json"],
+      "fileMatch": ["layout.json", "*.layout.json"],
       "schema": {
         "type": "object",
         "properties": {
-          "displayArea": {
+          "setup": {
             "type": "object",
             "properties": {
-              "centerX": {
-                "type": "number"
+              "placementUnit": {
+                "type": "string"
               },
-              "centerY": {
-                "type": "number"
+              "placementAnchor": {
+                "type": "string"
               },
-              "width": {
-                "type": "number"
-              },
-              "height": {
-                "type": "number"
+              "keySizeUnit": {
+                "type": "string"
               }
             },
-            "required": ["centerX", "centerY", "width", "height"],
+            "required": ["placementUnit", "placementAnchor", "keySizeUnit"],
             "additionalProperties": false
           },
-          "keyUnits": {
+          "keyEntities": {
             "type": "array",
             "items": {
               "type": "object",
               "properties": {
-                "id": {
-                  "type": "string"
-                },
                 "x": {
                   "type": "number"
                 },
                 "y": {
                   "type": "number"
                 },
-                "r": {
+                "angle": {
                   "type": "number"
                 },
+                "shape": {
+                  "type": "string"
+                },
                 "keyIndex": {
+                  "type": "number"
+                },
+                "mirrorKeyIndex": {
+                  "type": "number"
+                },
+                "groupIndex": {
                   "type": "number"
                 }
               },
               "additionalProperties": false,
-              "required": ["id", "x", "y", "r", "keyIndex"]
+              "required": ["x", "y", "angle", "shape"]
             }
           },
-          "bodyPathMarkups": {
+          "outlineShapes": {
             "type": "array",
             "items": {
-              "type": "string"
+              "type": "object",
+              "properties": {
+                "points": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "x": {
+                        "type": "number"
+                      },
+                      "y": {
+                        "type": "number"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": ["x", "y"]
+                  }
+                },
+                "groupIndex": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false,
+              "required": ["points"]
+            }
+          },
+          "transGroups": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                },
+                "angle": {
+                  "type": "number"
+                },
+                "mirror": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false,
+              "required": ["x", "y", "angle"]
             }
           }
         },
-        "required": ["displayArea", "keyUnits", "bodyPathMarkups"],
+        "required": ["setup", "keyEntities", "outlineShapes", "transGroups"],
         "additionalProperties": false
       }
     }
