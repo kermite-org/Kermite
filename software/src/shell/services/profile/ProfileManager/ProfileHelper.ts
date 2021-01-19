@@ -107,9 +107,11 @@ export namespace ProfileHelper {
         placementUnit: 'mm',
         placementAnchor: 'center',
         keySizeUnit: 'KP',
+        keyIdMode: 'auto',
       },
       keyEntities: shape.keyUnits.map((ku) => {
         return {
+          keyId: ku.id,
           x: ku.x,
           y: ku.y,
           angle: ku.r || 0,

@@ -6,6 +6,7 @@ function createFallbackKeyboardDesign(): IPersistKeyboardDesign {
       placementUnit: 'mm',
       placementAnchor: 'center',
       keySizeUnit: 'KP',
+      keyIdMode: 'auto',
     },
     keyEntities: [],
     outlineShapes: [],
