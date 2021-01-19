@@ -41,7 +41,7 @@ export namespace KeyboardDesignConverter {
             id,
             {
               id,
-              label,
+              editKeyId: label,
               x: ke.x,
               y: ke.y,
               angle: ke.angle,
@@ -86,7 +86,7 @@ export namespace KeyboardDesignConverter {
         keySizeUnit: design.setup.keySizeUnit,
       },
       keyEntities: Object.values(design.keyEntities).map((ke) => ({
-        label: ke.label,
+        label: ke.editKeyId,
         x: roundNumber(ke.x),
         y: roundNumber(ke.y),
         angle: roundNumber(ke.angle),

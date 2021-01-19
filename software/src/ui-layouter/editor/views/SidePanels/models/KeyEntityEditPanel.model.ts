@@ -21,8 +21,8 @@ import { makeSelectorModel } from '~/ui-layouter/editor/views/SidePanels/models/
 
 const slotSources: IAttributeSlotSource<IEditKeyEntity, IEditPropKey>[] = [
   {
-    propKey: 'label',
-    label: 'label',
+    propKey: 'editKeyId',
+    label: 'editKeyId',
     getUnit: () => '',
     validator: (text: string) =>
       text.length < 6 ? undefined : 'must be within 6 characters',
