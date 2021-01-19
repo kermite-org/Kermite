@@ -11,17 +11,22 @@ export interface IPersistKeyboardDesign {
     keySizeUnit: IKeySizeUnit;
     keyIdMode: IKeyIdMode;
   };
-  keyEntities: {
-    keyId: string;
-    mirrorKeyId: string;
-    x: number;
-    y: number;
-    angle: number;
-    shape: string;
-    keyIndex?: number;
-    mirrorKeyIndex?: number;
-    groupIndex?: number;
-  }[];
+  keyEntities: (
+    | {
+        keyId: string;
+        x: number;
+        y: number;
+        angle: number;
+        shape: string;
+        keyIndex?: number;
+        groupIndex?: number;
+      }
+    | {
+        keyId: string;
+        mirrorOf: string;
+        keyIndex?: number;
+      }
+  )[];
   outlineShapes: {
     points: { x: number; y: number }[];
     groupIndex?: number;
