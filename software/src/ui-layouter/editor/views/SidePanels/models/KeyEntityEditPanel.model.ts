@@ -142,9 +142,17 @@ class KeyEntityAttrsEditorModel {
   }
 
   get keyIdentificationText() {
-    const { currentKeyEntity: ke, isCurrentKeyMirror } = editReader;
+    const {
+      currentKeyEntity: ke,
+      isCurrentKeyMirror,
+      isManualKeyIdMode,
+    } = editReader;
     if (ke) {
-      let text = getKeyIdentifierText(ke, isCurrentKeyMirror);
+      let text = getKeyIdentifierText(
+        ke,
+        isCurrentKeyMirror,
+        isManualKeyIdMode,
+      );
       if (isCurrentKeyMirror) {
         text += ' (mirror)';
       }
@@ -165,6 +173,7 @@ class KeyEntityAttrsEditorModel {
 interface IPropertyPanelModel {
   keyEntityAttrsVm: {
     keyIdentificationText: string;
+    showManualEditKeyId: boolean;
     slots: IAttributeSlotViewModel[];
     vmKeyId: IConfigTextEditModel2;
     vmKeyIndex: IConfigTextEditModel2;
@@ -319,6 +328,7 @@ export function useKeyEntityEditPanelModel(): IPropertyPanelModel {
       errorText: model.errorText,
       vmGroupId: makeGroupIdSelectorModel(),
       keyIdentificationText: model.keyIdentificationText,
+      showManualEditKeyId: editReader.isManualKeyIdMode,
       vmKeyId,
       vmKeyIndex,
     },

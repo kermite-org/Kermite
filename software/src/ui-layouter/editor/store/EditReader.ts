@@ -166,6 +166,10 @@ class EditReader {
     return appState.editor.design.setup.keyIdMode;
   }
 
+  get isManualKeyIdMode() {
+    return this.keyIdMode === 'manual';
+  }
+
   get showKeyId() {
     return appState.env.showKeyId;
   }

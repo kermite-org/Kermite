@@ -28,8 +28,11 @@ export const KeyEntityEditPanel = () => {
             {...vm.vmKeyId}
             labelWidth={80}
             inputWidth={60}
+            qxIf={vm.showManualEditKeyId}
           />
-          <div css={cssErrorText}>{vm.vmKeyId.errorText}</div>
+          <div css={cssErrorText} qxIf={vm.showManualEditKeyId}>
+            {vm.vmKeyId.errorText}
+          </div>
           {vm.slots.map((slot, index) => (
             <GeneralConfigTextEditRow
               key={index}
