@@ -58,7 +58,7 @@ class EditMutations {
 
     const keyEntity: IEditKeyEntity = {
       id,
-      // label: `ke${(Math.random() * 1000) >> 0}`,
+      label: `ke${(Math.random() * 1000) >> 0}`,
       x,
       y,
       angle: 0,

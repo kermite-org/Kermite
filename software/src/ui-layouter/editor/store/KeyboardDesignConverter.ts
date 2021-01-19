@@ -32,11 +32,13 @@ export namespace KeyboardDesignConverter {
       keyEntities: createDictionaryFromKeyValues(
         source.keyEntities.map((ke, idx) => {
           const id = `ke!${idx}`;
+          const label = ke.label;
+          // const label = ke.label || `ke${(Math.random() * 1000) >> 0}`; // デバッグ時の一時処置
           return [
             id,
             {
               id,
-              // label: ke.label,
+              label,
               x: ke.x,
               y: ke.y,
               angle: ke.angle,
@@ -81,7 +83,7 @@ export namespace KeyboardDesignConverter {
         keySizeUnit: design.keySizeUnit,
       },
       keyEntities: Object.values(design.keyEntities).map((ke) => ({
-        // label: ke.label,
+        label: ke.label,
         x: roundNumber(ke.x),
         y: roundNumber(ke.y),
         angle: roundNumber(ke.angle),

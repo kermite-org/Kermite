@@ -3,7 +3,7 @@ import { IKeyPlacementAnchor, IKeySizeUnit } from '~/shared';
 // ------------------------------------------------------
 export interface IEditKeyEntity {
   id: string; // 編集中のみ一意の値を保持,永続化の際には保存しない
-  // label: string;
+  label: string;
   x: number;
   y: number;
   angle: number;
@@ -41,5 +41,11 @@ export interface IEditKeyboardDesign {
 // ------------------------------------------------------
 
 export type IEditPropKey =
-  // | 'label'
-  'x' | 'y' | 'angle' | 'shape' | 'keyIndex' | 'mirrorKeyIndex' | 'groupId';
+  | 'label'
+  | 'x'
+  | 'y'
+  | 'angle'
+  | 'shape'
+  | 'keyIndex'
+  | 'mirrorKeyIndex'
+  | 'groupId';

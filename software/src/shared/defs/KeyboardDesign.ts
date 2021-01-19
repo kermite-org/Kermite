@@ -9,7 +9,7 @@ export interface IPersistKeyboardDesign {
     keySizeUnit: IKeySizeUnit;
   };
   keyEntities: {
-    // label: string;
+    label: string;
     x: number;
     y: number;
     angle: number;
