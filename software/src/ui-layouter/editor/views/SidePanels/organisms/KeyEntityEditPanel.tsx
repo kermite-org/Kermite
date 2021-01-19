@@ -23,6 +23,13 @@ export const KeyEntityEditPanel = () => {
       <ConfigContent>
         <ConfigVStack>
           <div>{vm.keyIdentificationText}&nbsp;</div>
+          <GeneralConfigTextEditRow
+            label="editKeyId"
+            {...vm.vmKeyId}
+            labelWidth={80}
+            inputWidth={60}
+          />
+          <div css={cssErrorText}>{vm.vmKeyId.errorText}</div>
           {vm.slots.map((slot, index) => (
             <GeneralConfigTextEditRow
               key={index}
