@@ -99,8 +99,8 @@ export class ProfileManager {
 
   async loadProfile(profName: string): Promise<boolean> {
     try {
-      const profileData = await this.core.loadProfile(profName);
-      ProfileHelper.fixProfileData(profileData);
+      const _profileData = await this.core.loadProfile(profName);
+      const profileData = ProfileHelper.fixProfileData(_profileData);
       this.setStatus({
         currentProfileName: profName,
         loadedProfileData: profileData,

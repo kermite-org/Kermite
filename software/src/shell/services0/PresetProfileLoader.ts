@@ -30,8 +30,7 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
           | IProfileData
           | undefined;
         if (profileData) {
-          ProfileHelper.fixProfileData(profileData);
-          return profileData;
+          return ProfileHelper.fixProfileData(profileData);
         }
       } catch (error) {
         console.log(`errorr on loading preset file`);
