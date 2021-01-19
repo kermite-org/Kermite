@@ -151,7 +151,7 @@ export const keyboardShape_fallbackData: IKeyboardShape = {
 */
 
 export type IProfileData = {
-  revision: 'PRF02';
+  revision: 'PRF03';
   // keyboardBreedName: string;
   keyboardDesign: IPersistKeyboardDesign;
   // strong fallback layer is checked after when there aren't any assigns found
@@ -202,7 +202,7 @@ export type IProfileDataAssigns = {
 };
 
 export const fallbackProfileData: IProfileData = {
-  revision: 'PRF02',
+  revision: 'PRF03',
   keyboardDesign: createFallbackPersistKeyboardDesign(),
   assignType: 'single',
   settings: {
