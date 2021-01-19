@@ -1,4 +1,4 @@
-import { IKeyPlacementAnchor, IKeySizeUnit } from '~/shared';
+import { IKeyIdMode, IKeyPlacementAnchor, IKeySizeUnit } from '~/shared';
 import { useClosureModel } from '~/ui-layouter/base';
 import { ICommonSelectorViewModel } from '~/ui-layouter/controls';
 import { editReader, editMutations } from '~/ui-layouter/editor/store';
@@ -54,6 +54,15 @@ function createModels() {
     writer: (anchor) => editMutations.setPlacementAnchor(anchor),
   });
 
+  const vmKeyIdMode = makeSelectorModel<IKeyIdMode>({
+    sources: [
+      ['auto', 'auto'],
+      ['manual', 'manual'],
+    ],
+    reader: () => editReader.keyIdMode,
+    writer: (mode) => editMutations.setKeyIdMode(mode),
+  });
+
   return () => {
     const unitInputText = getPlacementUnitInputTextFromModel();
     vmPlacementUnitText.update(unitInputText);
@@ -63,6 +72,7 @@ function createModels() {
       vmPlacementUnitText,
       vmSizeUnitMode,
       vmPlacementAnchorMode,
+      vmKeyIdMode,
     };
   };
 }
@@ -72,6 +82,7 @@ export function useDesignConfigurationPanelModel(): {
   vmPlacementUnitText: IConfigTextEditModel;
   vmSizeUnitMode: ICommonSelectorViewModel;
   vmPlacementAnchorMode: ICommonSelectorViewModel;
+  vmKeyIdMode: ICommonSelectorViewModel;
 } {
   return useClosureModel(createModels);
 }
