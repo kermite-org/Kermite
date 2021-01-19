@@ -10,9 +10,10 @@ export function getDisplayKeyboardDesignSingleCached(
   design: IPersistKeyboardDesign,
 ): IDisplayKeyboardDesign {
   if (design !== state.source) {
-    console.log(`create display keyboard design cache`);
     state.source = design;
     state.dest = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(design);
+    console.log(`display keyboard design created`);
+    // console.log({ source: state.source, dest: state.dest });
   }
   return state.dest;
 }

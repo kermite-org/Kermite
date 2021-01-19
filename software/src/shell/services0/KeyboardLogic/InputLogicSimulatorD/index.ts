@@ -69,16 +69,19 @@ export class InputLogicSimulatorD {
   ) {}
 
   private updateProfileDataBlob() {
-    const prof = this.profileManager.getCurrentProfile();
-    const layoutStandard = this.keyboardConfigProvider.keyboardConfig
-      .layoutStandard;
-    if (prof && layoutStandard) {
-      const bytes = makeKeyAssignsConfigStorageData(prof, layoutStandard);
-      this.configDataStorage.writeConfigStorageData(bytes);
-      this.CL.keyboardCoreLogic_initialize();
-      this.CL.keyboardCoreLogic_setAssignStorageReaderFunc((addr) =>
-        this.configDataStorage.readByte(addr),
-      );
+    if (0) {
+      // layoutのスキーマ移行のためprofile読み込みを一時的に無効化
+      const prof = this.profileManager.getCurrentProfile();
+      const layoutStandard = this.keyboardConfigProvider.keyboardConfig
+        .layoutStandard;
+      if (prof && layoutStandard) {
+        const bytes = makeKeyAssignsConfigStorageData(prof, layoutStandard);
+        this.configDataStorage.writeConfigStorageData(bytes);
+        this.CL.keyboardCoreLogic_initialize();
+        this.CL.keyboardCoreLogic_setAssignStorageReaderFunc((addr) =>
+          this.configDataStorage.readByte(addr),
+        );
+      }
     }
   }
 
