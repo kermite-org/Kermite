@@ -4,6 +4,8 @@ import {
   convertUndefinedToMinusOne,
   IPersistKeyboardDesign,
   flattenArray,
+  IPersistKeyboardDesignRealKeyEntity,
+  IPersistKeyboardDesignMirrorKeyEntity,
 } from '~/shared';
 import {
   IEditKeyboardDesign,
@@ -27,30 +29,18 @@ function roundNumber(value: number) {
 }
 
 export namespace KeyboardDesignConverter {
-  interface IRealKey {
-    keyId: string;
-    x: number;
-    y: number;
-    angle: number;
-    shape: string;
-    keyIndex?: number;
-    groupIndex?: number;
-  }
-  interface IMirroredKey {
-    keyId: string;
-    mirrorOf: string;
-    keyIndex?: number;
-  }
+  type IRealKeyEntity = IPersistKeyboardDesignRealKeyEntity;
+  type IMirrorKeyEntity = IPersistKeyboardDesignMirrorKeyEntity;
 
   export function convertKeyboardDesignNonEditToEdit(
     source: IPersistKeyboardDesign,
   ): IEditKeyboardDesign {
     const realKeys = source.keyEntities.filter(
       (ke) => !('mirrorOf' in ke),
-    ) as IRealKey[];
+    ) as IRealKeyEntity[];
     const mirrorKeys = source.keyEntities.filter(
       (ke) => 'mirrorOf' in ke,
-    ) as IMirroredKey[];
+    ) as IMirrorKeyEntity[];
 
     const keyEntitiesSource = realKeys.map((ke, idx) => {
       const base: IEditKeyEntity = {

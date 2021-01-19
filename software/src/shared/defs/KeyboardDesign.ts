@@ -4,6 +4,21 @@ export type IKeyPlacementAnchor = 'topLeft' | 'center';
 
 export type IKeyIdMode = 'auto' | 'manual';
 
+export interface IPersistKeyboardDesignRealKeyEntity {
+  keyId: string;
+  x: number;
+  y: number;
+  angle: number;
+  shape: string;
+  keyIndex?: number;
+  groupIndex?: number;
+}
+
+export interface IPersistKeyboardDesignMirrorKeyEntity {
+  keyId: string;
+  mirrorOf: string;
+  keyIndex?: number;
+}
 export interface IPersistKeyboardDesign {
   setup: {
     placementUnit: string;
@@ -12,20 +27,8 @@ export interface IPersistKeyboardDesign {
     keyIdMode: IKeyIdMode;
   };
   keyEntities: (
-    | {
-        keyId: string;
-        x: number;
-        y: number;
-        angle: number;
-        shape: string;
-        keyIndex?: number;
-        groupIndex?: number;
-      }
-    | {
-        keyId: string;
-        mirrorOf: string;
-        keyIndex?: number;
-      }
+    | IPersistKeyboardDesignRealKeyEntity
+    | IPersistKeyboardDesignMirrorKeyEntity
   )[];
   outlineShapes: {
     points: { x: number; y: number }[];
