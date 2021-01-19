@@ -59,6 +59,7 @@ export function createFallbackEditKeyboardDesign(): IEditKeyboardDesign {
       placementUnit: 'mm',
       placementAnchor: 'center',
       keySizeUnit: 'KP',
+      keyIdMode: 'auto',
     },
     keyEntities: {},
     outlineShapes: {},

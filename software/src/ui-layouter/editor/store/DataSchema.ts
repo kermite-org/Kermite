@@ -1,4 +1,4 @@
-import { IKeyPlacementAnchor, IKeySizeUnit } from '~/shared';
+import { IKeyIdMode, IKeyPlacementAnchor, IKeySizeUnit } from '~/shared';
 
 // ------------------------------------------------------
 export interface IEditKeyEntity {
@@ -34,6 +34,7 @@ export interface IEditKeyboardDesign {
     placementUnit: string; // `mm` | `KP ${baseKeyPitch}`
     placementAnchor: IKeyPlacementAnchor;
     keySizeUnit: IKeySizeUnit; // 'mm' | 'KP'
+    keyIdMode: IKeyIdMode;
   };
   keyEntities: { [id: string]: IEditKeyEntity };
   outlineShapes: { [id: string]: IEditOutlineShape };

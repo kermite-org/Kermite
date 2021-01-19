@@ -1,4 +1,4 @@
-import { clamp, IKeyPlacementAnchor, IKeySizeUnit } from '~/shared';
+import { clamp, IKeyIdMode, IKeyPlacementAnchor, IKeySizeUnit } from '~/shared';
 import { getNextEntityInstanceId } from '~/ui-layouter/editor/store/DomainRelatedHelpers';
 import {
   appState,
@@ -130,6 +130,12 @@ class EditMutations {
   setPlacementAnchor(anchor: IKeyPlacementAnchor) {
     editUpdator.commitEditor((editor) => {
       editor.design.setup.placementAnchor = anchor;
+    });
+  }
+
+  setKeyIdMode(mode: IKeyIdMode) {
+    editUpdator.commitEditor((editor) => {
+      editor.design.setup.keyIdMode = mode;
     });
   }
 

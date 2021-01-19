@@ -162,6 +162,10 @@ class EditReader {
     return appState.editor.design.setup.placementAnchor;
   }
 
+  get keyIdMode() {
+    return appState.editor.design.setup.keyIdMode;
+  }
+
   get showKeyId() {
     return appState.env.showKeyId;
   }

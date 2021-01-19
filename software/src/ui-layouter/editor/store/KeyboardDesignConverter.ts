@@ -30,6 +30,7 @@ export namespace KeyboardDesignConverter {
         placementUnit: source.setup.placementUnit,
         placementAnchor: source.setup.placementAnchor,
         keySizeUnit: source.setup.keySizeUnit,
+        keyIdMode: 'auto', // TODO: keyIdModeも永続化する
       },
       keyEntities: createDictionaryFromKeyValues(
         source.keyEntities.map((ke, idx) => {

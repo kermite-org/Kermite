@@ -2,6 +2,8 @@ export type IKeySizeUnit = 'mm' | 'KP';
 
 export type IKeyPlacementAnchor = 'topLeft' | 'center';
 
+export type IKeyIdMode = 'auto' | 'manual';
+
 export interface IPersistKeyboardDesign {
   setup: {
     placementUnit: string;
