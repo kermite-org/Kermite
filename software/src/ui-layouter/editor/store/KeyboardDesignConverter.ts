@@ -42,6 +42,7 @@ export namespace KeyboardDesignConverter {
             {
               id,
               editKeyId: label,
+              mirrorEditKeyId: label + 'm',
               x: ke.x,
               y: ke.y,
               angle: ke.angle,

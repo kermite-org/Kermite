@@ -56,9 +56,11 @@ class EditMutations {
     const id = getNextEntityInstanceId('key', allKeyEntities);
     const keySize = keySizeUnit === 'KP' ? 1 : 18;
 
+    const editKeyId = `ke${(Math.random() * 1000) >> 0}`;
     const keyEntity: IEditKeyEntity = {
       id,
-      editKeyId: `ke${(Math.random() * 1000) >> 0}`,
+      editKeyId,
+      mirrorEditKeyId: editKeyId + 'm',
       x,
       y,
       angle: 0,
