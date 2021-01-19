@@ -46,7 +46,8 @@
     "immer": "^8.0.0",
     "node-fetch": "^2.6.1",
     "node-hid": "^2.1.1",
-    "serialport": "^9.0.4"
+    "serialport": "^9.0.4",
+    "source-map-support": "^0.5.19"
   },
   "devDependencies": {
     "@types/glob": "^7.1.3",
