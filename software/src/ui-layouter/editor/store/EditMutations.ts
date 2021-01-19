@@ -129,7 +129,7 @@ class EditMutations {
 
   setPlacementAnchor(anchor: IKeyPlacementAnchor) {
     editUpdator.commitEditor((editor) => {
-      editor.design.placementAnchor = anchor;
+      editor.design.setup.placementAnchor = anchor;
     });
   }
 

@@ -44,10 +44,10 @@ export function changePlacementCoordUnit(
   design: IEditKeyboardDesign,
   newUnitSpec: string,
 ) {
-  if (design.placementUnit === newUnitSpec) {
+  if (design.setup.placementUnit === newUnitSpec) {
     return design;
   }
-  const srcCoordUnit = getCoordUnitFromUnitSpec(design.placementUnit);
+  const srcCoordUnit = getCoordUnitFromUnitSpec(design.setup.placementUnit);
   const dstCoordUnit = getCoordUnitFromUnitSpec(newUnitSpec);
 
   design.keyEntities = mapObjectValues(design.keyEntities, (ke) => {
@@ -59,7 +59,7 @@ export function changePlacementCoordUnit(
       y: dstY,
     };
   });
-  design.placementUnit = newUnitSpec;
+  design.setup.placementUnit = newUnitSpec;
 }
 
 export function keySizeValueToMm(
@@ -103,10 +103,10 @@ export function changeKeySizeUnit(
   newUnit: IKeySizeUnit,
   coordUnit: ICoordUnit,
 ) {
-  if (design.keySizeUnit === newUnit) {
+  if (design.setup.keySizeUnit === newUnit) {
     return design;
   }
-  const oldUnit = design.keySizeUnit;
+  const oldUnit = design.setup.keySizeUnit;
   Object.values(design.keyEntities).forEach((ke) => {
     if (ke.shape.startsWith('std')) {
       const [, p1, p2] = ke.shape.split(' ');
@@ -129,7 +129,7 @@ export function changeKeySizeUnit(
       ke.shape = omitH ? `std ${dstW}` : `std ${dstW} ${dstH}`;
     }
   });
-  design.keySizeUnit = newUnit;
+  design.setup.keySizeUnit = newUnit;
 }
 
 export function getStdKeySize(

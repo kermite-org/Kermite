@@ -11,7 +11,7 @@ import { makeSelectorModel } from '~/ui-layouter/editor/views/SidePanels/models/
 function getPlacementUnitInputTextFromModel(): string | undefined {
   const mode = editReader.coordUnitSuffix;
   if (mode === 'KP') {
-    return editReader.design.placementUnit.replace('KP ', '');
+    return editReader.design.setup.placementUnit.replace('KP ', '');
   }
   return undefined;
 }

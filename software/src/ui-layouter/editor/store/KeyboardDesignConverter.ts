@@ -26,9 +26,11 @@ export namespace KeyboardDesignConverter {
     source: IPersistKeyboardDesign,
   ): IEditKeyboardDesign {
     return {
-      placementUnit: source.setup.placementUnit,
-      placementAnchor: source.setup.placementAnchor,
-      keySizeUnit: source.setup.keySizeUnit,
+      setup: {
+        placementUnit: source.setup.placementUnit,
+        placementAnchor: source.setup.placementAnchor,
+        keySizeUnit: source.setup.keySizeUnit,
+      },
       keyEntities: createDictionaryFromKeyValues(
         source.keyEntities.map((ke, idx) => {
           const id = `ke!${idx}`;
@@ -78,9 +80,9 @@ export namespace KeyboardDesignConverter {
   ): IPersistKeyboardDesign {
     return {
       setup: {
-        placementUnit: design.placementUnit,
-        placementAnchor: design.placementAnchor,
-        keySizeUnit: design.keySizeUnit,
+        placementUnit: design.setup.placementUnit,
+        placementAnchor: design.setup.placementAnchor,
+        keySizeUnit: design.setup.keySizeUnit,
       },
       keyEntities: Object.values(design.keyEntities).map((ke) => ({
         label: ke.label,

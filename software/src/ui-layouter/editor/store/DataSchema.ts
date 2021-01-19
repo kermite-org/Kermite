@@ -30,9 +30,11 @@ export type IEditTransGroup = {
   mirror: boolean;
 };
 export interface IEditKeyboardDesign {
-  placementUnit: string; // `mm` | `KP ${baseKeyPitch}`
-  placementAnchor: IKeyPlacementAnchor;
-  keySizeUnit: IKeySizeUnit; // 'mm' | 'KP'
+  setup: {
+    placementUnit: string; // `mm` | `KP ${baseKeyPitch}`
+    placementAnchor: IKeyPlacementAnchor;
+    keySizeUnit: IKeySizeUnit; // 'mm' | 'KP'
+  };
   keyEntities: { [id: string]: IEditKeyEntity };
   outlineShapes: { [id: string]: IEditOutlineShape };
   transGroups: { [id: string]: IEditTransGroup };
