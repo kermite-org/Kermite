@@ -9,9 +9,11 @@ export interface IPersistKeyboardDesign {
     placementUnit: string;
     placementAnchor: IKeyPlacementAnchor;
     keySizeUnit: IKeySizeUnit;
+    keyIdMode: IKeyIdMode;
   };
   keyEntities: {
-    label: string;
+    keyId: string;
+    mirrorKeyId: string;
     x: number;
     y: number;
     angle: number;
@@ -39,6 +41,7 @@ export function createFallbackPersistKeyboardDesign(): IPersistKeyboardDesign {
       placementUnit: 'mm',
       placementAnchor: 'center',
       keySizeUnit: 'KP',
+      keyIdMode: 'auto',
     },
     keyEntities: [],
     outlineShapes: [],

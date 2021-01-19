@@ -5,6 +5,7 @@ import {
   IPersistKeyboardDesign,
 } from '~/shared';
 import { IEditKeyboardDesign } from '~/ui-layouter/editor/store/DataSchema';
+import { getKeyIdentifierText } from '~/ui-layouter/editor/store/DomainRelatedHelpers';
 
 // groupId: string, ('0', '1', '2', など) 無効値は''
 // groupIndex: number | undefined, 無効値はundefined
@@ -30,19 +31,17 @@ export namespace KeyboardDesignConverter {
         placementUnit: source.setup.placementUnit,
         placementAnchor: source.setup.placementAnchor,
         keySizeUnit: source.setup.keySizeUnit,
-        keyIdMode: 'auto', // TODO: keyIdModeも永続化する
+        keyIdMode: source.setup.keyIdMode,
       },
       keyEntities: createDictionaryFromKeyValues(
         source.keyEntities.map((ke, idx) => {
           const id = `ke!${idx}`;
-          const label = ke.label;
-          // const label = ke.label || `ke${(Math.random() * 1000) >> 0}`; // デバッグ時の一時処置
           return [
             id,
             {
               id,
-              editKeyId: label,
-              mirrorEditKeyId: label + 'm',
+              editKeyId: ke.keyId,
+              mirrorEditKeyId: ke.mirrorKeyId,
               x: ke.x,
               y: ke.y,
               angle: ke.angle,
@@ -85,17 +84,22 @@ export namespace KeyboardDesignConverter {
         placementUnit: design.setup.placementUnit,
         placementAnchor: design.setup.placementAnchor,
         keySizeUnit: design.setup.keySizeUnit,
+        keyIdMode: design.setup.keyIdMode,
       },
-      keyEntities: Object.values(design.keyEntities).map((ke) => ({
-        label: ke.editKeyId,
-        x: roundNumber(ke.x),
-        y: roundNumber(ke.y),
-        angle: roundNumber(ke.angle),
-        shape: ke.shape,
-        keyIndex: convertMinusOneToUndefined(ke.keyIndex),
-        mirrorKeyIndex: convertMinusOneToUndefined(ke.mirrorKeyIndex),
-        groupIndex: groupIdToGroupIndex(ke.groupId),
-      })),
+      keyEntities: Object.values(design.keyEntities).map((ke) => {
+        const isManualKeyIdMode = design.setup.keyIdMode === 'manual';
+        return {
+          keyId: getKeyIdentifierText(ke, false, isManualKeyIdMode),
+          mirrorKeyId: getKeyIdentifierText(ke, true, isManualKeyIdMode),
+          x: roundNumber(ke.x),
+          y: roundNumber(ke.y),
+          angle: roundNumber(ke.angle),
+          shape: ke.shape,
+          keyIndex: convertMinusOneToUndefined(ke.keyIndex),
+          mirrorKeyIndex: convertMinusOneToUndefined(ke.mirrorKeyIndex),
+          groupIndex: groupIdToGroupIndex(ke.groupId),
+        };
+      }),
       outlineShapes: Object.values(design.outlineShapes).map((shape) => ({
         points: shape.points.map((p) => ({
           x: roundNumber(p.x),
