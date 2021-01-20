@@ -4,6 +4,7 @@ import { appUi } from '~/ui-common';
 import { editMutations, editReader } from '~/ui-layouter/editor/store';
 import { KeyboardDesignConverter } from '~/ui-layouter/editor/unification/KeyboardDesignConverter';
 import { keyboardOperationHander } from '~/ui-layouter/editor/unification/KeyboardOperationHandler';
+import { setupDeviceKeyEventsListener } from '~/ui-layouter/editor/unification/deviceKeyEventsReader';
 import { PageRoot } from '~/ui-layouter/editor/views/PageRoot';
 
 export namespace UiLayouterCore {
@@ -29,6 +30,8 @@ export namespace UiLayouterCore {
         window.removeEventListener('keydown', keyboardOperationHander);
       };
     }, []);
+
+    Hook.useEffect(setupDeviceKeyEventsListener, []);
 
     return <PageRoot />;
   }
