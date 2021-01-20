@@ -2,9 +2,11 @@ import { h, Hook } from 'qx';
 import { IPersistKeyboardDesign } from '~/shared';
 import { appUi } from '~/ui-common';
 import { editMutations, editReader } from '~/ui-layouter/editor/store';
-import { KeyboardDesignConverter } from '~/ui-layouter/editor/unification/KeyboardDesignConverter';
-import { keyboardOperationHander } from '~/ui-layouter/editor/unification/KeyboardOperationHandler';
-import { setupDeviceKeyEventsListener } from '~/ui-layouter/editor/unification/deviceKeyEventsReader';
+import {
+  KeyboardDesignConverter,
+  keyboardOperationHander,
+  setupDeviceKeyEventsListener,
+} from '~/ui-layouter/editor/unification';
 import { PageRoot } from '~/ui-layouter/editor/views/PageRoot';
 
 export namespace UiLayouterCore {
