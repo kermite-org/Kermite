@@ -5,9 +5,9 @@ import {
   IRealtimeKeyboardEvent,
   IntervalTimerWrapper,
 } from '~/shared';
+import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
+import { KeyboardDeviceService } from '~/shell/services/device/KeyboardDevice';
 import { ProfileManager } from '~/shell/services/profile/ProfileManager/ProfileManager';
-import { KeyboardConfigProvider } from '~/shell/services0/KeyboardConfigProvider';
-import { KeyboardDeviceService } from '~/shell/services0/KeyboardDevice';
 import { getKeyboardCoreLogicInterface } from './DeviceCoreLogicSimulator2_Dual';
 import { makeKeyAssignsConfigStorageData } from './ProfileDataBinaryPacker';
 

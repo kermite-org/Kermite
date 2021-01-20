@@ -1,17 +1,17 @@
 import { IProfileManagerStatus } from '~/shared';
 import { appGlobal, applicationStorage } from '~/shell/base';
+import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
+import { KeyMappingEmitter } from '~/shell/services/device/KeyMappingEmitter';
+import { KeyboardDeviceService } from '~/shell/services/device/KeyboardDevice';
 import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStatic';
+import { FirmwareUpdationService } from '~/shell/services/firmwareUpdation';
+import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/InputLogicSimulatorD';
 import { ProfileService } from '~/shell/services/profile';
+import { KeyboardLayoutFilesWatcher } from '~/shell/services/projects/KeyboardShape/KeyboardLayoutFilesWatcher';
+import { KeyboardShapesProvider } from '~/shell/services/projects/KeyboardShape/KeyboardShapesProvider';
+import { PresetProfileLoader } from '~/shell/services/projects/PresetProfileLoader';
+import { ProjectResourceInfoProvider } from '~/shell/services/projects/ProjectResource/ProjectResourceInfoProvider';
 import { WindowService } from '~/shell/services/window';
-import { FirmwareUpdationService } from '~/shell/services0/FirmwareUpdation';
-import { KeyMappingEmitter } from '~/shell/services0/KeyMappingEmitter';
-import { KeyboardConfigProvider } from '~/shell/services0/KeyboardConfigProvider';
-import { KeyboardDeviceService } from '~/shell/services0/KeyboardDevice';
-import { InputLogicSimulatorD } from '~/shell/services0/KeyboardLogic/InputLogicSimulatorD';
-import { KeyboardLayoutFilesWatcher } from '~/shell/services0/KeyboardShape/KeyboardLayoutFilesWatcher';
-import { KeyboardShapesProvider } from '~/shell/services0/KeyboardShape/KeyboardShapesProvider';
-import { PresetProfileLoader } from '~/shell/services0/PresetProfileLoader';
-import { ProjectResourceInfoProvider } from '~/shell/services0/ProjectResource/ProjectResourceInfoProvider';
 // import { resourceUpdator_syncRemoteResourcesToLocal } from '~/shell/services0/ResourceUpdator';
 
 export class ApplicationRoot {

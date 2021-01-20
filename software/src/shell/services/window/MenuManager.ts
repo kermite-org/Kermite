@@ -1,5 +1,5 @@
 import { app, Menu } from 'electron';
-import { makeListnerPort } from '~/shell/funcs';
+import { makeListenerPort } from '~/shell/funcs';
 import { IMenuManager } from './interfaces';
 
 function makePageMenuItem(
@@ -16,11 +16,11 @@ function makePageMenuItem(
 }
 
 export class MenuManager implements IMenuManager {
-  onMenuChangeCurrentPagePath = makeListnerPort<string>();
-  onMenuRequestReload = makeListnerPort<void>();
-  onMenuToggleDevtoolVisibility = makeListnerPort<void>();
-  onMenuCloseMainWindow = makeListnerPort<void>();
-  onMenuRestartApplication = makeListnerPort<void>();
+  onMenuChangeCurrentPagePath = makeListenerPort<string>();
+  onMenuRequestReload = makeListenerPort<void>();
+  onMenuToggleDevtoolVisibility = makeListenerPort<void>();
+  onMenuCloseMainWindow = makeListenerPort<void>();
+  onMenuRestartApplication = makeListenerPort<void>();
 
   buildMenu(initailState: {
     allPagePaths: string[];

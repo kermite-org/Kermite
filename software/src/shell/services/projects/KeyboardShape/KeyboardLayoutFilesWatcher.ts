@@ -8,7 +8,7 @@ import {
   fsExistsSync,
   fsxWtachFilesChange,
 } from '~/shell/funcs';
-import { IProjectResourceInfoProvider } from '~/shell/services0/serviceInterfaces';
+import { IProjectResourceInfoProvider } from '~/shell/services/serviceInterfaces';
 
 type IFileUpdationEvent = { projectId: string };
 

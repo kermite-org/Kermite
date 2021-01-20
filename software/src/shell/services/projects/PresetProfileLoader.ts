@@ -5,11 +5,11 @@ import {
 } from '~/shared';
 import { fsxReadJsonFile } from '~/shell/funcs';
 import { ProfileHelper } from '~/shell/services/profile/ProfileManager/ProfileHelper';
-import { KeyboardLayoutFileLoader } from '~/shell/services0/KeyboardShape/KeyboardLayoutFileLoader';
+import { KeyboardLayoutFileLoader } from '~/shell/services/projects/KeyboardShape/KeyboardLayoutFileLoader';
 import {
   IPresetProfileLoadingFeature,
   IProjectResourceInfoProvider,
-} from './serviceInterfaces';
+} from '../serviceInterfaces';
 
 export class PresetProfileLoader implements IPresetProfileLoadingFeature {
   constructor(
@@ -57,6 +57,7 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
           const profileData: IProfileData = duplicateObjectByJsonStringifyParse(
             fallbackProfileData,
           );
+          profileData.projectId = projectId;
           profileData.keyboardDesign = design;
           return profileData;
         }

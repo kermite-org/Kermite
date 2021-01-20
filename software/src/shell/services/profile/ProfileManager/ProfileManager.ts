@@ -7,7 +7,7 @@ import {
   IProfileManagerCommand,
 } from '~/shared';
 import { EventPort } from '~/shell/funcs';
-import { PresetProfileLoader } from '~/shell/services0/PresetProfileLoader';
+import { PresetProfileLoader } from '~/shell/services/projects/PresetProfileLoader';
 import { ProfileHelper } from './ProfileHelper';
 import { ProfileManagerCore } from './ProfileManagerCore';
 

@@ -130,6 +130,7 @@ export namespace ProfileHelper {
     const { assignType, keyboardShape, settings, layers, assigns } = profile;
     return {
       revision: 'PRF03',
+      projectId: '',
       assignType,
       settings,
       layers,

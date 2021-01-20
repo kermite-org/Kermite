@@ -1,6 +1,6 @@
 import { IProfileData, IProfileManagerStatus } from '~/shared';
-import { makeListnerPort } from '~/shell/funcs';
-import { PresetProfileLoader } from '~/shell/services0/PresetProfileLoader';
+import { makeListenerPort } from '~/shell/funcs';
+import { PresetProfileLoader } from '~/shell/services/projects/PresetProfileLoader';
 import { ProfileManager } from './ProfileManager/ProfileManager';
 import { IProfileService } from './interfaces';
 
@@ -11,7 +11,7 @@ export class ProfileService implements IProfileService {
     this.profileManager = new ProfileManager(presetProfileLoader);
   }
 
-  onCurrentProfileChanged = makeListnerPort<void>();
+  onCurrentProfileChanged = makeListenerPort<void>();
 
   getCurrentProfile(): IProfileData | undefined {
     return this.profileManager.getCurrentProfile();

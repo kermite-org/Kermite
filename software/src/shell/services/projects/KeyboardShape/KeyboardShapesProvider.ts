@@ -1,5 +1,5 @@
 import { IPersistKeyboardDesign } from '~/shared';
-import { IProjectResourceInfoProvider } from '~/shell/services0/serviceInterfaces';
+import { IProjectResourceInfoProvider } from '~/shell/services/serviceInterfaces';
 import { KeyboardLayoutFileLoader } from './KeyboardLayoutFileLoader';
 
 // キーボード品種ごとのレイアウトファイルを読み込み提供する
