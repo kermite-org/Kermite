@@ -3,17 +3,19 @@ import { IEditKeyEntity } from '~/ui-layouter/editor/store/DataSchema';
 export function getKeyIdentifierText(
   ke: IEditKeyEntity,
   isMirror: boolean,
+  isManualKeyIdMode: boolean,
 ): string {
-  if (ke) {
-    const ki = isMirror ? ke.mirrorKeyIndex : ke.keyIndex;
-    if (ki !== -1) {
-      return `key${ki}`;
+  if (!isManualKeyIdMode) {
+    const keyIndex = isMirror ? ke.mirrorKeyIndex : ke.keyIndex;
+    if (keyIndex !== -1) {
+      return `key${keyIndex}`;
     } else {
       const index = ke.id.split('!')[1];
       return `key0${index}${isMirror ? 'm' : ''}`;
     }
+  } else {
+    return isMirror ? ke.mirrorEditKeyId : ke.editKeyId;
   }
-  return '';
 }
 
 export function getNextEntityInstanceId<T extends { id: string }>(

@@ -69,8 +69,8 @@ function addKeyPoints(
   const points = getKeyCornerPoints(
     ke,
     coordUnit,
-    design.keySizeUnit,
-    design.placementAnchor,
+    design.setup.keySizeUnit,
+    design.setup.placementAnchor,
   );
 
   points.forEach(([px, py]) => {
@@ -106,7 +106,7 @@ function addShapePoints(
 }
 
 export function getKeyboardDesignBoundingBox(design: IEditKeyboardDesign) {
-  const coordUnit = getCoordUnitFromUnitSpec(design.placementUnit);
+  const coordUnit = getCoordUnitFromUnitSpec(design.setup.placementUnit);
   const xs: number[] = [];
   const ys: number[] = [];
 

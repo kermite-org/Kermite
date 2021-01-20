@@ -1,7 +1,7 @@
 import { ICommonSelectorViewModel } from '~/ui-layouter/controls';
 
 export function makeSelectorModel<T extends string>(props: {
-  sources: [string, string][];
+  sources: [T, string][];
   reader: () => T | undefined;
   writer: (choiceId: T) => void;
 }): ICommonSelectorViewModel {

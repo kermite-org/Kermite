@@ -107,9 +107,11 @@ export namespace ProfileHelper {
         placementUnit: 'mm',
         placementAnchor: 'center',
         keySizeUnit: 'KP',
+        keyIdMode: 'auto',
       },
       keyEntities: shape.keyUnits.map((ku) => {
         return {
+          keyId: ku.id,
           x: ku.x,
           y: ku.y,
           angle: ku.r || 0,
@@ -122,25 +124,6 @@ export namespace ProfileHelper {
     };
   }
 
-  function convertAssignKeyIds(
-    assigns: IAssigns,
-    shape: IKeyboardShape_PRF02,
-  ): IAssigns {
-    const dest: IAssigns = {};
-    for (const sig in assigns) {
-      // assing key format
-      // PRF02:`${layerId}.${keyId}`
-      // PRF03:`${layerId}.key${keyIndex}`
-      const value = assigns[sig];
-      const [layerId, keyId] = sig.split('.');
-      const ku = shape.keyUnits.find((ku) => ku.id === keyId);
-      const newKeyId = `key${ku ? ku.keyIndex : -1}`;
-      const newSig = `${layerId}.${newKeyId}`;
-      dest[newSig] = value;
-    }
-    return dest;
-  }
-
   function convertProfileFromPRF02(_profile: IProfileData_PRF02): IProfileData {
     const profile = duplicateObjectByJsonStringifyParse(_profile);
     patchOldScheme(profile);
@@ -151,7 +134,7 @@ export namespace ProfileHelper {
       settings,
       layers,
       keyboardDesign: makeKeyboardDesignFromKeyboardShapePRF02(keyboardShape),
-      assigns: convertAssignKeyIds(assigns, keyboardShape),
+      assigns,
     };
   }
 

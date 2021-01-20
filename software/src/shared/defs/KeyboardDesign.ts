@@ -2,22 +2,34 @@ export type IKeySizeUnit = 'mm' | 'KP';
 
 export type IKeyPlacementAnchor = 'topLeft' | 'center';
 
+export type IKeyIdMode = 'auto' | 'manual';
+
+export interface IPersistKeyboardDesignRealKeyEntity {
+  keyId: string;
+  x: number;
+  y: number;
+  angle: number;
+  shape: string;
+  keyIndex?: number;
+  groupIndex?: number;
+}
+
+export interface IPersistKeyboardDesignMirrorKeyEntity {
+  keyId: string;
+  mirrorOf: string;
+  keyIndex?: number;
+}
 export interface IPersistKeyboardDesign {
   setup: {
     placementUnit: string;
     placementAnchor: IKeyPlacementAnchor;
     keySizeUnit: IKeySizeUnit;
+    keyIdMode: IKeyIdMode;
   };
-  keyEntities: {
-    // label: string;
-    x: number;
-    y: number;
-    angle: number;
-    shape: string;
-    keyIndex?: number;
-    mirrorKeyIndex?: number;
-    groupIndex?: number;
-  }[];
+  keyEntities: (
+    | IPersistKeyboardDesignRealKeyEntity
+    | IPersistKeyboardDesignMirrorKeyEntity
+  )[];
   outlineShapes: {
     points: { x: number; y: number }[];
     groupIndex?: number;
@@ -37,6 +49,7 @@ export function createFallbackPersistKeyboardDesign(): IPersistKeyboardDesign {
       placementUnit: 'mm',
       placementAnchor: 'center',
       keySizeUnit: 'KP',
+      keyIdMode: 'auto',
     },
     keyEntities: [],
     outlineShapes: [],

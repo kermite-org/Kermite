@@ -55,9 +55,12 @@ interface IAppState {
 
 export function createFallbackEditKeyboardDesign(): IEditKeyboardDesign {
   return {
-    placementUnit: 'mm',
-    placementAnchor: 'center',
-    keySizeUnit: 'KP',
+    setup: {
+      placementUnit: 'mm',
+      placementAnchor: 'center',
+      keySizeUnit: 'KP',
+      keyIdMode: 'auto',
+    },
     keyEntities: {},
     outlineShapes: {},
     transGroups: {

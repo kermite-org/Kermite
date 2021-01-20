@@ -8,6 +8,8 @@ import {
   IDisplayOutlineShape,
   IKeySizeUnit,
   IPersistKeyboardDesign,
+  IPersistKeyboardDesignMirrorKeyEntity,
+  IPersistKeyboardDesignRealKeyEntity,
   rotateCoord,
   translateCoord,
 } from '~/shared';
@@ -21,8 +23,10 @@ import {
 export namespace DisplayKeyboardDesignLoader {
   type ISourceDesign = IPersistKeyboardDesign;
   type ISourceOutlineShape = IPersistKeyboardDesign['outlineShapes'][0];
-  type ISourceKeyEntity = IPersistKeyboardDesign['keyEntities'][0];
   type ISourceTransGroup = IPersistKeyboardDesign['transGroups'][0];
+
+  type IRealKeyEntity = IPersistKeyboardDesignRealKeyEntity;
+  type IMirrorKeyEntity = IPersistKeyboardDesignMirrorKeyEntity;
 
   function transformOutlineShape(
     shape: ISourceOutlineShape,
@@ -46,22 +50,6 @@ export namespace DisplayKeyboardDesignLoader {
     return {
       points,
     };
-  }
-
-  function getKeyIdentifierText2(
-    ke: ISourceKeyEntity,
-    isMirror: boolean,
-    entityIndex: number,
-  ): string {
-    if (ke) {
-      const ki = isMirror ? ke.mirrorKeyIndex : ke.keyIndex;
-      if (ki !== undefined) {
-        return `key${ki}`;
-      } else {
-        return `key0${entityIndex}${isMirror ? 'm' : ''}`;
-      }
-    }
-    return '';
   }
 
   function getGroupTransAmount(group: ISourceTransGroup | undefined) {
@@ -102,15 +90,12 @@ export namespace DisplayKeyboardDesignLoader {
   }
 
   function transformKeyEntity(
-    ke: ISourceKeyEntity,
-    isMirror: boolean,
+    ke: IRealKeyEntity,
+    mke: IMirrorKeyEntity | undefined,
     coordUnit: ICoordUnit,
     design: ISourceDesign,
-    entityIndex: number,
   ): IDisplayKeyEntity {
-    const sourceKeyIndex = isMirror ? ke.mirrorKeyIndex : ke.keyIndex;
-    const keyIndex = convertUndefinedToMinusOne(sourceKeyIndex);
-
+    const isMirror = !!mke;
     const mi = isMirror ? -1 : 1;
 
     const keyX = coordUnit.mode === 'KP' ? ke.x * coordUnit.x : ke.x;
@@ -135,11 +120,11 @@ export namespace DisplayKeyboardDesignLoader {
     translateCoord(p, groupX * mi, groupY);
 
     return {
-      keyId: getKeyIdentifierText2(ke, isMirror, entityIndex),
+      keyId: mke ? mke.keyId : ke.keyId,
       x: p.x,
       y: p.y,
       angle: (ke.angle + groupAngle) * mi,
-      keyIndex,
+      keyIndex: convertUndefinedToMinusOne(mke ? mke.keyIndex : ke.keyIndex),
       shapeSpec: ke.shape,
       shape: getKeyShape(ke.shape, coordUnit, keySizeUnit),
     };
@@ -257,18 +242,23 @@ export namespace DisplayKeyboardDesignLoader {
     const coordUnit = getCoordUnitFromUnitSpec(design.setup.placementUnit);
 
     const keyEntities = flattenArray(
-      design.keyEntities.map((ke, entityIndex) => {
-        const groupIndex = convertUndefinedToMinusOne(ke.groupIndex);
-        const group = design.transGroups[groupIndex];
-        if (group?.mirror) {
-          return [
-            transformKeyEntity(ke, false, coordUnit, design, entityIndex),
-            transformKeyEntity(ke, true, coordUnit, design, entityIndex),
-          ];
+      design.keyEntities.map((ke) => {
+        if ('mirrorOf' in ke) {
+          return [];
         } else {
-          return [
-            transformKeyEntity(ke, false, coordUnit, design, entityIndex),
-          ];
+          const groupIndex = convertUndefinedToMinusOne(ke.groupIndex);
+          const group = design.transGroups[groupIndex];
+          if (group?.mirror) {
+            const mke = design.keyEntities.find(
+              (k) => 'mirrorOf' in k && k.mirrorOf === ke.keyId,
+            ) as IMirrorKeyEntity | undefined;
+            return [
+              transformKeyEntity(ke, undefined, coordUnit, design),
+              transformKeyEntity(ke, mke, coordUnit, design),
+            ];
+          } else {
+            return [transformKeyEntity(ke, undefined, coordUnit, design)];
+          }
         }
       }),
     );

@@ -1,4 +1,4 @@
-import { clamp, IKeyPlacementAnchor, IKeySizeUnit } from '~/shared';
+import { clamp, IKeyIdMode, IKeyPlacementAnchor, IKeySizeUnit } from '~/shared';
 import { getNextEntityInstanceId } from '~/ui-layouter/editor/store/DomainRelatedHelpers';
 import {
   appState,
@@ -56,9 +56,11 @@ class EditMutations {
     const id = getNextEntityInstanceId('key', allKeyEntities);
     const keySize = keySizeUnit === 'KP' ? 1 : 18;
 
+    const editKeyId = `ke${(Math.random() * 1000) >> 0}`;
     const keyEntity: IEditKeyEntity = {
       id,
-      // label: `ke${(Math.random() * 1000) >> 0}`,
+      editKeyId,
+      mirrorEditKeyId: editKeyId + 'm',
       x,
       y,
       angle: 0,
@@ -129,7 +131,13 @@ class EditMutations {
 
   setPlacementAnchor(anchor: IKeyPlacementAnchor) {
     editUpdator.commitEditor((editor) => {
-      editor.design.placementAnchor = anchor;
+      editor.design.setup.placementAnchor = anchor;
+    });
+  }
+
+  setKeyIdMode(mode: IKeyIdMode) {
+    editUpdator.commitEditor((editor) => {
+      editor.design.setup.keyIdMode = mode;
     });
   }
 

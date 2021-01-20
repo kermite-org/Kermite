@@ -7,8 +7,8 @@ import { MockPageLayouterDevelopment } from './MockPageLayouterDevelopment';
 const PageRoot = () => {
   return (
     <div style={{ height: '100%' }}>
-      {/* <MockPageLayouterDevelopment /> */}
-      <MockPageLoadedDesignDrawing />
+      <MockPageLayouterDevelopment />
+      {/* <MockPageLoadedDesignDrawing /> */}
     </div>
   );
 };
