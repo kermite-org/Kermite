@@ -1,7 +1,7 @@
 import { app, BrowserWindow } from 'electron';
 import { IAppWindowEvent } from '~/shared';
 import { appConfig } from '~/shell/base';
-import { makeListnerPort, pathJoin, pathRelative } from '~/shell/funcs';
+import { makeListenerPort, pathJoin, pathRelative } from '~/shell/funcs';
 import { IAppWindowWrapper } from './interfaces';
 import { PageSourceWatcher, setupWebContentSourceChecker } from './modules';
 
@@ -12,9 +12,9 @@ export class AppWindowWrapper implements IAppWindowWrapper {
 
   private mainWindow: BrowserWindow | undefined;
 
-  // onPageLoaded = makeListnerPort<string>();
+  // onPageLoaded = makeListenerPort<string>();
 
-  onAppWindowEvent = makeListnerPort<IAppWindowEvent>();
+  onAppWindowEvent = makeListenerPort<IAppWindowEvent>();
 
   openMainWindow(params: {
     preloadFilePath: string;
