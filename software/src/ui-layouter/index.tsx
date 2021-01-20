@@ -22,12 +22,10 @@ export namespace UiLayouterCore {
 
   export function Component() {
     Hook.useEffect(() => {
-      console.log('start layouter');
       window.addEventListener('keydown', keyboardOperationHander);
       appUi.rerender();
 
       return () => {
-        console.log(`end layouter`);
         window.removeEventListener('keydown', keyboardOperationHander);
       };
     }, []);
