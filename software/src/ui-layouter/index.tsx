@@ -1,5 +1,6 @@
 import { h, Hook } from 'qx';
 import { IPersistKeyboardDesign } from '~/shared';
+import { windowKeyboardEventEffect } from '~/ui-common/helpers';
 import { editMutations, editReader } from '~/ui-layouter/editor/store';
 import {
   KeyboardDesignConverter,
@@ -23,15 +24,8 @@ export namespace UiLayouterCore {
   }
 
   export function Component() {
-    Hook.useEffect(() => {
-      window.addEventListener('keydown', keyboardOperationHander);
-      return () => {
-        window.removeEventListener('keydown', keyboardOperationHander);
-      };
-    }, []);
-
+    Hook.useEffect(windowKeyboardEventEffect(keyboardOperationHander), []);
     Hook.useEffect(setupDeviceKeyEventsListener, []);
-
     return <PageRoot />;
   }
 }
