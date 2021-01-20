@@ -1,6 +1,6 @@
 import { IProfileData, IProfileManagerStatus } from '~/shared';
 import { makeListenerPort } from '~/shell/funcs';
-import { PresetProfileLoader } from '~/shell/services0/PresetProfileLoader';
+import { PresetProfileLoader } from '~/shell/services/projects/PresetProfileLoader';
 import { ProfileManager } from './ProfileManager/ProfileManager';
 import { IProfileService } from './interfaces';
 

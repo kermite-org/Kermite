@@ -3,7 +3,7 @@ import {
   IProfileData,
   IPersistKeyboardDesign,
 } from '~/shared';
-import { IProjectResourceInfoSource } from '~/shell/services0/ProjectResource/ProjectResourceInfoSourceLoader';
+import { IProjectResourceInfoSource } from '~/shell/services/projects/ProjectResource/ProjectResourceInfoSourceLoader';
 
 export interface IProjectResourceInfoProvider {
   getAllProjectResourceInfos(): IProjectResourceInfo[];
