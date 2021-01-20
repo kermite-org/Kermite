@@ -57,6 +57,7 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
           const profileData: IProfileData = duplicateObjectByJsonStringifyParse(
             fallbackProfileData,
           );
+          profileData.projectId = projectId;
           profileData.keyboardDesign = design;
           return profileData;
         }
