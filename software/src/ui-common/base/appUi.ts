@@ -3,6 +3,8 @@ import { asyncRerender } from 'qx';
 class AppUi {
   isDevelopment = (window as any).debugConfig?.isDevelopment;
 
+  isExecutedInApp = (window as any).ipcRenderer !== undefined;
+
   private _debugObject: any = {};
 
   get hasDebugValue() {
