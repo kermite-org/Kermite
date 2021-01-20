@@ -110,8 +110,8 @@ export const EditSvgView = () => {
     }
   }, []);
 
-  // appGlobal.setDebugValue({ appState });
-  // layouterAppGlobal.setDebugValue({ design: editReader.design });
+  // const { pressedKeyIndices } = editReader;
+  // layouterAppGlobal.setDebugValue({ pressedKeyIndices });
 
   return (
     <svg

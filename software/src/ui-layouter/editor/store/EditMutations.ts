@@ -1,4 +1,10 @@
-import { clamp, IKeyIdMode, IKeyPlacementAnchor, IKeySizeUnit } from '~/shared';
+import {
+  clamp,
+  IKeyIdMode,
+  IKeyPlacementAnchor,
+  IKeySizeUnit,
+  removeArrayItems,
+} from '~/shared';
 import { getNextEntityInstanceId } from '~/ui-layouter/editor/store/DomainRelatedHelpers';
 import {
   appState,
@@ -420,6 +426,18 @@ class EditMutations {
     editUpdator.commitEditor((editor) => {
       const shape = editor.design.outlineShapes[currentShapeId];
       shape.groupId = groupId;
+    });
+  }
+
+  addPressedKey(keyIndex: number) {
+    editUpdator.patchEnvState((env) => {
+      env.pressedKeyIndices.push(keyIndex);
+    });
+  }
+
+  removePressedKey(keyIndex: number) {
+    editUpdator.patchEnvState((env) => {
+      removeArrayItems(env.pressedKeyIndices, keyIndex);
     });
   }
 }
