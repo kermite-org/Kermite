@@ -35,40 +35,68 @@
               },
               "keySizeUnit": {
                 "type": "string"
+              },
+              "keyIdMode": {
+                "type": "string"
               }
             },
-            "required": ["placementUnit", "placementAnchor", "keySizeUnit"],
+            "required": [
+              "placementUnit",
+              "placementAnchor",
+              "keySizeUnit",
+              "keyIdMode"
+            ],
             "additionalProperties": false
           },
           "keyEntities": {
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "x": {
-                  "type": "number"
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "keyId": {
+                      "type": "string"
+                    },
+                    "x": {
+                      "type": "number"
+                    },
+                    "y": {
+                      "type": "number"
+                    },
+                    "angle": {
+                      "type": "number"
+                    },
+                    "shape": {
+                      "type": "string"
+                    },
+                    "keyIndex": {
+                      "type": "number"
+                    },
+                    "groupIndex": {
+                      "type": "number"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": ["keyId", "x", "y", "angle", "shape"]
                 },
-                "y": {
-                  "type": "number"
-                },
-                "angle": {
-                  "type": "number"
-                },
-                "shape": {
-                  "type": "string"
-                },
-                "keyIndex": {
-                  "type": "number"
-                },
-                "mirrorKeyIndex": {
-                  "type": "number"
-                },
-                "groupIndex": {
-                  "type": "number"
+                {
+                  "type": "object",
+                  "properties": {
+                    "keyId": {
+                      "type": "string"
+                    },
+                    "mirrorOf": {
+                      "type": "string"
+                    },
+                    "keyIndex": {
+                      "type": "number"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": ["keyId", "mirrorOf"]
                 }
-              },
-              "additionalProperties": false,
-              "required": ["x", "y", "angle", "shape"]
+              ]
             }
           },
           "outlineShapes": {
