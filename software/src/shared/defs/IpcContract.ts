@@ -1,9 +1,6 @@
+import { IPersistKeyboardDesign } from '~/shared/defs/KeyboardDesign';
 import { IKeyboardConfig } from './ConfigTypes';
-import {
-  IKeyboardShape,
-  IProfileData,
-  IProjectResourceInfo,
-} from './ProfileData';
+import { IProfileData, IProjectResourceInfo } from './ProfileData';
 
 export interface IProfileManagerStatus {
   currentProfileName: string;
@@ -90,7 +87,7 @@ export interface IAppIpcContract {
     projects_loadKeyboardShape(
       projectId: string,
       layoutName: string,
-    ): Promise<IKeyboardShape | undefined>;
+    ): Promise<IPersistKeyboardDesign | undefined>;
 
     firmup_uploadFirmware(
       projectId: string,

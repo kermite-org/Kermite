@@ -1,4 +1,4 @@
-import { IProfileData } from '~/shared';
+import { IDisplayKeyboardDesign, IProfileData } from '~/shared';
 import {
   getAssignForKeyUnitWithLayerFallback,
   getAssignEntryTexts,
@@ -20,18 +20,19 @@ export function makeCustomKeyUnitViewModels<
   TCustomKeyUnitViewModel extends ICustomKeyUnitViewModelBase
 >(
   profileData: IProfileData,
+  keyboardDesign: IDisplayKeyboardDesign,
   targetLayerId: string,
   propsDecolator: (
     source: ICustomKeyUnitViewModelBase,
   ) => TCustomKeyUnitViewModel,
 ): TCustomKeyUnitViewModel[] {
-  const { layers, assigns, keyboardShape } = profileData;
-  return keyboardShape.keyUnits.map((ku) => {
-    const keyUnitId = ku.id;
+  const { layers, assigns } = profileData;
+  return keyboardDesign.keyEntities.map((ku) => {
+    const keyUnitId = ku.keyId;
     const pos = {
       x: ku.x,
       y: ku.y,
-      r: ku.r || 0,
+      r: ku.angle || 0,
     };
 
     const assign = getAssignForKeyUnitWithLayerFallback(

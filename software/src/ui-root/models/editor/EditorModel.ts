@@ -8,6 +8,7 @@ import {
   compareObjectByJsonStringify,
   duplicateObjectByJsonStringifyParse,
 } from '~/shared';
+import { getDisplayKeyboardDesignSingleCached } from '~/ui-common/modules/DisplayKeyboardSingleCache';
 import {
   changeProfileDataAssignType,
   removeInvalidProfileAssigns,
@@ -61,12 +62,10 @@ export class EditorModel {
     return this.profileData.layers;
   }
 
-  get keyPositions() {
-    return this.profileData.keyboardShape.keyUnits;
-  }
-
-  get bodyPathMarkupText() {
-    return this.profileData.keyboardShape.bodyPathMarkupText;
+  get displayDesign() {
+    return getDisplayKeyboardDesignSingleCached(
+      this.profileData.keyboardDesign,
+    );
   }
 
   get currentLayer() {
@@ -207,9 +206,9 @@ export class EditorModel {
   };
 
   translateKeyIndexToKeyUnitId(keyIndex: number): string | undefined {
-    const keyUnit = this.profileData.keyboardShape.keyUnits.find(
+    const keyEntity = this.displayDesign.keyEntities.find(
       (kp) => kp.keyIndex === keyIndex,
     );
-    return keyUnit?.id;
+    return keyEntity?.keyId;
   }
 }

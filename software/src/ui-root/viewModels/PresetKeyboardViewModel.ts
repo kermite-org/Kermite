@@ -1,5 +1,6 @@
 import { Hook } from 'qx';
-import { IKeyboardShapeDisplayArea, IProfileData } from '~/shared';
+import { IDisplayArea, IDisplayOutlineShape, IProfileData } from '~/shared';
+import { getDisplayKeyboardDesignSingleCached } from '~/ui-common/modules/DisplayKeyboardSingleCache';
 import {
   IPresetKeyUnitViewModel,
   makePresetKeyUnitViewModels,
@@ -18,8 +19,8 @@ export interface IPrsetLayerListViewModel {
 
 export interface IPresetKeyboardViewModel {
   keyUnits: IPresetKeyUnitViewModel[];
-  displayArea: IKeyboardShapeDisplayArea;
-  bodyPathMarkupText: string;
+  displayArea: IDisplayArea;
+  outlineShapes: IDisplayOutlineShape[];
   layerList: IPrsetLayerListViewModel;
 }
 
@@ -31,10 +32,18 @@ export function makePresetKeyboardViewModel(
     state.currentLayerId = profileData.layers[0].layerId;
     return true;
   }, [profileData]);
+
+  const displayDesign = getDisplayKeyboardDesignSingleCached(
+    profileData.keyboardDesign,
+  );
   return {
-    keyUnits: makePresetKeyUnitViewModels(profileData, state.currentLayerId),
-    displayArea: profileData.keyboardShape.displayArea,
-    bodyPathMarkupText: profileData.keyboardShape.bodyPathMarkupText,
+    keyUnits: makePresetKeyUnitViewModels(
+      profileData,
+      displayDesign,
+      state.currentLayerId,
+    ),
+    displayArea: displayDesign.displayArea,
+    outlineShapes: displayDesign.outlineShapes,
     layerList: {
       layers: profileData.layers.map((la) => ({
         layerId: la.layerId,

@@ -35,12 +35,12 @@ const EditKeyboardBasePlane = (props: { children: any }) => {
 };
 
 const EditKeyboardView = () => {
-  const bodyOuterPaths = models.editorModel.bodyPathMarkupText;
+  const outlineShapes = models.editorModel.displayDesign.outlineShapes;
   const bodyFillColor = uiTheme.colors.clKeyboardBodyFace;
   return (
     <EditKeyboardBasePlane>
       <KeyboardBodyShape
-        outerPaths={bodyOuterPaths}
+        outlineShapes={outlineShapes}
         fillColor={bodyFillColor}
         strokeColor="transparent"
       />

@@ -252,7 +252,7 @@ function makeRawAssignEntries(profile: IProfileData): IRawAssignEntry[] {
   const {
     assigns,
     layers,
-    keyboardShape: { keyUnits },
+    keyboardDesign: { keyUnits },
   } = profile;
 
   return Object.keys(assigns)
@@ -444,7 +444,7 @@ export function makeKeyAssignsConfigStorageData(
   profileData: IProfileData,
   layout: IKeyboardLayoutStandard,
 ): number[] {
-  const keyNum = profileData.keyboardShape.keyUnits.length;
+  const keyNum = profileData.keyboardDesign.keyUnits.length;
   const layerNum = profileData.layers.length;
   const assignsDataBytes = converProfileDataToBlobBytes(profileData, layout);
   const headerBytes = encodeHeaderBytes(

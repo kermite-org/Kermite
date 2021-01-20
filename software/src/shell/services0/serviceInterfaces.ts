@@ -1,4 +1,8 @@
-import { IProjectResourceInfo, IKeyboardShape, IProfileData } from '~/shared';
+import {
+  IProjectResourceInfo,
+  IProfileData,
+  IPersistKeyboardDesign,
+} from '~/shared';
 import { IProjectResourceInfoSource } from '~/shell/services0/ProjectResource/ProjectResourceInfoSourceLoader';
 
 export interface IProjectResourceInfoProvider {
@@ -21,7 +25,7 @@ export interface IKeyboardShapeBulkLoader {
     projectId: string[],
   ): Promise<{
     projectId: string;
-    shape: IKeyboardShape;
+    design: IPersistKeyboardDesign;
   }>;
 }
 

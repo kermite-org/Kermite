@@ -30,13 +30,10 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
           | IProfileData
           | undefined;
         if (profileData) {
-          ProfileHelper.fixProfileData(profileData);
-          ProfileHelper.patchProfileKeyboardShapeBodyPathMarkupText(
-            profileData,
-          );
-          return profileData;
+          return ProfileHelper.fixProfileData(profileData);
         }
       } catch (error) {
+        console.log(`errorr on loading preset file`);
         console.error(error);
       }
     }
@@ -53,19 +50,18 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
     );
     if (layoutFilePath) {
       try {
-        const keyboardShape = await KeyboardLayoutFileLoader.loadShapeFromFile(
+        const design = await KeyboardLayoutFileLoader.loadLayoutFromFile(
           layoutFilePath,
         );
-        if (keyboardShape) {
+        if (design) {
           const profileData: IProfileData = duplicateObjectByJsonStringifyParse(
             fallbackProfileData,
           );
-          if (keyboardShape) {
-            profileData.keyboardShape = keyboardShape;
-          }
+          profileData.keyboardDesign = design;
           return profileData;
         }
       } catch (error) {
+        console.log(`errorr on loading layout file`);
         console.error(error);
       }
     }
@@ -89,6 +85,9 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
     projectId: string,
     presetName: string,
   ): Promise<IProfileData | undefined> {
+    if (!presetName) {
+      return undefined;
+    }
     const profileKey = `${projectId}__${presetName}`;
     const cache = this.profileDataCache;
     if (profileKey in cache) {

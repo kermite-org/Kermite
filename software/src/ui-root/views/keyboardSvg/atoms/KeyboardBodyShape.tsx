@@ -1,8 +1,9 @@
 import { css } from 'goober';
 import { h } from 'qx';
+import { IDisplayOutlineShape } from '~/shared';
 
 export const KeyboardBodyShape = (props: {
-  outerPaths: string;
+  outlineShapes: IDisplayOutlineShape[];
   fillColor: string;
   strokeColor: string;
 }) => {
@@ -10,5 +11,15 @@ export const KeyboardBodyShape = (props: {
     fill: ${props.fillColor};
     stroke: ${props.strokeColor};
   `;
-  return <path d={props.outerPaths} css={cssBody} />;
+  return (
+    <g>
+      {props.outlineShapes.map((shape, idx) => (
+        <polygon
+          points={shape.points.map((p) => `${p.x}, ${p.y}`).join(' ')}
+          key={idx}
+          css={cssBody}
+        />
+      ))}
+    </g>
+  );
 };

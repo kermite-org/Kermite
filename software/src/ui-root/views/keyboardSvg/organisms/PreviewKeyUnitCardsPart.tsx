@@ -1,20 +1,20 @@
 import { h } from 'qx';
-import { IKeyUnitEntry } from '~/shared';
-import { PreviewKeyUnitCard } from '../molecules/PreviewKeyUnitCard';
+import { IDisplayKeyEntity } from '~/shared';
+import { PreviewKeyEntityCard } from '../molecules/PreviewKeyUnitCard';
 
-export const PreviewKeyUnitCardsPart = (props: {
-  keyUnits: IKeyUnitEntry[];
+export const PreviewKeyEntityCardsPart = (props: {
+  keyEntities: IDisplayKeyEntity[];
   showKeyId: boolean;
   showKeyIndex: boolean;
 }) => {
-  const { keyUnits, showKeyId, showKeyIndex } = props;
+  const { keyEntities, showKeyId, showKeyIndex } = props;
 
   return (
     <g>
-      {keyUnits.map((keyUnit) => (
-        <PreviewKeyUnitCard
-          keyUnit={keyUnit}
-          key={keyUnit.id}
+      {keyEntities.map((ke) => (
+        <PreviewKeyEntityCard
+          keyEntity={ke}
+          key={ke.keyId}
           showKeyId={showKeyId}
           showKeyIndex={showKeyIndex}
           // qxOptimizer="deepEqual"

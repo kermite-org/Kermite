@@ -1,15 +1,15 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { IKeyUnitEntry } from '~/shared';
+import { IDisplayKeyEntity } from '~/shared';
 
-export const PreviewKeyUnitCard = (props: {
-  keyUnit: IKeyUnitEntry;
+export const PreviewKeyEntityCard = (props: {
+  keyEntity: IDisplayKeyEntity;
   showKeyId: boolean;
   showKeyIndex: boolean;
 }) => {
-  const kp = props.keyUnit;
-  const pos = { x: kp.x, y: kp.y, r: kp.r || 0 };
-  const { id: keyUnitId, keyIndex } = kp;
+  const ke = props.keyEntity;
+  const pos = { x: ke.x, y: ke.y, r: ke.angle || 0 };
+  const { keyId: keyUnitId, keyIndex } = ke;
 
   const cssKeyRect = css`
     fill: rgba(0, 0, 0, 0.5);

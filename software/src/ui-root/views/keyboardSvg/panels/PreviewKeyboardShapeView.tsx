@@ -1,17 +1,17 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { IKeyboardShape } from '~/shared';
+import { IDisplayKeyboardDesign } from '~/shared';
 import { IUiSettings } from '~/ui-root/models/UiStatusModel';
 import { KeyboardBodyShape } from '~/ui-root/views/keyboardSvg/atoms/KeyboardBodyShape';
-import { PreviewBoundingBox } from '~/ui-root/views/keyboardSvg/atoms/PreviewBoundingBox';
-import { PreviewKeyUnitCardsPart } from '~/ui-root/views/keyboardSvg/organisms/PreviewKeyUnitCardsPart';
+import { PreviewDisplayAreaBox } from '~/ui-root/views/keyboardSvg/atoms/PreviewBoundingBox';
+import { PreviewKeyEntityCardsPart } from '~/ui-root/views/keyboardSvg/organisms/PreviewKeyUnitCardsPart';
 import { KeyboardSvgFrameWithAutoScaler } from '../outlines/KeyboardSvgFrameWithAutoScaler';
 
 export function PreviewKeyboardShapeView(props: {
-  shape: IKeyboardShape;
+  keyboardDesign: IDisplayKeyboardDesign;
   settings: IUiSettings;
 }) {
-  const { shape, settings } = props;
+  const { keyboardDesign, settings } = props;
 
   const cssKeyboardShapeView = css`
     background: #222;
@@ -33,23 +33,23 @@ export function PreviewKeyboardShapeView(props: {
   return (
     <div css={cssKeyboardShapeView}>
       <KeyboardSvgFrameWithAutoScaler
-        displayArea={shape.displayArea}
+        displayArea={keyboardDesign.displayArea}
         dpiScale={dpiScale}
         marginRatio={marginRatio}
         baseStrokeWidth={baseStrokeWidth}
       >
         <KeyboardBodyShape
-          outerPaths={shape.bodyPathMarkupText}
+          outlineShapes={keyboardDesign.outlineShapes}
           fillColor={fillColor}
           strokeColor={strokeColor}
         />
-        <PreviewKeyUnitCardsPart
-          keyUnits={shape.keyUnits}
+        <PreviewKeyEntityCardsPart
+          keyEntities={keyboardDesign.keyEntities}
           showKeyId={showKeyId}
           showKeyIndex={showKeyIndex}
         />
-        <PreviewBoundingBox
-          displayArea={shape.displayArea}
+        <PreviewDisplayAreaBox
+          dispalyArea={keyboardDesign.displayArea}
           qxIf={showBoundingBox}
         />
       </KeyboardSvgFrameWithAutoScaler>

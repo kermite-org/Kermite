@@ -148,7 +148,7 @@ export class PresetBrowserModel {
     const resourceInfos = this.projectResourceModel.projectResourceInfos;
     if (resourceInfos.length > 0) {
       this._currentProjectId = resourceInfos[0].projectId;
-      this._currentPresetName = this.optionPresetNames[0];
+      this._currentPresetName = this.optionPresetNames[0] || '';
       this.loadSelectedProfile();
     }
   }

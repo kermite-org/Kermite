@@ -1,0 +1,215 @@
+{
+  "setup": {
+    "placementUnit": "mm",
+    "placementAnchor": "center",
+    "keySizeUnit": "KP"
+  },
+  "keyEntities": [
+    {
+      "x": -21.259478,
+      "y": 25.185357,
+      "angle": 9,
+      "shape": "std 1",
+      "keyIndex": 0
+    },
+    {
+      "x": -40.027745,
+      "y": 22.233922,
+      "angle": 9,
+      "shape": "std 1",
+      "keyIndex": 1
+    },
+    {
+      "x": -58.796012,
+      "y": 19.282486,
+      "angle": 9,
+      "shape": "std 1",
+      "keyIndex": 2
+    },
+    { "x": -82.0, "y": 19.0, "angle": 0, "shape": "std 1", "keyIndex": 3 },
+    { "x": -101.0, "y": 19.0, "angle": 0, "shape": "std 1", "keyIndex": 4 },
+    { "x": -120.0, "y": 19.0, "angle": 0, "shape": "std 1", "keyIndex": 5 },
+
+    {
+      "x": -24.231733,
+      "y": 43.951435,
+      "angle": 9,
+      "shape": "std 1",
+      "keyIndex": 6
+    },
+    { "x": -43.0, "y": 41.0, "angle": 9, "shape": "std 1", "keyIndex": 7 },
+    {
+      "x": -61.768267,
+      "y": 38.048565,
+      "angle": 9,
+      "shape": "std 1",
+      "keyIndex": 8
+    },
+    { "x": -83.5, "y": 38.0, "angle": 0, "shape": "std 1", "keyIndex": 9 },
+    { "x": -102.5, "y": 38.0, "angle": 0, "shape": "std 1", "keyIndex": 10 },
+    { "x": -121.5, "y": 38.0, "angle": 0, "shape": "std 1", "keyIndex": 11 },
+
+    {
+      "x": -27.203988,
+      "y": 62.717514,
+      "angle": 9,
+      "shape": "std 1",
+      "keyIndex": 12
+    },
+    {
+      "x": -45.972255,
+      "y": 59.766078,
+      "angle": 9,
+      "shape": "std 1",
+      "keyIndex": 13
+    },
+    {
+      "x": -64.740522,
+      "y": 56.814643,
+      "angle": 9,
+      "shape": "std 1",
+      "keyIndex": 14
+    },
+    { "x": -85.0, "y": 57.0, "angle": 0, "shape": "std 1", "keyIndex": 15 },
+    { "x": -104.0, "y": 57.0, "angle": 0, "shape": "std 1", "keyIndex": 16 },
+    { "x": -123.0, "y": 57.0, "angle": 0, "shape": "std 1", "keyIndex": 17 },
+
+    {
+      "x": -23.246233,
+      "y": 87.128689,
+      "angle": 9,
+      "shape": "std 1",
+      "keyIndex": 18
+    },
+    { "x": -43.0, "y": 84.0, "angle": 9, "shape": "std 1", "keyIndex": 19 },
+    {
+      "x": -62.753767,
+      "y": 80.871311,
+      "angle": 9,
+      "shape": "std 1",
+      "keyIndex": 20
+    },
+    { "x": -84.0, "y": 79.0, "angle": 0, "shape": "std 1", "keyIndex": 21 },
+    { "x": -104.0, "y": 79.0, "angle": 0, "shape": "std 1", "keyIndex": 22 },
+    { "x": -124.0, "y": 79.0, "angle": 0, "shape": "std 1", "keyIndex": 23 },
+
+    {
+      "x": 21.259478,
+      "y": 25.185357,
+      "angle": -9,
+      "shape": "std 1",
+      "keyIndex": 24
+    },
+    {
+      "x": 40.027745,
+      "y": 22.233922,
+      "angle": -9,
+      "shape": "std 1",
+      "keyIndex": 25
+    },
+    {
+      "x": 58.796012,
+      "y": 19.282486,
+      "angle": -9,
+      "shape": "std 1",
+      "keyIndex": 26
+    },
+    { "x": 82.0, "y": 19.0, "angle": 0, "shape": "std 1", "keyIndex": 27 },
+    { "x": 101.0, "y": 19.0, "angle": 0, "shape": "std 1", "keyIndex": 28 },
+    { "x": 120.0, "y": 19.0, "angle": 0, "shape": "std 1", "keyIndex": 29 },
+
+    {
+      "x": 24.231733,
+      "y": 43.951435,
+      "angle": -9,
+      "shape": "std 1",
+      "keyIndex": 30
+    },
+    { "x": 43.0, "y": 41.0, "angle": -9, "shape": "std 1", "keyIndex": 31 },
+    {
+      "x": 61.768267,
+      "y": 38.048565,
+      "angle": -9,
+      "shape": "std 1",
+      "keyIndex": 32
+    },
+    { "x": 83.5, "y": 38.0, "angle": 0, "shape": "std 1", "keyIndex": 33 },
+    { "x": 102.5, "y": 38.0, "angle": 0, "shape": "std 1", "keyIndex": 34 },
+    { "x": 121.5, "y": 38.0, "angle": 0, "shape": "std 1", "keyIndex": 35 },
+
+    {
+      "x": 27.203988,
+      "y": 62.717514,
+      "angle": -9,
+      "shape": "std 1",
+      "keyIndex": 36
+    },
+    {
+      "x": 45.972255,
+      "y": 59.766078,
+      "angle": -9,
+      "shape": "std 1",
+      "keyIndex": 37
+    },
+    {
+      "x": 64.740522,
+      "y": 56.814643,
+      "angle": -9,
+      "shape": "std 1",
+      "keyIndex": 38
+    },
+    { "x": 85.0, "y": 57.0, "angle": 0, "shape": "std 1", "keyIndex": 39 },
+    { "x": 104.0, "y": 57.0, "angle": 0, "shape": "std 1", "keyIndex": 40 },
+    { "x": 123.0, "y": 57.0, "angle": 0, "shape": "std 1", "keyIndex": 41 },
+
+    {
+      "x": 23.246233,
+      "y": 87.128689,
+      "angle": -9,
+      "shape": "std 1",
+      "keyIndex": 42
+    },
+    { "x": 43.0, "y": 84.0, "angle": -9, "shape": "std 1", "keyIndex": 43 },
+    {
+      "x": 62.753767,
+      "y": 80.871311,
+      "angle": -9,
+      "shape": "std 1",
+      "keyIndex": 44
+    },
+    { "x": 84.0, "y": 79.0, "angle": 0, "shape": "std 1", "keyIndex": 45 },
+    { "x": 104.0, "y": 79.0, "angle": 0, "shape": "std 1", "keyIndex": 46 },
+    { "x": 124.0, "y": 79.0, "angle": 0, "shape": "std 1", "keyIndex": 47 }
+  ],
+  "outlineShapes": [
+    {
+      "points": [
+        {
+          "x": 143,
+          "y": 0
+        },
+        {
+          "x": 143,
+          "y": 94.8135
+        },
+        {
+          "x": 19.4678,
+          "y": 107
+        },
+        {
+          "x": -19.4678,
+          "y": 107
+        },
+        {
+          "x": -143,
+          "y": 94.8135
+        },
+        {
+          "x": -143,
+          "y": 0
+        }
+      ]
+    }
+  ],
+  "transGroups": []
+}
