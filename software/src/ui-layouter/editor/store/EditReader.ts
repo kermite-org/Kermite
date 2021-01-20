@@ -177,5 +177,9 @@ class EditReader {
   get showKeyIndex() {
     return appState.env.showKeyIndex;
   }
+
+  get pressedKeyIndices() {
+    return appState.env.pressedKeyIndices;
+  }
 }
 export const editReader = new EditReader();
