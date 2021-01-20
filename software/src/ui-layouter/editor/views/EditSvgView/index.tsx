@@ -3,6 +3,7 @@ import { Hook, h, asyncRerender } from 'qx';
 import { editReader, editMutations } from '~/ui-layouter/editor/store';
 import { DebugOverlay } from './DebugOverlay';
 import { EditSvgView } from './EditSvgView';
+import { InformationOverlay } from './InformationOverlay';
 
 export const EditSvgViewContainer = () => {
   const cssSvgView = css`
@@ -33,6 +34,7 @@ export const EditSvgViewContainer = () => {
     <div css={cssSvgView} ref={ref}>
       <EditSvgView />
       <DebugOverlay />
+      <InformationOverlay />
     </div>
   );
 };
