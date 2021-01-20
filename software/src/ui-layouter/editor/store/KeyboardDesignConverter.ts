@@ -32,7 +32,7 @@ export namespace KeyboardDesignConverter {
   type IRealKeyEntity = IPersistKeyboardDesignRealKeyEntity;
   type IMirrorKeyEntity = IPersistKeyboardDesignMirrorKeyEntity;
 
-  export function convertKeyboardDesignNonEditToEdit(
+  export function convertKeyboardDesignPersistToEdit(
     source: IPersistKeyboardDesign,
   ): IEditKeyboardDesign {
     const realKeys = source.keyEntities.filter(
@@ -96,7 +96,7 @@ export namespace KeyboardDesignConverter {
     };
   }
 
-  export function convertKeyboardDesignEditToNonEdit(
+  export function convertKeyboardDesignEditToPersist(
     design: IEditKeyboardDesign,
   ): IPersistKeyboardDesign {
     return {

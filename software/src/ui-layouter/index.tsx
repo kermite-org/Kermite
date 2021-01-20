@@ -8,14 +8,14 @@ import { PageRoot } from '~/ui-layouter/editor/views/PageRoot';
 
 export namespace UiLayouterCore {
   export function loadEditDesign(persistDesign: IPersistKeyboardDesign) {
-    const design = KeyboardDesignConverter.convertKeyboardDesignNonEditToEdit(
+    const design = KeyboardDesignConverter.convertKeyboardDesignPersistToEdit(
       persistDesign,
     );
     editMutations.loadKeyboardDesign(design);
   }
 
   export function emitEditDesign(): IPersistKeyboardDesign {
-    return KeyboardDesignConverter.convertKeyboardDesignEditToNonEdit(
+    return KeyboardDesignConverter.convertKeyboardDesignEditToPersist(
       editReader.design,
     );
   }
