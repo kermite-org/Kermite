@@ -1,7 +1,9 @@
 import { rerender } from 'qx';
-import { editManager } from './EditManager';
-import { editMutations } from './EditMutations';
-import { editReader } from './EditReader';
+import {
+  editManager,
+  editMutations,
+  editReader,
+} from '~/ui-layouter/editor/store';
 
 export function keyboardOperationHander(e: KeyboardEvent) {
   if (e.key === 'Delete' || (e.key === 'Backspace' && e.metaKey)) {

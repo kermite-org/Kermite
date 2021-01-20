@@ -252,15 +252,16 @@ function makeRawAssignEntries(profile: IProfileData): IRawAssignEntry[] {
   const {
     assigns,
     layers,
-    keyboardDesign: { keyUnits },
+    keyboardDesign: { keyEntities },
   } = profile;
 
   return Object.keys(assigns)
     .map((key) => {
       const [layerId, keyId] = key.split('.');
       const layerIndex = layers.findIndex((la) => la.layerId === layerId);
-      const keyUnit = keyUnits.find((ku) => ku.id === keyId);
-      const keyIndex = keyUnit ? keyUnit.keyIndex : -1;
+      const keyEntity = keyEntities.find((ke) => ke.keyId === keyId);
+      const keyIndex =
+        keyEntity?.keyIndex !== undefined ? keyEntity.keyIndex : -1;
       const entry = assigns[key];
       if (layerIndex !== -1 && keyIndex !== -1 && entry) {
         return {
@@ -444,7 +445,7 @@ export function makeKeyAssignsConfigStorageData(
   profileData: IProfileData,
   layout: IKeyboardLayoutStandard,
 ): number[] {
-  const keyNum = profileData.keyboardDesign.keyUnits.length;
+  const keyNum = profileData.keyboardDesign.keyEntities.length;
   const layerNum = profileData.layers.length;
   const assignsDataBytes = converProfileDataToBlobBytes(profileData, layout);
   const headerBytes = encodeHeaderBytes(
