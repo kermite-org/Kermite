@@ -1,6 +1,5 @@
 import { css } from 'goober';
-import { h, Hook } from 'qx';
-import { appUi } from '~/ui-common';
+import { h, Hook, asyncRerender } from 'qx';
 
 const cssBase = css`
   width: 100%;
@@ -29,7 +28,6 @@ interface IScalerBoxProps {
 export function ScalerBox(props: IScalerBoxProps) {
   const local = Hook.useMemo(
     () => ({
-      domBaseElementId: `scalerBox-${(Math.random() * 10000) >> 0}`,
       scale: 1.0,
       mh: 0,
       mv: 0,
@@ -39,19 +37,19 @@ export function ScalerBox(props: IScalerBoxProps) {
 
   const { contentWidth, contentHeight, children } = props;
 
-  const baseEl = document.getElementById(local.domBaseElementId);
-  if (!baseEl) {
-    setTimeout(() => appUi.rerender, 1);
-  } else {
+  const ref = Hook.useRef<HTMLDivElement>();
+  const baseEl = ref.current;
+  if (baseEl) {
     const { clientWidth: bw, clientHeight: bh } = baseEl;
     local.scale = Math.min(bw / contentWidth, bh / contentHeight);
     local.mh = Math.max((bw - contentWidth * local.scale) / 2, 0);
     local.mv = Math.max((bh - contentHeight * local.scale) / 2, 0);
-    // console.log({ scale });
+  } else {
+    asyncRerender();
   }
 
   return (
-    <div css={cssBase} id={local.domBaseElementId}>
+    <div css={cssBase} ref={ref}>
       <div
         css={cssInner}
         style={{
