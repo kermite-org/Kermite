@@ -111,9 +111,7 @@ export const EditSvgView = () => {
   }, []);
 
   // appGlobal.setDebugValue({ appState });
-  layouterAppGlobal.setDebugValue({ design: editReader.design });
-  const { isCurrentKeyMirror } = editReader;
-  layouterAppGlobal.setDebugValue({ isCurrentKeyMirror });
+  // layouterAppGlobal.setDebugValue({ design: editReader.design });
 
   return (
     <svg
