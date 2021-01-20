@@ -1,5 +1,5 @@
 import { css } from 'goober';
-import { Hook, h } from 'qx';
+import { Hook, h, asyncRerender } from 'qx';
 import { editReader, editMutations } from '~/ui-layouter/editor/store';
 import { DebugOverlay } from './DebugOverlay';
 import { EditSvgView } from './EditSvgView';
@@ -17,20 +17,20 @@ export const EditSvgViewContainer = () => {
 
   const { screenW, screenH } = editReader.sight;
 
-  Hook.useEffect(() => {
-    const el = document.getElementById('domEditSvgOuterDiv');
-    if (el) {
-      const cw = el.clientWidth;
-      const ch = el.clientHeight;
-      if (!(cw === screenW && ch === screenH)) {
-        editMutations.setEditScreenSize(cw, ch);
-        return true;
-      }
+  const ref = Hook.useRef<HTMLDivElement>();
+  const baseEl = ref.current;
+  if (baseEl) {
+    const cw = baseEl.clientWidth;
+    const ch = baseEl.clientHeight;
+    if (!(cw === screenW && ch === screenH)) {
+      editMutations.setEditScreenSize(cw, ch);
     }
-  });
+  } else {
+    asyncRerender();
+  }
 
   return (
-    <div css={cssSvgView} id="domEditSvgOuterDiv">
+    <div css={cssSvgView} ref={ref}>
       <EditSvgView />
       <DebugOverlay />
     </div>
