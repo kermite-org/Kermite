@@ -7,7 +7,7 @@ import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStat
 import { FirmwareUpdationService } from '~/shell/services/firmwareUpdation';
 import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/InputLogicSimulatorD';
 import { LayoutManager } from '~/shell/services/layout/LayoutManager';
-import { ProfileManager } from '~/shell/services/profile/ProfileManager/ProfileManager';
+import { ProfileManager } from '~/shell/services/profile/ProfileManager';
 import { KeyboardLayoutFilesWatcher } from '~/shell/services/projects/KeyboardShape/KeyboardLayoutFilesWatcher';
 import { KeyboardShapesProvider } from '~/shell/services/projects/KeyboardShape/KeyboardShapesProvider';
 import { PresetProfileLoader } from '~/shell/services/projects/PresetProfileLoader';
