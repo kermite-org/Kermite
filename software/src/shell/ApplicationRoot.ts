@@ -6,6 +6,7 @@ import { KeyboardDeviceService } from '~/shell/services/device/KeyboardDevice';
 import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStatic';
 import { FirmwareUpdationService } from '~/shell/services/firmwareUpdation';
 import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/InputLogicSimulatorD';
+import { LayoutManager } from '~/shell/services/layout/LayoutManager';
 import { ProfileService } from '~/shell/services/profile';
 import { KeyboardLayoutFilesWatcher } from '~/shell/services/projects/KeyboardShape/KeyboardLayoutFilesWatcher';
 import { KeyboardShapesProvider } from '~/shell/services/projects/KeyboardShape/KeyboardShapesProvider';
@@ -39,6 +40,8 @@ export class ApplicationRoot {
   private presetProfileLoader = new PresetProfileLoader(
     this.projectResourceInfoProvider,
   );
+
+  private layoutManager = new LayoutManager(this.projectResourceInfoProvider);
 
   private profileService = new ProfileService(this.presetProfileLoader);
   private profileManager = this.profileService.profileManager;
@@ -74,6 +77,10 @@ export class ApplicationRoot {
       //   this.appWindowManager.adjustWindowSize(isWidgetMode),
       profile_executeProfileManagerCommands: (commands) =>
         this.profileService.profileManager.executeCommands(commands),
+      layout_executeLayoutManagerCommands: (commands) =>
+        this.layoutManager.executeCommands(commands),
+      layout_getAllProjectLayoutsInfos: () =>
+        this.layoutManager.getAllProjectLayoutsInfos(),
       projects_loadKeyboardShape: (projectId, layoutName) =>
         this.keyboardShapesProvider.loadKeyboardShapeByProjectIdAndLayoutName(
           projectId,
@@ -126,6 +133,8 @@ export class ApplicationRoot {
         this.profileManager.statusEventPort.subscribe(cb2);
         return () => this.profileManager.statusEventPort.unsubscribe(cb2);
       },
+      layout_layoutManagerStatus: (listener) =>
+        this.layoutManager.statusEvents.subscribe(listener),
       device_keyEvents: (cb) => {
         this.deviceService.realtimeEventPort.subscribe(cb);
         return () => this.deviceService.realtimeEventPort.unsubscribe(cb);
