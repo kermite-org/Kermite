@@ -4,9 +4,15 @@ import {
   ILayoutManagerStatus,
   createFallbackPersistKeyboardDesign,
 } from '~/shared';
+import { createEventPort2 } from '~/shell/funcs';
 import { ILayoutManager } from '~/shell/services/layout/interfaces';
+import { IProjectResourceInfoProvider } from '~/shell/services/serviceInterfaces';
 
 export class LayoutManager implements ILayoutManager {
+  constructor(
+    private projectResourceInfoProvider: IProjectResourceInfoProvider,
+  ) {}
+
   private status: ILayoutManagerStatus = {
     editSource: {
       type: 'NewlyCreated',
@@ -15,19 +21,71 @@ export class LayoutManager implements ILayoutManager {
     errorMessage: '',
   };
 
-  async executeCommands(commands: ILayoutManagerCommand[]): Promise<void> {
-    console.log(`execute layout manager commands`, JSON.stringify(commands));
+  statusEvents = createEventPort2<Partial<ILayoutManagerStatus>>({
+    initialValueGetter: () => this.status,
+    onFirstSubscriptionStarting: () => {},
+    onLastSubscriptionEnded: () => {},
+  });
+
+  private setStatus(newStatusPartial: Partial<ILayoutManagerStatus>) {
+    this.status = { ...this.status, ...newStatusPartial };
+    this.statusEvents.emit(newStatusPartial);
+  }
+
+  private async executeCommand(command: ILayoutManagerCommand) {
+    console.log(`execute layout manager command`, JSON.stringify(command));
+
+    if (command.type === 'createNewLayout') {
+      this.setStatus({
+        editSource: { type: 'NewlyCreated' },
+      });
+    } else if (command.type === 'loadCurrentProfileLayout') {
+      this.setStatus({
+        editSource: { type: 'CurrentProfile' },
+      });
+    } else if (command.type === 'save') {
+    } else if (command.type === 'loadFromFile') {
+      const { filePath } = command;
+      this.setStatus({
+        editSource: { type: 'File', filePath },
+      });
+    } else if (command.type === 'saveToFile') {
+      const { filePath } = command;
+      this.setStatus({
+        editSource: { type: 'File', filePath },
+      });
+    } else if (command.type === 'loadFromProject') {
+      const { projectId, layoutName } = command;
+      this.setStatus({
+        editSource: {
+          type: 'ProjectLayout',
+          projectId,
+          layoutName,
+        },
+      });
+    } else if (command.type === 'saveToProject') {
+      const { projectId, layoutName } = command;
+      this.setStatus({
+        editSource: {
+          type: 'ProjectLayout',
+          projectId,
+          layoutName,
+        },
+      });
+    }
+  }
+
+  async executeCommands(commands: ILayoutManagerCommand[]): Promise<boolean> {
+    try {
+      commands.forEach((command) => this.executeCommand(command));
+    } catch (error) {
+      this.status.errorMessage = `error@LayoutManager ${error}`;
+      return false;
+    }
+    return true;
   }
 
   async getAllProjectLayoutsInfos(): Promise<IProjectLayoutsInfo[]> {
     return [];
   }
-
-  statusEvents = {
-    subscribe: (listener: (status: Partial<ILayoutManagerStatus>) => void) => {
-      listener(this.status);
-      // todo: status(の一部)が変化したときにそれを送出
-      return () => {};
-    },
-  };
 }

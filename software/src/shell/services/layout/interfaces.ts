@@ -3,13 +3,10 @@ import {
   ILayoutManagerStatus,
   IProjectLayoutsInfo,
 } from '~/shared';
+import { IListenerPortS } from '~/shell/base';
 
 export interface ILayoutManager {
-  executeCommands(commands: ILayoutManagerCommand[]): Promise<void>;
+  executeCommands(commands: ILayoutManagerCommand[]): Promise<boolean>;
   getAllProjectLayoutsInfos(): Promise<IProjectLayoutsInfo[]>;
-  statusEvents: {
-    subscribe: (
-      listener: (status: Partial<ILayoutManagerStatus>) => void,
-    ) => () => void;
-  };
+  statusEvents: IListenerPortS<Partial<ILayoutManagerStatus>>;
 }
