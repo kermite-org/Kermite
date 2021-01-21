@@ -7,7 +7,7 @@ import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStat
 import { FirmwareUpdationService } from '~/shell/services/firmwareUpdation';
 import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/InputLogicSimulatorD';
 import { LayoutManager } from '~/shell/services/layout/LayoutManager';
-import { ProfileService } from '~/shell/services/profile';
+import { ProfileManager } from '~/shell/services/profile/ProfileManager/ProfileManager';
 import { KeyboardLayoutFilesWatcher } from '~/shell/services/projects/KeyboardShape/KeyboardLayoutFilesWatcher';
 import { KeyboardShapesProvider } from '~/shell/services/projects/KeyboardShape/KeyboardShapesProvider';
 import { PresetProfileLoader } from '~/shell/services/projects/PresetProfileLoader';
@@ -43,8 +43,7 @@ export class ApplicationRoot {
 
   private layoutManager = new LayoutManager(this.projectResourceInfoProvider);
 
-  private profileService = new ProfileService(this.presetProfileLoader);
-  private profileManager = this.profileService.profileManager;
+  private profileManager = new ProfileManager(this.presetProfileLoader);
 
   private inputLogicSimulator = new InputLogicSimulatorD(
     this.profileManager,
@@ -76,7 +75,7 @@ export class ApplicationRoot {
       // window_widgetModeChanged: async (isWidgetMode) =>
       //   this.appWindowManager.adjustWindowSize(isWidgetMode),
       profile_executeProfileManagerCommands: (commands) =>
-        this.profileService.profileManager.executeCommands(commands),
+        this.profileManager.executeCommands(commands),
       layout_executeLayoutManagerCommands: (commands) =>
         this.layoutManager.executeCommands(commands),
       layout_getAllProjectLayoutsInfos: () =>
@@ -162,7 +161,7 @@ export class ApplicationRoot {
     await applicationStorage.initialize();
     // await resourceUpdator_syncRemoteResourcesToLocal();
     await this.projectResourceInfoProvider.initializeAsync();
-    await this.profileService.initialize();
+    await this.profileManager.initializeAsync();
     this.firmwareUpdationService.initialize();
     this.keyboardLayoutFilesWatcher.initialize();
     this.keyboardConfigProvider.initialize();
@@ -181,7 +180,7 @@ export class ApplicationRoot {
     this.keyboardConfigProvider.terminate();
     this.keyboardLayoutFilesWatcher.terminate();
     this.firmwareUpdationService.terminate();
-    await this.profileService.terminate();
+    await this.profileManager.terminateAsync();
     await applicationStorage.terminate();
   }
 }
