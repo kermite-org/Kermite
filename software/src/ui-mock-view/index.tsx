@@ -2,14 +2,16 @@
 import { h, render, rerender } from 'qx';
 import { debounce } from '~/shared';
 import { initializeCss } from '~/ui-common';
+import { UiLayouterPageDevelopmentDummy } from '~/ui-layouter-page/UiLayoutPageDevelopmentDummy';
 import { MockPageLoadedDesignDrawing } from '~/ui-mock-view/MockPageLoadedDesignDrawing';
 import { MockPageLayouterDevelopment } from './MockPageLayouterDevelopment';
 
 const PageRoot = () => {
   return (
     <div style={{ height: '100%' }}>
-      <MockPageLayouterDevelopment />
+      {/* <MockPageLayouterDevelopment /> */}
       {/* <MockPageLoadedDesignDrawing /> */}
+      <UiLayouterPageDevelopmentDummy />
     </div>
   );
 };
