@@ -1,7 +1,7 @@
 import { removeArrayItems } from '~/shared';
 
 type IListener<T> = (payload: T) => void;
-interface IListenerPortImpl<T> {
+export interface IListenerPortImpl<T> {
   (listener: IListener<T>): () => void;
   emit(payload: T): void;
 }
