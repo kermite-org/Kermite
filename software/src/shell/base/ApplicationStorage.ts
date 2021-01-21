@@ -39,7 +39,7 @@ class ApplicationStorage {
     this.data[key] = value;
   }
 
-  async initialize() {
+  async initializeAsync() {
     if (fsExistsSync(this.configFilePath)) {
       const obj = await fsxReadJsonFile(this.configFilePath);
       overwriteObjectProps(this.data, obj);
@@ -48,7 +48,7 @@ class ApplicationStorage {
     }
   }
 
-  async terminate() {
+  async terminateAsync() {
     console.log(`saving persist state`);
     await fsxWriteJsonFile(this.configFilePath, this.data);
   }
