@@ -69,7 +69,7 @@ type ILayoutEditSource =
     };
 export interface ILayoutManagerStatus {
   editSource: ILayoutEditSource;
-  loadedEditData: IPersistKeyboardDesign;
+  loadedDesign: IPersistKeyboardDesign;
   errorMessage: string;
 }
 
