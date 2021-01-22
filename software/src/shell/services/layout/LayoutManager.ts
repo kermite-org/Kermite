@@ -86,6 +86,19 @@ export class LayoutManager implements ILayoutManager {
   }
 
   async getAllProjectLayoutsInfos(): Promise<IProjectLayoutsInfo[]> {
-    return [];
+    return [
+      {
+        projectId: 'proj1',
+        projectPath: 'proto/proj1',
+        keyboardName: 'Proto-One',
+        layoutNames: ['default', 'layout1'],
+      },
+      {
+        projectId: 'proj2',
+        projectPath: 'proto/proj2',
+        keyboardName: 'proto2',
+        layoutNames: ['default', 'layout1', 'layout2'],
+      },
+    ];
   }
 }
