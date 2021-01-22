@@ -51,7 +51,7 @@ export interface IProfileManagerCommand {
   copyProfile?: { name: string; newName: string };
 }
 
-type ILayoutEditSource =
+export type ILayoutEditSource =
   | {
       type: 'NewlyCreated';
     }
