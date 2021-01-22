@@ -161,6 +161,8 @@ export interface IAppIpcContract {
       comPortName: string,
     ): Promise<string>;
 
+    file_getOpenJsonFilePathWithDialog(): Promise<string | undefined>;
+    file_getSaveJsonFilePathWithDialog(): Promise<string | undefined>;
     file_loadObjectFromJsonWithFileDialog(): Promise<any | undefined>;
     file_saveObjectToJsonWithFileDialog(obj: any): Promise<boolean>;
   };

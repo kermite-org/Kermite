@@ -107,6 +107,10 @@ export class ApplicationRoot {
           );
         }
       },
+      file_getOpenJsonFilePathWithDialog:
+        JsonFileServiceStatic.getOpeningJsonFilePathWithDialog,
+      file_getSaveJsonFilePathWithDialog:
+        JsonFileServiceStatic.getSavingJsonFilePathWithDialog,
       file_loadObjectFromJsonWithFileDialog:
         JsonFileServiceStatic.loadObjectFromJsonWithFileDialog,
       file_saveObjectToJsonWithFileDialog:

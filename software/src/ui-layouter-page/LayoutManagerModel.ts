@@ -77,15 +77,15 @@ class LayoutManagerModel implements ILayoutManagerModel {
     this.sendCommand({ type: 'saveToProject', projectId, layoutName, design });
   }
 
-  loadFromFileWithDialog() {
-    const filePath = ipcAgent.async.file_getOpenFileNameWithDialog();
+  async loadFromFileWithDialog() {
+    const filePath = await ipcAgent.async.file_getOpenJsonFilePathWithDialog();
     if (filePath) {
       this.sendCommand({ type: 'loadFromFile', filePath });
     }
   }
 
-  saveToFileWithDialog(design: IPersistKeyboardDesign) {
-    const filePath = ipcAgent.async.file_getSaveFileNameWithDialog();
+  async saveToFileWithDialog(design: IPersistKeyboardDesign) {
+    const filePath = await ipcAgent.async.file_getSaveJsonFilePathWithDialog();
     if (filePath) {
       this.sendCommand({ type: 'saveToFile', filePath, design });
     }
