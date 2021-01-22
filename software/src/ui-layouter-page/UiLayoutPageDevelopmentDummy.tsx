@@ -1,5 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
+import { reflectValue } from '~/ui-common';
+import { useLayoutManagerViewModel } from '~/ui-layouter-page/LayoutManagerModel';
 
 const cssPartBox = css`
   border: solid 1px #888;
@@ -19,6 +21,7 @@ const cssRoot = css`
   padding: 10px;
   display: flex;
   flex-direction: column;
+  background: #fff;
 
   > .topRow {
     flex-shrink: 0;
@@ -101,58 +104,102 @@ const cssProjectLayoutContent = css`
   }
 `;
 export const UiLayouterPageDevelopmentDummy = () => {
+  const vm = useLayoutManagerViewModel();
+
   return (
     <div css={cssRoot}>
       <div>Edit Layout Manager, Stub Development Page</div>
       <div class="mainRow">
         <div class="textEditColumn">
-          <textarea placeholder="テキスト編集領域, レイアウトのJSONをここで編集"></textarea>
+          <textarea
+            placeholder="テキスト編集領域, レイアウトのJSONをここで編集"
+            value={vm.editDesignText}
+            onInput={reflectValue(vm.setEditDesignText)}
+          ></textarea>
         </div>
         <div class="managementColumn">
           <PartBox title="EditSource">
-            <pre>
-              {`{
- type: 'ProjectLayout';
- projectId: string;
- layoutName: string;
-}`}
-            </pre>
+            <pre>{JSON.stringify(vm.editSource)}</pre>
           </PartBox>
           <PartBox title="Project Layout Files">
             <div css={cssProjectLayoutContent}>
               <div class="primaryRow">
                 <div class="column listColumn">
                   <div>Project</div>
-                  <select size={5}></select>
-                  <div>astelia</div>
+                  <select
+                    size={5}
+                    value={vm.currentProjectId}
+                    onInput={reflectValue(vm.setCurrentProjectId)}
+                  >
+                    {vm.projectOptions.map((it) => (
+                      <option value={it.id} key={it.id}>
+                        {it.text}
+                      </option>
+                    ))}
+                  </select>
+                  <div>{vm.currentProjectPath}</div>
+                  <div>{vm.currentKeyboardName}</div>
                 </div>
                 <div class="column listColumn">
                   <div>Layout</div>
-                  <select size={5}></select>
+                  <select
+                    size={5}
+                    value={vm.currentLayoutName}
+                    onChange={reflectValue(vm.setCurrentLayoutName)}
+                  >
+                    {vm.layoutOptions.map((it) => (
+                      <option value={it.id} key={it.id}>
+                        {it.text}
+                      </option>
+                    ))}
+                  </select>
                   <div>
-                    <input type="text" value="default"></input>
+                    <input
+                      type="text"
+                      value={vm.currentLayoutName}
+                      onInput={reflectValue(vm.setCurrentLayoutName)}
+                    ></input>
                   </div>
                 </div>
                 <div class="column">
-                  <button>Load</button>
-                  <button>Save</button>
+                  <button
+                    onClick={vm.loadFromProject}
+                    disabled={!vm.canLoadFromProject}
+                  >
+                    Load
+                  </button>
+                  <button
+                    onClick={vm.saveToProject}
+                    disabled={!vm.canSaveToProject}
+                  >
+                    Save
+                  </button>
                 </div>
               </div>
-              <div class="bottomRow">projects/astelia/layout.json</div>
+              <div class="bottomRow">{vm.targetProjectLayoutFilePath}</div>
             </div>
           </PartBox>
           <PartBox title="Operations">
             <div class="operationsArea">
               <div>
-                <button>Create New Layout</button>
-                <button>Edit Current Profile</button>
+                <button onClick={vm.createNewLayout}>Create New Layout</button>
+                <button onClick={vm.loadCurrentProfileLayout}>
+                  Edit Current Profile
+                </button>
               </div>
               <div>
-                <button>Load From File</button>
-                <button>Save To File</button>
+                <button onClick={vm.loadFromFileWithDialog}>
+                  Load From File
+                </button>
+                <button onClick={vm.saveToFileWithDialog}>Save To File</button>
               </div>
               <div>
-                <button disabled={true}>Overwrite</button>
+                <button
+                  disabled={!vm.canOverwrite}
+                  onClick={vm.overwriteLayout}
+                >
+                  Overwrite
+                </button>
               </div>
             </div>
           </PartBox>

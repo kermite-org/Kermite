@@ -121,7 +121,10 @@ interface ILayoutManagerViewModel {
 
   projectOptions: ISelectOption[];
   setCurrentProjectId(projectId: string): void;
-  currentProjectName: string;
+  currentProjectId: string;
+  currentProjectPath: string;
+  currentKeyboardName: string;
+  targetProjectLayoutFilePath: string;
 
   layoutOptions: ISelectOption[];
   currentLayoutName: string;
@@ -129,7 +132,9 @@ interface ILayoutManagerViewModel {
 
   createNewLayout(): void;
   loadCurrentProfileLayout(): void;
+  canLoadFromProject: boolean;
   loadFromProject(): void;
+  canSaveToProject: boolean;
   saveToProject(): void;
   loadFromFileWithDialog(): void;
   saveToFileWithDialog(): void;
@@ -151,13 +156,15 @@ function useLayoutManagerViewModelImpl(
   );
 
   Hook.useEffect(() => {
-    const stringifiedDesign = JSON.stringify(model.loadedDesign);
+    const stringifiedDesign = JSON.stringify(model.loadedDesign, null, '  ');
     local.loadedDesignText = stringifiedDesign;
     local.editDesignText = stringifiedDesign;
   }, [model.loadedDesign]);
 
   Hook.useEffect(() => {
-    console.log(`ERROR`, model.errorMessage);
+    if (model.errorMessage) {
+      console.log(`ERROR`, model.errorMessage);
+    }
   }, [model.errorMessage]);
 
   const currentProject = model.projectLayoutsInfos.find(
@@ -175,7 +182,9 @@ function useLayoutManagerViewModelImpl(
     setCurrentProjectId: (projectId: string) => {
       local.currentProjectId = projectId;
     },
-    currentProjectName: currentProject?.projectPath || '',
+    currentProjectId: local.currentProjectId,
+    currentProjectPath: currentProject?.projectPath || '',
+    currentKeyboardName: currentProject?.keyboardName || '',
     layoutOptions:
       currentProject?.layoutNames.map((layoutName) => ({
         id: layoutName,
@@ -185,11 +194,22 @@ function useLayoutManagerViewModelImpl(
     setCurrentLayoutName: (projectName: string) => {
       local.currentLayoutName = projectName;
     },
+    targetProjectLayoutFilePath:
+      (currentProject &&
+        local.currentLayoutName &&
+        `projects/${currentProject.projectPath || ''}/${
+          local.currentLayoutName === 'default'
+            ? 'layout'
+            : local.currentLayoutName
+        }.json`) ||
+      '',
     createNewLayout: () => model.createNewLayout(),
     loadCurrentProfileLayout: () => model.loadCurrentProfileLayout(),
+    canLoadFromProject: !!(local.currentProjectId && local.currentLayoutName),
     loadFromProject: () => {
       model.loadFromProject(local.currentProjectId, local.currentLayoutName);
     },
+    canSaveToProject: !!(local.currentProjectId && local.currentLayoutName),
     saveToProject: () =>
       model.saveToProject(
         local.currentProjectId,
