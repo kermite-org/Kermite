@@ -1,4 +1,4 @@
-import { Hook } from 'qx';
+import { asyncRerender, Hook } from 'qx';
 import {
   createFallbackPersistKeyboardDesign,
   ILayoutEditSource,
@@ -157,9 +157,11 @@ function useLayoutManagerViewModelImpl(
   );
 
   Hook.useEffect(() => {
+    // console.log(`loadedDesing changed`, model.loadedDesign);
     const stringifiedDesign = JSON.stringify(model.loadedDesign, null, '  ');
     local.loadedDesignText = stringifiedDesign;
     local.editDesignText = stringifiedDesign;
+    asyncRerender();
   }, [model.loadedDesign]);
 
   Hook.useEffect(() => {

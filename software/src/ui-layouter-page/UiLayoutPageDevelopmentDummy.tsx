@@ -108,7 +108,7 @@ export const UiLayouterPageDevelopmentDummy = () => {
 
   return (
     <div css={cssRoot}>
-      <div>Edit Layout Manager, Stub Development Page</div>
+      <div>Edit Layout Manager, Mock Development Page</div>
       <div class="mainRow">
         <div class="textEditColumn">
           <textarea

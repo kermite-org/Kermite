@@ -41,9 +41,12 @@ export class ApplicationRoot {
     this.projectResourceInfoProvider,
   );
 
-  private layoutManager = new LayoutManager(this.projectResourceInfoProvider);
-
   private profileManager = new ProfileManager(this.presetProfileLoader);
+
+  private layoutManager = new LayoutManager(
+    this.projectResourceInfoProvider,
+    this.profileManager,
+  );
 
   private inputLogicSimulator = new InputLogicSimulatorD(
     this.profileManager,

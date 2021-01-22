@@ -59,7 +59,9 @@ export class ProjectResourceInfoProvider
   getLayoutFilePath(projectId: string, layoutName: string): string | undefined {
     const info = this.getProjectInfoSourceById(projectId);
     if (info) {
-      return pathJoin(info.projectFolderPath, `${layoutName}.layout.json`);
+      const fileName =
+        layoutName === 'default' ? 'layout.json' : `${layoutName}.layout.json`;
+      return pathJoin(info.projectFolderPath, fileName);
     }
   }
 

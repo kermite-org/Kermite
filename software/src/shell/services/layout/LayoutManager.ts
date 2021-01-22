@@ -44,6 +44,7 @@ export class LayoutManager implements ILayoutManager {
   private async createNewLayout() {
     this.setStatus({
       editSource: { type: 'NewlyCreated' },
+      loadedDesign: createFallbackPersistKeyboardDesign(),
     });
   }
 
@@ -142,7 +143,7 @@ export class LayoutManager implements ILayoutManager {
   }
 
   private async executeCommand(command: ILayoutManagerCommand) {
-    console.log(`execute layout manager command`, JSON.stringify(command));
+    // console.log(`execute layout manager command`, JSON.stringify(command));
 
     if (command.type === 'createNewLayout') {
       await this.createNewLayout();
