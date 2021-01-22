@@ -96,7 +96,8 @@ class LayoutManagerModel implements ILayoutManagerModel {
   }
 
   private async fetchProjectLayoutsInfos() {
-    this._projectLayoutsInfos = await ipcAgent.async.layout_getAllProjectLayoutsInfos();
+    this._projectLayoutsInfos =
+      (await ipcAgent.async.layout_getAllProjectLayoutsInfos()) || [];
   }
 
   startLifecycle() {
