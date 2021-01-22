@@ -3,14 +3,19 @@ import {
   IProjectLayoutsInfo,
   ILayoutManagerStatus,
   createFallbackPersistKeyboardDesign,
+  duplicateObjectByJsonStringifyParse,
+  IPersistKeyboardDesign,
 } from '~/shared';
 import { createEventPort2 } from '~/shell/funcs';
+import { layoutFileLoader } from '~/shell/services/layout/LayoutFileLoader';
 import { ILayoutManager } from '~/shell/services/layout/interfaces';
+import { IProfileManager } from '~/shell/services/profile/interfaces';
 import { IProjectResourceInfoProvider } from '~/shell/services/serviceInterfaces';
 
 export class LayoutManager implements ILayoutManager {
   constructor(
     private projectResourceInfoProvider: IProjectResourceInfoProvider,
+    private profileManager: IProfileManager,
   ) {}
 
   private status: ILayoutManagerStatus = {
@@ -23,8 +28,12 @@ export class LayoutManager implements ILayoutManager {
 
   statusEvents = createEventPort2<Partial<ILayoutManagerStatus>>({
     initialValueGetter: () => this.status,
-    onFirstSubscriptionStarting: () => {},
-    onLastSubscriptionEnded: () => {},
+    onFirstSubscriptionStarting: () => {
+      // todo: editSourceをapplicaitonStorageに格納
+    },
+    onLastSubscriptionEnded: () => {
+      // todo: editSourceをapplicationStorageから復元し、編集対象ファイルを読み込む
+    },
   });
 
   private setStatus(newStatusPartial: Partial<ILayoutManagerStatus>) {
@@ -32,39 +41,69 @@ export class LayoutManager implements ILayoutManager {
     this.statusEvents.emit(newStatusPartial);
   }
 
-  private async executeCommand(command: ILayoutManagerCommand) {
-    console.log(`execute layout manager command`, JSON.stringify(command));
+  private async createNewLayout() {
+    this.setStatus({
+      editSource: { type: 'NewlyCreated' },
+    });
+  }
 
-    if (command.type === 'createNewLayout') {
-      this.setStatus({
-        editSource: { type: 'NewlyCreated' },
-      });
-    } else if (command.type === 'loadCurrentProfileLayout') {
+  private async loadCurrentProfileLayout() {
+    const profile = this.profileManager.getStatus().loadedProfileData;
+    if (profile) {
       this.setStatus({
         editSource: { type: 'CurrentProfile' },
+        loadedDesign: profile.keyboardDesign,
       });
-    } else if (command.type === 'save') {
-    } else if (command.type === 'loadFromFile') {
-      const { filePath } = command;
-      this.setStatus({
-        editSource: { type: 'File', filePath },
-      });
-    } else if (command.type === 'saveToFile') {
-      const { filePath } = command;
-      this.setStatus({
-        editSource: { type: 'File', filePath },
-      });
-    } else if (command.type === 'loadFromProject') {
-      const { projectId, layoutName } = command;
+    }
+  }
+
+  private async loadLayoutFromFile(filePath: string) {
+    const loadedDesign = await layoutFileLoader.loadLayoutFromFile(filePath);
+    this.setStatus({
+      editSource: { type: 'File', filePath },
+      loadedDesign,
+    });
+  }
+
+  private async saveLayoutToFile(
+    filePath: string,
+    design: IPersistKeyboardDesign,
+  ) {
+    await layoutFileLoader.saveLayoutToFile(filePath, design);
+    this.setStatus({
+      editSource: { type: 'File', filePath },
+    });
+  }
+
+  private async loadLayoutFromProfject(projectId: string, layoutName: string) {
+    const filePath = this.projectResourceInfoProvider.getLayoutFilePath(
+      projectId,
+      layoutName,
+    );
+    if (filePath) {
+      const loadedDesign = await layoutFileLoader.loadLayoutFromFile(filePath);
       this.setStatus({
         editSource: {
           type: 'ProjectLayout',
           projectId,
           layoutName,
         },
+        loadedDesign,
       });
-    } else if (command.type === 'saveToProject') {
-      const { projectId, layoutName } = command;
+    }
+  }
+
+  private async saveLayoutToProject(
+    projectId: string,
+    layoutName: string,
+    design: IPersistKeyboardDesign,
+  ) {
+    const filePath = this.projectResourceInfoProvider.getLayoutFilePath(
+      projectId,
+      layoutName,
+    );
+    if (filePath) {
+      await layoutFileLoader.saveLayoutToFile(filePath, design);
       this.setStatus({
         editSource: {
           type: 'ProjectLayout',
@@ -75,30 +114,79 @@ export class LayoutManager implements ILayoutManager {
     }
   }
 
+  private async overwriteCurrentLayout(design: IPersistKeyboardDesign) {
+    const { editSource } = this.status;
+    if (editSource.type === 'NewlyCreated') {
+      throw new Error('cannot save newly created layout');
+    } else if (editSource.type === 'CurrentProfile') {
+      const profile = this.profileManager.getStatus().loadedProfileData;
+      if (profile) {
+        const newProfile = duplicateObjectByJsonStringifyParse(profile);
+        newProfile.keyboardDesign = design;
+        this.profileManager.saveCurrentProfile(newProfile);
+      }
+    } else if (editSource.type === 'File') {
+      const { filePath } = editSource;
+      await layoutFileLoader.saveLayoutToFile(filePath, design);
+    } else if (editSource.type === 'ProjectLayout') {
+      const { projectId, layoutName } = editSource;
+      const filePath = this.projectResourceInfoProvider.getLayoutFilePath(
+        projectId,
+        layoutName,
+      );
+      if (filePath) {
+        await layoutFileLoader.saveLayoutToFile(filePath, design);
+      }
+    }
+    this.setStatus({ loadedDesign: design });
+  }
+
+  private async executeCommand(command: ILayoutManagerCommand) {
+    console.log(`execute layout manager command`, JSON.stringify(command));
+
+    if (command.type === 'createNewLayout') {
+      await this.createNewLayout();
+    } else if (command.type === 'loadCurrentProfileLayout') {
+      await this.loadCurrentProfileLayout();
+    } else if (command.type === 'loadFromFile') {
+      const { filePath } = command;
+      await this.loadLayoutFromFile(filePath);
+    } else if (command.type === 'saveToFile') {
+      const { filePath, design } = command;
+      await this.saveLayoutToFile(filePath, design);
+    } else if (command.type === 'loadFromProject') {
+      const { projectId, layoutName } = command;
+      await this.loadLayoutFromProfject(projectId, layoutName);
+    } else if (command.type === 'saveToProject') {
+      const { projectId, layoutName, design } = command;
+      await this.saveLayoutToProject(projectId, layoutName, design);
+    } else if (command.type === 'save') {
+      const { design } = command;
+      await this.overwriteCurrentLayout(design);
+    }
+  }
+
   async executeCommands(commands: ILayoutManagerCommand[]): Promise<boolean> {
     try {
-      commands.forEach((command) => this.executeCommand(command));
+      for (const command of commands) {
+        await this.executeCommand(command);
+      }
     } catch (error) {
-      this.status.errorMessage = `error@LayoutManager ${error}`;
+      this.setStatus({
+        errorMessage: `error@LayoutManager ${error}`,
+      });
       return false;
     }
     return true;
   }
 
   async getAllProjectLayoutsInfos(): Promise<IProjectLayoutsInfo[]> {
-    return [
-      {
-        projectId: 'proj1',
-        projectPath: 'proto/proj1',
-        keyboardName: 'Proto-One',
-        layoutNames: ['default', 'layout1'],
-      },
-      {
-        projectId: 'proj2',
-        projectPath: 'proto/proj2',
-        keyboardName: 'proto2',
-        layoutNames: ['default', 'layout1', 'layout2'],
-      },
-    ];
+    const resourceInfos = this.projectResourceInfoProvider.getAllProjectResourceInfos();
+    return resourceInfos.map((info) => ({
+      projectId: info.projectId,
+      projectPath: info.projectPath,
+      keyboardName: info.keyboardName,
+      layoutNames: info.layoutNames,
+    }));
   }
 }
