@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { uiTheme } from '~/ui-common';
-import { UiLayouterPageComponent } from '~/ui-layouter-page';
+import { UiLayouterPageComponent } from '~/ui-layouter-page/UiLayoutPageComponent';
 import { UiLayouterPageDevelopmentDummy } from '~/ui-layouter-page/UiLayoutPageDevelopmentDummy';
 import { models } from '~/ui-root/models';
 import { CustomWindowFrame } from '~/ui-root/views/base/window/CustomWindowFrame';
@@ -34,8 +34,8 @@ export const ConfiguratorZoneRoot = () => {
         <NavigationColumn />
         <div css={styles.cssMainColumn}>
           {page === 'editor' && <EditorPage />}
-          {/* {page === 'layouter' && <UiLayouterPageComponent />} */}
-          {page === 'layouter' && <UiLayouterPageDevelopmentDummy />}
+          {page === 'layouter' && <UiLayouterPageComponent />}
+          {/* {page === 'layouter' && <UiLayouterPageDevelopmentDummy />} */}
           {page === 'shapePreview' && <KeyboardShapePreviewPage />}
           {page === 'firmwareUpdation' && <FirmwareUpdationPage />}
           {page === 'presetBrowser' && <PresetBrowserPage />}
