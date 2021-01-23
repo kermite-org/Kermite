@@ -66,6 +66,10 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     }
   }
 
+  unloadCurrentProfileLayout() {
+    this.sendCommand({ type: 'unloadCurrentProfileLayout' });
+  }
+
   loadFromProject(projectId: string, layoutName: string) {
     this.sendCommand({ type: 'loadFromProject', projectId, layoutName });
   }

@@ -25,7 +25,6 @@ export interface ILayoutManagerViewModel {
   setCurrentLayoutName(text: string): void;
 
   createNewLayout(): void;
-  // loadCurrentProfileLayout(): void;
   toggleCurrentProfileEdit(): void;
   canLoadFromProject: boolean;
   loadFromProject(): void;
@@ -135,12 +134,11 @@ function useLayoutManagerViewModelImpl(
       local.currentLayoutName,
     ),
     createNewLayout: () => model.createNewLayout(),
-    // loadCurrentProfileLayout: () => model.loadCurrentProfileLayout(),
     toggleCurrentProfileEdit: () => {
       if (model.editSource.type !== 'CurrentProfile') {
         model.loadCurrentProfileLayout();
       } else {
-        model.createNewLayout();
+        model.unloadCurrentProfileLayout();
       }
     },
     canLoadFromProject: isProjectLayoutSourceSpecified,

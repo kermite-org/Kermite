@@ -5,6 +5,7 @@ import {
   createFallbackPersistKeyboardDesign,
   duplicateObjectByJsonStringifyParse,
   IPersistKeyboardDesign,
+  ILayoutEditSource,
 } from '~/shared';
 import { createEventPort2 } from '~/shell/funcs';
 import { layoutFileLoader } from '~/shell/services/layout/LayoutFileLoader';
@@ -17,6 +18,9 @@ export class LayoutManager implements ILayoutManager {
     private projectResourceInfoProvider: IProjectResourceInfoProvider,
     private profileManager: IProfileManager,
   ) {}
+
+  // CurrentProfile以外のEditSourceを維持
+  private backEditSource: ILayoutEditSource = { type: 'NewlyCreated' };
 
   private status: ILayoutManagerStatus = {
     editSource: {
@@ -39,6 +43,10 @@ export class LayoutManager implements ILayoutManager {
   private setStatus(newStatusPartial: Partial<ILayoutManagerStatus>) {
     this.status = { ...this.status, ...newStatusPartial };
     this.statusEvents.emit(newStatusPartial);
+    const { editSource } = newStatusPartial;
+    if (editSource && editSource.type !== 'CurrentProfile') {
+      this.backEditSource = editSource;
+    }
   }
 
   private async createNewLayout() {
@@ -115,6 +123,27 @@ export class LayoutManager implements ILayoutManager {
     }
   }
 
+  private async loadLayoutByEditSource(editSource: ILayoutEditSource) {
+    if (editSource.type === 'NewlyCreated') {
+      await this.createNewLayout();
+    } else if (editSource.type === 'CurrentProfile') {
+      await this.loadCurrentProfileLayout();
+    } else if (editSource.type === 'File') {
+      const { filePath } = editSource;
+      await this.loadLayoutFromFile(filePath);
+    } else if (editSource.type === 'ProjectLayout') {
+      const { projectId, layoutName } = editSource;
+      await this.loadLayoutFromProfject(projectId, layoutName);
+    }
+  }
+
+  private async unloadCurrentProfileLayout() {
+    await this.loadLayoutByEditSource(this.backEditSource);
+    this.setStatus({
+      editSource: this.backEditSource,
+    });
+  }
+
   private async overwriteCurrentLayout(design: IPersistKeyboardDesign) {
     const { editSource } = this.status;
     if (editSource.type === 'NewlyCreated') {
@@ -164,6 +193,8 @@ export class LayoutManager implements ILayoutManager {
     } else if (command.type === 'save') {
       const { design } = command;
       await this.overwriteCurrentLayout(design);
+    } else if (command.type === 'unloadCurrentProfileLayout') {
+      await this.unloadCurrentProfileLayout();
     }
   }
 
