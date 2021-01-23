@@ -231,6 +231,20 @@ export function convertUndefinedToBlankString(
   return value || '';
 }
 
+export function convertDefaultValueToUndefined<T>(
+  value: T,
+  defaultValue: T,
+): T | undefined {
+  return value === defaultValue ? undefined : value;
+}
+
+export function convertUndefinedToDefaultValue<T>(
+  value: T | undefined,
+  defaultValue: T,
+): T {
+  return value === undefined ? defaultValue : value;
+}
+
 export function clamp(val: number, lo: number, hi: number) {
   if (val < lo) {
     return lo;

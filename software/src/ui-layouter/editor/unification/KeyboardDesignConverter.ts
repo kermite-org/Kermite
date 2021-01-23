@@ -6,6 +6,8 @@ import {
   flattenArray,
   IPersistKeyboardDesignRealKeyEntity,
   IPersistKeyboardDesignMirrorKeyEntity,
+  convertDefaultValueToUndefined,
+  convertUndefinedToDefaultValue,
 } from '~/shared';
 import {
   IEditKeyboardDesign,
@@ -49,8 +51,8 @@ export namespace KeyboardDesignConverter {
         mirrorEditKeyId: ke.keyId + 'm',
         x: ke.x,
         y: ke.y,
-        angle: ke.angle,
-        shape: ke.shape,
+        angle: convertUndefinedToDefaultValue(ke.angle, 0),
+        shape: convertUndefinedToDefaultValue(ke.shape, 'std 1'),
         keyIndex: convertUndefinedToMinusOne(ke.keyIndex),
         mirrorKeyIndex: -1,
         groupId: groupIndexToGroupId(ke.groupIndex),
@@ -88,9 +90,17 @@ export namespace KeyboardDesignConverter {
       ),
       transGroups: createDictionaryFromKeyValues(
         source.transGroups.map((group, idx) => {
-          const { x, y, angle, mirror } = group;
           const id = idx.toString();
-          return [id, { x, y, angle, mirror: mirror || false, id }];
+          return [
+            id,
+            {
+              id,
+              x: group.x,
+              y: group.y,
+              angle: convertUndefinedToDefaultValue(group.angle, 0),
+              mirror: group.mirror || false,
+            },
+          ];
         }),
       ),
     };
@@ -122,8 +132,8 @@ export namespace KeyboardDesignConverter {
             keyId: realKeyId,
             x: roundNumber(ke.x),
             y: roundNumber(ke.y),
-            angle: roundNumber(ke.angle),
-            shape: ke.shape,
+            angle: convertDefaultValueToUndefined(roundNumber(ke.angle), 0),
+            shape: convertDefaultValueToUndefined(ke.shape, 'std 1'),
             keyIndex: convertMinusOneToUndefined(ke.keyIndex),
             groupIndex: groupIdToGroupIndex(ke.groupId),
           };
@@ -161,7 +171,7 @@ export namespace KeyboardDesignConverter {
       transGroups: Object.values(design.transGroups).map((group) => ({
         x: roundNumber(group.x),
         y: roundNumber(group.y),
-        angle: roundNumber(group.angle),
+        angle: convertDefaultValueToUndefined(roundNumber(group.angle), 0),
         mirror: group.mirror || undefined,
       })),
     };
