@@ -8,6 +8,7 @@ import {
   IProjectLayoutsInfo,
 } from '~/shared';
 import { ipcAgent } from '~/ui-common';
+import { UiLayouterCore } from '~/ui-layouter';
 import { ISelectOption } from '~/ui-layouter/controls';
 
 interface ILayoutManagerModel {
@@ -115,10 +116,8 @@ class LayoutManagerModel implements ILayoutManagerModel {
 }
 
 interface ILayoutManagerViewModel {
-  editSource: ILayoutEditSource;
-
-  editDesignText: string;
-  setEditDesignText(text: string): void;
+  editSourceText: string;
+  isEditCurrnetProfileLayoutActive: boolean;
 
   projectOptions: ISelectOption[];
   setCurrentProjectId(projectId: string): void;
@@ -150,17 +149,14 @@ function useLayoutManagerViewModelImpl(
     () => ({
       currentProjectId: '',
       currentLayoutName: '',
-      loadedDesignText: '',
-      editDesignText: '',
     }),
     [],
   );
 
   Hook.useEffect(() => {
-    // console.log(`loadedDesing changed`, model.loadedDesign);
-    const stringifiedDesign = JSON.stringify(model.loadedDesign, null, '  ');
-    local.loadedDesignText = stringifiedDesign;
-    local.editDesignText = stringifiedDesign;
+    if (model.loadedDesign) {
+      UiLayouterCore.loadEditDesign(model.loadedDesign);
+    }
     asyncRerender();
   }, [model.loadedDesign]);
 
@@ -174,10 +170,38 @@ function useLayoutManagerViewModelImpl(
     (info) => info.projectId === local.currentProjectId,
   );
 
+  function getProjectLayoutFilePath(projectId: string, layoutName: string) {
+    const projectInfo = model.projectLayoutsInfos.find(
+      (info) => info.projectId === projectId,
+    );
+    const fileNamePart = layoutName === 'default' ? 'layout' : layoutName;
+    return `<KermiteRoot>/firmware/projects/${
+      projectInfo?.projectPath || ''
+    }/${fileNamePart}.json`;
+  }
+
+  const getEditSourceText = () => {
+    const { editSource } = model;
+    if (editSource.type === 'NewlyCreated') {
+      return `[NewlyCreated]`;
+    } else if (editSource.type === 'CurrentProfile') {
+      return `[CurrentProfile]`;
+    } else if (editSource.type === 'File') {
+      return `[File]${editSource.filePath}`;
+    } else if (editSource.type === 'ProjectLayout') {
+      const { projectId, layoutName } = editSource;
+      return `[PorjectLayout]${getProjectLayoutFilePath(
+        projectId,
+        layoutName,
+      )}`;
+    }
+    return '';
+  };
+
   return {
-    editDesignText: local.editDesignText,
-    setEditDesignText: (text) => (local.editDesignText = text),
-    editSource: model.editSource,
+    isEditCurrnetProfileLayoutActive:
+      model.editSource.type === 'CurrentProfile',
+    editSourceText: getEditSourceText(),
     projectOptions: model.projectLayoutsInfos.map((info) => ({
       id: info.projectId,
       text: info.projectPath,
@@ -207,7 +231,11 @@ function useLayoutManagerViewModelImpl(
         }.json`) ||
       '',
     createNewLayout: () => model.createNewLayout(),
-    loadCurrentProfileLayout: () => model.loadCurrentProfileLayout(),
+    loadCurrentProfileLayout: () => {
+      if (model.editSource.type !== 'CurrentProfile') {
+        model.loadCurrentProfileLayout();
+      }
+    },
     canLoadFromProject: !!(local.currentProjectId && local.currentLayoutName),
     loadFromProject: () => {
       model.loadFromProject(local.currentProjectId, local.currentLayoutName);
@@ -217,13 +245,13 @@ function useLayoutManagerViewModelImpl(
       model.saveToProject(
         local.currentProjectId,
         local.currentLayoutName,
-        JSON.parse(local.editDesignText),
+        UiLayouterCore.emitEditDesign(),
       ),
     loadFromFileWithDialog: () => model.loadFromFileWithDialog(),
     saveToFileWithDialog: () =>
-      model.saveToFileWithDialog(JSON.parse(local.editDesignText)),
-    canOverwrite: local.editDesignText !== local.loadedDesignText,
-    overwriteLayout: () => model.save(JSON.parse(local.editDesignText)),
+      model.saveToFileWithDialog(UiLayouterCore.emitEditDesign()),
+    canOverwrite: true, // todo: ui-layoutから取得
+    overwriteLayout: () => model.save(UiLayouterCore.emitEditDesign()),
   };
 }
 
