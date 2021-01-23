@@ -7,6 +7,7 @@ import {
   IProjectLayoutsInfo,
 } from '~/shared';
 import { ipcAgent } from '~/ui-common';
+import { modalConfirm } from '~/ui-common/fundamental/dialog/BasicModals';
 import { UiLayouterCore } from '~/ui-layouter';
 
 interface ILayoutManagerModel {
@@ -79,11 +80,24 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     this.sendCommand({ type: 'loadFromProject', projectId, layoutName });
   }
 
-  saveToProject(
+  async saveToProject(
     projectId: string,
     layoutName: string,
     design: IPersistKeyboardDesign,
   ) {
+    const isExist = this.projectLayoutsInfos.find(
+      (info) =>
+        info.projectId === projectId && info.layoutNames.includes(layoutName),
+    );
+    if (isExist) {
+      const ok = await modalConfirm({
+        message: 'File ovewritten. Are you sure?',
+        caption: 'Save',
+      });
+      if (!ok) {
+        return;
+      }
+    }
     this.sendCommand({ type: 'saveToProject', projectId, layoutName, design });
   }
 
@@ -101,8 +115,14 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     }
   }
 
-  save(design: IPersistKeyboardDesign) {
-    this.sendCommand({ type: 'save', design });
+  async save(design: IPersistKeyboardDesign) {
+    const ok = await modalConfirm({
+      message: 'File ovewritten. Are you sure?',
+      caption: 'Save',
+    });
+    if (ok) {
+      this.sendCommand({ type: 'save', design });
+    }
   }
 
   private async fetchProjectLayoutsInfos() {
