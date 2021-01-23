@@ -97,6 +97,11 @@ export type ILayoutManagerCommand =
       design: IPersistKeyboardDesign;
     }
   | {
+      type: 'createForProject';
+      projectId: string;
+      layoutName: string;
+    }
+  | {
       type: 'loadFromProject';
       projectId: string;
       layoutName: string;

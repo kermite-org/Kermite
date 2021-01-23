@@ -16,6 +16,7 @@ interface ILayoutManagerModel {
   errorMessage: string;
   createNewLayout(): void;
   loadCurrentProfileLayout(): void;
+  createForProject(projectId: string, layoutName: string): void;
   loadFromProject(projectId: string, layoutName: string): void;
   saveToProject(
     projectId: string,
@@ -68,6 +69,10 @@ export class LayoutManagerModel implements ILayoutManagerModel {
 
   unloadCurrentProfileLayout() {
     this.sendCommand({ type: 'unloadCurrentProfileLayout' });
+  }
+
+  createForProject(projectId: string, layoutName: string) {
+    this.sendCommand({ type: 'createForProject', projectId, layoutName });
   }
 
   loadFromProject(projectId: string, layoutName: string) {

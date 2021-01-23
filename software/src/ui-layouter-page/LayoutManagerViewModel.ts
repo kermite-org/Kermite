@@ -27,6 +27,7 @@ export interface ILayoutManagerViewModel {
   createNewLayout(): void;
   toggleCurrentProfileEdit(): void;
   canLoadFromProject: boolean;
+  createForProject(): void;
   loadFromProject(): void;
   canSaveToProject: boolean;
   saveToProject(): void;
@@ -142,6 +143,10 @@ function useLayoutManagerViewModelImpl(
       }
     },
     canLoadFromProject: isProjectLayoutSourceSpecified,
+    createForProject: () => {
+      model.createForProject(local.currentProjectId, local.currentLayoutName);
+      setModalState('None');
+    },
     loadFromProject: () => {
       model.loadFromProject(local.currentProjectId, local.currentLayoutName);
       setModalState('None');

@@ -173,7 +173,9 @@ export const ProjectLayoutSelectorModal = (props: {
               <div class="buttonBox">
                 {isLoading ? (
                   <button
-                    onClick={vm.loadFromProject}
+                    onClick={
+                      isCustomName ? vm.createForProject : vm.loadFromProject
+                    }
                     disabled={!vm.canLoadFromProject}
                   >
                     {isCustomName ? 'Create' : 'Load'}

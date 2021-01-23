@@ -92,6 +92,25 @@ export class LayoutManager implements ILayoutManager {
     });
   }
 
+  private async createLayoutForProfject(projectId: string, layoutName: string) {
+    const filePath = this.projectResourceInfoProvider.getLayoutFilePath(
+      projectId,
+      layoutName,
+    );
+    if (filePath) {
+      const design = createFallbackPersistKeyboardDesign();
+      await this.saveLayoutToFile(filePath, design);
+      this.setStatus({
+        editSource: {
+          type: 'ProjectLayout',
+          projectId,
+          layoutName,
+        },
+        loadedDesign: design,
+      });
+    }
+  }
+
   private async loadLayoutFromProfject(projectId: string, layoutName: string) {
     const filePath = this.projectResourceInfoProvider.getLayoutFilePath(
       projectId,
@@ -196,6 +215,9 @@ export class LayoutManager implements ILayoutManager {
       await this.overwriteCurrentLayout(design);
     } else if (command.type === 'unloadCurrentProfileLayout') {
       await this.unloadCurrentProfileLayout();
+    } else if (command.type === 'createForProject') {
+      const { projectId, layoutName } = command;
+      await this.createLayoutForProfject(projectId, layoutName);
     }
   }
 
