@@ -153,15 +153,17 @@ function useLayoutManagerViewModelImpl(
       model.saveToProject(
         local.currentProjectId,
         local.currentLayoutName,
-        UiLayouterCore.emitEditDesign(),
+        UiLayouterCore.emitSavingDesign(),
       );
       setModalState('None');
     },
     loadFromFileWithDialog: () => model.loadFromFileWithDialog(),
     saveToFileWithDialog: () =>
-      model.saveToFileWithDialog(UiLayouterCore.emitEditDesign()),
-    canOverwrite: true, // todo: ui-layouterから取得
-    overwriteLayout: () => model.save(UiLayouterCore.emitEditDesign()),
+      model.saveToFileWithDialog(UiLayouterCore.emitSavingDesign()),
+    canOverwrite:
+      model.editSource.type !== 'NewlyCreated' &&
+      UiLayouterCore.getIsModified(),
+    overwriteLayout: () => model.save(UiLayouterCore.emitSavingDesign()),
     modalState: local.modalState,
     openLoadFromProjectModal: () => setModalState('LoadFromProject'),
     openSaveToProjectModal: () => setModalState('SaveToProject'),

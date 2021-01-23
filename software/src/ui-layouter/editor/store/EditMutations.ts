@@ -369,12 +369,15 @@ class EditMutations {
 
   resetKeyboardDesign() {
     editUpdator.patchEditor((editor) => {
-      editor.design = createFallbackEditKeyboardDesign();
+      const design = createFallbackEditKeyboardDesign();
+      editor.loadedDesign = design;
+      editor.design = design;
     });
   }
 
   loadKeyboardDesign(design: IEditKeyboardDesign) {
     editUpdator.patchEditor((editor) => {
+      editor.loadedDesign = design;
       editor.design = design;
     });
     this.resetSitePosition();

@@ -17,10 +17,14 @@ export namespace UiLayouterCore {
     editMutations.loadKeyboardDesign(design);
   }
 
-  export function emitEditDesign(): IPersistKeyboardDesign {
+  export function emitSavingDesign(): IPersistKeyboardDesign {
     return KeyboardDesignConverter.convertKeyboardDesignEditToPersist(
       editReader.design,
     );
+  }
+
+  export function getIsModified(): boolean {
+    return editReader.isModified;
   }
 
   export function Component() {
