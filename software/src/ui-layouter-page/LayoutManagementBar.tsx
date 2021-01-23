@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { useLayoutManagerViewModel } from '~/ui-layouter-page/LayoutManagerModel';
+import { useLayoutManagerViewModel } from '~/ui-layouter-page/LayoutManagerViewModel';
 
 const cssLayoutManagementBar = css`
   display: flex;
