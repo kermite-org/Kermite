@@ -1,6 +1,9 @@
 import { IProfileData, fallbackProfileData } from '~/shared';
 import { ipcAgent } from '~/ui-common';
-import { modalTextEdit, modalAlert } from '~/ui-root/base/dialog/BasicModals';
+import {
+  modalTextEdit,
+  modalAlert,
+} from '~/ui-common/fundamental/dialog/BasicModals';
 import { ProjectResourceModel } from '~/ui-root/models/ProjectResourceModel';
 import { UiStatusModel } from '~/ui-root/models/UiStatusModel';
 import { ProfilesModel } from '~/ui-root/models/profile/ProfilesModel';
