@@ -163,9 +163,7 @@ function useLayoutManagerViewModelImpl(
     loadFromFileWithDialog: () => model.loadFromFileWithDialog(),
     saveToFileWithDialog: () =>
       model.saveToFileWithDialog(UiLayouterCore.emitSavingDesign()),
-    canOverwrite:
-      model.editSource.type !== 'NewlyCreated' &&
-      UiLayouterCore.getIsModified(),
+    canOverwrite: model.editSource.type !== 'NewlyCreated' && model.isModified,
     overwriteLayout: () => model.save(UiLayouterCore.emitSavingDesign()),
     modalState: local.modalState,
     openLoadFromProjectModal: () => setModalState('LoadFromProject'),

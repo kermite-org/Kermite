@@ -55,29 +55,56 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     return this._layoutManagerStatus.errorMessage;
   }
 
+  get isModified() {
+    return UiLayouterCore.getIsModified();
+  }
+
   private sendCommand(command: ILayoutManagerCommand) {
     ipcAgent.async.layout_executeLayoutManagerCommands([command]);
   }
 
-  createNewLayout() {
+  private async checkShallLoadData(): Promise<boolean> {
+    if (!this.isModified) {
+      return true;
+    }
+    return await modalConfirm({
+      message: 'Unsaved changes will be lost. Are you OK?',
+      caption: 'Load',
+    });
+  }
+
+  async createNewLayout() {
+    if (!(await this.checkShallLoadData())) {
+      return;
+    }
     this.sendCommand({ type: 'createNewLayout' });
   }
 
-  loadCurrentProfileLayout() {
-    if (this._layoutManagerStatus.editSource.type !== 'CurrentProfile') {
-      this.sendCommand({ type: 'loadCurrentProfileLayout' });
+  async loadCurrentProfileLayout() {
+    if (!(await this.checkShallLoadData())) {
+      return;
     }
+    this.sendCommand({ type: 'loadCurrentProfileLayout' });
   }
 
-  unloadCurrentProfileLayout() {
+  async unloadCurrentProfileLayout() {
+    if (!(await this.checkShallLoadData())) {
+      return;
+    }
     this.sendCommand({ type: 'unloadCurrentProfileLayout' });
   }
 
-  createForProject(projectId: string, layoutName: string) {
+  async createForProject(projectId: string, layoutName: string) {
+    if (!(await this.checkShallLoadData())) {
+      return;
+    }
     this.sendCommand({ type: 'createForProject', projectId, layoutName });
   }
 
-  loadFromProject(projectId: string, layoutName: string) {
+  async loadFromProject(projectId: string, layoutName: string) {
+    if (!(await this.checkShallLoadData())) {
+      return;
+    }
     this.sendCommand({ type: 'loadFromProject', projectId, layoutName });
   }
 
@@ -103,6 +130,9 @@ export class LayoutManagerModel implements ILayoutManagerModel {
   }
 
   async loadFromFileWithDialog() {
+    if (!(await this.checkShallLoadData())) {
+      return;
+    }
     const filePath = await ipcAgent.async.file_getOpenJsonFilePathWithDialog();
     if (filePath) {
       this.sendCommand({ type: 'loadFromFile', filePath });
