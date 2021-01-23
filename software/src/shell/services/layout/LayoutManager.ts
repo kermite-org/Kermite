@@ -7,7 +7,7 @@ import {
   IPersistKeyboardDesign,
   ILayoutEditSource,
 } from '~/shared';
-import { AppError } from '~/shared/defs/CustomException';
+import { getErrorInfo } from '~/shared/defs';
 import { applicationStorage } from '~/shell/base';
 import { createEventPort2 } from '~/shell/funcs';
 import { layoutFileLoader } from '~/shell/services/layout/LayoutFileLoader';
@@ -30,19 +30,24 @@ export class LayoutManager implements ILayoutManager {
       type: 'NewlyCreated',
     },
     loadedDesign: createFallbackPersistKeyboardDesign(),
-    errorMessage: '',
     projectLayoutsInfos: [],
+    errroInfo: undefined,
   };
 
   statusEvents = createEventPort2<Partial<ILayoutManagerStatus>>({
     initialValueGetter: () => this.status,
-    onFirstSubscriptionStarting: () => {
+    onFirstSubscriptionStarting: async () => {
       const editSource = applicationStorage.getItem('layoutEditSource');
       this.setStatus({
         projectLayoutsInfos: this.getAllProjectLayoutsInfos(),
       });
-      // todo: 以前編集していたファイルが削除されている場合などの例外対応が必要
-      this.loadLayoutByEditSource(editSource);
+      try {
+        await this.loadLayoutByEditSource(editSource);
+      } catch (error) {
+        // 以前編集していたファイルが削除されていて読み込めない場合、新規レイアウトで初期化する
+        console.log(error);
+        this.createNewLayout();
+      }
     },
     onLastSubscriptionEnded: () => {
       applicationStorage.setItem('layoutEditSource', this.status.editSource);
@@ -256,10 +261,7 @@ export class LayoutManager implements ILayoutManager {
         await this.executeCommand(command);
       }
     } catch (error) {
-      const errorType = error instanceof AppError ? `AppError` : `Error`;
-      this.setStatus({
-        errorMessage: `${errorType}@LayoutManager: ${error.message}`,
-      });
+      this.setStatus({ errroInfo: getErrorInfo(error) });
       return false;
     }
     return true;

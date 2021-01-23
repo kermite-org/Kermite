@@ -1,5 +1,6 @@
 import {
   createFallbackPersistKeyboardDesign,
+  getErrorText,
   ILayoutEditSource,
   ILayoutManagerCommand,
   ILayoutManagerStatus,
@@ -17,7 +18,6 @@ interface ILayoutManagerModel {
   projectLayoutsInfos: IProjectLayoutsInfo[];
   editSource: ILayoutEditSource;
   loadedDesign: IPersistKeyboardDesign;
-  errorMessage: string;
   createNewLayout(): void;
   loadCurrentProfileLayout(): void;
   createForProject(projectId: string, layoutName: string): void;
@@ -38,7 +38,7 @@ export class LayoutManagerModel implements ILayoutManagerModel {
   private _layoutManagerStatus: ILayoutManagerStatus = {
     editSource: { type: 'NewlyCreated' },
     loadedDesign: createFallbackPersistKeyboardDesign(),
-    errorMessage: '',
+    errroInfo: undefined,
     projectLayoutsInfos: [],
   };
 
@@ -52,10 +52,6 @@ export class LayoutManagerModel implements ILayoutManagerModel {
 
   get loadedDesign() {
     return this._layoutManagerStatus.loadedDesign;
-  }
-
-  get errorMessage() {
-    return this._layoutManagerStatus.errorMessage;
   }
 
   get isModified() {
@@ -159,7 +155,9 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     }
   }
 
-  private onLayoutManagerStatus = (diff: Partial<ILayoutManagerStatus>) => {
+  private onLayoutManagerStatus = async (
+    diff: Partial<ILayoutManagerStatus>,
+  ) => {
     this._layoutManagerStatus = {
       ...this._layoutManagerStatus,
       ...diff,
@@ -167,9 +165,17 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     if (diff.loadedDesign) {
       UiLayouterCore.loadEditDesign(diff.loadedDesign);
     }
-    if (diff.errorMessage) {
-      console.log(`ERROR`, diff.errorMessage);
-      modalError(diff.errorMessage);
+    if (diff.errroInfo) {
+      const { errroInfo } = diff;
+      const errorTextEN = getErrorText(errroInfo, 'EN');
+      const errorTextJP = getErrorText(errroInfo, 'JP');
+      console.log(`ERROR`, {
+        errroInfo,
+        errorTextEN,
+        errorTextJP,
+      });
+      // todo: 多言語化対応時にエラーを出し分ける
+      await modalError(errorTextEN);
     }
     if (diff.projectLayoutsInfos) {
       this._projectLayoutsInfos = diff.projectLayoutsInfos;

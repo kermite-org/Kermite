@@ -64,6 +64,7 @@ export const DialogContentRow = (props: { children: any }) => {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    white-space: pre-wrap;
   `;
   return <div css={cssBody}>{props.children}</div>;
 };

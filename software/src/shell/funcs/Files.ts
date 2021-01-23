@@ -1,7 +1,7 @@
 import fs from 'fs';
 import * as path from 'path';
 import { glob } from 'glob';
-import { AppError } from '~/shared/defs/CustomException';
+import { AppError } from '~/shared/defs';
 
 export const pathJoin = path.join;
 
@@ -47,12 +47,12 @@ export async function fsxReadJsonFile(filePath: string): Promise<any> {
   try {
     text = await fs.promises.readFile(filePath, { encoding: 'utf-8' });
   } catch (error) {
-    throw new AppError(`cannot read file ${filePath}`);
+    throw new AppError({ type: 'CannotReadFile', filePath });
   }
   try {
     obj = JSON.parse(text);
   } catch (error) {
-    throw new AppError(`invalid json file content for ${filePath}`);
+    throw new AppError({ type: 'InvalidJsonFileContent', filePath });
   }
   return obj;
 }
@@ -65,7 +65,7 @@ export async function fsxWriteJsonFile(
   try {
     await fs.promises.writeFile(filePath, text);
   } catch (error) {
-    throw new AppError(`cannto write file ${filePath}`);
+    throw new AppError({ type: 'CannotWriteFile', filePath });
   }
 }
 

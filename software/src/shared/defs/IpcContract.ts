@@ -1,3 +1,4 @@
+import { IAppErrorInfo } from '~/shared/defs/CustomErrors';
 import { IPersistKeyboardDesign } from '~/shared/defs/KeyboardDesign';
 import { IKeyboardConfig } from './ConfigTypes';
 import { IProfileData, IProjectResourceInfo } from './ProfileData';
@@ -70,7 +71,7 @@ export type ILayoutEditSource =
 export interface ILayoutManagerStatus {
   editSource: ILayoutEditSource;
   loadedDesign: IPersistKeyboardDesign;
-  errorMessage: string;
+  errroInfo: IAppErrorInfo | undefined;
   projectLayoutsInfos: IProjectLayoutsInfo[];
 }
 

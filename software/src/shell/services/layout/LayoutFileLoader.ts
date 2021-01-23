@@ -1,5 +1,5 @@
 import { IPersistKeyboardDesign } from '~/shared';
-import { AppError } from '~/shared/defs/CustomException';
+import { AppError } from '~/shared/defs';
 import { fsxReadJsonFile, fsxWriteJsonFile } from '~/shell/funcs';
 import { checkLayoutFileContentObjectSchema } from '~/shell/modules/LayoutFileSchemaChecker';
 import { ILayoutFileLoader } from '~/shell/services/layout/interfaces';
@@ -10,9 +10,11 @@ class LayoutFileLoader implements ILayoutFileLoader {
 
     const schemaError = checkLayoutFileContentObjectSchema(obj);
     if (schemaError) {
-      throw new AppError(
-        `invalid schema for file ${filePath}, errors: ${schemaError}`,
-      );
+      throw new AppError({
+        type: 'InvalidLayoutFileSchema',
+        filePath,
+        errorDetail: schemaError.toString().replace(/\\\\/g, '\\'),
+      });
     }
     return obj as IPersistKeyboardDesign;
   }
