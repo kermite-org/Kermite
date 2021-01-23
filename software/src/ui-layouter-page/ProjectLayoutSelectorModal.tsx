@@ -21,11 +21,29 @@ const cssProjectLayoutSelectorModal = css`
 const cssPanel = css`
   background: #fff;
   width: 500px;
+  border: solid 3px #08f;
 
   > .panelHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background: #08f;
     color: #fff;
-    padding: 6px;
+    padding: 4px 1px;
+
+    > .titleText {
+      margin-left: 4px;
+    }
+
+    > .closeButton {
+      cursor: pointer;
+      padding: 0 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 24px;
+      height: 24px;
+    }
   }
 
   > .panelBody {
@@ -136,7 +154,12 @@ export const ProjectLayoutSelectorModal = (props: {
   return (
     <div css={cssProjectLayoutSelectorModal} onClick={vm.closeModal}>
       <div css={cssPanel} onClick={(e) => e.stopPropagation()}>
-        <div class="panelHeader">{titleText}</div>
+        <div class="panelHeader">
+          <div class="titleText">{titleText}</div>
+          <div class="closeButton" onClick={vm.closeModal}>
+            <i class="fa fa-times" />
+          </div>
+        </div>
         <div class="panelBody">
           <div css={cssProjectLayoutContent}>
             <div class="primaryRow">
