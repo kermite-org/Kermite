@@ -3,6 +3,7 @@ import { h } from 'qx';
 import { LayoutManagerButton } from '~/ui-layouter-page/LayoutManagerButton';
 import { LayoutManagerMenu } from '~/ui-layouter-page/LayoutManagerMenu';
 import { useLayoutManagerViewModel } from '~/ui-layouter-page/LayoutManagerViewModel';
+import { ProjectLayoutSelectorModal } from '~/ui-layouter-page/ProjectLayoutSelectorModal';
 
 const cssLayoutManagementBar = css`
   display: flex;
@@ -44,6 +45,7 @@ export const LayoutManagerTopBar = () => {
       >
         save
       </LayoutManagerButton>
+      <ProjectLayoutSelectorModal vm={vm} />
     </div>
   );
 };

@@ -41,6 +41,18 @@ export interface ILayoutManagerViewModel {
   closeModal(): void;
 }
 
+function getTargetProjectLayoutFilePath(
+  projectPath: string,
+  layoutName: string,
+) {
+  if (projectPath && layoutName) {
+    const fileNamePart = layoutName === 'default' ? 'layout' : layoutName;
+    return `projects/${projectPath}/${fileNamePart}.json`;
+    // return `<KermiteRoot>/firmare/src/projects/${projectPath}/${fileNamePart}.json`;
+  }
+  return '';
+}
+
 function getEditSourceDisplayText(
   editSource: ILayoutEditSource,
   projectLayoutsInfos: IProjectLayoutsInfo[],
@@ -56,21 +68,8 @@ function getEditSourceDisplayText(
     const projectInfo = projectLayoutsInfos.find(
       (info) => info.projectId === projectId,
     );
-    const fileNamePart = layoutName === 'default' ? 'layout' : layoutName;
-    return `<KermiteRoot>/firmware/projects/${
-      projectInfo?.projectPath || ''
-    }/${fileNamePart}.json`;
-  }
-  return '';
-}
-
-function getTargetProjectLayoutFilePath(
-  projectPath: string,
-  layoutName: string,
-) {
-  if (projectPath && layoutName) {
-    const fileNamePart = layoutName === 'default' ? 'layout' : layoutName;
-    return `projects/${projectPath}/${fileNamePart}.json`;
+    const projectPath = projectInfo?.projectPath || '';
+    return getTargetProjectLayoutFilePath(projectPath, layoutName);
   }
   return '';
 }
@@ -82,6 +81,7 @@ function useLayoutManagerViewModelImpl(
     currentProjectId: '',
     currentLayoutName: '',
     modalState: 'None' as ILayoutManagerModalState,
+    // modalState: 'LoadFromProject' as ILayoutManagerModalState,
   });
 
   const setCurrentProjectId = (projectId: string) => {
@@ -90,6 +90,10 @@ function useLayoutManagerViewModelImpl(
 
   const setCurrentLayoutName = (projectName: string) => {
     local.currentLayoutName = projectName;
+  };
+
+  const setModalState = (modalState: ILayoutManagerModalState) => {
+    local.modalState = modalState;
   };
 
   const currentProject = model.projectLayoutsInfos.find(
@@ -142,23 +146,26 @@ function useLayoutManagerViewModelImpl(
     canLoadFromProject: isProjectLayoutSourceSpecified,
     loadFromProject: () => {
       model.loadFromProject(local.currentProjectId, local.currentLayoutName);
+      setModalState('None');
     },
     canSaveToProject: isProjectLayoutSourceSpecified,
-    saveToProject: () =>
+    saveToProject: () => {
       model.saveToProject(
         local.currentProjectId,
         local.currentLayoutName,
         UiLayouterCore.emitEditDesign(),
-      ),
+      );
+      setModalState('None');
+    },
     loadFromFileWithDialog: () => model.loadFromFileWithDialog(),
     saveToFileWithDialog: () =>
       model.saveToFileWithDialog(UiLayouterCore.emitEditDesign()),
     canOverwrite: true, // todo: ui-layouterから取得
     overwriteLayout: () => model.save(UiLayouterCore.emitEditDesign()),
     modalState: local.modalState,
-    openLoadFromProjectModal: () => (local.modalState = 'LoadFromProject'),
-    openSaveToProjectModal: () => (local.modalState = 'SaveToProject'),
-    closeModal: () => (local.modalState = 'None'),
+    openLoadFromProjectModal: () => setModalState('LoadFromProject'),
+    openSaveToProjectModal: () => setModalState('SaveToProject'),
+    closeModal: () => setModalState('None'),
   };
 }
 
