@@ -4,7 +4,12 @@ import { UiLayouterCore } from '~/ui-layouter';
 import { LayoutManagerModel } from '~/ui-layouter-page/LayoutManagerModel';
 import { ISelectOption } from '~/ui-layouter/controls';
 
-interface ILayoutManagerViewModel {
+export type ILayoutManagerModalState =
+  | 'None'
+  | 'LoadFromProject'
+  | 'SaveToProject';
+
+export interface ILayoutManagerViewModel {
   editSourceText: string;
   isEditCurrnetProfileLayoutActive: boolean;
 
@@ -20,7 +25,8 @@ interface ILayoutManagerViewModel {
   setCurrentLayoutName(text: string): void;
 
   createNewLayout(): void;
-  loadCurrentProfileLayout(): void;
+  // loadCurrentProfileLayout(): void;
+  toggleCurrentProfileEdit(): void;
   canLoadFromProject: boolean;
   loadFromProject(): void;
   canSaveToProject: boolean;
@@ -29,6 +35,10 @@ interface ILayoutManagerViewModel {
   saveToFileWithDialog(): void;
   canOverwrite: boolean;
   overwriteLayout(): void;
+  modalState: ILayoutManagerModalState;
+  openLoadFromProjectModal(): void;
+  openSaveToProjectModal(): void;
+  closeModal(): void;
 }
 
 function getEditSourceDisplayText(
@@ -38,7 +48,7 @@ function getEditSourceDisplayText(
   if (editSource.type === 'NewlyCreated') {
     return `[NewlyCreated]`;
   } else if (editSource.type === 'CurrentProfile') {
-    return `[CurrentProfile]`;
+    return `[CurrentProfileLayout]`;
   } else if (editSource.type === 'File') {
     return `[File]${editSource.filePath}`;
   } else if (editSource.type === 'ProjectLayout') {
@@ -71,6 +81,7 @@ function useLayoutManagerViewModelImpl(
   const [local] = Hook.useState({
     currentProjectId: '',
     currentLayoutName: '',
+    modalState: 'None' as ILayoutManagerModalState,
   });
 
   const setCurrentProjectId = (projectId: string) => {
@@ -120,7 +131,14 @@ function useLayoutManagerViewModelImpl(
       local.currentLayoutName,
     ),
     createNewLayout: () => model.createNewLayout(),
-    loadCurrentProfileLayout: () => model.loadCurrentProfileLayout(),
+    // loadCurrentProfileLayout: () => model.loadCurrentProfileLayout(),
+    toggleCurrentProfileEdit: () => {
+      if (model.editSource.type !== 'CurrentProfile') {
+        model.loadCurrentProfileLayout();
+      } else {
+        model.createNewLayout();
+      }
+    },
     canLoadFromProject: isProjectLayoutSourceSpecified,
     loadFromProject: () => {
       model.loadFromProject(local.currentProjectId, local.currentLayoutName);
@@ -137,6 +155,10 @@ function useLayoutManagerViewModelImpl(
       model.saveToFileWithDialog(UiLayouterCore.emitEditDesign()),
     canOverwrite: true, // todo: ui-layouterから取得
     overwriteLayout: () => model.save(UiLayouterCore.emitEditDesign()),
+    modalState: local.modalState,
+    openLoadFromProjectModal: () => (local.modalState = 'LoadFromProject'),
+    openSaveToProjectModal: () => (local.modalState = 'SaveToProject'),
+    closeModal: () => (local.modalState = 'None'),
   };
 }
 

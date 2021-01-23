@@ -1,5 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
+import { LayoutManagerButton } from '~/ui-layouter-page/LayoutManagerButton';
+import { LayoutManagerMenu } from '~/ui-layouter-page/LayoutManagerMenu';
 import { useLayoutManagerViewModel } from '~/ui-layouter-page/LayoutManagerViewModel';
 
 const cssLayoutManagementBar = css`
@@ -11,23 +13,8 @@ const cssLayoutManagementBar = css`
     margin-left: 4px;
   }
 
-  > .btn {
+  > * {
     flex-shrink: 0;
-    border: solid 1px #008;
-    color: #008;
-    padding: 0 8px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-
-    &[data-active] {
-      background: #cdf;
-    }
-
-    &[data-disabled] {
-      opacity: 0.5;
-    }
   }
 
   > .targetDisplayArea {
@@ -39,26 +26,24 @@ const cssLayoutManagementBar = css`
   }
 `;
 
-export const LayoutManagementBar = () => {
+export const LayoutManagerTopBar = () => {
   const vm = useLayoutManagerViewModel();
   return (
     <div css={cssLayoutManagementBar}>
-      <div class="btn">menu</div>
-      <div
-        class="btn"
-        data-active={vm.isEditCurrnetProfileLayoutActive}
-        onClick={vm.loadCurrentProfileLayout}
+      <LayoutManagerMenu baseVm={vm} />
+      <LayoutManagerButton
+        active={vm.isEditCurrnetProfileLayoutActive}
+        handler={vm.toggleCurrentProfileEdit}
       >
         <i class="fa fa-link" />
-      </div>
+      </LayoutManagerButton>
       <div class="targetDisplayArea">{vm.editSourceText}</div>
-      <div
-        class="btn"
-        data-disabled={!vm.canOverwrite}
-        onClick={vm.overwriteLayout}
+      <LayoutManagerButton
+        disabled={!vm.canOverwrite}
+        handler={vm.overwriteLayout}
       >
         save
-      </div>
+      </LayoutManagerButton>
     </div>
   );
 };

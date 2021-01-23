@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { UiLayouterCore } from '~/ui-layouter';
-import { LayoutManagementBar } from '~/ui-layouter-page/LayoutManagementBar';
+import { LayoutManagerTopBar } from '~/ui-layouter-page/LayoutManagerTopBar';
 
 const cssBase = css`
   height: 100%;
@@ -20,7 +20,7 @@ export const UiLayouterPageComponent = () => {
   return (
     <div css={cssBase}>
       <div className="topRow">
-        <LayoutManagementBar />
+        <LayoutManagerTopBar />
       </div>
       <div className="mainRow">
         <UiLayouterCore.Component />
