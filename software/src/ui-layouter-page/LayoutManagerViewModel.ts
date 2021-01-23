@@ -1,4 +1,5 @@
-import { asyncRerender, Hook } from 'qx';
+import { Hook } from 'qx';
+import { ILayoutEditSource, IProjectLayoutsInfo } from '~/shared';
 import { UiLayouterCore } from '~/ui-layouter';
 import { LayoutManagerModel } from '~/ui-layouter-page/LayoutManagerModel';
 import { ISelectOption } from '~/ui-layouter/controls';
@@ -30,36 +31,19 @@ interface ILayoutManagerViewModel {
   overwriteLayout(): void;
 }
 
-function useLayoutManagerViewModelImpl(
-  model: LayoutManagerModel,
-): ILayoutManagerViewModel {
-  const local = Hook.useMemo(
-    () => ({
-      currentProjectId: '',
-      currentLayoutName: '',
-    }),
-    [],
-  );
-
-  Hook.useEffect(() => {
-    if (model.loadedDesign) {
-      UiLayouterCore.loadEditDesign(model.loadedDesign);
-    }
-    asyncRerender();
-  }, [model.loadedDesign]);
-
-  Hook.useEffect(() => {
-    if (model.errorMessage) {
-      console.log(`ERROR`, model.errorMessage);
-    }
-  }, [model.errorMessage]);
-
-  const currentProject = model.projectLayoutsInfos.find(
-    (info) => info.projectId === local.currentProjectId,
-  );
-
-  function getProjectLayoutFilePath(projectId: string, layoutName: string) {
-    const projectInfo = model.projectLayoutsInfos.find(
+function getEditSourceDisplayText(
+  editSource: ILayoutEditSource,
+  projectLayoutsInfos: IProjectLayoutsInfo[],
+) {
+  if (editSource.type === 'NewlyCreated') {
+    return `[NewlyCreated]`;
+  } else if (editSource.type === 'CurrentProfile') {
+    return `[CurrentProfile]`;
+  } else if (editSource.type === 'File') {
+    return `[File]${editSource.filePath}`;
+  } else if (editSource.type === 'ProjectLayout') {
+    const { projectId, layoutName } = editSource;
+    const projectInfo = projectLayoutsInfos.find(
       (info) => info.projectId === projectId,
     );
     const fileNamePart = layoutName === 'default' ? 'layout' : layoutName;
@@ -67,68 +51,81 @@ function useLayoutManagerViewModelImpl(
       projectInfo?.projectPath || ''
     }/${fileNamePart}.json`;
   }
+  return '';
+}
 
-  const getEditSourceText = () => {
-    const { editSource } = model;
-    if (editSource.type === 'NewlyCreated') {
-      return `[NewlyCreated]`;
-    } else if (editSource.type === 'CurrentProfile') {
-      return `[CurrentProfile]`;
-    } else if (editSource.type === 'File') {
-      return `[File]${editSource.filePath}`;
-    } else if (editSource.type === 'ProjectLayout') {
-      const { projectId, layoutName } = editSource;
-      return `[PorjectLayout]${getProjectLayoutFilePath(
-        projectId,
-        layoutName,
-      )}`;
-    }
-    return '';
+function getTargetProjectLayoutFilePath(
+  projectPath: string,
+  layoutName: string,
+) {
+  if (projectPath && layoutName) {
+    const fileNamePart = layoutName === 'default' ? 'layout' : layoutName;
+    return `projects/${projectPath}/${fileNamePart}.json`;
+  }
+  return '';
+}
+
+function useLayoutManagerViewModelImpl(
+  model: LayoutManagerModel,
+): ILayoutManagerViewModel {
+  const [local] = Hook.useState({
+    currentProjectId: '',
+    currentLayoutName: '',
+  });
+
+  const setCurrentProjectId = (projectId: string) => {
+    local.currentProjectId = projectId;
   };
+
+  const setCurrentLayoutName = (projectName: string) => {
+    local.currentLayoutName = projectName;
+  };
+
+  const currentProject = model.projectLayoutsInfos.find(
+    (info) => info.projectId === local.currentProjectId,
+  );
+
+  const projectOptions = model.projectLayoutsInfos.map((info) => ({
+    id: info.projectId,
+    text: info.projectPath,
+  }));
+
+  const layoutOptions =
+    currentProject?.layoutNames.map((layoutName) => ({
+      id: layoutName,
+      text: layoutName,
+    })) || [];
+
+  const isProjectLayoutSourceSpecified = !!(
+    local.currentProjectId && local.currentLayoutName
+  );
 
   return {
     isEditCurrnetProfileLayoutActive:
       model.editSource.type === 'CurrentProfile',
-    editSourceText: getEditSourceText(),
-    projectOptions: model.projectLayoutsInfos.map((info) => ({
-      id: info.projectId,
-      text: info.projectPath,
-    })),
-    setCurrentProjectId: (projectId: string) => {
-      local.currentProjectId = projectId;
-    },
+    editSourceText: getEditSourceDisplayText(
+      model.editSource,
+      model.projectLayoutsInfos,
+    ),
+    projectOptions,
     currentProjectId: local.currentProjectId,
+    setCurrentProjectId,
     currentProjectPath: currentProject?.projectPath || '',
     currentKeyboardName: currentProject?.keyboardName || '',
-    layoutOptions:
-      currentProject?.layoutNames.map((layoutName) => ({
-        id: layoutName,
-        text: layoutName,
-      })) || [],
+    layoutOptions,
     currentLayoutName: local.currentLayoutName,
-    setCurrentLayoutName: (projectName: string) => {
-      local.currentLayoutName = projectName;
-    },
-    targetProjectLayoutFilePath:
-      (currentProject &&
-        local.currentLayoutName &&
-        `projects/${currentProject.projectPath || ''}/${
-          local.currentLayoutName === 'default'
-            ? 'layout'
-            : local.currentLayoutName
-        }.json`) ||
-      '',
+    setCurrentLayoutName,
+    targetProjectLayoutFilePath: getTargetProjectLayoutFilePath(
+      currentProject?.projectPath || '',
+      local.currentLayoutName,
+    ),
     createNewLayout: () => model.createNewLayout(),
-    loadCurrentProfileLayout: () => {
-      if (model.editSource.type !== 'CurrentProfile') {
-        model.loadCurrentProfileLayout();
-      }
-    },
-    canLoadFromProject: !!(local.currentProjectId && local.currentLayoutName),
+    loadCurrentProfileLayout: () => model.loadCurrentProfileLayout(),
+    canLoadFromProject: isProjectLayoutSourceSpecified,
     loadFromProject: () => {
       model.loadFromProject(local.currentProjectId, local.currentLayoutName);
     },
-    canSaveToProject: !!(local.currentProjectId && local.currentLayoutName),
+    canSaveToProject: isProjectLayoutSourceSpecified,
     saveToProject: () =>
       model.saveToProject(
         local.currentProjectId,
@@ -138,7 +135,7 @@ function useLayoutManagerViewModelImpl(
     loadFromFileWithDialog: () => model.loadFromFileWithDialog(),
     saveToFileWithDialog: () =>
       model.saveToFileWithDialog(UiLayouterCore.emitEditDesign()),
-    canOverwrite: true, // todo: ui-layoutから取得
+    canOverwrite: true, // todo: ui-layouterから取得
     overwriteLayout: () => model.save(UiLayouterCore.emitEditDesign()),
   };
 }

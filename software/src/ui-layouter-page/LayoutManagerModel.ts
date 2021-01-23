@@ -7,6 +7,7 @@ import {
   IProjectLayoutsInfo,
 } from '~/shared';
 import { ipcAgent } from '~/ui-common';
+import { UiLayouterCore } from '~/ui-layouter';
 
 interface ILayoutManagerModel {
   projectLayoutsInfos: IProjectLayoutsInfo[];
@@ -60,7 +61,9 @@ export class LayoutManagerModel implements ILayoutManagerModel {
   }
 
   loadCurrentProfileLayout() {
-    this.sendCommand({ type: 'loadCurrentProfileLayout' });
+    if (this._layoutManagerStatus.editSource.type !== 'CurrentProfile') {
+      this.sendCommand({ type: 'loadCurrentProfileLayout' });
+    }
   }
 
   loadFromProject(projectId: string, layoutName: string) {
@@ -98,16 +101,26 @@ export class LayoutManagerModel implements ILayoutManagerModel {
       (await ipcAgent.async.layout_getAllProjectLayoutsInfos()) || [];
   }
 
+  private onLayoutManagerStatus = (
+    newStatusPartial: Partial<ILayoutManagerStatus>,
+  ) => {
+    this._layoutManagerStatus = {
+      ...this._layoutManagerStatus,
+      ...newStatusPartial,
+    };
+    if (newStatusPartial.loadedDesign) {
+      UiLayouterCore.loadEditDesign(newStatusPartial.loadedDesign);
+    }
+    if (newStatusPartial.errorMessage) {
+      console.log(`ERROR`, newStatusPartial.errorMessage);
+    }
+  };
+
   startLifecycle() {
     this.fetchProjectLayoutsInfos();
     return ipcAgent.subscribe(
       'layout_layoutManagerStatus',
-      (newStatusPartial) => {
-        this._layoutManagerStatus = {
-          ...this._layoutManagerStatus,
-          ...newStatusPartial,
-        };
-      },
+      this.onLayoutManagerStatus,
     );
   }
 }
