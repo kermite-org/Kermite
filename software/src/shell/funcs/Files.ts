@@ -54,7 +54,7 @@ export async function fsxWriteJsonFile(fpath: string, obj: any): Promise<void> {
   await fs.promises.writeFile(fpath, text);
 }
 
-export function fsxWtachFilesChange(
+export function fsxWatchFilesChange(
   baseDir: string,
   callback: (filePath: string) => void,
 ) {

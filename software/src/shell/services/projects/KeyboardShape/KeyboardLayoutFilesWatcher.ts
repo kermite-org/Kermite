@@ -6,7 +6,7 @@ import {
   pathRelative,
   pathDirname,
   fsExistsSync,
-  fsxWtachFilesChange,
+  fsxWatchFilesChange,
 } from '~/shell/funcs';
 import { IProjectResourceInfoProvider } from '~/shell/services/serviceInterfaces';
 
@@ -42,7 +42,7 @@ export class KeyboardLayoutFilesWatcher {
   initialize() {
     if (appEnv.isDevelopment) {
       if (fsExistsSync(this.baseDir)) {
-        this.watcher = fsxWtachFilesChange(this.baseDir, this.onFileUpdated);
+        this.watcher = fsxWatchFilesChange(this.baseDir, this.onFileUpdated);
       }
     }
   }
