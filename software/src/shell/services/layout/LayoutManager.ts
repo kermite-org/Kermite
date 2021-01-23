@@ -7,6 +7,7 @@ import {
   IPersistKeyboardDesign,
   ILayoutEditSource,
 } from '~/shared';
+import { applicationStorage } from '~/shell/base';
 import { createEventPort2 } from '~/shell/funcs';
 import { layoutFileLoader } from '~/shell/services/layout/LayoutFileLoader';
 import { ILayoutManager } from '~/shell/services/layout/interfaces';
@@ -19,7 +20,8 @@ export class LayoutManager implements ILayoutManager {
     private profileManager: IProfileManager,
   ) {}
 
-  // CurrentProfile以外のEditSourceを維持
+  // CurrentProfileLayoutとそれ以外との切り替えのために、
+  // CurrentProfileLayout以外のEditSourceをbackEditSourceとして保持
   private backEditSource: ILayoutEditSource = { type: 'NewlyCreated' };
 
   private status: ILayoutManagerStatus = {
@@ -33,10 +35,12 @@ export class LayoutManager implements ILayoutManager {
   statusEvents = createEventPort2<Partial<ILayoutManagerStatus>>({
     initialValueGetter: () => this.status,
     onFirstSubscriptionStarting: () => {
-      // todo: editSourceをapplicaitonStorageに格納
+      const editSource = applicationStorage.getItem('layoutEditSource');
+      // todo: 以前編集していたファイルが削除されている場合などの例外対応が必要
+      this.loadLayoutByEditSource(editSource);
     },
     onLastSubscriptionEnded: () => {
-      // todo: editSourceをapplicationStorageから復元し、編集対象ファイルを読み込む
+      applicationStorage.setItem('layoutEditSource', this.status.editSource);
     },
   });
 
@@ -64,6 +68,10 @@ export class LayoutManager implements ILayoutManager {
         loadedDesign: profile.keyboardDesign,
       });
     }
+  }
+
+  private async unloadCurrentProfileLayout() {
+    await this.loadLayoutByEditSource(this.backEditSource);
   }
 
   private async loadLayoutFromFile(filePath: string) {
@@ -135,13 +143,6 @@ export class LayoutManager implements ILayoutManager {
       const { projectId, layoutName } = editSource;
       await this.loadLayoutFromProfject(projectId, layoutName);
     }
-  }
-
-  private async unloadCurrentProfileLayout() {
-    await this.loadLayoutByEditSource(this.backEditSource);
-    this.setStatus({
-      editSource: this.backEditSource,
-    });
   }
 
   private async overwriteCurrentLayout(design: IPersistKeyboardDesign) {
