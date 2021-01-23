@@ -81,8 +81,8 @@ export class ApplicationRoot {
         this.profileManager.executeCommands(commands),
       layout_executeLayoutManagerCommands: (commands) =>
         this.layoutManager.executeCommands(commands),
-      layout_getAllProjectLayoutsInfos: () =>
-        this.layoutManager.getAllProjectLayoutsInfos(),
+      // layout_getAllProjectLayoutsInfos: () =>
+      //   this.layoutManager.getAllProjectLayoutsInfos(),
       projects_loadKeyboardShape: (projectId, layoutName) =>
         this.keyboardShapesProvider.loadKeyboardShapeByProjectIdAndLayoutName(
           projectId,

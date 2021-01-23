@@ -36,6 +36,7 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     editSource: { type: 'NewlyCreated' },
     loadedDesign: createFallbackPersistKeyboardDesign(),
     errorMessage: '',
+    projectLayoutsInfos: [],
   };
 
   get projectLayoutsInfos() {
@@ -125,28 +126,24 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     }
   }
 
-  private async fetchProjectLayoutsInfos() {
-    this._projectLayoutsInfos =
-      (await ipcAgent.async.layout_getAllProjectLayoutsInfos()) || [];
-  }
-
-  private onLayoutManagerStatus = (
-    newStatusPartial: Partial<ILayoutManagerStatus>,
-  ) => {
+  private onLayoutManagerStatus = (diff: Partial<ILayoutManagerStatus>) => {
     this._layoutManagerStatus = {
       ...this._layoutManagerStatus,
-      ...newStatusPartial,
+      ...diff,
     };
-    if (newStatusPartial.loadedDesign) {
-      UiLayouterCore.loadEditDesign(newStatusPartial.loadedDesign);
+    if (diff.loadedDesign) {
+      UiLayouterCore.loadEditDesign(diff.loadedDesign);
     }
-    if (newStatusPartial.errorMessage) {
-      console.log(`ERROR`, newStatusPartial.errorMessage);
+    if (diff.errorMessage) {
+      console.log(`ERROR`, diff.errorMessage);
+      // todo: ダイアログでエラーを表示
+    }
+    if (diff.projectLayoutsInfos) {
+      this._projectLayoutsInfos = diff.projectLayoutsInfos;
     }
   };
 
   startLifecycle() {
-    this.fetchProjectLayoutsInfos();
     return ipcAgent.subscribe(
       'layout_layoutManagerStatus',
       this.onLayoutManagerStatus,

@@ -2,12 +2,11 @@ import {
   ILayoutManagerCommand,
   ILayoutManagerStatus,
   IPersistKeyboardDesign,
-  IProjectLayoutsInfo,
 } from '~/shared';
 import { IListenerPortS } from '~/shell/base';
 
 export interface ILayoutManager {
-  getAllProjectLayoutsInfos(): Promise<IProjectLayoutsInfo[]>;
+  // getAllProjectLayoutsInfos(): Promise<IProjectLayoutsInfo[]>;
   executeCommands(commands: ILayoutManagerCommand[]): Promise<boolean>;
   statusEvents: IListenerPortS<Partial<ILayoutManagerStatus>>;
 }

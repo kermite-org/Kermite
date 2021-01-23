@@ -18,6 +18,12 @@ export interface IProjectResourceInfoProvider {
   internal_getProjectInfoSourceById(
     projectId: string,
   ): IProjectResourceInfoSource | undefined;
+
+  patchProjectInfoSource<K extends keyof IProjectResourceInfoSource>(
+    projectId: string,
+    key: K,
+    value: IProjectResourceInfoSource[K],
+  ): void;
 }
 
 export interface IKeyboardShapeBulkLoader {

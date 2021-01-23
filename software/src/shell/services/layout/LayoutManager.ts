@@ -30,12 +30,16 @@ export class LayoutManager implements ILayoutManager {
     },
     loadedDesign: createFallbackPersistKeyboardDesign(),
     errorMessage: '',
+    projectLayoutsInfos: [],
   };
 
   statusEvents = createEventPort2<Partial<ILayoutManagerStatus>>({
     initialValueGetter: () => this.status,
     onFirstSubscriptionStarting: () => {
       const editSource = applicationStorage.getItem('layoutEditSource');
+      this.setStatus({
+        projectLayoutsInfos: this.getAllProjectLayoutsInfos(),
+      });
       // todo: 以前編集していたファイルが削除されている場合などの例外対応が必要
       this.loadLayoutByEditSource(editSource);
     },
@@ -92,6 +96,26 @@ export class LayoutManager implements ILayoutManager {
     });
   }
 
+  private addLayoutNameToProjectInfoSource(
+    projectId: string,
+    layoutName: string,
+  ): boolean {
+    const info = this.projectResourceInfoProvider.internal_getProjectInfoSourceById(
+      projectId,
+    );
+    if (info) {
+      if (!info.layoutNames.includes(layoutName)) {
+        this.projectResourceInfoProvider.patchProjectInfoSource(
+          projectId,
+          'layoutNames',
+          [...info.layoutNames, layoutName],
+        );
+        return true;
+      }
+    }
+    return false;
+  }
+
   private async createLayoutForProfject(projectId: string, layoutName: string) {
     const filePath = this.projectResourceInfoProvider.getLayoutFilePath(
       projectId,
@@ -100,6 +124,7 @@ export class LayoutManager implements ILayoutManager {
     if (filePath) {
       const design = createFallbackPersistKeyboardDesign();
       await this.saveLayoutToFile(filePath, design);
+      this.addLayoutNameToProjectInfoSource(projectId, layoutName);
       this.setStatus({
         editSource: {
           type: 'ProjectLayout',
@@ -107,6 +132,7 @@ export class LayoutManager implements ILayoutManager {
           layoutName,
         },
         loadedDesign: design,
+        projectLayoutsInfos: this.getAllProjectLayoutsInfos(),
       });
     }
   }
@@ -140,12 +166,14 @@ export class LayoutManager implements ILayoutManager {
     );
     if (filePath) {
       await layoutFileLoader.saveLayoutToFile(filePath, design);
+      this.addLayoutNameToProjectInfoSource(projectId, layoutName);
       this.setStatus({
         editSource: {
           type: 'ProjectLayout',
           projectId,
           layoutName,
         },
+        projectLayoutsInfos: this.getAllProjectLayoutsInfos(),
       });
     }
   }
@@ -235,7 +263,7 @@ export class LayoutManager implements ILayoutManager {
     return true;
   }
 
-  async getAllProjectLayoutsInfos(): Promise<IProjectLayoutsInfo[]> {
+  private getAllProjectLayoutsInfos(): IProjectLayoutsInfo[] {
     const resourceInfos = this.projectResourceInfoProvider.getAllProjectResourceInfos();
     return resourceInfos.map((info) => ({
       projectId: info.projectId,

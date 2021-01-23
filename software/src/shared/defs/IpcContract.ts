@@ -71,6 +71,7 @@ export interface ILayoutManagerStatus {
   editSource: ILayoutEditSource;
   loadedDesign: IPersistKeyboardDesign;
   errorMessage: string;
+  projectLayoutsInfos: IProjectLayoutsInfo[];
 }
 
 export type ILayoutManagerCommand =
@@ -148,7 +149,7 @@ export interface IAppIpcContract {
       commands: ILayoutManagerCommand[],
     ): Promise<boolean>;
 
-    layout_getAllProjectLayoutsInfos(): Promise<IProjectLayoutsInfo[]>;
+    // layout_getAllProjectLayoutsInfos(): Promise<IProjectLayoutsInfo[]>;
 
     config_getKeyboardConfig(): Promise<IKeyboardConfig>;
     config_writeKeyboardConfig(config: IKeyboardConfig): Promise<void>;
