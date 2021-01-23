@@ -7,7 +7,10 @@ import {
   IProjectLayoutsInfo,
 } from '~/shared';
 import { ipcAgent } from '~/ui-common';
-import { modalConfirm } from '~/ui-common/fundamental/dialog/BasicModals';
+import {
+  modalConfirm,
+  modalError,
+} from '~/ui-common/fundamental/dialog/BasicModals';
 import { UiLayouterCore } from '~/ui-layouter';
 
 interface ILayoutManagerModel {
@@ -166,7 +169,7 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     }
     if (diff.errorMessage) {
       console.log(`ERROR`, diff.errorMessage);
-      // todo: ダイアログでエラーを表示
+      modalError(diff.errorMessage);
     }
     if (diff.projectLayoutsInfos) {
       this._projectLayoutsInfos = diff.projectLayoutsInfos;
