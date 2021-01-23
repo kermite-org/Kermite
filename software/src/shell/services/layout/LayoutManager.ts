@@ -7,6 +7,7 @@ import {
   IPersistKeyboardDesign,
   ILayoutEditSource,
 } from '~/shared';
+import { AppError } from '~/shared/defs/CustomException';
 import { applicationStorage } from '~/shell/base';
 import { createEventPort2 } from '~/shell/funcs';
 import { layoutFileLoader } from '~/shell/services/layout/LayoutFileLoader';
@@ -255,8 +256,9 @@ export class LayoutManager implements ILayoutManager {
         await this.executeCommand(command);
       }
     } catch (error) {
+      const errorType = error instanceof AppError ? `AppError` : `Error`;
       this.setStatus({
-        errorMessage: `error@LayoutManager ${error}`,
+        errorMessage: `${errorType}@LayoutManager: ${error.message}`,
       });
       return false;
     }
