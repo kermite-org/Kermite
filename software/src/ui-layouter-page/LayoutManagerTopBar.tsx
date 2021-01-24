@@ -1,10 +1,11 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { uiTheme } from '~/ui-common';
+import { ProjectAttachmentFileSelectorModal } from '~/ui-common/parts/ProjectAttachementFileSelectorModal';
 import { LayoutManagerButton } from '~/ui-layouter-page/LayoutManagerButton';
 import { LayoutManagerMenu } from '~/ui-layouter-page/LayoutManagerMenu';
 import { useLayoutManagerViewModel } from '~/ui-layouter-page/LayoutManagerViewModel';
-import { ProjectLayoutSelectorModal } from '~/ui-layouter-page/ProjectLayoutSelectorModal';
+import { makeLayoutSelectorModelViewModel } from '~/ui-layouter-page/ProjectLayoutSelectorModalViewModel';
 
 const cssLayoutManagementBar = css`
   background: ${uiTheme.colors.clBackground};
@@ -32,6 +33,7 @@ const cssLayoutManagementBar = css`
 
 export const LayoutManagerTopBar = () => {
   const vm = useLayoutManagerViewModel();
+  const modalVm = makeLayoutSelectorModelViewModel(vm);
   return (
     <div css={cssLayoutManagementBar}>
       <LayoutManagerMenu baseVm={vm} />
@@ -48,7 +50,7 @@ export const LayoutManagerTopBar = () => {
       >
         save
       </LayoutManagerButton>
-      <ProjectLayoutSelectorModal baseVm={vm} />
+      {modalVm && <ProjectAttachmentFileSelectorModal vm={modalVm} />}
     </div>
   );
 };

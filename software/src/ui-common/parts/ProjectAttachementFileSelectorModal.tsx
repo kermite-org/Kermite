@@ -1,7 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { reflectValue } from '~/ui-common';
-import { ILayoutManagerViewModel } from '~/ui-layouter-page/LayoutManagerViewModel';
 import { makeCssColor } from '~/ui-layouter/base';
 import { ISelectOption } from '~/ui-layouter/controls';
 
@@ -132,7 +131,7 @@ const FlatListSelector = (props: {
   );
 };
 
-interface IProjectAttachmentFileSelectorModalModel {
+export interface IProjectAttachmentFileSelectorModalModel {
   titleText: string;
   closeModal(): void;
   selectorSize: number;
@@ -153,7 +152,7 @@ interface IProjectAttachmentFileSelectorModalModel {
   buttonHandler(): void;
 }
 
-const ProjectAttachmentFileSelectorModal = (props: {
+export const ProjectAttachmentFileSelectorModal = (props: {
   vm: IProjectAttachmentFileSelectorModalModel;
 }) => {
   const {
@@ -227,75 +226,4 @@ const ProjectAttachmentFileSelectorModal = (props: {
       </div>
     </div>
   );
-};
-
-function makeLayoutSelectorModelViewModel(
-  baseVm: ILayoutManagerViewModel,
-): IProjectAttachmentFileSelectorModalModel | undefined {
-  if (baseVm.modalState === 'None') {
-    return undefined;
-  }
-  const isLoading = baseVm.modalState === 'LoadFromProject';
-
-  const titleText = isLoading
-    ? 'Load From Project Layout'
-    : 'Save To Project Layout';
-
-  const isCustomName =
-    baseVm.currentLayoutName &&
-    !baseVm.layoutOptions.some((it) => it.id === baseVm.currentLayoutName);
-
-  const selectorSize = 7;
-
-  const buttonText = isLoading ? (isCustomName ? 'Create' : 'Load') : 'Save';
-  const buttonHandler = isLoading
-    ? isCustomName
-      ? baseVm.createForProject
-      : baseVm.loadFromProject
-    : baseVm.saveToProject;
-  const buttonActive = isLoading
-    ? baseVm.canLoadFromProject
-    : baseVm.canSaveToProject;
-
-  const attachmentFileTypeHeader = 'Layout';
-
-  const {
-    closeModal,
-    projectOptions,
-    currentProjectId,
-    setCurrentProjectId,
-    currentKeyboardName,
-    layoutOptions,
-    currentLayoutName,
-    setCurrentLayoutName,
-    targetProjectLayoutFilePath,
-  } = baseVm;
-
-  return {
-    titleText,
-    closeModal,
-    selectorSize,
-    projectOptions,
-    currentProjectId,
-    setCurrentProjectId,
-    currentProejctKeyboardName: currentKeyboardName,
-    attachmentFileTypeHeader,
-    attachmentFileNameOptions: layoutOptions,
-    currentAttachmentFileName: currentLayoutName,
-    setCurrentAttachmentFileName: setCurrentLayoutName,
-    targetAttachementFilePath: targetProjectLayoutFilePath,
-    buttonText,
-    buttonActive,
-    buttonHandler,
-  };
-}
-
-export const ProjectLayoutSelectorModal = (props: {
-  baseVm: ILayoutManagerViewModel;
-}) => {
-  const vm = makeLayoutSelectorModelViewModel(props.baseVm);
-  if (!vm) {
-    return null;
-  }
-  return <ProjectAttachmentFileSelectorModal vm={vm} />;
 };
