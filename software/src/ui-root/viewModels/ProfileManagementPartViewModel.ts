@@ -1,3 +1,4 @@
+import { Hook } from 'qx';
 import {
   modalAlert,
   modalTextEdit,
@@ -20,9 +21,22 @@ export interface IProfileManagementPartViewModel {
   openConfiguration(): void;
   onLaunchButton(): void;
   profileSelectorSource: ISelectorSource;
+  isExportingPresetSelectionModalOpen: boolean;
+  openExportingPresetSelectionModal(): void;
+  closeExportingPresetSelectionModal(): void;
+  saveProfileAsPreset(projectId: string, presetName: string): void;
 }
 
 export function makeProfileManagementPartViewModel(): IProfileManagementPartViewModel {
+  const [isPresetsModalOpen, setIsPresetModalOpen] = Hook.useState(false);
+
+  const openExportingPresetSelectionModal = async () => {
+    setIsPresetModalOpen(true);
+  };
+  const closeExportingPresetSelectionModal = () => {
+    setIsPresetModalOpen(false);
+  };
+
   const {
     currentProfileName,
     allProfileNames,
@@ -130,5 +144,9 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
       choiceId: currentProfileName,
       setChoiceId: loadProfile,
     },
+    isExportingPresetSelectionModalOpen: isPresetsModalOpen,
+    openExportingPresetSelectionModal,
+    closeExportingPresetSelectionModal,
+    saveProfileAsPreset: models.profilesModel.exportProfileAsProjectPreset,
   };
 }
