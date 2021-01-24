@@ -2,6 +2,7 @@ import {
   IProjectResourceInfo,
   IProfileData,
   IPersistKeyboardDesign,
+  IPresetSpec,
 } from '~/shared';
 import { IProjectResourceInfoSource } from '~/shell/services/projects/ProjectResource/ProjectResourceInfoSourceLoader';
 
@@ -37,6 +38,6 @@ export interface IKeyboardShapeBulkLoader {
 export interface IPresetProfileLoadingFeature {
   loadPresetProfileData(
     projectId: string,
-    presetName: string,
+    presetSpec: IPresetSpec,
   ): Promise<IProfileData | undefined>;
 }

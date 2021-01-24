@@ -1,7 +1,29 @@
 import { IAppErrorInfo } from '~/shared/defs/CustomErrors';
 import { IPersistKeyboardDesign } from '~/shared/defs/KeyboardDesign';
 import { IKeyboardConfig } from './ConfigTypes';
-import { IProfileData, IProjectResourceInfo } from './ProfileData';
+import { IProfileData } from './ProfileData';
+
+export type IPresetSpec =
+  | {
+      type: 'blank';
+      layoutName: string;
+    }
+  | {
+      type: 'preset';
+      presetName: string;
+    };
+
+export type IProjectResourceOrigin = 'central' | 'local';
+
+export interface IProjectResourceInfo {
+  projectId: string;
+  keyboardName: string;
+  projectPath: string;
+  presetNames: string[];
+  layoutNames: string[];
+  hasLayout: boolean;
+  hasFirmwareBinary: boolean;
+}
 
 export interface IProfileManagerStatus {
   currentProfileName: string;
@@ -43,7 +65,7 @@ export interface IProfileManagerCommand {
   creatProfile?: {
     name: string;
     targetProjectId: string;
-    presetName: string;
+    presetSpec: IPresetSpec;
   };
   loadProfile?: { name: string };
   saveCurrentProfile?: { profileData: IProfileData };
@@ -166,7 +188,7 @@ export interface IAppIpcContract {
     projects_getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
     projects_loadPresetProfile(
       projectId: string,
-      presetName: string | undefined,
+      presetSpec: IPresetSpec,
     ): Promise<IProfileData | undefined>;
     projects_loadKeyboardShape(
       projectId: string,
