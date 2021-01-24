@@ -19,10 +19,9 @@ export interface IProjectResourceInfoProvider {
     projectId: string,
   ): IProjectResourceInfoSource | undefined;
 
-  patchProjectInfoSource<K extends keyof IProjectResourceInfoSource>(
+  patchProjectInfoSource(
     projectId: string,
-    key: K,
-    value: IProjectResourceInfoSource[K],
+    callback: (info: IProjectResourceInfoSource) => void,
   ): void;
 }
 
