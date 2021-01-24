@@ -1,14 +1,15 @@
 import { css } from 'goober';
 import { h } from 'qx';
+import { uiTheme } from '~/ui-common';
 import { EditSvgViewContainer } from '~/ui-layouter/editor/views/EditSvgView';
 import { EditorSideColumnContent } from '~/ui-layouter/editor/views/SidePanels';
 import { EditMenuBar } from '~/ui-layouter/editor/views/ToolBar/EditMenuBar';
 
 const cssPageRoot = css`
-  border: solid 2px #f08;
-  background: #fff;
+  background: ${uiTheme.colors.clBackground};
+  color: ${uiTheme.colors.clMainText};
 
-  padding: 10px;
+  padding: 6px;
   height: 100%;
   overflow: hidden;
 

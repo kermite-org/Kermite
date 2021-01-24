@@ -1,14 +1,17 @@
 import { css } from 'goober';
 import { h } from 'qx';
+import { uiTheme } from '~/ui-common';
 import { LayoutManagerButton } from '~/ui-layouter-page/LayoutManagerButton';
 import { LayoutManagerMenu } from '~/ui-layouter-page/LayoutManagerMenu';
 import { useLayoutManagerViewModel } from '~/ui-layouter-page/LayoutManagerViewModel';
 import { ProjectLayoutSelectorModal } from '~/ui-layouter-page/ProjectLayoutSelectorModal';
 
 const cssLayoutManagementBar = css`
+  background: ${uiTheme.colors.clBackground};
+  color: ${uiTheme.colors.clMainText};
   display: flex;
-  background: #fff;
-  padding: 5px;
+  padding: 6px;
+  padding-bottom: 3px;
 
   > * + * {
     margin-left: 4px;

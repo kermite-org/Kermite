@@ -2,8 +2,9 @@ import { css } from 'goober';
 import { h } from 'qx';
 
 const cssLayoutManagerButton = css`
-  border: solid 1px #008;
-  color: #008;
+  border: solid 1px #048;
+  color: #048;
+  background: #fff;
   padding: 0 8px;
   height: 28px;
   display: flex;
@@ -20,6 +21,7 @@ const cssLayoutManagerButton = css`
 
   &[data-disabled] {
     opacity: 0.5;
+    pointer-events: none;
   }
 `;
 
