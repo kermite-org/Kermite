@@ -12,6 +12,7 @@ import {
   modalConfirm,
   modalError,
 } from '~/ui-common/fundamental/dialog/BasicModals';
+import { forceCloseModal } from '~/ui-common/fundamental/overlay/ForegroundModalLayer';
 import { UiLayouterCore } from '~/ui-layouter';
 
 interface ILayoutManagerModel {
@@ -180,6 +181,11 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     }
     if (diff.projectLayoutsInfos) {
       this._projectLayoutsInfos = diff.projectLayoutsInfos;
+    }
+    if ('errroInfo' in diff && diff.errroInfo === undefined) {
+      // 編集中のファイルを外部エディタで更新し、フォーマットの誤りなどで
+      // 発生したエラーを修正して再度保存した場合に、エラーダイアログを閉じる
+      forceCloseModal();
     }
   };
 

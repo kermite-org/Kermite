@@ -10,6 +10,7 @@ import {
 import { getErrorInfo } from '~/shared/defs';
 import { applicationStorage } from '~/shell/base';
 import { createEventPort2 } from '~/shell/funcs';
+import { FileWather } from '~/shell/funcs/FileWatcher';
 import { layoutFileLoader } from '~/shell/services/layout/LayoutFileLoader';
 import { ILayoutManager } from '~/shell/services/layout/interfaces';
 import { IProfileManager } from '~/shell/services/profile/interfaces';
@@ -24,6 +25,8 @@ export class LayoutManager implements ILayoutManager {
   // CurrentProfileLayoutとそれ以外との切り替えのために、
   // CurrentProfileLayout以外のEditSourceをbackEditSourceとして保持
   private backEditSource: ILayoutEditSource = { type: 'NewlyCreated' };
+
+  private fileWatcher = new FileWather();
 
   private status: ILayoutManagerStatus = {
     editSource: {
@@ -51,6 +54,7 @@ export class LayoutManager implements ILayoutManager {
     },
     onLastSubscriptionEnded: () => {
       applicationStorage.setItem('layoutEditSource', this.status.editSource);
+      this.fileWatcher.unobserveFile();
     },
   });
 
@@ -62,6 +66,23 @@ export class LayoutManager implements ILayoutManager {
       this.backEditSource = editSource;
     }
   }
+
+  private onObservedFileChanged = async () => {
+    const filePath = this.fileWatcher.targetFilePath;
+    if (filePath) {
+      try {
+        const loadedDesign = await layoutFileLoader.loadLayoutFromFile(
+          filePath,
+        );
+        this.setStatus({
+          errroInfo: undefined,
+          loadedDesign,
+        });
+      } catch (error) {
+        this.setStatus({ errroInfo: getErrorInfo(error) });
+      }
+    }
+  };
 
   private async createNewLayout() {
     this.setStatus({
@@ -86,6 +107,7 @@ export class LayoutManager implements ILayoutManager {
 
   private async loadLayoutFromFile(filePath: string) {
     const loadedDesign = await layoutFileLoader.loadLayoutFromFile(filePath);
+    this.fileWatcher.observeFile(filePath, this.onObservedFileChanged);
     this.setStatus({
       editSource: { type: 'File', filePath },
       loadedDesign,
@@ -150,6 +172,7 @@ export class LayoutManager implements ILayoutManager {
     );
     if (filePath) {
       const loadedDesign = await layoutFileLoader.loadLayoutFromFile(filePath);
+      this.fileWatcher.observeFile(filePath, this.onObservedFileChanged);
       this.setStatus({
         editSource: {
           type: 'ProjectLayout',
