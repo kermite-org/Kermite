@@ -151,7 +151,7 @@ export interface IAppIpcContract {
     ): Promise<boolean>;
 
     layout_clearErrorInfo(): Promise<void>;
-
+    layout_showEditLayoutFileInFiler(): Promise<void>;
     // layout_getAllProjectLayoutsInfos(): Promise<IProjectLayoutsInfo[]>;
 
     config_getKeyboardConfig(): Promise<IKeyboardConfig>;

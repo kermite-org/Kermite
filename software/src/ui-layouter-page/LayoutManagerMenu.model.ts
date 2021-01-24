@@ -8,11 +8,15 @@ type ILayoutManagerViewModelCommandFunctionKey =
   | 'saveToFileWithDialog'
   | 'openLoadFromProjectModal'
   | 'openSaveToProjectModal'
-  | 'overwriteLayout';
+  | 'overwriteLayout'
+  | 'showEditLayoutFileInFiler';
+
+type ILayoutManagerViewModelCommandActiveFlagKey = 'canShowEditLayoutFileInFiler';
 
 interface IMenuItemSource {
   text: string;
   command: ILayoutManagerViewModelCommandFunctionKey;
+  commandActiveFlagKey?: ILayoutManagerViewModelCommandActiveFlagKey;
 }
 
 type IMenuItemSeparator = { separator: true };
@@ -25,10 +29,16 @@ const menuItemSources: (IMenuItemSource | IMenuItemSeparator)[] = [
   { separator: true },
   { text: 'load from project', command: 'openLoadFromProjectModal' },
   { text: 'save to project', command: 'openSaveToProjectModal' },
+  { separator: true },
+  {
+    text: 'show edit file in folder',
+    command: 'showEditLayoutFileInFiler',
+    commandActiveFlagKey: 'canShowEditLayoutFileInFiler',
+  },
 ];
 
 type IMenuItem =
-  | { type: 'menuEntry'; text: string; handler: () => void }
+  | { type: 'menuEntry'; text: string; handler: () => void; disabled?: boolean }
   | { type: 'separator' };
 
 export const useLayoutManagerMenuModel = (baseVm: ILayoutManagerViewModel) => {
@@ -47,6 +57,8 @@ export const useLayoutManagerMenuModel = (baseVm: ILayoutManagerViewModel) => {
             baseVm[source.command]();
             closeMenu();
           },
+          disabled:
+            source.commandActiveFlagKey && !baseVm[source.commandActiveFlagKey],
         },
   );
   return {

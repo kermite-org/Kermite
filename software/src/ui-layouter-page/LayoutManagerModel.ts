@@ -156,6 +156,10 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     }
   }
 
+  async showEditLayoutFileInFiler() {
+    await ipcAgent.async.layout_showEditLayoutFileInFiler();
+  }
+
   private onLayoutManagerStatus = async (
     diff: Partial<ILayoutManagerStatus>,
   ) => {

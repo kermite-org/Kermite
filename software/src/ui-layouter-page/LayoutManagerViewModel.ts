@@ -39,6 +39,8 @@ export interface ILayoutManagerViewModel {
   openLoadFromProjectModal(): void;
   openSaveToProjectModal(): void;
   closeModal(): void;
+  canShowEditLayoutFileInFiler: boolean;
+  showEditLayoutFileInFiler(): void;
 }
 
 function getTargetProjectLayoutFilePath(
@@ -169,6 +171,10 @@ function useLayoutManagerViewModelImpl(
     openLoadFromProjectModal: () => setModalState('LoadFromProject'),
     openSaveToProjectModal: () => setModalState('SaveToProject'),
     closeModal: () => setModalState('None'),
+    canShowEditLayoutFileInFiler:
+      model.editSource.type === 'File' ||
+      model.editSource.type === 'ProjectLayout',
+    showEditLayoutFileInFiler: () => model.showEditLayoutFileInFiler(),
   };
 }
 

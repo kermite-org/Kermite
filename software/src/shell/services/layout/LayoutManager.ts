@@ -1,3 +1,5 @@
+// import childProcess from 'child_process';
+import { shell } from 'electron';
 import {
   ILayoutManagerCommand,
   IProjectLayoutsInfo,
@@ -58,6 +60,19 @@ export class LayoutManager implements ILayoutManager {
     },
   });
 
+  private getCurrentEditLayoutFilePath(): string | undefined {
+    const { editSource } = this.status;
+    if (editSource.type === 'ProjectLayout') {
+      const { projectId, layoutName } = editSource;
+      return this.projectResourceInfoProvider.getLayoutFilePath(
+        projectId,
+        layoutName,
+      );
+    } else if (editSource.type === 'File') {
+      return editSource.filePath;
+    }
+  }
+
   private setStatus(newStatusPartial: Partial<ILayoutManagerStatus>) {
     this.status = { ...this.status, ...newStatusPartial };
     this.statusEvents.emit(newStatusPartial);
@@ -68,7 +83,7 @@ export class LayoutManager implements ILayoutManager {
   }
 
   private onObservedFileChanged = async () => {
-    const filePath = this.fileWatcher.targetFilePath;
+    const filePath = this.getCurrentEditLayoutFilePath();
     if (filePath) {
       try {
         const loadedDesign = await layoutFileLoader.loadLayoutFromFile(
@@ -302,5 +317,12 @@ export class LayoutManager implements ILayoutManager {
 
   clearErrorInfo() {
     this.setStatus({ errroInfo: undefined });
+  }
+
+  showEditLayoutFileInFiler() {
+    const filePath = this.getCurrentEditLayoutFilePath();
+    if (filePath) {
+      shell.showItemInFolder(filePath);
+    }
   }
 }

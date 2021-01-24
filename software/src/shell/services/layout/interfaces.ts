@@ -10,6 +10,7 @@ export interface ILayoutManager {
   executeCommands(commands: ILayoutManagerCommand[]): Promise<boolean>;
   statusEvents: IListenerPortS<Partial<ILayoutManagerStatus>>;
   clearErrorInfo(): void;
+  showEditLayoutFileInFiler(): void;
 }
 
 export interface ILayoutFileLoader {

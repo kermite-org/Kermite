@@ -20,10 +20,18 @@ const cssMenuPanel = css`
     margin-top: 4px;
   }
 
-  > div {
+  > .menuEntry {
     padding: 4px 8px;
+    cursor: pointer;
+
     &:hover {
       background: #8cf;
+    }
+
+    &[data-disabled] {
+      cursor: inherit;
+      pointer-events: none;
+      opacity: 0.5;
     }
   }
 `;
@@ -53,7 +61,12 @@ export const LayoutManagerMenu = (props: {
           item.type === 'separator' ? (
             <hr key={idx} />
           ) : (
-            <div key={idx} onClick={item.handler}>
+            <div
+              key={idx}
+              class="menuEntry"
+              onClick={item.handler}
+              data-disabled={item.disabled}
+            >
               {item.text}
             </div>
           ),
