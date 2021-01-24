@@ -48,7 +48,7 @@ export const LayoutManagerTopBar = () => {
       >
         save
       </LayoutManagerButton>
-      <ProjectLayoutSelectorModal vm={vm} />
+      <ProjectLayoutSelectorModal baseVm={vm} />
     </div>
   );
 };
