@@ -176,6 +176,7 @@ export class LayoutManagerModel implements ILayoutManagerModel {
       });
       // todo: 多言語化対応時にエラーを出し分ける
       await modalError(errorTextEN);
+      await ipcAgent.async.layout_clearErrorInfo();
     }
     if (diff.projectLayoutsInfos) {
       this._projectLayoutsInfos = diff.projectLayoutsInfos;

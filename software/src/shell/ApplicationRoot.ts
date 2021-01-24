@@ -83,6 +83,7 @@ export class ApplicationRoot {
         this.layoutManager.executeCommands(commands),
       // layout_getAllProjectLayoutsInfos: () =>
       //   this.layoutManager.getAllProjectLayoutsInfos(),
+      layout_clearErrorInfo: async () => this.layoutManager.clearErrorInfo(),
       projects_loadKeyboardShape: (projectId, layoutName) =>
         this.keyboardShapesProvider.loadKeyboardShapeByProjectIdAndLayoutName(
           projectId,

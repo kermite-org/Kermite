@@ -276,4 +276,8 @@ export class LayoutManager implements ILayoutManager {
       layoutNames: info.layoutNames,
     }));
   }
+
+  clearErrorInfo() {
+    this.setStatus({ errroInfo: undefined });
+  }
 }
