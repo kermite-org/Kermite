@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { uiTheme } from '~/ui-common';
-import { UiLayouterPageComponent } from '~/ui-layouter-page/UiLayoutPageComponent';
+import { UiLayouterPageComponent } from '~/ui-layouter-page';
 import { models } from '~/ui-root/models';
 import { CustomWindowFrame } from '~/ui-root/views/base/window/CustomWindowFrame';
 import { HeatmapPage } from '~/ui-root/views/pages/HeatmapPage';

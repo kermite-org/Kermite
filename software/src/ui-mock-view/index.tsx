@@ -2,7 +2,7 @@
 import { h, render, rerender } from 'qx';
 import { debounce } from '~/shared';
 import { initializeCss } from '~/ui-common';
-import { UiLayouterPageComponent } from '~/ui-layouter-page/UiLayoutPageComponent';
+import { UiLayouterPageComponent } from '~/ui-layouter-page';
 import { MockPageLoadedDesignDrawing } from '~/ui-mock-view/MockPageLoadedDesignDrawing';
 import { MockPageLayouterDevelopment } from './MockPageLayouterDevelopment';
 
