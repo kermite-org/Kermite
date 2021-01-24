@@ -287,7 +287,7 @@ export class ProfileManager implements IProfileManager {
   }
 
   private async executeCommand(cmd: IProfileManagerCommand): Promise<boolean> {
-    console.log(`execute command`, { cmd });
+    // console.log(`execute command`, { cmd });
     if (cmd.creatProfile) {
       return await this.createProfile(
         cmd.creatProfile.name,
