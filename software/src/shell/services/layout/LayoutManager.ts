@@ -1,4 +1,3 @@
-// import childProcess from 'child_process';
 import { shell } from 'electron';
 import {
   ILayoutManagerCommand,
@@ -39,25 +38,34 @@ export class LayoutManager implements ILayoutManager {
     errroInfo: undefined,
   };
 
-  statusEvents = createEventPort2<Partial<ILayoutManagerStatus>>({
-    initialValueGetter: () => this.status,
-    onFirstSubscriptionStarting: async () => {
-      const editSource = applicationStorage.getItem('layoutEditSource');
+  private initialized = false;
+
+  private initializeOnFirstConnect = async () => {
+    if (!this.initialized) {
       this.setStatus({
         projectLayoutsInfos: this.getAllProjectLayoutsInfos(),
       });
+      const editSource = applicationStorage.getItem('layoutEditSource');
       try {
+        // 前回起動時に編集していたファイルの読み込みを試みる
         await this.loadLayoutByEditSource(editSource);
       } catch (error) {
-        // 以前編集していたファイルが削除されていて読み込めない場合、新規レイアウトで初期化する
+        // 読み込めない場合は初期状態のままで、特にエラーを通知しない
         console.log(error);
-        this.createNewLayout();
       }
-    },
-    onLastSubscriptionEnded: () => {
-      applicationStorage.setItem('layoutEditSource', this.status.editSource);
-      this.fileWatcher.unobserveFile();
-    },
+      this.initialized = true;
+    }
+  };
+
+  private finalizeOnLastDisconnect = () => {
+    applicationStorage.setItem('layoutEditSource', this.status.editSource);
+    this.fileWatcher.unobserveFile();
+  };
+
+  statusEvents = createEventPort2<Partial<ILayoutManagerStatus>>({
+    initialValueGetter: () => this.status,
+    onFirstSubscriptionStarting: this.initializeOnFirstConnect,
+    onLastSubscriptionEnded: this.finalizeOnLastDisconnect,
   });
 
   private getCurrentEditLayoutFilePath(): string | undefined {

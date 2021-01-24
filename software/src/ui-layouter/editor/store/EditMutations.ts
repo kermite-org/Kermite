@@ -1,5 +1,6 @@
 import {
   clamp,
+  compareObjectByJsonStringify,
   IKeyIdMode,
   IKeyPlacementAnchor,
   IKeySizeUnit,
@@ -376,6 +377,13 @@ class EditMutations {
   }
 
   loadKeyboardDesign(design: IEditKeyboardDesign) {
+    const same = compareObjectByJsonStringify(
+      appState.editor.loadedDesign,
+      design,
+    );
+    if (same) {
+      return;
+    }
     editUpdator.patchEditor((editor) => {
       editor.loadedDesign = design;
       editor.design = design;
