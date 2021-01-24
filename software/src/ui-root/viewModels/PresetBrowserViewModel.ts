@@ -23,16 +23,19 @@ export function makePresetBrowserViewModel(): IPresetBrowserViewModel {
         id: it.projectId,
         text: it.keyboardName,
       })),
-      choiceId: presetBrowserModel.currentProjectId,
+      choiceId: presetBrowserModel.currentProjectId || '',
       setChoiceId: presetBrowserModel.setCurrentProjectId,
     },
     presetSelectorSource: {
-      options: presetBrowserModel.optionPresetNames.map((it) => ({
-        id: it,
-        text: it,
+      options: presetBrowserModel.optionPresetSpecs.map((it) => ({
+        id: it.id,
+        text:
+          it.type === 'preset'
+            ? `[preset]${it.presetName}`
+            : `[blank]${it.layoutName}`,
       })),
-      choiceId: presetBrowserModel.currentPresetName,
-      setChoiceId: presetBrowserModel.setCurrentPresetName,
+      choiceId: presetBrowserModel.currentPresetSpecId || '',
+      setChoiceId: presetBrowserModel.setCurrentPresetSpecId,
     },
     isLinkButtonActive:
       deviceStatusModel.isConnected &&
