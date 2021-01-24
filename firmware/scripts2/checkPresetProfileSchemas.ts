@@ -93,7 +93,7 @@ const profileJsonDataSchema = vObject({
 function checkPresets() {
   console.log("cheking preset json schemas ...");
 
-  const filePaths = glob.sync("src/projects/**/profiles/*.json");
+  const filePaths = glob.sync("src/projects/**/presets/*.json");
 
   const results = filePaths
     .map((filePath) => {
