@@ -4,59 +4,42 @@ import { uiTheme } from '~/ui-common';
 import { models } from '~/ui-root/models';
 import { KeyboardBodyShape } from '~/ui-root/views/keyboardSvg/atoms/KeyboardBodyShape';
 import { EditKeyUnitCardsPart } from '~/ui-root/views/keyboardSvg/organisms/EditKeyUnitCardsPart';
+import { KeyboardSvgFrameWithAutoScaler } from '~/ui-root/views/keyboardSvg/outlines/KeyboardSvgFrameWithAutoScaler';
 import { LayerStateView } from './LayerStateView';
 
-const EditKeyboardBasePlane = (props: { children: any }) => {
-  const { clearAssignSlotSelection } = models.editorModel;
-  const { children } = props;
-  const cssSvg = css`
-    user-select: none;
-  `;
-  const maxHeight = Math.max(((window.innerHeight / 2) >> 0) - 60, 200);
-  const styleSvg = {
-    'max-height': `${maxHeight}px`,
-  };
-  return (
-    <svg
-      viewBox="-300 -120 600 240"
-      css={cssSvg}
-      onMouseDown={clearAssignSlotSelection}
-      style={styleSvg}
-    >
-      <g
-        transform="scale(2) translate(0, -53.5)"
-        strokeWidth={0.3}
-        strokeLinejoin="round"
-      >
-        {children}
-      </g>
-    </svg>
-  );
-};
-
 const EditKeyboardView = () => {
-  const outlineShapes = models.editorModel.displayDesign.outlineShapes;
+  const design = models.editorModel.displayDesign;
   const bodyFillColor = uiTheme.colors.clKeyboardBodyFace;
+
+  const dpiScale = 2;
+  const marginRatio = 0.06;
+  const baseStrokeWidth = 0.3;
   return (
-    <EditKeyboardBasePlane>
+    <KeyboardSvgFrameWithAutoScaler
+      displayArea={design.displayArea}
+      dpiScale={dpiScale}
+      marginRatio={marginRatio}
+      baseStrokeWidth={baseStrokeWidth}
+    >
       <KeyboardBodyShape
-        outlineShapes={outlineShapes}
+        outlineShapes={design.outlineShapes}
         fillColor={bodyFillColor}
         strokeColor="transparent"
       />
       <EditKeyUnitCardsPart />
-    </EditKeyboardBasePlane>
+    </KeyboardSvgFrameWithAutoScaler>
   );
 };
 
 export function KeyboardSection() {
   const cssKeyboardSection = css`
-    object-fit: contain;
     position: relative;
+    height: 100%;
   `;
+  const { clearAssignSlotSelection } = models.editorModel;
 
   return (
-    <div css={cssKeyboardSection}>
+    <div css={cssKeyboardSection} onMouseDown={clearAssignSlotSelection}>
       <EditKeyboardView />
       <LayerStateView />
     </div>
