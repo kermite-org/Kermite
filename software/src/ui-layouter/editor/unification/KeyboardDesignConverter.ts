@@ -1,7 +1,5 @@
 import {
   createDictionaryFromKeyValues,
-  convertMinusOneToUndefined,
-  convertUndefinedToMinusOne,
   IPersistKeyboardDesign,
   flattenArray,
   IPersistKeyboardDesignRealKeyEntity,
@@ -53,14 +51,17 @@ export namespace KeyboardDesignConverter {
         y: ke.y,
         angle: convertUndefinedToDefaultValue(ke.angle, 0),
         shape: convertUndefinedToDefaultValue(ke.shape, 'std 1'),
-        keyIndex: convertUndefinedToMinusOne(ke.keyIndex),
+        keyIndex: convertUndefinedToDefaultValue(ke.keyIndex, -1),
         mirrorKeyIndex: -1,
         groupId: groupIndexToGroupId(ke.groupIndex),
       };
       const mirroredKey = mirrorKeys.find((mke) => mke.mirrorOf === ke.keyId);
       if (mirroredKey) {
         base.mirrorEditKeyId = mirroredKey.keyId;
-        base.mirrorKeyIndex = convertUndefinedToMinusOne(mirroredKey.keyIndex);
+        base.mirrorKeyIndex = convertUndefinedToDefaultValue(
+          mirroredKey.keyIndex,
+          -1,
+        );
       }
       return base;
     });
@@ -134,7 +135,7 @@ export namespace KeyboardDesignConverter {
             y: roundNumber(ke.y),
             angle: convertDefaultValueToUndefined(roundNumber(ke.angle), 0),
             shape: convertDefaultValueToUndefined(ke.shape, 'std 1'),
-            keyIndex: convertMinusOneToUndefined(ke.keyIndex),
+            keyIndex: convertDefaultValueToUndefined(ke.keyIndex, -1),
             groupIndex: groupIdToGroupIndex(ke.groupId),
           };
 
@@ -142,7 +143,7 @@ export namespace KeyboardDesignConverter {
             (group?.mirror && {
               keyId: mirroredKeyId,
               mirrorOf: realKeyId,
-              keyIndex: convertMinusOneToUndefined(ke.mirrorKeyIndex),
+              keyIndex: convertDefaultValueToUndefined(ke.mirrorKeyIndex, -1),
             }) ||
             undefined;
 
