@@ -21,7 +21,6 @@ function useProjectAttachmentFileSelectorViewModel(
 ): IProjectAttachmentFileSelectorModalModel {
   const [local] = Hook.useState({
     resourceInfos: [] as IProjectResourceInfo[],
-    currentProjectId: '',
     currentPresetName: '',
   });
 
@@ -36,8 +35,11 @@ function useProjectAttachmentFileSelectorViewModel(
     text: info.projectPath,
   }));
 
+  // 編集しているプロファイルのプロジェクトを規定で選び、変更させない
+  const currentProjectId = baseVm.currentProfileProjectId;
+
   const currentProject = local.resourceInfos.find(
-    (info) => info.projectId === local.currentProjectId,
+    (info) => info.projectId === currentProjectId,
   );
 
   const presetNameOptions =
@@ -50,9 +52,10 @@ function useProjectAttachmentFileSelectorViewModel(
     titleText: 'Save As Project Preset',
     closeModal: baseVm.closeExportingPresetSelectionModal,
     selectorSize: 7,
+    canSelectProject: false,
     projectOptions,
-    currentProjectId: local.currentProjectId,
-    setCurrentProjectId: fieldSetter(local, 'currentProjectId'),
+    currentProjectId,
+    setCurrentProjectId: () => {},
     currentProejctKeyboardName: currentProject?.keyboardName || '',
     attachmentFileTypeHeader: 'Preset',
     attachmentFileNameOptions: presetNameOptions,
@@ -63,12 +66,9 @@ function useProjectAttachmentFileSelectorViewModel(
       local.currentPresetName,
     ),
     buttonText: 'Save',
-    buttonActive: !!(local.currentProjectId && local.currentProjectId),
+    buttonActive: !!(currentProjectId && local.currentPresetName),
     buttonHandler: () => {
-      baseVm.saveProfileAsPreset(
-        local.currentProjectId,
-        local.currentPresetName,
-      );
+      baseVm.saveProfileAsPreset(currentProjectId, local.currentPresetName);
       baseVm.closeExportingPresetSelectionModal();
     },
   };

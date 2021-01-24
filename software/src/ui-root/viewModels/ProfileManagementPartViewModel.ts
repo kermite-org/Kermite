@@ -25,6 +25,7 @@ export interface IProfileManagementPartViewModel {
   openExportingPresetSelectionModal(): void;
   closeExportingPresetSelectionModal(): void;
   saveProfileAsPreset(projectId: string, presetName: string): void;
+  currentProfileProjectId: string;
 }
 
 export function makeProfileManagementPartViewModel(): IProfileManagementPartViewModel {
@@ -148,5 +149,6 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     openExportingPresetSelectionModal,
     closeExportingPresetSelectionModal,
     saveProfileAsPreset: models.profilesModel.exportProfileAsProjectPreset,
+    currentProfileProjectId: models.editorModel.loadedPorfileData.projectId,
   };
 }

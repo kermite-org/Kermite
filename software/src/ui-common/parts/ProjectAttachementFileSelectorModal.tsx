@@ -113,14 +113,16 @@ const FlatListSelector = (props: {
   value: string;
   setValue: (value: string) => void;
   size: number;
+  disabled?: boolean;
 }) => {
-  const { options, value, setValue, size } = props;
+  const { options, value, setValue, size, disabled } = props;
   return (
     <select
       size={size}
       value={value}
       onInput={reflectValue(setValue)}
       css={cssFlatListSelector}
+      disabled={disabled}
     >
       {options.map((it) => (
         <option value={it.id} key={it.id}>
@@ -136,6 +138,7 @@ export interface IProjectAttachmentFileSelectorModalModel {
   closeModal(): void;
   selectorSize: number;
 
+  canSelectProject: boolean;
   projectOptions: ISelectOption[];
   currentProjectId: string;
   setCurrentProjectId(projectId: string): void;
@@ -159,6 +162,7 @@ export const ProjectAttachmentFileSelectorModal = (props: {
     titleText,
     closeModal,
     selectorSize,
+    canSelectProject,
     projectOptions,
     currentProjectId,
     setCurrentProjectId,
@@ -192,6 +196,7 @@ export const ProjectAttachmentFileSelectorModal = (props: {
                   value={currentProjectId}
                   setValue={setCurrentProjectId}
                   size={selectorSize}
+                  disabled={!canSelectProject}
                 />
                 <div class="keyboardNameText">{currentProejctKeyboardName}</div>
               </div>

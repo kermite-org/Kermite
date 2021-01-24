@@ -47,6 +47,7 @@ export function makeLayoutSelectorModelViewModel(
     titleText,
     closeModal,
     selectorSize,
+    canSelectProject: true,
     projectOptions,
     currentProjectId,
     setCurrentProjectId,
