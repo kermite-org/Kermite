@@ -50,6 +50,11 @@ export interface IProfileManagerCommand {
   deleteProfile?: { name: string };
   renameProfile?: { name: string; newName: string };
   copyProfile?: { name: string; newName: string };
+  saveAsProjectPreset?: {
+    projectId: string;
+    presetName: string;
+    profileData: IProfileData;
+  };
 }
 
 export type ILayoutEditSource =
