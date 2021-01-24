@@ -141,7 +141,6 @@ export class ProfileManager implements IProfileManager {
         projectId,
         presetName,
       );
-      console.log(`saveAdProjectPreset`, { projectId, presetName, filePath });
       if (filePath) {
         await this.core.saveProfileAsPreset(filePath, profileData);
         this.resourceInfoProvider.patchProjectInfoSource(projectId, (info) =>
