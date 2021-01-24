@@ -34,8 +34,9 @@ const persistEditKeyboardDesignSchemaChecker = vObject({
         keyId: vString(),
         x: vNumber(),
         y: vNumber(),
-        angle: vNumber(),
-        shape: vStringMatchesTo([/^std \d+( \d+)?$/, /^circle$/, /^isoEnter$/]),
+        angle: vNumber().optional,
+        shape: vStringMatchesTo([/^std \d+( \d+)?$/, /^circle$/, /^isoEnter$/])
+          .optional,
         keyIndex: vNaturalInteger().optional,
         groupIndex: vNaturalInteger().optional,
       }),
@@ -50,7 +51,7 @@ const persistEditKeyboardDesignSchemaChecker = vObject({
     vObject({
       x: vNumber(),
       y: vNumber(),
-      angle: vNumber(),
+      angle: vNumber().optional,
       mirror: vBoolean().optional,
     }),
   ),
