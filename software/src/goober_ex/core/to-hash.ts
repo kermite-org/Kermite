@@ -7,6 +7,12 @@
  * @param {String} str
  * @returns {String}
  */
-export const toHash = (str) =>
-  'go' +
-  str.split('').reduce((out, i) => (101 * out + i.charCodeAt(0)) >>> 0, 11);
+export const toHash = (str, label) => {
+  const sig0 = str
+    .split('')
+    .reduce((out, i) => (101 * out + i.charCodeAt(0)) >>> 0, 11);
+
+  const prefix = `go`;
+  const sig = parseInt(sig0).toString(36);
+  return label ? `${prefix}_${sig}_${label}` : `${prefix}_${sig}`;
+};
