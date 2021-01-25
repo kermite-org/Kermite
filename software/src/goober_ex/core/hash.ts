@@ -38,15 +38,19 @@ export const hash = (compiled, sheet, global, append, keyframes) => {
   const stringifiedCompiled =
     typeof compiled === 'object' ? stringify(compiled) : compiled;
 
+  const m = stringifiedCompiled.match(/label: (.+);/);
+  const label = m?.[1] || '';
+
   // Retrieve the className from cache or hash it in place
   const className =
     cache[stringifiedCompiled] ||
-    (cache[stringifiedCompiled] = toHash(stringifiedCompiled));
+    (cache[stringifiedCompiled] = toHash(stringifiedCompiled, label));
 
   // If there's no entry for the current className
   if (!cache[className]) {
     // Build the _ast_-ish structure if needed
     const ast = typeof compiled === 'object' ? compiled : astish(compiled);
+    delete ast.label;
 
     // Parse it
     cache[className] = parse(
