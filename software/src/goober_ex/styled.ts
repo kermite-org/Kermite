@@ -4,7 +4,7 @@ import { css } from './css';
 let h, useTheme, fwdProp;
 function setup(pragma, prefix, theme, forwardProps) {
   // This one needs to stay in here, so we won't have cyclic dependencies
-  parse.p = prefix;
+  (parse as any).p = prefix;
 
   // These are scope to this context
   h = pragma;
@@ -21,6 +21,7 @@ function styled(tag, forwardRef) {
   const _ctx = this || {};
 
   return function wrapper() {
+    // eslint-disable-next-line prefer-rest-params
     const _args = arguments;
 
     function Styled(props, ref) {
@@ -28,10 +29,10 @@ function styled(tag, forwardRef) {
       const _props = Object.assign({}, props);
 
       // Keep a local reference to the previous className
-      const _previousClassName = _props.className || Styled.className;
+      const _previousClassName = _props.className || (Styled as any).className;
 
       // _ctx.p: is the props sent to the context
-      _ctx.p = Object.assign({ theme: useTheme && useTheme() }, _props);
+      _ctx.p = Object.assign({ theme: useTheme?.() }, _props);
 
       // Set a flag if the current components had a previous className
       // similar to goober. This is the append/prepend flag
@@ -40,7 +41,7 @@ function styled(tag, forwardRef) {
 
       _props.className =
         // Define the new className
-        css.apply(_ctx, _args) +
+        css.apply(_ctx, _args as any) +
         (_previousClassName ? ' ' + _previousClassName : '');
 
       // If the forwardRef fun is defined we have the ref

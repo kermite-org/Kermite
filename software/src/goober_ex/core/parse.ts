@@ -30,27 +30,29 @@ export const parse = (obj, selector) => {
         : key;
 
       // If these are the `@` rule
-      if (key[0] == '@') {
+      if (key[0] === '@') {
         // Handling the `@font-face` where the
         // block doesn't need the brackets wrapped
-        if (key[1] == 'f') {
+        if (key[1] === 'f') {
           blocks += parse(val, key);
         } else {
           // Regular rule block
-          blocks += key + '{' + parse(val, key[1] == 'k' ? '' : selector) + '}';
+          blocks +=
+            key + '{' + parse(val, key[1] === 'k' ? '' : selector) + '}';
         }
       } else {
         // Call the parse for this block
         blocks += parse(val, next);
       }
     } else {
-      if (key[0] == '@' && key[1] == 'i') {
+      if (key[0] === '@' && key[1] === 'i') {
         outer = key + ' ' + val + ';';
       } else {
+        const parse_p = (parse as any).p;
         // Push the line for this property
-        current += parse.p
+        current += parse_p
           ? // We have a prefixer and we need to run this through that
-            parse.p(key.replace(/[A-Z]/g, '-$&').toLowerCase(), val)
+            parse_p(key.replace(/[A-Z]/g, '-$&').toLowerCase(), val)
           : // Nope no prefixer just append it
             key.replace(/[A-Z]/g, '-$&').toLowerCase() + ':' + val + ';';
       }

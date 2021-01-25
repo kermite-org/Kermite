@@ -10,12 +10,12 @@ export const compile = (str, defs, data) => {
     let tail = defs[i];
 
     // If this is a function we need to:
-    if (tail && tail.call) {
+    if (tail?.call) {
       // 1. Call it with `data`
       const res = tail(data);
 
       // 2. Grab the className
-      const className = res && res.props && res.props.className;
+      const className = res?.props && res.props.className;
 
       // 3. If there's none, see if this is basically a
       // previously styled className by checking the prefix
@@ -33,6 +33,6 @@ export const compile = (str, defs, data) => {
         tail = res;
       }
     }
-    return out + next + (tail == null ? '' : tail);
+    return out + next + (tail === null ? '' : tail);
   }, '');
 };

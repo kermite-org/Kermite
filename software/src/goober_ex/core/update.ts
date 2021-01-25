@@ -17,6 +17,6 @@ export const extractCss = (target) => {
  * @param {Boolean} append
  */
 export const update = (css, sheet, append) => {
-  sheet.data.indexOf(css) == -1 &&
+  sheet.data.indexOf(css) === -1 &&
     (sheet.data = append ? css + sheet.data : sheet.data + css);
 };

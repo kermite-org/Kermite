@@ -14,6 +14,7 @@ function css(val) {
     _val.unshift
       ? _val.raw
         ? // Tagged templates
+          // eslint-disable-next-line prefer-rest-params
           compile(_val, [].slice.call(arguments, 1), ctx.p)
         : // Regular arrays
           _val.reduce(
