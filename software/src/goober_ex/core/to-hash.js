@@ -7,5 +7,6 @@
  * @param {String} str
  * @returns {String}
  */
-export let toHash = (str) =>
-    'go' + str.split('').reduce((out, i) => (101 * out + i.charCodeAt(0)) >>> 0, 11);
+export const toHash = (str) =>
+  'go' +
+  str.split('').reduce((out, i) => (101 * out + i.charCodeAt(0)) >>> 0, 11);
