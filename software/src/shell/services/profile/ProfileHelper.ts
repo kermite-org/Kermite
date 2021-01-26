@@ -110,6 +110,7 @@ export namespace ProfileHelper {
     shape: IKeyboardShape_PRF02,
   ): IPersistKeyboardDesign {
     return {
+      formatRevision: 'LA00',
       setup: {
         placementUnit: 'mm',
         placementAnchor: 'center',

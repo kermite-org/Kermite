@@ -111,6 +111,7 @@ export namespace KeyboardDesignConverter {
     design: IEditKeyboardDesign,
   ): IPersistKeyboardDesign {
     return {
+      formatRevision: 'LA00',
       setup: {
         placementUnit: design.setup.placementUnit,
         placementAnchor: design.setup.placementAnchor,

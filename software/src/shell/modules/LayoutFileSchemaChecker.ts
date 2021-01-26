@@ -11,6 +11,7 @@ import {
 } from '~/shell/modules/SchemaValidationHelper';
 
 const persistEditKeyboardDesignSchemaChecker = vObject({
+  formatRevision: vString(),
   setup: vObject({
     placementUnit: vStringMatchesTo([/^mm$/, /^KP \d+( \d+)?$/]),
     placementAnchor: vValueOneOf(['center', 'topLeft']),

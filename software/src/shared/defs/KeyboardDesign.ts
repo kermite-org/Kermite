@@ -20,6 +20,7 @@ export interface IPersistKeyboardDesignMirrorKeyEntity {
   keyIndex?: number;
 }
 export interface IPersistKeyboardDesign {
+  formatRevision: 'LA00';
   setup: {
     placementUnit: string;
     placementAnchor: IKeyPlacementAnchor;
@@ -45,6 +46,7 @@ export interface IPersistKeyboardDesign {
 
 export function createFallbackPersistKeyboardDesign(): IPersistKeyboardDesign {
   return {
+    formatRevision: 'LA00',
     setup: {
       placementUnit: 'mm',
       placementAnchor: 'center',
