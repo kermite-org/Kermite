@@ -13,8 +13,8 @@ const PageRoot = () => {
       {/* <MockPageLayouterDevelopment /> */}
       {/* <MockPageLoadedDesignDrawing /> */}
       {/* <UiLayouterPageDevelopmentDummy /> */}
-      <UiLayouterPageComponent />
-      {/* <GooberDevelopmentPage /> */}
+      {/* <UiLayouterPageComponent /> */}
+      <GooberDevelopmentPage />
     </div>
   );
 };
