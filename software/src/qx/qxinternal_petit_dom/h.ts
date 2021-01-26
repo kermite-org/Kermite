@@ -26,7 +26,7 @@ const isValidComponentType = (c: any): c is IComponentObject<any> =>
 export function h(
   type: string | IComponentFunction<any>,
   props: any,
-  ...children: any[]
+  ...argsChildren: any[]
 ): VNode | null {
   const key = props ? props.key : null;
 
@@ -34,6 +34,8 @@ export function h(
   if (skip) {
     return null;
   }
+
+  const children = props?.children || argsChildren;
 
   qxInterposeProps(props, type);
 
