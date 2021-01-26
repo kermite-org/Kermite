@@ -21,6 +21,8 @@ const cssHeader = css`
 `;
 
 export const GooberDevelopmentPage = () => {
+  console.log(`test message: #{TEST_TEXT_REPLACING}`);
+
   return (
     <div css={cssRoot}>
       <div css={cssHeader}>hello</div>

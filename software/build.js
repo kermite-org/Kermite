@@ -6,6 +6,20 @@ const childProcess = require('child_process');
 const readline = require('readline');
 const liveServer = require('live-server');
 
+const myPlugin = {
+  name: 'my',
+  setup(build) {
+    build.onLoad({ filter: /\.tsx$/ }, async (args) => {
+      let text = await fs.promises.readFile(args.path, 'utf8');
+      text = text.replace('#{TEST_TEXT_REPLACING}', '#{TEST_TEXT_REPLACED!!}');
+      return {
+        contents: text,
+        loader: 'tsx',
+      };
+    });
+  },
+};
+
 const [opts] = cliopts.parse(
   ['x-build', 'build application'],
   ['x-watch', 'build application with watcher'],
@@ -79,6 +93,7 @@ async function makeUi() {
       clear: false,
       tslint: false,
       sourcemap: true,
+      plugins: [myPlugin],
       onEnd: resolve,
     }),
   );
@@ -102,6 +117,7 @@ async function startMockView() {
     clear: false,
     tslint: false,
     sourcemap: 'inline',
+    plugins: [myPlugin],
   });
 
   liveServer.start({
