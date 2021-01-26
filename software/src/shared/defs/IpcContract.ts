@@ -59,6 +59,7 @@ export type IRealtimeKeyboardEvent =
 
 export type IAppWindowEvent = {
   activeChanged?: boolean;
+  devToolVisible?: boolean;
 };
 
 export interface IProfileManagerCommand {
@@ -167,6 +168,7 @@ export interface IAppIpcContract {
     window_maximizeWindow(): Promise<void>;
     // window_widgetModeChanged(isWidgetMode: boolean): Promise<void>;
     window_restartApplication(): Promise<void>;
+    window_setDevToolVisibility(visible: boolean): Promise<void>;
 
     // profile_getCurrentProfile(): Promise<IProfileData | undefined>;
     profile_executeProfileManagerCommands(

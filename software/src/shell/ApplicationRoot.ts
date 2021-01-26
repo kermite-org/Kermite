@@ -78,6 +78,8 @@ export class ApplicationRoot {
       window_minimizeWindow: async () => windowWrapper.minimizeMainWindow(),
       window_maximizeWindow: async () => windowWrapper.maximizeMainWindow(),
       window_restartApplication: async () => windowWrapper.restartApplication(),
+      window_setDevToolVisibility: async (visible) =>
+        windowWrapper.setDevToolsVisibility(visible),
       // window_widgetModeChanged: async (isWidgetMode) =>
       //   this.appWindowManager.adjustWindowSize(isWidgetMode),
       profile_executeProfileManagerCommands: (commands) =>
@@ -165,7 +167,7 @@ export class ApplicationRoot {
         return () =>
           this.keyboardLayoutFilesWatcher.fileUpdationEventPort.unsubscribe(cb);
       },
-      window_appWindowEvents: windowWrapper.onAppWindowEvent,
+      window_appWindowEvents: windowWrapper.appWindowEventPort.subscribe,
     });
   }
 
