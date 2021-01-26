@@ -68,6 +68,9 @@ function createRenderComponent<P extends {}>({
       };
       // with hooks integration
       const vnode = renderFn(props);
+      if (vnode) {
+        vnode.marker = componentFn.name;
+      }
       stateRef.vnode = vnode;
       stateRef.hook = hook;
       stateRef.renderFn = renderFn;

@@ -12,6 +12,7 @@ export type VComponent = {
   readonly props: { [key: string]: any };
   _state: any;
   label: string;
+  marker?: string;
 };
 
 export type VElement = {
@@ -21,6 +22,7 @@ export type VElement = {
   readonly props: { [key: string]: any };
   children: VNode[];
   label: string;
+  marker?: string;
 };
 
 export type VNode = VComponent | VElement;
