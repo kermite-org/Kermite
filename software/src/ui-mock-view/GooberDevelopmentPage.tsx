@@ -40,12 +40,41 @@ const StyledMyButton = styled(MyButton)`
   border-radius: 5px;
 `;
 
+const MultipleClassNameTestCard1 = () => {
+  const cssBase = css`
+    width: 200px;
+
+    > * + * {
+      margin-top: 5px;
+    }
+
+    > .foo {
+      color: red;
+    }
+
+    > .bar {
+      border: solid 1px blue;
+    }
+
+    > .buzz {
+      background: yellow;
+    }
+  `;
+  return (
+    <div css={cssBase}>
+      <div classNames={['foo', 'bar', 'buzz']}>test</div>
+      <div classNames={{ foo: true, bar: true, buzz: false }}>test</div>
+    </div>
+  );
+};
+
 export const GooberDevelopmentPage = () => {
   return (
     <div css={cssRoot}>
       <div css={cssHeader}>hello</div>
       <Header2>world</Header2>
       <StyledMyButton text="test" />
+      <MultipleClassNameTestCard1 />
     </div>
   );
 };
