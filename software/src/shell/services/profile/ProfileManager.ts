@@ -114,7 +114,7 @@ export class ProfileManager implements IProfileManager {
       });
       return true;
     } catch (error) {
-      this.raiseErrorMessage('failed to load profile');
+      this.raiseErrorMessage(`failed to load profile, ${error.message}`);
       return false;
     }
   }

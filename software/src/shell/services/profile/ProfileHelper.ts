@@ -78,6 +78,13 @@ export namespace ProfileHelper {
     });
   }
 
+  const fallbackDisplayArea: IKeyboardShape_PRF02['displayArea'] = {
+    centerX: 0,
+    centerY: 50,
+    width: 300,
+    height: 120,
+  };
+
   function makeOutlineShapesFromDisplayArea(
     displayArea: IKeyboardShape_PRF02['displayArea'],
   ): IPersistKeyboardDesign['outlineShapes'] {
@@ -119,7 +126,9 @@ export namespace ProfileHelper {
           keyIndex: ku.keyIndex,
         };
       }),
-      outlineShapes: makeOutlineShapesFromDisplayArea(shape.displayArea),
+      outlineShapes: makeOutlineShapesFromDisplayArea(
+        shape.displayArea || fallbackDisplayArea,
+      ),
       transGroups: [],
     };
   }
