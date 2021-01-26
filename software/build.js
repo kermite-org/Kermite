@@ -133,6 +133,13 @@ async function startMockView() {
     open: true,
     logLevel: 0,
   });
+
+  (async () => {
+    const key = await readKey();
+    if (key.sequence === '\x1B' || key.sequence === '\x03') {
+      process.exit();
+    }
+  })();
 }
 
 function startElectronProcess() {
