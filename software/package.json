@@ -42,7 +42,7 @@
   "dependencies": {
     "fast-equals": "^2.0.0",
     "glob": "^7.1.6",
-    "goober": "^2.0.19",
+    "goober": "2.0.19",
     "immer": "^8.0.0",
     "node-fetch": "^2.6.1",
     "node-hid": "^2.1.1",
