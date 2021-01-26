@@ -13,6 +13,18 @@ function styleObjectToString(obj: { [key: string]: any }) {
     .join(' ');
 }
 
+function extractClassNamesToArray(
+  classNames: string[] | { [key: string]: boolean },
+): string[] {
+  if (!classNames) {
+    return [];
+  }
+  if (Array.isArray(classNames)) {
+    return classNames;
+  }
+  return Object.keys(classNames).filter((key) => classNames[key]);
+}
+
 export function qxInterposeProps(
   props: any,
   vtype: string | object | Function,
@@ -36,8 +48,14 @@ export function qxInterposeProps(
           : undefined;
       }
     }
-    if (props.css || props.className || props.class) {
-      const classes = [props.css, props.className, props.class]
+    if (props.css || props.class || props.className || props.classNames) {
+      const classNamesArray = extractClassNamesToArray(props.classNames);
+      const classes = [
+        props.css,
+        props.class,
+        props.className,
+        ...classNamesArray,
+      ]
         .filter((a) => !!a)
         .join(' ');
       delete props.css;
