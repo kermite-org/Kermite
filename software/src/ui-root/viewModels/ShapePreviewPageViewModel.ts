@@ -1,3 +1,4 @@
+import { Hook } from 'qx';
 import { IDisplayKeyboardDesign } from '~/shared';
 import { models } from '~/ui-root/models';
 import { IUiSettings } from '~/ui-root/models/UiStatusModel';
@@ -18,6 +19,10 @@ export function makeShapePreviewPageViewModel(): IShapePreviewPageViewModel {
     playerModel,
   } = models;
 
+  Hook.useEffect(() => {
+    shapesModel.initialize();
+    return () => shapesModel.finalize();
+  }, []);
   return {
     settings: uiStatusModel.settings,
     loadedDesign: shapesModel.loadedDesign,

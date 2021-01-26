@@ -2,6 +2,7 @@ import {
   IProfileData,
   duplicateObjectByJsonStringifyParse,
   fallbackProfileData,
+  IPresetSpec,
 } from '~/shared';
 import { fsxReadJsonFile } from '~/shell/funcs';
 import { ProfileHelper } from '~/shell/services/profile/ProfileHelper';
@@ -70,13 +71,18 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
 
   private async loadPresetProfileDataImpl(
     projectId: string,
-    presetName: string,
+    presetSpec: IPresetSpec,
   ) {
-    if (!presetName.startsWith('@')) {
-      return await this.loadPresetProfileFromPresetFile(projectId, presetName);
+    if (presetSpec.type === 'preset') {
+      return await this.loadPresetProfileFromPresetFile(
+        projectId,
+        presetSpec.presetName,
+      );
     } else {
-      const layoutName = presetName.slice(1);
-      return await this.createBlankProfileFromLayoutFile(projectId, layoutName);
+      return await this.createBlankProfileFromLayoutFile(
+        projectId,
+        presetSpec.layoutName,
+      );
     }
   }
 
@@ -84,17 +90,21 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
 
   async loadPresetProfileData(
     projectId: string,
-    presetName: string,
+    presetSpec: IPresetSpec,
   ): Promise<IProfileData | undefined> {
-    if (!presetName) {
-      return undefined;
-    }
-    const profileKey = `${projectId}__${presetName}`;
+    const pp = presetSpec as {
+      type: string;
+      layoutName?: string;
+      presetName?: string;
+    };
+    const profileKey = `${projectId}__${pp.type}__${
+      pp.layoutName || pp.presetName || ''
+    }`;
     const cache = this.profileDataCache;
     if (profileKey in cache) {
       return cache[profileKey];
     }
-    const profile = await this.loadPresetProfileDataImpl(projectId, presetName);
+    const profile = await this.loadPresetProfileDataImpl(projectId, presetSpec);
     cache[profileKey] = profile;
     return profile;
   }

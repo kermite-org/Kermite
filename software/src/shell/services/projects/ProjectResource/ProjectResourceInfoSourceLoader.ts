@@ -147,7 +147,7 @@ export namespace ProjectResourceInfoSourceLoader {
         const hexFilePath = checkFileExistsOrBlank(
           pathJoin(projectBaseDir, `${coreName}.hex`),
         );
-        const presetFolderPath = pathJoin(projectBaseDir, 'profiles');
+        const presetFolderPath = pathJoin(projectBaseDir, 'presets');
         const presetNames = await readPresetNames(presetFolderPath);
 
         const layoutNames = await readLayoutNames(projectBaseDir);
@@ -189,7 +189,7 @@ export namespace ProjectResourceInfoSourceLoader {
           projectFilePath,
         );
 
-        const presetsFolderPath = pathJoin(projectBaseDir, 'profiles');
+        const presetsFolderPath = pathJoin(projectBaseDir, 'presets');
 
         const presetNames = await readPresetNames(presetsFolderPath);
 

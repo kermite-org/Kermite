@@ -6,6 +6,7 @@ import {
   clampValue,
   IProfileManagerCommand,
   addArrayItemIfNotExist,
+  IPresetSpec,
 } from '~/shared';
 import { EventPort } from '~/shell/funcs';
 import { PresetProfileLoader } from '~/shell/services/projects/PresetProfileLoader';
@@ -175,12 +176,12 @@ export class ProfileManager implements IProfileManager {
 
   private async createProfileImpl(
     profName: string,
-    targetProjectId: string,
-    presetName: string,
+    projectId: string,
+    presetSpec: IPresetSpec,
   ): Promise<IProfileData> {
     const profile = await this.presetProfileLoader.loadPresetProfileData(
-      targetProjectId,
-      presetName,
+      projectId,
+      presetSpec,
     );
     if (!profile) {
       throw new Error('failed to load profile');
@@ -191,8 +192,8 @@ export class ProfileManager implements IProfileManager {
 
   async createProfile(
     profName: string,
-    targetProjectId: string,
-    presetName: string,
+    projectId: string,
+    presetSpec: IPresetSpec,
   ): Promise<boolean> {
     if (this.status.allProfileNames.includes(profName)) {
       return false;
@@ -200,8 +201,8 @@ export class ProfileManager implements IProfileManager {
     try {
       const profileData = await this.createProfileImpl(
         profName,
-        targetProjectId,
-        presetName,
+        projectId,
+        presetSpec,
       );
       const allProfileNames = await this.core.listAllProfileNames();
       this.setStatus({
@@ -287,12 +288,12 @@ export class ProfileManager implements IProfileManager {
   }
 
   private async executeCommand(cmd: IProfileManagerCommand): Promise<boolean> {
-    console.log(`execute command`, { cmd });
+    // console.log(`execute command`, { cmd });
     if (cmd.creatProfile) {
       return await this.createProfile(
         cmd.creatProfile.name,
         cmd.creatProfile.targetProjectId,
-        cmd.creatProfile.presetName,
+        cmd.creatProfile.presetSpec,
       );
     } else if (cmd.deleteProfile) {
       return await this.deleteProfile(cmd.deleteProfile.name);

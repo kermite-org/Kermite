@@ -54,7 +54,7 @@ async function makeShell() {
       watch: reqWatch,
       clear: false,
       tslint: false,
-      sourcemap: true,
+      sourcemap: 'inline',
       onEnd: resolve,
     }),
   );

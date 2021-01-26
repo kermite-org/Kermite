@@ -1,4 +1,5 @@
 import { IpcRenderer } from 'electron';
+import { removeArrayItems } from '~/shared/funcs';
 import { IIpcContractBase } from './IpcContractBase';
 
 export interface IIpcRendererAgent<T extends IIpcContractBase> {
@@ -127,6 +128,7 @@ export function getIpcRendererAgent<
         const { wrapper, subscriptionKey } = entry;
         ipcRenderer.removeListener(subscriptionKey, wrapper);
         ipcRenderer.invoke(`__subscriptionEnded__${propKey}`, subscriptionKey);
+        removeArrayItems(subscriptionEntries, entry);
       }
     },
   };

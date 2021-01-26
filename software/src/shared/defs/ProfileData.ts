@@ -221,15 +221,3 @@ export const fallbackProfileData: IProfileData = {
   ],
   assigns: {},
 };
-
-export type IProjectResourceOrigin = 'central' | 'local';
-
-export interface IProjectResourceInfo {
-  projectId: string;
-  keyboardName: string;
-  projectPath: string;
-  presetNames: string[];
-  layoutNames: string[];
-  hasLayout: boolean;
-  hasFirmwareBinary: boolean;
-}

@@ -59,7 +59,7 @@ export class ProjectResourceInfoProvider
   ): string | undefined {
     const info = this.getProjectInfoSourceById(projectId);
     if (info) {
-      return pathJoin(info.projectFolderPath, 'profiles', `${presetName}.json`);
+      return pathJoin(info.projectFolderPath, 'presets', `${presetName}.json`);
     }
   }
 

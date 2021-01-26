@@ -10,16 +10,16 @@ export class KeyboardShapesModel {
     private uiStatusModel: UiStatusModel,
   ) {}
 
-  private _currentProjectId: string = '';
+  private _currentProjectId: string | undefined;
   private _loadedDesign: IDisplayKeyboardDesign | undefined;
-  private _currentLayoutName: string = '';
+  private _currentLayoutName: string | undefined;
 
   get currentProjectId() {
-    return this._currentProjectId;
+    return this._currentProjectId || '';
   }
 
   get currentLayoutName() {
-    return this._currentLayoutName;
+    return this._currentLayoutName || '';
   }
 
   get loadedDesign() {
@@ -38,6 +38,9 @@ export class KeyboardShapesModel {
   }
 
   private async loadCurrentProjectLayout() {
+    if (!(this._currentProjectId && this._currentLayoutName)) {
+      return;
+    }
     const design = await ipcAgent.async.projects_loadKeyboardShape(
       this._currentProjectId,
       this._currentLayoutName,

@@ -1,4 +1,4 @@
-import { IProfileManagerStatus } from '~/shared';
+import { IPresetSpec, IProfileManagerStatus } from '~/shared';
 import { appGlobal, applicationStorage } from '~/shell/base';
 import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
 import { KeyMappingEmitter } from '~/shell/services/device/KeyMappingEmitter';
@@ -98,8 +98,8 @@ export class ApplicationRoot {
         this.firmwareUpdationService.writeFirmware(projectId, comPortName),
       projects_getAllProjectResourceInfos: async () =>
         this.projectResourceInfoProvider.getAllProjectResourceInfos(),
-      projects_loadPresetProfile: (profileId, presetName: string) =>
-        this.presetProfileLoader.loadPresetProfileData(profileId, presetName),
+      projects_loadPresetProfile: (profileId, presetSpec: IPresetSpec) =>
+        this.presetProfileLoader.loadPresetProfileData(profileId, presetSpec),
       config_getKeyboardConfig: async () =>
         this.keyboardConfigProvider.keyboardConfig,
       config_writeKeyboardConfig: async (config) =>

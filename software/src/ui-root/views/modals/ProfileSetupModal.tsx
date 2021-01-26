@@ -19,7 +19,7 @@ import { GeneralSelector } from '~/ui-root/views/controls/GeneralSelector';
 interface ICreateProfileDialogEditValues {
   profileName: string;
   targetProjectId: string;
-  presetName: string;
+  layoutName: string;
 }
 
 function makeProfileSetupModalViewModel() {
@@ -36,13 +36,13 @@ function makeProfileSetupModalViewModel() {
     const info = models.projectResourceModel
       .getProjectsWithLayout()
       .find((info) => info.projectId === projectId);
-    return info!.layoutNames.map((it) => ({ id: `@${it}`, text: `@${it}` }));
+    return info!.layoutNames.map((it) => ({ id: it, text: it }));
   }
 
   const editValues: ICreateProfileDialogEditValues = {
     profileName: '',
     targetProjectId: defaultProjectId,
-    presetName: getLayoutNameOptions(defaultProjectId)[0].id,
+    layoutName: getLayoutNameOptions(defaultProjectId)[0].id,
   };
 
   return {
@@ -53,8 +53,8 @@ function makeProfileSetupModalViewModel() {
     editValues,
     sync() {
       const options = getLayoutNameOptions(editValues.targetProjectId);
-      if (!options.find((opt) => opt.id === editValues.presetName)) {
-        editValues.presetName = options[0].id;
+      if (!options.find((opt) => opt.id === editValues.layoutName)) {
+        editValues.layoutName = options[0].id;
       }
     },
   };
@@ -98,12 +98,12 @@ const ProfileSetupModalContent = (props: {
                 </td>
               </tr>
               <tr>
-                <td>Preset</td>
+                <td>Layout</td>
                 <td>
                   <GeneralSelector
                     options={presetOptions}
-                    choiceId={editValues.presetName}
-                    setChoiceId={(id) => (editValues.presetName = id)}
+                    choiceId={editValues.layoutName}
+                    setChoiceId={(id) => (editValues.layoutName = id)}
                     width={150}
                   />
                 </td>
