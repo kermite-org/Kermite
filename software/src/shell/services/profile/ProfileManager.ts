@@ -5,9 +5,11 @@ import {
   fallbackProfileData,
   clampValue,
   IProfileManagerCommand,
+  addArrayItemIfNotExist,
 } from '~/shared';
 import { EventPort } from '~/shell/funcs';
 import { PresetProfileLoader } from '~/shell/services/projects/PresetProfileLoader';
+import { IProjectResourceInfoProvider } from '~/shell/services/serviceInterfaces';
 import { ProfileHelper } from './ProfileHelper';
 import { ProfileManagerCore } from './ProfileManagerCore';
 import { IProfileManager } from './interfaces';
@@ -27,7 +29,10 @@ export class ProfileManager implements IProfileManager {
 
   private core: ProfileManagerCore;
 
-  constructor(private presetProfileLoader: PresetProfileLoader) {
+  constructor(
+    private resourceInfoProvider: IProjectResourceInfoProvider,
+    private presetProfileLoader: PresetProfileLoader,
+  ) {
     this.core = new ProfileManagerCore();
   }
 
@@ -122,6 +127,29 @@ export class ProfileManager implements IProfileManager {
       return true;
     } catch (error) {
       this.raiseErrorMessage('failed to save profile');
+      return false;
+    }
+  }
+
+  async saveAsProjectPreset(
+    projectId: string,
+    presetName: string,
+    profileData: IProfileData,
+  ): Promise<boolean> {
+    try {
+      const filePath = this.resourceInfoProvider.getPresetProfileFilePath(
+        projectId,
+        presetName,
+      );
+      if (filePath) {
+        await this.core.saveProfileAsPreset(filePath, profileData);
+        this.resourceInfoProvider.patchProjectInfoSource(projectId, (info) =>
+          addArrayItemIfNotExist(info.presetNames, presetName),
+        );
+      }
+      return true;
+    } catch (error) {
+      this.raiseErrorMessage('failed to save preset');
       return false;
     }
   }
@@ -259,6 +287,7 @@ export class ProfileManager implements IProfileManager {
   }
 
   private async executeCommand(cmd: IProfileManagerCommand): Promise<boolean> {
+    console.log(`execute command`, { cmd });
     if (cmd.creatProfile) {
       return await this.createProfile(
         cmd.creatProfile.name,
@@ -281,6 +310,9 @@ export class ProfileManager implements IProfileManager {
       );
     } else if (cmd.saveCurrentProfile) {
       return await this.saveCurrentProfile(cmd.saveCurrentProfile.profileData);
+    } else if (cmd.saveAsProjectPreset) {
+      const { projectId, presetName, profileData } = cmd.saveAsProjectPreset;
+      return await this.saveAsProjectPreset(projectId, presetName, profileData);
     }
     return false;
   }

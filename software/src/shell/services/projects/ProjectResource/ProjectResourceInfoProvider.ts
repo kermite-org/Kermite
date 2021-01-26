@@ -39,16 +39,15 @@ export class ProjectResourceInfoProvider
     return this.projectInfoSources.find((info) => info.projectId === projectId);
   }
 
-  patchProjectInfoSource<K extends keyof IProjectResourceInfoSource>(
+  patchProjectInfoSource(
     projectId: string,
-    key: K,
-    value: IProjectResourceInfoSource[K],
+    callback: (info: IProjectResourceInfoSource) => void,
   ) {
     const info = this.projectInfoSources.find(
       (it) => it.projectId === projectId,
     );
     if (info) {
-      info[key] = value;
+      callback(info);
     }
   }
 

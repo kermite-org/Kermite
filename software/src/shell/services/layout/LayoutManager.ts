@@ -7,6 +7,7 @@ import {
   duplicateObjectByJsonStringifyParse,
   IPersistKeyboardDesign,
   ILayoutEditSource,
+  addArrayItemIfNotExist,
 } from '~/shared';
 import { getErrorInfo } from '~/shared/defs';
 import { applicationStorage } from '~/shell/base';
@@ -147,24 +148,13 @@ export class LayoutManager implements ILayoutManager {
     });
   }
 
-  private addLayoutNameToProjectInfoSource(
+  private addLayoutNameToProjectInfoSourceIfNotExist(
     projectId: string,
     layoutName: string,
-  ): boolean {
-    const info = this.projectResourceInfoProvider.internal_getProjectInfoSourceById(
-      projectId,
+  ) {
+    this.projectResourceInfoProvider.patchProjectInfoSource(projectId, (info) =>
+      addArrayItemIfNotExist(info.layoutNames, layoutName),
     );
-    if (info) {
-      if (!info.layoutNames.includes(layoutName)) {
-        this.projectResourceInfoProvider.patchProjectInfoSource(
-          projectId,
-          'layoutNames',
-          [...info.layoutNames, layoutName],
-        );
-        return true;
-      }
-    }
-    return false;
   }
 
   private async createLayoutForProfject(projectId: string, layoutName: string) {
@@ -175,7 +165,7 @@ export class LayoutManager implements ILayoutManager {
     if (filePath) {
       const design = createFallbackPersistKeyboardDesign();
       await this.saveLayoutToFile(filePath, design);
-      this.addLayoutNameToProjectInfoSource(projectId, layoutName);
+      this.addLayoutNameToProjectInfoSourceIfNotExist(projectId, layoutName);
       this.setStatus({
         editSource: {
           type: 'ProjectLayout',
@@ -218,7 +208,7 @@ export class LayoutManager implements ILayoutManager {
     );
     if (filePath) {
       await layoutFileLoader.saveLayoutToFile(filePath, design);
-      this.addLayoutNameToProjectInfoSource(projectId, layoutName);
+      this.addLayoutNameToProjectInfoSourceIfNotExist(projectId, layoutName);
       this.setStatus({
         editSource: {
           type: 'ProjectLayout',

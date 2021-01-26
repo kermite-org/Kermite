@@ -1,7 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { reflectValue } from '~/ui-common';
-import { ILayoutManagerViewModel } from '~/ui-layouter-page/LayoutManagerViewModel';
 import { makeCssColor } from '~/ui-layouter/base';
 import { ISelectOption } from '~/ui-layouter/controls';
 
@@ -114,14 +113,16 @@ const FlatListSelector = (props: {
   value: string;
   setValue: (value: string) => void;
   size: number;
+  disabled?: boolean;
 }) => {
-  const { options, value, setValue, size } = props;
+  const { options, value, setValue, size, disabled } = props;
   return (
     <select
       size={size}
       value={value}
       onInput={reflectValue(setValue)}
       css={cssFlatListSelector}
+      disabled={disabled}
     >
       {options.map((it) => (
         <option value={it.id} key={it.id}>
@@ -132,31 +133,56 @@ const FlatListSelector = (props: {
   );
 };
 
-export const ProjectLayoutSelectorModal = (props: {
-  vm: ILayoutManagerViewModel;
+export interface IProjectAttachmentFileSelectorModalModel {
+  titleText: string;
+  closeModal(): void;
+  selectorSize: number;
+
+  canSelectProject: boolean;
+  projectOptions: ISelectOption[];
+  currentProjectId: string;
+  setCurrentProjectId(projectId: string): void;
+  currentProejctKeyboardName: string;
+
+  attachmentFileTypeHeader: string;
+  attachmentFileNameOptions: ISelectOption[];
+  currentAttachmentFileName: string;
+  setCurrentAttachmentFileName(fileName: string): void;
+  targetAttachementFilePath: string;
+
+  buttonText: string;
+  buttonActive: boolean;
+  buttonHandler(): void;
+}
+
+export const ProjectAttachmentFileSelectorModal = (props: {
+  vm: IProjectAttachmentFileSelectorModalModel;
 }) => {
-  const { vm } = props;
-  if (vm.modalState === 'None') {
-    return null;
-  }
-  const isLoading = vm.modalState === 'LoadFromProject';
-
-  const titleText = isLoading
-    ? 'Load From Project Layout'
-    : 'Save To Project Layout';
-
-  const isCustomName =
-    vm.currentLayoutName &&
-    !vm.layoutOptions.some((it) => it.id === vm.currentLayoutName);
-
-  const selectorSize = 7;
+  const {
+    titleText,
+    closeModal,
+    selectorSize,
+    canSelectProject,
+    projectOptions,
+    currentProjectId,
+    setCurrentProjectId,
+    currentProejctKeyboardName,
+    attachmentFileTypeHeader,
+    attachmentFileNameOptions: attachementFileNameOptions,
+    currentAttachmentFileName: currentAttachementFileName,
+    setCurrentAttachmentFileName,
+    targetAttachementFilePath,
+    buttonText,
+    buttonActive,
+    buttonHandler,
+  } = props.vm;
 
   return (
-    <div css={cssProjectLayoutSelectorModal} onClick={vm.closeModal}>
+    <div css={cssProjectLayoutSelectorModal} onClick={closeModal}>
       <div css={cssPanel} onClick={(e) => e.stopPropagation()}>
         <div class="panelHeader">
           <div class="titleText">{titleText}</div>
-          <div class="closeButton" onClick={vm.closeModal}>
+          <div class="closeButton" onClick={closeModal}>
             <i class="fa fa-times" />
           </div>
         </div>
@@ -166,51 +192,38 @@ export const ProjectLayoutSelectorModal = (props: {
               <div class="column listColumn">
                 <div>Project</div>
                 <FlatListSelector
-                  options={vm.projectOptions}
-                  value={vm.currentProjectId}
-                  setValue={vm.setCurrentProjectId}
+                  options={projectOptions}
+                  value={currentProjectId}
+                  setValue={setCurrentProjectId}
                   size={selectorSize}
+                  disabled={!canSelectProject}
                 />
-                <div class="keyboardNameText">{vm.currentKeyboardName}</div>
+                <div class="keyboardNameText">{currentProejctKeyboardName}</div>
               </div>
               <div class="column listColumn">
-                <div>Layout</div>
+                <div>{attachmentFileTypeHeader}</div>
                 <FlatListSelector
-                  options={vm.layoutOptions}
-                  value={vm.currentLayoutName}
-                  setValue={vm.setCurrentLayoutName}
+                  options={attachementFileNameOptions}
+                  value={currentAttachementFileName}
+                  setValue={setCurrentAttachmentFileName}
                   size={selectorSize}
                 />
                 <div>
                   <input
                     class="layoutNameEdit"
                     type="text"
-                    value={vm.currentLayoutName}
-                    onInput={reflectValue(vm.setCurrentLayoutName)}
+                    value={currentAttachementFileName}
+                    onInput={reflectValue(setCurrentAttachmentFileName)}
                   ></input>
                 </div>
               </div>
             </div>
             <div class="bottomRow">
-              <div class="filePathText">{vm.targetProjectLayoutFilePath}</div>
+              <div class="filePathText">{targetAttachementFilePath}</div>
               <div class="buttonBox">
-                {isLoading ? (
-                  <button
-                    onClick={
-                      isCustomName ? vm.createForProject : vm.loadFromProject
-                    }
-                    disabled={!vm.canLoadFromProject}
-                  >
-                    {isCustomName ? 'Create' : 'Load'}
-                  </button>
-                ) : (
-                  <button
-                    onClick={vm.saveToProject}
-                    disabled={!vm.canSaveToProject}
-                  >
-                    Save
-                  </button>
-                )}
+                <button onClick={buttonHandler} disabled={!buttonActive}>
+                  {buttonText}
+                </button>
               </div>
             </div>
           </div>

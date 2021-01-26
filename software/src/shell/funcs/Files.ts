@@ -27,6 +27,8 @@ export const fsLstatSync = fs.lstatSync;
 
 export const fsExistsSync = fs.existsSync;
 
+export const fsMkdirSync = fs.mkdirSync;
+
 export const fspMkdir = fs.promises.mkdir;
 
 export const fspCopyFile = fs.promises.copyFile;
@@ -36,6 +38,12 @@ export const fspUnlink = fs.promises.unlink;
 export const fspReaddir = fs.promises.readdir;
 
 export const fspRename = fs.promises.rename;
+
+export function fsxMkdirpSync(path: string) {
+  if (!fsExistsSync(path)) {
+    fsMkdirSync(path, { recursive: true });
+  }
+}
 
 export function fsxReadTextFile(fpath: string): Promise<string> {
   return fs.promises.readFile(fpath, { encoding: 'utf-8' });

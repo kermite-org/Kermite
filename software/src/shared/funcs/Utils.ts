@@ -14,6 +14,12 @@ export function generateNumberSequence(n: number): number[] {
   return res;
 }
 
+export function addArrayItemIfNotExist<T>(arr: T[], value: T) {
+  if (!arr.includes(value)) {
+    arr.push(value);
+  }
+}
+
 export function removeArrayItems<T>(ar: T[], a: T) {
   let i = 0;
   while (i < ar.length) {

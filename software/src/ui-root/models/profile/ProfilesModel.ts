@@ -118,4 +118,15 @@ export class ProfilesModel {
     const deleteCommand = { deleteProfile: { name: curProfName } };
     this.sendProfileManagerCommands(deleteCommand);
   };
+
+  exportProfileAsProjectPreset = (projectId: string, presetName: string) => {
+    const exportCommand: Partial<IProfileManagerCommand> = {
+      saveAsProjectPreset: {
+        projectId,
+        presetName,
+        profileData: this.editorModel.profileData,
+      },
+    };
+    this.sendProfileManagerCommands(exportCommand);
+  };
 }

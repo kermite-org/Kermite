@@ -8,9 +8,11 @@ import {
   fspReaddir,
   fspRename,
   fspUnlink,
+  fsxMkdirpSync,
   fsxReadJsonFile,
   fsxWriteJsonFile,
   pathBasename,
+  pathDirname,
 } from '~/shell/funcs';
 
 export class ProfileManagerCore {
@@ -56,6 +58,15 @@ export class ProfileManagerCore {
     const fpath = this.getDataFilePath(profName);
     console.log(`saving current profile to ${pathBasename(fpath)}`);
     await fsxWriteJsonFile(fpath, profileData);
+  }
+
+  async saveProfileAsPreset(
+    filePath: string,
+    profileData: IProfileData,
+  ): Promise<void> {
+    console.log(`saving current profile to ${filePath}`);
+    fsxMkdirpSync(pathDirname(filePath));
+    await fsxWriteJsonFile(filePath, profileData);
   }
 
   async deleteProfile(profName: string): Promise<void> {

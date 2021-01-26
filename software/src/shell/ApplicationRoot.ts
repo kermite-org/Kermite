@@ -41,7 +41,10 @@ export class ApplicationRoot {
     this.projectResourceInfoProvider,
   );
 
-  private profileManager = new ProfileManager(this.presetProfileLoader);
+  private profileManager = new ProfileManager(
+    this.projectResourceInfoProvider,
+    this.presetProfileLoader,
+  );
 
   private layoutManager = new LayoutManager(
     this.projectResourceInfoProvider,
