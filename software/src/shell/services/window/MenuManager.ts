@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { app, Menu } from 'electron';
 import { makeListenerPort } from '~/shell/funcs';
 import { IMenuManager } from './interfaces';
@@ -37,14 +38,14 @@ export class MenuManager implements IMenuManager {
       {
         label: 'App',
         submenu: [
-          {
-            label: 'Page',
-            submenu: allPagePaths.map((pagePath) =>
-              makePageMenuItem(pagePath, pagePath === currentPagePath, () =>
-                this.onMenuChangeCurrentPagePath.emit(pagePath),
-              ),
-            ),
-          },
+          // {
+          //   label: 'Page',
+          //   submenu: allPagePaths.map((pagePath) =>
+          //     makePageMenuItem(pagePath, pagePath === currentPagePath, () =>
+          //       this.onMenuChangeCurrentPagePath.emit(pagePath),
+          //     ),
+          //   ),
+          // },
           {
             label: 'Reload Page',
             click: () => this.onMenuRequestReload.emit(),
