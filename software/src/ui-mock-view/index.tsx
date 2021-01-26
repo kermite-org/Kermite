@@ -3,6 +3,7 @@ import { h, render, rerender } from 'qx';
 import { debounce } from '~/shared';
 import { initializeCss } from '~/ui-common';
 import { UiLayouterPageComponent } from '~/ui-layouter-page';
+import { GooberDevelopmentPage } from '~/ui-mock-view/GooberDevelopmentPage';
 import { MockPageLoadedDesignDrawing } from '~/ui-mock-view/MockPageLoadedDesignDrawing';
 import { MockPageLayouterDevelopment } from './MockPageLayouterDevelopment';
 
@@ -13,6 +14,7 @@ const PageRoot = () => {
       {/* <MockPageLoadedDesignDrawing /> */}
       {/* <UiLayouterPageDevelopmentDummy /> */}
       <UiLayouterPageComponent />
+      {/* <GooberDevelopmentPage /> */}
     </div>
   );
 };

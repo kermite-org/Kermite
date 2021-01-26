@@ -33,7 +33,7 @@ export function mount(vnode: VNode, env: IEnv = DEFAULT_ENV): Node {
     return document.createTextNode(String(vnode));
   } else if (isVElement(vnode)) {
     let node;
-    const { type, props, children } = vnode;
+    const { type, props, children, marker } = vnode;
     if (type === 'svg' && !env.isSvg) {
       env = Object.assign({}, env, { isSvg: true });
     }
@@ -48,6 +48,7 @@ export function mount(vnode: VNode, env: IEnv = DEFAULT_ENV): Node {
       props,
       undefined,
       env.isSvg || false,
+      marker,
     );
     mountChildren(node, children, 0, children.length - 1, null, env);
     if (delayedProps) {
@@ -100,6 +101,7 @@ export function patch(
       newVNode.props,
       oldVNode.props,
       env.isSvg || false,
+      undefined,
     );
 
     patchChildren(domNode, newVNode.children, oldVNode.children, env);
@@ -179,7 +181,11 @@ function setAttributes(
   newAttrs: { [key: string]: string },
   oldAttrs: { [key: string]: string } | undefined,
   isSvg: boolean,
+  marker: string | undefined,
 ) {
+  if (marker) {
+    setDOMAttribute(domElement, 'data-component-ref', marker, isSvg);
+  }
   const props = [];
   for (const key in newAttrs) {
     if (key.startsWith('on') || INTERACTIVE_PROPS.hasOwnProperty(key)) {
