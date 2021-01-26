@@ -50,12 +50,12 @@ export class MenuManager implements IMenuManager {
             label: 'Reload Page',
             click: () => this.onMenuRequestReload.emit(),
           },
-          {
-            label: 'Show DevTool',
-            type: 'checkbox',
-            checked: isDevToolVisible,
-            click: () => this.onMenuToggleDevtoolVisibility.emit(),
-          },
+          // {
+          //   label: 'Show DevTool',
+          //   type: 'checkbox',
+          //   checked: isDevToolVisible,
+          //   click: () => this.onMenuToggleDevtoolVisibility.emit(),
+          // },
           {
             label: 'Restart App',
             click: () => this.onMenuRestartApplication.emit(),
