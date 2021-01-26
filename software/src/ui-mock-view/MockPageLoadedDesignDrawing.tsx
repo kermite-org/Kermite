@@ -1,5 +1,5 @@
 import { css } from 'goober';
-import { h, Hook, asyncRerender } from 'qx';
+import { h, Hook } from 'qx';
 import {
   createFallbackDisplayKeyboardDesign,
   IDisplayKeyboardDesign,
@@ -33,7 +33,6 @@ export const MockPageLoadedDesignDrawing = () => {
     );
     console.log({ design });
     state.design = design;
-    asyncRerender();
   }, []);
 
   const { design } = state;

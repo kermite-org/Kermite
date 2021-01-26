@@ -3,7 +3,6 @@ import {
   IPosition,
   startDragSession,
   getRelativeMousePosition,
-  layouterAppGlobal,
 } from '~/ui-layouter/base';
 import { editReader, editMutations } from '~/ui-layouter/editor/store';
 import { screenToWorld } from './CoordHelpers';

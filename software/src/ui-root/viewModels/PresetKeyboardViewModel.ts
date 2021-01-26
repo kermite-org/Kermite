@@ -30,7 +30,6 @@ export function makePresetKeyboardViewModel(
   const state = Hook.useMemo(() => ({ currentLayerId: '' }), []);
   Hook.useEffect(() => {
     state.currentLayerId = profileData.layers[0].layerId;
-    return true;
   }, [profileData]);
 
   const displayDesign = getDisplayKeyboardDesignSingleCached(
