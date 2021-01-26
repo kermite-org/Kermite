@@ -6,12 +6,18 @@ const childProcess = require('child_process');
 const readline = require('readline');
 const liveServer = require('live-server');
 
-const myPlugin = {
-  name: 'my',
+const gooberCssAutoLabelPlugin = {
+  name: 'gooberCssAutoLabel',
   setup(build) {
     build.onLoad({ filter: /\.tsx$/ }, async (args) => {
+      //gooberのcss変数定義を見つけて、変数名をlabelとしてスタイル定義に挿入する
       let text = await fs.promises.readFile(args.path, 'utf8');
-      text = text.replace('#{TEST_TEXT_REPLACING}', '#{TEST_TEXT_REPLACED!!}');
+      if (text.includes('goober')) {
+        text = text.replace(
+          /const (.*) = (.*?)css`/g,
+          'const $1 = $2css` label: $1;',
+        );
+      }
       return {
         contents: text,
         loader: 'tsx',
@@ -93,7 +99,7 @@ async function makeUi() {
       clear: false,
       tslint: false,
       sourcemap: true,
-      plugins: [myPlugin],
+      plugins: [gooberCssAutoLabelPlugin],
       onEnd: resolve,
     }),
   );
@@ -117,7 +123,7 @@ async function startMockView() {
     clear: false,
     tslint: false,
     sourcemap: 'inline',
-    plugins: [myPlugin],
+    plugins: [gooberCssAutoLabelPlugin],
   });
 
   liveServer.start({
