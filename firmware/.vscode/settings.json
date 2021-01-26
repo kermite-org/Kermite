@@ -78,7 +78,7 @@
                     }
                   },
                   "additionalProperties": false,
-                  "required": ["keyId", "x", "y", "angle", "shape"]
+                  "required": ["keyId", "x", "y"]
                 },
                 {
                   "type": "object",
@@ -147,7 +147,7 @@
                 }
               },
               "additionalProperties": false,
-              "required": ["x", "y", "angle"]
+              "required": ["x", "y"]
             }
           }
         },
