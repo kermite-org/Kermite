@@ -1,5 +1,5 @@
 import { removeArrayItems } from '~/shared';
-import { modalConfirm } from '~/ui-root/base/dialog/BasicModals';
+import { modalConfirm } from '~/ui-common/fundamental/dialog/BasicModals';
 import { models } from '~/ui-root/models';
 import {
   ILayerConfigurationModelEditValues,

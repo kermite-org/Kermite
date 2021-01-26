@@ -8,6 +8,7 @@ export interface IModeState {
   editorTarget: IEditorTarget;
 }
 export interface IEditState {
+  loadedDesign: IEditKeyboardDesign;
   design: IEditKeyboardDesign;
   currentkeyEntityId: string | undefined;
   isCurrentKeyMirror: boolean;
@@ -78,6 +79,7 @@ export function createFallbackEditKeyboardDesign(): IEditKeyboardDesign {
 
 export const appState: IAppState = {
   editor: {
+    loadedDesign: createFallbackEditKeyboardDesign(),
     design: createFallbackEditKeyboardDesign(),
     currentkeyEntityId: undefined,
     isCurrentKeyMirror: false,

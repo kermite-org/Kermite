@@ -181,5 +181,9 @@ class EditReader {
   get pressedKeyIndices() {
     return appState.env.pressedKeyIndices;
   }
+
+  get isModified() {
+    return appState.editor.design !== appState.editor.loadedDesign;
+  }
 }
 export const editReader = new EditReader();

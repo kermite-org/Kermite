@@ -9,7 +9,7 @@ import {
 
 export class ProjectResourceInfoProvider
   implements IProjectResourceInfoProvider {
-  projectInfoSources: IProjectResourceInfoSource[] = [];
+  private projectInfoSources: IProjectResourceInfoSource[] = [];
 
   getAllProjectResourceInfos(): IProjectResourceInfo[] {
     return this.projectInfoSources.map((it) => {
@@ -39,6 +39,19 @@ export class ProjectResourceInfoProvider
     return this.projectInfoSources.find((info) => info.projectId === projectId);
   }
 
+  patchProjectInfoSource<K extends keyof IProjectResourceInfoSource>(
+    projectId: string,
+    key: K,
+    value: IProjectResourceInfoSource[K],
+  ) {
+    const info = this.projectInfoSources.find(
+      (it) => it.projectId === projectId,
+    );
+    if (info) {
+      info[key] = value;
+    }
+  }
+
   internal_getProjectInfoSourceById = this.getProjectInfoSourceById;
 
   getPresetProfileFilePath(
@@ -59,7 +72,9 @@ export class ProjectResourceInfoProvider
   getLayoutFilePath(projectId: string, layoutName: string): string | undefined {
     const info = this.getProjectInfoSourceById(projectId);
     if (info) {
-      return pathJoin(info.projectFolderPath, `${layoutName}.layout.json`);
+      const fileName =
+        layoutName === 'default' ? 'layout.json' : `${layoutName}.layout.json`;
+      return pathJoin(info.projectFolderPath, fileName);
     }
   }
 

@@ -1,5 +1,6 @@
 import {
   clamp,
+  compareObjectByJsonStringify,
   IKeyIdMode,
   IKeyPlacementAnchor,
   IKeySizeUnit,
@@ -369,12 +370,22 @@ class EditMutations {
 
   resetKeyboardDesign() {
     editUpdator.patchEditor((editor) => {
-      editor.design = createFallbackEditKeyboardDesign();
+      const design = createFallbackEditKeyboardDesign();
+      editor.loadedDesign = design;
+      editor.design = design;
     });
   }
 
   loadKeyboardDesign(design: IEditKeyboardDesign) {
+    const same = compareObjectByJsonStringify(
+      appState.editor.loadedDesign,
+      design,
+    );
+    if (same) {
+      return;
+    }
     editUpdator.patchEditor((editor) => {
+      editor.loadedDesign = design;
       editor.design = design;
     });
     this.resetSitePosition();

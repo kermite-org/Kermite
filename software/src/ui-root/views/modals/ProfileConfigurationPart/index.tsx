@@ -4,7 +4,7 @@ import { reflectFieldChecked } from '~/ui-common';
 import {
   ClosableOverlay,
   CommonDialogFrame,
-} from '~/ui-root/base/dialog/CommonDialogParts';
+} from '~/ui-common/fundamental/dialog/CommonDialogParts';
 import { models } from '~/ui-root/models';
 import { AssignTypeSelectionPart } from './AssignTypeSelectionPart';
 import { DualModeSettingsPart } from './DualModeSettingsPart';

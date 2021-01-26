@@ -1,11 +1,11 @@
 import {
   createDictionaryFromKeyValues,
-  convertMinusOneToUndefined,
-  convertUndefinedToMinusOne,
   IPersistKeyboardDesign,
   flattenArray,
   IPersistKeyboardDesignRealKeyEntity,
   IPersistKeyboardDesignMirrorKeyEntity,
+  convertDefaultValueToUndefined,
+  convertUndefinedToDefaultValue,
 } from '~/shared';
 import {
   IEditKeyboardDesign,
@@ -49,16 +49,19 @@ export namespace KeyboardDesignConverter {
         mirrorEditKeyId: ke.keyId + 'm',
         x: ke.x,
         y: ke.y,
-        angle: ke.angle,
-        shape: ke.shape,
-        keyIndex: convertUndefinedToMinusOne(ke.keyIndex),
+        angle: convertUndefinedToDefaultValue(ke.angle, 0),
+        shape: convertUndefinedToDefaultValue(ke.shape, 'std 1'),
+        keyIndex: convertUndefinedToDefaultValue(ke.keyIndex, -1),
         mirrorKeyIndex: -1,
         groupId: groupIndexToGroupId(ke.groupIndex),
       };
       const mirroredKey = mirrorKeys.find((mke) => mke.mirrorOf === ke.keyId);
       if (mirroredKey) {
         base.mirrorEditKeyId = mirroredKey.keyId;
-        base.mirrorKeyIndex = convertUndefinedToMinusOne(mirroredKey.keyIndex);
+        base.mirrorKeyIndex = convertUndefinedToDefaultValue(
+          mirroredKey.keyIndex,
+          -1,
+        );
       }
       return base;
     });
@@ -88,9 +91,17 @@ export namespace KeyboardDesignConverter {
       ),
       transGroups: createDictionaryFromKeyValues(
         source.transGroups.map((group, idx) => {
-          const { x, y, angle, mirror } = group;
           const id = idx.toString();
-          return [id, { x, y, angle, mirror: mirror || false, id }];
+          return [
+            id,
+            {
+              id,
+              x: group.x,
+              y: group.y,
+              angle: convertUndefinedToDefaultValue(group.angle, 0),
+              mirror: group.mirror || false,
+            },
+          ];
         }),
       ),
     };
@@ -122,9 +133,9 @@ export namespace KeyboardDesignConverter {
             keyId: realKeyId,
             x: roundNumber(ke.x),
             y: roundNumber(ke.y),
-            angle: roundNumber(ke.angle),
-            shape: ke.shape,
-            keyIndex: convertMinusOneToUndefined(ke.keyIndex),
+            angle: convertDefaultValueToUndefined(roundNumber(ke.angle), 0),
+            shape: convertDefaultValueToUndefined(ke.shape, 'std 1'),
+            keyIndex: convertDefaultValueToUndefined(ke.keyIndex, -1),
             groupIndex: groupIdToGroupIndex(ke.groupId),
           };
 
@@ -132,7 +143,7 @@ export namespace KeyboardDesignConverter {
             (group?.mirror && {
               keyId: mirroredKeyId,
               mirrorOf: realKeyId,
-              keyIndex: convertMinusOneToUndefined(ke.mirrorKeyIndex),
+              keyIndex: convertDefaultValueToUndefined(ke.mirrorKeyIndex, -1),
             }) ||
             undefined;
 
@@ -161,7 +172,7 @@ export namespace KeyboardDesignConverter {
       transGroups: Object.values(design.transGroups).map((group) => ({
         x: roundNumber(group.x),
         y: roundNumber(group.y),
-        angle: roundNumber(group.angle),
+        angle: convertDefaultValueToUndefined(roundNumber(group.angle), 0),
         mirror: group.mirror || undefined,
       })),
     };

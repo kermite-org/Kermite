@@ -2,7 +2,7 @@ import {
   modalAlert,
   modalTextEdit,
   modalConfirm,
-} from '~/ui-root/base/dialog/BasicModals';
+} from '~/ui-common/fundamental/dialog/BasicModals';
 import { models } from '~/ui-root/models';
 import { makePlainSelectorOption } from '~/ui-root/viewModels/viewModelHelpers';
 import { ISelectorSource } from '~/ui-root/viewModels/viewModelInterfaces';

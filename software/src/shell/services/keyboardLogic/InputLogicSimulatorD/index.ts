@@ -7,7 +7,7 @@ import {
 } from '~/shared';
 import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
 import { KeyboardDeviceService } from '~/shell/services/device/KeyboardDevice';
-import { ProfileManager } from '~/shell/services/profile/ProfileManager/ProfileManager';
+import { ProfileManager } from '~/shell/services/profile/ProfileManager';
 import { getKeyboardCoreLogicInterface } from './DeviceCoreLogicSimulator2_Dual';
 import { makeKeyAssignsConfigStorageData } from './ProfileDataBinaryPacker';
 

@@ -8,8 +8,8 @@ export interface IPersistKeyboardDesignRealKeyEntity {
   keyId: string;
   x: number;
   y: number;
-  angle: number;
-  shape: string;
+  angle?: number;
+  shape?: string;
   keyIndex?: number;
   groupIndex?: number;
 }
@@ -38,7 +38,7 @@ export interface IPersistKeyboardDesign {
     // groupId: string;
     x: number;
     y: number;
-    angle: number;
+    angle?: number;
     mirror?: boolean;
   }[];
 }

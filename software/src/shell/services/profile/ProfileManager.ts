@@ -10,11 +10,12 @@ import { EventPort } from '~/shell/funcs';
 import { PresetProfileLoader } from '~/shell/services/projects/PresetProfileLoader';
 import { ProfileHelper } from './ProfileHelper';
 import { ProfileManagerCore } from './ProfileManagerCore';
+import { IProfileManager } from './interfaces';
 
 const defaultProfileName = 'default';
 
 // プロファイルを<UserDataDir>/data/profiles以下でファイルとして管理
-export class ProfileManager {
+export class ProfileManager implements IProfileManager {
   private status: IProfileManagerStatus = {
     currentProfileName: '',
     allProfileNames: [],

@@ -1,3 +1,4 @@
+import { IAppErrorInfo } from '~/shared/defs/CustomErrors';
 import { IPersistKeyboardDesign } from '~/shared/defs/KeyboardDesign';
 import { IKeyboardConfig } from './ConfigTypes';
 import { IProfileData, IProjectResourceInfo } from './ProfileData';
@@ -51,6 +52,76 @@ export interface IProfileManagerCommand {
   copyProfile?: { name: string; newName: string };
 }
 
+export type ILayoutEditSource =
+  | {
+      type: 'NewlyCreated';
+    }
+  | {
+      type: 'CurrentProfile';
+    }
+  | {
+      type: 'File';
+      filePath: string;
+    }
+  | {
+      type: 'ProjectLayout';
+      projectId: string;
+      layoutName: string;
+    };
+export interface ILayoutManagerStatus {
+  editSource: ILayoutEditSource;
+  loadedDesign: IPersistKeyboardDesign;
+  errroInfo: IAppErrorInfo | undefined;
+  projectLayoutsInfos: IProjectLayoutsInfo[];
+}
+
+export type ILayoutManagerCommand =
+  | {
+      type: 'createNewLayout';
+    }
+  | {
+      type: 'loadCurrentProfileLayout';
+    }
+  | {
+      type: 'unloadCurrentProfileLayout';
+    }
+  | {
+      type: 'save';
+      design: IPersistKeyboardDesign;
+    }
+  | {
+      type: 'loadFromFile';
+      filePath: string;
+    }
+  | {
+      type: 'saveToFile';
+      filePath: string;
+      design: IPersistKeyboardDesign;
+    }
+  | {
+      type: 'createForProject';
+      projectId: string;
+      layoutName: string;
+    }
+  | {
+      type: 'loadFromProject';
+      projectId: string;
+      layoutName: string;
+    }
+  | {
+      type: 'saveToProject';
+      projectId: string;
+      layoutName: string;
+      design: IPersistKeyboardDesign;
+    };
+
+export interface IProjectLayoutsInfo {
+  projectId: string;
+  projectPath: string;
+  keyboardName: string;
+  layoutNames: string[];
+}
+
 export interface IAppIpcContract {
   sync: {
     dev_getVersionSync(): string;
@@ -75,6 +146,14 @@ export interface IAppIpcContract {
       commands: IProfileManagerCommand[],
     ): Promise<void>;
 
+    layout_executeLayoutManagerCommands(
+      commands: ILayoutManagerCommand[],
+    ): Promise<boolean>;
+
+    layout_clearErrorInfo(): Promise<void>;
+    layout_showEditLayoutFileInFiler(): Promise<void>;
+    // layout_getAllProjectLayoutsInfos(): Promise<IProjectLayoutsInfo[]>;
+
     config_getKeyboardConfig(): Promise<IKeyboardConfig>;
     config_writeKeyboardConfig(config: IKeyboardConfig): Promise<void>;
     config_writeKeyMappingToDevice(): Promise<void>;
@@ -94,6 +173,8 @@ export interface IAppIpcContract {
       comPortName: string,
     ): Promise<string>;
 
+    file_getOpenJsonFilePathWithDialog(): Promise<string | undefined>;
+    file_getSaveJsonFilePathWithDialog(): Promise<string | undefined>;
     file_loadObjectFromJsonWithFileDialog(): Promise<any | undefined>;
     file_saveObjectToJsonWithFileDialog(obj: any): Promise<boolean>;
   };
@@ -103,6 +184,8 @@ export interface IAppIpcContract {
 
     profile_currentProfile: IProfileData | undefined;
     profile_profileManagerStatus: Partial<IProfileManagerStatus>;
+
+    layout_layoutManagerStatus: Partial<ILayoutManagerStatus>;
 
     device_keyEvents: IRealtimeKeyboardEvent;
     device_keyboardDeviceStatusEvents: Partial<IKeyboardDeviceStatus>;

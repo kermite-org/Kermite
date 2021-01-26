@@ -4,7 +4,7 @@ import {
   fallbackProfileData,
 } from '~/shared';
 import { fsxReadJsonFile } from '~/shell/funcs';
-import { ProfileHelper } from '~/shell/services/profile/ProfileManager/ProfileHelper';
+import { ProfileHelper } from '~/shell/services/profile/ProfileHelper';
 import { KeyboardLayoutFileLoader } from '~/shell/services/projects/KeyboardShape/KeyboardLayoutFileLoader';
 import {
   IPresetProfileLoadingFeature,

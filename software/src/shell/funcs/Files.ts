@@ -1,6 +1,7 @@
 import fs from 'fs';
 import * as path from 'path';
 import { glob } from 'glob';
+import { AppError } from '~/shared/defs';
 
 export const pathJoin = path.join;
 
@@ -40,21 +41,35 @@ export function fsxReadTextFile(fpath: string): Promise<string> {
   return fs.promises.readFile(fpath, { encoding: 'utf-8' });
 }
 
-export async function fsxReadJsonFile(fpath: string): Promise<any> {
-  const text = await fs.promises.readFile(fpath, { encoding: 'utf-8' });
-  if (text) {
-    const obj = JSON.parse(text);
-    return obj;
+export async function fsxReadJsonFile(filePath: string): Promise<any> {
+  let text: string;
+  let obj: any;
+  try {
+    text = await fs.promises.readFile(filePath, { encoding: 'utf-8' });
+  } catch (error) {
+    throw new AppError({ type: 'CannotReadFile', filePath });
   }
-  return undefined;
+  try {
+    obj = JSON.parse(text);
+  } catch (error) {
+    throw new AppError({ type: 'InvalidJsonFileContent', filePath });
+  }
+  return obj;
 }
 
-export async function fsxWriteJsonFile(fpath: string, obj: any): Promise<void> {
+export async function fsxWriteJsonFile(
+  filePath: string,
+  obj: any,
+): Promise<void> {
   const text = JSON.stringify(obj, null, '  ');
-  await fs.promises.writeFile(fpath, text);
+  try {
+    await fs.promises.writeFile(filePath, text);
+  } catch (error) {
+    throw new AppError({ type: 'CannotWriteFile', filePath });
+  }
 }
 
-export function fsxWtachFilesChange(
+export function fsxWatchFilesChange(
   baseDir: string,
   callback: (filePath: string) => void,
 ) {

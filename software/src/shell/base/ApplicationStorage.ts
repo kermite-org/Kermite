@@ -1,4 +1,8 @@
-import { IKeyboardConfig, overwriteObjectProps } from '~/shared';
+import {
+  IKeyboardConfig,
+  ILayoutEditSource,
+  overwriteObjectProps,
+} from '~/shared';
 import { appEnv } from '~/shell/base';
 import { fsExistsSync, fsxReadJsonFile, fsxWriteJsonFile } from '~/shell/funcs';
 
@@ -9,6 +13,7 @@ export interface IApplicationPersistData {
   };
   currentProfileName: string | undefined;
   keyboardConfig: IKeyboardConfig;
+  layoutEditSource: ILayoutEditSource;
 }
 
 const defaultPersistData: IApplicationPersistData = {
@@ -20,6 +25,9 @@ const defaultPersistData: IApplicationPersistData = {
   keyboardConfig: {
     behaviorMode: 'Standalone',
     layoutStandard: 'US',
+  },
+  layoutEditSource: {
+    type: 'NewlyCreated',
   },
 };
 class ApplicationStorage {
@@ -39,7 +47,7 @@ class ApplicationStorage {
     this.data[key] = value;
   }
 
-  async initialize() {
+  async initializeAsync() {
     if (fsExistsSync(this.configFilePath)) {
       const obj = await fsxReadJsonFile(this.configFilePath);
       overwriteObjectProps(this.data, obj);
@@ -48,7 +56,7 @@ class ApplicationStorage {
     }
   }
 
-  async terminate() {
+  async terminateAsync() {
     console.log(`saving persist state`);
     await fsxWriteJsonFile(this.configFilePath, this.data);
   }

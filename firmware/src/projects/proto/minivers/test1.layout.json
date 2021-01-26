@@ -1,0 +1,69 @@
+{
+  "setup": {
+    "placementUnit": "mm",
+    "placementAnchor": "center",
+    "keySizeUnit": "KP",
+    "keyIdMode": "auto"
+  },
+  "keyEntities": [
+    {
+      "keyId": "key0",
+      "x": -12.5,
+      "y": -2.5,
+      "keyIndex": 0,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "key1",
+      "x": 7.5,
+      "y": 2.5,
+      "keyIndex": 1,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "key2",
+      "x": 27.5,
+      "y": -2.5,
+      "keyIndex": 2,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "key03",
+      "x": 110,
+      "y": -37.5
+    }
+  ],
+  "outlineShapes": [
+    {
+      "points": [
+        {
+          "x": -27.5,
+          "y": -32.5
+        },
+        {
+          "x": 10,
+          "y": -65
+        },
+        {
+          "x": 47.5,
+          "y": -20
+        },
+        {
+          "x": 45,
+          "y": 15
+        },
+        {
+          "x": -30,
+          "y": 20
+        }
+      ],
+      "groupIndex": 0
+    }
+  ],
+  "transGroups": [
+    {
+      "x": 100,
+      "y": 0
+    }
+  ]
+}

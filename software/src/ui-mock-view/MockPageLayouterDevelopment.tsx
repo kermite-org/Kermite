@@ -1,4 +1,4 @@
-import { h, Hook } from 'qx';
+import { h, Hook, asyncRerender } from 'qx';
 import { UiLayouterCore } from '~/ui-layouter';
 import {
   loadLocalStorageKeyboardDesignOrDefault,
@@ -8,8 +8,9 @@ import {
 export const MockPageLayouterDevelopment = () => {
   Hook.useEffect(() => {
     UiLayouterCore.loadEditDesign(loadLocalStorageKeyboardDesignOrDefault());
+    asyncRerender();
     return () =>
-      saveLocalStorageKeyboardDesign(UiLayouterCore.emitEditDesign());
+      saveLocalStorageKeyboardDesign(UiLayouterCore.emitSavingDesign());
   }, []);
 
   return <UiLayouterCore.Component />;

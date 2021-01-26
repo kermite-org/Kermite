@@ -6,7 +6,8 @@ import { KeyboardDeviceService } from '~/shell/services/device/KeyboardDevice';
 import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStatic';
 import { FirmwareUpdationService } from '~/shell/services/firmwareUpdation';
 import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/InputLogicSimulatorD';
-import { ProfileService } from '~/shell/services/profile';
+import { LayoutManager } from '~/shell/services/layout/LayoutManager';
+import { ProfileManager } from '~/shell/services/profile/ProfileManager';
 import { KeyboardLayoutFilesWatcher } from '~/shell/services/projects/KeyboardShape/KeyboardLayoutFilesWatcher';
 import { KeyboardShapesProvider } from '~/shell/services/projects/KeyboardShape/KeyboardShapesProvider';
 import { PresetProfileLoader } from '~/shell/services/projects/PresetProfileLoader';
@@ -40,8 +41,12 @@ export class ApplicationRoot {
     this.projectResourceInfoProvider,
   );
 
-  private profileService = new ProfileService(this.presetProfileLoader);
-  private profileManager = this.profileService.profileManager;
+  private profileManager = new ProfileManager(this.presetProfileLoader);
+
+  private layoutManager = new LayoutManager(
+    this.projectResourceInfoProvider,
+    this.profileManager,
+  );
 
   private inputLogicSimulator = new InputLogicSimulatorD(
     this.profileManager,
@@ -73,7 +78,14 @@ export class ApplicationRoot {
       // window_widgetModeChanged: async (isWidgetMode) =>
       //   this.appWindowManager.adjustWindowSize(isWidgetMode),
       profile_executeProfileManagerCommands: (commands) =>
-        this.profileService.profileManager.executeCommands(commands),
+        this.profileManager.executeCommands(commands),
+      layout_executeLayoutManagerCommands: (commands) =>
+        this.layoutManager.executeCommands(commands),
+      // layout_getAllProjectLayoutsInfos: () =>
+      //   this.layoutManager.getAllProjectLayoutsInfos(),
+      layout_clearErrorInfo: async () => this.layoutManager.clearErrorInfo(),
+      layout_showEditLayoutFileInFiler: async () =>
+        this.layoutManager.showEditLayoutFileInFiler(),
       projects_loadKeyboardShape: (projectId, layoutName) =>
         this.keyboardShapesProvider.loadKeyboardShapeByProjectIdAndLayoutName(
           projectId,
@@ -101,6 +113,10 @@ export class ApplicationRoot {
           );
         }
       },
+      file_getOpenJsonFilePathWithDialog:
+        JsonFileServiceStatic.getOpeningJsonFilePathWithDialog,
+      file_getSaveJsonFilePathWithDialog:
+        JsonFileServiceStatic.getSavingJsonFilePathWithDialog,
       file_loadObjectFromJsonWithFileDialog:
         JsonFileServiceStatic.loadObjectFromJsonWithFileDialog,
       file_saveObjectToJsonWithFileDialog:
@@ -126,6 +142,8 @@ export class ApplicationRoot {
         this.profileManager.statusEventPort.subscribe(cb2);
         return () => this.profileManager.statusEventPort.unsubscribe(cb2);
       },
+      layout_layoutManagerStatus: (listener) =>
+        this.layoutManager.statusEvents.subscribe(listener),
       device_keyEvents: (cb) => {
         this.deviceService.realtimeEventPort.subscribe(cb);
         return () => this.deviceService.realtimeEventPort.unsubscribe(cb);
@@ -150,10 +168,10 @@ export class ApplicationRoot {
 
   async initialize() {
     console.log(`initialize services`);
-    await applicationStorage.initialize();
+    await applicationStorage.initializeAsync();
     // await resourceUpdator_syncRemoteResourcesToLocal();
     await this.projectResourceInfoProvider.initializeAsync();
-    await this.profileService.initialize();
+    await this.profileManager.initializeAsync();
     this.firmwareUpdationService.initialize();
     this.keyboardLayoutFilesWatcher.initialize();
     this.keyboardConfigProvider.initialize();
@@ -172,7 +190,7 @@ export class ApplicationRoot {
     this.keyboardConfigProvider.terminate();
     this.keyboardLayoutFilesWatcher.terminate();
     this.firmwareUpdationService.terminate();
-    await this.profileService.terminate();
-    await applicationStorage.terminate();
+    await this.profileManager.terminateAsync();
+    await applicationStorage.terminateAsync();
   }
 }

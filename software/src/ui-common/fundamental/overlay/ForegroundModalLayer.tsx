@@ -51,7 +51,12 @@ export namespace ForegroundModalLayerDomain {
     };
     return <div>{RenderModal && <RenderModal close={close} />}</div>;
   }
+
+  export function forceCloseModal() {
+    modalModel.closeModal(undefined);
+  }
 }
 
 export const ForegroundModalLayerRoot = ForegroundModalLayerDomain.RenderRoot;
 export const createModal = ForegroundModalLayerDomain.createModal;
+export const forceCloseModal = ForegroundModalLayerDomain.forceCloseModal;

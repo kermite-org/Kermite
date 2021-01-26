@@ -1,5 +1,5 @@
 import {
-  convertUndefinedToMinusOne,
+  convertUndefinedToDefaultValue,
   degToRad,
   flattenArray,
   IDisplayKeyboardDesign,
@@ -35,7 +35,7 @@ export namespace DisplayKeyboardDesignLoader {
   ): IDisplayOutlineShape {
     const mi = isMirror ? -1 : 1;
 
-    const groupIndex = convertUndefinedToMinusOne(shape.groupIndex);
+    const groupIndex = convertUndefinedToDefaultValue(shape.groupIndex, -1);
     const { groupX, groupY, groupAngle } = getGroupTransAmount(
       design.transGroups[groupIndex],
     );
@@ -101,15 +101,17 @@ export namespace DisplayKeyboardDesignLoader {
     const keyX = coordUnit.mode === 'KP' ? ke.x * coordUnit.x : ke.x;
     const keyY = coordUnit.mode === 'KP' ? ke.y * coordUnit.y : ke.y;
 
-    const groupIndex = convertUndefinedToMinusOne(ke.groupIndex);
+    const keyAngle = convertUndefinedToDefaultValue(ke.angle, 0);
+    const keyShape = convertUndefinedToDefaultValue(ke.shape, 'std 1');
+    const keyGroupIndex = convertUndefinedToDefaultValue(ke.groupIndex, -1);
     const { groupX, groupY, groupAngle } = getGroupTransAmount(
-      design.transGroups[groupIndex],
+      design.transGroups[keyGroupIndex],
     );
     const groupRot = degToRad(groupAngle);
 
     const { keySizeUnit, placementAnchor } = design.setup;
 
-    const [w, h] = getKeySize(ke.shape, coordUnit, keySizeUnit);
+    const [w, h] = getKeySize(keyShape, coordUnit, keySizeUnit);
 
     const p = { x: 0, y: 0 };
     if (placementAnchor === 'topLeft') {
@@ -123,10 +125,13 @@ export namespace DisplayKeyboardDesignLoader {
       keyId: mke ? mke.keyId : ke.keyId,
       x: p.x,
       y: p.y,
-      angle: (ke.angle + groupAngle) * mi,
-      keyIndex: convertUndefinedToMinusOne(mke ? mke.keyIndex : ke.keyIndex),
-      shapeSpec: ke.shape,
-      shape: getKeyShape(ke.shape, coordUnit, keySizeUnit),
+      angle: (keyAngle + groupAngle) * mi,
+      keyIndex: convertUndefinedToDefaultValue(
+        mke ? mke.keyIndex : ke.keyIndex,
+        -1,
+      ),
+      shapeSpec: keyShape,
+      shape: getKeyShape(keyShape, coordUnit, keySizeUnit),
     };
   }
 
@@ -246,7 +251,7 @@ export namespace DisplayKeyboardDesignLoader {
         if ('mirrorOf' in ke) {
           return [];
         } else {
-          const groupIndex = convertUndefinedToMinusOne(ke.groupIndex);
+          const groupIndex = convertUndefinedToDefaultValue(ke.groupIndex, -1);
           const group = design.transGroups[groupIndex];
           if (group?.mirror) {
             const mke = design.keyEntities.find(
@@ -268,7 +273,7 @@ export namespace DisplayKeyboardDesignLoader {
         if (shape.points.length < 3) {
           return [];
         }
-        const groupIndex = convertUndefinedToMinusOne(shape.groupIndex);
+        const groupIndex = convertUndefinedToDefaultValue(shape.groupIndex, -1);
         const group = design.transGroups[groupIndex];
 
         if (group?.mirror) {

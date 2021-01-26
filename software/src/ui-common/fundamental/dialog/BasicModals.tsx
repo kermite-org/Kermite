@@ -26,6 +26,22 @@ export const modalAlert = createModal((message: string) => {
   };
 });
 
+export const modalError = createModal((message: string) => {
+  return (props: { close: () => void }) => {
+    const { close } = props;
+    return (
+      <ClosableOverlay close={close}>
+        <CommonDialogFrame caption="Error">
+          <DialogContentRow>{message}</DialogContentRow>
+          <DialogButtonsRow>
+            <DialogButton onClick={close}>OK</DialogButton>
+          </DialogButtonsRow>
+        </CommonDialogFrame>
+      </ClosableOverlay>
+    );
+  };
+});
+
 export const modalConfirm = createModal(
   (args: { message: string; caption: string }) => {
     const { message, caption } = args;
