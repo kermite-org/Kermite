@@ -105,60 +105,6 @@ export type IAssignEntryWithLayerFallback =
   | { type: 'layerFallbackTransparent' }
   | { type: 'layerFallbackBlock' };
 
-// export type IAssignEntry_SingleEx =
-//   | IAssignEntry_Single
-//   | IAssingEntry_Block
-//   | IAssignEntry_Transparent;
-
-// export type IAssignEntry_DualEx =
-//   | IAssignEntry_Dual
-//   | IAssingEntry_Block
-//   | IAssignEntry_Transparent;
-
-/*
-export type IProfileData_PRF02 = {
-  revision: 'PRF02';
-  projectId: string;
-  keyboardDesign: IPersistKeyboardDesign;
-  // strong fallback layer is checked after when there aren't any assigns found
-  strongFallbackLayerId?: string;
-  layers: ILayer[];
-} & (
-  | {
-      assignType: 'single';
-      settings: {
-        useShiftCancel: boolean;
-      };
-      assigns: {
-        // laX.kuY
-        [address: string]:
-          | IAssignEntry_Single
-          | IAssingEntry_Block
-          | IAssignEntry_Transparent
-          | undefined;
-      };
-    }
-  | {
-      assignType: 'dual';
-      settings: {
-        type: 'dual';
-        useShiftCancel: boolean;
-        primaryDefaultTrigger: 'down' | 'tap';
-        useInterruptHold: boolean;
-        tapHoldThresholdMs: number;
-      };
-      assigns: {
-        // laX.kuY
-        [address: string]:
-          | IAssignEntry_Dual
-          | IAssingEntry_Block
-          | IAssignEntry_Transparent
-          | undefined;
-      };
-    }
-);
-*/
-
 export type IProfileData = {
   revision: 'PRF03';
   projectId: string;

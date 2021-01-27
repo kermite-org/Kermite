@@ -1,11 +1,56 @@
 import {
   duplicateObjectByJsonStringifyParse,
+  IAssignEntry,
   ILayer,
   IPersistKeyboardDesign,
   IProfileData,
 } from '~/shared';
 
 export namespace ProfileDataMigrator {
+  /*
+export type IProfileData_PRF02 = {
+  revision: 'PRF02';
+  projectId: string;
+  keyboardDesign: IPersistKeyboardDesign;
+  // strong fallback layer is checked after when there aren't any assigns found
+  strongFallbackLayerId?: string;
+  layers: ILayer[];
+} & (
+  | {
+      assignType: 'single';
+      settings: {
+        useShiftCancel: boolean;
+      };
+      assigns: {
+        // laX.kuY
+        [address: string]:
+          | IAssignEntry_Single
+          | IAssingEntry_Block
+          | IAssignEntry_Transparent
+          | undefined;
+      };
+    }
+  | {
+      assignType: 'dual';
+      settings: {
+        type: 'dual';
+        useShiftCancel: boolean;
+        primaryDefaultTrigger: 'down' | 'tap';
+        useInterruptHold: boolean;
+        tapHoldThresholdMs: number;
+      };
+      assigns: {
+        // laX.kuY
+        [address: string]:
+          | IAssignEntry_Dual
+          | IAssingEntry_Block
+          | IAssignEntry_Transparent
+          | undefined;
+      };
+    }
+);
+*/
+
   interface IKeyboardShape_PRF02 {
     breedName?: string;
     keyUnits: {
@@ -24,18 +69,26 @@ export namespace ProfileDataMigrator {
     };
   }
 
-  type IAssigns = {
-    // laX.kuY
-    [address: string]: any;
-  };
-
   type IProfileData_PRF02 = {
     revision: 'PRF02';
     keyboardShape: IKeyboardShape_PRF02;
     layers: ILayer[];
-    assignType: any;
-    settings: any;
-    assigns: IAssigns;
+    assignType: 'single' | 'dual';
+    settings:
+      | {
+          useShiftCancel: boolean;
+        }
+      | {
+          type: 'dual';
+          useShiftCancel: boolean;
+          primaryDefaultTrigger: 'down' | 'tap';
+          useInterruptHold: boolean;
+          tapHoldThresholdMs: number;
+        };
+    assigns: {
+      // laX.kuY
+      [address: string]: IAssignEntry | undefined;
+    };
   };
 
   function patchOldScheme(profileData: IProfileData_PRF02) {
@@ -137,11 +190,14 @@ export namespace ProfileDataMigrator {
   function convertProfileFromPRF02(_profile: IProfileData_PRF02): IProfileData {
     const profile = duplicateObjectByJsonStringifyParse(_profile);
     patchOldScheme(profile);
-    const { assignType, keyboardShape, settings, layers, assigns } = profile;
+    const { keyboardShape, settings, layers, assigns } = profile;
     return {
       revision: 'PRF03',
       projectId: '',
-      settings: { ...settings, assignType },
+      settings:
+        'type' in settings && settings.type === 'dual'
+          ? { ...settings, assignType: 'dual' }
+          : { ...settings, assignType: 'single' },
       layers,
       keyboardDesign: makeKeyboardDesignFromKeyboardShapePRF02(keyboardShape),
       assigns,
