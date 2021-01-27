@@ -105,55 +105,20 @@ export type IAssignEntryWithLayerFallback =
   | { type: 'layerFallbackTransparent' }
   | { type: 'layerFallbackBlock' };
 
-export type IAssignEntry_SingleEx =
-  | IAssignEntry_Single
-  | IAssingEntry_Block
-  | IAssignEntry_Transparent;
+// export type IAssignEntry_SingleEx =
+//   | IAssignEntry_Single
+//   | IAssingEntry_Block
+//   | IAssignEntry_Transparent;
 
-export type IAssignEntry_DualEx =
-  | IAssignEntry_Dual
-  | IAssingEntry_Block
-  | IAssignEntry_Transparent;
+// export type IAssignEntry_DualEx =
+//   | IAssignEntry_Dual
+//   | IAssingEntry_Block
+//   | IAssignEntry_Transparent;
 
 /*
-//old keyboardshape scheme
-export interface IKeyUnitEntry {
-  id: string;
-  x: number;
-  y: number;
-  r?: number;
-  keyIndex: number;
-}
-
-export interface IKeyboardShapeDisplayArea {
-  centerX: number;
-  centerY: number;
-  width: number;
-  height: number;
-}
-
-export interface IKeyboardShape {
-  keyUnits: IKeyUnitEntry[];
-  bodyPathMarkupText: string;
-  displayArea: IKeyboardShapeDisplayArea;
-}
-
-export const keyboardShape_fallbackData: IKeyboardShape = {
-  keyUnits: [],
-  bodyPathMarkupText: '',
-  displayArea: {
-    centerX: 0,
-    centerY: 0,
-    width: 100,
-    height: 100,
-  },
-};
-*/
-
-export type IProfileData = {
-  revision: 'PRF03';
+export type IProfileData_PRF02 = {
+  revision: 'PRF02';
   projectId: string;
-  // keyboardBreedName: string;
   keyboardDesign: IPersistKeyboardDesign;
   // strong fallback layer is checked after when there aren't any assigns found
   strongFallbackLayerId?: string;
@@ -192,6 +157,35 @@ export type IProfileData = {
       };
     }
 );
+*/
+
+export type IProfileData = {
+  revision: 'PRF03';
+  projectId: string;
+  keyboardDesign: IPersistKeyboardDesign;
+  layers: ILayer[];
+  settings:
+    | {
+        assignType: 'single';
+        useShiftCancel: boolean;
+      }
+    | {
+        assignType: 'dual';
+        useShiftCancel: boolean;
+        primaryDefaultTrigger: 'down' | 'tap';
+        useInterruptHold: boolean;
+        tapHoldThresholdMs: number;
+      };
+  assigns: {
+    // laX.kuY
+    [address: string]:
+      | IAssignEntry_Single
+      | IAssignEntry_Dual
+      | IAssingEntry_Block
+      | IAssignEntry_Transparent
+      | undefined;
+  };
+};
 
 export type IProfileDataAssigns = {
   [address: string]:
@@ -206,8 +200,8 @@ export const fallbackProfileData: IProfileData = {
   revision: 'PRF03',
   projectId: '',
   keyboardDesign: createFallbackPersistKeyboardDesign(),
-  assignType: 'single',
   settings: {
+    assignType: 'single',
     useShiftCancel: false,
   },
   layers: [
