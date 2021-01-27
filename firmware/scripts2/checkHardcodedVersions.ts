@@ -8,7 +8,7 @@ import { fsxReadTextFile } from "./osHelpers";
 process.chdir("..");
 
 const sourceFilePaths = {
-  softwareVersions: "../software/src/defs/Versions.ts",
+  softwareVersions: "../software/src/shared/defs/Versions.ts",
   firmwareVersions: "./src/modules/versions.h",
 };
 
