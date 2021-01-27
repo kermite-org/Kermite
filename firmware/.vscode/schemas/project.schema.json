@@ -1,0 +1,9 @@
+{
+  "type": "object",
+  "properties": {
+    "projectId": { "type": "string" },
+    "keyboardName": { "type": "string" }
+  },
+  "required": ["projectId", "keyboardName"],
+  "additionalProperties": false
+}
