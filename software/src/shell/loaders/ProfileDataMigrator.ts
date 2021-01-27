@@ -206,7 +206,7 @@ export type IProfileData_PRF02 = {
     patchOldScheme(profile);
     const { keyboardShape, settings, layers, assigns } = profile;
     return {
-      revision: 'PRF03',
+      formatRevision: 'PRF03',
       projectId: '',
       settings:
         'type' in settings && settings.type === 'dual'
@@ -219,10 +219,22 @@ export type IProfileData_PRF02 = {
   }
 
   function fixProfileDataPRF03(profile: IPersistProfileData) {
-    const _profile = profile as any;
-    if (!_profile.settings.assignType) {
+    const _profile = (profile as any) as {
+      revision?: string;
+      formatRevision?: string;
+      settings: {
+        assignType?: 'single' | 'dual';
+      };
+      assignType?: 'single' | 'dual';
+    };
+    if (!_profile.settings.assignType && _profile.assignType) {
       _profile.settings.assignType = _profile.assignType;
     }
+
+    if (!_profile.formatRevision && _profile.revision) {
+      _profile.formatRevision = _profile.revision;
+    }
+
     LayoutDataMigrator.patchOldFormatLayoutData(profile.keyboardDesign);
 
     if (!Array.isArray(profile.assigns)) {
@@ -235,9 +247,16 @@ export type IProfileData_PRF02 = {
   export function fixProfileData(
     profileData: IPersistProfileData,
   ): IPersistProfileData {
-    if ((profileData.revision as string) === 'PRF02') {
+    const _profileData = (profileData as any) as {
+      revision?: string;
+      formatRevision?: string;
+    };
+    if (_profileData.revision === 'PRF02') {
       return convertProfileFromPRF02(profileData as any);
-    } else if (profileData.revision === 'PRF03') {
+    } else if (
+      _profileData.revision === 'PRF03' ||
+      _profileData.formatRevision === 'PRF03'
+    ) {
       fixProfileDataPRF03(profileData);
     }
     return profileData;

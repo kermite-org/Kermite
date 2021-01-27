@@ -138,7 +138,7 @@ export type IPersistAssignEntry = {
 };
 
 export type IPersistProfileData = {
-  revision: 'PRF03';
+  formatRevision: 'PRF03';
   projectId: string;
   keyboardDesign: IPersistKeyboardDesign;
   settings: IProfileSettings;

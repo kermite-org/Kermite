@@ -1,5 +1,5 @@
 {
-  "revision": "PRF03",
+  "formatRevision": "PRF03",
   "projectId": "dx5kE9SU",
   "keyboardDesign": {
     "formatRevision": "LA00",
@@ -435,9 +435,7 @@
         "op": {
           "type": "keyInput",
           "virtualKey": "K_X",
-          "attachedModifiers": [
-            "K_Ctrl"
-          ]
+          "attachedModifiers": ["K_Ctrl"]
         }
       }
     },
@@ -449,9 +447,7 @@
         "op": {
           "type": "keyInput",
           "virtualKey": "K_C",
-          "attachedModifiers": [
-            "K_Ctrl"
-          ]
+          "attachedModifiers": ["K_Ctrl"]
         }
       }
     },
@@ -463,9 +459,7 @@
         "op": {
           "type": "keyInput",
           "virtualKey": "K_V",
-          "attachedModifiers": [
-            "K_Ctrl"
-          ]
+          "attachedModifiers": ["K_Ctrl"]
         }
       }
     },
@@ -477,9 +471,7 @@
         "op": {
           "type": "keyInput",
           "virtualKey": "K_Z",
-          "attachedModifiers": [
-            "K_Ctrl"
-          ]
+          "attachedModifiers": ["K_Ctrl"]
         }
       }
     },
@@ -491,9 +483,7 @@
         "op": {
           "type": "keyInput",
           "virtualKey": "K_Y",
-          "attachedModifiers": [
-            "K_Ctrl"
-          ]
+          "attachedModifiers": ["K_Ctrl"]
         }
       }
     },
@@ -505,9 +495,7 @@
         "op": {
           "type": "keyInput",
           "virtualKey": "K_F",
-          "attachedModifiers": [
-            "K_Ctrl"
-          ]
+          "attachedModifiers": ["K_Ctrl"]
         }
       }
     },

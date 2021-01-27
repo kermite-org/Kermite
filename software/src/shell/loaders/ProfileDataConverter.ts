@@ -38,7 +38,7 @@ export namespace ProfileDataConverter {
     source: IProfileData,
   ): IPersistProfileData {
     return {
-      revision: 'PRF03',
+      formatRevision: 'PRF03',
       projectId: source.projectId,
       keyboardDesign: source.keyboardDesign,
       settings: source.settings,
