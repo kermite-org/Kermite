@@ -41,7 +41,7 @@ const vAssignOperation = () =>
     }),
   ]);
 
-const profileDataSchemaChecker = vObject({
+export const profileDataSchemaChecker = vObject({
   formatRevision: vValueEquals('PRF03'),
   keyboardDesign: persistEditKeyboardDesignSchemaChecker,
   settings: vSchemaOneOf([
