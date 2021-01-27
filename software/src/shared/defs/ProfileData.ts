@@ -105,41 +105,29 @@ export type IAssignEntryWithLayerFallback =
   | { type: 'layerFallbackTransparent' }
   | { type: 'layerFallbackBlock' };
 
+type IProfileSettings =
+  | {
+      assignType: 'single';
+      useShiftCancel: boolean;
+    }
+  | {
+      assignType: 'dual';
+      useShiftCancel: boolean;
+      primaryDefaultTrigger: 'down' | 'tap';
+      useInterruptHold: boolean;
+      tapHoldThresholdMs: number;
+    };
+
 export type IProfileData = {
   revision: 'PRF03';
   projectId: string;
   keyboardDesign: IPersistKeyboardDesign;
+  settings: IProfileSettings;
   layers: ILayer[];
-  settings:
-    | {
-        assignType: 'single';
-        useShiftCancel: boolean;
-      }
-    | {
-        assignType: 'dual';
-        useShiftCancel: boolean;
-        primaryDefaultTrigger: 'down' | 'tap';
-        useInterruptHold: boolean;
-        tapHoldThresholdMs: number;
-      };
   assigns: {
     // laX.kuY
-    [address: string]:
-      | IAssignEntry_Single
-      | IAssignEntry_Dual
-      | IAssingEntry_Block
-      | IAssignEntry_Transparent
-      | undefined;
+    [address: string]: IAssignEntry | undefined;
   };
-};
-
-export type IProfileDataAssigns = {
-  [address: string]:
-    | IAssignEntry_Single
-    | IAssignEntry_Dual
-    | IAssingEntry_Block
-    | IAssignEntry_Transparent
-    | undefined;
 };
 
 export const fallbackProfileData: IProfileData = {

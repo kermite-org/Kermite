@@ -3,7 +3,7 @@ import {
   ILayer,
   VirtualKeyTexts,
   IAssignEntryWithLayerFallback,
-  IProfileDataAssigns,
+  IProfileData,
 } from '~/shared';
 
 function getAssignOperationText(
@@ -97,7 +97,7 @@ export function getAssignForKeyUnitWithLayerFallback(
   keyUnitId: string,
   layerId: string,
   layers: ILayer[],
-  assigns: IProfileDataAssigns,
+  assigns: IProfileData['assigns'],
 ): IAssignEntryWithLayerFallback | undefined {
   const assign = assigns[`${layerId}.${keyUnitId}`];
   if (!assign) {
