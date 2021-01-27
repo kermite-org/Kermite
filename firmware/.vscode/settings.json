@@ -1,19 +1,13 @@
 {
-  "files.associations": {
-    "*.c": "cpp"
-  },
+  "files.associations": { "*.c": "cpp" },
   "json.schemas": [
     {
       "fileMatch": ["project.json"],
       "schema": {
         "type": "object",
         "properties": {
-          "projectId": {
-            "type": "string"
-          },
-          "keyboardName": {
-            "type": "string"
-          }
+          "projectId": { "type": "string" },
+          "keyboardName": { "type": "string" }
         },
         "required": ["projectId", "keyboardName"],
         "additionalProperties": false
@@ -24,21 +18,16 @@
       "schema": {
         "type": "object",
         "properties": {
+          "formatRevision": {
+            "type": "string"
+          },
           "setup": {
             "type": "object",
             "properties": {
-              "placementUnit": {
-                "type": "string"
-              },
-              "placementAnchor": {
-                "type": "string"
-              },
-              "keySizeUnit": {
-                "type": "string"
-              },
-              "keyIdMode": {
-                "type": "string"
-              }
+              "placementUnit": { "type": "string" },
+              "placementAnchor": { "type": "string" },
+              "keySizeUnit": { "type": "string" },
+              "keyIdMode": { "type": "string" }
             },
             "required": [
               "placementUnit",
@@ -55,27 +44,13 @@
                 {
                   "type": "object",
                   "properties": {
-                    "keyId": {
-                      "type": "string"
-                    },
-                    "x": {
-                      "type": "number"
-                    },
-                    "y": {
-                      "type": "number"
-                    },
-                    "angle": {
-                      "type": "number"
-                    },
-                    "shape": {
-                      "type": "string"
-                    },
-                    "keyIndex": {
-                      "type": "number"
-                    },
-                    "groupIndex": {
-                      "type": "number"
-                    }
+                    "keyId": { "type": "string" },
+                    "x": { "type": "number" },
+                    "y": { "type": "number" },
+                    "angle": { "type": "number" },
+                    "shape": { "type": "string" },
+                    "keyIndex": { "type": "number" },
+                    "groupIndex": { "type": "number" }
                   },
                   "additionalProperties": false,
                   "required": ["keyId", "x", "y"]
@@ -83,15 +58,9 @@
                 {
                   "type": "object",
                   "properties": {
-                    "keyId": {
-                      "type": "string"
-                    },
-                    "mirrorOf": {
-                      "type": "string"
-                    },
-                    "keyIndex": {
-                      "type": "number"
-                    }
+                    "keyId": { "type": "string" },
+                    "mirrorOf": { "type": "string" },
+                    "keyIndex": { "type": "number" }
                   },
                   "additionalProperties": false,
                   "required": ["keyId", "mirrorOf"]
@@ -109,49 +78,41 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "x": {
-                        "type": "number"
-                      },
-                      "y": {
-                        "type": "number"
-                      }
+                      "x": { "type": "number" },
+                      "y": { "type": "number" }
                     },
                     "additionalProperties": false,
                     "required": ["x", "y"]
                   }
                 },
-                "groupIndex": {
-                  "type": "number"
-                }
+                "groupIndex": { "type": "number" }
               },
               "additionalProperties": false,
               "required": ["points"]
             }
           },
-          "transGroups": {
+          "transformationGroups": {
             "type": "array",
             "items": {
               "type": "object",
               "properties": {
-                "x": {
-                  "type": "number"
-                },
-                "y": {
-                  "type": "number"
-                },
-                "angle": {
-                  "type": "number"
-                },
-                "mirror": {
-                  "type": "boolean"
-                }
+                "x": { "type": "number" },
+                "y": { "type": "number" },
+                "angle": { "type": "number" },
+                "mirror": { "type": "boolean" }
               },
               "additionalProperties": false,
               "required": ["x", "y"]
             }
           }
         },
-        "required": ["setup", "keyEntities", "outlineShapes", "transGroups"],
+        "required": [
+          "formatRevision",
+          "setup",
+          "keyEntities",
+          "outlineShapes",
+          "transformationGroups"
+        ],
         "additionalProperties": false
       }
     }
