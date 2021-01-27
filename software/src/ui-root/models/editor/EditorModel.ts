@@ -38,7 +38,7 @@ export class EditorModel {
   // getters
 
   private get profileAssignType(): IProfileAssignType {
-    return this.profileData.assignType;
+    return this.profileData.settings.assignType;
   }
 
   get isSingleMode() {

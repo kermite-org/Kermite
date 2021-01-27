@@ -20,6 +20,7 @@ export interface IPersistKeyboardDesignMirrorKeyEntity {
   keyIndex?: number;
 }
 export interface IPersistKeyboardDesign {
+  formatRevision: 'LA00';
   setup: {
     placementUnit: string;
     placementAnchor: IKeyPlacementAnchor;
@@ -34,7 +35,7 @@ export interface IPersistKeyboardDesign {
     points: { x: number; y: number }[];
     groupIndex?: number;
   }[];
-  transGroups: {
+  transformationGroups: {
     // groupId: string;
     x: number;
     y: number;
@@ -45,6 +46,7 @@ export interface IPersistKeyboardDesign {
 
 export function createFallbackPersistKeyboardDesign(): IPersistKeyboardDesign {
   return {
+    formatRevision: 'LA00',
     setup: {
       placementUnit: 'mm',
       placementAnchor: 'center',
@@ -53,7 +55,7 @@ export function createFallbackPersistKeyboardDesign(): IPersistKeyboardDesign {
     },
     keyEntities: [],
     outlineShapes: [],
-    transGroups: [],
+    transformationGroups: [],
   };
 }
 

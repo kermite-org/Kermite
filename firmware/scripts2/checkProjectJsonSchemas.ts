@@ -1,40 +1,26 @@
 import { fsxReadJsonFile, globSync } from "./osHelpers";
+import { persistEditKeyboardDesignSchemaChecker } from "~/shell/loaders/LayoutFileSchemaChecker";
+import { LayoutDataMigrator } from "~/shell/loaders/LayoutDataMigrator";
+import { profileDataSchemaChecker } from "~/shell/loaders/ProfileDataSchemaChecker";
+import { ProfileDataMigrator } from "~/shell/loaders/ProfileDataMigrator";
 import {
-  Checker,
-  vArray,
-  vNumber,
   vObject,
   vString,
-  vStringProjectId,
-} from "./schemaValidationHelper";
+  vStringMatchesTo,
+} from "~/shell/loaders/SchemaValidationHelper";
 
 process.chdir("..");
 
 const projectJsonDataValidator = vObject({
-  projectId: vStringProjectId(),
+  projectId: vStringMatchesTo([/^[a-zA-Z0-9]{8}$/]),
   keyboardName: vString(20),
 });
 
-const layoutJsonDataValidator = vObject({
-  displayArea: vObject({
-    centerX: vNumber(),
-    centerY: vNumber(),
-    width: vNumber(),
-    height: vNumber(),
-  }),
-  keyUnits: vArray(
-    vObject({
-      id: vString(10),
-      x: vNumber(),
-      y: vNumber(),
-      r: vNumber(),
-      keyIndex: vNumber(),
-    })
-  ),
-  bodyPathMarkups: vArray(vString()),
-});
-
-function checkFiles(target: string, globPttern: string, validator: Checker) {
+function checkFiles(
+  target: string,
+  globPttern: string,
+  checker: (obj: any) => any
+) {
   console.log(`cheking ${target} json schemas ...`);
 
   const filePaths = globSync(globPttern);
@@ -43,7 +29,7 @@ function checkFiles(target: string, globPttern: string, validator: Checker) {
   const results = filePaths
     .map((filePath) => {
       const obj = fsxReadJsonFile(filePath);
-      const errors = validator(obj);
+      const errors = checker(obj);
       return errors ? { filePath, errors } : undefined;
     })
     .filter((a) => !!a);
@@ -63,11 +49,14 @@ function projectJsonSchemaCheckerEntry() {
     "src/projects/**/*/project.json",
     projectJsonDataValidator
   );
-  checkFiles(
-    "layout",
-    "src/projects/**/*/*layout.json",
-    layoutJsonDataValidator
-  );
+  checkFiles("layout", "src/projects/**/*/*layout.json", (layout) => {
+    LayoutDataMigrator.patchOldFormatLayoutData(layout);
+    return persistEditKeyboardDesignSchemaChecker(layout);
+  });
+  checkFiles("preset", "src/projects/**/presets/*.json", (profile) => {
+    profile = ProfileDataMigrator.fixProfileData(profile);
+    return profileDataSchemaChecker(profile);
+  });
 }
 
 projectJsonSchemaCheckerEntry();

@@ -4,9 +4,8 @@ import {
   fallbackProfileData,
   IPresetSpec,
 } from '~/shared';
-import { fsxReadJsonFile } from '~/shell/funcs';
-import { ProfileHelper } from '~/shell/services/profile/ProfileHelper';
-import { KeyboardLayoutFileLoader } from '~/shell/services/projects/KeyboardShape/KeyboardLayoutFileLoader';
+import { layoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
+import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
 import {
   IPresetProfileLoadingFeature,
   IProjectResourceInfoProvider,
@@ -27,12 +26,7 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
     );
     if (presetFilePath) {
       try {
-        const profileData = (await fsxReadJsonFile(presetFilePath)) as
-          | IProfileData
-          | undefined;
-        if (profileData) {
-          return ProfileHelper.fixProfileData(profileData);
-        }
+        return await ProfileFileLoader.loadProfileFromFile(presetFilePath);
       } catch (error) {
         console.log(`errorr on loading preset file`);
         console.error(error);
@@ -51,7 +45,7 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
     );
     if (layoutFilePath) {
       try {
-        const design = await KeyboardLayoutFileLoader.loadLayoutFromFile(
+        const design = await layoutFileLoader.loadLayoutFromFile(
           layoutFilePath,
         );
         if (design) {

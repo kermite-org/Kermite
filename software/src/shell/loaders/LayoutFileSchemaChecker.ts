@@ -8,9 +8,10 @@ import {
   vString,
   vStringMatchesTo,
   vValueOneOf,
-} from '~/shell/modules/SchemaValidationHelper';
+} from '~/shell/loaders/SchemaValidationHelper';
 
-const persistEditKeyboardDesignSchemaChecker = vObject({
+export const persistEditKeyboardDesignSchemaChecker = vObject({
+  formatRevision: vString(),
   setup: vObject({
     placementUnit: vStringMatchesTo([/^mm$/, /^KP \d+( \d+)?$/]),
     placementAnchor: vValueOneOf(['center', 'topLeft']),
@@ -47,7 +48,7 @@ const persistEditKeyboardDesignSchemaChecker = vObject({
       }),
     ]),
   ),
-  transGroups: vArray(
+  transformationGroups: vArray(
     vObject({
       x: vNumber(),
       y: vNumber(),

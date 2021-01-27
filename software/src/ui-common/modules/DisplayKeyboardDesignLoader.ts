@@ -23,7 +23,7 @@ import {
 export namespace DisplayKeyboardDesignLoader {
   type ISourceDesign = IPersistKeyboardDesign;
   type ISourceOutlineShape = IPersistKeyboardDesign['outlineShapes'][0];
-  type ISourceTransGroup = IPersistKeyboardDesign['transGroups'][0];
+  type ISourceTransGroup = IPersistKeyboardDesign['transformationGroups'][0];
 
   type IRealKeyEntity = IPersistKeyboardDesignRealKeyEntity;
   type IMirrorKeyEntity = IPersistKeyboardDesignMirrorKeyEntity;
@@ -37,7 +37,7 @@ export namespace DisplayKeyboardDesignLoader {
 
     const groupIndex = convertUndefinedToDefaultValue(shape.groupIndex, -1);
     const { groupX, groupY, groupAngle } = getGroupTransAmount(
-      design.transGroups[groupIndex],
+      design.transformationGroups[groupIndex],
     );
     const groupRot = degToRad(groupAngle);
 
@@ -105,7 +105,7 @@ export namespace DisplayKeyboardDesignLoader {
     const keyShape = convertUndefinedToDefaultValue(ke.shape, 'std 1');
     const keyGroupIndex = convertUndefinedToDefaultValue(ke.groupIndex, -1);
     const { groupX, groupY, groupAngle } = getGroupTransAmount(
-      design.transGroups[keyGroupIndex],
+      design.transformationGroups[keyGroupIndex],
     );
     const groupRot = degToRad(groupAngle);
 
@@ -252,7 +252,7 @@ export namespace DisplayKeyboardDesignLoader {
           return [];
         } else {
           const groupIndex = convertUndefinedToDefaultValue(ke.groupIndex, -1);
-          const group = design.transGroups[groupIndex];
+          const group = design.transformationGroups[groupIndex];
           if (group?.mirror) {
             const mke = design.keyEntities.find(
               (k) => 'mirrorOf' in k && k.mirrorOf === ke.keyId,
@@ -274,7 +274,7 @@ export namespace DisplayKeyboardDesignLoader {
           return [];
         }
         const groupIndex = convertUndefinedToDefaultValue(shape.groupIndex, -1);
-        const group = design.transGroups[groupIndex];
+        const group = design.transformationGroups[groupIndex];
 
         if (group?.mirror) {
           const joinedShape = getJoinedIfCenterEdgeSharedForMirrorShape(

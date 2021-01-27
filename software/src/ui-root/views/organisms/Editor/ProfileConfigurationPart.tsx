@@ -7,7 +7,7 @@ export const ProfileConfigurationPart = () => {
     padding: 5px;
   `;
 
-  const currentAssignType = models.editorModel.profileData.assignType;
+  const currentAssignType = models.editorModel.profileData.settings.assignType;
 
   return <div css={cssBase}>assign model: {currentAssignType}</div>;
 };

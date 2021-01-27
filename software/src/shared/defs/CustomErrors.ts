@@ -3,6 +3,7 @@ export type IAppErrorInfo =
   | { type: 'CannotWriteFile'; filePath: string }
   | { type: 'InvalidJsonFileContent'; filePath: string }
   | { type: 'InvalidLayoutFileSchema'; filePath: string; errorDetail: string }
+  | { type: 'InvalidProjectFileSchema'; filePath: string; errorDetail: string }
   | { type: 'RawException'; message: string };
 
 export class AppError extends Error {
@@ -31,6 +32,7 @@ const errorTextMapEN: { [key in IErrorType]: string } = {
   CannotWriteFile: `failed to write file {filePath}`,
   InvalidJsonFileContent: `invalid json file content for {filePath}`,
   InvalidLayoutFileSchema: `invalid schema for file {filePath} {errorDetail}`,
+  InvalidProjectFileSchema: `invalid schema for file {filePath} {errorDetail}`,
   RawException: `{message}`,
 };
 
@@ -39,6 +41,7 @@ const errorTextMapJP: { [key in IErrorType]: string } = {
   CannotWriteFile: `ファイル {filePath} の書き込みに失敗しました`,
   InvalidJsonFileContent: `ファイル {filePath} の内容がJSONとして不正です`,
   InvalidLayoutFileSchema: `レイアウトファイル {filePath} の形式が不正です。\n詳細:\n{errorDetail}`,
+  InvalidProjectFileSchema: `プロジェクトファイル {filePath} の形式が不正です。\n詳細:\n{errorDetail}`,
   RawException: `{message}`,
 };
 

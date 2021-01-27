@@ -11,7 +11,6 @@ import {
 import { EventPort } from '~/shell/funcs';
 import { PresetProfileLoader } from '~/shell/services/projects/PresetProfileLoader';
 import { IProjectResourceInfoProvider } from '~/shell/services/serviceInterfaces';
-import { ProfileHelper } from './ProfileHelper';
 import { ProfileManagerCore } from './ProfileManagerCore';
 import { IProfileManager } from './interfaces';
 
@@ -106,15 +105,14 @@ export class ProfileManager implements IProfileManager {
 
   async loadProfile(profName: string): Promise<boolean> {
     try {
-      const _profileData = await this.core.loadProfile(profName);
-      const profileData = ProfileHelper.fixProfileData(_profileData);
+      const profileData = await this.core.loadProfile(profName);
       this.setStatus({
         currentProfileName: profName,
         loadedProfileData: profileData,
       });
       return true;
     } catch (error) {
-      this.raiseErrorMessage('failed to load profile');
+      this.raiseErrorMessage(`failed to load profile, ${error.message}`);
       return false;
     }
   }

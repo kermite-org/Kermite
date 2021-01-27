@@ -9,11 +9,10 @@ import {
   fspRename,
   fspUnlink,
   fsxMkdirpSync,
-  fsxReadJsonFile,
-  fsxWriteJsonFile,
   pathBasename,
   pathDirname,
 } from '~/shell/funcs';
+import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
 
 export class ProfileManagerCore {
   getDataFilePath(profName: string): string {
@@ -47,17 +46,17 @@ export class ProfileManagerCore {
   }
 
   async loadProfile(profName: string): Promise<IProfileData> {
-    const fpath = this.getDataFilePath(profName);
-    return (await fsxReadJsonFile(fpath)) as IProfileData;
+    const filePath = this.getDataFilePath(profName);
+    return await ProfileFileLoader.loadProfileFromFile(filePath);
   }
 
   async saveProfile(
     profName: string,
     profileData: IProfileData,
   ): Promise<void> {
-    const fpath = this.getDataFilePath(profName);
-    console.log(`saving current profile to ${pathBasename(fpath)}`);
-    await fsxWriteJsonFile(fpath, profileData);
+    const filePath = this.getDataFilePath(profName);
+    console.log(`saving current profile to ${pathBasename(filePath)}`);
+    await ProfileFileLoader.saveProfileToFile(filePath, profileData);
   }
 
   async saveProfileAsPreset(
@@ -66,7 +65,7 @@ export class ProfileManagerCore {
   ): Promise<void> {
     console.log(`saving current profile to ${filePath}`);
     fsxMkdirpSync(pathDirname(filePath));
-    await fsxWriteJsonFile(filePath, profileData);
+    await ProfileFileLoader.saveProfileToFile(filePath, profileData);
   }
 
   async deleteProfile(profName: string): Promise<void> {

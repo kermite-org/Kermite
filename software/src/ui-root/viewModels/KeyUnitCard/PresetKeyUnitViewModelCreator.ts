@@ -1,6 +1,5 @@
 import {
   ILayer,
-  IProfileDataAssigns,
   IProfileData,
   IDisplayKeyEntity,
   IDisplayKeyboardDesign,
@@ -26,7 +25,7 @@ function createPresetKeyUnitViewModel(
   ke: IDisplayKeyEntity,
   targetLayerId: string,
   layers: ILayer[],
-  assigns: IProfileDataAssigns,
+  assigns: IProfileData['assigns'],
 ): IPresetKeyUnitViewModel {
   const keyUnitId = ke.keyId;
   const pos = {

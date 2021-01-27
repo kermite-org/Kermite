@@ -90,7 +90,7 @@ export namespace KeyboardDesignConverter {
         }),
       ),
       transGroups: createDictionaryFromKeyValues(
-        source.transGroups.map((group, idx) => {
+        source.transformationGroups.map((group, idx) => {
           const id = idx.toString();
           return [
             id,
@@ -111,6 +111,7 @@ export namespace KeyboardDesignConverter {
     design: IEditKeyboardDesign,
   ): IPersistKeyboardDesign {
     return {
+      formatRevision: 'LA00',
       setup: {
         placementUnit: design.setup.placementUnit,
         placementAnchor: design.setup.placementAnchor,
@@ -169,7 +170,7 @@ export namespace KeyboardDesignConverter {
         })),
         groupIndex: groupIdToGroupIndex(shape.groupId),
       })),
-      transGroups: Object.values(design.transGroups).map((group) => ({
+      transformationGroups: Object.values(design.transGroups).map((group) => ({
         x: roundNumber(group.x),
         y: roundNumber(group.y),
         angle: convertDefaultValueToUndefined(roundNumber(group.angle), 0),

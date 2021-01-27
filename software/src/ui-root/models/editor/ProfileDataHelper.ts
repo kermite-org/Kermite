@@ -1,50 +1,53 @@
 import {
-  IAssignEntry_SingleEx,
-  IAssignEntry_DualEx,
   IProfileData,
   IProfileAssignType,
   mapObjectValues,
   IAssignEntry,
 } from '~/shared';
 
-function convertSignleAssignToDualAssign(
-  src: IAssignEntry_SingleEx,
-): IAssignEntry_DualEx {
+function convertSignleAssignToDualAssign(src: IAssignEntry): IAssignEntry {
   if (src.type === 'block' || src.type === 'transparent') {
     return src;
+  } else if (src.type === 'dual') {
+    return src;
+  } else if (src.type === 'single') {
+    return {
+      type: 'dual',
+      primaryOp: src.op,
+    };
+  } else {
+    return src as never;
   }
-  return {
-    type: 'dual',
-    primaryOp: src.op,
-  };
 }
 
-function convertDualAssignToSingleAssign(
-  src: IAssignEntry_DualEx,
-): IAssignEntry_SingleEx {
+function convertDualAssignToSingleAssign(src: IAssignEntry): IAssignEntry {
   if (src.type === 'block' || src.type === 'transparent') {
     return src;
+  } else if (src.type === 'single') {
+    return src;
+  } else if (src.type === 'dual') {
+    return {
+      type: 'single',
+      op: src.primaryOp,
+    };
+  } else {
+    return src as never;
   }
-  return {
-    type: 'single',
-    op: src.primaryOp,
-  };
 }
 
 export function changeProfileDataAssignType(
   profile: IProfileData,
   dstAssignType: IProfileAssignType,
 ): IProfileData {
-  if (profile.assignType === dstAssignType) {
+  if (profile.settings.assignType === dstAssignType) {
     return profile;
   }
 
-  if (profile.assignType === 'single' && dstAssignType === 'dual') {
+  if (profile.settings.assignType === 'single' && dstAssignType === 'dual') {
     return {
       ...profile,
-      assignType: 'dual',
       settings: {
-        type: 'dual',
+        assignType: 'dual',
         useShiftCancel: profile.settings.useShiftCancel,
         primaryDefaultTrigger: 'down',
         tapHoldThresholdMs: 200,
@@ -56,11 +59,11 @@ export function changeProfileDataAssignType(
       ),
     };
   }
-  if (profile.assignType === 'dual' && dstAssignType === 'single') {
+  if (profile.settings.assignType === 'dual' && dstAssignType === 'single') {
     return {
       ...profile,
-      assignType: 'single',
       settings: {
+        assignType: 'single',
         useShiftCancel: profile.settings.useShiftCancel,
       },
       assigns: mapObjectValues(
