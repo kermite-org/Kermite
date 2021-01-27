@@ -8,6 +8,7 @@ on:
       - "firmware/scripts2/**/*.ts"
       - "firmware/Makefile"
       - "firmware/src/**"
+      - "software/src/shell/loaders/**/*.ts"
 
   pull_request:
     branches: [master, variants]
@@ -40,17 +41,14 @@ jobs:
       - run: yarn checkHardcodedVersions
         working-directory: ./firmware/scripts2
 
-      - run: yarn checkProjectJsonSchemas
-        working-directory: ./firmware/scripts2
-
-      - name: Check Firmware Build Errors
-        run: yarn buildAll --abortOnError
-        working-directory: ./firmware/scripts2
-
       - name: Check Project IDs
         run: yarn checkProjectIds --abortOnError
         working-directory: ./firmware/scripts2
 
-      - name: Check Preset Profile Schemas
-        run: yarn checkPresetProfileSchemas --failureStatusIfError
+      - name: Check Project Related Json Schemas
+        run: yarn checkProjectJsonSchemas
+        working-directory: ./firmware/scripts2
+
+      - name: Check Firmware Build Errors
+        run: yarn buildAll --abortOnError
         working-directory: ./firmware/scripts2
