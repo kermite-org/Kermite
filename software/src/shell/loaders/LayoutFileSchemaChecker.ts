@@ -10,7 +10,7 @@ import {
   vValueOneOf,
 } from '~/shell/loaders/SchemaValidationHelper';
 
-const persistEditKeyboardDesignSchemaChecker = vObject({
+export const persistEditKeyboardDesignSchemaChecker = vObject({
   formatRevision: vString(),
   setup: vObject({
     placementUnit: vStringMatchesTo([/^mm$/, /^KP \d+( \d+)?$/]),
