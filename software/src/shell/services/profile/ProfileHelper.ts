@@ -141,8 +141,7 @@ export namespace ProfileHelper {
     return {
       revision: 'PRF03',
       projectId: '',
-      assignType,
-      settings,
+      settings: { ...settings, assignType },
       layers,
       keyboardDesign: makeKeyboardDesignFromKeyboardShapePRF02(keyboardShape),
       assigns,

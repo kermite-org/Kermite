@@ -6,7 +6,7 @@ import { models } from '~/ui-root/models';
 
 const AssignTypeSelectionPartViewModel = () => {
   const assignTypeOptions: IProfileAssignType[] = ['single', 'dual'];
-  const currentAssignType = models.editorModel.profileData.assignType;
+  const currentAssignType = models.editorModel.profileData.settings.assignType;
   const setAssignType = (value: string) => {
     models.editorModel.changeProfileAssignType(value as IProfileAssignType);
   };

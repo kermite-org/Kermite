@@ -30,7 +30,7 @@ const cssDualModeSettingsPart = css`
 `;
 
 export const DualModeSettingsPart = () => {
-  if (models.editorModel.profileData.assignType === 'single') {
+  if (models.editorModel.profileData.settings.assignType === 'single') {
     return null;
   }
 
