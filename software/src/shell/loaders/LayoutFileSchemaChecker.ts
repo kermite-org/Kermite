@@ -48,7 +48,7 @@ export const persistEditKeyboardDesignSchemaChecker = vObject({
       }),
     ]),
   ),
-  transGroups: vArray(
+  transformationGroups: vArray(
     vObject({
       x: vNumber(),
       y: vNumber(),

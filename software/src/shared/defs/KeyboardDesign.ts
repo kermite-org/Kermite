@@ -35,7 +35,7 @@ export interface IPersistKeyboardDesign {
     points: { x: number; y: number }[];
     groupIndex?: number;
   }[];
-  transGroups: {
+  transformationGroups: {
     // groupId: string;
     x: number;
     y: number;
@@ -55,7 +55,7 @@ export function createFallbackPersistKeyboardDesign(): IPersistKeyboardDesign {
     },
     keyEntities: [],
     outlineShapes: [],
-    transGroups: [],
+    transformationGroups: [],
   };
 }
 

@@ -9,7 +9,6 @@ import {
   fspRename,
   fspUnlink,
   fsxMkdirpSync,
-  fsxWriteJsonFile,
   pathBasename,
   pathDirname,
 } from '~/shell/funcs';

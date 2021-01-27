@@ -195,7 +195,7 @@ export type IProfileData_PRF02 = {
       outlineShapes: makeOutlineShapesFromDisplayArea(
         shape.displayArea || fallbackDisplayArea,
       ),
-      transGroups: [],
+      transformationGroups: [],
     };
   }
 

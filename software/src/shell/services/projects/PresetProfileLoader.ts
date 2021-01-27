@@ -4,8 +4,8 @@ import {
   fallbackProfileData,
   IPresetSpec,
 } from '~/shared';
+import { layoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
-import { KeyboardLayoutFileLoader } from '~/shell/services/projects/KeyboardShape/KeyboardLayoutFileLoader';
 import {
   IPresetProfileLoadingFeature,
   IProjectResourceInfoProvider,
@@ -45,7 +45,7 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
     );
     if (layoutFilePath) {
       try {
-        const design = await KeyboardLayoutFileLoader.loadLayoutFromFile(
+        const design = await layoutFileLoader.loadLayoutFromFile(
           layoutFilePath,
         );
         if (design) {

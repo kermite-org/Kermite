@@ -11,7 +11,7 @@ function createFallbackKeyboardDesign(): IPersistKeyboardDesign {
     },
     keyEntities: [],
     outlineShapes: [],
-    transGroups: [
+    transformationGroups: [
       {
         x: 0,
         y: 0,

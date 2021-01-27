@@ -1,6 +1,6 @@
 import { IPersistKeyboardDesign } from '~/shared';
+import { layoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { IProjectResourceInfoProvider } from '~/shell/services/serviceInterfaces';
-import { KeyboardLayoutFileLoader } from './KeyboardLayoutFileLoader';
 
 // キーボード品種ごとのレイアウトファイルを読み込み提供する
 export class KeyboardShapesProvider {
@@ -21,9 +21,7 @@ export class KeyboardShapesProvider {
         layoutName,
       );
       if (layoutFilePath) {
-        return await KeyboardLayoutFileLoader.loadLayoutFromFile(
-          layoutFilePath,
-        );
+        return await layoutFileLoader.loadLayoutFromFile(layoutFilePath);
       }
     }
     return undefined;
