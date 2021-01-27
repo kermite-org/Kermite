@@ -13,7 +13,7 @@ import { getErrorInfo } from '~/shared/defs';
 import { applicationStorage } from '~/shell/base';
 import { createEventPort2 } from '~/shell/funcs';
 import { FileWather } from '~/shell/funcs/FileWatcher';
-import { layoutFileLoader } from '~/shell/services/layout/LayoutFileLoader';
+import { layoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { ILayoutManager } from '~/shell/services/layout/interfaces';
 import { IProfileManager } from '~/shell/services/profile/interfaces';
 import { IProjectResourceInfoProvider } from '~/shell/services/serviceInterfaces';

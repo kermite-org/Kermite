@@ -8,7 +8,7 @@ import {
   vString,
   vStringMatchesTo,
   vValueOneOf,
-} from '~/shell/modules/SchemaValidationHelper';
+} from '~/shell/loaders/SchemaValidationHelper';
 
 const persistEditKeyboardDesignSchemaChecker = vObject({
   formatRevision: vString(),

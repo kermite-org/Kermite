@@ -1,7 +1,7 @@
 import { IPersistKeyboardDesign } from '~/shared';
 import { AppError } from '~/shared/defs';
 import { fsxReadJsonFile, fsxWriteJsonFile } from '~/shell/funcs';
-import { checkLayoutFileContentObjectSchema } from '~/shell/modules/LayoutFileSchemaChecker';
+import { checkLayoutFileContentObjectSchema } from '~/shell/loaders/LayoutFileSchemaChecker';
 import { ILayoutFileLoader } from '~/shell/services/layout/interfaces';
 
 namespace LayoutFileLoaderHelper {
