@@ -1,23 +1,15 @@
 import { IPersistKeyboardDesign } from '~/shared';
 import { AppError } from '~/shared/defs';
 import { fsxReadJsonFile, fsxWriteJsonFile } from '~/shell/funcs';
+import { LayoutDataMigrator } from '~/shell/loaders/LayoutDataMigrator';
 import { checkLayoutFileContentObjectSchema } from '~/shell/loaders/LayoutFileSchemaChecker';
 import { ILayoutFileLoader } from '~/shell/services/layout/interfaces';
 
-namespace LayoutFileLoaderHelper {
-  export function patchOldFormatLayoutData(layout: IPersistKeyboardDesign) {
-    if (!layout.formatRevision) {
-      layout.formatRevision = 'LA00';
-    }
-  }
-}
 class LayoutFileLoader implements ILayoutFileLoader {
   async loadLayoutFromFile(filePath: string): Promise<IPersistKeyboardDesign> {
     const obj = await fsxReadJsonFile(filePath);
 
-    LayoutFileLoaderHelper.patchOldFormatLayoutData(
-      obj as IPersistKeyboardDesign,
-    );
+    LayoutDataMigrator.patchOldFormatLayoutData(obj as IPersistKeyboardDesign);
 
     const schemaError = checkLayoutFileContentObjectSchema(obj);
     if (schemaError) {
