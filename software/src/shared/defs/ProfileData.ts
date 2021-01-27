@@ -118,20 +118,36 @@ type IProfileSettings =
       tapHoldThresholdMs: number;
     };
 
+export type IAssignsDictionary = {
+  // laX.kuY
+  [address: string]: IAssignEntry | undefined;
+};
+
 export type IProfileData = {
+  projectId: string;
+  keyboardDesign: IPersistKeyboardDesign;
+  settings: IProfileSettings;
+  layers: ILayer[];
+  assigns: IAssignsDictionary;
+};
+
+export type IPersistAssignEntry = {
+  layerId: string;
+  keyId: string;
+  usage: IAssignEntry;
+};
+
+export type IPersistProfileData = {
   revision: 'PRF03';
   projectId: string;
   keyboardDesign: IPersistKeyboardDesign;
   settings: IProfileSettings;
   layers: ILayer[];
-  assigns: {
-    // laX.kuY
-    [address: string]: IAssignEntry | undefined;
-  };
+  assigns: IPersistAssignEntry[];
 };
 
 export const fallbackProfileData: IProfileData = {
-  revision: 'PRF03',
+  // revision: 'PRF03',
   projectId: '',
   keyboardDesign: createFallbackPersistKeyboardDesign(),
   settings: {

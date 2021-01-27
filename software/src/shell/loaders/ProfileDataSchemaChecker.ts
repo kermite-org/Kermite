@@ -3,7 +3,6 @@ import {
   vArray,
   vBoolean,
   vNumber,
-  vObejectDictionary,
   vObject,
   vSchemaOneOf,
   vString,
@@ -70,21 +69,41 @@ const profileDataSchemaChecker = vObject({
       initialActive: vBoolean(),
     }),
   ),
-  assigns: vObejectDictionary(
-    vSchemaOneOf([
-      vObject({ type: vValueEquals('block') }),
-      vObject({ type: vValueEquals('transparent') }),
-      vObject({
-        type: vValueEquals('single'),
-        op: vAssignOperation().optional,
-      }),
-      vObject({
-        type: vValueEquals('dual'),
-        primaryOp: vAssignOperation().optional,
-        secondaryOp: vAssignOperation().optional,
-        tertiaryOp: vAssignOperation().optional,
-      }),
-    ]),
+  // assigns: vObejectDictionary(
+  //   vSchemaOneOf([
+  //     vObject({ type: vValueEquals('block') }),
+  //     vObject({ type: vValueEquals('transparent') }),
+  //     vObject({
+  //       type: vValueEquals('single'),
+  //       op: vAssignOperation().optional,
+  //     }),
+  //     vObject({
+  //       type: vValueEquals('dual'),
+  //       primaryOp: vAssignOperation().optional,
+  //       secondaryOp: vAssignOperation().optional,
+  //       tertiaryOp: vAssignOperation().optional,
+  //     }),
+  //   ]),
+  // ),
+  assigns: vArray(
+    vObject({
+      layerId: vString(),
+      keyId: vString(),
+      usage: vSchemaOneOf([
+        vObject({ type: vValueEquals('block') }),
+        vObject({ type: vValueEquals('transparent') }),
+        vObject({
+          type: vValueEquals('single'),
+          op: vAssignOperation().optional,
+        }),
+        vObject({
+          type: vValueEquals('dual'),
+          primaryOp: vAssignOperation().optional,
+          secondaryOp: vAssignOperation().optional,
+          tertiaryOp: vAssignOperation().optional,
+        }),
+      ]),
+    }),
   ),
 });
 

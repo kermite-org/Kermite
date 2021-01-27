@@ -55,9 +55,9 @@ export class ProfileManagerCore {
     profName: string,
     profileData: IProfileData,
   ): Promise<void> {
-    const fpath = this.getDataFilePath(profName);
-    console.log(`saving current profile to ${pathBasename(fpath)}`);
-    await fsxWriteJsonFile(fpath, profileData);
+    const filePath = this.getDataFilePath(profName);
+    console.log(`saving current profile to ${pathBasename(filePath)}`);
+    await ProfileFileLoader.saveProfileToFile(filePath, profileData);
   }
 
   async saveProfileAsPreset(
@@ -66,7 +66,7 @@ export class ProfileManagerCore {
   ): Promise<void> {
     console.log(`saving current profile to ${filePath}`);
     fsxMkdirpSync(pathDirname(filePath));
-    await fsxWriteJsonFile(filePath, profileData);
+    await ProfileFileLoader.saveProfileToFile(filePath, profileData);
   }
 
   async deleteProfile(profName: string): Promise<void> {

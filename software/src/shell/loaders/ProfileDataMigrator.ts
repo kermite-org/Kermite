@@ -3,9 +3,10 @@ import {
   IAssignEntry,
   ILayer,
   IPersistKeyboardDesign,
-  IProfileData,
+  IPersistProfileData,
 } from '~/shared';
 import { LayoutDataMigrator } from '~/shell/loaders/LayoutDataMigrator';
+import { ProfileDataConverter } from '~/shell/loaders/ProfileDataConverter';
 
 export namespace ProfileDataMigrator {
   /*
@@ -198,7 +199,9 @@ export type IProfileData_PRF02 = {
     };
   }
 
-  function convertProfileFromPRF02(_profile: IProfileData_PRF02): IProfileData {
+  function convertProfileFromPRF02(
+    _profile: IProfileData_PRF02,
+  ): IPersistProfileData {
     const profile = duplicateObjectByJsonStringifyParse(_profile);
     patchOldScheme(profile);
     const { keyboardShape, settings, layers, assigns } = profile;
@@ -211,25 +214,32 @@ export type IProfileData_PRF02 = {
           : { ...settings, assignType: 'single' },
       layers,
       keyboardDesign: makeKeyboardDesignFromKeyboardShapePRF02(keyboardShape),
-      assigns,
+      assigns: ProfileDataConverter.convertAssingsDictionaryToArray(assigns),
     };
   }
 
-  function fixProfileDataPRF03(profile: IProfileData) {
+  function fixProfileDataPRF03(profile: IPersistProfileData) {
     const _profile = profile as any;
     if (!_profile.settings.assignType) {
       _profile.settings.assignType = _profile.assignType;
     }
     LayoutDataMigrator.patchOldFormatLayoutData(profile.keyboardDesign);
+
+    if (!Array.isArray(profile.assigns)) {
+      profile.assigns = ProfileDataConverter.convertAssingsDictionaryToArray(
+        profile.assigns,
+      );
+    }
   }
 
-  export function fixProfileData(profileData: IProfileData): IProfileData {
+  export function fixProfileData(
+    profileData: IPersistProfileData,
+  ): IPersistProfileData {
     if ((profileData.revision as string) === 'PRF02') {
       return convertProfileFromPRF02(profileData as any);
     } else if (profileData.revision === 'PRF03') {
       fixProfileDataPRF03(profileData);
     }
-    // console.log({ profileData });
     return profileData;
   }
 }
