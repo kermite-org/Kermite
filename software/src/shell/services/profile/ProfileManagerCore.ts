@@ -9,11 +9,11 @@ import {
   fspRename,
   fspUnlink,
   fsxMkdirpSync,
-  fsxReadJsonFile,
   fsxWriteJsonFile,
   pathBasename,
   pathDirname,
 } from '~/shell/funcs';
+import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
 
 export class ProfileManagerCore {
   getDataFilePath(profName: string): string {
@@ -47,8 +47,8 @@ export class ProfileManagerCore {
   }
 
   async loadProfile(profName: string): Promise<IProfileData> {
-    const fpath = this.getDataFilePath(profName);
-    return (await fsxReadJsonFile(fpath)) as IProfileData;
+    const filePath = this.getDataFilePath(profName);
+    return await ProfileFileLoader.loadProfileFromFile(filePath);
   }
 
   async saveProfile(

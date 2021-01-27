@@ -5,7 +5,7 @@ import {
   IProfileData,
 } from '~/shared';
 
-export namespace ProfileHelper {
+export namespace ProfileDataMigrator {
   interface IKeyboardShape_PRF02 {
     breedName?: string;
     keyUnits: {
