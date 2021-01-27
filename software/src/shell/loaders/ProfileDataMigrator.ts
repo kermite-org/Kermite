@@ -5,6 +5,7 @@ import {
   IPersistKeyboardDesign,
   IProfileData,
 } from '~/shared';
+import { LayoutDataMigrator } from '~/shell/loaders/LayoutDataMigrator';
 
 export namespace ProfileDataMigrator {
   /*
@@ -129,6 +130,16 @@ export type IProfileData_PRF02 = {
         la.initialActive = false;
       }
     });
+
+    Object.values(profileData.assigns).forEach((assign) => {
+      if (assign?.type === 'single') {
+        if (assign.op?.type === 'layerCall') {
+          if ((assign.op.invocationMode as any) === 'exclusive') {
+            assign.op.invocationMode = 'turnOn';
+          }
+        }
+      }
+    });
   }
 
   const fallbackDisplayArea: IKeyboardShape_PRF02['displayArea'] = {
@@ -204,10 +215,21 @@ export type IProfileData_PRF02 = {
     };
   }
 
+  function fixProfileDataPRF03(profile: IProfileData) {
+    const _profile = profile as any;
+    if (!_profile.settings.assignType) {
+      _profile.settings.assignType = _profile.assignType;
+    }
+    LayoutDataMigrator.patchOldFormatLayoutData(profile.keyboardDesign);
+  }
+
   export function fixProfileData(profileData: IProfileData): IProfileData {
     if ((profileData.revision as string) === 'PRF02') {
       return convertProfileFromPRF02(profileData as any);
+    } else if (profileData.revision === 'PRF03') {
+      fixProfileDataPRF03(profileData);
     }
+    // console.log({ profileData });
     return profileData;
   }
 }
