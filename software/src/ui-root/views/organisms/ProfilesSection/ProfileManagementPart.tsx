@@ -9,6 +9,7 @@ import {
   BehaviorSelector,
   LayoutStandardSelector,
 } from '~/ui-root/views/organisms/ProfilesSection/ConfigSelectors';
+import { SavingProjectPresetSelectionModal } from '~/ui-root/views/organisms/ProfilesSection/SavingProjectPresetSelectionModal';
 import { ProfileSelectionMenuPart } from './ProfileSelectionMenu';
 
 const cssProfileManagementPart = css`
@@ -25,17 +26,20 @@ const cssProfileManagementPart = css`
 `;
 
 export const ProfileManagementPart = () => {
-  const vm = makeProfileManagementPartViewModel();
-  const menuModel = makeProfileSelectionMenuPartViewModel(vm);
+  const baseVm = makeProfileManagementPartViewModel();
+  const menuModel = makeProfileSelectionMenuPartViewModel(baseVm);
 
   return (
     <div css={cssProfileManagementPart}>
       <ProfileSelectionMenuPart vm={menuModel} />
-      <KeyboardProfileSelector selectorSource={vm.profileSelectorSource} />
-      <ConfigurationButton onClick={vm.openConfiguration} />
+      <KeyboardProfileSelector selectorSource={baseVm.profileSelectorSource} />
+      <ConfigurationButton onClick={baseVm.openConfiguration} />
       <BehaviorSelector />
       <LayoutStandardSelector />
-      <LaunchButton onClick={vm.onLaunchButton} />
+      <LaunchButton onClick={baseVm.onLaunchButton} />
+      {baseVm.isExportingPresetSelectionModalOpen && (
+        <SavingProjectPresetSelectionModal baseVm={baseVm} />
+      )}
     </div>
   );
 };

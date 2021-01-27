@@ -4,6 +4,7 @@ import { uiTheme } from '~/ui-common';
 import { UiLayouterPageComponent } from '~/ui-layouter-page';
 import { models } from '~/ui-root/models';
 import { CustomWindowFrame } from '~/ui-root/views/base/window/CustomWindowFrame';
+import { DevToolPullTab } from '~/ui-root/views/base/window/DevToolPullTab';
 import { HeatmapPage } from '~/ui-root/views/pages/HeatmapPage';
 import { NavigationColumn } from '../base/navigation/NavigationColumn';
 import { WindowTitleBarSection } from '../base/titleBar/WindowTitleBarSection';
@@ -39,6 +40,7 @@ export const ConfiguratorZoneRoot = () => {
           {page === 'presetBrowser' && <PresetBrowserPage />}
           {page === 'heatmap' && <HeatmapPage />}
         </div>
+        <DevToolPullTab />
       </div>
     </CustomWindowFrame>
   );

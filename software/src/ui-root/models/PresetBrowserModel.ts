@@ -1,6 +1,10 @@
-import { IProfileData, fallbackProfileData } from '~/shared';
+import { IProfileData, fallbackProfileData, IPresetSpec } from '~/shared';
 import { ipcAgent } from '~/ui-common';
-import { modalTextEdit, modalAlert } from '~/ui-root/base/dialog/BasicModals';
+import {
+  modalTextEdit,
+  modalAlert,
+} from '~/ui-common/fundamental/dialog/BasicModals';
+import { createSimpleSelector } from '~/ui-layouter/editor/store';
 import { ProjectResourceModel } from '~/ui-root/models/ProjectResourceModel';
 import { UiStatusModel } from '~/ui-root/models/UiStatusModel';
 import { ProfilesModel } from '~/ui-root/models/profile/ProfilesModel';
@@ -8,16 +12,16 @@ import { ProfilesModel } from '~/ui-root/models/profile/ProfilesModel';
 class PresetBrowserModelHelper {
   static getNewProfileNameBase(
     keyboardName: string,
-    presetName: string,
+    profileSourceName: string,
     allProfileNames: string[],
   ): string {
-    const presetNameIncluesKeyboardName = presetName
+    const isProfileSourceIncluesKeyboardName = profileSourceName
       .toLowerCase()
       .includes(keyboardName.toLowerCase());
 
-    let newProfileNameBase = presetNameIncluesKeyboardName
-      ? presetName
-      : `${keyboardName}_${presetName}`.toLowerCase();
+    let newProfileNameBase = isProfileSourceIncluesKeyboardName
+      ? profileSourceName
+      : `${keyboardName}_${profileSourceName}`.toLowerCase();
 
     if (allProfileNames.includes(newProfileNameBase)) {
       newProfileNameBase += '1';
@@ -40,6 +44,7 @@ class PresetBrowserModelHelper {
   }
 }
 
+type IPresetSpecWithId = IPresetSpec & { id: string };
 export class PresetBrowserModel {
   constructor(
     private projectResourceModel: ProjectResourceModel,
@@ -47,16 +52,16 @@ export class PresetBrowserModel {
     private uiStatusModel: UiStatusModel,
   ) {}
 
-  private _currentProjectId: string = '';
-  private _currentPresetName: string = '';
+  private _currentProjectId: string | undefined;
+  private _currentPresetSpecId: string | undefined;
   private _loadedProfileData: IProfileData = fallbackProfileData;
 
   get currentProjectId() {
     return this._currentProjectId;
   }
 
-  get currentPresetName() {
-    return this._currentPresetName;
+  get currentPresetSpecId() {
+    return this._currentPresetSpecId;
   }
 
   get loadedProfileData() {
@@ -67,48 +72,72 @@ export class PresetBrowserModel {
     return this.projectResourceModel.getProjectsWithLayout();
   }
 
-  get optionPresetNames() {
-    const info = this.projectResourceModel.getProjectResourceInfo(
-      this._currentProjectId,
-    );
-    if (info) {
-      return [
-        ...info.layoutNames.map((layoutName) => `@${layoutName}`),
-        ...info.presetNames,
-      ];
-    } else {
-      return ['@default'];
-    }
+  private optionPresetSpecsSelector = createSimpleSelector(
+    () =>
+      this.projectResourceModel.getProjectResourceInfo(
+        this._currentProjectId || '',
+      ),
+    (info) =>
+      (info && [
+        ...info.layoutNames.map((layoutName) => ({
+          id: `blank$${layoutName}`,
+          type: 'blank' as const,
+          layoutName,
+        })),
+        ...info.presetNames.map((presetName) => ({
+          id: `preset$${presetName}`,
+          type: 'preset' as const,
+          presetName,
+        })),
+      ]) ||
+      [],
+  );
+
+  get optionPresetSpecs(): IPresetSpecWithId[] {
+    return this.optionPresetSpecsSelector();
+  }
+
+  private getPresetSpecById(id: string) {
+    return this.optionPresetSpecs.find((it) => it.id === id);
   }
 
   setCurrentProjectId = (projectId: string) => {
     this._currentProjectId = projectId;
-    this._currentPresetName = this.optionPresetNames[0];
+    this._currentPresetSpecId = this.optionPresetSpecs[0]?.id;
     this.loadSelectedProfile();
   };
 
-  setCurrentPresetName = (presetName: string) => {
-    this._currentPresetName = presetName;
+  setCurrentPresetSpecId = (specId: string) => {
+    this._currentPresetSpecId = specId;
     this.loadSelectedProfile();
   };
 
   private async loadSelectedProfile() {
-    const profileData = await ipcAgent.async.projects_loadPresetProfile(
-      this._currentProjectId,
-      this._currentPresetName,
-    );
-    if (!profileData) {
-      console.error(`error while loading preset profile`);
+    if (!(this._currentProjectId && this._currentPresetSpecId)) {
       return;
     }
-    this._loadedProfileData = profileData;
+    const spec = this.getPresetSpecById(this._currentPresetSpecId);
+    if (spec) {
+      const profileData = await ipcAgent.async.projects_loadPresetProfile(
+        this._currentProjectId,
+        spec,
+      );
+      if (!profileData) {
+        console.error(`error while loading preset profile`);
+        return;
+      }
+      this._loadedProfileData = profileData;
+    }
   }
 
   editSelectedProjectPreset = async () => {
     const {
       _currentProjectId: projectId,
-      _currentPresetName: presetName,
+      _currentPresetSpecId: presetSpecId,
     } = this;
+    if (!(projectId && presetSpecId)) {
+      return;
+    }
     const { allProfileNames } = this.profilesModel;
 
     const info = this.projectResourceModel.getProjectResourceInfo(projectId);
@@ -116,10 +145,13 @@ export class PresetBrowserModel {
       console.log(`invalid project selection`);
       return;
     }
-
+    const spec = this.getPresetSpecById(presetSpecId);
+    if (!spec) {
+      return;
+    }
     const newProfileNameBase = PresetBrowserModelHelper.getNewProfileNameBase(
       info.keyboardName,
-      presetName,
+      spec.type === 'preset' ? spec.presetName : spec.layoutName,
       allProfileNames,
     );
 
@@ -140,7 +172,7 @@ export class PresetBrowserModel {
       return;
     }
 
-    this.profilesModel.createProfile(newProfileName, projectId, presetName);
+    this.profilesModel.createProfile(newProfileName, projectId, spec);
     this.uiStatusModel.navigateTo('editor');
   };
 
@@ -148,7 +180,7 @@ export class PresetBrowserModel {
     const resourceInfos = this.projectResourceModel.projectResourceInfos;
     if (resourceInfos.length > 0) {
       this._currentProjectId = resourceInfos[0].projectId;
-      this._currentPresetName = this.optionPresetNames[0];
+      this._currentPresetSpecId = this.optionPresetSpecs[0]?.id;
       this.loadSelectedProfile();
     }
   }

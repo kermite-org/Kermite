@@ -2,33 +2,61 @@ export type IKeySizeUnit = 'mm' | 'KP';
 
 export type IKeyPlacementAnchor = 'topLeft' | 'center';
 
+export type IKeyIdMode = 'auto' | 'manual';
+
+export interface IPersistKeyboardDesignRealKeyEntity {
+  keyId: string;
+  x: number;
+  y: number;
+  angle?: number;
+  shape?: string;
+  keyIndex?: number;
+  groupIndex?: number;
+}
+
+export interface IPersistKeyboardDesignMirrorKeyEntity {
+  keyId: string;
+  mirrorOf: string;
+  keyIndex?: number;
+}
 export interface IPersistKeyboardDesign {
+  formatRevision: 'LA00';
   setup: {
     placementUnit: string;
     placementAnchor: IKeyPlacementAnchor;
     keySizeUnit: IKeySizeUnit;
+    keyIdMode: IKeyIdMode;
   };
-  keyEntities: {
-    // label: string;
-    x: number;
-    y: number;
-    angle: number;
-    shape: string;
-    keyIndex?: number;
-    mirrorKeyIndex?: number;
-    groupIndex?: number;
-  }[];
+  keyEntities: (
+    | IPersistKeyboardDesignRealKeyEntity
+    | IPersistKeyboardDesignMirrorKeyEntity
+  )[];
   outlineShapes: {
     points: { x: number; y: number }[];
     groupIndex?: number;
   }[];
-  transGroups: {
+  transformationGroups: {
     // groupId: string;
     x: number;
     y: number;
-    angle: number;
+    angle?: number;
     mirror?: boolean;
   }[];
+}
+
+export function createFallbackPersistKeyboardDesign(): IPersistKeyboardDesign {
+  return {
+    formatRevision: 'LA00',
+    setup: {
+      placementUnit: 'mm',
+      placementAnchor: 'center',
+      keySizeUnit: 'KP',
+      keyIdMode: 'auto',
+    },
+    keyEntities: [],
+    outlineShapes: [],
+    transformationGroups: [],
+  };
 }
 
 // ----------------------------------------
@@ -58,7 +86,7 @@ export interface IDisplayKeyEntity {
   shape: IDisplayKeyShape;
 }
 
-export interface IDisplayBoundingBox {
+export interface IDisplayArea {
   centerX: number;
   centerY: number;
   width: number;
@@ -72,14 +100,14 @@ export interface IDisplayOutlineShape {
 export interface IDisplayKeyboardDesign {
   keyEntities: IDisplayKeyEntity[];
   outlineShapes: IDisplayOutlineShape[];
-  boundingBox: IDisplayBoundingBox;
+  displayArea: IDisplayArea;
 }
 
 export function createFallbackDisplayKeyboardDesign(): IDisplayKeyboardDesign {
   return {
     keyEntities: [],
     outlineShapes: [],
-    boundingBox: {
+    displayArea: {
       centerX: 0,
       centerY: 0,
       width: 100,

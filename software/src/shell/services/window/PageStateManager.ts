@@ -1,5 +1,5 @@
 import { appConfig, applicationStorage } from '~/shell/base';
-import { makeListnerPort } from '~/shell/funcs';
+import { makeListenerPort } from '~/shell/funcs';
 import { IPageStateManager } from './interfaces';
 import { enumeratePagePaths } from './modules';
 
@@ -8,8 +8,8 @@ export class PageStateManager implements IPageStateManager {
   private _currentPagePath: string = '/';
   private _isDevToolsVisible: boolean = false;
 
-  onPagePathChanged = makeListnerPort<string>();
-  onDevToolVisibilityChanged = makeListnerPort<boolean>();
+  onPagePathChanged = makeListenerPort<string>();
+  onDevToolVisibilityChanged = makeListenerPort<boolean>();
 
   get allPagePaths() {
     return this._allPagePaths;

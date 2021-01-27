@@ -3,7 +3,7 @@ import { appGlobal } from '~/shell/base';
 import { fsxReadJsonFile, fsxWriteJsonFile } from '~/shell/funcs';
 
 export namespace JsonFileServiceStatic {
-  async function getOpeningJsonFilePathWithDialog() {
+  export async function getOpeningJsonFilePathWithDialog() {
     const result = await dialog.showOpenDialog(appGlobal.mainWindow!, {
       properties: ['openFile'],
       filters: [
@@ -19,7 +19,7 @@ export namespace JsonFileServiceStatic {
     return undefined;
   }
 
-  async function getSavingJsonFilePathWithDialog() {
+  export async function getSavingJsonFilePathWithDialog() {
     const result = await dialog.showSaveDialog(appGlobal.mainWindow!, {
       properties: ['showOverwriteConfirmation'],
       filters: [

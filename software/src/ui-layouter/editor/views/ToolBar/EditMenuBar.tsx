@@ -9,6 +9,8 @@ import { makeEditMenuBarViewModel } from '~/ui-layouter/editor/views/ToolBar/Edi
 
 const cssEditMenuBar = css`
   display: flex;
+  flex-wrap: wrap;
+
   > * + * {
     margin-left: 40px;
   }
@@ -22,6 +24,7 @@ const cssEditMenuBar = css`
 
   > .spacer {
     flex-grow: 1;
+    margin-left: 0;
   }
 
   button {

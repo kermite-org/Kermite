@@ -780,6 +780,9 @@ declare global {
       itemType?: string;
       itemID?: string;
       itemRef?: string;
+
+      // extended multiple classNames
+      classNames?: string[] | { [key: string]: boolean };
     }
 
     interface HTMLMarqueeElement extends HTMLElement {

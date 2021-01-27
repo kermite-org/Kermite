@@ -1,11 +1,12 @@
-import { IKeyboardShape } from '~/shared';
+import { Hook } from 'qx';
+import { IDisplayKeyboardDesign } from '~/shared';
 import { models } from '~/ui-root/models';
 import { IUiSettings } from '~/ui-root/models/UiStatusModel';
 import { ISelectorSource } from '~/ui-root/viewModels/viewModelInterfaces';
 
 export interface IShapePreviewPageViewModel {
   settings: IUiSettings;
-  loadedShape: IKeyboardShape | undefined;
+  loadedDesign: IDisplayKeyboardDesign | undefined;
   holdKeyIndices: number[];
   projectSelectorSource: ISelectorSource;
   layoutSelectorSource: ISelectorSource;
@@ -18,9 +19,13 @@ export function makeShapePreviewPageViewModel(): IShapePreviewPageViewModel {
     playerModel,
   } = models;
 
+  Hook.useEffect(() => {
+    shapesModel.initialize();
+    return () => shapesModel.finalize();
+  }, []);
   return {
     settings: uiStatusModel.settings,
-    loadedShape: shapesModel.loadedShape,
+    loadedDesign: shapesModel.loadedDesign,
     holdKeyIndices: playerModel.holdKeyIndices,
     projectSelectorSource: {
       options: shapesModel.optionProjectInfos.map((info) => ({

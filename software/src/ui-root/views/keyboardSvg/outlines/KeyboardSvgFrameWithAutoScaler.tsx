@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { IKeyboardShapeDisplayArea } from '~/shared';
+import { IDisplayArea } from '~/shared';
 import { KeyboardSvgFrame } from '~/ui-root/views/keyboardSvg/outlines/KeyboardSvgFrame';
 import { ScalerBox } from '~/ui-root/views/keyboardSvg/outlines/ScalerBox';
 
@@ -12,7 +12,7 @@ export const cssScalerContent = css`
 `;
 
 export function KeyboardSvgFrameWithAutoScaler(props: {
-  displayArea: IKeyboardShapeDisplayArea;
+  displayArea: IDisplayArea;
   children: JSX.Element[];
   dpiScale: number;
   marginRatio: number;

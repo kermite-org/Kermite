@@ -6,8 +6,7 @@
   "scripts": {
     "buildAll": "ts-node buildAll.ts",
     "checkHardcodedVersions": "ts-node checkHardcodedVersions.ts",
-    "checkProjectJsonSchemas": "ts-node checkProjectJsonSchemas.ts",
-    "checkPresetProfileSchemas": "ts-node checkPresetProfileSchemas.ts",
+    "checkProjectJsonSchemas": "ts-node -r tsconfig-paths/register checkProjectJsonSchemas.ts",
     "checkProjectIds": "ts-node checkProjectIds.ts",
     "updateAllProjectDistributions": "ts-node updateAllProjectDistributions.ts"
   },
@@ -18,6 +17,7 @@
     "fs-extra": "^9.0.1",
     "glob": "^7.1.6",
     "ts-node": "^9.0.0",
+    "tsconfig-paths": "^3.9.0",
     "typescript": "^4.1.2"
   }
 }

@@ -21,4 +21,8 @@ export class ProjectResourceModel {
   async initializeAsync() {
     this.projectResourceInfos = await ipcAgent.async.projects_getAllProjectResourceInfos();
   }
+
+  refetchResourceInfos() {
+    this.initializeAsync();
+  }
 }

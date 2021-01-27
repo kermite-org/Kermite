@@ -77,7 +77,7 @@ function createHookInstance(): IHook {
       if (changed) {
         const reqRerender = func();
         if (reqRerender) {
-          qxGlobal.hookRerenderFlag = true;
+          qxGlobal.asyncRerenderFlag = true;
         }
         holders[idx] = {
           deps: deps || [],

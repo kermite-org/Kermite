@@ -57,10 +57,10 @@ export function render(
     }
     qxGlobal.hookEffectFuncs.forEach((func) => func());
     qxGlobal.hookEffectFuncs = [];
-    if (qxGlobal.hookRerenderFlag) {
-      qxGlobal.hookRerenderFlag = false;
-      requestAnimationFrame(executeRender);
-    }
+    // if (qxGlobal.hookRerenderFlag) {
+    //   qxGlobal.hookRerenderFlag = false;
+    //   requestAnimationFrame(executeRender);
+    // }
   };
 
   qxGlobal.rerender = executeRender;

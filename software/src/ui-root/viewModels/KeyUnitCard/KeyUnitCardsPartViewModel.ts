@@ -1,4 +1,4 @@
-import { IAssignEntryWithLayerFallback, IKeyUnitEntry } from '~/shared';
+import { IAssignEntryWithLayerFallback, IDisplayKeyEntity } from '~/shared';
 import { Models } from '~/ui-root/models';
 import { getAssignEntryTexts } from '~/ui-root/viewModels/KeyUnitCard/KeyUnitCardViewModelCommon';
 
@@ -36,12 +36,12 @@ function getAssignForKeyUnit(
 }
 
 function makeKeyUnitCardViewModel(
-  kp: IKeyUnitEntry,
+  ke: IDisplayKeyEntity,
   isEdit: boolean,
   models: Models,
 ): IKeyUnitCardViewModel {
-  const keyUnitId = kp.id;
-  const pos = { x: kp.x, y: kp.y, r: kp.r || 0 };
+  const keyUnitId = ke.keyId;
+  const pos = { x: ke.x, y: ke.y, r: ke.angle || 0 };
 
   const { isKeyUnitCurrent, setCurrentKeyUnitId } = models.editorModel;
   const isCurrent = isKeyUnitCurrent(keyUnitId);
@@ -52,7 +52,7 @@ function makeKeyUnitCardViewModel(
     models.editorModel.layers,
   );
 
-  const isHold = models.playerModel.keyStates[kp.id];
+  const isHold = models.playerModel.keyStates[ke.keyId];
 
   return {
     keyUnitId,
@@ -72,7 +72,7 @@ export function makeKeyUnitCardsPartViewModel(
 ): IKeyUnitCardPartViewModel {
   const { showLayerDefaultAssign } = models.uiStatusModel.settings;
   return {
-    cards: models.editorModel.keyPositions.map((kp) =>
+    cards: models.editorModel.displayDesign.keyEntities.map((kp) =>
       makeKeyUnitCardViewModel(kp, isEdit, models),
     ),
     showLayerDefaultAssign,

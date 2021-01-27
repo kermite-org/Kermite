@@ -16,13 +16,15 @@ type IProfileMenuCommand =
   | 'createProfile'
   | 'renameProfile'
   | 'copyProfile'
-  | 'deleteProfile';
+  | 'deleteProfile'
+  | 'openExportingPresetSelectionModal';
 
 const profileMenuCommands: IProfileMenuCommand[] = [
   'createProfile',
   'renameProfile',
   'copyProfile',
   'deleteProfile',
+  'openExportingPresetSelectionModal',
 ];
 
 const profileMenuCommandTexts: { [key in IProfileMenuCommand]: string } = {
@@ -30,6 +32,7 @@ const profileMenuCommandTexts: { [key in IProfileMenuCommand]: string } = {
   renameProfile: 'rename',
   copyProfile: 'copy',
   deleteProfile: 'delete',
+  openExportingPresetSelectionModal: 'save as preset',
 };
 
 export function makeProfileSelectionMenuPartViewModel(

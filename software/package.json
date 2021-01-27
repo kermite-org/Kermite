@@ -27,7 +27,7 @@
   },
   "private": true,
   "scripts": {
-    "postinstall": "electron-rebuild",
+    "postinstall": "patch-package && electron-rebuild",
     "_packaging_mac": "electron-builder --mac --x64",
     "_packaging_win": "electron-builder --win --x64",
     "build": "node build.js -x-build",
@@ -42,7 +42,7 @@
   "dependencies": {
     "fast-equals": "^2.0.0",
     "glob": "^7.1.6",
-    "goober": "^2.0.19",
+    "goober": "2.0.19",
     "immer": "^8.0.0",
     "node-fetch": "^2.6.1",
     "node-hid": "^2.1.1",
@@ -77,8 +77,11 @@
     "lerna": "^3.22.1",
     "live-server": "^1.2.1",
     "parcel": "^1.12.4",
+    "patch-package": "^6.2.2",
+    "postinstall-postinstall": "^2.1.0",
     "prettier": "^2.2.1",
     "reflect-metadata": "^0.1.13",
+    "source-map-support": "^0.5.19",
     "typescript": "^4.1.3"
   }
 }

@@ -1,9 +1,15 @@
-import { IProfileData } from '~/shared';
-import { IListenerPort } from '~/shell/base';
+import {
+  IProfileData,
+  IProfileManagerCommand,
+  IProfileManagerStatus,
+} from '~/shared';
+import { EventPort } from '~/shell/funcs';
 
-export interface IProfileService {
+export interface IProfileManager {
+  getStatus(): IProfileManagerStatus;
   getCurrentProfile(): IProfileData | undefined;
-  onCurrentProfileChanged: IListenerPort<void>;
-  initialize(): Promise<void>;
-  terminate(): Promise<void>;
+  statusEventPort: EventPort<Partial<IProfileManagerStatus>>;
+  reserveSaveProfileTask(prof: IProfileData): void;
+  executeCommands(commands: IProfileManagerCommand[]): Promise<void>;
+  saveCurrentProfile(profileData: IProfileData): Promise<boolean>;
 }

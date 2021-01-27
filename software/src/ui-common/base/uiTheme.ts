@@ -66,7 +66,7 @@ export const themeColors: { [key in ThemeKey]: IThemeColorSet } = {
     clWindowButtonFace: '#FFF',
     clWindowButtonHoverBack: '#08d',
     clKeyboardBodyFace: '#9aadd8',
-    clKeyUnitFace: 'rgba(255, 255, 255, 0.9)',
+    clKeyUnitFace: '#f6f8fA',
     clKeyUnitLegend: '#568',
     clKeyUnitLegendWeak: 'rgba(128, 128, 128, 0.2)',
     clAssignCardFace: '#EEE',

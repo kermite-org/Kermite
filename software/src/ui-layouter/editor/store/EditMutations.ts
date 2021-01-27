@@ -1,4 +1,11 @@
-import { clamp, IKeyPlacementAnchor, IKeySizeUnit } from '~/shared';
+import {
+  clamp,
+  compareObjectByJsonStringify,
+  IKeyIdMode,
+  IKeyPlacementAnchor,
+  IKeySizeUnit,
+  removeArrayItems,
+} from '~/shared';
 import { getNextEntityInstanceId } from '~/ui-layouter/editor/store/DomainRelatedHelpers';
 import {
   appState,
@@ -56,9 +63,11 @@ class EditMutations {
     const id = getNextEntityInstanceId('key', allKeyEntities);
     const keySize = keySizeUnit === 'KP' ? 1 : 18;
 
+    const editKeyId = `ke${(Math.random() * 1000) >> 0}`;
     const keyEntity: IEditKeyEntity = {
       id,
-      // label: `ke${(Math.random() * 1000) >> 0}`,
+      editKeyId,
+      mirrorEditKeyId: editKeyId + 'm',
       x,
       y,
       angle: 0,
@@ -129,7 +138,13 @@ class EditMutations {
 
   setPlacementAnchor(anchor: IKeyPlacementAnchor) {
     editUpdator.commitEditor((editor) => {
-      editor.design.placementAnchor = anchor;
+      editor.design.setup.placementAnchor = anchor;
+    });
+  }
+
+  setKeyIdMode(mode: IKeyIdMode) {
+    editUpdator.commitEditor((editor) => {
+      editor.design.setup.keyIdMode = mode;
     });
   }
 
@@ -355,12 +370,22 @@ class EditMutations {
 
   resetKeyboardDesign() {
     editUpdator.patchEditor((editor) => {
-      editor.design = createFallbackEditKeyboardDesign();
+      const design = createFallbackEditKeyboardDesign();
+      editor.loadedDesign = design;
+      editor.design = design;
     });
   }
 
   loadKeyboardDesign(design: IEditKeyboardDesign) {
+    const same = compareObjectByJsonStringify(
+      appState.editor.loadedDesign,
+      design,
+    );
+    if (same) {
+      return;
+    }
     editUpdator.patchEditor((editor) => {
+      editor.loadedDesign = design;
       editor.design = design;
     });
     this.resetSitePosition();
@@ -412,6 +437,18 @@ class EditMutations {
     editUpdator.commitEditor((editor) => {
       const shape = editor.design.outlineShapes[currentShapeId];
       shape.groupId = groupId;
+    });
+  }
+
+  addPressedKey(keyIndex: number) {
+    editUpdator.patchEnvState((env) => {
+      env.pressedKeyIndices.push(keyIndex);
+    });
+  }
+
+  removePressedKey(keyIndex: number) {
+    editUpdator.patchEnvState((env) => {
+      removeArrayItems(env.pressedKeyIndices, keyIndex);
     });
   }
 }

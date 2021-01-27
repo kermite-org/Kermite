@@ -69,14 +69,16 @@ const cssKeyboardPartBox = css`
   display: flex;
   flex-direction: column;
   min-width: 200px;
-  min-height: 80px;
+  height: 50%;
   flex-shrink: 0;
+  overflow: hidden;
 `;
 
 const cssAssignPartBox = css`
   background: ${clPanelBox};
   border-radius: ${panelBoxBorderRadius};
   flex-grow: 1;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
 `;

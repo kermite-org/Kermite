@@ -48,7 +48,7 @@ export class Models {
     this.deviceStatusModel.initialize();
     this.uiStatusModel.initialize();
     this.themeSelectionModel.initialize();
-    this.keyboardShapesModel.initialize();
+    // this.keyboardShapesModel.initialize();
     this.firmwareUpdationModel.initialize();
     this.presetBrowserModel.initialize();
     this.realtimeHeatmapModel.initialize();
@@ -57,7 +57,7 @@ export class Models {
   finalize() {
     this.realtimeHeatmapModel.finalize();
     this.firmwareUpdationModel.finalize();
-    this.keyboardShapesModel.finalize();
+    // this.keyboardShapesModel.finalize();
     this.uiStatusModel.finalize();
     this.deviceStatusModel.finalize();
     this.playerModel.finalize();

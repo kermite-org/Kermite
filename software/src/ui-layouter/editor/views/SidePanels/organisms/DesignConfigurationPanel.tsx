@@ -80,12 +80,25 @@ const SizeUnitEditPart = (props: {
   );
 };
 
+const KeyIdModePart = (props: { vmKeyIdMode: ICommonSelectorViewModel }) => {
+  const { vmKeyIdMode } = props;
+  return (
+    <div>
+      <ConfigSubHeader>key id mode</ConfigSubHeader>
+      <ConfigSubContent>
+        <ExclusiveButtonGroup {...vmKeyIdMode} buttonWidth={60} />
+      </ConfigSubContent>
+    </div>
+  );
+};
+
 export const DesignConfigurationPanel = () => {
   const {
     vmPlacementUnitMode,
     vmPlacementUnitText,
     vmSizeUnitMode,
     vmPlacementAnchorMode,
+    vmKeyIdMode,
   } = useDesignConfigurationPanelModel();
 
   return (
@@ -100,6 +113,7 @@ export const DesignConfigurationPanel = () => {
           vmPlacementAnchorMode={vmPlacementAnchorMode}
         />
         <SizeUnitEditPart vmUnitSizeMode={vmSizeUnitMode} />
+        <KeyIdModePart vmKeyIdMode={vmKeyIdMode} />
       </ConfigContent>
     </ConfigPanel>
   );

@@ -8,6 +8,7 @@ export interface IModeState {
   editorTarget: IEditorTarget;
 }
 export interface IEditState {
+  loadedDesign: IEditKeyboardDesign;
   design: IEditKeyboardDesign;
   currentkeyEntityId: string | undefined;
   isCurrentKeyMirror: boolean;
@@ -38,6 +39,7 @@ export interface IEnvState {
   showConfig: boolean;
   showKeyId: boolean;
   showKeyIndex: boolean;
+  pressedKeyIndices: number[];
 }
 
 export type IEnvBoolPropKey =
@@ -55,9 +57,12 @@ interface IAppState {
 
 export function createFallbackEditKeyboardDesign(): IEditKeyboardDesign {
   return {
-    placementUnit: 'mm',
-    placementAnchor: 'center',
-    keySizeUnit: 'KP',
+    setup: {
+      placementUnit: 'mm',
+      placementAnchor: 'center',
+      keySizeUnit: 'KP',
+      keyIdMode: 'auto',
+    },
     keyEntities: {},
     outlineShapes: {},
     transGroups: {
@@ -74,6 +79,7 @@ export function createFallbackEditKeyboardDesign(): IEditKeyboardDesign {
 
 export const appState: IAppState = {
   editor: {
+    loadedDesign: createFallbackEditKeyboardDesign(),
     design: createFallbackEditKeyboardDesign(),
     currentkeyEntityId: undefined,
     isCurrentKeyMirror: false,
@@ -102,5 +108,6 @@ export const appState: IAppState = {
     showConfig: true,
     showKeyId: true,
     showKeyIndex: true,
+    pressedKeyIndices: [],
   },
 };
