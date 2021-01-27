@@ -1,4 +1,5 @@
 import { IpcRenderer } from 'electron';
+import { removeArrayItems } from '~/shared/funcs';
 import { IIpcContractBase } from './IpcContractBase';
 
 export interface IIpcRendererAgent<T extends IIpcContractBase> {
@@ -34,10 +35,28 @@ interface ISubscriptionEntry {
   subscriptionKey: string;
 }
 
+function createDummeyIpcRendererAgentForMockDevelopment(): IIpcRendererAgent<any> {
+  return {
+    sync: new Proxy({}, { get: () => () => {} }) as any,
+    async: new Proxy({}, { get: () => () => {} }) as any,
+    subscribe: () => {
+      return () => {};
+    },
+    subscribe2: () => {},
+    unsubscribe2: () => {},
+    setPropsProcessHook: () => {},
+  };
+}
+
 export function getIpcRendererAgent<
   T extends IIpcContractBase
 >(): IIpcRendererAgent<T> {
   const ipcRenderer = (window.top as any).ipcRenderer as IpcRenderer;
+
+  if (!ipcRenderer) {
+    return createDummeyIpcRendererAgentForMockDevelopment();
+  }
+
   let postProcessHook: (() => void) | undefined;
 
   const subscriptionEntries: ISubscriptionEntry[] = [];
@@ -109,6 +128,7 @@ export function getIpcRendererAgent<
         const { wrapper, subscriptionKey } = entry;
         ipcRenderer.removeListener(subscriptionKey, wrapper);
         ipcRenderer.invoke(`__subscriptionEnded__${propKey}`, subscriptionKey);
+        removeArrayItems(subscriptionEntries, entry);
       }
     },
   };

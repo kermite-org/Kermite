@@ -1,5 +1,5 @@
 import { css } from 'goober';
-import { h, Hook, asyncRerender } from 'qx';
+import { h, Hook } from 'qx';
 import {
   createFallbackDisplayKeyboardDesign,
   IDisplayKeyboardDesign,
@@ -33,12 +33,11 @@ export const MockPageLoadedDesignDrawing = () => {
     );
     console.log({ design });
     state.design = design;
-    asyncRerender();
   }, []);
 
   const { design } = state;
 
-  const bb = design.boundingBox;
+  const da = design.displayArea;
   return (
     <div css={cssRootDiv}>
       {/* <pre>{JSON.stringify(state.design, null, ' ')}</pre> */}
@@ -98,12 +97,12 @@ export const MockPageLoadedDesignDrawing = () => {
             </g>
           ))}
 
-          <g transform={`translate(${bb.centerX}, ${bb.centerY})`}>
+          <g transform={`translate(${da.centerX}, ${da.centerY})`}>
             <rect
-              x={-bb.width / 2}
-              y={-bb.height / 2}
-              width={bb.width}
-              height={bb.height}
+              x={-da.width / 2}
+              y={-da.height / 2}
+              width={da.width}
+              height={da.height}
               stroke="#888"
               fill="transparent"
             />

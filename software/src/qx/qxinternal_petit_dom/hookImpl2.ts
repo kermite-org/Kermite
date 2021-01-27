@@ -1,6 +1,6 @@
 import { qxGlobal } from '../qxGlobal';
 
-type IEffectFunc = () => void | (() => void) | boolean;
+type IEffectFunc = () => void | (() => void);
 
 type IStateSetValue<T> = (value: T | ((arg: T) => T)) => void;
 interface IHookStateHolder<T> {
@@ -133,7 +133,7 @@ export namespace Hook {
     return holder.value;
   }
 
-  export function useEffect(effectFunc: IEffectFunc, deps?: any[]) {
+  export function useEffect(effectFunc: IEffectFunc, deps: any[] | undefined) {
     const { holder } = getHookHolder<IHookEffectHolder>();
     // console.log('ue');
     const changed = hasDepsChanged(holder.deps, deps);
@@ -179,10 +179,7 @@ export function flushHookEffects(target: IHookInstance, all: boolean = false) {
       if (result && typeof result === 'function') {
         holder.cleanupFunc = result;
       }
-      if (result === true) {
-        // useEffectのコールバック関数の戻り値がtrueの場合再描画を行う
-        qxGlobal.hookRerenderFlag = true;
-      }
+      qxGlobal.asyncRerenderFlag = true;
       holder.effectFunc = undefined;
     }
   });

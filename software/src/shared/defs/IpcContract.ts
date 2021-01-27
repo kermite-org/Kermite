@@ -1,9 +1,29 @@
+import { IAppErrorInfo } from '~/shared/defs/CustomErrors';
+import { IPersistKeyboardDesign } from '~/shared/defs/KeyboardDesign';
 import { IKeyboardConfig } from './ConfigTypes';
-import {
-  IKeyboardShape,
-  IProfileData,
-  IProjectResourceInfo,
-} from './ProfileData';
+import { IProfileData } from './ProfileData';
+
+export type IPresetSpec =
+  | {
+      type: 'blank';
+      layoutName: string;
+    }
+  | {
+      type: 'preset';
+      presetName: string;
+    };
+
+export type IProjectResourceOrigin = 'central' | 'local';
+
+export interface IProjectResourceInfo {
+  projectId: string;
+  keyboardName: string;
+  projectPath: string;
+  presetNames: string[];
+  layoutNames: string[];
+  hasLayout: boolean;
+  hasFirmwareBinary: boolean;
+}
 
 export interface IProfileManagerStatus {
   currentProfileName: string;
@@ -39,19 +59,95 @@ export type IRealtimeKeyboardEvent =
 
 export type IAppWindowEvent = {
   activeChanged?: boolean;
+  devToolVisible?: boolean;
 };
 
 export interface IProfileManagerCommand {
   creatProfile?: {
     name: string;
     targetProjectId: string;
-    presetName: string;
+    presetSpec: IPresetSpec;
   };
   loadProfile?: { name: string };
   saveCurrentProfile?: { profileData: IProfileData };
   deleteProfile?: { name: string };
   renameProfile?: { name: string; newName: string };
   copyProfile?: { name: string; newName: string };
+  saveAsProjectPreset?: {
+    projectId: string;
+    presetName: string;
+    profileData: IProfileData;
+  };
+}
+
+export type ILayoutEditSource =
+  | {
+      type: 'NewlyCreated';
+    }
+  | {
+      type: 'CurrentProfile';
+    }
+  | {
+      type: 'File';
+      filePath: string;
+    }
+  | {
+      type: 'ProjectLayout';
+      projectId: string;
+      layoutName: string;
+    };
+export interface ILayoutManagerStatus {
+  editSource: ILayoutEditSource;
+  loadedDesign: IPersistKeyboardDesign;
+  errroInfo: IAppErrorInfo | undefined;
+  projectLayoutsInfos: IProjectLayoutsInfo[];
+}
+
+export type ILayoutManagerCommand =
+  | {
+      type: 'createNewLayout';
+    }
+  | {
+      type: 'loadCurrentProfileLayout';
+    }
+  | {
+      type: 'unloadCurrentProfileLayout';
+    }
+  | {
+      type: 'save';
+      design: IPersistKeyboardDesign;
+    }
+  | {
+      type: 'loadFromFile';
+      filePath: string;
+    }
+  | {
+      type: 'saveToFile';
+      filePath: string;
+      design: IPersistKeyboardDesign;
+    }
+  | {
+      type: 'createForProject';
+      projectId: string;
+      layoutName: string;
+    }
+  | {
+      type: 'loadFromProject';
+      projectId: string;
+      layoutName: string;
+    }
+  | {
+      type: 'saveToProject';
+      projectId: string;
+      layoutName: string;
+      design: IPersistKeyboardDesign;
+    };
+
+export interface IProjectLayoutsInfo {
+  projectId: string;
+  projectPath: string;
+  keyboardName: string;
+  layoutNames: string[];
 }
 
 export interface IAppIpcContract {
@@ -72,11 +168,20 @@ export interface IAppIpcContract {
     window_maximizeWindow(): Promise<void>;
     // window_widgetModeChanged(isWidgetMode: boolean): Promise<void>;
     window_restartApplication(): Promise<void>;
+    window_setDevToolVisibility(visible: boolean): Promise<void>;
 
     // profile_getCurrentProfile(): Promise<IProfileData | undefined>;
     profile_executeProfileManagerCommands(
       commands: IProfileManagerCommand[],
     ): Promise<void>;
+
+    layout_executeLayoutManagerCommands(
+      commands: ILayoutManagerCommand[],
+    ): Promise<boolean>;
+
+    layout_clearErrorInfo(): Promise<void>;
+    layout_showEditLayoutFileInFiler(): Promise<void>;
+    // layout_getAllProjectLayoutsInfos(): Promise<IProjectLayoutsInfo[]>;
 
     config_getKeyboardConfig(): Promise<IKeyboardConfig>;
     config_writeKeyboardConfig(config: IKeyboardConfig): Promise<void>;
@@ -85,18 +190,20 @@ export interface IAppIpcContract {
     projects_getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
     projects_loadPresetProfile(
       projectId: string,
-      presetName: string | undefined,
+      presetSpec: IPresetSpec,
     ): Promise<IProfileData | undefined>;
     projects_loadKeyboardShape(
       projectId: string,
       layoutName: string,
-    ): Promise<IKeyboardShape | undefined>;
+    ): Promise<IPersistKeyboardDesign | undefined>;
 
     firmup_uploadFirmware(
       projectId: string,
       comPortName: string,
     ): Promise<string>;
 
+    file_getOpenJsonFilePathWithDialog(): Promise<string | undefined>;
+    file_getSaveJsonFilePathWithDialog(): Promise<string | undefined>;
     file_loadObjectFromJsonWithFileDialog(): Promise<any | undefined>;
     file_saveObjectToJsonWithFileDialog(obj: any): Promise<boolean>;
   };
@@ -106,6 +213,8 @@ export interface IAppIpcContract {
 
     profile_currentProfile: IProfileData | undefined;
     profile_profileManagerStatus: Partial<IProfileManagerStatus>;
+
+    layout_layoutManagerStatus: Partial<ILayoutManagerStatus>;
 
     device_keyEvents: IRealtimeKeyboardEvent;
     device_keyboardDeviceStatusEvents: Partial<IKeyboardDeviceStatus>;

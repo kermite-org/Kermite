@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { app, Menu } from 'electron';
-import { makeListnerPort } from '~/shell/funcs';
+import { makeListenerPort } from '~/shell/funcs';
 import { IMenuManager } from './interfaces';
 
 function makePageMenuItem(
@@ -16,11 +17,11 @@ function makePageMenuItem(
 }
 
 export class MenuManager implements IMenuManager {
-  onMenuChangeCurrentPagePath = makeListnerPort<string>();
-  onMenuRequestReload = makeListnerPort<void>();
-  onMenuToggleDevtoolVisibility = makeListnerPort<void>();
-  onMenuCloseMainWindow = makeListnerPort<void>();
-  onMenuRestartApplication = makeListnerPort<void>();
+  onMenuChangeCurrentPagePath = makeListenerPort<string>();
+  onMenuRequestReload = makeListenerPort<void>();
+  onMenuToggleDevtoolVisibility = makeListenerPort<void>();
+  onMenuCloseMainWindow = makeListenerPort<void>();
+  onMenuRestartApplication = makeListenerPort<void>();
 
   buildMenu(initailState: {
     allPagePaths: string[];
@@ -37,24 +38,24 @@ export class MenuManager implements IMenuManager {
       {
         label: 'App',
         submenu: [
-          {
-            label: 'Page',
-            submenu: allPagePaths.map((pagePath) =>
-              makePageMenuItem(pagePath, pagePath === currentPagePath, () =>
-                this.onMenuChangeCurrentPagePath.emit(pagePath),
-              ),
-            ),
-          },
+          // {
+          //   label: 'Page',
+          //   submenu: allPagePaths.map((pagePath) =>
+          //     makePageMenuItem(pagePath, pagePath === currentPagePath, () =>
+          //       this.onMenuChangeCurrentPagePath.emit(pagePath),
+          //     ),
+          //   ),
+          // },
           {
             label: 'Reload Page',
             click: () => this.onMenuRequestReload.emit(),
           },
-          {
-            label: 'Show DevTool',
-            type: 'checkbox',
-            checked: isDevToolVisible,
-            click: () => this.onMenuToggleDevtoolVisibility.emit(),
-          },
+          // {
+          //   label: 'Show DevTool',
+          //   type: 'checkbox',
+          //   checked: isDevToolVisible,
+          //   click: () => this.onMenuToggleDevtoolVisibility.emit(),
+          // },
           {
             label: 'Restart App',
             click: () => this.onMenuRestartApplication.emit(),

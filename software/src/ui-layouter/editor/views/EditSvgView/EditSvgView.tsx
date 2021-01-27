@@ -3,7 +3,6 @@ import {
   IPosition,
   startDragSession,
   getRelativeMousePosition,
-  layouterAppGlobal,
 } from '~/ui-layouter/base';
 import { editReader, editMutations } from '~/ui-layouter/editor/store';
 import { screenToWorld } from './CoordHelpers';
@@ -110,10 +109,8 @@ export const EditSvgView = () => {
     }
   }, []);
 
-  // appGlobal.setDebugValue({ appState });
-  layouterAppGlobal.setDebugValue({ design: editReader.design });
-  const { isCurrentKeyMirror } = editReader;
-  layouterAppGlobal.setDebugValue({ isCurrentKeyMirror });
+  // const { pressedKeyIndices } = editReader;
+  // layouterAppGlobal.setDebugValue({ pressedKeyIndices });
 
   return (
     <svg

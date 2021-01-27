@@ -1,5 +1,6 @@
-import { IKeyboardShape } from '~/shared';
+import { IDisplayKeyboardDesign } from '~/shared';
 import { ipcAgent } from '~/ui-common';
+import { DisplayKeyboardDesignLoader } from '~/ui-common/modules/DisplayKeyboardDesignLoader';
 import { ProjectResourceModel } from '~/ui-root/models/ProjectResourceModel';
 import { UiStatusModel } from '~/ui-root/models/UiStatusModel';
 
@@ -9,20 +10,20 @@ export class KeyboardShapesModel {
     private uiStatusModel: UiStatusModel,
   ) {}
 
-  private _currentProjectId: string = '';
-  private _loadedShape: IKeyboardShape | undefined;
-  private _currentLayoutName: string = '';
+  private _currentProjectId: string | undefined;
+  private _loadedDesign: IDisplayKeyboardDesign | undefined;
+  private _currentLayoutName: string | undefined;
 
   get currentProjectId() {
-    return this._currentProjectId;
+    return this._currentProjectId || '';
   }
 
   get currentLayoutName() {
-    return this._currentLayoutName;
+    return this._currentLayoutName || '';
   }
 
-  get loadedShape() {
-    return this._loadedShape;
+  get loadedDesign() {
+    return this._loadedDesign;
   }
 
   get optionProjectInfos() {
@@ -37,10 +38,20 @@ export class KeyboardShapesModel {
   }
 
   private async loadCurrentProjectLayout() {
-    this._loadedShape = await ipcAgent.async.projects_loadKeyboardShape(
+    if (!(this._currentProjectId && this._currentLayoutName)) {
+      return;
+    }
+    const design = await ipcAgent.async.projects_loadKeyboardShape(
       this._currentProjectId,
       this._currentLayoutName,
     );
+    if (design) {
+      this._loadedDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
+        design,
+      );
+    } else {
+      this._loadedDesign = undefined;
+    }
   }
 
   setCurrentProjectId = (projectId: string) => {
@@ -71,6 +82,10 @@ export class KeyboardShapesModel {
       'projects_layoutFileUpdationEvents',
       this.onLayoutFileUpdated,
     );
+
+    if (this.optionProjectInfos.length === 0) {
+      return;
+    }
 
     this._currentProjectId =
       this.uiStatusModel.settings.shapeViewProjectId ||

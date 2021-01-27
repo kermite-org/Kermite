@@ -1,8 +1,8 @@
 import {
-  IKeyUnitEntry,
   ILayer,
-  IProfileDataAssigns,
   IProfileData,
+  IDisplayKeyEntity,
+  IDisplayKeyboardDesign,
 } from '~/shared';
 import {
   getAssignForKeyUnitWithLayerFallback,
@@ -22,16 +22,16 @@ export interface IPresetKeyUnitViewModel {
 }
 
 function createPresetKeyUnitViewModel(
-  ku: IKeyUnitEntry,
+  ke: IDisplayKeyEntity,
   targetLayerId: string,
   layers: ILayer[],
-  assigns: IProfileDataAssigns,
+  assigns: IProfileData['assigns'],
 ): IPresetKeyUnitViewModel {
-  const keyUnitId = ku.id;
+  const keyUnitId = ke.keyId;
   const pos = {
-    x: ku.x,
-    y: ku.y,
-    r: ku.r || 0,
+    x: ke.x,
+    y: ke.y,
+    r: ke.angle || 0,
   };
 
   const assign = getAssignForKeyUnitWithLayerFallback(
@@ -57,10 +57,11 @@ function createPresetKeyUnitViewModel(
 
 export function makePresetKeyUnitViewModels(
   profileData: IProfileData,
+  keyboardDesign: IDisplayKeyboardDesign,
   targetLayerId: string,
 ): IPresetKeyUnitViewModel[] {
-  const { layers, assigns, keyboardShape } = profileData;
-  return keyboardShape.keyUnits.map((ku) => {
+  const { layers, assigns } = profileData;
+  return keyboardDesign.keyEntities.map((ku) => {
     return createPresetKeyUnitViewModel(ku, targetLayerId, layers, assigns);
   });
 }

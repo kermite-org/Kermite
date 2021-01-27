@@ -1,83 +1,13 @@
 {
-  "files.associations": {
-    "*.c": "cpp"
-  },
+  "files.associations": { "*.c": "cpp" },
   "json.schemas": [
     {
       "fileMatch": ["project.json"],
-      "schema": {
-        "type": "object",
-        "properties": {
-          "projectId": {
-            "type": "string"
-          },
-          "keyboardName": {
-            "type": "string"
-          }
-        },
-        "required": ["projectId", "keyboardName"],
-        "additionalProperties": false
-      }
+      "url": "./.vscode/schemas/project.schema.json"
     },
     {
-      "fileMatch": ["layout.json"],
-      "schema": {
-        "type": "object",
-        "properties": {
-          "displayArea": {
-            "type": "object",
-            "properties": {
-              "centerX": {
-                "type": "number"
-              },
-              "centerY": {
-                "type": "number"
-              },
-              "width": {
-                "type": "number"
-              },
-              "height": {
-                "type": "number"
-              }
-            },
-            "required": ["centerX", "centerY", "width", "height"],
-            "additionalProperties": false
-          },
-          "keyUnits": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "string"
-                },
-                "x": {
-                  "type": "number"
-                },
-                "y": {
-                  "type": "number"
-                },
-                "r": {
-                  "type": "number"
-                },
-                "keyIndex": {
-                  "type": "number"
-                }
-              },
-              "additionalProperties": false,
-              "required": ["id", "x", "y", "r", "keyIndex"]
-            }
-          },
-          "bodyPathMarkups": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "required": ["displayArea", "keyUnits", "bodyPathMarkups"],
-        "additionalProperties": false
-      }
+      "fileMatch": ["layout.json", "*.layout.json"],
+      "url": "./.vscode/schemas/layout.schema.json"
     }
   ]
 }

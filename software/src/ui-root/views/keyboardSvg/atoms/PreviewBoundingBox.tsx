@@ -1,10 +1,8 @@
 import { h } from 'qx';
-import { IKeyboardShapeDisplayArea } from '~/shared';
+import { IDisplayArea } from '~/shared';
 
-export const PreviewBoundingBox = (props: {
-  displayArea: IKeyboardShapeDisplayArea;
-}) => {
-  const da = props.displayArea;
+export const PreviewDisplayAreaBox = (props: { dispalyArea: IDisplayArea }) => {
+  const da = props.dispalyArea;
   const left = da.centerX - da.width / 2;
   const top = da.centerY - da.height / 2;
   const { width, height } = da;

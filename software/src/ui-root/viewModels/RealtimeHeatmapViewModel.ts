@@ -1,4 +1,8 @@
-import { IKeyboardShapeDisplayArea, formatTimeMsToMinSecMs } from '~/shared';
+import {
+  formatTimeMsToMinSecMs,
+  IDisplayArea,
+  IDisplayOutlineShape,
+} from '~/shared';
 import { models } from '~/ui-root/models';
 import {
   makeCustomKeyUnitViewModels,
@@ -22,8 +26,8 @@ export interface IHeatmapCustomKeyUnitViewModel {
 
 export interface IRealtimeHeatmapKeyboardViewModel {
   cardsVM: IHeatmapCustomKeyUnitViewModel[];
-  bodyPathMarkupText: string;
-  displayArea: IKeyboardShapeDisplayArea;
+  outlineShapes: IDisplayOutlineShape[];
+  displayArea: IDisplayArea;
 }
 
 export interface IRealtimeHeatmapViewModel {
@@ -51,6 +55,7 @@ export function makeRealtimeHeatmapViewModel(): IRealtimeHeatmapViewModel {
 
   const cardsVM = makeCustomKeyUnitViewModels(
     models.editorModel.profileData,
+    models.editorModel.displayDesign,
     'la0',
     (source: ICustomKeyUnitViewModelBase): IHeatmapCustomKeyUnitViewModel => {
       const typeCount = typeStats[source.keyUnitId];
@@ -65,10 +70,7 @@ export function makeRealtimeHeatmapViewModel(): IRealtimeHeatmapViewModel {
     },
   );
 
-  const {
-    displayArea,
-    bodyPathMarkupText,
-  } = models.editorModel.profileData.keyboardShape;
+  const { displayArea, outlineShapes } = models.editorModel.displayDesign;
 
   return {
     isRecording,
@@ -78,6 +80,10 @@ export function makeRealtimeHeatmapViewModel(): IRealtimeHeatmapViewModel {
     hasRecord: numTotalTypes > 0,
     timeText: formatTimeMsToMinSecMs(elapsedTimeMs),
     numTotalTypes,
-    keyboardVM: { cardsVM, displayArea, bodyPathMarkupText },
+    keyboardVM: {
+      cardsVM,
+      displayArea,
+      outlineShapes,
+    },
   };
 }

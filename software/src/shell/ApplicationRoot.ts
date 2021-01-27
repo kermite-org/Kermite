@@ -1,17 +1,18 @@
-import { IProfileManagerStatus } from '~/shared';
+import { IPresetSpec, IProfileManagerStatus } from '~/shared';
 import { appGlobal, applicationStorage } from '~/shell/base';
+import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
+import { KeyMappingEmitter } from '~/shell/services/device/KeyMappingEmitter';
+import { KeyboardDeviceService } from '~/shell/services/device/KeyboardDevice';
 import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStatic';
-import { ProfileService } from '~/shell/services/profile';
+import { FirmwareUpdationService } from '~/shell/services/firmwareUpdation';
+import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/InputLogicSimulatorD';
+import { LayoutManager } from '~/shell/services/layout/LayoutManager';
+import { ProfileManager } from '~/shell/services/profile/ProfileManager';
+import { KeyboardLayoutFilesWatcher } from '~/shell/services/projects/KeyboardShape/KeyboardLayoutFilesWatcher';
+import { KeyboardShapesProvider } from '~/shell/services/projects/KeyboardShape/KeyboardShapesProvider';
+import { PresetProfileLoader } from '~/shell/services/projects/PresetProfileLoader';
+import { ProjectResourceInfoProvider } from '~/shell/services/projects/ProjectResource/ProjectResourceInfoProvider';
 import { WindowService } from '~/shell/services/window';
-import { FirmwareUpdationService } from '~/shell/services0/FirmwareUpdation';
-import { KeyMappingEmitter } from '~/shell/services0/KeyMappingEmitter';
-import { KeyboardConfigProvider } from '~/shell/services0/KeyboardConfigProvider';
-import { KeyboardDeviceService } from '~/shell/services0/KeyboardDevice';
-import { InputLogicSimulatorD } from '~/shell/services0/KeyboardLogic/InputLogicSimulatorD';
-import { KeyboardLayoutFilesWatcher } from '~/shell/services0/KeyboardShape/KeyboardLayoutFilesWatcher';
-import { KeyboardShapesProvider } from '~/shell/services0/KeyboardShape/KeyboardShapesProvider';
-import { PresetProfileLoader } from '~/shell/services0/PresetProfileLoader';
-import { ProjectResourceInfoProvider } from '~/shell/services0/ProjectResource/ProjectResourceInfoProvider';
 // import { resourceUpdator_syncRemoteResourcesToLocal } from '~/shell/services0/ResourceUpdator';
 
 export class ApplicationRoot {
@@ -40,8 +41,15 @@ export class ApplicationRoot {
     this.projectResourceInfoProvider,
   );
 
-  private profileService = new ProfileService(this.presetProfileLoader);
-  private profileManager = this.profileService.profileManager;
+  private profileManager = new ProfileManager(
+    this.projectResourceInfoProvider,
+    this.presetProfileLoader,
+  );
+
+  private layoutManager = new LayoutManager(
+    this.projectResourceInfoProvider,
+    this.profileManager,
+  );
 
   private inputLogicSimulator = new InputLogicSimulatorD(
     this.profileManager,
@@ -53,6 +61,7 @@ export class ApplicationRoot {
 
   private setupIpcBackend() {
     const windowWrapper = this.windowService.getWindowWrapper();
+    const pageManger = this.windowService.getPageManager();
 
     appGlobal.icpMainAgent.supplySyncHandlers({
       dev_getVersionSync: () => 'v100',
@@ -70,10 +79,20 @@ export class ApplicationRoot {
       window_minimizeWindow: async () => windowWrapper.minimizeMainWindow(),
       window_maximizeWindow: async () => windowWrapper.maximizeMainWindow(),
       window_restartApplication: async () => windowWrapper.restartApplication(),
+      window_setDevToolVisibility: async (visible) =>
+        pageManger.setDevToolVisiblity(visible),
+      // windowWrapper.setDevToolsVisibility(visible),
       // window_widgetModeChanged: async (isWidgetMode) =>
       //   this.appWindowManager.adjustWindowSize(isWidgetMode),
       profile_executeProfileManagerCommands: (commands) =>
-        this.profileService.profileManager.executeCommands(commands),
+        this.profileManager.executeCommands(commands),
+      layout_executeLayoutManagerCommands: (commands) =>
+        this.layoutManager.executeCommands(commands),
+      // layout_getAllProjectLayoutsInfos: () =>
+      //   this.layoutManager.getAllProjectLayoutsInfos(),
+      layout_clearErrorInfo: async () => this.layoutManager.clearErrorInfo(),
+      layout_showEditLayoutFileInFiler: async () =>
+        this.layoutManager.showEditLayoutFileInFiler(),
       projects_loadKeyboardShape: (projectId, layoutName) =>
         this.keyboardShapesProvider.loadKeyboardShapeByProjectIdAndLayoutName(
           projectId,
@@ -83,8 +102,8 @@ export class ApplicationRoot {
         this.firmwareUpdationService.writeFirmware(projectId, comPortName),
       projects_getAllProjectResourceInfos: async () =>
         this.projectResourceInfoProvider.getAllProjectResourceInfos(),
-      projects_loadPresetProfile: (profileId, presetName: string) =>
-        this.presetProfileLoader.loadPresetProfileData(profileId, presetName),
+      projects_loadPresetProfile: (profileId, presetSpec: IPresetSpec) =>
+        this.presetProfileLoader.loadPresetProfileData(profileId, presetSpec),
       config_getKeyboardConfig: async () =>
         this.keyboardConfigProvider.keyboardConfig,
       config_writeKeyboardConfig: async (config) =>
@@ -101,6 +120,10 @@ export class ApplicationRoot {
           );
         }
       },
+      file_getOpenJsonFilePathWithDialog:
+        JsonFileServiceStatic.getOpeningJsonFilePathWithDialog,
+      file_getSaveJsonFilePathWithDialog:
+        JsonFileServiceStatic.getSavingJsonFilePathWithDialog,
       file_loadObjectFromJsonWithFileDialog:
         JsonFileServiceStatic.loadObjectFromJsonWithFileDialog,
       file_saveObjectToJsonWithFileDialog:
@@ -126,6 +149,8 @@ export class ApplicationRoot {
         this.profileManager.statusEventPort.subscribe(cb2);
         return () => this.profileManager.statusEventPort.unsubscribe(cb2);
       },
+      layout_layoutManagerStatus: (listener) =>
+        this.layoutManager.statusEvents.subscribe(listener),
       device_keyEvents: (cb) => {
         this.deviceService.realtimeEventPort.subscribe(cb);
         return () => this.deviceService.realtimeEventPort.unsubscribe(cb);
@@ -144,16 +169,16 @@ export class ApplicationRoot {
         return () =>
           this.keyboardLayoutFilesWatcher.fileUpdationEventPort.unsubscribe(cb);
       },
-      window_appWindowEvents: windowWrapper.onAppWindowEvent,
+      window_appWindowEvents: windowWrapper.appWindowEventPort.subscribe,
     });
   }
 
   async initialize() {
     console.log(`initialize services`);
-    await applicationStorage.initialize();
+    await applicationStorage.initializeAsync();
     // await resourceUpdator_syncRemoteResourcesToLocal();
     await this.projectResourceInfoProvider.initializeAsync();
-    await this.profileService.initialize();
+    await this.profileManager.initializeAsync();
     this.firmwareUpdationService.initialize();
     this.keyboardLayoutFilesWatcher.initialize();
     this.keyboardConfigProvider.initialize();
@@ -172,7 +197,7 @@ export class ApplicationRoot {
     this.keyboardConfigProvider.terminate();
     this.keyboardLayoutFilesWatcher.terminate();
     this.firmwareUpdationService.terminate();
-    await this.profileService.terminate();
-    await applicationStorage.terminate();
+    await this.profileManager.terminateAsync();
+    await applicationStorage.terminateAsync();
   }
 }

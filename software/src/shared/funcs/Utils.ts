@@ -14,6 +14,12 @@ export function generateNumberSequence(n: number): number[] {
   return res;
 }
 
+export function addArrayItemIfNotExist<T>(arr: T[], value: T) {
+  if (!arr.includes(value)) {
+    arr.push(value);
+  }
+}
+
 export function removeArrayItems<T>(ar: T[], a: T) {
   let i = 0;
   while (i < ar.length) {
@@ -211,24 +217,18 @@ export function formatTimeMsToMinSecMs(ms: number) {
   return `${deg2(min)}:${deg2(sec)}:${deg2((ms / 100) >> 0)}`;
 }
 
-export function convertMinusOneToUndefined(value: number): number | undefined {
-  return value === -1 ? undefined : value;
+export function convertDefaultValueToUndefined<T>(
+  value: T,
+  defaultValue: T,
+): T | undefined {
+  return value === defaultValue ? undefined : value;
 }
 
-export function convertUndefinedToMinusOne(value: number | undefined) {
-  return value === undefined ? -1 : value;
-}
-
-export function convertBlankStringToUndefined(
-  value: string,
-): string | undefined {
-  return value || undefined;
-}
-
-export function convertUndefinedToBlankString(
-  value: string | undefined,
-): string {
-  return value || '';
+export function convertUndefinedToDefaultValue<T>(
+  value: T | undefined,
+  defaultValue: T,
+): T {
+  return value === undefined ? defaultValue : value;
 }
 
 export function clamp(val: number, lo: number, hi: number) {

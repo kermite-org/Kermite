@@ -16,10 +16,10 @@ interface NavigationEntrySource {
 const entrySources: NavigationEntrySource[] = [
   { pageSig: 'editor', faIconName: 'fa-keyboard' },
   { pageSig: 'layouter', faIconName: 'fa-drafting-compass' },
-  { pageSig: 'firmwareUpdation', faIconName: 'fa-microchip' },
-  { pageSig: 'shapePreview', faIconName: 'fa-file-code' },
   { pageSig: 'presetBrowser', faIconName: 'fa-book' },
+  { pageSig: 'shapePreview', faIconName: 'fa-file-code' },
   { pageSig: 'heatmap', faIconName: 'fa-chart-bar' },
+  { pageSig: 'firmwareUpdation', faIconName: 'fa-microchip' },
 ];
 
 export interface INavigationViewModel {

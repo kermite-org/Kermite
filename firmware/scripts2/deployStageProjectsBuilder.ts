@@ -207,8 +207,8 @@ function buildProjectEntry(
     fsCopyFileSync(`${srcDir}/${fileName}`, `${destDir}/${fileName}`)
   );
 
-  if (fsExistsSync(`${srcDir}/profiles`)) {
-    fsxCopyDirectory(`${srcDir}/profiles`, `${destDir}/profiles`);
+  if (fsExistsSync(`${srcDir}/presets`)) {
+    fsxCopyDirectory(`${srcDir}/presets`, `${destDir}/presets`);
   }
 
   try {

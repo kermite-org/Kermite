@@ -19,8 +19,8 @@ import {
   DialogContentRow,
   DialogButtonsRow,
   DialogButton,
-} from '~/ui-root/base/dialog/CommonDialogParts';
-import { createModal } from '~/ui-root/base/overlay/ForegroundModalLayer';
+} from '~/ui-common/fundamental/dialog/CommonDialogParts';
+import { createModal } from '~/ui-common/fundamental/overlay/ForegroundModalLayer';
 import {
   cssCommonPropertiesTable,
   cssCommonTextInput,

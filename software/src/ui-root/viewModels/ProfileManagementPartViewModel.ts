@@ -1,8 +1,9 @@
+import { Hook } from 'qx';
 import {
   modalAlert,
   modalTextEdit,
   modalConfirm,
-} from '~/ui-root/base/dialog/BasicModals';
+} from '~/ui-common/fundamental/dialog/BasicModals';
 import { models } from '~/ui-root/models';
 import { makePlainSelectorOption } from '~/ui-root/viewModels/viewModelHelpers';
 import { ISelectorSource } from '~/ui-root/viewModels/viewModelInterfaces';
@@ -20,9 +21,23 @@ export interface IProfileManagementPartViewModel {
   openConfiguration(): void;
   onLaunchButton(): void;
   profileSelectorSource: ISelectorSource;
+  isExportingPresetSelectionModalOpen: boolean;
+  openExportingPresetSelectionModal(): void;
+  closeExportingPresetSelectionModal(): void;
+  saveProfileAsPreset(projectId: string, presetName: string): void;
+  currentProfileProjectId: string;
 }
 
 export function makeProfileManagementPartViewModel(): IProfileManagementPartViewModel {
+  const [isPresetsModalOpen, setIsPresetModalOpen] = Hook.useState(false);
+
+  const openExportingPresetSelectionModal = async () => {
+    setIsPresetModalOpen(true);
+  };
+  const closeExportingPresetSelectionModal = () => {
+    setIsPresetModalOpen(false);
+  };
+
   const {
     currentProfileName,
     allProfileNames,
@@ -51,15 +66,14 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
   const createProfile = async () => {
     const res = await callProfileSetupModal(undefined);
     // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-    if (res && res.profileName && res.targetProjectId && res.presetName) {
-      const { profileName, targetProjectId, presetName } = res;
+    if (res && res.profileName && res.targetProjectId && res.layoutName) {
+      const { profileName, targetProjectId, layoutName } = res;
       const nameValid = await checkValidNewProfileName(profileName);
       if (nameValid) {
-        models.profilesModel.createProfile(
-          profileName,
-          targetProjectId,
-          presetName,
-        );
+        models.profilesModel.createProfile(profileName, targetProjectId, {
+          type: 'blank',
+          layoutName,
+        });
       }
     }
   };
@@ -130,5 +144,10 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
       choiceId: currentProfileName,
       setChoiceId: loadProfile,
     },
+    isExportingPresetSelectionModalOpen: isPresetsModalOpen,
+    openExportingPresetSelectionModal,
+    closeExportingPresetSelectionModal,
+    saveProfileAsPreset: models.profilesModel.exportProfileAsProjectPreset,
+    currentProfileProjectId: models.editorModel.loadedPorfileData.projectId,
   };
 }

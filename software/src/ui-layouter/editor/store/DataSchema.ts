@@ -1,9 +1,10 @@
-import { IKeyPlacementAnchor, IKeySizeUnit } from '~/shared';
+import { IKeyIdMode, IKeyPlacementAnchor, IKeySizeUnit } from '~/shared';
 
 // ------------------------------------------------------
 export interface IEditKeyEntity {
   id: string; // 編集中のみ一意の値を保持,永続化の際には保存しない
-  // label: string;
+  editKeyId: string;
+  mirrorEditKeyId: string;
   x: number;
   y: number;
   angle: number;
@@ -30,9 +31,12 @@ export type IEditTransGroup = {
   mirror: boolean;
 };
 export interface IEditKeyboardDesign {
-  placementUnit: string; // `mm` | `KP ${baseKeyPitch}`
-  placementAnchor: IKeyPlacementAnchor;
-  keySizeUnit: IKeySizeUnit; // 'mm' | 'KP'
+  setup: {
+    placementUnit: string; // `mm` | `KP ${baseKeyPitch}`
+    placementAnchor: IKeyPlacementAnchor;
+    keySizeUnit: IKeySizeUnit; // 'mm' | 'KP'
+    keyIdMode: IKeyIdMode;
+  };
   keyEntities: { [id: string]: IEditKeyEntity };
   outlineShapes: { [id: string]: IEditOutlineShape };
   transGroups: { [id: string]: IEditTransGroup };
@@ -41,5 +45,12 @@ export interface IEditKeyboardDesign {
 // ------------------------------------------------------
 
 export type IEditPropKey =
-  // | 'label'
-  'x' | 'y' | 'angle' | 'shape' | 'keyIndex' | 'mirrorKeyIndex' | 'groupId';
+  | 'editKeyId'
+  | 'mirrorEditKeyId'
+  | 'x'
+  | 'y'
+  | 'angle'
+  | 'shape'
+  | 'keyIndex'
+  | 'mirrorKeyIndex'
+  | 'groupId';

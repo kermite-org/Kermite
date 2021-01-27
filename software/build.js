@@ -6,6 +6,28 @@ const childProcess = require('child_process');
 const readline = require('readline');
 const liveServer = require('live-server');
 
+const gooberCssAutoLabelPlugin = {
+  name: 'gooberCssAutoLabel',
+  setup(build) {
+    build.onLoad({ filter: /\.tsx$/ }, async (args) => {
+      //gooberのcss変数定義を見つけて、変数名をlabelとしてスタイル定義に挿入する
+      let text = await fs.promises.readFile(args.path, 'utf8');
+      if (text.includes('goober')) {
+        text = text
+          .replace(/const (.*) = css`/g, 'const $1 = css` label: $1;')
+          .replace(
+            /const (.*) = styled(.*?)`/g,
+            'const $1 = styled$2` label: $1;',
+          );
+      }
+      return {
+        contents: text,
+        loader: 'tsx',
+      };
+    });
+  },
+};
+
 const [opts] = cliopts.parse(
   ['x-build', 'build application'],
   ['x-watch', 'build application with watcher'],
@@ -54,7 +76,7 @@ async function makeShell() {
       watch: reqWatch,
       clear: false,
       tslint: false,
-      sourcemap: true,
+      sourcemap: 'inline',
       onEnd: resolve,
     }),
   );
@@ -79,6 +101,7 @@ async function makeUi() {
       clear: false,
       tslint: false,
       sourcemap: true,
+      plugins: [gooberCssAutoLabelPlugin],
       onEnd: resolve,
     }),
   );
@@ -102,6 +125,7 @@ async function startMockView() {
     clear: false,
     tslint: false,
     sourcemap: 'inline',
+    plugins: [gooberCssAutoLabelPlugin],
   });
 
   liveServer.start({
@@ -111,6 +135,13 @@ async function startMockView() {
     open: true,
     logLevel: 0,
   });
+
+  (async () => {
+    const key = await readKey();
+    if (key.sequence === '\x1B' || key.sequence === '\x03') {
+      process.exit();
+    }
+  })();
 }
 
 function startElectronProcess() {

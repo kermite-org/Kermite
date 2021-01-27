@@ -1,7 +1,7 @@
 import { app, BrowserWindow } from 'electron';
 import { IAppWindowEvent } from '~/shared';
 import { appConfig } from '~/shell/base';
-import { makeListnerPort, pathJoin, pathRelative } from '~/shell/funcs';
+import { createEventPort2, pathJoin, pathRelative } from '~/shell/funcs';
 import { IAppWindowWrapper } from './interfaces';
 import { PageSourceWatcher, setupWebContentSourceChecker } from './modules';
 
@@ -12,9 +12,11 @@ export class AppWindowWrapper implements IAppWindowWrapper {
 
   private mainWindow: BrowserWindow | undefined;
 
-  // onPageLoaded = makeListnerPort<string>();
-
-  onAppWindowEvent = makeListnerPort<IAppWindowEvent>();
+  appWindowEventPort = createEventPort2<IAppWindowEvent>({
+    initialValueGetter: () => ({
+      devToolVisible: this.mainWindow?.webContents.isDevToolsOpened() || false,
+    }),
+  });
 
   openMainWindow(params: {
     preloadFilePath: string;
@@ -48,10 +50,10 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     this.publicRootPath = publicRootPath;
 
     app.on('browser-window-focus', () => {
-      this.onAppWindowEvent.emit({ activeChanged: true });
+      this.appWindowEventPort.emit({ activeChanged: true });
     });
     app.on('browser-window-blur', () => {
-      this.onAppWindowEvent.emit({ activeChanged: false });
+      this.appWindowEventPort.emit({ activeChanged: false });
     });
 
     return win;
@@ -97,6 +99,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     } else {
       this.mainWindow?.webContents.closeDevTools();
     }
+    this.appWindowEventPort.emit({ devToolVisible: visible });
   }
 
   minimizeMainWindow() {

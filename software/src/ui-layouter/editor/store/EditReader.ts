@@ -31,7 +31,7 @@ class EditReader {
   }
 
   private coordUnitSelector = createSimpleSelector(
-    () => appState.editor.design.placementUnit,
+    () => appState.editor.design.setup.placementUnit,
     getCoordUnitFromUnitSpec,
   );
 
@@ -40,7 +40,9 @@ class EditReader {
   }
 
   get coordUnitSuffix(): 'mm' | 'KP' {
-    return appState.editor.design.placementUnit.split(' ')[0] as 'mm' | 'KP';
+    return appState.editor.design.setup.placementUnit.split(' ')[0] as
+      | 'mm'
+      | 'KP';
   }
 
   get gridPitches(): [number, number] {
@@ -153,11 +155,19 @@ class EditReader {
   }
 
   get keySizeUnit() {
-    return appState.editor.design.keySizeUnit;
+    return appState.editor.design.setup.keySizeUnit;
   }
 
   get placementAnchor() {
-    return appState.editor.design.placementAnchor;
+    return appState.editor.design.setup.placementAnchor;
+  }
+
+  get keyIdMode() {
+    return appState.editor.design.setup.keyIdMode;
+  }
+
+  get isManualKeyIdMode() {
+    return this.keyIdMode === 'manual';
   }
 
   get showKeyId() {
@@ -166,6 +176,14 @@ class EditReader {
 
   get showKeyIndex() {
     return appState.env.showKeyIndex;
+  }
+
+  get pressedKeyIndices() {
+    return appState.env.pressedKeyIndices;
+  }
+
+  get isModified() {
+    return appState.editor.design !== appState.editor.loadedDesign;
   }
 }
 export const editReader = new EditReader();

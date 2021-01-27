@@ -9,7 +9,7 @@ export const MockPageLayouterDevelopment = () => {
   Hook.useEffect(() => {
     UiLayouterCore.loadEditDesign(loadLocalStorageKeyboardDesignOrDefault());
     return () =>
-      saveLocalStorageKeyboardDesign(UiLayouterCore.emitEditDesign());
+      saveLocalStorageKeyboardDesign(UiLayouterCore.emitSavingDesign());
   }, []);
 
   return <UiLayouterCore.Component />;

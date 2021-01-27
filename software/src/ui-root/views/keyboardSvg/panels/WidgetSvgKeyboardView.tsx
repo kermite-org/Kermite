@@ -2,6 +2,7 @@ import { css } from 'goober';
 import { h } from 'qx';
 import { linerInterpolateValue } from '~/shared';
 import { IWidgetKeyboardViewViewModel } from '~/ui-root/viewModels/WidgetMainPageViewModel';
+import { KeyboardBodyShape } from '~/ui-root/views/keyboardSvg/atoms/KeyboardBodyShape';
 import { WidgetKeyUnitCardsPart } from '../organisms/WidgetKeyUnitCardsPart';
 
 export function WidgetSvgKeyboardView({
@@ -20,10 +21,10 @@ export function WidgetSvgKeyboardView({
         stroke-width={sw}
         stroke-linejoin="round"
       >
-        <path
-          d={vm.keyboardShape.bodyPathMarkupText}
-          stroke="#003"
-          fill="#89C"
+        <KeyboardBodyShape
+          outlineShapes={vm.keyboardDesign.outlineShapes}
+          fillColor={'#89C'}
+          strokeColor={'rgb(0, 0, 51)'}
         />
         <WidgetKeyUnitCardsPart vm={vm.cardsPartVM} />
       </g>

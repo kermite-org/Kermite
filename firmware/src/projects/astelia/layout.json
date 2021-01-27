@@ -1,0 +1,425 @@
+{
+  "setup": {
+    "placementUnit": "mm",
+    "placementAnchor": "center",
+    "keySizeUnit": "KP",
+    "keyIdMode": "manual"
+  },
+  "keyEntities": [
+    {
+      "keyId": "KL0",
+      "x": -21.259478,
+      "y": 25.185357,
+      "angle": 9,
+      "shape": "std 1",
+      "keyIndex": 0
+    },
+    {
+      "keyId": "KL1",
+      "x": -40.027745,
+      "y": 22.233922,
+      "angle": 9,
+      "shape": "std 1",
+      "keyIndex": 1
+    },
+    {
+      "keyId": "KL2",
+      "x": -58.796012,
+      "y": 19.282486,
+      "angle": 9,
+      "shape": "std 1",
+      "keyIndex": 2
+    },
+    {
+      "keyId": "KL3",
+      "x": -82.0,
+      "y": 19.0,
+      "angle": 0,
+      "shape": "std 1",
+      "keyIndex": 3
+    },
+    {
+      "keyId": "KL4",
+      "x": -101.0,
+      "y": 19.0,
+      "angle": 0,
+      "shape": "std 1",
+      "keyIndex": 4
+    },
+    {
+      "keyId": "KL5",
+      "x": -120.0,
+      "y": 19.0,
+      "angle": 0,
+      "shape": "std 1",
+      "keyIndex": 5
+    },
+    {
+      "keyId": "KL6",
+      "x": -24.231733,
+      "y": 43.951435,
+      "angle": 9,
+      "shape": "std 1",
+      "keyIndex": 6
+    },
+    {
+      "keyId": "KL7",
+      "x": -43.0,
+      "y": 41.0,
+      "angle": 9,
+      "shape": "std 1",
+      "keyIndex": 7
+    },
+    {
+      "keyId": "KL8",
+      "x": -61.768267,
+      "y": 38.048565,
+      "angle": 9,
+      "shape": "std 1",
+      "keyIndex": 8
+    },
+    {
+      "keyId": "KL9",
+      "x": -83.5,
+      "y": 38.0,
+      "angle": 0,
+      "shape": "std 1",
+      "keyIndex": 9
+    },
+    {
+      "keyId": "KL10",
+      "x": -102.5,
+      "y": 38.0,
+      "angle": 0,
+      "shape": "std 1",
+      "keyIndex": 10
+    },
+    {
+      "keyId": "KL11",
+      "x": -121.5,
+      "y": 38.0,
+      "angle": 0,
+      "shape": "std 1",
+      "keyIndex": 11
+    },
+    {
+      "keyId": "KL12",
+      "x": -27.203988,
+      "y": 62.717514,
+      "angle": 9,
+      "shape": "std 1",
+      "keyIndex": 12
+    },
+    {
+      "keyId": "KL13",
+      "x": -45.972255,
+      "y": 59.766078,
+      "angle": 9,
+      "shape": "std 1",
+      "keyIndex": 13
+    },
+    {
+      "keyId": "KL14",
+      "x": -64.740522,
+      "y": 56.814643,
+      "angle": 9,
+      "shape": "std 1",
+      "keyIndex": 14
+    },
+    {
+      "keyId": "KL15",
+      "x": -85.0,
+      "y": 57.0,
+      "angle": 0,
+      "shape": "std 1",
+      "keyIndex": 15
+    },
+    {
+      "keyId": "KL16",
+      "x": -104.0,
+      "y": 57.0,
+      "angle": 0,
+      "shape": "std 1",
+      "keyIndex": 16
+    },
+    {
+      "keyId": "KL17",
+      "x": -123.0,
+      "y": 57.0,
+      "angle": 0,
+      "shape": "std 1",
+      "keyIndex": 17
+    },
+    {
+      "keyId": "KL18",
+      "x": -23.246233,
+      "y": 87.128689,
+      "angle": 9,
+      "shape": "std 1",
+      "keyIndex": 18
+    },
+    {
+      "keyId": "KL19",
+      "x": -43.0,
+      "y": 84.0,
+      "angle": 9,
+      "shape": "std 1",
+      "keyIndex": 19
+    },
+    {
+      "keyId": "KL20",
+      "x": -62.753767,
+      "y": 80.871311,
+      "angle": 9,
+      "shape": "std 1",
+      "keyIndex": 20
+    },
+    {
+      "keyId": "KL21",
+      "x": -84.0,
+      "y": 79.0,
+      "angle": 0,
+      "shape": "std 1",
+      "keyIndex": 21
+    },
+    {
+      "keyId": "KL22",
+      "x": -104.0,
+      "y": 79.0,
+      "angle": 0,
+      "shape": "std 1",
+      "keyIndex": 22
+    },
+    {
+      "keyId": "KL23",
+      "x": -124.0,
+      "y": 79.0,
+      "angle": 0,
+      "shape": "std 1",
+      "keyIndex": 23
+    },
+    {
+      "keyId": "KR0",
+      "x": 21.259478,
+      "y": 25.185357,
+      "angle": -9,
+      "shape": "std 1",
+      "keyIndex": 24
+    },
+    {
+      "keyId": "KR1",
+      "x": 40.027745,
+      "y": 22.233922,
+      "angle": -9,
+      "shape": "std 1",
+      "keyIndex": 25
+    },
+    {
+      "keyId": "KR2",
+      "x": 58.796012,
+      "y": 19.282486,
+      "angle": -9,
+      "shape": "std 1",
+      "keyIndex": 26
+    },
+    {
+      "keyId": "KR3",
+      "x": 82.0,
+      "y": 19.0,
+      "angle": 0,
+      "shape": "std 1",
+      "keyIndex": 27
+    },
+    {
+      "keyId": "KR4",
+      "x": 101.0,
+      "y": 19.0,
+      "angle": 0,
+      "shape": "std 1",
+      "keyIndex": 28
+    },
+    {
+      "keyId": "KR5",
+      "x": 120.0,
+      "y": 19.0,
+      "angle": 0,
+      "shape": "std 1",
+      "keyIndex": 29
+    },
+    {
+      "keyId": "KR6",
+      "x": 24.231733,
+      "y": 43.951435,
+      "angle": -9,
+      "shape": "std 1",
+      "keyIndex": 30
+    },
+    {
+      "keyId": "KR7",
+      "x": 43.0,
+      "y": 41.0,
+      "angle": -9,
+      "shape": "std 1",
+      "keyIndex": 31
+    },
+    {
+      "keyId": "KR8",
+      "x": 61.768267,
+      "y": 38.048565,
+      "angle": -9,
+      "shape": "std 1",
+      "keyIndex": 32
+    },
+    {
+      "keyId": "KR9",
+      "x": 83.5,
+      "y": 38.0,
+      "angle": 0,
+      "shape": "std 1",
+      "keyIndex": 33
+    },
+    {
+      "keyId": "KR10",
+      "x": 102.5,
+      "y": 38.0,
+      "angle": 0,
+      "shape": "std 1",
+      "keyIndex": 34
+    },
+    {
+      "keyId": "KR11",
+      "x": 121.5,
+      "y": 38.0,
+      "angle": 0,
+      "shape": "std 1",
+      "keyIndex": 35
+    },
+    {
+      "keyId": "KR12",
+      "x": 27.203988,
+      "y": 62.717514,
+      "angle": -9,
+      "shape": "std 1",
+      "keyIndex": 36
+    },
+    {
+      "keyId": "KR13",
+      "x": 45.972255,
+      "y": 59.766078,
+      "angle": -9,
+      "shape": "std 1",
+      "keyIndex": 37
+    },
+    {
+      "keyId": "KR14",
+      "x": 64.740522,
+      "y": 56.814643,
+      "angle": -9,
+      "shape": "std 1",
+      "keyIndex": 38
+    },
+    {
+      "keyId": "KR15",
+      "x": 85.0,
+      "y": 57.0,
+      "angle": 0,
+      "shape": "std 1",
+      "keyIndex": 39
+    },
+    {
+      "keyId": "KR16",
+      "x": 104.0,
+      "y": 57.0,
+      "angle": 0,
+      "shape": "std 1",
+      "keyIndex": 40
+    },
+    {
+      "keyId": "KR17",
+      "x": 123.0,
+      "y": 57.0,
+      "angle": 0,
+      "shape": "std 1",
+      "keyIndex": 41
+    },
+    {
+      "keyId": "KR18",
+      "x": 23.246233,
+      "y": 87.128689,
+      "angle": -9,
+      "shape": "std 1",
+      "keyIndex": 42
+    },
+    {
+      "keyId": "KR19",
+      "x": 43.0,
+      "y": 84.0,
+      "angle": -9,
+      "shape": "std 1",
+      "keyIndex": 43
+    },
+    {
+      "keyId": "KR20",
+      "x": 62.753767,
+      "y": 80.871311,
+      "angle": -9,
+      "shape": "std 1",
+      "keyIndex": 44
+    },
+    {
+      "keyId": "KR21",
+      "x": 84.0,
+      "y": 79.0,
+      "angle": 0,
+      "shape": "std 1",
+      "keyIndex": 45
+    },
+    {
+      "keyId": "KR22",
+      "x": 104.0,
+      "y": 79.0,
+      "angle": 0,
+      "shape": "std 1",
+      "keyIndex": 46
+    },
+    {
+      "keyId": "KR23",
+      "x": 124.0,
+      "y": 79.0,
+      "angle": 0,
+      "shape": "std 1",
+      "keyIndex": 47
+    }
+  ],
+  "outlineShapes": [
+    {
+      "points": [
+        {
+          "x": 143,
+          "y": 0
+        },
+        {
+          "x": 143,
+          "y": 94.8135
+        },
+        {
+          "x": 19.4678,
+          "y": 107
+        },
+        {
+          "x": -19.4678,
+          "y": 107
+        },
+        {
+          "x": -143,
+          "y": 94.8135
+        },
+        {
+          "x": -143,
+          "y": 0
+        }
+      ]
+    }
+  ],
+  "transGroups": []
+}

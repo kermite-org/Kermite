@@ -1,5 +1,6 @@
 import { IAppWindowEvent } from '~/shared';
 import { IListenerPort } from '~/shell/base';
+import { IEventPort2 } from '~/shell/funcs';
 
 export interface IMenuManager {
   buildMenu(initailState: {
@@ -28,7 +29,7 @@ export interface IAppWindowWrapper {
   setDevToolsVisibility(visible: boolean): void;
   minimizeMainWindow(): void;
   maximizeMainWindow(): void;
-  onAppWindowEvent: IListenerPort<IAppWindowEvent>;
+  appWindowEventPort: IEventPort2<IAppWindowEvent>;
   restartApplication(): void;
   // onPageLoaded: IListenerPort<string>;
 }

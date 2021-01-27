@@ -1,7 +1,7 @@
 import { makeCssColor } from './ColorHelper';
 
-const primaryBase = 0x00aa88;
-// const primaryBase = 0x0088ff;
+const primaryBase = 0x00aa99;
+// const primaryBase = 0x3080e0;
 
 export const uiTheme = {
   colors: {
