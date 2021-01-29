@@ -1,9 +1,9 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { IDisplayKeyboardDesign } from '~/shared';
-import { IUiSettings } from '~/ui-common/models/UiStatusModel';
-import { KeyboardBodyShape } from '~/ui-common/parts/keyboardSvg/KeyboardBodyShape';
-import { KeyboardSvgFrameWithAutoScaler } from '~/ui-common/parts/keyboardSvg/outlines/KeyboardSvgFrameWithAutoScaler';
+import { IUiSettings } from '~/ui-common/sharedModels/UiStatusModel';
+import { KeyboardBodyShape } from '~/ui-common/sharedViews/keyboardSvg/KeyboardBodyShape';
+import { KeyboardSvgFrameWithAutoScaler } from '~/ui-common/sharedViews/keyboardSvg/outlines/KeyboardSvgFrameWithAutoScaler';
 import { PreviewDisplayAreaBox } from '~/ui-root/zones/common/parts/keyboardSvg/atoms/PreviewBoundingBox';
 import { PreviewKeyEntityCardsPart } from '~/ui-root/zones/common/parts/keyboardSvg/organisms/PreviewKeyUnitCardsPart';
 

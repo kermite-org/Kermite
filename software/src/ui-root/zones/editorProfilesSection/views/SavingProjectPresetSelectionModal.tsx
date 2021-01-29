@@ -4,7 +4,7 @@ import { fieldSetter, ipcAgent } from '~/ui-common';
 import {
   IProjectAttachmentFileSelectorModalModel,
   ProjectAttachmentFileSelectorModal,
-} from '~/ui-common/parts/ProjectAttachementFileSelectorModal';
+} from '~/ui-common/sharedViews/ProjectAttachementFileSelectorModal';
 import { IProfileManagementPartViewModel } from '~/ui-root/zones/editorProfilesSection/viewModels/ProfileManagementPartViewModel';
 
 function getTargetPresetNameFilePath(projectPath: string, presetName: string) {

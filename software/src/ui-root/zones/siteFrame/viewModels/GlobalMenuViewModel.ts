@@ -1,6 +1,6 @@
 import { Hook } from 'qx';
 import { appUi } from '~/ui-common';
-import { uiStatusModel } from '~/ui-common/models/UiStatusModel';
+import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
 import { themeSelectionModel } from '~/ui-root/zones/siteFrame/models/ThemeSelectionModel';
 
 export interface IGlobalMenuItem {

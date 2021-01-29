@@ -1,8 +1,8 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { ViewModelProps } from '~/ui-common/helpers';
-import { KeyboardBodyShape } from '~/ui-common/parts/keyboardSvg/KeyboardBodyShape';
-import { KeyboardSvgFrameWithAutoScaler } from '~/ui-common/parts/keyboardSvg/outlines/KeyboardSvgFrameWithAutoScaler';
+import { KeyboardBodyShape } from '~/ui-common/sharedViews/keyboardSvg/KeyboardBodyShape';
+import { KeyboardSvgFrameWithAutoScaler } from '~/ui-common/sharedViews/keyboardSvg/outlines/KeyboardSvgFrameWithAutoScaler';
 import { IPresetKeyboardViewModel } from '~/ui-preset-browser-page/viewModels/PresetKeyboardViewModel';
 import { PresetKeyUnitCard } from '~/ui-preset-browser-page/views/PresetKeyUnitCard';
 

@@ -1,10 +1,10 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { GeneralButton } from '../../../../../ui-common/parts/controls/GeneralButton';
+import { GeneralButton } from '../../../../../ui-common/sharedViews/controls/GeneralButton';
 import {
   GeneralSelector,
   IGeneralSelectorProps,
-} from '../../../../../ui-common/parts/controls/GeneralSelector';
+} from '../../../../../ui-common/sharedViews/controls/GeneralSelector';
 
 const testOptions: IGeneralSelectorProps['options'] = [
   { id: '', text: 'no-user' },

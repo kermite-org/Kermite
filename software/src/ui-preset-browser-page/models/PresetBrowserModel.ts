@@ -5,8 +5,8 @@ import {
   modalTextEdit,
 } from '~/ui-common/fundamental/dialog/BasicModals';
 import { createSimpleSelector } from '~/ui-common/helpers/StoreUtils';
-import { ProjectResourceModel } from '~/ui-common/models/ProjectResourceModel';
-import { uiStatusModel } from '~/ui-common/models/UiStatusModel';
+import { ProjectResourceModel } from '~/ui-common/sharedModels/ProjectResourceModel';
+import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
 
 class PresetBrowserModelHelper {
   static getNewProfileNameBase(

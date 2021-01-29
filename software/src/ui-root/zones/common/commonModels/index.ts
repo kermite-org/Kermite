@@ -1,5 +1,5 @@
-import { projectResourceModel } from '~/ui-common/models/ProjectResourceModel';
-import { uiStatusModel } from '~/ui-common/models/UiStatusModel';
+import { projectResourceModel } from '~/ui-common/sharedModels/ProjectResourceModel';
+import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
 import { deviceStatusModel } from '~/ui-root/zones/common/commonModels/DeviceStatusModel';
 import { playerModel } from '~/ui-root/zones/common/commonModels/PlayerModel';
 import { siteModel } from '~/ui-root/zones/common/commonModels/SiteModel';

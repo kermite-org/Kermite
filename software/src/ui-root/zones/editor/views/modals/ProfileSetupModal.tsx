@@ -8,8 +8,8 @@ import {
   DialogButton,
 } from '~/ui-common/fundamental/dialog/CommonDialogParts';
 import { createModal } from '~/ui-common/fundamental/overlay/ForegroundModalLayer';
-import { projectResourceModel } from '~/ui-common/models/ProjectResourceModel';
-import { GeneralSelector } from '~/ui-common/parts/controls/GeneralSelector';
+import { projectResourceModel } from '~/ui-common/sharedModels/ProjectResourceModel';
+import { GeneralSelector } from '~/ui-common/sharedViews/controls/GeneralSelector';
 import {
   cssCommonPropertiesTable,
   cssCommonTextInput,

@@ -2,7 +2,7 @@ import { IDisplayKeyboardDesign, IProfileData } from '~/shared';
 import {
   getAssignForKeyUnitWithLayerFallback,
   getAssignEntryTexts,
-} from '~/ui-common/viewModels/KeyUnitCardViewModelCommon';
+} from '~/ui-common/sharedViewModels/KeyUnitCardViewModelCommon';
 
 export interface ICustomKeyUnitViewModelBase {
   keyUnitId: string;

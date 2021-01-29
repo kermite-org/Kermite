@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { uiTheme } from '~/ui-common';
-import { GeneralButton } from '~/ui-common/parts/controls/GeneralButton';
+import { GeneralButton } from '~/ui-common/sharedViews/controls/GeneralButton';
 import { HeatmapKeyboardView } from '~/ui-root/zones/common/parts/keyboardSvg/panels/HeatmapKeyboardView';
 import { makeRealtimeHeatmapViewModel } from '~/ui-root/zones/heatmap/RealtimeHeatmapViewModel';
 

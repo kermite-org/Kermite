@@ -1,7 +1,10 @@
 import { Hook } from 'qx';
 import { IDisplayKeyboardDesign } from '~/shared';
 import { ISelectorSource } from '~/ui-common';
-import { IUiSettings, uiStatusModel } from '~/ui-common/models/UiStatusModel';
+import {
+  IUiSettings,
+  uiStatusModel,
+} from '~/ui-common/sharedModels/UiStatusModel';
 import { playerModel } from '~/ui-root/zones/common/commonModels/PlayerModel';
 import { keyboardShapesModel } from '~/ui-root/zones/shapePreview/KeyboardShapesModel';
 

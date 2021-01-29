@@ -5,7 +5,7 @@ import {
   ClosableOverlay,
   CommonDialogFrame,
 } from '~/ui-common/fundamental/dialog/CommonDialogParts';
-import { uiStatusModel } from '~/ui-common/models/UiStatusModel';
+import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
 import { editorModel } from '~/ui-root/zones/editor/models/EditorModel';
 import { AssignTypeSelectionPart } from './AssignTypeSelectionPart';
 import { DualModeSettingsPart } from './DualModeSettingsPart';

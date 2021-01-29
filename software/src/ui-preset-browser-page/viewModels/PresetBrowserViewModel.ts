@@ -1,5 +1,5 @@
 import { ISelectorSource } from '~/ui-common';
-import { useDeviceStatusModel } from '~/ui-common/models/DeviceStatusModelHook';
+import { useDeviceStatusModel } from '~/ui-common/sharedModels/DeviceStatusModelHook';
 import { presetBrowserModel } from '~/ui-preset-browser-page/models/PresetBrowserModel';
 import {
   IPresetKeyboardViewModel,
