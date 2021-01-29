@@ -4,7 +4,6 @@ import { projectResourceModel } from '~/ui-root/zones/common/commonModels/Projec
 import { siteModel } from '~/ui-root/zones/common/commonModels/SiteModel';
 import { uiStatusModel } from '~/ui-root/zones/common/commonModels/UiStatusModel';
 import { profilesModel } from '~/ui-root/zones/editorProfilesSection/models/ProfilesModel';
-import { firmwareUpdationModel } from '~/ui-root/zones/firmup/FirmwareUpdationModel';
 import { realtimeHeatmapModel } from '~/ui-root/zones/heatmap/RealtimeHeatmapModel';
 import { presetBrowserModel } from '~/ui-root/zones/presetBrowser/models/PresetBrowserModel';
 
@@ -18,14 +17,12 @@ export class Models {
     deviceStatusModel.initialize();
     uiStatusModel.initialize();
     // this.keyboardShapesModel.initialize();
-    firmwareUpdationModel.initialize();
     presetBrowserModel.initialize();
     realtimeHeatmapModel.initialize();
   }
 
   finalize() {
     realtimeHeatmapModel.finalize();
-    firmwareUpdationModel.finalize();
     // this.keyboardShapesModel.finalize();
     uiStatusModel.finalize();
     deviceStatusModel.finalize();

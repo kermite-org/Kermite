@@ -1,7 +1,8 @@
 import { css } from 'goober';
-import { h } from 'qx';
+import { h, Hook } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { GeneralSelector } from '~/ui-root/zones/common/parts/controls/GeneralSelector';
+import { firmwareUpdationModel } from '~/ui-root/zones/firmup/FirmwareUpdationModel';
 import { makeFirmwareUpdationPageViewModel } from '~/ui-root/zones/firmup/FirmwareUpdationPageViewModel';
 
 const cssFirmwareUpdationPage = css`
@@ -38,6 +39,8 @@ const cssFirmwareUpdationPage = css`
 `;
 
 export const FirmwareUpdationPage = () => {
+  Hook.useEffect(firmwareUpdationModel.startPageSession, []);
+
   const vm = makeFirmwareUpdationPageViewModel();
   const { phase } = vm;
 

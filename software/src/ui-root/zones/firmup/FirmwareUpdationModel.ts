@@ -80,13 +80,12 @@ export class FirmwareUpdationModel {
     }
   };
 
-  initialize() {
-    ipcAgent.subscribe2('firmup_comPortPlugEvents', this.onComPortPlugEvent);
-  }
-
-  finalize() {
-    ipcAgent.unsubscribe2('firmup_comPortPlugEvents', this.onComPortPlugEvent);
-  }
+  startPageSession = () => {
+    return ipcAgent.subscribe(
+      'firmup_comPortPlugEvents',
+      this.onComPortPlugEvent,
+    );
+  };
 }
 
 export const firmwareUpdationModel = new FirmwareUpdationModel(
