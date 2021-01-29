@@ -1,8 +1,8 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { IDisplayArea } from '~/shared';
-import { KeyboardSvgFrame } from '~/ui-root/zones/common/parts/keyboardSvg/outlines/KeyboardSvgFrame';
-import { ScalerBox } from '~/ui-root/zones/common/parts/keyboardSvg/outlines/ScalerBox';
+import { KeyboardSvgFrame } from '~/ui-common/parts/keyboardSvg/outlines/KeyboardSvgFrame';
+import { ScalerBox } from '~/ui-common/parts/keyboardSvg/outlines/ScalerBox';
 
 export const cssScalerContent = css`
   height: 100%;

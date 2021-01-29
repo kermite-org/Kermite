@@ -1,8 +1,8 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { ISelectorSource } from '~/ui-common';
-import { GeneralButton } from '../../../../../ui-common/parts/controls/GeneralButton';
-import { GeneralSelector } from '../../../../../ui-common/parts/controls/GeneralSelector';
+import { GeneralButton } from '../controls/GeneralButton';
+import { GeneralSelector } from '../controls/GeneralSelector';
 
 interface IKeyboardProjectSelectorProps {
   selectorSource: ISelectorSource;

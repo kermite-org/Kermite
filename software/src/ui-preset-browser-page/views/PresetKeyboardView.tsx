@@ -1,10 +1,10 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { ViewModelProps } from '~/ui-common/helpers';
-import { KeyboardBodyShape } from '~/ui-root/zones/common/parts/keyboardSvg/atoms/KeyboardBodyShape';
-import { PresetKeyUnitCard } from '~/ui-root/zones/common/parts/keyboardSvg/molecules/PresetKeyUnitCard';
-import { KeyboardSvgFrameWithAutoScaler } from '~/ui-root/zones/common/parts/keyboardSvg/outlines/KeyboardSvgFrameWithAutoScaler';
-import { IPresetKeyboardViewModel } from '~/ui-root/zones/presetBrowser/viewModels/PresetKeyboardViewModel';
+import { KeyboardBodyShape } from '~/ui-common/parts/keyboardSvg/KeyboardBodyShape';
+import { KeyboardSvgFrameWithAutoScaler } from '~/ui-common/parts/keyboardSvg/outlines/KeyboardSvgFrameWithAutoScaler';
+import { IPresetKeyboardViewModel } from '~/ui-preset-browser-page/viewModels/PresetKeyboardViewModel';
+import { PresetKeyUnitCard } from '~/ui-preset-browser-page/views/PresetKeyUnitCard';
 
 export const PresetKeyboardView = ({
   vm,

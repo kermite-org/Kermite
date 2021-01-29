@@ -4,7 +4,7 @@ import { getDisplayKeyboardDesignSingleCached } from '~/ui-common/modules/Displa
 import {
   IPresetKeyUnitViewModel,
   makePresetKeyUnitViewModels,
-} from '~/ui-root/zones/common/commonViewModels/KeyUnitCard/PresetKeyUnitViewModelCreator';
+} from '~/ui-preset-browser-page/viewModels/PresetKeyUnitViewModelCreator';
 
 export interface IPresetKeyboardLayerViewModel {
   layerId: string;

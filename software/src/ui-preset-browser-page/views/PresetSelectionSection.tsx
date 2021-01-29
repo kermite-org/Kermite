@@ -2,9 +2,9 @@ import { css } from 'goober';
 import { h } from 'qx';
 import { ViewModelProps } from '~/ui-common/helpers';
 import { GeneralButton } from '~/ui-common/parts/controls/GeneralButton';
-import { KeyboardProfileSelector } from '~/ui-root/zones/common/parts/fabrics/KeyboardProfileSelector';
-import { KeyboardProjectSelector } from '~/ui-root/zones/common/parts/fabrics/KeyboardProjectSelector';
-import { IPresetBrowserViewModel } from '~/ui-root/zones/presetBrowser/viewModels/PresetBrowserViewModel';
+import { KeyboardProfileSelector } from '~/ui-common/parts/fabrics/KeyboardProfileSelector';
+import { KeyboardProjectSelector } from '~/ui-common/parts/fabrics/KeyboardProjectSelector';
+import { IPresetBrowserViewModel } from '~/ui-preset-browser-page/viewModels/PresetBrowserViewModel';
 
 const cssPresetSelectionSection = css`
   display: flex;

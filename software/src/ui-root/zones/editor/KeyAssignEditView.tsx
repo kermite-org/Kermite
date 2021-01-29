@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { uiTheme } from '~/ui-common';
-import { uiStatusModel } from '~/ui-root/zones/common/commonModels/UiStatusModel';
+import { uiStatusModel } from '~/ui-common/models/UiStatusModel';
 import { ProfileConfigurationPart } from '~/ui-root/zones/editor/views/ProfileConfigurationPart';
 import { AssignEditSection } from './views/AssignEditSection';
 import { BehaviorOptionsPart } from './views/BehaviorOptionsPart';

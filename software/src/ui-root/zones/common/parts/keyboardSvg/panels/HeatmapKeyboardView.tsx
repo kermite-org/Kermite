@@ -1,9 +1,9 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { ViewModelProps } from '~/ui-common/helpers';
-import { KeyboardBodyShape } from '~/ui-root/zones/common/parts/keyboardSvg/atoms/KeyboardBodyShape';
+import { KeyboardBodyShape } from '~/ui-common/parts/keyboardSvg/KeyboardBodyShape';
+import { KeyboardSvgFrameWithAutoScaler } from '~/ui-common/parts/keyboardSvg/outlines/KeyboardSvgFrameWithAutoScaler';
 import { HeatmapKeyUnitCard } from '~/ui-root/zones/common/parts/keyboardSvg/molecules/HeatmapKeyUnitCard';
-import { KeyboardSvgFrameWithAutoScaler } from '~/ui-root/zones/common/parts/keyboardSvg/outlines/KeyboardSvgFrameWithAutoScaler';
 import { IRealtimeHeatmapKeyboardViewModel } from '~/ui-root/zones/heatmap/RealtimeHeatmapViewModel';
 
 export const HeatmapKeyboardView = ({

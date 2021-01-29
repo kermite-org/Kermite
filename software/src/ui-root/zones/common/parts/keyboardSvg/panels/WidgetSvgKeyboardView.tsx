@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { linerInterpolateValue } from '~/shared';
-import { KeyboardBodyShape } from '~/ui-root/zones/common/parts/keyboardSvg/atoms/KeyboardBodyShape';
+import { KeyboardBodyShape } from '~/ui-common/parts/keyboardSvg/KeyboardBodyShape';
 import { IWidgetKeyboardViewViewModel } from '~/ui-root/zones/widget/WidgetMainPageViewModel';
 import { WidgetKeyUnitCardsPart } from '../organisms/WidgetKeyUnitCardsPart';
 

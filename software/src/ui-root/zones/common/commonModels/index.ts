@@ -1,8 +1,8 @@
+import { projectResourceModel } from '~/ui-common/models/ProjectResourceModel';
+import { uiStatusModel } from '~/ui-common/models/UiStatusModel';
 import { deviceStatusModel } from '~/ui-root/zones/common/commonModels/DeviceStatusModel';
 import { playerModel } from '~/ui-root/zones/common/commonModels/PlayerModel';
-import { projectResourceModel } from '~/ui-root/zones/common/commonModels/ProjectResourceModel';
 import { siteModel } from '~/ui-root/zones/common/commonModels/SiteModel';
-import { uiStatusModel } from '~/ui-root/zones/common/commonModels/UiStatusModel';
 import { profilesModel } from '~/ui-root/zones/editorProfilesSection/models/ProfilesModel';
 import { realtimeHeatmapModel } from '~/ui-root/zones/heatmap/RealtimeHeatmapModel';
 

@@ -1,14 +1,14 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { uiTheme } from '~/ui-common';
+import { uiStatusModel } from '~/ui-common/models/UiStatusModel';
 import { FirmwareUpdationPage } from '~/ui-firmware-updation-page';
 import { UiLayouterPageComponent } from '~/ui-layouter-page';
-import { uiStatusModel } from '~/ui-root/zones/common/commonModels/UiStatusModel';
 import { HeatmapPage } from '~/ui-root/zones/heatmap/HeatmapPage';
 import { CustomWindowFrame } from '~/ui-root/zones/siteFrame/views/window/CustomWindowFrame';
 import { DevToolPullTab } from '~/ui-root/zones/siteFrame/views/window/DevToolPullTab';
+import { PresetBrowserPage } from '../ui-preset-browser-page';
 import { EditorPage } from './zones/editor/EditorPage';
-import { PresetBrowserPage } from './zones/presetBrowser/PresetBrowserPage';
 import { KeyboardShapePreviewPage } from './zones/shapePreview/ShapePreviewPage';
 import { NavigationColumn } from './zones/siteFrame/views/navigation/NavigationColumn';
 import { WindowTitleBarSection } from './zones/siteFrame/views/titleBar/WindowTitleBarSection';

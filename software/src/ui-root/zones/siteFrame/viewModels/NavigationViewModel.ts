@@ -1,7 +1,4 @@
-import {
-  PageSignature,
-  uiStatusModel,
-} from '~/ui-root/zones/common/commonModels/UiStatusModel';
+import { PageSignature, uiStatusModel } from '~/ui-common/models/UiStatusModel';
 
 export interface NavigationEntryViewModel {
   pageSig: PageSignature;

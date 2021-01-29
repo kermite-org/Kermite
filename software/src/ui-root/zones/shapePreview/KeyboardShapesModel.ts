@@ -1,14 +1,11 @@
 import { IDisplayKeyboardDesign } from '~/shared';
 import { ipcAgent } from '~/ui-common';
-import { DisplayKeyboardDesignLoader } from '~/ui-common/modules/DisplayKeyboardDesignLoader';
 import {
   projectResourceModel,
   ProjectResourceModel,
-} from '~/ui-root/zones/common/commonModels/ProjectResourceModel';
-import {
-  uiStatusModel,
-  UiStatusModel,
-} from '~/ui-root/zones/common/commonModels/UiStatusModel';
+} from '~/ui-common/models/ProjectResourceModel';
+import { uiStatusModel, UiStatusModel } from '~/ui-common/models/UiStatusModel';
+import { DisplayKeyboardDesignLoader } from '~/ui-common/modules/DisplayKeyboardDesignLoader';
 
 export class KeyboardShapesModel {
   constructor(

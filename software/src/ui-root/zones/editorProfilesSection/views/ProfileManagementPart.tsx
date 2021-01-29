@@ -1,8 +1,8 @@
 import { css } from 'goober';
 import { h, Hook } from 'qx';
+import { KeyboardProfileSelector } from '~/ui-common/parts/fabrics/KeyboardProfileSelector';
 import { ConfigurationButton } from '~/ui-root/zones/common/parts/controls/ConfigurationButton';
 import { LaunchButton } from '~/ui-root/zones/common/parts/controls/LaunchButton';
-import { KeyboardProfileSelector } from '~/ui-root/zones/common/parts/fabrics/KeyboardProfileSelector';
 import { keyboardConfigModel } from '~/ui-root/zones/editorProfilesSection/models/KeyboardConfigModel';
 import { makeProfileManagementPartViewModel } from '~/ui-root/zones/editorProfilesSection/viewModels/ProfileManagementPartViewModel';
 import { makeProfileSelectionMenuPartViewModel } from '~/ui-root/zones/editorProfilesSection/viewModels/ProfileSelectionMenuPartViewModel';

@@ -2,7 +2,7 @@ import { css } from 'goober';
 import { h } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { mvvmView } from '~/ui-common/helpers';
-import { IPresetKeyUnitViewModel } from '~/ui-root/zones/common/commonViewModels/KeyUnitCard/PresetKeyUnitViewModelCreator';
+import { IPresetKeyUnitViewModel } from '~/ui-preset-browser-page/viewModels/PresetKeyUnitViewModelCreator';
 
 const cssKeyRect = css`
   fill: transparent;

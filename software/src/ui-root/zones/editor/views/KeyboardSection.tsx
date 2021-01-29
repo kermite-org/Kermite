@@ -1,9 +1,9 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { uiTheme } from '~/ui-common';
-import { KeyboardBodyShape } from '~/ui-root/zones/common/parts/keyboardSvg/atoms/KeyboardBodyShape';
+import { KeyboardBodyShape } from '~/ui-common/parts/keyboardSvg/KeyboardBodyShape';
+import { KeyboardSvgFrameWithAutoScaler } from '~/ui-common/parts/keyboardSvg/outlines/KeyboardSvgFrameWithAutoScaler';
 import { EditKeyUnitCardsPart } from '~/ui-root/zones/common/parts/keyboardSvg/organisms/EditKeyUnitCardsPart';
-import { KeyboardSvgFrameWithAutoScaler } from '~/ui-root/zones/common/parts/keyboardSvg/outlines/KeyboardSvgFrameWithAutoScaler';
 import { editorModel } from '~/ui-root/zones/editor/models/EditorModel';
 import { LayerStateView } from './LayerStateView';
 

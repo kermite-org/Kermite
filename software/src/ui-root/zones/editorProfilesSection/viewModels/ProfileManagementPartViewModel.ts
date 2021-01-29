@@ -5,7 +5,7 @@ import {
   modalTextEdit,
   modalConfirm,
 } from '~/ui-common/fundamental/dialog/BasicModals';
-import { uiStatusModel } from '~/ui-root/zones/common/commonModels/UiStatusModel';
+import { uiStatusModel } from '~/ui-common/models/UiStatusModel';
 import { editorModel } from '~/ui-root/zones/editor/models/EditorModel';
 import { callProfileSetupModal } from '~/ui-root/zones/editor/views/modals/ProfileSetupModal';
 import { keyboardConfigModel } from '~/ui-root/zones/editorProfilesSection/models/KeyboardConfigModel';
