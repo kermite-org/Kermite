@@ -1,8 +1,8 @@
 import { h, render } from 'qx';
 import { debounce } from '~/shared';
 import { appUi } from '~/ui-common';
-import { SiteRoot } from '~/ui-root/views/SiteRoot';
-import { models } from './models';
+import { SiteRoot } from '~/ui-root/SiteRoot';
+import { models } from './zones/common/commonModels';
 
 async function start() {
   console.log('start');
