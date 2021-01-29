@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { ISelectorSource } from '~/ui-root/zones/common/commonViewModels/viewModelInterfaces';
+import { ISelectorSource } from '~/ui-common';
 import { GeneralButton } from '../controls/GeneralButton';
 import { GeneralSelector } from '../controls/GeneralSelector';
 

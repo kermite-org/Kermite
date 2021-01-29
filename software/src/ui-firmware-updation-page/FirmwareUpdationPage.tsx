@@ -2,8 +2,8 @@ import { css } from 'goober';
 import { h, Hook } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { GeneralSelector } from '~/ui-root/zones/common/parts/controls/GeneralSelector';
-import { firmwareUpdationModel } from '~/ui-root/zones/firmup/FirmwareUpdationModel';
-import { makeFirmwareUpdationPageViewModel } from '~/ui-root/zones/firmup/FirmwareUpdationPageViewModel';
+import { firmwareUpdationModel } from './FirmwareUpdationModel';
+import { makeFirmwareUpdationPageViewModel } from './FirmwareUpdationPageViewModel';
 
 const cssFirmwareUpdationPage = css`
   background: ${uiTheme.colors.clBackground};

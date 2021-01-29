@@ -1,5 +1,5 @@
 import { h } from 'qx';
-import { reflectFieldValue } from '~/ui-common';
+import { ISelectorOption, reflectFieldValue } from '~/ui-common';
 import {
   ClosableOverlay,
   CommonDialogFrame,
@@ -9,7 +9,6 @@ import {
 } from '~/ui-common/fundamental/dialog/CommonDialogParts';
 import { createModal } from '~/ui-common/fundamental/overlay/ForegroundModalLayer';
 import { projectResourceModel } from '~/ui-root/zones/common/commonModels/ProjectResourceModel';
-import { ISelectorOption } from '~/ui-root/zones/common/commonViewModels/viewModelInterfaces';
 import {
   cssCommonPropertiesTable,
   cssCommonTextInput,

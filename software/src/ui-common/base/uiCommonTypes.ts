@@ -7,3 +7,10 @@ export interface ISelectorSource {
   choiceId: string;
   setChoiceId(id: string): void;
 }
+
+export function makePlainSelectorOption(source: string): ISelectorOption {
+  return {
+    id: source,
+    text: source,
+  };
+}

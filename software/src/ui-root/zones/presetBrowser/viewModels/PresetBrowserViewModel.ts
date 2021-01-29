@@ -1,5 +1,5 @@
+import { ISelectorSource } from '~/ui-common';
 import { deviceStatusModel } from '~/ui-root/zones/common/commonModels/DeviceStatusModel';
-import { ISelectorSource } from '~/ui-root/zones/common/commonViewModels/viewModelInterfaces';
 import { presetBrowserModel } from '~/ui-root/zones/presetBrowser/models/PresetBrowserModel';
 import {
   IPresetKeyboardViewModel,

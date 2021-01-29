@@ -1,11 +1,11 @@
 import { Hook } from 'qx';
 import { IDisplayKeyboardDesign } from '~/shared';
+import { ISelectorSource } from '~/ui-common';
 import { playerModel } from '~/ui-root/zones/common/commonModels/PlayerModel';
 import {
   IUiSettings,
   uiStatusModel,
 } from '~/ui-root/zones/common/commonModels/UiStatusModel';
-import { ISelectorSource } from '~/ui-root/zones/common/commonViewModels/viewModelInterfaces';
 import { keyboardShapesModel } from '~/ui-root/zones/shapePreview/KeyboardShapesModel';
 
 export interface IShapePreviewPageViewModel {

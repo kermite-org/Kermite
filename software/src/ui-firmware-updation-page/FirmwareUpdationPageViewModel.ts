@@ -1,9 +1,9 @@
-import { ISelectorSource } from '~/ui-root/zones/common/commonViewModels/viewModelInterfaces';
-import { showCommandOutputLogModal } from '~/ui-root/zones/firmup/CommandOutputLogModal';
+import { ISelectorSource } from '~/ui-common';
+import { showCommandOutputLogModal } from './CommandOutputLogModal';
 import {
   firmwareUpdationModel,
   FirmwareUpdationPhase,
-} from '~/ui-root/zones/firmup/FirmwareUpdationModel';
+} from './FirmwareUpdationModel';
 
 interface IFirmwareUpdationPageViewModel {
   phase: FirmwareUpdationPhase;

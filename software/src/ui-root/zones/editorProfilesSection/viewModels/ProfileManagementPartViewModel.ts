@@ -1,12 +1,11 @@
 import { Hook } from 'qx';
+import { ISelectorSource, makePlainSelectorOption } from '~/ui-common';
 import {
   modalAlert,
   modalTextEdit,
   modalConfirm,
 } from '~/ui-common/fundamental/dialog/BasicModals';
 import { uiStatusModel } from '~/ui-root/zones/common/commonModels/UiStatusModel';
-import { makePlainSelectorOption } from '~/ui-root/zones/common/commonViewModels/viewModelHelpers';
-import { ISelectorSource } from '~/ui-root/zones/common/commonViewModels/viewModelInterfaces';
 import { editorModel } from '~/ui-root/zones/editor/models/EditorModel';
 import { callProfileSetupModal } from '~/ui-root/zones/editor/views/modals/ProfileSetupModal';
 import { keyboardConfigModel } from '~/ui-root/zones/editorProfilesSection/models/KeyboardConfigModel';
