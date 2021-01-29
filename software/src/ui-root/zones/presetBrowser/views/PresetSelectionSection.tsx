@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { ViewModelProps } from '~/ui-common/helpers';
-import { GeneralButton } from '~/ui-root/zones/common/parts/controls/GeneralButton';
+import { GeneralButton } from '~/ui-common/parts/controls/GeneralButton';
 import { KeyboardProfileSelector } from '~/ui-root/zones/common/parts/fabrics/KeyboardProfileSelector';
 import { KeyboardProjectSelector } from '~/ui-root/zones/common/parts/fabrics/KeyboardProjectSelector';
 import { IPresetBrowserViewModel } from '~/ui-root/zones/presetBrowser/viewModels/PresetBrowserViewModel';

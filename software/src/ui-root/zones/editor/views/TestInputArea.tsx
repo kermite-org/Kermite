@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { Hook, h } from 'qx';
-import { GeneralButton } from '~/ui-root/zones/common/parts/controls/GeneralButton';
-import { GeneralInput } from '~/ui-root/zones/common/parts/controls/GeneralInput';
+import { GeneralButton } from '~/ui-common/parts/controls/GeneralButton';
+import { GeneralInput } from '~/ui-common/parts/controls/GeneralInput';
 import { makeTestInputAreaViewModel } from '~/ui-root/zones/editor/TestInputAreaViweModel';
 
 const cssTestInputArea = css`

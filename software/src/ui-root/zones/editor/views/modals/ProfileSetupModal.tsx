@@ -8,12 +8,12 @@ import {
   DialogButton,
 } from '~/ui-common/fundamental/dialog/CommonDialogParts';
 import { createModal } from '~/ui-common/fundamental/overlay/ForegroundModalLayer';
+import { GeneralSelector } from '~/ui-common/parts/controls/GeneralSelector';
 import { projectResourceModel } from '~/ui-root/zones/common/commonModels/ProjectResourceModel';
 import {
   cssCommonPropertiesTable,
   cssCommonTextInput,
 } from '~/ui-root/zones/common/parts/controls/CommonStyles';
-import { GeneralSelector } from '~/ui-root/zones/common/parts/controls/GeneralSelector';
 
 interface ICreateProfileDialogEditValues {
   profileName: string;
