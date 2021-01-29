@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { deviceStatusModel } from '~/ui-root/zones/common/commonModels/DeviceStatusModel';
+import { useDeviceStatusModel } from '~/ui-common/sharedModels/DeviceStatusModelHook';
 import { playerModel } from '~/ui-root/zones/common/commonModels/PlayerModel';
 
 const cssLayerStateView = css`
@@ -31,7 +31,7 @@ const cssLayerCard = css`
 `;
 
 export const LayerStateView = () => {
-  const { isConnected } = deviceStatusModel;
+  const { isConnected } = useDeviceStatusModel();
 
   return (
     <div css={cssLayerStateView}>
