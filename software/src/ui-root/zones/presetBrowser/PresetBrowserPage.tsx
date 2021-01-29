@@ -18,9 +18,7 @@ const cssPresetBrowserPage = css`
 `;
 
 export const PresetBrowserPage = () => {
-  Hook.useEffect(() => {
-    presetBrowserModel.initialize();
-  }, []);
+  Hook.useEffect(presetBrowserModel.startPageSession, []);
 
   const vm = makePresetBrowserViewModel();
 

@@ -7,7 +7,6 @@ import {
 import { createSimpleSelector } from '~/ui-layouter/editor/store';
 import { ProjectResourceModel } from '~/ui-root/zones/common/commonModels/ProjectResourceModel';
 import { uiStatusModel } from '~/ui-root/zones/common/commonModels/UiStatusModel';
-import { profilesModel } from '~/ui-root/zones/editorProfilesSection/models/ProfilesModel';
 
 class PresetBrowserModelHelper {
   static getNewProfileNameBase(
@@ -58,6 +57,7 @@ class PresetBrowserModelHelper {
 type IPresetSpecWithId = IPresetSpec & { id: string };
 export class PresetBrowserModel {
   private projectResourceModel = new ProjectResourceModel();
+  private allProfileNames: string[] = [];
 
   private _currentProjectId: string | undefined;
   private _currentPresetSpecId: string | undefined;
@@ -148,8 +148,6 @@ export class PresetBrowserModel {
 
     // todo: ここでProfileの名前を設定せず、新規作成未保存のProfileとして編集できるようにする
 
-    const { allProfileNames } = profilesModel;
-
     const info = this.projectResourceModel.getProjectResourceInfo(projectId);
     if (!info) {
       console.log(`invalid project selection`);
@@ -162,7 +160,7 @@ export class PresetBrowserModel {
     const newProfileNameBase = PresetBrowserModelHelper.getNewProfileNameBase(
       info.keyboardName,
       spec.type === 'preset' ? spec.presetName : spec.layoutName,
-      allProfileNames,
+      this.allProfileNames,
     );
 
     const newProfileName = await modalTextEdit({
@@ -175,7 +173,7 @@ export class PresetBrowserModel {
     }
     const checkRes = PresetBrowserModelHelper.checkValidNewProfileName(
       newProfileName,
-      allProfileNames,
+      this.allProfileNames,
     );
     if (checkRes !== 'ok') {
       await modalAlert(`${checkRes} operation cancelled.`);
@@ -186,7 +184,7 @@ export class PresetBrowserModel {
     uiStatusModel.navigateTo('editor');
   };
 
-  async initialize() {
+  private async fetchResourceInfos() {
     await this.projectResourceModel.initializeAsync();
     const resourceInfos = this.projectResourceModel.projectResourceInfos;
     if (
@@ -198,6 +196,15 @@ export class PresetBrowserModel {
       this.loadSelectedProfile();
     }
   }
+
+  startPageSession = () => {
+    this.fetchResourceInfos();
+    return ipcAgent.subscribe('profile_profileManagerStatus', (status) => {
+      if (status.allProfileNames) {
+        this.allProfileNames = status.allProfileNames;
+      }
+    });
+  };
 }
 
 export const presetBrowserModel = new PresetBrowserModel();
