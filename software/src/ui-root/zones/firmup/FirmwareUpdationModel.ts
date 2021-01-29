@@ -1,8 +1,5 @@
+import { IProjectResourceInfo } from '~/shared';
 import { ipcAgent } from '~/ui-common';
-import {
-  projectResourceModel,
-  ProjectResourceModel,
-} from '~/ui-root/zones/common/commonModels/ProjectResourceModel';
 
 export type FirmwareUpdationPhase =
   | 'WaitingReset'
@@ -17,7 +14,7 @@ export class FirmwareUpdationModel {
   comPortName: string | undefined = undefined;
   firmwareUploadResult: string | undefined = undefined;
 
-  constructor(private projectResourceModel: ProjectResourceModel) {}
+  private projectInfosWithFirmware: IProjectResourceInfo[] = [];
 
   setCurrentProjectId = (projectId: string) => {
     this.currentProjectId = projectId;
@@ -25,12 +22,10 @@ export class FirmwareUpdationModel {
 
   get projectOptions() {
     const blankOption = { id: '', text: 'select firmware' };
-    const projectOptions = this.projectResourceModel
-      .getProjectsWithFirmware()
-      .map((info) => ({
-        id: info.projectId,
-        text: info.projectPath,
-      }));
+    const projectOptions = this.projectInfosWithFirmware.map((info) => ({
+      id: info.projectId,
+      text: info.projectPath,
+    }));
     return [blankOption, ...projectOptions];
   }
 
@@ -80,7 +75,15 @@ export class FirmwareUpdationModel {
     }
   };
 
+  private async fechProjectInfos() {
+    const projectResourceInfos = await ipcAgent.async.projects_getAllProjectResourceInfos();
+    this.projectInfosWithFirmware = projectResourceInfos.filter(
+      (info) => info.hasFirmwareBinary,
+    );
+  }
+
   startPageSession = () => {
+    this.fechProjectInfos();
     return ipcAgent.subscribe(
       'firmup_comPortPlugEvents',
       this.onComPortPlugEvent,
@@ -88,6 +91,4 @@ export class FirmwareUpdationModel {
   };
 }
 
-export const firmwareUpdationModel = new FirmwareUpdationModel(
-  projectResourceModel,
-);
+export const firmwareUpdationModel = new FirmwareUpdationModel();
