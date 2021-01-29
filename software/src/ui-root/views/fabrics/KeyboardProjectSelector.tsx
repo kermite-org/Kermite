@@ -24,7 +24,6 @@ export const KeyboardProjectSelector = (
         icon="fas fa-link"
         disabled={!props.isLinkButtonActive}
         handler={props.linkButtonHandler}
-        className="linkButton"
         form="unitSquare"
       />
     </div>

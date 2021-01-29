@@ -1,7 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { uiTheme, reflectValue } from '~/ui-common';
-import { combineClasses } from '~/ui-root/base/helper/ViewHelpers';
 
 interface IGeneralInputProps {
   value: string;
@@ -30,7 +29,7 @@ export const GeneralInput = ({
 }: IGeneralInputProps) => {
   return (
     <input
-      class={combineClasses(cssGeneralInput(width), className)}
+      classNames={[cssGeneralInput(width), className]}
       type="text"
       value={value}
       onInput={reflectValue(setValue)}

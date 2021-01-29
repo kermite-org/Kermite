@@ -1,7 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { uiTheme } from '~/ui-common';
-import { combineClasses } from '~/ui-root/base/helper/ViewHelpers';
 
 type IGeneralButtonForm = 'unit' | 'unitSquare' | 'large';
 
@@ -64,7 +63,7 @@ export const GeneralButton = ({
 }: IGeneralButtonProps) => {
   return (
     <div
-      class={combineClasses(cssGeneralButton, className)}
+      classNames={[cssGeneralButton, className]}
       onClick={handler}
       data-disabled={disabled}
       data-form={form}

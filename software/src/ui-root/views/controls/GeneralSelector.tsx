@@ -1,7 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { uiTheme, reflectValue } from '~/ui-common';
-import { combineClasses } from '~/ui-root/base/helper/ViewHelpers';
 
 const { unitHeight } = uiTheme;
 
@@ -42,7 +41,7 @@ export const GeneralSelector = (props: IGeneralSelectorProps) => {
     <select
       value={choiceId}
       onChange={reflectValue(setChoiceId)}
-      css={combineClasses(cssGeneralSelector2(width), className)}
+      classNames={[cssGeneralSelector2(width), className]}
       disabled={disabled}
     >
       {options.map((it, idx) => (
