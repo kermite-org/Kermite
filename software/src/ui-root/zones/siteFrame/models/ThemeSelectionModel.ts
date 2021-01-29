@@ -24,3 +24,6 @@ export class ThemeSelectionModel {
     this.currentThemeKey = uiThemeConfigLoader.loadThemeKey();
   }
 }
+
+export const themeSelectionModel = new ThemeSelectionModel();
+themeSelectionModel.initialize();

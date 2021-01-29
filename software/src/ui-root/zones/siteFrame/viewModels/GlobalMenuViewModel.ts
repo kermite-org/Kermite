@@ -1,6 +1,7 @@
 import { Hook } from 'qx';
 import { appUi } from '~/ui-common';
 import { models } from '~/ui-root/zones/common/commonModels';
+import { themeSelectionModel } from '~/ui-root/zones/siteFrame/models/ThemeSelectionModel';
 
 export interface IGlobalMenuItem {
   key: string;
@@ -25,17 +26,17 @@ function createMenuItems(): IGlobalMenuItem[] {
       key: 'miThemeLight',
       text: 'Light Theme',
       handler() {
-        models.themeSelectionModel.changeTheme('light');
+        themeSelectionModel.changeTheme('light');
       },
-      active: models.themeSelectionModel.currentTheme === 'light',
+      active: themeSelectionModel.currentTheme === 'light',
     },
     {
       key: 'miThemeDark',
       text: 'Dark Theme',
       handler() {
-        models.themeSelectionModel.changeTheme('dark');
+        themeSelectionModel.changeTheme('dark');
       },
-      active: models.themeSelectionModel.currentTheme === 'dark',
+      active: themeSelectionModel.currentTheme === 'dark',
     },
   ];
 

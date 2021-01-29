@@ -5,7 +5,6 @@ import { KeyboardConfigModel } from '../../editorProfilesSection/KeyboardConfigM
 import { ProfilesModel } from '../../editorProfilesSection/models/ProfilesModel';
 import { FirmwareUpdationModel } from '../../firmup/FirmwareUpdationModel';
 import { KeyboardShapesModel } from '../../shapePreview/KeyboardShapesModel';
-import { ThemeSelectionModel } from '../../siteFrame/models/ThemeSelectionModel';
 import { DeviceStatusModel } from './DeviceStatusModel';
 import { PlayerModel } from './PlayerModel';
 import { ProjectResourceModel } from './ProjectResourceModel';
@@ -29,7 +28,6 @@ export class Models {
   );
 
   siteModel = new SiteModel();
-  themeSelectionModel = new ThemeSelectionModel();
 
   presetBrowserModel = new PresetBrowserModel(
     this.projectResourceModel,
@@ -47,7 +45,6 @@ export class Models {
     this.keyboardConfigModel.initialize();
     this.deviceStatusModel.initialize();
     this.uiStatusModel.initialize();
-    this.themeSelectionModel.initialize();
     // this.keyboardShapesModel.initialize();
     this.firmwareUpdationModel.initialize();
     this.presetBrowserModel.initialize();
