@@ -1,22 +1,13 @@
-import { IProfileData, fallbackProfileData, IPresetSpec } from '~/shared';
+import { fallbackProfileData, IPresetSpec, IProfileData } from '~/shared';
 import { ipcAgent } from '~/ui-common';
 import {
-  modalTextEdit,
   modalAlert,
+  modalTextEdit,
 } from '~/ui-common/fundamental/dialog/BasicModals';
 import { createSimpleSelector } from '~/ui-layouter/editor/store';
-import {
-  projectResourceModel,
-  ProjectResourceModel,
-} from '~/ui-root/zones/common/commonModels/ProjectResourceModel';
-import {
-  uiStatusModel,
-  UiStatusModel,
-} from '~/ui-root/zones/common/commonModels/UiStatusModel';
-import {
-  profilesModel,
-  ProfilesModel,
-} from '~/ui-root/zones/editorProfilesSection/models/ProfilesModel';
+import { ProjectResourceModel } from '~/ui-root/zones/common/commonModels/ProjectResourceModel';
+import { uiStatusModel } from '~/ui-root/zones/common/commonModels/UiStatusModel';
+import { profilesModel } from '~/ui-root/zones/editorProfilesSection/models/ProfilesModel';
 
 class PresetBrowserModelHelper {
   static getNewProfileNameBase(
@@ -51,15 +42,22 @@ class PresetBrowserModelHelper {
     }
     return 'ok';
   }
+
+  static createProfile(
+    newProfileName: string,
+    targetProjectId: string,
+    presetSpec: IPresetSpec,
+  ) {
+    const createCommand = {
+      creatProfile: { name: newProfileName, targetProjectId, presetSpec },
+    };
+    ipcAgent.async.profile_executeProfileManagerCommands([createCommand]);
+  }
 }
 
 type IPresetSpecWithId = IPresetSpec & { id: string };
 export class PresetBrowserModel {
-  constructor(
-    private projectResourceModel: ProjectResourceModel,
-    private profilesModel: ProfilesModel,
-    private uiStatusModel: UiStatusModel,
-  ) {}
+  private projectResourceModel = new ProjectResourceModel();
 
   private _currentProjectId: string | undefined;
   private _currentPresetSpecId: string | undefined;
@@ -103,7 +101,7 @@ export class PresetBrowserModel {
   );
 
   get optionPresetSpecs(): IPresetSpecWithId[] {
-    return this.optionPresetSpecsSelector();
+    return this.optionPresetSpecsSelector() || [];
   }
 
   private getPresetSpecById(id: string) {
@@ -147,7 +145,10 @@ export class PresetBrowserModel {
     if (!(projectId && presetSpecId)) {
       return;
     }
-    const { allProfileNames } = this.profilesModel;
+
+    // todo: ここでProfileの名前を設定せず、新規作成未保存のProfileとして編集できるようにする
+
+    const { allProfileNames } = profilesModel;
 
     const info = this.projectResourceModel.getProjectResourceInfo(projectId);
     if (!info) {
@@ -181,13 +182,17 @@ export class PresetBrowserModel {
       return;
     }
 
-    this.profilesModel.createProfile(newProfileName, projectId, spec);
-    this.uiStatusModel.navigateTo('editor');
+    PresetBrowserModelHelper.createProfile(newProfileName, projectId, spec);
+    uiStatusModel.navigateTo('editor');
   };
 
-  initialize() {
+  async initialize() {
+    await this.projectResourceModel.initializeAsync();
     const resourceInfos = this.projectResourceModel.projectResourceInfos;
-    if (resourceInfos.length > 0) {
+    if (
+      resourceInfos.length > 0 &&
+      !(this._currentProjectId && this._currentPresetSpecId)
+    ) {
       this._currentProjectId = resourceInfos[0].projectId;
       this._currentPresetSpecId = this.optionPresetSpecs[0]?.id;
       this.loadSelectedProfile();
@@ -195,8 +200,4 @@ export class PresetBrowserModel {
   }
 }
 
-export const presetBrowserModel = new PresetBrowserModel(
-  projectResourceModel,
-  profilesModel,
-  uiStatusModel,
-);
+export const presetBrowserModel = new PresetBrowserModel();

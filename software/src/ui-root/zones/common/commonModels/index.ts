@@ -5,7 +5,6 @@ import { siteModel } from '~/ui-root/zones/common/commonModels/SiteModel';
 import { uiStatusModel } from '~/ui-root/zones/common/commonModels/UiStatusModel';
 import { profilesModel } from '~/ui-root/zones/editorProfilesSection/models/ProfilesModel';
 import { realtimeHeatmapModel } from '~/ui-root/zones/heatmap/RealtimeHeatmapModel';
-import { presetBrowserModel } from '~/ui-root/zones/presetBrowser/models/PresetBrowserModel';
 
 export class Models {
   async initialize() {
@@ -17,7 +16,6 @@ export class Models {
     deviceStatusModel.initialize();
     uiStatusModel.initialize();
     // this.keyboardShapesModel.initialize();
-    presetBrowserModel.initialize();
     realtimeHeatmapModel.initialize();
   }
 
