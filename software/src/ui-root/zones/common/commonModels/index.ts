@@ -1,7 +1,6 @@
 import { RealtimeHeatmapModel } from '~/ui-root/zones/heatmap/RealtimeHeatmapModel';
 import { PresetBrowserModel } from '~/ui-root/zones/presetBrowser/models/PresetBrowserModel';
 import { EditorModel } from '../../editor/models/EditorModel';
-import { KeyboardConfigModel } from '../../editorProfilesSection/KeyboardConfigModel';
 import { ProfilesModel } from '../../editorProfilesSection/models/ProfilesModel';
 import { FirmwareUpdationModel } from '../../firmup/FirmwareUpdationModel';
 import { KeyboardShapesModel } from '../../shapePreview/KeyboardShapesModel';
@@ -16,7 +15,6 @@ export class Models {
   editorModel = new EditorModel();
   playerModel = new PlayerModel(this.editorModel);
   profilesModel = new ProfilesModel(this.editorModel);
-  keyboardConfigModel = new KeyboardConfigModel();
 
   projectResourceModel = new ProjectResourceModel();
   firmwareUpdationModel = new FirmwareUpdationModel(this.projectResourceModel);
@@ -42,7 +40,7 @@ export class Models {
     this.siteModel.initialize();
     this.profilesModel.initialize();
     this.playerModel.initialize();
-    this.keyboardConfigModel.initialize();
+
     this.deviceStatusModel.initialize();
     this.uiStatusModel.initialize();
     // this.keyboardShapesModel.initialize();

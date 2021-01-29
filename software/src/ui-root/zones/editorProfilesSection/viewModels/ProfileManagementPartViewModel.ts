@@ -8,6 +8,7 @@ import { models } from '~/ui-root/zones/common/commonModels';
 import { makePlainSelectorOption } from '~/ui-root/zones/common/commonViewModels/viewModelHelpers';
 import { ISelectorSource } from '~/ui-root/zones/common/commonViewModels/viewModelInterfaces';
 import { callProfileSetupModal } from '~/ui-root/zones/editor/views/modals/ProfileSetupModal';
+import { keyboardConfigModel } from '~/ui-root/zones/editorProfilesSection/models/KeyboardConfigModel';
 
 export interface IProfileManagementPartViewModel {
   currentProfileName: string;
@@ -125,7 +126,7 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
 
   const onLaunchButton = () => {
     models.profilesModel.saveProfile();
-    models.keyboardConfigModel.writeConfigurationToDevice();
+    keyboardConfigModel.writeConfigurationToDevice();
   };
 
   return {

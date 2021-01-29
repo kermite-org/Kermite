@@ -23,7 +23,13 @@ export class KeyboardConfigModel {
     }
   }
 
+  private initialized = false;
   initialize() {
-    this.loadKeyboardConfig();
+    if (!this.initialized) {
+      this.loadKeyboardConfig();
+      this.initialized = true;
+    }
   }
 }
+
+export const keyboardConfigModel = new KeyboardConfigModel();
