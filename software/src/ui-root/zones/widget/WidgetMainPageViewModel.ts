@@ -1,9 +1,10 @@
 import { IDisplayKeyboardDesign } from '~/shared';
-import { models } from '~/ui-root/zones/common/commonModels';
+import { siteModel } from '~/ui-root/zones/common/commonModels/SiteModel';
 import {
   IKeyUnitCardPartViewModel,
   makeKeyUnitCardsPartViewModel,
 } from '~/ui-root/zones/common/commonViewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
+import { editorModel } from '~/ui-root/zones/editor/models/EditorModel';
 
 export interface IWidgetKeyboardViewViewModel {
   keyboardDesign: IDisplayKeyboardDesign;
@@ -18,13 +19,13 @@ export interface IWidgetMainPageViewModel {
 
 export function makeWidgetMainPageViewModel(): IWidgetMainPageViewModel {
   return {
-    isWindowActive: models.siteModel.isWindowActive,
+    isWindowActive: siteModel.isWindowActive,
     keyboardVM: {
-      keyboardDesign: models.editorModel.displayDesign,
-      cardsPartVM: makeKeyUnitCardsPartViewModel(false, models),
+      keyboardDesign: editorModel.displayDesign,
+      cardsPartVM: makeKeyUnitCardsPartViewModel(false),
     },
     onOpenButton() {
-      models.siteModel.setWidgetMode(false);
+      siteModel.setWidgetMode(false);
     },
   };
 }

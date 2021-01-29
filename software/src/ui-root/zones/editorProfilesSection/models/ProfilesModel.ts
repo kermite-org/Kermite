@@ -4,7 +4,7 @@ import {
   IProfileManagerStatus,
 } from '~/shared';
 import { ipcAgent } from '~/ui-common';
-import { EditorModel } from '../../editor/models/EditorModel';
+import { editorModel, EditorModel } from '../../editor/models/EditorModel';
 import { ProfileProvider } from './ProfileProvider';
 
 const useAutoSave = false;
@@ -134,3 +134,5 @@ export class ProfilesModel {
     this.sendProfileManagerCommands(exportCommand);
   };
 }
+
+export const profilesModel = new ProfilesModel(editorModel);

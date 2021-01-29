@@ -1,63 +1,37 @@
-import { RealtimeHeatmapModel } from '~/ui-root/zones/heatmap/RealtimeHeatmapModel';
-import { PresetBrowserModel } from '~/ui-root/zones/presetBrowser/models/PresetBrowserModel';
-import { EditorModel } from '../../editor/models/EditorModel';
-import { ProfilesModel } from '../../editorProfilesSection/models/ProfilesModel';
-import { FirmwareUpdationModel } from '../../firmup/FirmwareUpdationModel';
-import { KeyboardShapesModel } from '../../shapePreview/KeyboardShapesModel';
-import { DeviceStatusModel } from './DeviceStatusModel';
-import { PlayerModel } from './PlayerModel';
-import { ProjectResourceModel } from './ProjectResourceModel';
-import { SiteModel } from './SiteModel';
-import { UiStatusModel } from './UiStatusModel';
+import { deviceStatusModel } from '~/ui-root/zones/common/commonModels/DeviceStatusModel';
+import { playerModel } from '~/ui-root/zones/common/commonModels/PlayerModel';
+import { projectResourceModel } from '~/ui-root/zones/common/commonModels/ProjectResourceModel';
+import { siteModel } from '~/ui-root/zones/common/commonModels/SiteModel';
+import { uiStatusModel } from '~/ui-root/zones/common/commonModels/UiStatusModel';
+import { profilesModel } from '~/ui-root/zones/editorProfilesSection/models/ProfilesModel';
+import { firmwareUpdationModel } from '~/ui-root/zones/firmup/FirmwareUpdationModel';
+import { realtimeHeatmapModel } from '~/ui-root/zones/heatmap/RealtimeHeatmapModel';
+import { presetBrowserModel } from '~/ui-root/zones/presetBrowser/models/PresetBrowserModel';
 
 export class Models {
-  deviceStatusModel = new DeviceStatusModel();
-  editorModel = new EditorModel();
-  playerModel = new PlayerModel(this.editorModel);
-  profilesModel = new ProfilesModel(this.editorModel);
-
-  projectResourceModel = new ProjectResourceModel();
-  firmwareUpdationModel = new FirmwareUpdationModel(this.projectResourceModel);
-  uiStatusModel = new UiStatusModel();
-
-  keyboardShapesModel = new KeyboardShapesModel(
-    this.projectResourceModel,
-    this.uiStatusModel,
-  );
-
-  siteModel = new SiteModel();
-
-  presetBrowserModel = new PresetBrowserModel(
-    this.projectResourceModel,
-    this.profilesModel,
-    this.uiStatusModel,
-  );
-
-  realtimeHeatmapModel = new RealtimeHeatmapModel(this.editorModel);
-
   async initialize() {
-    await this.projectResourceModel.initializeAsync();
-    this.siteModel.initialize();
-    this.profilesModel.initialize();
-    this.playerModel.initialize();
+    await projectResourceModel.initializeAsync();
+    siteModel.initialize();
+    profilesModel.initialize();
+    playerModel.initialize();
 
-    this.deviceStatusModel.initialize();
-    this.uiStatusModel.initialize();
+    deviceStatusModel.initialize();
+    uiStatusModel.initialize();
     // this.keyboardShapesModel.initialize();
-    this.firmwareUpdationModel.initialize();
-    this.presetBrowserModel.initialize();
-    this.realtimeHeatmapModel.initialize();
+    firmwareUpdationModel.initialize();
+    presetBrowserModel.initialize();
+    realtimeHeatmapModel.initialize();
   }
 
   finalize() {
-    this.realtimeHeatmapModel.finalize();
-    this.firmwareUpdationModel.finalize();
+    realtimeHeatmapModel.finalize();
+    firmwareUpdationModel.finalize();
     // this.keyboardShapesModel.finalize();
-    this.uiStatusModel.finalize();
-    this.deviceStatusModel.finalize();
-    this.playerModel.finalize();
-    this.profilesModel.finalize();
-    this.siteModel.finalize();
+    uiStatusModel.finalize();
+    deviceStatusModel.finalize();
+    playerModel.finalize();
+    profilesModel.finalize();
+    siteModel.finalize();
   }
 }
 

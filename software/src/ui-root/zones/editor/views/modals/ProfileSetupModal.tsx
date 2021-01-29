@@ -8,7 +8,7 @@ import {
   DialogButton,
 } from '~/ui-common/fundamental/dialog/CommonDialogParts';
 import { createModal } from '~/ui-common/fundamental/overlay/ForegroundModalLayer';
-import { models } from '~/ui-root/zones/common/commonModels';
+import { projectResourceModel } from '~/ui-root/zones/common/commonModels/ProjectResourceModel';
 import { ISelectorOption } from '~/ui-root/zones/common/commonViewModels/viewModelInterfaces';
 import {
   cssCommonPropertiesTable,
@@ -23,7 +23,7 @@ interface ICreateProfileDialogEditValues {
 }
 
 function makeProfileSetupModalViewModel() {
-  const projectOptions = models.projectResourceModel
+  const projectOptions = projectResourceModel
     .getProjectsWithLayout()
     .map((info) => ({
       id: info.projectId,
@@ -33,7 +33,7 @@ function makeProfileSetupModalViewModel() {
   const defaultProjectId = projectOptions[0].id || '';
 
   function getLayoutNameOptions(projectId: string) {
-    const info = models.projectResourceModel
+    const info = projectResourceModel
       .getProjectsWithLayout()
       .find((info) => info.projectId === projectId);
     return info!.layoutNames.map((it) => ({ id: it, text: it }));

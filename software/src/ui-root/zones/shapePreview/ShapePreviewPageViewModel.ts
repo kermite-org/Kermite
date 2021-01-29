@@ -1,8 +1,12 @@
 import { Hook } from 'qx';
 import { IDisplayKeyboardDesign } from '~/shared';
-import { models } from '~/ui-root/zones/common/commonModels';
-import { IUiSettings } from '~/ui-root/zones/common/commonModels/UiStatusModel';
+import { playerModel } from '~/ui-root/zones/common/commonModels/PlayerModel';
+import {
+  IUiSettings,
+  uiStatusModel,
+} from '~/ui-root/zones/common/commonModels/UiStatusModel';
 import { ISelectorSource } from '~/ui-root/zones/common/commonViewModels/viewModelInterfaces';
+import { keyboardShapesModel } from '~/ui-root/zones/shapePreview/KeyboardShapesModel';
 
 export interface IShapePreviewPageViewModel {
   settings: IUiSettings;
@@ -13,11 +17,7 @@ export interface IShapePreviewPageViewModel {
 }
 
 export function makeShapePreviewPageViewModel(): IShapePreviewPageViewModel {
-  const {
-    uiStatusModel,
-    keyboardShapesModel: shapesModel,
-    playerModel,
-  } = models;
+  const shapesModel = keyboardShapesModel;
 
   Hook.useEffect(() => {
     shapesModel.initialize();

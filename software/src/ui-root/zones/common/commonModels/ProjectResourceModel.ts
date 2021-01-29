@@ -26,3 +26,4 @@ export class ProjectResourceModel {
     this.initializeAsync();
   }
 }
+export const projectResourceModel = new ProjectResourceModel();

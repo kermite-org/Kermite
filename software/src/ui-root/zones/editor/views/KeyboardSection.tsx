@@ -1,14 +1,14 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { uiTheme } from '~/ui-common';
-import { models } from '~/ui-root/zones/common/commonModels';
 import { KeyboardBodyShape } from '~/ui-root/zones/common/parts/keyboardSvg/atoms/KeyboardBodyShape';
 import { EditKeyUnitCardsPart } from '~/ui-root/zones/common/parts/keyboardSvg/organisms/EditKeyUnitCardsPart';
 import { KeyboardSvgFrameWithAutoScaler } from '~/ui-root/zones/common/parts/keyboardSvg/outlines/KeyboardSvgFrameWithAutoScaler';
+import { editorModel } from '~/ui-root/zones/editor/models/EditorModel';
 import { LayerStateView } from './LayerStateView';
 
 const EditKeyboardView = () => {
-  const design = models.editorModel.displayDesign;
+  const design = editorModel.displayDesign;
   const bodyFillColor = uiTheme.colors.clKeyboardBodyFace;
 
   const dpiScale = 2;
@@ -36,7 +36,7 @@ export function KeyboardSection() {
     position: relative;
     height: 100%;
   `;
-  const { clearAssignSlotSelection } = models.editorModel;
+  const { clearAssignSlotSelection } = editorModel;
 
   return (
     <div css={cssKeyboardSection} onMouseDown={clearAssignSlotSelection}>

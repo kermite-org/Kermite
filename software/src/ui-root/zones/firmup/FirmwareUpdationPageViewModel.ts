@@ -1,7 +1,9 @@
-import { models } from '~/ui-root/zones/common/commonModels';
 import { ISelectorSource } from '~/ui-root/zones/common/commonViewModels/viewModelInterfaces';
 import { showCommandOutputLogModal } from '~/ui-root/zones/firmup/CommandOutputLogModal';
-import { FirmwareUpdationPhase } from '~/ui-root/zones/firmup/FirmwareUpdationModel';
+import {
+  firmwareUpdationModel,
+  FirmwareUpdationPhase,
+} from '~/ui-root/zones/firmup/FirmwareUpdationModel';
 
 interface IFirmwareUpdationPageViewModel {
   phase: FirmwareUpdationPhase;
@@ -14,7 +16,7 @@ interface IFirmwareUpdationPageViewModel {
 }
 
 export function makeFirmwareUpdationPageViewModel(): IFirmwareUpdationPageViewModel {
-  const model = models.firmwareUpdationModel;
+  const model = firmwareUpdationModel;
   return {
     phase: model.phase,
     comPortName: model.comPortName,

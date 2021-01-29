@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { models } from '~/ui-root/zones/common/commonModels';
+import { siteModel } from '~/ui-root/zones/common/commonModels/SiteModel';
 import { WidgetWindowActiveChrome } from '~/ui-root/zones/siteFrame/views/window/WidgetWindowActiveChrome';
 import { MainPanel } from '~/ui-root/zones/widget/WidgetMainPage';
 
@@ -19,7 +19,7 @@ const cssWidgetZoneRoot = css`
 export const WidgetZoneRoot = () => {
   return (
     <div css={cssWidgetZoneRoot}>
-      <WidgetWindowActiveChrome qxIf={models.siteModel.isWindowActive} />
+      <WidgetWindowActiveChrome qxIf={siteModel.isWindowActive} />
       <MainPanel />
     </div>
   );

@@ -70,3 +70,5 @@ export class UiStatusModel {
     this.save();
   }
 }
+
+export const uiStatusModel = new UiStatusModel();

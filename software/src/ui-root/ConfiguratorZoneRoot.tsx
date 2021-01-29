@@ -2,7 +2,7 @@ import { css } from 'goober';
 import { h } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { UiLayouterPageComponent } from '~/ui-layouter-page';
-import { models } from '~/ui-root/zones/common/commonModels';
+import { uiStatusModel } from '~/ui-root/zones/common/commonModels/UiStatusModel';
 import { HeatmapPage } from '~/ui-root/zones/heatmap/HeatmapPage';
 import { CustomWindowFrame } from '~/ui-root/zones/siteFrame/views/window/CustomWindowFrame';
 import { DevToolPullTab } from '~/ui-root/zones/siteFrame/views/window/DevToolPullTab';
@@ -26,7 +26,7 @@ const styles = {
 };
 
 export const ConfiguratorZoneRoot = () => {
-  const { page } = models.uiStatusModel.settings;
+  const { page } = uiStatusModel.settings;
 
   return (
     <CustomWindowFrame renderTitleBar={() => <WindowTitleBarSection />}>

@@ -1,4 +1,4 @@
-import { models } from '~/ui-root/zones/common/commonModels';
+import { editorModel } from '~/ui-root/zones/editor/models/EditorModel';
 import {
   makePlainOperationEditCardsViewModel,
   makeOperationEditPartViewModel,
@@ -7,8 +7,8 @@ import { makeOperationLayerOptionEditViewModel } from '~/ui-root/zones/editor/vi
 import { makeOperationSlotsPartViewModel } from '~/ui-root/zones/editor/viewModels/OperationSlotsPartViewModel';
 
 export function makeAssignEditSectionViewModel() {
-  const isDisabled = !models.editorModel.isSlotSelected;
-  const { isSingleMode, isDualMode } = models.editorModel;
+  const isDisabled = !editorModel.isSlotSelected;
+  const { isSingleMode, isDualMode } = editorModel;
 
   const operationSlotsVM = makeOperationSlotsPartViewModel();
   const plainOperationEditCardsVM = makePlainOperationEditCardsViewModel();

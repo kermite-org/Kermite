@@ -5,9 +5,18 @@ import {
   modalAlert,
 } from '~/ui-common/fundamental/dialog/BasicModals';
 import { createSimpleSelector } from '~/ui-layouter/editor/store';
-import { ProjectResourceModel } from '~/ui-root/zones/common/commonModels/ProjectResourceModel';
-import { UiStatusModel } from '~/ui-root/zones/common/commonModels/UiStatusModel';
-import { ProfilesModel } from '~/ui-root/zones/editorProfilesSection/models/ProfilesModel';
+import {
+  projectResourceModel,
+  ProjectResourceModel,
+} from '~/ui-root/zones/common/commonModels/ProjectResourceModel';
+import {
+  uiStatusModel,
+  UiStatusModel,
+} from '~/ui-root/zones/common/commonModels/UiStatusModel';
+import {
+  profilesModel,
+  ProfilesModel,
+} from '~/ui-root/zones/editorProfilesSection/models/ProfilesModel';
 
 class PresetBrowserModelHelper {
   static getNewProfileNameBase(
@@ -185,3 +194,9 @@ export class PresetBrowserModel {
     }
   }
 }
+
+export const presetBrowserModel = new PresetBrowserModel(
+  projectResourceModel,
+  profilesModel,
+  uiStatusModel,
+);

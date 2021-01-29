@@ -1,6 +1,9 @@
 import { IntervalTimerWrapper, IRealtimeKeyboardEvent } from '~/shared';
 import { appUi, ipcAgent } from '~/ui-common';
-import { EditorModel } from '~/ui-root/zones/editor/models/EditorModel';
+import {
+  editorModel,
+  EditorModel,
+} from '~/ui-root/zones/editor/models/EditorModel';
 
 export class RealtimeHeatmapModel {
   constructor(private editorModel: EditorModel) {}
@@ -74,3 +77,5 @@ export class RealtimeHeatmapModel {
     ipcAgent.unsubscribe2('device_keyEvents', this.handleKeyboardEvent);
   }
 }
+
+export const realtimeHeatmapModel = new RealtimeHeatmapModel(editorModel);

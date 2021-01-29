@@ -2,13 +2,13 @@ import { css } from 'goober';
 import { h } from 'qx';
 import { IProfileAssignType } from '~/shared';
 import { reflectValue } from '~/ui-common';
-import { models } from '~/ui-root/zones/common/commonModels';
+import { editorModel } from '~/ui-root/zones/editor/models/EditorModel';
 
 const AssignTypeSelectionPartViewModel = () => {
   const assignTypeOptions: IProfileAssignType[] = ['single', 'dual'];
-  const currentAssignType = models.editorModel.profileData.settings.assignType;
+  const currentAssignType = editorModel.profileData.settings.assignType;
   const setAssignType = (value: string) => {
-    models.editorModel.changeProfileAssignType(value as IProfileAssignType);
+    editorModel.changeProfileAssignType(value as IProfileAssignType);
   };
   return { assignTypeOptions, currentAssignType, setAssignType };
 };

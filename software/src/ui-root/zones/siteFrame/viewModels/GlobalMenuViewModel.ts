@@ -1,6 +1,6 @@
 import { Hook } from 'qx';
 import { appUi } from '~/ui-common';
-import { models } from '~/ui-root/zones/common/commonModels';
+import { uiStatusModel } from '~/ui-root/zones/common/commonModels/UiStatusModel';
 import { themeSelectionModel } from '~/ui-root/zones/siteFrame/models/ThemeSelectionModel';
 
 export interface IGlobalMenuItem {
@@ -11,7 +11,7 @@ export interface IGlobalMenuItem {
 }
 
 function createMenuItems(): IGlobalMenuItem[] {
-  const { settings } = models.uiStatusModel;
+  const { settings } = uiStatusModel;
 
   const menuItems: IGlobalMenuItem[] = [
     {

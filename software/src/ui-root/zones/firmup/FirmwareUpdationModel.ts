@@ -1,5 +1,8 @@
 import { ipcAgent } from '~/ui-common';
-import { ProjectResourceModel } from '~/ui-root/zones/common/commonModels/ProjectResourceModel';
+import {
+  projectResourceModel,
+  ProjectResourceModel,
+} from '~/ui-root/zones/common/commonModels/ProjectResourceModel';
 
 export type FirmwareUpdationPhase =
   | 'WaitingReset'
@@ -85,3 +88,7 @@ export class FirmwareUpdationModel {
     ipcAgent.unsubscribe2('firmup_comPortPlugEvents', this.onComPortPlugEvent);
   }
 }
+
+export const firmwareUpdationModel = new FirmwareUpdationModel(
+  projectResourceModel,
+);

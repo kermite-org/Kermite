@@ -1,9 +1,9 @@
-import { models } from '~/ui-root/zones/common/commonModels';
+import { deviceStatusModel } from '~/ui-root/zones/common/commonModels/DeviceStatusModel';
 
 export function makeDeviceControlSectionViewModel() {
   return {
     currentDeviceKeyboardName:
-      models.deviceStatusModel.deviceAttrs?.keyboardName || '',
-    isDeviceConnected: models.deviceStatusModel.isConnected,
+      deviceStatusModel.deviceAttrs?.keyboardName || '',
+    isDeviceConnected: deviceStatusModel.isConnected,
   };
 }

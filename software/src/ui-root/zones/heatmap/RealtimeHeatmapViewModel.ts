@@ -3,11 +3,13 @@ import {
   IDisplayArea,
   IDisplayOutlineShape,
 } from '~/shared';
-import { models } from '~/ui-root/zones/common/commonModels';
+import { playerModel } from '~/ui-root/zones/common/commonModels/PlayerModel';
 import {
   makeCustomKeyUnitViewModels,
   ICustomKeyUnitViewModelBase,
 } from '~/ui-root/zones/common/commonViewModels/KeyUnitCard/CustomKeyUnitViewModel';
+import { editorModel } from '~/ui-root/zones/editor/models/EditorModel';
+import { realtimeHeatmapModel } from '~/ui-root/zones/heatmap/RealtimeHeatmapModel';
 
 export interface IHeatmapCustomKeyUnitViewModel {
   keyUnitId: string;
@@ -49,18 +51,18 @@ export function makeRealtimeHeatmapViewModel(): IRealtimeHeatmapViewModel {
     clearRecord,
     elapsedTimeMs,
     numTotalTypes,
-  } = models.realtimeHeatmapModel;
+  } = realtimeHeatmapModel;
 
-  const { typeStats, maxKeyTypeCount } = models.realtimeHeatmapModel;
+  const { typeStats, maxKeyTypeCount } = realtimeHeatmapModel;
 
   const cardsVM = makeCustomKeyUnitViewModels(
-    models.editorModel.profileData,
-    models.editorModel.displayDesign,
+    editorModel.profileData,
+    editorModel.displayDesign,
     'la0',
     (source: ICustomKeyUnitViewModelBase): IHeatmapCustomKeyUnitViewModel => {
       const typeCount = typeStats[source.keyUnitId];
       const weight = (typeCount || 0) / maxKeyTypeCount;
-      const hold = models.playerModel.keyStates[source.keyUnitId];
+      const hold = playerModel.keyStates[source.keyUnitId];
       return {
         ...source,
         typeCount,
@@ -70,7 +72,7 @@ export function makeRealtimeHeatmapViewModel(): IRealtimeHeatmapViewModel {
     },
   );
 
-  const { displayArea, outlineShapes } = models.editorModel.displayDesign;
+  const { displayArea, outlineShapes } = editorModel.displayDesign;
 
   return {
     isRecording,

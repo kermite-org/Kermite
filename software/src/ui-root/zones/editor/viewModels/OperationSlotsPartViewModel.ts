@@ -1,5 +1,7 @@
-import { models } from '~/ui-root/zones/common/commonModels';
-import { IDualModeEditTargetOperationSig } from '~/ui-root/zones/editor/models/EditorModel';
+import {
+  editorModel,
+  IDualModeEditTargetOperationSig,
+} from '~/ui-root/zones/editor/models/EditorModel';
 
 export interface IOperationSlotViewModel {
   text: string;
@@ -27,7 +29,7 @@ export function makeOperationSlotsPartViewModel(): IOperationSlotsPartViewModel 
     isSlotSelected,
     dualModeEditTargetOperationSig,
     setDualModeEditTargetOperationSig,
-  } = models.editorModel;
+  } = editorModel;
 
   const slots = targetSlotSigs.map((sig) => {
     return {

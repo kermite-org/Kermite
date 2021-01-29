@@ -1,5 +1,6 @@
-import { models } from '~/ui-root/zones/common/commonModels';
+import { deviceStatusModel } from '~/ui-root/zones/common/commonModels/DeviceStatusModel';
 import { ISelectorSource } from '~/ui-root/zones/common/commonViewModels/viewModelInterfaces';
+import { presetBrowserModel } from '~/ui-root/zones/presetBrowser/models/PresetBrowserModel';
 import {
   IPresetKeyboardViewModel,
   makePresetKeyboardViewModel,
@@ -15,7 +16,6 @@ export interface IPresetBrowserViewModel {
 }
 
 export function makePresetBrowserViewModel(): IPresetBrowserViewModel {
-  const { presetBrowserModel, deviceStatusModel } = models;
   return {
     keyboard: makePresetKeyboardViewModel(presetBrowserModel.loadedProfileData),
     projectSelectorSource: {

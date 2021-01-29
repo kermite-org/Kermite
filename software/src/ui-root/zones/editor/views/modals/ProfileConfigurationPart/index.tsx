@@ -5,12 +5,13 @@ import {
   ClosableOverlay,
   CommonDialogFrame,
 } from '~/ui-common/fundamental/dialog/CommonDialogParts';
-import { models } from '~/ui-root/zones/common/commonModels';
+import { uiStatusModel } from '~/ui-root/zones/common/commonModels/UiStatusModel';
+import { editorModel } from '~/ui-root/zones/editor/models/EditorModel';
 import { AssignTypeSelectionPart } from './AssignTypeSelectionPart';
 import { DualModeSettingsPart } from './DualModeSettingsPart';
 
 const ShiftCancelOptionPart = () => {
-  const { settings } = models.editorModel.profileData;
+  const { settings } = editorModel.profileData;
   return (
     <div
       css={css`
@@ -30,7 +31,7 @@ const ShiftCancelOptionPart = () => {
 };
 
 export const ProfileConfigratuionModalLayer = () => {
-  const uiStatus = models.uiStatusModel.status;
+  const uiStatus = uiStatusModel.status;
   const visible = uiStatus.profileConfigModalVisible;
   const closeModal = () => {
     uiStatus.profileConfigModalVisible = false;

@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { uiTheme } from '~/ui-common';
-import { models } from '~/ui-root/zones/common/commonModels';
+import { uiStatusModel } from '~/ui-root/zones/common/commonModels/UiStatusModel';
 import { ProfileConfigurationPart } from '~/ui-root/zones/editor/views/ProfileConfigurationPart';
 import { AssignEditSection } from './views/AssignEditSection';
 import { BehaviorOptionsPart } from './views/BehaviorOptionsPart';
@@ -111,7 +111,7 @@ export const KeyAssignEditView = () => {
     <div css={cssKeyAssignEditView}>
       <div
         css={cssEditTopBarBox}
-        qxIf={models.uiStatusModel.settings.showTestInputArea}
+        qxIf={uiStatusModel.settings.showTestInputArea}
       >
         <TestInputArea />
       </div>

@@ -5,7 +5,7 @@ import {
   reflectValue,
   reflectFieldChecked,
 } from '~/ui-common';
-import { models } from '~/ui-root/zones/common/commonModels';
+import { editorModel } from '~/ui-root/zones/editor/models/EditorModel';
 
 const cssDualModeSettingsPart = css`
   margin-top: 15px;
@@ -30,11 +30,11 @@ const cssDualModeSettingsPart = css`
 `;
 
 export const DualModeSettingsPart = () => {
-  if (models.editorModel.profileData.settings.assignType === 'single') {
+  if (editorModel.profileData.settings.assignType === 'single') {
     return null;
   }
 
-  const { settings } = models.editorModel.profileData;
+  const { settings } = editorModel.profileData;
 
   const onTapHoldThresholdValueChanged = (value: string) => {
     const val = parseInt(value);

@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h, Hook } from 'qx';
 import { uiTheme } from '~/ui-common';
-import { models } from '~/ui-root/zones/common/commonModels';
+import { projectResourceModel } from '~/ui-root/zones/common/commonModels/ProjectResourceModel';
 import { makePresetBrowserViewModel } from '~/ui-root/zones/presetBrowser/viewModels/PresetBrowserViewModel';
 import { PresetKeyboardSection } from '~/ui-root/zones/presetBrowser/views/PresetKeyboardSection';
 import { PresetSelectionSection } from '~/ui-root/zones/presetBrowser/views/PresetSelectionSection';
@@ -21,7 +21,7 @@ export const PresetBrowserPage = () => {
   const vm = makePresetBrowserViewModel();
 
   Hook.useEffect(() => {
-    models.projectResourceModel.refetchResourceInfos();
+    projectResourceModel.refetchResourceInfos();
   }, []);
 
   return (

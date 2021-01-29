@@ -1,10 +1,9 @@
 import { h } from 'qx';
-import { models } from '~/ui-root/zones/common/commonModels';
 import { makeKeyUnitCardsPartViewModel } from '~/ui-root/zones/common/commonViewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
 import { EditKeyUnitCard } from '../molecules/EditKeyUnitCard';
 
 export function EditKeyUnitCardsPart() {
-  const vm = makeKeyUnitCardsPartViewModel(true, models);
+  const vm = makeKeyUnitCardsPartViewModel(true);
   return (
     <g>
       {vm.cards.map((keyUnit) => (

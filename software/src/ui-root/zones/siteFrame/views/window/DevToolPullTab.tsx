@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { models } from '~/ui-root/zones/common/commonModels';
+import { siteModel } from '~/ui-root/zones/common/commonModels/SiteModel';
 
 const cssDevToolPullTabBase = css`
   position: absolute;
@@ -27,7 +27,7 @@ const cssDevToolPullTabBase = css`
 export const DevToolPullTab = () => {
   return (
     <div css={cssDevToolPullTabBase}>
-      <div onClick={models.siteModel.toggleDevToolVisible}>devtools</div>
+      <div onClick={siteModel.toggleDevToolVisible}>devtools</div>
     </div>
   );
 };

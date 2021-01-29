@@ -4,7 +4,7 @@ import {
   addOptionToOptionsArray,
   removeOptionFromOptionsArray,
 } from '~/shared';
-import { models } from '~/ui-root/zones/common/commonModels';
+import { editorModel } from '~/ui-root/zones/editor/models/EditorModel';
 import { virtualKeyGroupsTable2 } from './virtualkeyGroupsTable';
 
 export interface IOperationCardViewModel {
@@ -37,7 +37,7 @@ export function makePlainOperationEditCardsViewModel(): IPlainOperationEditCards
     editOperation,
     writeEditOperation,
     isSlotSelected,
-  } = models.editorModel;
+  } = editorModel;
 
   const noAssignEntry: IOperationCardViewModel = {
     sig: 'none',
@@ -81,12 +81,12 @@ export interface IOperationEditPartViewModel {
 }
 
 export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
-  const { editOperation, writeEditOperation } = models.editorModel;
+  const { editOperation, writeEditOperation } = editorModel;
 
   const isDualSecondary =
     RestrictDualSecondaryAssigns &&
-    models.editorModel.isDualMode &&
-    models.editorModel.dualModeEditTargetOperationSig === 'sec';
+    editorModel.isDualMode &&
+    editorModel.dualModeEditTargetOperationSig === 'sec';
 
   const virtualKeyEntryGroups: IOperationCardViewModel[][] = virtualKeyGroupsTable2.map(
     (group) =>
@@ -130,7 +130,7 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
     },
   );
 
-  const layerCallEntries: IOperationCardViewModel[] = models.editorModel.profileData.layers
+  const layerCallEntries: IOperationCardViewModel[] = editorModel.profileData.layers
     // .filter((la) => la.layerId !== 'la0')
     .map((la) => ({
       sig: la.layerId,

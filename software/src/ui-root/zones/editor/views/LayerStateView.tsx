@@ -1,6 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { models } from '~/ui-root/zones/common/commonModels';
+import { deviceStatusModel } from '~/ui-root/zones/common/commonModels/DeviceStatusModel';
+import { playerModel } from '~/ui-root/zones/common/commonModels/PlayerModel';
 
 const cssLayerStateView = css`
   position: absolute;
@@ -30,11 +31,11 @@ const cssLayerCard = css`
 `;
 
 export const LayerStateView = () => {
-  const { isConnected } = models.deviceStatusModel;
+  const { isConnected } = deviceStatusModel;
 
   return (
     <div css={cssLayerStateView}>
-      {models.playerModel.layerStackViewSource.map((la) => {
+      {playerModel.layerStackViewSource.map((la) => {
         return (
           <div
             key={la.layerId}

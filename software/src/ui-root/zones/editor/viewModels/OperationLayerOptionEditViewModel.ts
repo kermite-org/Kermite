@@ -1,5 +1,5 @@
 import { LayerInvocationMode, generateNumberSequence } from '~/shared';
-import { models } from '~/ui-root/zones/common/commonModels';
+import { editorModel } from '~/ui-root/zones/editor/models/EditorModel';
 
 export interface IOperationLayerOptionEditViewModel {
   enabled: boolean;
@@ -21,7 +21,7 @@ const exclusionGroupValues = generateNumberSequence(7).map((a) =>
 );
 
 export function makeOperationLayerOptionEditViewModel(): IOperationLayerOptionEditViewModel {
-  const { editOperation } = models.editorModel;
+  const { editOperation } = editorModel;
 
   if (editOperation?.type === 'layerCall') {
     return {

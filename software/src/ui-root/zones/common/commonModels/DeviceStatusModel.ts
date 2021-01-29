@@ -34,3 +34,4 @@ export class DeviceStatusModel {
     );
   }
 }
+export const deviceStatusModel = new DeviceStatusModel();

@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { fieldSetter } from '~/ui-common';
-import { models } from '~/ui-root/zones/common/commonModels';
+import { uiStatusModel } from '~/ui-root/zones/common/commonModels/UiStatusModel';
 import { CheckboxLine } from '~/ui-root/zones/common/parts/fabrics/CheckboxLine';
 
 const cssBehaviorOptionsPart = css`
@@ -12,7 +12,7 @@ const cssBehaviorOptionsPart = css`
 `;
 
 export const BehaviorOptionsPart = () => {
-  const { settings } = models.uiStatusModel;
+  const { settings } = uiStatusModel;
 
   return (
     <div css={cssBehaviorOptionsPart}>

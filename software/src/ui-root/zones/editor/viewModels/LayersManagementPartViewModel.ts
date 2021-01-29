@@ -1,6 +1,7 @@
 import { removeArrayItems } from '~/shared';
 import { modalConfirm } from '~/ui-common/fundamental/dialog/BasicModals';
 import { models } from '~/ui-root/zones/common/commonModels';
+import { editorModel } from '~/ui-root/zones/editor/models/EditorModel';
 import {
   ILayerConfigurationModelEditValues,
   callLayerConfigurationModal,
@@ -18,8 +19,8 @@ export interface ILayerManagementPartViewModel {
 }
 
 export function makeLayerManagementPartViewModel(): ILayerManagementPartViewModel {
-  const { layers } = models.editorModel;
-  const curLayer = models.editorModel.currentLayer!;
+  const { layers } = editorModel;
+  const curLayer = editorModel.currentLayer!;
   const isCurrentLayerCustom = curLayer?.layerId !== 'la0' || false;
 
   const canShiftCurrentLayerOrder = (dir: -1 | 1): boolean => {
@@ -51,7 +52,7 @@ export function makeLayerManagementPartViewModel(): ILayerManagementPartViewMode
       });
       if (ok) {
         removeArrayItems(layers, curLayer);
-        models.editorModel.setCurrentLayerId(layers[0].layerId);
+        editorModel.setCurrentLayerId(layers[0].layerId);
       }
     },
     editCurrentLayer: async () => {

@@ -1,8 +1,14 @@
 import { IDisplayKeyboardDesign } from '~/shared';
 import { ipcAgent } from '~/ui-common';
 import { DisplayKeyboardDesignLoader } from '~/ui-common/modules/DisplayKeyboardDesignLoader';
-import { UiStatusModel } from '~/ui-root/zones/common/commonModels/UiStatusModel';
-import { ProjectResourceModel } from '~/ui-root/zones/common/commonModels/ProjectResourceModel';
+import {
+  projectResourceModel,
+  ProjectResourceModel,
+} from '~/ui-root/zones/common/commonModels/ProjectResourceModel';
+import {
+  uiStatusModel,
+  UiStatusModel,
+} from '~/ui-root/zones/common/commonModels/UiStatusModel';
 
 export class KeyboardShapesModel {
   constructor(
@@ -109,3 +115,8 @@ export class KeyboardShapesModel {
     );
   }
 }
+
+export const keyboardShapesModel = new KeyboardShapesModel(
+  projectResourceModel,
+  uiStatusModel,
+);

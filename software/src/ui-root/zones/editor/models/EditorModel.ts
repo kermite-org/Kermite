@@ -212,3 +212,5 @@ export class EditorModel {
     return keyEntity?.keyId;
   }
 }
+
+export const editorModel = new EditorModel();

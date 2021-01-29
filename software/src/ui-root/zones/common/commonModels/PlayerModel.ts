@@ -1,6 +1,6 @@
 import { IRealtimeKeyboardEvent } from '~/shared';
 import { ipcAgent } from '~/ui-common';
-import { EditorModel } from '../../editor/models/EditorModel';
+import { editorModel, EditorModel } from '../../editor/models/EditorModel';
 
 export class PlayerModel {
   private _keyStates: { [keyId: string]: boolean } = {};
@@ -88,3 +88,5 @@ export class PlayerModel {
     ipcAgent.unsubscribe2('device_keyEvents', this.handlekeyEvents);
   }
 }
+
+export const playerModel = new PlayerModel(editorModel);

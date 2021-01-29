@@ -4,11 +4,13 @@ import {
   modalTextEdit,
   modalConfirm,
 } from '~/ui-common/fundamental/dialog/BasicModals';
-import { models } from '~/ui-root/zones/common/commonModels';
+import { uiStatusModel } from '~/ui-root/zones/common/commonModels/UiStatusModel';
 import { makePlainSelectorOption } from '~/ui-root/zones/common/commonViewModels/viewModelHelpers';
 import { ISelectorSource } from '~/ui-root/zones/common/commonViewModels/viewModelInterfaces';
+import { editorModel } from '~/ui-root/zones/editor/models/EditorModel';
 import { callProfileSetupModal } from '~/ui-root/zones/editor/views/modals/ProfileSetupModal';
 import { keyboardConfigModel } from '~/ui-root/zones/editorProfilesSection/models/KeyboardConfigModel';
+import { profilesModel } from '~/ui-root/zones/editorProfilesSection/models/ProfilesModel';
 
 export interface IProfileManagementPartViewModel {
   currentProfileName: string;
@@ -44,7 +46,7 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     allProfileNames,
     loadProfile,
     saveProfile,
-  } = models.profilesModel;
+  } = profilesModel;
 
   const checkValidNewProfileName = async (
     newProfileName: string,
@@ -55,7 +57,7 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
       );
       return false;
     }
-    if (models.profilesModel.allProfileNames.includes(newProfileName)) {
+    if (profilesModel.allProfileNames.includes(newProfileName)) {
       await modalAlert(
         `${newProfileName} is already exists. operation cancelled.`,
       );
@@ -71,7 +73,7 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
       const { profileName, targetProjectId, layoutName } = res;
       const nameValid = await checkValidNewProfileName(profileName);
       if (nameValid) {
-        models.profilesModel.createProfile(profileName, targetProjectId, {
+        profilesModel.createProfile(profileName, targetProjectId, {
           type: 'blank',
           layoutName,
         });
@@ -99,14 +101,14 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
   const renameProfile = async () => {
     const newProfileName = await inputNewProfileName('Rename Profile');
     if (newProfileName) {
-      models.profilesModel.renameProfile(newProfileName);
+      profilesModel.renameProfile(newProfileName);
     }
   };
 
   const copyProfile = async () => {
     const newProfileName = await inputNewProfileName('Copy Profile');
     if (newProfileName) {
-      models.profilesModel.copyProfile(newProfileName);
+      profilesModel.copyProfile(newProfileName);
     }
   };
 
@@ -116,16 +118,16 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
       caption: 'Delete Profile',
     });
     if (ok) {
-      models.profilesModel.deleteProfile();
+      profilesModel.deleteProfile();
     }
   };
 
   const openConfiguration = () => {
-    models.uiStatusModel.status.profileConfigModalVisible = true;
+    uiStatusModel.status.profileConfigModalVisible = true;
   };
 
   const onLaunchButton = () => {
-    models.profilesModel.saveProfile();
+    profilesModel.saveProfile();
     keyboardConfigModel.writeConfigurationToDevice();
   };
 
@@ -148,7 +150,7 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     isExportingPresetSelectionModalOpen: isPresetsModalOpen,
     openExportingPresetSelectionModal,
     closeExportingPresetSelectionModal,
-    saveProfileAsPreset: models.profilesModel.exportProfileAsProjectPreset,
-    currentProfileProjectId: models.editorModel.loadedPorfileData.projectId,
+    saveProfileAsPreset: profilesModel.exportProfileAsProjectPreset,
+    currentProfileProjectId: editorModel.loadedPorfileData.projectId,
   };
 }

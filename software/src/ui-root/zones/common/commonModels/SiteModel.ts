@@ -43,3 +43,4 @@ export class SiteModel {
     ipcAgent.unsubscribe2('window_appWindowEvents', this.onAppWindowEvents);
   }
 }
+export const siteModel = new SiteModel();

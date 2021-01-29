@@ -1,6 +1,7 @@
 import { ILayer, removeArrayItems } from '~/shared';
 import { modalConfirm } from '~/ui-common/fundamental/dialog/BasicModals';
 import { models } from '~/ui-root/zones/common/commonModels';
+import { editorModel } from '~/ui-root/zones/editor/models/EditorModel';
 import {
   ILayerConfigurationModelEditValues,
   callLayerConfigurationModal,
@@ -8,13 +9,11 @@ import {
 
 export class LayerManagementPartViewModel {
   private get layers() {
-    return models.editorModel.layers;
+    return editorModel.layers;
   }
 
   private get curLayer(): ILayer {
-    return this.layers.find(
-      (la) => la.layerId === models.editorModel.currentLayerId,
-    )!;
+    return this.layers.find((la) => la.layerId === editorModel.currentLayerId)!;
   }
 
   private get isCurrentLayerCustom() {
@@ -65,7 +64,7 @@ export class LayerManagementPartViewModel {
     });
     if (ok) {
       removeArrayItems(this.layers, this.curLayer);
-      models.editorModel.setCurrentLayerId(this.layers[0].layerId);
+      editorModel.setCurrentLayerId(this.layers[0].layerId);
     }
   };
 
