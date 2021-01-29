@@ -1,8 +1,9 @@
 import { css } from 'goober';
-import { h } from 'qx';
+import { h, Hook } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { GeneralButton } from '~/ui-common/sharedViews/controls/GeneralButton';
 import { HeatmapKeyboardView } from '~/ui-root/zones/common/parts/keyboardSvg/panels/HeatmapKeyboardView';
+import { realtimeHeatmapModel } from '~/ui-root/zones/heatmap/RealtimeHeatmapModel';
 import { makeRealtimeHeatmapViewModel } from '~/ui-root/zones/heatmap/RealtimeHeatmapViewModel';
 
 const cssHeatmapPage = css`
@@ -30,6 +31,8 @@ const cssHeatmapPage = css`
 `;
 
 export const HeatmapPage = () => {
+  Hook.useEffect(realtimeHeatmapModel.startPageSession, []);
+
   const vm = makeRealtimeHeatmapViewModel();
 
   if (!vm.keyboardVM.displayArea) {

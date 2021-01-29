@@ -1,13 +1,8 @@
 import { IntervalTimerWrapper, IRealtimeKeyboardEvent } from '~/shared';
 import { appUi, ipcAgent } from '~/ui-common';
-import {
-  editorModel,
-  EditorModel,
-} from '~/ui-root/zones/editor/models/EditorModel';
+import { editorModel } from '~/ui-root/zones/editor/models/EditorModel';
 
 export class RealtimeHeatmapModel {
-  constructor(private editorModel: EditorModel) {}
-
   private timer = new IntervalTimerWrapper();
 
   isRecording: boolean = false;
@@ -46,19 +41,8 @@ export class RealtimeHeatmapModel {
   prevTimestamp: number = 0;
 
   handleKeyboardEvent = (e: IRealtimeKeyboardEvent) => {
-    // 1キーごとに2回呼ばれるバグあり
-    // xpcRendererで、同じイベントを複数箇所から購読した場合に、それぞれが複数回ずつ呼ばれるバグがある
-    // これを回避するため、前回のイベントからの経過時間が短い場合には新しいイベントを無視する
-    const timeStamp = Date.now();
-    if (timeStamp - this.prevTimestamp < 20) {
-      return;
-    }
-    this.prevTimestamp = timeStamp;
-
     if (e.type === 'keyStateChanged' && e.isDown && this.isRecording) {
-      const keyUnitId = this.editorModel.translateKeyIndexToKeyUnitId(
-        e.keyIndex,
-      );
+      const keyUnitId = editorModel.translateKeyIndexToKeyUnitId(e.keyIndex);
       if (keyUnitId) {
         this.numTotalTypes++;
         if (this.typeStats[keyUnitId] === undefined) {
@@ -69,13 +53,9 @@ export class RealtimeHeatmapModel {
     }
   };
 
-  initialize() {
-    ipcAgent.subscribe2('device_keyEvents', this.handleKeyboardEvent);
-  }
-
-  finalize() {
-    ipcAgent.unsubscribe2('device_keyEvents', this.handleKeyboardEvent);
-  }
+  startPageSession = () => {
+    return ipcAgent.subscribe('device_keyEvents', this.handleKeyboardEvent);
+  };
 }
 
-export const realtimeHeatmapModel = new RealtimeHeatmapModel(editorModel);
+export const realtimeHeatmapModel = new RealtimeHeatmapModel();
