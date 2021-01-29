@@ -3,8 +3,8 @@ import { h } from 'qx';
 import { ViewModelProps } from '~/ui-common/helpers';
 import { KeyboardBodyShape } from '~/ui-common/sharedViews/keyboardSvg/KeyboardBodyShape';
 import { KeyboardSvgFrameWithAutoScaler } from '~/ui-common/sharedViews/keyboardSvg/outlines/KeyboardSvgFrameWithAutoScaler';
-import { HeatmapKeyUnitCard } from '~/ui-root/zones/common/parts/keyboardSvg/molecules/HeatmapKeyUnitCard';
-import { IRealtimeHeatmapKeyboardViewModel } from '~/ui-root/zones/heatmap/RealtimeHeatmapViewModel';
+import { HeatmapKeyUnitCard } from '~/ui-heatmap-page/HeatmapKeyUnitCard';
+import { IRealtimeHeatmapKeyboardViewModel } from '~/ui-heatmap-page/RealtimeHeatmapViewModel';
 
 export const HeatmapKeyboardView = ({
   vm,

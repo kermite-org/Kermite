@@ -6,8 +6,8 @@ import {
 import {
   makeCustomKeyUnitViewModels,
   ICustomKeyUnitViewModelBase,
-} from '~/ui-root/zones/common/commonViewModels/KeyUnitCard/CustomKeyUnitViewModel';
-import { realtimeHeatmapModel } from '~/ui-root/zones/heatmap/RealtimeHeatmapModel';
+} from '~/ui-common/sharedViewModels/CustomKeyUnitViewModel';
+import { realtimeHeatmapModel } from '~/ui-heatmap-page/RealtimeHeatmapModel';
 
 export interface IHeatmapCustomKeyUnitViewModel {
   keyUnitId: string;
