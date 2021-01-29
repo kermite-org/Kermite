@@ -2,12 +2,12 @@ import { css } from 'goober';
 import { h } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
-import { ProfileConfigurationPart } from '~/ui-root/zones/editor/views/ProfileConfigurationPart';
-import { AssignEditSection } from './views/AssignEditSection';
-import { BehaviorOptionsPart } from './views/BehaviorOptionsPart';
-import { KeyboardSection } from './views/KeyboardSection';
-import { LayersSection } from './views/LayersSection';
-import { TestInputArea } from './views/TestInputArea';
+import { ProfileConfigurationPart } from '~/ui-root/zones/editor/EditorMainPart/views/ProfileConfigurationPart';
+import { AssignEditSection } from './EditorMainPart/views/AssignEditSection';
+import { BehaviorOptionsPart } from './EditorMainPart/views/BehaviorOptionsPart';
+import { KeyboardSection } from './EditorMainPart/views/KeyboardSection';
+import { LayersSection } from './EditorMainPart/views/LayersSection';
+import { TestInputArea } from './TestInputArea/TestInputArea';
 
 const localStyleConstants = {
   editorPartMargin: '4px',

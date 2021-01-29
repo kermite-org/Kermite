@@ -4,7 +4,7 @@ import {
   IKeyUnitCardPartViewModel,
   makeKeyUnitCardsPartViewModel,
 } from '~/ui-root/zones/common/commonViewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
-import { editorModel } from '~/ui-root/zones/editor/models/EditorModel';
+import { editorModel } from '~/ui-root/zones/editor/EditorMainPart/models/EditorModel';
 
 export interface IWidgetKeyboardViewViewModel {
   keyboardDesign: IDisplayKeyboardDesign;

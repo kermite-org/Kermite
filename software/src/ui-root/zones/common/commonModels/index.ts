@@ -2,7 +2,7 @@ import { projectResourceModel } from '~/ui-common/sharedModels/ProjectResourceMo
 import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
 import { playerModel } from '~/ui-root/zones/common/commonModels/PlayerModel';
 import { siteModel } from '~/ui-root/zones/common/commonModels/SiteModel';
-import { profilesModel } from '~/ui-root/zones/editorProfilesSection/models/ProfilesModel';
+import { profilesModel } from '~/ui-root/zones/editor/ProfileManagement/models/ProfilesModel';
 
 export class Models {
   async initialize() {

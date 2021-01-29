@@ -1,6 +1,9 @@
 import { IRealtimeKeyboardEvent } from '~/shared';
 import { ipcAgent } from '~/ui-common';
-import { editorModel, EditorModel } from '../../editor/models/EditorModel';
+import {
+  editorModel,
+  EditorModel,
+} from '../../editor/EditorMainPart/models/EditorModel';
 
 export class PlayerModel {
   private _keyStates: { [keyId: string]: boolean } = {};

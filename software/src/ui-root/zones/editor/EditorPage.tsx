@@ -1,10 +1,10 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { uiTheme } from '~/ui-common';
-import { DeviceControlSection } from '../editorDeviceControlSection/DeviceControlSection';
-import { ProfileManagementPart } from '../editorProfilesSection/views/ProfileManagementPart';
+import { DeviceControlSection } from './DeviceControl/DeviceControlSection';
+import { ProfileConfigratuionModalLayer } from './EditorMainPart/views/modals/ProfileConfigurationPart';
 import { KeyAssignEditView } from './KeyAssignEditView';
-import { ProfileConfigratuionModalLayer } from './views/modals/ProfileConfigurationPart';
+import { ProfileManagementPart } from './ProfileManagement/ProfileManagementPart';
 
 const cssEditorPage = css`
   height: 100%;
