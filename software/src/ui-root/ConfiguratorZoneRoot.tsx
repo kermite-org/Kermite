@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { uiTheme } from '~/ui-common';
-import { FirmwareUpdationPage } from '~/ui-firmware-updation-page/FirmwareUpdationPage';
+import { FirmwareUpdationPage } from '~/ui-firmware-updation-page';
 import { UiLayouterPageComponent } from '~/ui-layouter-page';
 import { uiStatusModel } from '~/ui-root/zones/common/commonModels/UiStatusModel';
 import { HeatmapPage } from '~/ui-root/zones/heatmap/HeatmapPage';
