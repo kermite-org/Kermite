@@ -1,14 +1,36 @@
-import { IntervalTimerWrapper, IRealtimeKeyboardEvent } from '~/shared';
+import {
+  createFallbackDisplayKeyboardDesign,
+  fallbackProfileData,
+  IDisplayKeyboardDesign,
+  IntervalTimerWrapper,
+  IProfileData,
+  IRealtimeKeyboardEvent,
+} from '~/shared';
 import { appUi, ipcAgent } from '~/ui-common';
-import { editorModel } from '~/ui-root/zones/editor/models/EditorModel';
+import { DisplayKeyboardDesignLoader } from '~/ui-common/modules/DisplayKeyboardDesignLoader';
+
+function translateKeyIndexToKeyUnitId(
+  displayDesign: IDisplayKeyboardDesign,
+  keyIndex: number,
+): string | undefined {
+  const keyEntity = displayDesign.keyEntities.find(
+    (kp) => kp.keyIndex === keyIndex,
+  );
+  return keyEntity?.keyId;
+}
 
 export class RealtimeHeatmapModel {
   private timer = new IntervalTimerWrapper();
+
+  profileData: IProfileData = fallbackProfileData;
+  displayDesign: IDisplayKeyboardDesign = createFallbackDisplayKeyboardDesign();
 
   isRecording: boolean = false;
   numTotalTypes: number = 0;
   elapsedTimeMs: number = 0;
   typeStats: { [keyId: string]: number } = {};
+
+  keyStates: { [keyId: string]: boolean } = {};
 
   get maxKeyTypeCount() {
     return Math.max(...Object.values(this.typeStats));
@@ -41,20 +63,41 @@ export class RealtimeHeatmapModel {
   prevTimestamp: number = 0;
 
   handleKeyboardEvent = (e: IRealtimeKeyboardEvent) => {
-    if (e.type === 'keyStateChanged' && e.isDown && this.isRecording) {
-      const keyUnitId = editorModel.translateKeyIndexToKeyUnitId(e.keyIndex);
+    if (e.type === 'keyStateChanged') {
+      const keyUnitId = translateKeyIndexToKeyUnitId(
+        this.displayDesign,
+        e.keyIndex,
+      );
       if (keyUnitId) {
-        this.numTotalTypes++;
-        if (this.typeStats[keyUnitId] === undefined) {
-          this.typeStats[keyUnitId] = 0;
+        if (e.isDown && this.isRecording) {
+          this.numTotalTypes++;
+          if (this.typeStats[keyUnitId] === undefined) {
+            this.typeStats[keyUnitId] = 0;
+          }
+          this.typeStats[keyUnitId]++;
         }
-        this.typeStats[keyUnitId]++;
+        this.keyStates[keyUnitId] = e.isDown;
       }
     }
   };
 
   startPageSession = () => {
-    return ipcAgent.subscribe('device_keyEvents', this.handleKeyboardEvent);
+    const unsub1 = ipcAgent.subscribe('profile_currentProfile', (profile) => {
+      if (profile) {
+        this.profileData = profile;
+        this.displayDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
+          profile.keyboardDesign,
+        );
+      }
+    });
+    const unsub2 = ipcAgent.subscribe(
+      'device_keyEvents',
+      this.handleKeyboardEvent,
+    );
+    return () => {
+      unsub1();
+      unsub2();
+    };
   };
 }
 
