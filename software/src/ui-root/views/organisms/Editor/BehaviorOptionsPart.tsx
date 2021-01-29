@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { fieldSetter } from '~/ui-root/base/helper/ViewHelpers';
+import { fieldSetter } from '~/ui-common';
 import { models } from '~/ui-root/models';
 import { CheckboxLine } from '~/ui-root/views/fabrics/CheckboxLine';
 

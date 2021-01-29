@@ -1,11 +1,10 @@
 import { h, Hook } from 'qx';
 import { IProjectResourceInfo } from '~/shared';
-import { ipcAgent } from '~/ui-common';
+import { fieldSetter, ipcAgent } from '~/ui-common';
 import {
   IProjectAttachmentFileSelectorModalModel,
   ProjectAttachmentFileSelectorModal,
 } from '~/ui-common/parts/ProjectAttachementFileSelectorModal';
-import { fieldSetter } from '~/ui-root/base/helper/ViewHelpers';
 import { IProfileManagementPartViewModel } from '~/ui-root/viewModels/ProfileManagementPartViewModel';
 
 function getTargetPresetNameFilePath(projectPath: string, presetName: string) {
