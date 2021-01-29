@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { ViewModelProps } from '~/ui-root/base/helper/mvvmHelpers';
+import { ViewModelProps } from '~/ui-common/helpers';
 import { IPresetBrowserViewModel } from '~/ui-root/viewModels/PresetBrowserViewModel';
 import { GeneralButton } from '~/ui-root/views/controls/GeneralButton';
 import { KeyboardProfileSelector } from '~/ui-root/views/fabrics/KeyboardProfileSelector';

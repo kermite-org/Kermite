@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { ViewModelProps } from '~/ui-root/base/helper/mvvmHelpers';
+import { ViewModelProps } from '~/ui-common/helpers';
 import { IPresetKeyboardViewModel } from '~/ui-root/viewModels/PresetKeyboardViewModel';
 import { KeyboardBodyShape } from '~/ui-root/views/keyboardSvg/atoms/KeyboardBodyShape';
 import { PresetKeyUnitCard } from '~/ui-root/views/keyboardSvg/molecules/PresetKeyUnitCard';

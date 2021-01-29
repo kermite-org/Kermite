@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { uiTheme } from '~/ui-common';
-import { mvvmView } from '~/ui-root/base/helper/mvvmHelpers';
+import { mvvmView } from '~/ui-common/helpers';
 import { IHeatmapCustomKeyUnitViewModel } from '~/ui-root/viewModels/RealtimeHeatmapViewModel';
 
 const cssKeyRect = css`

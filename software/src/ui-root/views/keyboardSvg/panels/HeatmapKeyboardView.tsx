@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { ViewModelProps } from '~/ui-root/base/helper/mvvmHelpers';
+import { ViewModelProps } from '~/ui-common/helpers';
 import { IRealtimeHeatmapKeyboardViewModel } from '~/ui-root/viewModels/RealtimeHeatmapViewModel';
 import { KeyboardBodyShape } from '~/ui-root/views/keyboardSvg/atoms/KeyboardBodyShape';
 import { HeatmapKeyUnitCard } from '~/ui-root/views/keyboardSvg/molecules/HeatmapKeyUnitCard';
