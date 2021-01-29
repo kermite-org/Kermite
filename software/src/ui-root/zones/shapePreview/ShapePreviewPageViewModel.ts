@@ -1,11 +1,10 @@
 import { Hook } from 'qx';
-import { IDisplayKeyboardDesign } from '~/shared';
-import { ISelectorSource } from '~/ui-common';
+import { IDisplayKeyboardDesign, removeArrayItems } from '~/shared';
+import { ipcAgent, ISelectorSource } from '~/ui-common';
 import {
   IUiSettings,
   uiStatusModel,
 } from '~/ui-common/sharedModels/UiStatusModel';
-import { playerModel } from '~/ui-root/zones/common/commonModels/PlayerModel';
 import { keyboardShapesModel } from '~/ui-root/zones/shapePreview/KeyboardShapesModel';
 
 export interface IShapePreviewPageViewModel {
@@ -16,6 +15,24 @@ export interface IShapePreviewPageViewModel {
   layoutSelectorSource: ISelectorSource;
 }
 
+function useHoldKeyIndices() {
+  const [holdKeyIndices] = Hook.useState<number[]>([]);
+
+  Hook.useEffect(() => {
+    ipcAgent.subscribe('device_keyEvents', (e) => {
+      if (e.type === 'keyStateChanged') {
+        if (e.isDown) {
+          holdKeyIndices.push(e.keyIndex);
+        } else {
+          removeArrayItems(holdKeyIndices, e.keyIndex);
+        }
+      }
+    });
+  }, []);
+
+  return holdKeyIndices;
+}
+
 export function makeShapePreviewPageViewModel(): IShapePreviewPageViewModel {
   const shapesModel = keyboardShapesModel;
 
@@ -23,10 +40,13 @@ export function makeShapePreviewPageViewModel(): IShapePreviewPageViewModel {
     shapesModel.initialize();
     return () => shapesModel.finalize();
   }, []);
+
+  const holdKeyIndices = useHoldKeyIndices();
+
   return {
     settings: uiStatusModel.settings,
     loadedDesign: shapesModel.loadedDesign,
-    holdKeyIndices: playerModel.holdKeyIndices,
+    holdKeyIndices: holdKeyIndices,
     projectSelectorSource: {
       options: shapesModel.optionProjectInfos.map((info) => ({
         id: info.projectId,
