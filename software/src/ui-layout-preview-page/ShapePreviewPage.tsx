@@ -2,9 +2,9 @@ import { css } from 'goober';
 import { h } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { GeneralSelector } from '~/ui-common/sharedViews/controls/GeneralSelector';
-import { ShapePreviewOptionsBox } from '~/ui-root/zones/common/parts/fabrics/ShapePreviewOptionsBox';
-import { PreviewKeyboardShapeView } from '~/ui-root/zones/common/parts/keyboardSvg/panels/PreviewKeyboardShapeView';
-import { makeShapePreviewPageViewModel } from '~/ui-root/zones/shapePreview/ShapePreviewPageViewModel';
+import { PreviewKeyboardShapeView } from '~/ui-layout-preview-page/PreviewKeyboardShapeView';
+import { ShapePreviewOptionsBox } from '~/ui-layout-preview-page/ShapePreviewOptionsBox';
+import { makeShapePreviewPageViewModel } from '~/ui-layout-preview-page/ShapePreviewPageViewModel';
 
 const cssShapePreviewPage = css`
   background: ${uiTheme.colors.clBackground};
