@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { uiTheme } from '~/ui-common';
-import { makeTitleBarViewModel } from '~/ui-root/zones/siteFrame/viewModels/TitleBarViewModel';
+import { makeTitleBarViewModel } from '~/ui-root/viewModels/TitleBarViewModel';
 import { WindowControlButtonsPart } from './WindowControlButtonsPart';
 import { WindowTitlePart } from './WindowTitlePart';
 

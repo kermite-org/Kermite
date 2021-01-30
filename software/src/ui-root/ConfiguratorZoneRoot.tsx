@@ -8,10 +8,10 @@ import { HeatmapPage } from '~/ui-heatmap-page';
 import { KeyboardShapePreviewPage } from '~/ui-layout-preview-page/ShapePreviewPage';
 import { UiLayouterPageComponent } from '~/ui-layouter-page';
 import { PresetBrowserPage } from '~/ui-preset-browser-page';
-import { CustomWindowFrame } from '~/ui-root/zones/siteFrame/views/window/CustomWindowFrame';
-import { DevToolPullTab } from '~/ui-root/zones/siteFrame/views/window/DevToolPullTab';
-import { NavigationColumn } from './zones/siteFrame/views/navigation/NavigationColumn';
-import { WindowTitleBarSection } from './zones/siteFrame/views/titleBar/WindowTitleBarSection';
+import { CustomWindowFrame } from '~/ui-root/views/window/CustomWindowFrame';
+import { DevToolPullTab } from '~/ui-root/views/window/DevToolPullTab';
+import { NavigationColumn } from './views/navigation/NavigationColumn';
+import { WindowTitleBarSection } from './views/titleBar/WindowTitleBarSection';
 
 const styles = {
   cssContentRow: css`
