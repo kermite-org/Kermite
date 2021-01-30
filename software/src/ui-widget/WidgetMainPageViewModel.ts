@@ -5,7 +5,7 @@ import { siteModel } from '~/ui-common/sharedModels/SiteModel';
 import {
   IWidgetKeyUnitCardPartViewModel,
   makeKeyUnitCardsPartViewModel,
-} from '~/ui-root/zones/widget/WidgetKeyUnitCardsPartViewModel';
+} from '~/ui-widget/WidgetKeyUnitCardsPartViewModel';
 
 export interface IWidgetKeyboardViewViewModel {
   keyboardDesign: IDisplayKeyboardDesign;

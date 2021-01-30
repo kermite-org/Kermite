@@ -1,8 +1,8 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { siteModel } from '~/ui-common/sharedModels/SiteModel';
-import { WidgetWindowActiveChrome } from '~/ui-root/zones/siteFrame/views/window/WidgetWindowActiveChrome';
-import { MainPanel } from '~/ui-root/zones/widget/WidgetMainPage';
+import { MainPanel } from '~/ui-widget/WidgetMainPage';
+import { WidgetWindowActiveChrome } from '~/ui-widget/WidgetWindowActiveChrome';
 
 const cssWidgetZoneRoot = css`
   height: 100%;
