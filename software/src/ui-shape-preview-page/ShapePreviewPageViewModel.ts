@@ -5,7 +5,7 @@ import {
   IUiSettings,
   uiStatusModel,
 } from '~/ui-common/sharedModels/UiStatusModel';
-import { keyboardShapesModel } from '~/ui-layout-preview-page/KeyboardShapesModel';
+import { keyboardShapesModel } from '~/ui-shape-preview-page/KeyboardShapesModel';
 
 export interface IShapePreviewPageViewModel {
   settings: IUiSettings;

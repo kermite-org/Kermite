@@ -4,8 +4,8 @@ import { IDisplayKeyboardDesign } from '~/shared';
 import { IUiSettings } from '~/ui-common/sharedModels/UiStatusModel';
 import { KeyboardBodyShape } from '~/ui-common/sharedViews/keyboardSvg/KeyboardBodyShape';
 import { KeyboardSvgFrameWithAutoScaler } from '~/ui-common/sharedViews/keyboardSvg/outlines/KeyboardSvgFrameWithAutoScaler';
-import { PreviewDisplayAreaBox } from '~/ui-layout-preview-page/PreviewBoundingBox';
-import { PreviewKeyEntityCardsPart } from '~/ui-layout-preview-page/PreviewKeyUnitCardsPart';
+import { PreviewDisplayAreaBox } from '~/ui-shape-preview-page/PreviewBoundingBox';
+import { PreviewKeyEntityCardsPart } from '~/ui-shape-preview-page/PreviewKeyUnitCardsPart';
 
 export function PreviewKeyboardShapeView(props: {
   keyboardDesign: IDisplayKeyboardDesign;

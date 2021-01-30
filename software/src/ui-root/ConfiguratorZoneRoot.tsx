@@ -5,11 +5,11 @@ import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
 import { EditorPage } from '~/ui-editor-page/EditorPage';
 import { FirmwareUpdationPage } from '~/ui-firmware-updation-page';
 import { HeatmapPage } from '~/ui-heatmap-page';
-import { KeyboardShapePreviewPage } from '~/ui-layout-preview-page/ShapePreviewPage';
 import { UiLayouterPageComponent } from '~/ui-layouter-page';
 import { PresetBrowserPage } from '~/ui-preset-browser-page';
 import { CustomWindowFrame } from '~/ui-root/views/window/CustomWindowFrame';
 import { DevToolPullTab } from '~/ui-root/views/window/DevToolPullTab';
+import { KeyboardShapePreviewPage } from '~/ui-shape-preview-page/ShapePreviewPage';
 import { NavigationColumn } from './views/navigation/NavigationColumn';
 import { WindowTitleBarSection } from './views/titleBar/WindowTitleBarSection';
 
