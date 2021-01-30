@@ -9,7 +9,7 @@ import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
 import { editorModel } from '~/ui-root/zones/editor/EditorMainPart/models/EditorModel';
 import { callProfileSetupModal } from '~/ui-root/zones/editor/EditorMainPart/views/modals/ProfileSetupModal';
 import { keyboardConfigModel } from '~/ui-root/zones/editor/ProfileManagement/models/KeyboardConfigModel';
-import { profilesModel } from '~/ui-root/zones/editor/ProfileManagement/models/ProfilesModel';
+import { ProfilesModel } from '~/ui-root/zones/editor/ProfileManagement/models/ProfilesModel';
 
 export interface IProfileManagementPartViewModel {
   currentProfileName: string;
@@ -30,7 +30,14 @@ export interface IProfileManagementPartViewModel {
   currentProfileProjectId: string;
 }
 
+export const profilesModel = new ProfilesModel(editorModel);
+
 export function makeProfileManagementPartViewModel(): IProfileManagementPartViewModel {
+  Hook.useEffect(() => {
+    profilesModel.initialize();
+    return () => profilesModel.finalize();
+  }, []);
+
   const [isPresetsModalOpen, setIsPresetModalOpen] = Hook.useState(false);
 
   const openExportingPresetSelectionModal = async () => {

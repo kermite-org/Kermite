@@ -4,10 +4,7 @@ import {
   IProfileManagerStatus,
 } from '~/shared';
 import { ipcAgent } from '~/ui-common';
-import {
-  editorModel,
-  EditorModel,
-} from '../../EditorMainPart/models/EditorModel';
+import { EditorModel } from '../../EditorMainPart/models/EditorModel';
 import { ProfileProvider } from './ProfileProvider';
 
 const useAutoSave = false;
@@ -39,18 +36,6 @@ export class ProfilesModel {
       alert(payload.errorMessage);
     }
   };
-
-  initialize() {
-    this.profileProvider.setListener(this.handleProfileStatusChange);
-    this.profileProvider.initialize();
-  }
-
-  finalize() {
-    if (useAutoSave && this.editorModel.checkDirty()) {
-      this.profileProvider.saveProfileOnClosing(this.editorModel.profileData);
-    }
-    this.profileProvider.finalize();
-  }
 
   // actions
 
@@ -136,6 +121,16 @@ export class ProfilesModel {
     };
     this.sendProfileManagerCommands(exportCommand);
   };
-}
 
-export const profilesModel = new ProfilesModel(editorModel);
+  initialize() {
+    this.profileProvider.setListener(this.handleProfileStatusChange);
+    this.profileProvider.initialize();
+  }
+
+  finalize() {
+    if (useAutoSave && this.editorModel.checkDirty()) {
+      this.profileProvider.saveProfileOnClosing(this.editorModel.profileData);
+    }
+    this.profileProvider.finalize();
+  }
+}
