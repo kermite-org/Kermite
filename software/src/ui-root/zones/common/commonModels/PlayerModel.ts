@@ -1,11 +1,29 @@
-import { IRealtimeKeyboardEvent } from '~/shared';
-import { ipcAgent } from '~/ui-common';
 import {
-  editorModel,
-  EditorModel,
-} from '../../editor/EditorMainPart/models/EditorModel';
+  createFallbackDisplayKeyboardDesign,
+  fallbackProfileData,
+  IDisplayKeyboardDesign,
+  IProfileData,
+  IRealtimeKeyboardEvent,
+} from '~/shared';
+import { ipcAgent } from '~/ui-common';
+import { DisplayKeyboardDesignLoader } from '~/ui-common/modules/DisplayKeyboardDesignLoader';
+
+class PlayerModelHelper {
+  static translateKeyIndexToKeyUnitId(
+    keyIndex: number,
+    profileData: IProfileData,
+  ): string | undefined {
+    const keyEntity = profileData.keyboardDesign.keyEntities.find(
+      (kp) => kp.keyIndex === keyIndex,
+    );
+    return keyEntity?.keyId;
+  }
+}
 
 export class PlayerModel {
+  private _profileData: IProfileData = fallbackProfileData;
+  private _displayDesign: IDisplayKeyboardDesign = createFallbackDisplayKeyboardDesign();
+
   private _keyStates: { [keyId: string]: boolean } = {};
   private _layerActiveFlags: number = 1;
   private _holdKeyIndices: Set<number> = new Set();
@@ -14,11 +32,16 @@ export class PlayerModel {
     return this._holdKeyIndices.size > 0 ? [...this._holdKeyIndices] : [];
   }
 
-  constructor(private editorModel: EditorModel) {}
-
-  // getters
   get keyStates() {
     return this._keyStates;
+  }
+
+  get layers() {
+    return this._profileData.layers;
+  }
+
+  get displayDesign() {
+    return this._displayDesign;
   }
 
   private isLayerActive(layerIndex: number) {
@@ -30,7 +53,7 @@ export class PlayerModel {
     layerName: string;
     isActive: boolean;
   }[] {
-    return this.editorModel.layers.map((la, index) => ({
+    return this._profileData.layers.map((la, index) => ({
       layerId: la.layerId,
       layerName: la.layerName,
       isActive: this.isLayerActive(index),
@@ -38,14 +61,13 @@ export class PlayerModel {
   }
 
   getDynamicKeyAssign = (keyUnitId: string) => {
-    const { layers } = this.editorModel;
+    const { layers } = this._profileData;
     for (let i = layers.length - 1; i >= 0; i--) {
       if (this.isLayerActive(i)) {
         const layer = layers[i];
-        const assign = this.editorModel.getAssignForKeyUnit(
-          keyUnitId,
-          layer.layerId,
-        );
+        const assign = this._profileData.assigns[
+          `${layer.layerId}.${keyUnitId}`
+        ];
 
         if (assign?.type === 'transparent') {
           continue;
@@ -64,7 +86,6 @@ export class PlayerModel {
     return undefined;
   };
 
-  // listeners
   private handlekeyEvents = (ev: IRealtimeKeyboardEvent) => {
     if (ev.type === 'keyStateChanged') {
       const { keyIndex, isDown } = ev;
@@ -73,8 +94,10 @@ export class PlayerModel {
       } else {
         this._holdKeyIndices.delete(keyIndex);
       }
-
-      const keyUnitId = this.editorModel.translateKeyIndexToKeyUnitId(keyIndex);
+      const keyUnitId = PlayerModelHelper.translateKeyIndexToKeyUnitId(
+        keyIndex,
+        this._profileData,
+      );
       if (keyUnitId) {
         this._keyStates[keyUnitId] = isDown;
       }
@@ -83,13 +106,24 @@ export class PlayerModel {
     }
   };
 
+  private onProfileData = (profile: IProfileData | undefined) => {
+    if (profile) {
+      this._profileData = profile;
+      this._displayDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
+        profile.keyboardDesign,
+      );
+    }
+  };
+
   initialize() {
     ipcAgent.subscribe2('device_keyEvents', this.handlekeyEvents);
+    ipcAgent.subscribe2('profile_currentProfile', this.onProfileData);
   }
 
   finalize() {
     ipcAgent.unsubscribe2('device_keyEvents', this.handlekeyEvents);
+    ipcAgent.unsubscribe2('profile_currentProfile', this.onProfileData);
   }
 }
 
-export const playerModel = new PlayerModel(editorModel);
+export const playerModel = new PlayerModel();

@@ -3,7 +3,7 @@ import { h } from 'qx';
 import { linerInterpolateValue } from '~/shared';
 import { KeyboardBodyShape } from '~/ui-common/sharedViews/keyboardSvg/KeyboardBodyShape';
 import { IWidgetKeyboardViewViewModel } from '~/ui-root/zones/widget/WidgetMainPageViewModel';
-import { WidgetKeyUnitCardsPart } from '../organisms/WidgetKeyUnitCardsPart';
+import { WidgetKeyUnitCardsPart } from './WidgetKeyUnitCardsPart';
 
 export function WidgetSvgKeyboardView({
   vm,

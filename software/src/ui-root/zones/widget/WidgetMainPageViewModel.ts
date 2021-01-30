@@ -1,14 +1,15 @@
+import { Hook } from 'qx';
 import { IDisplayKeyboardDesign } from '~/shared';
+import { PlayerModel } from '~/ui-root/zones/common/commonModels/PlayerModel';
 import { siteModel } from '~/ui-root/zones/common/commonModels/SiteModel';
 import {
-  IKeyUnitCardPartViewModel,
+  IWidgetKeyUnitCardPartViewModel,
   makeKeyUnitCardsPartViewModel,
-} from '~/ui-root/zones/common/commonViewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
-import { editorModel } from '~/ui-root/zones/editor/EditorMainPart/models/EditorModel';
+} from '~/ui-root/zones/widget/WidgetKeyUnitCardsPartViewModel';
 
 export interface IWidgetKeyboardViewViewModel {
   keyboardDesign: IDisplayKeyboardDesign;
-  cardsPartVM: IKeyUnitCardPartViewModel;
+  cardsPartVM: IWidgetKeyUnitCardPartViewModel;
 }
 
 export interface IWidgetMainPageViewModel {
@@ -17,12 +18,19 @@ export interface IWidgetMainPageViewModel {
   onOpenButton(): void;
 }
 
+const playerModel = new PlayerModel();
+
 export function makeWidgetMainPageViewModel(): IWidgetMainPageViewModel {
+  Hook.useEffect(() => {
+    playerModel.initialize();
+    return () => playerModel.finalize();
+  }, []);
+
   return {
     isWindowActive: siteModel.isWindowActive,
     keyboardVM: {
-      keyboardDesign: editorModel.displayDesign,
-      cardsPartVM: makeKeyUnitCardsPartViewModel(false),
+      keyboardDesign: playerModel.displayDesign,
+      cardsPartVM: makeKeyUnitCardsPartViewModel(playerModel),
     },
     onOpenButton() {
       siteModel.setWidgetMode(false);

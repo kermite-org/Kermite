@@ -1,9 +1,9 @@
 import { h } from 'qx';
-import { IKeyUnitCardPartViewModel } from '~/ui-root/zones/common/commonViewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
-import { WidgetKeyUnitCard } from '../molecules/WidgetKeyUnitCard';
+import { IWidgetKeyUnitCardPartViewModel } from '~/ui-root/zones/widget/WidgetKeyUnitCardsPartViewModel';
+import { WidgetKeyUnitCard } from './WidgetKeyUnitCard';
 
 export function WidgetKeyUnitCardsPart(props: {
-  vm: IKeyUnitCardPartViewModel;
+  vm: IWidgetKeyUnitCardPartViewModel;
 }) {
   return (
     <g>

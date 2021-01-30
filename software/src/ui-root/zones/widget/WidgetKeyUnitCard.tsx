@@ -1,11 +1,11 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { IKeyUnitCardViewModel } from '~/ui-root/zones/common/commonViewModels/KeyUnitCard/KeyUnitCardsPartViewModel';
+import { IWidgetKeyUnitCardViewModel } from '~/ui-root/zones/widget/WidgetKeyUnitCardsPartViewModel';
 
 export function WidgetKeyUnitCard({
   keyUnit,
 }: {
-  keyUnit: IKeyUnitCardViewModel;
+  keyUnit: IWidgetKeyUnitCardViewModel;
 }) {
   const { keyUnitId, pos, primaryText, secondaryText, isHold } = keyUnit;
 
