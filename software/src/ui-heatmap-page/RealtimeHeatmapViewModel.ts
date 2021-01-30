@@ -1,34 +1,11 @@
+import { formatTimeMsToMinSecMs } from '~/shared';
 import {
-  formatTimeMsToMinSecMs,
-  IDisplayArea,
-  IDisplayOutlineShape,
-} from '~/shared';
-import {
-  makeCustomKeyUnitViewModels,
   ICustomKeyUnitViewModelBase,
-} from '~/ui-common/sharedViewModels/CustomKeyUnitViewModel';
+  makeCustomKeyUnitViewModels,
+} from '~/ui-common-svg/KeyUnitCardModels/CustomKeyUnitViewModel';
+import { IHeatmapCustomKeyUnitViewModel } from '~/ui-common-svg/KeyUnitCards/HeatmapKeyUnitCard';
+import { IRealtimeHeatmapKeyboardViewModel } from '~/ui-common-svg/panels/HeatmapKeyboardView';
 import { realtimeHeatmapModel } from '~/ui-heatmap-page/RealtimeHeatmapModel';
-
-export interface IHeatmapCustomKeyUnitViewModel {
-  keyUnitId: string;
-  pos: {
-    x: number;
-    y: number;
-    r: number;
-  };
-  primaryText: string;
-  secondaryText: string;
-  isLayerFallback: boolean;
-  typeCount: number;
-  weight: number;
-  hold: boolean;
-}
-
-export interface IRealtimeHeatmapKeyboardViewModel {
-  cardsVM: IHeatmapCustomKeyUnitViewModel[];
-  outlineShapes: IDisplayOutlineShape[];
-  displayArea: IDisplayArea;
-}
 
 export interface IRealtimeHeatmapViewModel {
   isRecording: boolean;

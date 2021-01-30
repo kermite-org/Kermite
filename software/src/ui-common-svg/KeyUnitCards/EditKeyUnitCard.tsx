@@ -1,7 +1,21 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { uiTheme } from '~/ui-common';
-import { IKeyUnitCardViewModel } from '~/ui-editor-page/EditorMainPart/viewModels/KeyUnitCardsPartViewModel';
+
+export interface IEditKeyUnitCardViewModel {
+  keyUnitId: string;
+  pos: {
+    x: number;
+    y: number;
+    r: number;
+  };
+  isCurrent: boolean;
+  setCurrent: () => void;
+  primaryText: string;
+  secondaryText: string;
+  isLayerFallback: boolean;
+  isHold: boolean;
+}
 
 const cssKeyRect = css`
   cursor: pointer;
@@ -30,7 +44,7 @@ const cssKeyText = css`
 `;
 
 export function EditKeyUnitCard(props: {
-  keyUnit: IKeyUnitCardViewModel;
+  keyUnit: IEditKeyUnitCardViewModel;
   showLayerDefaultAssign: boolean;
 }) {
   const {

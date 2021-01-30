@@ -1,6 +1,6 @@
 import { h } from 'qx';
 import { IDisplayKeyEntity } from '~/shared';
-import { PreviewKeyEntityCard } from './PreviewKeyUnitCard';
+import { PreviewKeyEntityCard } from '../KeyUnitCards/PreviewKeyUnitCard';
 
 export const PreviewKeyEntityCardsPart = (props: {
   keyEntities: IDisplayKeyEntity[];

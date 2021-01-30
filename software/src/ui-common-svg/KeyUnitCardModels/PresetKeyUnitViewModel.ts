@@ -7,19 +7,8 @@ import {
 import {
   getAssignForKeyUnitWithLayerFallback,
   getAssignEntryTexts,
-} from '~/ui-common/sharedViewModels/KeyUnitCardViewModelCommon';
-
-export interface IPresetKeyUnitViewModel {
-  keyUnitId: string;
-  pos: {
-    x: number;
-    y: number;
-    r: number;
-  };
-  primaryText: string;
-  secondaryText: string;
-  isLayerFallback: boolean;
-}
+} from '~/ui-common-svg/KeyUnitCardModels/KeyUnitCardViewModelCommon';
+import { IPresetKeyUnitViewModel } from '~/ui-common-svg/KeyUnitCards/PresetKeyUnitCard';
 
 function createPresetKeyUnitViewModel(
   ke: IDisplayKeyEntity,

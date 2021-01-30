@@ -1,25 +1,35 @@
 import { css } from 'goober';
 import { h } from 'qx';
+import { IDisplayArea, IDisplayOutlineShape } from '~/shared';
+import {
+  HeatmapKeyUnitCard,
+  IHeatmapCustomKeyUnitViewModel,
+} from '~/ui-common-svg/KeyUnitCards/HeatmapKeyUnitCard';
+import { KeyboardSvgFrameWithAutoScaler } from '~/ui-common-svg/frames/KeyboardSvgFrameWithAutoScaler';
+import { KeyboardBodyShape } from '~/ui-common-svg/keyboardBody/KeyboardBodyShape';
 import { ViewModelProps } from '~/ui-common/helpers';
-import { KeyboardBodyShape } from '~/ui-common/sharedViews/keyboardSvg/KeyboardBodyShape';
-import { KeyboardSvgFrameWithAutoScaler } from '~/ui-common/sharedViews/keyboardSvg/outlines/KeyboardSvgFrameWithAutoScaler';
-import { IPresetKeyboardViewModel } from '~/ui-preset-browser-page/viewModels/PresetKeyboardViewModel';
-import { PresetKeyUnitCard } from '~/ui-preset-browser-page/views/PresetKeyUnitCard';
 
-export const PresetKeyboardView = ({
+export interface IRealtimeHeatmapKeyboardViewModel {
+  cardsVM: IHeatmapCustomKeyUnitViewModel[];
+  outlineShapes: IDisplayOutlineShape[];
+  displayArea: IDisplayArea;
+}
+
+export const HeatmapKeyboardView = ({
   vm,
-}: ViewModelProps<IPresetKeyboardViewModel>) => {
+}: ViewModelProps<IRealtimeHeatmapKeyboardViewModel>) => {
   const cssKeyboardShapeView = css`
-    height: 100%;
+    height: 300px;
     overflow: hidden;
+    background: #ccc;
   `;
 
   const dpiScale = 2;
   const marginRatio = 0.06;
   const baseStrokeWidth = 0.3;
 
-  const fillColor = 'transparent';
-  const strokeColor = '#0A8';
+  const fillColor = '#FFF';
+  const strokeColor = '#888';
 
   return (
     <div css={cssKeyboardShapeView}>
@@ -35,8 +45,8 @@ export const PresetKeyboardView = ({
           strokeColor={strokeColor}
         />
         <g>
-          {vm.keyUnits.map((keyUnit) => (
-            <PresetKeyUnitCard
+          {vm.cardsVM.map((keyUnit) => (
+            <HeatmapKeyUnitCard
               model={keyUnit}
               key={keyUnit.keyUnitId}
               // qxOptimizer="deepEqual"

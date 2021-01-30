@@ -4,8 +4,9 @@ import {
   IDisplayKeyEntity,
   ILayer,
 } from '~/shared';
+import { getAssignEntryTexts } from '~/ui-common-svg/KeyUnitCardModels/KeyUnitCardViewModelCommon';
+import { IWidgetKeyUnitCardViewModel } from '~/ui-common-svg/KeyUnitCards/WidgetKeyUnitCard';
 import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
-import { getAssignEntryTexts } from '~/ui-common/sharedViewModels/KeyUnitCardViewModelCommon';
 
 interface IPlayerModel {
   getDynamicKeyAssign(keyUnitId: string): IAssignEntry | undefined;
@@ -14,25 +15,12 @@ interface IPlayerModel {
   displayDesign: IDisplayKeyboardDesign;
 }
 
-export interface IWidgetKeyUnitCardViewModel {
-  keyUnitId: string;
-  pos: {
-    x: number;
-    y: number;
-    r: number;
-  };
-  primaryText: string;
-  secondaryText: string;
-  isLayerFallback: boolean;
-  isHold: boolean;
-}
-
-export interface IWidgetKeyUnitCardPartViewModel {
+export interface IWidgetKeyUnitCardsPartViewModel {
   cards: IWidgetKeyUnitCardViewModel[];
   showLayerDefaultAssign: boolean;
 }
 
-function makeKeyUnitCardViewModel(
+function makeWidgetKeyUnitCardViewModel(
   ke: IDisplayKeyEntity,
   playerModel: IPlayerModel,
 ): IWidgetKeyUnitCardViewModel {
@@ -58,13 +46,13 @@ function makeKeyUnitCardViewModel(
   };
 }
 
-export function makeKeyUnitCardsPartViewModel(
+export function makeWidgetKeyUnitCardsPartViewModel(
   playerModel: IPlayerModel,
-): IWidgetKeyUnitCardPartViewModel {
+): IWidgetKeyUnitCardsPartViewModel {
   const { showLayerDefaultAssign } = uiStatusModel.settings;
   return {
     cards: playerModel.displayDesign.keyEntities.map((kp) =>
-      makeKeyUnitCardViewModel(kp, playerModel),
+      makeWidgetKeyUnitCardViewModel(kp, playerModel),
     ),
     showLayerDefaultAssign,
   };

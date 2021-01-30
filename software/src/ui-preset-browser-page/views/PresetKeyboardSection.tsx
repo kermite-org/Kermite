@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
+import { PresetKeyboardView } from '~/ui-common-svg/panels/PresetKeyboardView';
 import { IPresetBrowserViewModel } from '~/ui-preset-browser-page/viewModels/PresetBrowserViewModel';
-import { PresetKeyboardView } from '~/ui-preset-browser-page/views/PresetKeyboardView';
 import { PresetLayersBox } from '~/ui-preset-browser-page/views/PresetLayersBox';
 
 const cssPresetKeyboardSection = css`
@@ -30,7 +30,7 @@ export const PresetKeyboardSection = (props: {
       </div>
       <div class="layersPart">
         <h3>Layers</h3>
-        <PresetLayersBox vm={props.vm.keyboard.layerList} />
+        <PresetLayersBox vm={props.vm.layerList} />
       </div>
     </div>
   );

@@ -1,11 +1,11 @@
 import { css } from 'goober';
 import { h, Hook } from 'qx';
 import { uiTheme } from '~/ui-common';
+import { EditKeyUnitCardsPart } from '~/ui-common-svg/KeyUnitCardsPart/EditKeyUnitCardsPart';
+import { KeyboardSvgFrameWithAutoScaler } from '~/ui-common-svg/frames/KeyboardSvgFrameWithAutoScaler';
+import { KeyboardBodyShape } from '~/ui-common-svg/keyboardBody/KeyboardBodyShape';
 import { PlayerModel } from '~/ui-common/sharedModels/PlayerModel';
-import { KeyboardBodyShape } from '~/ui-common/sharedViews/keyboardSvg/KeyboardBodyShape';
-import { KeyboardSvgFrameWithAutoScaler } from '~/ui-common/sharedViews/keyboardSvg/outlines/KeyboardSvgFrameWithAutoScaler';
 import { editorModel } from '~/ui-editor-page/EditorMainPart/models/EditorModel';
-import { EditKeyUnitCardsPart } from '~/ui-editor-page/EditorMainPart/views/EditKeyUnitCardsPart';
 import { LayerStateView } from './views/LayerStateView';
 
 const playerModel = new PlayerModel();
@@ -29,7 +29,10 @@ const EditKeyboardView = () => {
         fillColor={bodyFillColor}
         strokeColor="transparent"
       />
-      <EditKeyUnitCardsPart playerModel={playerModel} />
+      <EditKeyUnitCardsPart
+        playerModel={playerModel}
+        editorModel={editorModel}
+      />
     </KeyboardSvgFrameWithAutoScaler>
   );
 };

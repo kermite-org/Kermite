@@ -5,40 +5,35 @@ import {
   IDisplayKeyEntity,
   ILayer,
 } from '~/shared';
+import { getAssignEntryTexts } from '~/ui-common-svg/KeyUnitCardModels/KeyUnitCardViewModelCommon';
+import { IEditKeyUnitCardViewModel } from '~/ui-common-svg/KeyUnitCards/EditKeyUnitCard';
 import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
-import { getAssignEntryTexts } from '~/ui-common/sharedViewModels/KeyUnitCardViewModelCommon';
-import { editorModel } from '~/ui-editor-page/EditorMainPart/models/EditorModel';
 
-interface IPlayerModel {
+export interface IPlayerModel {
   getDynamicKeyAssign(keyUnitId: string): IAssignEntry | undefined;
   layers: ILayer[];
   keyStates: { [keyId: string]: boolean };
   displayDesign: IDisplayKeyboardDesign;
 }
 
-export interface IKeyUnitCardViewModel {
-  keyUnitId: string;
-  pos: {
-    x: number;
-    y: number;
-    r: number;
-  };
-  isCurrent: boolean;
-  setCurrent: () => void;
-  primaryText: string;
-  secondaryText: string;
-  isLayerFallback: boolean;
-  isHold: boolean;
+export interface IEditorModel {
+  currentKeyUnitId: string;
+  setCurrentKeyUnitId(keyUnitId: string): void;
+  getAssignForKeyUnitWithLayerFallback(
+    keyUnitId: string,
+    targetLayerId?: string,
+  ): IAssignEntryWithLayerFallback | undefined;
 }
 
-export interface IKeyUnitCardPartViewModel {
-  cards: IKeyUnitCardViewModel[];
+export interface IEditKeyUnitCardPartViewModel {
+  cards: IEditKeyUnitCardViewModel[];
   showLayerDefaultAssign: boolean;
 }
 
 function getAssignForKeyUnit(
   keyUnitId: string,
   playerModel: IPlayerModel,
+  editorModel: IEditorModel,
 ): IAssignEntryWithLayerFallback | undefined {
   const dynamic = uiStatusModel.settings.showLayersDynamic;
   return dynamic
@@ -48,20 +43,21 @@ function getAssignForKeyUnit(
     : editorModel.getAssignForKeyUnitWithLayerFallback(keyUnitId);
 }
 
-function makeKeyUnitCardViewModel(
+function makeEditKeyUnitCardViewModel(
   ke: IDisplayKeyEntity,
   playerModel: IPlayerModel,
-): IKeyUnitCardViewModel {
+  editorModel: IEditorModel,
+): IEditKeyUnitCardViewModel {
   const keyUnitId = ke.keyId;
   const pos = { x: ke.x, y: ke.y, r: ke.angle || 0 };
 
-  const { isKeyUnitCurrent, setCurrentKeyUnitId } = editorModel;
-  const isCurrent = isKeyUnitCurrent(keyUnitId);
+  const { currentKeyUnitId, setCurrentKeyUnitId } = editorModel;
+  const isCurrent = currentKeyUnitId === keyUnitId;
   const setCurrent = () => setCurrentKeyUnitId(keyUnitId);
-  const assign = getAssignForKeyUnit(keyUnitId, playerModel);
+  const assign = getAssignForKeyUnit(keyUnitId, playerModel, editorModel);
   const { primaryText, secondaryText, isLayerFallback } = getAssignEntryTexts(
     assign,
-    editorModel.layers,
+    playerModel.layers,
   );
 
   const isHold = playerModel.keyStates[ke.keyId];
@@ -78,13 +74,14 @@ function makeKeyUnitCardViewModel(
   };
 }
 
-export function makeKeyUnitCardsPartViewModel(
+export function makeEditKeyUnitCardsPartViewModel(
   playerModel: IPlayerModel,
-): IKeyUnitCardPartViewModel {
+  editorModel: IEditorModel,
+): IEditKeyUnitCardPartViewModel {
   const { showLayerDefaultAssign } = uiStatusModel.settings;
   return {
-    cards: editorModel.displayDesign.keyEntities.map((kp) =>
-      makeKeyUnitCardViewModel(kp, playerModel),
+    cards: playerModel.displayDesign.keyEntities.map((kp) =>
+      makeEditKeyUnitCardViewModel(kp, playerModel, editorModel),
     ),
     showLayerDefaultAssign,
   };

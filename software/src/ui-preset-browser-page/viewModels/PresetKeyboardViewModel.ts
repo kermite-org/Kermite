@@ -1,10 +1,7 @@
-import { Hook } from 'qx';
-import { IDisplayArea, IDisplayOutlineShape, IProfileData } from '~/shared';
+import { IProfileData } from '~/shared';
+import { makePresetKeyUnitViewModels } from '~/ui-common-svg/KeyUnitCardModels/PresetKeyUnitViewModel';
+import { IPresetKeyboardViewModel } from '~/ui-common-svg/panels/PresetKeyboardView';
 import { getDisplayKeyboardDesignSingleCached } from '~/ui-common/modules/DisplayKeyboardSingleCache';
-import {
-  IPresetKeyUnitViewModel,
-  makePresetKeyUnitViewModels,
-} from '~/ui-preset-browser-page/viewModels/PresetKeyUnitViewModelCreator';
 
 export interface IPresetKeyboardLayerViewModel {
   layerId: string;
@@ -17,21 +14,10 @@ export interface IPrsetLayerListViewModel {
   setCurrentLayerId(layerId: string): void;
 }
 
-export interface IPresetKeyboardViewModel {
-  keyUnits: IPresetKeyUnitViewModel[];
-  displayArea: IDisplayArea;
-  outlineShapes: IDisplayOutlineShape[];
-  layerList: IPrsetLayerListViewModel;
-}
-
 export function makePresetKeyboardViewModel(
   profileData: IProfileData,
+  currentLayerId: string,
 ): IPresetKeyboardViewModel {
-  const state = Hook.useMemo(() => ({ currentLayerId: '' }), []);
-  Hook.useEffect(() => {
-    state.currentLayerId = profileData.layers[0].layerId;
-  }, [profileData]);
-
   const displayDesign = getDisplayKeyboardDesignSingleCached(
     profileData.keyboardDesign,
   );
@@ -39,17 +25,9 @@ export function makePresetKeyboardViewModel(
     keyUnits: makePresetKeyUnitViewModels(
       profileData,
       displayDesign,
-      state.currentLayerId,
+      currentLayerId,
     ),
     displayArea: displayDesign.displayArea,
     outlineShapes: displayDesign.outlineShapes,
-    layerList: {
-      layers: profileData.layers.map((la) => ({
-        layerId: la.layerId,
-        layerName: la.layerName,
-      })),
-      currentLayerId: state.currentLayerId,
-      setCurrentLayerId: (id) => (state.currentLayerId = id),
-    },
   };
 }

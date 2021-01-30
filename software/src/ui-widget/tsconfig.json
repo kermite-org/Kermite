@@ -3,5 +3,11 @@
   "compilerOptions": {
     "rootDir": ".."
   },
-  "include": ["./**/*", "../qx/**/*", "../shared/**/*", "../ui-common/**/*"]
+  "include": [
+    "./**/*",
+    "../qx/**/*",
+    "../shared/**/*",
+    "../ui-common/**/*",
+    "../ui-common-svg/**/*"
+  ]
 }

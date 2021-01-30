@@ -1,11 +1,11 @@
 import { h, Hook } from 'qx';
-import { IProfileManagementPartViewModel } from '~/ui-editor-page/ProfileManagement/viewModels/ProfileManagementPartViewModel';
 import { IProjectResourceInfo } from '~/shared';
 import { fieldSetter, ipcAgent } from '~/ui-common';
 import {
   IProjectAttachmentFileSelectorModalModel,
   ProjectAttachmentFileSelectorModal,
 } from '~/ui-common/sharedViews/ProjectAttachementFileSelectorModal';
+import { IProfileManagementPartViewModel } from '~/ui-editor-page/ProfileManagement/viewModels/ProfileManagementPartViewModel';
 
 function getTargetPresetNameFilePath(projectPath: string, presetName: string) {
   if (projectPath && presetName) {

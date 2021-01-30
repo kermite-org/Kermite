@@ -1,6 +1,18 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { IWidgetKeyUnitCardViewModel } from '~/ui-widget/WidgetKeyUnitCardsPartViewModel';
+
+export interface IWidgetKeyUnitCardViewModel {
+  keyUnitId: string;
+  pos: {
+    x: number;
+    y: number;
+    r: number;
+  };
+  primaryText: string;
+  secondaryText: string;
+  isLayerFallback: boolean;
+  isHold: boolean;
+}
 
 export function WidgetKeyUnitCard({
   keyUnit,

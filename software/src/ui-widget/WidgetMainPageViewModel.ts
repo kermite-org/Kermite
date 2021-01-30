@@ -1,15 +1,15 @@
 import { Hook } from 'qx';
 import { IDisplayKeyboardDesign } from '~/shared';
+import {
+  IWidgetKeyUnitCardsPartViewModel,
+  makeWidgetKeyUnitCardsPartViewModel,
+} from '~/ui-common-svg/KeyUnitCardsPart/WidgetKeyUnitCardsPartViewModel';
 import { PlayerModel } from '~/ui-common/sharedModels/PlayerModel';
 import { siteModel } from '~/ui-common/sharedModels/SiteModel';
-import {
-  IWidgetKeyUnitCardPartViewModel,
-  makeKeyUnitCardsPartViewModel,
-} from '~/ui-widget/WidgetKeyUnitCardsPartViewModel';
 
 export interface IWidgetKeyboardViewViewModel {
   keyboardDesign: IDisplayKeyboardDesign;
-  cardsPartVM: IWidgetKeyUnitCardPartViewModel;
+  cardsPartVM: IWidgetKeyUnitCardsPartViewModel;
 }
 
 export interface IWidgetMainPageViewModel {
@@ -30,7 +30,7 @@ export function makeWidgetMainPageViewModel(): IWidgetMainPageViewModel {
     isWindowActive: siteModel.isWindowActive,
     keyboardVM: {
       keyboardDesign: playerModel.displayDesign,
-      cardsPartVM: makeKeyUnitCardsPartViewModel(playerModel),
+      cardsPartVM: makeWidgetKeyUnitCardsPartViewModel(playerModel),
     },
     onOpenButton() {
       siteModel.setWidgetMode(false);

@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
+import { WidgetSvgKeyboardView } from '~/ui-common-svg/panels/WidgetSvgKeyboardView';
 import { makeWidgetMainPageViewModel } from '~/ui-widget/WidgetMainPageViewModel';
-import { WidgetSvgKeyboardView } from '~/ui-widget/WidgetSvgKeyboardView';
 
 const styles = {
   cssPanel: (contentScale: number) => css`
@@ -41,7 +41,10 @@ export function MainPanel() {
       <div css={styles.cssConfigButton} onClick={vm.onOpenButton}>
         <i className="fa fa-cog" />
       </div>
-      <WidgetSvgKeyboardView vm={vm.keyboardVM} />
+      <WidgetSvgKeyboardView
+        keyboardDesign={vm.keyboardVM.keyboardDesign}
+        cardsPartVM={vm.keyboardVM.cardsPartVM}
+      />
     </div>
   );
 }

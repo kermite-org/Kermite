@@ -2,7 +2,21 @@ import { css } from 'goober';
 import { h } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { mvvmView } from '~/ui-common/helpers';
-import { IHeatmapCustomKeyUnitViewModel } from '~/ui-heatmap-page/RealtimeHeatmapViewModel';
+
+export interface IHeatmapCustomKeyUnitViewModel {
+  keyUnitId: string;
+  pos: {
+    x: number;
+    y: number;
+    r: number;
+  };
+  primaryText: string;
+  secondaryText: string;
+  isLayerFallback: boolean;
+  typeCount: number;
+  weight: number;
+  hold: boolean;
+}
 
 const cssKeyRect = css`
   fill: transparent;

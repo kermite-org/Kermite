@@ -1,26 +1,34 @@
 import { css } from 'goober';
 import { h } from 'qx';
+import { IDisplayArea, IDisplayOutlineShape } from '~/shared';
+import {
+  IPresetKeyUnitViewModel,
+  PresetKeyUnitCard,
+} from '~/ui-common-svg/KeyUnitCards/PresetKeyUnitCard';
+import { KeyboardSvgFrameWithAutoScaler } from '~/ui-common-svg/frames/KeyboardSvgFrameWithAutoScaler';
+import { KeyboardBodyShape } from '~/ui-common-svg/keyboardBody/KeyboardBodyShape';
 import { ViewModelProps } from '~/ui-common/helpers';
-import { KeyboardBodyShape } from '~/ui-common/sharedViews/keyboardSvg/KeyboardBodyShape';
-import { KeyboardSvgFrameWithAutoScaler } from '~/ui-common/sharedViews/keyboardSvg/outlines/KeyboardSvgFrameWithAutoScaler';
-import { HeatmapKeyUnitCard } from '~/ui-heatmap-page/HeatmapKeyUnitCard';
-import { IRealtimeHeatmapKeyboardViewModel } from '~/ui-heatmap-page/RealtimeHeatmapViewModel';
 
-export const HeatmapKeyboardView = ({
+export interface IPresetKeyboardViewModel {
+  keyUnits: IPresetKeyUnitViewModel[];
+  displayArea: IDisplayArea;
+  outlineShapes: IDisplayOutlineShape[];
+}
+
+export const PresetKeyboardView = ({
   vm,
-}: ViewModelProps<IRealtimeHeatmapKeyboardViewModel>) => {
+}: ViewModelProps<IPresetKeyboardViewModel>) => {
   const cssKeyboardShapeView = css`
-    height: 300px;
+    height: 100%;
     overflow: hidden;
-    background: #ccc;
   `;
 
   const dpiScale = 2;
   const marginRatio = 0.06;
   const baseStrokeWidth = 0.3;
 
-  const fillColor = '#FFF';
-  const strokeColor = '#888';
+  const fillColor = 'transparent';
+  const strokeColor = '#0A8';
 
   return (
     <div css={cssKeyboardShapeView}>
@@ -36,8 +44,8 @@ export const HeatmapKeyboardView = ({
           strokeColor={strokeColor}
         />
         <g>
-          {vm.cardsVM.map((keyUnit) => (
-            <HeatmapKeyUnitCard
+          {vm.keyUnits.map((keyUnit) => (
+            <PresetKeyUnitCard
               model={keyUnit}
               key={keyUnit.keyUnitId}
               // qxOptimizer="deepEqual"
