@@ -35,12 +35,8 @@ export class SiteModel {
     ipcAgent.async.window_setDevToolVisibility(!this._isDevToolVisible);
   };
 
-  initialize() {
-    ipcAgent.subscribe2('window_appWindowEvents', this.onAppWindowEvents);
-  }
-
-  finalize() {
-    ipcAgent.unsubscribe2('window_appWindowEvents', this.onAppWindowEvents);
-  }
+  setupLifecycle = () => {
+    return ipcAgent.subscribe('window_appWindowEvents', this.onAppWindowEvents);
+  };
 }
 export const siteModel = new SiteModel();
