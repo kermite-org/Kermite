@@ -2,7 +2,7 @@ import { css, glob, setup } from 'goober';
 import { h, Hook } from 'qx';
 import { appUi } from '~/ui-common';
 import { DebugOverlay } from '~/ui-common/fundamental/overlay/DebugOverlay';
-import { siteModel } from '~/ui-root/zones/common/commonModels/SiteModel';
+import { siteModel } from '~/ui-common/sharedModels/SiteModel';
 import { ForegroundModalLayerRoot } from '../ui-common/fundamental/overlay/ForegroundModalLayer';
 import { ConfiguratorZoneRoot } from './ConfiguratorZoneRoot';
 import { WidgetZoneRoot } from './WidgetZoneRoot';

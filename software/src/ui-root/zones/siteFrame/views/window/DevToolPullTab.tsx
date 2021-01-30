@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { siteModel } from '~/ui-root/zones/common/commonModels/SiteModel';
+import { siteModel } from '~/ui-common/sharedModels/SiteModel';
 
 const cssDevToolPullTabBase = css`
   position: absolute;

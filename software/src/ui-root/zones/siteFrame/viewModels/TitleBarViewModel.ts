@@ -1,5 +1,5 @@
 import { ipcAgent } from '~/ui-common';
-import { siteModel } from '~/ui-root/zones/common/commonModels/SiteModel';
+import { siteModel } from '~/ui-common/sharedModels/SiteModel';
 
 export interface ITitleBarViewModel {
   showReloadButton: boolean;

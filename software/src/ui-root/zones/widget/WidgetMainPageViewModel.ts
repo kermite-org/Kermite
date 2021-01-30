@@ -1,7 +1,7 @@
 import { Hook } from 'qx';
 import { IDisplayKeyboardDesign } from '~/shared';
 import { PlayerModel } from '~/ui-common/sharedModels/PlayerModel';
-import { siteModel } from '~/ui-root/zones/common/commonModels/SiteModel';
+import { siteModel } from '~/ui-common/sharedModels/SiteModel';
 import {
   IWidgetKeyUnitCardPartViewModel,
   makeKeyUnitCardsPartViewModel,

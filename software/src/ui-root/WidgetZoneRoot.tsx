@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { siteModel } from '~/ui-root/zones/common/commonModels/SiteModel';
+import { siteModel } from '~/ui-common/sharedModels/SiteModel';
 import { WidgetWindowActiveChrome } from '~/ui-root/zones/siteFrame/views/window/WidgetWindowActiveChrome';
 import { MainPanel } from '~/ui-root/zones/widget/WidgetMainPage';
 
