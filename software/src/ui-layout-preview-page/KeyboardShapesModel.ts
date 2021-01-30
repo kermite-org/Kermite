@@ -1,20 +1,14 @@
 import { IDisplayKeyboardDesign } from '~/shared';
 import { ipcAgent } from '~/ui-common';
 import { DisplayKeyboardDesignLoader } from '~/ui-common/modules/DisplayKeyboardDesignLoader';
-import {
-  projectResourceModel,
-  ProjectResourceModel,
-} from '~/ui-common/sharedModels/ProjectResourceModel';
+import { projectResourceModel } from '~/ui-common/sharedModels/ProjectResourceModel';
 import {
   uiStatusModel,
   UiStatusModel,
 } from '~/ui-common/sharedModels/UiStatusModel';
 
 export class KeyboardShapesModel {
-  constructor(
-    private projectResourceModel: ProjectResourceModel,
-    private uiStatusModel: UiStatusModel,
-  ) {}
+  constructor(private uiStatusModel: UiStatusModel) {}
 
   private _currentProjectId: string | undefined;
   private _loadedDesign: IDisplayKeyboardDesign | undefined;
@@ -33,7 +27,7 @@ export class KeyboardShapesModel {
   }
 
   get optionProjectInfos() {
-    return this.projectResourceModel.getProjectsWithLayout();
+    return projectResourceModel.getProjectsWithLayout();
   }
 
   get optionLayoutNames() {
@@ -116,7 +110,4 @@ export class KeyboardShapesModel {
   }
 }
 
-export const keyboardShapesModel = new KeyboardShapesModel(
-  projectResourceModel,
-  uiStatusModel,
-);
+export const keyboardShapesModel = new KeyboardShapesModel(uiStatusModel);
