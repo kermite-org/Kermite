@@ -1,11 +1,14 @@
 import { css } from 'goober';
-import { h } from 'qx';
+import { h, Hook } from 'qx';
 import { uiTheme } from '~/ui-common';
+import { PlayerModel } from '~/ui-common/sharedModels/PlayerModel';
 import { KeyboardBodyShape } from '~/ui-common/sharedViews/keyboardSvg/KeyboardBodyShape';
 import { KeyboardSvgFrameWithAutoScaler } from '~/ui-common/sharedViews/keyboardSvg/outlines/KeyboardSvgFrameWithAutoScaler';
-import { EditKeyUnitCardsPart } from '~/ui-root/zones/common/parts/keyboardSvg/organisms/EditKeyUnitCardsPart';
 import { editorModel } from '~/ui-root/zones/editor/EditorMainPart/models/EditorModel';
-import { LayerStateView } from './LayerStateView';
+import { EditKeyUnitCardsPart } from '~/ui-root/zones/editor/EditorMainPart/views/EditKeyUnitCardsPart';
+import { LayerStateView } from './views/LayerStateView';
+
+const playerModel = new PlayerModel();
 
 const EditKeyboardView = () => {
   const design = editorModel.displayDesign;
@@ -26,12 +29,17 @@ const EditKeyboardView = () => {
         fillColor={bodyFillColor}
         strokeColor="transparent"
       />
-      <EditKeyUnitCardsPart />
+      <EditKeyUnitCardsPart playerModel={playerModel} />
     </KeyboardSvgFrameWithAutoScaler>
   );
 };
 
 export function KeyboardSection() {
+  Hook.useEffect(() => {
+    playerModel.initialize();
+    return () => playerModel.finalize();
+  }, []);
+
   const cssKeyboardSection = css`
     position: relative;
     height: 100%;
@@ -41,7 +49,7 @@ export function KeyboardSection() {
   return (
     <div css={cssKeyboardSection} onMouseDown={clearAssignSlotSelection}>
       <EditKeyboardView />
-      <LayerStateView />
+      <LayerStateView playerModel={playerModel} />
     </div>
   );
 }

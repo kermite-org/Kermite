@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { useDeviceStatusModel } from '~/ui-common/sharedModels/DeviceStatusModelHook';
-import { playerModel } from '~/ui-root/zones/common/commonModels/PlayerModel';
+import { PlayerModel } from '~/ui-common/sharedModels/PlayerModel';
 
 const cssLayerStateView = css`
   position: absolute;
@@ -30,12 +30,12 @@ const cssLayerCard = css`
   overflow: hidden;
 `;
 
-export const LayerStateView = () => {
+export const LayerStateView = (props: { playerModel: PlayerModel }) => {
   const { isConnected } = useDeviceStatusModel();
 
   return (
     <div css={cssLayerStateView}>
-      {playerModel.layerStackViewSource.map((la) => {
+      {props.playerModel.layerStackViewSource.map((la) => {
         return (
           <div
             key={la.layerId}

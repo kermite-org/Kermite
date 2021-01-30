@@ -3,9 +3,9 @@ import { h } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
 import { ProfileConfigurationPart } from '~/ui-root/zones/editor/EditorMainPart/views/ProfileConfigurationPart';
+import { KeyboardSection } from './EditorMainPart/KeyboardSection';
 import { AssignEditSection } from './EditorMainPart/views/AssignEditSection';
 import { BehaviorOptionsPart } from './EditorMainPart/views/BehaviorOptionsPart';
-import { KeyboardSection } from './EditorMainPart/views/KeyboardSection';
 import { LayersSection } from './EditorMainPart/views/LayersSection';
 import { TestInputArea } from './TestInputArea/TestInputArea';
 

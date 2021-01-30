@@ -1,6 +1,5 @@
 import { projectResourceModel } from '~/ui-common/sharedModels/ProjectResourceModel';
 import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
-import { playerModel } from '~/ui-root/zones/common/commonModels/PlayerModel';
 import { siteModel } from '~/ui-root/zones/common/commonModels/SiteModel';
 import { profilesModel } from '~/ui-root/zones/editor/ProfileManagement/models/ProfilesModel';
 
@@ -9,13 +8,11 @@ export class Models {
     await projectResourceModel.initializeAsync();
     siteModel.initialize();
     profilesModel.initialize();
-    playerModel.initialize();
     uiStatusModel.initialize();
   }
 
   finalize() {
     uiStatusModel.finalize();
-    playerModel.finalize();
     profilesModel.finalize();
     siteModel.finalize();
   }

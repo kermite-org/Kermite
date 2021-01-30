@@ -125,5 +125,3 @@ export class PlayerModel {
     ipcAgent.unsubscribe2('profile_currentProfile', this.onProfileData);
   }
 }
-
-export const playerModel = new PlayerModel();
