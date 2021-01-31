@@ -100,7 +100,7 @@ async function makeUi() {
       watch: reqWatch,
       clear: false,
       tslint: false,
-      sourcemap: 'inline',
+      sourcemap: false,
       plugins: [gooberCssAutoLabelPlugin],
       onEnd: resolve,
     }),
