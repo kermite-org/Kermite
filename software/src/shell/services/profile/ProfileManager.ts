@@ -10,7 +10,7 @@ import {
 } from '~/shared';
 import { EventPort } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projects';
-import { PresetProfileLoader } from '~/shell/projects/PresetProfileLoader';
+import { PresetProfileLoader } from '~/shell/services/profile/PresetProfileLoader';
 import { ProfileManagerCore } from './ProfileManagerCore';
 import { IProfileManager } from './interfaces';
 

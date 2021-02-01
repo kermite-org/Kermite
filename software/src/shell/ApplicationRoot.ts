@@ -2,7 +2,6 @@ import { IPresetSpec, IProfileManagerStatus } from '~/shared';
 import { appGlobal, applicationStorage } from '~/shell/base';
 import { projectResourceProvider } from '~/shell/projects';
 import { KeyboardLayoutFilesWatcher } from '~/shell/projects/KeyboardShape/KeyboardLayoutFilesWatcher';
-import { PresetProfileLoader } from '~/shell/projects/PresetProfileLoader';
 import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
 import { KeyMappingEmitter } from '~/shell/services/device/KeyMappingEmitter';
 import { KeyboardDeviceService } from '~/shell/services/device/KeyboardDevice';
@@ -10,6 +9,7 @@ import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStat
 import { FirmwareUpdationService } from '~/shell/services/firmwareUpdation';
 import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/InputLogicSimulatorD';
 import { LayoutManager } from '~/shell/services/layout/LayoutManager';
+import { PresetProfileLoader } from '~/shell/services/profile/PresetProfileLoader';
 import { ProfileManager } from '~/shell/services/profile/ProfileManager';
 import { WindowService } from '~/shell/services/window';
 // import { resourceUpdator_syncRemoteResourcesToLocal } from '~/shell/services0/ResourceUpdator';
