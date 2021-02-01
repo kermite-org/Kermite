@@ -1,6 +1,6 @@
 import { h, Hook } from 'qx';
 import { IProjectResourceInfo } from '~/shared';
-import { fieldSetter, ipcAgent } from '~/ui-common';
+import { fieldSetter, ipcAgent, useLocal } from '~/ui-common';
 import {
   IProjectAttachmentFileSelectorModalModel,
   ProjectAttachmentFileSelectorModal,
@@ -18,7 +18,7 @@ function getTargetPresetNameFilePath(projectPath: string, presetName: string) {
 function useProjectAttachmentFileSelectorViewModel(
   baseVm: IProfileManagementPartViewModel,
 ): IProjectAttachmentFileSelectorModalModel {
-  const [local] = Hook.useState({
+  const local = useLocal({
     resourceInfos: [] as IProjectResourceInfo[],
     currentPresetName: '',
   });

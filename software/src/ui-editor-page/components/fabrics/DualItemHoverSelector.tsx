@@ -1,5 +1,6 @@
 import { css } from 'goober';
-import { h, Hook } from 'qx';
+import { h } from 'qx';
+import { useLocal } from '~/ui-common';
 
 interface IDualItemsHoverSelectorProps<T extends string> {
   items: T[];
@@ -35,7 +36,7 @@ const cssDualItemsSelector = css`
 export function DualItemsHoverSelector<T extends string>(
   props: IDualItemsHoverSelectorProps<T>,
 ) {
-  const state = Hook.useMemo(() => ({ isHover: false }), []);
+  const state = useLocal({ isHover: false });
   const onMouseEnter = () => (state.isHover = true);
   const onMouseLeave = () => (state.isHover = false);
 

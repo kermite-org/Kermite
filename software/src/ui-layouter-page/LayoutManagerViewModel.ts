@@ -1,5 +1,6 @@
 import { Hook } from 'qx';
 import { ILayoutEditSource, IProjectLayoutsInfo } from '~/shared';
+import { useLocal } from '~/ui-common';
 import { UiLayouterCore } from '~/ui-layouter';
 import { LayoutManagerModel } from '~/ui-layouter-page/LayoutManagerModel';
 import { ISelectOption } from '~/ui-layouter/controls';
@@ -79,7 +80,7 @@ function getEditSourceDisplayText(
 function useLayoutManagerViewModelImpl(
   model: LayoutManagerModel,
 ): ILayoutManagerViewModel {
-  const [local] = Hook.useState({
+  const local = useLocal({
     currentProjectId: '',
     currentLayoutName: '',
     modalState: 'None' as ILayoutManagerModalState,
@@ -179,7 +180,7 @@ function useLayoutManagerViewModelImpl(
 }
 
 export function useLayoutManagerViewModel(): ILayoutManagerViewModel {
-  const model = Hook.useMemo(() => new LayoutManagerModel(), []);
+  const model = useLocal(() => new LayoutManagerModel());
   Hook.useEffect(() => model.startLifecycle(), []);
   return useLayoutManagerViewModelImpl(model);
 }

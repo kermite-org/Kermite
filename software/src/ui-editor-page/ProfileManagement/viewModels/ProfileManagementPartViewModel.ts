@@ -1,9 +1,13 @@
 import { Hook } from 'qx';
-import { ISelectorSource, makePlainSelectorOption } from '~/ui-common';
+import {
+  ISelectorSource,
+  makePlainSelectorOption,
+  useLocal,
+} from '~/ui-common';
 import {
   modalAlert,
-  modalTextEdit,
   modalConfirm,
+  modalTextEdit,
 } from '~/ui-common/fundamental/dialog/BasicModals';
 import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
 import { editorModel } from '~/ui-editor-page/EditorMainPart/models/EditorModel';
@@ -38,13 +42,13 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     return () => profilesModel.finalize();
   }, []);
 
-  const [isPresetsModalOpen, setIsPresetModalOpen] = Hook.useState(false);
+  const state = useLocal({ isPresetsModalOpen: false });
 
   const openExportingPresetSelectionModal = async () => {
-    setIsPresetModalOpen(true);
+    state.isPresetsModalOpen = true;
   };
   const closeExportingPresetSelectionModal = () => {
-    setIsPresetModalOpen(false);
+    state.isPresetsModalOpen = false;
   };
 
   const {
@@ -153,7 +157,7 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
       choiceId: currentProfileName,
       setChoiceId: loadProfile,
     },
-    isExportingPresetSelectionModalOpen: isPresetsModalOpen,
+    isExportingPresetSelectionModalOpen: state.isPresetsModalOpen,
     openExportingPresetSelectionModal,
     closeExportingPresetSelectionModal,
     saveProfileAsPreset: profilesModel.exportProfileAsProjectPreset,

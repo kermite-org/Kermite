@@ -1,5 +1,5 @@
 import { Hook } from 'qx';
-import { ISelectorSource } from '~/ui-common';
+import { ISelectorSource, useLocal } from '~/ui-common';
 import { IPresetKeyboardViewModel } from '~/ui-common-svg/panels/PresetKeyboardView';
 import { useDeviceStatusModel } from '~/ui-common/sharedModels/DeviceStatusModelHook';
 import { presetBrowserModel } from '~/ui-preset-browser-page/models/PresetBrowserModel';
@@ -22,7 +22,7 @@ export function makePresetBrowserViewModel(): IPresetBrowserViewModel {
   const deviceStatusModel = useDeviceStatusModel();
   const profileData = presetBrowserModel.loadedProfileData;
 
-  const state = Hook.useMemo(() => ({ currentLayerId: '' }), []);
+  const state = useLocal({ currentLayerId: '' });
   Hook.useEffect(() => {
     state.currentLayerId = profileData.layers[0].layerId;
   }, [profileData]);

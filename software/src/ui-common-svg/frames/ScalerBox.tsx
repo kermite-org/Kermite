@@ -1,5 +1,6 @@
 import { css } from 'goober';
 import { h, Hook, asyncRerender } from 'qx';
+import { useLocal } from '~/ui-common';
 
 const cssBase = css`
   width: 100%;
@@ -26,14 +27,11 @@ interface IScalerBoxProps {
 }
 
 export function ScalerBox(props: IScalerBoxProps) {
-  const local = Hook.useMemo(
-    () => ({
-      scale: 1.0,
-      mh: 0,
-      mv: 0,
-    }),
-    [],
-  );
+  const local = useLocal({
+    scale: 1.0,
+    mh: 0,
+    mv: 0,
+  });
 
   const { contentWidth, contentHeight, children } = props;
 

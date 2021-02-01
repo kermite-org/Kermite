@@ -1,5 +1,4 @@
-import { Hook } from 'qx';
-import { appUi } from '~/ui-common';
+import { appUi, useLocal } from '~/ui-common';
 import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
 import { themeSelectionModel } from '~/ui-root/models/ThemeSelectionModel';
 
@@ -55,7 +54,7 @@ export interface IGlobalMenuViewModel {
 }
 
 export function makeGlobalMenuViewModel(): IGlobalMenuViewModel {
-  const state = Hook.useMemo(() => ({ isOpen: false }), []);
+  const state = useLocal({ isOpen: false });
   return {
     isOpen: state.isOpen,
     openMenu: () => (state.isOpen = true),

@@ -1,4 +1,4 @@
-import { Hook } from 'qx';
+import { useLocal } from '~/ui-common';
 import { useClosureModel } from '~/ui-layouter/base';
 import { ICommonSelectorViewModel } from '~/ui-layouter/controls';
 import {
@@ -316,7 +316,7 @@ function createKeyIndexEditViewModel() {
 }
 
 export function useKeyEntityEditPanelModel(): IPropertyPanelModel {
-  const model = Hook.useMemo(() => new KeyEntityAttrsEditorModel(), []);
+  const model = useLocal(() => new KeyEntityAttrsEditorModel());
   model.update();
 
   const vmKeyId = useClosureModel(createKeyIdEditViewModel);

@@ -1,4 +1,4 @@
-import { Hook } from 'qx';
+import { useLocal } from '~/ui-common';
 import { IProfileManagementPartViewModel } from './ProfileManagementPartViewModel';
 
 export interface IProfileSelectionMenuPartViewModel {
@@ -38,7 +38,7 @@ const profileMenuCommandTexts: { [key in IProfileMenuCommand]: string } = {
 export function makeProfileSelectionMenuPartViewModel(
   vm: IProfileManagementPartViewModel,
 ) {
-  const state = Hook.useMemo(() => ({ isOpen: false }), []);
+  const state = useLocal({ isOpen: false });
   return {
     get isOpen() {
       return state.isOpen;
