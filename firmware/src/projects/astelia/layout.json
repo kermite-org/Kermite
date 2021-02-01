@@ -1,4 +1,5 @@
 {
+  "formatRevision": "LA00",
   "setup": {
     "placementUnit": "mm",
     "placementAnchor": "center",
@@ -421,5 +422,5 @@
       ]
     }
   ],
-  "transGroups": []
+  "transformationGroups": []
 }
