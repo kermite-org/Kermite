@@ -70,7 +70,7 @@ export class LayoutManager implements ILayoutManager {
     const { editSource } = this.status;
     if (editSource.type === 'ProjectLayout') {
       const { projectId, layoutName } = editSource;
-      return projectResourceInfoProvider.getLayoutFilePath(
+      return projectResourceInfoProvider.getLocalLayoutFilePath(
         projectId,
         layoutName,
       );
@@ -149,13 +149,13 @@ export class LayoutManager implements ILayoutManager {
     projectId: string,
     layoutName: string,
   ) {
-    projectResourceInfoProvider.patchProjectInfoSource(projectId, (info) =>
+    projectResourceInfoProvider.patchLocalProjectInfoSource(projectId, (info) =>
       addArrayItemIfNotExist(info.layoutNames, layoutName),
     );
   }
 
   private async createLayoutForProfject(projectId: string, layoutName: string) {
-    const filePath = projectResourceInfoProvider.getLayoutFilePath(
+    const filePath = projectResourceInfoProvider.getLocalLayoutFilePath(
       projectId,
       layoutName,
     );
@@ -176,12 +176,15 @@ export class LayoutManager implements ILayoutManager {
   }
 
   private async loadLayoutFromProfject(projectId: string, layoutName: string) {
-    const filePath = projectResourceInfoProvider.getLayoutFilePath(
+    const filePath = projectResourceInfoProvider.getLocalLayoutFilePath(
       projectId,
       layoutName,
     );
     if (filePath) {
-      const loadedDesign = await layoutFileLoader.loadLayoutFromFile(filePath);
+      const loadedDesign = await projectResourceInfoProvider.loadProjectLayout(
+        projectId,
+        layoutName,
+      );
       this.fileWatcher.observeFile(filePath, this.onObservedFileChanged);
       this.setStatus({
         editSource: {
@@ -199,7 +202,7 @@ export class LayoutManager implements ILayoutManager {
     layoutName: string,
     design: IPersistKeyboardDesign,
   ) {
-    const filePath = projectResourceInfoProvider.getLayoutFilePath(
+    const filePath = projectResourceInfoProvider.getLocalLayoutFilePath(
       projectId,
       layoutName,
     );
@@ -247,7 +250,7 @@ export class LayoutManager implements ILayoutManager {
       await layoutFileLoader.saveLayoutToFile(filePath, design);
     } else if (editSource.type === 'ProjectLayout') {
       const { projectId, layoutName } = editSource;
-      const filePath = projectResourceInfoProvider.getLayoutFilePath(
+      const filePath = projectResourceInfoProvider.getLocalLayoutFilePath(
         projectId,
         layoutName,
       );

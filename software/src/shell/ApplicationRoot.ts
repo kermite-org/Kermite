@@ -2,7 +2,6 @@ import { IPresetSpec, IProfileManagerStatus } from '~/shared';
 import { appGlobal, applicationStorage } from '~/shell/base';
 import { projectResourceInfoProvider } from '~/shell/projects';
 import { KeyboardLayoutFilesWatcher } from '~/shell/projects/KeyboardShape/KeyboardLayoutFilesWatcher';
-import { KeyboardShapesProvider } from '~/shell/projects/KeyboardShape/KeyboardShapesProvider';
 import { PresetProfileLoader } from '~/shell/projects/PresetProfileLoader';
 import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
 import { KeyMappingEmitter } from '~/shell/services/device/KeyMappingEmitter';
@@ -20,8 +19,6 @@ export class ApplicationRoot {
   private keyboardConfigProvider = new KeyboardConfigProvider();
 
   private keyboardLayoutFilesWatcher = new KeyboardLayoutFilesWatcher();
-
-  private keyboardShapesProvider = new KeyboardShapesProvider();
 
   private firmwareUpdationService = new FirmwareUpdationService();
 
@@ -76,10 +73,7 @@ export class ApplicationRoot {
       layout_showEditLayoutFileInFiler: async () =>
         this.layoutManager.showEditLayoutFileInFiler(),
       projects_loadKeyboardShape: (projectId, layoutName) =>
-        this.keyboardShapesProvider.loadKeyboardShapeByProjectIdAndLayoutName(
-          projectId,
-          layoutName,
-        ),
+        projectResourceInfoProvider.loadProjectLayout(projectId, layoutName),
       firmup_uploadFirmware: (projectId, comPortName) =>
         this.firmwareUpdationService.writeFirmware(projectId, comPortName),
       projects_getAllProjectResourceInfos: async () =>

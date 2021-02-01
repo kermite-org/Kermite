@@ -133,14 +133,15 @@ export class ProfileManager implements IProfileManager {
     profileData: IProfileData,
   ): Promise<boolean> {
     try {
-      const filePath = projectResourceInfoProvider.getPresetProfileFilePath(
+      const filePath = projectResourceInfoProvider.getLocalPresetProfileFilePath(
         projectId,
         presetName,
       );
       if (filePath) {
         await this.core.saveProfileAsPreset(filePath, profileData);
-        projectResourceInfoProvider.patchProjectInfoSource(projectId, (info) =>
-          addArrayItemIfNotExist(info.presetNames, presetName),
+        projectResourceInfoProvider.patchLocalProjectInfoSource(
+          projectId,
+          (info) => addArrayItemIfNotExist(info.presetNames, presetName),
         );
       }
       return true;

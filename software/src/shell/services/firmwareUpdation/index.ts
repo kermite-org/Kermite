@@ -13,7 +13,9 @@ export class FirmwareUpdationService {
     projectId: string,
     comPortName: string,
   ): Promise<'ok' | string> {
-    const hexFilePath = projectResourceInfoProvider.getHexFilePath(projectId);
+    const hexFilePath = await projectResourceInfoProvider.loadProjectFirmwareFile(
+      projectId,
+    );
 
     if (!hexFilePath) {
       return `cannot find firmware`;

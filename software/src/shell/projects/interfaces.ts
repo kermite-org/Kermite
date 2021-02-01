@@ -37,31 +37,43 @@ export interface IProjectResourceLoader__NEXT {
 
 export interface IProjectResourceInfoProvider {
   getAllProjectResourceInfos(): IProjectResourceInfo[];
-  getPresetProfileFilePath(
+
+  getLocalPresetProfileFilePath(
     projectId: string,
     presetName: string,
   ): string | undefined;
-  getHexFilePath(projectId: string): string | undefined;
-  getLayoutFilePath(projectId: string, layoutName: string): string | undefined;
+
+  getLocalLayoutFilePath(
+    projectId: string,
+    layoutName: string,
+  ): string | undefined;
+
+  // getHexFilePath(projectId: string): string | undefined;
+
+  loadProjectPreset(
+    projectId: string,
+    presetName: string,
+  ): Promise<IProfileData | undefined>;
+
+  loadProjectLayout(
+    projectId: string,
+    layoutName: string,
+  ): Promise<IPersistKeyboardDesign | undefined>;
+
+  // local: ローカルにあるプロジェクトのHexファイルのパスを返す
+  // online: Hexファイルをリモートからダウンロードして一時ファイルに保存しファイルパスを返す
+  loadProjectFirmwareFile(projectId: string): Promise<string | undefined>;
+
   initializeAsync(): Promise<void>;
 
   internal_getProjectInfoSourceById(
     projectId: string,
   ): IProjectResourceInfoSource | undefined;
 
-  patchProjectInfoSource(
+  patchLocalProjectInfoSource(
     projectId: string,
     callback: (info: IProjectResourceInfoSource) => void,
   ): void;
-}
-
-export interface IKeyboardShapeBulkLoader {
-  loadKeyboardShapesWithCache(
-    projectId: string[],
-  ): Promise<{
-    projectId: string;
-    design: IPersistKeyboardDesign;
-  }>;
 }
 
 export interface IPresetProfileLoadingFeature {

@@ -4,56 +4,30 @@ import {
   fallbackProfileData,
   IPresetSpec,
 } from '~/shared';
-import { layoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
-import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
 import { projectResourceInfoProvider } from '~/shell/projects';
 import { IPresetProfileLoadingFeature } from '~/shell/projects/interfaces';
 
 export class PresetProfileLoader implements IPresetProfileLoadingFeature {
-  private async loadPresetProfileFromPresetFile(
-    projectId: string,
-    presetName: string,
-  ) {
-    const presetFilePath = projectResourceInfoProvider.getPresetProfileFilePath(
-      projectId,
-      presetName,
-    );
-    if (presetFilePath) {
-      try {
-        return await ProfileFileLoader.loadProfileFromFile(presetFilePath);
-      } catch (error) {
-        console.log(`errorr on loading preset file`);
-        console.error(error);
-      }
-    }
-    return undefined;
-  }
-
   private async createBlankProfileFromLayoutFile(
     projectId: string,
     layoutName: string,
   ) {
-    const layoutFilePath = projectResourceInfoProvider.getLayoutFilePath(
-      projectId,
-      layoutName,
-    );
-    if (layoutFilePath) {
-      try {
-        const design = await layoutFileLoader.loadLayoutFromFile(
-          layoutFilePath,
+    try {
+      const design = await projectResourceInfoProvider.loadProjectLayout(
+        projectId,
+        layoutName,
+      );
+      if (design) {
+        const profileData: IProfileData = duplicateObjectByJsonStringifyParse(
+          fallbackProfileData,
         );
-        if (design) {
-          const profileData: IProfileData = duplicateObjectByJsonStringifyParse(
-            fallbackProfileData,
-          );
-          profileData.projectId = projectId;
-          profileData.keyboardDesign = design;
-          return profileData;
-        }
-      } catch (error) {
-        console.log(`errorr on loading layout file`);
-        console.error(error);
+        profileData.projectId = projectId;
+        profileData.keyboardDesign = design;
+        return profileData;
       }
+    } catch (error) {
+      console.log(`errorr on loading layout file`);
+      console.error(error);
     }
   }
 
@@ -62,7 +36,7 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
     presetSpec: IPresetSpec,
   ) {
     if (presetSpec.type === 'preset') {
-      return await this.loadPresetProfileFromPresetFile(
+      return await projectResourceInfoProvider.loadProjectPreset(
         projectId,
         presetSpec.presetName,
       );

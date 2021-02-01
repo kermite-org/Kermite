@@ -1,6 +1,12 @@
-import { IProjectResourceInfo } from '~/shared';
+import {
+  IPersistKeyboardDesign,
+  IProfileData,
+  IProjectResourceInfo,
+} from '~/shared';
 import { appEnv } from '~/shell/base';
 import { pathJoin } from '~/shell/funcs';
+import { layoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
+import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
 import { IProjectResourceInfoProvider } from '~/shell/projects/interfaces';
 import {
   IProjectResourceInfoSource,
@@ -39,7 +45,7 @@ class ProjectResourceInfoProvider implements IProjectResourceInfoProvider {
     return this.projectInfoSources.find((info) => info.projectId === projectId);
   }
 
-  patchProjectInfoSource(
+  patchLocalProjectInfoSource(
     projectId: string,
     callback: (info: IProjectResourceInfoSource) => void,
   ) {
@@ -53,7 +59,7 @@ class ProjectResourceInfoProvider implements IProjectResourceInfoProvider {
 
   internal_getProjectInfoSourceById = this.getProjectInfoSourceById;
 
-  getPresetProfileFilePath(
+  getLocalPresetProfileFilePath(
     projectId: string,
     presetName: string,
   ): string | undefined {
@@ -63,12 +69,15 @@ class ProjectResourceInfoProvider implements IProjectResourceInfoProvider {
     }
   }
 
-  getHexFilePath(projectId: string): string | undefined {
+  private getLocalHexFilePath(projectId: string): string | undefined {
     const info = this.getProjectInfoSourceById(projectId);
     return info?.hexFilePath;
   }
 
-  getLayoutFilePath(projectId: string, layoutName: string): string | undefined {
+  getLocalLayoutFilePath(
+    projectId: string,
+    layoutName: string,
+  ): string | undefined {
     const info = this.getProjectInfoSourceById(projectId);
     if (info) {
       const fileName =
@@ -83,6 +92,38 @@ class ProjectResourceInfoProvider implements IProjectResourceInfoProvider {
     this.projectInfoSources = await ProjectResourceInfoSourceLoader.loadProjectResourceInfoSources(
       resourceOrigin,
     );
+  }
+
+  async loadProjectPreset(
+    projectId: string,
+    presetName: string,
+  ): Promise<IProfileData | undefined> {
+    const filePath = this.getLocalPresetProfileFilePath(projectId, presetName);
+    if (filePath) {
+      try {
+        return await ProfileFileLoader.loadProfileFromFile(filePath);
+      } catch (error) {
+        console.log(`errorr on loading preset file`);
+        console.error(error);
+      }
+    }
+    return undefined;
+  }
+
+  async loadProjectLayout(
+    projectId: string,
+    layoutName: string,
+  ): Promise<IPersistKeyboardDesign | undefined> {
+    const filePath = this.getLocalLayoutFilePath(projectId, layoutName);
+    if (filePath) {
+      return await layoutFileLoader.loadLayoutFromFile(filePath);
+    }
+  }
+
+  async loadProjectFirmwareFile(
+    projectId: string,
+  ): Promise<string | undefined> {
+    return this.getLocalHexFilePath(projectId);
   }
 }
 export const projectResourceInfoProvider = new ProjectResourceInfoProvider();
