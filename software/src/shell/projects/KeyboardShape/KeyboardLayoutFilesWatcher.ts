@@ -8,7 +8,7 @@ import {
   fsExistsSync,
   fsxWatchFilesChange,
 } from '~/shell/funcs';
-import { projectResourceInfoProvider } from '~/shell/projects';
+import { projectResourceProvider } from '~/shell/projects';
 
 type IFileUpdationEvent = { projectId: string };
 
@@ -20,7 +20,7 @@ export class KeyboardLayoutFilesWatcher {
   readonly fileUpdationEventPort = new EventPort<IFileUpdationEvent>();
 
   private getProjectIdFromFilePath(projectPath: string) {
-    const infos = projectResourceInfoProvider.getAllProjectResourceInfos();
+    const infos = projectResourceProvider.getAllProjectResourceInfos();
     const info = infos.find((info) => info.projectPath === projectPath);
     return info?.projectId;
   }

@@ -35,7 +35,7 @@ export interface IProjectResourceLoader__NEXT {
   ): Promise<string>;
 }
 
-export interface IProjectResourceInfoProvider {
+export interface IProjectResourceProvider {
   getAllProjectResourceInfos(): IProjectResourceInfo[];
 
   getLocalPresetProfileFilePath(

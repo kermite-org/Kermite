@@ -1,6 +1,6 @@
 import { IPresetSpec, IProfileManagerStatus } from '~/shared';
 import { appGlobal, applicationStorage } from '~/shell/base';
-import { projectResourceInfoProvider } from '~/shell/projects';
+import { projectResourceProvider } from '~/shell/projects';
 import { KeyboardLayoutFilesWatcher } from '~/shell/projects/KeyboardShape/KeyboardLayoutFilesWatcher';
 import { PresetProfileLoader } from '~/shell/projects/PresetProfileLoader';
 import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
@@ -73,11 +73,11 @@ export class ApplicationRoot {
       layout_showEditLayoutFileInFiler: async () =>
         this.layoutManager.showEditLayoutFileInFiler(),
       projects_loadKeyboardShape: (projectId, layoutName) =>
-        projectResourceInfoProvider.loadProjectLayout(projectId, layoutName),
+        projectResourceProvider.loadProjectLayout(projectId, layoutName),
       firmup_uploadFirmware: (projectId, comPortName) =>
         this.firmwareUpdationService.writeFirmware(projectId, comPortName),
       projects_getAllProjectResourceInfos: async () =>
-        projectResourceInfoProvider.getAllProjectResourceInfos(),
+        projectResourceProvider.getAllProjectResourceInfos(),
       projects_loadPresetProfile: (profileId, presetSpec: IPresetSpec) =>
         this.presetProfileLoader.loadPresetProfileData(profileId, presetSpec),
       config_getKeyboardConfig: async () =>
@@ -153,7 +153,7 @@ export class ApplicationRoot {
     console.log(`initialize services`);
     await applicationStorage.initializeAsync();
     // await resourceUpdator_syncRemoteResourcesToLocal();
-    await projectResourceInfoProvider.initializeAsync();
+    await projectResourceProvider.initializeAsync();
     await this.profileManager.initializeAsync();
     this.firmwareUpdationService.initialize();
     this.keyboardLayoutFilesWatcher.initialize();

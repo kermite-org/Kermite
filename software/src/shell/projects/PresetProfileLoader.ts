@@ -4,7 +4,7 @@ import {
   fallbackProfileData,
   IPresetSpec,
 } from '~/shared';
-import { projectResourceInfoProvider } from '~/shell/projects';
+import { projectResourceProvider } from '~/shell/projects';
 import { IPresetProfileLoadingFeature } from '~/shell/projects/interfaces';
 
 export class PresetProfileLoader implements IPresetProfileLoadingFeature {
@@ -13,7 +13,7 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
     layoutName: string,
   ) {
     try {
-      const design = await projectResourceInfoProvider.loadProjectLayout(
+      const design = await projectResourceProvider.loadProjectLayout(
         projectId,
         layoutName,
       );
@@ -36,7 +36,7 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
     presetSpec: IPresetSpec,
   ) {
     if (presetSpec.type === 'preset') {
-      return await projectResourceInfoProvider.loadProjectPreset(
+      return await projectResourceProvider.loadProjectPreset(
         projectId,
         presetSpec.presetName,
       );

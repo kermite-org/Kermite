@@ -9,7 +9,7 @@ import {
   IPresetSpec,
 } from '~/shared';
 import { EventPort } from '~/shell/funcs';
-import { projectResourceInfoProvider } from '~/shell/projects';
+import { projectResourceProvider } from '~/shell/projects';
 import { PresetProfileLoader } from '~/shell/projects/PresetProfileLoader';
 import { ProfileManagerCore } from './ProfileManagerCore';
 import { IProfileManager } from './interfaces';
@@ -133,15 +133,14 @@ export class ProfileManager implements IProfileManager {
     profileData: IProfileData,
   ): Promise<boolean> {
     try {
-      const filePath = projectResourceInfoProvider.getLocalPresetProfileFilePath(
+      const filePath = projectResourceProvider.getLocalPresetProfileFilePath(
         projectId,
         presetName,
       );
       if (filePath) {
         await this.core.saveProfileAsPreset(filePath, profileData);
-        projectResourceInfoProvider.patchLocalProjectInfoSource(
-          projectId,
-          (info) => addArrayItemIfNotExist(info.presetNames, presetName),
+        projectResourceProvider.patchLocalProjectInfoSource(projectId, (info) =>
+          addArrayItemIfNotExist(info.presetNames, presetName),
         );
       }
       return true;

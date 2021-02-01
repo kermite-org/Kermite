@@ -1,4 +1,4 @@
-import { projectResourceInfoProvider } from '~/shell/projects';
+import { projectResourceProvider } from '~/shell/projects';
 import { ComPortsMonitor } from './ComPortsMonitor';
 import { FlashCommander } from './FlashCommander';
 
@@ -13,7 +13,7 @@ export class FirmwareUpdationService {
     projectId: string,
     comPortName: string,
   ): Promise<'ok' | string> {
-    const hexFilePath = await projectResourceInfoProvider.loadProjectFirmwareFile(
+    const hexFilePath = await projectResourceProvider.loadProjectFirmwareFile(
       projectId,
     );
 

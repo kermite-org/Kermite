@@ -5,7 +5,7 @@ import {
   RawHidMessageProtocolRevision,
 } from '~/shared';
 import { EventPort } from '~/shell/funcs';
-import { projectResourceInfoProvider } from '~/shell/projects';
+import { projectResourceProvider } from '~/shell/projects';
 import { DeviceWrapper } from './DeviceWrapper';
 
 function bytesToString(bytes: number[]) {
@@ -57,7 +57,7 @@ export class KeyboardDeviceService {
         );
       }
 
-      const info = projectResourceInfoProvider.internal_getProjectInfoSourceById(
+      const info = projectResourceProvider.internal_getProjectInfoSourceById(
         projectId,
       );
       if (info) {

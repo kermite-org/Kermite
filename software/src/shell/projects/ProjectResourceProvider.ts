@@ -7,13 +7,13 @@ import { appEnv } from '~/shell/base';
 import { pathJoin } from '~/shell/funcs';
 import { layoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
-import { IProjectResourceInfoProvider } from '~/shell/projects/interfaces';
+import { IProjectResourceProvider } from '~/shell/projects/interfaces';
 import {
   IProjectResourceInfoSource,
   ProjectResourceInfoSourceLoader,
 } from './ProjectResource/ProjectResourceInfoSourceLoader';
 
-class ProjectResourceInfoProvider implements IProjectResourceInfoProvider {
+class ProjectResourceProvider implements IProjectResourceProvider {
   private projectInfoSources: IProjectResourceInfoSource[] = [];
 
   getAllProjectResourceInfos(): IProjectResourceInfo[] {
@@ -126,4 +126,4 @@ class ProjectResourceInfoProvider implements IProjectResourceInfoProvider {
     return this.getLocalHexFilePath(projectId);
   }
 }
-export const projectResourceInfoProvider = new ProjectResourceInfoProvider();
+export const projectResourceProvider = new ProjectResourceProvider();
