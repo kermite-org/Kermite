@@ -126,6 +126,15 @@ export class PresetBrowserModel {
     this.loadSelectedProfile();
   };
 
+  setCurrentProjectByProjectId = (projectId: string) => {
+    const info = this.optionProjectInfos.find(
+      (info) => info.projectId === projectId,
+    );
+    if (info) {
+      this.setCurrentProjectSig(info.sig);
+    }
+  };
+
   setCurrentPresetSpecId = (specId: string) => {
     this._currentPresetSpecId = specId;
     this.loadSelectedProfile();
