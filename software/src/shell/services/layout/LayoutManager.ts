@@ -7,7 +7,6 @@ import {
   duplicateObjectByJsonStringifyParse,
   IPersistKeyboardDesign,
   ILayoutEditSource,
-  addArrayItemIfNotExist,
 } from '~/shared';
 import { getErrorInfo } from '~/shared/defs';
 import { applicationStorage } from '~/shell/base';
@@ -70,7 +69,7 @@ export class LayoutManager implements ILayoutManager {
     const { editSource } = this.status;
     if (editSource.type === 'ProjectLayout') {
       const { projectId, layoutName } = editSource;
-      return projectResourceProvider.getLocalLayoutFilePath(
+      return projectResourceProvider.localResourceProviderImpl.getLocalLayoutFilePath(
         projectId,
         layoutName,
       );
@@ -145,24 +144,25 @@ export class LayoutManager implements ILayoutManager {
     });
   }
 
-  private addLayoutNameToProjectInfoSourceIfNotExist(
-    projectId: string,
-    layoutName: string,
-  ) {
-    projectResourceProvider.patchLocalProjectInfoSource(projectId, (info) =>
-      addArrayItemIfNotExist(info.layoutNames, layoutName),
-    );
-  }
+  // private addLayoutNameToProjectInfoSourceIfNotExist(
+  //   projectId: string,
+  //   layoutName: string,
+  // ) {
+  //   projectResourceProvider.patchLocalProjectInfoSource(projectId, (info) =>
+  //     addArrayItemIfNotExist(info.layoutNames, layoutName),
+  //   );
+  // }
 
   private async createLayoutForProfject(projectId: string, layoutName: string) {
-    const filePath = projectResourceProvider.getLocalLayoutFilePath(
+    const filePath = projectResourceProvider.localResourceProviderImpl.getLocalLayoutFilePath(
       projectId,
       layoutName,
     );
     if (filePath) {
       const design = createFallbackPersistKeyboardDesign();
       await this.saveLayoutToFile(filePath, design);
-      this.addLayoutNameToProjectInfoSourceIfNotExist(projectId, layoutName);
+      // this.addLayoutNameToProjectInfoSourceIfNotExist(projectId, layoutName);
+      await projectResourceProvider.reenumerateResourceInfos();
       this.setStatus({
         editSource: {
           type: 'ProjectLayout',
@@ -176,7 +176,7 @@ export class LayoutManager implements ILayoutManager {
   }
 
   private async loadLayoutFromProfject(projectId: string, layoutName: string) {
-    const filePath = projectResourceProvider.getLocalLayoutFilePath(
+    const filePath = projectResourceProvider.localResourceProviderImpl.getLocalLayoutFilePath(
       projectId,
       layoutName,
     );
@@ -202,13 +202,14 @@ export class LayoutManager implements ILayoutManager {
     layoutName: string,
     design: IPersistKeyboardDesign,
   ) {
-    const filePath = projectResourceProvider.getLocalLayoutFilePath(
+    const filePath = projectResourceProvider.localResourceProviderImpl.getLocalLayoutFilePath(
       projectId,
       layoutName,
     );
     if (filePath) {
       await layoutFileLoader.saveLayoutToFile(filePath, design);
-      this.addLayoutNameToProjectInfoSourceIfNotExist(projectId, layoutName);
+      // this.addLayoutNameToProjectInfoSourceIfNotExist(projectId, layoutName);
+      await projectResourceProvider.reenumerateResourceInfos();
       this.setStatus({
         editSource: {
           type: 'ProjectLayout',
@@ -250,7 +251,7 @@ export class LayoutManager implements ILayoutManager {
       await layoutFileLoader.saveLayoutToFile(filePath, design);
     } else if (editSource.type === 'ProjectLayout') {
       const { projectId, layoutName } = editSource;
-      const filePath = projectResourceProvider.getLocalLayoutFilePath(
+      const filePath = projectResourceProvider.localResourceProviderImpl.getLocalLayoutFilePath(
         projectId,
         layoutName,
       );

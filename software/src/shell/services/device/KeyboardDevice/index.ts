@@ -57,9 +57,9 @@ export class KeyboardDeviceService {
         );
       }
 
-      const info = projectResourceProvider.internal_getProjectInfoSourceById(
-        projectId,
-      );
+      const info = projectResourceProvider
+        .getAllProjectResourceInfos()
+        .find((info) => info.projectId === projectId);
       if (info) {
         this.setStatus({
           isConnected: true,

@@ -3,127 +3,70 @@ import {
   IProfileData,
   IProjectResourceInfo,
 } from '~/shared';
-import { appEnv } from '~/shell/base';
-import { pathJoin } from '~/shell/funcs';
-import { layoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
-import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
 import { IProjectResourceProvider } from '~/shell/projects/interfaces';
-import {
-  IProjectResourceInfoSource,
-  ProjectResourceInfoSourceLoader,
-} from './ProjectResource/ProjectResourceInfoSourceLoader';
+import { ProjectResourceProviderImpl_Local } from './ProjectResourceProviderImpl_Local';
 
 class ProjectResourceProvider implements IProjectResourceProvider {
-  private projectInfoSources: IProjectResourceInfoSource[] = [];
+  private projectResourceInfos: IProjectResourceInfo[] = [];
+
+  localResourceProviderImpl = new ProjectResourceProviderImpl_Local();
 
   getAllProjectResourceInfos(): IProjectResourceInfo[] {
-    return this.projectInfoSources.map((it) => {
-      const {
-        projectId,
-        keyboardName,
-        projectPath,
-        hexFilePath,
-        presetNames,
-        layoutNames,
-        resourceOrigin,
-      } = it;
-      return {
-        projectId,
-        keyboardName,
-        projectPath,
-        presetNames,
-        layoutNames,
-        hasFirmwareBinary: !!hexFilePath,
-        resourceOrigin,
-      };
-    });
+    return this.projectResourceInfos;
   }
 
-  private getProjectInfoSourceById(
-    projectId: string,
-  ): IProjectResourceInfoSource | undefined {
-    return this.projectInfoSources.find((info) => info.projectId === projectId);
-  }
-
-  patchLocalProjectInfoSource(
-    projectId: string,
-    callback: (info: IProjectResourceInfoSource) => void,
-  ) {
-    const info = this.projectInfoSources.find(
-      (it) => it.projectId === projectId,
-    );
-    if (info) {
-      callback(info);
-    }
-  }
-
-  internal_getProjectInfoSourceById = this.getProjectInfoSourceById;
-
-  getLocalPresetProfileFilePath(
-    projectId: string,
-    presetName: string,
-  ): string | undefined {
-    const info = this.getProjectInfoSourceById(projectId);
-    if (info) {
-      return pathJoin(info.projectFolderPath, 'presets', `${presetName}.json`);
-    }
-  }
-
-  private getLocalHexFilePath(projectId: string): string | undefined {
-    const info = this.getProjectInfoSourceById(projectId);
-    return info?.hexFilePath;
-  }
-
-  getLocalLayoutFilePath(
-    projectId: string,
-    layoutName: string,
-  ): string | undefined {
-    const info = this.getProjectInfoSourceById(projectId);
-    if (info) {
-      const fileName =
-        layoutName === 'default' ? 'layout.json' : `${layoutName}.layout.json`;
-      return pathJoin(info.projectFolderPath, fileName);
-    }
-  }
-
-  async initializeAsync(): Promise<void> {
-    const resourceOrigin = appEnv.isDevelopment ? 'local' : 'online';
-    // const resourceOrigin = 'central';
-    this.projectInfoSources = await ProjectResourceInfoSourceLoader.loadProjectResourceInfoSources(
-      resourceOrigin,
-    );
-  }
-
-  async loadProjectPreset(
+  loadProjectPreset(
     projectId: string,
     presetName: string,
   ): Promise<IProfileData | undefined> {
-    const filePath = this.getLocalPresetProfileFilePath(projectId, presetName);
-    if (filePath) {
-      try {
-        return await ProfileFileLoader.loadProfileFromFile(filePath);
-      } catch (error) {
-        console.log(`errorr on loading preset file`);
-        console.error(error);
-      }
-    }
-    return undefined;
+    return this.localResourceProviderImpl.loadProjectPreset(
+      projectId,
+      presetName,
+    );
   }
 
-  async loadProjectLayout(
+  loadProjectLayout(
     projectId: string,
     layoutName: string,
   ): Promise<IPersistKeyboardDesign | undefined> {
-    const filePath = this.getLocalLayoutFilePath(projectId, layoutName);
-    if (filePath) {
-      return await layoutFileLoader.loadLayoutFromFile(filePath);
-    }
+    return this.localResourceProviderImpl.loadProjectLayout(
+      projectId,
+      layoutName,
+    );
   }
 
-  async loadProjectFirmwareFile(
-    projectId: string,
-  ): Promise<string | undefined> {
-    return this.getLocalHexFilePath(projectId);
+  loadProjectFirmwareFile(projectId: string): Promise<string | undefined> {
+    return this.localResourceProviderImpl.loadProjectFirmwareFile(projectId);
+  }
+
+  // internal_getProjectInfoSourceById(
+  //   projectId: string,
+  // ): IProjectResourceInfoSource | undefined {
+
+  // }
+  // private getProjectInfoSourceById(
+  //   projectId: string,
+  // ): IProjectResourceInfoSource | undefined {
+  //   return this.projectInfoSources.find((info) => info.projectId === projectId);
+  // }
+
+  //   // throw new Error('Method not implemented.');
+  // }
+
+  // patchLocalProjectInfoSource(
+  //   projectId: string,
+  //   callback: (info: IProjectResourceInfoSource) => void,
+  // ): void {
+  //   throw new Error('Method not implemented.');
+  // }
+
+  async reenumerateResourceInfos(): Promise<void> {
+    this.projectResourceInfos = await this.localResourceProviderImpl.loadAllProjectResourceInfos();
+  }
+
+  async initializeAsync(): Promise<void> {
+    await this.reenumerateResourceInfos();
   }
 }
+
 export const projectResourceProvider = new ProjectResourceProvider();

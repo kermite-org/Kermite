@@ -5,7 +5,6 @@ import {
   fallbackProfileData,
   clampValue,
   IProfileManagerCommand,
-  addArrayItemIfNotExist,
   IPresetSpec,
 } from '~/shared';
 import { EventPort } from '~/shell/funcs';
@@ -133,15 +132,17 @@ export class ProfileManager implements IProfileManager {
     profileData: IProfileData,
   ): Promise<boolean> {
     try {
-      const filePath = projectResourceProvider.getLocalPresetProfileFilePath(
+      const filePath = projectResourceProvider.localResourceProviderImpl.getLocalPresetProfileFilePath(
         projectId,
         presetName,
       );
       if (filePath) {
         await this.core.saveProfileAsPreset(filePath, profileData);
-        projectResourceProvider.patchLocalProjectInfoSource(projectId, (info) =>
-          addArrayItemIfNotExist(info.presetNames, presetName),
-        );
+        // projectResourceProvider.localResourceProviderImpl.patchLocalProjectInfoSource(
+        //   projectId,
+        //   (info) => addArrayItemIfNotExist(info.presetNames, presetName),
+        // );
+        await projectResourceProvider.reenumerateResourceInfos();
       }
       return true;
     } catch (error) {

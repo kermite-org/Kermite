@@ -3,50 +3,57 @@ import {
   IPresetSpec,
   IProfileData,
   IProjectResourceInfo,
-  IProjectResourceOrigin,
 } from '~/shared';
-import { IProjectResourceInfoSource } from '~/shell/projects/ProjectResource/ProjectResourceInfoSourceLoader';
 
-export interface IProjectResourceLoaderCore__NEXT {
-  getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
-  loadProjectPresetFile(projectId: string, presetName: string): Promise<string>;
-  loadProjectLayoutFile(projectId: string, layoutName: string): Promise<string>;
-  loadProjectFirmwareFile(projectId: string): Promise<string>;
-}
+export interface IProjectResourceProviderImpl {
+  loadAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
 
-export interface IProjectResourceLoader__NEXT {
-  getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
-
-  loadProjectPresetFile(
-    origin: IProjectResourceOrigin,
+  loadProjectPreset(
     projectId: string,
     presetName: string,
-  ): Promise<string>;
+  ): Promise<IProfileData | undefined>;
 
-  loadProjectLayoutFile(
-    origin: IProjectResourceOrigin,
+  loadProjectLayout(
     projectId: string,
     layoutName: string,
-  ): Promise<string>;
+  ): Promise<IPersistKeyboardDesign | undefined>;
 
-  loadProjectFirmwareFile(
-    origin: IProjectResourceOrigin,
-    projectId: string,
-  ): Promise<string>;
+  loadProjectFirmwareFile(projectId: string): Promise<string | undefined>;
 }
+
+// export interface IProjectResourceLoader__NEXT {
+//   getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
+
+//   loadProjectPresetFile(
+//     origin: IProjectResourceOrigin,
+//     projectId: string,
+//     presetName: string,
+//   ): Promise<string>;
+
+//   loadProjectLayoutFile(
+//     origin: IProjectResourceOrigin,
+//     projectId: string,
+//     layoutName: string,
+//   ): Promise<string>;
+
+//   loadProjectFirmwareFile(
+//     origin: IProjectResourceOrigin,
+//     projectId: string,
+//   ): Promise<string>;
+// }
 
 export interface IProjectResourceProvider {
   getAllProjectResourceInfos(): IProjectResourceInfo[];
 
-  getLocalPresetProfileFilePath(
-    projectId: string,
-    presetName: string,
-  ): string | undefined;
+  // getLocalPresetProfileFilePath(
+  //   projectId: string,
+  //   presetName: string,
+  // ): string | undefined;
 
-  getLocalLayoutFilePath(
-    projectId: string,
-    layoutName: string,
-  ): string | undefined;
+  // getLocalLayoutFilePath(
+  //   projectId: string,
+  //   layoutName: string,
+  // ): string | undefined;
 
   // getHexFilePath(projectId: string): string | undefined;
 
@@ -66,14 +73,16 @@ export interface IProjectResourceProvider {
 
   initializeAsync(): Promise<void>;
 
-  internal_getProjectInfoSourceById(
-    projectId: string,
-  ): IProjectResourceInfoSource | undefined;
+  reenumerateResourceInfos(): Promise<void>;
 
-  patchLocalProjectInfoSource(
-    projectId: string,
-    callback: (info: IProjectResourceInfoSource) => void,
-  ): void;
+  // internal_getProjectInfoSourceById(
+  //   projectId: string,
+  // ): IProjectResourceInfoSource | undefined;
+
+  // patchLocalProjectInfoSource(
+  //   projectId: string,
+  //   callback: (info: IProjectResourceInfoSource) => void,
+  // ): void;
 }
 
 export interface IPresetProfileLoadingFeature {
