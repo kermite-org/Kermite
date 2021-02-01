@@ -1,3 +1,5 @@
+import fetch from 'node-fetch';
+
 export async function fetchJson(uri: string): Promise<any> {
   console.log(`fetching ${uri}`);
   const res = await fetch(uri);

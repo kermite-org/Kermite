@@ -31,30 +31,30 @@ class ProjectResourceProvider implements IProjectResourceProvider {
     }
   }
 
-  loadProjectPreset(
+  async loadProjectPreset(
     origin: IResourceOrigin,
     projectId: string,
     presetName: string,
   ): Promise<IProfileData | undefined> {
     const providerImpl = this.getResouceProviderImpl(origin);
-    return providerImpl.loadProjectPreset(projectId, presetName);
+    return await providerImpl.loadProjectPreset(projectId, presetName);
   }
 
-  loadProjectLayout(
+  async loadProjectLayout(
     origin: IResourceOrigin,
     projectId: string,
     layoutName: string,
   ): Promise<IPersistKeyboardDesign | undefined> {
     const providerImpl = this.getResouceProviderImpl(origin);
-    return providerImpl.loadProjectLayout(projectId, layoutName);
+    return await providerImpl.loadProjectLayout(projectId, layoutName);
   }
 
-  loadProjectFirmwareFile(
+  async loadProjectFirmwareFile(
     origin: IResourceOrigin,
     projectId: string,
   ): Promise<string | undefined> {
     const providerImpl = this.getResouceProviderImpl(origin);
-    return providerImpl.loadProjectFirmwareFile(projectId);
+    return await providerImpl.loadProjectFirmwareFile(projectId);
   }
 
   async reenumerateResourceInfos(): Promise<void> {

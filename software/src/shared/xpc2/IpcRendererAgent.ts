@@ -74,9 +74,10 @@ export function getIpcRendererAgent<
       {
         get: (target, key: string) => (...args: any[]) => {
           return new Promise((resolve) => {
-            const res = ipcRenderer.invoke(key, ...args);
-            resolve(res);
-            postProcessHook?.();
+            ipcRenderer.invoke(key, ...args).then((res) => {
+              resolve(res);
+              postProcessHook?.();
+            });
           });
         },
       },

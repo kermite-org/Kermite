@@ -50,7 +50,7 @@ export function makeShapePreviewPageViewModel(): IShapePreviewPageViewModel {
     projectSelectorSource: {
       options: shapesModel.optionProjectInfos.map((info) => ({
         id: info.sig,
-        text: info.projectPath,
+        text: (info.origin === 'local' ? '[L]' : '[R]') + info.projectPath,
       })),
       choiceId: shapesModel.currentProjectSig,
       setChoiceId: shapesModel.setCurrentProjectSig,

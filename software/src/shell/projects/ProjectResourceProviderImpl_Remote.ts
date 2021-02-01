@@ -102,7 +102,7 @@ export class ProjectResourceProviderImpl_Remote
   ): Promise<IProfileData | undefined> {
     const info = this.getProjectInfoSourceById(projectId);
     if (info) {
-      const relPath = `variants/${info.projectPath}/profiles/${presetName}.json`;
+      const relPath = `variants/${info.projectPath}/presets/${presetName}.json`;
       const uri = `${remoteBaseUri}/${relPath}`;
       return await ProfileFileLoader.loadProfileFromUri(uri);
     }
