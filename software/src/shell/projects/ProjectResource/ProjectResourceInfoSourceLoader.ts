@@ -20,6 +20,7 @@ export interface IProjectResourceInfoSource {
   layoutNames: string[];
   presetNames: string[];
   hexFilePath?: string;
+  resourceOrigin: IProjectResourceOrigin;
 }
 
 interface IPorjectFileJson {
@@ -119,6 +120,7 @@ export namespace ProjectResourceInfoSourceLoader {
         layoutNames,
         presetNames,
         hexFilePath,
+        resourceOrigin: 'online',
       };
     });
   }
@@ -160,6 +162,7 @@ export namespace ProjectResourceInfoSourceLoader {
           layoutNames,
           presetNames,
           hexFilePath,
+          resourceOrigin: 'local' as const,
         };
       }),
     );
@@ -203,6 +206,7 @@ export namespace ProjectResourceInfoSourceLoader {
           layoutNames,
           presetNames,
           hexFilePath,
+          resourceOrigin: 'local' as const,
         };
       }),
     );
@@ -211,7 +215,7 @@ export namespace ProjectResourceInfoSourceLoader {
   export async function loadProjectResourceInfoSources(
     resourceOrigin: IProjectResourceOrigin,
   ): Promise<IProjectResourceInfoSource[]> {
-    if (resourceOrigin === 'central') {
+    if (resourceOrigin === 'online') {
       return await loadCentralResourcesFromSummaryJson();
     } else {
       return await loadLocalResources();

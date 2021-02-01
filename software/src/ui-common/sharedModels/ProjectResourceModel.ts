@@ -5,7 +5,9 @@ export class ProjectResourceModel {
   projectResourceInfos: IProjectResourceInfo[] = [];
 
   getProjectsWithLayout() {
-    return this.projectResourceInfos.filter((info) => info.hasLayout);
+    return this.projectResourceInfos.filter(
+      (info) => info.layoutNames.length > 0,
+    );
   }
 
   getProjectsWithFirmware() {

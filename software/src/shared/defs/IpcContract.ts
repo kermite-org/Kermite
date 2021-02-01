@@ -13,7 +13,7 @@ export type IPresetSpec =
       presetName: string;
     };
 
-export type IProjectResourceOrigin = 'central' | 'local';
+export type IProjectResourceOrigin = 'local' | 'online';
 
 export interface IProjectResourceInfo {
   projectId: string;
@@ -21,8 +21,8 @@ export interface IProjectResourceInfo {
   projectPath: string;
   presetNames: string[];
   layoutNames: string[];
-  hasLayout: boolean;
   hasFirmwareBinary: boolean;
+  resourceOrigin: IProjectResourceOrigin;
 }
 
 export interface IProfileManagerStatus {

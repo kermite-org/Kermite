@@ -20,6 +20,7 @@ export class ProjectResourceInfoProvider
         hexFilePath,
         presetNames,
         layoutNames,
+        resourceOrigin,
       } = it;
       return {
         projectId,
@@ -27,8 +28,8 @@ export class ProjectResourceInfoProvider
         projectPath,
         presetNames,
         layoutNames,
-        hasLayout: layoutNames.length > 0,
         hasFirmwareBinary: !!hexFilePath,
+        resourceOrigin,
       };
     });
   }
@@ -78,7 +79,7 @@ export class ProjectResourceInfoProvider
   }
 
   async initializeAsync(): Promise<void> {
-    const resourceOrigin = appEnv.isDevelopment ? 'local' : 'central';
+    const resourceOrigin = appEnv.isDevelopment ? 'local' : 'online';
     // const resourceOrigin = 'central';
     this.projectInfoSources = await ProjectResourceInfoSourceLoader.loadProjectResourceInfoSources(
       resourceOrigin,
