@@ -12,7 +12,7 @@ import { getErrorInfo } from '~/shared/defs';
 import { applicationStorage } from '~/shell/base';
 import { createEventPort2 } from '~/shell/funcs';
 import { FileWather } from '~/shell/funcs/FileWatcher';
-import { layoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
+import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { projectResourceProvider } from '~/shell/projects';
 import { ILayoutManager } from '~/shell/services/layout/interfaces';
 import { IProfileManager } from '~/shell/services/profile/interfaces';
@@ -91,7 +91,7 @@ export class LayoutManager implements ILayoutManager {
     const filePath = this.getCurrentEditLayoutFilePath();
     if (filePath) {
       try {
-        const loadedDesign = await layoutFileLoader.loadLayoutFromFile(
+        const loadedDesign = await LayoutFileLoader.loadLayoutFromFile(
           filePath,
         );
         this.setStatus({
@@ -126,7 +126,7 @@ export class LayoutManager implements ILayoutManager {
   }
 
   private async loadLayoutFromFile(filePath: string) {
-    const loadedDesign = await layoutFileLoader.loadLayoutFromFile(filePath);
+    const loadedDesign = await LayoutFileLoader.loadLayoutFromFile(filePath);
     this.fileWatcher.observeFile(filePath, this.onObservedFileChanged);
     this.setStatus({
       editSource: { type: 'File', filePath },
@@ -138,7 +138,7 @@ export class LayoutManager implements ILayoutManager {
     filePath: string,
     design: IPersistKeyboardDesign,
   ) {
-    await layoutFileLoader.saveLayoutToFile(filePath, design);
+    await LayoutFileLoader.saveLayoutToFile(filePath, design);
     this.setStatus({
       editSource: { type: 'File', filePath },
     });
@@ -208,7 +208,7 @@ export class LayoutManager implements ILayoutManager {
       layoutName,
     );
     if (filePath) {
-      await layoutFileLoader.saveLayoutToFile(filePath, design);
+      await LayoutFileLoader.saveLayoutToFile(filePath, design);
       // this.addLayoutNameToProjectInfoSourceIfNotExist(projectId, layoutName);
       await projectResourceProvider.reenumerateResourceInfos();
       this.setStatus({
@@ -249,7 +249,7 @@ export class LayoutManager implements ILayoutManager {
       }
     } else if (editSource.type === 'File') {
       const { filePath } = editSource;
-      await layoutFileLoader.saveLayoutToFile(filePath, design);
+      await LayoutFileLoader.saveLayoutToFile(filePath, design);
     } else if (editSource.type === 'ProjectLayout') {
       const { projectId, layoutName } = editSource;
       const filePath = projectResourceProvider.localResourceProviderImpl.getLocalLayoutFilePath(
@@ -257,7 +257,7 @@ export class LayoutManager implements ILayoutManager {
         layoutName,
       );
       if (filePath) {
-        await layoutFileLoader.saveLayoutToFile(filePath, design);
+        await LayoutFileLoader.saveLayoutToFile(filePath, design);
       }
     }
     this.setStatus({ loadedDesign: design });

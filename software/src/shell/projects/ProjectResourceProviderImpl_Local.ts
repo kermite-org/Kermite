@@ -5,7 +5,7 @@ import {
 } from '~/shared';
 import { createProjectSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { pathJoin } from '~/shell/funcs';
-import { layoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
+import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
 import { IProjectResourceProviderImpl } from '~/shell/projects/interfaces';
 import {
@@ -113,7 +113,7 @@ export class ProjectResourceProviderImpl_Local
   ): Promise<IPersistKeyboardDesign | undefined> {
     const filePath = this.getLocalLayoutFilePath(projectId, layoutName);
     if (filePath) {
-      return await layoutFileLoader.loadLayoutFromFile(filePath);
+      return await LayoutFileLoader.loadLayoutFromFile(filePath);
     }
   }
 

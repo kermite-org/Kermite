@@ -13,4 +13,9 @@ export const appEnv = new (class {
     const appDir = app.getAppPath();
     return pathJoin(appDir, relPath);
   }
+
+  resolveTempFilePath(relPath: string) {
+    const tmpDir = app.getPath('temp');
+    return pathJoin(tmpDir, relPath);
+  }
 })();

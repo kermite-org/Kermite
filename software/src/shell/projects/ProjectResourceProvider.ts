@@ -4,16 +4,31 @@ import {
   IProjectResourceInfo,
   IResourceOrigin,
 } from '~/shared';
-import { IProjectResourceProvider } from '~/shell/projects/interfaces';
+import { ProjectResourceProviderImpl_Remote } from '~/shell/projects/ProjectResourceProviderImpl_Remote';
+import {
+  IProjectResourceProvider,
+  IProjectResourceProviderImpl,
+} from '~/shell/projects/interfaces';
 import { ProjectResourceProviderImpl_Local } from './ProjectResourceProviderImpl_Local';
 
 class ProjectResourceProvider implements IProjectResourceProvider {
   private projectResourceInfos: IProjectResourceInfo[] = [];
 
   localResourceProviderImpl = new ProjectResourceProviderImpl_Local();
+  remoteResourceProviderImpl = new ProjectResourceProviderImpl_Remote();
 
   getAllProjectResourceInfos(): IProjectResourceInfo[] {
     return this.projectResourceInfos;
+  }
+
+  private getResouceProviderImpl(
+    origin: IResourceOrigin,
+  ): IProjectResourceProviderImpl {
+    if (origin === 'local') {
+      return this.localResourceProviderImpl;
+    } else {
+      return this.remoteResourceProviderImpl;
+    }
   }
 
   loadProjectPreset(
@@ -21,14 +36,8 @@ class ProjectResourceProvider implements IProjectResourceProvider {
     projectId: string,
     presetName: string,
   ): Promise<IProfileData | undefined> {
-    if (origin === 'local') {
-      return this.localResourceProviderImpl.loadProjectPreset(
-        projectId,
-        presetName,
-      );
-    } else {
-      throw 'unimplemented';
-    }
+    const providerImpl = this.getResouceProviderImpl(origin);
+    return providerImpl.loadProjectPreset(projectId, presetName);
   }
 
   loadProjectLayout(
@@ -36,50 +45,22 @@ class ProjectResourceProvider implements IProjectResourceProvider {
     projectId: string,
     layoutName: string,
   ): Promise<IPersistKeyboardDesign | undefined> {
-    if (origin === 'local') {
-      return this.localResourceProviderImpl.loadProjectLayout(
-        projectId,
-        layoutName,
-      );
-    } else {
-      throw 'unimplemented';
-    }
+    const providerImpl = this.getResouceProviderImpl(origin);
+    return providerImpl.loadProjectLayout(projectId, layoutName);
   }
 
   loadProjectFirmwareFile(
     origin: IResourceOrigin,
     projectId: string,
   ): Promise<string | undefined> {
-    if (origin === 'local') {
-      return this.localResourceProviderImpl.loadProjectFirmwareFile(projectId);
-    } else {
-      throw 'unimplemented';
-    }
+    const providerImpl = this.getResouceProviderImpl(origin);
+    return providerImpl.loadProjectFirmwareFile(projectId);
   }
 
-  // internal_getProjectInfoSourceById(
-  //   projectId: string,
-  // ): IProjectResourceInfoSource | undefined {
-
-  // }
-  // private getProjectInfoSourceById(
-  //   projectId: string,
-  // ): IProjectResourceInfoSource | undefined {
-  //   return this.projectInfoSources.find((info) => info.projectId === projectId);
-  // }
-
-  //   // throw new Error('Method not implemented.');
-  // }
-
-  // patchLocalProjectInfoSource(
-  //   projectId: string,
-  //   callback: (info: IProjectResourceInfoSource) => void,
-  // ): void {
-  //   throw new Error('Method not implemented.');
-  // }
-
   async reenumerateResourceInfos(): Promise<void> {
-    this.projectResourceInfos = await this.localResourceProviderImpl.loadAllProjectResourceInfos();
+    const locals = await this.localResourceProviderImpl.loadAllProjectResourceInfos();
+    const remotes = await this.remoteResourceProviderImpl.loadAllProjectResourceInfos();
+    this.projectResourceInfos = [...locals, ...remotes];
   }
 
   async initializeAsync(): Promise<void> {
