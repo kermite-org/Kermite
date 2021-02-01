@@ -1,4 +1,4 @@
-import { IProjectResourceInfoProvider } from '../serviceInterfaces';
+import { projectResourceInfoProvider } from '~/shell/projects';
 import { ComPortsMonitor } from './ComPortsMonitor';
 import { FlashCommander } from './FlashCommander';
 
@@ -7,19 +7,13 @@ import { FlashCommander } from './FlashCommander';
 export class FirmwareUpdationService {
   private comPortsMonitor = new ComPortsMonitor();
 
-  constructor(
-    private projectResourceInfoProvider: IProjectResourceInfoProvider,
-  ) {}
-
   readonly comPortPlugEvents = this.comPortsMonitor.comPortPlugEvents;
 
   async writeFirmware(
     projectId: string,
     comPortName: string,
   ): Promise<'ok' | string> {
-    const hexFilePath = this.projectResourceInfoProvider.getHexFilePath(
-      projectId,
-    );
+    const hexFilePath = projectResourceInfoProvider.getHexFilePath(projectId);
 
     if (!hexFilePath) {
       return `cannot find firmware`;

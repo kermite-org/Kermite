@@ -1,8 +1,9 @@
 import {
-  IProjectResourceInfo,
-  IProfileData,
   IPersistKeyboardDesign,
   IPresetSpec,
+  IProfileData,
+  IProjectResourceInfo,
+  IProjectResourceOrigin,
 } from '~/shared';
 import { IProjectResourceInfoSource } from '~/shell/projects/ProjectResource/ProjectResourceInfoSourceLoader';
 

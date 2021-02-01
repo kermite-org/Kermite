@@ -1,9 +1,9 @@
 import { IPresetSpec, IProfileManagerStatus } from '~/shared';
 import { appGlobal, applicationStorage } from '~/shell/base';
+import { projectResourceInfoProvider } from '~/shell/projects';
 import { KeyboardLayoutFilesWatcher } from '~/shell/projects/KeyboardShape/KeyboardLayoutFilesWatcher';
 import { KeyboardShapesProvider } from '~/shell/projects/KeyboardShape/KeyboardShapesProvider';
 import { PresetProfileLoader } from '~/shell/projects/PresetProfileLoader';
-import { ProjectResourceInfoProvider } from '~/shell/projects/ProjectResource/ProjectResourceInfoProvider';
 import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
 import { KeyMappingEmitter } from '~/shell/services/device/KeyMappingEmitter';
 import { KeyboardDeviceService } from '~/shell/services/device/KeyboardDevice';
@@ -17,39 +17,21 @@ import { WindowService } from '~/shell/services/window';
 
 export class ApplicationRoot {
   private windowService = new WindowService();
-
-  private projectResourceInfoProvider = new ProjectResourceInfoProvider();
   private keyboardConfigProvider = new KeyboardConfigProvider();
 
-  private keyboardLayoutFilesWatcher = new KeyboardLayoutFilesWatcher(
-    this.projectResourceInfoProvider,
-  );
+  private keyboardLayoutFilesWatcher = new KeyboardLayoutFilesWatcher();
 
-  private keyboardShapesProvider = new KeyboardShapesProvider(
-    this.projectResourceInfoProvider,
-  );
+  private keyboardShapesProvider = new KeyboardShapesProvider();
 
-  private firmwareUpdationService = new FirmwareUpdationService(
-    this.projectResourceInfoProvider,
-  );
+  private firmwareUpdationService = new FirmwareUpdationService();
 
-  private deviceService = new KeyboardDeviceService(
-    this.projectResourceInfoProvider,
-  );
+  private deviceService = new KeyboardDeviceService();
 
-  private presetProfileLoader = new PresetProfileLoader(
-    this.projectResourceInfoProvider,
-  );
+  private presetProfileLoader = new PresetProfileLoader();
 
-  private profileManager = new ProfileManager(
-    this.projectResourceInfoProvider,
-    this.presetProfileLoader,
-  );
+  private profileManager = new ProfileManager(this.presetProfileLoader);
 
-  private layoutManager = new LayoutManager(
-    this.projectResourceInfoProvider,
-    this.profileManager,
-  );
+  private layoutManager = new LayoutManager(this.profileManager);
 
   private inputLogicSimulator = new InputLogicSimulatorD(
     this.profileManager,
@@ -101,7 +83,7 @@ export class ApplicationRoot {
       firmup_uploadFirmware: (projectId, comPortName) =>
         this.firmwareUpdationService.writeFirmware(projectId, comPortName),
       projects_getAllProjectResourceInfos: async () =>
-        this.projectResourceInfoProvider.getAllProjectResourceInfos(),
+        projectResourceInfoProvider.getAllProjectResourceInfos(),
       projects_loadPresetProfile: (profileId, presetSpec: IPresetSpec) =>
         this.presetProfileLoader.loadPresetProfileData(profileId, presetSpec),
       config_getKeyboardConfig: async () =>
@@ -177,7 +159,7 @@ export class ApplicationRoot {
     console.log(`initialize services`);
     await applicationStorage.initializeAsync();
     // await resourceUpdator_syncRemoteResourcesToLocal();
-    await this.projectResourceInfoProvider.initializeAsync();
+    await projectResourceInfoProvider.initializeAsync();
     await this.profileManager.initializeAsync();
     this.firmwareUpdationService.initialize();
     this.keyboardLayoutFilesWatcher.initialize();

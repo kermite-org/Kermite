@@ -5,7 +5,7 @@ import {
   RawHidMessageProtocolRevision,
 } from '~/shared';
 import { EventPort } from '~/shell/funcs';
-import { ProjectResourceInfoProvider } from '~/shell/projects/ProjectResource/ProjectResourceInfoProvider';
+import { projectResourceInfoProvider } from '~/shell/projects';
 import { DeviceWrapper } from './DeviceWrapper';
 
 function bytesToString(bytes: number[]) {
@@ -29,10 +29,6 @@ export class KeyboardDeviceService {
     this.deviceStatus = newStatus;
     this.statusEventPort.emit(newStatus);
   }
-
-  constructor(
-    private projectResourceInfoProvider: ProjectResourceInfoProvider,
-  ) {}
 
   private decodeReceivedBytes(buf: Uint8Array) {
     if (buf[0] === 0xf0 && buf[1] === 0x11) {
@@ -61,7 +57,7 @@ export class KeyboardDeviceService {
         );
       }
 
-      const info = this.projectResourceInfoProvider.internal_getProjectInfoSourceById(
+      const info = projectResourceInfoProvider.internal_getProjectInfoSourceById(
         projectId,
       );
       if (info) {

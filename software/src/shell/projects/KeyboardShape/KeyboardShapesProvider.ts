@@ -1,22 +1,18 @@
 import { IPersistKeyboardDesign } from '~/shared';
 import { layoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
-import { IProjectResourceInfoProvider } from '~/shell/services/serviceInterfaces';
+import { projectResourceInfoProvider } from '~/shell/projects';
 
 // キーボード品種ごとのレイアウトファイルを読み込み提供する
 export class KeyboardShapesProvider {
-  constructor(
-    private projectResourceInfoProvider: IProjectResourceInfoProvider,
-  ) {}
-
   async loadKeyboardShapeByProjectIdAndLayoutName(
     projectId: string,
     layoutName: string,
   ): Promise<IPersistKeyboardDesign | undefined> {
-    const info = this.projectResourceInfoProvider.internal_getProjectInfoSourceById(
+    const info = projectResourceInfoProvider.internal_getProjectInfoSourceById(
       projectId,
     );
     if (info) {
-      const layoutFilePath = this.projectResourceInfoProvider.getLayoutFilePath(
+      const layoutFilePath = projectResourceInfoProvider.getLayoutFilePath(
         projectId,
         layoutName,
       );

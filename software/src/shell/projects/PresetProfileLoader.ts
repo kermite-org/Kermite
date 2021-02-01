@@ -6,21 +6,15 @@ import {
 } from '~/shared';
 import { layoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
-import {
-  IPresetProfileLoadingFeature,
-  IProjectResourceInfoProvider,
-} from '../services/serviceInterfaces';
+import { projectResourceInfoProvider } from '~/shell/projects';
+import { IPresetProfileLoadingFeature } from '~/shell/projects/interfaces';
 
 export class PresetProfileLoader implements IPresetProfileLoadingFeature {
-  constructor(
-    private projectResourceInfoProvider: IProjectResourceInfoProvider,
-  ) {}
-
   private async loadPresetProfileFromPresetFile(
     projectId: string,
     presetName: string,
   ) {
-    const presetFilePath = this.projectResourceInfoProvider.getPresetProfileFilePath(
+    const presetFilePath = projectResourceInfoProvider.getPresetProfileFilePath(
       projectId,
       presetName,
     );
@@ -39,7 +33,7 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
     projectId: string,
     layoutName: string,
   ) {
-    const layoutFilePath = this.projectResourceInfoProvider.getLayoutFilePath(
+    const layoutFilePath = projectResourceInfoProvider.getLayoutFilePath(
       projectId,
       layoutName,
     );

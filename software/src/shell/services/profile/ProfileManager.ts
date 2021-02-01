@@ -9,8 +9,8 @@ import {
   IPresetSpec,
 } from '~/shared';
 import { EventPort } from '~/shell/funcs';
+import { projectResourceInfoProvider } from '~/shell/projects';
 import { PresetProfileLoader } from '~/shell/projects/PresetProfileLoader';
-import { IProjectResourceInfoProvider } from '~/shell/services/serviceInterfaces';
 import { ProfileManagerCore } from './ProfileManagerCore';
 import { IProfileManager } from './interfaces';
 
@@ -29,10 +29,7 @@ export class ProfileManager implements IProfileManager {
 
   private core: ProfileManagerCore;
 
-  constructor(
-    private resourceInfoProvider: IProjectResourceInfoProvider,
-    private presetProfileLoader: PresetProfileLoader,
-  ) {
+  constructor(private presetProfileLoader: PresetProfileLoader) {
     this.core = new ProfileManagerCore();
   }
 
@@ -136,13 +133,13 @@ export class ProfileManager implements IProfileManager {
     profileData: IProfileData,
   ): Promise<boolean> {
     try {
-      const filePath = this.resourceInfoProvider.getPresetProfileFilePath(
+      const filePath = projectResourceInfoProvider.getPresetProfileFilePath(
         projectId,
         presetName,
       );
       if (filePath) {
         await this.core.saveProfileAsPreset(filePath, profileData);
-        this.resourceInfoProvider.patchProjectInfoSource(projectId, (info) =>
+        projectResourceInfoProvider.patchProjectInfoSource(projectId, (info) =>
           addArrayItemIfNotExist(info.presetNames, presetName),
         );
       }

@@ -14,15 +14,12 @@ import { applicationStorage } from '~/shell/base';
 import { createEventPort2 } from '~/shell/funcs';
 import { FileWather } from '~/shell/funcs/FileWatcher';
 import { layoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
+import { projectResourceInfoProvider } from '~/shell/projects';
 import { ILayoutManager } from '~/shell/services/layout/interfaces';
 import { IProfileManager } from '~/shell/services/profile/interfaces';
-import { IProjectResourceInfoProvider } from '~/shell/services/serviceInterfaces';
 
 export class LayoutManager implements ILayoutManager {
-  constructor(
-    private projectResourceInfoProvider: IProjectResourceInfoProvider,
-    private profileManager: IProfileManager,
-  ) {}
+  constructor(private profileManager: IProfileManager) {}
 
   // CurrentProfileLayoutとそれ以外との切り替えのために、
   // CurrentProfileLayout以外のEditSourceをbackEditSourceとして保持
@@ -73,7 +70,7 @@ export class LayoutManager implements ILayoutManager {
     const { editSource } = this.status;
     if (editSource.type === 'ProjectLayout') {
       const { projectId, layoutName } = editSource;
-      return this.projectResourceInfoProvider.getLayoutFilePath(
+      return projectResourceInfoProvider.getLayoutFilePath(
         projectId,
         layoutName,
       );
@@ -152,13 +149,13 @@ export class LayoutManager implements ILayoutManager {
     projectId: string,
     layoutName: string,
   ) {
-    this.projectResourceInfoProvider.patchProjectInfoSource(projectId, (info) =>
+    projectResourceInfoProvider.patchProjectInfoSource(projectId, (info) =>
       addArrayItemIfNotExist(info.layoutNames, layoutName),
     );
   }
 
   private async createLayoutForProfject(projectId: string, layoutName: string) {
-    const filePath = this.projectResourceInfoProvider.getLayoutFilePath(
+    const filePath = projectResourceInfoProvider.getLayoutFilePath(
       projectId,
       layoutName,
     );
@@ -179,7 +176,7 @@ export class LayoutManager implements ILayoutManager {
   }
 
   private async loadLayoutFromProfject(projectId: string, layoutName: string) {
-    const filePath = this.projectResourceInfoProvider.getLayoutFilePath(
+    const filePath = projectResourceInfoProvider.getLayoutFilePath(
       projectId,
       layoutName,
     );
@@ -202,7 +199,7 @@ export class LayoutManager implements ILayoutManager {
     layoutName: string,
     design: IPersistKeyboardDesign,
   ) {
-    const filePath = this.projectResourceInfoProvider.getLayoutFilePath(
+    const filePath = projectResourceInfoProvider.getLayoutFilePath(
       projectId,
       layoutName,
     );
@@ -250,7 +247,7 @@ export class LayoutManager implements ILayoutManager {
       await layoutFileLoader.saveLayoutToFile(filePath, design);
     } else if (editSource.type === 'ProjectLayout') {
       const { projectId, layoutName } = editSource;
-      const filePath = this.projectResourceInfoProvider.getLayoutFilePath(
+      const filePath = projectResourceInfoProvider.getLayoutFilePath(
         projectId,
         layoutName,
       );
@@ -304,7 +301,7 @@ export class LayoutManager implements ILayoutManager {
   }
 
   private getAllProjectLayoutsInfos(): IProjectLayoutsInfo[] {
-    const resourceInfos = this.projectResourceInfoProvider.getAllProjectResourceInfos();
+    const resourceInfos = projectResourceInfoProvider.getAllProjectResourceInfos();
     return resourceInfos.map((info) => ({
       projectId: info.projectId,
       projectPath: info.projectPath,

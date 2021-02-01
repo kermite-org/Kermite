@@ -1,14 +1,13 @@
 import { IProjectResourceInfo } from '~/shared';
 import { appEnv } from '~/shell/base';
 import { pathJoin } from '~/shell/funcs';
-import { IProjectResourceInfoProvider } from '../../services/serviceInterfaces';
+import { IProjectResourceInfoProvider } from '~/shell/projects/interfaces';
 import {
   IProjectResourceInfoSource,
   ProjectResourceInfoSourceLoader,
-} from './ProjectResourceInfoSourceLoader';
+} from './ProjectResource/ProjectResourceInfoSourceLoader';
 
-export class ProjectResourceInfoProvider
-  implements IProjectResourceInfoProvider {
+class ProjectResourceInfoProvider implements IProjectResourceInfoProvider {
   private projectInfoSources: IProjectResourceInfoSource[] = [];
 
   getAllProjectResourceInfos(): IProjectResourceInfo[] {
@@ -86,3 +85,4 @@ export class ProjectResourceInfoProvider
     );
   }
 }
+export const projectResourceInfoProvider = new ProjectResourceInfoProvider();
