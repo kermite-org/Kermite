@@ -782,7 +782,7 @@ declare global {
       itemRef?: string;
 
       // extended multiple classNames
-      classNames?: string[] | { [key: string]: boolean };
+      classNames?: (string | undefined)[] | { [key: string]: boolean };
     }
 
     interface HTMLMarqueeElement extends HTMLElement {

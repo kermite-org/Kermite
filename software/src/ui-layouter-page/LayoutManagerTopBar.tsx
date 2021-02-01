@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { uiTheme } from '~/ui-common';
-import { ProjectAttachmentFileSelectorModal } from '~/ui-common/parts/ProjectAttachementFileSelectorModal';
+import { ProjectAttachmentFileSelectorModal } from '~/ui-common/sharedViews/ProjectAttachementFileSelectorModal';
 import { LayoutManagerButton } from '~/ui-layouter-page/LayoutManagerButton';
 import { LayoutManagerMenu } from '~/ui-layouter-page/LayoutManagerMenu';
 import { useLayoutManagerViewModel } from '~/ui-layouter-page/LayoutManagerViewModel';

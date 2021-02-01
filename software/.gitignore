@@ -15,3 +15,5 @@ release
 
 lib/
 tsconfig.tsbuildinfo
+
+.VSCodeCounter

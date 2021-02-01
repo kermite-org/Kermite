@@ -14,13 +14,13 @@ function styleObjectToString(obj: { [key: string]: any }) {
 }
 
 function extractClassNamesToArray(
-  classNames: string[] | { [key: string]: boolean },
+  classNames: (string | undefined)[] | { [key: string]: boolean },
 ): string[] {
   if (!classNames) {
     return [];
   }
   if (Array.isArray(classNames)) {
-    return classNames;
+    return classNames.filter((it) => !!it) as string[];
   }
   return Object.keys(classNames).filter((key) => classNames[key]);
 }
@@ -60,6 +60,7 @@ export function qxInterposeProps(
         .join(' ');
       delete props.css;
       delete props.className;
+      delete props.classNames;
       props.class = classes;
     }
     if (props.style && typeof props.style === 'object') {

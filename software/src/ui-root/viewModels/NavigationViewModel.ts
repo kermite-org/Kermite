@@ -1,5 +1,7 @@
-import { models } from '~/ui-root/models';
-import { PageSignature } from '~/ui-root/models/UiStatusModel';
+import {
+  PageSignature,
+  uiStatusModel,
+} from '~/ui-common/sharedModels/UiStatusModel';
 
 export interface NavigationEntryViewModel {
   pageSig: PageSignature;
@@ -27,7 +29,7 @@ export interface INavigationViewModel {
 }
 
 export function makeNavigationViewModel(): INavigationViewModel {
-  const { settings } = models.uiStatusModel;
+  const { settings } = uiStatusModel;
   return {
     entries: entrySources.map((it) => ({
       pageSig: it.pageSig,
