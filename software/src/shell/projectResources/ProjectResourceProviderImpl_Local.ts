@@ -7,7 +7,7 @@ import { createProjectSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { pathJoin } from '~/shell/funcs';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
-import { IProjectResourceProviderImpl } from '~/shell/projects/interfaces';
+import { IProjectResourceProviderImpl } from '~/shell/projectResources/interfaces';
 import {
   IProjectResourceInfoSource,
   ProjectResourceInfoSourceLoader,

@@ -4,11 +4,11 @@ import {
   IProjectResourceInfo,
   IResourceOrigin,
 } from '~/shared';
-import { ProjectResourceProviderImpl_Remote } from '~/shell/projects/ProjectResourceProviderImpl_Remote';
+import { ProjectResourceProviderImpl_Remote } from '~/shell/projectResources/ProjectResourceProviderImpl_Remote';
 import {
   IProjectResourceProvider,
   IProjectResourceProviderImpl,
-} from '~/shell/projects/interfaces';
+} from '~/shell/projectResources/interfaces';
 import { ProjectResourceProviderImpl_Local } from './ProjectResourceProviderImpl_Local';
 
 class ProjectResourceProvider implements IProjectResourceProvider {

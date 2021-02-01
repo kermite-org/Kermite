@@ -1,5 +1,5 @@
 import { IResourceOrigin } from '~/shared';
-import { projectResourceProvider } from '~/shell/projects';
+import { projectResourceProvider } from '~/shell/projectResources';
 import { ComPortsMonitor } from './ComPortsMonitor';
 import { FlashCommander } from './FlashCommander';
 

@@ -13,7 +13,7 @@ import { applicationStorage } from '~/shell/base';
 import { createEventPort2 } from '~/shell/funcs';
 import { FileWather } from '~/shell/funcs/FileWatcher';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
-import { projectResourceProvider } from '~/shell/projects';
+import { projectResourceProvider } from '~/shell/projectResources';
 import { ILayoutManager } from '~/shell/services/layout/interfaces';
 import { IProfileManager } from '~/shell/services/profile/interfaces';
 

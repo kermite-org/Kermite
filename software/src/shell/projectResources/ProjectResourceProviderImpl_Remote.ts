@@ -14,7 +14,7 @@ import {
 } from '~/shell/funcs';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
-import { IProjectResourceProviderImpl } from '~/shell/projects';
+import { IProjectResourceProviderImpl } from '~/shell/projectResources';
 
 const remoteBaseUri =
   'https://raw.githubusercontent.com/yahiro07/KermiteResourceStore/master/resources';

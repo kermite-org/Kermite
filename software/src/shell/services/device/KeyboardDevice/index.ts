@@ -5,7 +5,7 @@ import {
   RawHidMessageProtocolRevision,
 } from '~/shared';
 import { EventPort } from '~/shell/funcs';
-import { projectResourceProvider } from '~/shell/projects';
+import { projectResourceProvider } from '~/shell/projectResources';
 import { DeviceWrapper } from './DeviceWrapper';
 
 function bytesToString(bytes: number[]) {

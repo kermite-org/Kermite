@@ -9,7 +9,7 @@ import {
   IResourceOrigin,
 } from '~/shared';
 import { EventPort } from '~/shell/funcs';
-import { projectResourceProvider } from '~/shell/projects';
+import { projectResourceProvider } from '~/shell/projectResources';
 import { PresetProfileLoader } from '~/shell/services/profile/PresetProfileLoader';
 import { ProfileManagerCore } from './ProfileManagerCore';
 import { IProfileManager } from './interfaces';

@@ -8,7 +8,7 @@ import {
   fsExistsSync,
   fsxWatchFilesChange,
 } from '~/shell/funcs';
-import { projectResourceProvider } from '~/shell/projects';
+import { projectResourceProvider } from '~/shell/projectResources';
 
 type IFileUpdationEvent = { projectId: string };
 

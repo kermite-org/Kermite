@@ -1,7 +1,7 @@
 import { IPresetSpec, IProfileManagerStatus } from '~/shared';
 import { appGlobal, applicationStorage } from '~/shell/base';
-import { projectResourceProvider } from '~/shell/projects';
-import { KeyboardLayoutFilesWatcher } from '~/shell/projects/KeyboardShape/KeyboardLayoutFilesWatcher';
+import { projectResourceProvider } from '~/shell/projectResources';
+import { KeyboardLayoutFilesWatcher } from '~/shell/projectResources/KeyboardShape/KeyboardLayoutFilesWatcher';
 import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
 import { KeyMappingEmitter } from '~/shell/services/device/KeyMappingEmitter';
