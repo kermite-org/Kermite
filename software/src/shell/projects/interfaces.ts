@@ -3,6 +3,7 @@ import {
   IPresetSpec,
   IProfileData,
   IProjectResourceInfo,
+  IResourceOrigin,
 } from '~/shared';
 
 export interface IProjectResourceProviderImpl {
@@ -58,18 +59,23 @@ export interface IProjectResourceProvider {
   // getHexFilePath(projectId: string): string | undefined;
 
   loadProjectPreset(
+    origin: IResourceOrigin,
     projectId: string,
     presetName: string,
   ): Promise<IProfileData | undefined>;
 
   loadProjectLayout(
+    origin: IResourceOrigin,
     projectId: string,
     layoutName: string,
   ): Promise<IPersistKeyboardDesign | undefined>;
 
   // local: ローカルにあるプロジェクトのHexファイルのパスを返す
   // online: Hexファイルをリモートからダウンロードして一時ファイルに保存しファイルパスを返す
-  loadProjectFirmwareFile(projectId: string): Promise<string | undefined>;
+  loadProjectFirmwareFile(
+    origin: IResourceOrigin,
+    projectId: string,
+  ): Promise<string | undefined>;
 
   initializeAsync(): Promise<void>;
 
@@ -87,6 +93,7 @@ export interface IProjectResourceProvider {
 
 export interface IPresetProfileLoadingFeature {
   loadPresetProfileData(
+    origin: IResourceOrigin,
     projectId: string,
     presetSpec: IPresetSpec,
   ): Promise<IProfileData | undefined>;

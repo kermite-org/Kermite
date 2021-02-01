@@ -6,6 +6,7 @@ import {
   clampValue,
   IProfileManagerCommand,
   IPresetSpec,
+  IResourceOrigin,
 } from '~/shared';
 import { EventPort } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projects';
@@ -171,11 +172,13 @@ export class ProfileManager implements IProfileManager {
   }
 
   private async createProfileImpl(
+    origin: IResourceOrigin,
     profName: string,
     projectId: string,
     presetSpec: IPresetSpec,
   ): Promise<IProfileData> {
     const profile = await this.presetProfileLoader.loadPresetProfileData(
+      origin,
       projectId,
       presetSpec,
     );
@@ -188,6 +191,7 @@ export class ProfileManager implements IProfileManager {
 
   async createProfile(
     profName: string,
+    origin: IResourceOrigin,
     projectId: string,
     presetSpec: IPresetSpec,
   ): Promise<boolean> {
@@ -196,6 +200,7 @@ export class ProfileManager implements IProfileManager {
     }
     try {
       const profileData = await this.createProfileImpl(
+        origin,
         profName,
         projectId,
         presetSpec,
@@ -288,6 +293,7 @@ export class ProfileManager implements IProfileManager {
     if (cmd.creatProfile) {
       return await this.createProfile(
         cmd.creatProfile.name,
+        cmd.creatProfile.targetProjectOrigin,
         cmd.creatProfile.targetProjectId,
         cmd.creatProfile.presetSpec,
       );

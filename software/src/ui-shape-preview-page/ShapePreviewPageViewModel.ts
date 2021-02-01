@@ -49,11 +49,11 @@ export function makeShapePreviewPageViewModel(): IShapePreviewPageViewModel {
     holdKeyIndices: holdKeyIndices,
     projectSelectorSource: {
       options: shapesModel.optionProjectInfos.map((info) => ({
-        id: info.projectId,
+        id: info.sig,
         text: info.projectPath,
       })),
-      choiceId: shapesModel.currentProjectId,
-      setChoiceId: shapesModel.setCurrentProjectId,
+      choiceId: shapesModel.currentProjectSig,
+      setChoiceId: shapesModel.setCurrentProjectSig,
     },
     layoutSelectorSource: {
       options: shapesModel.optionLayoutNames.map((layoutName) => ({

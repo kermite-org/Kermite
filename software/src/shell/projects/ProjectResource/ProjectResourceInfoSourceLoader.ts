@@ -1,4 +1,4 @@
-import { IProjectResourceOrigin } from '~/shared';
+import { IResourceOrigin } from '~/shared';
 import { appEnv } from '~/shell/base';
 import {
   fsExistsSync,
@@ -20,7 +20,7 @@ export interface IProjectResourceInfoSource {
   layoutNames: string[];
   presetNames: string[];
   hexFilePath?: string;
-  resourceOrigin: IProjectResourceOrigin;
+  origin: IResourceOrigin;
 }
 
 interface IPorjectFileJson {
@@ -120,7 +120,7 @@ export namespace ProjectResourceInfoSourceLoader {
         layoutNames,
         presetNames,
         hexFilePath,
-        resourceOrigin: 'online',
+        origin: 'online',
       };
     });
   }
@@ -162,7 +162,7 @@ export namespace ProjectResourceInfoSourceLoader {
           layoutNames,
           presetNames,
           hexFilePath,
-          resourceOrigin: 'local' as const,
+          origin: 'local' as const,
         };
       }),
     );
@@ -206,14 +206,14 @@ export namespace ProjectResourceInfoSourceLoader {
           layoutNames,
           presetNames,
           hexFilePath,
-          resourceOrigin: 'local' as const,
+          origin: 'local' as const,
         };
       }),
     );
   }
 
   export async function loadProjectResourceInfoSources(
-    resourceOrigin: IProjectResourceOrigin,
+    resourceOrigin: IResourceOrigin,
   ): Promise<IProjectResourceInfoSource[]> {
     if (resourceOrigin === 'online') {
       return await loadCentralResourcesFromSummaryJson();

@@ -9,21 +9,21 @@ export type FirmwareUpdationPhase =
   | 'UploadFailure';
 
 export class FirmwareUpdationModel {
-  currentProjectId: string = '';
+  currentProjectSig: string = '';
   phase: FirmwareUpdationPhase = 'WaitingReset';
   comPortName: string | undefined = undefined;
   firmwareUploadResult: string | undefined = undefined;
 
   private projectInfosWithFirmware: IProjectResourceInfo[] = [];
 
-  setCurrentProjectId = (projectId: string) => {
-    this.currentProjectId = projectId;
+  setCurrentProjectSig = (projectSig: string) => {
+    this.currentProjectSig = projectSig;
   };
 
   get projectOptions() {
     const blankOption = { id: '', text: 'select firmware' };
     const projectOptions = this.projectInfosWithFirmware.map((info) => ({
-      id: info.projectId,
+      id: info.sig,
       text: info.projectPath,
     }));
     return [blankOption, ...projectOptions];
@@ -56,21 +56,27 @@ export class FirmwareUpdationModel {
 
   // 2: WaitingUploadOrder --> Uploading --> UploadSuccess,UploadFailure
   uploadFirmware = async () => {
-    if (!this.currentProjectId) {
+    if (!this.currentProjectSig) {
       alert('please select the firmware');
       return;
     }
     if (this.phase === 'WaitingUploadOrder' && this.comPortName) {
-      this.phase = 'Uploading';
-      const res = await ipcAgent.async.firmup_uploadFirmware(
-        this.currentProjectId,
-        this.comPortName,
+      const info = this.projectInfosWithFirmware.find(
+        (it) => it.sig === this.currentProjectSig,
       );
-      this.firmwareUploadResult = res;
-      if (res === 'ok') {
-        this.phase = 'UploadSuccess';
-      } else {
-        this.phase = 'UploadFailure';
+      if (info) {
+        this.phase = 'Uploading';
+        const res = await ipcAgent.async.firmup_uploadFirmware(
+          info.origin,
+          info.projectId,
+          this.comPortName,
+        );
+        this.firmwareUploadResult = res;
+        if (res === 'ok') {
+          this.phase = 'UploadSuccess';
+        } else {
+          this.phase = 'UploadFailure';
+        }
       }
     }
   };

@@ -17,7 +17,7 @@ import {
 
 interface ICreateProfileDialogEditValues {
   profileName: string;
-  targetProjectId: string;
+  targetProjectSig: string;
   layoutName: string;
 }
 
@@ -25,33 +25,33 @@ function makeProfileSetupModalViewModel() {
   const projectOptions = projectResourceModel
     .getProjectsWithLayout()
     .map((info) => ({
-      id: info.projectId,
+      id: info.sig,
       text: info.projectPath,
     }));
 
-  const defaultProjectId = projectOptions[0].id || '';
+  const defaultProjectSig = projectOptions[0].id || '';
 
-  function getLayoutNameOptions(projectId: string) {
+  function getLayoutNameOptions(projectSig: string) {
     const info = projectResourceModel
       .getProjectsWithLayout()
-      .find((info) => info.projectId === projectId);
+      .find((info) => info.sig === projectSig);
     return info!.layoutNames.map((it) => ({ id: it, text: it }));
   }
 
   const editValues: ICreateProfileDialogEditValues = {
     profileName: '',
-    targetProjectId: defaultProjectId,
-    layoutName: getLayoutNameOptions(defaultProjectId)[0].id,
+    targetProjectSig: defaultProjectSig,
+    layoutName: getLayoutNameOptions(defaultProjectSig)[0].id,
   };
 
   return {
     projectOptions,
     get presetOptions() {
-      return getLayoutNameOptions(editValues.targetProjectId);
+      return getLayoutNameOptions(editValues.targetProjectSig);
     },
     editValues,
     sync() {
-      const options = getLayoutNameOptions(editValues.targetProjectId);
+      const options = getLayoutNameOptions(editValues.targetProjectSig);
       if (!options.find((opt) => opt.id === editValues.layoutName)) {
         editValues.layoutName = options[0].id;
       }
@@ -90,8 +90,8 @@ const ProfileSetupModalContent = (props: {
                 <td>
                   <GeneralSelector
                     options={projectOptions}
-                    choiceId={editValues.targetProjectId}
-                    setChoiceId={(id) => (editValues.targetProjectId = id)}
+                    choiceId={editValues.targetProjectSig}
+                    setChoiceId={(id) => (editValues.targetProjectSig = id)}
                     width={150}
                   />
                 </td>

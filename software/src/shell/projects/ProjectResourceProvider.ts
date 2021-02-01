@@ -2,6 +2,7 @@ import {
   IPersistKeyboardDesign,
   IProfileData,
   IProjectResourceInfo,
+  IResourceOrigin,
 } from '~/shared';
 import { IProjectResourceProvider } from '~/shell/projects/interfaces';
 import { ProjectResourceProviderImpl_Local } from './ProjectResourceProviderImpl_Local';
@@ -16,27 +17,44 @@ class ProjectResourceProvider implements IProjectResourceProvider {
   }
 
   loadProjectPreset(
+    origin: IResourceOrigin,
     projectId: string,
     presetName: string,
   ): Promise<IProfileData | undefined> {
-    return this.localResourceProviderImpl.loadProjectPreset(
-      projectId,
-      presetName,
-    );
+    if (origin === 'local') {
+      return this.localResourceProviderImpl.loadProjectPreset(
+        projectId,
+        presetName,
+      );
+    } else {
+      throw 'unimplemented';
+    }
   }
 
   loadProjectLayout(
+    origin: IResourceOrigin,
     projectId: string,
     layoutName: string,
   ): Promise<IPersistKeyboardDesign | undefined> {
-    return this.localResourceProviderImpl.loadProjectLayout(
-      projectId,
-      layoutName,
-    );
+    if (origin === 'local') {
+      return this.localResourceProviderImpl.loadProjectLayout(
+        projectId,
+        layoutName,
+      );
+    } else {
+      throw 'unimplemented';
+    }
   }
 
-  loadProjectFirmwareFile(projectId: string): Promise<string | undefined> {
-    return this.localResourceProviderImpl.loadProjectFirmwareFile(projectId);
+  loadProjectFirmwareFile(
+    origin: IResourceOrigin,
+    projectId: string,
+  ): Promise<string | undefined> {
+    if (origin === 'local') {
+      return this.localResourceProviderImpl.loadProjectFirmwareFile(projectId);
+    } else {
+      throw 'unimplemented';
+    }
   }
 
   // internal_getProjectInfoSourceById(

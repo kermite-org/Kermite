@@ -39,11 +39,11 @@ export function makePresetBrowserViewModel(): IPresetBrowserViewModel {
     },
     projectSelectorSource: {
       options: presetBrowserModel.optionProjectInfos.map((it) => ({
-        id: it.projectId,
+        id: it.sig,
         text: it.keyboardName,
       })),
-      choiceId: presetBrowserModel.currentProjectId || '',
-      setChoiceId: presetBrowserModel.setCurrentProjectId,
+      choiceId: presetBrowserModel.currentProjectSig || '',
+      setChoiceId: presetBrowserModel.setCurrentProjectSig,
     },
     presetSelectorSource: {
       options: presetBrowserModel.optionPresetSpecs.map((it) => ({
@@ -56,13 +56,13 @@ export function makePresetBrowserViewModel(): IPresetBrowserViewModel {
       choiceId: presetBrowserModel.currentPresetSpecId || '',
       setChoiceId: presetBrowserModel.setCurrentPresetSpecId,
     },
-    isLinkButtonActive:
-      deviceStatusModel.isConnected &&
-      deviceStatusModel.deviceAttrs?.projectId !==
-        presetBrowserModel.currentProjectId,
+    isLinkButtonActive: false,
+    // deviceStatusModel.isConnected &&
+    // deviceStatusModel.deviceAttrs?.projectId !==
+    //   presetBrowserModel.currentProjectSig,
     linkButtonHandler() {
-      const deviceProjectId = deviceStatusModel.deviceAttrs?.projectId || '';
-      presetBrowserModel.setCurrentProjectId(deviceProjectId);
+      // const deviceProjectId = deviceStatusModel.deviceAttrs?.projectId || '';
+      // presetBrowserModel.setCurrentProjectSig(deviceProjectId);
     },
     editPresetButtonHandler() {
       presetBrowserModel.editSelectedProjectPreset();

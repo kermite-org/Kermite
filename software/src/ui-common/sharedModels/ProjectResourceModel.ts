@@ -14,10 +14,8 @@ export class ProjectResourceModel {
     return this.projectResourceInfos.filter((info) => info.hasFirmwareBinary);
   }
 
-  getProjectResourceInfo(projectId: string) {
-    return this.projectResourceInfos.find(
-      (info) => info.projectId === projectId,
-    );
+  getProjectResourceInfo(projectSig: string) {
+    return this.projectResourceInfos.find((info) => info.sig === projectSig);
   }
 
   async initializeAsync() {

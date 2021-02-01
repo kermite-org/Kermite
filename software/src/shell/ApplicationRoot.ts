@@ -72,14 +72,30 @@ export class ApplicationRoot {
       layout_clearErrorInfo: async () => this.layoutManager.clearErrorInfo(),
       layout_showEditLayoutFileInFiler: async () =>
         this.layoutManager.showEditLayoutFileInFiler(),
-      projects_loadKeyboardShape: (projectId, layoutName) =>
-        projectResourceProvider.loadProjectLayout(projectId, layoutName),
-      firmup_uploadFirmware: (projectId, comPortName) =>
-        this.firmwareUpdationService.writeFirmware(projectId, comPortName),
+      projects_loadKeyboardShape: (origin, projectId, layoutName) =>
+        projectResourceProvider.loadProjectLayout(
+          origin,
+          projectId,
+          layoutName,
+        ),
+      firmup_uploadFirmware: (origin, projectId, comPortName) =>
+        this.firmwareUpdationService.writeFirmware(
+          origin,
+          projectId,
+          comPortName,
+        ),
       projects_getAllProjectResourceInfos: async () =>
         projectResourceProvider.getAllProjectResourceInfos(),
-      projects_loadPresetProfile: (profileId, presetSpec: IPresetSpec) =>
-        this.presetProfileLoader.loadPresetProfileData(profileId, presetSpec),
+      projects_loadPresetProfile: (
+        origin,
+        profileId,
+        presetSpec: IPresetSpec,
+      ) =>
+        this.presetProfileLoader.loadPresetProfileData(
+          origin,
+          profileId,
+          presetSpec,
+        ),
       config_getKeyboardConfig: async () =>
         this.keyboardConfigProvider.keyboardConfig,
       config_writeKeyboardConfig: async (config) =>

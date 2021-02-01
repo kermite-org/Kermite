@@ -3,17 +3,20 @@ import {
   duplicateObjectByJsonStringifyParse,
   fallbackProfileData,
   IPresetSpec,
+  IResourceOrigin,
 } from '~/shared';
 import { projectResourceProvider } from '~/shell/projects';
 import { IPresetProfileLoadingFeature } from '~/shell/projects/interfaces';
 
 export class PresetProfileLoader implements IPresetProfileLoadingFeature {
   private async createBlankProfileFromLayoutFile(
+    origin: IResourceOrigin,
     projectId: string,
     layoutName: string,
   ) {
     try {
       const design = await projectResourceProvider.loadProjectLayout(
+        origin,
         projectId,
         layoutName,
       );
@@ -32,16 +35,19 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
   }
 
   private async loadPresetProfileDataImpl(
+    origin: IResourceOrigin,
     projectId: string,
     presetSpec: IPresetSpec,
   ) {
     if (presetSpec.type === 'preset') {
       return await projectResourceProvider.loadProjectPreset(
+        origin,
         projectId,
         presetSpec.presetName,
       );
     } else {
       return await this.createBlankProfileFromLayoutFile(
+        origin,
         projectId,
         presetSpec.layoutName,
       );
@@ -51,6 +57,7 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
   private profileDataCache: { [key in string]: IProfileData | undefined } = {};
 
   async loadPresetProfileData(
+    origin: IResourceOrigin,
     projectId: string,
     presetSpec: IPresetSpec,
   ): Promise<IProfileData | undefined> {
@@ -66,7 +73,11 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
     if (profileKey in cache) {
       return cache[profileKey];
     }
-    const profile = await this.loadPresetProfileDataImpl(projectId, presetSpec);
+    const profile = await this.loadPresetProfileDataImpl(
+      origin,
+      projectId,
+      presetSpec,
+    );
     cache[profileKey] = profile;
     return profile;
   }

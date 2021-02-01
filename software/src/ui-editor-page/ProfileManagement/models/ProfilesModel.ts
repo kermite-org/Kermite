@@ -2,6 +2,7 @@ import {
   IPresetSpec,
   IProfileManagerCommand,
   IProfileManagerStatus,
+  IResourceOrigin,
 } from '~/shared';
 import { ipcAgent } from '~/ui-common';
 import { EditorModel } from '../../EditorMainPart/models/EditorModel';
@@ -59,13 +60,19 @@ export class ProfilesModel {
 
   createProfile = (
     newProfileName: string,
+    targetProjectOrigin: IResourceOrigin,
     targetProjectId: string,
     presetSpec: IPresetSpec,
   ) => {
     const saveCommand =
       (useAutoSave && this.getSaveCommandIfDirty()) || undefined;
     const createCommand = {
-      creatProfile: { name: newProfileName, targetProjectId, presetSpec },
+      creatProfile: {
+        name: newProfileName,
+        targetProjectOrigin,
+        targetProjectId,
+        presetSpec,
+      },
     };
     this.sendProfileManagerCommands(saveCommand, createCommand);
   };

@@ -26,7 +26,12 @@ function useProjectAttachmentFileSelectorViewModel(
   Hook.useEffect(() => {
     ipcAgent.async
       .projects_getAllProjectResourceInfos()
-      .then(fieldSetter(local, 'resourceInfos'));
+      .then(
+        (infos) =>
+          (local.resourceInfos = infos.filter(
+            (info) => info.origin === 'local',
+          )),
+      );
   }, []);
 
   const projectOptions = local.resourceInfos.map((info) => ({

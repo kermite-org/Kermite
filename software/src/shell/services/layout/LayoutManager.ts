@@ -153,7 +153,7 @@ export class LayoutManager implements ILayoutManager {
   //   );
   // }
 
-  private async createLayoutForProfject(projectId: string, layoutName: string) {
+  private async createLayoutForProject(projectId: string, layoutName: string) {
     const filePath = projectResourceProvider.localResourceProviderImpl.getLocalLayoutFilePath(
       projectId,
       layoutName,
@@ -175,13 +175,14 @@ export class LayoutManager implements ILayoutManager {
     }
   }
 
-  private async loadLayoutFromProfject(projectId: string, layoutName: string) {
+  private async loadLayoutFromProject(projectId: string, layoutName: string) {
     const filePath = projectResourceProvider.localResourceProviderImpl.getLocalLayoutFilePath(
       projectId,
       layoutName,
     );
     if (filePath) {
       const loadedDesign = await projectResourceProvider.loadProjectLayout(
+        'local',
         projectId,
         layoutName,
       );
@@ -231,7 +232,7 @@ export class LayoutManager implements ILayoutManager {
       await this.loadLayoutFromFile(filePath);
     } else if (editSource.type === 'ProjectLayout') {
       const { projectId, layoutName } = editSource;
-      await this.loadLayoutFromProfject(projectId, layoutName);
+      await this.loadLayoutFromProject(projectId, layoutName);
     }
   }
 
@@ -277,7 +278,7 @@ export class LayoutManager implements ILayoutManager {
       await this.saveLayoutToFile(filePath, design);
     } else if (command.type === 'loadFromProject') {
       const { projectId, layoutName } = command;
-      await this.loadLayoutFromProfject(projectId, layoutName);
+      await this.loadLayoutFromProject(projectId, layoutName);
     } else if (command.type === 'saveToProject') {
       const { projectId, layoutName, design } = command;
       await this.saveLayoutToProject(projectId, layoutName, design);
@@ -288,7 +289,7 @@ export class LayoutManager implements ILayoutManager {
       await this.unloadCurrentProfileLayout();
     } else if (command.type === 'createForProject') {
       const { projectId, layoutName } = command;
-      await this.createLayoutForProfject(projectId, layoutName);
+      await this.createLayoutForProject(projectId, layoutName);
     }
   }
 

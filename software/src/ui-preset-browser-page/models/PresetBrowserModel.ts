@@ -1,4 +1,10 @@
-import { fallbackProfileData, IPresetSpec, IProfileData } from '~/shared';
+import {
+  fallbackProfileData,
+  IPresetSpec,
+  IProfileData,
+  IResourceOrigin,
+} from '~/shared';
+import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { ipcAgent } from '~/ui-common';
 import {
   modalAlert,
@@ -44,11 +50,17 @@ class PresetBrowserModelHelper {
 
   static createProfile(
     newProfileName: string,
+    targetProjectOrigin: IResourceOrigin,
     targetProjectId: string,
     presetSpec: IPresetSpec,
   ) {
     const createCommand = {
-      creatProfile: { name: newProfileName, targetProjectId, presetSpec },
+      creatProfile: {
+        name: newProfileName,
+        targetProjectOrigin,
+        targetProjectId,
+        presetSpec,
+      },
     };
     ipcAgent.async.profile_executeProfileManagerCommands([createCommand]);
   }
@@ -59,12 +71,12 @@ export class PresetBrowserModel {
   private projectResourceModel = new ProjectResourceModel();
   private allProfileNames: string[] = [];
 
-  private _currentProjectId: string | undefined;
+  private _currentProjecSig: string | undefined;
   private _currentPresetSpecId: string | undefined;
   private _loadedProfileData: IProfileData = fallbackProfileData;
 
-  get currentProjectId() {
-    return this._currentProjectId;
+  get currentProjectSig() {
+    return this._currentProjecSig;
   }
 
   get currentPresetSpecId() {
@@ -82,7 +94,7 @@ export class PresetBrowserModel {
   private optionPresetSpecsSelector = createSimpleSelector(
     () =>
       this.projectResourceModel.getProjectResourceInfo(
-        this._currentProjectId || '',
+        this._currentProjecSig || '',
       ),
     (info) =>
       (info && [
@@ -108,8 +120,8 @@ export class PresetBrowserModel {
     return this.optionPresetSpecs.find((it) => it.id === id);
   }
 
-  setCurrentProjectId = (projectId: string) => {
-    this._currentProjectId = projectId;
+  setCurrentProjectSig = (projectSig: string) => {
+    this._currentProjecSig = projectSig;
     this._currentPresetSpecId = this.optionPresetSpecs[0]?.id;
     this.loadSelectedProfile();
   };
@@ -120,13 +132,17 @@ export class PresetBrowserModel {
   };
 
   private async loadSelectedProfile() {
-    if (!(this._currentProjectId && this._currentPresetSpecId)) {
+    if (!(this._currentProjecSig && this._currentPresetSpecId)) {
       return;
     }
     const spec = this.getPresetSpecById(this._currentPresetSpecId);
     if (spec) {
+      const { origin, projectId } = getProjectOriginAndIdFromSig(
+        this._currentProjecSig,
+      );
       const profileData = await ipcAgent.async.projects_loadPresetProfile(
-        this._currentProjectId,
+        origin,
+        projectId,
         spec,
       );
       if (!profileData) {
@@ -139,16 +155,16 @@ export class PresetBrowserModel {
 
   editSelectedProjectPreset = async () => {
     const {
-      _currentProjectId: projectId,
+      _currentProjecSig: projectSig,
       _currentPresetSpecId: presetSpecId,
     } = this;
-    if (!(projectId && presetSpecId)) {
+    if (!(projectSig && presetSpecId)) {
       return;
     }
 
     // todo: ここでProfileの名前を設定せず、新規作成未保存のProfileとして編集できるようにする
 
-    const info = this.projectResourceModel.getProjectResourceInfo(projectId);
+    const info = this.projectResourceModel.getProjectResourceInfo(projectSig);
     if (!info) {
       console.log(`invalid project selection`);
       return;
@@ -180,7 +196,13 @@ export class PresetBrowserModel {
       return;
     }
 
-    PresetBrowserModelHelper.createProfile(newProfileName, projectId, spec);
+    const { origin, projectId } = getProjectOriginAndIdFromSig(projectSig);
+    PresetBrowserModelHelper.createProfile(
+      newProfileName,
+      origin,
+      projectId,
+      spec,
+    );
     uiStatusModel.navigateTo('editor');
   };
 
@@ -189,9 +211,9 @@ export class PresetBrowserModel {
     const resourceInfos = this.projectResourceModel.projectResourceInfos;
     if (
       resourceInfos.length > 0 &&
-      !(this._currentProjectId && this._currentPresetSpecId)
+      !(this._currentProjecSig && this._currentPresetSpecId)
     ) {
-      this._currentProjectId = resourceInfos[0].projectId;
+      this._currentProjecSig = resourceInfos[0].sig;
       this._currentPresetSpecId = this.optionPresetSpecs[0]?.id;
       this.loadSelectedProfile();
     }

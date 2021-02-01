@@ -3,6 +3,7 @@ import {
   IProfileData,
   IProjectResourceInfo,
 } from '~/shared';
+import { createProjectSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { pathJoin } from '~/shell/funcs';
 import { layoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
@@ -30,16 +31,17 @@ export class ProjectResourceProviderImpl_Local
         hexFilePath,
         presetNames,
         layoutNames,
-        resourceOrigin,
+        origin,
       } = it;
       return {
+        sig: createProjectSig(origin, projectId),
         projectId,
         keyboardName,
         projectPath,
         presetNames,
         layoutNames,
         hasFirmwareBinary: !!hexFilePath,
-        resourceOrigin,
+        origin,
       };
     });
   }
