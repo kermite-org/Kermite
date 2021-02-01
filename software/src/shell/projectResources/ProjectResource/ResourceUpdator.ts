@@ -167,7 +167,7 @@ async function syncRemoteResourcesToLocalImpl(
   }
 }
 
-export async function resourceUpdator_syncRemoteResourcesToLocal() {
+async function resourceUpdator_syncRemoteResourcesToLocal__DEPRECATED() {
   const remoteDir =
     'https://raw.githubusercontent.com/yahiro07/KermiteResourceStore/master/resources';
   const localDir = appEnv.resolveUserDataFilePath('resources');
