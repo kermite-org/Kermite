@@ -7,6 +7,34 @@ import {
 } from '~/shared';
 import { IProjectResourceInfoSource } from '~/shell/projects/ProjectResource/ProjectResourceInfoSourceLoader';
 
+export interface IProjectResourceLoaderCore__NEXT {
+  getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
+  loadProjectPresetFile(projectId: string, presetName: string): Promise<string>;
+  loadProjectLayoutFile(projectId: string, layoutName: string): Promise<string>;
+  loadProjectFirmwareFile(projectId: string): Promise<string>;
+}
+
+export interface IProjectResourceLoader__NEXT {
+  getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
+
+  loadProjectPresetFile(
+    origin: IProjectResourceOrigin,
+    projectId: string,
+    presetName: string,
+  ): Promise<string>;
+
+  loadProjectLayoutFile(
+    origin: IProjectResourceOrigin,
+    projectId: string,
+    layoutName: string,
+  ): Promise<string>;
+
+  loadProjectFirmwareFile(
+    origin: IProjectResourceOrigin,
+    projectId: string,
+  ): Promise<string>;
+}
+
 export interface IProjectResourceInfoProvider {
   getAllProjectResourceInfos(): IProjectResourceInfo[];
   getPresetProfileFilePath(
