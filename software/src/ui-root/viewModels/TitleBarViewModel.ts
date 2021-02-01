@@ -1,5 +1,5 @@
 import { ipcAgent } from '~/ui-common';
-import { models } from '~/ui-root/models';
+import { siteModel } from '~/ui-common/sharedModels/SiteModel';
 
 export interface ITitleBarViewModel {
   showReloadButton: boolean;
@@ -18,7 +18,7 @@ export function makeTitleBarViewModel(): ITitleBarViewModel {
       ipcAgent.async.window_restartApplication();
     },
     onWidgetButton() {
-      models.siteModel.setWidgetMode(true);
+      siteModel.setWidgetMode(true);
     },
     onMinimizeButton() {
       ipcAgent.async.window_minimizeWindow();

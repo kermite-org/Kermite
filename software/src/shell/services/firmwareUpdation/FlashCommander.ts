@@ -231,8 +231,8 @@ export namespace FlashCommander {
     const resFuseHigh = await serial.query('N');
     checkValue(resFuseHigh, expectedValues.fuseHigh, 'fuse high byte');
 
-    const resFuseEx = await serial.query('Q');
-    checkValue(resFuseEx, expectedValues.fuseEx, 'fuse ex byte');
+    // const resFuseEx = await serial.query('Q');
+    // checkValue(resFuseEx, expectedValues.fuseEx, 'fuse ex byte');
 
     const resEnterProgramimgMode = await serial.query('P');
     checkAck(resEnterProgramimgMode, 'enter programing mode');

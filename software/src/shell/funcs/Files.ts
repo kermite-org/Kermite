@@ -39,6 +39,8 @@ export const fspReaddir = fs.promises.readdir;
 
 export const fspRename = fs.promises.rename;
 
+export const fspWriteFile = fs.promises.writeFile;
+
 export function fsxMkdirpSync(path: string) {
   if (!fsExistsSync(path)) {
     fsMkdirSync(path, { recursive: true });

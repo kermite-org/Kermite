@@ -1,5 +1,6 @@
 import { css } from 'goober';
-import { h, Hook } from 'qx';
+import { h } from 'qx';
+import { useLocal } from '~/ui-common/helpers';
 
 interface IDebugOverlayProps {
   debugObj: any | undefined;
@@ -35,7 +36,7 @@ const cssDebugPane = css`
 `;
 
 export const DebugOverlay = (props: IDebugOverlayProps) => {
-  const state = Hook.useMemo(() => ({ visible: false }), []);
+  const state = useLocal({ visible: false });
 
   const toggleVisible = () => {
     state.visible = !state.visible;

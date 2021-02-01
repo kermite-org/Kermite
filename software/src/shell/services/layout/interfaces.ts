@@ -1,8 +1,4 @@
-import {
-  ILayoutManagerCommand,
-  ILayoutManagerStatus,
-  IPersistKeyboardDesign,
-} from '~/shared';
+import { ILayoutManagerCommand, ILayoutManagerStatus } from '~/shared';
 import { IListenerPortS } from '~/shell/base';
 
 export interface ILayoutManager {
@@ -11,12 +7,4 @@ export interface ILayoutManager {
   statusEvents: IListenerPortS<Partial<ILayoutManagerStatus>>;
   clearErrorInfo(): void;
   showEditLayoutFileInFiler(): void;
-}
-
-export interface ILayoutFileLoader {
-  loadLayoutFromFile(filePath: string): Promise<IPersistKeyboardDesign>;
-  saveLayoutToFile(
-    filePath: string,
-    design: IPersistKeyboardDesign,
-  ): Promise<void>;
 }

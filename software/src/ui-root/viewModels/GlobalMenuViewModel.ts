@@ -1,6 +1,6 @@
-import { Hook } from 'qx';
-import { appUi } from '~/ui-common';
-import { models } from '~/ui-root/models';
+import { appUi, useLocal } from '~/ui-common';
+import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
+import { themeSelectionModel } from '~/ui-root/models/ThemeSelectionModel';
 
 export interface IGlobalMenuItem {
   key: string;
@@ -10,7 +10,7 @@ export interface IGlobalMenuItem {
 }
 
 function createMenuItems(): IGlobalMenuItem[] {
-  const { settings } = models.uiStatusModel;
+  const { settings } = uiStatusModel;
 
   const menuItems: IGlobalMenuItem[] = [
     {
@@ -25,17 +25,17 @@ function createMenuItems(): IGlobalMenuItem[] {
       key: 'miThemeLight',
       text: 'Light Theme',
       handler() {
-        models.themeSelectionModel.changeTheme('light');
+        themeSelectionModel.changeTheme('light');
       },
-      active: models.themeSelectionModel.currentTheme === 'light',
+      active: themeSelectionModel.currentTheme === 'light',
     },
     {
       key: 'miThemeDark',
       text: 'Dark Theme',
       handler() {
-        models.themeSelectionModel.changeTheme('dark');
+        themeSelectionModel.changeTheme('dark');
       },
-      active: models.themeSelectionModel.currentTheme === 'dark',
+      active: themeSelectionModel.currentTheme === 'dark',
     },
   ];
 
@@ -54,7 +54,7 @@ export interface IGlobalMenuViewModel {
 }
 
 export function makeGlobalMenuViewModel(): IGlobalMenuViewModel {
-  const state = Hook.useMemo(() => ({ isOpen: false }), []);
+  const state = useLocal({ isOpen: false });
   return {
     isOpen: state.isOpen,
     openMenu: () => (state.isOpen = true),
