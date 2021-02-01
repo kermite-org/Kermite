@@ -152,6 +152,11 @@ export interface IProjectLayoutsInfo {
   layoutNames: string[];
 }
 
+export interface IGlobalSettings {
+  useOnlineResources: boolean;
+  useLocalResouces: boolean;
+  localProjectRootFolderPath: string;
+}
 export interface IAppIpcContract {
   sync: {
     dev_getVersionSync(): string;
@@ -188,6 +193,9 @@ export interface IAppIpcContract {
     config_getKeyboardConfig(): Promise<IKeyboardConfig>;
     config_writeKeyboardConfig(config: IKeyboardConfig): Promise<void>;
     config_writeKeyMappingToDevice(): Promise<void>;
+
+    config_getGlobalSettings(): Promise<IGlobalSettings>;
+    config_writeGlobalSettings(settings: IGlobalSettings): Promise<void>;
 
     projects_getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
     projects_loadPresetProfile(

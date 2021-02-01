@@ -1,4 +1,5 @@
 import {
+  IGlobalSettings,
   IKeyboardConfig,
   ILayoutEditSource,
   overwriteObjectProps,
@@ -14,6 +15,7 @@ export interface IApplicationPersistData {
   currentProfileName: string | undefined;
   keyboardConfig: IKeyboardConfig;
   layoutEditSource: ILayoutEditSource;
+  globalSettings: IGlobalSettings;
 }
 
 const defaultPersistData: IApplicationPersistData = {
@@ -28,6 +30,11 @@ const defaultPersistData: IApplicationPersistData = {
   },
   layoutEditSource: {
     type: 'NewlyCreated',
+  },
+  globalSettings: {
+    useOnlineResources: true,
+    useLocalResouces: false,
+    localProjectRootFolderPath: '',
   },
 };
 class ApplicationStorage {

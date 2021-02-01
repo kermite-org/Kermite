@@ -2,6 +2,7 @@ import { IPresetSpec, IProfileManagerStatus } from '~/shared';
 import { appGlobal, applicationStorage } from '~/shell/base';
 import { projectResourceProvider } from '~/shell/projects';
 import { KeyboardLayoutFilesWatcher } from '~/shell/projects/KeyboardShape/KeyboardLayoutFilesWatcher';
+import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
 import { KeyMappingEmitter } from '~/shell/services/device/KeyMappingEmitter';
 import { KeyboardDeviceService } from '~/shell/services/device/KeyboardDevice';
@@ -112,6 +113,10 @@ export class ApplicationRoot {
           );
         }
       },
+      config_getGlobalSettings: async () =>
+        GlobalSettingsProvider.getGlobalSettings(),
+      config_writeGlobalSettings: async (settings) =>
+        GlobalSettingsProvider.writeGlobalSettings(settings),
       file_getOpenJsonFilePathWithDialog:
         JsonFileServiceStatic.getOpeningJsonFilePathWithDialog,
       file_getSaveJsonFilePathWithDialog:
