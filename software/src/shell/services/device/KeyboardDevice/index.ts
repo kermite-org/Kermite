@@ -30,7 +30,7 @@ export class KeyboardDeviceService {
     this.statusEventPort.emit(newStatus);
   }
 
-  private decodeReceivedBytes(buf: Uint8Array) {
+  private async decodeReceivedBytes(buf: Uint8Array) {
     if (buf[0] === 0xf0 && buf[1] === 0x11) {
       const firmwareReleaseBuildRevision = (buf[2] << 8) | buf[3];
       const firmwareConfigStorageRevision = buf[4];
@@ -57,9 +57,8 @@ export class KeyboardDeviceService {
         );
       }
 
-      const info = projectResourceProvider
-        .getAllProjectResourceInfos()
-        .find((info) => info.projectId === projectId);
+      const resourceInfos = await projectResourceProvider.getAllProjectResourceInfos();
+      const info = resourceInfos.find((info) => info.projectId === projectId);
       if (info) {
         this.setStatus({
           isConnected: true,

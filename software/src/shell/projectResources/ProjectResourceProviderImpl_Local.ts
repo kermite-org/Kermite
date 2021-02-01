@@ -4,25 +4,154 @@ import {
   IProjectResourceInfo,
 } from '~/shared';
 import { createProjectSig } from '~/shared/funcs/DomainRelatedHelpers';
-import { pathJoin } from '~/shell/funcs';
+import { appEnv } from '~/shell/base';
+import {
+  fsExistsSync,
+  fspReaddir,
+  fsxReadJsonFile,
+  globAsync,
+  pathBasename,
+  pathDirname,
+  pathJoin,
+  pathRelative,
+  pathResolve,
+} from '~/shell/funcs';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
 import { IProjectResourceProviderImpl } from '~/shell/projectResources/interfaces';
-import {
-  IProjectResourceInfoSource,
-  ProjectResourceInfoSourceLoader,
-} from './ProjectResource/ProjectResourceInfoSourceLoader';
+import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
+import { IProjectResourceInfoSource } from './ProjectResource/ProjectResourceInfoSourceLoader';
+
+namespace ProjectResourceInfoSourceLoader {
+  interface IPorjectFileJson {
+    projectId: string;
+    keyboardName: string;
+  }
+
+  function checkFileExistsOrBlank(filePath: string): string | undefined {
+    return (fsExistsSync(filePath) && filePath) || undefined;
+  }
+
+  async function readPresetNames(presetsFolderPath: string): Promise<string[]> {
+    if (fsExistsSync(presetsFolderPath)) {
+      return (await fspReaddir(presetsFolderPath))
+        .filter((fpath) => fpath.endsWith('.json'))
+        .map((fpath) => pathBasename(fpath, '.json'));
+    } else {
+      return [];
+    }
+  }
+
+  async function readLayoutNames(projectFolderPath: string): Promise<string[]> {
+    return (await fspReaddir(projectFolderPath))
+      .filter((fileName) => fileName.endsWith('layout.json'))
+      .map((fileName) =>
+        fileName === 'layout.json'
+          ? 'default'
+          : pathBasename(fileName, '.layout.json'),
+      );
+  }
+
+  async function readProjectFile(
+    projectFilePath: string,
+  ): Promise<IPorjectFileJson> {
+    return (await fsxReadJsonFile(projectFilePath)) as IPorjectFileJson;
+  }
+
+  export async function loadLocalResources(
+    localRepositoryRootDir: string,
+  ): Promise<IProjectResourceInfoSource[]> {
+    const projectsRoot = pathJoin(
+      localRepositoryRootDir,
+      'firmware/src/projects',
+    );
+
+    if (!fsExistsSync(projectsRoot)) {
+      console.log(
+        `firmware projects folder ${localRepositoryRootDir} is not exist.`,
+      );
+      return [];
+    }
+
+    const buildsRoot = pathJoin(localRepositoryRootDir, 'firmware/build');
+
+    const projectFilePaths = await globAsync(
+      `${projectsRoot}/**/*/project.json`,
+    );
+
+    return await Promise.all(
+      projectFilePaths.map(async (projectFilePath) => {
+        const projectPath = pathRelative(
+          projectsRoot,
+          pathDirname(projectFilePath),
+        );
+        const projectBaseDir = pathDirname(projectFilePath);
+
+        const coreName = pathBasename(projectPath);
+        const hexFilePath = checkFileExistsOrBlank(
+          pathJoin(buildsRoot, projectPath, `${coreName}.hex`),
+        );
+
+        const { projectId, keyboardName } = await readProjectFile(
+          projectFilePath,
+        );
+
+        const presetsFolderPath = pathJoin(projectBaseDir, 'presets');
+
+        const presetNames = await readPresetNames(presetsFolderPath);
+
+        const layoutNames = await readLayoutNames(projectBaseDir);
+
+        return {
+          projectId,
+          keyboardName,
+          projectPath,
+          projectFolderPath: projectBaseDir,
+          layoutNames,
+          presetNames,
+          hexFilePath,
+          origin: 'local' as const,
+        };
+      }),
+    );
+  }
+}
 
 export class ProjectResourceProviderImpl_Local
   implements IProjectResourceProviderImpl {
   private projectInfoSources: IProjectResourceInfoSource[] = [];
 
-  async loadAllProjectResourceInfos(): Promise<IProjectResourceInfo[]> {
-    // const resourceOrigin = appEnv.isDevelopment ? 'local' : 'online';
-    // const resourceOrigin = 'central';
-    this.projectInfoSources = await ProjectResourceInfoSourceLoader.loadProjectResourceInfoSources(
-      'local',
-    );
+  private loadedLocalRepositoryDir: string | undefined;
+
+  clearCache() {
+    this.loadedLocalRepositoryDir = undefined;
+  }
+
+  private getLocalRepositoryDir() {
+    const settings = GlobalSettingsProvider.getGlobalSettings();
+    if (settings.useLocalResouces) {
+      if (appEnv.isDevelopment) {
+        return pathResolve('../');
+      } else {
+        return settings.localProjectRootFolderPath;
+      }
+    }
+    return undefined;
+  }
+
+  async getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]> {
+    const localRepositoryDir = this.getLocalRepositoryDir();
+
+    if (!localRepositoryDir) {
+      return [];
+    }
+    if (localRepositoryDir !== this.loadedLocalRepositoryDir) {
+      this.projectInfoSources = await ProjectResourceInfoSourceLoader.loadLocalResources(
+        localRepositoryDir,
+      );
+      this.loadedLocalRepositoryDir = localRepositoryDir;
+    }
+
     return this.projectInfoSources.map((it) => {
       const {
         projectId,

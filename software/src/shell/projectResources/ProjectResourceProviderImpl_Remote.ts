@@ -76,8 +76,12 @@ export class ProjectResourceProviderImpl_Remote
   implements IProjectResourceProviderImpl {
   private projectInfoSources: IRemoteProjectResourceInfoSource[] = [];
 
-  async loadAllProjectResourceInfos(): Promise<IProjectResourceInfo[]> {
-    this.projectInfoSources = await loadRemoteResourceInfosFromSummaryJson();
+  private loaded = false;
+  async getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]> {
+    if (!this.loaded) {
+      this.projectInfoSources = await loadRemoteResourceInfosFromSummaryJson();
+      this.loaded = true;
+    }
     return this.projectInfoSources.map((it) => ({
       sig: createProjectSig('online', it.projectId),
       projectId: it.projectPath,

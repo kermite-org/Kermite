@@ -12,13 +12,13 @@ import {
 import { ProjectResourceProviderImpl_Local } from './ProjectResourceProviderImpl_Local';
 
 class ProjectResourceProvider implements IProjectResourceProvider {
-  private projectResourceInfos: IProjectResourceInfo[] = [];
-
   localResourceProviderImpl = new ProjectResourceProviderImpl_Local();
   remoteResourceProviderImpl = new ProjectResourceProviderImpl_Remote();
 
-  getAllProjectResourceInfos(): IProjectResourceInfo[] {
-    return this.projectResourceInfos;
+  async getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]> {
+    const locals = await this.localResourceProviderImpl.getAllProjectResourceInfos();
+    const remotes = await this.remoteResourceProviderImpl.getAllProjectResourceInfos();
+    return [...locals, ...remotes];
   }
 
   private getResouceProviderImpl(
@@ -55,16 +55,6 @@ class ProjectResourceProvider implements IProjectResourceProvider {
   ): Promise<string | undefined> {
     const providerImpl = this.getResouceProviderImpl(origin);
     return await providerImpl.loadProjectFirmwareFile(projectId);
-  }
-
-  async reenumerateResourceInfos(): Promise<void> {
-    const locals = await this.localResourceProviderImpl.loadAllProjectResourceInfos();
-    const remotes = await this.remoteResourceProviderImpl.loadAllProjectResourceInfos();
-    this.projectResourceInfos = [...locals, ...remotes];
-  }
-
-  async initializeAsync(): Promise<void> {
-    await this.reenumerateResourceInfos();
   }
 }
 

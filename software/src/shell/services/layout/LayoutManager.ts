@@ -40,7 +40,7 @@ export class LayoutManager implements ILayoutManager {
   private initializeOnFirstConnect = async () => {
     if (!this.initialized) {
       this.setStatus({
-        projectLayoutsInfos: this.getAllProjectLayoutsInfos(),
+        projectLayoutsInfos: await this.getAllProjectLayoutsInfos(),
       });
       const editSource = applicationStorage.getItem('layoutEditSource');
       try {
@@ -162,7 +162,8 @@ export class LayoutManager implements ILayoutManager {
       const design = createFallbackPersistKeyboardDesign();
       await this.saveLayoutToFile(filePath, design);
       // this.addLayoutNameToProjectInfoSourceIfNotExist(projectId, layoutName);
-      await projectResourceProvider.reenumerateResourceInfos();
+      // await projectResourceProvider.reenumerateResourceInfos();
+      projectResourceProvider.localResourceProviderImpl.clearCache();
       this.setStatus({
         editSource: {
           type: 'ProjectLayout',
@@ -170,7 +171,7 @@ export class LayoutManager implements ILayoutManager {
           layoutName,
         },
         loadedDesign: design,
-        projectLayoutsInfos: this.getAllProjectLayoutsInfos(),
+        projectLayoutsInfos: await this.getAllProjectLayoutsInfos(),
       });
     }
   }
@@ -210,14 +211,15 @@ export class LayoutManager implements ILayoutManager {
     if (filePath) {
       await LayoutFileLoader.saveLayoutToFile(filePath, design);
       // this.addLayoutNameToProjectInfoSourceIfNotExist(projectId, layoutName);
-      await projectResourceProvider.reenumerateResourceInfos();
+      // await projectResourceProvider.reenumerateResourceInfos();
+      projectResourceProvider.localResourceProviderImpl.clearCache();
       this.setStatus({
         editSource: {
           type: 'ProjectLayout',
           projectId,
           layoutName,
         },
-        projectLayoutsInfos: this.getAllProjectLayoutsInfos(),
+        projectLayoutsInfos: await this.getAllProjectLayoutsInfos(),
       });
     }
   }
@@ -305,8 +307,8 @@ export class LayoutManager implements ILayoutManager {
     return true;
   }
 
-  private getAllProjectLayoutsInfos(): IProjectLayoutsInfo[] {
-    const resourceInfos = projectResourceProvider.getAllProjectResourceInfos();
+  private async getAllProjectLayoutsInfos(): Promise<IProjectLayoutsInfo[]> {
+    const resourceInfos = await projectResourceProvider.getAllProjectResourceInfos();
     return resourceInfos.map((info) => ({
       projectId: info.projectId,
       projectPath: info.projectPath,

@@ -13,7 +13,6 @@ import { LayoutManager } from '~/shell/services/layout/LayoutManager';
 import { PresetProfileLoader } from '~/shell/services/profile/PresetProfileLoader';
 import { ProfileManager } from '~/shell/services/profile/ProfileManager';
 import { WindowService } from '~/shell/services/window';
-// import { resourceUpdator_syncRemoteResourcesToLocal } from '~/shell/services0/ResourceUpdator';
 
 export class ApplicationRoot {
   private windowService = new WindowService();
@@ -85,7 +84,7 @@ export class ApplicationRoot {
           projectId,
           comPortName,
         ),
-      projects_getAllProjectResourceInfos: async () =>
+      projects_getAllProjectResourceInfos: () =>
         projectResourceProvider.getAllProjectResourceInfos(),
       projects_loadPresetProfile: (
         origin,
@@ -173,8 +172,6 @@ export class ApplicationRoot {
   async initialize() {
     console.log(`initialize services`);
     await applicationStorage.initializeAsync();
-    // await resourceUpdator_syncRemoteResourcesToLocal();
-    await projectResourceProvider.initializeAsync();
     await this.profileManager.initializeAsync();
     this.firmwareUpdationService.initialize();
     this.keyboardLayoutFilesWatcher.initialize();
