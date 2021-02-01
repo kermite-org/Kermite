@@ -1,5 +1,9 @@
 import { IPresetSpec, IProfileManagerStatus } from '~/shared';
 import { appGlobal, applicationStorage } from '~/shell/base';
+import { KeyboardLayoutFilesWatcher } from '~/shell/projects/KeyboardShape/KeyboardLayoutFilesWatcher';
+import { KeyboardShapesProvider } from '~/shell/projects/KeyboardShape/KeyboardShapesProvider';
+import { PresetProfileLoader } from '~/shell/projects/PresetProfileLoader';
+import { ProjectResourceInfoProvider } from '~/shell/projects/ProjectResource/ProjectResourceInfoProvider';
 import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
 import { KeyMappingEmitter } from '~/shell/services/device/KeyMappingEmitter';
 import { KeyboardDeviceService } from '~/shell/services/device/KeyboardDevice';
@@ -8,10 +12,6 @@ import { FirmwareUpdationService } from '~/shell/services/firmwareUpdation';
 import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/InputLogicSimulatorD';
 import { LayoutManager } from '~/shell/services/layout/LayoutManager';
 import { ProfileManager } from '~/shell/services/profile/ProfileManager';
-import { KeyboardLayoutFilesWatcher } from '~/shell/services/projects/KeyboardShape/KeyboardLayoutFilesWatcher';
-import { KeyboardShapesProvider } from '~/shell/services/projects/KeyboardShape/KeyboardShapesProvider';
-import { PresetProfileLoader } from '~/shell/services/projects/PresetProfileLoader';
-import { ProjectResourceInfoProvider } from '~/shell/services/projects/ProjectResource/ProjectResourceInfoProvider';
 import { WindowService } from '~/shell/services/window';
 // import { resourceUpdator_syncRemoteResourcesToLocal } from '~/shell/services0/ResourceUpdator';
 

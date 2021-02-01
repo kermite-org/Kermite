@@ -9,7 +9,7 @@ import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
 import {
   IPresetProfileLoadingFeature,
   IProjectResourceInfoProvider,
-} from '../serviceInterfaces';
+} from '../services/serviceInterfaces';
 
 export class PresetProfileLoader implements IPresetProfileLoadingFeature {
   constructor(

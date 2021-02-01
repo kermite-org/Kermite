@@ -9,7 +9,7 @@ import {
   IPresetSpec,
 } from '~/shared';
 import { EventPort } from '~/shell/funcs';
-import { PresetProfileLoader } from '~/shell/services/projects/PresetProfileLoader';
+import { PresetProfileLoader } from '~/shell/projects/PresetProfileLoader';
 import { IProjectResourceInfoProvider } from '~/shell/services/serviceInterfaces';
 import { ProfileManagerCore } from './ProfileManagerCore';
 import { IProfileManager } from './interfaces';

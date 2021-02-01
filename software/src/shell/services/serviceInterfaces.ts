@@ -4,7 +4,7 @@ import {
   IPersistKeyboardDesign,
   IPresetSpec,
 } from '~/shared';
-import { IProjectResourceInfoSource } from '~/shell/services/projects/ProjectResource/ProjectResourceInfoSourceLoader';
+import { IProjectResourceInfoSource } from '~/shell/projects/ProjectResource/ProjectResourceInfoSourceLoader';
 
 export interface IProjectResourceInfoProvider {
   getAllProjectResourceInfos(): IProjectResourceInfo[];
