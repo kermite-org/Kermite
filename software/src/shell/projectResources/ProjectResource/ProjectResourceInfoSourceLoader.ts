@@ -56,7 +56,7 @@ interface ISummaryJsonData {
   projects: IProjectInfo[];
 }
 
-export namespace ProjectResourceInfoSourceLoader {
+namespace ProjectResourceInfoSourceLoader__DEPRECATED {
   function checkFileExistsOrBlank(filePath: string): string | undefined {
     return (fsExistsSync(filePath) && filePath) || undefined;
   }

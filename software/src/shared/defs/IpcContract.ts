@@ -152,6 +152,11 @@ export interface IProjectLayoutsInfo {
   layoutNames: string[];
 }
 
+export interface IGlobalSettings {
+  useOnlineResources: boolean;
+  useLocalResouces: boolean;
+  localProjectRootFolderPath: string;
+}
 export interface IAppIpcContract {
   sync: {
     dev_getVersionSync(): string;
@@ -189,6 +194,10 @@ export interface IAppIpcContract {
     config_writeKeyboardConfig(config: IKeyboardConfig): Promise<void>;
     config_writeKeyMappingToDevice(): Promise<void>;
 
+    config_getGlobalSettings(): Promise<IGlobalSettings>;
+    config_writeGlobalSettings(settings: IGlobalSettings): Promise<void>;
+    config_getProjectRootDirectoryPath(): Promise<string>;
+
     projects_getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
     projects_loadPresetProfile(
       origin: IResourceOrigin,
@@ -210,6 +219,7 @@ export interface IAppIpcContract {
     file_getSaveJsonFilePathWithDialog(): Promise<string | undefined>;
     file_loadObjectFromJsonWithFileDialog(): Promise<any | undefined>;
     file_saveObjectToJsonWithFileDialog(obj: any): Promise<boolean>;
+    file_getOpenDirectoryWithDialog(): Promise<string | undefined>;
   };
   events: {
     dev_testEvent: { type: string };

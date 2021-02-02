@@ -9,7 +9,7 @@ import {
   IResourceOrigin,
 } from '~/shared';
 import { EventPort } from '~/shell/funcs';
-import { projectResourceProvider } from '~/shell/projects';
+import { projectResourceProvider } from '~/shell/projectResources';
 import { PresetProfileLoader } from '~/shell/services/profile/PresetProfileLoader';
 import { ProfileManagerCore } from './ProfileManagerCore';
 import { IProfileManager } from './interfaces';
@@ -143,7 +143,8 @@ export class ProfileManager implements IProfileManager {
         //   projectId,
         //   (info) => addArrayItemIfNotExist(info.presetNames, presetName),
         // );
-        await projectResourceProvider.reenumerateResourceInfos();
+        // await projectResourceProvider.reenumerateResourceInfos();
+        projectResourceProvider.localResourceProviderImpl.clearCache();
       }
       return true;
     } catch (error) {

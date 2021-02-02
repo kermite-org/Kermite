@@ -22,6 +22,7 @@ const entrySources: NavigationEntrySource[] = [
   { pageSig: 'shapePreview', faIconName: 'fa-file-code' },
   { pageSig: 'heatmap', faIconName: 'fa-chart-bar' },
   { pageSig: 'firmwareUpdation', faIconName: 'fa-microchip' },
+  { pageSig: 'settings', faIconName: 'fa-cog' },
 ];
 
 export interface INavigationViewModel {

@@ -46,6 +46,8 @@ export function ScalerBox(props: IScalerBoxProps) {
     asyncRerender();
   }
 
+  Hook.useEffect(asyncRerender, [contentWidth, contentHeight]);
+
   return (
     <div css={cssBase} ref={ref}>
       <div

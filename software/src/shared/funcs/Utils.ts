@@ -138,6 +138,8 @@ export function clonePlainOldObject(src: any): any {
   }
 }
 
+export const cloneObject = clonePlainOldObject;
+
 export function sortOrderBy<T>(
   proc: (arg: T) => number,
   method: 'asc' | 'dsc' = 'asc',
@@ -204,6 +206,8 @@ export function overwriteObjectProps<T>(dst: T, src: T) {
     }
   }
 }
+
+export const copyObjectProps = overwriteObjectProps;
 
 function deg2(value: number) {
   return `0${value}`.slice(-2);

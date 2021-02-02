@@ -3,6 +3,16 @@ import { appGlobal } from '~/shell/base';
 import { fsxReadJsonFile, fsxWriteJsonFile } from '~/shell/funcs';
 
 export namespace JsonFileServiceStatic {
+  export async function getOpeningDirectoryPathWithDialog() {
+    const result = await dialog.showOpenDialog(appGlobal.mainWindow!, {
+      properties: ['openDirectory'],
+    });
+    if (result.filePaths && result.filePaths.length > 0) {
+      return result.filePaths[0];
+    }
+    return undefined;
+  }
+
   export async function getOpeningJsonFilePathWithDialog() {
     const result = await dialog.showOpenDialog(appGlobal.mainWindow!, {
       properties: ['openFile'],

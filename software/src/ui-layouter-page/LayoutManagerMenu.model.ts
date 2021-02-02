@@ -11,7 +11,9 @@ type ILayoutManagerViewModelCommandFunctionKey =
   | 'overwriteLayout'
   | 'showEditLayoutFileInFiler';
 
-type ILayoutManagerViewModelCommandActiveFlagKey = 'canShowEditLayoutFileInFiler';
+type ILayoutManagerViewModelCommandActiveFlagKey =
+  | 'canShowEditLayoutFileInFiler'
+  | 'canOpenProjectIoModal';
 
 interface IMenuItemSource {
   text: string;
@@ -27,8 +29,16 @@ const menuItemSources: (IMenuItemSource | IMenuItemSeparator)[] = [
   { text: 'load from file', command: 'loadFromFileWithDialog' },
   { text: 'save to file', command: 'saveToFileWithDialog' },
   { separator: true },
-  { text: 'load from project', command: 'openLoadFromProjectModal' },
-  { text: 'save to project', command: 'openSaveToProjectModal' },
+  {
+    text: 'load from project',
+    command: 'openLoadFromProjectModal',
+    commandActiveFlagKey: 'canOpenProjectIoModal',
+  },
+  {
+    text: 'save to project',
+    command: 'openSaveToProjectModal',
+    commandActiveFlagKey: 'canOpenProjectIoModal',
+  },
   { separator: true },
   {
     text: 'show edit file in folder',
