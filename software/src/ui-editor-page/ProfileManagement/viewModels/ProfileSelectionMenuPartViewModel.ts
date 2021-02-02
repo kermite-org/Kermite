@@ -1,4 +1,5 @@
 import { useLocal } from '~/ui-common';
+import { useProjectResourcePresenceChecker } from '~/ui-common/sharedModels/hooks';
 import { IProfileManagementPartViewModel } from './ProfileManagementPartViewModel';
 
 export interface IProfileSelectionMenuPartViewModel {
@@ -24,6 +25,13 @@ const profileMenuCommands: IProfileMenuCommand[] = [
   'renameProfile',
   'copyProfile',
   'deleteProfile',
+];
+
+const profileMenuCommandsWithProjectIO: IProfileMenuCommand[] = [
+  'createProfile',
+  'renameProfile',
+  'copyProfile',
+  'deleteProfile',
   'openExportingPresetSelectionModal',
 ];
 
@@ -39,6 +47,13 @@ export function makeProfileSelectionMenuPartViewModel(
   vm: IProfileManagementPartViewModel,
 ) {
   const state = useLocal({ isOpen: false });
+
+  const isLocalProjectsAvailable = useProjectResourcePresenceChecker('local');
+
+  const sourceMenuCoomands = isLocalProjectsAvailable
+    ? profileMenuCommandsWithProjectIO
+    : profileMenuCommands;
+
   return {
     get isOpen() {
       return state.isOpen;
@@ -50,7 +65,7 @@ export function makeProfileSelectionMenuPartViewModel(
       state.isOpen = false;
     },
     get menuItems() {
-      return profileMenuCommands.map((cmd, index) => ({
+      return sourceMenuCoomands.map((cmd, index) => ({
         key: `cmd${index}`,
         text: profileMenuCommandTexts[cmd],
         handler() {

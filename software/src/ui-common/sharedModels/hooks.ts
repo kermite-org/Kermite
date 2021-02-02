@@ -1,7 +1,7 @@
 import { IResourceOrigin } from '~/shared';
 import { ipcAgent, useFetcher } from '~/ui-common';
 
-export function useProjectResourceOriginsChecker(
+export function useProjectResourcePresenceChecker(
   origin: IResourceOrigin,
 ): boolean {
   const resourceInfos = useFetcher(

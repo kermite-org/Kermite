@@ -1,7 +1,7 @@
 import { Hook } from 'qx';
 import { ILayoutEditSource, IProjectLayoutsInfo } from '~/shared';
 import { useLocal } from '~/ui-common';
-import { useProjectResourceOriginsChecker } from '~/ui-common/sharedModels/hooks';
+import { useProjectResourcePresenceChecker } from '~/ui-common/sharedModels/hooks';
 import { UiLayouterCore } from '~/ui-layouter';
 import { LayoutManagerModel } from '~/ui-layouter-page/LayoutManagerModel';
 import { ISelectOption } from '~/ui-layouter/controls';
@@ -120,7 +120,7 @@ function useLayoutManagerViewModelImpl(
     local.currentProjectId && local.currentLayoutName
   );
 
-  const isLocalProjectsAvailable = useProjectResourceOriginsChecker('local');
+  const isLocalProjectsAvailable = useProjectResourcePresenceChecker('local');
 
   return {
     isEditCurrnetProfileLayoutActive:
