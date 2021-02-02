@@ -1,5 +1,7 @@
 name: Firmware Deployment
 
+#0202a
+
 on:
   push:
     branches: [master, variants]
@@ -33,6 +35,7 @@ jobs:
         with:
           repository: yahiro07/KermiteResourceStore
           path: "./firmware/KRS"
+          token: ${{ secrets.API_TOKEN_GITHUB }}
 
       - name: Check Project IDs
         run: yarn checkProjectIds --abortOnError
@@ -48,7 +51,9 @@ jobs:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
           source-directory: "./firmware/KRS"
-          destination-github-username: "yahiro07"
+          destination-github-username: "github-actions[bot]"
+          destination-repository-username: "yahiro07"
           destination-repository-name: "KermiteResourceStore"
           target-branch: "master"
-          user-email: yahiro07@users.noreply.github.com
+          user-email: 41898282+github-actions[bot]@users.noreply.github.com
+          commit-message: "resources updated in github actions"
