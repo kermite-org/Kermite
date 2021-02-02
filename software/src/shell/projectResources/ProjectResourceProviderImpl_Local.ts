@@ -67,8 +67,9 @@ namespace ProjectResourceInfoSourceLoader {
     );
 
     if (!fsExistsSync(projectsRoot)) {
+      console.log(`firmware projects folder ${projectsRoot} is not exist.`);
       console.log(
-        `firmware projects folder ${localRepositoryRootDir} is not exist.`,
+        `${localRepositoryRootDir} is not a valid Kermite project root folder.`,
       );
       return [];
     }

@@ -196,6 +196,7 @@ export interface IAppIpcContract {
 
     config_getGlobalSettings(): Promise<IGlobalSettings>;
     config_writeGlobalSettings(settings: IGlobalSettings): Promise<void>;
+    config_getProjectRootDirectoryPath(): Promise<string>;
 
     projects_getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
     projects_loadPresetProfile(
@@ -218,6 +219,7 @@ export interface IAppIpcContract {
     file_getSaveJsonFilePathWithDialog(): Promise<string | undefined>;
     file_loadObjectFromJsonWithFileDialog(): Promise<any | undefined>;
     file_saveObjectToJsonWithFileDialog(obj: any): Promise<boolean>;
+    file_getOpenDirectoryWithDialog(): Promise<string | undefined>;
   };
   events: {
     dev_testEvent: { type: string };

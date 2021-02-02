@@ -1,5 +1,6 @@
 import { IPresetSpec, IProfileManagerStatus } from '~/shared';
-import { appGlobal, applicationStorage } from '~/shell/base';
+import { appEnv, appGlobal, applicationStorage } from '~/shell/base';
+import { pathResolve } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
 import { KeyboardLayoutFilesWatcher } from '~/shell/projectResources/KeyboardShape/KeyboardLayoutFilesWatcher';
 import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
@@ -116,6 +117,14 @@ export class ApplicationRoot {
         GlobalSettingsProvider.getGlobalSettings(),
       config_writeGlobalSettings: async (settings) =>
         GlobalSettingsProvider.writeGlobalSettings(settings),
+      config_getProjectRootDirectoryPath: async () => {
+        if (appEnv.isDevelopment) {
+          return pathResolve('..');
+        } else {
+          const settings = GlobalSettingsProvider.getGlobalSettings();
+          return settings.localProjectRootFolderPath;
+        }
+      },
       file_getOpenJsonFilePathWithDialog:
         JsonFileServiceStatic.getOpeningJsonFilePathWithDialog,
       file_getSaveJsonFilePathWithDialog:
@@ -124,6 +133,8 @@ export class ApplicationRoot {
         JsonFileServiceStatic.loadObjectFromJsonWithFileDialog,
       file_saveObjectToJsonWithFileDialog:
         JsonFileServiceStatic.saveObjectToJsonWithFileDialog,
+      file_getOpenDirectoryWithDialog:
+        JsonFileServiceStatic.getOpeningDirectoryPathWithDialog,
     });
 
     appGlobal.icpMainAgent.supplySubscriptionHandlers({
