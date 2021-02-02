@@ -2,18 +2,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { glob } from 'glob';
-import fetch from 'node-fetch';
 import { appEnv } from '~/shell/base';
-
-async function fetchJson(url: string): Promise<any> {
-  const res = await fetch(url);
-  return await res.json();
-}
-
-async function fetchText(url: string): Promise<string> {
-  const res = await fetch(url);
-  return await res.text();
-}
+import { fetchJson, fetchText } from '~/shell/funcs';
 
 async function ensureDirectoryExists(fpath: string) {
   if (!fs.existsSync(fpath)) {

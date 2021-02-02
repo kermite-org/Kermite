@@ -1,4 +1,5 @@
 import { Hook } from 'qx';
+import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { ISelectorSource, useLocal } from '~/ui-common';
 import { IPresetKeyboardViewModel } from '~/ui-common-svg/panels/PresetKeyboardView';
 import { useDeviceStatusModel } from '~/ui-common/sharedModels/DeviceStatusModelHook';
@@ -39,11 +40,11 @@ export function makePresetBrowserViewModel(): IPresetBrowserViewModel {
     },
     projectSelectorSource: {
       options: presetBrowserModel.optionProjectInfos.map((it) => ({
-        id: it.projectId,
-        text: it.keyboardName,
+        id: it.sig,
+        text: (it.origin === 'local' ? '[L]' : '[R]') + it.keyboardName,
       })),
-      choiceId: presetBrowserModel.currentProjectId || '',
-      setChoiceId: presetBrowserModel.setCurrentProjectId,
+      choiceId: presetBrowserModel.currentProjectSig || '',
+      setChoiceId: presetBrowserModel.setCurrentProjectSig,
     },
     presetSelectorSource: {
       options: presetBrowserModel.optionPresetSpecs.map((it) => ({
@@ -59,10 +60,11 @@ export function makePresetBrowserViewModel(): IPresetBrowserViewModel {
     isLinkButtonActive:
       deviceStatusModel.isConnected &&
       deviceStatusModel.deviceAttrs?.projectId !==
-        presetBrowserModel.currentProjectId,
+        getProjectOriginAndIdFromSig(presetBrowserModel.currentProjectSig || '')
+          .projectId,
     linkButtonHandler() {
       const deviceProjectId = deviceStatusModel.deviceAttrs?.projectId || '';
-      presetBrowserModel.setCurrentProjectId(deviceProjectId);
+      presetBrowserModel.setCurrentProjectByProjectId(deviceProjectId);
     },
     editPresetButtonHandler() {
       presetBrowserModel.editSelectedProjectPreset();

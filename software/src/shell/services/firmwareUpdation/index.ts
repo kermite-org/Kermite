@@ -1,4 +1,5 @@
-import { IProjectResourceInfoProvider } from '../serviceInterfaces';
+import { IResourceOrigin } from '~/shared';
+import { projectResourceProvider } from '~/shell/projects';
 import { ComPortsMonitor } from './ComPortsMonitor';
 import { FlashCommander } from './FlashCommander';
 
@@ -7,17 +8,15 @@ import { FlashCommander } from './FlashCommander';
 export class FirmwareUpdationService {
   private comPortsMonitor = new ComPortsMonitor();
 
-  constructor(
-    private projectResourceInfoProvider: IProjectResourceInfoProvider,
-  ) {}
-
   readonly comPortPlugEvents = this.comPortsMonitor.comPortPlugEvents;
 
   async writeFirmware(
+    origin: IResourceOrigin,
     projectId: string,
     comPortName: string,
   ): Promise<'ok' | string> {
-    const hexFilePath = this.projectResourceInfoProvider.getHexFilePath(
+    const hexFilePath = await projectResourceProvider.loadProjectFirmwareFile(
+      origin,
       projectId,
     );
 

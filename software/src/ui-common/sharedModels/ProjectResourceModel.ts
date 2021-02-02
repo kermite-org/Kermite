@@ -5,17 +5,17 @@ export class ProjectResourceModel {
   projectResourceInfos: IProjectResourceInfo[] = [];
 
   getProjectsWithLayout() {
-    return this.projectResourceInfos.filter((info) => info.hasLayout);
+    return this.projectResourceInfos.filter(
+      (info) => info.layoutNames.length > 0,
+    );
   }
 
   getProjectsWithFirmware() {
     return this.projectResourceInfos.filter((info) => info.hasFirmwareBinary);
   }
 
-  getProjectResourceInfo(projectId: string) {
-    return this.projectResourceInfos.find(
-      (info) => info.projectId === projectId,
-    );
+  getProjectResourceInfo(projectSig: string) {
+    return this.projectResourceInfos.find((info) => info.sig === projectSig);
   }
 
   async initializeAsync() {

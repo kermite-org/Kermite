@@ -1,4 +1,5 @@
 import { Hook } from 'qx';
+import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import {
   ISelectorSource,
   makePlainSelectorOption,
@@ -79,11 +80,14 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
   const createProfile = async () => {
     const res = await callProfileSetupModal(undefined);
     // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-    if (res && res.profileName && res.targetProjectId && res.layoutName) {
-      const { profileName, targetProjectId, layoutName } = res;
+    if (res && res.profileName && res.targetProjectSig && res.layoutName) {
+      const { profileName, targetProjectSig, layoutName } = res;
       const nameValid = await checkValidNewProfileName(profileName);
       if (nameValid) {
-        profilesModel.createProfile(profileName, targetProjectId, {
+        const { origin, projectId } = getProjectOriginAndIdFromSig(
+          targetProjectSig,
+        );
+        profilesModel.createProfile(profileName, origin, projectId, {
           type: 'blank',
           layoutName,
         });

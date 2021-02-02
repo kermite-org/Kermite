@@ -1,4 +1,5 @@
 import { IDisplayKeyboardDesign } from '~/shared';
+import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { ipcAgent } from '~/ui-common';
 import { DisplayKeyboardDesignLoader } from '~/ui-common/modules/DisplayKeyboardDesignLoader';
 import { projectResourceModel } from '~/ui-common/sharedModels/ProjectResourceModel';
@@ -10,12 +11,12 @@ import {
 export class KeyboardShapesModel {
   constructor(private uiStatusModel: UiStatusModel) {}
 
-  private _currentProjectId: string | undefined;
+  private _currentProjectSig: string | undefined;
   private _loadedDesign: IDisplayKeyboardDesign | undefined;
   private _currentLayoutName: string | undefined;
 
-  get currentProjectId() {
-    return this._currentProjectId || '';
+  get currentProjectSig() {
+    return this._currentProjectSig || '';
   }
 
   get currentLayoutName() {
@@ -32,17 +33,21 @@ export class KeyboardShapesModel {
 
   get optionLayoutNames() {
     const info = this.optionProjectInfos.find(
-      (info) => info.projectId === this._currentProjectId,
+      (info) => info.sig === this._currentProjectSig,
     );
     return info?.layoutNames || [];
   }
 
   private async loadCurrentProjectLayout() {
-    if (!(this._currentProjectId && this._currentLayoutName)) {
+    if (!(this._currentProjectSig && this._currentLayoutName)) {
       return;
     }
+    const { origin, projectId } = getProjectOriginAndIdFromSig(
+      this._currentProjectSig,
+    );
     const design = await ipcAgent.async.projects_loadKeyboardShape(
-      this._currentProjectId,
+      origin,
+      projectId,
       this._currentLayoutName,
     );
     if (design) {
@@ -54,10 +59,10 @@ export class KeyboardShapesModel {
     }
   }
 
-  setCurrentProjectId = (projectId: string) => {
-    if (projectId !== this._currentProjectId) {
-      this._currentProjectId = projectId;
-      this.uiStatusModel.settings.shapeViewProjectId = projectId;
+  setCurrentProjectSig = (sig: string) => {
+    if (sig !== this._currentProjectSig) {
+      this._currentProjectSig = sig;
+      this.uiStatusModel.settings.shapeViewProjectSig = sig;
       this._currentLayoutName = this.optionLayoutNames[0];
       this.loadCurrentProjectLayout();
     }
@@ -72,8 +77,13 @@ export class KeyboardShapesModel {
   };
 
   private onLayoutFileUpdated = (args: { projectId: string }) => {
-    if (args.projectId === this._currentProjectId) {
-      this.loadCurrentProjectLayout();
+    if (this._currentProjectSig) {
+      if (
+        args.projectId ===
+        getProjectOriginAndIdFromSig(this._currentProjectSig).projectId
+      ) {
+        this.loadCurrentProjectLayout();
+      }
     }
   };
 
@@ -87,9 +97,9 @@ export class KeyboardShapesModel {
       return;
     }
 
-    this._currentProjectId =
-      this.uiStatusModel.settings.shapeViewProjectId ||
-      this.optionProjectInfos[0].projectId;
+    this._currentProjectSig =
+      this.uiStatusModel.settings.shapeViewProjectSig ||
+      this.optionProjectInfos[0].sig;
 
     this._currentLayoutName =
       this.uiStatusModel.settings.shapeViewLayoutName ||

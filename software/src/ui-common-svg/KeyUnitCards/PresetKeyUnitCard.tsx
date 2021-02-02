@@ -1,7 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { uiTheme } from '~/ui-common';
-import { mvvmView } from '~/ui-common/helpers';
+import { uiTheme, mvvmView } from '~/ui-common';
 
 export interface IPresetKeyUnitViewModel {
   keyUnitId: string;
