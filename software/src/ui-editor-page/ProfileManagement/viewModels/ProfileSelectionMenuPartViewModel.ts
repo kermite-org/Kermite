@@ -1,5 +1,6 @@
 import { useLocal } from '~/ui-common';
 import { useProjectResourcePresenceChecker } from '~/ui-common/sharedModels/hooks';
+import { editorModel } from '~/ui-editor-page/EditorMainPart/models/EditorModel';
 import { IProfileManagementPartViewModel } from './ProfileManagementPartViewModel';
 
 export interface IProfileSelectionMenuPartViewModel {
@@ -50,9 +51,12 @@ export function makeProfileSelectionMenuPartViewModel(
 
   const isLocalProjectsAvailable = useProjectResourcePresenceChecker('local');
 
-  const sourceMenuCoomands = isLocalProjectsAvailable
-    ? profileMenuCommandsWithProjectIO
-    : profileMenuCommands;
+  const { projectId } = editorModel.profileData;
+
+  const sourceMenuCoomands =
+    isLocalProjectsAvailable && projectId
+      ? profileMenuCommandsWithProjectIO
+      : profileMenuCommands;
 
   return {
     get isOpen() {
