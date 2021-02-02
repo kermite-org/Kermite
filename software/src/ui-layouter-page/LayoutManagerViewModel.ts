@@ -1,6 +1,7 @@
 import { Hook } from 'qx';
 import { ILayoutEditSource, IProjectLayoutsInfo } from '~/shared';
-import { ipcAgent, useFetcher, useLocal } from '~/ui-common';
+import { useLocal } from '~/ui-common';
+import { useProjectResourceOriginsChecker } from '~/ui-common/sharedModels/hooks';
 import { UiLayouterCore } from '~/ui-layouter';
 import { LayoutManagerModel } from '~/ui-layouter-page/LayoutManagerModel';
 import { ISelectOption } from '~/ui-layouter/controls';
@@ -119,13 +120,7 @@ function useLayoutManagerViewModelImpl(
     local.currentProjectId && local.currentLayoutName
   );
 
-  const resourceInfos = useFetcher(
-    ipcAgent.async.projects_getAllProjectResourceInfos,
-    [],
-  );
-  const isLocalResourceEnabled = resourceInfos.some(
-    (info) => info.origin === 'local',
-  );
+  const isLocalProjectsAvailable = useProjectResourceOriginsChecker('local');
 
   return {
     isEditCurrnetProfileLayoutActive:
@@ -185,7 +180,7 @@ function useLayoutManagerViewModelImpl(
       model.editSource.type === 'File' ||
       model.editSource.type === 'ProjectLayout',
     showEditLayoutFileInFiler: () => model.showEditLayoutFileInFiler(),
-    canOpenProjectIoModal: isLocalResourceEnabled,
+    canOpenProjectIoModal: isLocalProjectsAvailable,
   };
 }
 
