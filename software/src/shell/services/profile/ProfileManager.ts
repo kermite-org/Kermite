@@ -143,7 +143,8 @@ export class ProfileManager implements IProfileManager {
         //   projectId,
         //   (info) => addArrayItemIfNotExist(info.presetNames, presetName),
         // );
-        await projectResourceProvider.reenumerateResourceInfos();
+        // await projectResourceProvider.reenumerateResourceInfos();
+        projectResourceProvider.localResourceProviderImpl.clearCache();
       }
       return true;
     } catch (error) {
