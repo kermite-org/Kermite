@@ -11,6 +11,17 @@ on:
       - "firmware/Makefile"
       - "firmware/src/**"
 
+  #---DEBUG_CI
+  pull_request:
+    branches: [variants]
+    types: [opened, synchronize]
+    paths:
+      - ".github/workflows/firmware_deployment.yml"
+      - "firmware/scripts2/**/*.ts"
+      - "firmware/Makefile"
+      - "firmware/src/**"
+  #---DEBUG_CI
+
 jobs:
   build:
     runs-on: ubuntu-latest
