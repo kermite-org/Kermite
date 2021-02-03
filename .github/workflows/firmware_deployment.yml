@@ -11,14 +11,6 @@ on:
       - "firmware/Makefile"
       - "firmware/src/**"
 
-  pull_request_target:
-    branches: [master, variants]
-    types: [opened, synchronize]
-    paths:
-      - ".github/workflows/firmware_deployment.yml"
-      - "firmware/scripts2/**/*.ts"
-      - "firmware/Makefile"
-      - "firmware/src/**"
 jobs:
   build:
     runs-on: ubuntu-latest
