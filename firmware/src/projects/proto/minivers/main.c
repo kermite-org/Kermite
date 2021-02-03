@@ -32,7 +32,7 @@ static const int8_t keyIndexTable[NumKeySlots] PROGMEM = {
 int main() {
   splitKeyboard_useOnboardLeds();
   splitKeyboard_useDebugUART(38400);
-  printf("test0203\n");
+  printf("test0203\n"); xxxx
   splitKeyboard_setup(rowPins, columnPins, keyIndexTable);
   splitKeyboard_start();
   return 0;
