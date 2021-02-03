@@ -1,7 +1,5 @@
 name: Firmware Deployment
 
-#0202a
-
 on:
   push:
     branches: [master, variants]
