@@ -1,0 +1,7 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".."
+  },
+  "include": ["./**/*", "../qx/**/*", "../shared/**/*", "../ui-common/**/*"]
+}

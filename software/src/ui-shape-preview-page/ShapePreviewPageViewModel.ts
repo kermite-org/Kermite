@@ -36,10 +36,7 @@ function useHoldKeyIndices() {
 export function makeShapePreviewPageViewModel(): IShapePreviewPageViewModel {
   const shapesModel = keyboardShapesModel;
 
-  Hook.useEffect(() => {
-    shapesModel.initialize();
-    return () => shapesModel.finalize();
-  }, []);
+  Hook.useEffect(shapesModel.startPageSession, []);
 
   const holdKeyIndices = useHoldKeyIndices();
 
@@ -48,9 +45,9 @@ export function makeShapePreviewPageViewModel(): IShapePreviewPageViewModel {
     loadedDesign: shapesModel.loadedDesign,
     holdKeyIndices: holdKeyIndices,
     projectSelectorSource: {
-      options: shapesModel.optionProjectInfos.map((info) => ({
+      options: shapesModel.projectInfos.map((info) => ({
         id: info.sig,
-        text: info.projectPath,
+        text: (info.origin === 'local' ? '[L]' : '[R]') + info.projectPath,
       })),
       choiceId: shapesModel.currentProjectSig,
       setChoiceId: shapesModel.setCurrentProjectSig,

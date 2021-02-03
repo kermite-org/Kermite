@@ -24,7 +24,7 @@ export class FirmwareUpdationModel {
     const blankOption = { id: '', text: 'select firmware' };
     const projectOptions = this.projectInfosWithFirmware.map((info) => ({
       id: info.sig,
-      text: info.projectPath,
+      text: (info.origin === 'local' ? '[L]' : '[R]') + info.projectPath,
     }));
     return [blankOption, ...projectOptions];
   }

@@ -29,19 +29,19 @@ function makeProfileSetupModalViewModel() {
       text: info.projectPath,
     }));
 
-  const defaultProjectSig = projectOptions[0].id || '';
+  const defaultProjectSig = projectOptions[0]?.id || '';
 
   function getLayoutNameOptions(projectSig: string) {
     const info = projectResourceModel
       .getProjectsWithLayout()
       .find((info) => info.sig === projectSig);
-    return info!.layoutNames.map((it) => ({ id: it, text: it }));
+    return info?.layoutNames.map((it) => ({ id: it, text: it })) || [];
   }
 
   const editValues: ICreateProfileDialogEditValues = {
     profileName: '',
     targetProjectSig: defaultProjectSig,
-    layoutName: getLayoutNameOptions(defaultProjectSig)[0].id,
+    layoutName: getLayoutNameOptions(defaultProjectSig)[0]?.id,
   };
 
   return {
@@ -53,7 +53,7 @@ function makeProfileSetupModalViewModel() {
     sync() {
       const options = getLayoutNameOptions(editValues.targetProjectSig);
       if (!options.find((opt) => opt.id === editValues.layoutName)) {
-        editValues.layoutName = options[0].id;
+        editValues.layoutName = options[0]?.id;
       }
     },
   };

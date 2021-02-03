@@ -1,7 +1,9 @@
 import { IPresetSpec, IProfileManagerStatus } from '~/shared';
-import { appGlobal, applicationStorage } from '~/shell/base';
-import { projectResourceProvider } from '~/shell/projects';
-import { KeyboardLayoutFilesWatcher } from '~/shell/projects/KeyboardShape/KeyboardLayoutFilesWatcher';
+import { appEnv, appGlobal, applicationStorage } from '~/shell/base';
+import { pathResolve } from '~/shell/funcs';
+import { projectResourceProvider } from '~/shell/projectResources';
+import { KeyboardLayoutFilesWatcher } from '~/shell/projectResources/KeyboardShape/KeyboardLayoutFilesWatcher';
+import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
 import { KeyMappingEmitter } from '~/shell/services/device/KeyMappingEmitter';
 import { KeyboardDeviceService } from '~/shell/services/device/KeyboardDevice';
@@ -12,7 +14,6 @@ import { LayoutManager } from '~/shell/services/layout/LayoutManager';
 import { PresetProfileLoader } from '~/shell/services/profile/PresetProfileLoader';
 import { ProfileManager } from '~/shell/services/profile/ProfileManager';
 import { WindowService } from '~/shell/services/window';
-// import { resourceUpdator_syncRemoteResourcesToLocal } from '~/shell/services0/ResourceUpdator';
 
 export class ApplicationRoot {
   private windowService = new WindowService();
@@ -84,7 +85,7 @@ export class ApplicationRoot {
           projectId,
           comPortName,
         ),
-      projects_getAllProjectResourceInfos: async () =>
+      projects_getAllProjectResourceInfos: () =>
         projectResourceProvider.getAllProjectResourceInfos(),
       projects_loadPresetProfile: (
         origin,
@@ -112,6 +113,18 @@ export class ApplicationRoot {
           );
         }
       },
+      config_getGlobalSettings: async () =>
+        GlobalSettingsProvider.getGlobalSettings(),
+      config_writeGlobalSettings: async (settings) =>
+        GlobalSettingsProvider.writeGlobalSettings(settings),
+      config_getProjectRootDirectoryPath: async () => {
+        if (appEnv.isDevelopment) {
+          return pathResolve('..');
+        } else {
+          const settings = GlobalSettingsProvider.getGlobalSettings();
+          return settings.localProjectRootFolderPath;
+        }
+      },
       file_getOpenJsonFilePathWithDialog:
         JsonFileServiceStatic.getOpeningJsonFilePathWithDialog,
       file_getSaveJsonFilePathWithDialog:
@@ -120,6 +133,8 @@ export class ApplicationRoot {
         JsonFileServiceStatic.loadObjectFromJsonWithFileDialog,
       file_saveObjectToJsonWithFileDialog:
         JsonFileServiceStatic.saveObjectToJsonWithFileDialog,
+      file_getOpenDirectoryWithDialog:
+        JsonFileServiceStatic.getOpeningDirectoryPathWithDialog,
     });
 
     appGlobal.icpMainAgent.supplySubscriptionHandlers({
@@ -168,8 +183,6 @@ export class ApplicationRoot {
   async initialize() {
     console.log(`initialize services`);
     await applicationStorage.initializeAsync();
-    // await resourceUpdator_syncRemoteResourcesToLocal();
-    await projectResourceProvider.initializeAsync();
     await this.profileManager.initializeAsync();
     this.firmwareUpdationService.initialize();
     this.keyboardLayoutFilesWatcher.initialize();

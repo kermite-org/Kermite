@@ -14,7 +14,8 @@ import {
 } from '~/shell/funcs';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
-import { IProjectResourceProviderImpl } from '~/shell/projects';
+import { IProjectResourceProviderImpl } from '~/shell/projectResources';
+import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 
 const remoteBaseUri =
   'https://raw.githubusercontent.com/yahiro07/KermiteResourceStore/master/resources';
@@ -76,8 +77,16 @@ export class ProjectResourceProviderImpl_Remote
   implements IProjectResourceProviderImpl {
   private projectInfoSources: IRemoteProjectResourceInfoSource[] = [];
 
-  async loadAllProjectResourceInfos(): Promise<IProjectResourceInfo[]> {
-    this.projectInfoSources = await loadRemoteResourceInfosFromSummaryJson();
+  private loaded = false;
+  async getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]> {
+    const globalSetttings = GlobalSettingsProvider.getGlobalSettings();
+    if (!globalSetttings.useOnlineResources) {
+      return [];
+    }
+    if (!this.loaded) {
+      this.projectInfoSources = await loadRemoteResourceInfosFromSummaryJson();
+      this.loaded = true;
+    }
     return this.projectInfoSources.map((it) => ({
       sig: createProjectSig('online', it.projectId),
       projectId: it.projectPath,
@@ -102,7 +111,7 @@ export class ProjectResourceProviderImpl_Remote
   ): Promise<IProfileData | undefined> {
     const info = this.getProjectInfoSourceById(projectId);
     if (info) {
-      const relPath = `variants/${info.projectPath}/profiles/${presetName}.json`;
+      const relPath = `variants/${info.projectPath}/presets/${presetName}.json`;
       const uri = `${remoteBaseUri}/${relPath}`;
       return await ProfileFileLoader.loadProfileFromUri(uri);
     }

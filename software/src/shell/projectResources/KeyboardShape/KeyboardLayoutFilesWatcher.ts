@@ -8,7 +8,7 @@ import {
   fsExistsSync,
   fsxWatchFilesChange,
 } from '~/shell/funcs';
-import { projectResourceProvider } from '~/shell/projects';
+import { projectResourceProvider } from '~/shell/projectResources';
 
 type IFileUpdationEvent = { projectId: string };
 
@@ -19,8 +19,8 @@ export class KeyboardLayoutFilesWatcher {
 
   readonly fileUpdationEventPort = new EventPort<IFileUpdationEvent>();
 
-  private getProjectIdFromFilePath(projectPath: string) {
-    const infos = projectResourceProvider.getAllProjectResourceInfos();
+  private async getProjectIdFromFilePath(projectPath: string) {
+    const infos = await projectResourceProvider.getAllProjectResourceInfos();
     const info = infos.find((info) => info.projectPath === projectPath);
     return info?.projectId;
   }
@@ -28,7 +28,7 @@ export class KeyboardLayoutFilesWatcher {
   private onFileUpdated = async (filePath: string) => {
     if (filePath.endsWith('/layout.json')) {
       const projectPath = pathRelative(this.baseDir, pathDirname(filePath));
-      const projectId = this.getProjectIdFromFilePath(projectPath);
+      const projectId = await this.getProjectIdFromFilePath(projectPath);
       if (projectId) {
         this.fileUpdationEventPort.emit({ projectId });
       }

@@ -42,6 +42,10 @@ function useProjectAttachmentFileSelectorViewModel(
   // 編集しているプロファイルのプロジェクトを規定で選び、変更させない
   const currentProjectId = baseVm.currentProfileProjectId;
 
+  const includedInResources = local.resourceInfos.find(
+    (info) => info.origin === 'local' && info.projectId === currentProjectId,
+  );
+
   const currentProject = local.resourceInfos.find(
     (info) => info.projectId === currentProjectId,
   );
@@ -70,7 +74,11 @@ function useProjectAttachmentFileSelectorViewModel(
       local.currentPresetName,
     ),
     buttonText: 'Save',
-    buttonActive: !!(currentProjectId && local.currentPresetName),
+    buttonActive: !!(
+      currentProjectId &&
+      local.currentPresetName &&
+      includedInResources
+    ),
     buttonHandler: () => {
       baseVm.saveProfileAsPreset(currentProjectId, local.currentPresetName);
       baseVm.closeExportingPresetSelectionModal();
