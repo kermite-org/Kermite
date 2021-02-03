@@ -12,8 +12,7 @@ export function getDisplayKeyboardDesignSingleCached(
   if (design !== state.source) {
     state.source = design;
     state.dest = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(design);
-    console.log(`display keyboard design created`);
-    // console.log({ source: state.source, dest: state.dest });
+    // console.log(`display keyboard design created`);
   }
   return state.dest;
 }

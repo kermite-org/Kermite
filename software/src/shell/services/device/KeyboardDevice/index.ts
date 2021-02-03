@@ -5,7 +5,7 @@ import {
   RawHidMessageProtocolRevision,
 } from '~/shared';
 import { EventPort } from '~/shell/funcs';
-import { ProjectResourceInfoProvider } from '~/shell/services/projects/ProjectResource/ProjectResourceInfoProvider';
+import { projectResourceProvider } from '~/shell/projectResources';
 import { DeviceWrapper } from './DeviceWrapper';
 
 function bytesToString(bytes: number[]) {
@@ -30,11 +30,7 @@ export class KeyboardDeviceService {
     this.statusEventPort.emit(newStatus);
   }
 
-  constructor(
-    private projectResourceInfoProvider: ProjectResourceInfoProvider,
-  ) {}
-
-  private decodeReceivedBytes(buf: Uint8Array) {
+  private async decodeReceivedBytes(buf: Uint8Array) {
     if (buf[0] === 0xf0 && buf[1] === 0x11) {
       const firmwareReleaseBuildRevision = (buf[2] << 8) | buf[3];
       const firmwareConfigStorageRevision = buf[4];
@@ -61,9 +57,8 @@ export class KeyboardDeviceService {
         );
       }
 
-      const info = this.projectResourceInfoProvider.internal_getProjectInfoSourceById(
-        projectId,
-      );
+      const resourceInfos = await projectResourceProvider.getAllProjectResourceInfos();
+      const info = resourceInfos.find((info) => info.projectId === projectId);
       if (info) {
         this.setStatus({
           isConnected: true,

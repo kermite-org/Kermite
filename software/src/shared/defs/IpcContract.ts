@@ -13,16 +13,17 @@ export type IPresetSpec =
       presetName: string;
     };
 
-export type IProjectResourceOrigin = 'central' | 'local';
+export type IResourceOrigin = 'local' | 'online';
 
 export interface IProjectResourceInfo {
+  sig: string; // ${origin}#${projectId}
   projectId: string;
   keyboardName: string;
   projectPath: string;
   presetNames: string[];
   layoutNames: string[];
-  hasLayout: boolean;
   hasFirmwareBinary: boolean;
+  origin: IResourceOrigin;
 }
 
 export interface IProfileManagerStatus {
@@ -65,6 +66,7 @@ export type IAppWindowEvent = {
 export interface IProfileManagerCommand {
   creatProfile?: {
     name: string;
+    targetProjectOrigin: IResourceOrigin;
     targetProjectId: string;
     presetSpec: IPresetSpec;
   };
@@ -150,6 +152,11 @@ export interface IProjectLayoutsInfo {
   layoutNames: string[];
 }
 
+export interface IGlobalSettings {
+  useOnlineResources: boolean;
+  useLocalResouces: boolean;
+  localProjectRootFolderPath: string;
+}
 export interface IAppIpcContract {
   sync: {
     dev_getVersionSync(): string;
@@ -187,17 +194,23 @@ export interface IAppIpcContract {
     config_writeKeyboardConfig(config: IKeyboardConfig): Promise<void>;
     config_writeKeyMappingToDevice(): Promise<void>;
 
+    config_getGlobalSettings(): Promise<IGlobalSettings>;
+    config_writeGlobalSettings(settings: IGlobalSettings): Promise<void>;
+    config_getProjectRootDirectoryPath(): Promise<string>;
+
     projects_getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
     projects_loadPresetProfile(
+      origin: IResourceOrigin,
       projectId: string,
       presetSpec: IPresetSpec,
     ): Promise<IProfileData | undefined>;
     projects_loadKeyboardShape(
+      origin: IResourceOrigin,
       projectId: string,
       layoutName: string,
     ): Promise<IPersistKeyboardDesign | undefined>;
-
     firmup_uploadFirmware(
+      origin: IResourceOrigin,
       projectId: string,
       comPortName: string,
     ): Promise<string>;
@@ -206,6 +219,7 @@ export interface IAppIpcContract {
     file_getSaveJsonFilePathWithDialog(): Promise<string | undefined>;
     file_loadObjectFromJsonWithFileDialog(): Promise<any | undefined>;
     file_saveObjectToJsonWithFileDialog(obj: any): Promise<boolean>;
+    file_getOpenDirectoryWithDialog(): Promise<string | undefined>;
   };
   events: {
     dev_testEvent: { type: string };

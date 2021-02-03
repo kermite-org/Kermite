@@ -13,7 +13,7 @@ import {
 export const persistEditKeyboardDesignSchemaChecker = vObject({
   formatRevision: vString(),
   setup: vObject({
-    placementUnit: vStringMatchesTo([/^mm$/, /^KP \d+( \d+)?$/]),
+    placementUnit: vStringMatchesTo([/^mm$/, /^KP [\d.]+( [\d.]+)?$/]),
     placementAnchor: vValueOneOf(['center', 'topLeft']),
     keySizeUnit: vValueOneOf(['mm', 'KP']),
     keyIdMode: vValueOneOf(['auto', 'manual']),
@@ -36,8 +36,11 @@ export const persistEditKeyboardDesignSchemaChecker = vObject({
         x: vNumber(),
         y: vNumber(),
         angle: vNumber().optional,
-        shape: vStringMatchesTo([/^std \d+( \d+)?$/, /^circle$/, /^isoEnter$/])
-          .optional,
+        shape: vStringMatchesTo([
+          /^std [\d.]+( [\d.]+)?$/,
+          /^ext circle$/,
+          /^ext isoEnter$/,
+        ]).optional,
         keyIndex: vNaturalInteger().optional,
         groupIndex: vNaturalInteger().optional,
       }),

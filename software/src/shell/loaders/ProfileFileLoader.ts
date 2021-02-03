@@ -1,17 +1,20 @@
 import { AppError, IPersistProfileData, IProfileData } from '~/shared';
-import { fsxReadJsonFile, fsxWriteJsonFile } from '~/shell/funcs';
+import {
+  cacheRemoteResouce,
+  fetchJson,
+  fsxReadJsonFile,
+  fsxWriteJsonFile,
+} from '~/shell/funcs';
 import { ProfileDataConverter } from '~/shell/loaders/ProfileDataConverter';
 import { ProfileDataMigrator } from '~/shell/loaders/ProfileDataMigrator';
 import { checkProfileDataObjectSchema } from '~/shell/loaders/ProfileDataSchemaChecker';
 
 export namespace ProfileFileLoader {
-  export async function loadProfileFromFile(
+  function convertProfileDataFromPersistProfileData(
+    sourceProfileData: IPersistProfileData,
     filePath: string,
-  ): Promise<IProfileData> {
-    const _profileData = (await fsxReadJsonFile(
-      filePath,
-    )) as IPersistProfileData;
-    const profileData = ProfileDataMigrator.fixProfileData(_profileData);
+  ): IProfileData {
+    const profileData = ProfileDataMigrator.fixProfileData(sourceProfileData);
 
     const schemaError = checkProfileDataObjectSchema(profileData);
     if (schemaError) {
@@ -26,6 +29,23 @@ export namespace ProfileFileLoader {
       });
     }
     return ProfileDataConverter.convertProfileDataFromPersist(profileData);
+  }
+
+  export async function loadProfileFromFile(
+    filePath: string,
+  ): Promise<IProfileData> {
+    const _profileData = (await fsxReadJsonFile(
+      filePath,
+    )) as IPersistProfileData;
+    return convertProfileDataFromPersistProfileData(_profileData, filePath);
+  }
+
+  export async function loadProfileFromUri(uri: string): Promise<IProfileData> {
+    const _profileData = (await cacheRemoteResouce(
+      fetchJson,
+      uri,
+    )) as IPersistProfileData;
+    return convertProfileDataFromPersistProfileData(_profileData, uri);
   }
 
   export async function saveProfileToFile(

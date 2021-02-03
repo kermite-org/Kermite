@@ -32,6 +32,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
       initialPageWidth,
       initialPageHeight,
     } = params;
+
     const options: Electron.BrowserWindowConstructorOptions = {
       width: initialPageWidth,
       height: initialPageHeight,
@@ -44,6 +45,12 @@ export class AppWindowWrapper implements IAppWindowWrapper {
         preload: preloadFilePath,
       },
     };
+
+    if (!appConfig.isDevelopment) {
+      options.frame = false;
+      options.transparent = true;
+    }
+
     const win = new BrowserWindow(options);
     this.mainWindow = win;
     setupWebContentSourceChecker(win.webContents, publicRootPath);

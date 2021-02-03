@@ -5,12 +5,12 @@ import {
   fallbackProfileData,
   clampValue,
   IProfileManagerCommand,
-  addArrayItemIfNotExist,
   IPresetSpec,
+  IResourceOrigin,
 } from '~/shared';
 import { EventPort } from '~/shell/funcs';
-import { PresetProfileLoader } from '~/shell/services/projects/PresetProfileLoader';
-import { IProjectResourceInfoProvider } from '~/shell/services/serviceInterfaces';
+import { projectResourceProvider } from '~/shell/projectResources';
+import { PresetProfileLoader } from '~/shell/services/profile/PresetProfileLoader';
 import { ProfileManagerCore } from './ProfileManagerCore';
 import { IProfileManager } from './interfaces';
 
@@ -29,10 +29,7 @@ export class ProfileManager implements IProfileManager {
 
   private core: ProfileManagerCore;
 
-  constructor(
-    private resourceInfoProvider: IProjectResourceInfoProvider,
-    private presetProfileLoader: PresetProfileLoader,
-  ) {
+  constructor(private presetProfileLoader: PresetProfileLoader) {
     this.core = new ProfileManagerCore();
   }
 
@@ -136,15 +133,18 @@ export class ProfileManager implements IProfileManager {
     profileData: IProfileData,
   ): Promise<boolean> {
     try {
-      const filePath = this.resourceInfoProvider.getPresetProfileFilePath(
+      const filePath = projectResourceProvider.localResourceProviderImpl.getLocalPresetProfileFilePath(
         projectId,
         presetName,
       );
       if (filePath) {
         await this.core.saveProfileAsPreset(filePath, profileData);
-        this.resourceInfoProvider.patchProjectInfoSource(projectId, (info) =>
-          addArrayItemIfNotExist(info.presetNames, presetName),
-        );
+        // projectResourceProvider.localResourceProviderImpl.patchLocalProjectInfoSource(
+        //   projectId,
+        //   (info) => addArrayItemIfNotExist(info.presetNames, presetName),
+        // );
+        // await projectResourceProvider.reenumerateResourceInfos();
+        projectResourceProvider.localResourceProviderImpl.clearCache();
       }
       return true;
     } catch (error) {
@@ -173,11 +173,13 @@ export class ProfileManager implements IProfileManager {
   }
 
   private async createProfileImpl(
+    origin: IResourceOrigin,
     profName: string,
     projectId: string,
     presetSpec: IPresetSpec,
   ): Promise<IProfileData> {
     const profile = await this.presetProfileLoader.loadPresetProfileData(
+      origin,
       projectId,
       presetSpec,
     );
@@ -190,6 +192,7 @@ export class ProfileManager implements IProfileManager {
 
   async createProfile(
     profName: string,
+    origin: IResourceOrigin,
     projectId: string,
     presetSpec: IPresetSpec,
   ): Promise<boolean> {
@@ -198,6 +201,7 @@ export class ProfileManager implements IProfileManager {
     }
     try {
       const profileData = await this.createProfileImpl(
+        origin,
         profName,
         projectId,
         presetSpec,
@@ -290,6 +294,7 @@ export class ProfileManager implements IProfileManager {
     if (cmd.creatProfile) {
       return await this.createProfile(
         cmd.creatProfile.name,
+        cmd.creatProfile.targetProjectOrigin,
         cmd.creatProfile.targetProjectId,
         cmd.creatProfile.presetSpec,
       );

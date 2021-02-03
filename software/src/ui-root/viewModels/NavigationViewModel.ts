@@ -1,5 +1,7 @@
-import { models } from '~/ui-root/models';
-import { PageSignature } from '~/ui-root/models/UiStatusModel';
+import {
+  PageSignature,
+  uiStatusModel,
+} from '~/ui-common/sharedModels/UiStatusModel';
 
 export interface NavigationEntryViewModel {
   pageSig: PageSignature;
@@ -20,6 +22,7 @@ const entrySources: NavigationEntrySource[] = [
   { pageSig: 'shapePreview', faIconName: 'fa-file-code' },
   { pageSig: 'heatmap', faIconName: 'fa-chart-bar' },
   { pageSig: 'firmwareUpdation', faIconName: 'fa-microchip' },
+  { pageSig: 'settings', faIconName: 'fa-cog' },
 ];
 
 export interface INavigationViewModel {
@@ -27,7 +30,7 @@ export interface INavigationViewModel {
 }
 
 export function makeNavigationViewModel(): INavigationViewModel {
-  const { settings } = models.uiStatusModel;
+  const { settings } = uiStatusModel;
   return {
     entries: entrySources.map((it) => ({
       pageSig: it.pageSig,
