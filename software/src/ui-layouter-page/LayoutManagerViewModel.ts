@@ -51,8 +51,9 @@ function getTargetProjectLayoutFilePath(
   layoutName: string,
 ) {
   if (projectPath && layoutName) {
-    const fileNamePart = layoutName === 'default' ? 'layout' : layoutName;
-    return `projects/${projectPath}/${fileNamePart}.json`;
+    const fileNamePart =
+      layoutName === 'default' ? 'layout.json' : `${layoutName}.layout.json`;
+    return `projects/${projectPath}/${fileNamePart}`;
     // return `<KermiteRoot>/firmare/src/projects/${projectPath}/${fileNamePart}.json`;
   }
   return '';
