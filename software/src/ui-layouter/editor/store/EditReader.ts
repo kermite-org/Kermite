@@ -1,4 +1,8 @@
-import { createSimpleSelector } from '../../../ui-common/helpers/StoreUtils';
+import { createSimpleSelector } from '~/ui-common/helpers/StoreUtils';
+import {
+  getCoordUnitFromUnitSpec,
+  ICoordUnit,
+} from '~/ui-common/modules/PlacementUnitHelper';
 import { appState, IEnvBoolPropKey, IModeState } from './AppState';
 import { getKeyboardDesignBoundingBox } from './BoundingBoxCalculator';
 import {
@@ -7,7 +11,6 @@ import {
   IEditOutlineShape,
   IEditTransGroup,
 } from './DataSchema';
-import { getCoordUnitFromUnitSpec, ICoordUnit } from './PlacementUnitHelper';
 
 class EditReader {
   get editorTarget() {

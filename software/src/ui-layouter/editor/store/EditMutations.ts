@@ -8,6 +8,12 @@ import {
 } from '~/shared';
 import { getNextEntityInstanceId } from '~/ui-layouter/editor/store/DomainRelatedHelpers';
 import {
+  changeKeySizeUnit,
+  changePlacementCoordUnit,
+  mmToUnitValue,
+  unitValueToMm,
+} from '~/ui-layouter/editor/store/PlacementUnitHelperEx';
+import {
   appState,
   createFallbackEditKeyboardDesign,
   IEditMode,
@@ -22,12 +28,6 @@ import {
 } from './DataSchema';
 import { editReader } from './EditReader';
 import { editUpdator } from './EditUpdator';
-import {
-  changeKeySizeUnit,
-  changePlacementCoordUnit,
-  mmToUnitValue,
-  unitValueToMm,
-} from './PlacementUnitHelper';
 
 class EditMutations {
   startEdit = () => {
