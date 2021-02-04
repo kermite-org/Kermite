@@ -40,22 +40,22 @@ export function makePresetBrowserViewModel(): IPresetBrowserViewModel {
     },
     projectSelectorSource: {
       options: presetBrowserModel.optionProjectInfos.map((it) => ({
-        id: it.sig,
-        text: (it.origin === 'local' ? '[L]' : '[R]') + it.keyboardName,
+        value: it.sig,
+        label: (it.origin === 'local' ? '[L]' : '[R]') + it.keyboardName,
       })),
-      choiceId: presetBrowserModel.currentProjectSig || '',
-      setChoiceId: presetBrowserModel.setCurrentProjectSig,
+      value: presetBrowserModel.currentProjectSig || '',
+      setValue: presetBrowserModel.setCurrentProjectSig,
     },
     presetSelectorSource: {
       options: presetBrowserModel.optionPresetSpecs.map((it) => ({
-        id: it.id,
-        text:
+        value: it.id,
+        label:
           it.type === 'preset'
             ? `[preset]${it.presetName}`
             : `[blank]${it.layoutName}`,
       })),
-      choiceId: presetBrowserModel.currentPresetSpecId || '',
-      setChoiceId: presetBrowserModel.setCurrentPresetSpecId,
+      value: presetBrowserModel.currentPresetSpecId || '',
+      setValue: presetBrowserModel.setCurrentPresetSpecId,
     },
     isLinkButtonActive:
       deviceStatusModel.isConnected &&

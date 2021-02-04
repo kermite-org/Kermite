@@ -111,8 +111,8 @@ const FlatListSelector = (props: {
       disabled={disabled}
     >
       {options.map((it) => (
-        <option value={it.id} key={it.id}>
-          {it.text}
+        <option value={it.value} key={it.value}>
+          {it.label}
         </option>
       ))}
     </select>

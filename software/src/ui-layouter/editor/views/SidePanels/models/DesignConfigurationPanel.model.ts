@@ -23,8 +23,8 @@ function createModels() {
       ['KP', 'KP'],
     ],
     reader: () => editReader.coordUnitSuffix,
-    writer: (newChoiceId: 'mm' | 'KP') => {
-      const unitSpec = newChoiceId === 'mm' ? 'mm' : 'KP 19';
+    writer: (newValue: 'mm' | 'KP') => {
+      const unitSpec = newValue === 'mm' ? 'mm' : 'KP 19';
       editMutations.setPlacementUnit(unitSpec);
     },
   });

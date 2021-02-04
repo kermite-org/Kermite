@@ -5,8 +5,8 @@ import { ISelectOption } from './interfaces';
 
 export interface IExclusiveButtonGroup {
   options: ISelectOption[];
-  choiceId: string;
-  setChoiceId(key: string): void;
+  value: string;
+  setValue(key: string): void;
   buttonWidth?: number;
   disabled?: boolean;
 }
@@ -46,19 +46,19 @@ const cssExclusiveButtonGroup = (buttonWidth: number | undefined) => css`
 `;
 
 export const ExclusiveButtonGroup = (props: IExclusiveButtonGroup) => {
-  const { options, choiceId, setChoiceId, buttonWidth, disabled } = props;
+  const { options, value, setValue, buttonWidth, disabled } = props;
 
   return (
     <div css={cssExclusiveButtonGroup(buttonWidth)}>
       {options.map((option) => (
         <div
-          key={option.id}
+          key={option.value}
           class="button"
-          data-active={option.id === choiceId}
+          data-active={option.value === value}
           data-disabled={disabled}
-          onClick={() => setChoiceId(option.id)}
+          onClick={() => setValue(option.value)}
         >
-          {option.text}
+          {option.label}
         </div>
       ))}
     </div>

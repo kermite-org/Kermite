@@ -14,17 +14,17 @@ function createModeSelectionViewModel<K extends 'editorTarget' | 'editMode'>(
   const options: ISelectOption[] = (Object.keys(
     sources,
   ) as IModeState[K][]).map((key) => ({
-    id: key,
-    text: sources[key]!,
+    value: key,
+    label: sources[key]!,
   }));
-  const choiceId = editReader.getMode(targetKey);
-  const setChoiceId = (value: Extract<IModeState[K], string>) => {
+  const value = editReader.getMode(targetKey);
+  const setValue = (value: Extract<IModeState[K], string>) => {
     editMutations.setMode(targetKey, value);
   };
   return {
     options,
-    choiceId,
-    setChoiceId,
+    value,
+    setValue,
   };
 }
 
@@ -38,17 +38,17 @@ function createToggleOptionViewModel<K extends IEnvBoolPropKey>(targetKey: K) {
 function makeSnapDivisionViewModel() {
   const divs = [1, 2, 3, 4, 5, 6, 8, 10, 20];
   const options = divs.map((d) => ({
-    id: d.toString(),
-    text: d === 1 ? '1' : `1/${d}`,
+    value: d.toString(),
+    label: d === 1 ? '1' : `1/${d}`,
   }));
-  const choiceId = editReader.snapDivision.toString();
-  const setChoiceId = (id: string) => {
+  const value = editReader.snapDivision.toString();
+  const setValue = (id: string) => {
     editMutations.setSnapDivision(parseInt(id));
   };
   return {
     options,
-    choiceId,
-    setChoiceId,
+    value,
+    setValue,
   };
 }
 

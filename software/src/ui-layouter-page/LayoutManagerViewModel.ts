@@ -107,14 +107,14 @@ function useLayoutManagerViewModelImpl(
   );
 
   const projectOptions = model.projectLayoutsInfos.map((info) => ({
-    id: info.projectId,
-    text: info.projectPath,
+    value: info.projectId,
+    label: info.projectPath,
   }));
 
   const layoutOptions =
     currentProject?.layoutNames.map((layoutName) => ({
-      id: layoutName,
-      text: layoutName,
+      value: layoutName,
+      label: layoutName,
     })) || [];
 
   const isProjectLayoutSourceSpecified = !!(

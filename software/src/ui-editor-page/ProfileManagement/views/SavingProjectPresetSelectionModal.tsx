@@ -35,8 +35,8 @@ function useProjectAttachmentFileSelectorViewModel(
   }, []);
 
   const projectOptions = local.resourceInfos.map((info) => ({
-    id: info.projectId,
-    text: info.projectPath,
+    value: info.projectId,
+    label: info.projectPath,
   }));
 
   // 編集しているプロファイルのプロジェクトを規定で選び、変更させない
@@ -52,8 +52,8 @@ function useProjectAttachmentFileSelectorViewModel(
 
   const presetNameOptions =
     currentProject?.presetNames.map((presetName) => ({
-      id: presetName,
-      text: presetName,
+      value: presetName,
+      label: presetName,
     })) || [];
 
   return {

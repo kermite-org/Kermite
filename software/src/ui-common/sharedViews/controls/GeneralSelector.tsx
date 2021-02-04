@@ -5,20 +5,20 @@ import { uiTheme, reflectValue } from '~/ui-common';
 const { unitHeight } = uiTheme;
 
 export interface IGeneralSelectorOption {
-  id: string;
-  text: string;
+  value: string;
+  label: string;
 }
 
 export interface IGeneralSelectorViewModel {
   options: IGeneralSelectorOption[];
-  choiceId: string;
-  setChoiceId(key: string): void;
+  value: string;
+  setValue(value: string): void;
 }
 
 export interface IGeneralSelectorProps {
   options: IGeneralSelectorOption[];
-  choiceId: string;
-  setChoiceId(key: string): void;
+  value: string;
+  setValue(value: string): void;
   width?: number;
   className?: string;
   disabled?: boolean;
@@ -36,17 +36,17 @@ const cssGeneralSelector2 = (width: number | undefined) => css`
 `;
 
 export const GeneralSelector = (props: IGeneralSelectorProps) => {
-  const { options, choiceId, setChoiceId, className, width, disabled } = props;
+  const { options, value, setValue, className, width, disabled } = props;
   return (
     <select
-      value={choiceId}
-      onChange={reflectValue(setChoiceId)}
+      value={value}
+      onChange={reflectValue(setValue)}
       classNames={[cssGeneralSelector2(width), className]}
       disabled={disabled}
     >
       {options.map((it, idx) => (
-        <option value={it.id} key={idx}>
-          {it.text}
+        <option value={it.value} key={idx}>
+          {it.label}
         </option>
       ))}
     </select>
