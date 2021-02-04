@@ -1,21 +1,8 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { reflectValue } from '~/ui-common';
-import { makeCssColor } from '~/ui-layouter/base';
+import { ClosableOverlay } from '~/ui-common/fundamental/dialog/CommonDialogParts';
 import { ISelectOption } from '~/ui-layouter/controls';
-
-const cssProjectLayoutSelectorModal = css`
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: ${makeCssColor(0, 0.3)};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 
 const cssPanel = css`
   background: #fff;
@@ -178,8 +165,8 @@ export const ProjectAttachmentFileSelectorModal = (props: {
   } = props.vm;
 
   return (
-    <div css={cssProjectLayoutSelectorModal} onClick={closeModal}>
-      <div css={cssPanel} onClick={(e) => e.stopPropagation()}>
+    <ClosableOverlay close={closeModal}>
+      <div css={cssPanel}>
         <div class="panelHeader">
           <div class="titleText">{titleText}</div>
           <div class="closeButton" onClick={closeModal}>
@@ -229,6 +216,6 @@ export const ProjectAttachmentFileSelectorModal = (props: {
           </div>
         </div>
       </div>
-    </div>
+    </ClosableOverlay>
   );
 };
