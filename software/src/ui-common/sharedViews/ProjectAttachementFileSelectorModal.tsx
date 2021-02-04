@@ -1,8 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { reflectValue } from '~/ui-common';
+import { ISelectorOption, reflectValue } from '~/ui-common';
 import { ClosableOverlay } from '~/ui-common/fundamental/dialog/CommonDialogParts';
-import { ISelectOption } from '~/ui-layouter/controls';
 
 const cssPanel = css`
   background: #fff;
@@ -96,7 +95,7 @@ const cssFlatListSelector = css`
 `;
 
 const FlatListSelector = (props: {
-  options: ISelectOption[];
+  options: ISelectorOption[];
   value: string;
   setValue: (value: string) => void;
   size: number;
@@ -126,13 +125,13 @@ export interface IProjectAttachmentFileSelectorModalModel {
   selectorSize: number;
 
   canSelectProject: boolean;
-  projectOptions: ISelectOption[];
+  projectOptions: ISelectorOption[];
   currentProjectId: string;
   setCurrentProjectId(projectId: string): void;
   currentProejctKeyboardName: string;
 
   attachmentFileTypeHeader: string;
-  attachmentFileNameOptions: ISelectOption[];
+  attachmentFileNameOptions: ISelectorOption[];
   currentAttachmentFileName: string;
   setCurrentAttachmentFileName(fileName: string): void;
   targetAttachementFilePath: string;
