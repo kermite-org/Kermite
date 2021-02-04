@@ -3,8 +3,10 @@ import { render as petitDomRender } from './qxinternal_petit_dom';
 import { VNode } from './qxinternal_petit_dom/types';
 
 export { h } from './qxinternal_petit_dom/h';
-
 export { Hook } from './qxinternal_petit_dom/hookImpl2';
+export { qxGlobal };
+
+export * from './qx';
 
 export function rerender() {
   qxGlobal.rerender();
