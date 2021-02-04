@@ -35,7 +35,7 @@
     "start:dev": "cross-env NODE_ENV=development node build.js -x-watch -x-exec",
     "mockview": "cross-env NODE_ENV=development node build.js -x-mockview",
     "clean": "rm -rf dist .cache",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc -b src/*",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix"
   },
