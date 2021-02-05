@@ -21,7 +21,6 @@ export const PreviewKeyEntityCard = (props: {
     font-size: 4px;
   `;
 
-  console.log({ shape });
   return (
     <g
       transform={`translate(${pos.x}, ${pos.y}) rotate(${pos.r}) `}
