@@ -1,6 +1,8 @@
 import { css } from 'goober';
 import { h } from 'qx';
+import { IDisplayKeyShape } from '~/shared';
 import { uiTheme } from '~/ui-common';
+import { KeyUnitShape } from '~/ui-common-svg/KeyUnitCards/KeyUnitShape';
 
 export interface IEditKeyUnitCardViewModel {
   keyUnitId: string;
@@ -9,6 +11,7 @@ export interface IEditKeyUnitCardViewModel {
     y: number;
     r: number;
   };
+  shape: IDisplayKeyShape;
   isCurrent: boolean;
   setCurrent: () => void;
   primaryText: string;
@@ -17,7 +20,7 @@ export interface IEditKeyUnitCardViewModel {
   isHold: boolean;
 }
 
-const cssKeyRect = css`
+const cssKeyShape = css`
   cursor: pointer;
   fill: ${uiTheme.colors.clKeyUnitFace};
 
@@ -56,6 +59,7 @@ export function EditKeyUnitCard(props: {
     secondaryText,
     isLayerFallback,
     isHold,
+    shape,
   } = props.keyUnit;
   const { showLayerDefaultAssign } = props;
 
@@ -79,12 +83,9 @@ export function EditKeyUnitCard(props: {
       transform={`translate(${pos.x}, ${pos.y}) rotate(${pos.r}) `}
       key={keyUnitId}
     >
-      <rect
-        x={-9}
-        y={-9}
-        width={18}
-        height={18}
-        css={cssKeyRect}
+      <KeyUnitShape
+        shape={shape}
+        css={cssKeyShape}
         data-current={isCurrent}
         data-hold={isHold}
         onMouseDown={onMouseDown}
