@@ -201,7 +201,7 @@ function buildProjectEntry(
   fsCopyFileSync(`${srcDir}/project.json`, `${destDir}/project.json`);
 
   const layoutFileNames = fsReaddirSync(srcDir).filter((fileName) =>
-    fileName.endsWith("layout.json")
+    fileName.endsWith(".layout.json")
   );
   layoutFileNames.forEach((fileName) =>
     fsCopyFileSync(`${srcDir}/${fileName}`, `${destDir}/${fileName}`)
