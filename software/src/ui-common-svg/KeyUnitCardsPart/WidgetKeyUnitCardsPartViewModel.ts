@@ -43,6 +43,7 @@ function makeWidgetKeyUnitCardViewModel(
     secondaryText,
     isLayerFallback: isLayerFallback || false,
     isHold,
+    shape: ke.shape,
   };
 }
 
