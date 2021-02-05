@@ -1,7 +1,7 @@
 import { FC, h } from 'qx';
 import { IDisplayKeyShape } from '~/shared';
 
-type IKeyUnitShapeProps = Omit<JSX.HTMLAttributes, 'shape'> & {
+type IKeyUnitShapeProps = Omit<JSX.SVGAttributes, 'shape'> & {
   shape: IDisplayKeyShape;
 };
 export const KeyUnitShape: FC<IKeyUnitShapeProps> = ({ shape, ...rest }) => {
