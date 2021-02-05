@@ -1,6 +1,7 @@
 import { h, Hook } from 'qx';
 import { IProjectResourceInfo } from '~/shared';
 import { fieldSetter, ipcAgent, useLocal } from '~/ui-common';
+import { modalConfirm } from '~/ui-common/fundamental/dialog/BasicModals';
 import {
   IProjectAttachmentFileSelectorModalModel,
   ProjectAttachmentFileSelectorModal,
@@ -35,8 +36,8 @@ function useProjectAttachmentFileSelectorViewModel(
   }, []);
 
   const projectOptions = local.resourceInfos.map((info) => ({
-    id: info.projectId,
-    text: info.projectPath,
+    value: info.projectId,
+    label: info.projectPath,
   }));
 
   // 編集しているプロファイルのプロジェクトを規定で選び、変更させない
@@ -52,8 +53,8 @@ function useProjectAttachmentFileSelectorViewModel(
 
   const presetNameOptions =
     currentProject?.presetNames.map((presetName) => ({
-      id: presetName,
-      text: presetName,
+      value: presetName,
+      label: presetName,
     })) || [];
 
   return {
@@ -79,7 +80,20 @@ function useProjectAttachmentFileSelectorViewModel(
       local.currentPresetName &&
       includedInResources
     ),
-    buttonHandler: () => {
+    buttonHandler: async () => {
+      const savingName = local.currentPresetName;
+      const overwriting = presetNameOptions.some(
+        (it) => it.value === savingName,
+      );
+      if (overwriting) {
+        const isOk = await modalConfirm({
+          caption: 'save',
+          message: 'overwrite it?',
+        });
+        if (!isOk) {
+          return;
+        }
+      }
       baseVm.saveProfileAsPreset(currentProjectId, local.currentPresetName);
       baseVm.closeExportingPresetSelectionModal();
     },

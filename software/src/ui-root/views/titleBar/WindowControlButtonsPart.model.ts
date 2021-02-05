@@ -1,7 +1,7 @@
 import { ipcAgent } from '~/ui-common';
 import { siteModel } from '~/ui-common/sharedModels/SiteModel';
 
-export interface ITitleBarViewModel {
+export interface IWindowControlButtonsModel {
   showReloadButton: boolean;
   onReloadButton(): void;
   onWidgetButton(): void;
@@ -10,7 +10,7 @@ export interface ITitleBarViewModel {
   onCloseButton(): void;
 }
 
-export function makeTitleBarViewModel(): ITitleBarViewModel {
+export function makeWindowControlButtonsModel(): IWindowControlButtonsModel {
   return {
     // showReloadButton: appUi.isDevelopment,
     showReloadButton: false,

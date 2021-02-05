@@ -1,16 +1,17 @@
-/* eslint-disable */
-const { build, cliopts } = require('estrella');
-const fs = require('fs');
-const path = require('path');
-const childProcess = require('child_process');
-const readline = require('readline');
-const liveServer = require('live-server');
+import childProcess from 'child_process';
+import fs from 'fs';
+import path from 'path';
+import readline from 'readline';
+import { build, BuildConfig, cliopts } from 'estrella';
+import liveServer from 'live-server';
 
-const gooberCssAutoLabelPlugin = {
+type IPlugin = NonNullable<BuildConfig['plugins']>[0];
+
+const gooberCssAutoLabelPlugin: IPlugin = {
   name: 'gooberCssAutoLabel',
   setup(build) {
     build.onLoad({ filter: /\.tsx$/ }, async (args) => {
-      //gooberのcss変数定義を見つけて、変数名をlabelとしてスタイル定義に挿入する
+      // gooberのcss変数定義を見つけて、変数名をlabelとしてスタイル定義に挿入する
       let text = await fs.promises.readFile(args.path, 'utf8');
       if (text.includes('goober')) {
         text = text
@@ -39,11 +40,11 @@ const reqWatch = opts['x-watch'];
 const reqExec = opts['x-exec'];
 const reqMockView = opts['x-mockview'];
 
-async function readKey() {
+async function readKey(): Promise<{ sequence: string }> {
   readline.emitKeypressEvents(process.stdin);
   process.stdin.setRawMode(true);
 
-  return new Promise((resolve) => {
+  return await new Promise((resolve) => {
     process.stdin.once('keypress', (str, key) => {
       process.stdin.setRawMode(false);
       resolve(key);
@@ -58,7 +59,7 @@ async function makeShell() {
   fs.mkdirSync(shellDistDir, { recursive: true });
   fs.copyFileSync(`${shellSrcDir}/preload.js`, `${shellDistDir}/preload.js`);
 
-  return new Promise((resolve) =>
+  return await new Promise((resolve) =>
     build({
       platform: 'node',
       entry: `${shellSrcDir}/index.ts`,
@@ -88,7 +89,7 @@ async function makeUi() {
   fs.mkdirSync(distDir, { recursive: true });
   fs.copyFileSync(`${srcDir}/index.html`, `${distDir}/index.html`);
 
-  return new Promise((resolve) =>
+  return await new Promise((resolve) =>
     build({
       entry: `${srcDir}/index.tsx`,
       outfile: `${distDir}/index.js`,

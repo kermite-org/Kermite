@@ -1,24 +1,45 @@
 import { css } from 'goober';
 import { h } from 'qx';
+import { useLocal } from '~/ui-common/helpers';
 
 export function ClosableOverlay(props: {
   close: () => void;
   children: JSX.Element;
 }) {
   const cssDiv = css`
-    position: absolute;
-    width: 100%;
-    height: 100%;
+    position: fixed;
     top: 0;
     left: 0;
+    width: 100vw;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1;
   `;
+
+  const downMousePos = useLocal({ x: -1, y: -1 });
+
+  const onMouseDown = (e: MouseEvent) => {
+    downMousePos.x = e.pageX;
+    downMousePos.y = e.pageY;
+  };
+  const onMouseUp = (e: MouseEvent) => {
+    if (e.pageX === downMousePos.x && e.pageY === downMousePos.y) {
+      props.close();
+    }
+    downMousePos.x = -1;
+    downMousePos.y = -1;
+  };
+
+  const onMouseUpInner = (e: MouseEvent) => {
+    e.stopPropagation();
+  };
+
   return (
-    <div onClick={props.close} css={cssDiv}>
-      {props.children}
+    <div css={cssDiv} onMouseDown={onMouseDown} onMouseUp={onMouseUp}>
+      <div onMouseUp={onMouseUpInner}>{props.children}</div>
     </div>
   );
 }
@@ -49,7 +70,7 @@ export const CommonDialogFrame = (props: {
   const cssBody = css``;
 
   return (
-    <div css={cssLayerEditDialogPanel} onClick={(e) => e.stopPropagation()}>
+    <div css={cssLayerEditDialogPanel}>
       <div css={cssTitleBar}>{props.caption}</div>
       <div css={cssBody}>{props.children}</div>
     </div>

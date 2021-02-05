@@ -1,15 +1,15 @@
 import { css } from 'goober';
 import { rerender, h } from 'qx';
 import { degToRad } from '~/shared';
+import { getStdKeySize } from '~/ui-common/modules/PlacementUnitHelper';
 import { IPosition, startDragSession } from '~/ui-layouter/base';
 import {
-  editReader,
-  unitValueToMm,
   editMutations,
+  editReader,
   IEditKeyEntity,
-  getStdKeySize,
 } from '~/ui-layouter/editor/store';
 import { getKeyIdentifierText } from '~/ui-layouter/editor/store/DomainRelatedHelpers';
+import { unitValueToMm } from '~/ui-layouter/editor/store/PlacementUnitHelperEx';
 
 let temporaryChangingModeAddToMove = false;
 

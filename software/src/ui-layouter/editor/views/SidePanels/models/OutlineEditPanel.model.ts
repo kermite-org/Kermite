@@ -43,10 +43,10 @@ function createOutlineEditPanelModel() {
           ]
         : [],
       reader: () => currentOutlineShape?.groupId,
-      writer: (newChoiceId: string) => {
+      writer: (newValue: string) => {
         if (currentOutlineShape) {
-          editMutations.setCurrentShapeGroupId(newChoiceId);
-          editMutations.setCurrentTransGroupById(newChoiceId);
+          editMutations.setCurrentShapeGroupId(newValue);
+          editMutations.setCurrentTransGroupById(newValue);
         }
       },
     });

@@ -26,7 +26,7 @@ export class KeyboardLayoutFilesWatcher {
   }
 
   private onFileUpdated = async (filePath: string) => {
-    if (filePath.endsWith('/layout.json')) {
+    if (filePath.endsWith('.layout.json')) {
       const projectPath = pathRelative(this.baseDir, pathDirname(filePath));
       const projectId = await this.getProjectIdFromFilePath(projectPath);
       if (projectId) {

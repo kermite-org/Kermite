@@ -73,12 +73,8 @@ namespace ProjectResourceInfoSourceLoader__DEPRECATED {
 
   async function readLayoutNames(projectFolderPath: string): Promise<string[]> {
     return (await fspReaddir(projectFolderPath))
-      .filter((fileName) => fileName.endsWith('layout.json'))
-      .map((fileName) =>
-        fileName === 'layout.json'
-          ? 'default'
-          : pathBasename(fileName, '.layout.json'),
-      );
+      .filter((fileName) => fileName.endsWith('.layout.json'))
+      .map((fileName) => pathBasename(fileName, '.layout.json'));
   }
 
   async function readProjectFile(

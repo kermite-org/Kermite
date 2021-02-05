@@ -1,5 +1,5 @@
 import { css, setup, styled } from 'goober';
-import { h } from 'qx';
+import { h, FC } from 'qx';
 
 setup(h);
 
@@ -68,6 +68,14 @@ const MultipleClassNameTestCard1 = () => {
   );
 };
 
+interface IUserNameViewProps {
+  userName: string;
+}
+
+const UserNameView: FC<IUserNameViewProps> = ({ userName }) => {
+  return <div>hello {userName}</div>;
+};
+
 export const GooberDevelopmentPage = () => {
   return (
     <div css={cssRoot}>
@@ -75,6 +83,7 @@ export const GooberDevelopmentPage = () => {
       <Header2>world</Header2>
       <StyledMyButton text="test" />
       <MultipleClassNameTestCard1 />
+      <UserNameView userName="yamada" />
     </div>
   );
 };

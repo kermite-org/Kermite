@@ -158,8 +158,8 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     onLaunchButton,
     profileSelectorSource: {
       options: allProfileNames.map(makePlainSelectorOption),
-      choiceId: currentProfileName,
-      setChoiceId: loadProfile,
+      value: currentProfileName,
+      setValue: loadProfile,
     },
     isExportingPresetSelectionModalOpen: state.isPresetsModalOpen,
     openExportingPresetSelectionModal,

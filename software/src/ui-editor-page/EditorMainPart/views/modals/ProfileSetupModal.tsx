@@ -25,23 +25,23 @@ function makeProfileSetupModalViewModel() {
   const projectOptions = projectResourceModel
     .getProjectsWithLayout()
     .map((info) => ({
-      id: info.sig,
-      text: info.projectPath,
+      value: info.sig,
+      label: info.projectPath,
     }));
 
-  const defaultProjectSig = projectOptions[0]?.id || '';
+  const defaultProjectSig = projectOptions[0]?.value || '';
 
   function getLayoutNameOptions(projectSig: string) {
     const info = projectResourceModel
       .getProjectsWithLayout()
       .find((info) => info.sig === projectSig);
-    return info?.layoutNames.map((it) => ({ id: it, text: it })) || [];
+    return info?.layoutNames.map((it) => ({ value: it, label: it })) || [];
   }
 
   const editValues: ICreateProfileDialogEditValues = {
     profileName: '',
     targetProjectSig: defaultProjectSig,
-    layoutName: getLayoutNameOptions(defaultProjectSig)[0]?.id,
+    layoutName: getLayoutNameOptions(defaultProjectSig)[0]?.value,
   };
 
   return {
@@ -52,8 +52,8 @@ function makeProfileSetupModalViewModel() {
     editValues,
     sync() {
       const options = getLayoutNameOptions(editValues.targetProjectSig);
-      if (!options.find((opt) => opt.id === editValues.layoutName)) {
-        editValues.layoutName = options[0]?.id;
+      if (!options.find((opt) => opt.value === editValues.layoutName)) {
+        editValues.layoutName = options[0]?.value;
       }
     },
   };
@@ -90,8 +90,8 @@ const ProfileSetupModalContent = (props: {
                 <td>
                   <GeneralSelector
                     options={projectOptions}
-                    choiceId={editValues.targetProjectSig}
-                    setChoiceId={(id) => (editValues.targetProjectSig = id)}
+                    value={editValues.targetProjectSig}
+                    setValue={(id) => (editValues.targetProjectSig = id)}
                     width={150}
                   />
                 </td>
@@ -101,8 +101,8 @@ const ProfileSetupModalContent = (props: {
                 <td>
                   <GeneralSelector
                     options={presetOptions}
-                    choiceId={editValues.layoutName}
-                    setChoiceId={(id) => (editValues.layoutName = id)}
+                    value={editValues.layoutName}
+                    setValue={(id) => (editValues.layoutName = id)}
                     width={150}
                   />
                 </td>

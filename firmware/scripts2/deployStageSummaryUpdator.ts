@@ -121,12 +121,8 @@ function makeSummaryFileContent(
     }
 
     const layoutNames = fsReaddirSync(`./dist/variants/${projectPath}`)
-      .filter((fileName) => fileName.endsWith("layout.json"))
-      .map((fileName) =>
-        fileName === "layout.json"
-          ? "default"
-          : pathBasename(fileName, ".layout.json")
-      );
+      .filter((fileName) => fileName.endsWith(".layout.json"))
+      .map((fileName) => pathBasename(fileName, ".layout.json"));
 
     return {
       projectPath: projectPath,

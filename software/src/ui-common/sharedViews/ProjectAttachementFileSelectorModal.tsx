@@ -1,21 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { reflectValue } from '~/ui-common';
-import { makeCssColor } from '~/ui-layouter/base';
-import { ISelectOption } from '~/ui-layouter/controls';
-
-const cssProjectLayoutSelectorModal = css`
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: ${makeCssColor(0, 0.3)};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+import { ISelectorOption, reflectValue } from '~/ui-common';
+import { ClosableOverlay } from '~/ui-common/fundamental/dialog/CommonDialogParts';
 
 const cssPanel = css`
   background: #fff;
@@ -109,7 +95,7 @@ const cssFlatListSelector = css`
 `;
 
 const FlatListSelector = (props: {
-  options: ISelectOption[];
+  options: ISelectorOption[];
   value: string;
   setValue: (value: string) => void;
   size: number;
@@ -125,8 +111,8 @@ const FlatListSelector = (props: {
       disabled={disabled}
     >
       {options.map((it) => (
-        <option value={it.id} key={it.id}>
-          {it.text}
+        <option value={it.value} key={it.value}>
+          {it.label}
         </option>
       ))}
     </select>
@@ -139,13 +125,13 @@ export interface IProjectAttachmentFileSelectorModalModel {
   selectorSize: number;
 
   canSelectProject: boolean;
-  projectOptions: ISelectOption[];
+  projectOptions: ISelectorOption[];
   currentProjectId: string;
   setCurrentProjectId(projectId: string): void;
   currentProejctKeyboardName: string;
 
   attachmentFileTypeHeader: string;
-  attachmentFileNameOptions: ISelectOption[];
+  attachmentFileNameOptions: ISelectorOption[];
   currentAttachmentFileName: string;
   setCurrentAttachmentFileName(fileName: string): void;
   targetAttachementFilePath: string;
@@ -178,8 +164,8 @@ export const ProjectAttachmentFileSelectorModal = (props: {
   } = props.vm;
 
   return (
-    <div css={cssProjectLayoutSelectorModal} onClick={closeModal}>
-      <div css={cssPanel} onClick={(e) => e.stopPropagation()}>
+    <ClosableOverlay close={closeModal}>
+      <div css={cssPanel}>
         <div class="panelHeader">
           <div class="titleText">{titleText}</div>
           <div class="closeButton" onClick={closeModal}>
@@ -229,6 +215,6 @@ export const ProjectAttachmentFileSelectorModal = (props: {
           </div>
         </div>
       </div>
-    </div>
+    </ClosableOverlay>
   );
 };

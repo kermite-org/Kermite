@@ -49,7 +49,7 @@ function projectJsonSchemaCheckerEntry() {
     "src/projects/**/*/project.json",
     projectJsonDataValidator
   );
-  checkFiles("layout", "src/projects/**/*/*layout.json", (layout) => {
+  checkFiles("layout", "src/projects/**/*/*.layout.json", (layout) => {
     LayoutDataMigrator.patchOldFormatLayoutData(layout);
     return persistEditKeyboardDesignSchemaChecker(layout);
   });
