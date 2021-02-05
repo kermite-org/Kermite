@@ -58,15 +58,15 @@ export const EditMenuBar = () => {
     <div class={cssEditMenuBar}>
       <ExclusiveButtonGroup
         options={editorTargetVm.options}
-        choiceId={editorTargetVm.choiceId}
-        setChoiceId={editorTargetVm.setChoiceId}
+        value={editorTargetVm.value}
+        setValue={editorTargetVm.setValue}
         buttonWidth={55}
       />
 
       <ExclusiveButtonGroup
         options={editModeVm.options}
-        choiceId={editModeVm.choiceId}
-        setChoiceId={editModeVm.setChoiceId}
+        value={editModeVm.value}
+        setValue={editModeVm.setValue}
         buttonWidth={55}
         disabled={!canSelectEditMode}
       />
@@ -102,8 +102,8 @@ export const EditMenuBar = () => {
 
         <GeneralSelector
           options={vmSnapDivision.options}
-          choiceId={vmSnapDivision.choiceId}
-          setChoiceId={vmSnapDivision.setChoiceId}
+          value={vmSnapDivision.value}
+          setValue={vmSnapDivision.setValue}
         />
       </div>
 

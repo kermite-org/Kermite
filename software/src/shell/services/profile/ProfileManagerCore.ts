@@ -34,7 +34,9 @@ export class ProfileManagerCore {
     const fileNames = await fspReaddir(
       appEnv.resolveUserDataFilePath(`data/profiles`),
     );
-    return fileNames.map((fname) => pathBasename(fname, '.json'));
+    return fileNames
+      .filter((fname) => fname.endsWith('.json'))
+      .map((fname) => pathBasename(fname, '.json'));
   }
 
   loadCurrentProfileName(): string | undefined {

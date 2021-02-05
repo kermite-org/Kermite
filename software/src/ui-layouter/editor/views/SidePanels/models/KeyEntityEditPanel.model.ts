@@ -194,10 +194,10 @@ function makeGroupIdSelectorModel() {
         ]
       : [],
     reader: () => currentKeyEntity?.groupId,
-    writer: (newChoiceId: string) => {
+    writer: (newValue: string) => {
       if (currentKeyEntity) {
-        editMutations.changeKeyProperty('groupId', newChoiceId);
-        editMutations.setCurrentTransGroupById(newChoiceId);
+        editMutations.changeKeyProperty('groupId', newValue);
+        editMutations.setCurrentTransGroupById(newValue);
       }
     },
   });

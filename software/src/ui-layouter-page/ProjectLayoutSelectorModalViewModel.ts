@@ -15,7 +15,7 @@ export function makeLayoutSelectorModelViewModel(
 
   const isCustomName =
     baseVm.currentLayoutName &&
-    !baseVm.layoutOptions.some((it) => it.id === baseVm.currentLayoutName);
+    !baseVm.layoutOptions.some((it) => it.value === baseVm.currentLayoutName);
 
   const selectorSize = 7;
 

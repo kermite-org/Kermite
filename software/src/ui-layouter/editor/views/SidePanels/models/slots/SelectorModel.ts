@@ -3,18 +3,18 @@ import { ICommonSelectorViewModel } from '~/ui-layouter/controls';
 export function makeSelectorModel<T extends string>(props: {
   sources: [T, string][];
   reader: () => T | undefined;
-  writer: (choiceId: T) => void;
+  writer: (value: T) => void;
 }): ICommonSelectorViewModel {
   const { sources, reader, writer } = props;
-  const options = sources.map(([id, text]) => ({ id, text }));
+  const options = sources.map(([value, label]) => ({ value, label }));
   return {
     options,
-    get choiceId() {
+    get value() {
       return reader() || '';
     },
     get disabled() {
       return reader() === undefined;
     },
-    setChoiceId: writer,
+    setValue: writer,
   };
 }

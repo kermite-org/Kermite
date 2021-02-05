@@ -10,3 +10,12 @@ export function getProjectOriginAndIdFromSig(
   const [origin, projectId] = projectSig.split('#');
   return { origin: origin as IResourceOrigin, projectId };
 }
+
+export function generateNextSequentialId(
+  prefix: string,
+  existingsIds: string[],
+): string {
+  const allNumbers = existingsIds.map((it) => parseInt(it.replace(prefix, '')));
+  const newNumber = allNumbers.length > 0 ? Math.max(...allNumbers) + 1 : 0;
+  return `${prefix}${newNumber}`;
+}

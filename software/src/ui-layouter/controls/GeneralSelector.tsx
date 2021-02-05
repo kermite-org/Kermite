@@ -8,8 +8,8 @@ const { colors, unitHeight } = uiTheme;
 
 export interface IGeneralSelectorProps {
   options: ISelectOption[];
-  choiceId: string;
-  setChoiceId(key: string): void;
+  value: string;
+  setValue(value: string): void;
   width?: number;
   className?: string;
   disabled?: boolean;
@@ -28,17 +28,17 @@ const cssGeneralSelector = (width: number | undefined) => css`
 `;
 
 export const GeneralSelector = (props: IGeneralSelectorProps) => {
-  const { options, choiceId, setChoiceId, className, width, disabled } = props;
+  const { options, value, setValue, className, width, disabled } = props;
   return (
     <select
-      value={choiceId}
-      onChange={reflectValue(setChoiceId)}
+      value={value}
+      onChange={reflectValue(setValue)}
       css={combineClasses(cssGeneralSelector(width), className)}
       disabled={disabled}
     >
       {options.map((it, idx) => (
-        <option value={it.id} key={idx}>
-          {it.text}
+        <option value={it.value} key={idx}>
+          {it.label}
         </option>
       ))}
     </select>

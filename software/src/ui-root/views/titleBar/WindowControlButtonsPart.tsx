@@ -1,19 +1,17 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { ITitleBarViewModel } from '~/ui-root/viewModels/TitleBarViewModel';
-import { WindowControlButton } from './WindowControlButton';
-import { WindowRestartButton } from './WindowRestartButton';
+import { makeWindowControlButtonsModel } from '~/ui-root/views/titleBar/WindowControlButtonsPart.model';
+import { WindowControlButton } from './elements/WindowControlButton';
+import { WindowRestartButton } from './elements/WindowRestartButton';
 
-export const WindowControlButtonsPart = ({
-  vm,
-}: {
-  vm: ITitleBarViewModel;
-}) => {
+export const WindowControlButtonsPart = () => {
   const cssButtonsBox = css`
     display: flex;
     align-items: center;
     height: 100%;
   `;
+
+  const vm = makeWindowControlButtonsModel();
 
   return (
     <div css={cssButtonsBox}>

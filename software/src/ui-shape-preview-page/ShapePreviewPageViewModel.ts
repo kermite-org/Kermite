@@ -46,19 +46,19 @@ export function makeShapePreviewPageViewModel(): IShapePreviewPageViewModel {
     holdKeyIndices: holdKeyIndices,
     projectSelectorSource: {
       options: shapesModel.projectInfos.map((info) => ({
-        id: info.sig,
-        text: (info.origin === 'local' ? '[L]' : '[R]') + info.projectPath,
+        value: info.sig,
+        label: (info.origin === 'local' ? '[L]' : '[R]') + info.projectPath,
       })),
-      choiceId: shapesModel.currentProjectSig,
-      setChoiceId: shapesModel.setCurrentProjectSig,
+      value: shapesModel.currentProjectSig,
+      setValue: shapesModel.setCurrentProjectSig,
     },
     layoutSelectorSource: {
       options: shapesModel.optionLayoutNames.map((layoutName) => ({
-        id: layoutName,
-        text: layoutName,
+        value: layoutName,
+        label: layoutName,
       })),
-      choiceId: shapesModel.currentLayoutName,
-      setChoiceId: shapesModel.setCurrentLayoutName,
+      value: shapesModel.currentLayoutName,
+      setValue: shapesModel.setCurrentLayoutName,
     },
   };
 }

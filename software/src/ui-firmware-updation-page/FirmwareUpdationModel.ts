@@ -21,10 +21,10 @@ export class FirmwareUpdationModel {
   };
 
   get projectOptions() {
-    const blankOption = { id: '', text: 'select firmware' };
+    const blankOption = { value: '', label: 'select firmware' };
     const projectOptions = this.projectInfosWithFirmware.map((info) => ({
-      id: info.sig,
-      text: (info.origin === 'local' ? '[L]' : '[R]') + info.projectPath,
+      value: info.sig,
+      label: (info.origin === 'local' ? '[L]' : '[R]') + info.projectPath,
     }));
     return [blankOption, ...projectOptions];
   }
