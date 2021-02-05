@@ -44,12 +44,8 @@ namespace ProjectResourceInfoSourceLoader {
 
   async function readLayoutNames(projectFolderPath: string): Promise<string[]> {
     return (await fspReaddir(projectFolderPath))
-      .filter((fileName) => fileName.endsWith('layout.json'))
-      .map((fileName) =>
-        fileName === 'layout.json'
-          ? 'default'
-          : pathBasename(fileName, '.layout.json'),
-      );
+      .filter((fileName) => fileName.endsWith('.layout.json'))
+      .map((fileName) => pathBasename(fileName, '.layout.json'));
   }
 
   async function readProjectFile(
@@ -215,9 +211,7 @@ export class ProjectResourceProviderImpl_Local
   ): string | undefined {
     const info = this.getProjectInfoSourceById(projectId);
     if (info) {
-      const fileName =
-        layoutName === 'default' ? 'layout.json' : `${layoutName}.layout.json`;
-      return pathJoin(info.projectFolderPath, fileName);
+      return pathJoin(info.projectFolderPath, `${layoutName}.layout.json`);
     }
   }
 
