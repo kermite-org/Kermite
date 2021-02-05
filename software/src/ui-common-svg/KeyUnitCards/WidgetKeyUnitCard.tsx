@@ -1,5 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
+import { IDisplayKeyShape } from '~/shared';
+import { KeyUnitShape } from '~/ui-common-svg/KeyUnitCards/KeyUnitShape';
 
 export interface IWidgetKeyUnitCardViewModel {
   keyUnitId: string;
@@ -12,6 +14,7 @@ export interface IWidgetKeyUnitCardViewModel {
   secondaryText: string;
   isLayerFallback: boolean;
   isHold: boolean;
+  shape: IDisplayKeyShape;
 }
 
 export function WidgetKeyUnitCard({
@@ -19,9 +22,9 @@ export function WidgetKeyUnitCard({
 }: {
   keyUnit: IWidgetKeyUnitCardViewModel;
 }) {
-  const { keyUnitId, pos, primaryText, secondaryText, isHold } = keyUnit;
+  const { keyUnitId, pos, primaryText, secondaryText, isHold, shape } = keyUnit;
 
-  const cssKeyRect = css`
+  const cssKeyShape = css`
     fill: #e0e8ff;
     stroke: #003;
     &[data-hold] {
@@ -46,14 +49,7 @@ export function WidgetKeyUnitCard({
       transform={`translate(${pos.x}, ${pos.y}) rotate(${pos.r}) `}
       key={keyUnitId}
     >
-      <rect
-        x={-9}
-        y={-9}
-        width={18}
-        height={18}
-        css={cssKeyRect}
-        data-hold={isHold}
-      />
+      <KeyUnitShape shape={shape} css={cssKeyShape} data-hold={isHold} />
       <text
         css={cssKeyText}
         x={0}

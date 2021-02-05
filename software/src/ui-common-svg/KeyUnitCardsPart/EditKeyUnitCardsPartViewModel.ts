@@ -65,6 +65,7 @@ function makeEditKeyUnitCardViewModel(
   return {
     keyUnitId,
     pos,
+    shape: ke.shape,
     isCurrent,
     setCurrent,
     primaryText,

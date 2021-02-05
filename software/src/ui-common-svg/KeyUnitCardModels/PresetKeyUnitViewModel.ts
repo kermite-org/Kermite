@@ -41,6 +41,7 @@ function createPresetKeyUnitViewModel(
     primaryText,
     secondaryText,
     isLayerFallback,
+    shape: ke.shape,
   };
 }
 
