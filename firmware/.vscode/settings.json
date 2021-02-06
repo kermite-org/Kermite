@@ -6,7 +6,7 @@
       "url": "./.vscode/schemas/project.schema.json"
     },
     {
-      "fileMatch": ["layout.json", "*.layout.json"],
+      "fileMatch": ["*.layout.json"],
       "url": "./.vscode/schemas/layout.schema.json"
     }
   ]

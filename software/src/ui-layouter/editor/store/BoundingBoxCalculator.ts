@@ -6,16 +6,16 @@ import {
   translateCoord,
 } from '~/shared';
 import {
+  getCoordUnitFromUnitSpec,
+  getKeySize,
+  ICoordUnit,
+} from '~/ui-common/modules/PlacementUnitHelper';
+import {
   IEditKeyboardDesign,
   IEditKeyEntity,
   IEditOutlineShape,
   IEditTransGroup,
 } from './DataSchema';
-import {
-  getCoordUnitFromUnitSpec,
-  getKeySize,
-  ICoordUnit,
-} from './PlacementUnitHelper';
 
 function getKeyCornerPoints(
   ke: IEditKeyEntity,

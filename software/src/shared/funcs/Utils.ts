@@ -263,3 +263,7 @@ export function translateCoord(
   p.x += ax;
   p.y += ay;
 }
+
+export function getObjectKeys<T extends {}>(obj: T): (keyof T)[] {
+  return Object.keys(obj) as (keyof T)[];
+}

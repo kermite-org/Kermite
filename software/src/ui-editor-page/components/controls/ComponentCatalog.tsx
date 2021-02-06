@@ -7,10 +7,10 @@ import {
 } from '../../../ui-common/sharedViews/controls/GeneralSelector';
 
 const testOptions: IGeneralSelectorProps['options'] = [
-  { id: '', text: 'no-user' },
-  { id: 'user001', text: 'yamada' },
-  { id: 'user002', text: 'tanaka' },
-  { id: 'user003', text: 'suzuki' },
+  { value: '', label: 'no-user' },
+  { value: 'user001', label: 'yamada' },
+  { value: 'user002', label: 'tanaka' },
+  { value: 'user003', label: 'suzuki' },
 ];
 
 const cssBase = css`
@@ -65,8 +65,8 @@ export const ComponentCatalog = () => {
 
       <GeneralSelector
         options={testOptions}
-        choiceId={curUserId}
-        setChoiceId={setCurrentUserId}
+        value={curUserId}
+        setValue={setCurrentUserId}
       />
     </div>
   );

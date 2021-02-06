@@ -1,4 +1,8 @@
-import { IDisplayKeyboardDesign, IProfileData } from '~/shared';
+import {
+  IDisplayKeyboardDesign,
+  IDisplayKeyShape,
+  IProfileData,
+} from '~/shared';
 import {
   getAssignForKeyUnitWithLayerFallback,
   getAssignEntryTexts,
@@ -14,6 +18,7 @@ export interface ICustomKeyUnitViewModelBase {
   primaryText: string;
   secondaryText: string;
   isLayerFallback: boolean;
+  shape: IDisplayKeyShape;
 }
 
 export function makeCustomKeyUnitViewModels<
@@ -53,6 +58,7 @@ export function makeCustomKeyUnitViewModels<
       primaryText,
       secondaryText,
       isLayerFallback,
+      shape: ku.shape,
     });
   });
 }

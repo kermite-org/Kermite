@@ -1,9 +1,8 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { uiTheme } from '~/ui-common';
-import { makeTitleBarViewModel } from '~/ui-root/viewModels/TitleBarViewModel';
 import { WindowControlButtonsPart } from './WindowControlButtonsPart';
-import { WindowTitlePart } from './WindowTitlePart';
+import { WindowTitlePart } from './elements/WindowTitlePart';
 
 const cssWindowTitleBarSection = css`
   display: flex;
@@ -14,11 +13,10 @@ const cssWindowTitleBarSection = css`
 `;
 
 export const WindowTitleBarSection = () => {
-  const vm = makeTitleBarViewModel();
   return (
     <div css={cssWindowTitleBarSection}>
       <WindowTitlePart />
-      <WindowControlButtonsPart vm={vm} />
+      <WindowControlButtonsPart />
     </div>
   );
 };

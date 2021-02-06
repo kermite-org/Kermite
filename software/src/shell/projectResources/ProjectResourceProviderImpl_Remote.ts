@@ -123,9 +123,7 @@ export class ProjectResourceProviderImpl_Remote
   ): Promise<IPersistKeyboardDesign | undefined> {
     const info = this.getProjectInfoSourceById(projectId);
     if (info) {
-      const layoutFileName =
-        layoutName === 'default' ? 'layout.json' : `${layoutName}.layout.json`;
-      const relPath = `variants/${info.projectPath}/${layoutFileName}`;
+      const relPath = `variants/${info.projectPath}/${layoutName}.layout.json`;
       const uri = `${remoteBaseUri}/${relPath}`;
       return await LayoutFileLoader.loadLayoutFromUri(uri);
     }
