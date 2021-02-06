@@ -17,6 +17,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
   appWindowEventPort = createEventPort2<IAppWindowEvent>({
     initialValueGetter: () => ({
       devToolVisible: this.isDevtoolsVisible,
+      isMaximized: this.mainWindow?.isMaximized() || false,
     }),
   });
 
@@ -78,6 +79,13 @@ export class AppWindowWrapper implements IAppWindowWrapper {
       this.appWindowEventPort.emit({ devToolVisible: false });
     });
 
+    win.on('maximize', () =>
+      this.appWindowEventPort.emit({ isMaximized: true }),
+    );
+    win.on('unmaximize', () =>
+      this.appWindowEventPort.emit({ isMaximized: false }),
+    );
+
     if (appEnv.isDevelopment && this.isDevtoolsVisible) {
       this.setDevToolsVisibility(true);
     }
@@ -129,18 +137,13 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     this.mainWindow?.minimize();
   }
 
-  private _isMaximized = false;
-
   maximizeMainWindow() {
     if (this.mainWindow) {
-      // const isMaximized = this.mainWindow.isMaximized()
-      // ...always returns false for transparent window
-      if (this._isMaximized) {
-        this.mainWindow.unmaximize();
-        this._isMaximized = false;
-      } else {
+      // this.mainWindow.isMaximized() ... always returns false for transparent window (?)
+      if (!this.mainWindow.isMaximized()) {
         this.mainWindow.maximize();
-        this._isMaximized = true;
+      } else {
+        this.mainWindow.unmaximize();
       }
     }
   }

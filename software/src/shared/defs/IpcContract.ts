@@ -61,6 +61,7 @@ export type IRealtimeKeyboardEvent =
 export type IAppWindowEvent = {
   activeChanged?: boolean;
   devToolVisible?: boolean;
+  isMaximized?: boolean;
 };
 
 export interface IProfileManagerCommand {
