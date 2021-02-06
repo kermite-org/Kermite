@@ -22,35 +22,12 @@ export class WindowService implements IWindowService {
     return this.windowWrapper;
   }
 
-  initialize() {
-    preparePreloadJsFile(appConfig.preloadFilePath);
-
-    const win = this.windowWrapper.openMainWindow({
-      preloadFilePath: appConfig.preloadFilePath,
-      publicRootPath: appConfig.publicRootPath,
-      pageTitle: appConfig.pageTitle,
-      initialPageWidth: appConfig.initialPageWidth,
-      initialPageHeight: appConfig.initialPageHeight,
-    });
-    appGlobal.mainWindow = win;
-    appGlobal.icpMainAgent.setWebcontents(win.webContents);
-    this.setupPageManager();
-    this.setupMenu();
-  }
-
   private setupPageManager() {
     const { pageManager: pm, windowWrapper: ww } = this;
     pm.initialize();
     pm.onPagePathChanged((pagePath) => ww.loadPage(pagePath));
-    pm.onDevToolVisibilityChanged((visible) =>
-      ww.setDevToolsVisibility(visible),
-    );
-    const { currentPagePath, isDevToolsVisible } = pm;
-    ww.setDevToolsVisibility(isDevToolsVisible);
+    const { currentPagePath } = pm;
     ww.loadPage(currentPagePath);
-    if (isDevToolsVisible) {
-      // setTimeout(() => this.windowWrapper.reloadPage(), 500);
-    }
   }
 
   private setupMenu() {
@@ -58,20 +35,34 @@ export class WindowService implements IWindowService {
     mm.buildMenu({
       allPagePaths: pm.allPagePaths,
       currentPagePath: pm.currentPagePath,
-      isDevToolVisible: pm.isDevToolsVisible,
     });
     mm.onMenuCloseMainWindow(() => ww.closeMainWindow());
     mm.onMenuChangeCurrentPagePath((pagePath) =>
       pm.setCurrentPagePath(pagePath),
     );
     mm.onMenuRequestReload(() => ww.reloadPage());
-    mm.onMenuToggleDevtoolVisibility(() =>
-      pm.setDevToolVisiblity(!pm.isDevToolsVisible),
-    );
     mm.onMenuRestartApplication(() => ww.restartApplication());
+  }
+
+  initialize() {
+    preparePreloadJsFile(appConfig.preloadFilePath);
+    this.windowWrapper.initialize();
+    this.windowWrapper.openMainWindow({
+      preloadFilePath: appConfig.preloadFilePath,
+      publicRootPath: appConfig.publicRootPath,
+      pageTitle: appConfig.pageTitle,
+      initialPageWidth: appConfig.initialPageWidth,
+      initialPageHeight: appConfig.initialPageHeight,
+    });
+    const win = this.windowWrapper.getMainWindow();
+    appGlobal.mainWindow = win;
+    appGlobal.icpMainAgent.setWebcontents(win.webContents);
+    this.setupPageManager();
+    this.setupMenu();
   }
 
   terminate() {
     this.pageManager.terminate();
+    this.windowWrapper.terminate();
   }
 }

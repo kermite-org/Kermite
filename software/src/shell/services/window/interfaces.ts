@@ -22,8 +22,9 @@ export interface IAppWindowWrapper {
     pageTitle: string;
     initialPageWidth: number;
     initialPageHeight: number;
-  }): Electron.BrowserWindow;
+  }): void;
   closeMainWindow(): void;
+  getMainWindow(): Electron.BrowserWindow;
   loadPage(pagePath: string): void;
   reloadPage(): void;
   setDevToolsVisibility(visible: boolean): void;
@@ -39,9 +40,6 @@ export interface IPageStateManager {
   currentPagePath: string;
   setCurrentPagePath(pagePath: string): void;
   onPagePathChanged: IListenerPort<string>;
-  isDevToolsVisible: boolean;
-  setDevToolVisiblity(visible: boolean): void;
-  onDevToolVisibilityChanged: IListenerPort<boolean>;
   initialize(): void;
   terminate(): void;
 }

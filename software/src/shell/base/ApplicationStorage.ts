@@ -10,18 +10,19 @@ import { fsExistsSync, fsxReadJsonFile, fsxWriteJsonFile } from '~/shell/funcs';
 export interface IApplicationPersistData {
   pageState: {
     currentPagePath: string;
-    isDevToolsVisible: boolean;
   };
   currentProfileName: string | undefined;
   keyboardConfig: IKeyboardConfig;
   layoutEditSource: ILayoutEditSource;
   globalSettings: IGlobalSettings;
+  windowState: {
+    isDevtoolsVisible: boolean;
+  };
 }
 
 const defaultPersistData: IApplicationPersistData = {
   pageState: {
     currentPagePath: '/',
-    isDevToolsVisible: false,
   },
   currentProfileName: undefined,
   keyboardConfig: {
@@ -35,6 +36,9 @@ const defaultPersistData: IApplicationPersistData = {
     useOnlineResources: true,
     useLocalResouces: false,
     localProjectRootFolderPath: '',
+  },
+  windowState: {
+    isDevtoolsVisible: false,
   },
 };
 class ApplicationStorage {

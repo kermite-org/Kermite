@@ -1,6 +1,6 @@
 import { app, BrowserWindow } from 'electron';
 import { IAppWindowEvent } from '~/shared';
-import { appConfig } from '~/shell/base';
+import { appConfig, appEnv, applicationStorage } from '~/shell/base';
 import { createEventPort2, pathJoin, pathRelative } from '~/shell/funcs';
 import { IAppWindowWrapper } from './interfaces';
 import { PageSourceWatcher, setupWebContentSourceChecker } from './modules';
@@ -12,11 +12,17 @@ export class AppWindowWrapper implements IAppWindowWrapper {
 
   private mainWindow: BrowserWindow | undefined;
 
+  private isDevtoolsVisible = false;
+
   appWindowEventPort = createEventPort2<IAppWindowEvent>({
     initialValueGetter: () => ({
-      devToolVisible: this.mainWindow?.webContents.isDevToolsOpened() || false,
+      devToolVisible: this.isDevtoolsVisible,
     }),
   });
+
+  getMainWindow(): Electron.BrowserWindow {
+    return this.mainWindow!;
+  }
 
   openMainWindow(params: {
     preloadFilePath: string;
@@ -24,7 +30,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     pageTitle: string;
     initialPageWidth: number;
     initialPageHeight: number;
-  }): Electron.BrowserWindow {
+  }) {
     const {
       preloadFilePath,
       publicRootPath,
@@ -63,7 +69,18 @@ export class AppWindowWrapper implements IAppWindowWrapper {
       this.appWindowEventPort.emit({ activeChanged: false });
     });
 
-    return win;
+    win.webContents.on('devtools-opened', () => {
+      this.isDevtoolsVisible = true;
+      this.appWindowEventPort.emit({ devToolVisible: true });
+    });
+    win.webContents.on('devtools-closed', () => {
+      this.isDevtoolsVisible = false;
+      this.appWindowEventPort.emit({ devToolVisible: false });
+    });
+
+    if (appEnv.isDevelopment && this.isDevtoolsVisible) {
+      this.setDevToolsVisibility(true);
+    }
   }
 
   closeMainWindow() {
@@ -106,7 +123,6 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     } else {
       this.mainWindow?.webContents.closeDevTools();
     }
-    this.appWindowEventPort.emit({ devToolVisible: visible });
   }
 
   minimizeMainWindow() {
@@ -153,4 +169,15 @@ export class AppWindowWrapper implements IAppWindowWrapper {
   //     }
   //   }
   // }
+
+  initialize() {
+    const loadedState = applicationStorage.getItem('windowState');
+    this.isDevtoolsVisible = loadedState.isDevtoolsVisible;
+  }
+
+  terminate() {
+    applicationStorage.setItem('windowState', {
+      isDevtoolsVisible: this.isDevtoolsVisible,
+    });
+  }
 }

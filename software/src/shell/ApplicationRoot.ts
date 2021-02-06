@@ -41,7 +41,6 @@ export class ApplicationRoot {
 
   private setupIpcBackend() {
     const windowWrapper = this.windowService.getWindowWrapper();
-    const pageManger = this.windowService.getPageManager();
 
     appGlobal.icpMainAgent.supplySyncHandlers({
       dev_getVersionSync: () => 'v100',
@@ -60,8 +59,7 @@ export class ApplicationRoot {
       window_maximizeWindow: async () => windowWrapper.maximizeMainWindow(),
       window_restartApplication: async () => windowWrapper.restartApplication(),
       window_setDevToolVisibility: async (visible) =>
-        pageManger.setDevToolVisiblity(visible),
-      // windowWrapper.setDevToolsVisibility(visible),
+        windowWrapper.setDevToolsVisibility(visible),
       // window_widgetModeChanged: async (isWidgetMode) =>
       //   this.appWindowManager.adjustWindowSize(isWidgetMode),
       profile_executeProfileManagerCommands: (commands) =>

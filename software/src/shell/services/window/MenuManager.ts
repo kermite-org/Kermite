@@ -26,9 +26,8 @@ export class MenuManager implements IMenuManager {
   buildMenu(initailState: {
     allPagePaths: string[];
     currentPagePath: string;
-    isDevToolVisible: boolean;
   }): void {
-    const { allPagePaths, currentPagePath, isDevToolVisible } = initailState;
+    const { allPagePaths, currentPagePath } = initailState;
 
     const template: Electron.MenuItemConstructorOptions[] = [
       {

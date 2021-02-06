@@ -6,10 +6,8 @@ import { enumeratePagePaths } from './modules';
 export class PageStateManager implements IPageStateManager {
   private _allPagePaths: string[] = [];
   private _currentPagePath: string = '/';
-  private _isDevToolsVisible: boolean = false;
 
   onPagePathChanged = makeListenerPort<string>();
-  onDevToolVisibilityChanged = makeListenerPort<boolean>();
 
   get allPagePaths() {
     return this._allPagePaths;
@@ -19,18 +17,9 @@ export class PageStateManager implements IPageStateManager {
     return this._currentPagePath;
   }
 
-  get isDevToolsVisible() {
-    return this._isDevToolsVisible;
-  }
-
   setCurrentPagePath(pagePath: string) {
     this._currentPagePath = pagePath;
     this.onPagePathChanged.emit(pagePath);
-  }
-
-  setDevToolVisiblity(visible: boolean) {
-    this._isDevToolsVisible = visible;
-    this.onDevToolVisibilityChanged.emit(visible);
   }
 
   initialize() {
@@ -40,14 +29,12 @@ export class PageStateManager implements IPageStateManager {
     this._currentPagePath =
       (tmpPagePath && this.allPagePaths.includes(tmpPagePath) && tmpPagePath) ||
       '/';
-    this._isDevToolsVisible = loadedState.isDevToolsVisible || false;
   }
 
   terminate() {
-    const { currentPagePath, isDevToolsVisible } = this;
+    const { currentPagePath } = this;
     applicationStorage.setItem('pageState', {
       currentPagePath,
-      isDevToolsVisible,
     });
   }
 }
