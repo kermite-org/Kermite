@@ -58,6 +58,7 @@ export class ApplicationRoot {
       window_minimizeWindow: async () => windowWrapper.minimizeMainWindow(),
       window_maximizeWindow: async () => windowWrapper.maximizeMainWindow(),
       window_restartApplication: async () => windowWrapper.restartApplication(),
+      window_reloadPage: async () => windowWrapper.reloadPage(),
       window_setDevToolVisibility: async (visible) =>
         windowWrapper.setDevToolsVisibility(visible),
       // window_widgetModeChanged: async (isWidgetMode) =>

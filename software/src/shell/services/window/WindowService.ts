@@ -2,11 +2,7 @@ import { appGlobal, appConfig } from '~/shell/base';
 import { AppWindowWrapper } from './AppWindowWrapper';
 import { MenuManager } from './MenuManager';
 import { PageStateManager } from './PageStateManager';
-import {
-  IAppWindowWrapper,
-  IPageStateManager,
-  IWindowService,
-} from './interfaces';
+import { IPageStateManager, IWindowService } from './interfaces';
 import { preparePreloadJsFile } from './modules';
 
 export class WindowService implements IWindowService {
@@ -18,7 +14,7 @@ export class WindowService implements IWindowService {
     return this.pageManager;
   }
 
-  getWindowWrapper(): IAppWindowWrapper {
+  getWindowWrapper(): AppWindowWrapper {
     return this.windowWrapper;
   }
 
