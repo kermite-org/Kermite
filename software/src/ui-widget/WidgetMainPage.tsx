@@ -3,49 +3,17 @@ import { h } from 'qx';
 import { WidgetSvgKeyboardView } from '~/ui-common-svg/panels/WidgetSvgKeyboardView';
 import { makeWidgetMainPageViewModel } from '~/ui-widget/WidgetMainPageViewModel';
 
-const styles = {
-  cssPanel: (contentScale: number) => css`
-    width: 600px;
-    height: 240px;
-    user-select: none;
-    transform: scale(${contentScale}, ${contentScale});
-    position: relative;
-    -webkit-app-region: drag;
-  `,
-
-  // cssConfigButton: css`
-  //   position: absolute;
-  //   right: 18px;
-  //   top: 17px;
-  //   -webkit-app-region: no-drag;
-  //   color: #fff;
-  //   width: 20px;
-  //   height: 20px;
-  //   display: flex;
-  //   justify-content: center;
-  //   align-items: center;
-  //   cursor: pointer;
-  //   font-size: 14px;
-  //   background: #888;
-
-  //   &:hover {
-  //     background: #0cf;
-  //   }
-  // `,
-};
+const cssMainpanel = css`
+  user-select: none;
+  -webkit-app-region: drag;
+  width: 100%;
+  height: 100%;
+`;
 
 export function MainPanel() {
   const vm = makeWidgetMainPageViewModel();
-  const contentScale = window.innerWidth / 600;
-
   return (
-    <div
-      css={styles.cssPanel(contentScale)}
-      onDblClick={vm.backToConfiguratorView}
-    >
-      {/* <div css={styles.cssConfigButton} onClick={vm.backToConfiguratorView}>
-        <i className="fa fa-cog" />
-      </div> */}
+    <div css={cssMainpanel} onDblClick={vm.backToConfiguratorView}>
       <WidgetSvgKeyboardView
         keyboardDesign={vm.keyboardVM.keyboardDesign}
         cardsPartVM={vm.keyboardVM.cardsPartVM}

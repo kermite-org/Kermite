@@ -25,7 +25,7 @@ export const PresetKeyboardView = ({
 
   const dpiScale = 2;
   const marginRatio = 0.06;
-  const baseStrokeWidth = 0.3;
+  const baseStrokeWidth = 1.0;
 
   const fillColor = 'transparent';
   const strokeColor = '#0A8';
@@ -45,11 +45,7 @@ export const PresetKeyboardView = ({
         />
         <g>
           {vm.keyUnits.map((keyUnit) => (
-            <PresetKeyUnitCard
-              model={keyUnit}
-              key={keyUnit.keyUnitId}
-              // qxOptimizer="deepEqual"
-            />
+            <PresetKeyUnitCard model={keyUnit} key={keyUnit.keyUnitId} />
           ))}
         </g>
       </KeyboardSvgFrameWithAutoScaler>
