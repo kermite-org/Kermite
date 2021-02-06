@@ -6,6 +6,8 @@ import { createEventPort2, pathJoin, pathRelative } from '~/shell/funcs';
 import { IAppWindowWrapper } from './interfaces';
 import { PageSourceWatcher, setupWebContentSourceChecker } from './modules';
 
+const enableFilesWatcher = true;
+// const enableFilesWatcher = appEnv.isDevelopment;
 export class AppWindowWrapper implements IAppWindowWrapper {
   private pageSourceWatcher = new PageSourceWatcher();
 
@@ -116,7 +118,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     console.log(`loading ${relativeFilePathFromProjectRoot}`);
     this.mainWindow?.loadURL(uri);
 
-    if (appConfig.isDevelopment) {
+    if (enableFilesWatcher) {
       const includeSubFolders = true;
       this.pageSourceWatcher.observeFiles(pageDir, includeSubFolders, () =>
         this.mainWindow?.reload(),
