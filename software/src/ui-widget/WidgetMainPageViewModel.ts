@@ -15,7 +15,7 @@ export interface IWidgetKeyboardViewViewModel {
 export interface IWidgetMainPageViewModel {
   isWindowActive: boolean;
   keyboardVM: IWidgetKeyboardViewViewModel;
-  onOpenButton(): void;
+  backToConfiguratorView(): void;
 }
 
 const playerModel = new PlayerModel();
@@ -32,7 +32,7 @@ export function makeWidgetMainPageViewModel(): IWidgetMainPageViewModel {
       keyboardDesign: playerModel.displayDesign,
       cardsPartVM: makeWidgetKeyUnitCardsPartViewModel(playerModel),
     },
-    onOpenButton() {
+    backToConfiguratorView() {
       siteModel.setWidgetMode(false);
     },
   };
