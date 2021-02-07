@@ -17,13 +17,20 @@ export namespace router {
     return () => window.removeEventListener('hashchange', onHashChange);
   }
 
-  export function getHashPath() {
+  export function getPagePath() {
     return location.hash.slice(1);
   }
 
   export function navigateTo(path: string) {
     chainginHashInEventCallback = true;
     location.hash = path;
+  }
+
+  export function useRedirect(sourcePaths: string[], destPath: string) {
+    const pagePath = router.getPagePath();
+    if (sourcePaths.includes(pagePath)) {
+      navigateTo(destPath);
+    }
   }
 }
 

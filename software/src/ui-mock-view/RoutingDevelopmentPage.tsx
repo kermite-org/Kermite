@@ -31,7 +31,7 @@ export const RoutingDevelopmentPage: FC = () => {
 
   console.log(`render`, { hash: location.hash });
 
-  const path = router.getHashPath();
+  const path = router.getPagePath();
 
   return (
     <div>
