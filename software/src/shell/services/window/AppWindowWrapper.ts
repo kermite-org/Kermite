@@ -1,5 +1,6 @@
 import { app, BrowserWindow } from 'electron';
 import { IAppWindowStatus } from '~/shared';
+import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { createEventPort2, pathJoin, pathRelative } from '~/shell/funcs';
 import { IAppWindowWrapper } from './interfaces';
@@ -169,13 +170,18 @@ export class AppWindowWrapper implements IAppWindowWrapper {
       return;
     }
     if (this.isWidgetMode) {
+      const design = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
+        currentProfile.keyboardDesign,
+      );
+      const w = design.displayArea.width * 4;
+      const h = design.displayArea.height * 4 + 40;
+      this.mainWindow.setSize(w, h);
     } else {
       this.mainWindow.setSize(1280, 720);
     }
   }
-  // private _winHeight = 800;
 
-  // adjustWindowSize(isWidgetMode: boolean) {
+  // adjustWindowSize_oldImpl(isWidgetMode: boolean) {
   //   if (this.mainWindow) {
   //     const [w, h] = this.mainWindow.getSize();
 
