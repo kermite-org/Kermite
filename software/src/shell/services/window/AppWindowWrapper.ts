@@ -18,11 +18,8 @@ const enableFilesWatcher = true;
 
 export class AppWindowWrapper implements IAppWindowWrapper {
   private pageSourceWatcher = new PageSourceWatcher();
-
   private publicRootPath: string | undefined;
-
   private mainWindow: BrowserWindow | undefined;
-
   private state: IWindowPersistState = makeFallbackWindowPersistState();
 
   appWindowEventPort = createEventPort2<Partial<IAppWindowStatus>>({
@@ -147,30 +144,6 @@ export class AppWindowWrapper implements IAppWindowWrapper {
         this.mainWindow?.reload(),
       );
     }
-  }
-
-  loadPage(pagePath: string) {
-    // if (!this.publicRootPath) {
-    //   return;
-    // }
-    // const pageDir = pathJoin(
-    //   this.publicRootPath,
-    //   pagePath !== '/' ? pagePath : '',
-    // );
-    // const uri = `file://${pageDir}/index.html`;
-    // const relativeFilePathFromProjectRoot = pathRelative(
-    //   process.cwd(),
-    //   `${pageDir}/index.html`,
-    // );
-    // console.log(`loading ${relativeFilePathFromProjectRoot}`);
-    // this.mainWindow?.loadURL(uri);
-    // if (enableFilesWatcher) {
-    //   const includeSubFolders = true;
-    //   this.pageSourceWatcher.observeFiles(pageDir, includeSubFolders, () =>
-    //     this.mainWindow?.reload(),
-    //   );
-    // }
-    // this.onPageLoaded.emit(pagePath);
   }
 
   reloadPage() {

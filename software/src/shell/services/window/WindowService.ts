@@ -1,41 +1,21 @@
 import { appGlobal, appConfig } from '~/shell/base';
 import { AppWindowWrapper } from './AppWindowWrapper';
 import { MenuManager } from './MenuManager';
-import { PageStateManager } from './PageStateManager';
-import { IPageStateManager, IWindowService } from './interfaces';
+import { IWindowService } from './interfaces';
 import { preparePreloadJsFile } from './modules';
 
 export class WindowService implements IWindowService {
-  private pageManager = new PageStateManager();
   private windowWrapper = new AppWindowWrapper();
   private menuManager = new MenuManager();
-
-  getPageManager(): IPageStateManager {
-    return this.pageManager;
-  }
 
   getWindowWrapper(): AppWindowWrapper {
     return this.windowWrapper;
   }
 
-  private setupPageManager() {
-    const { pageManager: pm, windowWrapper: ww } = this;
-    pm.initialize();
-    pm.onPagePathChanged((pagePath) => ww.loadPage(pagePath));
-    const { currentPagePath } = pm;
-    ww.loadPage(currentPagePath);
-  }
-
   private setupMenu() {
-    const { menuManager: mm, pageManager: pm, windowWrapper: ww } = this;
-    mm.buildMenu({
-      allPagePaths: pm.allPagePaths,
-      currentPagePath: pm.currentPagePath,
-    });
+    const { menuManager: mm, windowWrapper: ww } = this;
+    mm.buildMenu();
     mm.onMenuCloseMainWindow(() => ww.closeMainWindow());
-    mm.onMenuChangeCurrentPagePath((pagePath) =>
-      pm.setCurrentPagePath(pagePath),
-    );
     mm.onMenuRequestReload(() => ww.reloadPage());
     mm.onMenuRestartApplication(() => ww.restartApplication());
   }
@@ -53,12 +33,10 @@ export class WindowService implements IWindowService {
     const win = this.windowWrapper.getMainWindow();
     appGlobal.mainWindow = win;
     appGlobal.icpMainAgent.setWebcontents(win.webContents);
-    this.setupPageManager();
     this.setupMenu();
   }
 
   terminate() {
-    this.pageManager.terminate();
     this.windowWrapper.terminate();
   }
 }
