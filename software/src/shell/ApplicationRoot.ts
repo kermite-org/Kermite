@@ -61,8 +61,6 @@ export class ApplicationRoot {
       window_reloadPage: async () => windowWrapper.reloadPage(),
       window_setDevToolVisibility: async (visible) =>
         windowWrapper.setDevToolsVisibility(visible),
-      window_setWidgetMode: async (isWidgetMode) =>
-        windowWrapper.setWidgetMode(isWidgetMode),
       profile_executeProfileManagerCommands: (commands) =>
         this.profileManager.executeCommands(commands),
       layout_executeLayoutManagerCommands: (commands) =>

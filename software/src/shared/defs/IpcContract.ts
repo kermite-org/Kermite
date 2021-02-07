@@ -62,7 +62,6 @@ export type IAppWindowStatus = {
   isActive: boolean;
   isDevtoolsVisible: boolean;
   isMaximized: boolean;
-  isWidgetMode: boolean;
 };
 
 export interface IProfileManagerCommand {
@@ -178,7 +177,6 @@ export interface IAppIpcContract {
     window_restartApplication(): Promise<void>;
     window_setDevToolVisibility(visible: boolean): Promise<void>;
     window_reloadPage(): Promise<void>;
-    window_setWidgetMode(isWidgetMode: boolean): Promise<void>;
 
     // profile_getCurrentProfile(): Promise<IProfileData | undefined>;
     profile_executeProfileManagerCommands(
