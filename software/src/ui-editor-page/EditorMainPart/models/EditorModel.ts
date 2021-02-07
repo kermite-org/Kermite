@@ -8,7 +8,7 @@ import {
   compareObjectByJsonStringify,
   duplicateObjectByJsonStringifyParse,
 } from '~/shared';
-import { getDisplayKeyboardDesignSingleCached } from '~/ui-common/modules/DisplayKeyboardSingleCache';
+import { getDisplayKeyboardDesignSingleCached } from '~/shared/modules/DisplayKeyboardSingleCache';
 import {
   changeProfileDataAssignType,
   removeInvalidProfileAssigns,

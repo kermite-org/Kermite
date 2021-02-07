@@ -1,8 +1,8 @@
-import { createSimpleSelector } from '~/ui-common/helpers/StoreUtils';
 import {
   getCoordUnitFromUnitSpec,
   ICoordUnit,
-} from '~/ui-common/modules/PlacementUnitHelper';
+} from '~/shared/modules/PlacementUnitHelper';
+import { createSimpleSelector } from '~/ui-common/helpers/StoreUtils';
 import { appState, IEnvBoolPropKey, IModeState } from './AppState';
 import { getKeyboardDesignBoundingBox } from './BoundingBoxCalculator';
 import {

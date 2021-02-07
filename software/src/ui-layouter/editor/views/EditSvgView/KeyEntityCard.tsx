@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h, rerender } from 'qx';
 import { degToRad } from '~/shared';
-import { getKeySize } from '~/ui-common/modules/PlacementUnitHelper';
+import { getKeySize } from '~/shared/modules/PlacementUnitHelper';
 import { IPosition, startDragSession } from '~/ui-layouter/base';
 import {
   editMutations,

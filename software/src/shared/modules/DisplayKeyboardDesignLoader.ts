@@ -18,7 +18,7 @@ import {
   getKeySize,
   getStdKeySize,
   ICoordUnit,
-} from '~/ui-common/modules/PlacementUnitHelper';
+} from '~/shared/modules/PlacementUnitHelper';
 
 export namespace DisplayKeyboardDesignLoader {
   type ISourceDesign = IPersistKeyboardDesign;
