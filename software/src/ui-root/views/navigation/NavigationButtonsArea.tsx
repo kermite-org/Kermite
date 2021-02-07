@@ -16,7 +16,7 @@ export const NavigationButtonsArea = () => {
   return (
     <div css={cssNavigationButtonsArea}>
       {vm.entries.map((entry) => (
-        <NavigationButton vm={entry} key={entry.pageSig} />
+        <NavigationButton vm={entry} key={entry.pagePath} />
       ))}
     </div>
   );

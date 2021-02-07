@@ -1,7 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { appUi, uiTheme } from '~/ui-common';
-import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
+import { appUi, router, uiTheme } from '~/ui-common';
 import { EditorPage } from '~/ui-editor-page/EditorPage';
 import { FirmwareUpdationPage } from '~/ui-firmware-updation-page';
 import { HeatmapPage } from '~/ui-heatmap-page';
@@ -27,20 +26,19 @@ const styles = {
 };
 
 export const ConfiguratorZoneRoot = () => {
-  const { page } = uiStatusModel.settings;
-
+  const pagePath = router.getPagePath();
   return (
     <CustomWindowFrame renderTitleBar={() => <WindowTitleBarSection />}>
       <div css={styles.cssContentRow}>
         <NavigationColumn />
         <div css={styles.cssMainColumn}>
-          {page === 'editor' && <EditorPage />}
-          {page === 'layouter' && <UiLayouterPageComponent />}
-          {page === 'shapePreview' && <KeyboardShapePreviewPage />}
-          {page === 'firmwareUpdation' && <FirmwareUpdationPage />}
-          {page === 'presetBrowser' && <PresetBrowserPage />}
-          {page === 'heatmap' && <HeatmapPage />}
-          {page === 'settings' && <UiSettingsPage />}
+          {pagePath === '/editor' && <EditorPage />}
+          {pagePath === '/layouter' && <UiLayouterPageComponent />}
+          {pagePath === '/shapePreview' && <KeyboardShapePreviewPage />}
+          {pagePath === '/firmwareUpdation' && <FirmwareUpdationPage />}
+          {pagePath === '/presetBrowser' && <PresetBrowserPage />}
+          {pagePath === '/heatmap' && <HeatmapPage />}
+          {pagePath === '/settings' && <UiSettingsPage />}
         </div>
         <DevToolPullTab qxIf={appUi.isDevelopment} />
       </div>

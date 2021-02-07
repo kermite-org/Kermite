@@ -1,5 +1,6 @@
 import { css, glob, setup } from 'goober';
 import { h, Hook } from 'qx';
+import { router } from '~/ui-common';
 import { DebugOverlay } from '~/ui-common/fundamental/overlay/DebugOverlay';
 import { ForegroundModalLayerRoot } from '~/ui-common/fundamental/overlay/ForegroundModalLayer';
 import { siteModel } from '~/ui-common/sharedModels/SiteModel';
@@ -35,17 +36,15 @@ const cssSiteRoot = css`
 `;
 
 export const SiteRoot = () => {
+  Hook.useEffect(router.rerenderEffectOnHashChange, []);
   Hook.useEffect(siteModel.setupLifecycle, []);
+  router.useRedirect(['', '/'], '/editor');
 
-  const { isWidgetMode } = siteModel;
-
-  const ZoneRootComponent = isWidgetMode
-    ? WidgetZoneRoot
-    : ConfiguratorZoneRoot;
-
+  const isWidgetMode = router.getPagePath() === '/widget';
   return (
     <div css={cssSiteRoot}>
-      <ZoneRootComponent />
+      {!isWidgetMode && <ConfiguratorZoneRoot />}
+      {isWidgetMode && <WidgetZoneRoot />}
       <ForegroundModalLayerRoot />
       <DebugOverlay />
     </div>
