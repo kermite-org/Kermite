@@ -5,14 +5,13 @@ import {
   IResourceOrigin,
 } from '~/shared';
 import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
-import { ipcAgent } from '~/ui-common';
+import { ipcAgent, router } from '~/ui-common';
 import {
   modalAlert,
   modalTextEdit,
 } from '~/ui-common/fundamental/dialog/BasicModals';
 import { createSimpleSelector } from '~/ui-common/helpers/StoreUtils';
 import { ProjectResourceModel } from '~/ui-common/sharedModels/ProjectResourceModel';
-import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
 
 class PresetBrowserModelHelper {
   static getNewProfileNameBase(
@@ -212,7 +211,7 @@ export class PresetBrowserModel {
       projectId,
       spec,
     );
-    uiStatusModel.navigateTo('editor');
+    router.navigateTo('/editor');
   };
 
   private async fetchResourceInfos() {

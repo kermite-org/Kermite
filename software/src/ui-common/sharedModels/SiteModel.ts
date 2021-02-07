@@ -2,14 +2,9 @@ import { IAppWindowStatus } from '~/shared';
 import { ipcAgent } from '~/ui-common';
 
 export class SiteModel {
-  isWidgetMode: boolean = false;
   isWindowActive: boolean = true;
   isDevtoolsVisible: boolean = false;
   isWindowMaximized: boolean = false;
-
-  setWidgetMode = (isWidgetMode: boolean) => {
-    ipcAgent.async.window_setWidgetMode(isWidgetMode);
-  };
 
   toggleDevToolVisible = () => {
     ipcAgent.async.window_setDevToolVisibility(!this.isDevtoolsVisible);
@@ -24,9 +19,6 @@ export class SiteModel {
     }
     if (ev.isMaximized !== undefined) {
       this.isWindowMaximized = ev.isMaximized;
-    }
-    if (ev.isWidgetMode !== undefined) {
-      this.isWidgetMode = ev.isWidgetMode;
     }
   };
 

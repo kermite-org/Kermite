@@ -1,18 +1,18 @@
 import { copyObjectProps } from '~/shared';
-import { appUi } from '~/ui-common';
 
-export type PageSignature =
-  | 'editor'
-  | 'layouter'
-  | 'shapePreview'
-  | 'firmwareUpdation'
-  | 'presetBrowser'
-  | 'heatmap'
-  | 'settings';
+export type PagePaths =
+  | '/'
+  | '/editor'
+  | '/layouter'
+  | '/shapePreview'
+  | '/firmwareUpdation'
+  | '/presetBrowser'
+  | '/heatmap'
+  | '/settings'
+  | '/widget';
 
 export interface IUiSettings {
   showTestInputArea: boolean;
-  page: PageSignature;
   shapeViewProjectSig: string;
   shapeViewLayoutName: string;
   shapeViewShowKeyId: boolean;
@@ -24,7 +24,6 @@ export interface IUiSettings {
 
 const defaultUiSettings: IUiSettings = {
   showTestInputArea: false,
-  page: 'editor',
   shapeViewProjectSig: '',
   shapeViewLayoutName: '',
   shapeViewShowKeyId: false,
@@ -53,13 +52,6 @@ export class UiStatusModel {
       const settings = JSON.parse(settingsText);
       copyObjectProps(this.settings, settings);
     }
-    if (!appUi.isDevelopment || !this.settings.page) {
-      this.settings.page = 'editor';
-    }
-  }
-
-  navigateTo(page: PageSignature) {
-    this.settings.page = page;
   }
 
   save() {

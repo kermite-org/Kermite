@@ -1,4 +1,4 @@
-import { ipcAgent } from '~/ui-common';
+import { ipcAgent, router } from '~/ui-common';
 import { siteModel } from '~/ui-common/sharedModels/SiteModel';
 
 export interface IWindowControlButtonsModel {
@@ -19,7 +19,7 @@ export function makeWindowControlButtonsModel(): IWindowControlButtonsModel {
       ipcAgent.async.window_restartApplication();
     },
     onWidgetButton() {
-      siteModel.setWidgetMode(true);
+      router.navigateTo('/widget');
     },
     onMinimizeButton() {
       ipcAgent.async.window_minimizeWindow();
