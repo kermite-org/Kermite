@@ -1,6 +1,6 @@
 import { app, BrowserWindow } from 'electron';
 import { IAppWindowStatus } from '~/shared';
-import { appConfig, appEnv, applicationStorage } from '~/shell/base';
+import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { createEventPort2, pathJoin, pathRelative } from '~/shell/funcs';
 import { IAppWindowWrapper } from './interfaces';
 import { PageSourceWatcher, setupWebContentSourceChecker } from './modules';
@@ -91,6 +91,8 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     if (appEnv.isDevelopment && this.isDevtoolsVisible) {
       this.setDevToolsVisibility(true);
     }
+
+    this.adjustWindowSize();
   }
 
   closeMainWindow() {
@@ -138,6 +140,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
   setWidgetMode(isWidgetMode: boolean) {
     this.isWidgetMode = isWidgetMode;
     this.appWindowEventPort.emit({ isWidgetMode });
+    this.adjustWindowSize();
   }
 
   minimizeMainWindow() {
@@ -158,6 +161,17 @@ export class AppWindowWrapper implements IAppWindowWrapper {
   restartApplication() {
     console.log('##REBOOT_ME_AFTER_CLOSE');
     this.closeMainWindow();
+  }
+
+  private adjustWindowSize() {
+    const currentProfile = appGlobal.currentProfileGetter?.();
+    if (!this.mainWindow || !currentProfile) {
+      return;
+    }
+    if (this.isWidgetMode) {
+    } else {
+      this.mainWindow.setSize(1280, 720);
+    }
   }
   // private _winHeight = 800;
 
