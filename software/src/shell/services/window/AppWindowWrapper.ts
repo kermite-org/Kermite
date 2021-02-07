@@ -10,13 +10,19 @@ import {
   makeFallbackWindowPersistState,
 } from '~/shell/base';
 import { createEventPort2, pathRelative } from '~/shell/funcs';
+import { MenuManager } from '~/shell/services/window/MenuManager';
 import { IAppWindowWrapper } from './interfaces';
-import { PageSourceWatcher, setupWebContentSourceChecker } from './modules';
+import {
+  PageSourceWatcher,
+  preparePreloadJsFile,
+  setupWebContentSourceChecker,
+} from './modules';
 
 const enableFilesWatcher = true;
 // const enableFilesWatcher = appEnv.isDevelopment;
 
 export class AppWindowWrapper implements IAppWindowWrapper {
+  private menuManager = new MenuManager();
   private pageSourceWatcher = new PageSourceWatcher();
   private publicRootPath: string | undefined;
   private mainWindow: BrowserWindow | undefined;
@@ -222,8 +228,19 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     }
   }
 
+  private setupMenu() {
+    const { menuManager: mm } = this;
+    mm.buildMenu();
+    mm.onMenuCloseMainWindow(this.closeMainWindow.bind(this));
+    mm.onMenuRequestReload(this.reloadPage.bind(this));
+    mm.onMenuRestartApplication(this.restartApplication.bind(this));
+  }
+
   initialize() {
     this.state = applicationStorage.getItem('windowState');
+    preparePreloadJsFile(appConfig.preloadFilePath);
+    this.openMainWindow();
+    this.setupMenu();
   }
 
   terminate() {
