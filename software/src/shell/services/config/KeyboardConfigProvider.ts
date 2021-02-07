@@ -1,7 +1,7 @@
 import {
+  copyObjectProps,
   fallbackKeyboardConfig,
   IKeyboardConfig,
-  overwriteObjectProps,
 } from '~/shared';
 import { applicationStorage } from '~/shell/base';
 import { EventPort } from '~/shell/funcs';
@@ -37,7 +37,7 @@ export class KeyboardConfigProvider {
     const config: IKeyboardConfig = { ...fallbackKeyboardConfig };
     const loaded = applicationStorage.getItem('keyboardConfig');
     if (loaded) {
-      overwriteObjectProps(config, loaded);
+      copyObjectProps(config, loaded);
     }
     return config;
   }
