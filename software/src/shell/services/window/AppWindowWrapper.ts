@@ -66,6 +66,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     if (!appConfig.isDevelopment) {
       options.frame = false;
       options.transparent = true;
+      options.hasShadow = false;
     }
 
     const win = new BrowserWindow(options);
