@@ -33,20 +33,14 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     return this.mainWindow!;
   }
 
-  openMainWindow(params: {
-    preloadFilePath: string;
-    publicRootPath: string;
-    pageTitle: string;
-    initialPageWidth: number;
-    initialPageHeight: number;
-  }) {
+  openMainWindow() {
     const {
       preloadFilePath,
       publicRootPath,
       pageTitle,
       initialPageWidth,
       initialPageHeight,
-    } = params;
+    } = appConfig;
 
     const recalledBounds = this.isWidgetMode
       ? this.state.placement.widget?.bounds
