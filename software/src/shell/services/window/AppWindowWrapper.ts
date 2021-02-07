@@ -13,9 +13,11 @@ export class AppWindowWrapper implements IAppWindowWrapper {
   private mainWindow: BrowserWindow | undefined;
 
   private isDevtoolsVisible = false;
+  private isWidgetMode = false;
 
   appWindowEventPort = createEventPort2<Partial<IAppWindowStatus>>({
     initialValueGetter: () => ({
+      isWidgetMode: this.isWidgetMode,
       isDevtoolsVisible: this.isDevtoolsVisible,
       isMaximized: this.mainWindow?.isMaximized() || false,
     }),
@@ -133,6 +135,11 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     }
   }
 
+  setWidgetMode(isWidgetMode: boolean) {
+    this.isWidgetMode = isWidgetMode;
+    this.appWindowEventPort.emit({ isWidgetMode });
+  }
+
   minimizeMainWindow() {
     this.mainWindow?.minimize();
   }
@@ -175,12 +182,15 @@ export class AppWindowWrapper implements IAppWindowWrapper {
 
   initialize() {
     const loadedState = applicationStorage.getItem('windowState');
+    console.log({ loadedState });
     this.isDevtoolsVisible = loadedState.isDevtoolsVisible;
+    this.isWidgetMode = loadedState.isWidgetMode;
   }
 
   terminate() {
     applicationStorage.setItem('windowState', {
       isDevtoolsVisible: this.isDevtoolsVisible,
+      isWidgetMode: this.isWidgetMode,
     });
   }
 }

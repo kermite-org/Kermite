@@ -17,6 +17,7 @@ export interface IApplicationPersistData {
   globalSettings: IGlobalSettings;
   windowState: {
     isDevtoolsVisible: boolean;
+    isWidgetMode: boolean;
   };
 }
 
@@ -39,6 +40,7 @@ const defaultPersistData: IApplicationPersistData = {
   },
   windowState: {
     isDevtoolsVisible: false,
+    isWidgetMode: false,
   },
 };
 class ApplicationStorage {

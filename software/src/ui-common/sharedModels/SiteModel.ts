@@ -8,8 +8,7 @@ export class SiteModel {
   isWindowMaximized: boolean = false;
 
   setWidgetMode = (isWidgetMode: boolean) => {
-    this.isWidgetMode = isWidgetMode;
-    // backendAgent.widgetModeChanged(isWidgetMode);
+    ipcAgent.async.window_setWidgetMode(isWidgetMode);
   };
 
   toggleDevToolVisible = () => {
@@ -19,10 +18,15 @@ export class SiteModel {
   private onAppWindowStatusEvent = (ev: Partial<IAppWindowStatus>) => {
     if (ev.isActive !== undefined) {
       this.isWindowActive = ev.isActive;
-    } else if (ev.isDevtoolsVisible !== undefined) {
+    }
+    if (ev.isDevtoolsVisible !== undefined) {
       this.isDevtoolsVisible = ev.isDevtoolsVisible;
-    } else if (ev.isMaximized !== undefined) {
+    }
+    if (ev.isMaximized !== undefined) {
       this.isWindowMaximized = ev.isMaximized;
+    }
+    if (ev.isWidgetMode !== undefined) {
+      this.isWidgetMode = ev.isWidgetMode;
     }
   };
 
