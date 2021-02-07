@@ -29,10 +29,6 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     }),
   });
 
-  getMainWindow(): Electron.BrowserWindow {
-    return this.mainWindow!;
-  }
-
   openMainWindow() {
     const {
       preloadFilePath,
@@ -70,6 +66,9 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     this.mainWindow = win;
     setupWebContentSourceChecker(win.webContents, publicRootPath);
     this.publicRootPath = publicRootPath;
+
+    appGlobal.mainWindow = win;
+    appGlobal.icpMainAgent.setWebcontents(win.webContents);
 
     if (appEnv.isDevelopment && this.state.isDevtoolsVisible) {
       this.setDevToolsVisibility(true);

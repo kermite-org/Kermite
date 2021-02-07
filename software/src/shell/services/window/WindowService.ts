@@ -24,9 +24,6 @@ export class WindowService implements IWindowService {
     preparePreloadJsFile(appConfig.preloadFilePath);
     this.windowWrapper.initialize();
     this.windowWrapper.openMainWindow();
-    const win = this.windowWrapper.getMainWindow();
-    appGlobal.mainWindow = win;
-    appGlobal.icpMainAgent.setWebcontents(win.webContents);
     this.setupMenu();
   }
 

@@ -10,15 +10,8 @@ export interface IMenuManager {
 }
 
 export interface IAppWindowWrapper {
-  openMainWindow(params: {
-    preloadFilePath: string;
-    publicRootPath: string;
-    pageTitle: string;
-    initialPageWidth: number;
-    initialPageHeight: number;
-  }): void;
+  openMainWindow(): void;
   closeMainWindow(): void;
-  getMainWindow(): Electron.BrowserWindow;
   reloadPage(): void;
   setDevToolsVisibility(visible: boolean): void;
   minimizeMainWindow(): void;
