@@ -175,7 +175,7 @@ export class ApplicationRoot {
         return () =>
           this.keyboardLayoutFilesWatcher.fileUpdationEventPort.unsubscribe(cb);
       },
-      window_appWindowEvents: windowWrapper.appWindowEventPort.subscribe,
+      window_appWindowStatus: windowWrapper.appWindowEventPort.subscribe,
     });
   }
 

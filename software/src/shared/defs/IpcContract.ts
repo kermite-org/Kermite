@@ -58,10 +58,10 @@ export type IRealtimeKeyboardEvent =
       prioritySpec: number;
     };
 
-export type IAppWindowEvent = {
-  activeChanged?: boolean;
-  devToolVisible?: boolean;
-  isMaximized?: boolean;
+export type IAppWindowStatus = {
+  isActive: boolean;
+  isDevtoolsVisible: boolean;
+  isMaximized: boolean;
 };
 
 export interface IProfileManagerCommand {
@@ -225,7 +225,7 @@ export interface IAppIpcContract {
   };
   events: {
     dev_testEvent: { type: string };
-    window_appWindowEvents: IAppWindowEvent;
+    window_appWindowStatus: Partial<IAppWindowStatus>;
 
     profile_currentProfile: IProfileData | undefined;
     profile_profileManagerStatus: Partial<IProfileManagerStatus>;

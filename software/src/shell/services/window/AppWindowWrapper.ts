@@ -1,5 +1,5 @@
 import { app, BrowserWindow } from 'electron';
-import { IAppWindowEvent } from '~/shared';
+import { IAppWindowStatus } from '~/shared';
 import { appConfig, appEnv, applicationStorage } from '~/shell/base';
 import { createEventPort2, pathJoin, pathRelative } from '~/shell/funcs';
 import { IAppWindowWrapper } from './interfaces';
@@ -14,9 +14,9 @@ export class AppWindowWrapper implements IAppWindowWrapper {
 
   private isDevtoolsVisible = false;
 
-  appWindowEventPort = createEventPort2<IAppWindowEvent>({
+  appWindowEventPort = createEventPort2<Partial<IAppWindowStatus>>({
     initialValueGetter: () => ({
-      devToolVisible: this.isDevtoolsVisible,
+      isDevtoolsVisible: this.isDevtoolsVisible,
       isMaximized: this.mainWindow?.isMaximized() || false,
     }),
   });
@@ -64,19 +64,19 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     this.publicRootPath = publicRootPath;
 
     app.on('browser-window-focus', () => {
-      this.appWindowEventPort.emit({ activeChanged: true });
+      this.appWindowEventPort.emit({ isActive: true });
     });
     app.on('browser-window-blur', () => {
-      this.appWindowEventPort.emit({ activeChanged: false });
+      this.appWindowEventPort.emit({ isActive: false });
     });
 
     win.webContents.on('devtools-opened', () => {
       this.isDevtoolsVisible = true;
-      this.appWindowEventPort.emit({ devToolVisible: true });
+      this.appWindowEventPort.emit({ isDevtoolsVisible: true });
     });
     win.webContents.on('devtools-closed', () => {
       this.isDevtoolsVisible = false;
-      this.appWindowEventPort.emit({ devToolVisible: false });
+      this.appWindowEventPort.emit({ isDevtoolsVisible: false });
     });
 
     win.on('maximize', () =>
