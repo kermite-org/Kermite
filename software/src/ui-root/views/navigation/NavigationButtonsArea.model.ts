@@ -1,28 +1,26 @@
-import {
-  PageSignature,
-  uiStatusModel,
-} from '~/ui-common/sharedModels/UiStatusModel';
+import { router } from '~/ui-common';
+import { PagePaths } from '~/ui-common/sharedModels/UiStatusModel';
 
 export interface NavigationEntryViewModel {
-  pageSig: PageSignature;
+  pagePath: PagePaths;
   faIconName: string;
   isCurrent: boolean;
   onClick: () => void;
 }
 
 interface NavigationEntrySource {
-  pageSig: PageSignature;
+  pagePath: PagePaths;
   faIconName: string;
 }
 
 const entrySources: NavigationEntrySource[] = [
-  { pageSig: 'editor', faIconName: 'fa-keyboard' },
-  { pageSig: 'layouter', faIconName: 'fa-drafting-compass' },
-  { pageSig: 'presetBrowser', faIconName: 'fa-book' },
-  { pageSig: 'shapePreview', faIconName: 'fa-file-code' },
-  { pageSig: 'heatmap', faIconName: 'fa-chart-bar' },
-  { pageSig: 'firmwareUpdation', faIconName: 'fa-microchip' },
-  { pageSig: 'settings', faIconName: 'fa-cog' },
+  { pagePath: '/editor', faIconName: 'fa-keyboard' },
+  { pagePath: '/layouter', faIconName: 'fa-drafting-compass' },
+  { pagePath: '/presetBrowser', faIconName: 'fa-book' },
+  { pagePath: '/shapePreview', faIconName: 'fa-file-code' },
+  { pagePath: '/heatmap', faIconName: 'fa-chart-bar' },
+  { pagePath: '/firmwareUpdation', faIconName: 'fa-microchip' },
+  { pagePath: '/settings', faIconName: 'fa-cog' },
 ];
 
 export interface INavigationViewModel {
@@ -30,13 +28,13 @@ export interface INavigationViewModel {
 }
 
 export function makeNavigationViewModel(): INavigationViewModel {
-  const { settings } = uiStatusModel;
+  const currentPagePath = router.getPagePath();
   return {
     entries: entrySources.map((it) => ({
-      pageSig: it.pageSig,
+      pagePath: it.pagePath,
       faIconName: it.faIconName,
-      isCurrent: settings.page === it.pageSig,
-      onClick: () => (settings.page = it.pageSig),
+      isCurrent: it.pagePath === currentPagePath,
+      onClick: () => router.navigateTo(it.pagePath),
     })),
   };
 }

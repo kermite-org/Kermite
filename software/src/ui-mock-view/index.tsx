@@ -5,6 +5,7 @@ import { initializeCss } from '~/ui-common';
 import { UiLayouterPageComponent } from '~/ui-layouter-page';
 import { GooberDevelopmentPage } from '~/ui-mock-view/GooberDevelopmentPage';
 import { MockPageLoadedDesignDrawing } from '~/ui-mock-view/MockPageLoadedDesignDrawing';
+import { RoutingDevelopmentPage } from '~/ui-mock-view/RoutingDevelopmentPage';
 import { MockPageLayouterDevelopment } from './MockPageLayouterDevelopment';
 
 const PageRoot = () => {
@@ -14,7 +15,8 @@ const PageRoot = () => {
       {/* <MockPageLoadedDesignDrawing /> */}
       {/* <UiLayouterPageDevelopmentDummy /> */}
       {/* <UiLayouterPageComponent /> */}
-      <GooberDevelopmentPage />
+      {/* <GooberDevelopmentPage /> */}
+      <RoutingDevelopmentPage />
     </div>
   );
 };

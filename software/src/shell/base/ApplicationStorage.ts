@@ -9,8 +9,8 @@ import { appEnv } from '~/shell/base';
 import { fsExistsSync, fsxReadJsonFile, fsxWriteJsonFile } from '~/shell/funcs';
 
 export interface IWindowPersistState {
+  pagePath: string;
   isDevtoolsVisible: boolean;
-  isWidgetMode: boolean;
   placement: {
     main:
       | {
@@ -28,8 +28,8 @@ export interface IWindowPersistState {
 
 export function makeFallbackWindowPersistState(): IWindowPersistState {
   return {
+    pagePath: '/',
     isDevtoolsVisible: false,
-    isWidgetMode: false,
     placement: {
       main: undefined,
       widget: undefined,

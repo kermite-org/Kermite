@@ -9,49 +9,42 @@ import {
   IWindowPersistState,
   makeFallbackWindowPersistState,
 } from '~/shell/base';
-import { createEventPort2, pathJoin, pathRelative } from '~/shell/funcs';
+import { createEventPort2, pathRelative } from '~/shell/funcs';
+import { MenuManager } from '~/shell/services/window/MenuManager';
 import { IAppWindowWrapper } from './interfaces';
-import { PageSourceWatcher, setupWebContentSourceChecker } from './modules';
+import {
+  PageSourceWatcher,
+  preparePreloadJsFile,
+  setupWebContentSourceChecker,
+} from './modules';
 
 const enableFilesWatcher = true;
 // const enableFilesWatcher = appEnv.isDevelopment;
+
 export class AppWindowWrapper implements IAppWindowWrapper {
+  private menuManager = new MenuManager();
   private pageSourceWatcher = new PageSourceWatcher();
-
   private publicRootPath: string | undefined;
-
   private mainWindow: BrowserWindow | undefined;
-
   private state: IWindowPersistState = makeFallbackWindowPersistState();
 
   appWindowEventPort = createEventPort2<Partial<IAppWindowStatus>>({
     initialValueGetter: () => ({
-      isWidgetMode: this.state.isWidgetMode,
       isDevtoolsVisible: this.state.isDevtoolsVisible,
       isMaximized: this.mainWindow?.isMaximized() || false,
     }),
   });
 
-  getMainWindow(): Electron.BrowserWindow {
-    return this.mainWindow!;
-  }
-
-  openMainWindow(params: {
-    preloadFilePath: string;
-    publicRootPath: string;
-    pageTitle: string;
-    initialPageWidth: number;
-    initialPageHeight: number;
-  }) {
+  openMainWindow() {
     const {
       preloadFilePath,
       publicRootPath,
       pageTitle,
       initialPageWidth,
       initialPageHeight,
-    } = params;
+    } = appConfig;
 
-    const recalledBounds = this.state.isWidgetMode
+    const recalledBounds = this.isWidgetMode
       ? this.state.placement.widget?.bounds
       : this.state.placement.main?.bounds;
 
@@ -73,12 +66,22 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     if (!appConfig.isDevelopment) {
       options.frame = false;
       options.transparent = true;
+      options.hasShadow = false;
     }
 
     const win = new BrowserWindow(options);
     this.mainWindow = win;
     setupWebContentSourceChecker(win.webContents, publicRootPath);
     this.publicRootPath = publicRootPath;
+
+    appGlobal.mainWindow = win;
+    appGlobal.icpMainAgent.setWebcontents(win.webContents);
+
+    if (appEnv.isDevelopment && this.state.isDevtoolsVisible) {
+      this.setDevToolsVisibility(true);
+    }
+
+    this.loadInitialPage();
 
     app.on('browser-window-focus', () => {
       this.appWindowEventPort.emit({ isActive: true });
@@ -103,24 +106,31 @@ export class AppWindowWrapper implements IAppWindowWrapper {
       this.appWindowEventPort.emit({ isMaximized: false }),
     );
 
-    if (appEnv.isDevelopment && this.state.isDevtoolsVisible) {
-      this.setDevToolsVisibility(true);
-    }
+    win.webContents.on('did-navigate-in-page', (_, url) => {
+      const pagePath = url.split('#')[1];
+      const widgetModeChanging = [pagePath, this.state.pagePath].some(
+        (it) => it === '/widget',
+      );
+      if (widgetModeChanging) {
+        this.reserveWindowSize();
+        this.state.pagePath = pagePath;
+        this.adjustWindowSize();
+      } else {
+        this.state.pagePath = pagePath;
+      }
+    });
   }
 
   closeMainWindow() {
     this.mainWindow?.close();
   }
 
-  loadPage(pagePath: string) {
+  private loadInitialPage() {
     if (!this.publicRootPath) {
       return;
     }
-    const pageDir = pathJoin(
-      this.publicRootPath,
-      pagePath !== '/' ? pagePath : '',
-    );
-    const uri = `file://${pageDir}/index.html`;
+    const pageDir = this.publicRootPath;
+    const uri = `file://${pageDir}/index.html#${this.state.pagePath}`;
     const relativeFilePathFromProjectRoot = pathRelative(
       process.cwd(),
       `${pageDir}/index.html`,
@@ -134,8 +144,6 @@ export class AppWindowWrapper implements IAppWindowWrapper {
         this.mainWindow?.reload(),
       );
     }
-
-    // this.onPageLoaded.emit(pagePath);
   }
 
   reloadPage() {
@@ -148,13 +156,6 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     } else {
       this.mainWindow?.webContents.closeDevTools();
     }
-  }
-
-  setWidgetMode(isWidgetMode: boolean) {
-    this.reserveWindowSize();
-    this.state.isWidgetMode = isWidgetMode;
-    this.appWindowEventPort.emit({ isWidgetMode });
-    this.adjustWindowSize();
   }
 
   minimizeMainWindow() {
@@ -178,10 +179,14 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     this.closeMainWindow();
   }
 
+  private get isWidgetMode() {
+    return this.state.pagePath === '/widget';
+  }
+
   private reserveWindowSize() {
     if (this.mainWindow) {
       const bounds = this.mainWindow.getBounds();
-      if (this.state.isWidgetMode) {
+      if (this.isWidgetMode) {
         const currentProfile = appGlobal.currentProfileGetter?.();
         if (currentProfile) {
           this.state.placement.widget = {
@@ -196,11 +201,14 @@ export class AppWindowWrapper implements IAppWindowWrapper {
   }
 
   private adjustWindowSize() {
-    const currentProfile = appGlobal.currentProfileGetter?.();
-    if (!this.mainWindow || !currentProfile) {
+    if (!this.mainWindow) {
       return;
     }
-    if (this.state.isWidgetMode) {
+    if (this.isWidgetMode) {
+      const currentProfile = appGlobal.currentProfileGetter?.();
+      if (!currentProfile) {
+        return;
+      }
       if (currentProfile.projectId === this.state.placement.widget?.projectId) {
         this.mainWindow.setBounds(this.state.placement.widget.bounds);
       } else {
@@ -221,8 +229,19 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     }
   }
 
+  private setupMenu() {
+    const { menuManager: mm } = this;
+    mm.buildMenu();
+    mm.onMenuCloseMainWindow(this.closeMainWindow.bind(this));
+    mm.onMenuRequestReload(this.reloadPage.bind(this));
+    mm.onMenuRestartApplication(this.restartApplication.bind(this));
+  }
+
   initialize() {
     this.state = applicationStorage.getItem('windowState');
+    preparePreloadJsFile(appConfig.preloadFilePath);
+    this.openMainWindow();
+    this.setupMenu();
   }
 
   terminate() {

@@ -8,7 +8,7 @@ export { qxGlobal };
 
 export * from './qx.d';
 
-export type FC<T extends {}> = (props: T) => JSX.Element | null;
+export type FC<T extends {} = {}> = (props: T) => JSX.Element | null;
 
 export function rerender() {
   qxGlobal.rerender();

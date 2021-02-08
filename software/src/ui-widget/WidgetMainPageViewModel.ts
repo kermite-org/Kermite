@@ -1,5 +1,6 @@
 import { Hook } from 'qx';
 import { IDisplayKeyboardDesign } from '~/shared';
+import { router } from '~/ui-common';
 import {
   IWidgetKeyUnitCardsPartViewModel,
   makeWidgetKeyUnitCardsPartViewModel,
@@ -33,7 +34,7 @@ export function makeWidgetMainPageViewModel(): IWidgetMainPageViewModel {
       cardsPartVM: makeWidgetKeyUnitCardsPartViewModel(playerModel),
     },
     backToConfiguratorView() {
-      siteModel.setWidgetMode(false);
+      router.navigateTo('/editor');
     },
   };
 }

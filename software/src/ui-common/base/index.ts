@@ -3,3 +3,4 @@ export * from './cssInitializer';
 export * from './uiCommonTypes';
 export * from './uiGlobal';
 export * from './uiTheme';
+export * from './router';

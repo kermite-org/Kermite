@@ -13,10 +13,10 @@ import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/InputLogicS
 import { LayoutManager } from '~/shell/services/layout/LayoutManager';
 import { PresetProfileLoader } from '~/shell/services/profile/PresetProfileLoader';
 import { ProfileManager } from '~/shell/services/profile/ProfileManager';
-import { WindowService } from '~/shell/services/window';
+import { AppWindowWrapper } from '~/shell/services/window';
 
 export class ApplicationRoot {
-  private windowService = new WindowService();
+  private windowWrapper = new AppWindowWrapper();
   private keyboardConfigProvider = new KeyboardConfigProvider();
 
   private keyboardLayoutFilesWatcher = new KeyboardLayoutFilesWatcher();
@@ -40,7 +40,7 @@ export class ApplicationRoot {
   // ------------------------------------------------------------
 
   private setupIpcBackend() {
-    const windowWrapper = this.windowService.getWindowWrapper();
+    const windowWrapper = this.windowWrapper;
 
     appGlobal.icpMainAgent.supplySyncHandlers({
       dev_getVersionSync: () => 'v100',
@@ -61,8 +61,6 @@ export class ApplicationRoot {
       window_reloadPage: async () => windowWrapper.reloadPage(),
       window_setDevToolVisibility: async (visible) =>
         windowWrapper.setDevToolsVisibility(visible),
-      window_setWidgetMode: async (isWidgetMode) =>
-        windowWrapper.setWidgetMode(isWidgetMode),
       profile_executeProfileManagerCommands: (commands) =>
         this.profileManager.executeCommands(commands),
       layout_executeLayoutManagerCommands: (commands) =>
@@ -190,12 +188,12 @@ export class ApplicationRoot {
     this.inputLogicSimulator.initialize();
 
     this.setupIpcBackend();
-    this.windowService.initialize();
+    this.windowWrapper.initialize();
   }
 
   async terminate() {
     console.log(`terminate services`);
-    this.windowService.terminate();
+    this.windowWrapper.terminate();
     this.inputLogicSimulator.terminate();
     this.deviceService.terminate();
     this.keyboardConfigProvider.terminate();

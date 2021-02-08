@@ -1,1 +1,1 @@
-export * from './WindowService';
+export * from './AppWindowWrapper';
