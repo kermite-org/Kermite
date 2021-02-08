@@ -8,6 +8,7 @@ import {
   IPresetSpec,
   IResourceOrigin,
 } from '~/shared';
+import { appGlobal } from '~/shell/base';
 import { EventPort } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
 import { PresetProfileLoader } from '~/shell/services/profile/PresetProfileLoader';
@@ -31,6 +32,8 @@ export class ProfileManager implements IProfileManager {
 
   constructor(private presetProfileLoader: PresetProfileLoader) {
     this.core = new ProfileManagerCore();
+
+    appGlobal.currentProfileGetter = this.getCurrentProfile.bind(this);
   }
 
   getStatus() {

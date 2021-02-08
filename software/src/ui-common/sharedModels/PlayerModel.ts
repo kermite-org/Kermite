@@ -5,8 +5,8 @@ import {
   IProfileData,
   IRealtimeKeyboardEvent,
 } from '~/shared';
+import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import { ipcAgent } from '~/ui-common';
-import { DisplayKeyboardDesignLoader } from '~/ui-common/modules/DisplayKeyboardDesignLoader';
 
 class PlayerModelHelper {
   static translateKeyIndexToKeyUnitId(

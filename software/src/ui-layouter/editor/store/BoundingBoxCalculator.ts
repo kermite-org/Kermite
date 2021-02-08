@@ -9,7 +9,7 @@ import {
   getCoordUnitFromUnitSpec,
   getKeySize,
   ICoordUnit,
-} from '~/ui-common/modules/PlacementUnitHelper';
+} from '~/shared/modules/PlacementUnitHelper';
 import {
   IEditKeyboardDesign,
   IEditKeyEntity,

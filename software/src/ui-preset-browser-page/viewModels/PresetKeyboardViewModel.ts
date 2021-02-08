@@ -1,7 +1,7 @@
 import { IProfileData } from '~/shared';
+import { getDisplayKeyboardDesignSingleCached } from '~/shared/modules/DisplayKeyboardSingleCache';
 import { makePresetKeyUnitViewModels } from '~/ui-common-svg/KeyUnitCardModels/PresetKeyUnitViewModel';
 import { IPresetKeyboardViewModel } from '~/ui-common-svg/panels/PresetKeyboardView';
-import { getDisplayKeyboardDesignSingleCached } from '~/ui-common/modules/DisplayKeyboardSingleCache';
 
 export interface IPresetKeyboardLayerViewModel {
   layerId: string;

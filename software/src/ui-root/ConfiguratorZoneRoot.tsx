@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { uiTheme } from '~/ui-common';
+import { appUi, uiTheme } from '~/ui-common';
 import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
 import { EditorPage } from '~/ui-editor-page/EditorPage';
 import { FirmwareUpdationPage } from '~/ui-firmware-updation-page';
@@ -42,7 +42,7 @@ export const ConfiguratorZoneRoot = () => {
           {page === 'heatmap' && <HeatmapPage />}
           {page === 'settings' && <UiSettingsPage />}
         </div>
-        <DevToolPullTab />
+        <DevToolPullTab qxIf={appUi.isDevelopment} />
       </div>
     </CustomWindowFrame>
   );

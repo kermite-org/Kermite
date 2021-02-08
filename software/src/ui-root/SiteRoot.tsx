@@ -1,6 +1,5 @@
 import { css, glob, setup } from 'goober';
 import { h, Hook } from 'qx';
-import { appUi } from '~/ui-common';
 import { DebugOverlay } from '~/ui-common/fundamental/overlay/DebugOverlay';
 import { ForegroundModalLayerRoot } from '~/ui-common/fundamental/overlay/ForegroundModalLayer';
 import { siteModel } from '~/ui-common/sharedModels/SiteModel';
@@ -48,7 +47,7 @@ export const SiteRoot = () => {
     <div css={cssSiteRoot}>
       <ZoneRootComponent />
       <ForegroundModalLayerRoot />
-      <DebugOverlay debugObj={appUi.debugObject} />
+      <DebugOverlay />
     </div>
   );
 };

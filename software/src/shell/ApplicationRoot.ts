@@ -41,7 +41,6 @@ export class ApplicationRoot {
 
   private setupIpcBackend() {
     const windowWrapper = this.windowService.getWindowWrapper();
-    const pageManger = this.windowService.getPageManager();
 
     appGlobal.icpMainAgent.supplySyncHandlers({
       dev_getVersionSync: () => 'v100',
@@ -59,11 +58,11 @@ export class ApplicationRoot {
       window_minimizeWindow: async () => windowWrapper.minimizeMainWindow(),
       window_maximizeWindow: async () => windowWrapper.maximizeMainWindow(),
       window_restartApplication: async () => windowWrapper.restartApplication(),
+      window_reloadPage: async () => windowWrapper.reloadPage(),
       window_setDevToolVisibility: async (visible) =>
-        pageManger.setDevToolVisiblity(visible),
-      // windowWrapper.setDevToolsVisibility(visible),
-      // window_widgetModeChanged: async (isWidgetMode) =>
-      //   this.appWindowManager.adjustWindowSize(isWidgetMode),
+        windowWrapper.setDevToolsVisibility(visible),
+      window_setWidgetMode: async (isWidgetMode) =>
+        windowWrapper.setWidgetMode(isWidgetMode),
       profile_executeProfileManagerCommands: (commands) =>
         this.profileManager.executeCommands(commands),
       layout_executeLayoutManagerCommands: (commands) =>
@@ -176,7 +175,7 @@ export class ApplicationRoot {
         return () =>
           this.keyboardLayoutFilesWatcher.fileUpdationEventPort.unsubscribe(cb);
       },
-      window_appWindowEvents: windowWrapper.appWindowEventPort.subscribe,
+      window_appWindowStatus: windowWrapper.appWindowEventPort.subscribe,
     });
   }
 

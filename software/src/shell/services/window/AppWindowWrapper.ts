@@ -1,6 +1,7 @@
 import { app, BrowserWindow } from 'electron';
-import { IAppWindowEvent } from '~/shared';
-import { appConfig } from '~/shell/base';
+import { IAppWindowStatus } from '~/shared';
+import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
+import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { createEventPort2, pathJoin, pathRelative } from '~/shell/funcs';
 import { IAppWindowWrapper } from './interfaces';
 import { PageSourceWatcher, setupWebContentSourceChecker } from './modules';
@@ -12,11 +13,20 @@ export class AppWindowWrapper implements IAppWindowWrapper {
 
   private mainWindow: BrowserWindow | undefined;
 
-  appWindowEventPort = createEventPort2<IAppWindowEvent>({
+  private isDevtoolsVisible = false;
+  private isWidgetMode = false;
+
+  appWindowEventPort = createEventPort2<Partial<IAppWindowStatus>>({
     initialValueGetter: () => ({
-      devToolVisible: this.mainWindow?.webContents.isDevToolsOpened() || false,
+      isWidgetMode: this.isWidgetMode,
+      isDevtoolsVisible: this.isDevtoolsVisible,
+      isMaximized: this.mainWindow?.isMaximized() || false,
     }),
   });
+
+  getMainWindow(): Electron.BrowserWindow {
+    return this.mainWindow!;
+  }
 
   openMainWindow(params: {
     preloadFilePath: string;
@@ -24,7 +34,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     pageTitle: string;
     initialPageWidth: number;
     initialPageHeight: number;
-  }): Electron.BrowserWindow {
+  }) {
     const {
       preloadFilePath,
       publicRootPath,
@@ -57,13 +67,33 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     this.publicRootPath = publicRootPath;
 
     app.on('browser-window-focus', () => {
-      this.appWindowEventPort.emit({ activeChanged: true });
+      this.appWindowEventPort.emit({ isActive: true });
     });
     app.on('browser-window-blur', () => {
-      this.appWindowEventPort.emit({ activeChanged: false });
+      this.appWindowEventPort.emit({ isActive: false });
     });
 
-    return win;
+    win.webContents.on('devtools-opened', () => {
+      this.isDevtoolsVisible = true;
+      this.appWindowEventPort.emit({ isDevtoolsVisible: true });
+    });
+    win.webContents.on('devtools-closed', () => {
+      this.isDevtoolsVisible = false;
+      this.appWindowEventPort.emit({ isDevtoolsVisible: false });
+    });
+
+    win.on('maximize', () =>
+      this.appWindowEventPort.emit({ isMaximized: true }),
+    );
+    win.on('unmaximize', () =>
+      this.appWindowEventPort.emit({ isMaximized: false }),
+    );
+
+    if (appEnv.isDevelopment && this.isDevtoolsVisible) {
+      this.setDevToolsVisibility(true);
+    }
+
+    this.adjustWindowSize();
   }
 
   closeMainWindow() {
@@ -106,25 +136,25 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     } else {
       this.mainWindow?.webContents.closeDevTools();
     }
-    this.appWindowEventPort.emit({ devToolVisible: visible });
+  }
+
+  setWidgetMode(isWidgetMode: boolean) {
+    this.isWidgetMode = isWidgetMode;
+    this.appWindowEventPort.emit({ isWidgetMode });
+    this.adjustWindowSize();
   }
 
   minimizeMainWindow() {
     this.mainWindow?.minimize();
   }
 
-  private _isMaximized = false;
-
   maximizeMainWindow() {
     if (this.mainWindow) {
-      // const isMaximized = this.mainWindow.isMaximized()
-      // ...always returns false for transparent window
-      if (this._isMaximized) {
-        this.mainWindow.unmaximize();
-        this._isMaximized = false;
-      } else {
+      // this.mainWindow.isMaximized() ... always returns false for transparent window (?)
+      if (!this.mainWindow.isMaximized()) {
         this.mainWindow.maximize();
-        this._isMaximized = true;
+      } else {
+        this.mainWindow.unmaximize();
       }
     }
   }
@@ -133,9 +163,25 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     console.log('##REBOOT_ME_AFTER_CLOSE');
     this.closeMainWindow();
   }
-  // private _winHeight = 800;
 
-  // adjustWindowSize(isWidgetMode: boolean) {
+  private adjustWindowSize() {
+    const currentProfile = appGlobal.currentProfileGetter?.();
+    if (!this.mainWindow || !currentProfile) {
+      return;
+    }
+    if (this.isWidgetMode) {
+      const design = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
+        currentProfile.keyboardDesign,
+      );
+      const w = design.displayArea.width * 4;
+      const h = design.displayArea.height * 4 + 40;
+      this.mainWindow.setSize(w, h);
+    } else {
+      this.mainWindow.setSize(1280, 720);
+    }
+  }
+
+  // adjustWindowSize_oldImpl(isWidgetMode: boolean) {
   //   if (this.mainWindow) {
   //     const [w, h] = this.mainWindow.getSize();
 
@@ -153,4 +199,18 @@ export class AppWindowWrapper implements IAppWindowWrapper {
   //     }
   //   }
   // }
+
+  initialize() {
+    const loadedState = applicationStorage.getItem('windowState');
+    console.log({ loadedState });
+    this.isDevtoolsVisible = loadedState.isDevtoolsVisible;
+    this.isWidgetMode = loadedState.isWidgetMode;
+  }
+
+  terminate() {
+    applicationStorage.setItem('windowState', {
+      isDevtoolsVisible: this.isDevtoolsVisible,
+      isWidgetMode: this.isWidgetMode,
+    });
+  }
 }

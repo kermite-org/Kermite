@@ -6,8 +6,8 @@ import {
   IProfileData,
   IRealtimeKeyboardEvent,
 } from '~/shared';
+import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import { appUi, ipcAgent } from '~/ui-common';
-import { DisplayKeyboardDesignLoader } from '~/ui-common/modules/DisplayKeyboardDesignLoader';
 
 function translateKeyIndexToKeyUnitId(
   displayDesign: IDisplayKeyboardDesign,

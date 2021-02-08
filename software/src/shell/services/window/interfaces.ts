@@ -1,4 +1,4 @@
-import { IAppWindowEvent } from '~/shared';
+import { IAppWindowStatus } from '~/shared';
 import { IListenerPort } from '~/shell/base';
 import { IEventPort2 } from '~/shell/funcs';
 
@@ -22,14 +22,15 @@ export interface IAppWindowWrapper {
     pageTitle: string;
     initialPageWidth: number;
     initialPageHeight: number;
-  }): Electron.BrowserWindow;
+  }): void;
   closeMainWindow(): void;
+  getMainWindow(): Electron.BrowserWindow;
   loadPage(pagePath: string): void;
   reloadPage(): void;
   setDevToolsVisibility(visible: boolean): void;
   minimizeMainWindow(): void;
   maximizeMainWindow(): void;
-  appWindowEventPort: IEventPort2<IAppWindowEvent>;
+  appWindowEventPort: IEventPort2<Partial<IAppWindowStatus>>;
   restartApplication(): void;
   // onPageLoaded: IListenerPort<string>;
 }
@@ -39,9 +40,6 @@ export interface IPageStateManager {
   currentPagePath: string;
   setCurrentPagePath(pagePath: string): void;
   onPagePathChanged: IListenerPort<string>;
-  isDevToolsVisible: boolean;
-  setDevToolVisiblity(visible: boolean): void;
-  onDevToolVisibilityChanged: IListenerPort<boolean>;
   initialize(): void;
   terminate(): void;
 }

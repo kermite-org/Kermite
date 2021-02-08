@@ -58,9 +58,11 @@ export type IRealtimeKeyboardEvent =
       prioritySpec: number;
     };
 
-export type IAppWindowEvent = {
-  activeChanged?: boolean;
-  devToolVisible?: boolean;
+export type IAppWindowStatus = {
+  isActive: boolean;
+  isDevtoolsVisible: boolean;
+  isMaximized: boolean;
+  isWidgetMode: boolean;
 };
 
 export interface IProfileManagerCommand {
@@ -173,9 +175,10 @@ export interface IAppIpcContract {
     window_closeWindow(): Promise<void>;
     window_minimizeWindow(): Promise<void>;
     window_maximizeWindow(): Promise<void>;
-    // window_widgetModeChanged(isWidgetMode: boolean): Promise<void>;
     window_restartApplication(): Promise<void>;
     window_setDevToolVisibility(visible: boolean): Promise<void>;
+    window_reloadPage(): Promise<void>;
+    window_setWidgetMode(isWidgetMode: boolean): Promise<void>;
 
     // profile_getCurrentProfile(): Promise<IProfileData | undefined>;
     profile_executeProfileManagerCommands(
@@ -223,7 +226,7 @@ export interface IAppIpcContract {
   };
   events: {
     dev_testEvent: { type: string };
-    window_appWindowEvents: IAppWindowEvent;
+    window_appWindowStatus: Partial<IAppWindowStatus>;
 
     profile_currentProfile: IProfileData | undefined;
     profile_profileManagerStatus: Partial<IProfileManagerStatus>;
