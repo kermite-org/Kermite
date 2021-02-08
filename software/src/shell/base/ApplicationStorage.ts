@@ -1,12 +1,41 @@
+import { Rectangle } from 'electron';
 import {
+  makeObjectPropsOverrideRecursive,
   IGlobalSettings,
   IKeyboardConfig,
   ILayoutEditSource,
-  overwriteObjectProps,
 } from '~/shared';
 import { appEnv } from '~/shell/base';
 import { fsExistsSync, fsxReadJsonFile, fsxWriteJsonFile } from '~/shell/funcs';
 
+export interface IWindowPersistState {
+  isDevtoolsVisible: boolean;
+  isWidgetMode: boolean;
+  placement: {
+    main:
+      | {
+          bounds: Rectangle;
+        }
+      | undefined;
+    widget:
+      | {
+          projectId: string;
+          bounds: Rectangle;
+        }
+      | undefined;
+  };
+}
+
+export function makeFallbackWindowPersistState(): IWindowPersistState {
+  return {
+    isDevtoolsVisible: false,
+    isWidgetMode: false,
+    placement: {
+      main: undefined,
+      widget: undefined,
+    },
+  };
+}
 export interface IApplicationPersistData {
   pageState: {
     currentPagePath: string;
@@ -15,10 +44,7 @@ export interface IApplicationPersistData {
   keyboardConfig: IKeyboardConfig;
   layoutEditSource: ILayoutEditSource;
   globalSettings: IGlobalSettings;
-  windowState: {
-    isDevtoolsVisible: boolean;
-    isWidgetMode: boolean;
-  };
+  windowState: IWindowPersistState;
 }
 
 const defaultPersistData: IApplicationPersistData = {
@@ -38,10 +64,7 @@ const defaultPersistData: IApplicationPersistData = {
     useLocalResouces: false,
     localProjectRootFolderPath: '',
   },
-  windowState: {
-    isDevtoolsVisible: false,
-    isWidgetMode: false,
-  },
+  windowState: makeFallbackWindowPersistState(),
 };
 class ApplicationStorage {
   private configFilePath = appEnv.resolveUserDataFilePath('data/config.json');
@@ -62,8 +85,10 @@ class ApplicationStorage {
 
   async initializeAsync() {
     if (fsExistsSync(this.configFilePath)) {
-      const obj = await fsxReadJsonFile(this.configFilePath);
-      overwriteObjectProps(this.data, obj);
+      const obj = (await fsxReadJsonFile(
+        this.configFilePath,
+      )) as IApplicationPersistData;
+      this.data = makeObjectPropsOverrideRecursive(this.data, obj);
     } else {
       console.log('config file not found!');
     }

@@ -1,11 +1,20 @@
 import { app, BrowserWindow } from 'electron';
 import { IAppWindowStatus } from '~/shared';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
-import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
+import {
+  appConfig,
+  appEnv,
+  appGlobal,
+  applicationStorage,
+  IWindowPersistState,
+  makeFallbackWindowPersistState,
+} from '~/shell/base';
 import { createEventPort2, pathJoin, pathRelative } from '~/shell/funcs';
 import { IAppWindowWrapper } from './interfaces';
 import { PageSourceWatcher, setupWebContentSourceChecker } from './modules';
 
+const enableFilesWatcher = true;
+// const enableFilesWatcher = appEnv.isDevelopment;
 export class AppWindowWrapper implements IAppWindowWrapper {
   private pageSourceWatcher = new PageSourceWatcher();
 
@@ -13,13 +22,12 @@ export class AppWindowWrapper implements IAppWindowWrapper {
 
   private mainWindow: BrowserWindow | undefined;
 
-  private isDevtoolsVisible = false;
-  private isWidgetMode = false;
+  private state: IWindowPersistState = makeFallbackWindowPersistState();
 
   appWindowEventPort = createEventPort2<Partial<IAppWindowStatus>>({
     initialValueGetter: () => ({
-      isWidgetMode: this.isWidgetMode,
-      isDevtoolsVisible: this.isDevtoolsVisible,
+      isWidgetMode: this.state.isWidgetMode,
+      isDevtoolsVisible: this.state.isDevtoolsVisible,
       isMaximized: this.mainWindow?.isMaximized() || false,
     }),
   });
@@ -43,9 +51,15 @@ export class AppWindowWrapper implements IAppWindowWrapper {
       initialPageHeight,
     } = params;
 
+    const recalledBounds = this.state.isWidgetMode
+      ? this.state.placement.widget?.bounds
+      : this.state.placement.main?.bounds;
+
     const options: Electron.BrowserWindowConstructorOptions = {
-      width: initialPageWidth,
-      height: initialPageHeight,
+      x: recalledBounds?.x,
+      y: recalledBounds?.y,
+      width: recalledBounds?.width || initialPageWidth,
+      height: recalledBounds?.height || initialPageHeight,
       title: pageTitle,
       webPreferences: {
         nodeIntegration: false,
@@ -74,11 +88,11 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     });
 
     win.webContents.on('devtools-opened', () => {
-      this.isDevtoolsVisible = true;
+      this.state.isDevtoolsVisible = true;
       this.appWindowEventPort.emit({ isDevtoolsVisible: true });
     });
     win.webContents.on('devtools-closed', () => {
-      this.isDevtoolsVisible = false;
+      this.state.isDevtoolsVisible = false;
       this.appWindowEventPort.emit({ isDevtoolsVisible: false });
     });
 
@@ -89,11 +103,9 @@ export class AppWindowWrapper implements IAppWindowWrapper {
       this.appWindowEventPort.emit({ isMaximized: false }),
     );
 
-    if (appEnv.isDevelopment && this.isDevtoolsVisible) {
+    if (appEnv.isDevelopment && this.state.isDevtoolsVisible) {
       this.setDevToolsVisibility(true);
     }
-
-    this.adjustWindowSize();
   }
 
   closeMainWindow() {
@@ -116,7 +128,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     console.log(`loading ${relativeFilePathFromProjectRoot}`);
     this.mainWindow?.loadURL(uri);
 
-    if (appConfig.isDevelopment) {
+    if (enableFilesWatcher) {
       const includeSubFolders = true;
       this.pageSourceWatcher.observeFiles(pageDir, includeSubFolders, () =>
         this.mainWindow?.reload(),
@@ -139,7 +151,8 @@ export class AppWindowWrapper implements IAppWindowWrapper {
   }
 
   setWidgetMode(isWidgetMode: boolean) {
-    this.isWidgetMode = isWidgetMode;
+    this.reserveWindowSize();
+    this.state.isWidgetMode = isWidgetMode;
     this.appWindowEventPort.emit({ isWidgetMode });
     this.adjustWindowSize();
   }
@@ -152,6 +165,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     if (this.mainWindow) {
       // this.mainWindow.isMaximized() ... always returns false for transparent window (?)
       if (!this.mainWindow.isMaximized()) {
+        this.reserveWindowSize();
         this.mainWindow.maximize();
       } else {
         this.mainWindow.unmaximize();
@@ -164,53 +178,57 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     this.closeMainWindow();
   }
 
+  private reserveWindowSize() {
+    if (this.mainWindow) {
+      const bounds = this.mainWindow.getBounds();
+      if (this.state.isWidgetMode) {
+        const currentProfile = appGlobal.currentProfileGetter?.();
+        if (currentProfile) {
+          this.state.placement.widget = {
+            projectId: currentProfile.projectId,
+            bounds,
+          };
+        }
+      } else {
+        this.state.placement.main = { bounds };
+      }
+    }
+  }
+
   private adjustWindowSize() {
     const currentProfile = appGlobal.currentProfileGetter?.();
     if (!this.mainWindow || !currentProfile) {
       return;
     }
-    if (this.isWidgetMode) {
-      const design = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
-        currentProfile.keyboardDesign,
-      );
-      const w = design.displayArea.width * 4;
-      const h = design.displayArea.height * 4 + 40;
-      this.mainWindow.setSize(w, h);
+    if (this.state.isWidgetMode) {
+      if (currentProfile.projectId === this.state.placement.widget?.projectId) {
+        this.mainWindow.setBounds(this.state.placement.widget.bounds);
+      } else {
+        const design = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
+          currentProfile.keyboardDesign,
+        );
+        const w = design.displayArea.width * 4;
+        const h = design.displayArea.height * 4 + 40;
+        this.mainWindow.setSize(w, h);
+        this.mainWindow.setAlwaysOnTop(true);
+      }
     } else {
-      this.mainWindow.setSize(1280, 720);
+      const bounds = this.state.placement.main?.bounds;
+      if (bounds) {
+        this.mainWindow.setBounds(bounds);
+      }
+      this.mainWindow.setAlwaysOnTop(false);
     }
   }
 
-  // adjustWindowSize_oldImpl(isWidgetMode: boolean) {
-  //   if (this.mainWindow) {
-  //     const [w, h] = this.mainWindow.getSize();
-
-  //     if (isWidgetMode) {
-  //       this._winHeight = h;
-  //       // todo: 現在選択されているプロファイルのキーボード形状データから縦横比を計算
-  //       const asr = 0.4;
-  //       const [w1, h1] = [w, (w * asr) >> 0];
-  //       this.mainWindow.setSize(w1, h1);
-  //       this.mainWindow.setAlwaysOnTop(true);
-  //     } else {
-  //       const [w1, h1] = [w, this._winHeight];
-  //       this.mainWindow.setSize(w1, h1);
-  //       this.mainWindow.setAlwaysOnTop(false);
-  //     }
-  //   }
-  // }
-
   initialize() {
-    const loadedState = applicationStorage.getItem('windowState');
-    console.log({ loadedState });
-    this.isDevtoolsVisible = loadedState.isDevtoolsVisible;
-    this.isWidgetMode = loadedState.isWidgetMode;
+    this.state = applicationStorage.getItem('windowState');
   }
 
   terminate() {
-    applicationStorage.setItem('windowState', {
-      isDevtoolsVisible: this.isDevtoolsVisible,
-      isWidgetMode: this.isWidgetMode,
-    });
+    if (this.mainWindow?.isVisible()) {
+      this.reserveWindowSize();
+    }
+    applicationStorage.setItem('windowState', this.state);
   }
 }

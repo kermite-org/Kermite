@@ -199,15 +199,44 @@ export function delayMs(n: number) {
   return new Promise((resolve) => setTimeout(resolve, n));
 }
 
-export function overwriteObjectProps<T>(dst: T, src: T) {
-  for (const key in dst) {
-    if (src[key] !== undefined) {
-      dst[key] = src[key];
+export function copyObjectProps<T>(target: T, source: T) {
+  for (const key in target) {
+    if (source[key] !== undefined) {
+      target[key] = source[key];
     }
   }
 }
 
-export const copyObjectProps = overwriteObjectProps;
+export function copyObjectPropsRecursive<T>(target: T, source: T) {
+  for (const key in target) {
+    if (source[key] !== undefined) {
+      if (typeof source[key] === 'object' && typeof target[key] === 'object') {
+        copyObjectPropsRecursive(target[key], source[key]);
+      } else {
+        target[key] = source[key];
+      }
+    }
+  }
+}
+
+export function makeObjectPropsOverrideRecursive<T>(original: T, input: T): T {
+  const merged: T = {} as any;
+  for (const key in original) {
+    if (input[key]) {
+      if (typeof original[key] === 'object' && typeof input[key] === 'object') {
+        merged[key] = makeObjectPropsOverrideRecursive(
+          original[key],
+          input[key],
+        );
+      } else {
+        merged[key] = input[key];
+      }
+    } else {
+      merged[key] = original[key];
+    }
+  }
+  return merged;
+}
 
 function deg2(value: number) {
   return `0${value}`.slice(-2);

@@ -29,7 +29,7 @@ export const KeyboardSvgFrame = (props: {
       viewBox={viewBox}
       css={cssSvgFrame}
     >
-      <g strokeWidth={baseStrokeWidth} strokeLinejoin="round">
+      <g stroke-width={baseStrokeWidth} stroke-linejoin="round">
         {children}
       </g>
     </svg>

@@ -1,4 +1,4 @@
-import { overwriteObjectProps } from '~/shared';
+import { copyObjectProps } from '~/shared';
 import { appUi } from '~/ui-common';
 
 export type PageSignature =
@@ -51,7 +51,7 @@ export class UiStatusModel {
     const settingsText = localStorage.getItem('uiSettings');
     if (settingsText) {
       const settings = JSON.parse(settingsText);
-      overwriteObjectProps(this.settings, settings);
+      copyObjectProps(this.settings, settings);
     }
     if (!appUi.isDevelopment || !this.settings.page) {
       this.settings.page = 'editor';
