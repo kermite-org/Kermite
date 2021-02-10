@@ -32,7 +32,8 @@ export const GeneralInput: FC<Props> = ({
 }) => {
   return (
     <input
-      classNames={[style(width), className]}
+      css={style(width)}
+      className={className}
       type="text"
       value={value}
       onInput={reflectValue(setValue)}

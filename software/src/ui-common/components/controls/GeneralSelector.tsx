@@ -38,7 +38,8 @@ export const GeneralSelector: FC<Props> = ({
   <select
     value={value}
     onChange={reflectValue(setValue)}
-    classNames={[style(width), className]}
+    css={style(width)}
+    className={className}
     disabled={disabled}
   >
     {options.map((it, idx) => (

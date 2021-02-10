@@ -66,7 +66,8 @@ export const GeneralButton: FC<Props> = ({
   form = 'unit',
 }) => (
   <div
-    classNames={[style, className]}
+    css={style}
+    className={className}
     onClick={handler}
     data-disabled={disabled}
     data-form={form}
