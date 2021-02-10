@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h, Hook } from 'qx';
-import { KeyboardProfileSelector } from '~/ui-common/sharedViews/fabrics/KeyboardProfileSelector';
+import { KeyboardProfileSelector } from '~/ui-common/components';
 import { keyboardConfigModel } from '~/ui-editor-page/ProfileManagement/models/KeyboardConfigModel';
 import { makeProfileManagementPartViewModel } from '~/ui-editor-page/ProfileManagement/viewModels/ProfileManagementPartViewModel';
 import { makeProfileSelectionMenuPartViewModel } from '~/ui-editor-page/ProfileManagement/viewModels/ProfileSelectionMenuPartViewModel';

@@ -2,7 +2,7 @@ import { css } from 'goober';
 import { h, Hook } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { HeatmapKeyboardView } from '~/ui-common-svg/panels/HeatmapKeyboardView';
-import { GeneralButton } from '~/ui-common/sharedViews/controls/GeneralButton';
+import { GeneralButton } from '~/ui-common/components';
 import { realtimeHeatmapModel } from '~/ui-heatmap-page/RealtimeHeatmapModel';
 import { makeRealtimeHeatmapViewModel } from '~/ui-heatmap-page/RealtimeHeatmapViewModel';
 

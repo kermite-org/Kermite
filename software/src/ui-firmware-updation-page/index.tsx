@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h, Hook } from 'qx';
 import { uiTheme } from '~/ui-common';
-import { GeneralSelector } from '~/ui-common/sharedViews/controls/GeneralSelector';
+import { GeneralSelector } from '~/ui-common/components';
 import { firmwareUpdationModel } from './FirmwareUpdationModel';
 import { makeFirmwareUpdationPageViewModel } from './FirmwareUpdationPageViewModel';
 

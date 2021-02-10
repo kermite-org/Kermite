@@ -1,6 +1,6 @@
 import { h } from 'qx';
 import { ISelectorSource } from '~/ui-common';
-import { GeneralSelector } from '~/ui-common/sharedViews/controls/GeneralSelector';
+import { GeneralSelector } from '~/ui-common/components/controls/GeneralSelector';
 
 export interface IProfileSelectorProps {
   selectorSource: ISelectorSource;

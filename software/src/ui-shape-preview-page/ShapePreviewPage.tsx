@@ -2,7 +2,7 @@ import { css } from 'goober';
 import { h } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { PreviewKeyboardShapeView } from '~/ui-common-svg/panels/PreviewKeyboardShapeView';
-import { GeneralSelector } from '~/ui-common/sharedViews/controls/GeneralSelector';
+import { GeneralSelector } from '~/ui-common/components';
 import { ShapePreviewOptionsBox } from '~/ui-shape-preview-page/ShapePreviewOptionsBox';
 import { makeShapePreviewPageViewModel } from '~/ui-shape-preview-page/ShapePreviewPageViewModel';
 
