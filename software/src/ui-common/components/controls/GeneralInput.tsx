@@ -1,18 +1,19 @@
 import { css } from 'goober';
-import { h } from 'qx';
+import { FC, h } from 'qx';
 import { uiTheme, reflectValue } from '~/ui-common';
 
-interface IGeneralInputProps {
+interface Props {
   value: string;
   setValue(value: string): void;
   className?: string;
   width?: number;
 }
 
-const cssGeneralInput = (width: number | undefined) => css`
+const style = (width: number | undefined) => css`
   background: ${uiTheme.colors.clControlBase};
   border: solid 1px ${uiTheme.colors.clPrimary};
   color: ${uiTheme.colors.clControlText};
+  /* border-radius: 1px; */
   min-width: 100px;
   height: ${uiTheme.unitHeight}px;
   width: ${width ? `${width}px` : 'inherit'};
@@ -23,15 +24,15 @@ const cssGeneralInput = (width: number | undefined) => css`
   padding-left: 4px;
 `;
 
-export const GeneralInput = ({
+export const GeneralInput: FC<Props> = ({
   value,
   setValue,
   className,
   width,
-}: IGeneralInputProps) => {
+}) => {
   return (
     <input
-      classNames={[cssGeneralInput(width), className]}
+      classNames={[style(width), className]}
       type="text"
       value={value}
       onInput={reflectValue(setValue)}
