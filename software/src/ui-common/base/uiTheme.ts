@@ -96,7 +96,34 @@ export const uiThemeConfigLoader = {
 
 const currentThemeKey = uiThemeConfigLoader.loadThemeKey();
 
-export const uiTheme: IUiTheme = {
+export const uiTheme_original: IUiTheme = {
   unitHeight: 26,
   colors: themeColors[currentThemeKey],
+};
+
+// UI刷新のため一時的に即値によるテーマを使用
+export const uiTheme = {
+  unitHeight: 26,
+  colors: {
+    clPageBackground: '#333',
+    clBackground: '#2E323E',
+    clTitleBar: '#F61189',
+    clStatusBar: '#3563b7',
+    clNavigationColumn: '#1d1d1d',
+    clPanelBox: '#181C23',
+    clSelectHighlight: '#22967d',
+    clHoldHighlight: '#f90',
+    clMainText: '#FFF',
+    clAltText: '#FFF',
+    clWindowButtonFace: '#FFF',
+    clWindowButtonHoverBack: '#f8b',
+    clKeyboardBodyFace: '#54566f',
+    clKeyUnitFace: 'rgba(0, 0, 0, 0.5)',
+    clKeyUnitLegend: '#fff',
+    clKeyUnitLegendWeak: 'rgba(128, 128, 128, 0.2)',
+    clAssignCardFace: '#383838',
+    clAssignCardText: '#FFF',
+    clCommonFrame: '#444',
+    dummy: '0',
+  },
 };
