@@ -1,4 +1,4 @@
-import { css, setup } from 'goober';
+import { css, setup, styled } from 'goober';
 import { h, FC } from 'qx';
 import { uiTheme } from '~/ui-common';
 
@@ -11,6 +11,15 @@ const cssRoot = css`
   padding: 10px;
 `;
 
+const Header = styled('div')`
+  color: ${uiTheme.colors.clPrimary};
+  font-size: 18px;
+`;
+
 export const MockPageComponentDevelopment: FC = () => {
-  return <div css={cssRoot}>hello</div>;
+  return (
+    <div css={cssRoot}>
+      <Header>Configurations</Header>
+    </div>
+  );
 };

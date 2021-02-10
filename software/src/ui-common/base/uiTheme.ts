@@ -105,8 +105,11 @@ export const uiTheme_original: IUiTheme = {
 export const uiTheme = {
   unitHeight: 26,
   colors: {
+    clBackground: '#000',
+    clForegroud: '#FFF',
+    clPrimary: '#08F',
+
     clPageBackground: '#333',
-    clBackground: '#2E323E',
     clTitleBar: '#F61189',
     clStatusBar: '#3563b7',
     clNavigationColumn: '#1d1d1d',
