@@ -44,11 +44,7 @@ export const MockPageComponentDevelopment: FC = () => {
         setValue={() => {}}
       />
       <div class="row">
-        <GeneralButton
-          icon="fa fa-cog"
-          // handler={buttonHandler}
-          form="unitSquare"
-        />
+        <GeneralButton icon="fa fa-cog" form="unitSquare" />
         <GeneralButton
           text="foo"
           icon="fa fa-cog"

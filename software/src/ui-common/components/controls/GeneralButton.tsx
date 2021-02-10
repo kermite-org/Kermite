@@ -1,10 +1,10 @@
 import { css } from 'goober';
-import { h } from 'qx';
+import { FC, h } from 'qx';
 import { uiTheme } from '~/ui-common';
 
 type IGeneralButtonForm = 'unit' | 'unitSquare' | 'large';
 
-interface IGeneralButtonProps {
+interface Props {
   text?: string;
   icon?: string;
   handler?(): void;
@@ -13,7 +13,7 @@ interface IGeneralButtonProps {
   form?: IGeneralButtonForm;
 }
 
-const cssGeneralButton = css`
+const style = css`
   background: ${uiTheme.colors.clPrimary};
   color: ${uiTheme.colors.clDecal};
   border-radius: 1px;
@@ -24,16 +24,6 @@ const cssGeneralButton = css`
   display: flex;
   justify-content: center;
   align-items: center;
-
-  &:hover {
-    opacity: 0.7;
-  }
-
-  &[data-disabled] {
-    pointer-events: none;
-    cursor: inherit;
-    opacity: 0.3;
-  }
 
   &[data-form='unit'] {
     height: ${uiTheme.unitHeight}px;
@@ -49,25 +39,37 @@ const cssGeneralButton = css`
     height: 36px;
     padding: 2px 15px;
   }
+
+  > :not(:first-child) {
+    margin-left: 3px;
+  }
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &[data-disabled] {
+    pointer-events: none;
+    cursor: inherit;
+    opacity: 0.3;
+  }
 `;
 
-export const GeneralButton = ({
+export const GeneralButton: FC<Props> = ({
   text,
   icon,
   handler,
   disabled,
   className,
   form = 'unit',
-}: IGeneralButtonProps) => {
-  return (
-    <div
-      classNames={[cssGeneralButton, className]}
-      onClick={handler}
-      data-disabled={disabled}
-      data-form={form}
-    >
-      {icon && <i class={icon} />}
-      {text}
-    </div>
-  );
-};
+}) => (
+  <div
+    classNames={[style, className]}
+    onClick={handler}
+    data-disabled={disabled}
+    data-form={form}
+  >
+    {icon && <i class={icon} />}
+    {text && <span>{text}</span>}
+  </div>
+);
