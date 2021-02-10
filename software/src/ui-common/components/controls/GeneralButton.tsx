@@ -17,6 +17,7 @@ const style = css`
   background: ${uiTheme.colors.clPrimary};
   color: ${uiTheme.colors.clDecal};
   /* border-radius: 1px; */
+  font-size: 15px;
   padding: 2px 4px;
   cursor: pointer;
   user-select: none;
@@ -37,6 +38,7 @@ const style = css`
 
   &[data-form='large'] {
     height: 36px;
+    font-size: 18px;
     padding: 2px 15px;
   }
 

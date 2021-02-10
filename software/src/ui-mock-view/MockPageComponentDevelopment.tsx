@@ -1,7 +1,11 @@
 import { css, setup, styled } from 'goober';
 import { h, FC } from 'qx';
 import { ISelectorOption, uiTheme } from '~/ui-common';
-import { GeneralButton, GeneralSelector } from '~/ui-common/components';
+import {
+  GeneralButton,
+  GeneralInput,
+  GeneralSelector,
+} from '~/ui-common/components';
 
 setup(h);
 
@@ -38,6 +42,8 @@ const testOptions: ISelectorOption[] = [
   { value: 'user003', label: 'suzuki' },
 ];
 
+const dummyHandler = () => {};
+
 export const MockPageComponentDevelopment: FC = () => {
   return (
     <div css={cssRoot}>
@@ -72,6 +78,10 @@ export const MockPageComponentDevelopment: FC = () => {
         <GeneralButton text="OK" form="unit" />
         <GeneralButton text="Edit this" form="unit" />
         <GeneralButton text="Edit this" form="large" />
+      </Row>
+      <Row>
+        <GeneralInput value="hoge" setValue={dummyHandler} />
+        <GeneralInput value="hoge" setValue={dummyHandler} width={100} />
       </Row>
     </div>
   );

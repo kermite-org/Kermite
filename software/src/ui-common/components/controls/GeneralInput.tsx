@@ -10,11 +10,13 @@ interface IGeneralInputProps {
 }
 
 const cssGeneralInput = (width: number | undefined) => css`
-  border: solid 1px #08a;
+  background: ${uiTheme.colors.clControlBase};
+  border: solid 1px ${uiTheme.colors.clPrimary};
+  color: ${uiTheme.colors.clControlText};
   min-width: 100px;
   height: ${uiTheme.unitHeight}px;
   width: ${width ? `${width}px` : 'inherit'};
-  font-size: 16px;
+  font-size: 15px;
   &:focus {
     outline: none;
   }

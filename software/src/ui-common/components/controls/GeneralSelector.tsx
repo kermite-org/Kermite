@@ -15,12 +15,12 @@ interface Props {
 const style = (width: number | undefined) => css`
   border: solid 1px ${uiTheme.colors.clPrimary};
   background: ${uiTheme.colors.clControlBase};
-  color: ${uiTheme.colors.clPrimary};
+  color: ${uiTheme.colors.clControlText};
   /* border-radius: 1px; */
   min-width: 100px;
   height: ${uiTheme.unitHeight}px;
   width: ${width ? `${width}px` : 'inherit'};
-  font-size: 16px;
+  font-size: 15px;
   cursor: pointer;
   &:focus {
     outline: none;
