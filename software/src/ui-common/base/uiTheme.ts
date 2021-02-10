@@ -109,6 +109,7 @@ export const uiTheme = {
     clForegroud: '#FFF',
     clPrimary: '#08F',
     clControlBase: '#222',
+    clDecal: '#FFF',
 
     clPageBackground: '#333',
     clTitleBar: '#F61189',

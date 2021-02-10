@@ -16,6 +16,7 @@ const style = (width: number | undefined) => css`
   border: solid 1px ${uiTheme.colors.clPrimary};
   background: ${uiTheme.colors.clControlBase};
   color: ${uiTheme.colors.clPrimary};
+  border-radius: 1px;
   min-width: 100px;
   height: ${uiTheme.unitHeight}px;
   width: ${width ? `${width}px` : 'inherit'};

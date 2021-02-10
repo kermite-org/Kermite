@@ -13,11 +13,10 @@ interface IGeneralButtonProps {
   form?: IGeneralButtonForm;
 }
 
-const { unitHeight } = uiTheme;
 const cssGeneralButton = css`
-  background: #08a;
+  background: ${uiTheme.colors.clPrimary};
+  color: ${uiTheme.colors.clDecal};
   border-radius: 1px;
-  color: #fff;
   padding: 2px 4px;
   cursor: pointer;
   user-select: none;
@@ -37,19 +36,18 @@ const cssGeneralButton = css`
   }
 
   &[data-form='unit'] {
-    height: ${unitHeight}px;
+    height: ${uiTheme.unitHeight}px;
     padding: 2px 10px;
   }
 
   &[data-form='unitSquare'] {
-    width: ${unitHeight}px;
-    height: ${unitHeight}px;
+    width: ${uiTheme.unitHeight}px;
+    height: ${uiTheme.unitHeight}px;
   }
 
   &[data-form='large'] {
     height: 36px;
     padding: 2px 15px;
-    border-radius: 5px;
   }
 `;
 
