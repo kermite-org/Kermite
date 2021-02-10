@@ -1,12 +1,9 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import {
-  GeneralSelector,
-  IGeneralSelectorProps,
-  GeneralButton,
-} from '~/ui-common/components';
+import { ISelectorOption } from '~/ui-common';
+import { GeneralSelector, GeneralButton } from '~/ui-common/components';
 
-const testOptions: IGeneralSelectorProps['options'] = [
+const testOptions: ISelectorOption[] = [
   { value: '', label: 'no-user' },
   { value: 'user001', label: 'yamada' },
   { value: 'user002', label: 'tanaka' },
