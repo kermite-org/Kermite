@@ -16,7 +16,7 @@ interface Props {
 const style = css`
   background: ${uiTheme.colors.clPrimary};
   color: ${uiTheme.colors.clDecal};
-  border-radius: 1px;
+  /* border-radius: 1px; */
   padding: 2px 4px;
   cursor: pointer;
   user-select: none;

@@ -13,18 +13,22 @@ const cssRoot = css`
   > * + * {
     margin-top: 5px;
   }
-
-  .row {
-    display: flex;
-    > * + * {
-      margin-left: 10px;
-    }
-  }
 `;
 
 const Header = styled('div')`
   color: ${uiTheme.colors.clPrimary};
   font-size: 18px;
+`;
+
+const Row = styled('div')`
+  display: flex;
+  > * + * {
+    margin-left: 10px;
+  }
+`;
+
+const HBox = styled('div')`
+  display: flex;
 `;
 
 const testOptions: ISelectorOption[] = [
@@ -38,12 +42,25 @@ export const MockPageComponentDevelopment: FC = () => {
   return (
     <div css={cssRoot}>
       <Header>Configurations</Header>
-      <GeneralSelector
-        options={testOptions}
-        value={'user001'}
-        setValue={() => {}}
-      />
-      <div class="row">
+      <Row>
+        <GeneralSelector
+          options={testOptions}
+          value={'user001'}
+          setValue={() => {}}
+        />
+
+        <HBox>
+          <GeneralSelector
+            options={testOptions}
+            value={'user001'}
+            setValue={() => {}}
+            width={160}
+          />
+          <GeneralButton icon="fa fa-link" form="unitSquare" />
+        </HBox>
+      </Row>
+
+      <Row>
         <GeneralButton icon="fa fa-cog" form="unitSquare" />
         <GeneralButton
           text="foo"
@@ -55,7 +72,7 @@ export const MockPageComponentDevelopment: FC = () => {
         <GeneralButton text="OK" form="unit" />
         <GeneralButton text="Edit this" form="unit" />
         <GeneralButton text="Edit this" form="large" />
-      </div>
+      </Row>
     </div>
   );
 };
