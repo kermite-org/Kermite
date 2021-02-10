@@ -104,6 +104,7 @@ export const uiTheme_original: IUiTheme = {
 // UI刷新のため一時的に即値によるテーマを使用
 export const uiTheme = {
   unitHeight: 26,
+  controlBorderRadius: 0,
   colors: {
     clBackground: '#000',
     clForegroud: '#FFF',
