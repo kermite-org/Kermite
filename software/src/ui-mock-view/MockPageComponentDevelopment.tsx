@@ -76,7 +76,7 @@ export const MockPageComponentDevelopment: FC = () => {
         />
         <GeneralButton icon="fa fa-cog" disabled form="unitSquare" />
         <GeneralButton text="OK" form="unit" />
-        <GeneralButton text="Edit this" form="unit" />
+        <GeneralButton text="Delete" form="unit" />
         <GeneralButton text="Edit this" form="large" />
       </Row>
       <Row>
