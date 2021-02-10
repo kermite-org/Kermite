@@ -24,12 +24,15 @@ export interface IGeneralSelectorProps {
   disabled?: boolean;
 }
 
-const cssGeneralSelector2 = (width: number | undefined) => css`
-  border: solid 1px #08a;
+const cssGeneralSelector = (width: number | undefined) => css`
+  border: solid 1px ${uiTheme.colors.clPrimary};
+  background: ${uiTheme.colors.clControlBase};
+  color: ${uiTheme.colors.clPrimary};
   min-width: 100px;
   height: ${unitHeight}px;
   width: ${width ? `${width}px` : 'inherit'};
   font-size: 16px;
+  cursor: pointer;
   &:focus {
     outline: none;
   }
@@ -41,7 +44,7 @@ export const GeneralSelector = (props: IGeneralSelectorProps) => {
     <select
       value={value}
       onChange={reflectValue(setValue)}
-      classNames={[cssGeneralSelector2(width), className]}
+      classNames={[cssGeneralSelector(width), className]}
       disabled={disabled}
     >
       {options.map((it, idx) => (
