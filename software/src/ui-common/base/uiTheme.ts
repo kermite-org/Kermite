@@ -108,10 +108,10 @@ export const uiTheme = {
   colors: {
     clBackground: '#000',
     clForegroud: '#FFF',
-    clPrimary: '#08F',
+    clPrimary: '#09A',
     clControlBase: '#222',
     // clControlText: '#FFF',
-    clControlText: '#08F',
+    clControlText: '#09A',
     clDecal: '#FFF',
 
     clPageBackground: '#333',

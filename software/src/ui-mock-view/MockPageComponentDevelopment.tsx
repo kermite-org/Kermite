@@ -6,6 +6,8 @@ import {
   GeneralInput,
   GeneralSelector,
 } from '~/ui-common/components';
+import { CheckBox } from '~/ui-common/components/controls/CheckBox';
+import { CheckBoxLine } from '~/ui-common/components/fabrics/CheckBoxLine';
 
 setup(h);
 
@@ -33,6 +35,12 @@ const Row = styled('div')`
 
 const HBox = styled('div')`
   display: flex;
+`;
+
+const VStack = styled('div')`
+  > * + * {
+    margin-top: 4px;
+  }
 `;
 
 const testOptions: ISelectorOption[] = [
@@ -83,6 +91,28 @@ export const MockPageComponentDevelopment: FC = () => {
         <GeneralInput value="hoge" setValue={dummyHandler} />
         <GeneralInput value="hoge" setValue={dummyHandler} width={100} />
       </Row>
+      <Row>
+        <CheckBox checked={false} setChecked={dummyHandler} />
+        <CheckBox checked={true} setChecked={dummyHandler} />
+      </Row>
+      <Row>
+        <GeneralInput value="test" setValue={dummyHandler} width={100} />
+        <CheckBoxLine
+          checked={false}
+          setChecked={dummyHandler}
+          text="show key index"
+        />
+      </Row>
+      <VStack>
+        <GeneralInput value="test" setValue={dummyHandler} width={100} />
+        <GeneralInput value="test" setValue={dummyHandler} width={100} />
+        <CheckBoxLine
+          checked={false}
+          setChecked={dummyHandler}
+          text="show key index"
+        />
+        <GeneralInput value="test" setValue={dummyHandler} width={100} />
+      </VStack>
     </div>
   );
 };

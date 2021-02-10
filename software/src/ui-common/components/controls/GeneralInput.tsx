@@ -10,6 +10,7 @@ interface Props {
 }
 
 const style = (width: number | undefined) => css`
+  display: block;
   background: ${uiTheme.colors.clControlBase};
   border: solid 1px ${uiTheme.colors.clPrimary};
   color: ${uiTheme.colors.clControlText};
