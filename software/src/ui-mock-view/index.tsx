@@ -4,6 +4,7 @@ import { debounce } from '~/shared';
 import { initializeCss } from '~/ui-common';
 import { UiLayouterPageComponent } from '~/ui-layouter-page';
 import { GooberDevelopmentPage } from '~/ui-mock-view/GooberDevelopmentPage';
+import { MockPageComponentDevelopment } from '~/ui-mock-view/MockPageComponentDevelopment';
 import { MockPageLoadedDesignDrawing } from '~/ui-mock-view/MockPageLoadedDesignDrawing';
 import { RoutingDevelopmentPage } from '~/ui-mock-view/RoutingDevelopmentPage';
 import { MockPageLayouterDevelopment } from './MockPageLayouterDevelopment';
@@ -16,7 +17,8 @@ const PageRoot = () => {
       {/* <UiLayouterPageDevelopmentDummy /> */}
       {/* <UiLayouterPageComponent /> */}
       {/* <GooberDevelopmentPage /> */}
-      <RoutingDevelopmentPage />
+      {/* <RoutingDevelopmentPage /> */}
+      <MockPageComponentDevelopment />
     </div>
   );
 };
