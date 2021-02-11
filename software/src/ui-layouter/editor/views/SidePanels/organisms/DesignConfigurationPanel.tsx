@@ -1,9 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import {
-  ExclusiveButtonGroup,
-  ICommonSelectorViewModel,
-} from '~/ui-layouter/controls';
+import { RibbonSelector } from '~/ui-common/components';
+import { ICommonSelectorViewModel } from '~/ui-layouter/controls';
 import {
   ConfigContent,
   ConfigHeader,
@@ -35,7 +33,7 @@ const PlacementUnitEditPart = (props: {
       <ConfigSubHeader>key placement unit</ConfigSubHeader>
       <ConfigSubContent>
         <ConfigRow>
-          <ExclusiveButtonGroup {...vmUnitMode} buttonWidth={40} />
+          <RibbonSelector {...vmUnitMode} buttonWidth={40} />
           <GeneralConfigTextEditRow
             {...vmUnitText}
             label=""
@@ -60,7 +58,7 @@ const PlacementAnchorEditPart = (props: {
     <div>
       <ConfigSubHeader>key placement anchor</ConfigSubHeader>
       <ConfigSubContent>
-        <ExclusiveButtonGroup {...vmPlacementAnchorMode} buttonWidth={60} />
+        <RibbonSelector {...vmPlacementAnchorMode} buttonWidth={60} />
       </ConfigSubContent>
     </div>
   );
@@ -74,7 +72,7 @@ const SizeUnitEditPart = (props: {
     <div>
       <ConfigSubHeader>key size unit</ConfigSubHeader>
       <ConfigSubContent>
-        <ExclusiveButtonGroup {...vmUnitSizeMode} buttonWidth={40} />
+        <RibbonSelector {...vmUnitSizeMode} buttonWidth={40} />
       </ConfigSubContent>
     </div>
   );
@@ -86,7 +84,7 @@ const KeyIdModePart = (props: { vmKeyIdMode: ICommonSelectorViewModel }) => {
     <div>
       <ConfigSubHeader>key id mode</ConfigSubHeader>
       <ConfigSubContent>
-        <ExclusiveButtonGroup {...vmKeyIdMode} buttonWidth={60} />
+        <RibbonSelector {...vmKeyIdMode} buttonWidth={60} />
       </ConfigSubContent>
     </div>
   );
