@@ -86,9 +86,11 @@ export const KeyEntityCardSingle = (props: {
   const mirrorMultX = isMirror ? -1 : 1;
 
   const cssKeyRect = css`
-    fill: rgba(255, 255, 255, 0.3);
     stroke-width: 0.5;
-    stroke: #666;
+    /* fill: rgba(255, 255, 255, 0.3);
+    stroke: #666; */
+    fill: #3334;
+    stroke: #fffa;
     cursor: pointer;
 
     &[data-selected] {
@@ -151,6 +153,8 @@ export const KeyEntityCardSingle = (props: {
     dominant-baseline: central;
     user-select: none;
     pointer-events: none;
+    /* fill: #000; */
+    fill: #fff;
     &[data-selected] {
       fill: #4bb;
     }

@@ -2,8 +2,12 @@ import { h } from 'qx';
 import { makeCssColor } from '~/ui-common/base';
 import { editReader } from '~/ui-layouter/editor/store';
 
-const axisColor = makeCssColor(0x444444, 0.2);
-const gridColor = makeCssColor(0x444444, 0.1);
+// for light
+// const axisColor = makeCssColor(0x444444, 0.2);
+// const gridColor = makeCssColor(0x444444, 0.1);
+// for dark
+const axisColor = '#0845';
+const gridColor = '#FFFFFF18';
 
 function getWorldViewBounds() {
   const { sight } = editReader;
