@@ -8,6 +8,11 @@ import {
 } from '~/ui-common/components';
 import { CheckBox } from '~/ui-common/components/controls/CheckBox';
 import { RibbonSelector } from '~/ui-common/components/controls/RibbonSelector';
+import {
+  OperationButtonOnlyIcon,
+  OperationButtonWithIcon,
+  SmallSymbolicActionButton,
+} from '~/ui-common/components/fabrics/Buttons';
 import { CheckBoxLine } from '~/ui-common/components/fabrics/CheckBoxLine';
 
 setup(h);
@@ -129,6 +134,24 @@ export const MockPageComponentDevelopment: FC = () => {
         <RibbonSelector {...useSelectorModel(testOptions3)} />
         <RibbonSelector {...useSelectorModel(testOptions3)} disabled />
       </VStack>
+      <Row>
+        <SmallSymbolicActionButton icon="fa fa-cog" />
+        <SmallSymbolicActionButton icon="fa fa-cog" disabled />
+        <SmallSymbolicActionButton icon="fa fa-plus" />
+        <SmallSymbolicActionButton icon="fa fa-pen-square" />
+        <SmallSymbolicActionButton icon="fa fa-times" />
+        <SmallSymbolicActionButton icon="fa fa-long-arrow-alt-up" />
+        <SmallSymbolicActionButton icon="fa fa-long-arrow-alt-down" />
+      </Row>
+      <Row>
+        <OperationButtonWithIcon icon="fa fa-save" label="save" />
+        <OperationButtonWithIcon icon="fa fa-upload" label="write" />
+      </Row>
+      <Row>
+        <OperationButtonOnlyIcon icon="fa fa-cog" />
+        <OperationButtonOnlyIcon icon="fa fa-undo" />
+        <OperationButtonOnlyIcon icon="fa fa-redo" />
+      </Row>
     </div>
   );
 };
