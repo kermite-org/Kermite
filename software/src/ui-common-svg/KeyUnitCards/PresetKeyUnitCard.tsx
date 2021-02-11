@@ -19,7 +19,7 @@ export interface IPresetKeyUnitViewModel {
 
 const cssKeyShape = css`
   fill: transparent;
-  stroke: #444;
+  stroke: #888;
   stroke-width: 0.3;
 `;
 
