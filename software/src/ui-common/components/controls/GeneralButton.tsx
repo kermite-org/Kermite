@@ -12,6 +12,7 @@ interface Props {
   disabled?: boolean;
   className?: string;
   size?: IGeneralButtonSize;
+  children?: any;
 }
 
 const style = css`
@@ -65,6 +66,7 @@ export const GeneralButton: FC<Props> = ({
   disabled,
   className,
   size = 'unit',
+  children,
 }) => (
   <div
     css={style}
@@ -75,5 +77,6 @@ export const GeneralButton: FC<Props> = ({
   >
     {icon && <Icon spec={icon} />}
     {text && <span>{text}</span>}
+    {children}
   </div>
 );

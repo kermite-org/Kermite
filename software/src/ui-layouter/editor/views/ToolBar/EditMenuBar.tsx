@@ -1,6 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import {
+  GeneralButton,
   GeneralSelector,
   RibbonSelector,
   ToggleButton,
@@ -72,12 +73,8 @@ export const EditMenuBar = () => {
       />
 
       <div class="buttonsBox">
-        <button disabled={!canUndo} onClick={undo}>
-          undo
-        </button>
-        <button disabled={!canRedo} onClick={redo}>
-          redo
-        </button>
+        <GeneralButton disabled={!canUndo} onClick={undo} icon="fa fa-undo" />
+        <GeneralButton disabled={!canRedo} onClick={redo} icon="fa fa-redo" />
       </div>
 
       <div class="buttonsBox">
@@ -123,7 +120,7 @@ export const EditMenuBar = () => {
       </div>
 
       <div>
-        <button onClick={resetKeyboardDesign}>reset</button>
+        <GeneralButton onClick={resetKeyboardDesign} text="reset" />
       </div>
 
       <div class="spacer" />
