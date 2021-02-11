@@ -26,6 +26,9 @@ const style = (width: number | undefined) => css`
   &:focus {
     outline: none;
   }
+  &:disabled {
+    opacity: 0.5;
+  }
 `;
 
 export const GeneralSelector: FC<Props> = ({

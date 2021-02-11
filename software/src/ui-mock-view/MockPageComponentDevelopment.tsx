@@ -1,5 +1,5 @@
 import { css, setup, styled } from 'goober';
-import { h, FC } from 'qx';
+import { h, FC, Hook } from 'qx';
 import { ISelectorOption, uiTheme } from '~/ui-common';
 import {
   GeneralButton,
@@ -7,6 +7,7 @@ import {
   GeneralSelector,
 } from '~/ui-common/components';
 import { CheckBox } from '~/ui-common/components/controls/CheckBox';
+import { RibbonSelector } from '~/ui-common/components/controls/RibbonSelector';
 import { CheckBoxLine } from '~/ui-common/components/fabrics/CheckBoxLine';
 
 setup(h);
@@ -44,32 +45,39 @@ const VStack = styled('div')`
 `;
 
 const testOptions: ISelectorOption[] = [
-  { value: '', label: 'no-user' },
   { value: 'user001', label: 'yamada' },
   { value: 'user002', label: 'tanaka' },
   { value: 'user003', label: 'suzuki' },
 ];
 
+const testOptions2: ISelectorOption[] = [
+  'select',
+  'move',
+  'add',
+  'delete',
+].map((it) => ({ label: it, value: it }));
+
+const testOptions3: ISelectorOption[] = ['manual', 'auto'].map((it) => ({
+  label: it,
+  value: it,
+}));
+
 const dummyHandler = () => {};
+
+function useSelectorProps(options: ISelectorOption[]) {
+  const [value, setValue] = Hook.useState(options[0].value);
+  return { options, value, setValue };
+}
 
 export const MockPageComponentDevelopment: FC = () => {
   return (
     <div css={cssRoot}>
       <Header>Configurations</Header>
       <Row>
-        <GeneralSelector
-          options={testOptions}
-          value={'user001'}
-          setValue={() => {}}
-        />
-
+        <GeneralSelector {...useSelectorProps(testOptions)} />
+        <GeneralSelector {...useSelectorProps(testOptions)} disabled />
         <HBox>
-          <GeneralSelector
-            options={testOptions}
-            value={'user001'}
-            setValue={() => {}}
-            width={160}
-          />
+          <GeneralSelector {...useSelectorProps(testOptions)} width={160} />
           <GeneralButton icon="fa fa-link" form="unitSquare" />
         </HBox>
       </Row>
@@ -112,6 +120,11 @@ export const MockPageComponentDevelopment: FC = () => {
           text="show key index"
         />
         <GeneralInput value="test" setValue={dummyHandler} width={100} />
+      </VStack>
+      <VStack>
+        <RibbonSelector {...useSelectorProps(testOptions2)} buttonWidth={50} />
+        <RibbonSelector {...useSelectorProps(testOptions3)} />
+        <RibbonSelector {...useSelectorProps(testOptions3)} disabled />
       </VStack>
     </div>
   );
