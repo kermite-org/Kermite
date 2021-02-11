@@ -18,7 +18,6 @@ const style = (width: number | undefined) => css`
   background: ${uiTheme.colors.clControlBase};
   color: ${uiTheme.colors.clControlText};
   border-radius: ${uiTheme.controlBorderRadius}px;
-  min-width: 100px;
   height: ${uiTheme.unitHeight}px;
   width: ${width ? `${width}px` : 'inherit'};
   font-size: 15px;

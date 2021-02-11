@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { GeneralSelector } from '~/ui-layouter/controls';
+import { GeneralSelector, HFlex } from '~/ui-common/components';
 import {
   ConfigContent,
   ConfigHeader,
@@ -48,12 +48,10 @@ export const KeyEntityEditPanel = () => {
             inputWidth={60}
           />
           <div css={cssErrorText}>{vm.vmKeyIndex.errorText}</div>
-          <div>
-            <span style={{ width: '80px', display: 'inline-block' }}>
-              groupId
-            </span>
+          <HFlex>
+            <span style={{ width: '80px' }}>groupId</span>
             <GeneralSelector {...vm.vmGroupId} width={60} />
-          </div>
+          </HFlex>
           <div qxIf={!!vm.errorText} css={cssErrorText}>
             {vm.errorText}
           </div>

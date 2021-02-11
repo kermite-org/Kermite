@@ -1,5 +1,5 @@
 import { h } from 'qx';
-import { GeneralSelector } from '~/ui-layouter/controls';
+import { GeneralSelector, HFlex } from '~/ui-common/components';
 import {
   ConfigContent,
   ConfigHeader,
@@ -53,12 +53,10 @@ export const OutlineEditPanel = () => {
           <ConfigSubContent>
             <div>shapeID: {currentShapeId}</div>
             <div>numPoints: {numShapePoints}</div>
-            <div>
-              <span style={{ width: '80px', display: 'inline-block' }}>
-                group
-              </span>
+            <HFlex>
+              <span style={{ width: '70px' }}>group</span>
               <GeneralSelector {...vmGroupId} width={60} />
-            </div>
+            </HFlex>
           </ConfigSubContent>
         </div>
       </ConfigContent>
