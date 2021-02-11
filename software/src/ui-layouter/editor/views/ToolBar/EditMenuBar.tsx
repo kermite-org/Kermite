@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { GeneralSelector } from '~/ui-common/components';
-import { ExclusiveButtonGroup, ToggleButton } from '~/ui-layouter/controls';
+import { GeneralSelector, ToggleButton } from '~/ui-common/components';
+import { ExclusiveButtonGroup } from '~/ui-layouter/controls';
 import { makeEditMenuBarViewModel } from '~/ui-layouter/editor/views/ToolBar/EditMenuBar.model';
 
 const cssEditMenuBar = css`
