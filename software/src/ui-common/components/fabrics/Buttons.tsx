@@ -33,10 +33,10 @@ export const OperationButtonWithIcon = (props: {
 }) => {
   const style = css`
     color: ${uiTheme.colors.clPrimary};
-    font-size: 22px;
+    font-size: 20px;
     font-weight: bold;
     > i {
-      font-size: 26px;
+      font-size: 24px;
     }
   `;
   return (

@@ -11,7 +11,7 @@ export function LayersSection() {
 
   return (
     <div>
-      <SectionHeaderText text="Layers" />
+      <SectionHeaderText text="Layers" icon="layers" />
       <LayersListBoxPart vm={layerListBoxPartViewModel} />
       <LayerManagementPart vm={layerManagementPartViewModel} />
     </div>

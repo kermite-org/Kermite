@@ -1,5 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
+import { uiTheme } from '~/ui-common';
 
 export const WindowTitlePart = () => {
   const cssTitlePart = css`
@@ -12,7 +13,7 @@ export const WindowTitlePart = () => {
       color: #fff;
 
       &.K {
-        color: #dbff00;
+        color: ${uiTheme.colors.clSpecialAccent};
       }
     }
   `;

@@ -16,9 +16,9 @@ const style = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 20px;
-  height: 20px;
-  font-size: 14px;
+  width: 16px;
+  height: 16px;
+  font-size: 12px;
   cursor: pointer;
 
   > .mark {

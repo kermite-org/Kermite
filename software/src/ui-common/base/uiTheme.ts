@@ -131,7 +131,8 @@ export const uiTheme = {
     clKeyUnitLegendWeak: 'rgba(128, 128, 128, 0.2)',
     clAssignCardFace: '#383838',
     clAssignCardText: '#FFF',
-    clCommonFrame: '#444',
+    clSpecialAccent: '#dbff00',
+    clLinkIndicator: '#0BC',
     // --------
     // light
     // clBackground: '#f8fAfC',
@@ -157,7 +158,8 @@ export const uiTheme = {
     // clKeyUnitLegendWeak: 'rgba(128, 128, 128, 0.2)',
     // clAssignCardFace: '#EEE',
     // clAssignCardText: '#348',
-    // clCommonFrame: '#08d',
+    // clSpecialAccent: '#dbff00',
+    // clLinkIndicator: '#FA0',
     // --------
   },
 };

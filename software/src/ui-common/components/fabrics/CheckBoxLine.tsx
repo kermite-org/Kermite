@@ -18,7 +18,7 @@ const style = css`
   > .inner {
     color: ${uiTheme.colors.clPrimary};
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     font-size: 15px;
 
     > span {

@@ -18,7 +18,7 @@ const baseCss = css`
   align-items: center;
 
   &:hover {
-    opacity: 0.8;
+    opacity: 0.7;
   }
 
   &.disabled {
