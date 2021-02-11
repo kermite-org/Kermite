@@ -8,7 +8,7 @@ type IGeneralButtonSize = 'unit' | 'unitSquare' | 'large';
 interface Props {
   text?: string;
   icon?: string;
-  handler?(): void;
+  onClick?(): void;
   disabled?: boolean;
   className?: string;
   size?: IGeneralButtonSize;
@@ -61,7 +61,7 @@ const style = css`
 export const GeneralButton: FC<Props> = ({
   text,
   icon,
-  handler,
+  onClick,
   disabled,
   className,
   size = 'unit',
@@ -69,7 +69,7 @@ export const GeneralButton: FC<Props> = ({
   <div
     css={style}
     className={className}
-    onClick={handler}
+    onClick={onClick}
     data-disabled={disabled}
     data-size={size}
   >

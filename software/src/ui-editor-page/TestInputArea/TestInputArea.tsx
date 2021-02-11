@@ -13,7 +13,7 @@ export const TestInputArea = () => {
   return (
     <div css={cssTestInputArea}>
       <GeneralInput value={vm.text} setValue={vm.setText} width={300} />
-      <GeneralButton text="clear" handler={vm.clearText} />
+      <GeneralButton text="clear" onClick={vm.clearText} />
     </div>
   );
 };

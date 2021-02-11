@@ -44,18 +44,18 @@ export const HeatmapPage = () => {
       <div>Realtime Heatmap</div>
       <div class="headRow">
         <GeneralButton
-          handler={vm.startRecording}
+          onClick={vm.startRecording}
           text="start"
           disabled={vm.isRecording || vm.hasRecord}
         />
         <GeneralButton
-          handler={vm.stopRecording}
+          onClick={vm.stopRecording}
           text="stop"
           disabled={!vm.isRecording}
         />
 
         <GeneralButton
-          handler={vm.clearRecord}
+          onClick={vm.clearRecord}
           text="clear"
           disabled={!(!vm.isRecording && vm.hasRecord)}
         />

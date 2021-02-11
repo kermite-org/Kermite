@@ -45,7 +45,7 @@ export const ComponentCatalog = () => {
       <div class="buttonsRow">
         <GeneralButton
           icon="fa fa-cog"
-          handler={buttonHandler}
+          onClick={buttonHandler}
           size="unitSquare"
         />
         <GeneralButton

@@ -84,7 +84,7 @@ export const UiSettingsPage = () => {
                 width={350}
               />
               <GeneralButton
-                handler={onSelectButton}
+                onClick={onSelectButton}
                 disabled={!canChangeFolder}
                 icon="folder_open"
                 size="unitSquare"

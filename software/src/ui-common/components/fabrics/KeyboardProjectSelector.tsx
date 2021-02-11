@@ -23,7 +23,7 @@ export const KeyboardProjectSelector = (
       <GeneralButton
         icon="fa fa-link"
         disabled={!props.isLinkButtonActive}
-        handler={props.linkButtonHandler}
+        onClick={props.linkButtonHandler}
         size="unitSquare"
       />
     </div>

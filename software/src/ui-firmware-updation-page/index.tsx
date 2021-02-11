@@ -69,7 +69,7 @@ export const FirmwareUpdationPage = () => {
         {phase === 'WaitingUploadOrder' && (
           <div>
             <div>{vm.comPortName} detected. Ready to flash.</div>
-            <GeneralButton handler={vm.onWriteButton} text="write" />
+            <GeneralButton onClick={vm.onWriteButton} text="write" />
           </div>
         )}
 
@@ -82,15 +82,15 @@ export const FirmwareUpdationPage = () => {
         {phase === 'UploadSuccess' && (
           <div>
             <div>Success!</div>
-            <GeneralButton handler={vm.onResetButton} text="done" />
+            <GeneralButton onClick={vm.onResetButton} text="done" />
           </div>
         )}
 
         {phase === 'UploadFailure' && (
           <div>
             <span style={{ color: 'red' }}>Failure</span>
-            <GeneralButton handler={vm.onLogButton} text="log" />
-            <GeneralButton handler={vm.onResetButton} text="done" />
+            <GeneralButton onClick={vm.onLogButton} text="log" />
+            <GeneralButton onClick={vm.onResetButton} text="done" />
           </div>
         )}
       </div>
