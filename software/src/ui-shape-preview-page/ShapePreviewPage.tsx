@@ -24,7 +24,14 @@ const cssShapePreviewPage = css`
 
   > .topRow {
     display: flex;
-    justify-content: space-between;
+
+    > * + * {
+      margin-left: 40px;
+    }
+
+    > .spacer {
+      flex-grow: 1;
+    }
   }
 
   > .keyboardRow {
@@ -55,6 +62,7 @@ export const KeyboardShapePreviewPage = () => {
       <div class="topRow">
         <GeneralSelector {...projectSelectorSource} width={160} />
         <GeneralSelector {...layoutSelectorSource} width={160} />
+        <div class="spacer" />
         <ShapePreviewOptionsBox settings={settings} />
       </div>
       <div class="keyboardRow">
