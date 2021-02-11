@@ -46,18 +46,18 @@ export const ComponentCatalog = () => {
         <GeneralButton
           icon="fa fa-cog"
           handler={buttonHandler}
-          form="unitSquare"
+          size="unitSquare"
         />
         <GeneralButton
           text="foo"
           icon="fa fa-cog"
           className={buttonExtraCss}
-          form="unit"
+          size="unit"
         />
-        <GeneralButton icon="fa fa-cog" disabled form="unitSquare" />
-        <GeneralButton text="OK" form="unit" />
-        <GeneralButton text="Edit this" form="unit" />
-        <GeneralButton text="Edit this" form="large" />
+        <GeneralButton icon="fa fa-cog" disabled size="unitSquare" />
+        <GeneralButton text="OK" size="unit" />
+        <GeneralButton text="Edit this" size="unit" />
+        <GeneralButton text="Edit this" size="large" />
       </div>
 
       <GeneralSelector

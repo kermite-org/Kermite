@@ -88,17 +88,17 @@ export const MockPageComponentDevelopment: FC = () => {
         <GeneralSelector {...useSelectorModel(testOptions)} disabled />
         <HBox>
           <GeneralSelector {...useSelectorModel(testOptions)} width={160} />
-          <GeneralButton icon="fa fa-link" form="unitSquare" />
+          <GeneralButton icon="fa fa-link" size="unitSquare" />
         </HBox>
       </Row>
 
       <Row>
-        <GeneralButton icon="fa fa-cog" form="unitSquare" />
-        <GeneralButton text="foo" icon="fa fa-cog" form="unit" />
-        <GeneralButton icon="fa fa-cog" disabled form="unitSquare" />
-        <GeneralButton text="OK" form="unit" />
-        <GeneralButton text="Delete" form="unit" />
-        <GeneralButton text="Edit this" form="large" />
+        <GeneralButton icon="fa fa-cog" size="unitSquare" />
+        <GeneralButton text="foo" icon="fa fa-cog" size="unit" />
+        <GeneralButton icon="fa fa-cog" disabled size="unitSquare" />
+        <GeneralButton text="OK" size="unit" />
+        <GeneralButton text="Delete" size="unit" />
+        <GeneralButton text="Edit this" size="large" />
       </Row>
       <Row>
         <GeneralInput {...useInputModel('hoge')} />

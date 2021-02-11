@@ -2,7 +2,7 @@ import { css } from 'goober';
 import { FC, h } from 'qx';
 import { uiTheme } from '~/ui-common';
 
-type IGeneralButtonForm = 'unit' | 'unitSquare' | 'large';
+type IGeneralButtonSize = 'unit' | 'unitSquare' | 'large';
 
 interface Props {
   text?: string;
@@ -10,7 +10,7 @@ interface Props {
   handler?(): void;
   disabled?: boolean;
   className?: string;
-  form?: IGeneralButtonForm;
+  size?: IGeneralButtonSize;
 }
 
 const style = css`
@@ -26,17 +26,17 @@ const style = css`
   justify-content: center;
   align-items: center;
 
-  &[data-form='unit'] {
+  &[data-size='unit'] {
     height: ${uiTheme.unitHeight}px;
     padding: 2px 10px;
   }
 
-  &[data-form='unitSquare'] {
+  &[data-size='unitSquare'] {
     width: ${uiTheme.unitHeight}px;
     height: ${uiTheme.unitHeight}px;
   }
 
-  &[data-form='large'] {
+  &[data-size='large'] {
     height: 36px;
     font-size: 18px;
     padding: 2px 15px;
@@ -63,14 +63,14 @@ export const GeneralButton: FC<Props> = ({
   handler,
   disabled,
   className,
-  form = 'unit',
+  size = 'unit',
 }) => (
   <div
     css={style}
     className={className}
     onClick={handler}
     data-disabled={disabled}
-    data-form={form}
+    data-size={size}
   >
     {icon && <i class={icon} />}
     {text && <span>{text}</span>}

@@ -48,7 +48,7 @@ export const PresetSelectionSection = ({
       </div>
       <GeneralButton
         text="Create Profile"
-        form="large"
+        size="large"
         handler={vm.editPresetButtonHandler}
       />
     </div>
