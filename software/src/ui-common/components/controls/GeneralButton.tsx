@@ -1,6 +1,7 @@
 import { css } from 'goober';
 import { FC, h } from 'qx';
 import { uiTheme } from '~/ui-common';
+import { Icon } from '~/ui-common/components/controls';
 
 type IGeneralButtonSize = 'unit' | 'unitSquare' | 'large';
 
@@ -43,7 +44,7 @@ const style = css`
   }
 
   > :not(:first-child) {
-    margin-left: 3px;
+    margin-left: 1px;
   }
 
   &:hover {
@@ -72,7 +73,7 @@ export const GeneralButton: FC<Props> = ({
     data-disabled={disabled}
     data-size={size}
   >
-    {icon && <i class={icon} />}
+    {icon && <Icon spec={icon} />}
     {text && <span>{text}</span>}
   </div>
 );

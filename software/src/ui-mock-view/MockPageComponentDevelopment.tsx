@@ -5,15 +5,15 @@ import {
   GeneralButton,
   GeneralInput,
   GeneralSelector,
+  Icon,
 } from '~/ui-common/components';
-import { CheckBox } from '~/ui-common/components/controls/CheckBox';
-import { RibbonSelector } from '~/ui-common/components/controls/RibbonSelector';
+import { RibbonSelector, CheckBox } from '~/ui-common/components/controls';
 import {
+  CheckBoxLine,
   OperationButtonOnlyIcon,
   OperationButtonWithIcon,
   SmallSymbolicActionButton,
-} from '~/ui-common/components/fabrics/Buttons';
-import { CheckBoxLine } from '~/ui-common/components/fabrics/CheckBoxLine';
+} from '~/ui-common/components/fabrics';
 
 setup(h);
 
@@ -69,6 +69,11 @@ const testOptions3: ISelectorOption[] = ['manual', 'auto'].map((it) => ({
 
 // const dummyHandler = () => {};
 
+const cssIconsContainer = css`
+  display: flex;
+  font-size: 30px;
+`;
+
 function useSelectorModel(options: ISelectorOption[]) {
   const [value, setValue] = Hook.useState(options[0].value);
   return { options, value, setValue };
@@ -98,9 +103,9 @@ export const MockPageComponentDevelopment: FC = () => {
       </Row>
 
       <Row>
-        <GeneralButton icon="fa fa-cog" size="unitSquare" />
-        <GeneralButton text="foo" icon="fa fa-cog" size="unit" />
-        <GeneralButton icon="fa fa-cog" disabled size="unitSquare" />
+        <GeneralButton icon="settings" size="unitSquare" />
+        <GeneralButton text="foo" icon="settings" size="unit" />
+        <GeneralButton icon="settings" disabled size="unitSquare" />
         <GeneralButton text="OK" size="unit" />
         <GeneralButton text="Delete" size="unit" />
         <GeneralButton text="Edit this" size="large" />
@@ -135,22 +140,36 @@ export const MockPageComponentDevelopment: FC = () => {
         <RibbonSelector {...useSelectorModel(testOptions3)} disabled />
       </VStack>
       <Row>
-        <SmallSymbolicActionButton icon="fa fa-cog" />
-        <SmallSymbolicActionButton icon="fa fa-cog" disabled />
-        <SmallSymbolicActionButton icon="fa fa-plus" />
-        <SmallSymbolicActionButton icon="fa fa-pen-square" />
-        <SmallSymbolicActionButton icon="fa fa-times" />
-        <SmallSymbolicActionButton icon="fa fa-long-arrow-alt-up" />
-        <SmallSymbolicActionButton icon="fa fa-long-arrow-alt-down" />
+        <SmallSymbolicActionButton icon="settings" />
+        <SmallSymbolicActionButton icon="settings" disabled />
+        <SmallSymbolicActionButton icon="add_box" />
+        <SmallSymbolicActionButton icon="edit" />
+        <SmallSymbolicActionButton icon="delete" />
+        <SmallSymbolicActionButton icon="north" />
+        <SmallSymbolicActionButton icon="south" />
       </Row>
       <Row>
-        <OperationButtonWithIcon icon="fa fa-save" label="save" />
-        <OperationButtonWithIcon icon="fa fa-upload" label="write" />
+        <OperationButtonWithIcon icon="save" label="save" />
+        <OperationButtonWithIcon icon="double_arrow" label="write" />
       </Row>
       <Row>
-        <OperationButtonOnlyIcon icon="fa fa-cog" />
-        <OperationButtonOnlyIcon icon="fa fa-undo" />
-        <OperationButtonOnlyIcon icon="fa fa-redo" />
+        <OperationButtonOnlyIcon icon="settings" />
+        <OperationButtonOnlyIcon icon="undo" />
+        <OperationButtonOnlyIcon icon="redo" />
+      </Row>
+      <Row>
+        <Icon spec={'settings'} size={20} />
+        <Icon spec={'fa fa-cog'} size={20} />
+        <Icon spec={'settings'} size={40} />
+        <Icon spec={'fa fa-cog'} size={40} />
+        <div css={cssIconsContainer}>
+          <Icon spec={'settings'} />
+          <Icon spec={'fa fa-cog'} />
+          <Icon spec={'settings'} size={20} />
+          <Icon spec={'fa fa-cog'} size={20} />
+          <Icon spec={'settings'} size={40} />
+          <Icon spec={'fa fa-cog'} size={40} />
+        </div>
       </Row>
     </div>
   );

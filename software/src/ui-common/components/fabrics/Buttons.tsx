@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { uiTheme } from '~/ui-common/base';
-import { ButtonBase } from '~/ui-common/components/controls';
+import { ButtonBase, Icon } from '~/ui-common/components/controls';
 
 export const SmallSymbolicActionButton = (props: {
   onClick?(): void;
@@ -12,7 +12,7 @@ export const SmallSymbolicActionButton = (props: {
     width: 20px;
     height: 20px;
     color: ${uiTheme.colors.clPrimary};
-    font-size: 18px;
+    font-size: 20px;
   `;
   return (
     <ButtonBase
@@ -20,7 +20,7 @@ export const SmallSymbolicActionButton = (props: {
       disabled={props.disabled}
       extraCss={style}
     >
-      <i class={props.icon} />
+      <Icon spec={props.icon} />
     </ButtonBase>
   );
 };
@@ -35,8 +35,8 @@ export const OperationButtonWithIcon = (props: {
     color: ${uiTheme.colors.clPrimary};
     font-size: 22px;
     font-weight: bold;
-    > span {
-      margin-left: 2px;
+    > i {
+      font-size: 26px;
     }
   `;
   return (
@@ -45,7 +45,7 @@ export const OperationButtonWithIcon = (props: {
       disabled={props.disabled}
       extraCss={style}
     >
-      <i class={props.icon} />
+      <Icon spec={props.icon} />
       <span>{props.label}</span>
     </ButtonBase>
   );
@@ -58,7 +58,7 @@ export const OperationButtonOnlyIcon = (props: {
 }) => {
   const style = css`
     color: ${uiTheme.colors.clPrimary};
-    font-size: 24px;
+    font-size: 28px;
   `;
   return (
     <ButtonBase
@@ -66,7 +66,7 @@ export const OperationButtonOnlyIcon = (props: {
       disabled={props.disabled}
       extraCss={style}
     >
-      <i class={props.icon} />
+      <Icon spec={props.icon} />
     </ButtonBase>
   );
 };
