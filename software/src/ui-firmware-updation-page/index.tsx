@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h, Hook } from 'qx';
 import { uiTheme } from '~/ui-common';
-import { GeneralSelector } from '~/ui-common/components';
+import { GeneralButton, GeneralSelector } from '~/ui-common/components';
 import { firmwareUpdationModel } from './FirmwareUpdationModel';
 import { makeFirmwareUpdationPageViewModel } from './FirmwareUpdationPageViewModel';
 
@@ -27,6 +27,7 @@ const cssFirmwareUpdationPage = css`
   .statusRow {
     > div {
       display: flex;
+      align-items: center;
       > * + * {
         margin-left: 10px;
       }
@@ -68,7 +69,7 @@ export const FirmwareUpdationPage = () => {
         {phase === 'WaitingUploadOrder' && (
           <div>
             <div>{vm.comPortName} detected. Ready to flash.</div>
-            <button onClick={vm.onWriteButton}>write</button>
+            <GeneralButton handler={vm.onWriteButton} text="write" />
           </div>
         )}
 
@@ -81,15 +82,15 @@ export const FirmwareUpdationPage = () => {
         {phase === 'UploadSuccess' && (
           <div>
             <div>Success!</div>
-            <button onClick={vm.onResetButton}>done</button>
+            <GeneralButton handler={vm.onResetButton} text="done" />
           </div>
         )}
 
         {phase === 'UploadFailure' && (
           <div>
             <span style={{ color: 'red' }}>Failure</span>
-            <button onClick={vm.onLogButton}>log</button>
-            <button onClick={vm.onResetButton}>done</button>
+            <GeneralButton handler={vm.onLogButton} text="log" />
+            <GeneralButton handler={vm.onResetButton} text="done" />
           </div>
         )}
       </div>
