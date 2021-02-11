@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { uiTheme } from '~/ui-layouter/base';
+import { uiTheme } from '~/ui-common';
 
 function styledDiv(cssDiv: string) {
   return (props: { children: any }) => <div css={cssDiv}>{props.children}</div>;
@@ -11,16 +11,16 @@ export const ConfigPanel = styledDiv(css`
 `);
 
 export const ConfigHeader = styledDiv(css`
-  color: ${uiTheme.colors.primary};
-  border: solid 1px ${uiTheme.colors.primary};
-  background: ${uiTheme.colors.primaryWeaken};
+  background: ${uiTheme.colors.clPrimary};
+  border: solid 1px ${uiTheme.colors.clPrimary};
+  color: ${uiTheme.colors.clDecal};
   padding: 2px 5px;
 `);
 
 export const ConfigContent = styledDiv(css`
-  padding: 6px 8px;
-  border: solid 1px ${uiTheme.colors.primary};
+  border: solid 1px ${uiTheme.colors.clPrimary};
   border-top: none;
+  padding: 6px 8px;
 
   > * + * {
     margin-top: 5px;
