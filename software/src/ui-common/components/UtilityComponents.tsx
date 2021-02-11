@@ -8,3 +8,5 @@ export const HFlex = styled('div')`
 export const Indent = styled('div')`
   margin-left: 10px;
 `;
+
+export const styleWidthSpec = (width: number) => ({ width: `${width}px` });
