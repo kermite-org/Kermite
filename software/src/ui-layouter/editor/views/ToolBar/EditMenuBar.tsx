@@ -1,7 +1,10 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { GeneralSelector, ToggleButton } from '~/ui-common/components';
-import { ExclusiveButtonGroup } from '~/ui-layouter/controls';
+import {
+  GeneralSelector,
+  RibbonSelector,
+  ToggleButton,
+} from '~/ui-common/components';
 import { makeEditMenuBarViewModel } from '~/ui-layouter/editor/views/ToolBar/EditMenuBar.model';
 
 const cssEditMenuBar = css`
@@ -53,14 +56,14 @@ export const EditMenuBar = () => {
 
   return (
     <div class={cssEditMenuBar}>
-      <ExclusiveButtonGroup
+      <RibbonSelector
         options={editorTargetVm.options}
         value={editorTargetVm.value}
         setValue={editorTargetVm.setValue}
         buttonWidth={55}
       />
 
-      <ExclusiveButtonGroup
+      <RibbonSelector
         options={editModeVm.options}
         value={editModeVm.value}
         setValue={editModeVm.setValue}
