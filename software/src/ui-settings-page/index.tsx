@@ -1,13 +1,14 @@
 import { css } from 'goober';
 import { h, Hook } from 'qx';
 import { IGlobalSettings } from '~/shared';
+import { appUi, fieldSetter, ipcAgent, uiTheme, useLocal } from '~/ui-common';
 import {
-  appUi,
-  ipcAgent,
-  reflectFieldChecked,
-  uiTheme,
-  useLocal,
-} from '~/ui-common';
+  CheckBoxLine,
+  GeneralButton,
+  GeneralInput,
+  HFlex,
+  Indent,
+} from '~/ui-common/components';
 
 const cssUiSettingsPage = css`
   background: ${uiTheme.colors.clBackground};
@@ -16,11 +17,7 @@ const cssUiSettingsPage = css`
   padding: 10px;
 
   > * + * {
-    margin-top: 10px;
-  }
-
-  .filePathInput {
-    width: 350px;
+    margin-top: 5px;
   }
 `;
 
@@ -62,39 +59,40 @@ export const UiSettingsPage = () => {
 
   return (
     <div css={cssUiSettingsPage}>
-      Configurations
-      <div>
+      <div>Configurations</div>
+
+      <Indent>
         <div>Resources</div>
-        <div>
-          <input
-            type="checkbox"
+        <Indent>
+          <CheckBoxLine
+            text="Use Online Project Resources"
             checked={settings.useOnlineResources}
-            onChange={reflectFieldChecked(settings, 'useOnlineResources')}
+            setChecked={fieldSetter(settings, 'useOnlineResources')}
           />
-          <span>Use Online Project Resources</span>
-        </div>
-        <div>
-          <input
-            type="checkbox"
+          <CheckBoxLine
+            text="Use Local Project Resources"
             checked={settings.useLocalResouces}
-            onChange={reflectFieldChecked(settings, 'useLocalResouces')}
+            setChecked={fieldSetter(settings, 'useLocalResouces')}
           />
-          <span>Use Local Project Resources</span>
-        </div>
-        <div>
-          <div>Kermite Root Directory</div>
-          <input
-            type="text"
-            readOnly={true}
-            value={folderPathDisplayValue}
-            className="filePathInput"
-            disabled={!canChangeFolder}
-          ></input>
-          <button onClick={onSelectButton} disabled={!canChangeFolder}>
-            select
-          </button>
-        </div>
-      </div>
+          <div>
+            <div>Kermite Root Directory</div>
+            <HFlex>
+              <GeneralInput
+                value={folderPathDisplayValue}
+                disabled={!canChangeFolder}
+                readOnly={true}
+                width={350}
+              />
+              <GeneralButton
+                handler={onSelectButton}
+                disabled={!canChangeFolder}
+                icon="folder_open"
+                size="unitSquare"
+              />
+            </HFlex>
+          </div>
+        </Indent>
+      </Indent>
     </div>
   );
 };

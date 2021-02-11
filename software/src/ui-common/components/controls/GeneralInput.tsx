@@ -4,11 +4,12 @@ import { uiTheme, reflectValue } from '~/ui-common';
 
 interface Props {
   value: string;
-  setValue(value: string): void;
+  setValue?(value: string): void;
   className?: string;
   width?: number;
   disabled?: boolean;
   invalid?: boolean;
+  readOnly?: boolean;
 }
 
 const style = (width: number | undefined) => css`
@@ -42,6 +43,7 @@ export const GeneralInput: FC<Props> = ({
   width,
   disabled,
   invalid,
+  readOnly,
 }) => {
   return (
     <input
@@ -49,9 +51,10 @@ export const GeneralInput: FC<Props> = ({
       className={className}
       type="text"
       value={value}
-      onInput={reflectValue(setValue)}
+      onInput={setValue && reflectValue(setValue)}
       disabled={disabled}
       data-invalid={invalid}
+      readOnly={readOnly}
     />
   );
 };
