@@ -1,4 +1,4 @@
-import { makeCssColor } from './ColorHelper';
+import { makeCssColor } from '../../ui-common/base/ColorHelper';
 
 const primaryBase = 0x00aa99;
 // const primaryBase = 0x3080e0;

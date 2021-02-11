@@ -1,12 +1,8 @@
 import { css } from 'goober';
 import { rerender, h } from 'qx';
 import { degToRad } from '~/shared';
-import {
-  makeCssColor,
-  uiTheme,
-  IPosition,
-  startDragSession,
-} from '~/ui-layouter/base';
+import { makeCssColor } from '~/ui-common';
+import { uiTheme, IPosition, startDragSession } from '~/ui-layouter/base';
 import {
   editReader,
   editMutations,
