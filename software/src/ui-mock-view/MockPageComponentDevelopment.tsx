@@ -62,11 +62,21 @@ const testOptions3: ISelectorOption[] = ['manual', 'auto'].map((it) => ({
   value: it,
 }));
 
-const dummyHandler = () => {};
+// const dummyHandler = () => {};
 
-function useSelectorProps(options: ISelectorOption[]) {
+function useSelectorModel(options: ISelectorOption[]) {
   const [value, setValue] = Hook.useState(options[0].value);
   return { options, value, setValue };
+}
+
+function useCheckboxModel(initialChecked: boolean) {
+  const [checked, setChecked] = Hook.useState(initialChecked);
+  return { checked, setChecked };
+}
+
+function useInputModel(initialText: string) {
+  const [value, setValue] = Hook.useState(initialText);
+  return { value, setValue };
 }
 
 export const MockPageComponentDevelopment: FC = () => {
@@ -74,57 +84,50 @@ export const MockPageComponentDevelopment: FC = () => {
     <div css={cssRoot}>
       <Header>Configurations</Header>
       <Row>
-        <GeneralSelector {...useSelectorProps(testOptions)} />
-        <GeneralSelector {...useSelectorProps(testOptions)} disabled />
+        <GeneralSelector {...useSelectorModel(testOptions)} />
+        <GeneralSelector {...useSelectorModel(testOptions)} disabled />
         <HBox>
-          <GeneralSelector {...useSelectorProps(testOptions)} width={160} />
+          <GeneralSelector {...useSelectorModel(testOptions)} width={160} />
           <GeneralButton icon="fa fa-link" form="unitSquare" />
         </HBox>
       </Row>
 
       <Row>
         <GeneralButton icon="fa fa-cog" form="unitSquare" />
-        <GeneralButton
-          text="foo"
-          icon="fa fa-cog"
-          // className={buttonExtraCss}
-          form="unit"
-        />
+        <GeneralButton text="foo" icon="fa fa-cog" form="unit" />
         <GeneralButton icon="fa fa-cog" disabled form="unitSquare" />
         <GeneralButton text="OK" form="unit" />
         <GeneralButton text="Delete" form="unit" />
         <GeneralButton text="Edit this" form="large" />
       </Row>
       <Row>
-        <GeneralInput value="hoge" setValue={dummyHandler} />
-        <GeneralInput value="hoge" setValue={dummyHandler} width={100} />
+        <GeneralInput {...useInputModel('hoge')} />
+        <GeneralInput {...useInputModel('hoge')} width={100} />
       </Row>
       <Row>
-        <CheckBox checked={false} setChecked={dummyHandler} />
-        <CheckBox checked={true} setChecked={dummyHandler} />
+        <CheckBox {...useCheckboxModel(false)} />
+        <CheckBox {...useCheckboxModel(true)} />
+        <CheckBox {...useCheckboxModel(false)} disabled />
+        <CheckBox {...useCheckboxModel(true)} disabled />
       </Row>
       <Row>
-        <GeneralInput value="test" setValue={dummyHandler} width={100} />
-        <CheckBoxLine
-          checked={false}
-          setChecked={dummyHandler}
-          text="show key index"
-        />
+        <GeneralInput {...useInputModel('test')} width={100} />
+        <CheckBoxLine {...useCheckboxModel(false)} text="show key index" />
       </Row>
       <VStack>
-        <GeneralInput value="test" setValue={dummyHandler} width={100} />
-        <GeneralInput value="test" setValue={dummyHandler} width={100} />
+        <GeneralInput {...useInputModel('test')} width={100} />
+        <GeneralInput {...useInputModel('test')} width={100} disabled />
         <CheckBoxLine
-          checked={false}
-          setChecked={dummyHandler}
+          {...useCheckboxModel(true)}
           text="show key index"
+          disabled
         />
-        <GeneralInput value="test" setValue={dummyHandler} width={100} />
+        <GeneralInput {...useInputModel('test')} width={100} invalid />
       </VStack>
       <VStack>
-        <RibbonSelector {...useSelectorProps(testOptions2)} buttonWidth={50} />
-        <RibbonSelector {...useSelectorProps(testOptions3)} />
-        <RibbonSelector {...useSelectorProps(testOptions3)} disabled />
+        <RibbonSelector {...useSelectorModel(testOptions2)} buttonWidth={50} />
+        <RibbonSelector {...useSelectorModel(testOptions3)} />
+        <RibbonSelector {...useSelectorModel(testOptions3)} disabled />
       </VStack>
     </div>
   );

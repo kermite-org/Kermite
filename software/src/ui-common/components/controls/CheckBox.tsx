@@ -6,6 +6,7 @@ interface Props {
   className?: string;
   checked: boolean;
   setChecked(value: boolean): void;
+  disabled?: boolean;
 }
 
 const style = css`
@@ -30,14 +31,25 @@ const style = css`
       visibility: visible;
     }
   }
+
+  &[data-disabled] {
+    opacity: 0.5;
+    pointer-events: none;
+  }
 `;
 
-export const CheckBox: FC<Props> = ({ className, checked, setChecked }) => (
+export const CheckBox: FC<Props> = ({
+  className,
+  checked,
+  setChecked,
+  disabled,
+}) => (
   <div
     css={style}
     className={className}
     data-checked={checked}
     onClick={() => setChecked(!checked)}
+    data-disabled={disabled}
   >
     <i class="fa fa-check mark" />
   </div>

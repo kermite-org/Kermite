@@ -7,6 +7,8 @@ interface Props {
   setValue(value: string): void;
   className?: string;
   width?: number;
+  disabled?: boolean;
+  invalid?: boolean;
 }
 
 const style = (width: number | undefined) => css`
@@ -19,10 +21,18 @@ const style = (width: number | undefined) => css`
   height: ${uiTheme.unitHeight}px;
   width: ${width ? `${width}px` : 'inherit'};
   font-size: 15px;
+  padding-left: 4px;
   &:focus {
     outline: none;
   }
-  padding-left: 4px;
+
+  &:disabled {
+    opacity: 0.5;
+  }
+
+  &[data-invalid] {
+    background: ${uiTheme.colors.clInvalidInput};
+  }
 `;
 
 export const GeneralInput: FC<Props> = ({
@@ -30,6 +40,8 @@ export const GeneralInput: FC<Props> = ({
   setValue,
   className,
   width,
+  disabled,
+  invalid,
 }) => {
   return (
     <input
@@ -38,6 +50,8 @@ export const GeneralInput: FC<Props> = ({
       type="text"
       value={value}
       onInput={reflectValue(setValue)}
+      disabled={disabled}
+      data-invalid={invalid}
     />
   );
 };

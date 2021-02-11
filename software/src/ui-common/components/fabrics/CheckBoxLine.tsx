@@ -8,6 +8,7 @@ interface Props {
   checked: boolean;
   setChecked(value: boolean): void;
   text: string;
+  disabled?: boolean;
 }
 
 const style = css`
@@ -20,8 +21,12 @@ const style = css`
     align-items: flex-end;
     font-size: 15px;
 
-    > :nth-child(2) {
+    > span {
       margin-left: 4px;
+
+      &[data-disabled] {
+        opacity: 0.5;
+      }
     }
   }
 `;
@@ -31,11 +36,12 @@ export const CheckBoxLine: FC<Props> = ({
   checked,
   setChecked,
   text,
+  disabled,
 }) => (
   <div css={style} className={className}>
     <div className="inner">
-      <CheckBox checked={checked} setChecked={setChecked} />
-      <span>{text}</span>
+      <CheckBox checked={checked} setChecked={setChecked} disabled={disabled} />
+      <span data-disabled={disabled}>{text}</span>
     </div>
   </div>
 );

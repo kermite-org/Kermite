@@ -106,13 +106,24 @@ export const uiTheme = {
   unitHeight: 26,
   controlBorderRadius: 0,
   colors: {
+    // --------
+    // dark bluegreen
     clBackground: '#000',
     clForegroud: '#FFF',
-    clPrimary: '#09A',
     clControlBase: '#222',
-    // clControlText: '#FFF',
-    clControlText: '#09A',
     clDecal: '#FFF',
+    clPrimary: '#09A',
+    clControlText: '#09A',
+    clInvalidInput: '#f004',
+    // --------
+    // light snow
+    // clBackground: '#FFF',
+    // clForegroud: '#000',
+    // clControlBase: '#F8F8F8',
+    // clDecal: '#FFF',
+    // clPrimary: '#2BE',
+    // clControlText: '#126',
+    // clInvalidInput: '#f003',
 
     clPageBackground: '#333',
     clTitleBar: '#F61189',
