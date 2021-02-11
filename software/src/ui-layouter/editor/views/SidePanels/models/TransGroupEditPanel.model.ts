@@ -1,5 +1,5 @@
+import { ICommonCheckboxViewModel } from '~/ui-common';
 import { useClosureModel } from '~/ui-layouter/base';
-import { ICommonCheckboxViewModel } from '~/ui-layouter/controls';
 import { editMutations, editReader } from '~/ui-layouter/editor/store';
 import {
   createConfigTextEditModelDynamic,

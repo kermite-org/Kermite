@@ -1,5 +1,5 @@
 import { getObjectKeys } from '~/shared';
-import { ISelectOption } from '~/ui-layouter/controls';
+import { ISelectorOption } from '~/ui-common';
 import {
   IModeState,
   editReader,
@@ -12,7 +12,7 @@ function createModeSelectionViewModel<K extends 'editorTarget' | 'editMode'>(
   targetKey: K,
   sources: { [key in IModeState[K]]?: string },
 ) {
-  const options: ISelectOption[] = getObjectKeys(sources).map((key) => ({
+  const options: ISelectorOption[] = getObjectKeys(sources).map((key) => ({
     value: key,
     label: sources[key]!,
   }));

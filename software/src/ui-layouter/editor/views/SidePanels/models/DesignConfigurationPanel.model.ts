@@ -1,6 +1,6 @@
 import { IKeyIdMode, IKeyPlacementAnchor, IKeySizeUnit } from '~/shared';
+import { ICommonSelectorViewModel } from '~/ui-common';
 import { useClosureModel } from '~/ui-layouter/base';
-import { ICommonSelectorViewModel } from '~/ui-layouter/controls';
 import { editReader, editMutations } from '~/ui-layouter/editor/store';
 import {
   createConfigTextEditModel,

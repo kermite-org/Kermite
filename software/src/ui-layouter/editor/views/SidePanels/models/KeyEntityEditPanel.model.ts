@@ -1,6 +1,5 @@
-import { useLocal } from '~/ui-common';
+import { ICommonSelectorViewModel, useLocal } from '~/ui-common';
 import { useClosureModel } from '~/ui-layouter/base';
-import { ICommonSelectorViewModel } from '~/ui-layouter/controls';
 import {
   editMutations,
   editReader,

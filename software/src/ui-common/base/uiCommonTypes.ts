@@ -14,3 +14,16 @@ export function makePlainSelectorOption(source: string): ISelectorOption {
     label: source,
   };
 }
+
+export interface ICommonCheckboxViewModel {
+  value: boolean;
+  setValue(value: boolean): void;
+  disabled?: boolean;
+}
+
+export interface ICommonSelectorViewModel {
+  options: ISelectorOption[];
+  value: string;
+  setValue(value: string): void;
+  disabled?: boolean;
+}
