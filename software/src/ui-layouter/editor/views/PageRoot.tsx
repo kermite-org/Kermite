@@ -38,6 +38,9 @@ const cssPageRoot = css`
       /* background: ${uiTheme.colors.clPanelBox}; */
       margin-left: 6px;
       width: 230px;
+      /* サイドパネルの内容の高さが多いときに、編集領域のサイズがこれにつられて
+      画面外まで広がっててしまうのを抑止するため、レイアウト上の高さを制限する */
+      max-height: calc(100vh - 140px);
     }
   }
 `;
