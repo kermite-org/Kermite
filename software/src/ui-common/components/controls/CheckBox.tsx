@@ -32,6 +32,10 @@ const style = css`
     }
   }
 
+  &:hover {
+    opacity: 0.7;
+  }
+
   &[data-disabled] {
     opacity: 0.5;
     pointer-events: none;

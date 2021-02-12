@@ -25,6 +25,9 @@ const style = (width: number | undefined) => css`
   &:focus {
     outline: none;
   }
+  &:hover {
+    opacity: 0.8;
+  }
   &:disabled {
     opacity: 0.5;
   }

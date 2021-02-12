@@ -43,6 +43,10 @@ const style = (buttonWidth: number) => css`
         opacity: 1;
       }
     }
+
+    &:hover {
+      opacity: 0.7;
+    }
   }
 
   &[data-disabled] {

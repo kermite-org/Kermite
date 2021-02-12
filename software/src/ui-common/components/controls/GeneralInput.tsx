@@ -25,8 +25,14 @@ const style = (width: number = 100) => css`
   width: ${width ? `${width}px` : 'inherit'};
   font-size: 15px;
   padding-left: 4px;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
   &:focus {
     outline: none;
+    opacity: 1;
   }
 
   &:disabled {
