@@ -21,6 +21,7 @@ export interface IUiSettings {
   showLayersDynamic: boolean;
   showLayerDefaultAssign: boolean;
   siteDpiScale: number;
+  showGlobalHint: boolean;
 }
 
 const defaultUiSettings: IUiSettings = {
@@ -33,6 +34,7 @@ const defaultUiSettings: IUiSettings = {
   showLayersDynamic: false,
   showLayerDefaultAssign: false,
   siteDpiScale: 1.0,
+  showGlobalHint: true,
 };
 
 export interface IUiStatus {
