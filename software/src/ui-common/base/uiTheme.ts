@@ -1,85 +1,77 @@
-// todo
-// UIのテキスト項目を追加するたび3箇所の変更が必要なためUI実装時の手間が多い
-// 一箇所のみの変更で色を追加できるようにし、他をあとから調整できるような方法を考える
+const themeColorsDark = {
+  clBackground: '#202634',
+  clForeground: '#FFF',
+  clControlBase: '#2226',
+  clDecal: '#FFF',
+  clPrimary: '#09A',
+  clControlText: '#09A',
+  clInvalidInput: '#f004',
+  clWindowBar: '#29B',
+  clPageBackground: '#334',
+  clNavigationColumn: '#1C3057',
+  clPanelBox: '#181C23',
+  clWindowButtonHoverBack: '#4bf',
+  clMainText: '#09A',
+  clSelectHighlight: '#0BD6',
+  clHoldHighlight: '#f90',
+  clAltText: '#FFF',
+  clWindowButtonFace: '#FFF',
+  clKeyboardBodyFace: '#54566f',
+  clKeyUnitFace: 'rgba(0, 0, 0, 0.5)',
+  clKeyUnitLegend: '#fff',
+  clKeyUnitLegendWeak: 'rgba(128, 128, 128, 0.2)',
+  clAssignCardFace: '#383838',
+  clAssignCardText: '#FFF',
+  clSpecialAccent: '#dbff00',
+  clLinkIndicator: '#0BC',
+  clLayouterKeyFace: '#3334',
+  clLayouterKeyEdge: '#fffa',
+  clLayouterKeyLegend: '#fff',
+  clLayouterAxis: '#0845',
+  clLayouterGrid: '#5554',
+};
 
-type ThemeColorKey =
-  | 'clPageBackground'
-  | 'clBackground'
-  | 'clTitleBar'
-  | 'clStatusBar'
-  | 'clNavigationColumn'
-  | 'clPanelBox'
-  | 'clSelectHighlight'
-  | 'clHoldHighlight'
-  | 'clMainText'
-  | 'clAltText'
-  | 'clWindowButtonFace'
-  | 'clWindowButtonHoverBack'
-  | 'clKeyboardBodyFace'
-  | 'clKeyUnitFace'
-  | 'clKeyUnitLegend'
-  | 'clKeyUnitLegendWeak'
-  | 'clAssignCardFace'
-  | 'clAssignCardText'
-  | 'clCommonFrame'
-  | 'dummy';
+const themeColorsLight = {
+  clBackground: '#f8fAfC',
+  clForeground: '#000',
+  clControlBase: '#F8F8F8',
+  clDecal: '#FFF',
+  clPrimary: '#1AD',
+  clControlText: '#126',
+  clInvalidInput: '#f003',
+  clWindowBar: '#15A5D2',
+  clPageBackground: '#c8d3e3',
+  clNavigationColumn: '#347',
+  clPanelBox: '#FFF',
+  clWindowButtonHoverBack: '#4bf',
+  clMainText: '#18C',
+  clSelectHighlight: '#0cf8',
+  clHoldHighlight: '#FC0',
+  clAltText: '#000',
+  clWindowButtonFace: '#FFF',
+  clKeyboardBodyFace: '#9aadd8',
+  clKeyUnitFace: '#f6f8fA',
+  clKeyUnitLegend: '#568',
+  clKeyUnitLegendWeak: 'rgba(128, 128, 128, 0.2)',
+  clAssignCardFace: '#EEE',
+  clAssignCardText: '#348',
+  clSpecialAccent: '#dbff00',
+  clLinkIndicator: '#FA0',
+  clLayouterKeyFace: 'rgba(255, 255, 255, 0.3)',
+  clLayouterKeyEdge: '#666',
+  clLayouterKeyLegend: '#000',
+  clLayouterAxis: '#4442',
+  clLayouterGrid: '#4441',
+};
 
-type IThemeColorSet = { [key in ThemeColorKey]: string };
+type IThemeColorSet = { [key in keyof typeof themeColorsDark]: string };
 
 export type ThemeKey = 'dark' | 'light';
 
 export const themeColors: { [key in ThemeKey]: IThemeColorSet } = {
-  dark: {
-    clPageBackground: '#333',
-    clBackground: '#2E323E',
-    clTitleBar: '#F61189',
-    clStatusBar: '#3563b7',
-    clNavigationColumn: '#1d1d1d',
-    clPanelBox: '#181C23',
-    clSelectHighlight: '#22967d',
-    clHoldHighlight: '#f90',
-    clMainText: '#FFF',
-    clAltText: '#FFF',
-    clWindowButtonFace: '#FFF',
-    clWindowButtonHoverBack: '#f8b',
-    clKeyboardBodyFace: '#54566f',
-    clKeyUnitFace: 'rgba(0, 0, 0, 0.5)',
-    clKeyUnitLegend: '#fff',
-    clKeyUnitLegendWeak: 'rgba(128, 128, 128, 0.2)',
-    clAssignCardFace: '#383838',
-    clAssignCardText: '#FFF',
-    clCommonFrame: '#444',
-    dummy: '0',
-  },
-  light: {
-    clPageBackground: '#c8d3e3',
-    clBackground: '#f8fAfC',
-    clTitleBar: '#02cee1',
-    clStatusBar: '#02cee1',
-    clNavigationColumn: '#3870A3',
-    clPanelBox: '#FFF',
-    // clSelectHighlight: '#80c8ff',
-    clSelectHighlight: '#af0',
-    clHoldHighlight: '#0CF',
-    clMainText: '#268EC9',
-    clAltText: '#000',
-    clWindowButtonFace: '#FFF',
-    clWindowButtonHoverBack: '#08d',
-    clKeyboardBodyFace: '#9aadd8',
-    clKeyUnitFace: '#f6f8fA',
-    clKeyUnitLegend: '#568',
-    clKeyUnitLegendWeak: 'rgba(128, 128, 128, 0.2)',
-    clAssignCardFace: '#EEE',
-    clAssignCardText: '#348',
-    clCommonFrame: '#08d',
-    dummy: '0',
-  },
+  dark: themeColorsDark,
+  light: themeColorsLight,
 };
-
-interface IUiTheme {
-  unitHeight: number;
-  colors: IThemeColorSet;
-}
 
 export const uiThemeConfigLoader = {
   loadThemeKey() {
@@ -94,82 +86,9 @@ export const uiThemeConfigLoader = {
   },
 };
 
-const currentThemeKey = uiThemeConfigLoader.loadThemeKey();
-
-export const uiTheme_original: IUiTheme = {
-  unitHeight: 26,
-  colors: themeColors[currentThemeKey],
-};
-
-// UI刷新のため一時的に即値によるテーマを使用
 export const uiTheme = {
   unitHeight: 26,
   controlBorderRadius: 0,
-  colors: {
-    // --------
-    // dark
-    clBackground: '#202634',
-    clForegroud: '#FFF',
-    clControlBase: '#2226',
-    clDecal: '#FFF',
-    clPrimary: '#09A',
-    clControlText: '#09A',
-    clInvalidInput: '#f004',
-    clWindowBar: '#29B',
-    clPageBackground: '#334',
-    clNavigationColumn: '#1C3057',
-    clPanelBox: '#181C23',
-    clWindowButtonHoverBack: '#4bf',
-    clMainText: '#09A',
-    clSelectHighlight: '#0BD6',
-    clHoldHighlight: '#f90',
-    clAltText: '#FFF',
-    clWindowButtonFace: '#FFF',
-    clKeyboardBodyFace: '#54566f',
-    clKeyUnitFace: 'rgba(0, 0, 0, 0.5)',
-    clKeyUnitLegend: '#fff',
-    clKeyUnitLegendWeak: 'rgba(128, 128, 128, 0.2)',
-    clAssignCardFace: '#383838',
-    clAssignCardText: '#FFF',
-    clSpecialAccent: '#dbff00',
-    clLinkIndicator: '#0BC',
-    clLayouterKeyFace: '#3334',
-    clLayouterKeyEdge: '#fffa',
-    clLayouterKeyLegend: '#fff',
-    clLayouterAxis: '#0845',
-    clLayouterGrid: '#5554',
-    // --------
-    // light
-    // clBackground: '#f8fAfC',
-    // clForegroud: '#000',
-    // clControlBase: '#F8F8F8',
-    // clDecal: '#FFF',
-    // clPrimary: '#1AD',
-    // clControlText: '#126',
-    // clInvalidInput: '#f003',
-    // clWindowBar: '#15A5D2',
-    // clPageBackground: '#c8d3e3',
-    // clNavigationColumn: '#347',
-    // clPanelBox: '#FFF',
-    // clWindowButtonHoverBack: '#4bf',
-    // clMainText: '#18C',
-    // clSelectHighlight: '#0cf8',
-    // clHoldHighlight: '#FC0',
-    // clAltText: '#000',
-    // clWindowButtonFace: '#FFF',
-    // clKeyboardBodyFace: '#9aadd8',
-    // clKeyUnitFace: '#f6f8fA',
-    // clKeyUnitLegend: '#568',
-    // clKeyUnitLegendWeak: 'rgba(128, 128, 128, 0.2)',
-    // clAssignCardFace: '#EEE',
-    // clAssignCardText: '#348',
-    // clSpecialAccent: '#dbff00',
-    // clLinkIndicator: '#FA0',
-    // clLayouterKeyFace: 'rgba(255, 255, 255, 0.3)',
-    // clLayouterKeyEdge: '#666',
-    // clLayouterKeyLegend: '#000',
-    // clLayouterAxis: '#4442',
-    // clLayouterGrid: '#4441',
-    // --------
-  },
+  // colors: themeColorsDark, // debug
+  colors: themeColors[uiThemeConfigLoader.loadThemeKey()],
 };

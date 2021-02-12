@@ -20,7 +20,7 @@ setup(h);
 const cssRoot = css`
   height: 100%;
   background: ${uiTheme.colors.clBackground};
-  color: ${uiTheme.colors.clForegroud};
+  color: ${uiTheme.colors.clForeground};
   padding: 10px;
   > * + * {
     margin-top: 5px;
