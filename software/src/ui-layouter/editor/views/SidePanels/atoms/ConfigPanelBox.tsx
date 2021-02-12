@@ -6,6 +6,8 @@ import { Icon } from '~/ui-common/components';
 type Props = {
   headerText: string;
   children: any;
+  canToggleOpen?: boolean;
+  initialOpen?: boolean;
 };
 
 const style = css`
@@ -49,8 +51,13 @@ const style = css`
   }
 `;
 
-export const ConfigPanelBox: FC<Props> = ({ headerText, children }) => {
-  const [isOpen, setIsOpen] = Hook.useState(true);
+export const ConfigPanelBox: FC<Props> = ({
+  headerText,
+  children,
+  canToggleOpen = false,
+  initialOpen = true,
+}) => {
+  const [isOpen, setIsOpen] = Hook.useState(initialOpen);
   const toggleIsOpen = () => setIsOpen(!isOpen);
 
   return (
@@ -59,7 +66,7 @@ export const ConfigPanelBox: FC<Props> = ({ headerText, children }) => {
         <Icon spec="article" />
         <span class="caption">{headerText}</span>
         <div class="spacer" />
-        <div onClick={toggleIsOpen} class="arrowBox">
+        <div onClick={toggleIsOpen} class="arrowBox" qxIf={canToggleOpen}>
           <Icon spec={isOpen ? 'expand_less' : 'expand_more'} />
         </div>
       </div>
