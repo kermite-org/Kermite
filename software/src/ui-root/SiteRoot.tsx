@@ -1,6 +1,7 @@
 import { css, glob, setup } from 'goober';
 import { h, Hook } from 'qx';
 import { router } from '~/ui-common';
+import { globalHintMouseMoveHandler } from '~/ui-common/base/GlobalHint';
 import { DebugOverlay } from '~/ui-common/fundamental/overlay/DebugOverlay';
 import { ForegroundModalLayerRoot } from '~/ui-common/fundamental/overlay/ForegroundModalLayer';
 import { siteModel } from '~/ui-common/sharedModels/SiteModel';
@@ -45,7 +46,7 @@ export const SiteRoot = () => {
   const isWidgetMode = router.getPagePath() === '/widget';
   return (
     <SiteDpiScaler dpiScale={uiStatusModel.settings.siteDpiScale}>
-      <div css={cssSiteRoot}>
+      <div css={cssSiteRoot} onMouseMove={globalHintMouseMoveHandler}>
         {!isWidgetMode && <ConfiguratorZoneRoot />}
         {isWidgetMode && <WidgetZoneRoot />}
         <ForegroundModalLayerRoot />
