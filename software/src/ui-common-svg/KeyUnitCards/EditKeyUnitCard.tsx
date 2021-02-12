@@ -85,6 +85,7 @@ export function EditKeyUnitCard(props: {
     <g
       transform={`translate(${pos.x}, ${pos.y}) rotate(${pos.r}) `}
       key={keyUnitId}
+      data-hint="Select edit target key."
     >
       <KeyUnitShape
         shape={shape}
