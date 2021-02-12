@@ -19,7 +19,7 @@ function findSpecificDatasetValueFromParents(
   return undefined;
 }
 
-export const globalHintMouseMoveHandler = (e: MouseEvent) => {
+function globalHintMouseMoveHandler(e: MouseEvent) {
   const el = e.target as HTMLElement;
   const instArea = document.getElementById('domHintDisplayText');
   if (!(el && instArea)) {
@@ -27,6 +27,12 @@ export const globalHintMouseMoveHandler = (e: MouseEvent) => {
   }
   const hint = findSpecificDatasetValueFromParents(el, 'hint', 3);
   instArea.innerText = hint || '';
-};
+}
+
+export function globalHintMouseMoveHandlerEffect() {
+  window.addEventListener('mousemove', globalHintMouseMoveHandler);
+  return () =>
+    window.removeEventListener('mousemove', globalHintMouseMoveHandler);
+}
 
 export const GlobalHintDisplayText = () => <span id="domHintDisplayText" />;
