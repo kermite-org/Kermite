@@ -1,5 +1,5 @@
 import { h } from 'qx';
-import { reflectChecked } from '~/ui-common';
+import { CheckBox, HFlex } from '~/ui-common/components';
 import {
   ConfigContent,
   ConfigHeader,
@@ -49,17 +49,14 @@ export const TransGroupEditPanel = () => {
                 inputWidth={60}
                 unit="deg"
               />
-              <div>
-                <span style={{ width: '80px', display: 'inline-block' }}>
-                  mirror
-                </span>
-                <input
-                  type="checkbox"
+              <HFlex>
+                <span style={{ width: '70px' }}>mirror</span>
+                <CheckBox
                   checked={vmMirror.value}
-                  onChange={reflectChecked(vmMirror.setValue)}
+                  setChecked={vmMirror.setValue}
                   disabled={vmMirror.disabled}
                 />
-              </div>
+              </HFlex>
             </ConfigVStack>
           </ConfigSubContent>
         </div>
