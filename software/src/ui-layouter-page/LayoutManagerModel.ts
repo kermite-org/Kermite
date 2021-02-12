@@ -7,7 +7,7 @@ import {
   IPersistKeyboardDesign,
   IProjectLayoutsInfo,
 } from '~/shared';
-import { ipcAgent } from '~/ui-common';
+import { appUi, ipcAgent } from '~/ui-common';
 import {
   modalConfirm,
   modalError,
@@ -194,6 +194,9 @@ export class LayoutManagerModel implements ILayoutManagerModel {
   };
 
   startLifecycle() {
+    if (!appUi.isExecutedInApp) {
+      return () => {};
+    }
     return ipcAgent.subscribe(
       'layout_layoutManagerStatus',
       this.onLayoutManagerStatus,
