@@ -30,6 +30,9 @@ const cssKeyShape = css`
   &[data-hold] {
     fill: ${uiTheme.colors.clHoldHighlight};
   }
+  &:hover {
+    opacity: 0.7;
+  }
 `;
 
 const cssKeyText = css`

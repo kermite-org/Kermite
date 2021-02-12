@@ -46,6 +46,10 @@ const cssOutlinePoint = css`
   &[data-selected] {
     stroke: ${uiTheme.colors.clPrimary};
   }
+
+  &:hover {
+    opacity: 0.7;
+  }
 `;
 
 export function startOutlinePointDragOperation(

@@ -8,13 +8,18 @@ import {
 
 const LayerCard = (props: { layerModel: ILayerListViewModel }) => {
   const cssLayerCard = css`
-    &[data-current] {
-      background: ${uiTheme.colors.clSelectHighlight};
-    }
     padding: 3px;
     cursor: pointer;
     user-select: none;
     color: ${uiTheme.colors.clMainText};
+
+    &[data-current] {
+      background: ${uiTheme.colors.clSelectHighlight};
+    }
+
+    &:hover {
+      opacity: 0.7;
+    }
   `;
 
   const { layerId, layerName, isCurrent, setCurrent } = props.layerModel;

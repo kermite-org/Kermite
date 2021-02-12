@@ -99,6 +99,10 @@ export const KeyEntityCardSingle = (props: {
     &[data-ghost] {
       opacity: 0.3;
     }
+
+    &:hover {
+      opacity: 0.7;
+    }
   `;
 
   const onMouseDown = (e: MouseEvent) => {
