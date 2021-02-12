@@ -1,8 +1,8 @@
 import { css } from 'goober';
 import { rerender, h } from 'qx';
 import { degToRad } from '~/shared';
-import { makeCssColor } from '~/ui-common';
-import { uiTheme, IPosition, startDragSession } from '~/ui-layouter/base';
+import { makeCssColor, uiTheme } from '~/ui-common';
+import { IPosition, startDragSession } from '~/ui-layouter/base';
 import {
   editReader,
   editMutations,
@@ -44,7 +44,7 @@ const cssOutlinePoint = css`
   }
 
   &[data-selected] {
-    stroke: ${uiTheme.colors.primary};
+    stroke: ${uiTheme.colors.clPrimary};
   }
 `;
 
