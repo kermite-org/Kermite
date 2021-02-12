@@ -36,7 +36,6 @@ export interface IEnvState {
   showGrid: boolean;
   snapToGrid: boolean;
   snapDivision: number;
-  showConfig: boolean;
   showKeyId: boolean;
   showKeyIndex: boolean;
   pressedKeyIndices: number[];
@@ -46,7 +45,6 @@ export type IEnvBoolPropKey =
   | 'showAxis'
   | 'showGrid'
   | 'snapToGrid'
-  | 'showConfig'
   | 'showKeyId'
   | 'showKeyIndex';
 
@@ -105,7 +103,6 @@ export const appState: IAppState = {
     showGrid: true,
     snapToGrid: true,
     snapDivision: 4,
-    showConfig: true,
     showKeyId: true,
     showKeyIndex: true,
     pressedKeyIndices: [],

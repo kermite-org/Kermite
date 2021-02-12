@@ -153,10 +153,6 @@ class EditReader {
     ];
   }
 
-  get showConfig() {
-    return appState.env.showConfig;
-  }
-
   get keySizeUnit() {
     return appState.editor.design.setup.keySizeUnit;
   }

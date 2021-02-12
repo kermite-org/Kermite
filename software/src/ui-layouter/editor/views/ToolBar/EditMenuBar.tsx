@@ -22,12 +22,6 @@ const cssEditMenuBar = css`
       margin-left: 5px;
     }
   }
-
-  > .spacer {
-    flex-grow: 1;
-    margin-left: 0;
-  }
-
   button {
     width: 50px;
     padding: 5px;
@@ -48,7 +42,6 @@ export const EditMenuBar = () => {
     vmShowGrid,
     vmSnapToGrid,
     vmSnapDivision,
-    vmShowConfig,
     canSelectEditMode,
     resetKeyboardDesign,
     vmShowKeyId,
@@ -121,17 +114,6 @@ export const EditMenuBar = () => {
 
       <div>
         <GeneralButton onClick={resetKeyboardDesign} text="reset" />
-      </div>
-
-      <div class="spacer" />
-
-      <div>
-        <ToggleButton
-          text="config"
-          width={60}
-          active={vmShowConfig.active}
-          setActive={vmShowConfig.setActive}
-        />
       </div>
     </div>
   );

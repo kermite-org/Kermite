@@ -70,8 +70,6 @@ export function makeEditMenuBarViewModel() {
 
   const vmSnapDivision = makeSnapDivisionViewModel();
 
-  const vmShowConfig = createToggleOptionViewModel('showConfig');
-
   const { editorTarget } = editReader;
   const canSelectEditMode =
     editorTarget === 'key' || editorTarget === 'outline';
@@ -92,7 +90,6 @@ export function makeEditMenuBarViewModel() {
     vmShowGrid,
     vmSnapToGrid,
     vmSnapDivision,
-    vmShowConfig,
     canSelectEditMode,
     resetKeyboardDesign,
     vmShowKeyId,

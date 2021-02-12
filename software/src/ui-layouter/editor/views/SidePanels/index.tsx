@@ -6,17 +6,6 @@ import { KeyEntityEditPanel } from '~/ui-layouter/editor/views/SidePanels/organi
 import { OutlineEditPanel } from '~/ui-layouter/editor/views/SidePanels/organisms/OutlineEditPanel';
 import { TransGroupEditPanel } from '~/ui-layouter/editor/views/SidePanels/organisms/TransGroupEditPanel';
 
-function getPanelContentComponent() {
-  const { editorTarget } = editReader;
-  // if (editReader.showConfig) {
-  //   return ConfigPanel;
-  // }
-  return {
-    key: KeyEntityEditPanel,
-    outline: OutlineEditPanel,
-  }[editorTarget];
-}
-
 const cssEditorSideColumnContent = css`
   > :not(:first-child) {
     margin-top: 5px;
@@ -24,11 +13,12 @@ const cssEditorSideColumnContent = css`
 `;
 
 export const EditorSideColumnContent = () => {
-  const PanelContent = getPanelContentComponent();
+  const { editorTarget } = editReader;
   return (
     <div css={cssEditorSideColumnContent}>
-      {editReader.showConfig && <DesignConfigurationPanel />}
-      {PanelContent && <PanelContent />}
+      <DesignConfigurationPanel />
+      {editorTarget === 'key' && <KeyEntityEditPanel />}
+      {editorTarget === 'outline' && <OutlineEditPanel />}
       <TransGroupEditPanel />
     </div>
   );

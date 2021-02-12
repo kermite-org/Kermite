@@ -18,7 +18,7 @@ const style = css`
     color: ${uiTheme.colors.clDecal};
     padding: 2px 0;
     padding-left: 3px;
-    font-size: 18px;
+    font-size: 16px;
 
     > .caption {
       margin-left: 1px;
