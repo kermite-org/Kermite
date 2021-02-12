@@ -3,13 +3,11 @@ import { h } from 'qx';
 import { ICommonSelectorViewModel } from '~/ui-common';
 import { RibbonSelector } from '~/ui-common/components';
 import {
-  ConfigContent,
-  ConfigHeader,
-  ConfigPanel,
   ConfigRow,
   ConfigSubContent,
   ConfigSubHeader,
 } from '~/ui-layouter/editor/views/SidePanels/atoms';
+import { ConfigPanelBox } from '~/ui-layouter/editor/views/SidePanels/atoms/ConfigPanelBox';
 import { GeneralConfigTextEditRow } from '~/ui-layouter/editor/views/SidePanels/controls/GeneralConfigTextEditRow';
 import { useDesignConfigurationPanelModel } from '~/ui-layouter/editor/views/SidePanels/models/DesignConfigurationPanel.model';
 import { IConfigTextEditModel } from '~/ui-layouter/editor/views/SidePanels/models/slots/ConfigTextEditModel';
@@ -100,19 +98,14 @@ export const DesignConfigurationPanel = () => {
   } = useDesignConfigurationPanelModel();
 
   return (
-    <ConfigPanel>
-      <ConfigHeader>configurations</ConfigHeader>
-      <ConfigContent>
-        <PlacementUnitEditPart
-          vmPlacementUnitMode={vmPlacementUnitMode}
-          vmPlacementUnitText={vmPlacementUnitText}
-        />
-        <PlacementAnchorEditPart
-          vmPlacementAnchorMode={vmPlacementAnchorMode}
-        />
-        <SizeUnitEditPart vmUnitSizeMode={vmSizeUnitMode} />
-        <KeyIdModePart vmKeyIdMode={vmKeyIdMode} />
-      </ConfigContent>
-    </ConfigPanel>
+    <ConfigPanelBox headerText="configurations">
+      <PlacementUnitEditPart
+        vmPlacementUnitMode={vmPlacementUnitMode}
+        vmPlacementUnitText={vmPlacementUnitText}
+      />
+      <PlacementAnchorEditPart vmPlacementAnchorMode={vmPlacementAnchorMode} />
+      <SizeUnitEditPart vmUnitSizeMode={vmSizeUnitMode} />
+      <KeyIdModePart vmKeyIdMode={vmKeyIdMode} />
+    </ConfigPanelBox>
   );
 };
