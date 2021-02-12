@@ -2,7 +2,10 @@ import { styled } from 'goober';
 import { uiTheme } from '~/ui-common';
 
 export const ConfigPanel = styled('div')`
-  margin: 5px;
+  /* margin: 5px; */
+  /* & + & {
+    margin-top: 5px;
+  } */
 `;
 
 export const ConfigHeader = styled('div')`

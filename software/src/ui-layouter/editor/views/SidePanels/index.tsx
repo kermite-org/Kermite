@@ -1,3 +1,4 @@
+import { css } from 'goober';
 import { h } from 'qx';
 import { editReader } from '~/ui-layouter/editor/store';
 import { DesignConfigurationPanel } from '~/ui-layouter/editor/views/SidePanels/organisms/DesignConfigurationPanel';
@@ -16,10 +17,16 @@ function getPanelContentComponent() {
   }[editorTarget];
 }
 
+const cssEditorSideColumnContent = css`
+  > :not(:first-child) {
+    margin-top: 5px;
+  }
+`;
+
 export const EditorSideColumnContent = () => {
   const PanelContent = getPanelContentComponent();
   return (
-    <div>
+    <div css={cssEditorSideColumnContent}>
       {editReader.showConfig && <DesignConfigurationPanel />}
       {PanelContent && <PanelContent />}
       <TransGroupEditPanel />

@@ -8,11 +8,10 @@ import { useLayoutManagerViewModel } from '~/ui-layouter-page/LayoutManagerViewM
 import { makeLayoutSelectorModelViewModel } from '~/ui-layouter-page/ProjectLayoutSelectorModalViewModel';
 
 const cssLayoutManagementBar = css`
-  background: ${uiTheme.colors.clBackground};
   color: ${uiTheme.colors.clMainText};
   display: flex;
   padding: 6px;
-  padding-bottom: 3px;
+  padding-bottom: 0;
 
   > * + * {
     margin-left: 4px;
@@ -24,7 +23,7 @@ const cssLayoutManagementBar = css`
 
   > .targetDisplayArea {
     flex-grow: 1;
-    border: solid 1px #aaa;
+    border: solid 1px ${uiTheme.colors.clPrimary};
     display: flex;
     align-items: center;
     padding: 0 5px;

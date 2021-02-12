@@ -108,9 +108,9 @@ export const uiTheme = {
   colors: {
     // --------
     // dark
-    clBackground: '#112',
+    clBackground: '#202634',
     clForegroud: '#FFF',
-    clControlBase: '#222',
+    clControlBase: '#2226',
     clDecal: '#FFF',
     clPrimary: '#09A',
     clControlText: '#09A',
@@ -138,6 +138,7 @@ export const uiTheme = {
     clLayouterKeyLegend: '#fff',
     clLayouterAxis: '#0845',
     clLayouterGrid: '#5554',
+    // clBackground: '#30323A',
     // --------
     // light
     // clBackground: '#f8fAfC',
