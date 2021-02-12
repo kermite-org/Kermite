@@ -4,10 +4,12 @@ import { GeneralSelector } from '~/ui-common/components/controls/GeneralSelector
 
 export interface IProfileSelectorProps {
   selectorSource: ISelectorSource;
+  hint?: string;
 }
 
 export const KeyboardProfileSelector = ({
   selectorSource,
+  hint,
 }: IProfileSelectorProps) => {
-  return <GeneralSelector {...selectorSource} width={170} />;
+  return <GeneralSelector {...selectorSource} width={170} hint={hint} />;
 };

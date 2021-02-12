@@ -10,6 +10,7 @@ interface Props {
   width?: number;
   className?: string;
   disabled?: boolean;
+  hint?: string;
 }
 
 const style = (width: number | undefined) => css`
@@ -40,6 +41,7 @@ export const GeneralSelector: FC<Props> = ({
   className,
   width,
   disabled,
+  hint,
 }) => (
   <select
     value={value}
@@ -47,6 +49,7 @@ export const GeneralSelector: FC<Props> = ({
     css={style(width)}
     className={className}
     disabled={disabled}
+    data-hint={hint}
   >
     {options.map((it, idx) => (
       <option value={it.value} key={idx}>

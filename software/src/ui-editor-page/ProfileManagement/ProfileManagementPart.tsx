@@ -44,7 +44,10 @@ export const ProfileManagementPart = () => {
   return (
     <div css={cssProfileManagementPart}>
       <ProfileSelectionMenuPart vm={menuModel} />
-      <KeyboardProfileSelector selectorSource={baseVm.profileSelectorSource} />
+      <KeyboardProfileSelector
+        selectorSource={baseVm.profileSelectorSource}
+        hint="Select current profile."
+      />
       <ConfigurationButton onClick={baseVm.openConfiguration} />
       <BehaviorSelector />
       <LayoutStandardSelector />
@@ -53,6 +56,7 @@ export const ProfileManagementPart = () => {
         onClick={baseVm.onLaunchButton}
         label="write"
         icon="double_arrow"
+        hint="Save edit profile and write keymapping to the device."
       />
       {baseVm.isExportingPresetSelectionModalOpen && (
         <SavingProjectPresetSelectionModal baseVm={baseVm} />

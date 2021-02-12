@@ -60,7 +60,11 @@ export const ProfileSelectionMenuPart = (props: {
     <div css={cssProfileSelectionMenuPart}>
       <div css={cssOverlay} qxIf={isOpen} onClick={closeMenu} />
       <div css={cssMenuArea}>
-        <div css={cssMenuButton} onMouseDown={openMenu}>
+        <div
+          css={cssMenuButton}
+          onMouseDown={openMenu}
+          data-hint="Open profile operations menu."
+        >
           <i className="fa fa-bars" />
         </div>
         <div css={cssMenuPopup} qxIf={isOpen}>
