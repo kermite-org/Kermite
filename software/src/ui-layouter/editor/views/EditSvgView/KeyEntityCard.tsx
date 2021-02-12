@@ -2,6 +2,7 @@ import { css } from 'goober';
 import { h, rerender } from 'qx';
 import { degToRad } from '~/shared';
 import { getKeySize } from '~/shared/modules/PlacementUnitHelper';
+import { uiTheme } from '~/ui-common';
 import { IPosition, startDragSession } from '~/ui-layouter/base';
 import {
   editMutations,
@@ -87,10 +88,8 @@ export const KeyEntityCardSingle = (props: {
 
   const cssKeyRect = css`
     stroke-width: 0.5;
-    /* fill: rgba(255, 255, 255, 0.3);
-    stroke: #666; */
-    fill: #3334;
-    stroke: #fffa;
+    fill: ${uiTheme.colors.clLayouterKeyFace};
+    stroke: ${uiTheme.colors.clLayouterKeyEdge};
     cursor: pointer;
 
     &[data-selected] {
@@ -153,8 +152,7 @@ export const KeyEntityCardSingle = (props: {
     dominant-baseline: central;
     user-select: none;
     pointer-events: none;
-    /* fill: #000; */
-    fill: #fff;
+    fill: ${uiTheme.colors.clLayouterKeyLegend};
     &[data-selected] {
       fill: #4bb;
     }

@@ -133,6 +133,11 @@ export const uiTheme = {
     clAssignCardText: '#FFF',
     clSpecialAccent: '#dbff00',
     clLinkIndicator: '#0BC',
+    clLayouterKeyFace: '#3334',
+    clLayouterKeyEdge: '#fffa',
+    clLayouterKeyLegend: '#fff',
+    clLayouterAxis: '#0845',
+    clLayouterGrid: '#5554',
     // --------
     // light
     // clBackground: '#f8fAfC',
@@ -160,6 +165,11 @@ export const uiTheme = {
     // clAssignCardText: '#348',
     // clSpecialAccent: '#dbff00',
     // clLinkIndicator: '#FA0',
+    // clLayouterKeyFace: 'rgba(255, 255, 255, 0.3)',
+    // clLayouterKeyEdge: '#666',
+    // clLayouterKeyLegend: '#000',
+    // clLayouterAxis: '#4442',
+    // clLayouterGrid: '#4441',
     // --------
   },
 };
