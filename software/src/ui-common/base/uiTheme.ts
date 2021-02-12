@@ -138,7 +138,6 @@ export const uiTheme = {
     clLayouterKeyLegend: '#fff',
     clLayouterAxis: '#0845',
     clLayouterGrid: '#5554',
-    // clBackground: '#30323A',
     // --------
     // light
     // clBackground: '#f8fAfC',
