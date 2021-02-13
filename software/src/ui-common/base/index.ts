@@ -6,4 +6,5 @@ export * from './router';
 export * from './shortCssProcessor';
 export * from './uiCommonTypes';
 export * from './uiGlobal';
+export * from './uiText';
 export * from './uiTheme';
