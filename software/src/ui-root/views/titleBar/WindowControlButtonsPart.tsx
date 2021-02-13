@@ -1,4 +1,5 @@
 import { jsx, css } from 'qx';
+import { texts } from '~/ui-common';
 import { makeWindowControlButtonsModel } from '~/ui-root/views/titleBar/WindowControlButtonsPart.model';
 import { WindowControlButton } from './elements/WindowControlButton';
 import { WindowRestartButton } from './elements/WindowRestartButton';
@@ -21,10 +22,12 @@ export const WindowControlButtonsPart = () => {
       <WindowControlButton
         icon="fa fa-feather-alt"
         onClick={vm.onWidgetButton}
+        hint={texts.hintSwitchToWidgetView}
       />
       <WindowControlButton
         icon="fa fa-window-minimize"
         onClick={vm.onMinimizeButton}
+        hint={texts.hintMinimizeWindow}
       />
       <WindowControlButton
         icon={
@@ -33,8 +36,13 @@ export const WindowControlButtonsPart = () => {
             : 'fa fa-window-restore'
         }
         onClick={vm.onMaximizeButton}
+        hint={texts.hintMaximizeWindow}
       />
-      <WindowControlButton icon="fa fa-times" onClick={vm.onCloseButton} />
+      <WindowControlButton
+        icon="fa fa-times"
+        onClick={vm.onCloseButton}
+        hint={texts.hintCloseApplication}
+      />
     </div>
   );
 };
