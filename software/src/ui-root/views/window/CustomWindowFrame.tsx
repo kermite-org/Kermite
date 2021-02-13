@@ -19,6 +19,7 @@ export const CustomWindowFrame = (props: {
 
   const cssBodyRow = css`
     flex-grow: 1;
+    overflow-y: hidden;
     display: flex;
     flex-direction: column;
     > * {

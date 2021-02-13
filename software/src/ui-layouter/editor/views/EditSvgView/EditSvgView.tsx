@@ -6,7 +6,6 @@ import {
 } from '~/ui-layouter/base';
 import { editReader, editMutations } from '~/ui-layouter/editor/store';
 import { screenToWorld } from './CoordHelpers';
-import { DisplayAreaFrame } from './DisplayAreaFrame';
 import { FieldGrid, FieldAxis } from './FieldParts';
 import { KeyEntityCard, startKeyEntityDragOperation } from './KeyEntityCard';
 import {
@@ -126,7 +125,7 @@ export const EditSvgView = () => {
         {showAxis && <FieldAxis />}
         {ghost && <KeyEntityCard ke={ghost} />}
 
-        <DisplayAreaFrame />
+        {/* <DisplayAreaFrame /> */}
 
         {editReader.allKeyEntities.map((ke) => (
           <KeyEntityCard ke={ke} key={ke.id} />

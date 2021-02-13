@@ -11,10 +11,14 @@ import { PageRoot } from '~/ui-layouter/editor/views/PageRoot';
 
 export namespace UiLayouterCore {
   export function loadEditDesign(persistDesign: IPersistKeyboardDesign) {
-    const design = KeyboardDesignConverter.convertKeyboardDesignPersistToEdit(
-      persistDesign,
-    );
-    editMutations.loadKeyboardDesign(design);
+    try {
+      const design = KeyboardDesignConverter.convertKeyboardDesignPersistToEdit(
+        persistDesign,
+      );
+      editMutations.loadKeyboardDesign(design);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   export function emitSavingDesign(): IPersistKeyboardDesign {

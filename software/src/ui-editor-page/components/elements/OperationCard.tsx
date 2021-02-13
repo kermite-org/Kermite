@@ -28,6 +28,10 @@ const cssOperationCard = css`
   &[data-text-long] {
     font-size: '15px';
   }
+
+  &:hover {
+    opacity: 0.7;
+  }
 `;
 
 export const OperationCard = (props: { model: IOperationCardViewModel }) => {

@@ -1,6 +1,5 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { uiTheme } from '~/ui-common';
 import { IProfileSelectionMenuPartViewModel } from '~/ui-editor-page/ProfileManagement/viewModels/ProfileSelectionMenuPartViewModel';
 
 const cssProfileSelectionMenuPart = css``;
@@ -38,7 +37,7 @@ const cssMenuPopup = css`
   width: 100px;
   background: #fff;
   position: absolute;
-  color: ${uiTheme.colors.clAltText};
+  color: #000;
   z-index: 20;
   user-select: none;
   border: solid 1px #248;

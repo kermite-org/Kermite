@@ -14,11 +14,10 @@ const PageRoot = () => {
     <div style={{ height: '100%' }}>
       {/* <MockPageLayouterDevelopment /> */}
       {/* <MockPageLoadedDesignDrawing /> */}
-      {/* <UiLayouterPageDevelopmentDummy /> */}
-      {/* <UiLayouterPageComponent /> */}
+      <UiLayouterPageComponent />
       {/* <GooberDevelopmentPage /> */}
       {/* <RoutingDevelopmentPage /> */}
-      <MockPageComponentDevelopment />
+      {/* <MockPageComponentDevelopment /> */}
     </div>
   );
 };

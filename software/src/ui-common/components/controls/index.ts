@@ -5,3 +5,4 @@ export * from './GeneralInput';
 export * from './GeneralSelector';
 export * from './Icon';
 export * from './RibbonSelector';
+export * from './ToggleButton';

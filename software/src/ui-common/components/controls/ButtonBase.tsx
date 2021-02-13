@@ -7,6 +7,7 @@ interface IButtonBase {
   extraCss?: string;
   className?: string;
   children?: any;
+  active?: boolean;
 }
 
 const baseCss = css`
@@ -34,9 +35,16 @@ export const ButtonBase: FC<IButtonBase> = ({
   extraCss,
   className,
   children,
+  active,
 }) => (
   <div
-    classNames={[baseCss, extraCss, (disabled && 'disabled') || '', className]}
+    classNames={[
+      baseCss,
+      extraCss,
+      (disabled && 'disabled') || undefined,
+      (active && 'active') || undefined,
+      className,
+    ]}
     onClick={onClick}
   >
     {children}

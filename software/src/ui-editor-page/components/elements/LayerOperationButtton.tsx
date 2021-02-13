@@ -8,7 +8,7 @@ const cssButton = css`
   height: 26px;
   cursor: pointer;
   &:hover {
-    background: #234;
+    opacity: 0.7;
   }
   display: flex;
   justify-content: center;
