@@ -14,7 +14,11 @@ export const LinkIndicator = (props: { isActive: boolean }) => {
   `;
 
   return (
-    <div css={cssLinkIndicator} data-active={props.isActive}>
+    <div
+      css={cssLinkIndicator}
+      data-active={props.isActive}
+      data-hint="Device connection status"
+    >
       <i class="fa fa-link" />
     </div>
   );

@@ -8,6 +8,7 @@ interface IButtonBase {
   className?: string;
   children?: any;
   active?: boolean;
+  hint?: string;
 }
 
 const baseCss = css`
@@ -36,6 +37,7 @@ export const ButtonBase: FC<IButtonBase> = ({
   className,
   children,
   active,
+  hint,
 }) => (
   <div
     classNames={[
@@ -46,6 +48,7 @@ export const ButtonBase: FC<IButtonBase> = ({
       className,
     ]}
     onClick={onClick}
+    data-hint={hint}
   >
     {children}
   </div>

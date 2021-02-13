@@ -20,11 +20,13 @@ export const BehaviorOptionsPart = () => {
         text="Show Layers Dynamic"
         checked={settings.showLayersDynamic}
         setChecked={fieldSetter(settings, 'showLayersDynamic')}
+        hint="デバイスのレイヤ状態に同期して表示するレイヤを切り替えます。"
       />
       <CheckBoxLine
         text="Show Fallback Assigns"
         checked={settings.showLayerDefaultAssign}
         setChecked={fieldSetter(settings, 'showLayerDefaultAssign')}
+        hint="レイヤのデフォルトアサインを表示します。"
       />
     </div>
   );

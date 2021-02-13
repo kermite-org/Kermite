@@ -29,6 +29,7 @@ const LayerCard = (props: { layerModel: ILayerListViewModel }) => {
       key={layerId}
       data-current={isCurrent}
       onClick={setCurrent}
+      data-hint="編集対象のレイヤを選択します。"
     >
       {layerName}
     </div>

@@ -7,6 +7,7 @@ interface IDualItemsHoverSelectorProps<T extends string> {
   currentItem: T;
   setCurrentItem: (nextItem: T) => void;
   textDictionary: { [key in T]: string };
+  hint?: string;
 }
 
 const cssDualItemsSelector = css`
@@ -46,6 +47,7 @@ export function DualItemsHoverSelector<T extends string>(
       css={cssDualItemsSelector}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
+      data-hint={props.hint}
     >
       {!state.isHover && (
         <div class="fixedView">{textDictionary[currentItem]}</div>

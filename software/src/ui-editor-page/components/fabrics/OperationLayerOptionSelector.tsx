@@ -18,7 +18,10 @@ export const OperationLayerOptionSelector = (props: {
   const { enabled, allValues, selectedValue, onValueChanged } = props;
 
   return (
-    <div css={cssOperationLayerOptionSelector}>
+    <div
+      css={cssOperationLayerOptionSelector}
+      data-hint="レイヤ呼び出しモードを指定します。"
+    >
       <select
         value={selectedValue}
         onChange={reflectValue(onValueChanged)}

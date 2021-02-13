@@ -6,6 +6,7 @@ import { FirmwareUpdationPage } from '~/ui-firmware-updation-page';
 import { HeatmapPage } from '~/ui-heatmap-page';
 import { UiLayouterPageComponent } from '~/ui-layouter-page';
 import { PresetBrowserPage } from '~/ui-preset-browser-page';
+import { WindowStatusBarSection } from '~/ui-root/views/titleBar/WindowStatusBarSection';
 import { CustomWindowFrame } from '~/ui-root/views/window/CustomWindowFrame';
 import { DevToolPullTab } from '~/ui-root/views/window/DevToolPullTab';
 import { UiSettingsPage } from '~/ui-settings-page';
@@ -28,7 +29,10 @@ const styles = {
 export const ConfiguratorZoneRoot = () => {
   const pagePath = router.getPagePath();
   return (
-    <CustomWindowFrame renderTitleBar={() => <WindowTitleBarSection />}>
+    <CustomWindowFrame
+      renderTitleBar={WindowTitleBarSection}
+      renderStatusBar={WindowStatusBarSection}
+    >
       <div css={styles.cssContentRow}>
         <NavigationColumn />
         <div css={styles.cssMainColumn}>

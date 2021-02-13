@@ -1,6 +1,7 @@
 import { css, glob, setup } from 'goober';
 import { h, Hook } from 'qx';
 import { router } from '~/ui-common';
+import { globalHintMouseMoveHandlerEffect } from '~/ui-common/base/GlobalHint';
 import { DebugOverlay } from '~/ui-common/fundamental/overlay/DebugOverlay';
 import { ForegroundModalLayerRoot } from '~/ui-common/fundamental/overlay/ForegroundModalLayer';
 import { siteModel } from '~/ui-common/sharedModels/SiteModel';
@@ -40,6 +41,7 @@ const cssSiteRoot = css`
 export const SiteRoot = () => {
   Hook.useEffect(router.rerenderEffectOnHashChange, []);
   Hook.useEffect(siteModel.setupLifecycle, []);
+  Hook.useEffect(globalHintMouseMoveHandlerEffect, []);
   router.useRedirect(['', '/'], '/editor');
 
   const isWidgetMode = router.getPagePath() === '/widget';

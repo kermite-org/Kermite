@@ -5,6 +5,7 @@ import { uiTheme } from '~/ui-common';
 export const CustomWindowFrame = (props: {
   children: JSX.Element;
   renderTitleBar: () => JSX.Element;
+  renderStatusBar: () => JSX.Element;
 }) => {
   const cssRoot = css`
     height: 100%;
@@ -37,7 +38,7 @@ export const CustomWindowFrame = (props: {
     <div css={cssRoot}>
       <div css={cssTitleBarRow}>{props.renderTitleBar()}</div>
       <div css={cssBodyRow}>{props.children}</div>
-      <div css={cssStatusBar} />
+      <div css={cssStatusBar}>{props.renderStatusBar()}</div>
     </div>
   );
 };

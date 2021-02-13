@@ -35,7 +35,7 @@ const cssOperationCard = css`
 `;
 
 export const OperationCard = (props: { model: IOperationCardViewModel }) => {
-  const { text, isCurrent, setCurrent, isEnabled } = props.model;
+  const { text, isCurrent, setCurrent, isEnabled, hint } = props.model;
 
   const isTextLong = text.length >= 2;
 
@@ -46,6 +46,7 @@ export const OperationCard = (props: { model: IOperationCardViewModel }) => {
       onMouseDown={setCurrent}
       data-disabled={!isEnabled}
       data-text-long={isTextLong}
+      data-hint={hint}
     >
       {text}
     </div>

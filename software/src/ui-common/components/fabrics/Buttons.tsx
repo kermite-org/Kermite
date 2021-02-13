@@ -30,6 +30,7 @@ export const OperationButtonWithIcon = (props: {
   disabled?: boolean;
   icon: string;
   label: string;
+  hint?: string;
 }) => {
   const style = css`
     color: ${uiTheme.colors.clPrimary};
@@ -44,6 +45,7 @@ export const OperationButtonWithIcon = (props: {
       onClick={props.onClick}
       disabled={props.disabled}
       extraCss={style}
+      hint={props.hint}
     >
       <Icon spec={props.icon} />
       <span>{props.label}</span>

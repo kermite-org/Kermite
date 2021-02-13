@@ -11,7 +11,11 @@ export const ConfigurationButton = (props: { onClick(): void }) => {
   `;
 
   return (
-    <div css={cssConfigurationButton} onClick={props.onClick}>
+    <div
+      css={cssConfigurationButton}
+      onClick={props.onClick}
+      data-hint="Open profile configuration modal."
+    >
       <i class="fa fa-cog" />
     </div>
   );
