@@ -96,7 +96,70 @@ export const uiThemeConfigLoader = {
 
 const currentThemeKey = uiThemeConfigLoader.loadThemeKey();
 
-export const uiTheme: IUiTheme = {
+export const uiTheme_original: IUiTheme = {
   unitHeight: 26,
   colors: themeColors[currentThemeKey],
+};
+
+// UI刷新のため一時的に即値によるテーマを使用
+export const uiTheme = {
+  unitHeight: 26,
+  controlBorderRadius: 0,
+  colors: {
+    // --------
+    // dark
+    clBackground: '#112',
+    clForegroud: '#FFF',
+    clControlBase: '#222',
+    clDecal: '#FFF',
+    clPrimary: '#09A',
+    clControlText: '#09A',
+    clInvalidInput: '#f004',
+    clWindowBar: '#29B',
+    clPageBackground: '#334',
+    clNavigationColumn: '#1C3057',
+    clPanelBox: '#181C23',
+    clWindowButtonHoverBack: '#4bf',
+    clMainText: '#09A',
+    clSelectHighlight: '#0BD6',
+    clHoldHighlight: '#f90',
+    clAltText: '#FFF',
+    clWindowButtonFace: '#FFF',
+    clKeyboardBodyFace: '#54566f',
+    clKeyUnitFace: 'rgba(0, 0, 0, 0.5)',
+    clKeyUnitLegend: '#fff',
+    clKeyUnitLegendWeak: 'rgba(128, 128, 128, 0.2)',
+    clAssignCardFace: '#383838',
+    clAssignCardText: '#FFF',
+    clSpecialAccent: '#dbff00',
+    clLinkIndicator: '#0BC',
+    // --------
+    // light
+    // clBackground: '#f8fAfC',
+    // clForegroud: '#000',
+    // clControlBase: '#F8F8F8',
+    // clDecal: '#FFF',
+    // clPrimary: '#1AD',
+    // clControlText: '#126',
+    // clInvalidInput: '#f003',
+    // clWindowBar: '#15A5D2',
+    // clPageBackground: '#c8d3e3',
+    // clNavigationColumn: '#347',
+    // clPanelBox: '#FFF',
+    // clWindowButtonHoverBack: '#4bf',
+    // clMainText: '#18C',
+    // clSelectHighlight: '#0cf8',
+    // clHoldHighlight: '#FC0',
+    // clAltText: '#000',
+    // clWindowButtonFace: '#FFF',
+    // clKeyboardBodyFace: '#9aadd8',
+    // clKeyUnitFace: '#f6f8fA',
+    // clKeyUnitLegend: '#568',
+    // clKeyUnitLegendWeak: 'rgba(128, 128, 128, 0.2)',
+    // clAssignCardFace: '#EEE',
+    // clAssignCardText: '#348',
+    // clSpecialAccent: '#dbff00',
+    // clLinkIndicator: '#FA0',
+    // --------
+  },
 };

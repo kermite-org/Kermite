@@ -9,7 +9,7 @@ const cssWindowTitleBarSection = css`
   justify-content: space-between;
   align-items: center;
   -webkit-app-region: drag;
-  background: ${uiTheme.colors.clTitleBar};
+  background: ${uiTheme.colors.clWindowBar};
 `;
 
 export const WindowTitleBarSection = () => {

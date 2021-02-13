@@ -11,7 +11,7 @@ const LayerCard = (props: { layerModel: ILayerListViewModel }) => {
     &[data-current] {
       background: ${uiTheme.colors.clSelectHighlight};
     }
-    padding: 4px;
+    padding: 3px;
     cursor: pointer;
     user-select: none;
     color: ${uiTheme.colors.clMainText};
@@ -34,8 +34,9 @@ export function LayersListBoxPart(props: { vm: ILayerListBoxPartViewModel }) {
   const cssLayersListBox = css`
     height: 240px;
     overflow-y: scroll;
-    border: solid 1px ${uiTheme.colors.clCommonFrame};
+    border: solid 1px ${uiTheme.colors.clPrimary};
     margin: 0 5px;
+    padding: 4px;
   `;
 
   return (

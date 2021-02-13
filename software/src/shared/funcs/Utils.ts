@@ -222,7 +222,7 @@ export function copyObjectPropsRecursive<T>(target: T, source: T) {
 export function makeObjectPropsOverrideRecursive<T>(original: T, input: T): T {
   const merged: T = {} as any;
   for (const key in original) {
-    if (input[key]) {
+    if (input[key] !== undefined) {
       if (typeof original[key] === 'object' && typeof input[key] === 'object') {
         merged[key] = makeObjectPropsOverrideRecursive(
           original[key],

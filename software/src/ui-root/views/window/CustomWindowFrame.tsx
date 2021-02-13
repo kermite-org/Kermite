@@ -27,7 +27,7 @@ export const CustomWindowFrame = (props: {
   `;
 
   const cssStatusBar = css`
-    background: ${uiTheme.colors.clStatusBar};
+    background: ${uiTheme.colors.clWindowBar};
     height: 28px;
     flex-shrink: 0;
   `;

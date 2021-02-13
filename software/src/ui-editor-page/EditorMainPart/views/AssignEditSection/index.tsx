@@ -18,7 +18,6 @@ const cssAssignEntryEditPart = css`
     opacity: 0.3;
     pointer-events: none;
   }
-  /* border: solid 1px ${uiTheme.colors.clCommonFrame}; */
   padding: 8px;
 `;
 
