@@ -2,11 +2,11 @@ import { FSWatcher } from 'fs';
 import { appEnv } from '~/shell/base';
 import {
   pathResolve,
-  EventPort,
   pathRelative,
   pathDirname,
   fsExistsSync,
   fsxWatchFilesChange,
+  createEventPort2,
 } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
 
@@ -17,7 +17,25 @@ export class KeyboardLayoutFilesWatcher {
 
   private watcher: FSWatcher | undefined;
 
-  readonly fileUpdationEventPort = new EventPort<IFileUpdationEvent>();
+  fileUpdationEvents = createEventPort2<IFileUpdationEvent>({
+    onFirstSubscriptionStarting: () => this.initializeWatcher(),
+    onLastSubscriptionEnded: () => this.terminateWatcher(),
+  });
+
+  private initializeWatcher() {
+    if (appEnv.isDevelopment) {
+      if (fsExistsSync(this.baseDir)) {
+        this.watcher = fsxWatchFilesChange(this.baseDir, this.onFileUpdated);
+      }
+    }
+  }
+
+  private terminateWatcher() {
+    if (this.watcher) {
+      this.watcher.close();
+      this.watcher = undefined;
+    }
+  }
 
   private async getProjectIdFromFilePath(projectPath: string) {
     const infos = await projectResourceProvider.getAllProjectResourceInfos();
@@ -30,23 +48,8 @@ export class KeyboardLayoutFilesWatcher {
       const projectPath = pathRelative(this.baseDir, pathDirname(filePath));
       const projectId = await this.getProjectIdFromFilePath(projectPath);
       if (projectId) {
-        this.fileUpdationEventPort.emit({ projectId });
+        this.fileUpdationEvents.emit({ projectId });
       }
     }
   };
-
-  initialize() {
-    if (appEnv.isDevelopment) {
-      if (fsExistsSync(this.baseDir)) {
-        this.watcher = fsxWatchFilesChange(this.baseDir, this.onFileUpdated);
-      }
-    }
-  }
-
-  terminate() {
-    if (this.watcher) {
-      this.watcher.close();
-      this.watcher = undefined;
-    }
-  }
 }
