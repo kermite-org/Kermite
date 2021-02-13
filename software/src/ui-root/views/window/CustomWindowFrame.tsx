@@ -19,7 +19,7 @@ export const CustomWindowFrame = (props: {
 
   const cssBodyRow = css`
     flex-grow: 1;
-    overflow-y: hidden;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     > * {
@@ -28,9 +28,9 @@ export const CustomWindowFrame = (props: {
   `;
 
   const cssStatusBar = css`
-    background: ${uiTheme.colors.clWindowBar};
-    height: 28px;
     flex-shrink: 0;
+    height: 28px;
+    background: ${uiTheme.colors.clWindowBar};
   `;
 
   return (

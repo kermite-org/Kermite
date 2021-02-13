@@ -13,6 +13,7 @@ export const SiteDpiScaler = (props: { children: any; dpiScale: number }) => {
     transform-origin: top left;
 
     > .inner {
+      position: relative;
       width: ${baseW / dpiScale}px;
       height: ${baseH / dpiScale}px;
     }
