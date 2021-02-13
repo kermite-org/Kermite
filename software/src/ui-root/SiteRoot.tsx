@@ -4,6 +4,8 @@ import { router } from '~/ui-common';
 import { DebugOverlay } from '~/ui-common/fundamental/overlay/DebugOverlay';
 import { ForegroundModalLayerRoot } from '~/ui-common/fundamental/overlay/ForegroundModalLayer';
 import { siteModel } from '~/ui-common/sharedModels/SiteModel';
+import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
+import { SiteDpiScaler } from '~/ui-root/views/window/SiteDpiScaler';
 import { WidgetZoneRoot } from '~/ui-widget';
 import { ConfiguratorZoneRoot } from './ConfiguratorZoneRoot';
 
@@ -42,11 +44,13 @@ export const SiteRoot = () => {
 
   const isWidgetMode = router.getPagePath() === '/widget';
   return (
-    <div css={cssSiteRoot}>
-      {!isWidgetMode && <ConfiguratorZoneRoot />}
-      {isWidgetMode && <WidgetZoneRoot />}
-      <ForegroundModalLayerRoot />
-      <DebugOverlay />
-    </div>
+    <SiteDpiScaler dpiScale={uiStatusModel.settings.siteDpiScale}>
+      <div css={cssSiteRoot}>
+        {!isWidgetMode && <ConfiguratorZoneRoot />}
+        {isWidgetMode && <WidgetZoneRoot />}
+        <ForegroundModalLayerRoot />
+        <DebugOverlay />
+      </div>
+    </SiteDpiScaler>
   );
 };

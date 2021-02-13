@@ -1,14 +1,23 @@
 import { css } from 'goober';
 import { h, Hook } from 'qx';
 import { IGlobalSettings } from '~/shared';
-import { appUi, fieldSetter, ipcAgent, uiTheme, useLocal } from '~/ui-common';
+import {
+  appUi,
+  fieldSetter,
+  ipcAgent,
+  ISelectorOption,
+  uiTheme,
+  useLocal,
+} from '~/ui-common';
 import {
   CheckBoxLine,
   GeneralButton,
   GeneralInput,
   HFlex,
   Indent,
+  RibbonSelector,
 } from '~/ui-common/components';
+import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
 
 const cssUiSettingsPage = css`
   background: ${uiTheme.colors.clBackground};
@@ -26,6 +35,16 @@ const fallbackGlobalSettings: IGlobalSettings = {
   useOnlineResources: false,
   localProjectRootFolderPath: '',
 };
+
+const uiScaleOptions: ISelectorOption[] = [
+  0.7,
+  0.8,
+  0.9,
+  1,
+  1.1,
+  1.2,
+  1.3,
+].map((val) => ({ label: `${(val * 100) >> 0}%`, value: val.toString() }));
 
 export const UiSettingsPage = () => {
   const local = useLocal({
@@ -91,6 +110,17 @@ export const UiSettingsPage = () => {
               />
             </HFlex>
           </div>
+        </Indent>
+        <div>User Interface</div>
+        <Indent>
+          <div>UI Scaling</div>
+          <RibbonSelector
+            options={uiScaleOptions}
+            value={uiStatusModel.settings.siteDpiScale.toString()}
+            setValue={(strVal) =>
+              (uiStatusModel.settings.siteDpiScale = parseFloat(strVal))
+            }
+          />
         </Indent>
       </Indent>
     </div>

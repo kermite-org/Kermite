@@ -20,6 +20,7 @@ export interface IUiSettings {
   shapeViewShowBoundingBox: boolean;
   showLayersDynamic: boolean;
   showLayerDefaultAssign: boolean;
+  siteDpiScale: number;
 }
 
 const defaultUiSettings: IUiSettings = {
@@ -31,6 +32,7 @@ const defaultUiSettings: IUiSettings = {
   shapeViewShowBoundingBox: false,
   showLayersDynamic: false,
   showLayerDefaultAssign: false,
+  siteDpiScale: 1.0,
 };
 
 export interface IUiStatus {
