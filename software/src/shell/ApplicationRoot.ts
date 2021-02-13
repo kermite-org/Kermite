@@ -163,11 +163,10 @@ export class ApplicationRoot {
         this.deviceService.statusEventPort.subscribe(cb);
         return () => this.deviceService.statusEventPort.unsubscribe(cb);
       },
-      firmup_comPortPlugEvents: (cb) => {
-        this.firmwareUpdationService.comPortPlugEvents.subscribe(cb);
-        return () =>
-          this.firmwareUpdationService.comPortPlugEvents.unsubscribe(cb);
-      },
+      firmup_comPortPlugEvents: (cb) =>
+        this.firmwareUpdationService.comPortsMonitor.comPortPlugEvents.subscribe(
+          cb,
+        ),
       projects_layoutFileUpdationEvents: (cb) => {
         this.keyboardLayoutFilesWatcher.fileUpdationEventPort.subscribe(cb);
         return () =>
@@ -181,7 +180,6 @@ export class ApplicationRoot {
     console.log(`initialize services`);
     await applicationStorage.initializeAsync();
     await this.profileManager.initializeAsync();
-    this.firmwareUpdationService.initialize();
     this.keyboardLayoutFilesWatcher.initialize();
     this.keyboardConfigProvider.initialize();
     this.deviceService.initialize();
@@ -198,7 +196,6 @@ export class ApplicationRoot {
     this.deviceService.terminate();
     this.keyboardConfigProvider.terminate();
     this.keyboardLayoutFilesWatcher.terminate();
-    this.firmwareUpdationService.terminate();
     await this.profileManager.terminateAsync();
     await applicationStorage.terminateAsync();
   }
