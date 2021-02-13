@@ -1,4 +1,5 @@
-import { jsx, Hook, css } from 'qx';
+import { css, Hook, jsx } from 'qx';
+import { texts } from '~/ui-common';
 import {
   KeyboardProfileSelector,
   OperationButtonWithIcon,
@@ -45,7 +46,7 @@ export const ProfileManagementPart = () => {
       <ProfileSelectionMenuPart vm={menuModel} />
       <KeyboardProfileSelector
         selectorSource={baseVm.profileSelectorSource}
-        hint="Select current profile."
+        hint={texts.hintSelectCurrentProfile}
       />
       <ConfigurationButton onClick={baseVm.openConfiguration} />
       <BehaviorSelector />
@@ -61,9 +62,9 @@ export const ProfileManagementPart = () => {
       <OperationButtonWithIcon
         onClick={baseVm.onWriteButton}
         disabled={!baseVm.canWrite}
-        label="write"
         icon="double_arrow"
-        hint="write keymapping to the device."
+        label={texts.buttonWriteAssigns}
+        hint={texts.hintWriteKeyMapping}
       />
       {baseVm.isExportingPresetSelectionModalOpen && (
         <SavingProjectPresetSelectionModal baseVm={baseVm} />

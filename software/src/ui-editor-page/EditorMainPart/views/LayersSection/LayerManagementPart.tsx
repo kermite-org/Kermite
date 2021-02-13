@@ -1,4 +1,5 @@
-import { jsx, css } from 'qx';
+import { css, jsx } from 'qx';
+import { texts } from '~/ui-common';
 import { ILayerManagementPartViewModel } from '~/ui-editor-page/EditorMainPart/viewModels/LayersManagementPartViewModel';
 import { LayerOperationButtton } from '~/ui-editor-page/components/elements/LayerOperationButtton';
 
@@ -26,31 +27,31 @@ export const LayerManagementPart = (props: {
         icon="fa fa-plus"
         enabled={true}
         handler={addNewLayer}
-        hint="Add new layer."
+        hint={texts.hintLayersAddNewLayer}
       />
       <LayerOperationButtton
         icon="fa fa-pen-square"
         enabled={true}
         handler={editCurrentLayer}
-        hint="Edit layer properties."
+        hint={texts.hintLayersEditLayerProperties}
       />
       <LayerOperationButtton
         icon="fa fa-times"
         enabled={canDeleteCurrentLayer}
         handler={deleteCurrentLayer}
-        hint="Delete layer."
+        hint={texts.hintLayersDeleteLayer}
       />
       <LayerOperationButtton
         icon="fa fa-long-arrow-alt-up"
         enabled={canShiftForwardCurrentLayer}
         handler={shiftForwardCurrentLayer}
-        hint="Bring layer forward."
+        hint={texts.hintLayersBringForward}
       />
       <LayerOperationButtton
         icon="fa fa-long-arrow-alt-down"
         enabled={canShiftBackCurrentLayer}
         handler={shiftBackCurrentLayer}
-        hint="Bring layer backward."
+        hint={texts.hintLayersBringBackward}
       />
     </div>
   );

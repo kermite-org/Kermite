@@ -1,4 +1,5 @@
-import { jsx, css } from 'qx';
+import { css, jsx } from 'qx';
+import { texts } from '~/ui-common';
 
 export const ConfigurationButton = (props: { onClick(): void }) => {
   const cssConfigurationButton = css`
@@ -13,7 +14,7 @@ export const ConfigurationButton = (props: { onClick(): void }) => {
     <div
       css={cssConfigurationButton}
       onClick={props.onClick}
-      data-hint="Open profile configuration modal."
+      data-hint={texts.hintProfileConfigurationButton}
     >
       <i class="fa fa-cog" />
     </div>

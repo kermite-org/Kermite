@@ -1,10 +1,11 @@
-import { useLocal } from '~/ui-common';
+import { texts, useLocal } from '~/ui-common';
 import { useProjectResourcePresenceChecker } from '~/ui-common/sharedModels/hooks';
 import { IProfileManagementPartViewModel } from './ProfileManagementPartViewModel';
 
 interface IMenuItem {
   key: string;
   text: string;
+  hint: string;
   handler(): void;
   enabled: boolean;
 }
@@ -23,49 +24,57 @@ function createMenuItemSources(
   return [
     {
       key: 'createProfile',
-      text: 'new',
+      text: texts.labelAssignerMenuNew,
+      hint: texts.hintAssignerMenuCreateNewProfile,
       handler: vm.createProfile,
       enabled: true,
     },
     {
       key: 'renameProfile',
-      text: 'rename',
+      text: texts.labelAssignerMenuRename,
+      hint: texts.hintAssignerMenuRenameProfile,
       handler: vm.renameProfile,
       enabled: vm.isCurrentProfileInternal,
     },
     {
       key: 'copyProfile',
-      text: 'copy',
+      text: texts.labelAssignerMenuCopy,
+      hint: texts.hintAssignerMenuCopyProfile,
       handler: vm.copyProfile,
       enabled: vm.isCurrentProfileInternal,
     },
     {
       key: 'deleteProfile',
-      text: 'delete',
+      text: texts.labelAssignerMenuDelete,
+      hint: texts.hintAssignerMenuDeleteProfile,
       handler: vm.deleteProfile,
       enabled: vm.isCurrentProfileInternal,
     },
     {
       key: 'saveAs',
-      text: 'save as',
+      text: 'save',
+      hint: 'save',
       handler: vm.handleSaveUnsavedProfile,
       enabled: !vm.isCurrentProfileInternal,
     },
     {
       key: 'importFromFile',
       text: 'import from file',
+      hint: 'import from file',
       handler: vm.handleImportFromFile,
       enabled: true,
     },
     {
       key: 'exportToFile',
       text: 'export to file',
+      hint: 'export to file',
       handler: vm.handleExportToFile,
       enabled: true,
     },
     {
       key: 'saveAsPreset',
-      text: 'save as preset',
+      text: texts.labelAssignerMenuSaveAsPreset,
+      hint: texts.hintAssignerMenuSaveAsPreset,
       handler: vm.openExportingPresetSelectionModal,
       enabled: isLocalProjectsAvailable && !!vm.currentProfileProjectId,
     },
@@ -98,6 +107,7 @@ export function makeProfileSelectionMenuPartViewModel(
           state.isOpen = false;
         },
         enabled: item.enabled,
+        hint: item.hint,
       }));
     },
   };

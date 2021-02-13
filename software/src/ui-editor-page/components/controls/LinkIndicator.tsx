@@ -1,5 +1,5 @@
-import { jsx, css } from 'qx';
-import { uiTheme } from '~/ui-common';
+import { css, jsx } from 'qx';
+import { texts, uiTheme } from '~/ui-common';
 
 export const LinkIndicator = (props: { isActive: boolean }) => {
   const cssLinkIndicator = css`
@@ -16,7 +16,7 @@ export const LinkIndicator = (props: { isActive: boolean }) => {
     <div
       css={cssLinkIndicator}
       data-active={props.isActive}
-      data-hint="Device connection status"
+      data-hint={texts.hintDeviceConnectionStatus}
     >
       <i class="fa fa-link" />
     </div>

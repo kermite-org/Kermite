@@ -1,5 +1,5 @@
-import { jsx, css } from 'qx';
-import { uiTheme } from '~/ui-common';
+import { css, jsx } from 'qx';
+import { texts, uiTheme } from '~/ui-common';
 import { makeDeviceControlSectionViewModel } from '~/ui-editor-page/DeviceControl/DeviceControlSectionViewModel';
 import { LinkIndicator } from '~/ui-editor-page/components/controls/LinkIndicator';
 
@@ -21,7 +21,7 @@ export const DeviceControlSection = () => {
   const vm = makeDeviceControlSectionViewModel();
   return (
     <div css={cssDeviceControlSection}>
-      <div className="keyboardName" data-hint="Connected keyboard name">
+      <div className="keyboardName" data-hint={texts.hintConnectedKeyboardName}>
         {vm.currentDeviceKeyboardName}
       </div>
       <LinkIndicator isActive={vm.isDeviceConnected} />
