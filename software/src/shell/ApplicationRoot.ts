@@ -95,12 +95,12 @@ export class ApplicationRoot {
           presetSpec,
         ),
       config_getKeyboardConfig: async () =>
-        this.keyboardConfigProvider.keyboardConfig,
+        this.keyboardConfigProvider.getKeyboardConfig(),
       config_writeKeyboardConfig: async (config) =>
         this.keyboardConfigProvider.writeKeyboardConfig(config),
       config_writeKeyMappingToDevice: async () => {
         const profile = this.profileManager.getCurrentProfile();
-        const layoutStandard = this.keyboardConfigProvider.keyboardConfig
+        const layoutStandard = this.keyboardConfigProvider.getKeyboardConfig()
           .layoutStandard;
         if (profile) {
           KeyMappingEmitter.emitKeyAssignsToDevice(
@@ -177,7 +177,6 @@ export class ApplicationRoot {
     console.log(`initialize services`);
     await applicationStorage.initializeAsync();
     await this.profileManager.initializeAsync();
-    this.keyboardConfigProvider.initialize();
     this.deviceService.initialize();
     this.inputLogicSimulator.initialize();
 
@@ -190,7 +189,6 @@ export class ApplicationRoot {
     this.windowWrapper.terminate();
     this.inputLogicSimulator.terminate();
     this.deviceService.terminate();
-    this.keyboardConfigProvider.terminate();
     await this.profileManager.terminateAsync();
     await applicationStorage.terminateAsync();
   }
