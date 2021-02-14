@@ -22,6 +22,10 @@ export function getAppErrorInfo(error: AppError | Error | any): IAppErrorInfo {
   }
 }
 
+export function makeCompactStackTrace(error: { stack?: string }) {
+  return error.stack?.split(/\r?\n/).slice(0, 2).join('\n');
+}
+
 const badExcutionContextNames: string[] = [];
 
 export async function executeWithAppErrorHandler(
@@ -37,7 +41,7 @@ export async function executeWithAppErrorHandler(
   try {
     await func();
   } catch (error) {
-    console.error(error);
+    console.error(makeCompactStackTrace(error));
     appGlobal.appErrorEventPort.emit(getAppErrorInfo(error));
     if (executionContextName) {
       // setIntervalのコールバックなどで例外が発生した場合に、次回以降処理を実行しないようにする

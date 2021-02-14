@@ -3,6 +3,7 @@ import { appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import {
   executeWithFatalErrorHandler,
   getAppErrorInfo,
+  makeCompactStackTrace,
 } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
@@ -47,7 +48,7 @@ export class ApplicationRoot {
     const windowWrapper = this.windowWrapper;
 
     appGlobal.icpMainAgent.setErrorHandler((error) => {
-      console.error(error);
+      console.error(makeCompactStackTrace(error));
       appGlobal.appErrorEventPort.emit(getAppErrorInfo(error));
     });
 

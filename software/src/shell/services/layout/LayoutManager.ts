@@ -9,7 +9,10 @@ import {
   ILayoutEditSource,
 } from '~/shared';
 import { applicationStorage } from '~/shell/base';
-import { getAppErrorInfo } from '~/shell/base/ErrorChecker';
+import {
+  getAppErrorInfo,
+  makeCompactStackTrace,
+} from '~/shell/base/ErrorChecker';
 import { createEventPort2 } from '~/shell/funcs';
 import { FileWather } from '~/shell/funcs/FileWatcher';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
@@ -99,7 +102,7 @@ export class LayoutManager implements ILayoutManager {
           loadedDesign,
         });
       } catch (error) {
-        console.error(error);
+        console.error(makeCompactStackTrace(error));
         this.setStatus({ errroInfo: getAppErrorInfo(error) });
       }
     }
@@ -302,7 +305,7 @@ export class LayoutManager implements ILayoutManager {
         await this.executeCommand(command);
       }
     } catch (error) {
-      console.error(error);
+      console.error(makeCompactStackTrace(error));
       this.setStatus({ errroInfo: getAppErrorInfo(error) });
       return false;
     }
