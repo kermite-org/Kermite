@@ -118,10 +118,7 @@ export class InputLogicSimulatorD {
     }
 
     const prof = this.profileManager.getCurrentProfile() || fallbackProfileData;
-    const layout = this.keyboardConfigProvider.getKeyboardConfig()
-      .layoutStandard;
-
-    console.log(`updateSourceSetup`, { config, prof, layout });
+    const layout = config.layoutStandard;
     const bytes = makeKeyAssignsConfigStorageData(prof, layout);
     this.configDataStorage.writeConfigStorageData(bytes);
     this.CL.keyboardCoreLogic_initialize();
