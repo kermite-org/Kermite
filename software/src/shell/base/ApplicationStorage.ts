@@ -88,6 +88,7 @@ class ApplicationStorage {
       const obj = (await fsxReadJsonFile(
         this.configFilePath,
       )) as IApplicationPersistData;
+      // todo: ここで永続データのスキーマをチェックし、データがおかしい場合は読み込まない
       this.data = makeObjectPropsOverrideRecursive(this.data, obj);
     } else {
       console.log('config file not found!');

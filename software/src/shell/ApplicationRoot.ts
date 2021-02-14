@@ -176,20 +176,23 @@ export class ApplicationRoot {
   async initialize() {
     console.log(`initialize services`);
     await applicationStorage.initializeAsync();
+    this.setupIpcBackend();
+    this.windowWrapper.initialize();
+    // todo: ここまでで例外が出た場合,システムダイアログでエラーを通知して終了する
+
+    // todo: 以下で例外が出た場合、アプリ画面上のモーダルでエラーを表示する
     await this.profileManager.initializeAsync();
     this.deviceService.initialize();
     this.inputLogicSimulator.initialize();
-
-    this.setupIpcBackend();
-    this.windowWrapper.initialize();
   }
 
   async terminate() {
     console.log(`terminate services`);
-    this.windowWrapper.terminate();
+    // todo: 以下で例外が出た場合,システムダイアログでエラーを通知して終了する
     this.inputLogicSimulator.terminate();
     this.deviceService.terminate();
     await this.profileManager.terminateAsync();
+    this.windowWrapper.terminate();
     await applicationStorage.terminateAsync();
   }
 }
