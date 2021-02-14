@@ -6,6 +6,11 @@ export type IAppErrorInfo =
   | { type: 'InvalidProjectFileSchema'; filePath: string; errorDetail: string }
   | { type: 'RawException'; message: string };
 
+export type IAppErrorData = {
+  info: IAppErrorInfo;
+  stack: string;
+};
+
 export class AppError extends Error {
   info: IAppErrorInfo;
 

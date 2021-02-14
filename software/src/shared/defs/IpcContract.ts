@@ -1,4 +1,4 @@
-import { IAppErrorInfo } from '~/shared/defs/CustomErrors';
+import { IAppErrorData, IAppErrorInfo } from '~/shared/defs/CustomErrors';
 import { IPersistKeyboardDesign } from '~/shared/defs/KeyboardDesign';
 import { IKeyboardConfig } from './ConfigTypes';
 import { IProfileData } from './ProfileData';
@@ -226,7 +226,7 @@ export interface IAppIpcContract {
   };
   events: {
     dev_testEvent: { type: string };
-    global_appErrorEvents: IAppErrorInfo;
+    global_appErrorEvents: IAppErrorData;
     window_appWindowStatus: Partial<IAppWindowStatus>;
 
     profile_currentProfile: IProfileData | undefined;

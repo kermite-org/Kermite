@@ -2,7 +2,7 @@ import { IPresetSpec, IProfileManagerStatus } from '~/shared';
 import { appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import {
   executeWithFatalErrorHandler,
-  getAppErrorInfo,
+  getAppErrorData,
   makeCompactStackTrace,
 } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
@@ -49,7 +49,7 @@ export class ApplicationRoot {
 
     appGlobal.icpMainAgent.setErrorHandler((error) => {
       console.error(makeCompactStackTrace(error));
-      appGlobal.appErrorEventPort.emit(getAppErrorInfo(error));
+      appGlobal.appErrorEventPort.emit(getAppErrorData(error));
     });
 
     appGlobal.icpMainAgent.supplySyncHandlers({
