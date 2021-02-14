@@ -3,6 +3,17 @@ import * as path from 'path';
 import { glob } from 'glob';
 import { AppError } from '~/shared/defs';
 
+function asyncWrap<T extends (...args: any[]) => Promise<any>>(func: T): T {
+  return (async (...args: any[]) => {
+    try {
+      return await func(...args);
+    } catch (error: any) {
+      // ファイル操作関数の元の例外にスタックトレースが含まれておらず、Errorのインスタンスとして再度throwすることでスタックトレースを付与する
+      throw new Error(error);
+    }
+  }) as any;
+}
+
 export const pathJoin = path.join;
 
 export const pathResolve = path.resolve;
@@ -29,17 +40,19 @@ export const fsExistsSync = fs.existsSync;
 
 export const fsMkdirSync = fs.mkdirSync;
 
-export const fspMkdir = fs.promises.mkdir;
+export const fspMkdir = asyncWrap(fs.promises.mkdir);
 
-export const fspCopyFile = fs.promises.copyFile;
+export const fspCopyFile = asyncWrap(fs.promises.copyFile);
 
-export const fspUnlink = fs.promises.unlink;
+export const fspUnlink = asyncWrap(fs.promises.unlink);
 
-export const fspReaddir = fs.promises.readdir;
+export const fspReaddir = asyncWrap(fs.promises.readdir);
 
-export const fspRename = fs.promises.rename;
+export const fspRename = asyncWrap(fs.promises.rename);
 
-export const fspWriteFile = fs.promises.writeFile;
+export const fspWriteFile = asyncWrap(fs.promises.writeFile);
+
+export const fspReadFile = asyncWrap(fs.promises.readFile);
 
 export function fsxMkdirpSync(path: string) {
   if (!fsExistsSync(path)) {
@@ -48,14 +61,14 @@ export function fsxMkdirpSync(path: string) {
 }
 
 export function fsxReadTextFile(fpath: string): Promise<string> {
-  return fs.promises.readFile(fpath, { encoding: 'utf-8' });
+  return fspReadFile(fpath, { encoding: 'utf-8' });
 }
 
 export async function fsxReadJsonFile(filePath: string): Promise<any> {
   let text: string;
   let obj: any;
   try {
-    text = await fs.promises.readFile(filePath, { encoding: 'utf-8' });
+    text = await fspReadFile(filePath, { encoding: 'utf-8' });
   } catch (error) {
     throw new AppError({ type: 'CannotReadFile', filePath });
   }
@@ -73,7 +86,7 @@ export async function fsxWriteJsonFile(
 ): Promise<void> {
   const text = JSON.stringify(obj, null, '  ');
   try {
-    await fs.promises.writeFile(filePath, text);
+    await fspWriteFile(filePath, text);
   } catch (error) {
     throw new AppError({ type: 'CannotWriteFile', filePath });
   }
