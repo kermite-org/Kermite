@@ -9,10 +9,7 @@ import {
   ILayoutEditSource,
 } from '~/shared';
 import { applicationStorage } from '~/shell/base';
-import {
-  getAppErrorInfo,
-  makeCompactStackTrace,
-} from '~/shell/base/ErrorChecker';
+import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { createEventPort2 } from '~/shell/funcs';
 import { FileWather } from '~/shell/funcs/FileWatcher';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
@@ -93,18 +90,11 @@ export class LayoutManager implements ILayoutManager {
   private onObservedFileChanged = async () => {
     const filePath = this.getCurrentEditLayoutFilePath();
     if (filePath) {
-      try {
-        const loadedDesign = await LayoutFileLoader.loadLayoutFromFile(
-          filePath,
-        );
-        this.setStatus({
-          errroInfo: undefined,
-          loadedDesign,
-        });
-      } catch (error) {
-        console.error(makeCompactStackTrace(error));
-        this.setStatus({ errroInfo: getAppErrorInfo(error) });
-      }
+      const loadedDesign = await LayoutFileLoader.loadLayoutFromFile(filePath);
+      this.setStatus({
+        errroInfo: undefined,
+        loadedDesign,
+      });
     }
   };
 
@@ -131,7 +121,10 @@ export class LayoutManager implements ILayoutManager {
 
   private async loadLayoutFromFile(filePath: string) {
     const loadedDesign = await LayoutFileLoader.loadLayoutFromFile(filePath);
-    this.fileWatcher.observeFile(filePath, this.onObservedFileChanged);
+    this.fileWatcher.observeFile(
+      filePath,
+      withAppErrorHandler(this.onObservedFileChanged),
+    );
     this.setStatus({
       editSource: { type: 'File', filePath },
       loadedDesign,
@@ -300,14 +293,8 @@ export class LayoutManager implements ILayoutManager {
   }
 
   async executeCommands(commands: ILayoutManagerCommand[]): Promise<boolean> {
-    try {
-      for (const command of commands) {
-        await this.executeCommand(command);
-      }
-    } catch (error) {
-      console.error(makeCompactStackTrace(error));
-      this.setStatus({ errroInfo: getAppErrorInfo(error) });
-      return false;
+    for (const command of commands) {
+      await this.executeCommand(command);
     }
     return true;
   }
