@@ -1,5 +1,6 @@
 import { IPresetSpec, IProfileManagerStatus } from '~/shared';
 import { appEnv, appGlobal, applicationStorage } from '~/shell/base';
+import { executeWithAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
 import { KeyboardLayoutFilesWatcher } from '~/shell/projectResources/KeyboardShape/KeyboardLayoutFilesWatcher';
@@ -132,6 +133,7 @@ export class ApplicationRoot {
         JsonFileServiceStatic.saveObjectToJsonWithFileDialog,
       file_getOpenDirectoryWithDialog:
         JsonFileServiceStatic.getOpeningDirectoryPathWithDialog,
+      global_triggerLazyInitializeServices: () => this.lazyInitialzeServices(),
     });
 
     appGlobal.icpMainAgent.supplySubscriptionHandlers({
@@ -140,6 +142,7 @@ export class ApplicationRoot {
         cb({ type: 'test_event_with_supplySubscriptionHandlers' });
         return () => {};
       },
+      global_appErrorEvents: (cb) => appGlobal.appErrorEventPort.subscribe(cb),
       profile_profileManagerStatus: (cb) => {
         this.profileManager.statusEventPort.subscribe(cb);
         return () => this.profileManager.statusEventPort.unsubscribe(cb);
@@ -179,11 +182,19 @@ export class ApplicationRoot {
     this.setupIpcBackend();
     this.windowWrapper.initialize();
     // todo: ここまでで例外が出た場合,システムダイアログでエラーを通知して終了する
+  }
 
-    // todo: 以下で例外が出た場合、アプリ画面上のモーダルでエラーを表示する
-    await this.profileManager.initializeAsync();
-    this.deviceService.initialize();
-    this.inputLogicSimulator.initialize();
+  private _lazyInitialized = false;
+  async lazyInitialzeServices() {
+    if (!this._lazyInitialized) {
+      // TODO: IPCにエラーハンドリングフックを組み込みそちらを使用
+      executeWithAppErrorHandler(async () => {
+        await this.profileManager.initializeAsync();
+        this.deviceService.initialize();
+        this.inputLogicSimulator.initialize();
+        this._lazyInitialized = true;
+      });
+    }
   }
 
   async terminate() {

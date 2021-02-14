@@ -221,9 +221,12 @@ export interface IAppIpcContract {
     file_loadObjectFromJsonWithFileDialog(): Promise<any | undefined>;
     file_saveObjectToJsonWithFileDialog(obj: any): Promise<boolean>;
     file_getOpenDirectoryWithDialog(): Promise<string | undefined>;
+
+    global_triggerLazyInitializeServices(): Promise<void>;
   };
   events: {
     dev_testEvent: { type: string };
+    global_appErrorEvents: IAppErrorInfo;
     window_appWindowStatus: Partial<IAppWindowStatus>;
 
     profile_currentProfile: IProfileData | undefined;

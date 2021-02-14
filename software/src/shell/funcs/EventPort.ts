@@ -33,11 +33,13 @@ export interface IEventPort2<T> {
   emit(event: T): void;
 }
 
-export function createEventPort2<T>(options: {
-  initialValueGetter?: () => T;
-  onFirstSubscriptionStarting?: () => void;
-  onLastSubscriptionEnded?: () => void;
-}): IEventPort2<T> {
+export function createEventPort2<T>(
+  options: {
+    initialValueGetter?: () => T;
+    onFirstSubscriptionStarting?: () => void;
+    onLastSubscriptionEnded?: () => void;
+  } = {},
+): IEventPort2<T> {
   const {
     initialValueGetter,
     onFirstSubscriptionStarting,

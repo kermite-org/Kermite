@@ -1,6 +1,7 @@
 import { BrowserWindow } from 'electron';
-import { IAppIpcContract, IProfileData } from '~/shared';
+import { IAppErrorInfo, IAppIpcContract, IProfileData } from '~/shared';
 import { IpcMainAgent } from '~/shared/xpc2/IpcMainAgent';
+import { createEventPort2 } from '~/shell/funcs';
 
 // interface IAppInternalEvents {
 //   keyboardConfigChanged: IKeyboardConfig;
@@ -11,4 +12,5 @@ export const appGlobal = new (class {
 
   currentProfileGetter: (() => IProfileData | undefined) | undefined;
   // eventBus = new TypedEventEmitter<IAppInternalEvents>();
+  appErrorEventPort = createEventPort2<IAppErrorInfo>();
 })();
