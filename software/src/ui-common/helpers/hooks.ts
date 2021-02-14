@@ -9,7 +9,7 @@ export function useLocal<T extends object>(arg: T | (() => T)) {
 export function useFetcher<T>(func: () => Promise<T>, defaultValue: T): T {
   const [value, setValue] = Hook.useState(defaultValue);
   Hook.useEffect(() => {
-    func().then(setValue);
+    func().then((value) => value && setValue(value));
   }, []);
   return value;
 }
