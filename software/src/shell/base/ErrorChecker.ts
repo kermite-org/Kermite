@@ -37,6 +37,7 @@ export async function executeWithAppErrorHandler(
   try {
     await func();
   } catch (error) {
+    console.error(error);
     appGlobal.appErrorEventPort.emit(getAppErrorInfo(error));
     if (executionContextName) {
       // setIntervalのコールバックなどで例外が発生した場合に、次回以降処理を実行しないようにする

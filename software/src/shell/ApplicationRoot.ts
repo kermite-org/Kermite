@@ -46,9 +46,10 @@ export class ApplicationRoot {
   private setupIpcBackend() {
     const windowWrapper = this.windowWrapper;
 
-    appGlobal.icpMainAgent.setErrorHandler((error) =>
-      appGlobal.appErrorEventPort.emit(getAppErrorInfo(error)),
-    );
+    appGlobal.icpMainAgent.setErrorHandler((error) => {
+      console.error(error);
+      appGlobal.appErrorEventPort.emit(getAppErrorInfo(error));
+    });
 
     appGlobal.icpMainAgent.supplySyncHandlers({
       dev_getVersionSync: () => 'v100',

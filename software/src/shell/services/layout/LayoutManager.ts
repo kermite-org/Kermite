@@ -99,6 +99,7 @@ export class LayoutManager implements ILayoutManager {
           loadedDesign,
         });
       } catch (error) {
+        console.error(error);
         this.setStatus({ errroInfo: getAppErrorInfo(error) });
       }
     }
@@ -301,6 +302,7 @@ export class LayoutManager implements ILayoutManager {
         await this.executeCommand(command);
       }
     } catch (error) {
+      console.error(error);
       this.setStatus({ errroInfo: getAppErrorInfo(error) });
       return false;
     }
