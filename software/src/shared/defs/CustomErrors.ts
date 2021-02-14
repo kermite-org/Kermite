@@ -17,7 +17,7 @@ export class AppError extends Error {
   }
 }
 
-export function getErrorInfo(error: Error | AppError): IAppErrorInfo {
+export function getAppErrorInfo(error: Error | AppError): IAppErrorInfo {
   if (error instanceof AppError) {
     return error.info;
   } else {

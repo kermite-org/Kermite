@@ -8,7 +8,7 @@ import {
   IPersistKeyboardDesign,
   ILayoutEditSource,
 } from '~/shared';
-import { getErrorInfo } from '~/shared/defs';
+import { getAppErrorInfo } from '~/shared/defs';
 import { applicationStorage } from '~/shell/base';
 import { createEventPort2 } from '~/shell/funcs';
 import { FileWather } from '~/shell/funcs/FileWatcher';
@@ -99,7 +99,7 @@ export class LayoutManager implements ILayoutManager {
           loadedDesign,
         });
       } catch (error) {
-        this.setStatus({ errroInfo: getErrorInfo(error) });
+        this.setStatus({ errroInfo: getAppErrorInfo(error) });
       }
     }
   };
@@ -301,7 +301,7 @@ export class LayoutManager implements ILayoutManager {
         await this.executeCommand(command);
       }
     } catch (error) {
-      this.setStatus({ errroInfo: getErrorInfo(error) });
+      this.setStatus({ errroInfo: getAppErrorInfo(error) });
       return false;
     }
     return true;
