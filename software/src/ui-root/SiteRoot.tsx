@@ -6,6 +6,7 @@ import { DebugOverlay } from '~/ui-common/fundamental/overlay/DebugOverlay';
 import { ForegroundModalLayerRoot } from '~/ui-common/fundamental/overlay/ForegroundModalLayer';
 import { siteModel } from '~/ui-common/sharedModels/SiteModel';
 import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
+import { globalAppServicesInitializerEffect } from '~/ui-root/AppServicesInitializer';
 import { SiteDpiScaler } from '~/ui-root/views/window/SiteDpiScaler';
 import { WidgetZoneRoot } from '~/ui-widget';
 import { ConfiguratorZoneRoot } from './ConfiguratorZoneRoot';
@@ -40,6 +41,7 @@ const cssSiteRoot = css`
 
 export const SiteRoot = () => {
   Hook.useEffect(router.rerenderEffectOnHashChange, []);
+  Hook.useEffect(globalAppServicesInitializerEffect, []);
   Hook.useEffect(siteModel.setupLifecycle, []);
   Hook.useEffect(globalHintMouseMoveHandlerEffect, []);
   router.useRedirect(['', '/'], '/editor');
