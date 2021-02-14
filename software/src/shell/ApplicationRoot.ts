@@ -191,8 +191,8 @@ export class ApplicationRoot {
     // todo: 以下で例外が出た場合,システムダイアログでエラーを通知して終了する
     this.inputLogicSimulator.terminate();
     this.deviceService.terminate();
-    await this.profileManager.terminateAsync();
     this.windowWrapper.terminate();
+    await this.profileManager.terminateAsync();
     await applicationStorage.terminateAsync();
   }
 }
