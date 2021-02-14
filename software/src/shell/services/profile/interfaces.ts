@@ -11,5 +11,5 @@ export interface IProfileManager {
   statusEventPort: EventPort<Partial<IProfileManagerStatus>>;
   reserveSaveProfileTask(prof: IProfileData): void;
   executeCommands(commands: IProfileManagerCommand[]): Promise<void>;
-  saveCurrentProfile(profileData: IProfileData): Promise<boolean>;
+  saveCurrentProfile(profileData: IProfileData): Promise<void>;
 }
