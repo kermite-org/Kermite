@@ -75,23 +75,13 @@ export class ProfileManager implements IProfileManager {
   }
 
   async initializeAsync() {
-    try {
-      await this.core.ensureProfilesDirectoryExists();
-      const allProfileNames = await this.initializeProfileList();
-      const initialProfileName = this.getInitialProfileName(allProfileNames);
-      this.setStatus({ allProfileNames });
-      await this.loadProfile(initialProfileName);
-
-      // debug
-      // setTimeout(() => {
-      //   const idx = (Math.random() * (allProfileNames.length - 1)) >> 0;
-      //   console.log({ name: this.status.allProfileNames, idx });
-      //   this.loadProfile(this.status.allProfileNames[idx]);
-      // }, 3000);
-    } catch (error) {
-      // todo: check various cases
-      // todo: check error when data or data/profiles is not exists
-    }
+    await this.core.ensureProfilesDirectoryExists();
+    const allProfileNames = await this.initializeProfileList();
+    const initialProfileName = this.getInitialProfileName(allProfileNames);
+    this.setStatus({ allProfileNames });
+    await this.loadProfile(initialProfileName);
+    // todo: check various cases
+    // todo: check error when data or data/profiles is not exists
   }
 
   async terminateAsync() {
