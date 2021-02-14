@@ -1,8 +1,10 @@
 import { ipcMain } from 'electron';
 import { IIpcContractBase } from './IpcContractBase';
 
+type IErrorHandler = (error: any) => void;
 export interface IIpcMainAgent<T extends IIpcContractBase> {
   setWebcontents(webContents: Electron.webContents): void;
+  setErrorHandler(errorHandler: IErrorHandler): void;
   supplySyncHandlers(handlers: T['sync']): void;
   supplyAsyncHandlers(handlers: T['async']): void;
   supplySubscriptionHandlers(
@@ -18,6 +20,12 @@ export class IpcMainAgent<T extends IIpcContractBase>
   implements IIpcMainAgent<T> {
   private webContents: Electron.webContents | undefined;
 
+  private errorHandler: IErrorHandler = console.error;
+
+  setErrorHandler(errorHandler: IErrorHandler) {
+    this.errorHandler = errorHandler;
+  }
+
   setWebcontents(webContents: Electron.WebContents): void {
     this.webContents = webContents;
   }
@@ -26,7 +34,11 @@ export class IpcMainAgent<T extends IIpcContractBase>
     for (const key in handlers) {
       const handler = handlers[key];
       ipcMain.on(key, (event, ...args) => {
-        event.returnValue = handler(...args);
+        try {
+          event.returnValue = handler(...args);
+        } catch (error) {
+          this.errorHandler(error);
+        }
       });
     }
   }
@@ -34,8 +46,12 @@ export class IpcMainAgent<T extends IIpcContractBase>
   supplyAsyncHandlers(handlers: T['async']): void {
     for (const key in handlers) {
       const handler = handlers[key];
-      ipcMain.handle(key, (event, ...args) => {
-        return handler(...args);
+      ipcMain.handle(key, async (event, ...args) => {
+        try {
+          return await handler(...args);
+        } catch (error) {
+          this.errorHandler(error);
+        }
       });
     }
   }

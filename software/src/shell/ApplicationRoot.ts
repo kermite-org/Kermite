@@ -1,4 +1,4 @@
-import { IPresetSpec, IProfileManagerStatus } from '~/shared';
+import { getAppErrorInfo, IPresetSpec, IProfileManagerStatus } from '~/shared';
 import { appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { executeWithAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
@@ -42,6 +42,10 @@ export class ApplicationRoot {
 
   private setupIpcBackend() {
     const windowWrapper = this.windowWrapper;
+
+    appGlobal.icpMainAgent.setErrorHandler((error) =>
+      appGlobal.appErrorEventPort.emit(getAppErrorInfo(error)),
+    );
 
     appGlobal.icpMainAgent.supplySyncHandlers({
       dev_getVersionSync: () => 'v100',
@@ -184,16 +188,13 @@ export class ApplicationRoot {
     // todo: ここまでで例外が出た場合,システムダイアログでエラーを通知して終了する
   }
 
-  private _lazyInitialized = false;
+  private _lazyInitializeTriggered = false;
   async lazyInitialzeServices() {
-    if (!this._lazyInitialized) {
-      // TODO: IPCにエラーハンドリングフックを組み込みそちらを使用
-      executeWithAppErrorHandler(async () => {
-        await this.profileManager.initializeAsync();
-        this.deviceService.initialize();
-        this.inputLogicSimulator.initialize();
-        this._lazyInitialized = true;
-      });
+    if (!this._lazyInitializeTriggered) {
+      this._lazyInitializeTriggered = true;
+      await this.profileManager.initializeAsync();
+      this.deviceService.initialize();
+      this.inputLogicSimulator.initialize();
     }
   }
 
