@@ -1,4 +1,5 @@
 import { IntervalTimerWrapper } from '~/shared';
+import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { createEventPort2 } from '~/shell/funcs';
 import { ComPortsResource } from './ComPortsResource';
 
@@ -18,7 +19,13 @@ export class ComPortsMonitor {
 
   private initializeTicker() {
     this.comPortEnumerationStartTime = Date.now();
-    this.timerWrapper.start(this.updateComPortsMonitor, 1000);
+    this.timerWrapper.start(
+      withAppErrorHandler(
+        this.updateComPortsMonitor,
+        'ComPortsMonitor_updateComPortsMonitor',
+      ),
+      1000,
+    );
   }
 
   private terminateTicker() {

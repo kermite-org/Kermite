@@ -5,6 +5,7 @@ import {
   IProfileManagerStatus,
   IRealtimeKeyboardEvent,
 } from '~/shared';
+import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
 import { KeyboardDeviceService } from '~/shell/services/device/KeyboardDevice';
 import { ProfileManager } from '~/shell/services/profile/ProfileManager';
@@ -143,7 +144,13 @@ export class InputLogicSimulatorD {
     this.deviceService.realtimeEventPort.subscribe(
       this.onRealtimeKeyboardEvent,
     );
-    this.tickerTimer.start(this.processTicker, 5);
+    this.tickerTimer.start(
+      withAppErrorHandler(
+        this.processTicker,
+        'InputLogicSimulatorD_processTicker',
+      ),
+      5,
+    );
     this.updateSourceSetup();
   }
 

@@ -1,5 +1,6 @@
 import * as HID from 'node-hid';
 import { delayMs } from '~/shared';
+import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { zeros } from '~/shell/services/device/KeyMappingEmitter/Helpers';
 
 function getArrayFromBuffer(data: any) {
@@ -52,16 +53,22 @@ export class DeviceWrapper {
       serialNumberSearchWord,
     );
     if (this.device) {
-      this.device.on('data', (data) => {
-        const buf = getArrayFromBuffer(data);
-        if (this.receiverFunc) {
-          this.receiverFunc(buf);
-        }
-      });
-      this.device.on('error', (error) => {
-        console.log(`error occured: ${error}`);
-        this.closedCallback?.();
-      });
+      this.device.on(
+        'data',
+        withAppErrorHandler((data) => {
+          const buf = getArrayFromBuffer(data);
+          if (this.receiverFunc) {
+            this.receiverFunc(buf);
+          }
+        }),
+      );
+      this.device.on(
+        'error',
+        withAppErrorHandler((error) => {
+          console.log(`error occured: ${error}`);
+          this.closedCallback?.();
+        }),
+      );
       return true;
     } else {
       return false;
