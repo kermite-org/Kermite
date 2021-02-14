@@ -1,5 +1,6 @@
 import { getAppErrorInfo, IPresetSpec, IProfileManagerStatus } from '~/shared';
 import { appEnv, appGlobal, applicationStorage } from '~/shell/base';
+import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
 import { KeyboardLayoutFilesWatcher } from '~/shell/projectResources/KeyboardShape/KeyboardLayoutFilesWatcher';
@@ -180,11 +181,12 @@ export class ApplicationRoot {
   }
 
   async initialize() {
-    console.log(`initialize services`);
-    await applicationStorage.initializeAsync();
-    this.setupIpcBackend();
-    this.windowWrapper.initialize();
-    // todo: ここまでで例外が出た場合,システムダイアログでエラーを通知して終了する
+    await executeWithFatalErrorHandler(async () => {
+      console.log(`initialize services`);
+      await applicationStorage.initializeAsync();
+      this.setupIpcBackend();
+      this.windowWrapper.initialize();
+    });
   }
 
   private _lazyInitializeTriggered = false;
@@ -198,12 +200,13 @@ export class ApplicationRoot {
   }
 
   async terminate() {
-    console.log(`terminate services`);
-    // todo: 以下で例外が出た場合,システムダイアログでエラーを通知して終了する
-    this.inputLogicSimulator.terminate();
-    this.deviceService.terminate();
-    this.windowWrapper.terminate();
-    await this.profileManager.terminateAsync();
-    await applicationStorage.terminateAsync();
+    await executeWithFatalErrorHandler(async () => {
+      console.log(`terminate services`);
+      this.inputLogicSimulator.terminate();
+      this.deviceService.terminate();
+      this.windowWrapper.terminate();
+      await this.profileManager.terminateAsync();
+      await applicationStorage.terminateAsync();
+    });
   }
 }
