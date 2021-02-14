@@ -104,8 +104,8 @@ export class KeyboardDeviceService {
   }
 
   initialize() {
-    const dw = new DeviceWrapper();
-    const isOpen = dw.open(
+    const deviceWrapper = new DeviceWrapper();
+    const isOpen = deviceWrapper.open(
       0xf055, // vid
       0xa577, // pid
       [
@@ -123,15 +123,15 @@ export class KeyboardDeviceService {
       console.log(`failed to open device`);
       return;
     }
-    this.deviceWrapper = dw;
-    dw.setReceiverFunc((buf) => {
+    this.deviceWrapper = deviceWrapper;
+    deviceWrapper.setReceiverFunc((buf) => {
       this.decodeReceivedBytes(buf);
     });
-    dw.onClosed(() => {
+    deviceWrapper.onClosed(() => {
       this.setStatus({ isConnected: false, deviceAttrs: undefined });
     });
 
-    dw.writeSingleFrame([0xf0, 0x10]); // device attributes request
+    deviceWrapper.writeSingleFrame([0xf0, 0x10]); // device attributes request
   }
 
   terminate() {
