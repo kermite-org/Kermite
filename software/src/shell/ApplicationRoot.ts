@@ -1,6 +1,5 @@
 import { getAppErrorInfo, IPresetSpec, IProfileManagerStatus } from '~/shared';
 import { appEnv, appGlobal, applicationStorage } from '~/shell/base';
-import { executeWithAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
 import { KeyboardLayoutFilesWatcher } from '~/shell/projectResources/KeyboardShape/KeyboardLayoutFilesWatcher';
@@ -108,7 +107,7 @@ export class ApplicationRoot {
         const layoutStandard = this.keyboardConfigProvider.getKeyboardConfig()
           .layoutStandard;
         if (profile) {
-          KeyMappingEmitter.emitKeyAssignsToDevice(
+          await KeyMappingEmitter.emitKeyAssignsToDevice(
             profile,
             layoutStandard,
             this.deviceService,
