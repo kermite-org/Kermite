@@ -1,6 +1,26 @@
 import { app, dialog } from 'electron';
-import { getAppErrorInfo } from '~/shared';
+import { AppError, IAppErrorInfo } from '~/shared';
+import { appEnv } from '~/shell/base/AppEnv';
 import { appGlobal } from '~/shell/base/appGlobal';
+
+export function getAppErrorInfo(error: AppError | Error | any): IAppErrorInfo {
+  if (error instanceof AppError) {
+    return error.info;
+  } else if (typeof error === 'string') {
+    return { type: 'RawException', message: error };
+  } else {
+    const baseDir = appEnv.resolveApplicationRootDir();
+    return {
+      type: 'RawException',
+      message:
+        error.stack
+          .replaceAll(baseDir + '/', '')
+          .replaceAll(/\/Users\/[^/]+/g, '~') ||
+        error.message ||
+        error.toString(),
+    };
+  }
+}
 
 const badExcutionContextNames: string[] = [];
 

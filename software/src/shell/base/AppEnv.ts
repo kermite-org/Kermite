@@ -1,5 +1,5 @@
 import { app } from 'electron';
-import { pathJoin } from '~/shell/funcs';
+import { pathJoin, pathResolve } from '~/shell/funcs';
 
 export const appEnv = new (class {
   isDevelopment = process.env.NODE_ENV === 'development';
@@ -17,5 +17,9 @@ export const appEnv = new (class {
   resolveTempFilePath(relPath: string) {
     const tmpDir = app.getPath('temp');
     return pathJoin(tmpDir, relPath);
+  }
+
+  resolveApplicationRootDir() {
+    return pathResolve();
   }
 })();

@@ -17,16 +17,6 @@ export class AppError extends Error {
   }
 }
 
-export function getAppErrorInfo(error: Error | AppError): IAppErrorInfo {
-  if (error instanceof AppError) {
-    return error.info;
-  } else if (typeof error === 'string') {
-    return { type: 'RawException', message: error };
-  } else {
-    return { type: 'RawException', message: error.message };
-  }
-}
-
 type IErrorType = IAppErrorInfo['type'];
 
 const errorTextMapEN: { [key in IErrorType]: string } = {

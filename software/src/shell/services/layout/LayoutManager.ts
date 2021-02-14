@@ -8,8 +8,8 @@ import {
   IPersistKeyboardDesign,
   ILayoutEditSource,
 } from '~/shared';
-import { getAppErrorInfo } from '~/shared/defs';
 import { applicationStorage } from '~/shell/base';
+import { getAppErrorInfo } from '~/shell/base/ErrorChecker';
 import { createEventPort2 } from '~/shell/funcs';
 import { FileWather } from '~/shell/funcs/FileWatcher';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';

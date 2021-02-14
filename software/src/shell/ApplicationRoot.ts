@@ -1,6 +1,9 @@
-import { getAppErrorInfo, IPresetSpec, IProfileManagerStatus } from '~/shared';
+import { IPresetSpec, IProfileManagerStatus } from '~/shared';
 import { appEnv, appGlobal, applicationStorage } from '~/shell/base';
-import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
+import {
+  executeWithFatalErrorHandler,
+  getAppErrorInfo,
+} from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
 import { KeyboardLayoutFilesWatcher } from '~/shell/projectResources/KeyboardShape/KeyboardLayoutFilesWatcher';
