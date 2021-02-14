@@ -8,7 +8,8 @@ function asyncWrap<T extends (...args: any[]) => Promise<any>>(func: T): T {
     try {
       return await func(...args);
     } catch (error: any) {
-      // ファイル操作関数の元の例外にスタックトレースが含まれておらず、Errorのインスタンスとして再度throwすることでスタックトレースを付与する
+      // ファイル操作関数の元の例外にスタックトレースが含まれておらず、
+      // Errorのインスタンスとして再度throwすることでスタックトレースを付与する
       throw new Error(error);
     }
   }) as any;
@@ -42,17 +43,45 @@ export const fsMkdirSync = fs.mkdirSync;
 
 export const fspMkdir = asyncWrap(fs.promises.mkdir);
 
-export const fspCopyFile = asyncWrap(fs.promises.copyFile);
-
 export const fspUnlink = asyncWrap(fs.promises.unlink);
 
-export const fspReaddir = asyncWrap(fs.promises.readdir);
+export const fspCopyFile = asyncWrap(fs.promises.copyFile);
 
 export const fspRename = asyncWrap(fs.promises.rename);
 
-export const fspWriteFile = asyncWrap(fs.promises.writeFile);
+export const fspReaddir = asyncWrap(fs.promises.readdir);
 
-export const fspReadFile = asyncWrap(fs.promises.readFile);
+export async function fsxDeleteFile(filePath: string): Promise<void> {
+  try {
+    return await fs.promises.unlink(filePath);
+  } catch (error) {
+    throw new AppError({ type: 'CannotDeleteFile', filePath }, error);
+  }
+}
+
+export async function fsxCopyFile(src: string, dest: string): Promise<void> {
+  try {
+    return await fs.promises.copyFile(src, dest);
+  } catch (error) {
+    throw new AppError({ type: 'CannotCopyFile' }, error);
+  }
+}
+
+export async function fsxRenameFile(src: string, dest: string): Promise<void> {
+  try {
+    return await fs.promises.rename(src, dest);
+  } catch (error) {
+    throw new AppError({ type: 'CannotRenameFile' }, error);
+  }
+}
+
+export async function fsxReaddir(folderPath: string): Promise<string[]> {
+  try {
+    return await fs.promises.readdir(folderPath);
+  } catch (error) {
+    throw new AppError({ type: 'CannotReadFolder', folderPath }, error);
+  }
+}
 
 export function fsxMkdirpSync(path: string) {
   if (!fsExistsSync(path)) {
@@ -60,24 +89,32 @@ export function fsxMkdirpSync(path: string) {
   }
 }
 
-export function fsxReadTextFile(fpath: string): Promise<string> {
-  return fspReadFile(fpath, { encoding: 'utf-8' });
+export async function fsxReadFile(filePath: string): Promise<string> {
+  try {
+    return await fs.promises.readFile(filePath, { encoding: 'utf-8' });
+  } catch (error) {
+    throw new AppError({ type: 'CannotReadFile', filePath }, error);
+  }
 }
 
 export async function fsxReadJsonFile(filePath: string): Promise<any> {
-  let text: string;
-  let obj: any;
+  const text = await fsxReadFile(filePath);
   try {
-    text = await fspReadFile(filePath, { encoding: 'utf-8' });
-  } catch (error) {
-    throw new AppError({ type: 'CannotReadFile', filePath });
-  }
-  try {
-    obj = JSON.parse(text);
+    return JSON.parse(text);
   } catch (error) {
     throw new AppError({ type: 'InvalidJsonFileContent', filePath });
   }
-  return obj;
+}
+
+export async function fsxWriteFile(
+  filePath: string,
+  content: string,
+): Promise<void> {
+  try {
+    await fs.promises.writeFile(filePath, content);
+  } catch (error) {
+    throw new AppError({ type: 'CannotWriteFile', filePath });
+  }
 }
 
 export async function fsxWriteJsonFile(
@@ -85,11 +122,7 @@ export async function fsxWriteJsonFile(
   obj: any,
 ): Promise<void> {
   const text = JSON.stringify(obj, null, '  ');
-  try {
-    await fspWriteFile(filePath, text);
-  } catch (error) {
-    throw new AppError({ type: 'CannotWriteFile', filePath });
-  }
+  return await fsxWriteFile(filePath, text);
 }
 
 export function fsxWatchFilesChange(

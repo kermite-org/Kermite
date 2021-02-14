@@ -7,7 +7,7 @@ import { createProjectSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { appEnv } from '~/shell/base';
 import {
   fsExistsSync,
-  fspReaddir,
+  fsxReaddir,
   fsxReadJsonFile,
   globAsync,
   pathBasename,
@@ -34,7 +34,7 @@ namespace ProjectResourceInfoSourceLoader {
 
   async function readPresetNames(presetsFolderPath: string): Promise<string[]> {
     if (fsExistsSync(presetsFolderPath)) {
-      return (await fspReaddir(presetsFolderPath))
+      return (await fsxReaddir(presetsFolderPath))
         .filter((fpath) => fpath.endsWith('.json'))
         .map((fpath) => pathBasename(fpath, '.json'));
     } else {
@@ -43,7 +43,7 @@ namespace ProjectResourceInfoSourceLoader {
   }
 
   async function readLayoutNames(projectFolderPath: string): Promise<string[]> {
-    return (await fspReaddir(projectFolderPath))
+    return (await fsxReaddir(projectFolderPath))
       .filter((fileName) => fileName.endsWith('.layout.json'))
       .map((fileName) => pathBasename(fileName, '.layout.json'));
   }
