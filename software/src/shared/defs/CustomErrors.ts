@@ -72,3 +72,43 @@ export function getErrorText(info: IAppErrorInfo, lang: 'EN' | 'JP') {
   }
   return message;
 }
+
+export function makeCompactStackTrace(error: { stack?: string }) {
+  return error.stack?.split(/\r?\n/).slice(0, 2).join('\n');
+}
+
+export function makeRelativeStackTrace(
+  error: {
+    stack?: string;
+    message?: string;
+  },
+  rootDir: string,
+): string {
+  if (error.stack) {
+    return error.stack
+      .replaceAll(rootDir + '/', '')
+      .replaceAll(/\/Users\/[^/]+/g, '~');
+  } else if (error.message) {
+    return error.message;
+  } else {
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
+    return error.toString();
+  }
+}
+
+export function getAppErrorData(
+  error: AppError | Error | any,
+  rootDir: string,
+): IAppErrorData {
+  if (error instanceof AppError) {
+    return { info: error.info, stack: makeRelativeStackTrace(error, rootDir) };
+  } else {
+    return {
+      info: {
+        type: 'RawException',
+        message: error.message || error.toString(),
+      },
+      stack: makeRelativeStackTrace(error, rootDir),
+    };
+  }
+}

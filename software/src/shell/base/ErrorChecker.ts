@@ -1,42 +1,7 @@
 import { app, dialog } from 'electron';
-import { AppError, IAppErrorData } from '~/shared';
+import { getAppErrorData, makeCompactStackTrace } from '~/shared';
 import { appEnv } from '~/shell/base/AppEnv';
 import { appGlobal } from '~/shell/base/appGlobal';
-
-export function makeCompactStackTrace(error: { stack?: string }) {
-  return error.stack?.split(/\r?\n/).slice(0, 2).join('\n');
-}
-
-export function makeRelativeStackTrace(error: {
-  stack?: string;
-  message?: string;
-}): string {
-  if (error.stack) {
-    const baseDir = appEnv.resolveApplicationRootDir();
-    return error.stack
-      .replaceAll(baseDir + '/', '')
-      .replaceAll(/\/Users\/[^/]+/g, '~');
-  } else if (error.message) {
-    return error.message;
-  } else {
-    // eslint-disable-next-line @typescript-eslint/no-base-to-string
-    return error.toString();
-  }
-}
-
-export function getAppErrorData(error: AppError | Error | any): IAppErrorData {
-  if (error instanceof AppError) {
-    return { info: error.info, stack: makeRelativeStackTrace(error) };
-  } else {
-    return {
-      info: {
-        type: 'RawException',
-        message: error.message || error.toString(),
-      },
-      stack: makeRelativeStackTrace(error),
-    };
-  }
-}
 
 const badExcutionContextNames: string[] = [];
 
@@ -53,8 +18,9 @@ export async function executeWithAppErrorHandler(
   try {
     await func();
   } catch (error) {
+    const rootDir = appEnv.resolveApplicationRootDir();
     console.error(makeCompactStackTrace(error));
-    appGlobal.appErrorEventPort.emit(getAppErrorData(error));
+    appGlobal.appErrorEventPort.emit(getAppErrorData(error, rootDir));
     if (executionContextName) {
       // setIntervalのコールバックなどで例外が発生した場合に、次回以降処理を実行しないようにする
       badExcutionContextNames.push(executionContextName);
