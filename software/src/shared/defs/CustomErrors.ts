@@ -8,7 +8,8 @@ export type IAppErrorInfo =
   | { type: 'RawException'; message: string }
   | { type: 'CannotDeleteFile'; filePath: string }
   | { type: 'CannotRenameFile' }
-  | { type: 'CannotCopyFile' };
+  | { type: 'CannotCopyFile' }
+  | { type: 'WrappedException'; text: string };
 
 export type IAppErrorData = {
   info: IAppErrorInfo;
@@ -21,9 +22,13 @@ export class AppError extends Error {
   constructor(info: IAppErrorInfo, original?: any) {
     const { type, ...rest } = info;
     const message = `AppError: ${type} ${JSON.stringify(rest)}`;
-    super(original || message);
+    super(original?.message || message);
     this.info = info;
   }
+}
+
+export function wrappedError(text: string, original?: any) {
+  return new AppError({ type: 'WrappedException', text }, original);
 }
 
 type IErrorType = IAppErrorInfo['type'];
@@ -39,6 +44,7 @@ const errorTextMapEN: { [key in IErrorType]: string } = {
   InvalidLayoutFileSchema: `invalid schema for file {filePath} {errorDetail}`,
   InvalidProjectFileSchema: `invalid schema for file {filePath} {errorDetail}`,
   RawException: `{message}`,
+  WrappedException: `{text}`,
 };
 
 const errorTextMapJP: { [key in IErrorType]: string } = {
@@ -52,6 +58,7 @@ const errorTextMapJP: { [key in IErrorType]: string } = {
   InvalidLayoutFileSchema: `レイアウトファイル {filePath} の形式が不正です。\n詳細:\n{errorDetail}`,
   InvalidProjectFileSchema: `プロジェクトファイル {filePath} の形式が不正です。\n詳細:\n{errorDetail}`,
   RawException: `{message}`,
+  WrappedException: `{text}`,
 };
 
 export function getErrorText(info: IAppErrorInfo, lang: 'EN' | 'JP') {
