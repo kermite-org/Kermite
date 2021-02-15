@@ -23,7 +23,6 @@ export class ProfileManager implements IProfileManager {
     currentProfileName: '',
     allProfileNames: [],
     loadedProfileData: undefined,
-    errorMessage: '',
   };
 
   private savingProfileData: IProfileData | undefined = undefined;

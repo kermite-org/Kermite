@@ -33,9 +33,6 @@ export class ProfilesModel {
     if (payload.loadedProfileData) {
       this.editorModel.loadProfileData(payload.loadedProfileData);
     }
-    if (payload.errorMessage) {
-      alert(payload.errorMessage);
-    }
   };
 
   // actions

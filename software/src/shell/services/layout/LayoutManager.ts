@@ -32,7 +32,6 @@ export class LayoutManager implements ILayoutManager {
     },
     loadedDesign: createFallbackPersistKeyboardDesign(),
     projectLayoutsInfos: [],
-    errroInfo: undefined,
   };
 
   private initialized = false;
@@ -48,6 +47,7 @@ export class LayoutManager implements ILayoutManager {
         await this.loadLayoutByEditSource(editSource);
       } catch (error) {
         // 読み込めない場合は初期状態のままで、特にエラーを通知しない
+        console.log(`error while loading previous edit layout file`);
         console.log(error);
       }
       this.initialized = true;
@@ -92,7 +92,6 @@ export class LayoutManager implements ILayoutManager {
     if (filePath) {
       const loadedDesign = await LayoutFileLoader.loadLayoutFromFile(filePath);
       this.setStatus({
-        errroInfo: undefined,
         loadedDesign,
       });
     }
@@ -307,10 +306,6 @@ export class LayoutManager implements ILayoutManager {
       keyboardName: info.keyboardName,
       layoutNames: info.layoutNames,
     }));
-  }
-
-  clearErrorInfo() {
-    this.setStatus({ errroInfo: undefined });
   }
 
   showEditLayoutFileInFiler() {

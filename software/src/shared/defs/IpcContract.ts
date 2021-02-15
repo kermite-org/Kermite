@@ -1,4 +1,4 @@
-import { IAppErrorData, IAppErrorInfo } from '~/shared/defs/CustomErrors';
+import { IAppErrorData } from '~/shared/defs/CustomErrors';
 import { IPersistKeyboardDesign } from '~/shared/defs/KeyboardDesign';
 import { IKeyboardConfig } from './ConfigTypes';
 import { IProfileData } from './ProfileData';
@@ -30,7 +30,6 @@ export interface IProfileManagerStatus {
   currentProfileName: string;
   allProfileNames: string[];
   loadedProfileData: IProfileData | undefined;
-  errorMessage: string;
 }
 
 export interface IKeyboardDeviceStatus {
@@ -102,7 +101,6 @@ export type ILayoutEditSource =
 export interface ILayoutManagerStatus {
   editSource: ILayoutEditSource;
   loadedDesign: IPersistKeyboardDesign;
-  errroInfo: IAppErrorInfo | undefined;
   projectLayoutsInfos: IProjectLayoutsInfo[];
 }
 
@@ -187,7 +185,6 @@ export interface IAppIpcContract {
       commands: ILayoutManagerCommand[],
     ): Promise<boolean>;
 
-    layout_clearErrorInfo(): Promise<void>;
     layout_showEditLayoutFileInFiler(): Promise<void>;
     // layout_getAllProjectLayoutsInfos(): Promise<IProjectLayoutsInfo[]>;
 
@@ -226,7 +223,7 @@ export interface IAppIpcContract {
   };
   events: {
     dev_testEvent: { type: string };
-    global_appErrorEvents: IAppErrorData;
+    global_appErrorEvents: IAppErrorData<any>;
     window_appWindowStatus: Partial<IAppWindowStatus>;
 
     profile_currentProfile: IProfileData | undefined;
