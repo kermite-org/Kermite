@@ -55,7 +55,7 @@ export async function fsxDeleteFile(filePath: string): Promise<void> {
   try {
     return await fs.promises.unlink(filePath);
   } catch (error) {
-    throw new AppError({ type: 'CannotDeleteFile', filePath }, error);
+    throw new AppError('CannotDeleteFile', { filePath }, error);
   }
 }
 
@@ -63,7 +63,7 @@ export async function fsxCopyFile(src: string, dest: string): Promise<void> {
   try {
     return await fs.promises.copyFile(src, dest);
   } catch (error) {
-    throw new AppError({ type: 'CannotCopyFile' }, error);
+    throw new AppError('CannotCopyFile', { from: src, to: dest }, error);
   }
 }
 
@@ -71,7 +71,7 @@ export async function fsxRenameFile(src: string, dest: string): Promise<void> {
   try {
     return await fs.promises.rename(src, dest);
   } catch (error) {
-    throw new AppError({ type: 'CannotRenameFile' }, error);
+    throw new AppError('CannotRenameFile', { from: src, to: dest }, error);
   }
 }
 
@@ -79,7 +79,7 @@ export async function fsxReaddir(folderPath: string): Promise<string[]> {
   try {
     return await fs.promises.readdir(folderPath);
   } catch (error) {
-    throw new AppError({ type: 'CannotReadFolder', folderPath }, error);
+    throw new AppError('CannotReadFolder', { folderPath }, error);
   }
 }
 
@@ -93,7 +93,7 @@ export async function fsxReadFile(filePath: string): Promise<string> {
   try {
     return await fs.promises.readFile(filePath, { encoding: 'utf-8' });
   } catch (error) {
-    throw new AppError({ type: 'CannotReadFile', filePath }, error);
+    throw new AppError('CannotReadFile', { filePath }, error);
   }
 }
 
@@ -102,7 +102,7 @@ export async function fsxReadJsonFile(filePath: string): Promise<any> {
   try {
     return JSON.parse(text);
   } catch (error) {
-    throw new AppError({ type: 'InvalidJsonFileContent', filePath });
+    throw new AppError('InvalidJsonFileContent', { filePath }, error);
   }
 }
 
@@ -113,7 +113,7 @@ export async function fsxWriteFile(
   try {
     await fs.promises.writeFile(filePath, content);
   } catch (error) {
-    throw new AppError({ type: 'CannotWriteFile', filePath });
+    throw new AppError('CannotWriteFile', { filePath }, error);
   }
 }
 

@@ -15,10 +15,9 @@ export namespace LayoutFileLoader {
 
     const schemaError = checkLayoutFileContentObjectSchema(obj);
     if (schemaError) {
-      throw new AppError({
-        type: 'InvalidLayoutFileSchema',
+      throw new AppError('InvalidLayoutFileSchema', {
         filePath,
-        errorDetail: schemaError.toString().replace(/\\\\/g, '\\'),
+        schemaErrorDetail: schemaError.toString().replace(/\\\\/g, '\\'),
       });
     }
   }

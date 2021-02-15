@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import { wrappedError } from '~/shared';
+import { AppError } from '~/shared';
 
 export async function fetchJson(uri: string): Promise<any> {
   console.log(`fetching ${uri}`);
@@ -7,7 +7,7 @@ export async function fetchJson(uri: string): Promise<any> {
     const res = await fetch(uri);
     return await res.json();
   } catch (error) {
-    throw wrappedError(`failed to fetch remote resource: ${uri}`, error);
+    throw new AppError('FailedToLoadRemoteResource', { url: uri }, error);
   }
 }
 
@@ -17,7 +17,7 @@ export async function fetchText(uri: string): Promise<string> {
     const res = await fetch(uri);
     return await res.text();
   } catch (error) {
-    throw wrappedError(`failed to fetch remote resource: ${uri}`, error);
+    throw new AppError('FailedToLoadRemoteResource', { url: uri }, error);
   }
 }
 

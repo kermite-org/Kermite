@@ -12,5 +12,5 @@ export const appGlobal = new (class {
 
   currentProfileGetter: (() => IProfileData | undefined) | undefined;
   // eventBus = new TypedEventEmitter<IAppInternalEvents>();
-  appErrorEventPort = createEventPort2<IAppErrorData>();
+  appErrorEventPort = createEventPort2<IAppErrorData<any>>();
 })();
