@@ -32,20 +32,13 @@ export class KeyboardDeviceService {
 
   private async decodeReceivedBytes(buf: Uint8Array) {
     if (buf[0] === 0xf0 && buf[1] === 0x11) {
-      const firmwareReleaseBuildRevision = (buf[2] << 8) | buf[3];
+      // const firmwareReleaseBuildRevision = (buf[2] << 8) | buf[3];
       const firmwareConfigStorageRevision = buf[4];
       const firmwareMessageProtocolRevision = buf[5];
-      const keyIndexRange = buf[6];
-      const side = buf[7];
+      // const keyIndexRange = buf[6];
+      // const side = buf[7];
       const projectId = bytesToString([...buf].slice(8, 16));
-      console.log(`device attrs received`, {
-        firmwareReleaseBuildRevision,
-        firmwareConfigStorageRevision,
-        firmwareMessageProtocolRevision,
-        keyIndexRange,
-        side,
-        projectId,
-      });
+      console.log(`device attrs received, projectId: ${projectId}`);
       if (firmwareConfigStorageRevision !== ConfigStorageFormatRevision) {
         console.log(
           `incompatible config storage revision (software:${ConfigStorageFormatRevision} firmware:${firmwareConfigStorageRevision})`,
