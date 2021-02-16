@@ -28,12 +28,12 @@ export async function executeWithAppErrorHandler(
   }
 }
 
-export function withAppErrorHandler<T extends (...args: any) => any>(
+export function withAppErrorHandler<T extends (...args: any[]) => any>(
   handler: T,
   executionContextName: string = '',
 ) {
   return async (...args: Parameters<T>) => {
-    executeWithAppErrorHandler(executionContextName, () => handler(args));
+    executeWithAppErrorHandler(executionContextName, () => handler(...args));
   };
 }
 
