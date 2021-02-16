@@ -120,8 +120,7 @@ export function makeDipsalyErrorMessage(errorData: IAppErrorData<any>) {
         (key) => `${fieldNameDictionaryJP[key] || key}: ${params[key]}`, // TODO: 多言語対応
       )
       .join('\n');
-    return `${headline}
-${paramsLines}
+    return `${headline}${paramsLines ? '\n' + paramsLines : ''}
 
 詳細:
 ${stack}
