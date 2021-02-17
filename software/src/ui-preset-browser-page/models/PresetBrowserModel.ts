@@ -2,6 +2,7 @@ import {
   fallbackProfileData,
   IPresetSpec,
   IProfileData,
+  IProjectResourceInfo,
   IResourceOrigin,
 } from '~/shared';
 import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
@@ -66,12 +67,24 @@ class PresetBrowserModelHelper {
 }
 
 type IPresetSpecWithId = IPresetSpec & { id: string };
-export class PresetBrowserModel {
+
+interface IPresetBrowserModel {
+  currentProjectSig: string | undefined; // ${origin}#${projectId}
+  currentPresetSpecId: string | undefined; // blank$${layoutName}, preset$${presetName}
+  loadedProfileData: IProfileData;
+  optionProjectInfos: IProjectResourceInfo[];
+  optionPresetSpecs: IPresetSpecWithId[];
+  setCurrentProjectSig(projectSig: string): void;
+  setCurrentProjectByProjectId(projectId: string): void;
+  setCurrentPresetSpecId(specId: string): void;
+  editSelectedProjectPreset(): void;
+}
+export class PresetBrowserModel implements IPresetBrowserModel {
   private projectResourceModel = new ProjectResourceModel();
   private allProfileNames: string[] = [];
 
-  private _currentProjecSig: string | undefined;
-  private _currentPresetSpecId: string | undefined;
+  private _currentProjecSig: string | undefined; // ${origin}#${projectId}
+  private _currentPresetSpecId: string | undefined; // blank$${layoutName}, preset$${presetName}
   private _loadedProfileData: IProfileData = fallbackProfileData;
 
   get currentProjectSig() {
