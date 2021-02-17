@@ -19,7 +19,7 @@ export function useDeviceStatusModel(): IDeviceStatusModel {
 
   Hook.useEffect(
     () =>
-      ipcAgent.subscribe('device_keyboardDeviceStatusEvents', (status) => {
+      ipcAgent.events.device_keyboardDeviceStatusEvents.subscribe((status) => {
         if (status.isConnected !== undefined) {
           deviceStatus.isConnected = status.isConnected;
         }

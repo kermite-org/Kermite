@@ -229,7 +229,7 @@ export class PresetBrowserModel {
 
   startPageSession = () => {
     this.fetchResourceInfos();
-    return ipcAgent.subscribe('profile_profileManagerStatus', (status) => {
+    return ipcAgent.events.profile_profileManagerStatus.subscribe((status) => {
       if (status.allProfileNames) {
         this.allProfileNames = status.allProfileNames;
       }

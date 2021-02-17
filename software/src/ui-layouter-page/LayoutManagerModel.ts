@@ -177,8 +177,7 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     if (!appUi.isExecutedInApp) {
       return () => {};
     }
-    return ipcAgent.subscribe(
-      'layout_layoutManagerStatus',
+    return ipcAgent.events.layout_layoutManagerStatus.subscribe(
       this.onLayoutManagerStatus,
     );
   }

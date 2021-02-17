@@ -114,8 +114,7 @@ export class KeyboardShapesModel {
   startPageSession = () => {
     this.initialize();
 
-    return ipcAgent.subscribe(
-      'projects_layoutFileUpdationEvents',
+    return ipcAgent.events.projects_layoutFileUpdationEvents.subscribe(
       this.onLayoutFileUpdated,
     );
   };
