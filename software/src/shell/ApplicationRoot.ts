@@ -35,7 +35,10 @@ export class ApplicationRoot {
 
   private profileManager = new ProfileManager(this.presetProfileLoader);
 
-  private layoutManager = new LayoutManager(this.profileManager);
+  private layoutManager = new LayoutManager(
+    this.presetProfileLoader,
+    this.profileManager,
+  );
 
   private inputLogicSimulator = new InputLogicSimulatorD(
     this.profileManager,

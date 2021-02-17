@@ -11,9 +11,8 @@ import {
 import { appGlobal } from '~/shell/base';
 import { EventPort } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
-import { PresetProfileLoader } from '~/shell/services/profile/PresetProfileLoader';
 import { ProfileManagerCore } from './ProfileManagerCore';
-import { IProfileManager } from './interfaces';
+import { IPresetProfileLoader, IProfileManager } from './interfaces';
 
 const defaultProfileName = 'default';
 
@@ -29,7 +28,7 @@ export class ProfileManager implements IProfileManager {
 
   private core: ProfileManagerCore;
 
-  constructor(private presetProfileLoader: PresetProfileLoader) {
+  constructor(private presetProfileLoader: IPresetProfileLoader) {
     this.core = new ProfileManagerCore();
 
     appGlobal.currentProfileGetter = this.getCurrentProfile.bind(this);
@@ -118,6 +117,7 @@ export class ProfileManager implements IProfileManager {
       // );
       // await projectResourceProvider.reenumerateResourceInfos();
       projectResourceProvider.localResourceProviderImpl.clearCache();
+      this.presetProfileLoader.deleteProjectPresetProfileCache(projectId);
     }
   }
 
