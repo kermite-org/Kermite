@@ -6,9 +6,9 @@ import {
   IResourceOrigin,
 } from '~/shared';
 import { projectResourceProvider } from '~/shell/projectResources';
-import { IPresetProfileLoadingFeature } from '~/shell/projectResources/interfaces';
+import { IPresetProfileLoader } from '~/shell/services/profile/interfaces';
 
-export class PresetProfileLoader implements IPresetProfileLoadingFeature {
+export class PresetProfileLoader implements IPresetProfileLoader {
   private async createBlankProfileFromLayoutFile(
     origin: IResourceOrigin,
     projectId: string,
@@ -55,6 +55,14 @@ export class PresetProfileLoader implements IPresetProfileLoadingFeature {
   }
 
   private profileDataCache: { [key in string]: IProfileData | undefined } = {};
+
+  deleteProjectPresetProfileCache(projectId: string) {
+    for (const key in this.profileDataCache) {
+      if (key.includes(projectId)) {
+        delete this.profileDataCache[key];
+      }
+    }
+  }
 
   async loadPresetProfileData(
     origin: IResourceOrigin,
