@@ -9,6 +9,8 @@ export { qxGlobal };
 export * from './qx.d';
 
 export type FC<T extends {} = {}> = (props: T) => JSX.Element | null;
+export type QxChild = JSX.Element | string;
+export type QxChildren = QxChild | QxChild[];
 
 export function rerender() {
   qxGlobal.rerender();
