@@ -82,16 +82,17 @@ export class RealtimeHeatmapModel {
   };
 
   startPageSession = () => {
-    const unsub1 = ipcAgent.subscribe('profile_currentProfile', (profile) => {
-      if (profile) {
-        this.profileData = profile;
-        this.displayDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
-          profile.keyboardDesign,
-        );
-      }
-    });
-    const unsub2 = ipcAgent.subscribe(
-      'device_keyEvents',
+    const unsub1 = ipcAgent.events.profile_currentProfile.subscribe(
+      (profile) => {
+        if (profile) {
+          this.profileData = profile;
+          this.displayDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
+            profile.keyboardDesign,
+          );
+        }
+      },
+    );
+    const unsub2 = ipcAgent.events.device_keyEvents.subscribe(
       this.handleKeyboardEvent,
     );
     return () => {

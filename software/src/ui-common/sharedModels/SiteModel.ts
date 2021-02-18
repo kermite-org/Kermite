@@ -23,8 +23,7 @@ export class SiteModel {
   };
 
   setupLifecycle = () => {
-    return ipcAgent.subscribe(
-      'window_appWindowStatus',
+    return ipcAgent.events.window_appWindowStatus.subscribe(
       this.onAppWindowStatusEvent,
     );
   };

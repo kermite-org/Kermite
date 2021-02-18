@@ -116,12 +116,12 @@ export class PlayerModel {
   };
 
   initialize() {
-    ipcAgent.subscribe2('device_keyEvents', this.handlekeyEvents);
-    ipcAgent.subscribe2('profile_currentProfile', this.onProfileData);
+    ipcAgent.events.device_keyEvents.subscribe(this.handlekeyEvents);
+    ipcAgent.events.profile_currentProfile.subscribe(this.onProfileData);
   }
 
   finalize() {
-    ipcAgent.unsubscribe2('device_keyEvents', this.handlekeyEvents);
-    ipcAgent.unsubscribe2('profile_currentProfile', this.onProfileData);
+    ipcAgent.events.device_keyEvents.unsubscribe(this.handlekeyEvents);
+    ipcAgent.events.profile_currentProfile.unsubscribe(this.onProfileData);
   }
 }

@@ -19,12 +19,13 @@ export class ProfileProvider {
   };
 
   initialize() {
-    ipcAgent.subscribe2('profile_profileManagerStatus', this.onProfileChanged);
+    ipcAgent.events.profile_profileManagerStatus.subscribe(
+      this.onProfileChanged,
+    );
   }
 
   finalize() {
-    ipcAgent.unsubscribe2(
-      'profile_profileManagerStatus',
+    ipcAgent.events.profile_profileManagerStatus.unsubscribe(
       this.onProfileChanged,
     );
   }
