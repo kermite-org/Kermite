@@ -76,6 +76,8 @@ export class ApplicationRoot {
         windowWrapper.setDevToolsVisibility(visible),
       profile_executeProfileManagerCommands: (commands) =>
         this.profileManager.executeCommands(commands),
+      profile_getAllProfileNames: async () =>
+        this.profileManager.getStatus().allProfileNames,
       layout_executeLayoutManagerCommands: (commands) =>
         this.layoutManager.executeCommands(commands),
       // layout_getAllProjectLayoutsInfos: () =>

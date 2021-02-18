@@ -180,6 +180,7 @@ export interface IAppIpcContract {
     profile_executeProfileManagerCommands(
       commands: IProfileManagerCommand[],
     ): Promise<void>;
+    profile_getAllProfileNames(): Promise<string[]>;
 
     layout_executeLayoutManagerCommands(
       commands: ILayoutManagerCommand[],
