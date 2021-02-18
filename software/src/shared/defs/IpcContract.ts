@@ -3,6 +3,8 @@ import { IPersistKeyboardDesign } from '~/shared/defs/KeyboardDesign';
 import { IKeyboardConfig } from './ConfigTypes';
 import { IProfileData } from './ProfileData';
 
+export type IPresetType = 'blank' | 'preset';
+
 export type IPresetSpec =
   | {
       type: 'blank';
@@ -180,6 +182,7 @@ export interface IAppIpcContract {
     profile_executeProfileManagerCommands(
       commands: IProfileManagerCommand[],
     ): Promise<void>;
+    profile_getAllProfileNames(): Promise<string[]>;
 
     layout_executeLayoutManagerCommands(
       commands: ILayoutManagerCommand[],

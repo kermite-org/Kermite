@@ -1,5 +1,6 @@
-import { IResourceOrigin } from '~/shared/defs';
+import { IPresetSpec, IPresetType, IResourceOrigin } from '~/shared/defs';
 
+// プロジェクトソースの単一文字列表現 `local#${projectId}` or `online#${projectId}`
 export function createProjectSig(origin: IResourceOrigin, projectId: string) {
   return `${origin}#${projectId}`;
 }
@@ -9,6 +10,21 @@ export function getProjectOriginAndIdFromSig(
 ): { origin: IResourceOrigin; projectId: string } {
   const [origin, projectId] = projectSig.split('#');
   return { origin: origin as IResourceOrigin, projectId };
+}
+
+// プリセットソースの単一文字列表現 `blank:${layoutName}` or `preset:${presetName}`
+export function createPresetKey(type: IPresetType, name: string) {
+  return `${type}:${name}`;
+}
+
+export function getPresetSpecFromPresetKey(presetKey: string): IPresetSpec {
+  const [_type, name] = presetKey.split(':');
+  const type = _type as IPresetType;
+  if (type === 'blank') {
+    return { type, layoutName: name };
+  } else {
+    return { type, presetName: name };
+  }
 }
 
 export function generateNextSequentialId(
