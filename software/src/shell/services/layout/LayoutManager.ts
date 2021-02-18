@@ -15,10 +15,16 @@ import { FileWather } from '~/shell/funcs/FileWatcher';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { projectResourceProvider } from '~/shell/projectResources';
 import { ILayoutManager } from '~/shell/services/layout/interfaces';
-import { IProfileManager } from '~/shell/services/profile/interfaces';
+import {
+  IPresetProfileLoader,
+  IProfileManager,
+} from '~/shell/services/profile/interfaces';
 
 export class LayoutManager implements ILayoutManager {
-  constructor(private profileManager: IProfileManager) {}
+  constructor(
+    private presetProfileLoader: IPresetProfileLoader,
+    private profileManager: IProfileManager,
+  ) {}
 
   // CurrentProfileLayoutとそれ以外との切り替えのために、
   // CurrentProfileLayout以外のEditSourceをbackEditSourceとして保持
@@ -256,6 +262,7 @@ export class LayoutManager implements ILayoutManager {
       );
       if (filePath) {
         await LayoutFileLoader.saveLayoutToFile(filePath, design);
+        this.presetProfileLoader.deleteProjectPresetProfileCache(projectId);
       }
     }
     this.setStatus({ loadedDesign: design });
