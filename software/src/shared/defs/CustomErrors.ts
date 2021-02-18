@@ -1,58 +1,131 @@
-export type IAppErrorInfo =
-  | { type: 'CannotReadFile'; filePath: string }
-  | { type: 'CannotWriteFile'; filePath: string }
-  | { type: 'InvalidJsonFileContent'; filePath: string }
-  | { type: 'InvalidLayoutFileSchema'; filePath: string; errorDetail: string }
-  | { type: 'InvalidProjectFileSchema'; filePath: string; errorDetail: string }
-  | { type: 'RawException'; message: string };
+export type IAppErrorsSource = {
+  CannotReadFile: { filePath: string };
+  CannotReadFolder: { folderPath: string };
+  CannotWriteFile: { filePath: string };
+  InvalidJsonFileContent: { filePath: string };
+  InvalidLayoutFileSchema: { filePath: string; schemaErrorDetail: string };
+  InvalidProjectFileSchema: { filePath: string; schemaErrorDetail: string };
+  CannotDeleteFile: { filePath: string };
+  CannotRenameFile: { from: string; to: string };
+  CannotCopyFile: { from: string; to: string };
+  FailedToLoadRemoteResource: { url: string };
+  // [key: string]: { [key in string]?: string };
+};
 
-export class AppError extends Error {
-  info: IAppErrorInfo;
-
-  constructor(info: IAppErrorInfo) {
-    const { type, ...rest } = info;
-    const message = `AppError: ${type} ${JSON.stringify(rest)}`;
-    super(message);
-    this.info = info;
-  }
-}
-
-export function getErrorInfo(error: Error | AppError): IAppErrorInfo {
-  if (error instanceof AppError) {
-    return error.info;
-  } else {
-    return { type: 'RawException', message: error.message };
-  }
-}
-
-type IErrorType = IAppErrorInfo['type'];
+type IErrorType = keyof IAppErrorsSource;
 
 const errorTextMapEN: { [key in IErrorType]: string } = {
-  CannotReadFile: `failed to read file {filePath}`,
-  CannotWriteFile: `failed to write file {filePath}`,
-  InvalidJsonFileContent: `invalid json file content for {filePath}`,
-  InvalidLayoutFileSchema: `invalid schema for file {filePath} {errorDetail}`,
-  InvalidProjectFileSchema: `invalid schema for file {filePath} {errorDetail}`,
-  RawException: `{message}`,
+  CannotReadFile: `Failed to read file.`,
+  CannotReadFolder: `Failed to read folder.`,
+  CannotWriteFile: `Failed to write file.`,
+  CannotDeleteFile: `Failed to delete file.`,
+  CannotCopyFile: `Failed to copy file.`,
+  CannotRenameFile: `Failed to rename file.`,
+  InvalidJsonFileContent: `Invalid json file content.`,
+  InvalidLayoutFileSchema: `Invalid schema for file.`,
+  InvalidProjectFileSchema: `Invalid schema for file.`,
+  FailedToLoadRemoteResource: `Failed to fetch remote resource.`,
 };
 
 const errorTextMapJP: { [key in IErrorType]: string } = {
-  CannotReadFile: `ファイル {filePath} を開けません`,
-  CannotWriteFile: `ファイル {filePath} の書き込みに失敗しました`,
-  InvalidJsonFileContent: `ファイル {filePath} の内容がJSONとして不正です`,
-  InvalidLayoutFileSchema: `レイアウトファイル {filePath} の形式が不正です。\n詳細:\n{errorDetail}`,
-  InvalidProjectFileSchema: `プロジェクトファイル {filePath} の形式が不正です。\n詳細:\n{errorDetail}`,
-  RawException: `{message}`,
+  CannotReadFile: `ファイルを開けません。`,
+  CannotReadFolder: `フォルダを読み取れません。`,
+  CannotWriteFile: `ファイルの書き込みに失敗しました。`,
+  CannotDeleteFile: `ファイルの削除に失敗しました。`,
+  CannotCopyFile: `ファイルのコピーに失敗しました。`,
+  CannotRenameFile: `ファイルのリネームに失敗しました`,
+  InvalidJsonFileContent: `ファイルの内容がJSONとして不正です。`,
+  InvalidLayoutFileSchema: `レイアウトファイルの形式が不正です。`,
+  InvalidProjectFileSchema: `プロジェクトファイルの形式が不正です。`,
+  FailedToLoadRemoteResource: `リソースの取得に失敗しました。`,
 };
 
-export function getErrorText(info: IAppErrorInfo, lang: 'EN' | 'JP') {
-  const source = lang === 'EN' ? errorTextMapEN : errorTextMapJP;
-  let message = source[info.type];
-  for (const key in info) {
-    if (key === 'type') {
-      continue;
+const fieldNameDictionaryJP: { [key: string]: string } = {
+  filePath: 'ファイルパス',
+  folderPath: 'フォルダパス',
+  schemaErrorDetail: 'スキーマエラー',
+  url: 'URL',
+};
+
+export type IAppErrorData<T extends keyof IAppErrorsSource> =
+  | {
+      isAppError: true;
+      type: T;
+      params: IAppErrorsSource[T];
+      stack: string;
     }
-    message = message.replace(`{${key}}`, (info as any)[key]);
+  | {
+      isAppError: false;
+      stack: string;
+    };
+
+export class AppError<T extends keyof IAppErrorsSource> extends Error {
+  type: T;
+  params: IAppErrorsSource[T];
+
+  constructor(type: T, params: IAppErrorsSource[T], original?: Error) {
+    super(original?.message || type);
+    this.type = type;
+    this.params = params;
   }
-  return message;
+}
+
+export function makeCompactStackTrace(error: { stack?: string }) {
+  return error.stack?.split(/\r?\n/).slice(0, 2).join('\n');
+}
+
+export function makeRelativeStackTrace(
+  error: {
+    stack?: string;
+    message?: string;
+  },
+  rootDir: string,
+): string {
+  if (error.stack) {
+    return error.stack.replaceAll(rootDir + '/', '');
+    // .replaceAll(/\/Users\/[^/]+/g, '~');
+  } else if (error.message) {
+    return error.message;
+  } else {
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
+    return error.toString();
+  }
+}
+
+export function getAppErrorData(
+  error: AppError<any> | Error | any,
+  rootDir: string,
+): IAppErrorData<any> {
+  if (error instanceof AppError) {
+    return {
+      isAppError: true,
+      type: error.type,
+      params: error.params,
+      stack: makeRelativeStackTrace(error, rootDir),
+    };
+  } else {
+    return {
+      isAppError: false,
+      stack: makeRelativeStackTrace(error, rootDir),
+    };
+  }
+}
+
+export function makeDipsalyErrorMessage(errorData: IAppErrorData<any>) {
+  if (errorData.isAppError) {
+    const { type, params, stack } = errorData;
+    const headline = errorTextMapJP[type as IErrorType] || type; // TODO: 多言語対応
+    const paramsLines = Object.keys(params)
+      .map(
+        (key) => `${fieldNameDictionaryJP[key] || key}: ${params[key]}`, // TODO: 多言語対応
+      )
+      .join('\n');
+    return `${headline}${paramsLines ? '\n' + paramsLines : ''}
+
+詳細:
+${stack}
+`;
+  } else {
+    return errorData.stack;
+  }
 }

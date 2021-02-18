@@ -8,8 +8,8 @@ import {
   IPersistKeyboardDesign,
   ILayoutEditSource,
 } from '~/shared';
-import { getErrorInfo } from '~/shared/defs';
 import { applicationStorage } from '~/shell/base';
+import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { createEventPort2 } from '~/shell/funcs';
 import { FileWather } from '~/shell/funcs/FileWatcher';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
@@ -32,7 +32,6 @@ export class LayoutManager implements ILayoutManager {
     },
     loadedDesign: createFallbackPersistKeyboardDesign(),
     projectLayoutsInfos: [],
-    errroInfo: undefined,
   };
 
   private initialized = false;
@@ -48,6 +47,7 @@ export class LayoutManager implements ILayoutManager {
         await this.loadLayoutByEditSource(editSource);
       } catch (error) {
         // 読み込めない場合は初期状態のままで、特にエラーを通知しない
+        console.log(`error while loading previous edit layout file`);
         console.log(error);
       }
       this.initialized = true;
@@ -90,17 +90,10 @@ export class LayoutManager implements ILayoutManager {
   private onObservedFileChanged = async () => {
     const filePath = this.getCurrentEditLayoutFilePath();
     if (filePath) {
-      try {
-        const loadedDesign = await LayoutFileLoader.loadLayoutFromFile(
-          filePath,
-        );
-        this.setStatus({
-          errroInfo: undefined,
-          loadedDesign,
-        });
-      } catch (error) {
-        this.setStatus({ errroInfo: getErrorInfo(error) });
-      }
+      const loadedDesign = await LayoutFileLoader.loadLayoutFromFile(filePath);
+      this.setStatus({
+        loadedDesign,
+      });
     }
   };
 
@@ -127,7 +120,10 @@ export class LayoutManager implements ILayoutManager {
 
   private async loadLayoutFromFile(filePath: string) {
     const loadedDesign = await LayoutFileLoader.loadLayoutFromFile(filePath);
-    this.fileWatcher.observeFile(filePath, this.onObservedFileChanged);
+    this.fileWatcher.observeFile(
+      filePath,
+      withAppErrorHandler(this.onObservedFileChanged),
+    );
     this.setStatus({
       editSource: { type: 'File', filePath },
       loadedDesign,
@@ -296,13 +292,8 @@ export class LayoutManager implements ILayoutManager {
   }
 
   async executeCommands(commands: ILayoutManagerCommand[]): Promise<boolean> {
-    try {
-      for (const command of commands) {
-        await this.executeCommand(command);
-      }
-    } catch (error) {
-      this.setStatus({ errroInfo: getErrorInfo(error) });
-      return false;
+    for (const command of commands) {
+      await this.executeCommand(command);
     }
     return true;
   }
@@ -315,10 +306,6 @@ export class LayoutManager implements ILayoutManager {
       keyboardName: info.keyboardName,
       layoutNames: info.layoutNames,
     }));
-  }
-
-  clearErrorInfo() {
-    this.setStatus({ errroInfo: undefined });
   }
 
   showEditLayoutFileInFiler() {

@@ -23,7 +23,6 @@ export class ProfileManager implements IProfileManager {
     currentProfileName: '',
     allProfileNames: [],
     loadedProfileData: undefined,
-    errorMessage: '',
   };
 
   private savingProfileData: IProfileData | undefined = undefined;
@@ -75,23 +74,11 @@ export class ProfileManager implements IProfileManager {
   }
 
   async initializeAsync() {
-    try {
-      await this.core.ensureProfilesDirectoryExists();
-      const allProfileNames = await this.initializeProfileList();
-      const initialProfileName = this.getInitialProfileName(allProfileNames);
-      this.setStatus({ allProfileNames });
-      await this.loadProfile(initialProfileName);
-
-      // debug
-      // setTimeout(() => {
-      //   const idx = (Math.random() * (allProfileNames.length - 1)) >> 0;
-      //   console.log({ name: this.status.allProfileNames, idx });
-      //   this.loadProfile(this.status.allProfileNames[idx]);
-      // }, 3000);
-    } catch (error) {
-      // todo: check various cases
-      // todo: check error when data or data/profiles is not exists
-    }
+    await this.core.ensureProfilesDirectoryExists();
+    const allProfileNames = await this.initializeProfileList();
+    const initialProfileName = this.getInitialProfileName(allProfileNames);
+    this.setStatus({ allProfileNames });
+    await this.loadProfile(initialProfileName);
   }
 
   async terminateAsync() {
@@ -99,60 +86,38 @@ export class ProfileManager implements IProfileManager {
     this.core.storeCurrentProfileName(this.status.currentProfileName);
   }
 
-  private raiseErrorMessage(errorMessage: string) {
-    this.setStatus({ errorMessage });
+  async loadProfile(profName: string) {
+    const profileData = await this.core.loadProfile(profName);
+    this.setStatus({
+      currentProfileName: profName,
+      loadedProfileData: profileData,
+    });
   }
 
-  async loadProfile(profName: string): Promise<boolean> {
-    try {
-      const profileData = await this.core.loadProfile(profName);
-      this.setStatus({
-        currentProfileName: profName,
-        loadedProfileData: profileData,
-      });
-      return true;
-    } catch (error) {
-      this.raiseErrorMessage(`failed to load profile, ${error.message}`);
-      return false;
-    }
+  async saveCurrentProfile(profileData: IProfileData) {
+    await this.core.saveProfile(this.status.currentProfileName, profileData);
+    this.setStatus({
+      loadedProfileData: profileData,
+    });
   }
 
-  async saveCurrentProfile(profileData: IProfileData): Promise<boolean> {
-    try {
-      this.core.saveProfile(this.status.currentProfileName, profileData);
-      this.setStatus({
-        loadedProfileData: profileData,
-      });
-      return true;
-    } catch (error) {
-      this.raiseErrorMessage('failed to save profile');
-      return false;
-    }
-  }
-
-  async saveAsProjectPreset(
+  private async saveAsProjectPreset(
     projectId: string,
     presetName: string,
     profileData: IProfileData,
-  ): Promise<boolean> {
-    try {
-      const filePath = projectResourceProvider.localResourceProviderImpl.getLocalPresetProfileFilePath(
-        projectId,
-        presetName,
-      );
-      if (filePath) {
-        await this.core.saveProfileAsPreset(filePath, profileData);
-        // projectResourceProvider.localResourceProviderImpl.patchLocalProjectInfoSource(
-        //   projectId,
-        //   (info) => addArrayItemIfNotExist(info.presetNames, presetName),
-        // );
-        // await projectResourceProvider.reenumerateResourceInfos();
-        projectResourceProvider.localResourceProviderImpl.clearCache();
-      }
-      return true;
-    } catch (error) {
-      this.raiseErrorMessage('failed to save preset');
-      return false;
+  ): Promise<void> {
+    const filePath = projectResourceProvider.localResourceProviderImpl.getLocalPresetProfileFilePath(
+      projectId,
+      presetName,
+    );
+    if (filePath) {
+      await this.core.saveProfileAsPreset(filePath, profileData);
+      // projectResourceProvider.localResourceProviderImpl.patchLocalProjectInfoSource(
+      //   projectId,
+      //   (info) => addArrayItemIfNotExist(info.presetNames, presetName),
+      // );
+      // await projectResourceProvider.reenumerateResourceInfos();
+      projectResourceProvider.localResourceProviderImpl.clearCache();
     }
   }
 
@@ -193,143 +158,112 @@ export class ProfileManager implements IProfileManager {
     return profile;
   }
 
-  async createProfile(
+  private async createProfile(
     profName: string,
     origin: IResourceOrigin,
     projectId: string,
     presetSpec: IPresetSpec,
-  ): Promise<boolean> {
+  ) {
     if (this.status.allProfileNames.includes(profName)) {
       return false;
     }
-    try {
-      const profileData = await this.createProfileImpl(
-        origin,
-        profName,
-        projectId,
-        presetSpec,
+    const profileData = await this.createProfileImpl(
+      origin,
+      profName,
+      projectId,
+      presetSpec,
+    );
+    const allProfileNames = await this.core.listAllProfileNames();
+    this.setStatus({
+      allProfileNames,
+      currentProfileName: profName,
+      loadedProfileData: profileData,
+    });
+  }
+
+  private async deleteProfile(profName: string) {
+    if (!this.status.allProfileNames.includes(profName)) {
+      return false;
+    }
+    const isCurrent = this.status.currentProfileName === profName;
+    const currentProfileIndex = this.status.allProfileNames.indexOf(profName);
+    const isLastOne = this.status.allProfileNames.length === 1;
+    await this.core.deleteProfile(profName);
+    if (isLastOne) {
+      await this.createDefaultProfile(defaultProfileName);
+    }
+    const allProfileNames = await this.core.listAllProfileNames();
+    this.setStatus({ allProfileNames });
+    if (isCurrent) {
+      const newIndex = clampValue(
+        currentProfileIndex,
+        0,
+        this.status.allProfileNames.length - 1,
       );
-      const allProfileNames = await this.core.listAllProfileNames();
-      this.setStatus({
-        allProfileNames,
-        currentProfileName: profName,
-        loadedProfileData: profileData,
-      });
-      return true;
-    } catch (error) {
-      this.raiseErrorMessage('failed to create profile');
-      return false;
+      await this.loadProfile(allProfileNames[newIndex]);
     }
   }
 
-  async deleteProfile(profName: string): Promise<boolean> {
-    if (!this.status.allProfileNames.includes(profName)) {
-      return false;
-    }
-    try {
-      const isCurrent = this.status.currentProfileName === profName;
-      const currentProfileIndex = this.status.allProfileNames.indexOf(profName);
-      const isLastOne = this.status.allProfileNames.length === 1;
-      await this.core.deleteProfile(profName);
-      if (isLastOne) {
-        await this.createDefaultProfile(defaultProfileName);
-      }
-      const allProfileNames = await this.core.listAllProfileNames();
-      this.setStatus({ allProfileNames });
-      if (isCurrent) {
-        const newIndex = clampValue(
-          currentProfileIndex,
-          0,
-          this.status.allProfileNames.length - 1,
-        );
-        await this.loadProfile(allProfileNames[newIndex]);
-      }
-      return true;
-    } catch (error) {
-      this.raiseErrorMessage('failed to delete profile');
-      return false;
-    }
-  }
-
-  async renameProfile(profName: string, newProfName: string): Promise<boolean> {
+  private async renameProfile(profName: string, newProfName: string) {
     if (!this.status.allProfileNames.includes(profName)) {
       return false;
     }
     if (this.status.allProfileNames.includes(newProfName)) {
       return false;
     }
-    try {
-      const isCurrent = this.status.currentProfileName === profName;
-      await this.core.renameProfile(profName, newProfName);
-      const allProfileNames = await this.core.listAllProfileNames();
-      this.setStatus({ allProfileNames });
-      if (isCurrent) {
-        await this.loadProfile(newProfName);
-      }
-      return true;
-    } catch (error) {
-      this.raiseErrorMessage('failed to rename profile');
-      return false;
-    }
-  }
-
-  async copyProfile(profName: string, newProfName: string): Promise<boolean> {
-    if (!this.status.allProfileNames.includes(profName)) {
-      return false;
-    }
-    if (this.status.allProfileNames.includes(newProfName)) {
-      return false;
-    }
-    try {
-      await this.core.copyProfile(profName, newProfName);
-      const allProfileNames = await this.core.listAllProfileNames();
-      this.setStatus({ allProfileNames });
+    const isCurrent = this.status.currentProfileName === profName;
+    await this.core.renameProfile(profName, newProfName);
+    const allProfileNames = await this.core.listAllProfileNames();
+    this.setStatus({ allProfileNames });
+    if (isCurrent) {
       await this.loadProfile(newProfName);
-      return true;
-    } catch (error) {
-      this.raiseErrorMessage('failed to copy profile');
-      return false;
     }
   }
 
-  private async executeCommand(cmd: IProfileManagerCommand): Promise<boolean> {
+  private async copyProfile(profName: string, newProfName: string) {
+    if (!this.status.allProfileNames.includes(profName)) {
+      return false;
+    }
+    if (this.status.allProfileNames.includes(newProfName)) {
+      return false;
+    }
+    await this.core.copyProfile(profName, newProfName);
+    const allProfileNames = await this.core.listAllProfileNames();
+    this.setStatus({ allProfileNames });
+    await this.loadProfile(newProfName);
+  }
+
+  private async executeCommand(cmd: IProfileManagerCommand) {
     // console.log(`execute command`, { cmd });
     if (cmd.creatProfile) {
-      return await this.createProfile(
+      await this.createProfile(
         cmd.creatProfile.name,
         cmd.creatProfile.targetProjectOrigin,
         cmd.creatProfile.targetProjectId,
         cmd.creatProfile.presetSpec,
       );
     } else if (cmd.deleteProfile) {
-      return await this.deleteProfile(cmd.deleteProfile.name);
+      await this.deleteProfile(cmd.deleteProfile.name);
     } else if (cmd.loadProfile) {
-      return await this.loadProfile(cmd.loadProfile.name);
+      await this.loadProfile(cmd.loadProfile.name);
     } else if (cmd.renameProfile) {
-      return await this.renameProfile(
+      await this.renameProfile(
         cmd.renameProfile.name,
         cmd.renameProfile.newName,
       );
     } else if (cmd.copyProfile) {
-      return await this.copyProfile(
-        cmd.copyProfile.name,
-        cmd.copyProfile.newName,
-      );
+      await this.copyProfile(cmd.copyProfile.name, cmd.copyProfile.newName);
     } else if (cmd.saveCurrentProfile) {
-      return await this.saveCurrentProfile(cmd.saveCurrentProfile.profileData);
+      await this.saveCurrentProfile(cmd.saveCurrentProfile.profileData);
     } else if (cmd.saveAsProjectPreset) {
       const { projectId, presetName, profileData } = cmd.saveAsProjectPreset;
-      return await this.saveAsProjectPreset(projectId, presetName, profileData);
+      await this.saveAsProjectPreset(projectId, presetName, profileData);
     }
-    return false;
   }
 
   async executeCommands(commands: IProfileManagerCommand[]) {
     for (const cmd of commands) {
-      const done = await this.executeCommand(cmd);
-      if (!done) {
-        return;
-      }
+      await this.executeCommand(cmd);
     }
   }
 }

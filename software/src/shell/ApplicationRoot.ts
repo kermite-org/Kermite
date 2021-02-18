@@ -1,5 +1,11 @@
-import { IPresetSpec, IProfileManagerStatus } from '~/shared';
+import {
+  getAppErrorData,
+  IPresetSpec,
+  IProfileManagerStatus,
+  makeCompactStackTrace,
+} from '~/shared';
 import { appEnv, appGlobal, applicationStorage } from '~/shell/base';
+import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
 import { KeyboardLayoutFilesWatcher } from '~/shell/projectResources/KeyboardShape/KeyboardLayoutFilesWatcher';
@@ -42,6 +48,13 @@ export class ApplicationRoot {
   private setupIpcBackend() {
     const windowWrapper = this.windowWrapper;
 
+    appGlobal.icpMainAgent.setErrorHandler((error) => {
+      console.error(makeCompactStackTrace(error));
+      appGlobal.appErrorEventPort.emit(
+        getAppErrorData(error, appEnv.resolveApplicationRootDir()),
+      );
+    });
+
     appGlobal.icpMainAgent.supplySyncHandlers({
       dev_getVersionSync: () => 'v100',
       dev_debugMessage: (msg) => console.log(`[renderer] ${msg}`),
@@ -67,7 +80,6 @@ export class ApplicationRoot {
         this.layoutManager.executeCommands(commands),
       // layout_getAllProjectLayoutsInfos: () =>
       //   this.layoutManager.getAllProjectLayoutsInfos(),
-      layout_clearErrorInfo: async () => this.layoutManager.clearErrorInfo(),
       layout_showEditLayoutFileInFiler: async () =>
         this.layoutManager.showEditLayoutFileInFiler(),
       projects_loadKeyboardShape: (origin, projectId, layoutName) =>
@@ -95,15 +107,15 @@ export class ApplicationRoot {
           presetSpec,
         ),
       config_getKeyboardConfig: async () =>
-        this.keyboardConfigProvider.keyboardConfig,
+        this.keyboardConfigProvider.getKeyboardConfig(),
       config_writeKeyboardConfig: async (config) =>
         this.keyboardConfigProvider.writeKeyboardConfig(config),
       config_writeKeyMappingToDevice: async () => {
         const profile = this.profileManager.getCurrentProfile();
-        const layoutStandard = this.keyboardConfigProvider.keyboardConfig
+        const layoutStandard = this.keyboardConfigProvider.getKeyboardConfig()
           .layoutStandard;
         if (profile) {
-          KeyMappingEmitter.emitKeyAssignsToDevice(
+          await KeyMappingEmitter.emitKeyAssignsToDevice(
             profile,
             layoutStandard,
             this.deviceService,
@@ -132,6 +144,7 @@ export class ApplicationRoot {
         JsonFileServiceStatic.saveObjectToJsonWithFileDialog,
       file_getOpenDirectoryWithDialog:
         JsonFileServiceStatic.getOpeningDirectoryPathWithDialog,
+      global_triggerLazyInitializeServices: () => this.lazyInitialzeServices(),
     });
 
     appGlobal.icpMainAgent.supplySubscriptionHandlers({
@@ -140,6 +153,7 @@ export class ApplicationRoot {
         cb({ type: 'test_event_with_supplySubscriptionHandlers' });
         return () => {};
       },
+      global_appErrorEvents: (cb) => appGlobal.appErrorEventPort.subscribe(cb),
       profile_profileManagerStatus: (cb) => {
         this.profileManager.statusEventPort.subscribe(cb);
         return () => this.profileManager.statusEventPort.unsubscribe(cb);
@@ -163,43 +177,43 @@ export class ApplicationRoot {
         this.deviceService.statusEventPort.subscribe(cb);
         return () => this.deviceService.statusEventPort.unsubscribe(cb);
       },
-      firmup_comPortPlugEvents: (cb) => {
-        this.firmwareUpdationService.comPortPlugEvents.subscribe(cb);
-        return () =>
-          this.firmwareUpdationService.comPortPlugEvents.unsubscribe(cb);
-      },
-      projects_layoutFileUpdationEvents: (cb) => {
-        this.keyboardLayoutFilesWatcher.fileUpdationEventPort.subscribe(cb);
-        return () =>
-          this.keyboardLayoutFilesWatcher.fileUpdationEventPort.unsubscribe(cb);
-      },
+      firmup_comPortPlugEvents: (cb) =>
+        this.firmwareUpdationService.comPortsMonitor.comPortPlugEvents.subscribe(
+          cb,
+        ),
+      projects_layoutFileUpdationEvents: (cb) =>
+        this.keyboardLayoutFilesWatcher.fileUpdationEvents.subscribe(cb),
       window_appWindowStatus: windowWrapper.appWindowEventPort.subscribe,
     });
   }
 
   async initialize() {
-    console.log(`initialize services`);
-    await applicationStorage.initializeAsync();
-    await this.profileManager.initializeAsync();
-    this.firmwareUpdationService.initialize();
-    this.keyboardLayoutFilesWatcher.initialize();
-    this.keyboardConfigProvider.initialize();
-    this.deviceService.initialize();
-    this.inputLogicSimulator.initialize();
+    await executeWithFatalErrorHandler(async () => {
+      console.log(`initialize services`);
+      await applicationStorage.initializeAsync();
+      this.setupIpcBackend();
+      this.windowWrapper.initialize();
+    });
+  }
 
-    this.setupIpcBackend();
-    this.windowWrapper.initialize();
+  private _lazyInitializeTriggered = false;
+  async lazyInitialzeServices() {
+    if (!this._lazyInitializeTriggered) {
+      this._lazyInitializeTriggered = true;
+      await this.profileManager.initializeAsync();
+      this.deviceService.initialize();
+      this.inputLogicSimulator.initialize();
+    }
   }
 
   async terminate() {
-    console.log(`terminate services`);
-    this.windowWrapper.terminate();
-    this.inputLogicSimulator.terminate();
-    this.deviceService.terminate();
-    this.keyboardConfigProvider.terminate();
-    this.keyboardLayoutFilesWatcher.terminate();
-    this.firmwareUpdationService.terminate();
-    await this.profileManager.terminateAsync();
-    await applicationStorage.terminateAsync();
+    await executeWithFatalErrorHandler(async () => {
+      console.log(`terminate services`);
+      this.inputLogicSimulator.terminate();
+      this.deviceService.terminate();
+      this.windowWrapper.terminate();
+      await this.profileManager.terminateAsync();
+      await applicationStorage.terminateAsync();
+    });
   }
 }

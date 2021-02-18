@@ -9,7 +9,7 @@ import {
   cacheRemoteResouce,
   fetchJson,
   fetchText,
-  fspWriteFile,
+  fsxWriteFile,
   pathBasename,
 } from '~/shell/funcs';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
@@ -142,7 +142,7 @@ export class ProjectResourceProviderImpl_Remote
       const localFilePath = appEnv.resolveTempFilePath(
         `remote_resources/${relPath}`,
       );
-      await fspWriteFile(localFilePath, hexFileContent);
+      await fsxWriteFile(localFilePath, hexFileContent);
       return localFilePath;
     }
   }

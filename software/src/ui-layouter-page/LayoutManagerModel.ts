@@ -1,6 +1,5 @@
 import {
   createFallbackPersistKeyboardDesign,
-  getErrorText,
   ILayoutEditSource,
   ILayoutManagerCommand,
   ILayoutManagerStatus,
@@ -8,11 +7,7 @@ import {
   IProjectLayoutsInfo,
 } from '~/shared';
 import { appUi, ipcAgent } from '~/ui-common';
-import {
-  modalConfirm,
-  modalError,
-} from '~/ui-common/fundamental/dialog/BasicModals';
-import { forceCloseModal } from '~/ui-common/fundamental/overlay/ForegroundModalLayer';
+import { modalConfirm } from '~/ui-common/fundamental/dialog/BasicModals';
 import { UiLayouterCore } from '~/ui-layouter';
 
 interface ILayoutManagerModel {
@@ -39,7 +34,7 @@ export class LayoutManagerModel implements ILayoutManagerModel {
   private _layoutManagerStatus: ILayoutManagerStatus = {
     editSource: { type: 'NewlyCreated' },
     loadedDesign: createFallbackPersistKeyboardDesign(),
-    errroInfo: undefined,
+    // errroInfo: undefined,
     projectLayoutsInfos: [],
   };
 
@@ -169,27 +164,12 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     };
     if (diff.loadedDesign) {
       UiLayouterCore.loadEditDesign(diff.loadedDesign);
-    }
-    if (diff.errroInfo) {
-      const { errroInfo } = diff;
-      const errorTextEN = getErrorText(errroInfo, 'EN');
-      const errorTextJP = getErrorText(errroInfo, 'JP');
-      console.log(`ERROR`, {
-        errroInfo,
-        errorTextEN,
-        errorTextJP,
-      });
-      // todo: 多言語化対応時にエラーを出し分ける
-      await modalError(errorTextEN);
-      await ipcAgent.async.layout_clearErrorInfo();
+      // 編集中のファイルを外部エディタで更新し、フォーマットの誤りなどで
+      // 発生したエラーを修正して再度保存した場合に、エラーダイアログを閉じる
+      // forceCloseModal();
     }
     if (diff.projectLayoutsInfos) {
       this._projectLayoutsInfos = diff.projectLayoutsInfos;
-    }
-    if ('errroInfo' in diff && diff.errroInfo === undefined) {
-      // 編集中のファイルを外部エディタで更新し、フォーマットの誤りなどで
-      // 発生したエラーを修正して再度保存した場合に、エラーダイアログを閉じる
-      forceCloseModal();
     }
   };
 

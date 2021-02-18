@@ -82,9 +82,11 @@ export const DialogContentRow = (props: { children: any }) => {
     margin: 10px 15px 0;
     color: #048;
     min-height: 60px;
+    max-width: 700px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    word-break: break-all;
     white-space: pre-wrap;
   `;
   return <div css={cssBody}>{props.children}</div>;

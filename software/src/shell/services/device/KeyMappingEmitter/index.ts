@@ -10,11 +10,11 @@ import {
 } from './MemoryOperationFrameBuilder';
 
 export namespace KeyMappingEmitter {
-  export function emitKeyAssignsToDevice(
+  export async function emitKeyAssignsToDevice(
     editModel: IProfileData,
     layout: IKeyboardLayoutStandard,
     deviceService: KeyboardDeviceService,
-  ) {
+  ): Promise<void> {
     const ds = deviceService;
 
     if (!ds.isOpen) {
@@ -43,20 +43,18 @@ export namespace KeyMappingEmitter {
       dataLength,
     );
 
-    (async () => {
-      try {
-        console.log('writing...');
-        ds.writeSingleFrame(memoryWriteTransactionStartFrame);
-        delayMs(50);
-        await ds.writeFrames(keyAssingnDataFrames);
+    try {
+      console.log('writing...');
+      ds.writeSingleFrame(memoryWriteTransactionStartFrame);
+      delayMs(50);
+      await ds.writeFrames(keyAssingnDataFrames);
 
-        ds.writeSingleFrame(checksumRequestFrame);
-        delayMs(50);
-        ds.writeSingleFrame(memoryWriteTransactionEndFrame);
-        console.log('write done');
-      } catch (err) {
-        console.log(err);
-      }
-    })();
+      ds.writeSingleFrame(checksumRequestFrame);
+      delayMs(50);
+      ds.writeSingleFrame(memoryWriteTransactionEndFrame);
+      console.log('write done');
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
