@@ -3,6 +3,8 @@ import { IPersistKeyboardDesign } from '~/shared/defs/KeyboardDesign';
 import { IKeyboardConfig } from './ConfigTypes';
 import { IProfileData } from './ProfileData';
 
+export type IPresetType = 'blank' | 'preset';
+
 export type IPresetSpec =
   | {
       type: 'blank';
