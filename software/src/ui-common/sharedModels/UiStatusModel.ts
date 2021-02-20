@@ -1,8 +1,4 @@
-import {
-  vBoolean,
-  vNumber,
-  vObject,
-} from '~/shared/modules/SchemaValidationHelper';
+import { copyObjectProps } from '~/shared';
 
 export type PagePaths =
   | '/'
@@ -14,6 +10,7 @@ export type PagePaths =
   | '/heatmap'
   | '/settings'
   | '/widget';
+
 export interface IUiSettings {
   showTestInputArea: boolean;
   showLayersDynamic: boolean;
@@ -29,14 +26,6 @@ const defaultUiSettings: IUiSettings = {
   siteDpiScale: 1.0,
   showGlobalHint: true,
 };
-
-export const uiSettingsDataSchemaChecker = vObject({
-  showTestInputArea: vBoolean(),
-  showLayersDynamic: vBoolean(),
-  showLayerDefaultAssign: vBoolean(),
-  siteDpiScale: vNumber(),
-  showGlobalHint: vBoolean(),
-});
 
 export interface IUiStatus {
   profileConfigModalVisible: boolean;
@@ -55,13 +44,7 @@ export class UiStatusModel {
     const settingsText = localStorage.getItem('uiSettings');
     if (settingsText) {
       const obj = JSON.parse(settingsText);
-      const errors = uiSettingsDataSchemaChecker(obj);
-      if (errors) {
-        console.error(`ui settings data schema error`);
-        console.log(JSON.stringify(errors, null, '  '));
-      } else {
-        this.settings = obj;
-      }
+      copyObjectProps(this.settings, obj);
     }
   }
 
