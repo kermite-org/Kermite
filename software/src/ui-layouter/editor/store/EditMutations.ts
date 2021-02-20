@@ -197,14 +197,14 @@ class EditMutations {
       editor.currentkeyEntityId = undefined;
       editor.isCurrentKeyMirror = false;
     });
-    const ke = editReader.currentKeyEntity;
-    this.setCurrentTransGroupById(ke?.groupId);
   }
 
   setCurrentShapeId(shapeId: string | undefined) {
     editUpdator.patchEditor((editor) => {
       editor.currentShapeId = shapeId;
     });
+    const shape = editReader.currentOutlineShape;
+    this.setCurrentTransGroupById(shape?.groupId);
   }
 
   setCurrentPointIndex(index: number) {
