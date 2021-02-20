@@ -1,7 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { IDisplayKeyShape } from '~/shared';
-import { uiTheme, mvvmView } from '~/ui-common';
+import { mvvmView } from '~/ui-common';
 import { KeyUnitShape } from '~/ui-common-svg/KeyUnitCards/KeyUnitShape';
 
 export interface IHeatmapCustomKeyUnitViewModel {
@@ -36,13 +36,13 @@ const cssKeyShapeHold = css`
 
 const cssKeyText = css`
   font-size: 5px;
-  fill: ${uiTheme.colors.clAltText};
+  fill: #000;
   text-anchor: middle;
 `;
 
 const cssCountText = css`
   font-size: 5px;
-  fill: ${uiTheme.colors.clAltText};
+  fill: #000;
   text-anchor: middle;
 `;
 
