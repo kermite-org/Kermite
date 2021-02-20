@@ -2,15 +2,12 @@ import {
   duplicateObjectByJsonStringifyParse,
   IGlobalSettings,
   IKeyboardConfig,
-  ILayoutEditSource,
 } from '~/shared';
 import {
   ICheckerEx,
   vBoolean,
   vObject,
-  vSchemaOneOf,
   vString,
-  vValueEquals,
   vValueOneOf,
 } from '~/shared/modules/SchemaValidationHelper';
 import { appEnv } from '~/shell/base';
@@ -22,7 +19,6 @@ export interface IApplicationPersistData {
   };
   currentProfileName: string | undefined;
   keyboardConfig: IKeyboardConfig;
-  layoutEditSource: ILayoutEditSource;
   globalSettings: IGlobalSettings;
 }
 
@@ -34,9 +30,6 @@ const defaultPersistData: IApplicationPersistData = {
   keyboardConfig: {
     behaviorMode: 'Standalone',
     layoutStandard: 'US',
-  },
-  layoutEditSource: {
-    type: 'NewlyCreated',
   },
   globalSettings: {
     useOnlineResources: true,
@@ -54,23 +47,7 @@ const applicationPersistDataSchemaChecker = vObject({
     behaviorMode: vValueOneOf(['Standalone', 'SideBrain']),
     layoutStandard: vValueOneOf(['US', 'JIS']),
   }),
-  layoutEditSource: vSchemaOneOf([
-    vObject({
-      type: vValueEquals('NewlyCreated'),
-    }),
-    vObject({
-      type: vValueEquals('CurrentProfile'),
-    }),
-    vObject({
-      type: vValueEquals('File'),
-      filePath: vString(),
-    }),
-    vObject({
-      type: vValueEquals('ProjectLayout'),
-      projectId: vString(),
-      layoutName: vString(),
-    }),
-  ]),
+
   globalSettings: vObject({
     useOnlineResources: vBoolean(),
     useLocalResouces: vBoolean(),

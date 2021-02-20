@@ -8,6 +8,12 @@ import {
   IPersistKeyboardDesign,
   ILayoutEditSource,
 } from '~/shared';
+import {
+  vSchemaOneOf,
+  vObject,
+  vValueEquals,
+  vString,
+} from '~/shared/modules/SchemaValidationHelper';
 import { applicationStorage } from '~/shell/base';
 import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { createEventPort2 } from '~/shell/funcs';
@@ -19,6 +25,28 @@ import {
   IPresetProfileLoader,
   IProfileManager,
 } from '~/shell/services/profile/interfaces';
+
+const layoutEditSourceSchema = vSchemaOneOf([
+  vObject({
+    type: vValueEquals('NewlyCreated'),
+  }),
+  vObject({
+    type: vValueEquals('CurrentProfile'),
+  }),
+  vObject({
+    type: vValueEquals('File'),
+    filePath: vString(),
+  }),
+  vObject({
+    type: vValueEquals('ProjectLayout'),
+    projectId: vString(),
+    layoutName: vString(),
+  }),
+]);
+
+const layoutEditSourceDefault: ILayoutEditSource = {
+  type: 'NewlyCreated',
+};
 
 export class LayoutManager implements ILayoutManager {
   constructor(
@@ -47,7 +75,11 @@ export class LayoutManager implements ILayoutManager {
       this.setStatus({
         projectLayoutsInfos: await this.getAllProjectLayoutsInfos(),
       });
-      const editSource = applicationStorage.getItem0('layoutEditSource');
+      const editSource = applicationStorage.readItemSafe(
+        'layoutEditSource',
+        layoutEditSourceSchema,
+        layoutEditSourceDefault,
+      );
       try {
         // 前回起動時に編集していたファイルの読み込みを試みる
         await this.loadLayoutByEditSource(editSource);
@@ -61,7 +93,7 @@ export class LayoutManager implements ILayoutManager {
   };
 
   private finalizeOnLastDisconnect = () => {
-    applicationStorage.setItem0('layoutEditSource', this.status.editSource);
+    applicationStorage.writeItem('layoutEditSource', this.status.editSource);
     this.fileWatcher.unobserveFile();
   };
 
