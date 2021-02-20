@@ -18,6 +18,10 @@ import {
 } from '~/ui-layouter/editor/views/SidePanels/models/slots/ConfigTextEditModel';
 import { makeSelectorModel } from '~/ui-layouter/editor/views/SidePanels/models/slots/SelectorModel';
 
+function floatNumberValidator(text: string) {
+  return text.match(/^-?\d+\.?\d*?$/) ? undefined : 'must be a number';
+}
+
 const slotSources: IAttributeSlotSource<IEditKeyEntity, IEditPropKey>[] = [
   // {
   //   propKey: 'editKeyId',
@@ -32,8 +36,7 @@ const slotSources: IAttributeSlotSource<IEditKeyEntity, IEditPropKey>[] = [
     propKey: 'x',
     label: 'x',
     getUnit: () => editReader.coordUnitSuffix,
-    validator: (text: string) =>
-      text.match(/^-?[0-9.]+$/) ? undefined : 'must be a number',
+    validator: floatNumberValidator,
     reader: (value: number) => value.toString(),
     writer: (text: string) => parseFloat(text),
   },
@@ -41,8 +44,7 @@ const slotSources: IAttributeSlotSource<IEditKeyEntity, IEditPropKey>[] = [
     propKey: 'y',
     label: 'y',
     getUnit: () => editReader.coordUnitSuffix,
-    validator: (text: string) =>
-      text.match(/^-?[0-9.]+$/) ? undefined : 'must be a number',
+    validator: floatNumberValidator,
     reader: (value: number) => value.toString(),
     writer: (text: string) => parseFloat(text),
   },
@@ -50,8 +52,7 @@ const slotSources: IAttributeSlotSource<IEditKeyEntity, IEditPropKey>[] = [
     propKey: 'angle',
     label: 'angle',
     getUnit: () => 'deg',
-    validator: (text: string) =>
-      text.match(/^-?[0-9.]+$/) ? undefined : 'must be a number',
+    validator: floatNumberValidator,
     reader: (value: number) => value.toString(),
     writer: (text: string) => parseFloat(text),
   },
@@ -67,8 +68,8 @@ const slotSources: IAttributeSlotSource<IEditKeyEntity, IEditPropKey>[] = [
     },
     validator(text: string) {
       const patterns = [
-        /^[0-9][0-9.]*$/,
-        /^[0-9][0-9.]* [0-9][0-9.]*$/,
+        /^\d+\.?\d*$/,
+        /^\d+\.?\d* \d+\.?\d*$/,
         /^circle$/,
         /^isoEnter$/,
       ];

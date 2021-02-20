@@ -31,14 +31,14 @@ export const OutlineEditPanel = () => {
               {...vmX}
               label={'x'}
               labelWidth={70}
-              inputWidth={60}
+              inputWidth={80}
               unit="mm"
             />
             <GeneralConfigTextEditRow
               {...vmY}
               label={'y'}
               labelWidth={70}
-              inputWidth={60}
+              inputWidth={80}
               unit="mm"
             />
           </ConfigVStack>
@@ -51,7 +51,7 @@ export const OutlineEditPanel = () => {
           <div>numPoints: {numShapePoints}</div>
           <HFlex>
             <span style={{ width: '70px' }}>group</span>
-            <GeneralSelector {...vmGroupId} width={60} />
+            <GeneralSelector {...vmGroupId} width={80} />
           </HFlex>
         </ConfigSubContent>
       </div>

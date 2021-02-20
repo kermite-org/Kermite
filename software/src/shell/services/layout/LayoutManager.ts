@@ -44,10 +44,6 @@ const layoutEditSourceSchema = vSchemaOneOf([
   }),
 ]);
 
-const layoutEditSourceDefault: ILayoutEditSource = {
-  type: 'NewlyCreated',
-};
-
 export class LayoutManager implements ILayoutManager {
   constructor(
     private presetProfileLoader: IPresetProfileLoader,
@@ -75,10 +71,10 @@ export class LayoutManager implements ILayoutManager {
       this.setStatus({
         projectLayoutsInfos: await this.getAllProjectLayoutsInfos(),
       });
-      const editSource = applicationStorage.readItemSafe(
+      const editSource = applicationStorage.readItemSafe<ILayoutEditSource>(
         'layoutEditSource',
         layoutEditSourceSchema,
-        layoutEditSourceDefault,
+        { type: 'CurrentProfile' },
       );
       try {
         // 前回起動時に編集していたファイルの読み込みを試みる
@@ -143,7 +139,7 @@ export class LayoutManager implements ILayoutManager {
   }
 
   private async loadCurrentProfileLayout() {
-    const profile = this.profileManager.getStatus().loadedProfileData;
+    const profile = await this.profileManager.getCurrentProfileAfterInitialization();
     if (profile) {
       this.setStatus({
         editSource: { type: 'CurrentProfile' },

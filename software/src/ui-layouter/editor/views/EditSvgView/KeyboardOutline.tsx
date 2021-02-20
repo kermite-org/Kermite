@@ -119,8 +119,23 @@ const OutlinePoint = (props: {
     if (editReader.editorTarget !== 'outline') {
       editMutations.setEditorTarget('outline');
     }
-    const { editorTarget, editMode } = editReader;
+    const { editorTarget, editMode, shapeDrawing } = editReader;
     if (e.button === 0) {
+      if (
+        editorTarget === 'outline' &&
+        editMode === 'add' &&
+        shapeDrawing
+        // index === 0
+      ) {
+        // shapeを閉じる
+        editMutations.endShapeDrawing();
+        editMutations.setCurrentShapeId(undefined);
+        editMutations.unsetCurrentKeyEntity();
+        editMutations.setCurrentPointIndex(-1);
+        e.stopPropagation();
+        return;
+      }
+
       if (editorTarget === 'outline') {
         if (editMode === 'select') {
           editMutations.setCurrentShapeId(shapeId);
@@ -128,9 +143,9 @@ const OutlinePoint = (props: {
           editMutations.unsetCurrentKeyEntity();
           e.stopPropagation();
         } else if (editMode === 'move' || editMode === 'add') {
+          editMutations.unsetCurrentKeyEntity();
           editMutations.setCurrentShapeId(shapeId);
           editMutations.setCurrentPointIndex(index);
-          editMutations.unsetCurrentKeyEntity();
           startOutlinePointDragOperation(e, true, isMirror);
           e.stopPropagation();
         } else if (editMode === 'delete') {

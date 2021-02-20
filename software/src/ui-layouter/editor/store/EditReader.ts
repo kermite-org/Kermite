@@ -184,5 +184,9 @@ class EditReader {
   get isModified() {
     return appState.editor.design !== appState.editor.loadedDesign;
   }
+
+  get shapeDrawing() {
+    return appState.editor.shapeDrawing;
+  }
 }
 export const editReader = new EditReader();

@@ -30,7 +30,16 @@ function createModels() {
   });
 
   const vmPlacementUnitText = createConfigTextEditModel(
-    [/^[0-9][0-9.]*$/, /^[0-9][0-9.]* [0-9][0-9.]*$/],
+    (text) => {
+      const textValid = [/^\d+\.?\d*$/, /^\d+\.?\d* \d+\.?\d*$/].some((p) =>
+        text.match(p),
+      );
+      if (textValid) {
+        const values = text.split(' ').map((str) => parseFloat(str));
+        return values.every((val) => val >= 5);
+      }
+      return false;
+    },
     (text) => {
       editMutations.setPlacementUnit(`KP ${text}`);
     },

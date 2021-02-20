@@ -69,19 +69,6 @@ const onSvgMouseDown = (e: MouseEvent) => {
       }
     }
   }
-  if (e.button === 2) {
-    const { editorTarget, editMode } = editReader;
-    if (editorTarget === 'outline' && editMode === 'add') {
-      editMutations.endShapeDrawing();
-    }
-    editMutations.setCurrentShapeId(undefined);
-    editMutations.unsetCurrentKeyEntity();
-    editMutations.setCurrentPointIndex(-1);
-    if (editMode === 'add') {
-      // addで右クリックしたときmoveに切り替える
-      // editMutations.setEditMode('move');
-    }
-  }
   if (e.button === 1) {
     startSightDragOperation(e);
   }

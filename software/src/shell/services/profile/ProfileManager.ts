@@ -42,6 +42,16 @@ export class ProfileManager implements IProfileManager {
     return this.status.loadedProfileData;
   }
 
+  async getCurrentProfileAfterInitialization(): Promise<
+    IProfileData | undefined
+  > {
+    // 初期化中なら初期化の処理を待ってから、読み込まれたプロファイルを返す
+    if (this.initializationPromise) {
+      await this.initializationPromise;
+    }
+    return this.status.loadedProfileData;
+  }
+
   readonly statusEventPort = new EventPort<Partial<IProfileManagerStatus>>({
     initialValueGetter: () => this.status,
   });
@@ -72,12 +82,18 @@ export class ProfileManager implements IProfileManager {
     return profName;
   }
 
+  private initializationPromise: Promise<void> | undefined;
+
   async initializeAsync() {
-    await this.core.ensureProfilesDirectoryExists();
-    const allProfileNames = await this.initializeProfileList();
-    const initialProfileName = this.getInitialProfileName(allProfileNames);
-    this.setStatus({ allProfileNames });
-    await this.loadProfile(initialProfileName);
+    this.initializationPromise = (async () => {
+      await this.core.ensureProfilesDirectoryExists();
+      const allProfileNames = await this.initializeProfileList();
+      const initialProfileName = this.getInitialProfileName(allProfileNames);
+      this.setStatus({ allProfileNames });
+      await this.loadProfile(initialProfileName);
+    })();
+    await this.initializationPromise;
+    this.initializationPromise = undefined;
   }
 
   async terminateAsync() {
