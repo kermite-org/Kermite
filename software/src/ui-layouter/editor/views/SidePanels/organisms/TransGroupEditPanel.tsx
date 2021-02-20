@@ -28,21 +28,21 @@ export const TransGroupEditPanel = () => {
               {...vmX}
               label={'x'}
               labelWidth={70}
-              inputWidth={60}
+              inputWidth={80}
               unit="mm"
             />
             <GeneralConfigTextEditRow
               {...vmY}
               label={'y'}
               labelWidth={70}
-              inputWidth={60}
+              inputWidth={80}
               unit="mm"
             />
             <GeneralConfigTextEditRow
               {...vmAngle}
               label={'angle'}
               labelWidth={70}
-              inputWidth={60}
+              inputWidth={80}
               unit="deg"
             />
             <HFlex>

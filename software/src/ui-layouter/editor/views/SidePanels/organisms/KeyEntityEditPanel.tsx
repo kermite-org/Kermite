@@ -32,19 +32,19 @@ export const KeyEntityEditPanel = () => {
             key={index}
             {...slot}
             labelWidth={80}
-            inputWidth={60}
+            inputWidth={80}
           />
         ))}
         <GeneralConfigTextEditRow
           label="keyIndex"
           {...vm.vmKeyIndex}
           labelWidth={80}
-          inputWidth={60}
+          inputWidth={80}
         />
         <div css={cssErrorText}>{vm.vmKeyIndex.errorText}</div>
         <HFlex>
           <span style={{ width: '80px' }}>groupId</span>
-          <GeneralSelector {...vm.vmGroupId} width={60} />
+          <GeneralSelector {...vm.vmGroupId} width={80} />
         </HFlex>
         <div qxIf={!!vm.errorText} css={cssErrorText}>
           {vm.errorText}
