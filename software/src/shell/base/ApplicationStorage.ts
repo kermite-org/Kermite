@@ -11,21 +11,18 @@ export interface IApplicationPersistData {
   pageState: {
     currentPagePath: string;
   };
-  currentProfileName: string | undefined;
 }
 
 const defaultPersistData: IApplicationPersistData = {
   pageState: {
     currentPagePath: '/',
   },
-  currentProfileName: undefined,
 };
 
 const applicationPersistDataSchemaChecker = vObject({
   pageState: vObject({
     currentPagePath: vString(),
   }),
-  currentProfileName: vString(),
 });
 class ApplicationStorage {
   private configFilePath = appEnv.resolveUserDataFilePath('data/config.json');
@@ -42,6 +39,10 @@ class ApplicationStorage {
     value: IApplicationPersistData[K],
   ) {
     this.data[key] = value;
+  }
+
+  readItem<T>(key: string): T | undefined {
+    return this.data[key];
   }
 
   readItemSafe<T>(
