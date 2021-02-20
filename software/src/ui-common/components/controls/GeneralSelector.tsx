@@ -44,7 +44,7 @@ export const GeneralSelector: FC<Props> = ({
   hint,
 }) => (
   <select
-    value={value}
+    value={options.length > 0 ? value : ''}
     onChange={reflectValue(setValue)}
     css={style(width)}
     className={className}

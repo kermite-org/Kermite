@@ -18,6 +18,7 @@ export interface IEditKeyUnitCardViewModel {
   secondaryText: string;
   isLayerFallback: boolean;
   isHold: boolean;
+  shiftHold: boolean;
 }
 
 const cssKeyShape = css`
@@ -63,6 +64,7 @@ export function EditKeyUnitCard(props: {
     isLayerFallback,
     isHold,
     shape,
+    shiftHold,
   } = props.keyUnit;
   const { showLayerDefaultAssign } = props;
 
@@ -79,6 +81,11 @@ export function EditKeyUnitCard(props: {
     } else {
       return '5px';
     }
+  };
+
+  const getFontWeight = (text: string) => {
+    const shouldBold = shiftHold && text.match(/^[A-Z]$/);
+    return shouldBold ? 'bold' : 'normal';
   };
 
   return (
@@ -99,6 +106,7 @@ export function EditKeyUnitCard(props: {
         x={0}
         y={0}
         font-size={getFontSize(primaryText)}
+        font-weight={getFontWeight(primaryText)}
         text-anchor="middle"
         dominant-baseline="center"
         data-is-weak={isLayerFallback}

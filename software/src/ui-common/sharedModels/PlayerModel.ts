@@ -86,6 +86,29 @@ export class PlayerModel {
     return undefined;
   };
 
+  private plainShiftPressed: boolean = false;
+
+  checkShiftHold(): boolean {
+    const shiftLayerHold = this._profileData.layers.some(
+      (layer, layerIndex) =>
+        this.isLayerActive(layerIndex) &&
+        layer.attachedModifiers?.includes('K_Shift'),
+    );
+    return shiftLayerHold || this.plainShiftPressed;
+  }
+
+  private shiftResolver = (keyUnitId: string, isDown: boolean) => {
+    const assign = this.getDynamicKeyAssign(keyUnitId);
+    if (assign?.type === 'single') {
+      if (
+        assign.op?.type === 'keyInput' &&
+        assign.op.virtualKey === 'K_Shift'
+      ) {
+        this.plainShiftPressed = isDown;
+      }
+    }
+  };
+
   private handlekeyEvents = (ev: IRealtimeKeyboardEvent) => {
     if (ev.type === 'keyStateChanged') {
       const { keyIndex, isDown } = ev;
@@ -100,6 +123,7 @@ export class PlayerModel {
       );
       if (keyUnitId) {
         this._keyStates[keyUnitId] = isDown;
+        this.shiftResolver(keyUnitId, isDown);
       }
     } else if (ev.type === 'layerChanged') {
       this._layerActiveFlags = ev.layerActiveFlags;

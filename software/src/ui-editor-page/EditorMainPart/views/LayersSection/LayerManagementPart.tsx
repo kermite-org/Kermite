@@ -43,15 +43,15 @@ export const LayerManagementPart = (props: {
       />
       <LayerOperationButtton
         icon="fa fa-long-arrow-alt-up"
-        enabled={canShiftBackCurrentLayer}
-        handler={shiftBackCurrentLayer}
-        hint="Bring layer backward."
-      />
-      <LayerOperationButtton
-        icon="fa fa-long-arrow-alt-down"
         enabled={canShiftForwardCurrentLayer}
         handler={shiftForwardCurrentLayer}
         hint="Bring layer forward."
+      />
+      <LayerOperationButtton
+        icon="fa fa-long-arrow-alt-down"
+        enabled={canShiftBackCurrentLayer}
+        handler={shiftBackCurrentLayer}
+        hint="Bring layer backward."
       />
     </div>
   );

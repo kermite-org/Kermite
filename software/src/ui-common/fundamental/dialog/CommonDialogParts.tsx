@@ -47,6 +47,7 @@ export function ClosableOverlay(props: {
 export const CommonDialogFrame = (props: {
   caption?: string;
   children: any;
+  close?: () => void;
 }) => {
   const cssLayerEditDialogPanel = css`
     background: #fff;
@@ -63,15 +64,34 @@ export const CommonDialogFrame = (props: {
     color: #fff;
     height: 28px;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    padding-left: 4px;
+
+    > .titleText {
+      margin-left: 4px;
+    }
+
+    > .closeButton {
+      cursor: pointer;
+      padding: 0 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 24px;
+      height: 24px;
+    }
   `;
 
   const cssBody = css``;
 
   return (
     <div css={cssLayerEditDialogPanel}>
-      <div css={cssTitleBar}>{props.caption}</div>
+      <div css={cssTitleBar}>
+        <span class="titleText">{props.caption}</span>
+        <div class="closeButton" onClick={props.close} qxIf={!!props.close}>
+          <i class="fa fa-times" />
+        </div>
+      </div>
       <div css={cssBody}>{props.children}</div>
     </div>
   );
