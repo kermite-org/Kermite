@@ -1,3 +1,6 @@
+import { duplicateObjectByJsonStringifyParse } from '~/shared';
+import { ICheckerEx } from '~/shared/modules/SchemaValidationHelper';
+
 export namespace UiLocalStorage {
   export function writeItem<T>(key: string, value: T) {
     const text = JSON.stringify(value);
@@ -14,5 +17,26 @@ export namespace UiLocalStorage {
       }
     }
     return undefined;
+  }
+
+  export function readItemSafe<T>(
+    key: string,
+    schemaChecker: ICheckerEx,
+    fallbackSource: T | (() => T),
+  ): T {
+    const value = readItem<T>(key);
+    const errors = schemaChecker(value);
+    if (errors) {
+      console.error(`invalid persist data for ${key}`);
+      console.error(JSON.stringify(errors, null, '  '));
+    }
+    if (value && !errors) {
+      return value;
+    }
+    if (fallbackSource instanceof Function) {
+      return fallbackSource();
+    } else {
+      return duplicateObjectByJsonStringifyParse(fallbackSource);
+    }
   }
 }
