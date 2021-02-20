@@ -14,6 +14,7 @@ export interface IPlayerModel {
   layers: ILayer[];
   keyStates: { [keyId: string]: boolean };
   displayDesign: IDisplayKeyboardDesign;
+  checkShiftHold(): boolean;
 }
 
 export interface IEditorModel {
@@ -60,6 +61,7 @@ function makeEditKeyUnitCardViewModel(
     playerModel.layers,
   );
 
+  const dynamic = uiStatusModel.settings.showLayersDynamic;
   const isHold = playerModel.keyStates[ke.keyId];
 
   return {
@@ -72,6 +74,7 @@ function makeEditKeyUnitCardViewModel(
     secondaryText,
     isLayerFallback: isLayerFallback || false,
     isHold,
+    shiftHold: dynamic && playerModel.checkShiftHold(),
   };
 }
 
