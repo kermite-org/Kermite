@@ -1,4 +1,9 @@
-import { copyObjectProps } from '~/shared';
+import {
+  vBoolean,
+  vNumber,
+  vObject,
+  vString,
+} from '~/shared/modules/SchemaValidationHelper';
 
 export type PagePaths =
   | '/'
@@ -37,6 +42,19 @@ const defaultUiSettings: IUiSettings = {
   showGlobalHint: true,
 };
 
+export const uiSettingsDataSchemaChecker = vObject({
+  showTestInputArea: vBoolean(),
+  shapeViewProjectSig: vString(),
+  shapeViewLayoutName: vString(),
+  shapeViewShowKeyId: vBoolean(),
+  shapeViewShowKeyIndex: vBoolean(),
+  shapeViewShowBoundingBox: vBoolean(),
+  showLayersDynamic: vBoolean(),
+  showLayerDefaultAssign: vBoolean(),
+  siteDpiScale: vNumber(),
+  showGlobalHint: vBoolean(),
+});
+
 export interface IUiStatus {
   profileConfigModalVisible: boolean;
 }
@@ -46,15 +64,21 @@ const defaultUiStatus: IUiStatus = {
 };
 
 export class UiStatusModel {
-  readonly settings: IUiSettings = defaultUiSettings;
+  settings: IUiSettings = defaultUiSettings;
 
   readonly status: IUiStatus = defaultUiStatus;
 
   initialize() {
     const settingsText = localStorage.getItem('uiSettings');
     if (settingsText) {
-      const settings = JSON.parse(settingsText);
-      copyObjectProps(this.settings, settings);
+      const obj = JSON.parse(settingsText);
+      const errors = uiSettingsDataSchemaChecker(obj);
+      if (errors) {
+        console.error(`ui settings data schema error`);
+        console.log(JSON.stringify(errors, null, '  '));
+      } else {
+        this.settings = obj;
+      }
     }
   }
 
