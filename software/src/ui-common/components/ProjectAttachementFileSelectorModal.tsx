@@ -105,7 +105,7 @@ const FlatListSelector = (props: {
   return (
     <select
       size={size}
-      value={value}
+      value={options.length > 0 ? value : ''}
       onInput={reflectValue(setValue)}
       css={cssFlatListSelector}
       disabled={disabled}
