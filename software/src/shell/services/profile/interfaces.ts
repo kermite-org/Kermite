@@ -14,6 +14,7 @@ export interface IProfileManager {
   reserveSaveProfileTask(prof: IProfileData): void;
   executeCommands(commands: IProfileManagerCommand[]): Promise<void>;
   saveCurrentProfile(profileData: IProfileData): Promise<void>;
+  getCurrentProfileAfterInitialization(): Promise<IProfileData | undefined>;
 }
 
 export interface IPresetProfileLoader {
