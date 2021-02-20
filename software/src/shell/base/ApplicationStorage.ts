@@ -45,7 +45,7 @@ const defaultPersistData: IApplicationPersistData = {
   },
 };
 
-export const applicationPersistDataSchemaChecker = vObject({
+const applicationPersistDataSchemaChecker = vObject({
   pageState: vObject({
     currentPagePath: vString(),
   }),
@@ -118,21 +118,21 @@ class ApplicationStorage {
   }
 
   async initializeAsync() {
-    if (fsExistsSync(this.configFilePath)) {
-      const obj = (await fsxReadJsonFile(
-        this.configFilePath,
-      )) as IApplicationPersistData;
-
-      const errors = applicationPersistDataSchemaChecker(obj);
-      if (errors) {
-        console.error(`application persist data schema error`);
-        console.log(JSON.stringify(errors, null, '  '));
-      } else {
-        this.data = obj;
-      }
-    } else {
+    if (!fsExistsSync(this.configFilePath)) {
       console.log('config file not found!');
+      return;
     }
+    const obj = (await fsxReadJsonFile(
+      this.configFilePath,
+    )) as IApplicationPersistData;
+    // const errors = applicationPersistDataSchemaChecker(obj);
+    // if (errors) {
+    //   console.error(`application persist data schema error`);
+    //   console.log(JSON.stringify(errors, null, '  '));
+    // } else {
+    //   this.data = obj;
+    // }
+    this.data = obj;
   }
 
   async terminateAsync() {
