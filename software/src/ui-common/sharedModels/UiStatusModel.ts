@@ -13,11 +13,6 @@ export type PagePaths =
 
 export interface IUiSettings {
   showTestInputArea: boolean;
-  shapeViewProjectSig: string;
-  shapeViewLayoutName: string;
-  shapeViewShowKeyId: boolean;
-  shapeViewShowKeyIndex: boolean;
-  shapeViewShowBoundingBox: boolean;
   showLayersDynamic: boolean;
   showLayerDefaultAssign: boolean;
   siteDpiScale: number;
@@ -26,11 +21,6 @@ export interface IUiSettings {
 
 const defaultUiSettings: IUiSettings = {
   showTestInputArea: false,
-  shapeViewProjectSig: '',
-  shapeViewLayoutName: '',
-  shapeViewShowKeyId: false,
-  shapeViewShowKeyIndex: false,
-  shapeViewShowBoundingBox: false,
   showLayersDynamic: false,
   showLayerDefaultAssign: false,
   siteDpiScale: 1.0,
@@ -46,15 +36,15 @@ const defaultUiStatus: IUiStatus = {
 };
 
 export class UiStatusModel {
-  readonly settings: IUiSettings = defaultUiSettings;
+  settings: IUiSettings = defaultUiSettings;
 
   readonly status: IUiStatus = defaultUiStatus;
 
   initialize() {
     const settingsText = localStorage.getItem('uiSettings');
     if (settingsText) {
-      const settings = JSON.parse(settingsText);
-      copyObjectProps(this.settings, settings);
+      const obj = JSON.parse(settingsText);
+      copyObjectProps(this.settings, obj);
     }
   }
 

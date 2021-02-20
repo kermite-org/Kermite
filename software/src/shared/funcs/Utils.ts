@@ -296,3 +296,14 @@ export function translateCoord(
 export function getObjectKeys<T extends {}>(obj: T): (keyof T)[] {
   return Object.keys(obj) as (keyof T)[];
 }
+
+export function checkValidOptionOrDefault<T extends string>(
+  optionValues: T[],
+  value: T,
+  defaultValue: T,
+): T {
+  if (optionValues.includes(value)) {
+    return value;
+  }
+  return defaultValue;
+}

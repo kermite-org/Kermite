@@ -5,11 +5,14 @@ import { PreviewKeyEntityCardsPart } from '~/ui-common-svg/KeyUnitCardsPart/Prev
 import { KeyboardSvgFrameWithAutoScaler } from '~/ui-common-svg/frames/KeyboardSvgFrameWithAutoScaler';
 import { KeyboardBodyShape } from '~/ui-common-svg/keyboardBody/KeyboardBodyShape';
 import { PreviewDisplayAreaBox } from '~/ui-common-svg/keyboardBody/PreviewBoundingBox';
-import { IUiSettings } from '~/ui-common/sharedModels/UiStatusModel';
 
 export function PreviewKeyboardShapeView(props: {
   keyboardDesign: IDisplayKeyboardDesign;
-  settings: IUiSettings;
+  settings: {
+    shapeViewShowKeyId: boolean;
+    shapeViewShowKeyIndex: boolean;
+    shapeViewShowBoundingBox: boolean;
+  };
 }) {
   const { keyboardDesign, settings } = props;
 

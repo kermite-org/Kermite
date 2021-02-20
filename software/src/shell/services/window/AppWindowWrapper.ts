@@ -1,14 +1,13 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, Rectangle } from 'electron';
 import { IAppWindowStatus } from '~/shared';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import {
-  appConfig,
-  appEnv,
-  appGlobal,
-  applicationStorage,
-  IWindowPersistState,
-  makeFallbackWindowPersistState,
-} from '~/shell/base';
+  vObject,
+  vNumber,
+  vString,
+  vBoolean,
+} from '~/shared/modules/SchemaValidationHelper';
+import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { createEventPort2, pathRelative } from '~/shell/funcs';
 import { MenuManager } from '~/shell/services/window/MenuManager';
 import { IAppWindowWrapper } from './interfaces';
@@ -20,6 +19,52 @@ import {
 
 const enableFilesWatcher = true;
 // const enableFilesWatcher = appEnv.isDevelopment;
+
+interface IWindowPersistState {
+  pagePath: string;
+  isDevtoolsVisible: boolean;
+  placement: {
+    main?: {
+      bounds: Rectangle;
+    };
+    widget?: {
+      projectId: string;
+      bounds: Rectangle;
+    };
+  };
+}
+
+function makeFallbackWindowPersistState(): IWindowPersistState {
+  return {
+    pagePath: '/',
+    isDevtoolsVisible: false,
+    placement: {
+      main: undefined,
+      widget: undefined,
+    },
+  };
+}
+
+const rectangleSchema = vObject({
+  x: vNumber(),
+  y: vNumber(),
+  width: vNumber(),
+  height: vNumber(),
+});
+
+const windowStateSchema = vObject({
+  pagePath: vString(),
+  isDevtoolsVisible: vBoolean(),
+  placement: vObject({
+    main: vObject({
+      bounds: rectangleSchema,
+    }).optional,
+    widget: vObject({
+      projectId: vString(),
+      bounds: rectangleSchema,
+    }).optional,
+  }),
+});
 
 export class AppWindowWrapper implements IAppWindowWrapper {
   private menuManager = new MenuManager();
@@ -238,7 +283,11 @@ export class AppWindowWrapper implements IAppWindowWrapper {
   }
 
   initialize() {
-    this.state = applicationStorage.getItem('windowState');
+    this.state = applicationStorage.readItemSafe(
+      'windowState',
+      windowStateSchema,
+      makeFallbackWindowPersistState,
+    );
     preparePreloadJsFile(appConfig.preloadFilePath);
     this.openMainWindow();
     this.setupMenu();
@@ -248,6 +297,6 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     if (this.mainWindow?.isVisible()) {
       this.reserveWindowSize();
     }
-    applicationStorage.setItem('windowState', this.state);
+    applicationStorage.writeItem('windowState', this.state);
   }
 }

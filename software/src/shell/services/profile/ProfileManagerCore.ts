@@ -40,11 +40,11 @@ export class ProfileManagerCore {
   }
 
   loadCurrentProfileName(): string | undefined {
-    return applicationStorage.getItem('currentProfileName');
+    return applicationStorage.readItem('currentProfileName');
   }
 
   storeCurrentProfileName(profName: string) {
-    applicationStorage.setItem('currentProfileName', profName);
+    applicationStorage.writeItem('currentProfileName', profName);
   }
 
   async loadProfile(profName: string): Promise<IProfileData> {

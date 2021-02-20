@@ -1,4 +1,6 @@
 export * from './ColorHelper';
+export * from './GlobalHint';
+export * from './UiLocalStorage';
 export * from './appUi';
 export * from './cssInitializer';
 export * from './router';

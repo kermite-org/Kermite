@@ -1,3 +1,5 @@
+import { checkValidOptionOrDefault } from '~/shared';
+
 const themeColorsDark = {
   clBackground: '#202634',
   clForeground: '#FFF',
@@ -74,12 +76,13 @@ export const themeColors: { [key in ThemeKey]: IThemeColorSet } = {
 };
 
 export const uiThemeConfigLoader = {
-  loadThemeKey() {
+  loadThemeKey(): ThemeKey {
     const themeKey = localStorage.getItem('themeKey') as ThemeKey;
-    if (Object.keys(themeColors).includes(themeKey)) {
-      return themeKey;
-    }
-    return 'light';
+    return checkValidOptionOrDefault<ThemeKey>(
+      Object.keys(themeColors) as ThemeKey[],
+      themeKey,
+      'light',
+    );
   },
   saveThemeKey(themeKey: ThemeKey) {
     localStorage.setItem('themeKey', themeKey);

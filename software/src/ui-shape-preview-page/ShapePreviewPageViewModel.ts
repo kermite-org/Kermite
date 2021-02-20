@@ -1,14 +1,11 @@
 import { Hook } from 'qx';
 import { IDisplayKeyboardDesign, removeArrayItems } from '~/shared';
 import { ipcAgent, ISelectorSource } from '~/ui-common';
-import {
-  IUiSettings,
-  uiStatusModel,
-} from '~/ui-common/sharedModels/UiStatusModel';
 import { keyboardShapesModel } from '~/ui-shape-preview-page/KeyboardShapesModel';
+import { IShapeViewPersistState } from '~/ui-shape-preview-page/ShapePreviewPageState';
 
 export interface IShapePreviewPageViewModel {
-  settings: IUiSettings;
+  settings: IShapeViewPersistState;
   loadedDesign: IDisplayKeyboardDesign | undefined;
   holdKeyIndices: number[];
   projectSelectorSource: ISelectorSource;
@@ -41,7 +38,7 @@ export function makeShapePreviewPageViewModel(): IShapePreviewPageViewModel {
   const holdKeyIndices = useHoldKeyIndices();
 
   return {
-    settings: uiStatusModel.settings,
+    settings: shapesModel.settings,
     loadedDesign: shapesModel.loadedDesign,
     holdKeyIndices: holdKeyIndices,
     projectSelectorSource: {

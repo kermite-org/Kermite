@@ -5,8 +5,3 @@ export interface IKeyboardConfig {
   behaviorMode: IKeyboardBehaviorMode;
   layoutStandard: IKeyboardLayoutStandard;
 }
-
-export const fallbackKeyboardConfig: IKeyboardConfig = {
-  behaviorMode: 'Standalone',
-  layoutStandard: 'US',
-};
