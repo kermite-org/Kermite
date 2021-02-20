@@ -22,7 +22,15 @@ export function WidgetKeyUnitCard({
 }: {
   keyUnit: IWidgetKeyUnitCardViewModel;
 }) {
-  const { keyUnitId, pos, primaryText, secondaryText, isHold, shape } = keyUnit;
+  const {
+    keyUnitId,
+    pos,
+    primaryText,
+    secondaryText,
+    isHold,
+    shape,
+    isLayerFallback,
+  } = keyUnit;
 
   const cssKeyShape = css`
     fill: #e0e8ff;
@@ -57,6 +65,7 @@ export function WidgetKeyUnitCard({
         font-size={getFontSize(primaryText)}
         text-anchor="middle"
         dominant-baseline="center"
+        qxIf={!isLayerFallback}
       >
         {primaryText}
       </text>
@@ -68,6 +77,7 @@ export function WidgetKeyUnitCard({
         font-size={getFontSize(secondaryText)}
         text-anchor="middle"
         dominant-baseline="center"
+        qxIf={!isLayerFallback}
       >
         {secondaryText}
       </text>
