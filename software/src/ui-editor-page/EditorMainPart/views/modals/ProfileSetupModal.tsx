@@ -70,7 +70,7 @@ const ProfileSetupModalContent = (props: {
 
   return (
     <ClosableOverlay close={close}>
-      <CommonDialogFrame caption="Create Profile">
+      <CommonDialogFrame caption="Create Profile" close={close}>
         <DialogContentRow>
           <table css={cssCommonPropertiesTable}>
             <tbody>
