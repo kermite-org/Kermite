@@ -45,9 +45,11 @@ export function LayersListBoxPart(props: { vm: ILayerListBoxPartViewModel }) {
     padding: 4px;
   `;
 
+  const layers = props.vm.layers.reverse();
+
   return (
     <div css={cssLayersListBox}>
-      {props.vm.layers.map((la) => (
+      {layers.map((la) => (
         <LayerCard layerModel={la} key={la.layerId} />
       ))}
     </div>
