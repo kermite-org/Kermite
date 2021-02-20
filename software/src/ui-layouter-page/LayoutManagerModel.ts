@@ -1,4 +1,5 @@
 import {
+  compareObjectByJsonStringify,
   createFallbackPersistKeyboardDesign,
   ILayoutEditSource,
   ILayoutManagerCommand,
@@ -28,6 +29,7 @@ interface ILayoutManagerModel {
   save(design: IPersistKeyboardDesign): void;
 }
 
+let _prevLoadedDevsign: IPersistKeyboardDesign | undefined;
 export class LayoutManagerModel implements ILayoutManagerModel {
   private _projectLayoutsInfos: IProjectLayoutsInfo[] = [];
 
@@ -163,10 +165,18 @@ export class LayoutManagerModel implements ILayoutManagerModel {
       ...diff,
     };
     if (diff.loadedDesign) {
-      UiLayouterCore.loadEditDesign(diff.loadedDesign);
-      // 編集中のファイルを外部エディタで更新し、フォーマットの誤りなどで
-      // 発生したエラーを修正して再度保存した場合に、エラーダイアログを閉じる
-      // forceCloseModal();
+      const same = compareObjectByJsonStringify(
+        diff.loadedDesign,
+        _prevLoadedDevsign,
+      );
+      const isClean = compareObjectByJsonStringify(
+        diff.loadedDesign,
+        createFallbackPersistKeyboardDesign(),
+      );
+      if (!same || isClean) {
+        UiLayouterCore.loadEditDesign(diff.loadedDesign);
+        _prevLoadedDevsign = diff.loadedDesign;
+      }
     }
     if (diff.projectLayoutsInfos) {
       this._projectLayoutsInfos = diff.projectLayoutsInfos;
