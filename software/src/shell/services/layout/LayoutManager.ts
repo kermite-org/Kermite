@@ -47,7 +47,7 @@ export class LayoutManager implements ILayoutManager {
       this.setStatus({
         projectLayoutsInfos: await this.getAllProjectLayoutsInfos(),
       });
-      const editSource = applicationStorage.getItem('layoutEditSource');
+      const editSource = applicationStorage.getItem0('layoutEditSource');
       try {
         // 前回起動時に編集していたファイルの読み込みを試みる
         await this.loadLayoutByEditSource(editSource);
@@ -61,7 +61,7 @@ export class LayoutManager implements ILayoutManager {
   };
 
   private finalizeOnLastDisconnect = () => {
-    applicationStorage.setItem('layoutEditSource', this.status.editSource);
+    applicationStorage.setItem0('layoutEditSource', this.status.editSource);
     this.fileWatcher.unobserveFile();
   };
 

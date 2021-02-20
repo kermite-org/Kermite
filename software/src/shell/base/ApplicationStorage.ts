@@ -127,13 +127,13 @@ class ApplicationStorage {
   private configFilePath = appEnv.resolveUserDataFilePath('data/config.json');
   private data: IApplicationPersistData = defaultPersistData;
 
-  getItem<K extends keyof IApplicationPersistData>(
+  getItem0<K extends keyof IApplicationPersistData>(
     key: K,
   ): IApplicationPersistData[K] {
     return this.data[key];
   }
 
-  setItem<K extends keyof IApplicationPersistData>(
+  setItem0<K extends keyof IApplicationPersistData>(
     key: K,
     value: IApplicationPersistData[K],
   ) {

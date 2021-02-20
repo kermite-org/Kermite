@@ -7,11 +7,11 @@ export class KeyboardConfigProvider {
   internal_changedNotifier = new EventPort<void>();
 
   getKeyboardConfig(): IKeyboardConfig {
-    return applicationStorage.getItem('keyboardConfig');
+    return applicationStorage.getItem0('keyboardConfig');
   }
 
   writeKeyboardConfig(config: IKeyboardConfig) {
-    applicationStorage.setItem('keyboardConfig', config);
+    applicationStorage.setItem0('keyboardConfig', config);
     // appGlobal.eventBus.emit('keyboardConfigChanged', config);
     this.internal_changedNotifier.emit();
   }

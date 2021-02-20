@@ -238,7 +238,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
   }
 
   initialize() {
-    this.state = applicationStorage.getItem('windowState');
+    this.state = applicationStorage.getItem0('windowState');
     preparePreloadJsFile(appConfig.preloadFilePath);
     this.openMainWindow();
     this.setupMenu();
@@ -248,6 +248,6 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     if (this.mainWindow?.isVisible()) {
       this.reserveWindowSize();
     }
-    applicationStorage.setItem('windowState', this.state);
+    applicationStorage.setItem0('windowState', this.state);
   }
 }
