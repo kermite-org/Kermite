@@ -1,45 +1,11 @@
 import { duplicateObjectByJsonStringifyParse } from '~/shared';
-import {
-  ICheckerEx,
-  vObject,
-  vString,
-} from '~/shared/modules/SchemaValidationHelper';
+import { ICheckerEx } from '~/shared/modules/SchemaValidationHelper';
 import { appEnv } from '~/shell/base';
 import { fsExistsSync, fsxReadJsonFile, fsxWriteJsonFile } from '~/shell/funcs';
 
-export interface IApplicationPersistData {
-  pageState: {
-    currentPagePath: string;
-  };
-}
-
-const defaultPersistData: IApplicationPersistData = {
-  pageState: {
-    currentPagePath: '/',
-  },
-};
-
-const applicationPersistDataSchemaChecker = vObject({
-  pageState: vObject({
-    currentPagePath: vString(),
-  }),
-});
 class ApplicationStorage {
   private configFilePath = appEnv.resolveUserDataFilePath('data/config.json');
-  private data: { [key: string]: any } = defaultPersistData;
-
-  getItem0<K extends keyof IApplicationPersistData>(
-    key: K,
-  ): IApplicationPersistData[K] {
-    return this.data[key];
-  }
-
-  setItem0<K extends keyof IApplicationPersistData>(
-    key: K,
-    value: IApplicationPersistData[K],
-  ) {
-    this.data[key] = value;
-  }
+  private data: { [key: string]: any } = {};
 
   readItem<T>(key: string): T | undefined {
     return this.data[key];
@@ -73,16 +39,7 @@ class ApplicationStorage {
       console.log('config file not found!');
       return;
     }
-    const obj = (await fsxReadJsonFile(
-      this.configFilePath,
-    )) as IApplicationPersistData;
-    // const errors = applicationPersistDataSchemaChecker(obj);
-    // if (errors) {
-    //   console.error(`application persist data schema error`);
-    //   console.log(JSON.stringify(errors, null, '  '));
-    // } else {
-    //   this.data = obj;
-    // }
+    const obj = await fsxReadJsonFile(this.configFilePath);
     this.data = obj;
   }
 
