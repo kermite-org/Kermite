@@ -17,7 +17,7 @@ interface IOutlineEditPanelModel {
 }
 
 function createOutlineEditPanelModel() {
-  const numberPatterns = [/^-?[0-9.]+$/];
+  const numberPatterns = [/^-?\d+\.?\d*$/];
 
   function createOulineEditPropModel(propKey: 'x' | 'y') {
     return createConfigTextEditModelDynamic(

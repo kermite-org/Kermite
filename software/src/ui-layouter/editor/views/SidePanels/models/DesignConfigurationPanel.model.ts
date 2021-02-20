@@ -30,7 +30,7 @@ function createModels() {
   });
 
   const vmPlacementUnitText = createConfigTextEditModel(
-    [/^[0-9][0-9.]*$/, /^[0-9][0-9.]* [0-9][0-9.]*$/],
+    [/^\d+\.?\d*$/, /^\d+\.?\d* \d+\.?\d*$/],
     (text) => {
       editMutations.setPlacementUnit(`KP ${text}`);
     },

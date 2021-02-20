@@ -15,7 +15,7 @@ interface ITransGroupEditPanelModel {
 }
 
 function createTransGroupEditPanelModel() {
-  const numberPatterns = [/^-?[0-9.]+$/];
+  const numberPatterns = [/^-?\d+\.?\d*$/];
 
   function createTransGroupEditPropModel(propKey: 'x' | 'y' | 'angle') {
     return createConfigTextEditModelDynamic(
