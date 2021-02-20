@@ -1,7 +1,5 @@
 import { Rectangle } from 'electron';
 import { IGlobalSettings, IKeyboardConfig, ILayoutEditSource } from '~/shared';
-import { appEnv } from '~/shell/base';
-import { fsExistsSync, fsxReadJsonFile, fsxWriteJsonFile } from '~/shell/funcs';
 import {
   vBoolean,
   vNumber,
@@ -10,7 +8,9 @@ import {
   vString,
   vValueEquals,
   vValueOneOf,
-} from '~/shell/loaders/SchemaValidationHelper';
+} from '~/shared/modules/SchemaValidationHelper';
+import { appEnv } from '~/shell/base';
+import { fsExistsSync, fsxReadJsonFile, fsxWriteJsonFile } from '~/shell/funcs';
 
 export interface IWindowPersistState {
   pagePath: string;
