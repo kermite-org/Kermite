@@ -2,10 +2,10 @@ import { css } from 'goober';
 import { h } from 'qx';
 import { fieldSetter } from '~/ui-common';
 import { CheckBoxLine } from '~/ui-common/components';
-import { IUiSettings } from '~/ui-common/sharedModels/UiStatusModel';
+import { IShapeViewPersistState } from '~/ui-shape-preview-page/ShapePreviewPageState';
 
 interface IDisplayOptionSource {
-  fieldKey: keyof IUiSettings;
+  fieldKey: keyof IShapeViewPersistState;
   label: string;
 }
 const displayOptionsSource: IDisplayOptionSource[] = [
@@ -45,7 +45,9 @@ const cssPreviewOptionsBox = css`
   }
 `;
 
-export function ShapePreviewOptionsBox(props: { settings: IUiSettings }) {
+export function ShapePreviewOptionsBox(props: {
+  settings: IShapeViewPersistState;
+}) {
   const { settings } = props;
   return (
     <div css={cssPreviewOptionsBox}>

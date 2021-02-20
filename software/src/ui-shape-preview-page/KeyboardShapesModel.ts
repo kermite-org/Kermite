@@ -1,20 +1,23 @@
 import { IDisplayKeyboardDesign, IProjectResourceInfo } from '~/shared';
 import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
-import { ipcAgent } from '~/ui-common';
+import { ipcAgent, UiLocalStorage } from '~/ui-common';
 import {
-  uiStatusModel,
-  UiStatusModel,
-} from '~/ui-common/sharedModels/UiStatusModel';
+  IShapeViewPersistState,
+  shapeViewPersistStateDefault,
+  shapeViewPersistStateSchema,
+} from '~/ui-shape-preview-page/ShapePreviewPageState';
 
 export class KeyboardShapesModel {
-  constructor(private uiStatusModel: UiStatusModel) {}
-
   projectInfos: IProjectResourceInfo[] = [];
 
   private _currentProjectSig: string | undefined;
   private _loadedDesign: IDisplayKeyboardDesign | undefined;
   private _currentLayoutName: string | undefined;
+
+  settings: IShapeViewPersistState = {
+    ...shapeViewPersistStateDefault,
+  };
 
   get currentProjectSig() {
     return this._currentProjectSig || '';
@@ -59,7 +62,7 @@ export class KeyboardShapesModel {
   setCurrentProjectSig = (sig: string) => {
     if (sig !== this._currentProjectSig) {
       this._currentProjectSig = sig;
-      this.uiStatusModel.settings.shapeViewProjectSig = sig;
+      this.settings.shapeViewProjectSig = sig;
       this._currentLayoutName = this.optionLayoutNames[0];
       this.loadCurrentProjectLayout();
     }
@@ -68,7 +71,7 @@ export class KeyboardShapesModel {
   setCurrentLayoutName = (layoutName: string) => {
     if (layoutName !== this._currentLayoutName) {
       this._currentLayoutName = layoutName;
-      this.uiStatusModel.settings.shapeViewLayoutName = layoutName;
+      this.settings.shapeViewLayoutName = layoutName;
       this.loadCurrentProjectLayout();
     }
   };
@@ -97,12 +100,10 @@ export class KeyboardShapesModel {
     }
 
     this._currentProjectSig =
-      this.uiStatusModel.settings.shapeViewProjectSig ||
-      this.projectInfos[0].sig;
+      this.settings.shapeViewProjectSig || this.projectInfos[0].sig;
 
     this._currentLayoutName =
-      this.uiStatusModel.settings.shapeViewLayoutName ||
-      this.projectInfos[0].layoutNames[0];
+      this.settings.shapeViewLayoutName || this.projectInfos[0].layoutNames[0];
 
     if (!this.optionLayoutNames.includes(this._currentLayoutName)) {
       this._currentLayoutName = this.optionLayoutNames[0];
@@ -112,12 +113,23 @@ export class KeyboardShapesModel {
   }
 
   startPageSession = () => {
+    this.settings = UiLocalStorage.readItemSafe(
+      'shapePareviewPageSettings',
+      shapeViewPersistStateSchema,
+      shapeViewPersistStateDefault,
+    );
+
     this.initialize();
 
-    return ipcAgent.events.projects_layoutFileUpdationEvents.subscribe(
+    const unsub = ipcAgent.events.projects_layoutFileUpdationEvents.subscribe(
       this.onLayoutFileUpdated,
     );
+
+    return () => {
+      unsub();
+      UiLocalStorage.writeItem('shapePareviewPageSettings', this.settings);
+    };
   };
 }
 
-export const keyboardShapesModel = new KeyboardShapesModel(uiStatusModel);
+export const keyboardShapesModel = new KeyboardShapesModel();

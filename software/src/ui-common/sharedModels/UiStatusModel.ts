@@ -2,7 +2,6 @@ import {
   vBoolean,
   vNumber,
   vObject,
-  vString,
 } from '~/shared/modules/SchemaValidationHelper';
 
 export type PagePaths =
@@ -15,14 +14,8 @@ export type PagePaths =
   | '/heatmap'
   | '/settings'
   | '/widget';
-
 export interface IUiSettings {
   showTestInputArea: boolean;
-  shapeViewProjectSig: string;
-  shapeViewLayoutName: string;
-  shapeViewShowKeyId: boolean;
-  shapeViewShowKeyIndex: boolean;
-  shapeViewShowBoundingBox: boolean;
   showLayersDynamic: boolean;
   showLayerDefaultAssign: boolean;
   siteDpiScale: number;
@@ -31,11 +24,6 @@ export interface IUiSettings {
 
 const defaultUiSettings: IUiSettings = {
   showTestInputArea: false,
-  shapeViewProjectSig: '',
-  shapeViewLayoutName: '',
-  shapeViewShowKeyId: false,
-  shapeViewShowKeyIndex: false,
-  shapeViewShowBoundingBox: false,
   showLayersDynamic: false,
   showLayerDefaultAssign: false,
   siteDpiScale: 1.0,
@@ -44,11 +32,6 @@ const defaultUiSettings: IUiSettings = {
 
 export const uiSettingsDataSchemaChecker = vObject({
   showTestInputArea: vBoolean(),
-  shapeViewProjectSig: vString(),
-  shapeViewLayoutName: vString(),
-  shapeViewShowKeyId: vBoolean(),
-  shapeViewShowKeyIndex: vBoolean(),
-  shapeViewShowBoundingBox: vBoolean(),
   showLayersDynamic: vBoolean(),
   showLayerDefaultAssign: vBoolean(),
   siteDpiScale: vNumber(),
