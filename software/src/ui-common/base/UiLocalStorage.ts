@@ -1,4 +1,4 @@
-export namespace LocalStorageHelper {
+export namespace UiLocalStorage {
   export function writeItem<T>(key: string, value: T) {
     const text = JSON.stringify(value);
     localStorage.setItem(key, text);
