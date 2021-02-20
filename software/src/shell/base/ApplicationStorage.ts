@@ -1,11 +1,6 @@
-import {
-  duplicateObjectByJsonStringifyParse,
-  IGlobalSettings,
-  IKeyboardConfig,
-} from '~/shared';
+import { duplicateObjectByJsonStringifyParse, IKeyboardConfig } from '~/shared';
 import {
   ICheckerEx,
-  vBoolean,
   vObject,
   vString,
   vValueOneOf,
@@ -19,7 +14,6 @@ export interface IApplicationPersistData {
   };
   currentProfileName: string | undefined;
   keyboardConfig: IKeyboardConfig;
-  globalSettings: IGlobalSettings;
 }
 
 const defaultPersistData: IApplicationPersistData = {
@@ -31,11 +25,6 @@ const defaultPersistData: IApplicationPersistData = {
     behaviorMode: 'Standalone',
     layoutStandard: 'US',
   },
-  globalSettings: {
-    useOnlineResources: true,
-    useLocalResouces: false,
-    localProjectRootFolderPath: '',
-  },
 };
 
 const applicationPersistDataSchemaChecker = vObject({
@@ -46,12 +35,6 @@ const applicationPersistDataSchemaChecker = vObject({
   keyboardConfig: vObject({
     behaviorMode: vValueOneOf(['Standalone', 'SideBrain']),
     layoutStandard: vValueOneOf(['US', 'JIS']),
-  }),
-
-  globalSettings: vObject({
-    useOnlineResources: vBoolean(),
-    useLocalResouces: vBoolean(),
-    localProjectRootFolderPath: vString(),
   }),
 });
 class ApplicationStorage {
