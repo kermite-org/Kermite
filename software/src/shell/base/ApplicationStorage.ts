@@ -1,6 +1,12 @@
 import { Rectangle } from 'electron';
-import { IGlobalSettings, IKeyboardConfig, ILayoutEditSource } from '~/shared';
 import {
+  duplicateObjectByJsonStringifyParse,
+  IGlobalSettings,
+  IKeyboardConfig,
+  ILayoutEditSource,
+} from '~/shared';
+import {
+  ICheckerEx,
   vBoolean,
   vNumber,
   vObject,
@@ -125,7 +131,7 @@ export const applicationPersistDataSchemaChecker = vObject({
 });
 class ApplicationStorage {
   private configFilePath = appEnv.resolveUserDataFilePath('data/config.json');
-  private data: IApplicationPersistData = defaultPersistData;
+  private data: { [key: string]: any } = defaultPersistData;
 
   getItem0<K extends keyof IApplicationPersistData>(
     key: K,
@@ -137,6 +143,29 @@ class ApplicationStorage {
     key: K,
     value: IApplicationPersistData[K],
   ) {
+    this.data[key] = value;
+  }
+
+  readItemSafe<T>(
+    key: string,
+    schemaChecker: ICheckerEx,
+    fallbackSource: T | (() => T),
+  ): T {
+    const value = this.data[key];
+    const errors = schemaChecker(value);
+    if (errors) {
+      console.error(`invalid persist data for ${key}`);
+      console.error(JSON.stringify(errors, null, '  '));
+      if (fallbackSource instanceof Function) {
+        return fallbackSource();
+      } else {
+        return duplicateObjectByJsonStringifyParse(fallbackSource);
+      }
+    }
+    return value;
+  }
+
+  writeItem<T>(key: string, value: T) {
     this.data[key] = value;
   }
 
