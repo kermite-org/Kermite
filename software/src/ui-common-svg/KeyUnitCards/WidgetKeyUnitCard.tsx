@@ -15,6 +15,7 @@ export interface IWidgetKeyUnitCardViewModel {
   isLayerFallback: boolean;
   isHold: boolean;
   shape: IDisplayKeyShape;
+  shiftHold: boolean;
 }
 
 export function WidgetKeyUnitCard({
@@ -30,6 +31,7 @@ export function WidgetKeyUnitCard({
     isHold,
     shape,
     isLayerFallback,
+    shiftHold,
   } = keyUnit;
 
   const cssKeyShape = css`
@@ -52,6 +54,11 @@ export function WidgetKeyUnitCard({
     }
   };
 
+  const getFontWeight = (text: string) => {
+    const shouldBold = shiftHold && text.match(/^[A-Z]$/);
+    return shouldBold ? 'bold' : 'normal';
+  };
+
   return (
     <g
       transform={`translate(${pos.x}, ${pos.y}) rotate(${pos.r}) `}
@@ -63,6 +70,7 @@ export function WidgetKeyUnitCard({
         x={0}
         y={0}
         font-size={getFontSize(primaryText)}
+        font-weight={getFontWeight(primaryText)}
         text-anchor="middle"
         dominant-baseline="center"
         qxIf={!isLayerFallback}

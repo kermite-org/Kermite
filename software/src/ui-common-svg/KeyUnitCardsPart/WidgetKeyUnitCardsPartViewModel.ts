@@ -13,6 +13,7 @@ interface IPlayerModel {
   layers: ILayer[];
   keyStates: { [keyId: string]: boolean };
   displayDesign: IDisplayKeyboardDesign;
+  checkShiftHold(): boolean;
 }
 
 export interface IWidgetKeyUnitCardsPartViewModel {
@@ -44,6 +45,7 @@ function makeWidgetKeyUnitCardViewModel(
     isLayerFallback: isLayerFallback || false,
     isHold,
     shape: ke.shape,
+    shiftHold: playerModel.checkShiftHold(),
   };
 }
 
