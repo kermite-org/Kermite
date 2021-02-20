@@ -1,9 +1,8 @@
-import { duplicateObjectByJsonStringifyParse, IKeyboardConfig } from '~/shared';
+import { duplicateObjectByJsonStringifyParse } from '~/shared';
 import {
   ICheckerEx,
   vObject,
   vString,
-  vValueOneOf,
 } from '~/shared/modules/SchemaValidationHelper';
 import { appEnv } from '~/shell/base';
 import { fsExistsSync, fsxReadJsonFile, fsxWriteJsonFile } from '~/shell/funcs';
@@ -13,7 +12,6 @@ export interface IApplicationPersistData {
     currentPagePath: string;
   };
   currentProfileName: string | undefined;
-  keyboardConfig: IKeyboardConfig;
 }
 
 const defaultPersistData: IApplicationPersistData = {
@@ -21,10 +19,6 @@ const defaultPersistData: IApplicationPersistData = {
     currentPagePath: '/',
   },
   currentProfileName: undefined,
-  keyboardConfig: {
-    behaviorMode: 'Standalone',
-    layoutStandard: 'US',
-  },
 };
 
 const applicationPersistDataSchemaChecker = vObject({
@@ -32,10 +26,6 @@ const applicationPersistDataSchemaChecker = vObject({
     currentPagePath: vString(),
   }),
   currentProfileName: vString(),
-  keyboardConfig: vObject({
-    behaviorMode: vValueOneOf(['Standalone', 'SideBrain']),
-    layoutStandard: vValueOneOf(['US', 'JIS']),
-  }),
 });
 class ApplicationStorage {
   private configFilePath = appEnv.resolveUserDataFilePath('data/config.json');
