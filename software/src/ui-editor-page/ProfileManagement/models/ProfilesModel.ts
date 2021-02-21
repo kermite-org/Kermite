@@ -146,6 +146,15 @@ export class ProfilesModel {
     });
   };
 
+  saveUnsavedProfileAs = (profileName: string) => {
+    this.sendProfileManagerCommands({
+      saveProfileAs: {
+        name: profileName,
+        profileData: this.editorModel.profileData,
+      },
+    });
+  };
+
   startPageSession = () => {
     return ipcAgent.events.profile_profileManagerStatus.subscribe(
       this.handleProfileStatusChange,

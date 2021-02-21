@@ -41,6 +41,7 @@ export interface IProfileManagementPartViewModel {
   handleImportFromFile(): void;
   handleExportToFile(): void;
   isCurrentProfileInternal: boolean;
+  handleSaveUnsavedProfile(): void;
 }
 
 export const profilesModel = new ProfilesModel(editorModel);
@@ -166,6 +167,16 @@ const deleteProfile = async () => {
   }
 };
 
+const handleSaveUnsavedProfile = async () => {
+  if (profilesModel.editSource.type === 'InternalProfile') {
+    return;
+  }
+  const newProfileName = await inputNewProfileName('Save Profile');
+  if (newProfileName) {
+    profilesModel.saveUnsavedProfileAs(newProfileName);
+  }
+};
+
 const openConfiguration = () => {
   uiStatusModel.status.profileConfigModalVisible = true;
 };
@@ -243,8 +254,9 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     closeExportingPresetSelectionModal,
     saveProfileAsPreset: profilesModel.exportProfileAsProjectPreset,
     currentProfileProjectId: editorModel.loadedPorfileData.projectId,
+    isCurrentProfileInternal: editSource.type === 'InternalProfile',
+    handleSaveUnsavedProfile,
     handleImportFromFile,
     handleExportToFile,
-    isCurrentProfileInternal: editSource.type === 'InternalProfile',
   };
 }

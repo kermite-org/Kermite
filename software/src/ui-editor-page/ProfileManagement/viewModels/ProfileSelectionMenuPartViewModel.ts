@@ -46,10 +46,10 @@ function createMenuItemSources(
       enabled: vm.isCurrentProfileInternal,
     },
     {
-      key: 'saveAsPreset',
-      text: 'save as preset',
-      handler: vm.openExportingPresetSelectionModal,
-      enabled: isLocalProjectsAvailable && !!vm.currentProfileProjectId,
+      key: 'saveAs',
+      text: 'save as',
+      handler: vm.handleSaveUnsavedProfile,
+      enabled: !vm.isCurrentProfileInternal,
     },
     {
       key: 'importFromFile',
@@ -62,6 +62,12 @@ function createMenuItemSources(
       text: 'export to file',
       handler: vm.handleExportToFile,
       enabled: true,
+    },
+    {
+      key: 'saveAsPreset',
+      text: 'save as preset',
+      handler: vm.openExportingPresetSelectionModal,
+      enabled: isLocalProjectsAvailable && !!vm.currentProfileProjectId,
     },
   ];
 }
