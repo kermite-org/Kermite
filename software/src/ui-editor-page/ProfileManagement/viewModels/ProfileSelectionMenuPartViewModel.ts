@@ -1,62 +1,77 @@
 import { useLocal } from '~/ui-common';
 import { useProjectResourcePresenceChecker } from '~/ui-common/sharedModels/hooks';
-import { editorModel } from '~/ui-editor-page/EditorMainPart/models/EditorModel';
 import { IProfileManagementPartViewModel } from './ProfileManagementPartViewModel';
+
+interface IMenuItem {
+  key: string;
+  text: string;
+  handler(): void;
+  enabled: boolean;
+}
 
 export interface IProfileSelectionMenuPartViewModel {
   isOpen: boolean;
   openMenu(): void;
   closeMenu(): void;
-  menuItems: {
-    key: string;
-    text: string;
-    handler(): void;
-  }[];
+  menuItems: IMenuItem[];
 }
 
-type IProfileMenuCommand =
-  | 'createProfile'
-  | 'renameProfile'
-  | 'copyProfile'
-  | 'deleteProfile'
-  | 'openExportingPresetSelectionModal';
-
-const profileMenuCommands: IProfileMenuCommand[] = [
-  'createProfile',
-  'renameProfile',
-  'copyProfile',
-  'deleteProfile',
-];
-
-const profileMenuCommandsWithProjectIO: IProfileMenuCommand[] = [
-  'createProfile',
-  'renameProfile',
-  'copyProfile',
-  'deleteProfile',
-  'openExportingPresetSelectionModal',
-];
-
-const profileMenuCommandTexts: { [key in IProfileMenuCommand]: string } = {
-  createProfile: 'new',
-  renameProfile: 'rename',
-  copyProfile: 'copy',
-  deleteProfile: 'delete',
-  openExportingPresetSelectionModal: 'save as preset',
-};
+function createMenuItemSources(
+  vm: IProfileManagementPartViewModel,
+  isLocalProjectsAvailable: boolean,
+): IMenuItem[] {
+  return [
+    {
+      key: 'createProfile',
+      text: 'new',
+      handler: vm.createProfile,
+      enabled: true,
+    },
+    {
+      key: 'renameProfile',
+      text: 'rename',
+      handler: vm.renameProfile,
+      enabled: vm.isCurrentProfileInternal,
+    },
+    {
+      key: 'copyProfile',
+      text: 'copy',
+      handler: vm.copyProfile,
+      enabled: vm.isCurrentProfileInternal,
+    },
+    {
+      key: 'deleteProfile',
+      text: 'delete',
+      handler: vm.deleteProfile,
+      enabled: vm.isCurrentProfileInternal,
+    },
+    {
+      key: 'saveAsPreset',
+      text: 'save as preset',
+      handler: vm.openExportingPresetSelectionModal,
+      enabled: isLocalProjectsAvailable && !!vm.currentProfileProjectId,
+    },
+    {
+      key: 'importFromFile',
+      text: 'import from file',
+      handler: vm.handleImportFromFile,
+      enabled: true,
+    },
+    {
+      key: 'exportToFile',
+      text: 'export to file',
+      handler: vm.handleExportToFile,
+      enabled: true,
+    },
+  ];
+}
 
 export function makeProfileSelectionMenuPartViewModel(
   vm: IProfileManagementPartViewModel,
 ) {
   const state = useLocal({ isOpen: false });
-
   const isLocalProjectsAvailable = useProjectResourcePresenceChecker('local');
-
-  const { projectId } = editorModel.profileData;
-
-  const sourceMenuCoomands =
-    isLocalProjectsAvailable && projectId
-      ? profileMenuCommandsWithProjectIO
-      : profileMenuCommands;
+  const menuItemsSource = createMenuItemSources(vm, isLocalProjectsAvailable);
 
   return {
     get isOpen() {
@@ -69,13 +84,14 @@ export function makeProfileSelectionMenuPartViewModel(
       state.isOpen = false;
     },
     get menuItems() {
-      return sourceMenuCoomands.map((cmd, index) => ({
-        key: `cmd${index}`,
-        text: profileMenuCommandTexts[cmd],
+      return menuItemsSource.map((item) => ({
+        key: item.key,
+        text: item.text,
         handler() {
-          vm[cmd]();
+          item.handler();
           state.isOpen = false;
         },
+        enabled: item.enabled,
       }));
     },
   };

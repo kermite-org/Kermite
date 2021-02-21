@@ -93,6 +93,8 @@ export interface IProfileManagerCommand {
     presetName: string;
     profileData: IProfileData;
   };
+  importFromFile?: { filePath: string };
+  exportToFile?: { filePath: string; profileData: IProfileData };
 }
 
 export type ILayoutEditSource =

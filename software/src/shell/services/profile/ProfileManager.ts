@@ -312,6 +312,22 @@ export class ProfileManager implements IProfileManager {
     await this.loadProfile(newProfName);
   }
 
+  private async importFromFile(filePath: string) {
+    const editSource: IProfileEditSource = {
+      type: 'ExternalFile',
+      filePath: filePath,
+    };
+    const profile = await this.loadProfileByEditSource(editSource);
+    this.setStatus({
+      editSource,
+      loadedProfileData: profile,
+    });
+  }
+
+  private async exportToFile(filePath: string, profileData: IProfileData) {
+    await this.core.saveExternalProfileFile(filePath, profileData);
+  }
+
   private async executeCommand(cmd: IProfileManagerCommand) {
     // console.log(`execute command`, { cmd });
     if (cmd.creatProfile) {
@@ -345,6 +361,13 @@ export class ProfileManager implements IProfileManager {
     } else if (cmd.saveAsProjectPreset) {
       const { projectId, presetName, profileData } = cmd.saveAsProjectPreset;
       await this.saveAsProjectPreset(projectId, presetName, profileData);
+    } else if (cmd.importFromFile) {
+      await this.importFromFile(cmd.importFromFile.filePath);
+    } else if (cmd.exportToFile) {
+      await this.exportToFile(
+        cmd.exportToFile.filePath,
+        cmd.exportToFile.profileData,
+      );
     }
   }
 

@@ -136,6 +136,16 @@ export class ProfilesModel {
     this.sendProfileManagerCommands(exportCommand);
   };
 
+  importFromFile = (filePath: string) => {
+    this.sendProfileManagerCommands({ importFromFile: { filePath } });
+  };
+
+  exportToFile = (filePath: string) => {
+    this.sendProfileManagerCommands({
+      exportToFile: { filePath, profileData: this.editorModel.profileData },
+    });
+  };
+
   startPageSession = () => {
     return ipcAgent.events.profile_profileManagerStatus.subscribe(
       this.handleProfileStatusChange,

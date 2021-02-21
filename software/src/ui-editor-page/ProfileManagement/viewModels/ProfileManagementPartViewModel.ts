@@ -3,6 +3,7 @@ import { IProfileEditSource } from '~/shared';
 import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import {
   getFileNameFromPath,
+  ipcAgent,
   ISelectorSource,
   makePlainSelectorOption,
   useLocal,
@@ -37,6 +38,9 @@ export interface IProfileManagementPartViewModel {
   closeExportingPresetSelectionModal(): void;
   saveProfileAsPreset(projectId: string, presetName: string): void;
   currentProfileProjectId: string;
+  handleImportFromFile(): void;
+  handleExportToFile(): void;
+  isCurrentProfileInternal: boolean;
 }
 
 export const profilesModel = new ProfilesModel(editorModel);
@@ -175,6 +179,20 @@ const onWriteButton = () => {
   keyboardConfigModel.writeConfigurationToDevice();
 };
 
+const handleImportFromFile = async () => {
+  const filePath = await ipcAgent.async.file_getOpenJsonFilePathWithDialog();
+  if (filePath) {
+    profilesModel.importFromFile(filePath);
+  }
+};
+
+const handleExportToFile = async () => {
+  const filePath = await ipcAgent.async.file_getSaveJsonFilePathWithDialog();
+  if (filePath) {
+    profilesModel.exportToFile(filePath);
+  }
+};
+
 export function makeProfileManagementPartViewModel(): IProfileManagementPartViewModel {
   Hook.useEffect(profilesModel.startPageSession, []);
 
@@ -225,5 +243,8 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     closeExportingPresetSelectionModal,
     saveProfileAsPreset: profilesModel.exportProfileAsProjectPreset,
     currentProfileProjectId: editorModel.loadedPorfileData.projectId,
+    handleImportFromFile,
+    handleExportToFile,
+    isCurrentProfileInternal: editSource.type === 'InternalProfile',
   };
 }
