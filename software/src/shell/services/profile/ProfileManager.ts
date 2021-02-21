@@ -70,10 +70,14 @@ export class ProfileManager implements IProfileManager {
     initialValueGetter: () => this.status,
   });
 
-  private lazyInitializer = createLazyInitializer(async () => {
-    await this.core.ensureProfilesDirectoryExists();
+  private async reEnumerateAllProfileNames() {
     const allProfileNames = await this.core.listAllProfileNames();
     this.setStatus({ allProfileNames });
+  }
+
+  private lazyInitializer = createLazyInitializer(async () => {
+    await this.core.ensureProfilesDirectoryExists();
+    await this.reEnumerateAllProfileNames();
     // const initialProfileName = this.getInitialProfileName(allProfileNames);
     // await this.loadProfile(initialProfileName);
     const editSource = this.loadInitialEditSource();
@@ -292,8 +296,7 @@ export class ProfileManager implements IProfileManager {
     }
     const isCurrent = this.status.editSource.profileName === profName;
     await this.core.renameProfile(profName, newProfName);
-    const allProfileNames = await this.core.listAllProfileNames();
-    this.setStatus({ allProfileNames });
+    await this.reEnumerateAllProfileNames();
     if (isCurrent) {
       await this.loadProfile(newProfName);
     }
@@ -307,8 +310,7 @@ export class ProfileManager implements IProfileManager {
       return false;
     }
     await this.core.copyProfile(profName, newProfName);
-    const allProfileNames = await this.core.listAllProfileNames();
-    this.setStatus({ allProfileNames });
+    await this.reEnumerateAllProfileNames();
     await this.loadProfile(newProfName);
   }
 
@@ -317,8 +319,7 @@ export class ProfileManager implements IProfileManager {
       return false;
     }
     await this.core.saveProfile(newProfName, profileData);
-    const allProfileNames = await this.core.listAllProfileNames();
-    this.setStatus({ allProfileNames });
+    await this.reEnumerateAllProfileNames();
     await this.loadProfile(newProfName);
   }
 
