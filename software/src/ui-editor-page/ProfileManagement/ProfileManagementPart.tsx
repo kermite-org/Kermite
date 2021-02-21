@@ -61,6 +61,7 @@ export const ProfileManagementPart = () => {
       />
       <OperationButtonWithIcon
         onClick={baseVm.onWriteButton}
+        disabled={!baseVm.canWrite}
         label="write"
         icon="double_arrow"
         hint="write keymapping to the device."

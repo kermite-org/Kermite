@@ -41,6 +41,10 @@ export class ProfilesModel {
     return this.editorModel.checkDirty(false);
   }
 
+  getCurrentProfileProjectId() {
+    return this.editorModel.loadedPorfileData.projectId;
+  }
+
   // actions
 
   private getSaveCommandIfDirty() {

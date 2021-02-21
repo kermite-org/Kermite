@@ -10,6 +10,7 @@ import {
   modalConfirm,
   modalTextEdit,
 } from '~/ui-common/fundamental/dialog/BasicModals';
+import { useDeviceStatusModel } from '~/ui-common/sharedModels/DeviceStatusModelHook';
 import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
 import { editorModel } from '~/ui-editor-page/EditorMainPart/models/EditorModel';
 import { callProfileSetupModal } from '~/ui-editor-page/EditorMainPart/views/modals/ProfileSetupModal';
@@ -27,6 +28,7 @@ export interface IProfileManagementPartViewModel {
   deleteProfile(): void;
   openConfiguration(): void;
   canSave: boolean;
+  canWrite: boolean;
   onSaveButton(): void;
   onWriteButton(): void;
   profileSelectorSource: ISelectorSource;
@@ -44,6 +46,8 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     profilesModel.initialize();
     return () => profilesModel.finalize();
   }, []);
+
+  const deviceStatus = useDeviceStatusModel();
 
   const state = useLocal({ isPresetsModalOpen: false });
 
@@ -151,6 +155,13 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     keyboardConfigModel.writeConfigurationToDevice();
   };
 
+  const canSave = profilesModel.checkDirty();
+
+  const canWrite =
+    deviceStatus.isConnected &&
+    deviceStatus.deviceAttrs?.projectId ===
+      profilesModel.getCurrentProfileProjectId();
+
   return {
     currentProfileName,
     allProfileNames,
@@ -161,7 +172,8 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     copyProfile,
     deleteProfile,
     openConfiguration,
-    canSave: profilesModel.checkDirty(),
+    canSave,
+    canWrite,
     onSaveButton,
     onWriteButton,
     profileSelectorSource: {
