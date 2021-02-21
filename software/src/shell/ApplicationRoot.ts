@@ -204,7 +204,6 @@ export class ApplicationRoot {
   async lazyInitialzeServices() {
     if (!this._lazyInitializeTriggered) {
       this._lazyInitializeTriggered = true;
-      await this.profileManager.initializeAsync();
       this.deviceService.initialize();
       this.inputLogicSimulator.initialize();
     }
@@ -216,7 +215,6 @@ export class ApplicationRoot {
       this.inputLogicSimulator.terminate();
       this.deviceService.terminate();
       this.windowWrapper.terminate();
-      await this.profileManager.terminateAsync();
       await applicationStorage.terminateAsync();
     });
   }

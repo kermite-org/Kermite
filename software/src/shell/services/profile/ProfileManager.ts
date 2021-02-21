@@ -8,7 +8,7 @@ import {
   IPresetSpec,
   IResourceOrigin,
 } from '~/shared';
-import { EventPort } from '~/shell/funcs';
+import { createEventPort2 } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
 import { ProfileManagerCore } from './ProfileManagerCore';
 import { IPresetProfileLoader, IProfileManager } from './interfaces';
@@ -41,6 +41,11 @@ export class ProfileManager implements IProfileManager {
     this.core = new ProfileManagerCore();
   }
 
+  statusEventPort = createEventPort2<Partial<IProfileManagerStatus>>({
+    onFirstSubscriptionStarting: () => this.lazyInitializer(),
+    initialValueGetter: () => this.status,
+  });
+
   private lazyInitializer = createLazyInitializer(async () => {
     await this.core.ensureProfilesDirectoryExists();
     const allProfileNames = await this.initializeProfileList();
@@ -48,14 +53,6 @@ export class ProfileManager implements IProfileManager {
     this.setStatus({ allProfileNames });
     await this.loadProfile(initialProfileName);
   });
-
-  async initializeAsync() {
-    await this.lazyInitializer();
-  }
-
-  async terminateAsync() {
-    this.core.storeCurrentProfileName(this.status.currentProfileName);
-  }
 
   getCurrentProfileProjectId(): string | undefined {
     return this.status.loadedProfileData?.projectId;
@@ -71,13 +68,12 @@ export class ProfileManager implements IProfileManager {
     return this.status.loadedProfileData;
   }
 
-  readonly statusEventPort = new EventPort<Partial<IProfileManagerStatus>>({
-    initialValueGetter: () => this.status,
-  });
-
   private setStatus(newStatePartial: Partial<IProfileManagerStatus>) {
     this.status = { ...this.status, ...newStatePartial };
     this.statusEventPort.emit(newStatePartial);
+    if (newStatePartial.currentProfileName) {
+      this.core.storeCurrentProfileName(newStatePartial.currentProfileName);
+    }
   }
 
   private async initializeProfileList(): Promise<string[]> {
