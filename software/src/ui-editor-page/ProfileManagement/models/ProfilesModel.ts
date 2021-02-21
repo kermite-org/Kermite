@@ -35,10 +35,16 @@ export class ProfilesModel {
     }
   };
 
+  // reader
+
+  checkDirty() {
+    return this.editorModel.checkDirty(false);
+  }
+
   // actions
 
   private getSaveCommandIfDirty() {
-    const isDirty = this.editorModel.checkDirty();
+    const isDirty = this.editorModel.checkDirty(true);
     if (isDirty) {
       return {
         saveCurrentProfile: { profileData: this.editorModel.profileData },
@@ -132,7 +138,7 @@ export class ProfilesModel {
   }
 
   finalize() {
-    if (useAutoSave && this.editorModel.checkDirty()) {
+    if (useAutoSave && this.editorModel.checkDirty(true)) {
       this.profileProvider.saveProfileOnClosing(this.editorModel.profileData);
     }
     this.profileProvider.finalize();

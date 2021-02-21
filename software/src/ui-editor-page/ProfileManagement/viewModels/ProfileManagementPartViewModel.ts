@@ -26,7 +26,9 @@ export interface IProfileManagementPartViewModel {
   copyProfile(): void;
   deleteProfile(): void;
   openConfiguration(): void;
-  onLaunchButton(): void;
+  canSave: boolean;
+  onSaveButton(): void;
+  onWriteButton(): void;
   profileSelectorSource: ISelectorSource;
   isExportingPresetSelectionModalOpen: boolean;
   openExportingPresetSelectionModal(): void;
@@ -140,7 +142,11 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     uiStatusModel.status.profileConfigModalVisible = true;
   };
 
-  const onLaunchButton = () => {
+  const onSaveButton = () => {
+    profilesModel.saveProfile();
+  };
+
+  const onWriteButton = () => {
     profilesModel.saveProfile();
     keyboardConfigModel.writeConfigurationToDevice();
   };
@@ -155,7 +161,9 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     copyProfile,
     deleteProfile,
     openConfiguration,
-    onLaunchButton,
+    canSave: profilesModel.checkDirty(),
+    onSaveButton,
+    onWriteButton,
     profileSelectorSource: {
       options: allProfileNames.map(makePlainSelectorOption),
       value: currentProfileName,
