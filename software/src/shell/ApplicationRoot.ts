@@ -22,7 +22,6 @@ import { ProfileManager } from '~/shell/services/profile/ProfileManager';
 import { AppWindowWrapper } from '~/shell/services/window';
 
 export class ApplicationRoot {
-  private windowWrapper = new AppWindowWrapper();
   private keyboardConfigProvider = new KeyboardConfigProvider();
 
   private keyboardLayoutFilesWatcher = new KeyboardLayoutFilesWatcher();
@@ -45,6 +44,8 @@ export class ApplicationRoot {
     this.keyboardConfigProvider,
     this.deviceService,
   );
+
+  private windowWrapper = new AppWindowWrapper(this.profileManager);
 
   // ------------------------------------------------------------
 

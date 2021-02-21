@@ -9,6 +9,7 @@ import {
 } from '~/shared/modules/SchemaValidationHelper';
 import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { createEventPort2, pathRelative } from '~/shell/funcs';
+import { IProfileManager } from '~/shell/services/profile/interfaces';
 import { MenuManager } from '~/shell/services/window/MenuManager';
 import { IAppWindowWrapper } from './interfaces';
 import {
@@ -72,6 +73,8 @@ export class AppWindowWrapper implements IAppWindowWrapper {
   private publicRootPath: string | undefined;
   private mainWindow: BrowserWindow | undefined;
   private state: IWindowPersistState = makeFallbackWindowPersistState();
+
+  constructor(private profileManager: IProfileManager) {}
 
   appWindowEventPort = createEventPort2<Partial<IAppWindowStatus>>({
     initialValueGetter: () => ({
@@ -232,7 +235,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     if (this.mainWindow) {
       const bounds = this.mainWindow.getBounds();
       if (this.isWidgetMode) {
-        const currentProfile = appGlobal.currentProfileGetter?.();
+        const currentProfile = this.profileManager.getCurrentProfile();
         if (currentProfile) {
           this.state.placement.widget = {
             projectId: currentProfile.projectId,
@@ -250,7 +253,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
       return;
     }
     if (this.isWidgetMode) {
-      const currentProfile = appGlobal.currentProfileGetter?.();
+      const currentProfile = this.profileManager.getCurrentProfile();
       if (!currentProfile) {
         return;
       }
