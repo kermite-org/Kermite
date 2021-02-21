@@ -162,8 +162,6 @@ export interface IAppIpcContract {
   sync: {
     dev_getVersionSync(): string;
     dev_debugMessage(message: string): void;
-
-    profile_reserveSaveProfileTask(data: IProfileData): void;
     // config_saveSettingsOnClosing?: IApplicationSettings;
     config_saveKeyboardConfigOnClosing(data: IKeyboardConfig): void;
   };

@@ -12,7 +12,6 @@ export interface IProfileManager {
   getCurrentProfileAsync(): Promise<IProfileData | undefined>;
   getAllProfileNamesAsync(): Promise<string[]>;
   statusEventPort: EventPort<Partial<IProfileManagerStatus>>;
-  reserveSaveProfileTask(prof: IProfileData): void;
   executeCommands(commands: IProfileManagerCommand[]): Promise<void>;
   saveCurrentProfile(profileData: IProfileData): Promise<void>;
 }

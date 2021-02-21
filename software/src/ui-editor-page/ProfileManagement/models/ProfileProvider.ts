@@ -1,4 +1,4 @@
-import { IProfileManagerStatus, IProfileData } from '~/shared';
+import { IProfileManagerStatus } from '~/shared';
 import { ipcAgent } from '~/ui-common';
 
 type IListener = (profile: Partial<IProfileManagerStatus>) => void;
@@ -8,10 +8,6 @@ export class ProfileProvider {
 
   setListener(listener: IListener) {
     this.listener = listener;
-  }
-
-  saveProfileOnClosing(profileData: IProfileData) {
-    ipcAgent.sync.profile_reserveSaveProfileTask(profileData);
   }
 
   private onProfileChanged = (payload: Partial<IProfileManagerStatus>) => {

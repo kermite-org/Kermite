@@ -62,8 +62,6 @@ export class ApplicationRoot {
     appGlobal.icpMainAgent.supplySyncHandlers({
       dev_getVersionSync: () => 'v100',
       dev_debugMessage: (msg) => console.log(`[renderer] ${msg}`),
-      profile_reserveSaveProfileTask: (data) =>
-        this.profileManager.reserveSaveProfileTask(data),
       config_saveKeyboardConfigOnClosing: (data) =>
         this.keyboardConfigProvider.writeKeyboardConfig(data),
     });

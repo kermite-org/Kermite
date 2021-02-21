@@ -8,8 +8,6 @@ import { ipcAgent } from '~/ui-common';
 import { EditorModel } from '../../EditorMainPart/models/EditorModel';
 import { ProfileProvider } from './ProfileProvider';
 
-const useAutoSave = false;
-
 export class ProfilesModel {
   private profileProvider = new ProfileProvider();
 
@@ -71,8 +69,6 @@ export class ProfilesModel {
     targetProjectId: string,
     presetSpec: IPresetSpec,
   ) => {
-    const saveCommand =
-      (useAutoSave && this.getSaveCommandIfDirty()) || undefined;
     const createCommand = {
       creatProfile: {
         name: newProfileName,
@@ -81,17 +77,15 @@ export class ProfilesModel {
         presetSpec,
       },
     };
-    this.sendProfileManagerCommands(saveCommand, createCommand);
+    this.sendProfileManagerCommands(createCommand);
   };
 
   loadProfile = (profileName: string) => {
     if (profileName === this.currentProfileName) {
       return;
     }
-    const saveCommand =
-      (useAutoSave && this.getSaveCommandIfDirty()) || undefined;
     const loadCommand = { loadProfile: { name: profileName } };
-    this.sendProfileManagerCommands(saveCommand, loadCommand);
+    this.sendProfileManagerCommands(loadCommand);
   };
 
   renameProfile = (newProfileName: string) => {
@@ -142,9 +136,6 @@ export class ProfilesModel {
   }
 
   finalize() {
-    if (useAutoSave && this.editorModel.checkDirty(true)) {
-      this.profileProvider.saveProfileOnClosing(this.editorModel.profileData);
-    }
     this.profileProvider.finalize();
   }
 }

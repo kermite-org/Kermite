@@ -35,8 +35,6 @@ export class ProfileManager implements IProfileManager {
     loadedProfileData: undefined,
   };
 
-  private savingProfileData: IProfileData | undefined = undefined;
-
   private core: ProfileManagerCore;
 
   constructor(private presetProfileLoader: IPresetProfileLoader) {
@@ -56,7 +54,6 @@ export class ProfileManager implements IProfileManager {
   }
 
   async terminateAsync() {
-    await this.executeSaveProfileTask();
     this.core.storeCurrentProfileName(this.status.currentProfileName);
   }
 
@@ -137,20 +134,6 @@ export class ProfileManager implements IProfileManager {
       // await projectResourceProvider.reenumerateResourceInfos();
       projectResourceProvider.localResourceProviderImpl.clearCache();
       this.presetProfileLoader.deleteProjectPresetProfileCache(projectId);
-    }
-  }
-
-  reserveSaveProfileTask(prof: IProfileData) {
-    // console.log(`reserveSaveProfileTask`)
-    this.savingProfileData = prof;
-  }
-
-  private async executeSaveProfileTask() {
-    // console.log(`execute save profile task ${!!this.savingEditModel}`)
-    if (this.savingProfileData) {
-      await this.saveCurrentProfile(this.savingProfileData);
-      this.savingProfileData = undefined;
-      // console.log(`execute save done`)
     }
   }
 
