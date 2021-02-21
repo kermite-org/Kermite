@@ -235,10 +235,10 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     if (this.mainWindow) {
       const bounds = this.mainWindow.getBounds();
       if (this.isWidgetMode) {
-        const currentProfile = this.profileManager.getCurrentProfile();
-        if (currentProfile) {
+        const currentProfileProjectId = this.profileManager.getCurrentProfileProjectId();
+        if (currentProfileProjectId) {
           this.state.placement.widget = {
-            projectId: currentProfile.projectId,
+            projectId: currentProfileProjectId,
             bounds,
           };
         }
@@ -248,12 +248,12 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     }
   }
 
-  private adjustWindowSize() {
+  private async adjustWindowSize() {
     if (!this.mainWindow) {
       return;
     }
     if (this.isWidgetMode) {
-      const currentProfile = this.profileManager.getCurrentProfile();
+      const currentProfile = await this.profileManager.getCurrentProfileAsync();
       if (!currentProfile) {
         return;
       }

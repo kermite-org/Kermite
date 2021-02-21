@@ -8,13 +8,13 @@ import {
 import { EventPort } from '~/shell/funcs';
 
 export interface IProfileManager {
-  getStatus(): IProfileManagerStatus;
-  getCurrentProfile(): IProfileData | undefined;
+  getCurrentProfileProjectId(): string | undefined;
+  getCurrentProfileAsync(): Promise<IProfileData | undefined>;
+  getAllProfileNamesAsync(): Promise<string[]>;
   statusEventPort: EventPort<Partial<IProfileManagerStatus>>;
   reserveSaveProfileTask(prof: IProfileData): void;
   executeCommands(commands: IProfileManagerCommand[]): Promise<void>;
   saveCurrentProfile(profileData: IProfileData): Promise<void>;
-  getCurrentProfileAfterInitialization(): Promise<IProfileData | undefined>;
 }
 
 export interface IPresetProfileLoader {

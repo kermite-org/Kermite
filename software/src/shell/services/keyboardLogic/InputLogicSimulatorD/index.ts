@@ -109,7 +109,7 @@ export class InputLogicSimulatorD {
     }
   };
 
-  private updateSourceSetup = () => {
+  private updateSourceSetup = async () => {
     const config = this.keyboardConfigProvider.getKeyboardConfig();
     const isSideBrainMode = config.behaviorMode === 'SideBrain';
     if (this.isSideBranMode !== isSideBrainMode) {
@@ -118,7 +118,9 @@ export class InputLogicSimulatorD {
       this.isSideBranMode = isSideBrainMode;
     }
 
-    const prof = this.profileManager.getCurrentProfile() || fallbackProfileData;
+    const prof =
+      (await this.profileManager.getCurrentProfileAsync()) ||
+      fallbackProfileData;
     const layout = config.layoutStandard;
     const bytes = makeKeyAssignsConfigStorageData(prof, layout);
     this.configDataStorage.writeConfigStorageData(bytes);

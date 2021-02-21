@@ -80,8 +80,8 @@ export class ApplicationRoot {
         windowWrapper.setDevToolsVisibility(visible),
       profile_executeProfileManagerCommands: (commands) =>
         this.profileManager.executeCommands(commands),
-      profile_getAllProfileNames: async () =>
-        this.profileManager.getStatus().allProfileNames,
+      profile_getAllProfileNames: () =>
+        this.profileManager.getAllProfileNamesAsync(),
       layout_executeLayoutManagerCommands: (commands) =>
         this.layoutManager.executeCommands(commands),
       // layout_getAllProjectLayoutsInfos: () =>
@@ -117,7 +117,7 @@ export class ApplicationRoot {
       config_writeKeyboardConfig: async (config) =>
         this.keyboardConfigProvider.writeKeyboardConfig(config),
       config_writeKeyMappingToDevice: async () => {
-        const profile = this.profileManager.getCurrentProfile();
+        const profile = await this.profileManager.getCurrentProfileAsync();
         const layoutStandard = this.keyboardConfigProvider.getKeyboardConfig()
           .layoutStandard;
         if (profile) {

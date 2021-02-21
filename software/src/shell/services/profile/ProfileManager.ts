@@ -15,6 +15,18 @@ import { IPresetProfileLoader, IProfileManager } from './interfaces';
 
 const defaultProfileName = 'default';
 
+function createLazyInitializer(
+  taskCreator: () => Promise<void>,
+): () => Promise<void> {
+  let task: Promise<void> | undefined;
+  return async () => {
+    if (!task) {
+      task = taskCreator();
+    }
+    await task;
+  };
+}
+
 // プロファイルを<UserDataDir>/data/profiles以下でファイルとして管理
 export class ProfileManager implements IProfileManager {
   private status: IProfileManagerStatus = {
@@ -31,21 +43,34 @@ export class ProfileManager implements IProfileManager {
     this.core = new ProfileManagerCore();
   }
 
-  getStatus() {
-    return this.status;
+  private lazyInitializer = createLazyInitializer(async () => {
+    await this.core.ensureProfilesDirectoryExists();
+    const allProfileNames = await this.initializeProfileList();
+    const initialProfileName = this.getInitialProfileName(allProfileNames);
+    this.setStatus({ allProfileNames });
+    await this.loadProfile(initialProfileName);
+  });
+
+  async initializeAsync() {
+    await this.lazyInitializer();
   }
 
-  getCurrentProfile(): IProfileData | undefined {
-    return this.status.loadedProfileData;
+  async terminateAsync() {
+    await this.executeSaveProfileTask();
+    this.core.storeCurrentProfileName(this.status.currentProfileName);
   }
 
-  async getCurrentProfileAfterInitialization(): Promise<
-    IProfileData | undefined
-  > {
-    // 初期化中なら初期化の処理を待ってから、読み込まれたプロファイルを返す
-    if (this.initializationPromise) {
-      await this.initializationPromise;
-    }
+  getCurrentProfileProjectId(): string | undefined {
+    return this.status.loadedProfileData?.projectId;
+  }
+
+  async getAllProfileNamesAsync(): Promise<string[]> {
+    await this.lazyInitializer();
+    return this.status.allProfileNames;
+  }
+
+  async getCurrentProfileAsync(): Promise<IProfileData | undefined> {
+    await this.lazyInitializer();
     return this.status.loadedProfileData;
   }
 
@@ -77,25 +102,6 @@ export class ProfileManager implements IProfileManager {
       profName = allProfileNames[0];
     }
     return profName;
-  }
-
-  private initializationPromise: Promise<void> | undefined;
-
-  async initializeAsync() {
-    this.initializationPromise = (async () => {
-      await this.core.ensureProfilesDirectoryExists();
-      const allProfileNames = await this.initializeProfileList();
-      const initialProfileName = this.getInitialProfileName(allProfileNames);
-      this.setStatus({ allProfileNames });
-      await this.loadProfile(initialProfileName);
-    })();
-    await this.initializationPromise;
-    this.initializationPromise = undefined;
-  }
-
-  async terminateAsync() {
-    await this.executeSaveProfileTask();
-    this.core.storeCurrentProfileName(this.status.currentProfileName);
   }
 
   async loadProfile(profName: string) {
