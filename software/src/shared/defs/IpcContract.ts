@@ -95,6 +95,7 @@ export interface IProfileManagerCommand {
   };
   importFromFile?: { filePath: string };
   exportToFile?: { filePath: string; profileData: IProfileData };
+  saveProfileAs?: { name: string; profileData: IProfileData };
 }
 
 export type ILayoutEditSource =

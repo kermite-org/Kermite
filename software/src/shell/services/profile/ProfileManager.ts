@@ -312,6 +312,16 @@ export class ProfileManager implements IProfileManager {
     await this.loadProfile(newProfName);
   }
 
+  private async saveProfileAs(newProfName: string, profileData: IProfileData) {
+    if (this.status.allProfileNames.includes(newProfName)) {
+      return false;
+    }
+    await this.core.saveProfile(newProfName, profileData);
+    const allProfileNames = await this.core.listAllProfileNames();
+    this.setStatus({ allProfileNames });
+    await this.loadProfile(newProfName);
+  }
+
   private async importFromFile(filePath: string) {
     const editSource: IProfileEditSource = {
       type: 'ExternalFile',
@@ -367,6 +377,11 @@ export class ProfileManager implements IProfileManager {
       await this.exportToFile(
         cmd.exportToFile.filePath,
         cmd.exportToFile.profileData,
+      );
+    } else if (cmd.saveProfileAs) {
+      await this.saveProfileAs(
+        cmd.saveProfileAs.name,
+        cmd.saveProfileAs.profileData,
       );
     }
   }
