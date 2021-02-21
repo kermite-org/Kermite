@@ -1,9 +1,4 @@
-import {
-  getAppErrorData,
-  IPresetSpec,
-  IProfileManagerStatus,
-  makeCompactStackTrace,
-} from '~/shared';
+import { getAppErrorData, IPresetSpec, makeCompactStackTrace } from '~/shared';
 import { appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
@@ -76,6 +71,8 @@ export class ApplicationRoot {
       window_reloadPage: async () => windowWrapper.reloadPage(),
       window_setDevToolVisibility: async (visible) =>
         windowWrapper.setDevToolsVisibility(visible),
+      profile_getCurrentProfile: () =>
+        this.profileManager.getCurrentProfileAsync(),
       profile_executeProfileManagerCommands: (commands) =>
         this.profileManager.executeCommands(commands),
       profile_getAllProfileNames: () =>
@@ -161,15 +158,6 @@ export class ApplicationRoot {
       profile_profileManagerStatus: (cb) => {
         this.profileManager.statusEventPort.subscribe(cb);
         return () => this.profileManager.statusEventPort.unsubscribe(cb);
-      },
-      profile_currentProfile: (cb) => {
-        const cb2 = (value: Partial<IProfileManagerStatus>) => {
-          if (value.loadedProfileData) {
-            cb(value.loadedProfileData);
-          }
-        };
-        this.profileManager.statusEventPort.subscribe(cb2);
-        return () => this.profileManager.statusEventPort.unsubscribe(cb2);
       },
       layout_layoutManagerStatus: (listener) =>
         this.layoutManager.statusEvents.subscribe(listener),

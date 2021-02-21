@@ -3,6 +3,7 @@ import {
   fallbackProfileData,
   IDisplayKeyboardDesign,
   IProfileData,
+  IProfileManagerStatus,
   IRealtimeKeyboardEvent,
 } from '~/shared';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
@@ -130,7 +131,8 @@ export class PlayerModel {
     }
   };
 
-  private onProfileData = (profile: IProfileData) => {
+  private onProfileStatus = (status: Partial<IProfileManagerStatus>) => {
+    const profile = status.loadedProfileData;
     if (profile) {
       this._profileData = profile;
       this._displayDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
@@ -141,11 +143,15 @@ export class PlayerModel {
 
   initialize() {
     ipcAgent.events.device_keyEvents.subscribe(this.handlekeyEvents);
-    ipcAgent.events.profile_currentProfile.subscribe(this.onProfileData);
+    ipcAgent.events.profile_profileManagerStatus.subscribe(
+      this.onProfileStatus,
+    );
   }
 
   finalize() {
     ipcAgent.events.device_keyEvents.unsubscribe(this.handlekeyEvents);
-    ipcAgent.events.profile_currentProfile.unsubscribe(this.onProfileData);
+    ipcAgent.events.profile_profileManagerStatus.unsubscribe(
+      this.onProfileStatus,
+    );
   }
 }

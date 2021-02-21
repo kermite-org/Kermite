@@ -176,11 +176,11 @@ export interface IAppIpcContract {
     window_setDevToolVisibility(visible: boolean): Promise<void>;
     window_reloadPage(): Promise<void>;
 
-    // profile_getCurrentProfile(): Promise<IProfileData | undefined>;
+    profile_getCurrentProfile(): Promise<IProfileData>;
+    profile_getAllProfileNames(): Promise<string[]>;
     profile_executeProfileManagerCommands(
       commands: IProfileManagerCommand[],
     ): Promise<void>;
-    profile_getAllProfileNames(): Promise<string[]>;
 
     layout_executeLayoutManagerCommands(
       commands: ILayoutManagerCommand[],
@@ -226,10 +226,7 @@ export interface IAppIpcContract {
     dev_testEvent: { type: string };
     global_appErrorEvents: IAppErrorData<any>;
     window_appWindowStatus: Partial<IAppWindowStatus>;
-
-    profile_currentProfile: IProfileData;
     profile_profileManagerStatus: Partial<IProfileManagerStatus>;
-
     layout_layoutManagerStatus: Partial<ILayoutManagerStatus>;
 
     device_keyEvents: IRealtimeKeyboardEvent;
