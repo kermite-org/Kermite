@@ -1,3 +1,4 @@
+import { asyncRerender } from 'qx';
 import { removeArrayItems } from '~/shared';
 import { generateNextSequentialId } from '~/shared/funcs/DomainRelatedHelpers';
 import { modalConfirm } from '~/ui-common/fundamental/dialog/BasicModals';
@@ -81,6 +82,7 @@ export function makeLayerManagementPartViewModel(): ILayerManagementPartViewMode
         curLayer.defaultScheme = editValues.defaultScheme;
         curLayer.exclusionGroup = editValues.exclusionGroup;
         curLayer.initialActive = editValues.initialActive;
+        asyncRerender();
       }
     },
     addNewLayer: async () => {
@@ -113,6 +115,7 @@ export function makeLayerManagementPartViewModel(): ILayerManagementPartViewMode
           exclusionGroup,
           initialActive,
         });
+        asyncRerender();
       }
     },
   };
