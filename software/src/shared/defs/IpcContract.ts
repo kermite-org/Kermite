@@ -27,13 +27,6 @@ export interface IProjectResourceInfo {
   hasFirmwareBinary: boolean;
   origin: IResourceOrigin;
 }
-
-export interface IProfileManagerStatus {
-  currentProfileName: string;
-  allProfileNames: string[];
-  loadedProfileData: IProfileData;
-}
-
 export interface IKeyboardDeviceStatus {
   isConnected: boolean;
   deviceAttrs?: {
@@ -65,9 +58,27 @@ export type IAppWindowStatus = {
   isMaximized: boolean;
 };
 
+export type IProfileEditSource =
+  | {
+      type: 'NewlyCreated';
+    }
+  | {
+      type: 'InternalProfile';
+      profileName: string;
+    }
+  | {
+      type: 'ExternalFile';
+      filePath: string;
+    };
+
+export interface IProfileManagerStatus {
+  editSource: IProfileEditSource;
+  allProfileNames: string[];
+  loadedProfileData: IProfileData;
+}
 export interface IProfileManagerCommand {
   creatProfile?: {
-    name: string;
+    name?: string;
     targetProjectOrigin: IResourceOrigin;
     targetProjectId: string;
     presetSpec: IPresetSpec;

@@ -1,5 +1,6 @@
 import {
   IPresetSpec,
+  IProfileEditSource,
   IProfileManagerCommand,
   IProfileManagerStatus,
   IResourceOrigin,
@@ -11,7 +12,7 @@ export class ProfilesModel {
   constructor(private editorModel: EditorModel) {}
 
   // state
-  currentProfileName: string = '';
+  editSource: IProfileEditSource = { type: 'NewlyCreated' };
   allProfileNames: string[] = [];
 
   // listeners
@@ -19,8 +20,8 @@ export class ProfilesModel {
   private handleProfileStatusChange = (
     payload: Partial<IProfileManagerStatus>,
   ) => {
-    if (payload.currentProfileName) {
-      this.currentProfileName = payload.currentProfileName;
+    if (payload.editSource) {
+      this.editSource = payload.editSource;
     }
     if (payload.allProfileNames) {
       this.allProfileNames = payload.allProfileNames;
@@ -31,6 +32,14 @@ export class ProfilesModel {
   };
 
   // reader
+
+  get currentProfileName() {
+    return (
+      (this.editSource.type === 'InternalProfile' &&
+        this.editSource.profileName) ||
+      ''
+    );
+  }
 
   checkDirty() {
     return this.editorModel.checkDirty(false);
