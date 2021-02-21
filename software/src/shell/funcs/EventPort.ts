@@ -30,6 +30,7 @@ export class EventPort<T> {
 
 export interface IEventPort2<T> {
   subscribe(listener: IEventListener<T>): () => void;
+  unsubscribe(listener: IEventListener<T>): void;
   emit(event: T): void;
 }
 
@@ -48,6 +49,13 @@ export function createEventPort2<T>(
 
   const listeners: IEventListener<T>[] = [];
 
+  const unsubscribe = (listener: IEventListener<T>) => {
+    removeArrayItems(listeners, listener);
+    if (listeners.length === 0) {
+      onLastSubscriptionEnded?.();
+    }
+  };
+
   const subscribe = (listener: IEventListener<T>) => {
     if (listeners.length === 0) {
       onFirstSubscriptionStarting?.();
@@ -56,12 +64,7 @@ export function createEventPort2<T>(
       listener(initialValueGetter());
     }
     listeners.push(listener);
-    return () => {
-      removeArrayItems(listeners, listener);
-      if (listeners.length === 0) {
-        onLastSubscriptionEnded?.();
-      }
-    };
+    return () => unsubscribe(listener);
   };
 
   const emit = (event: T) => {
@@ -70,6 +73,7 @@ export function createEventPort2<T>(
 
   return {
     subscribe,
+    unsubscribe,
     emit,
   };
 }
