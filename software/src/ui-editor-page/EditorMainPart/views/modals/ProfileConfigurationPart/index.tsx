@@ -49,7 +49,7 @@ export const ProfileConfigratuionModalLayer = () => {
 
   return (
     <ClosableOverlay close={closeModal}>
-      <CommonDialogFrame caption="profile configuration" close={close}>
+      <CommonDialogFrame caption="profile configuration" close={closeModal}>
         <div css={cssDialogContent}>
           <AssignTypeSelectionPart />
           <DualModeSettingsPart />
