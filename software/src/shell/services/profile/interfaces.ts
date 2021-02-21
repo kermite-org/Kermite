@@ -8,8 +8,8 @@ import {
 import { IEventPort2 } from '~/shell/funcs';
 
 export interface IProfileManager {
-  getCurrentProfileProjectId(): string | undefined;
-  getCurrentProfileAsync(): Promise<IProfileData | undefined>;
+  getCurrentProfileProjectId(): string;
+  getCurrentProfileAsync(): Promise<IProfileData>;
   getAllProfileNamesAsync(): Promise<string[]>;
   statusEventPort: IEventPort2<Partial<IProfileManagerStatus>>;
   executeCommands(commands: IProfileManagerCommand[]): Promise<void>;

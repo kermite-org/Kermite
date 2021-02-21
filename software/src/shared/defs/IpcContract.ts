@@ -31,7 +31,7 @@ export interface IProjectResourceInfo {
 export interface IProfileManagerStatus {
   currentProfileName: string;
   allProfileNames: string[];
-  loadedProfileData: IProfileData | undefined;
+  loadedProfileData: IProfileData;
 }
 
 export interface IKeyboardDeviceStatus {
@@ -227,7 +227,7 @@ export interface IAppIpcContract {
     global_appErrorEvents: IAppErrorData<any>;
     window_appWindowStatus: Partial<IAppWindowStatus>;
 
-    profile_currentProfile: IProfileData | undefined;
+    profile_currentProfile: IProfileData;
     profile_profileManagerStatus: Partial<IProfileManagerStatus>;
 
     layout_layoutManagerStatus: Partial<ILayoutManagerStatus>;

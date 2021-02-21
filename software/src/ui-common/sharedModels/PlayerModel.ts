@@ -130,7 +130,7 @@ export class PlayerModel {
     }
   };
 
-  private onProfileData = (profile: IProfileData | undefined) => {
+  private onProfileData = (profile: IProfileData) => {
     if (profile) {
       this._profileData = profile;
       this._displayDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(

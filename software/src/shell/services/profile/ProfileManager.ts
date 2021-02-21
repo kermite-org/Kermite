@@ -32,7 +32,7 @@ export class ProfileManager implements IProfileManager {
   private status: IProfileManagerStatus = {
     currentProfileName: '',
     allProfileNames: [],
-    loadedProfileData: undefined,
+    loadedProfileData: fallbackProfileData,
   };
 
   private core: ProfileManagerCore;
@@ -54,7 +54,7 @@ export class ProfileManager implements IProfileManager {
     await this.loadProfile(initialProfileName);
   });
 
-  getCurrentProfileProjectId(): string | undefined {
+  getCurrentProfileProjectId(): string {
     return this.status.loadedProfileData?.projectId;
   }
 
@@ -63,7 +63,7 @@ export class ProfileManager implements IProfileManager {
     return this.status.allProfileNames;
   }
 
-  async getCurrentProfileAsync(): Promise<IProfileData | undefined> {
+  async getCurrentProfileAsync(): Promise<IProfileData> {
     await this.lazyInitializer();
     return this.status.loadedProfileData;
   }

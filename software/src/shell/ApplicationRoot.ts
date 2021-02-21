@@ -164,7 +164,7 @@ export class ApplicationRoot {
       },
       profile_currentProfile: (cb) => {
         const cb2 = (value: Partial<IProfileManagerStatus>) => {
-          if ('loadedProfileData' in value) {
+          if (value.loadedProfileData) {
             cb(value.loadedProfileData);
           }
         };
