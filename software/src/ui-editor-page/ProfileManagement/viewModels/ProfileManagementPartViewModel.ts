@@ -42,10 +42,7 @@ export interface IProfileManagementPartViewModel {
 export const profilesModel = new ProfilesModel(editorModel);
 
 export function makeProfileManagementPartViewModel(): IProfileManagementPartViewModel {
-  Hook.useEffect(() => {
-    profilesModel.initialize();
-    return () => profilesModel.finalize();
-  }, []);
+  Hook.useEffect(profilesModel.startPageSession, []);
 
   const deviceStatus = useDeviceStatusModel();
 

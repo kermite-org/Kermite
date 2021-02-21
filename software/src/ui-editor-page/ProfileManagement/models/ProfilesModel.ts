@@ -6,11 +6,8 @@ import {
 } from '~/shared';
 import { ipcAgent } from '~/ui-common';
 import { EditorModel } from '../../EditorMainPart/models/EditorModel';
-import { ProfileProvider } from './ProfileProvider';
 
 export class ProfilesModel {
-  private profileProvider = new ProfileProvider();
-
   constructor(private editorModel: EditorModel) {}
 
   // state
@@ -130,12 +127,9 @@ export class ProfilesModel {
     this.sendProfileManagerCommands(exportCommand);
   };
 
-  initialize() {
-    this.profileProvider.setListener(this.handleProfileStatusChange);
-    this.profileProvider.initialize();
-  }
-
-  finalize() {
-    this.profileProvider.finalize();
-  }
+  startPageSession = () => {
+    return ipcAgent.events.profile_profileManagerStatus.subscribe(
+      this.handleProfileStatusChange,
+    );
+  };
 }
