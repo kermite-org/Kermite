@@ -7,7 +7,7 @@ import {
   vObject,
   vString,
   vStringMatchesTo,
-} from "~/shell/loaders/SchemaValidationHelper";
+} from "~/shared/modules/SchemaValidationHelper";
 
 process.chdir("..");
 
