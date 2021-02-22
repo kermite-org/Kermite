@@ -24,6 +24,7 @@ export interface IEditorModel {
     keyUnitId: string,
     targetLayerId?: string,
   ): IAssignEntryWithLayerFallback | undefined;
+  layers: ILayer[];
 }
 
 export interface IEditKeyUnitCardPartViewModel {
@@ -58,7 +59,7 @@ function makeEditKeyUnitCardViewModel(
   const assign = getAssignForKeyUnit(keyUnitId, playerModel, editorModel);
   const { primaryText, secondaryText, isLayerFallback } = getAssignEntryTexts(
     assign,
-    playerModel.layers,
+    editorModel.layers,
   );
 
   const dynamic = uiStatusModel.settings.showLayersDynamic;
