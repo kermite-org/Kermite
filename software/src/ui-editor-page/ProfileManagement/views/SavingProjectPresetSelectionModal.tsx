@@ -10,8 +10,8 @@ import { IProfileManagementPartViewModel } from '~/ui-editor-page/ProfileManagem
 
 function getTargetPresetNameFilePath(projectPath: string, presetName: string) {
   if (projectPath && presetName) {
-    return `projects/${projectPath}/presets/${presetName}.json`;
-    // return `<KermiteRoot>/firmare/src/projects/${projectPath}/presets/${fileNamePart}.json`;
+    return `projects/${projectPath}/profiles/${presetName}.profile.json`;
+    // return `<KermiteRoot>/firmare/src/projects/${projectPath}/profiles/${fileNamePart}.json`;
   }
   return '';
 }
