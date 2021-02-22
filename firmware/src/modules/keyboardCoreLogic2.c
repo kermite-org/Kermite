@@ -271,8 +271,8 @@ static AssignSet *getAssignSetInLayer(uint8_t keyIndex, uint8_t layerIndex) {
       bool isDual = assignType == 2;
       bool isTriple = assignType == 3;
       uint16_t pri = readStorageWordBE(addr1 + 1);
-      uint16_t sec = ((isDual || isTriple) && readStorageWordBE(addr1 + 3)) || 0;
-      uint16_t ter = (isTriple && readStorageWordBE(addr1 + 5)) || 0;
+      uint16_t sec = (isDual || isTriple) ? readStorageWordBE(addr1 + 3) : 0;
+      uint16_t ter = isTriple ? readStorageWordBE(addr1 + 5) : 0;
       assignSetRes.assignType = assignType;
       assignSetRes.pri = pri;
       assignSetRes.sec = sec;

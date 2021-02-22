@@ -303,8 +303,8 @@ function getAssignSetInLayer(
       const isDual = assignType === 2;
       const isTriple = assignType === 3;
       const pri = readStorageWordBE(addr1 + 1);
-      const sec = ((isDual || isTriple) && readStorageWordBE(addr1 + 3)) || 0;
-      const ter = (isTriple && readStorageWordBE(addr1 + 5)) || 0;
+      const sec = isDual || isTriple ? readStorageWordBE(addr1 + 3) : 0;
+      const ter = isTriple ? readStorageWordBE(addr1 + 5) : 0;
       return {
         assignType,
         pri,
