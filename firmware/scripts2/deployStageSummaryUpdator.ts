@@ -113,7 +113,7 @@ function makeSummaryFileContent(
 
     let presetNames: string[] = [];
 
-    const presetsDir = `./dist/variants/${projectPath}/presets`;
+    const presetsDir = `./dist/variants/${projectPath}/profiles`;
     if (fsExistsSync(presetsDir)) {
       presetNames = fsReaddirSync(presetsDir)
         .filter((fileName) => fileName.endsWith(".json"))
