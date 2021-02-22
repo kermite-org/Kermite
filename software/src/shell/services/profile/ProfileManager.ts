@@ -169,13 +169,13 @@ export class ProfileManager implements IProfileManager {
   }
 
   async saveCurrentProfile(profileData: IProfileData) {
-    if (this.status.editSource.type !== 'InternalProfile') {
-      return;
+    const { editSource } = this.status;
+    if (editSource.type === 'NewlyCreated') {
+    } else if (editSource.type === 'ExternalFile') {
+      await this.core.saveExternalProfileFile(editSource.filePath, profileData);
+    } else if (editSource.type === 'InternalProfile') {
+      await this.core.saveProfile(editSource.profileName, profileData);
     }
-    await this.core.saveProfile(
-      this.status.editSource.profileName,
-      profileData,
-    );
     this.setStatus({
       loadedProfileData: profileData,
     });
