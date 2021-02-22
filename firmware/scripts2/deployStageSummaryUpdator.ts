@@ -113,11 +113,11 @@ function makeSummaryFileContent(
 
     let presetNames: string[] = [];
 
-    const presetsDir = `./dist/variants/${projectPath}/profiles`;
-    if (fsExistsSync(presetsDir)) {
-      presetNames = fsReaddirSync(presetsDir)
-        .filter((fileName) => fileName.endsWith(".json"))
-        .map((fileName) => pathBasename(fileName, ".json"));
+    const profilesDir = `./dist/variants/${projectPath}/profiles`;
+    if (fsExistsSync(profilesDir)) {
+      presetNames = fsReaddirSync(profilesDir)
+        .filter((fileName) => fileName.endsWith(".profile.json"))
+        .map((fileName) => pathBasename(fileName, ".profile.json"));
     }
 
     const layoutNames = fsReaddirSync(`./dist/variants/${projectPath}`)
