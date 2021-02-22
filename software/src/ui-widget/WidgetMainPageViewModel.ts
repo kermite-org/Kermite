@@ -1,6 +1,6 @@
 import { Hook } from 'qx';
 import { IDisplayKeyboardDesign, IDisplayKeyEntity } from '~/shared';
-import { router } from '~/ui-common';
+import { ipcAgent, router } from '~/ui-common';
 import { getAssignEntryTexts } from '~/ui-common-svg/KeyUnitCardModels/KeyUnitCardViewModelCommon';
 import { IWidgetKeyUnitCardViewModel } from '~/ui-common-svg/KeyUnitCards/WidgetKeyUnitCard';
 import { PlayerModel } from '~/ui-common/sharedModels/PlayerModel';
@@ -48,6 +48,10 @@ function makeWidgetKeyUnitCardViewModel(
 export function makeWidgetMainPageViewModel(): IWidgetMainPageViewModel {
   Hook.useEffect(() => {
     playerModel.initialize();
+    (async () => {
+      const profileData = await ipcAgent.async.profile_getCurrentProfile();
+      playerModel.setProfileData(profileData);
+    })();
     return () => playerModel.finalize();
   }, []);
 

@@ -1,9 +1,10 @@
 import {
   createFallbackDisplayKeyboardDesign,
   fallbackProfileData,
+  IAssignEntry,
+  IAssignOperation,
   IDisplayKeyboardDesign,
   IProfileData,
-  IProfileManagerStatus,
   IRealtimeKeyboardEvent,
 } from '~/shared';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
@@ -18,6 +19,22 @@ class PlayerModelHelper {
       (kp) => kp.keyIndex === keyIndex,
     );
     return keyEntity?.keyId;
+  }
+
+  static isOperationShift(op: IAssignOperation | undefined) {
+    return op?.type === 'keyInput' && op.virtualKey === 'K_Shift';
+  }
+
+  static isAssignShift(assign: IAssignEntry | undefined) {
+    if (assign?.type === 'single') {
+      return this.isOperationShift(assign.op);
+    }
+    if (assign?.type === 'dual') {
+      return (
+        this.isOperationShift(assign.primaryOp) ||
+        this.isOperationShift(assign.secondaryOp)
+      );
+    }
   }
 }
 
@@ -100,13 +117,8 @@ export class PlayerModel {
 
   private shiftResolver = (keyUnitId: string, isDown: boolean) => {
     const assign = this.getDynamicKeyAssign(keyUnitId);
-    if (assign?.type === 'single') {
-      if (
-        assign.op?.type === 'keyInput' &&
-        assign.op.virtualKey === 'K_Shift'
-      ) {
-        this.plainShiftPressed = isDown;
-      }
+    if (PlayerModelHelper.isAssignShift(assign)) {
+      this.plainShiftPressed = isDown;
     }
   };
 
@@ -131,27 +143,20 @@ export class PlayerModel {
     }
   };
 
-  private onProfileStatus = (status: Partial<IProfileManagerStatus>) => {
-    const profile = status.loadedProfileData;
-    if (profile) {
+  setProfileData(profile: IProfileData) {
+    if (this._profileData !== profile) {
       this._profileData = profile;
       this._displayDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
         profile.keyboardDesign,
       );
     }
-  };
+  }
 
   initialize() {
     ipcAgent.events.device_keyEvents.subscribe(this.handlekeyEvents);
-    ipcAgent.events.profile_profileManagerStatus.subscribe(
-      this.onProfileStatus,
-    );
   }
 
   finalize() {
     ipcAgent.events.device_keyEvents.unsubscribe(this.handlekeyEvents);
-    ipcAgent.events.profile_profileManagerStatus.unsubscribe(
-      this.onProfileStatus,
-    );
   }
 }
