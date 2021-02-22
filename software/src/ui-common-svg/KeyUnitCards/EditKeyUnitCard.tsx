@@ -120,6 +120,7 @@ export function EditKeyUnitCard(props: {
         x={0}
         y={8}
         font-size={getFontSize(secondaryText)}
+        font-weight={getFontWeight(secondaryText)}
         text-anchor="middle"
         dominant-baseline="center"
       >
