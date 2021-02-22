@@ -1,6 +1,8 @@
 import {
   createFallbackDisplayKeyboardDesign,
   fallbackProfileData,
+  IAssignEntry,
+  IAssignOperation,
   IDisplayKeyboardDesign,
   IProfileData,
   IRealtimeKeyboardEvent,
@@ -17,6 +19,22 @@ class PlayerModelHelper {
       (kp) => kp.keyIndex === keyIndex,
     );
     return keyEntity?.keyId;
+  }
+
+  static isOperationShift(op: IAssignOperation | undefined) {
+    return op?.type === 'keyInput' && op.virtualKey === 'K_Shift';
+  }
+
+  static isAssignShift(assign: IAssignEntry | undefined) {
+    if (assign?.type === 'single') {
+      return this.isOperationShift(assign.op);
+    }
+    if (assign?.type === 'dual') {
+      return (
+        this.isOperationShift(assign.primaryOp) ||
+        this.isOperationShift(assign.secondaryOp)
+      );
+    }
   }
 }
 
@@ -99,13 +117,8 @@ export class PlayerModel {
 
   private shiftResolver = (keyUnitId: string, isDown: boolean) => {
     const assign = this.getDynamicKeyAssign(keyUnitId);
-    if (assign?.type === 'single') {
-      if (
-        assign.op?.type === 'keyInput' &&
-        assign.op.virtualKey === 'K_Shift'
-      ) {
-        this.plainShiftPressed = isDown;
-      }
+    if (PlayerModelHelper.isAssignShift(assign)) {
+      this.plainShiftPressed = isDown;
     }
   };
 
