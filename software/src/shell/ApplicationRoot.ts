@@ -1,9 +1,4 @@
-import {
-  getAppErrorData,
-  IPresetSpec,
-  IProfileManagerStatus,
-  makeCompactStackTrace,
-} from '~/shared';
+import { getAppErrorData, IPresetSpec, makeCompactStackTrace } from '~/shared';
 import { appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
@@ -22,7 +17,6 @@ import { ProfileManager } from '~/shell/services/profile/ProfileManager';
 import { AppWindowWrapper } from '~/shell/services/window';
 
 export class ApplicationRoot {
-  private windowWrapper = new AppWindowWrapper();
   private keyboardConfigProvider = new KeyboardConfigProvider();
 
   private keyboardLayoutFilesWatcher = new KeyboardLayoutFilesWatcher();
@@ -46,6 +40,8 @@ export class ApplicationRoot {
     this.deviceService,
   );
 
+  private windowWrapper = new AppWindowWrapper(this.profileManager);
+
   // ------------------------------------------------------------
 
   private setupIpcBackend() {
@@ -61,8 +57,6 @@ export class ApplicationRoot {
     appGlobal.icpMainAgent.supplySyncHandlers({
       dev_getVersionSync: () => 'v100',
       dev_debugMessage: (msg) => console.log(`[renderer] ${msg}`),
-      profile_reserveSaveProfileTask: (data) =>
-        this.profileManager.reserveSaveProfileTask(data),
       config_saveKeyboardConfigOnClosing: (data) =>
         this.keyboardConfigProvider.writeKeyboardConfig(data),
     });
@@ -77,10 +71,12 @@ export class ApplicationRoot {
       window_reloadPage: async () => windowWrapper.reloadPage(),
       window_setDevToolVisibility: async (visible) =>
         windowWrapper.setDevToolsVisibility(visible),
+      profile_getCurrentProfile: () =>
+        this.profileManager.getCurrentProfileAsync(),
       profile_executeProfileManagerCommands: (commands) =>
         this.profileManager.executeCommands(commands),
-      profile_getAllProfileNames: async () =>
-        this.profileManager.getStatus().allProfileNames,
+      profile_getAllProfileNames: () =>
+        this.profileManager.getAllProfileNamesAsync(),
       layout_executeLayoutManagerCommands: (commands) =>
         this.layoutManager.executeCommands(commands),
       // layout_getAllProjectLayoutsInfos: () =>
@@ -116,7 +112,7 @@ export class ApplicationRoot {
       config_writeKeyboardConfig: async (config) =>
         this.keyboardConfigProvider.writeKeyboardConfig(config),
       config_writeKeyMappingToDevice: async () => {
-        const profile = this.profileManager.getCurrentProfile();
+        const profile = await this.profileManager.getCurrentProfileAsync();
         const layoutStandard = this.keyboardConfigProvider.getKeyboardConfig()
           .layoutStandard;
         if (profile) {
@@ -163,15 +159,6 @@ export class ApplicationRoot {
         this.profileManager.statusEventPort.subscribe(cb);
         return () => this.profileManager.statusEventPort.unsubscribe(cb);
       },
-      profile_currentProfile: (cb) => {
-        const cb2 = (value: Partial<IProfileManagerStatus>) => {
-          if ('loadedProfileData' in value) {
-            cb(value.loadedProfileData);
-          }
-        };
-        this.profileManager.statusEventPort.subscribe(cb2);
-        return () => this.profileManager.statusEventPort.unsubscribe(cb2);
-      },
       layout_layoutManagerStatus: (listener) =>
         this.layoutManager.statusEvents.subscribe(listener),
       device_keyEvents: (cb) => {
@@ -205,7 +192,6 @@ export class ApplicationRoot {
   async lazyInitialzeServices() {
     if (!this._lazyInitializeTriggered) {
       this._lazyInitializeTriggered = true;
-      await this.profileManager.initializeAsync();
       this.deviceService.initialize();
       this.inputLogicSimulator.initialize();
     }
@@ -217,7 +203,6 @@ export class ApplicationRoot {
       this.inputLogicSimulator.terminate();
       this.deviceService.terminate();
       this.windowWrapper.terminate();
-      await this.profileManager.terminateAsync();
       await applicationStorage.terminateAsync();
     });
   }

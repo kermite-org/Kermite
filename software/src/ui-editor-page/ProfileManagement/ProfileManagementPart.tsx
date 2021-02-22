@@ -26,7 +26,7 @@ const cssProfileManagementPart = css`
     padding: 0 4px;
   }
   > * + * {
-    margin-left: 10px;
+    margin-left: 15px;
   }
   > .spacer {
     flex-grow: 1;
@@ -53,10 +53,18 @@ export const ProfileManagementPart = () => {
       <LayoutStandardSelector />
       <div class="spacer" />
       <OperationButtonWithIcon
-        onClick={baseVm.onLaunchButton}
+        onClick={baseVm.onSaveButton}
+        disabled={!baseVm.canSave}
+        label="save"
+        icon="save"
+        hint="save edit profile."
+      />
+      <OperationButtonWithIcon
+        onClick={baseVm.onWriteButton}
+        disabled={!baseVm.canWrite}
         label="write"
         icon="double_arrow"
-        hint="Save edit profile and write keymapping to the device."
+        hint="write keymapping to the device."
       />
       {baseVm.isExportingPresetSelectionModalOpen && (
         <SavingProjectPresetSelectionModal baseVm={baseVm} />

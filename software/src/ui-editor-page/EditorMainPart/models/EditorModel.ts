@@ -128,8 +128,10 @@ export class EditorModel {
     return this.layers.find((la) => la.layerId === layerId);
   }
 
-  checkDirty(): boolean {
-    removeInvalidProfileAssigns(this.profileData);
+  checkDirty(clean: boolean): boolean {
+    if (clean) {
+      removeInvalidProfileAssigns(this.profileData);
+    }
     return !compareObjectByJsonStringify(
       this.loadedPorfileData,
       this.profileData,

@@ -34,7 +34,7 @@ const cssMenuButton = css`
 `;
 
 const cssMenuPopup = css`
-  width: 100px;
+  width: 130px;
   background: #fff;
   position: absolute;
   color: #000;
@@ -69,7 +69,7 @@ export const ProfileSelectionMenuPart = (props: {
         </div>
         <div css={cssMenuPopup} qxIf={isOpen}>
           {menuItems.map((mi) => (
-            <div key={mi.key} onMouseUp={mi.handler}>
+            <div key={mi.key} onMouseUp={mi.handler} qxIf={mi.enabled}>
               {mi.text}
             </div>
           ))}

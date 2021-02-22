@@ -5,16 +5,15 @@ import {
   IProfileManagerStatus,
   IResourceOrigin,
 } from '~/shared';
-import { EventPort } from '~/shell/funcs';
+import { IEventPort2 } from '~/shell/funcs';
 
 export interface IProfileManager {
-  getStatus(): IProfileManagerStatus;
-  getCurrentProfile(): IProfileData | undefined;
-  statusEventPort: EventPort<Partial<IProfileManagerStatus>>;
-  reserveSaveProfileTask(prof: IProfileData): void;
+  getCurrentProfileProjectId(): string;
+  getCurrentProfileAsync(): Promise<IProfileData>;
+  getAllProfileNamesAsync(): Promise<string[]>;
+  statusEventPort: IEventPort2<Partial<IProfileManagerStatus>>;
   executeCommands(commands: IProfileManagerCommand[]): Promise<void>;
   saveCurrentProfile(profileData: IProfileData): Promise<void>;
-  getCurrentProfileAfterInitialization(): Promise<IProfileData | undefined>;
 }
 
 export interface IPresetProfileLoader {

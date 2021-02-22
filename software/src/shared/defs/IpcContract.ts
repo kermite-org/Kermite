@@ -27,13 +27,6 @@ export interface IProjectResourceInfo {
   hasFirmwareBinary: boolean;
   origin: IResourceOrigin;
 }
-
-export interface IProfileManagerStatus {
-  currentProfileName: string;
-  allProfileNames: string[];
-  loadedProfileData: IProfileData | undefined;
-}
-
 export interface IKeyboardDeviceStatus {
   isConnected: boolean;
   deviceAttrs?: {
@@ -65,9 +58,27 @@ export type IAppWindowStatus = {
   isMaximized: boolean;
 };
 
+export type IProfileEditSource =
+  | {
+      type: 'NewlyCreated';
+    }
+  | {
+      type: 'InternalProfile';
+      profileName: string;
+    }
+  | {
+      type: 'ExternalFile';
+      filePath: string;
+    };
+
+export interface IProfileManagerStatus {
+  editSource: IProfileEditSource;
+  allProfileNames: string[];
+  loadedProfileData: IProfileData;
+}
 export interface IProfileManagerCommand {
   creatProfile?: {
-    name: string;
+    name?: string;
     targetProjectOrigin: IResourceOrigin;
     targetProjectId: string;
     presetSpec: IPresetSpec;
@@ -82,6 +93,9 @@ export interface IProfileManagerCommand {
     presetName: string;
     profileData: IProfileData;
   };
+  importFromFile?: { filePath: string };
+  exportToFile?: { filePath: string; profileData: IProfileData };
+  saveProfileAs?: { name: string; profileData: IProfileData };
 }
 
 export type ILayoutEditSource =
@@ -162,8 +176,6 @@ export interface IAppIpcContract {
   sync: {
     dev_getVersionSync(): string;
     dev_debugMessage(message: string): void;
-
-    profile_reserveSaveProfileTask(data: IProfileData): void;
     // config_saveSettingsOnClosing?: IApplicationSettings;
     config_saveKeyboardConfigOnClosing(data: IKeyboardConfig): void;
   };
@@ -178,11 +190,11 @@ export interface IAppIpcContract {
     window_setDevToolVisibility(visible: boolean): Promise<void>;
     window_reloadPage(): Promise<void>;
 
-    // profile_getCurrentProfile(): Promise<IProfileData | undefined>;
+    profile_getCurrentProfile(): Promise<IProfileData>;
+    profile_getAllProfileNames(): Promise<string[]>;
     profile_executeProfileManagerCommands(
       commands: IProfileManagerCommand[],
     ): Promise<void>;
-    profile_getAllProfileNames(): Promise<string[]>;
 
     layout_executeLayoutManagerCommands(
       commands: ILayoutManagerCommand[],
@@ -228,10 +240,7 @@ export interface IAppIpcContract {
     dev_testEvent: { type: string };
     global_appErrorEvents: IAppErrorData<any>;
     window_appWindowStatus: Partial<IAppWindowStatus>;
-
-    profile_currentProfile: IProfileData | undefined;
     profile_profileManagerStatus: Partial<IProfileManagerStatus>;
-
     layout_layoutManagerStatus: Partial<ILayoutManagerStatus>;
 
     device_keyEvents: IRealtimeKeyboardEvent;

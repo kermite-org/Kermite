@@ -139,7 +139,7 @@ export class LayoutManager implements ILayoutManager {
   }
 
   private async loadCurrentProfileLayout() {
-    const profile = await this.profileManager.getCurrentProfileAfterInitialization();
+    const profile = await this.profileManager.getCurrentProfileAsync();
     if (profile) {
       this.setStatus({
         editSource: { type: 'CurrentProfile' },
@@ -273,7 +273,7 @@ export class LayoutManager implements ILayoutManager {
     if (editSource.type === 'NewlyCreated') {
       throw new Error('cannot save newly created layout');
     } else if (editSource.type === 'CurrentProfile') {
-      const profile = this.profileManager.getStatus().loadedProfileData;
+      const profile = await this.profileManager.getCurrentProfileAsync();
       if (profile) {
         const newProfile = duplicateObjectByJsonStringifyParse(profile);
         newProfile.keyboardDesign = design;

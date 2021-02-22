@@ -1,5 +1,4 @@
 import { IProfileData } from '~/shared';
-import { applicationStorage } from '~/shell/base';
 import { appEnv } from '~/shell/base/AppEnv';
 import {
   fsExistsSync,
@@ -39,14 +38,6 @@ export class ProfileManagerCore {
       .map((fname) => pathBasename(fname, '.json'));
   }
 
-  loadCurrentProfileName(): string | undefined {
-    return applicationStorage.readItem('currentProfileName');
-  }
-
-  storeCurrentProfileName(profName: string) {
-    applicationStorage.writeItem('currentProfileName', profName);
-  }
-
   async loadProfile(profName: string): Promise<IProfileData> {
     const filePath = this.getDataFilePath(profName);
     return await ProfileFileLoader.loadProfileFromFile(filePath);
@@ -58,6 +49,17 @@ export class ProfileManagerCore {
   ): Promise<void> {
     const filePath = this.getDataFilePath(profName);
     console.log(`saving current profile to ${pathBasename(filePath)}`);
+    await ProfileFileLoader.saveProfileToFile(filePath, profileData);
+  }
+
+  async loadExternalProfileFile(filePath: string): Promise<IProfileData> {
+    return await ProfileFileLoader.loadProfileFromFile(filePath);
+  }
+
+  async saveExternalProfileFile(
+    filePath: string,
+    profileData: IProfileData,
+  ): Promise<void> {
     await ProfileFileLoader.saveProfileToFile(filePath, profileData);
   }
 

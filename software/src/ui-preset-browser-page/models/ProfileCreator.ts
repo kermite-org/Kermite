@@ -4,11 +4,8 @@ import {
   getProjectOriginAndIdFromSig,
 } from '~/shared/funcs/DomainRelatedHelpers';
 import { ipcAgent, router } from '~/ui-common';
-import {
-  modalAlert,
-  modalTextEdit,
-} from '~/ui-common/fundamental/dialog/BasicModals';
 
+/*
 function getNewProfileNameBase(
   keyboardName: string,
   profileSourceName: string,
@@ -28,29 +25,14 @@ function getNewProfileNameBase(
   }
   return newProfileNameBase;
 }
-
-function checkValidNewProfileName(
-  newProfileName: string,
-  allProfileNames: string[],
-): 'ok' | string {
-  if (!newProfileName.match(/^[^/./\\:*?"<>|]+$/)) {
-    return `${newProfileName} is not for valid filename.`;
-  }
-  if (allProfileNames.includes(newProfileName)) {
-    return `${newProfileName} is already exists.`;
-  }
-  return 'ok';
-}
-
+*/
 function createProfile(
-  newProfileName: string,
   targetProjectOrigin: IResourceOrigin,
   targetProjectId: string,
   presetSpec: IPresetSpec,
 ) {
   const createCommand = {
     creatProfile: {
-      name: newProfileName,
       targetProjectOrigin,
       targetProjectId,
       presetSpec,
@@ -68,7 +50,10 @@ export async function editSelectedProjectPreset(
   }
   const { origin, projectId } = getProjectOriginAndIdFromSig(projectKey);
   const presetSpec = getPresetSpecFromPresetKey(presetKey);
+  createProfile(origin, projectId, presetSpec);
+  router.navigateTo('/editor');
 
+  /*
   const allProfileNames = await ipcAgent.async.profile_getAllProfileNames();
 
   const resourceInfos = await ipcAgent.async.projects_getAllProjectResourceInfos();
@@ -76,8 +61,6 @@ export async function editSelectedProjectPreset(
   if (!info) {
     return;
   }
-
-  // todo: ここでProfileの名前を設定せず、新規作成未保存のProfileとして編集できるようにする
 
   const newProfileNameBase = getNewProfileNameBase(
     info.keyboardName,
@@ -100,7 +83,5 @@ export async function editSelectedProjectPreset(
     await modalAlert(`${checkRes} operation cancelled.`);
     return;
   }
-
-  createProfile(newProfileName, origin, projectId, presetSpec);
-  router.navigateTo('/editor');
+  */
 }

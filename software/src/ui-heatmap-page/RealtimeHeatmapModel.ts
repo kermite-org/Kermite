@@ -81,24 +81,17 @@ export class RealtimeHeatmapModel {
     }
   };
 
+  private async fetchData() {
+    const profile = await ipcAgent.async.profile_getCurrentProfile();
+    this.profileData = profile;
+    this.displayDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
+      profile.keyboardDesign,
+    );
+  }
+
   startPageSession = () => {
-    const unsub1 = ipcAgent.events.profile_currentProfile.subscribe(
-      (profile) => {
-        if (profile) {
-          this.profileData = profile;
-          this.displayDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
-            profile.keyboardDesign,
-          );
-        }
-      },
-    );
-    const unsub2 = ipcAgent.events.device_keyEvents.subscribe(
-      this.handleKeyboardEvent,
-    );
-    return () => {
-      unsub1();
-      unsub2();
-    };
+    this.fetchData();
+    return ipcAgent.events.device_keyEvents.subscribe(this.handleKeyboardEvent);
   };
 }
 
