@@ -31,8 +31,8 @@ src
   ├── config.h
   ├── layout.json
   ├── main.c
-  ├── presets
-  │   └── preset1.json
+  ├── profiles
+  │   └── profile1.json
   ├── project.json
   └── rules.mk
 </pre>
@@ -42,7 +42,7 @@ src
 | config.h | ファームウェア内で参照する値を定義します。 |
 | layout.json | キーの配置とキーボードの外形を定義します。 |
 | main.c | プログラムのエントリポイントです。 | 
-| presets | プリセットプロファイルをここに格納します。 | 
+| profiles | プリセットプロファイルをここに格納します。 | 
 | project.json | プロジェクト固有の情報を記述します。 | 
 | rules.mk | ビルド時に親のMakefileから呼ばれます。 | 
 

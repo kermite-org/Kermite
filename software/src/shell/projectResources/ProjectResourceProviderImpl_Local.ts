@@ -35,8 +35,8 @@ namespace ProjectResourceInfoSourceLoader {
   async function readPresetNames(presetsFolderPath: string): Promise<string[]> {
     if (fsExistsSync(presetsFolderPath)) {
       return (await fsxReaddir(presetsFolderPath))
-        .filter((fpath) => fpath.endsWith('.json'))
-        .map((fpath) => pathBasename(fpath, '.json'));
+        .filter((fpath) => fpath.endsWith('.profile.json'))
+        .map((fpath) => pathBasename(fpath, '.profile.json'));
     } else {
       return [];
     }
@@ -93,7 +93,7 @@ namespace ProjectResourceInfoSourceLoader {
           projectFilePath,
         );
 
-        const presetsFolderPath = pathJoin(projectBaseDir, 'presets');
+        const presetsFolderPath = pathJoin(projectBaseDir, 'profiles');
 
         const presetNames = await readPresetNames(presetsFolderPath);
 
@@ -190,13 +190,18 @@ export class ProjectResourceProviderImpl_Local
   //   }
   // }
   // internal_getProjectInfoSourceById = this.getProjectInfoSourceById;
+
   getLocalPresetProfileFilePath(
     projectId: string,
     presetName: string,
   ): string | undefined {
     const info = this.getProjectInfoSourceById(projectId);
     if (info) {
-      return pathJoin(info.projectFolderPath, 'presets', `${presetName}.json`);
+      return pathJoin(
+        info.projectFolderPath,
+        'profiles',
+        `${presetName}.profile.json`,
+      );
     }
   }
 

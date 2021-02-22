@@ -1,5 +1,5 @@
 import { Hook } from 'qx';
-import { IProfileEditSource } from '~/shared';
+import { forceChangeFilePathExtension, IProfileEditSource } from '~/shared';
 import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import {
   getFileNameFromPath,
@@ -200,7 +200,8 @@ const handleImportFromFile = async () => {
 const handleExportToFile = async () => {
   const filePath = await ipcAgent.async.file_getSaveJsonFilePathWithDialog();
   if (filePath) {
-    profilesModel.exportToFile(filePath);
+    const modFilePath = forceChangeFilePathExtension(filePath, '.profile.json');
+    profilesModel.exportToFile(modFilePath);
   }
 };
 

@@ -4,7 +4,7 @@ export type IAppErrorsSource = {
   CannotWriteFile: { filePath: string };
   InvalidJsonFileContent: { filePath: string };
   InvalidLayoutFileSchema: { filePath: string; schemaErrorDetail: string };
-  InvalidProjectFileSchema: { filePath: string; schemaErrorDetail: string };
+  InvalidProfileFileSchema: { filePath: string; schemaErrorDetail: string };
   CannotDeleteFile: { filePath: string };
   CannotRenameFile: { from: string; to: string };
   CannotCopyFile: { from: string; to: string };
@@ -23,7 +23,7 @@ const errorTextMapEN: { [key in IErrorType]: string } = {
   CannotRenameFile: `Failed to rename file.`,
   InvalidJsonFileContent: `Invalid json file content.`,
   InvalidLayoutFileSchema: `Invalid schema for file.`,
-  InvalidProjectFileSchema: `Invalid schema for file.`,
+  InvalidProfileFileSchema: `Invalid schema for file.`,
   FailedToLoadRemoteResource: `Failed to fetch remote resource.`,
 };
 
@@ -36,7 +36,7 @@ const errorTextMapJP: { [key in IErrorType]: string } = {
   CannotRenameFile: `ファイルのリネームに失敗しました`,
   InvalidJsonFileContent: `ファイルの内容がJSONとして不正です。`,
   InvalidLayoutFileSchema: `レイアウトファイルの形式が不正です。`,
-  InvalidProjectFileSchema: `プロジェクトファイルの形式が不正です。`,
+  InvalidProfileFileSchema: `プロファイルファイルの形式が不正です。`,
   FailedToLoadRemoteResource: `リソースの取得に失敗しました。`,
 };
 

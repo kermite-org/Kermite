@@ -7,7 +7,7 @@ import {
   vObject,
   vString,
   vStringMatchesTo,
-} from "~/shell/loaders/SchemaValidationHelper";
+} from "~/shared/modules/SchemaValidationHelper";
 
 process.chdir("..");
 
@@ -53,7 +53,7 @@ function projectJsonSchemaCheckerEntry() {
     LayoutDataMigrator.patchOldFormatLayoutData(layout);
     return persistEditKeyboardDesignSchemaChecker(layout);
   });
-  checkFiles("preset", "src/projects/**/presets/*.json", (profile) => {
+  checkFiles("preset", "src/projects/**/profiles/*.json", (profile) => {
     profile = ProfileDataMigrator.fixProfileData(profile);
     return profileDataSchemaChecker(profile);
   });

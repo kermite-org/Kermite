@@ -15,7 +15,9 @@ import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
 
 export class ProfileManagerCore {
   getDataFilePath(profName: string): string {
-    return appEnv.resolveUserDataFilePath(`data/profiles/${profName}.json`);
+    return appEnv.resolveUserDataFilePath(
+      `data/profiles/${profName}.profile.json`,
+    );
   }
 
   async ensureProfilesDirectoryExists() {
@@ -34,8 +36,8 @@ export class ProfileManagerCore {
       appEnv.resolveUserDataFilePath(`data/profiles`),
     );
     return fileNames
-      .filter((fname) => fname.endsWith('.json'))
-      .map((fname) => pathBasename(fname, '.json'));
+      .filter((fname) => fname.endsWith('.profile.json'))
+      .map((fname) => pathBasename(fname, '.profile.json'));
   }
 
   async loadProfile(profName: string): Promise<IProfileData> {
