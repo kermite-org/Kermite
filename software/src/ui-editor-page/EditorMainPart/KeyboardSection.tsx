@@ -20,6 +20,8 @@ export function KeyboardSection() {
   `;
   const { clearAssignSlotSelection } = editorModel;
 
+  playerModel.setProfileData(editorModel.profileData);
+
   const cardsPartVm = makeEditKeyUnitCardsPartViewModel(
     playerModel,
     editorModel,
