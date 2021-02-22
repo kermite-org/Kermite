@@ -22,7 +22,7 @@ export namespace ProfileFileLoader {
       console.log(`profile schema error`);
       console.log(filePath);
       console.log(errorDetail);
-      throw new AppError('InvalidLayoutFileSchema', {
+      throw new AppError('InvalidProfileFileSchema', {
         filePath,
         schemaErrorDetail: errorDetail,
       });
