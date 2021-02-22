@@ -225,9 +225,11 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     saveProfile,
   } = profilesModel;
 
-  const canSave = profilesModel.checkDirty();
+  const canSave =
+    editSource.type === 'InternalProfile' && profilesModel.checkDirty();
 
   const canWrite =
+    editSource.type === 'InternalProfile' &&
     deviceStatus.isConnected &&
     deviceStatus.deviceAttrs?.projectId ===
       profilesModel.getCurrentProfileProjectId();
