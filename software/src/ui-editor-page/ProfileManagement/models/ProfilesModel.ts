@@ -1,4 +1,5 @@
 import {
+  compareObjectByJsonStringify,
   IPresetSpec,
   IProfileEditSource,
   IProfileManagerCommand,
@@ -27,7 +28,14 @@ export class ProfilesModel {
       this.allProfileNames = payload.allProfileNames;
     }
     if (payload.loadedProfileData) {
-      this.editorModel.loadProfileData(payload.loadedProfileData);
+      if (
+        !compareObjectByJsonStringify(
+          payload.loadedProfileData,
+          this.editorModel.loadedPorfileData,
+        )
+      ) {
+        this.editorModel.loadProfileData(payload.loadedProfileData);
+      }
     }
   };
 
