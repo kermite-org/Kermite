@@ -1,6 +1,5 @@
 import {
   IPersistKeyboardDesign,
-  IPresetSpec,
   IProfileData,
   IProjectResourceInfo,
   IResourceOrigin,
@@ -43,12 +42,4 @@ export interface IProjectResourceProvider {
     origin: IResourceOrigin,
     projectId: string,
   ): Promise<string | undefined>;
-}
-
-export interface IPresetProfileLoadingFeature {
-  loadPresetProfileData(
-    origin: IResourceOrigin,
-    projectId: string,
-    presetSpec: IPresetSpec,
-  ): Promise<IProfileData | undefined>;
 }

@@ -6,9 +6,7 @@ import { FlashCommander } from './FlashCommander';
 // 仮想COMポートでProMicroのブートローダ(Caterina)と通信しファームウェアを書き込む
 // 仮想COMポートの列挙や出現監視も行う
 export class FirmwareUpdationService {
-  private comPortsMonitor = new ComPortsMonitor();
-
-  readonly comPortPlugEvents = this.comPortsMonitor.comPortPlugEvents;
+  comPortsMonitor = new ComPortsMonitor();
 
   async writeFirmware(
     origin: IResourceOrigin,
@@ -33,13 +31,5 @@ export class FirmwareUpdationService {
     }
     console.log(flashResult);
     return flashResult;
-  }
-
-  initialize() {
-    this.comPortsMonitor.initializeTicker();
-  }
-
-  terminate() {
-    this.comPortsMonitor.terminateTicker();
   }
 }

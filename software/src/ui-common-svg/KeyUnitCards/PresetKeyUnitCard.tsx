@@ -1,6 +1,8 @@
 import { css } from 'goober';
 import { h } from 'qx';
+import { IDisplayKeyShape } from '~/shared';
 import { uiTheme, mvvmView } from '~/ui-common';
+import { KeyUnitShape } from '~/ui-common-svg/KeyUnitCards/KeyUnitShape';
 
 export interface IPresetKeyUnitViewModel {
   keyUnitId: string;
@@ -12,11 +14,12 @@ export interface IPresetKeyUnitViewModel {
   primaryText: string;
   secondaryText: string;
   isLayerFallback: boolean;
+  shape: IDisplayKeyShape;
 }
 
-const cssKeyRect = css`
+const cssKeyShape = css`
   fill: transparent;
-  stroke: #444;
+  stroke: #888;
   stroke-width: 0.3;
 `;
 
@@ -27,15 +30,21 @@ const cssKeyText = css`
 `;
 
 export const PresetKeyUnitCard = mvvmView((ku: IPresetKeyUnitViewModel) => {
-  const { keyUnitId, pos, primaryText, secondaryText, isLayerFallback } = ku;
+  const {
+    keyUnitId,
+    pos,
+    primaryText,
+    secondaryText,
+    isLayerFallback,
+    shape,
+  } = ku;
 
   return (
     <g
       transform={`translate(${pos.x}, ${pos.y}) rotate(${pos.r}) `}
       key={keyUnitId}
     >
-      <rect x={-9} y={-9} width={18} height={18} css={cssKeyRect} />
-
+      <KeyUnitShape shape={shape} css={cssKeyShape} />
       <text css={cssKeyText} x={0} y={-2} qxIf={!isLayerFallback}>
         {primaryText}
       </text>

@@ -1,41 +1,106 @@
-import { app, BrowserWindow } from 'electron';
-import { IAppWindowEvent } from '~/shared';
-import { appConfig } from '~/shell/base';
-import { createEventPort2, pathJoin, pathRelative } from '~/shell/funcs';
+import { app, BrowserWindow, Rectangle } from 'electron';
+import { IAppWindowStatus } from '~/shared';
+import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
+import {
+  vObject,
+  vNumber,
+  vString,
+  vBoolean,
+} from '~/shared/modules/SchemaValidationHelper';
+import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
+import { createEventPort2, pathRelative } from '~/shell/funcs';
+import { IProfileManager } from '~/shell/services/profile/interfaces';
+import { MenuManager } from '~/shell/services/window/MenuManager';
 import { IAppWindowWrapper } from './interfaces';
-import { PageSourceWatcher, setupWebContentSourceChecker } from './modules';
+import {
+  PageSourceWatcher,
+  preparePreloadJsFile,
+  setupWebContentSourceChecker,
+} from './modules';
+
+const enableFilesWatcher = true;
+// const enableFilesWatcher = appEnv.isDevelopment;
+
+interface IWindowPersistState {
+  pagePath: string;
+  isDevtoolsVisible: boolean;
+  placement: {
+    main?: {
+      bounds: Rectangle;
+    };
+    widget?: {
+      projectId: string;
+      bounds: Rectangle;
+    };
+  };
+}
+
+function makeFallbackWindowPersistState(): IWindowPersistState {
+  return {
+    pagePath: '/',
+    isDevtoolsVisible: false,
+    placement: {
+      main: undefined,
+      widget: undefined,
+    },
+  };
+}
+
+const rectangleSchema = vObject({
+  x: vNumber(),
+  y: vNumber(),
+  width: vNumber(),
+  height: vNumber(),
+});
+
+const windowStateSchema = vObject({
+  pagePath: vString(),
+  isDevtoolsVisible: vBoolean(),
+  placement: vObject({
+    main: vObject({
+      bounds: rectangleSchema,
+    }).optional,
+    widget: vObject({
+      projectId: vString(),
+      bounds: rectangleSchema,
+    }).optional,
+  }),
+});
 
 export class AppWindowWrapper implements IAppWindowWrapper {
+  private menuManager = new MenuManager();
   private pageSourceWatcher = new PageSourceWatcher();
-
   private publicRootPath: string | undefined;
-
   private mainWindow: BrowserWindow | undefined;
+  private state: IWindowPersistState = makeFallbackWindowPersistState();
 
-  appWindowEventPort = createEventPort2<IAppWindowEvent>({
+  constructor(private profileManager: IProfileManager) {}
+
+  appWindowEventPort = createEventPort2<Partial<IAppWindowStatus>>({
     initialValueGetter: () => ({
-      devToolVisible: this.mainWindow?.webContents.isDevToolsOpened() || false,
+      isDevtoolsVisible: this.state.isDevtoolsVisible,
+      isMaximized: this.mainWindow?.isMaximized() || false,
     }),
   });
 
-  openMainWindow(params: {
-    preloadFilePath: string;
-    publicRootPath: string;
-    pageTitle: string;
-    initialPageWidth: number;
-    initialPageHeight: number;
-  }): Electron.BrowserWindow {
+  openMainWindow() {
     const {
       preloadFilePath,
       publicRootPath,
       pageTitle,
       initialPageWidth,
       initialPageHeight,
-    } = params;
+    } = appConfig;
+
+    const recalledBounds = this.isWidgetMode
+      ? this.state.placement.widget?.bounds
+      : this.state.placement.main?.bounds;
 
     const options: Electron.BrowserWindowConstructorOptions = {
-      width: initialPageWidth,
-      height: initialPageHeight,
+      x: recalledBounds?.x,
+      y: recalledBounds?.y,
+      width: recalledBounds?.width || initialPageWidth,
+      height: recalledBounds?.height || initialPageHeight,
       title: pageTitle,
       webPreferences: {
         nodeIntegration: false,
@@ -49,6 +114,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     if (!appConfig.isDevelopment) {
       options.frame = false;
       options.transparent = true;
+      options.hasShadow = false;
     }
 
     const win = new BrowserWindow(options);
@@ -56,29 +122,63 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     setupWebContentSourceChecker(win.webContents, publicRootPath);
     this.publicRootPath = publicRootPath;
 
+    appGlobal.mainWindow = win;
+    appGlobal.icpMainAgent.setWebcontents(win.webContents);
+
+    if (appEnv.isDevelopment && this.state.isDevtoolsVisible) {
+      this.setDevToolsVisibility(true);
+    }
+
+    this.loadInitialPage();
+
     app.on('browser-window-focus', () => {
-      this.appWindowEventPort.emit({ activeChanged: true });
+      this.appWindowEventPort.emit({ isActive: true });
     });
     app.on('browser-window-blur', () => {
-      this.appWindowEventPort.emit({ activeChanged: false });
+      this.appWindowEventPort.emit({ isActive: false });
     });
 
-    return win;
+    win.webContents.on('devtools-opened', () => {
+      this.state.isDevtoolsVisible = true;
+      this.appWindowEventPort.emit({ isDevtoolsVisible: true });
+    });
+    win.webContents.on('devtools-closed', () => {
+      this.state.isDevtoolsVisible = false;
+      this.appWindowEventPort.emit({ isDevtoolsVisible: false });
+    });
+
+    win.on('maximize', () =>
+      this.appWindowEventPort.emit({ isMaximized: true }),
+    );
+    win.on('unmaximize', () =>
+      this.appWindowEventPort.emit({ isMaximized: false }),
+    );
+
+    win.webContents.on('did-navigate-in-page', (_, url) => {
+      const pagePath = url.split('#')[1];
+      const widgetModeChanging = [pagePath, this.state.pagePath].some(
+        (it) => it === '/widget',
+      );
+      if (widgetModeChanging) {
+        this.reserveWindowSize();
+        this.state.pagePath = pagePath;
+        this.adjustWindowSize();
+      } else {
+        this.state.pagePath = pagePath;
+      }
+    });
   }
 
   closeMainWindow() {
     this.mainWindow?.close();
   }
 
-  loadPage(pagePath: string) {
+  private loadInitialPage() {
     if (!this.publicRootPath) {
       return;
     }
-    const pageDir = pathJoin(
-      this.publicRootPath,
-      pagePath !== '/' ? pagePath : '',
-    );
-    const uri = `file://${pageDir}/index.html`;
+    const pageDir = this.publicRootPath;
+    const uri = `file://${pageDir}/index.html#${this.state.pagePath}`;
     const relativeFilePathFromProjectRoot = pathRelative(
       process.cwd(),
       `${pageDir}/index.html`,
@@ -86,14 +186,12 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     console.log(`loading ${relativeFilePathFromProjectRoot}`);
     this.mainWindow?.loadURL(uri);
 
-    if (appConfig.isDevelopment) {
+    if (enableFilesWatcher) {
       const includeSubFolders = true;
       this.pageSourceWatcher.observeFiles(pageDir, includeSubFolders, () =>
         this.mainWindow?.reload(),
       );
     }
-
-    // this.onPageLoaded.emit(pagePath);
   }
 
   reloadPage() {
@@ -106,25 +204,20 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     } else {
       this.mainWindow?.webContents.closeDevTools();
     }
-    this.appWindowEventPort.emit({ devToolVisible: visible });
   }
 
   minimizeMainWindow() {
     this.mainWindow?.minimize();
   }
 
-  private _isMaximized = false;
-
   maximizeMainWindow() {
     if (this.mainWindow) {
-      // const isMaximized = this.mainWindow.isMaximized()
-      // ...always returns false for transparent window
-      if (this._isMaximized) {
-        this.mainWindow.unmaximize();
-        this._isMaximized = false;
-      } else {
+      // this.mainWindow.isMaximized() ... always returns false for transparent window (?)
+      if (!this.mainWindow.isMaximized()) {
+        this.reserveWindowSize();
         this.mainWindow.maximize();
-        this._isMaximized = true;
+      } else {
+        this.mainWindow.unmaximize();
       }
     }
   }
@@ -133,24 +226,80 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     console.log('##REBOOT_ME_AFTER_CLOSE');
     this.closeMainWindow();
   }
-  // private _winHeight = 800;
 
-  // adjustWindowSize(isWidgetMode: boolean) {
-  //   if (this.mainWindow) {
-  //     const [w, h] = this.mainWindow.getSize();
+  private get isWidgetMode() {
+    return this.state.pagePath === '/widget';
+  }
 
-  //     if (isWidgetMode) {
-  //       this._winHeight = h;
-  //       // todo: 現在選択されているプロファイルのキーボード形状データから縦横比を計算
-  //       const asr = 0.4;
-  //       const [w1, h1] = [w, (w * asr) >> 0];
-  //       this.mainWindow.setSize(w1, h1);
-  //       this.mainWindow.setAlwaysOnTop(true);
-  //     } else {
-  //       const [w1, h1] = [w, this._winHeight];
-  //       this.mainWindow.setSize(w1, h1);
-  //       this.mainWindow.setAlwaysOnTop(false);
-  //     }
-  //   }
-  // }
+  private reserveWindowSize() {
+    if (this.mainWindow) {
+      const bounds = this.mainWindow.getBounds();
+      if (this.isWidgetMode) {
+        const currentProfileProjectId = this.profileManager.getCurrentProfileProjectId();
+        if (currentProfileProjectId) {
+          this.state.placement.widget = {
+            projectId: currentProfileProjectId,
+            bounds,
+          };
+        }
+      } else {
+        this.state.placement.main = { bounds };
+      }
+    }
+  }
+
+  private async adjustWindowSize() {
+    if (!this.mainWindow) {
+      return;
+    }
+    if (this.isWidgetMode) {
+      const currentProfile = await this.profileManager.getCurrentProfileAsync();
+      if (!currentProfile) {
+        return;
+      }
+      if (currentProfile.projectId === this.state.placement.widget?.projectId) {
+        this.mainWindow.setBounds(this.state.placement.widget.bounds);
+      } else {
+        const design = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
+          currentProfile.keyboardDesign,
+        );
+        const w = design.displayArea.width * 4;
+        const h = design.displayArea.height * 4 + 40;
+        this.mainWindow.setSize(w, h);
+        this.mainWindow.setAlwaysOnTop(true);
+      }
+    } else {
+      const bounds = this.state.placement.main?.bounds;
+      if (bounds) {
+        this.mainWindow.setBounds(bounds);
+      }
+      this.mainWindow.setAlwaysOnTop(false);
+    }
+  }
+
+  private setupMenu() {
+    const { menuManager: mm } = this;
+    mm.buildMenu();
+    mm.onMenuCloseMainWindow(this.closeMainWindow.bind(this));
+    mm.onMenuRequestReload(this.reloadPage.bind(this));
+    mm.onMenuRestartApplication(this.restartApplication.bind(this));
+  }
+
+  initialize() {
+    this.state = applicationStorage.readItemSafe(
+      'windowState',
+      windowStateSchema,
+      makeFallbackWindowPersistState,
+    );
+    preparePreloadJsFile(appConfig.preloadFilePath);
+    this.openMainWindow();
+    this.setupMenu();
+  }
+
+  terminate() {
+    if (this.mainWindow?.isVisible()) {
+      this.reserveWindowSize();
+    }
+    applicationStorage.writeItem('windowState', this.state);
+  }
 }

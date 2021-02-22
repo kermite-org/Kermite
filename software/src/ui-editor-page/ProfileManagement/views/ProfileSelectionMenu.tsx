@@ -1,6 +1,5 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { uiTheme } from '~/ui-common';
 import { IProfileSelectionMenuPartViewModel } from '~/ui-editor-page/ProfileManagement/viewModels/ProfileSelectionMenuPartViewModel';
 
 const cssProfileSelectionMenuPart = css``;
@@ -35,10 +34,10 @@ const cssMenuButton = css`
 `;
 
 const cssMenuPopup = css`
-  width: 100px;
+  width: 130px;
   background: #fff;
   position: absolute;
-  color: ${uiTheme.colors.clAltText};
+  color: #000;
   z-index: 20;
   user-select: none;
   border: solid 1px #248;
@@ -61,12 +60,16 @@ export const ProfileSelectionMenuPart = (props: {
     <div css={cssProfileSelectionMenuPart}>
       <div css={cssOverlay} qxIf={isOpen} onClick={closeMenu} />
       <div css={cssMenuArea}>
-        <div css={cssMenuButton} onMouseDown={openMenu}>
+        <div
+          css={cssMenuButton}
+          onMouseDown={openMenu}
+          data-hint="Open profile operations menu."
+        >
           <i className="fa fa-bars" />
         </div>
         <div css={cssMenuPopup} qxIf={isOpen}>
           {menuItems.map((mi) => (
-            <div key={mi.key} onMouseUp={mi.handler}>
+            <div key={mi.key} onMouseUp={mi.handler} qxIf={mi.enabled}>
               {mi.text}
             </div>
           ))}

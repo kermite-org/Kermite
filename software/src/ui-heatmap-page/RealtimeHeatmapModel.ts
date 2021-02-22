@@ -6,8 +6,8 @@ import {
   IProfileData,
   IRealtimeKeyboardEvent,
 } from '~/shared';
+import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import { appUi, ipcAgent } from '~/ui-common';
-import { DisplayKeyboardDesignLoader } from '~/ui-common/modules/DisplayKeyboardDesignLoader';
 
 function translateKeyIndexToKeyUnitId(
   displayDesign: IDisplayKeyboardDesign,
@@ -81,23 +81,17 @@ export class RealtimeHeatmapModel {
     }
   };
 
-  startPageSession = () => {
-    const unsub1 = ipcAgent.subscribe('profile_currentProfile', (profile) => {
-      if (profile) {
-        this.profileData = profile;
-        this.displayDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
-          profile.keyboardDesign,
-        );
-      }
-    });
-    const unsub2 = ipcAgent.subscribe(
-      'device_keyEvents',
-      this.handleKeyboardEvent,
+  private async fetchData() {
+    const profile = await ipcAgent.async.profile_getCurrentProfile();
+    this.profileData = profile;
+    this.displayDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
+      profile.keyboardDesign,
     );
-    return () => {
-      unsub1();
-      unsub2();
-    };
+  }
+
+  startPageSession = () => {
+    this.fetchData();
+    return ipcAgent.events.device_keyEvents.subscribe(this.handleKeyboardEvent);
   };
 }
 

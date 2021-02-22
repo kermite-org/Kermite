@@ -1,8 +1,8 @@
-import { createSimpleSelector } from '~/ui-common/helpers/StoreUtils';
 import {
   getCoordUnitFromUnitSpec,
   ICoordUnit,
-} from '~/ui-common/modules/PlacementUnitHelper';
+} from '~/shared/modules/PlacementUnitHelper';
+import { createSimpleSelector } from '~/ui-common/helpers/StoreUtils';
 import { appState, IEnvBoolPropKey, IModeState } from './AppState';
 import { getKeyboardDesignBoundingBox } from './BoundingBoxCalculator';
 import {
@@ -153,10 +153,6 @@ class EditReader {
     ];
   }
 
-  get showConfig() {
-    return appState.env.showConfig;
-  }
-
   get keySizeUnit() {
     return appState.editor.design.setup.keySizeUnit;
   }
@@ -187,6 +183,10 @@ class EditReader {
 
   get isModified() {
     return appState.editor.design !== appState.editor.loadedDesign;
+  }
+
+  get shapeDrawing() {
+    return appState.editor.shapeDrawing;
   }
 }
 export const editReader = new EditReader();

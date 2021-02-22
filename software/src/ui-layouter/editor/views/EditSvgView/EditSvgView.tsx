@@ -6,7 +6,6 @@ import {
 } from '~/ui-layouter/base';
 import { editReader, editMutations } from '~/ui-layouter/editor/store';
 import { screenToWorld } from './CoordHelpers';
-import { DisplayAreaFrame } from './DisplayAreaFrame';
 import { FieldGrid, FieldAxis } from './FieldParts';
 import { KeyEntityCard, startKeyEntityDragOperation } from './KeyEntityCard';
 import {
@@ -70,19 +69,6 @@ const onSvgMouseDown = (e: MouseEvent) => {
       }
     }
   }
-  if (e.button === 2) {
-    const { editorTarget, editMode } = editReader;
-    if (editorTarget === 'outline' && editMode === 'add') {
-      editMutations.endShapeDrawing();
-    }
-    editMutations.setCurrentShapeId(undefined);
-    editMutations.unsetCurrentKeyEntity();
-    editMutations.setCurrentPointIndex(-1);
-    if (editMode === 'add') {
-      // addで右クリックしたときmoveに切り替える
-      // editMutations.setEditMode('move');
-    }
-  }
   if (e.button === 1) {
     startSightDragOperation(e);
   }
@@ -126,7 +112,7 @@ export const EditSvgView = () => {
         {showAxis && <FieldAxis />}
         {ghost && <KeyEntityCard ke={ghost} />}
 
-        <DisplayAreaFrame />
+        {/* <DisplayAreaFrame /> */}
 
         {editReader.allKeyEntities.map((ke) => (
           <KeyEntityCard ke={ke} key={ke.id} />

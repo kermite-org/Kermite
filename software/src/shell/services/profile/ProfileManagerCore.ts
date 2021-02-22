@@ -1,5 +1,4 @@
 import { IProfileData } from '~/shared';
-import { applicationStorage } from '~/shell/base';
 import { appEnv } from '~/shell/base/AppEnv';
 import {
   fsExistsSync,
@@ -16,7 +15,9 @@ import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
 
 export class ProfileManagerCore {
   getDataFilePath(profName: string): string {
-    return appEnv.resolveUserDataFilePath(`data/profiles/${profName}.json`);
+    return appEnv.resolveUserDataFilePath(
+      `data/profiles/${profName}.profile.json`,
+    );
   }
 
   async ensureProfilesDirectoryExists() {
@@ -35,16 +36,8 @@ export class ProfileManagerCore {
       appEnv.resolveUserDataFilePath(`data/profiles`),
     );
     return fileNames
-      .filter((fname) => fname.endsWith('.json'))
-      .map((fname) => pathBasename(fname, '.json'));
-  }
-
-  loadCurrentProfileName(): string | undefined {
-    return applicationStorage.getItem('currentProfileName');
-  }
-
-  storeCurrentProfileName(profName: string) {
-    applicationStorage.setItem('currentProfileName', profName);
+      .filter((fname) => fname.endsWith('.profile.json'))
+      .map((fname) => pathBasename(fname, '.profile.json'));
   }
 
   async loadProfile(profName: string): Promise<IProfileData> {
@@ -58,6 +51,17 @@ export class ProfileManagerCore {
   ): Promise<void> {
     const filePath = this.getDataFilePath(profName);
     console.log(`saving current profile to ${pathBasename(filePath)}`);
+    await ProfileFileLoader.saveProfileToFile(filePath, profileData);
+  }
+
+  async loadExternalProfileFile(filePath: string): Promise<IProfileData> {
+    return await ProfileFileLoader.loadProfileFromFile(filePath);
+  }
+
+  async saveExternalProfileFile(
+    filePath: string,
+    profileData: IProfileData,
+  ): Promise<void> {
     await ProfileFileLoader.saveProfileToFile(filePath, profileData);
   }
 

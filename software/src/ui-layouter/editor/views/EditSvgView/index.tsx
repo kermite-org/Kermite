@@ -7,7 +7,6 @@ import { InformationOverlay } from './InformationOverlay';
 
 export const EditSvgViewContainer = () => {
   const cssSvgView = css`
-    border: solid 1px #888;
     flex-grow: 1;
     overflow: hidden;
     position: relative;

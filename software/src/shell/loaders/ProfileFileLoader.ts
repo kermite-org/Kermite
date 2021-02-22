@@ -22,10 +22,9 @@ export namespace ProfileFileLoader {
       console.log(`profile schema error`);
       console.log(filePath);
       console.log(errorDetail);
-      throw new AppError({
-        type: 'InvalidLayoutFileSchema',
+      throw new AppError('InvalidLayoutFileSchema', {
         filePath,
-        errorDetail,
+        schemaErrorDetail: errorDetail,
       });
     }
     return ProfileDataConverter.convertProfileDataFromPersist(profileData);

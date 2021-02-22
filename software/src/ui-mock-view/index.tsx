@@ -4,7 +4,10 @@ import { debounce } from '~/shared';
 import { initializeCss } from '~/ui-common';
 import { UiLayouterPageComponent } from '~/ui-layouter-page';
 import { GooberDevelopmentPage } from '~/ui-mock-view/GooberDevelopmentPage';
+import { HoverHintDevelopmentPage } from '~/ui-mock-view/HoverHintDevelopmentPage';
+import { MockPageComponentDevelopment } from '~/ui-mock-view/MockPageComponentDevelopment';
 import { MockPageLoadedDesignDrawing } from '~/ui-mock-view/MockPageLoadedDesignDrawing';
+import { RoutingDevelopmentPage } from '~/ui-mock-view/RoutingDevelopmentPage';
 import { MockPageLayouterDevelopment } from './MockPageLayouterDevelopment';
 
 const PageRoot = () => {
@@ -12,9 +15,11 @@ const PageRoot = () => {
     <div style={{ height: '100%' }}>
       {/* <MockPageLayouterDevelopment /> */}
       {/* <MockPageLoadedDesignDrawing /> */}
-      {/* <UiLayouterPageDevelopmentDummy /> */}
       {/* <UiLayouterPageComponent /> */}
-      <GooberDevelopmentPage />
+      {/* <GooberDevelopmentPage /> */}
+      {/* <RoutingDevelopmentPage /> */}
+      {/* <MockPageComponentDevelopment /> */}
+      <HoverHintDevelopmentPage />
     </div>
   );
 };

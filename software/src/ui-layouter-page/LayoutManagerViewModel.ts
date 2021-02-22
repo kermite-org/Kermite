@@ -1,10 +1,9 @@
 import { Hook } from 'qx';
 import { ILayoutEditSource, IProjectLayoutsInfo } from '~/shared';
-import { useLocal } from '~/ui-common';
+import { ISelectorOption, useLocal } from '~/ui-common';
 import { useProjectResourcePresenceChecker } from '~/ui-common/sharedModels/hooks';
 import { UiLayouterCore } from '~/ui-layouter';
 import { LayoutManagerModel } from '~/ui-layouter-page/LayoutManagerModel';
-import { ISelectOption } from '~/ui-layouter/controls';
 
 export type ILayoutManagerModalState =
   | 'None'
@@ -15,14 +14,14 @@ export interface ILayoutManagerViewModel {
   editSourceText: string;
   isEditCurrnetProfileLayoutActive: boolean;
 
-  projectOptions: ISelectOption[];
+  projectOptions: ISelectorOption[];
   setCurrentProjectId(projectId: string): void;
   currentProjectId: string;
   currentProjectPath: string;
   currentKeyboardName: string;
   targetProjectLayoutFilePath: string;
 
-  layoutOptions: ISelectOption[];
+  layoutOptions: ISelectorOption[];
   currentLayoutName: string;
   setCurrentLayoutName(text: string): void;
 

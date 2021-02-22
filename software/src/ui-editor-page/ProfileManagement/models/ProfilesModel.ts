@@ -1,22 +1,19 @@
 import {
+  compareObjectByJsonStringify,
   IPresetSpec,
+  IProfileEditSource,
   IProfileManagerCommand,
   IProfileManagerStatus,
   IResourceOrigin,
 } from '~/shared';
 import { ipcAgent } from '~/ui-common';
 import { EditorModel } from '../../EditorMainPart/models/EditorModel';
-import { ProfileProvider } from './ProfileProvider';
-
-const useAutoSave = false;
 
 export class ProfilesModel {
-  private profileProvider = new ProfileProvider();
-
   constructor(private editorModel: EditorModel) {}
 
   // state
-  currentProfileName: string = '';
+  editSource: IProfileEditSource = { type: 'NewlyCreated' };
   allProfileNames: string[] = [];
 
   // listeners
@@ -24,24 +21,46 @@ export class ProfilesModel {
   private handleProfileStatusChange = (
     payload: Partial<IProfileManagerStatus>,
   ) => {
-    if (payload.currentProfileName) {
-      this.currentProfileName = payload.currentProfileName;
+    if (payload.editSource) {
+      this.editSource = payload.editSource;
     }
     if (payload.allProfileNames) {
       this.allProfileNames = payload.allProfileNames;
     }
     if (payload.loadedProfileData) {
-      this.editorModel.loadProfileData(payload.loadedProfileData);
-    }
-    if (payload.errorMessage) {
-      alert(payload.errorMessage);
+      if (
+        !compareObjectByJsonStringify(
+          payload.loadedProfileData,
+          this.editorModel.loadedPorfileData,
+        )
+      ) {
+        this.editorModel.loadProfileData(payload.loadedProfileData);
+      }
     }
   };
+
+  // reader
+
+  get currentProfileName() {
+    return (
+      (this.editSource.type === 'InternalProfile' &&
+        this.editSource.profileName) ||
+      ''
+    );
+  }
+
+  checkDirty() {
+    return this.editorModel.checkDirty(false);
+  }
+
+  getCurrentProfileProjectId() {
+    return this.editorModel.loadedPorfileData.projectId;
+  }
 
   // actions
 
   private getSaveCommandIfDirty() {
-    const isDirty = this.editorModel.checkDirty();
+    const isDirty = this.editorModel.checkDirty(true);
     if (isDirty) {
       return {
         saveCurrentProfile: { profileData: this.editorModel.profileData },
@@ -64,8 +83,6 @@ export class ProfilesModel {
     targetProjectId: string,
     presetSpec: IPresetSpec,
   ) => {
-    const saveCommand =
-      (useAutoSave && this.getSaveCommandIfDirty()) || undefined;
     const createCommand = {
       creatProfile: {
         name: newProfileName,
@@ -74,17 +91,15 @@ export class ProfilesModel {
         presetSpec,
       },
     };
-    this.sendProfileManagerCommands(saveCommand, createCommand);
+    this.sendProfileManagerCommands(createCommand);
   };
 
   loadProfile = (profileName: string) => {
     if (profileName === this.currentProfileName) {
       return;
     }
-    const saveCommand =
-      (useAutoSave && this.getSaveCommandIfDirty()) || undefined;
     const loadCommand = { loadProfile: { name: profileName } };
-    this.sendProfileManagerCommands(saveCommand, loadCommand);
+    this.sendProfileManagerCommands(loadCommand);
   };
 
   renameProfile = (newProfileName: string) => {
@@ -129,15 +144,28 @@ export class ProfilesModel {
     this.sendProfileManagerCommands(exportCommand);
   };
 
-  initialize() {
-    this.profileProvider.setListener(this.handleProfileStatusChange);
-    this.profileProvider.initialize();
-  }
+  importFromFile = (filePath: string) => {
+    this.sendProfileManagerCommands({ importFromFile: { filePath } });
+  };
 
-  finalize() {
-    if (useAutoSave && this.editorModel.checkDirty()) {
-      this.profileProvider.saveProfileOnClosing(this.editorModel.profileData);
-    }
-    this.profileProvider.finalize();
-  }
+  exportToFile = (filePath: string) => {
+    this.sendProfileManagerCommands({
+      exportToFile: { filePath, profileData: this.editorModel.profileData },
+    });
+  };
+
+  saveUnsavedProfileAs = (profileName: string) => {
+    this.sendProfileManagerCommands({
+      saveProfileAs: {
+        name: profileName,
+        profileData: this.editorModel.profileData,
+      },
+    });
+  };
+
+  startPageSession = () => {
+    return ipcAgent.events.profile_profileManagerStatus.subscribe(
+      this.handleProfileStatusChange,
+    );
+  };
 }

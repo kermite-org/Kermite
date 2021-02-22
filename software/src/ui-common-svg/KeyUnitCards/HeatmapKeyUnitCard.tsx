@@ -1,6 +1,8 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { uiTheme, mvvmView } from '~/ui-common';
+import { IDisplayKeyShape } from '~/shared';
+import { mvvmView } from '~/ui-common';
+import { KeyUnitShape } from '~/ui-common-svg/KeyUnitCards/KeyUnitShape';
 
 export interface IHeatmapCustomKeyUnitViewModel {
   keyUnitId: string;
@@ -15,31 +17,32 @@ export interface IHeatmapCustomKeyUnitViewModel {
   typeCount: number;
   weight: number;
   hold: boolean;
+  shape: IDisplayKeyShape;
 }
 
-const cssKeyRect = css`
+const cssKeyShape = css`
   fill: transparent;
   stroke: #444;
   stroke-width: 0.3;
 `;
 
-const cssKeyRectCover = css`
+const cssKeyShapeCover = css`
   fill: #f09;
 `;
 
-const cssKeyRectHold = css`
+const cssKeyShapeHold = css`
   fill: #f90;
 `;
 
 const cssKeyText = css`
   font-size: 5px;
-  fill: ${uiTheme.colors.clAltText};
+  fill: #000;
   text-anchor: middle;
 `;
 
 const cssCountText = css`
   font-size: 5px;
-  fill: ${uiTheme.colors.clAltText};
+  fill: #000;
   text-anchor: middle;
 `;
 
@@ -54,6 +57,7 @@ export const HeatmapKeyUnitCard = mvvmView(
       typeCount,
       weight,
       hold,
+      shape,
     } = ku;
 
     return (
@@ -61,22 +65,11 @@ export const HeatmapKeyUnitCard = mvvmView(
         transform={`translate(${pos.x}, ${pos.y}) rotate(${pos.r}) `}
         key={keyUnitId}
       >
-        <rect x={-9} y={-9} width={18} height={18} css={cssKeyRect} />
-
+        <KeyUnitShape shape={shape} css={cssKeyShape} />
         {!hold && (
-          <rect
-            x={-9}
-            y={-9}
-            width={18}
-            height={18}
-            css={cssKeyRectCover}
-            opacity={weight}
-          />
+          <KeyUnitShape shape={shape} css={cssKeyShapeCover} opacity={weight} />
         )}
-
-        {hold && (
-          <rect x={-9} y={-9} width={18} height={18} css={cssKeyRectHold} />
-        )}
+        {hold && <KeyUnitShape shape={shape} css={cssKeyShapeHold} />}
 
         <text css={cssKeyText} x={0} y={-2} qxIf={!isLayerFallback}>
           {primaryText}

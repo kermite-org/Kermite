@@ -1,6 +1,8 @@
 import { css } from 'goober';
 import { h } from 'qx';
+import { IDisplayKeyShape } from '~/shared';
 import { uiTheme } from '~/ui-common';
+import { KeyUnitShape } from '~/ui-common-svg/KeyUnitCards/KeyUnitShape';
 
 export interface IEditKeyUnitCardViewModel {
   keyUnitId: string;
@@ -9,15 +11,17 @@ export interface IEditKeyUnitCardViewModel {
     y: number;
     r: number;
   };
+  shape: IDisplayKeyShape;
   isCurrent: boolean;
   setCurrent: () => void;
   primaryText: string;
   secondaryText: string;
   isLayerFallback: boolean;
   isHold: boolean;
+  shiftHold: boolean;
 }
 
-const cssKeyRect = css`
+const cssKeyShape = css`
   cursor: pointer;
   fill: ${uiTheme.colors.clKeyUnitFace};
 
@@ -26,6 +30,9 @@ const cssKeyRect = css`
   }
   &[data-hold] {
     fill: ${uiTheme.colors.clHoldHighlight};
+  }
+  &:hover {
+    opacity: 0.7;
   }
 `;
 
@@ -56,6 +63,8 @@ export function EditKeyUnitCard(props: {
     secondaryText,
     isLayerFallback,
     isHold,
+    shape,
+    shiftHold,
   } = props.keyUnit;
   const { showLayerDefaultAssign } = props;
 
@@ -74,17 +83,20 @@ export function EditKeyUnitCard(props: {
     }
   };
 
+  const getFontWeight = (text: string) => {
+    const shouldBold = shiftHold && text.match(/^[A-Z]$/);
+    return shouldBold ? 'bold' : 'normal';
+  };
+
   return (
     <g
       transform={`translate(${pos.x}, ${pos.y}) rotate(${pos.r}) `}
       key={keyUnitId}
+      data-hint="Select edit target key."
     >
-      <rect
-        x={-9}
-        y={-9}
-        width={18}
-        height={18}
-        css={cssKeyRect}
+      <KeyUnitShape
+        shape={shape}
+        css={cssKeyShape}
         data-current={isCurrent}
         data-hold={isHold}
         onMouseDown={onMouseDown}
@@ -94,6 +106,7 @@ export function EditKeyUnitCard(props: {
         x={0}
         y={0}
         font-size={getFontSize(primaryText)}
+        font-weight={getFontWeight(primaryText)}
         text-anchor="middle"
         dominant-baseline="center"
         data-is-weak={isLayerFallback}

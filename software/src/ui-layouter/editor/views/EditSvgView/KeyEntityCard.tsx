@@ -1,7 +1,8 @@
 import { css } from 'goober';
-import { rerender, h } from 'qx';
+import { h, rerender } from 'qx';
 import { degToRad } from '~/shared';
-import { getStdKeySize } from '~/ui-common/modules/PlacementUnitHelper';
+import { getKeySize } from '~/shared/modules/PlacementUnitHelper';
+import { uiTheme } from '~/ui-common';
 import { IPosition, startDragSession } from '~/ui-layouter/base';
 import {
   editMutations,
@@ -86,9 +87,9 @@ export const KeyEntityCardSingle = (props: {
   const mirrorMultX = isMirror ? -1 : 1;
 
   const cssKeyRect = css`
-    fill: rgba(255, 255, 255, 0.3);
     stroke-width: 0.5;
-    stroke: #666;
+    fill: ${uiTheme.colors.clLayouterKeyFace};
+    stroke: ${uiTheme.colors.clLayouterKeyEdge};
     cursor: pointer;
 
     &[data-selected] {
@@ -97,6 +98,10 @@ export const KeyEntityCardSingle = (props: {
 
     &[data-ghost] {
       opacity: 0.3;
+    }
+
+    &:hover {
+      opacity: 0.7;
     }
   `;
 
@@ -151,6 +156,7 @@ export const KeyEntityCardSingle = (props: {
     dominant-baseline: central;
     user-select: none;
     pointer-events: none;
+    fill: ${uiTheme.colors.clLayouterKeyLegend};
     &[data-selected] {
       fill: #4bb;
     }
@@ -165,8 +171,14 @@ export const KeyEntityCardSingle = (props: {
     isMirror,
     editReader.isManualKeyIdMode,
   );
+
+  const [keyW, keyH] = getKeySize(ke.shape, coordUnit, keySizeUnit);
+
+  const idTextsTransformSpec = `translate(${d * (keyW / 2 + 1)}, ${
+    d * (keyH / 2 + 1)
+  }) scale(0.2)`;
   const idTexts = (
-    <g transform="scale(0.2)">
+    <g transform={idTextsTransformSpec}>
       <text
         y={showBoth ? -10 : 0}
         css={cssText}
@@ -233,7 +245,6 @@ export const KeyEntityCardSingle = (props: {
     );
   }
 
-  const [keyW, keyH] = getStdKeySize(ke.shape, coordUnit, keySizeUnit);
   const transformSpec = `translate(
     ${d * (keyW / 2 + 0.5)}, ${d * (keyH / 2 + 0.5)})`;
   return (

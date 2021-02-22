@@ -7,7 +7,7 @@ import { createProjectSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { appEnv } from '~/shell/base';
 import {
   fsExistsSync,
-  fspReaddir,
+  fsxReaddir,
   fsxReadJsonFile,
   globAsync,
   pathBasename,
@@ -34,16 +34,16 @@ namespace ProjectResourceInfoSourceLoader {
 
   async function readPresetNames(presetsFolderPath: string): Promise<string[]> {
     if (fsExistsSync(presetsFolderPath)) {
-      return (await fspReaddir(presetsFolderPath))
-        .filter((fpath) => fpath.endsWith('.json'))
-        .map((fpath) => pathBasename(fpath, '.json'));
+      return (await fsxReaddir(presetsFolderPath))
+        .filter((fpath) => fpath.endsWith('.profile.json'))
+        .map((fpath) => pathBasename(fpath, '.profile.json'));
     } else {
       return [];
     }
   }
 
   async function readLayoutNames(projectFolderPath: string): Promise<string[]> {
-    return (await fspReaddir(projectFolderPath))
+    return (await fsxReaddir(projectFolderPath))
       .filter((fileName) => fileName.endsWith('.layout.json'))
       .map((fileName) => pathBasename(fileName, '.layout.json'));
   }
@@ -93,7 +93,7 @@ namespace ProjectResourceInfoSourceLoader {
           projectFilePath,
         );
 
-        const presetsFolderPath = pathJoin(projectBaseDir, 'presets');
+        const presetsFolderPath = pathJoin(projectBaseDir, 'profiles');
 
         const presetNames = await readPresetNames(presetsFolderPath);
 
@@ -196,7 +196,7 @@ export class ProjectResourceProviderImpl_Local
   ): string | undefined {
     const info = this.getProjectInfoSourceById(projectId);
     if (info) {
-      return pathJoin(info.projectFolderPath, 'presets', `${presetName}.json`);
+      return pathJoin(info.projectFolderPath, 'profiles', `${presetName}.json`);
     }
   }
 

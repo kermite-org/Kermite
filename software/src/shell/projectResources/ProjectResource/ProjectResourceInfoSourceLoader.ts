@@ -2,7 +2,6 @@ import { IResourceOrigin } from '~/shared';
 import { appEnv } from '~/shell/base';
 import {
   fsExistsSync,
-  fspReaddir,
   pathBasename,
   fsxReadJsonFile,
   pathJoin,
@@ -10,6 +9,7 @@ import {
   pathDirname,
   pathResolve,
   pathRelative,
+  fsxReaddir,
 } from '~/shell/funcs';
 
 export interface IProjectResourceInfoSource {
@@ -63,7 +63,7 @@ namespace ProjectResourceInfoSourceLoader__DEPRECATED {
 
   async function readPresetNames(presetsFolderPath: string): Promise<string[]> {
     if (fsExistsSync(presetsFolderPath)) {
-      return (await fspReaddir(presetsFolderPath))
+      return (await fsxReaddir(presetsFolderPath))
         .filter((fpath) => fpath.endsWith('.json'))
         .map((fpath) => pathBasename(fpath, '.json'));
     } else {
@@ -72,7 +72,7 @@ namespace ProjectResourceInfoSourceLoader__DEPRECATED {
   }
 
   async function readLayoutNames(projectFolderPath: string): Promise<string[]> {
-    return (await fspReaddir(projectFolderPath))
+    return (await fsxReaddir(projectFolderPath))
       .filter((fileName) => fileName.endsWith('.layout.json'))
       .map((fileName) => pathBasename(fileName, '.layout.json'));
   }
@@ -145,7 +145,7 @@ namespace ProjectResourceInfoSourceLoader__DEPRECATED {
         const hexFilePath = checkFileExistsOrBlank(
           pathJoin(projectBaseDir, `${coreName}.hex`),
         );
-        const presetFolderPath = pathJoin(projectBaseDir, 'presets');
+        const presetFolderPath = pathJoin(projectBaseDir, 'profiles');
         const presetNames = await readPresetNames(presetFolderPath);
 
         const layoutNames = await readLayoutNames(projectBaseDir);
@@ -188,7 +188,7 @@ namespace ProjectResourceInfoSourceLoader__DEPRECATED {
           projectFilePath,
         );
 
-        const presetsFolderPath = pathJoin(projectBaseDir, 'presets');
+        const presetsFolderPath = pathJoin(projectBaseDir, 'profiles');
 
         const presetNames = await readPresetNames(presetsFolderPath);
 

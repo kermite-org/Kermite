@@ -50,7 +50,7 @@ export const modalConfirm = createModal(
       const close = () => props.close(false);
       return (
         <ClosableOverlay close={close}>
-          <CommonDialogFrame caption={caption}>
+          <CommonDialogFrame caption={caption} close={close}>
             <DialogContentRow>{message}</DialogContentRow>
             <DialogButtonsRow>
               {/* <DialogButton onClick={close}>cancel</DialogButton> */}
@@ -86,7 +86,7 @@ export const modalTextEdit = createModal(
 
       return (
         <ClosableOverlay close={close}>
-          <CommonDialogFrame caption={caption}>
+          <CommonDialogFrame caption={caption} close={close}>
             <DialogContentRow>
               <div>{message}</div>
               <div css={cssInputRow}>

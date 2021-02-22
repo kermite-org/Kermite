@@ -22,20 +22,22 @@ export class PageSourceWatcher {
     }
     const debouncedNotify = debounce(notificationCallback, 200);
 
+    const onFileChange = (_event: string, fileName: string) => {
+      const ext = pathExtname(fileName);
+      if (['.js', '.html'].includes(ext)) {
+        const relPathFromProjectRoot = pathRelative(
+          pathResolve(),
+          pathJoin(pageDir, fileName),
+        );
+        console.log(`file changed: ${relPathFromProjectRoot}`);
+        debouncedNotify();
+      }
+    };
+
     this.watcher = fsWatch(
       pageDir,
       { recursive: includeSubFolders },
-      (_event, fileName) => {
-        const ext = pathExtname(fileName);
-        if (['.js', '.html'].includes(ext)) {
-          const relPathFromProjectRoot = pathRelative(
-            pathResolve(),
-            pathJoin(pageDir, fileName),
-          );
-          console.log(`file changed: ${relPathFromProjectRoot}`);
-          debouncedNotify();
-        }
-      },
+      onFileChange,
     );
   }
 }

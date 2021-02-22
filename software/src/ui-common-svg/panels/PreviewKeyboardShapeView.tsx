@@ -1,16 +1,36 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { IDisplayKeyboardDesign } from '~/shared';
-import { PreviewKeyEntityCardsPart } from '~/ui-common-svg/KeyUnitCardsPart/PreviewKeyUnitCardsPart';
+import { IDisplayKeyboardDesign, IDisplayKeyEntity } from '~/shared';
+import { PreviewKeyEntityCard } from '~/ui-common-svg/KeyUnitCards/PreviewKeyUnitCard';
 import { KeyboardSvgFrameWithAutoScaler } from '~/ui-common-svg/frames/KeyboardSvgFrameWithAutoScaler';
 import { KeyboardBodyShape } from '~/ui-common-svg/keyboardBody/KeyboardBodyShape';
 import { PreviewDisplayAreaBox } from '~/ui-common-svg/keyboardBody/PreviewBoundingBox';
-import { IUiSettings } from '~/ui-common/sharedModels/UiStatusModel';
 
-export function PreviewKeyboardShapeView(props: {
+const PreviewKeyEntityCardsPart = (props: {
+  keyEntities: IDisplayKeyEntity[];
+  showKeyId: boolean;
+  showKeyIndex: boolean;
+}) => (
+  <g>
+    {props.keyEntities.map((ke) => (
+      <PreviewKeyEntityCard
+        keyEntity={ke}
+        key={ke.keyId}
+        showKeyId={props.showKeyId}
+        showKeyIndex={props.showKeyIndex}
+      />
+    ))}
+  </g>
+);
+
+export const PreviewKeyboardShapeView = (props: {
   keyboardDesign: IDisplayKeyboardDesign;
-  settings: IUiSettings;
-}) {
+  settings: {
+    shapeViewShowKeyId: boolean;
+    shapeViewShowKeyIndex: boolean;
+    shapeViewShowBoundingBox: boolean;
+  };
+}) => {
   const { keyboardDesign, settings } = props;
 
   const cssKeyboardShapeView = css`
@@ -55,4 +75,4 @@ export function PreviewKeyboardShapeView(props: {
       </KeyboardSvgFrameWithAutoScaler>
     </div>
   );
-}
+};

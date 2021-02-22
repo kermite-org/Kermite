@@ -1,6 +1,7 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { IDisplayKeyEntity } from '~/shared';
+import { KeyUnitShape } from '~/ui-common-svg/KeyUnitCards/KeyUnitShape';
 
 export const PreviewKeyEntityCard = (props: {
   keyEntity: IDisplayKeyEntity;
@@ -9,9 +10,9 @@ export const PreviewKeyEntityCard = (props: {
 }) => {
   const ke = props.keyEntity;
   const pos = { x: ke.x, y: ke.y, r: ke.angle || 0 };
-  const { keyId: keyUnitId, keyIndex } = ke;
+  const { keyId: keyUnitId, keyIndex, shape } = ke;
 
-  const cssKeyRect = css`
+  const cssKeyShape = css`
     fill: rgba(0, 0, 0, 0.5);
   `;
 
@@ -25,8 +26,7 @@ export const PreviewKeyEntityCard = (props: {
       transform={`translate(${pos.x}, ${pos.y}) rotate(${pos.r}) `}
       key={keyUnitId}
     >
-      <rect x={-9} y={-9} width={18} height={18} css={cssKeyRect} />
-
+      <KeyUnitShape shape={shape} css={cssKeyShape} />
       <text
         css={cssKeyText}
         x={0}

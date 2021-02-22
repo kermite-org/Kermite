@@ -1,6 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { makeCssColor } from '~/ui-layouter/base';
+import { makeCssColor } from '~/ui-common/base';
 import { editReader } from '~/ui-layouter/editor/store';
 
 const cssDisplayAreaFrame = css`

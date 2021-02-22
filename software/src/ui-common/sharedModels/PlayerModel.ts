@@ -3,10 +3,11 @@ import {
   fallbackProfileData,
   IDisplayKeyboardDesign,
   IProfileData,
+  IProfileManagerStatus,
   IRealtimeKeyboardEvent,
 } from '~/shared';
+import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import { ipcAgent } from '~/ui-common';
-import { DisplayKeyboardDesignLoader } from '~/ui-common/modules/DisplayKeyboardDesignLoader';
 
 class PlayerModelHelper {
   static translateKeyIndexToKeyUnitId(
@@ -86,6 +87,29 @@ export class PlayerModel {
     return undefined;
   };
 
+  private plainShiftPressed: boolean = false;
+
+  checkShiftHold(): boolean {
+    const shiftLayerHold = this._profileData.layers.some(
+      (layer, layerIndex) =>
+        this.isLayerActive(layerIndex) &&
+        layer.attachedModifiers?.includes('K_Shift'),
+    );
+    return shiftLayerHold || this.plainShiftPressed;
+  }
+
+  private shiftResolver = (keyUnitId: string, isDown: boolean) => {
+    const assign = this.getDynamicKeyAssign(keyUnitId);
+    if (assign?.type === 'single') {
+      if (
+        assign.op?.type === 'keyInput' &&
+        assign.op.virtualKey === 'K_Shift'
+      ) {
+        this.plainShiftPressed = isDown;
+      }
+    }
+  };
+
   private handlekeyEvents = (ev: IRealtimeKeyboardEvent) => {
     if (ev.type === 'keyStateChanged') {
       const { keyIndex, isDown } = ev;
@@ -100,13 +124,15 @@ export class PlayerModel {
       );
       if (keyUnitId) {
         this._keyStates[keyUnitId] = isDown;
+        this.shiftResolver(keyUnitId, isDown);
       }
     } else if (ev.type === 'layerChanged') {
       this._layerActiveFlags = ev.layerActiveFlags;
     }
   };
 
-  private onProfileData = (profile: IProfileData | undefined) => {
+  private onProfileStatus = (status: Partial<IProfileManagerStatus>) => {
+    const profile = status.loadedProfileData;
     if (profile) {
       this._profileData = profile;
       this._displayDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
@@ -116,12 +142,16 @@ export class PlayerModel {
   };
 
   initialize() {
-    ipcAgent.subscribe2('device_keyEvents', this.handlekeyEvents);
-    ipcAgent.subscribe2('profile_currentProfile', this.onProfileData);
+    ipcAgent.events.device_keyEvents.subscribe(this.handlekeyEvents);
+    ipcAgent.events.profile_profileManagerStatus.subscribe(
+      this.onProfileStatus,
+    );
   }
 
   finalize() {
-    ipcAgent.unsubscribe2('device_keyEvents', this.handlekeyEvents);
-    ipcAgent.unsubscribe2('profile_currentProfile', this.onProfileData);
+    ipcAgent.events.device_keyEvents.unsubscribe(this.handlekeyEvents);
+    ipcAgent.events.profile_profileManagerStatus.unsubscribe(
+      this.onProfileStatus,
+    );
   }
 }

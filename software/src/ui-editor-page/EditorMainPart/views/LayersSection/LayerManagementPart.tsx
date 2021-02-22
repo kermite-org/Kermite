@@ -27,26 +27,31 @@ export const LayerManagementPart = (props: {
         icon="fa fa-plus"
         enabled={true}
         handler={addNewLayer}
+        hint="Add new layer."
       />
       <LayerOperationButtton
         icon="fa fa-pen-square"
         enabled={true}
         handler={editCurrentLayer}
+        hint="Edit layer properties."
       />
       <LayerOperationButtton
         icon="fa fa-times"
         enabled={canDeleteCurrentLayer}
         handler={deleteCurrentLayer}
+        hint="Delete layer."
       />
       <LayerOperationButtton
         icon="fa fa-long-arrow-alt-up"
-        enabled={canShiftBackCurrentLayer}
-        handler={shiftBackCurrentLayer}
+        enabled={canShiftForwardCurrentLayer}
+        handler={shiftForwardCurrentLayer}
+        hint="Bring layer forward."
       />
       <LayerOperationButtton
         icon="fa fa-long-arrow-alt-down"
-        enabled={canShiftForwardCurrentLayer}
-        handler={shiftForwardCurrentLayer}
+        enabled={canShiftBackCurrentLayer}
+        handler={shiftBackCurrentLayer}
+        hint="Bring layer backward."
       />
     </div>
   );

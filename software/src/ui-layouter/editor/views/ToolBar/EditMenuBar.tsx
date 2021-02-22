@@ -1,10 +1,11 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import {
-  ExclusiveButtonGroup,
-  ToggleButton,
+  GeneralButton,
   GeneralSelector,
-} from '~/ui-layouter/controls';
+  RibbonSelector,
+  ToggleButton,
+} from '~/ui-common/components';
 import { makeEditMenuBarViewModel } from '~/ui-layouter/editor/views/ToolBar/EditMenuBar.model';
 
 const cssEditMenuBar = css`
@@ -21,12 +22,6 @@ const cssEditMenuBar = css`
       margin-left: 5px;
     }
   }
-
-  > .spacer {
-    flex-grow: 1;
-    margin-left: 0;
-  }
-
   button {
     width: 50px;
     padding: 5px;
@@ -47,7 +42,6 @@ export const EditMenuBar = () => {
     vmShowGrid,
     vmSnapToGrid,
     vmSnapDivision,
-    vmShowConfig,
     canSelectEditMode,
     resetKeyboardDesign,
     vmShowKeyId,
@@ -56,14 +50,14 @@ export const EditMenuBar = () => {
 
   return (
     <div class={cssEditMenuBar}>
-      <ExclusiveButtonGroup
+      <RibbonSelector
         options={editorTargetVm.options}
         value={editorTargetVm.value}
         setValue={editorTargetVm.setValue}
         buttonWidth={55}
       />
 
-      <ExclusiveButtonGroup
+      <RibbonSelector
         options={editModeVm.options}
         value={editModeVm.value}
         setValue={editModeVm.setValue}
@@ -72,12 +66,8 @@ export const EditMenuBar = () => {
       />
 
       <div class="buttonsBox">
-        <button disabled={!canUndo} onClick={undo}>
-          undo
-        </button>
-        <button disabled={!canRedo} onClick={redo}>
-          redo
-        </button>
+        <GeneralButton disabled={!canUndo} onClick={undo} icon="fa fa-undo" />
+        <GeneralButton disabled={!canRedo} onClick={redo} icon="fa fa-redo" />
       </div>
 
       <div class="buttonsBox">
@@ -107,7 +97,7 @@ export const EditMenuBar = () => {
         />
       </div>
 
-      <div class="buttonsBox">
+      <div class="buttonsBox" qxIf={false}>
         <ToggleButton
           text="id"
           width={45}
@@ -122,19 +112,8 @@ export const EditMenuBar = () => {
         />
       </div>
 
-      <div>
-        <button onClick={resetKeyboardDesign}>reset</button>
-      </div>
-
-      <div class="spacer" />
-
-      <div>
-        <ToggleButton
-          text="config"
-          width={60}
-          active={vmShowConfig.active}
-          setActive={vmShowConfig.setActive}
-        />
+      <div qxIf={false}>
+        <GeneralButton onClick={resetKeyboardDesign} text="reset" />
       </div>
     </div>
   );

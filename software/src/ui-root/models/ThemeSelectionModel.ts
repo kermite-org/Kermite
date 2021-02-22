@@ -1,4 +1,9 @@
-import { themeColors, ThemeKey, uiThemeConfigLoader } from '~/ui-common';
+import {
+  ipcAgent,
+  themeColors,
+  ThemeKey,
+  uiThemeConfigLoader,
+} from '~/ui-common';
 
 const allThemeKeys = Object.keys(themeColors) as ThemeKey[];
 
@@ -16,7 +21,8 @@ export class ThemeSelectionModel {
   changeTheme = (themeKey: ThemeKey) => {
     if (themeKey !== this.currentThemeKey) {
       uiThemeConfigLoader.saveThemeKey(themeKey);
-      location.reload();
+      location.reload(); // Windowsの場合にうまくリロードされずにページが真っ白になってしまう問題がある
+      ipcAgent.async.window_reloadPage();
     }
   };
 

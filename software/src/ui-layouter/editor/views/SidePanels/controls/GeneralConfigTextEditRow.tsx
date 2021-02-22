@@ -1,7 +1,6 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { reflectValue } from '~/ui-common';
-import { styleWidthSpec } from '~/ui-layouter/base';
+import { GeneralInput, styleWidthSpec } from '~/ui-common/components';
 
 interface IProps {
   editText: string;
@@ -19,12 +18,6 @@ interface IProps {
 const cssEditRow = css`
   display: flex;
   align-items: center;
-
-  > input {
-    &[data-invalid] {
-      background: #fcc;
-    }
-  }
 
   > .unit {
     margin-left: 4px;
@@ -46,15 +39,14 @@ export const GeneralConfigTextEditRow = ({
   return (
     <div css={cssEditRow}>
       <label style={styleWidthSpec(labelWidth)}>{label}</label>
-      <input
-        type="text"
+      <GeneralInput
         value={editText}
-        onInput={reflectValue(onValueChanged)}
+        setValue={onValueChanged}
+        disabled={disabled}
+        invalid={!valid}
+        width={inputWidth}
         onFocus={onFocus}
         onBlur={onBlur}
-        disabled={disabled}
-        data-invalid={!valid}
-        style={styleWidthSpec(inputWidth)}
       />
       <span class="unit">{unit}</span>
     </div>

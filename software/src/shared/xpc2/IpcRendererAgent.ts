@@ -3,29 +3,34 @@ import { removeArrayItems } from '~/shared/funcs';
 import { IIpcContractBase } from './IpcContractBase';
 
 export interface IIpcRendererAgent<T extends IIpcContractBase> {
+  setPropsProcessHook(hook: () => void): void;
   sync: T['sync'];
   async: T['async'];
-  subscribe<K extends keyof T['events']>(
-    propKey: K,
-    listener: (value: T['events'][K]) => void,
-  ): () => void;
-  setPropsProcessHook(hook: () => void): void;
+  events: {
+    [K in keyof T['events']]: {
+      subscribe(listener: (value: T['events'][K]) => void): () => void;
+      unsubscribe(listener: (value: T['events'][K]) => void): void;
+    };
+  };
+}
 
-  // events: {
-  //   [K in keyof T['events']]: {
-  //     subscribe(listener: (value: T['events'][K]) => void): () => void;
-  //     subscribe2(listener: (value: T['events'][K]) => void): void;
-  //     unsubscribe2(listener: (value: T['events'][K]) => void): void;
-  //   };
-  // };
-  subscribe2<K extends keyof T['events']>(
-    propKey: K,
-    listener: (value: T['events'][K]) => void,
-  ): void;
-  unsubscribe2<K extends keyof T['events']>(
-    propKey: K,
-    listener: (value: T['events'][K]) => void,
-  ): void;
+function createDummeyIpcRendererAgentForMockDevelopment(): IIpcRendererAgent<any> {
+  return {
+    setPropsProcessHook: () => {},
+    sync: new Proxy({}, { get: () => () => {} }) as any,
+    async: new Proxy({}, { get: () => () => {} }) as any,
+    events: new Proxy(
+      {},
+      {
+        get: () => ({
+          subscribe: () => {
+            return () => {};
+          },
+          unsubscribe: () => {},
+        }),
+      },
+    ) as any,
+  };
 }
 
 interface ISubscriptionEntry {
@@ -33,19 +38,6 @@ interface ISubscriptionEntry {
   wrapper: (...args: any) => void;
   propKey: string;
   subscriptionKey: string;
-}
-
-function createDummeyIpcRendererAgentForMockDevelopment(): IIpcRendererAgent<any> {
-  return {
-    sync: new Proxy({}, { get: () => () => {} }) as any,
-    async: new Proxy({}, { get: () => () => {} }) as any,
-    subscribe: () => {
-      return () => {};
-    },
-    subscribe2: () => {},
-    unsubscribe2: () => {},
-    setPropsProcessHook: () => {},
-  };
 }
 
 export function getIpcRendererAgent<
@@ -61,76 +53,80 @@ export function getIpcRendererAgent<
 
   const subscriptionEntries: ISubscriptionEntry[] = [];
 
+  function getSyncHandler(key: string) {
+    return (...args: any[]) => ipcRenderer.sendSync(key, ...args);
+  }
+
+  function getAsyncHandler(key: string) {
+    return (...args: any[]) => {
+      return new Promise((resolve) => {
+        ipcRenderer.invoke(key, ...args).then((res) => {
+          resolve(res);
+          postProcessHook?.();
+        });
+      });
+    };
+  }
+
+  function subscribe<K extends keyof T['events']>(
+    propKey: K,
+    listener: (value: T['events'][K]) => void,
+  ) {
+    const subscriptionKey = `${propKey}_${(Math.random() * 100000) >> 0}`; // todo GUIDのようなものを使う
+    const wrapper = (event: any, value: any) => {
+      listener(value);
+      postProcessHook?.();
+    };
+    ipcRenderer.on(subscriptionKey, wrapper);
+    ipcRenderer.invoke(`__subscriptionStarted__${propKey}`, subscriptionKey);
+    subscriptionEntries.push({
+      listener,
+      wrapper,
+      propKey: propKey as string,
+      subscriptionKey,
+    });
+    return () => unsubscribe(propKey, listener);
+  }
+
+  function unsubscribe<K extends keyof T['events']>(
+    propKey: K,
+    listener: (value: T['events'][K]) => void,
+  ) {
+    const entry = subscriptionEntries.find(
+      (se) => se.propKey === propKey && se.listener === listener,
+    );
+    if (entry) {
+      const { wrapper, subscriptionKey } = entry;
+      ipcRenderer.removeListener(subscriptionKey, wrapper);
+      ipcRenderer.invoke(`__subscriptionEnded__${propKey}`, subscriptionKey);
+      removeArrayItems(subscriptionEntries, entry);
+    }
+  }
+
   return {
+    setPropsProcessHook(hook: () => void) {
+      postProcessHook = hook;
+    },
     sync: new Proxy(
       {},
       {
-        get: (target, key: string) => (...args: any[]) =>
-          ipcRenderer.sendSync(key, ...args),
+        get: (target, key: string) => getSyncHandler(key),
       },
     ) as T['sync'],
     async: new Proxy(
       {},
       {
-        get: (target, key: string) => (...args: any[]) => {
-          return new Promise((resolve) => {
-            ipcRenderer.invoke(key, ...args).then((res) => {
-              resolve(res);
-              postProcessHook?.();
-            });
-          });
-        },
+        get: (target, key: string) => getAsyncHandler(key),
       },
     ) as T['async'],
-    subscribe: ((propKey: string, listener: any) => {
-      const subscriptionKey = `${propKey}_${(Math.random() * 100000) >> 0}`; // todo GUIDのようなものを使う
-      const wrapper = (event: any, value: any) => {
-        listener(value);
-        postProcessHook?.();
-      };
-      // console.log(`[ren] S.S ${subsciptionKey}`);
-      ipcRenderer.on(subscriptionKey, wrapper);
-      ipcRenderer.invoke(`__subscriptionStarted__${propKey}`, subscriptionKey);
-      return () => {
-        // console.log(`[ren] S.E ${subsciptionKey}`);
-        ipcRenderer.removeListener(subscriptionKey, wrapper);
-        ipcRenderer.invoke(`__subscriptionEnded__${propKey}`, subscriptionKey);
-      };
-    }) as any,
-    setPropsProcessHook(hook: () => void) {
-      postProcessHook = hook;
-    },
-    subscribe2<K extends keyof T['events']>(
-      propKey: K,
-      listener: (value: T['events'][K]) => void,
-    ) {
-      const subscriptionKey = `${propKey}_${(Math.random() * 100000) >> 0}`; // todo GUIDのようなものを使う
-      const wrapper = (event: any, value: any) => {
-        listener(value);
-        postProcessHook?.();
-      };
-      ipcRenderer.on(subscriptionKey, wrapper);
-      ipcRenderer.invoke(`__subscriptionStarted__${propKey}`, subscriptionKey);
-      subscriptionEntries.push({
-        listener,
-        wrapper,
-        propKey: propKey as string,
-        subscriptionKey,
-      });
-    },
-    unsubscribe2<K extends keyof T['events']>(
-      propKey: K,
-      listener: (value: T['events'][K]) => void,
-    ) {
-      const entry = subscriptionEntries.find(
-        (se) => se.propKey === propKey && se.listener === listener,
-      );
-      if (entry) {
-        const { wrapper, subscriptionKey } = entry;
-        ipcRenderer.removeListener(subscriptionKey, wrapper);
-        ipcRenderer.invoke(`__subscriptionEnded__${propKey}`, subscriptionKey);
-        removeArrayItems(subscriptionEntries, entry);
-      }
-    },
+    events: new Proxy(
+      {},
+      {
+        get: (target, key: string) => ({
+          subscribe: (listener: any) => subscribe(key, listener),
+          unsubscribe: (listener: any) => unsubscribe(key, listener),
+        }),
+      },
+    ) as any,
   };
 }

@@ -19,6 +19,9 @@ const PresetLayerItem = (props: {
     &[data-active] {
       background: #0cc;
     }
+    &:hover {
+      opacity: 0.7;
+    }
   `;
 
   return (

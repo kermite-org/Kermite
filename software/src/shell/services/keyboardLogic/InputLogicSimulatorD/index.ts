@@ -1,10 +1,11 @@
 import {
+  fallbackProfileData,
   generateNumberSequence,
-  IProfileManagerStatus,
-  IKeyboardConfig,
-  IRealtimeKeyboardEvent,
   IntervalTimerWrapper,
+  IProfileManagerStatus,
+  IRealtimeKeyboardEvent,
 } from '~/shared';
+import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
 import { KeyboardDeviceService } from '~/shell/services/device/KeyboardDevice';
 import { ProfileManager } from '~/shell/services/profile/ProfileManager';
@@ -68,46 +69,6 @@ export class InputLogicSimulatorD {
     private deviceService: KeyboardDeviceService,
   ) {}
 
-  private updateProfileDataBlob() {
-    const prof = this.profileManager.getCurrentProfile();
-    const layoutStandard = this.keyboardConfigProvider.keyboardConfig
-      .layoutStandard;
-    if (prof && layoutStandard) {
-      const bytes = makeKeyAssignsConfigStorageData(prof, layoutStandard);
-      this.configDataStorage.writeConfigStorageData(bytes);
-      this.CL.keyboardCoreLogic_initialize();
-      this.CL.keyboardCoreLogic_setAssignStorageReaderFunc((addr) =>
-        this.configDataStorage.readByte(addr),
-      );
-    }
-  }
-
-  private onProfileStatusChanged = (
-    changedStatus: Partial<IProfileManagerStatus>,
-  ) => {
-    if (changedStatus.loadedProfileData) {
-      // console.log(`logicSimulator, profile data received`);
-      this.updateProfileDataBlob();
-    }
-  };
-
-  private onKeyboardConfigChanged = (
-    changedConfig: Partial<IKeyboardConfig>,
-  ) => {
-    if (changedConfig.behaviorMode) {
-      const isSideBrainMode = changedConfig.behaviorMode === 'SideBrain';
-      if (this.isSideBranMode !== isSideBrainMode) {
-        console.log({ isSideBrainMode });
-        this.deviceService.setSideBrainMode(isSideBrainMode);
-        this.isSideBranMode = isSideBrainMode;
-      }
-    }
-    if (changedConfig.layoutStandard) {
-      // console.log({ layout: changedConfig.layoutStandard });
-      this.updateProfileDataBlob();
-    }
-  };
-
   private onRealtimeKeyboardEvent = (event: IRealtimeKeyboardEvent) => {
     if (event.type === 'keyStateChanged') {
       const { keyIndex, isDown } = event;
@@ -148,23 +109,59 @@ export class InputLogicSimulatorD {
     }
   };
 
+  private updateSourceSetup = async () => {
+    const config = this.keyboardConfigProvider.getKeyboardConfig();
+    const isSideBrainMode = config.behaviorMode === 'SideBrain';
+    if (this.isSideBranMode !== isSideBrainMode) {
+      console.log({ isSideBrainMode });
+      this.deviceService.setSideBrainMode(isSideBrainMode);
+      this.isSideBranMode = isSideBrainMode;
+    }
+
+    const prof =
+      (await this.profileManager.getCurrentProfileAsync()) ||
+      fallbackProfileData;
+    const layout = config.layoutStandard;
+    const bytes = makeKeyAssignsConfigStorageData(prof, layout);
+    this.configDataStorage.writeConfigStorageData(bytes);
+    this.CL.keyboardCoreLogic_initialize();
+    this.CL.keyboardCoreLogic_setAssignStorageReaderFunc((addr) =>
+      this.configDataStorage.readByte(addr),
+    );
+  };
+
+  private onProfileStatusChanged = (
+    changedStatus: Partial<IProfileManagerStatus>,
+  ) => {
+    if (changedStatus.loadedProfileData) {
+      this.updateSourceSetup();
+    }
+  };
+
   initialize() {
     this.profileManager.statusEventPort.subscribe(this.onProfileStatusChanged);
-    this.keyboardConfigProvider.statusEventPort.subscribe(
-      this.onKeyboardConfigChanged,
+    this.keyboardConfigProvider.internal_changedNotifier.subscribe(
+      this.updateSourceSetup,
     );
     this.deviceService.realtimeEventPort.subscribe(
       this.onRealtimeKeyboardEvent,
     );
-    this.tickerTimer.start(this.processTicker, 5);
+    this.tickerTimer.start(
+      withAppErrorHandler(
+        this.processTicker,
+        'InputLogicSimulatorD_processTicker',
+      ),
+      5,
+    );
+    this.updateSourceSetup();
   }
 
   terminate() {
     this.profileManager.statusEventPort.unsubscribe(
       this.onProfileStatusChanged,
     );
-    this.keyboardConfigProvider.statusEventPort.unsubscribe(
-      this.onKeyboardConfigChanged,
+    this.keyboardConfigProvider.internal_changedNotifier.unsubscribe(
+      this.updateSourceSetup,
     );
     this.deviceService.realtimeEventPort.unsubscribe(
       this.onRealtimeKeyboardEvent,

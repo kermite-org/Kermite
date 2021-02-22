@@ -1,5 +1,5 @@
+import { ICommonSelectorViewModel } from '~/ui-common';
 import { useClosureModel } from '~/ui-layouter/base';
-import { ICommonSelectorViewModel } from '~/ui-layouter/controls';
 import { editMutations, editReader } from '~/ui-layouter/editor/store';
 import {
   createConfigTextEditModelDynamic,
@@ -17,7 +17,7 @@ interface IOutlineEditPanelModel {
 }
 
 function createOutlineEditPanelModel() {
-  const numberPatterns = [/^-?[0-9.]+$/];
+  const numberPatterns = [/^-?\d+\.?\d*$/];
 
   function createOulineEditPropModel(propKey: 'x' | 'y') {
     return createConfigTextEditModelDynamic(

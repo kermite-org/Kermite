@@ -1,5 +1,5 @@
+import { ICommonCheckboxViewModel } from '~/ui-common';
 import { useClosureModel } from '~/ui-layouter/base';
-import { ICommonCheckboxViewModel } from '~/ui-layouter/controls';
 import { editMutations, editReader } from '~/ui-layouter/editor/store';
 import {
   createConfigTextEditModelDynamic,
@@ -15,7 +15,7 @@ interface ITransGroupEditPanelModel {
 }
 
 function createTransGroupEditPanelModel() {
-  const numberPatterns = [/^-?[0-9.]+$/];
+  const numberPatterns = [/^-?\d+\.?\d*$/];
 
   function createTransGroupEditPropModel(propKey: 'x' | 'y' | 'angle') {
     return createConfigTextEditModelDynamic(

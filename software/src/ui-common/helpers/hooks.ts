@@ -1,4 +1,6 @@
 import { Hook } from 'qx';
+import { copyObjectProps } from '~/shared';
+import { UiLocalStorage } from '~/ui-common/base';
 
 export function useLocal<T extends object>(arg: T | (() => T)) {
   const initialValue = 'call' in arg ? arg() : arg;
@@ -9,7 +11,29 @@ export function useLocal<T extends object>(arg: T | (() => T)) {
 export function useFetcher<T>(func: () => Promise<T>, defaultValue: T): T {
   const [value, setValue] = Hook.useState(defaultValue);
   Hook.useEffect(() => {
-    func().then(setValue);
+    func().then((value) => value && setValue(value));
+  }, []);
+  return value;
+}
+
+export function useMemoEx<T extends (...args: any[]) => any>(
+  func: T,
+  args: Parameters<T>,
+): ReturnType<T> {
+  return Hook.useMemo(() => func(...args), args);
+}
+
+export function usePersistState<T extends {}>(key: string, initialValue: T) {
+  const [value] = Hook.useState(initialValue);
+  const storageKey = `usePersistState__${key}`;
+  Hook.useEffect(() => {
+    const savedValue = UiLocalStorage.readItem<T>(storageKey);
+    if (savedValue) {
+      copyObjectProps(value, savedValue);
+    }
+    return () => {
+      UiLocalStorage.writeItem(storageKey, value);
+    };
   }, []);
   return value;
 }

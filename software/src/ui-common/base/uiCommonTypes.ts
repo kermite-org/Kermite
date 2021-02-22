@@ -14,3 +14,29 @@ export function makePlainSelectorOption(source: string): ISelectorOption {
     label: source,
   };
 }
+
+export function getSelectionValueCorrected(
+  options: ISelectorOption[],
+  value: string,
+): string {
+  if (options.some((it) => it.value === value)) {
+    return value;
+  }
+  if (options.length > 0) {
+    return options[0].value;
+  }
+  return '';
+}
+
+export interface ICommonCheckboxViewModel {
+  value: boolean;
+  setValue(value: boolean): void;
+  disabled?: boolean;
+}
+
+export interface ICommonSelectorViewModel {
+  options: ISelectorOption[];
+  value: string;
+  setValue(value: string): void;
+  disabled?: boolean;
+}

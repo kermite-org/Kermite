@@ -28,7 +28,11 @@ export const WindowControlButtonsPart = () => {
         onClick={vm.onMinimizeButton}
       />
       <WindowControlButton
-        icon="fa fa-window-maximize"
+        icon={
+          !vm.isWindowMaximized
+            ? 'fa fa-window-maximize'
+            : 'fa fa-window-restore'
+        }
         onClick={vm.onMaximizeButton}
       />
       <WindowControlButton icon="fa fa-times" onClick={vm.onCloseButton} />

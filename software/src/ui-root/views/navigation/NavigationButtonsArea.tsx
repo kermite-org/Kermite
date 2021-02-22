@@ -4,11 +4,7 @@ import { makeNavigationViewModel } from '~/ui-root/views/navigation/NavigationBu
 import { NavigationButton } from './elements/NavigationButton';
 
 const cssNavigationButtonsArea = css`
-  margin-top: 10px;
-
-  > * + * {
-    margin-top: 5px;
-  }
+  width: 100%;
 `;
 
 export const NavigationButtonsArea = () => {
@@ -16,7 +12,7 @@ export const NavigationButtonsArea = () => {
   return (
     <div css={cssNavigationButtonsArea}>
       {vm.entries.map((entry) => (
-        <NavigationButton vm={entry} key={entry.pageSig} />
+        <NavigationButton vm={entry} key={entry.pagePath} />
       ))}
     </div>
   );

@@ -1,4 +1,6 @@
+import { asyncRerender } from 'qx';
 import { removeArrayItems } from '~/shared';
+import { generateNextSequentialId } from '~/shared/funcs/DomainRelatedHelpers';
 import { modalConfirm } from '~/ui-common/fundamental/dialog/BasicModals';
 import { editorModel } from '~/ui-editor-page/EditorMainPart/models/EditorModel';
 import {
@@ -80,6 +82,7 @@ export function makeLayerManagementPartViewModel(): ILayerManagementPartViewMode
         curLayer.defaultScheme = editValues.defaultScheme;
         curLayer.exclusionGroup = editValues.exclusionGroup;
         curLayer.initialActive = editValues.initialActive;
+        asyncRerender();
       }
     },
     addNewLayer: async () => {
@@ -95,8 +98,8 @@ export function makeLayerManagementPartViewModel(): ILayerManagementPartViewMode
         isRootLayer: false,
       });
       if (layerAttrs?.layerName) {
-        // todo: use sequential layer number
-        const layerId = `la${(Math.random() * 1000) >> 0}`;
+        const existingIds = layers.map((la) => la.layerId);
+        const newLayerId = generateNextSequentialId('la', existingIds);
         const {
           layerName,
           defaultScheme,
@@ -105,13 +108,14 @@ export function makeLayerManagementPartViewModel(): ILayerManagementPartViewMode
           initialActive,
         } = layerAttrs;
         layers.push({
-          layerId,
+          layerId: newLayerId,
           layerName,
           defaultScheme,
           attachedModifiers,
           exclusionGroup,
           initialActive,
         });
+        asyncRerender();
       }
     },
   };

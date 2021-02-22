@@ -1,4 +1,4 @@
-import { ipcAgent } from '~/ui-common';
+import { ipcAgent, router } from '~/ui-common';
 import { siteModel } from '~/ui-common/sharedModels/SiteModel';
 
 export interface IWindowControlButtonsModel {
@@ -8,6 +8,7 @@ export interface IWindowControlButtonsModel {
   onMinimizeButton(): void;
   onMaximizeButton(): void;
   onCloseButton(): void;
+  isWindowMaximized: boolean;
 }
 
 export function makeWindowControlButtonsModel(): IWindowControlButtonsModel {
@@ -18,7 +19,7 @@ export function makeWindowControlButtonsModel(): IWindowControlButtonsModel {
       ipcAgent.async.window_restartApplication();
     },
     onWidgetButton() {
-      siteModel.setWidgetMode(true);
+      router.navigateTo('/widget');
     },
     onMinimizeButton() {
       ipcAgent.async.window_minimizeWindow();
@@ -29,5 +30,6 @@ export function makeWindowControlButtonsModel(): IWindowControlButtonsModel {
     onCloseButton() {
       ipcAgent.async.window_closeWindow();
     },
+    isWindowMaximized: siteModel.isWindowMaximized,
   };
 }

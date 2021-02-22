@@ -1,35 +1,22 @@
-import { IAppWindowEvent } from '~/shared';
+import { IAppWindowStatus } from '~/shared';
 import { IListenerPort } from '~/shell/base';
 import { IEventPort2 } from '~/shell/funcs';
 
 export interface IMenuManager {
-  buildMenu(initailState: {
-    allPagePaths: string[];
-    currentPagePath: string;
-    isDevToolVisible: boolean;
-  }): void;
-  onMenuChangeCurrentPagePath: IListenerPort<string>;
+  buildMenu(): void;
   onMenuRequestReload: IListenerPort<void>;
-  onMenuToggleDevtoolVisibility: IListenerPort<void>;
   onMenuCloseMainWindow: IListenerPort<void>;
   onMenuRestartApplication: IListenerPort<void>;
 }
 
 export interface IAppWindowWrapper {
-  openMainWindow(params: {
-    preloadFilePath: string;
-    publicRootPath: string;
-    pageTitle: string;
-    initialPageWidth: number;
-    initialPageHeight: number;
-  }): Electron.BrowserWindow;
+  openMainWindow(): void;
   closeMainWindow(): void;
-  loadPage(pagePath: string): void;
   reloadPage(): void;
   setDevToolsVisibility(visible: boolean): void;
   minimizeMainWindow(): void;
   maximizeMainWindow(): void;
-  appWindowEventPort: IEventPort2<IAppWindowEvent>;
+  appWindowEventPort: IEventPort2<Partial<IAppWindowStatus>>;
   restartApplication(): void;
   // onPageLoaded: IListenerPort<string>;
 }
@@ -39,9 +26,6 @@ export interface IPageStateManager {
   currentPagePath: string;
   setCurrentPagePath(pagePath: string): void;
   onPagePathChanged: IListenerPort<string>;
-  isDevToolsVisible: boolean;
-  setDevToolVisiblity(visible: boolean): void;
-  onDevToolVisibilityChanged: IListenerPort<boolean>;
   initialize(): void;
   terminate(): void;
 }

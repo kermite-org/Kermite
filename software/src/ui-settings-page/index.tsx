@@ -3,11 +3,21 @@ import { h, Hook } from 'qx';
 import { IGlobalSettings } from '~/shared';
 import {
   appUi,
+  fieldSetter,
   ipcAgent,
-  reflectFieldChecked,
+  ISelectorOption,
   uiTheme,
   useLocal,
 } from '~/ui-common';
+import {
+  CheckBoxLine,
+  GeneralButton,
+  GeneralInput,
+  HFlex,
+  Indent,
+  RibbonSelector,
+} from '~/ui-common/components';
+import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
 
 const cssUiSettingsPage = css`
   background: ${uiTheme.colors.clBackground};
@@ -16,11 +26,7 @@ const cssUiSettingsPage = css`
   padding: 10px;
 
   > * + * {
-    margin-top: 10px;
-  }
-
-  .filePathInput {
-    width: 350px;
+    margin-top: 5px;
   }
 `;
 
@@ -29,6 +35,16 @@ const fallbackGlobalSettings: IGlobalSettings = {
   useOnlineResources: false,
   localProjectRootFolderPath: '',
 };
+
+const uiScaleOptions: ISelectorOption[] = [
+  0.7,
+  0.8,
+  0.9,
+  1,
+  1.1,
+  1.2,
+  1.3,
+].map((val) => ({ label: `${(val * 100) >> 0}%`, value: val.toString() }));
 
 export const UiSettingsPage = () => {
   const local = useLocal({
@@ -62,39 +78,51 @@ export const UiSettingsPage = () => {
 
   return (
     <div css={cssUiSettingsPage}>
-      Configurations
-      <div>
+      <div>Configurations</div>
+
+      <Indent>
         <div>Resources</div>
-        <div>
-          <input
-            type="checkbox"
+        <Indent>
+          <CheckBoxLine
+            text="Use Online Project Resources"
             checked={settings.useOnlineResources}
-            onChange={reflectFieldChecked(settings, 'useOnlineResources')}
+            setChecked={fieldSetter(settings, 'useOnlineResources')}
           />
-          <span>Use Online Project Resources</span>
-        </div>
-        <div>
-          <input
-            type="checkbox"
+          <CheckBoxLine
+            text="Use Local Project Resources"
             checked={settings.useLocalResouces}
-            onChange={reflectFieldChecked(settings, 'useLocalResouces')}
+            setChecked={fieldSetter(settings, 'useLocalResouces')}
           />
-          <span>Use Local Project Resources</span>
-        </div>
-        <div>
-          <div>Kermite Root Directory</div>
-          <input
-            type="text"
-            readOnly={true}
-            value={folderPathDisplayValue}
-            className="filePathInput"
-            disabled={!canChangeFolder}
-          ></input>
-          <button onClick={onSelectButton} disabled={!canChangeFolder}>
-            select
-          </button>
-        </div>
-      </div>
+          <div>
+            <div>Kermite Root Directory</div>
+            <HFlex>
+              <GeneralInput
+                value={folderPathDisplayValue}
+                disabled={!canChangeFolder}
+                readOnly={true}
+                width={350}
+              />
+              <GeneralButton
+                onClick={onSelectButton}
+                disabled={!canChangeFolder}
+                icon="folder_open"
+                size="unitSquare"
+              />
+            </HFlex>
+          </div>
+        </Indent>
+        <div>User Interface</div>
+        <Indent>
+          <div>UI Scaling</div>
+          <RibbonSelector
+            options={uiScaleOptions}
+            value={uiStatusModel.settings.siteDpiScale.toString()}
+            setValue={(strVal) =>
+              (uiStatusModel.settings.siteDpiScale = parseFloat(strVal))
+            }
+          />
+        </Indent>
+      </Indent>
     </div>
   );
 };

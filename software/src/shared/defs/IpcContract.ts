@@ -1,7 +1,9 @@
-import { IAppErrorInfo } from '~/shared/defs/CustomErrors';
+import { IAppErrorData } from '~/shared/defs/CustomErrors';
 import { IPersistKeyboardDesign } from '~/shared/defs/KeyboardDesign';
 import { IKeyboardConfig } from './ConfigTypes';
 import { IProfileData } from './ProfileData';
+
+export type IPresetType = 'blank' | 'preset';
 
 export type IPresetSpec =
   | {
@@ -25,14 +27,6 @@ export interface IProjectResourceInfo {
   hasFirmwareBinary: boolean;
   origin: IResourceOrigin;
 }
-
-export interface IProfileManagerStatus {
-  currentProfileName: string;
-  allProfileNames: string[];
-  loadedProfileData: IProfileData | undefined;
-  errorMessage: string;
-}
-
 export interface IKeyboardDeviceStatus {
   isConnected: boolean;
   deviceAttrs?: {
@@ -58,14 +52,33 @@ export type IRealtimeKeyboardEvent =
       prioritySpec: number;
     };
 
-export type IAppWindowEvent = {
-  activeChanged?: boolean;
-  devToolVisible?: boolean;
+export type IAppWindowStatus = {
+  isActive: boolean;
+  isDevtoolsVisible: boolean;
+  isMaximized: boolean;
 };
 
+export type IProfileEditSource =
+  | {
+      type: 'NewlyCreated';
+    }
+  | {
+      type: 'InternalProfile';
+      profileName: string;
+    }
+  | {
+      type: 'ExternalFile';
+      filePath: string;
+    };
+
+export interface IProfileManagerStatus {
+  editSource: IProfileEditSource;
+  allProfileNames: string[];
+  loadedProfileData: IProfileData;
+}
 export interface IProfileManagerCommand {
   creatProfile?: {
-    name: string;
+    name?: string;
     targetProjectOrigin: IResourceOrigin;
     targetProjectId: string;
     presetSpec: IPresetSpec;
@@ -80,6 +93,9 @@ export interface IProfileManagerCommand {
     presetName: string;
     profileData: IProfileData;
   };
+  importFromFile?: { filePath: string };
+  exportToFile?: { filePath: string; profileData: IProfileData };
+  saveProfileAs?: { name: string; profileData: IProfileData };
 }
 
 export type ILayoutEditSource =
@@ -101,7 +117,6 @@ export type ILayoutEditSource =
 export interface ILayoutManagerStatus {
   editSource: ILayoutEditSource;
   loadedDesign: IPersistKeyboardDesign;
-  errroInfo: IAppErrorInfo | undefined;
   projectLayoutsInfos: IProjectLayoutsInfo[];
 }
 
@@ -161,8 +176,6 @@ export interface IAppIpcContract {
   sync: {
     dev_getVersionSync(): string;
     dev_debugMessage(message: string): void;
-
-    profile_reserveSaveProfileTask(data: IProfileData): void;
     // config_saveSettingsOnClosing?: IApplicationSettings;
     config_saveKeyboardConfigOnClosing(data: IKeyboardConfig): void;
   };
@@ -173,11 +186,12 @@ export interface IAppIpcContract {
     window_closeWindow(): Promise<void>;
     window_minimizeWindow(): Promise<void>;
     window_maximizeWindow(): Promise<void>;
-    // window_widgetModeChanged(isWidgetMode: boolean): Promise<void>;
     window_restartApplication(): Promise<void>;
     window_setDevToolVisibility(visible: boolean): Promise<void>;
+    window_reloadPage(): Promise<void>;
 
-    // profile_getCurrentProfile(): Promise<IProfileData | undefined>;
+    profile_getCurrentProfile(): Promise<IProfileData>;
+    profile_getAllProfileNames(): Promise<string[]>;
     profile_executeProfileManagerCommands(
       commands: IProfileManagerCommand[],
     ): Promise<void>;
@@ -186,7 +200,6 @@ export interface IAppIpcContract {
       commands: ILayoutManagerCommand[],
     ): Promise<boolean>;
 
-    layout_clearErrorInfo(): Promise<void>;
     layout_showEditLayoutFileInFiler(): Promise<void>;
     // layout_getAllProjectLayoutsInfos(): Promise<IProjectLayoutsInfo[]>;
 
@@ -220,14 +233,14 @@ export interface IAppIpcContract {
     file_loadObjectFromJsonWithFileDialog(): Promise<any | undefined>;
     file_saveObjectToJsonWithFileDialog(obj: any): Promise<boolean>;
     file_getOpenDirectoryWithDialog(): Promise<string | undefined>;
+
+    global_triggerLazyInitializeServices(): Promise<void>;
   };
   events: {
     dev_testEvent: { type: string };
-    window_appWindowEvents: IAppWindowEvent;
-
-    profile_currentProfile: IProfileData | undefined;
+    global_appErrorEvents: IAppErrorData<any>;
+    window_appWindowStatus: Partial<IAppWindowStatus>;
     profile_profileManagerStatus: Partial<IProfileManagerStatus>;
-
     layout_layoutManagerStatus: Partial<ILayoutManagerStatus>;
 
     device_keyEvents: IRealtimeKeyboardEvent;

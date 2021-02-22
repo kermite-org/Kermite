@@ -11,7 +11,7 @@ import { TestInputArea } from './TestInputArea/TestInputArea';
 
 const localStyleConstants = {
   editorPartMargin: '4px',
-  panelBoxBorderRadius: '3px',
+  panelBoxBorderRadius: '2px',
 };
 
 const { editorPartMargin: mm, panelBoxBorderRadius } = localStyleConstants;

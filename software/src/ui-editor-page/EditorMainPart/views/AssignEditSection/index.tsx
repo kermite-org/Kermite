@@ -1,6 +1,5 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { uiTheme } from '~/ui-common';
 import { makeAssignEditSectionViewModel } from '~/ui-editor-page/EditorMainPart/viewModels/AssignEditSectionViewModel';
 import { OpertionEditPart } from './OperationEditPart';
 import { OerationSlotsPart } from './OperationSlotsPart';
@@ -18,7 +17,6 @@ const cssAssignEntryEditPart = css`
     opacity: 0.3;
     pointer-events: none;
   }
-  /* border: solid 1px ${uiTheme.colors.clCommonFrame}; */
   padding: 8px;
 `;
 

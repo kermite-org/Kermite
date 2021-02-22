@@ -1,37 +1,30 @@
-import { overwriteObjectProps } from '~/shared';
-import { appUi } from '~/ui-common';
+import { copyObjectProps } from '~/shared';
 
-export type PageSignature =
-  | 'editor'
-  | 'layouter'
-  | 'shapePreview'
-  | 'firmwareUpdation'
-  | 'presetBrowser'
-  | 'heatmap'
-  | 'settings';
+export type PagePaths =
+  | '/'
+  | '/editor'
+  | '/layouter'
+  | '/shapePreview'
+  | '/firmwareUpdation'
+  | '/presetBrowser'
+  | '/heatmap'
+  | '/settings'
+  | '/widget';
 
 export interface IUiSettings {
   showTestInputArea: boolean;
-  page: PageSignature;
-  shapeViewProjectSig: string;
-  shapeViewLayoutName: string;
-  shapeViewShowKeyId: boolean;
-  shapeViewShowKeyIndex: boolean;
-  shapeViewShowBoundingBox: boolean;
   showLayersDynamic: boolean;
   showLayerDefaultAssign: boolean;
+  siteDpiScale: number;
+  showGlobalHint: boolean;
 }
 
 const defaultUiSettings: IUiSettings = {
   showTestInputArea: false,
-  page: 'editor',
-  shapeViewProjectSig: '',
-  shapeViewLayoutName: '',
-  shapeViewShowKeyId: false,
-  shapeViewShowKeyIndex: false,
-  shapeViewShowBoundingBox: false,
   showLayersDynamic: false,
   showLayerDefaultAssign: false,
+  siteDpiScale: 1.0,
+  showGlobalHint: true,
 };
 
 export interface IUiStatus {
@@ -43,23 +36,16 @@ const defaultUiStatus: IUiStatus = {
 };
 
 export class UiStatusModel {
-  readonly settings: IUiSettings = defaultUiSettings;
+  settings: IUiSettings = defaultUiSettings;
 
   readonly status: IUiStatus = defaultUiStatus;
 
   initialize() {
     const settingsText = localStorage.getItem('uiSettings');
     if (settingsText) {
-      const settings = JSON.parse(settingsText);
-      overwriteObjectProps(this.settings, settings);
+      const obj = JSON.parse(settingsText);
+      copyObjectProps(this.settings, obj);
     }
-    if (!appUi.isDevelopment || !this.settings.page) {
-      this.settings.page = 'editor';
-    }
-  }
-
-  navigateTo(page: PageSignature) {
-    this.settings.page = page;
   }
 
   save() {

@@ -5,6 +5,7 @@ import { uiTheme } from '~/ui-common';
 export const CustomWindowFrame = (props: {
   children: JSX.Element;
   renderTitleBar: () => JSX.Element;
+  renderStatusBar: () => JSX.Element;
 }) => {
   const cssRoot = css`
     height: 100%;
@@ -19,6 +20,7 @@ export const CustomWindowFrame = (props: {
 
   const cssBodyRow = css`
     flex-grow: 1;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     > * {
@@ -27,16 +29,16 @@ export const CustomWindowFrame = (props: {
   `;
 
   const cssStatusBar = css`
-    background: ${uiTheme.colors.clStatusBar};
-    height: 28px;
     flex-shrink: 0;
+    height: 28px;
+    background: ${uiTheme.colors.clWindowBar};
   `;
 
   return (
     <div css={cssRoot}>
       <div css={cssTitleBarRow}>{props.renderTitleBar()}</div>
       <div css={cssBodyRow}>{props.children}</div>
-      <div css={cssStatusBar} />
+      <div css={cssStatusBar}>{props.renderStatusBar()}</div>
     </div>
   );
 };

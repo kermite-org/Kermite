@@ -1,10 +1,11 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { reflectFieldChecked } from '~/ui-common';
-import { IUiSettings } from '~/ui-common/sharedModels/UiStatusModel';
+import { fieldSetter } from '~/ui-common';
+import { CheckBoxLine } from '~/ui-common/components';
+import { IShapeViewPersistState } from '~/ui-shape-preview-page/ShapePreviewPageState';
 
 interface IDisplayOptionSource {
-  fieldKey: keyof IUiSettings;
+  fieldKey: keyof IShapeViewPersistState;
   label: string;
 }
 const displayOptionsSource: IDisplayOptionSource[] = [
@@ -44,20 +45,19 @@ const cssPreviewOptionsBox = css`
   }
 `;
 
-export function ShapePreviewOptionsBox(props: { settings: IUiSettings }) {
+export function ShapePreviewOptionsBox(props: {
+  settings: IShapeViewPersistState;
+}) {
   const { settings } = props;
   return (
     <div css={cssPreviewOptionsBox}>
       {displayOptionsSource.map((om) => (
         <div key={om.fieldKey}>
-          <label>
-            <input
-              type="checkbox"
-              checked={settings[om.fieldKey] as boolean}
-              onChange={reflectFieldChecked(settings, om.fieldKey)}
-            />
-            <span>{om.label}</span>
-          </label>
+          <CheckBoxLine
+            checked={settings[om.fieldKey] as boolean}
+            setChecked={fieldSetter(settings, om.fieldKey)}
+            text={om.label}
+          />
         </div>
       ))}
     </div>

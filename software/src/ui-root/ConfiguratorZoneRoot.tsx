@@ -1,12 +1,12 @@
 import { css } from 'goober';
 import { h } from 'qx';
-import { uiTheme } from '~/ui-common';
-import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
+import { appUi, router, uiTheme } from '~/ui-common';
 import { EditorPage } from '~/ui-editor-page/EditorPage';
 import { FirmwareUpdationPage } from '~/ui-firmware-updation-page';
 import { HeatmapPage } from '~/ui-heatmap-page';
 import { UiLayouterPageComponent } from '~/ui-layouter-page';
 import { PresetBrowserPage } from '~/ui-preset-browser-page';
+import { WindowStatusBarSection } from '~/ui-root/views/titleBar/WindowStatusBarSection';
 import { CustomWindowFrame } from '~/ui-root/views/window/CustomWindowFrame';
 import { DevToolPullTab } from '~/ui-root/views/window/DevToolPullTab';
 import { UiSettingsPage } from '~/ui-settings-page';
@@ -27,22 +27,24 @@ const styles = {
 };
 
 export const ConfiguratorZoneRoot = () => {
-  const { page } = uiStatusModel.settings;
-
+  const pagePath = router.getPagePath();
   return (
-    <CustomWindowFrame renderTitleBar={() => <WindowTitleBarSection />}>
+    <CustomWindowFrame
+      renderTitleBar={WindowTitleBarSection}
+      renderStatusBar={WindowStatusBarSection}
+    >
       <div css={styles.cssContentRow}>
         <NavigationColumn />
         <div css={styles.cssMainColumn}>
-          {page === 'editor' && <EditorPage />}
-          {page === 'layouter' && <UiLayouterPageComponent />}
-          {page === 'shapePreview' && <KeyboardShapePreviewPage />}
-          {page === 'firmwareUpdation' && <FirmwareUpdationPage />}
-          {page === 'presetBrowser' && <PresetBrowserPage />}
-          {page === 'heatmap' && <HeatmapPage />}
-          {page === 'settings' && <UiSettingsPage />}
+          {pagePath === '/editor' && <EditorPage />}
+          {pagePath === '/layouter' && <UiLayouterPageComponent />}
+          {pagePath === '/shapePreview' && <KeyboardShapePreviewPage />}
+          {pagePath === '/firmwareUpdation' && <FirmwareUpdationPage />}
+          {pagePath === '/presetBrowser' && <PresetBrowserPage />}
+          {pagePath === '/heatmap' && <HeatmapPage />}
+          {pagePath === '/settings' && <UiSettingsPage />}
         </div>
-        <DevToolPullTab />
+        <DevToolPullTab qxIf={appUi.isDevelopment} />
       </div>
     </CustomWindowFrame>
   );

@@ -1,9 +1,13 @@
 import { css, glob, setup } from 'goober';
 import { h, Hook } from 'qx';
-import { appUi } from '~/ui-common';
+import { router } from '~/ui-common';
+import { globalHintMouseMoveHandlerEffect } from '~/ui-common/base/GlobalHint';
 import { DebugOverlay } from '~/ui-common/fundamental/overlay/DebugOverlay';
 import { ForegroundModalLayerRoot } from '~/ui-common/fundamental/overlay/ForegroundModalLayer';
 import { siteModel } from '~/ui-common/sharedModels/SiteModel';
+import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
+import { globalAppServicesInitializerEffect } from '~/ui-root/AppServicesInitializer';
+import { SiteDpiScaler } from '~/ui-root/views/window/SiteDpiScaler';
 import { WidgetZoneRoot } from '~/ui-widget';
 import { ConfiguratorZoneRoot } from './ConfiguratorZoneRoot';
 
@@ -36,19 +40,21 @@ const cssSiteRoot = css`
 `;
 
 export const SiteRoot = () => {
+  Hook.useEffect(router.rerenderEffectOnHashChange, []);
+  Hook.useEffect(globalAppServicesInitializerEffect, []);
   Hook.useEffect(siteModel.setupLifecycle, []);
+  Hook.useEffect(globalHintMouseMoveHandlerEffect, []);
+  router.useRedirect(['', '/'], '/editor');
 
-  const { isWidgetMode } = siteModel;
-
-  const ZoneRootComponent = isWidgetMode
-    ? WidgetZoneRoot
-    : ConfiguratorZoneRoot;
-
+  const isWidgetMode = router.getPagePath() === '/widget';
   return (
-    <div css={cssSiteRoot}>
-      <ZoneRootComponent />
-      <ForegroundModalLayerRoot />
-      <DebugOverlay debugObj={appUi.debugObject} />
-    </div>
+    <SiteDpiScaler dpiScale={uiStatusModel.settings.siteDpiScale}>
+      <div css={cssSiteRoot}>
+        {!isWidgetMode && <ConfiguratorZoneRoot />}
+        {isWidgetMode && <WidgetZoneRoot />}
+        <ForegroundModalLayerRoot />
+        <DebugOverlay />
+      </div>
+    </SiteDpiScaler>
   );
 };

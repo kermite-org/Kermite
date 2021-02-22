@@ -1,5 +1,6 @@
 import { h } from 'qx';
 import { ISelectorOption, reflectFieldValue } from '~/ui-common';
+import { GeneralSelector } from '~/ui-common/components';
 import {
   ClosableOverlay,
   CommonDialogFrame,
@@ -9,7 +10,6 @@ import {
 } from '~/ui-common/fundamental/dialog/CommonDialogParts';
 import { createModal } from '~/ui-common/fundamental/overlay/ForegroundModalLayer';
 import { projectResourceModel } from '~/ui-common/sharedModels/ProjectResourceModel';
-import { GeneralSelector } from '~/ui-common/sharedViews/controls/GeneralSelector';
 import {
   cssCommonPropertiesTable,
   cssCommonTextInput,
@@ -70,7 +70,7 @@ const ProfileSetupModalContent = (props: {
 
   return (
     <ClosableOverlay close={close}>
-      <CommonDialogFrame caption="Create Profile">
+      <CommonDialogFrame caption="Create Profile" close={close}>
         <DialogContentRow>
           <table css={cssCommonPropertiesTable}>
             <tbody>

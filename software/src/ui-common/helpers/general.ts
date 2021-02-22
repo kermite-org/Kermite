@@ -6,3 +6,7 @@ export function windowKeyboardEventEffect(handler: (e: KeyboardEvent) => void) {
 export function fieldSetter<T, K extends keyof T>(obj: T, key: K) {
   return (value: T[K]) => (obj[key] = value);
 }
+
+export function getFileNameFromPath(path: string) {
+  return path.split(/[/\\]/).pop();
+}
