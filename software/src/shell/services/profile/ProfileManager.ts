@@ -114,10 +114,12 @@ export class ProfileManager implements IProfileManager {
     this.status = { ...this.status, ...newStatePartial };
     this.statusEventPort.emit(newStatePartial);
     if (newStatePartial.editSource) {
-      applicationStorage.writeItem(
-        'profileEditSource',
-        newStatePartial.editSource,
-      );
+      if (newStatePartial.editSource.type !== 'NewlyCreated') {
+        applicationStorage.writeItem(
+          'profileEditSource',
+          newStatePartial.editSource,
+        );
+      }
     }
   }
 
