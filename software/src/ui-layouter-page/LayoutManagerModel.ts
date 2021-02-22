@@ -1,6 +1,7 @@
 import {
   compareObjectByJsonStringify,
   createFallbackPersistKeyboardDesign,
+  forceChangeFilePathExtension,
   ILayoutEditSource,
   ILayoutManagerCommand,
   ILayoutManagerStatus,
@@ -139,7 +140,11 @@ export class LayoutManagerModel implements ILayoutManagerModel {
   async saveToFileWithDialog(design: IPersistKeyboardDesign) {
     const filePath = await ipcAgent.async.file_getSaveJsonFilePathWithDialog();
     if (filePath) {
-      this.sendCommand({ type: 'saveToFile', filePath, design });
+      const modFilePath = forceChangeFilePathExtension(
+        filePath,
+        '.layout.json',
+      );
+      this.sendCommand({ type: 'saveToFile', filePath: modFilePath, design });
     }
   }
 

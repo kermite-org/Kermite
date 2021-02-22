@@ -307,3 +307,12 @@ export function checkValidOptionOrDefault<T extends string>(
   }
   return defaultValue;
 }
+
+export function forceChangeFilePathExtension(
+  filePath: string,
+  extension: string,
+) {
+  const fileName = filePath.replace(/^.*[\\/]/, '');
+  const namePart = fileName.split('.')[0];
+  return filePath.replace(fileName, namePart + extension);
+}
