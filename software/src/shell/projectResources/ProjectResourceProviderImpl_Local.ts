@@ -256,7 +256,7 @@ export class ProjectResourceProviderImpl_Local
     }
   }
 
-  // eslint-disable-next-line require-await
+  // eslint-disable-next-line @typescript-eslint/require-await
   async loadProjectFirmwareFile(
     projectId: string,
   ): Promise<string | undefined> {

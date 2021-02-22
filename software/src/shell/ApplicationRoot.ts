@@ -1,4 +1,4 @@
-/* eslint-disable require-await */
+/* eslint-disable @typescript-eslint/require-await */
 import { getAppErrorData, IPresetSpec, makeCompactStackTrace } from '~/shared';
 import { appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';

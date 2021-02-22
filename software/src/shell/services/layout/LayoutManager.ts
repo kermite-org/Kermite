@@ -131,7 +131,7 @@ export class LayoutManager implements ILayoutManager {
     }
   };
 
-  // eslint-disable-next-line require-await
+  // eslint-disable-next-line @typescript-eslint/require-await
   private async createNewLayout() {
     this.setStatus({
       editSource: { type: 'NewlyCreated' },
