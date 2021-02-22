@@ -190,13 +190,18 @@ export class ProjectResourceProviderImpl_Local
   //   }
   // }
   // internal_getProjectInfoSourceById = this.getProjectInfoSourceById;
+
   getLocalPresetProfileFilePath(
     projectId: string,
     presetName: string,
   ): string | undefined {
     const info = this.getProjectInfoSourceById(projectId);
     if (info) {
-      return pathJoin(info.projectFolderPath, 'profiles', `${presetName}.json`);
+      return pathJoin(
+        info.projectFolderPath,
+        'profiles',
+        `${presetName}.profile.json`,
+      );
     }
   }
 
