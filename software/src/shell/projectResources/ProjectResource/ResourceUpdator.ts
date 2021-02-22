@@ -89,7 +89,7 @@ const stubIndexObjectForDevelopment: IIndexObject = {
   files: {
     // 'variants/proto/minivers/minivers.hex': 'd39fb9cb072f7b58184ddd7123df2307',
     // 'variants/proto/minivers/layout.json': 'f520e23b6874986f3f7550a5bdeacc27',
-    'variants/proto/minivers/presets/minivers_test1.json':
+    'variants/proto/minivers/profiles/minivers_test1.json':
       'a7b9c80b2a7bc5429ba57188722ade94',
     'variants/csp/astelia_dev/layout.json': '176f00e13f346f0bd440984a5041ad89',
     'variants/csp/astelia_dev/astelia_dev.hex':
