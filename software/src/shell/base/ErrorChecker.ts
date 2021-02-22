@@ -32,7 +32,7 @@ export function withAppErrorHandler<T extends (...args: any[]) => any>(
   handler: T,
   executionContextName: string = '',
 ) {
-  return async (...args: Parameters<T>) => {
+  return (...args: Parameters<T>) => {
     executeWithAppErrorHandler(executionContextName, () => handler(...args));
   };
 }

@@ -1,3 +1,4 @@
+/* eslint-disable require-await */
 import { getAppErrorData, IPresetSpec, makeCompactStackTrace } from '~/shared';
 import { appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
@@ -145,7 +146,8 @@ export class ApplicationRoot {
         JsonFileServiceStatic.saveObjectToJsonWithFileDialog,
       file_getOpenDirectoryWithDialog:
         JsonFileServiceStatic.getOpeningDirectoryPathWithDialog,
-      global_triggerLazyInitializeServices: () => this.lazyInitialzeServices(),
+      global_triggerLazyInitializeServices: async () =>
+        this.lazyInitialzeServices(),
     });
 
     appGlobal.icpMainAgent.supplySubscriptionHandlers({
@@ -189,7 +191,7 @@ export class ApplicationRoot {
   }
 
   private _lazyInitializeTriggered = false;
-  async lazyInitialzeServices() {
+  lazyInitialzeServices() {
     if (!this._lazyInitializeTriggered) {
       this._lazyInitializeTriggered = true;
       this.deviceService.initialize();

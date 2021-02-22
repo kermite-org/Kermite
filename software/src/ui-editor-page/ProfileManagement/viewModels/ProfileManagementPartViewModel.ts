@@ -212,7 +212,7 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
 
   const state = useLocal({ isPresetsModalOpen: false });
 
-  const openExportingPresetSelectionModal = async () => {
+  const openExportingPresetSelectionModal = () => {
     state.isPresetsModalOpen = true;
   };
   const closeExportingPresetSelectionModal = () => {

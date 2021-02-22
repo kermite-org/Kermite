@@ -256,6 +256,7 @@ export class ProjectResourceProviderImpl_Local
     }
   }
 
+  // eslint-disable-next-line require-await
   async loadProjectFirmwareFile(
     projectId: string,
   ): Promise<string | undefined> {

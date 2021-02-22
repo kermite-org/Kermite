@@ -129,7 +129,7 @@ export function fsxWatchFilesChange(
   baseDir: string,
   callback: (filePath: string) => void,
 ) {
-  return fs.watch(baseDir, { recursive: true }, async (eventType, relPath) => {
+  return fs.watch(baseDir, { recursive: true }, (eventType, relPath) => {
     if (eventType === 'change') {
       const filePath = `${baseDir}/${relPath}`;
       callback(filePath);

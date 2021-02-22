@@ -131,6 +131,7 @@ export class LayoutManager implements ILayoutManager {
     }
   };
 
+  // eslint-disable-next-line require-await
   private async createNewLayout() {
     this.setStatus({
       editSource: { type: 'NewlyCreated' },
