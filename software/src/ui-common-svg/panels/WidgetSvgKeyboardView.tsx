@@ -1,16 +1,18 @@
 import { css } from 'goober';
 import { h } from 'qx';
 import { IDisplayKeyboardDesign, linerInterpolateValue } from '~/shared';
-import { IWidgetKeyUnitCardsPartViewModel } from '~/ui-common-svg/KeyUnitCardsPart/WidgetKeyUnitCardsPartViewModel';
+import {
+  IWidgetKeyUnitCardViewModel,
+  WidgetKeyUnitCard,
+} from '~/ui-common-svg/KeyUnitCards/WidgetKeyUnitCard';
 import { KeyboardSvgFrameWithAutoScaler } from '~/ui-common-svg/frames/KeyboardSvgFrameWithAutoScaler';
 import { KeyboardBodyShape } from '~/ui-common-svg/keyboardBody/KeyboardBodyShape';
-import { WidgetKeyUnitCardsPart } from '../KeyUnitCardsPart/WidgetKeyUnitCardsPart';
 
 export function WidgetSvgKeyboardView(props: {
   keyboardDesign: IDisplayKeyboardDesign;
-  cardsPartVM: IWidgetKeyUnitCardsPartViewModel;
+  cards: IWidgetKeyUnitCardViewModel[];
 }) {
-  const { keyboardDesign, cardsPartVM } = props;
+  const { keyboardDesign, cards } = props;
 
   const cssKeyboardShapeView = css`
     height: 100%;
@@ -43,7 +45,11 @@ export function WidgetSvgKeyboardView(props: {
           fillColor={fillColor}
           strokeColor={strokeColor}
         />
-        <WidgetKeyUnitCardsPart vm={cardsPartVM} />
+        <g>
+          {cards.map((keyUnit) => (
+            <WidgetKeyUnitCard keyUnit={keyUnit} key={keyUnit.keyUnitId} />
+          ))}
+        </g>
       </KeyboardSvgFrameWithAutoScaler>
     </div>
   );

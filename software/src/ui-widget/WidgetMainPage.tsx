@@ -39,7 +39,7 @@ export function MainPanel() {
     <div css={cssMainpanel}>
       <WidgetSvgKeyboardView
         keyboardDesign={vm.keyboardVM.keyboardDesign}
-        cardsPartVM={vm.keyboardVM.cardsPartVM}
+        cards={vm.keyboardVM.cards}
       />
       <div
         css={cssConfigButton}
