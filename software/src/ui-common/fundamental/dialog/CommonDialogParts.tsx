@@ -124,7 +124,11 @@ export const DialogButtonsRow = (props: { children: any }) => {
   return <div css={cssButtonsRow}>{props.children}</div>;
 };
 
-export const DialogButton = (props: { children: any; onClick: () => void }) => {
+export const DialogButton = (props: {
+  children: any;
+  onClick: () => void;
+  disabled?: boolean;
+}) => {
   const cssButton = css`
     min-width: 80px;
     height: 28px;
@@ -138,9 +142,18 @@ export const DialogButton = (props: { children: any; onClick: () => void }) => {
     &:hover {
       opacity: 0.8;
     }
+
+    &:disabled {
+      opacity: 0.4;
+    }
   `;
   return (
-    <button css={cssButton} onClick={props.onClick} data-debug="hoge">
+    <button
+      css={cssButton}
+      onClick={props.onClick}
+      data-debug="hoge"
+      disabled={props.disabled}
+    >
       {props.children}
     </button>
   );
