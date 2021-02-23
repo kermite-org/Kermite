@@ -56,15 +56,12 @@ export class ApplicationRoot {
     });
 
     appGlobal.icpMainAgent.supplySyncHandlers({
-      dev_getVersionSync: () => 'v100',
       dev_debugMessage: (msg) => console.log(`[renderer] ${msg}`),
       config_saveKeyboardConfigOnClosing: (data) =>
         this.keyboardConfigProvider.writeKeyboardConfig(data),
     });
 
     appGlobal.icpMainAgent.supplyAsyncHandlers({
-      dev_getVersion: async () => 'v100',
-      dev_addNumber: async (a: number, b: number) => a + b,
       window_closeWindow: async () => windowWrapper.closeMainWindow(),
       window_minimizeWindow: async () => windowWrapper.minimizeMainWindow(),
       window_maximizeWindow: async () => windowWrapper.maximizeMainWindow(),

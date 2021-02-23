@@ -174,15 +174,11 @@ export interface IGlobalSettings {
 }
 export interface IAppIpcContract {
   sync: {
-    dev_getVersionSync(): string;
     dev_debugMessage(message: string): void;
     // config_saveSettingsOnClosing?: IApplicationSettings;
     config_saveKeyboardConfigOnClosing(data: IKeyboardConfig): void;
   };
   async: {
-    dev_getVersion(): Promise<string>;
-    dev_addNumber(a: number, b: number): Promise<number>;
-
     window_closeWindow(): Promise<void>;
     window_minimizeWindow(): Promise<void>;
     window_maximizeWindow(): Promise<void>;
