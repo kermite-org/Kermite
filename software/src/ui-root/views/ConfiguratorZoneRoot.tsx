@@ -11,8 +11,8 @@ import { CustomWindowFrame } from '~/ui-root/views/window/CustomWindowFrame';
 import { DevToolPullTab } from '~/ui-root/views/window/DevToolPullTab';
 import { UiSettingsPage } from '~/ui-settings-page';
 import { KeyboardShapePreviewPage } from '~/ui-shape-preview-page/ShapePreviewPage';
-import { NavigationColumn } from './views/navigation/NavigationColumn';
-import { WindowTitleBarSection } from './views/titleBar/WindowTitleBarSection';
+import { NavigationColumn } from './navigation/NavigationColumn';
+import { WindowTitleBarSection } from './titleBar/WindowTitleBarSection';
 
 const styles = {
   cssContentRow: css`
