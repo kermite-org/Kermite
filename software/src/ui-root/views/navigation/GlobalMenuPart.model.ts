@@ -1,6 +1,6 @@
 import { appUi, useLocal } from '~/ui-common';
 import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
-import { themeSelectionModel } from '~/ui-root/models/ThemeSelectionModel';
+import { useThemeSelectionModel } from '~/ui-root/models/ThemeSelectionModel';
 
 export interface IGlobalMenuItem {
   key: string;
@@ -11,6 +11,7 @@ export interface IGlobalMenuItem {
 
 function createMenuItems(): IGlobalMenuItem[] {
   const { settings } = uiStatusModel;
+  const themeSelectionModel = useThemeSelectionModel();
 
   const menuItems: IGlobalMenuItem[] = [
     {
@@ -27,7 +28,7 @@ function createMenuItems(): IGlobalMenuItem[] {
       handler() {
         themeSelectionModel.changeTheme('light');
       },
-      active: themeSelectionModel.currentTheme === 'light',
+      active: themeSelectionModel.currentThemeKey === 'light',
     },
     {
       key: 'miThemeDark',
@@ -35,7 +36,7 @@ function createMenuItems(): IGlobalMenuItem[] {
       handler() {
         themeSelectionModel.changeTheme('dark');
       },
-      active: themeSelectionModel.currentTheme === 'dark',
+      active: themeSelectionModel.currentThemeKey === 'dark',
     },
   ];
 
