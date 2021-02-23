@@ -102,16 +102,14 @@ const checkValidNewProfileName = async (
 const createProfile = async () => {
   const res = await callProfileSetupModal(undefined);
   // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-  if (res && res.profileName && res.targetProjectSig && res.layoutName) {
-    const { profileName, targetProjectSig, layoutName } = res;
+  if (res && res.profileName && res.projectKey && res.layoutKey) {
+    const { profileName, projectKey, layoutKey } = res;
     const nameValid = await checkValidNewProfileName(profileName);
     if (nameValid) {
-      const { origin, projectId } = getProjectOriginAndIdFromSig(
-        targetProjectSig,
-      );
+      const { origin, projectId } = getProjectOriginAndIdFromSig(projectKey);
       profilesModel.createProfile(profileName, origin, projectId, {
         type: 'blank',
-        layoutName,
+        layoutName: layoutKey,
       });
     }
   }
