@@ -8,7 +8,7 @@ export interface IPresetKeyboardLayerViewModel {
   layerName: string;
 }
 
-export interface IPrsetLayerListViewModel {
+export interface IPresetLayerListViewModel {
   layers: IPresetKeyboardLayerViewModel[];
   currentLayerId: string;
   setCurrentLayerId(layerId: string): void;
