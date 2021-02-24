@@ -7,6 +7,7 @@ import {
   reflectFieldValue,
   useFetcher,
   useLocal,
+  useMemoEx,
 } from '~/ui-common';
 import { GeneralSelector } from '~/ui-common/components';
 import {
@@ -96,7 +97,7 @@ const ProfileSetupModalContent = (props: {
   );
 };
 
-interface ProfileSetupModalViewModel {
+interface IProfileSetupModalViewModel {
   projectOptions: ISelectorOption[];
   layoutOptions: ISelectorOption[];
   editValues: ICreateProfileDialogEditValues;
@@ -120,7 +121,7 @@ function makeLayoutOptions(
   return info?.layoutNames.map((it) => ({ value: it, label: it })) || [];
 }
 
-function useProfileSetupModalViewModel(): ProfileSetupModalViewModel {
+function useProfileSetupModalViewModel(): IProfileSetupModalViewModel {
   const editValues = useLocal({
     profileName: '',
     projectKey: '',
@@ -131,17 +132,20 @@ function useProfileSetupModalViewModel(): ProfileSetupModalViewModel {
     ipcAgent.async.projects_getAllProjectResourceInfos,
     [],
   );
-  const projectOptions = makeProjectOptions(resourceInfos);
-  const layoutOptions = makeLayoutOptions(resourceInfos, editValues.projectKey);
+  const projectOptions = useMemoEx(makeProjectOptions, [resourceInfos]);
+
+  const layoutOptions = useMemoEx(makeLayoutOptions, [
+    resourceInfos,
+    editValues.projectKey,
+  ]);
 
   Hook.useEffect(() => {
     editValues.projectKey = projectOptions[0]?.value || '';
-    const _layoutOptions = makeLayoutOptions(
-      resourceInfos,
-      editValues.projectKey,
-    );
-    editValues.layoutKey = _layoutOptions[0]?.value || '';
-  }, [resourceInfos]);
+  }, [projectOptions]);
+
+  Hook.useEffect(() => {
+    editValues.layoutKey = layoutOptions[0]?.value || '';
+  }, [layoutOptions]);
 
   const canSubmit =
     (!!editValues.profileName &&
