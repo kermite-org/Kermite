@@ -1,7 +1,7 @@
 import { IKeyboardConfig } from '~/shared';
 import { vObject, vValueOneOf } from '~/shared/modules/SchemaValidationHelper';
 import { applicationStorage } from '~/shell/base';
-import { createEventPort2 } from '~/shell/funcs';
+import { createEventPort } from '~/shell/funcs';
 
 // 環境に関連したキーボードの設定を保存する, レイアウト(US/JP)など
 
@@ -15,7 +15,7 @@ const keyboardConfigDefault: IKeyboardConfig = {
   layoutStandard: 'US',
 };
 export class KeyboardConfigProvider {
-  internal_changedNotifier = createEventPort2<void>();
+  internal_changedNotifier = createEventPort<void>();
 
   getKeyboardConfig(): IKeyboardConfig {
     return applicationStorage.readItemSafe(

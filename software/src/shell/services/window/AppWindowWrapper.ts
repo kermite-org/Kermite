@@ -8,7 +8,7 @@ import {
   vBoolean,
 } from '~/shared/modules/SchemaValidationHelper';
 import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
-import { createEventPort2, pathRelative } from '~/shell/funcs';
+import { createEventPort, pathRelative } from '~/shell/funcs';
 import { IProfileManager } from '~/shell/services/profile/interfaces';
 import { MenuManager } from '~/shell/services/window/MenuManager';
 import { IAppWindowWrapper } from './interfaces';
@@ -76,7 +76,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
 
   constructor(private profileManager: IProfileManager) {}
 
-  appWindowEventPort = createEventPort2<Partial<IAppWindowStatus>>({
+  appWindowEventPort = createEventPort<Partial<IAppWindowStatus>>({
     initialValueGetter: () => ({
       isDevtoolsVisible: this.state.isDevtoolsVisible,
       isMaximized: this.mainWindow?.isMaximized() || false,

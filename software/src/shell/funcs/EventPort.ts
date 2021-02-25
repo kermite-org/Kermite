@@ -1,19 +1,19 @@
 import { removeArrayItems } from '~/shared';
 
 type IEventListener<T> = (event: T) => void;
-export interface IEventPort2<T> {
+export interface IEventPort<T> {
   subscribe(listener: IEventListener<T>): () => void;
   unsubscribe(listener: IEventListener<T>): void;
   emit(event: T): void;
 }
 
-export function createEventPort2<T>(
+export function createEventPort<T>(
   options: {
     initialValueGetter?: () => T;
     onFirstSubscriptionStarting?: () => void;
     onLastSubscriptionEnded?: () => void;
   } = {},
-): IEventPort2<T> {
+): IEventPort<T> {
   const {
     initialValueGetter,
     onFirstSubscriptionStarting,

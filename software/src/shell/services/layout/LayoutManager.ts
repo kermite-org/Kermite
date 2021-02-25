@@ -16,7 +16,7 @@ import {
 } from '~/shared/modules/SchemaValidationHelper';
 import { applicationStorage } from '~/shell/base';
 import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
-import { createEventPort2 } from '~/shell/funcs';
+import { createEventPort } from '~/shell/funcs';
 import { FileWather } from '~/shell/funcs/FileWatcher';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { projectResourceProvider } from '~/shell/projectResources';
@@ -93,7 +93,7 @@ export class LayoutManager implements ILayoutManager {
     this.fileWatcher.unobserveFile();
   };
 
-  statusEvents = createEventPort2<Partial<ILayoutManagerStatus>>({
+  statusEvents = createEventPort<Partial<ILayoutManagerStatus>>({
     initialValueGetter: () => this.status,
     onFirstSubscriptionStarting: this.initializeOnFirstConnect,
     onLastSubscriptionEnded: this.finalizeOnLastDisconnect,
