@@ -4,7 +4,7 @@ import {
   IRealtimeKeyboardEvent,
   RawHidMessageProtocolRevision,
 } from '~/shared';
-import { EventPort } from '~/shell/funcs';
+import { createEventPort2 } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
 import { DeviceWrapper } from './DeviceWrapper';
 
@@ -13,7 +13,7 @@ function bytesToString(bytes: number[]) {
 }
 // 接続中のキーボードとRawHIDでやりとりを行うためのブリッジ
 export class KeyboardDeviceService {
-  readonly realtimeEventPort = new EventPort<IRealtimeKeyboardEvent>();
+  realtimeEventPort = createEventPort2<IRealtimeKeyboardEvent>();
 
   private deviceWrapper: DeviceWrapper | null = null;
 
@@ -21,7 +21,7 @@ export class KeyboardDeviceService {
     isConnected: false,
   };
 
-  readonly statusEventPort = new EventPort<IKeyboardDeviceStatus>({
+  statusEventPort = createEventPort2<IKeyboardDeviceStatus>({
     initialValueGetter: () => this.deviceStatus,
   });
 
