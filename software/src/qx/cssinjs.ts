@@ -481,41 +481,25 @@ export function applyGlobalStyle(className: string) {
   }
 }
 
-let jsxCreateElementFunction: any;
-export function setup(pragma: any) {
+let jsxCreateElementFunction: Function;
+export function setup(pragma: Function): void {
   jsxCreateElementFunction = pragma;
 }
 
-type Tags =
-  | 'div'
-  | 'span'
-  | 'p'
-  | 'a'
-  | 'img'
-  | 'h1'
-  | 'h2'
-  | 'h3'
-  | 'h4'
-  | 'h5'
-  | 'ul'
-  | 'li'
-  | 'table'
-  | 'tr'
-  | 'td'
-  | 'button';
-
-type IStyledComponentGenerator = (
+type IStyledComponentGenerator<T extends keyof JSX.IntrinsicElements> = (
   template: TemplateStringsArray,
   ...templateParameters: (string | number)[]
-) => (props: any) => any;
+) => (props: JSX.IntrinsicElements[T]) => JSX.Element;
 
-export const styled: { [tag in Tags]: IStyledComponentGenerator } = new Proxy(
+export const styled: {
+  [K in keyof JSX.IntrinsicElements]: IStyledComponentGenerator<K>;
+} = new Proxy(
   {},
   {
-    get: (_target, tag: string) => {
-      return (...args: any[]) => {
-        const className = (css as any)(...args);
-        return (props: any) => {
+    get: <K extends keyof JSX.IntrinsicElements>(_target: any, tag: K) => {
+      return (...args: Parameters<typeof css>) => {
+        const className = css(...args);
+        return (props: JSX.IntrinsicElements[K]) => {
           return jsxCreateElementFunction(tag, { ...props, className });
         };
       };
