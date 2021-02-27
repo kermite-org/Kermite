@@ -145,6 +145,21 @@ export namespace Hook {
     }
   }
 
+  export function useInlineEffect(
+    effectFunc: IEffectFunc,
+    deps: any[] | undefined,
+  ) {
+    const { holder } = getHookHolder<IHookEffectHolder>();
+    const changed = hasDepsChanged(holder.deps, deps);
+    if (changed) {
+      const result = effectFunc();
+      if (result && typeof result === 'function') {
+        holder.cleanupFunc = result;
+      }
+      holder.deps = deps;
+    }
+  }
+
   export function useRef<T>() {
     const { holder, first } = getHookHolder<IHookRefHolder<T>>();
     if (first) {
