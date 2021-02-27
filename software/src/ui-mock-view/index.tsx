@@ -2,6 +2,7 @@
 import { h, render, rerender } from 'qx';
 import { debounce } from '~/shared';
 import { UiLayouterPageComponent } from '~/ui-layouter-page';
+import { GooberDevelopmentPage } from '~/ui-mock-view/GooberDevelopmentPage';
 import { GooberDevelopmentPage2 } from '~/ui-mock-view/GooberDevelopmentPage2';
 import { HoverHintDevelopmentPage } from '~/ui-mock-view/HoverHintDevelopmentPage';
 import { MockPageComponentDevelopment } from '~/ui-mock-view/MockPageComponentDevelopment';
@@ -17,11 +18,12 @@ const PageRoot = () => {
       {/* <MockPageLayouterDevelopment /> */}
       {/* <MockPageLoadedDesignDrawing /> */}
       {/* <UiLayouterPageComponent /> */}
-      <GooberDevelopmentPage2 />
+      {/* <GooberDevelopmentPage2 /> */}
       {/* <RoutingDevelopmentPage /> */}
       {/* <MockPageComponentDevelopment /> */}
       {/* <HoverHintDevelopmentPage /> */}
       {/* <QxDebugPage /> */}
+      <GooberDevelopmentPage />
     </div>
   );
 };

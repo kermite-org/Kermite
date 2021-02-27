@@ -1,5 +1,5 @@
 import { h, Hook, rerender } from 'qx';
-import { css, setup } from '~/goober_ex/goober';
+import { css, setup } from '~/goober_ex';
 // import { css2 } from '~/goober_ex/css';
 
 setup(h);

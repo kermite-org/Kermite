@@ -273,7 +273,7 @@ export const extractCss = (target) => {
  * css entry
  * @param {String|Object|Function} val
  */
-export function css(val) {
+export function css(val: any, ...args: any[]) {
   const ctx = this || {};
   const _val = val.call ? val(ctx.p) : val;
 
@@ -309,7 +309,7 @@ export const glob = css.bind({ g: 1 });
 export const keyframes = css.bind({ k: 1 });
 
 let h, useTheme, fwdProp;
-export function setup(pragma, prefix, theme, forwardProps) {
+export function setup(pragma: any, prefix?, theme?, forwardProps?) {
   // This one needs to stay in here, so we won't have cyclic dependencies
   (parse as any).p = prefix;
 
