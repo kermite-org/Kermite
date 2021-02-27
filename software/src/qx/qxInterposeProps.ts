@@ -1,3 +1,5 @@
+import { css } from 'qx/cssinjs';
+import { extractShortCss } from 'qx/shortCss';
 import { qxGlobal } from './qxGlobal';
 
 function camelCaseToHyphenCase(str: string) {
@@ -48,12 +50,24 @@ export function qxInterposeProps(
           : undefined;
       }
     }
-    if (props.css || props.class || props.className || props.classNames) {
+    if (
+      props.css ||
+      props.class ||
+      props.className ||
+      props.classNames ||
+      props.xw
+    ) {
       const classNamesArray = extractClassNamesToArray(props.classNames);
+      const xwClassName =
+        props.xw &&
+        css`
+          ${extractShortCss(props.xw)}
+        `;
       const classes = [
         props.css,
         props.class,
         props.className,
+        xwClassName,
         ...classNamesArray,
       ]
         .filter((a) => !!a)
