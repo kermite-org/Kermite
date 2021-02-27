@@ -98,7 +98,7 @@ const GooberStyledDev = () => (
   </div>
 );
 
-export const GooberDevelopmentPage = () => {
+export const GooberDevelopmentPage2 = () => {
   return (
     <div css={cssRoot}>
       <div css={cssHeader}>hello</div>
