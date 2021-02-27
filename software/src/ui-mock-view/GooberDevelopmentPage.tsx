@@ -1,11 +1,9 @@
 import { h, Hook, rerender } from 'qx';
-import { css, setup } from '~/goober_ex';
-// import { css2 } from '~/goober_ex/css';
+import { css, applyGlobalStyle, setup, styled } from '~/goober_ex';
 
 setup(h);
 
 const cssRoot = css`
-  label: cssRoot;
   border: solid 4px orange;
   color: green;
   padding: 10px;
@@ -15,10 +13,39 @@ const boxW = 100;
 const boxH = 50;
 
 const cssHeader = css`
-  label: cssHeaderBarSpecial;
   width: ${boxW}px;
   height: ${boxH}px;
   border: solid 1px blue;
+`;
+
+const cssPage = css`
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html,
+  body,
+  #app {
+    height: 100%;
+  }
+
+  #app {
+    font-family: 'Roboto', sans-serif;
+  }
+
+  body {
+    overflow: hidden;
+    background: #dfd;
+  }
+`;
+applyGlobalStyle(cssPage);
+
+const Foo = styled.div`
+  width: 100px;
+  height: 50px;
+  border: solid 1px #f08;
 `;
 
 export const GooberDevelopmentPage = () => {
@@ -30,6 +57,7 @@ export const GooberDevelopmentPage = () => {
   return (
     <div css={cssRoot}>
       <div css={cssHeader}>hello</div>
+      <Foo>world</Foo>
     </div>
   );
 };

@@ -1,32 +1,12 @@
-/**
- * Transforms the input into a className.
- * The multiplication constant 101 is selected to be a prime,
- * as is the initial value of 11.
- * The intermediate and final results are truncated into 32-bit
- * unsigned integers.
- * @param {String} str
- * @returns {String}
- */
-const toHash = (str, label) => {
-  const sig0 = str
-    .split('')
-    .reduce((out, i) => (101 * out + i.charCodeAt(0)) >>> 0, 11);
-
-  const prefix = `go`;
-  const sig = parseInt(sig0).toString(36);
-  return label ? `${prefix}_${sig}_${label}` : `${prefix}_${sig}`;
-};
+// based on goober
+// https://github.com/cristianbote/goober
 
 const newRule = /(?:([A-Z0-9-%@]+) *:? *([^{;]+?);|([^;}{]*?) *{)|(})/gi;
 const ruleClean = /\/\*[\s\S]*?\*\/|\s{2,}|\n/gm;
 
-/**
- * Convert a css style string into a object
- * @param {String} val
- * @returns {Object}
- */
-const astish = (val) => {
-  const tree = [{}];
+// Convert a css style string into a object
+const astish = (val: string): any => {
+  const tree: any = [{}];
   let block;
 
   while ((block = newRule.exec(val.replace(ruleClean, '')))) {
@@ -45,14 +25,16 @@ const astish = (val) => {
 
 /**
  * Updates the target and keeps a local cache
- * @param {String} css
- * @param {Object} sheet
- * @param {Boolean} append
  */
-const update = (css, sheet, append) => {
-  sheet.data.indexOf(css) === -1 &&
-    (sheet.data = append ? css + sheet.data : sheet.data + css);
-};
+// const update = (css, sheet, append) => {
+//   console.log({ css, sheet, append });
+//   // console.log({ data: sheet.data });
+//   console.log(sheet.data);
+//   sheet.data.indexOf(css) === -1 &&
+//     (sheet.data = append ? css + sheet.data : sheet.data + css);
+//   // console.log({ data: sheet.data });
+//   console.log(sheet.data);
+// };
 
 /**
  * Parses the object into css, scoped, blocks
@@ -60,7 +42,7 @@ const update = (css, sheet, append) => {
  * @param {String} selector
  * @param {String} wrapper
  */
-const parse = (obj, selector) => {
+const parse = (obj: any, selector: string) => {
   let outer = '';
   let blocks = '';
   let current = '';
@@ -130,13 +112,14 @@ const parse = (obj, selector) => {
 /**
  * In-memory cache.
  */
-const cache = {};
+// const cache = {};
 
 /**
  * Stringifies a object structure
  * @param {Object} data
  * @returns {String}
  */
+/*
 const stringify = (data) => {
   let out = '';
 
@@ -147,6 +130,7 @@ const stringify = (data) => {
 
   return out;
 };
+*/
 
 /**
  * Generates the needed className
@@ -157,6 +141,7 @@ const stringify = (data) => {
  * @param {Boolean} keyframes Keyframes mode. The input is the keyframes body that needs to be wrapped.
  * @returns {String}
  */
+/*
 export const hash = (compiled, sheet, global, append, keyframes) => {
   // Get a string representation of the object or the value that is called 'compiled'
   const stringifiedCompiled =
@@ -190,12 +175,14 @@ export const hash = (compiled, sheet, global, append, keyframes) => {
   // return hash
   return className;
 };
+*/
 
 /**
  * Can parse a compiled string, from a tagged template
  * @param {String} value
  * @param {Object} [props]
  */
+/*
 export const compile = (str, defs, data) => {
   return str.reduce((out, next, i) => {
     let tail = defs[i];
@@ -227,18 +214,22 @@ export const compile = (str, defs, data) => {
     return out + next + (tail === null ? '' : tail);
   }, '');
 };
-
-const GOOBER_ID = '_goober';
-const ssr = {
-  data: '',
-};
+*/
 
 /**
  * Returns the _commit_ target
  * @param {Object} [target]
  * @returns {HTMLStyleElement|{data: ''}}
  */
+/*
+const GOOBER_ID = '_goober';
+const ssr = {
+  data: '',
+};
+
+
 const getSheet = (target) => {
+  console.log({ target });
   if (typeof window !== 'undefined') {
     // Querying the existing target for a previously defined <style> tag
     // We're doing a querySelector because the <head> element doesn't implemented the getElementById api
@@ -257,22 +248,24 @@ const getSheet = (target) => {
   }
   return target || ssr;
 };
+*/
 
 /**
  * Extracts and wipes the cache
  * @returns {String}
  */
-export const extractCss = (target) => {
-  const sheet = getSheet(target);
-  const out = sheet.data;
-  sheet.data = '';
-  return out;
-};
+// export const extractCss = (target) => {
+//   const sheet = getSheet(target);
+//   const out = sheet.data;
+//   sheet.data = '';
+//   return out;
+// };
 
 /**
  * css entry
  * @param {String|Object|Function} val
  */
+/*
 export function css(val: any, ...args: any[]) {
   const ctx = this || {};
   const _val = val.call ? val(ctx.p) : val;
@@ -295,19 +288,14 @@ export function css(val: any, ...args: any[]) {
     ctx.k,
   );
 }
-
-/**
- * CSS Global function to declare global styles
- * @type {Function}
- */
-export const glob = css.bind({ g: 1 });
+*/
 
 /**
  * `keyframes` function for defining animations
  * @type {Function}
  */
-export const keyframes = css.bind({ k: 1 });
-
+// export const keyframes = css.bind({ k: 1 });
+/*
 let h, useTheme, fwdProp;
 export function setup(pragma: any, prefix?, theme?, forwardProps?) {
   // This one needs to stay in here, so we won't have cyclic dependencies
@@ -318,15 +306,24 @@ export function setup(pragma: any, prefix?, theme?, forwardProps?) {
   useTheme = theme;
   fwdProp = forwardProps;
 }
+*/
+
+/**
+ * CSS Global function to declare global styles
+ * @type {Function}
+ */
+// export const glob = css.bind({ g: 1 });
 
 /**
  * styled function
  * @param {string} tag
  * @param {function} forwardRef
  */
-export function styled(tag, forwardRef) {
+/*
+export function styled0(tag, forwardRef) {
   const _ctx = this || {};
 
+  console.log({ tag, forwardRef, _ctx });
   return function wrapper() {
     // eslint-disable-next-line prefer-rest-params
     const _args = arguments;
@@ -339,7 +336,7 @@ export function styled(tag, forwardRef) {
       const _previousClassName = _props.className || (Styled as any).className;
 
       // _ctx.p: is the props sent to the context
-      _ctx.p = Object.assign({ theme: useTheme?.() }, _props);
+      // _ctx.p = Object.assign({ theme: useTheme?.() }, _props);
 
       // Set a flag if the current components had a previous className
       // similar to goober. This is the append/prepend flag
@@ -360,13 +357,167 @@ export function styled(tag, forwardRef) {
       const _as = _props.as || tag;
 
       // Handle the forward props filter if defined and _as is a string
-      if (fwdProp && _as[0]) {
-        fwdProp(_props);
-      }
+      // if (fwdProp && _as[0]) {
+      //   fwdProp(_props);
+      // }
 
-      return h(_as, _props);
+      return jsxCreateElementFunction(_as, _props);
     }
 
     return forwardRef ? forwardRef(Styled) : Styled;
   };
 }
+*/
+
+// ------------------------------------------------------------
+
+// function makeNumberSequence(n: number): number[] {
+//   return new Array(n).map((_, i) => i);
+// }
+
+function findKeyByValue(
+  dict: { [key: string]: string },
+  value: string,
+): string | undefined {
+  for (const key in dict) {
+    if (dict[key] === value) {
+      return key;
+    }
+  }
+}
+
+let seqClassNameIndex = 0;
+const classNameIndexTable: { [key: string]: number } = {};
+
+const getUniqueClassName = (cssText: string, label?: string) => {
+  let index = classNameIndexTable[cssText];
+  if (!index) {
+    index = classNameIndexTable[cssText] = seqClassNameIndex++;
+  }
+  const prefix = 'go';
+  return label ? `${prefix}${index}_${label}` : `${prefix}_${index}`;
+};
+
+interface ILocalSheet {
+  data: string;
+}
+
+let gSheet: HTMLStyleElement | undefined;
+
+function getLocalSheet(): ILocalSheet {
+  if (!gSheet) {
+    gSheet = document.createElement('style');
+    gSheet.innerHTML = ' ';
+    gSheet.id = '_goober_ex';
+    document.head.appendChild(gSheet);
+  }
+  return gSheet.firstChild as any;
+}
+
+function updateLocalSheet(cssText0: string) {
+  const sheet = getLocalSheet();
+  const cssText = cssText0.replace(/label:.+?;/g, '');
+  // console.log({ cssText0, cssText });
+  if (!sheet.data.includes(cssText)) {
+    sheet.data = sheet.data + cssText;
+  }
+}
+
+function extractLabel(cssText: string): string | undefined {
+  const m = cssText.match(/label: (.+);/);
+  return m?.[1];
+}
+
+function extractCssTemplate(
+  template: TemplateStringsArray,
+  values: (string | number)[],
+): string {
+  let text = '';
+  let i = 0;
+  for (i = 0; i < values.length; i++) {
+    text += template[i];
+    text += values[i].toString();
+  }
+  text += template[i];
+  return text;
+}
+
+const cssTextToClassNameMap: { [sourceCssText: string]: string } = {};
+
+export function css(
+  template: TemplateStringsArray,
+  ...templateParameters: (string | number)[]
+): string {
+  // console.log(`CSS-----${template}`);
+  // const ctx = this || {};
+  const cssText = extractCssTemplate(template, templateParameters);
+  // console.log({ template, templateParameters, cssText });
+
+  if (cssTextToClassNameMap[cssText]) {
+    return cssTextToClassNameMap[cssText];
+  }
+  // console.log({ ctx });
+  const label = extractLabel(cssText);
+  // console.log({ sourceCssText, cssText, label });
+  const className = getUniqueClassName(cssText, label);
+  const ast = astish(cssText);
+  const parsed = parse(ast, `.${className}`);
+  // console.log({ compiledText, sheet, className, ast, parsed });
+  // update(parsed, sheet, false);
+  updateLocalSheet(parsed);
+
+  cssTextToClassNameMap[cssText] = className;
+
+  return className;
+  // return hash(compiledText, sheet, ctx.g, ctx.o, ctx.k);
+}
+
+export function applyGlobalStyle(className: string) {
+  const cssText = findKeyByValue(cssTextToClassNameMap, className);
+  if (cssText) {
+    const ast = astish(cssText);
+    const parsed = parse(ast, '');
+    updateLocalSheet(parsed);
+  }
+}
+
+let jsxCreateElementFunction: any;
+export function setup(pragma: any) {
+  jsxCreateElementFunction = pragma;
+}
+
+type Tags =
+  | 'div'
+  | 'span'
+  | 'p'
+  | 'a'
+  | 'img'
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'h4'
+  | 'h5'
+  | 'ul'
+  | 'li'
+  | 'table'
+  | 'tr'
+  | 'td';
+
+type IStyledComponentGenerator = (
+  template: TemplateStringsArray,
+  ...templateParameters: (string | number)[]
+) => (props: any) => any;
+
+export const styled: { [tag in Tags]: IStyledComponentGenerator } = new Proxy(
+  {},
+  {
+    get: (_target, tag: string) => {
+      return (...args: any[]) => {
+        const className = (css as any)(...args);
+        return (props: any) => {
+          return jsxCreateElementFunction(tag, { ...props, className });
+        };
+      };
+    },
+  },
+) as any;

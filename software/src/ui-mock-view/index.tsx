@@ -30,7 +30,7 @@ const PageRoot = () => {
 
 window.addEventListener('load', () => {
   const appDiv = document.getElementById('app');
-  initializeCss();
+  // initializeCss();
   render(() => <PageRoot />, appDiv);
 
   window.addEventListener('resize', debounce(rerender, 300));
