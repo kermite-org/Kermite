@@ -53,13 +53,6 @@ function hasDepsChanged(
   if (!oldDeps || !newDeps) {
     return true;
   }
-  // if (!Array.isArray(oldDeps) || !Array.isArray(newDeps)) {
-  //   // return ar1 === ar2;
-  //   return true;
-  // }
-  // if (oldDeps.length !== newDeps.length) {
-  //   return true;
-  // }
   for (let i = 0; i < oldDeps.length; i++) {
     if (oldDeps[i] !== newDeps[i]) {
       return true;
@@ -67,16 +60,6 @@ function hasDepsChanged(
   }
   return false;
 }
-
-// function getHookHolder<T>(gen: () => T): T {
-//   const hk = gHookInstance;
-//   let holder = hk.holders[hk.index] as T;
-//   if (!holder) {
-//     holder = hk.holders[hk.index] = gen();
-//   }
-//   hk.index++;
-//   return holder;
-// }
 
 function getHookHolder<T>(): { holder: T; first: boolean } {
   if (!gHookInstance) {
@@ -135,9 +118,7 @@ export namespace Hook {
 
   export function useEffect(effectFunc: IEffectFunc, deps: any[] | undefined) {
     const { holder } = getHookHolder<IHookEffectHolder>();
-    // console.log('ue');
     const changed = hasDepsChanged(holder.deps, deps);
-    // console.log({ a: holder.deps, b: deps, changed });
     if (changed) {
       holder.effectFunc = effectFunc;
       holder.deps = deps;
@@ -163,8 +144,6 @@ export namespace Hook {
   export function useRef<T>() {
     const { holder, first } = getHookHolder<IHookRefHolder<T>>();
     if (first) {
-      // holder.refObject = ((el: any) => (holder.refObject.current = el)) as any;
-      // holder.refObject.current = undefined;
       holder.refObject = { current: undefined };
     }
     return holder.refObject;
