@@ -1,5 +1,5 @@
 import { h, Hook, rerender } from 'qx';
-import { css, applyGlobalStyle, setup, styled } from '~/goober_ex';
+import { css, applyGlobalStyle, setup, styled } from 'qx/cssinjs';
 
 setup(h);
 
