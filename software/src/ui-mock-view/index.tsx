@@ -9,6 +9,7 @@ import { MockPageComponentDevelopment } from '~/ui-mock-view/MockPageComponentDe
 import { MockPageLoadedDesignDrawing } from '~/ui-mock-view/MockPageLoadedDesignDrawing';
 import { QxDebugPage } from '~/ui-mock-view/QxDebugPage';
 import { RoutingDevelopmentPage } from '~/ui-mock-view/RoutingDevelopmentPage';
+import { ShortCssDevPage } from '~/ui-mock-view/ShortCssDevPage';
 import { initializeCss } from '~/ui-mock-view/cssInitializer';
 import { MockPageLayouterDevelopment } from './MockPageLayouterDevelopment';
 
@@ -24,14 +25,15 @@ const PageRoot = () => {
       {/* <HoverHintDevelopmentPage /> */}
       {/* <QxDebugPage /> */}
       {/* <GooberDevelopmentPage /> */}
-      <GooberDevelopmentPage2 />
+      {/* <GooberDevelopmentPage2 /> */}
+      <ShortCssDevPage />
     </div>
   );
 };
 
 window.addEventListener('load', () => {
   const appDiv = document.getElementById('app');
-  // initializeCss();
+  initializeCss();
   render(() => <PageRoot />, appDiv);
 
   window.addEventListener('resize', debounce(rerender, 300));
