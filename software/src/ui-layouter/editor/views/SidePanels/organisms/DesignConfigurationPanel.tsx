@@ -1,5 +1,5 @@
-import { css } from 'goober';
 import { h } from 'qx';
+import { css } from 'qx/cssinjs';
 import { ICommonSelectorViewModel } from '~/ui-common';
 import { RibbonSelector } from '~/ui-common/components';
 import {

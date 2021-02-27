@@ -1,5 +1,5 @@
-import { css } from 'goober';
 import { Hook, h, asyncRerender } from 'qx';
+import { css } from 'qx/cssinjs';
 import { editReader, editMutations } from '~/ui-layouter/editor/store';
 import { DebugOverlay } from './DebugOverlay';
 import { EditSvgView } from './EditSvgView';

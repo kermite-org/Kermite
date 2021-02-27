@@ -1,5 +1,5 @@
-import { css } from 'goober';
 import { h } from 'qx';
+import { css } from 'qx/cssinjs';
 import {
   KeyboardProfileSelector,
   KeyboardProjectSelector,

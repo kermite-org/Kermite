@@ -1,5 +1,5 @@
-import { css } from 'goober';
 import { h } from 'qx';
+import { css } from 'qx/cssinjs';
 import { ISelectorOption, reflectValue } from '~/ui-common';
 import { ClosableOverlay } from '~/ui-common/fundamental/dialog/CommonDialogParts';
 

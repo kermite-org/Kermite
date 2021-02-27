@@ -1,11 +1,11 @@
-import { styled } from 'goober';
+import { styled } from 'qx/cssinjs';
 
-export const HFlex = styled('div')`
+export const HFlex = styled.div`
   display: flex;
   align-items: center;
 `;
 
-export const Indent = styled('div')`
+export const Indent = styled.div`
   margin-left: 10px;
 `;
 

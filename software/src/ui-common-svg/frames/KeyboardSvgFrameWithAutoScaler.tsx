@@ -1,5 +1,5 @@
-import { css } from 'goober';
 import { h } from 'qx';
+import { css } from 'qx/cssinjs';
 import { IDisplayArea } from '~/shared';
 import { KeyboardSvgFrame } from '~/ui-common-svg/frames/KeyboardSvgFrame';
 import { ScalerBox } from '~/ui-common-svg/frames/ScalerBox';

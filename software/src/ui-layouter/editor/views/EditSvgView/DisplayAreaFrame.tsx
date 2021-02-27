@@ -1,5 +1,5 @@
-import { css } from 'goober';
 import { h } from 'qx';
+import { css } from 'qx/cssinjs';
 import { makeCssColor } from '~/ui-common/base';
 import { editReader } from '~/ui-layouter/editor/store';
 

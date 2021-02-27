@@ -1,5 +1,5 @@
-import { css } from 'goober';
 import { h } from 'qx';
+import { css } from 'qx/cssinjs';
 import { WidgetSvgKeyboardView } from '~/ui-common-svg/panels/WidgetSvgKeyboardView';
 import { siteModel } from '~/ui-common/sharedModels/SiteModel';
 import { makeWidgetMainPageViewModel } from '~/ui-widget/WidgetMainPageViewModel';

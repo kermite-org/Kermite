@@ -1,5 +1,5 @@
-import { glob, setup } from 'goober';
 import { h } from 'qx';
+import { glob, setup } from 'qx/cssinjs';
 
 export function initializeCss() {
   setup(h);

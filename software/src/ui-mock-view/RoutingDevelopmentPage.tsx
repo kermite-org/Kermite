@@ -1,5 +1,5 @@
-import { css, setup } from 'goober';
 import { FC, h, Hook } from 'qx';
+import { css, setup } from 'qx/cssinjs';
 import { Link, linkTo, router } from '~/ui-common/base';
 
 setup(h);

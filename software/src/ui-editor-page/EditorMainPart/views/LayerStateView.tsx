@@ -1,5 +1,5 @@
-import { css } from 'goober';
 import { h } from 'qx';
+import { css } from 'qx/cssinjs';
 import { useDeviceStatusModel } from '~/ui-common/sharedModels/DeviceStatusModelHook';
 import { PlayerModel } from '~/ui-common/sharedModels/PlayerModel';
 

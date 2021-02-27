@@ -1,5 +1,5 @@
-import { css } from 'goober';
 import { h } from 'qx';
+import { css } from 'qx/cssinjs';
 import { IDisplayKeyboardDesign, IDisplayKeyEntity } from '~/shared';
 import { PreviewKeyEntityCard } from '~/ui-common-svg/KeyUnitCards/PreviewKeyUnitCard';
 import { KeyboardSvgFrameWithAutoScaler } from '~/ui-common-svg/frames/KeyboardSvgFrameWithAutoScaler';

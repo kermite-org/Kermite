@@ -1,5 +1,5 @@
-import { css, setup, styled } from 'goober';
 import { h, FC, QxChildren } from 'qx';
+import { css, setup, styled } from 'qx/cssinjs';
 
 setup(h);
 
@@ -22,7 +22,7 @@ const cssHeader = css`
   border: solid 1px blue;
 `;
 
-const Header2 = styled('div')`
+const Header2 = styled.div`
   width: ${boxW}px;
   height: ${boxH}px;
   border: solid 1px blue;
@@ -33,7 +33,8 @@ const MyButton = (props: { text: string; className?: string }) => {
   return <button className={props.className}>{props.text}</button>;
 };
 
-const StyledMyButton = styled(MyButton)`
+// TODO: styledで関数コンポーネントをサポート
+const StyledMyButton = styled.MyButton`
   border: solid 2px green;
   background: #cfc;
   padding: 10px;
@@ -77,11 +78,11 @@ const UserNameView: FC<IUserNameViewProps> = ({ userName }) => {
 };
 
 const Frame0: FC<{ children?: QxChildren }> = ({ children }) => {
-  console.log({ children });
+  // console.log({ children });
   return <div style={{ border: 'solid 1px purple' }}>{children}</div>;
 };
 
-const Frame = styled('div')`
+const Frame = styled.div`
   border: solid 1px #f08;
 `;
 

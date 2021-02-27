@@ -1,5 +1,5 @@
-import { css } from 'goober';
 import { h } from 'qx';
+import { css } from 'qx/cssinjs';
 import { makeAssignEditSectionViewModel } from '~/ui-editor-page/EditorMainPart/viewModels/AssignEditSectionViewModel';
 import { OpertionEditPart } from './OperationEditPart';
 import { OerationSlotsPart } from './OperationSlotsPart';

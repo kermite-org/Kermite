@@ -1,5 +1,5 @@
-import { css } from 'goober';
 import { h } from 'qx';
+import { css } from 'qx/cssinjs';
 import { GeneralInput, styleWidthSpec } from '~/ui-common/components';
 
 interface IProps {

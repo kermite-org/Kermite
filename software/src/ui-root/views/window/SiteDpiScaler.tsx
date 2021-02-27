@@ -1,5 +1,5 @@
-import { css } from 'goober';
 import { h } from 'qx';
+import { css } from 'qx/cssinjs';
 
 export const SiteDpiScaler = (props: { children: any; dpiScale: number }) => {
   const { children, dpiScale } = props;

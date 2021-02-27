@@ -1,5 +1,5 @@
-import { css } from 'goober';
 import { h } from 'qx';
+import { css } from 'qx/cssinjs';
 import { layouterAppGlobal } from '~/ui-layouter/base';
 
 export const DebugOverlay = () => {

@@ -1,5 +1,5 @@
-import { css } from 'goober';
 import { h } from 'qx';
+import { css } from 'qx/cssinjs';
 import { uiTheme } from '~/ui-common/base';
 import { ButtonBase, Icon } from '~/ui-common/components/controls';
 

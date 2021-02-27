@@ -1,5 +1,5 @@
-import { css } from 'goober';
 import { h } from 'qx';
+import { css } from 'qx/cssinjs';
 import { uiTheme } from '~/ui-common';
 import { DeviceControlSection } from './DeviceControl/DeviceControlSection';
 import { ProfileConfigratuionModalLayer } from './EditorMainPart/views/modals/ProfileConfigurationPart';

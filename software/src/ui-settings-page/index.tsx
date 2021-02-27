@@ -1,5 +1,5 @@
-import { css } from 'goober';
 import { h, Hook } from 'qx';
+import { css } from 'qx/cssinjs';
 import { IGlobalSettings } from '~/shared';
 import {
   appUi,

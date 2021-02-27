@@ -1,5 +1,5 @@
-import { css } from 'goober';
 import { h } from 'qx';
+import { css } from 'qx/cssinjs';
 import { uiTheme } from '~/ui-common';
 import { ViewModelProps } from '~/ui-common/helpers';
 import { IPresetLayerListViewModel } from '~/ui-preset-browser-page/viewModels/PresetKeyboardViewModel';

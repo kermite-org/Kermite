@@ -1,5 +1,5 @@
-import { css } from 'goober';
 import { h } from 'qx';
+import { css } from 'qx/cssinjs';
 import { makeNavigationViewModel } from '~/ui-root/views/navigation/NavigationButtonsArea.model';
 import { NavigationButton } from './elements/NavigationButton';
 

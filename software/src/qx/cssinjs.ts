@@ -501,7 +501,8 @@ type Tags =
   | 'li'
   | 'table'
   | 'tr'
-  | 'td';
+  | 'td'
+  | 'button';
 
 type IStyledComponentGenerator = (
   template: TemplateStringsArray,

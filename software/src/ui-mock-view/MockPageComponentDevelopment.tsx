@@ -1,5 +1,5 @@
-import { css, setup, styled } from 'goober';
 import { h, FC, Hook } from 'qx';
+import { css, setup, styled } from 'qx/cssinjs';
 import { ISelectorOption, uiTheme } from '~/ui-common';
 import {
   GeneralButton,
@@ -27,23 +27,23 @@ const cssRoot = css`
   }
 `;
 
-const Header = styled('div')`
+const Header = styled.div`
   color: ${uiTheme.colors.clPrimary};
   font-size: 18px;
 `;
 
-const Row = styled('div')`
+const Row = styled.div`
   display: flex;
   > * + * {
     margin-left: 10px;
   }
 `;
 
-const HBox = styled('div')`
+const HBox = styled.div`
   display: flex;
 `;
 
-const VStack = styled('div')`
+const VStack = styled.div`
   > * + * {
     margin-top: 4px;
   }

@@ -1,5 +1,5 @@
-import { css } from 'goober';
 import { FC, h } from 'qx';
+import { css } from 'qx/cssinjs';
 import { uiTheme } from '~/ui-common/base';
 
 interface Props {

@@ -1,5 +1,5 @@
-import { css } from 'goober';
 import { Hook, h } from 'qx';
+import { css } from 'qx/cssinjs';
 import { GeneralButton, GeneralInput } from '~/ui-common/components';
 import { makeTestInputAreaViewModel } from '~/ui-editor-page/TestInputArea/TestInputAreaViweModel';
 

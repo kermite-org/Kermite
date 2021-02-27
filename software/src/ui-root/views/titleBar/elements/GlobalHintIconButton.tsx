@@ -1,5 +1,5 @@
-import { css } from 'goober';
 import { FC, h } from 'qx';
+import { css } from 'qx/cssinjs';
 import { ButtonBase, Icon } from '~/ui-common/components';
 
 type Props = {

@@ -1,5 +1,5 @@
-import { css, glob, setup } from 'goober';
 import { h, Hook } from 'qx';
+import { applyGlobalStyle, css, setup } from 'qx/cssinjs';
 import { router } from '~/ui-common';
 import { globalHintMouseMoveHandlerEffect } from '~/ui-common/base/GlobalHint';
 import { DebugOverlay } from '~/ui-common/fundamental/overlay/DebugOverlay';
@@ -13,7 +13,7 @@ import { ConfiguratorZoneRoot } from './ConfiguratorZoneRoot';
 
 setup(h);
 
-glob`
+const cssGlobal = css`
   * {
     margin: 0;
     padding: 0;
@@ -34,6 +34,7 @@ glob`
     overflow: hidden;
   }
 `;
+applyGlobalStyle(cssGlobal);
 
 const cssSiteRoot = css`
   height: 100%;

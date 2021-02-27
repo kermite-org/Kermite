@@ -1,5 +1,5 @@
-import { css } from 'goober';
 import { h } from 'qx';
+import { css } from 'qx/cssinjs';
 import { uiTheme } from '~/ui-common';
 import { GlobalMenuPart } from './GlobalMenuPart';
 import { NavigationButtonsArea } from './NavigationButtonsArea';

@@ -1,5 +1,5 @@
-import { css } from 'goober';
 import { h } from 'qx';
+import { css } from 'qx/cssinjs';
 import { IDisplayKeyEntity } from '~/shared';
 import { KeyUnitShape } from '~/ui-common-svg/KeyUnitCards/KeyUnitShape';
 
