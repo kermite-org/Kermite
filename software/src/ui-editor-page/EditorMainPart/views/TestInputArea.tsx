@@ -1,5 +1,4 @@
-import { h } from 'qx';
-import { css } from 'qx/cssinjs';
+import { h, css } from 'qx';
 import { useLocal } from '~/ui-common';
 import { GeneralButton, GeneralInput } from '~/ui-common/components';
 import { makeTestInputAreaViewModel } from '~/ui-editor-page/TestInputArea/TestInputAreaViweModel';

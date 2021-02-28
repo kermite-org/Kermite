@@ -1,5 +1,4 @@
-import { h } from 'qx';
-import { css } from 'qx/cssinjs';
+import { h, css } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
 import { ProfileConfigurationPart } from '~/ui-editor-page/EditorMainPart/views/ProfileConfigurationPart';

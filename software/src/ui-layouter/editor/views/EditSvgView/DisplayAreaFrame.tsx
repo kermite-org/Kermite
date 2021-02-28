@@ -1,5 +1,4 @@
-import { h } from 'qx';
-import { css } from 'qx/cssinjs';
+import { h, css } from 'qx';
 import { makeCssColor } from '~/ui-common/base';
 import { editReader } from '~/ui-layouter/editor/store';
 

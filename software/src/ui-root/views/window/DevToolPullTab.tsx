@@ -1,5 +1,4 @@
-import { h } from 'qx';
-import { css } from 'qx/cssinjs';
+import { h, css } from 'qx';
 import { siteModel } from '~/ui-common/sharedModels/SiteModel';
 
 const cssDevToolPullTabBase = css`

@@ -1,4 +1,4 @@
-import { styled } from 'qx/cssinjs';
+import { styled } from 'qx';
 
 export const ConfigSubHeader = styled.div`
   margin-bottom: 4px;

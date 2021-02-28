@@ -1,7 +1,4 @@
-import { h, FC, QxChildren } from 'qx';
-import { css, setup, styled } from 'qx/cssinjs';
-
-setup(h);
+import { h, FC, QxChildren, css, styled } from 'qx';
 
 const cssRoot = css`
   border: solid 4px orange;

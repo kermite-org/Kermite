@@ -1,5 +1,4 @@
-import { h } from 'qx';
-import { css } from 'qx/cssinjs';
+import { h, css } from 'qx';
 import { reflectValue } from '~/ui-common';
 
 const cssOperationLayerOptionSelector = css`

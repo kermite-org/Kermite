@@ -1,5 +1,4 @@
-import { h } from 'qx';
-import { css } from 'qx/cssinjs';
+import { h, css } from 'qx';
 import { editorModel } from '~/ui-editor-page/EditorMainPart/models/EditorModel';
 
 export const ProfileConfigurationPart = () => {

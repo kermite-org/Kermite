@@ -1,5 +1,4 @@
-import { h } from 'qx';
-import { css } from 'qx/cssinjs';
+import { h, css } from 'qx';
 import { ISelectorOption, reflectValue } from '~/ui-common';
 import { ClosableOverlay } from '~/ui-common/fundamental/dialog/CommonDialogParts';
 

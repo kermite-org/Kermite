@@ -1,5 +1,4 @@
-import { h } from 'qx';
-import { css } from 'qx/cssinjs';
+import { h, css } from 'qx';
 import { ISelectorOption } from '~/ui-common';
 import { GeneralSelector, GeneralButton } from '~/ui-common/components';
 

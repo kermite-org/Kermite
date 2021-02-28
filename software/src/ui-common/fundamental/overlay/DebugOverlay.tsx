@@ -1,5 +1,4 @@
-import { h } from 'qx';
-import { css } from 'qx/cssinjs';
+import { h, css } from 'qx';
 import { appUi } from '~/ui-common/base';
 import { useLocal } from '~/ui-common/helpers';
 

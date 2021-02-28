@@ -1,5 +1,4 @@
-import { h, Hook } from 'qx';
-import { applyGlobalStyle, css, setup } from 'qx/cssinjs';
+import { h, Hook, applyGlobalStyle, css } from 'qx';
 import { router } from '~/ui-common';
 import { globalHintMouseMoveHandlerEffect } from '~/ui-common/base/GlobalHint';
 import { DebugOverlay } from '~/ui-common/fundamental/overlay/DebugOverlay';
@@ -10,8 +9,6 @@ import { globalAppServicesInitializerEffect } from '~/ui-root/models/AppServices
 import { SiteDpiScaler } from '~/ui-root/views/window/SiteDpiScaler';
 import { WidgetZoneRoot } from '~/ui-widget';
 import { ConfiguratorZoneRoot } from './ConfiguratorZoneRoot';
-
-setup(h);
 
 const cssGlobal = css`
   * {

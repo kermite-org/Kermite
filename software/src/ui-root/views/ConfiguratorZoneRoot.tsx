@@ -1,5 +1,4 @@
-import { h } from 'qx';
-import { css } from 'qx/cssinjs';
+import { h, css } from 'qx';
 import { appUi, router, uiTheme } from '~/ui-common';
 import { EditorPage } from '~/ui-editor-page/EditorPage';
 import { FirmwareUpdationPage } from '~/ui-firmware-updation-page';

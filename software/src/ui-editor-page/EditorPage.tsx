@@ -1,5 +1,4 @@
-import { h } from 'qx';
-import { css } from 'qx/cssinjs';
+import { h, css } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { DeviceControlSection } from './DeviceControl/DeviceControlSection';
 import { ProfileConfigratuionModalLayer } from './EditorMainPart/views/modals/ProfileConfigurationPart';

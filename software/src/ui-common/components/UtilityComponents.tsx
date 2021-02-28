@@ -1,4 +1,4 @@
-import { styled } from 'qx/cssinjs';
+import { styled } from 'qx';
 
 export const HFlex = styled.div`
   display: flex;

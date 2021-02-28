@@ -1,9 +1,6 @@
-import { h } from 'qx';
-import { applyGlobalStyle, css, setup } from 'qx/cssinjs';
+import { applyGlobalStyle, css } from 'qx';
 
 export function initializeCss() {
-  setup(h);
-
   applyGlobalStyle(css`
     * {
       margin: 0;

@@ -1,5 +1,4 @@
-import { h } from 'qx';
-import { css } from 'qx/cssinjs';
+import { h, css } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { makePresetBrowserViewModel } from '~/ui-preset-browser-page/viewModels/PresetBrowserViewModel';
 import { PresetKeyboardSection } from '~/ui-preset-browser-page/views/PresetKeyboardSection';

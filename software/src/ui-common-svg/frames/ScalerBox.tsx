@@ -1,5 +1,4 @@
-import { h, Hook, asyncRerender } from 'qx';
-import { css } from 'qx/cssinjs';
+import { h, Hook, asyncRerender, css } from 'qx';
 import { useLocal } from '~/ui-common';
 
 const cssBase = css`

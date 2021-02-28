@@ -1,5 +1,4 @@
-import { h } from 'qx';
-import { css } from 'qx/cssinjs';
+import { h, css } from 'qx';
 import { editReader } from '~/ui-layouter/editor/store';
 import { DesignConfigurationPanel } from '~/ui-layouter/editor/views/SidePanels/organisms/DesignConfigurationPanel';
 import { KeyEntityEditPanel } from '~/ui-layouter/editor/views/SidePanels/organisms/KeyEntityEditPanel';

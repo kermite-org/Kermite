@@ -1,5 +1,4 @@
-import { h, FC, Hook } from 'qx';
-import { css, setup, styled } from 'qx/cssinjs';
+import { h, FC, Hook, css, styled } from 'qx';
 import { ISelectorOption, uiTheme } from '~/ui-common';
 import {
   GeneralButton,
@@ -14,8 +13,6 @@ import {
   OperationButtonWithIcon,
   SmallSymbolicActionButton,
 } from '~/ui-common/components/fabrics';
-
-setup(h);
 
 const cssRoot = css`
   height: 100%;

@@ -1,5 +1,4 @@
-import { h, rerender } from 'qx';
-import { css } from 'qx/cssinjs';
+import { h, rerender, css } from 'qx';
 import { degToRad } from '~/shared';
 import { getKeySize } from '~/shared/modules/PlacementUnitHelper';
 import { uiTheme } from '~/ui-common';

@@ -1,7 +1,4 @@
-import { h, Hook, rerender } from 'qx';
-import { css, applyGlobalStyle, setup, styled } from 'qx/cssinjs';
-
-setup(h);
+import { h, Hook, rerender, css, applyGlobalStyle, styled } from 'qx';
 
 const cssRoot = css`
   border: solid 4px orange;

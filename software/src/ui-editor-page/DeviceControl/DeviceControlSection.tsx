@@ -1,5 +1,4 @@
-import { h } from 'qx';
-import { css } from 'qx/cssinjs';
+import { h, css } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { makeDeviceControlSectionViewModel } from '~/ui-editor-page/DeviceControl/DeviceControlSectionViewModel';
 import { LinkIndicator } from '~/ui-editor-page/components/controls/LinkIndicator';

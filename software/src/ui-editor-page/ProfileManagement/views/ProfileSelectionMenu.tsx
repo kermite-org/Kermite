@@ -1,5 +1,4 @@
-import { h } from 'qx';
-import { css } from 'qx/cssinjs';
+import { h, css } from 'qx';
 import { IProfileSelectionMenuPartViewModel } from '~/ui-editor-page/ProfileManagement/viewModels/ProfileSelectionMenuPartViewModel';
 
 const cssProfileSelectionMenuPart = css``;

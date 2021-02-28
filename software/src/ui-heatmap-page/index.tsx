@@ -1,5 +1,4 @@
-import { h, Hook } from 'qx';
-import { css } from 'qx/cssinjs';
+import { h, Hook, css } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { HeatmapKeyboardView } from '~/ui-common-svg/panels/HeatmapKeyboardView';
 import { GeneralButton } from '~/ui-common/components';

@@ -1,5 +1,4 @@
-import { h, Hook } from 'qx';
-import { css } from 'qx/cssinjs';
+import { h, Hook, css } from 'qx';
 import { EditorKeyboardView } from '~/ui-common-svg/panels/EditorKeyboardView';
 import { PlayerModel } from '~/ui-common/sharedModels/PlayerModel';
 import { makeEditKeyUnitCardsPartViewModel } from '~/ui-editor-page/EditorMainPart/EditKeyUnitCardsPartViewModel';

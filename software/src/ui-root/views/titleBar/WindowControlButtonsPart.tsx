@@ -1,5 +1,4 @@
-import { h } from 'qx';
-import { css } from 'qx/cssinjs';
+import { h, css } from 'qx';
 import { makeWindowControlButtonsModel } from '~/ui-root/views/titleBar/WindowControlButtonsPart.model';
 import { WindowControlButton } from './elements/WindowControlButton';
 import { WindowRestartButton } from './elements/WindowRestartButton';

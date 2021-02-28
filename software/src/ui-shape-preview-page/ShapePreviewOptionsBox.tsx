@@ -1,5 +1,4 @@
-import { h } from 'qx';
-import { css } from 'qx/cssinjs';
+import { h, css } from 'qx';
 import { fieldSetter } from '~/ui-common';
 import { CheckBoxLine } from '~/ui-common/components';
 import { IShapeViewPersistState } from '~/ui-shape-preview-page/ShapePreviewPageState';

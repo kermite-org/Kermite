@@ -1,5 +1,4 @@
-import { h } from 'qx';
-import { css } from 'qx/cssinjs';
+import { h, css } from 'qx';
 import { PresetKeyboardView } from '~/ui-common-svg/panels/PresetKeyboardView';
 import { IPresetBrowserViewModel } from '~/ui-preset-browser-page/viewModels/PresetBrowserViewModel';
 import { PresetLayersBox } from '~/ui-preset-browser-page/views/PresetLayersBox';

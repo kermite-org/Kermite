@@ -1,5 +1,4 @@
-import { h } from 'qx';
-import { css } from 'qx/cssinjs';
+import { h, css } from 'qx';
 import { IDisplayKeyShape } from '~/shared';
 import { KeyUnitShape } from '~/ui-common-svg/KeyUnitCards/KeyUnitShape';
 

@@ -1,5 +1,4 @@
-import { h } from 'qx';
-import { css } from 'qx/cssinjs';
+import { h, css } from 'qx';
 import { IPlainOperationEditCardsViewModel } from '~/ui-editor-page/EditorMainPart/viewModels/OperationEditPartViewModel';
 import { IOperationSlotsPartViewModel } from '~/ui-editor-page/EditorMainPart/viewModels/OperationSlotsPartViewModel';
 import { OperationCard } from '~/ui-editor-page/components/elements/OperationCard';

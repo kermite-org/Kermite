@@ -1,5 +1,4 @@
-import { h, Hook, QxChild, QxChildren } from 'qx';
-import { css } from 'qx/cssinjs';
+import { h, Hook, QxChild, QxChildren, css } from 'qx';
 import { useLocal } from '~/ui-common';
 
 const Hello = () => <div>hello</div>;
