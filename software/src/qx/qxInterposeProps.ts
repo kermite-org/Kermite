@@ -55,19 +55,19 @@ export function qxInterposeProps(
       props.class ||
       props.className ||
       props.classNames ||
-      props.xw
+      props.xs
     ) {
       const classNamesArray = extractClassNamesToArray(props.classNames);
-      const xwClassName =
-        props.xw &&
+      const xsClassName =
+        props.xs &&
         css`
-          ${extractShortCss(props.xw)}
+          ${extractShortCss(props.xs)}
         `;
       const classes = [
         props.css,
         props.class,
         props.className,
-        xwClassName,
+        xsClassName,
         ...classNamesArray,
       ]
         .filter((a) => !!a)
@@ -75,7 +75,7 @@ export function qxInterposeProps(
       delete props.css;
       delete props.className;
       delete props.classNames;
-      delete props.xw;
+      delete props.xs;
       props.class = classes;
     }
     if (props.style && typeof props.style === 'object') {
