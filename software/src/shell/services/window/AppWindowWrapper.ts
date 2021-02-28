@@ -291,6 +291,8 @@ export class AppWindowWrapper implements IAppWindowWrapper {
       windowStateSchema,
       makeFallbackWindowPersistState,
     );
+    // this.state.isDevtoolsVisible = true; // debug
+
     preparePreloadJsFile(appConfig.preloadFilePath);
     this.openMainWindow();
     this.setupMenu();
