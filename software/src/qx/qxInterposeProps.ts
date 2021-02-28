@@ -75,6 +75,7 @@ export function qxInterposeProps(
       delete props.css;
       delete props.className;
       delete props.classNames;
+      delete props.xw;
       props.class = classes;
     }
     if (props.style && typeof props.style === 'object') {
