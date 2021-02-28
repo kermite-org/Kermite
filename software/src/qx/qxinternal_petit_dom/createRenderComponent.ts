@@ -9,7 +9,7 @@ import {
   flushHookEffects,
   IHookInstance,
   startHooks,
-} from './hookImpl2';
+} from './hookImpl';
 // import {
 //   createHookInstance,
 //   IHook,

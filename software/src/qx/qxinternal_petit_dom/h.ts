@@ -45,7 +45,7 @@ export function h(
       vtype: VTYPE_ELEMENT,
       type,
       key,
-      props,
+      props: { ...props, children: undefined },
       children: maybeFlattenArray(children),
     };
   } else if (isValidComponentType(type)) {

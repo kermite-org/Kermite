@@ -1,5 +1,5 @@
 import { css, setup, styled } from 'goober';
-import { h, FC } from 'qx';
+import { h, FC, QxChildren } from 'qx';
 
 setup(h);
 
@@ -76,13 +76,36 @@ const UserNameView: FC<IUserNameViewProps> = ({ userName }) => {
   return <div>hello {userName}</div>;
 };
 
-export const GooberDevelopmentPage = () => {
+const Frame0: FC<{ children?: QxChildren }> = ({ children }) => {
+  console.log({ children });
+  return <div style={{ border: 'solid 1px purple' }}>{children}</div>;
+};
+
+const Frame = styled('div')`
+  border: solid 1px #f08;
+`;
+
+const GooberStyledDev = () => (
+  <div>
+    <Frame0>
+      <div>foo0</div>
+      <div>bar0</div>
+    </Frame0>
+    <Frame>
+      <div>foo</div>
+      <div>bar</div>
+    </Frame>
+  </div>
+);
+
+export const GooberDevelopmentPage2 = () => {
   return (
     <div css={cssRoot}>
       <div css={cssHeader}>hello</div>
       <Header2>world</Header2>
       <StyledMyButton text="test" />
       <MultipleClassNameTestCard1 />
+      <GooberStyledDev />
       <UserNameView userName="yamada" />
     </div>
   );

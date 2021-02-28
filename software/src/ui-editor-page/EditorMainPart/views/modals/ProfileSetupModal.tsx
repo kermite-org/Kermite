@@ -134,16 +134,16 @@ function useProfileSetupModalViewModel(): IProfileSetupModalViewModel {
   );
   const projectOptions = useMemoEx(makeProjectOptions, [resourceInfos]);
 
+  Hook.useInlineEffect(() => {
+    editValues.projectKey = projectOptions[0]?.value || '';
+  }, [projectOptions]);
+
   const layoutOptions = useMemoEx(makeLayoutOptions, [
     resourceInfos,
     editValues.projectKey,
   ]);
 
-  Hook.useEffect(() => {
-    editValues.projectKey = projectOptions[0]?.value || '';
-  }, [projectOptions]);
-
-  Hook.useEffect(() => {
+  Hook.useInlineEffect(() => {
     editValues.layoutKey = layoutOptions[0]?.value || '';
   }, [layoutOptions]);
 
