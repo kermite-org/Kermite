@@ -1,6 +1,6 @@
 import { IntervalTimerWrapper } from '~/shared';
 import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
-import { createEventPort2 } from '~/shell/funcs';
+import { createEventPort } from '~/shell/funcs';
 import { ComPortsResource } from './ComPortsResource';
 
 interface IComPortEvent {
@@ -12,7 +12,7 @@ export class ComPortsMonitor {
   private activeComPortName: string | undefined = undefined;
   private comPortEnumerationStartTime: number = 0;
 
-  comPortPlugEvents = createEventPort2<IComPortEvent>({
+  comPortPlugEvents = createEventPort<IComPortEvent>({
     onFirstSubscriptionStarting: () => this.initializeTicker(),
     onLastSubscriptionEnded: () => this.terminateTicker(),
   });

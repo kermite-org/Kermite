@@ -2,6 +2,7 @@ import {
   IPersistKeyboardDesign,
   IProfileData,
   IProjectResourceInfo,
+  IResourceOrigin,
 } from '~/shared';
 import { createProjectSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { appEnv } from '~/shell/base';
@@ -20,8 +21,17 @@ import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
 import { IProjectResourceProviderImpl } from '~/shell/projectResources/interfaces';
 import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
-import { IProjectResourceInfoSource } from './ProjectResource/ProjectResourceInfoSourceLoader';
 
+interface IProjectResourceInfoSource {
+  projectId: string;
+  keyboardName: string;
+  projectPath: string;
+  projectFolderPath: string;
+  layoutNames: string[];
+  presetNames: string[];
+  hexFilePath?: string;
+  origin: IResourceOrigin;
+}
 namespace ProjectResourceInfoSourceLoader {
   interface IPorjectFileJson {
     projectId: string;
@@ -246,6 +256,7 @@ export class ProjectResourceProviderImpl_Local
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   async loadProjectFirmwareFile(
     projectId: string,
   ): Promise<string | undefined> {

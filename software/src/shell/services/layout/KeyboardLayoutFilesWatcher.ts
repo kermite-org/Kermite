@@ -6,7 +6,7 @@ import {
   pathDirname,
   fsExistsSync,
   fsxWatchFilesChange,
-  createEventPort2,
+  createEventPort,
 } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
 
@@ -17,7 +17,7 @@ export class KeyboardLayoutFilesWatcher {
 
   private watcher: FSWatcher | undefined;
 
-  fileUpdationEvents = createEventPort2<IFileUpdationEvent>({
+  fileUpdationEvents = createEventPort<IFileUpdationEvent>({
     onFirstSubscriptionStarting: () => this.initializeWatcher(),
     onLastSubscriptionEnded: () => this.terminateWatcher(),
   });

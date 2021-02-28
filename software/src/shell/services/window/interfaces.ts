@@ -1,6 +1,6 @@
 import { IAppWindowStatus } from '~/shared';
 import { IListenerPort } from '~/shell/base';
-import { IEventPort2 } from '~/shell/funcs';
+import { IEventPort } from '~/shell/funcs';
 
 export interface IMenuManager {
   buildMenu(): void;
@@ -16,7 +16,7 @@ export interface IAppWindowWrapper {
   setDevToolsVisibility(visible: boolean): void;
   minimizeMainWindow(): void;
   maximizeMainWindow(): void;
-  appWindowEventPort: IEventPort2<Partial<IAppWindowStatus>>;
+  appWindowEventPort: IEventPort<Partial<IAppWindowStatus>>;
   restartApplication(): void;
   // onPageLoaded: IListenerPort<string>;
 }

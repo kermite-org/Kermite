@@ -16,7 +16,7 @@ import {
   vValueEquals,
 } from '~/shared/modules/SchemaValidationHelper';
 import { applicationStorage } from '~/shell/base';
-import { createEventPort2 } from '~/shell/funcs';
+import { createEventPort } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
 import { ProfileManagerCore } from './ProfileManagerCore';
 import { IPresetProfileLoader, IProfileManager } from './interfaces';
@@ -65,7 +65,7 @@ export class ProfileManager implements IProfileManager {
     this.core = new ProfileManagerCore();
   }
 
-  statusEventPort = createEventPort2<Partial<IProfileManagerStatus>>({
+  statusEventPort = createEventPort<Partial<IProfileManagerStatus>>({
     onFirstSubscriptionStarting: () => this.lazyInitializer(),
     initialValueGetter: () => this.status,
   });

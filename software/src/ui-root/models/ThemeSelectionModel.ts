@@ -1,35 +1,23 @@
-import {
-  ipcAgent,
-  themeColors,
-  ThemeKey,
-  uiThemeConfigLoader,
-} from '~/ui-common';
+import { Hook } from 'qx';
+import { ipcAgent, ThemeKey, uiThemeConfigLoader } from '~/ui-common';
 
-const allThemeKeys = Object.keys(themeColors) as ThemeKey[];
-
-export class ThemeSelectionModel {
-  private currentThemeKey: ThemeKey = 'light';
-
-  get currentTheme() {
-    return this.currentThemeKey;
-  }
-
-  get themeOptions() {
-    return allThemeKeys;
-  }
-
-  changeTheme = (themeKey: ThemeKey) => {
-    if (themeKey !== this.currentThemeKey) {
-      uiThemeConfigLoader.saveThemeKey(themeKey);
-      location.reload(); // Windowsの場合にうまくリロードされずにページが真っ白になってしまう問題がある
-      ipcAgent.async.window_reloadPage();
-    }
-  };
-
-  initialize() {
-    this.currentThemeKey = uiThemeConfigLoader.loadThemeKey();
-  }
+interface IThemeSelectionModel {
+  currentThemeKey: ThemeKey;
+  // themeOptions: ThemeKey[];
+  changeTheme(themeKey: ThemeKey): void;
 }
 
-export const themeSelectionModel = new ThemeSelectionModel();
-themeSelectionModel.initialize();
+export function useThemeSelectionModel(): IThemeSelectionModel {
+  const currentThemeKey = Hook.useMemo(uiThemeConfigLoader.loadThemeKey, []);
+  return {
+    currentThemeKey,
+    // themeOptions: Object.keys(themeColors) as ThemeKey[],
+    changeTheme: (themeKey: ThemeKey) => {
+      if (themeKey !== currentThemeKey) {
+        uiThemeConfigLoader.saveThemeKey(themeKey);
+        // location.reload(); // Windowsの場合にうまくリロードされずにページが真っ白になってしまう問題がある
+        ipcAgent.async.window_reloadPage();
+      }
+    },
+  };
+}

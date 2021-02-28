@@ -7,13 +7,13 @@ import { usePresetSelectionModel } from '~/ui-preset-browser-page/models/PresetS
 import { editSelectedProjectPreset } from '~/ui-preset-browser-page/models/ProfileCreator';
 import { useProfileDataLoaded } from '~/ui-preset-browser-page/models/ProfileDataLoader';
 import {
-  IPrsetLayerListViewModel,
+  IPresetLayerListViewModel,
   makePresetKeyboardViewModel,
 } from './PresetKeyboardViewModel';
 
 export interface IPresetBrowserViewModel {
   keyboard: IPresetKeyboardViewModel;
-  layerList: IPrsetLayerListViewModel;
+  layerList: IPresetLayerListViewModel;
   projectSelectorSource: ISelectorSource;
   presetSelectorSource: ISelectorSource;
   isLinkButtonActive: boolean;

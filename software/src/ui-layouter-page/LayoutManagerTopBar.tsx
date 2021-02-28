@@ -8,7 +8,7 @@ import {
 import { LayoutManagerButton } from '~/ui-layouter-page/LayoutManagerButton';
 import { LayoutManagerMenu } from '~/ui-layouter-page/LayoutManagerMenu';
 import { useLayoutManagerViewModel } from '~/ui-layouter-page/LayoutManagerViewModel';
-import { makeLayoutSelectorModelViewModel } from '~/ui-layouter-page/ProjectLayoutSelectorModalViewModel';
+import { makeLayoutSelectorModalViewModel } from '~/ui-layouter-page/ProjectLayoutSelectorModalViewModel';
 
 const cssLayoutManagementBar = css`
   color: ${uiTheme.colors.clMainText};
@@ -35,7 +35,7 @@ const cssLayoutManagementBar = css`
 
 export const LayoutManagerTopBar = () => {
   const vm = useLayoutManagerViewModel();
-  const modalVm = makeLayoutSelectorModelViewModel(vm);
+  const modalVm = makeLayoutSelectorModalViewModel(vm);
   return (
     <div css={cssLayoutManagementBar}>
       <LayoutManagerMenu baseVm={vm} />

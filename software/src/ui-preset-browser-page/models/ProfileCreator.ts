@@ -41,7 +41,7 @@ function createProfile(
   ipcAgent.async.profile_executeProfileManagerCommands([createCommand]);
 }
 
-export async function editSelectedProjectPreset(
+export function editSelectedProjectPreset(
   projectKey: string,
   presetKey: string,
 ) {

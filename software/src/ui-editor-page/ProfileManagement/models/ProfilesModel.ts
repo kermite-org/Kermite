@@ -127,7 +127,7 @@ export class ProfilesModel {
     }
   };
 
-  deleteProfile = async () => {
+  deleteProfile = () => {
     const curProfName = this.currentProfileName;
     const deleteCommand = { deleteProfile: { name: curProfName } };
     this.sendProfileManagerCommands(deleteCommand);

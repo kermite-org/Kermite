@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/require-await */
 import { getAppErrorData, IPresetSpec, makeCompactStackTrace } from '~/shared';
 import { appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
-import { KeyboardLayoutFilesWatcher } from '~/shell/projectResources/KeyboardShape/KeyboardLayoutFilesWatcher';
 import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
 import { KeyMappingEmitter } from '~/shell/services/device/KeyMappingEmitter';
@@ -11,6 +11,7 @@ import { KeyboardDeviceService } from '~/shell/services/device/KeyboardDevice';
 import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStatic';
 import { FirmwareUpdationService } from '~/shell/services/firmwareUpdation';
 import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/InputLogicSimulatorD';
+import { KeyboardLayoutFilesWatcher } from '~/shell/services/layout/KeyboardLayoutFilesWatcher';
 import { LayoutManager } from '~/shell/services/layout/LayoutManager';
 import { PresetProfileLoader } from '~/shell/services/profile/PresetProfileLoader';
 import { ProfileManager } from '~/shell/services/profile/ProfileManager';
@@ -55,15 +56,12 @@ export class ApplicationRoot {
     });
 
     appGlobal.icpMainAgent.supplySyncHandlers({
-      dev_getVersionSync: () => 'v100',
       dev_debugMessage: (msg) => console.log(`[renderer] ${msg}`),
       config_saveKeyboardConfigOnClosing: (data) =>
         this.keyboardConfigProvider.writeKeyboardConfig(data),
     });
 
     appGlobal.icpMainAgent.supplyAsyncHandlers({
-      dev_getVersion: async () => 'v100',
-      dev_addNumber: async (a: number, b: number) => a + b,
       window_closeWindow: async () => windowWrapper.closeMainWindow(),
       window_minimizeWindow: async () => windowWrapper.minimizeMainWindow(),
       window_maximizeWindow: async () => windowWrapper.maximizeMainWindow(),
@@ -145,7 +143,8 @@ export class ApplicationRoot {
         JsonFileServiceStatic.saveObjectToJsonWithFileDialog,
       file_getOpenDirectoryWithDialog:
         JsonFileServiceStatic.getOpeningDirectoryPathWithDialog,
-      global_triggerLazyInitializeServices: () => this.lazyInitialzeServices(),
+      global_triggerLazyInitializeServices: async () =>
+        this.lazyInitialzeServices(),
     });
 
     appGlobal.icpMainAgent.supplySubscriptionHandlers({
@@ -189,7 +188,7 @@ export class ApplicationRoot {
   }
 
   private _lazyInitializeTriggered = false;
-  async lazyInitialzeServices() {
+  lazyInitialzeServices() {
     if (!this._lazyInitializeTriggered) {
       this._lazyInitializeTriggered = true;
       this.deviceService.initialize();
