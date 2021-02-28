@@ -189,7 +189,7 @@ export function applyGlobalStyle(className: string) {
 }
 
 let jsxCreateElementFunction: Function;
-export function setup(pragma: Function): void {
+export function setJsxCreateElementFunction(pragma: Function): void {
   jsxCreateElementFunction = pragma;
 }
 

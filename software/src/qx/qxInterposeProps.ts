@@ -1,6 +1,6 @@
-import { css } from 'qx/cssinjs';
-import { extractShortCss } from 'qx/shortCss';
+import { css } from './cssinjs';
 import { qxGlobal } from './qxGlobal';
+import { extractShortCss } from './shortCss';
 
 function camelCaseToHyphenCase(str: string) {
   return str.replace(/[A-Z]/g, (s) => '-' + s.charAt(0).toLowerCase());
