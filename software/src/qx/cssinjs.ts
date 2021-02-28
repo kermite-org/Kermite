@@ -109,11 +109,11 @@ const classNameIndexTable: { [key: string]: number } = {};
 
 const getUniqueClassName = (cssText: string, label?: string) => {
   let index = classNameIndexTable[cssText];
-  if (!index) {
+  if (index === undefined) {
     index = classNameIndexTable[cssText] = seqClassNameIndex++;
   }
-  const prefix = 'go';
-  return label ? `${prefix}${index}_${label}` : `${prefix}_${index}`;
+  const prefix = 'cs';
+  return label ? `${prefix}${index}_${label}` : `${prefix}${index}`;
 };
 
 interface ILocalSheet {
@@ -126,7 +126,7 @@ function getLocalSheet(): ILocalSheet {
   if (!gSheet) {
     gSheet = document.createElement('style');
     gSheet.innerHTML = ' ';
-    gSheet.id = '_goober_ex';
+    gSheet.id = 'qx_css_in_js';
     document.head.appendChild(gSheet);
   }
   return gSheet.firstChild as any;
