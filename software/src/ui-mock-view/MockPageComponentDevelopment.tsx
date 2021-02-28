@@ -1,4 +1,4 @@
-import { h, FC, Hook, css, styled } from 'qx';
+import { jsx, FC, Hook, css, styled } from 'qx';
 import { ISelectorOption, uiTheme } from '~/ui-common';
 import {
   GeneralButton,

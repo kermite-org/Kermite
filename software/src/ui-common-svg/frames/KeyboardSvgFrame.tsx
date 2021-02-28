@@ -1,4 +1,4 @@
-import { h, css } from 'qx';
+import { jsx, css } from 'qx';
 import { IDisplayArea } from '~/shared';
 
 function getViewBox(da: IDisplayArea) {

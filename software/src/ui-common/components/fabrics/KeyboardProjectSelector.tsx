@@ -1,4 +1,4 @@
-import { h, css } from 'qx';
+import { jsx, css } from 'qx';
 import { ISelectorSource } from '~/ui-common';
 import { GeneralButton } from '../controls/GeneralButton';
 import { GeneralSelector } from '../controls/GeneralSelector';

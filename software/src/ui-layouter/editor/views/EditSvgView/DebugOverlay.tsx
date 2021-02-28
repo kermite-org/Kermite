@@ -1,4 +1,4 @@
-import { h, css } from 'qx';
+import { jsx, css } from 'qx';
 import { layouterAppGlobal } from '~/ui-layouter/base';
 
 export const DebugOverlay = () => {

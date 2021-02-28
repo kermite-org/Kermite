@@ -1,4 +1,4 @@
-import { h, Hook, css } from 'qx';
+import { jsx, Hook, css } from 'qx';
 import {
   createFallbackDisplayKeyboardDesign,
   IDisplayKeyboardDesign,

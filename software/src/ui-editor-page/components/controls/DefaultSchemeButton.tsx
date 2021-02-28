@@ -1,4 +1,4 @@
-import { h, css } from 'qx';
+import { jsx, css } from 'qx';
 import { ILayerDefaultScheme } from '~/shared';
 
 export const DefaultSchemeButton = (props: {

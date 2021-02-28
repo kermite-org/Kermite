@@ -1,4 +1,4 @@
-import { h, Hook } from 'qx';
+import { jsx, Hook } from 'qx';
 import { IPersistKeyboardDesign } from '~/shared';
 import { windowKeyboardEventEffect } from '~/ui-common/helpers';
 import { editMutations, editReader } from '~/ui-layouter/editor/store';

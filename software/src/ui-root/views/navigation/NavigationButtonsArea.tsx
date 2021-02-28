@@ -1,4 +1,4 @@
-import { h, css } from 'qx';
+import { jsx, css } from 'qx';
 import { makeNavigationViewModel } from '~/ui-root/views/navigation/NavigationButtonsArea.model';
 import { NavigationButton } from './elements/NavigationButton';
 

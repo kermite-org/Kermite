@@ -1,4 +1,4 @@
-import { h, css } from 'qx';
+import { jsx, css } from 'qx';
 
 export const WindowRestartButton = (props: { handler: () => void }) => {
   const cssReloadButton = css`

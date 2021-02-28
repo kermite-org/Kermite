@@ -1,4 +1,4 @@
-import { h, css } from 'qx';
+import { jsx, css } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { PreviewKeyboardShapeView } from '~/ui-common-svg/panels/PreviewKeyboardShapeView';
 import { GeneralSelector } from '~/ui-common/components';

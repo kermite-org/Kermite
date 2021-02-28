@@ -1,4 +1,4 @@
-import { h, css } from 'qx';
+import { jsx, css } from 'qx';
 import { useLocal } from '~/ui-common/helpers';
 
 export function ClosableOverlay(props: {

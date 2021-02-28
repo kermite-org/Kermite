@@ -1,4 +1,4 @@
-import { h, css } from 'qx';
+import { jsx, css } from 'qx';
 import { ICommonSelectorViewModel } from '~/ui-common';
 import { RibbonSelector } from '~/ui-common/components';
 import {

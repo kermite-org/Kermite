@@ -1,4 +1,4 @@
-import { h } from 'qx';
+import { jsx } from 'qx';
 import { IDisplayArea } from '~/shared';
 
 export const PreviewDisplayAreaBox = (props: { dispalyArea: IDisplayArea }) => {

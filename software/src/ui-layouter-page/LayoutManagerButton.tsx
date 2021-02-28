@@ -1,4 +1,4 @@
-import { h, css } from 'qx';
+import { jsx, css } from 'qx';
 
 const cssLayoutManagerButton = css`
   border: solid 1px #048;

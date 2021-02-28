@@ -1,4 +1,4 @@
-import { h, render } from 'qx';
+import { jsx, render } from 'qx';
 import { debounce } from '~/shared';
 import { appUi } from '~/ui-common';
 import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';

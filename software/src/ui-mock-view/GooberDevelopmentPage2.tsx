@@ -1,4 +1,4 @@
-import { h, FC, QxChildren, css, styled } from 'qx';
+import { jsx, FC, QxChildren, css, styled } from 'qx';
 
 const cssRoot = css`
   border: solid 4px orange;

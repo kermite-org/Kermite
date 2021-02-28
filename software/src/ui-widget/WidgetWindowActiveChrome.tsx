@@ -1,4 +1,4 @@
-import { h, css } from 'qx';
+import { jsx, css } from 'qx';
 
 export const WidgetWindowActiveChrome = () => {
   const cssBase = css`

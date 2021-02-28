@@ -1,4 +1,4 @@
-import { h, css } from 'qx';
+import { jsx, css } from 'qx';
 import { Icon } from '~/ui-common/components';
 import { NavigationEntryViewModel } from '~/ui-root/views/navigation/NavigationButtonsArea.model';
 

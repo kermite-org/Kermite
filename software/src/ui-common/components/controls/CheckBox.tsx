@@ -1,4 +1,4 @@
-import { FC, h, css } from 'qx';
+import { FC, jsx, css } from 'qx';
 import { uiTheme } from '~/ui-common/base';
 
 interface Props {

@@ -1,4 +1,4 @@
-import { h, css } from 'qx';
+import { jsx, css } from 'qx';
 import { WidgetSvgKeyboardView } from '~/ui-common-svg/panels/WidgetSvgKeyboardView';
 import { siteModel } from '~/ui-common/sharedModels/SiteModel';
 import { makeWidgetMainPageViewModel } from '~/ui-widget/WidgetMainPageViewModel';

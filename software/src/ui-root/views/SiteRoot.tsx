@@ -1,4 +1,4 @@
-import { h, Hook, applyGlobalStyle, css } from 'qx';
+import { jsx, Hook, applyGlobalStyle, css } from 'qx';
 import { router } from '~/ui-common';
 import { globalHintMouseMoveHandlerEffect } from '~/ui-common/base/GlobalHint';
 import { DebugOverlay } from '~/ui-common/fundamental/overlay/DebugOverlay';

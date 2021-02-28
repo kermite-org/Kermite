@@ -1,4 +1,4 @@
-import { h, Hook, css } from 'qx';
+import { jsx, Hook, css } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { GeneralButton, GeneralSelector } from '~/ui-common/components';
 import { firmwareUpdationModel } from './FirmwareUpdationModel';

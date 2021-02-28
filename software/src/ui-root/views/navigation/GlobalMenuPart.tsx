@@ -1,4 +1,4 @@
-import { h, css } from 'qx';
+import { jsx, css } from 'qx';
 import { makeGlobalMenuViewModel } from '~/ui-root/views/navigation/GlobalMenuPart.model';
 
 const cssGlobalMenuPart = css``;

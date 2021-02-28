@@ -1,4 +1,4 @@
-import { h, Hook, rerender, css, applyGlobalStyle, styled } from 'qx';
+import { jsx, Hook, rerender, css, applyGlobalStyle, styled } from 'qx';
 
 const cssRoot = css`
   border: solid 4px orange;

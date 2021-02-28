@@ -1,4 +1,4 @@
-import { h } from 'qx';
+import { jsx } from 'qx';
 import { IDisplayKeyboardDesign } from '~/shared';
 import { uiTheme } from '~/ui-common';
 import {

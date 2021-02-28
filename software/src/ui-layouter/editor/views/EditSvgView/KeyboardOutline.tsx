@@ -1,4 +1,4 @@
-import { rerender, h, css } from 'qx';
+import { rerender, jsx, css } from 'qx';
 import { degToRad } from '~/shared';
 import { makeCssColor, uiTheme } from '~/ui-common';
 import { IPosition, startDragSession } from '~/ui-layouter/base';

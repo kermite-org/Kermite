@@ -1,4 +1,4 @@
-import { FC, h, Hook, css } from 'qx';
+import { FC, jsx, Hook, css } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { Icon } from '~/ui-common/components';
 

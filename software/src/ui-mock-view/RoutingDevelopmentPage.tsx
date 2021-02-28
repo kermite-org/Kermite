@@ -1,4 +1,4 @@
-import { FC, h, Hook, css } from 'qx';
+import { FC, jsx, Hook, css } from 'qx';
 import { Link, linkTo, router } from '~/ui-common/base';
 
 const cssNavBox = css`

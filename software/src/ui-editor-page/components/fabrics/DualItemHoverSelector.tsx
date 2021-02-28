@@ -1,4 +1,4 @@
-import { h, css } from 'qx';
+import { jsx, css } from 'qx';
 
 interface IDualItemsHoverSelectorProps<T extends string> {
   items: T[];

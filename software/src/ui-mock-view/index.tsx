@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { h, render, rerender } from 'qx';
+import { jsx, render, rerender } from 'qx';
 import { debounce } from '~/shared';
 import { UiLayouterPageComponent } from '~/ui-layouter-page';
 import { GooberDevelopmentPage } from '~/ui-mock-view/GooberDevelopmentPage';

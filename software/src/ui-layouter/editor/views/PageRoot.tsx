@@ -1,4 +1,4 @@
-import { h, css } from 'qx';
+import { jsx, css } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { EditSvgViewContainer } from '~/ui-layouter/editor/views/EditSvgView';
 import { EditorSideColumnContent } from '~/ui-layouter/editor/views/SidePanels';

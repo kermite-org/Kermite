@@ -1,4 +1,4 @@
-import { h, css } from 'qx';
+import { jsx, css } from 'qx';
 import { IDisplayArea } from '~/shared';
 import { KeyboardSvgFrame } from '~/ui-common-svg/frames/KeyboardSvgFrame';
 import { ScalerBox } from '~/ui-common-svg/frames/ScalerBox';

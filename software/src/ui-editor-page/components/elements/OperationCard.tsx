@@ -1,4 +1,4 @@
-import { h, css } from 'qx';
+import { jsx, css } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { IOperationCardViewModel } from '~/ui-editor-page/EditorMainPart/viewModels/OperationEditPartViewModel';
 

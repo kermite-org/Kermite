@@ -1,4 +1,4 @@
-import { h, css } from 'qx';
+import { jsx, css } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { WindowControlButtonsPart } from './WindowControlButtonsPart';
 import { WindowTitlePart } from './elements/WindowTitlePart';

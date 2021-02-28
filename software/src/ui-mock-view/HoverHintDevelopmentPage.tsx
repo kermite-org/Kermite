@@ -1,4 +1,4 @@
-import { h, css } from 'qx';
+import { jsx, css } from 'qx';
 
 const globalHintMouseMoveHandler = (e: MouseEvent) => {
   const el = e.target as HTMLElement;

@@ -1,4 +1,4 @@
-import { h, setShortCssProcessor, css } from 'qx';
+import { jsx, setShortCssProcessor, css } from 'qx';
 import { shortCssProcessor } from '~/ui-common/base';
 
 const cssRoot = css`

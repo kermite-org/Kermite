@@ -1,4 +1,4 @@
-import { h } from 'qx';
+import { jsx } from 'qx';
 import { CheckBox, HFlex } from '~/ui-common/components';
 import {
   ConfigSubContent,

@@ -1,4 +1,4 @@
-import { h, Hook } from 'qx';
+import { jsx, Hook } from 'qx';
 import { UiLayouterCore } from '~/ui-layouter';
 import {
   loadLocalStorageKeyboardDesignOrDefault,

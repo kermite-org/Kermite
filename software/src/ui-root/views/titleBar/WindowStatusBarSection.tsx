@@ -1,4 +1,4 @@
-import { h, css } from 'qx';
+import { jsx, css } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { GlobalHintDisplayText } from '~/ui-common/base/GlobalHint';
 import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
