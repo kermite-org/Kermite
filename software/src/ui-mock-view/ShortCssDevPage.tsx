@@ -12,14 +12,20 @@ export const ShortCssDevPage = () => {
   console.log('render');
   return (
     <div css={cssRoot}>
-      <div xw="m[10px] p-20px col(red) border-d1-blue">aaa</div>
-      <div xw="bg(#FEE) mt-20px p-10px mb-10px">bbb</div>
-      <div xw="flex border-s1-blue p-8px gap-8px">
-        <div xw="border-s1-red w-40px h-40px" />
-        <div xw="border-s1-red w-40px h-40px" />
-        <div xw="border-s1-red w-40px h-40px" />
+      <div xw="margin(10px) padding(20px) color(red) border(solid 1px red)">
+        aaa
       </div>
-      <div xw="w-80px h-80px centerFlex border-s1-green">aaa</div>
+      <div xw="background(#FEE) marginTop(20px) padding(10px) marginBottom(10px)">
+        bbb
+      </div>
+      <div xw="display(flex) border(solid 1px blue) padding(8px) gap(8px)">
+        <div xw="border(solid 1px red) width(40px) height(40px)" />
+        <div xw="border(solid 1px red) width(40px) height(40px)" />
+        <div xw="border(solid 1px red) width(40px) height(40px)" />
+      </div>
+      <div xw="width(80px) height(80px) $centerFlex border(solid 1px green)">
+        aaa
+      </div>
     </div>
   );
 };

@@ -19,7 +19,7 @@ function attrName(text: string) {
   return attributeNameMappers[text] || text;
 }
 
-export function shortCssProcessor(source: string): string {
+export function shortCssProcessor0_deprecated(source: string): string {
   let text = source;
 
   let parts = text.split(' ');
@@ -45,4 +45,28 @@ export function shortCssProcessor(source: string): string {
   );
   text = parts.join(' ');
   return text;
+}
+
+const predefinedMacros: { [key: string]: string } = {
+  $centerFlex: 'display flex; justify-content: center; align-items: center;',
+};
+
+export function shortCssProcessor(source: string): string {
+  let parts = source.match(/[^\s(]+(\(.*?\))?/g);
+  if (parts) {
+    parts = parts.map((part) => {
+      const m = part.match(/^(.*)\((.*)\)$/);
+      if (m) {
+        const key = m[1];
+        const values = m[2];
+        return `${key}:${values};`;
+      } else {
+        return predefinedMacros[part] || part;
+      }
+    });
+    const res = parts.join(' ');
+    // console.log({ source, res });
+    return res;
+  }
+  return source;
 }
