@@ -9,6 +9,11 @@ class EditManager {
   private undoStack: IModification[] = [];
   private redoStack: IModification[] = [];
 
+  reset() {
+    this.undoStack = [];
+    this.redoStack = [];
+  }
+
   pushUndoStack(oldState: IEditState, newState: IEditState) {
     this.undoStack.push({
       oldState,
