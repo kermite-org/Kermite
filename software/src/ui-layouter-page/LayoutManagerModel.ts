@@ -149,8 +149,9 @@ export class LayoutManagerModel implements ILayoutManagerModel {
   }
 
   async save(design: IPersistKeyboardDesign) {
+    const isProfile = this.editSource.type === 'CurrentProfile';
     const ok = await modalConfirm({
-      message: 'File ovewritten. Are you sure?',
+      message: `${isProfile ? 'Profile' : 'File'} ovewritten. Are you ok?`,
       caption: 'Save',
     });
     if (ok) {
