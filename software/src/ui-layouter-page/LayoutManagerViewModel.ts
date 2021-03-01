@@ -144,7 +144,7 @@ function useLayoutManagerViewModelImpl(
       if (model.editSource.type !== 'CurrentProfile') {
         model.loadCurrentProfileLayout();
       } else {
-        model.unloadCurrentProfileLayout();
+        // model.unloadCurrentProfileLayout();
       }
     },
     canLoadFromProject: isProjectLayoutSourceSpecified,

@@ -15,7 +15,8 @@ const cssLayoutManagerButton = css`
   }
 
   &[data-active] {
-    background: #cdf;
+    background: #37c;
+    color: #fff;
   }
 
   &[data-disabled] {
