@@ -5,7 +5,7 @@ import { NavigationButton } from './elements/NavigationButton';
 export const NavigationButtonsArea = () => {
   const vm = makeNavigationViewModel();
   return (
-    <div xs="width(100%)">
+    <div xs="width[100%]">
       {vm.entries.map((entry) => (
         <NavigationButton vm={entry} key={entry.pagePath} />
       ))}
