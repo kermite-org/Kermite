@@ -26,6 +26,9 @@ export const ShortCssDevPage = () => {
       <div xs="width[80px] height[80px] $centerFlex border[solid 1px green]">
         aaa
       </div>
+      <div xs="width:80px; height:80px; $centerFlex; border:solid 1px #F80;">
+        aaa
+      </div>
     </div>
   );
 };

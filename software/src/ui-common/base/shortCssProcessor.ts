@@ -48,10 +48,18 @@ export function shortCssProcessor0_deprecated(source: string): string {
 }
 
 const predefinedMacros: { [key: string]: string } = {
-  $centerFlex: 'display: flex; justify-content: center; align-items: center;',
+  $centerFlex: 'display: flex; justify-content: center; align-items: center',
 };
 
 export function shortCssProcessor(source: string): string {
+  if (source.includes(':') && source.includes(';')) {
+    for (const key in predefinedMacros) {
+      const value = predefinedMacros[key];
+      source = source.replace(key, value);
+    }
+    return source;
+  }
+
   let parts = source.match(/[^\s[]+(\[.*?\])?/g);
   if (parts) {
     parts = parts.map((part) => {
@@ -61,7 +69,7 @@ export function shortCssProcessor(source: string): string {
         const values = m[2];
         return `${key}:${values};`;
       } else {
-        return predefinedMacros[part] || part;
+        return `${predefinedMacros[part] || part};`;
       }
     });
     const res = parts.join(' ');
