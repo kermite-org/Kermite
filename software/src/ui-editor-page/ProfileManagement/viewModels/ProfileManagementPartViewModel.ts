@@ -183,9 +183,9 @@ const onSaveButton = () => {
   profilesModel.saveProfile();
 };
 
-const onWriteButton = () => {
-  profilesModel.saveProfile();
-  keyboardConfigModel.writeConfigurationToDevice();
+const onWriteButton = async () => {
+  await profilesModel.saveProfile();
+  await keyboardConfigModel.writeConfigurationToDevice();
 };
 
 const handleImportFromFile = async () => {
