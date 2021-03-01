@@ -183,7 +183,9 @@ export class LayoutManagerModel implements ILayoutManagerModel {
       }
     }
     if (diff.projectLayoutsInfos) {
-      this._projectLayoutsInfos = diff.projectLayoutsInfos;
+      this._projectLayoutsInfos = diff.projectLayoutsInfos.filter(
+        (info) => info.origin === 'local',
+      );
     }
   };
 

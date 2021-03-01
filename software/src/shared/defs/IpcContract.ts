@@ -161,6 +161,7 @@ export type ILayoutManagerCommand =
     };
 
 export interface IProjectLayoutsInfo {
+  origin: IResourceOrigin;
   projectId: string;
   projectPath: string;
   keyboardName: string;

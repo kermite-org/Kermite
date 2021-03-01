@@ -337,6 +337,7 @@ export class LayoutManager implements ILayoutManager {
   private async getAllProjectLayoutsInfos(): Promise<IProjectLayoutsInfo[]> {
     const resourceInfos = await projectResourceProvider.getAllProjectResourceInfos();
     return resourceInfos.map((info) => ({
+      origin: info.origin,
       projectId: info.projectId,
       projectPath: info.projectPath,
       keyboardName: info.keyboardName,
