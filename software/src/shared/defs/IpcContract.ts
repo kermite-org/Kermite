@@ -201,7 +201,7 @@ export interface IAppIpcContract {
 
     config_getKeyboardConfig(): Promise<IKeyboardConfig>;
     config_writeKeyboardConfig(config: IKeyboardConfig): Promise<void>;
-    config_writeKeyMappingToDevice(): Promise<void>;
+    config_writeKeyMappingToDevice(): Promise<boolean>;
 
     config_getGlobalSettings(): Promise<IGlobalSettings>;
     config_writeGlobalSettings(settings: IGlobalSettings): Promise<void>;

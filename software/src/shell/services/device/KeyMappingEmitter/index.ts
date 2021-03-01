@@ -14,12 +14,12 @@ export namespace KeyMappingEmitter {
     editModel: IProfileData,
     layout: IKeyboardLayoutStandard,
     deviceService: KeyboardDeviceService,
-  ): Promise<void> {
+  ): Promise<boolean> {
     const ds = deviceService;
 
     if (!ds.isOpen) {
       console.log(`device is not connected`);
-      return;
+      return false;
     }
     console.log(emitKeyAssignsToDevice.name);
 
@@ -53,8 +53,10 @@ export namespace KeyMappingEmitter {
       delayMs(50);
       ds.writeSingleFrame(memoryWriteTransactionEndFrame);
       console.log('write done');
+      return true;
     } catch (err) {
       console.log(err);
+      return false;
     }
   }
 }
