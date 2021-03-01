@@ -1,4 +1,4 @@
-import { FC, jsx, css, Hook } from 'qx';
+import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { ISelectorOption } from '~/ui-common/base';
 
