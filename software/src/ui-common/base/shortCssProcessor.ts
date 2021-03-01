@@ -48,14 +48,14 @@ export function shortCssProcessor0_deprecated(source: string): string {
 }
 
 const predefinedMacros: { [key: string]: string } = {
-  $centerFlex: 'display flex; justify-content: center; align-items: center;',
+  $centerFlex: 'display: flex; justify-content: center; align-items: center;',
 };
 
 export function shortCssProcessor(source: string): string {
-  let parts = source.match(/[^\s(]+(\(.*?\))?/g);
+  let parts = source.match(/[^\s[]+(\[.*?\])?/g);
   if (parts) {
     parts = parts.map((part) => {
-      const m = part.match(/^(.*)\((.*)\)$/);
+      const m = part.match(/^(.*)\[(.*)\]$/);
       if (m) {
         const key = m[1];
         const values = m[2];
