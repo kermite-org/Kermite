@@ -42,9 +42,11 @@ export function useEventSource<T extends {}>(
   source: { subscribe: (listener: (value: Partial<T>) => void) => () => void },
   initialValue: T,
 ): T {
-  const [value] = Hook.useState(initialValue);
+  const [value, setValue] = Hook.useState(initialValue);
   Hook.useEffect(() => {
-    return source.subscribe((_value) => copyObjectProps(value, _value));
+    return source.subscribe((newValuePartial) => {
+      setValue((oldValue) => ({ ...oldValue, ...newValuePartial }));
+    });
   }, []);
   return value;
 }

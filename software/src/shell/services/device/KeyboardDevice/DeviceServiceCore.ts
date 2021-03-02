@@ -1,7 +1,9 @@
 import {
+  ConfigStorageFormatRevision,
   IKeyboardDeviceStatus,
   IProjectResourceInfo,
   IRealtimeKeyboardEvent,
+  RawHidMessageProtocolRevision,
 } from '~/shared';
 import { createEventPort } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
@@ -29,25 +31,27 @@ function createConnectedStatus(
   };
 }
 
-// function openDeviceWrapper(): DeviceWrapper | undefined {
-//   const deviceWrapper = new DeviceWrapper();
-//   const isOpen = deviceWrapper.open(
-//     0xf055, // vid
-//     0xa577, // pid
-//     [
-//       // find interface 0 by searching words in device.path
-//       'mi_00', // Windows
-//       'IOUSBHostInterface@0', // Mac
-//     ],
-//     '74F3AC2E', // serial number fixed part
-//   );
-//   if (!isOpen) {
-//     console.log(`failed to open device`);
-//     return undefined;
-//   }
-//   console.log('device opened');
-//   return deviceWrapper;
-// }
+function checkDeviceRevisions(data: {
+  projectReleaseBuildRevision: number;
+  configStorageFormatRevision: number;
+  rawHidMessageProtocolRevision: number;
+}): boolean {
+  const { configStorageFormatRevision, rawHidMessageProtocolRevision } = data;
+
+  if (configStorageFormatRevision !== ConfigStorageFormatRevision) {
+    console.log(
+      `incompatible config storage revision (software:${ConfigStorageFormatRevision} firmware:${configStorageFormatRevision})`,
+    );
+    return false;
+  }
+  if (rawHidMessageProtocolRevision !== RawHidMessageProtocolRevision) {
+    console.log(
+      `incompatible message protocol revision (software:${RawHidMessageProtocolRevision} firmware:${rawHidMessageProtocolRevision})`,
+    );
+    return false;
+  }
+  return true;
+}
 
 export class KeyboardDeviceServiceCore {
   realtimeEventPort = createEventPort<IRealtimeKeyboardEvent>();
@@ -70,6 +74,11 @@ export class KeyboardDeviceServiceCore {
   private onDeviceDataReceived = async (buf: Uint8Array) => {
     const res = recievedBytesDecoder(buf);
     if (res?.type === 'deviceAttributeResponse') {
+      console.log(`device attrs received, projectId: ${res.data.projectId}`);
+      if (!checkDeviceRevisions(res.data)) {
+        // this.device?.close();
+        // throw new Error('inconpatible firmware version.');
+      }
       const info = await getProjectInfoFromProjectId(res.data.projectId);
       if (info) {
         this.setStatus(createConnectedStatus(info));
@@ -80,14 +89,16 @@ export class KeyboardDeviceServiceCore {
     }
   };
 
-  private onDeviceClosed = () => {
+  private clearDevice = () => {
     this.setStatus({ isConnected: false, deviceAttrs: undefined });
+    this.device = undefined;
   };
 
   setDeivce(device: IDeviceWrapper | undefined) {
+    this.clearDevice();
     if (device) {
       device.onData(this.onDeviceDataReceived);
-      device.onClosed(this.onDeviceClosed);
+      device.onClosed(this.clearDevice);
       device.writeSingleFrame(Packets.deviceAttributesRequestFrame);
     }
     this.device = device;

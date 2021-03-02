@@ -5,7 +5,7 @@ import {
   IDeviceSpecificationParams,
 } from '~/shell/services/device/KeyboardDevice/DeviceEnumerator';
 import {
-  DeviceWrapper2,
+  DeviceWrapper,
   IDeviceWrapper,
 } from '~/shell/services/device/KeyboardDevice/DeviceWrapper';
 
@@ -41,39 +41,44 @@ export class DeviceSelectionManager {
   }
 
   private openDevice(path: string) {
-    if (path !== 'none') {
-      const device = DeviceWrapper2.openDeviceByPath(path);
-      if (device) {
-        device.onClosed(() => this.setStatus({ currentDevicePath: 'none' }));
-        this.device = device;
-        this.setStatus({ currentDevicePath: path });
-      } else {
-        this.setStatus({ currentDevicePath: 'none' });
-      }
+    const device = DeviceWrapper.openDeviceByPath(path);
+    if (!device) {
+      console.log(`failed to open device`);
+      return;
     }
+    console.log(`device opened`);
+    device.onClosed(this.onDeviceClosed);
+    this.setStatus({ currentDevicePath: path });
+    this.device = device;
   }
+
+  private onDeviceClosed = () => {
+    this.setStatus({ currentDevicePath: 'none' });
+    console.log(`device closed`);
+  };
 
   private closeDevice() {
     if (this.device) {
       this.device.close();
       this.device = undefined;
-      // this.setStatus({ currentDevicePath: 'none' }
     }
   }
 
-  selectTargetDevice(path: string): IDeviceWrapper | undefined {
+  selectTargetDevice(path: string) {
     if (path !== this.status.currentDevicePath) {
       this.closeDevice();
-      this.openDevice(path);
+      if (path !== 'none') {
+        this.openDevice(path);
+      }
     }
-    return this.device;
   }
 
   initialize() {
     const infos = enumerateSupportedDeviceInfos(deviceSpecificationParams);
-    console.log({ infos });
     this.setStatus({ allDeviceInfos: infos });
   }
 
-  terminate() {}
+  terminate() {
+    this.closeDevice();
+  }
 }

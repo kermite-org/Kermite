@@ -1,8 +1,4 @@
-import {
-  IRealtimeKeyboardEvent,
-  ConfigStorageFormatRevision,
-  RawHidMessageProtocolRevision,
-} from '~/shared';
+import { IRealtimeKeyboardEvent } from '~/shared';
 import { bytesToString } from '~/shell/services/device/KeyboardDevice/Helpers';
 
 type IReceivedBytesDecodeResult =
@@ -30,18 +26,6 @@ export function recievedBytesDecoder(
     // const keyIndexRange = buf[6];
     // const side = buf[7];
     const projectId = bytesToString([...buf].slice(8, 16));
-    console.log(`device attrs received, projectId: ${projectId}`);
-    if (configStorageFormatRevision !== ConfigStorageFormatRevision) {
-      console.log(
-        `incompatible config storage revision (software:${ConfigStorageFormatRevision} firmware:${configStorageFormatRevision})`,
-      );
-    }
-    if (rawHidMessageProtocolRevision !== RawHidMessageProtocolRevision) {
-      console.log(
-        `incompatible message protocol revision (software:${RawHidMessageProtocolRevision} firmware:${rawHidMessageProtocolRevision})`,
-      );
-    }
-
     return {
       type: 'deviceAttributeResponse',
       data: {

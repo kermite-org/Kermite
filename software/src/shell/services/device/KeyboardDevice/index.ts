@@ -25,11 +25,9 @@ export class KeyboardDeviceService implements IKeyboardDeviceServcie {
   }
 
   selectTargetDevice(path: string) {
-    const device = this.selectionManager.selectTargetDevice(path);
-    this.core.setDeivce(device);
-    if (device) {
-      device.onClosed(() => this.core.setDeivce(undefined));
-    }
+    // console.log('selectTargetDevice', path);
+    this.selectionManager.selectTargetDevice(path);
+    this.core.setDeivce(this.selectionManager.getDevice());
   }
 
   initialize() {

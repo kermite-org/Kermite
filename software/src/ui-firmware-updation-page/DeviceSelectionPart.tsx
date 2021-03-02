@@ -7,7 +7,7 @@ export const DeviceSelectionPart: FC = () => {
     ipcAgent.events.device_deviceSelectionEvents,
     {
       allDeviceInfos: [],
-      currentDevicePath: '',
+      currentDevicePath: 'none',
     },
   );
   const noneOption: ISelectorOption = { label: 'none', value: 'none' };
@@ -26,6 +26,7 @@ export const DeviceSelectionPart: FC = () => {
       isConnected: false,
     },
   );
+
   const connectedKeyboardName =
     (deviceStatus.isConnected && deviceStatus.deviceAttrs?.keyboardName) ||
     'no connection';
