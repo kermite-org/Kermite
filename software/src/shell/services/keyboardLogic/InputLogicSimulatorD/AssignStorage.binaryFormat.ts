@@ -176,16 +176,16 @@ namespace AssignStroageBinaryFormat {
     byte2_3: { reservedWord: Fixed<u16, Reserved> };
     byte4: { logicModelType: Fixed<u8, 1> };
     byte5: { formatRevision: u8 };
-    byte6: { assignDataStartLocation: Fixed<u8, 24> };
+    byte6: { assignDataStartOffset: Fixed<u8, 12> };
     byte7: { numKeys: u8 }; // 1~255
     byte8: { numLayers: u8 }; // 1~16
     byte9_10: { bodyLength: u8 };
-    byte11_23: Reserved;
+    byte11: { reservedByte: u8 };
   };
 
   type ConfigStorageDataBlobBytes = {
-    byte0_23: { headerBytes: ConfigStorageHeaderBytes };
-    'byte24_24+N*2-1': { layerAttributes: LayerAttributeWord[] }; // numLayers*2 bytes
-    'byte24+N*2__': { keyAssigns: KeyBoundAssignDataSet[] }; // bodyLength bytes
+    'pos(0),len(12)': { headerBytes: ConfigStorageHeaderBytes };
+    'pos(12),len(NL*2)': { layerAttributes: LayerAttributeWord[] }; // numLayers*2 bytes
+    'pos(12+NL*2),len(BL-NL*2)': { keyAssigns: KeyBoundAssignDataSet[] }; // bodyLength-numLayers*2 bytes
   };
 }

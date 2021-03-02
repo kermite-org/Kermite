@@ -37,7 +37,7 @@ namespace CommunicationDataBinaryForamt {
     [0]: { category: 0xb0 }; // 0xb0 for memory operation
     [1]: { dataKind: 0x01 }; // 0x01 for config storage data
     [2]: { command: 0x20 }; // 0x20 for write request
-    [3_4]: { address: u16 };
+    [3_4]: { offset: u16 };
     [5]: { dataLength: u8 };
     '6__': { data: VariableLength }; // dataLength bytes
   };
@@ -46,7 +46,7 @@ namespace CommunicationDataBinaryForamt {
     [0]: { category: 0xb0 }; // 0xb0 for memory operation
     [1]: { dataKind: 0x01 }; // 0x01 for config storage data
     [2]: { command: 0x21 }; // 0x21 for checksum request
-    [3_4]: { address: u16 };
+    [3_4]: { offset: u16 };
     [5_6]: { dataLength: u16 };
   };
 

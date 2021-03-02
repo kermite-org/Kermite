@@ -355,9 +355,8 @@ function makeLayerAttributeBytes(profile: IProfileData): number[] {
 }
 
 // デバイスのEEPROMに書き込むキーアサインバイナリデータを生成する
-// [0:1]: numLayers
-// [1:1+numLayers]: layer attributes
-// [1+numLayers:~] key assings data
+// [0:numLayers*2-1]: layer attributes
+// [numLayers*2:~] key assings data
 export function converProfileDataToBlobBytes(
   profile0: IProfileData,
   layoutStandard: IKeyboardLayoutStandard,
@@ -408,27 +407,29 @@ export function converProfileDataToBlobBytes(
 /*
 Data format for the keymapping data stored in AVR's EEPROM
 EEPROM 1KB
-[0-23] header 24bytes
-[24-1023] keymapping data, 1000bytes
 
-Header 24bytes
+[0-] keymappingData
+ [0-11] keymapping data header 12bytes
+ [12-1023] keymapping data body
+
+keymapping Header 12bytes
 [0-1] 0xFE03(BE), magic number
 [2-3] 0xFFFF(BE), reserved
 [4] logic model type
   0x01 for dominant
 [5] format revision, increment when format changed
-[6] assign data start location, 24
+[6] bodyOffset, 12
 [7] numKeys
 [8] numLayers
 [9-10] bodyLength
-[11-23]: padding
+[11]: padding
 */
 function encodeHeaderBytes(
   numKeys: number,
   numLayers: number,
   bodyLength: number,
 ): number[] {
-  const headerLength = 24;
+  const headerLength = 12;
   const buffer = Array(headerLength).fill(0);
   writeUint16BE(buffer, 0, 0xfe03);
   writeUint16BE(buffer, 2, 0xffff);
