@@ -1,5 +1,6 @@
 import { jsx, css } from 'qx';
 import { ISelectorOption, reflectValue } from '~/ui-common';
+import { FlatListSelector } from '~/ui-common/components/controls/FlatListSelector';
 import { ClosableOverlay } from '~/ui-common/fundamental/dialog/CommonDialogParts';
 
 const cssPanel = css`
@@ -87,36 +88,6 @@ const cssProjectLayoutContent = css`
     cursor: pointer;
   }
 `;
-
-const cssFlatListSelector = css`
-  padding: 5px;
-  font-size: 15px;
-`;
-
-const FlatListSelector = (props: {
-  options: ISelectorOption[];
-  value: string;
-  setValue: (value: string) => void;
-  size: number;
-  disabled?: boolean;
-}) => {
-  const { options, value, setValue, size, disabled } = props;
-  return (
-    <select
-      size={size}
-      value={options.length > 0 ? value : ''}
-      onInput={reflectValue(setValue)}
-      css={cssFlatListSelector}
-      disabled={disabled}
-    >
-      {options.map((it) => (
-        <option value={it.value} key={it.value}>
-          {it.label}
-        </option>
-      ))}
-    </select>
-  );
-};
 
 export interface IProjectAttachmentFileSelectorModalModel {
   titleText: string;

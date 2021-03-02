@@ -201,7 +201,8 @@ export function delayMs(n: number) {
 
 export function copyObjectProps<T>(target: T, source: T) {
   for (const key in target) {
-    if (source[key] !== undefined) {
+    // if (source[key] !== undefined) {
+    if (key in source) {
       target[key] = source[key];
     }
   }

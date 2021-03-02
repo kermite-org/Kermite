@@ -1,5 +1,6 @@
 export * from './ButtonBase';
 export * from './CheckBox';
+export * from './FlatListSelector';
 export * from './GeneralButton';
 export * from './GeneralInput';
 export * from './GeneralSelector';

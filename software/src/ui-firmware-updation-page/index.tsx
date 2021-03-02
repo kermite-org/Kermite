@@ -1,6 +1,7 @@
 import { jsx, Hook, css } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { GeneralButton, GeneralSelector } from '~/ui-common/components';
+import { DeviceSelectionPart } from '~/ui-firmware-updation-page/DeviceSelectionPart';
 import { firmwareUpdationModel } from './FirmwareUpdationModel';
 import { makeFirmwareUpdationPageViewModel } from './FirmwareUpdationPageViewModel';
 
@@ -93,6 +94,8 @@ export const FirmwareUpdationPage = () => {
           </div>
         )}
       </div>
+
+      <DeviceSelectionPart />
     </div>
   );
 };

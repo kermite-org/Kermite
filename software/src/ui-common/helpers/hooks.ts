@@ -37,3 +37,14 @@ export function usePersistState<T extends {}>(key: string, initialValue: T) {
   }, []);
   return value;
 }
+
+export function useEventSource<T extends {}>(
+  source: { subscribe: (listener: (value: Partial<T>) => void) => () => void },
+  initialValue: T,
+): T {
+  const [value] = Hook.useState(initialValue);
+  Hook.useEffect(() => {
+    return source.subscribe((_value) => copyObjectProps(value, _value));
+  }, []);
+  return value;
+}
