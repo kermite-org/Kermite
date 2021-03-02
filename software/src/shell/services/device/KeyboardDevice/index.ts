@@ -1,21 +1,25 @@
 import {
   ConfigStorageFormatRevision,
   IKeyboardDeviceStatus,
+  IKeyboardLayoutStandard,
+  IProfileData,
   IRealtimeKeyboardEvent,
   RawHidMessageProtocolRevision,
 } from '~/shared';
 import { createEventPort } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
+import { KeyMappingEmitter } from '~/shell/services/device/KeyMappingEmitter';
+import { IKeyboardDeviceServcie } from '~/shell/services/device/KeyboardDevice/interfaces';
 import { DeviceWrapper } from './DeviceWrapper';
 
 function bytesToString(bytes: number[]) {
   return bytes.reduce((str, chr) => str + String.fromCharCode(chr), '');
 }
 // 接続中のキーボードとRawHIDでやりとりを行うためのブリッジ
-export class KeyboardDeviceService {
+export class KeyboardDeviceService implements IKeyboardDeviceServcie {
   realtimeEventPort = createEventPort<IRealtimeKeyboardEvent>();
 
-  private deviceWrapper: DeviceWrapper | null = null;
+  private deviceWrapper: DeviceWrapper | undefined;
 
   private deviceStatus: IKeyboardDeviceStatus = {
     isConnected: false,
@@ -25,7 +29,7 @@ export class KeyboardDeviceService {
     initialValueGetter: () => this.deviceStatus,
   });
 
-  setStatus(newStatus: IKeyboardDeviceStatus) {
+  private setStatus(newStatus: IKeyboardDeviceStatus) {
     this.deviceStatus = newStatus;
     this.statusEventPort.emit(newStatus);
   }
@@ -130,12 +134,8 @@ export class KeyboardDeviceService {
   terminate() {
     if (this.deviceWrapper) {
       this.deviceWrapper.close();
-      this.deviceWrapper = null;
+      this.deviceWrapper = undefined;
     }
-  }
-
-  get isOpen(): boolean {
-    return !!this.deviceWrapper;
   }
 
   private isSideBrainMode = false;
@@ -167,11 +167,14 @@ export class KeyboardDeviceService {
     this.realtimeEventPort.emit(event);
   }
 
-  writeSingleFrame(bytes: number[]) {
-    this.deviceWrapper?.writeSingleFrame(bytes);
-  }
-
-  async writeFrames(frames: number[][]) {
-    await this.deviceWrapper?.writeFrames(frames);
+  async emitKeyAssignsToDevice(
+    editModel: IProfileData,
+    layout: IKeyboardLayoutStandard,
+  ): Promise<boolean> {
+    return await KeyMappingEmitter.emitKeyAssignsToDevice(
+      editModel,
+      layout,
+      this.deviceWrapper,
+    );
   }
 }

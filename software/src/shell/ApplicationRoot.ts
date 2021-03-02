@@ -6,7 +6,6 @@ import { pathResolve } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
 import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
-import { KeyMappingEmitter } from '~/shell/services/device/KeyMappingEmitter';
 import { KeyboardDeviceService } from '~/shell/services/device/KeyboardDevice';
 import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStatic';
 import { FirmwareUpdationService } from '~/shell/services/firmwareUpdation';
@@ -114,10 +113,9 @@ export class ApplicationRoot {
         const layoutStandard = this.keyboardConfigProvider.getKeyboardConfig()
           .layoutStandard;
         if (profile) {
-          return await KeyMappingEmitter.emitKeyAssignsToDevice(
+          return await this.deviceService.emitKeyAssignsToDevice(
             profile,
             layoutStandard,
-            this.deviceService,
           );
         }
         return false;
