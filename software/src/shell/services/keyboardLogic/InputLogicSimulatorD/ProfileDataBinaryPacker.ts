@@ -408,9 +408,11 @@ export function converProfileDataToBlobBytes(
 Data format for the keymapping data stored in AVR's EEPROM
 EEPROM 1KB
 
-[0-] keymappingData
- [0-11] keymapping data header 12bytes
- [12-1023] keymapping data body
+[0-7] projectId 8bytes
+[8-17] customSettingBytes 10bytes
+[18-] keymappingData
+ [18-29] keymapping data header 12bytes
+ [30-1023] keymapping data body
 
 keymapping Header 12bytes
 [0-1] 0xFE03(BE), magic number

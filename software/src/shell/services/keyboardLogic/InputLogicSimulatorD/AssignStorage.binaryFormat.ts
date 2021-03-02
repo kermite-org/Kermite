@@ -179,7 +179,7 @@ namespace AssignStroageBinaryFormat {
     byte6: { assignDataStartOffset: Fixed<u8, 12> };
     byte7: { numKeys: u8 }; // 1~255
     byte8: { numLayers: u8 }; // 1~16
-    byte9_10: { bodyLength: u8 };
+    byte9_10: { bodyLength: u16 };
     byte11: { reservedByte: u8 };
   };
 

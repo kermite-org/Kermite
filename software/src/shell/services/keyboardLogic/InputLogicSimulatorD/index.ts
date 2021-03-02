@@ -29,21 +29,18 @@ function createTimeIntervalCounter() {
   };
 }
 
-function copyBytes(dst: number[], src: number[], len: number) {
-  for (let i = 0; i < len; i++) {
-    dst[i] = src[i];
-  }
-}
-
 class ConfigDataStorage {
   readonly StorageBufCapacity = 1024;
+  readonly DataLocation = 18;
   storageBuf: number[] = Array(this.StorageBufCapacity).fill(0);
 
   writeConfigStorageData(bytes: number[]) {
     const len = bytes.length;
-    if (len < this.StorageBufCapacity) {
+    if (len < this.StorageBufCapacity - this.DataLocation) {
       this.storageBuf.fill(0);
-      copyBytes(this.storageBuf, bytes, len);
+      for (let i = 0; i < len; i++) {
+        this.storageBuf[this.DataLocation + i] = bytes[i];
+      }
     }
   }
 
