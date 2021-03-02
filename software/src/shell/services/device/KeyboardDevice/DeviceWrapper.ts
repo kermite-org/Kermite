@@ -1,43 +1,49 @@
 import * as HID from 'node-hid';
 import { delayMs } from '~/shared';
 import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
-import { zeros } from '~/shell/services/device/KeyMappingEmitter/Helpers';
-
-function getArrayFromBuffer(data: any) {
-  return new Uint8Array(Buffer.from(data));
-}
+import {
+  getArrayFromBuffer,
+  zeros,
+} from '~/shell/services/device/KeyboardDevice/Helpers';
 
 type IReceiverFunc = (buf: Uint8Array) => void;
 
+function openTargetDevice(
+  venderId: number,
+  productId: number,
+  pathSearchWords?: string[],
+  serialNumberSearchWord?: string,
+): HID.HID | undefined {
+  const allDeviceInfos = HID.devices();
+  // console.log(allDeviceInfos);
+  const targetDeviceInfo = allDeviceInfos.find(
+    (d) =>
+      d.vendorId === venderId &&
+      d.productId === productId &&
+      (pathSearchWords
+        ? d.path && pathSearchWords.some((word) => d.path!.includes(word))
+        : true) &&
+      (serialNumberSearchWord
+        ? d.serialNumber?.includes(serialNumberSearchWord)
+        : true),
+  );
+  if (targetDeviceInfo?.path) {
+    return new HID.HID(targetDeviceInfo.path);
+  }
+  return undefined;
+}
+
 export class DeviceWrapper {
-  private device?: HID.HID | null = null;
+  private device?: HID.HID | undefined;
   private receiverFunc?: IReceiverFunc;
   private closedCallback?: () => void;
 
-  private static openTargetDevice(
-    venderId: number,
-    productId: number,
-    pathSearchWords?: string[],
-    serialNumberSearchWord?: string,
-  ): HID.HID | null {
-    const allDeviceInfos = HID.devices();
-    // console.log(allDeviceInfos);
-    const targetDeviceInfo = allDeviceInfos.find(
-      (d) =>
-        d.vendorId === venderId &&
-        d.productId === productId &&
-        (pathSearchWords
-          ? d.path && pathSearchWords.some((word) => d.path!.includes(word))
-          : true) &&
-        (serialNumberSearchWord
-          ? d.serialNumber?.includes(serialNumberSearchWord)
-          : true),
-    );
-    if (targetDeviceInfo?.path) {
-      return new HID.HID(targetDeviceInfo.path);
-    } else {
-      return null;
-    }
+  onClosed(callback: () => void) {
+    this.closedCallback = callback;
+  }
+
+  setReceiverFunc(func: IReceiverFunc) {
+    this.receiverFunc = func;
   }
 
   open(
@@ -46,48 +52,40 @@ export class DeviceWrapper {
     pathSearchWords?: string[],
     serialNumberSearchWord?: string,
   ): boolean {
-    this.device = DeviceWrapper.openTargetDevice(
+    const device = openTargetDevice(
       venderId,
       productId,
       pathSearchWords,
       serialNumberSearchWord,
     );
-    if (this.device) {
-      this.device.on(
-        'data',
-        withAppErrorHandler((data) => {
-          const buf = getArrayFromBuffer(data);
-          if (this.receiverFunc) {
-            this.receiverFunc(buf);
-          }
-        }),
-      );
-      this.device.on(
-        'error',
-        withAppErrorHandler((error) => {
-          console.log(`error occured: ${error}`);
-          this.closedCallback?.();
-        }),
-      );
-      return true;
-    } else {
+    if (!device) {
       return false;
     }
+    device.on(
+      'data',
+      withAppErrorHandler((data) => {
+        const buf = getArrayFromBuffer(data);
+        if (this.receiverFunc) {
+          this.receiverFunc(buf);
+        }
+      }),
+    );
+    device.on(
+      'error',
+      withAppErrorHandler((error) => {
+        console.log(`error occured: ${error}`);
+        this.closedCallback?.();
+      }),
+    );
+    this.device = device;
+    return true;
   }
 
   close() {
     if (this.device) {
       this.device.close();
-      this.device = null;
+      this.device = undefined;
     }
-  }
-
-  onClosed(callback: () => void) {
-    this.closedCallback = callback;
-  }
-
-  setReceiverFunc(func: IReceiverFunc) {
-    this.receiverFunc = func;
   }
 
   writeSingleFrame(bytes: number[]) {

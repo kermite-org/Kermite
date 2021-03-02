@@ -17,7 +17,7 @@ import {
 import {
   writeUint16BE,
   writeUint8,
-} from '~/shell/services/device/KeyMappingEmitter/Helpers';
+} from '~/shell/services/device/KeyboardDevice/Helpers';
 
 /*
 Key Assigns Restriction

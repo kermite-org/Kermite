@@ -34,3 +34,11 @@ export function bhi(val: number) {
 export function blo(val: number) {
   return val & 0xff;
 }
+
+export function bytesToString(bytes: number[]) {
+  return bytes.reduce((str, chr) => str + String.fromCharCode(chr), '');
+}
+
+export function getArrayFromBuffer(data: any) {
+  return new Uint8Array(Buffer.from(data));
+}
