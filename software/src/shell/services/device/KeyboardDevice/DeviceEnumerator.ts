@@ -1,5 +1,5 @@
 import * as HID from 'node-hid';
-import { IKeyboardDeviceInfo } from '~/shared';
+import { compareString, IKeyboardDeviceInfo } from '~/shared';
 
 export interface IDeviceSpecificationParams {
   vendorId: number;
@@ -31,16 +31,18 @@ export function enumerateSupportedDevicePathsCore(
     .filter((it) => !!it);
 }
 
-function getDisplayNameFromDevicePath(path: string) {
-  const m = path.match(/kermite_core_atmega32u4@(\d+)/); // MacOS
+export function getDisplayNameFromDevicePath(path: string) {
+  const m = path.match(/kermite_core_atmega32u4@(\d+)/); // Mac
   return m ? `device@${m[1]}` : path;
 }
 
 export function enumerateSupportedDeviceInfos(
   params: IDeviceSpecificationParams,
 ): IKeyboardDeviceInfo[] {
-  return enumerateSupportedDevicePathsCore(params).map((path) => ({
-    path,
-    displayName: getDisplayNameFromDevicePath(path),
-  }));
+  return enumerateSupportedDevicePathsCore(params)
+    .map((path) => ({
+      path,
+      displayName: getDisplayNameFromDevicePath(path),
+    }))
+    .sort((a, b) => compareString(a.displayName, b.displayName));
 }

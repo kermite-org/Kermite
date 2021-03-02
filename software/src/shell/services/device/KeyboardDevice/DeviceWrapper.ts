@@ -1,6 +1,5 @@
 import * as HID from 'node-hid';
 import { delayMs } from '~/shared';
-import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { makeListenerPort } from '~/shell/funcs';
 import {
   getArrayFromBuffer,
@@ -37,8 +36,8 @@ export class DeviceWrapper implements IDeviceWrapper {
     if (!device) {
       return false;
     }
-    device.on('data', withAppErrorHandler(this.handleData));
-    device.on('error', withAppErrorHandler(this.handleError));
+    device.on('data', this.handleData);
+    device.on('error', this.handleError);
     this.device = device;
     return true;
   }

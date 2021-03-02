@@ -25,13 +25,13 @@ export class KeyboardDeviceService implements IKeyboardDeviceServcie {
   }
 
   selectTargetDevice(path: string) {
-    // console.log('selectTargetDevice', path);
     this.selectionManager.selectTargetDevice(path);
     this.core.setDeivce(this.selectionManager.getDevice());
   }
 
   initialize() {
     this.selectionManager.initialize();
+    this.core.setDeivce(this.selectionManager.getDevice());
   }
 
   terminate() {

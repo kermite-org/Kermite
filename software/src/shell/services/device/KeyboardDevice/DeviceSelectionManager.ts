@@ -1,7 +1,9 @@
 import { IDeviceSelectionStatus } from '~/shared';
+import { applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
 import {
   enumerateSupportedDeviceInfos,
+  getDisplayNameFromDevicePath,
   IDeviceSpecificationParams,
 } from '~/shell/services/device/KeyboardDevice/DeviceEnumerator';
 import {
@@ -40,23 +42,6 @@ export class DeviceSelectionManager {
     return this.device;
   }
 
-  private openDevice(path: string) {
-    const device = DeviceWrapper.openDeviceByPath(path);
-    if (!device) {
-      console.log(`failed to open device`);
-      return;
-    }
-    console.log(`device opened`);
-    device.onClosed(this.onDeviceClosed);
-    this.setStatus({ currentDevicePath: path });
-    this.device = device;
-  }
-
-  private onDeviceClosed = () => {
-    this.setStatus({ currentDevicePath: 'none' });
-    console.log(`device closed`);
-  };
-
   private closeDevice() {
     if (this.device) {
       this.device.close();
@@ -68,7 +53,21 @@ export class DeviceSelectionManager {
     if (path !== this.status.currentDevicePath) {
       this.closeDevice();
       if (path !== 'none') {
-        this.openDevice(path);
+        if (this.status.allDeviceInfos.some((info) => info.path === path)) {
+          const device = DeviceWrapper.openDeviceByPath(path);
+          const displayName = getDisplayNameFromDevicePath(path);
+          if (!device) {
+            console.log(`failed to open device: ${displayName}`);
+            return;
+          }
+          console.log(`device opened: ${displayName}`);
+          device.onClosed(() => {
+            this.setStatus({ currentDevicePath: 'none' });
+            console.log(`device closed: ${displayName}`);
+          });
+          this.setStatus({ currentDevicePath: path });
+          this.device = device;
+        }
       }
     }
   }
@@ -76,9 +75,19 @@ export class DeviceSelectionManager {
   initialize() {
     const infos = enumerateSupportedDeviceInfos(deviceSpecificationParams);
     this.setStatus({ allDeviceInfos: infos });
+    const initialDevicePath = applicationStorage.readItem<string>(
+      'currentDevicePath',
+    );
+    if (initialDevicePath) {
+      this.selectTargetDevice(initialDevicePath);
+    }
   }
 
   terminate() {
+    applicationStorage.writeItem(
+      'currentDevicePath',
+      this.status.currentDevicePath,
+    );
     this.closeDevice();
   }
 }

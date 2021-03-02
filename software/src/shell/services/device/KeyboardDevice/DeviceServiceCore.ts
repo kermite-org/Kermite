@@ -35,22 +35,19 @@ function checkDeviceRevisions(data: {
   projectReleaseBuildRevision: number;
   configStorageFormatRevision: number;
   rawHidMessageProtocolRevision: number;
-}): boolean {
+}) {
   const { configStorageFormatRevision, rawHidMessageProtocolRevision } = data;
 
   if (configStorageFormatRevision !== ConfigStorageFormatRevision) {
     console.log(
       `incompatible config storage revision (software:${ConfigStorageFormatRevision} firmware:${configStorageFormatRevision})`,
     );
-    return false;
   }
   if (rawHidMessageProtocolRevision !== RawHidMessageProtocolRevision) {
     console.log(
       `incompatible message protocol revision (software:${RawHidMessageProtocolRevision} firmware:${rawHidMessageProtocolRevision})`,
     );
-    return false;
   }
-  return true;
 }
 
 export class KeyboardDeviceServiceCore {
@@ -75,10 +72,7 @@ export class KeyboardDeviceServiceCore {
     const res = recievedBytesDecoder(buf);
     if (res?.type === 'deviceAttributeResponse') {
       console.log(`device attrs received, projectId: ${res.data.projectId}`);
-      if (!checkDeviceRevisions(res.data)) {
-        // this.device?.close();
-        // throw new Error('inconpatible firmware version.');
-      }
+      checkDeviceRevisions(res.data);
       const info = await getProjectInfoFromProjectId(res.data.projectId);
       if (info) {
         this.setStatus(createConnectedStatus(info));
