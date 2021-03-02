@@ -58,6 +58,39 @@ namespace CommunicationDataBinaryForamt {
   };
 
   // --------------------
+  // custom paramters data read/write
+
+  type PktCustomParametersBulkReadRequest = PacketHostToDevice & {
+    [0]: { category: 0xb0 }; // 0xb0 for memory operation
+    [1]: { dataKind: 0x02 }; // 0x02 for custom parameters
+    [2]: { command: 0x80 }; // 0x80 for bulk read request
+  };
+
+  type PktCustomParametersBulkReadResponse = PacketDeviceToHost & {
+    [0]: { category: 0xb0 }; // 0xb0 for memory operation
+    [1]: { dataKind: 0x02 }; // 0x02 for custom parameters
+    [2]: { command: 0x81 }; // 0x81 for bulk read response
+    [3_12]: { data: Bytes<10> };
+  };
+
+  type PktCustomParametersBulkWriteOperation = PacketHostToDevice & {
+    [0]: { category: 0xb0 }; // 0xb0 for memory operation
+    [1]: { dataKind: 0x02 }; // 0x02 for custom parameters
+    [2]: { command: 0x90 }; // 0x90 for bulk write request
+    [3_12]: { data: Bytes<10> };
+  };
+
+  type PktCustomParameterSingleWriteOperation = PacketHostToDevice & {
+    [0]: { category: 0xb0 }; // 0xb0 for memory operation
+    [1]: { dataKind: 0x02 }; // 0x02 for custom parameters
+    [2]: { command: 0xa0 }; // 0xa0 for single write request
+    [3]: { index: u8 }; // paramter index, 0~9
+    [4]: { value: u8 }; // parameter value
+  };
+
+  // 書き込めたかどうかは書き込み後にbulk readすることで確認する
+
+  // --------------------
   // realtime event
 
   type PktRealtimeKeyStateEvent = PacketDeviceToHost & {
