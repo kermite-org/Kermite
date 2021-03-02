@@ -1,7 +1,16 @@
-import { FC, jsx } from 'qx';
+import { css, FC, jsx } from 'qx';
 import { ipcAgent, ISelectorOption, useEventSource } from '~/ui-common';
 import { FlatListSelector } from '~/ui-common/components/controls/FlatListSelector';
 
+const style = css`
+  * + * {
+    margin-top: 5px;
+  }
+
+  .selector {
+    width: 240px;
+  }
+`;
 export const DeviceSelectionPart: FC = () => {
   const selectionInfos = useEventSource(
     ipcAgent.events.device_deviceSelectionEvents,
@@ -32,14 +41,15 @@ export const DeviceSelectionPart: FC = () => {
     'no connection';
 
   return (
-    <div xs="marginTop[20px]">
-      <div>device selection part</div>
+    <div css={style}>
+      <div>Device Selection</div>
       <div>connected keyboard: {connectedKeyboardName}</div>
       <FlatListSelector
         options={deviceOptions}
         value={selectionInfos.currentDevicePath}
         setValue={onChange}
         size={5}
+        className="selector"
       />
     </div>
   );

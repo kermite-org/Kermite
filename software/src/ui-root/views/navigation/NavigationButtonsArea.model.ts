@@ -31,7 +31,7 @@ const entrySources: NavigationEntrySource[] = [
   { pagePath: '/heatmap', pageName: 'Heatmap', iconSpec: 'fa fa-chart-bar' },
   {
     pagePath: '/firmwareUpdation',
-    pageName: 'Firmware',
+    pageName: 'Device',
     iconSpec: 'fa fa-microchip',
   },
   { pagePath: '/settings', pageName: 'Settings', iconSpec: 'fa fa-cog' },
