@@ -86,6 +86,8 @@ export class ApplicationRoot {
           projectId,
           layoutName,
         ),
+      device_connectToDevice: async (path) =>
+        this.deviceService.selectTargetDevice(path),
       firmup_uploadFirmware: (origin, projectId, comPortName) =>
         this.firmwareUpdationService.writeFirmware(
           origin,
@@ -159,6 +161,8 @@ export class ApplicationRoot {
       },
       layout_layoutManagerStatus: (listener) =>
         this.layoutManager.statusEvents.subscribe(listener),
+      device_deviceSelectionEvents: (cb) =>
+        this.deviceService.selectionStatusEventPort.subscribe(cb),
       device_keyEvents: (cb) => {
         this.deviceService.realtimeEventPort.subscribe(cb);
         return () => this.deviceService.realtimeEventPort.unsubscribe(cb);

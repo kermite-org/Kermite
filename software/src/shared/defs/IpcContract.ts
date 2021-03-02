@@ -27,6 +27,16 @@ export interface IProjectResourceInfo {
   hasFirmwareBinary: boolean;
   origin: IResourceOrigin;
 }
+
+export interface IKeyboardDeviceInfo {
+  path: string;
+  displayName: string;
+}
+
+export interface IDeviceSelectionStatus {
+  allDeviceInfos: IKeyboardDeviceInfo[];
+  currentDevicePath: string | 'none';
+}
 export interface IKeyboardDeviceStatus {
   isConnected: boolean;
   deviceAttrs?: {
@@ -219,6 +229,9 @@ export interface IAppIpcContract {
       projectId: string,
       layoutName: string,
     ): Promise<IPersistKeyboardDesign | undefined>;
+
+    device_connectToDevice(path: string): Promise<void>;
+
     firmup_uploadFirmware(
       origin: IResourceOrigin,
       projectId: string,
@@ -240,6 +253,7 @@ export interface IAppIpcContract {
     profile_profileManagerStatus: Partial<IProfileManagerStatus>;
     layout_layoutManagerStatus: Partial<ILayoutManagerStatus>;
 
+    device_deviceSelectionEvents: Partial<IDeviceSelectionStatus>;
     device_keyEvents: IRealtimeKeyboardEvent;
     device_keyboardDeviceStatusEvents: Partial<IKeyboardDeviceStatus>;
 

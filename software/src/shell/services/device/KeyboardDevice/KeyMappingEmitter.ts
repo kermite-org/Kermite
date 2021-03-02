@@ -1,5 +1,5 @@
 import { delayMs, IKeyboardLayoutStandard, IProfileData } from '~/shared';
-import { DeviceWrapper } from '~/shell/services/device/KeyboardDevice/DeviceWrapper';
+import { IDeviceWrapper } from '~/shell/services/device/KeyboardDevice/DeviceWrapper';
 import { Packets } from '~/shell/services/device/KeyboardDevice/Packets';
 import { makeKeyAssignsConfigStorageData } from '~/shell/services/keyboardLogic/InputLogicSimulatorD/ProfileDataBinaryPacker';
 import { calcChecksum } from './Helpers';
@@ -8,7 +8,7 @@ export namespace KeyMappingEmitter {
   export async function emitKeyAssignsToDevice(
     editModel: IProfileData,
     layout: IKeyboardLayoutStandard,
-    device: DeviceWrapper | undefined,
+    device: IDeviceWrapper | undefined,
   ): Promise<boolean> {
     if (!device) {
       console.log(`device is not connected`);
@@ -38,13 +38,13 @@ export namespace KeyMappingEmitter {
 
     try {
       console.log('writing...');
-      device.writeSingleFrame(Packets.memoryWriteTransactionStartFrame);
+      await device.writeSingleFrame(Packets.memoryWriteTransactionStartFrame);
       delayMs(50);
       await device.writeFrames(keyAssingnDataFrames);
 
-      device.writeSingleFrame(checksumRequestFrame);
+      await device.writeSingleFrame(checksumRequestFrame);
       delayMs(50);
-      device.writeSingleFrame(Packets.memoryWriteTransactionEndFrame);
+      await device.writeSingleFrame(Packets.memoryWriteTransactionEndFrame);
       console.log('write done');
       return true;
     } catch (err) {
