@@ -153,7 +153,7 @@ static uint8_t getOutputModifiers() {
 //assing memory reader
 
 #define NumLayersMax 16
-#define AssignStorageHeaderSize 24
+#define AssignStorageHeaderSize 12
 
 typedef struct {
   uint8_t numLayers;
