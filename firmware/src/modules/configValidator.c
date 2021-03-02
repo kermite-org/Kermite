@@ -3,12 +3,18 @@
 #include "eeprom.h"
 #include "utils.h"
 #include "versions.h"
+#include "eepromLayout.h"
 #include <stdio.h>
 
-//EEPROMの先頭24バイトを配列データのヘッダ領域, 24~1023番地を配列データ本体に使用
+//EEPROMのデータ配置
+//[0-7] projectId 8bytes
+//[8-17] customSettingsBytes 10bytes
+//[18-] assignData
+// [18-29] header 12bytes
+// [30-] body
 #define EEPROMSIZE 1024
 #define CONFIG_DATA_HEADER_LENGTH 12
-#define CONFIG_DATA_BODY_LENGTH_MAX (EEPROMSIZE - CONFIG_DATA_HEADER_LENGTH)
+#define CONFIG_DATA_BODY_LENGTH_MAX (EEPROMSIZE - CONFIG_DATA_HEADER_LENGTH - 10 - 8)
 
 #define decode_byte(p) (*(p))
 #define decode_word_be(p) ((*(p) << 8) | (*(p + 1)))
@@ -16,7 +22,7 @@
 static uint8_t eepromTempBuf[12];
 
 bool configValidator_checkDataHeader() {
-  eeprom_readBlock(0, eepromTempBuf, 12);
+  eeprom_readBlock(EEPROM_BASE_ADDR_ASSIGN_STORAGE, eepromTempBuf, 12);
   uint8_t *p = eepromTempBuf;
   uint16_t magicNumber = decode_word_be(p + 0);
   uint16_t reserved0xFFFF = decode_word_be(p + 2);
