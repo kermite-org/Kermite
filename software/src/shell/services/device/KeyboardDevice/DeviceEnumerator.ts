@@ -32,7 +32,9 @@ export function enumerateSupportedDevicePathsCore(
 }
 
 export function getDisplayNameFromDevicePath(path: string) {
-  const m = path.match(/kermite_core_atmega32u4@(\d+)/); // Mac
+  const m =
+    path.match(/kermite_core_atmega32u4@(\d+)/) || // Mac
+    path.match(/mi_00#8&([0-9a-f]+)/); // Windows
   return m ? `device@${m[1]}` : path;
 }
 
