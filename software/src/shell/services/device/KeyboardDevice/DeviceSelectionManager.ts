@@ -1,4 +1,8 @@
-import { IDeviceSelectionStatus } from '~/shared';
+import {
+  compareObjectByJsonStringify,
+  IDeviceSelectionStatus,
+  IntervalTimerWrapper,
+} from '~/shared';
 import { applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
 import {
@@ -72,9 +76,14 @@ export class DeviceSelectionManager {
     }
   }
 
-  initialize() {
+  private updateEnumeration = () => {
     const infos = enumerateSupportedDeviceInfos(deviceSpecificationParams);
-    this.setStatus({ allDeviceInfos: infos });
+    if (!compareObjectByJsonStringify(infos, this.status.allDeviceInfos)) {
+      this.setStatus({ allDeviceInfos: infos });
+    }
+  };
+
+  private restoreConnection() {
     const initialDevicePath = applicationStorage.readItem<string>(
       'currentDevicePath',
     );
@@ -83,11 +92,20 @@ export class DeviceSelectionManager {
     }
   }
 
+  private timerWrapper = new IntervalTimerWrapper();
+
+  initialize() {
+    this.updateEnumeration();
+    this.restoreConnection();
+    this.timerWrapper.start(this.updateEnumeration, 2000);
+  }
+
   terminate() {
     applicationStorage.writeItem(
       'currentDevicePath',
       this.status.currentDevicePath,
     );
     this.closeDevice();
+    this.timerWrapper.stop();
   }
 }
