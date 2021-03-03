@@ -1,5 +1,5 @@
 #include "configValidator.h"
-
+#include "config.h"
 #include "eeprom.h"
 #include "utils.h"
 #include "versions.h"
@@ -55,4 +55,18 @@ bool configValidator_checkDataHeader() {
   }
 
   return storageHeaderValid;
+}
+
+
+
+void configValidator_initializeEEPROM(){
+  eeprom_readBlock(EEPROM_BASE_ADDR_PROJECT_ID, eepromTempBuf, 8);
+  bool projectIdValid = utils_compareBytes(eepromTempBuf, (uint8_t *)PROJECT_ID, 8);
+  if(!projectIdValid){
+    printf("clear eeprom for new project\n");
+    eeprom_writeBlock(0, (uint8_t*)PROJECT_ID, 8);
+    for(uint16_t i = 8; i< 1024; i++){
+      eeprom_writeByte(i, 0);
+    }
+  }
 }

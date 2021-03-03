@@ -197,6 +197,7 @@ static void processKeyStatesUpdate() {
 }
 
 static void keyboardEntry() {
+  configValidator_initializeEEPROM();
   usbioCore_initialize();
   keyMatrixScanner_initialize(
       NumRows, NumColumns, rowPins, columnPins, nextKeyStateFlags);

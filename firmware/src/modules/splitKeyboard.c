@@ -390,7 +390,7 @@ void splitKeyboard_useDebugUART(uint16_t baud) {
 void splitKeyboard_start() {
   USBCON = 0;
   printf("start\n");
-
+  configValidator_initializeEEPROM();
   usbioCore_initialize();
   bool isMaster = runMasterSlaveDetectionMode();
   printf("isMaster:%d\n", isMaster);
