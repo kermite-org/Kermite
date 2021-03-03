@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
+import {
+  AssignStorageBaseAddr,
+  AssignStorageHeaderLength,
+} from '~/shell/services/keyboardLogic/InputLogicSimulatorD/MemoryDefs';
 import { KeyboardCoreLogicInterface } from './KeyboardCoreLogicInterface';
 
 // --------------------------------------------------------------------------------
@@ -169,8 +173,9 @@ function getOutputModifiers() {
 // assign memory reader
 
 const NumLayersMax = 16;
-const AssignStorageHeaderLocation = 18;
-const AssignStorageBodyLocation = 18 + 12;
+const AssignStorageHeaderLocation = AssignStorageBaseAddr;
+const AssignStorageBodyLocation =
+  AssignStorageBaseAddr + AssignStorageHeaderLength;
 const assignMemoryReaderState = new (class {
   numLayers: u8 = 0;
   assignsStartAddress: u16 = 0;

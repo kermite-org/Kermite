@@ -18,6 +18,7 @@ import {
   writeUint16BE,
   writeUint8,
 } from '~/shell/services/device/KeyboardDevice/Helpers';
+import { AssignStorageHeaderLength } from '~/shell/services/keyboardLogic/InputLogicSimulatorD/MemoryDefs';
 
 /*
 Key Assigns Restriction
@@ -409,10 +410,12 @@ Data format for the keymapping data stored in AVR's EEPROM
 EEPROM 1KB
 
 [0-7] projectId 8bytes
-[8-17] customSettingBytes 10bytes
-[18-] keymappingData
- [18-29] keymapping data header 12bytes
- [30-1023] keymapping data body
+[8] reserved
+[9] isParameterInitialzed flag
+[10-19] customSettingBytes 10bytes
+[20-] keymappingData
+ [20-31] keymapping data header 12bytes
+ [32-1023] keymapping data body
 
 keymapping Header 12bytes
 [0-1] 0xFE03(BE), magic number
@@ -431,7 +434,7 @@ function encodeHeaderBytes(
   numLayers: number,
   bodyLength: number,
 ): number[] {
-  const headerLength = 12;
+  const headerLength = AssignStorageHeaderLength;
   const buffer = Array(headerLength).fill(0);
   writeUint16BE(buffer, 0, 0xfe03);
   writeUint16BE(buffer, 2, 0xffff);

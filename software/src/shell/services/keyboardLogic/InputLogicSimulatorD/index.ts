@@ -8,6 +8,7 @@ import {
 import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
 import { KeyboardDeviceService } from '~/shell/services/device/KeyboardDevice';
+import { AssignStorageBaseAddr } from '~/shell/services/keyboardLogic/InputLogicSimulatorD/MemoryDefs';
 import { ProfileManager } from '~/shell/services/profile/ProfileManager';
 import { getKeyboardCoreLogicInterface } from './DeviceCoreLogicSimulator2_Dual';
 import { makeKeyAssignsConfigStorageData } from './ProfileDataBinaryPacker';
@@ -31,7 +32,7 @@ function createTimeIntervalCounter() {
 
 class ConfigDataStorage {
   readonly StorageBufCapacity = 1024;
-  readonly DataLocation = 18;
+  readonly DataLocation = AssignStorageBaseAddr;
   storageBuf: number[] = Array(this.StorageBufCapacity).fill(0);
 
   writeConfigStorageData(bytes: number[]) {
