@@ -155,7 +155,7 @@ static uint8_t getOutputModifiers() {
 
 
 #define AssignStorageHeaderLocation EEPROM_BASE_ADDR_ASSIGN_STORAGE
-#define AssignStorageBodyLocation EEPROM_BASE_ADDR_ASSIGN_STORAGE + 12
+#define AssignStorageBodyLocation EEPROM_BASE_ADDR_ASSIGN_STORAGE + ASSIGN_STORAGE_HEADER_LENGTH
 #define NumLayersMax 16
 typedef struct {
   uint8_t numLayers;

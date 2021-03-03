@@ -8,21 +8,22 @@
 
 //EEPROMのデータ配置
 //[0-7] projectId 8bytes
-//[8-17] customSettingsBytes 10bytes
-//[18-] assignData
-// [18-29] header 12bytes
-// [30-] body
+//[8] 0
+//[9] isParameterInitialized flag
+//[10-19] customSettingsBytes 10bytes
+//[20-] assignData
+// [20-31] header 12bytes
+// [32-] body
 #define EEPROMSIZE 1024
-#define CONFIG_DATA_HEADER_LENGTH 12
-#define CONFIG_DATA_BODY_LENGTH_MAX (EEPROMSIZE - CONFIG_DATA_HEADER_LENGTH - 10 - 8)
+#define CONFIG_DATA_BODY_LENGTH_MAX (EEPROMSIZE - ASSIGN_STORAGE_HEADER_LENGTH - EEPROM_BASE_ADDR_ASSIGN_STORAGE)
 
 #define decode_byte(p) (*(p))
 #define decode_word_be(p) ((*(p) << 8) | (*(p + 1)))
 
-static uint8_t eepromTempBuf[12];
+static uint8_t eepromTempBuf[ASSIGN_STORAGE_HEADER_LENGTH];
 
 bool configValidator_checkDataHeader() {
-  eeprom_readBlock(EEPROM_BASE_ADDR_ASSIGN_STORAGE, eepromTempBuf, 12);
+  eeprom_readBlock(EEPROM_BASE_ADDR_ASSIGN_STORAGE, eepromTempBuf, ASSIGN_STORAGE_HEADER_LENGTH);
   uint8_t *p = eepromTempBuf;
   uint16_t magicNumber = decode_word_be(p + 0);
   uint16_t reserved0xFFFF = decode_word_be(p + 2);
@@ -41,14 +42,14 @@ bool configValidator_checkDataHeader() {
       reserved0xFFFF == 0xFFFF &&
       logicModelType == 0x01 &&
       formatRevision == CONFIG_STORAGE_FORMAT_REVISION &&
-      configBodyOffset == CONFIG_DATA_HEADER_LENGTH &&
+      configBodyOffset == ASSIGN_STORAGE_HEADER_LENGTH &&
       numKeys <= 255 &&
       numLayers <= 16 &&
       configBodyLength < CONFIG_DATA_BODY_LENGTH_MAX;
 
   if (!storageHeaderValid) {
     printf("invalid config memory data\n");
-    utils_debugShowBytes(eepromTempBuf, 12);
+    utils_debugShowBytes(eepromTempBuf, ASSIGN_STORAGE_HEADER_LENGTH);
   } else {
     printf("config memory is valid\n");
   }
