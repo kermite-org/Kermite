@@ -9,62 +9,21 @@
 #include <string.h>
 
 //---------------------------------------------
-//key assign buffer stub
-
-#if 0
-//デバッグ用, ダミーキーマッピングメモリ
-
-#define NumKeys 12
-#define NumLayers 3
-
-static uint16_t assignBuffer[NumKeys * NumLayers] = {
-  //any layer
-  0b1001000000000001, //key0, any layer, keydown, keyinput, A
-  0b1001000000000010, //key1, any layer, keydown, keyinput, B
-  0,
-  0,
-  0b1001000001010111, //key4, any layer, keydown, keyinput, shift
-  0b1101000100000010, //key5, any layer, keydown, holdlayer, sub layer
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-
-  //main layer
-  0,
-  0,
-  0b1001000000000011, //key2, main layer, keydown, keyinput, C
-  0b1001000000000100, //key3, main layer, keydown, keyinput, D
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-
-  // //2nd layer
-  0,
-  0,
-  0b1001000000011011, //key2, sub layer, keydown, keyinput, 0
-  0b1001000000011100, //key3, sub layer, keydown, keyinput, 1
-};
-
-static uint16_t readKeyAssignMemory(uint16_t wordIndex) {
-  uint16_t res = assignBuffer[wordIndex];
-  printf("wordIndex: %d, res: %d\n", wordIndex, res);
-  return res;
-}
-#endif
+//callbacks
 
 static void (*stateNotificationCallback)(uint8_t state) = 0;
+
+static void (*customParameterChangedCallback)(uint8_t slotIndex, uint8_t value) = 0;
 
 static void emitStateNotification(uint8_t state) {
   if (stateNotificationCallback) {
     stateNotificationCallback(state);
+  }
+}
+
+static void invokeCustomParameterChangedCallback(uint8_t index, uint8_t value) {
+  if (customParameterChangedCallback) {
+    customParameterChangedCallback(index, value);
   }
 }
 
@@ -202,17 +161,18 @@ static void processReadGenericHidData() {
           // printf("handle custom parameters bluk write\n");
           uint8_t *src = p + 3;
           for (uint8_t i = 0; i < 10; i++) {
-            eeprom_writeByte(EEPROM_BASE_ADDR_CUSTOM_SETTINGS_BYTES + i, src[i]);
+            uint8_t value = src[i];
+            eeprom_writeByte(EEPROM_BASE_ADDR_CUSTOM_SETTINGS_BYTES + i, value);
+            invokeCustomParameterChangedCallback(i, value);
           }
           eeprom_writeByte(EEPROM_BASE_ADDR_CUSTOM_SETTINGS_BYTES_INITILIZATION_FLAG, 1);
-          //todo: call paramter changed callbacks
         }
         if (cmd == 0xa0) {
           // printf("handle custom parameters signle write\n");
           uint8_t index = p[3];
           uint8_t value = p[4];
           eeprom_writeByte(EEPROM_BASE_ADDR_CUSTOM_SETTINGS_BYTES + index, value);
-          //todo: call paramter changed callback
+          invokeCustomParameterChangedCallback(index, value);
         }
       }
     }
@@ -243,11 +203,27 @@ static void processReadGenericHidData() {
 }
 
 //---------------------------------------------
+//custom parameter initial loading
+
+static void loadCustomParameters() {
+  bool isInitialized = eeprom_readByte(EEPROM_BASE_ADDR_CUSTOM_SETTINGS_BYTES_INITILIZATION_FLAG);
+  if (isInitialized) {
+    for (uint8_t i = 0; i < 10; i++) {
+      uint8_t value = eeprom_readByte(EEPROM_BASE_ADDR_CUSTOM_SETTINGS_BYTES + i);
+      invokeCustomParameterChangedCallback(i, value);
+    }
+  }
+}
+
+//---------------------------------------------
 //exports
 
 void configuratorServant_initialize(
-    void (*_stateNotificationCallback)(uint8_t state)) {
+    void (*_stateNotificationCallback)(uint8_t state),
+    void (*_customParameterChangedCallback)(uint8_t index, uint8_t value)) {
   stateNotificationCallback = _stateNotificationCallback;
+  customParameterChangedCallback = _customParameterChangedCallback;
+  loadCustomParameters();
 }
 
 void configuratorServant_processUpdate() {

@@ -56,6 +56,17 @@ static bool isSideBrainModeEnabled = false;
 
 static bool useBoardLeds = false;
 
+//カスタムパラメタで変更可能なオプション
+static bool optionEmitKeyStroke = true;
+static bool optionEmitRealtimeEvents = true;
+static bool optionAffectKeyHoldStateToLED = true;
+static bool optionUseHeartbeatLED = true;
+
+#define PRM_SLOT_EmitKeyStroke 0
+#define PRM_SLOT_EmitRealtimeEvents 1
+#define PRM_SLOT_AffectKeyHoldStateToLED 2
+#define PRP_SLOT_UseHeartBeatLED 3
+
 //---------------------------------------------
 //board io
 
@@ -100,12 +111,16 @@ static void processKeyboardCoreLogicOutput() {
 
   bool changed = false;
   if (layerFlags != localLayerFlags) {
-    configuratorServant_emitRelatimeLayerEvent(layerFlags);
+    if (optionEmitRealtimeEvents) {
+      configuratorServant_emitRelatimeLayerEvent(layerFlags);
+    }
     localLayerFlags = layerFlags;
     changed = true;
   }
   if (!utils_compareBytes(hidReport, localHidReport, 8)) {
-    usbioCore_hidKeyboard_writeReport(hidReport);
+    if (optionEmitKeyStroke) {
+      usbioCore_hidKeyboard_writeReport(hidReport);
+    }
     utils_copyBytes(localHidReport, hidReport, 8);
     changed = true;
   }
@@ -114,7 +129,7 @@ static void processKeyboardCoreLogicOutput() {
   }
 
   uint16_t assignHitResult = keyboardCoreLogic_peekAssignHitResult();
-  if (assignHitResult != 0) {
+  if (assignHitResult != 0 && optionEmitRealtimeEvents) {
     configuratorServant_emitRelatimeAssignHitEvent(assignHitResult);
   }
 }
@@ -137,7 +152,9 @@ static void onPhysicalKeyStateChanged(uint8_t keySlotIndex, bool isDown) {
   }
 
   //ユーティリティにキー状態変化イベントを送信
-  configuratorServant_emitRealtimeKeyEvent(keyIndex, isDown);
+  if (optionEmitRealtimeEvents) {
+    configuratorServant_emitRealtimeKeyEvent(keyIndex, isDown);
+  }
 
   if (!isSideBrainModeEnabled) {
     //メインロジックでキー入力を処理
@@ -167,6 +184,18 @@ static void configuratorServantStateHandler(uint8_t state) {
   }
   if (state == ConfiguratorServentState_SideBrainModeDisabled) {
     isSideBrainModeEnabled = false;
+  }
+}
+
+static void customParameterValueHandler(uint8_t slotIndex, uint8_t value) {
+  if (slotIndex == PRM_SLOT_EmitKeyStroke) {
+    optionEmitKeyStroke = !!value;
+  } else if (slotIndex == PRM_SLOT_EmitRealtimeEvents) {
+    optionEmitRealtimeEvents = !!value;
+  } else if (slotIndex == PRM_SLOT_AffectKeyHoldStateToLED) {
+    optionAffectKeyHoldStateToLED = !!value;
+  } else if (slotIndex == PRP_SLOT_UseHeartBeatLED) {
+    optionUseHeartbeatLED = !!value;
   }
 }
 
@@ -202,7 +231,8 @@ static void keyboardEntry() {
   keyMatrixScanner_initialize(
       NumRows, NumColumns, rowPins, columnPins, nextKeyStateFlags);
   resetKeyboardCoreLogic();
-  configuratorServant_initialize(configuratorServantStateHandler);
+  configuratorServant_initialize(
+      configuratorServantStateHandler, customParameterValueHandler);
 
   sei();
 
@@ -214,13 +244,17 @@ static void keyboardEntry() {
       processKeyStatesUpdate();
       keyboardCoreLogic_processTicker(5);
       processKeyboardCoreLogicOutput();
-      outputLED1(pressedKeyCount > 0);
+      if (optionAffectKeyHoldStateToLED) {
+        outputLED1(pressedKeyCount > 0);
+      }
     }
-    if (cnt % 2000 == 0) {
-      outputLED0(true);
-    }
-    if (cnt % 2000 == 1) {
-      outputLED0(false);
+    if (optionUseHeartbeatLED) {
+      if (cnt % 2000 == 0) {
+        outputLED0(true);
+      }
+      if (cnt % 2000 == 1) {
+        outputLED0(false);
+      }
     }
     _delay_ms(1);
     configuratorServant_processUpdate();
