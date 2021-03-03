@@ -199,7 +199,7 @@ static void processReadGenericHidData() {
           emitCustomParametersReadResponse();
         }
         if (cmd == 0x90) {
-          printf("handle custom parameters bluk write\n");
+          // printf("handle custom parameters bluk write\n");
           uint8_t *src = p + 3;
           for (uint8_t i = 0; i < 10; i++) {
             eeprom_writeByte(EEPROM_BASE_ADDR_CUSTOM_SETTINGS_BYTES + i, src[i]);
@@ -208,7 +208,7 @@ static void processReadGenericHidData() {
           //todo: call paramter changed callbacks
         }
         if (cmd == 0xa0) {
-          printf("handle custom parameters signle write\n");
+          // printf("handle custom parameters signle write\n");
           uint8_t index = p[3];
           uint8_t value = p[4];
           eeprom_writeByte(EEPROM_BASE_ADDR_CUSTOM_SETTINGS_BYTES + index, value);
