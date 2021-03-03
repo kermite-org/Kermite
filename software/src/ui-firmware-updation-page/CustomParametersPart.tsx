@@ -23,7 +23,7 @@ function makeParameterModel(
 
   const setSelectionKey = (selectionKey: string) => {
     const newValue = parseInt(selectionKey);
-    console.log('value change', { index, newValue });
+    ipcAgent.async.device_setCustomParameterValue(index, newValue);
   };
 
   return {

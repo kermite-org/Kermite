@@ -73,9 +73,7 @@ export class KeyboardDeviceServiceCore {
 
   private initializeDeviceCustromParameters() {
     // todo: プロジェクトの定義からパラメタ初期値のセットを取得
-    const m = (Math.random() * 100) >> 0;
-    const initialParametrs = generateNumberSequence(10).map((a) => m + a);
-
+    const initialParametrs = generateNumberSequence(10);
     this.device?.writeSingleFrame(
       Packets.makeCustomParametersBulkWriteOperationFrame(initialParametrs),
     );
@@ -93,7 +91,9 @@ export class KeyboardDeviceServiceCore {
       }
     }
     if (res?.type === 'custromParametersReadResponse') {
-      console.log(`custom parameters received,`, res.data);
+      console.log(
+        `custom parameters received, [${res.data.parameterValues.join(',')}]`,
+      );
       if (
         !res.data.isParametersInitialized &&
         !this.parameterInitializationTried
@@ -119,6 +119,13 @@ export class KeyboardDeviceServiceCore {
     this.device = undefined;
     this.parameterInitializationTried = false;
   };
+
+  setCustomParameterValue(index: number, value: number) {
+    this.device?.writeSingleFrame(
+      Packets.makeCustomParameterSignleWriteOperationFrame(index, value),
+    );
+    this.device?.writeSingleFrame(Packets.customParametersBulkReadRequestFrame);
+  }
 
   setDeivce(device: IDeviceWrapper | undefined) {
     this.clearDevice();

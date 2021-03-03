@@ -232,6 +232,7 @@ export interface IAppIpcContract {
     ): Promise<IPersistKeyboardDesign | undefined>;
 
     device_connectToDevice(path: string): Promise<void>;
+    device_setCustomParameterValue(index: number, value: number): Promise<void>;
 
     firmup_uploadFirmware(
       origin: IResourceOrigin,

@@ -38,6 +38,10 @@ export class KeyboardDeviceService implements IKeyboardDeviceServcie {
     this.selectionManager.terminate();
   }
 
+  setCustomParameterValue(index: number, value: number) {
+    this.core.setCustomParameterValue(index, value);
+  }
+
   setSideBrainMode(enabled: boolean) {
     this.core.setSideBrainMode(enabled);
   }
