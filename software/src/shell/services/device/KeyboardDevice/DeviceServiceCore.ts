@@ -1,5 +1,6 @@
 import {
   ConfigStorageFormatRevision,
+  generateNumberSequence,
   IKeyboardDeviceStatus,
   IProjectResourceInfo,
   IRealtimeKeyboardEvent,
@@ -68,6 +69,19 @@ export class KeyboardDeviceServiceCore {
     this.statusEventPort.emit(newStatus);
   }
 
+  private parameterInitializationTried = false;
+
+  private initializeDeviceCustromParameters() {
+    // todo: プロジェクトの定義からパラメタ初期値のセットを取得
+    const m = (Math.random() * 100) >> 0;
+    const initialParametrs = generateNumberSequence(10).map((a) => m + a);
+
+    this.device?.writeSingleFrame(
+      Packets.makeCustomParametersBulkWriteOperationFrame(initialParametrs),
+    );
+    this.device?.writeSingleFrame(Packets.customParametersBulkReadRequestFrame);
+  }
+
   private onDeviceDataReceived = async (buf: Uint8Array) => {
     const res = recievedBytesDecoder(buf);
     if (res?.type === 'deviceAttributeResponse') {
@@ -78,6 +92,16 @@ export class KeyboardDeviceServiceCore {
         this.setStatus(createConnectedStatus(info));
       }
     }
+    if (res?.type === 'custromParametersReadResponse') {
+      console.log(`custom parameters received,`, res.data);
+      if (
+        !res.data.isParametersInitialized &&
+        !this.parameterInitializationTried
+      ) {
+        this.parameterInitializationTried = true;
+        this.initializeDeviceCustromParameters();
+      }
+    }
     if (res?.type === 'realtimeEvent') {
       this.realtimeEventPort.emit(res.event);
     }
@@ -86,6 +110,7 @@ export class KeyboardDeviceServiceCore {
   private clearDevice = () => {
     this.setStatus({ isConnected: false, deviceAttrs: undefined });
     this.device = undefined;
+    this.parameterInitializationTried = false;
   };
 
   setDeivce(device: IDeviceWrapper | undefined) {
@@ -94,6 +119,7 @@ export class KeyboardDeviceServiceCore {
       device.onData(this.onDeviceDataReceived);
       device.onClosed(this.clearDevice);
       device.writeSingleFrame(Packets.deviceAttributesRequestFrame);
+      device.writeSingleFrame(Packets.customParametersBulkReadRequestFrame);
     }
     this.device = device;
   }

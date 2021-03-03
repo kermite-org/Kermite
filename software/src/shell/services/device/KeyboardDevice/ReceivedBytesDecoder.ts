@@ -14,6 +14,13 @@ type IReceivedBytesDecodeResult =
         rawHidMessageProtocolRevision: number;
         projectId: string;
       };
+    }
+  | {
+      type: 'custromParametersReadResponse';
+      data: {
+        isParametersInitialized: boolean;
+        parameterValues: number[];
+      };
     };
 
 export function recievedBytesDecoder(
@@ -33,6 +40,18 @@ export function recievedBytesDecoder(
         configStorageFormatRevision,
         rawHidMessageProtocolRevision,
         projectId,
+      },
+    };
+  }
+
+  if (buf[0] === 0xb0 && buf[1] === 0x02 && buf[2] === 0x81) {
+    const isParametersInitialized = !!buf[3];
+    const parameterValues = [...buf.slice(4, 14)];
+    return {
+      type: 'custromParametersReadResponse',
+      data: {
+        isParametersInitialized,
+        parameterValues,
       },
     };
   }
@@ -77,4 +96,6 @@ export function recievedBytesDecoder(
       },
     };
   }
+
+  return undefined;
 }

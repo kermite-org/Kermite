@@ -1,12 +1,12 @@
 #include "configuratorServant.h"
 #include "config.h"
 #include "eeprom.h"
+#include "eepromLayout.h"
 #include "usbioCore.h"
 #include "utils.h"
 #include "versions.h"
 #include <stdio.h>
 #include <string.h>
-#include "eepromLayout.h"
 
 //---------------------------------------------
 //key assign buffer stub
@@ -133,6 +133,17 @@ static void emitDeviceAttributesResponse() {
   emitGenericHidData(rawHidSendBuf);
 }
 
+static void emitCustomParametersReadResponse() {
+  uint8_t *p = rawHidSendBuf;
+  p[0] = 0xb0;
+  p[1] = 0x02;
+  p[2] = 0x81;
+  p[3] = eeprom_readByte(EEPROM_BASE_ADDR_CUSTOM_SETTINGS_BYTES_INITILIZATION_FLAG);
+  for (uint8_t i = 0; i < 10; i++) {
+    p[4 + i] = eeprom_readByte(EEPROM_BASE_ADDR_CUSTOM_SETTINGS_BYTES + i);
+  }
+  emitGenericHidData(rawHidSendBuf);
+}
 
 static void processReadGenericHidData() {
   bool hasData = usbioCore_genericHid_readDataIfExists(rawHidRcvBuf);
@@ -181,12 +192,35 @@ static void processReadGenericHidData() {
           emitStateNotification(ConfiguratorServentState_KeyMemoryUpdationDone);
         }
       }
+
+      if (dataKind == 0x02) {
+        if (cmd == 0x80) {
+          // printf("custom parameters read requested\n");
+          emitCustomParametersReadResponse();
+        }
+        if (cmd == 0x90) {
+          printf("handle custom parameters bluk write\n");
+          uint8_t *src = p + 3;
+          for (uint8_t i = 0; i < 10; i++) {
+            eeprom_writeByte(EEPROM_BASE_ADDR_CUSTOM_SETTINGS_BYTES + i, src[i]);
+          }
+          eeprom_writeByte(EEPROM_BASE_ADDR_CUSTOM_SETTINGS_BYTES_INITILIZATION_FLAG, 1);
+          //todo: call paramter changed callbacks
+        }
+        if (cmd == 0xa0) {
+          printf("handle custom parameters signle write\n");
+          uint8_t index = p[3];
+          uint8_t value = p[4];
+          eeprom_writeByte(EEPROM_BASE_ADDR_CUSTOM_SETTINGS_BYTES + index, value);
+          //todo: call paramter changed callback
+        }
+      }
     }
 
     if (category == 0xF0) {
       uint8_t command = p[1];
       if (command == 0x10) {
-        // printf("device attributes requested");
+        // printf("device attributes requested\n");
         emitDeviceAttributesResponse();
       }
     }

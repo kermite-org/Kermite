@@ -38,13 +38,13 @@ export namespace KeyMappingEmitter {
 
     try {
       console.log('writing...');
-      await device.writeSingleFrame(Packets.memoryWriteTransactionStartFrame);
+      device.writeSingleFrame(Packets.memoryWriteTransactionStartFrame);
       delayMs(50);
       await device.writeFrames(keyAssingnDataFrames);
 
-      await device.writeSingleFrame(checksumRequestFrame);
+      device.writeSingleFrame(checksumRequestFrame);
       delayMs(50);
-      await device.writeSingleFrame(Packets.memoryWriteTransactionEndFrame);
+      device.writeSingleFrame(Packets.memoryWriteTransactionEndFrame);
       console.log('write done');
       return true;
     } catch (err) {

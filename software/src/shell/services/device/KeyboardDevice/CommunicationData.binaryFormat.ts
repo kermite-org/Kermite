@@ -70,7 +70,8 @@ namespace CommunicationDataBinaryForamt {
     [0]: { category: 0xb0 }; // 0xb0 for memory operation
     [1]: { dataKind: 0x02 }; // 0x02 for custom parameters
     [2]: { command: 0x81 }; // 0x81 for bulk read response
-    [3_12]: { data: Bytes<10> };
+    [3]: { initializedFlag: 0 | 1 };
+    [4_13]: { data: Bytes<10> };
   };
 
   type PktCustomParametersBulkWriteOperation = PacketHostToDevice & {

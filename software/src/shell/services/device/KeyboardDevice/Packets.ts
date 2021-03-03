@@ -14,6 +14,21 @@ export class Packets {
 
   // ------------------------------------------------------------
 
+  static customParametersBulkReadRequestFrame = [0xb0, 0x02, 0x80];
+
+  static makeCustomParametersBulkWriteOperationFrame(data: number[]) {
+    return [0xb0, 0x02, 0x90, ...data];
+  }
+
+  static makeCustomParameterSignleWriteOperationFrame(
+    index: number,
+    value: number,
+  ) {
+    return [0xb0, 0x02, 0xa0, index, value];
+  }
+
+  // ------------------------------------------------------------
+
   static memoryWriteTransactionStartFrame = [0xb0, 0x01, 0x10];
 
   static memoryWriteTransactionEndFrame = [0xb0, 0x01, 0x11];
