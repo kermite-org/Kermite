@@ -1,6 +1,11 @@
 import { css, FC, jsx } from 'qx';
 import { generateNumberSequence } from '~/shared';
-import { ipcAgent, ISelectorOption, useEventSource } from '~/ui-common';
+import {
+  ipcAgent,
+  ISelectorOption,
+  useEventSource,
+  useFetcher,
+} from '~/ui-common';
 import { GeneralSelector } from '~/ui-common/components';
 
 interface ICustomParameterModel {
@@ -40,6 +45,11 @@ interface ICustomParametersPartViewModel {
 }
 
 function useCustomParametersPartViewModel(): ICustomParametersPartViewModel {
+  const resourceInfos = useFetcher(
+    ipcAgent.async.projects_getAllProjectResourceInfos,
+    [],
+  );
+
   const deviceStatus = useEventSource(
     ipcAgent.events.device_keyboardDeviceStatusEvents,
     {
@@ -47,9 +57,20 @@ function useCustomParametersPartViewModel(): ICustomParametersPartViewModel {
     },
   );
 
+  const deviceProjectId =
+    deviceStatus.isConnected && deviceStatus.deviceAttrs?.projectId;
+
   const parameterValues =
     (deviceStatus.isConnected && deviceStatus.customParameterValues) ||
     undefined;
+
+  const projectInfo = resourceInfos.find(
+    (info) => info.projectId === deviceProjectId,
+  );
+
+  console.log({ projectInfo });
+
+  // todo: projectInfoからパラメタ定義を取り出しUIの出し分けに使用
 
   return {
     parameterModels:
