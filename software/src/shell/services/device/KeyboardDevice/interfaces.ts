@@ -10,7 +10,7 @@ import { IEventPort } from '~/shell/funcs';
 export interface IKeyboardDeviceServcie {
   selectionStatusEventPort: IEventPort<Partial<IDeviceSelectionStatus>>;
   realtimeEventPort: IEventPort<IRealtimeKeyboardEvent>;
-  statusEventPort: IEventPort<IKeyboardDeviceStatus>;
+  statusEventPort: IEventPort<Partial<IKeyboardDeviceStatus>>;
   selectTargetDevice(path: string): void;
   setSideBrainMode(enabled: boolean): void;
   writeSideBrainHidReport(report: number[]): void;

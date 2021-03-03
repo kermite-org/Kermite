@@ -43,6 +43,7 @@ export interface IKeyboardDeviceStatus {
     projectId: string;
     keyboardName: string;
   };
+  customParameterValues?: number[];
 }
 
 export type IRealtimeKeyboardEvent =

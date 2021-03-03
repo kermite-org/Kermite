@@ -60,12 +60,12 @@ export class KeyboardDeviceServiceCore {
     isConnected: false,
   };
 
-  statusEventPort = createEventPort<IKeyboardDeviceStatus>({
+  statusEventPort = createEventPort<Partial<IKeyboardDeviceStatus>>({
     initialValueGetter: () => this.deviceStatus,
   });
 
-  private setStatus(newStatus: IKeyboardDeviceStatus) {
-    this.deviceStatus = newStatus;
+  private setStatus(newStatus: Partial<IKeyboardDeviceStatus>) {
+    this.deviceStatus = { ...this.deviceStatus, ...newStatus };
     this.statusEventPort.emit(newStatus);
   }
 
@@ -101,6 +101,9 @@ export class KeyboardDeviceServiceCore {
         this.parameterInitializationTried = true;
         this.initializeDeviceCustromParameters();
       }
+      if (res.data.isParametersInitialized) {
+        this.setStatus({ customParameterValues: res.data.parameterValues });
+      }
     }
     if (res?.type === 'realtimeEvent') {
       this.realtimeEventPort.emit(res.event);
@@ -108,7 +111,11 @@ export class KeyboardDeviceServiceCore {
   };
 
   private clearDevice = () => {
-    this.setStatus({ isConnected: false, deviceAttrs: undefined });
+    this.setStatus({
+      isConnected: false,
+      deviceAttrs: undefined,
+      customParameterValues: undefined,
+    });
     this.device = undefined;
     this.parameterInitializationTried = false;
   };
