@@ -1,5 +1,6 @@
 import { css, jsx } from 'qx';
 import { uiTheme } from '~/ui-common';
+import { CustomParametersPart } from '~/ui-firmware-updation-page/CustomParametersPart';
 import { DeviceSelectionPart } from '~/ui-firmware-updation-page/DeviceSelectionPart';
 import { FirmwareUpdationPart } from '~/ui-firmware-updation-page/FirmwareUpdationPart';
 
@@ -18,6 +19,7 @@ export const FirmwareUpdationPage = () => {
   return (
     <div css={cssPage}>
       <DeviceSelectionPart />
+      <CustomParametersPart />
       <FirmwareUpdationPart />
     </div>
   );

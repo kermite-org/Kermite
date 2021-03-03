@@ -40,12 +40,6 @@ export const DeviceSelectionPart: FC = () => {
     (deviceStatus.isConnected && deviceStatus.deviceAttrs?.keyboardName) ||
     'no connection';
 
-  const parameterValues =
-    (deviceStatus.isConnected && deviceStatus.customParameterValues) ||
-    undefined;
-
-  console.log({ parameterValues });
-
   return (
     <div css={style}>
       <div>Device Selection</div>
