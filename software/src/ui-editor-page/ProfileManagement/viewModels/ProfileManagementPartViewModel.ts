@@ -22,7 +22,6 @@ import { ProfilesModel } from '~/ui-editor-page/ProfileManagement/models/Profile
 
 export interface IProfileManagementPartViewModel {
   createProfile(): void;
-  loadProfile(name: string): void;
   saveProfile(): void;
   renameProfile(): void;
   copyProfile(): void;
@@ -183,9 +182,9 @@ const onSaveButton = () => {
   profilesModel.saveProfile();
 };
 
-const onWriteButton = () => {
-  profilesModel.saveProfile();
-  keyboardConfigModel.writeConfigurationToDevice();
+const onWriteButton = async () => {
+  await profilesModel.saveProfile();
+  await keyboardConfigModel.writeConfigurationToDevice();
 };
 
 const handleImportFromFile = async () => {
@@ -217,12 +216,7 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     state.isPresetsModalOpen = false;
   };
 
-  const {
-    editSource,
-    allProfileNames,
-    loadProfile,
-    saveProfile,
-  } = profilesModel;
+  const { editSource, allProfileNames, saveProfile } = profilesModel;
 
   const canSave =
     editSource.type === 'InternalProfile' && profilesModel.checkDirty();
@@ -233,9 +227,21 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     deviceStatus.deviceAttrs?.projectId ===
       profilesModel.getCurrentProfileProjectId();
 
+  const loadProfile = async (profileName: string) => {
+    if (profilesModel.checkDirty()) {
+      const ok = await modalConfirm({
+        caption: 'Load Profile',
+        message: 'Unsaved changes will be lost. Are you ok?',
+      });
+      if (!ok) {
+        return;
+      }
+    }
+    profilesModel.loadProfile(profileName);
+  };
+
   return {
     createProfile,
-    loadProfile,
     saveProfile,
     renameProfile,
     copyProfile,

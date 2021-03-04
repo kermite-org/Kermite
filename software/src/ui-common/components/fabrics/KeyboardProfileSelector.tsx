@@ -11,5 +11,12 @@ export const KeyboardProfileSelector = ({
   selectorSource,
   hint,
 }: IProfileSelectorProps) => {
-  return <GeneralSelector {...selectorSource} width={170} hint={hint} />;
+  return (
+    <GeneralSelector
+      {...selectorSource}
+      width={170}
+      hint={hint}
+      forceControlled
+    />
+  );
 };

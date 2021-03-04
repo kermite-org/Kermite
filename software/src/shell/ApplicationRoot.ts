@@ -114,12 +114,13 @@ export class ApplicationRoot {
         const layoutStandard = this.keyboardConfigProvider.getKeyboardConfig()
           .layoutStandard;
         if (profile) {
-          await KeyMappingEmitter.emitKeyAssignsToDevice(
+          return await KeyMappingEmitter.emitKeyAssignsToDevice(
             profile,
             layoutStandard,
             this.deviceService,
           );
         }
+        return false;
       },
       config_getGlobalSettings: async () =>
         GlobalSettingsProvider.getGlobalSettings(),

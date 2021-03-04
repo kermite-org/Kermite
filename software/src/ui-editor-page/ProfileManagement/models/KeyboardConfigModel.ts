@@ -12,14 +12,19 @@ export class KeyboardConfigModel {
     this.layoutStandard = layoutStandard;
   }
 
-  writeConfigurationToDevice() {
+  async writeConfigurationToDevice() {
     const { behaviorMode, layoutStandard } = this;
-    ipcAgent.async.config_writeKeyboardConfig({
+    await ipcAgent.async.config_writeKeyboardConfig({
       behaviorMode,
       layoutStandard,
     });
     if (behaviorMode === 'Standalone') {
-      ipcAgent.async.config_writeKeyMappingToDevice();
+      const done = await ipcAgent.async.config_writeKeyMappingToDevice();
+      if (done) {
+        alert('write succeeded.');
+      } else {
+        alert('write failed.');
+      }
     }
   }
 

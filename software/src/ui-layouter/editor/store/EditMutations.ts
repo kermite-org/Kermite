@@ -6,6 +6,7 @@ import {
   removeArrayItems,
 } from '~/shared';
 import { getNextEntityInstanceId } from '~/ui-layouter/editor/store/DomainRelatedHelpers';
+import { editManager } from '~/ui-layouter/editor/store/EditManager';
 import {
   changeKeySizeUnit,
   changePlacementCoordUnit,
@@ -381,6 +382,7 @@ class EditMutations {
       editor.design = design;
     });
     this.resetSitePosition();
+    editManager.reset();
   }
 
   resetSitePosition() {

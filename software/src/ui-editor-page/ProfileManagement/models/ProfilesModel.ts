@@ -72,7 +72,7 @@ export class ProfilesModel {
   private sendProfileManagerCommands(
     ...commands: (IProfileManagerCommand | undefined)[]
   ) {
-    ipcAgent.async.profile_executeProfileManagerCommands(
+    return ipcAgent.async.profile_executeProfileManagerCommands(
       commands.filter((c) => c !== undefined) as IProfileManagerCommand[],
     );
   }
@@ -120,10 +120,10 @@ export class ProfilesModel {
     this.sendProfileManagerCommands(saveCommand, copyCommand);
   };
 
-  saveProfile = () => {
+  saveProfile = async () => {
     const saveCommand = this.getSaveCommandIfDirty();
     if (saveCommand) {
-      this.sendProfileManagerCommands(saveCommand);
+      await this.sendProfileManagerCommands(saveCommand);
     }
   };
 
