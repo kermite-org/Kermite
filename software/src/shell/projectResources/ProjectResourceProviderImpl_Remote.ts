@@ -89,7 +89,7 @@ export class ProjectResourceProviderImpl_Remote
     }
     return this.projectInfoSources.map((it) => ({
       sig: createProjectSig('online', it.projectId),
-      projectId: it.projectPath,
+      projectId: it.projectId,
       keyboardName: it.keyboardName,
       projectPath: it.projectPath,
       presetNames: it.presetNames,
