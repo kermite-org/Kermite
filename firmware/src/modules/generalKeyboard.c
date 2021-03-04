@@ -56,16 +56,35 @@ static bool isSideBrainModeEnabled = false;
 
 static bool useBoardLeds = false;
 
-//カスタムパラメタで変更可能なオプション
+//---------------------------------------------
+//動的に変更可能なオプション
 static bool optionEmitKeyStroke = true;
 static bool optionEmitRealtimeEvents = true;
 static bool optionAffectKeyHoldStateToLED = true;
 static bool optionUseHeartbeatLED = true;
 
-#define PRM_SLOT_EmitKeyStroke 0
-#define PRM_SLOT_EmitRealtimeEvents 1
-#define PRM_SLOT_AffectKeyHoldStateToLED 2
-#define PRP_SLOT_UseHeartBeatLED 3
+static uint8_t optionDynamicFlags = 0xFF;
+
+static bool optionsInitialConfigShutup = false;
+
+static void customParameterValueHandler(uint8_t slotIndex, uint8_t value) {
+  if (optionsInitialConfigShutup && bit_read(optionDynamicFlags, slotIndex) == 0) {
+    return;
+  }
+  if (slotIndex == OptionSlot_EmitKeyStroke) {
+    optionEmitKeyStroke = !!value;
+  } else if (slotIndex == OptionSlot_EmitRealtimeEvents) {
+    optionEmitRealtimeEvents = !!value;
+  } else if (slotIndex == OptionSlot_AffectKeyHoldStateToLED) {
+    optionAffectKeyHoldStateToLED = !!value;
+  } else if (slotIndex == OptionSlot_UseHeartBeatLED) {
+    optionUseHeartbeatLED = !!value;
+  }
+}
+
+void setCustomParameterDynamicFlag(uint8_t slotIndex, bool isDynamic) {
+  bit_spec(optionDynamicFlags, slotIndex, isDynamic);
+}
 
 //---------------------------------------------
 //board io
@@ -187,18 +206,6 @@ static void configuratorServantStateHandler(uint8_t state) {
   }
 }
 
-static void customParameterValueHandler(uint8_t slotIndex, uint8_t value) {
-  if (slotIndex == PRM_SLOT_EmitKeyStroke) {
-    optionEmitKeyStroke = !!value;
-  } else if (slotIndex == PRM_SLOT_EmitRealtimeEvents) {
-    optionEmitRealtimeEvents = !!value;
-  } else if (slotIndex == PRM_SLOT_AffectKeyHoldStateToLED) {
-    optionAffectKeyHoldStateToLED = !!value;
-  } else if (slotIndex == PRP_SLOT_UseHeartBeatLED) {
-    optionUseHeartbeatLED = !!value;
-  }
-}
-
 //---------------------------------------------
 //master
 
@@ -231,6 +238,7 @@ static void keyboardEntry() {
   keyMatrixScanner_initialize(
       NumRows, NumColumns, rowPins, columnPins, nextKeyStateFlags);
   resetKeyboardCoreLogic();
+  optionsInitialConfigShutup = true;
   configuratorServant_initialize(
       configuratorServantStateHandler, customParameterValueHandler);
 
@@ -263,19 +271,28 @@ static void keyboardEntry() {
 
 //---------------------------------------------
 
-void generalKeyboard_setup(
-    const uint8_t *_rowPins, const uint8_t *_columnPins, const int8_t *_keySlotIndexToKeyIndexMap) {
-  rowPins = (uint8_t *)_rowPins;
-  columnPins = (uint8_t *)_columnPins;
-  keySlotIndexToKeyIndexMap = (uint8_t *)_keySlotIndexToKeyIndexMap;
-}
-
 void generalKeyboard_useOnboardLeds() {
   initBoardLeds();
 }
 
 void generalKeyboard_useDebugUART(uint16_t baud) {
   debugUart_setup(baud);
+}
+
+void generalKeyboard_useOptionFixed(uint8_t slot, uint8_t value) {
+  customParameterValueHandler(slot, value);
+  setCustomParameterDynamicFlag(slot, false);
+}
+
+void generalKeyboard_useOptionDynamic(uint8_t slot) {
+  setCustomParameterDynamicFlag(slot, true);
+}
+
+void generalKeyboard_setup(
+    const uint8_t *_rowPins, const uint8_t *_columnPins, const int8_t *_keySlotIndexToKeyIndexMap) {
+  rowPins = (uint8_t *)_rowPins;
+  columnPins = (uint8_t *)_columnPins;
+  keySlotIndexToKeyIndexMap = (uint8_t *)_keySlotIndexToKeyIndexMap;
 }
 
 void generalKeyboard_start() {
