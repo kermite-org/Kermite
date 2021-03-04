@@ -327,3 +327,9 @@ export function compareString(a: string, b: string) {
     return 0;
   }
 }
+
+export function compareArray(ar0: any[], ar1: any[]): boolean {
+  return (
+    ar0.length === ar1.length && ar0.every((it, index) => ar1[index] === it)
+  );
+}
