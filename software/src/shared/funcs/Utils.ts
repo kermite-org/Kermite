@@ -201,7 +201,8 @@ export function delayMs(n: number) {
 
 export function copyObjectProps<T>(target: T, source: T) {
   for (const key in target) {
-    if (source[key] !== undefined) {
+    // if (source[key] !== undefined) {
+    if (key in source) {
       target[key] = source[key];
     }
   }
@@ -315,4 +316,14 @@ export function forceChangeFilePathExtension(
   const fileName = filePath.replace(/^.*[\\/]/, '');
   const namePart = fileName.split('.')[0];
   return filePath.replace(fileName, namePart + extension);
+}
+
+export function compareString(a: string, b: string) {
+  if (a > b) {
+    return 1;
+  } else if (a < b) {
+    return -1;
+  } else {
+    return 0;
+  }
 }

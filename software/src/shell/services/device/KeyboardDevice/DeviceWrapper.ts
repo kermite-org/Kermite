@@ -1,96 +1,69 @@
 import * as HID from 'node-hid';
 import { delayMs } from '~/shared';
-import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
-import { zeros } from '~/shell/services/device/KeyMappingEmitter/Helpers';
-
-function getArrayFromBuffer(data: any) {
-  return new Uint8Array(Buffer.from(data));
-}
+import { makeListenerPort } from '~/shell/funcs';
+import {
+  getArrayFromBuffer,
+  zeros,
+} from '~/shell/services/device/KeyboardDevice/Helpers';
 
 type IReceiverFunc = (buf: Uint8Array) => void;
+type IClosedCallback = () => void;
 
-export class DeviceWrapper {
-  private device?: HID.HID | null = null;
-  private receiverFunc?: IReceiverFunc;
-  private closedCallback?: () => void;
+export interface IDeviceWrapper {
+  close(): void;
+  onClosed(callback: IClosedCallback): void;
+  onData(func: IReceiverFunc): void;
+  writeSingleFrame(bytes: number[]): Promise<void>;
+  writeFrames(frames: number[][]): Promise<void>;
+}
+export class DeviceWrapper implements IDeviceWrapper {
+  private device?: HID.HID | undefined;
 
-  private static openTargetDevice(
-    venderId: number,
-    productId: number,
-    pathSearchWords?: string[],
-    serialNumberSearchWord?: string,
-  ): HID.HID | null {
-    const allDeviceInfos = HID.devices();
-    // console.log(allDeviceInfos);
-    const targetDeviceInfo = allDeviceInfos.find(
-      (d) =>
-        d.vendorId === venderId &&
-        d.productId === productId &&
-        (pathSearchWords
-          ? d.path && pathSearchWords.some((word) => d.path!.includes(word))
-          : true) &&
-        (serialNumberSearchWord
-          ? d.serialNumber?.includes(serialNumberSearchWord)
-          : true),
-    );
-    if (targetDeviceInfo?.path) {
-      return new HID.HID(targetDeviceInfo.path);
-    } else {
-      return null;
+  onData = makeListenerPort<Uint8Array>();
+  onClosed = makeListenerPort<void>();
+
+  static openDeviceByPath(path: string): DeviceWrapper | undefined {
+    const instance = new DeviceWrapper();
+    const ok = instance.open(path);
+    if (ok) {
+      return instance;
     }
+    return undefined;
   }
 
-  open(
-    venderId: number,
-    productId: number,
-    pathSearchWords?: string[],
-    serialNumberSearchWord?: string,
-  ): boolean {
-    this.device = DeviceWrapper.openTargetDevice(
-      venderId,
-      productId,
-      pathSearchWords,
-      serialNumberSearchWord,
-    );
-    if (this.device) {
-      this.device.on(
-        'data',
-        withAppErrorHandler((data) => {
-          const buf = getArrayFromBuffer(data);
-          if (this.receiverFunc) {
-            this.receiverFunc(buf);
-          }
-        }),
-      );
-      this.device.on(
-        'error',
-        withAppErrorHandler((error) => {
-          console.log(`error occured: ${error}`);
-          this.closedCallback?.();
-        }),
-      );
-      return true;
-    } else {
+  private open(path: string): boolean {
+    const device = new HID.HID(path);
+    if (!device) {
       return false;
     }
+    device.on('data', this.handleData);
+    device.on('error', this.handleError);
+    this.device = device;
+    return true;
   }
+
+  private handleData = (data: any) => {
+    const buf = getArrayFromBuffer(data);
+    this.onData.emit(buf);
+  };
+
+  private handleError = (error: any) => {
+    console.log(`hid device error occured: ${error}`);
+    this.close();
+  };
 
   close() {
     if (this.device) {
+      this.onClosed.emit();
       this.device.close();
-      this.device = null;
+      this.device = undefined;
+      this.onData.purge();
+      this.onClosed.purge();
     }
   }
 
-  onClosed(callback: () => void) {
-    this.closedCallback = callback;
-  }
-
-  setReceiverFunc(func: IReceiverFunc) {
-    this.receiverFunc = func;
-  }
-
-  writeSingleFrame(bytes: number[]) {
+  // eslint-disable-next-line @typescript-eslint/require-await
+  async writeSingleFrame(bytes: number[]) {
     if (bytes.length > 64) {
       throw new Error(`generic hid frame length too long, ${bytes.length}/64`);
     }
@@ -108,7 +81,7 @@ export class DeviceWrapper {
 
   async writeFrames(frames: number[][]) {
     for (let i = 0; i < frames.length; i++) {
-      this.writeSingleFrame(frames[i]);
+      await this.writeSingleFrame(frames[i]);
       // await delayMs(10);
       await delayMs(50); // debug
     }

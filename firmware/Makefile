@@ -2,7 +2,7 @@ PROJECT ?=
 -include Makefile.user
 
 BUILD_DIR = build
-OBJ_DIR = build/obj
+OBJ_DIR = build/$(PROJECT)/obj
 
 OUT_DIR = $(BUILD_DIR)/$(PROJECT)
 CORE_NAME = $(notdir $(PROJECT))

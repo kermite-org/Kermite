@@ -32,6 +32,10 @@ const cssGlobal = css`
   body {
     overflow: hidden;
   }
+
+  select {
+    outline: none;
+  }
 `;
 applyGlobalStyle(cssGlobal);
 
