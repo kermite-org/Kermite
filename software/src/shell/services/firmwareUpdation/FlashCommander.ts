@@ -1,16 +1,13 @@
 /* eslint-disable import/first */
 import SerialPort = require('serialport');
+import { compareArray, delayMs } from '~/shared';
 import { readHexFileBytesBlocks } from './HexFileReader';
-import { bytesToHexString, bhi, blo } from './helpers';
-
-export function bytesToHexStringWithOmit(bytes: number[], maxLen: number) {
-  if (bytes.length > maxLen) {
-    const core = bytes.slice(0, maxLen);
-    return bytesToHexString(core) + ` ... (${bytes.length}bytes)`;
-  } else {
-    return bytesToHexString(bytes);
-  }
-}
+import {
+  bytesToHexString,
+  bhi,
+  blo,
+  bytesToHexStringWithOmit,
+} from './helpers';
 
 export namespace FlashCommander {
   const logger = new (class {
@@ -33,129 +30,72 @@ export namespace FlashCommander {
   const queryTimeoutMs = 3000;
 
   class SerialPortBridge {
-    port: SerialPort;
+    serial: SerialPort;
+    rcvBuf: number[] = [];
 
     constructor(comPortName: string) {
-      this.port = new SerialPort(comPortName);
+      this.serial = new SerialPort(comPortName);
+      this.serial.on('data', this.onData);
     }
+
+    onData = (data: Buffer) => {
+      const arr = [...new Uint8Array(data)];
+      this.rcvBuf.push(...arr);
+    };
 
     close() {
-      this.port.close();
+      this.serial.off('data', this.onData);
+      this.serial.close();
     }
 
-    query(op: string, ...args: number[]): Promise<number[]> {
-      if (args.length > 0) {
-        logger.log(`>${op} ${bytesToHexStringWithOmit(args, 8)}`);
-      } else {
-        logger.log(`>${op}`);
-      }
-      const command = [op.charCodeAt(0), ...args];
-      // logger.log(command)
-      return new Promise((resolve, reject) => {
-        let received = false;
-
-        let timerId: NodeJS.Timeout | undefined = undefined;
-        const clearTimer = () => {
-          if (timerId) {
-            clearTimeout(timerId);
-            timerId = undefined;
-          }
-        };
-
-        const onData = (data: Buffer) => {
-          // logger.log({data})
-          const ar = new Uint8Array(data);
-          const ar1 = [...ar];
-          logger.log(bytesToHexString(ar1));
-          received = true;
-
-          this.port.off('data', onData);
-          clearTimer();
-          resolve(ar1);
-        };
-
-        const onTimeout = () => {
-          if (!received) {
-            this.port.off('data', onData);
-            clearTimer();
-            reject('read command response timed out');
-          }
-        };
-
-        this.port.on('data', onData);
-        timerId = setTimeout(onTimeout, queryTimeoutMs);
-
-        this.port.write(command);
-      });
-    }
-
-    queryWithFixedSizeRead(
+    async query(op: string, readLength: number): Promise<number[]>;
+    async query(
       op: string,
-      args: number[],
-      lengthToRead: number,
-    ): Promise<number[]> {
-      if (args.length > 0) {
-        logger.log(`>${op} ${bytesToHexString(args)}`);
-      } else {
-        logger.log(`>${op}`);
+      params: number[],
+      readLength: number,
+    ): Promise<number[]>;
+    async query(...args: any[]) {
+      const op: string = args[0];
+      const params: number[] = args.length === 3 ? args[1] : [];
+      const readLength: number = args.length === 3 ? args[2] : args[1];
+      logger.log(
+        `>${op} ${
+          params.length > 0 ? bytesToHexStringWithOmit(params, 10) : ''
+        }`,
+      );
+      this.serial.write([op.charCodeAt(0), ...params]);
+      let cnt = 0;
+      while (this.rcvBuf.length < readLength) {
+        await delayMs(1);
+        if (++cnt > queryTimeoutMs) {
+          logger.log(bytesToHexString(this.rcvBuf));
+          logger.log(`reading ${this.rcvBuf.length} / ${readLength} bytes`);
+          throw new Error(`serial read timed out`);
+        }
       }
-      const command = [op.charCodeAt(0), ...args];
-      // logger.log(command)
-      return new Promise((resolve, reject) => {
-        const resBytes: number[] = [];
-
-        let timerId: NodeJS.Timeout | undefined = undefined;
-        const clearTimer = () => {
-          if (timerId) {
-            clearTimeout(timerId);
-            timerId = undefined;
-          }
-        };
-
-        const onData = (data: any) => {
-          const ar = [...new Uint8Array(data)];
-          // logger.log(bytesToHexString(ar));
-          resBytes.push(...ar);
-          if (resBytes.length >= lengthToRead) {
-            logger.log(`... ${resBytes.length}bytes read`);
-            this.port.off('data', onData);
-            clearTimer();
-            resolve(resBytes);
-          }
-        };
-        const onTimeout = () => {
-          if (resBytes.length < lengthToRead) {
-            // abort
-            logger.log(bytesToHexString(resBytes));
-            logger.log(`read ${resBytes.length} / ${lengthToRead} bytes`);
-            this.port.off('data', onData);
-            clearTimer();
-            reject('read command response timed out');
-          }
-        };
-        this.port.on('data', onData);
-        timerId = setTimeout(onTimeout, queryTimeoutMs);
-        this.port.write(command);
-      });
+      const res = this.rcvBuf;
+      logger.log(bytesToHexStringWithOmit(res, 10));
+      this.rcvBuf = [];
+      return res;
     }
   }
 
   const expectedValues = {
-    softwareIdentifier: [0x43, 0x41, 0x54, 0x45, 0x52, 0x49, 0x4e], // CATERIN
-    bootloaderVersion: [0x31, 0x30],
-    hardwareVersion: [0x3f],
-    programmerType: [0x53],
-    signatureBytes: [0x87, 0x95, 0x1e],
-    supportedDeviceTypes: [0x44, 0x00],
-    autoIncrementSupported: [0x59],
-    blockSize: [0x59, 0x00, 0x80],
-    fuseLow: [0xff],
-    fuseHigh: [0xd8],
-    fuseEx: [0xfb],
+    S_softwareIdentifier: [0x43, 0x41, 0x54, 0x45, 0x52, 0x49, 0x4e], // CATERIN
+    V_bootloaderVersion: [0x31, 0x30],
+    v_hardwareVersion: [0x3f],
+    p_programmerType: [0x53],
+    s_signatureBytes: [0x87, 0x95, 0x1e],
+    t_supportedDeviceTypes: [0x44, 0x00],
+    a_autoIncrementSupported: [0x59],
+    b_blockSize: [0x59, 0x00, 0x80],
+    F_fuseLow: [0xff],
+    N_fuseHigh: [0xd8],
+    Q_fuseEx: [0xfb],
   };
 
   function checkValue(res: number[], expected: number[], fieldSig: string) {
-    if (JSON.stringify(res) !== JSON.stringify(expected)) {
+    if (!compareArray(res, expected)) {
       throw new Error(`incompatible ${fieldSig} ${JSON.stringify(res)}`);
     }
   }
@@ -172,108 +112,101 @@ export namespace FlashCommander {
     sourceBlocks: number[][],
   ) {
     logger.log('start');
-    const resSoftwareIdentifier = await serial.query('S');
-    const resBootloaderVersion = await serial.query('V');
-    const resHardwareVersion = await serial.query('v');
-    const resProgrammerType = await serial.query('p');
-    const resSignatureBytes = await serial.query('s');
+    const resSoftwareIdentifier = await serial.query('S', 7);
+    const resBootloaderVersion = await serial.query('V', 2);
+    const resHardwareVersion = await serial.query('v', 1);
+    const resProgrammerType = await serial.query('p', 1);
+    const resSignatureBytes = await serial.query('s', 3);
     checkValue(
       resSoftwareIdentifier,
-      expectedValues.softwareIdentifier,
+      expectedValues.S_softwareIdentifier,
       'software identifier',
     );
     checkValue(
       resBootloaderVersion,
-      expectedValues.bootloaderVersion,
+      expectedValues.V_bootloaderVersion,
       'bootloader version',
     );
     checkValue(
       resHardwareVersion,
-      expectedValues.hardwareVersion,
+      expectedValues.v_hardwareVersion,
       'hardware version',
     );
     checkValue(
       resProgrammerType,
-      expectedValues.programmerType,
+      expectedValues.p_programmerType,
       'programmer type',
     );
     checkValue(
       resSignatureBytes,
-      expectedValues.signatureBytes,
+      expectedValues.s_signatureBytes,
       'signature bytes',
     );
 
-    const resSupportedDeviceTypes = await serial.query('t');
+    const resSupportedDeviceTypes = await serial.query('t', 2);
     checkValue(
       resSupportedDeviceTypes,
-      expectedValues.supportedDeviceTypes,
+      expectedValues.t_supportedDeviceTypes,
       'supported devices types',
     );
 
-    const resSelectDeviceType = await serial.query(
-      'T',
-      resSupportedDeviceTypes[0],
-    );
+    const deviceType = resSupportedDeviceTypes[0];
+    const resSelectDeviceType = await serial.query('T', [deviceType], 1);
     checkAck(resSelectDeviceType, 'select device type');
 
-    const resAutoIncrementSupported = await serial.query('a');
-    const resBlockSize = await serial.query('b');
+    const resAutoIncrementSupported = await serial.query('a', 1);
+    const resBlockSize = await serial.query('b', 3);
     checkValue(
       resAutoIncrementSupported,
-      expectedValues.autoIncrementSupported,
+      expectedValues.a_autoIncrementSupported,
       'auto increment supported',
     );
-    checkValue(resBlockSize, expectedValues.blockSize, 'block size');
+    checkValue(resBlockSize, expectedValues.b_blockSize, 'block size');
 
-    const resFuseLow = await serial.query('F');
-    checkValue(resFuseLow, expectedValues.fuseLow, 'fuse low byte');
+    const resFuseLow = await serial.query('F', 1);
+    checkValue(resFuseLow, expectedValues.F_fuseLow, 'fuse low byte');
 
-    const resFuseHigh = await serial.query('N');
-    checkValue(resFuseHigh, expectedValues.fuseHigh, 'fuse high byte');
+    const resFuseHigh = await serial.query('N', 1);
+    checkValue(resFuseHigh, expectedValues.N_fuseHigh, 'fuse high byte');
 
-    // const resFuseEx = await serial.query('Q');
+    // const resFuseEx = await serial.query('Q', 1);
     // checkValue(resFuseEx, expectedValues.fuseEx, 'fuse ex byte');
 
-    const resEnterProgramimgMode = await serial.query('P');
+    const resEnterProgramimgMode = await serial.query('P', 1);
     checkAck(resEnterProgramimgMode, 'enter programing mode');
 
-    if (1) {
-      if (1) {
-        const resErase = await serial.query('e');
-        checkAck(resErase, 'erase');
-        logger.log(`erase done`);
-      }
+    logger.log(`erasing...`);
 
-      for (let i = 0; i < sourceBlocks.length; i++) {
-        // write one block, 64words, 128bytes
-        const addr = i * 64;
-        const resSetAddress = await serial.query('A', bhi(addr), blo(addr));
-        checkAck(resSetAddress, 'set address');
-        const resWriteBlock = await serial.query(
-          'B',
-          0x00,
-          0x80,
-          0x46,
-          ...sourceBlocks[i],
-        );
-        checkAck(resWriteBlock, 'write block');
-        logger.log(`block ${i + 1}/${sourceBlocks.length} written`);
-      }
+    const resErase = await serial.query('e', 1);
+    checkAck(resErase, 'erase');
+    logger.log(`erase done`);
+
+    logger.log(`writing...`);
+
+    for (let i = 0; i < sourceBlocks.length; i++) {
+      // write one block, 64words, 128bytes
+      const addr = i * 64;
+      const resSetAddress = await serial.query('A', [bhi(addr), blo(addr)], 1);
+      checkAck(resSetAddress, 'set address');
+      const resWriteBlock = await serial.query(
+        'B',
+        [0x00, 0x80, 0x46, ...sourceBlocks[i]],
+        1,
+      );
+      checkAck(resWriteBlock, 'write block');
+      logger.log(`block ${i + 1}/${sourceBlocks.length} written`);
     }
 
+    logger.log(`write done`);
     logger.log(`verifying...`);
 
     for (let i = 0; i < sourceBlocks.length; i++) {
       // read one block, 64words, 128bytes
       const addr = i * 64;
-      const resSetAddress = await serial.query('A', bhi(addr), blo(addr));
+      const resSetAddress = await serial.query('A', [bhi(addr), blo(addr)], 1);
       checkAck(resSetAddress, 'set address');
       // const blockBytes = await query('g', 0x00, 0x80, 0x46)
-      const blockBytes = await serial.queryWithFixedSizeRead(
-        'g',
-        [0x00, 0x80, 0x46],
-        128,
-      );
+      const blockBytes = await serial.query('g', [0x00, 0x80, 0x46], 128);
       // logger.log({blockBytes})
       const isVarid =
         JSON.stringify(sourceBlocks[i]) === JSON.stringify(blockBytes);
@@ -290,10 +223,10 @@ export namespace FlashCommander {
 
     logger.log(`verification complete!`);
 
-    const resLeaveProgramingMode = await serial.query('L');
+    const resLeaveProgramingMode = await serial.query('L', 1);
     checkAck(resLeaveProgramingMode, 'leave programing mode');
 
-    await serial.query('E'); // exit
+    await serial.query('E', 1); // exit
 
     serial.close();
   }

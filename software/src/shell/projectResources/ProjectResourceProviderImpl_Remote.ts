@@ -9,8 +9,10 @@ import {
   cacheRemoteResouce,
   fetchJson,
   fetchText,
+  fsxMkdirpSync,
   fsxWriteFile,
   pathBasename,
+  pathDirname,
 } from '~/shell/funcs';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
@@ -89,7 +91,7 @@ export class ProjectResourceProviderImpl_Remote
     }
     return this.projectInfoSources.map((it) => ({
       sig: createProjectSig('online', it.projectId),
-      projectId: it.projectPath,
+      projectId: it.projectId,
       keyboardName: it.keyboardName,
       projectPath: it.projectPath,
       presetNames: it.presetNames,
@@ -142,6 +144,7 @@ export class ProjectResourceProviderImpl_Remote
       const localFilePath = appEnv.resolveTempFilePath(
         `remote_resources/${relPath}`,
       );
+      fsxMkdirpSync(pathDirname(localFilePath));
       await fsxWriteFile(localFilePath, hexFileContent);
       return localFilePath;
     }
