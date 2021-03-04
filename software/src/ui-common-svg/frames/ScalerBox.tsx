@@ -1,5 +1,4 @@
-import { css } from 'goober';
-import { h, Hook, asyncRerender } from 'qx';
+import { jsx, Hook, asyncRerender, css } from 'qx';
 import { useLocal } from '~/ui-common';
 
 const cssBase = css`

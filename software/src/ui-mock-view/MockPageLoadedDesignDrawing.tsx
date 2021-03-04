@@ -1,5 +1,4 @@
-import { css } from 'goober';
-import { h, Hook } from 'qx';
+import { jsx, Hook, css } from 'qx';
 import {
   createFallbackDisplayKeyboardDesign,
   IDisplayKeyboardDesign,

@@ -1,5 +1,4 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
 import { reflectFieldChecked } from '~/ui-common';
 import {
   ClosableOverlay,

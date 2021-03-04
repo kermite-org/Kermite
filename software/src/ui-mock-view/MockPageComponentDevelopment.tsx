@@ -1,5 +1,4 @@
-import { css, setup, styled } from 'goober';
-import { h, FC, Hook } from 'qx';
+import { jsx, FC, Hook, css, styled } from 'qx';
 import { ISelectorOption, uiTheme } from '~/ui-common';
 import {
   GeneralButton,
@@ -15,8 +14,6 @@ import {
   SmallSymbolicActionButton,
 } from '~/ui-common/components/fabrics';
 
-setup(h);
-
 const cssRoot = css`
   height: 100%;
   background: ${uiTheme.colors.clBackground};
@@ -27,23 +24,23 @@ const cssRoot = css`
   }
 `;
 
-const Header = styled('div')`
+const Header = styled.div`
   color: ${uiTheme.colors.clPrimary};
   font-size: 18px;
 `;
 
-const Row = styled('div')`
+const Row = styled.div`
   display: flex;
   > * + * {
     margin-left: 10px;
   }
 `;
 
-const HBox = styled('div')`
+const HBox = styled.div`
   display: flex;
 `;
 
-const VStack = styled('div')`
+const VStack = styled.div`
   > * + * {
     margin-top: 4px;
   }

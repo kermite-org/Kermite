@@ -1,5 +1,4 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
 import { GeneralSelector, HFlex } from '~/ui-common/components';
 import { ConfigVStack } from '~/ui-layouter/editor/views/SidePanels/atoms';
 import { ConfigPanelBox } from '~/ui-layouter/editor/views/SidePanels/atoms/ConfigPanelBox';

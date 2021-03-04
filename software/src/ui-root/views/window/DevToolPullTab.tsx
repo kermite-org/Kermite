@@ -1,5 +1,4 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
 import { siteModel } from '~/ui-common/sharedModels/SiteModel';
 
 const cssDevToolPullTabBase = css`

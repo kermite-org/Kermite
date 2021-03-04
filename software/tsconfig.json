@@ -11,7 +11,7 @@
     "esModuleInterop": true,
     "lib": ["dom", "esnext"],
     "jsx": "react",
-    "jsxFactory": "h",
+    "jsxFactory": "jsx",
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,

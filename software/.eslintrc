@@ -19,7 +19,7 @@
       "typescript": {}
     },
     "react": {
-      "pragma": "h",
+      "pragma": "jsx",
       "version": "16.8"
     }
   },

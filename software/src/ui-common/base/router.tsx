@@ -1,4 +1,4 @@
-import { FC, h, rerender } from 'qx';
+import { FC, jsx, rerender } from 'qx';
 
 export namespace router {
   let chainginHashInEventCallback = false;

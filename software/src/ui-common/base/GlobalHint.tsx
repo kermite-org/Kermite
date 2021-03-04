@@ -1,4 +1,4 @@
-import { h } from 'qx';
+import { jsx } from 'qx';
 
 function findSpecificDatasetValueFromParents(
   el: HTMLElement,

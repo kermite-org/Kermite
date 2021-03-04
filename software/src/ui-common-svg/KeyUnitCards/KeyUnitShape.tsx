@@ -1,4 +1,4 @@
-import { FC, h } from 'qx';
+import { jsx, FC } from 'qx';
 import { IDisplayKeyShape } from '~/shared';
 
 type IKeyUnitShapeProps = Omit<JSX.SVGAttributes, 'shape'> & {

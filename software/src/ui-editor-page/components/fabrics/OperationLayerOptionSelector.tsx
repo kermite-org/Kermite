@@ -1,5 +1,4 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
 import { reflectValue } from '~/ui-common';
 
 const cssOperationLayerOptionSelector = css`

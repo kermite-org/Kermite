@@ -1,5 +1,4 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
 import { Icon } from '~/ui-common/components';
 
 export function SectionHeaderText(props: { text: string; icon: string }) {

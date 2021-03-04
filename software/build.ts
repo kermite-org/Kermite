@@ -8,17 +8,17 @@ import liveServer from 'live-server';
 type IPlugin = NonNullable<BuildConfig['plugins']>[0];
 
 const gooberCssAutoLabelPlugin: IPlugin = {
-  name: 'gooberCssAutoLabel',
+  name: 'cssInJsAutoLabel',
   setup(build) {
     build.onLoad({ filter: /\.tsx$/ }, async (args) => {
       // gooberのcss変数定義を見つけて、変数名をlabelとしてスタイル定義に挿入する
       let text = await fs.promises.readFile(args.path, 'utf8');
-      if (text.includes('goober')) {
+      if (text.includes('qx')) {
         text = text
           .replace(/const (.*) = css`/g, 'const $1 = css` label: $1;')
           .replace(
-            /const (.*) = styled(.*?)`/g,
-            'const $1 = styled$2` label: $1;',
+            /const (.*) = styled\.(.*?)`/g,
+            'const $1 = styled.$2` label: $1;',
           );
       }
       return {
@@ -108,7 +108,7 @@ async function makeUi() {
   );
 }
 
-async function startMockView() {
+function startMockView() {
   const srcDir = './src/ui-mock-view';
   const distDir = `./dist/ui_mock`;
   fs.mkdirSync(distDir, { recursive: true });

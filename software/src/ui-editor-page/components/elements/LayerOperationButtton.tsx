@@ -1,5 +1,4 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
 import { uiTheme } from '~/ui-common';
 
 const cssButton = css`

@@ -1,5 +1,4 @@
-import { css } from 'goober';
-import { FC, h } from 'qx';
+import { FC, jsx, css } from 'qx';
 
 interface Props {
   spec: string;

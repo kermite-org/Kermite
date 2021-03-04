@@ -1,5 +1,4 @@
-import { css } from 'goober';
-import { h, rerender } from 'qx';
+import { jsx, rerender, css } from 'qx';
 import { degToRad } from '~/shared';
 import { getKeySize } from '~/shared/modules/PlacementUnitHelper';
 import { uiTheme } from '~/ui-common';

@@ -1,4 +1,4 @@
-import { h } from 'qx';
+import { jsx } from 'qx';
 import { uiTheme } from '~/ui-common/base';
 import { editReader } from '~/ui-layouter/editor/store';
 

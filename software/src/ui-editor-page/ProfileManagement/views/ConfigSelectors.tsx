@@ -1,4 +1,4 @@
-import { h } from 'qx';
+import { jsx } from 'qx';
 import { IKeyboardBehaviorMode, IKeyboardLayoutStandard } from '~/shared';
 import { keyboardConfigModel } from '~/ui-editor-page/ProfileManagement/models/KeyboardConfigModel';
 import { DualItemsHoverSelector } from '~/ui-editor-page/components/fabrics/DualItemHoverSelector';

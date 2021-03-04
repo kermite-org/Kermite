@@ -1,5 +1,4 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
 import { editorModel } from '~/ui-editor-page/EditorMainPart/models/EditorModel';
 
 export const ProfileConfigurationPart = () => {

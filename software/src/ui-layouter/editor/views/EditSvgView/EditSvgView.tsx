@@ -1,4 +1,4 @@
-import { Hook, h, asyncRerender } from 'qx';
+import { Hook, jsx, asyncRerender } from 'qx';
 import {
   IPosition,
   startDragSession,

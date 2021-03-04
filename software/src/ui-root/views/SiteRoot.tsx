@@ -1,6 +1,5 @@
-import { css, glob, setup } from 'goober';
-import { h, Hook } from 'qx';
-import { router } from '~/ui-common';
+import { jsx, Hook, applyGlobalStyle, css, setShortCssProcessor } from 'qx';
+import { router, shortCssProcessor } from '~/ui-common';
 import { globalHintMouseMoveHandlerEffect } from '~/ui-common/base/GlobalHint';
 import { DebugOverlay } from '~/ui-common/fundamental/overlay/DebugOverlay';
 import { ForegroundModalLayerRoot } from '~/ui-common/fundamental/overlay/ForegroundModalLayer';
@@ -11,9 +10,9 @@ import { SiteDpiScaler } from '~/ui-root/views/window/SiteDpiScaler';
 import { WidgetZoneRoot } from '~/ui-widget';
 import { ConfiguratorZoneRoot } from './ConfiguratorZoneRoot';
 
-setup(h);
+setShortCssProcessor(shortCssProcessor);
 
-glob`
+const cssGlobal = css`
   * {
     margin: 0;
     padding: 0;
@@ -34,6 +33,7 @@ glob`
     overflow: hidden;
   }
 `;
+applyGlobalStyle(cssGlobal);
 
 const cssSiteRoot = css`
   height: 100%;

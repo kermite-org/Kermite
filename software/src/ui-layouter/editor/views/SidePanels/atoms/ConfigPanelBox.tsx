@@ -1,5 +1,4 @@
-import { css } from 'goober';
-import { FC, h, Hook } from 'qx';
+import { FC, jsx, Hook, css } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { Icon } from '~/ui-common/components';
 

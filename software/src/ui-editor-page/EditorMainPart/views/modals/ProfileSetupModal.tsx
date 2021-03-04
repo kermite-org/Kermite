@@ -1,4 +1,4 @@
-import { h, Hook } from 'qx';
+import { jsx, Hook } from 'qx';
 import { IProjectResourceInfo } from '~/shared';
 import {
   fieldSetter,
