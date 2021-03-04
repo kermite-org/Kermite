@@ -9,8 +9,10 @@ import {
   cacheRemoteResouce,
   fetchJson,
   fetchText,
+  fsxMkdirpSync,
   fsxWriteFile,
   pathBasename,
+  pathDirname,
 } from '~/shell/funcs';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
@@ -142,6 +144,7 @@ export class ProjectResourceProviderImpl_Remote
       const localFilePath = appEnv.resolveTempFilePath(
         `remote_resources/${relPath}`,
       );
+      fsxMkdirpSync(pathDirname(localFilePath));
       await fsxWriteFile(localFilePath, hexFileContent);
       return localFilePath;
     }
