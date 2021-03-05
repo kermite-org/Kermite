@@ -22,12 +22,14 @@ async function getProjectInfoFromProjectId(
 
 function createConnectedStatus(
   info: IProjectResourceInfo,
+  assignStorageCapacity: number,
 ): IKeyboardDeviceStatus {
   return {
     isConnected: true,
     deviceAttrs: {
       projectId: info.projectId,
       keyboardName: info.keyboardName,
+      assignStorageCapacity,
     },
   };
 }
@@ -87,7 +89,9 @@ export class KeyboardDeviceServiceCore {
       checkDeviceRevisions(res.data);
       const info = await getProjectInfoFromProjectId(res.data.projectId);
       if (info) {
-        this.setStatus(createConnectedStatus(info));
+        this.setStatus(
+          createConnectedStatus(info, res.data.assignStorageCapacity),
+        );
       }
     }
     if (res?.type === 'custromParametersReadResponse') {

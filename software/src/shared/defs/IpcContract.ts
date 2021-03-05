@@ -44,6 +44,7 @@ export interface IKeyboardDeviceStatus {
   deviceAttrs?: {
     projectId: string;
     keyboardName: string;
+    assignStorageCapacity: number;
   };
   customParameterValues?: number[];
 }

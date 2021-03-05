@@ -13,6 +13,7 @@ type IReceivedBytesDecodeResult =
         configStorageFormatRevision: number;
         rawHidMessageProtocolRevision: number;
         projectId: string;
+        assignStorageCapacity: number;
       };
     }
   | {
@@ -30,9 +31,8 @@ export function recievedBytesDecoder(
     const projectReleaseBuildRevision = (buf[2] << 8) | buf[3];
     const configStorageFormatRevision = buf[4];
     const rawHidMessageProtocolRevision = buf[5];
-    // const keyIndexRange = buf[6];
-    // const side = buf[7];
-    const projectId = bytesToString([...buf].slice(8, 16));
+    const projectId = bytesToString([...buf].slice(6, 14));
+    const assignStorageCapacity = (buf[14] << 8) | buf[15];
     return {
       type: 'deviceAttributeResponse',
       data: {
@@ -40,6 +40,7 @@ export function recievedBytesDecoder(
         configStorageFormatRevision,
         rawHidMessageProtocolRevision,
         projectId,
+        assignStorageCapacity,
       },
     };
   }
