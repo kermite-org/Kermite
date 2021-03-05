@@ -71,13 +71,25 @@ export class KeyboardDeviceServiceCore {
     this.statusEventPort.emit(newStatus);
   }
 
+  private receivedProjectId: string = '';
   private parameterInitializationTried = false;
 
-  private initializeDeviceCustromParameters() {
-    // todo: プロジェクトの定義からパラメタ初期値のセットを取得
-    const initialParametrs = generateNumberSequence(10);
+  private async initializeDeviceCustromParameters() {
+    const info = await getProjectInfoFromProjectId(
+      this.receivedProjectId || '',
+    );
+    if (!info) {
+      return;
+    }
+    console.log(`writing initial parameters`);
+    const initialParameters = generateNumberSequence(10).map((i) => {
+      const paramSpec = info.customParameters.find(
+        (paramSpec) => paramSpec.slotIndex === i,
+      );
+      return paramSpec ? paramSpec.defaultValue : 0;
+    });
     this.device?.writeSingleFrame(
-      Packets.makeCustomParametersBulkWriteOperationFrame(initialParametrs),
+      Packets.makeCustomParametersBulkWriteOperationFrame(initialParameters),
     );
     this.device?.writeSingleFrame(Packets.customParametersBulkReadRequestFrame);
   }
@@ -87,6 +99,7 @@ export class KeyboardDeviceServiceCore {
     if (res?.type === 'deviceAttributeResponse') {
       console.log(`device attrs received, projectId: ${res.data.projectId}`);
       checkDeviceRevisions(res.data);
+      this.receivedProjectId = res.data.projectId;
       const info = await getProjectInfoFromProjectId(res.data.projectId);
       if (info) {
         this.setStatus(
@@ -103,7 +116,7 @@ export class KeyboardDeviceServiceCore {
         !this.parameterInitializationTried
       ) {
         this.parameterInitializationTried = true;
-        this.initializeDeviceCustromParameters();
+        await this.initializeDeviceCustromParameters();
       }
       if (res.data.isParametersInitialized) {
         this.setStatus({ customParameterValues: res.data.parameterValues });
@@ -122,6 +135,7 @@ export class KeyboardDeviceServiceCore {
     });
     this.device = undefined;
     this.parameterInitializationTried = false;
+    this.receivedProjectId = '';
   };
 
   setCustomParameterValue(index: number, value: number) {
