@@ -1,35 +1,24 @@
 #include "configValidator.h"
 #include "config.h"
 #include "eeprom.h"
+#include "eepromLayout.h"
 #include "utils.h"
 #include "versions.h"
-#include "eepromLayout.h"
 #include <stdio.h>
-
-//EEPROMのデータ配置
-//[0-7] projectId 8bytes
-//[8] 0
-//[9] isParameterInitialized flag
-//[10-19] customSettingsBytes 10bytes
-//[20-] assignData
-// [20-31] header 12bytes
-// [32-] body
-#define EEPROMSIZE 1024
-#define CONFIG_DATA_BODY_LENGTH_MAX (EEPROMSIZE - ASSIGN_STORAGE_HEADER_LENGTH - EEPROM_BASE_ADDR_ASSIGN_STORAGE)
 
 #define decode_byte(p) (*(p))
 #define decode_word_be(p) ((*(p) << 8) | (*(p + 1)))
 
-static uint8_t eepromTempBuf[ASSIGN_STORAGE_HEADER_LENGTH];
+static uint8_t eepromTempBuf[AssignStorageHeaderLength];
 
 bool configValidator_checkDataHeader() {
-  eeprom_readBlock(EEPROM_BASE_ADDR_ASSIGN_STORAGE, eepromTempBuf, ASSIGN_STORAGE_HEADER_LENGTH);
+  eeprom_readBlock(EepromAddr_AssignStorageHeader, eepromTempBuf, AssignStorageHeaderLength);
   uint8_t *p = eepromTempBuf;
   uint16_t magicNumber = decode_word_be(p + 0);
   uint16_t reserved0xFFFF = decode_word_be(p + 2);
   uint8_t logicModelType = decode_byte(p + 4);
   uint8_t formatRevision = decode_byte(p + 5);
-  uint8_t configBodyOffset= decode_byte(p + 6);
+  uint8_t configBodyOffset = decode_byte(p + 6);
   uint8_t numKeys = decode_byte(p + 7);
   uint8_t numLayers = decode_byte(p + 8);
   uint16_t configBodyLength = decode_word_be(p + 9);
@@ -42,14 +31,14 @@ bool configValidator_checkDataHeader() {
       reserved0xFFFF == 0xFFFF &&
       logicModelType == 0x01 &&
       formatRevision == CONFIG_STORAGE_FORMAT_REVISION &&
-      configBodyOffset == ASSIGN_STORAGE_HEADER_LENGTH &&
+      configBodyOffset == AssignStorageHeaderLength &&
       numKeys <= 255 &&
       numLayers <= 16 &&
-      configBodyLength < CONFIG_DATA_BODY_LENGTH_MAX;
+      configBodyLength < AssignStorageBodyLengthMax;
 
   if (!storageHeaderValid) {
     printf("invalid config memory data\n");
-    utils_debugShowBytes(eepromTempBuf, ASSIGN_STORAGE_HEADER_LENGTH);
+    utils_debugShowBytes(eepromTempBuf, AssignStorageHeaderLength);
   } else {
     printf("config memory is valid\n");
   }
@@ -57,15 +46,16 @@ bool configValidator_checkDataHeader() {
   return storageHeaderValid;
 }
 
-
-
-void configValidator_initializeEEPROM(){
-  eeprom_readBlock(EEPROM_BASE_ADDR_PROJECT_ID, eepromTempBuf, 8);
+void configValidator_initializeEEPROM() {
+  eeprom_readBlock(EepromAddr_ProjectID, eepromTempBuf, 8);
   bool projectIdValid = utils_compareBytes(eepromTempBuf, (uint8_t *)PROJECT_ID, 8);
-  if(!projectIdValid){
+  if (!projectIdValid) {
     printf("clear eeprom for new project\n");
-    eeprom_writeBlock(0, (uint8_t*)PROJECT_ID, 8);
-    for(uint16_t i = 8; i< 1024; i++){
+    for (uint16_t i = 0; i < EepromAddr_ProjectID; i++) {
+      eeprom_writeByte(i, 0);
+    }
+    eeprom_writeBlock(EepromAddr_ProjectID, (uint8_t *)PROJECT_ID, 8);
+    for (uint16_t i = EepromAddr_ProjectID + 8; i < 1024; i++) {
       eeprom_writeByte(i, 0);
     }
   }

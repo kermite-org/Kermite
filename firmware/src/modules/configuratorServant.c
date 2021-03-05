@@ -97,9 +97,9 @@ static void emitCustomParametersReadResponse() {
   p[0] = 0xb0;
   p[1] = 0x02;
   p[2] = 0x81;
-  p[3] = eeprom_readByte(EEPROM_BASE_ADDR_CUSTOM_SETTINGS_BYTES_INITILIZATION_FLAG);
+  p[3] = eeprom_readByte(EepromAddr_CustomSettingsBytesInitializationFlag);
   for (uint8_t i = 0; i < 10; i++) {
-    p[4 + i] = eeprom_readByte(EEPROM_BASE_ADDR_CUSTOM_SETTINGS_BYTES + i);
+    p[4 + i] = eeprom_readByte(EepromAddr_CustomSettingsBytes + i);
   }
   emitGenericHidData(rawHidSendBuf);
 }
@@ -122,7 +122,7 @@ static void processReadGenericHidData() {
 
         if (cmd == 0x20) {
           //write keymapping data to ROM
-          uint16_t addr = EEPROM_BASE_ADDR_ASSIGN_STORAGE + (p[3] << 8 | p[4]);
+          uint16_t addr = EepromBaseAddr_AssignStorage + (p[3] << 8 | p[4]);
           uint8_t len = p[5];
           uint8_t *src = p + 6;
           //uint8_t *dst = dummyStorage + addr;
@@ -134,7 +134,7 @@ static void processReadGenericHidData() {
         }
         if (cmd == 0x21) {
           //read memory checksum for keymapping data
-          uint16_t addr = EEPROM_BASE_ADDR_ASSIGN_STORAGE + (p[3] << 8 | p[4]);
+          uint16_t addr = EepromBaseAddr_AssignStorage + (p[3] << 8 | p[4]);
           uint16_t len = p[5] << 8 | p[6];
           uint8_t ck = 0;
           printf("check, addr %d, len %d\n", addr, len);
@@ -162,16 +162,16 @@ static void processReadGenericHidData() {
           uint8_t *src = p + 3;
           for (uint8_t i = 0; i < 10; i++) {
             uint8_t value = src[i];
-            eeprom_writeByte(EEPROM_BASE_ADDR_CUSTOM_SETTINGS_BYTES + i, value);
+            eeprom_writeByte(EepromAddr_CustomSettingsBytes + i, value);
             invokeCustomParameterChangedCallback(i, value);
           }
-          eeprom_writeByte(EEPROM_BASE_ADDR_CUSTOM_SETTINGS_BYTES_INITILIZATION_FLAG, 1);
+          eeprom_writeByte(EepromAddr_CustomSettingsBytesInitializationFlag, 1);
         }
         if (cmd == 0xa0) {
           // printf("handle custom parameters signle write\n");
           uint8_t index = p[3];
           uint8_t value = p[4];
-          eeprom_writeByte(EEPROM_BASE_ADDR_CUSTOM_SETTINGS_BYTES + index, value);
+          eeprom_writeByte(EepromAddr_CustomSettingsBytes + index, value);
           invokeCustomParameterChangedCallback(index, value);
         }
       }
@@ -206,10 +206,10 @@ static void processReadGenericHidData() {
 //custom parameter initial loading
 
 static void loadCustomParameters() {
-  bool isInitialized = eeprom_readByte(EEPROM_BASE_ADDR_CUSTOM_SETTINGS_BYTES_INITILIZATION_FLAG);
+  bool isInitialized = eeprom_readByte(EepromAddr_CustomSettingsBytesInitializationFlag);
   if (isInitialized) {
     for (uint8_t i = 0; i < 10; i++) {
-      uint8_t value = eeprom_readByte(EEPROM_BASE_ADDR_CUSTOM_SETTINGS_BYTES + i);
+      uint8_t value = eeprom_readByte(EepromAddr_CustomSettingsBytes + i);
       invokeCustomParameterChangedCallback(i, value);
     }
   }
