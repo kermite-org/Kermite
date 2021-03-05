@@ -37,10 +37,10 @@ bool configValidator_checkDataHeader() {
       configBodyLength < AssignStorageBodyLengthMax;
 
   if (!storageHeaderValid) {
-    printf("invalid config memory data\n");
+    printf("invalid assign stroage data\n");
     utils_debugShowBytes(eepromTempBuf, AssignStorageHeaderLength);
   } else {
-    printf("config memory is valid\n");
+    printf("assign storage is valid\n");
   }
 
   return storageHeaderValid;
