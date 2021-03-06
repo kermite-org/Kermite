@@ -56,6 +56,8 @@ static bool isSideBrainModeEnabled = false;
 
 static bool useBoardLeds = false;
 
+static bool debugUartConfigured = false;
+
 //---------------------------------------------
 //動的に変更可能なオプション
 static bool optionEmitKeyStroke = true;
@@ -277,6 +279,7 @@ void generalKeyboard_useOnboardLeds() {
 
 void generalKeyboard_useDebugUART(uint16_t baud) {
   debugUart_setup(baud);
+  debugUartConfigured = true;
 }
 
 void generalKeyboard_useOptionFixed(uint8_t slot, uint8_t value) {
@@ -297,6 +300,9 @@ void generalKeyboard_setup(
 
 void generalKeyboard_start() {
   USBCON = 0;
+  if (!debugUartConfigured) {
+    debugUart_disable();
+  }
   printf("start\n");
   keyboardEntry();
 }
