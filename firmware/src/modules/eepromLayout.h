@@ -13,18 +13,18 @@
 DATA LAYOUT
 U = USE_EEPROM_SIZE
 (address):(size), DataType
-(0):(U), user data
-(U):(8), project ID
-(U+8):(1), reserved
-(U+9):(1), custom parameter bytes initialization flag
-(U+10):(10), custom parameter bytes
-(U+20):(1024-U-20), assign storage (keymapping data)
+
+(0):(8), project ID
+(8):(1), reserved
+(9):(1), custom parameter bytes initialization flag
+(10):(10), custom parameter bytes
+(20):(1024-U-20), assign storage (keymapping data)
+
+(1024-U):(U), user data
+
 */
 
-#define EepromBaseAddr_UserData 0
-#define EepromDataSize_UserData USER_EEPROM_SIZE
-
-#define EepromBaseAddr_Framework USER_EEPROM_SIZE
+#define EepromBaseAddr_Framework 0
 #define EepromDataSize_Framework (EEPROM_DATA_SIZE_MCU - USER_EEPROM_SIZE)
 
 #define EepromAddr_ProjectID EepromBaseAddr_Framework
@@ -43,5 +43,8 @@ U = USE_EEPROM_SIZE
 
 #define EepromAddr_AssignStorageBody (EepromBaseAddr_AssignStorage + AssignStorageHeaderLength)
 #define AssignStorageBodyLengthMax (AssignStorageCapacity - AssignStorageHeaderLength)
+
+#define EepromBaseAddr_UserData (EEPROM_DATA_SIZE_MCU - USER_EEPROM_SIZE)
+#define EepromDataSize_UserData USER_EEPROM_SIZE
 
 #endif

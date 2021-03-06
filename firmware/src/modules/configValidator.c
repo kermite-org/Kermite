@@ -51,9 +51,6 @@ void configValidator_initializeEEPROM() {
   bool projectIdValid = utils_compareBytes(eepromTempBuf, (uint8_t *)PROJECT_ID, 8);
   if (!projectIdValid) {
     printf("clear eeprom for new project\n");
-    for (uint16_t i = 0; i < EepromAddr_ProjectID; i++) {
-      eeprom_writeByte(i, 0);
-    }
     eeprom_writeBlock(EepromAddr_ProjectID, (uint8_t *)PROJECT_ID, 8);
     for (uint16_t i = EepromAddr_ProjectID + 8; i < 1024; i++) {
       eeprom_writeByte(i, 0);

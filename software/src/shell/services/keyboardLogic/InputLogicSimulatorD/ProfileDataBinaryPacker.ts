@@ -411,24 +411,26 @@ EEPROM 1KB
 
 U=USER_EEPROM_SIZE, EEPROM先頭に確保されたユーザ領域, 未使用の場合は0
 
-[U:U+7] projectId 8bytes
-[U+8] reserved
-[U+9] isParameterInitialzed flag
-[U+10:U+19] customSettingBytes 10bytes
-[U+20:~] keymappingData
- [U+20:U+31] keymapping data header 12bytes
- [U+32:~] keymapping data body
+[0~7] projectId 8bytes
+[8] reserved
+[9] isParameterInitialzed flag
+[10~19] customSettingBytes 10bytes
+[20~] keymappingData
+ [20~31] keymapping data header 12bytes
+ [32~(1024-U)] keymapping data body
+
+[(1024-U)~1023] user eeprom data
 
 keymapping Header 12bytes
-[0-1] 0xFE03(BE), magic number
-[2-3] 0xFFFF(BE), reserved
+[0~1] 0xFE03(BE), magic number
+[2~3] 0xFFFF(BE), reserved
 [4] logic model type
   0x01 for dominant
 [5] format revision, increment when format changed
 [6] bodyOffset, 12
 [7] numKeys
 [8] numLayers
-[9-10] bodyLength
+[9~10] bodyLength
 [11]: padding
 */
 function encodeHeaderBytes(
