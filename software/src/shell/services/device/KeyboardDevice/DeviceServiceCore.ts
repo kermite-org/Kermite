@@ -86,7 +86,10 @@ export class KeyboardDeviceServiceCore {
       const paramSpec = info.customParameters.find(
         (paramSpec) => paramSpec.slotIndex === i,
       );
-      return paramSpec ? paramSpec.defaultValue : 0;
+      return paramSpec ? paramSpec.defaultValue : 1;
+      // 定義がないパラメタのデフォルト値は1とする。
+      // project.jsonでパラメタが定義されていない場合に基本的なオプションを設定値クリアで0にしてしまうと
+      // キーストローク出力/LED出力が無効化されてファームウェアが動作しているかどうかを判別できなくなるため
     });
     this.device?.writeSingleFrame(
       Packets.makeCustomParametersBulkWriteOperationFrame(initialParameters),
