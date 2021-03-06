@@ -20,7 +20,6 @@ export type ICustomParameterOption = {
 
 export type ICustomParameterSpec_Select = {
   type: 'selection';
-  uiType: 'ribbon' | 'pulldown';
   slotIndex: number;
   label: string;
   options: ICustomParameterOption[];

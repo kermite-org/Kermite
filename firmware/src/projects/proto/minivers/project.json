@@ -28,7 +28,6 @@
     },
     {
       "type": "selection",
-      "uiType": "pulldown",
       "slotIndex": 4,
       "label": "Master Side",
       "options": [
