@@ -221,11 +221,13 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
   const canSave =
     editSource.type === 'InternalProfile' && profilesModel.checkDirty();
 
+  const refProjectId = profilesModel.getCurrentProfileProjectId();
   const canWrite =
     editSource.type === 'InternalProfile' &&
     deviceStatus.isConnected &&
-    deviceStatus.deviceAttrs?.projectId ===
-      profilesModel.getCurrentProfileProjectId();
+    (refProjectId
+      ? deviceStatus.deviceAttrs?.projectId === refProjectId
+      : true);
 
   const loadProfile = async (profileName: string) => {
     if (profilesModel.checkDirty()) {
