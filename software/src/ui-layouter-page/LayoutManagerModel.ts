@@ -1,18 +1,15 @@
 import {
+  compareObjectByJsonStringify,
   createFallbackPersistKeyboardDesign,
-  getErrorText,
+  forceChangeFilePathExtension,
   ILayoutEditSource,
   ILayoutManagerCommand,
   ILayoutManagerStatus,
   IPersistKeyboardDesign,
   IProjectLayoutsInfo,
 } from '~/shared';
-import { ipcAgent } from '~/ui-common';
-import {
-  modalConfirm,
-  modalError,
-} from '~/ui-common/fundamental/dialog/BasicModals';
-import { forceCloseModal } from '~/ui-common/fundamental/overlay/ForegroundModalLayer';
+import { appUi, ipcAgent } from '~/ui-common';
+import { modalConfirm } from '~/ui-common/fundamental/dialog/BasicModals';
 import { UiLayouterCore } from '~/ui-layouter';
 
 interface ILayoutManagerModel {
@@ -33,13 +30,14 @@ interface ILayoutManagerModel {
   save(design: IPersistKeyboardDesign): void;
 }
 
+let _prevLoadedDevsign: IPersistKeyboardDesign | undefined;
 export class LayoutManagerModel implements ILayoutManagerModel {
   private _projectLayoutsInfos: IProjectLayoutsInfo[] = [];
 
   private _layoutManagerStatus: ILayoutManagerStatus = {
     editSource: { type: 'NewlyCreated' },
     loadedDesign: createFallbackPersistKeyboardDesign(),
-    errroInfo: undefined,
+    // errroInfo: undefined,
     projectLayoutsInfos: [],
   };
 
@@ -142,13 +140,18 @@ export class LayoutManagerModel implements ILayoutManagerModel {
   async saveToFileWithDialog(design: IPersistKeyboardDesign) {
     const filePath = await ipcAgent.async.file_getSaveJsonFilePathWithDialog();
     if (filePath) {
-      this.sendCommand({ type: 'saveToFile', filePath, design });
+      const modFilePath = forceChangeFilePathExtension(
+        filePath,
+        '.layout.json',
+      );
+      this.sendCommand({ type: 'saveToFile', filePath: modFilePath, design });
     }
   }
 
   async save(design: IPersistKeyboardDesign) {
+    const isProfile = this.editSource.type === 'CurrentProfile';
     const ok = await modalConfirm({
-      message: 'File ovewritten. Are you sure?',
+      message: `${isProfile ? 'Profile' : 'File'} ovewritten. Are you ok?`,
       caption: 'Save',
     });
     if (ok) {
@@ -160,42 +163,37 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     await ipcAgent.async.layout_showEditLayoutFileInFiler();
   }
 
-  private onLayoutManagerStatus = async (
-    diff: Partial<ILayoutManagerStatus>,
-  ) => {
+  private onLayoutManagerStatus = (diff: Partial<ILayoutManagerStatus>) => {
     this._layoutManagerStatus = {
       ...this._layoutManagerStatus,
       ...diff,
     };
     if (diff.loadedDesign) {
-      UiLayouterCore.loadEditDesign(diff.loadedDesign);
-    }
-    if (diff.errroInfo) {
-      const { errroInfo } = diff;
-      const errorTextEN = getErrorText(errroInfo, 'EN');
-      const errorTextJP = getErrorText(errroInfo, 'JP');
-      console.log(`ERROR`, {
-        errroInfo,
-        errorTextEN,
-        errorTextJP,
-      });
-      // todo: 多言語化対応時にエラーを出し分ける
-      await modalError(errorTextEN);
-      await ipcAgent.async.layout_clearErrorInfo();
+      const same = compareObjectByJsonStringify(
+        diff.loadedDesign,
+        _prevLoadedDevsign,
+      );
+      const isClean = compareObjectByJsonStringify(
+        diff.loadedDesign,
+        createFallbackPersistKeyboardDesign(),
+      );
+      if (!same || isClean) {
+        UiLayouterCore.loadEditDesign(diff.loadedDesign);
+        _prevLoadedDevsign = diff.loadedDesign;
+      }
     }
     if (diff.projectLayoutsInfos) {
-      this._projectLayoutsInfos = diff.projectLayoutsInfos;
-    }
-    if ('errroInfo' in diff && diff.errroInfo === undefined) {
-      // 編集中のファイルを外部エディタで更新し、フォーマットの誤りなどで
-      // 発生したエラーを修正して再度保存した場合に、エラーダイアログを閉じる
-      forceCloseModal();
+      this._projectLayoutsInfos = diff.projectLayoutsInfos.filter(
+        (info) => info.origin === 'local',
+      );
     }
   };
 
   startLifecycle() {
-    return ipcAgent.subscribe(
-      'layout_layoutManagerStatus',
+    if (!appUi.isExecutedInApp) {
+      return () => {};
+    }
+    return ipcAgent.events.layout_layoutManagerStatus.subscribe(
       this.onLayoutManagerStatus,
     );
   }

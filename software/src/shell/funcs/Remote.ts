@@ -1,15 +1,24 @@
 import fetch from 'node-fetch';
+import { AppError } from '~/shared';
 
 export async function fetchJson(uri: string): Promise<any> {
   console.log(`fetching ${uri}`);
-  const res = await fetch(uri);
-  return await res.json();
+  try {
+    const res = await fetch(uri);
+    return await res.json();
+  } catch (error) {
+    throw new AppError('FailedToLoadRemoteResource', { url: uri }, error);
+  }
 }
 
 export async function fetchText(uri: string): Promise<string> {
   console.log(`fetching ${uri}`);
-  const res = await fetch(uri);
-  return await res.text();
+  try {
+    const res = await fetch(uri);
+    return await res.text();
+  } catch (error) {
+    throw new AppError('FailedToLoadRemoteResource', { url: uri }, error);
+  }
 }
 
 const cached: { [key in string]: any } = {};

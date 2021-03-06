@@ -1,13 +1,11 @@
-import { h } from 'qx';
-import { GeneralSelector } from '~/ui-layouter/controls';
+import { jsx } from 'qx';
+import { GeneralSelector, HFlex } from '~/ui-common/components';
 import {
-  ConfigContent,
-  ConfigHeader,
-  ConfigPanel,
   ConfigSubContent,
   ConfigSubHeader,
   ConfigVStack,
 } from '~/ui-layouter/editor/views/SidePanels/atoms';
+import { ConfigPanelBox } from '~/ui-layouter/editor/views/SidePanels/atoms/ConfigPanelBox';
 import { GeneralConfigTextEditRow } from '~/ui-layouter/editor/views/SidePanels/controls/GeneralConfigTextEditRow';
 import { useOutlineEditPanelModel } from '~/ui-layouter/editor/views/SidePanels/models/OutlineEditPanel.model';
 
@@ -24,44 +22,39 @@ export const OutlineEditPanel = () => {
   const pointIndexText = currentPointIndex !== -1 ? currentPointIndex : '';
 
   return (
-    <ConfigPanel>
-      <ConfigHeader>outline shapes</ConfigHeader>
-      <ConfigContent>
-        <div>
-          <ConfigSubHeader>point {pointIndexText} properties</ConfigSubHeader>
-          <ConfigSubContent>
-            <ConfigVStack>
-              <GeneralConfigTextEditRow
-                {...vmX}
-                label={'x'}
-                labelWidth={70}
-                inputWidth={60}
-                unit="mm"
-              />
-              <GeneralConfigTextEditRow
-                {...vmY}
-                label={'y'}
-                labelWidth={70}
-                inputWidth={60}
-                unit="mm"
-              />
-            </ConfigVStack>
-          </ConfigSubContent>
-        </div>
-        <div>
-          <ConfigSubHeader>shape properties</ConfigSubHeader>
-          <ConfigSubContent>
-            <div>shapeID: {currentShapeId}</div>
-            <div>numPoints: {numShapePoints}</div>
-            <div>
-              <span style={{ width: '80px', display: 'inline-block' }}>
-                group
-              </span>
-              <GeneralSelector {...vmGroupId} width={60} />
-            </div>
-          </ConfigSubContent>
-        </div>
-      </ConfigContent>
-    </ConfigPanel>
+    <ConfigPanelBox headerText="outline shapes">
+      <div>
+        <ConfigSubHeader>point {pointIndexText} properties</ConfigSubHeader>
+        <ConfigSubContent>
+          <ConfigVStack>
+            <GeneralConfigTextEditRow
+              {...vmX}
+              label={'x'}
+              labelWidth={70}
+              inputWidth={80}
+              unit="mm"
+            />
+            <GeneralConfigTextEditRow
+              {...vmY}
+              label={'y'}
+              labelWidth={70}
+              inputWidth={80}
+              unit="mm"
+            />
+          </ConfigVStack>
+        </ConfigSubContent>
+      </div>
+      <div>
+        <ConfigSubHeader>shape properties</ConfigSubHeader>
+        <ConfigSubContent>
+          <div>shapeID: {currentShapeId}</div>
+          <div>numPoints: {numShapePoints}</div>
+          <HFlex>
+            <span style={{ width: '70px' }}>group</span>
+            <GeneralSelector {...vmGroupId} width={80} />
+          </HFlex>
+        </ConfigSubContent>
+      </div>
+    </ConfigPanelBox>
   );
 };

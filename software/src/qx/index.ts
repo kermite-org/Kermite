@@ -1,14 +1,23 @@
+import { jsx } from 'qx/qxinternal_petit_dom/h';
+import {
+  applyGlobalStyle,
+  css,
+  setJsxCreateElementFunction,
+  styled,
+} from './cssinjs';
 import { qxGlobal } from './qxGlobal';
 import { render as petitDomRender } from './qxinternal_petit_dom';
+import { Hook } from './qxinternal_petit_dom/hookImpl';
 import { VNode } from './qxinternal_petit_dom/types';
+import { setShortCssProcessor } from './shortCss';
 
-export { h } from './qxinternal_petit_dom/h';
-export { Hook } from './qxinternal_petit_dom/hookImpl2';
-export { qxGlobal };
+export { jsx, Hook, css, styled, applyGlobalStyle, setShortCssProcessor };
 
-export * from './qx.d';
+export type FC<T extends {} = {}> = (props: T) => JSX.Element | null;
+export type QxChild = JSX.Element | string;
+export type QxChildren = QxChild | QxChild[];
 
-export type FC<T extends {}> = (props: T) => JSX.Element | null;
+setJsxCreateElementFunction(jsx);
 
 export function rerender() {
   qxGlobal.rerender();

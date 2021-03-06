@@ -1,5 +1,4 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
 import { LayoutManagerButton } from '~/ui-layouter-page/LayoutManagerButton';
 import { useLayoutManagerMenuModel } from '~/ui-layouter-page/LayoutManagerMenu.model';
 import { ILayoutManagerViewModel } from '~/ui-layouter-page/LayoutManagerViewModel';
@@ -37,12 +36,12 @@ const cssMenuPanel = css`
 `;
 
 const cssMenuOverlay = css`
-  position: fixed;
+  position: absolute;
   z-index: 1;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
 `;
 
 export const LayoutManagerMenu = (props: {
@@ -51,26 +50,28 @@ export const LayoutManagerMenu = (props: {
   const { baseVm } = props;
   const vm = useLayoutManagerMenuModel(baseVm);
   return (
-    <div css={cssMenuBase}>
-      <LayoutManagerButton handler={vm.openMenu} active={vm.isOpen}>
-        <i class="fa fa-bars" />
-      </LayoutManagerButton>
+    <div>
       <div css={cssMenuOverlay} onClick={vm.closeMenu} qxIf={vm.isOpen} />
-      <div css={cssMenuPanel} qxIf={vm.isOpen}>
-        {vm.menuItems.map((item, idx) =>
-          item.type === 'separator' ? (
-            <hr key={idx} />
-          ) : (
-            <div
-              key={idx}
-              class="menuEntry"
-              onClick={item.handler}
-              data-disabled={item.disabled}
-            >
-              {item.text}
-            </div>
-          ),
-        )}
+      <div css={cssMenuBase}>
+        <LayoutManagerButton handler={vm.openMenu} active={vm.isOpen}>
+          <i class="fa fa-bars" />
+        </LayoutManagerButton>
+        <div css={cssMenuPanel} qxIf={vm.isOpen}>
+          {vm.menuItems.map((item, idx) =>
+            item.type === 'separator' ? (
+              <hr key={idx} />
+            ) : (
+              <div
+                key={idx}
+                class="menuEntry"
+                onClick={item.handler}
+                data-disabled={item.disabled}
+              >
+                {item.text}
+              </div>
+            ),
+          )}
+        </div>
       </div>
     </div>
   );

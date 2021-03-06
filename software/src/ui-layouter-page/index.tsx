@@ -1,5 +1,5 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
+import { uiTheme } from '~/ui-common';
 import { UiLayouterCore } from '~/ui-layouter';
 import { LayoutManagerTopBar } from '~/ui-layouter-page/LayoutManagerTopBar';
 
@@ -7,13 +7,20 @@ const cssBase = css`
   height: 100%;
   display: flex;
   flex-direction: column;
+  background: ${uiTheme.colors.clBackground};
+  /* background: ${uiTheme.colors.clPanelBox}; */
+  /* padding: 4px; */
 
   > .topRow {
+    /* background: ${uiTheme.colors.clPanelBox}; */
+    /* background: ${uiTheme.colors.clBackground}; */
     flex-shrink: 0;
   }
 
   > .mainRow {
     flex-grow: 1;
+    /* margin-top: 4px; */
+    /* margin: 4px; */
   }
 `;
 export const UiLayouterPageComponent = () => {

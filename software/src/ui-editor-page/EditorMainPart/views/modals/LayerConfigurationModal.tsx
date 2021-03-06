@@ -1,5 +1,4 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
 import {
   ILayerDefaultScheme,
   ModifierVirtualKey,
@@ -97,7 +96,7 @@ const LayerConfigurationModalContent = (props: {
 
   return (
     <ClosableOverlay close={close}>
-      <CommonDialogFrame caption={caption}>
+      <CommonDialogFrame caption={caption} close={close}>
         <DialogContentRow>
           <table css={cssCommonPropertiesTable}>
             <tbody>

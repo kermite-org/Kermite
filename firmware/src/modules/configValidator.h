@@ -2,6 +2,7 @@
 
 #include "types.h"
 
+void configValidator_initializeEEPROM();
 bool configValidator_checkDataHeader();
 
 #endif

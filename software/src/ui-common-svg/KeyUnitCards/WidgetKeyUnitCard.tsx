@@ -1,5 +1,4 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
 import { IDisplayKeyShape } from '~/shared';
 import { KeyUnitShape } from '~/ui-common-svg/KeyUnitCards/KeyUnitShape';
 
@@ -15,6 +14,7 @@ export interface IWidgetKeyUnitCardViewModel {
   isLayerFallback: boolean;
   isHold: boolean;
   shape: IDisplayKeyShape;
+  shiftHold: boolean;
 }
 
 export function WidgetKeyUnitCard({
@@ -22,7 +22,16 @@ export function WidgetKeyUnitCard({
 }: {
   keyUnit: IWidgetKeyUnitCardViewModel;
 }) {
-  const { keyUnitId, pos, primaryText, secondaryText, isHold, shape } = keyUnit;
+  const {
+    keyUnitId,
+    pos,
+    primaryText,
+    secondaryText,
+    isHold,
+    shape,
+    isLayerFallback,
+    shiftHold,
+  } = keyUnit;
 
   const cssKeyShape = css`
     fill: #e0e8ff;
@@ -44,6 +53,11 @@ export function WidgetKeyUnitCard({
     }
   };
 
+  const getFontWeight = (text: string) => {
+    const shouldBold = shiftHold && text.match(/^[A-Z]$/);
+    return shouldBold ? 'bold' : 'normal';
+  };
+
   return (
     <g
       transform={`translate(${pos.x}, ${pos.y}) rotate(${pos.r}) `}
@@ -55,8 +69,10 @@ export function WidgetKeyUnitCard({
         x={0}
         y={0}
         font-size={getFontSize(primaryText)}
+        font-weight={getFontWeight(primaryText)}
         text-anchor="middle"
         dominant-baseline="center"
+        qxIf={!isLayerFallback}
       >
         {primaryText}
       </text>
@@ -66,8 +82,10 @@ export function WidgetKeyUnitCard({
         x={0}
         y={8}
         font-size={getFontSize(secondaryText)}
+        font-weight={getFontWeight(secondaryText)}
         text-anchor="middle"
         dominant-baseline="center"
+        qxIf={!isLayerFallback}
       >
         {secondaryText}
       </text>

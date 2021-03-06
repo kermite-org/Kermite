@@ -1,7 +1,7 @@
-import { IProjectAttachmentFileSelectorModalModel } from '~/ui-common/sharedViews/ProjectAttachementFileSelectorModal';
+import { IProjectAttachmentFileSelectorModalModel } from '~/ui-common/components';
 import { ILayoutManagerViewModel } from '~/ui-layouter-page/LayoutManagerViewModel';
 
-export function makeLayoutSelectorModelViewModel(
+export function makeLayoutSelectorModalViewModel(
   baseVm: ILayoutManagerViewModel,
 ): IProjectAttachmentFileSelectorModalModel | undefined {
   if (baseVm.modalState === 'None') {

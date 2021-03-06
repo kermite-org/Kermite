@@ -1,7 +1,7 @@
-import { css } from 'goober';
-import { h, rerender } from 'qx';
+import { jsx, rerender, css } from 'qx';
 import { degToRad } from '~/shared';
-import { getKeySize } from '~/ui-common/modules/PlacementUnitHelper';
+import { getKeySize } from '~/shared/modules/PlacementUnitHelper';
+import { uiTheme } from '~/ui-common';
 import { IPosition, startDragSession } from '~/ui-layouter/base';
 import {
   editMutations,
@@ -86,9 +86,9 @@ export const KeyEntityCardSingle = (props: {
   const mirrorMultX = isMirror ? -1 : 1;
 
   const cssKeyRect = css`
-    fill: rgba(255, 255, 255, 0.3);
     stroke-width: 0.5;
-    stroke: #666;
+    fill: ${uiTheme.colors.clLayouterKeyFace};
+    stroke: ${uiTheme.colors.clLayouterKeyEdge};
     cursor: pointer;
 
     &[data-selected] {
@@ -97,6 +97,10 @@ export const KeyEntityCardSingle = (props: {
 
     &[data-ghost] {
       opacity: 0.3;
+    }
+
+    &:hover {
+      opacity: 0.7;
     }
   `;
 
@@ -151,6 +155,7 @@ export const KeyEntityCardSingle = (props: {
     dominant-baseline: central;
     user-select: none;
     pointer-events: none;
+    fill: ${uiTheme.colors.clLayouterKeyLegend};
     &[data-selected] {
       fill: #4bb;
     }

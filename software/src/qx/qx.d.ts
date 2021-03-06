@@ -20,6 +20,7 @@ declare namespace JsxLocal {
     key?: string | number;
     jsx?: boolean;
     css?: string;
+    xs?: string;
     qxIf?: boolean;
     ref?: ((el: Element) => void) | { current: any };
   };

@@ -3,15 +3,17 @@ import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelper
 import { ISelectorSource, useLocal } from '~/ui-common';
 import { IPresetKeyboardViewModel } from '~/ui-common-svg/panels/PresetKeyboardView';
 import { useDeviceStatusModel } from '~/ui-common/sharedModels/DeviceStatusModelHook';
-import { presetBrowserModel } from '~/ui-preset-browser-page/models/PresetBrowserModel';
+import { usePresetSelectionModel } from '~/ui-preset-browser-page/models/PresetSelectionModel';
+import { editSelectedProjectPreset } from '~/ui-preset-browser-page/models/ProfileCreator';
+import { useProfileDataLoaded } from '~/ui-preset-browser-page/models/ProfileDataLoader';
 import {
-  IPrsetLayerListViewModel,
+  IPresetLayerListViewModel,
   makePresetKeyboardViewModel,
 } from './PresetKeyboardViewModel';
 
 export interface IPresetBrowserViewModel {
   keyboard: IPresetKeyboardViewModel;
-  layerList: IPrsetLayerListViewModel;
+  layerList: IPresetLayerListViewModel;
   projectSelectorSource: ISelectorSource;
   presetSelectorSource: ISelectorSource;
   isLinkButtonActive: boolean;
@@ -21,7 +23,12 @@ export interface IPresetBrowserViewModel {
 
 export function makePresetBrowserViewModel(): IPresetBrowserViewModel {
   const deviceStatusModel = useDeviceStatusModel();
-  const profileData = presetBrowserModel.loadedProfileData;
+  const model = usePresetSelectionModel();
+
+  const profileData = useProfileDataLoaded(
+    model.currentProjectKey,
+    model.currentPresetKey,
+  );
 
   const state = useLocal({ currentLayerId: '' });
   Hook.useEffect(() => {
@@ -38,36 +45,21 @@ export function makePresetBrowserViewModel(): IPresetBrowserViewModel {
       currentLayerId: state.currentLayerId,
       setCurrentLayerId: (id) => (state.currentLayerId = id),
     },
-    projectSelectorSource: {
-      options: presetBrowserModel.optionProjectInfos.map((it) => ({
-        value: it.sig,
-        label: (it.origin === 'local' ? '[L]' : '[R]') + it.keyboardName,
-      })),
-      value: presetBrowserModel.currentProjectSig || '',
-      setValue: presetBrowserModel.setCurrentProjectSig,
-    },
-    presetSelectorSource: {
-      options: presetBrowserModel.optionPresetSpecs.map((it) => ({
-        value: it.id,
-        label:
-          it.type === 'preset'
-            ? `[preset]${it.presetName}`
-            : `[blank]${it.layoutName}`,
-      })),
-      value: presetBrowserModel.currentPresetSpecId || '',
-      setValue: presetBrowserModel.setCurrentPresetSpecId,
-    },
+    projectSelectorSource: model.projectSelectorSource,
+    presetSelectorSource: model.presetSelectorSource,
     isLinkButtonActive:
       deviceStatusModel.isConnected &&
       deviceStatusModel.deviceAttrs?.projectId !==
-        getProjectOriginAndIdFromSig(presetBrowserModel.currentProjectSig || '')
-          .projectId,
+        getProjectOriginAndIdFromSig(model.currentProjectKey || '').projectId,
     linkButtonHandler() {
       const deviceProjectId = deviceStatusModel.deviceAttrs?.projectId || '';
-      presetBrowserModel.setCurrentProjectByProjectId(deviceProjectId);
+      model.selectProjectByProjectId(deviceProjectId);
     },
     editPresetButtonHandler() {
-      presetBrowserModel.editSelectedProjectPreset();
+      editSelectedProjectPreset(
+        model.currentProjectKey,
+        model.currentPresetKey,
+      );
     },
   };
 }

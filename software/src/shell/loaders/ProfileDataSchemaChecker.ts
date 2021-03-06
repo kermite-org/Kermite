@@ -1,4 +1,3 @@
-import { persistEditKeyboardDesignSchemaChecker } from '~/shell/loaders/LayoutFileSchemaChecker';
 import {
   vArray,
   vBoolean,
@@ -8,7 +7,8 @@ import {
   vString,
   vValueEquals,
   vValueOneOf,
-} from '~/shell/loaders/SchemaValidationHelper';
+} from '~/shared/modules/SchemaValidationHelper';
+import { persistEditKeyboardDesignSchemaChecker } from '~/shell/loaders/LayoutFileSchemaChecker';
 
 const vModiferKey = vValueOneOf(['K_Ctrl', 'K_Shift', 'K_Alt', 'K_OS']);
 

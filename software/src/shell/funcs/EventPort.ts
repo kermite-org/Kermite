@@ -1,43 +1,19 @@
 import { removeArrayItems } from '~/shared';
 
 type IEventListener<T> = (event: T) => void;
-
-export class EventPort<T> {
-  private listeners: IEventListener<T>[] = [];
-
-  emit(event: T) {
-    this.listeners.forEach((li) => li(event));
-  }
-
-  private initialValueGetter: (() => T) | undefined;
-
-  constructor(options?: { initialValueGetter: () => T }) {
-    this.initialValueGetter = options?.initialValueGetter;
-  }
-
-  subscribe = (listener: IEventListener<T>) => {
-    this.listeners.push(listener);
-
-    if (this.initialValueGetter) {
-      listener(this.initialValueGetter());
-    }
-  };
-
-  unsubscribe = (listener: IEventListener<T>) => {
-    removeArrayItems(this.listeners, listener);
-  };
-}
-
-export interface IEventPort2<T> {
+export interface IEventPort<T> {
   subscribe(listener: IEventListener<T>): () => void;
+  unsubscribe(listener: IEventListener<T>): void;
   emit(event: T): void;
 }
 
-export function createEventPort2<T>(options: {
-  initialValueGetter?: () => T;
-  onFirstSubscriptionStarting?: () => void;
-  onLastSubscriptionEnded?: () => void;
-}): IEventPort2<T> {
+export function createEventPort<T>(
+  options: {
+    initialValueGetter?: () => T;
+    onFirstSubscriptionStarting?: () => void;
+    onLastSubscriptionEnded?: () => void;
+  } = {},
+): IEventPort<T> {
   const {
     initialValueGetter,
     onFirstSubscriptionStarting,
@@ -45,6 +21,13 @@ export function createEventPort2<T>(options: {
   } = options;
 
   const listeners: IEventListener<T>[] = [];
+
+  const unsubscribe = (listener: IEventListener<T>) => {
+    removeArrayItems(listeners, listener);
+    if (listeners.length === 0) {
+      onLastSubscriptionEnded?.();
+    }
+  };
 
   const subscribe = (listener: IEventListener<T>) => {
     if (listeners.length === 0) {
@@ -54,12 +37,7 @@ export function createEventPort2<T>(options: {
       listener(initialValueGetter());
     }
     listeners.push(listener);
-    return () => {
-      removeArrayItems(listeners, listener);
-      if (listeners.length === 0) {
-        onLastSubscriptionEnded?.();
-      }
-    };
+    return () => unsubscribe(listener);
   };
 
   const emit = (event: T) => {
@@ -68,6 +46,7 @@ export function createEventPort2<T>(options: {
 
   return {
     subscribe,
+    unsubscribe,
     emit,
   };
 }

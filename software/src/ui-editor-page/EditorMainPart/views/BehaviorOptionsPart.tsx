@@ -1,8 +1,7 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
 import { fieldSetter } from '~/ui-common';
+import { CheckBoxLine } from '~/ui-common/components';
 import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
-import { CheckboxLine } from '~/ui-editor-page/components/fabrics/CheckboxLine';
 
 const cssBehaviorOptionsPart = css`
   margin: 0 5px;
@@ -16,15 +15,17 @@ export const BehaviorOptionsPart = () => {
 
   return (
     <div css={cssBehaviorOptionsPart}>
-      <CheckboxLine
+      <CheckBoxLine
         text="Show Layers Dynamic"
         checked={settings.showLayersDynamic}
         setChecked={fieldSetter(settings, 'showLayersDynamic')}
+        hint="デバイスのレイヤ状態に同期して表示するレイヤを切り替えます。"
       />
-      <CheckboxLine
+      <CheckBoxLine
         text="Show Fallback Assigns"
         checked={settings.showLayerDefaultAssign}
         setChecked={fieldSetter(settings, 'showLayerDefaultAssign')}
+        hint="レイヤのデフォルトアサインを表示します。"
       />
     </div>
   );

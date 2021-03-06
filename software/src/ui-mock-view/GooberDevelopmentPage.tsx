@@ -1,16 +1,9 @@
-import { css, setup, styled } from 'goober';
-import { h, FC } from 'qx';
-
-setup(h);
+import { jsx, Hook, rerender, css, applyGlobalStyle, styled } from 'qx';
 
 const cssRoot = css`
   border: solid 4px orange;
   color: green;
   padding: 10px;
-
-  > * + * {
-    margin-top: 5px;
-  }
 `;
 
 const boxW = 100;
@@ -22,68 +15,46 @@ const cssHeader = css`
   border: solid 1px blue;
 `;
 
-const Header2 = styled('div')`
-  width: ${boxW}px;
-  height: ${boxH}px;
-  border: solid 1px blue;
-  color: red;
+const cssPage = css`
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html,
+  body,
+  #app {
+    height: 100%;
+  }
+
+  #app {
+    font-family: 'Roboto', sans-serif;
+  }
+
+  body {
+    overflow: hidden;
+    background: #dfd;
+  }
 `;
+applyGlobalStyle(cssPage);
 
-const MyButton = (props: { text: string; className?: string }) => {
-  return <button className={props.className}>{props.text}</button>;
-};
-
-const StyledMyButton = styled(MyButton)`
-  border: solid 2px green;
-  background: #cfc;
-  padding: 10px;
-  border-radius: 5px;
+const Foo = styled.div`
+  width: 100px;
+  height: 50px;
+  border: solid 1px #f08;
 `;
-
-const MultipleClassNameTestCard1 = () => {
-  const cssBase = css`
-    width: 200px;
-
-    > * + * {
-      margin-top: 5px;
-    }
-
-    > .foo {
-      color: red;
-    }
-
-    > .bar {
-      border: solid 1px blue;
-    }
-
-    > .buzz {
-      background: yellow;
-    }
-  `;
-  return (
-    <div css={cssBase}>
-      <div classNames={['foo', 'bar', 'buzz']}>test</div>
-      <div classNames={{ foo: true, bar: true, buzz: false }}>test</div>
-    </div>
-  );
-};
-
-interface IUserNameViewProps {
-  userName: string;
-}
-
-const UserNameView: FC<IUserNameViewProps> = ({ userName }) => {
-  return <div>hello {userName}</div>;
-};
 
 export const GooberDevelopmentPage = () => {
+  Hook.useEffect(() => {
+    setTimeout(rerender, 1000);
+  }, []);
+
+  console.log('render');
   return (
     <div css={cssRoot}>
       <div css={cssHeader}>hello</div>
-      <Header2>world</Header2>
-      <StyledMyButton text="test" />
-      <MultipleClassNameTestCard1 />
-      <UserNameView userName="yamada" />
+      <Foo>world</Foo>
     </div>
   );
 };

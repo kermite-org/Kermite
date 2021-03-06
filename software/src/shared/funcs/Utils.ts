@@ -199,15 +199,45 @@ export function delayMs(n: number) {
   return new Promise((resolve) => setTimeout(resolve, n));
 }
 
-export function overwriteObjectProps<T>(dst: T, src: T) {
-  for (const key in dst) {
-    if (src[key] !== undefined) {
-      dst[key] = src[key];
+export function copyObjectProps<T>(target: T, source: T) {
+  for (const key in target) {
+    // if (source[key] !== undefined) {
+    if (key in source) {
+      target[key] = source[key];
     }
   }
 }
 
-export const copyObjectProps = overwriteObjectProps;
+export function copyObjectPropsRecursive<T>(target: T, source: T) {
+  for (const key in target) {
+    if (source[key] !== undefined) {
+      if (typeof source[key] === 'object' && typeof target[key] === 'object') {
+        copyObjectPropsRecursive(target[key], source[key]);
+      } else {
+        target[key] = source[key];
+      }
+    }
+  }
+}
+
+export function makeObjectPropsOverrideRecursive<T>(original: T, input: T): T {
+  const merged: T = {} as any;
+  for (const key in original) {
+    if (input[key] !== undefined) {
+      if (typeof original[key] === 'object' && typeof input[key] === 'object') {
+        merged[key] = makeObjectPropsOverrideRecursive(
+          original[key],
+          input[key],
+        );
+      } else {
+        merged[key] = input[key];
+      }
+    } else {
+      merged[key] = original[key];
+    }
+  }
+  return merged;
+}
 
 function deg2(value: number) {
   return `0${value}`.slice(-2);
@@ -266,4 +296,40 @@ export function translateCoord(
 
 export function getObjectKeys<T extends {}>(obj: T): (keyof T)[] {
   return Object.keys(obj) as (keyof T)[];
+}
+
+export function checkValidOptionOrDefault<T extends string>(
+  optionValues: T[],
+  value: T,
+  defaultValue: T,
+): T {
+  if (optionValues.includes(value)) {
+    return value;
+  }
+  return defaultValue;
+}
+
+export function forceChangeFilePathExtension(
+  filePath: string,
+  extension: string,
+) {
+  const fileName = filePath.replace(/^.*[\\/]/, '');
+  const namePart = fileName.split('.')[0];
+  return filePath.replace(fileName, namePart + extension);
+}
+
+export function compareString(a: string, b: string) {
+  if (a > b) {
+    return 1;
+  } else if (a < b) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+
+export function compareArray(ar0: any[], ar1: any[]): boolean {
+  return (
+    ar0.length === ar1.length && ar0.every((it, index) => ar1[index] === it)
+  );
 }

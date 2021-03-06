@@ -1,12 +1,8 @@
-import { css } from 'goober';
-import { h } from 'qx';
-import { GeneralButton } from '../../../ui-common/sharedViews/controls/GeneralButton';
-import {
-  GeneralSelector,
-  IGeneralSelectorProps,
-} from '../../../ui-common/sharedViews/controls/GeneralSelector';
+import { jsx, css } from 'qx';
+import { ISelectorOption } from '~/ui-common';
+import { GeneralSelector, GeneralButton } from '~/ui-common/components';
 
-const testOptions: IGeneralSelectorProps['options'] = [
+const testOptions: ISelectorOption[] = [
   { value: '', label: 'no-user' },
   { value: 'user001', label: 'yamada' },
   { value: 'user002', label: 'tanaka' },
@@ -48,19 +44,19 @@ export const ComponentCatalog = () => {
       <div class="buttonsRow">
         <GeneralButton
           icon="fa fa-cog"
-          handler={buttonHandler}
-          form="unitSquare"
+          onClick={buttonHandler}
+          size="unitSquare"
         />
         <GeneralButton
           text="foo"
           icon="fa fa-cog"
           className={buttonExtraCss}
-          form="unit"
+          size="unit"
         />
-        <GeneralButton icon="fa fa-cog" disabled form="unitSquare" />
-        <GeneralButton text="OK" form="unit" />
-        <GeneralButton text="Edit this" form="unit" />
-        <GeneralButton text="Edit this" form="large" />
+        <GeneralButton icon="fa fa-cog" disabled size="unitSquare" />
+        <GeneralButton text="OK" size="unit" />
+        <GeneralButton text="Edit this" size="unit" />
+        <GeneralButton text="Edit this" size="large" />
       </div>
 
       <GeneralSelector

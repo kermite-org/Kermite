@@ -1,5 +1,4 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
 import { IDisplayArea, IDisplayOutlineShape } from '~/shared';
 import {
   IPresetKeyUnitViewModel,
@@ -25,7 +24,7 @@ export const PresetKeyboardView = ({
 
   const dpiScale = 2;
   const marginRatio = 0.06;
-  const baseStrokeWidth = 0.3;
+  const baseStrokeWidth = 1.0;
 
   const fillColor = 'transparent';
   const strokeColor = '#0A8';
@@ -45,11 +44,7 @@ export const PresetKeyboardView = ({
         />
         <g>
           {vm.keyUnits.map((keyUnit) => (
-            <PresetKeyUnitCard
-              model={keyUnit}
-              key={keyUnit.keyUnitId}
-              // qxOptimizer="deepEqual"
-            />
+            <PresetKeyUnitCard model={keyUnit} key={keyUnit.keyUnitId} />
           ))}
         </g>
       </KeyboardSvgFrameWithAutoScaler>

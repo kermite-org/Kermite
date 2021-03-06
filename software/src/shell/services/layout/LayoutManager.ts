@@ -8,17 +8,47 @@ import {
   IPersistKeyboardDesign,
   ILayoutEditSource,
 } from '~/shared';
-import { getErrorInfo } from '~/shared/defs';
+import {
+  vSchemaOneOf,
+  vObject,
+  vValueEquals,
+  vString,
+} from '~/shared/modules/SchemaValidationHelper';
 import { applicationStorage } from '~/shell/base';
-import { createEventPort2 } from '~/shell/funcs';
+import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
+import { createEventPort } from '~/shell/funcs';
 import { FileWather } from '~/shell/funcs/FileWatcher';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { projectResourceProvider } from '~/shell/projectResources';
 import { ILayoutManager } from '~/shell/services/layout/interfaces';
-import { IProfileManager } from '~/shell/services/profile/interfaces';
+import {
+  IPresetProfileLoader,
+  IProfileManager,
+} from '~/shell/services/profile/interfaces';
+
+const layoutEditSourceSchema = vSchemaOneOf([
+  vObject({
+    type: vValueEquals('NewlyCreated'),
+  }),
+  vObject({
+    type: vValueEquals('CurrentProfile'),
+  }),
+  vObject({
+    type: vValueEquals('File'),
+    filePath: vString(),
+  }),
+  vObject({
+    type: vValueEquals('ProjectLayout'),
+    projectId: vString(),
+    layoutName: vString(),
+  }),
+]);
 
 export class LayoutManager implements ILayoutManager {
-  constructor(private profileManager: IProfileManager) {}
+  constructor(
+    private presetProfileLoader: IPresetProfileLoader,
+    private profileManager: IProfileManager,
+  ) {}
 
   // CurrentProfileLayoutとそれ以外との切り替えのために、
   // CurrentProfileLayout以外のEditSourceをbackEditSourceとして保持
@@ -32,7 +62,6 @@ export class LayoutManager implements ILayoutManager {
     },
     loadedDesign: createFallbackPersistKeyboardDesign(),
     projectLayoutsInfos: [],
-    errroInfo: undefined,
   };
 
   private initialized = false;
@@ -42,12 +71,17 @@ export class LayoutManager implements ILayoutManager {
       this.setStatus({
         projectLayoutsInfos: await this.getAllProjectLayoutsInfos(),
       });
-      const editSource = applicationStorage.getItem('layoutEditSource');
+      const editSource = applicationStorage.readItemSafe<ILayoutEditSource>(
+        'layoutEditSource',
+        layoutEditSourceSchema,
+        { type: 'CurrentProfile' },
+      );
       try {
         // 前回起動時に編集していたファイルの読み込みを試みる
         await this.loadLayoutByEditSource(editSource);
       } catch (error) {
         // 読み込めない場合は初期状態のままで、特にエラーを通知しない
+        console.log(`error while loading previous edit layout file`);
         console.log(error);
       }
       this.initialized = true;
@@ -55,11 +89,11 @@ export class LayoutManager implements ILayoutManager {
   };
 
   private finalizeOnLastDisconnect = () => {
-    applicationStorage.setItem('layoutEditSource', this.status.editSource);
+    applicationStorage.writeItem('layoutEditSource', this.status.editSource);
     this.fileWatcher.unobserveFile();
   };
 
-  statusEvents = createEventPort2<Partial<ILayoutManagerStatus>>({
+  statusEvents = createEventPort<Partial<ILayoutManagerStatus>>({
     initialValueGetter: () => this.status,
     onFirstSubscriptionStarting: this.initializeOnFirstConnect,
     onLastSubscriptionEnded: this.finalizeOnLastDisconnect,
@@ -90,20 +124,14 @@ export class LayoutManager implements ILayoutManager {
   private onObservedFileChanged = async () => {
     const filePath = this.getCurrentEditLayoutFilePath();
     if (filePath) {
-      try {
-        const loadedDesign = await LayoutFileLoader.loadLayoutFromFile(
-          filePath,
-        );
-        this.setStatus({
-          errroInfo: undefined,
-          loadedDesign,
-        });
-      } catch (error) {
-        this.setStatus({ errroInfo: getErrorInfo(error) });
-      }
+      const loadedDesign = await LayoutFileLoader.loadLayoutFromFile(filePath);
+      this.setStatus({
+        loadedDesign,
+      });
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   private async createNewLayout() {
     this.setStatus({
       editSource: { type: 'NewlyCreated' },
@@ -112,7 +140,7 @@ export class LayoutManager implements ILayoutManager {
   }
 
   private async loadCurrentProfileLayout() {
-    const profile = this.profileManager.getStatus().loadedProfileData;
+    const profile = await this.profileManager.getCurrentProfileAsync();
     if (profile) {
       this.setStatus({
         editSource: { type: 'CurrentProfile' },
@@ -127,7 +155,10 @@ export class LayoutManager implements ILayoutManager {
 
   private async loadLayoutFromFile(filePath: string) {
     const loadedDesign = await LayoutFileLoader.loadLayoutFromFile(filePath);
-    this.fileWatcher.observeFile(filePath, this.onObservedFileChanged);
+    this.fileWatcher.observeFile(
+      filePath,
+      withAppErrorHandler(this.onObservedFileChanged),
+    );
     this.setStatus({
       editSource: { type: 'File', filePath },
       loadedDesign,
@@ -243,7 +274,7 @@ export class LayoutManager implements ILayoutManager {
     if (editSource.type === 'NewlyCreated') {
       throw new Error('cannot save newly created layout');
     } else if (editSource.type === 'CurrentProfile') {
-      const profile = this.profileManager.getStatus().loadedProfileData;
+      const profile = await this.profileManager.getCurrentProfileAsync();
       if (profile) {
         const newProfile = duplicateObjectByJsonStringifyParse(profile);
         newProfile.keyboardDesign = design;
@@ -260,6 +291,7 @@ export class LayoutManager implements ILayoutManager {
       );
       if (filePath) {
         await LayoutFileLoader.saveLayoutToFile(filePath, design);
+        this.presetProfileLoader.deleteProjectPresetProfileCache(projectId);
       }
     }
     this.setStatus({ loadedDesign: design });
@@ -296,13 +328,8 @@ export class LayoutManager implements ILayoutManager {
   }
 
   async executeCommands(commands: ILayoutManagerCommand[]): Promise<boolean> {
-    try {
-      for (const command of commands) {
-        await this.executeCommand(command);
-      }
-    } catch (error) {
-      this.setStatus({ errroInfo: getErrorInfo(error) });
-      return false;
+    for (const command of commands) {
+      await this.executeCommand(command);
     }
     return true;
   }
@@ -310,15 +337,12 @@ export class LayoutManager implements ILayoutManager {
   private async getAllProjectLayoutsInfos(): Promise<IProjectLayoutsInfo[]> {
     const resourceInfos = await projectResourceProvider.getAllProjectResourceInfos();
     return resourceInfos.map((info) => ({
+      origin: info.origin,
       projectId: info.projectId,
       projectPath: info.projectPath,
       keyboardName: info.keyboardName,
       layoutNames: info.layoutNames,
     }));
-  }
-
-  clearErrorInfo() {
-    this.setStatus({ errroInfo: undefined });
   }
 
   showEditLayoutFileInFiler() {

@@ -184,7 +184,7 @@ function setAttributes(
   marker: string | undefined,
 ) {
   if (marker) {
-    setDOMAttribute(domElement, 'data-component-ref', marker, isSvg);
+    setDOMAttribute(domElement, 'data-ref', marker, isSvg);
   }
   const props = [];
   for (const key in newAttrs) {

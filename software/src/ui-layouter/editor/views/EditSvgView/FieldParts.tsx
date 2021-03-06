@@ -1,9 +1,6 @@
-import { h } from 'qx';
-import { makeCssColor } from '~/ui-layouter/base';
+import { jsx } from 'qx';
+import { uiTheme } from '~/ui-common/base';
 import { editReader } from '~/ui-layouter/editor/store';
-
-const axisColor = makeCssColor(0x444444, 0.2);
-const gridColor = makeCssColor(0x444444, 0.1);
 
 function getWorldViewBounds() {
   const { sight } = editReader;
@@ -31,7 +28,7 @@ export const FieldAxis = () => {
         y1={0}
         x2={right}
         y2={0}
-        stroke={axisColor}
+        stroke={uiTheme.colors.clLayouterAxis}
         stroke-width={0.5}
       />
       <line
@@ -39,7 +36,7 @@ export const FieldAxis = () => {
         y1={top}
         x2={0}
         y2={bottom}
-        stroke={axisColor}
+        stroke={uiTheme.colors.clLayouterAxis}
         stroke-width={0.5}
       />
     </g>
@@ -72,7 +69,7 @@ export const FieldGrid = () => {
             y1={y}
             x2={right}
             y2={y}
-            stroke={gridColor}
+            stroke={uiTheme.colors.clLayouterGrid}
             stroke-width={0.5}
           />
         ))}
@@ -85,7 +82,7 @@ export const FieldGrid = () => {
             y1={top}
             x2={x}
             y2={bottom}
-            stroke={gridColor}
+            stroke={uiTheme.colors.clLayouterGrid}
             stroke-width={0.5}
           />
         ))}

@@ -1,8 +1,7 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { ViewModelProps } from '~/ui-common/helpers';
-import { IPrsetLayerListViewModel } from '~/ui-preset-browser-page/viewModels/PresetKeyboardViewModel';
+import { IPresetLayerListViewModel } from '~/ui-preset-browser-page/viewModels/PresetKeyboardViewModel';
 
 const PresetLayerItem = (props: {
   layerName: string;
@@ -19,6 +18,9 @@ const PresetLayerItem = (props: {
     &[data-active] {
       background: #0cc;
     }
+    &:hover {
+      opacity: 0.7;
+    }
   `;
 
   return (
@@ -30,7 +32,7 @@ const PresetLayerItem = (props: {
 
 export const PresetLayersBox = ({
   vm,
-}: ViewModelProps<IPrsetLayerListViewModel>) => {
+}: ViewModelProps<IPresetLayerListViewModel>) => {
   const cssBase = css`
     padding: 5px;
   `;

@@ -1,7 +1,5 @@
-import { css } from 'goober';
-import { h, Hook } from 'qx';
+import { jsx, css } from 'qx';
 import { uiTheme } from '~/ui-common';
-import { presetBrowserModel } from '~/ui-preset-browser-page/models/PresetBrowserModel';
 import { makePresetBrowserViewModel } from '~/ui-preset-browser-page/viewModels/PresetBrowserViewModel';
 import { PresetKeyboardSection } from '~/ui-preset-browser-page/views/PresetKeyboardSection';
 import { PresetSelectionSection } from '~/ui-preset-browser-page/views/PresetSelectionSection';
@@ -18,10 +16,7 @@ const cssPresetBrowserPage = css`
 `;
 
 export const PresetBrowserPage = () => {
-  Hook.useEffect(presetBrowserModel.startPageSession, []);
-
   const vm = makePresetBrowserViewModel();
-
   return (
     <div css={cssPresetBrowserPage}>
       <div>Preset Browser</div>

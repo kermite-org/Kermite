@@ -1,17 +1,17 @@
-import { h, Hook } from 'qx';
+import { jsx, Hook } from 'qx';
 import { IProjectResourceInfo } from '~/shared';
 import { fieldSetter, ipcAgent, useLocal } from '~/ui-common';
-import { modalConfirm } from '~/ui-common/fundamental/dialog/BasicModals';
 import {
   IProjectAttachmentFileSelectorModalModel,
   ProjectAttachmentFileSelectorModal,
-} from '~/ui-common/sharedViews/ProjectAttachementFileSelectorModal';
+} from '~/ui-common/components';
+import { modalConfirm } from '~/ui-common/fundamental/dialog/BasicModals';
 import { IProfileManagementPartViewModel } from '~/ui-editor-page/ProfileManagement/viewModels/ProfileManagementPartViewModel';
 
 function getTargetPresetNameFilePath(projectPath: string, presetName: string) {
   if (projectPath && presetName) {
-    return `projects/${projectPath}/presets/${presetName}.json`;
-    // return `<KermiteRoot>/firmare/src/projects/${projectPath}/presets/${fileNamePart}.json`;
+    return `projects/${projectPath}/profiles/${presetName}.profile.json`;
+    // return `<KermiteRoot>/firmare/src/projects/${projectPath}/profiles/${fileNamePart}.json`;
   }
   return '';
 }

@@ -26,16 +26,16 @@ type IMenuItemSeparator = { separator: true };
 const menuItemSources: (IMenuItemSource | IMenuItemSeparator)[] = [
   { text: 'new design', command: 'createNewLayout' },
   { separator: true },
-  { text: 'load from file', command: 'loadFromFileWithDialog' },
-  { text: 'save to file', command: 'saveToFileWithDialog' },
+  { text: 'load from file...', command: 'loadFromFileWithDialog' },
+  { text: 'save to file...', command: 'saveToFileWithDialog' },
   { separator: true },
   {
-    text: 'load from project',
+    text: 'load from project...',
     command: 'openLoadFromProjectModal',
     commandActiveFlagKey: 'canOpenProjectIoModal',
   },
   {
-    text: 'save to project',
+    text: 'save to project...',
     command: 'openSaveToProjectModal',
     commandActiveFlagKey: 'canOpenProjectIoModal',
   },

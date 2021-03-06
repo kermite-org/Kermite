@@ -8,7 +8,7 @@ import {
   compareObjectByJsonStringify,
   duplicateObjectByJsonStringifyParse,
 } from '~/shared';
-import { getDisplayKeyboardDesignSingleCached } from '~/ui-common/modules/DisplayKeyboardSingleCache';
+import { getDisplayKeyboardDesignSingleCached } from '~/shared/modules/DisplayKeyboardSingleCache';
 import {
   changeProfileDataAssignType,
   removeInvalidProfileAssigns,
@@ -128,8 +128,10 @@ export class EditorModel {
     return this.layers.find((la) => la.layerId === layerId);
   }
 
-  checkDirty(): boolean {
-    removeInvalidProfileAssigns(this.profileData);
+  checkDirty(clean: boolean): boolean {
+    if (clean) {
+      removeInvalidProfileAssigns(this.profileData);
+    }
     return !compareObjectByJsonStringify(
       this.loadedPorfileData,
       this.profileData,

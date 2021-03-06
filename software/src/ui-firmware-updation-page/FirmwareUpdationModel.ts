@@ -90,8 +90,7 @@ export class FirmwareUpdationModel {
 
   startPageSession = () => {
     this.fechProjectInfos();
-    return ipcAgent.subscribe(
-      'firmup_comPortPlugEvents',
+    return ipcAgent.events.firmup_comPortPlugEvents.subscribe(
       this.onComPortPlugEvent,
     );
   };

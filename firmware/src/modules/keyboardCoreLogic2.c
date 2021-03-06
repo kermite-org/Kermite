@@ -2,6 +2,7 @@
 #include "bitOperations.h"
 #include "config.h"
 #include "eeprom.h"
+#include "eepromLayout.h"
 #include <stdio.h>
 
 #ifndef CORELOGIC_NUM_KEYSLOTS
@@ -152,9 +153,9 @@ static uint8_t getOutputModifiers() {
 //--------------------------------------------------------------------------------
 //assing memory reader
 
+#define AssignStorageHeaderLocation EepromAddr_AssignStorageHeader
+#define AssignStorageBodyLocation EepromAddr_AssignStorageBody
 #define NumLayersMax 16
-#define AssignStorageHeaderSize 24
-
 typedef struct {
   uint8_t numLayers;
   uint16_t assignsStartAddress;
@@ -166,14 +167,14 @@ static AssignMemoryReaderState assignMemoryReaderState;
 
 static void initAssignMemoryReader() {
   AssignMemoryReaderState *rs = &assignMemoryReaderState;
-  uint8_t numLayers = readStorageByte(8);
-  uint16_t bodyLength = readStorageWordBE(9);
+  uint8_t numLayers = readStorageByte(AssignStorageHeaderLocation + 8);
+  uint16_t bodyLength = readStorageWordBE(AssignStorageHeaderLocation + 9);
   rs->numLayers = numLayers;
-  rs->assignsStartAddress = AssignStorageHeaderSize + numLayers * 2;
-  rs->assignsEndAddress = AssignStorageHeaderSize + bodyLength;
+  rs->assignsStartAddress = AssignStorageBodyLocation + numLayers * 2;
+  rs->assignsEndAddress = AssignStorageBodyLocation + bodyLength;
   printf("nl:%d bl:%d\n", numLayers, bodyLength);
   for (uint8_t i = 0; i < 16; i++) {
-    rs->layerAttributeWords[i] = (i < numLayers) ? readStorageWordBE(AssignStorageHeaderSize + i * 2) : 0;
+    rs->layerAttributeWords[i] = (i < numLayers) ? readStorageWordBE(AssignStorageBodyLocation + i * 2) : 0;
   }
 }
 
@@ -271,8 +272,8 @@ static AssignSet *getAssignSetInLayer(uint8_t keyIndex, uint8_t layerIndex) {
       bool isDual = assignType == 2;
       bool isTriple = assignType == 3;
       uint16_t pri = readStorageWordBE(addr1 + 1);
-      uint16_t sec = ((isDual || isTriple) && readStorageWordBE(addr1 + 3)) || 0;
-      uint16_t ter = (isTriple && readStorageWordBE(addr1 + 5)) || 0;
+      uint16_t sec = (isDual || isTriple) ? readStorageWordBE(addr1 + 3) : 0;
+      uint16_t ter = isTriple ? readStorageWordBE(addr1 + 5) : 0;
       assignSetRes.assignType = assignType;
       assignSetRes.pri = pri;
       assignSetRes.sec = sec;

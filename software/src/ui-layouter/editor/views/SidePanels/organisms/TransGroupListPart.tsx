@@ -1,6 +1,6 @@
-import { css } from 'goober';
-import { h } from 'qx';
-import { uiTheme } from '~/ui-layouter/base';
+import { jsx, css } from 'qx';
+import { uiTheme } from '~/ui-common';
+import { GeneralButton } from '~/ui-common/components';
 import { editMutations } from '~/ui-layouter/editor/store';
 import { ConfigSubHeader } from '~/ui-layouter/editor/views/SidePanels/atoms';
 import { useTransGroupListPartModel } from '~/ui-layouter/editor/views/SidePanels/models/TransGroupListPanel.model';
@@ -12,15 +12,15 @@ const cssHeaderRow = css`
   > .buttonsBox {
     display: flex;
 
-    > button {
-      width: 20px;
+    > * {
+      margin-left: 4px;
     }
   }
 `;
 
 const cssListFrame = css`
   margin-top: 2px;
-  border: solid 1px #ccc;
+  /* border: solid 1px ${uiTheme.colors.clPrimary}; */
   display: flex;
   flex-wrap: wrap;
 `;
@@ -29,17 +29,22 @@ const cssTransGroupListItemCard = css`
   width: 24px;
   height: 24px;
   margin: 2px;
-  border: solid 1px ${uiTheme.colors.primary};
-  color: ${uiTheme.colors.primary};
-  border-radius: 2px;
+  border: solid 1px ${uiTheme.colors.clPrimary};
+  color: ${uiTheme.colors.clPrimary};
   display: flex;
   justify-content: center;
   align-items: center;
 
   cursor: pointer;
   &[data-active] {
-    background: ${uiTheme.colors.primaryWeaken};
+    background: ${uiTheme.colors.clPrimary};
+    color: ${uiTheme.colors.clDecal};
   }
+`;
+
+const cssOpButton = css`
+  width: 18px !important;
+  height: 18px !important;
 `;
 
 export const TransGroupListPart = () => {
@@ -57,12 +62,20 @@ export const TransGroupListPart = () => {
         <div css={cssHeaderRow}>
           <span>groups</span>
           <div className="buttonsBox">
-            <button disabled={!canDeleteGroup} onClick={deleteGroup}>
-              x
-            </button>
-            <button disabled={!canAddGroup} onClick={addGroup}>
-              +
-            </button>
+            <GeneralButton
+              disabled={!canAddGroup}
+              onClick={addGroup}
+              icon="add"
+              size="unitSquare"
+              className={cssOpButton}
+            />
+            <GeneralButton
+              disabled={!canDeleteGroup}
+              onClick={deleteGroup}
+              icon="delete"
+              size="unitSquare"
+              className={cssOpButton}
+            />
           </div>
         </div>
       </ConfigSubHeader>

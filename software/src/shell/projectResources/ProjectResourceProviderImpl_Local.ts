@@ -1,13 +1,15 @@
 import {
+  ICustromParameterSpec,
   IPersistKeyboardDesign,
   IProfileData,
   IProjectResourceInfo,
+  IResourceOrigin,
 } from '~/shared';
 import { createProjectSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { appEnv } from '~/shell/base';
 import {
   fsExistsSync,
-  fspReaddir,
+  fsxReaddir,
   fsxReadJsonFile,
   globAsync,
   pathBasename,
@@ -20,12 +22,23 @@ import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
 import { IProjectResourceProviderImpl } from '~/shell/projectResources/interfaces';
 import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
-import { IProjectResourceInfoSource } from './ProjectResource/ProjectResourceInfoSourceLoader';
 
+interface IProjectResourceInfoSource {
+  origin: IResourceOrigin;
+  projectId: string;
+  keyboardName: string;
+  projectPath: string;
+  projectFolderPath: string;
+  layoutNames: string[];
+  presetNames: string[];
+  hexFilePath?: string;
+  customParameters: ICustromParameterSpec[];
+}
 namespace ProjectResourceInfoSourceLoader {
   interface IPorjectFileJson {
     projectId: string;
     keyboardName: string;
+    customParameters: ICustromParameterSpec[];
   }
 
   function checkFileExistsOrBlank(filePath: string): string | undefined {
@@ -34,16 +47,16 @@ namespace ProjectResourceInfoSourceLoader {
 
   async function readPresetNames(presetsFolderPath: string): Promise<string[]> {
     if (fsExistsSync(presetsFolderPath)) {
-      return (await fspReaddir(presetsFolderPath))
-        .filter((fpath) => fpath.endsWith('.json'))
-        .map((fpath) => pathBasename(fpath, '.json'));
+      return (await fsxReaddir(presetsFolderPath))
+        .filter((fpath) => fpath.endsWith('.profile.json'))
+        .map((fpath) => pathBasename(fpath, '.profile.json'));
     } else {
       return [];
     }
   }
 
   async function readLayoutNames(projectFolderPath: string): Promise<string[]> {
-    return (await fspReaddir(projectFolderPath))
+    return (await fsxReaddir(projectFolderPath))
       .filter((fileName) => fileName.endsWith('.layout.json'))
       .map((fileName) => pathBasename(fileName, '.layout.json'));
   }
@@ -51,6 +64,7 @@ namespace ProjectResourceInfoSourceLoader {
   async function readProjectFile(
     projectFilePath: string,
   ): Promise<IPorjectFileJson> {
+    // TODO: スキーマをチェック
     return (await fsxReadJsonFile(projectFilePath)) as IPorjectFileJson;
   }
 
@@ -89,11 +103,13 @@ namespace ProjectResourceInfoSourceLoader {
           pathJoin(buildsRoot, projectPath, `${coreName}.hex`),
         );
 
-        const { projectId, keyboardName } = await readProjectFile(
-          projectFilePath,
-        );
+        const {
+          projectId,
+          keyboardName,
+          customParameters,
+        } = await readProjectFile(projectFilePath);
 
-        const presetsFolderPath = pathJoin(projectBaseDir, 'presets');
+        const presetsFolderPath = pathJoin(projectBaseDir, 'profiles');
 
         const presetNames = await readPresetNames(presetsFolderPath);
 
@@ -108,6 +124,7 @@ namespace ProjectResourceInfoSourceLoader {
           presetNames,
           hexFilePath,
           origin: 'local' as const,
+          customParameters,
         };
       }),
     );
@@ -151,23 +168,25 @@ export class ProjectResourceProviderImpl_Local
 
     return this.projectInfoSources.map((it) => {
       const {
+        origin,
         projectId,
         keyboardName,
         projectPath,
         hexFilePath,
         presetNames,
         layoutNames,
-        origin,
+        customParameters,
       } = it;
       return {
         sig: createProjectSig(origin, projectId),
+        origin,
         projectId,
         keyboardName,
         projectPath,
         presetNames,
         layoutNames,
         hasFirmwareBinary: !!hexFilePath,
-        origin,
+        customParameters,
       };
     });
   }
@@ -190,13 +209,18 @@ export class ProjectResourceProviderImpl_Local
   //   }
   // }
   // internal_getProjectInfoSourceById = this.getProjectInfoSourceById;
+
   getLocalPresetProfileFilePath(
     projectId: string,
     presetName: string,
   ): string | undefined {
     const info = this.getProjectInfoSourceById(projectId);
     if (info) {
-      return pathJoin(info.projectFolderPath, 'presets', `${presetName}.json`);
+      return pathJoin(
+        info.projectFolderPath,
+        'profiles',
+        `${presetName}.profile.json`,
+      );
     }
   }
 
@@ -241,6 +265,7 @@ export class ProjectResourceProviderImpl_Local
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   async loadProjectFirmwareFile(
     projectId: string,
   ): Promise<string | undefined> {

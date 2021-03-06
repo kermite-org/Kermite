@@ -1,5 +1,4 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
 import { reflectFieldChecked } from '~/ui-common';
 import {
   ClosableOverlay,
@@ -49,7 +48,7 @@ export const ProfileConfigratuionModalLayer = () => {
 
   return (
     <ClosableOverlay close={closeModal}>
-      <CommonDialogFrame caption="profile configuration">
+      <CommonDialogFrame caption="profile configuration" close={closeModal}>
         <div css={cssDialogContent}>
           <AssignTypeSelectionPart />
           <DualModeSettingsPart />

@@ -1,5 +1,4 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
 
 const cssLayoutManagerButton = css`
   border: solid 1px #048;
@@ -16,7 +15,8 @@ const cssLayoutManagerButton = css`
   }
 
   &[data-active] {
-    background: #cdf;
+    background: #37c;
+    color: #fff;
   }
 
   &[data-disabled] {

@@ -1,5 +1,5 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
+import { uiTheme } from '~/ui-common';
 
 export const LinkIndicator = (props: { isActive: boolean }) => {
   const cssLinkIndicator = css`
@@ -7,13 +7,17 @@ export const LinkIndicator = (props: { isActive: boolean }) => {
     opacity: 0.5;
 
     &[data-active] {
-      color: #0df;
+      color: ${uiTheme.colors.clLinkIndicator};
       opacity: 1;
     }
   `;
 
   return (
-    <div css={cssLinkIndicator} data-active={props.isActive}>
+    <div
+      css={cssLinkIndicator}
+      data-active={props.isActive}
+      data-hint="Device connection status"
+    >
       <i class="fa fa-link" />
     </div>
   );

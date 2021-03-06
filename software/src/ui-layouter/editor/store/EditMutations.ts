@@ -1,12 +1,12 @@
 import {
   clamp,
-  compareObjectByJsonStringify,
   IKeyIdMode,
   IKeyPlacementAnchor,
   IKeySizeUnit,
   removeArrayItems,
 } from '~/shared';
 import { getNextEntityInstanceId } from '~/ui-layouter/editor/store/DomainRelatedHelpers';
+import { editManager } from '~/ui-layouter/editor/store/EditManager';
 import {
   changeKeySizeUnit,
   changePlacementCoordUnit,
@@ -22,9 +22,9 @@ import {
   IModeState,
 } from './AppState';
 import {
-  IEditPropKey,
   IEditKeyboardDesign,
   IEditKeyEntity,
+  IEditPropKey,
 } from './DataSchema';
 import { editReader } from './EditReader';
 import { editUpdator } from './EditUpdator';
@@ -198,14 +198,14 @@ class EditMutations {
       editor.currentkeyEntityId = undefined;
       editor.isCurrentKeyMirror = false;
     });
-    const ke = editReader.currentKeyEntity;
-    this.setCurrentTransGroupById(ke?.groupId);
   }
 
   setCurrentShapeId(shapeId: string | undefined) {
     editUpdator.patchEditor((editor) => {
       editor.currentShapeId = shapeId;
     });
+    const shape = editReader.currentOutlineShape;
+    this.setCurrentTransGroupById(shape?.groupId);
   }
 
   setCurrentPointIndex(index: number) {
@@ -377,18 +377,12 @@ class EditMutations {
   }
 
   loadKeyboardDesign(design: IEditKeyboardDesign) {
-    const same = compareObjectByJsonStringify(
-      appState.editor.loadedDesign,
-      design,
-    );
-    if (same) {
-      return;
-    }
     editUpdator.patchEditor((editor) => {
       editor.loadedDesign = design;
       editor.design = design;
     });
     this.resetSitePosition();
+    editManager.reset();
   }
 
   resetSitePosition() {

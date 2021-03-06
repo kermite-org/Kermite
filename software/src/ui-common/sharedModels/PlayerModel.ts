@@ -1,12 +1,14 @@
 import {
   createFallbackDisplayKeyboardDesign,
   fallbackProfileData,
+  IAssignEntry,
+  IAssignOperation,
   IDisplayKeyboardDesign,
   IProfileData,
   IRealtimeKeyboardEvent,
 } from '~/shared';
+import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import { ipcAgent } from '~/ui-common';
-import { DisplayKeyboardDesignLoader } from '~/ui-common/modules/DisplayKeyboardDesignLoader';
 
 class PlayerModelHelper {
   static translateKeyIndexToKeyUnitId(
@@ -17,6 +19,22 @@ class PlayerModelHelper {
       (kp) => kp.keyIndex === keyIndex,
     );
     return keyEntity?.keyId;
+  }
+
+  static isOperationShift(op: IAssignOperation | undefined) {
+    return op?.type === 'keyInput' && op.virtualKey === 'K_Shift';
+  }
+
+  static isAssignShift(assign: IAssignEntry | undefined) {
+    if (assign?.type === 'single') {
+      return this.isOperationShift(assign.op);
+    }
+    if (assign?.type === 'dual') {
+      return (
+        this.isOperationShift(assign.primaryOp) ||
+        this.isOperationShift(assign.secondaryOp)
+      );
+    }
   }
 }
 
@@ -86,6 +104,24 @@ export class PlayerModel {
     return undefined;
   };
 
+  private plainShiftPressed: boolean = false;
+
+  checkShiftHold(): boolean {
+    const shiftLayerHold = this._profileData.layers.some(
+      (layer, layerIndex) =>
+        this.isLayerActive(layerIndex) &&
+        layer.attachedModifiers?.includes('K_Shift'),
+    );
+    return shiftLayerHold || this.plainShiftPressed;
+  }
+
+  private shiftResolver = (keyUnitId: string, isDown: boolean) => {
+    const assign = this.getDynamicKeyAssign(keyUnitId);
+    if (PlayerModelHelper.isAssignShift(assign)) {
+      this.plainShiftPressed = isDown;
+    }
+  };
+
   private handlekeyEvents = (ev: IRealtimeKeyboardEvent) => {
     if (ev.type === 'keyStateChanged') {
       const { keyIndex, isDown } = ev;
@@ -100,28 +136,27 @@ export class PlayerModel {
       );
       if (keyUnitId) {
         this._keyStates[keyUnitId] = isDown;
+        this.shiftResolver(keyUnitId, isDown);
       }
     } else if (ev.type === 'layerChanged') {
       this._layerActiveFlags = ev.layerActiveFlags;
     }
   };
 
-  private onProfileData = (profile: IProfileData | undefined) => {
-    if (profile) {
+  setProfileData(profile: IProfileData) {
+    if (this._profileData !== profile) {
       this._profileData = profile;
       this._displayDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
         profile.keyboardDesign,
       );
     }
-  };
+  }
 
   initialize() {
-    ipcAgent.subscribe2('device_keyEvents', this.handlekeyEvents);
-    ipcAgent.subscribe2('profile_currentProfile', this.onProfileData);
+    ipcAgent.events.device_keyEvents.subscribe(this.handlekeyEvents);
   }
 
   finalize() {
-    ipcAgent.unsubscribe2('device_keyEvents', this.handlekeyEvents);
-    ipcAgent.unsubscribe2('profile_currentProfile', this.onProfileData);
+    ipcAgent.events.device_keyEvents.unsubscribe(this.handlekeyEvents);
   }
 }

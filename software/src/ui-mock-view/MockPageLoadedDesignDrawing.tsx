@@ -1,10 +1,9 @@
-import { css } from 'goober';
-import { h, Hook } from 'qx';
+import { jsx, Hook, css } from 'qx';
 import {
   createFallbackDisplayKeyboardDesign,
   IDisplayKeyboardDesign,
 } from '~/shared';
-import { DisplayKeyboardDesignLoader } from '~/ui-common/modules/DisplayKeyboardDesignLoader';
+import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import { loadLocalStorageKeyboardDesignOrDefault } from '~/ui-mock-view/LocalStoragePersistKeyboardDesign';
 
 const state = new (class {

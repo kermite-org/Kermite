@@ -1,19 +1,7 @@
-#include "bitOperations.h"
 #include "config.h"
-#include "configValidator.h"
-#include "configuratorServant.h"
-#include "debugUart.h"
 #include "generalKeyboard.h"
-#include "keyMatrixScanner2.h"
-#include "keyboardCoreLogic2.h"
 #include "pio.h"
-#include "usbioCore.h"
-#include "utils.h"
-#include <avr/interrupt.h>
-#include <avr/io.h>
 #include <avr/pgmspace.h>
-#include <stdio.h>
-#include <util/delay.h>
 
 #define NumRows GK_NUM_ROWS
 #define NumColumns GK_NUM_COLUMNS

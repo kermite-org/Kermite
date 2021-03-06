@@ -10,7 +10,7 @@ export interface IConfigTextEditModel {
 
 // reflect edit value to model on blur
 export function createConfigTextEditModel(
-  patterns: RegExp[],
+  checker: (text: string) => boolean,
   textOutputFunc: (text: string) => void,
 ): IConfigTextEditModel {
   let originalText: string | undefined;
@@ -32,7 +32,7 @@ export function createConfigTextEditModel(
     },
     onValueChanged(text: string) {
       editText = text;
-      valid = patterns.some((p) => text.match(p));
+      valid = checker(text);
     },
     onBlur() {
       hasFocus = false;

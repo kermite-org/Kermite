@@ -1,18 +1,19 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
 import { uiTheme } from '~/ui-common';
-import { ProjectAttachmentFileSelectorModal } from '~/ui-common/sharedViews/ProjectAttachementFileSelectorModal';
+import {
+  OperationButtonWithIcon,
+  ProjectAttachmentFileSelectorModal,
+} from '~/ui-common/components';
 import { LayoutManagerButton } from '~/ui-layouter-page/LayoutManagerButton';
 import { LayoutManagerMenu } from '~/ui-layouter-page/LayoutManagerMenu';
 import { useLayoutManagerViewModel } from '~/ui-layouter-page/LayoutManagerViewModel';
-import { makeLayoutSelectorModelViewModel } from '~/ui-layouter-page/ProjectLayoutSelectorModalViewModel';
+import { makeLayoutSelectorModalViewModel } from '~/ui-layouter-page/ProjectLayoutSelectorModalViewModel';
 
 const cssLayoutManagementBar = css`
-  background: ${uiTheme.colors.clBackground};
   color: ${uiTheme.colors.clMainText};
   display: flex;
   padding: 6px;
-  padding-bottom: 3px;
+  padding-bottom: 0;
 
   > * + * {
     margin-left: 4px;
@@ -24,7 +25,7 @@ const cssLayoutManagementBar = css`
 
   > .targetDisplayArea {
     flex-grow: 1;
-    border: solid 1px #aaa;
+    border: solid 1px ${uiTheme.colors.clPrimary};
     display: flex;
     align-items: center;
     padding: 0 5px;
@@ -33,7 +34,7 @@ const cssLayoutManagementBar = css`
 
 export const LayoutManagerTopBar = () => {
   const vm = useLayoutManagerViewModel();
-  const modalVm = makeLayoutSelectorModelViewModel(vm);
+  const modalVm = makeLayoutSelectorModalViewModel(vm);
   return (
     <div css={cssLayoutManagementBar}>
       <LayoutManagerMenu baseVm={vm} />
@@ -44,12 +45,12 @@ export const LayoutManagerTopBar = () => {
         <i class="fa fa-link" />
       </LayoutManagerButton>
       <div class="targetDisplayArea">{vm.editSourceText}</div>
-      <LayoutManagerButton
+      <OperationButtonWithIcon
+        icon="save"
+        label="save"
         disabled={!vm.canOverwrite}
-        handler={vm.overwriteLayout}
-      >
-        save
-      </LayoutManagerButton>
+        onClick={vm.overwriteLayout}
+      />
       {modalVm && <ProjectAttachmentFileSelectorModal vm={modalVm} />}
     </div>
   );

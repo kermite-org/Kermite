@@ -1,16 +1,14 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
+import { appUi } from '~/ui-common/base';
 import { useLocal } from '~/ui-common/helpers';
-
-interface IDebugOverlayProps {
-  debugObj: any | undefined;
-}
 
 const cssTab = css`
   position: absolute;
   top: 0;
   right: 0;
-  font-size: 10px;
+  z-index: 1;
+  margin-top: 30px;
+  font-size: 12px;
   width: 15px;
   height: 15px;
   display: flex;
@@ -26,30 +24,33 @@ const cssDebugPane = css`
   position: absolute;
   top: 0;
   right: 0;
-  height: calc(100% - 40px);
+  margin-top: 30px;
+  height: calc(100% - 30px);
   background: rgba(0, 0, 0, 0.3);
   color: #0f0;
   pointer-events: none;
   overflow: hidden;
   padding: 5px;
   font-size: 10px;
+  padding-top: 15px;
 `;
 
-export const DebugOverlay = (props: IDebugOverlayProps) => {
-  const state = useLocal({ visible: false });
+export const DebugOverlay = () => {
+  const baseVisible = appUi.isDevelopment && appUi.hasDebugValue;
+  const state = useLocal({ isOpen: true });
 
-  const toggleVisible = () => {
-    state.visible = !state.visible;
+  const toggleOpen = () => {
+    state.isOpen = !state.isOpen;
   };
 
-  return props.debugObj ? (
+  return baseVisible ? (
     <div>
-      <div css={cssTab} onClick={toggleVisible}>
+      <div css={cssTab} onClick={toggleOpen}>
         D
       </div>
-      {state.visible && (
+      {state.isOpen && (
         <div css={cssDebugPane}>
-          <pre>{JSON.stringify(props.debugObj, null, '  ')}</pre>
+          <pre>{JSON.stringify(appUi.debugObject, null, '  ')}</pre>
         </div>
       )}
     </div>

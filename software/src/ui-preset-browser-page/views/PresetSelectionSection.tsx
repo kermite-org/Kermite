@@ -1,9 +1,10 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
+import {
+  KeyboardProfileSelector,
+  KeyboardProjectSelector,
+} from '~/ui-common/components';
+import { GeneralButton } from '~/ui-common/components/controls/GeneralButton';
 import { ViewModelProps } from '~/ui-common/helpers';
-import { GeneralButton } from '~/ui-common/sharedViews/controls/GeneralButton';
-import { KeyboardProfileSelector } from '~/ui-common/sharedViews/fabrics/KeyboardProfileSelector';
-import { KeyboardProjectSelector } from '~/ui-common/sharedViews/fabrics/KeyboardProjectSelector';
 import { IPresetBrowserViewModel } from '~/ui-preset-browser-page/viewModels/PresetBrowserViewModel';
 
 const cssPresetSelectionSection = css`
@@ -46,8 +47,8 @@ export const PresetSelectionSection = ({
       </div>
       <GeneralButton
         text="Create Profile"
-        form="large"
-        handler={vm.editPresetButtonHandler}
+        size="large"
+        onClick={vm.editPresetButtonHandler}
       />
     </div>
   );

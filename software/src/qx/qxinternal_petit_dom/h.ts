@@ -23,7 +23,7 @@ export const isVComponent = (c: VNode): c is VComponent =>
 const isValidComponentType = (c: any): c is IComponentObject<any> =>
   c?.mount && c.patch && c.unmount;
 
-export function h(
+export function jsx(
   type: string | IComponentFunction<any>,
   props: any,
   ...argsChildren: any[]
@@ -45,7 +45,7 @@ export function h(
       vtype: VTYPE_ELEMENT,
       type,
       key,
-      props,
+      props: { ...props, children: undefined },
       children: maybeFlattenArray(children),
     };
   } else if (isValidComponentType(type)) {

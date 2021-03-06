@@ -1,5 +1,4 @@
-import { css } from 'goober';
-import { Hook, h, asyncRerender } from 'qx';
+import { Hook, jsx, asyncRerender, css } from 'qx';
 import { editReader, editMutations } from '~/ui-layouter/editor/store';
 import { DebugOverlay } from './DebugOverlay';
 import { EditSvgView } from './EditSvgView';
@@ -7,7 +6,6 @@ import { InformationOverlay } from './InformationOverlay';
 
 export const EditSvgViewContainer = () => {
   const cssSvgView = css`
-    border: solid 1px #888;
     flex-grow: 1;
     overflow: hidden;
     position: relative;

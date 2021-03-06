@@ -1,12 +1,7 @@
-import { css } from 'goober';
-import { rerender, h } from 'qx';
+import { rerender, jsx, css } from 'qx';
 import { degToRad } from '~/shared';
-import {
-  makeCssColor,
-  uiTheme,
-  IPosition,
-  startDragSession,
-} from '~/ui-layouter/base';
+import { makeCssColor, uiTheme } from '~/ui-common';
+import { IPosition, startDragSession } from '~/ui-layouter/base';
 import {
   editReader,
   editMutations,
@@ -48,7 +43,11 @@ const cssOutlinePoint = css`
   }
 
   &[data-selected] {
-    stroke: ${uiTheme.colors.primary};
+    stroke: ${uiTheme.colors.clPrimary};
+  }
+
+  &:hover {
+    opacity: 0.7;
   }
 `;
 
@@ -119,8 +118,23 @@ const OutlinePoint = (props: {
     if (editReader.editorTarget !== 'outline') {
       editMutations.setEditorTarget('outline');
     }
-    const { editorTarget, editMode } = editReader;
+    const { editorTarget, editMode, shapeDrawing } = editReader;
     if (e.button === 0) {
+      if (
+        editorTarget === 'outline' &&
+        editMode === 'add' &&
+        shapeDrawing
+        // index === 0
+      ) {
+        // shapeを閉じる
+        editMutations.endShapeDrawing();
+        editMutations.setCurrentShapeId(undefined);
+        editMutations.unsetCurrentKeyEntity();
+        editMutations.setCurrentPointIndex(-1);
+        e.stopPropagation();
+        return;
+      }
+
       if (editorTarget === 'outline') {
         if (editMode === 'select') {
           editMutations.setCurrentShapeId(shapeId);
@@ -128,9 +142,9 @@ const OutlinePoint = (props: {
           editMutations.unsetCurrentKeyEntity();
           e.stopPropagation();
         } else if (editMode === 'move' || editMode === 'add') {
+          editMutations.unsetCurrentKeyEntity();
           editMutations.setCurrentShapeId(shapeId);
           editMutations.setCurrentPointIndex(index);
-          editMutations.unsetCurrentKeyEntity();
           startOutlinePointDragOperation(e, true, isMirror);
           e.stopPropagation();
         } else if (editMode === 'delete') {

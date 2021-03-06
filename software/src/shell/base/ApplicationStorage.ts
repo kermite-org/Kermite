@@ -1,66 +1,46 @@
-import {
-  IGlobalSettings,
-  IKeyboardConfig,
-  ILayoutEditSource,
-  overwriteObjectProps,
-} from '~/shared';
+import { duplicateObjectByJsonStringifyParse } from '~/shared';
+import { ICheckerEx } from '~/shared/modules/SchemaValidationHelper';
 import { appEnv } from '~/shell/base';
 import { fsExistsSync, fsxReadJsonFile, fsxWriteJsonFile } from '~/shell/funcs';
 
-export interface IApplicationPersistData {
-  pageState: {
-    currentPagePath: string;
-    isDevToolsVisible: boolean;
-  };
-  currentProfileName: string | undefined;
-  keyboardConfig: IKeyboardConfig;
-  layoutEditSource: ILayoutEditSource;
-  globalSettings: IGlobalSettings;
-}
-
-const defaultPersistData: IApplicationPersistData = {
-  pageState: {
-    currentPagePath: '/',
-    isDevToolsVisible: false,
-  },
-  currentProfileName: undefined,
-  keyboardConfig: {
-    behaviorMode: 'Standalone',
-    layoutStandard: 'US',
-  },
-  layoutEditSource: {
-    type: 'NewlyCreated',
-  },
-  globalSettings: {
-    useOnlineResources: true,
-    useLocalResouces: false,
-    localProjectRootFolderPath: '',
-  },
-};
 class ApplicationStorage {
   private configFilePath = appEnv.resolveUserDataFilePath('data/config.json');
-  private data: IApplicationPersistData = defaultPersistData;
+  private data: { [key: string]: any } = {};
 
-  getItem<K extends keyof IApplicationPersistData>(
-    key: K,
-  ): IApplicationPersistData[K] {
+  readItem<T>(key: string): T | undefined {
     return this.data[key];
   }
 
-  setItem<K extends keyof IApplicationPersistData>(
-    key: K,
-    value: IApplicationPersistData[K],
-  ) {
+  readItemSafe<T>(
+    key: string,
+    schemaChecker: ICheckerEx,
+    fallbackSource: T | (() => T),
+  ): T {
+    const value = this.data[key];
+    const errors = schemaChecker(value);
+    if (errors) {
+      console.error(`invalid persist data for ${key}`);
+      console.error(JSON.stringify(errors, null, '  '));
+      if (fallbackSource instanceof Function) {
+        return fallbackSource();
+      } else {
+        return duplicateObjectByJsonStringifyParse(fallbackSource);
+      }
+    }
+    return value;
+  }
+
+  writeItem<T>(key: string, value: T) {
     this.data[key] = value;
   }
 
   async initializeAsync() {
-    if (fsExistsSync(this.configFilePath)) {
-      const obj = await fsxReadJsonFile(this.configFilePath);
-      overwriteObjectProps(this.data, obj);
-    } else {
+    if (!fsExistsSync(this.configFilePath)) {
       console.log('config file not found!');
+      return;
     }
+    const obj = await fsxReadJsonFile(this.configFilePath);
+    this.data = obj;
   }
 
   async terminateAsync() {

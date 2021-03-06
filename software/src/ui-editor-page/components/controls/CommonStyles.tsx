@@ -1,4 +1,4 @@
-import { css } from 'goober';
+import { css } from 'qx';
 
 export const cssCommonPropertiesTable = css`
   tr {

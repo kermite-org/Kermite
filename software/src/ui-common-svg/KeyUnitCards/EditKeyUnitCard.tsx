@@ -1,5 +1,4 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
 import { IDisplayKeyShape } from '~/shared';
 import { uiTheme } from '~/ui-common';
 import { KeyUnitShape } from '~/ui-common-svg/KeyUnitCards/KeyUnitShape';
@@ -18,6 +17,7 @@ export interface IEditKeyUnitCardViewModel {
   secondaryText: string;
   isLayerFallback: boolean;
   isHold: boolean;
+  shiftHold: boolean;
 }
 
 const cssKeyShape = css`
@@ -29,6 +29,9 @@ const cssKeyShape = css`
   }
   &[data-hold] {
     fill: ${uiTheme.colors.clHoldHighlight};
+  }
+  &:hover {
+    opacity: 0.7;
   }
 `;
 
@@ -60,6 +63,7 @@ export function EditKeyUnitCard(props: {
     isLayerFallback,
     isHold,
     shape,
+    shiftHold,
   } = props.keyUnit;
   const { showLayerDefaultAssign } = props;
 
@@ -78,10 +82,16 @@ export function EditKeyUnitCard(props: {
     }
   };
 
+  const getFontWeight = (text: string) => {
+    const shouldBold = shiftHold && text.match(/^[A-Z]$/);
+    return shouldBold ? 'bold' : 'normal';
+  };
+
   return (
     <g
       transform={`translate(${pos.x}, ${pos.y}) rotate(${pos.r}) `}
       key={keyUnitId}
+      data-hint="Select edit target key."
     >
       <KeyUnitShape
         shape={shape}
@@ -95,6 +105,7 @@ export function EditKeyUnitCard(props: {
         x={0}
         y={0}
         font-size={getFontSize(primaryText)}
+        font-weight={getFontWeight(primaryText)}
         text-anchor="middle"
         dominant-baseline="center"
         data-is-weak={isLayerFallback}
@@ -108,6 +119,7 @@ export function EditKeyUnitCard(props: {
         x={0}
         y={8}
         font-size={getFontSize(secondaryText)}
+        font-weight={getFontWeight(secondaryText)}
         text-anchor="middle"
         dominant-baseline="center"
       >

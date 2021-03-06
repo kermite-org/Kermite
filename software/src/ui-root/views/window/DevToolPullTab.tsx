@@ -1,9 +1,10 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
 import { siteModel } from '~/ui-common/sharedModels/SiteModel';
 
 const cssDevToolPullTabBase = css`
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   display: flex;

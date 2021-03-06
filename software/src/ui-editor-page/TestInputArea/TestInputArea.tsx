@@ -1,7 +1,5 @@
-import { css } from 'goober';
-import { Hook, h } from 'qx';
-import { GeneralButton } from '~/ui-common/sharedViews/controls/GeneralButton';
-import { GeneralInput } from '~/ui-common/sharedViews/controls/GeneralInput';
+import { Hook, jsx, css } from 'qx';
+import { GeneralButton, GeneralInput } from '~/ui-common/components';
 import { makeTestInputAreaViewModel } from '~/ui-editor-page/TestInputArea/TestInputAreaViweModel';
 
 const cssTestInputArea = css`
@@ -14,7 +12,7 @@ export const TestInputArea = () => {
   return (
     <div css={cssTestInputArea}>
       <GeneralInput value={vm.text} setValue={vm.setText} width={300} />
-      <GeneralButton text="clear" handler={vm.clearText} />
+      <GeneralButton text="clear" onClick={vm.clearText} />
     </div>
   );
 };

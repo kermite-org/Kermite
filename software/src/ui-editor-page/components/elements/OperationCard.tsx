@@ -1,5 +1,4 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { IOperationCardViewModel } from '~/ui-editor-page/EditorMainPart/viewModels/OperationEditPartViewModel';
 
@@ -28,10 +27,14 @@ const cssOperationCard = css`
   &[data-text-long] {
     font-size: '15px';
   }
+
+  &:hover {
+    opacity: 0.7;
+  }
 `;
 
 export const OperationCard = (props: { model: IOperationCardViewModel }) => {
-  const { text, isCurrent, setCurrent, isEnabled } = props.model;
+  const { text, isCurrent, setCurrent, isEnabled, hint } = props.model;
 
   const isTextLong = text.length >= 2;
 
@@ -42,6 +45,7 @@ export const OperationCard = (props: { model: IOperationCardViewModel }) => {
       onMouseDown={setCurrent}
       data-disabled={!isEnabled}
       data-text-long={isTextLong}
+      data-hint={hint}
     >
       {text}
     </div>

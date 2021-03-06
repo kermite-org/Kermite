@@ -1,5 +1,4 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
 import { makeWindowControlButtonsModel } from '~/ui-root/views/titleBar/WindowControlButtonsPart.model';
 import { WindowControlButton } from './elements/WindowControlButton';
 import { WindowRestartButton } from './elements/WindowRestartButton';
@@ -28,7 +27,11 @@ export const WindowControlButtonsPart = () => {
         onClick={vm.onMinimizeButton}
       />
       <WindowControlButton
-        icon="fa fa-window-maximize"
+        icon={
+          !vm.isWindowMaximized
+            ? 'fa fa-window-maximize'
+            : 'fa fa-window-restore'
+        }
         onClick={vm.onMaximizeButton}
       />
       <WindowControlButton icon="fa fa-times" onClick={vm.onCloseButton} />

@@ -1,42 +1,31 @@
-import { IAppWindowEvent } from '~/shared';
+import { IAppWindowStatus } from '~/shared';
 import { ipcAgent } from '~/ui-common';
 
 export class SiteModel {
-  private _isWidgetMode: boolean = false;
-  private _isWindowActive: boolean = true;
-  private _isDevToolVisible: boolean = false;
+  isWindowActive: boolean = true;
+  isDevtoolsVisible: boolean = false;
+  isWindowMaximized: boolean = false;
 
-  get isWidgetMode() {
-    return this._isWidgetMode;
-  }
-
-  get isWindowActive() {
-    return this._isWindowActive;
-  }
-
-  get isDevToolVisible() {
-    return this._isDevToolVisible;
-  }
-
-  setWidgetMode = (isWidgetMode: boolean) => {
-    this._isWidgetMode = isWidgetMode;
-    // backendAgent.widgetModeChanged(isWidgetMode);
+  toggleDevToolVisible = () => {
+    ipcAgent.async.window_setDevToolVisibility(!this.isDevtoolsVisible);
   };
 
-  private onAppWindowEvents = (ev: IAppWindowEvent) => {
-    if (ev.activeChanged !== undefined) {
-      this._isWindowActive = ev.activeChanged;
-    } else if (ev.devToolVisible !== undefined) {
-      this._isDevToolVisible = ev.devToolVisible;
+  private onAppWindowStatusEvent = (ev: Partial<IAppWindowStatus>) => {
+    if (ev.isActive !== undefined) {
+      this.isWindowActive = ev.isActive;
+    }
+    if (ev.isDevtoolsVisible !== undefined) {
+      this.isDevtoolsVisible = ev.isDevtoolsVisible;
+    }
+    if (ev.isMaximized !== undefined) {
+      this.isWindowMaximized = ev.isMaximized;
     }
   };
 
-  toggleDevToolVisible = () => {
-    ipcAgent.async.window_setDevToolVisibility(!this._isDevToolVisible);
-  };
-
   setupLifecycle = () => {
-    return ipcAgent.subscribe('window_appWindowEvents', this.onAppWindowEvents);
+    return ipcAgent.events.window_appWindowStatus.subscribe(
+      this.onAppWindowStatusEvent,
+    );
   };
 }
 export const siteModel = new SiteModel();

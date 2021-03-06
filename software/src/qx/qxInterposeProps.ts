@@ -1,4 +1,6 @@
+import { css } from './cssinjs';
 import { qxGlobal } from './qxGlobal';
+import { extractShortCss } from './shortCss';
 
 function camelCaseToHyphenCase(str: string) {
   return str.replace(/[A-Z]/g, (s) => '-' + s.charAt(0).toLowerCase());
@@ -48,12 +50,24 @@ export function qxInterposeProps(
           : undefined;
       }
     }
-    if (props.css || props.class || props.className || props.classNames) {
+    if (
+      props.css ||
+      props.class ||
+      props.className ||
+      props.classNames ||
+      props.xs
+    ) {
       const classNamesArray = extractClassNamesToArray(props.classNames);
+      const xsClassName =
+        props.xs &&
+        css`
+          ${extractShortCss(props.xs)}
+        `;
       const classes = [
         props.css,
         props.class,
         props.className,
+        xsClassName,
         ...classNamesArray,
       ]
         .filter((a) => !!a)
@@ -61,6 +75,7 @@ export function qxInterposeProps(
       delete props.css;
       delete props.className;
       delete props.classNames;
+      delete props.xs;
       props.class = classes;
     }
     if (props.style && typeof props.style === 'object') {

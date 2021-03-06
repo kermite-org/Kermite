@@ -1,6 +1,5 @@
-import { css } from 'goober';
-import { h } from 'qx';
-import { uiTheme } from '~/ui-layouter/base';
+import { jsx, css } from 'qx';
+import { uiTheme } from '~/ui-common';
 import { editReader } from '~/ui-layouter/editor/store';
 
 const cssInformationOverlay = css`
@@ -8,7 +7,7 @@ const cssInformationOverlay = css`
   bottom: 0;
   left: 0;
   pointer-events: none;
-  color: ${uiTheme.colors.primary};
+  color: ${uiTheme.colors.clPrimary};
   margin: 1px 4px;
 `;
 

@@ -1,5 +1,4 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
 import { useLocal } from '~/ui-common/helpers';
 
 export function ClosableOverlay(props: {
@@ -7,11 +6,11 @@ export function ClosableOverlay(props: {
   children: JSX.Element;
 }) {
   const cssDiv = css`
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -47,6 +46,7 @@ export function ClosableOverlay(props: {
 export const CommonDialogFrame = (props: {
   caption?: string;
   children: any;
+  close?: () => void;
 }) => {
   const cssLayerEditDialogPanel = css`
     background: #fff;
@@ -63,15 +63,34 @@ export const CommonDialogFrame = (props: {
     color: #fff;
     height: 28px;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    padding-left: 4px;
+
+    > .titleText {
+      margin-left: 4px;
+    }
+
+    > .closeButton {
+      cursor: pointer;
+      padding: 0 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 24px;
+      height: 24px;
+    }
   `;
 
   const cssBody = css``;
 
   return (
     <div css={cssLayerEditDialogPanel}>
-      <div css={cssTitleBar}>{props.caption}</div>
+      <div css={cssTitleBar}>
+        <span class="titleText">{props.caption}</span>
+        <div class="closeButton" onClick={props.close} qxIf={!!props.close}>
+          <i class="fa fa-times" />
+        </div>
+      </div>
       <div css={cssBody}>{props.children}</div>
     </div>
   );
@@ -82,9 +101,11 @@ export const DialogContentRow = (props: { children: any }) => {
     margin: 10px 15px 0;
     color: #048;
     min-height: 60px;
+    max-width: 700px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    word-break: break-all;
     white-space: pre-wrap;
   `;
   return <div css={cssBody}>{props.children}</div>;
@@ -102,7 +123,11 @@ export const DialogButtonsRow = (props: { children: any }) => {
   return <div css={cssButtonsRow}>{props.children}</div>;
 };
 
-export const DialogButton = (props: { children: any; onClick: () => void }) => {
+export const DialogButton = (props: {
+  children: any;
+  onClick: () => void;
+  disabled?: boolean;
+}) => {
   const cssButton = css`
     min-width: 80px;
     height: 28px;
@@ -116,9 +141,18 @@ export const DialogButton = (props: { children: any; onClick: () => void }) => {
     &:hover {
       opacity: 0.8;
     }
+
+    &:disabled {
+      opacity: 0.4;
+    }
   `;
   return (
-    <button css={cssButton} onClick={props.onClick} data-debug="hoge">
+    <button
+      css={cssButton}
+      onClick={props.onClick}
+      data-debug="hoge"
+      disabled={props.disabled}
+    >
       {props.children}
     </button>
   );

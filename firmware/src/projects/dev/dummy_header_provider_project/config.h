@@ -1,0 +1,17 @@
+#ifndef __CONFIG_H__
+
+#define PROJECT_ID "ABC12345"
+
+#define CORELOGIC_NUM_KEYSLOTS 40
+
+#define GK_NUM_ROWS 10
+#define GK_NUM_COLUMNS 4
+
+#define SINGLEWIRE_SIGNAL_PIN_PD0
+
+#define CORELOGIC_NUM_KEYSLOTS 40
+
+#define SK_NUM_ROWS 5
+#define SK_NUM_COLUMNS 4
+
+#endif

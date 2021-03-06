@@ -2,7 +2,7 @@ import { mapObjectValues, IKeySizeUnit } from '~/shared';
 import {
   ICoordUnit,
   getCoordUnitFromUnitSpec,
-} from '~/ui-common/modules/PlacementUnitHelper';
+} from '~/shared/modules/PlacementUnitHelper';
 import { IEditKeyboardDesign } from '~/ui-layouter/editor/store';
 
 export function unitValueToMm(x: number, y: number, coordUnit: ICoordUnit) {

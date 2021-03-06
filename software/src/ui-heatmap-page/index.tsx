@@ -1,8 +1,7 @@
-import { css } from 'goober';
-import { h, Hook } from 'qx';
+import { jsx, Hook, css } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { HeatmapKeyboardView } from '~/ui-common-svg/panels/HeatmapKeyboardView';
-import { GeneralButton } from '~/ui-common/sharedViews/controls/GeneralButton';
+import { GeneralButton } from '~/ui-common/components';
 import { realtimeHeatmapModel } from '~/ui-heatmap-page/RealtimeHeatmapModel';
 import { makeRealtimeHeatmapViewModel } from '~/ui-heatmap-page/RealtimeHeatmapViewModel';
 
@@ -44,18 +43,18 @@ export const HeatmapPage = () => {
       <div>Realtime Heatmap</div>
       <div class="headRow">
         <GeneralButton
-          handler={vm.startRecording}
+          onClick={vm.startRecording}
           text="start"
           disabled={vm.isRecording || vm.hasRecord}
         />
         <GeneralButton
-          handler={vm.stopRecording}
+          onClick={vm.stopRecording}
           text="stop"
           disabled={!vm.isRecording}
         />
 
         <GeneralButton
-          handler={vm.clearRecord}
+          onClick={vm.clearRecord}
           text="clear"
           disabled={!(!vm.isRecording && vm.hasRecord)}
         />

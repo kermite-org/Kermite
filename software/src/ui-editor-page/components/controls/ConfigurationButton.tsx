@@ -1,5 +1,4 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
 
 export const ConfigurationButton = (props: { onClick(): void }) => {
   const cssConfigurationButton = css`
@@ -11,7 +10,11 @@ export const ConfigurationButton = (props: { onClick(): void }) => {
   `;
 
   return (
-    <div css={cssConfigurationButton} onClick={props.onClick}>
+    <div
+      css={cssConfigurationButton}
+      onClick={props.onClick}
+      data-hint="Open profile configuration modal."
+    >
       <i class="fa fa-cog" />
     </div>
   );

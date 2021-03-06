@@ -1,5 +1,4 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
 import { reflectValue } from '~/ui-common';
 
 const cssOperationLayerOptionSelector = css`
@@ -18,7 +17,10 @@ export const OperationLayerOptionSelector = (props: {
   const { enabled, allValues, selectedValue, onValueChanged } = props;
 
   return (
-    <div css={cssOperationLayerOptionSelector}>
+    <div
+      css={cssOperationLayerOptionSelector}
+      data-hint="レイヤ呼び出しモードを指定します。"
+    >
       <select
         value={selectedValue}
         onChange={reflectValue(onValueChanged)}

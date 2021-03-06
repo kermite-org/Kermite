@@ -1,22 +1,22 @@
-import { IPresetSpec, IProfileManagerStatus } from '~/shared';
+/* eslint-disable @typescript-eslint/require-await */
+import { getAppErrorData, IPresetSpec, makeCompactStackTrace } from '~/shared';
 import { appEnv, appGlobal, applicationStorage } from '~/shell/base';
+import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
-import { KeyboardLayoutFilesWatcher } from '~/shell/projectResources/KeyboardShape/KeyboardLayoutFilesWatcher';
 import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
-import { KeyMappingEmitter } from '~/shell/services/device/KeyMappingEmitter';
 import { KeyboardDeviceService } from '~/shell/services/device/KeyboardDevice';
 import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStatic';
 import { FirmwareUpdationService } from '~/shell/services/firmwareUpdation';
 import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/InputLogicSimulatorD';
+import { KeyboardLayoutFilesWatcher } from '~/shell/services/layout/KeyboardLayoutFilesWatcher';
 import { LayoutManager } from '~/shell/services/layout/LayoutManager';
 import { PresetProfileLoader } from '~/shell/services/profile/PresetProfileLoader';
 import { ProfileManager } from '~/shell/services/profile/ProfileManager';
-import { WindowService } from '~/shell/services/window';
+import { AppWindowWrapper } from '~/shell/services/window';
 
 export class ApplicationRoot {
-  private windowService = new WindowService();
   private keyboardConfigProvider = new KeyboardConfigProvider();
 
   private keyboardLayoutFilesWatcher = new KeyboardLayoutFilesWatcher();
@@ -29,7 +29,10 @@ export class ApplicationRoot {
 
   private profileManager = new ProfileManager(this.presetProfileLoader);
 
-  private layoutManager = new LayoutManager(this.profileManager);
+  private layoutManager = new LayoutManager(
+    this.presetProfileLoader,
+    this.profileManager,
+  );
 
   private inputLogicSimulator = new InputLogicSimulatorD(
     this.profileManager,
@@ -37,40 +40,44 @@ export class ApplicationRoot {
     this.deviceService,
   );
 
+  private windowWrapper = new AppWindowWrapper(this.profileManager);
+
   // ------------------------------------------------------------
 
   private setupIpcBackend() {
-    const windowWrapper = this.windowService.getWindowWrapper();
-    const pageManger = this.windowService.getPageManager();
+    const windowWrapper = this.windowWrapper;
+
+    appGlobal.icpMainAgent.setErrorHandler((error) => {
+      console.error(makeCompactStackTrace(error));
+      appGlobal.appErrorEventPort.emit(
+        getAppErrorData(error, appEnv.resolveApplicationRootDir()),
+      );
+    });
 
     appGlobal.icpMainAgent.supplySyncHandlers({
-      dev_getVersionSync: () => 'v100',
       dev_debugMessage: (msg) => console.log(`[renderer] ${msg}`),
-      profile_reserveSaveProfileTask: (data) =>
-        this.profileManager.reserveSaveProfileTask(data),
       config_saveKeyboardConfigOnClosing: (data) =>
         this.keyboardConfigProvider.writeKeyboardConfig(data),
     });
 
     appGlobal.icpMainAgent.supplyAsyncHandlers({
-      dev_getVersion: async () => 'v100',
-      dev_addNumber: async (a: number, b: number) => a + b,
       window_closeWindow: async () => windowWrapper.closeMainWindow(),
       window_minimizeWindow: async () => windowWrapper.minimizeMainWindow(),
       window_maximizeWindow: async () => windowWrapper.maximizeMainWindow(),
       window_restartApplication: async () => windowWrapper.restartApplication(),
+      window_reloadPage: async () => windowWrapper.reloadPage(),
       window_setDevToolVisibility: async (visible) =>
-        pageManger.setDevToolVisiblity(visible),
-      // windowWrapper.setDevToolsVisibility(visible),
-      // window_widgetModeChanged: async (isWidgetMode) =>
-      //   this.appWindowManager.adjustWindowSize(isWidgetMode),
+        windowWrapper.setDevToolsVisibility(visible),
+      profile_getCurrentProfile: () =>
+        this.profileManager.getCurrentProfileAsync(),
       profile_executeProfileManagerCommands: (commands) =>
         this.profileManager.executeCommands(commands),
+      profile_getAllProfileNames: () =>
+        this.profileManager.getAllProfileNamesAsync(),
       layout_executeLayoutManagerCommands: (commands) =>
         this.layoutManager.executeCommands(commands),
       // layout_getAllProjectLayoutsInfos: () =>
       //   this.layoutManager.getAllProjectLayoutsInfos(),
-      layout_clearErrorInfo: async () => this.layoutManager.clearErrorInfo(),
       layout_showEditLayoutFileInFiler: async () =>
         this.layoutManager.showEditLayoutFileInFiler(),
       projects_loadKeyboardShape: (origin, projectId, layoutName) =>
@@ -79,6 +86,10 @@ export class ApplicationRoot {
           projectId,
           layoutName,
         ),
+      device_connectToDevice: async (path) =>
+        this.deviceService.selectTargetDevice(path),
+      device_setCustomParameterValue: async (index, value) =>
+        this.deviceService.setCustomParameterValue(index, value),
       firmup_uploadFirmware: (origin, projectId, comPortName) =>
         this.firmwareUpdationService.writeFirmware(
           origin,
@@ -98,20 +109,20 @@ export class ApplicationRoot {
           presetSpec,
         ),
       config_getKeyboardConfig: async () =>
-        this.keyboardConfigProvider.keyboardConfig,
+        this.keyboardConfigProvider.getKeyboardConfig(),
       config_writeKeyboardConfig: async (config) =>
         this.keyboardConfigProvider.writeKeyboardConfig(config),
       config_writeKeyMappingToDevice: async () => {
-        const profile = this.profileManager.getCurrentProfile();
-        const layoutStandard = this.keyboardConfigProvider.keyboardConfig
+        const profile = await this.profileManager.getCurrentProfileAsync();
+        const layoutStandard = this.keyboardConfigProvider.getKeyboardConfig()
           .layoutStandard;
         if (profile) {
-          KeyMappingEmitter.emitKeyAssignsToDevice(
+          return await this.deviceService.emitKeyAssignsToDevice(
             profile,
             layoutStandard,
-            this.deviceService,
           );
         }
+        return false;
       },
       config_getGlobalSettings: async () =>
         GlobalSettingsProvider.getGlobalSettings(),
@@ -135,6 +146,8 @@ export class ApplicationRoot {
         JsonFileServiceStatic.saveObjectToJsonWithFileDialog,
       file_getOpenDirectoryWithDialog:
         JsonFileServiceStatic.getOpeningDirectoryPathWithDialog,
+      global_triggerLazyInitializeServices: async () =>
+        this.lazyInitialzeServices(),
     });
 
     appGlobal.icpMainAgent.supplySubscriptionHandlers({
@@ -143,21 +156,15 @@ export class ApplicationRoot {
         cb({ type: 'test_event_with_supplySubscriptionHandlers' });
         return () => {};
       },
+      global_appErrorEvents: (cb) => appGlobal.appErrorEventPort.subscribe(cb),
       profile_profileManagerStatus: (cb) => {
         this.profileManager.statusEventPort.subscribe(cb);
         return () => this.profileManager.statusEventPort.unsubscribe(cb);
       },
-      profile_currentProfile: (cb) => {
-        const cb2 = (value: Partial<IProfileManagerStatus>) => {
-          if ('loadedProfileData' in value) {
-            cb(value.loadedProfileData);
-          }
-        };
-        this.profileManager.statusEventPort.subscribe(cb2);
-        return () => this.profileManager.statusEventPort.unsubscribe(cb2);
-      },
       layout_layoutManagerStatus: (listener) =>
         this.layoutManager.statusEvents.subscribe(listener),
+      device_deviceSelectionEvents: (cb) =>
+        this.deviceService.selectionStatusEventPort.subscribe(cb),
       device_keyEvents: (cb) => {
         this.deviceService.realtimeEventPort.subscribe(cb);
         return () => this.deviceService.realtimeEventPort.unsubscribe(cb);
@@ -166,43 +173,41 @@ export class ApplicationRoot {
         this.deviceService.statusEventPort.subscribe(cb);
         return () => this.deviceService.statusEventPort.unsubscribe(cb);
       },
-      firmup_comPortPlugEvents: (cb) => {
-        this.firmwareUpdationService.comPortPlugEvents.subscribe(cb);
-        return () =>
-          this.firmwareUpdationService.comPortPlugEvents.unsubscribe(cb);
-      },
-      projects_layoutFileUpdationEvents: (cb) => {
-        this.keyboardLayoutFilesWatcher.fileUpdationEventPort.subscribe(cb);
-        return () =>
-          this.keyboardLayoutFilesWatcher.fileUpdationEventPort.unsubscribe(cb);
-      },
-      window_appWindowEvents: windowWrapper.appWindowEventPort.subscribe,
+      firmup_comPortPlugEvents: (cb) =>
+        this.firmwareUpdationService.comPortsMonitor.comPortPlugEvents.subscribe(
+          cb,
+        ),
+      projects_layoutFileUpdationEvents: (cb) =>
+        this.keyboardLayoutFilesWatcher.fileUpdationEvents.subscribe(cb),
+      window_appWindowStatus: windowWrapper.appWindowEventPort.subscribe,
     });
   }
 
   async initialize() {
-    console.log(`initialize services`);
-    await applicationStorage.initializeAsync();
-    await this.profileManager.initializeAsync();
-    this.firmwareUpdationService.initialize();
-    this.keyboardLayoutFilesWatcher.initialize();
-    this.keyboardConfigProvider.initialize();
-    this.deviceService.initialize();
-    this.inputLogicSimulator.initialize();
+    await executeWithFatalErrorHandler(async () => {
+      console.log(`initialize services`);
+      await applicationStorage.initializeAsync();
+      this.setupIpcBackend();
+      this.windowWrapper.initialize();
+    });
+  }
 
-    this.setupIpcBackend();
-    this.windowService.initialize();
+  private _lazyInitializeTriggered = false;
+  lazyInitialzeServices() {
+    if (!this._lazyInitializeTriggered) {
+      this._lazyInitializeTriggered = true;
+      this.deviceService.initialize();
+      this.inputLogicSimulator.initialize();
+    }
   }
 
   async terminate() {
-    console.log(`terminate services`);
-    this.windowService.terminate();
-    this.inputLogicSimulator.terminate();
-    this.deviceService.terminate();
-    this.keyboardConfigProvider.terminate();
-    this.keyboardLayoutFilesWatcher.terminate();
-    this.firmwareUpdationService.terminate();
-    await this.profileManager.terminateAsync();
-    await applicationStorage.terminateAsync();
+    await executeWithFatalErrorHandler(async () => {
+      console.log(`terminate services`);
+      this.inputLogicSimulator.terminate();
+      this.deviceService.terminate();
+      this.windowWrapper.terminate();
+      await applicationStorage.terminateAsync();
+    });
   }
 }

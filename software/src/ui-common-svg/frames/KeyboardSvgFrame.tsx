@@ -1,5 +1,4 @@
-import { css } from 'goober';
-import { h } from 'qx';
+import { jsx, css } from 'qx';
 import { IDisplayArea } from '~/shared';
 
 function getViewBox(da: IDisplayArea) {
@@ -29,7 +28,7 @@ export const KeyboardSvgFrame = (props: {
       viewBox={viewBox}
       css={cssSvgFrame}
     >
-      <g strokeWidth={baseStrokeWidth} strokeLinejoin="round">
+      <g stroke-width={baseStrokeWidth} stroke-linejoin="round">
         {children}
       </g>
     </svg>
