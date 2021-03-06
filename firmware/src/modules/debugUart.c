@@ -12,12 +12,20 @@ static void uart_init(uint32_t baud) {
   bit_on(UCSR1B, TXEN1);                   //送信有効化
 }
 
+static void uart_deinit() {
+  bit_off(UCSR1B, TXEN1);
+}
+
+static bool debug_uart_enabled = false;
+
 static void uart_putchar(char byte) {
-  if (byte == '\n') {
-    uart_putchar('\r');
+  if (debug_uart_enabled) {
+    if (byte == '\n') {
+      uart_putchar('\r');
+    }
+    while (bit_is_off(UCSR1A, UDRE1)) {}
+    UDR1 = byte;
   }
-  while (bit_is_off(UCSR1A, UDRE1)) {}
-  UDR1 = byte;
 }
 
 static FILE mystdout = FDEV_SETUP_STREAM((void *)uart_putchar, NULL, _FDEV_SETUP_WRITE);
@@ -25,4 +33,11 @@ static FILE mystdout = FDEV_SETUP_STREAM((void *)uart_putchar, NULL, _FDEV_SETUP
 void debugUart_setup(uint32_t baud) {
   uart_init(baud);
   stdout = &mystdout;
+  debug_uart_enabled = true;
+}
+
+void debugUart_disable() {
+  uart_deinit();
+  stdout = &mystdout;
+  debug_uart_enabled = false;
 }

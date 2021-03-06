@@ -13,7 +13,7 @@ export interface IDeviceWrapper {
   close(): void;
   onClosed(callback: IClosedCallback): void;
   onData(func: IReceiverFunc): void;
-  writeSingleFrame(bytes: number[]): Promise<void>;
+  writeSingleFrame(bytes: number[]): void;
   writeFrames(frames: number[][]): Promise<void>;
 }
 export class DeviceWrapper implements IDeviceWrapper {
@@ -62,8 +62,7 @@ export class DeviceWrapper implements IDeviceWrapper {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/require-await
-  async writeSingleFrame(bytes: number[]) {
+  writeSingleFrame(bytes: number[]) {
     if (bytes.length > 64) {
       throw new Error(`generic hid frame length too long, ${bytes.length}/64`);
     }
@@ -81,7 +80,7 @@ export class DeviceWrapper implements IDeviceWrapper {
 
   async writeFrames(frames: number[][]) {
     for (let i = 0; i < frames.length; i++) {
-      await this.writeSingleFrame(frames[i]);
+      this.writeSingleFrame(frames[i]);
       // await delayMs(10);
       await delayMs(50); // debug
     }

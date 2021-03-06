@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
+import {
+  AssignStorageBaseAddr,
+  AssignStorageHeaderLength,
+} from '~/shell/services/keyboardLogic/InputLogicSimulatorD/MemoryDefs';
 import { KeyboardCoreLogicInterface } from './KeyboardCoreLogicInterface';
 
 // --------------------------------------------------------------------------------
@@ -169,8 +173,9 @@ function getOutputModifiers() {
 // assign memory reader
 
 const NumLayersMax = 16;
-const AssignStorageHeaderSize = 24;
-
+const AssignStorageHeaderLocation = AssignStorageBaseAddr;
+const AssignStorageBodyLocation =
+  AssignStorageBaseAddr + AssignStorageHeaderLength;
 const assignMemoryReaderState = new (class {
   numLayers: u8 = 0;
   assignsStartAddress: u16 = 0;
@@ -180,14 +185,14 @@ const assignMemoryReaderState = new (class {
 
 function initAssignMemoryReader() {
   const state = assignMemoryReaderState;
-  const numLayers = readStorageByte(8);
-  const bodyLength = readStorageWordBE(9);
+  const numLayers = readStorageByte(AssignStorageHeaderLocation + 8);
+  const bodyLength = readStorageWordBE(AssignStorageHeaderLocation + 9);
   state.numLayers = numLayers;
-  state.assignsStartAddress = AssignStorageHeaderSize + numLayers * 2;
-  state.assignsEndAddress = AssignStorageHeaderSize + bodyLength;
+  state.assignsStartAddress = AssignStorageBodyLocation + numLayers * 2;
+  state.assignsEndAddress = AssignStorageBodyLocation + bodyLength;
   for (let i = 0; i < NumLayersMax; i++) {
     state.layerAttributeWords[i] =
-      (i < numLayers && readStorageWordBE(AssignStorageHeaderSize + i * 2)) ||
+      (i < numLayers && readStorageWordBE(AssignStorageBodyLocation + i * 2)) ||
       0;
   }
 }

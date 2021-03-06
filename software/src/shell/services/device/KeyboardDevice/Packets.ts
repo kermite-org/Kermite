@@ -14,6 +14,21 @@ export class Packets {
 
   // ------------------------------------------------------------
 
+  static customParametersBulkReadRequestFrame = [0xb0, 0x02, 0x80];
+
+  static makeCustomParametersBulkWriteOperationFrame(data: number[]) {
+    return [0xb0, 0x02, 0x90, ...data];
+  }
+
+  static makeCustomParameterSignleWriteOperationFrame(
+    index: number,
+    value: number,
+  ) {
+    return [0xb0, 0x02, 0xa0, index, value];
+  }
+
+  // ------------------------------------------------------------
+
   static memoryWriteTransactionStartFrame = [0xb0, 0x01, 0x10];
 
   static memoryWriteTransactionEndFrame = [0xb0, 0x01, 0x11];
@@ -27,14 +42,14 @@ export class Packets {
     const dataKindByte = (dataKind === 'keyMapping' && 0x01) || 0;
 
     return generateNumberSequence(numFrames).map((k) => {
-      const addr = k * sz;
-      const data = bytes.slice(addr, addr + sz);
+      const offset = k * sz;
+      const data = bytes.slice(offset, offset + sz);
       return [
         0xb0,
         dataKindByte,
         0x20,
-        bhi(addr),
-        blo(addr),
+        bhi(offset),
+        blo(offset),
         data.length,
         ...data,
       ];
@@ -43,7 +58,7 @@ export class Packets {
 
   static makeMemoryChecksumRequestFrame(
     dataKind: 'keyMapping',
-    addr: number,
+    offset: number,
     length: number,
   ): number[] {
     const dataKindByte = (dataKind === 'keyMapping' && 0x01) || 0;
@@ -51,8 +66,8 @@ export class Packets {
       0xb0,
       dataKindByte,
       0x21,
-      bhi(addr),
-      blo(addr),
+      bhi(offset),
+      blo(offset),
       bhi(length),
       blo(length),
     ];

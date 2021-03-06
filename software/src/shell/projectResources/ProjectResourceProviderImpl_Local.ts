@@ -1,4 +1,5 @@
 import {
+  ICustromParameterSpec,
   IPersistKeyboardDesign,
   IProfileData,
   IProjectResourceInfo,
@@ -23,6 +24,7 @@ import { IProjectResourceProviderImpl } from '~/shell/projectResources/interface
 import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 
 interface IProjectResourceInfoSource {
+  origin: IResourceOrigin;
   projectId: string;
   keyboardName: string;
   projectPath: string;
@@ -30,12 +32,13 @@ interface IProjectResourceInfoSource {
   layoutNames: string[];
   presetNames: string[];
   hexFilePath?: string;
-  origin: IResourceOrigin;
+  customParameters: ICustromParameterSpec[];
 }
 namespace ProjectResourceInfoSourceLoader {
   interface IPorjectFileJson {
     projectId: string;
     keyboardName: string;
+    customParameters: ICustromParameterSpec[];
   }
 
   function checkFileExistsOrBlank(filePath: string): string | undefined {
@@ -61,6 +64,7 @@ namespace ProjectResourceInfoSourceLoader {
   async function readProjectFile(
     projectFilePath: string,
   ): Promise<IPorjectFileJson> {
+    // TODO: スキーマをチェック
     return (await fsxReadJsonFile(projectFilePath)) as IPorjectFileJson;
   }
 
@@ -99,9 +103,11 @@ namespace ProjectResourceInfoSourceLoader {
           pathJoin(buildsRoot, projectPath, `${coreName}.hex`),
         );
 
-        const { projectId, keyboardName } = await readProjectFile(
-          projectFilePath,
-        );
+        const {
+          projectId,
+          keyboardName,
+          customParameters,
+        } = await readProjectFile(projectFilePath);
 
         const presetsFolderPath = pathJoin(projectBaseDir, 'profiles');
 
@@ -118,6 +124,7 @@ namespace ProjectResourceInfoSourceLoader {
           presetNames,
           hexFilePath,
           origin: 'local' as const,
+          customParameters,
         };
       }),
     );
@@ -161,23 +168,25 @@ export class ProjectResourceProviderImpl_Local
 
     return this.projectInfoSources.map((it) => {
       const {
+        origin,
         projectId,
         keyboardName,
         projectPath,
         hexFilePath,
         presetNames,
         layoutNames,
-        origin,
+        customParameters,
       } = it;
       return {
         sig: createProjectSig(origin, projectId),
+        origin,
         projectId,
         keyboardName,
         projectPath,
         presetNames,
         layoutNames,
         hasFirmwareBinary: !!hexFilePath,
-        origin,
+        customParameters,
       };
     });
   }

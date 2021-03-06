@@ -1,5 +1,6 @@
 import {
   ConfigStorageFormatRevision,
+  generateNumberSequence,
   IKeyboardDeviceStatus,
   IProjectResourceInfo,
   IRealtimeKeyboardEvent,
@@ -21,12 +22,14 @@ async function getProjectInfoFromProjectId(
 
 function createConnectedStatus(
   info: IProjectResourceInfo,
+  assignStorageCapacity: number,
 ): IKeyboardDeviceStatus {
   return {
     isConnected: true,
     deviceAttrs: {
       projectId: info.projectId,
       keyboardName: info.keyboardName,
+      assignStorageCapacity,
     },
   };
 }
@@ -59,13 +62,39 @@ export class KeyboardDeviceServiceCore {
     isConnected: false,
   };
 
-  statusEventPort = createEventPort<IKeyboardDeviceStatus>({
+  statusEventPort = createEventPort<Partial<IKeyboardDeviceStatus>>({
     initialValueGetter: () => this.deviceStatus,
   });
 
-  private setStatus(newStatus: IKeyboardDeviceStatus) {
-    this.deviceStatus = newStatus;
+  private setStatus(newStatus: Partial<IKeyboardDeviceStatus>) {
+    this.deviceStatus = { ...this.deviceStatus, ...newStatus };
     this.statusEventPort.emit(newStatus);
+  }
+
+  private receivedProjectId: string = '';
+  private parameterInitializationTried = false;
+
+  private async initializeDeviceCustromParameters() {
+    const info = await getProjectInfoFromProjectId(
+      this.receivedProjectId || '',
+    );
+    if (!info) {
+      return;
+    }
+    console.log(`writing initial parameters`);
+    const initialParameters = generateNumberSequence(10).map((i) => {
+      const paramSpec = info.customParameters.find(
+        (paramSpec) => paramSpec.slotIndex === i,
+      );
+      return paramSpec ? paramSpec.defaultValue : 1;
+      // 定義がないパラメタのデフォルト値は1とする。
+      // project.jsonでパラメタが定義されていない場合に基本的なオプションを設定値クリアで0にしてしまうと
+      // キーストローク出力/LED出力が無効化されてファームウェアが動作しているかどうかを判別できなくなるため
+    });
+    this.device?.writeSingleFrame(
+      Packets.makeCustomParametersBulkWriteOperationFrame(initialParameters),
+    );
+    this.device?.writeSingleFrame(Packets.customParametersBulkReadRequestFrame);
   }
 
   private onDeviceDataReceived = async (buf: Uint8Array) => {
@@ -73,9 +102,27 @@ export class KeyboardDeviceServiceCore {
     if (res?.type === 'deviceAttributeResponse') {
       console.log(`device attrs received, projectId: ${res.data.projectId}`);
       checkDeviceRevisions(res.data);
+      this.receivedProjectId = res.data.projectId;
       const info = await getProjectInfoFromProjectId(res.data.projectId);
       if (info) {
-        this.setStatus(createConnectedStatus(info));
+        this.setStatus(
+          createConnectedStatus(info, res.data.assignStorageCapacity),
+        );
+      }
+    }
+    if (res?.type === 'custromParametersReadResponse') {
+      console.log(
+        `custom parameters received, [${res.data.parameterValues.join(',')}]`,
+      );
+      if (
+        !res.data.isParametersInitialized &&
+        !this.parameterInitializationTried
+      ) {
+        this.parameterInitializationTried = true;
+        await this.initializeDeviceCustromParameters();
+      }
+      if (res.data.isParametersInitialized) {
+        this.setStatus({ customParameterValues: res.data.parameterValues });
       }
     }
     if (res?.type === 'realtimeEvent') {
@@ -84,9 +131,22 @@ export class KeyboardDeviceServiceCore {
   };
 
   private clearDevice = () => {
-    this.setStatus({ isConnected: false, deviceAttrs: undefined });
+    this.setStatus({
+      isConnected: false,
+      deviceAttrs: undefined,
+      customParameterValues: undefined,
+    });
     this.device = undefined;
+    this.parameterInitializationTried = false;
+    this.receivedProjectId = '';
   };
+
+  setCustomParameterValue(index: number, value: number) {
+    this.device?.writeSingleFrame(
+      Packets.makeCustomParameterSignleWriteOperationFrame(index, value),
+    );
+    this.device?.writeSingleFrame(Packets.customParametersBulkReadRequestFrame);
+  }
 
   setDeivce(device: IDeviceWrapper | undefined) {
     this.clearDevice();
@@ -94,6 +154,7 @@ export class KeyboardDeviceServiceCore {
       device.onData(this.onDeviceDataReceived);
       device.onClosed(this.clearDevice);
       device.writeSingleFrame(Packets.deviceAttributesRequestFrame);
+      device.writeSingleFrame(Packets.customParametersBulkReadRequestFrame);
     }
     this.device = device;
   }

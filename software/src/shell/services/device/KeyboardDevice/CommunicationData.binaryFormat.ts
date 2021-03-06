@@ -37,7 +37,7 @@ namespace CommunicationDataBinaryForamt {
     [0]: { category: 0xb0 }; // 0xb0 for memory operation
     [1]: { dataKind: 0x01 }; // 0x01 for config storage data
     [2]: { command: 0x20 }; // 0x20 for write request
-    [3_4]: { address: u16 };
+    [3_4]: { offset: u16 };
     [5]: { dataLength: u8 };
     '6__': { data: VariableLength }; // dataLength bytes
   };
@@ -46,7 +46,7 @@ namespace CommunicationDataBinaryForamt {
     [0]: { category: 0xb0 }; // 0xb0 for memory operation
     [1]: { dataKind: 0x01 }; // 0x01 for config storage data
     [2]: { command: 0x21 }; // 0x21 for checksum request
-    [3_4]: { address: u16 };
+    [3_4]: { offset: u16 };
     [5_6]: { dataLength: u16 };
   };
 
@@ -56,6 +56,40 @@ namespace CommunicationDataBinaryForamt {
     [2]: { command: 0x22 }; // 0x22 for checksum response
     [3]: { checksumValue: u8 };
   };
+
+  // --------------------
+  // custom paramters data read/write
+
+  type PktCustomParametersBulkReadRequest = PacketHostToDevice & {
+    [0]: { category: 0xb0 }; // 0xb0 for memory operation
+    [1]: { dataKind: 0x02 }; // 0x02 for custom parameters
+    [2]: { command: 0x80 }; // 0x80 for bulk read request
+  };
+
+  type PktCustomParametersBulkReadResponse = PacketDeviceToHost & {
+    [0]: { category: 0xb0 }; // 0xb0 for memory operation
+    [1]: { dataKind: 0x02 }; // 0x02 for custom parameters
+    [2]: { command: 0x81 }; // 0x81 for bulk read response
+    [3]: { initializedFlag: 0 | 1 };
+    [4_13]: { data: Bytes<10> };
+  };
+
+  type PktCustomParametersBulkWriteOperation = PacketHostToDevice & {
+    [0]: { category: 0xb0 }; // 0xb0 for memory operation
+    [1]: { dataKind: 0x02 }; // 0x02 for custom parameters
+    [2]: { command: 0x90 }; // 0x90 for bulk write request
+    [3_12]: { data: Bytes<10> };
+  };
+
+  type PktCustomParameterSingleWriteOperation = PacketHostToDevice & {
+    [0]: { category: 0xb0 }; // 0xb0 for memory operation
+    [1]: { dataKind: 0x02 }; // 0x02 for custom parameters
+    [2]: { command: 0xa0 }; // 0xa0 for single write request
+    [3]: { index: u8 }; // paramter index, 0~9
+    [4]: { value: u8 }; // parameter value
+  };
+
+  // 書き込めたかどうかは書き込み後にbulk readすることで確認する
 
   // --------------------
   // realtime event
@@ -107,9 +141,8 @@ namespace CommunicationDataBinaryForamt {
     [2_3]: { projectReleaseBuildRevision: u16 };
     [4]: { configStorageFormatRevision: u8 };
     [5]: { rawHidMessageProtocolRevision: u8 };
-    [6]: { keyIndexRange: 255 };
-    [7]: { keyboardSide: u8 }; // (0:unset, 1:left, 2:right)
-    [8_15]: { projectId: Bytes<8> };
+    [6_13]: { projectId: Bytes<8> };
+    [14_15]: { assignStorageCapacity: u16 };
   };
 
   type __draft__PktKeyboardSideConfiguration = PacketHostToDevice & {

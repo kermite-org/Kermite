@@ -12,13 +12,15 @@
         "${myCompilerBaseDirectory}/avr/include",
         "${workspaceFolder}/src",
         "${workspaceFolder}/src/modules",
-        "${workspaceFolder}/src/projects/proto/minivers_gsk"
+        "${workspaceFolder}/src/projects/dev/dummy_header_provider_project"
       ],
       "defines": [
         "_DEBUG",
         "UNICODE",
         "_UNICODE",
-        "__AVR_ATmega32U4__"
+        "__AVR_ATmega32U4__",
+        "EXTR_PROJECT_RELEASE_BUILD_REVISION=0",
+        "F_CPU=8000000"
       ],
       "compilerPath": "${myCompilerExecutablePath} -mmcu=atmega32u4",
       "cStandard": "c11",

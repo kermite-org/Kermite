@@ -55,6 +55,37 @@ static uint8_t localHidReport[8] = { 0 };
 static bool isSideBrainModeEnabled = false;
 
 static bool useBoardLeds = false;
+static bool debugUartConfigured = false;
+
+//---------------------------------------------
+//動的に変更可能なオプション
+static bool optionEmitKeyStroke = true;
+static bool optionEmitRealtimeEvents = true;
+static bool optionAffectKeyHoldStateToLED = true;
+static bool optionUseHeartbeatLED = true;
+
+static uint8_t optionDynamicFlags = 0xFF;
+
+static bool optionsInitialConfigShutup = false;
+
+static void customParameterValueHandler(uint8_t slotIndex, uint8_t value) {
+  if (optionsInitialConfigShutup && bit_read(optionDynamicFlags, slotIndex) == 0) {
+    return;
+  }
+  if (slotIndex == OptionSlot_EmitKeyStroke) {
+    optionEmitKeyStroke = !!value;
+  } else if (slotIndex == OptionSlot_EmitRealtimeEvents) {
+    optionEmitRealtimeEvents = !!value;
+  } else if (slotIndex == OptionSlot_AffectKeyHoldStateToLED) {
+    optionAffectKeyHoldStateToLED = !!value;
+  } else if (slotIndex == OptionSlot_UseHeartBeatLED) {
+    optionUseHeartbeatLED = !!value;
+  }
+}
+
+void setCustomParameterDynamicFlag(uint8_t slotIndex, bool isDynamic) {
+  bit_spec(optionDynamicFlags, slotIndex, isDynamic);
+}
 
 //---------------------------------------------
 //board io
@@ -100,12 +131,16 @@ static void processKeyboardCoreLogicOutput() {
 
   bool changed = false;
   if (layerFlags != localLayerFlags) {
-    configuratorServant_emitRelatimeLayerEvent(layerFlags);
+    if (optionEmitRealtimeEvents) {
+      configuratorServant_emitRelatimeLayerEvent(layerFlags);
+    }
     localLayerFlags = layerFlags;
     changed = true;
   }
   if (!utils_compareBytes(hidReport, localHidReport, 8)) {
-    usbioCore_hidKeyboard_writeReport(hidReport);
+    if (optionEmitKeyStroke) {
+      usbioCore_hidKeyboard_writeReport(hidReport);
+    }
     utils_copyBytes(localHidReport, hidReport, 8);
     changed = true;
   }
@@ -114,7 +149,7 @@ static void processKeyboardCoreLogicOutput() {
   }
 
   uint16_t assignHitResult = keyboardCoreLogic_peekAssignHitResult();
-  if (assignHitResult != 0) {
+  if (assignHitResult != 0 && optionEmitRealtimeEvents) {
     configuratorServant_emitRelatimeAssignHitEvent(assignHitResult);
   }
 }
@@ -137,7 +172,9 @@ static void onPhysicalKeyStateChanged(uint8_t keySlotIndex, bool isDown) {
   }
 
   //ユーティリティにキー状態変化イベントを送信
-  configuratorServant_emitRealtimeKeyEvent(keyIndex, isDown);
+  if (optionEmitRealtimeEvents) {
+    configuratorServant_emitRealtimeKeyEvent(keyIndex, isDown);
+  }
 
   if (!isSideBrainModeEnabled) {
     //メインロジックでキー入力を処理
@@ -197,11 +234,14 @@ static void processKeyStatesUpdate() {
 }
 
 static void keyboardEntry() {
+  configValidator_initializeEEPROM();
   usbioCore_initialize();
   keyMatrixScanner_initialize(
       NumRows, NumColumns, rowPins, columnPins, nextKeyStateFlags);
   resetKeyboardCoreLogic();
-  configuratorServant_initialize(configuratorServantStateHandler);
+  optionsInitialConfigShutup = true;
+  configuratorServant_initialize(
+      configuratorServantStateHandler, customParameterValueHandler);
 
   sei();
 
@@ -213,13 +253,17 @@ static void keyboardEntry() {
       processKeyStatesUpdate();
       keyboardCoreLogic_processTicker(5);
       processKeyboardCoreLogicOutput();
-      outputLED1(pressedKeyCount > 0);
+      if (optionAffectKeyHoldStateToLED) {
+        outputLED1(pressedKeyCount > 0);
+      }
     }
-    if (cnt % 2000 == 0) {
-      outputLED0(true);
-    }
-    if (cnt % 2000 == 1) {
-      outputLED0(false);
+    if (optionUseHeartbeatLED) {
+      if (cnt % 2000 == 0) {
+        outputLED0(true);
+      }
+      if (cnt % 2000 == 1) {
+        outputLED0(false);
+      }
     }
     _delay_ms(1);
     configuratorServant_processUpdate();
@@ -228,6 +272,24 @@ static void keyboardEntry() {
 
 //---------------------------------------------
 
+void generalKeyboard_useOnboardLeds() {
+  initBoardLeds();
+}
+
+void generalKeyboard_useDebugUART(uint16_t baud) {
+  debugUart_setup(baud);
+  debugUartConfigured = true;
+}
+
+void generalKeyboard_useOptionFixed(uint8_t slot, uint8_t value) {
+  customParameterValueHandler(slot, value);
+  setCustomParameterDynamicFlag(slot, false);
+}
+
+void generalKeyboard_useOptionDynamic(uint8_t slot) {
+  setCustomParameterDynamicFlag(slot, true);
+}
+
 void generalKeyboard_setup(
     const uint8_t *_rowPins, const uint8_t *_columnPins, const int8_t *_keySlotIndexToKeyIndexMap) {
   rowPins = (uint8_t *)_rowPins;
@@ -235,16 +297,11 @@ void generalKeyboard_setup(
   keySlotIndexToKeyIndexMap = (uint8_t *)_keySlotIndexToKeyIndexMap;
 }
 
-void generalKeyboard_useOnboardLeds() {
-  initBoardLeds();
-}
-
-void generalKeyboard_useDebugUART(uint16_t baud) {
-  debugUart_setup(baud);
-}
-
 void generalKeyboard_start() {
   USBCON = 0;
+  if (!debugUartConfigured) {
+    debugUart_disable();
+  }
   printf("start\n");
   keyboardEntry();
 }

@@ -88,6 +88,8 @@ export class ApplicationRoot {
         ),
       device_connectToDevice: async (path) =>
         this.deviceService.selectTargetDevice(path),
+      device_setCustomParameterValue: async (index, value) =>
+        this.deviceService.setCustomParameterValue(index, value),
       firmup_uploadFirmware: (origin, projectId, comPortName) =>
         this.firmwareUpdationService.writeFirmware(
           origin,

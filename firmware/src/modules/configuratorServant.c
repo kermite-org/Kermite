@@ -1,6 +1,7 @@
 #include "configuratorServant.h"
 #include "config.h"
 #include "eeprom.h"
+#include "eepromLayout.h"
 #include "usbioCore.h"
 #include "utils.h"
 #include "versions.h"
@@ -8,62 +9,21 @@
 #include <string.h>
 
 //---------------------------------------------
-//key assign buffer stub
-
-#if 0
-//デバッグ用, ダミーキーマッピングメモリ
-
-#define NumKeys 12
-#define NumLayers 3
-
-static uint16_t assignBuffer[NumKeys * NumLayers] = {
-  //any layer
-  0b1001000000000001, //key0, any layer, keydown, keyinput, A
-  0b1001000000000010, //key1, any layer, keydown, keyinput, B
-  0,
-  0,
-  0b1001000001010111, //key4, any layer, keydown, keyinput, shift
-  0b1101000100000010, //key5, any layer, keydown, holdlayer, sub layer
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-
-  //main layer
-  0,
-  0,
-  0b1001000000000011, //key2, main layer, keydown, keyinput, C
-  0b1001000000000100, //key3, main layer, keydown, keyinput, D
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-
-  // //2nd layer
-  0,
-  0,
-  0b1001000000011011, //key2, sub layer, keydown, keyinput, 0
-  0b1001000000011100, //key3, sub layer, keydown, keyinput, 1
-};
-
-static uint16_t readKeyAssignMemory(uint16_t wordIndex) {
-  uint16_t res = assignBuffer[wordIndex];
-  printf("wordIndex: %d, res: %d\n", wordIndex, res);
-  return res;
-}
-#endif
+//callbacks
 
 static void (*stateNotificationCallback)(uint8_t state) = 0;
+
+static void (*customParameterChangedCallback)(uint8_t slotIndex, uint8_t value) = 0;
 
 static void emitStateNotification(uint8_t state) {
   if (stateNotificationCallback) {
     stateNotificationCallback(state);
+  }
+}
+
+static void invokeCustomParameterChangedCallback(uint8_t index, uint8_t value) {
+  if (customParameterChangedCallback) {
+    customParameterChangedCallback(index, value);
   }
 }
 
@@ -125,10 +85,22 @@ static void emitDeviceAttributesResponse() {
   p[3] = PROJECT_RELEASE_BUILD_REVISION & 0xFF;
   p[4] = CONFIG_STORAGE_FORMAT_REVISION;
   p[5] = RAWHID_MESSAGE_PROTOCOL_REVISION;
-  p[6] = 255;
-  p[7] = 0; //todo: read side configuration from eeprom
-  utils_copyBytes(p + 8, (uint8_t *)PROJECT_ID, 8);
+  utils_copyBytes(p + 6, (uint8_t *)PROJECT_ID, 8);
+  p[14] = AssignStorageCapacity >> 8 & 0xFF;
+  p[15] = AssignStorageCapacity & 0xFF;
 
+  emitGenericHidData(rawHidSendBuf);
+}
+
+static void emitCustomParametersReadResponse() {
+  uint8_t *p = rawHidSendBuf;
+  p[0] = 0xb0;
+  p[1] = 0x02;
+  p[2] = 0x81;
+  p[3] = eeprom_readByte(EepromAddr_CustomSettingsBytesInitializationFlag);
+  for (uint8_t i = 0; i < 10; i++) {
+    p[4 + i] = eeprom_readByte(EepromAddr_CustomSettingsBytes + i);
+  }
   emitGenericHidData(rawHidSendBuf);
 }
 
@@ -149,9 +121,8 @@ static void processReadGenericHidData() {
         }
 
         if (cmd == 0x20) {
-
           //write keymapping data to ROM
-          uint16_t addr = p[3] << 8 | p[4];
+          uint16_t addr = EepromBaseAddr_AssignStorage + (p[3] << 8 | p[4]);
           uint8_t len = p[5];
           uint8_t *src = p + 6;
           //uint8_t *dst = dummyStorage + addr;
@@ -163,7 +134,7 @@ static void processReadGenericHidData() {
         }
         if (cmd == 0x21) {
           //read memory checksum for keymapping data
-          uint16_t addr = p[3] << 8 | p[4];
+          uint16_t addr = EepromBaseAddr_AssignStorage + (p[3] << 8 | p[4]);
           uint16_t len = p[5] << 8 | p[6];
           uint8_t ck = 0;
           printf("check, addr %d, len %d\n", addr, len);
@@ -180,12 +151,36 @@ static void processReadGenericHidData() {
           emitStateNotification(ConfiguratorServentState_KeyMemoryUpdationDone);
         }
       }
+
+      if (dataKind == 0x02) {
+        if (cmd == 0x80) {
+          // printf("custom parameters read requested\n");
+          emitCustomParametersReadResponse();
+        }
+        if (cmd == 0x90) {
+          // printf("handle custom parameters bluk write\n");
+          uint8_t *src = p + 3;
+          for (uint8_t i = 0; i < 10; i++) {
+            uint8_t value = src[i];
+            eeprom_writeByte(EepromAddr_CustomSettingsBytes + i, value);
+            invokeCustomParameterChangedCallback(i, value);
+          }
+          eeprom_writeByte(EepromAddr_CustomSettingsBytesInitializationFlag, 1);
+        }
+        if (cmd == 0xa0) {
+          // printf("handle custom parameters signle write\n");
+          uint8_t index = p[3];
+          uint8_t value = p[4];
+          eeprom_writeByte(EepromAddr_CustomSettingsBytes + index, value);
+          invokeCustomParameterChangedCallback(index, value);
+        }
+      }
     }
 
     if (category == 0xF0) {
       uint8_t command = p[1];
       if (command == 0x10) {
-        // printf("device attributes requested");
+        // printf("device attributes requested\n");
         emitDeviceAttributesResponse();
       }
     }
@@ -208,11 +203,27 @@ static void processReadGenericHidData() {
 }
 
 //---------------------------------------------
+//custom parameter initial loading
+
+static void loadCustomParameters() {
+  bool isInitialized = eeprom_readByte(EepromAddr_CustomSettingsBytesInitializationFlag);
+  if (isInitialized) {
+    for (uint8_t i = 0; i < 10; i++) {
+      uint8_t value = eeprom_readByte(EepromAddr_CustomSettingsBytes + i);
+      invokeCustomParameterChangedCallback(i, value);
+    }
+  }
+}
+
+//---------------------------------------------
 //exports
 
 void configuratorServant_initialize(
-    void (*_stateNotificationCallback)(uint8_t state)) {
+    void (*_stateNotificationCallback)(uint8_t state),
+    void (*_customParameterChangedCallback)(uint8_t index, uint8_t value)) {
   stateNotificationCallback = _stateNotificationCallback;
+  customParameterChangedCallback = _customParameterChangedCallback;
+  loadCustomParameters();
 }
 
 void configuratorServant_processUpdate() {

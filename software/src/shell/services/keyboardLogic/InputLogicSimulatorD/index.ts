@@ -8,6 +8,7 @@ import {
 import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
 import { KeyboardDeviceService } from '~/shell/services/device/KeyboardDevice';
+import { AssignStorageBaseAddr } from '~/shell/services/keyboardLogic/InputLogicSimulatorD/MemoryDefs';
 import { ProfileManager } from '~/shell/services/profile/ProfileManager';
 import { getKeyboardCoreLogicInterface } from './DeviceCoreLogicSimulator2_Dual';
 import { makeKeyAssignsConfigStorageData } from './ProfileDataBinaryPacker';
@@ -29,21 +30,18 @@ function createTimeIntervalCounter() {
   };
 }
 
-function copyBytes(dst: number[], src: number[], len: number) {
-  for (let i = 0; i < len; i++) {
-    dst[i] = src[i];
-  }
-}
-
 class ConfigDataStorage {
   readonly StorageBufCapacity = 1024;
+  readonly DataLocation = AssignStorageBaseAddr;
   storageBuf: number[] = Array(this.StorageBufCapacity).fill(0);
 
   writeConfigStorageData(bytes: number[]) {
     const len = bytes.length;
-    if (len < this.StorageBufCapacity) {
+    if (len < this.StorageBufCapacity - this.DataLocation) {
       this.storageBuf.fill(0);
-      copyBytes(this.storageBuf, bytes, len);
+      for (let i = 0; i < len; i++) {
+        this.storageBuf[this.DataLocation + i] = bytes[i];
+      }
     }
   }
 

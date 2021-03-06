@@ -1,4 +1,5 @@
 import { IAppErrorData } from '~/shared/defs/CustomErrors';
+import { ICustromParameterSpec } from '~/shared/defs/CustomParameter';
 import { IPersistKeyboardDesign } from '~/shared/defs/KeyboardDesign';
 import { IKeyboardConfig } from './ConfigTypes';
 import { IProfileData } from './ProfileData';
@@ -19,13 +20,14 @@ export type IResourceOrigin = 'local' | 'online';
 
 export interface IProjectResourceInfo {
   sig: string; // ${origin}#${projectId}
+  origin: IResourceOrigin;
   projectId: string;
   keyboardName: string;
   projectPath: string;
   presetNames: string[];
   layoutNames: string[];
   hasFirmwareBinary: boolean;
-  origin: IResourceOrigin;
+  customParameters: ICustromParameterSpec[];
 }
 
 export interface IKeyboardDeviceInfo {
@@ -42,7 +44,9 @@ export interface IKeyboardDeviceStatus {
   deviceAttrs?: {
     projectId: string;
     keyboardName: string;
+    assignStorageCapacity: number;
   };
+  customParameterValues?: number[];
 }
 
 export type IRealtimeKeyboardEvent =
@@ -231,6 +235,7 @@ export interface IAppIpcContract {
     ): Promise<IPersistKeyboardDesign | undefined>;
 
     device_connectToDevice(path: string): Promise<void>;
+    device_setCustomParameterValue(index: number, value: number): Promise<void>;
 
     firmup_uploadFirmware(
       origin: IResourceOrigin,
