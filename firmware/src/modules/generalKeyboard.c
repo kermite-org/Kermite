@@ -55,7 +55,6 @@ static uint8_t localHidReport[8] = { 0 };
 static bool isSideBrainModeEnabled = false;
 
 static bool useBoardLeds = false;
-
 static bool debugUartConfigured = false;
 
 //---------------------------------------------
