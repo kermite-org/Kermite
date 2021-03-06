@@ -6,6 +6,7 @@
 #define OptionSlot_EmitRealtimeEvents 1
 #define OptionSlot_AffectKeyHoldStateToLED 2
 #define OptionSlot_UseHeartBeatLED 3
+#define OptionSlot_MasterSide 4
 
 void splitKeyboard_useOnboardLeds();
 void splitKeyboard_useDebugUART(uint16_t baud);

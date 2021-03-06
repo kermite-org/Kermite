@@ -72,6 +72,7 @@ static bool optionEmitKeyStroke = true;
 static bool optionEmitRealtimeEvents = true;
 static bool optionAffectKeyHoldStateToLED = true;
 static bool optionUseHeartbeatLED = true;
+static bool optionInvertSide = false;
 
 static uint8_t optionDynamicFlags = 0xFF;
 
@@ -89,6 +90,9 @@ static void customParameterValueHandler(uint8_t slotIndex, uint8_t value) {
     optionAffectKeyHoldStateToLED = !!value;
   } else if (slotIndex == OptionSlot_UseHeartBeatLED) {
     optionUseHeartbeatLED = !!value;
+  } else if (slotIndex == OptionSlot_MasterSide) {
+    //value: (1:left, 2:right)
+    optionInvertSide = value == 2;
   }
 }
 
@@ -247,6 +251,11 @@ static void processKeyStatesUpdate() {
       uint8_t keySlotIndex = i * 8 + j;
       if (keySlotIndex >= NumKeySlots) {
         break;
+      }
+      if (optionInvertSide) {
+        keySlotIndex = (keySlotIndex < NumKeySlotsHalf)
+                           ? (NumKeySlotsHalf + keySlotIndex)
+                           : (keySlotIndex - NumKeySlotsHalf);
       }
       bool state0 = bit_read(byte0, j);
       bool state1 = bit_read(byte1, j);

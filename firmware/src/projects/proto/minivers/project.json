@@ -25,6 +25,17 @@
       "slotIndex": 3,
       "label": "Heartbeat LED Output",
       "defaultValue": 1
+    },
+    {
+      "type": "selection",
+      "uiType": "pulldown",
+      "slotIndex": 4,
+      "label": "Master Side",
+      "options": [
+        { "value": 1, "label": "Left" },
+        { "value": 2, "label": "Right" }
+      ],
+      "defaultValue": 1
     }
   ]
 }
