@@ -1,6 +1,7 @@
 import {
   IPersistKeyboardDesign,
   IProfileData,
+  IProjectCustomDefinition,
   IProjectResourceInfo,
   IResourceOrigin,
 } from '~/shared';
@@ -29,6 +30,14 @@ class ProjectResourceProvider implements IProjectResourceProvider {
     } else {
       return this.remoteResourceProviderImpl;
     }
+  }
+
+  async getProjectCustomDefinition(
+    origin: IResourceOrigin,
+    projectId: string,
+  ): Promise<IProjectCustomDefinition | undefined> {
+    const providerImpl = this.getResouceProviderImpl(origin);
+    return await providerImpl.getProjectCustomDefinition(projectId);
   }
 
   async loadProjectPreset(

@@ -1,12 +1,17 @@
 import {
   IPersistKeyboardDesign,
   IProfileData,
+  IProjectCustomDefinition,
   IProjectResourceInfo,
   IResourceOrigin,
 } from '~/shared';
 
 export interface IProjectResourceProviderImpl {
   getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
+
+  getProjectCustomDefinition(
+    projectId: string,
+  ): Promise<IProjectCustomDefinition | undefined>;
 
   loadProjectPreset(
     projectId: string,

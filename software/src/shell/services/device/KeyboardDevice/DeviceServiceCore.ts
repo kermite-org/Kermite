@@ -84,16 +84,16 @@ export class KeyboardDeviceServiceCore {
     if (!this.receivedProjectOrigin || !this.receivedProjectId) {
       return;
     }
-    const info = await getProjectInfo(
+    const customDef = await projectResourceProvider.getProjectCustomDefinition(
       this.receivedProjectOrigin,
       this.receivedProjectId,
     );
-    if (!info) {
+    if (!customDef) {
       return;
     }
     console.log(`writing initial parameters`);
     const initialParameters = generateNumberSequence(10).map((i) => {
-      const paramSpec = info.customParameters.find(
+      const paramSpec = customDef.customParameterSpecs.find(
         (paramSpec) => paramSpec.slotIndex === i,
       );
       return paramSpec ? paramSpec.defaultValue : 1;

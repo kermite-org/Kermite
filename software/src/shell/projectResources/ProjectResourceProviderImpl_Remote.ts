@@ -1,6 +1,7 @@
 import {
   IPersistKeyboardDesign,
   IProfileData,
+  IProjectCustomDefinition,
   IProjectResourceInfo,
 } from '~/shared';
 import { createProjectSig } from '~/shared/funcs/DomainRelatedHelpers';
@@ -17,6 +18,7 @@ import {
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
 import { IProjectResourceProviderImpl } from '~/shell/projectResources';
+import { IPorjectFileJson } from '~/shell/projectResources/ProjectResourceProviderImpl_Local';
 import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 
 const remoteBaseUri =
@@ -61,10 +63,10 @@ interface ISummaryJsonData {
 async function loadRemoteResourceInfosFromSummaryJson(): Promise<
   IRemoteProjectResourceInfoSource[]
 > {
-  const remoteSummary = (await cacheRemoteResouce(
+  const remoteSummary = await cacheRemoteResouce<ISummaryJsonData>(
     fetchJson,
     `${remoteBaseUri}/summary.json`,
-  )) as ISummaryJsonData;
+  );
   return remoteSummary.projects.map((info) => ({
     projectId: info.projectId,
     keyboardName: info.keyboardName,
@@ -105,6 +107,23 @@ export class ProjectResourceProviderImpl_Remote
     projectId: string,
   ): IRemoteProjectResourceInfoSource | undefined {
     return this.projectInfoSources.find((info) => info.projectId === projectId);
+  }
+
+  async getProjectCustomDefinition(
+    projectId: string,
+  ): Promise<IProjectCustomDefinition | undefined> {
+    const info = this.getProjectInfoSourceById(projectId);
+    if (info) {
+      const relPath = `variants/${info.projectPath}/project.json`;
+      const uri = `${remoteBaseUri}/${relPath}`;
+      const projectJsonContent = await cacheRemoteResouce<IPorjectFileJson>(
+        fetchJson,
+        uri,
+      );
+      return {
+        customParameterSpecs: projectJsonContent.customParameters,
+      };
+    }
   }
 
   async loadProjectPreset(

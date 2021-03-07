@@ -27,7 +27,10 @@ export interface IProjectResourceInfo {
   presetNames: string[];
   layoutNames: string[];
   hasFirmwareBinary: boolean;
-  customParameters: ICustromParameterSpec[];
+}
+
+export interface IProjectCustomDefinition {
+  customParameterSpecs: ICustromParameterSpec[];
 }
 
 export interface IKeyboardDeviceInfo {
@@ -224,6 +227,10 @@ export interface IAppIpcContract {
     config_getProjectRootDirectoryPath(): Promise<string>;
 
     projects_getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
+    projects_getProjectCustomDefinition(
+      origin: IResourceOrigin,
+      projectId: string,
+    ): Promise<IProjectCustomDefinition | undefined>;
     projects_loadPresetProfile(
       origin: IResourceOrigin,
       projectId: string,
