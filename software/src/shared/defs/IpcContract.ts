@@ -49,6 +49,7 @@ export interface IKeyboardDeviceStatus {
     origin: IResourceOrigin;
     projectId: string;
     keyboardName: string;
+    firmwareBuildRevision: number;
     assignStorageCapacity: number;
   };
   customParameterValues?: number[];

@@ -35,6 +35,7 @@ function createConnectedStatus(
       projectId: info.projectId,
       keyboardName: info.keyboardName,
       assignStorageCapacity,
+      firmwareBuildRevision: info.firmwareBuildRevision,
     },
   };
 }
