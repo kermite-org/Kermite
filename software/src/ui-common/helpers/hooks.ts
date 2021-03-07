@@ -1,6 +1,5 @@
 import { Hook } from 'qx';
 import { copyObjectProps } from '~/shared';
-import { PromiseResultType } from '~/shared/funcs/UtilityTypes';
 import { UiLocalStorage } from '~/ui-common/base';
 
 export function useLocal<T extends object>(arg: T | (() => T)) {
@@ -17,21 +16,19 @@ export function useFetcher<T>(func: () => Promise<T>, defaultValue: T): T {
   return value;
 }
 
-export function useFetcher2<T extends (...args: any[]) => Promise<any>>(
-  func: T,
-  args: Parameters<T>,
-  canFetch: boolean,
-): PromiseResultType<T> | undefined {
-  const [value, setValue] = Hook.useState<PromiseResultType<T> | undefined>(
-    undefined,
-  );
+export function useFetcher2<T>(
+  func: () => Promise<T> | undefined,
+  deps: any[],
+): T | undefined {
+  const [value, setValue] = Hook.useState<T | undefined>(undefined);
   Hook.useEffect(() => {
-    if (canFetch) {
-      func(...args).then((value) => value && setValue(value));
+    const promise = func();
+    if (promise) {
+      promise.then((value) => value && setValue(value));
     } else {
       setValue(undefined);
     }
-  }, args);
+  }, deps);
   return value;
 }
 

@@ -108,18 +108,21 @@ function useCustomParametersPartViewModel(): ICustomParametersPartViewModel {
     },
   );
 
-  const deviceProjectId =
-    (deviceStatus.isConnected && deviceStatus.deviceAttrs?.projectId) ||
-    undefined;
-
   const parameterValues =
     (deviceStatus.isConnected && deviceStatus.customParameterValues) ||
     undefined;
 
+  const deviceAttrs =
+    (deviceStatus.isConnected && deviceStatus.deviceAttrs) || undefined;
+
   const customDef = useFetcher2(
-    ipcAgent.async.projects_getProjectCustomDefinition,
-    ['local', deviceProjectId || ''],
-    !!deviceProjectId,
+    () =>
+      deviceAttrs &&
+      ipcAgent.async.projects_getProjectCustomDefinition(
+        deviceAttrs.origin,
+        deviceAttrs.projectId,
+      ),
+    [deviceAttrs],
   );
 
   return {
