@@ -86,8 +86,9 @@ static void emitDeviceAttributesResponse() {
   p[4] = CONFIG_STORAGE_FORMAT_REVISION;
   p[5] = RAWHID_MESSAGE_PROTOCOL_REVISION;
   utils_copyBytes(p + 6, (uint8_t *)PROJECT_ID, 8);
-  p[14] = AssignStorageCapacity >> 8 & 0xFF;
-  p[15] = AssignStorageCapacity & 0xFF;
+  p[14] = IS_RESOURCE_ORIGIN_ONLINE;
+  p[15] = AssignStorageCapacity >> 8 & 0xFF;
+  p[16] = AssignStorageCapacity & 0xFF;
 
   emitGenericHidData(rawHidSendBuf);
 }
