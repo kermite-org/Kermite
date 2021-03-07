@@ -27,6 +27,7 @@ export interface IProjectResourceInfo {
   presetNames: string[];
   layoutNames: string[];
   hasFirmwareBinary: boolean;
+  firmwareBuildRevision: number;
 }
 
 export interface IProjectCustomDefinition {
