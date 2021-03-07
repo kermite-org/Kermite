@@ -36,7 +36,7 @@ function getUpdatedProjectPaths() {
 }
 
 function makeProjectBuild(projectPath: string) {
-  const command = `make ${projectPath}:build`;
+  const command = `make ${projectPath}:build IS_RESOURCE_ORIGIN_ONLINE=1`;
   const [_stdout, stderr, status] = executeCommand(command);
   if (status !== 0) {
     throw new Error(`>${command}\n${stderr}`);

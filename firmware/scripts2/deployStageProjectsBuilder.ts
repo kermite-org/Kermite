@@ -71,7 +71,7 @@ function loadProjectSourceAttributes(
 }
 
 function makeProjectBuild(projectPath: string, buildRevision: number) {
-  const command = `make ${projectPath}:build RELEASE_REVISION=${buildRevision}`;
+  const command = `make ${projectPath}:build RELEASE_REVISION=${buildRevision} IS_RESOURCE_ORIGIN_ONLINE=1`;
   const [_stdout, stderr, status] = executeCommand(command);
   if (status !== 0) {
     throw `>${command}\n${stderr}`;
