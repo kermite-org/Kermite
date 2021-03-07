@@ -4,6 +4,7 @@ import {
   IKeyboardDeviceStatus,
   IProjectResourceInfo,
   IRealtimeKeyboardEvent,
+  IResourceOrigin,
   RawHidMessageProtocolRevision,
 } from '~/shared';
 import { createEventPort } from '~/shell/funcs';
@@ -12,11 +13,14 @@ import { Packets } from '~/shell/services/device/KeyboardDevice/Packets';
 import { recievedBytesDecoder } from '~/shell/services/device/KeyboardDevice/ReceivedBytesDecoder';
 import { IDeviceWrapper } from './DeviceWrapper';
 
-async function getProjectInfoFromProjectId(
+async function getProjectInfo(
+  origin: IResourceOrigin,
   projectId: string,
 ): Promise<IProjectResourceInfo | undefined> {
   const resourceInfos = await projectResourceProvider.getAllProjectResourceInfos();
-  const info = resourceInfos.find((info) => info.projectId === projectId);
+  const info = resourceInfos.find(
+    (info) => info.origin === origin && info.projectId === projectId,
+  );
   return info;
 }
 
@@ -71,12 +75,17 @@ export class KeyboardDeviceServiceCore {
     this.statusEventPort.emit(newStatus);
   }
 
-  private receivedProjectId: string = '';
+  private receivedProjectOrigin: IResourceOrigin | undefined;
+  private receivedProjectId: string | undefined;
   private parameterInitializationTried = false;
 
   private async initializeDeviceCustromParameters() {
-    const info = await getProjectInfoFromProjectId(
-      this.receivedProjectId || '',
+    if (!this.receivedProjectOrigin || !this.receivedProjectId) {
+      return;
+    }
+    const info = await getProjectInfo(
+      this.receivedProjectOrigin,
+      this.receivedProjectId,
     );
     if (!info) {
       return;
@@ -105,7 +114,10 @@ export class KeyboardDeviceServiceCore {
       );
       checkDeviceRevisions(res.data);
       this.receivedProjectId = res.data.projectId;
-      const info = await getProjectInfoFromProjectId(res.data.projectId);
+      const info = await getProjectInfo(
+        res.data.resourceOrigin,
+        res.data.projectId,
+      );
       if (info) {
         this.setStatus(
           createConnectedStatus(info, res.data.assignStorageCapacity),
@@ -140,7 +152,8 @@ export class KeyboardDeviceServiceCore {
     });
     this.device = undefined;
     this.parameterInitializationTried = false;
-    this.receivedProjectId = '';
+    this.receivedProjectOrigin = undefined;
+    this.receivedProjectId = undefined;
   };
 
   setCustomParameterValue(index: number, value: number) {
