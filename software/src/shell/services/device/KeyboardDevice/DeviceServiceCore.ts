@@ -31,6 +31,7 @@ function createConnectedStatus(
   return {
     isConnected: true,
     deviceAttrs: {
+      origin: info.origin,
       projectId: info.projectId,
       keyboardName: info.keyboardName,
       assignStorageCapacity,
