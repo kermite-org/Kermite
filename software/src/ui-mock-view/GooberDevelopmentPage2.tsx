@@ -26,17 +26,16 @@ const Header2 = styled.div`
   color: red;
 `;
 
-const MyButton = (props: { text: string; className?: string }) => {
-  return <button className={props.className}>{props.text}</button>;
-};
-
-// TODO: styledで関数コンポーネントをサポート
-const StyledMyButton = styled.MyButton`
-  border: solid 2px green;
-  background: #cfc;
-  padding: 10px;
-  border-radius: 5px;
-`;
+// // TODO: styledで関数コンポーネントをサポート
+// const MyButton = (props: { text: string; className?: string }) => {
+//   return <button className={props.className}>{props.text}</button>;
+// };
+// const StyledMyButton = styled.MyButton`
+//   border: solid 2px green;
+//   background: #cfc;
+//   padding: 10px;
+//   border-radius: 5px;
+// `;
 
 const MultipleClassNameTestCard1 = () => {
   const cssBase = css`
@@ -101,7 +100,7 @@ export const GooberDevelopmentPage2 = () => {
     <div css={cssRoot}>
       <div css={cssHeader}>hello</div>
       <Header2>world</Header2>
-      <StyledMyButton text="test" />
+      {/* <StyledMyButton text="test" /> */}
       <MultipleClassNameTestCard1 />
       <GooberStyledDev />
       <UserNameView userName="yamada" />
