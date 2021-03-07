@@ -100,7 +100,9 @@ export class KeyboardDeviceServiceCore {
   private onDeviceDataReceived = async (buf: Uint8Array) => {
     const res = recievedBytesDecoder(buf);
     if (res?.type === 'deviceAttributeResponse') {
-      console.log(`device attrs received, projectId: ${res.data.projectId}`);
+      console.log(
+        `device attrs received, origin:${res.data.resourceOrigin} projectId: ${res.data.projectId}`,
+      );
       checkDeviceRevisions(res.data);
       this.receivedProjectId = res.data.projectId;
       const info = await getProjectInfoFromProjectId(res.data.projectId);
