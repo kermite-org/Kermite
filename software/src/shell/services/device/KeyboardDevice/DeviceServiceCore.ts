@@ -7,6 +7,7 @@ import {
   IResourceOrigin,
   RawHidMessageProtocolRevision,
 } from '~/shared';
+import { generateRandomDeviceInstanceCode } from '~/shared/funcs/DomainRelatedHelpers';
 import { createEventPort } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
 import { Packets } from '~/shell/services/device/KeyboardDevice/Packets';
@@ -79,7 +80,17 @@ export class KeyboardDeviceServiceCore {
 
   private receivedResourceOrigin: IResourceOrigin | undefined;
   private receivedProjectId: string | undefined;
+  private instanceCodeInitializationTried = false;
   private parameterInitializationTried = false;
+
+  private initializeDeviceInstanceCode() {
+    console.log('write device instance code');
+    const code = generateRandomDeviceInstanceCode();
+    this.device?.writeSingleFrame(
+      Packets.makeDeviceInstanceCodeWriteOperationFrame(code),
+    );
+    this.device?.writeSingleFrame(Packets.deviceAttributesRequestFrame);
+  }
 
   private async initializeDeviceCustromParameters() {
     if (!this.receivedResourceOrigin || !this.receivedProjectId) {
@@ -115,6 +126,14 @@ export class KeyboardDeviceServiceCore {
         `device attrs received, origin:${res.data.resourceOrigin} projectId: ${res.data.projectId} instanceCode: ${res.data.deviceInstanceCode}`,
       );
       console.log({ res });
+      if (
+        !res.data.deviceInstanceCode &&
+        !this.instanceCodeInitializationTried
+      ) {
+        this.instanceCodeInitializationTried = true;
+        this.initializeDeviceInstanceCode();
+        return;
+      }
       checkDeviceRevisions(res.data);
       this.receivedResourceOrigin = res.data.resourceOrigin;
       this.receivedProjectId = res.data.projectId;
@@ -155,6 +174,7 @@ export class KeyboardDeviceServiceCore {
       customParameterValues: undefined,
     });
     this.device = undefined;
+    this.instanceCodeInitializationTried = false;
     this.parameterInitializationTried = false;
     this.receivedResourceOrigin = undefined;
     this.receivedProjectId = undefined;

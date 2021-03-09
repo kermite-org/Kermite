@@ -182,6 +182,16 @@ static void processReadGenericHidData() {
           invokeCustomParameterChangedCallback(index, value);
         }
       }
+
+      if (dataKind == 0x03) {
+        if (cmd == 0x90) {
+          // printf("write device instance code\n");
+          uint8_t *src = p + 3;
+          for (uint8_t i = 0; i < 8; i++) {
+            eeprom_writeByte(EepromAddr_DeviceInstanceCode + i, src[i]);
+          }
+        }
+      }
     }
 
     if (category == 0xF0) {

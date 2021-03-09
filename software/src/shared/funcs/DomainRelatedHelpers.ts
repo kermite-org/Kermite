@@ -1,3 +1,4 @@
+import { generateNumberSequence } from '~/shared';
 import { IPresetSpec, IPresetType, IResourceOrigin } from '~/shared/defs';
 
 // プロジェクトソースの単一文字列表現 `local#${projectId}` or `online#${projectId}`
@@ -34,4 +35,10 @@ export function generateNextSequentialId(
   const allNumbers = existingsIds.map((it) => parseInt(it.replace(prefix, '')));
   const newNumber = allNumbers.length > 0 ? Math.max(...allNumbers) + 1 : 0;
   return `${prefix}${newNumber}`;
+}
+
+export function generateRandomDeviceInstanceCode(): string {
+  return generateNumberSequence(8)
+    .map((_) => ((Math.random() * 16) >> 0).toString(16))
+    .join('');
 }
