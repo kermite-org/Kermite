@@ -77,16 +77,16 @@ export class KeyboardDeviceServiceCore {
     this.statusEventPort.emit(newStatus);
   }
 
-  private receivedProjectOrigin: IResourceOrigin | undefined;
+  private receivedResourceOrigin: IResourceOrigin | undefined;
   private receivedProjectId: string | undefined;
   private parameterInitializationTried = false;
 
   private async initializeDeviceCustromParameters() {
-    if (!this.receivedProjectOrigin || !this.receivedProjectId) {
+    if (!this.receivedResourceOrigin || !this.receivedProjectId) {
       return;
     }
     const customDef = await projectResourceProvider.getProjectCustomDefinition(
-      this.receivedProjectOrigin,
+      this.receivedResourceOrigin,
       this.receivedProjectId,
     );
     if (!customDef) {
@@ -110,11 +110,13 @@ export class KeyboardDeviceServiceCore {
 
   private onDeviceDataReceived = async (buf: Uint8Array) => {
     const res = recievedBytesDecoder(buf);
+    console.log({ res });
     if (res?.type === 'deviceAttributeResponse') {
       console.log(
         `device attrs received, origin:${res.data.resourceOrigin} projectId: ${res.data.projectId}`,
       );
       checkDeviceRevisions(res.data);
+      this.receivedResourceOrigin = res.data.resourceOrigin;
       this.receivedProjectId = res.data.projectId;
       const info = await getProjectInfo(
         res.data.resourceOrigin,
@@ -154,7 +156,7 @@ export class KeyboardDeviceServiceCore {
     });
     this.device = undefined;
     this.parameterInitializationTried = false;
-    this.receivedProjectOrigin = undefined;
+    this.receivedResourceOrigin = undefined;
     this.receivedProjectId = undefined;
   };
 

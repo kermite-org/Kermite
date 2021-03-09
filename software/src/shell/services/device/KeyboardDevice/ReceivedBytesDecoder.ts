@@ -14,6 +14,7 @@ type IReceivedBytesDecodeResult =
         rawHidMessageProtocolRevision: number;
         resourceOrigin: IResourceOrigin;
         projectId: string;
+        deviceInstanceCode: string;
         assignStorageCapacity: number;
       };
     }
@@ -34,7 +35,8 @@ export function recievedBytesDecoder(
     const rawHidMessageProtocolRevision = buf[5];
     const projectId = bytesToString([...buf].slice(6, 14));
     const isProjectOriginOnline = !!buf[14];
-    const assignStorageCapacity = (buf[15] << 8) | buf[16];
+    const deviceInstanceCode = bytesToString([...buf].slice(16, 24));
+    const assignStorageCapacity = (buf[24] << 8) | buf[25];
     return {
       type: 'deviceAttributeResponse',
       data: {
@@ -43,6 +45,7 @@ export function recievedBytesDecoder(
         rawHidMessageProtocolRevision,
         resourceOrigin: isProjectOriginOnline ? 'online' : 'local',
         projectId,
+        deviceInstanceCode,
         assignStorageCapacity,
       },
     };
