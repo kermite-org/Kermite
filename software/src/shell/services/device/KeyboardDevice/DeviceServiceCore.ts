@@ -27,6 +27,7 @@ async function getProjectInfo(
 
 function createConnectedStatus(
   info: IProjectResourceInfo,
+  deviceInstanceCode: string,
   assignStorageCapacity: number,
 ): IKeyboardDeviceStatus {
   return {
@@ -35,8 +36,9 @@ function createConnectedStatus(
       origin: info.origin,
       projectId: info.projectId,
       keyboardName: info.keyboardName,
-      assignStorageCapacity,
       firmwareBuildRevision: info.firmwareBuildRevision,
+      deviceInstanceCode,
+      assignStorageCapacity,
     },
   };
 }
@@ -125,7 +127,7 @@ export class KeyboardDeviceServiceCore {
       console.log(
         `device attrs received, origin:${res.data.resourceOrigin} projectId: ${res.data.projectId} instanceCode: ${res.data.deviceInstanceCode}`,
       );
-      console.log({ res });
+      // console.log({ res });
       if (
         !res.data.deviceInstanceCode &&
         !this.instanceCodeInitializationTried
@@ -143,7 +145,11 @@ export class KeyboardDeviceServiceCore {
       );
       if (info) {
         this.setStatus(
-          createConnectedStatus(info, res.data.assignStorageCapacity),
+          createConnectedStatus(
+            info,
+            res.data.deviceInstanceCode,
+            res.data.assignStorageCapacity,
+          ),
         );
       }
     }
