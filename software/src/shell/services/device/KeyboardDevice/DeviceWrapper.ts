@@ -15,12 +15,15 @@ export interface IDeviceWrapper {
   onData(func: IReceiverFunc): void;
   writeSingleFrame(bytes: number[]): void;
   writeFrames(frames: number[][]): Promise<void>;
+  connectedDevicePath: string | undefined;
 }
 export class DeviceWrapper implements IDeviceWrapper {
   private device?: HID.HID | undefined;
 
   onData = makeListenerPort<Uint8Array>();
   onClosed = makeListenerPort<void>();
+
+  connectedDevicePath: string | undefined;
 
   static openDeviceByPath(path: string): DeviceWrapper | undefined {
     const instance = new DeviceWrapper();
@@ -39,6 +42,7 @@ export class DeviceWrapper implements IDeviceWrapper {
     device.on('data', this.handleData);
     device.on('error', this.handleError);
     this.device = device;
+    this.connectedDevicePath = path;
     return true;
   }
 
@@ -57,6 +61,7 @@ export class DeviceWrapper implements IDeviceWrapper {
       this.onClosed.emit();
       this.device.close();
       this.device = undefined;
+      this.connectedDevicePath = undefined;
       this.onData.purge();
       this.onClosed.purge();
     }

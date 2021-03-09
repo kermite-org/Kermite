@@ -52,6 +52,7 @@ export interface IKeyboardDeviceStatus {
     firmwareBuildRevision: number;
     deviceInstanceCode: string;
     assignStorageCapacity: number;
+    portName: string;
   };
   customParameterValues?: number[];
 }

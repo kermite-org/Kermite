@@ -31,11 +31,16 @@ export function enumerateSupportedDevicePathsCore(
     .filter((it) => !!it);
 }
 
-export function getDisplayNameFromDevicePath(path: string) {
+export function getPortNameFromDevicePath(path: string) {
   const m =
     path.match(/kermite_core_atmega32u4@(\d+)/) || // Mac
     path.match(/mi_00#8&([0-9a-f]+)/); // Windows
-  return m ? `device@${m[1]}` : path;
+  return (m && `${m[1]}`) || undefined;
+}
+
+export function getDisplayNameFromDevicePath(path: string) {
+  const portName = getPortNameFromDevicePath(path);
+  return portName ? `device@${portName}` : path;
 }
 
 export function enumerateSupportedDeviceInfos(
