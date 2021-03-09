@@ -11,15 +11,15 @@
 
 /*
 DATA LAYOUT
-U = USE_EEPROM_SIZE
+U = USER_EEPROM_SIZE
+
 (address):(size), DataType
-
 (0):(8), project ID
-(8):(1), reserved
-(9):(1), custom parameter bytes initialization flag
-(10):(10), custom parameter bytes
-(20):(1024-U-20), assign storage (keymapping data)
-
+(8):(8), device instance code
+(16):(1), reserved
+(17):(1), custom parameter bytes initialization flag
+(18):(10), custom parameter bytes
+(28):(1024-U-28), assign storage (keymapping data)
 (1024-U):(U), user data
 
 */
@@ -30,13 +30,16 @@ U = USE_EEPROM_SIZE
 #define EepromAddr_ProjectID EepromBaseAddr_Framework
 #define EepromDataSize_ProjectID 8
 
-#define EepromAddr_CustomSettingsBytesInitializationFlag (EepromBaseAddr_Framework + 9)
+#define EepromAddr_DeviceInstanceCode (EepromBaseAddr_Framework + 8)
+#define EepromDataSize_DeviceInstanceCode 8
 
-#define EepromAddr_CustomSettingsBytes (EepromBaseAddr_Framework + 10)
+#define EepromAddr_CustomSettingsBytesInitializationFlag (EepromBaseAddr_Framework + 17)
+
+#define EepromAddr_CustomSettingsBytes (EepromBaseAddr_Framework + 18)
 #define EepromDataSize_CustomSettingsBytes 10
 
-#define EepromBaseAddr_AssignStorage (EepromBaseAddr_Framework + 20)
-#define AssignStorageCapacity (EepromDataSize_Framework - 20)
+#define EepromBaseAddr_AssignStorage (EepromBaseAddr_Framework + 28)
+#define AssignStorageCapacity (EepromDataSize_Framework - 28)
 
 #define EepromAddr_AssignStorageHeader EepromBaseAddr_AssignStorage
 #define AssignStorageHeaderLength 12
