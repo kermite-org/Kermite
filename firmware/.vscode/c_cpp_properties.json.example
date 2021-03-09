@@ -20,6 +20,7 @@
         "_UNICODE",
         "__AVR_ATmega32U4__",
         "EXTR_PROJECT_RELEASE_BUILD_REVISION=0",
+        "EXTR_IS_RESOURCE_ORIGIN_ONLINE=0",
         "F_CPU=8000000"
       ],
       "compilerPath": "${myCompilerExecutablePath} -mmcu=atmega32u4",
