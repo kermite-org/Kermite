@@ -28,6 +28,7 @@ export interface IProjectResourceInfo {
   layoutNames: string[];
   hasFirmwareBinary: boolean;
   firmwareBuildRevision: number;
+  firmwareBuildTimestamp: string;
 }
 
 export interface IProjectCustomDefinition {
@@ -52,6 +53,7 @@ export interface IKeyboardDeviceStatus {
     firmwareBuildRevision: number;
     deviceInstanceCode: string;
     assignStorageCapacity: number;
+    portName: string;
   };
   customParameterValues?: number[];
 }

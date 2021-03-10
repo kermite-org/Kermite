@@ -10,6 +10,7 @@ import {
 import { generateRandomDeviceInstanceCode } from '~/shared/funcs/DomainRelatedHelpers';
 import { createEventPort } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
+import { getPortNameFromDevicePath } from '~/shell/services/device/KeyboardDevice/DeviceEnumerator';
 import { Packets } from '~/shell/services/device/KeyboardDevice/Packets';
 import { recievedBytesDecoder } from '~/shell/services/device/KeyboardDevice/ReceivedBytesDecoder';
 import { IDeviceWrapper } from './DeviceWrapper';
@@ -29,6 +30,7 @@ function createConnectedStatus(
   info: IProjectResourceInfo,
   deviceInstanceCode: string,
   assignStorageCapacity: number,
+  devicePath: string,
 ): IKeyboardDeviceStatus {
   return {
     isConnected: true,
@@ -39,6 +41,7 @@ function createConnectedStatus(
       firmwareBuildRevision: info.firmwareBuildRevision,
       deviceInstanceCode,
       assignStorageCapacity,
+      portName: getPortNameFromDevicePath(devicePath) || devicePath,
     },
   };
 }
@@ -149,6 +152,7 @@ export class KeyboardDeviceServiceCore {
             info,
             res.data.deviceInstanceCode,
             res.data.assignStorageCapacity,
+            this.device!.connectedDevicePath!,
           ),
         );
       }

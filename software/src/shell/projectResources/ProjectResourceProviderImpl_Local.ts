@@ -186,6 +186,7 @@ export class ProjectResourceProviderImpl_Local
         layoutNames,
         hasFirmwareBinary: !!hexFilePath,
         firmwareBuildRevision: 0,
+        firmwareBuildTimestamp: 'N/A',
       };
     });
   }
