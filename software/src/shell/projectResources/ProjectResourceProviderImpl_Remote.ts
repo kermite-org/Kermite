@@ -32,6 +32,7 @@ interface IRemoteProjectResourceInfoSource {
   presetNames: string[];
   hasHexFile: boolean;
   firmwareBuildRevision: number;
+  firmwareBuildTimestamp: string;
 }
 
 interface ISummaryJsonData {
@@ -76,6 +77,7 @@ async function loadRemoteResourceInfosFromSummaryJson(): Promise<
     presetNames: info.presetNames,
     hasHexFile: info.buildStatus === 'success',
     firmwareBuildRevision: info.revision,
+    firmwareBuildTimestamp: info.updatedAt,
   }));
 }
 
@@ -103,6 +105,7 @@ export class ProjectResourceProviderImpl_Remote
       layoutNames: it.layoutNames,
       hasFirmwareBinary: it.hasHexFile,
       firmwareBuildRevision: it.firmwareBuildRevision,
+      firmwareBuildTimestamp: it.firmwareBuildTimestamp,
     }));
   }
 
