@@ -1,4 +1,4 @@
-import { IRealtimeKeyboardEvent } from '~/shared';
+import { IRealtimeKeyboardEvent, IResourceOrigin } from '~/shared';
 import { bytesToString } from '~/shell/services/device/KeyboardDevice/Helpers';
 
 type IReceivedBytesDecodeResult =
@@ -12,6 +12,7 @@ type IReceivedBytesDecodeResult =
         projectReleaseBuildRevision: number;
         configStorageFormatRevision: number;
         rawHidMessageProtocolRevision: number;
+        resourceOrigin: IResourceOrigin;
         projectId: string;
         assignStorageCapacity: number;
       };
@@ -32,13 +33,15 @@ export function recievedBytesDecoder(
     const configStorageFormatRevision = buf[4];
     const rawHidMessageProtocolRevision = buf[5];
     const projectId = bytesToString([...buf].slice(6, 14));
-    const assignStorageCapacity = (buf[14] << 8) | buf[15];
+    const isProjectOriginOnline = !!buf[14];
+    const assignStorageCapacity = (buf[15] << 8) | buf[16];
     return {
       type: 'deviceAttributeResponse',
       data: {
         projectReleaseBuildRevision,
         configStorageFormatRevision,
         rawHidMessageProtocolRevision,
+        resourceOrigin: isProjectOriginOnline ? 'online' : 'local',
         projectId,
         assignStorageCapacity,
       },

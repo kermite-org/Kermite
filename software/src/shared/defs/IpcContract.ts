@@ -42,6 +42,7 @@ export interface IDeviceSelectionStatus {
 export interface IKeyboardDeviceStatus {
   isConnected: boolean;
   deviceAttrs?: {
+    origin: string;
     projectId: string;
     keyboardName: string;
     assignStorageCapacity: number;

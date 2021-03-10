@@ -142,7 +142,8 @@ namespace CommunicationDataBinaryForamt {
     [4]: { configStorageFormatRevision: u8 };
     [5]: { rawHidMessageProtocolRevision: u8 };
     [6_13]: { projectId: Bytes<8> };
-    [14_15]: { assignStorageCapacity: u16 };
+    [14]: { isOnlineProject: u8 };
+    [15_16]: { assignStorageCapacity: u16 };
   };
 
   type __draft__PktKeyboardSideConfiguration = PacketHostToDevice & {
