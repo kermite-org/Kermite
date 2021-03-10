@@ -50,6 +50,7 @@ export interface IKeyboardDeviceStatus {
     projectId: string;
     keyboardName: string;
     firmwareBuildRevision: number;
+    deviceInstanceCode: string;
     assignStorageCapacity: number;
   };
   customParameterValues?: number[];

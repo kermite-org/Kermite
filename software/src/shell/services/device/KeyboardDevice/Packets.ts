@@ -29,6 +29,13 @@ export class Packets {
 
   // ------------------------------------------------------------
 
+  static makeDeviceInstanceCodeWriteOperationFrame(code: string) {
+    const bytes = generateNumberSequence(8).map((i) => code.charCodeAt(i) || 0);
+    return [0xb0, 0x03, 0x90, ...bytes];
+  }
+
+  // ------------------------------------------------------------
+
   static memoryWriteTransactionStartFrame = [0xb0, 0x01, 0x10];
 
   static memoryWriteTransactionEndFrame = [0xb0, 0x01, 0x11];

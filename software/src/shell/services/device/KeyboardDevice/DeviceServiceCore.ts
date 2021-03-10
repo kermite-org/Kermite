@@ -7,6 +7,7 @@ import {
   IResourceOrigin,
   RawHidMessageProtocolRevision,
 } from '~/shared';
+import { generateRandomDeviceInstanceCode } from '~/shared/funcs/DomainRelatedHelpers';
 import { createEventPort } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
 import { Packets } from '~/shell/services/device/KeyboardDevice/Packets';
@@ -26,6 +27,7 @@ async function getProjectInfo(
 
 function createConnectedStatus(
   info: IProjectResourceInfo,
+  deviceInstanceCode: string,
   assignStorageCapacity: number,
 ): IKeyboardDeviceStatus {
   return {
@@ -34,8 +36,9 @@ function createConnectedStatus(
       origin: info.origin,
       projectId: info.projectId,
       keyboardName: info.keyboardName,
-      assignStorageCapacity,
       firmwareBuildRevision: info.firmwareBuildRevision,
+      deviceInstanceCode,
+      assignStorageCapacity,
     },
   };
 }
@@ -77,16 +80,26 @@ export class KeyboardDeviceServiceCore {
     this.statusEventPort.emit(newStatus);
   }
 
-  private receivedProjectOrigin: IResourceOrigin | undefined;
+  private receivedResourceOrigin: IResourceOrigin | undefined;
   private receivedProjectId: string | undefined;
+  private instanceCodeInitializationTried = false;
   private parameterInitializationTried = false;
 
+  private initializeDeviceInstanceCode() {
+    console.log('write device instance code');
+    const code = generateRandomDeviceInstanceCode();
+    this.device?.writeSingleFrame(
+      Packets.makeDeviceInstanceCodeWriteOperationFrame(code),
+    );
+    this.device?.writeSingleFrame(Packets.deviceAttributesRequestFrame);
+  }
+
   private async initializeDeviceCustromParameters() {
-    if (!this.receivedProjectOrigin || !this.receivedProjectId) {
+    if (!this.receivedResourceOrigin || !this.receivedProjectId) {
       return;
     }
     const customDef = await projectResourceProvider.getProjectCustomDefinition(
-      this.receivedProjectOrigin,
+      this.receivedResourceOrigin,
       this.receivedProjectId,
     );
     if (!customDef) {
@@ -112,9 +125,19 @@ export class KeyboardDeviceServiceCore {
     const res = recievedBytesDecoder(buf);
     if (res?.type === 'deviceAttributeResponse') {
       console.log(
-        `device attrs received, origin:${res.data.resourceOrigin} projectId: ${res.data.projectId}`,
+        `device attrs received, origin:${res.data.resourceOrigin} projectId: ${res.data.projectId} instanceCode: ${res.data.deviceInstanceCode}`,
       );
+      // console.log({ res });
+      if (
+        !res.data.deviceInstanceCode &&
+        !this.instanceCodeInitializationTried
+      ) {
+        this.instanceCodeInitializationTried = true;
+        this.initializeDeviceInstanceCode();
+        return;
+      }
       checkDeviceRevisions(res.data);
+      this.receivedResourceOrigin = res.data.resourceOrigin;
       this.receivedProjectId = res.data.projectId;
       const info = await getProjectInfo(
         res.data.resourceOrigin,
@@ -122,7 +145,11 @@ export class KeyboardDeviceServiceCore {
       );
       if (info) {
         this.setStatus(
-          createConnectedStatus(info, res.data.assignStorageCapacity),
+          createConnectedStatus(
+            info,
+            res.data.deviceInstanceCode,
+            res.data.assignStorageCapacity,
+          ),
         );
       }
     }
@@ -153,8 +180,9 @@ export class KeyboardDeviceServiceCore {
       customParameterValues: undefined,
     });
     this.device = undefined;
+    this.instanceCodeInitializationTried = false;
     this.parameterInitializationTried = false;
-    this.receivedProjectOrigin = undefined;
+    this.receivedResourceOrigin = undefined;
     this.receivedProjectId = undefined;
   };
 

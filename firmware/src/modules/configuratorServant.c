@@ -77,6 +77,12 @@ static void emitMemoryChecksumResult(uint8_t dataKind, uint8_t checksum) {
   emitGenericHidData(rawHidSendBuf);
 }
 
+static void copyEepromBytesToBuffer(uint8_t *dstBuffer, int dstOffset, uint16_t srcEepromAddr, uint16_t len) {
+  for (uint16_t i = 0; i < len; i++) {
+    dstBuffer[dstOffset + i] = eeprom_readByte(srcEepromAddr + i);
+  }
+}
+
 static void emitDeviceAttributesResponse() {
   uint8_t *p = rawHidSendBuf;
   p[0] = 0xF0;
@@ -87,8 +93,10 @@ static void emitDeviceAttributesResponse() {
   p[5] = RAWHID_MESSAGE_PROTOCOL_REVISION;
   utils_copyBytes(p + 6, (uint8_t *)PROJECT_ID, 8);
   p[14] = IS_RESOURCE_ORIGIN_ONLINE;
-  p[15] = AssignStorageCapacity >> 8 & 0xFF;
-  p[16] = AssignStorageCapacity & 0xFF;
+  p[15] = 0;
+  copyEepromBytesToBuffer(p, 16, EepromAddr_DeviceInstanceCode, 8);
+  p[24] = AssignStorageCapacity >> 8 & 0xFF;
+  p[25] = AssignStorageCapacity & 0xFF;
 
   emitGenericHidData(rawHidSendBuf);
 }
@@ -99,9 +107,7 @@ static void emitCustomParametersReadResponse() {
   p[1] = 0x02;
   p[2] = 0x81;
   p[3] = eeprom_readByte(EepromAddr_CustomSettingsBytesInitializationFlag);
-  for (uint8_t i = 0; i < 10; i++) {
-    p[4 + i] = eeprom_readByte(EepromAddr_CustomSettingsBytes + i);
-  }
+  copyEepromBytesToBuffer(p, 4, EepromAddr_CustomSettingsBytes, 10);
   emitGenericHidData(rawHidSendBuf);
 }
 
@@ -174,6 +180,16 @@ static void processReadGenericHidData() {
           uint8_t value = p[4];
           eeprom_writeByte(EepromAddr_CustomSettingsBytes + index, value);
           invokeCustomParameterChangedCallback(index, value);
+        }
+      }
+
+      if (dataKind == 0x03) {
+        if (cmd == 0x90) {
+          // printf("write device instance code\n");
+          uint8_t *src = p + 3;
+          for (uint8_t i = 0; i < 8; i++) {
+            eeprom_writeByte(EepromAddr_DeviceInstanceCode + i, src[i]);
+          }
         }
       }
     }

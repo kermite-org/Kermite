@@ -92,6 +92,15 @@ namespace CommunicationDataBinaryForamt {
   // 書き込めたかどうかは書き込み後にbulk readすることで確認する
 
   // --------------------
+  // device instance code write
+
+  type PktDeviceInstanceCodeWriteOperation = PacketHostToDevice & {
+    [0]: { category: 0xb0 }; // 0xb0 for memory operation
+    [1]: { dataKind: 0x03 }; // 0x03 for device instance code
+    [2]: { command: 0x90 }; // 0x80 for write request
+    [3_10]: { data: Bytes<8> };
+  };
+  // --------------------
   // realtime event
 
   type PktRealtimeKeyStateEvent = PacketDeviceToHost & {
@@ -143,7 +152,9 @@ namespace CommunicationDataBinaryForamt {
     [5]: { rawHidMessageProtocolRevision: u8 };
     [6_13]: { projectId: Bytes<8> };
     [14]: { isOnlineProject: u8 };
-    [15_16]: { assignStorageCapacity: u16 };
+    [15]: { padding: u8 };
+    [16_23]: { deviceInstanceCode: Bytes<8> };
+    [24_25]: { assignStorageCapacity: u16 };
   };
 
   type __draft__PktKeyboardSideConfiguration = PacketHostToDevice & {
