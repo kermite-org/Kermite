@@ -1,29 +1,33 @@
 import { IRealtimeKeyboardEvent, IResourceOrigin } from '~/shared';
 import { bytesToString } from '~/shell/services/device/KeyboardDevice/Helpers';
 
-type IReceivedBytesDecodeResult =
+export type IDeviceAttributesReadResponseData = {
+  projectReleaseBuildRevision: number;
+  configStorageFormatRevision: number;
+  rawHidMessageProtocolRevision: number;
+  resourceOrigin: IResourceOrigin;
+  projectId: string;
+  deviceInstanceCode: string;
+  assignStorageCapacity: number;
+};
+
+export type ICustomParametersReadResponseData = {
+  isParametersInitialized: boolean;
+  parameterValues: number[];
+};
+
+export type IReceivedBytesDecodeResult =
   | {
       type: 'realtimeEvent';
       event: IRealtimeKeyboardEvent;
     }
   | {
       type: 'deviceAttributeResponse';
-      data: {
-        projectReleaseBuildRevision: number;
-        configStorageFormatRevision: number;
-        rawHidMessageProtocolRevision: number;
-        resourceOrigin: IResourceOrigin;
-        projectId: string;
-        deviceInstanceCode: string;
-        assignStorageCapacity: number;
-      };
+      data: IDeviceAttributesReadResponseData;
     }
   | {
       type: 'custromParametersReadResponse';
-      data: {
-        isParametersInitialized: boolean;
-        parameterValues: number[];
-      };
+      data: ICustomParametersReadResponseData;
     };
 
 export function recievedBytesDecoder(

@@ -28,6 +28,18 @@ export async function executeWithAppErrorHandler(
   }
 }
 
+export async function executeWithAppErrorHandler2(
+  func: () => Promise<void>,
+): Promise<void> {
+  try {
+    await func();
+  } catch (error) {
+    const rootDir = appEnv.resolveApplicationRootDir();
+    console.error(makeCompactStackTrace(error));
+    appGlobal.appErrorEventPort.emit(getAppErrorData(error, rootDir));
+  }
+}
+
 export function withAppErrorHandler<T extends (...args: any[]) => any>(
   handler: T,
   executionContextName: string = '',

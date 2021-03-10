@@ -5,6 +5,7 @@ export interface IListenerPortImpl<T> {
   (listener: IListener<T>): () => void;
   emit(payload: T): void;
   purge(): void;
+  remove(listener: IListener<T>): void;
 }
 
 export function makeListenerPort<T>(): IListenerPortImpl<T> {
@@ -18,6 +19,9 @@ export function makeListenerPort<T>(): IListenerPortImpl<T> {
   };
   func.purge = () => {
     listeners = [];
+  };
+  func.remove = (listener: IListener<T>) => {
+    removeArrayItems(listeners, listener);
   };
   return func;
 }

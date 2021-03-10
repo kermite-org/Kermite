@@ -1,18 +1,15 @@
 import * as HID from 'node-hid';
 import { delayMs } from '~/shared';
-import { makeListenerPort } from '~/shell/funcs';
+import { IListenerPortImpl, makeListenerPort } from '~/shell/funcs';
 import {
   getArrayFromBuffer,
   zeros,
 } from '~/shell/services/device/KeyboardDevice/Helpers';
 
-type IReceiverFunc = (buf: Uint8Array) => void;
-type IClosedCallback = () => void;
-
 export interface IDeviceWrapper {
   close(): void;
-  onClosed(callback: IClosedCallback): void;
-  onData(func: IReceiverFunc): void;
+  onData: IListenerPortImpl<Uint8Array>;
+  onClosed: IListenerPortImpl<void>;
   writeSingleFrame(bytes: number[]): void;
   writeFrames(frames: number[][]): Promise<void>;
   connectedDevicePath: string | undefined;
