@@ -4,8 +4,9 @@ import { compareString, IKeyboardDeviceInfo } from '~/shared';
 export interface IDeviceSpecificationParams {
   vendorId: number;
   productId: number;
+  manufacturerString: string;
+  productString: string;
   pathSearchWords: string[];
-  serialNumberSearchWord: string;
 }
 
 export function enumerateSupportedDevicePathsCore(
@@ -14,8 +15,9 @@ export function enumerateSupportedDevicePathsCore(
   const {
     vendorId,
     productId,
+    manufacturerString,
+    productString,
     pathSearchWords,
-    serialNumberSearchWord,
   } = params;
   const allDeviceInfos = HID.devices();
   // console.log(allDeviceInfos);
@@ -24,8 +26,9 @@ export function enumerateSupportedDevicePathsCore(
       (d) =>
         d.vendorId === vendorId &&
         d.productId === productId &&
-        pathSearchWords.some((word) => d.path!.includes(word)) &&
-        d.serialNumber?.includes(serialNumberSearchWord),
+        d.manufacturer === manufacturerString &&
+        d.product === productString &&
+        pathSearchWords.some((word) => d.path!.includes(word)),
     )
     .map((info) => info.path!)
     .filter((it) => !!it);

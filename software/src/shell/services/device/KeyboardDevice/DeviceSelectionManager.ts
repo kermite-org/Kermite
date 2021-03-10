@@ -18,11 +18,12 @@ import {
 const deviceSpecificationParams: IDeviceSpecificationParams = {
   vendorId: 0xf055,
   productId: 0xa577,
+  manufacturerString: 'kermite',
+  productString: 'kermite_core_atmega32u4',
   pathSearchWords: [
     'mi_00', // Windows
     'IOUSBHostInterface@0', // Mac
   ],
-  serialNumberSearchWord: '74F3AC2E', // serial number fixed part
 };
 
 export class DeviceSelectionManager {
