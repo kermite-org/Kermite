@@ -4,9 +4,9 @@ import {
   ipcAgent,
   ISelectorOption,
   useEventSource,
-  useFetcher,
+  useFetcher2,
 } from '~/ui-common';
-import { CheckBox, Slider, GeneralSelector } from '~/ui-common/components';
+import { CheckBox, GeneralSelector, Slider } from '~/ui-common/components';
 
 type ICustomParameterModel =
   | {
@@ -101,11 +101,6 @@ interface ICustomParametersPartViewModel {
 }
 
 function useCustomParametersPartViewModel(): ICustomParametersPartViewModel {
-  const resourceInfos = useFetcher(
-    ipcAgent.async.projects_getAllProjectResourceInfos,
-    [],
-  );
-
   const deviceStatus = useEventSource(
     ipcAgent.events.device_keyboardDeviceStatusEvents,
     {
@@ -113,24 +108,28 @@ function useCustomParametersPartViewModel(): ICustomParametersPartViewModel {
     },
   );
 
-  const deviceProjectId =
-    deviceStatus.isConnected && deviceStatus.deviceAttrs?.projectId;
-
   const parameterValues =
     (deviceStatus.isConnected && deviceStatus.customParameterValues) ||
     undefined;
 
-  const projectInfo = resourceInfos.find(
-    (info) => info.projectId === deviceProjectId,
-  );
+  const deviceAttrs =
+    (deviceStatus.isConnected && deviceStatus.deviceAttrs) || undefined;
 
-  const customParameterSpecs = projectInfo?.customParameters;
+  const customDef = useFetcher2(
+    () =>
+      deviceAttrs &&
+      ipcAgent.async.projects_getProjectCustomDefinition(
+        deviceAttrs.origin,
+        deviceAttrs.projectId,
+      ),
+    [deviceAttrs],
+  );
 
   return {
     parameterModels:
-      (customParameterSpecs &&
+      (customDef &&
         parameterValues &&
-        customParameterSpecs.map((spec) =>
+        customDef.customParameterSpecs.map((spec) =>
           makeParameterModel(spec, parameterValues[spec.slotIndex]),
         )) ||
       [],

@@ -2,6 +2,7 @@ import {
   ICustromParameterSpec,
   IPersistKeyboardDesign,
   IProfileData,
+  IProjectCustomDefinition,
   IProjectResourceInfo,
   IResourceOrigin,
 } from '~/shared';
@@ -23,6 +24,11 @@ import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
 import { IProjectResourceProviderImpl } from '~/shell/projectResources/interfaces';
 import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 
+export interface IPorjectFileJson {
+  projectId: string;
+  keyboardName: string;
+  customParameters: ICustromParameterSpec[];
+}
 interface IProjectResourceInfoSource {
   origin: IResourceOrigin;
   projectId: string;
@@ -35,12 +41,6 @@ interface IProjectResourceInfoSource {
   customParameters: ICustromParameterSpec[];
 }
 namespace ProjectResourceInfoSourceLoader {
-  interface IPorjectFileJson {
-    projectId: string;
-    keyboardName: string;
-    customParameters: ICustromParameterSpec[];
-  }
-
   function checkFileExistsOrBlank(filePath: string): string | undefined {
     return (fsExistsSync(filePath) && filePath) || undefined;
   }
@@ -175,7 +175,6 @@ export class ProjectResourceProviderImpl_Local
         hexFilePath,
         presetNames,
         layoutNames,
-        customParameters,
       } = it;
       return {
         sig: createProjectSig(origin, projectId),
@@ -186,7 +185,6 @@ export class ProjectResourceProviderImpl_Local
         presetNames,
         layoutNames,
         hasFirmwareBinary: !!hexFilePath,
-        customParameters,
       };
     });
   }
@@ -195,6 +193,14 @@ export class ProjectResourceProviderImpl_Local
     projectId: string,
   ): IProjectResourceInfoSource | undefined {
     return this.projectInfoSources.find((info) => info.projectId === projectId);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/require-await
+  async getProjectCustomDefinition(
+    projectId: string,
+  ): Promise<IProjectCustomDefinition | undefined> {
+    const info = this.getProjectInfoSourceById(projectId);
+    return info && { customParameterSpecs: info.customParameters };
   }
 
   // patchLocalProjectInfoSource(

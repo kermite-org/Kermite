@@ -16,6 +16,22 @@ export function useFetcher<T>(func: () => Promise<T>, defaultValue: T): T {
   return value;
 }
 
+export function useFetcher2<T>(
+  func: () => Promise<T> | undefined,
+  deps: any[],
+): T | undefined {
+  const [value, setValue] = Hook.useState<T | undefined>(undefined);
+  Hook.useEffect(() => {
+    const promise = func();
+    if (promise) {
+      promise.then((value) => value && setValue(value));
+    } else {
+      setValue(undefined);
+    }
+  }, deps);
+  return value;
+}
+
 export function useMemoEx<T extends (...args: any[]) => any>(
   func: T,
   args: Parameters<T>,
