@@ -17,7 +17,10 @@ export const DeviceSelectionPart: FC = () => {
   const selectionStatus = useDeviceSelectionStatus();
   const noneOption: ISelectorOption = { label: 'none', value: 'none' };
   const deviceOptionsBase: ISelectorOption[] = selectionStatus.allDeviceInfos.map(
-    (info) => ({ label: info.displayName, value: info.path }),
+    (info) => ({
+      label: `device@${info.portName} (${info.serialNumber})`,
+      value: info.path,
+    }),
   );
   const deviceOptions = [noneOption, ...deviceOptionsBase];
 

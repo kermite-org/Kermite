@@ -61,8 +61,8 @@ export function enumerateSupportedDeviceInfos(
   return specs
     .map((spec) => ({
       path: spec.path,
-      displayName: getDisplayNameFromDevicePath(spec.path),
+      portName: getPortNameFromDevicePath(spec.path) || spec.path,
       serialNumber: spec.serialNumber,
     }))
-    .sort((a, b) => compareString(a.displayName, b.displayName));
+    .sort((a, b) => compareString(a.portName, b.portName));
 }

@@ -37,7 +37,7 @@ export interface IProjectCustomDefinition {
 
 export interface IKeyboardDeviceInfo {
   path: string;
-  displayName: string;
+  portName: string;
   serialNumber: string;
 }
 
