@@ -10,25 +10,36 @@ const cssBase = css`
 export const ConnectedDeviceAttrsPart: FC = () => {
   const { deviceAttrs, projectInfo } = useConnectedDeviceAttributes();
 
+  console.log({ deviceAttrs, projectInfo });
+
+  const isOriginOnline = deviceAttrs?.origin === 'online';
   const tableData =
-    (deviceAttrs &&
-      projectInfo && [
-        ['ポート', deviceAttrs.portName],
-        [
-          'リソースオリジン',
-          deviceAttrs.origin === 'local' ? 'ローカル' : 'オンライン',
-        ],
-        ['プロジェクトID', deviceAttrs.projectId],
-        ['プロジェクトパス', projectInfo.projectPath],
-        ['キーボード名', projectInfo.keyboardName],
-        ['個体番号', deviceAttrs.deviceInstanceCode],
-        ['ファームウェアビルドリビジョン', deviceAttrs.firmwareBuildRevision],
-        [
-          'キーマッピング領域サイズ',
-          deviceAttrs.assignStorageCapacity + ' bytes',
-        ],
-      ]) ||
-    undefined;
+    deviceAttrs &&
+    projectInfo &&
+    ([
+      ['ポート', deviceAttrs.portName],
+      ['リソースオリジン', isOriginOnline ? 'オンライン' : 'ローカル'],
+      ['プロジェクトID', deviceAttrs.projectId],
+      ['プロジェクトパス', projectInfo.projectPath],
+      ['キーボード名', projectInfo.keyboardName],
+      ['個体番号', deviceAttrs.deviceInstanceCode],
+      [
+        'ファームウェアリビジョン',
+        (isOriginOnline && deviceAttrs.firmwareBuildRevision) || 'N/A',
+      ],
+      isOriginOnline && [
+        'ファームウェア最新リビジョン',
+        projectInfo.firmwareBuildRevision,
+      ],
+      isOriginOnline && [
+        'ファームウェア最新ビルド日時',
+        projectInfo.firmwareBuildTimestamp,
+      ],
+      [
+        'キーマッピング領域サイズ',
+        deviceAttrs.assignStorageCapacity + ' bytes',
+      ],
+    ].filter((a) => !!a) as [string, string][]);
 
   return (
     <div css={cssBase}>
