@@ -44,7 +44,7 @@ export function enumerateSupportedDevicePathsCore(
 
 export function getPortNameFromDevicePath(path: string) {
   const m =
-    path.match(/kermite_core_atmega32u4@(\d+)/) || // Mac
+    path.match(/Kermitie Keyboard Device@(\d+)/) || // Mac
     path.match(/mi_00#8&([0-9a-f]+)/); // Windows
   return (m && `${m[1]}`) || undefined;
 }

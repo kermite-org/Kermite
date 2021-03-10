@@ -19,7 +19,7 @@ const deviceSpecificationParams: IDeviceSpecificationParams = {
   vendorId: 0xf055,
   productId: 0xa577,
   manufacturerString: 'kermite',
-  productString: 'kermite_core_atmega32u4',
+  productString: 'Kermitie Keyboard Device',
   pathSearchWords: [
     'mi_00', // Windows
     'IOUSBHostInterface@0', // Mac
