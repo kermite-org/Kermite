@@ -31,6 +31,7 @@ interface IRemoteProjectResourceInfoSource {
   layoutNames: string[];
   presetNames: string[];
   hasHexFile: boolean;
+  firmwareBuildRevision: number;
 }
 
 interface ISummaryJsonData {
@@ -74,6 +75,7 @@ async function loadRemoteResourceInfosFromSummaryJson(): Promise<
     layoutNames: info.layoutNames,
     presetNames: info.presetNames,
     hasHexFile: info.buildStatus === 'success',
+    firmwareBuildRevision: info.revision,
   }));
 }
 
@@ -93,13 +95,14 @@ export class ProjectResourceProviderImpl_Remote
     }
     return this.projectInfoSources.map((it) => ({
       sig: createProjectSig('online', it.projectId),
+      origin: 'online',
       projectId: it.projectId,
       keyboardName: it.keyboardName,
       projectPath: it.projectPath,
       presetNames: it.presetNames,
       layoutNames: it.layoutNames,
       hasFirmwareBinary: it.hasHexFile,
-      origin: 'online',
+      firmwareBuildRevision: it.firmwareBuildRevision,
     }));
   }
 

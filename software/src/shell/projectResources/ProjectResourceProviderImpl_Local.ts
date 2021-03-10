@@ -185,6 +185,7 @@ export class ProjectResourceProviderImpl_Local
         presetNames,
         layoutNames,
         hasFirmwareBinary: !!hexFilePath,
+        firmwareBuildRevision: 0,
       };
     });
   }

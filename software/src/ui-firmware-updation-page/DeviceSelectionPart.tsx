@@ -1,5 +1,10 @@
 import { css, FC, jsx } from 'qx';
-import { ipcAgent, ISelectorOption, useEventSource } from '~/ui-common';
+import {
+  ipcAgent,
+  ISelectorOption,
+  useEventSource,
+  useFetcher,
+} from '~/ui-common';
 import { FlatListSelector } from '~/ui-common/components/controls/FlatListSelector';
 
 const style = css`
@@ -36,9 +41,22 @@ export const DeviceSelectionPart: FC = () => {
     },
   );
 
-  const connectedKeyboardName =
-    (deviceStatus.isConnected && deviceStatus.deviceAttrs?.keyboardName) ||
-    'no connection';
+  const deviceAttrs =
+    (deviceStatus.isConnected && deviceStatus.deviceAttrs) || undefined;
+
+  const connectedKeyboardName = deviceAttrs?.keyboardName || 'no connection';
+
+  const resourceInfos = useFetcher(
+    ipcAgent.async.projects_getAllProjectResourceInfos,
+    [],
+  );
+  const projectInfo = resourceInfos.find(
+    (info) =>
+      info.origin === deviceAttrs?.origin &&
+      info.projectId === deviceAttrs?.projectId,
+  );
+
+  console.log({ deviceAttrs, projectInfo });
 
   return (
     <div css={style}>

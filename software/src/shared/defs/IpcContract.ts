@@ -27,6 +27,7 @@ export interface IProjectResourceInfo {
   presetNames: string[];
   layoutNames: string[];
   hasFirmwareBinary: boolean;
+  firmwareBuildRevision: number;
 }
 
 export interface IProjectCustomDefinition {
@@ -48,6 +49,7 @@ export interface IKeyboardDeviceStatus {
     origin: IResourceOrigin;
     projectId: string;
     keyboardName: string;
+    firmwareBuildRevision: number;
     assignStorageCapacity: number;
   };
   customParameterValues?: number[];
