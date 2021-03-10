@@ -9,9 +9,14 @@ export interface IDeviceSpecificationParams {
   pathSearchWords: string[];
 }
 
+interface IEnumeratedDeviceSpec {
+  path: string;
+  serialNumber: string;
+}
+
 export function enumerateSupportedDevicePathsCore(
   params: IDeviceSpecificationParams,
-): string[] {
+): IEnumeratedDeviceSpec[] {
   const {
     vendorId,
     productId,
@@ -30,8 +35,11 @@ export function enumerateSupportedDevicePathsCore(
         d.product === productString &&
         pathSearchWords.some((word) => d.path!.includes(word)),
     )
-    .map((info) => info.path!)
-    .filter((it) => !!it);
+    .filter((info) => !!info.path)
+    .map((info) => ({
+      path: info.path!,
+      serialNumber: info.serialNumber || '',
+    }));
 }
 
 export function getPortNameFromDevicePath(path: string) {
@@ -49,10 +57,12 @@ export function getDisplayNameFromDevicePath(path: string) {
 export function enumerateSupportedDeviceInfos(
   params: IDeviceSpecificationParams,
 ): IKeyboardDeviceInfo[] {
-  return enumerateSupportedDevicePathsCore(params)
-    .map((path) => ({
-      path,
-      displayName: getDisplayNameFromDevicePath(path),
+  const specs = enumerateSupportedDevicePathsCore(params);
+  return specs
+    .map((spec) => ({
+      path: spec.path,
+      displayName: getDisplayNameFromDevicePath(spec.path),
+      serialNumber: spec.serialNumber,
     }))
     .sort((a, b) => compareString(a.displayName, b.displayName));
 }
