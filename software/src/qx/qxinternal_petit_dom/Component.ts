@@ -1,6 +1,6 @@
 import { qxGlobal } from '../qxGlobal';
 import { VNode, IEnv } from './types';
-import { mount, patch, unmount } from './index';
+import { mount, patch, unmount } from './vdom';
 
 const promise = Promise.resolve();
 function doLater(fn: () => void) {
