@@ -49,9 +49,25 @@ export function getPortNameFromDevicePath(path: string) {
   return (m && `${m[1]}`) || undefined;
 }
 
-export function getDisplayNameFromDevicePath(path: string) {
+export function getDebugDeviceSigFromDevicePath(path: string) {
   const portName = getPortNameFromDevicePath(path);
   return portName ? `device@${portName}` : path;
+}
+
+function makeKeyboardDeviceInfoFromDeviceSpec(
+  spec: IEnumeratedDeviceSpec,
+  index: number,
+): IKeyboardDeviceInfo {
+  const { path, serialNumber } = spec;
+  const portName = getPortNameFromDevicePath(path) || index.toString();
+  const projectId = serialNumber.slice(0, 8);
+  const deviceInstanceCode = serialNumber.slice(8, 16);
+  return {
+    path,
+    portName,
+    projectId,
+    deviceInstanceCode,
+  };
 }
 
 export function enumerateSupportedDeviceInfos(
@@ -59,10 +75,7 @@ export function enumerateSupportedDeviceInfos(
 ): IKeyboardDeviceInfo[] {
   const specs = enumerateSupportedDevicePathsCore(params);
   return specs
-    .map((spec) => ({
-      path: spec.path,
-      portName: getPortNameFromDevicePath(spec.path) || spec.path,
-      serialNumber: spec.serialNumber,
-    }))
-    .sort((a, b) => compareString(a.portName, b.portName));
+    .sort((a, b) => compareString(a.path, b.path))
+    .map(makeKeyboardDeviceInfoFromDeviceSpec);
+  // .sort((a, b) => compareString(a.portName, b.portName));
 }

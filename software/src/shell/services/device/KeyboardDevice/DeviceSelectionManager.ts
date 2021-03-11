@@ -7,7 +7,7 @@ import { applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
 import {
   enumerateSupportedDeviceInfos,
-  getDisplayNameFromDevicePath,
+  getDebugDeviceSigFromDevicePath,
   IDeviceSpecificationParams,
 } from '~/shell/services/device/KeyboardDevice/DeviceEnumerator';
 import {
@@ -60,15 +60,15 @@ export class DeviceSelectionManager {
       if (path !== 'none') {
         if (this.status.allDeviceInfos.some((info) => info.path === path)) {
           const device = DeviceWrapper.openDeviceByPath(path);
-          const displayName = getDisplayNameFromDevicePath(path);
+          const deviceSig = getDebugDeviceSigFromDevicePath(path);
           if (!device) {
-            console.log(`failed to open device: ${displayName}`);
+            console.log(`failed to open device: ${deviceSig}`);
             return;
           }
-          console.log(`device opened: ${displayName}`);
+          console.log(`device opened: ${deviceSig}`);
           device.onClosed(() => {
             this.setStatus({ currentDevicePath: 'none' });
-            console.log(`device closed: ${displayName}`);
+            console.log(`device closed: ${deviceSig}`);
           });
           this.setStatus({ currentDevicePath: path });
           this.device = device;

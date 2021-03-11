@@ -38,7 +38,8 @@ export interface IProjectCustomDefinition {
 export interface IKeyboardDeviceInfo {
   path: string;
   portName: string;
-  serialNumber: string;
+  projectId: string;
+  deviceInstanceCode: string;
 }
 
 export interface IDeviceSelectionStatus {
