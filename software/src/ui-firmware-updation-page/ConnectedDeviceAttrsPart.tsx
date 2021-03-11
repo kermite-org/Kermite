@@ -15,26 +15,27 @@ export const ConnectedDeviceAttrsPart: FC = () => {
   const isOriginOnline = deviceAttrs?.origin === 'online';
   const tableData =
     deviceAttrs &&
-    projectInfo &&
     ([
       ['ポート', deviceAttrs.portName],
       ['リソースオリジン', isOriginOnline ? 'オンライン' : 'ローカル'],
       ['プロジェクトID', deviceAttrs.projectId],
-      ['プロジェクトパス', projectInfo.projectPath],
-      ['キーボード名', projectInfo.keyboardName],
+      projectInfo && ['プロジェクトパス', projectInfo.projectPath],
+      projectInfo && ['キーボード名', projectInfo.keyboardName],
       ['個体番号', deviceAttrs.deviceInstanceCode],
       [
         'ファームウェアリビジョン',
         (isOriginOnline && deviceAttrs.firmwareBuildRevision) || 'N/A',
       ],
-      isOriginOnline && [
-        'ファームウェア最新リビジョン',
-        projectInfo.firmwareBuildRevision,
-      ],
-      isOriginOnline && [
-        'ファームウェア最新ビルド日時',
-        projectInfo.firmwareBuildTimestamp,
-      ],
+      projectInfo &&
+        isOriginOnline && [
+          'ファームウェア最新リビジョン',
+          projectInfo.firmwareBuildRevision,
+        ],
+      projectInfo &&
+        isOriginOnline && [
+          'ファームウェア最新ビルド日時',
+          projectInfo.firmwareBuildTimestamp,
+        ],
       [
         'キーマッピング領域サイズ',
         deviceAttrs.assignStorageCapacity + ' bytes',
