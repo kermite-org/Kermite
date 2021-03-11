@@ -7,6 +7,10 @@ export function useDeviceSelectionStatus() {
   });
 }
 
+export function useProjectResourceInfos() {
+  return useFetcher(ipcAgent.async.projects_getAllProjectResourceInfos, []);
+}
+
 export function useConnectedDeviceAttributes() {
   const deviceStatus = useEventSource(
     ipcAgent.events.device_keyboardDeviceStatusEvents,
