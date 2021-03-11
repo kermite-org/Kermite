@@ -45,7 +45,9 @@ export namespace FlashCommander {
 
     close() {
       this.serial.off('data', this.onData);
-      this.serial.close();
+      if (this.serial.isOpen) {
+        this.serial.close();
+      }
     }
 
     async query(op: string, readLength: number): Promise<number[]>;
