@@ -37,7 +37,7 @@ function checkDeviceRevisions(data: {
 
 function getDeviceInitialParameterValues(customDef: IProjectCustomDefinition) {
   return generateNumberSequence(10).map((i) => {
-    const paramSpec = customDef.customParameterSpecs.find(
+    const paramSpec = customDef.customParameterSpecs?.find(
       (paramSpec) => paramSpec.slotIndex === i,
     );
     return paramSpec ? paramSpec.defaultValue : 1;

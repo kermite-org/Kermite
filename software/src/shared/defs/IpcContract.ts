@@ -32,7 +32,7 @@ export interface IProjectResourceInfo {
 }
 
 export interface IProjectCustomDefinition {
-  customParameterSpecs: ICustromParameterSpec[];
+  customParameterSpecs?: ICustromParameterSpec[];
 }
 
 export interface IKeyboardDeviceInfo {

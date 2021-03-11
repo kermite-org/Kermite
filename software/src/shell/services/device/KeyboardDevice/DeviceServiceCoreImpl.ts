@@ -60,13 +60,14 @@ export class KeyboardDeviceServiceCore {
   };
 
   private async loadDeviceInfo(device: IDeviceWrapper) {
-    const res = await deviceSetupTask(device);
-    if (res) {
+    const setupRes = await deviceSetupTask(device);
+    // console.log({ res: setupRes });
+    if (setupRes) {
       this.setStatus(
         createConnectedStatus(
           device.connectedDevicePath!,
-          res.attrsRes,
-          res.customParamsRes,
+          setupRes.attrsRes,
+          setupRes.customParamsRes,
         ),
       );
     }
