@@ -46,17 +46,18 @@ export interface IDeviceSelectionStatus {
   allDeviceInfos: IKeyboardDeviceInfo[];
   currentDevicePath: string | 'none';
 }
+
+export interface IKeyboardDeviceAttributes {
+  origin: IResourceOrigin;
+  projectId: string;
+  firmwareBuildRevision: number;
+  deviceInstanceCode: string;
+  assignStorageCapacity: number;
+  portName: string;
+}
 export interface IKeyboardDeviceStatus {
   isConnected: boolean;
-  deviceAttrs?: {
-    origin: IResourceOrigin;
-    projectId: string;
-    keyboardName: string;
-    firmwareBuildRevision: number;
-    deviceInstanceCode: string;
-    assignStorageCapacity: number;
-    portName: string;
-  };
+  deviceAttrs?: IKeyboardDeviceAttributes;
   customParameterValues?: number[];
 }
 

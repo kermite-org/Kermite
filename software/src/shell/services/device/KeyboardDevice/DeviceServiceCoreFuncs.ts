@@ -113,7 +113,12 @@ function writeDeviceCustromParameters(
   );
 }
 
-export async function deviceSetupTask(device: IDeviceWrapper) {
+export async function deviceSetupTask(
+  device: IDeviceWrapper,
+): Promise<{
+  attrsRes: IDeviceAttributesReadResponseData;
+  customParamsRes: ICustomParametersReadResponseData | undefined;
+}> {
   let attrsRes = await readDeviceAttributes(device);
   checkDeviceRevisions(attrsRes);
   // console.log({ attrsRes });
@@ -134,7 +139,12 @@ export async function deviceSetupTask(device: IDeviceWrapper) {
       attrsRes.projectId,
     );
     if (!customDef) {
-      throw new Error('cannot find custom parameter definition');
+      // throw new Error('cannot find custom parameter definition');
+      console.log('cannot find custom parameter definition');
+      return {
+        attrsRes,
+        customParamsRes: undefined,
+      };
     }
     console.log(`writing initial custom parameters`);
     const parameterValues = getDeviceInitialParameterValues(customDef);
