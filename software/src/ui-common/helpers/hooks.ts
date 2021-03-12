@@ -24,7 +24,7 @@ export function useFetcher2<T>(
   Hook.useEffect(() => {
     const promise = func();
     if (promise) {
-      promise.then((value) => value && setValue(value));
+      promise.then((value) => setValue(value));
     } else {
       setValue(undefined);
     }

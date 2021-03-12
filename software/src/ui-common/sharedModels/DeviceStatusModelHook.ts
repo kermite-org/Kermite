@@ -1,14 +1,10 @@
 import { Hook } from 'qx';
+import { IKeyboardDeviceAttributes } from '~/shared';
 import { ipcAgent } from '~/ui-common';
 
 export interface IDeviceStatusModel {
   isConnected: boolean;
-  deviceAttrs:
-    | {
-        projectId: string;
-        keyboardName: string;
-      }
-    | undefined;
+  deviceAttrs: IKeyboardDeviceAttributes | undefined;
 }
 
 export function useDeviceStatusModel(): IDeviceStatusModel {

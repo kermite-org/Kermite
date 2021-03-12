@@ -98,6 +98,7 @@ function makeParameterModel(
 
 interface ICustomParametersPartViewModel {
   parameterModels: ICustomParameterModel[];
+  definitionUnavailable: boolean;
 }
 
 function useCustomParametersPartViewModel(): ICustomParametersPartViewModel {
@@ -124,12 +125,11 @@ function useCustomParametersPartViewModel(): ICustomParametersPartViewModel {
       ),
     [deviceAttrs],
   );
-
   return {
+    definitionUnavailable: deviceStatus.isConnected && !customDef,
     parameterModels:
-      (customDef &&
-        parameterValues &&
-        customDef.customParameterSpecs.map((spec) =>
+      (parameterValues &&
+        customDef?.customParameterSpecs?.map((spec) =>
           makeParameterModel(spec, parameterValues[spec.slotIndex]),
         )) ||
       [],
@@ -155,10 +155,14 @@ const cssBase = css`
 `;
 
 export const CustomParametersPart: FC = () => {
-  const { parameterModels } = useCustomParametersPartViewModel();
+  const {
+    parameterModels,
+    definitionUnavailable,
+  } = useCustomParametersPartViewModel();
   return (
     <div css={cssBase}>
       <div>Custom Setting Parameters</div>
+      {definitionUnavailable && 'パラメータの定義が利用できません'}
       <div className="parameters-list-outer">
         <div className="parameters-list">
           {parameterModels.map((item) => (

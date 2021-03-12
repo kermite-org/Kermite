@@ -1,12 +1,6 @@
-import {
-  IKeyboardDeviceStatus,
-  IProjectResourceInfo,
-  IRealtimeKeyboardEvent,
-  IResourceOrigin,
-} from '~/shared';
+import { IKeyboardDeviceStatus, IRealtimeKeyboardEvent } from '~/shared';
 import { executeWithAppErrorHandler2 } from '~/shell/base/ErrorChecker';
 import { createEventPort } from '~/shell/funcs';
-import { projectResourceProvider } from '~/shell/projectResources';
 import { getPortNameFromDevicePath } from '~/shell/services/device/KeyboardDevice/DeviceEnumerator';
 import {
   deviceSetupTask,
@@ -14,39 +8,29 @@ import {
   sendSideBrainMode,
   updateDeviceCustomParameterSingle,
 } from '~/shell/services/device/KeyboardDevice/DeviceServiceCoreFuncs';
-import { recievedBytesDecoder } from '~/shell/services/device/KeyboardDevice/ReceivedBytesDecoder';
+import {
+  ICustomParametersReadResponseData,
+  IDeviceAttributesReadResponseData,
+  recievedBytesDecoder,
+} from '~/shell/services/device/KeyboardDevice/ReceivedBytesDecoder';
 import { IDeviceWrapper } from './DeviceWrapper';
 
-async function getProjectInfo(
-  origin: IResourceOrigin,
-  projectId: string,
-): Promise<IProjectResourceInfo | undefined> {
-  const resourceInfos = await projectResourceProvider.getAllProjectResourceInfos();
-  const info = resourceInfos.find(
-    (info) => info.origin === origin && info.projectId === projectId,
-  );
-  return info;
-}
-
 function createConnectedStatus(
-  info: IProjectResourceInfo,
-  deviceInstanceCode: string,
-  assignStorageCapacity: number,
   devicePath: string,
-  customParameterValues: number[],
+  attrsRes: IDeviceAttributesReadResponseData,
+  custromParamsRes: ICustomParametersReadResponseData | undefined,
 ): IKeyboardDeviceStatus {
   return {
     isConnected: true,
     deviceAttrs: {
-      origin: info.origin,
-      projectId: info.projectId,
-      keyboardName: info.keyboardName,
-      firmwareBuildRevision: info.firmwareBuildRevision,
-      deviceInstanceCode,
-      assignStorageCapacity,
+      origin: attrsRes.resourceOrigin,
+      projectId: attrsRes.projectId,
+      firmwareBuildRevision: attrsRes.projectReleaseBuildRevision,
+      deviceInstanceCode: attrsRes.deviceInstanceCode,
+      assignStorageCapacity: attrsRes.assignStorageCapacity,
       portName: getPortNameFromDevicePath(devicePath) || devicePath,
     },
-    customParameterValues,
+    customParameterValues: custromParamsRes?.parameterValues,
   };
 }
 
@@ -76,24 +60,16 @@ export class KeyboardDeviceServiceCore {
   };
 
   private async loadDeviceInfo(device: IDeviceWrapper) {
-    const res = await deviceSetupTask(device);
-    if (res) {
-      const { attrsRes } = res;
-      const info = await getProjectInfo(
-        attrsRes.resourceOrigin,
-        attrsRes.projectId,
+    const setupRes = await deviceSetupTask(device);
+    // console.log({ res: setupRes });
+    if (setupRes) {
+      this.setStatus(
+        createConnectedStatus(
+          device.connectedDevicePath!,
+          setupRes.attrsRes,
+          setupRes.customParamsRes,
+        ),
       );
-      if (info) {
-        this.setStatus(
-          createConnectedStatus(
-            info,
-            attrsRes.deviceInstanceCode,
-            attrsRes.assignStorageCapacity,
-            device.connectedDevicePath!,
-            res.customParamsRes.parameterValues,
-          ),
-        );
-      }
     }
   }
 

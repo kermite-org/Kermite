@@ -13,7 +13,7 @@ const style = css`
   }
 
   .selector {
-    width: 240px;
+    width: 300px;
   }
 `;
 
