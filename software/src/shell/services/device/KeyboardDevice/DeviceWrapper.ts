@@ -55,12 +55,12 @@ export class DeviceWrapper implements IDeviceWrapper {
 
   close() {
     if (this.device) {
-      this.onClosed.emit();
       this.device.close();
-      this.device = undefined;
-      this.connectedDevicePath = undefined;
+      this.onClosed.emit();
       this.onData.purge();
       this.onClosed.purge();
+      this.connectedDevicePath = undefined;
+      this.device = undefined;
     }
   }
 
