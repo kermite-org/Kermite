@@ -57,7 +57,7 @@ export class FirmwareUpdationModel {
   // 2: WaitingUploadOrder --> Uploading --> UploadSuccess,UploadFailure
   uploadFirmware = async () => {
     if (!this.currentProjectSig) {
-      alert('please select the firmware');
+      alert('please select firmware');
       return;
     }
     if (this.phase === 'WaitingUploadOrder' && this.comPortName) {

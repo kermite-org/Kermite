@@ -3,9 +3,9 @@ import SerialPort = require('serialport');
 import { compareArray, delayMs } from '~/shared';
 import { readHexFileBytesBlocks } from './HexFileReader';
 import {
-  bytesToHexString,
   bhi,
   blo,
+  bytesToHexString,
   bytesToHexStringWithOmit,
 } from './helpers';
 
@@ -29,13 +29,31 @@ export namespace FlashCommander {
 
   const queryTimeoutMs = 3000;
 
+  function openSerial(path: string): Promise<SerialPort> {
+    return new Promise((resolve, reject) => {
+      const port = new SerialPort(path, (err) => {
+        if (err) {
+          reject(err);
+        }
+      });
+      port.once('open', () => {
+        console.log(`serial port opened: ${path}`);
+        resolve(port);
+      });
+    });
+  }
   class SerialPortBridge {
-    serial: SerialPort;
+    port: SerialPort;
     rcvBuf: number[] = [];
 
-    constructor(comPortName: string) {
-      this.serial = new SerialPort(comPortName);
-      this.serial.on('data', this.onData);
+    static async open(comPortName: string): Promise<SerialPortBridge> {
+      const port = await openSerial(comPortName);
+      return new SerialPortBridge(port);
+    }
+
+    private constructor(port: SerialPort) {
+      this.port = port;
+      this.port.on('data', this.onData);
     }
 
     onData = (data: Buffer) => {
@@ -44,8 +62,13 @@ export namespace FlashCommander {
     };
 
     close() {
-      this.serial.off('data', this.onData);
-      this.serial.close();
+      if (this.port) {
+        this.port.off('data', this.onData);
+        if (this.port.isOpen) {
+          this.port.close();
+          console.log(`serial port closed: ${this.port.path}`);
+        }
+      }
     }
 
     async query(op: string, readLength: number): Promise<number[]>;
@@ -55,6 +78,9 @@ export namespace FlashCommander {
       readLength: number,
     ): Promise<number[]>;
     async query(...args: any[]) {
+      if (!this.port || !this.port.isOpen) {
+        throw new Error('serial port is not open');
+      }
       const op: string = args[0];
       const params: number[] = args.length === 3 ? args[1] : [];
       const readLength: number = args.length === 3 ? args[2] : args[1];
@@ -63,7 +89,7 @@ export namespace FlashCommander {
           params.length > 0 ? bytesToHexStringWithOmit(params, 10) : ''
         }`,
       );
-      this.serial.write([op.charCodeAt(0), ...params]);
+      this.port.write([op.charCodeAt(0), ...params]);
       let cnt = 0;
       while (this.rcvBuf.length < readLength) {
         await delayMs(1);
@@ -241,7 +267,7 @@ export namespace FlashCommander {
     try {
       logger.log(`#### start firmware upload`);
       const sourceBlocks = readHexFileBytesBlocks(hexFilePath);
-      serial = new SerialPortBridge(comPortName);
+      serial = await SerialPortBridge.open(comPortName);
       await executeFlashCommandSequence(serial, sourceBlocks);
       logger.log(`#### firmware upload complete`);
       return 'ok';
