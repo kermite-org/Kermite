@@ -10,6 +10,14 @@ const cssBase = css`
     white-space: nowrap;
   }
 `;
+
+function fixDatetimeText(datetimeText: string) {
+  if (datetimeText.endsWith('Z')) {
+    return new Date(datetimeText).toLocaleString();
+  }
+  return datetimeText;
+}
+
 export const ConnectedDeviceAttrsPart: FC = () => {
   const { deviceAttrs, projectInfo } = useConnectedDeviceAttributes();
 
@@ -37,7 +45,7 @@ export const ConnectedDeviceAttrsPart: FC = () => {
       projectInfo &&
         isOriginOnline && [
           'ファームウェア最新ビルド日時',
-          projectInfo.firmwareBuildTimestamp,
+          fixDatetimeText(projectInfo.firmwareBuildTimestamp),
         ],
       [
         'キーマッピング領域サイズ',
