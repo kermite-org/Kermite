@@ -43,7 +43,7 @@ jobs:
         run: yarn updateAllProjectDistributions
         working-directory: ./firmware/ci
 
-      - name: Push resources to store repo
+      - name: Push resources to KermiteResourceStore
         uses: cpina/github-action-push-to-another-repository@master
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
