@@ -26,6 +26,7 @@
 #include "usbioCore.h"
 
 #include "bitOperations.h"
+#include "utils.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <avr/pgmspace.h>
@@ -37,7 +38,8 @@
 #ifdef USBIOCORE_DEBUG
 #define dprintf printf
 #else
-void dprintf() {}
+void dprintf() {
+}
 #endif
 
 // #define KEYBOARD_ENDPOINT 3
@@ -104,10 +106,11 @@ void dprintf() {}
 
 // You can change these to give your code its own name.
 #define STR_MANUFACTURER L"kermite"
-#define STR_PRODUCT L"kermite_core_atmega32u4"
+// #define STR_PRODUCT L"kermite_core_atmega32u4"
+#define STR_PRODUCT L"Kermitie Keyboard Device"
 
-//#define STR_SERIALNUMBER L"CF72D920FD314AD5"
-#define STR_SERIALNUMBER L"74F3AC2EFD314AAC"
+// #define STR_SERIALNUMBER L"74F3AC2EFD314AAC"
+#define STR_SERIALNUMBER_DUMMY L"0000000000000000"
 
 // Mac OS-X and Linux automatically load the correct drivers.  On
 // Windows, even though the driver is supplied by Microsoft, an
@@ -438,9 +441,15 @@ static struct usb_string_descriptor_struct const PROGMEM string1 = {
 static struct usb_string_descriptor_struct const PROGMEM string2 = {
   sizeof(STR_PRODUCT), 3, STR_PRODUCT
 };
-static struct usb_string_descriptor_struct const PROGMEM string3 = {
-  sizeof(STR_SERIALNUMBER), 3, STR_SERIALNUMBER
+static struct usb_string_descriptor_struct const PROGMEM string3_dummy = {
+  sizeof(STR_SERIALNUMBER_DUMMY), 3, STR_SERIALNUMBER_DUMMY
 };
+
+//動的にシリアルナンバを指定するのためのバッファをRAM上に配置
+static struct usb_string_descriptor_struct serialNumberStringDescriptorStruct = {
+  sizeof(STR_SERIALNUMBER_DUMMY), 3, STR_SERIALNUMBER_DUMMY
+};
+
 // This table defines which descriptor data is sent for each specific
 // request from the host (in wValue and wIndex).
 static struct descriptor_list_struct {
@@ -466,7 +475,7 @@ static struct descriptor_list_struct {
   { 0x0300, 0x0000, (const uint8_t *)&string0, 4 },
   { 0x0301, 0x0409, (const uint8_t *)&string1, sizeof(STR_MANUFACTURER) },
   { 0x0302, 0x0409, (const uint8_t *)&string2, sizeof(STR_PRODUCT) },
-  { 0x0303, 0x0409, (const uint8_t *)&string3, sizeof(STR_SERIALNUMBER) }
+  { 0x0303, 0x0409, (const uint8_t *)&string3_dummy, sizeof(STR_SERIALNUMBER_DUMMY) },
 };
 #define NUM_DESC_LIST \
   (sizeof(descriptor_list) / sizeof(struct descriptor_list_struct))
@@ -727,6 +736,8 @@ ISR(USB_COM_vect) {
 
       dprintf("desc length, %d\n", desc_length);
 
+      uint8_t *desc_add_serialnumber = (uint8_t *)&serialNumberStringDescriptorStruct;
+
       len = (wLength < 256) ? wLength : 255;
       if (len > desc_length)
         len = desc_length;
@@ -739,9 +750,18 @@ ISR(USB_COM_vect) {
           return; // abort
         // send IN packet
         n = len < ENDPOINT0_SIZE ? len : ENDPOINT0_SIZE;
-        for (i = n; i; i--) {
-          UEDATX = pgm_read_byte(desc_addr++);
+
+        if (wValue == 0x0303) {
+          //serialNumberの読み出しの場合、ROM上の固定のDescriptor定義ではなくRAM上にあるバッファから値を読み取る
+          for (i = n; i; i--) {
+            UEDATX = *(desc_add_serialnumber++);
+          }
+        } else {
+          for (i = n; i; i--) {
+            UEDATX = pgm_read_byte(desc_addr++);
+          }
         }
+
         len -= n;
         usb_send_in();
       } while (len || n == ENDPOINT0_SIZE);
@@ -1042,4 +1062,8 @@ bool usbioCore_isConnectedToHost() {
   return usb_configuration != 0;
 }
 
+void usbioCore_initernal_setDeviceSignatures(uint8_t *pProjectId, uint8_t *pInstanceCode) {
+  utils_copyStringToWideString(serialNumberStringDescriptorStruct.wString, pProjectId, 8);
+  utils_copyStringToWideString(serialNumberStringDescriptorStruct.wString + 8, pInstanceCode, 8);
+}
 //------------------------------------------------------------

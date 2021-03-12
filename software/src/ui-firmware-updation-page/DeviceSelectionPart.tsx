@@ -1,7 +1,11 @@
 import { css, FC, jsx } from 'qx';
+import { IKeyboardDeviceInfo, IProjectResourceInfo } from '~/shared';
 import { ipcAgent, ISelectorOption } from '~/ui-common';
 import { FlatListSelector } from '~/ui-common/components/controls/FlatListSelector';
-import { useDeviceSelectionStatus } from '~/ui-firmware-updation-page/dataSource';
+import {
+  useDeviceSelectionStatus,
+  useProjectResourceInfos,
+} from '~/ui-firmware-updation-page/dataSource';
 
 const style = css`
   * + * {
@@ -13,11 +17,25 @@ const style = css`
   }
 `;
 
+function makeDeviceOptionEntry(
+  deviceInfo: IKeyboardDeviceInfo,
+  resourceInfos: IProjectResourceInfo[],
+): ISelectorOption {
+  const { path, portName, projectId } = deviceInfo;
+  const project = resourceInfos.find((info) => info.projectId === projectId);
+  const keyboardName = project?.keyboardName;
+  const postfix = (keyboardName && ` (${keyboardName})`) || '';
+  return {
+    label: `device@${portName}${postfix}`,
+    value: path,
+  };
+}
 export const DeviceSelectionPart: FC = () => {
+  const resourceInfos = useProjectResourceInfos();
   const selectionStatus = useDeviceSelectionStatus();
   const noneOption: ISelectorOption = { label: 'none', value: 'none' };
   const deviceOptionsBase: ISelectorOption[] = selectionStatus.allDeviceInfos.map(
-    (info) => ({ label: info.displayName, value: info.path }),
+    (deviceInfo) => makeDeviceOptionEntry(deviceInfo, resourceInfos),
   );
   const deviceOptions = [noneOption, ...deviceOptionsBase];
 

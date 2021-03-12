@@ -258,3 +258,7 @@ void configuratorServant_emitRelatimeLayerEvent(uint16_t layerFlags) {
 void configuratorServant_emitRelatimeAssignHitEvent(uint16_t assignHitResult) {
   emitRealtimeAssignHitEvent(assignHitResult);
 }
+
+void configuratorServant_readDeviceInstanceCode(uint8_t *buffer) {
+  copyEepromBytesToBuffer(buffer, 0, EepromAddr_DeviceInstanceCode, 8);
+}

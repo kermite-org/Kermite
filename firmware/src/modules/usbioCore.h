@@ -29,4 +29,6 @@ bool usbioCore_genericHid_readDataIfExists(uint8_t *pDataBytes64);
 
 bool usbioCore_isConnectedToHost();
 
+void usbioCore_initernal_setDeviceSignatures(uint8_t *pProjectId, uint8_t *pInstanceCode);
+
 #endif

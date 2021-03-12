@@ -4,18 +4,25 @@ import { compareString, IKeyboardDeviceInfo } from '~/shared';
 export interface IDeviceSpecificationParams {
   vendorId: number;
   productId: number;
+  manufacturerString: string;
+  productString: string;
   pathSearchWords: string[];
-  serialNumberSearchWord: string;
+}
+
+interface IEnumeratedDeviceSpec {
+  path: string;
+  serialNumber: string;
 }
 
 export function enumerateSupportedDevicePathsCore(
   params: IDeviceSpecificationParams,
-): string[] {
+): IEnumeratedDeviceSpec[] {
   const {
     vendorId,
     productId,
+    manufacturerString,
+    productString,
     pathSearchWords,
-    serialNumberSearchWord,
   } = params;
   const allDeviceInfos = HID.devices();
   // console.log(allDeviceInfos);
@@ -24,32 +31,51 @@ export function enumerateSupportedDevicePathsCore(
       (d) =>
         d.vendorId === vendorId &&
         d.productId === productId &&
-        pathSearchWords.some((word) => d.path!.includes(word)) &&
-        d.serialNumber?.includes(serialNumberSearchWord),
+        d.manufacturer === manufacturerString &&
+        d.product === productString &&
+        pathSearchWords.some((word) => d.path!.includes(word)),
     )
-    .map((info) => info.path!)
-    .filter((it) => !!it);
+    .filter((info) => !!info.path)
+    .map((info) => ({
+      path: info.path!,
+      serialNumber: info.serialNumber || '',
+    }));
 }
 
 export function getPortNameFromDevicePath(path: string) {
   const m =
-    path.match(/kermite_core_atmega32u4@(\d+)/) || // Mac
+    path.match(/Kermitie Keyboard Device@(\d+)/) || // Mac
     path.match(/mi_00#8&([0-9a-f]+)/); // Windows
   return (m && `${m[1]}`) || undefined;
 }
 
-export function getDisplayNameFromDevicePath(path: string) {
+export function getDebugDeviceSigFromDevicePath(path: string) {
   const portName = getPortNameFromDevicePath(path);
   return portName ? `device@${portName}` : path;
+}
+
+function makeKeyboardDeviceInfoFromDeviceSpec(
+  spec: IEnumeratedDeviceSpec,
+  index: number,
+): IKeyboardDeviceInfo {
+  const { path, serialNumber } = spec;
+  const portName = getPortNameFromDevicePath(path) || index.toString();
+  const projectId = serialNumber.slice(0, 8);
+  const deviceInstanceCode = serialNumber.slice(8, 16);
+  return {
+    path,
+    portName,
+    projectId,
+    deviceInstanceCode,
+  };
 }
 
 export function enumerateSupportedDeviceInfos(
   params: IDeviceSpecificationParams,
 ): IKeyboardDeviceInfo[] {
-  return enumerateSupportedDevicePathsCore(params)
-    .map((path) => ({
-      path,
-      displayName: getDisplayNameFromDevicePath(path),
-    }))
-    .sort((a, b) => compareString(a.displayName, b.displayName));
+  const specs = enumerateSupportedDevicePathsCore(params);
+  return specs
+    .sort((a, b) => compareString(a.path, b.path))
+    .map(makeKeyboardDeviceInfoFromDeviceSpec);
+  // .sort((a, b) => compareString(a.portName, b.portName));
 }

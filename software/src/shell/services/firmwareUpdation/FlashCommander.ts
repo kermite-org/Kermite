@@ -70,7 +70,7 @@ export namespace FlashCommander {
         if (++cnt > queryTimeoutMs) {
           logger.log(bytesToHexString(this.rcvBuf));
           logger.log(`reading ${this.rcvBuf.length} / ${readLength} bytes`);
-          throw new Error(`serial read timed out`);
+          throw new Error(`serial read timeout`);
         }
       }
       const res = this.rcvBuf;

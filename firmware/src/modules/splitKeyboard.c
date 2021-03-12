@@ -451,6 +451,8 @@ void splitKeyboard_setup(
   keySlotIndexToKeyIndexMap = (uint8_t *)_keySlotIndexToKeyIndexMap;
 }
 
+static uint8_t deviceInstanceCodeBuf[8];
+
 void splitKeyboard_start() {
   USBCON = 0;
   optionsInitialConfigShutup = true;
@@ -459,6 +461,8 @@ void splitKeyboard_start() {
   }
   printf("start\n");
   configValidator_initializeEEPROM();
+  configuratorServant_readDeviceInstanceCode(deviceInstanceCodeBuf);
+  usbioCore_initernal_setDeviceSignatures((uint8_t *)PROJECT_ID, deviceInstanceCodeBuf);
   usbioCore_initialize();
   bool isMaster = runMasterSlaveDetectionMode();
   printf("isMaster:%d\n", isMaster);

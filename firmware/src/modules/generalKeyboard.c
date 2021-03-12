@@ -233,8 +233,12 @@ static void processKeyStatesUpdate() {
   }
 }
 
+static uint8_t deviceInstanceCodeBuf[8];
+
 static void keyboardEntry() {
   configValidator_initializeEEPROM();
+  configuratorServant_readDeviceInstanceCode(deviceInstanceCodeBuf);
+  usbioCore_initernal_setDeviceSignatures((uint8_t *)PROJECT_ID, deviceInstanceCodeBuf);
   usbioCore_initialize();
   keyMatrixScanner_initialize(
       NumRows, NumColumns, rowPins, columnPins, nextKeyStateFlags);

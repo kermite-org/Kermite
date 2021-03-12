@@ -43,3 +43,9 @@ bool utils_compareBytes(uint8_t *arr1, uint8_t *arr2, uint16_t len) {
   }
   return true;
 }
+
+void utils_copyStringToWideString(int16_t *dst, uint8_t *src, uint16_t len) {
+  for (uint16_t i = 0; i < len; i++) {
+    dst[i] = src[i];
+  }
+}
