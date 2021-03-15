@@ -11,7 +11,6 @@
 #include "system.h"
 #include "usbioCore.h"
 #include "utils.h"
-#include <avr/interrupt.h>
 #include <stdio.h>
 
 #ifndef GK_NUM_ROWS
@@ -246,7 +245,7 @@ static void keyboardEntry() {
   configuratorServant_initialize(
       configuratorServantStateHandler, customParameterValueHandler);
 
-  sei();
+  system_enableInterrupts();
 
   uint16_t cnt = 0;
   while (1) {
@@ -301,7 +300,7 @@ void generalKeyboard_setup(
 }
 
 void generalKeyboard_start() {
-  USBCON = 0;
+  system_initializeUserProgram();
   if (!debugUartConfigured) {
     debugUart_disable();
   }
