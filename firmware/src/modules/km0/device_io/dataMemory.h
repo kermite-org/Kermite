@@ -1,5 +1,5 @@
-#ifndef __EEPROM_H__
-#define __EEPROM_H__
+#ifndef __DATA_MEMORY_H__
+#define __DATA_MEMORY_H__
 
 #include "types.h"
 

@@ -234,7 +234,7 @@ static void processKeyStatesUpdate() {
 static uint8_t serialNumberTextBuf[16];
 
 static void keyboardEntry() {
-  configValidator_initializeEEPROM();
+  configValidator_initializeDataStorage();
   utils_copyBytes(serialNumberTextBuf, (uint8_t *)PROJECT_ID, 8);
   configuratorServant_readDeviceInstanceCode(serialNumberTextBuf + 8);
   uibioCore_internal_setSerialNumberText(serialNumberTextBuf, 16);

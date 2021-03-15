@@ -3,7 +3,7 @@
 #include <avr/eeprom.h>
 
 uint16_t dataMemory_getCapacity() {
-  return 1024;
+  return DEVICE_PERSIST_STORAGE_DATA_SIZE;
 }
 
 uint8_t dataMemory_readByte(uint16_t addr) {

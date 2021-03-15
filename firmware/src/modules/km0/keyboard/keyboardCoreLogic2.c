@@ -2,7 +2,7 @@
 #include "bitOperations.h"
 #include "config.h"
 #include "dataMemory.h"
-#include "eepromLayout.h"
+#include "storageLayout.h"
 #include <stdio.h>
 
 #ifndef CORELOGIC_NUM_KEYSLOTS
@@ -153,8 +153,8 @@ static uint8_t getOutputModifiers() {
 //--------------------------------------------------------------------------------
 //assing memory reader
 
-#define AssignStorageHeaderLocation EepromAddr_AssignStorageHeader
-#define AssignStorageBodyLocation EepromAddr_AssignStorageBody
+#define KeyAssignsDataHeaderLocation StorageAddr_KeyAssignsDataHeader
+#define KeyAssignsDataBodyLocation StorageAddr_KeyAssignsDataBody
 #define NumLayersMax 16
 typedef struct {
   uint8_t numLayers;
@@ -167,14 +167,14 @@ static AssignMemoryReaderState assignMemoryReaderState;
 
 static void initAssignMemoryReader() {
   AssignMemoryReaderState *rs = &assignMemoryReaderState;
-  uint8_t numLayers = readStorageByte(AssignStorageHeaderLocation + 8);
-  uint16_t bodyLength = readStorageWordBE(AssignStorageHeaderLocation + 9);
+  uint8_t numLayers = readStorageByte(KeyAssignsDataHeaderLocation + 8);
+  uint16_t bodyLength = readStorageWordBE(KeyAssignsDataHeaderLocation + 9);
   rs->numLayers = numLayers;
-  rs->assignsStartAddress = AssignStorageBodyLocation + numLayers * 2;
-  rs->assignsEndAddress = AssignStorageBodyLocation + bodyLength;
+  rs->assignsStartAddress = KeyAssignsDataBodyLocation + numLayers * 2;
+  rs->assignsEndAddress = KeyAssignsDataBodyLocation + bodyLength;
   printf("nl:%d bl:%d\n", numLayers, bodyLength);
   for (uint8_t i = 0; i < 16; i++) {
-    rs->layerAttributeWords[i] = (i < numLayers) ? readStorageWordBE(AssignStorageBodyLocation + i * 2) : 0;
+    rs->layerAttributeWords[i] = (i < numLayers) ? readStorageWordBE(KeyAssignsDataBodyLocation + i * 2) : 0;
   }
 }
 

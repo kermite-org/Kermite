@@ -460,7 +460,7 @@ void splitKeyboard_start() {
     debugUart_disable();
   }
   printf("start\n");
-  configValidator_initializeEEPROM();
+  configValidator_initializeDataStorage();
   configuratorServant_readDeviceInstanceCode(deviceInstanceCodeBuf);
   usbioCore_initernal_setDeviceSignatures((uint8_t *)PROJECT_ID, deviceInstanceCodeBuf);
   usbioCore_initialize();
