@@ -12,7 +12,6 @@
 #include "usbioCore.h"
 #include "utils.h"
 #include <avr/interrupt.h>
-#include <avr/io.h>
 #include <stdio.h>
 
 #ifndef GK_NUM_ROWS

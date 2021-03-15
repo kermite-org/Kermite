@@ -1,7 +1,6 @@
 #include "keyMatrixScanner2.h"
 #include "bitOperations.h"
 #include "dio.h"
-#include <avr/io.h>
 
 static uint8_t numRows;
 static uint8_t numColumns;
