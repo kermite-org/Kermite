@@ -1,6 +1,6 @@
 #include "configuratorServant.h"
 #include "config.h"
-#include "eeprom.h"
+#include "dataMemory.h"
 #include "eepromLayout.h"
 #include "usbioCore.h"
 #include "utils.h"
@@ -79,7 +79,7 @@ static void emitMemoryChecksumResult(uint8_t dataKind, uint8_t checksum) {
 
 static void copyEepromBytesToBuffer(uint8_t *dstBuffer, int dstOffset, uint16_t srcEepromAddr, uint16_t len) {
   for (uint16_t i = 0; i < len; i++) {
-    dstBuffer[dstOffset + i] = eeprom_readByte(srcEepromAddr + i);
+    dstBuffer[dstOffset + i] = dataMemory_readByte(srcEepromAddr + i);
   }
 }
 
@@ -106,7 +106,7 @@ static void emitCustomParametersReadResponse() {
   p[0] = 0xb0;
   p[1] = 0x02;
   p[2] = 0x81;
-  p[3] = eeprom_readByte(EepromAddr_CustomSettingsBytesInitializationFlag);
+  p[3] = dataMemory_readByte(EepromAddr_CustomSettingsBytesInitializationFlag);
   copyEepromBytesToBuffer(p, 4, EepromAddr_CustomSettingsBytes, 10);
   emitGenericHidData(rawHidSendBuf);
 }
@@ -135,7 +135,7 @@ static void processReadGenericHidData() {
           //uint8_t *dst = dummyStorage + addr;
           //memcpy(dst, src, len);
           for (uint8_t i = 0; i < len; i++) {
-            eeprom_writeByte(addr + i, src[i]);
+            dataMemory_writeByte(addr + i, src[i]);
           }
           printf("%d bytes written at %d\n", len, addr);
         }
@@ -146,7 +146,7 @@ static void processReadGenericHidData() {
           uint8_t ck = 0;
           printf("check, addr %d, len %d\n", addr, len);
           for (uint16_t i = 0; i < len; i++) {
-            ck ^= eeprom_readByte(addr + i); //dummyStorage[addr + i];
+            ck ^= dataMemory_readByte(addr + i); //dummyStorage[addr + i];
           }
           printf("ck: %d\n", ck);
           emitMemoryChecksumResult(0x01, ck);
@@ -169,16 +169,16 @@ static void processReadGenericHidData() {
           uint8_t *src = p + 3;
           for (uint8_t i = 0; i < 10; i++) {
             uint8_t value = src[i];
-            eeprom_writeByte(EepromAddr_CustomSettingsBytes + i, value);
+            dataMemory_writeByte(EepromAddr_CustomSettingsBytes + i, value);
             invokeCustomParameterChangedCallback(i, value);
           }
-          eeprom_writeByte(EepromAddr_CustomSettingsBytesInitializationFlag, 1);
+          dataMemory_writeByte(EepromAddr_CustomSettingsBytesInitializationFlag, 1);
         }
         if (cmd == 0xa0) {
           // printf("handle custom parameters signle write\n");
           uint8_t index = p[3];
           uint8_t value = p[4];
-          eeprom_writeByte(EepromAddr_CustomSettingsBytes + index, value);
+          dataMemory_writeByte(EepromAddr_CustomSettingsBytes + index, value);
           invokeCustomParameterChangedCallback(index, value);
         }
       }
@@ -188,7 +188,7 @@ static void processReadGenericHidData() {
           // printf("write device instance code\n");
           uint8_t *src = p + 3;
           for (uint8_t i = 0; i < 8; i++) {
-            eeprom_writeByte(EepromAddr_DeviceInstanceCode + i, src[i]);
+            dataMemory_writeByte(EepromAddr_DeviceInstanceCode + i, src[i]);
           }
         }
       }
@@ -223,10 +223,10 @@ static void processReadGenericHidData() {
 //custom parameter initial loading
 
 static void loadCustomParameters() {
-  bool isInitialized = eeprom_readByte(EepromAddr_CustomSettingsBytesInitializationFlag);
+  bool isInitialized = dataMemory_readByte(EepromAddr_CustomSettingsBytesInitializationFlag);
   if (isInitialized) {
     for (uint8_t i = 0; i < 10; i++) {
-      uint8_t value = eeprom_readByte(EepromAddr_CustomSettingsBytes + i);
+      uint8_t value = dataMemory_readByte(EepromAddr_CustomSettingsBytes + i);
       invokeCustomParameterChangedCallback(i, value);
     }
   }

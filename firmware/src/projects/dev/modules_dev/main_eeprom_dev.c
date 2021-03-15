@@ -3,9 +3,9 @@
 #include <util/delay.h>
 
 #include "bitOperations.h"
+#include "dataMemory.h"
 #include "debugUart.h"
 #include "dio.h"
-#include "eeprom.h"
 
 static void initLED0() {
   dio_setOutput(P_B0);
@@ -32,7 +32,7 @@ void eepromDev() {
 
 #if 1
   debugShowBytes("write", buf, 4);
-  eeprom_writeBlock(addr, buf, 4);
+  dataMemory_writeBlock(addr, buf, 4);
 #endif
 
   for (int i = 0; i < 4; i++) {
@@ -40,7 +40,7 @@ void eepromDev() {
   }
   debugShowBytes("cleard", buf, 4);
 
-  eeprom_readBlock(addr, buf, 4);
+  dataMemory_readBlock(addr, buf, 4);
 
   debugShowBytes("read", buf, 4);
 

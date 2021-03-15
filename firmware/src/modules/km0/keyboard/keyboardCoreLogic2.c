@@ -1,7 +1,7 @@
 #include "keyboardCoreLogic2.h"
 #include "bitOperations.h"
 #include "config.h"
-#include "eeprom.h"
+#include "dataMemory.h"
 #include "eepromLayout.h"
 #include <stdio.h>
 
@@ -18,12 +18,12 @@ software/src/shell/services/KeyboardLogic/InputLogicSimulatorD/DeviceCoreLogicSi
 //assing memory storage
 
 static uint8_t readStorageByte(uint16_t addr) {
-  return eeprom_readByte(addr);
+  return dataMemory_readByte(addr);
 }
 
 static uint16_t readStorageWordBE(uint16_t addr) {
-  uint8_t a = eeprom_readByte(addr);
-  uint8_t b = eeprom_readByte(addr + 1);
+  uint8_t a = dataMemory_readByte(addr);
+  uint8_t b = dataMemory_readByte(addr + 1);
   return a << 8 | b;
 }
 

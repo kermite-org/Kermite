@@ -1,6 +1,6 @@
 #include "configValidator.h"
 #include "config.h"
-#include "eeprom.h"
+#include "dataMemory.h"
 #include "eepromLayout.h"
 #include "utils.h"
 #include "versions.h"
@@ -12,7 +12,7 @@
 static uint8_t eepromTempBuf[AssignStorageHeaderLength];
 
 bool configValidator_checkDataHeader() {
-  eeprom_readBlock(EepromAddr_AssignStorageHeader, eepromTempBuf, AssignStorageHeaderLength);
+  dataMemory_readBlock(EepromAddr_AssignStorageHeader, eepromTempBuf, AssignStorageHeaderLength);
   uint8_t *p = eepromTempBuf;
   uint16_t magicNumber = decode_word_be(p + 0);
   uint16_t reserved0xFFFF = decode_word_be(p + 2);
@@ -47,13 +47,13 @@ bool configValidator_checkDataHeader() {
 }
 
 void configValidator_initializeEEPROM() {
-  eeprom_readBlock(EepromAddr_ProjectID, eepromTempBuf, 8);
+  dataMemory_readBlock(EepromAddr_ProjectID, eepromTempBuf, 8);
   bool projectIdValid = utils_compareBytes(eepromTempBuf, (uint8_t *)PROJECT_ID, 8);
   if (!projectIdValid) {
     printf("clear eeprom for new project\n");
-    eeprom_writeBlock(EepromAddr_ProjectID, (uint8_t *)PROJECT_ID, 8);
+    dataMemory_writeBlock(EepromAddr_ProjectID, (uint8_t *)PROJECT_ID, 8);
     for (uint16_t i = EepromAddr_ProjectID + 8; i < 1024; i++) {
-      eeprom_writeByte(i, 0);
+      dataMemory_writeByte(i, 0);
     }
   }
 }

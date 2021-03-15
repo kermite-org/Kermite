@@ -5,9 +5,9 @@
 #include <util/delay.h>
 
 #include "bitOperations.h"
+#include "dataMemory.h"
 #include "debugUart.h"
 #include "dio.h"
-#include "eeprom.h"
 #include "singlewire3.h"
 #include "utils.h"
 
@@ -44,11 +44,11 @@ void toggleLED1() {
 //master slave configuration
 
 bool checkIsMaster() {
-  return eeprom_readByte(0) > 0;
+  return dataMemory_readByte(0) > 0;
 }
 
 void writeIsMaster(bool isMaster) {
-  eeprom_writeByte(0, isMaster ? 1 : 0);
+  dataMemory_writeByte(0, isMaster ? 1 : 0);
 }
 
 //---------------------------------------------
