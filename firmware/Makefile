@@ -15,8 +15,9 @@ RELEASE_REVISION ?= 0
 IS_RESOURCE_ORIGIN_ONLINE ?= 0
 
 INC_PATHS =
-INC_PATHS += -Isrc/modules
-INC_PATHS += -Isrc/modules/deprecated
+INC_PATHS += -Isrc/modules/km0/common
+INC_PATHS += -Isrc/modules/km0/device_io
+INC_PATHS += -Isrc/modules/km0/keyboard
 INC_PATHS += -Isrc/projects/$(PROJECT)
 
 

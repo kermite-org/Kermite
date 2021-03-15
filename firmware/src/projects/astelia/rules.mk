@@ -1,12 +1,14 @@
-MODULE_SRCS += pio.c
-MODULE_SRCS += debugUart.c
-MODULE_SRCS += keyMatrixScanner2.c
-MODULE_SRCS += usbioCore.c
-MODULE_SRCS += configuratorServant.c
-MODULE_SRCS += eeprom.c
-MODULE_SRCS += utils.c
-MODULE_SRCS += configValidator.c
-MODULE_SRCS += keyboardCoreLogic2.c
-MODULE_SRCS += generalKeyboard.c
+MODULE_SRCS += km0/common/utils.c
+
+MODULE_SRCS += km0/device_io/atmega32/pio.c
+MODULE_SRCS += km0/device_io/atmega32/debugUart.c
+MODULE_SRCS += km0/device_io/atmega32/usbioCore.c
+MODULE_SRCS += km0/device_io/atmega32/eeprom.c
+
+MODULE_SRCS += km0/keyboard/keyMatrixScanner2.c
+MODULE_SRCS += km0/keyboard/configuratorServant.c
+MODULE_SRCS += km0/keyboard/configValidator.c
+MODULE_SRCS += km0/keyboard/keyboardCoreLogic2.c
+MODULE_SRCS += km0/keyboard/generalKeyboard.c
 
 PROJECT_SRCS += main.c
