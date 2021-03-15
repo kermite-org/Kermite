@@ -1,12 +1,8 @@
-TARGET_MCU = atmega
-
 MODULE_SRCS += km0/common/utils.c
-
 MODULE_SRCS += km0/device_io/atmega/pio.c
 MODULE_SRCS += km0/device_io/atmega/debugUart.c
 MODULE_SRCS += km0/device_io/atmega/usbioCore.c
 MODULE_SRCS += km0/device_io/atmega/eeprom.c
-
 MODULE_SRCS += km0/keyboard/keyMatrixScanner2.c
 MODULE_SRCS += km0/keyboard/configuratorServant.c
 MODULE_SRCS += km0/keyboard/configValidator.c
