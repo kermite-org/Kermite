@@ -8,13 +8,12 @@
 #include "keyboardCoreLogic2.h"
 #include "pio.h"
 #include "singlewire3.h"
+#include "system.h"
 #include "usbioCore.h"
 #include "utils.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
-#include <avr/pgmspace.h>
 #include <stdio.h>
-#include <util/delay.h>
 
 #ifndef GK_NUM_ROWS
 #error GK_NUM_ROWS is not defined
@@ -159,7 +158,7 @@ static void onPhysicalKeyStateChanged(uint8_t keySlotIndex, bool isDown) {
   if (keySlotIndex >= NumKeySlots) {
     return;
   }
-  uint8_t keyIndex = pgm_read_byte(keySlotIndexToKeyIndexMap + keySlotIndex);
+  uint8_t keyIndex = system_readRomByte(keySlotIndexToKeyIndexMap + keySlotIndex);
   if (keyIndex == 0xFF) {
     return;
   }
@@ -270,7 +269,7 @@ static void keyboardEntry() {
         outputLED0(false);
       }
     }
-    _delay_ms(1);
+    delayMs(1);
     configuratorServant_processUpdate();
   }
 }
