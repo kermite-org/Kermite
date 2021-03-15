@@ -52,11 +52,6 @@ void pio_setInputPullup(uint8_t pin);
 void pio_output(uint8_t pin, bool val);
 bool pio_input(uint8_t pin);
 void pio_toggleOutput(uint8_t pin);
-
-volatile uint8_t *pio_ex_getRegPORTX(uint8_t pin);
-volatile uint8_t *pio_ex_getRegPINX(uint8_t pin);
-uint8_t pio_ex_getPortBit(uint8_t pin);
-
 void pio_setHigh(uint8_t pin);
 void pio_setLow(uint8_t pin);
 
