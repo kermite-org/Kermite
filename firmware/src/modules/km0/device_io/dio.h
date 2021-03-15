@@ -46,13 +46,13 @@ enum {
   P_F7,
 };
 
-void pio_setOutput(uint8_t pin);
-void pio_setInput(uint8_t pin);
-void pio_setInputPullup(uint8_t pin);
-void pio_output(uint8_t pin, bool val);
-bool pio_input(uint8_t pin);
-void pio_toggleOutput(uint8_t pin);
-void pio_setHigh(uint8_t pin);
-void pio_setLow(uint8_t pin);
+void dio_setOutput(uint8_t pin);
+void dio_setInput(uint8_t pin);
+void dio_setInputPullup(uint8_t pin);
+void dio_write(uint8_t pin, bool val);
+bool dio_read(uint8_t pin);
+void dio_toggle(uint8_t pin);
+void dio_setHigh(uint8_t pin);
+void dio_setLow(uint8_t pin);
 
 #endif

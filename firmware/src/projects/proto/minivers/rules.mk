@@ -1,4 +1,4 @@
-MODULE_SRCS += pio.c
+MODULE_SRCS += dio.c
 MODULE_SRCS += usbioCore.c
 MODULE_SRCS += eeprom.c
 MODULE_SRCS += debugUart.c

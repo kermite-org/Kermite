@@ -2,7 +2,7 @@
 
 #include "bitOperations.h"
 
-#include "pio.h"
+#include "dio.h"
 #include "types.h"
 
 #include <avr/interrupt.h>
@@ -58,8 +58,8 @@ SingleLineHalfDuplex_PulseRatio_BinaryFragment_SeqMultiBytes
 //timing debug pin
 
 static void debug_initTimeDebugPin() {
-  // pio_setOutput(P_D7);
-  pio_setOutput(P_E6);
+  // dio_setOutput(P_D7);
+  dio_setOutput(P_E6);
 }
 
 static void debug_timingPinLow() {
@@ -73,7 +73,7 @@ static void debug_timingPinHigh() {
 static void debug_toggleTimeDebugPin() {
   bit_on(PINE, 6);
   // bit_invert(PORTD, 7);
-  //pio_toggleOutput(P_D7);
+  //dio_toggle(P_D7);
 }
 
 //---------------------------------------------
@@ -88,7 +88,7 @@ static void debug_toggleTimeDebugPin() {
 
 static inline void signalPin_initialize() {
   //defualt state, inputPullup, DDR=0, PORT=1
-  pio_setInputPullup(P_D2);
+  dio_setInputPullup(P_D2);
 }
 
 static inline void singalPin_startWrite() {
@@ -116,24 +116,24 @@ static inline void signalPin_endWrite_standy() {
 #else
 
 static inline void singalPin_startWrite() {
-  pio_setOutput(pinHdc);
+  dio_setOutput(pinHdc);
 }
 
 static inline void signalPin_endWrite() {
-  pio_setInputPullup(pinHdc);
+  dio_setInputPullup(pinHdc);
 }
 
 static inline void signalPin_outputHigh() {
-  pio_output(pinHdc, 1);
+  dio_write(pinHdc, 1);
 }
 
 static inline void signalPin_outputLow() {
-  pio_output(pinHdc, 0);
+  dio_write(pinHdc, 0);
 }
 #endif
 
 static inline uint8_t signalPin_read() {
-  return pio_input(P_D2);
+  return dio_read(P_D2);
   //return bit_read(PIND, 2);
 }
 
@@ -141,10 +141,10 @@ static inline uint8_t signalPin_read() {
 //sender
 
 static void emitFragmentCore(uint8_t t0, uint8_t t1) {
-  // pio_output(pinHdc, 1);
+  // dio_write(pinHdc, 1);
   signalPin_outputHigh();
   delayUnit(t0);
-  // pio_output(pinHdc, 0);
+  // dio_write(pinHdc, 0);
   signalPin_outputLow();
   delayUnit(t1);
 }
@@ -166,11 +166,11 @@ static void sendBytes(uint8_t *bytes, uint8_t len) {
   _delay_us(200);
   // delayUnit(50);
 
-  //pio_setOutput(pinHdc);
+  //dio_setOutput(pinHdc);
   singalPin_startWrite();
 
   //最初の立ち下りで通信開始を示す
-  //pio_setLow(pinHdc);
+  //dio_setLow(pinHdc);
   signalPin_outputLow();
   debug_toggleTimeDebugPin();
   delayUnit(50);
@@ -191,7 +191,7 @@ static void sendBytes(uint8_t *bytes, uint8_t len) {
   }
   debug_toggleTimeDebugPin();
 
-  // pio_setInputPullup(pinHdc);
+  // dio_setInputPullup(pinHdc);
   signalPin_endWrite_standy();
 
   //送信処理中に発生したピン変化割り込みイベントをクリア
@@ -310,7 +310,7 @@ ISR(INT2_vect) {
 void singleWire_initialize() {
 
   //通信に使用するピンを初期化
-  // pio_setInputPullup(pinHdc);
+  // dio_setInputPullup(pinHdc);
   signalPin_initialize();
 
   //タイミングデバッグ用のピンを初期化

@@ -4,9 +4,9 @@
 #include "configValidator.h"
 #include "configuratorServant.h"
 #include "debugUart.h"
+#include "dio.h"
 #include "keyMatrixScanner2.h"
 #include "keyboardCoreLogic2.h"
-#include "pio.h"
 #include "singlewire3.h"
 #include "system.h"
 #include "usbioCore.h"
@@ -94,20 +94,20 @@ void setCustomParameterDynamicFlag(uint8_t slotIndex, bool isDynamic) {
 
 static void outputLED0(bool val) {
   if (useBoardLeds) {
-    pio_output(PIN_LED0, !val);
+    dio_write(PIN_LED0, !val);
   }
 }
 
 static void outputLED1(bool val) {
   if (useBoardLeds) {
-    pio_output(PIN_LED1, !val);
+    dio_write(PIN_LED1, !val);
   }
 }
 
 static void initBoardLeds() {
   useBoardLeds = true;
-  pio_setOutput(PIN_LED0);
-  pio_setOutput(PIN_LED1);
+  dio_setOutput(PIN_LED0);
+  dio_setOutput(PIN_LED1);
   outputLED0(false);
   outputLED1(false);
 }

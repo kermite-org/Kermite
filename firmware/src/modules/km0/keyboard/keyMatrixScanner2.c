@@ -1,6 +1,6 @@
 #include "keyMatrixScanner2.h"
 #include "bitOperations.h"
-#include "pio.h"
+#include "dio.h"
 #include <avr/io.h>
 
 static uint8_t numRows;
@@ -23,11 +23,11 @@ void keyMatrixScanner_initialize(
   columnPins = _columnPins;
 
   for (uint8_t i = 0; i < numRows; i++) {
-    pio_setOutput(rowPins[i]);
-    pio_setHigh(rowPins[i]);
+    dio_setOutput(rowPins[i]);
+    dio_setHigh(rowPins[i]);
   }
   for (uint8_t i = 0; i < numColumns; i++) {
-    pio_setInputPullup(columnPins[i]);
+    dio_setInputPullup(columnPins[i]);
   }
 
   keyStateBitFlags = _keyStateBitFlags;
@@ -41,14 +41,14 @@ void keyMatrixScanner_update() {
 
   uint8_t keySlotIndex = 0;
   for (uint8_t i = 0; i < numRows; i++) {
-    pio_setLow(rowPins[i]);
+    dio_setLow(rowPins[i]);
     for (uint8_t j = 0; j < numColumns; j++) {
       uint8_t byteIndex = keySlotIndex >> 3;
       uint8_t bitIndex = keySlotIndex & 7;
-      bool isDown = pio_input(columnPins[j]) == 0;
+      bool isDown = dio_read(columnPins[j]) == 0;
       bit_spec(keyStateBitFlags[byteIndex], bitIndex, isDown);
       keySlotIndex++;
     }
-    pio_setHigh(rowPins[i]);
+    dio_setHigh(rowPins[i]);
   }
 }

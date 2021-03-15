@@ -1,6 +1,6 @@
 #include "config.h"
+#include "dio.h"
 #include "generalKeyboard.h"
-#include "pio.h"
 #include <avr/pgmspace.h>
 
 #define NumRows GK_NUM_ROWS

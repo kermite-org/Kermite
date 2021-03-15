@@ -1,7 +1,7 @@
 #include "singlewire3.h"
 #include "bitOperations.h"
 #include "config.h"
-#include "pio.h"
+#include "dio.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <util/delay.h>
@@ -74,7 +74,7 @@ static inline uint8_t signalPin_read() {
 #define pinDebug_Bit 4
 
 static void debug_initTimeDebugPin() {
-  pio_setOutput(pinDebug);
+  dio_setOutput(pinDebug);
 }
 
 static void debug_timingPinHigh() {

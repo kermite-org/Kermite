@@ -4,15 +4,15 @@
 
 #include "bitOperations.h"
 #include "debugUart.h"
+#include "dio.h"
 #include "eeprom.h"
-#include "pio.h"
 
 static void initLED0() {
-  pio_setOutput(P_B0);
+  dio_setOutput(P_B0);
 }
 
 static void toggleLED0() {
-  pio_toggleOutput(P_B0);
+  dio_toggle(P_B0);
 }
 
 void debugShowBytes(char *name, uint8_t *buf, int len) {

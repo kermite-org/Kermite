@@ -2,7 +2,7 @@
 
 #include "bitOperations.h"
 #include "debug_uart.h"
-#include "pio.h"
+#include "dio.h"
 #include "types.h"
 
 #include <avr/interrupt.h>
@@ -68,7 +68,7 @@ SingleLineHalfDuplex_PulseRatio_FourFragment_SeqMultiBytes
 
 static inline void signalPin_initialize() {
   //defualt state, inputPullup, DDR=0, PORT=1
-  pio_setInputPullup(pinHdc);
+  dio_setInputPullup(pinHdc);
 }
 
 static inline void singalPin_startWrite() {
@@ -94,24 +94,24 @@ static inline void signalPin_endWrite_standy() {
 #else
 
 static inline void singalPin_startWrite() {
-  pio_setOutput(pinHdc);
+  dio_setOutput(pinHdc);
 }
 
 static inline void signalPin_endWrite() {
-  pio_setInputPullup(pinHdc);
+  dio_setInputPullup(pinHdc);
 }
 
 static inline void signalPin_outputHigh() {
-  pio_output(pinHdc, 1);
+  dio_write(pinHdc, 1);
 }
 
 static inline void signalPin_outputLow() {
-  pio_output(pinHdc, 0);
+  dio_write(pinHdc, 0);
 }
 #endif
 
 static inline uint8_t signalPin_read() {
-  // return pio_input(pinHdc);
+  // return dio_read(pinHdc);
   return bit_read(PIND, 2);
 }
 
@@ -137,10 +137,10 @@ void emitFragment(uint8_t val) {
 }
 
 static inline void emitTail() {
-  // pio_output(pinHdc, 0);
+  // dio_write(pinHdc, 0);
   signalPin_outputLow();
   delayUnit(50);
-  // pio_output(pinHdc, 1);
+  // dio_write(pinHdc, 1);
   signalPin_outputHigh();
 }
 
@@ -160,7 +160,7 @@ void sendBytes(uint8_t *buf, uint8_t len) {
 
   // singalPin_startOutput();
   singalPin_startWrite();
-  // pio_output(pinHdc, 1);
+  // dio_write(pinHdc, 1);
   signalPin_outputHigh();
   delayUnit(50);
 
@@ -232,7 +232,7 @@ void readTail() {
 // uint8_t receiveHalfFlagment() {
 //   uint8_t t0 = 0;
 //   //uint8_t t1 = 0;
-//   while (pio_input(pinOneWireRx) == 0) {
+//   while (dio_read(pinOneWireRx) == 0) {
 //     _delay_ms(1);
 //     t0++;
 //   }

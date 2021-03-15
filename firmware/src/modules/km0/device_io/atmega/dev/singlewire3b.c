@@ -1,5 +1,5 @@
 #include "bitOperations.h"
-#include "pio.h"
+#include "dio.h"
 #include "singlewire3.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
@@ -74,7 +74,7 @@ static inline uint8_t signalPin_read() {
 #define pinDebug_Bit 4
 
 static inline void debug_initTimeDebugPin() {
-  pio_setOutput(pinDebug);
+  dio_setOutput(pinDebug);
 }
 
 static inline void debug_timingPinHigh() {
