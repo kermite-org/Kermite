@@ -3,6 +3,8 @@
 
 #include "types.h"
 
+uint16_t dataMemory_getCapacity();
+
 uint8_t dataMemory_readByte(uint16_t addr);
 void dataMemory_writeByte(uint16_t addr, uint8_t val);
 

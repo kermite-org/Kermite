@@ -2,6 +2,10 @@
 #include "bitOperations.h"
 #include <avr/eeprom.h>
 
+uint16_t dataMemory_getCapacity() {
+  return 1024;
+}
+
 uint8_t dataMemory_readByte(uint16_t addr) {
   eeprom_busy_wait();
   return eeprom_read_byte((uint8_t *)addr);
