@@ -3,6 +3,7 @@
 
 #include "types.h"
 
+#ifdef TARGET_MCU_ATMEGA
 enum {
   P_B0 = 0,
   P_B1,
@@ -45,6 +46,7 @@ enum {
   P_F6,
   P_F7,
 };
+#endif
 
 void dio_setOutput(uint8_t pin);
 void dio_setInput(uint8_t pin);
