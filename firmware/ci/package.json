@@ -1,5 +1,5 @@
 {
-  "name": "scripts2",
+  "name": "kermite-firmware-ci",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
