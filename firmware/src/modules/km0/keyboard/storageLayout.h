@@ -3,6 +3,10 @@
 
 #include "config.h"
 
+#ifdef TARGET_MCU_ATMEGA
+#define DEVICE_PERSIST_STORAGE_DATA_SIZE 1024
+#endif
+
 #ifndef DEVICE_PERSIST_STORAGE_DATA_SIZE
 #error DEVICE_PERSIST_STORAGE_SIZE is not defined
 #endif
@@ -13,6 +17,7 @@
 
 /*
 DATA LAYOUT
+SZ = DEVICE_PERSIST_STORAGE_DATA_SIZE
 U = USER_STORAGE_SIZE
 
 (address):(size), DataType
@@ -21,8 +26,8 @@ U = USER_STORAGE_SIZE
 (16):(1), reserved
 (17):(1), custom parameter bytes initialization flag
 (18):(10), custom parameter bytes
-(28):(1024-U-28), assign storage (keymapping data)
-(1024-U):(U), user data
+(28):(SZ-U-28), assign storage (keymapping data)
+(SZ-U):(U), user data
 
 */
 
