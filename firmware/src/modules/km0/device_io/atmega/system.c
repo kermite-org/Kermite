@@ -9,11 +9,11 @@ void delayMs(uint16_t ms) {
   }
 }
 
-uint8_t system_readRomByte(uint8_t *ptr) {
+uint8_t system_readRomByte(const uint8_t *ptr) {
   return pgm_read_byte(ptr);
 }
 
-uint16_t system_readRomWord(uint16_t *ptr) {
+uint16_t system_readRomWord(const uint16_t *ptr) {
   return pgm_read_word(ptr);
 }
 
