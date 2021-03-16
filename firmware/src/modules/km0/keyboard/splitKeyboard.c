@@ -4,17 +4,14 @@
 #include "configValidator.h"
 #include "configuratorServant.h"
 #include "debugUart.h"
+#include "dio.h"
 #include "keyMatrixScanner2.h"
 #include "keyboardCoreLogic2.h"
-#include "pio.h"
 #include "singlewire3.h"
+#include "system.h"
 #include "usbioCore.h"
 #include "utils.h"
-#include <avr/interrupt.h>
-#include <avr/io.h>
-#include <avr/pgmspace.h>
 #include <stdio.h>
-#include <util/delay.h>
 
 #ifndef SK_NUM_ROWS
 #error SK_NUM_ROWS is not defined
@@ -108,20 +105,20 @@ void setCustomParameterDynamicFlag(uint8_t slotIndex, bool isDynamic) {
 
 static void outputLED0(bool val) {
   if (useBoardLeds) {
-    pio_output(PIN_LED0, !val);
+    dio_write(PIN_LED0, !val);
   }
 }
 
 static void outputLED1(bool val) {
   if (useBoardLeds) {
-    pio_output(PIN_LED1, !val);
+    dio_write(PIN_LED1, !val);
   }
 }
 
 static void initBoardLeds() {
   useBoardLeds = true;
-  pio_setOutput(PIN_LED0);
-  pio_setOutput(PIN_LED1);
+  dio_setOutput(PIN_LED0);
+  dio_setOutput(PIN_LED1);
   outputLED0(false);
   outputLED1(false);
 }
@@ -172,7 +169,7 @@ static void onPhysicalKeyStateChanged(uint8_t keySlotIndex, bool isDown) {
   if (keySlotIndex >= NumKeySlots) {
     return;
   }
-  uint8_t keyIndex = pgm_read_byte(keySlotIndexToKeyIndexMap + keySlotIndex);
+  uint8_t keyIndex = system_readRomByte(keySlotIndexToKeyIndexMap + keySlotIndex);
   if (keyIndex == 0xFF) {
     return;
   }
@@ -225,12 +222,13 @@ static void configuratorServantStateHandler(uint8_t state) {
 
 //反対側のコントローラからキー状態を受け取る処理
 static void pullAltSideKeyStates() {
-  cli();
+  system_disableInterrupts();
   sw_txbuf[0] = 0x40;
   singlewire_sendFrame(sw_txbuf, 1); //キー状態要求パケットを送信
 
   uint8_t sz = singlewire_receiveFrame(sw_rxbuf, SingleWireMaxPacketSize);
-  sei();
+  system_enableInterrupts();
+
   if (sz > 0) {
 
     uint8_t cmd = sw_rxbuf[0];
@@ -302,7 +300,7 @@ static void runAsMaster() {
         outputLED0(false);
       }
     }
-    _delay_ms(1);
+    delayMs(1);
     configuratorServant_processUpdate();
   }
 }
@@ -361,7 +359,7 @@ static void runAsSlave() {
         outputLED0(false);
       }
     }
-    _delay_ms(1);
+    delayMs(1);
   }
 }
 
@@ -385,7 +383,9 @@ static void masterSlaveDetectionMode_onRecevierInterruption() {
 static bool runMasterSlaveDetectionMode() {
   singlewire_initialize();
   singlewire_setupInterruptedReceiver(masterSlaveDetectionMode_onRecevierInterruption);
-  sei();
+
+  system_enableInterrupts();
+
   while (true) {
     if (usbioCore_isConnectedToHost()) {
       singlewire_clearInterruptedReceiver();
@@ -396,7 +396,7 @@ static bool runMasterSlaveDetectionMode() {
     if (hasMasterOathReceived) {
       return false;
     }
-    _delay_ms(1);
+    delayMs(1);
   }
 }
 
@@ -409,16 +409,16 @@ static void showModeByLedBlinkPattern(bool isMaster) {
     for (uint8_t i = 0; i < 4; i++) {
       outputLED0(true);
       outputLED1(true);
-      _delay_ms(2);
+      delayMs(2);
       outputLED0(false);
       outputLED1(false);
-      _delay_ms(100);
+      delayMs(100);
     }
   } else {
     //slaveの場合長く1回点灯
     outputLED0(true);
     outputLED1(true);
-    _delay_ms(500);
+    delayMs(500);
     outputLED0(false);
     outputLED1(false);
   }
@@ -451,18 +451,19 @@ void splitKeyboard_setup(
   keySlotIndexToKeyIndexMap = (uint8_t *)_keySlotIndexToKeyIndexMap;
 }
 
-static uint8_t deviceInstanceCodeBuf[8];
+static uint8_t serialNumberTextBuf[16];
 
 void splitKeyboard_start() {
-  USBCON = 0;
+  system_initializeUserProgram();
   optionsInitialConfigShutup = true;
   if (!debugUartConfigured) {
     debugUart_disable();
   }
   printf("start\n");
-  configValidator_initializeEEPROM();
-  configuratorServant_readDeviceInstanceCode(deviceInstanceCodeBuf);
-  usbioCore_initernal_setDeviceSignatures((uint8_t *)PROJECT_ID, deviceInstanceCodeBuf);
+  configValidator_initializeDataStorage();
+  utils_copyBytes(serialNumberTextBuf, (uint8_t *)PROJECT_ID, 8);
+  configuratorServant_readDeviceInstanceCode(serialNumberTextBuf + 8);
+  uibioCore_internal_setSerialNumberText(serialNumberTextBuf, 16);
   usbioCore_initialize();
   bool isMaster = runMasterSlaveDetectionMode();
   printf("isMaster:%d\n", isMaster);

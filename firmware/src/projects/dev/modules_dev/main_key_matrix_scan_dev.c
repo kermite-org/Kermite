@@ -1,6 +1,6 @@
 #include "bitOperations.h"
 #include "debug_uart.h"
-#include "pio.h"
+#include "dio.h"
 #include <avr/io.h>
 #include <avr/pgmspace.h>
 #include <stdio.h>
@@ -13,16 +13,16 @@
 #define pin_LED1 P_F5
 
 static void initLEDs() {
-  pio_setOutput(pin_LED0);
-  pio_setOutput(pin_LED1);
+  dio_setOutput(pin_LED0);
+  dio_setOutput(pin_LED1);
 }
 
 static void toggleLED0() {
-  pio_toggleOutput(pin_LED0);
+  dio_toggle(pin_LED0);
 }
 
 static void outputLED1(bool val) {
-  pio_output(pin_LED1, val);
+  dio_write(pin_LED1, val);
 }
 
 //---------------------------------------------
@@ -41,12 +41,12 @@ uint8_t keyStateFlags[NumRows];
 void keyMatrix_init() {
   for (uint8_t i = 0; i < NumRows; i++) {
     uint8_t rowPin = pgm_read_byte(&row_pins[i]);
-    pio_setOutput(rowPin);
-    pio_setHigh(rowPin);
+    dio_setOutput(rowPin);
+    dio_setHigh(rowPin);
   }
   for (uint8_t i = 0; i < NumColumns; i++) {
     uint8_t colPin = pgm_read_byte(&col_pins[i]);
-    pio_setInputPullup(colPin);
+    dio_setInputPullup(colPin);
   }
   for (uint8_t i = 0; i < NumRows; i++) {
     rowScanValues[i] = 0;
@@ -58,14 +58,14 @@ void keyMatrix_update() {
 
   for (uint8_t i = 0; i < NumRows; i++) {
     uint8_t rowPin = pgm_read_byte(&row_pins[i]);
-    pio_setLow(rowPin);
+    dio_setLow(rowPin);
     uint8_t rowValue = 0;
     for (uint8_t j = 0; j < NumColumns; j++) {
       uint8_t columnPin = pgm_read_byte(&col_pins[j]);
-      bit_spec(rowValue, j, pio_input(columnPin) == 0);
+      bit_spec(rowValue, j, dio_read(columnPin) == 0);
     }
     rowScanValues[i] = rowValue;
-    pio_setHigh(rowPin);
+    dio_setHigh(rowPin);
   }
 
   // for (uint8_t i = 0; i < NumRows; i++) {

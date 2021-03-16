@@ -5,9 +5,9 @@
 #include <util/delay.h>
 
 #include "bitOperations.h"
+#include "dataMemory.h"
 #include "debugUart.h"
-#include "eeprom.h"
-#include "pio.h"
+#include "dio.h"
 #include "singlewire3.h"
 #include "utils.h"
 
@@ -20,35 +20,35 @@ extern uint8_t singlewire3_debugValues[4];
 #define pin_LED1 P_B0 //RXLED on ProMicro
 
 void initBoardIo() {
-  pio_setOutput(pin_LED0);
-  pio_setOutput(pin_LED1);
+  dio_setOutput(pin_LED0);
+  dio_setOutput(pin_LED1);
 }
 
 void outputLED0(bool val) {
-  pio_output(pin_LED0, !val);
+  dio_write(pin_LED0, !val);
 }
 
 void toggleLED0() {
-  pio_toggleOutput(pin_LED0);
+  dio_toggle(pin_LED0);
 }
 
 void outputLED1(bool val) {
-  pio_output(pin_LED1, !val);
+  dio_write(pin_LED1, !val);
 }
 
 void toggleLED1() {
-  pio_toggleOutput(pin_LED1);
+  dio_toggle(pin_LED1);
 }
 
 //---------------------------------------------
 //master slave configuration
 
 bool checkIsMaster() {
-  return eeprom_readByte(0) > 0;
+  return dataMemory_readByte(0) > 0;
 }
 
 void writeIsMaster(bool isMaster) {
-  eeprom_writeByte(0, isMaster ? 1 : 0);
+  dataMemory_writeByte(0, isMaster ? 1 : 0);
 }
 
 //---------------------------------------------

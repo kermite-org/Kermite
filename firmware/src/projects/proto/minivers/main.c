@@ -1,5 +1,5 @@
 #include "config.h"
-#include "pio.h"
+#include "dio.h"
 #include "splitKeyboard.h"
 #include <avr/pgmspace.h>
 

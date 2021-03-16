@@ -1,4 +1,2 @@
-#PROJECT = astelia
-#PROJECT = proto/minivers_gsk
-#COM_PORT = COM1
-#COM_PORT = /dev/tty.usbmodem123456
+#AVRDUDE_COM_PORT = COM1
+#AVRDUDE_COM_PORT = /dev/tty.usbmodem123456

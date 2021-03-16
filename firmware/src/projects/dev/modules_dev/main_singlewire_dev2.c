@@ -1,5 +1,5 @@
 #include "debug_uart.h"
-#include "pio.h"
+#include "dio.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <stdio.h>
@@ -17,25 +17,25 @@
 #define pin_BT0 P_B6
 
 static void initBoardIo() {
-  pio_setOutput(pin_LED0);
-  pio_setOutput(pin_LED1);
-  pio_setInputPullup(pin_BT0);
+  dio_setOutput(pin_LED0);
+  dio_setOutput(pin_LED1);
+  dio_setInputPullup(pin_BT0);
 }
 
 static void toggleLED0() {
-  pio_toggleOutput(pin_LED0);
+  dio_toggle(pin_LED0);
 }
 
 static void outputLED1(bool val) {
-  pio_output(pin_LED1, val);
+  dio_write(pin_LED1, val);
 }
 
 static void toggleLED1() {
-  pio_toggleOutput(pin_LED1);
+  dio_toggle(pin_LED1);
 }
 
 static bool readButton0() {
-  return pio_input(pin_BT0) == 0;
+  return dio_read(pin_BT0) == 0;
 }
 
 //---------------------------------------------
@@ -43,27 +43,27 @@ static bool readButton0() {
 
 #if 1
 static void debug_initDebug3Pin() {
-  pio_setOutput(P_B3);
+  dio_setOutput(P_B3);
 }
 
 static void debug_toggleDebug3Pin() {
-  pio_toggleOutput(P_B3);
+  dio_toggle(P_B3);
 }
 
 static void debug_outputDebug3Pin(bool val) {
-  pio_output(P_B3, val);
+  dio_write(P_B3, val);
 }
 
 static void debug_initDebug4Pin() {
-  pio_setOutput(P_B2);
+  dio_setOutput(P_B2);
 }
 
 static void debug_toggleDebug4Pin() {
-  pio_toggleOutput(P_B2);
+  dio_toggle(P_B2);
 }
 
 static void debug_outputDebug4Pin(bool val) {
-  pio_output(P_B2, val);
+  dio_write(P_B2, val);
 }
 
 #else
@@ -77,8 +77,8 @@ static void debug_toggleIntervalPin() {}
 #define pin_SlaveCheck P_C6
 
 static bool checkIsMaster() {
-  pio_setInputPullup(pin_SlaveCheck);
-  return pio_input(pin_SlaveCheck) == 1;
+  dio_setInputPullup(pin_SlaveCheck);
+  return dio_read(pin_SlaveCheck) == 1;
 }
 
 //---------------------------------------------

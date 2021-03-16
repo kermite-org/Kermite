@@ -1,16 +1,14 @@
 #include "bitOperations.h"
-#include "pio.h"
+#include "dio.h"
 #include "singlewire3.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <util/delay.h>
 
 //単線通信
-//singlewire3aの改良版
 //パルス幅で0/1を表す
-//パルス幅計測による受信
-//100kbps
-//安定
+//立ち上がり一定時間後の信号サンプリングによる受信
+//160kpbs
 
 uint8_t singlewire3_debugValues[4] = { 0 };
 
@@ -76,7 +74,7 @@ static inline uint8_t signalPin_read() {
 #define pinDebug_Bit 4
 
 static inline void debug_initTimeDebugPin() {
-  pio_setOutput(pinDebug);
+  dio_setOutput(pinDebug);
 }
 
 static inline void debug_timingPinHigh() {
@@ -86,6 +84,7 @@ static inline void debug_timingPinHigh() {
 static inline void debug_timingPinLow() {
   bit_off(pinDebug_PORT, pinDebug_Bit);
 }
+
 #else
 
 static void debug_initTimeDebugPin() {}
@@ -101,116 +100,85 @@ static inline void delayCore(uint8_t t) {
 }
 
 static inline void delayUnit(uint8_t t) {
-  //_delay_loop_1(t * 27); //50kbps
-  _delay_loop_1(t * 10); //100kbps
-  //_delay_loop_1(t * 7); //130kbps
+  _delay_loop_1(t * 5);
 }
 
+static inline void skipLow() {
+  while (signalPin_read() == 0) {}
+}
+
+static void skipHigh() {
+  uint8_t t0 = 0;
+  debug_timingPinHigh();
+  while (signalPin_read() != 0 && ++t0) {}
+  debug_timingPinLow();
+}
+
+//ビット送信
 //Highのパルス幅で0/1を表す
-
-static inline void emitLogicalOne() {
-  signalPin_setHigh();
-  delayUnit(3);
-  signalPin_setLow();
-  delayUnit(1);
-}
-
-static inline void emitLogicalZero() {
-  signalPin_setHigh();
-  delayUnit(1);
-  signalPin_setLow();
-  delayUnit(1);
-}
-
-static void emitByte(uint8_t value) {
-  for (int8_t j = 7; j >= 0; j--) {
-    uint8_t f = (value >> j) & 1;
-    if (f) {
-      emitLogicalOne();
-    } else {
-      emitLogicalZero();
-    }
+static void writeLogical(uint8_t val) {
+  if (val > 0) {
+    signalPin_setHigh();
+    delayUnit(3);
+    signalPin_setLow();
+    delayUnit(1);
+  } else {
+    signalPin_setHigh();
+    delayUnit(1);
+    signalPin_setLow();
+    delayUnit(1);
   }
+}
+
+//ビット受信
+//各パルスに対して、信号が立ち上がってから一定時間後にレベルを見て、そのパルスが表現しているビットの論理値を判別する
+static uint8_t readFragment() {
+  debug_timingPinHigh();
+  delayUnit(1);
+  debug_timingPinLow();
+  uint8_t val = signalPin_read() ? 1 : 0;
+  if (val) {
+    skipHigh();
+  }
+  return val;
 }
 
 void singlewire_sendFrame(uint8_t *txbuf, uint8_t len) {
   signalPin_startTransmit();
   signalPin_setLow();
-  delayCore(50);
+  // delayUnit(2);
+  delayCore(30);
 
-  emitLogicalZero(); //reference zero
-  emitLogicalOne();  //reference one
-
-  uint8_t *p = txbuf;
-  uint8_t *p_end = txbuf + len;
-  while (1) {
-    emitByte(*p++);
-    if (p == p_end) {
-      break;
+  for (uint8_t i = 0; i < len; i++) {
+    bool isLast = i == len - 1;
+    for (int8_t j = 7; j >= 0; j--) {
+      uint8_t val = (txbuf[i] >> j) & 1;
+      writeLogical(val);
     }
-    emitLogicalZero();
-    delayUnit(1);
+    writeLogical(isLast);
   }
-  delayUnit(1);
-  emitLogicalOne();
+
   signalPin_endTransmit_standby();
   bit_on(EIFR, dINTx);
 }
 
-//信号がLOWのときに次にパルスが立ち上がるまで待つ
-//信号線は非通信状態でinput pullupなので、LOWの状態が続いて無限ループになることは考慮しない
-static inline void skipLow() {
-  while (!signalPin_read()) {}
-}
-
-static uint8_t measureHigh() {
-  uint8_t t0 = 0;
-  debug_timingPinHigh();
-  while (signalPin_read() && ++t0 != 0) {}
-  debug_timingPinLow();
-  return t0;
-}
-
 uint8_t singlewire_receiveFrame(uint8_t *rxbuf, uint8_t capacity) {
   uint8_t bi = 0;
-  uint8_t t0, t1, TH;
-  uint8_t value, m, f, m1, isEnd;
+  uint8_t value, isEnd, f;
 
   //相手がまだ送信を開始していない場合、送信開始を待つ
-  measureHigh();
-
-  skipLow();
-  //measure reference zero
-  t0 = measureHigh();
-  if (t0 == 0) {
-    goto escape;
-  }
-  skipLow();
-  //measure reference one
-  t1 = measureHigh();
-  if (t1 == 0) {
-    goto escape;
-  }
-  TH = (t0 + t1) >> 1;
+  skipHigh();
 
   while (bi < capacity) {
     value = 0;
     for (int8_t j = 7; j >= 0; j--) {
       skipLow();
-      m = measureHigh();
-      if (m == 0) {
-        goto escape;
-      }
-      f = m > TH;
+      f = readFragment();
       value |= f << j;
     }
     rxbuf[bi++] = value;
     skipLow();
-    m1 = measureHigh();
-    if (m1 == 0) {
-      goto escape;
-    }
-    isEnd = m1 > TH;
+    isEnd = readFragment();
     if (isEnd) {
       break;
     }
@@ -218,10 +186,6 @@ uint8_t singlewire_receiveFrame(uint8_t *rxbuf, uint8_t capacity) {
   skipLow();
 
   debug_timingPinHigh();
-
-  singlewire3_debugValues[0] = t0;
-  singlewire3_debugValues[1] = t1;
-  singlewire3_debugValues[2] = TH;
   bit_on(EIFR, dINTx);
   return bi;
 escape:

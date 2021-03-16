@@ -1,5 +1,5 @@
 #include "debug_uart.h"
-#include "pio.h"
+#include "dio.h"
 #include "singlewire.h"
 #include <avr/io.h>
 #include <stdio.h>
@@ -18,39 +18,39 @@
 #define pin_SlaveCheck P_C6
 
 static void initLEDs() {
-  pio_setOutput(pin_LED0);
-  pio_setOutput(pin_LED1);
+  dio_setOutput(pin_LED0);
+  dio_setOutput(pin_LED1);
 }
 
 static void toggleLED0() {
-  pio_toggleOutput(pin_LED0);
+  dio_toggle(pin_LED0);
 }
 
 static void outputLED1(bool val) {
-  pio_output(pin_LED1, val);
+  dio_write(pin_LED1, val);
 }
 
 static void initButtons() {
-  pio_setInputPullup(pin_BT0);
-  //pio_setInputPullup(P_B5);
-  //pio_setInputPullup(P_C6);
+  dio_setInputPullup(pin_BT0);
+  //dio_setInputPullup(P_B5);
+  //dio_setInputPullup(P_C6);
 }
 
 static bool readButton0() {
-  return pio_input(pin_BT0) == 0;
+  return dio_read(pin_BT0) == 0;
 }
 
 // static bool readButton1() {
-//   return pio_input(P_B5) == 0;
+//   return dio_read(P_B5) == 0;
 // }
 
 // static bool readButton2() {
-//   return pio_input(P_C6) == 0;
+//   return dio_read(P_C6) == 0;
 // }
 
 static bool checkIsMaster() {
-  pio_setInputPullup(pin_SlaveCheck);
-  return pio_input(pin_SlaveCheck) == 1;
+  dio_setInputPullup(pin_SlaveCheck);
+  return dio_read(pin_SlaveCheck) == 1;
 }
 
 void debugShowBytes(uint8_t *buf, int len) {
@@ -112,7 +112,7 @@ void runAsMaster() {
     }
     //checkReceivedBuffer();
     singleWire_processUpdate();
-    pio_toggleOutput(P_B4);
+    dio_toggle(P_B4);
     _delay_ms(1);
   }
 }
@@ -150,7 +150,7 @@ void runAsSlave() {
     }
     //checkReceivedBuffer();
     singleWire_processUpdate();
-    pio_toggleOutput(P_B4);
+    dio_toggle(P_B4);
     _delay_ms(1);
   }
 }
@@ -168,8 +168,8 @@ void singlewire_dev() {
   initButtons();
 
   //initWritePort();
-  //pio_setInputPullup(pinHdcTx);
-  //pio_setInputPullup(pinHdc);
+  //dio_setInputPullup(pinHdcTx);
+  //dio_setInputPullup(pinHdc);
 
   singleWire_initialize();
 
@@ -177,7 +177,7 @@ void singlewire_dev() {
   isMaster = checkIsMaster();
   //printf("isMaster: %d\n", isMaster ? 1 : 0);
 
-  pio_setOutput(P_B4);
+  dio_setOutput(P_B4);
 
   if (isMaster) {
     runAsMaster();

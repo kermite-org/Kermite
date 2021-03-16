@@ -1,7 +1,7 @@
 #include <avr/io.h>
 
 #include "debug_uart.h"
-#include "pio.h"
+#include "dio.h"
 
 #include <util/delay.h>
 
@@ -46,43 +46,43 @@ c: 継続フラグ, 後続のバイト値があるなら物理Low, ないなら�
 //env
 
 static void initLEDs() {
-  pio_setOutput(P_F4);
-  pio_setOutput(P_F5);
+  dio_setOutput(P_F4);
+  dio_setOutput(P_F5);
 }
 
 static void toggleLED0() {
-  pio_toggleOutput(P_F4);
+  dio_toggle(P_F4);
 }
 
 static void toggleLED1() {
-  pio_toggleOutput(P_F5);
+  dio_toggle(P_F5);
 }
 
 static void outputLED1(bool val) {
-  pio_output(P_F5, val);
+  dio_write(P_F5, val);
 }
 
 static void initButtons() {
-  pio_setInputPullup(P_B6);
-  //pio_setInputPullup(P_B5);
-  //pio_setInputPullup(P_C6);
+  dio_setInputPullup(P_B6);
+  //dio_setInputPullup(P_B5);
+  //dio_setInputPullup(P_C6);
 }
 
 static bool readButton0() {
-  return pio_input(P_B6) == 0;
+  return dio_read(P_B6) == 0;
 }
 
 // static bool readButton1() {
-//   return pio_input(P_B5) == 0;
+//   return dio_read(P_B5) == 0;
 // }
 
 // static bool readButton2() {
-//   return pio_input(P_C6) == 0;
+//   return dio_read(P_C6) == 0;
 // }
 
 static bool checkIsMaster() {
-  pio_setInputPullup(P_D4);
-  return pio_input(P_D4) == 1;
+  dio_setInputPullup(P_D4);
+  return dio_read(P_D4) == 1;
 }
 
 void debugShowBytes(uint8_t *buf, int len) {
@@ -144,9 +144,9 @@ typedef struct {
 } TFastIoPortSpec;
 
 void fio_configureIoPort(TFastIoPortSpec *spec, uint8_t pin) {
-  spec->portBit = pio_ex_getPortBit(pin);
-  spec->reg_PORT = pio_ex_getRegPORTX(pin);
-  spec->reg_PIN = pio_ex_getRegPINX(pin);
+  spec->portBit = dio_ex_getPortBit(pin);
+  spec->reg_PORT = dio_ex_getRegPORTX(pin);
+  spec->reg_PIN = dio_ex_getRegPINX(pin);
 }
 
 //inline
@@ -173,11 +173,11 @@ void sendBytes(uint8_t *bytes, uint8_t len) {
   printf("sending 1\n");
   cli();
 
-  pio_setOutput(pinHdc);
-  pio_output(pinHdc, 1);
+  dio_setOutput(pinHdc);
+  dio_write(pinHdc, 1);
   bits_spec(TCCR3B, CS30, 0b111, 0b001); //タイマ設定, 分周
-  volatile uint8_t *reg_PORT = pio_ex_getRegPORTX(pinHdc);
-  uint8_t portBit = pio_ex_getPortBit(pinHdc);
+  volatile uint8_t *reg_PORT = dio_ex_getRegPORTX(pinHdc);
+  uint8_t portBit = dio_ex_getPortBit(pinHdc);
 
   till = TimeUnit;
   TCNT3 = 0;
@@ -187,7 +187,7 @@ void sendBytes(uint8_t *bytes, uint8_t len) {
   //start half-bit
   bit_off(*reg_PORT, portBit);
   // bit_spec(*reg_PORT, portBit, 0);
-  //pio_toggleOutput(pin_timingDebug);
+  //dio_toggle(pin_timingDebug);
   debug_toggleTimeDebugPin();
   while (TCNT3 < till) {}
 
@@ -203,14 +203,14 @@ void sendBytes(uint8_t *bytes, uint8_t len) {
       uint8_t f = value >> i & 1;
       while (TCNT3 < till) {}
       bit_spec(*reg_PORT, portBit, f);
-      //pio_toggleOutput(pin_timingDebug);
+      //dio_toggle(pin_timingDebug);
       debug_toggleTimeDebugPin();
       till += TimeUnit;
     }
     uint8_t contFlagBit = (bi == len - 1) ? 1 : 0;
     while (TCNT3 < till) {}
     bit_spec(*reg_PORT, portBit, contFlagBit);
-    //pio_toggleOutput(pin_timingDebug);
+    //dio_toggle(pin_timingDebug);
     debug_toggleTimeDebugPin();
 
     till += TimeUnit;
@@ -218,7 +218,7 @@ void sendBytes(uint8_t *bytes, uint8_t len) {
 
   bit_on(EIFR, INTF2); //送信処理中に発生したピン変化割り込みイベントをクリア
 
-  pio_setInputPullup(pinHdc);
+  dio_setInputPullup(pinHdc);
   sei();
   printf("send done\n");
 }
@@ -231,12 +231,12 @@ ISR(INT2_vect) {
   //   return;
   // }
   // bits_spec(TCCR3B, CS30, 0b111, 0b001); //分周なし
-  // pio_toggleOutput(pin_timingDebug);
+  // dio_toggle(pin_timingDebug);
   // fio_toggleOutput(&fio_timingDebug);
   debug_toggleTimeDebugPin();
 
-  volatile uint8_t *reg_PIN = pio_ex_getRegPINX(pinHdc);
-  uint8_t portBit = pio_ex_getPortBit(pinHdc);
+  volatile uint8_t *reg_PIN = dio_ex_getRegPINX(pinHdc);
+  uint8_t portBit = dio_ex_getPortBit(pinHdc);
 
   uint8_t bi = 0;
 
@@ -264,9 +264,9 @@ ISR(INT2_vect) {
     for (int8_t i = 7; i >= 0; i--) {
       while (TCNT3 < till) {}
       uint8_t f = bit_read(*reg_PIN, portBit);
-      //pio_toggleOutput(pin_timingDebug);
+      //dio_toggle(pin_timingDebug);
       // fio_toggleOutput(&fio_timingDebug);
-      //pio_toggleOutput_2(pin_timingDebug);
+      //dio_toggle_2(pin_timingDebug);
       debug_toggleTimeDebugPin();
 
       // printf("f: %d\n", f);
@@ -277,9 +277,9 @@ ISR(INT2_vect) {
     rcvBuf[bi] = value;
     while (TCNT3 < till) {}
     uint8_t contFlagBit = bit_read(*reg_PIN, portBit);
-    //pio_toggleOutput(pin_timingDebug);
+    //dio_toggle(pin_timingDebug);
     //fio_toggleOutput(&fio_timingDebug);
-    //pio_toggleOutput_2(pin_timingDebug);
+    //dio_toggle_2(pin_timingDebug);
     debug_toggleTimeDebugPin();
     // printf("cont: %d\n", contFlagBit);
     till += TimeUnit;
@@ -376,8 +376,8 @@ void runAsMaster2() {
   printf("run as master2\n");
   receiveCallbackProc = rcvCallback_master;
 
-  pio_setOutput(pinHdc);
-  pio_setHigh(pinHdc);
+  dio_setOutput(pinHdc);
+  dio_setHigh(pinHdc);
 
   bool bst = false;
   uint8_t cnt = 0;
@@ -408,11 +408,11 @@ void singlewire_dev() {
   initLEDs();
   initButtons();
 
-  pio_setInputPullup(pinHdc);
+  dio_setInputPullup(pinHdc);
   bits_spec(TCCR3B, CS30, 0b111, 0b001); //タイマ設定, 分周なし
 
-  pio_setOutput(pin_timingDebug);
-  pio_setHigh(pin_timingDebug);
+  dio_setOutput(pin_timingDebug);
+  dio_setHigh(pin_timingDebug);
   fio_configureIoPort(&fio_timingDebug, pin_timingDebug);
 
   //bool

@@ -7,18 +7,18 @@ DevTarget := blink
 #DevTarget := eeprom
 
 ifeq ($(DevTarget), blink)
-MODULE_SRCS += pio.c
+MODULE_SRCS += dio.c
 PROJECT_SRCS += main_blink.c
 endif
 
 ifeq ($(DevTarget), DebugUartTest)
-MODULE_SRCS += pio.c
+MODULE_SRCS += dio.c
 MODULE_SRCS += debug_uart.c
 PROJECT_SRCS += main_debug_uart_test.c
 endif
 
 ifeq ($(DevTarget), KeyboardMatrix)
-MODULE_SRCS += pio.c
+MODULE_SRCS += dio.c
 MODULE_SRCS += debug_uart.c
 MODULE_SRCS += keyMatrixScanner8x8.c
 MODULE_SRCS += usbioore.c
@@ -26,16 +26,16 @@ MODULE_SRCS += keyboardCore/hidKeyCombinationManager.c
 MODULE_SRCS += keyboardCore/dominant/keyInputLogicModel.c
 MODULE_SRCS += keyboardCore/dominant/LocalizationKeyMapper/LocalizationKeyMapper.c
 MODULE_SRCS += configuratorServant.c
-MODULE_SRCS += eeprom.c
+MODULE_SRCS += dataMemory.c
 MODULE_SRCS += generalUtils.c
 MODULE_SRCS += ConfigurationMemoryReader.c
 PROJECT_SRCS += main_keyboard_dev_matrix.c
 endif
 
 ifeq ($(DevTarget), singlewire)
-MODULE_SRCS += pio.c
+MODULE_SRCS += dio.c
 MODULE_SRCS += debug_uart.c
-MODULE_SRCS += eeprom.c
+MODULE_SRCS += dataMemory.c
 MODULE_SRCS += generalUtils.c
 
 #v0
@@ -69,24 +69,24 @@ endif
 
 
 ifeq ($(DevTarget), neopixel)
-MODULE_SRCS += pio.c
+MODULE_SRCS += dio.c
 MODULE_SRCS += debug_uart.c
 PROJECT_SRCS += main_neopixel_dev.c
 PROJECT_ASM_SRCS += asmdev.S
 endif
 
 ifeq ($(DevTarget), singlekey)
-MODULE_SRCS += pio.c
+MODULE_SRCS += dio.c
 MODULE_SRCS += debug_uart.c
 MODULE_SRCS += usbioCore.c
 PROJECT_SRCS += main_keyboard_dev_singlekey.c
 endif
 
 ifeq ($(DevTarget), eeprom)
-MODULE_SRCS += pio.c
+MODULE_SRCS += dio.c
 MODULE_SRCS += debug_uart.c
-MODULE_SRCS += eeprom.c
-PROJECT_SRCS += main_eeprom_dev.c
+MODULE_SRCS += dataMemory.c
+PROJECT_SRCS += main_dataMemory_dev.c
 endif
 
 #SRCS += main_singlewire_dev.c

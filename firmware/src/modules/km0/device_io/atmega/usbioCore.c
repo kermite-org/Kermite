@@ -1066,4 +1066,11 @@ void usbioCore_initernal_setDeviceSignatures(uint8_t *pProjectId, uint8_t *pInst
   utils_copyStringToWideString(serialNumberStringDescriptorStruct.wString, pProjectId, 8);
   utils_copyStringToWideString(serialNumberStringDescriptorStruct.wString + 8, pInstanceCode, 8);
 }
+
+void uibioCore_internal_setSerialNumberText(uint8_t *pTextBuf, uint8_t len) {
+  if (len > 16) {
+    len = 16;
+  }
+  utils_copyStringToWideString(serialNumberStringDescriptorStruct.wString, pTextBuf, len);
+}
 //------------------------------------------------------------
