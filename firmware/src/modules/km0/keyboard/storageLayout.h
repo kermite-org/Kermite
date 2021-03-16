@@ -3,12 +3,10 @@
 
 #include "config.h"
 
-#ifdef TARGET_MCU_ATMEGA
+#if defined TARGET_MCU_ATMEGA
 #define DEVICE_PERSIST_STORAGE_DATA_SIZE 1024
-#endif
-
-#ifndef DEVICE_PERSIST_STORAGE_DATA_SIZE
-#error DEVICE_PERSIST_STORAGE_SIZE is not defined
+#else
+#error TARGET_MCU_* is not defined
 #endif
 
 #ifndef USER_STORAGE_SIZE
