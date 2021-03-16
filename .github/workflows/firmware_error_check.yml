@@ -1,10 +1,10 @@
-name: Firmware ErrorCheck 2
+name: Firmware ErrorCheck
 
 on:
   push:
     branches: [master, variants]
     paths:
-      - ".github/workflows/firmwareErrorCheck2.yml"
+      - ".github/workflows/firmware_error_check.yml"
       - "firmware/ci/**/*.ts"
       - "firmware/Makefile"
       - "firmware/src/**"
