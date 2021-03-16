@@ -14,6 +14,7 @@ RULES_MK = $(PROJECT_CODE_DIR)/rules.mk
 RELEASE_REVISION ?= 0
 IS_RESOURCE_ORIGIN_ONLINE ?= 0
 
+#--------------------
 
 OUT_DIR = $(BUILD_DIR)/$(PROJECT)
 CORE_NAME = $(notdir $(PROJECT))
