@@ -5,7 +5,7 @@ on:
     branches: [master, variants]
     paths:
       - ".github/workflows/firmware_deployment.yml"
-      - "firmware/scripts2/**/*.ts"
+      - "firmware/ci/**/*.ts"
       - "firmware/Makefile"
       - "firmware/src/**"
 
@@ -26,7 +26,7 @@ jobs:
 
       - uses: bahmutov/npm-install@v1
         with:
-          working-directory: ./firmware/scripts2
+          working-directory: ./firmware/ci
 
       - name: Checkout store repo
         uses: actions/checkout@v2
@@ -37,11 +37,11 @@ jobs:
 
       - name: Check Project IDs
         run: yarn checkProjectIds --abortOnError
-        working-directory: ./firmware/scripts2
+        working-directory: ./firmware/ci
 
       - name: Update All Project Distributions
         run: yarn updateAllProjectDistributions
-        working-directory: ./firmware/scripts2
+        working-directory: ./firmware/ci
 
       - name: Push resources to store repo
         uses: cpina/github-action-push-to-another-repository@master

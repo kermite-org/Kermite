@@ -5,7 +5,7 @@ on:
     branches: [master, variants]
     paths:
       - ".github/workflows/firmwareErrorCheck2.yml"
-      - "firmware/scripts2/**/*.ts"
+      - "firmware/ci/**/*.ts"
       - "firmware/Makefile"
       - "firmware/src/**"
       - "software/src/shell/loaders/**/*.ts"
@@ -36,19 +36,19 @@ jobs:
 
       - uses: bahmutov/npm-install@v1
         with:
-          working-directory: ./firmware/scripts2
+          working-directory: ./firmware/ci
 
       - run: yarn checkHardcodedVersions
-        working-directory: ./firmware/scripts2
+        working-directory: ./firmware/ci
 
       - name: Check Project IDs
         run: yarn checkProjectIds --abortOnError
-        working-directory: ./firmware/scripts2
+        working-directory: ./firmware/ci
 
       - name: Check Project Related Json Schemas
         run: yarn checkProjectJsonSchemas
-        working-directory: ./firmware/scripts2
+        working-directory: ./firmware/ci
 
       - name: Check Firmware Build Errors
         run: yarn buildAll --abortOnError
-        working-directory: ./firmware/scripts2
+        working-directory: ./firmware/ci
