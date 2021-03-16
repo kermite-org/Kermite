@@ -46,6 +46,8 @@ INC_PATHS = \
 -I$(PICO_LOCAL_DIR)/include \
 -I$(KM0_DIR)/base/defs \
 -I$(KM0_DIR)/keyboard/defs \
+-I$(PICO_SDK_DIR)/src/rp2040/hardware_regs/include \
+-I$(PICO_SDK_DIR)/src/rp2040/hardware_structs/include \
 -I$(PICO_SDK_DIR)/src/common/pico_stdlib/include \
 -I$(PICO_SDK_DIR)/src/common/pico_base/include \
 -I$(PICO_SDK_DIR)/src/common/pico_time/include \
@@ -53,9 +55,6 @@ INC_PATHS = \
 -I$(PICO_SDK_DIR)/src/common/pico_util/include \
 -I$(PICO_SDK_DIR)/src/common/pico_bit_ops/include \
 -I$(PICO_SDK_DIR)/src/common/pico_divider/include \
--I$(PICO_SDK_DIR)/src/rp2040/hardware_regs/include \
--I$(PICO_SDK_DIR)/src/rp2040/hardware_structs/include \
--I$(PICO_SDK_DIR)/src/common/include \
 -I$(PICO_SDK_DIR)/src/common/pico_binary_info/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/hardware_gpio/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/hardware_flash/include \
@@ -82,7 +81,6 @@ INC_PATHS = \
 -I$(PICO_SDK_DIR)/src/rp2_common/pico_malloc/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/pico_stdio/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/pico_stdio_uart/include \
--I$(PICO_SDK_DIR)/src/boards/include \
 -I$(PICO_SDK_DIR)/lib/tinyusb/src \
 -I$(PICO_SDK_DIR)/lib/tinyusb/src/common \
 -I$(PICO_SDK_DIR)/lib/tinyusb/hw \
