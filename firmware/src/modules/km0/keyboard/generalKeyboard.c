@@ -51,7 +51,6 @@ static uint8_t localHidReport[8] = { 0 };
 //メインロジックをPC側ユーティリティのLogicSimulatorに移譲するモード
 static bool isSideBrainModeEnabled = false;
 
-static bool useBoardLeds = false;
 static bool debugUartConfigured = false;
 
 //---------------------------------------------
@@ -87,27 +86,32 @@ void setCustomParameterDynamicFlag(uint8_t slotIndex, bool isDynamic) {
 //---------------------------------------------
 //board io
 
-#define PIN_LED0 P_D5 //TXLED on ProMicro
-#define PIN_LED1 P_B0 //RXLED on ProMicro
-
-static void outputLED0(bool val) {
-  if (useBoardLeds) {
-    dio_write(PIN_LED0, !val);
-  }
-}
+static int8_t pin_led1 = -1;
+static int8_t pin_led2 = -1;
 
 static void outputLED1(bool val) {
-  if (useBoardLeds) {
-    dio_write(PIN_LED1, !val);
+  if (pin_led1 != -1) {
+    dio_write(pin_led1, !val);
   }
 }
 
-static void initBoardLeds() {
-  useBoardLeds = true;
-  dio_setOutput(PIN_LED0);
-  dio_setOutput(PIN_LED1);
-  outputLED0(false);
-  outputLED1(false);
+static void outputLED2(bool val) {
+  if (pin_led2 != -1) {
+    dio_write(pin_led2, !val);
+  }
+}
+
+static void initBoardLeds(uint8_t pin1, uint8_t pin2) {
+  if (pin1 != -1) {
+    pin_led1 = pin1;
+    dio_setOutput(pin_led1);
+    outputLED1(false);
+  }
+  if (pin2 != -1) {
+    pin_led2 = pin2;
+    dio_setOutput(pin_led2);
+    outputLED2(false);
+  }
 }
 
 //---------------------------------------------
@@ -256,15 +260,15 @@ static void keyboardEntry() {
       keyboardCoreLogic_processTicker(5);
       processKeyboardCoreLogicOutput();
       if (optionAffectKeyHoldStateToLED) {
-        outputLED1(pressedKeyCount > 0);
+        outputLED2(pressedKeyCount > 0);
       }
     }
     if (optionUseHeartbeatLED) {
       if (cnt % 2000 == 0) {
-        outputLED0(true);
+        outputLED1(true);
       }
       if (cnt % 2000 == 1) {
-        outputLED0(false);
+        outputLED1(false);
       }
     }
     delayMs(1);
@@ -274,8 +278,8 @@ static void keyboardEntry() {
 
 //---------------------------------------------
 
-void generalKeyboard_useOnboardLeds() {
-  initBoardLeds();
+void generalKeyboard_useOnboardLeds(int8_t pin1, int8_t pin2) {
+  initBoardLeds(pin1, pin2);
 }
 
 void generalKeyboard_useDebugUART(uint16_t baud) {
