@@ -3,7 +3,10 @@ PROJECT ?=
 -include Makefile.user
 
 PROJECT_CODE_DIR = src/projects/$(PROJECT)
-#PROJECT_CODE_DIR = src/projects/$(PROJECT)/source/rp2040
+PROJECT_CODE_DIR_ALT = src/projects/$(PROJECT)/source/rp2040
+ifneq "$(wildcard $(PROJECT_CODE_DIR_ALT) )" ""
+PROJECT_CODE_DIR = $(PROJECT_CODE_DIR_ALT)
+endif
 
 BUILD_DIR = build
 OBJ_DIR = build/$(PROJECT)/rp2040/obj
