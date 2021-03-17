@@ -44,7 +44,7 @@ uint8_t databuf[16] = { 0 };
 void dumpStorage() {
   printf("read:\n");
   memset(databuf, 0, 16);
-  dataMemory_readBlock(storageAddr, databuf, 16);
+  dataMemory_readBytes(storageAddr, databuf, 16);
   debugDumpBytes(databuf, 16);
 }
 
@@ -54,7 +54,7 @@ void writeStorage(uint8_t baseValue) {
   }
   printf("writing: %d\n", baseValue);
   debugDumpBytes(databuf, 16);
-  dataMemory_writeBlock(storageAddr, databuf, 16);
+  dataMemory_writeBytes(storageAddr, databuf, 16);
   printf("write done\n");
 }
 

@@ -26,12 +26,12 @@ void dataMemory_writeWord(uint16_t addr, uint16_t val) {
   eeprom_write_word((uint16_t *)addr, val);
 }
 
-void dataMemory_readBlock(uint16_t addr, uint8_t *buf, uint16_t len) {
+void dataMemory_readBytes(uint16_t addr, uint8_t *buf, uint16_t len) {
   eeprom_busy_wait();
   eeprom_read_block((void *)buf, (void *)addr, len);
 }
 
-void dataMemory_writeBlock(uint16_t addr, uint8_t *buf, uint16_t len) {
+void dataMemory_writeBytes(uint16_t addr, uint8_t *buf, uint16_t len) {
   eeprom_busy_wait();
   eeprom_write_block((void *)buf, (void *)addr, len);
 }

@@ -24,7 +24,7 @@ uint16_t dataMemory_readWord(uint16_t addr) {
   return (hi << 8) | lo;
 }
 
-void dataMemory_readBlock(uint16_t addr, uint8_t *buf, uint16_t len) {
+void dataMemory_readBytes(uint16_t addr, uint8_t *buf, uint16_t len) {
   memcpy(buf, ptrFlashRomData + addr, len);
 }
 
@@ -52,7 +52,7 @@ void dataMemory_writeWord(uint16_t addr, uint16_t val) {
   storeRamDataToFlash();
 }
 
-void dataMemory_writeBlock(uint16_t addr, uint8_t *buf, uint16_t len) {
+void dataMemory_writeBytes(uint16_t addr, uint8_t *buf, uint16_t len) {
   loadRamDataFromFlash();
   memcpy(ramData + addr, buf, len);
   storeRamDataToFlash();
