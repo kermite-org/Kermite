@@ -190,10 +190,12 @@ bool usbioCore_hidKeyboard_writeReport(uint8_t *pReportBytes8) {
     uint8_t *p = pReportBytes8;
     tud_hid_n_keyboard_report(ITF_KEYBOARD, p[0], p[1], p + 2);
   }
+  return true;
 }
 
 bool usbioCore_genericHid_writeData(uint8_t *pDataBytes64) {
   tud_hid_n_report(ITF_RAWHID, 0, pDataBytes64, 64);
+  return true;
 }
 
 bool usbioCore_genericHid_readDataIfExists(uint8_t *pDataBytes64) {
@@ -203,6 +205,10 @@ bool usbioCore_genericHid_readDataIfExists(uint8_t *pDataBytes64) {
     return true;
   }
   return false;
+}
+
+void uibioCore_internal_setSerialNumberText(uint8_t *pTextBuf, uint8_t len) {
+  //todo: implement this
 }
 
 bool usbioCore_isConnectedToHost() {

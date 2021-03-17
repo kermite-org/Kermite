@@ -36,7 +36,7 @@ void dataMemory_writeBytes(uint16_t addr, uint8_t *buf, uint16_t len) {
   eeprom_write_block((void *)buf, (void *)addr, len);
 }
 
-void dataMemory_crearAllZero() {
+void dataMemory_clearAllZero() {
   for (uint16_t i = 0; i < 1024; i++) {
     dataMemory_writeByte(i, 0);
   }

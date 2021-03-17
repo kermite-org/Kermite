@@ -91,13 +91,13 @@ static int8_t pin_led2 = -1;
 
 static void outputLED1(bool val) {
   if (pin_led1 != -1) {
-    dio_write(pin_led1, !val);
+    dio_write(pin_led1, val);
   }
 }
 
 static void outputLED2(bool val) {
   if (pin_led2 != -1) {
-    dio_write(pin_led2, !val);
+    dio_write(pin_led2, val);
   }
 }
 

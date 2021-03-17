@@ -5,6 +5,9 @@
 
 #if defined TARGET_MCU_ATMEGA
 #define DEVICE_PERSIST_STORAGE_DATA_SIZE 1024
+#elif defined TARGET_MCU_RP2040
+#define DEVICE_PERSIST_STORAGE_DATA_SIZE 4096
+
 #else
 #error TARGET_MCU_* is not defined
 #endif
