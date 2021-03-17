@@ -74,7 +74,8 @@ DEFINES = \
 -DPICO_TARGET_NAME=\"kermite\" \
 -DPICO_PROGRAM_URL=\"https://github.com/yahiro07/Kermite/tree/master/firmware\" \
 -DTARGET_MCU_RP2040 \
-
+-DEXTR_PROJECT_RELEASE_BUILD_REVISION=$(RELEASE_REVISION) \
+-DEXTR_IS_RESOURCE_ORIGIN_ONLINE=$(IS_RESOURCE_ORIGIN_ONLINE) \
 
 CORE_FLAGS = $(DEFINES) $(INC_PATHS) -march=armv6-m -mcpu=cortex-m0plus -mthumb -Og -g -ffunction-sections -fdata-sections
 AS_FLAGS = $(CORE_FLAGS)
