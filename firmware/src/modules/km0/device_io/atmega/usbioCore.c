@@ -1073,4 +1073,6 @@ void uibioCore_internal_setSerialNumberText(uint8_t *pTextBuf, uint8_t len) {
   }
   utils_copyStringToWideString(serialNumberStringDescriptorStruct.wString, pTextBuf, len);
 }
+
+void usbioCore_processUpdate() {}
 //------------------------------------------------------------

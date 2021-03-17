@@ -164,7 +164,6 @@ INC_PATHS = \
 -I$(PICO_SDK_DIR)/src/rp2_common/pico_stdio_uart/include \
 -I$(PICO_SDK_DIR)/lib/tinyusb/src \
 -I$(PICO_SDK_DIR)/lib/tinyusb/src/common \
--I$(PICO_SDK_DIR)/lib/tinyusb/hw \
 -I$(PICO_SDK_DIR)/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/include
 
 
@@ -205,7 +204,7 @@ $(PICO_SDK_DIR)/src/rp2_common/pico_stdio/stdio.c \
 $(PICO_SDK_DIR)/src/rp2_common/pico_stdio_uart/stdio_uart.c \
 
 #USB
-# SDK_SRCS += $(PICO_SDK_DIR)/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c \
+SDK_SRCS += $(PICO_SDK_DIR)/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c \
 $(PICO_SDK_DIR)/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c \
 $(PICO_SDK_DIR)/lib/tinyusb/src/device/usbd.c \
 $(PICO_SDK_DIR)/lib/tinyusb/src/device/usbd_control.c \
@@ -213,7 +212,7 @@ $(PICO_SDK_DIR)/lib/tinyusb/src/class/hid/hid_device.c \
 $(PICO_SDK_DIR)/lib/tinyusb/src/tusb.c \
 $(PICO_SDK_DIR)/lib/tinyusb/src/common/tusb_fifo.c \
 $(PICO_SDK_DIR)/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c \
-$(PICO_LOCAL_DIR)/board_raspberry_pi_pico.c \
+
 
 ASM_SRCS = \
 $(PICO_SDK_DIR)/src/rp2_common/hardware_divider/divider.S \
