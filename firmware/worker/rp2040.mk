@@ -8,13 +8,16 @@ ifneq "$(wildcard $(PROJECT_CODE_DIR_ALT) )" ""
 PROJECT_CODE_DIR = $(PROJECT_CODE_DIR_ALT)
 endif
 
-BUILD_DIR = build
-OBJ_DIR = build/$(PROJECT)/rp2040/obj
-
+#import rules.mk
 MODULE_SRCS = 
 PROJECT_SRCS =
 RULES_MK = $(PROJECT_CODE_DIR)/rules.mk
 -include $(RULES_MK)
+
+MODULES_DIR = src/modules
+
+BUILD_DIR = build
+OBJ_DIR = build/$(PROJECT)/rp2040/obj
 
 RELEASE_REVISION ?= 0
 IS_RESOURCE_ORIGIN_ONLINE ?= 0
@@ -42,13 +45,88 @@ OBJDUMP = arm-none-eabi-objdump
 ELF2UF2 = $(PICO_LOCAL_DIR)/tools/elf2uf2
 
 #--------------------
+#flags
+
+DEFINES = \
+-DCFG_TUSB_DEBUG=1 \
+-DCFG_TUSB_MCU=OPT_MCU_RP2040 \
+-DCFG_TUSB_OS=OPT_OS_PICO \
+-DPICO_BIT_OPS_PICO=1 \
+-DPICO_BOARD=\"pico\" \
+-DPICO_BOOT2_NAME=\"boot2_w25q080\" \
+-DPICO_BUILD=1 \
+-DPICO_CMAKE_BUILD_TYPE=\"Debug\" \
+-DPICO_COPY_TO_RAM=0 \
+-DPICO_CXX_ENABLE_EXCEPTIONS=0 \
+-DPICO_DIVIDER_HARDWARE=1 \
+-DPICO_DOUBLE_PICO=1 \
+-DPICO_FLOAT_PICO=1 \
+-DPICO_INT64_OPS_PICO=1 \
+-DPICO_MEM_OPS_PICO=1 \
+-DPICO_NO_FLASH=0 \
+-DPICO_NO_HARDWARE=0 \
+-DPICO_ON_DEVICE=1 \
+-DPICO_PRINTF_PICO=1 \
+-DPICO_STDIO_UART=1 \
+-DPICO_USE_BLOCKED_RAM=0 \
+-DRP2040_USB_DEVICE_MODE=1 \
+-DTINYUSB_DEVICE_LINKED=1 \
+-DPICO_TARGET_NAME=\"kermite\" \
+-DPICO_PROGRAM_URL=\"https://github.com/yahiro07/Kermite/tree/master/firmware\" \
+-DTARGET_MCU_RP2040 \
+
+
+CORE_FLAGS = $(DEFINES) $(INC_PATHS) -march=armv6-m -mcpu=cortex-m0plus -mthumb -Og -g -ffunction-sections -fdata-sections
+AS_FLAGS = $(CORE_FLAGS)
+C_FLAGS = $(CORE_FLAGS) -std=gnu11
+
+FUNCS_WRAPPED = sprintf snprintf vsnprintf printf vprintf puts putchar \
+__clzsi2 __clzdi2 __ctzsi2 __ctzdi2 __clz __clzl __clzll __popcountsi2 __popcountdi2 \
+__aeabi_idiv __aeabi_idivmod __aeabi_ldivmod __aeabi_uidiv __aeabi_uidivmod __aeabi_uldivmod \
+__aeabi_dadd __aeabi_ddiv __aeabi_dmul __aeabi_drsub __aeabi_dsub \
+__aeabi_cdcmpeq __aeabi_cdrcmple __aeabi_cdcmple __aeabi_dcmpeq __aeabi_dcmpl \
+ __aeabi_dcmple __aeabi_dcmpge __aeabi_dcmpgt __aeabi_dcmpun __aeabi_i2d \
+__aeabi_l2d __aeabi_ui2d __aeabi_ul2d __aeabi_d2iz __aeabi_d2lz __aeabi_d2uiz __aeabi_d2ulz \
+__aeabi_d2f __aeabi_lmul __aeabi_fadd __aeabi_fdiv __aeabi_fmul __aeabi_frsub __aeabi_fsub \
+__aeabi_cfcmpeq __aeabi_cfrcmple __aeabi_cfcmple __aeabi_fcmpeq __aeabi_fcmplt \
+__aeabi_fcmple __aeabi_fcmpge __aeabi_fcmpgt __aeabi_fcmpun \
+__aeabi_i2f __aeabi_l2f __aeabi_ui2f __aeabi_ul2f __aeabi_f2iz __aeabi_f2lz __aeabi_f2uiz __aeabi_f2ulz __aeabi_f2d \
+__aeabi_memcpy __aeabi_memset __aeabi_memcpy4 __aeabi_memset4 __aeabi_memcpy8 __aeabi_memset8 \
+sqrt cos sin tan atan2 exp log ldexp copysign trunc floor ceil round sincos asin acos atan \
+sinh cosh tanh asinh acosh atanh exp2 log2 exp10 log10 pow powint hypot cbrt fmod drem remainder remquo \
+expm1 log1p fma sqrtf cosf sinf tanf atan2f expf logf ldexpf copysignf truncf floorf ceilf roundf \
+sincosf asinf acosf atanf sinhf coshf tanhf asinhf acoshf atanhf exp2f log2f exp10f log10f \
+powf powintf hypotf cbrtf fmodf dremf remainderf remquof expm1f log1pf \
+fmaf malloc calloc free memcpy memset
+
+
+WL_PREFIX = -Wl,--wrap=
+
+LD_FLAGS = \
+-march=armv6-m \
+-mcpu=cortex-m0plus \
+-mthumb \
+-Og \
+-g \
+-Wl,--build-id=none \
+--specs=nosys.specs \
+-Wl,-Map=$(MAP) \
+-Wl,--script=$(LD_SCRIPT) \
+-Wl,--gc-sections \
+-Wl,--print-memory-usage
+
+LD_FLAGS += $(addprefix $(WL_PREFIX),$(FUNCS_WRAPPED))
+
+
+#--------------------
 #files
 
 INC_PATHS = \
 -I$(PROJECT_CODE_DIR) \
 -I$(PICO_LOCAL_DIR)/include \
--I$(KM0_DIR)/base/defs \
--I$(KM0_DIR)/keyboard/defs \
+-I$(MODULES_DIR)/km0/common \
+-I$(MODULES_DIR)/km0/device_io \
+-I$(MODULES_DIR)/km0/keyboard \
 -I$(PICO_SDK_DIR)/src/rp2040/hardware_regs/include \
 -I$(PICO_SDK_DIR)/src/rp2040/hardware_structs/include \
 -I$(PICO_SDK_DIR)/src/common/pico_stdlib/include \
@@ -137,10 +215,6 @@ $(PICO_SDK_DIR)/lib/tinyusb/src/common/tusb_fifo.c \
 $(PICO_SDK_DIR)/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c \
 $(PICO_LOCAL_DIR)/board_raspberry_pi_pico.c \
 
-C_SRCS = $(SDK_SRCS) \
-$(addprefix src/modules/,$(MODULE_SRCS)) \
-$(addprefix $(PROJECT_CODE_DIR)/, $(PROJECT_SRCS)) 
-
 ASM_SRCS = \
 $(PICO_SDK_DIR)/src/rp2_common/hardware_divider/divider.S \
 $(PICO_SDK_DIR)/src/rp2_common/hardware_irq/irq_handler_chain.S \
@@ -154,88 +228,19 @@ $(PICO_SDK_DIR)/src/rp2_common/pico_float/float_v1_rom_shim.S \
 $(PICO_SDK_DIR)/src/rp2_common/pico_mem_ops/mem_ops_aeabi.S \
 $(PICO_SDK_DIR)/src/rp2_common/pico_standard_link/crt0.S \
 
+BOOT_S = $(PICO_LOCAL_DIR)/loaders/bs2_default_padded_checksummed.S
+LD_SCRIPT = $(PICO_LOCAL_DIR)/loaders/memmap_default.ld
+
+C_SRCS = $(SDK_SRCS) \
+$(addprefix src/modules/,$(MODULE_SRCS)) \
+$(addprefix $(PROJECT_CODE_DIR)/, $(PROJECT_SRCS)) 
 
 C_OBJS = $(addprefix $(OBJ_DIR)/,$(C_SRCS:.c=.c.obj))
 ASM_OBJS = $(addprefix $(OBJ_DIR)/,$(ASM_SRCS:.S=.S.obj))
 OBJS = $(C_OBJS) $(CPP_OBJS) $(ASM_OBJS)
 
-BOOT_S = $(PICO_LOCAL_DIR)/loaders/bs2_default_padded_checksummed.S
-LD_SCRIPT = $(PICO_LOCAL_DIR)/loaders/memmap_default.ld
-
 DEP_FILES = $(filter %.d,$(OBJS:%.obj=%.d))
 -include $(DEP_FILES)
-
-#--------------------
-#flags
-
-DEFINES = \
--DCFG_TUSB_DEBUG=1 \
--DCFG_TUSB_MCU=OPT_MCU_RP2040 \
--DCFG_TUSB_OS=OPT_OS_PICO \
--DPICO_BIT_OPS_PICO=1 \
--DPICO_BOARD=\"pico\" \
--DPICO_BOOT2_NAME=\"boot2_w25q080\" \
--DPICO_BUILD=1 \
--DPICO_CMAKE_BUILD_TYPE=\"Debug\" \
--DPICO_COPY_TO_RAM=0 \
--DPICO_CXX_ENABLE_EXCEPTIONS=0 \
--DPICO_DIVIDER_HARDWARE=1 \
--DPICO_DOUBLE_PICO=1 \
--DPICO_FLOAT_PICO=1 \
--DPICO_INT64_OPS_PICO=1 \
--DPICO_MEM_OPS_PICO=1 \
--DPICO_NO_FLASH=0 \
--DPICO_NO_HARDWARE=0 \
--DPICO_ON_DEVICE=1 \
--DPICO_PRINTF_PICO=1 \
--DPICO_STDIO_UART=1 \
--DPICO_USE_BLOCKED_RAM=0 \
--DRP2040_USB_DEVICE_MODE=1 \
--DTINYUSB_DEVICE_LINKED=1 \
--DPICO_TARGET_NAME=\"kermite\" \
--DPICO_PROGRAM_URL=\"https://github.com/yahiro07/Kermite/tree/master/firmware\" \
-
-
-CORE_FLAGS = $(DEFINES) $(INC_PATHS) -march=armv6-m -mcpu=cortex-m0plus -mthumb -Og -g -ffunction-sections -fdata-sections
-AS_FLAGS = $(CORE_FLAGS)
-C_FLAGS = $(CORE_FLAGS) -std=gnu11
-
-FUNCS_WRAPPED = sprintf snprintf vsnprintf printf vprintf puts putchar \
-__clzsi2 __clzdi2 __ctzsi2 __ctzdi2 __clz __clzl __clzll __popcountsi2 __popcountdi2 \
-__aeabi_idiv __aeabi_idivmod __aeabi_ldivmod __aeabi_uidiv __aeabi_uidivmod __aeabi_uldivmod \
-__aeabi_dadd __aeabi_ddiv __aeabi_dmul __aeabi_drsub __aeabi_dsub \
-__aeabi_cdcmpeq __aeabi_cdrcmple __aeabi_cdcmple __aeabi_dcmpeq __aeabi_dcmpl \
- __aeabi_dcmple __aeabi_dcmpge __aeabi_dcmpgt __aeabi_dcmpun __aeabi_i2d \
-__aeabi_l2d __aeabi_ui2d __aeabi_ul2d __aeabi_d2iz __aeabi_d2lz __aeabi_d2uiz __aeabi_d2ulz \
-__aeabi_d2f __aeabi_lmul __aeabi_fadd __aeabi_fdiv __aeabi_fmul __aeabi_frsub __aeabi_fsub \
-__aeabi_cfcmpeq __aeabi_cfrcmple __aeabi_cfcmple __aeabi_fcmpeq __aeabi_fcmplt \
-__aeabi_fcmple __aeabi_fcmpge __aeabi_fcmpgt __aeabi_fcmpun \
-__aeabi_i2f __aeabi_l2f __aeabi_ui2f __aeabi_ul2f __aeabi_f2iz __aeabi_f2lz __aeabi_f2uiz __aeabi_f2ulz __aeabi_f2d \
-__aeabi_memcpy __aeabi_memset __aeabi_memcpy4 __aeabi_memset4 __aeabi_memcpy8 __aeabi_memset8 \
-sqrt cos sin tan atan2 exp log ldexp copysign trunc floor ceil round sincos asin acos atan \
-sinh cosh tanh asinh acosh atanh exp2 log2 exp10 log10 pow powint hypot cbrt fmod drem remainder remquo \
-expm1 log1p fma sqrtf cosf sinf tanf atan2f expf logf ldexpf copysignf truncf floorf ceilf roundf \
-sincosf asinf acosf atanf sinhf coshf tanhf asinhf acoshf atanhf exp2f log2f exp10f log10f \
-powf powintf hypotf cbrtf fmodf dremf remainderf remquof expm1f log1pf \
-fmaf malloc calloc free memcpy memset
-
-
-WL_PREFIX = -Wl,--wrap=
-
-LD_FLAGS = \
--march=armv6-m \
--mcpu=cortex-m0plus \
--mthumb \
--Og \
--g \
--Wl,--build-id=none \
---specs=nosys.specs \
--Wl,-Map=$(MAP) \
--Wl,--script=$(LD_SCRIPT) \
--Wl,--gc-sections \
--Wl,--print-memory-usage
-
-LD_FLAGS += $(addprefix $(WL_PREFIX),$(FUNCS_WRAPPED))
 
 #--------------------
 #targets
