@@ -57,3 +57,9 @@ void dataMemory_writeBytes(uint16_t addr, uint8_t *buf, uint16_t len) {
   memcpy(ramData + addr, buf, len);
   storeRamDataToFlash();
 }
+
+void dataMemory_clearAllZero() {
+  loadRamDataFromFlash();
+  memset(ramData, 0, FLASH_SECTOR_SIZE);
+  storeRamDataToFlash();
+}
