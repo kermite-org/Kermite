@@ -4,10 +4,6 @@
 //--------------------------------------------------------------------
 // Definitions
 
-#define _PID_MAP(itf, n) ((CFG_TUD_##itf) << (n))
-#define USB_PID (0x4000 | _PID_MAP(CDC, 0) | _PID_MAP(MSC, 1) | _PID_MAP(HID, 2) | \
-                 _PID_MAP(MIDI, 3) | _PID_MAP(VENDOR, 4))
-
 enum {
   ITF_KEYBOARD = 0,
   ITF_MOUSE = 1,
@@ -29,8 +25,8 @@ static tusb_desc_device_t const desc_device = {
   .bDeviceProtocol = 0x00,
   .bMaxPacketSize0 = CFG_TUD_ENDPOINT0_SIZE,
 
-  .idVendor = 0xCafe,
-  .idProduct = USB_PID,
+  .idVendor = 0xF055,
+  .idProduct = 0xA579,
   .bcdDevice = 0x0100,
 
   .iManufacturer = 0x01,
