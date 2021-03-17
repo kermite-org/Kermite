@@ -272,6 +272,7 @@ static void keyboardEntry() {
       }
     }
     delayMs(1);
+    usbioCore_processUpdate();
     configuratorServant_processUpdate();
   }
 }
