@@ -107,7 +107,7 @@ void dprintf() {
 // You can change these to give your code its own name.
 #define STR_MANUFACTURER L"kermite"
 // #define STR_PRODUCT L"kermite_core_atmega32u4"
-#define STR_PRODUCT L"Kermitie Keyboard Device"
+#define STR_PRODUCT L"Kermite Keyboard Device"
 
 // #define STR_SERIALNUMBER L"74F3AC2EFD314AAC"
 #define STR_SERIALNUMBER_DUMMY L"0000000000000000"

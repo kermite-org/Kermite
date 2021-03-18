@@ -38,7 +38,7 @@ export function enumerateSupportedDevicePathsCore(
 
 export function getPortNameFromDevicePath(path: string) {
   const m =
-    path.match(/Kermitie Keyboard Device@(\d+)/) || // Mac
+    path.match(/Kermite Keyboard Device@(\d+)/) || // Mac
     path.match(/mi_00#8&([0-9a-f]+)/); // Windows
   return (m && `${m[1]}`) || undefined;
 }
