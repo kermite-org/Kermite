@@ -1,4 +1,4 @@
-#include "keyMatrixScanner2.h"
+#include "keyMatrixScanner.h"
 #include "bitOperations.h"
 #include "dio.h"
 #include "system.h"

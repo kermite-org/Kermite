@@ -1,6 +1,6 @@
 MODULE_SRCS += dio.c
 MODULE_SRCS += debug_uart.c
-MODULE_SRCS += keyMatrixScanner2.c
+MODULE_SRCS += keyMatrixScanner.c
 MODULE_SRCS += usbioCore.c
 MODULE_SRCS += configuratorServant.c
 MODULE_SRCS += dataMemory.c

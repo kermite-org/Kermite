@@ -3,7 +3,7 @@
 #include "configuratorServant.h"
 #include "debugUart.h"
 #include "dio.h"
-#include "keyMatrixScanner2.h"
+#include "keyMatrixScanner.h"
 #include "keyboardCoreLogic2.h"
 #include "singlewire3.h"
 #include "usbioCore.h"
