@@ -290,6 +290,7 @@ static void runAsMaster() {
       }
     }
     delayMs(1);
+    usbioCore_processUpdate();
     configuratorServant_processUpdate();
   }
 }
