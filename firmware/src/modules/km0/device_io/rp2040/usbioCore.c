@@ -1,3 +1,5 @@
+//based on tinyusb multiple interfaces example
+
 #include "usbioCore.h"
 #include "tusb.h"
 
@@ -100,8 +102,10 @@ static char const *string_desc_arr[] = {
   (const char[]){ 0x09, 0x04 }, // 0: is supported language is English (0x0409)
   "Kermite",                    // 1: Manufacturer
   "Kermite Keyboard Device",    // 2: Product
-  "00000000AAAAAAAABBBBBBBB",   // 3: Serials, should use chip ID
+  "000000000000000000000000",   // 3: Serials, should use chip ID
 };
+
+static char altSerialNumberTextBuf[] = "000000000000000000000000";
 
 static uint16_t _desc_str[32];
 
@@ -118,6 +122,10 @@ uint16_t const *tud_descriptor_string_cb(uint8_t index, uint16_t langid) {
       return NULL;
 
     const char *str = string_desc_arr[index];
+
+    if (index == 3) {
+      str = altSerialNumberTextBuf;
+    }
 
     // Cap at max char
     chr_count = strlen(str);
@@ -208,7 +216,10 @@ bool usbioCore_genericHid_readDataIfExists(uint8_t *pDataBytes64) {
 }
 
 void uibioCore_internal_setSerialNumberText(uint8_t *pTextBuf, uint8_t len) {
-  //todo: implement this
+  if (len <= 24) {
+    memcpy(altSerialNumberTextBuf, pTextBuf, len);
+    altSerialNumberTextBuf[len] = '\0';
+  }
 }
 
 bool usbioCore_isConnectedToHost() {
