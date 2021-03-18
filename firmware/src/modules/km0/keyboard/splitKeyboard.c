@@ -13,25 +13,18 @@
 #include "utils.h"
 #include <stdio.h>
 
-#ifndef SK_NUM_ROWS
-#error SK_NUM_ROWS is not defined
-#endif
-
-#ifndef SK_NUM_COLUMNS
-#error SK_NUM_COLUMNS is not defined
-#endif
-
 //---------------------------------------------
 //definitions
 
-#define NumRows SK_NUM_ROWS
-#define NumColumns SK_NUM_COLUMNS
+#ifndef KM0_NUM_KEYSLOTS
+#error KM0_NUM_KEYSLOTS is not defined
+#endif
 
-#define NumKeySlots (NumRows * NumColumns * 2)
-#define NumKeySlotsHalf (NumRows * NumColumns)
+#define NumKeySlots KM0_NUM_KEYSLOTS
+#define NumKeySlotsHalf (KM0_NUM_KEYSLOTS >> 1)
 
-//#define NumKeySlotBytesHalf Ceil(NumRows * NumColumns / 8)
-#define NumKeySlotBytesHalf ((NumRows * NumColumns + 7) >> 3)
+//#define NumKeySlotBytesHalf Ceil(NumKeySlotsHalf / 8)
+#define NumKeySlotBytesHalf ((NumKeySlotsHalf + 7) >> 3)
 #define NumKeySlotBytes (NumKeySlotBytesHalf * 2)
 
 #define SingleWireMaxPacketSize (NumKeySlotBytesHalf + 1)
@@ -39,13 +32,15 @@
 //---------------------------------------------
 //variables
 
+static uint8_t numRows = 0;
+static uint8_t numColumns = 0;
 static uint8_t *rowPins;
 static uint8_t *columnPins;
 static uint8_t *keySlotIndexToKeyIndexMap;
 
 //左右間通信用バッファ
-static uint8_t sw_txbuf[SingleWireMaxPacketSize];
-static uint8_t sw_rxbuf[SingleWireMaxPacketSize];
+static uint8_t sw_txbuf[SingleWireMaxPacketSize] = { 0 };
+static uint8_t sw_rxbuf[SingleWireMaxPacketSize] = { 0 };
 
 //キー状態
 static uint8_t keyStateFlags[NumKeySlotBytes] = { 0 };
@@ -270,7 +265,7 @@ static void processKeyStatesUpdate() {
 
 static void runAsMaster() {
   keyMatrixScanner_initialize(
-      NumRows, NumColumns, rowPins, columnPins, nextKeyStateFlags);
+      numRows, numColumns, rowPins, columnPins, nextKeyStateFlags);
 
   resetKeyboardCoreLogic();
 
@@ -338,7 +333,7 @@ static bool checkIfSomeKeyPressed() {
 
 static void runAsSlave() {
   keyMatrixScanner_initialize(
-      NumRows, NumColumns, rowPins, columnPins, nextKeyStateFlags);
+      numRows, numColumns, rowPins, columnPins, nextKeyStateFlags);
   singlewire_setupInterruptedReceiver(onRecevierInterruption);
 
   uint16_t cnt = 0;
@@ -445,7 +440,11 @@ void splitKeyboard_useOptionDynamic(uint8_t slot) {
 }
 
 void splitKeyboard_setup(
-    const uint8_t *_rowPins, const uint8_t *_columnPins, const int8_t *_keySlotIndexToKeyIndexMap) {
+    uint8_t _numRows, uint8_t _numColumns,
+    const uint8_t *_rowPins, const uint8_t *_columnPins,
+    const int8_t *_keySlotIndexToKeyIndexMap) {
+  numRows = _numRows;
+  numColumns = _numColumns;
   rowPins = (uint8_t *)_rowPins;
   columnPins = (uint8_t *)_columnPins;
   keySlotIndexToKeyIndexMap = (uint8_t *)_keySlotIndexToKeyIndexMap;

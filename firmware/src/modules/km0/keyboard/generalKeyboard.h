@@ -13,9 +13,11 @@ void generalKeyboard_useOptionFixed(uint8_t slot, uint8_t value);
 void generalKeyboard_useOptionDynamic(uint8_t slot);
 
 void generalKeyboard_setup(
-    const uint8_t *_rowPins,
-    const uint8_t *_columnPins,
-    const int8_t *_keySlotIndexToKeyIndexMap);
+    uint8_t numRows,
+    uint8_t numColumns,
+    const uint8_t *rowPins,
+    const uint8_t *columnPins,
+    const int8_t *keySlotIndexToKeyIndexMap);
 
 void generalKeyboard_start();
 

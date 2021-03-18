@@ -4,7 +4,4 @@
 
 #define KM0_NUM_KEYSLOTS 12
 
-#define GK_NUM_ROWS 3
-#define GK_NUM_COLUMNS 4
-
 #endif

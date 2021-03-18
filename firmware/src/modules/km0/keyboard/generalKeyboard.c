@@ -14,28 +14,23 @@
 #include "versions.h"
 #include <stdio.h>
 
-#ifndef GK_NUM_ROWS
-#error GK_NUM_ROWS is not defined
-#endif
-
-#ifndef GK_NUM_COLUMNS
-#error GK_NUM_COLUMNS is not defined
-#endif
-
 //---------------------------------------------
 //definitions
 
-#define NumRows GK_NUM_ROWS
-#define NumColumns GK_NUM_COLUMNS
+#ifndef KM0_NUM_KEYSLOTS
+#error KM0_NUM_KEYSLOTS is not defined
+#endif
 
-#define NumKeySlots (NumRows * NumColumns)
+#define NumKeySlots KM0_NUM_KEYSLOTS
 
-//#define NumKeySlotBytes Ceil(NumRows * NumColumns / 8)
-#define NumKeySlotBytes ((NumRows * NumColumns + 7) >> 3)
+//#define NumKeySlotBytes Ceil(KM0_NUM_KEYSLOTS / 8)
+#define NumKeySlotBytes ((KM0_NUM_KEYSLOTS + 7) >> 3)
 
 //---------------------------------------------
 //variables
 
+static uint8_t numRows = 0;
+static uint8_t numColumns = 0;
 static uint8_t *rowPins;
 static uint8_t *columnPins;
 static uint8_t *keySlotIndexToKeyIndexMap;
@@ -245,7 +240,7 @@ static void keyboardEntry() {
   uibioCore_internal_setSerialNumberText(serialNumberTextBuf, 24);
   usbioCore_initialize();
   keyMatrixScanner_initialize(
-      NumRows, NumColumns, rowPins, columnPins, nextKeyStateFlags);
+      numRows, numColumns, rowPins, columnPins, nextKeyStateFlags);
   resetKeyboardCoreLogic();
   optionsInitialConfigShutup = true;
   configuratorServant_initialize(
@@ -300,7 +295,11 @@ void generalKeyboard_useOptionDynamic(uint8_t slot) {
 }
 
 void generalKeyboard_setup(
-    const uint8_t *_rowPins, const uint8_t *_columnPins, const int8_t *_keySlotIndexToKeyIndexMap) {
+    uint8_t _numRows, uint8_t _numColumns,
+    const uint8_t *_rowPins, const uint8_t *_columnPins,
+    const int8_t *_keySlotIndexToKeyIndexMap) {
+  numRows = _numRows;
+  numColumns = _numColumns;
   rowPins = (uint8_t *)_rowPins;
   columnPins = (uint8_t *)_columnPins;
   keySlotIndexToKeyIndexMap = (uint8_t *)_keySlotIndexToKeyIndexMap;
