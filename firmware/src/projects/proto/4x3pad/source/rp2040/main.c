@@ -18,7 +18,7 @@ static const int8_t keyIndexTable[NumKeySlots] = {
 // clang-format on
 
 int main() {
-  generalKeyboard_useOnboardLED(GP25, false);
+  generalKeyboard_useIndicatorLED(GP25, false);
   generalKeyboard_useDebugUART(38400);
   generalKeyboard_setup(NumRows, NumColumns, rowPins, columnPins, keyIndexTable);
   generalKeyboard_start();

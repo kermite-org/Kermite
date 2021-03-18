@@ -266,7 +266,7 @@ static void keyboardEntry() {
 
 //---------------------------------------------
 
-void generalKeyboard_useOnboardLED(int8_t pin, bool invert) {
+void generalKeyboard_useIndicatorLED(int8_t pin, bool invert) {
   initBoardLED(pin, invert);
 }
 

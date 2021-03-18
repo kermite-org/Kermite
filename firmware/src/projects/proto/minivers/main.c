@@ -30,7 +30,7 @@ static const int8_t keyIndexTable[NumKeySlots] PROGMEM = {
 // clang-format on
 
 int main() {
-  splitKeyboard_useOnboardLED(P_D5, true);
+  splitKeyboard_useIndicatorLED(P_D5, true);
   splitKeyboard_useDebugUART(38400);
   splitKeyboard_setup(NumRows, NumColumns, rowPins, columnPins, keyIndexTable);
   splitKeyboard_start();

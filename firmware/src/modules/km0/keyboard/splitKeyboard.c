@@ -411,7 +411,7 @@ static void showModeByLedBlinkPattern(bool isMaster) {
 
 //---------------------------------------------
 
-void splitKeyboard_useOnboardLED(int8_t pin, bool invert) {
+void splitKeyboard_useIndicatorLED(int8_t pin, bool invert) {
   initBoardLED(pin, invert);
 }
 
