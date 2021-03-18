@@ -8,4 +8,12 @@
 
 #define IS_RESOURCE_ORIGIN_ONLINE EXTR_IS_RESOURCE_ORIGIN_ONLINE
 
+#if defined TARGET_MCU_ATMEGA
+#define KERMITE_MCU_CODE "A152FD20"
+#elif defined TARGET_MCU_RP2040
+#define KERMITE_MCU_CODE "A152FD21"
+#else
+#error TARGET_MCU_* is not defined
+#endif
+
 #endif

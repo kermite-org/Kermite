@@ -11,6 +11,7 @@
 #include "system.h"
 #include "usbioCore.h"
 #include "utils.h"
+#include "versions.h"
 #include <stdio.h>
 
 #ifndef GK_NUM_ROWS
@@ -234,13 +235,14 @@ static void processKeyStatesUpdate() {
   }
 }
 
-static uint8_t serialNumberTextBuf[16];
+static uint8_t serialNumberTextBuf[24];
 
 static void keyboardEntry() {
   configValidator_initializeDataStorage();
-  utils_copyBytes(serialNumberTextBuf, (uint8_t *)PROJECT_ID, 8);
-  configuratorServant_readDeviceInstanceCode(serialNumberTextBuf + 8);
-  uibioCore_internal_setSerialNumberText(serialNumberTextBuf, 16);
+  utils_copyBytes(serialNumberTextBuf, (uint8_t *)KERMITE_MCU_CODE, 8);
+  utils_copyBytes(serialNumberTextBuf + 8, (uint8_t *)PROJECT_ID, 8);
+  configuratorServant_readDeviceInstanceCode(serialNumberTextBuf + 16);
+  uibioCore_internal_setSerialNumberText(serialNumberTextBuf, 24);
   usbioCore_initialize();
   keyMatrixScanner_initialize(
       NumRows, NumColumns, rowPins, columnPins, nextKeyStateFlags);

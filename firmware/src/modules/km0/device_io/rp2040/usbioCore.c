@@ -216,10 +216,11 @@ bool usbioCore_genericHid_readDataIfExists(uint8_t *pDataBytes64) {
 }
 
 void uibioCore_internal_setSerialNumberText(uint8_t *pTextBuf, uint8_t len) {
-  if (len <= 24) {
-    memcpy(altSerialNumberTextBuf, pTextBuf, len);
-    altSerialNumberTextBuf[len] = '\0';
+  if (len > 24) {
+    len = 24;
   }
+  memcpy(altSerialNumberTextBuf, pTextBuf, len);
+  altSerialNumberTextBuf[len] = '\0';
 }
 
 bool usbioCore_isConnectedToHost() {
