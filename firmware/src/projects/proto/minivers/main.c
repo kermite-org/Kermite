@@ -1,4 +1,3 @@
-#include "config.h"
 #include "dio.h"
 #include "splitKeyboard.h"
 #include <avr/pgmspace.h>
@@ -30,9 +29,7 @@ static const int8_t keyIndexTable[NumKeySlots] PROGMEM = {
 // clang-format on
 
 int main() {
-  splitKeyboard_useIndicatorLED(P_D5, true);
-  dio_setOutput(P_B0);
-  dio_setHigh(P_B0);
+  splitKeyboard_useIndicatorLEDs(P_B0, P_D5, true);
   splitKeyboard_useDebugUART(38400);
   splitKeyboard_setup(NumRows, NumColumns, rowPins, columnPins, keyIndexTable);
   splitKeyboard_start();

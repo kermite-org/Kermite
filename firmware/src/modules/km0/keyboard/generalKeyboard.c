@@ -82,21 +82,33 @@ void setCustomParameterDynamicFlag(uint8_t slotIndex, bool isDynamic) {
 //---------------------------------------------
 //board io
 
-static int8_t led_pin = -1;
+static int8_t led_pin1 = -1;
+static int8_t led_pin2 = -1;
 static bool led_invert = false;
 
-static void outputLED(bool val) {
-  if (led_pin != -1) {
-    dio_write(led_pin, led_invert ? !val : val);
+static void outputLED1(bool val) {
+  if (led_pin1 != -1) {
+    dio_write(led_pin1, led_invert ? !val : val);
   }
 }
 
-static void initBoardLED(uint8_t pin, bool invert) {
-  led_pin = pin;
+static void outputLED2(bool val) {
+  if (led_pin2 != -1) {
+    dio_write(led_pin2, led_invert ? !val : val);
+  }
+}
+
+static void initBoardLEDs(int8_t pin1, int8_t pin2, bool invert) {
+  led_pin1 = pin1;
+  led_pin2 = pin2;
   led_invert = invert;
-  if (pin != -1) {
-    dio_setOutput(led_pin);
-    outputLED(false);
+  if (led_pin1 != -1) {
+    dio_setOutput(led_pin1);
+    dio_write(led_pin1, invert);
+  }
+  if (led_pin2 != -1) {
+    dio_setOutput(led_pin2);
+    dio_write(led_pin2, invert);
   }
 }
 
@@ -247,15 +259,15 @@ static void keyboardEntry() {
       keyboardCoreLogic_processTicker(5);
       processKeyboardCoreLogicOutput();
       if (optionAffectKeyHoldStateToLED) {
-        outputLED(pressedKeyCount > 0);
+        outputLED2(pressedKeyCount > 0);
       }
     }
     if (optionUseHeartbeatLED) {
       if (cnt % 2000 == 0) {
-        outputLED(true);
+        outputLED1(true);
       }
       if (cnt % 2000 == 1) {
-        outputLED(false);
+        outputLED1(false);
       }
     }
     delayMs(1);
@@ -266,8 +278,8 @@ static void keyboardEntry() {
 
 //---------------------------------------------
 
-void generalKeyboard_useIndicatorLED(int8_t pin, bool invert) {
-  initBoardLED(pin, invert);
+void generalKeyboard_useIndicatorLEDs(int8_t pin1, uint8_t pin2, bool invert) {
+  initBoardLEDs(pin1, pin2, invert);
 }
 
 void generalKeyboard_useDebugUART(uint16_t baud) {
