@@ -1,13 +1,13 @@
 #ifndef __GENERAL_KEYBOARD_H__
 
-#include <stdint.h>
+#include "types.h"
 
 #define OptionSlot_EmitKeyStroke 0
 #define OptionSlot_EmitRealtimeEvents 1
 #define OptionSlot_AffectKeyHoldStateToLED 2
 #define OptionSlot_UseHeartBeatLED 3
 
-void generalKeyboard_useOnboardLeds(int8_t pin1, int8_t pin2);
+void generalKeyboard_useOnboardLED(int8_t pin, bool invert);
 void generalKeyboard_useDebugUART(uint16_t baud);
 void generalKeyboard_useOptionFixed(uint8_t slot, uint8_t value);
 void generalKeyboard_useOptionDynamic(uint8_t slot);

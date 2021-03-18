@@ -54,7 +54,6 @@ static uint8_t localHidReport[8] = { 0 };
 //メインロジックをPC側ユーティリティのLogicSimulatorに移譲するモード
 static bool isSideBrainModeEnabled = false;
 
-static bool useBoardLeds = false;
 static bool hasMasterOathReceived = false;
 static bool debugUartConfigured = false;
 
@@ -95,27 +94,22 @@ void setCustomParameterDynamicFlag(uint8_t slotIndex, bool isDynamic) {
 //---------------------------------------------
 //board io
 
-#define PIN_LED0 P_D5 //TXLED on ProMicro
-#define PIN_LED1 P_B0 //RXLED on ProMicro
+static int8_t led_pin = -1;
+static bool led_invert = false;
 
-static void outputLED0(bool val) {
-  if (useBoardLeds) {
-    dio_write(PIN_LED0, !val);
+static void outputLED(bool val) {
+  if (led_pin != -1) {
+    dio_write(led_pin, led_invert ? !val : val);
   }
 }
 
-static void outputLED1(bool val) {
-  if (useBoardLeds) {
-    dio_write(PIN_LED1, !val);
+static void initBoardLED(uint8_t pin, bool invert) {
+  led_pin = pin;
+  led_invert = invert;
+  if (pin != -1) {
+    dio_setOutput(led_pin);
+    outputLED(false);
   }
-}
-
-static void initBoardLeds() {
-  useBoardLeds = true;
-  dio_setOutput(PIN_LED0);
-  dio_setOutput(PIN_LED1);
-  outputLED0(false);
-  outputLED1(false);
 }
 
 //---------------------------------------------
@@ -281,7 +275,7 @@ static void runAsMaster() {
       keyboardCoreLogic_processTicker(5);
       processKeyboardCoreLogicOutput();
       if (optionAffectKeyHoldStateToLED) {
-        outputLED1(pressedKeyCount > 0);
+        outputLED(pressedKeyCount > 0);
       }
     }
     if (cnt % 4 == 2) {
@@ -289,10 +283,10 @@ static void runAsMaster() {
     }
     if (optionUseHeartbeatLED) {
       if (cnt % 2000 == 0) {
-        outputLED0(true);
+        outputLED(true);
       }
       if (cnt % 2000 == 1) {
-        outputLED0(false);
+        outputLED(false);
       }
     }
     delayMs(1);
@@ -343,15 +337,15 @@ static void runAsSlave() {
       keyMatrixScanner_update();
       pressedKeyCount = checkIfSomeKeyPressed();
       if (optionAffectKeyHoldStateToLED) {
-        outputLED1(pressedKeyCount > 0);
+        outputLED(pressedKeyCount > 0);
       }
     }
     if (optionUseHeartbeatLED) {
       if (cnt % 4000 == 0) {
-        outputLED0(true);
+        outputLED(true);
       }
       if (cnt % 4000 == 1) {
-        outputLED0(false);
+        outputLED(false);
       }
     }
     delayMs(1);
@@ -402,27 +396,23 @@ static void showModeByLedBlinkPattern(bool isMaster) {
   if (isMaster) {
     //masterの場合高速に4回点滅
     for (uint8_t i = 0; i < 4; i++) {
-      outputLED0(true);
-      outputLED1(true);
+      outputLED(true);
       delayMs(2);
-      outputLED0(false);
-      outputLED1(false);
+      outputLED(false);
       delayMs(100);
     }
   } else {
     //slaveの場合長く1回点灯
-    outputLED0(true);
-    outputLED1(true);
+    outputLED(true);
     delayMs(500);
-    outputLED0(false);
-    outputLED1(false);
+    outputLED(false);
   }
 }
 
 //---------------------------------------------
 
-void splitKeyboard_useOnboardLeds() {
-  initBoardLeds();
+void splitKeyboard_useOnboardLED(int8_t pin, bool invert) {
+  initBoardLED(pin, invert);
 }
 
 void splitKeyboard_useDebugUART(uint16_t baud) {
