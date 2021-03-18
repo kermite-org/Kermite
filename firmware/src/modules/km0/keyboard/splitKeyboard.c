@@ -11,6 +11,7 @@
 #include "system.h"
 #include "usbioCore.h"
 #include "utils.h"
+#include "versions.h"
 #include <stdio.h>
 
 //---------------------------------------------
@@ -441,7 +442,7 @@ void splitKeyboard_setup(
   keySlotIndexToKeyIndexMap = (uint8_t *)_keySlotIndexToKeyIndexMap;
 }
 
-static uint8_t serialNumberTextBuf[16];
+static uint8_t serialNumberTextBuf[24];
 
 void splitKeyboard_start() {
   system_initializeUserProgram();
@@ -451,9 +452,10 @@ void splitKeyboard_start() {
   }
   printf("start\n");
   configValidator_initializeDataStorage();
-  utils_copyBytes(serialNumberTextBuf, (uint8_t *)PROJECT_ID, 8);
-  configuratorServant_readDeviceInstanceCode(serialNumberTextBuf + 8);
-  uibioCore_internal_setSerialNumberText(serialNumberTextBuf, 16);
+  utils_copyBytes(serialNumberTextBuf, (uint8_t *)KERMITE_MCU_CODE, 8);
+  utils_copyBytes(serialNumberTextBuf + 8, (uint8_t *)PROJECT_ID, 8);
+  configuratorServant_readDeviceInstanceCode(serialNumberTextBuf + 16);
+  uibioCore_internal_setSerialNumberText(serialNumberTextBuf, 24);
   usbioCore_initialize();
   bool isMaster = runMasterSlaveDetectionMode();
   printf("isMaster:%d\n", isMaster);
