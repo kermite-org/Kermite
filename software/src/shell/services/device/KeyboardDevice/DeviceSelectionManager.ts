@@ -26,11 +26,11 @@ const deviceSpecificationParams: IDeviceSpecificationParams[] = [
   //     'IOUSBHostInterface@0', // Mac
   //   ],
   // },
-  // atmega
+  // atmega32u4
   {
     vendorId: 0xf055,
     productId: 0xa577,
-    // serialNumberMcuCode: 'A152FD20',
+    serialNumberMcuCode: 'A152FD20',
     usagePage: 0xffab,
     usage: 0x0200,
   },
@@ -38,7 +38,7 @@ const deviceSpecificationParams: IDeviceSpecificationParams[] = [
   {
     vendorId: 0xf055,
     productId: 0xa579,
-    // serialNumberMcuCode: 'A152FD21',
+    serialNumberMcuCode: 'A152FD21',
     usagePage: 0xff00,
     usage: 0x0001,
   },

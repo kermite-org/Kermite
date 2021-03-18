@@ -4,7 +4,7 @@ import { compareString, IKeyboardDeviceInfo } from '~/shared';
 export interface IDeviceSpecificationParams {
   vendorId: number;
   productId: number;
-  // serialNumberMcuCode: string;
+  serialNumberMcuCode: string;
   usagePage: number;
   usage: number;
 }
@@ -25,6 +25,7 @@ export function enumerateSupportedDevicePathsCore(
         (param) =>
           d.vendorId === param.vendorId &&
           d.productId === param.productId &&
+          d.serialNumber?.slice(0, 8) === param.serialNumberMcuCode &&
           d.usagePage === param.usagePage &&
           d.usage === param.usage,
       ),
