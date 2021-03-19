@@ -271,10 +271,10 @@ $(ELF): $(OBJS)
 $(UF2): $(ELF)
 	$(ELF2UF2) $(ELF) $(UF2)
 
-flash0: $(UF2)
+flash: $(UF2)
 	cp $(UF2) /Volumes/RPI-RP2
 
-flash: $(ELF)
+flash_via_swd: $(ELF)
 	openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "program $(ELF) verify reset exit"
 
 clean:
