@@ -2,7 +2,7 @@ PROJECT ?=
 -include Makefile.user
 
 PROJECT_CODE_DIR = src/projects/$(PROJECT)
-PROJECT_CODE_DIR_ALT = src/projects/$(PROJECT)/source/atmega
+PROJECT_CODE_DIR_ALT = src/projects/$(PROJECT)/mcu_atmega
 ifneq "$(wildcard $(PROJECT_CODE_DIR_ALT) )" ""
 PROJECT_CODE_DIR = $(PROJECT_CODE_DIR_ALT)
 endif
