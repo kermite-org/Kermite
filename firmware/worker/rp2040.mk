@@ -73,6 +73,7 @@ DEFINES = \
 -DTINYUSB_DEVICE_LINKED=1 \
 -DPICO_TARGET_NAME=\"kermite\" \
 -DPICO_PROGRAM_URL=\"https://github.com/yahiro07/Kermite/tree/master/firmware\" \
+-DPICO_BOOTSEL_VIA_DOUBLE_RESET_TIMEOUT_MS=500 \
 -DTARGET_MCU_RP2040 \
 -DEXTR_PROJECT_RELEASE_BUILD_REVISION=$(RELEASE_REVISION) \
 -DEXTR_IS_RESOURCE_ORIGIN_ONLINE=$(IS_RESOURCE_ORIGIN_ONLINE) \
@@ -203,6 +204,7 @@ $(PICO_SDK_DIR)/src/rp2_common/pico_malloc/pico_malloc.c \
 $(PICO_SDK_DIR)/src/rp2_common/pico_standard_link/binary_info.c \
 $(PICO_SDK_DIR)/src/rp2_common/pico_stdio/stdio.c \
 $(PICO_SDK_DIR)/src/rp2_common/pico_stdio_uart/stdio_uart.c \
+$(PICO_SDK_DIR)/src/rp2_common/pico_bootsel_via_double_reset/pico_bootsel_via_double_reset.c
 
 #USB
 SDK_SRCS += $(PICO_SDK_DIR)/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c \
