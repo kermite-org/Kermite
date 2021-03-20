@@ -17,7 +17,9 @@ RULES_MK = $(PROJECT_CODE_DIR)/rules.mk
 MODULES_DIR = src/modules
 
 BUILD_DIR = build
+OUT_DIR = build/$(PROJECT)/rp2040
 OBJ_DIR = build/$(PROJECT)/rp2040/obj
+CORE_NAME = $(notdir $(PROJECT))_rp2040
 
 RELEASE_REVISION ?= 0
 IS_RESOURCE_ORIGIN_ONLINE ?= 0
@@ -27,8 +29,6 @@ IS_RESOURCE_ORIGIN_ONLINE ?= 0
 PICO_SDK_DIR = deps/rp2040/external/pico_sdk
 PICO_LOCAL_DIR = deps/rp2040/local
 
-OUT_DIR = $(BUILD_DIR)/$(PROJECT)
-CORE_NAME = $(notdir $(PROJECT))
 ELF = $(OUT_DIR)/$(CORE_NAME).elf
 BIN = $(OUT_DIR)/$(CORE_NAME).bin
 HEX = $(OUT_DIR)/$(CORE_NAME).hex
