@@ -1,7 +1,7 @@
 import { IResourceOrigin } from '~/shared';
 import { projectResourceProvider } from '~/shell/projectResources';
-import { ComPortsMonitor } from './ComPortsMonitor';
-import { FlashCommander } from './FlashCommander';
+import { ComPortsMonitor } from '~/shell/services/firmwareUpdation/flashSchemeAtMega/ComPortsMonitor';
+import { FlashCommander } from '~/shell/services/firmwareUpdation/flashSchemeAtMega/FlashCommander';
 
 // 仮想COMポートでProMicroのブートローダ(Caterina)と通信しファームウェアを書き込む
 // 仮想COMポートの列挙や出現監視も行う
