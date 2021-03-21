@@ -1,5 +1,6 @@
 #include "generalKeyboard.h"
 #include "bitOperations.h"
+#include "boardLED.h"
 #include "config.h"
 #include "configValidator.h"
 #include "configuratorServant.h"
@@ -77,39 +78,6 @@ static void customParameterValueHandler(uint8_t slotIndex, uint8_t value) {
 
 void setCustomParameterDynamicFlag(uint8_t slotIndex, bool isDynamic) {
   bit_spec(optionDynamicFlags, slotIndex, isDynamic);
-}
-
-//---------------------------------------------
-//board io
-
-static int8_t led_pin1 = -1;
-static int8_t led_pin2 = -1;
-static bool led_invert = false;
-
-static void outputLED1(bool val) {
-  if (led_pin1 != -1) {
-    dio_write(led_pin1, led_invert ? !val : val);
-  }
-}
-
-static void outputLED2(bool val) {
-  if (led_pin2 != -1) {
-    dio_write(led_pin2, led_invert ? !val : val);
-  }
-}
-
-static void initBoardLEDs(int8_t pin1, int8_t pin2, bool invert) {
-  led_pin1 = pin1;
-  led_pin2 = pin2;
-  led_invert = invert;
-  if (led_pin1 != -1) {
-    dio_setOutput(led_pin1);
-    dio_write(led_pin1, invert);
-  }
-  if (led_pin2 != -1) {
-    dio_setOutput(led_pin2);
-    dio_write(led_pin2, invert);
-  }
 }
 
 //---------------------------------------------
@@ -259,15 +227,15 @@ static void keyboardEntry() {
       keyboardCoreLogic_processTicker(5);
       processKeyboardCoreLogicOutput();
       if (optionAffectKeyHoldStateToLED) {
-        outputLED2(pressedKeyCount > 0);
+        boardLED_outputLED2(pressedKeyCount > 0);
       }
     }
     if (optionUseHeartbeatLED) {
-      if (cnt % 2000 == 0) {
-        outputLED1(true);
+      if (cnt % 4000 == 0) {
+        boardLED_outputLED1(true);
       }
-      if (cnt % 2000 == 1) {
-        outputLED1(false);
+      if (cnt % 4000 == 4) {
+        boardLED_outputLED1(false);
       }
     }
     delayMs(1);
@@ -279,7 +247,11 @@ static void keyboardEntry() {
 //---------------------------------------------
 
 void generalKeyboard_useIndicatorLEDs(int8_t pin1, uint8_t pin2, bool invert) {
-  initBoardLEDs(pin1, pin2, invert);
+  boardLED_initLEDs(pin1, pin2, invert);
+}
+
+void generalKeyboard_useIndicatorRgbLED(int8_t pin) {
+  boardLED_initRgbLED(pin);
 }
 
 void generalKeyboard_useDebugUART(uint16_t baud) {

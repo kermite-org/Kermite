@@ -73,7 +73,7 @@ DEFINES = \
 -DTINYUSB_DEVICE_LINKED=1 \
 -DPICO_TARGET_NAME=\"kermite\" \
 -DPICO_PROGRAM_URL=\"https://github.com/yahiro07/Kermite/tree/master/firmware\" \
--DPICO_BOOTSEL_VIA_DOUBLE_RESET_TIMEOUT_MS=500 \
+-DPICO_BOOTSEL_VIA_DOUBLE_RESET_TIMEOUT_MS=700 \
 -DTARGET_MCU_RP2040 \
 -DEXTR_PROJECT_RELEASE_BUILD_REVISION=$(RELEASE_REVISION) \
 -DEXTR_IS_RESOURCE_ORIGIN_ONLINE=$(IS_RESOURCE_ORIGIN_ONLINE) \
@@ -156,6 +156,7 @@ INC_PATHS = \
 -I$(PICO_SDK_DIR)/src/rp2_common/hardware_pll/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/hardware_vreg/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/hardware_irq/include \
+-I$(PICO_SDK_DIR)/src/rp2_common/hardware_pio/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/pico_printf/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/pico_bootrom/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/pico_double/include \
@@ -194,6 +195,7 @@ $(PICO_SDK_DIR)/src/rp2_common/hardware_xosc/xosc.c \
 $(PICO_SDK_DIR)/src/rp2_common/hardware_pll/pll.c \
 $(PICO_SDK_DIR)/src/rp2_common/hardware_vreg/vreg.c \
 $(PICO_SDK_DIR)/src/rp2_common/hardware_irq/irq.c \
+$(PICO_SDK_DIR)/src/rp2_common/hardware_pio/pio.c \
 $(PICO_SDK_DIR)/src/rp2_common/pico_printf/printf.c \
 $(PICO_SDK_DIR)/src/rp2_common/pico_bootrom/bootrom.c \
 $(PICO_SDK_DIR)/src/rp2_common/pico_double/double_init_rom.c \
