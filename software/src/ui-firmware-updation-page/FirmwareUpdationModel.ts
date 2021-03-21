@@ -40,10 +40,10 @@ export class FirmwareUpdationModel {
   };
 
   // 1: WaitingReset --> WaitingUploadOrder
-  private onComPortPlugEvent = ({
+  private onDeviceDetectionEvent = ({
     comPortName,
   }: {
-    comPortName: string | undefined;
+    comPortName?: string;
   }) => {
     this.comPortName = comPortName;
     if (this.phase === 'WaitingReset' && this.comPortName) {
@@ -69,7 +69,6 @@ export class FirmwareUpdationModel {
         const res = await ipcAgent.async.firmup_uploadFirmware(
           info.origin,
           info.projectId,
-          this.comPortName,
         );
         this.firmwareUploadResult = res;
         if (res === 'ok') {
@@ -90,8 +89,8 @@ export class FirmwareUpdationModel {
 
   startPageSession = () => {
     this.fechProjectInfos();
-    return ipcAgent.events.firmup_comPortPlugEvents.subscribe(
-      this.onComPortPlugEvent,
+    return ipcAgent.events.firmup_deviceDetectionEvents.subscribe(
+      this.onDeviceDetectionEvent,
     );
   };
 }

@@ -256,7 +256,6 @@ export interface IAppIpcContract {
     firmup_uploadFirmware(
       origin: IResourceOrigin,
       projectId: string,
-      comPortName: string,
     ): Promise<string>;
 
     file_getOpenJsonFilePathWithDialog(): Promise<string | undefined>;
@@ -278,7 +277,7 @@ export interface IAppIpcContract {
     device_keyEvents: IRealtimeKeyboardEvent;
     device_keyboardDeviceStatusEvents: Partial<IKeyboardDeviceStatus>;
 
-    firmup_comPortPlugEvents: { comPortName: string | undefined };
+    firmup_deviceDetectionEvents: { comPortName?: string; driveName?: string };
     projects_layoutFileUpdationEvents: { projectId: string };
   };
 }

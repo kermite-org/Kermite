@@ -12,7 +12,7 @@ export class FirmwareUpdationService {
   private timerWrapper = new IntervalTimerWrapper();
 
   private schemeAtMega = new FirmwareUpdationSchemeAtMega();
-  private dectectedDeviceSig: string | undefined;
+  private pluggedComPortName: string | undefined;
 
   deviceDetectionEvents = createEventPort<IComPortDetectionEvent>({
     onFirstSubscriptionStarting: () => this.startDetection(),
@@ -20,15 +20,15 @@ export class FirmwareUpdationService {
   });
 
   private updateDetection = async () => {
-    const dectectedDeviceSig = await this.schemeAtMega.updateDeviceDetection();
-    if (dectectedDeviceSig !== this.dectectedDeviceSig) {
-      this.deviceDetectionEvents.emit({ comPortName: dectectedDeviceSig });
-      this.dectectedDeviceSig = dectectedDeviceSig;
+    const pllugedComPortName = await this.schemeAtMega.updateDeviceDetection();
+    if (pllugedComPortName !== this.pluggedComPortName) {
+      this.deviceDetectionEvents.emit({ comPortName: pllugedComPortName });
+      this.pluggedComPortName = pllugedComPortName;
     }
   };
 
   private startDetection() {
-    this.dectectedDeviceSig = undefined;
+    this.pluggedComPortName = undefined;
     this.schemeAtMega.resetDeviceDetectionStatus();
     this.timerWrapper.start(
       withAppErrorHandler(
@@ -47,7 +47,6 @@ export class FirmwareUpdationService {
   async writeFirmware(
     origin: IResourceOrigin,
     projectId: string,
-    dectectedDeviceSig: string,
   ): Promise<'ok' | string> {
     const hexFilePath = await projectResourceProvider.loadProjectFirmwareFile(
       origin,
@@ -56,8 +55,12 @@ export class FirmwareUpdationService {
     if (!hexFilePath) {
       return `cannot find firmware`;
     }
+
+    if (!this.pluggedComPortName) {
+      return `com port is not available`;
+    }
     return await this.schemeAtMega.flashFirmware(
-      dectectedDeviceSig,
+      this.pluggedComPortName,
       hexFilePath,
     );
   }
