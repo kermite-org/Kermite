@@ -2,8 +2,8 @@ import * as HID from 'node-hid';
 import { compareString, IKeyboardDeviceInfo } from '~/shared';
 
 export interface IDeviceSpecificationParams {
-  vendorId: number;
-  productId: number;
+  // vendorId: number;
+  // productId: number;
   serialNumberMcuCode: string;
   usagePage: number;
   usage: number;
@@ -23,8 +23,8 @@ export function enumerateSupportedDevicePathsCore(
     .filter((d) =>
       params.some(
         (param) =>
-          d.vendorId === param.vendorId &&
-          d.productId === param.productId &&
+          // d.vendorId === param.vendorId &&
+          // d.productId === param.productId &&
           d.serialNumber?.slice(0, 8) === param.serialNumberMcuCode &&
           d.usagePage === param.usagePage &&
           d.usage === param.usage,
@@ -39,7 +39,7 @@ export function enumerateSupportedDevicePathsCore(
 
 export function getPortNameFromDevicePath(path: string) {
   const m =
-    path.match(/Kermite Keyboard Device@(\d+)/) || // Mac
+    path.match(/AppleUSB20HubPort@(\d+)/) || // Mac
     path.match(/mi_00#8&([0-9a-f]+)/); // Windows
   return (m && `${m[1]}`) || undefined;
 }

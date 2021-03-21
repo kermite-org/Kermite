@@ -2,14 +2,15 @@ PROJECT ?=
 -include Makefile.user
 
 PROJECT_CODE_DIR = src/projects/$(PROJECT)
-PROJECT_CODE_DIR_ALT = src/projects/$(PROJECT)/source/atmega
+PROJECT_CODE_DIR_ALT = src/projects/$(PROJECT)/mcu_atmega
 ifneq "$(wildcard $(PROJECT_CODE_DIR_ALT) )" ""
 PROJECT_CODE_DIR = $(PROJECT_CODE_DIR_ALT)
 endif
 
-
 BUILD_DIR = build
+OUT_DIR = build/$(PROJECT)/atmega
 OBJ_DIR = build/$(PROJECT)/atmega/obj
+CORE_NAME = $(notdir $(PROJECT))_atmega32u4
 
 MODULE_SRCS = 
 PROJECT_SRCS =
@@ -21,8 +22,6 @@ IS_RESOURCE_ORIGIN_ONLINE ?= 0
 
 #--------------------
 
-OUT_DIR = $(BUILD_DIR)/$(PROJECT)
-CORE_NAME = $(notdir $(PROJECT))
 ELF = $(OUT_DIR)/$(CORE_NAME).elf
 HEX = $(OUT_DIR)/$(CORE_NAME).hex
 LST = $(OUT_DIR)/$(CORE_NAME).lst

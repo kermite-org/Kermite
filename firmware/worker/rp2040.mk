@@ -3,7 +3,7 @@ PROJECT ?=
 -include Makefile.user
 
 PROJECT_CODE_DIR = src/projects/$(PROJECT)
-PROJECT_CODE_DIR_ALT = src/projects/$(PROJECT)/source/rp2040
+PROJECT_CODE_DIR_ALT = src/projects/$(PROJECT)/mcu_rp2040
 ifneq "$(wildcard $(PROJECT_CODE_DIR_ALT) )" ""
 PROJECT_CODE_DIR = $(PROJECT_CODE_DIR_ALT)
 endif
@@ -17,7 +17,9 @@ RULES_MK = $(PROJECT_CODE_DIR)/rules.mk
 MODULES_DIR = src/modules
 
 BUILD_DIR = build
+OUT_DIR = build/$(PROJECT)/rp2040
 OBJ_DIR = build/$(PROJECT)/rp2040/obj
+CORE_NAME = $(notdir $(PROJECT))_rp2040
 
 RELEASE_REVISION ?= 0
 IS_RESOURCE_ORIGIN_ONLINE ?= 0
@@ -27,8 +29,6 @@ IS_RESOURCE_ORIGIN_ONLINE ?= 0
 PICO_SDK_DIR = deps/rp2040/external/pico_sdk
 PICO_LOCAL_DIR = deps/rp2040/local
 
-OUT_DIR = $(BUILD_DIR)/$(PROJECT)
-CORE_NAME = $(notdir $(PROJECT))
 ELF = $(OUT_DIR)/$(CORE_NAME).elf
 BIN = $(OUT_DIR)/$(CORE_NAME).bin
 HEX = $(OUT_DIR)/$(CORE_NAME).hex
@@ -73,6 +73,7 @@ DEFINES = \
 -DTINYUSB_DEVICE_LINKED=1 \
 -DPICO_TARGET_NAME=\"kermite\" \
 -DPICO_PROGRAM_URL=\"https://github.com/yahiro07/Kermite/tree/master/firmware\" \
+-DPICO_BOOTSEL_VIA_DOUBLE_RESET_TIMEOUT_MS=500 \
 -DTARGET_MCU_RP2040 \
 -DEXTR_PROJECT_RELEASE_BUILD_REVISION=$(RELEASE_REVISION) \
 -DEXTR_IS_RESOURCE_ORIGIN_ONLINE=$(IS_RESOURCE_ORIGIN_ONLINE) \
@@ -203,6 +204,7 @@ $(PICO_SDK_DIR)/src/rp2_common/pico_malloc/pico_malloc.c \
 $(PICO_SDK_DIR)/src/rp2_common/pico_standard_link/binary_info.c \
 $(PICO_SDK_DIR)/src/rp2_common/pico_stdio/stdio.c \
 $(PICO_SDK_DIR)/src/rp2_common/pico_stdio_uart/stdio_uart.c \
+$(PICO_SDK_DIR)/src/rp2_common/pico_bootsel_via_double_reset/pico_bootsel_via_double_reset.c
 
 #USB
 SDK_SRCS += $(PICO_SDK_DIR)/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c \
@@ -269,10 +271,10 @@ $(ELF): $(OBJS)
 $(UF2): $(ELF)
 	$(ELF2UF2) $(ELF) $(UF2)
 
-flash0: $(UF2)
+flash: $(UF2)
 	cp $(UF2) /Volumes/RPI-RP2
 
-flash: $(ELF)
+flash_via_swd: $(ELF)
 	openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "program $(ELF) verify reset exit"
 
 clean:
