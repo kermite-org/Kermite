@@ -10,9 +10,10 @@
       "name": "Mac",
       "includePath": [
         "${myCompilerBaseDirectory}/avr/include",
-        "${workspaceFolder}/src",
-        "${workspaceFolder}/src/modules",
-        "${workspaceFolder}/src/projects/dev/dummy_header_provider_project"
+        "src/modules/km0/common",
+        "src/modules/km0/device_io",
+        "src/modules/km0/keyboard",
+        "src/projects/dev/dummy_header_provider_project"
       ],
       "defines": [
         "_DEBUG",
@@ -21,17 +22,15 @@
         "__AVR_ATmega32U4__",
         "EXTR_PROJECT_RELEASE_BUILD_REVISION=0",
         "EXTR_IS_RESOURCE_ORIGIN_ONLINE=0",
-        "F_CPU=8000000"
+        "F_CPU=8000000",
+        "TARGET_MCU_ATMEGA"
       ],
       "compilerPath": "${myCompilerExecutablePath} -mmcu=atmega32u4",
       "cStandard": "c11",
       "cppStandard": "c++17",
       "intelliSenseMode": "clang-x64",
       "browse": {
-        "path": [
-          "${workspaceFolder}/src",
-          "${myCompilerBaseDirectory}/avr/include"
-        ],
+        "path": ["src", "${myCompilerBaseDirectory}/avr/include"],
         "limitSymbolsToIncludedHeaders": true,
         "databaseFilename": ""
       }
