@@ -33,10 +33,10 @@ static void loadRamDataFromFlash() {
 }
 
 static void storeRamDataToFlash() {
-  // uint32_t status = save_and_disable_interrupts();
+  uint32_t status = save_and_disable_interrupts();
   flash_range_erase(FLASH_TARGET_OFFSET, FLASH_SECTOR_SIZE);
   flash_range_program(FLASH_TARGET_OFFSET, ramData, FLASH_SECTOR_SIZE);
-  // restore_interrupts(status);
+  restore_interrupts(status);
 }
 
 void dataMemory_writeByte(uint16_t addr, uint8_t val) {

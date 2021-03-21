@@ -105,12 +105,9 @@ void dprintf() {
  **************************************************************************/
 
 // You can change these to give your code its own name.
-#define STR_MANUFACTURER L"kermite"
-// #define STR_PRODUCT L"kermite_core_atmega32u4"
-#define STR_PRODUCT L"Kermitie Keyboard Device"
-
-// #define STR_SERIALNUMBER L"74F3AC2EFD314AAC"
-#define STR_SERIALNUMBER_DUMMY L"0000000000000000"
+#define STR_MANUFACTURER L"Kermite"
+#define STR_PRODUCT L"Kermite Keyboard Device"
+#define STR_SERIALNUMBER_DUMMY L"000000000000000000000000"
 
 // Mac OS-X and Linux automatically load the correct drivers.  On
 // Windows, even though the driver is supplied by Microsoft, an
@@ -1062,14 +1059,9 @@ bool usbioCore_isConnectedToHost() {
   return usb_configuration != 0;
 }
 
-void usbioCore_initernal_setDeviceSignatures(uint8_t *pProjectId, uint8_t *pInstanceCode) {
-  utils_copyStringToWideString(serialNumberStringDescriptorStruct.wString, pProjectId, 8);
-  utils_copyStringToWideString(serialNumberStringDescriptorStruct.wString + 8, pInstanceCode, 8);
-}
-
 void uibioCore_internal_setSerialNumberText(uint8_t *pTextBuf, uint8_t len) {
-  if (len > 16) {
-    len = 16;
+  if (len > 24) {
+    len = 24;
   }
   utils_copyStringToWideString(serialNumberStringDescriptorStruct.wString, pTextBuf, len);
 }

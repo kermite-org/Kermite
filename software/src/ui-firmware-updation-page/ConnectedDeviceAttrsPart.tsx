@@ -5,6 +5,9 @@ import { useConnectedDeviceAttributes } from '~/ui-firmware-updation-page/dataSo
 const cssBase = css`
   td + td {
     padding-left: 20px;
+    max-width: 240px;
+    overflow-x: hidden;
+    white-space: nowrap;
   }
 `;
 export const ConnectedDeviceAttrsPart: FC = () => {

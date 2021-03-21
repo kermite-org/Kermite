@@ -11,6 +11,6 @@ uint16_t dataMemory_readWord(uint16_t addr);
 void dataMemory_writeWord(uint16_t addr, uint16_t val);
 void dataMemory_readBytes(uint16_t addr, uint8_t *buf, uint16_t len);
 void dataMemory_writeBytes(uint16_t addr, uint8_t *buf, uint16_t len);
-void dataMemory_crearAllZero();
+void dataMemory_clearAllZero();
 
 #endif

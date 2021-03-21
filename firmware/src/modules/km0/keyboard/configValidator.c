@@ -51,7 +51,7 @@ void configValidator_initializeDataStorage() {
   bool projectIdValid = utils_compareBytes(eepromTempBuf, (uint8_t *)PROJECT_ID, 8);
   if (!projectIdValid) {
     printf("clear eeprom for new project\n");
-    dataMemory_crearAllZero();
+    dataMemory_clearAllZero();
     dataMemory_writeBytes(StorageAddr_ProjectID, (uint8_t *)PROJECT_ID, 8);
   }
 }
