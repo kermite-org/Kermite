@@ -234,7 +234,7 @@ static void keyboardEntry() {
       if (cnt % 2000 == 0) {
         boardLED_outputLED1(true);
       }
-      if (cnt % 2000 == 1) {
+      if (cnt % 2000 == 4) {
         boardLED_outputLED1(false);
       }
     }
