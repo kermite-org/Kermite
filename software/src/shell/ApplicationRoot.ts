@@ -176,9 +176,7 @@ export class ApplicationRoot {
         return () => this.deviceService.statusEventPort.unsubscribe(cb);
       },
       firmup_comPortPlugEvents: (cb) =>
-        this.firmwareUpdationService.comPortsMonitor.comPortPlugEvents.subscribe(
-          cb,
-        ),
+        this.firmwareUpdationService.deviceDetectionEvents.subscribe(cb),
       projects_layoutFileUpdationEvents: (cb) =>
         this.keyboardLayoutFilesWatcher.fileUpdationEvents.subscribe(cb),
       window_appWindowStatus: windowWrapper.appWindowEventPort.subscribe,
