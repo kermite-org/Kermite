@@ -2,9 +2,6 @@
 
 #define PROJECT_ID "dx5kE9SU"
 
-#define CORELOGIC_NUM_KEYSLOTS 15
-
-#define GK_NUM_ROWS 5
-#define GK_NUM_COLUMNS 3
+#define KM0_NUM_KEYSLOTS 15
 
 #endif

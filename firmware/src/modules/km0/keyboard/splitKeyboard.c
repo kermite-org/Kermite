@@ -5,33 +5,27 @@
 #include "configuratorServant.h"
 #include "debugUart.h"
 #include "dio.h"
-#include "keyMatrixScanner2.h"
+#include "keyMatrixScanner.h"
 #include "keyboardCoreLogic2.h"
 #include "singlewire3.h"
 #include "system.h"
 #include "usbioCore.h"
 #include "utils.h"
+#include "versions.h"
 #include <stdio.h>
-
-#ifndef SK_NUM_ROWS
-#error SK_NUM_ROWS is not defined
-#endif
-
-#ifndef SK_NUM_COLUMNS
-#error SK_NUM_COLUMNS is not defined
-#endif
 
 //---------------------------------------------
 //definitions
 
-#define NumRows SK_NUM_ROWS
-#define NumColumns SK_NUM_COLUMNS
+#ifndef KM0_NUM_KEYSLOTS
+#error KM0_NUM_KEYSLOTS is not defined
+#endif
 
-#define NumKeySlots (NumRows * NumColumns * 2)
-#define NumKeySlotsHalf (NumRows * NumColumns)
+#define NumKeySlots KM0_NUM_KEYSLOTS
+#define NumKeySlotsHalf (KM0_NUM_KEYSLOTS >> 1)
 
-//#define NumKeySlotBytesHalf Ceil(NumRows * NumColumns / 8)
-#define NumKeySlotBytesHalf ((NumRows * NumColumns + 7) >> 3)
+//#define NumKeySlotBytesHalf Ceil(NumKeySlotsHalf / 8)
+#define NumKeySlotBytesHalf ((NumKeySlotsHalf + 7) >> 3)
 #define NumKeySlotBytes (NumKeySlotBytesHalf * 2)
 
 #define SingleWireMaxPacketSize (NumKeySlotBytesHalf + 1)
@@ -39,13 +33,15 @@
 //---------------------------------------------
 //variables
 
+static uint8_t numRows = 0;
+static uint8_t numColumns = 0;
 static uint8_t *rowPins;
 static uint8_t *columnPins;
 static uint8_t *keySlotIndexToKeyIndexMap;
 
 //左右間通信用バッファ
-static uint8_t sw_txbuf[SingleWireMaxPacketSize];
-static uint8_t sw_rxbuf[SingleWireMaxPacketSize];
+static uint8_t sw_txbuf[SingleWireMaxPacketSize] = { 0 };
+static uint8_t sw_rxbuf[SingleWireMaxPacketSize] = { 0 };
 
 //キー状態
 static uint8_t keyStateFlags[NumKeySlotBytes] = { 0 };
@@ -59,7 +55,6 @@ static uint8_t localHidReport[8] = { 0 };
 //メインロジックをPC側ユーティリティのLogicSimulatorに移譲するモード
 static bool isSideBrainModeEnabled = false;
 
-static bool useBoardLeds = false;
 static bool hasMasterOathReceived = false;
 static bool debugUartConfigured = false;
 
@@ -100,29 +95,35 @@ void setCustomParameterDynamicFlag(uint8_t slotIndex, bool isDynamic) {
 //---------------------------------------------
 //board io
 
-#define PIN_LED0 P_D5 //TXLED on ProMicro
-#define PIN_LED1 P_B0 //RXLED on ProMicro
-
-static void outputLED0(bool val) {
-  if (useBoardLeds) {
-    dio_write(PIN_LED0, !val);
-  }
-}
+static int8_t led_pin1 = -1;
+static int8_t led_pin2 = -1;
+static bool led_invert = false;
 
 static void outputLED1(bool val) {
-  if (useBoardLeds) {
-    dio_write(PIN_LED1, !val);
+  if (led_pin1 != -1) {
+    dio_write(led_pin1, led_invert ? !val : val);
   }
 }
 
-static void initBoardLeds() {
-  useBoardLeds = true;
-  dio_setOutput(PIN_LED0);
-  dio_setOutput(PIN_LED1);
-  outputLED0(false);
-  outputLED1(false);
+static void outputLED2(bool val) {
+  if (led_pin2 != -1) {
+    dio_write(led_pin2, led_invert ? !val : val);
+  }
 }
 
+static void initBoardLEDs(uint8_t pin1, uint8_t pin2, bool invert) {
+  led_pin1 = pin1;
+  led_pin2 = pin2;
+  led_invert = invert;
+  if (led_pin1 != -1) {
+    dio_setOutput(led_pin1);
+    dio_write(led_pin1, invert);
+  }
+  if (led_pin2 != -1) {
+    dio_setOutput(led_pin2);
+    dio_write(led_pin2, invert);
+  }
+}
 //---------------------------------------------
 
 static void debugDumpLocalOutputState() {
@@ -270,7 +271,7 @@ static void processKeyStatesUpdate() {
 
 static void runAsMaster() {
   keyMatrixScanner_initialize(
-      NumRows, NumColumns, rowPins, columnPins, nextKeyStateFlags);
+      numRows, numColumns, rowPins, columnPins, nextKeyStateFlags);
 
   resetKeyboardCoreLogic();
 
@@ -286,7 +287,7 @@ static void runAsMaster() {
       keyboardCoreLogic_processTicker(5);
       processKeyboardCoreLogicOutput();
       if (optionAffectKeyHoldStateToLED) {
-        outputLED1(pressedKeyCount > 0);
+        outputLED2(pressedKeyCount > 0);
       }
     }
     if (cnt % 4 == 2) {
@@ -294,13 +295,14 @@ static void runAsMaster() {
     }
     if (optionUseHeartbeatLED) {
       if (cnt % 2000 == 0) {
-        outputLED0(true);
+        outputLED1(true);
       }
       if (cnt % 2000 == 1) {
-        outputLED0(false);
+        outputLED1(false);
       }
     }
     delayMs(1);
+    usbioCore_processUpdate();
     configuratorServant_processUpdate();
   }
 }
@@ -338,7 +340,7 @@ static bool checkIfSomeKeyPressed() {
 
 static void runAsSlave() {
   keyMatrixScanner_initialize(
-      NumRows, NumColumns, rowPins, columnPins, nextKeyStateFlags);
+      numRows, numColumns, rowPins, columnPins, nextKeyStateFlags);
   singlewire_setupInterruptedReceiver(onRecevierInterruption);
 
   uint16_t cnt = 0;
@@ -348,15 +350,15 @@ static void runAsSlave() {
       keyMatrixScanner_update();
       pressedKeyCount = checkIfSomeKeyPressed();
       if (optionAffectKeyHoldStateToLED) {
-        outputLED1(pressedKeyCount > 0);
+        outputLED2(pressedKeyCount > 0);
       }
     }
     if (optionUseHeartbeatLED) {
       if (cnt % 4000 == 0) {
-        outputLED0(true);
+        outputLED1(true);
       }
       if (cnt % 4000 == 1) {
-        outputLED0(false);
+        outputLED1(false);
       }
     }
     delayMs(1);
@@ -407,27 +409,23 @@ static void showModeByLedBlinkPattern(bool isMaster) {
   if (isMaster) {
     //masterの場合高速に4回点滅
     for (uint8_t i = 0; i < 4; i++) {
-      outputLED0(true);
       outputLED1(true);
       delayMs(2);
-      outputLED0(false);
       outputLED1(false);
       delayMs(100);
     }
   } else {
     //slaveの場合長く1回点灯
-    outputLED0(true);
     outputLED1(true);
     delayMs(500);
-    outputLED0(false);
     outputLED1(false);
   }
 }
 
 //---------------------------------------------
 
-void splitKeyboard_useOnboardLeds() {
-  initBoardLeds();
+void splitKeyboard_useIndicatorLEDs(int8_t pin1, int8_t pin2, bool invert) {
+  initBoardLEDs(pin1, pin2, invert);
 }
 
 void splitKeyboard_useDebugUART(uint16_t baud) {
@@ -445,13 +443,17 @@ void splitKeyboard_useOptionDynamic(uint8_t slot) {
 }
 
 void splitKeyboard_setup(
-    const uint8_t *_rowPins, const uint8_t *_columnPins, const int8_t *_keySlotIndexToKeyIndexMap) {
+    uint8_t _numRows, uint8_t _numColumns,
+    const uint8_t *_rowPins, const uint8_t *_columnPins,
+    const int8_t *_keySlotIndexToKeyIndexMap) {
+  numRows = _numRows;
+  numColumns = _numColumns;
   rowPins = (uint8_t *)_rowPins;
   columnPins = (uint8_t *)_columnPins;
   keySlotIndexToKeyIndexMap = (uint8_t *)_keySlotIndexToKeyIndexMap;
 }
 
-static uint8_t serialNumberTextBuf[16];
+static uint8_t serialNumberTextBuf[24];
 
 void splitKeyboard_start() {
   system_initializeUserProgram();
@@ -461,9 +463,10 @@ void splitKeyboard_start() {
   }
   printf("start\n");
   configValidator_initializeDataStorage();
-  utils_copyBytes(serialNumberTextBuf, (uint8_t *)PROJECT_ID, 8);
-  configuratorServant_readDeviceInstanceCode(serialNumberTextBuf + 8);
-  uibioCore_internal_setSerialNumberText(serialNumberTextBuf, 16);
+  utils_copyBytes(serialNumberTextBuf, (uint8_t *)KERMITE_MCU_CODE, 8);
+  utils_copyBytes(serialNumberTextBuf + 8, (uint8_t *)PROJECT_ID, 8);
+  configuratorServant_readDeviceInstanceCode(serialNumberTextBuf + 16);
+  uibioCore_internal_setSerialNumberText(serialNumberTextBuf, 24);
   usbioCore_initialize();
   bool isMaster = runMasterSlaveDetectionMode();
   printf("isMaster:%d\n", isMaster);

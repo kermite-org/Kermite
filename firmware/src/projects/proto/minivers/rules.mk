@@ -1,13 +1,14 @@
-MODULE_SRCS += dio.c
-MODULE_SRCS += usbioCore.c
-MODULE_SRCS += dataMemory.c
-MODULE_SRCS += debugUart.c
-MODULE_SRCS += utils.c
-MODULE_SRCS += keyMatrixScanner2.c
-MODULE_SRCS += configuratorServant.c
-MODULE_SRCS += configValidator.c
-MODULE_SRCS += singlewire3.c
-MODULE_SRCS += keyboardCoreLogic2.c
-MODULE_SRCS += splitKeyboard.c
+MODULE_SRCS += km0/common/utils.c
+MODULE_SRCS += km0/device_io/atmega/system.c
+MODULE_SRCS += km0/device_io/atmega/dio.c
+MODULE_SRCS += km0/device_io/atmega/usbioCore.c
+MODULE_SRCS += km0/device_io/atmega/dataMemory.c
+MODULE_SRCS += km0/device_io/atmega/debugUart.c
+MODULE_SRCS += km0/device_io/atmega/singlewire3.c
+MODULE_SRCS += km0/keyboard/keyMatrixScanner.c
+MODULE_SRCS += km0/keyboard/configuratorServant.c
+MODULE_SRCS += km0/keyboard/configValidator.c
+MODULE_SRCS += km0/keyboard/keyboardCoreLogic2.c
+MODULE_SRCS += km0/keyboard/splitKeyboard.c
 
 PROJECT_SRCS += main.c

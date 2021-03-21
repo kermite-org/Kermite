@@ -5,7 +5,7 @@
 #include "configuratorServant.h"
 #include "debugUart.h"
 #include "dio.h"
-#include "keyMatrixScanner2.h"
+#include "keyMatrixScanner.h"
 #include "keyboardCoreLogic2.h"
 #include "singlewire3.h"
 #include "system.h"
@@ -14,28 +14,23 @@
 #include "versions.h"
 #include <stdio.h>
 
-#ifndef GK_NUM_ROWS
-#error GK_NUM_ROWS is not defined
-#endif
-
-#ifndef GK_NUM_COLUMNS
-#error GK_NUM_COLUMNS is not defined
-#endif
-
 //---------------------------------------------
 //definitions
 
-#define NumRows GK_NUM_ROWS
-#define NumColumns GK_NUM_COLUMNS
+#ifndef KM0_NUM_KEYSLOTS
+#error KM0_NUM_KEYSLOTS is not defined
+#endif
 
-#define NumKeySlots (NumRows * NumColumns)
+#define NumKeySlots KM0_NUM_KEYSLOTS
 
-//#define NumKeySlotBytes Ceil(NumRows * NumColumns / 8)
-#define NumKeySlotBytes ((NumRows * NumColumns + 7) >> 3)
+//#define NumKeySlotBytes Ceil(KM0_NUM_KEYSLOTS / 8)
+#define NumKeySlotBytes ((KM0_NUM_KEYSLOTS + 7) >> 3)
 
 //---------------------------------------------
 //variables
 
+static uint8_t numRows = 0;
+static uint8_t numColumns = 0;
 static uint8_t *rowPins;
 static uint8_t *columnPins;
 static uint8_t *keySlotIndexToKeyIndexMap;
@@ -87,31 +82,33 @@ void setCustomParameterDynamicFlag(uint8_t slotIndex, bool isDynamic) {
 //---------------------------------------------
 //board io
 
-static int8_t pin_led1 = -1;
-static int8_t pin_led2 = -1;
+static int8_t led_pin1 = -1;
+static int8_t led_pin2 = -1;
+static bool led_invert = false;
 
 static void outputLED1(bool val) {
-  if (pin_led1 != -1) {
-    dio_write(pin_led1, val);
+  if (led_pin1 != -1) {
+    dio_write(led_pin1, led_invert ? !val : val);
   }
 }
 
 static void outputLED2(bool val) {
-  if (pin_led2 != -1) {
-    dio_write(pin_led2, val);
+  if (led_pin2 != -1) {
+    dio_write(led_pin2, led_invert ? !val : val);
   }
 }
 
-static void initBoardLeds(uint8_t pin1, uint8_t pin2) {
-  if (pin1 != -1) {
-    pin_led1 = pin1;
-    dio_setOutput(pin_led1);
-    outputLED1(false);
+static void initBoardLEDs(int8_t pin1, int8_t pin2, bool invert) {
+  led_pin1 = pin1;
+  led_pin2 = pin2;
+  led_invert = invert;
+  if (led_pin1 != -1) {
+    dio_setOutput(led_pin1);
+    dio_write(led_pin1, invert);
   }
-  if (pin2 != -1) {
-    pin_led2 = pin2;
-    dio_setOutput(pin_led2);
-    outputLED2(false);
+  if (led_pin2 != -1) {
+    dio_setOutput(led_pin2);
+    dio_write(led_pin2, invert);
   }
 }
 
@@ -245,7 +242,7 @@ static void keyboardEntry() {
   uibioCore_internal_setSerialNumberText(serialNumberTextBuf, 24);
   usbioCore_initialize();
   keyMatrixScanner_initialize(
-      NumRows, NumColumns, rowPins, columnPins, nextKeyStateFlags);
+      numRows, numColumns, rowPins, columnPins, nextKeyStateFlags);
   resetKeyboardCoreLogic();
   optionsInitialConfigShutup = true;
   configuratorServant_initialize(
@@ -281,8 +278,8 @@ static void keyboardEntry() {
 
 //---------------------------------------------
 
-void generalKeyboard_useOnboardLeds(int8_t pin1, int8_t pin2) {
-  initBoardLeds(pin1, pin2);
+void generalKeyboard_useIndicatorLEDs(int8_t pin1, uint8_t pin2, bool invert) {
+  initBoardLEDs(pin1, pin2, invert);
 }
 
 void generalKeyboard_useDebugUART(uint16_t baud) {
@@ -300,7 +297,11 @@ void generalKeyboard_useOptionDynamic(uint8_t slot) {
 }
 
 void generalKeyboard_setup(
-    const uint8_t *_rowPins, const uint8_t *_columnPins, const int8_t *_keySlotIndexToKeyIndexMap) {
+    uint8_t _numRows, uint8_t _numColumns,
+    const uint8_t *_rowPins, const uint8_t *_columnPins,
+    const int8_t *_keySlotIndexToKeyIndexMap) {
+  numRows = _numRows;
+  numColumns = _numColumns;
   rowPins = (uint8_t *)_rowPins;
   columnPins = (uint8_t *)_columnPins;
   keySlotIndexToKeyIndexMap = (uint8_t *)_keySlotIndexToKeyIndexMap;
