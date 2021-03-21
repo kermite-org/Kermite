@@ -231,10 +231,10 @@ static void keyboardEntry() {
       }
     }
     if (optionUseHeartbeatLED) {
-      if (cnt % 2000 == 0) {
+      if (cnt % 4000 == 0) {
         boardLED_outputLED1(true);
       }
-      if (cnt % 2000 == 4) {
+      if (cnt % 4000 == 4) {
         boardLED_outputLED1(false);
       }
     }

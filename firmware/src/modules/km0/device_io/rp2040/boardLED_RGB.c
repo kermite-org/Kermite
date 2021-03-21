@@ -76,14 +76,15 @@ static void updateLEDColor() {
   put_pixel(urgb_u32(value_r, value_g, value_b));
 }
 
-static const uint8_t brightness = 10;
+static const uint8_t brightness_b = 60;
+static const uint8_t brightness_g = 15;
 
 void boardLED_outputLED1(bool val) {
-  value_b = val ? brightness : 0;
+  value_g = val ? brightness_g : 0;
   updateLEDColor();
 }
 
 void boardLED_outputLED2(bool val) {
-  value_g = val ? brightness : 0;
+  value_b = val ? brightness_b : 0;
   updateLEDColor();
 }
