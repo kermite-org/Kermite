@@ -131,11 +131,7 @@ static void processReadGenericHidData() {
           uint16_t addr = StorageBaseAddr_KeyAssignsData + (p[3] << 8 | p[4]);
           uint8_t len = p[5];
           uint8_t *src = p + 6;
-          //uint8_t *dst = dummyStorage + addr;
-          //memcpy(dst, src, len);
-          for (uint8_t i = 0; i < len; i++) {
-            dataMemory_writeByte(addr + i, src[i]);
-          }
+          dataMemory_writeBytes(addr, src, len);
           printf("%d bytes written at %d\n", len, addr);
         }
         if (cmd == 0x21) {
@@ -145,7 +141,7 @@ static void processReadGenericHidData() {
           uint8_t ck = 0;
           printf("check, addr %d, len %d\n", addr, len);
           for (uint16_t i = 0; i < len; i++) {
-            ck ^= dataMemory_readByte(addr + i); //dummyStorage[addr + i];
+            ck ^= dataMemory_readByte(addr + i);
           }
           printf("ck: %d\n", ck);
           emitMemoryChecksumResult(0x01, ck);
@@ -166,12 +162,12 @@ static void processReadGenericHidData() {
         if (cmd == 0x90) {
           // printf("handle custom parameters bluk write\n");
           uint8_t *src = p + 3;
+          dataMemory_writeBytes(StorageAddr_CustomSettingsBytes, src, 10);
+          dataMemory_writeByte(StorageAddr_CustomSettingsBytesInitializationFlag, 1);
           for (uint8_t i = 0; i < 10; i++) {
             uint8_t value = src[i];
-            dataMemory_writeByte(StorageAddr_CustomSettingsBytes + i, value);
             invokeCustomParameterChangedCallback(i, value);
           }
-          dataMemory_writeByte(StorageAddr_CustomSettingsBytesInitializationFlag, 1);
         }
         if (cmd == 0xa0) {
           // printf("handle custom parameters signle write\n");
@@ -186,9 +182,7 @@ static void processReadGenericHidData() {
         if (cmd == 0x90) {
           // printf("write device instance code\n");
           uint8_t *src = p + 3;
-          for (uint8_t i = 0; i < 8; i++) {
-            dataMemory_writeByte(StorageAddr_DeviceInstanceCode + i, src[i]);
-          }
+          dataMemory_writeBytes(StorageAddr_DeviceInstanceCode, src, 8);
         }
       }
     }

@@ -32,7 +32,7 @@ void eepromDev() {
 
 #if 1
   debugShowBytes("write", buf, 4);
-  dataMemory_writeBlock(addr, buf, 4);
+  dataMemory_writeBytes(addr, buf, 4);
 #endif
 
   for (int i = 0; i < 4; i++) {
@@ -40,7 +40,7 @@ void eepromDev() {
   }
   debugShowBytes("cleard", buf, 4);
 
-  dataMemory_readBlock(addr, buf, 4);
+  dataMemory_readBytes(addr, buf, 4);
 
   debugShowBytes("read", buf, 4);
 

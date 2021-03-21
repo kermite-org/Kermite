@@ -12,7 +12,7 @@
 static uint8_t eepromTempBuf[KeyAssignsDataHeaderLength];
 
 bool configValidator_checkDataHeader() {
-  dataMemory_readBlock(StorageAddr_KeyAssignsDataHeader, eepromTempBuf, KeyAssignsDataHeaderLength);
+  dataMemory_readBytes(StorageAddr_KeyAssignsDataHeader, eepromTempBuf, KeyAssignsDataHeaderLength);
   uint8_t *p = eepromTempBuf;
   uint16_t magicNumber = decode_word_be(p + 0);
   uint16_t reserved0xFFFF = decode_word_be(p + 2);
@@ -47,13 +47,11 @@ bool configValidator_checkDataHeader() {
 }
 
 void configValidator_initializeDataStorage() {
-  dataMemory_readBlock(StorageAddr_ProjectID, eepromTempBuf, 8);
+  dataMemory_readBytes(StorageAddr_ProjectID, eepromTempBuf, 8);
   bool projectIdValid = utils_compareBytes(eepromTempBuf, (uint8_t *)PROJECT_ID, 8);
   if (!projectIdValid) {
     printf("clear eeprom for new project\n");
-    dataMemory_writeBlock(StorageAddr_ProjectID, (uint8_t *)PROJECT_ID, 8);
-    for (uint16_t i = StorageAddr_ProjectID + 8; i < 1024; i++) {
-      dataMemory_writeByte(i, 0);
-    }
+    dataMemory_crearAllZero();
+    dataMemory_writeBytes(StorageAddr_ProjectID, (uint8_t *)PROJECT_ID, 8);
   }
 }

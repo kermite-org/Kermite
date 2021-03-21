@@ -110,9 +110,6 @@ def pull_library_code
   copy_folder_recursive('lib/tinyusb/src/osal')
   copy_folder_recursive('lib/tinyusb/src/portable/raspberrypi')
 
-  copy_source_files_direct_under('lib/tinyusb/hw/bsp')
-  copy_folder_recursive('lib/tinyusb/hw/bsp/raspberry_pi_pico')
-
   copy_single_file('LICENSE.TXT')
   output_note_text
 
