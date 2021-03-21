@@ -339,3 +339,9 @@ export function getArrayDiff<T>(curr: T[], next: T[]): [T[], T[]] {
   const removed = curr.filter((a) => !next.includes(a));
   return [added, removed];
 }
+
+export function generateRandomId(n: number): string {
+  return generateNumberSequence(n)
+    .map((_) => String.fromCharCode((97 + Math.random() * 26) >> 0))
+    .join('');
+}
