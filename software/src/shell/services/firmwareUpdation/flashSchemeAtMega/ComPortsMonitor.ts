@@ -1,4 +1,4 @@
-import { IntervalTimerWrapper } from '~/shared';
+import { getArrayDiff, IntervalTimerWrapper } from '~/shared';
 import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { ComPortsResource } from './ComPortsResource';
 
@@ -7,45 +7,41 @@ export interface IComPortDetectionEvent {
 }
 
 type IComPortDetectionCallback = (event: IComPortDetectionEvent) => void;
+
 export class ComPortsMonitor {
   private timerWrapper = new IntervalTimerWrapper();
   private comPortNames: string[] = [];
-  private activeComPortName: string | undefined = undefined;
-  private comPortEnumerationStartTime: number = 0;
+  private iterationCount: number = 0;
   private detectionCallback: IComPortDetectionCallback | undefined;
 
   private updateComPortsMonitor = async () => {
-    const newComPortNames = await ComPortsResource.getComPortNames();
+    const allComPortNames = await ComPortsResource.getComPortNames();
 
-    const newlyAppearedPortName = newComPortNames.find(
-      (portName) => !this.comPortNames.includes(portName),
-    );
-    const elapsed = Date.now() - this.comPortEnumerationStartTime;
-    if (elapsed > 2000 && !this.activeComPortName && newlyAppearedPortName) {
-      this.detectionCallback?.({ comPortName: newlyAppearedPortName });
-      this.activeComPortName = newlyAppearedPortName;
+    if (this.iterationCount > 0) {
+      const [added, removed] = getArrayDiff(this.comPortNames, allComPortNames);
+
+      if (removed.length > 0) {
+        this.detectionCallback?.({ comPortName: undefined });
+      }
+      if (added.length > 0) {
+        this.detectionCallback?.({ comPortName: added[0] });
+      }
     }
-
-    if (
-      this.activeComPortName &&
-      !newComPortNames.includes(this.activeComPortName)
-    ) {
-      this.detectionCallback?.({ comPortName: undefined });
-      this.activeComPortName = undefined;
-    }
-
-    this.comPortNames = newComPortNames;
+    this.comPortNames = allComPortNames;
+    this.iterationCount++;
   };
 
   startDetection(callback: IComPortDetectionCallback) {
     this.detectionCallback = callback;
-    this.comPortEnumerationStartTime = Date.now();
+    this.comPortNames = [];
+    this.iterationCount = 0;
     this.timerWrapper.start(
       withAppErrorHandler(
         this.updateComPortsMonitor,
         'ComPortsMonitor_updateComPortsMonitor',
       ),
       1000,
+      true,
     );
   }
 

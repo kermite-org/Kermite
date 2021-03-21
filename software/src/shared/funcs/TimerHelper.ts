@@ -51,8 +51,11 @@ export function debounceThrottle<T extends (...args: any[]) => unknown>(
 
 export class IntervalTimerWrapper {
   private timerHandle: number | undefined;
-  start(proc: () => void, ms: number) {
-    this.timerHandle = setInterval(proc, ms) as any;
+  start(callback: () => void, ms: number, callInitial?: boolean) {
+    if (callInitial) {
+      callback();
+    }
+    this.timerHandle = setInterval(callback, ms) as any;
   }
 
   stop() {

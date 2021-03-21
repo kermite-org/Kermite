@@ -333,3 +333,9 @@ export function compareArray(ar0: any[], ar1: any[]): boolean {
     ar0.length === ar1.length && ar0.every((it, index) => ar1[index] === it)
   );
 }
+
+export function getArrayDiff<T>(curr: T[], next: T[]): [T[], T[]] {
+  const added = next.filter((a) => !curr.includes(a));
+  const removed = curr.filter((a) => !next.includes(a));
+  return [added, removed];
+}
