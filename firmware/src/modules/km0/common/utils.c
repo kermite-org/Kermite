@@ -49,3 +49,19 @@ void utils_copyStringToWideString(int16_t *dst, uint8_t *src, uint16_t len) {
     dst[i] = src[i];
   }
 }
+
+void utils_fillBytes(uint8_t *dst, uint8_t val, uint16_t len) {
+  for (uint16_t i = 0; i < len; i++) {
+    dst[i] = val;
+  }
+}
+
+int utils_clamp(int val, int lo, int hi) {
+  if (val < lo) {
+    return lo;
+  } else if (val > hi) {
+    return hi;
+  } else {
+    return val;
+  }
+}
