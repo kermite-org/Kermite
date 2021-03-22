@@ -2,6 +2,7 @@ import { IRealtimeKeyboardEvent, IResourceOrigin } from '~/shared';
 import { bytesToString } from '~/shell/services/device/KeyboardDevice/Helpers';
 
 export type IDeviceAttributesReadResponseData = {
+  firmwareVariationName: string;
   projectReleaseBuildRevision: number;
   configStorageFormatRevision: number;
   rawHidMessageProtocolRevision: number;
@@ -41,9 +42,11 @@ export function recievedBytesDecoder(
     const isProjectOriginOnline = !!buf[14];
     const deviceInstanceCode = bytesToString([...buf].slice(16, 24));
     const assignStorageCapacity = (buf[24] << 8) | buf[25];
+    const firmwareVariationName = bytesToString([...buf].slice(26, 42));
     return {
       type: 'deviceAttributeResponse',
       data: {
+        firmwareVariationName,
         projectReleaseBuildRevision,
         configStorageFormatRevision,
         rawHidMessageProtocolRevision,

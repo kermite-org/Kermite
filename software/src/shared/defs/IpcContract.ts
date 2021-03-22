@@ -50,6 +50,7 @@ export interface IDeviceSelectionStatus {
 export interface IKeyboardDeviceAttributes {
   origin: IResourceOrigin;
   projectId: string;
+  firmwareVariationName: string;
   firmwareBuildRevision: number;
   deviceInstanceCode: string;
   assignStorageCapacity: number;
