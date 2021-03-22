@@ -86,7 +86,7 @@ export class FirmwareUpdationService {
         firmwareFilePath,
       );
     }
-    if (firmwareFilePath.endsWith('.rp2040.uf2')) {
+    if (firmwareFilePath.endsWith('_rp2040.uf2')) {
       if (!this.pluggedDriveName) {
         return `target drive unavailable`;
       }

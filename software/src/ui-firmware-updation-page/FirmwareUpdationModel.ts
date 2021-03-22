@@ -58,11 +58,21 @@ export class FirmwareUpdationModel {
 
   // 2: WaitingUploadOrder --> Uploading --> UploadSuccess,UploadFailure
   uploadFirmware = async () => {
-    if (!this.currentProjectSig) {
-      alert('please select firmware');
-      return;
-    }
+    // if (!this.currentProjectSig) {
+    //   alert('please select firmware');
+    //   return;
+    // }
     if (this.phase === 'WaitingUploadOrder' && this.detectedDeviceSig) {
+      // DEBUG
+      const res = await ipcAgent.async.firmup_uploadFirmware('local', 'DUMMY');
+      this.firmwareUploadResult = res;
+      if (res === 'ok') {
+        this.phase = 'UploadSuccess';
+      } else {
+        this.phase = 'UploadFailure';
+      }
+      return;
+
       const info = this.projectInfosWithFirmware.find(
         (it) => it.sig === this.currentProjectSig,
       );
