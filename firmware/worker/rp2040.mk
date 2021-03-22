@@ -274,7 +274,7 @@ $(ELF): $(OBJS)
 
 $(UF2): $(ELF)
 	$(ELF2UF2) $(ELF) $(UF2)
-	@echo "binary output: $(UF2)"
+	@echo "output: $(UF2)"
 
 flash: $(UF2)
 	cp $(UF2) /Volumes/RPI-RP2

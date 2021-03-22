@@ -1,3 +1,5 @@
+TARGET_MCU = atmega32u4
+
 MODULE_SRCS += dio.c
 MODULE_SRCS += debugUart.c
 MODULE_SRCS += keyMatrixScanner.c

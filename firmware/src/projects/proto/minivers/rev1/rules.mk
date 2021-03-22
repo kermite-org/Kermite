@@ -1,3 +1,5 @@
+TARGET_MCU = atmega32u4
+
 MODULE_SRCS += km0/common/utils.c
 MODULE_SRCS += km0/device_io/atmega/system.c
 MODULE_SRCS += km0/device_io/atmega/dio.c

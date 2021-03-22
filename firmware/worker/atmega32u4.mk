@@ -106,7 +106,7 @@ $(ELF): $(OBJS)
 
 $(HEX) : $(ELF)
 	@$(OBJCOPY) -O ihex $(ELF) $(HEX)
-	@echo "binary output: $(HEX)"
+	@echo "output: $(HEX)"
 
 $(LST): $(ELF)
 	@$(OBJDUMP) -h -S $< > $@
