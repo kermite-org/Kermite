@@ -3,7 +3,7 @@ import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { createEventPort } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
 import { FirmwareUpdationSchemeAtMega } from '~/shell/services/firmwareUpdation/flashSchemeAtMega/FlashSchemeAtMega';
-import { FirmwareUpdationSchemeRP } from '~/shell/services/firmwareUpdation/flashSchemeRP/FlashSchemeAtMega';
+import { FirmwareUpdationSchemeRP } from '~/shell/services/firmwareUpdation/flashSchemeRP/FlashSchemeRP';
 
 interface IDeviceDetectionEvent {
   comPortName?: string;
@@ -64,10 +64,15 @@ export class FirmwareUpdationService {
     origin: IResourceOrigin,
     projectId: string,
   ): Promise<'ok' | string> {
-    const firmwareFilePath = await projectResourceProvider.loadProjectFirmwareFile(
+    let firmwareFilePath = await projectResourceProvider.loadProjectFirmwareFile(
       origin,
       projectId,
     );
+
+    // debug
+    firmwareFilePath =
+      '../firmware/build/proto/4x3pad/rp2040/4x3pad_rp2040.uf2';
+
     if (!firmwareFilePath) {
       return `cannot find firmware`;
     }

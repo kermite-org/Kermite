@@ -7,7 +7,7 @@ import {
 
 interface IFirmwareUpdationPageViewModel {
   phase: FirmwareUpdationPhase;
-  comPortName: string | undefined;
+  detectedDeviceSig: string | undefined;
   canSelectTargetFirmware: boolean;
   projectSelectorSource: ISelectorSource;
   onWriteButton(): void;
@@ -19,7 +19,7 @@ export function makeFirmwareUpdationPageViewModel(): IFirmwareUpdationPageViewMo
   const model = firmwareUpdationModel;
   return {
     phase: model.phase,
-    comPortName: model.comPortName,
+    detectedDeviceSig: model.detectedDeviceSig,
     canSelectTargetFirmware: model.canSelectTargetFirmware,
     projectSelectorSource: {
       options: model.projectOptions,

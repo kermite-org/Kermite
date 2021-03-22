@@ -61,7 +61,7 @@ export const FirmwareUpdationPart = () => {
 
         {phase === 'WaitingUploadOrder' && (
           <div>
-            <div>{vm.comPortName} detected. Ready to flash.</div>
+            <div>{vm.detectedDeviceSig} detected. Ready to flash.</div>
             <GeneralButton onClick={vm.onWriteButton} text="write" />
           </div>
         )}
