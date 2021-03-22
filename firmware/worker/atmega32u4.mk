@@ -1,22 +1,14 @@
 -include Makefile.user
 
-
-REL_PROJECT_CODE_DIR = $(PROJECT)
-ifneq ($(VARIATION),)
 REL_PROJECT_CODE_DIR = $(PROJECT)/$(VARIATION)
-endif
-
 PROJECT_CODE_DIR = src/projects/$(REL_PROJECT_CODE_DIR)
 
 BUILD_DIR = build
 OUT_DIR = build/$(REL_PROJECT_CODE_DIR)
 OBJ_DIR = $(OUT_DIR)/obj
-CORE_NAME = $(notdir $(PROJECT))
-ifneq ($(VARIATION),)
 CORE_NAME = $(notdir $(PROJECT))_$(VARIATION)
-endif
 
-MODULE_SRCS = 
+MODULE_SRCS =
 PROJECT_SRCS =
 RULES_MK = $(PROJECT_CODE_DIR)/rules.mk
 -include $(RULES_MK)

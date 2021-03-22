@@ -46,10 +46,7 @@ ifneq ($(COMMAND),)
 
 #read TARGET_MCU from rules.mk
 TARGET_MCU =
-RULES_MK = src/projects/$(PROJECT)/rules.mk
-ifneq ($(VARIATION),)
 RULES_MK = src/projects/$(PROJECT)/$(VARIATION)/rules.mk
-endif
 ifeq ($(wildcard $(RULES_MK)),)
 $(error file not found: $(RULES_MK))
 endif
