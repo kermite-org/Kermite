@@ -1,11 +1,18 @@
-
-PROJECT ?=
 -include Makefile.user
 
-PROJECT_CODE_DIR = src/projects/$(PROJECT)
-PROJECT_CODE_DIR_ALT = src/projects/$(PROJECT)/mcu_rp2040
-ifneq "$(wildcard $(PROJECT_CODE_DIR_ALT) )" ""
-PROJECT_CODE_DIR = $(PROJECT_CODE_DIR_ALT)
+REL_PROJECT_CODE_DIR = $(PROJECT)
+ifneq ($(VARIATION),)
+REL_PROJECT_CODE_DIR = $(PROJECT)/$(VARIATION)
+endif
+
+PROJECT_CODE_DIR = src/projects/$(REL_PROJECT_CODE_DIR)
+
+BUILD_DIR = build
+OUT_DIR = build/$(REL_PROJECT_CODE_DIR)
+OBJ_DIR = $(OUT_DIR)/obj
+CORE_NAME = $(notdir $(PROJECT))
+ifneq ($(VARIATION),)
+CORE_NAME = $(notdir $(PROJECT))_$(VARIATION)
 endif
 
 #import rules.mk
@@ -15,11 +22,6 @@ RULES_MK = $(PROJECT_CODE_DIR)/rules.mk
 -include $(RULES_MK)
 
 MODULES_DIR = src/modules
-
-BUILD_DIR = build
-OUT_DIR = build/$(PROJECT)/rp2040
-OBJ_DIR = build/$(PROJECT)/rp2040/obj
-CORE_NAME = $(notdir $(PROJECT))_rp2040
 
 RELEASE_REVISION ?= 0
 IS_RESOURCE_ORIGIN_ONLINE ?= 0
@@ -272,6 +274,7 @@ $(ELF): $(OBJS)
 
 $(UF2): $(ELF)
 	$(ELF2UF2) $(ELF) $(UF2)
+	@echo "binary output: $(UF2)"
 
 flash: $(UF2)
 	cp $(UF2) /Volumes/RPI-RP2

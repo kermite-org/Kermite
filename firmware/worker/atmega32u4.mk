@@ -1,16 +1,20 @@
-PROJECT ?=
 -include Makefile.user
 
-PROJECT_CODE_DIR = src/projects/$(PROJECT)
-PROJECT_CODE_DIR_ALT = src/projects/$(PROJECT)/mcu_atmega
-ifneq "$(wildcard $(PROJECT_CODE_DIR_ALT) )" ""
-PROJECT_CODE_DIR = $(PROJECT_CODE_DIR_ALT)
+
+REL_PROJECT_CODE_DIR = $(PROJECT)
+ifneq ($(VARIATION),)
+REL_PROJECT_CODE_DIR = $(PROJECT)/$(VARIATION)
 endif
 
+PROJECT_CODE_DIR = src/projects/$(REL_PROJECT_CODE_DIR)
+
 BUILD_DIR = build
-OUT_DIR = build/$(PROJECT)/atmega
-OBJ_DIR = build/$(PROJECT)/atmega/obj
-CORE_NAME = $(notdir $(PROJECT))_atmega32u4
+OUT_DIR = build/$(REL_PROJECT_CODE_DIR)
+OBJ_DIR = $(OUT_DIR)/obj
+CORE_NAME = $(notdir $(PROJECT))
+ifneq ($(VARIATION),)
+CORE_NAME = $(notdir $(PROJECT))_$(VARIATION)
+endif
 
 MODULE_SRCS = 
 PROJECT_SRCS =
@@ -102,6 +106,7 @@ $(ELF): $(OBJS)
 
 $(HEX) : $(ELF)
 	@$(OBJCOPY) -O ihex $(ELF) $(HEX)
+	@echo "binary output: $(HEX)"
 
 $(LST): $(ELF)
 	@$(OBJDUMP) -h -S $< > $@
