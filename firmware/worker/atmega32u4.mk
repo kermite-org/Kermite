@@ -121,7 +121,7 @@ purge:
 	rm -rf $(ELF) $(HEX) $(LIST) $(OBJS)
 
 clean:
-	rm -rf $(BUILD_DIR) dist
+	rm -rf $(BUILD_DIR)
 
 .PHONY: build
 	

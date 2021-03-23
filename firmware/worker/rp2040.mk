@@ -37,6 +37,8 @@ AS = arm-none-eabi-gcc
 LD = arm-none-eabi-g++
 OBJCOPY = arm-none-eabi-objcopy
 OBJDUMP = arm-none-eabi-objdump
+OBJSIZE = arm-none-eabi-size
+
 ELF2UF2 = $(PICO_LOCAL_DIR)/tools/elf2uf2
 
 #--------------------
@@ -270,6 +272,9 @@ $(UF2): $(ELF)
 	$(ELF2UF2) $(ELF) $(UF2)
 	@echo "output: $(UF2)"
 
+size: $(OBJS)
+	@$(LD) $(LD_FLAGS) $(OBJS) -o $(ELF) $(BOOT_S)
+
 flash: $(UF2)
 	cp $(UF2) /Volumes/RPI-RP2
 
@@ -277,6 +282,6 @@ flash_via_swd: $(ELF)
 	openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "program $(ELF) verify reset exit"
 
 clean:
-	rm -rf build
+	rm -rf $(BUILD_DIR)
 
 .PHONY: build
