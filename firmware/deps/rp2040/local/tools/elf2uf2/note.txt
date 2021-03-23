@@ -1,0 +1,2 @@
+based on
+https://github.com/raspberrypi/pico-sdk/tree/master/tools/elf2uf2
