@@ -19,8 +19,10 @@ jobs:
       - name: Install Dependencies
         run: sudo apt install gcc-avr avr-libc binutils-avr
 
-      - name: arm-none-eabi-gcc
+      - name: install arm-none-eabi-gcc
         uses: fiam/arm-none-eabi-gcc@v1
+        with:
+          release: "10-2020-q4-major"
 
       - name: Use Node.js
         uses: actions/setup-node@v1
