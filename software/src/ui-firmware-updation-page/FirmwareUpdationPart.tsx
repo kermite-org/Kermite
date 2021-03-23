@@ -49,7 +49,7 @@ export const FirmwareUpdationPart = () => {
       <div className="mainRow">
         <GeneralSelector
           {...vm.projectSelectorSource}
-          width={170}
+          width={350}
           disabled={!vm.canSelectTargetFirmware}
         />
       </div>
