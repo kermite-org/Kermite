@@ -90,8 +90,12 @@ export class ApplicationRoot {
         this.deviceService.selectTargetDevice(path),
       device_setCustomParameterValue: async (index, value) =>
         this.deviceService.setCustomParameterValue(index, value),
-      firmup_uploadFirmware: (origin, projectId) =>
-        this.firmwareUpdationService.writeFirmware(origin, projectId),
+      firmup_uploadFirmware: (origin, projectId, variationName) =>
+        this.firmwareUpdationService.writeFirmware(
+          origin,
+          projectId,
+          variationName,
+        ),
       projects_getAllProjectResourceInfos: () =>
         projectResourceProvider.getAllProjectResourceInfos(),
       projects_getProjectCustomDefinition: (origin, projectId) =>
