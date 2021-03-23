@@ -282,6 +282,6 @@ flash_via_swd: $(ELF)
 	openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "program $(ELF) verify reset exit"
 
 clean:
-	rm -rf $(BUILD_DIR)
+	rm -rf $(OUT_DIR)
 
 .PHONY: build

@@ -13,8 +13,10 @@ function getAllProjectVariationPaths() {
   return glob
     .sync("src/projects/**/rules.mk")
     .map((fpath) => path.dirname(fpath))
-    .filter((fpath) =>
-      fs.existsSync(path.join(path.dirname(fpath), "project.json"))
+    .filter(
+      (fpath) =>
+        fs.existsSync(path.join(fpath, "config.h")) &&
+        fs.existsSync(path.join(path.dirname(fpath), "project.json"))
     )
     .map((fpath) => path.relative("src/projects", fpath));
 }
@@ -50,7 +52,7 @@ function checkFirmwareBinarySize(projectPath: string, variationName: string) {
     !(0 < usageProg && usageProg < 100.0 && 0 < usageData && usageData < 100.0)
   ) {
     throw new Error(
-      `firmware footprint overrun (FLASH: ${usageProg}, RAM: ${usageData})`
+      `firmware footprint overrun (FLASH: ${usageProg}%, RAM: ${usageData}%)`
     );
   }
 }
