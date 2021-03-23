@@ -168,7 +168,7 @@ function projectBuildPipeline(
 ): IProjectBuildResultUpdatedAttrs {
   const { releaseBuildRevision: buildRevision } = sourceAttrs;
 
-  // executeCommand(`make ${projectPath}:${variationName}:clean`);
+  executeCommand(`make ${projectPath}:${variationName}:clean_app`);
   makeFirmwareBuild(projectPath, variationName, buildRevision);
   const sizeRes = checkFirmwareBinarySize(
     projectPath,
@@ -196,7 +196,7 @@ function projectBuildPipeline(
   }
 
   const nextBuildRevision = buildRevision + 1;
-  executeCommand(`make ${projectPath}:${variationName}:clean`);
+  executeCommand(`make ${projectPath}:${variationName}:clean_app`);
   makeFirmwareBuild(projectPath, variationName, nextBuildRevision);
   const nextInfo = readOutputBinaryFileInfo(
     projectPath,
@@ -338,7 +338,7 @@ interface IBuildStats {
 }
 
 export function deployStageProjectsBuilder_buildProjects(): IBuildStats {
-  // executeCommand("make clean");
+  executeCommand("make clean");
   fsxMakeDirectory("dist");
   const projectVariationPaths = gatherTargetProjectVariationPaths();
   puts(`projectVariations: ${stringifyArray(projectVariationPaths)}`);
