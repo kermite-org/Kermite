@@ -63,38 +63,36 @@ export class FirmwareUpdationService {
   async writeFirmware(
     origin: IResourceOrigin,
     projectId: string,
+    variationName: string,
   ): Promise<'ok' | string> {
-    let firmwareFilePath = await projectResourceProvider.loadProjectFirmwareFile(
+    const binarySpec = await projectResourceProvider.loadProjectFirmwareFile(
       origin,
       projectId,
+      variationName,
     );
 
-    // debug
-    firmwareFilePath =
-      '../firmware/build/proto/4x3pad/rp2040/4x3pad_rp2040.uf2';
-
-    if (!firmwareFilePath) {
+    if (!binarySpec) {
       return `cannot find firmware`;
     }
 
-    if (firmwareFilePath.endsWith('.atmega32u4.hex')) {
+    if (binarySpec.targetDevice === 'atmega32u4') {
       if (!this.pluggedComPortName) {
         return `target com port unavailable`;
       }
       return await this.schemeAtMega.flashFirmware(
         this.pluggedComPortName,
-        firmwareFilePath,
+        binarySpec.filePath,
       );
     }
-    if (firmwareFilePath.endsWith('_rp2040.uf2')) {
+    if (binarySpec.targetDevice === 'rp2040') {
       if (!this.pluggedDriveName) {
         return `target drive unavailable`;
       }
       return await this.schemeRP.flashFirmware(
         this.pluggedDriveName,
-        firmwareFilePath,
+        binarySpec.filePath,
       );
     }
-    return `cannot determine updation method for ${firmwareFilePath}`;
+    return `cannot determine updation method for ${binarySpec.filePath}`;
   }
 }
