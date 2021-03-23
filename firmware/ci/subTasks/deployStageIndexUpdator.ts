@@ -1,9 +1,6 @@
 import {
   compareObjectByJsonStringifyParse,
   createObjectFromKeyValues,
-  puts,
-} from "./helpers";
-import {
   fsExistsSync,
   fsStatSync,
   fsxReadJsonFile,
@@ -12,8 +9,9 @@ import {
   generateMd5,
   globSync,
   pathRelative,
+  puts,
   timeNow,
-} from "./osHelpers";
+} from "../helpers";
 
 type IFilesMd5Dict = { [key in string]: string };
 

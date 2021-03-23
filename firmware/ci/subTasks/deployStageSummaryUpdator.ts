@@ -10,7 +10,7 @@ import {
   pathDirname,
   pathRelative,
   timeNow,
-} from "./osHelpers";
+} from "../helpers";
 
 interface IBuildStats {
   numSuccess: number;

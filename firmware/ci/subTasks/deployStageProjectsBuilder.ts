@@ -1,4 +1,5 @@
 import {
+  arrayCount,
   executeCommand,
   fsCopyFileSync,
   fsExistsSync,
@@ -11,14 +12,16 @@ import {
   fsxWriteJsonFile,
   fsxWriteTextFile,
   generateMd5,
+  getMatched,
   globSync,
   pathBasename,
   pathDirname,
   pathJoin,
   pathRelative,
+  puts,
+  stringifyArray,
   timeNow,
-} from "./osHelpers";
-import { arrayCount, getMatched, puts, stringifyArray } from "./helpers";
+} from "../helpers";
 
 function gatherTargetProjectPaths() {
   return globSync("./src/projects/**/rules.mk")

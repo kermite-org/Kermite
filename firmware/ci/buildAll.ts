@@ -1,8 +1,7 @@
 import * as fs from "fs";
 import glob from "glob";
 import path from "path";
-import { stringifyArray } from "./helpers";
-import { executeCommand } from "./osHelpers";
+import { executeCommand, stringifyArray } from "./helpers";
 
 process.chdir("..");
 

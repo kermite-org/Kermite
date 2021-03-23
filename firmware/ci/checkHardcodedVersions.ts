@@ -1,9 +1,9 @@
 import {
   checkHasFields,
   compareObjectByJsonStringifyParse,
+  fsxReadTextFile,
   getMatched,
 } from "./helpers";
-import { fsxReadTextFile } from "./osHelpers";
 
 process.chdir("..");
 
