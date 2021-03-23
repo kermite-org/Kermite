@@ -17,7 +17,10 @@ import {
 } from '~/shell/funcs';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
-import { IProjectResourceProviderImpl } from '~/shell/projectResources';
+import {
+  IFirmwareBinaryFileSpec,
+  IProjectResourceProviderImpl,
+} from '~/shell/projectResources';
 import { IPorjectFileJson } from '~/shell/projectResources/ProjectResourceProviderImpl_Local';
 import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 
@@ -158,7 +161,7 @@ export class ProjectResourceProviderImpl_Remote
 
   async loadProjectFirmwareFile(
     projectId: string,
-  ): Promise<string | undefined> {
+  ): Promise<IFirmwareBinaryFileSpec | undefined> {
     // リモートからHexファイルを取得後、ローカルに一時ファイルとして保存してファイルパスを返す
     const info = this.getProjectInfoSourceById(projectId);
     if (info) {

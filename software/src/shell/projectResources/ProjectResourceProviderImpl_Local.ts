@@ -1,5 +1,6 @@
 import {
   ICustromParameterSpec,
+  IFirmwareTargetDevice,
   IPersistKeyboardDesign,
   IProfileData,
   IProjectCustomDefinition,
@@ -10,7 +11,9 @@ import { createProjectSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { appEnv } from '~/shell/base';
 import {
   fsExistsSync,
+  fsLstatSync,
   fsxReaddir,
+  fsxReadFile,
   fsxReadJsonFile,
   globAsync,
   pathBasename,
@@ -21,7 +24,10 @@ import {
 } from '~/shell/funcs';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
-import { IProjectResourceProviderImpl } from '~/shell/projectResources/interfaces';
+import {
+  IFirmwareBinaryFileSpec,
+  IProjectResourceProviderImpl,
+} from '~/shell/projectResources/interfaces';
 import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 
 export interface IPorjectFileJson {
@@ -37,7 +43,13 @@ interface IProjectResourceInfoSource {
   projectFolderPath: string;
   layoutNames: string[];
   presetNames: string[];
-  hexFilePath?: string;
+  firmwares: {
+    variationName: string;
+    targetDevice: IFirmwareTargetDevice;
+    binaryFilePath: string;
+    buildRevision: number;
+    buildTimestamp: string;
+  }[];
   customParameters: ICustromParameterSpec[];
 }
 namespace ProjectResourceInfoSourceLoader {
@@ -68,6 +80,59 @@ namespace ProjectResourceInfoSourceLoader {
     return (await fsxReadJsonFile(projectFilePath)) as IPorjectFileJson;
   }
 
+  async function gatherFirmwares(
+    localRepositoryRootDir: string,
+    projectPath: string,
+  ): Promise<IProjectResourceInfoSource['firmwares']> {
+    const projectsRoot = pathJoin(
+      localRepositoryRootDir,
+      'firmware/src/projects',
+    );
+    const buildsRoot = pathJoin(localRepositoryRootDir, 'firmware/build');
+
+    const projectBaseDir = pathJoin(projectsRoot, projectPath);
+
+    const rulesMks = await globAsync('**/rules.mk', projectBaseDir);
+
+    const coreName = pathBasename(projectPath);
+
+    return (
+      await Promise.all(
+        rulesMks.map(async (rulesMk) => {
+          const variationName = pathDirname(rulesMk);
+          const content = await fsxReadFile(pathJoin(projectBaseDir, rulesMk));
+          const m = content.match(/^TARGET_MCU\s?=\s?(.+)$/m);
+          const _targetDevice = m?.[1] || '';
+          const targetDevice = (['atmega32u4', 'rp2040'].includes(_targetDevice)
+            ? _targetDevice
+            : undefined) as IFirmwareTargetDevice;
+          const extension = targetDevice === 'atmega32u4' ? 'hex' : 'uf2';
+          const _binaryFilePath = pathJoin(
+            buildsRoot,
+            projectPath,
+            variationName,
+            `${coreName}_${variationName}.${extension}`,
+          );
+          const binaryFilePath = checkFileExistsOrBlank(_binaryFilePath) || '';
+          const buildTimestamp =
+            (binaryFilePath &&
+              (() => {
+                const mtime = fsLstatSync(binaryFilePath).mtime;
+                return mtime.toISOString();
+              })()) ||
+            '';
+          return {
+            variationName,
+            targetDevice,
+            binaryFilePath,
+            buildRevision: 0,
+            buildTimestamp,
+          };
+        }),
+      )
+    ).filter((it) => it.targetDevice && it.binaryFilePath);
+  }
+
   export async function loadLocalResources(
     localRepositoryRootDir: string,
   ): Promise<IProjectResourceInfoSource[]> {
@@ -84,8 +149,6 @@ namespace ProjectResourceInfoSourceLoader {
       return [];
     }
 
-    const buildsRoot = pathJoin(localRepositoryRootDir, 'firmware/build');
-
     const projectFilePaths = await globAsync(
       `${projectsRoot}/**/*/project.json`,
     );
@@ -98,9 +161,9 @@ namespace ProjectResourceInfoSourceLoader {
         );
         const projectBaseDir = pathDirname(projectFilePath);
 
-        const coreName = pathBasename(projectPath);
-        const hexFilePath = checkFileExistsOrBlank(
-          pathJoin(buildsRoot, projectPath, `${coreName}.hex`),
+        const firmwares = await gatherFirmwares(
+          localRepositoryRootDir,
+          projectPath,
         );
 
         const {
@@ -122,7 +185,7 @@ namespace ProjectResourceInfoSourceLoader {
           projectFolderPath: projectBaseDir,
           layoutNames,
           presetNames,
-          hexFilePath,
+          firmwares,
           origin: 'local' as const,
           customParameters,
         };
@@ -172,7 +235,7 @@ export class ProjectResourceProviderImpl_Local
         projectId,
         keyboardName,
         projectPath,
-        hexFilePath,
+        firmwares,
         presetNames,
         layoutNames,
       } = it;
@@ -184,9 +247,7 @@ export class ProjectResourceProviderImpl_Local
         projectPath,
         presetNames,
         layoutNames,
-        hasFirmwareBinary: !!hexFilePath,
-        firmwareBuildRevision: 0,
-        firmwareBuildTimestamp: 'N/A',
+        firmwares,
       };
     });
   }
@@ -232,9 +293,23 @@ export class ProjectResourceProviderImpl_Local
     }
   }
 
-  private getLocalHexFilePath(projectId: string): string | undefined {
+  private getLocalFirmwareFileSpec(
+    projectId: string,
+    variationName: string,
+  ): IFirmwareBinaryFileSpec | undefined {
     const info = this.getProjectInfoSourceById(projectId);
-    return info?.hexFilePath;
+    if (info) {
+      const firmware = info.firmwares.find(
+        (it) => it.variationName === variationName,
+      );
+      if (firmware) {
+        return {
+          targetDevice: firmware.targetDevice,
+          filePath: firmware.binaryFilePath,
+        };
+      }
+    }
+    return undefined;
   }
 
   getLocalLayoutFilePath(
@@ -276,7 +351,8 @@ export class ProjectResourceProviderImpl_Local
   // eslint-disable-next-line @typescript-eslint/require-await
   async loadProjectFirmwareFile(
     projectId: string,
-  ): Promise<string | undefined> {
-    return this.getLocalHexFilePath(projectId);
+    variationName: string,
+  ): Promise<IFirmwareBinaryFileSpec | undefined> {
+    return this.getLocalFirmwareFileSpec(projectId, variationName);
   }
 }

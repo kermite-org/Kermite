@@ -7,6 +7,7 @@ import {
 } from '~/shared';
 import { ProjectResourceProviderImpl_Remote } from '~/shell/projectResources/ProjectResourceProviderImpl_Remote';
 import {
+  IFirmwareBinaryFileSpec,
   IProjectResourceProvider,
   IProjectResourceProviderImpl,
 } from '~/shell/projectResources/interfaces';
@@ -61,9 +62,10 @@ class ProjectResourceProvider implements IProjectResourceProvider {
   async loadProjectFirmwareFile(
     origin: IResourceOrigin,
     projectId: string,
-  ): Promise<string | undefined> {
+    variationName: string,
+  ): Promise<IFirmwareBinaryFileSpec | undefined> {
     const providerImpl = this.getResouceProviderImpl(origin);
-    return await providerImpl.loadProjectFirmwareFile(projectId);
+    return await providerImpl.loadProjectFirmwareFile(projectId, variationName);
   }
 }
 
