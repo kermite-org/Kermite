@@ -8,6 +8,7 @@ import {
   globSync,
   pathBasename,
   pathDirname,
+  pathJoin,
   pathRelative,
   timeNow,
 } from "../helpers";
@@ -30,22 +31,32 @@ interface IMetadataJson {
   buildResult: "success" | "failure";
   releaseBuildRevision: number;
   buildTimestamp: string;
+  storageFormatRevision: number;
+  messageProtocolRevision: number;
   flashUsage: number;
   ramUsage: number;
-  hexFileSize: number;
-  hexFileMD5: string;
+  firmwareFileSize: number;
+  firmwareBinaryFileMD5: string;
+  variationName: string;
+  targetDevice: "atmega32u4" | "rp2040";
+  firmwareFileName: string;
 }
 
 interface IProjectInfo {
-  projectPath: string;
   projectId: string;
+  projectPath: string;
   keyboardName: string;
-  buildStatus: "success" | "failure";
-  revision: number;
-  updatedAt: string;
-  hexFileSize: number;
   layoutNames: string[];
   presetNames: string[];
+  firmwares: {
+    variationName: string;
+    targetDevice: "atmega32u4" | "rp2040";
+    binaryFileName: string;
+    buildRevision: number;
+    buildTimestamp: string;
+    romUsage: number;
+    ramUsage: number;
+  }[];
 }
 
 interface IEnvironmentVersions {
@@ -108,8 +119,6 @@ function makeSummaryFileContent(
     const projectObj = fsxReadJsonFile(
       projectJsonFilePath
     ) as IProjectJsonPartial;
-    const metadataFilePath = `./dist/variants/${projectPath}/metadata.json`;
-    const meta = fsxReadJsonFile(metadataFilePath) as IMetadataJson;
 
     let presetNames: string[] = [];
 
@@ -124,16 +133,36 @@ function makeSummaryFileContent(
       .filter((fileName) => fileName.endsWith(".layout.json"))
       .map((fileName) => pathBasename(fileName, ".layout.json"));
 
+    const metadataFileNames = fsReaddirSync(
+      `./dist/variants/${projectPath}`
+    ).filter((fileName) => fileName.match(/^metadata_.*\.json$/));
+
+    const firmwares = metadataFileNames
+      .map((metadataFileName) => {
+        const filePath = pathJoin(
+          `./dist/variants/${projectPath}`,
+          metadataFileName
+        );
+        return fsxReadJsonFile(filePath) as IMetadataJson;
+      })
+      .filter((metadata) => metadata.buildResult === "success")
+      .map((md) => ({
+        variationName: md.variationName,
+        targetDevice: md.targetDevice,
+        binaryFileName: md.firmwareFileName,
+        buildRevision: md.releaseBuildRevision,
+        buildTimestamp: md.buildTimestamp,
+        romUsage: md.flashUsage,
+        ramUsage: md.ramUsage,
+      }));
+
     return {
       projectPath: projectPath,
       projectId: projectObj.projectId,
       keyboardName: projectObj.keyboardName,
-      buildStatus: meta.buildResult,
-      revision: meta.releaseBuildRevision,
-      updatedAt: meta.buildTimestamp,
-      hexFileSize: meta.hexFileSize,
       layoutNames,
       presetNames,
+      firmwares,
     };
   });
   return {

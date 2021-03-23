@@ -27,8 +27,8 @@ function buildAllProjectDistributions() {
   pullResourceStoreRepo();
   const buildStats = deployStageProjectsBuilder_buildProjects();
   const changeRes = deployStageIndexUpdator_updateIndexIfFilesChanged();
-  // deployStageSummaryUpdator_outputSummaryFile(buildStats, changeRes);
-  // copyResourcesToLocalResourceStoreRepo();
+  deployStageSummaryUpdator_outputSummaryFile(buildStats, changeRes);
+  copyResourcesToLocalResourceStoreRepo();
   console.log("done");
 }
 
