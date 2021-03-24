@@ -155,6 +155,7 @@ namespace CommunicationDataBinaryForamt {
     [15]: { padding: u8 };
     [16_23]: { deviceInstanceCode: Bytes<8> };
     [24_25]: { assignStorageCapacity: u16 };
+    [26_31]: { variationName: Bytes<16> };
   };
 
   type __draft__PktKeyboardSideConfiguration = PacketHostToDevice & {

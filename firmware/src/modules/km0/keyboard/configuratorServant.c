@@ -6,6 +6,7 @@
 #include "utils.h"
 #include "versions.h"
 #include <stdio.h>
+#include <string.h>
 
 //---------------------------------------------
 //callbacks
@@ -96,7 +97,9 @@ static void emitDeviceAttributesResponse() {
   copyEepromBytesToBuffer(p, 16, StorageAddr_DeviceInstanceCode, 8);
   p[24] = KeyAssignsDataCapacity >> 8 & 0xFF;
   p[25] = KeyAssignsDataCapacity & 0xFF;
-
+  utils_fillBytes(p + 26, 0, 16);
+  size_t slen = utils_clamp(strlen(VARIATION_NAME), 0, 16);
+  utils_copyBytes(p + 26, (uint8_t *)VARIATION_NAME, slen);
   emitGenericHidData(rawHidSendBuf);
 }
 

@@ -1,12 +1,12 @@
-
-PROJECT ?=
 -include Makefile.user
 
-PROJECT_CODE_DIR = src/projects/$(PROJECT)
-PROJECT_CODE_DIR_ALT = src/projects/$(PROJECT)/mcu_rp2040
-ifneq "$(wildcard $(PROJECT_CODE_DIR_ALT) )" ""
-PROJECT_CODE_DIR = $(PROJECT_CODE_DIR_ALT)
-endif
+REL_PROJECT_CODE_DIR = $(PROJECT)/$(VARIATION)
+PROJECT_CODE_DIR = src/projects/$(REL_PROJECT_CODE_DIR)
+
+BUILD_DIR = build
+OUT_DIR = build/$(REL_PROJECT_CODE_DIR)
+OBJ_DIR = $(OUT_DIR)/obj
+CORE_NAME = $(notdir $(PROJECT))_$(VARIATION)
 
 #import rules.mk
 MODULE_SRCS = 
@@ -15,11 +15,6 @@ RULES_MK = $(PROJECT_CODE_DIR)/rules.mk
 -include $(RULES_MK)
 
 MODULES_DIR = src/modules
-
-BUILD_DIR = build
-OUT_DIR = build/$(PROJECT)/rp2040
-OBJ_DIR = build/$(PROJECT)/rp2040/obj
-CORE_NAME = $(notdir $(PROJECT))_rp2040
 
 RELEASE_REVISION ?= 0
 IS_RESOURCE_ORIGIN_ONLINE ?= 0
@@ -77,6 +72,7 @@ DEFINES = \
 -DTARGET_MCU_RP2040 \
 -DEXTR_PROJECT_RELEASE_BUILD_REVISION=$(RELEASE_REVISION) \
 -DEXTR_IS_RESOURCE_ORIGIN_ONLINE=$(IS_RESOURCE_ORIGIN_ONLINE) \
+-DEXTR_VARIATION_NAME=\"$(VARIATION)\" \
 
 CORE_FLAGS = $(DEFINES) $(INC_PATHS) -march=armv6-m -mcpu=cortex-m0plus -mthumb -Og -g -ffunction-sections -fdata-sections
 AS_FLAGS = $(CORE_FLAGS)
@@ -272,6 +268,7 @@ $(ELF): $(OBJS)
 
 $(UF2): $(ELF)
 	$(ELF2UF2) $(ELF) $(UF2)
+	@echo "output: $(UF2)"
 
 flash: $(UF2)
 	cp $(UF2) /Volumes/RPI-RP2

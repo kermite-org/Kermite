@@ -1,18 +1,14 @@
-PROJECT ?=
 -include Makefile.user
 
-PROJECT_CODE_DIR = src/projects/$(PROJECT)
-PROJECT_CODE_DIR_ALT = src/projects/$(PROJECT)/mcu_atmega
-ifneq "$(wildcard $(PROJECT_CODE_DIR_ALT) )" ""
-PROJECT_CODE_DIR = $(PROJECT_CODE_DIR_ALT)
-endif
+REL_PROJECT_CODE_DIR = $(PROJECT)/$(VARIATION)
+PROJECT_CODE_DIR = src/projects/$(REL_PROJECT_CODE_DIR)
 
 BUILD_DIR = build
-OUT_DIR = build/$(PROJECT)/atmega
-OBJ_DIR = build/$(PROJECT)/atmega/obj
-CORE_NAME = $(notdir $(PROJECT))_atmega32u4
+OUT_DIR = build/$(REL_PROJECT_CODE_DIR)
+OBJ_DIR = $(OUT_DIR)/obj
+CORE_NAME = $(notdir $(PROJECT))_$(VARIATION)
 
-MODULE_SRCS = 
+MODULE_SRCS =
 PROJECT_SRCS =
 RULES_MK = $(PROJECT_CODE_DIR)/rules.mk
 -include $(RULES_MK)
@@ -66,6 +62,7 @@ CFLAGS += -MMD
 CFLAGS += -DF_CPU=16000000UL
 CFLAGS += -DEXTR_PROJECT_RELEASE_BUILD_REVISION=$(RELEASE_REVISION)
 CFLAGS += -DEXTR_IS_RESOURCE_ORIGIN_ONLINE=$(IS_RESOURCE_ORIGIN_ONLINE)
+CFLAGS += -DEXTR_VARIATION_NAME=\"$(VARIATION)\"
 CFLAGS += -DTARGET_MCU_ATMEGA
 
 ASFLAGS += -gstabs 
@@ -102,6 +99,7 @@ $(ELF): $(OBJS)
 
 $(HEX) : $(ELF)
 	@$(OBJCOPY) -O ihex $(ELF) $(HEX)
+	@echo "output: $(HEX)"
 
 $(LST): $(ELF)
 	@$(OBJDUMP) -h -S $< > $@
