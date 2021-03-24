@@ -18,6 +18,15 @@ export type IPresetSpec =
 
 export type IResourceOrigin = 'local' | 'online';
 
+export type IFirmwareTargetDevice = 'atmega32u4' | 'rp2040';
+
+export interface IProjectFirmwareInfo {
+  variationName: string;
+  targetDevice: IFirmwareTargetDevice;
+  buildRevision: number;
+  buildTimestamp: string;
+}
+
 export interface IProjectResourceInfo {
   sig: string; // ${origin}#${projectId}
   origin: IResourceOrigin;
@@ -26,9 +35,7 @@ export interface IProjectResourceInfo {
   projectPath: string;
   presetNames: string[];
   layoutNames: string[];
-  hasFirmwareBinary: boolean;
-  firmwareBuildRevision: number;
-  firmwareBuildTimestamp: string;
+  firmwares: IProjectFirmwareInfo[];
 }
 
 export interface IProjectCustomDefinition {
@@ -257,6 +264,7 @@ export interface IAppIpcContract {
     firmup_uploadFirmware(
       origin: IResourceOrigin,
       projectId: string,
+      variationName: string,
     ): Promise<string>;
 
     file_getOpenJsonFilePathWithDialog(): Promise<string | undefined>;

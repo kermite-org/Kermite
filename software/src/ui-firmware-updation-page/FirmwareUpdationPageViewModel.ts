@@ -23,8 +23,8 @@ export function makeFirmwareUpdationPageViewModel(): IFirmwareUpdationPageViewMo
     canSelectTargetFirmware: model.canSelectTargetFirmware,
     projectSelectorSource: {
       options: model.projectOptions,
-      value: model.currentProjectSig,
-      setValue: model.setCurrentProjectSig,
+      value: model.currentProjectFirmwareSpec,
+      setValue: model.setCurrentProjectFirmwareSpec,
     },
     onWriteButton() {
       model.uploadFirmware();
