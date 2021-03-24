@@ -9,6 +9,7 @@ import { createProjectSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { appEnv } from '~/shell/base';
 import {
   cacheRemoteResouce,
+  fetchBinary,
   fetchJson,
   fetchText,
   fsxMkdirpSync,
@@ -160,14 +161,24 @@ export class ProjectResourceProviderImpl_Remote
       const { binaryFileName } = firm;
       const relPath = `variants/${info.projectPath}/${binaryFileName}`;
       const uri = `${remoteBaseUri}/${relPath}`;
-      const binaryFileContent = await cacheRemoteResouce(fetchText, uri);
-      const localFilePath = appEnv.resolveTempFilePath(
+      const localTempFilePath = appEnv.resolveTempFilePath(
         `remote_resources/${relPath}`,
       );
-      fsxMkdirpSync(pathDirname(localFilePath));
-      await fsxWriteFile(localFilePath, binaryFileContent);
+      fsxMkdirpSync(pathDirname(localTempFilePath));
+
+      if (firm.targetDevice === 'atmega32u4') {
+        // text file (.hex)
+        const hexFileContent = await cacheRemoteResouce(fetchText, uri);
+        await fsxWriteFile(localTempFilePath, hexFileContent);
+      } else if (firm.targetDevice === 'rp2040') {
+        // binary file (.uf2)
+        const uf2FileContent = await cacheRemoteResouce(fetchBinary, uri);
+        await fsxWriteFile(localTempFilePath, uf2FileContent);
+      } else {
+        throw new Error(`unexpected target device ${firm.targetDevice}`);
+      }
       return {
-        filePath: localFilePath,
+        filePath: localTempFilePath,
         targetDevice: firm?.targetDevice,
       };
     }
