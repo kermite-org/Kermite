@@ -61,8 +61,9 @@ interface IProjectInfo {
 
 interface IEnvironmentVersions {
   OS: string;
-  "avr-gcc": string;
   make: string;
+  "avr-gcc": string;
+  "arm-none-eabi-gcc": string;
 }
 
 interface ISummaryData {
@@ -94,16 +95,24 @@ function readOsVersion(): string {
   return "";
 }
 
+function readArmNoneEabiGccVersion(): string {
+  const text = execueteOneliner("arm-none-eabi-gcc --version");
+  const m = text.match(/^arm-none-eabi-gcc \(.* (.+?)\) (.+?) (.+?) /m);
+  return (m && `arm-none-eabi-gcc ${m[1]} ${m[2]} ${m[3]}`) || "";
+}
+
 function readEnvironmentVersions(): IEnvironmentVersions {
   const osVersion = readOsVersion();
   const avrGccVersion = execueteOneliner(
     `avr-gcc -v 2>&1 >/dev/null | grep "gcc version"`
   );
   const makeVersion = execueteOneliner(`make -v | grep "GNU Make"`);
+  const armNoneEabiGccVersion = readArmNoneEabiGccVersion();
   return {
     OS: osVersion,
-    "avr-gcc": avrGccVersion,
     make: makeVersion,
+    "avr-gcc": avrGccVersion,
+    "arm-none-eabi-gcc": armNoneEabiGccVersion,
   };
 }
 
