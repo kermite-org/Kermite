@@ -1,7 +1,7 @@
 {
   "projectId": "79xv6ZbA",
   "keyboardName": "Astelia",
-  "customParameterConfiguration": [
+  "customParameterConfigurations": [
     {
       "targetVariationNames": ["all"],
       "customParameters": [

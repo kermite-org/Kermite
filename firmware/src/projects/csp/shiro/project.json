@@ -1,7 +1,7 @@
 {
   "projectId": "dx5kE9SU",
   "keyboardName": "Shiro",
-  "customParameterConfiguration": [
+  "customParameterConfigurations": [
     {
       "targetVariationNames": ["all"],
       "customParameters": [
