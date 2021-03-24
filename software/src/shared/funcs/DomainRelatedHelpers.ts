@@ -42,3 +42,11 @@ export function generateRandomDeviceInstanceCode(): string {
     .map((_) => ((Math.random() * 16) >> 0).toString(16))
     .join('');
 }
+
+const kermiteMcuCodeToMcuNameMap: { [key in string]: string } = {
+  A152FD20: 'ATmega32U4',
+  A152FD21: 'RP2040',
+};
+export function getMcuNameFromKermiteMcuCode(code: string) {
+  return kermiteMcuCodeToMcuNameMap[code] || 'unknown';
+}
