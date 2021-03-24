@@ -111,6 +111,7 @@ export class ProjectResourceProviderImpl_Remote
 
   async getProjectCustomDefinition(
     projectId: string,
+    variationName: string,
   ): Promise<IProjectCustomDefinition | undefined> {
     const info = this.getProjectInfoSourceById(projectId);
     if (info) {
@@ -120,10 +121,16 @@ export class ProjectResourceProviderImpl_Remote
         fetchJson,
         uri,
       );
-      return {
-        customParameterSpecs: projectJsonContent.customParameters,
-      };
+      const targetConfig = projectJsonContent.customParameterConfigurations.find(
+        (it) =>
+          it.targetVariationNames.includes(variationName) ||
+          it.targetVariationNames.includes('all'),
+      );
+      if (targetConfig) {
+        return { customParameterSpecs: targetConfig.customParameters };
+      }
     }
+    return undefined;
   }
 
   async loadProjectPreset(

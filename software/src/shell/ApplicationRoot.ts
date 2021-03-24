@@ -98,8 +98,12 @@ export class ApplicationRoot {
         ),
       projects_getAllProjectResourceInfos: () =>
         projectResourceProvider.getAllProjectResourceInfos(),
-      projects_getProjectCustomDefinition: (origin, projectId) =>
-        projectResourceProvider.getProjectCustomDefinition(origin, projectId),
+      projects_getProjectCustomDefinition: (origin, projectId, variationName) =>
+        projectResourceProvider.getProjectCustomDefinition(
+          origin,
+          projectId,
+          variationName,
+        ),
       projects_loadPresetProfile: (
         origin,
         profileId,

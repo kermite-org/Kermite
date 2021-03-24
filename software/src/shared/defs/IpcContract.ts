@@ -247,6 +247,7 @@ export interface IAppIpcContract {
     projects_getProjectCustomDefinition(
       origin: IResourceOrigin,
       projectId: string,
+      variationName: string,
     ): Promise<IProjectCustomDefinition | undefined>;
     projects_loadPresetProfile(
       origin: IResourceOrigin,

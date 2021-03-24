@@ -122,6 +122,7 @@ function useCustomParametersPartViewModel(): ICustomParametersPartViewModel {
       ipcAgent.async.projects_getProjectCustomDefinition(
         deviceAttrs.origin,
         deviceAttrs.projectId,
+        deviceAttrs.firmwareVariationName,
       ),
     [deviceAttrs],
   );

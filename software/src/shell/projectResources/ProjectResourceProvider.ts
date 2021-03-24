@@ -36,9 +36,13 @@ class ProjectResourceProvider implements IProjectResourceProvider {
   async getProjectCustomDefinition(
     origin: IResourceOrigin,
     projectId: string,
+    variationName: string,
   ): Promise<IProjectCustomDefinition | undefined> {
     const providerImpl = this.getResouceProviderImpl(origin);
-    return await providerImpl.getProjectCustomDefinition(projectId);
+    return await providerImpl.getProjectCustomDefinition(
+      projectId,
+      variationName,
+    );
   }
 
   async loadProjectPreset(
