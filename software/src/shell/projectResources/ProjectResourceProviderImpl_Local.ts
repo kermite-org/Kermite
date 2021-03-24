@@ -33,7 +33,10 @@ import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsPr
 export interface IPorjectFileJson {
   projectId: string;
   keyboardName: string;
-  customParameters: ICustromParameterSpec[];
+  customParameterConfigurations: {
+    targetVariationNames: string[];
+    customParameters: ICustromParameterSpec[];
+  }[];
 }
 interface IProjectResourceInfoSource {
   origin: IResourceOrigin;
@@ -50,7 +53,10 @@ interface IProjectResourceInfoSource {
     buildRevision: number;
     buildTimestamp: string;
   }[];
-  customParameters: ICustromParameterSpec[];
+  customParameterConfigurations: {
+    targetVariationNames: string[];
+    customParameters: ICustromParameterSpec[];
+  }[];
 }
 namespace ProjectResourceInfoSourceLoader {
   function checkFileExistsOrBlank(filePath: string): string | undefined {
@@ -169,7 +175,7 @@ namespace ProjectResourceInfoSourceLoader {
         const {
           projectId,
           keyboardName,
-          customParameters,
+          customParameterConfigurations,
         } = await readProjectFile(projectFilePath);
 
         const presetsFolderPath = pathJoin(projectBaseDir, 'profiles');
@@ -187,7 +193,7 @@ namespace ProjectResourceInfoSourceLoader {
           presetNames,
           firmwares,
           origin: 'local' as const,
-          customParameters,
+          customParameterConfigurations,
         };
       }),
     );
@@ -261,9 +267,20 @@ export class ProjectResourceProviderImpl_Local
   // eslint-disable-next-line @typescript-eslint/require-await
   async getProjectCustomDefinition(
     projectId: string,
+    variationName: string,
   ): Promise<IProjectCustomDefinition | undefined> {
     const info = this.getProjectInfoSourceById(projectId);
-    return info && { customParameterSpecs: info.customParameters };
+    if (info) {
+      const targetConfig = info.customParameterConfigurations.find(
+        (it) =>
+          it.targetVariationNames.includes(variationName) ||
+          it.targetVariationNames.includes('all'),
+      );
+      if (targetConfig) {
+        return { customParameterSpecs: targetConfig.customParameters };
+      }
+    }
+    return undefined;
   }
 
   // patchLocalProjectInfoSource(
