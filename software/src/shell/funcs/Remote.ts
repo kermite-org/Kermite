@@ -32,13 +32,13 @@ export async function fetchBinary(uri: string): Promise<Uint8Array> {
   }
 }
 
-const cached: { [key in string]: any } = {};
+const cached: { [key in string]: Promise<any> } = {};
 export async function cacheRemoteResouce<T>(
   func: (uri: string) => Promise<T>,
   uri: string,
 ): Promise<T> {
   if (!cached[uri]) {
-    cached[uri] = await func(uri);
+    cached[uri] = func(uri);
   }
-  return cached[uri];
+  return await cached[uri];
 }
