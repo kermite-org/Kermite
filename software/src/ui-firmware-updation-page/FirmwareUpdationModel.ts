@@ -11,7 +11,7 @@ export type FirmwareUpdationPhase =
 export class FirmwareUpdationModel {
   currentProjectSig: string = '';
   phase: FirmwareUpdationPhase = 'WaitingReset';
-  comPortName: string | undefined = undefined;
+  detectedDeviceSig: string | undefined = undefined;
   firmwareUploadResult: string | undefined = undefined;
 
   private projectInfosWithFirmware: IProjectResourceInfo[] = [];
@@ -42,25 +42,37 @@ export class FirmwareUpdationModel {
   // 1: WaitingReset --> WaitingUploadOrder
   private onDeviceDetectionEvent = ({
     comPortName,
+    driveName,
   }: {
     comPortName?: string;
+    driveName?: string;
   }) => {
-    this.comPortName = comPortName;
-    if (this.phase === 'WaitingReset' && this.comPortName) {
+    this.detectedDeviceSig = comPortName || driveName;
+    if (this.phase === 'WaitingReset' && this.detectedDeviceSig) {
       this.phase = 'WaitingUploadOrder';
     }
-    if (this.phase === 'WaitingUploadOrder' && !this.comPortName) {
+    if (this.phase === 'WaitingUploadOrder' && !this.detectedDeviceSig) {
       this.phase = 'WaitingReset';
     }
   };
 
   // 2: WaitingUploadOrder --> Uploading --> UploadSuccess,UploadFailure
   uploadFirmware = async () => {
-    if (!this.currentProjectSig) {
-      alert('please select firmware');
+    // if (!this.currentProjectSig) {
+    //   alert('please select firmware');
+    //   return;
+    // }
+    if (this.phase === 'WaitingUploadOrder' && this.detectedDeviceSig) {
+      // DEBUG
+      const res = await ipcAgent.async.firmup_uploadFirmware('local', 'DUMMY');
+      this.firmwareUploadResult = res;
+      if (res === 'ok') {
+        this.phase = 'UploadSuccess';
+      } else {
+        this.phase = 'UploadFailure';
+      }
       return;
-    }
-    if (this.phase === 'WaitingUploadOrder' && this.comPortName) {
+
       const info = this.projectInfosWithFirmware.find(
         (it) => it.sig === this.currentProjectSig,
       );
