@@ -1,4 +1,5 @@
 import {
+  IFirmwareTargetDevice,
   IPersistKeyboardDesign,
   IProfileData,
   IProjectCustomDefinition,
@@ -8,11 +9,11 @@ import { createProjectSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { appEnv } from '~/shell/base';
 import {
   cacheRemoteResouce,
+  fetchBinary,
   fetchJson,
   fetchText,
   fsxMkdirpSync,
   fsxWriteFile,
-  pathBasename,
   pathDirname,
 } from '~/shell/funcs';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
@@ -29,13 +30,19 @@ const remoteBaseUri =
 
 interface IRemoteProjectResourceInfoSource {
   projectId: string;
-  keyboardName: string;
   projectPath: string;
+  keyboardName: string;
   layoutNames: string[];
   presetNames: string[];
-  hasHexFile: boolean;
-  firmwareBuildRevision: number;
-  firmwareBuildTimestamp: string;
+  firmwares: {
+    variationName: string;
+    targetDevice: IFirmwareTargetDevice;
+    binaryFileName: string;
+    buildRevision: number;
+    buildTimestamp: string;
+    romUsage: number;
+    ramUsage: number;
+  }[];
 }
 
 interface ISummaryJsonData {
@@ -52,17 +59,7 @@ interface ISummaryJsonData {
     updateAt: string;
     filesRevision: number;
   };
-  projects: {
-    projectPath: string;
-    projectId: string;
-    keyboardName: string;
-    buildStatus: 'success' | 'failure';
-    revision: number;
-    updatedAt: string;
-    hexFileSize: number;
-    layoutNames: string[];
-    presetNames: string[];
-  }[];
+  projects: IRemoteProjectResourceInfoSource[];
 }
 
 async function loadRemoteResourceInfosFromSummaryJson(): Promise<
@@ -72,16 +69,7 @@ async function loadRemoteResourceInfosFromSummaryJson(): Promise<
     fetchJson,
     `${remoteBaseUri}/summary.json`,
   );
-  return remoteSummary.projects.map((info) => ({
-    projectId: info.projectId,
-    keyboardName: info.keyboardName,
-    projectPath: info.projectPath,
-    layoutNames: info.layoutNames,
-    presetNames: info.presetNames,
-    hasHexFile: info.buildStatus === 'success',
-    firmwareBuildRevision: info.revision,
-    firmwareBuildTimestamp: info.updatedAt,
-  }));
+  return remoteSummary.projects;
 }
 
 export class ProjectResourceProviderImpl_Remote
@@ -106,9 +94,12 @@ export class ProjectResourceProviderImpl_Remote
       projectPath: it.projectPath,
       presetNames: it.presetNames,
       layoutNames: it.layoutNames,
-      hasFirmwareBinary: it.hasHexFile,
-      firmwareBuildRevision: it.firmwareBuildRevision,
-      firmwareBuildTimestamp: it.firmwareBuildTimestamp,
+      firmwares: it.firmwares.map((f) => ({
+        variationName: f.variationName,
+        targetDevice: f.targetDevice,
+        buildRevision: f.buildRevision,
+        buildTimestamp: f.buildTimestamp,
+      })),
     }));
   }
 
@@ -161,20 +152,35 @@ export class ProjectResourceProviderImpl_Remote
 
   async loadProjectFirmwareFile(
     projectId: string,
+    variationName: string,
   ): Promise<IFirmwareBinaryFileSpec | undefined> {
-    // リモートからHexファイルを取得後、ローカルに一時ファイルとして保存してファイルパスを返す
+    // リモートからファイルを取得後、ローカルに一時ファイルとして保存してファイルパスを返す
     const info = this.getProjectInfoSourceById(projectId);
-    if (info) {
-      const coreName = pathBasename(info.projectPath);
-      const relPath = `variants/${info.projectPath}/${coreName}.hex`;
+    const firm = info?.firmwares.find((f) => f.variationName === variationName);
+    if (info && firm) {
+      const { binaryFileName } = firm;
+      const relPath = `variants/${info.projectPath}/${binaryFileName}`;
       const uri = `${remoteBaseUri}/${relPath}`;
-      const hexFileContent = await cacheRemoteResouce(fetchText, uri);
-      const localFilePath = appEnv.resolveTempFilePath(
+      const localTempFilePath = appEnv.resolveTempFilePath(
         `remote_resources/${relPath}`,
       );
-      fsxMkdirpSync(pathDirname(localFilePath));
-      await fsxWriteFile(localFilePath, hexFileContent);
-      return localFilePath;
+      fsxMkdirpSync(pathDirname(localTempFilePath));
+
+      if (firm.targetDevice === 'atmega32u4') {
+        // text file (.hex)
+        const hexFileContent = await cacheRemoteResouce(fetchText, uri);
+        await fsxWriteFile(localTempFilePath, hexFileContent);
+      } else if (firm.targetDevice === 'rp2040') {
+        // binary file (.uf2)
+        const uf2FileContent = await cacheRemoteResouce(fetchBinary, uri);
+        await fsxWriteFile(localTempFilePath, uf2FileContent);
+      } else {
+        throw new Error(`unexpected target device ${firm.targetDevice}`);
+      }
+      return {
+        filePath: localTempFilePath,
+        targetDevice: firm?.targetDevice,
+      };
     }
   }
 }

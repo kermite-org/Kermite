@@ -108,7 +108,7 @@ export async function fsxReadJsonFile(filePath: string): Promise<any> {
 
 export async function fsxWriteFile(
   filePath: string,
-  content: string,
+  content: string | Uint8Array,
 ): Promise<void> {
   try {
     await fs.promises.writeFile(filePath, content);
