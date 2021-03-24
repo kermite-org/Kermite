@@ -120,6 +120,6 @@
       }
     }
   },
-  "required": ["projectId", "keyboardName", "customParameterConfiguration"],
+  "required": ["projectId", "keyboardName", "customParameterConfigurations"],
   "additionalProperties": false
 }
