@@ -1,12 +1,12 @@
-import { deployStageIndexUpdator_updateIndexIfFilesChanged } from "./deployStageIndexUpdator";
-import { deployStageProjectsBuilder_buildProjects } from "./deployStageProjectsBuilder";
-import { deployStageSummaryUpdator_outputSummaryFile } from "./deployStageSummaryUpdator";
 import {
   executeCommand,
   fsExistsSync,
   fsRmdirSync,
   fsxCopyDirectory,
-} from "./osHelpers";
+} from "./helpers";
+import { deployStageIndexUpdator_updateIndexIfFilesChanged } from "./subTasks/deployStageIndexUpdator";
+import { deployStageProjectsBuilder_buildProjects } from "./subTasks/deployStageProjectsBuilder";
+import { deployStageSummaryUpdator_outputSummaryFile } from "./subTasks/deployStageSummaryUpdator";
 
 process.chdir("..");
 

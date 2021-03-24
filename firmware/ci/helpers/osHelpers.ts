@@ -40,7 +40,7 @@ export function generateMd5(str: string) {
 }
 
 export function timeNow(): string {
-  return new Date().toLocaleString();
+  return new Date().toISOString();
 }
 
 export function fsxCopyDirectory(src: string, dst: string) {

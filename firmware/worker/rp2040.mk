@@ -23,6 +23,7 @@ IS_RESOURCE_ORIGIN_ONLINE ?= 0
 
 PICO_SDK_DIR = deps/rp2040/external/pico_sdk
 PICO_LOCAL_DIR = deps/rp2040/local
+SHARED_OBJ_DIR = $(BUILD_DIR)/obj
 
 ELF = $(OUT_DIR)/$(CORE_NAME).elf
 BIN = $(OUT_DIR)/$(CORE_NAME).bin
@@ -37,7 +38,11 @@ AS = arm-none-eabi-gcc
 LD = arm-none-eabi-g++
 OBJCOPY = arm-none-eabi-objcopy
 OBJDUMP = arm-none-eabi-objdump
-ELF2UF2 = $(PICO_LOCAL_DIR)/tools/elf2uf2
+OBJSIZE = arm-none-eabi-size
+
+ELF2UF2_ROOT_DIR = $(PICO_LOCAL_DIR)/tools/elf2uf2
+ELF2UF2_BIN = $(ELF2UF2_ROOT_DIR)/build/elf2uf2
+#ELF2UF2_BIN = $(ELF2UF2_ROOT_DIR)/prebuild/elf2uf2_darwin
 
 #--------------------
 #flags
@@ -166,7 +171,7 @@ INC_PATHS = \
 -I$(PICO_SDK_DIR)/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/include
 
 
-SDK_SRCS = \
+SDK_C_SRCS = \
 $(PICO_SDK_DIR)/src/common/pico_time/time.c \
 $(PICO_SDK_DIR)/src/common/pico_time/timeout_helper.c \
 $(PICO_SDK_DIR)/src/common/pico_sync/sem.c \
@@ -205,7 +210,7 @@ $(PICO_SDK_DIR)/src/rp2_common/pico_stdio_uart/stdio_uart.c \
 $(PICO_SDK_DIR)/src/rp2_common/pico_bootsel_via_double_reset/pico_bootsel_via_double_reset.c
 
 #USB
-SDK_SRCS += $(PICO_SDK_DIR)/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c \
+SDK_C_SRCS += $(PICO_SDK_DIR)/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c \
 $(PICO_SDK_DIR)/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c \
 $(PICO_SDK_DIR)/lib/tinyusb/src/device/usbd.c \
 $(PICO_SDK_DIR)/lib/tinyusb/src/device/usbd_control.c \
@@ -215,7 +220,7 @@ $(PICO_SDK_DIR)/lib/tinyusb/src/common/tusb_fifo.c \
 $(PICO_SDK_DIR)/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c \
 
 
-ASM_SRCS = \
+SDK_ASM_SRCS = \
 $(PICO_SDK_DIR)/src/rp2_common/hardware_divider/divider.S \
 $(PICO_SDK_DIR)/src/rp2_common/hardware_irq/irq_handler_chain.S \
 $(PICO_SDK_DIR)/src/rp2_common/pico_bit_ops/bit_ops_aeabi.S \
@@ -231,13 +236,14 @@ $(PICO_SDK_DIR)/src/rp2_common/pico_standard_link/crt0.S \
 BOOT_S = $(PICO_LOCAL_DIR)/loaders/bs2_default_padded_checksummed.S
 LD_SCRIPT = $(PICO_LOCAL_DIR)/loaders/memmap_default.ld
 
-C_SRCS = $(SDK_SRCS) \
-$(addprefix src/modules/,$(MODULE_SRCS)) \
-$(addprefix $(PROJECT_CODE_DIR)/, $(PROJECT_SRCS)) 
+C_SRCS = $(addprefix src/modules/,$(MODULE_SRCS)) \
+$(addprefix $(PROJECT_CODE_DIR)/, $(PROJECT_SRCS))
 
 C_OBJS = $(addprefix $(OBJ_DIR)/,$(C_SRCS:.c=.c.obj))
-ASM_OBJS = $(addprefix $(OBJ_DIR)/,$(ASM_SRCS:.S=.S.obj))
-OBJS = $(C_OBJS) $(CPP_OBJS) $(ASM_OBJS)
+SDK_C_OBJS = $(addprefix $(SHARED_OBJ_DIR)/,$(SDK_C_SRCS:.c=.c.obj))
+SDK_ASM_OBJS = $(addprefix $(SHARED_OBJ_DIR)/,$(SDK_ASM_SRCS:.S=.S.obj))
+
+OBJS = $(C_OBJS) $(SDK_C_OBJS) $(SDK_ASM_OBJS)
 
 DEP_FILES = $(filter %.d,$(OBJS:%.obj=%.d))
 -include $(DEP_FILES)
@@ -252,7 +258,12 @@ $(OBJ_DIR)/%.c.obj: %.c
 	@mkdir -p $(dir $@)
 	@$(CC) $(C_FLAGS) -o $@ -c $<
 
-$(OBJ_DIR)/%.S.obj: %.S
+$(SHARED_OBJ_DIR)/%.c.obj: %.c
+	@echo "compiling $<"
+	@mkdir -p $(dir $@)
+	@$(CC) $(C_FLAGS) -o $@ -c $<
+
+$(SHARED_OBJ_DIR)/%.S.obj: %.S
 	@echo "compiling $<"
 	@mkdir -p $(dir $@)
 	@$(AS) $(AS_FLAGS) -o $@ -c $<
@@ -266,9 +277,15 @@ $(ELF): $(OBJS)
 	@$(OBJDUMP) -h $(ELF) >$(DIS)
 	@$(OBJDUMP) -d $(ELF) >>$(DIS)
 
-$(UF2): $(ELF)
-	$(ELF2UF2) $(ELF) $(UF2)
+$(ELF2UF2_BIN):
+	cd $(ELF2UF2_ROOT_DIR) && make
+
+$(UF2): $(ELF) $(ELF2UF2_BIN)
+	$(ELF2UF2_BIN) $(ELF) $(UF2)
 	@echo "output: $(UF2)"
+
+size: $(OBJS)
+	@$(LD) $(LD_FLAGS) $(OBJS) -o $(ELF) $(BOOT_S)
 
 flash: $(UF2)
 	cp $(UF2) /Volumes/RPI-RP2
@@ -276,7 +293,10 @@ flash: $(UF2)
 flash_via_swd: $(ELF)
 	openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "program $(ELF) verify reset exit"
 
+clean_app:
+	rm -rf $(OUT_DIR)
+
 clean:
-	rm -rf build
+	rm -rf $(OUT_DIR) $(SHARED_OBJ_DIR)
 
 .PHONY: build

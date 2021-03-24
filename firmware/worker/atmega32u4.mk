@@ -120,8 +120,11 @@ endif
 purge:
 	rm -rf $(ELF) $(HEX) $(LIST) $(OBJS)
 
+clean_app:
+	rm -rf $(OUT_DIR)
+
 clean:
-	rm -rf $(BUILD_DIR) dist
+	rm -rf $(OUT_DIR)
 
 .PHONY: build
 	

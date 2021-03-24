@@ -2,24 +2,27 @@ import {
   fsExistsSync,
   fsxReadJsonFile,
   fsxReadTextFile,
+  getMatched,
   globSync,
   pathDirname,
   pathJoin,
   pathRelative,
-} from "./osHelpers";
-import { getMatched, stringifyArray, uniqueArrayItems } from "./helpers";
+  stringifyArray,
+  uniqueArrayItems,
+  uniqueArrayItemsDeep,
+} from "./helpers";
 
 process.chdir("..");
 
 const AbortOnError = process.argv.includes("--abortOnError");
 
-function getAllProjectPaths() {
+function getAllProjectVariationPaths() {
   return globSync("src/projects/**/rules.mk")
     .map((fpath) => pathDirname(fpath))
-    .filter((fpath) =>
-      ["project.json", "config.h"].every((fileName) =>
-        fsExistsSync(pathJoin(fpath, fileName))
-      )
+    .filter(
+      (fpath) =>
+        fsExistsSync(pathJoin(fpath, "config.h")) &&
+        fsExistsSync(pathJoin(pathDirname(fpath), "project.json"))
     )
     .map((fpath) => pathRelative("src/projects", fpath));
 }
@@ -29,9 +32,10 @@ interface IProjectInfo {
   projectId: string;
 }
 
-function loadProjectInfo(projectPath: string): IProjectInfo {
+function loadProjectInfo(projectVariationPath: string): IProjectInfo {
+  const projectPath = pathDirname(projectVariationPath);
   const projectFilePath = `./src/projects/${projectPath}/project.json`;
-  const configFilePath = `./src/projects/${projectPath}/config.h`;
+  const configFilePath = `./src/projects/${projectVariationPath}/config.h`;
   const projectObj = fsxReadJsonFile(projectFilePath);
   const projectId = projectObj.projectId as string;
 
@@ -47,7 +51,7 @@ function loadProjectInfo(projectPath: string): IProjectInfo {
     }
 
     if (!configProjectId) {
-      throw `PROJECT_ID is not defined in ${projectPath}/config.h`;
+      throw `PROJECT_ID is not defined in ${projectVariationPath}/config.h`;
     }
 
     if (!projectId?.match(/^[a-zA-Z0-9]{8}$/)) {
@@ -55,7 +59,7 @@ function loadProjectInfo(projectPath: string): IProjectInfo {
     }
 
     if (projectId !== configProjectId) {
-      throw `inconsistent Project IDs in ${projectPath}/config.h and ${projectPath}/project.json`;
+      throw `inconsistent Project IDs in ${projectVariationPath}/config.h and ${projectPath}/project.json`;
     }
   } catch (error) {
     console.log(error);
@@ -70,10 +74,13 @@ function loadProjectInfo(projectPath: string): IProjectInfo {
   };
 }
 
-function checkAllProjectIds(projectInfos: IProjectInfo[]) {
+function checkAllProjectIds(_projectInfos: IProjectInfo[]) {
+  const projectInfos = uniqueArrayItemsDeep(_projectInfos);
+  // console.log({ _projectInfos, projectInfos });
   const allProjectIds = projectInfos
     .map((info) => info.projectId)
     .filter((a) => !!a);
+
   const duprecatedProjectIds = uniqueArrayItems(
     allProjectIds.filter((it, index) => allProjectIds.indexOf(it) !== index)
   );
@@ -95,8 +102,9 @@ function checkAllProjectIds(projectInfos: IProjectInfo[]) {
 }
 
 function checkProjectIds() {
-  const projectPaths = getAllProjectPaths();
-  const projectInfos = projectPaths.map(loadProjectInfo);
+  const projectVariationPaths = getAllProjectVariationPaths();
+  // console.log({ projectVariationPaths });
+  const projectInfos = projectVariationPaths.map(loadProjectInfo);
   checkAllProjectIds(projectInfos);
   if (AbortOnError) {
     console.log("ok");

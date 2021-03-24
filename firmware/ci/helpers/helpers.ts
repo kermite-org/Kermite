@@ -27,6 +27,13 @@ export function uniqueArrayItems<T>(arr: T[]): T[] {
   return arr.filter((a, idx) => arr.indexOf(a) === idx);
 }
 
+export function uniqueArrayItemsDeep<T>(arr: T[]): T[] {
+  return arr.filter((a, idx) => {
+    const sig = JSON.stringify(a);
+    return arr.findIndex((b) => JSON.stringify(b) == sig) === idx;
+  });
+}
+
 export function stringifyArray(ar: any[]) {
   return `[${ar.join(", ")}]`;
 }

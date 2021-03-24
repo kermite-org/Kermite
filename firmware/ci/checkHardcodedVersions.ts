@@ -1,15 +1,15 @@
 import {
   checkHasFields,
   compareObjectByJsonStringifyParse,
+  fsxReadTextFile,
   getMatched,
 } from "./helpers";
-import { fsxReadTextFile } from "./osHelpers";
 
 process.chdir("..");
 
 const sourceFilePaths = {
   softwareVersions: "../software/src/shared/defs/Versions.ts",
-  firmwareVersions: "./src/modules/versions.h",
+  firmwareVersions: "./src/modules/km0/keyboard/versions.h",
 };
 
 interface ISynchronousVersionsSet {
