@@ -24,6 +24,10 @@ export const ConnectedDeviceAttrsPart: FC = () => {
   console.log({ deviceAttrs, projectInfo });
 
   const isOriginOnline = deviceAttrs?.origin === 'online';
+
+  const firm = projectInfo?.firmwares.find(
+    (f) => f.variationName === deviceAttrs?.firmwareVariationName,
+  );
   const tableData =
     deviceAttrs &&
     ([
@@ -33,19 +37,18 @@ export const ConnectedDeviceAttrsPart: FC = () => {
       projectInfo && ['プロジェクトパス', projectInfo.projectPath],
       projectInfo && ['キーボード名', projectInfo.keyboardName],
       ['個体番号', deviceAttrs.deviceInstanceCode],
+      ['ファームウェアバリエーション', deviceAttrs.firmwareVariationName],
       [
         'ファームウェアリビジョン',
         (isOriginOnline && deviceAttrs.firmwareBuildRevision) || 'N/A',
       ],
-      projectInfo &&
-        isOriginOnline && [
-          'ファームウェア最新リビジョン',
-          projectInfo.firmwareBuildRevision,
-        ],
-      projectInfo &&
-        isOriginOnline && [
+      isOriginOnline &&
+        firm && ['ファームウェア最新リビジョン', firm.buildRevision],
+
+      isOriginOnline &&
+        firm && [
           'ファームウェア最新ビルド日時',
-          fixDatetimeText(projectInfo.firmwareBuildTimestamp),
+          fixDatetimeText(firm.buildTimestamp),
         ],
       [
         'キーマッピング領域サイズ',
