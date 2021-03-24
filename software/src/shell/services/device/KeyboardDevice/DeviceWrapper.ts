@@ -1,26 +1,26 @@
 import * as HID from 'node-hid';
 import { delayMs } from '~/shared';
-import { makeListenerPort } from '~/shell/funcs';
+import { IListenerPortImpl, makeListenerPort } from '~/shell/funcs';
 import {
   getArrayFromBuffer,
   zeros,
 } from '~/shell/services/device/KeyboardDevice/Helpers';
 
-type IReceiverFunc = (buf: Uint8Array) => void;
-type IClosedCallback = () => void;
-
 export interface IDeviceWrapper {
   close(): void;
-  onClosed(callback: IClosedCallback): void;
-  onData(func: IReceiverFunc): void;
+  onData: IListenerPortImpl<Uint8Array>;
+  onClosed: IListenerPortImpl<void>;
   writeSingleFrame(bytes: number[]): void;
   writeFrames(frames: number[][]): Promise<void>;
+  connectedDevicePath: string | undefined;
 }
 export class DeviceWrapper implements IDeviceWrapper {
   private device?: HID.HID | undefined;
 
   onData = makeListenerPort<Uint8Array>();
   onClosed = makeListenerPort<void>();
+
+  connectedDevicePath: string | undefined;
 
   static openDeviceByPath(path: string): DeviceWrapper | undefined {
     const instance = new DeviceWrapper();
@@ -39,6 +39,7 @@ export class DeviceWrapper implements IDeviceWrapper {
     device.on('data', this.handleData);
     device.on('error', this.handleError);
     this.device = device;
+    this.connectedDevicePath = path;
     return true;
   }
 
@@ -54,11 +55,12 @@ export class DeviceWrapper implements IDeviceWrapper {
 
   close() {
     if (this.device) {
-      this.onClosed.emit();
       this.device.close();
-      this.device = undefined;
+      this.onClosed.emit();
       this.onData.purge();
       this.onClosed.purge();
+      this.connectedDevicePath = undefined;
+      this.device = undefined;
     }
   }
 

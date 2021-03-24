@@ -7,7 +7,7 @@ import { applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
 import {
   enumerateSupportedDeviceInfos,
-  getDisplayNameFromDevicePath,
+  getDebugDeviceSigFromDevicePath,
   IDeviceSpecificationParams,
 } from '~/shell/services/device/KeyboardDevice/DeviceEnumerator';
 import {
@@ -15,15 +15,34 @@ import {
   IDeviceWrapper,
 } from '~/shell/services/device/KeyboardDevice/DeviceWrapper';
 
-const deviceSpecificationParams: IDeviceSpecificationParams = {
-  vendorId: 0xf055,
-  productId: 0xa577,
-  pathSearchWords: [
-    'mi_00', // Windows
-    'IOUSBHostInterface@0', // Mac
-  ],
-  serialNumberSearchWord: '74F3AC2E', // serial number fixed part
-};
+const deviceSpecificationParams: IDeviceSpecificationParams[] = [
+  // {
+  //   vendorId: 0xf055,
+  //   productId: 0xa577,
+  //   manufacturerString: 'kermite',
+  //   productString: 'Kermitie Keyboard Device',
+  //   pathSearchWords: [
+  //     'mi_00', // Windows
+  //     'IOUSBHostInterface@0', // Mac
+  //   ],
+  // },
+  // atmega32u4
+  {
+    // vendorId: 0xf055,
+    // productId: 0xa577,
+    serialNumberMcuCode: 'A152FD20',
+    usagePage: 0xffab,
+    usage: 0x0200,
+  },
+  // rp2040
+  {
+    // vendorId: 0xf055,
+    // productId: 0xa579,
+    serialNumberMcuCode: 'A152FD21',
+    usagePage: 0xff00,
+    usage: 0x0001,
+  },
+];
 
 export class DeviceSelectionManager {
   private status: IDeviceSelectionStatus = {
@@ -59,15 +78,15 @@ export class DeviceSelectionManager {
       if (path !== 'none') {
         if (this.status.allDeviceInfos.some((info) => info.path === path)) {
           const device = DeviceWrapper.openDeviceByPath(path);
-          const displayName = getDisplayNameFromDevicePath(path);
+          const deviceSig = getDebugDeviceSigFromDevicePath(path);
           if (!device) {
-            console.log(`failed to open device: ${displayName}`);
+            console.log(`failed to open device: ${deviceSig}`);
             return;
           }
-          console.log(`device opened: ${displayName}`);
+          console.log(`device opened: ${deviceSig}`);
           device.onClosed(() => {
             this.setStatus({ currentDevicePath: 'none' });
-            console.log(`device closed: ${displayName}`);
+            console.log(`device closed: ${deviceSig}`);
           });
           this.setStatus({ currentDevicePath: path });
           this.device = device;

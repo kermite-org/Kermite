@@ -36,7 +36,10 @@ export function blo(val: number) {
 }
 
 export function bytesToString(bytes: number[]) {
-  return bytes.reduce((str, chr) => str + String.fromCharCode(chr), '');
+  return bytes.reduce(
+    (str, byte) => str + (byte !== 0 ? String.fromCharCode(byte) : ''),
+    '',
+  );
 }
 
 export function getArrayFromBuffer(data: any) {

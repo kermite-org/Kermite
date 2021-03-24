@@ -1,27 +1,36 @@
-import { IRealtimeKeyboardEvent } from '~/shared';
+import { IRealtimeKeyboardEvent, IResourceOrigin } from '~/shared';
+import { getMcuNameFromKermiteMcuCode } from '~/shared/funcs/DomainRelatedHelpers';
 import { bytesToString } from '~/shell/services/device/KeyboardDevice/Helpers';
 
-type IReceivedBytesDecodeResult =
+export type IDeviceAttributesReadResponseData = {
+  firmwareVariationName: string;
+  projectReleaseBuildRevision: number;
+  configStorageFormatRevision: number;
+  rawHidMessageProtocolRevision: number;
+  resourceOrigin: IResourceOrigin;
+  projectId: string;
+  deviceInstanceCode: string;
+  assignStorageCapacity: number;
+  firmwareMcuName: string;
+};
+
+export type ICustomParametersReadResponseData = {
+  isParametersInitialized: boolean;
+  parameterValues: number[];
+};
+
+export type IReceivedBytesDecodeResult =
   | {
       type: 'realtimeEvent';
       event: IRealtimeKeyboardEvent;
     }
   | {
       type: 'deviceAttributeResponse';
-      data: {
-        projectReleaseBuildRevision: number;
-        configStorageFormatRevision: number;
-        rawHidMessageProtocolRevision: number;
-        projectId: string;
-        assignStorageCapacity: number;
-      };
+      data: IDeviceAttributesReadResponseData;
     }
   | {
       type: 'custromParametersReadResponse';
-      data: {
-        isParametersInitialized: boolean;
-        parameterValues: number[];
-      };
+      data: ICustomParametersReadResponseData;
     };
 
 export function recievedBytesDecoder(
@@ -32,15 +41,23 @@ export function recievedBytesDecoder(
     const configStorageFormatRevision = buf[4];
     const rawHidMessageProtocolRevision = buf[5];
     const projectId = bytesToString([...buf].slice(6, 14));
-    const assignStorageCapacity = (buf[14] << 8) | buf[15];
+    const isProjectOriginOnline = !!buf[14];
+    const deviceInstanceCode = bytesToString([...buf].slice(16, 24));
+    const assignStorageCapacity = (buf[24] << 8) | buf[25];
+    const firmwareVariationName = bytesToString([...buf].slice(26, 42));
+    const kermiteMcuCode = bytesToString([...buf].slice(42, 50));
     return {
       type: 'deviceAttributeResponse',
       data: {
+        firmwareVariationName,
         projectReleaseBuildRevision,
         configStorageFormatRevision,
         rawHidMessageProtocolRevision,
+        resourceOrigin: isProjectOriginOnline ? 'online' : 'local',
         projectId,
+        deviceInstanceCode,
         assignStorageCapacity,
+        firmwareMcuName: getMcuNameFromKermiteMcuCode(kermiteMcuCode),
       },
     };
   }

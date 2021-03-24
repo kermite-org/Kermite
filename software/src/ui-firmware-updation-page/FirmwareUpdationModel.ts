@@ -1,4 +1,4 @@
-import { IProjectResourceInfo } from '~/shared';
+import { flattenArray, IProjectResourceInfo } from '~/shared';
 import { ipcAgent } from '~/ui-common';
 
 export type FirmwareUpdationPhase =
@@ -9,23 +9,29 @@ export type FirmwareUpdationPhase =
   | 'UploadFailure';
 
 export class FirmwareUpdationModel {
-  currentProjectSig: string = '';
+  currentProjectFirmwareSpec: string = '';
   phase: FirmwareUpdationPhase = 'WaitingReset';
-  comPortName: string | undefined = undefined;
+  detectedDeviceSig: string | undefined = undefined;
   firmwareUploadResult: string | undefined = undefined;
 
   private projectInfosWithFirmware: IProjectResourceInfo[] = [];
 
-  setCurrentProjectSig = (projectSig: string) => {
-    this.currentProjectSig = projectSig;
+  setCurrentProjectFirmwareSpec = (spec: string) => {
+    this.currentProjectFirmwareSpec = spec;
   };
 
   get projectOptions() {
     const blankOption = { value: '', label: 'select firmware' };
-    const projectOptions = this.projectInfosWithFirmware.map((info) => ({
-      value: info.sig,
-      label: (info.origin === 'local' ? '[L]' : '[R]') + info.projectPath,
-    }));
+    const projectOptions = flattenArray(
+      this.projectInfosWithFirmware.map((info) =>
+        info.firmwares.map((firmware) => ({
+          value: `${info.sig}:${firmware.variationName}`,
+          label: `${info.origin === 'local' ? '[L]' : '[R]'} ${
+            info.projectPath
+          } ${firmware.variationName}`,
+        })),
+      ),
+    );
     return [blankOption, ...projectOptions];
   }
 
@@ -40,36 +46,41 @@ export class FirmwareUpdationModel {
   };
 
   // 1: WaitingReset --> WaitingUploadOrder
-  private onComPortPlugEvent = ({
+  private onDeviceDetectionEvent = ({
     comPortName,
+    driveName,
   }: {
-    comPortName: string | undefined;
+    comPortName?: string;
+    driveName?: string;
   }) => {
-    this.comPortName = comPortName;
-    if (this.phase === 'WaitingReset' && this.comPortName) {
+    this.detectedDeviceSig = comPortName || driveName;
+    if (this.phase === 'WaitingReset' && this.detectedDeviceSig) {
       this.phase = 'WaitingUploadOrder';
     }
-    if (this.phase === 'WaitingUploadOrder' && !this.comPortName) {
+    if (this.phase === 'WaitingUploadOrder' && !this.detectedDeviceSig) {
       this.phase = 'WaitingReset';
     }
   };
 
   // 2: WaitingUploadOrder --> Uploading --> UploadSuccess,UploadFailure
   uploadFirmware = async () => {
-    if (!this.currentProjectSig) {
-      alert('please select the firmware');
+    if (!this.currentProjectFirmwareSpec) {
+      alert('please select firmware');
       return;
     }
-    if (this.phase === 'WaitingUploadOrder' && this.comPortName) {
-      const info = this.projectInfosWithFirmware.find(
-        (it) => it.sig === this.currentProjectSig,
+    if (this.phase === 'WaitingUploadOrder' && this.detectedDeviceSig) {
+      const [projectSig, variationName] = this.currentProjectFirmwareSpec.split(
+        ':',
+      );
+      const info = this.projectInfosWithFirmware.find((it) =>
+        it.sig.startsWith(projectSig),
       );
       if (info) {
         this.phase = 'Uploading';
         const res = await ipcAgent.async.firmup_uploadFirmware(
           info.origin,
           info.projectId,
-          this.comPortName,
+          variationName,
         );
         this.firmwareUploadResult = res;
         if (res === 'ok') {
@@ -84,14 +95,14 @@ export class FirmwareUpdationModel {
   private async fechProjectInfos() {
     const projectResourceInfos = await ipcAgent.async.projects_getAllProjectResourceInfos();
     this.projectInfosWithFirmware = projectResourceInfos.filter(
-      (info) => info.hasFirmwareBinary,
+      (info) => info.firmwares.length > 0,
     );
   }
 
   startPageSession = () => {
     this.fechProjectInfos();
-    return ipcAgent.events.firmup_comPortPlugEvents.subscribe(
-      this.onComPortPlugEvent,
+    return ipcAgent.events.firmup_deviceDetectionEvents.subscribe(
+      this.onDeviceDetectionEvent,
     );
   };
 }

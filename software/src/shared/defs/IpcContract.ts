@@ -18,6 +18,15 @@ export type IPresetSpec =
 
 export type IResourceOrigin = 'local' | 'online';
 
+export type IFirmwareTargetDevice = 'atmega32u4' | 'rp2040';
+
+export interface IProjectFirmwareInfo {
+  variationName: string;
+  targetDevice: IFirmwareTargetDevice;
+  buildRevision: number;
+  buildTimestamp: string;
+}
+
 export interface IProjectResourceInfo {
   sig: string; // ${origin}#${projectId}
   origin: IResourceOrigin;
@@ -26,26 +35,38 @@ export interface IProjectResourceInfo {
   projectPath: string;
   presetNames: string[];
   layoutNames: string[];
-  hasFirmwareBinary: boolean;
-  customParameters: ICustromParameterSpec[];
+  firmwares: IProjectFirmwareInfo[];
+}
+
+export interface IProjectCustomDefinition {
+  customParameterSpecs?: ICustromParameterSpec[];
 }
 
 export interface IKeyboardDeviceInfo {
   path: string;
-  displayName: string;
+  portName: string;
+  projectId: string;
+  deviceInstanceCode: string;
 }
 
 export interface IDeviceSelectionStatus {
   allDeviceInfos: IKeyboardDeviceInfo[];
   currentDevicePath: string | 'none';
 }
+
+export interface IKeyboardDeviceAttributes {
+  origin: IResourceOrigin;
+  projectId: string;
+  firmwareVariationName: string;
+  firmwareBuildRevision: number;
+  deviceInstanceCode: string;
+  assignStorageCapacity: number;
+  portName: string;
+  mcuName: string;
+}
 export interface IKeyboardDeviceStatus {
   isConnected: boolean;
-  deviceAttrs?: {
-    projectId: string;
-    keyboardName: string;
-    assignStorageCapacity: number;
-  };
+  deviceAttrs?: IKeyboardDeviceAttributes;
   customParameterValues?: number[];
 }
 
@@ -223,6 +244,11 @@ export interface IAppIpcContract {
     config_getProjectRootDirectoryPath(): Promise<string>;
 
     projects_getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
+    projects_getProjectCustomDefinition(
+      origin: IResourceOrigin,
+      projectId: string,
+      variationName: string,
+    ): Promise<IProjectCustomDefinition | undefined>;
     projects_loadPresetProfile(
       origin: IResourceOrigin,
       projectId: string,
@@ -240,7 +266,7 @@ export interface IAppIpcContract {
     firmup_uploadFirmware(
       origin: IResourceOrigin,
       projectId: string,
-      comPortName: string,
+      variationName: string,
     ): Promise<string>;
 
     file_getOpenJsonFilePathWithDialog(): Promise<string | undefined>;
@@ -262,7 +288,7 @@ export interface IAppIpcContract {
     device_keyEvents: IRealtimeKeyboardEvent;
     device_keyboardDeviceStatusEvents: Partial<IKeyboardDeviceStatus>;
 
-    firmup_comPortPlugEvents: { comPortName: string | undefined };
+    firmup_deviceDetectionEvents: { comPortName?: string; driveName?: string };
     projects_layoutFileUpdationEvents: { projectId: string };
   };
 }

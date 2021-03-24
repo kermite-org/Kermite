@@ -1,6 +1,11 @@
 import { css, FC, jsx } from 'qx';
-import { ipcAgent, ISelectorOption, useEventSource } from '~/ui-common';
+import { IKeyboardDeviceInfo, IProjectResourceInfo } from '~/shared';
+import { ipcAgent, ISelectorOption } from '~/ui-common';
 import { FlatListSelector } from '~/ui-common/components/controls/FlatListSelector';
+import {
+  useDeviceSelectionStatus,
+  useProjectResourceInfos,
+} from '~/ui-firmware-updation-page/dataSource';
 
 const style = css`
   * + * {
@@ -8,20 +13,29 @@ const style = css`
   }
 
   .selector {
-    width: 240px;
+    width: 300px;
   }
 `;
+
+function makeDeviceOptionEntry(
+  deviceInfo: IKeyboardDeviceInfo,
+  resourceInfos: IProjectResourceInfo[],
+): ISelectorOption {
+  const { path, portName, projectId } = deviceInfo;
+  const project = resourceInfos.find((info) => info.projectId === projectId);
+  const keyboardName = project?.keyboardName;
+  const postfix = (keyboardName && ` (${keyboardName})`) || '';
+  return {
+    label: `device@${portName}${postfix}`,
+    value: path,
+  };
+}
 export const DeviceSelectionPart: FC = () => {
-  const selectionInfos = useEventSource(
-    ipcAgent.events.device_deviceSelectionEvents,
-    {
-      allDeviceInfos: [],
-      currentDevicePath: 'none',
-    },
-  );
+  const resourceInfos = useProjectResourceInfos();
+  const selectionStatus = useDeviceSelectionStatus();
   const noneOption: ISelectorOption = { label: 'none', value: 'none' };
-  const deviceOptionsBase: ISelectorOption[] = selectionInfos.allDeviceInfos.map(
-    (info) => ({ label: info.displayName, value: info.path }),
+  const deviceOptionsBase: ISelectorOption[] = selectionStatus.allDeviceInfos.map(
+    (deviceInfo) => makeDeviceOptionEntry(deviceInfo, resourceInfos),
   );
   const deviceOptions = [noneOption, ...deviceOptionsBase];
 
@@ -29,24 +43,13 @@ export const DeviceSelectionPart: FC = () => {
     ipcAgent.async.device_connectToDevice(path);
   };
 
-  const deviceStatus = useEventSource(
-    ipcAgent.events.device_keyboardDeviceStatusEvents,
-    {
-      isConnected: false,
-    },
-  );
-
-  const connectedKeyboardName =
-    (deviceStatus.isConnected && deviceStatus.deviceAttrs?.keyboardName) ||
-    'no connection';
-
   return (
     <div css={style}>
       <div>Device Selection</div>
-      <div>connected keyboard: {connectedKeyboardName}</div>
+      {/* <div>connected keyboard: {connectedKeyboardName}</div> */}
       <FlatListSelector
         options={deviceOptions}
-        value={selectionInfos.currentDevicePath}
+        value={selectionStatus.currentDevicePath}
         setValue={onChange}
         size={5}
         className="selector"

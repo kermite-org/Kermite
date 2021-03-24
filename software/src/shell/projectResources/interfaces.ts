@@ -1,12 +1,23 @@
 import {
+  IFirmwareTargetDevice,
   IPersistKeyboardDesign,
   IProfileData,
+  IProjectCustomDefinition,
   IProjectResourceInfo,
   IResourceOrigin,
 } from '~/shared';
 
+export interface IFirmwareBinaryFileSpec {
+  filePath: string;
+  targetDevice: IFirmwareTargetDevice;
+}
 export interface IProjectResourceProviderImpl {
   getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
+
+  getProjectCustomDefinition(
+    projectId: string,
+    variationName: string,
+  ): Promise<IProjectCustomDefinition | undefined>;
 
   loadProjectPreset(
     projectId: string,
@@ -18,7 +29,10 @@ export interface IProjectResourceProviderImpl {
     layoutName: string,
   ): Promise<IPersistKeyboardDesign | undefined>;
 
-  loadProjectFirmwareFile(projectId: string): Promise<string | undefined>;
+  loadProjectFirmwareFile(
+    projectId: string,
+    variationName: string,
+  ): Promise<IFirmwareBinaryFileSpec | undefined>;
 }
 
 export interface IProjectResourceProvider {
@@ -41,5 +55,6 @@ export interface IProjectResourceProvider {
   loadProjectFirmwareFile(
     origin: IResourceOrigin,
     projectId: string,
-  ): Promise<string | undefined>;
+    variationName: string,
+  ): Promise<IFirmwareBinaryFileSpec | undefined>;
 }

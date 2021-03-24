@@ -409,15 +409,16 @@ export function converProfileDataToBlobBytes(
 Data format for the keymapping data stored in AVR's EEPROM
 EEPROM 1KB
 
-U=USER_EEPROM_SIZE, EEPROM先頭に確保されたユーザ領域, 未使用の場合は0
+U=USER_EEPROM_SIZE, EEPROM末尾に確保されるユーザ領域, 未使用の場合は0
 
 [0~7] projectId 8bytes
-[8] reserved
-[9] isParameterInitialzed flag
-[10~19] customSettingBytes 10bytes
-[20~] keymappingData
- [20~31] keymapping data header 12bytes
- [32~(1024-U)] keymapping data body
+[8~15] device instance code 8bytes
+[16] reserved
+[17] isParameterInitialzed flag
+[18~27] customSettingBytes 10bytes
+[28~] keymappingData
+ [28~40] keymapping data header 12bytes
+ [40~(1024-U)] keymapping data body
 
 [(1024-U)~1023] user eeprom data
 

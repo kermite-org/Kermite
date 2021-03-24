@@ -1,5 +1,5 @@
 import { generateNumberSequence } from '~/shared';
-import { bhi, blo } from '~/shell/services/firmwareUpdation/helpers';
+import { bhi, blo } from '~/shell/services/device/KeyboardDevice/Helpers';
 
 export class Packets {
   static deviceAttributesRequestFrame = [0xf0, 0x10];
@@ -25,6 +25,13 @@ export class Packets {
     value: number,
   ) {
     return [0xb0, 0x02, 0xa0, index, value];
+  }
+
+  // ------------------------------------------------------------
+
+  static makeDeviceInstanceCodeWriteOperationFrame(code: string) {
+    const bytes = generateNumberSequence(8).map((i) => code.charCodeAt(i) || 0);
+    return [0xb0, 0x03, 0x90, ...bytes];
   }
 
   // ------------------------------------------------------------

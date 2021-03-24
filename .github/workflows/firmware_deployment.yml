@@ -5,7 +5,7 @@ on:
     branches: [master, variants]
     paths:
       - ".github/workflows/firmware_deployment.yml"
-      - "firmware/scripts2/**/*.ts"
+      - "firmware/ci/**/*.ts"
       - "firmware/Makefile"
       - "firmware/src/**"
 
@@ -19,6 +19,11 @@ jobs:
       - name: Install Dependencies
         run: sudo apt install gcc-avr avr-libc binutils-avr
 
+      - name: install arm-none-eabi-gcc
+        uses: fiam/arm-none-eabi-gcc@v1
+        with:
+          release: "10-2020-q4"
+
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
@@ -26,7 +31,7 @@ jobs:
 
       - uses: bahmutov/npm-install@v1
         with:
-          working-directory: ./firmware/scripts2
+          working-directory: ./firmware/ci
 
       - name: Checkout store repo
         uses: actions/checkout@v2
@@ -37,13 +42,13 @@ jobs:
 
       - name: Check Project IDs
         run: yarn checkProjectIds --abortOnError
-        working-directory: ./firmware/scripts2
+        working-directory: ./firmware/ci
 
       - name: Update All Project Distributions
         run: yarn updateAllProjectDistributions
-        working-directory: ./firmware/scripts2
+        working-directory: ./firmware/ci
 
-      - name: Push resources to store repo
+      - name: Push resources to KermiteResourceStore
         uses: cpina/github-action-push-to-another-repository@master
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}

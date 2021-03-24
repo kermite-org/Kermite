@@ -4,9 +4,9 @@ import {
   ipcAgent,
   ISelectorOption,
   useEventSource,
-  useFetcher,
+  useFetcher2,
 } from '~/ui-common';
-import { CheckBox, Slider, GeneralSelector } from '~/ui-common/components';
+import { CheckBox, GeneralSelector, Slider } from '~/ui-common/components';
 
 type ICustomParameterModel =
   | {
@@ -98,14 +98,10 @@ function makeParameterModel(
 
 interface ICustomParametersPartViewModel {
   parameterModels: ICustomParameterModel[];
+  definitionUnavailable: boolean;
 }
 
 function useCustomParametersPartViewModel(): ICustomParametersPartViewModel {
-  const resourceInfos = useFetcher(
-    ipcAgent.async.projects_getAllProjectResourceInfos,
-    [],
-  );
-
   const deviceStatus = useEventSource(
     ipcAgent.events.device_keyboardDeviceStatusEvents,
     {
@@ -113,24 +109,28 @@ function useCustomParametersPartViewModel(): ICustomParametersPartViewModel {
     },
   );
 
-  const deviceProjectId =
-    deviceStatus.isConnected && deviceStatus.deviceAttrs?.projectId;
-
   const parameterValues =
     (deviceStatus.isConnected && deviceStatus.customParameterValues) ||
     undefined;
 
-  const projectInfo = resourceInfos.find(
-    (info) => info.projectId === deviceProjectId,
+  const deviceAttrs =
+    (deviceStatus.isConnected && deviceStatus.deviceAttrs) || undefined;
+
+  const customDef = useFetcher2(
+    () =>
+      deviceAttrs &&
+      ipcAgent.async.projects_getProjectCustomDefinition(
+        deviceAttrs.origin,
+        deviceAttrs.projectId,
+        deviceAttrs.firmwareVariationName,
+      ),
+    [deviceAttrs],
   );
-
-  const customParameterSpecs = projectInfo?.customParameters;
-
   return {
+    definitionUnavailable: deviceStatus.isConnected && !customDef,
     parameterModels:
-      (customParameterSpecs &&
-        parameterValues &&
-        customParameterSpecs.map((spec) =>
+      (parameterValues &&
+        customDef?.customParameterSpecs?.map((spec) =>
           makeParameterModel(spec, parameterValues[spec.slotIndex]),
         )) ||
       [],
@@ -156,10 +156,14 @@ const cssBase = css`
 `;
 
 export const CustomParametersPart: FC = () => {
-  const { parameterModels } = useCustomParametersPartViewModel();
+  const {
+    parameterModels,
+    definitionUnavailable,
+  } = useCustomParametersPartViewModel();
   return (
     <div css={cssBase}>
       <div>Custom Setting Parameters</div>
+      {definitionUnavailable && 'パラメータの定義が利用できません'}
       <div className="parameters-list-outer">
         <div className="parameters-list">
           {parameterModels.map((item) => (

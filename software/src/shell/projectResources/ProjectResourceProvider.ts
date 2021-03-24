@@ -1,11 +1,13 @@
 import {
   IPersistKeyboardDesign,
   IProfileData,
+  IProjectCustomDefinition,
   IProjectResourceInfo,
   IResourceOrigin,
 } from '~/shared';
 import { ProjectResourceProviderImpl_Remote } from '~/shell/projectResources/ProjectResourceProviderImpl_Remote';
 import {
+  IFirmwareBinaryFileSpec,
   IProjectResourceProvider,
   IProjectResourceProviderImpl,
 } from '~/shell/projectResources/interfaces';
@@ -31,6 +33,18 @@ class ProjectResourceProvider implements IProjectResourceProvider {
     }
   }
 
+  async getProjectCustomDefinition(
+    origin: IResourceOrigin,
+    projectId: string,
+    variationName: string,
+  ): Promise<IProjectCustomDefinition | undefined> {
+    const providerImpl = this.getResouceProviderImpl(origin);
+    return await providerImpl.getProjectCustomDefinition(
+      projectId,
+      variationName,
+    );
+  }
+
   async loadProjectPreset(
     origin: IResourceOrigin,
     projectId: string,
@@ -52,9 +66,10 @@ class ProjectResourceProvider implements IProjectResourceProvider {
   async loadProjectFirmwareFile(
     origin: IResourceOrigin,
     projectId: string,
-  ): Promise<string | undefined> {
+    variationName: string,
+  ): Promise<IFirmwareBinaryFileSpec | undefined> {
     const providerImpl = this.getResouceProviderImpl(origin);
-    return await providerImpl.loadProjectFirmwareFile(projectId);
+    return await providerImpl.loadProjectFirmwareFile(projectId, variationName);
   }
 }
 

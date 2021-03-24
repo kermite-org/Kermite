@@ -221,13 +221,13 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
   const canSave =
     editSource.type === 'InternalProfile' && profilesModel.checkDirty();
 
-  const refProjectId = profilesModel.getCurrentProfileProjectId();
+  // todo: デフォルトではProjetIDが異なるデバイスには書き込めないようにする
+  // const refProjectId = profilesModel.getCurrentProfileProjectId();
   const canWrite =
-    editSource.type === 'InternalProfile' &&
-    deviceStatus.isConnected &&
-    (refProjectId
-      ? deviceStatus.deviceAttrs?.projectId === refProjectId
-      : true);
+    editSource.type === 'InternalProfile' && deviceStatus.isConnected;
+  // (refProjectId
+  //   ? deviceStatus.deviceAttrs?.projectId === refProjectId
+  //   : true);
 
   const loadProfile = async (profileName: string) => {
     if (profilesModel.checkDirty()) {

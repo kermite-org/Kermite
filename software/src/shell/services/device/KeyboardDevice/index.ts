@@ -4,7 +4,7 @@ import {
   IRealtimeKeyboardEvent,
 } from '~/shared';
 import { DeviceSelectionManager } from '~/shell/services/device/KeyboardDevice/DeviceSelectionManager';
-import { KeyboardDeviceServiceCore } from '~/shell/services/device/KeyboardDevice/DeviceServiceCore';
+import { KeyboardDeviceServiceCore } from '~/shell/services/device/KeyboardDevice/DeviceServiceCoreImpl';
 import { KeyMappingEmitter } from '~/shell/services/device/KeyboardDevice/KeyMappingEmitter';
 import { IKeyboardDeviceServcie } from '~/shell/services/device/KeyboardDevice/interfaces';
 
