@@ -38,6 +38,7 @@ export const ConnectedDeviceAttrsPart: FC = () => {
       projectInfo && ['キーボード名', projectInfo.keyboardName],
       ['個体番号', deviceAttrs.deviceInstanceCode],
       ['ファームウェアバリエーション', deviceAttrs.firmwareVariationName],
+      ['MCU品種名', deviceAttrs.mcuName],
       [
         'ファームウェアリビジョン',
         (isOriginOnline && deviceAttrs.firmwareBuildRevision) || 'N/A',
