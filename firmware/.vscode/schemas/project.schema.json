@@ -3,107 +3,123 @@
   "properties": {
     "projectId": { "type": "string" },
     "keyboardName": { "type": "string" },
-    "customParameters": {
+    "customParameterConfiguration": {
       "type": "array",
       "items": {
-        "oneOf": [
-          {
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string",
-                "enum": ["toggle"]
-              },
-              "slotIndex": {
-                "type": "number"
-              },
-              "label": {
-                "type": "string"
-              },
-              "defaultValue": {
-                "type": "number",
-                "minimum": 0,
-                "maximum": 1
-              }
-            },
-            "required": ["type", "slotIndex", "label", "defaultValue"],
-            "additionalProperties": false
+        "type": "object",
+        "properties": {
+          "targetVariationNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
-          {
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string",
-                "enum": ["linear"]
-              },
-              "slotIndex": {
-                "type": "number"
-              },
-              "label": {
-                "type": "string"
-              },
-              "maxValue": {
-                "type": "number"
-              },
-              "defaultValue": {
-                "type": "number"
-              }
-            },
-            "required": [
-              "type",
-              "slotIndex",
-              "label",
-              "maxValue",
-              "defaultValue"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string",
-                "enum": ["selection"]
-              },
-              "slotIndex": {
-                "type": "number"
-              },
-              "label": {
-                "type": "string"
-              },
-              "options": {
-                "type": "array",
-                "items": {
+          "customParameters": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
                   "type": "object",
                   "properties": {
-                    "value": {
+                    "type": {
+                      "type": "string",
+                      "enum": ["toggle"]
+                    },
+                    "slotIndex": {
                       "type": "number"
                     },
                     "label": {
                       "type": "string"
+                    },
+                    "defaultValue": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
                     }
                   },
-                  "required": ["value", "label"],
+                  "required": ["type", "slotIndex", "label", "defaultValue"],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": ["linear"]
+                    },
+                    "slotIndex": {
+                      "type": "number"
+                    },
+                    "label": {
+                      "type": "string"
+                    },
+                    "maxValue": {
+                      "type": "number"
+                    },
+                    "defaultValue": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "slotIndex",
+                    "label",
+                    "maxValue",
+                    "defaultValue"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": ["selection"]
+                    },
+                    "slotIndex": {
+                      "type": "number"
+                    },
+                    "label": {
+                      "type": "string"
+                    },
+                    "options": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": "number"
+                          },
+                          "label": {
+                            "type": "string"
+                          }
+                        },
+                        "required": ["value", "label"],
+                        "additionalProperties": false
+                      }
+                    },
+                    "defaultValue": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "slotIndex",
+                    "label",
+                    "options",
+                    "defaultValue"
+                  ],
                   "additionalProperties": false
                 }
-              },
-              "defaultValue": {
-                "type": "number"
-              }
-            },
-            "required": [
-              "type",
-              "slotIndex",
-              "label",
-              "options",
-              "defaultValue"
-            ],
-            "additionalProperties": false
+              ]
+            }
           }
-        ]
+        },
+        "required": ["targetVariationNames", "customParameters"],
+        "additionalProperties": false
       }
     }
   },
-  "required": ["projectId", "keyboardName", "customParameters"],
+  "required": ["projectId", "keyboardName", "customParameterConfiguration"],
   "additionalProperties": false
 }
