@@ -18,6 +18,15 @@ export type IPresetSpec =
 
 export type IResourceOrigin = 'local' | 'online';
 
+export type IFirmwareTargetDevice = 'atmega32u4' | 'rp2040';
+
+export interface IProjectFirmwareInfo {
+  variationName: string;
+  targetDevice: IFirmwareTargetDevice;
+  buildRevision: number;
+  buildTimestamp: string;
+}
+
 export interface IProjectResourceInfo {
   sig: string; // ${origin}#${projectId}
   origin: IResourceOrigin;
@@ -26,9 +35,7 @@ export interface IProjectResourceInfo {
   projectPath: string;
   presetNames: string[];
   layoutNames: string[];
-  hasFirmwareBinary: boolean;
-  firmwareBuildRevision: number;
-  firmwareBuildTimestamp: string;
+  firmwares: IProjectFirmwareInfo[];
 }
 
 export interface IProjectCustomDefinition {
@@ -50,10 +57,12 @@ export interface IDeviceSelectionStatus {
 export interface IKeyboardDeviceAttributes {
   origin: IResourceOrigin;
   projectId: string;
+  firmwareVariationName: string;
   firmwareBuildRevision: number;
   deviceInstanceCode: string;
   assignStorageCapacity: number;
   portName: string;
+  mcuName: string;
 }
 export interface IKeyboardDeviceStatus {
   isConnected: boolean;
@@ -238,6 +247,7 @@ export interface IAppIpcContract {
     projects_getProjectCustomDefinition(
       origin: IResourceOrigin,
       projectId: string,
+      variationName: string,
     ): Promise<IProjectCustomDefinition | undefined>;
     projects_loadPresetProfile(
       origin: IResourceOrigin,
@@ -256,7 +266,7 @@ export interface IAppIpcContract {
     firmup_uploadFirmware(
       origin: IResourceOrigin,
       projectId: string,
-      comPortName: string,
+      variationName: string,
     ): Promise<string>;
 
     file_getOpenJsonFilePathWithDialog(): Promise<string | undefined>;
@@ -278,7 +288,7 @@ export interface IAppIpcContract {
     device_keyEvents: IRealtimeKeyboardEvent;
     device_keyboardDeviceStatusEvents: Partial<IKeyboardDeviceStatus>;
 
-    firmup_comPortPlugEvents: { comPortName: string | undefined };
+    firmup_deviceDetectionEvents: { comPortName?: string; driveName?: string };
     projects_layoutFileUpdationEvents: { projectId: string };
   };
 }

@@ -5,14 +5,29 @@ import { useConnectedDeviceAttributes } from '~/ui-firmware-updation-page/dataSo
 const cssBase = css`
   td + td {
     padding-left: 20px;
+    max-width: 240px;
+    overflow-x: hidden;
+    white-space: nowrap;
   }
 `;
+
+function fixDatetimeText(datetimeText: string) {
+  if (datetimeText.endsWith('Z')) {
+    return new Date(datetimeText).toLocaleString();
+  }
+  return datetimeText;
+}
+
 export const ConnectedDeviceAttrsPart: FC = () => {
   const { deviceAttrs, projectInfo } = useConnectedDeviceAttributes();
 
   console.log({ deviceAttrs, projectInfo });
 
   const isOriginOnline = deviceAttrs?.origin === 'online';
+
+  const firm = projectInfo?.firmwares.find(
+    (f) => f.variationName === deviceAttrs?.firmwareVariationName,
+  );
   const tableData =
     deviceAttrs &&
     ([
@@ -22,19 +37,19 @@ export const ConnectedDeviceAttrsPart: FC = () => {
       projectInfo && ['プロジェクトパス', projectInfo.projectPath],
       projectInfo && ['キーボード名', projectInfo.keyboardName],
       ['個体番号', deviceAttrs.deviceInstanceCode],
+      ['ファームウェアバリエーション', deviceAttrs.firmwareVariationName],
+      ['MCU品種名', deviceAttrs.mcuName],
       [
         'ファームウェアリビジョン',
         (isOriginOnline && deviceAttrs.firmwareBuildRevision) || 'N/A',
       ],
-      projectInfo &&
-        isOriginOnline && [
-          'ファームウェア最新リビジョン',
-          projectInfo.firmwareBuildRevision,
-        ],
-      projectInfo &&
-        isOriginOnline && [
+      isOriginOnline &&
+        firm && ['ファームウェア最新リビジョン', firm.buildRevision],
+
+      isOriginOnline &&
+        firm && [
           'ファームウェア最新ビルド日時',
-          projectInfo.firmwareBuildTimestamp,
+          fixDatetimeText(firm.buildTimestamp),
         ],
       [
         'キーマッピング領域サイズ',

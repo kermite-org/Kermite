@@ -2,11 +2,11 @@ import * as HID from 'node-hid';
 import { compareString, IKeyboardDeviceInfo } from '~/shared';
 
 export interface IDeviceSpecificationParams {
-  vendorId: number;
-  productId: number;
-  manufacturerString: string;
-  productString: string;
-  pathSearchWords: string[];
+  // vendorId: number;
+  // productId: number;
+  serialNumberMcuCode: string;
+  usagePage: number;
+  usage: number;
 }
 
 interface IEnumeratedDeviceSpec {
@@ -15,25 +15,20 @@ interface IEnumeratedDeviceSpec {
 }
 
 export function enumerateSupportedDevicePathsCore(
-  params: IDeviceSpecificationParams,
+  params: IDeviceSpecificationParams[],
 ): IEnumeratedDeviceSpec[] {
-  const {
-    vendorId,
-    productId,
-    manufacturerString,
-    productString,
-    pathSearchWords,
-  } = params;
   const allDeviceInfos = HID.devices();
   // console.log(allDeviceInfos);
   return allDeviceInfos
-    .filter(
-      (d) =>
-        d.vendorId === vendorId &&
-        d.productId === productId &&
-        d.manufacturer === manufacturerString &&
-        d.product === productString &&
-        pathSearchWords.some((word) => d.path!.includes(word)),
+    .filter((d) =>
+      params.some(
+        (param) =>
+          // d.vendorId === param.vendorId &&
+          // d.productId === param.productId &&
+          d.serialNumber?.slice(0, 8) === param.serialNumberMcuCode &&
+          d.usagePage === param.usagePage &&
+          d.usage === param.usage,
+      ),
     )
     .filter((info) => !!info.path)
     .map((info) => ({
@@ -44,7 +39,7 @@ export function enumerateSupportedDevicePathsCore(
 
 export function getPortNameFromDevicePath(path: string) {
   const m =
-    path.match(/Kermitie Keyboard Device@(\d+)/) || // Mac
+    path.match(/AppleUSB20HubPort@(\d+)/) || // Mac
     path.match(/mi_00#8&([0-9a-f]+)/); // Windows
   return (m && `${m[1]}`) || undefined;
 }
@@ -71,11 +66,10 @@ function makeKeyboardDeviceInfoFromDeviceSpec(
 }
 
 export function enumerateSupportedDeviceInfos(
-  params: IDeviceSpecificationParams,
+  params: IDeviceSpecificationParams[],
 ): IKeyboardDeviceInfo[] {
   const specs = enumerateSupportedDevicePathsCore(params);
   return specs
     .sort((a, b) => compareString(a.path, b.path))
     .map(makeKeyboardDeviceInfoFromDeviceSpec);
-  // .sort((a, b) => compareString(a.portName, b.portName));
 }

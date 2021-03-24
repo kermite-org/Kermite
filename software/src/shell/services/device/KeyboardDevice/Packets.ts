@@ -1,5 +1,5 @@
 import { generateNumberSequence } from '~/shared';
-import { bhi, blo } from '~/shell/services/firmwareUpdation/helpers';
+import { bhi, blo } from '~/shell/services/device/KeyboardDevice/Helpers';
 
 export class Packets {
   static deviceAttributesRequestFrame = [0xf0, 0x10];

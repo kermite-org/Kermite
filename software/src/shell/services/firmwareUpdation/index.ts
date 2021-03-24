@@ -1,35 +1,98 @@
-import { IResourceOrigin } from '~/shared';
+import { IntervalTimerWrapper, IResourceOrigin } from '~/shared';
+import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
+import { createEventPort } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
-import { ComPortsMonitor } from './ComPortsMonitor';
-import { FlashCommander } from './FlashCommander';
+import { FirmwareUpdationSchemeAtMega } from '~/shell/services/firmwareUpdation/flashSchemeAtMega/FlashSchemeAtMega';
+import { FirmwareUpdationSchemeRP } from '~/shell/services/firmwareUpdation/flashSchemeRP/FlashSchemeRP';
 
-// 仮想COMポートでProMicroのブートローダ(Caterina)と通信しファームウェアを書き込む
-// 仮想COMポートの列挙や出現監視も行う
+interface IDeviceDetectionEvent {
+  comPortName?: string;
+  driveName?: string;
+}
+
 export class FirmwareUpdationService {
-  comPortsMonitor = new ComPortsMonitor();
+  private timerWrapper = new IntervalTimerWrapper();
+
+  private schemeAtMega = new FirmwareUpdationSchemeAtMega();
+  private schemeRP = new FirmwareUpdationSchemeRP();
+  private pluggedComPortName: string | undefined;
+  private pluggedDriveName: string | undefined;
+
+  deviceDetectionEvents = createEventPort<IDeviceDetectionEvent>({
+    onFirstSubscriptionStarting: () => this.startDetection(),
+    onLastSubscriptionEnded: () => this.stopDetection(),
+  });
+
+  private emitDetectionEvent() {
+    this.deviceDetectionEvents.emit({
+      comPortName: this.pluggedComPortName,
+      driveName: this.pluggedDriveName,
+    });
+  }
+
+  private updateDetection = async () => {
+    const pluggedComPortName = await this.schemeAtMega.updateDeviceDetection();
+    if (this.pluggedComPortName !== pluggedComPortName) {
+      this.pluggedComPortName = pluggedComPortName;
+      this.emitDetectionEvent();
+    }
+    const pluggedDriveName = await this.schemeRP.updateDeviceDetection();
+    if (this.pluggedDriveName !== pluggedDriveName) {
+      this.pluggedDriveName = pluggedDriveName;
+      this.emitDetectionEvent();
+    }
+  };
+
+  private startDetection() {
+    this.pluggedComPortName = undefined;
+    this.schemeAtMega.resetDeviceDetectionStatus();
+    this.timerWrapper.start(
+      withAppErrorHandler(
+        this.updateDetection,
+        'ComPortsMonitor_updateComPortsMonitor',
+      ),
+      1000,
+      true,
+    );
+  }
+
+  private stopDetection() {
+    this.timerWrapper.stop();
+  }
 
   async writeFirmware(
     origin: IResourceOrigin,
     projectId: string,
-    comPortName: string,
+    variationName: string,
   ): Promise<'ok' | string> {
-    const hexFilePath = await projectResourceProvider.loadProjectFirmwareFile(
+    const binarySpec = await projectResourceProvider.loadProjectFirmwareFile(
       origin,
       projectId,
+      variationName,
     );
 
-    if (!hexFilePath) {
+    if (!binarySpec) {
       return `cannot find firmware`;
     }
 
-    const flashResult = await FlashCommander.uploadFirmware(
-      hexFilePath,
-      comPortName,
-    );
-    if (flashResult !== 'ok') {
-      console.log(`firmwre upload error`);
+    if (binarySpec.targetDevice === 'atmega32u4') {
+      if (!this.pluggedComPortName) {
+        return `target com port unavailable`;
+      }
+      return await this.schemeAtMega.flashFirmware(
+        this.pluggedComPortName,
+        binarySpec.filePath,
+      );
     }
-    console.log(flashResult);
-    return flashResult;
+    if (binarySpec.targetDevice === 'rp2040') {
+      if (!this.pluggedDriveName) {
+        return `target drive unavailable`;
+      }
+      return await this.schemeRP.flashFirmware(
+        this.pluggedDriveName,
+        binarySpec.filePath,
+      );
+    }
+    return `cannot determine updation method for ${binarySpec.filePath}`;
   }
 }

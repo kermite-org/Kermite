@@ -21,13 +21,24 @@ export async function fetchText(uri: string): Promise<string> {
   }
 }
 
-const cached: { [key in string]: any } = {};
+export async function fetchBinary(uri: string): Promise<Uint8Array> {
+  console.log(`fetching ${uri}`);
+  try {
+    const res = await fetch(uri);
+    const data = await res.arrayBuffer();
+    return new Uint8Array(data);
+  } catch (error) {
+    throw new AppError('FailedToLoadRemoteResource', { url: uri }, error);
+  }
+}
+
+const cached: { [key in string]: Promise<any> } = {};
 export async function cacheRemoteResouce<T>(
   func: (uri: string) => Promise<T>,
   uri: string,
 ): Promise<T> {
   if (!cached[uri]) {
-    cached[uri] = await func(uri);
+    cached[uri] = func(uri);
   }
-  return cached[uri];
+  return await cached[uri];
 }

@@ -1,7 +1,9 @@
 import { IRealtimeKeyboardEvent, IResourceOrigin } from '~/shared';
+import { getMcuNameFromKermiteMcuCode } from '~/shared/funcs/DomainRelatedHelpers';
 import { bytesToString } from '~/shell/services/device/KeyboardDevice/Helpers';
 
 export type IDeviceAttributesReadResponseData = {
+  firmwareVariationName: string;
   projectReleaseBuildRevision: number;
   configStorageFormatRevision: number;
   rawHidMessageProtocolRevision: number;
@@ -9,6 +11,7 @@ export type IDeviceAttributesReadResponseData = {
   projectId: string;
   deviceInstanceCode: string;
   assignStorageCapacity: number;
+  firmwareMcuName: string;
 };
 
 export type ICustomParametersReadResponseData = {
@@ -41,9 +44,12 @@ export function recievedBytesDecoder(
     const isProjectOriginOnline = !!buf[14];
     const deviceInstanceCode = bytesToString([...buf].slice(16, 24));
     const assignStorageCapacity = (buf[24] << 8) | buf[25];
+    const firmwareVariationName = bytesToString([...buf].slice(26, 42));
+    const kermiteMcuCode = bytesToString([...buf].slice(42, 50));
     return {
       type: 'deviceAttributeResponse',
       data: {
+        firmwareVariationName,
         projectReleaseBuildRevision,
         configStorageFormatRevision,
         rawHidMessageProtocolRevision,
@@ -51,6 +57,7 @@ export function recievedBytesDecoder(
         projectId,
         deviceInstanceCode,
         assignStorageCapacity,
+        firmwareMcuName: getMcuNameFromKermiteMcuCode(kermiteMcuCode),
       },
     };
   }

@@ -1,0 +1,59 @@
+name: Firmware ErrorCheck
+
+on:
+  push:
+    branches: [master, variants]
+    paths:
+      - ".github/workflows/firmware_error_check.yml"
+      - "firmware/ci/**/*.ts"
+      - "firmware/Makefile"
+      - "firmware/src/**"
+      - "software/src/shell/loaders/**/*.ts"
+
+  pull_request:
+    branches: [master, variants]
+    types: [opened, synchronize]
+    paths:
+      - "firmware/Makefile"
+      - "firmware/src/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - name: Install Dependencies
+        run: sudo apt install gcc-avr avr-libc binutils-avr
+
+      - name: install arm-none-eabi-gcc
+        uses: fiam/arm-none-eabi-gcc@v1
+        with:
+          release: "10-2020-q4"
+
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+
+      - uses: bahmutov/npm-install@v1
+        with:
+          working-directory: ./firmware/ci
+
+      - run: yarn checkHardcodedVersions
+        working-directory: ./firmware/ci
+
+      - name: Check Project IDs
+        run: yarn checkProjectIds --abortOnError
+        working-directory: ./firmware/ci
+
+      - name: Check Project Related Json Schemas
+        run: yarn checkProjectJsonSchemas
+        working-directory: ./firmware/ci
+
+      - name: Check Firmware Build Errors
+        run: yarn buildAll --abortOnError
+        working-directory: ./firmware/ci

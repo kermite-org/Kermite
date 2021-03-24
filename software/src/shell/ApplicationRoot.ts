@@ -90,16 +90,20 @@ export class ApplicationRoot {
         this.deviceService.selectTargetDevice(path),
       device_setCustomParameterValue: async (index, value) =>
         this.deviceService.setCustomParameterValue(index, value),
-      firmup_uploadFirmware: (origin, projectId, comPortName) =>
+      firmup_uploadFirmware: (origin, projectId, variationName) =>
         this.firmwareUpdationService.writeFirmware(
           origin,
           projectId,
-          comPortName,
+          variationName,
         ),
       projects_getAllProjectResourceInfos: () =>
         projectResourceProvider.getAllProjectResourceInfos(),
-      projects_getProjectCustomDefinition: (origin, projectId) =>
-        projectResourceProvider.getProjectCustomDefinition(origin, projectId),
+      projects_getProjectCustomDefinition: (origin, projectId, variationName) =>
+        projectResourceProvider.getProjectCustomDefinition(
+          origin,
+          projectId,
+          variationName,
+        ),
       projects_loadPresetProfile: (
         origin,
         profileId,
@@ -175,10 +179,8 @@ export class ApplicationRoot {
         this.deviceService.statusEventPort.subscribe(cb);
         return () => this.deviceService.statusEventPort.unsubscribe(cb);
       },
-      firmup_comPortPlugEvents: (cb) =>
-        this.firmwareUpdationService.comPortsMonitor.comPortPlugEvents.subscribe(
-          cb,
-        ),
+      firmup_deviceDetectionEvents: (cb) =>
+        this.firmwareUpdationService.deviceDetectionEvents.subscribe(cb),
       projects_layoutFileUpdationEvents: (cb) =>
         this.keyboardLayoutFilesWatcher.fileUpdationEvents.subscribe(cb),
       window_appWindowStatus: windowWrapper.appWindowEventPort.subscribe,

@@ -25,10 +25,12 @@ function createConnectedStatus(
     deviceAttrs: {
       origin: attrsRes.resourceOrigin,
       projectId: attrsRes.projectId,
+      firmwareVariationName: attrsRes.firmwareVariationName,
       firmwareBuildRevision: attrsRes.projectReleaseBuildRevision,
       deviceInstanceCode: attrsRes.deviceInstanceCode,
       assignStorageCapacity: attrsRes.assignStorageCapacity,
       portName: getPortNameFromDevicePath(devicePath) || devicePath,
+      mcuName: attrsRes.firmwareMcuName,
     },
     customParameterValues: custromParamsRes?.parameterValues,
   };
