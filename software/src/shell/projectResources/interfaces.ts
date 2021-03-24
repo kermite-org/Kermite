@@ -16,6 +16,7 @@ export interface IProjectResourceProviderImpl {
 
   getProjectCustomDefinition(
     projectId: string,
+    variationName: string,
   ): Promise<IProjectCustomDefinition | undefined>;
 
   loadProjectPreset(

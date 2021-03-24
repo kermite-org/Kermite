@@ -137,6 +137,7 @@ export async function deviceSetupTask(
     const customDef = await projectResourceProvider.getProjectCustomDefinition(
       attrsRes.resourceOrigin,
       attrsRes.projectId,
+      attrsRes.firmwareVariationName,
     );
     if (!customDef) {
       // throw new Error('cannot find custom parameter definition');
