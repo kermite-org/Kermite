@@ -62,6 +62,7 @@ export interface IKeyboardDeviceAttributes {
   deviceInstanceCode: string;
   assignStorageCapacity: number;
   portName: string;
+  mcuName: string;
 }
 export interface IKeyboardDeviceStatus {
   isConnected: boolean;

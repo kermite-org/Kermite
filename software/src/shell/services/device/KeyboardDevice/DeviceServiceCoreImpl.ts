@@ -30,6 +30,7 @@ function createConnectedStatus(
       deviceInstanceCode: attrsRes.deviceInstanceCode,
       assignStorageCapacity: attrsRes.assignStorageCapacity,
       portName: getPortNameFromDevicePath(devicePath) || devicePath,
+      mcuName: attrsRes.firmwareMcuName,
     },
     customParameterValues: custromParamsRes?.parameterValues,
   };
