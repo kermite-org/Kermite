@@ -97,9 +97,7 @@ function readOsVersion(): string {
 
 function readArmNoneEabiGccVersion(): string {
   const text = execueteOneliner("arm-none-eabi-gcc --version");
-  const m = text.match(
-    /^arm-none-eabi-gcc \(GNU Tools for Arm Embedded Processors (.+?)\) (.+?) (.+?) /m
-  );
+  const m = text.match(/^arm-none-eabi-gcc \(.* (.+?)\) (.+?) (.+?) /m);
   return (m && `arm-none-eabi-gcc ${m[1]} ${m[2]} ${m[3]}`) || "";
 }
 
