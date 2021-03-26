@@ -11,8 +11,7 @@ CORE_NAME = $(notdir $(PROJECT))_$(VARIATION)
 #import rules.mk
 MODULE_SRCS = 
 PROJECT_SRCS =
-RULES_MK = $(PROJECT_CODE_DIR)/rules.mk
--include $(RULES_MK)
+-include $(PROJECT_CODE_DIR)/rules.mk
 
 MODULES_DIR = src/modules
 
@@ -43,6 +42,9 @@ OBJSIZE = arm-none-eabi-size
 ELF2UF2_ROOT_DIR = $(PICO_LOCAL_DIR)/tools/elf2uf2
 ELF2UF2_BIN = $(ELF2UF2_ROOT_DIR)/build/elf2uf2
 #ELF2UF2_BIN = $(ELF2UF2_ROOT_DIR)/prebuild/elf2uf2_darwin
+
+PIOASM_ROOT_DIR = $(PICO_LOCAL_DIR)/tools/pioasm
+PIOASM_BIN = $(PIOASM_ROOT_DIR)/prebuild/pioasm_darwin
 
 #--------------------
 #flags
@@ -236,6 +238,10 @@ $(PICO_SDK_DIR)/src/rp2_common/pico_standard_link/crt0.S \
 BOOT_S = $(PICO_LOCAL_DIR)/loaders/bs2_default_padded_checksummed.S
 LD_SCRIPT = $(PICO_LOCAL_DIR)/loaders/memmap_default.ld
 
+PROJECT_PIO_ASM_SRCS =
+
+-include $(PROJECT_CODE_DIR)/rules_post_declarations.mk
+
 C_SRCS = $(addprefix src/modules/,$(MODULE_SRCS)) \
 $(addprefix $(PROJECT_CODE_DIR)/, $(PROJECT_SRCS))
 
@@ -245,6 +251,9 @@ SDK_ASM_OBJS = $(addprefix $(SHARED_OBJ_DIR)/,$(SDK_ASM_SRCS:.S=.S.obj))
 
 OBJS = $(C_OBJS) $(SDK_C_OBJS) $(SDK_ASM_OBJS)
 
+PIO_ASM_SRCS = $(addprefix $(PROJECT_CODE_DIR)/, $(PROJECT_PIO_ASM_SRCS))
+PIO_ASM_GENERATED_HEADERS = $(PIO_ASM_SRCS:.pio=.pio.h)
+
 DEP_FILES = $(filter %.d,$(OBJS:%.obj=%.d))
 -include $(DEP_FILES)
 
@@ -252,6 +261,10 @@ DEP_FILES = $(filter %.d,$(OBJS:%.obj=%.d))
 #targets
 
 build: $(UF2)
+
+#$(PROJECT_CODE_DIR)/
+%.pio.h: %.pio
+	$(PIOASM_BIN) -o c-sdk $< $@
 
 $(OBJ_DIR)/%.c.obj: %.c
 	@echo "compiling $<"
@@ -268,7 +281,7 @@ $(SHARED_OBJ_DIR)/%.S.obj: %.S
 	@mkdir -p $(dir $@)
 	@$(AS) $(AS_FLAGS) -o $@ -c $<
 
-$(ELF): $(OBJS)
+$(ELF): $(PIO_ASM_GENERATED_HEADERS) $(OBJS)
 	@echo "linking"
 	@mkdir -p $(dir $@)
 	@$(LD) $(LD_FLAGS) $(OBJS) -o $(ELF) $(BOOT_S)
