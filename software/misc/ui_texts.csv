@@ -1,0 +1,84 @@
+変数名,英語表記,日本語表記
+STUB,TODO: specify text for this elelement,TODO: specify text for this elelement
+,,
+hint_titleBar_switchToWidgetView,Switch to widget view,ウィジェット表示に切り替えます。
+hint_titleBar_minimizeWindow,Minimize window,ウインドウを最小化します。
+hint_titleBar_maximizeWindow,Maximize window,ウインドウを最大化します。
+hint_titleBar_closeApplication,Close application,アプリケーションを終了します。
+,,
+hint_globalMenuButton,Show global menu,グローバルメニューを表示します。
+,,
+hint_assigner_topBar_profileOperationsMenu,Open profile operations menu,プロファイル管理メニューを開きます。
+,,
+label_assigner_menu_newProfile,new,新規作成
+label_assigner_menu_renameProfile,rename,名前を変更
+label_assigner_menu_copyProfile,copy,複製
+label_assigner_menu_deleteProfile,delete,削除
+label_assigner_menu_saveAsPreset,save as preset,プリセットとして保存
+hint_assigner_menu_newProfile,Create new profile,新規プロファイルを作成します。
+hint_assigner_menu_renameProfile,Rename profile,プロファイルの名前を変更します。
+hint_assigner_menu_copyProfile,Duplicate profile,プロファイルを複製します。
+hint_assigner_menu_deleteProfile,Delete profile,プロファイルを削除します。
+hint_assigner_menu_saveAsPreset,Save profile as preset,プロファイルをプロジェクトのプリセットとして保存します。
+,,
+label_assigner_topBar_saveAssignsButton,save,保存
+label_assigner_topBar_writeAssignsButton,write,書き込み
+hint_assigner_topBar_saveAssignsButton,Save edit profile,編集中のプロファイルを保存します
+hint_assigner_topBar_writeAssignsButton,Save edit profile and write keymapping to the device,プロファイルを保存して、デバイスにキーマッピングを書き込みます。
+,,
+hint_assigner_topBar_selectCurrentProfile,Select current profile,プロファイルを選択します。
+hint_assigner_topBar_profileConfigurationButton,Open profile configuration modal,プロファイル設定ダイアログを開きます。
+hint_assigner_topBar_keyboardBehaviorModeSelector,"“Select keyboard behavior mode. (STD: Standalone Mode, SIM: Simulation Mode)”","“キーボードの動作モードを設定します。(STD: スタンドアロン動作, SIM: シミュレーション動作)”"
+hint_assigner_topBar_keyboardSystemLayoutSelector,Select keyboard layout recognized by OS,OSが認識するキーボードレイアウトを設定します
+hint_assigner_topBar_connectedKeyboardName,Connected keyboard name,接続しているキーボードの品種名を表示しています。
+hint_assigner_topBar_deviceConnectionStatus,Device connection status,キーボードの接続状態を表示しています。
+,,
+hint_assigner_keyboardView_layerStates,Layers states: Affects current layter states of the device.,デバイスの現在のレイヤ状態を表示しています。
+hint_assigner_keyboardView_keyUnit,Select edit target key,アサイン設定対象のキーを選択します
+,,
+hint_assigner_assigns_none,Clear assign,アサインを解除します。
+hint_assigner_assigns_transparent,Set transparent assign,透過アサインを割り当てます。アサイン探索処理が次のレイヤに引き継がれます。
+hint_assigner_assigns_block,Set block assign,ブロックアサインを割り当てます。アサイン探索処理がこのレイヤで終了します。
+hint_assigner_assigns_keyInput,Set key input assigns,キー入力を割り当てます。
+hint_assigner_assigns_modifiers,Set modifier assigns,モディファイヤキーを割り当てます。
+hint_assigner_assigns_layers,Set layer assigns,レイヤ呼び出しを割り当てます。
+hint_assigner_assigns_clearExclusiveGroup,Clear all layers belongs to the same exclusion group,排他レイヤグループに対して、グループに所属する全レイヤを解除します。
+hint_assigner_assigns_layerInvocationModeSelector,Select layer invocation mode,レイヤ呼び出しモードを選択します。
+,,
+label_assigner_layerListHeader,Layers,レイヤ
+hint_assigner_layers_layerListHeader,Layer List,プロファイルが持っているレイヤのリストです。
+hint_assigner_layers_layerListItems,Select edit target layer,編集対象のレイヤを選択します。
+,,
+hint_assigner_layerOps_addNewLayer,Add new layer,新規レイヤを追加します。
+hint_assigner_layerOps_editLayerProperties,Edit layer properties,レイヤの設定を編集します。
+hint_assigner_layerOps_deleteLayer,Delete layer,レイヤを削除します。
+hint_assigner_layerOps_bringBackward,Bring layer backward,レイヤを後ろに移動します。
+hint_assigner_layerOps_bringForward,Bring layer forward,レイヤを前に移動します。
+,,
+label_assigner_configs_assignModel,assign model,アサインモデル
+label_assigner_configs_showLayersDynamic,Show Layers Dynamic,デバイスのレイヤを反映
+label_assigner_configs_showFallbackAssigns,Show Fallback Assigns,デフォルトアサインを表示
+hint_assigner_configs_assignModel,Assign model for current profile,プロファイルのアサインモデルを表示しています。
+hint_assigner_configs_showLayersDynamic,Show layers synchronized to the connected keyboard device,デバイスのレイヤ状態に同期して表示するレイヤを切り替えます。
+hint_assigner_configs_showFallbackAssigns,Show fallback assigns for layers,レイヤのデフォルトアサインを表示します。
+,,
+label_presetBrowser_pageTitle,Preset Browser,プリセットブラウザ
+label_presetBrowser_selectionTitle_keyboard,Keyboard,キーボード
+label_presetBrowser_selectionTitle_preset,Preset,プリセット
+label_presetBrowser_createProfileButton,Create Profile,プロファイルを作成
+label_presetBrowser_layers,Layers,
+,,
+hint_presetBrowser_selection_keyboard,,キーボードの品種を選択します。
+hint_presetBrowser_selection_preset,,プリセットを選択します。
+hint_presetBrowser_createProfileButton,,選択されたプリセットから新しいプロファイルを作成します。
+hint_presetBrowser_projectLinkButton,,接続されているデバイスに紐付くキーボード品種を選択します。
+,,
+label_device_deviceSelection_sectionTitle,Device Selection,
+,,
+,,
+label_device_deviceInfo_sectionTitle,,
+,,
+label_device_customParameters_sectionTitle,,
+,,
+lavel_firmup_sectionTitle,,
+lavel_firmup_operationAlertText,,
