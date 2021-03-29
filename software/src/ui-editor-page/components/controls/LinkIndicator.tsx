@@ -16,7 +16,7 @@ export const LinkIndicator = (props: { isActive: boolean }) => {
     <div
       css={cssLinkIndicator}
       data-active={props.isActive}
-      data-hint={texts.hintDeviceConnectionStatus}
+      data-hint={texts.hint_assigner_topBar_deviceConnectionStatus}
     >
       <i class="fa fa-link" />
     </div>

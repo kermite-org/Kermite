@@ -92,7 +92,7 @@ export function EditKeyUnitCard(props: {
     <g
       transform={`translate(${pos.x}, ${pos.y}) rotate(${pos.r}) `}
       key={keyUnitId}
-      data-hint={texts.hintSelectAssignTargetKey}
+      data-hint={texts.hint_assigner_keyboardView_keyUnit}
     >
       <KeyUnitShape
         shape={shape}

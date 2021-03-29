@@ -46,7 +46,7 @@ export const ProfileManagementPart = () => {
       <ProfileSelectionMenuPart vm={menuModel} />
       <KeyboardProfileSelector
         selectorSource={baseVm.profileSelectorSource}
-        hint={texts.hintSelectCurrentProfile}
+        hint={texts.hint_assigner_topBar_selectCurrentProfile}
       />
       <ConfigurationButton onClick={baseVm.openConfiguration} />
       <BehaviorSelector />
@@ -63,8 +63,8 @@ export const ProfileManagementPart = () => {
         onClick={baseVm.onWriteButton}
         disabled={!baseVm.canWrite}
         icon="double_arrow"
-        label={texts.buttonWriteAssigns}
-        hint={texts.hintWriteKeyMapping}
+        label={texts.label_assigner_topBar_writeAssignsButton}
+        hint={texts.hint_assigner_topBar_writeAssignsButton}
       />
       {baseVm.isExportingPresetSelectionModalOpen && (
         <SavingProjectPresetSelectionModal baseVm={baseVm} />

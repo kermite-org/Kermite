@@ -14,7 +14,7 @@ export const ConfigurationButton = (props: { onClick(): void }) => {
     <div
       css={cssConfigurationButton}
       onClick={props.onClick}
-      data-hint={texts.hintProfileConfigurationButton}
+      data-hint={texts.hint_assigner_topBar_profileConfigurationButton}
     >
       <i class="fa fa-cog" />
     </div>

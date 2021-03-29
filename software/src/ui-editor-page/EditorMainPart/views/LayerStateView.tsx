@@ -34,7 +34,10 @@ export const LayerStateView = (props: { playerModel: PlayerModel }) => {
   const { isConnected } = useDeviceStatusModel();
 
   return (
-    <div css={cssLayerStateView} data-hint={texts.hintLayerStates}>
+    <div
+      css={cssLayerStateView}
+      data-hint={texts.hint_assigner_keyboardView_layerStates}
+    >
       {props.playerModel.layerStackViewSource.map((la) => {
         return (
           <div

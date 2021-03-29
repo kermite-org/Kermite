@@ -19,7 +19,7 @@ export const OperationLayerOptionSelector = (props: {
   return (
     <div
       css={cssOperationLayerOptionSelector}
-      data-hint={texts.hintAssignLayerInvocationModeSelector}
+      data-hint={texts.hint_assigner_assigns_layerInvocationModeSelector}
     >
       <select
         value={selectedValue}

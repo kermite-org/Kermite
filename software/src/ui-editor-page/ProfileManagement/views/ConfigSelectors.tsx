@@ -21,7 +21,7 @@ export const BehaviorSelector = () => {
       currentItem={currentMode}
       setCurrentItem={setCurrent}
       textDictionary={textDictionary}
-      hint={texts.hintKeyboardBehaviorModeSelector}
+      hint={texts.hint_assigner_topBar_keyboardBehaviorModeSelector}
     />
   );
 };
@@ -42,7 +42,7 @@ export const LayoutStandardSelector = () => {
       currentItem={currentLayout}
       setCurrentItem={setCurrent}
       textDictionary={textDictionary}
-      hint={texts.hintKeyboardSystemLayoutSelector}
+      hint={texts.hint_assigner_topBar_keyboardSystemLayoutSelector}
     />
   );
 };

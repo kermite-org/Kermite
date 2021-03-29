@@ -22,12 +22,12 @@ export const WindowControlButtonsPart = () => {
       <WindowControlButton
         icon="fa fa-feather-alt"
         onClick={vm.onWidgetButton}
-        hint={texts.hintSwitchToWidgetView}
+        hint={texts.hint_titleBar_switchToWidgetView}
       />
       <WindowControlButton
         icon="fa fa-window-minimize"
         onClick={vm.onMinimizeButton}
-        hint={texts.hintMinimizeWindow}
+        hint={texts.hint_titleBar_minimizeWindow}
       />
       <WindowControlButton
         icon={
@@ -36,12 +36,12 @@ export const WindowControlButtonsPart = () => {
             : 'fa fa-window-restore'
         }
         onClick={vm.onMaximizeButton}
-        hint={texts.hintMaximizeWindow}
+        hint={texts.hint_titleBar_maximizeWindow}
       />
       <WindowControlButton
         icon="fa fa-times"
         onClick={vm.onCloseButton}
-        hint={texts.hintCloseApplication}
+        hint={texts.hint_titleBar_closeApplication}
       />
     </div>
   );

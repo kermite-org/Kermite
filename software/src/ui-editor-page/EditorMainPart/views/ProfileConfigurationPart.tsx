@@ -10,8 +10,8 @@ export const ProfileConfigurationPart = () => {
   const currentAssignType = editorModel.profileData.settings.assignType;
 
   return (
-    <div css={cssBase} data-hint={texts.hintAssignModelDisplay}>
-      {texts.labelAssignModel}: {currentAssignType}
+    <div css={cssBase} data-hint={texts.hint_assigner_configs_assignModel}>
+      {texts.label_assigner_configs_assignModel}: {currentAssignType}
     </div>
   );
 };

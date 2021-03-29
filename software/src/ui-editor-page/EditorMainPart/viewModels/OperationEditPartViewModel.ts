@@ -51,7 +51,7 @@ export function makePlainOperationEditCardsViewModel(): IPlainOperationEditCards
       editOperation === undefined,
     setCurrent: () => writeEditOperation(undefined),
     isEnabled: true,
-    hint: texts.hintAssignNone,
+    hint: texts.hint_assigner_assigns_none,
   };
 
   const transparentEntry: IOperationCardViewModel = {
@@ -60,7 +60,7 @@ export function makePlainOperationEditCardsViewModel(): IPlainOperationEditCards
     isCurrent: isSlotSelected && assignEntry?.type === 'transparent',
     setCurrent: () => writeAssignEntry({ type: 'transparent' }),
     isEnabled: true,
-    hint: texts.hintAssignTransparent,
+    hint: texts.hint_assigner_assigns_transparent,
   };
 
   const blockEntry: IOperationCardViewModel = {
@@ -69,7 +69,7 @@ export function makePlainOperationEditCardsViewModel(): IPlainOperationEditCards
     isCurrent: isSlotSelected && assignEntry?.type === 'block',
     setCurrent: () => writeAssignEntry({ type: 'block' }),
     isEnabled: true,
-    hint: texts.hintAssignBlock,
+    hint: texts.hint_assigner_assigns_block,
   };
 
   return {
@@ -106,7 +106,7 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
           !isDualSecondary ||
           (isDualSecondary &&
             modifierVirtualKeys.includes(vk as ModifierVirtualKey)),
-        hint: texts.hintAssignKeyInput,
+        hint: texts.hint_assigner_assigns_keyInput,
       })),
   );
 
@@ -132,7 +132,7 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
         isCurrent,
         setCurrent,
         isEnabled: editOperation?.type === 'keyInput' && !isDualSecondary,
-        hint: texts.hintAssignModifiers,
+        hint: texts.hint_assigner_assigns_modifiers,
       };
     },
   );
@@ -152,7 +152,7 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
           invocationMode: 'hold',
         }),
       isEnabled: true,
-      hint: texts.hintAssignLayers,
+      hint: texts.hint_assigner_assigns_layers,
     }));
 
   const layerCallEntryClearExclusive: IOperationCardViewModel = {
@@ -165,7 +165,7 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
         targetExclusionGroup: 1,
       }),
     isEnabled: true,
-    hint: texts.hintAssignClearExclusiveGroup,
+    hint: texts.hint_assigner_assigns_clearExclusiveGroup,
   };
 
   layerCallEntries.push(layerCallEntryClearExclusive);

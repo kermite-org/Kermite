@@ -28,7 +28,7 @@ const LayerCard = (props: { layerModel: ILayerListViewModel }) => {
       key={layerId}
       data-current={isCurrent}
       onClick={setCurrent}
-      data-hint={texts.hintLayerListItem}
+      data-hint={texts.hint_assigner_layers_layerListItems}
     >
       {layerName}
     </div>

@@ -16,16 +16,16 @@ export const BehaviorOptionsPart = () => {
   return (
     <div css={cssBehaviorOptionsPart}>
       <CheckBoxLine
-        text={texts.labelShowLayersDynamic}
+        text={texts.label_assigner_configs_showLayersDynamic}
         checked={settings.showLayersDynamic}
         setChecked={fieldSetter(settings, 'showLayersDynamic')}
-        hint={texts.hintShowLayersDynamic}
+        hint={texts.hint_assigner_configs_showLayersDynamic}
       />
       <CheckBoxLine
-        text={texts.labelShowFallbackAssigns}
+        text={texts.label_assigner_configs_showFallbackAssigns}
         checked={settings.showLayerDefaultAssign}
         setChecked={fieldSetter(settings, 'showLayerDefaultAssign')}
-        hint={texts.hintShowFallbackAssigns}
+        hint={texts.hint_assigner_configs_showFallbackAssigns}
       />
     </div>
   );

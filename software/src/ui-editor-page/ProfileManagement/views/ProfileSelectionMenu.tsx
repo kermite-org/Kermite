@@ -63,7 +63,7 @@ export const ProfileSelectionMenuPart = (props: {
         <div
           css={cssMenuButton}
           onMouseDown={openMenu}
-          data-hint={texts.hintProfileOperationsMenu}
+          data-hint={texts.hint_assigner_topBar_profileOperationsMenu}
         >
           <i className="fa fa-bars" />
         </div>

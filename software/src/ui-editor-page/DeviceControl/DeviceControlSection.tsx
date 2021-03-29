@@ -21,7 +21,10 @@ export const DeviceControlSection = () => {
   const vm = makeDeviceControlSectionViewModel();
   return (
     <div css={cssDeviceControlSection}>
-      <div className="keyboardName" data-hint={texts.hintConnectedKeyboardName}>
+      <div
+        className="keyboardName"
+        data-hint={texts.hint_assigner_topBar_connectedKeyboardName}
+      >
         {vm.currentDeviceKeyboardName}
       </div>
       <LinkIndicator isActive={vm.isDeviceConnected} />

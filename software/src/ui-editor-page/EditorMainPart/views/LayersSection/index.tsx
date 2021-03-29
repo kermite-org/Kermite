@@ -13,9 +13,9 @@ export function LayersSection() {
   return (
     <div>
       <SectionHeaderText
-        text={texts.headerLayers}
+        text={texts.label_assigner_layerListHeader}
         icon="layers"
-        hint={texts.hintLayerListHeader}
+        hint={texts.hint_assigner_layers_layerListHeader}
       />
       <LayersListBoxPart vm={layerListBoxPartViewModel} />
       <LayerManagementPart vm={layerManagementPartViewModel} />
