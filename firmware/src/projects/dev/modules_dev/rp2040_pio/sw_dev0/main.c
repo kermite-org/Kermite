@@ -9,12 +9,19 @@
 
 const float SwClockDiv = 1000000;
 
-static inline void
-swtx_program_init(PIO pio, uint sm, uint offset, uint pin) {
+static inline void swtx_program_init(PIO pio, uint sm, uint offset, uint pin) {
+  //sender pin
+  // pio_gpio_init(pio, pin);
+  // pio_sm_set_consecutive_pindirs(pio, sm, pin, 1, true);
+
+  //sender pseudo open drain
+  gpio_pull_up(pin);
   pio_gpio_init(pio, pin);
-  pio_sm_set_consecutive_pindirs(pio, sm, pin, 1, true);
+  pio_sm_set_consecutive_pindirs(pio, sm, pin, 1, false);
+  gpio_set_oeover(pin, GPIO_OVERRIDE_INVERT);
+
   pio_sm_config c = swtx_program_get_default_config(offset);
-  sm_config_set_sideset_pins(&c, pin);
+  sm_config_set_set_pins(&c, pin, 1);
   sm_config_set_out_shift(&c, true, false, 0);
   // sm_config_set_fifo_join(&c, PIO_FIFO_JOIN_TX);
   sm_config_set_clkdiv(&c, SwClockDiv);
@@ -99,14 +106,17 @@ void tick_rxin() {
 int main() {
   stdio_init_all();
   initLed();
+  printf("start\n");
 
   setup_txout();
-  setup_rxin();
+  // setup_rxin();
+
+  printf("sm initialize done\n");
 
   while (1) {
     tick_blink();
     tick_txout();
-    tick_rxin();
+    // tick_rxin();
     sleep_ms(1000);
   }
 }
