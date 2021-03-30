@@ -1,0 +1,17 @@
+.program swtx
+.side_set 1 opt
+    pull             ;TX FIFOからosrに1word(32bit)を取り込む
+    set x, 8         ;ループカウンタ, 8ビット+終端フラグ1ビットで9ビット分出力する
+    nop side 0 [7]
+bitloop:
+    out y, 1         ;osrの下位から1ビットシフトしてyに格納
+    jmp !y do_zero
+    nop side 1 [5]   ;論理1出力 HI
+    nop side 0 [1]   ;論理1出力 LO
+    jmp end_cycle
+do_zero:
+    nop side 1 [1]   ;論理0出力 HI
+    nop side 0 [4]   ;論理0出力 LO
+end_cycle:
+    jmp x-- bitloop
+    nop side 1 [1]
