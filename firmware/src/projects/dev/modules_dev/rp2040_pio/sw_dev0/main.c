@@ -14,7 +14,7 @@ static inline void swtx_program_init(PIO pio, uint sm, uint offset, uint pin) {
   gpio_pull_up(pin);
   pio_gpio_init(pio, pin);
   pio_sm_set_consecutive_pindirs(pio, sm, pin, 1, false);
-  gpio_set_oeover(pin, GPIO_OVERRIDE_INVERT);
+  // gpio_set_oeover(pin, GPIO_OVERRIDE_INVERT);
 
   pio_sm_config c = swtx_program_get_default_config(offset);
   sm_config_set_set_pins(&c, pin, 1);
@@ -69,7 +69,7 @@ void setup_txout() {
   swtx_program_init(pio_tx, sm_tx, offset, PIN_TX);
 }
 
-PIO pio_rx = pio1;
+PIO pio_rx = pio0;
 int sm_rx = 1;
 
 void setup_rxin() {
@@ -79,8 +79,8 @@ void setup_rxin() {
 
 void tick_txout() {
   pio_sm_put_blocking(pio_tx, sm_tx, 0xC4);
-  sleep_ms(15);
-  pio_sm_put_blocking(pio_tx, sm_tx, 0x1A7);
+  // sleep_ms(15);
+  // pio_sm_put_blocking(pio_tx, sm_tx, 0x1A7);
 }
 
 static inline uint16_t rxout_getData() {
@@ -96,8 +96,9 @@ static inline uint16_t rxout_getData() {
 
 void tick_rxin() {
   uint16_t a = rxout_getData();
-  uint16_t b = rxout_getData();
-  printf("%x %x\n", a, b);
+  printf("%x\n", a);
+  // uint16_t b = rxout_getData();
+  // printf("%x %x\n", a, b);
 }
 
 int main() {

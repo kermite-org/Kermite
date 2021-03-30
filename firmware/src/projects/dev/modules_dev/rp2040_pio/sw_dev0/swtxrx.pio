@@ -2,19 +2,19 @@
 .side_set 1 opt
     pull                ;TX FIFOからosrに1word(32bit)を取り込む
     set x, 8            ;ループカウンタ, 8ビット+終端フラグ1ビットで9ビット分出力する
-    set pindirs, 0 [7] 
+    set pindirs, 1 [7]  ;送信開始 lower
 bitloop:
     out y, 1            ;osrの下位から1ビットシフトしてyに格納
     jmp !y do_zero  
-    set pindirs, 1 [5]  ;論理1出力 HI
-    set pindirs, 0 [1]  ;論理1出力 LO
+    set pindirs, 0 [5]  ;論理1出力 raise
+    set pindirs, 1 [1]  ;論理1出力 lower
     jmp end_cycle
 do_zero:
-    set pindirs, 1 [1]  ;論理0出力 HI
-    set pindirs, 0 [4]  ;論理0出力 LO
+    set pindirs, 0 [1]  ;論理0出力 raise
+    set pindirs, 1 [4]  ;論理0出力 lower
 end_cycle:
     jmp x-- bitloop
-    set pindirs, 1 [1]
+    set pindirs, 0 [1]  ;送信終了 raise
 
 
 .program swrx
