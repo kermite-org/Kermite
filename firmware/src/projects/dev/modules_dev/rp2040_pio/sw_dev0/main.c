@@ -10,10 +10,6 @@
 const float SwClockDiv = 1000000;
 
 static inline void swtx_program_init(PIO pio, uint sm, uint offset, uint pin) {
-  //sender pin
-  // pio_gpio_init(pio, pin);
-  // pio_sm_set_consecutive_pindirs(pio, sm, pin, 1, true);
-
   //sender pseudo open drain
   gpio_pull_up(pin);
   pio_gpio_init(pio, pin);
@@ -31,10 +27,11 @@ static inline void swtx_program_init(PIO pio, uint sm, uint offset, uint pin) {
 }
 
 static inline void swrx_program_init(PIO pio, uint sm, uint offset, uint pin, uint pin_sideset) {
-  //receiver pin
+  //receiver pin open drain
+  gpio_pull_up(pin);
   pio_gpio_init(pio, pin);
   pio_sm_set_consecutive_pindirs(pio, sm, pin, 1, false);
-  gpio_pull_up(pin);
+  // gpio_set_oeover(pin, GPIO_OVERRIDE_INVERT);
 
   //debug sideset pin
   pio_gpio_init(pio, pin_sideset);
@@ -109,14 +106,14 @@ int main() {
   printf("start\n");
 
   setup_txout();
-  // setup_rxin();
+  setup_rxin();
 
   printf("sm initialize done\n");
 
   while (1) {
     tick_blink();
     tick_txout();
-    // tick_rxin();
+    tick_rxin();
     sleep_ms(1000);
   }
 }
