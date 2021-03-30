@@ -80,5 +80,14 @@ label_device_deviceInfo_sectionTitle,,
 ,,
 label_device_customParameters_sectionTitle,,
 ,,
-lavel_firmup_sectionTitle,,
-lavel_firmup_operationAlertText,,
+label_device_firmwareUpdation_sectionTitle,Firmware Updation,ファームウェア書き込み
+label_deivce_firmwareUpdation_operationAlertText,Note: Wrong firmware selection may damage the hardware. Be careful.,誤ったファームウェアを書き込むとデバイスが破損する可能性があります。ご注意ください。
+,,
+label_settings_pageTitle,Configurations,設定
+label_settings_header_resources,Resources,リソース
+label_settings_configUseOnlineProjectResources,Use Online Project Resources,オンラインプロジェクトリソースを使用
+label_settings_configUserLocalProjectResources,Use Local Project Resources,ローカルプロジェクトリソースを使用
+label_settings_configKermiteRootDirectory,Kermite Root Directory,Kermiteのソースコードの場所
+,,
+label_settings_header_userInterface,User Interface,ユーザーインターフェイス
+label_settings_configUiScaling,UI Scaling,UIスケーリング
