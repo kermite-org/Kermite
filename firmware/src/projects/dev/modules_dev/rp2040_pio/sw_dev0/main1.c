@@ -7,7 +7,7 @@
 #include "pico/stdlib.h"
 #include "swtxrx.pio.h"
 
-//単一デバイスで単線往復送受信実験, 割り込みなし
+//単一デバイスで単線往復送受信実験, slave側ピン変化割り込みハンドラで送受信処理を実行
 
 //回路構成
 //RPi pico
@@ -21,7 +21,7 @@
 // const float SwBaseFreq = 2000000; //base 2MHz, data 128kbps ..NG
 const float SwBaseFreq = 1000000; //base 1MHz, data 64kbps
 // const float SwBaseFreq = 100000; //base 100kHz, data 6.4kbps
-//const float SwBaseFreq = 10000; //10kHz
+// const float SwBaseFreq = 10000; //base 10kHz
 
 static inline void swtx_program_init(PIO pio, uint sm, uint offset, uint pin) {
   //sender pseudo open drain
@@ -160,8 +160,8 @@ void setup_txout1() {
 void tick_txout1() {
   pio_sm_set_enabled(pio_sw1, sm_rx1, false); //受信を無効化
 
-  txout_send_sync_single_word(pio_sw1, sm_tx1, 0x12);
-  txout_send_sync_single_word(pio_sw1, sm_tx1, 0x34);
+  // txout_send_sync_single_word(pio_sw1, sm_tx1, 0x12);
+  // txout_send_sync_single_word(pio_sw1, sm_tx1, 0x34);
   txout_send_sync_single_word(pio_sw1, sm_tx1, 0x156);
 
   pio_sm_set_enabled(pio_sw1, sm_rx1, true); //受信を有効化
@@ -195,8 +195,8 @@ void setup_txout2() {
 
 void tick_txout2() {
   pio_sm_set_enabled(pio_sw2, sm_rx2, false);
-  txout_send_sync_single_word(pio_sw2, sm_tx2, 0xAB);
-  txout_send_sync_single_word(pio_sw2, sm_tx2, 0xCD);
+  // txout_send_sync_single_word(pio_sw2, sm_tx2, 0xAB);
+  // txout_send_sync_single_word(pio_sw2, sm_tx2, 0xCD);
   txout_send_sync_single_word(pio_sw2, sm_tx2, 0x1EF);
   pio_sm_set_enabled(pio_sw2, sm_rx2, true);
 }
@@ -221,6 +221,37 @@ void dump_received_rxin2() {
 }
 
 //------------------------------------
+//slave receiver pcint
+
+const int PIN_DEBUG2 = 15;
+
+void on_pin_slave_falling_edge() {
+  gpio_set_irq_enabled(PIN_SLAVE, 4, false);
+  // dio_toggle(PIN_DEBUG2);
+  dio_write(PIN_DEBUG2, 0);
+
+  tick_rxin2();
+
+  busy_wait_us(50);
+
+  dio_write(PIN_DEBUG2, 1);
+
+  pio_sm_set_enabled(pio_sw2, sm_rx2, false);
+  pio_sm_put_blocking(pio_sw2, sm_tx2, 0x1CF); //TX FIFOにデータをpush
+}
+
+void pin_change_interrupt_handler(uint gpio, uint32_t events) {
+  if (gpio == PIN_SLAVE && (events & 4)) {
+    on_pin_slave_falling_edge();
+  }
+}
+
+void setup_rxin2_pcint() {
+  dio_setOutput(PIN_DEBUG2);
+  gpio_set_irq_enabled_with_callback(PIN_SLAVE, GPIO_IRQ_EDGE_FALL, true, &pin_change_interrupt_handler);
+}
+
+//------------------------------------
 
 int main() {
   stdio_init_all();
@@ -234,14 +265,23 @@ int main() {
   setup_rxin2();
   setup_txout2();
 
+  setup_rxin2_pcint();
+
   printf("sm initialize done\n");
 
   while (1) {
     tick_blink();
     tick_txout1();
-    tick_rxin2();
-    tick_txout2();
     tick_rxin1();
+
+    //RX FIFOに送信完了通知用の空データが来るのを待つ
+    while (pio_sm_is_rx_fifo_empty(pio_sw2, sm_tx2)) {
+      tight_loop_contents();
+    }
+    int data = pio_sw2->rxf[sm_tx2]; //読み捨て
+
+    pio_sm_set_enabled(pio_sw2, sm_rx2, true);
+    gpio_set_irq_enabled(PIN_SLAVE, 4, true);
     dump_received_rxin2();
     dump_received_rxin1();
     sleep_ms(1000);
