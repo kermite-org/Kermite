@@ -94,6 +94,27 @@ void txout_send_sync_single_word(PIO pio, uint sm, uint word) {
   // sleep_us(1);
 }
 
+static inline uint16_t rxin_wait_receive_single_word(PIO pio, uint sm) {
+  //ポーリングでデータが来るまで待つ
+  while (pio_sm_is_rx_fifo_empty(pio, sm)) {
+    tight_loop_contents();
+  }
+  return decodeReceivedWord(pio->rxf[sm]);
+}
+
+int rxin_receive_words(PIO pio, uint sm, uint16_t *rcv_buffer, int maxLen) {
+  int pos = 0;
+  while (pos < maxLen) {
+    uint16_t val = rxin_wait_receive_single_word(pio, sm);
+    rcv_buffer[pos++] = val;
+    if ((val >> 8) & 1 > 0) {
+      //終端フラグ検知
+      return pos;
+    }
+  }
+  return -1;
+}
+
 //------------------------------------
 
 //master uses PIO0(sm0 for tx, sm1 for rx)
@@ -112,7 +133,8 @@ const int PIN_MASTER_RCV_SIDESET = 21;
 const int PIN_SLAVE = 26;
 const int PIN_SLAVE_RCV_SIDESET = 27;
 
-uint16_t rcvbuf[8];
+uint16_t rcvbuf1[8];
+uint16_t rcvbuf2[8];
 
 //------------------------------------
 //master sender
@@ -125,9 +147,9 @@ void setup_txout1() {
 void tick_txout1() {
   pio_sm_set_enabled(pio_sw1, sm_rx1, false); //受信を無効化
 
-  txout_send_sync_single_word(pio_sw1, sm_tx1, 0xC4);
-  txout_send_sync_single_word(pio_sw1, sm_tx1, 0x33);
-  txout_send_sync_single_word(pio_sw1, sm_tx1, 0x1A7);
+  txout_send_sync_single_word(pio_sw1, sm_tx1, 0x12);
+  txout_send_sync_single_word(pio_sw1, sm_tx1, 0x34);
+  txout_send_sync_single_word(pio_sw1, sm_tx1, 0x156);
 
   pio_sm_set_enabled(pio_sw1, sm_rx1, true); //受信を有効化
 }
@@ -140,19 +162,14 @@ void setup_rxin1() {
   swrx_program_init(pio_sw1, sm_rx1, offset, PIN_MASTER, PIN_MASTER_RCV_SIDESET);
 }
 
-static inline uint16_t rxin1_getData() {
-  //ポーリングでデータが来るまで待つ
-  while (pio_sm_is_rx_fifo_empty(pio_sw1, sm_rx1)) {
-    tight_loop_contents();
-  }
-  return decodeReceivedWord(pio_sw1->rxf[sm_rx1]);
+uint rcvsz1 = 0;
+void tick_rxin1() {
+  rcvsz1 = rxin_receive_words(pio_sw1, sm_rx1, rcvbuf1, 8);
 }
 
-void tick_rxin1() {
-  uint16_t a = rxin1_getData();
-  printf("master received: %x\n", a);
-  // uint16_t b = rxout_getData();
-  // printf("%x %x\n", a, b);
+void dump_received_rxin1() {
+  printf("rcv@master: ");
+  dumpShortWords(rcvbuf1, rcvsz1);
 }
 
 //------------------------------------
@@ -165,13 +182,9 @@ void setup_txout2() {
 
 void tick_txout2() {
   pio_sm_set_enabled(pio_sw2, sm_rx2, false);
-  pio_sm_put_blocking(pio_sw2, sm_tx2, 0xA3);
-  // sleep_ms(15);
-  //送信完了通知用の空データが来るのを待つ
-  while (pio_sm_is_rx_fifo_empty(pio_sw2, sm_tx2)) {
-    tight_loop_contents();
-  }
-  int data = pio_sw2->rxf[sm_tx2]; //読み捨て
+  txout_send_sync_single_word(pio_sw2, sm_tx2, 0xAB);
+  txout_send_sync_single_word(pio_sw2, sm_tx2, 0xCD);
+  txout_send_sync_single_word(pio_sw2, sm_tx2, 0x1EF);
   pio_sm_set_enabled(pio_sw2, sm_rx2, true);
 }
 
@@ -183,25 +196,15 @@ void setup_rxin2() {
   swrx_program_init(pio_sw2, sm_rx2, offset, PIN_SLAVE, PIN_SLAVE_RCV_SIDESET);
 }
 
-static inline uint16_t rxin2_getData() {
-  //ポーリングでデータが来るまで待つ
-  while (pio_sm_is_rx_fifo_empty(pio_sw2, sm_rx2)) {
-    tight_loop_contents();
-  }
-  return decodeReceivedWord(pio_sw2->rxf[sm_rx2]);
-}
+uint rcvsz2 = 0;
 
 void tick_rxin2() {
-  int pos = 0;
-  while (pos < 8) {
-    uint16_t val = rxin2_getData();
-    rcvbuf[pos++] = val;
-    if ((val >> 8) & 1 > 0) {
-      //終端フラグ検知
-      break;
-    }
-  }
-  dumpShortWords(rcvbuf, pos);
+  rcvsz2 = rxin_receive_words(pio_sw2, sm_rx2, rcvbuf2, 8);
+}
+
+void dump_received_rxin2() {
+  printf("rcv@slave: ");
+  dumpShortWords(rcvbuf2, rcvsz2);
 }
 
 //------------------------------------
@@ -224,9 +227,10 @@ int main() {
     tick_blink();
     tick_txout1();
     tick_rxin2();
-    // sleep_ms(10);
-    // tick_txout2();
-    // tick_rxin1();
+    tick_txout2();
+    tick_rxin1();
+    dump_received_rxin2();
+    dump_received_rxin1();
     sleep_ms(1000);
   }
 }
