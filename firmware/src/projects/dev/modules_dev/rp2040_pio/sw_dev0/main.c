@@ -19,10 +19,9 @@ static inline void swtx_program_init(PIO pio, uint sm, uint offset, uint pin) {
   pio_sm_config c = swtx_program_get_default_config(offset);
   sm_config_set_set_pins(&c, pin, 1);
   sm_config_set_out_shift(&c, true, false, 0);
-  // sm_config_set_fifo_join(&c, PIO_FIFO_JOIN_TX);
   sm_config_set_clkdiv(&c, SwClockDiv);
-
   pio_sm_init(pio, sm, offset, &c);
+
   pio_sm_set_enabled(pio, sm, true);
 }
 
@@ -95,13 +94,18 @@ void setup_txout1() {
 }
 
 void tick_txout1() {
-  pio_sm_set_enabled(pio_sw1, sm_rx1, false);
+  pio_sm_set_enabled(pio_sw1, sm_rx1, false); //受信を無効化
 
   pio_sm_put_blocking(pio_sw1, sm_tx1, 0xC4); //送信FIFOにデータをpush
   // sleep_ms(15);
   // pio_sm_put_blocking(pio_tx, sm_tx, 0x1A7);
-  sleep_ms(15);
-  pio_sm_set_enabled(pio_sw1, sm_rx1, true); //TODO: 送信が終わるのを待ってから受信を有効化したい
+  // sleep_ms(15);
+  //送信完了通知用の空データが来るのを待つ
+  while (pio_sm_is_rx_fifo_empty(pio_sw1, sm_tx1)) {
+    tight_loop_contents();
+  }
+  int data = pio_sw1->rxf[sm_tx1];           //読み捨て
+  pio_sm_set_enabled(pio_sw1, sm_rx1, true); //受信を有効化
 }
 
 //------------------------------------
@@ -138,7 +142,12 @@ void setup_txout2() {
 void tick_txout2() {
   pio_sm_set_enabled(pio_sw2, sm_rx2, false);
   pio_sm_put_blocking(pio_sw2, sm_tx2, 0xA3);
-  sleep_ms(15);
+  // sleep_ms(15);
+  //送信完了通知用の空データが来るのを待つ
+  while (pio_sm_is_rx_fifo_empty(pio_sw2, sm_tx2)) {
+    tight_loop_contents();
+  }
+  int data = pio_sw2->rxf[sm_tx2]; //読み捨て
   pio_sm_set_enabled(pio_sw2, sm_rx2, true);
 }
 

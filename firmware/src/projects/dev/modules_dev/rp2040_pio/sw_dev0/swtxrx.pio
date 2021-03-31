@@ -15,6 +15,7 @@ do_zero:
 end_cycle:
     jmp x-- bitloop
     set pindirs, 0 [1]  ;送信終了 raise
+    push                ;RX FIFOに空データを吐き出すことで送信完了を呼び出し元に通知
 
 
 .program swrx
