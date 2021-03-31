@@ -14,12 +14,18 @@ label_assigner_menu_newProfile,new,新規作成
 label_assigner_menu_renameProfile,rename,名前を変更
 label_assigner_menu_copyProfile,copy,複製
 label_assigner_menu_deleteProfile,delete,削除
+label_assigner_menu_importFromFile,import from file,ファイルから読み込む
+label_assigner_menu_exportToFile,export to file,ファイルへ保存
 label_assigner_menu_saveAsPreset,save as preset,プリセットとして保存
+,,
 hint_assigner_menu_newProfile,Create new profile,新規プロファイルを作成します。
 hint_assigner_menu_renameProfile,Rename profile,プロファイルの名前を変更します。
 hint_assigner_menu_copyProfile,Duplicate profile,プロファイルを複製します。
 hint_assigner_menu_deleteProfile,Delete profile,プロファイルを削除します。
+hint_assigner_menu_importFromFile,,ディスク上の任意にあるファイルからプロファイルを読み込みます。
+hint_assigner_menu_exportToFile,,プロファイルをディスク上の任意の場所にファイルとして保存します。
 hint_assigner_menu_saveAsPreset,Save profile as preset,プロファイルをプロジェクトのプリセットとして保存します。
+,,
 ,,
 label_assigner_topBar_saveAssignsButton,save,保存
 label_assigner_topBar_writeAssignsButton,write,書き込み
@@ -32,6 +38,10 @@ hint_assigner_topBar_keyboardBehaviorModeSelector,"“Select keyboard behavior m
 hint_assigner_topBar_keyboardSystemLayoutSelector,Select keyboard layout recognized by OS,OSが認識するキーボードレイアウトを設定します
 hint_assigner_topBar_connectedKeyboardName,Connected keyboard name,接続しているキーボードの品種名を表示しています。
 hint_assigner_topBar_deviceConnectionStatus,Device connection status,キーボードの接続状態を表示しています。
+,,
+label_assigner_testInputArea_clearButton,clear,クリア
+hint_assigner_testInputArea_inputField,,キーボードの動作確認用の入力欄です。
+hint_assigner_testInputArea_clearButton,,入力欄をクリアします。
 ,,
 hint_assigner_keyboardView_layerStates,Layers states: Affects current layter states of the device.,デバイスの現在のレイヤ状態を表示しています。
 hint_assigner_keyboardView_keyUnit,Select edit target key,アサイン設定対象のキーを選択します
@@ -58,30 +68,91 @@ hint_assigner_layerOps_bringForward,Bring layer forward,レイヤを前に移動
 label_assigner_configs_assignModel,assign model,アサインモデル
 label_assigner_configs_showLayersDynamic,Show Layers Dynamic,デバイスのレイヤを反映
 label_assigner_configs_showFallbackAssigns,Show Fallback Assigns,デフォルトアサインを表示
-hint_assigner_configs_assignModel,Assign model for current profile,プロファイルのアサインモデルを表示しています。
+hint_assigner_configs_assignModel,Assign model for current profile,プロファイルのアサインモデルを表示しています。アサインモデル毎に異なる機能があります。
 hint_assigner_configs_showLayersDynamic,Show layers synchronized to the connected keyboard device,デバイスのレイヤ状態に同期して表示するレイヤを切り替えます。
 hint_assigner_configs_showFallbackAssigns,Show fallback assigns for layers,レイヤのデフォルトアサインを表示します。
+,,
+label_assigner_profileConfigModal_modalTitle,profile configuration,プロファイル設定
+label_assigner_profileConfigModal_assignModel,assign model,アサインモデル
+label_assigner_profileConfigModal_dualMode_header,dual mode settings,Dualモード設定
+label_assigner_profileConfigModal_dualMode_primaryDefaultTrigger,primary default trigger,デフォルトトリガ
+label_assigner_profileConfigModal_dualMode_tapHoldThreshold,tap hold threshold,タップ判定時間
+label_assigner_profileConfigModal_dualMode_useInterruptHold,use interrupt hold,割り込みホールド機能を使用
+label_assigner_profileConfigModal_shiftCancel,use shift cancel feature,Shiftキャンセル機能を使用
+,,
+,,
+hint_assigner_profileConfigModal_assignModel,,アサインモデルを選択します。アサインモデル毎に異なる機能があります。
+hint_assigner_profileConfigModal_dualMode_header,,アサインモデル:dual に固有の設定です
+hint_assigner_profileConfigModal_dualMode_primaryDefaultTrigger,,セカンダリアサインがない場合のプライマリアサインの実行トリガを指定します。
+hint_assigner_profileConfigModal_dualMode_tapHoldThreshold,,キーを押し続けたときにホールドしたとみなされる時間を指定します。
+hint_assigner_profileConfigModal_dualMode_useInterruptHold,,ホールド時間に満たないときに割り込んで他のキーが押された場合に、1つ目のキーをホールド状態に移行します。
+hint_assigner_profileConfigModal_shiftCancel,,shiftを押しながら本来shiftなしで入力される記号を入力したい場合に、shiftを一時的にキャンセル状態にします。
+,,
+label_assigner_layerModal_modalTitle,Edit Layer Properties,レイヤプロパティ
+label_assigner_layerModal_layerName,Layer Name,レイヤ名
+label_assigner_layerModal_defaultScheme,Default Scheme,デフォルトスキーム
+label_assigner_layerModal_attachedModifiers,Attrached Modifiers,添付モディファイヤ
+label_assigner_layerModal_exclusionGroup,Exclusion Group,レイヤ排他グループ
+label_assigner_layerModal_initialActive,Initial Active,初期状態でレイヤを有効化
+,,
+,,
+hint_assigner_layerModal_layerName,,レイヤの名前を設定します。
+hint_assigner_layerModal_defaultScheme,,"キーのデフォルトの挙動を設定します(transparent: スキップして次のレイヤに進む, block: 探索終了)"
+hint_assigner_layerModal_attachedModifiers,,レイヤを有効化したときに同時に有効になるモディファイヤキーを設定します。
+hint_assigner_layerModal_exclusionGroup,,レイヤ排他グループを設定します。同じグループに所属するレイヤのうち、1つのみが有効になります。
+hint_assigner_layerModal_initialActive,,キーボードの起動時に、レイヤが始めから有効化された状態にします。
+,,
+,,
+,,
 ,,
 label_presetBrowser_pageTitle,Preset Browser,プリセットブラウザ
 label_presetBrowser_selectionTitle_keyboard,Keyboard,キーボード
 label_presetBrowser_selectionTitle_preset,Preset,プリセット
 label_presetBrowser_createProfileButton,Create Profile,プロファイルを作成
-label_presetBrowser_layers,Layers,
+label_presetBrowser_layers,Layers,レイヤ
 ,,
-hint_presetBrowser_selection_keyboard,,キーボードの品種を選択します。
-hint_presetBrowser_selection_preset,,プリセットを選択します。
-hint_presetBrowser_createProfileButton,,選択されたプリセットから新しいプロファイルを作成します。
-hint_presetBrowser_projectLinkButton,,接続されているデバイスに紐付くキーボード品種を選択します。
+hint_presetBrowser_selection_keyboard,Select keyboard model.,キーボードの品種を選択します。
+hint_presetBrowser_selection_preset,Select preset.,プリセットを選択します。
+hint_presetBrowser_createProfileButton,Create new profile base on the selected preset.,選択されたプリセットから新しいプロファイルを作成します。
+hint_presetBrowser_projectLinkButton,Select keyboard model corresponds to the connected device.,接続されているデバイスに紐付くキーボード品種を選択します。
+hitn_presetBrowser_layers,Showing layers for selected preset.,選択されたプリセットのレイヤリストを表示しています。
 ,,
-label_device_deviceSelection_sectionTitle,Device Selection,
+label_device_deviceSelection_sectionTitle,Device Selection,デバイス選択
+hint_device_deviceSelection_selectionArea,Supported devices are enumerated. Select device to connect.,対応しているデバイスが列挙されます。接続するデバイスを選択します。
 ,,
+label_device_deviceInfo_sectionTitle,Device Information,デバイス情報
+lebel_device_deviceInfo_fieldName_port,Port,ポート
+lebel_device_deviceInfo_fieldName_resourceOrigin,Resource Origin,リソースオリジン
+lebel_device_deviceInfo_fieldName_projectID,Project ID,プロジェクトID
+lebel_device_deviceInfo_value_resourceOrigin_local,Local,ローカル
+lebel_device_deviceInfo_value_resourceOrigin_online,Online,オンライン
+lebel_device_deviceInfo_fieldName_projectPath,Project Path,プロジェクトパス
+lebel_device_deviceInfo_fieldName_keyboardName,Keyboard Name,キーボード名
+lebel_device_deviceInfo_fieldName_instanceNumber,Instance Number,個体番号
+lebel_device_deviceInfo_fieldName_firmwareVariation,Firmware Variation Name,ファームウェアバリエーション
+lebel_device_deviceInfo_fieldName_mcuName,MCU Name,MCU品種名
+lebel_device_deviceInfo_fieldName_firmwareRevision,Firmware Revision,ファームウェアリビジョン
+lebel_device_deviceInfo_fieldName_keymappingAreaSize,Keymapping Area Size,キーマッピング領域サイズ
 ,,
-label_device_deviceInfo_sectionTitle,,
-,,
-label_device_customParameters_sectionTitle,,
+label_device_customParameters_sectionTitle,Custom Parameters,カスタムパラメータ
+hint_device_customParameters_sectionTitle,Set firmware specific parameters. ,ファームウェア固有のパラメータを設定します。
 ,,
 label_device_firmwareUpdation_sectionTitle,Firmware Updation,ファームウェア書き込み
 label_deivce_firmwareUpdation_operationAlertText,Note: Wrong firmware selection may damage the hardware. Be careful.,誤ったファームウェアを書き込むとデバイスが破損する可能性があります。ご注意ください。
+label_device_firmwareUpdation_projectSelector,,デバイスに書き込むファームウェアを選択します。
+label_device_firmwareUpdation_usageText,Double tap the reset button on the device.,デバイスのリセットボタンを2回タップして、ファームウェア書き込みモードにしてください。
+,{DEVICE_NAME} detected. Ready to flash.,{DEVICE_NAME}が検出されました。書き込みできます。
+label_device_firmwareUpdation_writeButton,write,書き込む
+label_device_firmwareUpdation_success,,
+label_device_firmwareUpdation_failure,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
 ,,
 label_settings_pageTitle,Configurations,設定
 label_settings_header_resources,Resources,リソース
@@ -91,3 +162,8 @@ label_settings_configKermiteRootDirectory,Kermite Root Directory,Kermiteのソ�
 ,,
 label_settings_header_userInterface,User Interface,ユーザーインターフェイス
 label_settings_configUiScaling,UI Scaling,UIスケーリング
+,,
+hint_settings_configUseOnlineProjectResources,,オンラインリソースを使用します。KermiteResourceStoreリポジトリに配置してあるデータを参照します。
+hint_settings_configUserLocalProjectResources,,ローカルマシンにあるリソースを使用します。Kermiteのソースコードの場所の指定が必要です。
+hint_settings_configKermiteRootDirectory,,Kermiteのソースコードのルートフォルダを指定します (ファームウェア開発者向け)
+hint_settings_configUiScaling,,画面のスケーリング値を設定します。文字の大きさが変わります。
