@@ -8,7 +8,8 @@
 #include "swtxrx.pio.h"
 
 //const float SwBaseFreq = 10000000; //base 10MHz, data 640kbps ..NG
-// const float SwBaseFreq = 3000000; //base 3MHz, data 192kbps ..NG
+//const float SwBaseFreq = 3000000; //base 3MHz, data 192kbps ..NG
+// const float SwBaseFreq = 2000000; //base 2MHz, data 128kbps ..NG
 const float SwBaseFreq = 1000000; //base 1MHz, data 64kbps
 // const float SwBaseFreq = 100000; //base 100kHz, data 6.4kbps
 //const float SwBaseFreq = 10000; //10kHz
