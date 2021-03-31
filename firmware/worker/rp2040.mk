@@ -168,6 +168,7 @@ INC_PATHS = \
 -I$(PICO_SDK_DIR)/src/rp2_common/pico_malloc/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/pico_stdio/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/pico_stdio_uart/include \
+-I$(PICO_SDK_DIR)/src/rp2_common/pico_multicore/include \
 -I$(PICO_SDK_DIR)/lib/tinyusb/src \
 -I$(PICO_SDK_DIR)/lib/tinyusb/src/common \
 -I$(PICO_SDK_DIR)/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/include
@@ -209,6 +210,7 @@ $(PICO_SDK_DIR)/src/rp2_common/pico_malloc/pico_malloc.c \
 $(PICO_SDK_DIR)/src/rp2_common/pico_standard_link/binary_info.c \
 $(PICO_SDK_DIR)/src/rp2_common/pico_stdio/stdio.c \
 $(PICO_SDK_DIR)/src/rp2_common/pico_stdio_uart/stdio_uart.c \
+$(PICO_SDK_DIR)/src/rp2_common/pico_multicore/multicore.c \
 $(PICO_SDK_DIR)/src/rp2_common/pico_bootsel_via_double_reset/pico_bootsel_via_double_reset.c
 
 #USB
