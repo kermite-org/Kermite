@@ -1,5 +1,4 @@
 .program swtx
-.side_set 1 opt
     pull                ;TX FIFOからosrに1word(32bit)を取り込む
     set x, 8            ;ループカウンタ, 8ビット+終端フラグ1ビットで9ビット分出力する
     set pindirs, 1 [7]  ;送信開始 lower
