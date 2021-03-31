@@ -7,12 +7,11 @@
 #include "pico/stdlib.h"
 #include "swtxrx.pio.h"
 
-//const float SwClockDiv = 1000000;
-
-const float SwClockDiv = 125; //1MHz
-// const float SwClockDiv = 1250; //100kHz
-// const float SwClockDiv = 12500; //10kHz
-// const float SwClockDiv = 125000; //1kHz
+//const float SwBaseFreq = 10000000; //base 10MHz, data 640kbps ..NG
+// const float SwBaseFreq = 3000000; //base 3MHz, data 192kbps ..NG
+const float SwBaseFreq = 1000000; //base 1MHz, data 64kbps
+// const float SwBaseFreq = 100000; //base 100kHz, data 6.4kbps
+//const float SwBaseFreq = 10000; //10kHz
 
 static inline void swtx_program_init(PIO pio, uint sm, uint offset, uint pin) {
   //sender pseudo open drain
@@ -24,7 +23,9 @@ static inline void swtx_program_init(PIO pio, uint sm, uint offset, uint pin) {
   pio_sm_config c = swtx_program_get_default_config(offset);
   sm_config_set_set_pins(&c, pin, 1);
   sm_config_set_out_shift(&c, true, false, 0);
-  sm_config_set_clkdiv(&c, SwClockDiv);
+
+  float clkdiv = clock_get_hz(clk_sys) / SwBaseFreq;
+  sm_config_set_clkdiv(&c, clkdiv);
   pio_sm_init(pio, sm, offset, &c);
 
   pio_sm_set_enabled(pio, sm, true);
@@ -46,7 +47,9 @@ static inline void swrx_program_init(PIO pio, uint sm, uint offset, uint pin, ui
   sm_config_set_in_pins(&c, pin);
   sm_config_set_in_shift(&c, true, false, 0);
   // sm_config_set_fifo_join(&c, PIO_FIFO_JOIN_RX);
-  sm_config_set_clkdiv(&c, SwClockDiv);
+
+  float clkdiv = clock_get_hz(clk_sys) / SwBaseFreq;
+  sm_config_set_clkdiv(&c, clkdiv);
 
   pio_sm_init(pio, sm, offset, &c);
   pio_sm_set_enabled(pio, sm, true);
