@@ -67,6 +67,28 @@ static uint16_t decodeReceivedWord(uint32_t val) {
   return flag << 8 | byte;
 }
 
+void dumpShortWords(uint16_t *words, uint len) {
+  for (int i = 0; i < len; i++) {
+    printf("%x", words[i]);
+    if (i < len - 1) {
+      printf(",");
+    }
+  }
+  printf("\n");
+}
+
+//------------------------------------
+
+void txout_send_sync_single_word(PIO pio, uint sm, uint word) {
+  pio_sm_put_blocking(pio, sm, word); //TX FIFOにデータをpush
+  //RX FIFOに送信完了通知用の空データが来るのを待つ
+  while (pio_sm_is_rx_fifo_empty(pio, sm)) {
+    tight_loop_contents();
+  }
+  int data = pio->rxf[sm]; //読み捨て
+  sleep_ms(2);
+}
+
 //------------------------------------
 
 //master uses PIO0(sm0 for tx, sm1 for rx)
@@ -85,6 +107,8 @@ const int PIN_MASTER_RCV_SIDESET = 21;
 const int PIN_SLAVE = 26;
 const int PIN_SLAVE_RCV_SIDESET = 27;
 
+uint16_t rcvbuf[8];
+
 //------------------------------------
 //master sender
 
@@ -96,15 +120,10 @@ void setup_txout1() {
 void tick_txout1() {
   pio_sm_set_enabled(pio_sw1, sm_rx1, false); //受信を無効化
 
-  pio_sm_put_blocking(pio_sw1, sm_tx1, 0xC4); //送信FIFOにデータをpush
-  // sleep_ms(15);
-  // pio_sm_put_blocking(pio_tx, sm_tx, 0x1A7);
-  // sleep_ms(15);
-  //送信完了通知用の空データが来るのを待つ
-  while (pio_sm_is_rx_fifo_empty(pio_sw1, sm_tx1)) {
-    tight_loop_contents();
-  }
-  int data = pio_sw1->rxf[sm_tx1];           //読み捨て
+  txout_send_sync_single_word(pio_sw1, sm_tx1, 0xC4);
+  txout_send_sync_single_word(pio_sw1, sm_tx1, 0x33);
+  txout_send_sync_single_word(pio_sw1, sm_tx1, 0x1A7);
+
   pio_sm_set_enabled(pio_sw1, sm_rx1, true); //受信を有効化
 }
 
@@ -168,10 +187,16 @@ static inline uint16_t rxin2_getData() {
 }
 
 void tick_rxin2() {
-  uint16_t a = rxin2_getData();
-  printf("slave received: %x\n", a);
-  // uint16_t b = rxout_getData();
-  // printf("%x %x\n", a, b);
+  int pos = 0;
+  while (pos < 8) {
+    uint16_t val = rxin2_getData();
+    rcvbuf[pos++] = val;
+    if ((val >> 8) & 1 > 0) {
+      //終端フラグ検知
+      break;
+    }
+  }
+  dumpShortWords(rcvbuf, pos);
 }
 
 //------------------------------------
@@ -194,9 +219,9 @@ int main() {
     tick_blink();
     tick_txout1();
     tick_rxin2();
-    sleep_ms(10);
-    tick_txout2();
-    tick_rxin1();
+    // sleep_ms(10);
+    // tick_txout2();
+    // tick_rxin1();
     sleep_ms(1000);
   }
 }
