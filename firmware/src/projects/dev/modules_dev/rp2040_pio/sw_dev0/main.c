@@ -9,8 +9,8 @@
 
 //const float SwClockDiv = 1000000;
 
-// const float SwClockDiv = 125; //1MHz
-const float SwClockDiv = 1250; //100kHz
+const float SwClockDiv = 125; //1MHz
+// const float SwClockDiv = 1250; //100kHz
 // const float SwClockDiv = 12500; //10kHz
 // const float SwClockDiv = 125000; //1kHz
 
@@ -31,7 +31,7 @@ static inline void swtx_program_init(PIO pio, uint sm, uint offset, uint pin) {
 }
 
 static inline void swrx_program_init(PIO pio, uint sm, uint offset, uint pin, uint pin_sideset) {
-  //receiver pin open drain
+  //receiver pin pseudo open drain
   gpio_pull_up(pin);
   pio_gpio_init(pio, pin);
   pio_sm_set_consecutive_pindirs(pio, sm, pin, 1, false);
@@ -91,8 +91,7 @@ void txout_send_sync_single_word(PIO pio, uint sm, uint word) {
     tight_loop_contents();
   }
   int data = pio->rxf[sm]; //読み捨て
-  sleep_us(20);
-  // sleep_ms(2);
+  // sleep_us(1);
 }
 
 //------------------------------------
