@@ -1,5 +1,6 @@
-import { IServerPorfileInfo } from '~/shared';
+import { IPersistProfileData, IServerPorfileInfo } from '~/shared';
 import { cacheRemoteResouce, fetchJson } from '~/shell/funcs';
+import { ProfileDataConverter } from '~/shell/loaders/ProfileDataConverter';
 import { PresetHubServerTypes } from '~/shell/services/userPresetHub/PresetHubServerTypes';
 import { IUserPresetHubService } from '~/shell/services/userPresetHub/interfaces';
 
@@ -22,12 +23,18 @@ export class UserPresetHubService implements IUserPresetHubService {
       url,
     );
     return (
-      data.profiles?.map((item) => ({
-        id: item.id,
-        userName: item.userName,
-        profileName: item.name,
-        profileData: JSON.parse(item.data),
-      })) || []
+      data.profiles?.map((item) => {
+        const persistProfileData = JSON.parse(item.data) as IPersistProfileData;
+        const profileData = ProfileDataConverter.convertProfileDataFromPersist(
+          persistProfileData,
+        );
+        return {
+          id: item.id,
+          userName: item.userName,
+          profileName: item.name,
+          profileData,
+        };
+      }) || []
     );
   }
 }
