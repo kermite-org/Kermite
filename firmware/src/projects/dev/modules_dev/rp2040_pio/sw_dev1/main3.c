@@ -20,12 +20,12 @@
 //GP27 slave read timing monitor ----> ロジアナch2
 //GP15 slave isr timing monitor ----> ロジアナch3
 
-//const float SwBaseFreq = 10000000; //base 10MHz, data ??kbps ..NG
-//const float SwBaseFreq = 3000000; //base 3MHz, data ??kbps ..NG
-// const float SwBaseFreq = 2000000; //base 2MHz, data ??kbps ..NG
-// const float SwBaseFreq = 1000000; //base 1MHz, data ??kbps
-// const float SwBaseFreq = 600000;
-const float SwBaseFreq = 100000; //base 100kHz, data ??kbps
+// const float SwBaseFreq = 10000000; //base 10MHz, data 400kbps
+// const float SwBaseFreq = 6000000; //base 6MHz, data kbps
+// const float SwBaseFreq = 3000000; //base 3MHz, data kbps
+// const float SwBaseFreq = 2000000; //base 2MHz, data kbps
+const float SwBaseFreq = 1000000; //base 1MHz, data 40kbps
+// const float SwBaseFreq = 100000; //base 100kHz, data 4kbps
 // const float SwBaseFreq = 10000; //base 10kHz
 
 static inline void swtx_program_init(PIO pio, uint sm, uint offset, uint pin) {
