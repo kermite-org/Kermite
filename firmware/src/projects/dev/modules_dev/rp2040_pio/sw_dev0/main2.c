@@ -19,11 +19,12 @@
 //GP27 slave read timing monitor ----> ロジアナch2
 //GP15 slave isr timing monitor ----> ロジアナch3
 
-//const float SwBaseFreq = 10000000; //base 10MHz, data 640kbps ..NG
-//const float SwBaseFreq = 3000000; //base 3MHz, data 192kbps ..NG
-// const float SwBaseFreq = 2000000; //base 2MHz, data 128kbps ..NG
-const float SwBaseFreq = 1000000; //base 1MHz, data 64kbps
-// const float SwBaseFreq = 100000; //base 100kHz, data 6.4kbps
+//const float SwBaseFreq = 10000000; //base 10MHz, data 800kbps ..NG
+//const float SwBaseFreq = 4000000; //base 4MHz, data 320kbps ..NG
+const float SwBaseFreq = 3000000; //base 3MHz, data 240kbps
+// const float SwBaseFreq = 2000000; //base 2MHz, data 160kbps
+// const float SwBaseFreq = 1000000; //base 1MHz, data 80kbps
+// const float SwBaseFreq = 100000; //base 100kHz, data 8kbps
 // const float SwBaseFreq = 10000; //base 10kHz
 
 static inline void swtx_program_init(PIO pio, uint sm, uint offset, uint pin) {
@@ -232,7 +233,7 @@ void on_pin_slave_falling_edge() {
   gpio_set_irq_enabled(PIN_SLAVE, 4, false);
   dio_write(PIN_DEBUG2, 0);
   tick_rxin2();
-  busy_wait_us(50);
+  busy_wait_us(10);
   tick_txout2();
   dio_write(PIN_DEBUG2, 1);
   gpio_set_irq_enabled(PIN_SLAVE, 4, true);
