@@ -327,8 +327,8 @@ function copyProjectDataResources(projectPath: string) {
   layoutFileNames.forEach((fileName) =>
     fsCopyFileSync(`${srcDir}/${fileName}`, `${destDir}/${fileName}`)
   );
-  if (fsExistsSync(`${srcDir}/_profiles`)) {
-    fsxCopyDirectory(`${srcDir}/_profiles`, `${destDir}/profiles`);
+  if (fsExistsSync(`${srcDir}/profiles`)) {
+    fsxCopyDirectory(`${srcDir}/profiles`, `${destDir}/profiles`);
   }
 }
 
