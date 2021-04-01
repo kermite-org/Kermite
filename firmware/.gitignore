@@ -8,3 +8,5 @@ dist/
 KRS/
 node_modules/
 .tmp/
+
+*.pio.h
