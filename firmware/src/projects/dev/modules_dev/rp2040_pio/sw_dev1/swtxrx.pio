@@ -2,19 +2,11 @@
     pull                ;TX FIFOからosrに1word(32bit)を取り込む
     set x, 8            ;ループカウンタ, 8ビット+終端フラグ1ビットで9ビット分出力する
     set pindirs, 1 [7]  ;送信開始 lower
+    set pindirs, 0      ;タイミング基点 raise
 bitloop:
-    out y, 1            ;osrの下位から1ビットシフトしてyに格納
-    jmp !y do_zero  
-    set pindirs, 0 [5]  ;論理1出力 raise
-    set pindirs, 1 [1]  ;論理1出力 lower
-    jmp end_cycle
-do_zero:
-    set pindirs, 0 [1]  ;論理0出力 raise
-    set pindirs, 1 [4]  ;論理0出力 lower
-end_cycle:
+    out pindirs, 1 [5]  ;osrの下位から1ビットシフトして出力
     jmp x-- bitloop
-    set pindirs, 0 [1]  ;送信終了 raise
-    nop [15]
+    set pindirs, 0      ;送信終了 raise
     push                ;RX FIFOに空データを吐き出すことで送信完了を呼び出し元に通知
 
 
@@ -23,14 +15,13 @@ end_cycle:
     wait 0 pin 0
     nop side 0
     set x, 8         ;データ8ビット+終端フラグ1ビットの9ビット分パルスを読み取る
-bitloop:
     wait 1 pin 0
-    nop side 1 [1]
+    nop [1]
+bitloop:
+    nop side 1
     in pins 1        ;ピンから読み取った値をisrにシフトして入れる
-    nop side 0
+    nop side 0 [3]
     jmp x--, bitloop
     push
-    nop [3]
     nop side 1
-    wait 1 pin 0
     

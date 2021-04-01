@@ -20,12 +20,13 @@
 //GP27 slave read timing monitor ----> ロジアナch2
 //GP15 slave isr timing monitor ----> ロジアナch3
 
-//const float SwBaseFreq = 10000000; //base 10MHz, data 640kbps ..NG
-//const float SwBaseFreq = 3000000; //base 3MHz, data 192kbps ..NG
-// const float SwBaseFreq = 2000000; //base 2MHz, data 128kbps ..NG
-// const float SwBaseFreq = 1000000; //base 1MHz, data 64kbps
-// const float SwBaseFreq = 100000; //base 100kHz, data 6.4kbps
-const float SwBaseFreq = 10000; //base 10kHz
+//const float SwBaseFreq = 10000000; //base 10MHz, data ??kbps ..NG
+//const float SwBaseFreq = 3000000; //base 3MHz, data ??kbps ..NG
+// const float SwBaseFreq = 2000000; //base 2MHz, data ??kbps ..NG
+// const float SwBaseFreq = 1000000; //base 1MHz, data ??kbps
+// const float SwBaseFreq = 600000;
+const float SwBaseFreq = 100000; //base 100kHz, data ??kbps
+// const float SwBaseFreq = 10000; //base 10kHz
 
 static inline void swtx_program_init(PIO pio, uint sm, uint offset, uint pin) {
   //sender pseudo open drain
@@ -36,6 +37,7 @@ static inline void swtx_program_init(PIO pio, uint sm, uint offset, uint pin) {
 
   pio_sm_config c = swtx_program_get_default_config(offset);
   sm_config_set_set_pins(&c, pin, 1);
+  sm_config_set_out_pins(&c, pin, 1);
   sm_config_set_out_shift(&c, true, false, 0);
 
   float clkdiv = clock_get_hz(clk_sys) / SwBaseFreq;
@@ -84,8 +86,8 @@ void tick_blink() {
 //------------------------------------
 
 static uint16_t decodeReceivedWord(uint32_t val) {
-  uint8_t flag = val >> 31 & 1;
-  uint8_t byte = val >> 23 % 0xFF;
+  uint8_t flag = ~val >> 31 & 1;
+  uint8_t byte = ~val >> 23 % 0xFF;
   return flag << 8 | byte;
 }
 
@@ -124,12 +126,13 @@ int rxin_receive_words(PIO pio, uint sm, uint16_t *rcv_buffer, int maxLen) {
   while (pos < maxLen) {
     uint16_t val = rxin_wait_receive_single_word(pio, sm);
     rcv_buffer[pos++] = val;
+    // return pos;
     if ((val >> 8) & 1 > 0) {
       //終端フラグ検知
       return pos;
     }
   }
-  return -1;
+  return 0;
 }
 
 //------------------------------------
@@ -166,7 +169,9 @@ void tick_txout1() {
 
   // txout_send_sync_single_word(pio_sw1, sm_tx1, 0x12);
   // txout_send_sync_single_word(pio_sw1, sm_tx1, 0x34);
-  txout_send_sync_single_word(pio_sw1, sm_tx1, 0x1AA);
+  // txout_send_sync_single_word(pio_sw1, sm_tx1, 0x1AA);
+  // txout_send_sync_single_word(pio_sw1, sm_tx1, 0x1A3);
+  txout_send_sync_single_word(pio_sw1, sm_tx1, 0x155);
 
   pio_sm_set_enabled(pio_sw1, sm_rx1, true); //受信を有効化
 }
@@ -256,7 +261,7 @@ void core1_entry() {
   //master
   initLed();
   setup_txout1();
-  setup_rxin1();
+  // setup_rxin1();
 
   sleep_ms(100);
 
@@ -278,11 +283,11 @@ int main() {
 
   //slave
   setup_rxin2();
-  setup_txout2();
+  // setup_txout2();
   setup_rxin2_pcint();
 
   while (1) {
-    // dump_received_rxin2();
+    dump_received_rxin2();
     sleep_ms(1000);
   }
 }
