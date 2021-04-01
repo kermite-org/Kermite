@@ -5,6 +5,7 @@ import { FirmwareUpdationPage } from '~/ui-firmware-updation-page';
 import { HeatmapPage } from '~/ui-heatmap-page';
 import { UiLayouterPageComponent } from '~/ui-layouter-page';
 import { PresetBrowserPage } from '~/ui-preset-browser-page';
+import { PresetBrowserPage2 } from '~/ui-preset-browser-page2';
 import { WindowStatusBarSection } from '~/ui-root/views/titleBar/WindowStatusBarSection';
 import { CustomWindowFrame } from '~/ui-root/views/window/CustomWindowFrame';
 import { DevToolPullTab } from '~/ui-root/views/window/DevToolPullTab';
@@ -40,6 +41,7 @@ export const ConfiguratorZoneRoot = () => {
           {pagePath === '/shapePreview' && <KeyboardShapePreviewPage />}
           {pagePath === '/firmwareUpdation' && <FirmwareUpdationPage />}
           {pagePath === '/presetBrowser' && <PresetBrowserPage />}
+          {pagePath === '/presetBrowser2' && <PresetBrowserPage2 />}
           {pagePath === '/heatmap' && <HeatmapPage />}
           {pagePath === '/settings' && <UiSettingsPage />}
         </div>
