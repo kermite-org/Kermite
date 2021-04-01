@@ -10,7 +10,7 @@
 
 //単一デバイスで単線往復送受信実験, slave側ピン変化割り込みハンドラで送受信処理を実行
 //マルチコア使用, Core0: slave, Core1: master
-//パルス幅での0/1伝達をやめてUART風の波形を使用する
+//UART風の波形
 
 //回路構成
 //RPi pico
@@ -20,10 +20,9 @@
 //GP27 slave read timing monitor ----> ロジアナch2
 //GP15 slave isr timing monitor ----> ロジアナch3
 
-// const float SwBaseFreq = 10000000; //base 10MHz, data 400kbps
-// const float SwBaseFreq = 6000000; //base 6MHz, data kbps
-// const float SwBaseFreq = 3000000; //base 3MHz, data kbps
-// const float SwBaseFreq = 2000000; //base 2MHz, data kbps
+// const float SwBaseFreq = 10000000; //base 10MHz, data 400kbps ..NG
+// const float SwBaseFreq = 5000000; //base 5MHz, data 200kbps ..NG
+// const float SwBaseFreq = 2000000; //base 2MHz, data 80kbps
 const float SwBaseFreq = 1000000; //base 1MHz, data 40kbps
 // const float SwBaseFreq = 100000; //base 100kHz, data 4kbps
 // const float SwBaseFreq = 10000; //base 10kHz
@@ -167,11 +166,12 @@ void setup_txout1() {
 void tick_txout1() {
   pio_sm_set_enabled(pio_sw1, sm_rx1, false); //受信を無効化
 
-  // txout_send_sync_single_word(pio_sw1, sm_tx1, 0x12);
-  // txout_send_sync_single_word(pio_sw1, sm_tx1, 0x34);
+  txout_send_sync_single_word(pio_sw1, sm_tx1, 0x12);
+  txout_send_sync_single_word(pio_sw1, sm_tx1, 0x34);
+  txout_send_sync_single_word(pio_sw1, sm_tx1, 0x156);
   // txout_send_sync_single_word(pio_sw1, sm_tx1, 0x1AA);
   // txout_send_sync_single_word(pio_sw1, sm_tx1, 0x1A3);
-  txout_send_sync_single_word(pio_sw1, sm_tx1, 0x155);
+  // txout_send_sync_single_word(pio_sw1, sm_tx1, 0x155);
 
   pio_sm_set_enabled(pio_sw1, sm_rx1, true); //受信を有効化
 }
@@ -239,7 +239,7 @@ void on_pin_slave_falling_edge() {
   dio_write(PIN_DEBUG2, 0);
   tick_rxin2();
   // busy_wait_us(50);
-  // tick_txout2();
+  tick_txout2();
   dio_write(PIN_DEBUG2, 1);
   gpio_set_irq_enabled(PIN_SLAVE, 4, true);
 }
@@ -261,15 +261,15 @@ void core1_entry() {
   //master
   initLed();
   setup_txout1();
-  // setup_rxin1();
+  setup_rxin1();
 
   sleep_ms(100);
 
   while (1) {
     tick_blink();
     tick_txout1();
-    // tick_rxin1();
-    // dump_received_rxin1();
+    tick_rxin1();
+    dump_received_rxin1();
     sleep_ms(1000);
   }
 }
@@ -283,7 +283,7 @@ int main() {
 
   //slave
   setup_rxin2();
-  // setup_txout2();
+  setup_txout2();
   setup_rxin2_pcint();
 
   while (1) {

@@ -1,11 +1,13 @@
 .program swtx
+    set pindirs, 0      ;
+    nop[20]             ;
     pull                ;TX FIFOからosrに1word(32bit)を取り込む
     set x, 8            ;ループカウンタ, 8ビット+終端フラグ1ビットで9ビット分出力する
     set pindirs, 1      ;送信開始 lower
     nop [7]
-    set pindirs, 0 [7]     ;タイミング基点 raise
+    set pindirs, 0 [7]  ;タイミング基点 raise
 bitloop:
-    out pindirs, 1  ;osrの下位から1ビットシフトして出力
+    out pindirs, 1      ;osrの下位から1ビットシフトして出力
     nop [15]
     jmp x-- bitloop
     set pindirs, 0      ;送信終了 raise
