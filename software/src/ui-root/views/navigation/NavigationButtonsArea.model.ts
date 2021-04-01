@@ -23,6 +23,7 @@ const entrySources: NavigationEntrySource[] = [
     iconSpec: 'fa fa-drafting-compass',
   },
   { pagePath: '/presetBrowser', pageName: 'Presets', iconSpec: 'fa fa-book' },
+  { pagePath: '/presetBrowser2', pageName: 'Presets2', iconSpec: 'fa fa-book' },
   {
     pagePath: '/shapePreview',
     pageName: 'Preview',

@@ -260,6 +260,13 @@ export class ProfileManager implements IProfileManager {
     });
   }
 
+  private createProfileExternal(profileData: IProfileData) {
+    this.setStatus({
+      editSource: { type: 'NewlyCreated' },
+      loadedProfileData: profileData,
+    });
+  }
+
   private async deleteProfile(profName: string) {
     if (this.status.editSource.type !== 'InternalProfile') {
       return;
@@ -358,6 +365,8 @@ export class ProfileManager implements IProfileManager {
           cmd.creatProfile.presetSpec,
         );
       }
+    } else if (cmd.createProfileExternal) {
+      this.createProfileExternal(cmd.createProfileExternal.profileData);
     } else if (cmd.deleteProfile) {
       await this.deleteProfile(cmd.deleteProfile.name);
     } else if (cmd.loadProfile) {
