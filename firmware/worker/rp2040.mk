@@ -83,7 +83,7 @@ DEFINES = \
 
 CORE_FLAGS = $(DEFINES) $(INC_PATHS) -march=armv6-m -mcpu=cortex-m0plus -mthumb -Og -g -ffunction-sections -fdata-sections
 AS_FLAGS = $(CORE_FLAGS)
-C_FLAGS = $(CORE_FLAGS) -std=gnu11
+C_FLAGS = $(CORE_FLAGS) -std=gnu11 -MMD
 
 FUNCS_WRAPPED = sprintf snprintf vsnprintf printf vprintf puts putchar \
 __clzsi2 __clzdi2 __ctzsi2 __ctzdi2 __clz __clzl __clzll __popcountsi2 __popcountdi2 \
