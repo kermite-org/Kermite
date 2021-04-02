@@ -101,7 +101,8 @@ async function makeUi() {
       watch: reqWatch,
       clear: false,
       tslint: false,
-      sourcemap: false,
+      sourcemap: true,
+      sourcesContent: true,
       plugins: [gooberCssAutoLabelPlugin],
       onEnd: resolve,
     }),
@@ -125,7 +126,8 @@ function startMockView() {
     watch: true,
     clear: false,
     tslint: false,
-    sourcemap: 'inline',
+    sourcemap: true,
+    sourcesContent: true,
     plugins: [gooberCssAutoLabelPlugin],
   });
 
