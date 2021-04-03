@@ -6,6 +6,7 @@
   "include": [
     "./**/*",
     "../shared/**/*",
+    "../shell/**/*",
     "../ui-common/**/*",
     "../ui-common-svg/**/*"
   ]

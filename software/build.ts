@@ -156,8 +156,8 @@ async function makeSupportModules() {
 
   return await new Promise((resolve) =>
     build({
-      entry: `${srcDir}/kermite_profile_layers_display_model_converter.ts`,
-      outfile: `${distDir}/kermite_profile_layers_display_model_converter.js`,
+      entry: `${srcDir}/kermite_core_functions.ts`,
+      outfile: `${distDir}/kermite_core_functions.js`,
       define: {
         'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`,
       },
