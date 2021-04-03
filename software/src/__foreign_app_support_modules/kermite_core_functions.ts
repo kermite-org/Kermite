@@ -33,11 +33,17 @@ type IKeyUnitTextDisplayModelsDict = {
   [keyId in string]: IKeyUnitTextDisplayModel;
 };
 
+interface ILayerDisplayModel {
+  layerId: string;
+  layerName: string;
+}
+
 interface IProfileLayersDisplayModel {
   displayArea: IDisplayArea;
   outlineShapes: IDisplayOutlineShape[];
+  layers: ILayerDisplayModel[];
   keyUnits: IKeyUnitDisplayModel[];
-  completeKeyUnitTexts: IKeyUnitTextDisplayModelsDict;
+  completedKeyUnitTexts: IKeyUnitTextDisplayModelsDict;
   layerKeyUnitTexts: { [layerId in string]: IKeyUnitTextDisplayModelsDict };
 }
 
@@ -84,6 +90,11 @@ function createProfileLayersDisplayModel(
 
   const { layers, assigns } = profileData;
 
+  const outLayers = layers.map((la) => ({
+    layerId: la.layerId,
+    layerName: la.layerName,
+  }));
+
   const layerKeyUnitTexts = createDictionaryFromKeyValues(
     layers.map((la) => {
       const keyUnitTextDisplayModelsDict = createDictionaryFromKeyValues(
@@ -100,14 +111,15 @@ function createProfileLayersDisplayModel(
       return [la.layerId, keyUnitTextDisplayModelsDict];
     }),
   );
-  const completeKeyUnitTexts = layerKeyUnitTexts.la0;
+  const completedKeyUnitTexts = layerKeyUnitTexts.la0;
 
   return {
     displayArea: keyboardDesign.displayArea,
     outlineShapes: keyboardDesign.outlineShapes,
+    layers: outLayers,
     keyUnits,
     layerKeyUnitTexts,
-    completeKeyUnitTexts,
+    completedKeyUnitTexts,
   };
 }
 

@@ -916,6 +916,10 @@
       shape: ke.shape
     }));
     const {layers, assigns} = profileData;
+    const outLayers = layers.map((la) => ({
+      layerId: la.layerId,
+      layerName: la.layerName
+    }));
     const layerKeyUnitTexts = createDictionaryFromKeyValues(layers.map((la) => {
       const keyUnitTextDisplayModelsDict = createDictionaryFromKeyValues(keyboardDesign.keyEntities.map((ke) => {
         const textDispalyModel = createKeyUnitTextDisplayModel(ke, la.layerId, layers, assigns);
@@ -923,13 +927,14 @@
       }));
       return [la.layerId, keyUnitTextDisplayModelsDict];
     }));
-    const completeKeyUnitTexts = layerKeyUnitTexts.la0;
+    const completedKeyUnitTexts = layerKeyUnitTexts.la0;
     return {
       displayArea: keyboardDesign.displayArea,
       outlineShapes: keyboardDesign.outlineShapes,
+      layers: outLayers,
       keyUnits,
       layerKeyUnitTexts,
-      completeKeyUnitTexts
+      completedKeyUnitTexts
     };
   }
   window.KermiteCoreFunctions = {
