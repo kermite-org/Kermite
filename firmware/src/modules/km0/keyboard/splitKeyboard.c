@@ -7,7 +7,7 @@
 #include "dio.h"
 #include "keyMatrixScanner.h"
 #include "keyboardCoreLogic2.h"
-#include "singlewire3.h"
+#include "singleWire4.h"
 #include "system.h"
 #include "usbioCore.h"
 #include "utils.h"
@@ -223,12 +223,11 @@ static void configuratorServantStateHandler(uint8_t state) {
 
 //反対側のコントローラからキー状態を受け取る処理
 static void pullAltSideKeyStates() {
-  system_disableInterrupts();
   sw_txbuf[0] = 0x40;
-  singlewire_sendFrame(sw_txbuf, 1); //キー状態要求パケットを送信
-
-  uint8_t sz = singlewire_receiveFrame(sw_rxbuf, SingleWireMaxPacketSize);
-  system_enableInterrupts();
+  singleWire_startBurstSection();
+  singleWire_transmitFrame(sw_txbuf, 1); //キー状態要求パケットを送信
+  uint8_t sz = singleWire_receiveFrame(sw_rxbuf, SingleWireMaxPacketSize);
+  singleWire_endBurstSection();
 
   if (sz > 0) {
 
@@ -310,23 +309,21 @@ static void runAsMaster() {
 //---------------------------------------------
 //slave
 
-//子から親に対してキー状態応答パケットを送る
-static void sendKeyStateResponsePacketToMaster() {
-  sw_txbuf[0] = 0x41;
-  utils_copyBytes(sw_txbuf + 1, nextKeyStateFlags, NumKeySlotBytesHalf);
-  singlewire_sendFrame(sw_txbuf, 1 + NumKeySlotBytesHalf);
-}
-
 //単線通信の受信割り込みコールバック
 static void onRecevierInterruption() {
-  uint8_t sz = singlewire_receiveFrame(sw_rxbuf, SingleWireMaxPacketSize);
+  singleWire_startBurstSection();
+  uint8_t sz = singleWire_receiveFrame(sw_rxbuf, SingleWireMaxPacketSize);
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
     if (cmd == 0x40 && sz == 1) {
       //親-->子, キー状態要求パケット受信, キー状態応答パケットを返す
-      sendKeyStateResponsePacketToMaster();
+      //子から親に対してキー状態応答パケットを送る
+      sw_txbuf[0] = 0x41;
+      utils_copyBytes(sw_txbuf + 1, nextKeyStateFlags, NumKeySlotBytesHalf);
+      singleWire_transmitFrame(sw_txbuf, 1 + NumKeySlotBytesHalf);
     }
   }
+  singleWire_endBurstSection();
 }
 
 static bool checkIfSomeKeyPressed() {
@@ -341,7 +338,7 @@ static bool checkIfSomeKeyPressed() {
 static void runAsSlave() {
   keyMatrixScanner_initialize(
       numRows, numColumns, rowPins, columnPins, nextKeyStateFlags);
-  singlewire_setupInterruptedReceiver(onRecevierInterruption);
+  singleWire_setInterruptedReceiver(onRecevierInterruption);
 
   uint16_t cnt = 0;
   while (1) {
@@ -370,7 +367,9 @@ static void runAsSlave() {
 
 //単線通信受信割り込みコールバック
 static void masterSlaveDetectionMode_onRecevierInterruption() {
-  uint8_t sz = singlewire_receiveFrame(sw_rxbuf, SingleWireMaxPacketSize);
+  singleWire_startBurstSection();
+  uint8_t sz = singleWire_receiveFrame(sw_rxbuf, SingleWireMaxPacketSize);
+  singleWire_endBurstSection();
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
     if (cmd == 0xA0 && sz == 1) {
@@ -383,16 +382,18 @@ static void masterSlaveDetectionMode_onRecevierInterruption() {
 //USB接続が確立していない期間の動作
 //双方待機し、USB接続が確立すると自分がMasterになり、相手にMaseter確定通知パケットを送る
 static bool runMasterSlaveDetectionMode() {
-  singlewire_initialize();
-  singlewire_setupInterruptedReceiver(masterSlaveDetectionMode_onRecevierInterruption);
+  singleWire_initialize();
+  singleWire_setInterruptedReceiver(masterSlaveDetectionMode_onRecevierInterruption);
 
   system_enableInterrupts();
 
   while (true) {
     if (usbioCore_isConnectedToHost()) {
-      singlewire_clearInterruptedReceiver();
+      singleWire_clearInterruptedReceiver();
       sw_txbuf[0] = 0xA0;
-      singlewire_sendFrame(sw_txbuf, 1); //Master確定通知パケットを送信
+      singleWire_startBurstSection();
+      singleWire_transmitFrame(sw_txbuf, 1); //Master確定通知パケットを送信
+      singleWire_endBurstSection();
       return true;
     }
     if (hasMasterOathReceived) {
