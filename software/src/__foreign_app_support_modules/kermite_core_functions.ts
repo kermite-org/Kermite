@@ -24,18 +24,21 @@ interface IKeyUnitDisplayModel {
 }
 
 interface IKeyUnitTextDisplayModel {
-  keyId: string;
   primaryText: string;
   secondaryText: string;
   isLayerFallback: boolean;
 }
 
+type IKeyUnitTextDisplayModelsDict = {
+  [keyId in string]: IKeyUnitTextDisplayModel;
+};
+
 interface IProfileLayersDisplayModel {
   displayArea: IDisplayArea;
   outlineShapes: IDisplayOutlineShape[];
   keyUnits: IKeyUnitDisplayModel[];
-  completeKeyUnitTexts: IKeyUnitTextDisplayModel[];
-  layerKeyUnitTexts: { [layerId in string]: IKeyUnitTextDisplayModel[] };
+  completeKeyUnitTexts: IKeyUnitTextDisplayModelsDict;
+  layerKeyUnitTexts: { [layerId in string]: IKeyUnitTextDisplayModelsDict };
 }
 
 function createKeyUnitTextDisplayModel(
@@ -56,7 +59,6 @@ function createKeyUnitTextDisplayModel(
     layers,
   );
   return {
-    keyId,
     primaryText,
     secondaryText,
     isLayerFallback,
@@ -84,10 +86,18 @@ function createProfileLayersDisplayModel(
 
   const layerKeyUnitTexts = createDictionaryFromKeyValues(
     layers.map((la) => {
-      const keyUnitTextDisplayModels = keyboardDesign.keyEntities.map((ke) =>
-        createKeyUnitTextDisplayModel(ke, la.layerId, layers, assigns),
+      const keyUnitTextDisplayModelsDict = createDictionaryFromKeyValues(
+        keyboardDesign.keyEntities.map((ke) => {
+          const textDispalyModel = createKeyUnitTextDisplayModel(
+            ke,
+            la.layerId,
+            layers,
+            assigns,
+          );
+          return [ke.keyId, textDispalyModel];
+        }),
       );
-      return [la.layerId, keyUnitTextDisplayModels];
+      return [la.layerId, keyUnitTextDisplayModelsDict];
     }),
   );
   const completeKeyUnitTexts = layerKeyUnitTexts.la0;
