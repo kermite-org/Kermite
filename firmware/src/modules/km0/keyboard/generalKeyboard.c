@@ -8,7 +8,6 @@
 #include "dio.h"
 #include "keyMatrixScanner.h"
 #include "keyboardCoreLogic2.h"
-#include "singlewire3.h"
 #include "system.h"
 #include "usbioCore.h"
 #include "utils.h"
