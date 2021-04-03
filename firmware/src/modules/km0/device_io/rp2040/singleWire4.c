@@ -203,11 +203,11 @@ void singleWire_initialize() {
   setup_programs();
 }
 
-void singleWire_transmitFrame(uint8_t *buf, int len) {
+void singleWire_transmitFrame(uint8_t *buf, uint8_t len) {
   tx_send_frame(buf, len);
 }
 
-uint singleWire_receiveFrame(uint8_t *buf, int maxLen) {
+uint8_t singleWire_receiveFrame(uint8_t *buf, uint8_t maxLen) {
   return rx_receive_frame(buf, maxLen);
 }
 

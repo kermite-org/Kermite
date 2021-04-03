@@ -1,4 +1,4 @@
-#include "singlewire3.h"
+#include "singleWire4.h"
 #include "bitOperations.h"
 #include "config.h"
 #include "dio.h"
@@ -118,9 +118,7 @@ static void writeLogical(uint8_t val) {
   }
 }
 
-void singlewire_sendFrame(uint8_t *txbuf, uint8_t len) {
-  cli();
-
+void singleWire_transmitFrame(uint8_t *txbuf, uint8_t len) {
   signalPin_startTransmit();
   signalPin_setLow();
   delayUnit(100);
@@ -138,7 +136,6 @@ void singlewire_sendFrame(uint8_t *txbuf, uint8_t len) {
   signalPin_endTransmit_standby();
   delayUnit(100);
   bit_on(EIFR, dINTx);
-  sei();
 }
 
 #define ReadAbort 2
@@ -168,7 +165,7 @@ static uint8_t readFragment() {
   return t0 > mid ? 1 : 0;
 }
 
-uint8_t singlewire_receiveFrame(uint8_t *rxbuf, uint8_t capacity) {
+uint8_t singleWire_receiveFrame(uint8_t *rxbuf, uint8_t capacity) {
   debug_timingPinLow();
   uint8_t bi = 0;
 
@@ -209,9 +206,16 @@ escape:
   return 0;
 }
 
-void singlewire_initialize() {
+void singleWire_initialize() {
   signalPin_endTransmit_standby();
   debug_initTimeDebugPin();
+}
+
+void singleWire_startBurstSection() {
+  cli();
+}
+void singleWire_endBurstSection() {
+  sei();
 }
 
 //---------------------------------------------
@@ -221,7 +225,7 @@ typedef void (*TReceiverCallback)(void);
 
 static TReceiverCallback pReceiverCallback = 0;
 
-void singlewire_setupInterruptedReceiver(void (*_pReceiverCallback)(void)) {
+void singleWire_setInterruptedReceiver(void (*_pReceiverCallback)(void)) {
   pReceiverCallback = _pReceiverCallback;
   //信号ピンがHIGHからLOWに変化したときに割り込みを生成
   bits_spec(EICRA, dISCx0, 0b11, 0b10);
@@ -229,7 +233,7 @@ void singlewire_setupInterruptedReceiver(void (*_pReceiverCallback)(void)) {
   sei();
 }
 
-void singlewire_clearInterruptedReceiver() {
+void singleWire_clearInterruptedReceiver() {
   pReceiverCallback = 0;
   bits_spec(EICRA, dISCx0, 0b11, 0b00);
   bit_off(EIMSK, dINTx);

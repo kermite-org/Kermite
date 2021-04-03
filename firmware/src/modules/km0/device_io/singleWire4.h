@@ -7,8 +7,8 @@ void singleWire_initialize();
 
 void singleWire_startBurstSection();
 void singleWire_endBurstSection();
-void singleWire_transmitFrame(uint8_t *buf, int len);
-uint singleWire_receiveFrame(uint8_t *buf, int maxLen);
+void singleWire_transmitFrame(uint8_t *buf, uint8_t len);
+uint8_t singleWire_receiveFrame(uint8_t *buf, uint8_t maxLen);
 void singleWire_setInterruptedReceiver(void (*f)(void));
 void singleWire_clearInterruptedReceiver();
 
