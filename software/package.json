@@ -34,6 +34,7 @@
     "start": "ts-node build.ts -x-watch -x-exec",
     "start:dev": "cross-env NODE_ENV=development ts-node build.ts -x-watch -x-exec",
     "mockview": "cross-env NODE_ENV=development ts-node build.ts -x-mockview",
+    "build_support_modules": "ts-node build.ts -x-build-support-modules",
     "clean": "rm -rf dist .cache",
     "typecheck": "tsc",
     "typecheck:full": "tsc -b src/*",
