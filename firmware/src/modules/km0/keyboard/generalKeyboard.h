@@ -9,7 +9,7 @@
 
 void generalKeyboard_useIndicatorLEDs(int8_t pin1, uint8_t pin2, bool invert);
 void generalKeyboard_useIndicatorRgbLED(int8_t pin);
-void generalKeyboard_useDebugUART(uint16_t baud);
+void generalKeyboard_useDebugUART(uint32_t baud);
 void generalKeyboard_useOptionFixed(uint8_t slot, uint8_t value);
 void generalKeyboard_useOptionDynamic(uint8_t slot);
 

@@ -429,7 +429,7 @@ void splitKeyboard_useIndicatorLEDs(int8_t pin1, int8_t pin2, bool invert) {
   initBoardLEDs(pin1, pin2, invert);
 }
 
-void splitKeyboard_useDebugUART(uint16_t baud) {
+void splitKeyboard_useDebugUART(uint32_t baud) {
   debugUart_setup(baud);
   debugUartConfigured = true;
 }

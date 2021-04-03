@@ -254,7 +254,7 @@ void generalKeyboard_useIndicatorRgbLED(int8_t pin) {
   boardLED_initRgbLED(pin);
 }
 
-void generalKeyboard_useDebugUART(uint16_t baud) {
+void generalKeyboard_useDebugUART(uint32_t baud) {
   debugUart_setup(baud);
   debugUartConfigured = true;
 }
