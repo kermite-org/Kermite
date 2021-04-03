@@ -399,6 +399,7 @@ static bool runMasterSlaveDetectionMode() {
     if (hasMasterOathReceived) {
       return false;
     }
+    usbioCore_processUpdate();
     delayMs(1);
   }
 }
