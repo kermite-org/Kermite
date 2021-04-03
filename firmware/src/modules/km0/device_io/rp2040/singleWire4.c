@@ -180,15 +180,15 @@ static void (*interrupted_receiver_func)(void) = 0;
 static void pin_change_interrupt_handler(uint gpio, uint32_t events) {
   if (gpio == pin_signal && (events & GPIO_IRQ_EDGE_FALL)) {
     gpio_set_irq_enabled(pin_signal, GPIO_IRQ_EDGE_FALL, false);
-    // dio_write(PIN_DEBUG2, 0);
+    // dio_write(pin_debug2, 0);
     interrupted_receiver_func();
-    // dio_write(PIN_DEBUG2, 1);
+    // dio_write(pin_debug2, 1);
     gpio_set_irq_enabled(pin_signal, GPIO_IRQ_EDGE_FALL, true);
   }
 }
 
 static void setup_rx_pcint() {
-  // dio_setOutput(PIN_DEBUG2);
+  // dio_setOutput(pin_debug2);
   gpio_set_irq_enabled_with_callback(pin_signal, GPIO_IRQ_EDGE_FALL, true, &pin_change_interrupt_handler);
 }
 
