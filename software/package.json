@@ -72,7 +72,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-standard": "^4.1.0",
-    "estrella": "^1.3.0",
+    "estrella": "^1.4.0",
     "live-server": "^1.2.1",
     "postinstall-postinstall": "^2.1.0",
     "prettier": "^2.2.1",
