@@ -2,6 +2,7 @@
 
 REL_PROJECT_CODE_DIR = $(PROJECT)/$(VARIATION)
 PROJECT_CODE_DIR = src/projects/$(REL_PROJECT_CODE_DIR)
+MODULES_DIR = src/modules
 
 BUILD_DIR = build
 OUT_DIR = build/$(REL_PROJECT_CODE_DIR)
@@ -11,6 +12,8 @@ CORE_NAME = $(notdir $(PROJECT))_$(VARIATION)
 #import rules.mk
 MODULE_SRCS = 
 PROJECT_SRCS =
+MODULE_PIO_ASM_SRCS =
+PROJECT_PIO_ASM_SRCS =
 -include $(PROJECT_CODE_DIR)/rules.mk
 
 MODULES_DIR = src/modules
@@ -131,6 +134,7 @@ INC_PATHS = \
 -I$(PICO_LOCAL_DIR)/include \
 -I$(MODULES_DIR)/km0/common \
 -I$(MODULES_DIR)/km0/device_io \
+-I$(MODULES_DIR)/km0/device_io/rp2040 \
 -I$(MODULES_DIR)/km0/keyboard \
 -I$(PICO_SDK_DIR)/src/rp2040/hardware_regs/include \
 -I$(PICO_SDK_DIR)/src/rp2040/hardware_structs/include \
@@ -244,7 +248,8 @@ PROJECT_PIO_ASM_SRCS =
 
 -include $(PROJECT_CODE_DIR)/rules_post_declarations.mk
 
-C_SRCS = $(addprefix src/modules/,$(MODULE_SRCS)) \
+C_SRCS = \
+$(addprefix $(MODULES_DIR)/,$(MODULE_SRCS)) \
 $(addprefix $(PROJECT_CODE_DIR)/, $(PROJECT_SRCS))
 
 C_OBJS = $(addprefix $(OBJ_DIR)/,$(C_SRCS:.c=.c.obj))
@@ -253,7 +258,9 @@ SDK_ASM_OBJS = $(addprefix $(SHARED_OBJ_DIR)/,$(SDK_ASM_SRCS:.S=.S.obj))
 
 OBJS = $(C_OBJS) $(SDK_C_OBJS) $(SDK_ASM_OBJS)
 
-PIO_ASM_SRCS = $(addprefix $(PROJECT_CODE_DIR)/, $(PROJECT_PIO_ASM_SRCS))
+PIO_ASM_SRCS = \
+$(addprefix $(MODULES_DIR)/, $(MODULE_PIO_ASM_SRCS))
+$(addprefix $(PROJECT_CODE_DIR)/, $(PROJECT_PIO_ASM_SRCS))
 PIO_ASM_GENERATED_HEADERS = $(PIO_ASM_SRCS:.pio=.pio.h)
 
 DEP_FILES = $(filter %.d,$(OBJS:%.obj=%.d))
