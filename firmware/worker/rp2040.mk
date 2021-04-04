@@ -12,8 +12,8 @@ CORE_NAME = $(notdir $(PROJECT))_$(VARIATION)
 #import rules.mk
 MODULE_SRCS = 
 PROJECT_SRCS =
-MODULE_PIO_ASM_SRCS =
-PROJECT_PIO_ASM_SRCS =
+MODULE_PIOASM_SRCS =
+PROJECT_PIOASM_SRCS =
 -include $(PROJECT_CODE_DIR)/rules.mk
 
 MODULES_DIR = src/modules
@@ -256,10 +256,10 @@ SDK_ASM_OBJS = $(addprefix $(SHARED_OBJ_DIR)/,$(SDK_ASM_SRCS:.S=.S.obj))
 
 OBJS = $(C_OBJS) $(SDK_C_OBJS) $(SDK_ASM_OBJS)
 
-PIO_ASM_SRCS = \
-$(addprefix $(MODULES_DIR)/, $(MODULE_PIO_ASM_SRCS)) \
-$(addprefix $(PROJECT_CODE_DIR)/, $(PROJECT_PIO_ASM_SRCS))
-PIO_ASM_GENERATED_HEADERS = $(PIO_ASM_SRCS:.pio=.pio.h)
+PIOASM_SRCS = \
+$(addprefix $(MODULES_DIR)/, $(MODULE_PIOASM_SRCS)) \
+$(addprefix $(PROJECT_CODE_DIR)/, $(PROJECT_PIOASM_SRCS))
+PIOASM_GENERATED_HEADERS = $(PIOASM_SRCS:.pio=.pio.h)
 
 DEP_FILES = $(filter %.d,$(OBJS:%.obj=%.d))
 -include $(DEP_FILES)
@@ -288,7 +288,7 @@ $(SHARED_OBJ_DIR)/%.S.obj: %.S
 	@mkdir -p $(dir $@)
 	@$(AS) $(AS_FLAGS) -o $@ -c $<
 
-$(ELF): $(PIO_ASM_GENERATED_HEADERS) $(OBJS)
+$(ELF): $(PIOASM_GENERATED_HEADERS) $(OBJS)
 	@echo "linking"
 	@mkdir -p $(dir $@)
 	@$(LD) $(LD_FLAGS) $(OBJS) -o $(ELF) $(BOOT_S)

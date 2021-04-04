@@ -8,11 +8,11 @@ MODULE_SRCS += km0/device_io/rp2040/usbioCore.c
 MODULE_SRCS += km0/device_io/rp2040/dataMemory.c
 MODULE_SRCS += km0/device_io/rp2040/boardLED_RGB.c
 MODULE_SRCS += km0/device_io/rp2040/neoPixelCore.c
-MODULE_PIO_ASM_SRCS += km0/device_io/rp2040/neoPixelCore.pio
+MODULE_PIOASM_SRCS += km0/device_io/rp2040/neoPixelCore.pio
 MODULE_SRCS += km0/device_io/rp2040/singleWire4.c
-MODULE_PIO_ASM_SRCS += km0/device_io/rp2040/singleWire4.pio
+MODULE_PIOASM_SRCS += km0/device_io/rp2040/singleWire4.pio
 MODULE_SRCS += km0/device_io/rp2040/neoPixelCore.c
-MODULE_PIO_ASM_SRCS += km0/device_io/rp2040/neoPixelCore.pio
+MODULE_PIOASM_SRCS += km0/device_io/rp2040/neoPixelCore.pio
 MODULE_SRCS += km0/device_io/rp2040/serialLED.c
 
 #PROJECT_SRCS += main_blink.c
