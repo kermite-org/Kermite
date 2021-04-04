@@ -1,0 +1,21 @@
+#include "serialLED.h"
+#include "config.h"
+#include "neoPixelCore.h"
+
+#ifndef SERIALLED_RP2040_PIO
+#define SRRIALLED_RP2040_PIO pio0
+#endif
+
+#ifndef SERIALLED_RP2040_SM
+#define SERIALLED_RP2040_SM 1
+#endif
+
+const PIO serial_led_pio = SRRIALLED_RP2040_PIO;
+const int serial_led_sm = SERIALLED_RP2040_SM;
+
+void serialLED_initialize(uint8_t pin) {
+  neoPixelCore_initialize(serial_led_pio, serial_led_sm, pin);
+}
+void serialLED_putPixel(uint32_t pixel_aarrggbb) {
+  neoPixelCore_putPixel(serial_led_pio, serial_led_sm, pixel_aarrggbb);
+}
