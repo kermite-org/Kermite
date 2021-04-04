@@ -1,6 +1,9 @@
 #include "dio.h"
 #include "system.h"
 
+//board RPi Pico
+//GP25: onboard LED
+
 int main() {
   dio_setOutput(GP25);
   while (true) {

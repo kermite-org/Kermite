@@ -2,6 +2,9 @@
 #include "dio.h"
 #include "system.h"
 
+//board ProMicro Pico
+//GP25: onboard RGB LED
+
 int main() {
   boardLED_initRgbLED(GP25);
   while (true) {

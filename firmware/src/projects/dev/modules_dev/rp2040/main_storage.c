@@ -5,6 +5,11 @@
 #include "system.h"
 #include <stdio.h>
 
+//board RPi Pico
+//GP25: onboard LED
+//GP0 ---> USB UART ---> PC
+//GP16 (internal pullup) <--- button <--- GND
+
 void initLED() {
   dio_setOutput(GP25);
 }

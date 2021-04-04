@@ -3,6 +3,10 @@
 #include "system.h"
 #include <stdio.h>
 
+//board RPi Pico
+//GP25: onboard LED
+//GP0 ----> USB UART ---> PC
+
 int main() {
   debugUart_setup(38400);
   dio_setOutput(GP25);

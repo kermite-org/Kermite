@@ -1,6 +1,9 @@
+#include "dio.h"
 #include "serialLED.h"
 #include "system.h"
-#include "dio.h"
+
+//board RPi Pico
+//GP17 ---> NeoPixel Strip 8LEDs
 
 uint32_t colors[] = { 0xFF0000, 0x00FF00, 0x0000FF, 0x00FFFF, 0xFF00FF, 0xFFFF00, 0xFFFFFF };
 
@@ -21,4 +24,3 @@ void main() {
     cnt++;
   }
 }
-

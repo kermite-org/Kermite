@@ -5,6 +5,8 @@
 #include "utils.h"
 #include <stdio.h>
 
+//board RPi Pico
+
 //単一デバイスで単線往復送受信実験
 //slave側ピン変化割り込みハンドラで送受信処理を実行
 //モジュール化
