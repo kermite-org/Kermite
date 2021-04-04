@@ -264,7 +264,7 @@ static void runAsMaster() {
       if (cnt % 2000 == 0) {
         boardLED_outputLED1(true);
       }
-      if (cnt % 2000 == 1) {
+      if (cnt % 2000 == 4) {
         boardLED_outputLED1(false);
       }
     }
@@ -322,7 +322,7 @@ static void runAsSlave() {
       if (cnt % 4000 == 0) {
         boardLED_outputLED1(true);
       }
-      if (cnt % 4000 == 1) {
+      if (cnt % 4000 == 4) {
         boardLED_outputLED1(false);
       }
     }
