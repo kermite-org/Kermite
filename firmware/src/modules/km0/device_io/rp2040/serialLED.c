@@ -10,8 +10,8 @@
 #define SERIALLED_RP2040_SM 1
 #endif
 
-const PIO serial_led_pio = SRRIALLED_RP2040_PIO;
-const int serial_led_sm = SERIALLED_RP2040_SM;
+static const PIO serial_led_pio = SRRIALLED_RP2040_PIO;
+static const int serial_led_sm = SERIALLED_RP2040_SM;
 
 void serialLED_initialize(uint8_t pin) {
   neoPixelCore_initialize(serial_led_pio, serial_led_sm, pin);
