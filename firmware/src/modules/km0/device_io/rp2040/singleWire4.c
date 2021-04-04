@@ -124,7 +124,7 @@ const float pio_base_freq = 1000000; //base clock 1MHz, data 80kbps
 #endif
 
 #ifndef SINGLEWIRE_RP2040_PIO
-#define SINGLEWIRE_RP2040_PIO pio0
+#define SINGLEWIRE_RP2040_PIO pio1
 #endif
 
 #ifndef SINGLEWIRE_RP2040_SM_TX

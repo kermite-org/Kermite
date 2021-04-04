@@ -1,5 +1,6 @@
 #include "splitKeyboard.h"
 #include "bitOperations.h"
+#include "boardLED.h"
 #include "config.h"
 #include "configValidator.h"
 #include "configuratorServant.h"
@@ -92,38 +93,6 @@ void setCustomParameterDynamicFlag(uint8_t slotIndex, bool isDynamic) {
   bit_spec(optionDynamicFlags, slotIndex, isDynamic);
 }
 
-//---------------------------------------------
-//board io
-
-static int8_t led_pin1 = -1;
-static int8_t led_pin2 = -1;
-static bool led_invert = false;
-
-static void outputLED1(bool val) {
-  if (led_pin1 != -1) {
-    dio_write(led_pin1, led_invert ? !val : val);
-  }
-}
-
-static void outputLED2(bool val) {
-  if (led_pin2 != -1) {
-    dio_write(led_pin2, led_invert ? !val : val);
-  }
-}
-
-static void initBoardLEDs(uint8_t pin1, uint8_t pin2, bool invert) {
-  led_pin1 = pin1;
-  led_pin2 = pin2;
-  led_invert = invert;
-  if (led_pin1 != -1) {
-    dio_setOutput(led_pin1);
-    dio_write(led_pin1, invert);
-  }
-  if (led_pin2 != -1) {
-    dio_setOutput(led_pin2);
-    dio_write(led_pin2, invert);
-  }
-}
 //---------------------------------------------
 
 static void debugDumpLocalOutputState() {
@@ -285,7 +254,7 @@ static void runAsMaster() {
       keyboardCoreLogic_processTicker(5);
       processKeyboardCoreLogicOutput();
       if (optionAffectKeyHoldStateToLED) {
-        outputLED2(pressedKeyCount > 0);
+        boardLED_outputLED2(pressedKeyCount > 0);
       }
     }
     if (cnt % 4 == 2) {
@@ -293,10 +262,10 @@ static void runAsMaster() {
     }
     if (optionUseHeartbeatLED) {
       if (cnt % 2000 == 0) {
-        outputLED1(true);
+        boardLED_outputLED1(true);
       }
-      if (cnt % 2000 == 1) {
-        outputLED1(false);
+      if (cnt % 2000 == 4) {
+        boardLED_outputLED1(false);
       }
     }
     delayMs(1);
@@ -346,15 +315,15 @@ static void runAsSlave() {
       keyMatrixScanner_update();
       pressedKeyCount = checkIfSomeKeyPressed();
       if (optionAffectKeyHoldStateToLED) {
-        outputLED2(pressedKeyCount > 0);
+        boardLED_outputLED2(pressedKeyCount > 0);
       }
     }
     if (optionUseHeartbeatLED) {
       if (cnt % 4000 == 0) {
-        outputLED1(true);
+        boardLED_outputLED1(true);
       }
-      if (cnt % 4000 == 1) {
-        outputLED1(false);
+      if (cnt % 4000 == 4) {
+        boardLED_outputLED1(false);
       }
     }
     delayMs(1);
@@ -411,23 +380,27 @@ static void showModeByLedBlinkPattern(bool isMaster) {
   if (isMaster) {
     //masterの場合高速に4回点滅
     for (uint8_t i = 0; i < 4; i++) {
-      outputLED1(true);
+      boardLED_outputLED1(true);
       delayMs(2);
-      outputLED1(false);
+      boardLED_outputLED1(false);
       delayMs(100);
     }
   } else {
     //slaveの場合長く1回点灯
-    outputLED1(true);
+    boardLED_outputLED1(true);
     delayMs(500);
-    outputLED1(false);
+    boardLED_outputLED1(false);
   }
 }
 
 //---------------------------------------------
 
 void splitKeyboard_useIndicatorLEDs(int8_t pin1, int8_t pin2, bool invert) {
-  initBoardLEDs(pin1, pin2, invert);
+  boardLED_initLEDs(pin1, pin2, invert);
+}
+
+void splitKeyboard_useIndicatorRgbLED(int8_t pin) {
+  boardLED_initRgbLED(pin);
 }
 
 void splitKeyboard_useDebugUART(uint32_t baud) {

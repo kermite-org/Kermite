@@ -1,5 +1,14 @@
 #include "boardLED.h"
+#include "hardware/clocks.h"
 #include "hardware/pio.h"
+
+#ifndef BOARD_LED_RGB_RP2040_PIO
+#define BOARD_LED_RGB_RP2040_PIO pio0
+#endif
+
+#ifndef BOARD_LED_RGB_RP2040_SM
+#define BOARD_LED_RGB_RP2040_SM 0
+#endif
 
 //based on
 //https://github.com/raspberrypi/pico-examples/blob/master/pio/ws2812/ws2812.c
@@ -32,7 +41,6 @@ static inline pio_sm_config ws2812_program_get_default_config(uint offset) {
   return c;
 }
 
-#include "hardware/clocks.h"
 static inline void ws2812_program_init(PIO pio, uint sm, uint offset, uint pin, float freq, bool rgbw) {
   pio_gpio_init(pio, pin);
   pio_sm_set_consecutive_pindirs(pio, sm, pin, 1, true);
@@ -61,8 +69,8 @@ void boardLED_initLEDs(int8_t pin1, int8_t pin2, bool invert) {}
 
 void boardLED_initRgbLED(int8_t pin_tx) {
   // todo get free sm
-  PIO pio = pio0;
-  int sm = 0;
+  PIO pio = BOARD_LED_RGB_RP2040_PIO;
+  int sm = BOARD_LED_RGB_RP2040_SM;
   uint offset = pio_add_program(pio, &ws2812_program);
   ws2812_program_init(pio, sm, offset, pin_tx, 800000, true);
   put_pixel(0);
