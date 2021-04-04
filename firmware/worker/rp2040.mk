@@ -2,6 +2,7 @@
 
 REL_PROJECT_CODE_DIR = $(PROJECT)/$(VARIATION)
 PROJECT_CODE_DIR = src/projects/$(REL_PROJECT_CODE_DIR)
+MODULES_DIR = src/modules
 
 BUILD_DIR = build
 OUT_DIR = build/$(REL_PROJECT_CODE_DIR)
@@ -11,8 +12,9 @@ CORE_NAME = $(notdir $(PROJECT))_$(VARIATION)
 #import rules.mk
 MODULE_SRCS = 
 PROJECT_SRCS =
-RULES_MK = $(PROJECT_CODE_DIR)/rules.mk
--include $(RULES_MK)
+MODULE_PIO_ASM_SRCS =
+PROJECT_PIO_ASM_SRCS =
+-include $(PROJECT_CODE_DIR)/rules.mk
 
 MODULES_DIR = src/modules
 
@@ -43,6 +45,9 @@ OBJSIZE = arm-none-eabi-size
 ELF2UF2_ROOT_DIR = $(PICO_LOCAL_DIR)/tools/elf2uf2
 ELF2UF2_BIN = $(ELF2UF2_ROOT_DIR)/build/elf2uf2
 #ELF2UF2_BIN = $(ELF2UF2_ROOT_DIR)/prebuild/elf2uf2_darwin
+
+PIOASM_ROOT_DIR = $(PICO_LOCAL_DIR)/tools/pioasm
+PIOASM_BIN = $(PIOASM_ROOT_DIR)/prebuild/pioasm_darwin
 
 #--------------------
 #flags
@@ -81,7 +86,7 @@ DEFINES = \
 
 CORE_FLAGS = $(DEFINES) $(INC_PATHS) -march=armv6-m -mcpu=cortex-m0plus -mthumb -Og -g -ffunction-sections -fdata-sections
 AS_FLAGS = $(CORE_FLAGS)
-C_FLAGS = $(CORE_FLAGS) -std=gnu11
+C_FLAGS = $(CORE_FLAGS) -std=gnu11 -MMD
 
 FUNCS_WRAPPED = sprintf snprintf vsnprintf printf vprintf puts putchar \
 __clzsi2 __clzdi2 __ctzsi2 __ctzdi2 __clz __clzl __clzll __popcountsi2 __popcountdi2 \
@@ -129,6 +134,7 @@ INC_PATHS = \
 -I$(PICO_LOCAL_DIR)/include \
 -I$(MODULES_DIR)/km0/common \
 -I$(MODULES_DIR)/km0/device_io \
+-I$(MODULES_DIR)/km0/device_io/rp2040 \
 -I$(MODULES_DIR)/km0/keyboard \
 -I$(PICO_SDK_DIR)/src/rp2040/hardware_regs/include \
 -I$(PICO_SDK_DIR)/src/rp2040/hardware_structs/include \
@@ -166,6 +172,7 @@ INC_PATHS = \
 -I$(PICO_SDK_DIR)/src/rp2_common/pico_malloc/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/pico_stdio/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/pico_stdio_uart/include \
+-I$(PICO_SDK_DIR)/src/rp2_common/pico_multicore/include \
 -I$(PICO_SDK_DIR)/lib/tinyusb/src \
 -I$(PICO_SDK_DIR)/lib/tinyusb/src/common \
 -I$(PICO_SDK_DIR)/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/include
@@ -207,6 +214,7 @@ $(PICO_SDK_DIR)/src/rp2_common/pico_malloc/pico_malloc.c \
 $(PICO_SDK_DIR)/src/rp2_common/pico_standard_link/binary_info.c \
 $(PICO_SDK_DIR)/src/rp2_common/pico_stdio/stdio.c \
 $(PICO_SDK_DIR)/src/rp2_common/pico_stdio_uart/stdio_uart.c \
+$(PICO_SDK_DIR)/src/rp2_common/pico_multicore/multicore.c \
 $(PICO_SDK_DIR)/src/rp2_common/pico_bootsel_via_double_reset/pico_bootsel_via_double_reset.c
 
 #USB
@@ -236,7 +244,12 @@ $(PICO_SDK_DIR)/src/rp2_common/pico_standard_link/crt0.S \
 BOOT_S = $(PICO_LOCAL_DIR)/loaders/bs2_default_padded_checksummed.S
 LD_SCRIPT = $(PICO_LOCAL_DIR)/loaders/memmap_default.ld
 
-C_SRCS = $(addprefix src/modules/,$(MODULE_SRCS)) \
+PROJECT_PIO_ASM_SRCS =
+
+-include $(PROJECT_CODE_DIR)/rules_post_declarations.mk
+
+C_SRCS = \
+$(addprefix $(MODULES_DIR)/,$(MODULE_SRCS)) \
 $(addprefix $(PROJECT_CODE_DIR)/, $(PROJECT_SRCS))
 
 C_OBJS = $(addprefix $(OBJ_DIR)/,$(C_SRCS:.c=.c.obj))
@@ -245,6 +258,11 @@ SDK_ASM_OBJS = $(addprefix $(SHARED_OBJ_DIR)/,$(SDK_ASM_SRCS:.S=.S.obj))
 
 OBJS = $(C_OBJS) $(SDK_C_OBJS) $(SDK_ASM_OBJS)
 
+PIO_ASM_SRCS = \
+$(addprefix $(MODULES_DIR)/, $(MODULE_PIO_ASM_SRCS))
+$(addprefix $(PROJECT_CODE_DIR)/, $(PROJECT_PIO_ASM_SRCS))
+PIO_ASM_GENERATED_HEADERS = $(PIO_ASM_SRCS:.pio=.pio.h)
+
 DEP_FILES = $(filter %.d,$(OBJS:%.obj=%.d))
 -include $(DEP_FILES)
 
@@ -252,6 +270,10 @@ DEP_FILES = $(filter %.d,$(OBJS:%.obj=%.d))
 #targets
 
 build: $(UF2)
+
+#$(PROJECT_CODE_DIR)/
+%.pio.h: %.pio
+	$(PIOASM_BIN) -o c-sdk $< $@
 
 $(OBJ_DIR)/%.c.obj: %.c
 	@echo "compiling $<"
@@ -268,7 +290,7 @@ $(SHARED_OBJ_DIR)/%.S.obj: %.S
 	@mkdir -p $(dir $@)
 	@$(AS) $(AS_FLAGS) -o $@ -c $<
 
-$(ELF): $(OBJS)
+$(ELF): $(PIO_ASM_GENERATED_HEADERS) $(OBJS)
 	@echo "linking"
 	@mkdir -p $(dir $@)
 	@$(LD) $(LD_FLAGS) $(OBJS) -o $(ELF) $(BOOT_S)
