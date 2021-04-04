@@ -1,0 +1,17 @@
+.program neopixel_emitter
+.side_set 1 opt
+  pull
+  set x 23
+bitloop:
+  out y, 1
+  jmp !y do_zero
+do_one:
+  nop side 1 [4]
+  nop side 0 [0]
+  jmp end_cycle
+do_zero:
+  nop side 1 [1]
+  nop side 0 [1]
+end_cycle:
+  jmp x-- bitloop
+  nop [7]
