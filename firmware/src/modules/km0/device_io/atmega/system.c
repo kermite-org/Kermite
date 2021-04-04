@@ -9,6 +9,12 @@ void delayMs(uint16_t ms) {
   }
 }
 
+void delayUs(uint16_t us) {
+  for (uint16_t i = 0; i < us; i++) {
+    _delay_us(1);
+  }
+}
+
 uint8_t system_readRomByte(const uint8_t *ptr) {
   return pgm_read_byte(ptr);
 }

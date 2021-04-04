@@ -1,27 +1,32 @@
 #include "config.h"
 #include "dio.h"
-#include "generalKeyboard.h"
+#include "splitKeyboard.h"
 
 #define NumColumns 4
 #define NumRows 3
-#define NumKeySlots (NumColumns * NumRows)
+#define NumKeySlots 24
 
 static const uint8_t columnPins[NumColumns] = { GP2, GP3, GP4, GP5 };
 static const uint8_t rowPins[NumRows] = { GP7, GP8, GP9 };
 
 // clang-format off
 static const int8_t keyIndexTable[NumKeySlots] = {
-   0,  1,  2,  3, 
-   4,  5,  6,  7,
-   8,  9, 10, 11
+  //left
+  0,  1,  2,  3,
+  4,  5,  6,  7,
+  8,  9, 10, 11,
+  //right
+  12, 13, 14, 15,
+  16, 17, 18, 19,
+  20, 21, 22, 23
 };
 // clang-format on
 
 int main() {
-  generalKeyboard_useIndicatorLEDs(GP25, GP25, false); //RPi pico
+  splitKeyboard_useIndicatorLEDs(GP25, GP25, false); //RPi pico
   // generalKeyboard_useIndicatorRgbLED(GP25); //promicro rp2040
-  generalKeyboard_useDebugUART(115200);
-  generalKeyboard_setup(NumRows, NumColumns, rowPins, columnPins, keyIndexTable);
-  generalKeyboard_start();
+  splitKeyboard_useDebugUART(115200);
+  splitKeyboard_setup(NumRows, NumColumns, rowPins, columnPins, keyIndexTable);
+  splitKeyboard_start();
   return 0;
 }

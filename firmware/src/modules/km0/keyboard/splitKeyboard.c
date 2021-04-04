@@ -230,7 +230,6 @@ static void pullAltSideKeyStates() {
   singleWire_endBurstSection();
 
   if (sz > 0) {
-
     uint8_t cmd = sw_rxbuf[0];
     if (cmd == 0x41 && sz == 1 + NumKeySlotBytesHalf) {
       uint8_t *payloadBytes = sw_rxbuf + 1;
@@ -397,8 +396,10 @@ static bool runMasterSlaveDetectionMode() {
       return true;
     }
     if (hasMasterOathReceived) {
+      singleWire_clearInterruptedReceiver();
       return false;
     }
+    usbioCore_processUpdate();
     delayMs(1);
   }
 }
@@ -429,7 +430,7 @@ void splitKeyboard_useIndicatorLEDs(int8_t pin1, int8_t pin2, bool invert) {
   initBoardLEDs(pin1, pin2, invert);
 }
 
-void splitKeyboard_useDebugUART(uint16_t baud) {
+void splitKeyboard_useDebugUART(uint32_t baud) {
   debugUart_setup(baud);
   debugUartConfigured = true;
 }
