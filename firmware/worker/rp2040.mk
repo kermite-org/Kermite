@@ -244,8 +244,6 @@ $(PICO_SDK_DIR)/src/rp2_common/pico_standard_link/crt0.S \
 BOOT_S = $(PICO_LOCAL_DIR)/loaders/bs2_default_padded_checksummed.S
 LD_SCRIPT = $(PICO_LOCAL_DIR)/loaders/memmap_default.ld
 
-PROJECT_PIO_ASM_SRCS =
-
 -include $(PROJECT_CODE_DIR)/rules_post_declarations.mk
 
 C_SRCS = \
@@ -259,7 +257,7 @@ SDK_ASM_OBJS = $(addprefix $(SHARED_OBJ_DIR)/,$(SDK_ASM_SRCS:.S=.S.obj))
 OBJS = $(C_OBJS) $(SDK_C_OBJS) $(SDK_ASM_OBJS)
 
 PIO_ASM_SRCS = \
-$(addprefix $(MODULES_DIR)/, $(MODULE_PIO_ASM_SRCS))
+$(addprefix $(MODULES_DIR)/, $(MODULE_PIO_ASM_SRCS)) \
 $(addprefix $(PROJECT_CODE_DIR)/, $(PROJECT_PIO_ASM_SRCS))
 PIO_ASM_GENERATED_HEADERS = $(PIO_ASM_SRCS:.pio=.pio.h)
 
