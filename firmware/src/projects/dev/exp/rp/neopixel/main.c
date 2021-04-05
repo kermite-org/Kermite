@@ -1,4 +1,4 @@
-#include "boardLED.h"
+#include "boardIo.h"
 #include "dio.h"
 #include "hardware/clocks.h"
 #include "hardware/pio.h"
@@ -57,7 +57,7 @@ void serialLED_initialize(uint pin) {
 uint32_t colors[] = { 0xFF0000, 0x00FF00, 0x0000FF, 0x00FFFF, 0xFF00FF, 0xFFFF00 };
 
 void main() {
-  boardLED_initLEDs(GP25, GP25, false);
+  boardIo_setupLeds(GP25, GP25, false);
   serialLED_initialize(GP17);
 
   int cnt = 0;

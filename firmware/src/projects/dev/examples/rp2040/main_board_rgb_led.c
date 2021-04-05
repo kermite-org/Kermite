@@ -1,4 +1,4 @@
-#include "boardLED.h"
+#include "boardIo.h"
 #include "dio.h"
 #include "system.h"
 
@@ -6,15 +6,15 @@
 //GP25: onboard RGB LED
 
 int main() {
-  boardLED_initRgbLED(GP25);
+  boardIo_setupLedsRgb(GP25);
   while (true) {
-    boardLED_outputLED1(true);
+    boardIo_writeLed1(true);
     delayMs(1);
-    boardLED_outputLED2(false);
+    boardIo_writeLed2(false);
     delayMs(1000);
-    boardLED_outputLED1(false);
+    boardIo_writeLed1(false);
     delayMs(1);
-    boardLED_outputLED2(true);
+    boardIo_writeLed2(true);
     delayMs(1000);
   }
 }

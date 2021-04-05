@@ -1,6 +1,6 @@
 #include "generalKeyboard.h"
 #include "bitOperations.h"
-#include "boardLED.h"
+#include "boardIo.h"
 #include "config.h"
 #include "configValidator.h"
 #include "configuratorServant.h"
@@ -226,15 +226,15 @@ static void keyboardEntry() {
       keyboardCoreLogic_processTicker(5);
       processKeyboardCoreLogicOutput();
       if (optionAffectKeyHoldStateToLED) {
-        boardLED_outputLED2(pressedKeyCount > 0);
+        boardIo_writeLed2(pressedKeyCount > 0);
       }
     }
     if (optionUseHeartbeatLED) {
       if (cnt % 4000 == 0) {
-        boardLED_outputLED1(true);
+        boardIo_writeLed1(true);
       }
       if (cnt % 4000 == 4) {
-        boardLED_outputLED1(false);
+        boardIo_writeLed1(false);
       }
     }
     delayMs(1);
@@ -246,11 +246,11 @@ static void keyboardEntry() {
 //---------------------------------------------
 
 void generalKeyboard_useIndicatorLEDs(int8_t pin1, uint8_t pin2, bool invert) {
-  boardLED_initLEDs(pin1, pin2, invert);
+  boardIo_setupLeds(pin1, pin2, invert);
 }
 
 void generalKeyboard_useIndicatorRgbLED(int8_t pin) {
-  boardLED_initRgbLED(pin);
+  boardIo_setupLedsRgb(pin);
 }
 
 void generalKeyboard_useDebugUART(uint32_t baud) {

@@ -1,6 +1,6 @@
 #include "splitKeyboard.h"
 #include "bitOperations.h"
-#include "boardLED.h"
+#include "boardIo.h"
 #include "config.h"
 #include "configValidator.h"
 #include "configuratorServant.h"
@@ -254,7 +254,7 @@ static void runAsMaster() {
       keyboardCoreLogic_processTicker(5);
       processKeyboardCoreLogicOutput();
       if (optionAffectKeyHoldStateToLED) {
-        boardLED_outputLED2(pressedKeyCount > 0);
+        boardIo_writeLed2(pressedKeyCount > 0);
       }
     }
     if (cnt % 4 == 2) {
@@ -262,10 +262,10 @@ static void runAsMaster() {
     }
     if (optionUseHeartbeatLED) {
       if (cnt % 2000 == 0) {
-        boardLED_outputLED1(true);
+        boardIo_writeLed1(true);
       }
       if (cnt % 2000 == 4) {
-        boardLED_outputLED1(false);
+        boardIo_writeLed1(false);
       }
     }
     delayMs(1);
@@ -315,15 +315,15 @@ static void runAsSlave() {
       keyMatrixScanner_update();
       pressedKeyCount = checkIfSomeKeyPressed();
       if (optionAffectKeyHoldStateToLED) {
-        boardLED_outputLED2(pressedKeyCount > 0);
+        boardIo_writeLed2(pressedKeyCount > 0);
       }
     }
     if (optionUseHeartbeatLED) {
       if (cnt % 4000 == 0) {
-        boardLED_outputLED1(true);
+        boardIo_writeLed1(true);
       }
       if (cnt % 4000 == 4) {
-        boardLED_outputLED1(false);
+        boardIo_writeLed1(false);
       }
     }
     delayMs(1);
@@ -380,27 +380,27 @@ static void showModeByLedBlinkPattern(bool isMaster) {
   if (isMaster) {
     //masterの場合高速に4回点滅
     for (uint8_t i = 0; i < 4; i++) {
-      boardLED_outputLED1(true);
+      boardIo_writeLed1(true);
       delayMs(2);
-      boardLED_outputLED1(false);
+      boardIo_writeLed1(false);
       delayMs(100);
     }
   } else {
     //slaveの場合長く1回点灯
-    boardLED_outputLED1(true);
+    boardIo_writeLed1(true);
     delayMs(500);
-    boardLED_outputLED1(false);
+    boardIo_writeLed1(false);
   }
 }
 
 //---------------------------------------------
 
 void splitKeyboard_useIndicatorLEDs(int8_t pin1, int8_t pin2, bool invert) {
-  boardLED_initLEDs(pin1, pin2, invert);
+  boardIo_setupLeds(pin1, pin2, invert);
 }
 
 void splitKeyboard_useIndicatorRgbLED(int8_t pin) {
-  boardLED_initRgbLED(pin);
+  boardIo_setupLedsRgb(pin);
 }
 
 void splitKeyboard_useDebugUART(uint32_t baud) {
