@@ -7,9 +7,7 @@
   "build": {
     "appId": "org.kermite.electron-app",
     "mac": {
-      "target": [
-        "pkg"
-      ]
+      "target": "pkg"
     },
     "win": {
       "target": "nsis"
