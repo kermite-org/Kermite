@@ -44,11 +44,11 @@ void neoPixelCore_initialize(PIO pio, int sm, uint pin) {
 const PIO serial_led_pio = pio1;
 const int serial_led_sm = 1;
 
-void serialLED_putPixel(uint32_t pixel_aarrggbb) {
+void serialLed_putPixel(uint32_t pixel_aarrggbb) {
   neoPixelCore_putPixel(serial_led_pio, serial_led_sm, pixel_aarrggbb);
 }
 
-void serialLED_initialize(uint pin) {
+void serialLed_initialize(uint pin) {
   neoPixelCore_initialize(serial_led_pio, serial_led_sm, pin);
 }
 
@@ -58,7 +58,7 @@ uint32_t colors[] = { 0xFF0000, 0x00FF00, 0x0000FF, 0x00FFFF, 0xFF00FF, 0xFFFF00
 
 void main() {
   boardIo_setupLeds(GP25, GP25, false);
-  serialLED_initialize(GP17);
+  serialLed_initialize(GP17);
 
   int cnt = 0;
   while (1) {
@@ -68,7 +68,7 @@ void main() {
     uint32_t alpha = q * 20;
     for (int i = 0; i < 6; i++) {
       uint32_t col = (alpha << 24) | colors[i];
-      serialLED_putPixel(col);
+      serialLed_putPixel(col);
     }
     delayMs(1);
     cnt++;

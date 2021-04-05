@@ -1,4 +1,4 @@
-#include "serialLED.h"
+#include "serialLed.h"
 #include "config.h"
 #include "neoPixelCore.h"
 
@@ -13,9 +13,9 @@
 static const PIO serial_led_pio = SRRIALLED_RP2040_PIO;
 static const int serial_led_sm = SERIALLED_RP2040_SM;
 
-void serialLED_initialize(uint8_t pin) {
+void serialLed_initialize(uint8_t pin) {
   neoPixelCore_initialize(serial_led_pio, serial_led_sm, pin);
 }
-void serialLED_putPixel(uint32_t pixel_aarrggbb) {
+void serialLed_putPixel(uint32_t pixel_aarrggbb) {
   neoPixelCore_putPixel(serial_led_pio, serial_led_sm, pixel_aarrggbb);
 }

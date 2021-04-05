@@ -1,5 +1,5 @@
 #include "dio.h"
-#include "serialLED.h"
+#include "serialLed.h"
 #include "system.h"
 
 //board RPi Pico
@@ -8,7 +8,7 @@
 uint32_t colors[] = { 0xFF0000, 0x00FF00, 0x0000FF, 0x00FFFF, 0xFF00FF, 0xFFFF00, 0xFFFFFF };
 
 void main() {
-  serialLED_initialize(GP17);
+  serialLed_initialize(GP17);
 
   int cnt = 0;
   while (1) {
@@ -18,7 +18,7 @@ void main() {
     uint32_t alpha = q * 20;
     for (int i = 0; i < 7; i++) {
       uint32_t col = (alpha << 24) | colors[i];
-      serialLED_putPixel(col);
+      serialLed_putPixel(col);
     }
     delayMs(1);
     cnt++;
