@@ -3,6 +3,8 @@
   "productName": "Kermite",
   "version": "0.0.1",
   "main": "dist/shell/index.js",
+  "author": "yahiro",
+  "description": "keyboard software",
   "license": "MIT",
   "build": {
     "appId": "org.kermite.electron-app",
