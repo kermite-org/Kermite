@@ -218,6 +218,10 @@ export interface IServerPorfileInfo {
   userName: string;
   profileData: IProfileData;
 }
+
+export interface IApplicationVersionInfo {
+  version: string;
+}
 export interface IAppIpcContract {
   sync: {
     dev_debugMessage(message: string): void;
@@ -225,6 +229,7 @@ export interface IAppIpcContract {
     config_saveKeyboardConfigOnClosing(data: IKeyboardConfig): void;
   };
   async: {
+    system_getApplicationVersionInfo(): Promise<IApplicationVersionInfo>;
     window_closeWindow(): Promise<void>;
     window_minimizeWindow(): Promise<void>;
     window_maximizeWindow(): Promise<void>;

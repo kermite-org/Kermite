@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/require-await */
 import { getAppErrorData, IPresetSpec, makeCompactStackTrace } from '~/shared';
-import { appEnv, appGlobal, applicationStorage } from '~/shell/base';
+import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
@@ -64,6 +64,9 @@ export class ApplicationRoot {
     });
 
     appGlobal.icpMainAgent.supplyAsyncHandlers({
+      system_getApplicationVersionInfo: async () => ({
+        version: appConfig.applicationVersion,
+      }),
       window_closeWindow: async () => windowWrapper.closeMainWindow(),
       window_minimizeWindow: async () => windowWrapper.minimizeMainWindow(),
       window_maximizeWindow: async () => windowWrapper.maximizeMainWindow(),
