@@ -39,7 +39,8 @@
     "typecheck": "tsc",
     "typecheck:full": "tsc -b src/*",
     "lint": "eslint src --ext .ts,.tsx",
-    "lint:fix": "eslint src --ext .ts,.tsx --fix"
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "incver": "npm version patch"
   },
   "dependencies": {
     "fast-equals": "^2.0.0",
