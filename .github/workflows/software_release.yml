@@ -2,6 +2,7 @@ name: Software Release
 
 on:
   push:
+    # branches: [0405_releasing] #debug
     tags:
       - "v*"
 
@@ -17,21 +18,18 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v2
 
-      - name: Install Dependencies
-        run: sudo apt install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
-
       - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
           node-version: "14.x"
 
-      - name: yarn install
-        run: "yarn install"
+      - uses: bahmutov/npm-install@v1
         with:
           working-directory: software
 
       - name: Build/release Electron app
         uses: samuelmeuli/action-electron-builder@v1
         with:
+          package_root: software
           github_token: ${{ secrets.github_token }}
           release: ${{ startsWith(github.ref, 'refs/tags/v') }}

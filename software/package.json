@@ -26,7 +26,7 @@
       "provider": "github",
       "owner": "yahiro07",
       "repo": "Kermite",
-      "releaseType": "draft"
+      "releaseType": "release"
     }
   },
   "private": true,
