@@ -245,15 +245,15 @@ static void keyboardEntry() {
 
 //---------------------------------------------
 
-void generalKeyboard_useIndicatorLEDs(int8_t pin1, uint8_t pin2, bool invert) {
+void generalKeyboard_useIndicatorLeds(int8_t pin1, uint8_t pin2, bool invert) {
   boardIo_setupLeds(pin1, pin2, invert);
 }
 
-void generalKeyboard_useIndicatorRgbLED(int8_t pin) {
+void generalKeyboard_useIndicatorRgbLed(int8_t pin) {
   boardIo_setupLedsRgb(pin);
 }
 
-void generalKeyboard_useDebugUART(uint32_t baud) {
+void generalKeyboard_useDebugUart(uint32_t baud) {
   debugUart_setup(baud);
   debugUartConfigured = true;
 }

@@ -395,15 +395,15 @@ static void showModeByLedBlinkPattern(bool isMaster) {
 
 //---------------------------------------------
 
-void splitKeyboard_useIndicatorLEDs(int8_t pin1, int8_t pin2, bool invert) {
+void splitKeyboard_useIndicatorLeds(int8_t pin1, int8_t pin2, bool invert) {
   boardIo_setupLeds(pin1, pin2, invert);
 }
 
-void splitKeyboard_useIndicatorRgbLED(int8_t pin) {
+void splitKeyboard_useIndicatorRgbLed(int8_t pin) {
   boardIo_setupLedsRgb(pin);
 }
 
-void splitKeyboard_useDebugUART(uint32_t baud) {
+void splitKeyboard_useDebugUart(uint32_t baud) {
   debugUart_setup(baud);
   debugUartConfigured = true;
 }

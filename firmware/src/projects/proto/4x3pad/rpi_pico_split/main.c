@@ -23,9 +23,9 @@ static const int8_t keyIndexTable[NumKeySlots] = {
 // clang-format on
 
 int main() {
-  splitKeyboard_useIndicatorLEDs(GP25, GP25, false); //RPi pico
-  // generalKeyboard_useIndicatorRgbLED(GP25); //promicro rp2040
-  splitKeyboard_useDebugUART(115200);
+  splitKeyboard_useIndicatorLeds(GP25, GP25, false); //RPi pico
+  // generalKeyboard_useIndicatorRgbLed(GP25); //promicro rp2040
+  splitKeyboard_useDebugUart(115200);
   splitKeyboard_setup(NumRows, NumColumns, rowPins, columnPins, keyIndexTable);
   splitKeyboard_start();
   return 0;

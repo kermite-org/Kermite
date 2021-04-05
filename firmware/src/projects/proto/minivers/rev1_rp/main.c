@@ -27,8 +27,8 @@ static const int8_t keyIndexTable[NumKeySlots]  = {
 // clang-format on
 
 int main() {
-  splitKeyboard_useIndicatorRgbLED(GP25);
-  splitKeyboard_useDebugUART(115200);
+  splitKeyboard_useIndicatorRgbLed(GP25);
+  splitKeyboard_useDebugUart(115200);
   splitKeyboard_setup(NumRows, NumColumns, rowPins, columnPins, keyIndexTable);
   splitKeyboard_start();
   return 0;
