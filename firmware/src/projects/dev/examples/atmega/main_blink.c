@@ -1,9 +1,10 @@
 #include "dio.h"
+#include <avr/delay.h>
 #include <avr/io.h>
-#include <stdio.h>
-#include <util/delay.h>
 
-//blink LEDs on ProMicro board
+//board ProMicro
+//B0: onboard RX LED
+//D5: onboard TX LED
 
 void blink() {
   dio_setOutput(P_B0);

@@ -1,17 +1,19 @@
-#include <avr/io.h>
-#include <stdio.h>
-#include <util/delay.h>
-
-#include "bitOperations.h"
 #include "dataMemory.h"
 #include "debugUart.h"
 #include "dio.h"
+#include "system.h"
+#include <avr/io.h>
+#include <stdio.h>
 
-static void initLED0() {
+//board ProMicro
+//B0: onboard LED
+//D3 (TX) ---> USB UART ---> PC
+
+void initLED0() {
   dio_setOutput(P_B0);
 }
 
-static void toggleLED0() {
+void toggleLED0() {
   dio_toggle(P_B0);
 }
 
@@ -27,8 +29,8 @@ void eepromDev() {
   debugUart_setup(38400);
   printf("start\n");
 
-  uint16_t addr = 40;
-  uint8_t buf[4] = { 10, 20, 30, 44 };
+  uint16_t addr = 0;
+  uint8_t buf[4] = { 0x12, 0x34, 0xAB, 0xCD };
 
 #if 1
   debugShowBytes("write", buf, 4);
@@ -38,7 +40,7 @@ void eepromDev() {
   for (int i = 0; i < 4; i++) {
     buf[i] = 0;
   }
-  debugShowBytes("cleard", buf, 4);
+  debugShowBytes("cleared", buf, 4);
 
   dataMemory_readBytes(addr, buf, 4);
 
@@ -47,7 +49,7 @@ void eepromDev() {
   initLED0();
   while (1) {
     toggleLED0();
-    _delay_ms(100);
+    delayMs(1000);
   }
 }
 
