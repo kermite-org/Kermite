@@ -21,17 +21,23 @@
     ],
     "directories": {
       "output": "release"
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "yahiro07",
+      "repo": "Kermite",
+      "releaseType": "draft"
     }
   },
   "private": true,
   "scripts": {
     "postinstall": "electron-rebuild",
-    "packaging_mac": "electron-builder --mac --x64",
-    "packaging_win": "electron-builder --win --x64",
-    "build": "ts-node build.ts -x-build",
     "start": "ts-node build.ts -x-watch -x-exec",
     "start:dev": "cross-env NODE_ENV=development ts-node build.ts -x-watch -x-exec",
     "mockview": "cross-env NODE_ENV=development ts-node build.ts -x-mockview",
+    "build": "cross-env NODE_ENV=production ts-node build.ts -x-build",
+    "packaging_mac": "electron-builder --mac --x64",
+    "packaging_win": "electron-builder --win --x64",
     "build_support_modules": "ts-node build.ts -x-build-support-modules",
     "clean": "rm -rf dist .cache",
     "typecheck": "tsc",
