@@ -5,10 +5,10 @@
   "main": "dist/shell/index.js",
   "license": "MIT",
   "build": {
-    "appId": "com.electron.yourapp",
+    "appId": "org.kermite.electron-app",
     "mac": {
       "target": [
-        "dmg"
+        "pkg"
       ]
     },
     "win": {
@@ -28,8 +28,8 @@
   "private": true,
   "scripts": {
     "postinstall": "electron-rebuild",
-    "_packaging_mac": "electron-builder --mac --x64",
-    "_packaging_win": "electron-builder --win --x64",
+    "packaging_mac": "electron-builder --mac --x64",
+    "packaging_win": "electron-builder --win --x64",
     "build": "ts-node build.ts -x-build",
     "start": "ts-node build.ts -x-watch -x-exec",
     "start:dev": "cross-env NODE_ENV=development ts-node build.ts -x-watch -x-exec",
