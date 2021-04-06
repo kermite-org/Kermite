@@ -3,7 +3,9 @@ import fs from 'fs';
 import path from 'path';
 import readline from 'readline';
 import { build, BuildConfig, cliopts } from 'estrella';
-import liveServer from 'live-server';
+import open from 'open';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const servor = require('servor');
 
 type IPlugin = NonNullable<BuildConfig['plugins']>[0];
 
@@ -133,13 +135,15 @@ function startMockView() {
     plugins: [gooberCssAutoLabelPlugin],
   });
 
-  liveServer.start({
-    host: 'localhost',
-    port: 3000,
+  servor({
     root: distDir,
-    open: true,
-    logLevel: 0,
+    fallback: 'index.html',
+    reload: true,
+    browse: true,
+    port: 3000,
   });
+  open('http://localhost:3000');
+  console.log('server listening on http://localhost:3000');
 
   (async () => {
     const key = await readKey();

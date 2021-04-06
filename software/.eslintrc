@@ -29,9 +29,7 @@
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:react/recommended",
     "standard-with-typescript",
-    // "airbnb-typescript",
-    "prettier/@typescript-eslint",
-    "plugin:prettier/recommended"
+    "prettier"
   ],
   "rules": {
     //plugin:@typescript-eslint/recommended
@@ -135,6 +133,7 @@
     "no-constant-condition": 0,
     "no-prototype-builtins": 0,
     "no-console": 0,
-    "eqeqeq": [1, "always"]
+    "eqeqeq": [1, "always"],
+    "node/no-path-concat": 0
   }
 }
