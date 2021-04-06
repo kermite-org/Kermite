@@ -8,6 +8,7 @@ def get_all_project_variation_paths
      .map { |path| File.dirname(path) }
      .select { |path| File.exist?(File.join(Pathname(path).parent, 'project.json')) }
      .map { |path| path.sub('./src/projects/', '') }
+     .sort
 end
 
 def make_firmware_build(project_path, variation_name)
