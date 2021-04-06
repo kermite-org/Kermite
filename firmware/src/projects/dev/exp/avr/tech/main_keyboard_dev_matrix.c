@@ -7,7 +7,7 @@
 #include <util/delay.h>
 
 #include "keyMatrixScanner8x8.h"
-#include "usbioCore.h"
+#include "usbIoCore.h"
 
 #include "./keyboardCore/dominant/LocalizationKeyMapper/localizationKeyMapper.h"
 #include "./keyboardCore/dominant/LogicalKeycodes.h"
@@ -54,7 +54,7 @@ static uint8_t pressedKeyCount = 0;
 //---------------------------------------------
 
 static void emitHidKeyStateReport(uint8_t *pReportBytes8) {
-  bool done = usbioCore_hidKeyboard_writeReport(pReportBytes8);
+  bool done = usbIoCore_hidKeyboard_writeReport(pReportBytes8);
   if (!done) {
     //todo: 送信できない場合のために、usioCore内でホストから次のデータ要求があった場合に再送信する実装を行う
     printf("[warn] failed to write keyboard report\n");
@@ -124,7 +124,7 @@ void devEntry() {
 
   initBoardIo();
 
-  usbioCore_initialize();
+  usbIoCore_initialize();
 
   keyInputLogicModel_initialize(
       false, NumKeys, /*NumLayers,*/ onLogicalKeyIssued, keyAssignMemoryReadHandler);

@@ -7,7 +7,7 @@
 #include <util/delay.h>
 
 #include "keyMatrixScanner8x8.h"
-#include "usbioCore.h"
+#include "usbIoCore.h"
 
 //---------------------------------------------
 //board io
@@ -36,7 +36,7 @@ uint8_t rawHidSendBuf[64] = { 0 };
 
 void emitHidKeyEvent(uint8_t keyUsage, bool isDown) {
   hidKeyUsages[0] = isDown ? keyUsage : 0;
-  bool done = usbioCore_hidKeyboard_writeKeyStatus(0, hidKeyUsages);
+  bool done = usbIoCore_hidKeyboard_writeKeyStatus(0, hidKeyUsages);
   if (!done) {
     printf("failed to write key event %d %d\n", keyUsage, isDown);
   }
@@ -49,7 +49,7 @@ void emitReadtimeKeyStateEvent(uint8_t keyUsage, bool isDown) {
   p[2] = isDown ? 0x90 : 0x80;
   p[3] = keyUsage;
   p[4] = 0;
-  bool done = usbioCore_genericHid_writeData(p);
+  bool done = usbIoCore_genericHid_writeData(p);
   if (!done) {
     printf("failed to write rawhid data %d %d\n", keyUsage, isDown);
   }
@@ -101,7 +101,7 @@ void devEntry() {
 
   initBoardIo();
 
-  usbioCore_initialize();
+  usbIoCore_initialize();
 
   keyMatrixScanner_initialize(
       NumRows, NumColumns, rowPins, columnPins, OnKeyStateChanged);

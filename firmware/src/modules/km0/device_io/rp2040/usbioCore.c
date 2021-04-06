@@ -1,6 +1,6 @@
 //based on tinyusb multiple interfaces example
 
-#include "usbioCore.h"
+#include "usbIoCore.h"
 #include "config.h"
 #include "tusb.h"
 
@@ -206,11 +206,11 @@ void tud_hid_set_report_cb(uint8_t itf, uint8_t report_id, hid_report_type_t rep
 //--------------------------------------------------------------------
 // exports
 
-void usbioCore_initialize() {
+void usbIoCore_initialize() {
   tusb_init();
 }
 
-bool usbioCore_hidKeyboard_writeReport(uint8_t *pReportBytes8) {
+bool usbIoCore_hidKeyboard_writeReport(uint8_t *pReportBytes8) {
   if (tud_hid_n_ready(ITF_KEYBOARD)) {
     uint8_t *p = pReportBytes8;
     tud_hid_n_keyboard_report(ITF_KEYBOARD, p[0], p[1], p + 2);
@@ -218,12 +218,12 @@ bool usbioCore_hidKeyboard_writeReport(uint8_t *pReportBytes8) {
   return true;
 }
 
-bool usbioCore_genericHid_writeData(uint8_t *pDataBytes64) {
+bool usbIoCore_genericHid_writeData(uint8_t *pDataBytes64) {
   tud_hid_n_report(ITF_RAWHID, 0, pDataBytes64, 64);
   return true;
 }
 
-bool usbioCore_genericHid_readDataIfExists(uint8_t *pDataBytes64) {
+bool usbIoCore_genericHid_readDataIfExists(uint8_t *pDataBytes64) {
   if (rawHidReceivedPageCount > 0) {
     memcpy(pDataBytes64, rawHidReceivedBuf, 64);
     rawHidReceivedPageCount--;
@@ -240,10 +240,10 @@ void uibioCore_internal_setSerialNumberText(uint8_t *pTextBuf, uint8_t len) {
   altSerialNumberTextBuf[len] = '\0';
 }
 
-bool usbioCore_isConnectedToHost() {
+bool usbIoCore_isConnectedToHost() {
   return isConnected;
 }
 
-void usbioCore_processUpdate() {
+void usbIoCore_processUpdate() {
   tud_task();
 }

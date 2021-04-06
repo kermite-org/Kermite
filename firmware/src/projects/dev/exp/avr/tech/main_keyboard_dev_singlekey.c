@@ -1,5 +1,5 @@
 #include "dio.h"
-#include "usbioCore.h"
+#include "usbIoCore.h"
 
 #include <avr/io.h>
 #include <stdio.h>
@@ -99,7 +99,7 @@ void emitKeyEvent(uint8_t keyUsage, bool isDown) {
 
 #if 1
   keyUsages[0] = isDown ? keyUsage : 0;
-  done = usbioCore_hidKeyboard_writeKeyStatus(0, keyUsages);
+  done = usbIoCore_hidKeyboard_writeKeyStatus(0, keyUsages);
   if (!done) {
     printf("failed to write key event %d %d\n", keyUsage, isDown);
   }
@@ -112,7 +112,7 @@ void emitKeyEvent(uint8_t keyUsage, bool isDown) {
   p[2] = isDown ? 0x90 : 0x80;
   p[3] = keyUsage;
   p[4] = 0;
-  done = usbioCore_genericHid_writeData(p);
+  done = usbIoCore_genericHid_writeData(p);
   if (!done) {
     printf("failed to write rawhid data %d %d\n", keyUsage, isDown);
   }
@@ -127,7 +127,7 @@ void debugShowBytes(uint8_t *buf, int len) {
 }
 
 void processReadGenericHidData() {
-  bool hasData = usbioCore_genericHid_readDataIfExists(rawHidRcvBuf);
+  bool hasData = usbIoCore_genericHid_readDataIfExists(rawHidRcvBuf);
   if (hasData) {
     printf("received rawHid Data\n");
     //uint8_t *p = rawHidRcvBuf;
@@ -151,7 +151,7 @@ void devEntry() {
   printf("start\n");
   initBoardIo();
 
-  usbioCore_initialize();
+  usbIoCore_initialize();
 
   debug_initTimeDebugPin();
 

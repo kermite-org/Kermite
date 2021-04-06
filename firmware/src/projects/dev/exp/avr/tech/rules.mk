@@ -64,7 +64,7 @@ endif
 ifeq ($(DevTarget), singlekey)
 MODULE_SRCS += dio.c
 MODULE_SRCS += debug_uart.c
-MODULE_SRCS += usbioCore.c
+MODULE_SRCS += usbIoCore.c
 PROJECT_SRCS += main_keyboard_dev_singlekey.c
 endif
 

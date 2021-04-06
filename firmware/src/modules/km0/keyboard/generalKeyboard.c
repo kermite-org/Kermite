@@ -9,7 +9,7 @@
 #include "keyMatrixScanner.h"
 #include "keyboardCoreLogic2.h"
 #include "system.h"
-#include "usbioCore.h"
+#include "usbIoCore.h"
 #include "utils.h"
 #include "versions.h"
 #include <stdio.h>
@@ -105,7 +105,7 @@ static void processKeyboardCoreLogicOutput() {
   }
   if (!utils_compareBytes(hidReport, localHidReport, 8)) {
     if (optionEmitKeyStroke) {
-      usbioCore_hidKeyboard_writeReport(hidReport);
+      usbIoCore_hidKeyboard_writeReport(hidReport);
     }
     utils_copyBytes(localHidReport, hidReport, 8);
     changed = true;
@@ -207,7 +207,7 @@ static void keyboardEntry() {
   utils_copyBytes(serialNumberTextBuf + 8, (uint8_t *)PROJECT_ID, 8);
   configuratorServant_readDeviceInstanceCode(serialNumberTextBuf + 16);
   uibioCore_internal_setSerialNumberText(serialNumberTextBuf, 24);
-  usbioCore_initialize();
+  usbIoCore_initialize();
   keyMatrixScanner_initialize(
       numRows, numColumns, rowPins, columnPins, nextKeyStateFlags);
   resetKeyboardCoreLogic();
@@ -238,7 +238,7 @@ static void keyboardEntry() {
       }
     }
     delayMs(1);
-    usbioCore_processUpdate();
+    usbIoCore_processUpdate();
     configuratorServant_processUpdate();
   }
 }

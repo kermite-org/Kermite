@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-#include "usbioCore.h"
+#include "usbIoCore.h"
 
 #include "bitOperations.h"
 #include "config.h"
@@ -1052,27 +1052,27 @@ static bool genericHid_readDataIfExists(uint8_t *pDataBytes64) {
 //------------------------------------------------------------
 //exports
 
-void usbioCore_initialize() {
+void usbIoCore_initialize() {
   initUSB();
 }
 
-bool usbioCore_hidKeyboard_writeKeyStatus(uint8_t modifier, uint8_t *pKeyUsages6) {
+bool usbIoCore_hidKeyboard_writeKeyStatus(uint8_t modifier, uint8_t *pKeyUsages6) {
   return hidKeyboard_writeKeyStatus(modifier, pKeyUsages6);
 }
 
-bool usbioCore_hidKeyboard_writeReport(uint8_t *pReportBytes8) {
+bool usbIoCore_hidKeyboard_writeReport(uint8_t *pReportBytes8) {
   return hidKeyboard_writeReport(pReportBytes8);
 }
 
-bool usbioCore_genericHid_writeData(uint8_t *pDataBytes64) {
+bool usbIoCore_genericHid_writeData(uint8_t *pDataBytes64) {
   return genericHid_writeData(pDataBytes64);
 }
 
-bool usbioCore_genericHid_readDataIfExists(uint8_t *pDataBytes64) {
+bool usbIoCore_genericHid_readDataIfExists(uint8_t *pDataBytes64) {
   return genericHid_readDataIfExists(pDataBytes64);
 }
 
-bool usbioCore_isConnectedToHost() {
+bool usbIoCore_isConnectedToHost() {
   return usb_configuration != 0;
 }
 
@@ -1083,5 +1083,5 @@ void uibioCore_internal_setSerialNumberText(uint8_t *pTextBuf, uint8_t len) {
   utils_copyStringToWideString(serialNumberStringDescriptorStruct.wString, pTextBuf, len);
 }
 
-void usbioCore_processUpdate() {}
+void usbIoCore_processUpdate() {}
 //------------------------------------------------------------

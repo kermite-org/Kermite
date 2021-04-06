@@ -2,7 +2,7 @@
 #include "config.h"
 #include "dataMemory.h"
 #include "storageLayout.h"
-#include "usbioCore.h"
+#include "usbIoCore.h"
 #include "utils.h"
 #include "versions.h"
 #include <stdio.h>
@@ -34,7 +34,7 @@ static uint8_t rawHidSendBuf[64] = { 0 };
 static uint8_t rawHidRcvBuf[64] = { 0 };
 
 static void emitGenericHidData(uint8_t *p) {
-  bool done = usbioCore_genericHid_writeData(p);
+  bool done = usbIoCore_genericHid_writeData(p);
   if (!done) {
     printf("[warn] failed to write rawhid data\n");
   }
@@ -115,7 +115,7 @@ static void emitCustomParametersReadResponse() {
 }
 
 static void processReadGenericHidData() {
-  bool hasData = usbioCore_genericHid_readDataIfExists(rawHidRcvBuf);
+  bool hasData = usbIoCore_genericHid_readDataIfExists(rawHidRcvBuf);
   if (hasData) {
     uint8_t *p = rawHidRcvBuf;
     uint8_t category = p[0];
@@ -210,7 +210,7 @@ static void processReadGenericHidData() {
         }
       }
       if (command == 0x20) {
-        usbioCore_hidKeyboard_writeReport(&p[2]);
+        usbIoCore_hidKeyboard_writeReport(&p[2]);
       }
     }
   }
