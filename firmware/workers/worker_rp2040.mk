@@ -146,16 +146,15 @@ INC_PATHS = \
 -I$(PICO_SDK_DIR)/src/common/pico_bit_ops/include \
 -I$(PICO_SDK_DIR)/src/common/pico_divider/include \
 -I$(PICO_SDK_DIR)/src/common/pico_binary_info/include \
+-I$(PICO_SDK_DIR)/src/rp2_common/boot_stage2/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/hardware_gpio/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/hardware_flash/include \
--I$(PICO_SDK_DIR)/src/rp2_common/pico_platform/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/hardware_base/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/hardware_claim/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/hardware_sync/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/hardware_uart/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/hardware_divider/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/hardware_timer/include \
--I$(PICO_SDK_DIR)/src/rp2_common/pico_runtime/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/hardware_clocks/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/hardware_resets/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/hardware_watchdog/include \
@@ -164,6 +163,8 @@ INC_PATHS = \
 -I$(PICO_SDK_DIR)/src/rp2_common/hardware_vreg/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/hardware_irq/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/hardware_pio/include \
+-I$(PICO_SDK_DIR)/src/rp2_common/pico_platform/include \
+-I$(PICO_SDK_DIR)/src/rp2_common/pico_runtime/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/pico_printf/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/pico_bootrom/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/pico_double/include \
