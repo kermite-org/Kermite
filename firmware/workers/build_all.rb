@@ -24,10 +24,10 @@ def check_firmware_binary_size(project_path, variation_name)
 
   usage_prog = -1
   usage_data = -1
-  if size_output_text.include?('worker/atmega32u4.mk')
+  if size_output_text.include?('workers/worker_atmega32u4.mk')
     usage_prog = size_output_text.match(/^Program.*\(([\d.]+)% Full\)/)[1].to_f
     usage_data = size_output_text.match(/^Data.*\(([\d.]+)% Full\)/)[1].to_f
-  elsif size_output_text.include?('worker/rp2040.mk')
+  elsif size_output_text.include?('workers/worker_rp2040.mk')
     usage_prog = size_output_text.match(/FLASH:.*\s([\d.]+)%/)[1].to_f
     usage_data = size_output_text.match(/RAM:.*\s([\d.]+)%/)[1].to_f
   else
