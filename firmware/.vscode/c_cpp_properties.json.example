@@ -18,7 +18,7 @@
         "src/projects/dev/dummy_header_provider_project",
         "${myAvrCompilerBaseDirectory}/avr/include",
         "${picoLocalDir}/include",
-        "${picoLocalDir}/include/boards",
+        // "${picoLocalDir}/include/boards",
         "${picoSdkRoot}/src/rp2040/hardware_regs/include",
         "${picoSdkRoot}/src/rp2040/hardware_structs/include",
         "${picoSdkRoot}/src/common/pico_base/include",
@@ -55,6 +55,7 @@
         "${picoSdkRoot}/src/rp2_common/pico_malloc/include",
         "${picoSdkRoot}/src/rp2_common/pico_stdio/include",
         "${picoSdkRoot}/src/rp2_common/pico_stdio_uart/include",
+        "${picoSdkRoot}/src/rp2_common/pico_multicore/include",
         "${picoSdkRoot}/lib/tinyusb/src",
         "${picoSdkRoot}/lib/tinyusb/src/common",
         "${picoSdkRoot}/lib/tinyusb/hw",
@@ -71,13 +72,14 @@
         "F_CPU=8000000",
         "TARGET_MCU_ATMEGA",
         "TARGET_MCU_RP2040",
-        "CFG_TUSB_MCU=OPT_MCU_RP2040"
+        "CFG_TUSB_MCU=OPT_MCU_RP2040",
+        "SINGLEWIRE_RP2040_PIN_SIGNAL=GP0"
       ],
       // "compilerPath": "${myAvrCompilerExecutablePath} -mmcu=atmega32u4",
       "compilerPath": "${myCompilerExecutablePath}",
       "cStandard": "c11",
       "cppStandard": "c++17",
-      "intelliSenseMode": "clang-x64",
+      "intelliSenseMode": "gcc-arm",
       "browse": {
         "path": [
           "src",

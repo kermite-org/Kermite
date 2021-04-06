@@ -1,6 +1,6 @@
 #include "splitKeyboard.h"
 #include "bitOperations.h"
-#include "boardLED.h"
+#include "boardIo.h"
 #include "config.h"
 #include "configValidator.h"
 #include "configuratorServant.h"
@@ -10,7 +10,7 @@
 #include "keyboardCoreLogic2.h"
 #include "singleWire4.h"
 #include "system.h"
-#include "usbioCore.h"
+#include "usbIoCore.h"
 #include "utils.h"
 #include "versions.h"
 #include <stdio.h>
@@ -119,7 +119,7 @@ static void processKeyboardCoreLogicOutput() {
   }
   if (!utils_compareBytes(hidReport, localHidReport, 8)) {
     if (optionEmitKeyStroke) {
-      usbioCore_hidKeyboard_writeReport(hidReport);
+      usbIoCore_hidKeyboard_writeReport(hidReport);
     }
     utils_copyBytes(localHidReport, hidReport, 8);
     changed = true;
@@ -254,7 +254,7 @@ static void runAsMaster() {
       keyboardCoreLogic_processTicker(5);
       processKeyboardCoreLogicOutput();
       if (optionAffectKeyHoldStateToLED) {
-        boardLED_outputLED2(pressedKeyCount > 0);
+        boardIo_writeLed2(pressedKeyCount > 0);
       }
     }
     if (cnt % 4 == 2) {
@@ -262,14 +262,14 @@ static void runAsMaster() {
     }
     if (optionUseHeartbeatLED) {
       if (cnt % 2000 == 0) {
-        boardLED_outputLED1(true);
+        boardIo_writeLed1(true);
       }
       if (cnt % 2000 == 4) {
-        boardLED_outputLED1(false);
+        boardIo_writeLed1(false);
       }
     }
     delayMs(1);
-    usbioCore_processUpdate();
+    usbIoCore_processUpdate();
     configuratorServant_processUpdate();
   }
 }
@@ -315,15 +315,15 @@ static void runAsSlave() {
       keyMatrixScanner_update();
       pressedKeyCount = checkIfSomeKeyPressed();
       if (optionAffectKeyHoldStateToLED) {
-        boardLED_outputLED2(pressedKeyCount > 0);
+        boardIo_writeLed2(pressedKeyCount > 0);
       }
     }
     if (optionUseHeartbeatLED) {
       if (cnt % 4000 == 0) {
-        boardLED_outputLED1(true);
+        boardIo_writeLed1(true);
       }
       if (cnt % 4000 == 4) {
-        boardLED_outputLED1(false);
+        boardIo_writeLed1(false);
       }
     }
     delayMs(1);
@@ -356,7 +356,7 @@ static bool runMasterSlaveDetectionMode() {
   system_enableInterrupts();
 
   while (true) {
-    if (usbioCore_isConnectedToHost()) {
+    if (usbIoCore_isConnectedToHost()) {
       singleWire_clearInterruptedReceiver();
       sw_txbuf[0] = 0xA0;
       singleWire_startBurstSection();
@@ -368,7 +368,7 @@ static bool runMasterSlaveDetectionMode() {
       singleWire_clearInterruptedReceiver();
       return false;
     }
-    usbioCore_processUpdate();
+    usbIoCore_processUpdate();
     delayMs(1);
   }
 }
@@ -380,30 +380,30 @@ static void showModeByLedBlinkPattern(bool isMaster) {
   if (isMaster) {
     //masterの場合高速に4回点滅
     for (uint8_t i = 0; i < 4; i++) {
-      boardLED_outputLED1(true);
+      boardIo_writeLed1(true);
       delayMs(2);
-      boardLED_outputLED1(false);
+      boardIo_writeLed1(false);
       delayMs(100);
     }
   } else {
     //slaveの場合長く1回点灯
-    boardLED_outputLED1(true);
+    boardIo_writeLed1(true);
     delayMs(500);
-    boardLED_outputLED1(false);
+    boardIo_writeLed1(false);
   }
 }
 
 //---------------------------------------------
 
-void splitKeyboard_useIndicatorLEDs(int8_t pin1, int8_t pin2, bool invert) {
-  boardLED_initLEDs(pin1, pin2, invert);
+void splitKeyboard_useIndicatorLeds(int8_t pin1, int8_t pin2, bool invert) {
+  boardIo_setupLeds(pin1, pin2, invert);
 }
 
-void splitKeyboard_useIndicatorRgbLED(int8_t pin) {
-  boardLED_initRgbLED(pin);
+void splitKeyboard_useIndicatorRgbLed(int8_t pin) {
+  boardIo_setupLedsRgb(pin);
 }
 
-void splitKeyboard_useDebugUART(uint32_t baud) {
+void splitKeyboard_useDebugUart(uint32_t baud) {
   debugUart_setup(baud);
   debugUartConfigured = true;
 }
@@ -442,7 +442,7 @@ void splitKeyboard_start() {
   utils_copyBytes(serialNumberTextBuf + 8, (uint8_t *)PROJECT_ID, 8);
   configuratorServant_readDeviceInstanceCode(serialNumberTextBuf + 16);
   uibioCore_internal_setSerialNumberText(serialNumberTextBuf, 24);
-  usbioCore_initialize();
+  usbIoCore_initialize();
   bool isMaster = runMasterSlaveDetectionMode();
   printf("isMaster:%d\n", isMaster);
   showModeByLedBlinkPattern(isMaster);

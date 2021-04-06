@@ -44,25 +44,25 @@ ifneq ($(PROJECT),)
 ifneq ($(VARIATION),)
 ifneq ($(COMMAND),)
 
-#read TARGET_MCU from rules.mk
-TARGET_MCU =
+#read WORKER from rules.mk
+WORKER =
 RULES_MK = src/projects/$(PROJECT)/$(VARIATION)/rules.mk
 ifeq ($(wildcard $(RULES_MK)),)
 $(error file not found: $(RULES_MK))
 endif
 -include $(RULES_MK)
 
-ifeq ($(TARGET_MCU), )
-$(error TARGET_MCU is not defined in rules.mk)
+ifeq ($(WORKER), )
+$(error WORKER is not defined in rules.mk)
 endif
 
 # $(warning target_mcu:$(TARGET_MCU))
 
 %:
-	make -f worker/$(TARGET_MCU).mk PROJECT=$(PROJECT) VARIATION=$(VARIATION) $(COMMAND)
+	make -f workers/$(WORKER).mk PROJECT=$(PROJECT) VARIATION=$(VARIATION) $(COMMAND)
 
 build:
-	make -f worker/$(TARGET_MCU).mk PROJECT=$(PROJECT) VARIATION=$(VARIATION) build
+	make -f workers/$(WORKER).mk PROJECT=$(PROJECT) VARIATION=$(VARIATION) build
 
 endif
 endif
