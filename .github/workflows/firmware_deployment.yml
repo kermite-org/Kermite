@@ -2,13 +2,13 @@ name: Firmware Deployment
 
 on:
   push:
-    branches: [master, variants]
-    paths:
-      - ".github/workflows/firmware_deployment.yml"
-      - "firmware/ci/**/*.ts"
-      - "firmware/Makefile"
-      - "firmware/workers/*.mk"
-      - "firmware/src/**"
+    branches: [variants]
+    # paths:
+    #   - ".github/workflows/firmware_deployment.yml"
+    #   - "firmware/ci/**/*.ts"
+    #   - "firmware/Makefile"
+    #   - "firmware/workers/*.mk"
+    #   - "firmware/src/**"
 
 jobs:
   build:
