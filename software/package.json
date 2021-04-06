@@ -1,15 +1,15 @@
 {
   "name": "kermite",
   "productName": "Kermite",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "main": "dist/shell/index.js",
+  "author": "yahiro",
+  "description": "keyboard software",
   "license": "MIT",
   "build": {
-    "appId": "com.electron.yourapp",
+    "appId": "org.kermite.electron-app",
     "mac": {
-      "target": [
-        "dmg"
-      ]
+      "target": "pkg"
     },
     "win": {
       "target": "nsis"
@@ -28,18 +28,19 @@
   "private": true,
   "scripts": {
     "postinstall": "electron-rebuild",
-    "_packaging_mac": "electron-builder --mac --x64",
-    "_packaging_win": "electron-builder --win --x64",
-    "build": "ts-node build.ts -x-build",
     "start": "ts-node build.ts -x-watch -x-exec",
     "start:dev": "cross-env NODE_ENV=development ts-node build.ts -x-watch -x-exec",
     "mockview": "cross-env NODE_ENV=development ts-node build.ts -x-mockview",
+    "build": "cross-env NODE_ENV=production ts-node build.ts -x-build",
+    "packaging:mac": "electron-builder --mac --x64",
+    "packaging:win": "electron-builder --win --x64",
     "build_support_modules": "ts-node build.ts -x-build-support-modules",
     "clean": "rm -rf dist .cache",
     "typecheck": "tsc",
     "typecheck:full": "tsc -b src/*",
     "lint": "eslint src --ext .ts,.tsx",
-    "lint:fix": "eslint src --ext .ts,.tsx --fix"
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "incver": "npm version patch"
   },
   "dependencies": {
     "fast-equals": "^2.0.0",
@@ -61,7 +62,7 @@
     "cross-env": "^7.0.3",
     "electron": "11.1.1",
     "electron-builder": "^22.9.1",
-    "electron-rebuild": "^2.3.4",
+    "electron-rebuild": "^2.3.5",
     "eslint": "^7.17.0",
     "eslint-config-prettier": "^7.1.0",
     "eslint-config-standard-with-typescript": "^19.0.1",

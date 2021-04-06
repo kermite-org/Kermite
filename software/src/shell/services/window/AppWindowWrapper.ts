@@ -18,8 +18,8 @@ import {
   setupWebContentSourceChecker,
 } from './modules';
 
-const enableFilesWatcher = true;
-// const enableFilesWatcher = appEnv.isDevelopment;
+// const enableFilesWatcher = true;
+const enableFilesWatcher = appEnv.isDevelopment;
 
 interface IWindowPersistState {
   pagePath: string;
