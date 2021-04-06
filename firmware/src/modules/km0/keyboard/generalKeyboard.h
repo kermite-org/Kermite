@@ -7,9 +7,9 @@
 #define OptionSlot_AffectKeyHoldStateToLED 2
 #define OptionSlot_UseHeartBeatLED 3
 
-void generalKeyboard_useIndicatorLEDs(int8_t pin1, uint8_t pin2, bool invert);
-void generalKeyboard_useIndicatorRgbLED(int8_t pin);
-void generalKeyboard_useDebugUART(uint16_t baud);
+void generalKeyboard_useIndicatorLeds(int8_t pin1, uint8_t pin2, bool invert);
+void generalKeyboard_useIndicatorRgbLed(int8_t pin);
+void generalKeyboard_useDebugUart(uint32_t baud);
 void generalKeyboard_useOptionFixed(uint8_t slot, uint8_t value);
 void generalKeyboard_useOptionDynamic(uint8_t slot);
 

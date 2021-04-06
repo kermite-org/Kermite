@@ -1,0 +1,34 @@
+.program swtx
+    set pindirs, 0      ;
+    nop[20]             ;
+    pull                ;TX FIFOからosrに1word(32bit)を取り込む
+    set x, 8            ;ループカウンタ, 8ビット+終端フラグ1ビットで9ビット分出力する
+    set pindirs, 1      ;送信開始 lower
+    nop [7]
+    set pindirs, 0 [7]  ;タイミング基点 raise
+bitloop:
+    out pindirs, 1      ;osrの下位から1ビットシフトして出力
+    nop [15]
+    jmp x-- bitloop
+    set pindirs, 0      ;送信終了 raise
+    push                ;RX FIFOに空データを吐き出すことで送信完了を呼び出し元に通知
+
+
+.program swrx
+.side_set 1 opt
+    wait 0 pin 0
+    nop side 0
+    set x, 8         ;データ8ビット+終端フラグ1ビットの9ビット分パルスを読み取る
+    wait 1 pin 0     ;タイミング基点待ち
+    nop [7]
+    nop [2]
+bitloop:
+    nop side 1
+    in pins 1        ;ピンから読み取った値をisrにシフトして入れる
+    nop side 0
+    nop [7]
+    nop [5]
+    jmp x--, bitloop
+    push
+    nop side 1
+    

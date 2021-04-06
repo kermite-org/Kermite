@@ -7,6 +7,7 @@ export type PagePaths =
   | '/shapePreview'
   | '/firmwareUpdation'
   | '/presetBrowser'
+  | '/presetBrowser2'
   | '/heatmap'
   | '/settings'
   | '/widget';

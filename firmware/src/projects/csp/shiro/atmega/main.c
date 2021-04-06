@@ -21,7 +21,7 @@ static const int8_t keyIndexTable[NumKeySlots] PROGMEM = {
 // clang-format on
 
 int main() {
-  generalKeyboard_useIndicatorLEDs(P_B0, P_D5, true);
+  generalKeyboard_useIndicatorLeds(P_B0, P_D5, true);
   generalKeyboard_setup(NumRows, NumColumns, rowPins, columnPins, keyIndexTable);
   generalKeyboard_start();
   return 0;

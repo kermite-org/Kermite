@@ -34,11 +34,13 @@ const [opts] = cliopts.parse(
   ['x-watch', 'build application with watcher'],
   ['x-exec', 'start application'],
   ['x-mockview', 'start mockview'],
+  ['x-build-support-modules', 'build support modules'],
 );
 const reqBuild = opts['x-build'];
 const reqWatch = opts['x-watch'];
 const reqExec = opts['x-exec'];
 const reqMockView = opts['x-mockview'];
+const reqBuildSupportModules = opts['x-build-support-modules'];
 
 async function readKey(): Promise<{ sequence: string }> {
   readline.emitKeypressEvents(process.stdin);
@@ -101,7 +103,8 @@ async function makeUi() {
       watch: reqWatch,
       clear: false,
       tslint: false,
-      sourcemap: false,
+      sourcemap: true,
+      sourcesContent: true,
       plugins: [gooberCssAutoLabelPlugin],
       onEnd: resolve,
     }),
@@ -125,7 +128,8 @@ function startMockView() {
     watch: true,
     clear: false,
     tslint: false,
-    sourcemap: 'inline',
+    sourcemap: true,
+    sourcesContent: true,
     plugins: [gooberCssAutoLabelPlugin],
   });
 
@@ -143,6 +147,29 @@ function startMockView() {
       process.exit();
     }
   })();
+}
+
+async function makeSupportModules() {
+  const srcDir = './src/__foreign_app_support_modules';
+  const distDir = `./src/__foreign_app_support_modules/bundles`;
+  fs.mkdirSync(distDir, { recursive: true });
+
+  return await new Promise((resolve) =>
+    build({
+      entry: `${srcDir}/kermite_core_functions.ts`,
+      outfile: `${distDir}/kermite_core_functions.js`,
+      define: {
+        'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`,
+      },
+      bundle: true,
+      minify: false,
+      watch: false,
+      clear: false,
+      tslint: false,
+      sourcemap: false,
+      onEnd: resolve,
+    }),
+  );
 }
 
 function startElectronProcess() {
@@ -179,6 +206,11 @@ function startElectronProcess() {
 async function entry() {
   if (reqMockView) {
     startMockView();
+    return;
+  }
+
+  if (reqBuildSupportModules) {
+    await makeSupportModules();
     return;
   }
 

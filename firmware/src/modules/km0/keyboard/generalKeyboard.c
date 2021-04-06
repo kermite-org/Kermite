@@ -1,6 +1,6 @@
 #include "generalKeyboard.h"
 #include "bitOperations.h"
-#include "boardLED.h"
+#include "boardIo.h"
 #include "config.h"
 #include "configValidator.h"
 #include "configuratorServant.h"
@@ -8,9 +8,8 @@
 #include "dio.h"
 #include "keyMatrixScanner.h"
 #include "keyboardCoreLogic2.h"
-#include "singlewire3.h"
 #include "system.h"
-#include "usbioCore.h"
+#include "usbIoCore.h"
 #include "utils.h"
 #include "versions.h"
 #include <stdio.h>
@@ -106,7 +105,7 @@ static void processKeyboardCoreLogicOutput() {
   }
   if (!utils_compareBytes(hidReport, localHidReport, 8)) {
     if (optionEmitKeyStroke) {
-      usbioCore_hidKeyboard_writeReport(hidReport);
+      usbIoCore_hidKeyboard_writeReport(hidReport);
     }
     utils_copyBytes(localHidReport, hidReport, 8);
     changed = true;
@@ -208,7 +207,7 @@ static void keyboardEntry() {
   utils_copyBytes(serialNumberTextBuf + 8, (uint8_t *)PROJECT_ID, 8);
   configuratorServant_readDeviceInstanceCode(serialNumberTextBuf + 16);
   uibioCore_internal_setSerialNumberText(serialNumberTextBuf, 24);
-  usbioCore_initialize();
+  usbIoCore_initialize();
   keyMatrixScanner_initialize(
       numRows, numColumns, rowPins, columnPins, nextKeyStateFlags);
   resetKeyboardCoreLogic();
@@ -227,34 +226,34 @@ static void keyboardEntry() {
       keyboardCoreLogic_processTicker(5);
       processKeyboardCoreLogicOutput();
       if (optionAffectKeyHoldStateToLED) {
-        boardLED_outputLED2(pressedKeyCount > 0);
+        boardIo_writeLed2(pressedKeyCount > 0);
       }
     }
     if (optionUseHeartbeatLED) {
       if (cnt % 4000 == 0) {
-        boardLED_outputLED1(true);
+        boardIo_writeLed1(true);
       }
       if (cnt % 4000 == 4) {
-        boardLED_outputLED1(false);
+        boardIo_writeLed1(false);
       }
     }
     delayMs(1);
-    usbioCore_processUpdate();
+    usbIoCore_processUpdate();
     configuratorServant_processUpdate();
   }
 }
 
 //---------------------------------------------
 
-void generalKeyboard_useIndicatorLEDs(int8_t pin1, uint8_t pin2, bool invert) {
-  boardLED_initLEDs(pin1, pin2, invert);
+void generalKeyboard_useIndicatorLeds(int8_t pin1, uint8_t pin2, bool invert) {
+  boardIo_setupLeds(pin1, pin2, invert);
 }
 
-void generalKeyboard_useIndicatorRgbLED(int8_t pin) {
-  boardLED_initRgbLED(pin);
+void generalKeyboard_useIndicatorRgbLed(int8_t pin) {
+  boardIo_setupLedsRgb(pin);
 }
 
-void generalKeyboard_useDebugUART(uint16_t baud) {
+void generalKeyboard_useDebugUart(uint32_t baud) {
   debugUart_setup(baud);
   debugUartConfigured = true;
 }

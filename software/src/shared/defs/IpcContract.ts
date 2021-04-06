@@ -118,6 +118,9 @@ export interface IProfileManagerCommand {
     targetProjectId: string;
     presetSpec: IPresetSpec;
   };
+  createProfileExternal?: {
+    profileData: IProfileData;
+  };
   loadProfile?: { name: string };
   saveCurrentProfile?: { profileData: IProfileData };
   deleteProfile?: { name: string };
@@ -208,6 +211,17 @@ export interface IGlobalSettings {
   useLocalResouces: boolean;
   localProjectRootFolderPath: string;
 }
+
+export interface IServerPorfileInfo {
+  id: string;
+  profileName: string;
+  userName: string;
+  profileData: IProfileData;
+}
+
+export interface IApplicationVersionInfo {
+  version: string;
+}
 export interface IAppIpcContract {
   sync: {
     dev_debugMessage(message: string): void;
@@ -215,6 +229,7 @@ export interface IAppIpcContract {
     config_saveKeyboardConfigOnClosing(data: IKeyboardConfig): void;
   };
   async: {
+    system_getApplicationVersionInfo(): Promise<IApplicationVersionInfo>;
     window_closeWindow(): Promise<void>;
     window_minimizeWindow(): Promise<void>;
     window_maximizeWindow(): Promise<void>;
@@ -259,6 +274,11 @@ export interface IAppIpcContract {
       projectId: string,
       layoutName: string,
     ): Promise<IPersistKeyboardDesign | undefined>;
+
+    presetHub_getServerProjectIds(): Promise<string[]>;
+    presetHub_getServerProfiles(
+      projectId: string,
+    ): Promise<IServerPorfileInfo[]>;
 
     device_connectToDevice(path: string): Promise<void>;
     device_setCustomParameterValue(index: number, value: number): Promise<void>;

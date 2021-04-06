@@ -1,5 +1,6 @@
 #include "splitKeyboard.h"
 #include "bitOperations.h"
+#include "boardIo.h"
 #include "config.h"
 #include "configValidator.h"
 #include "configuratorServant.h"
@@ -7,9 +8,9 @@
 #include "dio.h"
 #include "keyMatrixScanner.h"
 #include "keyboardCoreLogic2.h"
-#include "singlewire3.h"
+#include "singleWire4.h"
 #include "system.h"
-#include "usbioCore.h"
+#include "usbIoCore.h"
 #include "utils.h"
 #include "versions.h"
 #include <stdio.h>
@@ -93,38 +94,6 @@ void setCustomParameterDynamicFlag(uint8_t slotIndex, bool isDynamic) {
 }
 
 //---------------------------------------------
-//board io
-
-static int8_t led_pin1 = -1;
-static int8_t led_pin2 = -1;
-static bool led_invert = false;
-
-static void outputLED1(bool val) {
-  if (led_pin1 != -1) {
-    dio_write(led_pin1, led_invert ? !val : val);
-  }
-}
-
-static void outputLED2(bool val) {
-  if (led_pin2 != -1) {
-    dio_write(led_pin2, led_invert ? !val : val);
-  }
-}
-
-static void initBoardLEDs(uint8_t pin1, uint8_t pin2, bool invert) {
-  led_pin1 = pin1;
-  led_pin2 = pin2;
-  led_invert = invert;
-  if (led_pin1 != -1) {
-    dio_setOutput(led_pin1);
-    dio_write(led_pin1, invert);
-  }
-  if (led_pin2 != -1) {
-    dio_setOutput(led_pin2);
-    dio_write(led_pin2, invert);
-  }
-}
-//---------------------------------------------
 
 static void debugDumpLocalOutputState() {
   printf("HID report:[");
@@ -150,7 +119,7 @@ static void processKeyboardCoreLogicOutput() {
   }
   if (!utils_compareBytes(hidReport, localHidReport, 8)) {
     if (optionEmitKeyStroke) {
-      usbioCore_hidKeyboard_writeReport(hidReport);
+      usbIoCore_hidKeyboard_writeReport(hidReport);
     }
     utils_copyBytes(localHidReport, hidReport, 8);
     changed = true;
@@ -223,15 +192,13 @@ static void configuratorServantStateHandler(uint8_t state) {
 
 //反対側のコントローラからキー状態を受け取る処理
 static void pullAltSideKeyStates() {
-  system_disableInterrupts();
   sw_txbuf[0] = 0x40;
-  singlewire_sendFrame(sw_txbuf, 1); //キー状態要求パケットを送信
-
-  uint8_t sz = singlewire_receiveFrame(sw_rxbuf, SingleWireMaxPacketSize);
-  system_enableInterrupts();
+  singleWire_startBurstSection();
+  singleWire_transmitFrame(sw_txbuf, 1); //キー状態要求パケットを送信
+  uint8_t sz = singleWire_receiveFrame(sw_rxbuf, SingleWireMaxPacketSize);
+  singleWire_endBurstSection();
 
   if (sz > 0) {
-
     uint8_t cmd = sw_rxbuf[0];
     if (cmd == 0x41 && sz == 1 + NumKeySlotBytesHalf) {
       uint8_t *payloadBytes = sw_rxbuf + 1;
@@ -287,7 +254,7 @@ static void runAsMaster() {
       keyboardCoreLogic_processTicker(5);
       processKeyboardCoreLogicOutput();
       if (optionAffectKeyHoldStateToLED) {
-        outputLED2(pressedKeyCount > 0);
+        boardIo_writeLed2(pressedKeyCount > 0);
       }
     }
     if (cnt % 4 == 2) {
@@ -295,14 +262,14 @@ static void runAsMaster() {
     }
     if (optionUseHeartbeatLED) {
       if (cnt % 2000 == 0) {
-        outputLED1(true);
+        boardIo_writeLed1(true);
       }
-      if (cnt % 2000 == 1) {
-        outputLED1(false);
+      if (cnt % 2000 == 4) {
+        boardIo_writeLed1(false);
       }
     }
     delayMs(1);
-    usbioCore_processUpdate();
+    usbIoCore_processUpdate();
     configuratorServant_processUpdate();
   }
 }
@@ -310,23 +277,21 @@ static void runAsMaster() {
 //---------------------------------------------
 //slave
 
-//子から親に対してキー状態応答パケットを送る
-static void sendKeyStateResponsePacketToMaster() {
-  sw_txbuf[0] = 0x41;
-  utils_copyBytes(sw_txbuf + 1, nextKeyStateFlags, NumKeySlotBytesHalf);
-  singlewire_sendFrame(sw_txbuf, 1 + NumKeySlotBytesHalf);
-}
-
 //単線通信の受信割り込みコールバック
 static void onRecevierInterruption() {
-  uint8_t sz = singlewire_receiveFrame(sw_rxbuf, SingleWireMaxPacketSize);
+  singleWire_startBurstSection();
+  uint8_t sz = singleWire_receiveFrame(sw_rxbuf, SingleWireMaxPacketSize);
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
     if (cmd == 0x40 && sz == 1) {
       //親-->子, キー状態要求パケット受信, キー状態応答パケットを返す
-      sendKeyStateResponsePacketToMaster();
+      //子から親に対してキー状態応答パケットを送る
+      sw_txbuf[0] = 0x41;
+      utils_copyBytes(sw_txbuf + 1, nextKeyStateFlags, NumKeySlotBytesHalf);
+      singleWire_transmitFrame(sw_txbuf, 1 + NumKeySlotBytesHalf);
     }
   }
+  singleWire_endBurstSection();
 }
 
 static bool checkIfSomeKeyPressed() {
@@ -341,7 +306,7 @@ static bool checkIfSomeKeyPressed() {
 static void runAsSlave() {
   keyMatrixScanner_initialize(
       numRows, numColumns, rowPins, columnPins, nextKeyStateFlags);
-  singlewire_setupInterruptedReceiver(onRecevierInterruption);
+  singleWire_setInterruptedReceiver(onRecevierInterruption);
 
   uint16_t cnt = 0;
   while (1) {
@@ -350,15 +315,15 @@ static void runAsSlave() {
       keyMatrixScanner_update();
       pressedKeyCount = checkIfSomeKeyPressed();
       if (optionAffectKeyHoldStateToLED) {
-        outputLED2(pressedKeyCount > 0);
+        boardIo_writeLed2(pressedKeyCount > 0);
       }
     }
     if (optionUseHeartbeatLED) {
       if (cnt % 4000 == 0) {
-        outputLED1(true);
+        boardIo_writeLed1(true);
       }
-      if (cnt % 4000 == 1) {
-        outputLED1(false);
+      if (cnt % 4000 == 4) {
+        boardIo_writeLed1(false);
       }
     }
     delayMs(1);
@@ -370,7 +335,9 @@ static void runAsSlave() {
 
 //単線通信受信割り込みコールバック
 static void masterSlaveDetectionMode_onRecevierInterruption() {
-  uint8_t sz = singlewire_receiveFrame(sw_rxbuf, SingleWireMaxPacketSize);
+  singleWire_startBurstSection();
+  uint8_t sz = singleWire_receiveFrame(sw_rxbuf, SingleWireMaxPacketSize);
+  singleWire_endBurstSection();
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
     if (cmd == 0xA0 && sz == 1) {
@@ -383,21 +350,25 @@ static void masterSlaveDetectionMode_onRecevierInterruption() {
 //USB接続が確立していない期間の動作
 //双方待機し、USB接続が確立すると自分がMasterになり、相手にMaseter確定通知パケットを送る
 static bool runMasterSlaveDetectionMode() {
-  singlewire_initialize();
-  singlewire_setupInterruptedReceiver(masterSlaveDetectionMode_onRecevierInterruption);
+  singleWire_initialize();
+  singleWire_setInterruptedReceiver(masterSlaveDetectionMode_onRecevierInterruption);
 
   system_enableInterrupts();
 
   while (true) {
-    if (usbioCore_isConnectedToHost()) {
-      singlewire_clearInterruptedReceiver();
+    if (usbIoCore_isConnectedToHost()) {
+      singleWire_clearInterruptedReceiver();
       sw_txbuf[0] = 0xA0;
-      singlewire_sendFrame(sw_txbuf, 1); //Master確定通知パケットを送信
+      singleWire_startBurstSection();
+      singleWire_transmitFrame(sw_txbuf, 1); //Master確定通知パケットを送信
+      singleWire_endBurstSection();
       return true;
     }
     if (hasMasterOathReceived) {
+      singleWire_clearInterruptedReceiver();
       return false;
     }
+    usbIoCore_processUpdate();
     delayMs(1);
   }
 }
@@ -409,26 +380,30 @@ static void showModeByLedBlinkPattern(bool isMaster) {
   if (isMaster) {
     //masterの場合高速に4回点滅
     for (uint8_t i = 0; i < 4; i++) {
-      outputLED1(true);
+      boardIo_writeLed1(true);
       delayMs(2);
-      outputLED1(false);
+      boardIo_writeLed1(false);
       delayMs(100);
     }
   } else {
     //slaveの場合長く1回点灯
-    outputLED1(true);
+    boardIo_writeLed1(true);
     delayMs(500);
-    outputLED1(false);
+    boardIo_writeLed1(false);
   }
 }
 
 //---------------------------------------------
 
-void splitKeyboard_useIndicatorLEDs(int8_t pin1, int8_t pin2, bool invert) {
-  initBoardLEDs(pin1, pin2, invert);
+void splitKeyboard_useIndicatorLeds(int8_t pin1, int8_t pin2, bool invert) {
+  boardIo_setupLeds(pin1, pin2, invert);
 }
 
-void splitKeyboard_useDebugUART(uint16_t baud) {
+void splitKeyboard_useIndicatorRgbLed(int8_t pin) {
+  boardIo_setupLedsRgb(pin);
+}
+
+void splitKeyboard_useDebugUart(uint32_t baud) {
   debugUart_setup(baud);
   debugUartConfigured = true;
 }
@@ -467,7 +442,7 @@ void splitKeyboard_start() {
   utils_copyBytes(serialNumberTextBuf + 8, (uint8_t *)PROJECT_ID, 8);
   configuratorServant_readDeviceInstanceCode(serialNumberTextBuf + 16);
   uibioCore_internal_setSerialNumberText(serialNumberTextBuf, 24);
-  usbioCore_initialize();
+  usbIoCore_initialize();
   bool isMaster = runMasterSlaveDetectionMode();
   printf("isMaster:%d\n", isMaster);
   showModeByLedBlinkPattern(isMaster);

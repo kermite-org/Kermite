@@ -5,6 +5,10 @@ void delayMs(uint16_t ms) {
   sleep_ms(ms);
 }
 
+void delayUs(uint16_t us) {
+  sleep_us(us);
+}
+
 uint8_t system_readRomByte(const uint8_t *ptr) {
   return *ptr;
 }

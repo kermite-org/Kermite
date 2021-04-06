@@ -6,6 +6,7 @@ import {
   ipcAgent,
   ISelectorOption,
   uiTheme,
+  useFetcher,
   useLocal,
 } from '~/ui-common';
 import {
@@ -23,9 +24,17 @@ const cssUiSettingsPage = css`
   color: ${uiTheme.colors.clMainText};
   height: 100%;
   padding: 10px;
+  position: relative;
 
   > * + * {
     margin-top: 5px;
+  }
+
+  .version-area {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 10px;
   }
 `;
 
@@ -75,6 +84,11 @@ export const UiSettingsPage = () => {
 
   const { settings } = local;
 
+  const appVersionInfo = useFetcher(
+    ipcAgent.async.system_getApplicationVersionInfo,
+    { version: '' },
+  );
+
   return (
     <div css={cssUiSettingsPage}>
       <div>Configurations</div>
@@ -122,6 +136,10 @@ export const UiSettingsPage = () => {
           />
         </Indent>
       </Indent>
+
+      <div className="version-area">
+        application version: {appVersionInfo.version}
+      </div>
     </div>
   );
 };
