@@ -2,14 +2,14 @@ name: Firmware ErrorCheck
 
 on:
   push:
-    branches: [variants]
-    # paths:
-    #   - ".github/workflows/firmware_error_check.yml"
-    #   - "firmware/ci/**/*.ts"
-    #   - "firmware/Makefile"
-    #   - "firmware/workers/*.mk"
-    #   - "firmware/src/**"
-    #   - "software/src/shell/loaders/**/*.ts"
+    branches: [variants, variants-dev]
+    paths:
+      - ".github/workflows/firmware_error_check.yml"
+      - "firmware/ci/**/*.ts"
+      - "firmware/Makefile"
+      - "firmware/workers/*.mk"
+      - "firmware/src/**"
+      - "software/src/shell/loaders/**/*.ts"
 
   pull_request:
     branches: [variants]
