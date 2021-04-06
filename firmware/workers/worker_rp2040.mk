@@ -47,7 +47,8 @@ ELF2UF2_BIN = $(ELF2UF2_ROOT_DIR)/build/elf2uf2
 #ELF2UF2_BIN = $(ELF2UF2_ROOT_DIR)/prebuild/elf2uf2_darwin
 
 PIOASM_ROOT_DIR = $(PICO_LOCAL_DIR)/tools/pioasm
-PIOASM_BIN = $(PIOASM_ROOT_DIR)/prebuild/pioasm_darwin
+PIOASM_BIN = $(PIOASM_ROOT_DIR)/build/pioasm
+#PIOASM_BIN = $(PIOASM_ROOT_DIR)/prebuild/pioasm_darwin
 
 #--------------------
 #flags
@@ -270,8 +271,7 @@ DEP_FILES = $(filter %.d,$(OBJS:%.obj=%.d))
 
 build: $(UF2)
 
-#$(PROJECT_CODE_DIR)/
-%.pio.h: %.pio
+%.pio.h: %.pio $(PIOASM_BIN)
 	$(PIOASM_BIN) -o c-sdk $< $@
 
 $(OBJ_DIR)/%.c.obj: %.c
@@ -300,6 +300,9 @@ $(ELF): $(PIOASM_GENERATED_HEADERS) $(OBJS)
 
 $(ELF2UF2_BIN):
 	cd $(ELF2UF2_ROOT_DIR) && make
+
+$(PIOASM_BIN):
+	cd $(PIOASM_ROOT_DIR) && make
 
 $(UF2): $(ELF) $(ELF2UF2_BIN)
 	$(ELF2UF2_BIN) $(ELF) $(UF2)

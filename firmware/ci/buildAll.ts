@@ -35,14 +35,14 @@ function checkFirmwareBinarySize(projectPath: string, variationName: string) {
 
   let usageProg = -1;
   let usageData = -1;
-  if (sizeOutputText.includes("worker/atmega32u4.mk")) {
+  if (sizeOutputText.includes("workers/worker_atmega32u4.mk")) {
     usageProg = parseFloat(
       sizeOutputText.match(/^Program.*\(([\d.]+)% Full\)/m)![1]
     );
     usageData = parseFloat(
       sizeOutputText.match(/^Data.*\(([\d.]+)% Full\)/m)![1]
     );
-  } else if (sizeOutputText.includes("worker/rp2040.mk")) {
+  } else if (sizeOutputText.includes("workers/worker_rp2040.mk")) {
     usageProg = parseFloat(sizeOutputText.match(/FLASH:.*\s([\d.]+)%/m)![1]);
     usageData = parseFloat(sizeOutputText.match(/RAM:.*\s([\d.]+)%/m)![1]);
   } else {

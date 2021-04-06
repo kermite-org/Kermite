@@ -254,7 +254,7 @@ function detectTargetDeviceFromRulesMk(
     "rules.mk"
   );
   const content = fsxReadTextFile(rulesMkFilePath);
-  const m = content.match(/^TARGET_MCU\s?=\s?(.+)$/m);
+  const m = content.match(/^WORKER\s?=\s?worker_(.+)$/m);
   return (m?.[1] as ITargetDevice) || undefined;
 }
 
