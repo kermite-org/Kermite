@@ -47,7 +47,7 @@ jobs:
         with:
           draft: true
           files: |
-            release/*.pkg
-            release/*.exe
+            software/release/*.pkg
+            software/release/*.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
