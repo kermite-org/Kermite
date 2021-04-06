@@ -16,6 +16,7 @@ on:
     types: [opened, synchronize]
     paths:
       - "firmware/Makefile"
+      - "firmware/workers/*.mk"
       - "firmware/src/**"
 
 jobs:
