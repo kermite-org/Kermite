@@ -23,10 +23,13 @@ jobs:
         with:
           node-version: "14.x"
 
-      - name: install packages
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: software
+      - name: install dependencies
+        run: npm install
+        working-directory: software
+
+      - name: build application
+        run: yarn build
+        working-directory: software
 
       - name: build distribution package (mac)
         if: matrix.os == 'macos-latest'
