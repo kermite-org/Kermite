@@ -2,9 +2,9 @@ name: Software Release
 
 on:
   push:
-    # branches: [0405_releasing] #debug
-    tags:
-      - "v*"
+    branches: [0405_releasing] #debug
+    # tags:
+    # - "v*.*.*"
 
 jobs:
   build:
@@ -15,21 +15,36 @@ jobs:
         os: [macos-latest, windows-latest]
 
     steps:
-      - name: Check out Git repository
+      - name: check out git repository
         uses: actions/checkout@v2
 
-      - name: Setup Node.js
+      - name: setup node.js
         uses: actions/setup-node@v1
         with:
           node-version: "14.x"
 
-      - uses: bahmutov/npm-install@v1
+      - name: install packages
+        uses: bahmutov/npm-install@v1
         with:
           working-directory: software
 
-      - name: Build/release Electron app
-        uses: samuelmeuli/action-electron-builder@v1
+      - name: build distribution package (mac)
+        if: matrix.os == 'macos-latest'
+        run: yarn packaging:mac
+        working-directory: software
+
+      - name: build distribution package (win)
+        if: matrix.os == 'windows-latest'
+        run: yarn packaging:win
+        working-directory: software
+
+      - name: make release
+        uses: softprops/action-gh-release@v1
+        # if: startsWith(github.ref, 'refs/tags/')
         with:
-          package_root: software
-          github_token: ${{ secrets.github_token }}
-          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
+          draft: true
+          files: |
+            release/*.pkg
+            release/*.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

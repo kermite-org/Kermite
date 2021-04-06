@@ -23,12 +23,6 @@
     ],
     "directories": {
       "output": "release"
-    },
-    "publish": {
-      "provider": "github",
-      "owner": "yahiro07",
-      "repo": "Kermite",
-      "releaseType": "release"
     }
   },
   "private": true,
@@ -38,8 +32,8 @@
     "start:dev": "cross-env NODE_ENV=development ts-node build.ts -x-watch -x-exec",
     "mockview": "cross-env NODE_ENV=development ts-node build.ts -x-mockview",
     "build": "cross-env NODE_ENV=production ts-node build.ts -x-build",
-    "packaging_mac": "electron-builder --mac --x64",
-    "packaging_win": "electron-builder --win --x64",
+    "packaging:mac": "electron-builder --mac --x64",
+    "packaging:win": "electron-builder --win --x64",
     "build_support_modules": "ts-node build.ts -x-build-support-modules",
     "clean": "rm -rf dist .cache",
     "typecheck": "tsc",
