@@ -1,4 +1,3 @@
-import { Hook } from 'qx';
 import { formatTimeMsToMinSecMs } from '~/shared';
 import {
   ICustomKeyUnitViewModelBase,
@@ -6,7 +5,7 @@ import {
 } from '~/ui-common-svg/KeyUnitCardModels/CustomKeyUnitViewModel';
 import { IHeatmapCustomKeyUnitViewModel } from '~/ui-common-svg/KeyUnitCards/HeatmapKeyUnitCard';
 import { IRealtimeHeatmapKeyboardViewModel } from '~/ui-common-svg/panels/HeatmapKeyboardView';
-import { RealtimeHeatmapModel } from '~/ui-heatmap-page/models/RealtimeHeatmapModel';
+import { useRealtimeHeatmapModel } from '~/ui-heatmap-page/models/RealtimeHeatmapModel';
 
 export interface IRealtimeHeatmapPageModel {
   isRecording: boolean;
@@ -20,8 +19,6 @@ export interface IRealtimeHeatmapPageModel {
 }
 
 export function useRealtimeHeatmapPageModel(): IRealtimeHeatmapPageModel {
-  const heatmapModel = Hook.useMemo(() => new RealtimeHeatmapModel(), []);
-  Hook.useEffect(heatmapModel.startPageSession, []);
   const {
     isRecording,
     startRecording,
@@ -34,7 +31,7 @@ export function useRealtimeHeatmapPageModel(): IRealtimeHeatmapPageModel {
     maxKeyTypeCount,
     profileData,
     displayDesign,
-  } = heatmapModel;
+  } = useRealtimeHeatmapModel();
 
   const cardsVM =
     makeCustomKeyUnitViewModels(

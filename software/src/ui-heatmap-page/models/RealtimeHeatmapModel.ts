@@ -1,3 +1,4 @@
+import { Hook } from 'qx';
 import {
   createFallbackDisplayKeyboardDesign,
   fallbackProfileData,
@@ -34,7 +35,7 @@ function translateKeyIndexToKeyUnitId(
   return keyEntity?.keyId;
 }
 
-export class RealtimeHeatmapModel implements IRealtimeHeatmapModel {
+class RealtimeHeatmapModel implements IRealtimeHeatmapModel {
   private timer = new IntervalTimerWrapper();
 
   profileData: IProfileData = fallbackProfileData;
@@ -106,4 +107,10 @@ export class RealtimeHeatmapModel implements IRealtimeHeatmapModel {
     this.fetchData();
     return ipcAgent.events.device_keyEvents.subscribe(this.handleKeyboardEvent);
   };
+}
+
+export function useRealtimeHeatmapModel(): IRealtimeHeatmapModel {
+  const heatmapModel = Hook.useMemo(() => new RealtimeHeatmapModel(), []);
+  Hook.useEffect(heatmapModel.startPageSession, []);
+  return heatmapModel;
 }
