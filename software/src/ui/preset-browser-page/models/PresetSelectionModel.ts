@@ -10,6 +10,14 @@ import {
   usePersistState,
 } from '~/ui/common';
 
+export interface IPresetSelectionModel {
+  projectSelectorSource: ISelectorSource;
+  presetSelectorSource: ISelectorSource;
+  currentProjectKey: string;
+  currentPresetKey: string;
+  selectProjectByProjectId(projectId: string): void;
+}
+
 function makeProjectOptions(infos: IProjectResourceInfo[]): ISelectorOption[] {
   return infos.map((it) => ({
     value: it.sig,
@@ -47,14 +55,6 @@ function makePresetOptions(
       },
     })),
   ];
-}
-
-interface IPresetSelectionModel {
-  projectSelectorSource: ISelectorSource;
-  presetSelectorSource: ISelectorSource;
-  currentProjectKey: string;
-  currentPresetKey: string;
-  selectProjectByProjectId(projectId: string): void;
 }
 
 export function usePresetSelectionModel(): IPresetSelectionModel {

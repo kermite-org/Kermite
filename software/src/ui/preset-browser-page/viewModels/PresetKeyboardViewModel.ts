@@ -1,20 +1,15 @@
-import { IProfileData } from '~/shared';
+import { IDisplayArea, IDisplayOutlineShape, IProfileData } from '~/shared';
 import { getDisplayKeyboardDesignSingleCached } from '~/shared/modules/DisplayKeyboardSingleCache';
 import { makePresetKeyUnitViewModels } from '~/ui/common-svg/KeyUnitCardModels/PresetKeyUnitViewModel';
-import { IPresetKeyboardViewModel } from '~/ui/common-svg/panels/PresetKeyboardView';
+import { IPresetKeyUnitViewModel } from '~/ui/common-svg/KeyUnitCards/PresetKeyUnitCard';
 
-export interface IPresetKeyboardLayerViewModel {
-  layerId: string;
-  layerName: string;
+export interface IPresetKeyboardViewModel {
+  keyUnits: IPresetKeyUnitViewModel[];
+  displayArea: IDisplayArea;
+  outlineShapes: IDisplayOutlineShape[];
 }
 
-export interface IPresetLayerListViewModel {
-  layers: IPresetKeyboardLayerViewModel[];
-  currentLayerId: string;
-  setCurrentLayerId(layerId: string): void;
-}
-
-export function makePresetKeyboardViewModel(
+export function usePresetKeyboardViewModel(
   profileData: IProfileData,
   currentLayerId: string,
 ): IPresetKeyboardViewModel {

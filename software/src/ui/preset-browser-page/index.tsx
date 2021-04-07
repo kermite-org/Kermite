@@ -1,27 +1,12 @@
-import { jsx, css } from 'qx';
-import { texts, uiTheme } from '~/ui/common';
-import { makePresetBrowserViewModel } from '~/ui/preset-browser-page/viewModels/PresetBrowserViewModel';
-import { PresetKeyboardSection } from '~/ui/preset-browser-page/views/PresetKeyboardSection';
-import { PresetSelectionSection } from '~/ui/preset-browser-page/views/PresetSelectionSection';
+import { FC, jsx } from 'qx';
+import { usePresetSelectionModel } from '~/ui/preset-browser-page/models';
+import { usePresetBrowserViewModel } from '~/ui/preset-browser-page/viewModels';
+import { PresetBrowserPageView } from '~/ui/preset-browser-page/views/PresetBrowserPageView';
 
-const cssPresetBrowserPage = css`
-  background: ${uiTheme.colors.clBackground};
-  color: ${uiTheme.colors.clMainText};
-
-  height: 100%;
-  padding: 20px;
-  > * + * {
-    margin-top: 10px;
-  }
-`;
-
-export const PresetBrowserPage = () => {
-  const vm = makePresetBrowserViewModel();
+export const PresetBrowserPage: FC = () => {
+  const model = usePresetSelectionModel();
+  const viewModel = usePresetBrowserViewModel(model);
   return (
-    <div css={cssPresetBrowserPage}>
-      <div>{texts.label_presetBrowser_pageTitle}</div>
-      <PresetSelectionSection vm={vm} />
-      <PresetKeyboardSection vm={vm} />
-    </div>
+    <PresetBrowserPageView pageTitle="Preset Browser" viewModel={viewModel} />
   );
 };

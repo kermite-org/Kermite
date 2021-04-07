@@ -1,10 +1,13 @@
-import { jsx, css } from 'qx';
-import { texts } from '~/ui/common';
+import { css, FC, jsx } from 'qx';
 import { PresetKeyboardView } from '~/ui/common-svg/panels/PresetKeyboardView';
-import { IPresetBrowserViewModel } from '~/ui/preset-browser-page/viewModels/PresetBrowserViewModel';
-import { PresetLayersBox } from '~/ui/preset-browser-page/views/PresetLayersBox';
+import { PresetLayersBox } from '~/ui/preset-browser-page/components/PresetLayersBox';
+import { IPresetKeyboardSectionViewModel } from '~/ui/preset-browser-page/viewModels/PresetKeyboardSectionViewModel';
 
-const cssPresetKeyboardSection = css`
+type Props = {
+  viewModel: IPresetKeyboardSectionViewModel;
+};
+
+const style = css`
   height: 300px;
   display: flex;
   > .keyboardPart {
@@ -20,18 +23,16 @@ const cssPresetKeyboardSection = css`
   }
 `;
 
-export const PresetKeyboardSection = (props: {
-  vm: IPresetBrowserViewModel;
-}) => {
-  return (
-    <div css={cssPresetKeyboardSection}>
-      <div class="keyboardPart">
-        <PresetKeyboardView vm={props.vm.keyboard} />
-      </div>
-      <div class="layersPart">
-        <h3>{texts.label_presetBrowser_layers}</h3>
-        <PresetLayersBox vm={props.vm.layerList} />
-      </div>
+export const PresetKeyboardSection: FC<Props> = ({
+  viewModel: { keyboard, layerList },
+}) => (
+  <div css={style}>
+    <div class="keyboardPart">
+      <PresetKeyboardView {...keyboard} />
     </div>
-  );
-};
+    <div class="layersPart">
+      <h3>Layers</h3>
+      <PresetLayersBox {...layerList} />
+    </div>
+  </div>
+);
