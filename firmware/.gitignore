@@ -1,12 +1,14 @@
 build/
-.vscode/c_cpp_properties.json
-.local/
-.~lock.*.ods#
-.sub/
-Makefile.user
 dist/
 KRS/
-node_modules/
+.local/
+.sub/
 .tmp/
+node_modules/
+
+.vscode/c_cpp_properties.json
+.~lock.*.ods#
+
+Makefile.user
 
 *.pio.h
