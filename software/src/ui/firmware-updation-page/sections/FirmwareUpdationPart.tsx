@@ -1,6 +1,6 @@
-import { css, Hook, jsx } from 'qx';
-import { texts } from '~/ui-common';
-import { GeneralButton, GeneralSelector } from '~/ui-common/components';
+import { css, FC, jsx } from 'qx';
+import { texts } from '~/ui/common';
+import { GeneralButton, GeneralSelector } from '~/ui/common/components';
 import { useFirmwareUpdationPartModel } from '~/ui/firmware-updation-page/models';
 
 const style = css`
@@ -44,7 +44,7 @@ export const FirmwareUpdationPart: FC = () => {
   } = useFirmwareUpdationPartModel();
 
   return (
-    <div css={cssFirmwareUpdationPart}>
+    <div css={style}>
       <div className="titleRow">
         {texts.label_device_firmwareUpdation_sectionTitle}
       </div>

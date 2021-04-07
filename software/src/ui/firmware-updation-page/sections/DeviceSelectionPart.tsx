@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { FlatListSelector } from '~/ui-common/components/controls/FlatListSelector';
+import { FlatListSelector } from '~/ui/common/components/controls/FlatListSelector';
 import { useDeviceSelectionPartModel } from '~/ui/firmware-updation-page/models';
 
 const style = css`

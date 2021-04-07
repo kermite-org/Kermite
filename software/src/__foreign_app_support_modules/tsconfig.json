@@ -7,7 +7,7 @@
     "./**/*",
     "../shared/**/*",
     "../shell/**/*",
-    "../ui-common/**/*",
-    "../ui-common-svg/**/*"
+    "../ui/common/**/*",
+    "../ui/common-svg/**/*"
   ]
 }

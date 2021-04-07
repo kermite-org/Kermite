@@ -1,5 +1,5 @@
 import { Hook } from 'qx';
-import { ISelectorSource } from '~/ui-common';
+import { ISelectorSource } from '~/ui/common';
 import { showCommandOutputLogModal } from '~/ui/firmware-updation-page/modals';
 import {
   firmwareUpdationModel,

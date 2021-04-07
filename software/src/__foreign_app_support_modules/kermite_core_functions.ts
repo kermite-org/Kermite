@@ -15,7 +15,7 @@ import { ProfileDataMigrator } from '~/shell/loaders/ProfileDataMigrator';
 import {
   getAssignEntryTexts,
   getAssignForKeyUnitWithLayerFallback,
-} from '~/ui-common-svg/KeyUnitCardModels/KeyUnitCardViewModelCommon';
+} from '~/ui/common-svg/KeyUnitCardModels/KeyUnitCardViewModelCommon';
 
 interface IKeyUnitDisplayModel {
   keyId: string;

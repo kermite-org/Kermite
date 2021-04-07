@@ -3,7 +3,7 @@ import {
   IKeyboardDeviceAttributes,
   IProjectResourceInfo,
 } from '~/shared';
-import { useEventSource, ipcAgent, useFetcher } from '~/ui-common';
+import { useEventSource, ipcAgent, useFetcher } from '~/ui/common';
 
 export function useDeviceSelectionStatus(): IDeviceSelectionStatus {
   return useEventSource(ipcAgent.events.device_deviceSelectionEvents, {

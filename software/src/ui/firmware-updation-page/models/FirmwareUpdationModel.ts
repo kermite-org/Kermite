@@ -1,5 +1,5 @@
 import { flattenArray, IProjectResourceInfo } from '~/shared';
-import { ipcAgent } from '~/ui-common';
+import { ipcAgent } from '~/ui/common';
 
 export type FirmwareUpdationPhase =
   | 'WaitingReset'

@@ -1,4 +1,4 @@
-import { ipcAgent, useEventSource, useFetcher2 } from '~/ui-common';
+import { ipcAgent, useEventSource, useFetcher2 } from '~/ui/common';
 import {
   ICustomParameterModel,
   makeParameterModel,

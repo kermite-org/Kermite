@@ -1,5 +1,5 @@
 import { ICustromParameterSpec } from '~/shared';
-import { ipcAgent, ISelectorOption } from '~/ui-common';
+import { ipcAgent, ISelectorOption } from '~/ui/common';
 
 export type ICustomParameterModel =
   | {
