@@ -22,7 +22,7 @@ const displayOptionsSource: IDisplayOptionSource[] = [
   },
 ];
 
-const cssPreviewOptionsBox = css`
+const style = css`
   display: flex;
   align-items: center;
   > * + * {
@@ -49,7 +49,7 @@ export function ShapePreviewOptionsBox(props: {
 }) {
   const { settings } = props;
   return (
-    <div css={cssPreviewOptionsBox}>
+    <div css={style}>
       {displayOptionsSource.map((om) => (
         <div key={om.fieldKey}>
           <CheckBoxLine

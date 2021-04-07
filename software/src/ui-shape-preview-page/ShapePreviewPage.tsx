@@ -5,7 +5,7 @@ import { GeneralSelector } from '~/ui-common/components';
 import { ShapePreviewOptionsBox } from '~/ui-shape-preview-page/ShapePreviewOptionsBox';
 import { useShapePreviewPageModel } from '~/ui-shape-preview-page/models/ShapePreviewPageModel';
 
-const cssShapePreviewPage = css`
+const style = css`
   background: ${uiTheme.colors.clBackground};
   color: ${uiTheme.colors.clMainText};
   height: 100%;
@@ -47,16 +47,15 @@ const cssShapePreviewPage = css`
 `;
 
 export const KeyboardShapePreviewPage = () => {
-  const vm = useShapePreviewPageModel();
   const {
     loadedDesign,
     settings,
     projectSelectorSource,
     layoutSelectorSource,
     holdKeyIndices,
-  } = vm;
+  } = useShapePreviewPageModel();
   return (
-    <div css={cssShapePreviewPage}>
+    <div css={style}>
       <div>keyboard shape preview</div>
       <div class="topRow">
         <GeneralSelector {...projectSelectorSource} width={160} />
