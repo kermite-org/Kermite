@@ -56,7 +56,7 @@ ifeq ($(WORKER), )
 $(error WORKER is not defined in rules.mk)
 endif
 
-# $(warning target_mcu:$(TARGET_MCU))
+# $(warning WORKER:$(WORKER))
 
 %:
 	make -f workers/$(WORKER).mk PROJECT=$(PROJECT) VARIATION=$(VARIATION) $(COMMAND)

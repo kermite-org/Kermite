@@ -113,10 +113,6 @@
         ],
         "pathGroups": [
           {
-            "pattern": "~lib/qx",
-            "group": "external"
-          },
-          {
             "pattern": "~*/**",
             "group": "internal"
           }
