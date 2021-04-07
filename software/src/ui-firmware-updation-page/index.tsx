@@ -5,7 +5,7 @@ import {
   CustomParametersPart,
   DeviceSelectionPart,
   FirmwareUpdationPart,
-} from '~/ui-firmware-updation-page/organisms';
+} from '~/ui-firmware-updation-page/sections';
 
 const cssPage = css`
   background: ${uiTheme.colors.clBackground};
