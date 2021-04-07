@@ -1,7 +1,7 @@
 import { jsx, css } from 'qx';
 import { fieldSetter } from '~/ui-common';
 import { CheckBoxLine } from '~/ui-common/components';
-import { IShapeViewPersistState } from '~/ui-shape-preview-page/ShapePreviewPageState';
+import { IShapeViewPersistState } from '~/ui-shape-preview-page/models/ShapeViewPersistState';
 
 interface IDisplayOptionSource {
   fieldKey: keyof IShapeViewPersistState;

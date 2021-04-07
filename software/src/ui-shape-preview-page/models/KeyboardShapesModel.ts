@@ -6,7 +6,7 @@ import {
   IShapeViewPersistState,
   shapeViewPersistStateDefault,
   shapeViewPersistStateSchema,
-} from '~/ui-shape-preview-page/ShapePreviewPageState';
+} from '~/ui-shape-preview-page/models/ShapeViewPersistState';
 
 export class KeyboardShapesModel {
   projectInfos: IProjectResourceInfo[] = [];
@@ -131,5 +131,3 @@ export class KeyboardShapesModel {
     };
   };
 }
-
-export const keyboardShapesModel = new KeyboardShapesModel();

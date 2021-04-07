@@ -3,7 +3,7 @@ import { uiTheme } from '~/ui-common';
 import { PreviewKeyboardShapeView } from '~/ui-common-svg/panels/PreviewKeyboardShapeView';
 import { GeneralSelector } from '~/ui-common/components';
 import { ShapePreviewOptionsBox } from '~/ui-shape-preview-page/ShapePreviewOptionsBox';
-import { makeShapePreviewPageViewModel } from '~/ui-shape-preview-page/ShapePreviewPageViewModel';
+import { useShapePreviewPageModel } from '~/ui-shape-preview-page/models/ShapePreviewPageModel';
 
 const cssShapePreviewPage = css`
   background: ${uiTheme.colors.clBackground};
@@ -47,7 +47,7 @@ const cssShapePreviewPage = css`
 `;
 
 export const KeyboardShapePreviewPage = () => {
-  const vm = makeShapePreviewPageViewModel();
+  const vm = useShapePreviewPageModel();
   const {
     loadedDesign,
     settings,
