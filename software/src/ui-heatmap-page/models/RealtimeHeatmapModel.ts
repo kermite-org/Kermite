@@ -9,6 +9,21 @@ import {
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import { appUi, ipcAgent } from '~/ui-common';
 
+interface IRealtimeHeatmapModel {
+  isRecording: boolean;
+  startRecording(): void;
+  stopRecording(): void;
+  clearRecord(): void;
+  profileData: IProfileData;
+  displayDesign: IDisplayKeyboardDesign;
+  numTotalTypes: number;
+  elapsedTimeMs: number;
+  typeStats: { [keyId: string]: number };
+  keyStates: { [keyId: string]: boolean };
+  maxKeyTypeCount: number;
+  startPageSession(): void;
+}
+
 function translateKeyIndexToKeyUnitId(
   displayDesign: IDisplayKeyboardDesign,
   keyIndex: number,
@@ -19,7 +34,7 @@ function translateKeyIndexToKeyUnitId(
   return keyEntity?.keyId;
 }
 
-export class RealtimeHeatmapModel {
+export class RealtimeHeatmapModel implements IRealtimeHeatmapModel {
   private timer = new IntervalTimerWrapper();
 
   profileData: IProfileData = fallbackProfileData;
@@ -60,9 +75,7 @@ export class RealtimeHeatmapModel {
     this.timer.stop();
   };
 
-  prevTimestamp: number = 0;
-
-  handleKeyboardEvent = (e: IRealtimeKeyboardEvent) => {
+  private handleKeyboardEvent = (e: IRealtimeKeyboardEvent) => {
     if (e.type === 'keyStateChanged') {
       const keyUnitId = translateKeyIndexToKeyUnitId(
         this.displayDesign,
@@ -94,5 +107,3 @@ export class RealtimeHeatmapModel {
     return ipcAgent.events.device_keyEvents.subscribe(this.handleKeyboardEvent);
   };
 }
-
-export const realtimeHeatmapModel = new RealtimeHeatmapModel();

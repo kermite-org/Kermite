@@ -1,11 +1,10 @@
-import { jsx, Hook, css } from 'qx';
+import { jsx, css, FC } from 'qx';
 import { uiTheme } from '~/ui-common';
 import { HeatmapKeyboardView } from '~/ui-common-svg/panels/HeatmapKeyboardView';
 import { GeneralButton } from '~/ui-common/components';
-import { realtimeHeatmapModel } from '~/ui-heatmap-page/RealtimeHeatmapModel';
-import { makeRealtimeHeatmapViewModel } from '~/ui-heatmap-page/RealtimeHeatmapViewModel';
+import { useRealtimeHeatmapPageModel } from '~/ui-heatmap-page/models';
 
-const cssHeatmapPage = css`
+const style = css`
   background: ${uiTheme.colors.clBackground};
   color: ${uiTheme.colors.clMainText};
 
@@ -29,39 +28,46 @@ const cssHeatmapPage = css`
   }
 `;
 
-export const HeatmapPage = () => {
-  Hook.useEffect(realtimeHeatmapModel.startPageSession, []);
+export const RealtimeHeatmapPage: FC = () => {
+  const {
+    startRecording,
+    stopRecording,
+    isRecording,
+    hasRecord,
+    clearRecord,
+    timeText,
+    numTotalTypes,
+    keyboardVM,
+  } = useRealtimeHeatmapPageModel();
 
-  const vm = makeRealtimeHeatmapViewModel();
-
-  if (!vm.keyboardVM.displayArea) {
+  if (!keyboardVM.displayArea) {
     return <div>incompatible keyboardShape, displayArea is not defined</div>;
   }
 
   return (
-    <div css={cssHeatmapPage}>
+    <div css={style}>
       <div>Realtime Heatmap</div>
       <div class="headRow">
         <GeneralButton
-          onClick={vm.startRecording}
+          onClick={startRecording}
           text="start"
-          disabled={vm.isRecording || vm.hasRecord}
+          disabled={isRecording || hasRecord}
         />
         <GeneralButton
-          onClick={vm.stopRecording}
+          onClick={stopRecording}
           text="stop"
-          disabled={!vm.isRecording}
+          disabled={!isRecording}
         />
 
         <GeneralButton
-          onClick={vm.clearRecord}
+          onClick={clearRecord}
           text="clear"
-          disabled={!(!vm.isRecording && vm.hasRecord)}
+          disabled={!(!isRecording && hasRecord)}
         />
-        <div class="text">{vm.timeText}</div>
-        <div class="text">{vm.numTotalTypes}</div>
+        <div class="text">{timeText}</div>
+        <div class="text">{numTotalTypes}</div>
       </div>
-      <HeatmapKeyboardView vm={vm.keyboardVM} />
+      <HeatmapKeyboardView vm={keyboardVM} />
     </div>
   );
 };
