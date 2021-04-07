@@ -1,17 +1,25 @@
+import {
+  IDeviceSelectionStatus,
+  IKeyboardDeviceAttributes,
+  IProjectResourceInfo,
+} from '~/shared';
 import { useEventSource, ipcAgent, useFetcher } from '~/ui-common';
 
-export function useDeviceSelectionStatus() {
+export function useDeviceSelectionStatus(): IDeviceSelectionStatus {
   return useEventSource(ipcAgent.events.device_deviceSelectionEvents, {
     allDeviceInfos: [],
     currentDevicePath: 'none',
   });
 }
 
-export function useProjectResourceInfos() {
+export function useProjectResourceInfos(): IProjectResourceInfo[] {
   return useFetcher(ipcAgent.async.projects_getAllProjectResourceInfos, []);
 }
 
-export function useConnectedDeviceAttributes() {
+export function useConnectedDeviceAttributes(): {
+  deviceAttrs: IKeyboardDeviceAttributes | undefined;
+  projectInfo: IProjectResourceInfo | undefined;
+} {
   const deviceStatus = useEventSource(
     ipcAgent.events.device_keyboardDeviceStatusEvents,
     {

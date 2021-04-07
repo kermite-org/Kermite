@@ -1,11 +1,12 @@
+import { Hook } from 'qx';
 import { ISelectorSource } from '~/ui-common';
-import { showCommandOutputLogModal } from './CommandOutputLogModal';
+import { showCommandOutputLogModal } from '~/ui-firmware-updation-page/modals';
 import {
   firmwareUpdationModel,
   FirmwareUpdationPhase,
 } from './FirmwareUpdationModel';
 
-interface IFirmwareUpdationPageViewModel {
+interface IFirmwareUpdationPartModel {
   phase: FirmwareUpdationPhase;
   detectedDeviceSig: string | undefined;
   canSelectTargetFirmware: boolean;
@@ -15,8 +16,9 @@ interface IFirmwareUpdationPageViewModel {
   onLogButton(): void;
 }
 
-export function makeFirmwareUpdationPageViewModel(): IFirmwareUpdationPageViewModel {
+export function useFirmwareUpdationPartModel(): IFirmwareUpdationPartModel {
   const model = firmwareUpdationModel;
+  Hook.useEffect(model.startPageSession, []);
   return {
     phase: model.phase,
     detectedDeviceSig: model.detectedDeviceSig,

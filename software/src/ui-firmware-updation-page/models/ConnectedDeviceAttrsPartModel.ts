@@ -1,16 +1,10 @@
 /* eslint-disable react/jsx-key */
-import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui-common';
-import { useConnectedDeviceAttributes } from '~/ui-firmware-updation-page/dataSource';
+import { useConnectedDeviceAttributes } from '~/ui-firmware-updation-page/models';
 
-const cssBase = css`
-  td + td {
-    padding-left: 20px;
-    max-width: 240px;
-    overflow-x: hidden;
-    white-space: nowrap;
-  }
-`;
+interface IConnectedDevicesAttrsPartModel {
+  tableData: [string, string][] | undefined;
+}
 
 function fixDatetimeText(datetimeText: string) {
   if (datetimeText.endsWith('Z')) {
@@ -19,10 +13,10 @@ function fixDatetimeText(datetimeText: string) {
   return datetimeText;
 }
 
-export const ConnectedDeviceAttrsPart: FC = () => {
+export function useConnectedDevicesAttrsPartModel(): IConnectedDevicesAttrsPartModel {
   const { deviceAttrs, projectInfo } = useConnectedDeviceAttributes();
 
-  console.log({ deviceAttrs, projectInfo });
+  // console.log({ deviceAttrs, projectInfo });
 
   const isOriginOnline = deviceAttrs?.origin === 'online';
 
@@ -81,23 +75,5 @@ export const ConnectedDeviceAttrsPart: FC = () => {
       ],
     ].filter((a) => !!a) as [string, string][]);
 
-  return (
-    <div css={cssBase}>
-      <div>{texts.label_device_deviceInfo_sectionTitle}</div>
-      {tableData && (
-        <div>
-          <table>
-            <tbody>
-              {tableData.map((item, idx) => (
-                <tr key={idx}>
-                  <td>{item[0]}</td>
-                  <td>{item[1]}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
-  );
-};
+  return { tableData };
+}

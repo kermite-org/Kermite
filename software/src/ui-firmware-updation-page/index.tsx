@@ -1,9 +1,11 @@
 import { css, jsx } from 'qx';
 import { uiTheme } from '~/ui-common';
-import { ConnectedDeviceAttrsPart } from '~/ui-firmware-updation-page/ConnectedDeviceAttrsPart';
-import { CustomParametersPart } from '~/ui-firmware-updation-page/CustomParametersPart';
-import { DeviceSelectionPart } from '~/ui-firmware-updation-page/DeviceSelectionPart';
-import { FirmwareUpdationPart } from '~/ui-firmware-updation-page/FirmwareUpdationPart';
+import {
+  ConnectedDeviceAttrsPart,
+  CustomParametersPart,
+  DeviceSelectionPart,
+  FirmwareUpdationPart,
+} from '~/ui-firmware-updation-page/organisms';
 
 const cssPage = css`
   background: ${uiTheme.colors.clBackground};

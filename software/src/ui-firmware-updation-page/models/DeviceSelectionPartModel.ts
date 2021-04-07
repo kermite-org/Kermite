@@ -1,21 +1,15 @@
-import { css, FC, jsx } from 'qx';
 import { IKeyboardDeviceInfo, IProjectResourceInfo } from '~/shared';
-import { ipcAgent, ISelectorOption, texts } from '~/ui-common';
-import { FlatListSelector } from '~/ui-common/components/controls/FlatListSelector';
+import { ipcAgent, ISelectorOption } from '~/ui-common';
 import {
   useDeviceSelectionStatus,
   useProjectResourceInfos,
-} from '~/ui-firmware-updation-page/dataSource';
+} from '~/ui-firmware-updation-page/models/DataSource';
 
-const style = css`
-  * + * {
-    margin-top: 5px;
-  }
-
-  .selector {
-    width: 300px;
-  }
-`;
+interface IDeviceSelectionPartModel {
+  deviceOptions: ISelectorOption[];
+  currentDevicePath: string;
+  setSelectedDevicePath(path: string): void;
+}
 
 function makeDeviceOptionEntry(
   deviceInfo: IKeyboardDeviceInfo,
@@ -30,7 +24,8 @@ function makeDeviceOptionEntry(
     value: path,
   };
 }
-export const DeviceSelectionPart: FC = () => {
+
+export function useDeviceSelectionPartModel(): IDeviceSelectionPartModel {
   const resourceInfos = useProjectResourceInfos();
   const selectionStatus = useDeviceSelectionStatus();
   const noneOption: ISelectorOption = { label: 'none', value: 'none' };
@@ -39,22 +34,13 @@ export const DeviceSelectionPart: FC = () => {
   );
   const deviceOptions = [noneOption, ...deviceOptionsBase];
 
-  const onChange = (path: string) => {
+  const setSelectedDevicePath = (path: string) => {
     ipcAgent.async.device_connectToDevice(path);
   };
 
-  return (
-    <div css={style}>
-      <div>{texts.label_device_deviceSelection_sectionTitle}</div>
-      {/* <div>connected keyboard: {connectedKeyboardName}</div> */}
-      <FlatListSelector
-        options={deviceOptions}
-        value={selectionStatus.currentDevicePath}
-        setValue={onChange}
-        size={5}
-        className="selector"
-        hint={texts.hint_device_deviceSelection_selectionArea}
-      />
-    </div>
-  );
-};
+  return {
+    deviceOptions,
+    currentDevicePath: selectionStatus.currentDevicePath,
+    setSelectedDevicePath,
+  };
+}

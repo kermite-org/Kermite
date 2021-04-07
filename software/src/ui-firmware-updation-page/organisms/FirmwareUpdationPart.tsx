@@ -1,10 +1,9 @@
 import { css, Hook, jsx } from 'qx';
 import { texts } from '~/ui-common';
 import { GeneralButton, GeneralSelector } from '~/ui-common/components';
-import { firmwareUpdationModel } from './FirmwareUpdationModel';
-import { makeFirmwareUpdationPageViewModel } from './FirmwareUpdationPageViewModel';
+import { useFirmwareUpdationPartModel } from '~/ui-firmware-updation-page/models';
 
-const cssFirmwareUpdationPart = css`
+const style = css`
   > * + * {
     margin-top: 10px;
   }
@@ -33,11 +32,16 @@ const cssFirmwareUpdationPart = css`
   }
 `;
 
-export const FirmwareUpdationPart = () => {
-  Hook.useEffect(firmwareUpdationModel.startPageSession, []);
-
-  const vm = makeFirmwareUpdationPageViewModel();
-  const { phase } = vm;
+export const FirmwareUpdationPart: FC = () => {
+  const {
+    phase,
+    detectedDeviceSig,
+    canSelectTargetFirmware,
+    projectSelectorSource,
+    onWriteButton,
+    onResetButton,
+    onLogButton,
+  } = useFirmwareUpdationPartModel();
 
   return (
     <div css={cssFirmwareUpdationPart}>
@@ -51,9 +55,9 @@ export const FirmwareUpdationPart = () => {
 
       <div className="mainRow">
         <GeneralSelector
-          {...vm.projectSelectorSource}
+          {...projectSelectorSource}
           width={350}
-          disabled={!vm.canSelectTargetFirmware}
+          disabled={!canSelectTargetFirmware}
           hint={texts.label_device_firmwareUpdation_projectSelector}
         />
       </div>
@@ -63,16 +67,16 @@ export const FirmwareUpdationPart = () => {
           <div>{texts.label_device_firmwareUpdation_usageText}</div>
         )}
 
-        {phase === 'WaitingUploadOrder' && vm.detectedDeviceSig && (
+        {phase === 'WaitingUploadOrder' && detectedDeviceSig && (
           <div>
             <div>
               {texts.label_device_firmwareUpdation_deviceDetected.replace(
                 '{DEVICE_NAME}',
-                vm.detectedDeviceSig,
+                detectedDeviceSig,
               )}
             </div>
             <GeneralButton
-              onClick={vm.onWriteButton}
+              onClick={onWriteButton}
               text={texts.label_device_firmwareUpdation_writeButton}
             />
           </div>
@@ -88,7 +92,7 @@ export const FirmwareUpdationPart = () => {
           <div>
             <div>{texts.label_device_firmwareUpdation_success}</div>
             <GeneralButton
-              onClick={vm.onResetButton}
+              onClick={onResetButton}
               text={texts.label_device_firmwareUpdation_doneButton}
             />
           </div>
@@ -100,11 +104,11 @@ export const FirmwareUpdationPart = () => {
               {texts.label_device_firmwareUpdation_failure}
             </span>
             <GeneralButton
-              onClick={vm.onLogButton}
+              onClick={onLogButton}
               text={texts.label_device_firmwareUpdation_logButton}
             />
             <GeneralButton
-              onClick={vm.onResetButton}
+              onClick={onResetButton}
               text={texts.label_device_firmwareUpdation_doneButton}
             />
           </div>
