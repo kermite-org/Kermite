@@ -1,12 +1,12 @@
 import { Hook } from 'qx';
-import { IDisplayKeyboardDesign, IDisplayKeyEntity } from '~/shared';
+import { IDisplayKeyboardDesign } from '~/shared';
 import { ipcAgent, router } from '~/ui-common';
-import { getAssignEntryTexts } from '~/ui-common-svg/KeyUnitCardModels/KeyUnitCardViewModelCommon';
 import { IWidgetKeyUnitCardViewModel } from '~/ui-common-svg/KeyUnitCards/WidgetKeyUnitCard';
 import { PlayerModel } from '~/ui-common/sharedModels/PlayerModel';
 import { siteModel } from '~/ui-common/sharedModels/SiteModel';
+import { makeWidgetKeyUnitCardViewModel } from '~/ui-widget/models/WidgetKeyUnitCardViewModel';
 
-export interface IWidgetMainPageViewModel {
+export interface IWidgetMainPanelModel {
   isWindowActive: boolean;
   keyboardVM: {
     keyboardDesign: IDisplayKeyboardDesign;
@@ -15,37 +15,8 @@ export interface IWidgetMainPageViewModel {
   backToConfiguratorView(): void;
 }
 
-const playerModel = new PlayerModel();
-
-function makeWidgetKeyUnitCardViewModel(
-  ke: IDisplayKeyEntity,
-  playerModel: PlayerModel,
-): IWidgetKeyUnitCardViewModel {
-  const keyUnitId = ke.keyId;
-  const pos = { x: ke.x, y: ke.y, r: ke.angle || 0 };
-  const assign = playerModel.getDynamicKeyAssign(keyUnitId) || {
-    type: 'layerFallbackBlock',
-  };
-  const { primaryText, secondaryText, isLayerFallback } = getAssignEntryTexts(
-    assign,
-    playerModel.layers,
-  );
-
-  const isHold = playerModel.keyStates[ke.keyId];
-
-  return {
-    keyUnitId,
-    pos,
-    primaryText,
-    secondaryText,
-    isLayerFallback: isLayerFallback || false,
-    isHold,
-    shape: ke.shape,
-    shiftHold: playerModel.checkShiftHold(),
-  };
-}
-
-export function makeWidgetMainPageViewModel(): IWidgetMainPageViewModel {
+export function useWidgetMainPanelModel(): IWidgetMainPanelModel {
+  const playerModel = Hook.useMemo(() => new PlayerModel(), []);
   Hook.useEffect(() => {
     playerModel.initialize();
     (async () => {

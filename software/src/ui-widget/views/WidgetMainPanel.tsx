@@ -1,47 +1,47 @@
 import { jsx, css } from 'qx';
 import { WidgetSvgKeyboardView } from '~/ui-common-svg/panels/WidgetSvgKeyboardView';
 import { siteModel } from '~/ui-common/sharedModels/SiteModel';
-import { makeWidgetMainPageViewModel } from '~/ui-widget/WidgetMainPageViewModel';
+import { useWidgetMainPanelModel } from '~/ui-widget/models/WidgetMainPanelModel';
 
-const cssMainpanel = css`
+const style = css`
   position: relative;
   user-select: none;
   -webkit-app-region: drag;
   width: 100%;
   height: 100%;
-`;
 
-const cssConfigButton = css`
-  position: absolute;
-  right: 0px;
-  top: 0px;
-  -webkit-app-region: no-drag;
-  color: #fff;
-  width: 30px;
-  height: 30px;
-  margin: 5px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  font-size: 20px;
-  background: #888;
+  > .config-button {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    -webkit-app-region: no-drag;
+    color: #fff;
+    width: 30px;
+    height: 30px;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 20px;
+    background: #888;
 
-  &:hover {
-    background: #0cf;
+    &:hover {
+      background: #0cf;
+    }
   }
 `;
 
-export function MainPanel() {
-  const vm = makeWidgetMainPageViewModel();
+export function WidgetMainPanel() {
+  const vm = useWidgetMainPanelModel();
   return (
-    <div css={cssMainpanel}>
+    <div css={style}>
       <WidgetSvgKeyboardView
         keyboardDesign={vm.keyboardVM.keyboardDesign}
         cards={vm.keyboardVM.cards}
       />
       <div
-        css={cssConfigButton}
+        className="config-button"
         onClick={vm.backToConfiguratorView}
         qxIf={siteModel.isWindowActive}
       >
