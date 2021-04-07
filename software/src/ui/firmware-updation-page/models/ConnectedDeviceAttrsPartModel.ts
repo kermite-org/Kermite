@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
 import { texts } from '~/ui-common';
-import { useConnectedDeviceAttributes } from '~/ui-firmware-updation-page/models';
+import { useConnectedDeviceAttributes } from '~/ui/firmware-updation-page/models/DataSource';
 
 interface IConnectedDevicesAttrsPartModel {
   tableData: [string, string][] | undefined;

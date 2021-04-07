@@ -1,7 +1,6 @@
 import { jsx, css } from 'qx';
 import { appUi, router, uiTheme } from '~/ui-common';
 import { EditorPage } from '~/ui-editor-page/EditorPage';
-import { FirmwareUpdationPage } from '~/ui-firmware-updation-page';
 import { RealtimeHeatmapPage } from '~/ui-heatmap-page';
 import { UiLayouterPageComponent } from '~/ui-layouter-page';
 import { PresetBrowserPage } from '~/ui-preset-browser-page';
@@ -11,6 +10,7 @@ import { CustomWindowFrame } from '~/ui-root/views/window/CustomWindowFrame';
 import { DevToolPullTab } from '~/ui-root/views/window/DevToolPullTab';
 import { UiSettingsPage } from '~/ui-settings-page';
 import { KeyboardShapePreviewPage } from '~/ui-shape-preview-page/ShapePreviewPage';
+import { FirmwareUpdationPage } from '~/ui/firmware-updation-page';
 import { NavigationColumn } from './navigation/NavigationColumn';
 import { WindowTitleBarSection } from './titleBar/WindowTitleBarSection';
 

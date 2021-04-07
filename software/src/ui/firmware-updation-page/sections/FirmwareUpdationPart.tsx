@@ -1,7 +1,7 @@
 import { css, Hook, jsx } from 'qx';
 import { texts } from '~/ui-common';
 import { GeneralButton, GeneralSelector } from '~/ui-common/components';
-import { useFirmwareUpdationPartModel } from '~/ui-firmware-updation-page/models';
+import { useFirmwareUpdationPartModel } from '~/ui/firmware-updation-page/models';
 
 const style = css`
   > * + * {

@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
 import { css, FC, jsx } from 'qx';
-import { useConnectedDevicesAttrsPartModel } from '~/ui-firmware-updation-page/models';
+import { useConnectedDevicesAttrsPartModel } from '~/ui/firmware-updation-page/models';
 
 const style = css`
   td + td {

@@ -2,7 +2,7 @@ import { ipcAgent, useEventSource, useFetcher2 } from '~/ui-common';
 import {
   ICustomParameterModel,
   makeParameterModel,
-} from '~/ui-firmware-updation-page/models/CustomParameterModel';
+} from '~/ui/firmware-updation-page/models/CustomParameterModel';
 
 interface ICustomParametersPartModel {
   parameterModels: ICustomParameterModel[];
