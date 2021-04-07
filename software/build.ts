@@ -36,13 +36,13 @@ const [opts] = cliopts.parse(
   ['x-watch', 'build application with watcher'],
   ['x-exec', 'start application'],
   ['x-mockview', 'start mockview'],
-  ['x-build-support-modules', 'build support modules'],
+  ['x-build-outward-modules', 'build outward modules'],
 );
 const reqBuild = opts['x-build'];
 const reqWatch = opts['x-watch'];
 const reqExec = opts['x-exec'];
 const reqMockView = opts['x-mockview'];
-const reqBuildSupportModules = opts['x-build-support-modules'];
+const reqBuildOutwardModules = opts['x-build-outward-modules'];
 
 async function readKey(): Promise<{ sequence: string }> {
   readline.emitKeypressEvents(process.stdin);
@@ -153,9 +153,9 @@ function startMockView() {
   })();
 }
 
-async function makeSupportModules() {
-  const srcDir = './src/__foreign_app_support_modules';
-  const distDir = `./src/__foreign_app_support_modules/bundles`;
+async function makeOutwardModules() {
+  const srcDir = './src/outward';
+  const distDir = `./src/outward/bundle`;
   fs.mkdirSync(distDir, { recursive: true });
 
   return await new Promise((resolve) =>
@@ -213,8 +213,8 @@ async function entry() {
     return;
   }
 
-  if (reqBuildSupportModules) {
-    await makeSupportModules();
+  if (reqBuildOutwardModules) {
+    await makeOutwardModules();
     return;
   }
 
