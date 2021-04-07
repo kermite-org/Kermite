@@ -10,8 +10,14 @@ src
     ├── keyboard1
     ├── keyboard2
     └── csp
-        ├── keyboard3
-        ├── keyboard4
+    │   ├── keyboard3
+    │   ├── keyboard4
+    ├── dev
+    │   ├── examples
+    │   └── exp
+    └── proto
+        ├── keyboard5
+        └── keyboard6
         └── ...
 </pre>
 `Kermite/firmware`の`src`配下では以下のようなフォルダ構成になっています。
@@ -19,6 +25,9 @@ src
 * `projects`以下に各キーボードの実装を配置しています。
   * キット開発者による公式の実装は`projects`直下に配置
   * 有志による非公式の対応は`projects/csp`以下に配置(CSPはCommunity Supported Projectsの略です)
+  * キット未公開のプロトタイプなどは`projects/proto`以下に配置
+  * `dev/examples`にはモジュールの使用例のコードを置いています。
+  * `dev/exp`はモジュール開発用の実験コードを置いています。
 
 新たなキーボードのプロジェクトを追加する場合、`projects`以下にキーボード名でフォルダを作ってコードや設定ファイルを配置してください。
 
@@ -27,24 +36,28 @@ src
 各キーボードのファームウェア実装のことをプロジェクトと呼んでいます。プロジェクトは以下のようなファイルで構成されます。
 
 <pre>
- keyboard1
-  ├── config.h
-  ├── layout.json
-  ├── main.c
+  keyboard1
+  ├── variation1
+  │   ├── config.h
+  │   ├── main.c
+  │   └── rules.mk
+  ├── default.layout.json
   ├── profiles
-  │   └── profile1.json
-  ├── project.json
-  └── rules.mk
+  │   └── profile1.json
+  └── project.json
 </pre>
+
+keyboard1,variation1,profile1などには任意の名前を指定できます。
+keyboard1がプロジェクト名です。プロジェクトは複数のファームウェア実装を持つことができ、それらをバリエーションと呼んでいます。
 
 | ファイル名 |　説明 |
 | :--- | :--- |
 | config.h | ファームウェア内で参照する値を定義します。 |
-| layout.json | キーの配置とキーボードの外形を定義します。 |
 | main.c | プログラムのエントリポイントです。 | 
+| rules.mk | ビルド時に親のMakefileから呼ばれます。 | 
+| layout.json | キーの配置とキーボードの外形を定義します。 |
 | profiles | プリセットプロファイルをここに格納します。 | 
 | project.json | プロジェクト固有の情報を記述します。 | 
-| rules.mk | ビルド時に親のMakefileから呼ばれます。 | 
 
 (※) レイアウトやプリセットのJSONは、ユーティリティソフトを使って作成できます。
 
@@ -62,7 +75,7 @@ https://yahiro07.github.io/KermiteResourceStore/generator
 <a href="https://github.com/yahiro07/KermiteResourceStore">KermiteResourceStore</a>
 リポジトリに保存されます。Kermiteのユーティリティソフトは、実行時にこのリポジトリから最新のファームウェアや各キーボードのレイアウト定義を取得します。
 
-新たにキーボードの対応を行った場合、`variants`ブランチに向けてプルリクエストを作成してください。PRが`variants`ブランチにマージされた時点でユーティリティソフトから対象のプロジェクトが利用できるようになります。
+新たにキーボードの対応を行った場合、`variants`ブランチに向けてPRを作成してください。PRが`variants`ブランチにマージされた時点でユーティリティソフトから対象のプロジェクトが利用できるようになります。
 
 
 
