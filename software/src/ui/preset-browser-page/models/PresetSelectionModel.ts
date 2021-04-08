@@ -9,10 +9,8 @@ import {
   useFetcher,
   usePersistState,
 } from '~/ui/common';
-import {
-  editSelectedProjectPreset as editSelectedProjectPresetOriginal,
-  useProfileDataLoaded,
-} from '~/ui/preset-browser-page/models';
+import { editSelectedProjectPreset as editSelectedProjectPresetOriginal } from '~/ui/preset-browser-page/models/ProfileCreator';
+import { useProfileDataLoaded } from '~/ui/preset-browser-page/models/ProfileDataLoader';
 
 export interface IPresetSelectionModel {
   projectSelectorSource: ISelectorSource;

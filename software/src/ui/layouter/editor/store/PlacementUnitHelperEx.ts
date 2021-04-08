@@ -3,7 +3,7 @@ import {
   ICoordUnit,
   getCoordUnitFromUnitSpec,
 } from '~/shared/modules/PlacementUnitHelper';
-import { IEditKeyboardDesign } from '~/ui/layouter/editor/store';
+import { IEditKeyboardDesign } from '~/ui/layouter/editor/store/DataSchema';
 
 export function unitValueToMm(x: number, y: number, coordUnit: ICoordUnit) {
   if (coordUnit.mode === 'mm') {

@@ -1,6 +1,6 @@
 import { qxGlobal } from '../qxGlobal';
+import { isVNull, isVLeaf, isVElement, isVComponent } from './checker';
 import { diff, INSERTION, DELETION, PATCH } from './diff';
-import { isVNull, isVLeaf, isVElement, isVComponent } from './h';
 import { VNode, IEnv } from './types';
 import { indexOf } from './utils';
 

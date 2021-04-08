@@ -1,27 +1,13 @@
 import { qxInterposeProps } from '../qxInterposeProps';
+import { isValidComponentType } from './checker';
 import { createFunctionComponent } from './createRenderComponent';
 import {
-  VNode,
-  VTYPE_ELEMENT,
-  VTYPE_COMPONENT,
   IComponentFunction,
-  VElement,
-  VComponent,
-  IComponentObject,
+  VNode,
+  VTYPE_COMPONENT,
+  VTYPE_ELEMENT,
 } from './types';
 import { maybeFlattenArray } from './utils';
-
-export const isVNull = (c: VNode | null | false | undefined) =>
-  c === null || c === false || c === undefined;
-export const isVLeaf = (c: any) =>
-  typeof c === 'string' || typeof c === 'number';
-export const isVElement = (c: VNode): c is VElement =>
-  c?.vtype === VTYPE_ELEMENT;
-export const isVComponent = (c: VNode): c is VComponent =>
-  c?.vtype === VTYPE_COMPONENT;
-
-const isValidComponentType = (c: any): c is IComponentObject<any> =>
-  c?.mount && c.patch && c.unmount;
 
 export function jsx(
   type: string | IComponentFunction<any>,
