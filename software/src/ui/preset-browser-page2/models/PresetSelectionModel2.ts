@@ -10,19 +10,19 @@ import {
   getSelectionValueCorrected,
   ipcAgent,
   ISelectorOption,
-  ISelectorSource,
   router,
   useFetcher,
   useLocal,
   usePersistState,
 } from '~/ui/common';
+import { IPresetSelectionModel } from '~/ui/preset-browser-page/models';
 
 function makeProjectOptions(
   infos: IProjectResourceInfo[],
   projectIds: string[],
 ): ISelectorOption[] {
   return infos
-    .filter((it) => projectIds.includes(it.projectId))
+    .filter((it) => projectIds.includes(it.projectId) && it.origin === 'online')
     .map((it) => ({
       value: it.projectId,
       label: it.keyboardName,
@@ -44,16 +44,6 @@ function sendCreateProfileCommand(profileData: IProfileData) {
       createProfileExternal: { profileData },
     },
   ]);
-}
-
-interface IPresetSelectionModel {
-  projectSelectorSource: ISelectorSource;
-  presetSelectorSource: ISelectorSource;
-  currentProjectKey: string;
-  currentPresetKey: string;
-  selectProjectByProjectId(projectId: string): void;
-  loadedProfileData: IProfileData;
-  editSelectedProjectPreset(): void;
 }
 
 export function usePresetSelectionModel2(): IPresetSelectionModel {
@@ -97,7 +87,7 @@ export function usePresetSelectionModel2(): IPresetSelectionModel {
   };
 
   const loadedProfileData = local.projectProfiles.find(
-    (it) => it.id === sel.presetKey,
+    (it) => it.id === modPresetKey,
   )?.profileData;
 
   const editSelectedProjectPreset = async () => {

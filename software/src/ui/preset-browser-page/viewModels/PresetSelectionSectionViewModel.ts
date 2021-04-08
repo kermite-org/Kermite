@@ -1,10 +1,7 @@
 import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { ISelectorSource } from '~/ui/common';
 import { useDeviceStatusModel } from '~/ui/common/sharedModels/DeviceStatusModelHook';
-import {
-  IPresetSelectionModel,
-  editSelectedProjectPreset,
-} from '~/ui/preset-browser-page/models';
+import { IPresetSelectionModel } from '~/ui/preset-browser-page/models';
 
 export interface IPresetSelectionSectionViewModel {
   projectSelectorSource: ISelectorSource;
@@ -30,10 +27,7 @@ export function usePresetSelectionSectionViewModel(
       model.selectProjectByProjectId(deviceProjectId);
     },
     editPresetButtonHandler() {
-      editSelectedProjectPreset(
-        model.currentProjectKey,
-        model.currentPresetKey,
-      );
+      model.editSelectedProjectPreset();
     },
   };
 }

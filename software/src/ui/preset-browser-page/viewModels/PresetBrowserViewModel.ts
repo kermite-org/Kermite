@@ -1,7 +1,4 @@
-import {
-  IPresetSelectionModel,
-  useProfileDataLoaded,
-} from '~/ui/preset-browser-page/models';
+import { IPresetSelectionModel } from '~/ui/preset-browser-page/models';
 import {
   IPresetKeyboardSectionViewModel,
   usePresetKeyboardSectionViewModel,
@@ -19,15 +16,11 @@ export interface IPresetBrowserViewModel {
 export function usePresetBrowserViewModel(
   model: IPresetSelectionModel,
 ): IPresetBrowserViewModel {
-  const profileData = useProfileDataLoaded(
-    model.currentProjectKey,
-    model.currentPresetKey,
-  );
   const presetSelectionSectionViewModel = usePresetSelectionSectionViewModel(
     model,
   );
   const presetKeyboardSectionViewModel = usePresetKeyboardSectionViewModel(
-    profileData,
+    model.loadedProfileData,
   );
   return {
     presetSelectionSectionViewModel,

@@ -1,4 +1,4 @@
-import { IPresetSpec, IProjectResourceInfo } from '~/shared';
+import { IPresetSpec, IProfileData, IProjectResourceInfo } from '~/shared';
 import { createPresetKey } from '~/shared/funcs/DomainRelatedHelpers';
 import {
   fieldSetter,
@@ -9,6 +9,10 @@ import {
   useFetcher,
   usePersistState,
 } from '~/ui/common';
+import {
+  editSelectedProjectPreset as editSelectedProjectPresetOriginal,
+  useProfileDataLoaded,
+} from '~/ui/preset-browser-page/models';
 
 export interface IPresetSelectionModel {
   projectSelectorSource: ISelectorSource;
@@ -16,6 +20,8 @@ export interface IPresetSelectionModel {
   currentProjectKey: string;
   currentPresetKey: string;
   selectProjectByProjectId(projectId: string): void;
+  loadedProfileData: IProfileData;
+  editSelectedProjectPreset(): void;
 }
 
 function makeProjectOptions(infos: IProjectResourceInfo[]): ISelectorOption[] {
@@ -88,6 +94,12 @@ export function usePresetSelectionModel(): IPresetSelectionModel {
     }
   };
 
+  const loadedProfileData = useProfileDataLoaded(modProjectKey, modPresetKey);
+
+  const editSelectedProjectPreset = () => {
+    editSelectedProjectPresetOriginal(modProjectKey, modPresetKey);
+  };
+
   return {
     projectSelectorSource: {
       options: projectOptions,
@@ -102,5 +114,7 @@ export function usePresetSelectionModel(): IPresetSelectionModel {
     currentProjectKey: modProjectKey,
     currentPresetKey: modPresetKey,
     selectProjectByProjectId,
+    loadedProfileData,
+    editSelectedProjectPreset,
   };
 }
