@@ -1,9 +1,6 @@
-import { jsx, css } from 'qx';
+import { css, jsx } from 'qx';
 import { reflectFieldChecked, texts } from '~/ui/common';
-import {
-  ClosableOverlay,
-  CommonDialogFrame,
-} from '~/ui/common/fundamental/dialog/CommonDialogParts';
+import { ClosableOverlay, CommonDialogFrame } from '~/ui/common/components';
 import { uiStatusModel } from '~/ui/common/sharedModels/UiStatusModel';
 import { editorModel } from '~/ui/editor-page/EditorMainPart/models/EditorModel';
 import { AssignTypeSelectionPart } from './AssignTypeSelectionPart';

@@ -2,7 +2,7 @@ import { asyncRerender } from 'qx';
 import { removeArrayItems } from '~/shared';
 import { generateNextSequentialId } from '~/shared/funcs/DomainRelatedHelpers';
 import { texts } from '~/ui/common';
-import { modalConfirm } from '~/ui/common/fundamental/dialog/BasicModals';
+import { modalConfirm } from '~/ui/common/components';
 import { editorModel } from '~/ui/editor-page/EditorMainPart/models/EditorModel';
 import {
   ILayerConfigurationModelEditValues,

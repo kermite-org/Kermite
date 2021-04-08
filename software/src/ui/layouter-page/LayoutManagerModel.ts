@@ -9,7 +9,7 @@ import {
   IProjectLayoutsInfo,
 } from '~/shared';
 import { appUi, ipcAgent } from '~/ui/common';
-import { modalConfirm } from '~/ui/common/fundamental/dialog/BasicModals';
+import { modalConfirm } from '~/ui/common/components';
 import { UiLayouterCore } from '~/ui/layouter';
 
 interface ILayoutManagerModel {

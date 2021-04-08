@@ -14,13 +14,13 @@ import {
   texts,
 } from '~/ui/common';
 import {
+  createModal,
   ClosableOverlay,
   CommonDialogFrame,
   DialogContentRow,
   DialogButtonsRow,
   DialogButton,
-} from '~/ui/common/fundamental/dialog/CommonDialogParts';
-import { createModal } from '~/ui/common/fundamental/overlay/ForegroundModalLayer';
+} from '~/ui/common/components';
 import {
   cssCommonPropertiesTable,
   cssCommonTextInput,

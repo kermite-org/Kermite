@@ -12,7 +12,7 @@ import {
   modalAlert,
   modalConfirm,
   modalTextEdit,
-} from '~/ui/common/fundamental/dialog/BasicModals';
+} from '~/ui/common/components';
 import { useDeviceStatusModel } from '~/ui/common/sharedModels/DeviceStatusModelHook';
 import { uiStatusModel } from '~/ui/common/sharedModels/UiStatusModel';
 import { editorModel } from '~/ui/editor-page/EditorMainPart/models/EditorModel';

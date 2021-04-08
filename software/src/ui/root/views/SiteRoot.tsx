@@ -1,8 +1,7 @@
 import { jsx, Hook, applyGlobalStyle, css, setShortCssProcessor } from 'qx';
 import { router, shortCssProcessor } from '~/ui/common';
 import { globalHintMouseMoveHandlerEffect } from '~/ui/common/base/GlobalHint';
-import { DebugOverlay } from '~/ui/common/fundamental/overlay/DebugOverlay';
-import { ForegroundModalLayerRoot } from '~/ui/common/fundamental/overlay/ForegroundModalLayer';
+import { DebugOverlay, ForegroundModalLayerRoot } from '~/ui/common/components';
 import { siteModel } from '~/ui/common/sharedModels/SiteModel';
 import { uiStatusModel } from '~/ui/common/sharedModels/UiStatusModel';
 import { globalAppServicesInitializerEffect } from '~/ui/root/models/AppServicesInitializer';

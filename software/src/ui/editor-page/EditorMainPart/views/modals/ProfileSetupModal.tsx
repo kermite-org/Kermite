@@ -9,15 +9,15 @@ import {
   useLocal,
   useMemoEx,
 } from '~/ui/common';
-import { GeneralSelector } from '~/ui/common/components';
 import {
+  GeneralSelector,
   ClosableOverlay,
   CommonDialogFrame,
   DialogButton,
   DialogButtonsRow,
   DialogContentRow,
-} from '~/ui/common/fundamental/dialog/CommonDialogParts';
-import { createModal } from '~/ui/common/fundamental/overlay/ForegroundModalLayer';
+  createModal,
+} from '~/ui/common/components';
 import {
   cssCommonPropertiesTable,
   cssCommonTextInput,
