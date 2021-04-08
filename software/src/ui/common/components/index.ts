@@ -1,4 +1,4 @@
 export * from './ProjectAttachementFileSelectorModal';
 export * from './UtilityComponents';
-export * from './controls';
-export * from './fabrics';
+export * from './atoms';
+export * from './molecules';

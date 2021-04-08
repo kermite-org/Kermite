@@ -1,6 +1,6 @@
 import { jsx, css } from 'qx';
 import { ISelectorOption, reflectValue } from '~/ui/common';
-import { FlatListSelector } from '~/ui/common/components/controls/FlatListSelector';
+import { FlatListSelector } from '~/ui/common/components/atoms/FlatListSelector';
 import { ClosableOverlay } from '~/ui/common/fundamental/dialog/CommonDialogParts';
 
 const cssPanel = css`

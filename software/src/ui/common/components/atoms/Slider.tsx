@@ -1,12 +1,12 @@
 import { FC, jsx } from 'qx';
 import { reflectValue } from '~/ui/common';
 
-type Props = {
+interface Props {
   min: number;
   max: number;
   value: number;
   onChange(value: number): void;
-};
+}
 
 export const Slider: FC<Props> = (props) => {
   const handleChange = reflectValue((value) =>

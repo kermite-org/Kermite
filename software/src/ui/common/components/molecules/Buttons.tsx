@@ -1,6 +1,6 @@
 import { jsx, css } from 'qx';
 import { uiTheme } from '~/ui/common/base';
-import { ButtonBase, Icon } from '~/ui/common/components/controls';
+import { ButtonBase, Icon } from '~/ui/common/components/atoms';
 
 export const SmallSymbolicActionButton = (props: {
   onClick?(): void;

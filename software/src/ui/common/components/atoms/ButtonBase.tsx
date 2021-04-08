@@ -1,6 +1,6 @@
 import { FC, jsx, css } from 'qx';
 
-interface IButtonBase {
+interface Props {
   onClick?(): void;
   disabled?: boolean;
   extraCss?: string;
@@ -10,7 +10,7 @@ interface IButtonBase {
   hint?: string;
 }
 
-const baseCss = css`
+const style = css`
   font-size: 15px;
   cursor: pointer;
   user-select: none;
@@ -29,7 +29,7 @@ const baseCss = css`
   }
 `;
 
-export const ButtonBase: FC<IButtonBase> = ({
+export const ButtonBase: FC<Props> = ({
   onClick,
   disabled,
   extraCss,
@@ -40,7 +40,7 @@ export const ButtonBase: FC<IButtonBase> = ({
 }) => (
   <div
     classNames={[
-      baseCss,
+      style,
       extraCss,
       (disabled && 'disabled') || undefined,
       (active && 'active') || undefined,

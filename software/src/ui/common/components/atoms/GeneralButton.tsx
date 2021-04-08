@@ -1,6 +1,6 @@
 import { FC, jsx, css } from 'qx';
 import { uiTheme } from '~/ui/common';
-import { Icon } from '~/ui/common/components/controls';
+import { Icon } from '~/ui/common/components/atoms';
 
 type IGeneralButtonSize = 'unit' | 'unitSquare' | 'large';
 

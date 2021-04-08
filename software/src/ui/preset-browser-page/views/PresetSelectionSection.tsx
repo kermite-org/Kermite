@@ -3,7 +3,7 @@ import {
   KeyboardProfileSelector,
   KeyboardProjectSelector,
 } from '~/ui/common/components';
-import { GeneralButton } from '~/ui/common/components/controls/GeneralButton';
+import { GeneralButton } from '~/ui/common/components/atoms/GeneralButton';
 import { IPresetSelectionSectionViewModel } from '~/ui/preset-browser-page/viewModels/PresetSelectionSectionViewModel';
 
 type Props = {

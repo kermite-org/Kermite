@@ -6,13 +6,13 @@ import {
   GeneralSelector,
   Icon,
 } from '~/ui/common/components';
-import { RibbonSelector, CheckBox } from '~/ui/common/components/controls';
+import { RibbonSelector, CheckBox } from '~/ui/common/components/atoms';
 import {
   CheckBoxLine,
   OperationButtonOnlyIcon,
   OperationButtonWithIcon,
   SmallSymbolicActionButton,
-} from '~/ui/common/components/fabrics';
+} from '~/ui/common/components/molecules';
 
 const cssRoot = css`
   height: 100%;

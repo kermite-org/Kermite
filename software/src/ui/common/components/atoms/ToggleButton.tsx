@@ -2,7 +2,7 @@ import { FC, jsx, css } from 'qx';
 import { uiTheme } from '~/ui/common';
 import { ButtonBase } from '~/ui/common/components';
 
-export interface Props {
+interface Props {
   active: boolean;
   setActive(active: boolean): void;
   width?: number;

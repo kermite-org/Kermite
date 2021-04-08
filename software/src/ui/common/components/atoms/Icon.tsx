@@ -5,15 +5,15 @@ interface Props {
   size?: number;
 }
 
-const cssIcon = (size?: number) => css`
+const style = (size?: number) => css`
   font-size: ${size ? `${size}px` : 'inherit'};
 `;
 
 export const Icon: FC<Props> = ({ spec, size }) =>
   spec.startsWith('fa ') ? (
-    <i class={spec} css={cssIcon(size)} />
+    <i class={spec} css={style(size)} />
   ) : (
-    <i class="material-icons" css={cssIcon(size)}>
+    <i class="material-icons" css={style(size)}>
       {spec}
     </i>
   );
