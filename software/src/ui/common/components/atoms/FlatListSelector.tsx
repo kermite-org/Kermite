@@ -1,5 +1,6 @@
 import { css, FC, jsx } from 'qx';
-import { ISelectorOption, reflectValue } from '~/ui/common';
+import { ISelectorOption } from '~/ui/common/base';
+import { reflectValue } from '~/ui/common/helpers';
 
 type Props = {
   options: ISelectorOption[];

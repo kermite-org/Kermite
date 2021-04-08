@@ -1,6 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { uiTheme } from '~/ui/common';
-import { ISelectorOption } from '~/ui/common/base';
+import { ISelectorOption, uiTheme } from '~/ui/common/base';
 
 interface Props {
   options: ISelectorOption[];

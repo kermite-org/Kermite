@@ -1,5 +1,5 @@
 import { FC, jsx, css } from 'qx';
-import { uiTheme } from '~/ui/common';
+import { uiTheme } from '~/ui/common/base';
 import { ButtonBase } from '~/ui/common/components/atoms/ButtonBase';
 
 interface Props {

@@ -8,7 +8,7 @@ import {
   IRealtimeKeyboardEvent,
 } from '~/shared';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
-import { ipcAgent } from '~/ui/common';
+import { ipcAgent } from '~/ui/common/base';
 
 class PlayerModelHelper {
   static translateKeyIndexToKeyUnitId(

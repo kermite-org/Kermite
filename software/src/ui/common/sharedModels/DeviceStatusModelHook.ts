@@ -1,6 +1,6 @@
 import { Hook } from 'qx';
 import { IKeyboardDeviceAttributes } from '~/shared';
-import { ipcAgent } from '~/ui/common';
+import { ipcAgent } from '~/ui/common/base';
 
 export interface IDeviceStatusModel {
   isConnected: boolean;

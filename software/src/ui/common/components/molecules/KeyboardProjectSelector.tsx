@@ -1,7 +1,6 @@
 import { jsx, css, FC } from 'qx';
-import { ISelectorSource } from '~/ui/common';
-import { GeneralButton } from '../atoms/GeneralButton';
-import { GeneralSelector } from '../atoms/GeneralSelector';
+import { ISelectorSource } from '~/ui/common/base';
+import { GeneralButton, GeneralSelector } from '~/ui/common/components/atoms';
 
 interface Props {
   selectorSource: ISelectorSource;

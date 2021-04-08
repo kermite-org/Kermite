@@ -1,6 +1,6 @@
 import { FC, jsx, css } from 'qx';
 import { uiTheme } from '~/ui/common/base';
-import { CheckBox } from '~/ui/common/components/atoms/CheckBox';
+import { CheckBox } from '~/ui/common/components/atoms';
 
 interface Props {
   className?: string;

@@ -1,6 +1,6 @@
 import { IResourceOrigin } from '~/shared';
-import { ipcAgent, useFetcher } from '~/ui/common';
-import { appUi } from '~/ui/common/base';
+import { ipcAgent, appUi } from '~/ui/common/base';
+import { useFetcher } from '~/ui/common/helpers';
 
 export function useProjectResourcePresenceChecker(
   origin: IResourceOrigin,

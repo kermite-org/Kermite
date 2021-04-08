@@ -1,5 +1,5 @@
 import { IAppWindowStatus } from '~/shared';
-import { ipcAgent } from '~/ui/common';
+import { ipcAgent } from '~/ui/common/base';
 
 export class SiteModel {
   isWindowActive: boolean = true;
