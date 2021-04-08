@@ -6,7 +6,7 @@ import {
   DialogButtonsRow,
   DialogButton,
   createModal,
-} from '~/ui/common/components';
+} from '~/ui/common';
 
 export const showCommandOutputLogModal = createModal(
   (args: { caption: string; logText: string }) => {

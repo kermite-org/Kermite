@@ -1,5 +1,5 @@
 import { jsx, css } from 'qx';
-import { makeCssColor } from '~/ui/common/base';
+import { makeCssColor } from '~/ui/common';
 import { editReader } from '~/ui/layouter/editor/store';
 
 const cssDisplayAreaFrame = css`

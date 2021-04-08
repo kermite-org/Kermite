@@ -4,7 +4,7 @@ import {
   GeneralSelector,
   RibbonSelector,
   ToggleButton,
-} from '~/ui/common/components';
+} from '~/ui/common';
 import { makeEditMenuBarViewModel } from '~/ui/layouter/editor/views/ToolBar/EditMenuBar.model';
 
 const cssEditMenuBar = css`

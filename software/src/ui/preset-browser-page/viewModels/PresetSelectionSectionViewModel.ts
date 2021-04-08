@@ -1,6 +1,5 @@
 import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
-import { ISelectorSource } from '~/ui/common';
-import { useDeviceStatusModel } from '~/ui/common/sharedModels/DeviceStatusModelHook';
+import { ISelectorSource, useDeviceStatusModel } from '~/ui/common';
 import { IPresetSelectionModel } from '~/ui/preset-browser-page/models';
 
 export interface IPresetSelectionSectionViewModel {

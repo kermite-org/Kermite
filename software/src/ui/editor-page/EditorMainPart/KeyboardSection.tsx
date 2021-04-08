@@ -1,6 +1,6 @@
 import { jsx, Hook, css } from 'qx';
+import { PlayerModel } from '~/ui/common';
 import { EditorKeyboardView } from '~/ui/common-svg/panels/EditorKeyboardView';
-import { PlayerModel } from '~/ui/common/sharedModels/PlayerModel';
 import { makeEditKeyUnitCardsPartViewModel } from '~/ui/editor-page/EditorMainPart/EditKeyUnitCardsPartViewModel';
 import { editorModel } from '~/ui/editor-page/EditorMainPart/models/EditorModel';
 import { LayerStateView } from './views/LayerStateView';

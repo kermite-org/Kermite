@@ -7,14 +7,12 @@ import {
   ISelectorSource,
   makePlainSelectorOption,
   useLocal,
-} from '~/ui/common';
-import {
   modalAlert,
   modalConfirm,
   modalTextEdit,
-} from '~/ui/common/components';
-import { useDeviceStatusModel } from '~/ui/common/sharedModels/DeviceStatusModelHook';
-import { uiStatusModel } from '~/ui/common/sharedModels/UiStatusModel';
+  useDeviceStatusModel,
+  uiStatusModel,
+} from '~/ui/common';
 import { editorModel } from '~/ui/editor-page/EditorMainPart/models/EditorModel';
 import { callProfileSetupModal } from '~/ui/editor-page/EditorMainPart/views/modals/ProfileSetupModal';
 import { keyboardConfigModel } from '~/ui/editor-page/ProfileManagement/models/KeyboardConfigModel';

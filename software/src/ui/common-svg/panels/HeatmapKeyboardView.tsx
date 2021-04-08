@@ -1,12 +1,12 @@
 import { jsx, css } from 'qx';
 import { IDisplayArea, IDisplayOutlineShape } from '~/shared';
+import { ViewModelProps } from '~/ui/common';
 import {
   HeatmapKeyUnitCard,
   IHeatmapCustomKeyUnitViewModel,
 } from '~/ui/common-svg/KeyUnitCards/HeatmapKeyUnitCard';
 import { KeyboardSvgFrameWithAutoScaler } from '~/ui/common-svg/frames/KeyboardSvgFrameWithAutoScaler';
 import { KeyboardBodyShape } from '~/ui/common-svg/keyboardBody/KeyboardBodyShape';
-import { ViewModelProps } from '~/ui/common/helpers';
 
 export interface IRealtimeHeatmapKeyboardViewModel {
   cardsVM: IHeatmapCustomKeyUnitViewModel[];

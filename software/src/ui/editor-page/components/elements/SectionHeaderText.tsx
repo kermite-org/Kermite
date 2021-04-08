@@ -1,5 +1,5 @@
 import { jsx, css } from 'qx';
-import { Icon } from '~/ui/common/components';
+import { Icon } from '~/ui/common';
 
 export function SectionHeaderText(props: {
   text: string;

@@ -2,8 +2,8 @@ import { css, FC, jsx } from 'qx';
 import {
   KeyboardProfileSelector,
   KeyboardProjectSelector,
-} from '~/ui/common/components';
-import { GeneralButton } from '~/ui/common/components/atoms/GeneralButton';
+  GeneralButton,
+} from '~/ui/common';
 import { IPresetSelectionSectionViewModel } from '~/ui/preset-browser-page/viewModels/PresetSelectionSectionViewModel';
 
 type Props = {

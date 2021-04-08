@@ -1,7 +1,10 @@
 import { Hook } from 'qx';
 import { ILayoutEditSource, IProjectLayoutsInfo } from '~/shared';
-import { ISelectorOption, useLocal } from '~/ui/common';
-import { useProjectResourcePresenceChecker } from '~/ui/common/sharedModels/hooks';
+import {
+  ISelectorOption,
+  useLocal,
+  useProjectResourcePresenceChecker,
+} from '~/ui/common';
 import { UiLayouterCore } from '~/ui/layouter';
 import { LayoutManagerModel } from '~/ui/layouter-page/LayoutManagerModel';
 

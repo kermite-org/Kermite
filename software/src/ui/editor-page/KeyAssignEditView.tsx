@@ -1,6 +1,5 @@
 import { jsx, css } from 'qx';
-import { uiTheme } from '~/ui/common';
-import { uiStatusModel } from '~/ui/common/sharedModels/UiStatusModel';
+import { uiTheme, uiStatusModel } from '~/ui/common';
 import { ProfileConfigurationPart } from '~/ui/editor-page/EditorMainPart/views/ProfileConfigurationPart';
 import { KeyboardSection } from './EditorMainPart/KeyboardSection';
 import { AssignEditSection } from './EditorMainPart/views/AssignEditSection';

@@ -1,7 +1,6 @@
 import { jsx, css, FC } from 'qx';
-import { uiTheme } from '~/ui/common';
+import { uiTheme, GeneralButton } from '~/ui/common';
 import { HeatmapKeyboardView } from '~/ui/common-svg/panels/HeatmapKeyboardView';
-import { GeneralButton } from '~/ui/common/components';
 import { useRealtimeHeatmapPageModel } from '~/ui/heatmap-page/models/RealtimeHeatmapPageModel';
 
 const style = css`

@@ -1,26 +1,24 @@
-import { jsx, css } from 'qx';
+import { css, jsx } from 'qx';
 import {
+  addOptionToOptionsArray,
   ILayerDefaultScheme,
   ModifierVirtualKey,
-  addOptionToOptionsArray,
   removeOptionFromOptionsArray,
   VirtualKeyTexts,
 } from '~/shared';
 import {
-  reflectFieldValue,
-  reflectChecked,
-  reflectValue,
-  reflectFieldChecked,
-  texts,
-} from '~/ui/common';
-import {
-  createModal,
   ClosableOverlay,
   CommonDialogFrame,
-  DialogContentRow,
-  DialogButtonsRow,
+  createModal,
   DialogButton,
-} from '~/ui/common/components';
+  DialogButtonsRow,
+  DialogContentRow,
+  reflectChecked,
+  reflectFieldChecked,
+  reflectFieldValue,
+  reflectValue,
+  texts,
+} from '~/ui/common';
 import {
   cssCommonPropertiesTable,
   cssCommonTextInput,

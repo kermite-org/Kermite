@@ -1,6 +1,6 @@
 import { jsx, Hook } from 'qx';
 import { IPersistKeyboardDesign } from '~/shared';
-import { windowKeyboardEventEffect } from '~/ui/common/helpers';
+import { windowKeyboardEventEffect } from '~/ui/common';
 import { editMutations, editReader } from '~/ui/layouter/editor/store';
 import {
   KeyboardDesignConverter,

@@ -1,5 +1,5 @@
 import { jsx, setShortCssProcessor, css } from 'qx';
-import { shortCssProcessor } from '~/ui/common/base';
+import { shortCssProcessor } from '~/ui/common';
 
 const cssRoot = css`
   border: solid 3px orange;

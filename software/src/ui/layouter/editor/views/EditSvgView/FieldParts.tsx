@@ -1,5 +1,5 @@
 import { jsx } from 'qx';
-import { uiTheme } from '~/ui/common/base';
+import { uiTheme } from '~/ui/common';
 import { editReader } from '~/ui/layouter/editor/store';
 
 function getWorldViewBounds() {

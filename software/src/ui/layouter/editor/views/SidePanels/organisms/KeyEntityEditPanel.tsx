@@ -1,5 +1,5 @@
 import { jsx, css } from 'qx';
-import { GeneralSelector, HFlex } from '~/ui/common/components';
+import { GeneralSelector, HFlex } from '~/ui/common';
 import { ConfigVStack } from '~/ui/layouter/editor/views/SidePanels/atoms';
 import { ConfigPanelBox } from '~/ui/layouter/editor/views/SidePanels/atoms/ConfigPanelBox';
 import { GeneralConfigTextEditRow } from '~/ui/layouter/editor/views/SidePanels/controls/GeneralConfigTextEditRow';

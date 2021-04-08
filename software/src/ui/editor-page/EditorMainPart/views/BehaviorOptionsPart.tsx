@@ -1,4 +1,4 @@
-import { jsx, css } from 'qx';
+import { css, jsx } from 'qx';
 import { fieldSetter, texts } from '~/ui/common';
 import { CheckBoxLine } from '~/ui/common/components';
 import { uiStatusModel } from '~/ui/common/sharedModels/UiStatusModel';

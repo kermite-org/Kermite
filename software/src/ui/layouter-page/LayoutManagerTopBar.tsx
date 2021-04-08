@@ -1,9 +1,9 @@
 import { jsx, css } from 'qx';
-import { uiTheme } from '~/ui/common';
 import {
+  uiTheme,
   OperationButtonWithIcon,
   ProjectAttachmentFileSelectorModal,
-} from '~/ui/common/components';
+} from '~/ui/common';
 import { LayoutManagerButton } from '~/ui/layouter-page/LayoutManagerButton';
 import { LayoutManagerMenu } from '~/ui/layouter-page/LayoutManagerMenu';
 import { useLayoutManagerViewModel } from '~/ui/layouter-page/LayoutManagerViewModel';

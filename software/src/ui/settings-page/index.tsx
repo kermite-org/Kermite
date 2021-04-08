@@ -9,16 +9,14 @@ import {
   uiTheme,
   useFetcher,
   useLocal,
-} from '~/ui/common';
-import {
   CheckBoxLine,
   GeneralButton,
   GeneralInput,
   HFlex,
   Indent,
   RibbonSelector,
-} from '~/ui/common/components';
-import { uiStatusModel } from '~/ui/common/sharedModels/UiStatusModel';
+  uiStatusModel,
+} from '~/ui/common';
 
 const cssUiSettingsPage = css`
   background: ${uiTheme.colors.clBackground};

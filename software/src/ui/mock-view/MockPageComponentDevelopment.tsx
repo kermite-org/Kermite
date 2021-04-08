@@ -1,18 +1,18 @@
 import { jsx, FC, Hook, css, styled } from 'qx';
-import { ISelectorOption, uiTheme } from '~/ui/common';
 import {
+  ISelectorOption,
+  uiTheme,
   GeneralButton,
   GeneralInput,
   GeneralSelector,
   Icon,
-} from '~/ui/common/components';
-import { RibbonSelector, CheckBox } from '~/ui/common/components/atoms';
-import {
+  RibbonSelector,
+  CheckBox,
   CheckBoxLine,
   OperationButtonOnlyIcon,
   OperationButtonWithIcon,
   SmallSymbolicActionButton,
-} from '~/ui/common/components/molecules';
+} from '~/ui/common';
 
 const cssRoot = css`
   height: 100%;

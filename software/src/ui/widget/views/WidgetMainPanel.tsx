@@ -1,6 +1,6 @@
 import { jsx, css } from 'qx';
+import { siteModel } from '~/ui/common';
 import { WidgetSvgKeyboardView } from '~/ui/common-svg/panels/WidgetSvgKeyboardView';
-import { siteModel } from '~/ui/common/sharedModels/SiteModel';
 import { useWidgetMainPanelModel } from '~/ui/widget/models/WidgetMainPanelModel';
 
 const style = css`

@@ -1,7 +1,6 @@
 import { jsx, render } from 'qx';
 import { debounce } from '~/shared';
-import { appUi } from '~/ui/common';
-import { uiStatusModel } from '~/ui/common/sharedModels/UiStatusModel';
+import { appUi, uiStatusModel } from '~/ui/common';
 import { SiteRoot } from '~/ui/root/views/SiteRoot';
 
 function start() {

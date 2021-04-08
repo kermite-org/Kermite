@@ -1,4 +1,4 @@
-import { jsx, css } from 'qx';
+import { css, jsx } from 'qx';
 import { texts } from '~/ui/common';
 import { useDeviceStatusModel } from '~/ui/common/sharedModels/DeviceStatusModelHook';
 import { PlayerModel } from '~/ui/common/sharedModels/PlayerModel';

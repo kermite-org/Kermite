@@ -1,5 +1,5 @@
 import { FC, jsx, Hook, css } from 'qx';
-import { Link, linkTo, router } from '~/ui/common/base';
+import { Link, linkTo, router } from '~/ui/common';
 
 const cssNavBox = css`
   display: flex;

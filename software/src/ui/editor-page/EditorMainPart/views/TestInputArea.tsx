@@ -1,6 +1,5 @@
 import { jsx, css } from 'qx';
-import { useLocal } from '~/ui/common';
-import { GeneralButton, GeneralInput } from '~/ui/common/components';
+import { useLocal, GeneralButton, GeneralInput } from '~/ui/common';
 import { makeTestInputAreaViewModel } from '~/ui/editor-page/TestInputArea/TestInputAreaViweModel';
 
 const cssTestInputArea = css`

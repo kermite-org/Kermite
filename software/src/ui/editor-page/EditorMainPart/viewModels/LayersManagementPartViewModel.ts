@@ -5,8 +5,8 @@ import { texts } from '~/ui/common';
 import { modalConfirm } from '~/ui/common/components';
 import { editorModel } from '~/ui/editor-page/EditorMainPart/models/EditorModel';
 import {
-  ILayerConfigurationModelEditValues,
   callLayerConfigurationModal,
+  ILayerConfigurationModelEditValues,
 } from '~/ui/editor-page/EditorMainPart/views/modals/LayerConfigurationModal';
 
 export interface ILayerManagementPartViewModel {

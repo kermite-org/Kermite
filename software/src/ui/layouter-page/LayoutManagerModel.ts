@@ -8,8 +8,7 @@ import {
   IPersistKeyboardDesign,
   IProjectLayoutsInfo,
 } from '~/shared';
-import { appUi, ipcAgent } from '~/ui/common';
-import { modalConfirm } from '~/ui/common/components';
+import { appUi, ipcAgent, modalConfirm } from '~/ui/common';
 import { UiLayouterCore } from '~/ui/layouter';
 
 interface ILayoutManagerModel {

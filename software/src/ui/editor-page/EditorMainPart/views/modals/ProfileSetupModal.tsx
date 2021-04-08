@@ -8,8 +8,6 @@ import {
   useFetcher,
   useLocal,
   useMemoEx,
-} from '~/ui/common';
-import {
   GeneralSelector,
   ClosableOverlay,
   CommonDialogFrame,
@@ -17,7 +15,7 @@ import {
   DialogButtonsRow,
   DialogContentRow,
   createModal,
-} from '~/ui/common/components';
+} from '~/ui/common';
 import {
   cssCommonPropertiesTable,
   cssCommonTextInput,
