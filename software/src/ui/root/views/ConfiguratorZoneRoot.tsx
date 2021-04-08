@@ -10,7 +10,7 @@ import { WindowStatusBarSection } from '~/ui/root/views/titleBar/WindowStatusBar
 import { CustomWindowFrame } from '~/ui/root/views/window/CustomWindowFrame';
 import { DevToolPullTab } from '~/ui/root/views/window/DevToolPullTab';
 import { UiSettingsPage } from '~/ui/settings-page';
-import { KeyboardShapePreviewPage } from '~/ui/shape-preview-page/ShapePreviewPage';
+import { ShapePreviewPage } from '~/ui/shape-preview-page';
 import { NavigationColumn } from './navigation/NavigationColumn';
 import { WindowTitleBarSection } from './titleBar/WindowTitleBarSection';
 
@@ -38,7 +38,7 @@ export const ConfiguratorZoneRoot = () => {
         <div css={styles.cssMainColumn}>
           {pagePath === '/editor' && <EditorPage />}
           {pagePath === '/layouter' && <UiLayouterPageComponent />}
-          {pagePath === '/shapePreview' && <KeyboardShapePreviewPage />}
+          {pagePath === '/shapePreview' && <ShapePreviewPage />}
           {pagePath === '/firmwareUpdation' && <FirmwareUpdationPage />}
           {pagePath === '/presetBrowser' && <PresetBrowserPage />}
           {pagePath === '/presetBrowser2' && <PresetBrowserPage2 />}

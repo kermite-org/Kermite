@@ -1,7 +1,7 @@
-import { jsx, css } from 'qx';
+import { jsx, css, FC } from 'qx';
 import { fieldSetter } from '~/ui/common';
 import { CheckBoxLine } from '~/ui/common/components';
-import { IShapeViewPersistState } from '~/ui/shape-preview-page/models/ShapeViewPersistState';
+import { IShapeViewPersistState } from '~/ui/shape-preview-page/models';
 
 interface IDisplayOptionSource {
   fieldKey: keyof IShapeViewPersistState;
@@ -21,6 +21,10 @@ const displayOptionsSource: IDisplayOptionSource[] = [
     label: 'box',
   },
 ];
+
+interface Props {
+  settings: IShapeViewPersistState;
+}
 
 const style = css`
   display: flex;
@@ -44,21 +48,16 @@ const style = css`
   }
 `;
 
-export function ShapePreviewOptionsBox(props: {
-  settings: IShapeViewPersistState;
-}) {
-  const { settings } = props;
-  return (
-    <div css={style}>
-      {displayOptionsSource.map((om) => (
-        <div key={om.fieldKey}>
-          <CheckBoxLine
-            checked={settings[om.fieldKey] as boolean}
-            setChecked={fieldSetter(settings, om.fieldKey)}
-            text={om.label}
-          />
-        </div>
-      ))}
-    </div>
-  );
-}
+export const ShapePreviewOptionsBox: FC<Props> = ({ settings }) => (
+  <div css={style}>
+    {displayOptionsSource.map((om) => (
+      <div key={om.fieldKey}>
+        <CheckBoxLine
+          checked={settings[om.fieldKey] as boolean}
+          setChecked={fieldSetter(settings, om.fieldKey)}
+          text={om.label}
+        />
+      </div>
+    ))}
+  </div>
+);

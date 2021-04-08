@@ -1,7 +1,7 @@
 import { Hook } from 'qx';
 import { IDisplayKeyboardDesign, removeArrayItems } from '~/shared';
 import { ipcAgent, ISelectorSource } from '~/ui/common';
-import { KeyboardShapesModel } from '~/ui/shape-preview-page/models/KeyboardShapesModel';
+import { useKeyboardShapesModel } from '~/ui/shape-preview-page/models/KeyboardShapesModel';
 import { IShapeViewPersistState } from '~/ui/shape-preview-page/models/ShapeViewPersistState';
 
 export interface IShapePreviewPageModel {
@@ -31,8 +31,7 @@ function useHoldKeyIndices() {
 }
 
 export function useShapePreviewPageModel(): IShapePreviewPageModel {
-  const shapesModel = Hook.useMemo(() => new KeyboardShapesModel(), []);
-  Hook.useEffect(shapesModel.startPageSession, []);
+  const shapesModel = useKeyboardShapesModel();
   const holdKeyIndices = useHoldKeyIndices();
 
   return {

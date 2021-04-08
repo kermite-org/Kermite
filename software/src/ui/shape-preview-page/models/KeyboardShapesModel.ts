@@ -1,3 +1,4 @@
+import { Hook } from 'qx';
 import { IDisplayKeyboardDesign, IProjectResourceInfo } from '~/shared';
 import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
@@ -8,7 +9,19 @@ import {
   shapeViewPersistStateSchema,
 } from '~/ui/shape-preview-page/models/ShapeViewPersistState';
 
-export class KeyboardShapesModel {
+export interface IKeyboardShapesModel {
+  settings: IShapeViewPersistState;
+  loadedDesign: IDisplayKeyboardDesign | undefined;
+  projectInfos: IProjectResourceInfo[];
+  currentProjectSig: string;
+  currentLayoutName: string;
+  optionLayoutNames: string[];
+  setCurrentProjectSig(sig: string): void;
+  setCurrentLayoutName(layoutName: string): void;
+  startPageSession(): void;
+}
+
+class KeyboardShapesModel {
   projectInfos: IProjectResourceInfo[] = [];
 
   private _currentProjectSig: string | undefined;
@@ -130,4 +143,10 @@ export class KeyboardShapesModel {
       UiLocalStorage.writeItem('shapePareviewPageSettings', this.settings);
     };
   };
+}
+
+export function useKeyboardShapesModel(): IKeyboardShapesModel {
+  const shapesModel = Hook.useMemo(() => new KeyboardShapesModel(), []);
+  Hook.useEffect(shapesModel.startPageSession, []);
+  return shapesModel;
 }

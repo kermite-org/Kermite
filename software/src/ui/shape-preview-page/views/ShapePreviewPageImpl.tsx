@@ -1,9 +1,9 @@
-import { jsx, css } from 'qx';
+import { css, jsx } from 'qx';
 import { uiTheme } from '~/ui/common';
 import { PreviewKeyboardShapeView } from '~/ui/common-svg/panels/PreviewKeyboardShapeView';
 import { GeneralSelector } from '~/ui/common/components';
-import { ShapePreviewOptionsBox } from '~/ui/shape-preview-page/ShapePreviewOptionsBox';
-import { useShapePreviewPageModel } from '~/ui/shape-preview-page/models/ShapePreviewPageModel';
+import { useShapePreviewPageModel } from '~/ui/shape-preview-page/models';
+import { ShapePreviewOptionsBox } from '~/ui/shape-preview-page/views/ShapePreviewOptionsBox';
 
 const style = css`
   background: ${uiTheme.colors.clBackground};
@@ -46,7 +46,7 @@ const style = css`
   }
 `;
 
-export const KeyboardShapePreviewPage = () => {
+export const ShapePreviewPageImpl = () => {
   const {
     loadedDesign,
     settings,
