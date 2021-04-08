@@ -4,7 +4,7 @@ import { ipcAgent, router } from '~/ui/common';
 import { IWidgetKeyUnitCardViewModel } from '~/ui/common-svg/KeyUnitCards/WidgetKeyUnitCard';
 import { PlayerModel } from '~/ui/common/sharedModels/PlayerModel';
 import { siteModel } from '~/ui/common/sharedModels/SiteModel';
-import { makeWidgetKeyUnitCardViewModel } from '~/ui/widget/models/WidgetKeyUnitCardViewModel';
+import { useWidgetKeyUnitCardViewModel } from '~/ui/widget/models/WidgetKeyUnitCardViewModel';
 
 export interface IWidgetMainPanelModel {
   isWindowActive: boolean;
@@ -31,7 +31,7 @@ export function useWidgetMainPanelModel(): IWidgetMainPanelModel {
     keyboardVM: {
       keyboardDesign: playerModel.displayDesign,
       cards: playerModel.displayDesign.keyEntities.map((kp) =>
-        makeWidgetKeyUnitCardViewModel(kp, playerModel),
+        useWidgetKeyUnitCardViewModel(kp, playerModel),
       ),
     },
     backToConfiguratorView() {

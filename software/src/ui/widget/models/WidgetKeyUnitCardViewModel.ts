@@ -3,7 +3,7 @@ import { getAssignEntryTexts } from '~/ui/common-svg/KeyUnitCardModels/KeyUnitCa
 import { IWidgetKeyUnitCardViewModel } from '~/ui/common-svg/KeyUnitCards/WidgetKeyUnitCard';
 import { PlayerModel } from '~/ui/common/sharedModels/PlayerModel';
 
-export function makeWidgetKeyUnitCardViewModel(
+export function useWidgetKeyUnitCardViewModel(
   ke: IDisplayKeyEntity,
   playerModel: PlayerModel,
 ): IWidgetKeyUnitCardViewModel {
