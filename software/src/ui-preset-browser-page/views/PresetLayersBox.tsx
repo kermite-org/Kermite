@@ -1,5 +1,5 @@
 import { jsx, css } from 'qx';
-import { uiTheme } from '~/ui-common';
+import { texts, uiTheme } from '~/ui-common';
 import { ViewModelProps } from '~/ui-common/helpers';
 import { IPresetLayerListViewModel } from '~/ui-preset-browser-page/viewModels/PresetKeyboardViewModel';
 
@@ -38,7 +38,7 @@ export const PresetLayersBox = ({
   `;
 
   return (
-    <div css={cssBase}>
+    <div css={cssBase} data-hint={texts.hitn_presetBrowser_layers}>
       {vm.layers.map((la) => (
         <PresetLayerItem
           key={la.layerId}

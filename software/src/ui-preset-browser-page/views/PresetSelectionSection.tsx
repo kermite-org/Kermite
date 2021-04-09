@@ -1,4 +1,5 @@
 import { jsx, css } from 'qx';
+import { texts } from '~/ui-common';
 import {
   KeyboardProfileSelector,
   KeyboardProjectSelector,
@@ -33,7 +34,7 @@ export const PresetSelectionSection = ({
     <div css={cssPresetSelectionSection}>
       <div class="selectorsPart">
         <div className="selectorBlock">
-          <div>Keyboard</div>
+          <div>{texts.label_presetBrowser_selectionTitle_keyboard}</div>
           <KeyboardProjectSelector
             selectorSource={vm.projectSelectorSource}
             isLinkButtonActive={vm.isLinkButtonActive}
@@ -41,12 +42,16 @@ export const PresetSelectionSection = ({
           />
         </div>
         <div className="selectorBlock">
-          <div>Preset</div>
-          <KeyboardProfileSelector selectorSource={vm.presetSelectorSource} />
+          <div>{texts.label_presetBrowser_selectionTitle_preset}</div>
+          <KeyboardProfileSelector
+            selectorSource={vm.presetSelectorSource}
+            hint={texts.hint_presetBrowser_selection_preset}
+          />
         </div>
       </div>
       <GeneralButton
-        text="Create Profile"
+        text={texts.label_presetBrowser_createProfileButton}
+        hint={texts.hint_presetBrowser_createProfileButton}
         size="large"
         onClick={vm.editPresetButtonHandler}
       />
