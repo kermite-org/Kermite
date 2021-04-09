@@ -46,10 +46,11 @@ function run() {
     .replace('%DICT_EN%', formatTextDict(dict_en))
     .replace('%DICT_JA%', formatTextDict(dict_ja));
 
-  fs.writeFileSync('../src/ui-common/base/uiTextData.ts', generatedCode, {
+  const filePath = '../src/ui-common/base/uiTextData.ts';
+  fs.writeFileSync(filePath, generatedCode, {
     encoding: 'utf-8',
   });
-
+  console.log(`file saved: ${filePath}`);
   console.log('done');
 }
 
