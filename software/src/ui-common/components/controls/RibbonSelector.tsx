@@ -9,6 +9,7 @@ interface Props {
   buttonWidth?: number;
   className?: string;
   disabled?: boolean;
+  hint?: string;
 }
 
 const style = (buttonWidth: number) => css`
@@ -61,8 +62,14 @@ export const RibbonSelector: FC<Props> = ({
   className,
   buttonWidth = 60,
   disabled,
+  hint,
 }) => (
-  <div css={style(buttonWidth)} class={className} data-disabled={disabled}>
+  <div
+    css={style(buttonWidth)}
+    class={className}
+    data-disabled={disabled}
+    data-hint={hint}
+  >
     {options.map((item) => (
       <div
         key={item.value}
