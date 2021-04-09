@@ -55,9 +55,9 @@ export const ProfileManagementPart = () => {
       <OperationButtonWithIcon
         onClick={baseVm.onSaveButton}
         disabled={!baseVm.canSave}
-        label="save"
         icon="save"
-        hint="save edit profile."
+        label={texts.label_assigner_topBar_saveAssignsButton}
+        hint={texts.hint_assigner_topBar_saveAssignsButton}
       />
       <OperationButtonWithIcon
         onClick={baseVm.onWriteButton}

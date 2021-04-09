@@ -1,6 +1,6 @@
 import { jsx, css } from 'qx';
 import { IProfileAssignType } from '~/shared';
-import { reflectValue } from '~/ui-common';
+import { reflectValue, texts } from '~/ui-common';
 import { editorModel } from '~/ui-editor-page/EditorMainPart/models/EditorModel';
 
 const AssignTypeSelectionPartViewModel = () => {
@@ -28,7 +28,9 @@ export const AssignTypeSelectionPart = () => {
 
   return (
     <div css={cssAttrsRow}>
-      <div>assign model</div>
+      <div data-hint={texts.hint_assigner_profileConfigModal_assignModel}>
+        {texts.label_assigner_profileConfigModal_assignModel}
+      </div>
       <div>
         <select
           value={currentAssignType}

@@ -11,6 +11,7 @@ interface Props {
   readOnly?: boolean;
   onFocus?(): void;
   onBlur?(): void;
+  hint?: string;
 }
 
 const style = (width: number = 100) => css`
@@ -53,6 +54,7 @@ export const GeneralInput: FC<Props> = ({
   readOnly,
   onFocus,
   onBlur,
+  hint,
 }) => {
   return (
     <input
@@ -66,6 +68,7 @@ export const GeneralInput: FC<Props> = ({
       readOnly={readOnly}
       onFocus={onFocus}
       onBlur={onBlur}
+      data-hint={hint}
     />
   );
 };

@@ -34,7 +34,7 @@ const cssMenuButton = css`
 `;
 
 const cssMenuPopup = css`
-  width: 130px;
+  width: 160px;
   background: #fff;
   position: absolute;
   color: #000;
