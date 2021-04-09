@@ -1,4 +1,5 @@
 import { css, Hook, jsx } from 'qx';
+import { texts } from '~/ui-common';
 import { GeneralButton, GeneralSelector } from '~/ui-common/components';
 import { firmwareUpdationModel } from './FirmwareUpdationModel';
 import { makeFirmwareUpdationPageViewModel } from './FirmwareUpdationPageViewModel';
@@ -40,10 +41,12 @@ export const FirmwareUpdationPart = () => {
 
   return (
     <div css={cssFirmwareUpdationPart}>
-      <div className="titleRow">Firmware Updation</div>
+      <div className="titleRow">
+        {texts.label_device_firmwareUpdation_sectionTitle}
+      </div>
 
       <div className="operationAlert">
-        Note: Wrong firmware selection may damage the hardware. Be careful.
+        {texts.label_deivce_firmwareUpdation_operationAlertText}
       </div>
 
       <div className="mainRow">
@@ -51,18 +54,22 @@ export const FirmwareUpdationPart = () => {
           {...vm.projectSelectorSource}
           width={350}
           disabled={!vm.canSelectTargetFirmware}
+          hint={texts.label_device_firmwareUpdation_projectSelector}
         />
       </div>
 
       <div className="statusRow">
         {phase === 'WaitingReset' && (
-          <div>Double tap the reset button on the device.</div>
+          <div>{texts.label_device_firmwareUpdation_usageText}</div>
         )}
 
         {phase === 'WaitingUploadOrder' && (
           <div>
             <div>{vm.detectedDeviceSig} detected. Ready to flash.</div>
-            <GeneralButton onClick={vm.onWriteButton} text="write" />
+            <GeneralButton
+              onClick={vm.onWriteButton}
+              text={texts.label_device_firmwareUpdation_writeButton}
+            />
           </div>
         )}
 

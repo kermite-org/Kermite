@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-key */
 import { css, FC, jsx } from 'qx';
+import { texts } from '~/ui-common';
 import { useConnectedDeviceAttributes } from '~/ui-firmware-updation-page/dataSource';
 
 const cssBase = css`
@@ -31,16 +32,34 @@ export const ConnectedDeviceAttrsPart: FC = () => {
   const tableData =
     deviceAttrs &&
     ([
-      ['ポート', deviceAttrs.portName],
-      ['リソースオリジン', isOriginOnline ? 'オンライン' : 'ローカル'],
-      ['プロジェクトID', deviceAttrs.projectId],
-      projectInfo && ['プロジェクトパス', projectInfo.projectPath],
-      projectInfo && ['キーボード名', projectInfo.keyboardName],
-      ['個体番号', deviceAttrs.deviceInstanceCode],
-      ['ファームウェアバリエーション', deviceAttrs.firmwareVariationName],
-      ['MCU品種名', deviceAttrs.mcuName],
+      [texts.lebel_device_deviceInfo_fieldName_port, deviceAttrs.portName],
       [
-        'ファームウェアリビジョン',
+        texts.lebel_device_deviceInfo_fieldName_resourceOrigin,
+        isOriginOnline ? 'オンライン' : 'ローカル',
+      ],
+      [
+        texts.lebel_device_deviceInfo_fieldName_projectID,
+        deviceAttrs.projectId,
+      ],
+      projectInfo && [
+        texts.lebel_device_deviceInfo_fieldName_projectPath,
+        projectInfo.projectPath,
+      ],
+      projectInfo && [
+        texts.lebel_device_deviceInfo_fieldName_keyboardName,
+        projectInfo.keyboardName,
+      ],
+      [
+        texts.lebel_device_deviceInfo_fieldName_instanceNumber,
+        deviceAttrs.deviceInstanceCode,
+      ],
+      [
+        texts.lebel_device_deviceInfo_fieldName_firmwareVariation,
+        deviceAttrs.firmwareVariationName,
+      ],
+      [texts.lebel_device_deviceInfo_fieldName_mcuName, deviceAttrs.mcuName],
+      [
+        texts.lebel_device_deviceInfo_fieldName_firmwareRevision,
         (isOriginOnline && deviceAttrs.firmwareBuildRevision) || 'N/A',
       ],
       isOriginOnline &&
@@ -52,14 +71,14 @@ export const ConnectedDeviceAttrsPart: FC = () => {
           fixDatetimeText(firm.buildTimestamp),
         ],
       [
-        'キーマッピング領域サイズ',
+        texts.lebel_device_deviceInfo_fieldName_keymappingAreaSize,
         deviceAttrs.assignStorageCapacity + ' bytes',
       ],
     ].filter((a) => !!a) as [string, string][]);
 
   return (
     <div css={cssBase}>
-      <div>デバイス情報</div>
+      <div>{texts.label_device_deviceInfo_sectionTitle}</div>
       {tableData && (
         <div>
           <table>
