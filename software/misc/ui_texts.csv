@@ -115,7 +115,7 @@ hint_presetBrowser_selection_keyboard,Select keyboard model.,キーボードの�
 hint_presetBrowser_selection_preset,Select preset.,プリセットを選択します。
 hint_presetBrowser_createProfileButton,Create new profile base on the selected preset.,選択されたプリセットから新しいプロファイルを作成します。
 hint_presetBrowser_projectLinkButton,Select keyboard model corresponds to the connected device.,接続されているデバイスに紐付くキーボード品種を選択します。
-hitn_presetBrowser_layers,Showing layers for selected preset.,選択されたプリセットのレイヤリストを表示しています。
+hint_presetBrowser_layers,Showing layers for selected preset.,選択されたプリセットのレイヤリストを表示しています。
 ,,
 label_device_deviceSelection_sectionTitle,Device Selection,デバイス選択
 hint_device_deviceSelection_selectionArea,Supported devices are enumerated. Select device to connect.,対応しているデバイスが列挙されます。接続するデバイスを選択します。
@@ -157,13 +157,13 @@ label_device_firmwareUpdation_failure,,
 label_settings_pageTitle,Configurations,設定
 label_settings_header_resources,Resources,リソース
 label_settings_configUseOnlineProjectResources,Use Online Project Resources,オンラインプロジェクトリソースを使用
-label_settings_configUserLocalProjectResources,Use Local Project Resources,ローカルプロジェクトリソースを使用
+label_settings_configUseLocalProjectResources,Use Local Project Resources,ローカルプロジェクトリソースを使用
 label_settings_configKermiteRootDirectory,Kermite Root Directory,Kermiteのソースコードの場所
 ,,
 label_settings_header_userInterface,User Interface,ユーザーインターフェイス
 label_settings_configUiScaling,UI Scaling,UIスケーリング
 ,,
 hint_settings_configUseOnlineProjectResources,,オンラインリソースを使用します。KermiteResourceStoreリポジトリに配置してあるデータを参照します。
-hint_settings_configUserLocalProjectResources,,ローカルマシンにあるリソースを使用します。Kermiteのソースコードの場所の指定が必要です。
+hint_settings_configUseLocalProjectResources,,ローカルマシンにあるリソースを使用します。Kermiteのソースコードの場所の指定が必要です。
 hint_settings_configKermiteRootDirectory,,Kermiteのソースコードのルートフォルダを指定します (ファームウェア開発者向け)
 hint_settings_configUiScaling,,画面のスケーリング値を設定します。文字の大きさが変わります。

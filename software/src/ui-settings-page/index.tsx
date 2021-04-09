@@ -104,8 +104,8 @@ export const UiSettingsPage = () => {
             setChecked={fieldSetter(settings, 'useOnlineResources')}
           />
           <CheckBoxLine
-            text={texts.label_settings_configUserLocalProjectResources}
-            hint={texts.hint_settings_configUserLocalProjectResources}
+            text={texts.label_settings_configUseLocalProjectResources}
+            hint={texts.hint_settings_configUseLocalProjectResources}
             checked={settings.useLocalResouces}
             setChecked={fieldSetter(settings, 'useLocalResouces')}
           />

@@ -38,7 +38,7 @@ export const PresetLayersBox = ({
   `;
 
   return (
-    <div css={cssBase} data-hint={texts.hitn_presetBrowser_layers}>
+    <div css={cssBase} data-hint={texts.hint_presetBrowser_layers}>
       {vm.layers.map((la) => (
         <PresetLayerItem
           key={la.layerId}
