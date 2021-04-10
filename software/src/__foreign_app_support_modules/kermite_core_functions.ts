@@ -1,4 +1,5 @@
 import {
+  converNullToUndefinedRecursive,
   createDictionaryFromKeyValues,
   IDisplayArea,
   IDisplayKeyEntity,
@@ -10,6 +11,7 @@ import {
 } from '~/shared';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import { ProfileDataConverter } from '~/shell/loaders/ProfileDataConverter';
+import { ProfileDataMigrator } from '~/shell/loaders/ProfileDataMigrator';
 import {
   getAssignEntryTexts,
   getAssignForKeyUnitWithLayerFallback,
@@ -72,10 +74,12 @@ function createKeyUnitTextDisplayModel(
 }
 
 function createProfileLayersDisplayModel(
-  persistProfileData: IPersistProfileData,
+  sourcePersistProfileData: IPersistProfileData,
 ): IProfileLayersDisplayModel {
+  const nullReplaced = converNullToUndefinedRecursive(sourcePersistProfileData);
+  const formatFixed = ProfileDataMigrator.fixProfileData(nullReplaced);
   const profileData = ProfileDataConverter.convertProfileDataFromPersist(
-    persistProfileData,
+    formatFixed,
   );
   const keyboardDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
     profileData.keyboardDesign,
