@@ -46,7 +46,7 @@ function run() {
     .replace('%DICT_EN%', formatTextDict(dict_en))
     .replace('%DICT_JA%', formatTextDict(dict_ja));
 
-  const filePath = '../src/ui-common/base/uiTextData.ts';
+  const filePath = '../src/ui/common/base/uiTextData.ts';
   fs.writeFileSync(filePath, generatedCode, {
     encoding: 'utf-8',
   });

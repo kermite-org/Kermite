@@ -31,7 +31,10 @@ export const CustomParametersPart: FC = () => {
       {definitionUnavailable &&
         texts.label_device_customParameters_patamtersUnavailable}
       <div className="parameters-list-outer">
-        <div className="parameters-list">
+        <div
+          className="parameters-list"
+          data-hint={texts.hint_device_customParameters_sectionArea}
+        >
           {parameterModels.map((item) => (
             <div key={item.slotIndex} className="row">
               <label>{item.label}</label>
