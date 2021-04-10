@@ -5,6 +5,7 @@ import {
   fieldSetter,
   ipcAgent,
   ISelectorOption,
+  texts,
   uiTheme,
   useFetcher,
   useLocal,
@@ -91,29 +92,32 @@ export const UiSettingsPage = () => {
 
   return (
     <div css={cssUiSettingsPage}>
-      <div>Configurations</div>
+      <div>{texts.label_settings_pageTitle}</div>
 
       <Indent>
-        <div>Resources</div>
+        <div>{texts.label_settings_header_resources}</div>
         <Indent>
           <CheckBoxLine
-            text="Use Online Project Resources"
+            text={texts.label_settings_configUseOnlineProjectResources}
+            hint={texts.hint_settings_configUseOnlineProjectResources}
             checked={settings.useOnlineResources}
             setChecked={fieldSetter(settings, 'useOnlineResources')}
           />
           <CheckBoxLine
-            text="Use Local Project Resources"
+            text={texts.label_settings_configUseLocalProjectResources}
+            hint={texts.hint_settings_configUseLocalProjectResources}
             checked={settings.useLocalResouces}
             setChecked={fieldSetter(settings, 'useLocalResouces')}
           />
           <div>
-            <div>Kermite Root Directory</div>
+            <div>{texts.label_settings_configKermiteRootDirectory}</div>
             <HFlex>
               <GeneralInput
                 value={folderPathDisplayValue}
                 disabled={!canChangeFolder}
                 readOnly={true}
                 width={350}
+                hint={texts.hint_settings_configKermiteRootDirectory}
               />
               <GeneralButton
                 onClick={onSelectButton}
@@ -124,15 +128,16 @@ export const UiSettingsPage = () => {
             </HFlex>
           </div>
         </Indent>
-        <div>User Interface</div>
+        <div>{texts.label_settings_header_userInterface}</div>
         <Indent>
-          <div>UI Scaling</div>
+          <div>{texts.label_settings_configUiScaling}</div>
           <RibbonSelector
             options={uiScaleOptions}
             value={uiStatusModel.settings.siteDpiScale.toString()}
             setValue={(strVal) =>
               (uiStatusModel.settings.siteDpiScale = parseFloat(strVal))
             }
+            hint={texts.hint_settings_configUiScaling}
           />
         </Indent>
       </Indent>

@@ -21,12 +21,14 @@ export function OperationSlotCard(props: {
   text: string;
   isCurrent: boolean;
   setCurrent(): void;
+  hint: string;
 }) {
   return (
     <div
       css={cssOperationSlotCard}
       data-current={props.isCurrent}
       onClick={props.setCurrent}
+      data-hint={props.hint}
     >
       {props.text}
     </div>

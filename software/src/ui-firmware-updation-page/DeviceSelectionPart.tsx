@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'qx';
 import { IKeyboardDeviceInfo, IProjectResourceInfo } from '~/shared';
-import { ipcAgent, ISelectorOption } from '~/ui-common';
+import { ipcAgent, ISelectorOption, texts } from '~/ui-common';
 import { FlatListSelector } from '~/ui-common/components/controls/FlatListSelector';
 import {
   useDeviceSelectionStatus,
@@ -45,7 +45,7 @@ export const DeviceSelectionPart: FC = () => {
 
   return (
     <div css={style}>
-      <div>Device Selection</div>
+      <div>{texts.label_device_deviceSelection_sectionTitle}</div>
       {/* <div>connected keyboard: {connectedKeyboardName}</div> */}
       <FlatListSelector
         options={deviceOptions}
@@ -53,6 +53,7 @@ export const DeviceSelectionPart: FC = () => {
         setValue={onChange}
         size={5}
         className="selector"
+        hint={texts.hint_device_deviceSelection_selectionArea}
       />
     </div>
   );

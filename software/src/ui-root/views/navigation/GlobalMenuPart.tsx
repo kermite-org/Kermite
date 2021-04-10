@@ -1,4 +1,5 @@
 import { jsx, css } from 'qx';
+import { texts } from '~/ui-common';
 import { makeGlobalMenuViewModel } from '~/ui-root/views/navigation/GlobalMenuPart.model';
 
 const cssGlobalMenuPart = css``;
@@ -58,7 +59,11 @@ export const GlobalMenuPart = () => {
     <div css={cssGlobalMenuPart}>
       <div css={cssOverlay} qxIf={isOpen} onClick={closeMenu} />
       <div css={cssMenuArea}>
-        <div css={cssMenuButton} onMouseDown={openMenu}>
+        <div
+          css={cssMenuButton}
+          onMouseDown={openMenu}
+          data-hint={texts.hint_globalMenuButton}
+        >
           <i className="fa fa-bars" />
         </div>
         <div css={cssMenuPopup} qxIf={isOpen}>

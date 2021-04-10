@@ -1,5 +1,6 @@
 import { appUi, useLocal } from '~/ui-common';
 import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
+import { useLanguageSelectionModel } from '~/ui-root/models/LanguageSelectionModel';
 import { useThemeSelectionModel } from '~/ui-root/models/ThemeSelectionModel';
 
 export interface IGlobalMenuItem {
@@ -12,6 +13,7 @@ export interface IGlobalMenuItem {
 function createMenuItems(): IGlobalMenuItem[] {
   const { settings } = uiStatusModel;
   const themeSelectionModel = useThemeSelectionModel();
+  const languageSelectionModel = useLanguageSelectionModel();
 
   const menuItems: IGlobalMenuItem[] = [
     {
@@ -37,6 +39,23 @@ function createMenuItems(): IGlobalMenuItem[] {
         themeSelectionModel.changeTheme('dark');
       },
       active: themeSelectionModel.currentThemeKey === 'dark',
+    },
+
+    {
+      key: 'miLanguageEnglish',
+      text: 'English',
+      handler() {
+        languageSelectionModel.changeLanguage('english');
+      },
+      active: languageSelectionModel.currrentLanguage === 'english',
+    },
+    {
+      key: 'miLanguageJapanese',
+      text: 'Japanese',
+      handler() {
+        languageSelectionModel.changeLanguage('japanese');
+      },
+      active: languageSelectionModel.currrentLanguage === 'japanese',
     },
   ];
 

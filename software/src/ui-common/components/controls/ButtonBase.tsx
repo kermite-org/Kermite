@@ -23,7 +23,7 @@ const baseCss = css`
   }
 
   &.disabled {
-    pointer-events: none;
+    /* pointer-events: none; */
     cursor: inherit;
     opacity: 0.5;
   }
@@ -46,7 +46,7 @@ export const ButtonBase: FC<IButtonBase> = ({
       (active && 'active') || undefined,
       className,
     ]}
-    onClick={onClick}
+    onClick={(!disabled && onClick) || undefined}
     data-hint={hint}
   >
     {children}

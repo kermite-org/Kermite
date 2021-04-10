@@ -1,4 +1,5 @@
 import { jsx } from 'qx';
+import { texts } from '~/ui-common';
 import { makeLayerListBoxPartViewModel } from '~/ui-editor-page/EditorMainPart/viewModels/LayersListBoxPartViewModel';
 import { makeLayerManagementPartViewModel } from '~/ui-editor-page/EditorMainPart/viewModels/LayersManagementPartViewModel';
 import { SectionHeaderText } from '~/ui-editor-page/components/elements/SectionHeaderText';
@@ -11,7 +12,11 @@ export function LayersSection() {
 
   return (
     <div>
-      <SectionHeaderText text="Layers" icon="layers" />
+      <SectionHeaderText
+        text={texts.label_assigner_layerListHeader}
+        icon="layers"
+        hint={texts.hint_assigner_layers_layerListHeader}
+      />
       <LayersListBoxPart vm={layerListBoxPartViewModel} />
       <LayerManagementPart vm={layerManagementPartViewModel} />
     </div>

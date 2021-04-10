@@ -1,7 +1,11 @@
 import { jsx, css } from 'qx';
 import { Icon } from '~/ui-common/components';
 
-export function SectionHeaderText(props: { text: string; icon: string }) {
+export function SectionHeaderText(props: {
+  text: string;
+  icon: string;
+  hint?: string;
+}) {
   const cssSectionHeader = css`
     display: flex;
     align-items: center;
@@ -9,7 +13,7 @@ export function SectionHeaderText(props: { text: string; icon: string }) {
     font-size: 18px;
   `;
   return (
-    <div css={cssSectionHeader}>
+    <div css={cssSectionHeader} data-hint={props.hint}>
       <Icon spec={props.icon} size={20} />
       <span>{props.text}</span>
     </div>

@@ -11,6 +11,7 @@ import {
   reflectChecked,
   reflectValue,
   reflectFieldChecked,
+  texts,
 } from '~/ui-common';
 import {
   ClosableOverlay,
@@ -101,7 +102,9 @@ const LayerConfigurationModalContent = (props: {
           <table css={cssCommonPropertiesTable}>
             <tbody>
               <tr>
-                <td>Layer Name</td>
+                <td data-hint={texts.hint_assigner_layerModal_layerName}>
+                  {texts.label_assigner_layerModal_layerName}
+                </td>
                 <td>
                   <input
                     type="text"
@@ -112,7 +115,9 @@ const LayerConfigurationModalContent = (props: {
                 </td>
               </tr>
               <tr>
-                <td>Default Scheme</td>
+                <td data-hint={texts.hint_assigner_layerModal_defaultScheme}>
+                  {texts.label_assigner_layerModal_defaultScheme}
+                </td>
                 <td>
                   <div css={cssDefaultSchemeButtonsRow}>
                     {defaultSchemeOptions.map((ds) => (
@@ -128,7 +133,11 @@ const LayerConfigurationModalContent = (props: {
                 </td>
               </tr>
               <tr>
-                <td>Attached Modifiers</td>
+                <td
+                  data-hint={texts.hint_assigner_layerModal_attachedModifiers}
+                >
+                  {texts.label_assigner_layerModal_attachedModifiers}
+                </td>
                 <td>
                   <div css={cssAttachedModifiersBox}>
                     {modsModel.map((mod) => {
@@ -148,7 +157,9 @@ const LayerConfigurationModalContent = (props: {
                 </td>
               </tr>
               <tr>
-                <td>Exclusion Group</td>
+                <td data-hint={texts.hint_assigner_layerModal_exclusionGroup}>
+                  {texts.label_assigner_layerModal_exclusionGroup}
+                </td>
                 <td>
                   <select
                     value={editValues.exclusionGroup.toString()}
@@ -165,7 +176,9 @@ const LayerConfigurationModalContent = (props: {
                 </td>
               </tr>
               <tr>
-                <td>Initial Active</td>
+                <td data-hint={texts.hint_assigner_layerModal_initialActive}>
+                  {texts.label_assigner_layerModal_initialActive}
+                </td>
                 <td>
                   <label>
                     <input

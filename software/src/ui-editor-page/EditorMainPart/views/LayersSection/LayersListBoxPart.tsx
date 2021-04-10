@@ -1,8 +1,8 @@
-import { jsx, css } from 'qx';
-import { uiTheme } from '~/ui-common';
+import { css, jsx } from 'qx';
+import { texts, uiTheme } from '~/ui-common';
 import {
-  ILayerListViewModel,
   ILayerListBoxPartViewModel,
+  ILayerListViewModel,
 } from '~/ui-editor-page/EditorMainPart/viewModels/LayersListBoxPartViewModel';
 
 const LayerCard = (props: { layerModel: ILayerListViewModel }) => {
@@ -28,7 +28,7 @@ const LayerCard = (props: { layerModel: ILayerListViewModel }) => {
       key={layerId}
       data-current={isCurrent}
       onClick={setCurrent}
-      data-hint="編集対象のレイヤを選択します。"
+      data-hint={texts.hint_assigner_layers_layerListItems}
     >
       {layerName}
     </div>

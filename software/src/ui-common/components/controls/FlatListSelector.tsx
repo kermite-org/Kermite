@@ -8,6 +8,7 @@ type Props = {
   size: number;
   disabled?: boolean;
   className?: string;
+  hint?: string;
 };
 
 const style = css`
@@ -22,6 +23,7 @@ export const FlatListSelector: FC<Props> = ({
   size,
   disabled,
   className,
+  hint,
 }) => (
   <select
     size={size}
@@ -30,6 +32,7 @@ export const FlatListSelector: FC<Props> = ({
     css={style}
     disabled={disabled}
     className={className}
+    data-hint={hint}
   >
     {options.map((it) => (
       <option value={it.value} key={it.value}>

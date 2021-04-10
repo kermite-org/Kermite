@@ -4,6 +4,7 @@ import { uiTheme } from '~/ui-common';
 export const WindowControlButton = (props: {
   icon: string;
   onClick: () => void;
+  hint?: string;
 }) => {
   const cssButton = css`
     display: flex;
@@ -19,7 +20,7 @@ export const WindowControlButton = (props: {
     -webkit-app-region: no-drag;
   `;
   return (
-    <div css={cssButton} onClick={props.onClick}>
+    <div css={cssButton} onClick={props.onClick} data-hint={props.hint}>
       <i className={props.icon} />
     </div>
   );

@@ -2,6 +2,7 @@ import { jsx, css } from 'qx';
 import { IDisplayKeyShape } from '~/shared';
 import { uiTheme } from '~/ui-common';
 import { KeyUnitShape } from '~/ui-common-svg/KeyUnitCards/KeyUnitShape';
+import { texts } from '~/ui-common/base';
 
 export interface IEditKeyUnitCardViewModel {
   keyUnitId: string;
@@ -91,7 +92,7 @@ export function EditKeyUnitCard(props: {
     <g
       transform={`translate(${pos.x}, ${pos.y}) rotate(${pos.r}) `}
       key={keyUnitId}
-      data-hint="Select edit target key."
+      data-hint={texts.hint_assigner_keyboardView_keyUnit}
     >
       <KeyUnitShape
         shape={shape}

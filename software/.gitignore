@@ -14,4 +14,7 @@ tsconfig.tsbuildinfo
 .node-version
 .VSCodeCounter
 
+.~*.csv#
+
+
 

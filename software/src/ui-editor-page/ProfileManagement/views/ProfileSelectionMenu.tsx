@@ -1,4 +1,5 @@
-import { jsx, css } from 'qx';
+import { css, jsx } from 'qx';
+import { texts } from '~/ui-common';
 import { IProfileSelectionMenuPartViewModel } from '~/ui-editor-page/ProfileManagement/viewModels/ProfileSelectionMenuPartViewModel';
 
 const cssProfileSelectionMenuPart = css``;
@@ -33,7 +34,7 @@ const cssMenuButton = css`
 `;
 
 const cssMenuPopup = css`
-  width: 130px;
+  width: 160px;
   background: #fff;
   position: absolute;
   color: #000;
@@ -62,13 +63,18 @@ export const ProfileSelectionMenuPart = (props: {
         <div
           css={cssMenuButton}
           onMouseDown={openMenu}
-          data-hint="Open profile operations menu."
+          data-hint={texts.hint_assigner_topBar_profileOperationsMenu}
         >
           <i className="fa fa-bars" />
         </div>
         <div css={cssMenuPopup} qxIf={isOpen}>
           {menuItems.map((mi) => (
-            <div key={mi.key} onMouseUp={mi.handler} qxIf={mi.enabled}>
+            <div
+              key={mi.key}
+              onMouseUp={mi.handler}
+              data-hint={mi.hint}
+              qxIf={mi.enabled}
+            >
               {mi.text}
             </div>
           ))}

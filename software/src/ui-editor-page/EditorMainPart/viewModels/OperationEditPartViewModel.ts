@@ -4,6 +4,7 @@ import {
   addOptionToOptionsArray,
   removeOptionFromOptionsArray,
 } from '~/shared';
+import { texts } from '~/ui-common';
 import { editorModel } from '~/ui-editor-page/EditorMainPart/models/EditorModel';
 import { virtualKeyGroupsTable2 } from './virtualkeyGroupsTable';
 
@@ -50,7 +51,7 @@ export function makePlainOperationEditCardsViewModel(): IPlainOperationEditCards
       editOperation === undefined,
     setCurrent: () => writeEditOperation(undefined),
     isEnabled: true,
-    hint: 'アサインを解除します。',
+    hint: texts.hint_assigner_assigns_none,
   };
 
   const transparentEntry: IOperationCardViewModel = {
@@ -59,8 +60,7 @@ export function makePlainOperationEditCardsViewModel(): IPlainOperationEditCards
     isCurrent: isSlotSelected && assignEntry?.type === 'transparent',
     setCurrent: () => writeAssignEntry({ type: 'transparent' }),
     isEnabled: true,
-    hint:
-      '透過アサインを割り当てます。アサイン探索処理が次のレイヤに引き継がれます。',
+    hint: texts.hint_assigner_assigns_transparent,
   };
 
   const blockEntry: IOperationCardViewModel = {
@@ -69,8 +69,7 @@ export function makePlainOperationEditCardsViewModel(): IPlainOperationEditCards
     isCurrent: isSlotSelected && assignEntry?.type === 'block',
     setCurrent: () => writeAssignEntry({ type: 'block' }),
     isEnabled: true,
-    hint:
-      'ブロックアサインを割り当てます。アサイン探索処理がこのレイヤで終了します。',
+    hint: texts.hint_assigner_assigns_block,
   };
 
   return {
@@ -107,7 +106,7 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
           !isDualSecondary ||
           (isDualSecondary &&
             modifierVirtualKeys.includes(vk as ModifierVirtualKey)),
-        hint: 'キー入力を割り当てます。',
+        hint: texts.hint_assigner_assigns_keyInput,
       })),
   );
 
@@ -133,7 +132,7 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
         isCurrent,
         setCurrent,
         isEnabled: editOperation?.type === 'keyInput' && !isDualSecondary,
-        hint: 'モディファイヤキーを割り当てます。',
+        hint: texts.hint_assigner_assigns_modifiers,
       };
     },
   );
@@ -153,7 +152,7 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
           invocationMode: 'hold',
         }),
       isEnabled: true,
-      hint: 'レイヤ呼び出しを割り当てます。',
+      hint: texts.hint_assigner_assigns_layers,
     }));
 
   const layerCallEntryClearExclusive: IOperationCardViewModel = {
@@ -166,8 +165,7 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
         targetExclusionGroup: 1,
       }),
     isEnabled: true,
-    hint:
-      '排他レイヤグループに対して、グループに所属する全レイヤを解除します。',
+    hint: texts.hint_assigner_assigns_clearExclusiveGroup,
   };
 
   layerCallEntries.push(layerCallEntryClearExclusive);

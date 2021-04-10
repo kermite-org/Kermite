@@ -1,5 +1,5 @@
-import { jsx, css } from 'qx';
-import { fieldSetter } from '~/ui-common';
+import { css, jsx } from 'qx';
+import { fieldSetter, texts } from '~/ui-common';
 import { CheckBoxLine } from '~/ui-common/components';
 import { uiStatusModel } from '~/ui-common/sharedModels/UiStatusModel';
 
@@ -16,16 +16,16 @@ export const BehaviorOptionsPart = () => {
   return (
     <div css={cssBehaviorOptionsPart}>
       <CheckBoxLine
-        text="Show Layers Dynamic"
+        text={texts.label_assigner_configs_showLayersDynamic}
         checked={settings.showLayersDynamic}
         setChecked={fieldSetter(settings, 'showLayersDynamic')}
-        hint="デバイスのレイヤ状態に同期して表示するレイヤを切り替えます。"
+        hint={texts.hint_assigner_configs_showLayersDynamic}
       />
       <CheckBoxLine
-        text="Show Fallback Assigns"
+        text={texts.label_assigner_configs_showFallbackAssigns}
         checked={settings.showLayerDefaultAssign}
         setChecked={fieldSetter(settings, 'showLayerDefaultAssign')}
-        hint="レイヤのデフォルトアサインを表示します。"
+        hint={texts.hint_assigner_configs_showFallbackAssigns}
       />
     </div>
   );

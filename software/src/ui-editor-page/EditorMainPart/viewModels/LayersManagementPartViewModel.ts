@@ -1,6 +1,7 @@
 import { asyncRerender } from 'qx';
 import { removeArrayItems } from '~/shared';
 import { generateNextSequentialId } from '~/shared/funcs/DomainRelatedHelpers';
+import { texts } from '~/ui-common';
 import { modalConfirm } from '~/ui-common/fundamental/dialog/BasicModals';
 import { editorModel } from '~/ui-editor-page/EditorMainPart/models/EditorModel';
 import {
@@ -73,7 +74,7 @@ export function makeLayerManagementPartViewModel(): ILayerManagementPartViewMode
       };
       const editValues = await callLayerConfigurationModal({
         sourceValues,
-        caption: 'Edit Layer Properties',
+        caption: texts.label_assigner_layerModal_modalTitleEdit,
         isRootLayer: !isCurrentLayerCustom,
       });
       if (editValues) {
@@ -94,7 +95,7 @@ export function makeLayerManagementPartViewModel(): ILayerManagementPartViewMode
           exclusionGroup: 0,
           initialActive: false,
         },
-        caption: 'Add Layer',
+        caption: texts.label_assigner_layerModal_modalTitleAdd,
         isRootLayer: false,
       });
       if (layerAttrs?.layerName) {

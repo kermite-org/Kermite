@@ -1,5 +1,5 @@
 import { jsx, css } from 'qx';
-import { reflectValue } from '~/ui-common';
+import { reflectValue, texts } from '~/ui-common';
 
 const cssOperationLayerOptionSelector = css`
   margin-left: 10px;
@@ -19,7 +19,7 @@ export const OperationLayerOptionSelector = (props: {
   return (
     <div
       css={cssOperationLayerOptionSelector}
-      data-hint="レイヤ呼び出しモードを指定します。"
+      data-hint={texts.hint_assigner_assigns_layerInvocationModeSelector}
     >
       <select
         value={selectedValue}

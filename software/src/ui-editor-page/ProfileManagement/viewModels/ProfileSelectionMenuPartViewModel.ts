@@ -1,10 +1,11 @@
-import { useLocal } from '~/ui-common';
+import { texts, useLocal } from '~/ui-common';
 import { useProjectResourcePresenceChecker } from '~/ui-common/sharedModels/hooks';
 import { IProfileManagementPartViewModel } from './ProfileManagementPartViewModel';
 
 interface IMenuItem {
   key: string;
   text: string;
+  hint: string;
   handler(): void;
   enabled: boolean;
 }
@@ -23,49 +24,57 @@ function createMenuItemSources(
   return [
     {
       key: 'createProfile',
-      text: 'new',
+      text: texts.label_assigner_menu_newProfile,
+      hint: texts.hint_assigner_menu_newProfile,
       handler: vm.createProfile,
       enabled: true,
     },
     {
       key: 'renameProfile',
-      text: 'rename',
+      text: texts.label_assigner_menu_renameProfile,
+      hint: texts.hint_assigner_menu_renameProfile,
       handler: vm.renameProfile,
       enabled: vm.isCurrentProfileInternal,
     },
     {
       key: 'copyProfile',
-      text: 'copy',
+      text: texts.label_assigner_menu_copyProfile,
+      hint: texts.hint_assigner_menu_copyProfile,
       handler: vm.copyProfile,
       enabled: vm.isCurrentProfileInternal,
     },
     {
       key: 'deleteProfile',
-      text: 'delete',
+      text: texts.label_assigner_menu_deleteProfile,
+      hint: texts.hint_assigner_menu_deleteProfile,
       handler: vm.deleteProfile,
       enabled: vm.isCurrentProfileInternal,
     },
     {
       key: 'saveAs',
-      text: 'save as',
+      text: 'save',
+      hint: 'save',
       handler: vm.handleSaveUnsavedProfile,
       enabled: !vm.isCurrentProfileInternal,
     },
     {
       key: 'importFromFile',
-      text: 'import from file',
+      text: texts.label_assigner_menu_importFromFile,
+      hint: texts.hint_assigner_menu_importFromFile,
       handler: vm.handleImportFromFile,
       enabled: true,
     },
     {
       key: 'exportToFile',
-      text: 'export to file',
+      text: texts.label_assigner_menu_exportToFile,
+      hint: texts.hint_assigner_menu_exportToFile,
       handler: vm.handleExportToFile,
       enabled: true,
     },
     {
       key: 'saveAsPreset',
-      text: 'save as preset',
+      text: texts.label_assigner_menu_saveAsPreset,
+      hint: texts.hint_assigner_menu_saveAsPreset,
       handler: vm.openExportingPresetSelectionModal,
       enabled: isLocalProjectsAvailable && !!vm.currentProfileProjectId,
     },
@@ -98,6 +107,7 @@ export function makeProfileSelectionMenuPartViewModel(
           state.isOpen = false;
         },
         enabled: item.enabled,
+        hint: item.hint,
       }));
     },
   };

@@ -12,6 +12,7 @@ interface Props {
   className?: string;
   size?: IGeneralButtonSize;
   children?: any;
+  hint?: string;
 }
 
 const style = css`
@@ -66,6 +67,7 @@ export const GeneralButton: FC<Props> = ({
   className,
   size = 'unit',
   children,
+  hint,
 }) => (
   <div
     css={style}
@@ -73,6 +75,7 @@ export const GeneralButton: FC<Props> = ({
     onClick={onClick}
     data-disabled={disabled}
     data-size={size}
+    data-hint={hint}
   >
     {icon && <Icon spec={icon} />}
     {text && <span>{text}</span>}

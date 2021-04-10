@@ -1,5 +1,5 @@
 import { jsx, css } from 'qx';
-import { reflectFieldChecked } from '~/ui-common';
+import { reflectFieldChecked, texts } from '~/ui-common';
 import {
   ClosableOverlay,
   CommonDialogFrame,
@@ -17,8 +17,8 @@ const ShiftCancelOptionPart = () => {
         margin-top: 10px;
       `}
     >
-      <label>
-        use shift cancel feature
+      <label data-hint={texts.hint_assigner_profileConfigModal_shiftCancel}>
+        {texts.label_assigner_profileConfigModal_shiftCancel}
         <input
           type="checkbox"
           checked={settings.useShiftCancel}
@@ -48,7 +48,10 @@ export const ProfileConfigratuionModalLayer = () => {
 
   return (
     <ClosableOverlay close={closeModal}>
-      <CommonDialogFrame caption="profile configuration" close={closeModal}>
+      <CommonDialogFrame
+        caption={texts.label_assigner_profileConfigModal_modalTitle}
+        close={closeModal}
+      >
         <div css={cssDialogContent}>
           <AssignTypeSelectionPart />
           <DualModeSettingsPart />

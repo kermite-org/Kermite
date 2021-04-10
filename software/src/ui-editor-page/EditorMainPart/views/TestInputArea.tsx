@@ -8,7 +8,7 @@ const cssTestInputArea = css`
   display: flex;
 `;
 
-export const TestInputArea = () => {
+export const TestInputArea__Deprecated = () => {
   const vm = useLocal(makeTestInputAreaViewModel);
   return (
     <div css={cssTestInputArea}>

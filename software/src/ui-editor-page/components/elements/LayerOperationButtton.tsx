@@ -16,7 +16,7 @@ const cssButton = css`
 
   &[data-disabled] {
     opacity: 0.3;
-    pointer-events: none;
+    /* pointer-events: none; */
   }
   color: ${uiTheme.colors.clMainText};
 `;
@@ -30,7 +30,7 @@ export const LayerOperationButtton = (props: {
   return (
     <div
       css={cssButton}
-      onClick={props.handler}
+      onClick={(props.enabled && props.handler) || undefined}
       data-disabled={!props.enabled}
       data-hint={props.hint}
     >

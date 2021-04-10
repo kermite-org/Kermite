@@ -3,6 +3,7 @@ import { ICustromParameterSpec } from '~/shared';
 import {
   ipcAgent,
   ISelectorOption,
+  texts,
   useEventSource,
   useFetcher2,
 } from '~/ui-common';
@@ -162,9 +163,13 @@ export const CustomParametersPart: FC = () => {
   } = useCustomParametersPartViewModel();
   return (
     <div css={cssBase}>
-      <div>Custom Setting Parameters</div>
-      {definitionUnavailable && 'パラメータの定義が利用できません'}
-      <div className="parameters-list-outer">
+      <div>{texts.label_device_customParameters_sectionTitle}</div>
+      {definitionUnavailable &&
+        texts.label_device_customParameters_patamtersUnavailable}
+      <div
+        className="parameters-list-outer"
+        data-hint={texts.hint_device_customParameters_sectionArea}
+      >
         <div className="parameters-list">
           {parameterModels.map((item) => (
             <div key={item.slotIndex} className="row">

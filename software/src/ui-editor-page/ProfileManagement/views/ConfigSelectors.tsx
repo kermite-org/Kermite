@@ -1,5 +1,6 @@
 import { jsx } from 'qx';
 import { IKeyboardBehaviorMode, IKeyboardLayoutStandard } from '~/shared';
+import { texts } from '~/ui-common';
 import { keyboardConfigModel } from '~/ui-editor-page/ProfileManagement/models/KeyboardConfigModel';
 import { DualItemsHoverSelector } from '~/ui-editor-page/components/fabrics/DualItemHoverSelector';
 
@@ -20,7 +21,7 @@ export const BehaviorSelector = () => {
       currentItem={currentMode}
       setCurrentItem={setCurrent}
       textDictionary={textDictionary}
-      hint="Select keyboard behavior mode. (STD: Standalone Mode, SIM: Simulation Mode)"
+      hint={texts.hint_assigner_topBar_keyboardBehaviorModeSelector}
     />
   );
 };
@@ -41,7 +42,7 @@ export const LayoutStandardSelector = () => {
       currentItem={currentLayout}
       setCurrentItem={setCurrent}
       textDictionary={textDictionary}
-      hint="Select keyboard system layout."
+      hint={texts.hint_assigner_topBar_keyboardSystemLayoutSelector}
     />
   );
 };

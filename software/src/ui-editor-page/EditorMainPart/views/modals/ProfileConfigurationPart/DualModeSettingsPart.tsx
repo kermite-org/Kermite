@@ -3,6 +3,7 @@ import {
   reflectFieldValue,
   reflectValue,
   reflectFieldChecked,
+  texts,
 } from '~/ui-common';
 import { editorModel } from '~/ui-editor-page/EditorMainPart/models/EditorModel';
 
@@ -46,12 +47,22 @@ export const DualModeSettingsPart = () => {
 
   return (
     <div css={cssDualModeSettingsPart}>
-      <div>dual mode settings</div>
+      <div data-hint={texts.hint_assigner_profileConfigModal_dualMode_header}>
+        {texts.label_assigner_profileConfigModal_dualMode_header}
+      </div>
 
       <table class="settingsTable">
         <tbody>
           <tr>
-            <td> primary default trigger</td>
+            <td
+              data-hint={
+                texts.hint_assigner_profileConfigModal_dualMode_primaryDefaultTrigger
+              }
+            >
+              {
+                texts.label_assigner_profileConfigModal_dualMode_primaryDefaultTrigger
+              }
+            </td>
             <td>
               <select
                 value={settings.primaryDefaultTrigger}
@@ -63,7 +74,15 @@ export const DualModeSettingsPart = () => {
             </td>
           </tr>
           <tr>
-            <td> tap hold threshold</td>
+            <td
+              data-hint={
+                texts.hint_assigner_profileConfigModal_dualMode_tapHoldThreshold
+              }
+            >
+              {
+                texts.label_assigner_profileConfigModal_dualMode_tapHoldThreshold
+              }
+            </td>
             <td>
               <input
                 type="number"
@@ -75,7 +94,15 @@ export const DualModeSettingsPart = () => {
             </td>
           </tr>
           <tr>
-            <td> use interrupt hold</td>
+            <td
+              data-hint={
+                texts.hint_assigner_profileConfigModal_dualMode_useInterruptHold
+              }
+            >
+              {
+                texts.label_assigner_profileConfigModal_dualMode_useInterruptHold
+              }
+            </td>
             <td>
               <input
                 type="checkbox"

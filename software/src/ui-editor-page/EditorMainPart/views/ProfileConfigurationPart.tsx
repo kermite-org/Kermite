@@ -1,4 +1,5 @@
-import { jsx, css } from 'qx';
+import { css, jsx } from 'qx';
+import { texts } from '~/ui-common';
 import { editorModel } from '~/ui-editor-page/EditorMainPart/models/EditorModel';
 
 export const ProfileConfigurationPart = () => {
@@ -8,5 +9,9 @@ export const ProfileConfigurationPart = () => {
 
   const currentAssignType = editorModel.profileData.settings.assignType;
 
-  return <div css={cssBase}>assign model: {currentAssignType}</div>;
+  return (
+    <div css={cssBase} data-hint={texts.hint_assigner_configs_assignModel}>
+      {texts.label_assigner_configs_assignModel}: {currentAssignType}
+    </div>
+  );
 };

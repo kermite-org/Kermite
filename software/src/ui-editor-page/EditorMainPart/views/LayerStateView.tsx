@@ -1,4 +1,5 @@
 import { jsx, css } from 'qx';
+import { texts } from '~/ui-common';
 import { useDeviceStatusModel } from '~/ui-common/sharedModels/DeviceStatusModelHook';
 import { PlayerModel } from '~/ui-common/sharedModels/PlayerModel';
 
@@ -33,7 +34,10 @@ export const LayerStateView = (props: { playerModel: PlayerModel }) => {
   const { isConnected } = useDeviceStatusModel();
 
   return (
-    <div css={cssLayerStateView}>
+    <div
+      css={cssLayerStateView}
+      data-hint={texts.hint_assigner_keyboardView_layerStates}
+    >
       {props.playerModel.layerStackViewSource.map((la) => {
         return (
           <div
