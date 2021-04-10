@@ -43,16 +43,16 @@ label_assigner_testInputArea_clearButton,clear,クリア
 hint_assigner_testInputArea_inputField,Test input area for typing.,キーボードの動作確認用の入力欄です。
 hint_assigner_testInputArea_clearButton,Clear input text.,入力欄をクリアします。
 ,,
-hint_assigner_keyboardView_layerStates,Layers states: Affects current layter states of the device.,デバイスの現在のレイヤ状態を表示しています。
+hint_assigner_keyboardView_layerStates,Layer states: Affects current layter states of the device.,デバイスの現在のレイヤ状態を表示しています。
 hint_assigner_keyboardView_keyUnit,Select edit target key,アサイン設定対象のキーを選択します
 ,,
 hint_assigner_assigns_pri,Select primary assign slot. Primary assigns are fired when key down or tap.,プライマリアサインスロットを選択します。キーを押下またはタップしたときに適用されます。
 hint_assigner_assigns_sec,Select secondary assign slot. Secondary assigns are fired when key hold.,セカンダリアサインスロットを選択します。キーを押下またはタップしたときに適用されます。
 hint_assigner_assigns_ter,Select tertiary assign slot. Tertiary assigns are fired when double tap detected.,ターシャリアサインスロットを割り当てます。キーを素早く2回タップしたときに適用されます。
 hint_assigner_assigns_none,Clear assign,アサインを解除します。
-hint_assigner_assigns_transparent,Set transparent assign,透過アサインを割り当てます。アサイン探索処理が次のレイヤに引き継がれます。
-hint_assigner_assigns_block,Set block assign. lookup flow is stopped on this layer.,ブロックアサインを割り当てます。アサイン探索処理がこのレイヤで終了します。
-hint_assigner_assigns_keyInput,Set key input assigns. lookup flow skipped for this layer.,キー入力を割り当てます。
+hint_assigner_assigns_transparent,Set transparent assign. lookup flow skips the layer.,透過アサインを割り当てます。アサイン探索処理が次のレイヤに引き継がれます。
+hint_assigner_assigns_block,Set block assign. lookup flow is stopped.,ブロックアサインを割り当てます。アサイン探索処理がこのレイヤで終了します。
+hint_assigner_assigns_keyInput,Set key input assigns.,キー入力を割り当てます。
 hint_assigner_assigns_modifiers,Set modifiers attached to key input,キー入力に対して適用されるモディファイヤキーを割り当てます。
 hint_assigner_assigns_layers,Set layer assigns,レイヤ呼び出しを割り当てます。
 hint_assigner_assigns_clearExclusiveGroup,Clear all layers belongs to the same exclusion group,排他レイヤグループに対して、グループに所属する全レイヤを解除します。
