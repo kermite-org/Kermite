@@ -1,4 +1,5 @@
 import { css, FC, jsx } from 'qx';
+import { texts } from '~/ui/common';
 import { PresetKeyboardView } from '~/ui/common-svg/panels/PresetKeyboardView';
 import { PresetLayersBox } from '~/ui/preset-browser-page/components/PresetLayersBox';
 import { IPresetKeyboardSectionViewModel } from '~/ui/preset-browser-page/viewModels/PresetKeyboardSectionViewModel';
@@ -31,7 +32,7 @@ export const PresetKeyboardSection: FC<Props> = ({
       <PresetKeyboardView {...keyboard} />
     </div>
     <div class="layersPart">
-      <h3>Layers</h3>
+      <h3>{texts.label_presetBrowser_layers}</h3>
       <PresetLayersBox {...layerList} />
     </div>
   </div>

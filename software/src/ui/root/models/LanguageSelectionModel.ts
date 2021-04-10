@@ -1,5 +1,5 @@
 import { Hook } from 'qx';
-import { ILanguageKey, ipcAgent, uiTextConfigLoader } from '~/ui-common/base';
+import { ILanguageKey, ipcAgent, uiTextConfigLoader } from '~/ui/common/base';
 
 export interface ILanguageSelectionModel {
   currrentLanguage: ILanguageKey;

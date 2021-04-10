@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { CheckBox, GeneralSelector, Slider } from '~/ui/common';
+import { CheckBox, GeneralSelector, Slider, texts } from '~/ui/common';
 import { useCustomParametersPartModel } from '~/ui/firmware-updation-page/models';
 
 const style = css`
@@ -27,8 +27,9 @@ export const CustomParametersPart: FC = () => {
   } = useCustomParametersPartModel();
   return (
     <div css={style}>
-      <div>Custom Setting Parameters</div>
-      {definitionUnavailable && 'パラメータの定義が利用できません'}
+      <div>{texts.label_device_customParameters_sectionTitle}</div>
+      {definitionUnavailable &&
+        texts.label_device_customParameters_patamtersUnavailable}
       <div className="parameters-list-outer">
         <div className="parameters-list">
           {parameterModels.map((item) => (

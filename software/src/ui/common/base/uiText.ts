@@ -1,7 +1,7 @@
 import {
   textSourceEnglish,
   textSourceJapanese,
-} from '~/ui-common/base/uiTextData';
+} from '~/ui/common/base/uiTextData';
 
 type ITextSource = { [key in keyof typeof textSourceEnglish]: string };
 

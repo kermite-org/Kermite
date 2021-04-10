@@ -1,5 +1,5 @@
 import { css, Hook, jsx } from 'qx';
-import { texts } from '~/ui-common';
+import { texts } from '~/ui/common';
 import {
   KeyboardProfileSelector,
   OperationButtonWithIcon,

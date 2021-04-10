@@ -1,4 +1,5 @@
 import { css, FC, jsx } from 'qx';
+import { texts } from '~/ui/common';
 import { PresetLayerItem } from '~/ui/preset-browser-page/components/PresetLayerItem';
 
 type Props = {
@@ -19,7 +20,7 @@ export const PresetLayersBox: FC<Props> = ({
   currentLayerId,
   setCurrentLayerId,
 }) => (
-  <div css={style}>
+  <div css={style} data-hint={texts.hint_presetBrowser_layers}>
     {layers.map((la) => (
       <PresetLayerItem
         key={la.layerId}

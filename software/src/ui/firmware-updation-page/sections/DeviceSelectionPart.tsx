@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { FlatListSelector } from '~/ui/common';
+import { FlatListSelector, texts } from '~/ui/common';
 import { useDeviceSelectionPartModel } from '~/ui/firmware-updation-page/models';
 
 const style = css`
@@ -20,7 +20,7 @@ export const DeviceSelectionPart: FC = () => {
   } = useDeviceSelectionPartModel();
   return (
     <div css={style}>
-      <div>Device Selection</div>
+      <div>{texts.label_device_deviceSelection_sectionTitle}</div>
       {/* <div>connected keyboard: {connectedKeyboardName}</div> */}
       <FlatListSelector
         options={deviceOptions}
@@ -28,6 +28,7 @@ export const DeviceSelectionPart: FC = () => {
         setValue={setSelectedDevicePath}
         size={5}
         className="selector"
+        hint={texts.hint_device_deviceSelection_selectionArea}
       />
     </div>
   );

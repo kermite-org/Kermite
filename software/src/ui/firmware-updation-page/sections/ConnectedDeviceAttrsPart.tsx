@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-key */
 import { css, FC, jsx } from 'qx';
+import { texts } from '~/ui/common';
 import { useConnectedDevicesAttrsPartModel } from '~/ui/firmware-updation-page/models';
 
 const style = css`
@@ -15,7 +16,7 @@ export const ConnectedDeviceAttrsPart: FC = () => {
   const { tableData } = useConnectedDevicesAttrsPartModel();
   return (
     <div css={style}>
-      <div>デバイス情報</div>
+      <div>{texts.label_device_deviceInfo_sectionTitle}</div>
       {tableData && (
         <div>
           <table>
