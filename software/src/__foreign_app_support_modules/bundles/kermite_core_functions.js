@@ -484,6 +484,9 @@
     }
     return res;
   }
+  function duplicateObjectByJsonStringifyParse(obj) {
+    return JSON.parse(JSON.stringify(obj));
+  }
   function createDictionaryFromKeyValues(arr) {
     const obj = {};
     arr.forEach((el) => {
@@ -506,6 +509,22 @@
   function translateCoord(p, ax, ay) {
     p.x += ax;
     p.y += ay;
+  }
+  function converNullToUndefinedRecursive(src) {
+    if (src === null) {
+      return void 0;
+    }
+    if (Array.isArray(src)) {
+      return src.map(converNullToUndefinedRecursive);
+    } else if (typeof src === "object") {
+      const dst = {};
+      for (const key in src) {
+        dst[key] = converNullToUndefinedRecursive(src[key]);
+      }
+      return dst;
+    } else {
+      return src;
+    }
   }
 
   // src/shared/modules/PlacementUnitHelper.ts
@@ -806,6 +825,154 @@
     ProfileDataConverter2.convertProfileDataFromPersist = convertProfileDataFromPersist;
   })(ProfileDataConverter || (ProfileDataConverter = {}));
 
+  // src/shell/loaders/LayoutDataMigrator.ts
+  var LayoutDataMigrator;
+  (function(LayoutDataMigrator2) {
+    function patchOldFormatLayoutData(layout) {
+      const _layout = layout;
+      if (!layout.formatRevision) {
+        layout.formatRevision = "LA00";
+      }
+      if (!layout.transformationGroups && _layout.transGroups) {
+        layout.transformationGroups = _layout.transGroups;
+      }
+    }
+    LayoutDataMigrator2.patchOldFormatLayoutData = patchOldFormatLayoutData;
+  })(LayoutDataMigrator || (LayoutDataMigrator = {}));
+
+  // src/shell/loaders/ProfileDataMigrator.ts
+  var ProfileDataMigrator;
+  (function(ProfileDataMigrator2) {
+    function patchOldScheme(profileData) {
+      for (const la of profileData.layers) {
+        if (la.defaultScheme === void 0) {
+          la.defaultScheme = "block";
+        }
+      }
+      if (!profileData.assignType) {
+        profileData.assignType = "single";
+      }
+      if (!profileData.settings) {
+        if (profileData.assignType === "single") {
+          profileData.settings = {
+            useShiftCancel: false
+          };
+        }
+        if (profileData.assignType === "dual") {
+          profileData.settings = {
+            type: "dual",
+            useShiftCancel: false,
+            primaryDefaultTrigger: "down",
+            tapHoldThresholdMs: 200,
+            useInterruptHold: true
+          };
+        }
+      }
+      if (profileData.settings.useShiftCancel === void 0) {
+        profileData.settings.useShiftCancel = false;
+      }
+      profileData.layers.forEach((la) => {
+        if (la.exclusionGroup === void 0) {
+          la.exclusionGroup = 0;
+        }
+        if (la.initialActive === void 0) {
+          la.initialActive = false;
+        }
+      });
+      Object.values(profileData.assigns).forEach((assign) => {
+        if (assign?.type === "single") {
+          if (assign.op?.type === "layerCall") {
+            if (assign.op.invocationMode === "exclusive") {
+              assign.op.invocationMode = "turnOn";
+            }
+          }
+        }
+      });
+    }
+    const fallbackDisplayArea = {
+      centerX: 0,
+      centerY: 50,
+      width: 300,
+      height: 120
+    };
+    function makeOutlineShapesFromDisplayArea(displayArea) {
+      const cx = displayArea.centerX;
+      const cy = displayArea.centerY;
+      const hw = displayArea.width / 2;
+      const hh = displayArea.height / 2;
+      const _points = [
+        [cx + hw, cy - hh],
+        [cx + hw, cy + hh],
+        [cx - hw, cy + hh],
+        [cx - hw, cy - hh]
+      ];
+      return [
+        {
+          points: _points.map(([x, y]) => ({x, y}))
+        }
+      ];
+    }
+    function makeKeyboardDesignFromKeyboardShapePRF02(shape) {
+      return {
+        formatRevision: "LA00",
+        setup: {
+          placementUnit: "mm",
+          placementAnchor: "center",
+          keySizeUnit: "KP",
+          keyIdMode: "auto"
+        },
+        keyEntities: shape.keyUnits.map((ku) => {
+          return {
+            keyId: ku.id,
+            x: ku.x,
+            y: ku.y,
+            angle: ku.r || 0,
+            shape: "std 1",
+            keyIndex: ku.keyIndex
+          };
+        }),
+        outlineShapes: makeOutlineShapesFromDisplayArea(shape.displayArea || fallbackDisplayArea),
+        transformationGroups: []
+      };
+    }
+    function convertProfileFromPRF02(_profile) {
+      const profile = duplicateObjectByJsonStringifyParse(_profile);
+      patchOldScheme(profile);
+      const {keyboardShape, settings, layers, assigns} = profile;
+      return {
+        formatRevision: "PRF03",
+        projectId: "",
+        settings: "type" in settings && settings.type === "dual" ? {...settings, assignType: "dual"} : {...settings, assignType: "single"},
+        layers,
+        keyboardDesign: makeKeyboardDesignFromKeyboardShapePRF02(keyboardShape),
+        assigns: ProfileDataConverter.convertAssingsDictionaryToArray(assigns)
+      };
+    }
+    function fixProfileDataPRF03(profile) {
+      const _profile = profile;
+      if (!_profile.settings.assignType && _profile.assignType) {
+        _profile.settings.assignType = _profile.assignType;
+      }
+      if (!_profile.formatRevision && _profile.revision) {
+        _profile.formatRevision = _profile.revision;
+      }
+      LayoutDataMigrator.patchOldFormatLayoutData(profile.keyboardDesign);
+      if (!Array.isArray(profile.assigns)) {
+        profile.assigns = ProfileDataConverter.convertAssingsDictionaryToArray(profile.assigns);
+      }
+    }
+    function fixProfileData(profileData) {
+      const _profileData = profileData;
+      if (_profileData.revision === "PRF02") {
+        return convertProfileFromPRF02(profileData);
+      } else if (_profileData.revision === "PRF03" || _profileData.formatRevision === "PRF03") {
+        fixProfileDataPRF03(profileData);
+      }
+      return profileData;
+    }
+    ProfileDataMigrator2.fixProfileData = fixProfileData;
+  })(ProfileDataMigrator || (ProfileDataMigrator = {}));
+
   // src/ui-common-svg/KeyUnitCardModels/KeyUnitCardViewModelCommon.ts
   function getAssignOperationText(op, layers) {
     if (op?.type === "keyInput") {
@@ -905,8 +1072,10 @@
       isLayerFallback
     };
   }
-  function createProfileLayersDisplayModel(persistProfileData) {
-    const profileData = ProfileDataConverter.convertProfileDataFromPersist(persistProfileData);
+  function createProfileLayersDisplayModel(sourcePersistProfileData) {
+    const nullReplaced = converNullToUndefinedRecursive(sourcePersistProfileData);
+    const formatFixed = ProfileDataMigrator.fixProfileData(nullReplaced);
+    const profileData = ProfileDataConverter.convertProfileDataFromPersist(formatFixed);
     const keyboardDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(profileData.keyboardDesign);
     const keyUnits = keyboardDesign.keyEntities.map((ke) => ({
       keyId: ke.keyId,
