@@ -1,5 +1,5 @@
 import { jsx, css } from 'qx';
-import { uiTheme } from '~/ui-common';
+import { texts, uiTheme } from '~/ui-common';
 import { PresetKeyboardSection } from '~/ui-preset-browser-page/views/PresetKeyboardSection';
 import { PresetSelectionSection } from '~/ui-preset-browser-page/views/PresetSelectionSection';
 import { makePresetBrowserViewModel2 } from '~/ui-preset-browser-page2/viewModels/PresetBrowserViewModel2';
@@ -19,7 +19,7 @@ export const PresetBrowserPage2 = () => {
   const vm = makePresetBrowserViewModel2();
   return (
     <div css={cssPresetBrowserPage}>
-      <div>User Preset Browser</div>
+      <div>{texts.label_presetBrowser2_pageTitle}</div>
       <PresetSelectionSection vm={vm} />
       <PresetKeyboardSection vm={vm} />
     </div>

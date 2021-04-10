@@ -1,27 +1,28 @@
-import {
-  editorModel,
-  IDualModeEditTargetOperationSig,
-} from '~/ui-editor-page/EditorMainPart/models/EditorModel';
+import { texts } from '~/ui-common';
+import { editorModel } from '~/ui-editor-page/EditorMainPart/models/EditorModel';
 
 export interface IOperationSlotViewModel {
   text: string;
   isCurrent: boolean;
   setCurrent(): void;
+  hint: string;
 }
 
 export type IOperationSlotsPartViewModel = {
   slots: IOperationSlotViewModel[];
 };
 
-const targetSlotSigs: IDualModeEditTargetOperationSig[] = ['pri', 'sec', 'ter'];
-
-const targetSlotSigToTextMap: {
-  [key in IDualModeEditTargetOperationSig]: string;
-} = {
-  pri: 'pri',
-  sec: 'sec',
-  ter: 'ter',
+type ISlotSource = {
+  sig: 'pri' | 'sec' | 'ter';
+  text: string;
+  hint: string;
 };
+
+const slotsSource: ISlotSource[] = [
+  { sig: 'pri', text: 'pri', hint: texts.hint_assigner_assigns_pri },
+  { sig: 'sec', text: 'sec', hint: texts.hint_assigner_assigns_sec },
+  { sig: 'ter', text: 'ter', hint: texts.hint_assigner_assigns_ter },
+];
 
 export function makeOperationSlotsPartViewModel(): IOperationSlotsPartViewModel {
   const {
@@ -31,15 +32,16 @@ export function makeOperationSlotsPartViewModel(): IOperationSlotsPartViewModel 
     setDualModeEditTargetOperationSig,
   } = editorModel;
 
-  const slots = targetSlotSigs.map((sig) => {
+  const slots = slotsSource.map((it) => {
     return {
-      text: targetSlotSigToTextMap[sig],
+      text: it.text,
       isCurrent:
         isSlotSelected &&
         assignEntry?.type !== 'block' &&
         assignEntry?.type !== 'transparent' &&
-        dualModeEditTargetOperationSig === sig,
-      setCurrent: () => setDualModeEditTargetOperationSig(sig),
+        dualModeEditTargetOperationSig === it.sig,
+      setCurrent: () => setDualModeEditTargetOperationSig(it.sig),
+      hint: it.hint,
     };
   });
   return { slots };

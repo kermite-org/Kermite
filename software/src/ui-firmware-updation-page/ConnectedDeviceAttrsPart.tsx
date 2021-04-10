@@ -35,7 +35,9 @@ export const ConnectedDeviceAttrsPart: FC = () => {
       [texts.lebel_device_deviceInfo_fieldName_port, deviceAttrs.portName],
       [
         texts.lebel_device_deviceInfo_fieldName_resourceOrigin,
-        isOriginOnline ? 'オンライン' : 'ローカル',
+        isOriginOnline
+          ? texts.lebel_device_deviceInfo_value_resourceOrigin_online
+          : texts.lebel_device_deviceInfo_value_resourceOrigin_local,
       ],
       [
         texts.lebel_device_deviceInfo_fieldName_projectID,
@@ -63,11 +65,14 @@ export const ConnectedDeviceAttrsPart: FC = () => {
         (isOriginOnline && deviceAttrs.firmwareBuildRevision) || 'N/A',
       ],
       isOriginOnline &&
-        firm && ['ファームウェア最新リビジョン', firm.buildRevision],
+        firm && [
+          texts.lebel_device_deviceInfo_fieldName_firmwareLatestRevision,
+          firm.buildRevision,
+        ],
 
       isOriginOnline &&
         firm && [
-          'ファームウェア最新ビルド日時',
+          texts.lebel_device_deviceInfo_fieldName_firmwareLatestTimestamp,
           fixDatetimeText(firm.buildTimestamp),
         ],
       [

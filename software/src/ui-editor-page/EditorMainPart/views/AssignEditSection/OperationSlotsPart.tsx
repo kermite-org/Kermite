@@ -32,6 +32,7 @@ export function OerationSlotsPart(props: {
           text={slot.text}
           isCurrent={slot.isCurrent}
           setCurrent={slot.setCurrent}
+          hint={slot.hint}
         />
       ))}
       <div class="spacer" />

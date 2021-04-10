@@ -74,7 +74,7 @@ export function makeLayerManagementPartViewModel(): ILayerManagementPartViewMode
       };
       const editValues = await callLayerConfigurationModal({
         sourceValues,
-        caption: texts.label_assigner_layerModal_modalTitle,
+        caption: texts.label_assigner_layerModal_modalTitleEdit,
         isRootLayer: !isCurrentLayerCustom,
       });
       if (editValues) {
@@ -95,7 +95,7 @@ export function makeLayerManagementPartViewModel(): ILayerManagementPartViewMode
           exclusionGroup: 0,
           initialActive: false,
         },
-        caption: 'Add Layer',
+        caption: texts.label_assigner_layerModal_modalTitleAdd,
         isRootLayer: false,
       });
       if (layerAttrs?.layerName) {

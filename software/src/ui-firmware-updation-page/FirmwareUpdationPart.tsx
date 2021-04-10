@@ -63,9 +63,14 @@ export const FirmwareUpdationPart = () => {
           <div>{texts.label_device_firmwareUpdation_usageText}</div>
         )}
 
-        {phase === 'WaitingUploadOrder' && (
+        {phase === 'WaitingUploadOrder' && vm.detectedDeviceSig && (
           <div>
-            <div>{vm.detectedDeviceSig} detected. Ready to flash.</div>
+            <div>
+              {texts.label_device_firmwareUpdation_deviceDetected.replace(
+                '{DEVICE_NAME}',
+                vm.detectedDeviceSig,
+              )}
+            </div>
             <GeneralButton
               onClick={vm.onWriteButton}
               text={texts.label_device_firmwareUpdation_writeButton}
@@ -75,22 +80,33 @@ export const FirmwareUpdationPart = () => {
 
         {phase === 'Uploading' && (
           <div>
-            <div>Uploading...</div>
+            <div>{texts.label_device_firmwareUpdation_writing}</div>
           </div>
         )}
 
         {phase === 'UploadSuccess' && (
           <div>
-            <div>Success!</div>
-            <GeneralButton onClick={vm.onResetButton} text="done" />
+            <div>{texts.label_device_firmwareUpdation_success}</div>
+            <GeneralButton
+              onClick={vm.onResetButton}
+              text={texts.label_device_firmwareUpdation_doneButton}
+            />
           </div>
         )}
 
         {phase === 'UploadFailure' && (
           <div>
-            <span style={{ color: 'red' }}>Failure</span>
-            <GeneralButton onClick={vm.onLogButton} text="log" />
-            <GeneralButton onClick={vm.onResetButton} text="done" />
+            <span style={{ color: 'red' }}>
+              {texts.label_device_firmwareUpdation_failure}
+            </span>
+            <GeneralButton
+              onClick={vm.onLogButton}
+              text={texts.label_device_firmwareUpdation_logButton}
+            />
+            <GeneralButton
+              onClick={vm.onResetButton}
+              text={texts.label_device_firmwareUpdation_doneButton}
+            />
           </div>
         )}
       </div>
