@@ -4,6 +4,7 @@ on:
   push:
     branches: [master, develop]
     paths:
+      - ".github/workflows/software_ci.yml"
       - "software/src/**"
 
   pull_request:
@@ -22,8 +23,12 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: "14.x"
+
+      - name: update apt
+        run: sudo apt-get update
+
       - name: Install Dependencies
-        run: sudo apt install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
+        run: sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
       - uses: bahmutov/npm-install@v1
         with:
           working-directory: software
