@@ -23,9 +23,9 @@ IS_RESOURCE_ORIGIN_ONLINE ?= 0
 
 #--------------------
 
-PICO_SDK_DIR = deps/rp2040/pico_sdk
+PICO_SDK_DIR = deps/rp2040/pico_sdk_import/pico_sdk
+PICO_TOOLS_DIR = deps/rp2040/pico_sdk_import/pico_sdk_tools
 PICO_LOCAL_DIR = deps/rp2040/pico_sdk_local
-PICO_TOOLS_DIR = deps/rp2040/pico_sdk_tools
 SHARED_OBJ_DIR = $(BUILD_DIR)/obj
 
 ELF = $(OUT_DIR)/$(CORE_NAME).elf
