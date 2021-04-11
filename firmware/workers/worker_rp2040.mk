@@ -45,11 +45,9 @@ OBJSIZE = arm-none-eabi-size
 
 ELF2UF2_ROOT_DIR = $(PICO_TOOLS_DIR)/elf2uf2
 ELF2UF2_BIN = $(ELF2UF2_ROOT_DIR)/build/elf2uf2
-#ELF2UF2_BIN = $(ELF2UF2_ROOT_DIR)/prebuild/elf2uf2_darwin
 
 PIOASM_ROOT_DIR = $(PICO_TOOLS_DIR)/pioasm
 PIOASM_BIN = $(PIOASM_ROOT_DIR)/build/pioasm
-#PIOASM_BIN = $(PIOASM_ROOT_DIR)/prebuild/pioasm_darwin
 
 #--------------------
 #flags
