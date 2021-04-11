@@ -27,8 +27,9 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "plugin:react/recommended",
     "standard-with-typescript",
+    "plugin:import/typescript",
+    "plugin:react/recommended",
     "prettier"
   ],
   "rules": {
@@ -98,7 +99,7 @@
     "react/jsx-key": 1,
     "react/display-name": 0,
     "react/no-unknown-property": 0,
-    "import/no-cycle": [1, { "maxDepth": 1 }],
+    "import/no-cycle": [1, { "maxDepth": 3, "ignoreExternal": true }],
     "import/order": [
       1,
       {

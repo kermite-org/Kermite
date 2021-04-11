@@ -1,6 +1,6 @@
 import { duplicateObjectByJsonStringifyParse } from '~/shared';
 import { ICheckerEx } from '~/shared/modules/SchemaValidationHelper';
-import { appEnv } from '~/shell/base';
+import { appEnv } from '~/shell/base/AppEnv';
 import { fsExistsSync, fsxReadJsonFile, fsxWriteJsonFile } from '~/shell/funcs';
 
 class ApplicationStorage {

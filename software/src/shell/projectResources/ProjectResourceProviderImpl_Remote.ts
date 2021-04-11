@@ -18,11 +18,11 @@ import {
 } from '~/shell/funcs';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
+import { IPorjectFileJson } from '~/shell/projectResources/ProjectResourceProviderImpl_Local';
 import {
   IFirmwareBinaryFileSpec,
   IProjectResourceProviderImpl,
-} from '~/shell/projectResources';
-import { IPorjectFileJson } from '~/shell/projectResources/ProjectResourceProviderImpl_Local';
+} from '~/shell/projectResources/interfaces';
 import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 
 const remoteBaseUri =
