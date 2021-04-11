@@ -5,6 +5,8 @@ ProMicroを使用した自作キーボード向けのファームウェアです
 
 ## 準備
 
+### AVR
+
 ビルドには
 
 - AVR 8-bit Toolchain
@@ -13,8 +15,13 @@ ProMicroを使用した自作キーボード向けのファームウェアです
 が必要です。
 
 書き込みには avrdude を使用します。
+### RP2040
 
-RP2040のプログラムをビルドする場合は、arm-none-eabi-gcc, gccなどが必要です
+arm-none-eabi-gcc, gccなどが必要です
+
+依存コードを外部リポジトリに置いているため、
+`git submodule update --init`
+で取り込んでください。
 ## ビルド
 
 ```
