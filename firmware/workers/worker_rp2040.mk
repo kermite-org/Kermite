@@ -129,47 +129,6 @@ LD_FLAGS += $(addprefix $(WL_PREFIX),$(FUNCS_WRAPPED))
 #--------------------
 #files
 
-AA =\
--I$(PICO_SDK_DIR)/src/rp2040/hardware_regs/include \
--I$(PICO_SDK_DIR)/src/rp2040/hardware_structs/include \
--I$(PICO_SDK_DIR)/src/common/pico_stdlib/include \
--I$(PICO_SDK_DIR)/src/common/pico_base/include \
--I$(PICO_SDK_DIR)/src/common/pico_time/include \
--I$(PICO_SDK_DIR)/src/common/pico_sync/include \
--I$(PICO_SDK_DIR)/src/common/pico_util/include \
--I$(PICO_SDK_DIR)/src/common/pico_bit_ops/include \
--I$(PICO_SDK_DIR)/src/common/pico_divider/include \
--I$(PICO_SDK_DIR)/src/common/pico_binary_info/include \
--I$(PICO_SDK_DIR)/src/rp2_common/boot_stage2/include \
--I$(PICO_SDK_DIR)/src/rp2_common/hardware_gpio/include \
--I$(PICO_SDK_DIR)/src/rp2_common/hardware_flash/include \
--I$(PICO_SDK_DIR)/src/rp2_common/hardware_base/include \
--I$(PICO_SDK_DIR)/src/rp2_common/hardware_claim/include \
--I$(PICO_SDK_DIR)/src/rp2_common/hardware_sync/include \
--I$(PICO_SDK_DIR)/src/rp2_common/hardware_uart/include \
--I$(PICO_SDK_DIR)/src/rp2_common/hardware_divider/include \
--I$(PICO_SDK_DIR)/src/rp2_common/hardware_timer/include \
--I$(PICO_SDK_DIR)/src/rp2_common/hardware_clocks/include \
--I$(PICO_SDK_DIR)/src/rp2_common/hardware_resets/include \
--I$(PICO_SDK_DIR)/src/rp2_common/hardware_watchdog/include \
--I$(PICO_SDK_DIR)/src/rp2_common/hardware_xosc/include \
--I$(PICO_SDK_DIR)/src/rp2_common/hardware_pll/include \
--I$(PICO_SDK_DIR)/src/rp2_common/hardware_vreg/include \
--I$(PICO_SDK_DIR)/src/rp2_common/hardware_irq/include \
--I$(PICO_SDK_DIR)/src/rp2_common/hardware_pio/include \
--I$(PICO_SDK_DIR)/src/rp2_common/pico_platform/include \
--I$(PICO_SDK_DIR)/src/rp2_common/pico_runtime/include \
--I$(PICO_SDK_DIR)/src/rp2_common/pico_printf/include \
--I$(PICO_SDK_DIR)/src/rp2_common/pico_bootrom/include \
--I$(PICO_SDK_DIR)/src/rp2_common/pico_double/include \
--I$(PICO_SDK_DIR)/src/rp2_common/pico_int64_ops/include \
--I$(PICO_SDK_DIR)/src/rp2_common/pico_float/include \
--I$(PICO_SDK_DIR)/src/rp2_common/pico_malloc/include \
--I$(PICO_SDK_DIR)/src/rp2_common/pico_stdio/include \
--I$(PICO_SDK_DIR)/src/rp2_common/pico_stdio_uart/include \
--I$(PICO_SDK_DIR)/src/rp2_common/pico_multicore/include \
-
-
 INC_PATHS = \
 -I$(PROJECT_CODE_DIR) \
 -I$(PICO_LOCAL_DIR)/include \
@@ -183,7 +142,6 @@ INC_PATHS = \
 -I$(PICO_SDK_DIR)/lib/tinyusb/src \
 -I$(PICO_SDK_DIR)/lib/tinyusb/src/common \
 -I$(PICO_SDK_DIR)/src/rp2_common/rp2040_usb_device_enumeration/include
-
 
 SDK_C_SRCS = \
 $(PICO_SDK_DIR)/src/common/time.c \
