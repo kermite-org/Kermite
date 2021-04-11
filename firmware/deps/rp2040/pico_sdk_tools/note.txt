@@ -1,0 +1,4 @@
+based on
+https://github.com/raspberrypi/pico-sdk/tree/master/tools
+
+modifiled for compiling with plain Makefile without CMake

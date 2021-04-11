@@ -1,2 +1,4 @@
-copied required files from pico-sdk
+import required code from pico-sdk
 https://github.com/raspberrypi/pico-sdk
+
+folder structure is arranged for easiness

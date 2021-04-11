@@ -7,8 +7,8 @@ KRS/
 node_modules/
 
 .vscode/c_cpp_properties.json
+.vscode/settings.json
+
 .~lock.*.ods#
 
 Makefile.user
-
-*.pio.h
