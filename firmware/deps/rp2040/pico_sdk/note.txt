@@ -1,2 +1,0 @@
-copied required files from pico-sdk
-https://github.com/raspberrypi/pico-sdk

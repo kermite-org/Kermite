@@ -1,6 +1,6 @@
 import { BrowserWindow } from 'electron';
 import { IAppErrorData, IAppIpcContract } from '~/shared';
-import { IpcMainAgent } from '~/shared/xpc2/IpcMainAgent';
+import { IpcMainAgent } from '~/shared/xpc/IpcMainAgent';
 import { createEventPort } from '~/shell/funcs';
 
 // interface IAppInternalEvents {

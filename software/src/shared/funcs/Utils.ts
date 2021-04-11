@@ -345,3 +345,20 @@ export function generateRandomId(n: number): string {
     .map((_) => String.fromCharCode((97 + Math.random() * 26) >> 0))
     .join('');
 }
+
+export function converNullToUndefinedRecursive(src: any): any {
+  if (src === null) {
+    return undefined;
+  }
+  if (Array.isArray(src)) {
+    return src.map(converNullToUndefinedRecursive);
+  } else if (typeof src === 'object') {
+    const dst: any = {};
+    for (const key in src) {
+      dst[key] = converNullToUndefinedRecursive(src[key]);
+    }
+    return dst;
+  } else {
+    return src;
+  }
+}

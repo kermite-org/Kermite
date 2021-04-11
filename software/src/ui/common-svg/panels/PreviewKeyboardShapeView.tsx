@@ -1,0 +1,77 @@
+import { jsx, css } from 'qx';
+import { IDisplayKeyboardDesign, IDisplayKeyEntity } from '~/shared';
+import { PreviewKeyEntityCard } from '~/ui/common-svg/KeyUnitCards/PreviewKeyUnitCard';
+import { KeyboardSvgFrameWithAutoScaler } from '~/ui/common-svg/frames/KeyboardSvgFrameWithAutoScaler';
+import { KeyboardBodyShape } from '~/ui/common-svg/keyboardBody/KeyboardBodyShape';
+import { PreviewDisplayAreaBox } from '~/ui/common-svg/keyboardBody/PreviewBoundingBox';
+
+const PreviewKeyEntityCardsPart = (props: {
+  keyEntities: IDisplayKeyEntity[];
+  showKeyId: boolean;
+  showKeyIndex: boolean;
+}) => (
+  <g>
+    {props.keyEntities.map((ke) => (
+      <PreviewKeyEntityCard
+        keyEntity={ke}
+        key={ke.keyId}
+        showKeyId={props.showKeyId}
+        showKeyIndex={props.showKeyIndex}
+      />
+    ))}
+  </g>
+);
+
+export const PreviewKeyboardShapeView = (props: {
+  keyboardDesign: IDisplayKeyboardDesign;
+  settings: {
+    shapeViewShowKeyId: boolean;
+    shapeViewShowKeyIndex: boolean;
+    shapeViewShowBoundingBox: boolean;
+  };
+}) => {
+  const { keyboardDesign, settings } = props;
+
+  const cssKeyboardShapeView = css`
+    background: #222;
+    height: 100%;
+    overflow: hidden;
+  `;
+
+  const showBoundingBox = settings.shapeViewShowBoundingBox;
+
+  const showKeyId = settings.shapeViewShowKeyId;
+  const showKeyIndex = settings.shapeViewShowKeyIndex;
+
+  const dpiScale = 2;
+  const marginRatio = 0.06;
+  const baseStrokeWidth = 0.3;
+
+  const fillColor = '#54566f';
+  const strokeColor = 'transparent';
+  return (
+    <div css={cssKeyboardShapeView}>
+      <KeyboardSvgFrameWithAutoScaler
+        displayArea={keyboardDesign.displayArea}
+        dpiScale={dpiScale}
+        marginRatio={marginRatio}
+        baseStrokeWidth={baseStrokeWidth}
+      >
+        <KeyboardBodyShape
+          outlineShapes={keyboardDesign.outlineShapes}
+          fillColor={fillColor}
+          strokeColor={strokeColor}
+        />
+        <PreviewKeyEntityCardsPart
+          keyEntities={keyboardDesign.keyEntities}
+          showKeyId={showKeyId}
+          showKeyIndex={showKeyIndex}
+        />
+        <PreviewDisplayAreaBox
+          dispalyArea={keyboardDesign.displayArea}
+          qxIf={showBoundingBox}
+        />
+      </KeyboardSvgFrameWithAutoScaler>
+    </div>
+  );
+};

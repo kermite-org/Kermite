@@ -2,11 +2,12 @@ name: Firmware Deployment
 
 on:
   push:
-    branches: [master, variants]
+    branches: [variants, variants-dev]
     paths:
       - ".github/workflows/firmware_deployment.yml"
       - "firmware/ci/**/*.ts"
       - "firmware/Makefile"
+      - "firmware/workers/*.mk"
       - "firmware/src/**"
 
 jobs:
@@ -50,6 +51,7 @@ jobs:
 
       - name: Push resources to KermiteResourceStore
         uses: cpina/github-action-push-to-another-repository@master
+        if: github.ref == 'refs/heads/variants'
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:

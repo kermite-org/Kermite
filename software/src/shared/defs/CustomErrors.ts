@@ -14,6 +14,7 @@ export type IAppErrorsSource = {
 
 type IErrorType = keyof IAppErrorsSource;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const errorTextMapEN: { [key in IErrorType]: string } = {
   CannotReadFile: `Failed to read file.`,
   CannotReadFolder: `Failed to read folder.`,

@@ -3,7 +3,9 @@ import fs from 'fs';
 import path from 'path';
 import readline from 'readline';
 import { build, BuildConfig, cliopts } from 'estrella';
-import liveServer from 'live-server';
+import open from 'open';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const servor = require('servor');
 
 type IPlugin = NonNullable<BuildConfig['plugins']>[0];
 
@@ -34,13 +36,13 @@ const [opts] = cliopts.parse(
   ['x-watch', 'build application with watcher'],
   ['x-exec', 'start application'],
   ['x-mockview', 'start mockview'],
-  ['x-build-support-modules', 'build support modules'],
+  ['x-build-outward-modules', 'build outward modules'],
 );
 const reqBuild = opts['x-build'];
 const reqWatch = opts['x-watch'];
 const reqExec = opts['x-exec'];
 const reqMockView = opts['x-mockview'];
-const reqBuildSupportModules = opts['x-build-support-modules'];
+const reqBuildOutwardModules = opts['x-build-outward-modules'];
 
 async function readKey(): Promise<{ sequence: string }> {
   readline.emitKeypressEvents(process.stdin);
@@ -86,7 +88,7 @@ async function makeShell() {
 }
 
 async function makeUi() {
-  const srcDir = './src/ui-root';
+  const srcDir = './src/ui/root';
   const distDir = `./dist/ui`;
   fs.mkdirSync(distDir, { recursive: true });
   fs.copyFileSync(`${srcDir}/index.html`, `${distDir}/index.html`);
@@ -112,7 +114,7 @@ async function makeUi() {
 }
 
 function startMockView() {
-  const srcDir = './src/ui-mock-view';
+  const srcDir = './src/ui/mock-view';
   const distDir = `./dist/ui_mock`;
   fs.mkdirSync(distDir, { recursive: true });
   fs.copyFileSync(`${srcDir}/index.html`, `${distDir}/index.html`);
@@ -133,13 +135,15 @@ function startMockView() {
     plugins: [gooberCssAutoLabelPlugin],
   });
 
-  liveServer.start({
-    host: 'localhost',
-    port: 3000,
+  servor({
     root: distDir,
-    open: true,
-    logLevel: 0,
+    fallback: 'index.html',
+    reload: true,
+    browse: true,
+    port: 3000,
   });
+  open('http://localhost:3000');
+  console.log('server listening on http://localhost:3000');
 
   (async () => {
     const key = await readKey();
@@ -149,9 +153,9 @@ function startMockView() {
   })();
 }
 
-async function makeSupportModules() {
-  const srcDir = './src/__foreign_app_support_modules';
-  const distDir = `./src/__foreign_app_support_modules/bundles`;
+async function makeOutwardModules() {
+  const srcDir = './src/outward';
+  const distDir = `./src/outward/bundle`;
   fs.mkdirSync(distDir, { recursive: true });
 
   return await new Promise((resolve) =>
@@ -209,8 +213,8 @@ async function entry() {
     return;
   }
 
-  if (reqBuildSupportModules) {
-    await makeSupportModules();
+  if (reqBuildOutwardModules) {
+    await makeOutwardModules();
     return;
   }
 

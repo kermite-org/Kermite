@@ -13,5 +13,5 @@ yarn start:dev
 
 [パッケージ化]
 yarn build
-yarn packaging_mac
-yarn packaging_win
+yarn packaging:mac
+yarn packaging:win
