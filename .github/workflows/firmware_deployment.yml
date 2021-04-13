@@ -37,7 +37,7 @@ jobs:
       - name: Checkout store repo
         uses: actions/checkout@v2
         with:
-          repository: yahiro07/KermiteResourceStore
+          repository: kermite-org/KermiteResourceStore
           path: "./firmware/KRS"
           token: ${{ secrets.API_TOKEN_GITHUB }}
 
@@ -57,7 +57,7 @@ jobs:
         with:
           source-directory: "./firmware/KRS"
           destination-github-username: "github-actions[bot]"
-          destination-repository-username: "yahiro07"
+          destination-repository-username: "kermite-org"
           destination-repository-name: "KermiteResourceStore"
           target-branch: "master"
           user-email: 41898282+github-actions[bot]@users.noreply.github.com
