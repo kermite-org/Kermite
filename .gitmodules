@@ -1,3 +1,3 @@
 [submodule "firmware/deps/rp2040/pico_sdk_import"]
 	path = firmware/deps/rp2040/pico_sdk_import
-	url = https://github.com/yahiro07/pico_sdk_import.git
+	url = https://github.com/kermite-org/pico_sdk_import.git
