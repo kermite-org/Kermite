@@ -5,13 +5,13 @@ import {
   IProjectResourceInfo,
   IResourceOrigin,
 } from '~/shared';
-import { ProjectResourceProviderImpl_Remote } from '~/shell/projectResources/ProjectResourceProviderImpl_Remote';
 import {
   IFirmwareBinaryFileSpec,
   IProjectResourceProvider,
   IProjectResourceProviderImpl,
 } from '~/shell/projectResources/Interfaces';
-import { ProjectResourceProviderImpl_Local } from './ProjectResourceProviderImpl_Local';
+import { ProjectResourceProviderImpl_Local } from '~/shell/projectResources/ProjectResourceProviderImpl_Local';
+import { ProjectResourceProviderImpl_Remote } from '~/shell/projectResources/ProjectResourceProviderImpl_Remote';
 
 class ProjectResourceProvider implements IProjectResourceProvider {
   localResourceProviderImpl = new ProjectResourceProviderImpl_Local();

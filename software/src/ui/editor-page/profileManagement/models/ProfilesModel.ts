@@ -7,7 +7,7 @@ import {
   IResourceOrigin,
 } from '~/shared';
 import { ipcAgent } from '~/ui/common';
-import { EditorModel } from '../../editorMainPart/models/EditorModel';
+import { EditorModel } from '~/ui/editor-page/editorMainPart/models/EditorModel';
 
 export class ProfilesModel {
   constructor(private editorModel: EditorModel) {}
