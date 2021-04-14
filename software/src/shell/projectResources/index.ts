@@ -1,2 +1,2 @@
-export * from './Interfaces_';
+export * from './Interfaces';
 export * from './ProjectResourceProvider';

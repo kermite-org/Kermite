@@ -10,7 +10,7 @@ import {
   IFirmwareBinaryFileSpec,
   IProjectResourceProvider,
   IProjectResourceProviderImpl,
-} from '~/shell/projectResources/Interfaces_';
+} from '~/shell/projectResources/Interfaces';
 import { ProjectResourceProviderImpl_Local } from './ProjectResourceProviderImpl_Local';
 
 class ProjectResourceProvider implements IProjectResourceProvider {

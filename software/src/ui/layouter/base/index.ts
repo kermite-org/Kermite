@@ -1,3 +1,3 @@
 export * from './LayouterAppGlobal';
 export * from './UiInteractionHelpers';
-export * from './Hooks_';
+export * from './Hooks';

@@ -1,9 +1,9 @@
 import { jsx, css } from 'qx';
 import { uiTheme } from '~/ui/common';
 import { KeyAssignEditView } from './KeyAssignEditView';
-import { DeviceControlSection } from './deviceControl_/DeviceControlSection';
-import { ProfileConfigratuionModalLayer } from './editorMainPart_/views/modals/profileConfigurationPart_';
-import { ProfileManagementPart } from './profileManagement_/ProfileManagementPart';
+import { DeviceControlSection } from './deviceControl/DeviceControlSection';
+import { ProfileConfigratuionModalLayer } from './editorMainPart/views/modals/profileConfigurationPart_';
+import { ProfileManagementPart } from './profileManagement/ProfileManagementPart';
 
 const cssEditorPage = css`
   height: 100%;

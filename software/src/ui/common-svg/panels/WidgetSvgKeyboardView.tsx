@@ -4,7 +4,7 @@ import { KeyboardSvgFrameWithAutoScaler } from '~/ui/common-svg/frames/KeyboardS
 import {
   IWidgetKeyUnitCardViewModel,
   WidgetKeyUnitCard,
-} from '~/ui/common-svg/keyUnitCards_/WidgetKeyUnitCard';
+} from '~/ui/common-svg/keyUnitCards/WidgetKeyUnitCard';
 import { KeyboardBodyShape } from '~/ui/common-svg/keyboardBody/KeyboardBodyShape';
 
 export function WidgetSvgKeyboardView(props: {

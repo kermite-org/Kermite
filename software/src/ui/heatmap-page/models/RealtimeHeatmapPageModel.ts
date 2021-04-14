@@ -1,9 +1,9 @@
 import { formatTimeMsToMinSecMs } from '~/shared';
-import { IHeatmapCustomKeyUnitViewModel } from '~/ui/common-svg/keyUnitCards_/HeatmapKeyUnitCard';
 import {
   ICustomKeyUnitViewModelBase,
   makeCustomKeyUnitViewModels,
-} from '~/ui/common-svg/keyUnitCardModels_/CustomKeyUnitViewModel';
+} from '~/ui/common-svg/keyUnitCardModels/CustomKeyUnitViewModel';
+import { IHeatmapCustomKeyUnitViewModel } from '~/ui/common-svg/keyUnitCards/HeatmapKeyUnitCard';
 import { IRealtimeHeatmapKeyboardViewModel } from '~/ui/common-svg/panels/HeatmapKeyboardView';
 import { useRealtimeHeatmapModel } from '~/ui/heatmap-page/models/RealtimeHeatmapModel';
 

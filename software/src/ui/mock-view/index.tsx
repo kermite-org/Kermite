@@ -2,7 +2,7 @@
 import { jsx, render, rerender } from 'qx';
 import { debounce } from '~/shared';
 import { UiLayouterPageComponent } from '~/ui/layouter-page';
-import { initializeCss } from '~/ui/mock-view/CssInitializer_';
+import { initializeCss } from '~/ui/mock-view/CssInitializer';
 import { GooberDevelopmentPage } from '~/ui/mock-view/GooberDevelopmentPage';
 import { GooberDevelopmentPage2 } from '~/ui/mock-view/GooberDevelopmentPage2';
 import { HoverHintDevelopmentPage } from '~/ui/mock-view/HoverHintDevelopmentPage';

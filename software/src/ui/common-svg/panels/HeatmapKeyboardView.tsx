@@ -5,7 +5,7 @@ import { KeyboardSvgFrameWithAutoScaler } from '~/ui/common-svg/frames/KeyboardS
 import {
   HeatmapKeyUnitCard,
   IHeatmapCustomKeyUnitViewModel,
-} from '~/ui/common-svg/keyUnitCards_/HeatmapKeyUnitCard';
+} from '~/ui/common-svg/keyUnitCards/HeatmapKeyUnitCard';
 import { KeyboardBodyShape } from '~/ui/common-svg/keyboardBody/KeyboardBodyShape';
 
 export interface IRealtimeHeatmapKeyboardViewModel {

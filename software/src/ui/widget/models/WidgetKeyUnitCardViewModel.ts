@@ -1,7 +1,7 @@
 import { IDisplayKeyEntity } from '~/shared';
 import { PlayerModel } from '~/ui/common';
-import { getAssignEntryTexts } from '~/ui/common-svg/keyUnitCardModels_/KeyUnitCardViewModelCommon';
-import { IWidgetKeyUnitCardViewModel } from '~/ui/common-svg/keyUnitCards_/WidgetKeyUnitCard';
+import { getAssignEntryTexts } from '~/ui/common-svg/keyUnitCardModels/KeyUnitCardViewModelCommon';
+import { IWidgetKeyUnitCardViewModel } from '~/ui/common-svg/keyUnitCards/WidgetKeyUnitCard';
 
 export function useWidgetKeyUnitCardViewModel(
   ke: IDisplayKeyEntity,

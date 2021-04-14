@@ -1,4 +1,4 @@
-import { IFirmwareUpdationScheme } from '~/shell/services/firmwareUpdation/Interfaces_';
+import { IFirmwareUpdationScheme } from '~/shell/services/firmwareUpdation/Interfaces';
 import { ComPortsMonitor } from '~/shell/services/firmwareUpdation/flashSchemeAtMega/ComPortsMonitor';
 import { FlashCommander } from '~/shell/services/firmwareUpdation/flashSchemeAtMega/FlashCommander';
 

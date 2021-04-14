@@ -5,7 +5,7 @@ import { KeyboardSvgFrameWithAutoScaler } from '~/ui/common-svg/frames/KeyboardS
 import {
   EditKeyUnitCard,
   IEditKeyUnitCardViewModel,
-} from '~/ui/common-svg/keyUnitCards_/EditKeyUnitCard';
+} from '~/ui/common-svg/keyUnitCards/EditKeyUnitCard';
 import { KeyboardBodyShape } from '~/ui/common-svg/keyboardBody/KeyboardBodyShape';
 
 const EditKeyUnitCardsPart = (props: {

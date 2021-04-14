@@ -1,11 +1,11 @@
 import { jsx, css } from 'qx';
 import { uiTheme, uiStatusModel } from '~/ui/common';
-import { ProfileConfigurationPart } from '~/ui/editor-page/editorMainPart_/views/ProfileConfigurationPart';
-import { KeyboardSection } from './editorMainPart_/KeyboardSection';
-import { BehaviorOptionsPart } from './editorMainPart_/views/BehaviorOptionsPart';
-import { AssignEditSection } from './editorMainPart_/views/assignEditSection_';
-import { LayersSection } from './editorMainPart_/views/layersSection_';
-import { TestInputArea } from './testInputArea_/TestInputArea';
+import { ProfileConfigurationPart } from '~/ui/editor-page/editorMainPart/views/ProfileConfigurationPart';
+import { KeyboardSection } from './editorMainPart/KeyboardSection';
+import { BehaviorOptionsPart } from './editorMainPart/views/BehaviorOptionsPart';
+import { AssignEditSection } from './editorMainPart/views/assignEditSection_';
+import { LayersSection } from './editorMainPart/views/layersSection_';
+import { TestInputArea } from './testInputArea/TestInputArea';
 
 const localStyleConstants = {
   editorPartMargin: '4px',

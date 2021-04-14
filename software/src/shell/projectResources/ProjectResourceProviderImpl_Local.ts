@@ -27,7 +27,7 @@ import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
 import {
   IFirmwareBinaryFileSpec,
   IProjectResourceProviderImpl,
-} from '~/shell/projectResources/Interfaces_';
+} from '~/shell/projectResources/Interfaces';
 import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 
 export interface IPorjectFileJson {
