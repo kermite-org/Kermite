@@ -1,0 +1,377 @@
+{
+  "formatRevision": "LA00",
+  "setup": {
+    "placementUnit": "KP 18 17",
+    "placementAnchor": "center",
+    "keySizeUnit": "KP",
+    "keyIdMode": "manual"
+  },
+  "keyEntities": [
+    {
+      "keyId": "KL0",
+      "x": -1.5,
+      "y": -1.5,
+      "keyIndex": 0,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KL1",
+      "x": -2.5,
+      "y": -1.5,
+      "keyIndex": 1,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KL2",
+      "x": -3.5,
+      "y": -1.5,
+      "keyIndex": 2,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KL3",
+      "x": -4.5,
+      "y": -1.5,
+      "keyIndex": 3,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KL4",
+      "x": -5.5,
+      "y": -1.5,
+      "keyIndex": 4,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KL5",
+      "x": -6.5,
+      "y": -1.5,
+      "keyIndex": 5,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KL6",
+      "x": -7.5,
+      "y": -1.5,
+      "keyIndex": 6,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KL7",
+      "x": -1.5,
+      "y": -0.5,
+      "keyIndex": 7,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KL8",
+      "x": -2.5,
+      "y": -0.5,
+      "keyIndex": 8,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KL9",
+      "x": -3.5,
+      "y": -0.5,
+      "keyIndex": 9,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KL10",
+      "x": -4.5,
+      "y": -0.5,
+      "keyIndex": 10,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KL11",
+      "x": -5.5,
+      "y": -0.5,
+      "keyIndex": 11,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KL12",
+      "x": -6.5,
+      "y": -0.5,
+      "keyIndex": 12,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KL13",
+      "x": -7.5,
+      "y": -0.5,
+      "keyIndex": 13,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KL14",
+      "x": -1.5,
+      "y": 0.5,
+      "keyIndex": 14,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KL15",
+      "x": -2.5,
+      "y": 0.5,
+      "keyIndex": 15,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KL16",
+      "x": -3.5,
+      "y": 0.5,
+      "keyIndex": 16,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KL17",
+      "x": -4.5,
+      "y": 0.5,
+      "keyIndex": 17,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KL18",
+      "x": -5.5,
+      "y": 0.5,
+      "keyIndex": 18,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KL19",
+      "x": -6.5,
+      "y": 0.5,
+      "keyIndex": 19,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KL20",
+      "x": -7.5,
+      "y": 0.5,
+      "keyIndex": 20,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KL21",
+      "x": -1.5,
+      "y": 1.6667,
+      "keyIndex": 21,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KL22",
+      "x": -2.5,
+      "y": 1.6667,
+      "keyIndex": 22,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KL23",
+      "x": -3.5,
+      "y": 1.6667,
+      "keyIndex": 23,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KL24",
+      "x": -4.5,
+      "y": 1.6667,
+      "keyIndex": 24,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KL25",
+      "x": -5.5,
+      "y": 1.6667,
+      "keyIndex": 25,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KL26",
+      "x": -6.5,
+      "y": 1.6667,
+      "keyIndex": 26,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KL27",
+      "x": -7.5,
+      "y": 1.6667,
+      "keyIndex": 27,
+      "groupIndex": 0
+    },
+    {
+      "keyId": "KR0",
+      "mirrorOf": "KL0",
+      "keyIndex": 28
+    },
+    {
+      "keyId": "KR1",
+      "mirrorOf": "KL1",
+      "keyIndex": 29
+    },
+    {
+      "keyId": "KR2",
+      "mirrorOf": "KL2",
+      "keyIndex": 30
+    },
+    {
+      "keyId": "KR3",
+      "mirrorOf": "KL3",
+      "keyIndex": 31
+    },
+    {
+      "keyId": "KR4",
+      "mirrorOf": "KL4",
+      "keyIndex": 32
+    },
+    {
+      "keyId": "KR5",
+      "mirrorOf": "KL5",
+      "keyIndex": 33
+    },
+    {
+      "keyId": "KR6",
+      "mirrorOf": "KL6",
+      "keyIndex": 34
+    },
+    {
+      "keyId": "KR7",
+      "mirrorOf": "KL7",
+      "keyIndex": 35
+    },
+    {
+      "keyId": "KR8",
+      "mirrorOf": "KL8",
+      "keyIndex": 36
+    },
+    {
+      "keyId": "KR9",
+      "mirrorOf": "KL9",
+      "keyIndex": 37
+    },
+    {
+      "keyId": "KR10",
+      "mirrorOf": "KL10",
+      "keyIndex": 38
+    },
+    {
+      "keyId": "KR11",
+      "mirrorOf": "KL11",
+      "keyIndex": 39
+    },
+    {
+      "keyId": "KR12",
+      "mirrorOf": "KL12",
+      "keyIndex": 40
+    },
+    {
+      "keyId": "KR13",
+      "mirrorOf": "KL13",
+      "keyIndex": 41
+    },
+    {
+      "keyId": "KR14",
+      "mirrorOf": "KL14",
+      "keyIndex": 42
+    },
+    {
+      "keyId": "KR15",
+      "mirrorOf": "KL15",
+      "keyIndex": 43
+    },
+    {
+      "keyId": "KR16",
+      "mirrorOf": "KL16",
+      "keyIndex": 44
+    },
+    {
+      "keyId": "KR17",
+      "mirrorOf": "KL17",
+      "keyIndex": 45
+    },
+    {
+      "keyId": "KR18",
+      "mirrorOf": "KL18",
+      "keyIndex": 46
+    },
+    {
+      "keyId": "KR19",
+      "mirrorOf": "KL19",
+      "keyIndex": 47
+    },
+    {
+      "keyId": "KR20",
+      "mirrorOf": "KL20",
+      "keyIndex": 48
+    },
+    {
+      "keyId": "KR21",
+      "mirrorOf": "KL21",
+      "keyIndex": 49
+    },
+    {
+      "keyId": "KR22",
+      "mirrorOf": "KL22",
+      "keyIndex": 50
+    },
+    {
+      "keyId": "KR23",
+      "mirrorOf": "KL23",
+      "keyIndex": 51
+    },
+    {
+      "keyId": "KR24",
+      "mirrorOf": "KL24",
+      "keyIndex": 52
+    },
+    {
+      "keyId": "KR25",
+      "mirrorOf": "KL25",
+      "keyIndex": 53
+    },
+    {
+      "keyId": "KR26",
+      "mirrorOf": "KL26",
+      "keyIndex": 54
+    },
+    {
+      "keyId": "KR27",
+      "mirrorOf": "KL27",
+      "keyIndex": 55
+    }
+  ],
+  "outlineShapes": [
+    {
+      "points": [
+        {
+          "x": -153,
+          "y": -40
+        },
+        {
+          "x": -153,
+          "y": 43
+        },
+        {
+          "x": 5,
+          "y": 43
+        },
+        {
+          "x": 5,
+          "y": -40
+        }
+      ],
+      "groupIndex": 0
+    }
+  ],
+  "transformationGroups": [
+    {
+      "x": -20,
+      "y": 0,
+      "mirror": true
+    }
+  ]
+}
