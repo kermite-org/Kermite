@@ -3,7 +3,7 @@ import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { createEventPort } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
 import { FirmwareUpdationSchemeAtMega } from '~/shell/services/firmwareUpdation/flashSchemeAtMega/FlashSchemeAtMega';
-import { FirmwareUpdationSchemeRp } from '~/shell/services/firmwareUpdation/flashSchemeRp_/FlashSchemeRp_';
+import { FirmwareUpdationSchemeRp } from '~/shell/services/firmwareUpdation/flashSchemeRp/FlashSchemeRp';
 
 interface IDeviceDetectionEvent {
   comPortName?: string;
@@ -14,7 +14,7 @@ export class FirmwareUpdationService {
   private timerWrapper = new IntervalTimerWrapper();
 
   private schemeAtMega = new FirmwareUpdationSchemeAtMega();
-  private schemeRP = new FirmwareUpdationSchemeRp();
+  private schemeRp = new FirmwareUpdationSchemeRp();
   private pluggedComPortName: string | undefined;
   private pluggedDriveName: string | undefined;
 
@@ -36,7 +36,7 @@ export class FirmwareUpdationService {
       this.pluggedComPortName = pluggedComPortName;
       this.emitDetectionEvent();
     }
-    const pluggedDriveName = await this.schemeRP.updateDeviceDetection();
+    const pluggedDriveName = await this.schemeRp.updateDeviceDetection();
     if (this.pluggedDriveName !== pluggedDriveName) {
       this.pluggedDriveName = pluggedDriveName;
       this.emitDetectionEvent();
@@ -88,7 +88,7 @@ export class FirmwareUpdationService {
       if (!this.pluggedDriveName) {
         return `target drive unavailable`;
       }
-      return await this.schemeRP.flashFirmware(
+      return await this.schemeRp.flashFirmware(
         this.pluggedDriveName,
         binarySpec.filePath,
       );
