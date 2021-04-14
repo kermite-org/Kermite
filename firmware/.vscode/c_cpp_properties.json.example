@@ -5,7 +5,7 @@
     "myAvrCompilerBaseDirectory": "/usr/local/Cellar/avr-gcc/9.3.0",
     "myAvrCompilerExecutablePath": "/usr/local/bin/avr-gcc",
     "myCompilerExecutablePath": "/usr/local/bin/arm-none-eabi-gcc",
-    "picoSdkRoot": "./deps/rp2040/pico_sdk",
+    "picoSdkRoot": "./deps/rp2040/pico_sdk_import/pico_sdk",
     "picoLocalDir": "./deps/rp2040/pico_sdk_local"
   },
   "configurations": [
