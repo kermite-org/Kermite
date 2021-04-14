@@ -1,8 +1,8 @@
 import { IPersistProfileData, IServerPorfileInfo } from '~/shared';
 import { cacheRemoteResouce, fetchJson } from '~/shell/funcs';
 import { ProfileDataConverter } from '~/shell/loaders/ProfileDataConverter';
+import { IUserPresetHubService } from '~/shell/services/userPresetHub/Interfaces';
 import { PresetHubServerTypes } from '~/shell/services/userPresetHub/PresetHubServerTypes';
-import { IUserPresetHubService } from '~/shell/services/userPresetHub/interfaces';
 
 const serverUrlBase = `http://localhost:5000`;
 

@@ -1,10 +1,10 @@
 import { jsx, css } from 'qx';
 import { IDisplayKeyboardDesign, linerInterpolateValue } from '~/shared';
+import { KeyboardSvgFrameWithAutoScaler } from '~/ui/common-svg/frames/KeyboardSvgFrameWithAutoScaler';
 import {
   IWidgetKeyUnitCardViewModel,
   WidgetKeyUnitCard,
-} from '~/ui/common-svg/KeyUnitCards/WidgetKeyUnitCard';
-import { KeyboardSvgFrameWithAutoScaler } from '~/ui/common-svg/frames/KeyboardSvgFrameWithAutoScaler';
+} from '~/ui/common-svg/keyUnitCards/WidgetKeyUnitCard';
 import { KeyboardBodyShape } from '~/ui/common-svg/keyboardBody/KeyboardBodyShape';
 
 export function WidgetSvgKeyboardView(props: {

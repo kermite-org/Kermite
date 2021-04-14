@@ -4,7 +4,7 @@ import {
   css,
   setJsxCreateElementFunction,
   styled,
-} from './cssinjs';
+} from './cssInJs';
 import { qxGlobal } from './qxGlobal';
 import { render as petitDomRender } from './qxinternal_petit_dom';
 import { Hook } from './qxinternal_petit_dom/hookImpl';

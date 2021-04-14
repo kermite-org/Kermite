@@ -123,7 +123,7 @@
       }
     ],
     "import/newline-after-import": 1,
-    // "no-restricted-imports": [1, { "patterns": ["../../*"] }],
+    "no-restricted-imports": [1, { "patterns": ["../../*"] }],
     "no-restricted-globals": [2, "name", "close", "status"],
     "no-empty": 0,
     "no-inner-declarations": 0,
