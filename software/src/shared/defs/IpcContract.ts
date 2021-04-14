@@ -212,6 +212,14 @@ export interface IGlobalSettings {
   useLocalResouces: boolean;
   localProjectRootFolderPath: string;
 }
+
+export interface IServerPorfileInfo {
+  id: string;
+  profileName: string;
+  userName: string;
+  profileData: IProfileData;
+}
+
 export interface IApplicationVersionInfo {
   version: string;
 }
@@ -268,6 +276,11 @@ export interface IAppIpcContract {
       projectId: string,
       layoutName: string,
     ): Promise<IPersistKeyboardDesign | undefined>;
+
+    presetHub_getServerProjectIds(): Promise<string[]>;
+    presetHub_getServerProfiles(
+      projectId: string,
+    ): Promise<IServerPorfileInfo[]>;
 
     device_connectToDevice(path: string): Promise<void>;
     device_setCustomParameterValue(index: number, value: number): Promise<void>;

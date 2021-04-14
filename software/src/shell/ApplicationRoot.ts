@@ -14,6 +14,7 @@ import { KeyboardLayoutFilesWatcher } from '~/shell/services/layout/KeyboardLayo
 import { LayoutManager } from '~/shell/services/layout/LayoutManager';
 import { PresetProfileLoader } from '~/shell/services/profile/PresetProfileLoader';
 import { ProfileManager } from '~/shell/services/profile/ProfileManager';
+import { UserPresetHubService } from '~/shell/services/userPresetHub/UserPresetHubService';
 import { AppWindowWrapper } from '~/shell/services/window';
 
 export class ApplicationRoot {
@@ -41,6 +42,8 @@ export class ApplicationRoot {
   );
 
   private windowWrapper = new AppWindowWrapper(this.profileManager);
+
+  private presetHubService = new UserPresetHubService();
 
   // ------------------------------------------------------------
 
@@ -119,6 +122,10 @@ export class ApplicationRoot {
           profileId,
           presetSpec,
         ),
+      presetHub_getServerProjectIds: () =>
+        this.presetHubService.getServerProjectIds(),
+      presetHub_getServerProfiles: (projectId: string) =>
+        this.presetHubService.getServerProfiles(projectId),
       config_getKeyboardConfig: async () =>
         this.keyboardConfigProvider.getKeyboardConfig(),
       config_writeKeyboardConfig: async (config) =>
