@@ -1,4 +1,4 @@
-import { css } from './cssInJs_';
+import { css } from './cssInJs';
 import { qxGlobal } from './qxGlobal';
 import { extractShortCss } from './shortCss';
 
