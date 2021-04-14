@@ -1,8 +1,8 @@
 import { jsx, css } from 'qx';
 import { uiTheme } from '~/ui/common';
-import { EditSvgViewContainer } from '~/ui/layouter/editor/views/EditSvgView';
-import { EditorSideColumnContent } from '~/ui/layouter/editor/views/SidePanels';
-import { EditMenuBar } from '~/ui/layouter/editor/views/ToolBar/EditMenuBar';
+import { EditSvgViewContainer } from '~/ui/layouter/editor/views/editSvgView_';
+import { EditorSideColumnContent } from '~/ui/layouter/editor/views/sidePanels_';
+import { EditMenuBar } from '~/ui/layouter/editor/views/toolBar_/EditMenuBar';
 
 const cssPageRoot = css`
   color: ${uiTheme.colors.clMainText};

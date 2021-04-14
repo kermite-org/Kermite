@@ -18,8 +18,8 @@ import {
 import { applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
+import { IPresetProfileLoader, IProfileManager } from './Interfaces_';
 import { ProfileManagerCore } from './ProfileManagerCore';
-import { IPresetProfileLoader, IProfileManager } from './interfaces';
 
 const defaultProfileName = 'default';
 

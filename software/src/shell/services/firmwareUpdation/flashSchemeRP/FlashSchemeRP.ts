@@ -1,6 +1,6 @@
 // import drivelist from 'drivelist';
 import { fsExistsSync, fsxCopyFile } from '~/shell/funcs';
-import { IFirmwareUpdationScheme } from '~/shell/services/firmwareUpdation/interfaces';
+import { IFirmwareUpdationScheme } from '~/shell/services/firmwareUpdation/Interfaces_';
 
 export class FirmwareUpdationSchemeRP implements IFirmwareUpdationScheme {
   resetDeviceDetectionStatus() {}

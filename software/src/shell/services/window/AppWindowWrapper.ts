@@ -9,9 +9,9 @@ import {
 } from '~/shared/modules/SchemaValidationHelper';
 import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { createEventPort, pathRelative } from '~/shell/funcs';
-import { IProfileManager } from '~/shell/services/profile/interfaces';
+import { IProfileManager } from '~/shell/services/profile/Interfaces_';
 import { MenuManager } from '~/shell/services/window/MenuManager';
-import { IAppWindowWrapper } from './interfaces';
+import { IAppWindowWrapper } from './Interfaces_';
 import {
   PageSourceWatcher,
   preparePreloadJsFile,

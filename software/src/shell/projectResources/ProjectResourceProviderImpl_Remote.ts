@@ -22,7 +22,7 @@ import { IPorjectFileJson } from '~/shell/projectResources/ProjectResourceProvid
 import {
   IFirmwareBinaryFileSpec,
   IProjectResourceProviderImpl,
-} from '~/shell/projectResources/interfaces';
+} from '~/shell/projectResources/Interfaces_';
 import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 
 const remoteBaseUri =

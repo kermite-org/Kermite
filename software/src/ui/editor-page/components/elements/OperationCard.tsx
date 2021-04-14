@@ -1,6 +1,6 @@
 import { jsx, css } from 'qx';
 import { uiTheme } from '~/ui/common';
-import { IOperationCardViewModel } from '~/ui/editor-page/EditorMainPart/viewModels/OperationEditPartViewModel';
+import { IOperationCardViewModel } from '~/ui/editor-page/editorMainPart_/viewModels/OperationEditPartViewModel';
 
 const cssOperationCard = css`
   min-width: 28px;

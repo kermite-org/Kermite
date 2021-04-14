@@ -1,7 +1,7 @@
 import { jsx, css } from 'qx';
 import { IDisplayKeyboardDesign, IDisplayKeyEntity } from '~/shared';
-import { PreviewKeyEntityCard } from '~/ui/common-svg/KeyUnitCards/PreviewKeyUnitCard';
 import { KeyboardSvgFrameWithAutoScaler } from '~/ui/common-svg/frames/KeyboardSvgFrameWithAutoScaler';
+import { PreviewKeyEntityCard } from '~/ui/common-svg/keyUnitCards_/PreviewKeyUnitCard';
 import { KeyboardBodyShape } from '~/ui/common-svg/keyboardBody/KeyboardBodyShape';
 import { PreviewDisplayAreaBox } from '~/ui/common-svg/keyboardBody/PreviewBoundingBox';
 

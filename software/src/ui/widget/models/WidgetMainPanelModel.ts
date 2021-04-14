@@ -1,7 +1,7 @@
 import { Hook } from 'qx';
 import { IDisplayKeyboardDesign } from '~/shared';
 import { ipcAgent, router, PlayerModel, siteModel } from '~/ui/common';
-import { IWidgetKeyUnitCardViewModel } from '~/ui/common-svg/KeyUnitCards/WidgetKeyUnitCard';
+import { IWidgetKeyUnitCardViewModel } from '~/ui/common-svg/keyUnitCards_/WidgetKeyUnitCard';
 import { useWidgetKeyUnitCardViewModel } from '~/ui/widget/models/WidgetKeyUnitCardViewModel';
 
 export interface IWidgetMainPanelModel {

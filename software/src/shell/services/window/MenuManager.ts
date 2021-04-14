@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { app, Menu } from 'electron';
 import { makeListenerPort } from '~/shell/funcs';
-import { IMenuManager } from './interfaces';
+import { IMenuManager } from './Interfaces_';
 
 export class MenuManager implements IMenuManager {
   onMenuRequestReload = makeListenerPort<void>();

@@ -6,7 +6,7 @@ import {
   IResourceOrigin,
 } from '~/shared';
 import { projectResourceProvider } from '~/shell/projectResources';
-import { IPresetProfileLoader } from '~/shell/services/profile/interfaces';
+import { IPresetProfileLoader } from '~/shell/services/profile/Interfaces_';
 
 export class PresetProfileLoader implements IPresetProfileLoader {
   private async createBlankProfileFromLayoutFile(
