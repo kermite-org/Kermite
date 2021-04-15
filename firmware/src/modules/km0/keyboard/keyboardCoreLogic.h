@@ -1,5 +1,5 @@
-#ifndef __KEYBOARD_CORE_LOGIC_2_H__
-#define __KEYBOARD_CORE_LOGIC_2_H__
+#ifndef __KEYBOARD_CORE_LOGIC_H__
+#define __KEYBOARD_CORE_LOGIC_H__
 
 #include "types.h"
 
