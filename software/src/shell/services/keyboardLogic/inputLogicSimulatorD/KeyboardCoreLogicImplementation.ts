@@ -323,6 +323,31 @@ function getAssignSetInLayer(
   return undefined;
 }
 
+function findAssignInLayerStack(
+  keyIndex: u8,
+  layerActiveFlags: u16,
+): IAssignSet | undefined {
+  for (let i = 15; i >= 0; i--) {
+    if ((layerActiveFlags >> i) & 1) {
+      const res = getAssignSetInLayer(keyIndex, i);
+      const isDefaultSchemeBlock = isLayerDefaultSchemeBlock(i);
+      if (res?.assignType === AssignType.Transparent) {
+        continue;
+      }
+      if (res?.assignType === AssignType.Block) {
+        return undefined;
+      }
+      if (!res && isDefaultSchemeBlock) {
+        return undefined;
+      }
+      if (res) {
+        return res;
+      }
+    }
+  }
+  return undefined;
+}
+
 // --------------------------------------------------------------------------------
 // operation handlers
 const layerState = new (class {
@@ -346,28 +371,6 @@ function resetLayerState() {
 
 function getLayerActiveFlags() {
   return layerState.layerActiveFlags;
-}
-
-function findAssignInLayerStack(keyIndex: u8): IAssignSet | undefined {
-  for (let i = 15; i >= 0; i--) {
-    if ((layerState.layerActiveFlags >> i) & 1) {
-      const res = getAssignSetInLayer(keyIndex, i);
-      const isDefaultSchemeBlock = isLayerDefaultSchemeBlock(i);
-      if (res?.assignType === AssignType.Transparent) {
-        continue;
-      }
-      if (res?.assignType === AssignType.Block) {
-        return undefined;
-      }
-      if (!res && isDefaultSchemeBlock) {
-        return undefined;
-      }
-      if (res) {
-        return res;
-      }
-    }
-  }
-  return undefined;
 }
 
 function layerMutations_isActive(layerIndex: number) {
@@ -641,6 +644,12 @@ const InputEdge = {
   Up: 2,
 };
 
+const AssignOrder = {
+  Pri: 1,
+  Sec: 2,
+  Ter: 3,
+};
+
 const resolverConfig = {
   debugShowTrigger: false,
   emitOutputStroke: true,
@@ -656,7 +665,8 @@ interface KeySlot {
   tick: u16;
   interrupted: boolean;
   resolving: boolean;
-  assignSet: IAssignSet;
+  liveLayerIndex: s8;
+  liveLayerStateFlags: u16;
   resolverProc: ((slot: KeySlot) => boolean) | undefined;
   inputEdge: u8;
 }
@@ -688,21 +698,11 @@ function initResolverState() {
       tick: 0,
       interrupted: false,
       resolving: false,
-      assignSet: fallbackAssignSet,
+      liveLayerIndex: -1,
+      liveLayerStateFlags: 0,
       resolverProc: undefined,
       inputEdge: 0,
     }));
-}
-
-function storeAssignHitResult(
-  slot: KeySlot,
-  prioritySpec: number, // 1:pri, 2:sec, 3:ter
-) {
-  const fKeyIndex = slot.keyIndex;
-  const fLayerIndex = slot.assignSet.layerIndex;
-  const fSlotSpec = prioritySpec;
-  resolverState.assignHitResultWord =
-    (1 << 15) | (fSlotSpec << 12) | (fLayerIndex << 8) | fKeyIndex;
 }
 
 function peekAssignHitResult() {
@@ -714,6 +714,14 @@ function peekAssignHitResult() {
   return 0;
 }
 
+function keySlot_storeAssignHitResult(slot: KeySlot, assignOrder: u8) {
+  const fKeyIndex = slot.keyIndex;
+  const fLayerIndex = slot.liveLayerIndex;
+  const fSlotSpec = assignOrder;
+  resolverState.assignHitResultWord =
+    (1 << 15) | (fSlotSpec << 12) | (fLayerIndex << 8) | fKeyIndex;
+}
+
 function keySlot_clearSteps(slot: KeySlot) {
   slot.steps = '';
 }
@@ -721,6 +729,26 @@ function keySlot_clearSteps(slot: KeySlot) {
 function keySlot_debugShowSlotTrigger(slot: KeySlot, triggerObj: any) {
   const trigger = getFieldNameByValue(triggerObj, slot.steps) || '--';
   console.log(`[TRIGGER] ${slot.keyIndex} ${slot.steps} ${trigger}`);
+}
+
+function keySlot_handleKeyOn(slot: KeySlot, order: u8) {
+  const assignSet = findAssignInLayerStack(
+    slot.keyIndex,
+    slot.liveLayerStateFlags,
+  );
+  if (assignSet) {
+    if (order === AssignOrder.Pri) {
+      handleKeyOn(slot.keyIndex, assignSet.pri);
+    } else if (order === AssignOrder.Sec) {
+      handleKeyOn(slot.keyIndex, assignSet.sec);
+    } else if (order === AssignOrder.Ter) {
+      handleKeyOn(slot.keyIndex, assignSet.ter);
+    }
+  }
+}
+
+function keySlot_handleKeyOff(slot: KeySlot) {
+  handleKeyOff(slot.keyIndex);
 }
 
 // --------------------------------------------------------------------------------
@@ -748,16 +776,16 @@ function keySlot_pushStepA(slot: KeySlot, step: 'D' | 'U' | '_') {
     keySlot_debugShowSlotTrigger(slot, TriggerA);
   }
 
-  const { keyIndex, assignSet, steps } = slot;
+  const { steps } = slot;
 
   if (resolverConfig.emitOutputStroke) {
     if (steps === TriggerA.Down) {
-      handleKeyOn(keyIndex, assignSet.pri);
-      storeAssignHitResult(slot, 1);
+      keySlot_handleKeyOn(slot, AssignOrder.Pri);
+      keySlot_storeAssignHitResult(slot, AssignOrder.Pri);
     }
 
     if (steps === TriggerA.Up) {
-      handleKeyOff(keyIndex);
+      keySlot_handleKeyOff(slot);
     }
   }
 }
@@ -796,29 +824,29 @@ function keySlot_pushStepB(slot: KeySlot, step: 'D' | 'U' | '_') {
     keySlot_debugShowSlotTrigger(slot, TriggerB);
   }
 
-  const { steps, keyIndex, assignSet } = slot;
+  const { steps, keyIndex } = slot;
 
   if (resolverConfig.emitOutputStroke) {
     if (steps === TriggerB.Down) {
     }
 
     if (steps === TriggerB.Tap) {
-      handleKeyOn(keyIndex, assignSet.pri);
+      keySlot_handleKeyOn(slot, AssignOrder.Pri);
       recallKeyOff(keyIndex);
-      storeAssignHitResult(slot, 1);
+      keySlot_storeAssignHitResult(slot, AssignOrder.Pri);
     }
 
     if (steps === TriggerB.Hold) {
-      handleKeyOn(keyIndex, assignSet.sec);
-      storeAssignHitResult(slot, 2);
+      keySlot_handleKeyOn(slot, AssignOrder.Sec);
+      keySlot_storeAssignHitResult(slot, AssignOrder.Sec);
     }
 
     if (steps === TriggerB.Rehold) {
-      handleKeyOn(keyIndex, assignSet.pri);
+      keySlot_handleKeyOn(slot, AssignOrder.Pri);
     }
 
     if (steps === TriggerB.Up) {
-      handleKeyOff(keyIndex);
+      keySlot_handleKeyOff(slot);
     }
   }
 }
@@ -888,35 +916,35 @@ function keySlot_pushStepC(slot: KeySlot, step: 'D' | 'U' | '_') {
     keySlot_debugShowSlotTrigger(slot, TriggerC);
   }
 
-  const { steps, keyIndex, assignSet } = slot;
+  const { steps, keyIndex } = slot;
 
   if (resolverConfig.emitOutputStroke) {
     if (steps === TriggerC.Down) {
     }
 
     if (steps === TriggerC.Tap) {
-      handleKeyOn(keyIndex, assignSet.pri);
+      keySlot_handleKeyOn(slot, AssignOrder.Pri);
       recallKeyOff(keyIndex);
-      storeAssignHitResult(slot, 1);
+      keySlot_storeAssignHitResult(slot, AssignOrder.Pri);
     }
 
     if (steps === TriggerC.Hold) {
-      handleKeyOn(keyIndex, assignSet.sec);
-      storeAssignHitResult(slot, 2);
+      keySlot_handleKeyOn(slot, AssignOrder.Sec);
+      keySlot_storeAssignHitResult(slot, AssignOrder.Sec);
     }
 
     if (steps === TriggerC.Hold2) {
-      handleKeyOn(keyIndex, assignSet.pri);
+      keySlot_handleKeyOn(slot, AssignOrder.Pri);
     }
 
     if (steps === TriggerC.Tap2) {
-      handleKeyOn(keyIndex, assignSet.ter);
+      keySlot_handleKeyOn(slot, AssignOrder.Ter);
       recallKeyOff(keyIndex);
-      storeAssignHitResult(slot, 3);
+      keySlot_storeAssignHitResult(slot, AssignOrder.Ter);
     }
 
     if (steps === TriggerC.Up) {
-      handleKeyOff(keyIndex);
+      keySlot_handleKeyOff(slot);
     }
   }
 }
@@ -1001,18 +1029,23 @@ function keySlot_tick(slot: KeySlot, ms: number) {
   slot.interrupted = intrrupt_kidx !== -1 && intrrupt_kidx !== slot.keyIndex;
 
   if (!slot.resolverProc && slot.inputEdge === InputEdge.Down) {
-    slot.assignSet = findAssignInLayerStack(slot.keyIndex) || fallbackAssignSet;
-    slot.resolverProc = keySlotResolverFuncs[slot.assignSet.assignType];
+    const assignSet =
+      findAssignInLayerStack(slot.keyIndex, layerState.layerActiveFlags) ||
+      fallbackAssignSet;
+
+    slot.liveLayerIndex = assignSet.layerIndex;
+    slot.liveLayerStateFlags = layerState.layerActiveFlags;
+    slot.resolverProc = keySlotResolverFuncs[assignSet.assignType];
     if (resolverConfig.debugShowTrigger) {
-      console.log(
-        `resolver attached ${slot.keyIndex} ${slot.assignSet.assignType}`,
-      );
+      console.log(`resolver attached ${slot.keyIndex} ${assignSet.assignType}`);
     }
   }
 
   if (slot.resolverProc) {
     const done = slot.resolverProc(slot);
     if (done) {
+      slot.liveLayerIndex = -1;
+      slot.liveLayerStateFlags = 0;
       slot.resolverProc = undefined;
       if (resolverConfig.debugShowTrigger) {
         console.log(`resolver detached ${slot.keyIndex}`);
