@@ -644,19 +644,19 @@ enum {
   Steps_DUDU = 0b01100110,
 };
 
-// 14bytes/key
+// 10bytes/key
 typedef struct _KeySlot {
   uint8_t keyIndex;
   uint8_t steps;
-  bool hold;
-  bool nextHold;
   uint16_t tick;
-  bool interrupted;
-  bool resolving;
   int8_t liveLayerIndex;
   uint16_t liveLayerStateFlags;
-  bool (*resolverProc)(struct _KeySlot *slot); //2bytes
-  uint8_t inputEdge;
+  bool (*resolverProc)(struct _KeySlot *slot); //2bytes for AVR
+  bool hold : 1;
+  bool nextHold : 1;
+  bool interrupted : 1;
+  bool resolving : 1;
+  uint8_t inputEdge : 2;
 } KeySlot;
 
 typedef struct {
