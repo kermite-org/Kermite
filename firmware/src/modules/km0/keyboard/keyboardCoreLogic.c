@@ -1,4 +1,4 @@
-#include "keyboardCoreLogic2.h"
+#include "keyboardCoreLogic.h"
 #include "bitOperations.h"
 #include "config.h"
 #include "dataMemory.h"
@@ -10,7 +10,7 @@
 #endif
 
 /*
-software/src/shell/services/KeyboardLogic/InputLogicSimulatorD/DeviceCoreLogicSimulator2_Dual.ts
+software/src/shell/services/keyboardLogic/inputLogicSimulatorD/KeyboardCoreLogicImplementation.ts
 プロトタイプ/シミュレータ実装のコードを元にC言語に移植
 */
 
@@ -153,9 +153,9 @@ static uint8_t getOutputModifiers() {
 //--------------------------------------------------------------------------------
 //assing memory reader
 
+#define NumLayersMax 16
 #define KeyAssignsDataHeaderLocation StorageAddr_KeyAssignsDataHeader
 #define KeyAssignsDataBodyLocation StorageAddr_KeyAssignsDataBody
-#define NumLayersMax 16
 typedef struct {
   uint8_t numLayers;
   uint16_t assignsStartAddress;
@@ -222,13 +222,22 @@ static uint16_t getAssignsBlockAddressForKey(uint8_t targetKeyIndex) {
   return 0;
 }
 
+enum {
+  AssignType_None = 0,
+  AssignType_Single = 1,
+  AssignType_Dual = 2,
+  AssignType_Tri = 3,
+  AssignType_Block = 4,
+  AssignType_Transparent = 5,
+};
+
 static uint8_t assignTypeToBodyByteSizeMap[6] = { 0, 2, 4, 6, 0, 0 };
 
 static uint16_t getAssignBlockAddressForLayer(uint16_t baseAddr, uint8_t targetLayerIndex) {
   uint8_t len = readStorageByte(baseAddr) & 0x3F;
   uint16_t addr = baseAddr + 2;
-  uint16_t endAddr = baseAddr + 2 + len;
-  while (addr < endAddr) {
+  uint16_t endPos = addr + len;
+  while (addr < endPos) {
     uint8_t data = readStorageByte(addr);
     uint8_t layerIndex = data & 0b1111;
     if (layerIndex == targetLayerIndex) {
@@ -285,45 +294,9 @@ static AssignSet *getAssignSetInLayer(uint8_t keyIndex, uint8_t layerIndex) {
   return NULL;
 }
 
-//--------------------------------------------------------------------------------
-//operation handlers
-
-typedef struct {
-  uint16_t layerActiveFlags;
-  int8_t oneshotLayerIndex;
-  int8_t oneshotCancelTick;
-} LayerState;
-
-static LayerState layerState;
-
-static void resetLayerState() {
-  LayerState *ls = &layerState;
-
-  ls->layerActiveFlags = 0;
-  uint8_t numLayers = getNumLayers();
-  for (uint8_t i = 0; i < numLayers; i++) {
-    bool initialActive = getLayerInitialActive(i);
-    if (initialActive) {
-      ls->layerActiveFlags |= 1 << i;
-    }
-  }
-  ls->oneshotLayerIndex = -1;
-  ls->oneshotCancelTick = -1;
-}
-
-static uint16_t getLayerActiveFlags() {
-  return layerState.layerActiveFlags;
-}
-
-enum {
-  AssignType_None = 0,
-  AssignType_Block = 4,
-  AssignType_Transparent = 5,
-};
-
-static AssignSet *findAssignInLayerStack(uint8_t keyIndex) {
+static AssignSet *findAssignInLayerStack(uint8_t keyIndex, uint16_t layerActiveFlags) {
   for (int8_t i = 15; i >= 0; i--) {
-    if ((layerState.layerActiveFlags >> i) & 1) {
+    if ((layerActiveFlags >> i) & 1) {
       AssignSet *res = getAssignSetInLayer(keyIndex, i);
       bool isDefaultSchemeBlock = isLayerDefaultSchemeBlock(i);
       if (res && res->assignType == AssignType_Transparent) {
@@ -341,6 +314,34 @@ static AssignSet *findAssignInLayerStack(uint8_t keyIndex) {
     }
   }
   return NULL;
+}
+
+//--------------------------------------------------------------------------------
+//operation handlers
+
+typedef struct {
+  uint16_t layerActiveFlags;
+  int8_t oneshotLayerIndex;
+  int8_t oneshotCancelTick;
+} LayerState;
+
+static LayerState layerState;
+
+static void resetLayerState() {
+  layerState.layerActiveFlags = 0;
+  uint8_t numLayers = getNumLayers();
+  for (uint8_t i = 0; i < numLayers; i++) {
+    bool initialActive = getLayerInitialActive(i);
+    if (initialActive) {
+      layerState.layerActiveFlags |= 1 << i;
+    }
+  }
+  layerState.oneshotLayerIndex = -1;
+  layerState.oneshotCancelTick = -1;
+}
+
+static uint16_t getLayerActiveFlags() {
+  return layerState.layerActiveFlags;
 }
 
 static void layerMutations_clearExclusive(uint8_t targetExclusiveGroup, int8_t skipLayerIndex);
@@ -567,13 +568,13 @@ static void resetAssignBinder() {
   }
 }
 
-static void handleKeyOn(uint8_t keyIndex, uint16_t opWord) {
+static void assignBinder_handleKeyOn(uint8_t keyIndex, uint16_t opWord) {
   //printf("handleKeyOn %d %d\n", keyIndex, opWord);
   handleOperationOn(opWord);
   assignBinderState.keyAttachedOperationWords[keyIndex] = opWord;
 }
 
-static void handleKeyOff(uint8_t keyIndex) {
+static void assignBinder_handleKeyOff(uint8_t keyIndex) {
   uint16_t opWord = assignBinderState.keyAttachedOperationWords[keyIndex];
   if (opWord) {
     //printf("handleKeyOff %d\n", keyIndex);
@@ -582,7 +583,7 @@ static void handleKeyOff(uint8_t keyIndex) {
   }
 }
 
-static void recallKeyOff(uint8_t keyIndex) {
+static void assignBinder_recallKeyOff(uint8_t keyIndex) {
   for (uint8_t i = 0; i < NumRecallKeyEntries; i++) {
     RecallKeyEntry *ke = &assignBinderState.recallKeyEntries[i];
     if (ke->keyIndex == KIDX_NONE) {
@@ -601,7 +602,7 @@ static void assignBinder_ticker(uint8_t ms) {
       ke->tick += ms;
       if (ke->tick > ImmediateReleaseStrokeDuration) {
         //printf("exec recall %d\n", ke->keyIndex);
-        handleKeyOff(ke->keyIndex);
+        assignBinder_handleKeyOff(ke->keyIndex);
         ke->keyIndex = KIDX_NONE;
       }
     }
@@ -623,6 +624,12 @@ enum {
 };
 
 enum {
+  AssignOrder_Pri = 1,
+  AssignOrder_Sec = 2,
+  AssignOrder_Ter = 3
+};
+
+enum {
   Step_D = 0b01,
   Step_U = 0b10,
   Step_W = 0b11,
@@ -637,18 +644,19 @@ enum {
   Steps_DUDU = 0b01100110,
 };
 
-// 18bytes/key
+// 10bytes/key
 typedef struct _KeySlot {
   uint8_t keyIndex;
   uint8_t steps;
-  bool hold;
-  bool nextHold;
   uint16_t tick;
-  bool interrupted;
-  bool resolving;
-  AssignSet assignSet;                         //7bytes
-  bool (*resolverProc)(struct _KeySlot *slot); //2bytes
-  uint8_t inputEdge;
+  int8_t liveLayerIndex;
+  uint16_t liveLayerStateFlags;
+  bool (*resolverProc)(struct _KeySlot *slot); //2bytes for AVR
+  bool hold : 1;
+  bool nextHold : 1;
+  bool interrupted : 1;
+  bool resolving : 1;
+  uint8_t inputEdge : 2;
 } KeySlot;
 
 typedef struct {
@@ -658,14 +666,6 @@ typedef struct {
 } ResolverState;
 
 static ResolverState resolverState;
-
-static AssignSet fallbackAssignSet = {
-  assignType : 0,
-  pri : 0,
-  sec : 0,
-  ter : 0,
-  layerIndex : -1
-};
 
 static void initResolverState() {
   resolverState.interruptKeyIndex = KIDX_NONE;
@@ -679,22 +679,12 @@ static void initResolverState() {
     slot->tick = 0;
     slot->interrupted = false;
     slot->resolving = false;
-    slot->assignSet = fallbackAssignSet;
+    slot->liveLayerIndex = -1;
+    slot->liveLayerStateFlags = 0;
     slot->resolverProc = NULL;
     slot->inputEdge = 0;
     slot->tick = 0;
   }
-}
-
-static void storeAssignHitResult(
-    KeySlot *slot,
-    uint8_t prioritySpec // 1:pri, 2:sec, 3:ter
-) {
-  uint8_t fKeyIndex = slot->keyIndex;
-  uint8_t fLayerIndex = slot->assignSet.layerIndex;
-  uint8_t fSlotSpec = prioritySpec;
-  resolverState.assignHitResultWord =
-      (1 << 15) | (fSlotSpec << 12) | (fLayerIndex << 8) | fKeyIndex;
 }
 
 static uint16_t peekAssignHitResult() {
@@ -704,6 +694,33 @@ static uint16_t peekAssignHitResult() {
     return res;
   }
   return 0;
+}
+
+static void keySlot_storeAssignHitResult(
+    KeySlot *slot,
+    uint8_t assignOrder) {
+  uint8_t fKeyIndex = slot->keyIndex;
+  uint8_t fLayerIndex = slot->liveLayerIndex;
+  uint8_t fSlotSpec = assignOrder;
+  resolverState.assignHitResultWord =
+      (1 << 15) | (fSlotSpec << 12) | (fLayerIndex << 8) | fKeyIndex;
+}
+
+static void keySlot_handleKeyOn(KeySlot *slot, uint8_t order) {
+  AssignSet *pAssignSet = findAssignInLayerStack(slot->keyIndex, slot->liveLayerStateFlags);
+  if (pAssignSet != NULL) {
+    if (order == AssignOrder_Pri) {
+      assignBinder_handleKeyOn(slot->keyIndex, pAssignSet->pri);
+    } else if (order == AssignOrder_Sec) {
+      assignBinder_handleKeyOn(slot->keyIndex, pAssignSet->sec);
+    } else if (order == AssignOrder_Ter) {
+      assignBinder_handleKeyOn(slot->keyIndex, pAssignSet->ter);
+    }
+  }
+}
+
+static void keySlot_handleKeyOff(KeySlot *slot) {
+  assignBinder_handleKeyOff(slot->keyIndex);
 }
 
 static void keySlot_clearSteps(KeySlot *slot) {
@@ -736,16 +753,14 @@ static void keySlot_pushStepA(KeySlot *slot, uint8_t step) {
   keySlot_addStep(slot, step);
 
   uint8_t steps = slot->steps;
-  uint8_t keyIndex = slot->keyIndex;
-  AssignSet *assignSet = &slot->assignSet;
 
   if (steps == TriggerA_Down) {
-    handleKeyOn(keyIndex, assignSet->pri);
-    storeAssignHitResult(slot, 1);
+    keySlot_handleKeyOn(slot, AssignOrder_Pri);
+    keySlot_storeAssignHitResult(slot, AssignOrder_Pri);
   }
 
   if (steps == TriggerA_Up) {
-    handleKeyOff(keyIndex);
+    keySlot_handleKeyOff(slot);
   }
 }
 
@@ -780,29 +795,27 @@ static void keySlot_pushStepB(KeySlot *slot, uint8_t step) {
   slot->tick = 0;
 
   uint8_t steps = slot->steps;
-  uint8_t keyIndex = slot->keyIndex;
-  AssignSet *assignSet = &slot->assignSet;
 
   if (steps == TriggerB_Down) {
   }
 
   if (steps == TriggerB_Tap) {
-    handleKeyOn(keyIndex, assignSet->pri);
-    recallKeyOff(keyIndex);
-    storeAssignHitResult(slot, 1);
+    keySlot_handleKeyOn(slot, AssignOrder_Pri);
+    assignBinder_recallKeyOff(slot->keyIndex);
+    keySlot_storeAssignHitResult(slot, AssignOrder_Pri);
   }
 
   if (steps == TriggerB_Hold) {
-    handleKeyOn(keyIndex, assignSet->sec);
-    storeAssignHitResult(slot, 2);
+    keySlot_handleKeyOn(slot, AssignOrder_Sec);
+    keySlot_storeAssignHitResult(slot, AssignOrder_Sec);
   }
 
   if (steps == TriggerB_Rehold) {
-    handleKeyOn(keyIndex, assignSet->pri);
+    keySlot_handleKeyOn(slot, AssignOrder_Pri);
   }
 
   if (steps == TriggerB_Up) {
-    handleKeyOff(keyIndex);
+    keySlot_handleKeyOff(slot);
   }
 }
 
@@ -872,35 +885,33 @@ static void keySlot_pushStepC(KeySlot *slot, uint8_t step) {
   slot->tick = 0;
 
   uint8_t steps = slot->steps;
-  uint8_t keyIndex = slot->keyIndex;
-  AssignSet *assignSet = &slot->assignSet;
 
   if (steps == TriggerC_Down) {
   }
 
   if (steps == TriggerC_Tap) {
-    handleKeyOn(keyIndex, assignSet->pri);
-    recallKeyOff(keyIndex);
-    storeAssignHitResult(slot, 1);
+    keySlot_handleKeyOn(slot, AssignOrder_Pri);
+    assignBinder_recallKeyOff(slot->keyIndex);
+    keySlot_storeAssignHitResult(slot, AssignOrder_Pri);
   }
 
   if (steps == TriggerC_Hold) {
-    handleKeyOn(keyIndex, assignSet->sec);
-    storeAssignHitResult(slot, 2);
+    keySlot_handleKeyOn(slot, AssignOrder_Sec);
+    keySlot_storeAssignHitResult(slot, AssignOrder_Sec);
   }
 
   if (steps == TriggerC_Hold2) {
-    handleKeyOn(keyIndex, assignSet->pri);
+    keySlot_handleKeyOn(slot, AssignOrder_Pri);
   }
 
   if (steps == TriggerC_Tap2) {
-    handleKeyOn(keyIndex, assignSet->ter);
-    recallKeyOff(keyIndex);
-    storeAssignHitResult(slot, 3);
+    keySlot_handleKeyOn(slot, AssignOrder_Ter);
+    assignBinder_recallKeyOff(slot->keyIndex);
+    keySlot_storeAssignHitResult(slot, AssignOrder_Ter);
   }
 
   if (steps == TriggerC_Up) {
-    handleKeyOff(keyIndex);
+    keySlot_handleKeyOff(slot);
   }
 }
 
@@ -988,17 +999,23 @@ static void keySlot_tick(KeySlot *slot, uint8_t ms) {
   slot->interrupted = rs->interruptKeyIndex != KIDX_NONE && rs->interruptKeyIndex != slot->keyIndex;
 
   if (!slot->resolverProc && slot->inputEdge == InputEdge_Down) {
-    AssignSet *pAssignSet = findAssignInLayerStack(slot->keyIndex);
-    slot->assignSet = (pAssignSet != NULL) ? *pAssignSet : fallbackAssignSet;
-    if (DebugShowTrigger) {
-      printf("resolver attached %d %d\n", slot->keyIndex, slot->assignSet.assignType);
+    uint16_t layerActiveFlags = getLayerActiveFlags();
+    AssignSet *pAssignSet = findAssignInLayerStack(slot->keyIndex, layerActiveFlags);
+    if (pAssignSet != NULL) {
+      slot->liveLayerIndex = pAssignSet->layerIndex;
+      slot->liveLayerStateFlags = layerActiveFlags;
+      slot->resolverProc = keySlotResolverFuncs[pAssignSet->assignType];
+      if (DebugShowTrigger) {
+        printf("resolver attached %d %d\n", slot->keyIndex, pAssignSet->assignType);
+      }
     }
-    slot->resolverProc = keySlotResolverFuncs[slot->assignSet.assignType];
   }
 
   if (slot->resolverProc) {
     bool done = slot->resolverProc(slot);
     if (done) {
+      slot->liveLayerStateFlags = -1;
+      slot->liveLayerStateFlags = 0;
       slot->resolverProc = NULL;
       if (DebugShowTrigger) {
         printf("resolver detached %d\n", slot->keyIndex);

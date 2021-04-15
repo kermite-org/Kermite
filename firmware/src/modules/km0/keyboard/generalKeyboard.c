@@ -7,7 +7,7 @@
 #include "debugUart.h"
 #include "dio.h"
 #include "keyMatrixScanner.h"
-#include "keyboardCoreLogic2.h"
+#include "keyboardCoreLogic.h"
 #include "system.h"
 #include "usbIoCore.h"
 #include "utils.h"
