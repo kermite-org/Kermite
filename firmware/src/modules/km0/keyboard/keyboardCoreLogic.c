@@ -153,9 +153,9 @@ static uint8_t getOutputModifiers() {
 //--------------------------------------------------------------------------------
 //assing memory reader
 
+#define NumLayersMax 16
 #define KeyAssignsDataHeaderLocation StorageAddr_KeyAssignsDataHeader
 #define KeyAssignsDataBodyLocation StorageAddr_KeyAssignsDataBody
-#define NumLayersMax 16
 typedef struct {
   uint8_t numLayers;
   uint16_t assignsStartAddress;
@@ -222,13 +222,22 @@ static uint16_t getAssignsBlockAddressForKey(uint8_t targetKeyIndex) {
   return 0;
 }
 
+enum {
+  AssignType_None = 0,
+  AssignType_Single = 1,
+  AssignType_Dual = 2,
+  AssignType_Tri = 3,
+  AssignType_Block = 4,
+  AssignType_Transparent = 5,
+};
+
 static uint8_t assignTypeToBodyByteSizeMap[6] = { 0, 2, 4, 6, 0, 0 };
 
 static uint16_t getAssignBlockAddressForLayer(uint16_t baseAddr, uint8_t targetLayerIndex) {
   uint8_t len = readStorageByte(baseAddr) & 0x3F;
   uint16_t addr = baseAddr + 2;
-  uint16_t endAddr = baseAddr + 2 + len;
-  while (addr < endAddr) {
+  uint16_t endPos = addr + len;
+  while (addr < endPos) {
     uint8_t data = readStorageByte(addr);
     uint8_t layerIndex = data & 0b1111;
     if (layerIndex == targetLayerIndex) {
@@ -297,29 +306,21 @@ typedef struct {
 static LayerState layerState;
 
 static void resetLayerState() {
-  LayerState *ls = &layerState;
-
-  ls->layerActiveFlags = 0;
+  layerState.layerActiveFlags = 0;
   uint8_t numLayers = getNumLayers();
   for (uint8_t i = 0; i < numLayers; i++) {
     bool initialActive = getLayerInitialActive(i);
     if (initialActive) {
-      ls->layerActiveFlags |= 1 << i;
+      layerState.layerActiveFlags |= 1 << i;
     }
   }
-  ls->oneshotLayerIndex = -1;
-  ls->oneshotCancelTick = -1;
+  layerState.oneshotLayerIndex = -1;
+  layerState.oneshotCancelTick = -1;
 }
 
 static uint16_t getLayerActiveFlags() {
   return layerState.layerActiveFlags;
 }
-
-enum {
-  AssignType_None = 0,
-  AssignType_Block = 4,
-  AssignType_Transparent = 5,
-};
 
 static AssignSet *findAssignInLayerStack(uint8_t keyIndex) {
   for (int8_t i = 15; i >= 0; i--) {
