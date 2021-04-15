@@ -10,7 +10,7 @@
 #endif
 
 /*
-software/src/shell/services/KeyboardLogic/InputLogicSimulatorD/DeviceCoreLogicSimulator2_Dual.ts
+software/src/shell/services/keyboardLogic/inputLogicSimulatorD/KeyboardCoreLogicImplementation.ts
 プロトタイプ/シミュレータ実装のコードを元にC言語に移植
 */
 

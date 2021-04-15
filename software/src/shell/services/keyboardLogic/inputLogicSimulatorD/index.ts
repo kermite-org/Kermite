@@ -10,7 +10,7 @@ import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigPr
 import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
 import { AssignStorageBaseAddr } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/MemoryDefs';
 import { ProfileManager } from '~/shell/services/profile/ProfileManager';
-import { getKeyboardCoreLogicInterface } from './DeviceCoreLogicSimulator2_Dual';
+import { getKeyboardCoreLogicInterface } from './KeyboardCoreLogicImplementation';
 import { makeKeyAssignsConfigStorageData } from './ProfileDataBinaryPacker';
 
 function compareArray(ar0: any[], ar1: any[]): boolean {
