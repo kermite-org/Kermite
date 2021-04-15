@@ -637,7 +637,7 @@ enum {
   Steps_DUDU = 0b01100110,
 };
 
-// 18bytes/key
+// 19bytes/key
 typedef struct _KeySlot {
   uint8_t keyIndex;
   uint8_t steps;
@@ -646,7 +646,7 @@ typedef struct _KeySlot {
   uint16_t tick;
   bool interrupted;
   bool resolving;
-  AssignSet assignSet;                         //7bytes
+  AssignSet assignSet;                         //8bytes
   bool (*resolverProc)(struct _KeySlot *slot); //2bytes
   uint8_t inputEdge;
 } KeySlot;
