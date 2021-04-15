@@ -568,13 +568,13 @@ static void resetAssignBinder() {
   }
 }
 
-static void handleKeyOn(uint8_t keyIndex, uint16_t opWord) {
+static void assignBinder_handleKeyOn(uint8_t keyIndex, uint16_t opWord) {
   //printf("handleKeyOn %d %d\n", keyIndex, opWord);
   handleOperationOn(opWord);
   assignBinderState.keyAttachedOperationWords[keyIndex] = opWord;
 }
 
-static void handleKeyOff(uint8_t keyIndex) {
+static void assignBinder_handleKeyOff(uint8_t keyIndex) {
   uint16_t opWord = assignBinderState.keyAttachedOperationWords[keyIndex];
   if (opWord) {
     //printf("handleKeyOff %d\n", keyIndex);
@@ -583,7 +583,7 @@ static void handleKeyOff(uint8_t keyIndex) {
   }
 }
 
-static void recallKeyOff(uint8_t keyIndex) {
+static void assignBinder_recallKeyOff(uint8_t keyIndex) {
   for (uint8_t i = 0; i < NumRecallKeyEntries; i++) {
     RecallKeyEntry *ke = &assignBinderState.recallKeyEntries[i];
     if (ke->keyIndex == KIDX_NONE) {
@@ -602,7 +602,7 @@ static void assignBinder_ticker(uint8_t ms) {
       ke->tick += ms;
       if (ke->tick > ImmediateReleaseStrokeDuration) {
         //printf("exec recall %d\n", ke->keyIndex);
-        handleKeyOff(ke->keyIndex);
+        assignBinder_handleKeyOff(ke->keyIndex);
         ke->keyIndex = KIDX_NONE;
       }
     }
@@ -710,17 +710,17 @@ static void keySlot_handleKeyOn(KeySlot *slot, uint8_t order) {
   AssignSet *pAssignSet = findAssignInLayerStack(slot->keyIndex, slot->liveLayerStateFlags);
   if (pAssignSet != NULL) {
     if (order == AssignOrder_Pri) {
-      handleKeyOn(slot->keyIndex, pAssignSet->pri);
+      assignBinder_handleKeyOn(slot->keyIndex, pAssignSet->pri);
     } else if (order == AssignOrder_Sec) {
-      handleKeyOn(slot->keyIndex, pAssignSet->sec);
+      assignBinder_handleKeyOn(slot->keyIndex, pAssignSet->sec);
     } else if (order == AssignOrder_Ter) {
-      handleKeyOn(slot->keyIndex, pAssignSet->ter);
+      assignBinder_handleKeyOn(slot->keyIndex, pAssignSet->ter);
     }
   }
 }
 
 static void keySlot_handleKeyOff(KeySlot *slot) {
-  handleKeyOff(slot->keyIndex);
+  assignBinder_handleKeyOff(slot->keyIndex);
 }
 
 static void keySlot_clearSteps(KeySlot *slot) {
@@ -801,7 +801,7 @@ static void keySlot_pushStepB(KeySlot *slot, uint8_t step) {
 
   if (steps == TriggerB_Tap) {
     keySlot_handleKeyOn(slot, AssignOrder_Pri);
-    recallKeyOff(slot->keyIndex);
+    assignBinder_recallKeyOff(slot->keyIndex);
     keySlot_storeAssignHitResult(slot, AssignOrder_Pri);
   }
 
@@ -891,7 +891,7 @@ static void keySlot_pushStepC(KeySlot *slot, uint8_t step) {
 
   if (steps == TriggerC_Tap) {
     keySlot_handleKeyOn(slot, AssignOrder_Pri);
-    recallKeyOff(slot->keyIndex);
+    assignBinder_recallKeyOff(slot->keyIndex);
     keySlot_storeAssignHitResult(slot, AssignOrder_Pri);
   }
 
@@ -906,7 +906,7 @@ static void keySlot_pushStepC(KeySlot *slot, uint8_t step) {
 
   if (steps == TriggerC_Tap2) {
     keySlot_handleKeyOn(slot, AssignOrder_Ter);
-    recallKeyOff(slot->keyIndex);
+    assignBinder_recallKeyOff(slot->keyIndex);
     keySlot_storeAssignHitResult(slot, AssignOrder_Ter);
   }
 

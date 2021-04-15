@@ -598,13 +598,13 @@ function resetAssignBinder() {
     }));
 }
 
-function handleKeyOn(keyIndex: u8, opWord: u16) {
+function assignBinder_handleKeyOn(keyIndex: u8, opWord: u16) {
   // console.log(`keyOn ${keyIndex} ${opWord}`);
   handleOperationOn(opWord);
   assignBinderState.keyAttachedOperationWords[keyIndex] = opWord;
 }
 
-function handleKeyOff(keyIndex: u8) {
+function assignBinder_handleKeyOff(keyIndex: u8) {
   const opWord = assignBinderState.keyAttachedOperationWords[keyIndex];
   if (opWord) {
     // console.log(`keyOff ${keyIndex} ${opWord}`);
@@ -613,7 +613,7 @@ function handleKeyOff(keyIndex: u8) {
   }
 }
 
-function recallKeyOff(keyIndex: u8) {
+function assignBinder_recallKeyOff(keyIndex: u8) {
   const ke = assignBinderState.recallKeyEntries.find((a) => a.keyIndex === -1);
   if (ke) {
     ke.keyIndex = keyIndex;
@@ -626,7 +626,7 @@ function assignBinder_ticker(ms: u16) {
     if (ke.keyIndex !== -1) {
       ke.tick += ms;
       if (ke.tick > ImmediateReleaseStrokeDuration) {
-        handleKeyOff(ke.keyIndex);
+        assignBinder_handleKeyOff(ke.keyIndex);
         ke.keyIndex = -1;
       }
     }
@@ -676,14 +676,6 @@ const resolverState = new (class {
   keySlots: KeySlot[] = [];
   assignHitResultWord: number = 0;
 })();
-
-const fallbackAssignSet: IAssignSet = {
-  assignType: AssignType.None,
-  pri: 0,
-  sec: 0,
-  ter: 0,
-  layerIndex: -1,
-};
 
 function initResolverState() {
   resolverState.interruptKeyIndex = -1;
@@ -738,17 +730,17 @@ function keySlot_handleKeyOn(slot: KeySlot, order: u8) {
   );
   if (assignSet) {
     if (order === AssignOrder.Pri) {
-      handleKeyOn(slot.keyIndex, assignSet.pri);
+      assignBinder_handleKeyOn(slot.keyIndex, assignSet.pri);
     } else if (order === AssignOrder.Sec) {
-      handleKeyOn(slot.keyIndex, assignSet.sec);
+      assignBinder_handleKeyOn(slot.keyIndex, assignSet.sec);
     } else if (order === AssignOrder.Ter) {
-      handleKeyOn(slot.keyIndex, assignSet.ter);
+      assignBinder_handleKeyOn(slot.keyIndex, assignSet.ter);
     }
   }
 }
 
 function keySlot_handleKeyOff(slot: KeySlot) {
-  handleKeyOff(slot.keyIndex);
+  assignBinder_handleKeyOff(slot.keyIndex);
 }
 
 // --------------------------------------------------------------------------------
@@ -832,7 +824,7 @@ function keySlot_pushStepB(slot: KeySlot, step: 'D' | 'U' | '_') {
 
     if (steps === TriggerB.Tap) {
       keySlot_handleKeyOn(slot, AssignOrder.Pri);
-      recallKeyOff(keyIndex);
+      assignBinder_recallKeyOff(keyIndex);
       keySlot_storeAssignHitResult(slot, AssignOrder.Pri);
     }
 
@@ -924,7 +916,7 @@ function keySlot_pushStepC(slot: KeySlot, step: 'D' | 'U' | '_') {
 
     if (steps === TriggerC.Tap) {
       keySlot_handleKeyOn(slot, AssignOrder.Pri);
-      recallKeyOff(keyIndex);
+      assignBinder_recallKeyOff(keyIndex);
       keySlot_storeAssignHitResult(slot, AssignOrder.Pri);
     }
 
@@ -939,7 +931,7 @@ function keySlot_pushStepC(slot: KeySlot, step: 'D' | 'U' | '_') {
 
     if (steps === TriggerC.Tap2) {
       keySlot_handleKeyOn(slot, AssignOrder.Ter);
-      recallKeyOff(keyIndex);
+      assignBinder_recallKeyOff(keyIndex);
       keySlot_storeAssignHitResult(slot, AssignOrder.Ter);
     }
 
@@ -1029,15 +1021,19 @@ function keySlot_tick(slot: KeySlot, ms: number) {
   slot.interrupted = intrrupt_kidx !== -1 && intrrupt_kidx !== slot.keyIndex;
 
   if (!slot.resolverProc && slot.inputEdge === InputEdge.Down) {
-    const assignSet =
-      findAssignInLayerStack(slot.keyIndex, layerState.layerActiveFlags) ||
-      fallbackAssignSet;
-
-    slot.liveLayerIndex = assignSet.layerIndex;
-    slot.liveLayerStateFlags = layerState.layerActiveFlags;
-    slot.resolverProc = keySlotResolverFuncs[assignSet.assignType];
-    if (resolverConfig.debugShowTrigger) {
-      console.log(`resolver attached ${slot.keyIndex} ${assignSet.assignType}`);
+    const assignSet = findAssignInLayerStack(
+      slot.keyIndex,
+      layerState.layerActiveFlags,
+    );
+    if (assignSet) {
+      slot.liveLayerIndex = assignSet.layerIndex;
+      slot.liveLayerStateFlags = layerState.layerActiveFlags;
+      slot.resolverProc = keySlotResolverFuncs[assignSet.assignType];
+      if (resolverConfig.debugShowTrigger) {
+        console.log(
+          `resolver attached ${slot.keyIndex} ${assignSet.assignType}`,
+        );
+      }
     }
   }
 
