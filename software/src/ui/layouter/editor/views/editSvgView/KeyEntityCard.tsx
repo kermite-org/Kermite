@@ -139,7 +139,7 @@ export const KeyEntityCardSingle = (props: {
 
   const {
     coordUnit,
-    keySizeUnit,
+    sizeUnit,
     placementAnchor,
     showKeyId,
     showKeyIndex,
@@ -171,7 +171,7 @@ export const KeyEntityCardSingle = (props: {
     editReader.isManualKeyIdMode,
   );
 
-  const [keyW, keyH] = getKeySize(ke.shape, coordUnit, keySizeUnit);
+  const [keyW, keyH] = getKeySize(ke.shape, sizeUnit);
 
   const idTextsTransformSpec = `translate(${d * (keyW / 2 + 1)}, ${
     d * (keyH / 2 + 1)

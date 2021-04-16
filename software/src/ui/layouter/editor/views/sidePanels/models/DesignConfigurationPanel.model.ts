@@ -1,4 +1,4 @@
-import { IKeyIdMode, IKeyPlacementAnchor, IKeySizeUnit } from '~/shared';
+import { IKeyIdMode, IKeyPlacementAnchor } from '~/shared';
 import { ICommonSelectorViewModel } from '~/ui/common';
 import { useClosureModel } from '~/ui/layouter/base';
 import { editReader, editMutations } from '~/ui/layouter/editor/store';
@@ -45,13 +45,16 @@ function createModels() {
     },
   );
 
-  const vmSizeUnitMode = makeSelectorModel<IKeySizeUnit>({
+  const vmSizeUnitMode = makeSelectorModel<'mm' | 'KP'>({
     sources: [
       ['KP', 'U'],
       ['mm', 'mm'],
     ],
-    reader: () => editReader.keySizeUnit,
-    writer: (sizeUnit) => editMutations.setSizeUnit(sizeUnit),
+    reader: () => editReader.sizeUnitSuffix,
+    writer: (newValue: 'mm' | 'KP') => {
+      const unitSpec = newValue === 'mm' ? 'mm' : 'KP 19';
+      editMutations.setKeySizeUnit(unitSpec);
+    },
   });
 
   const vmPlacementAnchorMode = makeSelectorModel<IKeyPlacementAnchor>({

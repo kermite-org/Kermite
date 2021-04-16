@@ -6,7 +6,6 @@ import {
   IDisplayKeyEntity,
   IDisplayKeyShape,
   IDisplayOutlineShape,
-  IKeySizeUnit,
   IPersistKeyboardDesign,
   IPersistKeyboardDesignMirrorKeyEntity,
   IPersistKeyboardDesignRealKeyEntity,
@@ -70,8 +69,7 @@ export namespace DisplayKeyboardDesignLoader {
 
   function getKeyShape(
     shapeSpec: string,
-    coordUnit: ICoordUnit,
-    keySizeUnit: IKeySizeUnit,
+    sizeUnit: ICoordUnit,
   ): IDisplayKeyShape {
     if (shapeSpec === 'ext circle') {
       return { type: 'circle', radius: 9 };
@@ -81,7 +79,7 @@ export namespace DisplayKeyboardDesignLoader {
         points: isoEnterPathPoints.map(([x, y]) => ({ x, y })),
       };
     }
-    const [w, h] = getStdKeySize(shapeSpec, coordUnit, keySizeUnit);
+    const [w, h] = getStdKeySize(shapeSpec, sizeUnit);
     return {
       type: 'rect',
       width: w,
@@ -93,6 +91,7 @@ export namespace DisplayKeyboardDesignLoader {
     ke: IRealKeyEntity,
     mke: IMirrorKeyEntity | undefined,
     coordUnit: ICoordUnit,
+    sizeUnit: ICoordUnit,
     design: ISourceDesign,
   ): IDisplayKeyEntity {
     const isMirror = !!mke;
@@ -109,9 +108,9 @@ export namespace DisplayKeyboardDesignLoader {
     );
     const groupRot = degToRad(groupAngle);
 
-    const { keySizeUnit, placementAnchor } = design.setup;
+    const { placementAnchor } = design.setup;
 
-    const [w, h] = getKeySize(keyShape, coordUnit, keySizeUnit);
+    const [w, h] = getKeySize(keyShape, sizeUnit);
 
     const p = { x: 0, y: 0 };
     if (placementAnchor === 'topLeft') {
@@ -131,7 +130,7 @@ export namespace DisplayKeyboardDesignLoader {
         -1,
       ),
       shapeSpec: keyShape,
-      shape: getKeyShape(keyShape, coordUnit, keySizeUnit),
+      shape: getKeyShape(keyShape, sizeUnit),
     };
   }
 
@@ -245,6 +244,7 @@ export namespace DisplayKeyboardDesignLoader {
     design: IPersistKeyboardDesign,
   ): IDisplayKeyboardDesign {
     const coordUnit = getCoordUnitFromUnitSpec(design.setup.placementUnit);
+    const sizeUnit = getCoordUnitFromUnitSpec(design.setup.keySizeUnit);
 
     const keyEntities = flattenArray(
       design.keyEntities.map((ke) => {
@@ -258,11 +258,13 @@ export namespace DisplayKeyboardDesignLoader {
               (k) => 'mirrorOf' in k && k.mirrorOf === ke.keyId,
             ) as IMirrorKeyEntity | undefined;
             return [
-              transformKeyEntity(ke, undefined, coordUnit, design),
-              transformKeyEntity(ke, mke, coordUnit, design),
+              transformKeyEntity(ke, undefined, coordUnit, sizeUnit, design),
+              transformKeyEntity(ke, mke, coordUnit, sizeUnit, design),
             ];
           } else {
-            return [transformKeyEntity(ke, undefined, coordUnit, design)];
+            return [
+              transformKeyEntity(ke, undefined, coordUnit, sizeUnit, design),
+            ];
           }
         }
       }),

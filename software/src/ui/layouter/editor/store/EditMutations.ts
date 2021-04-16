@@ -2,7 +2,6 @@ import {
   clamp,
   IKeyIdMode,
   IKeyPlacementAnchor,
-  IKeySizeUnit,
   removeArrayItems,
 } from '~/shared';
 import { getNextEntityInstanceId } from '~/ui/layouter/editor/store/DomainRelatedHelpers';
@@ -148,10 +147,9 @@ class EditMutations {
     });
   }
 
-  setSizeUnit(unit: IKeySizeUnit) {
-    const { coordUnit } = editReader;
+  setKeySizeUnit(unitSpec: string) {
     editUpdator.commitEditor((editor) => {
-      changeKeySizeUnit(editor.design, unit, coordUnit);
+      changeKeySizeUnit(editor.design, unitSpec);
     });
   }
 

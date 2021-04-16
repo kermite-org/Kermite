@@ -1,5 +1,3 @@
-export type IKeySizeUnit = 'mm' | 'KP';
-
 export type IKeyPlacementAnchor = 'topLeft' | 'center';
 
 export type IKeyIdMode = 'auto' | 'manual';
@@ -22,9 +20,9 @@ export interface IPersistKeyboardDesignMirrorKeyEntity {
 export interface IPersistKeyboardDesign {
   formatRevision: 'LA00';
   setup: {
-    placementUnit: string;
+    placementUnit: string; // 'mm' | 'KP x <y>'
     placementAnchor: IKeyPlacementAnchor;
-    keySizeUnit: IKeySizeUnit;
+    keySizeUnit: string; // 'mm' | 'KP x <y>'
     keyIdMode: IKeyIdMode;
   };
   keyEntities: (
@@ -50,7 +48,7 @@ export function createFallbackPersistKeyboardDesign(): IPersistKeyboardDesign {
     setup: {
       placementUnit: 'mm',
       placementAnchor: 'center',
-      keySizeUnit: 'KP',
+      keySizeUnit: 'KP 19',
       keyIdMode: 'auto',
     },
     keyEntities: [],
