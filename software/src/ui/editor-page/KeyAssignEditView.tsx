@@ -1,8 +1,9 @@
 import { jsx, css } from 'qx';
 import { uiTheme, uiStatusModel } from '~/ui/common';
+import { BehaviorOptionsPartA } from '~/ui/editor-page/editorMainPart/views/BehaviorOptionsPartA';
 import { ProfileConfigurationPart } from '~/ui/editor-page/editorMainPart/views/ProfileConfigurationPart';
 import { KeyboardSection } from './editorMainPart/KeyboardSection';
-import { BehaviorOptionsPart } from './editorMainPart/views/BehaviorOptionsPart';
+import { BehaviorOptionsPartB } from './editorMainPart/views/BehaviorOptionsPartB';
 import { AssignEditSection } from './editorMainPart/views/assignEditSection';
 import { LayersSection } from './editorMainPart/views/layersSection';
 import { TestInputArea } from './testInputArea/TestInputArea';
@@ -91,6 +92,11 @@ const cssEditSideBarColumn = css`
   }
 `;
 
+const cssTopPartBox = css`
+  background: ${clPanelBox};
+  border-radius: ${panelBoxBorderRadius};
+`;
+
 const cssLayersPartBox = css`
   background: ${clPanelBox};
   border-radius: ${panelBoxBorderRadius};
@@ -123,12 +129,15 @@ export const KeyAssignEditView = () => {
           </div>
         </div>
         <div css={cssEditSideBarColumn}>
+          <div css={cssTopPartBox}>
+            <BehaviorOptionsPartA />
+          </div>
           <div css={cssLayersPartBox}>
             <LayersSection />
           </div>
           <div css={cssRestPartBox}>
             <ProfileConfigurationPart />
-            <BehaviorOptionsPart />
+            <BehaviorOptionsPartB />
           </div>
         </div>
       </div>
