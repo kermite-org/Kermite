@@ -8,6 +8,15 @@ import {
 } from '~/ui/layouter/editor/views/sidePanels/models/slots/ConfigTextEditModel';
 import { makeSelectorModel } from '~/ui/layouter/editor/views/sidePanels/models/slots/SelectorModel';
 
+interface IDesignConfigurationPanelModel {
+  vmPlacementUnitMode: ICommonSelectorViewModel;
+  vmPlacementUnitText: IConfigTextEditModel;
+  vmPlacementAnchorMode: ICommonSelectorViewModel;
+  vmKeySizeUnitMode: ICommonSelectorViewModel;
+  vmKeySizeUnitText: IConfigTextEditModel;
+  vmKeyIdMode: ICommonSelectorViewModel;
+}
+
 function getPlacementUnitInputTextFromModel(): string | undefined {
   const mode = editReader.coordUnitSuffix;
   if (mode === 'KP') {
@@ -16,7 +25,15 @@ function getPlacementUnitInputTextFromModel(): string | undefined {
   return undefined;
 }
 
-function createModels() {
+function getKeySizeUnitInputTextFromModel(): string | undefined {
+  const mode = editReader.sizeUnitSuffix;
+  if (mode === 'KP') {
+    return editReader.design.setup.keySizeUnit.replace('KP ', '');
+  }
+  return undefined;
+}
+
+function createModels(): () => IDesignConfigurationPanelModel {
   const vmPlacementUnitMode = makeSelectorModel<'mm' | 'KP'>({
     sources: [
       ['mm', 'mm'],
@@ -45,10 +62,10 @@ function createModels() {
     },
   );
 
-  const vmSizeUnitMode = makeSelectorModel<'mm' | 'KP'>({
+  const vmKeySizeUnitMode = makeSelectorModel<'mm' | 'KP'>({
     sources: [
-      ['KP', 'U'],
       ['mm', 'mm'],
+      ['KP', 'U'],
     ],
     reader: () => editReader.sizeUnitSuffix,
     writer: (newValue: 'mm' | 'KP') => {
@@ -56,6 +73,22 @@ function createModels() {
       editMutations.setKeySizeUnit(unitSpec);
     },
   });
+
+  const vmKeySizeUnitText = createConfigTextEditModel(
+    (text) => {
+      const textValid = [/^\d+\.?\d*$/, /^\d+\.?\d* \d+\.?\d*$/].some((p) =>
+        text.match(p),
+      );
+      if (textValid) {
+        const values = text.split(' ').map((str) => parseFloat(str));
+        return values.every((val) => val >= 1);
+      }
+      return false;
+    },
+    (text) => {
+      editMutations.setKeySizeUnit(`KP ${text}`);
+    },
+  );
 
   const vmPlacementAnchorMode = makeSelectorModel<IKeyPlacementAnchor>({
     sources: [
@@ -76,25 +109,21 @@ function createModels() {
   });
 
   return () => {
-    const unitInputText = getPlacementUnitInputTextFromModel();
-    vmPlacementUnitText.update(unitInputText);
-
+    const placementUnitInputText = getPlacementUnitInputTextFromModel();
+    vmPlacementUnitText.update(placementUnitInputText);
+    const keySizeUnitInputText = getKeySizeUnitInputTextFromModel();
+    vmKeySizeUnitText.update(keySizeUnitInputText);
     return {
       vmPlacementUnitMode,
       vmPlacementUnitText,
-      vmSizeUnitMode,
+      vmKeySizeUnitMode,
+      vmKeySizeUnitText,
       vmPlacementAnchorMode,
       vmKeyIdMode,
     };
   };
 }
 
-export function useDesignConfigurationPanelModel(): {
-  vmPlacementUnitMode: ICommonSelectorViewModel;
-  vmPlacementUnitText: IConfigTextEditModel;
-  vmSizeUnitMode: ICommonSelectorViewModel;
-  vmPlacementAnchorMode: ICommonSelectorViewModel;
-  vmKeyIdMode: ICommonSelectorViewModel;
-} {
+export function useDesignConfigurationPanelModel(): IDesignConfigurationPanelModel {
   return useClosureModel(createModels);
 }

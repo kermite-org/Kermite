@@ -57,10 +57,10 @@ class EditMutations {
   };
 
   addKeyEntity(px: number, py: number) {
-    const { coordUnit, keySizeUnit, allKeyEntities } = editReader;
+    const { coordUnit, sizeUnit, allKeyEntities } = editReader;
     const [x, y] = mmToUnitValue(px, py, coordUnit);
     const id = getNextEntityInstanceId('key', allKeyEntities);
-    const keySize = keySizeUnit === 'KP' ? 1 : 18;
+    const keySize = sizeUnit.mode === 'KP' ? 1 : 18;
 
     const editKeyId = `ke${(Math.random() * 1000) >> 0}`;
     const keyEntity: IEditKeyEntity = {

@@ -61,14 +61,30 @@ const PlacementAnchorEditPart = (props: {
 };
 
 const SizeUnitEditPart = (props: {
-  vmUnitSizeMode: ICommonSelectorViewModel;
+  vmKeySizeUnitMode: ICommonSelectorViewModel;
+  vmKeySizeUnitText: IConfigTextEditModel;
 }) => {
-  const { vmUnitSizeMode } = props;
+  const {
+    vmKeySizeUnitMode: vmUnitMode,
+    vmKeySizeUnitText: vmUnitText,
+  } = props;
   return (
     <div>
       <ConfigSubHeader>key size unit</ConfigSubHeader>
       <ConfigSubContent>
-        <RibbonSelector {...vmUnitSizeMode} buttonWidth={40} />
+        <ConfigRow>
+          <RibbonSelector {...vmUnitMode} buttonWidth={40} />
+          <GeneralConfigTextEditRow
+            {...vmUnitText}
+            label=""
+            labelWidth={0}
+            inputWidth={85}
+            unit="mm"
+          />
+        </ConfigRow>
+        <div css={cssErrorText}>
+          {!vmUnitText.valid && 'invalid size specificaion'}
+        </div>
       </ConfigSubContent>
     </div>
   );
@@ -90,7 +106,8 @@ export const DesignConfigurationPanel = () => {
   const {
     vmPlacementUnitMode,
     vmPlacementUnitText,
-    vmSizeUnitMode,
+    vmKeySizeUnitMode,
+    vmKeySizeUnitText,
     vmPlacementAnchorMode,
     vmKeyIdMode,
   } = useDesignConfigurationPanelModel();
@@ -106,7 +123,10 @@ export const DesignConfigurationPanel = () => {
         vmPlacementUnitText={vmPlacementUnitText}
       />
       <PlacementAnchorEditPart vmPlacementAnchorMode={vmPlacementAnchorMode} />
-      <SizeUnitEditPart vmUnitSizeMode={vmSizeUnitMode} />
+      <SizeUnitEditPart
+        vmKeySizeUnitMode={vmKeySizeUnitMode}
+        vmKeySizeUnitText={vmKeySizeUnitText}
+      />
       <KeyIdModePart vmKeyIdMode={vmKeyIdMode} />
     </ConfigPanelBox>
   );

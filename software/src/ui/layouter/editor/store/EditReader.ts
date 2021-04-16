@@ -168,10 +168,6 @@ class EditReader {
     ];
   }
 
-  get keySizeUnit() {
-    return appState.editor.design.setup.keySizeUnit;
-  }
-
   get placementAnchor() {
     return appState.editor.design.setup.placementAnchor;
   }
