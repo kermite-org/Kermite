@@ -5,12 +5,21 @@ export namespace LayoutDataMigrator {
     const _layout = layout as {
       transformationGroups?: IPersistKeyboardDesign['transformationGroups'];
       transGroups?: IPersistKeyboardDesign['transformationGroups'];
+      formatRevision?: string;
     };
     if (!layout.formatRevision) {
-      layout.formatRevision = 'LA00';
+      _layout.formatRevision = 'LA00';
     }
     if (!layout.transformationGroups && _layout.transGroups) {
       layout.transformationGroups = _layout.transGroups;
+    }
+    // LA00 --> LA01
+    // keySizeUnitに縦横のサイズを追加
+    if (_layout.formatRevision === 'LA00') {
+      layout.formatRevision = 'LA01';
+      if (layout.setup.keySizeUnit === 'KP') {
+        layout.setup.keySizeUnit = 'KP 19';
+      }
     }
   }
 }

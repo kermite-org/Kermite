@@ -175,7 +175,7 @@ export type IProfileData_PRF02 = {
     shape: IKeyboardShape_PRF02,
   ): IPersistKeyboardDesign {
     return {
-      formatRevision: 'LA00',
+      formatRevision: 'LA01',
       setup: {
         placementUnit: 'mm',
         placementAnchor: 'center',
