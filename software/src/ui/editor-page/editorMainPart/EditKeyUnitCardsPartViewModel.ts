@@ -32,7 +32,10 @@ function makeEditKeyUnitCardViewModel(
 
   const { currentKeyUnitId, setCurrentKeyUnitId } = editorModel;
   const isCurrent = currentKeyUnitId === keyUnitId;
-  const setCurrent = () => setCurrentKeyUnitId(keyUnitId);
+  const setCurrent = () => {
+    setCurrentKeyUnitId(keyUnitId);
+    uiStatusModel.stopLiveMode();
+  };
   const assign = getAssignForKeyUnit(keyUnitId, playerModel, editorModel);
   const { primaryText, secondaryText, isLayerFallback } = getAssignEntryTexts(
     assign,

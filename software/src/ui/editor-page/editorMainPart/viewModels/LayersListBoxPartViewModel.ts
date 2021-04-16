@@ -1,4 +1,5 @@
 import { ILayer } from '~/shared';
+import { uiStatusModel } from '~/ui/common';
 import { editorModel } from '~/ui/editor-page/editorMainPart/models/EditorModel';
 
 export interface ILayerListViewModel {
@@ -16,7 +17,10 @@ function makeLayerListViewModel(layer: ILayer): ILayerListViewModel {
   const { isLayerCurrent, setCurrentLayerId } = editorModel;
   const { layerId, layerName } = layer;
   const isCurrent = isLayerCurrent(layerId);
-  const setCurrent = () => setCurrentLayerId(layerId);
+  const setCurrent = () => {
+    setCurrentLayerId(layerId);
+    uiStatusModel.stopLiveMode();
+  };
   return {
     layerId,
     layerName,

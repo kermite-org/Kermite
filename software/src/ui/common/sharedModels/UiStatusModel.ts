@@ -53,6 +53,10 @@ export class UiStatusModel {
     localStorage.setItem('uiSettings', settingsText);
   }
 
+  stopLiveMode() {
+    this.settings.showLayersDynamic = false;
+  }
+
   finalize() {
     this.save();
   }
