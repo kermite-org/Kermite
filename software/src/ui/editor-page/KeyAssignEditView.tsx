@@ -3,8 +3,8 @@ import { uiTheme, uiStatusModel } from '~/ui/common';
 import { ProfileConfigurationPart } from '~/ui/editor-page/editorMainPart/views/ProfileConfigurationPart';
 import { KeyboardSection } from './editorMainPart/KeyboardSection';
 import { BehaviorOptionsPart } from './editorMainPart/views/BehaviorOptionsPart';
-import { AssignEditSection } from './editorMainPart/views/assignEditSection_';
-import { LayersSection } from './editorMainPart/views/layersSection_';
+import { AssignEditSection } from './editorMainPart/views/assignEditSection';
+import { LayersSection } from './editorMainPart/views/layersSection';
 import { TestInputArea } from './testInputArea/TestInputArea';
 
 const localStyleConstants = {

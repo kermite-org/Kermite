@@ -2,7 +2,7 @@ import { jsx, css } from 'qx';
 import { uiTheme } from '~/ui/common';
 import { KeyAssignEditView } from './KeyAssignEditView';
 import { DeviceControlSection } from './deviceControl/DeviceControlSection';
-import { ProfileConfigratuionModalLayer } from './editorMainPart/views/modals/profileConfigurationPart_';
+import { ProfileConfigratuionModalLayer } from './editorMainPart/views/modals/profileConfigurationPart';
 import { ProfileManagementPart } from './profileManagement/ProfileManagementPart';
 
 const cssEditorPage = css`
