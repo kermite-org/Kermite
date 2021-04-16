@@ -70,7 +70,14 @@ export function changeKeySizeUnit(
   newKeySizeUnit: string,
 ) {
   if (design.setup.keySizeUnit === newKeySizeUnit) {
-    return design;
+    return;
+  }
+  if (
+    design.setup.keySizeUnit.startsWith('KP') &&
+    newKeySizeUnit.startsWith('KP')
+  ) {
+    design.setup.keySizeUnit = newKeySizeUnit;
+    return;
   }
   const oldKeySizeUnit = design.setup.keySizeUnit;
   const oldUnit = getCoordUnitFromUnitSpec(oldKeySizeUnit);
