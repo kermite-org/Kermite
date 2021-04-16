@@ -1,26 +1,20 @@
-import { css, jsx } from 'qx';
+import { css, FC, jsx } from 'qx';
 import { fieldSetter, texts } from '~/ui/common';
 import { CheckBoxLine } from '~/ui/common/components';
 import { uiStatusModel } from '~/ui/common/sharedModels/UiStatusModel';
 
-const cssBehaviorOptionsPart = css`
+const style = css`
   margin: 0 5px;
   > div + div {
     margin-top: 2px;
   }
 `;
 
-export const BehaviorOptionsPart = () => {
+export const BehaviorOptionsPartB: FC = () => {
   const { settings } = uiStatusModel;
 
   return (
-    <div css={cssBehaviorOptionsPart}>
-      <CheckBoxLine
-        text={texts.label_assigner_configs_showLayersDynamic}
-        checked={settings.showLayersDynamic}
-        setChecked={fieldSetter(settings, 'showLayersDynamic')}
-        hint={texts.hint_assigner_configs_showLayersDynamic}
-      />
+    <div css={style}>
       <CheckBoxLine
         text={texts.label_assigner_configs_showFallbackAssigns}
         checked={settings.showLayerDefaultAssign}
