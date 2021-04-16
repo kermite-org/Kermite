@@ -1,4 +1,4 @@
-import { mapObjectValues, IKeySizeUnit } from '~/shared';
+import { mapObjectValues } from '~/shared';
 import {
   ICoordUnit,
   getCoordUnitFromUnitSpec,
@@ -43,20 +43,11 @@ export function changePlacementCoordUnit(
   design.setup.placementUnit = newUnitSpec;
 }
 
-export function keySizeValueToMm(
-  w: number,
-  h: number,
-  keySizeUnit: IKeySizeUnit,
-  coordUnit: ICoordUnit,
-) {
-  if (keySizeUnit === 'mm') {
+export function keySizeValueToMm(w: number, h: number, sizeUnit: ICoordUnit) {
+  if (sizeUnit.mode === 'mm') {
     return [w, h];
-  } else if (keySizeUnit === 'KP') {
-    if (coordUnit.mode === 'KP') {
-      return [w * coordUnit.x - 1, h * coordUnit.y - 1];
-    } else {
-      return [w * 19 - 1, h * 19 - 1];
-    }
+  } else if (sizeUnit.mode === 'KP') {
+    return [w * sizeUnit.x - 1, h * sizeUnit.y - 1];
   }
   throw new Error();
 }
@@ -64,30 +55,33 @@ export function keySizeValueToMm(
 export function mmToKeySizeValue(
   mmW: number,
   mmH: number,
-  keySizeUnit: IKeySizeUnit,
-  coordUnit: ICoordUnit,
+  sizeUnit: ICoordUnit,
 ) {
-  if (keySizeUnit === 'mm') {
+  if (sizeUnit.mode === 'mm') {
     return [mmW, mmH];
-  } else if (keySizeUnit === 'KP') {
-    if (coordUnit.mode === 'KP') {
-      return [(mmW + 1) / coordUnit.x, (mmH + 1) / coordUnit.y];
-    } else {
-      return [(mmW + 1) / 19, (mmH + 1) / 19];
-    }
+  } else if (sizeUnit.mode === 'KP') {
+    return [(mmW + 1) / sizeUnit.x, (mmH + 1) / sizeUnit.y];
   }
   throw new Error();
 }
 
 export function changeKeySizeUnit(
   design: IEditKeyboardDesign,
-  newUnit: IKeySizeUnit,
-  coordUnit: ICoordUnit,
+  newKeySizeUnit: string,
 ) {
-  if (design.setup.keySizeUnit === newUnit) {
-    return design;
+  if (design.setup.keySizeUnit === newKeySizeUnit) {
+    return;
   }
-  const oldUnit = design.setup.keySizeUnit;
+  if (
+    design.setup.keySizeUnit.startsWith('KP') &&
+    newKeySizeUnit.startsWith('KP')
+  ) {
+    design.setup.keySizeUnit = newKeySizeUnit;
+    return;
+  }
+  const oldKeySizeUnit = design.setup.keySizeUnit;
+  const oldUnit = getCoordUnitFromUnitSpec(oldKeySizeUnit);
+  const newUnit = getCoordUnitFromUnitSpec(newKeySizeUnit);
   Object.values(design.keyEntities).forEach((ke) => {
     if (ke.shape.startsWith('std')) {
       const [, p1, p2] = ke.shape.split(' ');
@@ -97,18 +91,19 @@ export function changeKeySizeUnit(
       const pw = parseFloat(p1);
       let ph = (p2 && parseFloat(p2)) || undefined;
       if (!ph) {
-        if (oldUnit === 'mm') {
+        if (oldUnit.mode === 'mm') {
           ph = pw;
-        } else if (oldUnit === 'KP') {
+        } else if (oldUnit.mode === 'KP') {
           ph = 1;
         }
       }
-      const [tmpW, tmpH] = keySizeValueToMm(pw, ph!, oldUnit, coordUnit);
-      const [dstW, dstH] = mmToKeySizeValue(tmpW, tmpH, newUnit, coordUnit);
+      const [tmpW, tmpH] = keySizeValueToMm(pw, ph!, oldUnit);
+      const [dstW, dstH] = mmToKeySizeValue(tmpW, tmpH, newUnit);
       const omitH =
-        (newUnit === 'mm' && dstH === dstW) || (newUnit === 'KP' && dstH === 1);
+        (newUnit.mode === 'mm' && dstH === dstW) ||
+        (newUnit.mode === 'KP' && dstH === 1);
       ke.shape = omitH ? `std ${dstW}` : `std ${dstW} ${dstH}`;
     }
   });
-  design.setup.keySizeUnit = newUnit;
+  design.setup.keySizeUnit = newKeySizeUnit;
 }

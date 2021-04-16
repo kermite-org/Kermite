@@ -38,12 +38,27 @@ class EditReader {
     getCoordUnitFromUnitSpec,
   );
 
+  private sizeUnitSelector = createSimpleSelector(
+    () => appState.editor.design.setup.keySizeUnit,
+    getCoordUnitFromUnitSpec,
+  );
+
   get coordUnit(): ICoordUnit {
     return this.coordUnitSelector();
   }
 
+  get sizeUnit(): ICoordUnit {
+    return this.sizeUnitSelector();
+  }
+
   get coordUnitSuffix(): 'mm' | 'KP' {
     return appState.editor.design.setup.placementUnit.split(' ')[0] as
+      | 'mm'
+      | 'KP';
+  }
+
+  get sizeUnitSuffix(): 'mm' | 'KP' {
+    return appState.editor.design.setup.keySizeUnit.split(' ')[0] as
       | 'mm'
       | 'KP';
   }
@@ -151,10 +166,6 @@ class EditReader {
     return appState.editor.design.transGroups[
       appState.editor.currentTransGroupId || ''
     ];
-  }
-
-  get keySizeUnit() {
-    return appState.editor.design.setup.keySizeUnit;
   }
 
   get placementAnchor() {

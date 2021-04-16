@@ -2,7 +2,6 @@ import {
   clamp,
   IKeyIdMode,
   IKeyPlacementAnchor,
-  IKeySizeUnit,
   removeArrayItems,
 } from '~/shared';
 import { getNextEntityInstanceId } from '~/ui/layouter/editor/store/DomainRelatedHelpers';
@@ -58,18 +57,26 @@ class EditMutations {
   };
 
   addKeyEntity(px: number, py: number) {
-    const { coordUnit, keySizeUnit, allKeyEntities } = editReader;
-    const [x, y] = mmToUnitValue(px, py, coordUnit);
+    const { coordUnit, sizeUnit, allKeyEntities, placementAnchor } = editReader;
+    const keySize = sizeUnit.mode === 'KP' ? 1 : 18;
+    if (placementAnchor === 'topLeft') {
+      if (sizeUnit.mode === 'KP') {
+        px -= sizeUnit.x / 2;
+        py -= sizeUnit.y / 2;
+      } else {
+        px -= keySize / 2;
+        py -= keySize / 2;
+      }
+    }
+    const [kx, ky] = mmToUnitValue(px, py, coordUnit);
     const id = getNextEntityInstanceId('key', allKeyEntities);
-    const keySize = keySizeUnit === 'KP' ? 1 : 18;
-
     const editKeyId = `ke${(Math.random() * 1000) >> 0}`;
     const keyEntity: IEditKeyEntity = {
       id,
       editKeyId,
       mirrorEditKeyId: editKeyId + 'm',
-      x,
-      y,
+      x: kx,
+      y: ky,
       angle: 0,
       shape: `std ${keySize}`,
       keyIndex: -1,
@@ -148,10 +155,9 @@ class EditMutations {
     });
   }
 
-  setSizeUnit(unit: IKeySizeUnit) {
-    const { coordUnit } = editReader;
+  setKeySizeUnit(unitSpec: string) {
     editUpdator.commitEditor((editor) => {
-      changeKeySizeUnit(editor.design, unit, coordUnit);
+      changeKeySizeUnit(editor.design, unitSpec);
     });
   }
 
