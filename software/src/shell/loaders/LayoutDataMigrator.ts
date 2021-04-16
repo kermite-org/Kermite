@@ -18,7 +18,11 @@ export namespace LayoutDataMigrator {
     if (_layout.formatRevision === 'LA00') {
       layout.formatRevision = 'LA01';
       if (layout.setup.keySizeUnit === 'KP') {
-        layout.setup.keySizeUnit = 'KP 19';
+        if (layout.setup.placementUnit.startsWith('KP')) {
+          layout.setup.keySizeUnit = layout.setup.placementUnit;
+        } else {
+          layout.setup.keySizeUnit = 'KP 19';
+        }
       }
     }
   }
