@@ -8,7 +8,7 @@
 
 Kermiteを起動するとこのような画面になります。
 
-<img src="images/0417/capture0.png" style="zoom:0.5;" />
+<img src="images/0417/capture0.png"  width="600" />
 
 ## 日本語の表示に変更
 
@@ -16,7 +16,7 @@ Kermiteを起動するとこのような画面になります。
 
 画面左上のグローバルメニューで`Japanese`を選ぶと、日本語表示に切替わります。
 
-<img src="images/0417/capture1.png" style="zoom:0.8" />
+<img src="images/0417/capture1.png" />
 
 
 ## ファームウェアの書き込み
@@ -25,15 +25,15 @@ Kermiteを起動するとこのような画面になります。
 
 サイドバーで、
 
-<img src="images/0417/capture2.png" style="zoom:0.8"/>
+<img src="images/0417/capture2.png" />
 
 をクリックしてデバイス管理画面に移動します。
 
-<img src="images/0417/capture3.png" style="zoom:0.5;" />
+<img src="images/0417/capture3.png" width="600" />
 
 書き込むファームウェアを選びます。
 
-<img src="images/0417a/capture1.png" style="zoom:0.8;" />
+<img src="images/0417a/capture1.png" />
 
 ここでは
 ```
@@ -43,21 +43,21 @@ Kermiteを起動するとこのような画面になります。
 
 キーボードのリセットボタンを2回押して書き込みモードにします。
 
-<img src="images/0417/capture4.png" style="zoom:0.8;" />
+<img src="images/0417/capture4.png" />
 
 仮想COMポートが検出され、書き込み可能な状態になりました。
 
 `書き込む`ボタンを押します。
 
-<img src="images/0417/capture6.png" style="zoom:0.8;" />
+<img src="images/0417/capture6.png" />
 
 書き込みに成功するとこのような表示になります。
 
-<img src="images/0417/capture7.png" style="zoom:0.8;" />
+<img src="images/0417/capture7.png" />
 
 キーボードがKermite対応デバイスになり、デバイス選択欄に表示されるようになりました。選択して接続します。
 
-<img src="images/0417/capture8.png" style="zoom:0.5;" />
+<img src="images/0417/capture8.png" width="600" />
 
 接続がうまくいくと、デバイス情報やカスタムパラメータの一覧が表示されます。
 
@@ -68,11 +68,11 @@ Kermiteでは、キーボードの配列設定をプロファイルと呼んで�
 
 サイドバーで、
 
-<img src="images/0417/capture11.png" style="zoom:0.8;" />
+<img src="images/0417/capture11.png" />
 
 をクリックしてプリセットブラウザに移動します。
 
-<img src="images/0417a/capture2.png" style="zoom:0.5;" />
+<img src="images/0417a/capture2.png" width="600" />
 
 キーボードの品種とプロファイルを選びます。
 ここでは、キーボードは
@@ -87,20 +87,20 @@ Kermiteでは、キーボードの配列設定をプロファイルと呼んで�
 
 `プロファイルを作成`ボタンを押して、このプリセットを元に新しいプロファイルを作成します。
 
-<img src="images/0417a/capture3.png" style="zoom:0.5;" />
+<img src="images/0417a/capture3.png" width="600" />
 
 キーマッピング編集画面に遷移します。新しいプロファイルが未保存の状態で作成されています。
 
-<img src="images/0417a/capture4.png" style="zoom:0.8;" />
+<img src="images/0417a/capture4.png" />
 
 メニューから`保存`を選びます。
 
-<img src="images/0417a/capture5.png" style="zoom:0.8;" />
+<img src="images/0417a/capture5.png" />
 
 プロファイルの名前を指定するダイアログが出ます。適当な名前をつけてOKボタンを押します。
 
 
-<img src="images/0417a/capture6.png" style="zoom:0.8;" />
+<img src="images/0417a/capture6.png" />
 
 プロファイルが保存されました。保存されているプロファイルはセレクタで名前を選んで切り替えられるようになります。
 
@@ -108,13 +108,13 @@ Kermiteでは、キーボードの配列設定をプロファイルと呼んで�
 
 キーボードにキーマッピングを書き込こみます。
 
-<img src="images/0417a/capture7b.png" style="zoom:0.8;" />
+<img src="images/0417a/capture7b.png" />
 
 デバイスに接続している状態では、画面右上にキーボードのモデル名が表示されます。
 
 `書き込み`ボタンを押して、キーボードにキーマッピングを書き込みます。
 
-<img src="images/0417a/capture8.png" style="zoom:0.5;" />
+<img src="images/0417a/capture8.png" width="600" />
 
 書き込みが成功すると、ダイアログが出ます。
 
@@ -122,27 +122,27 @@ Kermiteでは、キーボードの配列設定をプロファイルと呼んで�
 
 文字入力の動作を確認します。
 
-<img src="images/0417a/capture10.png" style="zoom:0.8;" />
+<img src="images/0417a/capture10.png" />
 
 テキストエディタなどを開いて文字が入力されることを確認します。
 
 また、アプリ内部にもテスト用の文字入力欄があり、文字入力の確認に使えます。メニューから有効化すると表示されます。
 
-<img src="images/0417/capture24.png" style="zoom:0.8;" /> <br />
+<img src="images/0417/capture24.png" /> <br />
 
-<img src="images/0417/capture26.png" style="zoom:0.8;" />
+<img src="images/0417/capture26.png" />
 
 ## レイヤ表示の動作確認
 
 Kermiteでは、接続しているキーボードのキーの押下状態が画面に表示されます。また、接続されているキーボードの実際のレイヤ状態を反映して表示するモードがあります。それらの動作を確認します。
 
-<img src="images/0417/capture18.png" style="zoom:0.8;" />
+<img src="images/0417/capture18.png" />
 
 キーボードのキーを押すと押したキーが画面上の表示に反映されます。
 
 レイヤのリアルタイム表示の動作を確認します。
 
-<img src="images/0417/capture19.png" style="zoom:0.8;" />
+<img src="images/0417/capture19.png" />
 
 右上にレイヤ表示モードの切り替えUIがあります。
 
@@ -151,9 +151,9 @@ Kermiteでは、接続しているキーボードのキーの押下状態が画�
 
 レイヤ表示モードを'LIVE'にします。
 
-<img src="images/0417/capture20.png" style="zoom:0.8;" />
-<img src="images/0417/capture21.png" style="zoom:0.8;" />
-<img src="images/0417/capture22.png" style="zoom:0.8;" />
+<img src="images/0417/capture20.png" />
+<img src="images/0417/capture21.png" />
+<img src="images/0417/capture22.png" />
 
 キーボードのレイヤキーを押したときに表示が切り替わります。
 
@@ -161,11 +161,11 @@ Kermiteでは、接続しているキーボードのキーの押下状態が画�
 
 キーマッピングを変更します。
 
-<img src="images/0417/capture27.png" style="zoom:0.8;" />
+<img src="images/0417/capture27.png" width="600"/>
 
 キーボード表示でキーアサインを変更したいキーを選び、下のパレットで割り当てる機能を指定します。
 
-<img src="images/0417/capture29.png" style="zoom:0.8;" />
+<img src="images/0417/capture29.png" width="600"/>
 
 変更したら書き込みを行い、デバイスに反映されていることを確認します。
 
@@ -173,11 +173,11 @@ Kermiteでは、接続しているキーボードのキーの押下状態が画�
 
 画面右上の
 
-<img src="images/0417a/capture11.png" style="zoom:0.8;" />
+<img src="images/0417a/capture11.png" />
 
 を押すとウインドウ枠のないウィジェット表示になります。
 
-<img src="images/0417a/capture13.png" style="zoom:0.5;" />
+<img src="images/0417a/capture13.png" width="600" />
 
 デスクトップの端に置いてレイヤ状態の確認などに使用できます。
 
@@ -188,11 +188,11 @@ Kermiteには、キーの配置をGUIで編集できるレイアウトエディ�
 
 メニューから
 
-<img src="images/0417/capture30.png" style="zoom:0.8;" />
+<img src="images/0417/capture30.png" />
 
 を選んで、レイアウト編集画面にします。
 
-<img src="images/0417a/capture14.png" style="zoom:0.5;" />
+<img src="images/0417a/capture14.png" width="600" />
 
 
 レイアウト編集画面では、
@@ -204,15 +204,15 @@ Kermiteには、キーの配置をGUIで編集できるレイアウトエディ�
 
 画面左上の
 
-<img src="images/0417/capture31.png" style="zoom:0.8;" />
+<img src="images/0417/capture31.png" />
 
 を押すと、現在選択されているプロファイルのレイアウトが編集対象になります。
 
-<img src="images/0417a/capture15.png" style="zoom:0.5;" />
+<img src="images/0417a/capture15.png" width="600" />
 
 キーや外形を変更します。
 
-<img src="images/0417/capture33.png" style="zoom:0.8;" />
+<img src="images/0417/capture33.png" />
 
 ここでは、
 * キーを3つ追加
@@ -223,7 +223,7 @@ Kermiteには、キーの配置をGUIで編集できるレイアウトエディ�
 
 画面右上の`save`ボタンを押して保存すると、プロファイルに反映されます。
 
-<img src="images/0417a/capture16.png" style="zoom:0.5;" />
+<img src="images/0417a/capture16.png" width="600" />
 
 ## まとめ
 
