@@ -2,7 +2,7 @@
 
 このページでは、Kermiteを使ってキーボードの配列を変更できるようにする方法を解説します。
 
-例としてT.Shinohara氏の<a href="https://booth.pm/ja/items/1444895">shiro</a>に対応ファームウェアを書き込んで、Kermite上で使えるようにしてみます。
+例としてT.Shinohara氏の<a href="https://booth.pm/ja/items/1444895" target='_blank'>shiro</a>に対応ファームウェアを書き込んで、Kermite上で使えるようにしてみます。
 
 ## 起動
 
