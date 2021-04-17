@@ -177,7 +177,7 @@ Kermiteでは、接続しているキーボードのキーの押下状態が画�
 
 を押すとウインドウ枠のないウィジェット表示になります。
 
-<img src="images/0417a/capture13.png" width="600" />
+<img src="images/0417a/capture13.png" width="500" />
 
 デスクトップの端に置いてレイヤ状態の確認などに使用できます。
 
