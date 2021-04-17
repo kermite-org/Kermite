@@ -161,11 +161,11 @@ Kermiteでは、接続しているキーボードのキーの押下状態が画�
 
 キーマッピングを変更します。
 
-<img src="images/0417/capture27.png" width="700"/>
+<img src="images/0417/capture27.png" width="600"/>
 
 キーボード表示でキーアサインを変更したいキーを選び、下のパレットで割り当てる機能を指定します。
 
-<img src="images/0417/capture29.png" width="700"/>
+<img src="images/0417/capture29.png" width="600"/>
 
 変更したら書き込みを行い、デバイスに反映されていることを確認します。
 
@@ -177,7 +177,7 @@ Kermiteでは、接続しているキーボードのキーの押下状態が画�
 
 を押すとウインドウ枠のないウィジェット表示になります。
 
-<img src="images/0417a/capture13.png" width="700" />
+<img src="images/0417a/capture13.png" width="600" />
 
 デスクトップの端に置いてレイヤ状態の確認などに使用できます。
 
