@@ -116,7 +116,7 @@ export const DesignConfigurationPanel = () => {
     <ConfigPanelBox
       headerText="configurations"
       canToggleOpen={true}
-      initialOpen={true}
+      initialOpen={false}
     >
       <PlacementUnitEditPart
         vmPlacementUnitMode={vmPlacementUnitMode}
