@@ -18,7 +18,6 @@ export function enumerateSupportedDevicePathsCore(
   params: IDeviceSpecificationParams[],
 ): IEnumeratedDeviceSpec[] {
   const allDeviceInfos = HID.devices();
-  // console.log(allDeviceInfos);
   return allDeviceInfos
     .filter((d) =>
       params.some(
@@ -40,7 +39,7 @@ export function enumerateSupportedDevicePathsCore(
 export function getPortNameFromDevicePath(path: string) {
   const m =
     path.match(/AppleUSB20HubPort@(\d+)/) || // Mac
-    path.match(/mi_00#8&([0-9a-f]+)/); // Windows
+    path.match(/mi_\d+#8&([0-9a-f]+)/); // Windows
   return (m && `${m[1]}`) || undefined;
 }
 
