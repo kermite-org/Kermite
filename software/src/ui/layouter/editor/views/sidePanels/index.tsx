@@ -16,8 +16,16 @@ export const EditorSideColumnContent = () => {
   return (
     <div css={cssEditorSideColumnContent}>
       <DesignConfigurationPanel />
-      {editorTarget === 'key' && <KeyEntityEditPanel />}
-      {editorTarget === 'outline' && <OutlineEditPanel />}
+      {/* {editorTarget === 'key' && <KeyEntityEditPanel />}
+      {editorTarget === 'outline' && <OutlineEditPanel />} */}
+      {/* KeyEntityEditPanelやOutlineEditPanelのinputにフォーカスがある状態でパネル表示が切り替わったときにpetit-dom内部で例外が発生する */}
+      {/* デバッグしても原因がわからないため、非表示の場合にDOMから要素を除去せず display:noneにすることで暫定的に対処 */}
+      <div style={(!(editorTarget === 'key') && { display: 'none' }) || {}}>
+        <KeyEntityEditPanel />
+      </div>
+      <div style={(!(editorTarget === 'outline') && { display: 'none' }) || {}}>
+        <OutlineEditPanel />
+      </div>
       <TransGroupEditPanel />
     </div>
   );
