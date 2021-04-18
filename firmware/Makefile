@@ -59,10 +59,10 @@ endif
 # $(warning WORKER:$(WORKER))
 
 %:
-	make -f workers/$(WORKER).mk PROJECT=$(PROJECT) VARIATION=$(VARIATION) $(COMMAND)
+	make -f workers/$(WORKER).mk --no-print-directory PROJECT=$(PROJECT) VARIATION=$(VARIATION) $(COMMAND)
 
 build:
-	make -f workers/$(WORKER).mk PROJECT=$(PROJECT) VARIATION=$(VARIATION) build
+	make -f workers/$(WORKER).mk --no-print-directory PROJECT=$(PROJECT) VARIATION=$(VARIATION) build
 
 endif
 endif

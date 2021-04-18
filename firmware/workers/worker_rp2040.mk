@@ -49,6 +49,12 @@ ELF2UF2_BIN = $(ELF2UF2_ROOT_DIR)/build/elf2uf2
 PIOASM_ROOT_DIR = $(PICO_TOOLS_DIR)/pioasm
 PIOASM_BIN = $(PIOASM_ROOT_DIR)/build/pioasm
 
+ifeq ($(OS),Windows_NT)
+ELF2UF2_BIN = $(ELF2UF2_ROOT_DIR)/build/elf2uf2.exe
+PIOASM_BIN = $(PIOASM_ROOT_DIR)/build/pioasm.exe
+endif
+
+
 #--------------------
 #flags
 

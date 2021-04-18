@@ -9,15 +9,19 @@ ProMicroを使用した自作キーボード向けのファームウェアです
 
 ビルドには
 
-- AVR 8-bit Toolchain
 - GNU Make
+- AVR 8-bit Toolchain (avr-gcc)
 
 が必要です。
 
 書き込みには avrdude を使用します。
 ### RP2040
 
-arm-none-eabi-gcc, gccなどが必要です
+- GNU Make
+- GNU ARM Embedded Toolcahin (arm-none-eabi-gcc)
+- GNU GCC (g++)
+
+が必要です
 
 依存コードを外部リポジトリに置いているため、
 `git submodule update --init`
@@ -62,11 +66,9 @@ arm-none-eabi-gcc, gccなどが必要です
 
 を打ってそれらしきものを探します。
 
-
 ## 書き込み (RP2040)
 
 ProMicro RP2040のBOOTSELボタンを押しながらリセットボタンを押して、ブートローダモードにします。RPI-RP2のような名前のリムーバブルメディアがマウントされます。build/<プロジェクトパス>/<プロジェクト名>.uf2をドライブにドラッグ&ドロップします。KermiteのRP2040用ファームウェアにはpico_bootsel_via_double_resetが組み込んであり、２回目以降は(BOOTSELボタンを押さなくても)リセットボタンを素早く2回押すことでブートローダモードに入れるようになります。
-
 
 ## IDE の設定
 
