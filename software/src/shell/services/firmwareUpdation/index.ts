@@ -1,9 +1,16 @@
 import { IntervalTimerWrapper, IResourceOrigin } from '~/shared';
+import { appEnv } from '~/shell/base';
 import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { createEventPort } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
 import { FirmwareUpdationSchemeAtMega } from '~/shell/services/firmwareUpdation/flashSchemeAtMega/FlashSchemeAtMega';
 import { FirmwareUpdationSchemeRp_Mac } from '~/shell/services/firmwareUpdation/flashSchemeRp/FlashSchemeRp_Mac';
+import { FirmwareUpdationSchemeRp_Windows } from '~/shell/services/firmwareUpdation/flashSchemeRp/FlashSchemeRp_Windows';
+
+const FirmwareUpdationSchemeRp =
+  appEnv.platform === 'win32'
+    ? FirmwareUpdationSchemeRp_Windows
+    : FirmwareUpdationSchemeRp_Mac;
 
 interface IDeviceDetectionEvent {
   comPortName?: string;
@@ -14,7 +21,7 @@ export class FirmwareUpdationService {
   private timerWrapper = new IntervalTimerWrapper();
 
   private schemeAtMega = new FirmwareUpdationSchemeAtMega();
-  private schemeRp = new FirmwareUpdationSchemeRp_Mac();
+  private schemeRp = new FirmwareUpdationSchemeRp();
   private pluggedComPortName: string | undefined;
   private pluggedDriveName: string | undefined;
 
