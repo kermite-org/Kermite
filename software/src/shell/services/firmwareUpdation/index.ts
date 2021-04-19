@@ -3,7 +3,7 @@ import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { createEventPort } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
 import { FirmwareUpdationSchemeAtMega } from '~/shell/services/firmwareUpdation/flashSchemeAtMega/FlashSchemeAtMega';
-import { FirmwareUpdationSchemeRp } from '~/shell/services/firmwareUpdation/flashSchemeRp/FlashSchemeRp';
+import { FirmwareUpdationSchemeRp_Mac } from '~/shell/services/firmwareUpdation/flashSchemeRp/FlashSchemeRp_Mac';
 
 interface IDeviceDetectionEvent {
   comPortName?: string;
@@ -14,7 +14,7 @@ export class FirmwareUpdationService {
   private timerWrapper = new IntervalTimerWrapper();
 
   private schemeAtMega = new FirmwareUpdationSchemeAtMega();
-  private schemeRp = new FirmwareUpdationSchemeRp();
+  private schemeRp = new FirmwareUpdationSchemeRp_Mac();
   private pluggedComPortName: string | undefined;
   private pluggedDriveName: string | undefined;
 

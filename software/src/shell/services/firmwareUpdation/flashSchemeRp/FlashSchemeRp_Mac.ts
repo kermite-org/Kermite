@@ -2,7 +2,7 @@
 import { fsExistsSync, fsxCopyFile } from '~/shell/funcs';
 import { IFirmwareUpdationScheme } from '~/shell/services/firmwareUpdation/Interfaces';
 
-export class FirmwareUpdationSchemeRp implements IFirmwareUpdationScheme {
+export class FirmwareUpdationSchemeRp_Mac implements IFirmwareUpdationScheme {
   resetDeviceDetectionStatus() {}
 
   // eslint-disable-next-line @typescript-eslint/require-await
