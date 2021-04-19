@@ -266,7 +266,7 @@ export const textSourceJapanese = {
   label_deivce_firmwareUpdation_operationAlertText: '誤ったファームウェアを書き込むとデバイスが破損する可能性があります。ご注意ください。',
   label_device_firmwareUpdation_projectSelector: 'デバイスに書き込むファームウェアを選択します。',
   label_device_firmwareUpdation_usageText: 'デバイスのリセットボタンを2回タップして、ファームウェア書き込みモードにしてください。',
-  label_device_firmwareUpdation_deviceDetected: '{DEVICE_NAME}が検出されました。書き込みできます。',
+  label_device_firmwareUpdation_deviceDetected: '{DEVICE_NAME}に対応デバイスを認識しました。書き込みできます。',
   label_device_firmwareUpdation_writeButton: '書き込む',
   label_device_firmwareUpdation_writing: '書き込んでいます...',
   label_device_firmwareUpdation_success: '成功しました!',
