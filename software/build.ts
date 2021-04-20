@@ -7,6 +7,10 @@ import open from 'open';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const servor = require('servor');
 
+function delayMs(n: number) {
+  return new Promise((resolve) => setTimeout(resolve, n));
+}
+
 type IPlugin = NonNullable<BuildConfig['plugins']>[0];
 
 const gooberCssAutoLabelPlugin: IPlugin = {
@@ -204,6 +208,7 @@ function startElectronProcess() {
       startElectronProcess();
     } else {
       console.log('press q to exit, other keys to restart application');
+      await delayMs(10);
       const key = await readKey();
       if (
         key.name === 'q' ||
