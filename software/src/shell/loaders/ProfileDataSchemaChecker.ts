@@ -1,3 +1,4 @@
+import { profileFormatRevisionLatest } from '~/shared';
 import {
   vArray,
   vBoolean,
@@ -42,7 +43,7 @@ const vAssignOperation = () =>
   ]);
 
 export const profileDataSchemaChecker = vObject({
-  formatRevision: vValueEquals('PRF03'),
+  formatRevision: vValueEquals(profileFormatRevisionLatest),
   keyboardDesign: persistEditKeyboardDesignSchemaChecker,
   settings: vSchemaOneOf([
     vObject({
