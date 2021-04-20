@@ -5,6 +5,7 @@ import {
   IAssignsDictionary,
   IPersistProfileData,
   IProfileData,
+  profileFormatRevisionLatest,
 } from '~/shared';
 
 export namespace ProfileDataConverter {
@@ -38,7 +39,7 @@ export namespace ProfileDataConverter {
     source: IProfileData,
   ): IPersistProfileData {
     return {
-      formatRevision: 'PRF03',
+      formatRevision: profileFormatRevisionLatest,
       projectId: source.projectId,
       keyboardDesign: source.keyboardDesign,
       settings: source.settings,

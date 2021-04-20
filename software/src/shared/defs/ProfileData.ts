@@ -137,8 +137,10 @@ export type IPersistAssignEntry = {
   usage: IAssignEntry;
 };
 
+export type ProfileFormatRevisionLatest = 'PRF04';
+export const profileFormatRevisionLatest = 'PRF04';
 export type IPersistProfileData = {
-  formatRevision: 'PRF03';
+  formatRevision: ProfileFormatRevisionLatest;
   projectId: string;
   keyboardDesign: IPersistKeyboardDesign;
   settings: IProfileSettings;
