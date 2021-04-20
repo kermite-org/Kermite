@@ -22,11 +22,9 @@ const cssProfileManagementPart = css`
   display: flex;
   align-items: center;
   padding: 4px;
+  gap: 0 15px;
   button {
     padding: 0 4px;
-  }
-  > * + * {
-    margin-left: 15px;
   }
   > .spacer {
     flex-grow: 1;
