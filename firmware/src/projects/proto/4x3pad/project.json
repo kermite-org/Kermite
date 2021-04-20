@@ -32,7 +32,7 @@
       ]
     },
     {
-      "targetVariationNames": ["promico_rp2040", "rpi_pico"],
+      "targetVariationNames": ["promicro_rp2040", "rpi_pico"],
       "customParameters": [
         {
           "type": "toggle",

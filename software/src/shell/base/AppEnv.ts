@@ -4,6 +4,8 @@ import { pathJoin, pathResolve } from '~/shell/funcs';
 export const appEnv = new (class {
   isDevelopment = process.env.NODE_ENV === 'development';
 
+  platform = process.platform;
+
   resolveUserDataFilePath(relPath: string) {
     const appDataDir = app.getPath('userData');
     return pathJoin(appDataDir, relPath);

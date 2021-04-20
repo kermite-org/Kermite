@@ -1,9 +1,16 @@
 import { IntervalTimerWrapper, IResourceOrigin } from '~/shared';
+import { appEnv } from '~/shell/base';
 import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { createEventPort } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
 import { FirmwareUpdationSchemeAtMega } from '~/shell/services/firmwareUpdation/flashSchemeAtMega/FlashSchemeAtMega';
-import { FirmwareUpdationSchemeRp } from '~/shell/services/firmwareUpdation/flashSchemeRp/FlashSchemeRp';
+import { FirmwareUpdationSchemeRp_Mac } from '~/shell/services/firmwareUpdation/flashSchemeRp/FlashSchemeRp_Mac';
+import { FirmwareUpdationSchemeRp_Windows } from '~/shell/services/firmwareUpdation/flashSchemeRp/FlashSchemeRp_Windows';
+
+const FirmwareUpdationSchemeRp =
+  appEnv.platform === 'win32'
+    ? FirmwareUpdationSchemeRp_Windows
+    : FirmwareUpdationSchemeRp_Mac;
 
 interface IDeviceDetectionEvent {
   comPortName?: string;

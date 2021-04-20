@@ -44,16 +44,22 @@ const reqExec = opts['x-exec'];
 const reqMockView = opts['x-mockview'];
 const reqBuildOutwardModules = opts['x-build-outward-modules'];
 
-async function readKey(): Promise<{ sequence: string }> {
+type IKeyPressEvent = {
+  sequence: string;
+  name: string;
+  ctrl: boolean;
+  shift: boolean;
+  meta: boolean;
+};
+
+async function readKey(): Promise<IKeyPressEvent> {
   readline.emitKeypressEvents(process.stdin);
   process.stdin.setRawMode(true);
-
-  return await new Promise((resolve) => {
-    process.stdin.once('keypress', (str, key) => {
-      process.stdin.setRawMode(false);
-      resolve(key);
-    });
+  const res = await new Promise<IKeyPressEvent>((resolve) => {
+    process.stdin.once('keypress', (_, key: any) => resolve(key));
   });
+  process.stdin.setRawMode(false);
+  return res;
 }
 
 async function makeShell() {
@@ -197,9 +203,13 @@ function startElectronProcess() {
     if (reqReboot) {
       startElectronProcess();
     } else {
-      console.log('press any key to restart application');
+      console.log('press q to exit, other keys to restart application');
       const key = await readKey();
-      if (key.sequence === '\x1B' || key.sequence === '\x03') {
+      if (
+        key.name === 'q' ||
+        key.sequence === '\x1B' ||
+        key.sequence === '\x03'
+      ) {
         process.exit();
       }
       startElectronProcess();
