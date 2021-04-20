@@ -1,5 +1,5 @@
 import { IKeyboardBehaviorMode, IKeyboardLayoutStandard } from '~/shared';
-import { ipcAgent } from '~/ui/common';
+import { ipcAgent, modalAlertTop } from '~/ui/common';
 
 export class KeyboardConfigModel {
   behaviorMode: IKeyboardBehaviorMode = 'Standalone';
@@ -20,10 +20,11 @@ export class KeyboardConfigModel {
     });
     if (behaviorMode === 'Standalone') {
       const done = await ipcAgent.async.config_writeKeyMappingToDevice();
+      // todo: トーストにする
       if (done) {
-        alert('write succeeded.');
+        await modalAlertTop('write succeeded.');
       } else {
-        alert('write failed.');
+        await modalAlertTop('write failed.');
       }
     }
   }

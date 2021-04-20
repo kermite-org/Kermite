@@ -1,5 +1,5 @@
 import { flattenArray, IProjectResourceInfo } from '~/shared';
-import { ipcAgent } from '~/ui/common';
+import { ipcAgent, modalAlert } from '~/ui/common';
 
 export type FirmwareUpdationPhase =
   | 'WaitingReset'
@@ -65,7 +65,7 @@ export class FirmwareUpdationModel {
   // 2: WaitingUploadOrder --> Uploading --> UploadSuccess,UploadFailure
   uploadFirmware = async () => {
     if (!this.currentProjectFirmwareSpec) {
-      alert('please select firmware');
+      await modalAlert('please select firmware');
       return;
     }
     if (this.phase === 'WaitingUploadOrder' && this.detectedDeviceSig) {

@@ -4,6 +4,7 @@ import { useLocal } from '~/ui/common/helpers';
 export function ClosableOverlay(props: {
   close: () => void;
   children: JSX.Element;
+  placeAtTop?: boolean;
 }) {
   const cssDiv = css`
     position: absolute;
@@ -13,7 +14,7 @@ export function ClosableOverlay(props: {
     height: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: ${props.placeAtTop ? 'flex-start' : 'center'};
     background: rgba(0, 0, 0, 0.4);
     z-index: 1;
   `;
