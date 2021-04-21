@@ -32,6 +32,14 @@ export class MenuManager implements IMenuManager {
           },
         ],
       },
+      {
+        label: 'Edit',
+        submenu: [
+          { label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:' },
+          { label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:' },
+          { label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:' },
+        ],
+      },
     ];
     const menu = Menu.buildFromTemplate(template);
     Menu.setApplicationMenu(menu);
