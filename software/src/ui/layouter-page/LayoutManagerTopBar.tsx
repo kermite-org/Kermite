@@ -14,10 +14,7 @@ const cssLayoutManagementBar = css`
   display: flex;
   padding: 6px;
   padding-bottom: 0;
-
-  > * + * {
-    margin-left: 4px;
-  }
+  gap: 0 4px;
 
   > * {
     flex-shrink: 0;

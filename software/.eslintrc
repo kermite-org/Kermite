@@ -131,6 +131,7 @@
     "no-prototype-builtins": 0,
     "no-console": 0,
     "eqeqeq": [1, "always"],
-    "node/no-path-concat": 0
+    "node/no-path-concat": 0,
+    "no-alert": 2
   }
 }

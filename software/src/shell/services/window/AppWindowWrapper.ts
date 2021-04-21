@@ -253,6 +253,8 @@ export class AppWindowWrapper implements IAppWindowWrapper {
       return;
     }
     if (this.isWidgetMode) {
+      this.mainWindow.setAlwaysOnTop(true);
+
       const currentProfile = await this.profileManager.getCurrentProfileAsync();
       if (!currentProfile) {
         return;
@@ -266,7 +268,6 @@ export class AppWindowWrapper implements IAppWindowWrapper {
         const w = design.displayArea.width * 4;
         const h = design.displayArea.height * 4 + 40;
         this.mainWindow.setSize(w, h);
-        this.mainWindow.setAlwaysOnTop(true);
       }
     } else {
       const bounds = this.state.placement.main?.bounds;

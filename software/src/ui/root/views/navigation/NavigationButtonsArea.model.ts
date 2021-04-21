@@ -18,7 +18,7 @@ const entrySources: NavigationEntrySource[] = [
   { pagePath: '/editor', pageName: 'Assigner', iconSpec: 'fa fa-keyboard' },
   {
     pagePath: '/layouter',
-    pageName: 'Drafter',
+    pageName: 'Layouter',
     iconSpec: 'fa fa-drafting-compass',
   },
   { pagePath: '/presetBrowser', pageName: 'Presets', iconSpec: 'fa fa-book' },

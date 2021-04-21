@@ -29,7 +29,7 @@ const cssGlobal = css`
   }
 
   #app {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto', 'Kosugi', sans-serif;
   }
 
   body {

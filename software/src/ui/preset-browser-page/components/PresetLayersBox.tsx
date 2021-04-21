@@ -21,7 +21,7 @@ export const PresetLayersBox: FC<Props> = ({
   setCurrentLayerId,
 }) => (
   <div css={style} data-hint={texts.hint_presetBrowser_layers}>
-    {layers.map((la) => (
+    {layers.reverse().map((la) => (
       <PresetLayerItem
         key={la.layerId}
         layerName={la.layerName}
