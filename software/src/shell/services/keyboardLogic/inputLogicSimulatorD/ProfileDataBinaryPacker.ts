@@ -25,7 +25,7 @@ Key Assigns Restriction
 supports max 16 Layers
 supports max 255 Keys
 layerIndex: 0~15
-keyIndex: 0~127
+keyIndex: 0~254
 */
 
 interface IRawAssignEntry {
@@ -75,17 +75,20 @@ function makeLayerInvocationModeBits(mode: LayerInvocationMode): number {
 
 /*
 noOperation
-0bTTXX_XXXX 0bXXXX_XXXX
-TT: type, 0b00 for noOperation
+0bTTxx_xxxx
+0b00~
+TT: type, 0b00 for no operation
 
 keyInput
 0bTTMM_MMKK 0bKKKK_KKKK
+0b01~
 TT: type, 0b01 for keyInput
 MMMM: modifiers, [os, alt, shift, ctrl] for msb-lsb
 KK_KKKK_KKKK: hid keycode with adhocShift flags
 
 layerCall
 0bTTxx_LLLL 0bIIII_xxxx
+0b10~
 TT: type, 0b10 for layerCall
 LLLL: layerIndex
 IIII: invocation mode
@@ -96,9 +99,26 @@ IIII: invocation mode
  5: oneshot
 
 layerClearExclusive
-0bTTxx_xQQQ 0bxxx_xxxx
-TT: type, 0b11 for layerClearExclusive
+0bTTxx_xFFF 0bxxxx_xQQQ
+0b11xx_x001 ~
+TT: type, 0b11 for extended operations
+FFF: extended operation type, 0b001 for layer clear exclusive
 QQQ: target exclusion group
+
+mouse pointer movement
+0bTTxx_xFFF AAAA_AAAA BBBB_BBBB
+0b11xx_x010 ~
+TT: type, 0b11 for extended operations
+FFF: extended operation type, 0b010 for mouse pointer movement
+AAAA_AAAA: movement amount x, -128~127
+BBBB_BBBB: movement amount y, -128~127
+
+custom command
+0bTTxx_xFFF CCCC_CCCC
+0b11xx_x011 ~
+TT: type, 0b11 for extended operations
+FFF: extended operation type, 0b011 for user custom command
+CCCC_CCCC: user custom command index
 */
 function encodeAssignOperation(
   op: IAssignOperation | undefined,
@@ -137,15 +157,16 @@ function encodeAssignOperation(
   }
   if (op?.type === 'layerClearExclusive') {
     const fAssingType = 0b11;
+    const fExOperationType = 1;
     const targetGroup = op.targetExclusionGroup;
-    return [(fAssingType << 6) | targetGroup];
+    return [(fAssingType << 6) | fExOperationType, targetGroup];
   }
-  return [0, 0];
+  return [0];
 }
 
 /*
 rawAssignEntryHeader
-0b1TTT_LLLL
+0b1TTT_LLLL <0bXXXX_DDDD>
 TTT: type
  0: reserved
  1: single
@@ -154,11 +175,13 @@ TTT: type
  4: block
  5: transparent
 LLLL: layerIndex
+DDDD: body length, exist when single/dual/triple assign
 */
-function encodeRawAssignEntryHeaderByte(
+function encodeRawAssignEntryHeaderBytes(
   type: 'single' | 'dual' | 'triple' | 'block' | 'transparent',
   layerIndex: number,
-): number {
+  bodyLength: number,
+): number[] {
   const assignType = {
     single: 1,
     dual: 2,
@@ -166,19 +189,22 @@ function encodeRawAssignEntryHeaderByte(
     block: 4,
     transparent: 5,
   }[type];
-  return (1 << 7) | (assignType << 4) | layerIndex;
+  const firstByte = (1 << 7) | (assignType << 4) | layerIndex;
+  const hasSecondByte = [1, 2, 3].includes(assignType);
+  return hasSecondByte ? [firstByte, bodyLength] : [firstByte];
 }
 
 /*
 rawAssignEntry
 0x~ HH, for block and transparent assign entry
-0x~ HH PP PP, for single assign entry
-0x~ HH PP PP SS SS, for dual assign entry
-0x~ HH PP PP SS SS TT TT, for triple assign entry
+0x~ HH DD, PP <PP PP PP>, for single assign entry
+0x~ HH DD, PP <PP PP PP>, SS <SS SS SS>, for dual assign entry
+0x~ HH DD, PP <PP PP PP>, SS <SS SS SS>, TT <TT TT TT>, for triple assign entry
 HH: assign entry header
-PP: primary operation
-SS: secondary oepration
-TT: tertiary operation
+DD: assign entry body length
+PP: primary operation (variable length, 1~4bytes)
+SS: secondary operation (variable length, 1~4bytes)
+TT: tertiary operation (variable length, 1~4bytes)
 */
 function encodeRawAssignEntry(ra: IRawAssignEntry): number[] {
   const { entry } = ra;
@@ -186,52 +212,76 @@ function encodeRawAssignEntry(ra: IRawAssignEntry): number[] {
   const layer = localContext.layersDict[ra.layerId];
 
   if (entry.type === 'block') {
-    return [encodeRawAssignEntryHeaderByte('block', ra.layerIndex)];
+    return encodeRawAssignEntryHeaderBytes('block', ra.layerIndex, 0);
   } else if (entry.type === 'transparent') {
-    return [encodeRawAssignEntryHeaderByte('transparent', ra.layerIndex)];
+    return encodeRawAssignEntryHeaderBytes('transparent', ra.layerIndex, 0);
   } else if (entry.type === 'single') {
     // single
+    const operationsBody = encodeAssignOperation(entry.op, layer);
     return [
-      encodeRawAssignEntryHeaderByte('single', ra.layerIndex),
-      ...encodeAssignOperation(entry.op, layer),
+      ...encodeRawAssignEntryHeaderBytes(
+        'single',
+        ra.layerIndex,
+        operationsBody.length,
+      ),
+      ...operationsBody,
     ];
   } else {
     // dual
     if (entry.tertiaryOp) {
-      return [
-        encodeRawAssignEntryHeaderByte('triple', ra.layerIndex),
+      const operationsBody = [
         ...encodeAssignOperation(entry.primaryOp, layer),
         ...encodeAssignOperation(entry.secondaryOp, layer),
         ...encodeAssignOperation(entry.tertiaryOp, layer),
       ];
-    } else if (entry.secondaryOp) {
       return [
-        encodeRawAssignEntryHeaderByte('dual', ra.layerIndex),
+        ...encodeRawAssignEntryHeaderBytes(
+          'triple',
+          ra.layerIndex,
+          operationsBody.length,
+        ),
+        ...operationsBody,
+      ];
+    } else if (entry.secondaryOp) {
+      const operationsBody = [
         ...encodeAssignOperation(entry.primaryOp, layer),
         ...encodeAssignOperation(entry.secondaryOp, layer),
       ];
-    } else {
       return [
-        encodeRawAssignEntryHeaderByte('single', ra.layerIndex),
-        ...encodeAssignOperation(entry.primaryOp, layer),
+        ...encodeRawAssignEntryHeaderBytes(
+          'dual',
+          ra.layerIndex,
+          operationsBody.length,
+        ),
+        ...operationsBody,
+      ];
+    } else {
+      const operationsBody = encodeAssignOperation(entry.primaryOp, layer);
+      return [
+        ...encodeRawAssignEntryHeaderBytes(
+          'single',
+          ra.layerIndex,
+          operationsBody.length,
+        ),
+        ...operationsBody,
       ];
     }
   }
 }
 
 /*
-0b1KKK_KKKK 0bRRRS_SSSS
-KKK_KKKK: keyIndex
-RRR: reserved
-S_SSSS: body length
+
+0b1SSS_SSSS 0bKKKK_KKKK
+SSS_SSSS: body length
+KKKK_KKKK: keyIndex
 */
 function encodeKeyBoundAssignsSetHeder(
   keyIndex: number,
   bodyLength: number,
 ): number[] {
-  if (bodyLength > 63) {
+  if (bodyLength > 127) {
     throw new Error(
-      `key bound assign size overrun, keyIndex: ${keyIndex}, bodyLength: ${bodyLength}/63`,
+      `key bound assign size overrun, keyIndex: ${keyIndex}, bodyLength: ${bodyLength}/127`,
     );
   }
   return [(1 << 7) | bodyLength, keyIndex];
