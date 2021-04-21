@@ -13,7 +13,7 @@ import { KeyboardCoreLogicInterface } from './KeyboardCoreLogicInterface';
 type u8 = number;
 type s8 = number;
 type u16 = number;
-type s16 = number;
+type u32 = number;
 type size_t = number;
 
 // --------------------------------------------------------------------------------
@@ -227,7 +227,7 @@ function getAssignsBlockAddressForKey(targetKeyIndex: u8): u16 {
   while (addr < assignMemoryReaderState.assignsEndAddress) {
     const data = readStorageWordBE(addr);
     const fIsAssign = ((data >> 15) & 1) > 0;
-    const fBodyLength = (data >> 8) & 0x3f;
+    const fBodyLength = (data >> 8) & 0x7f;
     const fKeyIndex = data & 0xff;
 
     if (!fIsAssign) {
@@ -245,27 +245,32 @@ function getAssignsBlockAddressForKey(targetKeyIndex: u8): u16 {
 
 const AssignType = {
   None: 0,
-  Signle: 1,
+  Single: 1,
   Dual: 2,
   Tri: 3,
   Block: 4,
   Transparent: 5,
 };
 
-const assignTypeToBodyByteSizeMap: { [key in number]: number } = {
-  [AssignType.None]: 0,
-  [AssignType.Signle]: 2,
-  [AssignType.Dual]: 4,
-  [AssignType.Tri]: 6,
-  [AssignType.Block]: 0,
-  [AssignType.Transparent]: 0,
-};
+function decodeOperationWordsLength(code: u8): number {
+  const szPri = ((code >> 6) & 0b11) + 1;
+  const szSec = (code >> 3) & 0b111;
+  const szTer = code & 0b111;
+  return szPri + szSec + szTer;
+}
+
+function decodeOperationWordLengths(code: u8): number[] {
+  const szPri = ((code >> 6) & 0b11) + 1;
+  const szSec = (code >> 3) & 0b111;
+  const szTer = code & 0b111;
+  return [szPri, szSec, szTer];
+}
 
 function getAssignBlockAddressForLayer(
   baseAddr: u8,
   targetLayerIndex: u8,
 ): u16 {
-  const len = readStorageByte(baseAddr) & 0x3f;
+  const len = readStorageByte(baseAddr) & 0x7f;
   let addr = baseAddr + 2;
   const endPos = addr + len;
   while (addr < endPos) {
@@ -276,7 +281,16 @@ function getAssignBlockAddressForLayer(
     }
     addr++;
     const assignType = (data >> 4) & 0b111;
-    const numBlockBytes = assignTypeToBodyByteSizeMap[assignType];
+    let numBlockBytes = 0;
+    if (
+      assignType === AssignType.Single ||
+      assignType === AssignType.Dual ||
+      assignType === AssignType.Tri
+    ) {
+      const secondByte = readStorageByte(addr);
+      numBlockBytes = decodeOperationWordsLength(secondByte);
+      addr++;
+    }
     addr += numBlockBytes;
   }
   return 0;
@@ -284,10 +298,21 @@ function getAssignBlockAddressForLayer(
 
 interface IAssignSet {
   assignType: u8;
-  pri: u16;
-  sec: u16;
-  ter: u16;
+  pri: u32;
+  sec: u32;
+  ter: u32;
   layerIndex: s8;
+}
+
+function readOperationWordVL4(addr: u16, sz: u8): u32 {
+  let word = 0;
+  for (let i = 0; i < sz; i++) {
+    word = (word << 8) | readStorageByte(addr++);
+  }
+  for (let i = 0; i < 4 - sz; i++) {
+    word <<= 8;
+  }
+  return word;
 }
 
 function getAssignSetInLayer(
@@ -308,9 +333,14 @@ function getAssignSetInLayer(
       }
       const isDual = assignType === 2;
       const isTriple = assignType === 3;
-      const pri = readStorageWordBE(addr1 + 1);
-      const sec = isDual || isTriple ? readStorageWordBE(addr1 + 3) : 0;
-      const ter = isTriple ? readStorageWordBE(addr1 + 5) : 0;
+
+      const secondByte = readStorageByte(addr1 + 1);
+      const [sz0, sz1, sz2] = decodeOperationWordLengths(secondByte);
+      const pos = addr1 + 2;
+
+      const pri = readOperationWordVL4(pos, sz0);
+      const sec = isDual || isTriple ? readOperationWordVL4(pos + sz0, sz1) : 0;
+      const ter = isTriple ? readOperationWordVL4(pos + sz0 + sz1, sz2) : 0;
       return {
         assignType,
         pri,
@@ -473,7 +503,13 @@ function layerMutations_recoverMainLayerIfAllLayeresDisabled() {
 const OpType = {
   KeyInput: 1,
   LayerCall: 2,
-  LayerClearExclusive: 3,
+  ExtendedOperation: 3,
+};
+
+const ExOpType = {
+  LayerClearExclusive: 1,
+  MovePointerMovement: 2,
+  CustomCommand: 3,
 };
 
 const InvocationMode = {
@@ -484,9 +520,10 @@ const InvocationMode = {
   Oneshot: 5,
 };
 
-function handleOperationOn(opWord: u16) {
-  const opType = (opWord >> 14) & 0b11;
+function handleOperationOn(opWord: u32) {
+  const opType = (opWord >> 30) & 0b11;
   if (opType === OpType.KeyInput) {
+    opWord >>= 16;
     const hidKey = opWord & 0x3ff;
     const modFlags = (opWord >> 10) & 0b1111;
     if (modFlags) {
@@ -512,6 +549,7 @@ function handleOperationOn(opWord: u16) {
     }
   }
   if (opType === OpType.LayerCall) {
+    opWord >>= 16;
     const layerIndex = (opWord >> 8) & 0b1111;
     const fInvocationMode = (opWord >> 4) & 0b1111;
 
@@ -527,9 +565,13 @@ function handleOperationOn(opWord: u16) {
       layerMutations_oneshot(layerIndex);
     }
   }
-  if (opType === OpType.LayerClearExclusive) {
-    const targetGroup = (opWord >> 8) & 0b111;
-    layerMutations_clearExclusive(targetGroup);
+  if (opType === OpType.ExtendedOperation) {
+    const exOpType = (opWord >> 24) & 0b111;
+    if (exOpType === ExOpType.LayerClearExclusive) {
+      opWord >>= 16;
+      const targetGroup = opWord & 0b111;
+      layerMutations_clearExclusive(targetGroup);
+    }
   }
 
   if (opType !== OpType.LayerCall) {
@@ -538,9 +580,10 @@ function handleOperationOn(opWord: u16) {
   layerMutations_recoverMainLayerIfAllLayeresDisabled();
 }
 
-function handleOperationOff(opWord: u16) {
-  const opType = (opWord >> 14) & 0b11;
+function handleOperationOff(opWord: u32) {
+  const opType = (opWord >> 30) & 0b11;
   if (opType === OpType.KeyInput) {
+    opWord >>= 16;
     const hidKey = opWord & 0x3ff;
     const modFlags = (opWord >> 10) & 0b1111;
     if (modFlags) {
@@ -562,6 +605,7 @@ function handleOperationOff(opWord: u16) {
     }
   }
   if (opType === OpType.LayerCall) {
+    opWord >>= 16;
     const layerIndex = (opWord >> 8) & 0b1111;
     const fInvocationMode = (opWord >> 4) & 0b1111;
     if (fInvocationMode === InvocationMode.Hold) {
@@ -584,7 +628,7 @@ interface RecallKeyEntry {
 }
 
 const assignBinderState = new (class {
-  keyAttachedOperationWords: u16[] = Array(NumKeySlotsMax).fill(0);
+  keyAttachedOperationWords: u32[] = Array(NumKeySlotsMax).fill(0);
   recallKeyEntries: RecallKeyEntry[] = [];
 })();
 
@@ -598,7 +642,7 @@ function resetAssignBinder() {
     }));
 }
 
-function assignBinder_handleKeyOn(keyIndex: u8, opWord: u16) {
+function assignBinder_handleKeyOn(keyIndex: u8, opWord: u32) {
   // console.log(`keyOn ${keyIndex} ${opWord}`);
   handleOperationOn(opWord);
   assignBinderState.keyAttachedOperationWords[keyIndex] = opWord;

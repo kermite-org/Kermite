@@ -164,9 +164,20 @@ function encodeAssignOperation(
   return [0];
 }
 
+function encodeOperationWordLengths(operationWordLengths: number[]) {
+  let value = 0;
+  const szPri = operationWordLengths[0];
+  const szSec = operationWordLengths[1] || 0;
+  const szTer = operationWordLengths[2] || 0;
+  value |= (szPri - 1) << 6;
+  value |= szSec << 3;
+  value |= szTer;
+  return value;
+}
+
 /*
 rawAssignEntryHeader
-0b1TTT_LLLL <0bXXXX_DDDD>
+0b1TTT_LLLL <0bAABB_BCCC>
 TTT: type
  0: reserved
  1: single
@@ -175,12 +186,15 @@ TTT: type
  4: block
  5: transparent
 LLLL: layerIndex
-DDDD: body length, exist when single/dual/triple assign
+AABBBCCC: set of opertion data length, exist when single/dual/triple assign
+AA: tertiary operation data length, (0: 1byte, 1:2byte, 2:3byte, 3:4byte)
+BBB: secondary operation data length, (0: 0byte, 1:1byte, 2:2byte, 3:3byte, 4:4byte)
+CCC: primary operation data length, (0: 0byte, 1:1byte, 2:2byte, 3:3byte, 4:4byte)
 */
 function encodeRawAssignEntryHeaderBytes(
   type: 'single' | 'dual' | 'triple' | 'block' | 'transparent',
   layerIndex: number,
-  bodyLength: number,
+  operationWordLengths?: number[],
 ): number[] {
   const assignType = {
     single: 1,
@@ -191,7 +205,9 @@ function encodeRawAssignEntryHeaderBytes(
   }[type];
   const firstByte = (1 << 7) | (assignType << 4) | layerIndex;
   const hasSecondByte = [1, 2, 3].includes(assignType);
-  return hasSecondByte ? [firstByte, bodyLength] : [firstByte];
+  return hasSecondByte && operationWordLengths
+    ? [firstByte, encodeOperationWordLengths(operationWordLengths)]
+    : [firstByte];
 }
 
 /*
@@ -212,58 +228,54 @@ function encodeRawAssignEntry(ra: IRawAssignEntry): number[] {
   const layer = localContext.layersDict[ra.layerId];
 
   if (entry.type === 'block') {
-    return encodeRawAssignEntryHeaderBytes('block', ra.layerIndex, 0);
+    return encodeRawAssignEntryHeaderBytes('block', ra.layerIndex);
   } else if (entry.type === 'transparent') {
-    return encodeRawAssignEntryHeaderBytes('transparent', ra.layerIndex, 0);
+    return encodeRawAssignEntryHeaderBytes('transparent', ra.layerIndex);
   } else if (entry.type === 'single') {
     // single
-    const operationsBody = encodeAssignOperation(entry.op, layer);
+    const primaryOpWord = encodeAssignOperation(entry.op, layer);
     return [
-      ...encodeRawAssignEntryHeaderBytes(
-        'single',
-        ra.layerIndex,
-        operationsBody.length,
-      ),
-      ...operationsBody,
+      ...encodeRawAssignEntryHeaderBytes('single', ra.layerIndex, [
+        primaryOpWord.length,
+      ]),
+      ...primaryOpWord,
     ];
   } else {
     // dual
     if (entry.tertiaryOp) {
-      const operationsBody = [
-        ...encodeAssignOperation(entry.primaryOp, layer),
-        ...encodeAssignOperation(entry.secondaryOp, layer),
-        ...encodeAssignOperation(entry.tertiaryOp, layer),
+      const operationWords = [
+        encodeAssignOperation(entry.primaryOp, layer),
+        encodeAssignOperation(entry.secondaryOp, layer),
+        encodeAssignOperation(entry.tertiaryOp, layer),
       ];
       return [
         ...encodeRawAssignEntryHeaderBytes(
           'triple',
           ra.layerIndex,
-          operationsBody.length,
+          operationWords.map((it) => it.length),
         ),
-        ...operationsBody,
+        ...flattenArray(operationWords),
       ];
     } else if (entry.secondaryOp) {
-      const operationsBody = [
-        ...encodeAssignOperation(entry.primaryOp, layer),
-        ...encodeAssignOperation(entry.secondaryOp, layer),
+      const operationWords = [
+        encodeAssignOperation(entry.primaryOp, layer),
+        encodeAssignOperation(entry.secondaryOp, layer),
       ];
       return [
         ...encodeRawAssignEntryHeaderBytes(
           'dual',
           ra.layerIndex,
-          operationsBody.length,
+          operationWords.map((it) => it.length),
         ),
-        ...operationsBody,
+        ...flattenArray(operationWords),
       ];
     } else {
-      const operationsBody = encodeAssignOperation(entry.primaryOp, layer);
+      const primaryOpWord = encodeAssignOperation(entry.primaryOp, layer);
       return [
-        ...encodeRawAssignEntryHeaderBytes(
-          'single',
-          ra.layerIndex,
-          operationsBody.length,
-        ),
-        ...operationsBody,
+        ...encodeRawAssignEntryHeaderBytes('single', ra.layerIndex, [
+          primaryOpWord.length,
+        ]),
+        ...primaryOpWord,
       ];
     }
   }

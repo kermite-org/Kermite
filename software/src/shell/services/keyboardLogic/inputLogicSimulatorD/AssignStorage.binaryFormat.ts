@@ -140,8 +140,9 @@ namespace AssignStroageBinaryFormat {
     bit15: Fixed<b1, 1>;
     bit14_12: { fAssignType: TAssignTypeValue };
     bit11_8: { fLayerIndex: b4 }; // 0~15
-    bit7_4: Reserved;
-    bit3_0: { fOperationsBodyLength: b4 };
+    bit7_6: { fOpWordLengthCodePrimary: b2 };
+    bit5_3: { fOpWordLengthCodeSecondary: b3 };
+    bit2_0: { fOpWordLengthCodeTertiary: b3 };
   };
 
   type BlockAssignEntry = BasedOn<bytes1> & {
