@@ -1,0 +1,9 @@
+#ifndef __CONFIG_H__
+
+#define PROJECT_ID "Di6V4KvF"
+
+#define KM0_NUM_KEYSLOTS 56
+
+#define SINGLEWIRE_RP2040_PIN_SIGNAL GP1
+
+#endif
