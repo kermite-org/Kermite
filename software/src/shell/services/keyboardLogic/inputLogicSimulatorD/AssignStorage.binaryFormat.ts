@@ -6,8 +6,12 @@ namespace AssignStroageBinaryFormat {
   // --------------------
   // types
 
+  type valueOf<T> = T[keyof T];
+
+  type s8 = number;
   type u8 = number; // unsigend byte
   type u16 = number; // unsigned short, big endian
+  type u24 = number;
 
   // bits
   type b1 = number;
@@ -29,11 +33,12 @@ namespace AssignStroageBinaryFormat {
   type bytes7 = number[];
   type bytes8 = number[];
 
-  type Reserved = any;
+  type Reserved = {};
   type BasedOn<T> = T;
-  type DefineValues<T> = T;
+  type DefineValues<T> = {};
   type Fixed<T, val> = val;
   type OneOf<T, val> = val;
+  type VariableLength<lo = 1, hi = 99> = {};
 
   // --------------------
   // attached modifiers
@@ -48,9 +53,9 @@ namespace AssignStroageBinaryFormat {
   // --------------------
   // assign operation
 
-  type OpNoOperation = BasedOn<u16> & {
-    bit15_14: { fOperationType: Fixed<b2, 0> };
-    bit13_0: Reserved;
+  type OpNoOperation = BasedOn<u8> & {
+    bit7_6: { fOperationType: Fixed<b2, 0> };
+    bit5_0: Reserved;
   };
 
   type OpKeyInput = BasedOn<u16> & {
@@ -77,15 +82,38 @@ namespace AssignStroageBinaryFormat {
     bit3_0: Reserved;
   };
 
-  type OpLayerClearExclusive = BasedOn<u16> & {
-    bit15_14: { fOperationType: Fixed<b2, 3> };
-    bit13_11: Reserved;
-    bit10_8: { fTargetExclusionGroup: b3 };
-    bit7_0: Reserved;
+  type ExOperationHeadByte<F extends number> = {
+    bit7_6: { fOperationType: Fixed<b2, 3> };
+    bit5_3: Reserved;
+    bit2_0: { fExOperationType: Fixed<b3, F> };
   };
 
-  type AssignOpeartion = BasedOn<u16> &
-    (OpNoOperation | OpKeyInput | OpLayerCall | OpLayerClearExclusive);
+  type OpLayerClearExclusive = BasedOn<u16> & {
+    bit15_8: { headByte: ExOperationHeadByte<1> };
+    bit7_3: Reserved;
+    bit2_0: { fTargetExclusionGroup: b3 };
+  };
+
+  type OpMousePointerMove = BasedOn<u24> & {
+    bit23_16: { headByte: ExOperationHeadByte<2> };
+    bit15_8: { fMoveAmountX: s8 };
+    bit7_0: { fMoveAmountY: s8 };
+  };
+
+  type OpCustomCommand = BasedOn<u16> & {
+    bit15_8: { headByte: ExOperationHeadByte<3> };
+    bit7_0: { fCommandIndex: u8 };
+  };
+
+  type AssignOpeartion = VariableLength<1, 4> &
+    (
+      | OpNoOperation
+      | OpKeyInput
+      | OpLayerCall
+      | OpLayerClearExclusive
+      | OpMousePointerMove
+      | OpCustomCommand
+    );
 
   // --------------------
   // assign entry
@@ -98,58 +126,72 @@ namespace AssignStroageBinaryFormat {
     transparent: 5;
   };
 
-  type AssignEntryHeader<TAssignTypeValue> = BasedOn<u8> & {
+  type AssignEntryHeaderA<
+    TAssignTypeValue extends valueOf<AssignTypeValues>
+  > = BasedOn<u8> & {
     bit7: Fixed<b1, 1>;
     bit6_4: { fAssignType: TAssignTypeValue };
     bit3_0: { fLayerIndex: b4 }; // 0~15
   };
 
+  type AssignEntryHeaderB<
+    TAssignTypeValue extends valueOf<AssignTypeValues>
+  > = BasedOn<u16> & {
+    bit15: Fixed<b1, 1>;
+    bit14_12: { fAssignType: TAssignTypeValue };
+    bit11_8: { fLayerIndex: b4 }; // 0~15
+    bit7_6: { fOpWordLengthCodePrimary: b2 };
+    bit5_3: { fOpWordLengthCodeSecondary: b3 };
+    bit2_0: { fOpWordLengthCodeTertiary: b3 };
+  };
+
   type BlockAssignEntry = BasedOn<bytes1> & {
-    byte0: { header: AssignEntryHeader<AssignTypeValues['block']> };
+    byte0: { header: AssignEntryHeaderA<4> };
   };
 
   type TransparentAssignEntry = BasedOn<bytes1> & {
-    byte0: { header: AssignEntryHeader<AssignTypeValues['transparent']> };
+    byte0: { header: AssignEntryHeaderA<5> };
   };
 
-  type SingleAssignEntry = BasedOn<bytes3> & {
-    byte0: { header: AssignEntryHeader<AssignTypeValues['single']> };
-    byte1_2: { operation: AssignOpeartion };
+  type SingleAssignEntry = VariableLength<3, 6> & {
+    byte0_1: { header: AssignEntryHeaderB<1> };
+    vl_min1_max4: { operation: AssignOpeartion };
   };
 
-  type DualAssignEntry = BasedOn<bytes5> & {
-    byte0: { header: AssignEntryHeader<AssignTypeValues['dual']> };
-    byte1_2: { opPrimary: AssignOpeartion };
-    byte3_4: { opSecondary: AssignOpeartion };
+  type DualAssignEntry = VariableLength<4, 10> & {
+    byte0_1: { header: AssignEntryHeaderB<2> };
+    vl_min1_max4_a: { opPrimary: AssignOpeartion };
+    vl_min1_max4_b: { opSecondary: AssignOpeartion };
   };
 
-  type TripleAssignEntry = BasedOn<bytes7> & {
-    byte0: { header: AssignEntryHeader<AssignTypeValues['triple']> };
-    byte1_2: { opPrimary: AssignOpeartion };
-    byte3_4: { opSecondary: AssignOpeartion };
-    byte5_6: { opTertiary: AssignOpeartion };
+  type TripleAssignEntry = VariableLength<5, 14> & {
+    byte0_1: { header: AssignEntryHeaderB<3> };
+    vl_min1_max4_a: { opPrimary: AssignOpeartion };
+    vl_min1_max4_b: { opSecondary: AssignOpeartion };
+    vl_min1_max4_c: { opTertiary: AssignOpeartion };
   };
 
-  type AssignEntry =
-    | BlockAssignEntry
-    | TransparentAssignEntry
-    | SingleAssignEntry
-    | DualAssignEntry
-    | TripleAssignEntry;
+  type AssignEntry = VariableLength &
+    (
+      | BlockAssignEntry
+      | TransparentAssignEntry
+      | SingleAssignEntry
+      | DualAssignEntry
+      | TripleAssignEntry
+    );
 
   // --------------------
   // key bound assign data set
 
   type KeyBoundAssignDataSetHeader = BasedOn<u16> & {
     bit15: Fixed<b1, 1>;
-    bit14_13: Reserved;
-    bit12_8: { fBodyLength: b6 }; // 1~63
+    bit14_8: { fBodyLength: b6 }; // 1~127
     bit7_0: { fKeyIndex: b8 }; // 0~255
   };
 
   type KeyBoundAssignDataSet = {
     byte0_1: { header: KeyBoundAssignDataSetHeader };
-    byte2__: { assigns: AssignEntry[] }; // max 63bytes of assigns body
+    byte2__: { assigns: AssignEntry[] }; // max 127bytes of assigns body
   };
 
   // --------------------

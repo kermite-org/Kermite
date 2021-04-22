@@ -207,7 +207,7 @@ static uint16_t getAssignsBlockAddressForKey(uint8_t targetKeyIndex) {
   while (addr < assignMemoryReaderState.assignsEndAddress) {
     uint16_t data = readStorageWordBE(addr);
     bool fIsAssign = ((data >> 15) & 1) > 0;
-    uint8_t fBodyLength = (data >> 8) & 0x3f;
+    uint8_t fBodyLength = (data >> 8) & 0x7f;
     uint8_t fKeyIndex = data & 0xff;
 
     if (!fIsAssign) {
@@ -231,10 +231,21 @@ enum {
   AssignType_Transparent = 5,
 };
 
-static uint8_t assignTypeToBodyByteSizeMap[6] = { 0, 2, 4, 6, 0, 0 };
+static uint8_t decodeOperationWordsLength(uint8_t code) {
+  uint8_t szPri = ((code >> 6) & 0b11) + 1;
+  uint8_t szSec = (code >> 3) & 0b111;
+  uint8_t szTer = code & 0b111;
+  return szPri + szSec + szTer;
+}
+
+static void decodeOperationWordLengths(uint8_t code, uint8_t *szPri, uint8_t *szSec, uint8_t *szTer) {
+  *szPri = ((code >> 6) & 0b11) + 1;
+  *szSec = (code >> 3) & 0b111;
+  *szTer = code & 0b111;
+}
 
 static uint16_t getAssignBlockAddressForLayer(uint16_t baseAddr, uint8_t targetLayerIndex) {
-  uint8_t len = readStorageByte(baseAddr) & 0x3F;
+  uint8_t len = readStorageByte(baseAddr) & 0x7F;
   uint16_t addr = baseAddr + 2;
   uint16_t endPos = addr + len;
   while (addr < endPos) {
@@ -245,7 +256,15 @@ static uint16_t getAssignBlockAddressForLayer(uint16_t baseAddr, uint8_t targetL
     }
     addr++;
     uint8_t assignType = data >> 4 & 0b111;
-    uint8_t numBlockBytes = assignTypeToBodyByteSizeMap[assignType];
+    uint8_t numBlockBytes = 0;
+    if (
+        assignType == AssignType_Single ||
+        assignType == AssignType_Dual ||
+        assignType == AssignType_Tri) {
+      uint8_t secondByte = readStorageByte(addr);
+      numBlockBytes = decodeOperationWordsLength(secondByte);
+      addr++;
+    }
     addr += numBlockBytes;
   }
   return 0;
@@ -253,13 +272,24 @@ static uint16_t getAssignBlockAddressForLayer(uint16_t baseAddr, uint8_t targetL
 
 typedef struct {
   uint8_t assignType;
-  uint16_t pri;
-  uint16_t sec;
-  uint16_t ter;
+  uint32_t pri;
+  uint32_t sec;
+  uint32_t ter;
   int8_t layerIndex;
 } AssignSet;
 
 static AssignSet assignSetRes;
+
+static uint32_t readOperationWordVL4(uint16_t addr, uint8_t sz) {
+  uint32_t word = 0;
+  for (uint8_t i = 0; i < sz; i++) {
+    word = (word << 8) | readStorageByte(addr++);
+  }
+  for (uint8_t i = 0; i < 4 - sz; i++) {
+    word <<= 8;
+  }
+  return word;
+}
 
 static AssignSet *getAssignSetInLayer(uint8_t keyIndex, uint8_t layerIndex) {
   uint16_t addr0 = getAssignsBlockAddressForKey(keyIndex);
@@ -280,9 +310,18 @@ static AssignSet *getAssignSetInLayer(uint8_t keyIndex, uint8_t layerIndex) {
       }
       bool isDual = assignType == 2;
       bool isTriple = assignType == 3;
-      uint16_t pri = readStorageWordBE(addr1 + 1);
-      uint16_t sec = (isDual || isTriple) ? readStorageWordBE(addr1 + 3) : 0;
-      uint16_t ter = isTriple ? readStorageWordBE(addr1 + 5) : 0;
+
+      uint8_t sz0, sz1, sz2;
+      uint8_t secondByte = readStorageByte(addr1 + 1);
+      decodeOperationWordLengths(secondByte, &sz0, &sz1, &sz2);
+      uint16_t pos = addr1 + 2;
+
+      uint32_t pri = readOperationWordVL4(pos, sz0);
+      uint32_t sec =
+          (isDual || isTriple) ? readOperationWordVL4(pos + sz0, sz1) : 0;
+      uint32_t ter = isTriple
+                         ? readOperationWordVL4(pos + sz0 + sz1, sz2)
+                         : 0;
       assignSetRes.assignType = assignType;
       assignSetRes.pri = pri;
       assignSetRes.sec = sec;
@@ -440,7 +479,13 @@ static void layerMutations_recoverMainLayerIfAllLayeresDisabled() {
 enum {
   OpType_KeyInput = 1,
   OpType_LayerCall = 2,
-  OpType_LayerClearExclusive = 3,
+  OpType_ExtendedOperation = 3,
+};
+
+enum {
+  ExOpType_LayerClearExclusive = 1,
+  ExOpType_MovePointerMovement = 2,
+  ExOpType_CustomCommand = 3,
 };
 
 enum {
@@ -451,9 +496,10 @@ enum {
   InvocationMode_Oneshot = 5,
 };
 
-static void handleOperationOn(uint16_t opWord) {
-  uint8_t opType = (opWord >> 14) & 0b11;
+static void handleOperationOn(uint32_t opWord) {
+  uint8_t opType = (opWord >> 30) & 0b11;
   if (opType == OpType_KeyInput) {
+    opWord >>= 16;
     uint16_t hidKey = opWord & 0x3ff;
     uint8_t modFlags = (opWord >> 10) & 0b1111;
     if (modFlags) {
@@ -478,6 +524,7 @@ static void handleOperationOn(uint16_t opWord) {
     }
   }
   if (opType == OpType_LayerCall) {
+    opWord >>= 16;
     uint8_t layerIndex = (opWord >> 8) & 0b1111;
     uint8_t fInvocationMode = (opWord >> 4) & 0b1111;
 
@@ -493,19 +540,25 @@ static void handleOperationOn(uint16_t opWord) {
       layerMutations_oneshot(layerIndex);
     }
   }
-  if (opType == OpType_LayerClearExclusive) {
-    uint8_t targetGroup = (opWord >> 8) & 0b111;
-    layerMutations_clearExclusive(targetGroup, -1);
+  if (opType == OpType_ExtendedOperation) {
+    uint8_t exOpType = (opWord >> 24) & 0b111;
+    if (exOpType == ExOpType_LayerClearExclusive) {
+      opWord >>= 16;
+      uint8_t targetGroup = opWord & 0b111;
+      layerMutations_clearExclusive(targetGroup, -1);
+    }
   }
+
   if (opType != OpType_LayerCall) {
     layerMutations_clearOneshot();
   }
   layerMutations_recoverMainLayerIfAllLayeresDisabled();
 }
 
-static void handleOperationOff(uint16_t opWord) {
-  uint8_t opType = (opWord >> 14) & 0b11;
+static void handleOperationOff(uint32_t opWord) {
+  uint8_t opType = (opWord >> 30) & 0b11;
   if (opType == OpType_KeyInput) {
+    opWord >>= 16;
     uint16_t hidKey = opWord & 0x3ff;
     uint8_t modFlags = (opWord >> 10) & 0b1111;
     if (modFlags) {
@@ -527,6 +580,7 @@ static void handleOperationOff(uint16_t opWord) {
     }
   }
   if (opType == OpType_LayerCall) {
+    opWord >>= 16;
     uint8_t layerIndex = (opWord >> 8) & 0b1111;
     uint8_t fInvocationMode = (opWord >> 4) & 0b1111;
     if (fInvocationMode == InvocationMode_Hold) {
@@ -551,7 +605,7 @@ typedef struct {
 } RecallKeyEntry;
 
 typedef struct {
-  uint16_t keyAttachedOperationWords[NumKeySlotsMax];
+  uint32_t keyAttachedOperationWords[NumKeySlotsMax];
   RecallKeyEntry recallKeyEntries[NumRecallKeyEntries];
 } AssignBinderState;
 
@@ -568,14 +622,14 @@ static void resetAssignBinder() {
   }
 }
 
-static void assignBinder_handleKeyOn(uint8_t keyIndex, uint16_t opWord) {
+static void assignBinder_handleKeyOn(uint8_t keyIndex, uint32_t opWord) {
   //printf("handleKeyOn %d %d\n", keyIndex, opWord);
   handleOperationOn(opWord);
   assignBinderState.keyAttachedOperationWords[keyIndex] = opWord;
 }
 
 static void assignBinder_handleKeyOff(uint8_t keyIndex) {
-  uint16_t opWord = assignBinderState.keyAttachedOperationWords[keyIndex];
+  uint32_t opWord = assignBinderState.keyAttachedOperationWords[keyIndex];
   if (opWord) {
     //printf("handleKeyOff %d\n", keyIndex);
     handleOperationOff(opWord);

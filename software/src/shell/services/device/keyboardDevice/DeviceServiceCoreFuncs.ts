@@ -25,12 +25,12 @@ function checkDeviceRevisions(data: {
 
   if (configStorageFormatRevision !== ConfigStorageFormatRevision) {
     throw new Error(
-      `incompatible config storage revision (software:${ConfigStorageFormatRevision} firmware:${configStorageFormatRevision})`,
+      `incompatible config storage revision (software:${ConfigStorageFormatRevision}, firmware:${configStorageFormatRevision})`,
     );
   }
   if (rawHidMessageProtocolRevision !== RawHidMessageProtocolRevision) {
     throw new Error(
-      `incompatible message protocol revision (software:${RawHidMessageProtocolRevision} firmware:${rawHidMessageProtocolRevision})`,
+      `incompatible message protocol revision (software:${RawHidMessageProtocolRevision}, firmware:${rawHidMessageProtocolRevision})`,
     );
   }
 }
