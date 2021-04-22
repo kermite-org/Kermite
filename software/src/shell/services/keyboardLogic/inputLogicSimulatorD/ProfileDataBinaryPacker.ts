@@ -105,7 +105,7 @@ TT: type, 0b11 for extended operations
 FFF: extended operation type, 0b001 for layer clear exclusive
 QQQ: target exclusion group
 
-mouse pointer movement
+MousePointerMovement (NOT IMPLEMENTED YET)
 0bTTxx_xFFF AAAA_AAAA BBBB_BBBB
 0b11xx_x010 ~
 TT: type, 0b11 for extended operations
@@ -113,7 +113,7 @@ FFF: extended operation type, 0b010 for mouse pointer movement
 AAAA_AAAA: movement amount x, -128~127
 BBBB_BBBB: movement amount y, -128~127
 
-custom command
+CustomCommand (NOT IMPLEMENTED YET)
 0bTTxx_xFFF CCCC_CCCC
 0b11xx_x011 ~
 TT: type, 0b11 for extended operations
