@@ -204,6 +204,43 @@ void tud_hid_set_report_cb(uint8_t itf, uint8_t report_id, hid_report_type_t rep
 }
 
 //--------------------------------------------------------------------
+
+//RawHIDのフレームを複数続けて送りたい場合に、後続のフレームが書き込めず失われるため
+//多面バッファを使用して送信する
+//TODO: 無駄が多いので、複数のリアルタイムイベントを1つのフレームに詰めて送る実装にしたい
+
+#define EmitNumPages 8
+static uint8_t emitBuffers[64][EmitNumPages] = { 0 };
+static bool emitPageFlags[EmitNumPages] = { 0 };
+static int emitWritePageIndex = 0;
+static int emitReadPageIndex = 0;
+
+static void enqueueRawHidEmitInternalBuffer(uint8_t *pDataBytes64) {
+  memcpy(emitBuffers[emitWritePageIndex], pDataBytes64, 64);
+  emitPageFlags[emitWritePageIndex] = true;
+  emitWritePageIndex = (emitWritePageIndex + 1) % EmitNumPages;
+}
+
+static void shiftOutRawHidEmitInternalBuffer() {
+  if (emitPageFlags[emitReadPageIndex]) {
+    bool done = tud_hid_n_report(ITF_RAWHID, 0, emitBuffers[emitReadPageIndex], 64);
+    if (done) {
+      emitPageFlags[emitReadPageIndex] = false;
+      emitReadPageIndex = (emitReadPageIndex + 1) % EmitNumPages;
+    }
+  }
+}
+
+// Invoked when sent REPORT successfully to host
+// Application can use this to send the next report
+// Note: For composite reports, report[0] is report ID
+void tud_hid_report_complete_cb(uint8_t itf, uint8_t const *report, uint8_t len) {
+  (void)itf;
+  (void)len;
+  shiftOutRawHidEmitInternalBuffer();
+}
+
+//--------------------------------------------------------------------
 // exports
 
 void usbIoCore_initialize() {
@@ -219,7 +256,11 @@ bool usbIoCore_hidKeyboard_writeReport(uint8_t *pReportBytes8) {
 }
 
 bool usbIoCore_genericHid_writeData(uint8_t *pDataBytes64) {
-  tud_hid_n_report(ITF_RAWHID, 0, pDataBytes64, 64);
+  if (tud_hid_n_ready(ITF_RAWHID)) {
+    tud_hid_n_report(ITF_RAWHID, 0, pDataBytes64, 64);
+  } else {
+    enqueueRawHidEmitInternalBuffer(pDataBytes64);
+  }
   return true;
 }
 
