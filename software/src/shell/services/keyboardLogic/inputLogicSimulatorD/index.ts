@@ -70,15 +70,23 @@ export class InputLogicSimulatorD {
   private onRealtimeKeyboardEvent = (event: IRealtimeKeyboardEvent) => {
     if (event.type === 'keyStateChanged') {
       const { keyIndex, isDown } = event;
-      this.CL.keyboardCoreLogic_issuePhysicalKeyStateChanged(keyIndex, isDown);
+      if (this.isSideBranMode) {
+        this.CL.keyboardCoreLogic_issuePhysicalKeyStateChanged(
+          keyIndex,
+          isDown,
+        );
+      } else {
+        console.log(`${event.isDown ? 'keydown' : 'keyup'} ${event.keyIndex}`);
+      }
     }
   };
 
   processTicker = () => {
     const elapsedMs = this.tickUpdator();
-    this.CL.keyboardCoreLogic_processTicker(elapsedMs);
 
     if (this.isSideBranMode) {
+      this.CL.keyboardCoreLogic_processTicker(elapsedMs);
+
       const report = this.CL.keyboardCoreLogic_getOutputHidReportBytes();
       if (!compareArray(this.hidReportBytes, report)) {
         this.deviceService.writeSideBrainHidReport(report);
