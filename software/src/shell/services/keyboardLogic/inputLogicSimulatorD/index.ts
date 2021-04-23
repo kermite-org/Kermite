@@ -75,6 +75,8 @@ export class InputLogicSimulatorD {
           keyIndex,
           isDown,
         );
+      } else {
+        console.log(`${event.isDown ? 'keydown' : 'keyup'} ${event.keyIndex}`);
       }
     }
   };
