@@ -26,6 +26,7 @@ IS_RESOURCE_ORIGIN_ONLINE ?= 0
 PICO_SDK_DIR = deps/rp2040/pico_sdk_import/pico_sdk
 PICO_TOOLS_DIR = deps/rp2040/pico_sdk_import/pico_sdk_tools
 PICO_LOCAL_DIR = deps/rp2040/pico_sdk_local
+TINYUSB_DIR = deps/rp2040/pico_sdk_import/tinyusb
 SHARED_OBJ_DIR = $(BUILD_DIR)/obj
 
 ELF = $(OUT_DIR)/$(CORE_NAME).elf
@@ -145,8 +146,8 @@ INC_PATHS = \
 -I$(PICO_SDK_DIR)/src/common/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/include \
 -I$(PICO_SDK_DIR)/src/rp2040/include \
--I$(PICO_SDK_DIR)/lib/tinyusb/src \
--I$(PICO_SDK_DIR)/lib/tinyusb/src/common \
+-I$(TINYUSB_DIR)/src \
+-I$(TINYUSB_DIR)/src/common \
 -I$(PICO_SDK_DIR)/src/rp2_common/rp2040_usb_device_enumeration/include
 
 SDK_C_SRCS = \
@@ -189,13 +190,13 @@ $(PICO_SDK_DIR)/src/rp2_common/multicore.c \
 $(PICO_SDK_DIR)/src/rp2_common/pico_bootsel_via_double_reset.c
 
 #USB
-SDK_C_SRCS += $(PICO_SDK_DIR)/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c \
-$(PICO_SDK_DIR)/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c \
-$(PICO_SDK_DIR)/lib/tinyusb/src/device/usbd.c \
-$(PICO_SDK_DIR)/lib/tinyusb/src/device/usbd_control.c \
-$(PICO_SDK_DIR)/lib/tinyusb/src/class/hid/hid_device.c \
-$(PICO_SDK_DIR)/lib/tinyusb/src/tusb.c \
-$(PICO_SDK_DIR)/lib/tinyusb/src/common/tusb_fifo.c \
+SDK_C_SRCS += $(TINYUSB_DIR)/src/portable/raspberrypi/rp2040/dcd_rp2040.c \
+$(TINYUSB_DIR)/src/portable/raspberrypi/rp2040/rp2040_usb.c \
+$(TINYUSB_DIR)/src/device/usbd.c \
+$(TINYUSB_DIR)/src/device/usbd_control.c \
+$(TINYUSB_DIR)/src/class/hid/hid_device.c \
+$(TINYUSB_DIR)/src/tusb.c \
+$(TINYUSB_DIR)/src/common/tusb_fifo.c \
 $(PICO_SDK_DIR)/src/rp2_common/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c \
 
 SDK_ASM_SRCS = \
