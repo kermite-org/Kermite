@@ -7,20 +7,20 @@
 //--------------------------------------------------------------------
 // Definitions
 
-#ifndef KM0_USB_VENDOR_ID
-#define KM0_USB_VENDOR_ID 0xF055
+#ifndef KM0_USB__VENDOR_ID
+#define KM0_USB__VENDOR_ID 0xF055
 #endif
 
-#ifndef KM0_USB_PRODUCT_ID
-#define KM0_USB_PRODUCT_ID 0xA579
+#ifndef KM0_USB__PRODUCT_ID
+#define KM0_USB__PRODUCT_ID 0xA579
 #endif
 
-#ifndef KM0_USB_MANUFACTURER_TEXT
-#define KM0_USB_MANUFACTURER_TEXT "Kermite"
+#ifndef KM0_USB__MANUFACTURER_TEXT
+#define KM0_USB__MANUFACTURER_TEXT "Kermite"
 #endif
 
-#ifndef KM0_USB_PRODUCT_TEXT
-#define KM0_USB_PRODUCT_TEXT "Kermite Keyboard Device"
+#ifndef KM0_USB__PRODUCT_TEXT
+#define KM0_USB__PRODUCT_TEXT "Kermite Keyboard Device"
 #endif
 
 enum {
@@ -44,8 +44,8 @@ static tusb_desc_device_t const desc_device = {
   .bDeviceProtocol = 0x00,
   .bMaxPacketSize0 = CFG_TUD_ENDPOINT0_SIZE,
 
-  .idVendor = KM0_USB_VENDOR_ID,
-  .idProduct = KM0_USB_PRODUCT_ID,
+  .idVendor = KM0_USB__VENDOR_ID,
+  .idProduct = KM0_USB__PRODUCT_ID,
   .bcdDevice = 0x0100,
 
   .iManufacturer = 0x01,
@@ -117,8 +117,8 @@ uint8_t const *tud_descriptor_configuration_cb(uint8_t index) {
 // array of pointer to string descriptors
 static char const *string_desc_arr[] = {
   (const char[]){ 0x09, 0x04 }, // 0: is supported language is English (0x0409)
-  KM0_USB_MANUFACTURER_TEXT,    // 1: Manufacturer
-  KM0_USB_PRODUCT_TEXT,         // 2: Product
+  KM0_USB__MANUFACTURER_TEXT,   // 1: Manufacturer
+  KM0_USB__PRODUCT_TEXT,        // 2: Product
   "000000000000000000000000",   // 3: Serials, should use chip ID
 };
 

@@ -1,19 +1,19 @@
 #include "km0/deviceIo/boardIo.h"
 #include "neoPixelCore.h"
 
-#ifndef BOARD_LED_RGB_RP2040_PIO
-#define BOARD_LED_RGB_RP2040_PIO pio0
+#ifndef KM0_RP_BOARD_IO_RGBLED__PIO_INSTANCE
+#define KM0_RP_BOARD_IO_RGBLED__PIO_INSTANCE pio0
 #endif
 
-#ifndef BOARD_LED_RGB_RP2040_SM
-#define BOARD_LED_RGB_RP2040_SM 0
+#ifndef KM0_RP_BOARD_IO_RGBLED__PIO_SM
+#define KM0_RP_BOARD_IO_RGBLED__PIO_SM 0
 #endif
 
 static const uint8_t brightness_b = 60;
 static const uint8_t brightness_g = 15;
 
-static const PIO pio_rgbled = BOARD_LED_RGB_RP2040_PIO;
-static const int sm_rgbled = BOARD_LED_RGB_RP2040_SM;
+static const PIO pio_rgbled = KM0_RP_BOARD_IO_RGBLED__PIO_INSTANCE;
+static const int sm_rgbled = KM0_RP_BOARD_IO_RGBLED__PIO_SM;
 
 static bool state_led1 = false;
 static bool state_led2 = false;

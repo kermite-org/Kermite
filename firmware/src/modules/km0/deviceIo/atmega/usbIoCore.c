@@ -42,20 +42,20 @@ void dprintf() {
 }
 #endif
 
-#ifndef KM0_USB_VENDOR_ID
-#define KM0_USB_VENDOR_ID 0xF055
+#ifndef KM0_USB__VENDOR_ID
+#define KM0_USB__VENDOR_ID 0xF055
 #endif
 
-#ifndef KM0_USB_PRODUCT_ID
-#define KM0_USB_PRODUCT_ID 0xA577
+#ifndef KM0_USB__PRODUCT_ID
+#define KM0_USB__PRODUCT_ID 0xA577
 #endif
 
-#ifndef KM0_USB_MANUFACTURER_TEXT
-#define KM0_USB_MANUFACTURER_TEXT L"Kermite"
+#ifndef KM0_USB__MANUFACTURER_TEXT
+#define KM0_USB__MANUFACTURER_TEXT L"Kermite"
 #endif
 
-#ifndef KM0_USB_PRODUCT_TEXT
-#define KM0_USB_PRODUCT_TEXT L"Kermite Keyboard Device"
+#ifndef KM0_USB__PRODUCT_TEXT
+#define KM0_USB__PRODUCT_TEXT L"Kermite Keyboard Device"
 #endif
 
 // #define KEYBOARD_ENDPOINT 3
@@ -124,12 +124,12 @@ void dprintf() {
 // Windows, even though the driver is supplied by Microsoft, an
 // INF file is needed to load the driver.  These numbers need to
 // match the INF file.
-#define VENDOR_ID KM0_USB_VENDOR_ID
-#define PRODUCT_ID KM0_USB_PRODUCT_ID
+#define VENDOR_ID KM0_USB__VENDOR_ID
+#define PRODUCT_ID KM0_USB__PRODUCT_ID
 
 // You can change these to give your code its own name.
-#define STR_MANUFACTURER KM0_USB_MANUFACTURER_TEXT
-#define STR_PRODUCT KM0_USB_PRODUCT_TEXT
+#define STR_MANUFACTURER KM0_USB__MANUFACTURER_TEXT
+#define STR_PRODUCT KM0_USB__PRODUCT_TEXT
 #define STR_SERIALNUMBER_DUMMY L"000000000000000000000000"
 
 // USB devices are supposed to implment a halt feature, which is

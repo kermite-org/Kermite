@@ -116,36 +116,36 @@ static int rxin_receive_sync_bytes(PIO pio, uint sm, uint8_t *rcv_buffer, int ma
 
 //------------------------------------------------------------
 
-#ifdef SINGLEWIRE_RP2040_BASE_FREQ_FAST
+#ifdef KM0_RP_SINGLEWIRE_BASE_FREQ_FAST
 const float pio_base_freq = 2000000; //base clock 2MHz, data 160kbps
 #else
 const float pio_base_freq = 1000000; //base clock 1MHz, data 80kbps
 #endif
 
-#ifndef SINGLEWIRE_RP2040_PIO
-#define SINGLEWIRE_RP2040_PIO pio1
+#ifndef KM0_RP_SINGLEWIRE__PIO_INSTANCE
+#define KM0_RP_SINGLEWIRE__PIO_INSTANCE pio1
 #endif
 
-#ifndef SINGLEWIRE_RP2040_SM_TX
-#define SINGLEWIRE_RP2040_SM_TX 0
+#ifndef KM0_RP_SINGLEWIRE__PIO_SM_TX
+#define KM0_RP_SINGLEWIRE__PIO_SM_TX 0
 #endif
 
-#ifndef SINGLEWIRE_RP2040_SM_RX
-#define SINGLEWIRE_RP2040_SM_RX 1
+#ifndef KM0_RP_SINGLEWIRE__PIO_SM_RX
+#define KM0_RP_SINGLEWIRE__PIO_SM_RX 1
 #endif
 
-const PIO pio_sw1 = SINGLEWIRE_RP2040_PIO;
-const int sm_tx1 = SINGLEWIRE_RP2040_SM_TX;
-const int sm_rx1 = SINGLEWIRE_RP2040_SM_RX;
+const PIO pio_sw1 = KM0_RP_SINGLEWIRE__PIO_INSTANCE;
+const int sm_tx1 = KM0_RP_SINGLEWIRE__PIO_SM_TX;
+const int sm_rx1 = KM0_RP_SINGLEWIRE__PIO_SM_RX;
 
-#ifndef SINGLEWIRE_RP2040_PIN_SIGNAL
-#error SINGLEWIRE_RP2040_PIN_SIGNAL should be provided
+#ifndef KM0_RP_SINGLEWIRE__PIN_SIGNAL
+#error KM0_RP_SINGLEWIRE__PIN_SIGNAL should be provided
 #endif
 
-const int pin_signal = SINGLEWIRE_RP2040_PIN_SIGNAL;
+const int pin_signal = KM0_RP_SINGLEWIRE__PIN_SIGNAL;
 
-#ifdef SINGLEWIRE_RP2040_PIN_DEBUG_TIMING_MONITOR
-const int pin_rcv_sideset = SINGLEWIRE_RP2040_PIN_DEBUG_TIMING_MONITOR;
+#ifdef KM0_RP_SINGLEWIRE__PIN_DEBUG_TIMING_MONITOR
+const int pin_rcv_sideset = KM0_RP_SINGLEWIRE__PIN_DEBUG_TIMING_MONITOR;
 #else
 const int pin_rcv_sideset = -1;
 #endif

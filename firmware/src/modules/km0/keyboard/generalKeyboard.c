@@ -17,14 +17,14 @@
 //---------------------------------------------
 //definitions
 
-#ifndef KM0_NUM_KEYSLOTS
-#error KM0_NUM_KEYSLOTS is not defined
+#ifndef KM0_KEYBOARD__NUM_KEYSLOTS
+#error KM0_KEYBOARD__NUM_KEYSLOTS is not defined
 #endif
 
-#define NumKeySlots KM0_NUM_KEYSLOTS
+#define NumKeySlots KM0_KEYBOARD__NUM_KEYSLOTS
 
-//#define NumKeySlotBytes Ceil(KM0_NUM_KEYSLOTS / 8)
-#define NumKeySlotBytes ((KM0_NUM_KEYSLOTS + 7) >> 3)
+//#define NumKeySlotBytes Ceil(KM0_KEYBOARD__NUM_KEYSLOTS / 8)
+#define NumKeySlotBytes ((KM0_KEYBOARD__NUM_KEYSLOTS + 7) >> 3)
 
 //---------------------------------------------
 //variables

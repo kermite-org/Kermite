@@ -2,16 +2,16 @@
 #include "config.h"
 #include "neoPixelCore.h"
 
-#ifndef SERIALLED_RP2040_PIO
-#define SRRIALLED_RP2040_PIO pio0
+#ifndef KM0_RP_SERIAL_LED__PIO_INSTANCE
+#define KM0_RP_SERIAL_LED__PIO_INSTANCE pio0
 #endif
 
-#ifndef SERIALLED_RP2040_SM
-#define SERIALLED_RP2040_SM 1
+#ifndef KM0_RP_SERIAL_LED__PIO_SM
+#define KM0_RP_SERIAL_LED__PIO_SM 1
 #endif
 
-static const PIO serial_led_pio = SRRIALLED_RP2040_PIO;
-static const int serial_led_sm = SERIALLED_RP2040_SM;
+static const PIO serial_led_pio = KM0_RP_SERIAL_LED__PIO_INSTANCE;
+static const int serial_led_sm = KM0_RP_SERIAL_LED__PIO_SM;
 
 void serialLed_initialize(uint8_t pin) {
   neoPixelCore_initialize(serial_led_pio, serial_led_sm, pin);

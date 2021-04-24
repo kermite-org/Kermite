@@ -2,6 +2,6 @@
 
 #define PROJECT_ID "066MbLCf"
 
-#define KM0_NUM_KEYSLOTS 12
+#define KM0_KEYBOARD__NUM_KEYSLOTS 12
 
 #endif

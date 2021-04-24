@@ -16,19 +16,19 @@ uint8_t singlewire3_debugValues[4] = { 0 };
 
 //信号ピン設定
 //以下のいずれかをコンパイル時のフラグで注入して指定
-//SINGLEWIRE_SIGNAL_PIN_PD0
-//SINGLEWIRE_SIGNAL_PIN_PD2
+//KM0_ATMEGA_SINGLEWIRE__PIN_SIGNAL_PD0
+//KM0_ATMEGA_SINGLEWIRE__PIN_SIGNAL_PD2
 
 #define dDDR DDRD
 #define dPORT PORTD
 #define dPIN PIND
 
-#if defined(SINGLEWIRE_SIGNAL_PIN_PD0)
+#if defined(KM0_ATMEGA_SINGLEWIRE__PIN_SIGNAL_PD0)
 #define dBit 0
 #define dISCx0 ISC00
 #define dINTx INT0
 #define dINTx_vect INT0_vect
-#elif defined(SINGLEWIRE_SIGNAL_PIN_PD2)
+#elif defined(KM0_ATMEGA_SINGLEWIRE__PIN_SIGNAL_PD2)
 #define dBit 2
 #define dISCx0 ISC20
 #define dINTx INT2
@@ -67,7 +67,7 @@ static inline uint8_t signalPin_read() {
 //---------------------------------------------
 //timing debug pin
 
-#ifdef SINGLEWIRE_ENABLE_TIMING_DEBUG_PINS
+#ifdef KM0_ATMEGA_SINGLEWIRE__ENABLE_TIMING_DEBUG_PINS
 
 #define pinDebug P_F4
 #define pinDebug_PORT PORTF

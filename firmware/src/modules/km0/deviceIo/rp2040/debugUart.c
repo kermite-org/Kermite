@@ -3,11 +3,8 @@
 #include "km0/deviceIo/dio.h"
 #include "pico_sdk/src/rp2_common/include/pico/stdio_uart.h"
 
-#define UART0 uart0
-#define UART1 uart1
-
 #ifndef KM0_RP_DEBUG_UART__UART_INSTANCE
-#define KM0_RP_DEBUG_UART__UART_INSTANCE UART0
+#define KM0_RP_DEBUG_UART__UART_INSTANCE uart0
 #endif
 
 #ifndef KM0_RP_DEBUG_UART__PIN_TX
