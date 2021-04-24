@@ -87,19 +87,19 @@ static void emitDeviceAttributesResponse() {
   uint8_t *p = rawHidSendBuf;
   p[0] = 0xF0;
   p[1] = 0x11;
-  p[2] = PROJECT_RELEASE_BUILD_REVISION >> 8 & 0xFF;
-  p[3] = PROJECT_RELEASE_BUILD_REVISION & 0xFF;
-  p[4] = CONFIG_STORAGE_FORMAT_REVISION;
-  p[5] = RAWHID_MESSAGE_PROTOCOL_REVISION;
+  p[2] = KERMITE_PROJECT_RELEASE_BUILD_REVISION >> 8 & 0xFF;
+  p[3] = KERMITE_PROJECT_RELEASE_BUILD_REVISION & 0xFF;
+  p[4] = KERMITE_CONFIG_STORAGE_FORMAT_REVISION;
+  p[5] = KERMITE_RAWHID_MESSAGE_PROTOCOL_REVISION;
   utils_copyBytes(p + 6, (uint8_t *)PROJECT_ID, 8);
-  p[14] = IS_RESOURCE_ORIGIN_ONLINE;
+  p[14] = KERMITE_IS_RESOURCE_ORIGIN_ONLINE;
   p[15] = 0;
   copyEepromBytesToBuffer(p, 16, StorageAddr_DeviceInstanceCode, 8);
   p[24] = KeyAssignsDataCapacity >> 8 & 0xFF;
   p[25] = KeyAssignsDataCapacity & 0xFF;
   utils_fillBytes(p + 26, 0, 16);
-  size_t slen = utils_clamp(strlen(VARIATION_NAME), 0, 16);
-  utils_copyBytes(p + 26, (uint8_t *)VARIATION_NAME, slen);
+  size_t slen = utils_clamp(strlen(KERMITE_VARIATION_NAME), 0, 16);
+  utils_copyBytes(p + 26, (uint8_t *)KERMITE_VARIATION_NAME, slen);
   utils_copyBytes(p + 42, (uint8_t *)KERMITE_MCU_CODE, 8);
   emitGenericHidData(rawHidSendBuf);
 }

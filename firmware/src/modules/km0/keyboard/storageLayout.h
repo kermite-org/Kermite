@@ -3,13 +3,12 @@
 
 #include "config.h"
 
-#if defined TARGET_MCU_ATMEGA
+#if defined KERMITE_TARGET_MCU_ATMEGA
 #define DEVICE_PERSIST_STORAGE_DATA_SIZE 1024
-#elif defined TARGET_MCU_RP2040
+#elif defined KERMITE_TARGET_MCU_RP2040
 #define DEVICE_PERSIST_STORAGE_DATA_SIZE 4096
-
 #else
-#error TARGET_MCU_* is not defined
+#error KERMITE_TARGET_MCU_* is not defined
 #endif
 
 #ifndef KM0_STORAGE__USER_STORAZE_SIZE

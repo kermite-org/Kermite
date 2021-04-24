@@ -3,7 +3,7 @@
 
 #include "km0/types.h"
 
-#ifdef TARGET_MCU_ATMEGA
+#ifdef KERMITE_TARGET_MCU_ATMEGA
 enum {
   P_B0 = 0,
   P_B1,
@@ -48,7 +48,7 @@ enum {
 };
 #endif
 
-#ifdef TARGET_MCU_RP2040
+#ifdef KERMITE_TARGET_MCU_RP2040
 enum {
   GP0 = 0,
   GP1,
