@@ -1,5 +1,5 @@
 import {
-  converNullToUndefinedRecursive,
+  convertNullToUndefinedRecursive,
   createDictionaryFromKeyValues,
   IDisplayArea,
   IDisplayKeyEntity,
@@ -76,7 +76,9 @@ function createKeyUnitTextDisplayModel(
 function createProfileLayersDisplayModel(
   sourcePersistProfileData: IPersistProfileData,
 ): IProfileLayersDisplayModel {
-  const nullReplaced = converNullToUndefinedRecursive(sourcePersistProfileData);
+  const nullReplaced = convertNullToUndefinedRecursive(
+    sourcePersistProfileData,
+  );
   const formatFixed = ProfileDataMigrator.fixProfileData(nullReplaced);
   const profileData = ProfileDataConverter.convertProfileDataFromPersist(
     formatFixed,
