@@ -1,7 +1,7 @@
 #ifndef __SINGLE_WIRE_4_H__
 #define __SINGLE_WIRE_4_H__
 
-#include "types.h"
+#include "km0/types.h"
 
 void singleWire_initialize();
 

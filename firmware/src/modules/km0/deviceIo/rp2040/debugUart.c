@@ -1,4 +1,4 @@
-#include "debugUart.h"
+#include "km0/deviceIo/debugUart.h"
 #include "pico/stdio_uart.h"
 
 void debugUart_setup(uint32_t baud) {

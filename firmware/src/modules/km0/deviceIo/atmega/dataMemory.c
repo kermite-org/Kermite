@@ -1,5 +1,4 @@
-#include "dataMemory.h"
-#include "bitOperations.h"
+#include "km0/deviceIo/dataMemory.h"
 #include <avr/eeprom.h>
 
 uint16_t dataMemory_getCapacity() {

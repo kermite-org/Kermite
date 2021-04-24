@@ -4,10 +4,10 @@
 #include <stdio.h>
 #include <util/delay.h>
 
-#include "bitOperations.h"
 #include "dataMemory.h"
 #include "debugUart.h"
 #include "dio.h"
+#include "km0/common/bitOperations.h"
 #include "singlewire3.h"
 #include "utils.h"
 

@@ -1,7 +1,7 @@
 #ifndef __SYSTEM_H__
 #define __SYSTEM_H__
 
-#include "types.h"
+#include "km0/types.h"
 
 void delayMs(uint16_t ms);
 void delayUs(uint16_t us);

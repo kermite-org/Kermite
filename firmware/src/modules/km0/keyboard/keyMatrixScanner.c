@@ -1,7 +1,7 @@
 #include "keyMatrixScanner.h"
-#include "bitOperations.h"
-#include "dio.h"
-#include "system.h"
+#include "km0/common/bitOperations.h"
+#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/system.h"
 
 static uint8_t numRows;
 static uint8_t numColumns;

@@ -1,7 +1,7 @@
 #ifndef __PIO_H__
 #define __PIO_H__
 
-#include "types.h"
+#include "km0/types.h"
 
 #ifdef TARGET_MCU_ATMEGA
 enum {

@@ -1,7 +1,7 @@
 #ifndef __KEY_MATRIX_SCANNER_2_H__
 #define __KEY_MATRIX_SCANNER_2_H__
 
-#include "types.h"
+#include "km0/types.h"
 
 //numRows: 行の数(1 <= numRows <= 8)
 //numColumns: 列の数(1 <= numColums <= 8)

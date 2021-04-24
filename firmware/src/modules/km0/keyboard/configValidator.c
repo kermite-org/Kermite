@@ -1,8 +1,8 @@
 #include "configValidator.h"
 #include "config.h"
-#include "dataMemory.h"
+#include "km0/common/utils.h"
+#include "km0/deviceIo/dataMemory.h"
 #include "storageLayout.h"
-#include "utils.h"
 #include "versions.h"
 #include <stdio.h>
 

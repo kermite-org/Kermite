@@ -5,7 +5,7 @@
 
 #include <util/delay.h>
 
-#include "bitOperations.h"
+#include "km0/common/bitOperations.h"
 #include <avr/interrupt.h>
 #include <util/delay_basic.h>
 

@@ -1,6 +1,6 @@
 #ifndef __CONFIG_VALIDATOR_H__
 
-#include "types.h"
+#include "km0/types.h"
 
 void configValidator_initializeDataStorage();
 bool configValidator_checkDataHeader();

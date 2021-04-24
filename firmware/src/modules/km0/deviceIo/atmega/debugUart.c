@@ -1,8 +1,7 @@
+#include "km0/deviceIo/debugUart.h"
+#include "km0/common/bitOperations.h"
 #include <avr/io.h>
 #include <stdio.h>
-
-#include "bitOperations.h"
-#include "debugUart.h"
 
 static void uart_init(uint32_t baud) {
   UBRR1 = (F_CPU / 16 / baud - 1);         //ボーレート設定

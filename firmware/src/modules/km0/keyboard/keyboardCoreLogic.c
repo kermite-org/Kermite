@@ -1,7 +1,7 @@
 #include "keyboardCoreLogic.h"
-#include "bitOperations.h"
 #include "config.h"
-#include "dataMemory.h"
+#include "km0/common/bitOperations.h"
+#include "km0/deviceIo/dataMemory.h"
 #include "storageLayout.h"
 #include <stdio.h>
 

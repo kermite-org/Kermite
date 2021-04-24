@@ -1,14 +1,13 @@
-#include "singleWire4.h"
+
+#include "km0/deviceIo/singleWire4.h"
 #include "config.h"
-#include "singleWire4.pio.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-
-#include "dio.h"
 #include "hardware/clocks.h"
+#include "km0/deviceIo/dio.h"
 #include "pico/multicore.h"
 #include "pico/stdlib.h"
+#include "singleWire4.pio.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 //------------------------------------------------------------
 //program initializers

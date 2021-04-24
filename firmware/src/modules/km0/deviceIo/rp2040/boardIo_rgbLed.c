@@ -1,4 +1,4 @@
-#include "boardIo.h"
+#include "km0/deviceIo/boardIo.h"
 #include "neoPixelCore.h"
 
 #ifndef BOARD_LED_RGB_RP2040_PIO

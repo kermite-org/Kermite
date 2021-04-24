@@ -1,5 +1,5 @@
-#include "bitOperations.h"
 #include "dio.h"
+#include "km0/common/bitOperations.h"
 #include "singlewire3.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>

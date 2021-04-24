@@ -23,11 +23,10 @@
  * THE SOFTWARE.
  */
 
-#include "usbIoCore.h"
-
-#include "bitOperations.h"
+#include "km0/deviceIo/usbIoCore.h"
 #include "config.h"
-#include "utils.h"
+#include "km0/common/bitOperations.h"
+#include "km0/common/utils.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <avr/pgmspace.h>

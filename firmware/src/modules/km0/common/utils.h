@@ -1,7 +1,7 @@
 #ifndef __UTILS_H__
 #define __UTILS_H__
 
-#include "types.h"
+#include "km0/types.h"
 
 void utils_debugShowBytes(uint8_t *buf, uint16_t len);
 

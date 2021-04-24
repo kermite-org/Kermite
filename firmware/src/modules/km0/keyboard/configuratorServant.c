@@ -1,9 +1,9 @@
 #include "configuratorServant.h"
 #include "config.h"
-#include "dataMemory.h"
+#include "km0/common/utils.h"
+#include "km0/deviceIo/dataMemory.h"
+#include "km0/deviceIo/usbIoCore.h"
 #include "storageLayout.h"
-#include "usbIoCore.h"
-#include "utils.h"
 #include "versions.h"
 #include <stdio.h>
 #include <string.h>

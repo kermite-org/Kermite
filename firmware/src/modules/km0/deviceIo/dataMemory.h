@@ -1,7 +1,7 @@
 #ifndef __DATA_MEMORY_H__
 #define __DATA_MEMORY_H__
 
-#include "types.h"
+#include "km0/types.h"
 
 uint16_t dataMemory_getCapacity();
 

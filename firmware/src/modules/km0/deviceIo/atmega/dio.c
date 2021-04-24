@@ -1,6 +1,5 @@
-#include "dio.h"
-
-#include "bitOperations.h"
+#include "km0/deviceIo/dio.h"
+#include "km0/common/bitOperations.h"
 #include <avr/io.h>
 
 #define portIndex(p) ((p) >> 3)

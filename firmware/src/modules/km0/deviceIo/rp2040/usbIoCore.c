@@ -1,6 +1,6 @@
 //based on tinyusb multiple interfaces example
 
-#include "usbIoCore.h"
+#include "km0/deviceIo/usbIoCore.h"
 #include "config.h"
 #include "tusb.h"
 

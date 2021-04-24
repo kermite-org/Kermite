@@ -1,7 +1,7 @@
-#include "singleWire4.h"
-#include "bitOperations.h"
+#include "km0/deviceIo/singleWire4.h"
 #include "config.h"
-#include "dio.h"
+#include "km0/common/bitOperations.h"
+#include "km0/deviceIo/dio.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <util/delay.h>

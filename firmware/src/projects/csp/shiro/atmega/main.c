@@ -1,6 +1,6 @@
 #include "config.h"
-#include "dio.h"
-#include "generalKeyboard.h"
+#include "km0/deviceIo/dio.h"
+#include "km0/keyboard/generalKeyboard.h"
 #include <avr/pgmspace.h>
 
 #define NumColumns 3

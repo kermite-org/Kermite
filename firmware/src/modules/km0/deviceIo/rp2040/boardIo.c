@@ -1,7 +1,6 @@
 
-#include "boardIo.h"
-#include "dio.h"
-#include "types.h"
+#include "km0/deviceIo/boardIo.h"
+#include "km0/deviceIo/dio.h"
 
 static int8_t led_pin1 = -1;
 static int8_t led_pin2 = -1;

@@ -1,6 +1,6 @@
 #ifndef __GENERAL_KEYBOARD_H__
 
-#include "types.h"
+#include "km0/types.h"
 
 #define OptionSlot_EmitKeyStroke 0
 #define OptionSlot_EmitRealtimeEvents 1
