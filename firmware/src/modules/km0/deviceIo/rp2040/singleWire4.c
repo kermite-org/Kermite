@@ -202,11 +202,11 @@ void singleWire_initialize() {
   setup_programs();
 }
 
-void singleWire_transmitFrame(uint8_t *buf, uint8_t len) {
+void singleWire_transmitFrameBlocking(uint8_t *buf, uint8_t len) {
   tx_send_frame(buf, len);
 }
 
-uint8_t singleWire_receiveFrame(uint8_t *buf, uint8_t maxLen) {
+uint8_t singleWire_receiveFrameBlocking(uint8_t *buf, uint8_t maxLen) {
   return rx_receive_frame(buf, maxLen);
 }
 
@@ -219,5 +219,5 @@ void singleWire_clearInterruptedReceiver() {
   deinit_rx_pcint();
 }
 
-void singleWire_startBurstSection() {}
-void singleWire_endBurstSection() {}
+void singleWire_startSynchronizedSection() {}
+void singleWire_endSynchronizedSection() {}

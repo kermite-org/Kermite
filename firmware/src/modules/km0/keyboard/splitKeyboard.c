@@ -193,10 +193,10 @@ static void configuratorServantStateHandler(uint8_t state) {
 //反対側のコントローラからキー状態を受け取る処理
 static void pullAltSideKeyStates() {
   sw_txbuf[0] = 0x40;
-  singleWire_startBurstSection();
-  singleWire_transmitFrame(sw_txbuf, 1); //キー状態要求パケットを送信
-  uint8_t sz = singleWire_receiveFrame(sw_rxbuf, SingleWireMaxPacketSize);
-  singleWire_endBurstSection();
+  singleWire_startSynchronizedSection();
+  singleWire_transmitFrameBlocking(sw_txbuf, 1); //キー状態要求パケットを送信
+  uint8_t sz = singleWire_receiveFrameBlocking(sw_rxbuf, SingleWireMaxPacketSize);
+  singleWire_endSynchronizedSection();
 
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
@@ -279,8 +279,8 @@ static void runAsMaster() {
 
 //単線通信の受信割り込みコールバック
 static void onRecevierInterruption() {
-  singleWire_startBurstSection();
-  uint8_t sz = singleWire_receiveFrame(sw_rxbuf, SingleWireMaxPacketSize);
+  singleWire_startSynchronizedSection();
+  uint8_t sz = singleWire_receiveFrameBlocking(sw_rxbuf, SingleWireMaxPacketSize);
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
     if (cmd == 0x40 && sz == 1) {
@@ -288,10 +288,10 @@ static void onRecevierInterruption() {
       //子から親に対してキー状態応答パケットを送る
       sw_txbuf[0] = 0x41;
       utils_copyBytes(sw_txbuf + 1, nextKeyStateFlags, NumKeySlotBytesHalf);
-      singleWire_transmitFrame(sw_txbuf, 1 + NumKeySlotBytesHalf);
+      singleWire_transmitFrameBlocking(sw_txbuf, 1 + NumKeySlotBytesHalf);
     }
   }
-  singleWire_endBurstSection();
+  singleWire_endSynchronizedSection();
 }
 
 static bool checkIfSomeKeyPressed() {
@@ -335,9 +335,9 @@ static void runAsSlave() {
 
 //単線通信受信割り込みコールバック
 static void masterSlaveDetectionMode_onRecevierInterruption() {
-  singleWire_startBurstSection();
-  uint8_t sz = singleWire_receiveFrame(sw_rxbuf, SingleWireMaxPacketSize);
-  singleWire_endBurstSection();
+  singleWire_startSynchronizedSection();
+  uint8_t sz = singleWire_receiveFrameBlocking(sw_rxbuf, SingleWireMaxPacketSize);
+  singleWire_endSynchronizedSection();
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
     if (cmd == 0xA0 && sz == 1) {
@@ -359,9 +359,9 @@ static bool runMasterSlaveDetectionMode() {
     if (usbIoCore_isConnectedToHost()) {
       singleWire_clearInterruptedReceiver();
       sw_txbuf[0] = 0xA0;
-      singleWire_startBurstSection();
-      singleWire_transmitFrame(sw_txbuf, 1); //Master確定通知パケットを送信
-      singleWire_endBurstSection();
+      singleWire_startSynchronizedSection();
+      singleWire_transmitFrameBlocking(sw_txbuf, 1); //Master確定通知パケットを送信
+      singleWire_endSynchronizedSection();
       return true;
     }
     if (hasMasterOathReceived) {

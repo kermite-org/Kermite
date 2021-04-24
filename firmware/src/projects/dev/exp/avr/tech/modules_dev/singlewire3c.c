@@ -171,7 +171,7 @@ static uint8_t measureHigh() {
   return t0;
 }
 
-uint8_t singlewire_receiveFrame(uint8_t *rxbuf, uint8_t capacity) {
+uint8_t singlewire_receiveFrameBlocking(uint8_t *rxbuf, uint8_t capacity) {
   uint8_t bi = 0;
   uint8_t t0, t1, TH;
   uint8_t value, m, f, m1, isEnd;

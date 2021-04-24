@@ -442,7 +442,7 @@ waitWhileHigh:
 
 
 /*
-uint8_t singlewire_receiveFrame(uint8_t* buf, uint8_t maxlen){
+uint8_t singlewire_receiveFrameBlocking(uint8_t* buf, uint8_t maxlen){
 	p = buf
 	p_end = buf + maxlen
 	cnt = 0
@@ -472,9 +472,9 @@ abort:
   return 0
 }
 */
-.global singlewire_receiveFrame
-.func singlewire_receiveFrame
-singlewire_receiveFrame:
+.global singlewire_receiveFrameBlocking
+.func singlewire_receiveFrameBlocking
+singlewire_receiveFrameBlocking:
 	//p = buf
 	movw r30, r24
 

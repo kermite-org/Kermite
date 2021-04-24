@@ -116,7 +116,7 @@ static void writeLogical(uint8_t val) {
   }
 }
 
-void singleWire_transmitFrame(uint8_t *txbuf, uint8_t len) {
+void singleWire_transmitFrameBlocking(uint8_t *txbuf, uint8_t len) {
   signalPin_startTransmit();
   signalPin_setLow();
   delayUnit(100);
@@ -163,7 +163,7 @@ static uint8_t readFragment() {
   return t0 > mid ? 1 : 0;
 }
 
-uint8_t singleWire_receiveFrame(uint8_t *rxbuf, uint8_t capacity) {
+uint8_t singleWire_receiveFrameBlocking(uint8_t *rxbuf, uint8_t capacity) {
   debug_timingPinLow();
   uint8_t bi = 0;
 
@@ -209,10 +209,10 @@ void singleWire_initialize() {
   debug_initTimeDebugPin();
 }
 
-void singleWire_startBurstSection() {
+void singleWire_startSynchronizedSection() {
   cli();
 }
-void singleWire_endBurstSection() {
+void singleWire_endSynchronizedSection() {
   sei();
 }
 

@@ -162,7 +162,7 @@ void singlewire_sendFrame(uint8_t *txbuf, uint8_t len) {
   bit_on(EIFR, dINTx);
 }
 
-uint8_t singlewire_receiveFrame(uint8_t *rxbuf, uint8_t capacity) {
+uint8_t singlewire_receiveFrameBlocking(uint8_t *rxbuf, uint8_t capacity) {
   uint8_t bi = 0;
   uint8_t value, isEnd, f;
 
