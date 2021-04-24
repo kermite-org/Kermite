@@ -5,26 +5,26 @@
     "myAvrCompilerBaseDirectory": "/usr/local/Cellar/avr-gcc/9.3.0",
     "myAvrCompilerExecutablePath": "/usr/local/bin/avr-gcc",
     "myCompilerExecutablePath": "/usr/local/bin/arm-none-eabi-gcc",
+    "picoSdkOuterDir": "./deps/rp2040/pico_sdk_import",
     "picoSdkRoot": "./deps/rp2040/pico_sdk_import/pico_sdk",
+    "tinyusbRoot": "./deps/rp2040/pico_sdk_import/tinyusb",
     "picoLocalDir": "./deps/rp2040/pico_sdk_local"
   },
   "configurations": [
     {
       "name": "Mac",
       "includePath": [
-        "src/modules/km0/common",
-        "src/modules/km0/device_io",
-        "src/modules/km0/keyboard",
+        "src/modules",
         "src/projects/dev/dummy_header_provider_project",
         "${myAvrCompilerBaseDirectory}/avr/include",
         "${picoLocalDir}/include",
         // "${picoLocalDir}/include/boards",
+        "${picoSdkOuterDir}",
         "${picoSdkRoot}/src/rp2040/include",
         "${picoSdkRoot}/src/common/include",
         "${picoSdkRoot}/src/rp2_common/include",
-        "${picoSdkRoot}/lib/tinyusb/src",
-        "${picoSdkRoot}/lib/tinyusb/src/common",
-        "${picoSdkRoot}/lib/tinyusb/hw",
+        "${tinyusbRoot}/src",
+        "${tinyusbRoot}/src/common",
         "${picoSdkRoot}/src/rp2_common/rp2040_usb_device_enumeration/include"
       ],
       "defines": [
