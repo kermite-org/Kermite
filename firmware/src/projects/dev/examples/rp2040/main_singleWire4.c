@@ -1,8 +1,8 @@
-#include "debugUart.h"
-#include "dio.h"
-#include "singleWire4.h"
-#include "system.h"
-#include "utils.h"
+#include "km0/common/utils.h"
+#include "km0/deviceIo/debugUart.h"
+#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/singleWire4.h"
+#include "km0/deviceIo/system.h"
 #include <stdio.h>
 
 //board RPi Pico

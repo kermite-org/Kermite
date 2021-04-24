@@ -1,6 +1,6 @@
-#include "debugUart.h"
-#include "dio.h"
-#include "system.h"
+#include "km0/deviceIo/debugUart.h"
+#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/system.h"
 #include <stdio.h>
 
 //board RPi Pico

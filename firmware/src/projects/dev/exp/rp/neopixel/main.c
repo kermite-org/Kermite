@@ -1,9 +1,9 @@
-#include "boardIo.h"
-#include "dio.h"
 #include "hardware/clocks.h"
 #include "hardware/pio.h"
+#include "km0/deviceIo/boardIo.h"
+#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/system.h"
 #include "neoPixelCore.pio.h"
-#include "system.h"
 
 static void neoPixelCore_initProgram(PIO pio, uint sm, uint offset, uint pin) {
   pio_gpio_init(pio, pin);
