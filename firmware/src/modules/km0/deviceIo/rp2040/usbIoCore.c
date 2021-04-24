@@ -2,7 +2,7 @@
 
 #include "km0/deviceIo/usbIoCore.h"
 #include "config.h"
-#include "tusb.h"
+#include "tinyusb/src/tusb.h"
 
 //--------------------------------------------------------------------
 // Definitions

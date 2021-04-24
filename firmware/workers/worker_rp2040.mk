@@ -23,6 +23,7 @@ IS_RESOURCE_ORIGIN_ONLINE ?= 0
 
 #--------------------
 
+PICO_SDK_OUTER_DIR = deps/rp2040/pico_sdk_import
 PICO_SDK_DIR = deps/rp2040/pico_sdk_import/pico_sdk
 PICO_TOOLS_DIR = deps/rp2040/pico_sdk_import/pico_sdk_tools
 PICO_LOCAL_DIR = deps/rp2040/pico_sdk_local
@@ -140,6 +141,7 @@ INC_PATHS = \
 -I$(PROJECT_CODE_DIR) \
 -I$(PICO_LOCAL_DIR)/include \
 -I$(MODULES_DIR) \
+-I$(PICO_SDK_OUTER_DIR) \
 -I$(PICO_SDK_DIR)/src/common/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/include \
 -I$(PICO_SDK_DIR)/src/rp2040/include \

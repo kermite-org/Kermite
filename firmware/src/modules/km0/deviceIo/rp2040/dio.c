@@ -1,5 +1,5 @@
 #include "km0/deviceIo/dio.h"
-#include "pico/stdlib.h"
+#include "pico_sdk/src/common/include/pico/stdlib.h"
 
 void dio_setOutput(uint8_t pin) {
   gpio_init(pin);

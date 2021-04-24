@@ -1,7 +1,7 @@
 #include "km0/deviceIo/dataMemory.h"
-#include "hardware/flash.h"
-#include "hardware/sync.h"
-#include "pico/stdlib.h"
+#include "pico_sdk/src/common/include/pico/stdlib.h"
+#include "pico_sdk/src/rp2_common/include/hardware/flash.h"
+#include "pico_sdk/src/rp2_common/include/hardware/sync.h"
 #include <string.h>
 
 #define FLASH_TARGET_OFFSET (256 * 1024)

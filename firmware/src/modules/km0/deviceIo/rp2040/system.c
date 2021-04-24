@@ -1,5 +1,5 @@
 #include "km0/deviceIo/system.h"
-#include "pico/stdlib.h"
+#include "pico_sdk/src/common/include/pico/stdlib.h"
 
 void delayMs(uint16_t ms) {
   sleep_ms(ms);

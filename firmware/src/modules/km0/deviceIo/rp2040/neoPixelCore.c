@@ -1,6 +1,6 @@
-#include "hardware/clocks.h"
-#include "hardware/pio.h"
 #include "neoPixelCore.pio.h"
+#include "pico_sdk/src/rp2_common/include/hardware/clocks.h"
+#include "pico_sdk/src/rp2_common/include/hardware/pio.h"
 
 static void neoPixelCore_initProgram(PIO pio, uint sm, uint offset, uint pin) {
   pio_gpio_init(pio, pin);

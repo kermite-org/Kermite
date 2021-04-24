@@ -1,10 +1,10 @@
 
 #include "km0/deviceIo/singleWire4.h"
 #include "config.h"
-#include "hardware/clocks.h"
 #include "km0/deviceIo/dio.h"
-#include "pico/multicore.h"
-#include "pico/stdlib.h"
+#include "pico_sdk/src/common/include/pico/stdlib.h"
+#include "pico_sdk/src/rp2_common/include/hardware/clocks.h"
+#include "pico_sdk/src/rp2_common/include/pico/multicore.h"
 #include "singleWire4.pio.h"
 #include <stdio.h>
 #include <stdlib.h>
