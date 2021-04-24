@@ -346,16 +346,16 @@ export function generateRandomId(n: number): string {
     .join('');
 }
 
-export function converNullToUndefinedRecursive(src: any): any {
+export function convertNullToUndefinedRecursive(src: any): any {
   if (src === null) {
     return undefined;
   }
   if (Array.isArray(src)) {
-    return src.map(converNullToUndefinedRecursive);
+    return src.map(convertNullToUndefinedRecursive);
   } else if (typeof src === 'object') {
     const dst: any = {};
     for (const key in src) {
-      dst[key] = converNullToUndefinedRecursive(src[key]);
+      dst[key] = convertNullToUndefinedRecursive(src[key]);
     }
     return dst;
   } else {

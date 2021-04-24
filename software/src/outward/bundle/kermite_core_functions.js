@@ -327,11 +327,11 @@
   // src/shared/defs/KeyboardDesign.ts
   function createFallbackPersistKeyboardDesign() {
     return {
-      formatRevision: "LA00",
+      formatRevision: "LA01",
       setup: {
         placementUnit: "mm",
         placementAnchor: "center",
-        keySizeUnit: "KP",
+        keySizeUnit: "KP 19",
         keyIdMode: "auto"
       },
       keyEntities: [],
@@ -341,6 +341,7 @@
   }
 
   // src/shared/defs/ProfileData.ts
+  var profileFormatRevisionLatest = "PRF04";
   var fallbackProfileData = {
     projectId: "",
     keyboardDesign: createFallbackPersistKeyboardDesign(),
@@ -484,9 +485,6 @@
     }
     return res;
   }
-  function duplicateObjectByJsonStringifyParse(obj) {
-    return JSON.parse(JSON.stringify(obj));
-  }
   function createDictionaryFromKeyValues(arr) {
     const obj = {};
     arr.forEach((el) => {
@@ -534,24 +532,24 @@
     }
     const [p0, p1, p2] = unitSpec.split(" ");
     if (p0 === "KP") {
-      const x = parseFloat(p1);
-      const y = p2 !== void 0 ? parseFloat(p2) : x;
+      const x = p1 && parseFloat(p1) || 19;
+      const y = p2 && parseFloat(p2) || x;
       return {mode: "KP", x, y};
     }
     throw new Error("invalid unit spec");
   }
-  function getStdKeySize(shapeSpec, coordUnit, sizeUnit) {
+  function getStdKeySize(shapeSpec, sizeUnit) {
     if (shapeSpec.startsWith("std")) {
       const [, p1, p2] = shapeSpec.split(" ");
       const pw = p1 && parseFloat(p1) || void 0;
       const ph = p2 && parseFloat(p2) || void 0;
-      if (sizeUnit === "mm") {
+      if (sizeUnit.mode === "mm") {
         const w = pw || 10;
         const h = ph || pw || 10;
         return [w, h];
-      } else if (sizeUnit === "KP") {
-        const baseW = coordUnit.mode === "KP" && coordUnit.x || 19;
-        const baseH = coordUnit.mode === "KP" && coordUnit.y || 19;
+      } else if (sizeUnit.mode === "KP") {
+        const baseW = sizeUnit.x || 19;
+        const baseH = sizeUnit.y || sizeUnit.x || 19;
         const uw = pw || 1;
         const uh = ph || 1;
         return [uw * baseW - 1, uh * baseH - 1];
@@ -559,13 +557,13 @@
     }
     return [18, 18];
   }
-  function getKeySize(shapeSpec, coordUnit, keySizeUnit) {
+  function getKeySize(shapeSpec, sizeUnit) {
     if (shapeSpec === "ext circle") {
       return [18, 18];
     } else if (shapeSpec === "ext isoEnter") {
       return [27, 37];
     }
-    return getStdKeySize(shapeSpec, coordUnit, keySizeUnit);
+    return getStdKeySize(shapeSpec, sizeUnit);
   }
 
   // src/shared/modules/DisplayKeyboardDesignLoader.ts
@@ -600,7 +598,7 @@
       [11.375, 18.5],
       [11.375, -18.5]
     ];
-    function getKeyShape(shapeSpec, coordUnit, keySizeUnit) {
+    function getKeyShape(shapeSpec, sizeUnit) {
       if (shapeSpec === "ext circle") {
         return {type: "circle", radius: 9};
       } else if (shapeSpec === "ext isoEnter") {
@@ -609,14 +607,14 @@
           points: isoEnterPathPoints.map(([x, y]) => ({x, y}))
         };
       }
-      const [w, h] = getStdKeySize(shapeSpec, coordUnit, keySizeUnit);
+      const [w, h] = getStdKeySize(shapeSpec, sizeUnit);
       return {
         type: "rect",
         width: w,
         height: h
       };
     }
-    function transformKeyEntity(ke, mke, coordUnit, design) {
+    function transformKeyEntity(ke, mke, coordUnit, sizeUnit, design) {
       const isMirror = !!mke;
       const mi = isMirror ? -1 : 1;
       const keyX = coordUnit.mode === "KP" ? ke.x * coordUnit.x : ke.x;
@@ -626,8 +624,8 @@
       const keyGroupIndex = convertUndefinedToDefaultValue(ke.groupIndex, -1);
       const {groupX, groupY, groupAngle} = getGroupTransAmount(design.transformationGroups[keyGroupIndex]);
       const groupRot = degToRad(groupAngle);
-      const {keySizeUnit, placementAnchor} = design.setup;
-      const [w, h] = getKeySize(keyShape, coordUnit, keySizeUnit);
+      const {placementAnchor} = design.setup;
+      const [w, h] = getKeySize(keyShape, sizeUnit);
       const p = {x: 0, y: 0};
       if (placementAnchor === "topLeft") {
         translateCoord(p, w / 2 + 0.5, h / 2 + 0.5);
@@ -642,7 +640,7 @@
         angle: (keyAngle + groupAngle) * mi,
         keyIndex: convertUndefinedToDefaultValue(mke ? mke.keyIndex : ke.keyIndex, -1),
         shapeSpec: keyShape,
-        shape: getKeyShape(keyShape, coordUnit, keySizeUnit)
+        shape: getKeyShape(keyShape, sizeUnit)
       };
     }
     function getBoundingBox(keyEntities, outlineShapes) {
@@ -733,6 +731,7 @@
     }
     function loadDisplayKeyboardDesign(design) {
       const coordUnit = getCoordUnitFromUnitSpec(design.setup.placementUnit);
+      const sizeUnit = getCoordUnitFromUnitSpec(design.setup.keySizeUnit);
       const keyEntities = flattenArray(design.keyEntities.map((ke) => {
         if ("mirrorOf" in ke) {
           return [];
@@ -742,11 +741,13 @@
           if (group?.mirror) {
             const mke = design.keyEntities.find((k) => "mirrorOf" in k && k.mirrorOf === ke.keyId);
             return [
-              transformKeyEntity(ke, void 0, coordUnit, design),
-              transformKeyEntity(ke, mke, coordUnit, design)
+              transformKeyEntity(ke, void 0, coordUnit, sizeUnit, design),
+              transformKeyEntity(ke, mke, coordUnit, sizeUnit, design)
             ];
           } else {
-            return [transformKeyEntity(ke, void 0, coordUnit, design)];
+            return [
+              transformKeyEntity(ke, void 0, coordUnit, sizeUnit, design)
+            ];
           }
         }
       }));
@@ -804,7 +805,7 @@
     ProfileDataConverter2.convertAssingsDictionaryToArray = convertAssingsDictionaryToArray;
     function convertProfileDataToPersist(source) {
       return {
-        formatRevision: "PRF03",
+        formatRevision: profileFormatRevisionLatest,
         projectId: source.projectId,
         keyboardDesign: source.keyboardDesign,
         settings: source.settings,
@@ -829,12 +830,18 @@
   var LayoutDataMigrator;
   (function(LayoutDataMigrator2) {
     function patchOldFormatLayoutData(layout) {
-      const _layout = layout;
       if (!layout.formatRevision) {
-        layout.formatRevision = "LA00";
+        throw new Error("layout file format too old");
       }
-      if (!layout.transformationGroups && _layout.transGroups) {
-        layout.transformationGroups = _layout.transGroups;
+      if (layout.formatRevision === "LA00") {
+        layout.formatRevision = "LA01";
+        if (layout.setup.keySizeUnit === "KP") {
+          if (layout.setup.placementUnit.startsWith("KP")) {
+            layout.setup.keySizeUnit = layout.setup.placementUnit;
+          } else {
+            layout.setup.keySizeUnit = "KP 19";
+          }
+        }
       }
     }
     LayoutDataMigrator2.patchOldFormatLayoutData = patchOldFormatLayoutData;
@@ -843,137 +850,31 @@
   // src/shell/loaders/ProfileDataMigrator.ts
   var ProfileDataMigrator;
   (function(ProfileDataMigrator2) {
-    function patchOldScheme(profileData) {
-      for (const la of profileData.layers) {
-        if (la.defaultScheme === void 0) {
-          la.defaultScheme = "block";
-        }
-      }
-      if (!profileData.assignType) {
-        profileData.assignType = "single";
-      }
-      if (!profileData.settings) {
-        if (profileData.assignType === "single") {
-          profileData.settings = {
-            useShiftCancel: false
-          };
-        }
-        if (profileData.assignType === "dual") {
-          profileData.settings = {
-            type: "dual",
-            useShiftCancel: false,
-            primaryDefaultTrigger: "down",
-            tapHoldThresholdMs: 200,
-            useInterruptHold: true
-          };
-        }
-      }
-      if (profileData.settings.useShiftCancel === void 0) {
-        profileData.settings.useShiftCancel = false;
-      }
-      profileData.layers.forEach((la) => {
-        if (la.exclusionGroup === void 0) {
-          la.exclusionGroup = 0;
-        }
-        if (la.initialActive === void 0) {
-          la.initialActive = false;
-        }
-      });
-      Object.values(profileData.assigns).forEach((assign) => {
-        if (assign?.type === "single") {
-          if (assign.op?.type === "layerCall") {
-            if (assign.op.invocationMode === "exclusive") {
-              assign.op.invocationMode = "turnOn";
-            }
-          }
-        }
-      });
-    }
-    const fallbackDisplayArea = {
-      centerX: 0,
-      centerY: 50,
-      width: 300,
-      height: 120
-    };
-    function makeOutlineShapesFromDisplayArea(displayArea) {
-      const cx = displayArea.centerX;
-      const cy = displayArea.centerY;
-      const hw = displayArea.width / 2;
-      const hh = displayArea.height / 2;
-      const _points = [
-        [cx + hw, cy - hh],
-        [cx + hw, cy + hh],
-        [cx - hw, cy + hh],
-        [cx - hw, cy - hh]
-      ];
-      return [
-        {
-          points: _points.map(([x, y]) => ({x, y}))
-        }
-      ];
-    }
-    function makeKeyboardDesignFromKeyboardShapePRF02(shape) {
-      return {
-        formatRevision: "LA00",
-        setup: {
-          placementUnit: "mm",
-          placementAnchor: "center",
-          keySizeUnit: "KP",
-          keyIdMode: "auto"
-        },
-        keyEntities: shape.keyUnits.map((ku) => {
-          return {
-            keyId: ku.id,
-            x: ku.x,
-            y: ku.y,
-            angle: ku.r || 0,
-            shape: "std 1",
-            keyIndex: ku.keyIndex
-          };
-        }),
-        outlineShapes: makeOutlineShapesFromDisplayArea(shape.displayArea || fallbackDisplayArea),
-        transformationGroups: []
-      };
-    }
-    function convertProfileFromPRF02(_profile) {
-      const profile = duplicateObjectByJsonStringifyParse(_profile);
-      patchOldScheme(profile);
-      const {keyboardShape, settings, layers, assigns} = profile;
-      return {
-        formatRevision: "PRF03",
-        projectId: "",
-        settings: "type" in settings && settings.type === "dual" ? {...settings, assignType: "dual"} : {...settings, assignType: "single"},
-        layers,
-        keyboardDesign: makeKeyboardDesignFromKeyboardShapePRF02(keyboardShape),
-        assigns: ProfileDataConverter.convertAssingsDictionaryToArray(assigns)
-      };
-    }
     function fixProfileDataPRF03(profile) {
+      console.log(`PRF03 --> PRF04`);
+      profile.formatRevision = "PRF04";
       const _profile = profile;
       if (!_profile.settings.assignType && _profile.assignType) {
         _profile.settings.assignType = _profile.assignType;
-      }
-      if (!_profile.formatRevision && _profile.revision) {
-        _profile.formatRevision = _profile.revision;
       }
       LayoutDataMigrator.patchOldFormatLayoutData(profile.keyboardDesign);
       if (!Array.isArray(profile.assigns)) {
         profile.assigns = ProfileDataConverter.convertAssingsDictionaryToArray(profile.assigns);
       }
     }
-    function fixProfileData(profileData) {
-      const _profileData = profileData;
-      if (_profileData.revision === "PRF02") {
-        return convertProfileFromPRF02(profileData);
-      } else if (_profileData.revision === "PRF03" || _profileData.formatRevision === "PRF03") {
-        fixProfileDataPRF03(profileData);
+    function fixProfileData(profile) {
+      if (!profile.formatRevision) {
+        throw new Error("profile file format too old");
       }
-      return profileData;
+      if (profile.formatRevision === "PRF03") {
+        fixProfileDataPRF03(profile);
+      }
+      return profile;
     }
     ProfileDataMigrator2.fixProfileData = fixProfileData;
   })(ProfileDataMigrator || (ProfileDataMigrator = {}));
 
-  // src/ui-common-svg/KeyUnitCardModels/KeyUnitCardViewModelCommon.ts
+  // src/ui/common-svg/keyUnitCardModels/KeyUnitCardViewModelCommon.ts
   function getAssignOperationText(op, layers) {
     if (op?.type === "keyInput") {
       const keyText = VirtualKeyTexts[op.virtualKey] || "";
@@ -1061,7 +962,7 @@
     return assign;
   }
 
-  // src/__foreign_app_support_modules/kermite_core_functions.ts
+  // src/outward/kermite_core_functions.ts
   function createKeyUnitTextDisplayModel(ke, targetLayerId, layers, assigns) {
     const keyId = ke.keyId;
     const assign = getAssignForKeyUnitWithLayerFallback(keyId, targetLayerId, layers, assigns);
