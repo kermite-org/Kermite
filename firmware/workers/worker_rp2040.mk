@@ -140,8 +140,8 @@ INC_PATHS = \
 -I$(PROJECT_CODE_DIR) \
 -I$(PICO_LOCAL_DIR)/include \
 -I$(MODULES_DIR)/km0/common \
--I$(MODULES_DIR)/km0/device_io \
--I$(MODULES_DIR)/km0/device_io/rp2040 \
+-I$(MODULES_DIR)/km0/deviceIo \
+-I$(MODULES_DIR)/km0/deviceIo/rp2040 \
 -I$(MODULES_DIR)/km0/keyboard \
 -I$(PICO_SDK_DIR)/src/common/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/include \

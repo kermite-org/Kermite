@@ -25,7 +25,7 @@ MAP = $(OUT_DIR)/$(CORE_NAME).map
 
 INC_PATHS =
 INC_PATHS += -Isrc/modules/km0/common
-INC_PATHS += -Isrc/modules/km0/device_io
+INC_PATHS += -Isrc/modules/km0/deviceIo
 INC_PATHS += -Isrc/modules/km0/keyboard
 INC_PATHS += -I$(PROJECT_CODE_DIR)
 

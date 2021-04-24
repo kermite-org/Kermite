@@ -1,14 +1,14 @@
 WORKER = worker_rp2040
 
 MODULE_SRCS += km0/common/utils.c
-MODULE_SRCS += km0/device_io/rp2040/system.c
-MODULE_SRCS += km0/device_io/rp2040/dio.c
-MODULE_SRCS += km0/device_io/rp2040/usbIoCore.c
-MODULE_SRCS += km0/device_io/rp2040/dataMemory.c
-MODULE_SRCS += km0/device_io/rp2040/debugUart.c
-MODULE_SRCS += km0/device_io/rp2040/boardIo_rgbLed.c
-MODULE_SRCS += km0/device_io/rp2040/neoPixelCore.c
-MODULE_PIOASM_SRCS += km0/device_io/rp2040/neoPixelCore.pio
+MODULE_SRCS += km0/deviceIo/rp2040/system.c
+MODULE_SRCS += km0/deviceIo/rp2040/dio.c
+MODULE_SRCS += km0/deviceIo/rp2040/usbIoCore.c
+MODULE_SRCS += km0/deviceIo/rp2040/dataMemory.c
+MODULE_SRCS += km0/deviceIo/rp2040/debugUart.c
+MODULE_SRCS += km0/deviceIo/rp2040/boardIo_rgbLed.c
+MODULE_SRCS += km0/deviceIo/rp2040/neoPixelCore.c
+MODULE_PIOASM_SRCS += km0/deviceIo/rp2040/neoPixelCore.pio
 MODULE_SRCS += km0/keyboard/keyMatrixScanner.c
 MODULE_SRCS += km0/keyboard/configuratorServant.c
 MODULE_SRCS += km0/keyboard/configValidator.c
