@@ -139,7 +139,7 @@ static void onPhysicalKeyStateChanged(uint8_t keySlotIndex, bool isDown) {
   if (keySlotIndex >= NumKeySlots) {
     return;
   }
-  uint8_t keyIndex = system_readRomByte(keySlotIndexToKeyIndexMap + keySlotIndex);
+  uint8_t keyIndex = keySlotIndexToKeyIndexMap[keySlotIndex];
   if (keyIndex == 0xFF) {
     return;
   }

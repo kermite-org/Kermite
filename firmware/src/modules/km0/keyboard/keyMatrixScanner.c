@@ -23,12 +23,12 @@ void keyMatrixScanner_initialize(
   columnPins = _columnPins;
 
   for (uint8_t i = 0; i < numRows; i++) {
-    uint8_t rowPin = system_readRomByte(rowPins + i);
+    uint8_t rowPin = rowPins[i];
     dio_setOutput(rowPin);
     dio_setHigh(rowPin);
   }
   for (uint8_t i = 0; i < numColumns; i++) {
-    uint8_t columnPin = system_readRomByte(columnPins + i);
+    uint8_t columnPin = columnPins[i];
     dio_setInputPullup(columnPin);
   }
 
@@ -43,13 +43,13 @@ void keyMatrixScanner_update() {
 
   uint8_t keySlotIndex = 0;
   for (uint8_t i = 0; i < numRows; i++) {
-    uint8_t rowPin = system_readRomByte(rowPins + i);
+    uint8_t rowPin = rowPins[i];
     dio_setLow(rowPin);
     delayUs(1); //RP2040の場合僅かに待たないとキーの状態を正しく読み出せない
     for (uint8_t j = 0; j < numColumns; j++) {
       uint8_t byteIndex = keySlotIndex >> 3;
       uint8_t bitIndex = keySlotIndex & 7;
-      uint8_t columnPin = system_readRomByte(columnPins + j);
+      uint8_t columnPin = columnPins[j];
       bool isDown = dio_read(columnPin) == 0;
       bit_spec(keyStateBitFlags[byteIndex], bitIndex, isDown);
       keySlotIndex++;
