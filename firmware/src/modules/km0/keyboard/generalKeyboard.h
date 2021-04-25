@@ -7,7 +7,6 @@ enum {
   OptionSlot_EmitRealtimeEvents = 1,
   OptionSlot_AffectKeyHoldStateToLED = 2,
   OptionSlot_UseHeartBeatLED = 3,
-  OptionSlot_MasterSide = 4
 };
 
 void generalKeyboard_useIndicatorLeds(int8_t pin1, uint8_t pin2, bool invert);
