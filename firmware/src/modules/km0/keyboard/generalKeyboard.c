@@ -45,6 +45,8 @@ static bool isSideBrainModeEnabled = false;
 
 static bool debugUartConfigured = false;
 
+static KeyboardCallbackSet *callbacks = NULL;
+
 //---------------------------------------------
 //動的に変更可能なオプション
 static bool optionEmitKeyStroke = true;
@@ -57,9 +59,15 @@ static uint8_t optionDynamicFlags = 0xFF;
 static bool optionsInitialConfigShutup = false;
 
 static void customParameterValueHandler(uint8_t slotIndex, uint8_t value) {
+  if (callbacks && callbacks->customParameterHandlerOverride) {
+    callbacks->customParameterHandlerOverride(slotIndex, value);
+    return;
+  }
+
   if (optionsInitialConfigShutup && bit_read(optionDynamicFlags, slotIndex) == 0) {
     return;
   }
+
   if (slotIndex == OptionSlot_EmitKeyStroke) {
     optionEmitKeyStroke = !!value;
   } else if (slotIndex == OptionSlot_EmitRealtimeEvents) {
@@ -68,6 +76,10 @@ static void customParameterValueHandler(uint8_t slotIndex, uint8_t value) {
     optionAffectKeyHoldStateToLED = !!value;
   } else if (slotIndex == OptionSlot_UseHeartBeatLED) {
     optionUseHeartbeatLED = !!value;
+  }
+
+  if (callbacks && callbacks->customParameterHandlerChained) {
+    callbacks->customParameterHandlerChained(slotIndex, value);
   }
 }
 
@@ -95,6 +107,9 @@ static void processKeyboardCoreLogicOutput() {
   if (layerFlags != localLayerFlags) {
     if (optionEmitRealtimeEvents) {
       configuratorServant_emitRelatimeLayerEvent(layerFlags);
+    }
+    if (callbacks && callbacks->layerStateChanged) {
+      callbacks->layerStateChanged(layerFlags);
     }
     localLayerFlags = layerFlags;
     changed = true;
@@ -136,6 +151,10 @@ static void onPhysicalKeyStateChanged(uint8_t keySlotIndex, bool isDown) {
   //ユーティリティにキー状態変化イベントを送信
   if (optionEmitRealtimeEvents) {
     configuratorServant_emitRealtimeKeyEvent(keyIndex, isDown);
+  }
+
+  if (callbacks && callbacks->keyStateChanged) {
+    callbacks->keyStateChanged(keyIndex, isDown);
   }
 
   if (!isSideBrainModeEnabled) {
@@ -274,6 +293,10 @@ void generalKeyboard_useDirectWiredKeyScanner(
     const int8_t *_keySlotIndexToKeyIndexMap) {
   keyScanner_initializeDirectWired(numKeys, pins);
   keySlotIndexToKeyIndexMap = (uint8_t *)_keySlotIndexToKeyIndexMap;
+}
+
+void generalKeyboard_setCallbacks(KeyboardCallbackSet *_callbacks) {
+  callbacks = _callbacks;
 }
 
 void generalKeyboard_start() {
