@@ -408,7 +408,7 @@ void splitKeyboard_useOptionDynamic(uint8_t slot) {
   setCustomParameterDynamicFlag(slot, true);
 }
 
-void splitKeyboard_useBasicMatrixKeyScanner(
+void splitKeyboard_useMatrixKeyScanner(
     uint8_t numRows, uint8_t numColumns,
     const uint8_t *rowPins, const uint8_t *columnPins,
     const int8_t *_keySlotIndexToKeyIndexMap) {
