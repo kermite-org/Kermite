@@ -9,7 +9,7 @@
 static const uint8_t keyInputPins[NumKeys] = { GP12, GP13, GP14, GP15 };
 static const int8_t keyIndexTable[NumKeys] = { 0, 1, 2, 3 };
 
-void customParameterHandlerChained(uint8_t slotIndex, uint8_t value) {
+void customParameterHandlerExtended(uint8_t slotIndex, uint8_t value) {
   if (slotIndex == 4) {
     uint32_t color = value ? 0x10FF00FF : 0;
     for (int i = 0; i < 4; i++) {
@@ -19,7 +19,7 @@ void customParameterHandlerChained(uint8_t slotIndex, uint8_t value) {
 }
 
 KeyboardCallbackSet callbacks = {
-  .customParameterHandlerChained = customParameterHandlerChained
+  .customParameterHandlerExtended = customParameterHandlerExtended
 };
 
 int main() {
