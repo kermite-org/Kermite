@@ -7,16 +7,13 @@ static uint8_t numRows;
 static uint8_t numColumns;
 static const uint8_t *rowPins;
 static const uint8_t *columnPins;
-static uint8_t *keyStateBitFlags;
 static bool initialized = false;
 
 void keyMatrixScanner_initialize(
     uint8_t _numRows,
     uint8_t _numColumns,
     const uint8_t *_rowPins,
-    const uint8_t *_columnPins,
-    uint8_t *_keyStateBitFlags) {
-
+    const uint8_t *_columnPins) {
   numRows = _numRows;
   numColumns = _numColumns;
   rowPins = _rowPins;
@@ -31,12 +28,10 @@ void keyMatrixScanner_initialize(
     uint8_t columnPin = columnPins[i];
     dio_setInputPullup(columnPin);
   }
-
-  keyStateBitFlags = _keyStateBitFlags;
   initialized = true;
 }
 
-void keyMatrixScanner_update() {
+void keyMatrixScanner_update(uint8_t *keyStateBitFlags) {
   if (!initialized) {
     return;
   }

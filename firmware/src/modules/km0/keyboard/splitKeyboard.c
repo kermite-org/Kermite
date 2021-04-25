@@ -34,10 +34,6 @@
 //---------------------------------------------
 //variables
 
-static uint8_t numRows = 0;
-static uint8_t numColumns = 0;
-static uint8_t *rowPins;
-static uint8_t *columnPins;
 static uint8_t *keySlotIndexToKeyIndexMap;
 
 //左右間通信用バッファ
@@ -237,9 +233,6 @@ static void processKeyStatesUpdate() {
 }
 
 static void runAsMaster() {
-  keyMatrixScanner_initialize(
-      numRows, numColumns, rowPins, columnPins, nextKeyStateFlags);
-
   resetKeyboardCoreLogic();
 
   configuratorServant_initialize(
@@ -249,7 +242,7 @@ static void runAsMaster() {
   while (1) {
     cnt++;
     if (cnt % 4 == 0) {
-      keyMatrixScanner_update();
+      keyMatrixScanner_update(nextKeyStateFlags);
       processKeyStatesUpdate();
       keyboardCoreLogic_processTicker(5);
       processKeyboardCoreLogicOutput();
@@ -304,15 +297,13 @@ static bool checkIfSomeKeyPressed() {
 }
 
 static void runAsSlave() {
-  keyMatrixScanner_initialize(
-      numRows, numColumns, rowPins, columnPins, nextKeyStateFlags);
   singleWire_setInterruptedReceiver(onRecevierInterruption);
 
   uint16_t cnt = 0;
   while (1) {
     cnt++;
     if (cnt % 4 == 0) {
-      keyMatrixScanner_update();
+      keyMatrixScanner_update(nextKeyStateFlags);
       pressedKeyCount = checkIfSomeKeyPressed();
       if (optionAffectKeyHoldStateToLED) {
         boardIo_writeLed2(pressedKeyCount > 0);
@@ -418,13 +409,11 @@ void splitKeyboard_useOptionDynamic(uint8_t slot) {
 }
 
 void splitKeyboard_setup(
-    uint8_t _numRows, uint8_t _numColumns,
-    const uint8_t *_rowPins, const uint8_t *_columnPins,
+    uint8_t numRows, uint8_t numColumns,
+    const uint8_t *rowPins, const uint8_t *columnPins,
     const int8_t *_keySlotIndexToKeyIndexMap) {
-  numRows = _numRows;
-  numColumns = _numColumns;
-  rowPins = (uint8_t *)_rowPins;
-  columnPins = (uint8_t *)_columnPins;
+  keyMatrixScanner_initialize(
+      numRows, numColumns, rowPins, columnPins);
   keySlotIndexToKeyIndexMap = (uint8_t *)_keySlotIndexToKeyIndexMap;
 }
 

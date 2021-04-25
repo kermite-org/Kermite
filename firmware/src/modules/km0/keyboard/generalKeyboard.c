@@ -29,10 +29,6 @@
 //---------------------------------------------
 //variables
 
-static uint8_t numRows = 0;
-static uint8_t numColumns = 0;
-static uint8_t *rowPins;
-static uint8_t *columnPins;
 static uint8_t *keySlotIndexToKeyIndexMap;
 
 //キー状態
@@ -208,8 +204,6 @@ static void keyboardEntry() {
   configuratorServant_readDeviceInstanceCode(serialNumberTextBuf + 16);
   uibioCore_internal_setSerialNumberText(serialNumberTextBuf, 24);
   usbIoCore_initialize();
-  keyMatrixScanner_initialize(
-      numRows, numColumns, rowPins, columnPins, nextKeyStateFlags);
   resetKeyboardCoreLogic();
   optionsInitialConfigShutup = true;
   configuratorServant_initialize(
@@ -221,7 +215,7 @@ static void keyboardEntry() {
   while (1) {
     cnt++;
     if (cnt % 4 == 0) {
-      keyMatrixScanner_update();
+      keyMatrixScanner_update(nextKeyStateFlags);
       processKeyStatesUpdate();
       keyboardCoreLogic_processTicker(5);
       processKeyboardCoreLogicOutput();
@@ -268,13 +262,11 @@ void generalKeyboard_useOptionDynamic(uint8_t slot) {
 }
 
 void generalKeyboard_setup(
-    uint8_t _numRows, uint8_t _numColumns,
-    const uint8_t *_rowPins, const uint8_t *_columnPins,
+    uint8_t numRows, uint8_t numColumns,
+    const uint8_t *rowPins, const uint8_t *columnPins,
     const int8_t *_keySlotIndexToKeyIndexMap) {
-  numRows = _numRows;
-  numColumns = _numColumns;
-  rowPins = (uint8_t *)_rowPins;
-  columnPins = (uint8_t *)_columnPins;
+  keyMatrixScanner_initialize(
+      numRows, numColumns, rowPins, columnPins);
   keySlotIndexToKeyIndexMap = (uint8_t *)_keySlotIndexToKeyIndexMap;
 }
 
