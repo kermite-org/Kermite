@@ -1,4 +1,4 @@
-WORKER = worker_rp2040
+TARGET_MCU = rp2040
 
 MODULE_SRCS += km0/deviceIo/rp2040/system.c
 MODULE_SRCS += km0/deviceIo/rp2040/dio.c
