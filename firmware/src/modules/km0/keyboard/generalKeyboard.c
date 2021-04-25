@@ -2,7 +2,7 @@
 #include "config.h"
 #include "configValidator.h"
 #include "configuratorServant.h"
-#include "keyMatrixScanner.h"
+#include "keyScanner.h"
 #include "keyboardCoreLogic.h"
 #include "km0/common/bitOperations.h"
 #include "km0/common/utils.h"
@@ -215,7 +215,7 @@ static void keyboardEntry() {
   while (1) {
     cnt++;
     if (cnt % 4 == 0) {
-      keyMatrixScanner_update(nextKeyStateFlags);
+      keyScanner_update(nextKeyStateFlags);
       processKeyStatesUpdate();
       keyboardCoreLogic_processTicker(5);
       processKeyboardCoreLogicOutput();
@@ -261,12 +261,18 @@ void generalKeyboard_useOptionDynamic(uint8_t slot) {
   setCustomParameterDynamicFlag(slot, true);
 }
 
-void generalKeyboard_setup(
+void generalKeyboard_useMatrixKeyScanner(
     uint8_t numRows, uint8_t numColumns,
     const uint8_t *rowPins, const uint8_t *columnPins,
     const int8_t *_keySlotIndexToKeyIndexMap) {
-  keyMatrixScanner_initialize(
-      numRows, numColumns, rowPins, columnPins);
+  keyScanner_initializeBasicMatrix(numRows, numColumns, rowPins, columnPins);
+  keySlotIndexToKeyIndexMap = (uint8_t *)_keySlotIndexToKeyIndexMap;
+}
+
+void generalKeyboard_useDirectWiredKeyScanner(
+    uint8_t numKeys, const uint8_t *pins,
+    const int8_t *_keySlotIndexToKeyIndexMap) {
+  keyScanner_initializeDirectWired(numKeys, pins);
   keySlotIndexToKeyIndexMap = (uint8_t *)_keySlotIndexToKeyIndexMap;
 }
 

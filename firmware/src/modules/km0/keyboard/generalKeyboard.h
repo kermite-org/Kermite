@@ -16,11 +16,16 @@ void generalKeyboard_useDebugUart(uint32_t baud);
 void generalKeyboard_useOptionFixed(uint8_t slot, uint8_t value);
 void generalKeyboard_useOptionDynamic(uint8_t slot);
 
-void generalKeyboard_setup(
+void generalKeyboard_useMatrixKeyScanner(
     uint8_t numRows,
     uint8_t numColumns,
     const uint8_t *rowPins,
     const uint8_t *columnPins,
+    const int8_t *keySlotIndexToKeyIndexMap);
+
+void generalKeyboard_useDirectWiredKeyScanner(
+    uint8_t numKeys,
+    const uint8_t *pins,
     const int8_t *keySlotIndexToKeyIndexMap);
 
 void generalKeyboard_start();

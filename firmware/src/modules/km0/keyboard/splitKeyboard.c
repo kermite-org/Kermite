@@ -2,7 +2,7 @@
 #include "config.h"
 #include "configValidator.h"
 #include "configuratorServant.h"
-#include "keyMatrixScanner.h"
+#include "keyScanner.h"
 #include "keyboardCoreLogic.h"
 #include "km0/common/bitOperations.h"
 #include "km0/common/utils.h"
@@ -242,7 +242,7 @@ static void runAsMaster() {
   while (1) {
     cnt++;
     if (cnt % 4 == 0) {
-      keyMatrixScanner_update(nextKeyStateFlags);
+      keyScanner_update(nextKeyStateFlags);
       processKeyStatesUpdate();
       keyboardCoreLogic_processTicker(5);
       processKeyboardCoreLogicOutput();
@@ -303,7 +303,7 @@ static void runAsSlave() {
   while (1) {
     cnt++;
     if (cnt % 4 == 0) {
-      keyMatrixScanner_update(nextKeyStateFlags);
+      keyScanner_update(nextKeyStateFlags);
       pressedKeyCount = checkIfSomeKeyPressed();
       if (optionAffectKeyHoldStateToLED) {
         boardIo_writeLed2(pressedKeyCount > 0);
@@ -408,11 +408,11 @@ void splitKeyboard_useOptionDynamic(uint8_t slot) {
   setCustomParameterDynamicFlag(slot, true);
 }
 
-void splitKeyboard_setup(
+void splitKeyboard_useMatrixKeyScanner(
     uint8_t numRows, uint8_t numColumns,
     const uint8_t *rowPins, const uint8_t *columnPins,
     const int8_t *_keySlotIndexToKeyIndexMap) {
-  keyMatrixScanner_initialize(
+  keyScanner_initializeBasicMatrix(
       numRows, numColumns, rowPins, columnPins);
   keySlotIndexToKeyIndexMap = (uint8_t *)_keySlotIndexToKeyIndexMap;
 }

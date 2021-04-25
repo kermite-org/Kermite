@@ -16,7 +16,7 @@ void splitKeyboard_useDebugUart(uint32_t baud);
 void splitKeyboard_useOptionFixed(uint8_t slot, uint8_t value);
 void splitKeyboard_useOptionDynamic(uint8_t slot);
 
-void splitKeyboard_setup(
+void splitKeyboard_useMatrixKeyScanner(
     uint8_t numRows,
     uint8_t numColumns,
     const uint8_t *rowPins,
