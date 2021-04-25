@@ -1,0 +1,29 @@
+{
+  "projectId": "LN9M6TPO",
+  "keyboardName": "flash4",
+  "customParameterConfigurations": [
+    {
+      "targetVariationNames": ["all"],
+      "customParameters": [
+        {
+          "type": "toggle",
+          "slotIndex": 2,
+          "label": "Key Hold LED Output",
+          "defaultValue": 1
+        },
+        {
+          "type": "toggle",
+          "slotIndex": 3,
+          "label": "Heartbeat LED Output",
+          "defaultValue": 1
+        },
+        {
+          "type": "toggle",
+          "slotIndex": 4,
+          "label": "Enable Lighting",
+          "defaultValue": 0
+        }
+      ]
+    }
+  ]
+}
