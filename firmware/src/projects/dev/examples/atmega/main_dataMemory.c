@@ -2,7 +2,6 @@
 #include "km0/deviceIo/debugUart.h"
 #include "km0/deviceIo/dio.h"
 #include "km0/deviceIo/system.h"
-#include <avr/io.h>
 #include <stdio.h>
 
 //board ProMicro
@@ -54,7 +53,7 @@ void eepromDev() {
 }
 
 int main() {
-  USBCON = 0;
+  system_initializeUserProgram();
   eepromDev();
   return 0;
 }

@@ -1,6 +1,5 @@
 #include "km0/deviceIo/dio.h"
 #include "km0/keyboard/splitKeyboard.h"
-#include <avr/pgmspace.h>
 
 //---------------------------------------------
 
