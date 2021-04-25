@@ -54,7 +54,7 @@ static bool optionEmitRealtimeEvents = true;
 static bool optionAffectKeyHoldStateToLed = true;
 static bool optionUseHeartbeatLed = true;
 
-static uint8_t optionDynamicFlags = 0xFF;
+static uint16_t optionDynamicFlags = 0xFFFF;
 
 static bool optionsInitialConfigShutup = false;
 
