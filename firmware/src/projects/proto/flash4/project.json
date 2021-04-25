@@ -6,22 +6,36 @@
       "targetVariationNames": ["all"],
       "customParameters": [
         {
-          "type": "toggle",
           "slotIndex": 2,
+          "type": "toggle",
           "label": "Key Hold LED Output",
           "defaultValue": 1
         },
         {
-          "type": "toggle",
           "slotIndex": 3,
+          "type": "toggle",
           "label": "Heartbeat LED Output",
           "defaultValue": 1
         },
         {
-          "type": "toggle",
           "slotIndex": 4,
-          "label": "Enable Lighting",
+          "type": "toggle",
+          "label": "Enable Glow",
           "defaultValue": 0
+        },
+        {
+          "slotIndex": 5,
+          "type": "linear",
+          "label": "Glow Color",
+          "defaultValue": 0,
+          "maxValue": 12
+        },
+        {
+          "slotIndex": 6,
+          "type": "linear",
+          "label": "Glow Brightness",
+          "defaultValue": 10,
+          "maxValue": 255
         }
       ]
     }
