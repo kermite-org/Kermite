@@ -288,10 +288,7 @@ void generalKeyboard_useMatrixKeyScanner(
   keySlotIndexToKeyIndexMap = (uint8_t *)_keySlotIndexToKeyIndexMap;
 }
 
-void generalKeyboard_useDirectWiredKeyScanner(
-    uint8_t numKeys, const uint8_t *pins,
-    const int8_t *_keySlotIndexToKeyIndexMap) {
-  keyScanner_initializeDirectWired(numKeys, pins);
+void generalKeyboard_setKeyIndexTable(const int8_t *_keySlotIndexToKeyIndexMap) {
   keySlotIndexToKeyIndexMap = (uint8_t *)_keySlotIndexToKeyIndexMap;
 }
 

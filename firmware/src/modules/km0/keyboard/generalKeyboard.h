@@ -30,10 +30,7 @@ void generalKeyboard_useMatrixKeyScanner(
     const uint8_t *columnPins,
     const int8_t *keySlotIndexToKeyIndexMap);
 
-void generalKeyboard_useDirectWiredKeyScanner(
-    uint8_t numKeys,
-    const uint8_t *pins,
-    const int8_t *keySlotIndexToKeyIndexMap);
+void generalKeyboard_setKeyIndexTable(const int8_t *keySlotIndexToKeyIndexMap);
 
 void generalKeyboard_setCallbacks(KeyboardCallbackSet *callbacks);
 
