@@ -13,7 +13,7 @@ void customParameterHandlerChained(uint8_t slotIndex, uint8_t value) {
   if (slotIndex == 4) {
     uint32_t color = value ? 0x10FF00FF : 0;
     for (int i = 0; i < 4; i++) {
-      serialLed_putPixel(color);
+      serialLed_putPixelWithAlpha(color);
     }
   }
 }

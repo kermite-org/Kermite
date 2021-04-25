@@ -4,6 +4,7 @@
 #include "km0/types.h"
 
 void serialLed_initialize(uint8_t pin);
-void serialLed_putPixel(uint32_t pixel_aarrggbb);
+void serialLed_putPixel(uint32_t pixel_rrggbb);
+void serialLed_putPixelWithAlpha(uint32_t pixel_aarrggbb);
 
 #endif

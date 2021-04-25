@@ -19,11 +19,10 @@ static void neoPixelCore_initProgram(PIO pio, uint sm, uint offset, uint pin) {
   pio_sm_set_enabled(pio, sm, true);
 }
 
-void neoPixelCore_putPixel(PIO pio, int sm, uint32_t pixel_aarrggbb) {
-  uint8_t aa = pixel_aarrggbb >> 24 & 0xFF;
-  uint8_t rr = ((pixel_aarrggbb >> 16 & 0xFF) * aa) >> 8;
-  uint8_t gg = ((pixel_aarrggbb >> 8 & 0xFF) * aa) >> 8;
-  uint8_t bb = ((pixel_aarrggbb & 0xFF) * aa) >> 8;
+void neoPixelCore_putPixel(PIO pio, int sm, uint32_t pixel_rrggbb) {
+  uint8_t rr = pixel_rrggbb >> 16 & 0xFF;
+  uint8_t gg = pixel_rrggbb >> 8 & 0xFF;
+  uint8_t bb = pixel_rrggbb & 0xFF;
   uint32_t data =
       ((uint32_t)(gg) << 24) |
       ((uint32_t)(rr) << 16) |

@@ -18,7 +18,7 @@ void main() {
     uint32_t alpha = q * 20;
     for (int i = 0; i < 7; i++) {
       uint32_t col = (alpha << 24) | colors[i];
-      serialLed_putPixel(col);
+      serialLed_putPixelWithAlpha(col);
     }
     delayMs(1);
     cnt++;
