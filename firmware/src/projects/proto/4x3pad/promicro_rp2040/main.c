@@ -18,7 +18,7 @@ static const int8_t keyIndexTable[NumKeySlots] = {
 // clang-format on
 
 int main() {
-  // generalKeyboard_useIndicatorLEDs(GP25, GP25, false); //RPi pico
+  // generalKeyboard_useIndicatorLeds(GP25, GP25, false); //RPi pico
   generalKeyboard_useIndicatorRgbLed(GP25); //promicro rp2040
   generalKeyboard_useDebugUart(38400);
   generalKeyboard_useMatrixKeyScanner(NumRows, NumColumns, rowPins, columnPins, keyIndexTable);
