@@ -1,9 +1,9 @@
 #include "singlewire.h"
 
-#include "bitOperations.h"
 #include "debug_uart.h"
 #include "dio.h"
-#include "types.h"
+#include "km0/common/bitOperations.h"
+#include "km0/types.h"
 
 #include <avr/interrupt.h>
 #include <avr/io.h>

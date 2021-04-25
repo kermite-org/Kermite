@@ -1,6 +1,6 @@
-#include "bitOperations.h"
 #include "debug_uart.h"
 #include "dio.h"
+#include "km0/common/bitOperations.h"
 #include <avr/io.h>
 #include <avr/pgmspace.h>
 #include <stdio.h>
@@ -32,8 +32,8 @@ static void outputLED1(bool val) {
 
 #define NumKeys (NumRows * NumColumns)
 
-const uint8_t row_pins[NumRows] PROGMEM = { P_C6, P_D7, P_E6 };
-const uint8_t col_pins[NumColumns] PROGMEM = { P_F6, P_F7, P_B1, P_B3 };
+const uint8_t row_pins[NumRows] = { P_C6, P_D7, P_E6 };
+const uint8_t col_pins[NumColumns] = { P_F6, P_F7, P_B1, P_B3 };
 
 uint8_t rowScanValues[NumRows];
 uint8_t keyStateFlags[NumRows];

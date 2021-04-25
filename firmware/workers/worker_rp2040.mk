@@ -23,6 +23,7 @@ IS_RESOURCE_ORIGIN_ONLINE ?= 0
 
 #--------------------
 
+PICO_SDK_OUTER_DIR = deps/rp2040/pico_sdk_import
 PICO_SDK_DIR = deps/rp2040/pico_sdk_import/pico_sdk
 PICO_TOOLS_DIR = deps/rp2040/pico_sdk_import/pico_sdk_tools
 PICO_LOCAL_DIR = deps/rp2040/pico_sdk_local
@@ -86,10 +87,10 @@ DEFINES = \
 -DPICO_TARGET_NAME=\"kermite\" \
 -DPICO_PROGRAM_URL=\"https://github.com/yahiro07/Kermite/tree/master/firmware\" \
 -DPICO_BOOTSEL_VIA_DOUBLE_RESET_TIMEOUT_MS=700 \
--DTARGET_MCU_RP2040 \
--DEXTR_PROJECT_RELEASE_BUILD_REVISION=$(RELEASE_REVISION) \
--DEXTR_IS_RESOURCE_ORIGIN_ONLINE=$(IS_RESOURCE_ORIGIN_ONLINE) \
--DEXTR_VARIATION_NAME=\"$(VARIATION)\" \
+-DKERMITE_TARGET_MCU_RP2040 \
+-DEXTR_KERMITE_PROJECT_RELEASE_BUILD_REVISION=$(RELEASE_REVISION) \
+-DEXTR_KERMITE_IS_RESOURCE_ORIGIN_ONLINE=$(IS_RESOURCE_ORIGIN_ONLINE) \
+-DEXTR_KERMITE_VARIATION_NAME=\"$(VARIATION)\" \
 
 CORE_FLAGS = $(DEFINES) $(INC_PATHS) -march=armv6-m -mcpu=cortex-m0plus -mthumb -Og -g -ffunction-sections -fdata-sections
 AS_FLAGS = $(CORE_FLAGS)
@@ -139,10 +140,8 @@ LD_FLAGS += $(addprefix $(WL_PREFIX),$(FUNCS_WRAPPED))
 INC_PATHS = \
 -I$(PROJECT_CODE_DIR) \
 -I$(PICO_LOCAL_DIR)/include \
--I$(MODULES_DIR)/km0/common \
--I$(MODULES_DIR)/km0/device_io \
--I$(MODULES_DIR)/km0/device_io/rp2040 \
--I$(MODULES_DIR)/km0/keyboard \
+-I$(MODULES_DIR) \
+-I$(PICO_SDK_OUTER_DIR) \
 -I$(PICO_SDK_DIR)/src/common/include \
 -I$(PICO_SDK_DIR)/src/rp2_common/include \
 -I$(PICO_SDK_DIR)/src/rp2040/include \

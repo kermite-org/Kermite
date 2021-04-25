@@ -31,14 +31,14 @@ singlewire3_debugValues: .ds.b	4
 
 //信号ピン設定
 //以下のいずれかをビルド時のフラグで注入して指定
-//SINGLEWIRE_SIGNAL_PIN_PD0
-//SINGLEWIRE_SIGNAL_PIN_PD2
+//KM0_ATMEGA_SINGLEWIRE__PIN_SIGNAL_PD0
+//KM0_ATMEGA_SINGLEWIRE__PIN_SIGNAL_PD2
 
-#ifdef SINGLEWIRE_SIGNAL_PIN_PD0
+#ifdef KM0_ATMEGA_SINGLEWIRE__PIN_SIGNAL_PD0
 	#define SW_PIN_PD0
 #endif
 
-#ifdef SINGLEWIRE_SIGNAL_PIN_PD2
+#ifdef KM0_ATMEGA_SINGLEWIRE__PIN_SIGNAL_PD2
 	#define SW_PIN_PD2
 #endif
 
@@ -98,7 +98,7 @@ singlewire3_debugValues: .ds.b	4
 //timing debug pin
 
 
-#ifdef SINGLEWIRE_ENABLE_TIMING_DEBUG_PINS
+#ifdef KM0_ATMEGA_SINGLEWIRE__ENABLE_TIMING_DEBUG_PINS
   #define pinDebug_PORT _SFR_IO_ADDR(PORTF)
   #define pinDebug_DDR _SFR_IO_ADDR(DDRF)
   #define pinDebug_PIN _SFR_IO_ADDR(PINF)
@@ -442,7 +442,7 @@ waitWhileHigh:
 
 
 /*
-uint8_t singlewire_receiveFrame(uint8_t* buf, uint8_t maxlen){
+uint8_t singlewire_receiveFrameBlocking(uint8_t* buf, uint8_t maxlen){
 	p = buf
 	p_end = buf + maxlen
 	cnt = 0
@@ -472,9 +472,9 @@ abort:
   return 0
 }
 */
-.global singlewire_receiveFrame
-.func singlewire_receiveFrame
-singlewire_receiveFrame:
+.global singlewire_receiveFrameBlocking
+.func singlewire_receiveFrameBlocking
+singlewire_receiveFrameBlocking:
 	//p = buf
 	movw r30, r24
 

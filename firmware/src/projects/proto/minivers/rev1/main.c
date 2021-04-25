@@ -1,6 +1,5 @@
-#include "dio.h"
-#include "splitKeyboard.h"
-#include <avr/pgmspace.h>
+#include "km0/deviceIo/dio.h"
+#include "km0/keyboard/splitKeyboard.h"
 
 //---------------------------------------------
 
@@ -8,11 +7,11 @@
 #define NumRows 5
 #define NumKeySlots (NumColumns * NumRows * 2)
 
-static const uint8_t columnPins[NumColumns] PROGMEM = { P_F4, P_F5, P_F6, P_F7, P_B1, P_B3, P_B2, P_B6 };
-static const uint8_t rowPins[NumRows] PROGMEM = { P_C6, P_D7, P_E6, P_B4, P_B5 };
+static const uint8_t columnPins[NumColumns] = { P_F4, P_F5, P_F6, P_F7, P_B1, P_B3, P_B2, P_B6 };
+static const uint8_t rowPins[NumRows] = { P_C6, P_D7, P_E6, P_B4, P_B5 };
 
 // clang-format off
-static const int8_t keyIndexTable[NumKeySlots] PROGMEM = {
+static const int8_t keyIndexTable[NumKeySlots] = {
   //left
    0,  1,  2,  3,  4,  5,  6,  7,
    8,  9, 10, 11, 12, 13, 14, 15,
@@ -31,7 +30,7 @@ static const int8_t keyIndexTable[NumKeySlots] PROGMEM = {
 int main() {
   splitKeyboard_useIndicatorLeds(P_B0, P_D5, true);
   splitKeyboard_useDebugUart(38400);
-  splitKeyboard_setup(NumRows, NumColumns, rowPins, columnPins, keyIndexTable);
+  splitKeyboard_useMatrixKeyScanner(NumRows, NumColumns, rowPins, columnPins, keyIndexTable);
   splitKeyboard_start();
   return 0;
 }

@@ -1,10 +1,10 @@
 WORKER = worker_atmega32u4
 
-MODULE_SRCS += km0/device_io/atmega/system.c
-MODULE_SRCS += km0/device_io/atmega/dio.c
-MODULE_SRCS += km0/device_io/atmega/boardIo.c
-MODULE_SRCS += km0/device_io/atmega/debugUart.c
-MODULE_SRCS += km0/device_io/atmega/dataMemory.c
+MODULE_SRCS += km0/deviceIo/atmega/system.c
+MODULE_SRCS += km0/deviceIo/atmega/dio.c
+MODULE_SRCS += km0/deviceIo/atmega/boardIo.c
+MODULE_SRCS += km0/deviceIo/atmega/debugUart.c
+MODULE_SRCS += km0/deviceIo/atmega/dataMemory.c
 
 PROJECT_SRCS += main_blink.c
 #PROJECT_SRCS += main_dio.c

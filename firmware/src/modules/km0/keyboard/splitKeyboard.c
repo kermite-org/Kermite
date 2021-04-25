@@ -1,29 +1,29 @@
 #include "splitKeyboard.h"
-#include "bitOperations.h"
-#include "boardIo.h"
 #include "config.h"
 #include "configValidator.h"
 #include "configuratorServant.h"
-#include "debugUart.h"
-#include "dio.h"
-#include "keyMatrixScanner.h"
+#include "keyScanner.h"
 #include "keyboardCoreLogic.h"
-#include "singleWire4.h"
-#include "system.h"
-#include "usbIoCore.h"
-#include "utils.h"
+#include "km0/common/bitOperations.h"
+#include "km0/common/utils.h"
+#include "km0/deviceIo/boardIo.h"
+#include "km0/deviceIo/debugUart.h"
+#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/singleWire4.h"
+#include "km0/deviceIo/system.h"
+#include "km0/deviceIo/usbIoCore.h"
 #include "versions.h"
 #include <stdio.h>
 
 //---------------------------------------------
 //definitions
 
-#ifndef KM0_NUM_KEYSLOTS
-#error KM0_NUM_KEYSLOTS is not defined
+#ifndef KM0_KEYBOARD__NUM_KEYSLOTS
+#error KM0_KEYBOARD__NUM_KEYSLOTS is not defined
 #endif
 
-#define NumKeySlots KM0_NUM_KEYSLOTS
-#define NumKeySlotsHalf (KM0_NUM_KEYSLOTS >> 1)
+#define NumKeySlots KM0_KEYBOARD__NUM_KEYSLOTS
+#define NumKeySlotsHalf (KM0_KEYBOARD__NUM_KEYSLOTS >> 1)
 
 //#define NumKeySlotBytesHalf Ceil(NumKeySlotsHalf / 8)
 #define NumKeySlotBytesHalf ((NumKeySlotsHalf + 7) >> 3)
@@ -34,10 +34,6 @@
 //---------------------------------------------
 //variables
 
-static uint8_t numRows = 0;
-static uint8_t numColumns = 0;
-static uint8_t *rowPins;
-static uint8_t *columnPins;
 static uint8_t *keySlotIndexToKeyIndexMap;
 
 //左右間通信用バッファ
@@ -63,8 +59,8 @@ static bool debugUartConfigured = false;
 //動的に変更可能なオプション
 static bool optionEmitKeyStroke = true;
 static bool optionEmitRealtimeEvents = true;
-static bool optionAffectKeyHoldStateToLED = true;
-static bool optionUseHeartbeatLED = true;
+static bool optionAffectKeyHoldStateToLed = true;
+static bool optionUseHeartbeatLed = true;
 static bool optionInvertSide = false;
 
 static uint8_t optionDynamicFlags = 0xFF;
@@ -79,10 +75,10 @@ static void customParameterValueHandler(uint8_t slotIndex, uint8_t value) {
     optionEmitKeyStroke = !!value;
   } else if (slotIndex == OptionSlot_EmitRealtimeEvents) {
     optionEmitRealtimeEvents = !!value;
-  } else if (slotIndex == OptionSlot_AffectKeyHoldStateToLED) {
-    optionAffectKeyHoldStateToLED = !!value;
-  } else if (slotIndex == OptionSlot_UseHeartBeatLED) {
-    optionUseHeartbeatLED = !!value;
+  } else if (slotIndex == OptionSlot_AffectKeyHoldStateToLed) {
+    optionAffectKeyHoldStateToLed = !!value;
+  } else if (slotIndex == OptionSlot_UseHeartBeatLed) {
+    optionUseHeartbeatLed = !!value;
   } else if (slotIndex == OptionSlot_MasterSide) {
     //value: (1:left, 2:right)
     optionInvertSide = value == 2;
@@ -139,7 +135,7 @@ static void onPhysicalKeyStateChanged(uint8_t keySlotIndex, bool isDown) {
   if (keySlotIndex >= NumKeySlots) {
     return;
   }
-  uint8_t keyIndex = system_readRomByte(keySlotIndexToKeyIndexMap + keySlotIndex);
+  uint8_t keyIndex = keySlotIndexToKeyIndexMap[keySlotIndex];
   if (keyIndex == 0xFF) {
     return;
   }
@@ -193,10 +189,10 @@ static void configuratorServantStateHandler(uint8_t state) {
 //反対側のコントローラからキー状態を受け取る処理
 static void pullAltSideKeyStates() {
   sw_txbuf[0] = 0x40;
-  singleWire_startBurstSection();
-  singleWire_transmitFrame(sw_txbuf, 1); //キー状態要求パケットを送信
-  uint8_t sz = singleWire_receiveFrame(sw_rxbuf, SingleWireMaxPacketSize);
-  singleWire_endBurstSection();
+  singleWire_startSynchronizedSection();
+  singleWire_transmitFrameBlocking(sw_txbuf, 1); //キー状態要求パケットを送信
+  uint8_t sz = singleWire_receiveFrameBlocking(sw_rxbuf, SingleWireMaxPacketSize);
+  singleWire_endSynchronizedSection();
 
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
@@ -237,9 +233,6 @@ static void processKeyStatesUpdate() {
 }
 
 static void runAsMaster() {
-  keyMatrixScanner_initialize(
-      numRows, numColumns, rowPins, columnPins, nextKeyStateFlags);
-
   resetKeyboardCoreLogic();
 
   configuratorServant_initialize(
@@ -249,18 +242,18 @@ static void runAsMaster() {
   while (1) {
     cnt++;
     if (cnt % 4 == 0) {
-      keyMatrixScanner_update();
+      keyScanner_update(nextKeyStateFlags);
       processKeyStatesUpdate();
       keyboardCoreLogic_processTicker(5);
       processKeyboardCoreLogicOutput();
-      if (optionAffectKeyHoldStateToLED) {
+      if (optionAffectKeyHoldStateToLed) {
         boardIo_writeLed2(pressedKeyCount > 0);
       }
     }
     if (cnt % 4 == 2) {
       pullAltSideKeyStates();
     }
-    if (optionUseHeartbeatLED) {
+    if (optionUseHeartbeatLed) {
       if (cnt % 2000 == 0) {
         boardIo_writeLed1(true);
       }
@@ -279,8 +272,8 @@ static void runAsMaster() {
 
 //単線通信の受信割り込みコールバック
 static void onRecevierInterruption() {
-  singleWire_startBurstSection();
-  uint8_t sz = singleWire_receiveFrame(sw_rxbuf, SingleWireMaxPacketSize);
+  singleWire_startSynchronizedSection();
+  uint8_t sz = singleWire_receiveFrameBlocking(sw_rxbuf, SingleWireMaxPacketSize);
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
     if (cmd == 0x40 && sz == 1) {
@@ -288,10 +281,10 @@ static void onRecevierInterruption() {
       //子から親に対してキー状態応答パケットを送る
       sw_txbuf[0] = 0x41;
       utils_copyBytes(sw_txbuf + 1, nextKeyStateFlags, NumKeySlotBytesHalf);
-      singleWire_transmitFrame(sw_txbuf, 1 + NumKeySlotBytesHalf);
+      singleWire_transmitFrameBlocking(sw_txbuf, 1 + NumKeySlotBytesHalf);
     }
   }
-  singleWire_endBurstSection();
+  singleWire_endSynchronizedSection();
 }
 
 static bool checkIfSomeKeyPressed() {
@@ -304,21 +297,19 @@ static bool checkIfSomeKeyPressed() {
 }
 
 static void runAsSlave() {
-  keyMatrixScanner_initialize(
-      numRows, numColumns, rowPins, columnPins, nextKeyStateFlags);
   singleWire_setInterruptedReceiver(onRecevierInterruption);
 
   uint16_t cnt = 0;
   while (1) {
     cnt++;
     if (cnt % 4 == 0) {
-      keyMatrixScanner_update();
+      keyScanner_update(nextKeyStateFlags);
       pressedKeyCount = checkIfSomeKeyPressed();
-      if (optionAffectKeyHoldStateToLED) {
+      if (optionAffectKeyHoldStateToLed) {
         boardIo_writeLed2(pressedKeyCount > 0);
       }
     }
-    if (optionUseHeartbeatLED) {
+    if (optionUseHeartbeatLed) {
       if (cnt % 4000 == 0) {
         boardIo_writeLed1(true);
       }
@@ -335,9 +326,9 @@ static void runAsSlave() {
 
 //単線通信受信割り込みコールバック
 static void masterSlaveDetectionMode_onRecevierInterruption() {
-  singleWire_startBurstSection();
-  uint8_t sz = singleWire_receiveFrame(sw_rxbuf, SingleWireMaxPacketSize);
-  singleWire_endBurstSection();
+  singleWire_startSynchronizedSection();
+  uint8_t sz = singleWire_receiveFrameBlocking(sw_rxbuf, SingleWireMaxPacketSize);
+  singleWire_endSynchronizedSection();
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
     if (cmd == 0xA0 && sz == 1) {
@@ -359,9 +350,9 @@ static bool runMasterSlaveDetectionMode() {
     if (usbIoCore_isConnectedToHost()) {
       singleWire_clearInterruptedReceiver();
       sw_txbuf[0] = 0xA0;
-      singleWire_startBurstSection();
-      singleWire_transmitFrame(sw_txbuf, 1); //Master確定通知パケットを送信
-      singleWire_endBurstSection();
+      singleWire_startSynchronizedSection();
+      singleWire_transmitFrameBlocking(sw_txbuf, 1); //Master確定通知パケットを送信
+      singleWire_endSynchronizedSection();
       return true;
     }
     if (hasMasterOathReceived) {
@@ -417,14 +408,12 @@ void splitKeyboard_useOptionDynamic(uint8_t slot) {
   setCustomParameterDynamicFlag(slot, true);
 }
 
-void splitKeyboard_setup(
-    uint8_t _numRows, uint8_t _numColumns,
-    const uint8_t *_rowPins, const uint8_t *_columnPins,
+void splitKeyboard_useBasicMatrixKeyScanner(
+    uint8_t numRows, uint8_t numColumns,
+    const uint8_t *rowPins, const uint8_t *columnPins,
     const int8_t *_keySlotIndexToKeyIndexMap) {
-  numRows = _numRows;
-  numColumns = _numColumns;
-  rowPins = (uint8_t *)_rowPins;
-  columnPins = (uint8_t *)_columnPins;
+  keyScanner_initializeBasicMatrix(
+      numRows, numColumns, rowPins, columnPins);
   keySlotIndexToKeyIndexMap = (uint8_t *)_keySlotIndexToKeyIndexMap;
 }
 

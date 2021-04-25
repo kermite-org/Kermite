@@ -1,17 +1,17 @@
 WORKER = worker_rp2040
 
 MODULE_SRCS += km0/common/utils.c
-MODULE_SRCS += km0/device_io/rp2040/system.c
-MODULE_SRCS += km0/device_io/rp2040/dio.c
-MODULE_SRCS += km0/device_io/rp2040/debugUart.c
-MODULE_SRCS += km0/device_io/rp2040/usbIoCore.c
-MODULE_SRCS += km0/device_io/rp2040/dataMemory.c
-MODULE_SRCS += km0/device_io/rp2040/boardIo_rgbLed.c
-MODULE_SRCS += km0/device_io/rp2040/neoPixelCore.c
-MODULE_PIOASM_SRCS += km0/device_io/rp2040/neoPixelCore.pio
-MODULE_SRCS += km0/device_io/rp2040/singleWire4.c
-MODULE_PIOASM_SRCS += km0/device_io/rp2040/singleWire4.pio
-MODULE_SRCS += km0/device_io/rp2040/serialLed.c
+MODULE_SRCS += km0/deviceIo/rp2040/system.c
+MODULE_SRCS += km0/deviceIo/rp2040/dio.c
+MODULE_SRCS += km0/deviceIo/rp2040/debugUart.c
+MODULE_SRCS += km0/deviceIo/rp2040/usbIoCore.c
+MODULE_SRCS += km0/deviceIo/rp2040/dataMemory.c
+MODULE_SRCS += km0/deviceIo/rp2040/boardIo_rgbLed.c
+MODULE_SRCS += km0/deviceIo/rp2040/neoPixelCore.c
+MODULE_PIOASM_SRCS += km0/deviceIo/rp2040/neoPixelCore.pio
+MODULE_SRCS += km0/deviceIo/rp2040/singleWire4.c
+MODULE_PIOASM_SRCS += km0/deviceIo/rp2040/singleWire4.pio
+MODULE_SRCS += km0/deviceIo/rp2040/serialLed.c
 
 PROJECT_SRCS += main_blink.c
 #PROJECT_SRCS += main_debug_uart.c

@@ -1,6 +1,6 @@
-#include "dio.h"
-#include "serialLed.h"
-#include "system.h"
+#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/serialLed.h"
+#include "km0/deviceIo/system.h"
 
 //board RPi Pico
 //GP17 ---> NeoPixel Strip 8LEDs

@@ -1,38 +1,34 @@
 #include "generalKeyboard.h"
-#include "bitOperations.h"
-#include "boardIo.h"
 #include "config.h"
 #include "configValidator.h"
 #include "configuratorServant.h"
-#include "debugUart.h"
-#include "dio.h"
-#include "keyMatrixScanner.h"
+#include "keyScanner.h"
 #include "keyboardCoreLogic.h"
-#include "system.h"
-#include "usbIoCore.h"
-#include "utils.h"
+#include "km0/common/bitOperations.h"
+#include "km0/common/utils.h"
+#include "km0/deviceIo/boardIo.h"
+#include "km0/deviceIo/debugUart.h"
+#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/system.h"
+#include "km0/deviceIo/usbIoCore.h"
 #include "versions.h"
 #include <stdio.h>
 
 //---------------------------------------------
 //definitions
 
-#ifndef KM0_NUM_KEYSLOTS
-#error KM0_NUM_KEYSLOTS is not defined
+#ifndef KM0_KEYBOARD__NUM_KEYSLOTS
+#error KM0_KEYBOARD__NUM_KEYSLOTS is not defined
 #endif
 
-#define NumKeySlots KM0_NUM_KEYSLOTS
+#define NumKeySlots KM0_KEYBOARD__NUM_KEYSLOTS
 
-//#define NumKeySlotBytes Ceil(KM0_NUM_KEYSLOTS / 8)
-#define NumKeySlotBytes ((KM0_NUM_KEYSLOTS + 7) >> 3)
+//#define NumKeySlotBytes Ceil(KM0_KEYBOARD__NUM_KEYSLOTS / 8)
+#define NumKeySlotBytes ((KM0_KEYBOARD__NUM_KEYSLOTS + 7) >> 3)
 
 //---------------------------------------------
 //variables
 
-static uint8_t numRows = 0;
-static uint8_t numColumns = 0;
-static uint8_t *rowPins;
-static uint8_t *columnPins;
 static uint8_t *keySlotIndexToKeyIndexMap;
 
 //キー状態
@@ -49,29 +45,41 @@ static bool isSideBrainModeEnabled = false;
 
 static bool debugUartConfigured = false;
 
+static KeyboardCallbackSet *callbacks = NULL;
+
 //---------------------------------------------
 //動的に変更可能なオプション
 static bool optionEmitKeyStroke = true;
 static bool optionEmitRealtimeEvents = true;
-static bool optionAffectKeyHoldStateToLED = true;
-static bool optionUseHeartbeatLED = true;
+static bool optionAffectKeyHoldStateToLed = true;
+static bool optionUseHeartbeatLed = true;
 
-static uint8_t optionDynamicFlags = 0xFF;
+static uint16_t optionDynamicFlags = 0xFFFF;
 
 static bool optionsInitialConfigShutup = false;
 
 static void customParameterValueHandler(uint8_t slotIndex, uint8_t value) {
+  if (callbacks && callbacks->customParameterHandlerOverride) {
+    callbacks->customParameterHandlerOverride(slotIndex, value);
+    return;
+  }
+
   if (optionsInitialConfigShutup && bit_read(optionDynamicFlags, slotIndex) == 0) {
     return;
   }
+
   if (slotIndex == OptionSlot_EmitKeyStroke) {
     optionEmitKeyStroke = !!value;
   } else if (slotIndex == OptionSlot_EmitRealtimeEvents) {
     optionEmitRealtimeEvents = !!value;
-  } else if (slotIndex == OptionSlot_AffectKeyHoldStateToLED) {
-    optionAffectKeyHoldStateToLED = !!value;
-  } else if (slotIndex == OptionSlot_UseHeartBeatLED) {
-    optionUseHeartbeatLED = !!value;
+  } else if (slotIndex == OptionSlot_AffectKeyHoldStateToLed) {
+    optionAffectKeyHoldStateToLed = !!value;
+  } else if (slotIndex == OptionSlot_UseHeartBeatLed) {
+    optionUseHeartbeatLed = !!value;
+  }
+
+  if (callbacks && callbacks->customParameterHandlerChained) {
+    callbacks->customParameterHandlerChained(slotIndex, value);
   }
 }
 
@@ -100,6 +108,9 @@ static void processKeyboardCoreLogicOutput() {
     if (optionEmitRealtimeEvents) {
       configuratorServant_emitRelatimeLayerEvent(layerFlags);
     }
+    if (callbacks && callbacks->layerStateChanged) {
+      callbacks->layerStateChanged(layerFlags);
+    }
     localLayerFlags = layerFlags;
     changed = true;
   }
@@ -125,7 +136,7 @@ static void onPhysicalKeyStateChanged(uint8_t keySlotIndex, bool isDown) {
   if (keySlotIndex >= NumKeySlots) {
     return;
   }
-  uint8_t keyIndex = system_readRomByte(keySlotIndexToKeyIndexMap + keySlotIndex);
+  uint8_t keyIndex = keySlotIndexToKeyIndexMap[keySlotIndex];
   if (keyIndex == 0xFF) {
     return;
   }
@@ -140,6 +151,10 @@ static void onPhysicalKeyStateChanged(uint8_t keySlotIndex, bool isDown) {
   //ユーティリティにキー状態変化イベントを送信
   if (optionEmitRealtimeEvents) {
     configuratorServant_emitRealtimeKeyEvent(keyIndex, isDown);
+  }
+
+  if (callbacks && callbacks->keyStateChanged) {
+    callbacks->keyStateChanged(keyIndex, isDown);
   }
 
   if (!isSideBrainModeEnabled) {
@@ -208,8 +223,6 @@ static void keyboardEntry() {
   configuratorServant_readDeviceInstanceCode(serialNumberTextBuf + 16);
   uibioCore_internal_setSerialNumberText(serialNumberTextBuf, 24);
   usbIoCore_initialize();
-  keyMatrixScanner_initialize(
-      numRows, numColumns, rowPins, columnPins, nextKeyStateFlags);
   resetKeyboardCoreLogic();
   optionsInitialConfigShutup = true;
   configuratorServant_initialize(
@@ -221,15 +234,15 @@ static void keyboardEntry() {
   while (1) {
     cnt++;
     if (cnt % 4 == 0) {
-      keyMatrixScanner_update();
+      keyScanner_update(nextKeyStateFlags);
       processKeyStatesUpdate();
       keyboardCoreLogic_processTicker(5);
       processKeyboardCoreLogicOutput();
-      if (optionAffectKeyHoldStateToLED) {
+      if (optionAffectKeyHoldStateToLed) {
         boardIo_writeLed2(pressedKeyCount > 0);
       }
     }
-    if (optionUseHeartbeatLED) {
+    if (optionUseHeartbeatLed) {
       if (cnt % 4000 == 0) {
         boardIo_writeLed1(true);
       }
@@ -267,15 +280,20 @@ void generalKeyboard_useOptionDynamic(uint8_t slot) {
   setCustomParameterDynamicFlag(slot, true);
 }
 
-void generalKeyboard_setup(
-    uint8_t _numRows, uint8_t _numColumns,
-    const uint8_t *_rowPins, const uint8_t *_columnPins,
+void generalKeyboard_useMatrixKeyScanner(
+    uint8_t numRows, uint8_t numColumns,
+    const uint8_t *rowPins, const uint8_t *columnPins,
     const int8_t *_keySlotIndexToKeyIndexMap) {
-  numRows = _numRows;
-  numColumns = _numColumns;
-  rowPins = (uint8_t *)_rowPins;
-  columnPins = (uint8_t *)_columnPins;
+  keyScanner_initializeBasicMatrix(numRows, numColumns, rowPins, columnPins);
   keySlotIndexToKeyIndexMap = (uint8_t *)_keySlotIndexToKeyIndexMap;
+}
+
+void generalKeyboard_setKeyIndexTable(const int8_t *_keySlotIndexToKeyIndexMap) {
+  keySlotIndexToKeyIndexMap = (uint8_t *)_keySlotIndexToKeyIndexMap;
+}
+
+void generalKeyboard_setCallbacks(KeyboardCallbackSet *_callbacks) {
+  callbacks = _callbacks;
 }
 
 void generalKeyboard_start() {

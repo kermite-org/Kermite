@@ -1,6 +1,6 @@
-#include "boardIo.h"
-#include "dio.h"
-#include "system.h"
+#include "km0/deviceIo/boardIo.h"
+#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/system.h"
 
 //board ProMicro Pico
 //GP25: onboard RGB LED

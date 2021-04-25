@@ -5,26 +5,26 @@
     "myAvrCompilerBaseDirectory": "/usr/local/Cellar/avr-gcc/9.3.0",
     "myAvrCompilerExecutablePath": "/usr/local/bin/avr-gcc",
     "myCompilerExecutablePath": "/usr/local/bin/arm-none-eabi-gcc",
+    "picoSdkOuterDir": "./deps/rp2040/pico_sdk_import",
     "picoSdkRoot": "./deps/rp2040/pico_sdk_import/pico_sdk",
+    "tinyusbRoot": "./deps/rp2040/pico_sdk_import/tinyusb",
     "picoLocalDir": "./deps/rp2040/pico_sdk_local"
   },
   "configurations": [
     {
       "name": "Mac",
       "includePath": [
-        "src/modules/km0/common",
-        "src/modules/km0/device_io",
-        "src/modules/km0/keyboard",
+        "src/modules",
         "src/projects/dev/dummy_header_provider_project",
         "${myAvrCompilerBaseDirectory}/avr/include",
         "${picoLocalDir}/include",
         // "${picoLocalDir}/include/boards",
+        "${picoSdkOuterDir}",
         "${picoSdkRoot}/src/rp2040/include",
         "${picoSdkRoot}/src/common/include",
         "${picoSdkRoot}/src/rp2_common/include",
-        "${picoSdkRoot}/lib/tinyusb/src",
-        "${picoSdkRoot}/lib/tinyusb/src/common",
-        "${picoSdkRoot}/lib/tinyusb/hw",
+        "${tinyusbRoot}/src",
+        "${tinyusbRoot}/src/common",
         "${picoSdkRoot}/src/rp2_common/rp2040_usb_device_enumeration/include"
       ],
       "defines": [
@@ -32,14 +32,14 @@
         "UNICODE",
         "_UNICODE",
         "__AVR_ATmega32U4__",
-        "EXTR_PROJECT_RELEASE_BUILD_REVISION=0",
-        "EXTR_IS_RESOURCE_ORIGIN_ONLINE=0",
-        "EXTR_VARIATION_NAME=\"default\"",
+        "EXTR_KERMITE_PROJECT_RELEASE_BUILD_REVISION=0",
+        "EXTR_KERMITE_IS_RESOURCE_ORIGIN_ONLINE=0",
+        "EXTR_KERMITE_VARIATION_NAME=\"default\"",
         "F_CPU=8000000",
-        "TARGET_MCU_ATMEGA",
-        "TARGET_MCU_RP2040",
+        "KERMITE_TARGET_MCU_ATMEGA",
+        "KERMITE_TARGET_MCU_RP2040",
         "CFG_TUSB_MCU=OPT_MCU_RP2040",
-        "SINGLEWIRE_RP2040_PIN_SIGNAL=GP0"
+        "KM0_RP_SINGLEWIRE__PIN_SIGNAL=GP0"
       ],
       // "compilerPath": "${myAvrCompilerExecutablePath} -mmcu=atmega32u4",
       "compilerPath": "${myCompilerExecutablePath}",

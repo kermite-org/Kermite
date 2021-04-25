@@ -1,7 +1,7 @@
 #ifndef __SINGLEWIRE2_H__
 #define __SINGLEWIRE2_H__
 
-#include "types.h"
+#include "km0/types.h"
 
 void singleWire_initialize_txonly(); //for debug
 void singleWire_initialize();

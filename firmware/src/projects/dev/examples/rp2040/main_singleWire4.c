@@ -1,8 +1,8 @@
-#include "debugUart.h"
-#include "dio.h"
-#include "singleWire4.h"
-#include "system.h"
-#include "utils.h"
+#include "km0/common/utils.h"
+#include "km0/deviceIo/debugUart.h"
+#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/singleWire4.h"
+#include "km0/deviceIo/system.h"
 #include <stdio.h>
 
 //board RPi Pico
@@ -47,10 +47,10 @@ uint8_t rxbuf[10];
 void processSendData() {
   txbuf[0] = 0x12;
   txbuf[1] = 0x34;
-  singleWire_startBurstSection();
-  singleWire_transmitFrame(txbuf, 2);
-  int sz = singleWire_receiveFrame(rxbuf, 10);
-  singleWire_endBurstSection();
+  singleWire_startSynchronizedSection();
+  singleWire_transmitFrameBlocking(txbuf, 2);
+  int sz = singleWire_receiveFrameBlocking(rxbuf, 10);
+  singleWire_endSynchronizedSection();
   printf("received @master: ");
   utils_debugShowBytes(rxbuf, sz);
 }
@@ -59,10 +59,10 @@ void processSendData2() {
   for (int i = 0; i < 10; i++) {
     txbuf[i] = 0x10 * i + i;
   }
-  singleWire_startBurstSection();
-  singleWire_transmitFrame(txbuf, 10);
-  int sz = singleWire_receiveFrame(rxbuf, 10);
-  singleWire_endBurstSection();
+  singleWire_startSynchronizedSection();
+  singleWire_transmitFrameBlocking(txbuf, 10);
+  int sz = singleWire_receiveFrameBlocking(rxbuf, 10);
+  singleWire_endSynchronizedSection();
   printf("received @master: ");
   utils_debugShowBytes(rxbuf, sz);
 }
@@ -85,14 +85,14 @@ void runAsMaster() {
 int receivedCount = -1;
 
 void onRecieverInterrupted() {
-  singleWire_startBurstSection();
-  receivedCount = singleWire_receiveFrame(rxbuf, 10);
+  singleWire_startSynchronizedSection();
+  receivedCount = singleWire_receiveFrameBlocking(rxbuf, 10);
   //echo back
   for (int i = 0; i < receivedCount; i++) {
     txbuf[i] = rxbuf[i] + 1;
   }
-  singleWire_transmitFrame(txbuf, receivedCount);
-  singleWire_endBurstSection();
+  singleWire_transmitFrameBlocking(txbuf, receivedCount);
+  singleWire_endSynchronizedSection();
 }
 
 void runAsSlave() {

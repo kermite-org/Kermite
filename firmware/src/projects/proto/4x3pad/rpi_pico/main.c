@@ -1,6 +1,6 @@
 #include "config.h"
-#include "dio.h"
-#include "generalKeyboard.h"
+#include "km0/deviceIo/dio.h"
+#include "km0/keyboard/generalKeyboard.h"
 
 #define NumColumns 4
 #define NumRows 3
@@ -19,9 +19,9 @@ static const int8_t keyIndexTable[NumKeySlots] = {
 
 int main() {
   generalKeyboard_useIndicatorLeds(GP25, GP25, false); //RPi pico
-  // generalKeyboard_useIndicatorRgbLED(GP25); //promicro rp2040
+  // generalKeyboard_useIndicatorRgbLed(GP25); //promicro rp2040
   generalKeyboard_useDebugUart(115200);
-  generalKeyboard_setup(NumRows, NumColumns, rowPins, columnPins, keyIndexTable);
+  generalKeyboard_useMatrixKeyScanner(NumRows, NumColumns, rowPins, columnPins, keyIndexTable);
   generalKeyboard_start();
   return 0;
 }

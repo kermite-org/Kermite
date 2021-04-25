@@ -1,7 +1,7 @@
 #ifndef __CONFIGURATOR_SERVANT_H__
 #define __CONFIGURATOR_SERVANT_H__
 
-#include "types.h"
+#include "km0/types.h"
 
 enum {
   ConfiguratorServantState_KeyMemoryUpdationStarted = 1,

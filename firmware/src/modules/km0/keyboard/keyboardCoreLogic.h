@@ -1,7 +1,7 @@
 #ifndef __KEYBOARD_CORE_LOGIC_H__
 #define __KEYBOARD_CORE_LOGIC_H__
 
-#include "types.h"
+#include "km0/types.h"
 
 void keyboardCoreLogic_initialize();
 uint16_t keyboardCoreLogic_getLayerActiveFlags();

@@ -2,8 +2,8 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-#include "bitOperations.h"
 #include "debug_uart.h"
+#include "km0/common/bitOperations.h"
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -1,5 +1,5 @@
-#include "dio.h"
-#include "splitKeyboard.h"
+#include "km0/deviceIo/dio.h"
+#include "km0/keyboard/splitKeyboard.h"
 //---------------------------------------------
 
 #define NumColumns 7
@@ -27,7 +27,7 @@ static const int8_t keyIndexTable[NumKeySlots]  = {
 int main() {
   splitKeyboard_useIndicatorRgbLed(GP25);
   splitKeyboard_useDebugUart(115200);
-  splitKeyboard_setup(NumRows, NumColumns, rowPins, columnPins, keyIndexTable);
+  splitKeyboard_useMatrixKeyScanner(NumRows, NumColumns, rowPins, columnPins, keyIndexTable);
   splitKeyboard_start();
   return 0;
 }

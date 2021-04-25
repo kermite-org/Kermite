@@ -1,8 +1,8 @@
-#include "dataMemory.h"
-#include "debugUart.h"
-#include "dio.h"
+#include "km0/deviceIo/dataMemory.h"
+#include "km0/deviceIo/debugUart.h"
+#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/system.h"
 #include "string.h"
-#include "system.h"
 #include <stdio.h>
 
 //board RPi Pico
