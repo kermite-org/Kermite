@@ -28,7 +28,7 @@ static const int8_t keyIndexTable[NumKeySlots] = {
 int main() {
   generalKeyboard_useIndicatorLeds(P_B0, P_D5, true);
   generalKeyboard_useDebugUart(38400);
-  generalKeyboard_setup(NumRows, NumColumns, rowPins, columnPins, keyIndexTable);
+  generalKeyboard_useMatrixKeyScanner(NumRows, NumColumns, rowPins, columnPins, keyIndexTable);
   generalKeyboard_start();
   return 0;
 }

@@ -26,7 +26,7 @@ int main() {
   splitKeyboard_useIndicatorLeds(GP25, GP25, false); //RPi pico
   // generalKeyboard_useIndicatorRgbLed(GP25); //promicro rp2040
   splitKeyboard_useDebugUart(115200);
-  splitKeyboard_setup(NumRows, NumColumns, rowPins, columnPins, keyIndexTable);
+  splitKeyboard_useMatrixKeyScanner(NumRows, NumColumns, rowPins, columnPins, keyIndexTable);
   splitKeyboard_start();
   return 0;
 }

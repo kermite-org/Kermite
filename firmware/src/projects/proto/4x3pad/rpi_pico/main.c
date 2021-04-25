@@ -21,7 +21,7 @@ int main() {
   generalKeyboard_useIndicatorLeds(GP25, GP25, false); //RPi pico
   // generalKeyboard_useIndicatorRgbLED(GP25); //promicro rp2040
   generalKeyboard_useDebugUart(115200);
-  generalKeyboard_setup(NumRows, NumColumns, rowPins, columnPins, keyIndexTable);
+  generalKeyboard_useMatrixKeyScanner(NumRows, NumColumns, rowPins, columnPins, keyIndexTable);
   generalKeyboard_start();
   return 0;
 }

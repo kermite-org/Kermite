@@ -31,7 +31,7 @@ static const int8_t keyIndexTable[NumKeySlots] = {
 int main() {
   splitKeyboard_useIndicatorLeds(P_B0, P_D5, true);
   splitKeyboard_useDebugUart(38400);
-  splitKeyboard_setup(NumRows, NumColumns, rowPins, columnPins, keyIndexTable);
+  splitKeyboard_useMatrixKeyScanner(NumRows, NumColumns, rowPins, columnPins, keyIndexTable);
   splitKeyboard_start();
   return 0;
 }
