@@ -5,8 +5,8 @@
 enum {
   OptionSlot_EmitKeyStroke = 0,
   OptionSlot_EmitRealtimeEvents = 1,
-  OptionSlot_AffectKeyHoldStateToLED = 2,
-  OptionSlot_UseHeartBeatLED = 3,
+  OptionSlot_AffectKeyHoldStateToLed = 2,
+  OptionSlot_UseHeartBeatLed = 3,
 };
 
 typedef struct _KeyboardCallbackSet {

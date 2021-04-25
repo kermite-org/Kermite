@@ -51,8 +51,8 @@ static KeyboardCallbackSet *callbacks = NULL;
 //動的に変更可能なオプション
 static bool optionEmitKeyStroke = true;
 static bool optionEmitRealtimeEvents = true;
-static bool optionAffectKeyHoldStateToLED = true;
-static bool optionUseHeartbeatLED = true;
+static bool optionAffectKeyHoldStateToLed = true;
+static bool optionUseHeartbeatLed = true;
 
 static uint8_t optionDynamicFlags = 0xFF;
 
@@ -72,10 +72,10 @@ static void customParameterValueHandler(uint8_t slotIndex, uint8_t value) {
     optionEmitKeyStroke = !!value;
   } else if (slotIndex == OptionSlot_EmitRealtimeEvents) {
     optionEmitRealtimeEvents = !!value;
-  } else if (slotIndex == OptionSlot_AffectKeyHoldStateToLED) {
-    optionAffectKeyHoldStateToLED = !!value;
-  } else if (slotIndex == OptionSlot_UseHeartBeatLED) {
-    optionUseHeartbeatLED = !!value;
+  } else if (slotIndex == OptionSlot_AffectKeyHoldStateToLed) {
+    optionAffectKeyHoldStateToLed = !!value;
+  } else if (slotIndex == OptionSlot_UseHeartBeatLed) {
+    optionUseHeartbeatLed = !!value;
   }
 
   if (callbacks && callbacks->customParameterHandlerChained) {
@@ -238,11 +238,11 @@ static void keyboardEntry() {
       processKeyStatesUpdate();
       keyboardCoreLogic_processTicker(5);
       processKeyboardCoreLogicOutput();
-      if (optionAffectKeyHoldStateToLED) {
+      if (optionAffectKeyHoldStateToLed) {
         boardIo_writeLed2(pressedKeyCount > 0);
       }
     }
-    if (optionUseHeartbeatLED) {
+    if (optionUseHeartbeatLed) {
       if (cnt % 4000 == 0) {
         boardIo_writeLed1(true);
       }
