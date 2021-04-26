@@ -1,5 +1,6 @@
 #include "keyScanner_encoderBasic.h"
 #include "km0/common/bitOperations.h"
+#include "km0/common/utils.h"
 #include "km0/deviceIo/dio.h"
 #if __has_include("config.h")
 #include "config.h"
@@ -66,7 +67,7 @@ void keyScanner_encoderBasic_update(uint8_t *keyStateBitFlags) {
     EncoderConfig *config = &encoderConfigs[i];
     EncoderState *state = &encoderStates[i];
     updateEncoderInstance(config, state);
-    writeArrayedBitFlagsBit(keyStateBitFlags, config->scanIndexBase + 0, state->holdA);
-    writeArrayedBitFlagsBit(keyStateBitFlags, config->scanIndexBase + 1, state->holdB);
+    utils_writeArrayedBitFlagsBit(keyStateBitFlags, config->scanIndexBase + 0, state->holdA);
+    utils_writeArrayedBitFlagsBit(keyStateBitFlags, config->scanIndexBase + 1, state->holdB);
   }
 }

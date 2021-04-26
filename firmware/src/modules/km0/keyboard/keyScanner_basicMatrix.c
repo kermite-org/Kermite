@@ -1,5 +1,6 @@
 #include "keyScanner_basicMatrix.h"
 #include "km0/common/bitOperations.h"
+#include "km0/common/utils.h"
 #include "km0/deviceIo/dio.h"
 #include "km0/deviceIo/system.h"
 
@@ -43,7 +44,7 @@ void keyScanner_basicMatrix_update(uint8_t *keyStateBitFlags) {
     for (uint8_t j = 0; j < numColumns; j++) {
       uint8_t columnPin = columnPins[j];
       bool isDown = dio_read(columnPin) == 0;
-      writeArrayedBitFlagsBit(keyStateBitFlags, keySlotIndex, isDown);
+      utils_writeArrayedBitFlagsBit(keyStateBitFlags, keySlotIndex, isDown);
       keySlotIndex++;
     }
     dio_setHigh(rowPin);
