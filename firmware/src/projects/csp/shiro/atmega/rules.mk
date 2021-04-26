@@ -1,4 +1,4 @@
-WORKER = worker_atmega32u4
+TARGET_MCU = atmega32u4
 
 MODULE_SRCS += km0/common/utils.c
 MODULE_SRCS += km0/deviceIo/atmega/system.c

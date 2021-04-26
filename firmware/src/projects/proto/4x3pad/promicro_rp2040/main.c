@@ -1,16 +1,17 @@
 #include "config.h"
 #include "km0/deviceIo/dio.h"
 #include "km0/keyboard/generalKeyboard.h"
+#include "km0/keyboard/keyScanner_basicMatrix.h"
 
 #define NumColumns 4
 #define NumRows 3
-#define NumKeySlots (NumColumns * NumRows)
+#define NumScanSlots (NumColumns * NumRows)
 
 static const uint8_t columnPins[NumColumns] = { GP2, GP3, GP4, GP5 };
 static const uint8_t rowPins[NumRows] = { GP7, GP8, GP9 };
 
 // clang-format off
-static const int8_t keyIndexTable[NumKeySlots] = {
+static const int8_t keyIndexTable[NumScanSlots] = {
    0,  1,  2,  3, 
    4,  5,  6,  7,
    8,  9, 10, 11
@@ -21,7 +22,9 @@ int main() {
   // generalKeyboard_useIndicatorLeds(GP25, GP25, false); //RPi pico
   generalKeyboard_useIndicatorRgbLed(GP25); //promicro rp2040
   generalKeyboard_useDebugUart(38400);
-  generalKeyboard_useMatrixKeyScanner(NumRows, NumColumns, rowPins, columnPins, keyIndexTable);
+  keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
+  generalKeyboard_useKeyCanner(keyScanner_basicMatrix_update);
+  generalKeyboard_setKeyIndexTable(keyIndexTable);
   generalKeyboard_start();
   return 0;
 }

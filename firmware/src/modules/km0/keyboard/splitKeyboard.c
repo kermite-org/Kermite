@@ -2,7 +2,6 @@
 #include "config.h"
 #include "configValidator.h"
 #include "configuratorServant.h"
-#include "keyScanner.h"
 #include "keyboardCoreLogic.h"
 #include "km0/common/bitOperations.h"
 #include "km0/common/utils.h"
@@ -18,31 +17,31 @@
 //---------------------------------------------
 //definitions
 
-#ifndef KM0_KEYBOARD__NUM_KEYSLOTS
-#error KM0_KEYBOARD__NUM_KEYSLOTS is not defined
+#ifndef KM0_KEYBOARD__NUM_SCAN_SLOTS
+#error KM0_KEYBOARD__NUM_SCAN_SLOTS is not defined
 #endif
 
-#define NumKeySlots KM0_KEYBOARD__NUM_KEYSLOTS
-#define NumKeySlotsHalf (KM0_KEYBOARD__NUM_KEYSLOTS >> 1)
+#define NumScanSlots KM0_KEYBOARD__NUM_SCAN_SLOTS
+#define NumScanSlotsHalf (KM0_KEYBOARD__NUM_SCAN_SLOTS >> 1)
 
-//#define NumKeySlotBytesHalf Ceil(NumKeySlotsHalf / 8)
-#define NumKeySlotBytesHalf ((NumKeySlotsHalf + 7) >> 3)
-#define NumKeySlotBytes (NumKeySlotBytesHalf * 2)
+//#define NumScanSlotBytesHalf Ceil(NumScanSlotsHalf / 8)
+#define NumScanSlotBytesHalf ((NumScanSlotsHalf + 7) >> 3)
+#define NumScanSlotBytes (NumScanSlotBytesHalf * 2)
 
-#define SingleWireMaxPacketSize (NumKeySlotBytesHalf + 1)
+#define SingleWireMaxPacketSize (NumScanSlotBytesHalf + 1)
 
 //---------------------------------------------
 //variables
 
-static uint8_t *keySlotIndexToKeyIndexMap;
+static uint8_t *scanIndexToKeyIndexMap;
 
 //左右間通信用バッファ
 static uint8_t sw_txbuf[SingleWireMaxPacketSize] = { 0 };
 static uint8_t sw_rxbuf[SingleWireMaxPacketSize] = { 0 };
 
 //キー状態
-static uint8_t keyStateFlags[NumKeySlotBytes] = { 0 };
-static uint8_t nextKeyStateFlags[NumKeySlotBytes] = { 0 };
+static uint8_t keyStateFlags[NumScanSlotBytes] = { 0 };
+static uint8_t nextKeyStateFlags[NumScanSlotBytes] = { 0 };
 
 static uint8_t pressedKeyCount = 0;
 
@@ -54,6 +53,8 @@ static bool isSideBrainModeEnabled = false;
 
 static bool hasMasterOathReceived = false;
 static bool debugUartConfigured = false;
+
+static void (*keyScannerUpdateFunc)(uint8_t *keyStateBitFlags) = 0;
 
 //---------------------------------------------
 //動的に変更可能なオプション
@@ -131,11 +132,11 @@ static void processKeyboardCoreLogicOutput() {
 }
 
 //キーが押された/離されたときに呼ばれるハンドラ, 両手用
-static void onPhysicalKeyStateChanged(uint8_t keySlotIndex, bool isDown) {
-  if (keySlotIndex >= NumKeySlots) {
+static void onPhysicalKeyStateChanged(uint8_t scanIndex, bool isDown) {
+  if (scanIndex >= NumScanSlots) {
     return;
   }
-  uint8_t keyIndex = keySlotIndexToKeyIndexMap[keySlotIndex];
+  uint8_t keyIndex = scanIndexToKeyIndexMap[scanIndex];
   if (keyIndex == 0xFF) {
     return;
   }
@@ -196,36 +197,36 @@ static void pullAltSideKeyStates() {
 
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
-    if (cmd == 0x41 && sz == 1 + NumKeySlotBytesHalf) {
+    if (cmd == 0x41 && sz == 1 + NumScanSlotBytesHalf) {
       uint8_t *payloadBytes = sw_rxbuf + 1;
       //子-->親, キー状態応答パケット受信, 子のキー状態を受け取り保持
-      utils_copyBitFlagsBuf(nextKeyStateFlags, NumKeySlotsHalf, payloadBytes, 0, NumKeySlotsHalf);
+      utils_copyBitFlagsBuf(nextKeyStateFlags, NumScanSlotsHalf, payloadBytes, 0, NumScanSlotsHalf);
     }
   }
 }
 
 //キー状態更新処理
 static void processKeyStatesUpdate() {
-  for (uint8_t i = 0; i < NumKeySlotBytes; i++) {
+  for (uint8_t i = 0; i < NumScanSlotBytes; i++) {
     uint8_t byte0 = keyStateFlags[i];
     uint8_t byte1 = nextKeyStateFlags[i];
     for (uint8_t j = 0; j < 8; j++) {
-      uint8_t keySlotIndex = i * 8 + j;
-      if (keySlotIndex >= NumKeySlots) {
+      uint8_t scanIndex = i * 8 + j;
+      if (scanIndex >= NumScanSlots) {
         break;
       }
       if (optionInvertSide) {
-        keySlotIndex = (keySlotIndex < NumKeySlotsHalf)
-                           ? (NumKeySlotsHalf + keySlotIndex)
-                           : (keySlotIndex - NumKeySlotsHalf);
+        scanIndex = (scanIndex < NumScanSlotsHalf)
+                        ? (NumScanSlotsHalf + scanIndex)
+                        : (scanIndex - NumScanSlotsHalf);
       }
       bool state0 = bit_read(byte0, j);
       bool state1 = bit_read(byte1, j);
       if (!state0 && state1) {
-        onPhysicalKeyStateChanged(keySlotIndex, true);
+        onPhysicalKeyStateChanged(scanIndex, true);
       }
       if (state0 && !state1) {
-        onPhysicalKeyStateChanged(keySlotIndex, false);
+        onPhysicalKeyStateChanged(scanIndex, false);
       }
     }
     keyStateFlags[i] = nextKeyStateFlags[i];
@@ -242,7 +243,7 @@ static void runAsMaster() {
   while (1) {
     cnt++;
     if (cnt % 4 == 0) {
-      keyScanner_update(nextKeyStateFlags);
+      keyScannerUpdateFunc(nextKeyStateFlags);
       processKeyStatesUpdate();
       keyboardCoreLogic_processTicker(5);
       processKeyboardCoreLogicOutput();
@@ -280,15 +281,15 @@ static void onRecevierInterruption() {
       //親-->子, キー状態要求パケット受信, キー状態応答パケットを返す
       //子から親に対してキー状態応答パケットを送る
       sw_txbuf[0] = 0x41;
-      utils_copyBytes(sw_txbuf + 1, nextKeyStateFlags, NumKeySlotBytesHalf);
-      singleWire_transmitFrameBlocking(sw_txbuf, 1 + NumKeySlotBytesHalf);
+      utils_copyBytes(sw_txbuf + 1, nextKeyStateFlags, NumScanSlotBytesHalf);
+      singleWire_transmitFrameBlocking(sw_txbuf, 1 + NumScanSlotBytesHalf);
     }
   }
   singleWire_endSynchronizedSection();
 }
 
 static bool checkIfSomeKeyPressed() {
-  for (uint8_t i = 0; i < NumKeySlotBytesHalf; i++) {
+  for (uint8_t i = 0; i < NumScanSlotBytesHalf; i++) {
     if (nextKeyStateFlags[i] > 0) {
       return true;
     }
@@ -303,7 +304,7 @@ static void runAsSlave() {
   while (1) {
     cnt++;
     if (cnt % 4 == 0) {
-      keyScanner_update(nextKeyStateFlags);
+      keyScannerUpdateFunc(nextKeyStateFlags);
       pressedKeyCount = checkIfSomeKeyPressed();
       if (optionAffectKeyHoldStateToLed) {
         boardIo_writeLed2(pressedKeyCount > 0);
@@ -408,13 +409,12 @@ void splitKeyboard_useOptionDynamic(uint8_t slot) {
   setCustomParameterDynamicFlag(slot, true);
 }
 
-void splitKeyboard_useBasicMatrixKeyScanner(
-    uint8_t numRows, uint8_t numColumns,
-    const uint8_t *rowPins, const uint8_t *columnPins,
-    const int8_t *_keySlotIndexToKeyIndexMap) {
-  keyScanner_initializeBasicMatrix(
-      numRows, numColumns, rowPins, columnPins);
-  keySlotIndexToKeyIndexMap = (uint8_t *)_keySlotIndexToKeyIndexMap;
+void splitKeyboard_useKeyCanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags)) {
+  keyScannerUpdateFunc = _keyScannerUpdateFunc;
+}
+
+void splitKeyboard_setKeyIndexTable(const int8_t *_scanIndexToKeyIndexMap) {
+  scanIndexToKeyIndexMap = (uint8_t *)_scanIndexToKeyIndexMap;
 }
 
 static uint8_t serialNumberTextBuf[24];

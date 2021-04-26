@@ -1,16 +1,18 @@
 #include "km0/deviceIo/dio.h"
+#include "km0/keyboard/keyScanner_basicMatrix.h"
 #include "km0/keyboard/splitKeyboard.h"
+
 //---------------------------------------------
 
 #define NumColumns 7
 #define NumRows 4
-#define NumKeySlots 56
+#define NumScanSlots 56
 
 static const uint8_t columnPins[NumColumns] = { GP28, GP27, GP26, GP22, GP20, GP23, GP21 };
 static const uint8_t rowPins[NumRows] = { GP6, GP7, GP8, GP9 };
 
 // clang-format off
-static const int8_t keyIndexTable[NumKeySlots]  = {
+static const int8_t keyIndexTable[NumScanSlots]  = {
   //left
     0,  1,  2,  3,  4,  5,  6,
     7,  8,  9, 10, 11, 12, 13, 
@@ -27,7 +29,9 @@ static const int8_t keyIndexTable[NumKeySlots]  = {
 int main() {
   splitKeyboard_useIndicatorRgbLed(GP25);
   splitKeyboard_useDebugUart(115200);
-  splitKeyboard_useMatrixKeyScanner(NumRows, NumColumns, rowPins, columnPins, keyIndexTable);
+  keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
+  splitKeyboard_useKeyCanner(keyScanner_basicMatrix_update);
+  splitKeyboard_setKeyIndexTable(keyIndexTable);
   splitKeyboard_start();
   return 0;
 }

@@ -1,6 +1,8 @@
 
 #include "km0/deviceIo/singleWire4.h"
+#if __has_include("config.h")
 #include "config.h"
+#endif
 #include "km0/deviceIo/dio.h"
 #include "pico_sdk/src/common/include/pico/stdlib.h"
 #include "pico_sdk/src/rp2_common/include/hardware/clocks.h"
