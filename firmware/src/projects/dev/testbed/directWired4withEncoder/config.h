@@ -2,6 +2,7 @@
 
 #define PROJECT_ID "Mr158P4b"
 
-#define KM0_KEYBOARD__NUM_KEYSLOTS 4
+#define KM0_KEYBOARD__NUM_SCAN_SLOTS 4
+#define KM0_KEYBOARD__NUM_KEY_SLOTS 4
 
 #endif
