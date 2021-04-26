@@ -281,7 +281,7 @@ void generalKeyboard_useOptionDynamic(uint8_t slot) {
   setCustomParameterDynamicFlag(slot, true);
 }
 
-void generalKeyboard_useKeyCanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags)) {
+void generalKeyboard_useKeyScanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags)) {
   keyScannerUpdateFunc = _keyScannerUpdateFunc;
 }
 

@@ -23,7 +23,7 @@ int main() {
   generalKeyboard_useIndicatorRgbLed(GP25); //promicro rp2040
   generalKeyboard_useDebugUart(38400);
   keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
-  generalKeyboard_useKeyCanner(keyScanner_basicMatrix_update);
+  generalKeyboard_useKeyScanner(keyScanner_basicMatrix_update);
   generalKeyboard_setKeyIndexTable(keyIndexTable);
   generalKeyboard_start();
   return 0;

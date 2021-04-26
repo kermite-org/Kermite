@@ -32,7 +32,7 @@ int main() {
   splitKeyboard_useIndicatorLeds(P_B0, P_D5, true);
   splitKeyboard_useDebugUart(38400);
   keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
-  splitKeyboard_useKeyCanner(keyScanner_basicMatrix_update);
+  splitKeyboard_useKeyScanner(keyScanner_basicMatrix_update);
   splitKeyboard_setKeyIndexTable(keyIndexTable);
   splitKeyboard_start();
   return 0;
