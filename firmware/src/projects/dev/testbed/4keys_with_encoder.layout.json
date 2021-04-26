@@ -1,0 +1,82 @@
+{
+  "formatRevision": "LA01",
+  "setup": {
+    "placementUnit": "KP 19",
+    "placementAnchor": "center",
+    "keySizeUnit": "KP 19",
+    "keyIdMode": "auto"
+  },
+  "keyEntities": [
+    {
+      "keyId": "key0",
+      "x": -1.5,
+      "y": 0,
+      "keyIndex": 0
+    },
+    {
+      "keyId": "key1",
+      "x": -0.5,
+      "y": 0,
+      "keyIndex": 1
+    },
+    {
+      "keyId": "key2",
+      "x": 0.5,
+      "y": 0,
+      "keyIndex": 2
+    },
+    {
+      "keyId": "key3",
+      "x": 1.5,
+      "y": 0,
+      "keyIndex": 3
+    },
+    {
+      "keyId": "key4",
+      "x": -4,
+      "y": -2.25,
+      "keyIndex": 4
+    },
+    {
+      "keyId": "key5",
+      "x": -4,
+      "y": -1.25,
+      "keyIndex": 5
+    },
+    {
+      "keyId": "key6",
+      "x": -4,
+      "y": 0.25,
+      "keyIndex": 6
+    },
+    {
+      "keyId": "key7",
+      "x": -4,
+      "y": 1.25,
+      "keyIndex": 7
+    }
+  ],
+  "outlineShapes": [
+    {
+      "points": [
+        {
+          "x": -95,
+          "y": -60
+        },
+        {
+          "x": -95,
+          "y": 40
+        },
+        {
+          "x": 55,
+          "y": 40
+        },
+        {
+          "x": 55,
+          "y": -60
+        }
+      ]
+    }
+  ],
+  "transformationGroups": []
+}
