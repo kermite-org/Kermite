@@ -1,4 +1,4 @@
-#include "keyScanner.h"
+#include "keyScanner_basicMatrix.h"
 #include "km0/common/bitOperations.h"
 #include "km0/deviceIo/dio.h"
 #include "km0/deviceIo/system.h"
@@ -9,7 +9,7 @@ static const uint8_t *rowPins;
 static const uint8_t *columnPins;
 static bool initialized = false;
 
-void keyScanner_initializeBasicMatrix(
+void keyScanner_basicMatrix_initialize(
     uint8_t _numRows,
     uint8_t _numColumns,
     const uint8_t *_rowPins,
@@ -31,11 +31,10 @@ void keyScanner_initializeBasicMatrix(
   initialized = true;
 }
 
-void keyScanner_update(uint8_t *keyStateBitFlags) {
+void keyScanner_basicMatrix_update(uint8_t *keyStateBitFlags) {
   if (!initialized) {
     return;
   }
-
   uint8_t keySlotIndex = 0;
   for (uint8_t i = 0; i < numRows; i++) {
     uint8_t rowPin = rowPins[i];

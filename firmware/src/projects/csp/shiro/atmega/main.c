@@ -1,6 +1,7 @@
 #include "config.h"
 #include "km0/deviceIo/dio.h"
 #include "km0/keyboard/generalKeyboard.h"
+#include "km0/keyboard/keyScanner_basicMatrix.h"
 
 #define NumColumns 3
 #define NumRows 5
@@ -21,7 +22,9 @@ static const int8_t keyIndexTable[NumKeySlots] = {
 
 int main() {
   generalKeyboard_useIndicatorLeds(P_B0, P_D5, true);
-  generalKeyboard_useMatrixKeyScanner(NumRows, NumColumns, rowPins, columnPins, keyIndexTable);
+  keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
+  generalKeyboard_useKeyCanner(keyScanner_basicMatrix_update);
+  generalKeyboard_setKeyIndexTable(keyIndexTable);
   generalKeyboard_start();
   return 0;
 }

@@ -1,5 +1,6 @@
 #include "config.h"
 #include "km0/deviceIo/dio.h"
+#include "km0/keyboard/keyScanner_basicMatrix.h"
 #include "km0/keyboard/splitKeyboard.h"
 
 #define NumColumns 4
@@ -26,7 +27,9 @@ int main() {
   splitKeyboard_useIndicatorLeds(GP25, GP25, false); //RPi pico
   // generalKeyboard_useIndicatorRgbLed(GP25); //promicro rp2040
   splitKeyboard_useDebugUart(115200);
-  splitKeyboard_useMatrixKeyScanner(NumRows, NumColumns, rowPins, columnPins, keyIndexTable);
+  keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
+  splitKeyboard_useKeyCanner(keyScanner_basicMatrix_update);
+  splitKeyboard_setKeyIndexTable(keyIndexTable);
   splitKeyboard_start();
   return 0;
 }

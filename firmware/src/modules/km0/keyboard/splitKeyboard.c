@@ -2,7 +2,6 @@
 #include "config.h"
 #include "configValidator.h"
 #include "configuratorServant.h"
-#include "keyScanner.h"
 #include "keyboardCoreLogic.h"
 #include "km0/common/bitOperations.h"
 #include "km0/common/utils.h"
@@ -54,6 +53,8 @@ static bool isSideBrainModeEnabled = false;
 
 static bool hasMasterOathReceived = false;
 static bool debugUartConfigured = false;
+
+static void (*keyScannerUpdateFunc)(uint8_t *keyStateBitFlags) = 0;
 
 //---------------------------------------------
 //動的に変更可能なオプション
@@ -242,7 +243,7 @@ static void runAsMaster() {
   while (1) {
     cnt++;
     if (cnt % 4 == 0) {
-      keyScanner_update(nextKeyStateFlags);
+      keyScannerUpdateFunc(nextKeyStateFlags);
       processKeyStatesUpdate();
       keyboardCoreLogic_processTicker(5);
       processKeyboardCoreLogicOutput();
@@ -303,7 +304,7 @@ static void runAsSlave() {
   while (1) {
     cnt++;
     if (cnt % 4 == 0) {
-      keyScanner_update(nextKeyStateFlags);
+      keyScannerUpdateFunc(nextKeyStateFlags);
       pressedKeyCount = checkIfSomeKeyPressed();
       if (optionAffectKeyHoldStateToLed) {
         boardIo_writeLed2(pressedKeyCount > 0);
@@ -408,12 +409,11 @@ void splitKeyboard_useOptionDynamic(uint8_t slot) {
   setCustomParameterDynamicFlag(slot, true);
 }
 
-void splitKeyboard_useMatrixKeyScanner(
-    uint8_t numRows, uint8_t numColumns,
-    const uint8_t *rowPins, const uint8_t *columnPins,
-    const int8_t *_keySlotIndexToKeyIndexMap) {
-  keyScanner_initializeBasicMatrix(
-      numRows, numColumns, rowPins, columnPins);
+void splitKeyboard_useKeyCanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags)) {
+  keyScannerUpdateFunc = _keyScannerUpdateFunc;
+}
+
+void splitKeyboard_setKeyIndexTable(const int8_t *_keySlotIndexToKeyIndexMap) {
   keySlotIndexToKeyIndexMap = (uint8_t *)_keySlotIndexToKeyIndexMap;
 }
 

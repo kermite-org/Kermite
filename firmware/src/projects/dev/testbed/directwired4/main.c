@@ -1,7 +1,7 @@
 #include "config.h"
 #include "km0/deviceIo/dio.h"
 #include "km0/keyboard/generalKeyboard.h"
-#include "km0/keyboard/keyScanner.h"
+#include "km0/keyboard/keyScanner_directWired.h"
 
 #define NumKeys 4
 
@@ -11,7 +11,8 @@ static const int8_t keyIndexTable[NumKeys] = { 0, 1, 2, 3 };
 int main() {
   generalKeyboard_useIndicatorLeds(P_B0, P_D5, true);
   generalKeyboard_useDebugUart(38400);
-  keyScanner_initializeDirectWired(NumKeys, keyInputPins);
+  keyScanner_directWired_initialize(NumKeys, keyInputPins);
+  generalKeyboard_useKeyCanner(keyScanner_directWired_update);
   generalKeyboard_setKeyIndexTable(keyIndexTable);
   generalKeyboard_start();
   return 0;

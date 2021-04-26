@@ -2,7 +2,6 @@
 #include "config.h"
 #include "configValidator.h"
 #include "configuratorServant.h"
-#include "keyScanner.h"
 #include "keyboardCoreLogic.h"
 #include "km0/common/bitOperations.h"
 #include "km0/common/utils.h"
@@ -46,6 +45,8 @@ static bool isSideBrainModeEnabled = false;
 static bool debugUartConfigured = false;
 
 static KeyboardCallbackSet *callbacks = NULL;
+
+static void (*keyScannerUpdateFunc)(uint8_t *keyStateBitFlags) = 0;
 
 //---------------------------------------------
 //動的に変更可能なオプション
@@ -234,7 +235,7 @@ static void keyboardEntry() {
   while (1) {
     cnt++;
     if (cnt % 4 == 0) {
-      keyScanner_update(nextKeyStateFlags);
+      keyScannerUpdateFunc(nextKeyStateFlags);
       processKeyStatesUpdate();
       keyboardCoreLogic_processTicker(5);
       processKeyboardCoreLogicOutput();
@@ -280,12 +281,8 @@ void generalKeyboard_useOptionDynamic(uint8_t slot) {
   setCustomParameterDynamicFlag(slot, true);
 }
 
-void generalKeyboard_useMatrixKeyScanner(
-    uint8_t numRows, uint8_t numColumns,
-    const uint8_t *rowPins, const uint8_t *columnPins,
-    const int8_t *_keySlotIndexToKeyIndexMap) {
-  keyScanner_initializeBasicMatrix(numRows, numColumns, rowPins, columnPins);
-  keySlotIndexToKeyIndexMap = (uint8_t *)_keySlotIndexToKeyIndexMap;
+void generalKeyboard_useKeyCanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags)) {
+  keyScannerUpdateFunc = _keyScannerUpdateFunc;
 }
 
 void generalKeyboard_setKeyIndexTable(const int8_t *_keySlotIndexToKeyIndexMap) {
