@@ -12,4 +12,10 @@
 #define bit_is_on(p, b) (bit_read((p), (b)))
 #define bit_is_off(p, b) (!(bit_read((p), (b))))
 
+inline void writeArrayedBitFlagsBit(uint8_t *bitFlagBytes, uint8_t flagIndex, bool state) {
+  uint8_t byteIndex = flagIndex >> 3;
+  uint8_t bitIndex = flagIndex & 7;
+  bit_spec(bitFlagBytes[byteIndex], bitIndex, state);
+}
+
 #endif

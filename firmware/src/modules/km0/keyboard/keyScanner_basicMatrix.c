@@ -41,11 +41,9 @@ void keyScanner_basicMatrix_update(uint8_t *keyStateBitFlags) {
     dio_setLow(rowPin);
     delayUs(1); //RP2040の場合僅かに待たないとキーの状態を正しく読み出せない
     for (uint8_t j = 0; j < numColumns; j++) {
-      uint8_t byteIndex = keySlotIndex >> 3;
-      uint8_t bitIndex = keySlotIndex & 7;
       uint8_t columnPin = columnPins[j];
       bool isDown = dio_read(columnPin) == 0;
-      bit_spec(keyStateBitFlags[byteIndex], bitIndex, isDown);
+      writeArrayedBitFlagsBit(keyStateBitFlags, keySlotIndex, isDown);
       keySlotIndex++;
     }
     dio_setHigh(rowPin);
