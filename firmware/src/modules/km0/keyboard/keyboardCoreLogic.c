@@ -5,8 +5,8 @@
 #include "storageLayout.h"
 #include <stdio.h>
 
-#ifndef KM0_KEYBOARD__NUM_SCAN_SLOTS
-#error corelogic option KM0_KEYBOARD__NUM_SCAN_SLOTS is not provided.
+#ifndef KM0_KEYBOARD__NUM_KEY_SLOTS
+#error corelogic option KM0_KEYBOARD__NUM_KEY_SLOTS is not provided.
 #endif
 
 /*
@@ -595,7 +595,7 @@ static void handleOperationOff(uint32_t opWord) {
 
 #define KIDX_NONE 255
 
-#define NumKeySlotsMax KM0_KEYBOARD__NUM_SCAN_SLOTS
+#define NumKeySlots KM0_KEYBOARD__NUM_KEY_SLOTS
 #define NumRecallKeyEntries 4
 #define ImmediateReleaseStrokeDuration 50
 
@@ -605,14 +605,14 @@ typedef struct {
 } RecallKeyEntry;
 
 typedef struct {
-  uint32_t keyAttachedOperationWords[NumKeySlotsMax];
+  uint32_t keyAttachedOperationWords[NumKeySlots];
   RecallKeyEntry recallKeyEntries[NumRecallKeyEntries];
 } AssignBinderState;
 
 static AssignBinderState assignBinderState;
 
 static void resetAssignBinder() {
-  for (uint8_t i = 0; i < NumKeySlotsMax; i++) {
+  for (uint8_t i = 0; i < NumKeySlots; i++) {
     assignBinderState.keyAttachedOperationWords[i] = 0;
   }
   for (uint8_t i = 0; i < NumRecallKeyEntries; i++) {
@@ -715,7 +715,7 @@ typedef struct _KeySlot {
 
 typedef struct {
   uint8_t interruptKeyIndex;
-  KeySlot keySlots[NumKeySlotsMax];
+  KeySlot keySlots[NumKeySlots];
   uint16_t assignHitResultWord;
 } ResolverState;
 
@@ -724,7 +724,7 @@ static ResolverState resolverState;
 static void initResolverState() {
   resolverState.interruptKeyIndex = KIDX_NONE;
   resolverState.assignHitResultWord = 0;
-  for (uint8_t i = 0; i < NumKeySlotsMax; i++) {
+  for (uint8_t i = 0; i < NumKeySlots; i++) {
     KeySlot *slot = &resolverState.keySlots[i];
     slot->keyIndex = i;
     slot->steps = 0;
@@ -1080,7 +1080,7 @@ static void keySlot_tick(KeySlot *slot, uint8_t ms) {
 
 static void triggerResolver_tick(uint8_t ms) {
   ResolverState *rs = &resolverState;
-  for (uint8_t i = 0; i < NumKeySlotsMax; i++) {
+  for (uint8_t i = 0; i < NumKeySlots; i++) {
     if (i != rs->interruptKeyIndex) {
       KeySlot *slot = &rs->keySlots[i];
       keySlot_tick(slot, ms);
@@ -1094,7 +1094,7 @@ static void triggerResolver_tick(uint8_t ms) {
 }
 
 static void triggerResolver_handleKeyInput(uint8_t keyIndex, bool isDown) {
-  if (keyIndex >= NumKeySlotsMax) {
+  if (keyIndex >= NumKeySlots) {
     return;
   }
   ResolverState *rs = &resolverState;
