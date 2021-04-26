@@ -5,6 +5,11 @@
 #include "km0/keyboard/keyScanner_encoderBasic.h"
 #include <stdio.h>
 
+//board RPi Pico
+//GP25: onboard LED
+//GP16, GP17 <-- Rotary Encoder 1
+//GP18, GP19 <-- Rotary Encoder 2
+
 static EncoderConfig appEncoderConfigs[] = {
   { .pin1 = GP16, .pin2 = GP17, .scanIndexBase = 0 },
   { .pin1 = GP18, .pin2 = GP19, .scanIndexBase = 2 },

@@ -12,6 +12,7 @@ MODULE_PIOASM_SRCS += km0/deviceIo/rp2040/neoPixelCore.pio
 MODULE_SRCS += km0/deviceIo/rp2040/singleWire4.c
 MODULE_PIOASM_SRCS += km0/deviceIo/rp2040/singleWire4.pio
 MODULE_SRCS += km0/deviceIo/rp2040/serialLed.c
+MODULE_SRCS += km0/keyboard/keyScanner_encoderBasic.c
 
 PROJECT_SRCS += main_blink.c
 #PROJECT_SRCS += main_debug_uart.c
@@ -20,3 +21,4 @@ PROJECT_SRCS += main_blink.c
 #PROJECT_SRCS += main_board_rgb_led.c
 #PROJECT_SRCS += main_singleWire4.c
 # PROJECT_SRCS += main_serialLed.c
+#PROJECT_SRCS += main_rotary_encoder.c
