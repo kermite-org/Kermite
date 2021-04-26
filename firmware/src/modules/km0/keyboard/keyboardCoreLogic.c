@@ -5,8 +5,8 @@
 #include "storageLayout.h"
 #include <stdio.h>
 
-#ifndef KM0_KEYBOARD__NUM_KEY_SLOTS
-#error corelogic option KM0_KEYBOARD__NUM_KEY_SLOTS is not provided.
+#ifndef KM0_KEYBOARD__NUM_SCAN_SLOTS
+#error corelogic option KM0_KEYBOARD__NUM_SCAN_SLOTS is not provided.
 #endif
 
 /*
@@ -595,7 +595,7 @@ static void handleOperationOff(uint32_t opWord) {
 
 #define KIDX_NONE 255
 
-#define NumKeySlotsMax KM0_KEYBOARD__NUM_KEY_SLOTS
+#define NumKeySlotsMax KM0_KEYBOARD__NUM_SCAN_SLOTS
 #define NumRecallKeyEntries 4
 #define ImmediateReleaseStrokeDuration 50
 

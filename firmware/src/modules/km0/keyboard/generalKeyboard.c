@@ -16,23 +16,23 @@
 //---------------------------------------------
 //definitions
 
-#ifndef KM0_KEYBOARD__NUM_KEY_SLOTS
-#error KM0_KEYBOARD__NUM_KEY_SLOTS is not defined
+#ifndef KM0_KEYBOARD__NUM_SCAN_SLOTS
+#error KM0_KEYBOARD__NUM_SCAN_SLOTS is not defined
 #endif
 
-#define NumKeySlots KM0_KEYBOARD__NUM_KEY_SLOTS
+#define NumScanSlots KM0_KEYBOARD__NUM_SCAN_SLOTS
 
-//#define NumKeySlotBytes Ceil(KM0_KEYBOARD__NUM_KEY_SLOTS / 8)
-#define NumKeySlotBytes ((KM0_KEYBOARD__NUM_KEY_SLOTS + 7) >> 3)
+//#define NumScanSlotBytes Ceil(KM0_KEYBOARD__NUM_SCAN_SLOTS / 8)
+#define NumScanSlotBytes ((KM0_KEYBOARD__NUM_SCAN_SLOTS + 7) >> 3)
 
 //---------------------------------------------
 //variables
 
-static uint8_t *keySlotIndexToKeyIndexMap;
+static uint8_t *scanIndexToKeyIndexMap;
 
 //キー状態
-static uint8_t keyStateFlags[NumKeySlotBytes] = { 0 };
-static uint8_t nextKeyStateFlags[NumKeySlotBytes] = { 0 };
+static uint8_t keyStateFlags[NumScanSlotBytes] = { 0 };
+static uint8_t nextKeyStateFlags[NumScanSlotBytes] = { 0 };
 
 static uint8_t pressedKeyCount = 0;
 
@@ -133,11 +133,11 @@ static void processKeyboardCoreLogicOutput() {
 }
 
 //キーが押された/離されたときに呼ばれるハンドラ
-static void onPhysicalKeyStateChanged(uint8_t keySlotIndex, bool isDown) {
-  if (keySlotIndex >= NumKeySlots) {
+static void onPhysicalKeyStateChanged(uint8_t scanIndex, bool isDown) {
+  if (scanIndex >= NumScanSlots) {
     return;
   }
-  uint8_t keyIndex = keySlotIndexToKeyIndexMap[keySlotIndex];
+  uint8_t keyIndex = scanIndexToKeyIndexMap[scanIndex];
   if (keyIndex == 0xFF) {
     return;
   }
@@ -194,21 +194,21 @@ static void configuratorServantStateHandler(uint8_t state) {
 
 //キー状態更新処理
 static void processKeyStatesUpdate() {
-  for (uint8_t i = 0; i < NumKeySlotBytes; i++) {
+  for (uint8_t i = 0; i < NumScanSlotBytes; i++) {
     uint8_t byte0 = keyStateFlags[i];
     uint8_t byte1 = nextKeyStateFlags[i];
     for (uint8_t j = 0; j < 8; j++) {
-      uint8_t keySlotIndex = i * 8 + j;
-      if (keySlotIndex >= NumKeySlots) {
+      uint8_t scanIndex = i * 8 + j;
+      if (scanIndex >= NumScanSlots) {
         break;
       }
       bool state0 = bit_read(byte0, j);
       bool state1 = bit_read(byte1, j);
       if (!state0 && state1) {
-        onPhysicalKeyStateChanged(keySlotIndex, true);
+        onPhysicalKeyStateChanged(scanIndex, true);
       }
       if (state0 && !state1) {
-        onPhysicalKeyStateChanged(keySlotIndex, false);
+        onPhysicalKeyStateChanged(scanIndex, false);
       }
     }
     keyStateFlags[i] = nextKeyStateFlags[i];
@@ -285,8 +285,8 @@ void generalKeyboard_useKeyCanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStat
   keyScannerUpdateFunc = _keyScannerUpdateFunc;
 }
 
-void generalKeyboard_setKeyIndexTable(const int8_t *_keySlotIndexToKeyIndexMap) {
-  keySlotIndexToKeyIndexMap = (uint8_t *)_keySlotIndexToKeyIndexMap;
+void generalKeyboard_setKeyIndexTable(const int8_t *_scanIndexToKeyIndexMap) {
+  scanIndexToKeyIndexMap = (uint8_t *)_scanIndexToKeyIndexMap;
 }
 
 void generalKeyboard_setCallbacks(KeyboardCallbackSet *_callbacks) {
