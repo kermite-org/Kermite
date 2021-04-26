@@ -6,13 +6,13 @@
 
 #define NumColumns 7
 #define NumRows 4
-#define NumKeySlots 56
+#define NumScanSlots 56
 
 static const uint8_t columnPins[NumColumns] = { GP28, GP27, GP26, GP22, GP20, GP23, GP21 };
 static const uint8_t rowPins[NumRows] = { GP6, GP7, GP8, GP9 };
 
 // clang-format off
-static const int8_t keyIndexTable[NumKeySlots]  = {
+static const int8_t keyIndexTable[NumScanSlots]  = {
   //left
     0,  1,  2,  3,  4,  5,  6,
     7,  8,  9, 10, 11, 12, 13, 
