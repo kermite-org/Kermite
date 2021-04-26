@@ -12,4 +12,6 @@ void utils_copyStringToWideString(int16_t *dst, uint8_t *src, uint16_t len);
 void utils_fillBytes(uint8_t *dst, uint8_t val, uint16_t len);
 int utils_clamp(int val, int lo, int hi);
 
+void utils_writeArrayedBitFlagsBit(uint8_t *bitFlagBytes, uint8_t flagIndex, bool state);
+
 #endif

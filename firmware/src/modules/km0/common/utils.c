@@ -65,3 +65,9 @@ int utils_clamp(int val, int lo, int hi) {
     return val;
   }
 }
+
+void utils_writeArrayedBitFlagsBit(uint8_t *bitFlagBytes, uint8_t flagIndex, bool state) {
+  uint8_t byteIndex = flagIndex >> 3;
+  uint8_t bitIndex = flagIndex & 7;
+  bit_spec(bitFlagBytes[byteIndex], bitIndex, state);
+}

@@ -47,6 +47,7 @@ static bool debugUartConfigured = false;
 static KeyboardCallbackSet *callbacks = NULL;
 
 static void (*keyScannerUpdateFunc)(uint8_t *keyStateBitFlags) = 0;
+static void (*keyScannerUpdateFunc2)(uint8_t *keyStateBitFlags) = 0;
 
 //---------------------------------------------
 //動的に変更可能なオプション
@@ -236,6 +237,9 @@ static void keyboardEntry() {
     cnt++;
     if (cnt % 4 == 0) {
       keyScannerUpdateFunc(nextKeyStateFlags);
+      if (keyScannerUpdateFunc2) {
+        keyScannerUpdateFunc2(nextKeyStateFlags);
+      }
       processKeyStatesUpdate();
       keyboardCoreLogic_processTicker(5);
       processKeyboardCoreLogicOutput();
@@ -281,10 +285,12 @@ void generalKeyboard_useOptionDynamic(uint8_t slot) {
   setCustomParameterDynamicFlag(slot, true);
 }
 
-void generalKeyboard_useKeyCanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags)) {
+void generalKeyboard_useKeyScanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags)) {
   keyScannerUpdateFunc = _keyScannerUpdateFunc;
 }
-
+void generalKeyboard_useKeyScannerExtra(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags)) {
+  keyScannerUpdateFunc2 = _keyScannerUpdateFunc;
+}
 void generalKeyboard_setKeyIndexTable(const int8_t *_scanIndexToKeyIndexMap) {
   scanIndexToKeyIndexMap = (uint8_t *)_scanIndexToKeyIndexMap;
 }

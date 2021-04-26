@@ -23,7 +23,7 @@ static const int8_t keyIndexTable[NumScanSlots] = {
 int main() {
   generalKeyboard_useIndicatorLeds(P_B0, P_D5, true);
   keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
-  generalKeyboard_useKeyCanner(keyScanner_basicMatrix_update);
+  generalKeyboard_useKeyScanner(keyScanner_basicMatrix_update);
   generalKeyboard_setKeyIndexTable(keyIndexTable);
   generalKeyboard_start();
   return 0;

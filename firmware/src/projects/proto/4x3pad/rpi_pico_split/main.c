@@ -28,7 +28,7 @@ int main() {
   // generalKeyboard_useIndicatorRgbLed(GP25); //promicro rp2040
   splitKeyboard_useDebugUart(115200);
   keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
-  splitKeyboard_useKeyCanner(keyScanner_basicMatrix_update);
+  splitKeyboard_useKeyScanner(keyScanner_basicMatrix_update);
   splitKeyboard_setKeyIndexTable(keyIndexTable);
   splitKeyboard_start();
   return 0;

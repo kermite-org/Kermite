@@ -409,7 +409,7 @@ void splitKeyboard_useOptionDynamic(uint8_t slot) {
   setCustomParameterDynamicFlag(slot, true);
 }
 
-void splitKeyboard_useKeyCanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags)) {
+void splitKeyboard_useKeyScanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags)) {
   keyScannerUpdateFunc = _keyScannerUpdateFunc;
 }
 

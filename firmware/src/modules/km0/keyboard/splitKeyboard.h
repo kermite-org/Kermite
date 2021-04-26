@@ -16,7 +16,7 @@ void splitKeyboard_useDebugUart(uint32_t baud);
 void splitKeyboard_useOptionFixed(uint8_t slot, uint8_t value);
 void splitKeyboard_useOptionDynamic(uint8_t slot);
 
-void splitKeyboard_useKeyCanner(void (*keyScannerUpdateFunc)(uint8_t *keyStateBitFlags));
+void splitKeyboard_useKeyScanner(void (*keyScannerUpdateFunc)(uint8_t *keyStateBitFlags));
 void splitKeyboard_setKeyIndexTable(const int8_t *scanIndexToKeyIndexMap);
 void splitKeyboard_start();
 
