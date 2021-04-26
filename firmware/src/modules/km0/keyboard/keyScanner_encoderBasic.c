@@ -66,7 +66,7 @@ void keyScanner_encoderBasic_update(uint8_t *keyStateBitFlags) {
     EncoderConfig *config = &encoderConfigs[i];
     EncoderState *state = &encoderStates[i];
     updateEncoderInstance(config, state);
-    bit_spec(keyStateBitFlags[0], config->scanIndexBase + 0, state->holdA);
-    bit_spec(keyStateBitFlags[0], config->scanIndexBase + 1, state->holdB);
+    writeArrayedBitFlagsBit(keyStateBitFlags, config->scanIndexBase + 0, state->holdA);
+    writeArrayedBitFlagsBit(keyStateBitFlags, config->scanIndexBase + 1, state->holdB);
   }
 }
