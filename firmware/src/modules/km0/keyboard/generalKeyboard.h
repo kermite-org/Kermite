@@ -24,6 +24,7 @@ void generalKeyboard_useOptionFixed(uint8_t slot, uint8_t value);
 void generalKeyboard_useOptionDynamic(uint8_t slot);
 
 void generalKeyboard_useKeyScanner(void (*keyScannerUpdateFunc)(uint8_t *keyStateBitFlags));
+void generalKeyboard_useKeyScannerExtra(void (*keyScannerUpdateFunc)(uint8_t *keyStateBitFlags));
 void generalKeyboard_setKeyIndexTable(const int8_t *scanIndexToKeyIndexMap);
 void generalKeyboard_setCallbacks(KeyboardCallbackSet *callbacks);
 void generalKeyboard_start();
