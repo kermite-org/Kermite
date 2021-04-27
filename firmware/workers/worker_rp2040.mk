@@ -186,7 +186,8 @@ $(PICO_SDK_DIR)/src/rp2_common/binary_info.c \
 $(PICO_SDK_DIR)/src/rp2_common/stdio.c \
 $(PICO_SDK_DIR)/src/rp2_common/stdio_uart.c \
 $(PICO_SDK_DIR)/src/rp2_common/multicore.c \
-$(PICO_SDK_DIR)/src/rp2_common/pico_bootsel_via_double_reset.c
+$(PICO_SDK_DIR)/src/rp2_common/pico_bootsel_via_double_reset.c \
+$(PICO_SDK_DIR)/src/rp2_common/i2c.c \
 
 #USB
 SDK_C_SRCS += $(TINYUSB_DIR)/src/portable/raspberrypi/rp2040/dcd_rp2040.c \
