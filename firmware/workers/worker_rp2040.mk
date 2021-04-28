@@ -85,7 +85,7 @@ DEFINES = \
 -DRP2040_USB_DEVICE_MODE=1 \
 -DTINYUSB_DEVICE_LINKED=1 \
 -DPICO_TARGET_NAME=\"kermite\" \
--DPICO_PROGRAM_URL=\"https://github.com/yahiro07/Kermite/tree/master/firmware\" \
+-DPICO_PROGRAM_URL=\"https://github.com/kermite-org/Kermite/tree/master/firmware\" \
 -DPICO_BOOTSEL_VIA_DOUBLE_RESET_TIMEOUT_MS=700 \
 -DKERMITE_TARGET_MCU_RP2040 \
 -DEXTR_KERMITE_PROJECT_RELEASE_BUILD_REVISION=$(RELEASE_REVISION) \
@@ -280,7 +280,7 @@ size: $(OBJS)
 	@$(LD) $(LD_FLAGS) $(OBJS) -o $(ELF) $(BOOT_S)
 
 flash: $(UF2)
-	cp $(UF2) /Volumes/RPI-RP2
+	cp $(UF2) $(RP2040_UF2_TARGET_DRIVE_PATH)
 
 flash_via_swd: $(ELF)
 	openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "program $(ELF) verify reset exit"

@@ -64,7 +64,7 @@ keyboard1がプロジェクト名です。プロジェクトは複数のファ�
 ## プロジェクトID
 各プロジェクトは、英数字8桁の重複しないIDを持っています。このIDはマイコンのROMに格納され、ユーティリティソフトがキーボードを検出した際に品種を判定するために使用されます。新しいプロジェクトを作成する場合、以下のジェネレータで生成してください。
 
-https://yahiro07.github.io/KermiteResourceStore/generator
+https://kermite-org.github.io/KermiteResourceStore/generator
 
 
 
@@ -72,7 +72,7 @@ https://yahiro07.github.io/KermiteResourceStore/generator
 ファームウェアの共通モジュールやユーティリティソフトウェアの実装を`master`ブランチ,`develop`ブランチで行っています。
 
 これとは別に各キーボードのファームウェア対応用の`variants`ブランチがあります。`variants`ブランチにマージされたファームウェアのソースコードはCI(github actions)でビルドされ、ビルドされたバイナリが
-<a href="https://github.com/yahiro07/KermiteResourceStore">KermiteResourceStore</a>
+<a href="https://github.com/kermite-org/KermiteResourceStore">KermiteResourceStore</a>
 リポジトリに保存されます。Kermiteのユーティリティソフトは、実行時にこのリポジトリから最新のファームウェアや各キーボードのレイアウト定義を取得します。
 
 新たにキーボードの対応を行った場合、`variants`ブランチに向けてPRを作成してください。PRが`variants`ブランチにマージされた時点でユーティリティソフトから対象のプロジェクトが利用できるようになります。

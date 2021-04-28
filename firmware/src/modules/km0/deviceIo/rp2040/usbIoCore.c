@@ -62,8 +62,53 @@ uint8_t const *tud_descriptor_device_cb(void) {
 //--------------------------------------------------------------------
 // HID Report Descriptors
 
+// clang-format off
+// Keyboard Report Descriptor Template
+#define TUD_HID_REPORT_DESC_KEYBOARD__MODIFIED(...) \
+  HID_USAGE_PAGE ( HID_USAGE_PAGE_DESKTOP     )                    ,\
+  HID_USAGE      ( HID_USAGE_DESKTOP_KEYBOARD )                    ,\
+  HID_COLLECTION ( HID_COLLECTION_APPLICATION )                    ,\
+    /* Report ID if any */\
+    __VA_ARGS__ \
+    /* 8 bits Modifier Keys (Shfit, Control, Alt) */ \
+    HID_USAGE_PAGE ( HID_USAGE_PAGE_KEYBOARD )                     ,\
+      HID_USAGE_MIN    ( 224                                    )  ,\
+      HID_USAGE_MAX    ( 231                                    )  ,\
+      HID_LOGICAL_MIN  ( 0                                      )  ,\
+      HID_LOGICAL_MAX  ( 1                                      )  ,\
+      HID_REPORT_COUNT ( 8                                      )  ,\
+      HID_REPORT_SIZE  ( 1                                      )  ,\
+      HID_INPUT        ( HID_DATA | HID_VARIABLE | HID_ABSOLUTE )  ,\
+      /* 8 bit reserved */ \
+      HID_REPORT_COUNT ( 1                                      )  ,\
+      HID_REPORT_SIZE  ( 8                                      )  ,\
+      HID_INPUT        ( HID_CONSTANT                           )  ,\
+    /* 6-byte Keycodes */ \
+    HID_USAGE_PAGE ( HID_USAGE_PAGE_KEYBOARD )                     ,\
+      HID_USAGE_MIN    ( 0                                   )     ,\
+      HID_USAGE_MAX    ( 255                                 )     ,\
+      HID_LOGICAL_MIN  ( 0                                   )     ,\
+      /*HID_LOGICAL_MAX  ( 255                               )   ,*/\
+      HID_LOGICAL_MAX_N  ( 255, 2 ) /*JISキーボードで\_¥|などの文字が入力できない問題を改善*/ ,\
+      HID_REPORT_COUNT ( 6                                   )     ,\
+      HID_REPORT_SIZE  ( 8                                   )     ,\
+      HID_INPUT        ( HID_DATA | HID_ARRAY | HID_ABSOLUTE )     ,\
+    /* 5-bit LED Indicator Kana | Compose | ScrollLock | CapsLock | NumLock */ \
+    HID_USAGE_PAGE  ( HID_USAGE_PAGE_LED                   )       ,\
+      HID_USAGE_MIN    ( 1                                       ) ,\
+      HID_USAGE_MAX    ( 5                                       ) ,\
+      HID_REPORT_COUNT ( 5                                       ) ,\
+      HID_REPORT_SIZE  ( 1                                       ) ,\
+      HID_OUTPUT       ( HID_DATA | HID_VARIABLE | HID_ABSOLUTE  ) ,\
+      /* led padding */ \
+      HID_REPORT_COUNT ( 1                                       ) ,\
+      HID_REPORT_SIZE  ( 3                                       ) ,\
+      HID_OUTPUT       ( HID_CONSTANT                            ) ,\
+  HID_COLLECTION_END
+// clang-format on
+
 static uint8_t const desc_hid_report_keyboard[] = {
-  TUD_HID_REPORT_DESC_KEYBOARD()
+  TUD_HID_REPORT_DESC_KEYBOARD__MODIFIED()
 };
 
 static uint8_t const desc_hid_report_mouse[] = {
@@ -99,8 +144,8 @@ static uint8_t const desc_configuration[] = {
   TUD_CONFIG_DESCRIPTOR(1, 3, 0, CONFIG_TOTAL_LEN, TUSB_DESC_CONFIG_ATT_REMOTE_WAKEUP, 100),
 
   // Interface number, string index, protocol, report descriptor len, EP In & Out address, size & polling interval
-  TUD_HID_DESCRIPTOR(ITF_KEYBOARD, 0, HID_PROTOCOL_NONE, sizeof(desc_hid_report_keyboard), EPNUM_HID_MOUSE, CFG_TUD_HID_EP_BUFSIZE, 10),
-  TUD_HID_DESCRIPTOR(ITF_MOUSE, 0, HID_PROTOCOL_NONE, sizeof(desc_hid_report_mouse), EPNUM_HID_KEYBOARD, CFG_TUD_HID_EP_BUFSIZE, 10),
+  TUD_HID_DESCRIPTOR(ITF_KEYBOARD, 0, HID_PROTOCOL_NONE, sizeof(desc_hid_report_keyboard), EPNUM_HID_KEYBOARD, CFG_TUD_HID_EP_BUFSIZE, 10),
+  TUD_HID_DESCRIPTOR(ITF_MOUSE, 0, HID_PROTOCOL_NONE, sizeof(desc_hid_report_mouse), EPNUM_HID_MOUSE, CFG_TUD_HID_EP_BUFSIZE, 10),
   // Interface number, string index, protocol, report descriptor len, EP In & Out address, size & polling interval
   TUD_HID_INOUT_DESCRIPTOR(ITF_RAWHID, 0, HID_PROTOCOL_NONE, sizeof(desc_hid_report_rawhid), EPNUM_HID_RAWHID,
                            0x80 | EPNUM_HID_RAWHID, CFG_TUD_HID_EP_BUFSIZE, 10)
@@ -210,7 +255,7 @@ void tud_hid_set_report_cb(uint8_t itf, uint8_t report_id, hid_report_type_t rep
 //TODO: 無駄が多いので、複数のリアルタイムイベントを1つのフレームに詰めて送る実装にしたい
 
 #define EmitNumPages 8
-static uint8_t emitBuffers[64][EmitNumPages] = { 0 };
+static uint8_t emitBuffers[EmitNumPages][64] = { 0 };
 static bool emitPageFlags[EmitNumPages] = { 0 };
 static int emitWritePageIndex = 0;
 static int emitReadPageIndex = 0;
@@ -223,8 +268,8 @@ static void enqueueRawHidEmitInternalBuffer(uint8_t *pDataBytes64) {
 
 static void shiftOutRawHidEmitInternalBuffer() {
   if (emitPageFlags[emitReadPageIndex]) {
-    bool done = tud_hid_n_report(ITF_RAWHID, 0, emitBuffers[emitReadPageIndex], 64);
-    if (done) {
+    if (tud_hid_n_ready(ITF_RAWHID)) {
+      tud_hid_n_report(ITF_RAWHID, 0, emitBuffers[emitReadPageIndex], 64);
       emitPageFlags[emitReadPageIndex] = false;
       emitReadPageIndex = (emitReadPageIndex + 1) % EmitNumPages;
     }
@@ -235,9 +280,10 @@ static void shiftOutRawHidEmitInternalBuffer() {
 // Application can use this to send the next report
 // Note: For composite reports, report[0] is report ID
 void tud_hid_report_complete_cb(uint8_t itf, uint8_t const *report, uint8_t len) {
-  (void)itf;
   (void)len;
-  shiftOutRawHidEmitInternalBuffer();
+  if (itf == ITF_RAWHID) {
+    shiftOutRawHidEmitInternalBuffer();
+  }
 }
 
 //--------------------------------------------------------------------
@@ -250,7 +296,7 @@ void usbIoCore_initialize() {
 bool usbIoCore_hidKeyboard_writeReport(uint8_t *pReportBytes8) {
   if (tud_hid_n_ready(ITF_KEYBOARD)) {
     uint8_t *p = pReportBytes8;
-    tud_hid_n_keyboard_report(ITF_KEYBOARD, p[0], p[1], p + 2);
+    tud_hid_n_report(ITF_KEYBOARD, 0, pReportBytes8, 8);
   }
   return true;
 }
