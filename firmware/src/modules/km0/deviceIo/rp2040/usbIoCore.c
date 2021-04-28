@@ -104,7 +104,7 @@ uint8_t const *tud_descriptor_device_cb(void) {
       HID_REPORT_COUNT ( 1                                       ) ,\
       HID_REPORT_SIZE  ( 3                                       ) ,\
       HID_OUTPUT       ( HID_CONSTANT                            ) ,\
-  HID_COLLECTION_END \
+  HID_COLLECTION_END
 // clang-format on
 
 static uint8_t const desc_hid_report_keyboard[] = {
@@ -255,7 +255,7 @@ void tud_hid_set_report_cb(uint8_t itf, uint8_t report_id, hid_report_type_t rep
 //TODO: 無駄が多いので、複数のリアルタイムイベントを1つのフレームに詰めて送る実装にしたい
 
 #define EmitNumPages 8
-static uint8_t emitBuffers[64][EmitNumPages] = { 0 };
+static uint8_t emitBuffers[EmitNumPages][64] = { 0 };
 static bool emitPageFlags[EmitNumPages] = { 0 };
 static int emitWritePageIndex = 0;
 static int emitReadPageIndex = 0;
@@ -268,8 +268,8 @@ static void enqueueRawHidEmitInternalBuffer(uint8_t *pDataBytes64) {
 
 static void shiftOutRawHidEmitInternalBuffer() {
   if (emitPageFlags[emitReadPageIndex]) {
-    bool done = tud_hid_n_report(ITF_RAWHID, 0, emitBuffers[emitReadPageIndex], 64);
-    if (done) {
+    if (tud_hid_n_ready(ITF_RAWHID)) {
+      tud_hid_n_report(ITF_RAWHID, 0, emitBuffers[emitReadPageIndex], 64);
       emitPageFlags[emitReadPageIndex] = false;
       emitReadPageIndex = (emitReadPageIndex + 1) % EmitNumPages;
     }
@@ -280,9 +280,10 @@ static void shiftOutRawHidEmitInternalBuffer() {
 // Application can use this to send the next report
 // Note: For composite reports, report[0] is report ID
 void tud_hid_report_complete_cb(uint8_t itf, uint8_t const *report, uint8_t len) {
-  (void)itf;
   (void)len;
-  shiftOutRawHidEmitInternalBuffer();
+  if (itf == ITF_RAWHID) {
+    shiftOutRawHidEmitInternalBuffer();
+  }
 }
 
 //--------------------------------------------------------------------
