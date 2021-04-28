@@ -250,7 +250,7 @@ void usbIoCore_initialize() {
 bool usbIoCore_hidKeyboard_writeReport(uint8_t *pReportBytes8) {
   if (tud_hid_n_ready(ITF_KEYBOARD)) {
     uint8_t *p = pReportBytes8;
-    tud_hid_n_keyboard_report(ITF_KEYBOARD, p[0], p[1], p + 2);
+    tud_hid_n_report(ITF_KEYBOARD, 0, pReportBytes8, 8);
   }
   return true;
 }
