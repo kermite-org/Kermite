@@ -280,7 +280,7 @@ size: $(OBJS)
 	@$(LD) $(LD_FLAGS) $(OBJS) -o $(ELF) $(BOOT_S)
 
 flash: $(UF2)
-	cp $(UF2) /Volumes/RPI-RP2
+	cp $(UF2) $(RP2040_UF2_DRIVE_PATH)
 
 flash_via_swd: $(ELF)
 	openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "program $(ELF) verify reset exit"
