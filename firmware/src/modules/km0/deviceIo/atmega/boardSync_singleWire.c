@@ -225,7 +225,7 @@ void boardSync_initialize() {
   debug_initTimeDebugPin();
 }
 
-void boardSync_writeTxFrame(uint8_t *buf, uint8_t len) {
+void boardSync_writeTxBuffer(uint8_t *buf, uint8_t len) {
   memcpy(raw_tx_buf, buf, len);
   raw_tx_len = len;
 }
@@ -237,7 +237,7 @@ void boardSync_exchangeFramesBlocking() {
   sei();
 }
 
-uint8_t boardSync_readRxFrame(uint8_t *buf, uint8_t maxLen) {
+uint8_t boardSync_readRxBuffer(uint8_t *buf, uint8_t maxLen) {
   uint8_t len = valueMinimum(raw_rx_len, maxLen);
   memcpy(buf, raw_rx_buf, len);
   return len;

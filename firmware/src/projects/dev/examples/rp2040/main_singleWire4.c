@@ -48,9 +48,9 @@ void processSendData() {
   txbuf[0] = 0x12;
   txbuf[1] = 0x34;
 
-  boardSync_writeTxFrame(txbuf, 2);
+  boardSync_writeTxBuffer(txbuf, 2);
   boardSync_exchangeFramesBlocking();
-  int sz = boardSync_readRxFrame(rxbuf, 10);
+  int sz = boardSync_readRxBuffer(rxbuf, 10);
   printf("received @master: ");
   utils_debugShowBytes(rxbuf, sz);
 }
@@ -59,9 +59,9 @@ void processSendData2() {
   for (int i = 0; i < 10; i++) {
     txbuf[i] = 0x10 * i + i;
   }
-  boardSync_writeTxFrame(txbuf, 10);
+  boardSync_writeTxBuffer(txbuf, 10);
   boardSync_exchangeFramesBlocking();
-  int sz = boardSync_readRxFrame(rxbuf, 10);
+  int sz = boardSync_readRxBuffer(rxbuf, 10);
   printf("received @master: ");
   utils_debugShowBytes(rxbuf, sz);
 }
@@ -84,12 +84,12 @@ void runAsMaster() {
 int receivedCount = -1;
 
 void onRecieverInterrupted() {
-  receivedCount = boardSync_readRxFrame(rxbuf, 10);
+  receivedCount = boardSync_readRxBuffer(rxbuf, 10);
   //echo back
   for (int i = 0; i < receivedCount; i++) {
     txbuf[i] = rxbuf[i] + 1;
   }
-  boardSync_writeTxFrame(txbuf, receivedCount);
+  boardSync_writeTxBuffer(txbuf, receivedCount);
 }
 
 void runAsSlave() {
