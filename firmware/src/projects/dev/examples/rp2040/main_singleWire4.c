@@ -1,7 +1,7 @@
 #include "km0/common/utils.h"
-#include "km0/deviceIo/boardSync.h"
 #include "km0/deviceIo/debugUart.h"
 #include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/interLink.h"
 #include "km0/deviceIo/system.h"
 #include <stdio.h>
 
@@ -48,9 +48,9 @@ void processSendData() {
   txbuf[0] = 0x12;
   txbuf[1] = 0x34;
 
-  boardSync_writeTxBuffer(txbuf, 2);
-  boardSync_exchangeFramesBlocking();
-  int sz = boardSync_readRxBuffer(rxbuf, 10);
+  interLink_writeTxBuffer(txbuf, 2);
+  interLink_exchangeFramesBlocking();
+  int sz = interLink_readRxBuffer(rxbuf, 10);
   printf("received @master: ");
   utils_debugShowBytes(rxbuf, sz);
 }
@@ -59,15 +59,15 @@ void processSendData2() {
   for (int i = 0; i < 10; i++) {
     txbuf[i] = 0x10 * i + i;
   }
-  boardSync_writeTxBuffer(txbuf, 10);
-  boardSync_exchangeFramesBlocking();
-  int sz = boardSync_readRxBuffer(rxbuf, 10);
+  interLink_writeTxBuffer(txbuf, 10);
+  interLink_exchangeFramesBlocking();
+  int sz = interLink_readRxBuffer(rxbuf, 10);
   printf("received @master: ");
   utils_debugShowBytes(rxbuf, sz);
 }
 
 void runAsMaster() {
-  boardSync_initialize();
+  interLink_initialize();
   delayMs(100);
 
   while (true) {
@@ -84,17 +84,17 @@ void runAsMaster() {
 int receivedCount = -1;
 
 void onRecieverInterrupted() {
-  receivedCount = boardSync_readRxBuffer(rxbuf, 10);
+  receivedCount = interLink_readRxBuffer(rxbuf, 10);
   //echo back
   for (int i = 0; i < receivedCount; i++) {
     txbuf[i] = rxbuf[i] + 1;
   }
-  boardSync_writeTxBuffer(txbuf, receivedCount);
+  interLink_writeTxBuffer(txbuf, receivedCount);
 }
 
 void runAsSlave() {
-  boardSync_initialize();
-  boardSync_setupSlaveReceiver(onRecieverInterrupted);
+  interLink_initialize();
+  interLink_setupSlaveReceiver(onRecieverInterrupted);
   while (true) {
     if (receivedCount > 0) {
       printf("received @slave: ");
