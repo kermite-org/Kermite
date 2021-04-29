@@ -14,4 +14,6 @@ int utils_clamp(int val, int lo, int hi);
 
 void utils_writeArrayedBitFlagsBit(uint8_t *bitFlagBytes, uint8_t flagIndex, bool state);
 
+#define valueMinimum(a, b) (a < b ? a : b)
+
 #endif
