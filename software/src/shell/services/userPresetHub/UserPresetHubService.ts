@@ -4,8 +4,7 @@ import { ProfileDataConverter } from '~/shell/loaders/ProfileDataConverter';
 import { IUserPresetHubService } from '~/shell/services/userPresetHub/Interfaces';
 import { PresetHubServerTypes } from '~/shell/services/userPresetHub/PresetHubServerTypes';
 
-const serverUrlBase = `http://localhost:5000`;
-
+const serverUrlBase = `http://dev.server.kermite.org`;
 export class UserPresetHubService implements IUserPresetHubService {
   async getServerProjectIds(): Promise<string[]> {
     const url = `${serverUrlBase}/api/projects/distinctedids`;
@@ -30,7 +29,7 @@ export class UserPresetHubService implements IUserPresetHubService {
         );
         return {
           id: item.id,
-          userName: item.userName,
+          userName: item.userViewName,
           profileName: item.name,
           profileData,
         };

@@ -6,7 +6,8 @@ export namespace PresetHubServerTypes {
   export type PublicProfileInfomation = {
     id: string;
     name: string;
-    userName: string;
+    userId: string;
+    userViewName: string;
     projectId: string;
     data: string;
     lastUpdate: string;
