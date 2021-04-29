@@ -7,35 +7,71 @@
 
 //----------------------------------------------------------------------
 
-static const uint32_t i2cFrequency = 1000 * 1000;
+#ifndef KM0_RP_BOARD_SYNC_I2C__I2C_INSTANCE_INDEX
+#define KM0_RP_BOARD_SYNC_I2C__I2C_INSTANCE_INDEX 1
+#endif
 
-//I2Cスレーブのアドレス, 7ビットで設定
-static const uint8_t i2cSlaveAddress = 0x11;
+#ifndef KM0_RP_BOARD_SYNC_I2C__FREQUENCY
+#define KM0_RP_BOARD_SYNC_I2C__FREQUENCY 1000000
+#endif
 
+#ifndef KM0_RP_BOARD_SYNC_I2C__SLAVE_ADDRESS
+#define KM0_RP_BOARD_SYNC_I2C__SLAVE_ADDRESS 0x11
+#endif
+
+#ifndef KM0_RP_BOARD_SYNC_I2C__PIN_SDA
+#define KM0_RP_BOARD_SYNC_I2C__PIN_SDA 2
+#endif
+
+#ifndef KM0_RP_BOARD_SYNC_I2C__PIN_SCL
+#define KM0_RP_BOARD_SYNC_I2C__PIN_SCL 3
+#endif
+
+#ifndef KM0_RP_BOARD_SYNC_I2C__BUFFER_SIZE
+#define KM0_RP_BOARD_SYNC_I2C__BUFFER_SIZE 16
+#endif
+
+static const uint32_t i2cFrequency = KM0_RP_BOARD_SYNC_I2C__FREQUENCY;
+
+//I2Cスレーブのアドレス, 7ビットで指定
+static const uint8_t i2cSlaveAddress = KM0_RP_BOARD_SYNC_I2C__SLAVE_ADDRESS;
+
+#if KM0_RP_BOARD_SYNC_I2C__I2C_INSTANCE_INDEX == 0
+static struct i2c_inst *i2c_instance = i2c0;
+#define I2C_INSTANCE_IRQ I2C0_IRQ
+#define i2c_instance_irq_handler i2c0_irq_handler
+#elif KM0_RP_BOARD_SYNC_I2C__I2C_INSTANCE_INDEX == 1
+static struct i2c_inst *i2c_instance = i2c1;
 #define I2C_INSTANCE_IRQ I2C1_IRQ
 #define i2c_instance_irq_handler i2c1_irq_handler
-static struct i2c_inst *i2c_instance = i2c1;
+#else
+#error invalid KM0_RP_BOARD_SYNC_I2C__I2C_INSTANCE_INDEX
+#endif
 
-static const uint8_t pin_sda = 2;
-static const uint8_t pin_scl = 3;
+static const uint8_t pin_sda = KM0_RP_BOARD_SYNC_I2C__PIN_SDA;
+static const uint8_t pin_scl = KM0_RP_BOARD_SYNC_I2C__PIN_SCL;
+
+#define RawBufferSize (KM0_RP_BOARD_SYNC_I2C__BUFFER_SIZE + 1)
 
 //送信/受信フレーム形式
 //0x~ SS BB BB BB ...
 //SS: フレームボディのサイズ
 //BB BB BB ...: ボディ, SS bytes
 
-//i2cの送信/受信フレームの先頭に送るデータのサイズを入れることで、
+//i2cの送信/受信フレームの先頭に送るデータのサイズを格納することで、
 //サイズが決まっていないデータの送受信ができるようにする
 
-static uint8_t raw_rx_buf[256]; //受信バッファ, 先頭にデータサイズを含まない
+static uint8_t raw_rx_buf[RawBufferSize]; //受信バッファ, 先頭にデータサイズを含まない
 static uint8_t raw_rx_pos = 0;
 static uint8_t raw_rx_body_len = 0;
 
-static uint8_t raw_tx_buf[256]; //送信バッファ, 先頭にデータサイズを含む
+static uint8_t raw_tx_buf[RawBufferSize]; //送信バッファ, 先頭にデータサイズを含む
 static uint8_t raw_tx_pos = 0;
 static uint8_t raw_tx_len = 0;
 
 static void (*slaveReceiverCallback)() = NULL;
+
+//----------------------------------------------------------------------
 
 void boardSync_writeTxBuffer(uint8_t *buf, uint8_t len) {
   raw_tx_buf[0] = len;
