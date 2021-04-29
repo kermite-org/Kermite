@@ -59,15 +59,15 @@ void debugPin0_toggle() {
 
 //slaveAddress: I2Cスレーブのアドレス, 7ビットで指定
 
-void boardSync_initializeMaster();
-void boardSync_initializeSlave();
+void boardSyncDev_initializeMaster();
+void boardSyncDev_initializeSlave();
 
-void boardSync_writeTxBuffer(uint8_t *buf, uint8_t len);
+void boardSyncDev_writeTxBuffer(uint8_t *buf, uint8_t len);
 uint8_t boadSync_readRxBuffer(uint8_t *buf, uint8_t maxLen);
+void boardSyncDev_master_exchangeFramesBlocking(); //送信+受信
 
-void boardSync_master_exchangeFramesBlocking(); //送信+受信
-void boardSync_slave_setupInterruptedReceiver(void (*callback)());
-void boardSync_slave_clearInterruptedReceiver();
+void boardSyncDev_slave_setupInterruptedReceiver(void (*callback)());
+void boardSyncDev_slave_clearInterruptedReceiver();
 
 //----------------------------------------------------------------------
 
@@ -99,19 +99,19 @@ static uint8_t raw_tx_len = 0;
 
 static void (*slaveReceiverCallback)() = NULL;
 
-void boardSync_writeTxBuffer(uint8_t *buf, uint8_t len) {
+void boardSyncDev_writeTxBuffer(uint8_t *buf, uint8_t len) {
   raw_tx_buf[0] = len;
   memcpy(raw_tx_buf + 1, buf, len);
   raw_tx_len = len + 1;
 }
 
-uint8_t boardSync_readRxBuffer(uint8_t *buf, uint8_t maxLen) {
+uint8_t boardSyncDev_readRxBuffer(uint8_t *buf, uint8_t maxLen) {
   uint8_t len = valueMinimum(raw_rx_body_len, maxLen);
   memcpy(buf, raw_rx_buf, len);
   return len;
 }
 
-void boardSync_initializeMaster() {
+void boardSyncDev_initializeMaster() {
   i2c_init(i2c_instance, i2cFrequency);
   i2c_set_slave_mode(i2c_instance, false, 0);
   gpio_set_function(pin_sda, GPIO_FUNC_I2C);
@@ -120,7 +120,7 @@ void boardSync_initializeMaster() {
   gpio_pull_up(pin_scl);
 }
 
-void boardSync_master_exchangeFramesBlocking() {
+void boardSyncDev_master_exchangeFramesBlocking() {
   printf("sending %d bytes\n", raw_tx_len);
   debugPin0_setLow();
   i2c_write_blocking(i2c_instance, i2cSlaveAddress, raw_tx_buf, raw_tx_len, true);
@@ -180,7 +180,7 @@ static void i2c_instance_irq_handler() {
   debugPin0_setHigh();
 }
 
-void boardSync_initializeSlave() {
+void boardSyncDev_initializeSlave() {
   i2c_init(i2c_instance, i2cFrequency);
   i2c_set_slave_mode(i2c_instance, true, i2cSlaveAddress);
   gpio_set_function(pin_sda, GPIO_FUNC_I2C);
@@ -189,14 +189,14 @@ void boardSync_initializeSlave() {
   gpio_pull_up(pin_scl);
 }
 
-void boardSync_slave_setupInterruptedReceiver(void (*callback)()) {
+void boardSyncDev_slave_setupInterruptedReceiver(void (*callback)()) {
   slaveReceiverCallback = callback;
   i2c_instance->hw->intr_mask = (I2C_IC_INTR_MASK_M_RD_REQ_BITS | I2C_IC_INTR_MASK_M_RX_FULL_BITS);
   irq_set_exclusive_handler(I2C_INSTANCE_IRQ, i2c_instance_irq_handler);
   irq_set_enabled(I2C_INSTANCE_IRQ, true);
 }
 
-void boardSync_slave_clearInterruptedReceiver() {
+void boardSyncDev_slave_clearInterruptedReceiver() {
   slaveReceiverCallback = NULL;
   i2c_instance->hw->intr_mask = 0;
   irq_remove_handler(I2C_INSTANCE_IRQ, i2c_instance_irq_handler);
@@ -210,16 +210,16 @@ uint8_t m_rxbuf[4];
 
 void runAsMaster() {
   printf("run as master mode\n");
-  boardSync_initializeMaster();
+  boardSyncDev_initializeMaster();
   initDebugPins();
 
   while (true) {
     boardIo_toggleLed1();
     delayMs(1000);
 
-    boardSync_writeTxBuffer(m_txbuf, 2);
-    boardSync_master_exchangeFramesBlocking();
-    uint8_t sz = boardSync_readRxBuffer(m_rxbuf, 2);
+    boardSyncDev_writeTxBuffer(m_txbuf, 2);
+    boardSyncDev_master_exchangeFramesBlocking();
+    uint8_t sz = boardSyncDev_readRxBuffer(m_rxbuf, 2);
     printf("received: %d bytes\n", sz);
     utils_debugShowBytes(m_rxbuf, sz);
   }
@@ -231,20 +231,20 @@ uint8_t s_tx_buf[4];
 uint8_t s_rx_buf[4];
 
 void app_onFrameReceived() {
-  uint8_t len = boardSync_readRxBuffer(s_rx_buf, 4);
+  uint8_t len = boardSyncDev_readRxBuffer(s_rx_buf, 4);
   printf("data received, %d bytes\n", len);
   utils_debugShowBytes(s_rx_buf, len);
   if (s_rx_buf[0] == 0xAB && len == 2) {
     s_tx_buf[0] = 0x67;
     s_tx_buf[1] = 0x89;
-    boardSync_writeTxBuffer(s_tx_buf, 2);
+    boardSyncDev_writeTxBuffer(s_tx_buf, 2);
   }
 }
 
 void runAsSlave() {
   initDebugPins();
-  boardSync_initializeSlave();
-  boardSync_slave_setupInterruptedReceiver(app_onFrameReceived);
+  boardSyncDev_initializeSlave();
+  boardSyncDev_slave_setupInterruptedReceiver(app_onFrameReceived);
 
   while (true) {
     boardIo_toggleLed1();
