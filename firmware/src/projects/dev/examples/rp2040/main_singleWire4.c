@@ -97,7 +97,7 @@ void onRecieverInterrupted() {
 
 void runAsSlave() {
   singleWire_initialize();
-  singleWire_setInterruptedReceiver(onRecieverInterrupted);
+  boardSync_setupSlaveReceiver(onRecieverInterrupted);
   while (true) {
     if (receivedCount > 0) {
       printf("received @slave: ");

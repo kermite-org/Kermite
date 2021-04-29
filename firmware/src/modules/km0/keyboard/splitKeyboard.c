@@ -295,7 +295,7 @@ static bool checkIfSomeKeyPressed() {
 }
 
 static void runAsSlave() {
-  singleWire_setInterruptedReceiver(onRecevierInterruption);
+  boardSync_setupSlaveReceiver(onRecevierInterruption);
 
   uint16_t cnt = 0;
   while (1) {
@@ -338,20 +338,20 @@ static void masterSlaveDetectionMode_onRecevierInterruption() {
 //双方待機し、USB接続が確立すると自分がMasterになり、相手にMaseter確定通知パケットを送る
 static bool runMasterSlaveDetectionMode() {
   singleWire_initialize();
-  singleWire_setInterruptedReceiver(masterSlaveDetectionMode_onRecevierInterruption);
+  boardSync_setupSlaveReceiver(masterSlaveDetectionMode_onRecevierInterruption);
 
   system_enableInterrupts();
 
   while (true) {
     if (usbIoCore_isConnectedToHost()) {
-      singleWire_clearInterruptedReceiver();
+      boardSync_clearSlaveReceiver();
       sw_txbuf[0] = 0xA0;
       singleWire_writeTxFrame(sw_txbuf, 1); //Master確定通知パケットを送信
       singleWire_exchangeFramesBlocking();
       return true;
     }
     if (hasMasterOathReceived) {
-      singleWire_clearInterruptedReceiver();
+      boardSync_clearSlaveReceiver();
       return false;
     }
     usbIoCore_processUpdate();

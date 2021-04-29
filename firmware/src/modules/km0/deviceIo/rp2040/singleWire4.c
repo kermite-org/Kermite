@@ -234,11 +234,11 @@ uint8_t singleWire_readRxFrame(uint8_t *buf, uint8_t maxLen) {
   return len;
 }
 
-void singleWire_setInterruptedReceiver(void (*f)(void)) {
+void boardSync_setupSlaveReceiver(void (*f)(void)) {
   interrupted_receiver_func = f;
   setup_rx_pcint();
 }
 
-void singleWire_clearInterruptedReceiver() {
+void boardSync_clearSlaveReceiver() {
   deinit_rx_pcint();
 }

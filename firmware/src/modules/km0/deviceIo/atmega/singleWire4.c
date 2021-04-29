@@ -244,7 +244,7 @@ typedef void (*TReceiverCallback)(void);
 
 static TReceiverCallback pReceiverCallback = 0;
 
-void singleWire_setInterruptedReceiver(void (*_pReceiverCallback)(void)) {
+void boardSync_setupSlaveReceiver(void (*_pReceiverCallback)(void)) {
   pReceiverCallback = _pReceiverCallback;
   //信号ピンがHIGHからLOWに変化したときに割り込みを生成
   bits_spec(EICRA, dISCx0, 0b11, 0b10);
@@ -252,7 +252,7 @@ void singleWire_setInterruptedReceiver(void (*_pReceiverCallback)(void)) {
   sei();
 }
 
-void singleWire_clearInterruptedReceiver() {
+void boardSync_clearSlaveReceiver() {
   pReceiverCallback = 0;
   bits_spec(EICRA, dISCx0, 0b11, 0b00);
   bit_off(EIMSK, dINTx);
