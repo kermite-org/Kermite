@@ -47,10 +47,10 @@ uint8_t rxbuf[10];
 void processSendData() {
   txbuf[0] = 0x12;
   txbuf[1] = 0x34;
-  singleWire_startSynchronizedSection();
-  singleWire_transmitFrameBlocking(txbuf, 2);
-  int sz = singleWire_receiveFrameBlocking(rxbuf, 10);
-  singleWire_endSynchronizedSection();
+  boardSync_startSynchronizedSection();
+  boardSync_transmitFrameBlocking(txbuf, 2);
+  int sz = boardSync_receiveFrameBlocking(rxbuf, 10);
+  boardSync_endSynchronizedSection();
   printf("received @master: ");
   utils_debugShowBytes(rxbuf, sz);
 }
@@ -59,16 +59,16 @@ void processSendData2() {
   for (int i = 0; i < 10; i++) {
     txbuf[i] = 0x10 * i + i;
   }
-  singleWire_startSynchronizedSection();
-  singleWire_transmitFrameBlocking(txbuf, 10);
-  int sz = singleWire_receiveFrameBlocking(rxbuf, 10);
-  singleWire_endSynchronizedSection();
+  boardSync_startSynchronizedSection();
+  boardSync_transmitFrameBlocking(txbuf, 10);
+  int sz = boardSync_receiveFrameBlocking(rxbuf, 10);
+  boardSync_endSynchronizedSection();
   printf("received @master: ");
   utils_debugShowBytes(rxbuf, sz);
 }
 
 void runAsMaster() {
-  singleWire_initialize();
+  boardSync_initialize();
   delayMs(100);
 
   while (true) {
@@ -85,18 +85,18 @@ void runAsMaster() {
 int receivedCount = -1;
 
 void onRecieverInterrupted() {
-  singleWire_startSynchronizedSection();
-  receivedCount = singleWire_receiveFrameBlocking(rxbuf, 10);
+  boardSync_startSynchronizedSection();
+  receivedCount = boardSync_receiveFrameBlocking(rxbuf, 10);
   //echo back
   for (int i = 0; i < receivedCount; i++) {
     txbuf[i] = rxbuf[i] + 1;
   }
-  singleWire_transmitFrameBlocking(txbuf, receivedCount);
-  singleWire_endSynchronizedSection();
+  boardSync_transmitFrameBlocking(txbuf, receivedCount);
+  boardSync_endSynchronizedSection();
 }
 
 void runAsSlave() {
-  singleWire_initialize();
+  boardSync_initialize();
   boardSync_setupSlaveReceiver(onRecieverInterrupted);
   while (true) {
     if (receivedCount > 0) {

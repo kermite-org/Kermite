@@ -190,9 +190,9 @@ static void configuratorServantStateHandler(uint8_t state) {
 //反対側のコントローラからキー状態を受け取る処理
 static void pullAltSideKeyStates() {
   sw_txbuf[0] = 0x40;
-  singleWire_writeTxFrame(sw_txbuf, 1); //キー状態要求パケットを送信
-  singleWire_exchangeFramesBlocking();
-  uint8_t sz = singleWire_readRxFrame(sw_rxbuf, SingleWireMaxPacketSize);
+  boardSync_writeTxFrame(sw_txbuf, 1); //キー状態要求パケットを送信
+  boardSync_exchangeFramesBlocking();
+  uint8_t sz = boardSync_readRxFrame(sw_rxbuf, SingleWireMaxPacketSize);
 
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
@@ -272,7 +272,7 @@ static void runAsMaster() {
 
 //単線通信の受信割り込みコールバック
 static void onRecevierInterruption() {
-  uint8_t sz = singleWire_readRxFrame(sw_rxbuf, SingleWireMaxPacketSize);
+  uint8_t sz = boardSync_readRxFrame(sw_rxbuf, SingleWireMaxPacketSize);
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
     if (cmd == 0x40 && sz == 1) {
@@ -280,7 +280,7 @@ static void onRecevierInterruption() {
       //子から親に対してキー状態応答パケットを送る
       sw_txbuf[0] = 0x41;
       utils_copyBytes(sw_txbuf + 1, nextKeyStateFlags, NumScanSlotBytesHalf);
-      singleWire_writeTxFrame(sw_txbuf, 1 + NumScanSlotBytesHalf);
+      boardSync_writeTxFrame(sw_txbuf, 1 + NumScanSlotBytesHalf);
     }
   }
 }
@@ -324,7 +324,7 @@ static void runAsSlave() {
 
 //単線通信受信割り込みコールバック
 static void masterSlaveDetectionMode_onRecevierInterruption() {
-  uint8_t sz = singleWire_readRxFrame(sw_rxbuf, SingleWireMaxPacketSize);
+  uint8_t sz = boardSync_readRxFrame(sw_rxbuf, SingleWireMaxPacketSize);
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
     if (cmd == 0xA0 && sz == 1) {
@@ -337,7 +337,7 @@ static void masterSlaveDetectionMode_onRecevierInterruption() {
 //USB接続が確立していない期間の動作
 //双方待機し、USB接続が確立すると自分がMasterになり、相手にMaseter確定通知パケットを送る
 static bool runMasterSlaveDetectionMode() {
-  singleWire_initialize();
+  boardSync_initialize();
   boardSync_setupSlaveReceiver(masterSlaveDetectionMode_onRecevierInterruption);
 
   system_enableInterrupts();
@@ -346,8 +346,8 @@ static bool runMasterSlaveDetectionMode() {
     if (usbIoCore_isConnectedToHost()) {
       boardSync_clearSlaveReceiver();
       sw_txbuf[0] = 0xA0;
-      singleWire_writeTxFrame(sw_txbuf, 1); //Master確定通知パケットを送信
-      singleWire_exchangeFramesBlocking();
+      boardSync_writeTxFrame(sw_txbuf, 1); //Master確定通知パケットを送信
+      boardSync_exchangeFramesBlocking();
       return true;
     }
     if (hasMasterOathReceived) {

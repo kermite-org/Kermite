@@ -214,21 +214,21 @@ static void deinit_rx_pcint() {
 //------------------------------------------------------------
 //exports
 
-void singleWire_initialize() {
+void boardSync_initialize() {
   setup_programs();
 }
 
-void singleWire_writeTxFrame(uint8_t *buf, uint8_t len) {
+void boardSync_writeTxFrame(uint8_t *buf, uint8_t len) {
   memcpy(raw_tx_buf, buf, len);
   raw_tx_len = len;
 }
 
-void singleWire_exchangeFramesBlocking() {
+void boardSync_exchangeFramesBlocking() {
   tx_send_frame(raw_tx_buf, raw_tx_len);
   raw_rx_len = rx_receive_frame(raw_rx_buf, 64);
 }
 
-uint8_t singleWire_readRxFrame(uint8_t *buf, uint8_t maxLen) {
+uint8_t boardSync_readRxFrame(uint8_t *buf, uint8_t maxLen) {
   uint8_t len = valueMinimum(raw_rx_len, maxLen);
   memcpy(buf, raw_rx_buf, len);
   return len;

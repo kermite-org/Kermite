@@ -214,24 +214,24 @@ escape:
   return 0;
 }
 
-void singleWire_initialize() {
+void boardSync_initialize() {
   signalPin_endTransmit_standby();
   debug_initTimeDebugPin();
 }
 
-void singleWire_writeTxFrame(uint8_t *buf, uint8_t len) {
+void boardSync_writeTxFrame(uint8_t *buf, uint8_t len) {
   memcpy(raw_tx_buf, buf, len);
   raw_tx_len = len;
 }
 
-void singleWire_exchangeFramesBlocking() {
+void boardSync_exchangeFramesBlocking() {
   cli();
   transmitFrame(raw_tx_buf, raw_tx_len);
   raw_rx_len = receiveFrame(raw_rx_buf, 64);
   sei();
 }
 
-uint8_t singleWire_readRxFrame(uint8_t *buf, uint8_t maxLen) {
+uint8_t boardSync_readRxFrame(uint8_t *buf, uint8_t maxLen) {
   uint8_t len = valueMinimum(raw_rx_len, maxLen);
   memcpy(buf, raw_rx_buf, len);
   return len;
