@@ -1,7 +1,7 @@
-#include "km0/deviceIo/singleWire4.h"
 #include "config.h"
 #include "km0/common/bitOperations.h"
 #include "km0/common/utils.h"
+#include "km0/deviceIo/boardSync.h"
 #include "km0/deviceIo/dio.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>

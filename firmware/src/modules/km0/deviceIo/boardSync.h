@@ -1,5 +1,5 @@
-#ifndef __SINGLE_WIRE_4_H__
-#define __SINGLE_WIRE_4_H__
+#ifndef __BOARD_SYNC_H__
+#define __BOARD_SYNC_H__
 
 #include "km0/types.h"
 

@@ -1,6 +1,6 @@
 
-#include "km0/deviceIo/singleWire4.h"
 #include "km0/common/utils.h"
+#include "km0/deviceIo/boardSync.h"
 #include "km0/deviceIo/dio.h"
 #include "pico_sdk/src/common/include/pico/stdlib.h"
 #include "pico_sdk/src/rp2_common/include/hardware/clocks.h"
