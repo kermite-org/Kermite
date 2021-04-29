@@ -1,9 +1,11 @@
-#include "km0/deviceIo/singleWire4.h"
 #include "config.h"
 #include "km0/common/bitOperations.h"
+#include "km0/common/utils.h"
+#include "km0/deviceIo/boardSync.h"
 #include "km0/deviceIo/dio.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
+#include <string.h>
 #include <util/delay.h>
 
 //単線通信
@@ -91,6 +93,20 @@ static void debug_timingPinLow() {}
 #endif
 
 //---------------------------------------------
+//variables
+
+#ifndef KM0_ATMEGA_SINGLEWIRE__BUFFER_SIZE
+#define KM0_ATMEGA_SINGLEWIRE__BUFFER_SIZE 16
+#endif
+
+#define RawBufferSize KM0_ATMEGA_SINGLEWIRE__BUFFER_SIZE
+
+static uint8_t raw_tx_buf[RawBufferSize];
+static uint8_t raw_rx_buf[RawBufferSize];
+static uint8_t raw_tx_len = 0;
+static uint8_t raw_rx_len = 0;
+
+//---------------------------------------------
 
 static inline void delayUnit(uint8_t t) {
   //_delay_loop_1(t);     //40kbps
@@ -116,7 +132,7 @@ static void writeLogical(uint8_t val) {
   }
 }
 
-void singleWire_transmitFrameBlocking(uint8_t *txbuf, uint8_t len) {
+static void transmitFrame(uint8_t *txbuf, uint8_t len) {
   signalPin_startTransmit();
   signalPin_setLow();
   delayUnit(100);
@@ -163,7 +179,7 @@ static uint8_t readFragment() {
   return t0 > mid ? 1 : 0;
 }
 
-uint8_t singleWire_receiveFrameBlocking(uint8_t *rxbuf, uint8_t capacity) {
+static uint8_t receiveFrame(uint8_t *rxbuf, uint8_t capacity) {
   debug_timingPinLow();
   uint8_t bi = 0;
 
@@ -204,16 +220,27 @@ escape:
   return 0;
 }
 
-void singleWire_initialize() {
+void boardSync_initialize() {
   signalPin_endTransmit_standby();
   debug_initTimeDebugPin();
 }
 
-void singleWire_startSynchronizedSection() {
-  cli();
+void boardSync_writeTxFrame(uint8_t *buf, uint8_t len) {
+  memcpy(raw_tx_buf, buf, len);
+  raw_tx_len = len;
 }
-void singleWire_endSynchronizedSection() {
+
+void boardSync_exchangeFramesBlocking() {
+  cli();
+  transmitFrame(raw_tx_buf, raw_tx_len);
+  raw_rx_len = receiveFrame(raw_rx_buf, RawBufferSize);
   sei();
+}
+
+uint8_t boardSync_readRxFrame(uint8_t *buf, uint8_t maxLen) {
+  uint8_t len = valueMinimum(raw_rx_len, maxLen);
+  memcpy(buf, raw_rx_buf, len);
+  return len;
 }
 
 //---------------------------------------------
@@ -223,7 +250,7 @@ typedef void (*TReceiverCallback)(void);
 
 static TReceiverCallback pReceiverCallback = 0;
 
-void singleWire_setInterruptedReceiver(void (*_pReceiverCallback)(void)) {
+void boardSync_setupSlaveReceiver(void (*_pReceiverCallback)(void)) {
   pReceiverCallback = _pReceiverCallback;
   //信号ピンがHIGHからLOWに変化したときに割り込みを生成
   bits_spec(EICRA, dISCx0, 0b11, 0b10);
@@ -231,14 +258,19 @@ void singleWire_setInterruptedReceiver(void (*_pReceiverCallback)(void)) {
   sei();
 }
 
-void singleWire_clearInterruptedReceiver() {
+void boardSync_clearSlaveReceiver() {
   pReceiverCallback = 0;
   bits_spec(EICRA, dISCx0, 0b11, 0b00);
   bit_off(EIMSK, dINTx);
 }
 
 ISR(dINTx_vect) {
+  raw_rx_len = receiveFrame(raw_rx_buf, RawBufferSize);
+  raw_tx_len = 0;
   if (pReceiverCallback) {
     pReceiverCallback();
+  }
+  if (raw_tx_len > 0) {
+    transmitFrame(raw_tx_buf, raw_tx_len);
   }
 }

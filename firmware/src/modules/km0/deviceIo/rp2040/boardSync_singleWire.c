@@ -1,8 +1,6 @@
 
-#include "km0/deviceIo/singleWire4.h"
-#if __has_include("config.h")
-#include "config.h"
-#endif
+#include "km0/common/utils.h"
+#include "km0/deviceIo/boardSync.h"
 #include "km0/deviceIo/dio.h"
 #include "pico_sdk/src/common/include/pico/stdlib.h"
 #include "pico_sdk/src/rp2_common/include/hardware/clocks.h"
@@ -10,6 +8,10 @@
 #include "singleWire4.pio.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#if __has_include("config.h")
+#include "config.h"
+#endif
 
 //------------------------------------------------------------
 //program initializers
@@ -118,7 +120,7 @@ static int rxin_receive_sync_bytes(PIO pio, uint sm, uint8_t *rcv_buffer, int ma
 
 //------------------------------------------------------------
 
-#ifdef KM0_RP_SINGLEWIRE_BASE_FREQ_FAST
+#ifdef KM0_RP_SINGLEWIRE__BASE_FREQ_FAST
 const float pio_base_freq = 2000000; //base clock 2MHz, data 160kbps
 #else
 const float pio_base_freq = 1000000; //base clock 1MHz, data 80kbps
@@ -152,6 +154,17 @@ const int pin_rcv_sideset = KM0_RP_SINGLEWIRE__PIN_DEBUG_TIMING_MONITOR;
 const int pin_rcv_sideset = -1;
 #endif
 
+#ifndef KM0_RP_SINGLEWIRE__BUFFER_SIZE
+#define KM0_RP_SINGLEWIRE__BUFFER_SIZE 16
+#endif
+
+#define RawBufferSize KM0_RP_SINGLEWIRE__BUFFER_SIZE
+
+static uint8_t raw_tx_buf[RawBufferSize];
+static uint8_t raw_rx_buf[RawBufferSize];
+static uint8_t raw_tx_len = 0;
+static uint8_t raw_rx_len = 0;
+
 //------------------------------------------------------------
 
 static void setup_programs() {
@@ -182,7 +195,14 @@ static void pin_change_interrupt_handler(uint gpio, uint32_t events) {
   if (gpio == pin_signal && (events & GPIO_IRQ_EDGE_FALL)) {
     gpio_set_irq_enabled(pin_signal, GPIO_IRQ_EDGE_FALL, false);
     // dio_write(pin_debug2, 0);
-    interrupted_receiver_func();
+    raw_rx_len = rx_receive_frame(raw_rx_buf, RawBufferSize);
+    raw_tx_len = 0;
+    if (interrupted_receiver_func) {
+      interrupted_receiver_func();
+    }
+    if (raw_tx_len > 0) {
+      tx_send_frame(raw_tx_buf, raw_tx_len);
+    }
     // dio_write(pin_debug2, 1);
     gpio_set_irq_enabled(pin_signal, GPIO_IRQ_EDGE_FALL, true);
   }
@@ -200,26 +220,31 @@ static void deinit_rx_pcint() {
 //------------------------------------------------------------
 //exports
 
-void singleWire_initialize() {
+void boardSync_initialize() {
   setup_programs();
 }
 
-void singleWire_transmitFrameBlocking(uint8_t *buf, uint8_t len) {
-  tx_send_frame(buf, len);
+void boardSync_writeTxFrame(uint8_t *buf, uint8_t len) {
+  memcpy(raw_tx_buf, buf, len);
+  raw_tx_len = len;
 }
 
-uint8_t singleWire_receiveFrameBlocking(uint8_t *buf, uint8_t maxLen) {
-  return rx_receive_frame(buf, maxLen);
+void boardSync_exchangeFramesBlocking() {
+  tx_send_frame(raw_tx_buf, raw_tx_len);
+  raw_rx_len = rx_receive_frame(raw_rx_buf, RawBufferSize);
 }
 
-void singleWire_setInterruptedReceiver(void (*f)(void)) {
+uint8_t boardSync_readRxFrame(uint8_t *buf, uint8_t maxLen) {
+  uint8_t len = valueMinimum(raw_rx_len, maxLen);
+  memcpy(buf, raw_rx_buf, len);
+  return len;
+}
+
+void boardSync_setupSlaveReceiver(void (*f)(void)) {
   interrupted_receiver_func = f;
   setup_rx_pcint();
 }
 
-void singleWire_clearInterruptedReceiver() {
+void boardSync_clearSlaveReceiver() {
   deinit_rx_pcint();
 }
-
-void singleWire_startSynchronizedSection() {}
-void singleWire_endSynchronizedSection() {}
