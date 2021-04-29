@@ -95,8 +95,14 @@ static void debug_timingPinLow() {}
 //---------------------------------------------
 //variables
 
-static uint8_t raw_tx_buf[64];
-static uint8_t raw_rx_buf[64];
+#ifndef KM0_ATMEGA_SINGLEWIRE__BUFFER_SIZE
+#define KM0_ATMEGA_SINGLEWIRE__BUFFER_SIZE 16
+#endif
+
+#define RawBufferSize KM0_ATMEGA_SINGLEWIRE__BUFFER_SIZE
+
+static uint8_t raw_tx_buf[RawBufferSize];
+static uint8_t raw_rx_buf[RawBufferSize];
 static uint8_t raw_tx_len = 0;
 static uint8_t raw_rx_len = 0;
 
@@ -227,7 +233,7 @@ void boardSync_writeTxFrame(uint8_t *buf, uint8_t len) {
 void boardSync_exchangeFramesBlocking() {
   cli();
   transmitFrame(raw_tx_buf, raw_tx_len);
-  raw_rx_len = receiveFrame(raw_rx_buf, 64);
+  raw_rx_len = receiveFrame(raw_rx_buf, RawBufferSize);
   sei();
 }
 
@@ -259,7 +265,7 @@ void boardSync_clearSlaveReceiver() {
 }
 
 ISR(dINTx_vect) {
-  raw_rx_len = receiveFrame(raw_rx_buf, 64);
+  raw_rx_len = receiveFrame(raw_rx_buf, RawBufferSize);
   raw_tx_len = 0;
   if (pReceiverCallback) {
     pReceiverCallback();
