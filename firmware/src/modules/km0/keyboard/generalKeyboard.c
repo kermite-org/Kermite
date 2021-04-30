@@ -20,7 +20,12 @@
 #error KM0_KEYBOARD__NUM_SCAN_SLOTS is not defined
 #endif
 
+#ifndef KM0_KEYBOARD__NUM_MAX_EXTRA_KEY_SCANNERS
+#define KM0_KEYBOARD__NUM_MAX_EXTRA_KEY_SCANNERS 1
+#endif
+
 #define NumScanSlots KM0_KEYBOARD__NUM_SCAN_SLOTS
+#define NumMaxExtraKeyScanners KM0_KEYBOARD__NUM_MAX_EXTRA_KEY_SCANNERS
 
 //#define NumScanSlotBytes Ceil(KM0_KEYBOARD__NUM_SCAN_SLOTS / 8)
 #define NumScanSlotBytes ((KM0_KEYBOARD__NUM_SCAN_SLOTS + 7) >> 3)
@@ -46,8 +51,12 @@ static bool debugUartConfigured = false;
 
 static KeyboardCallbackSet *callbacks = NULL;
 
-static void (*keyScannerUpdateFunc)(uint8_t *keyStateBitFlags) = 0;
-static void (*keyScannerUpdateFunc2)(uint8_t *keyStateBitFlags) = 0;
+typedef void (*KeyScannerUpdateFunc)(uint8_t *keyStateBitFlags);
+
+static KeyScannerUpdateFunc keyScannerUpdateFunc = NULL;
+
+static KeyScannerUpdateFunc extraKeyScannerUpdateFuncs[NumMaxExtraKeyScanners] = { 0 };
+static uint8_t extraKeyScannersLength = 0;
 
 //---------------------------------------------
 //動的に変更可能なオプション
@@ -237,8 +246,8 @@ static void keyboardEntry() {
     cnt++;
     if (cnt % 4 == 0) {
       keyScannerUpdateFunc(nextKeyStateFlags);
-      if (keyScannerUpdateFunc2) {
-        keyScannerUpdateFunc2(nextKeyStateFlags);
+      for (uint8_t i = 0; i < extraKeyScannersLength; i++) {
+        extraKeyScannerUpdateFuncs[i](nextKeyStateFlags);
       }
       processKeyStatesUpdate();
       keyboardCoreLogic_processTicker(5);
@@ -288,9 +297,11 @@ void generalKeyboard_useOptionDynamic(uint8_t slot) {
 void generalKeyboard_useKeyScanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags)) {
   keyScannerUpdateFunc = _keyScannerUpdateFunc;
 }
+
 void generalKeyboard_useKeyScannerExtra(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags)) {
-  keyScannerUpdateFunc2 = _keyScannerUpdateFunc;
+  extraKeyScannerUpdateFuncs[extraKeyScannersLength++] = _keyScannerUpdateFunc;
 }
+
 void generalKeyboard_setKeyIndexTable(const int8_t *_scanIndexToKeyIndexMap) {
   scanIndexToKeyIndexMap = (uint8_t *)_scanIndexToKeyIndexMap;
 }
