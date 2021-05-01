@@ -234,6 +234,7 @@ export interface IAppIpcContract {
     profile_executeProfileManagerCommands(
       commands: IProfileManagerCommand[],
     ): Promise<void>;
+    profile_openUserProfilesFolder(): Promise<void>;
 
     layout_executeLayoutManagerCommands(
       commands: ILayoutManagerCommand[],
