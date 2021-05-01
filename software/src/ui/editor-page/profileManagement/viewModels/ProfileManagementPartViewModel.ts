@@ -39,6 +39,7 @@ export interface IProfileManagementPartViewModel {
   handleExportToFile(): void;
   isCurrentProfileInternal: boolean;
   handleSaveUnsavedProfile(): void;
+  openUserProfilesFolder(): void;
 }
 
 export const profilesModel = new ProfilesModel(editorModel);
@@ -240,6 +241,10 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     profilesModel.loadProfile(profileName);
   };
 
+  const openUserProfilesFolder = async () => {
+    await ipcAgent.async.profile_openUserProfilesFolder();
+  };
+
   return {
     createProfile,
     saveProfile,
@@ -265,5 +270,6 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     handleSaveUnsavedProfile,
     handleImportFromFile,
     handleExportToFile,
+    openUserProfilesFolder,
   };
 }
