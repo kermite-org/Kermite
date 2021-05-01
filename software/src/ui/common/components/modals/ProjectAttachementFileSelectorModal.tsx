@@ -171,7 +171,8 @@ export const ProjectAttachmentFileSelectorModal = (props: {
                     type="text"
                     value={currentAttachementFileName}
                     onInput={reflectValue(setCurrentAttachmentFileName)}
-                  ></input>
+                    spellcheck={'false' as any}
+                  />
                 </div>
               </div>
             </div>

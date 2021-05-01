@@ -109,6 +109,7 @@ const LayerConfigurationModalContent = (props: {
                     css={cssCommonTextInput}
                     value={editValues.layerName}
                     onChange={reflectFieldValue(editValues, 'layerName')}
+                    spellcheck={'false' as any}
                   />
                 </td>
               </tr>

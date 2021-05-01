@@ -110,6 +110,7 @@ export const modalTextEdit = createModal(
                   css={cssCommonTextInput}
                   value={editValues.text}
                   onChange={reflectFieldValue(editValues, 'text')}
+                  spellcheck={'false' as any}
                 />
               </div>
             </DialogContentRow>
