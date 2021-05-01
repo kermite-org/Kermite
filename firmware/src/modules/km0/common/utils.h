@@ -17,4 +17,6 @@ bool utils_readArrayedBitFlagsBit(uint8_t *bitFlagBytes, uint8_t flagIndex);
 
 #define valueMinimum(a, b) (a < b ? a : b)
 
+#define utils_max(a, b) (a > b ? a : b)
+
 #endif
