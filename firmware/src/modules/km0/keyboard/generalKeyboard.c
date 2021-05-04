@@ -1,275 +1,14 @@
 #include "generalKeyboard.h"
 #include "config.h"
-#include "configValidator.h"
-#include "configuratorServant.h"
-#include "keyboardCoreLogic.h"
+#include "keyboardMain.h"
 #include "km0/common/bitOperations.h"
 #include "km0/common/utils.h"
 #include "km0/deviceIo/boardIo.h"
 #include "km0/deviceIo/debugUart.h"
 #include "km0/deviceIo/system.h"
-#include "km0/deviceIo/usbIoCore.h"
-#include "versions.h"
 #include <stdio.h>
 
-//---------------------------------------------
-//definitions
-
-#ifndef KM0_KEYBOARD__NUM_SCAN_SLOTS
-#error KM0_KEYBOARD__NUM_SCAN_SLOTS is not defined
-#endif
-
-#ifndef KM0_KEYBOARD__NUM_MAX_EXTRA_KEY_SCANNERS
-#define KM0_KEYBOARD__NUM_MAX_EXTRA_KEY_SCANNERS 1
-#endif
-
-#define NumScanSlots KM0_KEYBOARD__NUM_SCAN_SLOTS
-#define NumMaxExtraKeyScanners KM0_KEYBOARD__NUM_MAX_EXTRA_KEY_SCANNERS
-
-//#define NumScanSlotBytes Ceil(KM0_KEYBOARD__NUM_SCAN_SLOTS / 8)
-#define NumScanSlotBytes ((KM0_KEYBOARD__NUM_SCAN_SLOTS + 7) >> 3)
-
-//---------------------------------------------
-//variables
-
-static uint8_t *scanIndexToKeyIndexMap;
-
-//キー状態
-static uint8_t keyStateFlags[NumScanSlotBytes] = { 0 };
-static uint8_t nextKeyStateFlags[NumScanSlotBytes] = { 0 };
-
-static uint8_t pressedKeyCount = 0;
-
-static uint16_t localLayerFlags = 0;
-static uint8_t localHidReport[8] = { 0 };
-
-//メインロジックをPC側ユーティリティのLogicSimulatorに移譲するモード
-static bool isSideBrainModeEnabled = false;
-
 static bool debugUartConfigured = false;
-
-static KeyboardCallbackSet *callbacks = NULL;
-
-typedef void (*KeyScannerUpdateFunc)(uint8_t *keyStateBitFlags);
-
-static KeyScannerUpdateFunc keyScannerUpdateFunc = NULL;
-
-static KeyScannerUpdateFunc extraKeyScannerUpdateFuncs[NumMaxExtraKeyScanners] = { 0 };
-static uint8_t extraKeyScannersLength = 0;
-
-//---------------------------------------------
-//動的に変更可能なオプション
-static bool optionEmitKeyStroke = true;
-static bool optionEmitRealtimeEvents = true;
-static bool optionAffectKeyHoldStateToLed = true;
-static bool optionUseHeartbeatLed = true;
-
-static uint16_t optionDynamicFlags = 0xFFFF;
-
-static bool optionsInitialConfigShutup = false;
-
-static void customParameterValueHandler(uint8_t slotIndex, uint8_t value) {
-  if (callbacks && callbacks->customParameterHandlerOverride) {
-    callbacks->customParameterHandlerOverride(slotIndex, value);
-    return;
-  }
-
-  if (optionsInitialConfigShutup && bit_read(optionDynamicFlags, slotIndex) == 0) {
-    return;
-  }
-
-  if (slotIndex == OptionSlot_EmitKeyStroke) {
-    optionEmitKeyStroke = !!value;
-  } else if (slotIndex == OptionSlot_EmitRealtimeEvents) {
-    optionEmitRealtimeEvents = !!value;
-  } else if (slotIndex == OptionSlot_AffectKeyHoldStateToLed) {
-    optionAffectKeyHoldStateToLed = !!value;
-  } else if (slotIndex == OptionSlot_UseHeartBeatLed) {
-    optionUseHeartbeatLed = !!value;
-  }
-
-  if (callbacks && callbacks->customParameterHandlerChained) {
-    callbacks->customParameterHandlerChained(slotIndex, value);
-  }
-}
-
-void setCustomParameterDynamicFlag(uint8_t slotIndex, bool isDynamic) {
-  bit_spec(optionDynamicFlags, slotIndex, isDynamic);
-}
-
-//---------------------------------------------
-
-static void debugDumpLocalOutputState() {
-  printf("HID report:[");
-  for (uint16_t i = 0; i < 8; i++) {
-    printf("%02X ", localHidReport[i]);
-  }
-  printf("], ");
-  printf("layers: %02X\n", localLayerFlags);
-}
-
-//ロジック結果出力処理
-static void processKeyboardCoreLogicOutput() {
-  uint16_t layerFlags = keyboardCoreLogic_getLayerActiveFlags();
-  uint8_t *hidReport = keyboardCoreLogic_getOutputHidReportBytes();
-
-  bool changed = false;
-  if (layerFlags != localLayerFlags) {
-    if (optionEmitRealtimeEvents) {
-      configuratorServant_emitRelatimeLayerEvent(layerFlags);
-    }
-    if (callbacks && callbacks->layerStateChanged) {
-      callbacks->layerStateChanged(layerFlags);
-    }
-    localLayerFlags = layerFlags;
-    changed = true;
-  }
-  if (!utils_compareBytes(hidReport, localHidReport, 8)) {
-    if (optionEmitKeyStroke) {
-      usbIoCore_hidKeyboard_writeReport(hidReport);
-    }
-    utils_copyBytes(localHidReport, hidReport, 8);
-    changed = true;
-  }
-  if (changed) {
-    debugDumpLocalOutputState();
-  }
-
-  uint16_t assignHitResult = keyboardCoreLogic_peekAssignHitResult();
-  if (assignHitResult != 0 && optionEmitRealtimeEvents) {
-    configuratorServant_emitRelatimeAssignHitEvent(assignHitResult);
-  }
-}
-
-//キーが押された/離されたときに呼ばれるハンドラ
-static void onPhysicalKeyStateChanged(uint8_t scanIndex, bool isDown) {
-  if (scanIndex >= NumScanSlots) {
-    return;
-  }
-  uint8_t keyIndex = scanIndexToKeyIndexMap[scanIndex];
-  if (keyIndex == 0xFF) {
-    return;
-  }
-  if (isDown) {
-    printf("keydown %d\n", keyIndex);
-    pressedKeyCount++;
-  } else {
-    printf("keyup %d\n", keyIndex);
-    pressedKeyCount--;
-  }
-
-  //ユーティリティにキー状態変化イベントを送信
-  if (optionEmitRealtimeEvents) {
-    configuratorServant_emitRealtimeKeyEvent(keyIndex, isDown);
-  }
-
-  if (callbacks && callbacks->keyStateChanged) {
-    callbacks->keyStateChanged(keyIndex, isDown);
-  }
-
-  if (!isSideBrainModeEnabled) {
-    //メインロジックでキー入力を処理
-    keyboardCoreLogic_issuePhysicalKeyStateChanged(keyIndex, isDown);
-  }
-}
-
-static void resetKeyboardCoreLogic() {
-  bool configMemoryValid = configValidator_checkDataHeader();
-  if (configMemoryValid) {
-    keyboardCoreLogic_initialize();
-  } else {
-    keyboardCoreLogic_halt();
-  }
-}
-
-//ユーティリティによる設定書き込み時に呼ばれるハンドラ
-static void configuratorServantStateHandler(uint8_t state) {
-  if (state == ConfiguratorServantState_KeyMemoryUpdationStarted) {
-    keyboardCoreLogic_halt();
-  }
-  if (state == ConfiguratorServentState_KeyMemoryUpdationDone) {
-    resetKeyboardCoreLogic();
-  }
-  if (state == ConfiguratorServentState_SideBrainModeEnabled) {
-    isSideBrainModeEnabled = true;
-  }
-  if (state == ConfiguratorServentState_SideBrainModeDisabled) {
-    isSideBrainModeEnabled = false;
-  }
-}
-
-//---------------------------------------------
-//master
-
-//キー状態更新処理
-static void processKeyStatesUpdate() {
-  for (uint8_t i = 0; i < NumScanSlotBytes; i++) {
-    uint8_t byte0 = keyStateFlags[i];
-    uint8_t byte1 = nextKeyStateFlags[i];
-    for (uint8_t j = 0; j < 8; j++) {
-      uint8_t scanIndex = i * 8 + j;
-      if (scanIndex >= NumScanSlots) {
-        break;
-      }
-      bool state0 = bit_read(byte0, j);
-      bool state1 = bit_read(byte1, j);
-      if (!state0 && state1) {
-        onPhysicalKeyStateChanged(scanIndex, true);
-      }
-      if (state0 && !state1) {
-        onPhysicalKeyStateChanged(scanIndex, false);
-      }
-    }
-    keyStateFlags[i] = nextKeyStateFlags[i];
-  }
-}
-
-static uint8_t serialNumberTextBuf[24];
-
-static void keyboardEntry() {
-  configValidator_initializeDataStorage();
-  utils_copyBytes(serialNumberTextBuf, (uint8_t *)KERMITE_MCU_CODE, 8);
-  utils_copyBytes(serialNumberTextBuf + 8, (uint8_t *)PROJECT_ID, 8);
-  configuratorServant_readDeviceInstanceCode(serialNumberTextBuf + 16);
-  uibioCore_internal_setSerialNumberText(serialNumberTextBuf, 24);
-  usbIoCore_initialize();
-  resetKeyboardCoreLogic();
-  optionsInitialConfigShutup = true;
-  configuratorServant_initialize(
-      configuratorServantStateHandler, customParameterValueHandler);
-
-  system_enableInterrupts();
-
-  uint16_t cnt = 0;
-  while (1) {
-    cnt++;
-    if (cnt % 4 == 0) {
-      keyScannerUpdateFunc(nextKeyStateFlags);
-      for (uint8_t i = 0; i < extraKeyScannersLength; i++) {
-        extraKeyScannerUpdateFuncs[i](nextKeyStateFlags);
-      }
-      processKeyStatesUpdate();
-      keyboardCoreLogic_processTicker(5);
-      processKeyboardCoreLogicOutput();
-      if (optionAffectKeyHoldStateToLed) {
-        boardIo_writeLed2(pressedKeyCount > 0);
-      }
-    }
-    if (optionUseHeartbeatLed) {
-      if (cnt % 4000 == 0) {
-        boardIo_writeLed1(true);
-      }
-      if (cnt % 4000 == 4) {
-        boardIo_writeLed1(false);
-      }
-    }
-    delayMs(1);
-    usbIoCore_processUpdate();
-    configuratorServant_processUpdate();
-  }
-}
-
-//---------------------------------------------
 
 void generalKeyboard_useIndicatorLeds(int8_t pin1, uint8_t pin2, bool invert) {
   boardIo_setupLeds(pin1, pin2, invert);
@@ -284,29 +23,16 @@ void generalKeyboard_useDebugUart(uint32_t baud) {
   debugUartConfigured = true;
 }
 
-void generalKeyboard_useOptionFixed(uint8_t slot, uint8_t value) {
-  customParameterValueHandler(slot, value);
-  setCustomParameterDynamicFlag(slot, false);
-}
-
-void generalKeyboard_useOptionDynamic(uint8_t slot) {
-  setCustomParameterDynamicFlag(slot, true);
-}
-
 void generalKeyboard_useKeyScanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags)) {
-  keyScannerUpdateFunc = _keyScannerUpdateFunc;
+  keyboardMain_useKeyScanner(_keyScannerUpdateFunc);
 }
 
 void generalKeyboard_useKeyScannerExtra(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags)) {
-  extraKeyScannerUpdateFuncs[extraKeyScannersLength++] = _keyScannerUpdateFunc;
+  keyboardMain_useKeyScannerExtra(_keyScannerUpdateFunc);
 }
 
 void generalKeyboard_setKeyIndexTable(const int8_t *_scanIndexToKeyIndexMap) {
-  scanIndexToKeyIndexMap = (uint8_t *)_scanIndexToKeyIndexMap;
-}
-
-void generalKeyboard_setCallbacks(KeyboardCallbackSet *_callbacks) {
-  callbacks = _callbacks;
+  keyboardMain_setKeyIndexTable(_scanIndexToKeyIndexMap);
 }
 
 void generalKeyboard_start() {
@@ -315,5 +41,28 @@ void generalKeyboard_start() {
     debugUart_disable();
   }
   printf("start\n");
-  keyboardEntry();
+  keyboardMain_initialize();
+  system_enableInterrupts();
+
+  uint16_t cnt = 0;
+  while (1) {
+    cnt++;
+    if (cnt % 4 == 0) {
+      keyboardMain_udpateKeyScanners();
+      keyboardMain_processKeyInputUpdate();
+      if (optionAffectKeyHoldStateToLed) {
+        boardIo_writeLed2(pressedKeyCount > 0);
+      }
+    }
+    if (optionUseHeartbeatLed) {
+      if (cnt % 4000 == 0) {
+        boardIo_writeLed1(true);
+      }
+      if (cnt % 4000 == 4) {
+        boardIo_writeLed1(false);
+      }
+    }
+    delayMs(1);
+    keyboardMain_processUpdate();
+  }
 }
