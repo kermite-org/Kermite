@@ -7,7 +7,6 @@
 #include "km0/common/utils.h"
 #include "km0/deviceIo/boardIo.h"
 #include "km0/deviceIo/debugUart.h"
-#include "km0/deviceIo/dio.h"
 #include "km0/deviceIo/interLink.h"
 #include "km0/deviceIo/system.h"
 #include "km0/deviceIo/usbIoCore.h"
