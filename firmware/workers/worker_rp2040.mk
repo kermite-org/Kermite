@@ -60,37 +60,17 @@ endif
 #--------------------
 #flags
 
-DEFINES = \
--DCFG_TUSB_DEBUG=1 \
--DCFG_TUSB_MCU=OPT_MCU_RP2040 \
--DCFG_TUSB_OS=OPT_OS_PICO \
--DPICO_BIT_OPS_PICO=1 \
--DPICO_BOARD=\"pico\" \
--DPICO_BOOT2_NAME=\"boot2_w25q080\" \
--DPICO_BUILD=1 \
--DPICO_CMAKE_BUILD_TYPE=\"Debug\" \
--DPICO_COPY_TO_RAM=0 \
--DPICO_CXX_ENABLE_EXCEPTIONS=0 \
--DPICO_DIVIDER_HARDWARE=1 \
--DPICO_DOUBLE_PICO=1 \
--DPICO_FLOAT_PICO=1 \
--DPICO_INT64_OPS_PICO=1 \
--DPICO_MEM_OPS_PICO=1 \
--DPICO_NO_FLASH=0 \
--DPICO_NO_HARDWARE=0 \
--DPICO_ON_DEVICE=1 \
--DPICO_PRINTF_PICO=1 \
--DPICO_STDIO_UART=1 \
--DPICO_USE_BLOCKED_RAM=0 \
--DRP2040_USB_DEVICE_MODE=1 \
--DTINYUSB_DEVICE_LINKED=1 \
--DPICO_TARGET_NAME=\"kermite\" \
--DPICO_PROGRAM_URL=\"https://github.com/kermite-org/Kermite/tree/master/firmware\" \
--DPICO_BOOTSEL_VIA_DOUBLE_RESET_TIMEOUT_MS=700 \
--DKERMITE_TARGET_MCU_RP2040 \
--DEXTR_KERMITE_PROJECT_RELEASE_BUILD_REVISION=$(RELEASE_REVISION) \
--DEXTR_KERMITE_IS_RESOURCE_ORIGIN_ONLINE=$(IS_RESOURCE_ORIGIN_ONLINE) \
--DEXTR_KERMITE_VARIATION_NAME=\"$(VARIATION)\" \
+DEFINES =
+DEFINES += -DCFG_TUSB_MCU=OPT_MCU_RP2040
+DEFINES += -DCFG_TUSB_OS=OPT_OS_PICO
+DEFINES += -DPICO_ON_DEVICE=1
+DEFINES += -DPICO_NO_BINARY_INFO=0
+DEFINES += -DPICO_NO_BI_BOOTSEL_VIA_DOUBLE_RESET
+DEFINES += -DPICO_BOOTSEL_VIA_DOUBLE_RESET_TIMEOUT_MS=800
+DEFINES += -DKERMITE_TARGET_MCU_RP2040
+DEFINES += -DEXTR_KERMITE_PROJECT_RELEASE_BUILD_REVISION=$(RELEASE_REVISION)
+DEFINES += -DEXTR_KERMITE_IS_RESOURCE_ORIGIN_ONLINE=$(IS_RESOURCE_ORIGIN_ONLINE)
+DEFINES += -DEXTR_KERMITE_VARIATION_NAME=\"$(VARIATION)\"
 
 CORE_FLAGS = $(DEFINES) $(INC_PATHS) -march=armv6-m -mcpu=cortex-m0plus -mthumb -Og -g -ffunction-sections -fdata-sections
 AS_FLAGS = $(CORE_FLAGS)
@@ -118,18 +98,18 @@ fmaf malloc calloc free memcpy memset
 
 WL_PREFIX = -Wl,--wrap=
 
-LD_FLAGS = \
--march=armv6-m \
--mcpu=cortex-m0plus \
--mthumb \
--Og \
--g \
--Wl,--build-id=none \
---specs=nosys.specs \
--Wl,-Map=$(MAP) \
--Wl,--script=$(LD_SCRIPT) \
--Wl,--gc-sections \
--Wl,--print-memory-usage
+LD_FLAGS =
+LD_FLAGS += -march=armv6-m
+LD_FLAGS += -mcpu=cortex-m0plus
+LD_FLAGS += -mthumb
+LD_FLAGS += -Og
+LD_FLAGS += -g
+LD_FLAGS += -Wl,--build-id=none
+LD_FLAGS += --specs=nosys.specs
+LD_FLAGS += -Wl,-Map=$(MAP)
+LD_FLAGS += -Wl,--script=$(LD_SCRIPT)
+LD_FLAGS += -Wl,--gc-sections
+LD_FLAGS += -Wl,--print-memory-usage
 
 LD_FLAGS += $(addprefix $(WL_PREFIX),$(FUNCS_WRAPPED))
 
@@ -137,89 +117,87 @@ LD_FLAGS += $(addprefix $(WL_PREFIX),$(FUNCS_WRAPPED))
 #--------------------
 #files
 
-INC_PATHS = \
--I$(PROJECT_CODE_DIR) \
--I$(PICO_LOCAL_DIR)/include \
--I$(MODULES_DIR) \
--I$(PICO_SDK_OUTER_DIR) \
--I$(PICO_SDK_DIR)/src/common/include \
--I$(PICO_SDK_DIR)/src/rp2_common/include \
--I$(PICO_SDK_DIR)/src/rp2040/include \
--I$(TINYUSB_DIR)/src \
--I$(TINYUSB_DIR)/src/common \
--I$(PICO_SDK_DIR)/src/rp2_common/rp2040_usb_device_enumeration/include
+INC_PATHS =
+INC_PATHS += -I$(PROJECT_CODE_DIR)
+INC_PATHS += -I$(PICO_LOCAL_DIR)/include
+INC_PATHS += -I$(MODULES_DIR)
+INC_PATHS += -I$(PICO_SDK_OUTER_DIR)
+INC_PATHS += -I$(PICO_SDK_DIR)/src/common/include
+INC_PATHS += -I$(PICO_SDK_DIR)/src/rp2_common/include
+INC_PATHS += -I$(PICO_SDK_DIR)/src/rp2040/include
+INC_PATHS += -I$(TINYUSB_DIR)/src
+INC_PATHS += -I$(TINYUSB_DIR)/src/common
+INC_PATHS += -I$(PICO_SDK_DIR)/src/rp2_common/rp2040_usb_device_enumeration/include
 
-SDK_C_SRCS = \
-$(PICO_SDK_DIR)/src/common/time.c \
-$(PICO_SDK_DIR)/src/common/timeout_helper.c \
-$(PICO_SDK_DIR)/src/common/sem.c \
-$(PICO_SDK_DIR)/src/common/lock_core.c \
-$(PICO_SDK_DIR)/src/common/mutex.c \
-$(PICO_SDK_DIR)/src/common/critical_section.c \
-$(PICO_SDK_DIR)/src/common/datetime.c \
-$(PICO_SDK_DIR)/src/common/pheap.c \
-$(PICO_SDK_DIR)/src/common/queue.c \
-$(PICO_SDK_DIR)/src/rp2_common/stdlib.c \
-$(PICO_SDK_DIR)/src/rp2_common/gpio.c \
-$(PICO_SDK_DIR)/src/rp2_common/flash.c \
-$(PICO_SDK_DIR)/src/rp2_common/claim.c \
-$(PICO_SDK_DIR)/src/rp2_common/sync.c \
-$(PICO_SDK_DIR)/src/rp2_common/platform.c \
-$(PICO_SDK_DIR)/src/rp2_common/uart.c \
-$(PICO_SDK_DIR)/src/rp2_common/timer.c \
-$(PICO_SDK_DIR)/src/rp2_common/runtime.c \
-$(PICO_SDK_DIR)/src/rp2_common/clocks.c \
-$(PICO_SDK_DIR)/src/rp2_common/watchdog.c \
-$(PICO_SDK_DIR)/src/rp2_common/xosc.c \
-$(PICO_SDK_DIR)/src/rp2_common/pll.c \
-$(PICO_SDK_DIR)/src/rp2_common/vreg.c \
-$(PICO_SDK_DIR)/src/rp2_common/irq.c \
-$(PICO_SDK_DIR)/src/rp2_common/pio.c \
-$(PICO_SDK_DIR)/src/rp2_common/printf.c \
-$(PICO_SDK_DIR)/src/rp2_common/bootrom.c \
-$(PICO_SDK_DIR)/src/rp2_common/double_init_rom.c \
-$(PICO_SDK_DIR)/src/rp2_common/double_math.c \
-$(PICO_SDK_DIR)/src/rp2_common/float_init_rom.c \
-$(PICO_SDK_DIR)/src/rp2_common/float_math.c \
-$(PICO_SDK_DIR)/src/rp2_common/pico_malloc.c \
-$(PICO_SDK_DIR)/src/rp2_common/binary_info.c \
-$(PICO_SDK_DIR)/src/rp2_common/stdio.c \
-$(PICO_SDK_DIR)/src/rp2_common/stdio_uart.c \
-$(PICO_SDK_DIR)/src/rp2_common/multicore.c \
-$(PICO_SDK_DIR)/src/rp2_common/pico_bootsel_via_double_reset.c \
-$(PICO_SDK_DIR)/src/rp2_common/i2c.c \
+SDK_C_SRCS =
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/common/time.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/common/timeout_helper.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/common/sem.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/common/lock_core.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/common/mutex.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/common/critical_section.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/common/datetime.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/common/pheap.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/common/queue.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/stdlib.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/gpio.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/flash.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/claim.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/sync.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/platform.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/uart.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/timer.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/runtime.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/clocks.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/watchdog.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/xosc.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/pll.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/vreg.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/irq.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/pio.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/printf.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/bootrom.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/double_init_rom.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/double_math.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/float_init_rom.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/float_math.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/pico_malloc.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/stdio.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/stdio_uart.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/multicore.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/pico_bootsel_via_double_reset.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/i2c.c
 
 #USB
-SDK_C_SRCS += $(TINYUSB_DIR)/src/portable/raspberrypi/rp2040/dcd_rp2040.c \
-$(TINYUSB_DIR)/src/portable/raspberrypi/rp2040/rp2040_usb.c \
-$(TINYUSB_DIR)/src/device/usbd.c \
-$(TINYUSB_DIR)/src/device/usbd_control.c \
-$(TINYUSB_DIR)/src/class/hid/hid_device.c \
-$(TINYUSB_DIR)/src/tusb.c \
-$(TINYUSB_DIR)/src/common/tusb_fifo.c \
-$(PICO_SDK_DIR)/src/rp2_common/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c \
+SDK_C_SRCS += $(TINYUSB_DIR)/src/portable/raspberrypi/rp2040/dcd_rp2040.c
+SDK_C_SRCS += $(TINYUSB_DIR)/src/portable/raspberrypi/rp2040/rp2040_usb.c
+SDK_C_SRCS += $(TINYUSB_DIR)/src/device/usbd.c
+SDK_C_SRCS += $(TINYUSB_DIR)/src/device/usbd_control.c
+SDK_C_SRCS += $(TINYUSB_DIR)/src/class/hid/hid_device.c
+SDK_C_SRCS += $(TINYUSB_DIR)/src/tusb.c
+SDK_C_SRCS += $(TINYUSB_DIR)/src/common/tusb_fifo.c
+SDK_C_SRCS += $(PICO_SDK_DIR)/src/rp2_common/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c
 
-SDK_ASM_SRCS = \
-$(PICO_SDK_DIR)/src/rp2_common/divider__hardware_divider.S \
-$(PICO_SDK_DIR)/src/rp2_common/divider__pico_divider.S \
-$(PICO_SDK_DIR)/src/rp2_common/irq_handler_chain.S \
-$(PICO_SDK_DIR)/src/rp2_common/bit_ops_aeabi.S \
-$(PICO_SDK_DIR)/src/rp2_common/double_aeabi.S \
-$(PICO_SDK_DIR)/src/rp2_common/double_v1_rom_shim.S \
-$(PICO_SDK_DIR)/src/rp2_common/pico_int64_ops_aeabi.S \
-$(PICO_SDK_DIR)/src/rp2_common/float_aeabi.S \
-$(PICO_SDK_DIR)/src/rp2_common/float_v1_rom_shim.S \
-$(PICO_SDK_DIR)/src/rp2_common/mem_ops_aeabi.S \
-$(PICO_SDK_DIR)/src/rp2_common/crt0.S \
+SDK_ASM_SRCS =
+SDK_ASM_SRCS += $(PICO_SDK_DIR)/src/rp2_common/divider__hardware_divider.S
+SDK_ASM_SRCS += $(PICO_SDK_DIR)/src/rp2_common/divider__pico_divider.S
+SDK_ASM_SRCS += $(PICO_SDK_DIR)/src/rp2_common/irq_handler_chain.S
+SDK_ASM_SRCS += $(PICO_SDK_DIR)/src/rp2_common/bit_ops_aeabi.S
+SDK_ASM_SRCS += $(PICO_SDK_DIR)/src/rp2_common/double_aeabi.S
+SDK_ASM_SRCS += $(PICO_SDK_DIR)/src/rp2_common/double_v1_rom_shim.S
+SDK_ASM_SRCS += $(PICO_SDK_DIR)/src/rp2_common/pico_int64_ops_aeabi.S
+SDK_ASM_SRCS += $(PICO_SDK_DIR)/src/rp2_common/float_aeabi.S
+SDK_ASM_SRCS += $(PICO_SDK_DIR)/src/rp2_common/float_v1_rom_shim.S
+SDK_ASM_SRCS += $(PICO_SDK_DIR)/src/rp2_common/mem_ops_aeabi.S
+SDK_ASM_SRCS += $(PICO_SDK_DIR)/src/rp2_common/crt0.S
 
 BOOT_S = $(PICO_LOCAL_DIR)/loaders/bs2_default_padded_checksummed.S
 LD_SCRIPT = $(PICO_LOCAL_DIR)/loaders/memmap_default.ld
 
 -include $(PROJECT_CODE_DIR)/rules_post_declarations.mk
 
-C_SRCS = \
-$(addprefix $(MODULES_DIR)/,$(MODULE_SRCS)) \
-$(addprefix $(PROJECT_CODE_DIR)/, $(PROJECT_SRCS))
+C_SRCS = $(addprefix $(MODULES_DIR)/,$(MODULE_SRCS))
+C_SRCS += $(addprefix $(PROJECT_CODE_DIR)/, $(PROJECT_SRCS))
 
 C_OBJS = $(addprefix $(OBJ_DIR)/,$(C_SRCS:.c=.c.obj))
 SDK_C_OBJS = $(addprefix $(SHARED_OBJ_DIR)/,$(SDK_C_SRCS:.c=.c.obj))
@@ -227,9 +205,9 @@ SDK_ASM_OBJS = $(addprefix $(SHARED_OBJ_DIR)/,$(SDK_ASM_SRCS:.S=.S.obj))
 
 OBJS =  $(C_OBJS) $(SDK_C_OBJS) $(SDK_ASM_OBJS)
 
-PIOASM_SRCS = \
-$(addprefix $(MODULES_DIR)/, $(MODULE_PIOASM_SRCS)) \
-$(addprefix $(PROJECT_CODE_DIR)/, $(PROJECT_PIOASM_SRCS))
+PIOASM_SRCS = $(addprefix $(MODULES_DIR)/, $(MODULE_PIOASM_SRCS))
+PIOASM_SRCS += $(addprefix $(PROJECT_CODE_DIR)/, $(PROJECT_PIOASM_SRCS))
+
 PIOASM_GENERATED_HEADERS = $(PIOASM_SRCS:.pio=.pio.h)
 
 DEP_FILES = $(filter %.d,$(OBJS:%.obj=%.d))
