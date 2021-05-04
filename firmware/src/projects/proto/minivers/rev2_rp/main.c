@@ -1,5 +1,6 @@
 #include "km0/deviceIo/dio.h"
 #include "km0/keyboard/keyScanner_basicMatrix.h"
+#include "km0/keyboard/keyboardMain.h"
 #include "km0/keyboard/splitKeyboard.h"
 
 //---------------------------------------------
@@ -27,11 +28,11 @@ static const int8_t keyIndexTable[NumScanSlots]  = {
 // clang-format on
 
 int main() {
-  splitKeyboard_useIndicatorRgbLed(GP25);
-  splitKeyboard_useDebugUart(115200);
+  keyboardMain_useIndicatorRgbLed(GP25);
+  keyboardMain_useDebugUart(115200);
   keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
-  splitKeyboard_useKeyScanner(keyScanner_basicMatrix_update);
-  splitKeyboard_setKeyIndexTable(keyIndexTable);
+  keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
+  keyboardMain_setKeyIndexTable(keyIndexTable);
   splitKeyboard_start();
   return 0;
 }

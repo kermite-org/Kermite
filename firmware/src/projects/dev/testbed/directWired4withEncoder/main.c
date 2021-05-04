@@ -3,6 +3,7 @@
 #include "km0/keyboard/generalKeyboard.h"
 #include "km0/keyboard/keyScanner_directWired.h"
 #include "km0/keyboard/keyScanner_encoderBasic.h"
+#include "km0/keyboard/keyboardMain.h"
 
 #define NumKeyScanSlots 4
 #define NumEncoderScanSlots 4
@@ -17,13 +18,13 @@ static EncoderConfig encoderConfigs[] = {
 };
 
 int main() {
-  generalKeyboard_useIndicatorLeds(P_B0, P_D5, true);
-  generalKeyboard_useDebugUart(38400);
+  keyboardMain_useIndicatorLeds(P_B0, P_D5, true);
+  keyboardMain_useDebugUart(38400);
   keyScanner_directWired_initialize(NumKeyScanSlots, keyInputPins);
   keyScanner_encoderBasic_initialize(2, encoderConfigs);
-  generalKeyboard_useKeyScanner(keyScanner_directWired_update);
-  generalKeyboard_useKeyScannerExtra(keyScanner_encoderBasic_update);
-  generalKeyboard_setKeyIndexTable(keyIndexTable);
+  keyboardMain_useKeyScanner(keyScanner_directWired_update);
+  keyboardMain_useKeyScannerExtra(keyScanner_encoderBasic_update);
+  keyboardMain_setKeyIndexTable(keyIndexTable);
   generalKeyboard_start();
   return 0;
 }

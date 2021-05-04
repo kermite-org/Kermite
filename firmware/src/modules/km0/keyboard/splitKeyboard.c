@@ -1,10 +1,8 @@
 #include "splitKeyboard.h"
 #include "config.h"
 #include "keyboardMain.h"
-#include "km0/common/bitOperations.h"
 #include "km0/common/utils.h"
 #include "km0/deviceIo/boardIo.h"
-#include "km0/deviceIo/debugUart.h"
 #include "km0/deviceIo/interLink.h"
 #include "km0/deviceIo/system.h"
 #include "km0/deviceIo/usbIoCore.h"
@@ -18,7 +16,6 @@
 #endif
 
 #define NumScanSlots KM0_KEYBOARD__NUM_SCAN_SLOTS
-
 #define NumScanSlotsHalf (NumScanSlots >> 1)
 
 //#define NumScanSlotBytesHalf Ceil(NumScanSlotsHalf / 8)
@@ -35,7 +32,6 @@ static uint8_t sw_txbuf[SingleWireMaxPacketSize] = { 0 };
 static uint8_t sw_rxbuf[SingleWireMaxPacketSize] = { 0 };
 
 static bool hasMasterOathReceived = false;
-static bool debugUartConfigured = false;
 
 //---------------------------------------------
 //master
@@ -210,34 +206,10 @@ static bool runMasterSlaveDetectionMode() {
 
 //---------------------------------------------
 
-void splitKeyboard_useIndicatorLeds(int8_t pin1, int8_t pin2, bool invert) {
-  boardIo_setupLeds(pin1, pin2, invert);
-}
-
-void splitKeyboard_useIndicatorRgbLed(int8_t pin) {
-  boardIo_setupLedsRgb(pin);
-}
-
-void splitKeyboard_useDebugUart(uint32_t baud) {
-  debugUart_setup(baud);
-  debugUartConfigured = true;
-}
-
-void splitKeyboard_useKeyScanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags)) {
-  keyboardMain_useKeyScanner(_keyScannerUpdateFunc);
-}
-
-void splitKeyboard_setKeyIndexTable(const int8_t *_scanIndexToKeyIndexMap) {
-  keyboardMain_setKeyIndexTable(_scanIndexToKeyIndexMap);
-}
-
 void splitKeyboard_start() {
   system_initializeUserProgram();
-  if (!debugUartConfigured) {
-    debugUart_disable();
-  }
-  printf("start\n");
   keyboardMain_initialize();
+  printf("start\n");
 
   bool isMaster = runMasterSlaveDetectionMode();
   printf("isMaster:%d\n", isMaster);

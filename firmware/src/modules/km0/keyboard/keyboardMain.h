@@ -18,6 +18,10 @@ extern bool optionUseHeartbeatLed;
 extern bool optionInvertSide;
 extern uint8_t pressedKeyCount;
 
+void keyboardMain_useIndicatorLeds(int8_t pin1, uint8_t pin2, bool invert);
+void keyboardMain_useIndicatorRgbLed(int8_t pin);
+void keyboardMain_useDebugUart(uint32_t baud);
+
 void keyboardMain_useKeyScanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags));
 void keyboardMain_useKeyScannerExtra(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags));
 void keyboardMain_setKeyIndexTable(const int8_t *_scanIndexToKeyIndexMap);

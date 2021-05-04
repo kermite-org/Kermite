@@ -5,6 +5,8 @@
 #include "keyboardCoreLogic.h"
 #include "km0/common/bitOperations.h"
 #include "km0/common/utils.h"
+#include "km0/deviceIo/boardIo.h"
+#include "km0/deviceIo/debugUart.h"
 #include "km0/deviceIo/usbIoCore.h"
 #include "versions.h"
 #include <stdio.h>
@@ -67,6 +69,8 @@ typedef void (*KeyScannerUpdateFunc)(uint8_t *keyStateBitFlags);
 static KeyScannerUpdateFunc keyScannerUpdateFunc = NULL;
 static KeyScannerUpdateFunc extraKeyScannerUpdateFuncs[NumMaxExtraKeyScanners] = { 0 };
 static uint8_t extraKeyScannersLength = 0;
+
+static bool debugUartConfigured = false;
 
 //----------------------------------------------------------------------
 //helpers
@@ -225,6 +229,19 @@ static void processKeyStatesUpdate() {
 
 //----------------------------------------------------------------------
 
+void keyboardMain_useIndicatorLeds(int8_t pin1, uint8_t pin2, bool invert) {
+  boardIo_setupLeds(pin1, pin2, invert);
+}
+
+void keyboardMain_useIndicatorRgbLed(int8_t pin) {
+  boardIo_setupLedsRgb(pin);
+}
+
+void keyboardMain_useDebugUart(uint32_t baud) {
+  debugUart_setup(baud);
+  debugUartConfigured = true;
+}
+
 void keyboardMain_useKeyScanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags)) {
   keyScannerUpdateFunc = _keyScannerUpdateFunc;
 }
@@ -246,6 +263,9 @@ uint8_t *keyboardMain_getNextScanSlotStateFlags() {
 }
 
 void keyboardMain_initialize() {
+  if (!debugUartConfigured) {
+    debugUart_disable();
+  }
   configValidator_initializeDataStorage();
   setupSerialNumberText();
   usbIoCore_initialize();

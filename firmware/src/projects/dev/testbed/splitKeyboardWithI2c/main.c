@@ -1,6 +1,7 @@
 #include "config.h"
 #include "km0/deviceIo/dio.h"
 #include "km0/keyboard/keyScanner_directWired.h"
+#include "km0/keyboard/keyboardMain.h"
 #include "km0/keyboard/splitKeyboard.h"
 
 #define NumScanSlotsHalf 4
@@ -16,11 +17,11 @@ static const int8_t keyIndexTable[NumScanSlots] = {
 };
 
 int main() {
-  splitKeyboard_useIndicatorLeds(GP25, GP25, false);
-  splitKeyboard_useDebugUart(115200);
+  keyboardMain_useIndicatorLeds(GP25, GP25, false);
+  keyboardMain_useDebugUart(115200);
   keyScanner_directWired_initialize(NumScanSlotsHalf, keyInputPins);
-  splitKeyboard_useKeyScanner(keyScanner_directWired_update);
-  splitKeyboard_setKeyIndexTable(keyIndexTable);
+  keyboardMain_useKeyScanner(keyScanner_directWired_update);
+  keyboardMain_setKeyIndexTable(keyIndexTable);
   splitKeyboard_start();
   return 0;
 }
