@@ -52,20 +52,20 @@ static void pullAltSideKeyStates() {
     if (cmd == 0x41 && sz == 1 + NumScanSlotBytesHalf) {
       uint8_t *payloadBytes = sw_rxbuf + 1;
       //子-->親, キー状態応答パケット受信, 子のキー状態を受け取り保持
-      uint8_t *nextKeyStateFlags = keyboardMain_getNextKeyStateFlags();
-      //nextKeyStateFlagsの後ろ半分にslave側のボードのキー状態を格納する
-      utils_copyBitFlagsBuf(nextKeyStateFlags, NumScanSlotsHalf, payloadBytes, 0, NumScanSlotsHalf);
+      uint8_t *nextScanSlotStateFlags = keyboardMain_getNextScanSlotStateFlags();
+      //nextScanSlotStateFlagsの後ろ半分にslave側のボードのキー状態を格納する
+      utils_copyBitFlagsBuf(nextScanSlotStateFlags, NumScanSlotsHalf, payloadBytes, 0, NumScanSlotsHalf);
     }
   }
 }
 
-static void swapNextKeyStateFlagsFirstLastHalf() {
-  uint8_t *nextKeyStateFlags = keyboardMain_getNextKeyStateFlags();
+static void swapNextScanSlotStateFlagsFirstLastHalf() {
+  uint8_t *nextScanSlotStateFlags = keyboardMain_getNextScanSlotStateFlags();
   for (int i = 0; i < NumScanSlotsHalf; i++) {
-    bool a = utils_readArrayedBitFlagsBit(nextKeyStateFlags, i);
-    bool b = utils_readArrayedBitFlagsBit(nextKeyStateFlags, NumScanSlotsHalf + i);
-    utils_writeArrayedBitFlagsBit(nextKeyStateFlags, i, b);
-    utils_writeArrayedBitFlagsBit(nextKeyStateFlags, NumScanSlotsHalf + i, a);
+    bool a = utils_readArrayedBitFlagsBit(nextScanSlotStateFlags, i);
+    bool b = utils_readArrayedBitFlagsBit(nextScanSlotStateFlags, NumScanSlotsHalf + i);
+    utils_writeArrayedBitFlagsBit(nextScanSlotStateFlags, i, b);
+    utils_writeArrayedBitFlagsBit(nextScanSlotStateFlags, NumScanSlotsHalf + i, a);
   }
 }
 
@@ -78,9 +78,9 @@ static void runAsMaster() {
       if (!optionInvertSide) {
         keyboardMain_processKeyInputUpdate();
       } else {
-        swapNextKeyStateFlagsFirstLastHalf(); //nextKeyStateFlagsの前半と後半を入れ替える
+        swapNextScanSlotStateFlagsFirstLastHalf(); //nextScanSlotStateFlagsの前半と後半を入れ替える
         keyboardMain_processKeyInputUpdate();
-        swapNextKeyStateFlagsFirstLastHalf(); //戻す
+        swapNextScanSlotStateFlagsFirstLastHalf(); //戻す
       }
       if (optionAffectKeyHoldStateToLed) {
         boardIo_writeLed2(pressedKeyCount > 0);
@@ -114,9 +114,9 @@ static void onRecevierInterruption() {
       //親-->子, キー状態要求パケット受信, キー状態応答パケットを返す
       //子から親に対してキー状態応答パケットを送る
       sw_txbuf[0] = 0x41;
-      uint8_t *nextKeyStateFlags = keyboardMain_getNextKeyStateFlags();
-      //slave側でnextKeyStateFlagsの前半分に入っているキー状態をmasterに送信する
-      utils_copyBytes(sw_txbuf + 1, nextKeyStateFlags, NumScanSlotBytesHalf);
+      uint8_t *nextScanSlotStateFlags = keyboardMain_getNextScanSlotStateFlags();
+      //slave側でnextScanSlotStateFlagsの前半分に入っているキー状態をmasterに送信する
+      utils_copyBytes(sw_txbuf + 1, nextScanSlotStateFlags, NumScanSlotBytesHalf);
       interLink_writeTxBuffer(sw_txbuf, 1 + NumScanSlotBytesHalf);
     }
   }

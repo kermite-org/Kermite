@@ -52,8 +52,8 @@ bool optionInvertSide = false;
 static uint8_t *scanIndexToKeyIndexMap;
 
 //キー状態
-static uint8_t keyStateFlags[NumScanSlotBytes] = { 0 };
-static uint8_t nextKeyStateFlags[NumScanSlotBytes] = { 0 };
+static uint8_t scanSlotStateFlags[NumScanSlotBytes] = { 0 };
+static uint8_t nextScanSlotStateFlags[NumScanSlotBytes] = { 0 };
 
 static uint16_t localLayerFlags = 0;
 static uint8_t localHidReport[8] = { 0 };
@@ -211,15 +211,15 @@ static void onPhysicalKeyStateChanged(uint8_t scanIndex, bool isDown) {
 //キー状態更新処理
 static void processKeyStatesUpdate() {
   for (uint8_t i = 0; i < NumScanSlots; i++) {
-    uint8_t curr = utils_readArrayedBitFlagsBit(keyStateFlags, i);
-    uint8_t next = utils_readArrayedBitFlagsBit(nextKeyStateFlags, i);
+    uint8_t curr = utils_readArrayedBitFlagsBit(scanSlotStateFlags, i);
+    uint8_t next = utils_readArrayedBitFlagsBit(nextScanSlotStateFlags, i);
     if (!curr && next) {
       onPhysicalKeyStateChanged(i, true);
     }
     if (curr && !next) {
       onPhysicalKeyStateChanged(i, false);
     }
-    utils_writeArrayedBitFlagsBit(keyStateFlags, i, next);
+    utils_writeArrayedBitFlagsBit(scanSlotStateFlags, i, next);
   }
 }
 
@@ -241,8 +241,8 @@ void keyboardMain_setCallbacks(KeyboardCallbackSet *_callbacks) {
   callbacks = _callbacks;
 }
 
-uint8_t *keyboardMain_getNextKeyStateFlags() {
-  return nextKeyStateFlags;
+uint8_t *keyboardMain_getNextScanSlotStateFlags() {
+  return nextScanSlotStateFlags;
 }
 
 void keyboardMain_initialize() {
@@ -256,10 +256,10 @@ void keyboardMain_initialize() {
 
 void keyboardMain_udpateKeyScanners() {
   if (keyScannerUpdateFunc) {
-    keyScannerUpdateFunc(nextKeyStateFlags);
+    keyScannerUpdateFunc(nextScanSlotStateFlags);
   }
   for (uint8_t i = 0; i < extraKeyScannersLength; i++) {
-    extraKeyScannerUpdateFuncs[i](nextKeyStateFlags);
+    extraKeyScannerUpdateFuncs[i](nextScanSlotStateFlags);
   }
 }
 

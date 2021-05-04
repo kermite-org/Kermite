@@ -21,7 +21,7 @@ extern uint8_t pressedKeyCount;
 void keyboardMain_useKeyScanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags));
 void keyboardMain_useKeyScannerExtra(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags));
 void keyboardMain_setKeyIndexTable(const int8_t *_scanIndexToKeyIndexMap);
-uint8_t *keyboardMain_getNextKeyStateFlags();
+uint8_t *keyboardMain_getNextScanSlotStateFlags();
 
 void keyboardMain_initialize();
 void keyboardMain_udpateKeyScanners();
