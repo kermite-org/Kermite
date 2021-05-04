@@ -1,3 +1,4 @@
+import { shell } from 'electron';
 import {
   IProfileManagerStatus,
   IProfileData,
@@ -402,5 +403,9 @@ export class ProfileManager implements IProfileManager {
     for (const cmd of commands) {
       await this.executeCommand(cmd);
     }
+  }
+
+  async openUserProfilesFolder() {
+    await shell.openPath(this.core.getProfilesFolderPath());
   }
 }

@@ -78,6 +78,13 @@ function createMenuItemSources(
       handler: vm.openExportingPresetSelectionModal,
       enabled: isLocalProjectsAvailable && !!vm.currentProfileProjectId,
     },
+    {
+      key: 'openUserProfilesFolder',
+      text: 'Open User Profiles Folder',
+      hint: 'Open user profiles folder in default file manager of OS.',
+      handler: vm.openUserProfilesFolder,
+      enabled: true,
+    },
   ];
 }
 

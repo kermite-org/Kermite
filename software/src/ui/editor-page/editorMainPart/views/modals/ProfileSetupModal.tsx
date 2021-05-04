@@ -57,6 +57,7 @@ const ProfileSetupModalContent = (props: {
                     css={cssCommonTextInput}
                     value={editValues.profileName}
                     onInput={reflectFieldValue(editValues, 'profileName')}
+                    spellcheck={'false' as any}
                   />
                 </td>
               </tr>

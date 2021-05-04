@@ -46,7 +46,7 @@ export function createFallbackPersistKeyboardDesign(): IPersistKeyboardDesign {
   return {
     formatRevision: 'LA01',
     setup: {
-      placementUnit: 'mm',
+      placementUnit: 'KP 19',
       placementAnchor: 'center',
       keySizeUnit: 'KP 19',
       keyIdMode: 'auto',
