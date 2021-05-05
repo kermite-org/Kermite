@@ -66,10 +66,9 @@ static void swapNextScanSlotStateFlagsFirstLastHalf() {
 }
 
 static void runAsMaster() {
-  uint16_t cnt = 0;
+  uint32_t tick = 0;
   while (1) {
-    cnt++;
-    if (cnt % 4 == 0) {
+    if (tick % 4 == 0) {
       keyboardMain_udpateKeyScanners();
       if (!optionInvertSide) {
         keyboardMain_processKeyInputUpdate();
@@ -82,19 +81,20 @@ static void runAsMaster() {
         boardIo_writeLed2(pressedKeyCount > 0);
       }
     }
-    if (cnt % 4 == 2) {
+    if (tick % 4 == 2) {
       pullAltSideKeyStates();
     }
     if (optionUseHeartbeatLed) {
-      if (cnt % 2000 == 0) {
+      if (tick % 2000 == 0) {
         boardIo_writeLed1(true);
       }
-      if (cnt % 2000 == 4) {
+      if (tick % 2000 == 4) {
         boardIo_writeLed1(false);
       }
     }
+    tick++;
     delayMs(1);
-    keyboardMain_processUpdate();
+    keyboardMain_processUpdate(tick);
   }
 }
 
@@ -121,23 +121,23 @@ static void onRecevierInterruption() {
 static void runAsSlave() {
   interLink_setupSlaveReceiver(onRecevierInterruption);
 
-  uint16_t cnt = 0;
+  uint32_t tick = 0;
   while (1) {
-    cnt++;
-    if (cnt % 4 == 0) {
+    if (tick % 4 == 0) {
       keyboardMain_udpateKeyScanners();
       if (optionAffectKeyHoldStateToLed) {
         boardIo_writeLed2(pressedKeyCount > 0);
       }
     }
     if (optionUseHeartbeatLed) {
-      if (cnt % 4000 == 0) {
+      if (tick % 4000 == 0) {
         boardIo_writeLed1(true);
       }
-      if (cnt % 4000 == 4) {
+      if (tick % 4000 == 4) {
         boardIo_writeLed1(false);
       }
     }
+    tick++;
     delayMs(1);
   }
 }
