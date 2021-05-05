@@ -2,9 +2,11 @@
 #include "km0/common/utils.h"
 #include "km0/deviceIo/boardIo.h"
 #include "km0/deviceIo/system.h"
+#include "km0/keyboard/keyboardMain.h"
 #include "oledDisplay.h"
 #include "pico_sdk/src/common/include/pico/stdlib.h"
 #include "pico_sdk/src/rp2_common/include/hardware/i2c.h"
+#include <stdio.h>
 #include <string.h>
 
 //----------------------------------------------------------------------
@@ -284,9 +286,57 @@ static void drawText(int caretY, int caretX, char *text) {
   }
 }
 
-static void drawTextView() {
+static uint8_t getPressedKeyCode(const uint8_t *report) {
+  for (int i = 2; i < 8; i++) {
+    if (report[i] > 0) {
+      return report[i];
+    }
+  }
+  return 0;
+}
+
+static char strbuf[8];
+
+#define pm(x) (x > 0 ? '+' : '-')
+
+static void renderStatusView() {
   __gr_clearScreen();
-  drawText(0, 0, "test");
+
+  drawText(0, 0, "Status");
+
+  //hid key slots
+  const uint8_t *b = exposedState.hidReportBuf;
+  sprintf(strbuf, "%c%c%c%c%c%c", pm(b[2]), pm(b[3]), pm(b[4]), pm(b[5]), pm(b[6]), pm(b[7]));
+  drawText(0, 15, strbuf);
+
+  //key index
+  uint8_t ki = exposedState.pressedKeyIndex;
+
+  if (ki != KEYINDEX_NONE) {
+    //keycode
+    uint8_t kc = getPressedKeyCode(exposedState.hidReportBuf);
+    //modifiers
+    uint8_t m = exposedState.hidReportBuf[0];
+
+    sprintf(strbuf, "KI:%d", ki);
+    drawText(3, 0, strbuf);
+    sprintf(strbuf, "KC:%d", kc);
+    drawText(3, 6, strbuf);
+    sprintf(strbuf, "M:%x", m);
+    drawText(3, 13, strbuf);
+  } else {
+    sprintf(strbuf, "KI:");
+    drawText(3, 0, strbuf);
+    sprintf(strbuf, "KC:");
+    drawText(3, 6, strbuf);
+    sprintf(strbuf, "M:");
+    drawText(3, 13, strbuf);
+  }
+
+  //layers
+  uint8_t lsf = exposedState.layerStateFlags;
+  sprintf(strbuf, "L:%x", lsf);
+  drawText(3, 18, strbuf);
   __gr_flush();
 }
 
@@ -294,14 +344,14 @@ static void drawTextView() {
 
 void oledDisplay_initialize() {
   initLcd();
-  drawKermiteLogo();
 }
 
 void oledDisplay_updateFrame() {
   static int cnt = 0;
-  if (cnt < 100) {
+  if (cnt < 60) {
+    drawKermiteLogo();
     cnt++;
     return;
   }
-  drawTextView();
+  renderStatusView();
 }

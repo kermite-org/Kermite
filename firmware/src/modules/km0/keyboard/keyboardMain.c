@@ -80,6 +80,12 @@ bool optionInvertSide = false;
 
 static bool debugUartConfigured = false;
 
+KeyboardMainExposedState exposedState = {
+  .layerStateFlags = 0,
+  .hidReportBuf = localHidReport,
+  .pressedKeyIndex = KEYINDEX_NONE,
+};
+
 //----------------------------------------------------------------------
 //helpers
 
@@ -197,6 +203,7 @@ static void processKeyboardCoreLogicOutput() {
       callbacks->layerStateChanged(layerFlags);
     }
     localLayerFlags = layerFlags;
+    exposedState.layerStateFlags = layerFlags;
     changed = true;
   }
   if (!utils_compareBytes(hidReport, localHidReport, 8)) {
@@ -222,13 +229,15 @@ static void onPhysicalKeyStateChanged(uint8_t scanIndex, bool isDown) {
     return;
   }
   uint8_t keyIndex = scanIndexToKeyIndexMap[scanIndex];
-  if (keyIndex == 0xFF) {
+  if (keyIndex == KEYINDEX_NONE) {
     return;
   }
   if (isDown) {
     printf("keydown %d\n", keyIndex);
+    exposedState.pressedKeyIndex = keyIndex;
   } else {
     printf("keyup %d\n", keyIndex);
+    exposedState.pressedKeyIndex = KEYINDEX_NONE;
   }
 
   //ユーティリティにキー状態変化イベントを送信
