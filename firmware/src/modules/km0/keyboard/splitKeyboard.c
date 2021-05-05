@@ -71,10 +71,10 @@ static void runAsMaster() {
     if (tick % 4 == 0) {
       keyboardMain_udpateKeyScanners();
       if (!optionInvertSide) {
-        keyboardMain_processKeyInputUpdate();
+        keyboardMain_processKeyInputUpdate(4);
       } else {
         swapNextScanSlotStateFlagsFirstLastHalf(); //nextScanSlotStateFlagsの前半と後半を入れ替える
-        keyboardMain_processKeyInputUpdate();
+        keyboardMain_processKeyInputUpdate(4);
         swapNextScanSlotStateFlagsFirstLastHalf(); //戻す
       }
       keyboardMain_updateKeyInidicatorLed();

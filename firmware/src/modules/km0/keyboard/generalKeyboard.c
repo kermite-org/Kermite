@@ -13,7 +13,7 @@ void generalKeyboard_start() {
   while (1) {
     if (tick % 4 == 0) {
       keyboardMain_udpateKeyScanners();
-      keyboardMain_processKeyInputUpdate();
+      keyboardMain_processKeyInputUpdate(4);
       keyboardMain_updateKeyInidicatorLed();
     }
     keyboardMain_updateHeartBeatLed(tick);

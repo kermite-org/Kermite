@@ -321,9 +321,9 @@ void keyboardMain_udpateKeyScanners() {
   updateKeyScanners();
 }
 
-void keyboardMain_processKeyInputUpdate() {
+void keyboardMain_processKeyInputUpdate(uint8_t tickInterval) {
   processKeyStatesUpdate();
-  keyboardCoreLogic_processTicker(5);
+  keyboardCoreLogic_processTicker(tickInterval);
   processKeyboardCoreLogicOutput();
 }
 

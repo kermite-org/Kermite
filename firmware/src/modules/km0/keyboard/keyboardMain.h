@@ -12,6 +12,7 @@ typedef struct _KeyboardCallbackSet {
 } KeyboardCallbackSet;
 
 extern bool optionInvertSide;
+uint8_t *keyboardMain_getNextScanSlotStateFlags();
 
 void keyboardMain_useIndicatorLeds(int8_t pin1, uint8_t pin2, bool invert);
 void keyboardMain_useIndicatorRgbLed(int8_t pin);
@@ -21,11 +22,10 @@ void keyboardMain_useKeyScanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateB
 void keyboardMain_useKeyScannerExtra(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags));
 void keyboardMain_setKeyIndexTable(const int8_t *_scanIndexToKeyIndexMap);
 void keyboardMain_useDisplayModule(void (*_displayModuleUpdateFunc)(void), uint8_t frameRate);
-uint8_t *keyboardMain_getNextScanSlotStateFlags();
 
 void keyboardMain_initialize();
 void keyboardMain_udpateKeyScanners();
-void keyboardMain_processKeyInputUpdate();
+void keyboardMain_processKeyInputUpdate(uint8_t tickInterval);
 void keyboardMain_updateKeyInidicatorLed();
 void keyboardMain_updateDisplayModules(uint32_t tick);
 void keyboardMain_updateHeartBeatLed(uint32_t tick);
