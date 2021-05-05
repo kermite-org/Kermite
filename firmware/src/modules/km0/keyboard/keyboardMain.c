@@ -36,6 +36,11 @@ enum {
 #endif
 #define NumMaxExtraKeyScanners KM0_KEYBOARD__NUM_MAX_EXTRA_KEY_SCANNERS
 
+#ifndef KM0_KEYBOARD__NUM_MAX_DISPLAY_MODULE_TASKS
+#define KM0_KEYBOARD__NUM_MAX_DISPLAY_MODULE_TASKS 2
+#endif
+#define NumsMaxDisplayModuleTasks KM0_KEYBOARD__NUM_MAX_DISPLAY_MODULE_TASKS
+
 //----------------------------------------------------------------------
 //public variables
 
@@ -70,6 +75,14 @@ static KeyScannerUpdateFunc keyScannerUpdateFunc = NULL;
 static KeyScannerUpdateFunc extraKeyScannerUpdateFuncs[NumMaxExtraKeyScanners] = { 0 };
 static uint8_t extraKeyScannersLength = 0;
 
+typedef struct {
+  void (*updateFunc)(void);
+  uint8_t intervalMs;
+} DisplayModuleTask;
+
+static DisplayModuleTask displayModuelTasks[NumsMaxDisplayModuleTasks] = { 0 };
+static uint8_t displayModuelTasksLength = 0;
+
 static bool debugUartConfigured = false;
 
 //----------------------------------------------------------------------
@@ -98,6 +111,27 @@ static void resetKeyboardCoreLogic() {
     keyboardCoreLogic_initialize();
   } else {
     keyboardCoreLogic_halt();
+  }
+}
+
+static void updateKeyScanners() {
+  if (keyScannerUpdateFunc) {
+    keyScannerUpdateFunc(nextScanSlotStateFlags);
+  }
+  for (uint8_t i = 0; i < extraKeyScannersLength; i++) {
+    KeyScannerUpdateFunc updateFunc = extraKeyScannerUpdateFuncs[i];
+    if (updateFunc) {
+      updateFunc(nextScanSlotStateFlags);
+    }
+  }
+}
+
+static void updateDisplayModules(uint32_t tickMs) {
+  for (uint8_t i = 0; i < displayModuelTasksLength; i++) {
+    DisplayModuleTask *task = &displayModuelTasks[i];
+    if (tickMs % task->intervalMs == 0) {
+      task->updateFunc();
+    }
   }
 }
 
@@ -250,6 +284,13 @@ void keyboardMain_useKeyScannerExtra(void (*_keyScannerUpdateFunc)(uint8_t *keyS
   extraKeyScannerUpdateFuncs[extraKeyScannersLength++] = _keyScannerUpdateFunc;
 }
 
+void keyboardMain_useDisplayModule(void (*_displayModuleUpdateFunc)(void), uint8_t frameRate) {
+  DisplayModuleTask *task = &displayModuelTasks[displayModuelTasksLength];
+  task->updateFunc = _displayModuleUpdateFunc;
+  task->intervalMs = 1000 / frameRate;
+  displayModuelTasksLength++;
+}
+
 void keyboardMain_setKeyIndexTable(const int8_t *_scanIndexToKeyIndexMap) {
   scanIndexToKeyIndexMap = (uint8_t *)_scanIndexToKeyIndexMap;
 }
@@ -275,12 +316,7 @@ void keyboardMain_initialize() {
 }
 
 void keyboardMain_udpateKeyScanners() {
-  if (keyScannerUpdateFunc) {
-    keyScannerUpdateFunc(nextScanSlotStateFlags);
-  }
-  for (uint8_t i = 0; i < extraKeyScannersLength; i++) {
-    extraKeyScannerUpdateFuncs[i](nextScanSlotStateFlags);
-  }
+  updateKeyScanners();
 }
 
 void keyboardMain_processKeyInputUpdate() {
@@ -289,7 +325,8 @@ void keyboardMain_processKeyInputUpdate() {
   processKeyboardCoreLogicOutput();
 }
 
-void keyboardMain_processUpdate() {
+void keyboardMain_processUpdate(uint32_t tickMs) {
+  updateDisplayModules(tickMs);
   usbIoCore_processUpdate();
   configuratorServant_processUpdate();
 }
