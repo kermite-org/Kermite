@@ -77,24 +77,16 @@ static void runAsMaster() {
         keyboardMain_processKeyInputUpdate();
         swapNextScanSlotStateFlagsFirstLastHalf(); //戻す
       }
-      if (optionAffectKeyHoldStateToLed) {
-        boardIo_writeLed2(pressedKeyCount > 0);
-      }
+      keyboardMain_updateKeyInidicatorLed();
     }
     if (tick % 4 == 2) {
       pullAltSideKeyStates();
     }
-    if (optionUseHeartbeatLed) {
-      if (tick % 2000 == 0) {
-        boardIo_writeLed1(true);
-      }
-      if (tick % 2000 == 4) {
-        boardIo_writeLed1(false);
-      }
-    }
-    tick++;
+    keyboardMain_updateDisplayModules(tick);
+    keyboardMain_updateHeartBeatLed(tick);
+    keyboardMain_processUpdate();
     delayMs(1);
-    keyboardMain_processUpdate(tick);
+    tick++;
   }
 }
 
@@ -125,20 +117,11 @@ static void runAsSlave() {
   while (1) {
     if (tick % 4 == 0) {
       keyboardMain_udpateKeyScanners();
-      if (optionAffectKeyHoldStateToLed) {
-        boardIo_writeLed2(pressedKeyCount > 0);
-      }
+      keyboardMain_updateKeyInidicatorLed();
     }
-    if (optionUseHeartbeatLed) {
-      if (tick % 4000 == 0) {
-        boardIo_writeLed1(true);
-      }
-      if (tick % 4000 == 4) {
-        boardIo_writeLed1(false);
-      }
-    }
-    tick++;
+    keyboardMain_updateHeartBeatLed(tick);
     delayMs(1);
+    tick++;
   }
 }
 

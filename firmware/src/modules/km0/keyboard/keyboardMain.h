@@ -11,12 +11,7 @@ typedef struct _KeyboardCallbackSet {
   void (*keyStateChanged)(uint8_t keyIndex, bool isDown);
 } KeyboardCallbackSet;
 
-extern bool optionEmitKeyStroke;
-extern bool optionEmitRealtimeEvents;
-extern bool optionAffectKeyHoldStateToLed;
-extern bool optionUseHeartbeatLed;
 extern bool optionInvertSide;
-extern uint8_t pressedKeyCount;
 
 void keyboardMain_useIndicatorLeds(int8_t pin1, uint8_t pin2, bool invert);
 void keyboardMain_useIndicatorRgbLed(int8_t pin);
@@ -31,6 +26,9 @@ uint8_t *keyboardMain_getNextScanSlotStateFlags();
 void keyboardMain_initialize();
 void keyboardMain_udpateKeyScanners();
 void keyboardMain_processKeyInputUpdate();
-void keyboardMain_processUpdate(uint32_t tick);
+void keyboardMain_updateKeyInidicatorLed();
+void keyboardMain_updateDisplayModules(uint32_t tick);
+void keyboardMain_updateHeartBeatLed(uint32_t tick);
+void keyboardMain_processUpdate();
 
 #endif

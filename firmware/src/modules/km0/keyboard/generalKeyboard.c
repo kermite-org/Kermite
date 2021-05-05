@@ -1,6 +1,5 @@
 #include "generalKeyboard.h"
 #include "keyboardMain.h"
-#include "km0/deviceIo/boardIo.h"
 #include "km0/deviceIo/system.h"
 #include <stdio.h>
 
@@ -15,20 +14,12 @@ void generalKeyboard_start() {
     if (tick % 4 == 0) {
       keyboardMain_udpateKeyScanners();
       keyboardMain_processKeyInputUpdate();
-      if (optionAffectKeyHoldStateToLed) {
-        boardIo_writeLed2(pressedKeyCount > 0);
-      }
+      keyboardMain_updateKeyInidicatorLed();
     }
-    if (optionUseHeartbeatLed) {
-      if (tick % 4000 == 0) {
-        boardIo_writeLed1(true);
-      }
-      if (tick % 4000 == 4) {
-        boardIo_writeLed1(false);
-      }
-    }
-    tick++;
-    delayMs(1);
+    keyboardMain_updateHeartBeatLed(tick);
+    keyboardMain_updateDisplayModules(tick);
     keyboardMain_processUpdate();
+    delayMs(1);
+    tick++;
   }
 }

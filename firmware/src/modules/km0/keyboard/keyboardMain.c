@@ -42,18 +42,6 @@ enum {
 #define NumsMaxDisplayModuleTasks KM0_KEYBOARD__NUM_MAX_DISPLAY_MODULE_TASKS
 
 //----------------------------------------------------------------------
-//public variables
-
-uint8_t pressedKeyCount = 0;
-
-//動的に変更可能なオプション
-bool optionEmitKeyStroke = true;
-bool optionEmitRealtimeEvents = true;
-bool optionAffectKeyHoldStateToLed = true;
-bool optionUseHeartbeatLed = true;
-bool optionInvertSide = false;
-
-//----------------------------------------------------------------------
 //variables
 
 static uint8_t *scanIndexToKeyIndexMap;
@@ -82,6 +70,15 @@ typedef struct {
 
 static DisplayModuleTask displayModuelTasks[NumsMaxDisplayModuleTasks] = { 0 };
 static uint8_t displayModuelTasksLength = 0;
+
+static uint8_t pressedKeyCount = 0;
+
+//動的に変更可能なオプション
+static bool optionEmitKeyStroke = true;
+static bool optionEmitRealtimeEvents = true;
+static bool optionAffectKeyHoldStateToLed = true;
+static bool optionUseHeartbeatLed = true;
+bool optionInvertSide = false;
 
 static bool debugUartConfigured = false;
 
@@ -126,10 +123,10 @@ static void updateKeyScanners() {
   }
 }
 
-static void updateDisplayModules(uint32_t tickMs) {
+static void updateDisplayModules(uint32_t tick) {
   for (uint8_t i = 0; i < displayModuelTasksLength; i++) {
     DisplayModuleTask *task = &displayModuelTasks[i];
-    if (tickMs % task->intervalMs == 0) {
+    if (tick % task->intervalMs == 0) {
       task->updateFunc();
     }
   }
@@ -325,8 +322,28 @@ void keyboardMain_processKeyInputUpdate() {
   processKeyboardCoreLogicOutput();
 }
 
-void keyboardMain_processUpdate(uint32_t tickMs) {
-  updateDisplayModules(tickMs);
+void keyboardMain_updateKeyInidicatorLed() {
+  if (optionAffectKeyHoldStateToLed) {
+    boardIo_writeLed2(pressedKeyCount > 0);
+  }
+}
+
+void keyboardMain_updateHeartBeatLed(uint32_t tick) {
+  if (optionUseHeartbeatLed) {
+    if (tick % 4000 == 0) {
+      boardIo_writeLed1(true);
+    }
+    if (tick % 4000 == 4) {
+      boardIo_writeLed1(false);
+    }
+  }
+}
+
+void keyboardMain_updateDisplayModules(uint32_t tick) {
+  updateDisplayModules(tick);
+}
+
+void keyboardMain_processUpdate() {
   usbIoCore_processUpdate();
   configuratorServant_processUpdate();
 }
