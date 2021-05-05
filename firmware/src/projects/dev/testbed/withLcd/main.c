@@ -3,7 +3,7 @@
 #include "km0/keyboard/generalKeyboard.h"
 #include "km0/keyboard/keyScanner_directWired.h"
 #include "km0/keyboard/keyboardMain.h"
-#include "km0/keyboard/oledDisplay.h"
+#include "km0/visualizer/oledDisplay.h"
 
 #define NumScanSlots 4
 
