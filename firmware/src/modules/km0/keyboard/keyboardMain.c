@@ -80,6 +80,7 @@ KeyboardMainExposedState exposedState = {
   .layerStateFlags = 0,
   .hidReportBuf = localHidReport,
   .pressedKeyIndex = KEYINDEX_NONE,
+  .isSplitSlave = false,
 };
 
 //----------------------------------------------------------------------
@@ -298,6 +299,10 @@ void keyboardMain_setKeyIndexTable(const int8_t *_scanIndexToKeyIndexMap) {
 
 void keyboardMain_setCallbacks(KeyboardCallbackSet *_callbacks) {
   callbacks = _callbacks;
+}
+
+void keyboardMain_setAsSplitSlave() {
+  exposedState.isSplitSlave = true;
 }
 
 uint8_t *keyboardMain_getNextScanSlotStateFlags() {

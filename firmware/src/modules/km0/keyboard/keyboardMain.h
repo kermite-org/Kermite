@@ -17,6 +17,7 @@ typedef struct {
   uint16_t layerStateFlags;
   const uint8_t *hidReportBuf;
   uint8_t pressedKeyIndex;
+  bool isSplitSlave;
 } KeyboardMainExposedState;
 
 extern KeyboardMainExposedState exposedState;
@@ -32,6 +33,7 @@ void keyboardMain_useKeyScanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateB
 void keyboardMain_useKeyScannerExtra(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags));
 void keyboardMain_setKeyIndexTable(const int8_t *_scanIndexToKeyIndexMap);
 void keyboardMain_useDisplayModule(void (*_displayModuleUpdateFunc)(void));
+void keyboardMain_setAsSplitSlave();
 
 void keyboardMain_initialize();
 void keyboardMain_udpateKeyScanners();

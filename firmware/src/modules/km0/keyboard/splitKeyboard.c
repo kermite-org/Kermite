@@ -112,6 +112,7 @@ static void onRecevierInterruption() {
 
 static void runAsSlave() {
   interLink_setupSlaveReceiver(onRecevierInterruption);
+  keyboardMain_setAsSplitSlave();
 
   uint32_t tick = 0;
   while (1) {

@@ -353,13 +353,17 @@ static void renderStatusView() {
 }
 
 static void updateFrame() {
-  static int cnt = 0;
-  if (cnt < 60) {
-    drawKermiteLogo();
-    cnt++;
-    return;
+  static int cnt = 60;
+  if (cnt > 0) {
+    cnt--;
   }
-  renderStatusView();
+  bool bootComplete = cnt == 0;
+  bool isMaster = !exposedState.isSplitSlave;
+  if (bootComplete && isMaster) {
+    renderStatusView();
+  } else {
+    drawKermiteLogo();
+  }
 }
 
 //----------------------------------------------------------------------
