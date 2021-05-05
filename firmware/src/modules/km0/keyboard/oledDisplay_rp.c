@@ -11,9 +11,21 @@
 
 //----------------------------------------------------------------------
 
-static struct i2c_inst *i2c_instance = i2c1;
-static const uint8_t pin_sda = 2;
-static const uint8_t pin_scl = 3;
+#ifndef KM0_RP_OLED__I2C_INSTANCE
+#define KM0_RP_OLED__I2C_INSTANCE i2c1
+#endif
+
+#ifndef KM0_RP_OLED__I2C_PIN_SDA
+#define KM0_RP_OLED__I2C_PIN_SDA 2
+#endif
+
+#ifndef KM0_RP_OLED__I2C_PIN_SCL
+#define KM0_RP_OLED__I2C_PIN_SCL 3
+#endif
+
+static struct i2c_inst *i2c_instance = KM0_RP_OLED__I2C_INSTANCE;
+static const uint8_t pin_sda = KM0_RP_OLED__I2C_PIN_SDA;
+static const uint8_t pin_scl = KM0_RP_OLED__I2C_PIN_SCL;
 
 static uint8_t i2c_slave_address = 0;
 
@@ -121,7 +133,7 @@ static void __gr_flush() {
 
 //----------------------------------------------------------------------
 
-uint32_t logoData[] = {
+static uint32_t logoData[] = {
   0x00000000, 0x00000000, 0x00000000, 0x00000000,
   0x07ffff80, 0x07ffff80, 0x07ffff80, 0x07ffff80,
   0x00070000, 0x000f8000, 0x001fc000, 0x003ff000,
