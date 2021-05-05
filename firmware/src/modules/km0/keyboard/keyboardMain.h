@@ -31,7 +31,7 @@ void keyboardMain_useDebugUart(uint32_t baud);
 void keyboardMain_useKeyScanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags));
 void keyboardMain_useKeyScannerExtra(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags));
 void keyboardMain_setKeyIndexTable(const int8_t *_scanIndexToKeyIndexMap);
-void keyboardMain_useDisplayModule(void (*_displayModuleUpdateFunc)(void), uint8_t frameRate);
+void keyboardMain_useDisplayModule(void (*_displayModuleUpdateFunc)(void));
 
 void keyboardMain_initialize();
 void keyboardMain_udpateKeyScanners();

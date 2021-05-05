@@ -18,7 +18,7 @@ int main() {
   keyboardMain_useIndicatorLeds(GP25, GP25, false);
   keyboardMain_useKeyScanner(keyScanner_directWired_update);
   keyboardMain_setKeyIndexTable(keyIndexTable);
-  keyboardMain_useDisplayModule(oledDisplay_updateFrame, 20);
+  keyboardMain_useDisplayModule(oledDisplay_update);
   generalKeyboard_start();
   return 0;
 }

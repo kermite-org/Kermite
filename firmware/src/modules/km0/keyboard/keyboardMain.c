@@ -36,10 +36,10 @@ enum {
 #endif
 #define NumMaxExtraKeyScanners KM0_KEYBOARD__NUM_MAX_EXTRA_KEY_SCANNERS
 
-#ifndef KM0_KEYBOARD__NUM_MAX_DISPLAY_MODULE_TASKS
-#define KM0_KEYBOARD__NUM_MAX_DISPLAY_MODULE_TASKS 2
+#ifndef KM0_KEYBOARD__NUM_MAX_DISPLAY_MODULES
+#define KM0_KEYBOARD__NUM_MAX_DISPLAY_MODULES 2
 #endif
-#define NumsMaxDisplayModuleTasks KM0_KEYBOARD__NUM_MAX_DISPLAY_MODULE_TASKS
+#define NumsMaxDisplayModules KM0_KEYBOARD__NUM_MAX_DISPLAY_MODULES
 
 //----------------------------------------------------------------------
 //variables
@@ -63,13 +63,9 @@ static KeyScannerUpdateFunc keyScannerUpdateFunc = NULL;
 static KeyScannerUpdateFunc extraKeyScannerUpdateFuncs[NumMaxExtraKeyScanners] = { 0 };
 static uint8_t extraKeyScannersLength = 0;
 
-typedef struct {
-  void (*updateFunc)(void);
-  uint8_t intervalMs;
-} DisplayModuleTask;
-
-static DisplayModuleTask displayModuelTasks[NumsMaxDisplayModuleTasks] = { 0 };
-static uint8_t displayModuelTasksLength = 0;
+typedef void (*DisplayUpdateFunc)(void);
+static DisplayUpdateFunc displayUpdateFuncs[NumsMaxDisplayModules] = { 0 };
+static uint8_t displayModulesLength = 0;
 
 //動的に変更可能なオプション
 static bool optionEmitKeyStroke = true;
@@ -128,11 +124,8 @@ static void updateKeyScanners() {
 }
 
 static void updateDisplayModules(uint32_t tick) {
-  for (uint8_t i = 0; i < displayModuelTasksLength; i++) {
-    DisplayModuleTask *task = &displayModuelTasks[i];
-    if (tick % task->intervalMs == 0) {
-      task->updateFunc();
-    }
+  for (uint8_t i = 0; i < displayModulesLength; i++) {
+    displayUpdateFuncs[i]();
   }
 }
 
@@ -295,11 +288,8 @@ void keyboardMain_useKeyScannerExtra(void (*_keyScannerUpdateFunc)(uint8_t *keyS
   extraKeyScannerUpdateFuncs[extraKeyScannersLength++] = _keyScannerUpdateFunc;
 }
 
-void keyboardMain_useDisplayModule(void (*_displayModuleUpdateFunc)(void), uint8_t frameRate) {
-  DisplayModuleTask *task = &displayModuelTasks[displayModuelTasksLength];
-  task->updateFunc = _displayModuleUpdateFunc;
-  task->intervalMs = 1000 / frameRate;
-  displayModuelTasksLength++;
+void keyboardMain_useDisplayModule(void (*_displayModuleUpdateFunc)(void)) {
+  displayUpdateFuncs[displayModulesLength++] = _displayModuleUpdateFunc;
 }
 
 void keyboardMain_setKeyIndexTable(const int8_t *_scanIndexToKeyIndexMap) {

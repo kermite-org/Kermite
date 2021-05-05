@@ -340,13 +340,7 @@ static void renderStatusView() {
   __gr_flush();
 }
 
-//----------------------------------------------------------------------
-
-void oledDisplay_initialize() {
-  initLcd();
-}
-
-void oledDisplay_updateFrame() {
+static void updateFrame() {
   static int cnt = 0;
   if (cnt < 60) {
     drawKermiteLogo();
@@ -354,4 +348,17 @@ void oledDisplay_updateFrame() {
     return;
   }
   renderStatusView();
+}
+
+//----------------------------------------------------------------------
+
+void oledDisplay_initialize() {
+  initLcd();
+}
+
+void oledDisplay_update() {
+  static uint32_t tick = 0;
+  if (++tick % 50 == 0) {
+    updateFrame();
+  }
 }
