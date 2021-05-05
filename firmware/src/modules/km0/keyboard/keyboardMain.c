@@ -71,8 +71,6 @@ typedef struct {
 static DisplayModuleTask displayModuelTasks[NumsMaxDisplayModuleTasks] = { 0 };
 static uint8_t displayModuelTasksLength = 0;
 
-static uint8_t pressedKeyCount = 0;
-
 //動的に変更可能なオプション
 static bool optionEmitKeyStroke = true;
 static bool optionEmitRealtimeEvents = true;
@@ -130,6 +128,15 @@ static void updateDisplayModules(uint32_t tick) {
       task->updateFunc();
     }
   }
+}
+
+static bool checkIfSomeKeyPressed() {
+  for (uint8_t i = 0; i < NumScanSlotBytes; i++) {
+    if (nextScanSlotStateFlags[i] > 0) {
+      return true;
+    }
+  }
+  return false;
 }
 
 //----------------------------------------------------------------------
@@ -220,10 +227,8 @@ static void onPhysicalKeyStateChanged(uint8_t scanIndex, bool isDown) {
   }
   if (isDown) {
     printf("keydown %d\n", keyIndex);
-    pressedKeyCount++;
   } else {
     printf("keyup %d\n", keyIndex);
-    pressedKeyCount--;
   }
 
   //ユーティリティにキー状態変化イベントを送信
@@ -324,7 +329,8 @@ void keyboardMain_processKeyInputUpdate() {
 
 void keyboardMain_updateKeyInidicatorLed() {
   if (optionAffectKeyHoldStateToLed) {
-    boardIo_writeLed2(pressedKeyCount > 0);
+    bool isKeyPressed = checkIfSomeKeyPressed();
+    boardIo_writeLed2(isKeyPressed);
   }
 }
 
