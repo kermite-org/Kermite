@@ -3,6 +3,6 @@
 
 void oledDisplay_initialize();
 
-void oledDispaly_updateFrame();
+void oledDisplay_updateFrame();
 
 #endif

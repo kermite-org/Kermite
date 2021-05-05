@@ -297,7 +297,7 @@ void oledDisplay_initialize() {
   drawKermiteLogo();
 }
 
-void oledDispaly_updateFrame() {
+void oledDisplay_updateFrame() {
   static int cnt = 0;
   if (cnt < 100) {
     cnt++;
