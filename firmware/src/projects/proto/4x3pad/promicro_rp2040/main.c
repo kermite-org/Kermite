@@ -2,6 +2,7 @@
 #include "km0/deviceIo/dio.h"
 #include "km0/keyboard/generalKeyboard.h"
 #include "km0/keyboard/keyScanner_basicMatrix.h"
+#include "km0/keyboard/keyboardMain.h"
 
 #define NumColumns 4
 #define NumRows 3
@@ -20,11 +21,11 @@ static const int8_t keyIndexTable[NumScanSlots] = {
 
 int main() {
   // generalKeyboard_useIndicatorLeds(GP25, GP25, false); //RPi pico
-  generalKeyboard_useIndicatorRgbLed(GP25); //promicro rp2040
-  generalKeyboard_useDebugUart(38400);
+  keyboardMain_useIndicatorRgbLed(GP25); //promicro rp2040
+  keyboardMain_useDebugUart(38400);
   keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
-  generalKeyboard_useKeyScanner(keyScanner_basicMatrix_update);
-  generalKeyboard_setKeyIndexTable(keyIndexTable);
+  keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
+  keyboardMain_setKeyIndexTable(keyIndexTable);
   generalKeyboard_start();
   return 0;
 }

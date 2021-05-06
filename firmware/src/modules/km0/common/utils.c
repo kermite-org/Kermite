@@ -71,3 +71,9 @@ void utils_writeArrayedBitFlagsBit(uint8_t *bitFlagBytes, uint8_t flagIndex, boo
   uint8_t bitIndex = flagIndex & 7;
   bit_spec(bitFlagBytes[byteIndex], bitIndex, state);
 }
+
+bool utils_readArrayedBitFlagsBit(uint8_t *bitFlagBytes, uint8_t flagIndex) {
+  uint8_t byteIndex = flagIndex >> 3;
+  uint8_t bitIndex = flagIndex & 7;
+  return bit_read(bitFlagBytes[byteIndex], bitIndex);
+}
