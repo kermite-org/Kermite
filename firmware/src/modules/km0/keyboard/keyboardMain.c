@@ -163,8 +163,8 @@ static void parameterValueHandler(uint8_t slotIndex, uint8_t value) {
     printf("routing channel: %s\n", value == 1 ? "Alter" : "Main");
   }
 
-  if (callbacks && callbacks->customParameterHandlerChained) {
-    callbacks->customParameterHandlerChained(slotIndex, value);
+  if (callbacks && callbacks->customParameterHandlerExtended) {
+    callbacks->customParameterHandlerExtended(slotIndex, value);
   }
 }
 

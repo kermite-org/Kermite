@@ -2,7 +2,8 @@
 #include "km0/deviceIo/dio.h"
 #include "km0/deviceIo/serialLed.h"
 #include "km0/keyboard/generalKeyboard.h"
-#include "km0/keyboard/keyScanner.h"
+#include "km0/keyboard/keyScanner_directWired.h"
+#include "km0/keyboard/keyboardMain.h"
 #include <stdio.h>
 
 #define NumKeys 4
@@ -57,13 +58,11 @@ static KeyboardCallbackSet callbacks = {
 };
 
 int main() {
-  generalKeyboard_useOptionFixed(0, true);
-  generalKeyboard_useOptionFixed(1, true);
-  generalKeyboard_useIndicatorLeds(GP25, GP25, false); //RPi pico
-  generalKeyboard_useDebugUart(38400);
-  keyScanner_initializeDirectWired(NumKeys, keyInputPins);
-  generalKeyboard_setKeyIndexTable(keyIndexTable);
-  generalKeyboard_setCallbacks(&callbacks);
+  keyboardMain_useIndicatorLeds(GP25, GP25, false); //RPi pico
+  keyboardMain_useDebugUart(38400);
+  keyScanner_directWired_initialize(NumKeys, keyInputPins);
+  keyboardMain_setKeyIndexTable(keyIndexTable);
+  keyboardMain_setCallbacks(&callbacks);
   serialLed_initialize(GP2);
   generalKeyboard_start();
   return 0;
