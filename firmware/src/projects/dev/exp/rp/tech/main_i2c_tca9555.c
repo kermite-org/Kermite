@@ -1,22 +1,27 @@
 #include "hardware/i2c.h"
+#include "km0/common/bitOperations.h"
 #include "km0/deviceIo/boardIo.h"
+#include "km0/deviceIo/debugUart.h"
 #include "km0/deviceIo/dio.h"
 #include "km0/deviceIo/system.h"
 #include "pico/binary_info.h"
 #include "pico/stdlib.h"
+#include <stdio.h>
 
 //board RPi Pico
 //GP25: onboard LED
 //GP4 I2C0_SDA <--> TCA9555 SDA
-//GP5 I2C0_SCL ---> TCA9555 SDL
+//GP5 I2C0_SCL ---> TCA9555 SCL
 
 //TCA9555
 //SDA <---> RPi Pico GP4
-//SCL <---> RPi Pico GP5
+//SCL <---- RPi Pico GP5
 //A0 <--- GND
 //A1 <--- GND
 //A2 <--- VDD
-//P00 ---> LED
+//P00 ---> LED -- R -- GND
+//P01 ---> LED -- R -- GND
+//P17 <--- Button -- GND
 
 //----------------------------------------------------------------------
 
@@ -115,19 +120,23 @@ uint16_t iox_input(uint8_t slaveAddress) {
 
 int main() {
   uint8_t addrSlave0 = 0x21;
-
   boardIo_setupLeds(GP25, GP25, false);
   boardI2c_initialize(100000);
 
-  uint16_t portDirs = 0xFFFE;
+  uint16_t portDirs = 0xFFFC;
   iox_configure_ports(addrSlave0, portDirs);
 
+  uint32_t tick = 0;
   while (true) {
-    boardIo_writeLed1(1);
-    iox_output(addrSlave0, 0x1);
-    delayMs(1000);
-    boardIo_writeLed1(0);
-    iox_output(addrSlave0, 0x0);
-    delayMs(1000);
+    if (tick % 1000 == 0) {
+      boardIo_toggleLed1();
+    }
+    uint16_t portStates = iox_input(addrSlave0);
+    bool isButtenPressed = bit_read(portStates, 15) == 0;
+    uint8_t led0out = tick % 1000 < 500 ? 1 : 0;
+    uint8_t led1out = isButtenPressed ? 1 : 0;
+    iox_output(addrSlave0, (led1out << 1) | (led0out));
+    delayMs(1);
+    tick++;
   }
 }
