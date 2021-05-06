@@ -18,20 +18,20 @@
           "defaultValue": 1
         },
         {
-          "slotIndex": 4,
+          "slotIndex": 6,
           "type": "toggle",
           "label": "Enable Glow",
           "defaultValue": 0
         },
         {
-          "slotIndex": 5,
+          "slotIndex": 7,
           "type": "linear",
           "label": "Glow Color",
           "defaultValue": 0,
           "maxValue": 12
         },
         {
-          "slotIndex": 6,
+          "slotIndex": 8,
           "type": "linear",
           "label": "Glow Brightness",
           "defaultValue": 10,

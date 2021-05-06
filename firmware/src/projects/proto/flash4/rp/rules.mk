@@ -15,5 +15,6 @@ MODULE_SRCS += km0/keyboard/configValidator.c
 MODULE_SRCS += km0/keyboard/keyboardCoreLogic.c
 MODULE_SRCS += km0/keyboard/keyboardMain.c
 MODULE_SRCS += km0/keyboard/generalKeyboard.c
+MODULE_SRCS += km0/visualizer/rgbLighting.c
 
 PROJECT_SRCS += main.c
