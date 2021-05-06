@@ -15,6 +15,9 @@ int utils_clamp(int val, int lo, int hi);
 void utils_writeArrayedBitFlagsBit(uint8_t *bitFlagBytes, uint8_t flagIndex, bool state);
 bool utils_readArrayedBitFlagsBit(uint8_t *bitFlagBytes, uint8_t flagIndex);
 
-#define valueMinimum(a, b) (a < b ? a : b)
+#define valueMinimum(a, b) ((a) < (b) ? (a) : (b))
+
+#define utils_abs(a) ((a) < 0 ? -(a) : (a))
+#define utils_max(a, b) ((a) > (b) ? (a) : (b))
 
 #endif
