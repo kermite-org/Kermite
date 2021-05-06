@@ -35,11 +35,11 @@ static void updateGlowLeds() {
 }
 
 static void customParameterHandlerExtended(uint8_t slotIndex, uint8_t value) {
-  if (slotIndex == 6) {
+  if (slotIndex == 5) {
     glowEnabled = value;
-  } else if (slotIndex == 7) {
+  } else if (slotIndex == 6) {
     glowColor = value;
-  } else if (slotIndex == 8) {
+  } else if (slotIndex == 7) {
     glowBrightness = value;
   }
 }
