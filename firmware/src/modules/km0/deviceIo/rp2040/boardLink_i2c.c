@@ -1,5 +1,5 @@
 #include "km0/common/utils.h"
-#include "km0/deviceIo/interLink.h"
+#include "km0/deviceIo/boardLink.h"
 #include "pico_sdk/src/common/include/pico/stdlib.h"
 #include "pico_sdk/src/rp2_common/include/hardware/i2c.h"
 #include "pico_sdk/src/rp2_common/include/hardware/irq.h"
@@ -73,19 +73,19 @@ static void (*slaveReceiverCallback)() = NULL;
 
 //----------------------------------------------------------------------
 
-void interLink_writeTxBuffer(uint8_t *buf, uint8_t len) {
+void boardLink_writeTxBuffer(uint8_t *buf, uint8_t len) {
   raw_tx_buf[0] = len;
   memcpy(raw_tx_buf + 1, buf, len);
   raw_tx_len = len + 1;
 }
 
-uint8_t interLink_readRxBuffer(uint8_t *buf, uint8_t maxLen) {
+uint8_t boardLink_readRxBuffer(uint8_t *buf, uint8_t maxLen) {
   uint8_t len = valueMinimum(raw_rx_body_len, maxLen);
   memcpy(buf, raw_rx_buf, len);
   return len;
 }
 
-void interLink_initialize() {
+void boardLink_initialize() {
   i2c_init(i2c_instance, i2cFrequency);
   gpio_set_function(pin_sda, GPIO_FUNC_I2C);
   gpio_set_function(pin_scl, GPIO_FUNC_I2C);
@@ -93,7 +93,7 @@ void interLink_initialize() {
   gpio_pull_up(pin_scl);
 }
 
-void interLink_exchangeFramesBlocking() {
+void boardLink_exchangeFramesBlocking() {
   i2c_write_blocking(i2c_instance, i2cSlaveAddress, raw_tx_buf, raw_tx_len, true);
   i2c_read_blocking(i2c_instance, i2cSlaveAddress, raw_rx_buf, 1, false);
   raw_rx_body_len = raw_rx_buf[0];
@@ -141,7 +141,7 @@ static void i2c_instance_irq_handler() {
   }
 }
 
-void interLink_setupSlaveReceiver(void (*callback)()) {
+void boardLink_setupSlaveReceiver(void (*callback)()) {
   i2c_set_slave_mode(i2c_instance, true, i2cSlaveAddress);
   slaveReceiverCallback = callback;
   i2c_instance->hw->intr_mask = (I2C_IC_INTR_MASK_M_RD_REQ_BITS | I2C_IC_INTR_MASK_M_RX_FULL_BITS);
@@ -149,7 +149,7 @@ void interLink_setupSlaveReceiver(void (*callback)()) {
   irq_set_enabled(I2C_INSTANCE_IRQ, true);
 }
 
-void interLink_clearSlaveReceiver() {
+void boardLink_clearSlaveReceiver() {
   slaveReceiverCallback = NULL;
   i2c_instance->hw->intr_mask = 0;
   irq_remove_handler(I2C_INSTANCE_IRQ, i2c_instance_irq_handler);

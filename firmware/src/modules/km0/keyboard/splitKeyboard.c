@@ -3,7 +3,7 @@
 #include "keyboardMain.h"
 #include "km0/common/utils.h"
 #include "km0/deviceIo/boardIo.h"
-#include "km0/deviceIo/interLink.h"
+#include "km0/deviceIo/boardLink.h"
 #include "km0/deviceIo/system.h"
 #include "km0/deviceIo/usbIoCore.h"
 #include <stdio.h>
@@ -39,9 +39,9 @@ static bool hasMasterOathReceived = false;
 //反対側のコントローラからキー状態を受け取る処理
 static void pullAltSideKeyStates() {
   sw_txbuf[0] = 0x40;
-  interLink_writeTxBuffer(sw_txbuf, 1); //キー状態要求パケットを送信
-  interLink_exchangeFramesBlocking();
-  uint8_t sz = interLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
+  boardLink_writeTxBuffer(sw_txbuf, 1); //キー状態要求パケットを送信
+  boardLink_exchangeFramesBlocking();
+  uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
 
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
@@ -95,7 +95,7 @@ static void runAsMaster() {
 
 //単線通信の受信割り込みコールバック
 static void onRecevierInterruption() {
-  uint8_t sz = interLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
+  uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
     if (cmd == 0x40 && sz == 1) {
@@ -105,13 +105,13 @@ static void onRecevierInterruption() {
       uint8_t *nextScanSlotStateFlags = keyboardMain_getNextScanSlotStateFlags();
       //slave側でnextScanSlotStateFlagsの前半分に入っているキー状態をmasterに送信する
       utils_copyBytes(sw_txbuf + 1, nextScanSlotStateFlags, NumScanSlotBytesHalf);
-      interLink_writeTxBuffer(sw_txbuf, 1 + NumScanSlotBytesHalf);
+      boardLink_writeTxBuffer(sw_txbuf, 1 + NumScanSlotBytesHalf);
     }
   }
 }
 
 static void runAsSlave() {
-  interLink_setupSlaveReceiver(onRecevierInterruption);
+  boardLink_setupSlaveReceiver(onRecevierInterruption);
   keyboardMain_setAsSplitSlave();
 
   uint32_t tick = 0;
@@ -149,7 +149,7 @@ static void showModeByLedBlinkPattern(bool isMaster) {
 
 //単線通信受信割り込みコールバック
 static void masterSlaveDetectionMode_onSlaveDataReceived() {
-  uint8_t sz = interLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
+  uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
     if (cmd == 0xA0 && sz == 1) {
@@ -162,8 +162,8 @@ static void masterSlaveDetectionMode_onSlaveDataReceived() {
 //USB接続が確立していない期間の動作
 //双方待機し、USB接続が確立すると自分がMasterになり、相手にMaseter確定通知パケットを送る
 static bool runMasterSlaveDetectionMode() {
-  interLink_initialize();
-  interLink_setupSlaveReceiver(masterSlaveDetectionMode_onSlaveDataReceived);
+  boardLink_initialize();
+  boardLink_setupSlaveReceiver(masterSlaveDetectionMode_onSlaveDataReceived);
   system_enableInterrupts();
 
   bool isMaster = true;
@@ -172,8 +172,8 @@ static bool runMasterSlaveDetectionMode() {
     if (usbIoCore_isConnectedToHost()) {
       //Master確定通知パケットを送信
       sw_txbuf[0] = 0xA0;
-      interLink_writeTxBuffer(sw_txbuf, 1);
-      interLink_exchangeFramesBlocking();
+      boardLink_writeTxBuffer(sw_txbuf, 1);
+      boardLink_exchangeFramesBlocking();
       isMaster = true;
       break;
     }
@@ -184,7 +184,7 @@ static bool runMasterSlaveDetectionMode() {
     usbIoCore_processUpdate();
     delayMs(1);
   }
-  interLink_clearSlaveReceiver();
+  boardLink_clearSlaveReceiver();
   return isMaster;
 }
 
