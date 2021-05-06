@@ -59,11 +59,11 @@ static KeyboardCallbackSet callbacks = {
 
 int main() {
   keyboardMain_useIndicatorLeds(GP25, GP25, false); //RPi pico
-  keyboardMain_useDebugUart(38400);
+  keyboardMain_useDebugUart(115200);
   keyScanner_directWired_initialize(NumKeys, keyInputPins);
   keyboardMain_setKeyIndexTable(keyIndexTable);
   keyboardMain_setCallbacks(&callbacks);
-  serialLed_initialize(GP2);
+  serialLed_initialize(GP28);
   generalKeyboard_start();
   return 0;
 }
