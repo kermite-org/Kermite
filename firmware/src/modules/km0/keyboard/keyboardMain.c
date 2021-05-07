@@ -268,14 +268,6 @@ static void processKeyStatesUpdate() {
 
 //----------------------------------------------------------------------
 
-void keyboardMain_useIndicatorLeds(int8_t pin1, uint8_t pin2, bool invert) {
-  boardIo_setupLeds(pin1, pin2, invert);
-}
-
-void keyboardMain_useIndicatorRgbLed(int8_t pin) {
-  boardIo_setupLedsRgb(pin);
-}
-
 void keyboardMain_useDebugUart(uint32_t baud) {
   debugUart_initialize(baud);
   debugUartConfigured = true;

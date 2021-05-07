@@ -120,7 +120,7 @@ uint16_t iox_input(uint8_t slaveAddress) {
 
 int main() {
   uint8_t addrSlave0 = 0x21;
-  boardIo_setupLeds(GP25, GP25, false);
+  boardIo_setupLeds_rpiPico();
   boardI2c_initialize(100000);
 
   uint16_t portDirs = 0xFFFC;

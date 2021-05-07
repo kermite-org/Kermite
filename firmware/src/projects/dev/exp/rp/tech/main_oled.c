@@ -390,7 +390,7 @@ void scene3_entry() {
 //----------------------------------------------------------------------
 
 void main() {
-  boardIo_setupLeds(GP25, GP25, false);
+  boardIo_setupLeds_rpiPico();
   initLcd();
   // scene1_entry();
   // scene2_entry();

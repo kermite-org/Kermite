@@ -73,7 +73,7 @@ void dev() {
 
 int main() {
   debugUart_initialize(38400);
-  boardIo_setupLeds(P_B0, P_D5, true);
+  boardIo_setupLeds_proMicroAvr();
   printf("start\n");
   __i2c_init();
   dev();

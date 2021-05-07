@@ -249,7 +249,7 @@ const int pin_master_slave_flag = GP28;
 
 int main() {
   debugUart_initialize(115200);
-  boardIo_setupLeds(GP25, GP25, false);
+  boardIo_setupLeds_rpiPico();
   dio_setInputPullup(pin_master_slave_flag);
   delayMs(1);
   bool isMaster = dio_read(pin_master_slave_flag) == 0;

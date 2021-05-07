@@ -1,4 +1,5 @@
 #include "config.h"
+#include "km0/deviceIo/boardIo.h"
 #include "km0/deviceIo/dio.h"
 #include "km0/keyboard/keyScanner_directWired.h"
 #include "km0/keyboard/keyboardMain.h"
@@ -17,7 +18,7 @@ static const int8_t keyIndexTable[NumScanSlots] = {
 };
 
 int main() {
-  keyboardMain_useIndicatorLeds(GP25, GP25, false);
+  boardIo_setupLeds_rpiPico();
   keyboardMain_useDebugUart(115200);
   keyScanner_directWired_initialize(NumScanSlotsHalf, keyInputPins);
   keyboardMain_useKeyScanner(keyScanner_directWired_update);

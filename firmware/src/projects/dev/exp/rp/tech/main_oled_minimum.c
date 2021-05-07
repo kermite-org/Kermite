@@ -52,7 +52,7 @@ void initLcd() {
 }
 
 void main() {
-  boardIo_setupLeds(GP25, GP25, false);
+  boardIo_setupLeds_rpiPico();
   initLcd();
   while (1) {
     boardIo_toggleLed1();
