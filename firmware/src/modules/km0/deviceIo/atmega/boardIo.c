@@ -45,5 +45,5 @@ void boardIo_toggleLed2() {
 }
 
 void boardIo_setupLeds_proMicroAvr() {
-  boardIo_setupLeds_proMicroAvr();
+  boardIo_setupLeds(P_B0, P_D5, true);
 }

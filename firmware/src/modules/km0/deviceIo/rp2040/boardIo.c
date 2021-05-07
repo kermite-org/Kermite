@@ -45,5 +45,5 @@ void boardIo_toggleLed2() {
 }
 
 void boardIo_setupLeds_rpiPico() {
-  boardIo_setupLeds_rpiPico();
+  boardIo_setupLeds(25, 25, false);
 }
