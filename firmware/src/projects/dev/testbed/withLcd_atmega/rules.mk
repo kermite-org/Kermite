@@ -14,7 +14,7 @@ MODULE_SRCS += km0/keyboard/configValidator.c
 MODULE_SRCS += km0/keyboard/keyboardCoreLogic.c
 MODULE_SRCS += km0/keyboard/keyboardMain.c
 MODULE_SRCS += km0/keyboard/generalKeyboard.c
-MODULE_SRCS += km0/visualizer/oledCore.c
-MODULE_SRCS += km0/visualizer/oledDisplay_default.c
+MODULE_SRCS += km0/visualizer/oledDisplay_atmega/oledCore.c
+MODULE_SRCS += km0/visualizer/oledDisplay_atmega/oledDisplay_default.c
 
 PROJECT_SRCS += main.c

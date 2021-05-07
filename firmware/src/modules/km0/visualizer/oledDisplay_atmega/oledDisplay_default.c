@@ -5,8 +5,8 @@
 #include "km0/deviceIo/boardIo.h"
 #include "km0/deviceIo/system.h"
 #include "km0/keyboard/keyboardMain.h"
+#include "km0/visualizer/oledDisplay.h"
 #include "oledCore.h"
-#include "oledDisplay.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -163,14 +163,14 @@ static char strbuf[8];
 #define pm(x) (x > 0 ? '+' : '-')
 
 static void renderStatusView() {
-  oledCore_graphics_clear();
+  oledCore_clearTexts();
 
-  oledCore_graphics_drawText(0, 0, "Status");
+  oledCore_putText(0, 0, "Status");
 
   //hid key slots
   const uint8_t *b = exposedState.hidReportBuf;
   sprintf(strbuf, "%c%c%c%c%c%c", pm(b[2]), pm(b[3]), pm(b[4]), pm(b[5]), pm(b[6]), pm(b[7]));
-  oledCore_graphics_drawText(0, 15, strbuf);
+  oledCore_putText(0, 15, strbuf);
 
   //key index
   uint8_t ki = exposedState.pressedKeyIndex;
@@ -182,40 +182,37 @@ static void renderStatusView() {
     uint8_t m = exposedState.hidReportBuf[0];
 
     sprintf(strbuf, "KI:%d", ki);
-    oledCore_graphics_drawText(3, 0, strbuf);
+    oledCore_putText(3, 0, strbuf);
     sprintf(strbuf, "KC:%d", kc);
-    oledCore_graphics_drawText(3, 6, strbuf);
+    oledCore_putText(3, 6, strbuf);
     sprintf(strbuf, "M:%x", m);
-    oledCore_graphics_drawText(3, 13, strbuf);
+    oledCore_putText(3, 13, strbuf);
   } else {
     sprintf(strbuf, "KI:");
-    oledCore_graphics_drawText(3, 0, strbuf);
+    oledCore_putText(3, 0, strbuf);
     sprintf(strbuf, "KC:");
-    oledCore_graphics_drawText(3, 6, strbuf);
+    oledCore_putText(3, 6, strbuf);
     sprintf(strbuf, "M:");
-    oledCore_graphics_drawText(3, 13, strbuf);
+    oledCore_putText(3, 13, strbuf);
   }
 
   //layers
   uint8_t lsf = exposedState.layerStateFlags;
   sprintf(strbuf, "L:%x", lsf);
-  oledCore_graphics_drawText(3, 18, strbuf);
+  oledCore_putText(3, 18, strbuf);
 
-  oledCore_flushScreen();
+  oledCore_drawFullTexts();
 }
 
 static void renderKermiteLogo() {
-  oledCore_graphics_clear();
-  oledCore_graphics_drawFullImage(logoData);
-  oledCore_flushScreen();
+  oledCore_drawFullImage(logoData);
 }
 
 //----------------------------------------------------------------------
 
 void oledDisplay_initialize() {
   oledCore_initialize();
-  oledCore_graphics_setFontData(fontData, fontWidth, fontLetterSpacing);
-  delayMs(10);
+  oledCore_setFontData(fontData, fontWidth, fontLetterSpacing);
 }
 
 static void updateFrame() {
