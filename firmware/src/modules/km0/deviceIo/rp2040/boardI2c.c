@@ -41,16 +41,16 @@ static uint8_t tx_slave_address = 0;
 static uint8_t tx_buffer[520]; //LCDの画素更新データ513バイトの送信に対応
 static int tx_buffer_pos = 0;
 
-void boardI2c_start(uint8_t slaveAddress) {
+void boardI2c_procedural_startWrite(uint8_t slaveAddress) {
   tx_slave_address = slaveAddress;
   tx_buffer_pos = 0;
 }
 
-void boardI2c_putByte(uint8_t data) {
+void boardI2c_procedural_putByte(uint8_t data) {
   tx_buffer[tx_buffer_pos++] = data;
 }
 
-void boardI2c_complete() {
+void boardI2c_procedural_endWrite() {
   int len = tx_buffer_pos;
   i2c_write_blocking(i2c_instance, tx_slave_address, tx_buffer, len, false);
 }

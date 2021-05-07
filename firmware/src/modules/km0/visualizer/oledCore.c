@@ -43,11 +43,11 @@ static const uint8_t commandResetPositionBytes[] ROM_DATA = {
 static const uint8_t oledSlaveAddress = 0x3C;
 
 static void sendRomData(const uint8_t *buf, int len) {
-  boardI2c_start(oledSlaveAddress);
+  boardI2c_procedural_startWrite(oledSlaveAddress);
   for (int i = 0; i < len; i++) {
-    boardI2c_putByte(romData_readByte(buf + i));
+    boardI2c_procedural_putByte(romData_readByte(buf + i));
   }
-  boardI2c_complete();
+  boardI2c_procedural_endWrite();
 }
 
 static void initializeOled() {
@@ -57,12 +57,12 @@ static void initializeOled() {
 
 static void flushScreenPixels(uint8_t *pPixelsBuf512) {
   sendRomData(commandResetPositionBytes, sizeof(commandResetPositionBytes));
-  boardI2c_start(oledSlaveAddress);
-  boardI2c_putByte(0x40);
+  boardI2c_procedural_startWrite(oledSlaveAddress);
+  boardI2c_procedural_putByte(0x40);
   for (int i = 0; i < 512; i++) {
-    boardI2c_putByte(pPixelsBuf512[i]);
+    boardI2c_procedural_putByte(pPixelsBuf512[i]);
   }
-  boardI2c_complete();
+  boardI2c_procedural_endWrite();
 }
 //----------------------------------------------------------------------
 
