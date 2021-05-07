@@ -1,21 +1,18 @@
-#include "hardware/i2c.h"
 #include "km0/common/bitOperations.h"
 #include "km0/deviceIo/boardIo.h"
-#include "km0/deviceIo/debugUart.h"
 #include "km0/deviceIo/dio.h"
 #include "km0/deviceIo/system.h"
-#include "pico/binary_info.h"
-#include "pico/stdlib.h"
+#include <avr/io.h>
 #include <stdio.h>
+#include <util/twi.h>
 
-//board RPi Pico
-//GP25: onboard LED
-//GP4 I2C0_SDA <--> TCA9555 SDA
-//GP5 I2C0_SCL ---> TCA9555 SCL
+//board Pro Micro
+//PD1 SDA <--> TCA9555 SDA
+//PD0 SCL ---> TCA9555 SDL
 
 //TCA9555
-//SDA <---> RPi Pico GP4
-//SCL <---- RPi Pico GP5
+//SDA <---> Pro Micro PD1
+//SCL <---- Pro Micro PD0
 //A0 <--- GND
 //A1 <--- GND
 //A2 <--- VDD
@@ -25,33 +22,58 @@
 
 //----------------------------------------------------------------------
 
-void boardI2c_initialize(uint32_t freqInHz);
-
-//slaveAddress: I2Cスレーブのアドレス, 7ビットで指定
-void boardI2c_write(uint8_t slaveAddress, uint8_t *buf, int len);
-void boardI2c_read(uint8_t slaveAddress, uint8_t *buf, int len);
-
-//----------------------------------------------------------------------
-
-static struct i2c_inst *i2c_instance = i2c0;
-
-static const uint8_t pin_sda = 4;
-static const uint8_t pin_scl = 5;
-
-void boardI2c_initialize(uint32_t freqInHz) {
-  i2c_init(i2c_instance, freqInHz);
-  gpio_set_function(pin_sda, GPIO_FUNC_I2C);
-  gpio_set_function(pin_scl, GPIO_FUNC_I2C);
-  gpio_pull_up(pin_sda);
-  gpio_pull_up(pin_scl);
+void __i2c_init() {
+  dio_setInputPullup(P_D0);
+  dio_setInputPullup(P_D1);
+  uint32_t clockFreq = 400000;
+  TWSR = 0;
+  TWBR = (F_CPU / clockFreq - 16) / 2;
 }
 
-void boardI2c_write(uint8_t slaveAddress, uint8_t *buf, int len) {
-  i2c_write_blocking(i2c_instance, slaveAddress, buf, len, false);
+void __i2c_write(uint8_t slaveAddress, uint8_t *buf, int len) {
+  //emit start condition
+  TWCR = _BV(TWINT) | _BV(TWSTA) | _BV(TWEN);
+  while (bit_is_off(TWCR, TWINT)) {};
+
+  //write sla+w
+  TWDR = (slaveAddress << 1) | 0; //write
+  TWCR = _BV(TWINT) | _BV(TWEN);
+  while (bit_is_off(TWCR, TWINT)) {};
+
+  for (int i = 0; i < len; i++) {
+    //write data
+    TWDR = buf[i];
+    TWCR = _BV(TWINT) | _BV(TWEN);
+    while (bit_is_off(TWCR, TWINT)) {};
+  }
+
+  //emit stop condition
+  TWCR = _BV(TWINT) | _BV(TWSTO) | _BV(TWEN);
 }
 
-void boardI2c_read(uint8_t slaveAddress, uint8_t *buf, int len) {
-  i2c_read_blocking(i2c_instance, slaveAddress, buf, len, false);
+void __i2c_read(uint8_t slaveAddress, uint8_t *buf, int len) {
+  //emit start condition
+  TWCR = _BV(TWINT) | _BV(TWSTA) | _BV(TWEN);
+  while (bit_is_off(TWCR, TWINT)) {};
+
+  //write sla+r
+  TWDR = (slaveAddress << 1) | 1; //read
+  TWCR = _BV(TWINT) | _BV(TWEN);
+  while (bit_is_off(TWCR, TWINT)) {};
+
+  for (int i = 0; i < len; i++) {
+    //read data
+    if (i < len - 1) {
+      TWCR = _BV(TWINT) | _BV(TWEN) | (1 << TWEA);
+    } else {
+      TWCR = _BV(TWINT) | _BV(TWEN);
+    }
+    while (bit_is_off(TWCR, TWINT)) {};
+    buf[i] = TWDR;
+  }
+
+  //emit stop condition
+  TWCR = _BV(TWINT) | _BV(TWSTO) | _BV(TWEN);
 }
 
 //----------------------------------------------------------------------
@@ -92,15 +114,15 @@ static void iox_write16(uint8_t slaveAddress, uint8_t addr, uint16_t val) {
   txbuf[0] = addr;
   txbuf[1] = val & 0xFF;
   txbuf[2] = val >> 8 & 0xFF;
-  boardI2c_write(slaveAddress, txbuf, 3);
+  __i2c_write(slaveAddress, txbuf, 3);
 }
 
 static uint16_t iox_read16(uint8_t slaveAddress, uint8_t addr) {
   static uint8_t txbuf[1];
   static uint8_t rxbuf[2];
   txbuf[0] = addr;
-  boardI2c_write(slaveAddress, txbuf, 1);
-  boardI2c_read(slaveAddress, rxbuf, 2);
+  __i2c_write(slaveAddress, txbuf, 1);
+  __i2c_read(slaveAddress, rxbuf, 2);
   return ((uint16_t)rxbuf[1] << 8) | rxbuf[0];
 }
 
@@ -120,8 +142,8 @@ uint16_t iox_input(uint8_t slaveAddress) {
 
 int main() {
   uint8_t addrSlave0 = 0x21;
-  boardIo_setupLeds(GP25, GP25, false);
-  boardI2c_initialize(100000);
+  boardIo_setupLeds(P_B0, P_D5, true);
+  __i2c_init();
 
   uint16_t portDirs = 0xFFFC;
   iox_configure_ports(addrSlave0, portDirs);

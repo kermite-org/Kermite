@@ -9,14 +9,6 @@ void delayUs(uint16_t us) {
   sleep_us(us);
 }
 
-uint8_t system_readRomByte(const uint8_t *ptr) {
-  return *ptr;
-}
-
-uint16_t system_readRomWord(const uint16_t *ptr) {
-  return *ptr;
-}
-
 void system_enableInterrupts() {
 }
 

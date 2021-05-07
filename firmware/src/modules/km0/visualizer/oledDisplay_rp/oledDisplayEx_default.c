@@ -1,139 +1,18 @@
 #include "km0/common/bitOperations.h"
+#include "km0/common/romData.h"
 #include "km0/common/utils.h"
+#include "km0/deviceIo/boardI2c.h"
 #include "km0/deviceIo/boardIo.h"
 #include "km0/deviceIo/system.h"
 #include "km0/keyboard/keyboardMain.h"
-#include "oledDisplay.h"
-#include "pico_sdk/src/common/include/pico/stdlib.h"
-#include "pico_sdk/src/rp2_common/include/hardware/i2c.h"
+#include "km0/visualizer/oledDisplay.h"
+#include "oledCoreEx.h"
 #include <stdio.h>
 #include <string.h>
 
 //----------------------------------------------------------------------
 
-#ifndef KM0_RP_OLED__I2C_INSTANCE
-#define KM0_RP_OLED__I2C_INSTANCE i2c1
-#endif
-
-#ifndef KM0_RP_OLED__I2C_PIN_SDA
-#define KM0_RP_OLED__I2C_PIN_SDA 2
-#endif
-
-#ifndef KM0_RP_OLED__I2C_PIN_SCL
-#define KM0_RP_OLED__I2C_PIN_SCL 3
-#endif
-
-static struct i2c_inst *i2c_instance = KM0_RP_OLED__I2C_INSTANCE;
-static const uint8_t pin_sda = KM0_RP_OLED__I2C_PIN_SDA;
-static const uint8_t pin_scl = KM0_RP_OLED__I2C_PIN_SCL;
-
-static uint8_t i2c_slave_address = 0;
-
-static void __i2c_initialize(uint32_t freqInHz, uint8_t slaveAddress) {
-  i2c_init(i2c_instance, freqInHz);
-  gpio_set_function(pin_sda, GPIO_FUNC_I2C);
-  gpio_set_function(pin_scl, GPIO_FUNC_I2C);
-  gpio_pull_up(pin_sda);
-  gpio_pull_up(pin_scl);
-  i2c_slave_address = slaveAddress;
-}
-
-static void __i2c_write(uint8_t *buf, int len) {
-  i2c_write_blocking(i2c_instance, i2c_slave_address, buf, len, false);
-}
-
-//----------------------------------------------------------------------
-
-static uint8_t commandInitializationBytes[] = {
-  0x00,       //Control Byte
-  0xAE,       //Display Off
-  0xA8, 0x1F, //MUX Ratio
-  0xD3, 0x00, //Display Offset
-  0x40,       //Display Start Line
-  0xA1,       //Segment re-map
-  // 0xA0, //Segment re-map
-  0xC8, //COM Output Scan Direction
-  // 0xC0, //COM Output Scan Direction
-  0xDA, 0x02, //COM Pins hadware configuration
-  // 0x81, 0x8F, //Contrast Control
-  0x81, 0x3F, //Contrast Control
-  0xA4,       //Disable Entire Display On
-  0xA6,       //Normal Display
-  0xD5, 0x80, //Osc Frequency
-  0x8D, 0x14, //Enable charge pump regulator
-  // 0xD9, 0xF1, //pre charge
-  // 0xDB, 0x40, //vcom detect
-  // 0x2E, //deactivate scroll
-  // 0x20, 0x00,   //Memory Addressing Mode, Horizontal
-  0x20, 0x01, //Memory Addressing Mode, Vertical
-  0xAF        //Display On
-};
-
-static uint8_t commandResetPositionBytes[] = {
-  0x00,             //Control Byte
-  0x22, 0x00, 0x03, //Page Start Address
-  0x21, 0x00, 0x7F, //Column Start Address
-  // 0x22, 0x00, 0x00, //Page Start Address
-  // 0x21, 0x00, 0x00, //Column Start Address
-};
-
-static void __oled_initialize() {
-  __i2c_initialize(400000, 0x3C);
-  __i2c_write(commandInitializationBytes, sizeof(commandInitializationBytes));
-  delayMs(10);
-}
-
-static uint8_t txbuf[513];
-
-static void __oled_flushScreenPixels(uint8_t *pPixelsBuf512) {
-  __i2c_write(commandResetPositionBytes, sizeof(commandResetPositionBytes));
-  txbuf[0] = 0x40;
-  memcpy(txbuf + 1, pPixelsBuf512, 512);
-  __i2c_write(txbuf, 513);
-}
-
-//----------------------------------------------------------------------
-
-#define NumScanLine 128
-
-static uint32_t scanLines[NumScanLine];
-
-static void __gr_clearScreen() {
-  memset(scanLines, 0, NumScanLine * sizeof(uint32_t));
-}
-
-static void __gr_putPixel(int x, int y) {
-  bit_on(scanLines[x], y);
-}
-
-static void __gr_drawLine(int x0, int y0, int x1, int y1) {
-  int dx = x1 - x0;
-  int dy = y1 - y0;
-  int dd = utils_max(utils_abs(dx), utils_abs(dy));
-  int ax = (dx << 8) / dd;
-  int ay = (dy << 8) / dd;
-  int px = x0 << 8;
-  int py = y0 << 8;
-  // __gr_putPixel(x0, y0);
-  // __gr_putPixel(x1, y1);
-  for (int i = 0; i < dd; i++) {
-    __gr_putPixel(px >> 8, py >> 8);
-    px += ax;
-    py += ay;
-  }
-}
-
-static void __gr_drawFullImage(uint32_t *pLineBuffers128) {
-  memcpy(scanLines, pLineBuffers128, 512);
-}
-
-static void __gr_flush() {
-  __oled_flushScreenPixels((uint8_t *)scanLines);
-}
-
-//----------------------------------------------------------------------
-
-static uint32_t logoData[] = {
+static const uint32_t logoData[] = {
   0x00000000, 0x00000000, 0x00000000, 0x00000000,
   0x07ffff80, 0x07ffff80, 0x07ffff80, 0x07ffff80,
   0x00070000, 0x000f8000, 0x001fc000, 0x003ff000,
@@ -167,20 +46,6 @@ static uint32_t logoData[] = {
   0x07878780, 0x07878780, 0x07878780, 0x07878780,
   0x07800780, 0x00000000, 0x00000000, 0x00000000
 };
-
-static void initLcd() {
-  __oled_initialize();
-  __gr_clearScreen();
-  __oled_flushScreenPixels((uint8_t *)scanLines);
-}
-
-static void drawKermiteLogo() {
-  __gr_clearScreen();
-  __gr_drawFullImage(logoData);
-  __gr_flush();
-}
-
-//----------------------------------------------------------------------
 
 static const uint8_t fontWidth = 5;
 static const uint8_t fontLetterSpacing = 1;
@@ -282,21 +147,7 @@ static const uint8_t fontData[] = {
   0x00, 0x00, 0x41, 0x7f, 0x08
 };
 
-static void drawChar(int caretY, int caretX, char chr) {
-  int px = caretX * (fontWidth + fontLetterSpacing);
-  int fontIndexBase = (chr - 32) * fontWidth;
-  for (int i = 0; i < fontWidth; i++) {
-    uint8_t *ptr = (uint8_t *)&scanLines[px + i];
-    ptr[caretY] = fontData[fontIndexBase + i];
-  }
-}
-
-static void drawText(int caretY, int caretX, char *text) {
-  char chr;
-  while ((chr = *text++) != '\0') {
-    drawChar(caretY, caretX++, chr);
-  }
-}
+//----------------------------------------------------------------------
 
 static uint8_t getPressedKeyCode(const uint8_t *report) {
   for (int i = 2; i < 8; i++) {
@@ -312,14 +163,14 @@ static char strbuf[8];
 #define pm(x) (x > 0 ? '+' : '-')
 
 static void renderStatusView() {
-  __gr_clearScreen();
+  oledCoreEx_graphics_clear();
 
-  drawText(0, 0, "Status");
+  oledCoreEx_graphics_drawText(0, 0, "Status");
 
   //hid key slots
   const uint8_t *b = exposedState.hidReportBuf;
   sprintf(strbuf, "%c%c%c%c%c%c", pm(b[2]), pm(b[3]), pm(b[4]), pm(b[5]), pm(b[6]), pm(b[7]));
-  drawText(0, 15, strbuf);
+  oledCoreEx_graphics_drawText(0, 15, strbuf);
 
   //key index
   uint8_t ki = exposedState.pressedKeyIndex;
@@ -331,25 +182,40 @@ static void renderStatusView() {
     uint8_t m = exposedState.hidReportBuf[0];
 
     sprintf(strbuf, "KI:%d", ki);
-    drawText(3, 0, strbuf);
+    oledCoreEx_graphics_drawText(3, 0, strbuf);
     sprintf(strbuf, "KC:%d", kc);
-    drawText(3, 6, strbuf);
+    oledCoreEx_graphics_drawText(3, 6, strbuf);
     sprintf(strbuf, "M:%x", m);
-    drawText(3, 13, strbuf);
+    oledCoreEx_graphics_drawText(3, 13, strbuf);
   } else {
     sprintf(strbuf, "KI:");
-    drawText(3, 0, strbuf);
+    oledCoreEx_graphics_drawText(3, 0, strbuf);
     sprintf(strbuf, "KC:");
-    drawText(3, 6, strbuf);
+    oledCoreEx_graphics_drawText(3, 6, strbuf);
     sprintf(strbuf, "M:");
-    drawText(3, 13, strbuf);
+    oledCoreEx_graphics_drawText(3, 13, strbuf);
   }
 
   //layers
   uint8_t lsf = exposedState.layerStateFlags;
   sprintf(strbuf, "L:%x", lsf);
-  drawText(3, 18, strbuf);
-  __gr_flush();
+  oledCoreEx_graphics_drawText(3, 18, strbuf);
+
+  oledCoreEx_flushScreen();
+}
+
+static void renderKermiteLogo() {
+  oledCoreEx_graphics_clear();
+  oledCoreEx_graphics_drawFullImage(logoData);
+  oledCoreEx_flushScreen();
+}
+
+//----------------------------------------------------------------------
+
+void oledDisplay_initialize() {
+  oledCoreEx_initialize();
+  oledCoreEx_graphics_setFontData(fontData, fontWidth, fontLetterSpacing);
+  delayMs(10);
 }
 
 static void updateFrame() {
@@ -362,14 +228,8 @@ static void updateFrame() {
   if (bootComplete && isMaster) {
     renderStatusView();
   } else {
-    drawKermiteLogo();
+    renderKermiteLogo();
   }
-}
-
-//----------------------------------------------------------------------
-
-void oledDisplay_initialize() {
-  initLcd();
 }
 
 void oledDisplay_update() {
