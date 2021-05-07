@@ -1,8 +1,8 @@
 #include "config.h"
 #include "km0/common/bitOperations.h"
 #include "km0/common/utils.h"
+#include "km0/deviceIo/boardLink.h"
 #include "km0/deviceIo/dio.h"
-#include "km0/deviceIo/interLink.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <string.h>
@@ -220,24 +220,24 @@ escape:
   return 0;
 }
 
-void interLink_initialize() {
+void boardLink_initialize() {
   signalPin_endTransmit_standby();
   debug_initTimeDebugPin();
 }
 
-void interLink_writeTxBuffer(uint8_t *buf, uint8_t len) {
+void boardLink_writeTxBuffer(uint8_t *buf, uint8_t len) {
   memcpy(raw_tx_buf, buf, len);
   raw_tx_len = len;
 }
 
-void interLink_exchangeFramesBlocking() {
+void boardLink_exchangeFramesBlocking() {
   cli();
   transmitFrame(raw_tx_buf, raw_tx_len);
   raw_rx_len = receiveFrame(raw_rx_buf, RawBufferSize);
   sei();
 }
 
-uint8_t interLink_readRxBuffer(uint8_t *buf, uint8_t maxLen) {
+uint8_t boardLink_readRxBuffer(uint8_t *buf, uint8_t maxLen) {
   uint8_t len = valueMinimum(raw_rx_len, maxLen);
   memcpy(buf, raw_rx_buf, len);
   return len;
@@ -250,7 +250,7 @@ typedef void (*TReceiverCallback)(void);
 
 static TReceiverCallback pReceiverCallback = 0;
 
-void interLink_setupSlaveReceiver(void (*_pReceiverCallback)(void)) {
+void boardLink_setupSlaveReceiver(void (*_pReceiverCallback)(void)) {
   pReceiverCallback = _pReceiverCallback;
   //信号ピンがHIGHからLOWに変化したときに割り込みを生成
   bits_spec(EICRA, dISCx0, 0b11, 0b10);
@@ -258,7 +258,7 @@ void interLink_setupSlaveReceiver(void (*_pReceiverCallback)(void)) {
   sei();
 }
 
-void interLink_clearSlaveReceiver() {
+void boardLink_clearSlaveReceiver() {
   pReceiverCallback = 0;
   bits_spec(EICRA, dISCx0, 0b11, 0b00);
   bit_off(EIMSK, dINTx);

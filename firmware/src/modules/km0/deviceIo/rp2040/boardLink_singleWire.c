@@ -1,7 +1,7 @@
 
 #include "km0/common/utils.h"
+#include "km0/deviceIo/boardLink.h"
 #include "km0/deviceIo/dio.h"
-#include "km0/deviceIo/interLink.h"
 #include "pico_sdk/src/common/include/pico/stdlib.h"
 #include "pico_sdk/src/rp2_common/include/hardware/clocks.h"
 #include "pico_sdk/src/rp2_common/include/pico/multicore.h"
@@ -220,31 +220,31 @@ static void deinit_rx_pcint() {
 //------------------------------------------------------------
 //exports
 
-void interLink_initialize() {
+void boardLink_initialize() {
   setup_programs();
 }
 
-void interLink_writeTxBuffer(uint8_t *buf, uint8_t len) {
+void boardLink_writeTxBuffer(uint8_t *buf, uint8_t len) {
   memcpy(raw_tx_buf, buf, len);
   raw_tx_len = len;
 }
 
-void interLink_exchangeFramesBlocking() {
+void boardLink_exchangeFramesBlocking() {
   tx_send_frame(raw_tx_buf, raw_tx_len);
   raw_rx_len = rx_receive_frame(raw_rx_buf, RawBufferSize);
 }
 
-uint8_t interLink_readRxBuffer(uint8_t *buf, uint8_t maxLen) {
+uint8_t boardLink_readRxBuffer(uint8_t *buf, uint8_t maxLen) {
   uint8_t len = valueMinimum(raw_rx_len, maxLen);
   memcpy(buf, raw_rx_buf, len);
   return len;
 }
 
-void interLink_setupSlaveReceiver(void (*f)(void)) {
+void boardLink_setupSlaveReceiver(void (*f)(void)) {
   interrupted_receiver_func = f;
   setup_rx_pcint();
 }
 
-void interLink_clearSlaveReceiver() {
+void boardLink_clearSlaveReceiver() {
   deinit_rx_pcint();
 }
