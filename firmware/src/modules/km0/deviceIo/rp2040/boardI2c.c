@@ -35,10 +35,10 @@ void boardI2c_read(uint8_t slaveAddress, uint8_t *buf, int len) {
   i2c_read_blocking(i2c_instance, slaveAddress, buf, len, false);
 }
 
-//1バイト毎の送信はライブラリの実装がないためバッファによる実装で代用
+//1バイト毎の送信はライブラリの関数がないため一旦バッファによる実装で代替
 
 static uint8_t tx_slave_address = 0;
-static uint8_t tx_buffer[520]; //LCDの画素更新データ513バイトの送信に対応
+static uint8_t tx_buffer[32];
 static int tx_buffer_pos = 0;
 
 void boardI2c_procedural_startWrite(uint8_t slaveAddress) {
