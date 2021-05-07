@@ -19,7 +19,7 @@ static const uint8_t pin_sda = KM0_RP_BOARD_I2C__PIN_SDA;
 static const uint8_t pin_scl = KM0_RP_BOARD_I2C__PIN_SCL;
 
 void boardI2c_initialize() {
-  uint32_t freqInHz = 4000000;
+  uint32_t freqInHz = 400000;
   i2c_init(i2c_instance, freqInHz);
   gpio_set_function(pin_sda, GPIO_FUNC_I2C);
   gpio_set_function(pin_scl, GPIO_FUNC_I2C);
