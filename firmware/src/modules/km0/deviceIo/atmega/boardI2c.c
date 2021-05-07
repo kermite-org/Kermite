@@ -62,3 +62,26 @@ void boardI2c_read(uint8_t slaveAddress, uint8_t *buf, int len) {
   //emit stop condition
   TWCR = _BV(TWINT) | _BV(TWSTO) | _BV(TWEN);
 }
+
+void boardI2c_start(uint8_t slaveAddress) {
+  //emit start condition
+  TWCR = _BV(TWINT) | _BV(TWSTA) | _BV(TWEN);
+  while (bit_is_off(TWCR, TWINT)) {};
+
+  //write sla+w
+  TWDR = (slaveAddress << 1) | 0; //write
+  TWCR = _BV(TWINT) | _BV(TWEN);
+  while (bit_is_off(TWCR, TWINT)) {};
+}
+
+void boardI2c_putByte(uint8_t data) {
+  //write data
+  TWDR = data;
+  TWCR = _BV(TWINT) | _BV(TWEN);
+  while (bit_is_off(TWCR, TWINT)) {};
+}
+
+void boardI2c_complete() {
+  //emit stop condition
+  TWCR = _BV(TWINT) | _BV(TWSTO) | _BV(TWEN);
+}
