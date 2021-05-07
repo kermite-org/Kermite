@@ -124,6 +124,10 @@ clean_app:
 clean:
 	rm -rf $(OUT_DIR)
 
+show_ram_usage:
+	$(OBJSIZE) -C --mcu=atmega32u4 $(ELF)
+	avr-nm -r --size-sort -td $(ELF) | grep -i ' [dbv] '
+
 .PHONY: build
 	
 
