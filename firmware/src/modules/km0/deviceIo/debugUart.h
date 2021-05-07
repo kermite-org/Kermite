@@ -3,7 +3,7 @@
 
 #include "km0/types.h"
 
-void debugUart_setup(uint32_t baud);
+void debugUart_initialize(uint32_t baud);
 void debugUart_disable();
 
 #endif

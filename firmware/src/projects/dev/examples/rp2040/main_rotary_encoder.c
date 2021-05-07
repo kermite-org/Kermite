@@ -18,7 +18,7 @@ static EncoderConfig appEncoderConfigs[] = {
 static uint8_t keyStateBitFlags[1] = { 0 };
 
 int main() {
-  debugUart_setup(115200);
+  debugUart_initialize(115200);
   printf("start\n");
 
   dio_setOutput(GP25);

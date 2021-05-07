@@ -9,7 +9,7 @@
 
 void uartTest() {
   dio_setOutput(P_B0);
-  debugUart_setup(38400);
+  debugUart_initialize(38400);
   printf("start\n");
   int cnt = 0;
   while (1) {

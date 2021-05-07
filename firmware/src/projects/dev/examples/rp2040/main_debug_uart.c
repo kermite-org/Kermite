@@ -8,7 +8,7 @@
 //GP0 ----> USB UART ---> PC
 
 int main() {
-  debugUart_setup(38400);
+  debugUart_initialize(38400);
   dio_setOutput(GP25);
   printf("start\n");
 

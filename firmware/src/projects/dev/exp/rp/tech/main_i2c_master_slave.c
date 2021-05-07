@@ -248,7 +248,7 @@ void runAsSlave() {
 const int pin_master_slave_flag = GP28;
 
 int main() {
-  debugUart_setup(115200);
+  debugUart_initialize(115200);
   boardIo_setupLeds(GP25, GP25, false);
   dio_setInputPullup(pin_master_slave_flag);
   delayMs(1);

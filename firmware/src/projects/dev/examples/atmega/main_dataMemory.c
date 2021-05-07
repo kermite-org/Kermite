@@ -25,7 +25,7 @@ void debugShowBytes(char *name, uint8_t *buf, int len) {
 }
 
 void eepromDev() {
-  debugUart_setup(38400);
+  debugUart_initialize(38400);
   printf("start\n");
 
   uint16_t addr = 0;

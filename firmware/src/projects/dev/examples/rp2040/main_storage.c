@@ -81,7 +81,7 @@ void processExperiment() {
 }
 
 int main() {
-  debugUart_setup(38400);
+  debugUart_initialize(38400);
   initLED();
   initButton();
 

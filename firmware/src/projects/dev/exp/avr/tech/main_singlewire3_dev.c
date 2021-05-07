@@ -161,7 +161,7 @@ void runAsSlave() {
 //---------------------------------------------
 
 void devEntry() {
-  debugUart_setup(38400);
+  debugUart_initialize(38400);
   printf("start\n");
   initBoardIo();
   bool isMaster = checkIsMaster();

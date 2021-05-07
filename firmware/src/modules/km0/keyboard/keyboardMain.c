@@ -277,7 +277,7 @@ void keyboardMain_useIndicatorRgbLed(int8_t pin) {
 }
 
 void keyboardMain_useDebugUart(uint32_t baud) {
-  debugUart_setup(baud);
+  debugUart_initialize(baud);
   debugUartConfigured = true;
 }
 

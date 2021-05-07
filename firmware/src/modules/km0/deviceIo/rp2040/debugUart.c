@@ -16,7 +16,7 @@
 static uart_inst_t *const uart_instance = KM0_RP_DEBUG_UART__UART_INSTANCE;
 static const int pin_tx = KM0_RP_DEBUG_UART__PIN_TX;
 
-void debugUart_setup(uint32_t baud) {
+void debugUart_initialize(uint32_t baud) {
   stdio_uart_init_full(uart_instance, baud, pin_tx, -1);
 }
 

@@ -72,7 +72,7 @@ void dev() {
 }
 
 int main() {
-  debugUart_setup(38400);
+  debugUart_initialize(38400);
   boardIo_setupLeds(P_B0, P_D5, true);
   printf("start\n");
   __i2c_init();

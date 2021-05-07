@@ -70,7 +70,7 @@ void rawHidReceiveTask() {
 int main() {
   initLED();
   initButton();
-  debugUart_setup(38400);
+  debugUart_initialize(38400);
   printf("start\n");
 
   usbIoCore_initialize();
