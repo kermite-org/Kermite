@@ -3,7 +3,7 @@
 
 #include "km0/types.h"
 
-#if defined KERMITE_TARGET_MCU_ATMEGA_
+#if defined KERMITE_TARGET_MCU_ATMEGA
 #include <avr/pgmspace.h>
 #define ROM_DATA PROGMEM
 

@@ -12,7 +12,7 @@
 
 //----------------------------------------------------------------------
 
-static const uint32_t logoData[] = {
+static const uint32_t logoData[] ROM_DATA = {
   0x00000000, 0x00000000, 0x00000000, 0x00000000,
   0x07ffff80, 0x07ffff80, 0x07ffff80, 0x07ffff80,
   0x00070000, 0x000f8000, 0x001fc000, 0x003ff000,
@@ -49,7 +49,7 @@ static const uint32_t logoData[] = {
 
 static const uint8_t fontWidth = 5;
 static const uint8_t fontLetterSpacing = 1;
-static const uint8_t fontData[] = {
+static const uint8_t fontData[] ROM_DATA = {
   0x00, 0x00, 0x00, 0x00, 0x00,
   0x00, 0x00, 0x5e, 0x00, 0x00,
   0x00, 0x06, 0x00, 0x06, 0x00,
