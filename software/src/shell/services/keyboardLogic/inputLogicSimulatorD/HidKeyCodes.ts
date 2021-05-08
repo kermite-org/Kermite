@@ -1,5 +1,4 @@
-import { IKeyboardLayoutStandard } from './ConfigTypes';
-import { VirtualKey } from './VirtualKeys';
+import { IKeyboardLayoutStandard, VirtualKey } from '~/shared';
 
 // HIDのキーコード定義, キーボードの言語やレイアウトによらない共通部分
 const enum HidKey {

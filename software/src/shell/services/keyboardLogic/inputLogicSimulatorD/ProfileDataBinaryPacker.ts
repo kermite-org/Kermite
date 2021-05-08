@@ -5,7 +5,6 @@ import {
   LayerInvocationMode,
   IAssignOperation,
   isModifierVirtualKey,
-  getHidKeyCodeEx,
   flattenArray,
   IProfileData,
   duplicateObjectByJsonStringifyParse,
@@ -18,6 +17,7 @@ import {
   writeUint16BE,
   writeUint8,
 } from '~/shell/services/device/keyboardDevice/Helpers';
+import { getHidKeyCodeEx } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/HidKeyCodes';
 import { AssignStorageHeaderLength } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/MemoryDefs';
 
 /*
