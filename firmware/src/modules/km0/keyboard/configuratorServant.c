@@ -1,9 +1,9 @@
 #include "configuratorServant.h"
 #include "config.h"
+#include "dataStorage.h"
 #include "km0/common/utils.h"
 #include "km0/deviceIo/dataMemory.h"
 #include "km0/deviceIo/usbIoCore.h"
-#include "storageLayout.h"
 #include "versions.h"
 #include <stdio.h>
 #include <string.h>
@@ -28,7 +28,24 @@ static void invokeCustomParameterChangedCallback(uint8_t index, uint8_t value) {
 }
 
 //---------------------------------------------
-//usbio
+//storage data addresses
+
+static uint16_t storageAddr_DeviceInstanceCode;
+static uint16_t storageAddr_CustomSettingsBytesInitializationFlag;
+static uint16_t storageAddr_CustomSettingsBytes;
+static uint16_t storageBaseAddr_KeyAssignsData;
+static uint16_t keyAssignsDataCapacity;
+
+static void initializeDataAddresses() {
+  storageAddr_DeviceInstanceCode = dataStorage_getDataAddress_deviceInstanceCode();
+  storageAddr_CustomSettingsBytesInitializationFlag = dataStorage_getDataAddress_parametersInitializationFlag();
+  storageAddr_CustomSettingsBytes = dataStorage_getDataAddress_systemParameters();
+  storageBaseAddr_KeyAssignsData = dataStorage_getDataAddress_keyAssignsData();
+  keyAssignsDataCapacity = dataStorage_getKeyAssignDataCapacity();
+}
+
+//---------------------------------------------
+//rawhid interface
 
 static uint8_t rawHidSendBuf[64] = { 0 };
 static uint8_t rawHidRcvBuf[64] = { 0 };
@@ -94,9 +111,9 @@ static void emitDeviceAttributesResponse() {
   utils_copyBytes(p + 6, (uint8_t *)PROJECT_ID, 8);
   p[14] = KERMITE_IS_RESOURCE_ORIGIN_ONLINE;
   p[15] = 0;
-  copyEepromBytesToBuffer(p, 16, StorageAddr_DeviceInstanceCode, 8);
-  p[24] = KeyAssignsDataCapacity >> 8 & 0xFF;
-  p[25] = KeyAssignsDataCapacity & 0xFF;
+  copyEepromBytesToBuffer(p, 16, storageAddr_DeviceInstanceCode, 8);
+  p[24] = keyAssignsDataCapacity >> 8 & 0xFF;
+  p[25] = keyAssignsDataCapacity & 0xFF;
   utils_fillBytes(p + 26, 0, 16);
   size_t slen = utils_clamp(strlen(KERMITE_VARIATION_NAME), 0, 16);
   utils_copyBytes(p + 26, (uint8_t *)KERMITE_VARIATION_NAME, slen);
@@ -109,8 +126,8 @@ static void emitCustomParametersReadResponse() {
   p[0] = 0xb0;
   p[1] = 0x02;
   p[2] = 0x81;
-  p[3] = dataMemory_readByte(StorageAddr_CustomSettingsBytesInitializationFlag);
-  copyEepromBytesToBuffer(p, 4, StorageAddr_CustomSettingsBytes, 10);
+  p[3] = dataMemory_readByte(storageAddr_CustomSettingsBytesInitializationFlag);
+  copyEepromBytesToBuffer(p, 4, storageAddr_CustomSettingsBytes, 10);
   emitGenericHidData(rawHidSendBuf);
 }
 
@@ -132,7 +149,7 @@ static void processReadGenericHidData() {
 
         if (cmd == 0x20) {
           //write keymapping data to ROM
-          uint16_t addr = StorageBaseAddr_KeyAssignsData + (p[3] << 8 | p[4]);
+          uint16_t addr = storageBaseAddr_KeyAssignsData + (p[3] << 8 | p[4]);
           uint8_t len = p[5];
           uint8_t *src = p + 6;
           dataMemory_writeBytes(addr, src, len);
@@ -140,7 +157,7 @@ static void processReadGenericHidData() {
         }
         if (cmd == 0x21) {
           //read memory checksum for keymapping data
-          uint16_t addr = StorageBaseAddr_KeyAssignsData + (p[3] << 8 | p[4]);
+          uint16_t addr = storageBaseAddr_KeyAssignsData + (p[3] << 8 | p[4]);
           uint16_t len = p[5] << 8 | p[6];
           uint8_t ck = 0;
           printf("check, addr %d, len %d\n", addr, len);
@@ -166,8 +183,8 @@ static void processReadGenericHidData() {
         if (cmd == 0x90) {
           // printf("handle custom parameters bluk write\n");
           uint8_t *src = p + 3;
-          dataMemory_writeBytes(StorageAddr_CustomSettingsBytes, src, 10);
-          dataMemory_writeByte(StorageAddr_CustomSettingsBytesInitializationFlag, 1);
+          dataMemory_writeBytes(storageAddr_CustomSettingsBytes, src, 10);
+          dataMemory_writeByte(storageAddr_CustomSettingsBytesInitializationFlag, 1);
           for (uint8_t i = 0; i < 10; i++) {
             uint8_t value = src[i];
             invokeCustomParameterChangedCallback(i, value);
@@ -177,7 +194,7 @@ static void processReadGenericHidData() {
           // printf("handle custom parameters signle write\n");
           uint8_t index = p[3];
           uint8_t value = p[4];
-          dataMemory_writeByte(StorageAddr_CustomSettingsBytes + index, value);
+          dataMemory_writeByte(storageAddr_CustomSettingsBytes + index, value);
           invokeCustomParameterChangedCallback(index, value);
         }
       }
@@ -186,7 +203,7 @@ static void processReadGenericHidData() {
         if (cmd == 0x90) {
           // printf("write device instance code\n");
           uint8_t *src = p + 3;
-          dataMemory_writeBytes(StorageAddr_DeviceInstanceCode, src, 8);
+          dataMemory_writeBytes(storageAddr_DeviceInstanceCode, src, 8);
         }
       }
     }
@@ -220,10 +237,10 @@ static void processReadGenericHidData() {
 //custom parameter initial loading
 
 static void loadCustomParameters() {
-  bool isInitialized = dataMemory_readByte(StorageAddr_CustomSettingsBytesInitializationFlag);
+  bool isInitialized = dataMemory_readByte(storageAddr_CustomSettingsBytesInitializationFlag);
   if (isInitialized) {
     for (uint8_t i = 0; i < 10; i++) {
-      uint8_t value = dataMemory_readByte(StorageAddr_CustomSettingsBytes + i);
+      uint8_t value = dataMemory_readByte(storageAddr_CustomSettingsBytes + i);
       invokeCustomParameterChangedCallback(i, value);
     }
   }
@@ -237,6 +254,7 @@ void configuratorServant_initialize(
     void (*_customParameterChangedCallback)(uint8_t index, uint8_t value)) {
   stateNotificationCallback = _stateNotificationCallback;
   customParameterChangedCallback = _customParameterChangedCallback;
+  initializeDataAddresses();
   loadCustomParameters();
 }
 
@@ -257,5 +275,5 @@ void configuratorServant_emitRelatimeAssignHitEvent(uint16_t assignHitResult) {
 }
 
 void configuratorServant_readDeviceInstanceCode(uint8_t *buffer) {
-  copyEepromBytesToBuffer(buffer, 0, StorageAddr_DeviceInstanceCode, 8);
+  copyEepromBytesToBuffer(buffer, 0, storageAddr_DeviceInstanceCode, 8);
 }
