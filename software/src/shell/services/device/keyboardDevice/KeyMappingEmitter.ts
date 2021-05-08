@@ -1,12 +1,12 @@
 import { delayMs, IKeyboardLayoutStandard, IProfileData } from '~/shared';
 import { IDeviceWrapper } from '~/shell/services/device/keyboardDevice/DeviceWrapper';
 import { Packets } from '~/shell/services/device/keyboardDevice/Packets';
-import { makeKeyAssignsConfigStorageData } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/ProfileDataBinaryPacker';
+import { makeProfileBinaryData } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/ProfileDataBinaryPacker';
 import { calcChecksum } from './Helpers';
 
 export namespace KeyMappingEmitter {
   export async function emitKeyAssignsToDevice(
-    editModel: IProfileData,
+    profileData: IProfileData,
     layout: IKeyboardLayoutStandard,
     device: IDeviceWrapper | undefined,
   ): Promise<boolean> {
@@ -16,7 +16,7 @@ export namespace KeyMappingEmitter {
     }
     console.log(emitKeyAssignsToDevice.name);
 
-    const data = makeKeyAssignsConfigStorageData(editModel, layout);
+    const data = makeProfileBinaryData(profileData, layout);
     const checksum = calcChecksum(data);
     const dataLength = data.length;
 

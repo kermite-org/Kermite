@@ -516,7 +516,7 @@ function encodeHeaderBytes(
   return buffer;
 }
 
-export function makeKeyAssignsConfigStorageData(
+export function makeProfileBinaryData(
   profileData: IProfileData,
   layout: IKeyboardLayoutStandard,
 ): number[] {
