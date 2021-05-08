@@ -133,17 +133,19 @@ function encodeAssignOperation(
       const mods = makeAttachedModifiersBits([vk]);
       return [(fAssignType << 6) | mods, 0];
     } else {
-      // const { layoutStandard, useShiftCancel } = localContext;
+      const { useShiftCancel } = localContext;
       const mods = makeAttachedModifiersBits(op.attachedModifiers);
-      // let hidKey = getHidKeyCodeEx(vk, layoutStandard);
       const logicalKey = getLogicalKeyForVirtualKey(vk);
-      const fIsShiftLayer = layer.isShiftLayer ? 1 : 0;
+      const fIsShiftCancellable = useShiftCancel && layer.isShiftLayer ? 1 : 0;
       // if (!(useShiftCancel && layer.isShiftLayer)) {
       //   // ShiftCancelオプションが有効で、shiftレイヤの場合のみ、shift cancel bitを維持
       //   // そうでない場合はshift cancel bitを削除
       //   hidKey = hidKey & 0x1ff;
       // }
-      return [(fAssignType << 6) | (fIsShiftLayer << 4) | mods, logicalKey];
+      return [
+        (fAssignType << 6) | (fIsShiftCancellable << 4) | mods,
+        logicalKey,
+      ];
     }
   }
   if (op?.type === 'layerCall') {
