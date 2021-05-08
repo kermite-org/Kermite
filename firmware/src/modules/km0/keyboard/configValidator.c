@@ -16,7 +16,7 @@
 static uint8_t eepromTempBuf[KeyAssignsDataHeaderLength];
 
 bool configValidator_checkBinaryProfileDataHeader() {
-  uint16_t addrKeyAssignsDataHeader = dataStorage_getDataAddress_keyAssigns_dataHeader();
+  uint16_t addrKeyAssignsDataHeader = dataStorage_getDataAddress_profileData_profileHeader();
   uint16_t keyAssignsDataBodyLengthMax = dataStorage_getKeyAssignDataCapacity();
   bool storageHeaderValid = false;
   if (addrKeyAssignsDataHeader && keyAssignsDataBodyLengthMax) {

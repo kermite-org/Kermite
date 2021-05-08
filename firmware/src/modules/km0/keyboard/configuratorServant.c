@@ -40,7 +40,7 @@ static void initializeDataAddresses() {
   storageAddr_DeviceInstanceCode = dataStorage_getDataAddress_deviceInstanceCode();
   storageAddr_CustomSettingsBytesInitializationFlag = dataStorage_getDataAddress_parametersInitializationFlag();
   storageAddr_CustomSettingsBytes = dataStorage_getDataAddress_systemParameters();
-  storageBaseAddr_KeyAssignsData = dataStorage_getDataAddress_keyAssignsData();
+  storageBaseAddr_KeyAssignsData = dataStorage_getDataAddress_profileData();
   keyAssignsDataCapacity = dataStorage_getKeyAssignDataCapacity();
 }
 

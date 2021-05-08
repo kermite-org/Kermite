@@ -11,8 +11,11 @@ uint16_t dataStorage_getDataAddress_systemParameters();
 uint16_t dataStorage_getDataSize_systemParameters();
 
 uint16_t dataStorage_getKeyAssignDataCapacity();
-uint16_t dataStorage_getDataAddress_keyAssignsData();
-uint16_t dataStorage_getDataAddress_keyAssigns_dataHeader();
-uint16_t dataStorage_getDataAddress_keyAssigns_coreDataBlock();
+uint16_t dataStorage_getDataAddress_profileData();
+uint16_t dataStorage_getDataAddress_profileData_profileHeader();
+uint16_t dataStorage_getDataAddress_profileData_layerList();
+
+uint16_t dataStorage_getDataAddress_profileData_keyAssigns();
+uint16_t dataStorage_getDataSize_profileData_keyAssigns();
 
 #endif

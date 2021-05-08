@@ -68,15 +68,15 @@ enum {
   ChunkSig_SystemData = 0xAA20,
   ChunkSig_SystemParameters = 0xAA30,
   ChunkSig_CustomParameters = 0xAA40,
-  ChunkSig_KeyAssignsData = 0xAA70
+  ChunkSig_ProfileData = 0xAA70
 };
 
 enum {
-  SubChunkSig_KeyAssignsDataHeader = 0xBB71,
-  SubChunkSig_LayerListBlock = 0xBB74,
-  SubChunkSig_ShortStringsBlock = 0xBB75,
-  SubChunkSig_SlectiveAssignsBlock = 0xBB76,
-  SubChunkSig_KeyAssignsDataBlock = 0xBB78,
+  SubChunkSig_ProfileDataHeader = 0xBB71,
+  SubChunkSig_ProfileLayerList = 0xBB74,
+  SubChunkSig_ProfileShortStrings = 0xBB75,
+  SubChunkSig_ProfileSlectiveAssigns = 0xBB76,
+  SubChunkSig_ProfileKeyAssigns = 0xBB78,
 };
 
 typedef struct {
@@ -84,12 +84,10 @@ typedef struct {
   uint16_t size;
 } ChunkSpan;
 
-//チャンク識別子を元にチャンクを探して、チャンクボディのアドレスとデータサイズを得る
-static ChunkSpan getChunkSpan(uint16_t chunkSig) {
-  uint16_t totalSize = dataMemory_getCapacity();
-  uint16_t pos = 2;
-  ChunkSpan result;
-  while (pos < totalSize) {
+static ChunkSpan seekChunk(uint16_t chunkSig, uint16_t posStart, uint16_t posEnd) {
+  ChunkSpan result = { 0, 0 };
+  uint16_t pos = posStart;
+  while (pos < posEnd) {
     uint16_t head = dataMemory_readWord(pos);
     uint16_t size = dataMemory_readWord(pos + 2);
     if (head == chunkSig) {
@@ -104,9 +102,24 @@ static ChunkSpan getChunkSpan(uint16_t chunkSig) {
       pos += 4 + size;
     }
   }
-  result.address = 0;
-  result.size = 0;
   return result;
+}
+
+//チャンク識別子を元にチャンクを探して、チャンクボディのアドレスとデータサイズを得る
+static ChunkSpan getChunkSpan(uint16_t chunkSig) {
+  return seekChunk(chunkSig, 2, dataMemory_getCapacity());
+}
+
+static ChunkSpan getSubChunkSpan(uint16_t chunkSig, uint16_t subChunkSig) {
+  ChunkSpan span = getChunkSpan(chunkSig);
+  if (span.address > 0) {
+    uint16_t pos = span.address + 4;
+    uint16_t bodySize = span.size;
+    return seekChunk(subChunkSig, span.address + 4, span.address + 4 + span.size);
+  }
+  span.address = 0;
+  span.size = 0;
+  return span;
 }
 
 static uint16_t getChunkBodyAddress(uint16_t chunkSig) {
@@ -120,22 +133,13 @@ static uint16_t getChunkBodySize(uint16_t chunkSig) {
 }
 
 static uint16_t getSubChunkBodyAddress(uint16_t chunkSig, uint16_t subChunkSig) {
-  ChunkSpan span = getChunkSpan(chunkSig);
-  if (span.address > 0) {
-    uint16_t pos = span.address + 4;
-    uint16_t bodySize = span.size;
-    while (pos < bodySize) {
-      uint16_t head = dataMemory_readWord(pos);
-      uint16_t size = dataMemory_readWord(pos + 2);
-      if (head == subChunkSig) {
-        pos += 4;
-        return pos;
-      } else {
-        pos += 4 + size;
-      }
-    }
-  }
-  return 0;
+  ChunkSpan span = getSubChunkSpan(chunkSig, subChunkSig);
+  return span.address;
+}
+
+static uint16_t getSubChunkBodySize(uint16_t chunkSig, uint16_t subChunkSig) {
+  ChunkSpan span = getSubChunkSpan(chunkSig, subChunkSig);
+  return span.size;
 }
 
 static uint16_t putBlankChunk(uint16_t addr, uint16_t chunkSig, uint16_t bodySize) {
@@ -160,9 +164,9 @@ static uint16_t putBlankChunk(uint16_t addr, uint16_t chunkSig, uint16_t bodySiz
 //   return NULL;
 // }
 
-//keyAssignsDataBodyの先頭からストレージ領域末尾までのサイズを得る
+//profileDataのBodyの先頭からストレージ領域末尾までのサイズを得る
 static uint16_t getKeyAssignsDataBodyLengthMax() {
-  uint16_t addr = getChunkBodyAddress(ChunkSig_KeyAssignsData);
+  uint16_t addr = getChunkBodyAddress(ChunkSig_ProfileData);
   if (addr) {
     return dataMemory_getCapacity() - addr;
   }
@@ -178,7 +182,7 @@ static bool validateStorageDataFormat() {
   uint16_t szSystemData = getChunkBodySize(ChunkSig_SystemData);
   uint16_t szSystemParameters = getChunkBodySize(ChunkSig_SystemParameters);
   uint16_t szCustomParameters = getChunkBodySize(ChunkSig_CustomParameters);
-  uint16_t posKeyAssignsDataBody = getChunkBodyAddress(ChunkSig_KeyAssignsData);
+  uint16_t posKeyAssignsDataBody = getChunkBodyAddress(ChunkSig_ProfileData);
   bool dataLayoutValid = (szUserData == UserStorageDataSize) &&
                          (szSystemData == SystemDataSize) &&
                          (szSystemParameters == SystemParametersDataSize) &&
@@ -211,7 +215,7 @@ static void resetDataStorage() {
   if (CustomParametersDataSize > 0) {
     pos = putBlankChunk(pos, ChunkSig_CustomParameters, CustomParametersDataSize);
   }
-  pos = putBlankChunk(pos, ChunkSig_KeyAssignsData, 0);
+  pos = putBlankChunk(pos, ChunkSig_ProfileData, 0);
 
   //fill initial data
   uint16_t posSystemDataBody = getChunkBodyAddress(ChunkSig_SystemData);
@@ -259,13 +263,22 @@ uint16_t dataStorage_getDataSize_systemParameters() {
   return SystemParametersDataSize;
 }
 
-uint16_t dataStorage_getDataAddress_keyAssignsData() {
-  return getChunkBodyAddress(ChunkSig_KeyAssignsData);
+uint16_t dataStorage_getDataAddress_profileData() {
+  return getChunkBodyAddress(ChunkSig_ProfileData);
 }
 
-uint16_t dataStorage_getDataAddress_keyAssigns_dataHeader() {
-  return getSubChunkBodyAddress(ChunkSig_KeyAssignsData, SubChunkSig_KeyAssignsDataHeader);
+uint16_t dataStorage_getDataAddress_profileData_profileHeader() {
+  return getSubChunkBodyAddress(ChunkSig_ProfileData, SubChunkSig_ProfileDataHeader);
 }
 
-uint16_t dataStorage_getDataAddress_keyAssigns_coreDataBlock() {
+uint16_t dataStorage_getDataAddress_profileData_layerList() {
+  return getSubChunkBodyAddress(ChunkSig_ProfileData, SubChunkSig_ProfileLayerList);
+}
+
+uint16_t dataStorage_getDataAddress_profileData_keyAssigns() {
+  return getSubChunkBodyAddress(ChunkSig_ProfileData, SubChunkSig_ProfileKeyAssigns);
+}
+
+uint16_t dataStorage_getDataSize_profileData_keyAssigns() {
+  return getSubChunkBodySize(ChunkSig_ProfileData, SubChunkSig_ProfileKeyAssigns);
 }

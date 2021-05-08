@@ -165,17 +165,18 @@ typedef struct {
 static AssignMemoryReaderState assignMemoryReaderState;
 
 static void initAssignMemoryReader() {
-  uint16_t keyAssignsDataHeaderLocation = dataStorage_getDataAddress_keyAssigns_dataHeader();
-  uint16_t keyAssignsDataBodyLocation = dataStorage_getDataAddress_keyAssigns_coreDataBlock();
+  uint16_t profileHeaderLocation = dataStorage_getDataAddress_profileData_profileHeader();
+  uint16_t layerListDataLocation = dataStorage_getDataAddress_profileData_layerList();
+  uint16_t keyAssignsDataLocation = dataStorage_getDataAddress_profileData_keyAssigns();
+  uint16_t keyAssignsDataSize = dataStorage_getDataSize_profileData_keyAssigns();
   AssignMemoryReaderState *rs = &assignMemoryReaderState;
-  uint8_t numLayers = readStorageByte(keyAssignsDataHeaderLocation + 8);
-  uint16_t bodyLength = readStorageWordBE(keyAssignsDataHeaderLocation + 9);
+  uint8_t numLayers = readStorageByte(profileHeaderLocation + 4);
   rs->numLayers = numLayers;
-  rs->assignsStartAddress = keyAssignsDataBodyLocation + numLayers * 2;
-  rs->assignsEndAddress = keyAssignsDataBodyLocation + bodyLength;
-  printf("nl:%d bl:%d\n", numLayers, bodyLength);
+  rs->assignsStartAddress = keyAssignsDataLocation;
+  rs->assignsEndAddress = keyAssignsDataLocation + keyAssignsDataSize;
+  printf("nl:%d bl:%d\n", numLayers, keyAssignsDataSize);
   for (uint8_t i = 0; i < 16; i++) {
-    rs->layerAttributeWords[i] = (i < numLayers) ? readStorageWordBE(keyAssignsDataBodyLocation + i * 2) : 0;
+    rs->layerAttributeWords[i] = (i < numLayers) ? readStorageWordBE(layerListDataLocation + i * 2) : 0;
   }
 }
 
