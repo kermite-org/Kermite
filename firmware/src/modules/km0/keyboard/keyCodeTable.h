@@ -3,7 +3,7 @@
 
 #include "km0/types.h"
 
-uint16_t keyCodeTable_getLogicalKeyHidKeyCode(uint8_t logicalKey, bool isSecondaryLayout);
-char *keyCodeTable_getLogicalKeyText(uint8_t logicalKey);
+uint16_t keyCodeTable_mapLogicalKeyToHidKeyCode(uint8_t logicalKey, bool isSecondaryLayout);
+char *keyCodeTable_mapLogicalKeyToKeyText(uint8_t logicalKey);
 
 #endif
