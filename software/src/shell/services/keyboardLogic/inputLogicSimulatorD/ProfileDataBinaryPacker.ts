@@ -17,7 +17,8 @@ import {
   writeUint16BE,
   writeUint8,
 } from '~/shell/services/device/keyboardDevice/Helpers';
-import { getHidKeyCodeEx } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/HidKeyCodes';
+import { getLogicalKeyForVirtualKey } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/LogicalKey';
+// import { getHidKeyCodeEx } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/HidKeyCodes';
 import { AssignStorageHeaderLength } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/MemoryDefs';
 
 /*
@@ -79,12 +80,13 @@ noOperation
 0b00~
 TT: type, 0b00 for no operation
 
-keyInput
-0bTTMM_MMKK 0bKKKK_KKKK
+keyInput (logicalKey)
+0bTTxS_MMMM 0bxKKK_KKKK
 0b01~
 TT: type, 0b01 for keyInput
+S: isShiftLayer
 MMMM: modifiers, [os, alt, shift, ctrl] for msb-lsb
-KK_KKKK_KKKK: hid keycode with adhocShift flags
+KKK_KKKK: logical keycode
 
 layerCall
 0bTTxx_LLLL 0bIIII_xxxx
@@ -129,21 +131,19 @@ function encodeAssignOperation(
     const vk = op.virtualKey;
     if (isModifierVirtualKey(vk)) {
       const mods = makeAttachedModifiersBits([vk]);
-      return [(fAssignType << 6) | (mods << 2), 0];
+      return [(fAssignType << 6) | mods, 0];
     } else {
-      const { layoutStandard, useShiftCancel } = localContext;
+      // const { layoutStandard, useShiftCancel } = localContext;
       const mods = makeAttachedModifiersBits(op.attachedModifiers);
-      let hidKey = getHidKeyCodeEx(vk, layoutStandard);
-
-      if (!(useShiftCancel && layer.isShiftLayer)) {
-        // ShiftCancelオプションが有効で、shiftレイヤの場合のみ、shift cancel bitを維持
-        // そうでない場合はshift cancel bitを削除
-        hidKey = hidKey & 0x1ff;
-      }
-      return [
-        (fAssignType << 6) | (mods << 2) | ((hidKey >> 8) & 0x03),
-        hidKey,
-      ];
+      // let hidKey = getHidKeyCodeEx(vk, layoutStandard);
+      const logicalKey = getLogicalKeyForVirtualKey(vk);
+      const fIsShiftLayer = layer.isShiftLayer ? 1 : 0;
+      // if (!(useShiftCancel && layer.isShiftLayer)) {
+      //   // ShiftCancelオプションが有効で、shiftレイヤの場合のみ、shift cancel bitを維持
+      //   // そうでない場合はshift cancel bitを削除
+      //   hidKey = hidKey & 0x1ff;
+      // }
+      return [(fAssignType << 6) | (fIsShiftLayer << 4) | mods, logicalKey];
     }
   }
   if (op?.type === 'layerCall') {
