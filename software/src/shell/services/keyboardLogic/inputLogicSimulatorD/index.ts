@@ -11,7 +11,7 @@ import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
 import { AssignStorageBaseAddr } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/MemoryDefs';
 import { ProfileManager } from '~/shell/services/profile/ProfileManager';
 import { getKeyboardCoreLogicInterface } from './KeyboardCoreLogicImplementation';
-import { makeKeyAssignsConfigStorageData } from './ProfileDataBinaryPacker';
+import { makeProfileBinaryData } from './ProfileDataBinaryPacker';
 
 function compareArray(ar0: any[], ar1: any[]): boolean {
   return (
@@ -127,8 +127,7 @@ export class InputLogicSimulatorD {
     const prof =
       (await this.profileManager.getCurrentProfileAsync()) ||
       fallbackProfileData;
-    const layout = config.layoutStandard;
-    const bytes = makeKeyAssignsConfigStorageData(prof, layout);
+    const bytes = makeProfileBinaryData(prof);
     this.configDataStorage.writeConfigStorageData(bytes);
     this.CL.keyboardCoreLogic_initialize();
     this.CL.keyboardCoreLogic_setAssignStorageReaderFunc((addr) =>

@@ -1,25 +1,25 @@
 import {
-  IAssignEntry,
-  IKeyboardLayoutStandard,
-  ModifierVirtualKey,
-  LayerInvocationMode,
-  IAssignOperation,
-  isModifierVirtualKey,
-  flattenArray,
-  IProfileData,
-  duplicateObjectByJsonStringifyParse,
-  createDictionaryFromKeyValues,
-  sortOrderBy,
-  createGroupedArrayByKey,
   ConfigStorageFormatRevision,
+  createDictionaryFromKeyValues,
+  createGroupedArrayByKey,
+  flattenArray,
+  IAssignEntry,
+  IAssignOperation,
+  ILayer,
+  IProfileData,
+  isModifierVirtualKey,
+  LayerInvocationMode,
+  ModifierVirtualKey,
+  ProfileBinaryFormatRevision,
+  sortOrderBy,
 } from '~/shared';
 import {
-  writeUint16BE,
+  writeBytes,
+  writeUint16LE,
   writeUint8,
 } from '~/shell/services/device/keyboardDevice/Helpers';
 import { getLogicalKeyForVirtualKey } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/LogicalKey';
 // import { getHidKeyCodeEx } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/HidKeyCodes';
-import { AssignStorageHeaderLength } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/MemoryDefs';
 
 /*
 Key Assigns Restriction
@@ -43,7 +43,7 @@ interface IRawLayerInfo {
 }
 
 const localContext = new (class {
-  layoutStandard: IKeyboardLayoutStandard = 'US';
+  // layoutStandard: IKeyboardLayoutStandard = 'US';
   layersDict: { [layerId: string]: IRawLayerInfo } = {};
   useShiftCancel: boolean = false;
 })();
@@ -343,10 +343,11 @@ function makeRawAssignEntries(profile: IProfileData): IRawAssignEntry[] {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function hexBytes(bytes: number[], splitter = ',') {
-  return bytes.map((b) => ('00' + b.toString(16)).slice(-2)).join(splitter);
-}
+// function hexBytes(bytes: number[], splitter = ',') {
+//   return bytes.map((b) => ('00' + b.toString(16)).slice(-2)).join(splitter);
+// }
 
+/*
 function fixAssignOperation(
   op: IAssignOperation,
   layout: IKeyboardLayoutStandard,
@@ -396,6 +397,25 @@ function fixProfileData(
     }
   }
 }
+*/
+
+function createChunk(headerWord: number, bodyBytes: number[]) {
+  const buffer = Array(bodyBytes.length + 4).fill(0);
+  writeUint16LE(buffer, 0, headerWord);
+  writeUint16LE(buffer, 2, bodyBytes.length);
+  writeBytes(buffer, 4, bodyBytes);
+  return buffer;
+}
+
+function encodeProfileHeaderData(numKeys: number, numLayers: number): number[] {
+  const buffer = Array(5).fill(0);
+  writeUint8(buffer, 0, 0x01);
+  writeUint8(buffer, 1, ConfigStorageFormatRevision);
+  writeUint8(buffer, 2, ProfileBinaryFormatRevision);
+  writeUint8(buffer, 3, numKeys);
+  writeUint8(buffer, 4, numLayers);
+  return buffer;
+}
 
 // LayerAttributeByte
 // 0bDxIx_MMMM 0bxxxx_xQQQ
@@ -403,9 +423,9 @@ function fixProfileData(
 // I: initialActive
 // MMMM: attachedModifiers
 // QQQ: exclusion group, 0~7
-function makeLayerAttributeBytes(profile: IProfileData): number[] {
+function encodeLayerListData(layers: ILayer[]): number[] {
   return flattenArray(
-    profile.layers.map((la) => {
+    layers.map((la) => {
       const fDefaultScheme = la.defaultScheme === 'block' ? 1 : 0;
       const fInitialActive = la.initialActive ? 1 : 0;
       const fAttachedModifiers = makeAttachedModifiersBits(
@@ -419,17 +439,23 @@ function makeLayerAttributeBytes(profile: IProfileData): number[] {
   );
 }
 
-// デバイスのEEPROMに書き込むキーアサインバイナリデータを生成する
-// [0:numLayers*2-1]: layer attributes
-// [numLayers*2:~] key assings data
-export function converProfileDataToBlobBytes(
-  profile0: IProfileData,
-  layoutStandard: IKeyboardLayoutStandard,
-): number[] {
-  const profile = duplicateObjectByJsonStringifyParse(profile0);
-  fixProfileData(profile, layoutStandard);
+function encodeKeyAssignsData(profile: IProfileData): number[] {
+  const numLayers = profile.layers.length;
+  const rawAssigns = makeRawAssignEntries(profile);
+  rawAssigns.sort(
+    sortOrderBy((ra) => ra.keyIndex * 100 + (numLayers - ra.layerIndex)),
+  );
+  // console.log(rawAssigns);
+  const groupedAssignBytes = createGroupedArrayByKey(
+    rawAssigns,
+    'keyIndex',
+  ).map(encodeKeyBoundAssignsSet);
+  // console.log(groupedAssignBytes.map((a) => hexBytes(a, ' ')));
+  return flattenArray(groupedAssignBytes);
+}
 
-  localContext.layoutStandard = layoutStandard;
+function setupLocalContext(profile: IProfileData) {
+  // レイヤ情報をグローバル変数に格納(末端の関数でこれを参照する)
   localContext.layersDict = createDictionaryFromKeyValues(
     profile.layers.map((la, idx) => [
       la.layerId,
@@ -440,93 +466,51 @@ export function converProfileDataToBlobBytes(
     ]),
   );
   localContext.useShiftCancel = profile.settings.useShiftCancel;
-
-  const layerAttributeBytes = makeLayerAttributeBytes(profile);
-
-  const rawAssigns = makeRawAssignEntries(profile);
-  const numLayers = profile.layers.length;
-  rawAssigns.sort(
-    sortOrderBy((ra) => ra.keyIndex * 100 + (numLayers - ra.layerIndex)),
-  );
-
-  // console.log(rawAssigns);
-
-  const groupedAssignBytes = createGroupedArrayByKey(
-    rawAssigns,
-    'keyIndex',
-  ).map(encodeKeyBoundAssignsSet);
-
-  // console.log(groupedAssignBytes.map((a) => hexBytes(a, ' ')));
-
-  const keyAssignsBufferBytes = flattenArray(groupedAssignBytes);
-
-  const buf = [...layerAttributeBytes, ...keyAssignsBufferBytes];
-
-  // console.log(`len: ${buf.length}`);
-
-  // console.log(hexBytes(buf));
-
-  return buf;
 }
 
-/*
-Data format for the keymapping data stored in AVR's EEPROM
-EEPROM 1KB
-
-U=USER_EEPROM_SIZE, EEPROM末尾に確保されるユーザ領域, 未使用の場合は0
-
-[0~7] projectId 8bytes
-[8~15] device instance code 8bytes
-[16] reserved
-[17] isParameterInitialzed flag
-[18~27] customSettingBytes 10bytes
-[28~] keymappingData
- [28~40] keymapping data header 12bytes
- [40~(1024-U)] keymapping data body
-
-[(1024-U)~1023] user eeprom data
-
-keymapping Header 12bytes
-[0~1] 0xFE03(BE), magic number
-[2~3] 0xFFFF(BE), reserved
-[4] logic model type
-  0x01 for dominant
-[5] format revision, increment when format changed
-[6] bodyOffset, 12
-[7] numKeys
-[8] numLayers
-[9~10] bodyLength
-[11]: padding
-*/
-function encodeHeaderBytes(
-  numKeys: number,
-  numLayers: number,
-  bodyLength: number,
-): number[] {
-  const headerLength = AssignStorageHeaderLength;
-  const buffer = Array(headerLength).fill(0);
-  writeUint16BE(buffer, 0, 0xfe03);
-  writeUint16BE(buffer, 2, 0xffff);
-  writeUint8(buffer, 4, 0x01);
-  writeUint8(buffer, 5, ConfigStorageFormatRevision);
-  writeUint8(buffer, 6, headerLength);
-  writeUint8(buffer, 7, numKeys);
-  writeUint8(buffer, 8, numLayers);
-  writeUint16BE(buffer, 9, bodyLength);
-  return buffer;
-}
+// デバイスのEEPROMに書き込むキーアサインバイナリデータを生成する
+// [0:numLayers*2-1]: layer attributes
+// [numLayers*2:~] key assings data
+// export function converProfileDataToBlobBytes(
+//   profile: IProfileData,
+//   // layoutStandard: IKeyboardLayoutStandard,
+// ): number[] {}
 
 export function makeProfileBinaryData(
-  profileData: IProfileData,
-  layout: IKeyboardLayoutStandard,
+  profile: IProfileData,
+  // layout: IKeyboardLayoutStandard,
 ): number[] {
-  const keyNum = profileData.keyboardDesign.keyEntities.length;
-  const layerNum = profileData.layers.length;
-  const assignsDataBytes = converProfileDataToBlobBytes(profileData, layout);
-  const headerBytes = encodeHeaderBytes(
-    keyNum,
-    layerNum,
-    assignsDataBytes.length,
-  );
-  return [...headerBytes, ...assignsDataBytes];
+  setupLocalContext(profile);
+  // const profile = duplicateObjectByJsonStringifyParse(profile0);
+  // fixProfileData(profile, layoutStandard);
+  // localContext.layoutStandard = layoutStandard;
+
+  const numKeys = profile.keyboardDesign.keyEntities.length;
+  const numLayers = profile.layers.length;
+
+  const profileHeaderData = encodeProfileHeaderData(numKeys, numLayers);
+  const profileHeaderChunk = createChunk(0xbb71, profileHeaderData);
+
+  const layerListData = encodeLayerListData(profile.layers);
+  const layerListChunk = createChunk(0xbb74, layerListData);
+
+  const keyAssignsData = encodeKeyAssignsData(profile);
+  const keyAssignsChunk = createChunk(0xbb78, keyAssignsData);
+
+  return [...profileHeaderChunk, ...layerListChunk, ...keyAssignsChunk];
+
+  // const buf = [...layerAttributeBytes, ...keyAssignsBufferBytes];
+  // console.log(`len: ${buf.length}`);
+  // console.log(hexBytes(buf));
+  // return buf;
+
+  // const layerListData = encodla
+
+  // const assignsDataBytes = converProfileDataToBlobBytes(profileData);
+  // const headerBytes = encodeHeaderBytes(
+  //   numKeys,
+  //   numLayers,
+  //   assignsDataBytes.length,
+  // );
+  // return [...headerBytes, ...assignsDataBytes];
 }

@@ -27,6 +27,12 @@ export function writeUint16BE(buf: number[], pos: number, val: number) {
   buf[pos + 1] = val & 0xff;
 }
 
+export function writeBytes(buf: number[], pos: number, bytes: number[]) {
+  for (let i = 0; i < bytes.length; i++) {
+    buf[pos + i] = bytes[i];
+  }
+}
+
 export function bhi(val: number) {
   return (val >> 8) & 0xff;
 }

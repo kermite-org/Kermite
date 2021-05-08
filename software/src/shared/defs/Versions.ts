@@ -4,3 +4,6 @@
 export const ConfigStorageFormatRevision = 5;
 
 export const RawHidMessageProtocolRevision = 1;
+
+// 210509 1, 初版
+export const ProfileBinaryFormatRevision = 1;

@@ -16,7 +16,7 @@ export namespace KeyMappingEmitter {
     }
     console.log(emitKeyAssignsToDevice.name);
 
-    const data = makeProfileBinaryData(profileData, layout);
+    const data = makeProfileBinaryData(profileData);
     const checksum = calcChecksum(data);
     const dataLength = data.length;
 
