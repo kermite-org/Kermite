@@ -205,8 +205,8 @@ enum LogicalKey {
 typedef struct {
   uint8_t logicalKey; //logical key code
   char *text;
-  uint16_t hidKeyPrimary;   //hid key code with shift (us mapping)
-  uint16_t hidKeySecondary; //hid key code with shift (jis mapping)
+  uint16_t hidKeyPrimary;   //hid keycode with shift (us mapping)
+  uint16_t hidKeySecondary; //hid keycode with shift (jis mapping)
 } LogicalKeyItem;
 
 static const LogicalKeyItem logicalKeyItems[] = {
