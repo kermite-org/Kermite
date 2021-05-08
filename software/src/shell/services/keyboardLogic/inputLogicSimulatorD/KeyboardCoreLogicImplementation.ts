@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
+import { keyCodeTableImpl_mapLogicalKeyToHidKeyCode } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/KeyCodeTableImpl';
 import {
   AssignStorageBaseAddr,
   AssignStorageHeaderLength,
@@ -524,15 +525,21 @@ function handleOperationOn(opWord: u32) {
   const opType = (opWord >> 30) & 0b11;
   if (opType === OpType.KeyInput) {
     opWord >>= 16;
-    const hidKey = opWord & 0x3ff;
-    const modFlags = (opWord >> 10) & 0b1111;
+    const logicalKey = opWord & 0x7f;
+    const modFlags = (opWord >> 8) & 0b1111;
     if (modFlags) {
       setModifiers(modFlags);
     }
-    if (hidKey) {
+    if (logicalKey) {
+      const hidKey = keyCodeTableImpl_mapLogicalKeyToHidKeyCode(
+        logicalKey,
+        true, // todo: globalなuseSecondaryLayoutフラグを参照する
+      );
+      const isShiftLayer = ((opWord >> 12) & 1) > 0;
       const keyCode = hidKey & 0xff;
-      const shiftOn = hidKey & 0x100;
-      const shiftCancel = hidKey & 0x200;
+      const shiftOn = (hidKey & 0x100) > 0;
+      const shiftCancel = isShiftLayer && (hidKey & 0x200) > 0;
+      // todo: globalなuseShiftCancelフラグが有効な場合のみshiftCancelを有効にする
 
       const outputModifiers = getOutputModifiers();
       const isOtherModifiersClean = (outputModifiers & 0b1101) === 0;
@@ -584,15 +591,20 @@ function handleOperationOff(opWord: u32) {
   const opType = (opWord >> 30) & 0b11;
   if (opType === OpType.KeyInput) {
     opWord >>= 16;
-    const hidKey = opWord & 0x3ff;
-    const modFlags = (opWord >> 10) & 0b1111;
+    const logicalKey = opWord & 0x7f;
+    const modFlags = (opWord >> 8) & 0b1111;
     if (modFlags) {
       clearModifiers(modFlags);
     }
-    if (hidKey) {
+    if (logicalKey) {
+      const hidKey = keyCodeTableImpl_mapLogicalKeyToHidKeyCode(
+        logicalKey,
+        true,
+      );
+      const isShiftLayer = ((opWord >> 12) & 1) > 0;
       const keyCode = hidKey & 0xff;
-      const shiftOn = hidKey & 0x100;
-      const shiftCancel = hidKey & 0x200;
+      const shiftOn = (hidKey & 0x100) > 0;
+      const shiftCancel = isShiftLayer && (hidKey & 0x200) > 0;
       if (shiftOn) {
         clearAdhocModifiers(ModFlag.Shift);
       }
