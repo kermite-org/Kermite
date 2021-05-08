@@ -113,9 +113,7 @@ static ChunkSpan getChunkSpan(uint16_t chunkSig) {
 static ChunkSpan getSubChunkSpan(uint16_t chunkSig, uint16_t subChunkSig) {
   ChunkSpan span = getChunkSpan(chunkSig);
   if (span.address > 0) {
-    uint16_t pos = span.address + 4;
-    uint16_t bodySize = span.size;
-    return seekChunk(subChunkSig, span.address + 4, span.address + 4 + span.size);
+    return seekChunk(subChunkSig, span.address, span.address + span.size);
   }
   span.address = 0;
   span.size = 0;
@@ -147,22 +145,6 @@ static uint16_t putBlankChunk(uint16_t addr, uint16_t chunkSig, uint16_t bodySiz
   dataMemory_writeWord(addr + 2, bodySize);
   return addr + 4 + bodySize;
 }
-
-// uint16_t putPresetChunk(uint16_t addr, uint16_t chunkSig, uint8_t *body, uint16_t bodySize) {
-//   dataMemory_writeWord(addr, chunkSig);
-//   dataMemory_writeWord(addr + 2, bodySize);
-//   dataMemory_writeBytes(addr + 4, body, bodySize);
-//   return addr + 4 + bodySize;
-// }
-
-// void *readChunkBodyAsStruct(uint16_t chunkSig, uint8_t *buffer, uint16_t size) {
-//   ChunkSpan span = getChunkSpan(chunkSig);
-//   if (span.size == size) {
-//     dataMemory_readBytes(span.addr, buffer, size);
-//     return buffer;
-//   }
-//   return NULL;
-// }
 
 //profileDataのBodyの先頭からストレージ領域末尾までのサイズを得る
 static uint16_t getKeyAssignsDataBodyLengthMax() {
