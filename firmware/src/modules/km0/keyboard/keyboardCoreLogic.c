@@ -1,5 +1,6 @@
 #include "keyboardCoreLogic.h"
 #include "config.h"
+#include "keyCodeTable.h"
 #include "km0/common/bitOperations.h"
 #include "km0/deviceIo/dataMemory.h"
 #include "storageLayout.h"
@@ -500,15 +501,19 @@ static void handleOperationOn(uint32_t opWord) {
   uint8_t opType = (opWord >> 30) & 0b11;
   if (opType == OpType_KeyInput) {
     opWord >>= 16;
-    uint16_t hidKey = opWord & 0x3ff;
-    uint8_t modFlags = (opWord >> 10) & 0b1111;
+    uint8_t logicalKey = opWord & 0x7f;
+    uint8_t modFlags = (opWord >> 8) & 0b1111;
     if (modFlags) {
       setModifiers(modFlags);
     }
-    if (hidKey) {
+    if (logicalKey) {
+      // todo: globalなuseSecondaryLayoutフラグを参照する
+      uint16_t hidKey = keyCodeTable_mapLogicalKeyToHidKeyCode(logicalKey, true);
+      bool isShiftLayer = ((opWord >> 12) & 1) > 0;
       uint8_t keyCode = hidKey & 0xff;
-      bool shiftOn = hidKey & 0x100;
-      bool shiftCancel = hidKey & 0x200;
+      bool shiftOn = (hidKey & 0x100) > 0;
+      // todo: globalなuseShiftCancelフラグが有効な場合のみshiftCancelを有効にする
+      bool shiftCancel = isShiftLayer && (hidKey & 0x200) > 0;
 
       uint8_t outputModifiers = getOutputModifiers();
       bool isOtherModifiersClean = (outputModifiers & 0b1101) == 0;
@@ -559,15 +564,18 @@ static void handleOperationOff(uint32_t opWord) {
   uint8_t opType = (opWord >> 30) & 0b11;
   if (opType == OpType_KeyInput) {
     opWord >>= 16;
-    uint16_t hidKey = opWord & 0x3ff;
-    uint8_t modFlags = (opWord >> 10) & 0b1111;
+    uint8_t logicalKey = opWord & 0x7f;
+    uint8_t modFlags = (opWord >> 8) & 0b1111;
     if (modFlags) {
       clearModifiers(modFlags);
     }
-    if (hidKey) {
+    if (logicalKey) {
+      uint16_t hidKey = keyCodeTable_mapLogicalKeyToHidKeyCode(logicalKey, true);
+      bool isShiftLayer = ((opWord >> 12) & 1) > 0;
       uint8_t keyCode = hidKey & 0xff;
-      bool shiftOn = hidKey & 0x100;
-      bool shiftCancel = hidKey & 0x200;
+      bool shiftOn = (hidKey & 0x100) > 0;
+      bool shiftCancel = isShiftLayer && (hidKey & 0x200) > 0;
+
       if (shiftOn) {
         clearAdhocModifiers(ModFlag_Shift);
       }
