@@ -509,11 +509,10 @@ static void handleOperationOn(uint32_t opWord) {
     if (logicalKey) {
       // todo: globalなuseSecondaryLayoutフラグを参照する
       uint16_t hidKey = keyCodeTable_mapLogicalKeyToHidKeyCode(logicalKey, true);
-      bool isShiftLayer = ((opWord >> 12) & 1) > 0;
+      bool isShiftCancellable = ((opWord >> 12) & 1) > 0;
       uint8_t keyCode = hidKey & 0xff;
       bool shiftOn = (hidKey & 0x100) > 0;
-      // todo: globalなuseShiftCancelフラグが有効な場合のみshiftCancelを有効にする
-      bool shiftCancel = isShiftLayer && (hidKey & 0x200) > 0;
+      bool shiftCancel = isShiftCancellable && (hidKey & 0x200) > 0;
 
       uint8_t outputModifiers = getOutputModifiers();
       bool isOtherModifiersClean = (outputModifiers & 0b1101) == 0;
@@ -571,10 +570,10 @@ static void handleOperationOff(uint32_t opWord) {
     }
     if (logicalKey) {
       uint16_t hidKey = keyCodeTable_mapLogicalKeyToHidKeyCode(logicalKey, true);
-      bool isShiftLayer = ((opWord >> 12) & 1) > 0;
+      bool isShiftCancellable = ((opWord >> 12) & 1) > 0;
       uint8_t keyCode = hidKey & 0xff;
       bool shiftOn = (hidKey & 0x100) > 0;
-      bool shiftCancel = isShiftLayer && (hidKey & 0x200) > 0;
+      bool shiftCancel = isShiftCancellable && (hidKey & 0x200) > 0;
 
       if (shiftOn) {
         clearAdhocModifiers(ModFlag_Shift);

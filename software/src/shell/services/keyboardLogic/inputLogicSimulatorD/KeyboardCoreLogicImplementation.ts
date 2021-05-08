@@ -535,12 +535,10 @@ function handleOperationOn(opWord: u32) {
         logicalKey,
         true, // todo: globalなuseSecondaryLayoutフラグを参照する
       );
-      const isShiftLayer = ((opWord >> 12) & 1) > 0;
+      const isShiftCancellable = ((opWord >> 12) & 1) > 0;
       const keyCode = hidKey & 0xff;
       const shiftOn = (hidKey & 0x100) > 0;
-      const shiftCancel = isShiftLayer && (hidKey & 0x200) > 0;
-      // todo: globalなuseShiftCancelフラグが有効な場合のみshiftCancelを有効にする
-
+      const shiftCancel = isShiftCancellable && (hidKey & 0x200) > 0;
       const outputModifiers = getOutputModifiers();
       const isOtherModifiersClean = (outputModifiers & 0b1101) === 0;
       if (shiftOn) {
@@ -601,10 +599,10 @@ function handleOperationOff(opWord: u32) {
         logicalKey,
         true,
       );
-      const isShiftLayer = ((opWord >> 12) & 1) > 0;
+      const isShiftCancellable = ((opWord >> 12) & 1) > 0;
       const keyCode = hidKey & 0xff;
       const shiftOn = (hidKey & 0x100) > 0;
-      const shiftCancel = isShiftLayer && (hidKey & 0x200) > 0;
+      const shiftCancel = isShiftCancellable && (hidKey & 0x200) > 0;
       if (shiftOn) {
         clearAdhocModifiers(ModFlag.Shift);
       }
