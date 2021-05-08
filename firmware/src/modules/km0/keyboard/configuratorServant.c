@@ -33,14 +33,14 @@ static void invokeCustomParameterChangedCallback(uint8_t index, uint8_t value) {
 static uint16_t storageAddr_DeviceInstanceCode;
 static uint16_t storageAddr_CustomSettingsBytesInitializationFlag;
 static uint16_t storageAddr_CustomSettingsBytes;
-static uint16_t storageBaseAddr_KeyAssignsData;
+static uint16_t storageAddr_profileData;
 static uint16_t keyAssignsDataCapacity;
 
 static void initializeDataAddresses() {
   storageAddr_DeviceInstanceCode = dataStorage_getDataAddress_deviceInstanceCode();
   storageAddr_CustomSettingsBytesInitializationFlag = dataStorage_getDataAddress_parametersInitializationFlag();
   storageAddr_CustomSettingsBytes = dataStorage_getDataAddress_systemParameters();
-  storageBaseAddr_KeyAssignsData = dataStorage_getDataAddress_profileData();
+  storageAddr_profileData = dataStorage_getDataAddress_profileData();
   keyAssignsDataCapacity = dataStorage_getKeyAssignDataCapacity();
 }
 
@@ -149,7 +149,7 @@ static void processReadGenericHidData() {
 
         if (cmd == 0x20) {
           //write keymapping data to ROM
-          uint16_t addr = storageBaseAddr_KeyAssignsData + (p[3] << 8 | p[4]);
+          uint16_t addr = storageAddr_profileData + (p[3] << 8 | p[4]);
           uint8_t len = p[5];
           uint8_t *src = p + 6;
           dataMemory_writeBytes(addr, src, len);
@@ -157,7 +157,7 @@ static void processReadGenericHidData() {
         }
         if (cmd == 0x21) {
           //read memory checksum for keymapping data
-          uint16_t addr = storageBaseAddr_KeyAssignsData + (p[3] << 8 | p[4]);
+          uint16_t addr = storageAddr_profileData + (p[3] << 8 | p[4]);
           uint16_t len = p[5] << 8 | p[6];
           uint8_t ck = 0;
           printf("check, addr %d, len %d\n", addr, len);
@@ -166,6 +166,9 @@ static void processReadGenericHidData() {
           }
           printf("ck: %d\n", ck);
           emitMemoryChecksumResult(0x01, ck);
+
+          //チャンクボディデータサイズを書き込む
+          dataMemory_writeWord(storageAddr_profileData - 2, len);
         }
 
         if (cmd == 0x11) {
