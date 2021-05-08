@@ -96,7 +96,7 @@ void oledCoreEx_graphics_drawFullImage(const uint32_t *pLineBuffers128) {
   }
 }
 
-static const uint8_t *fontDataPtr;
+static const uint8_t *fontDataPtr = NULL;
 static int fontWidth = 0;
 static int fontLetterSpacing = 0;
 

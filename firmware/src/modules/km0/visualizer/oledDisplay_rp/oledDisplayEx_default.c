@@ -1,3 +1,4 @@
+#include "config.h"
 #include "km0/common/bitOperations.h"
 #include "km0/common/utils.h"
 #include "km0/deviceIo/boardI2c.h"
@@ -5,11 +6,27 @@
 #include "km0/deviceIo/system.h"
 #include "km0/keyboard/keyboardMain.h"
 #include "km0/visualizer/oledDisplay.h"
-#include "km0/visualizer/oledFontData.h"
-#include "km0/visualizer/oledLogoData.h"
 #include "oledCoreEx.h"
 #include <stdio.h>
 #include <string.h>
+
+#ifdef KM0_OLED_DISPLAY__USE_CUSTOM_LOGO
+static const uint32_t *mainLogoData = NULL;
+#else
+#include "km0/visualizer/oledLogoData.h"
+static const uint32_t *mainLogoData = oledLogoDataKermite;
+#endif
+
+#ifdef KM0_OLED_DISPLAY__USE_CUSTOM_FONT
+const uint8_t *mainFontData = NULL;
+uint8_t mainFontWidth = 0;
+uint8_t mainFontLetterSpacing = 0;
+#else
+#include "km0/visualizer/oledFontData.h"
+const uint8_t *mainFontData = oledFontData;
+uint8_t mainFontWidth = oledFontWidth;
+uint8_t mainFontLetterSpacing = oledFontLetterSpacing;
+#endif
 
 //----------------------------------------------------------------------
 
@@ -27,6 +44,12 @@ static char strbuf[8];
 #define pm(x) (x > 0 ? '+' : '-')
 
 static void renderStatusView() {
+  if (!mainFontData) {
+    oledCoreEx_graphics_clear();
+    oledCoreEx_flushScreen();
+    return;
+  }
+
   oledCoreEx_graphics_clear();
 
   oledCoreEx_graphics_drawText(0, 0, "Status");
@@ -68,18 +91,29 @@ static void renderStatusView() {
   oledCoreEx_flushScreen();
 }
 
-static void renderKermiteLogo() {
+//----------------------------------------------------------------------
+
+static void renderMainLogo() {
   oledCoreEx_graphics_clear();
-  oledCoreEx_graphics_drawFullImage(oledLogoDataKermite);
+  if (mainLogoData) {
+    oledCoreEx_graphics_drawFullImage(mainLogoData);
+  }
   oledCoreEx_flushScreen();
 }
 
-//----------------------------------------------------------------------
+void oledDisplay_setCustomLogo(const uint32_t *logoData) {
+  mainLogoData = logoData;
+}
+
+void oledDisplay_setCustomFont(const uint8_t *fontData, uint8_t fontWidth, uint8_t fontLetterSpacing) {
+  mainFontData = fontData;
+  mainFontWidth = fontWidth;
+  mainFontLetterSpacing = fontLetterSpacing;
+}
 
 void oledDisplay_initialize() {
   oledCoreEx_initialize();
-  oledCoreEx_graphics_setFontData(oledFontData, oledFontWidth, oledFontLetterSpacing);
-  delayMs(10);
+  oledCoreEx_graphics_setFontData(mainFontData, mainFontWidth, mainFontLetterSpacing);
 }
 
 static void updateFrame() {
@@ -92,7 +126,7 @@ static void updateFrame() {
   if (bootComplete && isMaster) {
     renderStatusView();
   } else {
-    renderKermiteLogo();
+    renderMainLogo();
   }
 }
 
