@@ -376,7 +376,7 @@ const virutalKeyToHidKeyMapper_JIS: {
   K_GreaterThan: HidKeyJP.KU__JP_Dot_GreaterThan | OUT_SHIFT,
 };
 
-export function getHidKeyCodeEx(
+function getHidKeyCodeEx__deprecated(
   vk: VirtualKey,
   layout: IKeyboardLayoutStandard,
 ): number {

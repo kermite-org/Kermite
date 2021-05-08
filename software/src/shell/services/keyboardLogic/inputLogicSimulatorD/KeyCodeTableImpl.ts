@@ -226,8 +226,8 @@ const logicalKeyItems: LogicalKeyItem[] = [
   [
     LogicalKey.LK_AtMark,
     '@',
-    HidKeyUS.KU_US_Num2_Atmark | NoShift,
-    HidKeyJA.KU_JA_Atmark_BackQuote | Shifted,
+    HidKeyUS.KU_US_Num2_Atmark | Shifted,
+    HidKeyJA.KU_JA_Atmark_BackQuote | NoShift,
   ],
 ];
 
@@ -237,10 +237,10 @@ function getLogicalKeysItem(logicalKey: number): LogicalKeyItem | undefined {
   });
 }
 
-export function keyCodeTableImpl_getLogicalKeyHidKeyCode(
+export function keyCodeTableImpl_mapLogicalKeyToHidKeyCode(
   logicalKey: number,
   isSecondaryLayout: boolean,
-) {
+): number {
   const item = getLogicalKeysItem(logicalKey);
   if (item) {
     const [, , hidKeyPrimary, hidKeySecondary] = item;
@@ -249,9 +249,10 @@ export function keyCodeTableImpl_getLogicalKeyHidKeyCode(
     }
     return hidKeyPrimary;
   }
+  return 0;
 }
 
-export function keyCodeTableImpl_getLogicalKeyText(
+export function keyCodeTableImpl_mapLogicalKeyToKeyText(
   logicalKey: number,
 ): string | undefined {
   const item = getLogicalKeysItem(logicalKey);
