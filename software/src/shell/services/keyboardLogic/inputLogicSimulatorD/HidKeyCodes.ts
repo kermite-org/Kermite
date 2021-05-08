@@ -192,7 +192,7 @@ const enum HidKeyJP {
 const OUT_SHIFT = 0x100;
 const OUT_NOSHIFT = 0x200;
 
-export const HidKeyCodes = {
+const HidKeyCodes = {
   K_Shift: HidKey.KU_Shift,
   K_Ctrl: HidKey.KU_Ctrl,
   K_Alt: HidKey.KU_Alt,
