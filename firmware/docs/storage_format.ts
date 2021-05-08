@@ -39,29 +39,31 @@ BB BB ...: チャンクのボディデータ, LL LL で規定されるサイズ�
       glowBrightness: U8;
     };
     customParameters: Chunk<0xaa40, "KM0_KEYBOARD__NUM_CUSTOM_PARAMETERS"> & {};
-    keyAssignsData: Chunk<0xaa70> & {
-      //データが書き込まれていない場合はサイズ0でヘッダのみ保持
-      //実際に書き込まれているデータのサイズをチャンクサイズとする
-      keyAssignsDataHeader: Chunk<0xbb71> & {
-        magicNumber: 0xfe03;
-        reservedWord: 0x0000;
-        logicModelType: 1;
-        assignDataStartOffset: 12;
+    profileData: Chunk<0xaa70> & {
+      //データが書き込まれていない場合はサイズ0でチャンクヘッダのみ保持
+      //データを書き込んだ場合は実際に書き込まれているデータのサイズをチャンクサイズとする
+      profileHeader: Chunk<0xbb71> & {
+        // magicNumber: 0xfe03;
+        // reservedWord: 0x0000;
+        logicModelType: 0x01;
+        configStorageFormatRevision: U8;
+        profileBinaryFormatRevision: U8;
+        // assignDataStartOffset: 12;
         numKeys: U8;
         numLayers: U8;
-        configBodyLength: U16;
+        // configBodyLength: U16;
       };
-      layerListBlock: Chunk<0xbb74> & {
+      layerList: Chunk<0xbb74> & {
         layerItems: {
           attrs: Bytes<2>;
           // layerNameStringPos: U8; //shortStrigsBlock内でのインデクス, レイヤ名は最大8文字
         }[]; //numLayers個の配列
       };
-      shortStringsBlock: Chunk<0xbb75> & {
-        //\0終端の文字列を続けて多数格納
-      };
-      selectiveAssignsBlock: Chunk<0xbb76> & {};
-      keyAssignsCoreDataBlock: Chunk<0xbb78> & {};
+      // shortStringsBlock: Chunk<0xbb75> & {
+      //   //\0終端の文字列を続けて多数格納
+      // };
+      // selectiveAssignsBlock: Chunk<0xbb76> & {};
+      keyAssigns: Chunk<0xbb78> & {};
     };
   };
 }

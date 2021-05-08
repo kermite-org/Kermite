@@ -105,7 +105,7 @@ static void setupSerialNumberText() {
 }
 
 static void resetKeyboardCoreLogic() {
-  bool configMemoryValid = configValidator_checkKeyAssignsDataHeader();
+  bool configMemoryValid = configValidator_checkBinaryProfileDataHeader();
   if (configMemoryValid) {
     keyboardCoreLogic_initialize();
   } else {
