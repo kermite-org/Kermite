@@ -30,8 +30,8 @@ bool keyAssignsDataValidator_checkBinaryProfileDataHeader() {
     // printf("%d %d %d %d %d\n", logicModelType, configStorageFormatRevision, profileBinaryFormatRevision, numKeys, numLayers);
     storageHeaderValid =
         logicModelType == 0x01 &&
-        configStorageFormatRevision == KERMITE_CONFIG_STORAGE_FORMAT_REVISION &&
-        profileBinaryFormatRevision == KermiteProfileBinaryFormatRevision &&
+        configStorageFormatRevision == Kermite_ConfigStorageFormatRevision &&
+        profileBinaryFormatRevision == Kermite_ProfileBinaryFormatRevision &&
         numKeys <= 254 &&
         numLayers <= 16;
   }
