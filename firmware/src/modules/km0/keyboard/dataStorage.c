@@ -79,22 +79,19 @@ enum {
   SubChunkSig_ProfileKeyAssigns = 0xBB78,
 };
 
-typedef struct {
-  uint16_t address;
-  uint16_t size;
-} ChunkSpan;
-
-static ChunkSpan seekChunk(uint16_t chunkSig, uint16_t posStart, uint16_t posEnd) {
-  ChunkSpan result = { 0, 0 };
+//チャンク識別子を元にチャンクを探して、チャンクボディのアドレスとデータサイズを得る
+static void seekChunk(uint16_t chunkSig, uint16_t posStart, uint16_t posEnd, uint16_t *out_addr, uint16_t *out_size) {
   uint16_t pos = posStart;
+  // printf("--seek chunk %x\n", chunkSig);
   while (pos < posEnd) {
     uint16_t head = dataMemory_readWord(pos);
     uint16_t size = dataMemory_readWord(pos + 2);
     if (head == chunkSig) {
       pos += 4;
-      result.address = pos;
-      result.size = size;
-      return result;
+      *out_addr = pos;
+      *out_size = size;
+      // printf("chunk %x found, pos:%d size:%d\n", chunkSig, pos, size);
+      return;
     } else {
       if (size == 0) {
         break;
@@ -102,42 +99,47 @@ static ChunkSpan seekChunk(uint16_t chunkSig, uint16_t posStart, uint16_t posEnd
       pos += 4 + size;
     }
   }
-  return result;
+  *out_addr = 0;
+  *out_size = 0;
 }
 
-//チャンク識別子を元にチャンクを探して、チャンクボディのアドレスとデータサイズを得る
-static ChunkSpan getChunkSpan(uint16_t chunkSig) {
-  return seekChunk(chunkSig, 2, dataMemory_getCapacity());
+static void getChunkRegion(uint16_t chunkSig, uint16_t *out_addr, uint16_t *out_size) {
+  seekChunk(chunkSig, 2, dataMemory_getCapacity(), out_addr, out_size);
 }
 
-static ChunkSpan getSubChunkSpan(uint16_t chunkSig, uint16_t subChunkSig) {
-  ChunkSpan span = getChunkSpan(chunkSig);
-  if (span.address > 0) {
-    return seekChunk(subChunkSig, span.address, span.address + span.size);
+static void getSubChunkRegion(uint16_t chunkSig, uint16_t subChunkSig, uint16_t *out_addr, uint16_t *out_size) {
+  uint16_t parent_addr, parent_size;
+  getChunkRegion(chunkSig, &parent_addr, &parent_size);
+  if (parent_addr > 0) {
+    seekChunk(subChunkSig, parent_addr, parent_addr + parent_size, out_addr, out_size);
+  } else {
+    *out_addr = 0;
+    *out_size = 0;
   }
-  span.address = 0;
-  span.size = 0;
-  return span;
 }
 
 static uint16_t getChunkBodyAddress(uint16_t chunkSig) {
-  ChunkSpan span = getChunkSpan(chunkSig);
-  return span.address;
+  uint16_t addr, size;
+  getChunkRegion(chunkSig, &addr, &size);
+  return addr;
 }
 
 static uint16_t getChunkBodySize(uint16_t chunkSig) {
-  ChunkSpan span = getChunkSpan(chunkSig);
-  return span.size;
+  uint16_t addr, size;
+  getChunkRegion(chunkSig, &addr, &size);
+  return size;
 }
 
 static uint16_t getSubChunkBodyAddress(uint16_t chunkSig, uint16_t subChunkSig) {
-  ChunkSpan span = getSubChunkSpan(chunkSig, subChunkSig);
-  return span.address;
+  uint16_t addr, size;
+  getSubChunkRegion(chunkSig, subChunkSig, &addr, &size);
+  return addr;
 }
 
 static uint16_t getSubChunkBodySize(uint16_t chunkSig, uint16_t subChunkSig) {
-  ChunkSpan span = getSubChunkSpan(chunkSig, subChunkSig);
-  return span.size;
+  uint16_t addr, size;
+  getSubChunkRegion(chunkSig, subChunkSig, &addr, &size);
+  return size;
 }
 
 static uint16_t putBlankChunk(uint16_t addr, uint16_t chunkSig, uint16_t bodySize) {
