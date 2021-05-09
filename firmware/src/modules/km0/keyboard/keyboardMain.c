@@ -9,7 +9,7 @@
 #include "km0/deviceIo/boardIo.h"
 #include "km0/deviceIo/debugUart.h"
 #include "km0/deviceIo/usbIoCore.h"
-#include "versions.h"
+#include "versionDefinitions.h"
 #include <stdio.h>
 
 //----------------------------------------------------------------------

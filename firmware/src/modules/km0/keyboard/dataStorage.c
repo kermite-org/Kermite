@@ -4,7 +4,7 @@
 #include "km0/deviceIo/dataMemory.h"
 #include "km0/deviceIo/system.h"
 #include "km0/types.h"
-#include "versions.h"
+#include "versionDefinitions.h"
 #include <stdio.h>
 
 #ifndef PROJECT_ID

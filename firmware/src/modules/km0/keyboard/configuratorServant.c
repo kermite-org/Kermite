@@ -4,7 +4,7 @@
 #include "km0/common/utils.h"
 #include "km0/deviceIo/dataMemory.h"
 #include "km0/deviceIo/usbIoCore.h"
-#include "versions.h"
+#include "versionDefinitions.h"
 #include <stdio.h>
 #include <string.h>
 

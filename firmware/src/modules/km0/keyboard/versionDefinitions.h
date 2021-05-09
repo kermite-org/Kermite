@@ -1,4 +1,4 @@
-#ifndef __VERSIONS_H__
+#ifndef __VERSION_DEFINITIONS_H__
 
 #define Kermite_ConfigStorageFormatRevision 6
 #define Kermite_RawHidMessageProtocolRevision 1
