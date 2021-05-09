@@ -8,7 +8,7 @@ import {
 import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
 import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
-import { AssignStorageBaseAddr } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/MemoryDefs';
+import { dataStorage } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/DataStorage';
 import { ProfileManager } from '~/shell/services/profile/ProfileManager';
 import { getKeyboardCoreLogicInterface } from './KeyboardCoreLogicImplementation';
 import { makeProfileBinaryData } from './ProfileDataBinaryPacker';
@@ -29,33 +29,10 @@ function createTimeIntervalCounter() {
     return elapsedMs;
   };
 }
-
-class ConfigDataStorage {
-  readonly StorageBufCapacity = 1024;
-  readonly DataLocation = AssignStorageBaseAddr;
-  storageBuf: number[] = Array(this.StorageBufCapacity).fill(0);
-
-  writeConfigStorageData(bytes: number[]) {
-    const len = bytes.length;
-    if (len < this.StorageBufCapacity - this.DataLocation) {
-      this.storageBuf.fill(0);
-      for (let i = 0; i < len; i++) {
-        this.storageBuf[this.DataLocation + i] = bytes[i];
-      }
-    }
-  }
-
-  readByte(addr: number) {
-    return this.storageBuf[addr];
-  }
-}
-
 export class InputLogicSimulatorD {
   private CL = getKeyboardCoreLogicInterface();
   private tickerTimer = new IntervalTimerWrapper();
   private isSideBranMode: boolean = false;
-  private configDataStorage = new ConfigDataStorage();
-
   private layerActiveFlags: number = 0;
   private hidReportBytes: number[] = new Array(8).fill(0);
 
@@ -128,11 +105,8 @@ export class InputLogicSimulatorD {
       (await this.profileManager.getCurrentProfileAsync()) ||
       fallbackProfileData;
     const bytes = makeProfileBinaryData(prof);
-    this.configDataStorage.writeConfigStorageData(bytes);
+    dataStorage.writeBinaryProfileData(bytes);
     this.CL.keyboardCoreLogic_initialize();
-    this.CL.keyboardCoreLogic_setAssignStorageReaderFunc((addr) =>
-      this.configDataStorage.readByte(addr),
-    );
   };
 
   private onProfileStatusChanged = (

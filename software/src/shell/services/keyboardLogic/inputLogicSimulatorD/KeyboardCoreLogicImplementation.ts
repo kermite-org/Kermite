@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
+import { dataStorage } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/DataStorage';
 import { keyCodeTableImpl_mapLogicalKeyToHidKeyCode } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/KeyCodeTableImpl';
 import {
   AssignStorageBaseAddr,
@@ -40,19 +41,13 @@ function getFieldNameByValue(obj: any, value: string) {
 // --------------------------------------------------------------------------------
 // assign memory storage
 
-let procConfigStorageReadByte = (addr: u16) => 0;
-
-function setConfigStorageReaderProc(proc: (addr: u16) => u8) {
-  procConfigStorageReadByte = proc;
-}
-
 function readStorageByte(addr: u16): u8 {
-  return procConfigStorageReadByte(addr);
+  return dataStorage.readByte(addr);
 }
 
 function readStorageWordBE(addr: u16): u16 {
-  const a = readStorageByte(addr);
-  const b = readStorageByte(addr + 1);
+  const a = dataStorage.readByte(addr);
+  const b = dataStorage.readByte(addr + 1);
   return (a << 8) | b;
 }
 
@@ -175,9 +170,6 @@ function getOutputModifiers() {
 // assign memory reader
 
 const NumLayersMax = 16;
-const AssignStorageHeaderLocation = AssignStorageBaseAddr;
-const AssignStorageBodyLocation =
-  AssignStorageBaseAddr + AssignStorageHeaderLength;
 const assignMemoryReaderState = new (class {
   numLayers: u8 = 0;
   assignsStartAddress: u16 = 0;
@@ -186,16 +178,19 @@ const assignMemoryReaderState = new (class {
 })();
 
 function initAssignMemoryReader() {
-  const state = assignMemoryReaderState;
-  const numLayers = readStorageByte(AssignStorageHeaderLocation + 8);
-  const bodyLength = readStorageWordBE(AssignStorageHeaderLocation + 9);
-  state.numLayers = numLayers;
-  state.assignsStartAddress = AssignStorageBodyLocation + numLayers * 2;
-  state.assignsEndAddress = AssignStorageBodyLocation + bodyLength;
-  for (let i = 0; i < NumLayersMax; i++) {
-    state.layerAttributeWords[i] =
-      (i < numLayers && readStorageWordBE(AssignStorageBodyLocation + i * 2)) ||
-      0;
+  const profileHeaderLocation = dataStorage.getChunk_profileHeader().address;
+  const layerListDataLocation = dataStorage.getChunk_layerList().address;
+  const keyAssignsDataLocation = dataStorage.getChunk_keyAssigns().address;
+  const keyAssignsDataSize = dataStorage.getChunk_keyAssigns().size;
+  const rs = assignMemoryReaderState;
+  const numLayers = readStorageByte(profileHeaderLocation + 4);
+  rs.numLayers = numLayers;
+  rs.assignsStartAddress = keyAssignsDataLocation;
+  rs.assignsEndAddress = keyAssignsDataLocation + keyAssignsDataSize;
+  // console.log('nl:%d bl:%d\n', numLayers, keyAssignsDataSize);
+  for (let i = 0; i < 16; i++) {
+    rs.layerAttributeWords[i] =
+      i < numLayers ? readStorageWordBE(layerListDataLocation + i * 2) : 0;
   }
 }
 
@@ -1191,7 +1186,6 @@ function keyboardCoreLogic_halt() {
 
 export function getKeyboardCoreLogicInterface(): KeyboardCoreLogicInterface {
   return {
-    keyboardCoreLogic_setAssignStorageReaderFunc: setConfigStorageReaderProc,
     keyboardCoreLogic_initialize,
     keyboardCoreLogic_getOutputHidReportBytes,
     keyboardCoreLogic_getLayerActiveFlags,
