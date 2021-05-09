@@ -19,7 +19,6 @@ import {
   writeUint8,
 } from '~/shell/services/device/keyboardDevice/Helpers';
 import { getLogicalKeyForVirtualKey } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/LogicalKey';
-// import { getHidKeyCodeEx } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/HidKeyCodes';
 
 /*
 Key Assigns Restriction
@@ -43,7 +42,6 @@ interface IRawLayerInfo {
 }
 
 const localContext = new (class {
-  // layoutStandard: IKeyboardLayoutStandard = 'US';
   layersDict: { [layerId: string]: IRawLayerInfo } = {};
   useShiftCancel: boolean = false;
 })();
@@ -136,12 +134,8 @@ function encodeAssignOperation(
       const { useShiftCancel } = localContext;
       const mods = makeAttachedModifiersBits(op.attachedModifiers);
       const logicalKey = getLogicalKeyForVirtualKey(vk);
+      // ShiftCancelオプションが有効でshiftレイヤの場合のみ、shiftCancelを適用可能にする
       const fIsShiftCancellable = useShiftCancel && layer.isShiftLayer ? 1 : 0;
-      // if (!(useShiftCancel && layer.isShiftLayer)) {
-      //   // ShiftCancelオプションが有効で、shiftレイヤの場合のみ、shift cancel bitを維持
-      //   // そうでない場合はshift cancel bitを削除
-      //   hidKey = hidKey & 0x1ff;
-      // }
       return [
         (fAssignType << 6) | (fIsShiftCancellable << 4) | mods,
         logicalKey,
@@ -468,23 +462,8 @@ function setupLocalContext(profile: IProfileData) {
   localContext.useShiftCancel = profile.settings.useShiftCancel;
 }
 
-// デバイスのEEPROMに書き込むキーアサインバイナリデータを生成する
-// [0:numLayers*2-1]: layer attributes
-// [numLayers*2:~] key assings data
-// export function converProfileDataToBlobBytes(
-//   profile: IProfileData,
-//   // layoutStandard: IKeyboardLayoutStandard,
-// ): number[] {}
-
-export function makeProfileBinaryData(
-  profile: IProfileData,
-  // layout: IKeyboardLayoutStandard,
-): number[] {
+export function makeProfileBinaryData(profile: IProfileData): number[] {
   setupLocalContext(profile);
-  // const profile = duplicateObjectByJsonStringifyParse(profile0);
-  // fixProfileData(profile, layoutStandard);
-  // localContext.layoutStandard = layoutStandard;
-
   const numKeys = profile.keyboardDesign.keyEntities.length;
   const numLayers = profile.layers.length;
 
@@ -498,19 +477,4 @@ export function makeProfileBinaryData(
   const keyAssignsChunk = createChunk(0xbb78, keyAssignsData);
 
   return [...profileHeaderChunk, ...layerListChunk, ...keyAssignsChunk];
-
-  // const buf = [...layerAttributeBytes, ...keyAssignsBufferBytes];
-  // console.log(`len: ${buf.length}`);
-  // console.log(hexBytes(buf));
-  // return buf;
-
-  // const layerListData = encodla
-
-  // const assignsDataBytes = converProfileDataToBlobBytes(profileData);
-  // const headerBytes = encodeHeaderBytes(
-  //   numKeys,
-  //   numLayers,
-  //   assignsDataBytes.length,
-  // );
-  // return [...headerBytes, ...assignsDataBytes];
 }
