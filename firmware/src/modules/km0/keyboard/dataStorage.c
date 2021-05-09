@@ -183,6 +183,7 @@ static bool validateStorageDataFormat() {
   if (!projectIdValid) {
     return false;
   }
+  return true;
 }
 
 static void resetDataStorage() {
