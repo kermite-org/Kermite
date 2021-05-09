@@ -118,6 +118,7 @@ static void emitDeviceAttributesResponse() {
   size_t slen = utils_clamp(strlen(KERMITE_VARIATION_NAME), 0, 16);
   utils_copyBytes(p + 26, (uint8_t *)KERMITE_VARIATION_NAME, slen);
   utils_copyBytes(p + 42, (uint8_t *)KERMITE_MCU_CODE, 8);
+  p[50] = KermiteProfileBinaryFormatRevision;
   emitGenericHidData(rawHidSendBuf);
 }
 
