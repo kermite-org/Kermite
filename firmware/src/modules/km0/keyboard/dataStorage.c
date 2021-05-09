@@ -7,8 +7,8 @@
 #include "versionDefinitions.h"
 #include <stdio.h>
 
-#ifndef PROJECT_ID
-#error PROJECT_ID is not defined in config.h
+#ifndef KERMITE_PROJECT_ID
+#error KERMITE_PROJECT_ID is not defined in config.h
 #endif
 
 #ifndef KM0_STORAGE__USER_STORAGE_SIZE
@@ -179,7 +179,7 @@ static bool validateStorageDataFormat() {
   static uint8_t tempDataBuf[10];
   uint16_t posSystemDataBody = getChunkBodyAddress(ChunkSig_SystemData);
   dataMemory_readBytes(posSystemDataBody, tempDataBuf, 8);
-  bool projectIdValid = utils_compareBytes(tempDataBuf, (uint8_t *)PROJECT_ID, 8);
+  bool projectIdValid = utils_compareBytes(tempDataBuf, (uint8_t *)KERMITE_PROJECT_ID, 8);
   if (!projectIdValid) {
     return false;
   }
@@ -205,7 +205,7 @@ static void resetDataStorage() {
   //fill initial data
   uint16_t posSystemDataBody = getChunkBodyAddress(ChunkSig_SystemData);
   if (posSystemDataBody) {
-    dataMemory_writeBytes(posSystemDataBody, (uint8_t *)PROJECT_ID, 8);
+    dataMemory_writeBytes(posSystemDataBody, (uint8_t *)KERMITE_PROJECT_ID, 8);
   }
   uint16_t posSystemParameters = getChunkBodyAddress(ChunkSig_SystemParameters);
   if (posSystemParameters) {
