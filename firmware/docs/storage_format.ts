@@ -22,7 +22,6 @@ BB BB ...: チャンクのボディデータ, LL LL で規定されるサイズ�
       projectId: Bytes<8>;
       deviceInstanceCode: Bytes<8>;
       parametersDataInitializationFlag: U8;
-      // firmwareHardcodedStorageFormatRevision: U8;
       softwareStorageFomartRevision: U8;
     };
     systemParameters: Chunk<0xaa30, 11> & {
@@ -43,15 +42,11 @@ BB BB ...: チャンクのボディデータ, LL LL で規定されるサイズ�
       //データが書き込まれていない場合はサイズ0でチャンクヘッダのみ保持
       //データを書き込んだ場合は実際に書き込まれているデータのサイズをチャンクサイズとする
       profileHeader: Chunk<0xbb71> & {
-        // magicNumber: 0xfe03;
-        // reservedWord: 0x0000;
         logicModelType: 0x01;
         configStorageFormatRevision: U8;
         profileBinaryFormatRevision: U8;
-        // assignDataStartOffset: 12;
         numKeys: U8;
         numLayers: U8;
-        // configBodyLength: U16;
       };
       layerList: Chunk<0xbb74> & {
         layerItems: {

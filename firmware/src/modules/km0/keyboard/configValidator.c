@@ -22,29 +22,18 @@ bool configValidator_checkBinaryProfileDataHeader() {
   if (addrKeyAssignsDataHeader && keyAssignsDataBodyLengthMax) {
     dataMemory_readBytes(addrKeyAssignsDataHeader, eepromTempBuf, KeyAssignsDataHeaderLength);
     uint8_t *p = eepromTempBuf;
-    // uint16_t magicNumber = decode_word_be(p + 0);
-    // uint16_t reserved0xFFFF = decode_word_be(p + 2);
     uint8_t logicModelType = decode_byte(p + 0);
     uint8_t configStorageFormatRevision = decode_byte(p + 1);
     uint8_t profileBinaryFormatRevision = decode_byte(p + 2);
-    // uint8_t configBodyOffset = decode_byte(p + 6);
     uint8_t numKeys = decode_byte(p + 3);
     uint8_t numLayers = decode_byte(p + 4);
-    // uint16_t configBodyLength = decode_word_be(p + 9);
-
-    // printf("versions: %d %d %d\n", KERMITE_PROJECT_RELEASE_BUILD_REVISION, KERMITE_RAWHID_MESSAGE_PROTOCOL_REVISION, KERMITE_CONFIG_STORAGE_FORMAT_REVISION);
-    // printf("%x %x %x %d %d\n", magicNumber, reserved0xFFFF, logicModelType, numKeys, numLayers);
-
+    // printf("%d %d %d %d %d\n", logicModelType, configStorageFormatRevision, profileBinaryFormatRevision, numKeys, numLayers);
     storageHeaderValid =
-        // magicNumber == 0xFE03 &&
-        // reserved0xFFFF == 0xFFFF &&
         logicModelType == 0x01 &&
         configStorageFormatRevision == KERMITE_CONFIG_STORAGE_FORMAT_REVISION &&
         profileBinaryFormatRevision == KermiteProfileBinaryFormatRevision &&
-        // configBodyOffset == KeyAssignsDataHeaderLength &&
         numKeys <= 254 &&
         numLayers <= 16;
-    // configBodyLength < keyAssignsDataBodyLengthMax;
   }
 
   if (!storageHeaderValid) {
