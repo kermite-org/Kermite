@@ -3,8 +3,8 @@
 
 #include "km0/types.h"
 
-void ontionManager_setParameterChangedCallback(
-    void (*callback)(uint8_t parameterIndex, uint8_t value));
+void ontionManager_addParameterChangeListener(
+    void (*listener)(uint8_t parameterIndex, uint8_t value));
 void optionManager_initialize();
 void optionManager_setSystemParameter(uint8_t parameterIndex, uint8_t value);
 void optionManager_handleSystemAction(uint8_t systemActionCode, uint8_t payloadValue);

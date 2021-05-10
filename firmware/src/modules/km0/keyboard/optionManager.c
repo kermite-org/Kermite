@@ -5,12 +5,13 @@
 #include "systemCommand.h"
 #include <stdio.h>
 
-typedef void (*ParameterChangedCallback)(uint8_t parameterIndex, uint8_t value);
+typedef void (*ParameterChangedListener)(uint8_t parameterIndex, uint8_t value);
 
 static uint8_t systemParameterValues[NumSystemParameters];
 static uint16_t addrSystemParameters = 0;
 static int lazySaveTick = -1;
-ParameterChangedCallback parameterChangedCallback = 0;
+static ParameterChangedListener parameterChangedListeners[4] = { 0 };
+static int numParameterChangedListeners = 0;
 
 static const uint8_t systemParameterMaxValues[NumSystemParameters] = {
   1,
@@ -28,15 +29,17 @@ static const uint8_t systemParameterMaxValues[NumSystemParameters] = {
   10,  //glow speed
 };
 
-static void
-notifyParameterChanged(uint8_t parameterIndex, uint8_t value) {
-  if (parameterChangedCallback) {
-    parameterChangedCallback(parameterIndex, value);
+static void notifyParameterChanged(uint8_t parameterIndex, uint8_t value) {
+  for (int i = 0; i < numParameterChangedListeners; i++) {
+    ParameterChangedListener listener = parameterChangedListeners[i];
+    if (listener) {
+      listener(parameterIndex, value);
+    }
   }
 }
 
-void ontionManager_setParameterChangedCallback(ParameterChangedCallback callback) {
-  parameterChangedCallback = callback;
+void ontionManager_addParameterChangeListener(ParameterChangedListener listener) {
+  parameterChangedListeners[numParameterChangedListeners++] = listener;
 }
 
 void optionManager_initialize() {
