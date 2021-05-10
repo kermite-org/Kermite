@@ -60,6 +60,14 @@ void optionManager_setSystemParameter(uint8_t parameterIndex, uint8_t value) {
   lazySaveTick = 5000; //いずれかのパラメタが変更されてから5秒後にデータをストレージに書き込む
 }
 
+void optionManager_bulkWriteParameters(uint8_t *buf, uint8_t len, uint8_t parameterIndexBase) {
+  for (int i = 0; i < len; i++) {
+    uint8_t parameterIndex = parameterIndexBase + i;
+    uint8_t value = buf[i];
+    optionManager_setSystemParameter(parameterIndex, value);
+  }
+}
+
 static void shiftParameterValue(uint8_t parameterIndex, uint8_t payloadValue) {
   int dir = (payloadValue & 0x0F == 1) ? 1 : -1;
   bool clamp = payloadValue >> 4 & 0x0F > 0;

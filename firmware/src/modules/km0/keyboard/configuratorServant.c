@@ -4,6 +4,7 @@
 #include "km0/common/utils.h"
 #include "km0/deviceIo/dataMemory.h"
 #include "km0/deviceIo/usbIoCore.h"
+#include "optionManager.h"
 #include "versionDefinitions.h"
 #include <stdio.h>
 #include <string.h>
@@ -13,7 +14,7 @@
 
 static void (*stateNotificationCallback)(uint8_t state) = 0;
 
-static void (*customParameterChangedCallback)(uint8_t slotIndex, uint8_t value) = 0;
+// static void (*customParameterChangedCallback)(uint8_t slotIndex, uint8_t value) = 0;
 
 static void emitStateNotification(uint8_t state) {
   if (stateNotificationCallback) {
@@ -21,11 +22,11 @@ static void emitStateNotification(uint8_t state) {
   }
 }
 
-static void invokeCustomParameterChangedCallback(uint8_t index, uint8_t value) {
-  if (customParameterChangedCallback) {
-    customParameterChangedCallback(index, value);
-  }
-}
+// static void invokeCustomParameterChangedCallback(uint8_t index, uint8_t value) {
+//   if (customParameterChangedCallback) {
+//     customParameterChangedCallback(index, value);
+//   }
+// }
 
 //---------------------------------------------
 //storage data addresses
@@ -186,20 +187,24 @@ static void processReadGenericHidData() {
         }
         if (cmd == 0x90) {
           // printf("handle custom parameters bluk write\n");
-          uint8_t *src = p + 3;
-          dataMemory_writeBytes(storageAddr_CustomSettingsBytes, src, 10);
-          dataMemory_writeByte(storageAddr_CustomSettingsBytesInitializationFlag, 1);
-          for (uint8_t i = 0; i < 10; i++) {
-            uint8_t value = src[i];
-            invokeCustomParameterChangedCallback(i, value);
-          }
+          uint8_t parameterIndexBase = p[3];
+          uint8_t count = p[4];
+          uint8_t *ptr = p + 5;
+          optionManager_bulkWriteParameters(ptr, count, parameterIndexBase);
+          // dataMemory_writeBytes(storageAddr_CustomSettingsBytes, ptr, num);
+          // dataMemory_writeByte(storageAddr_CustomSettingsBytesInitializationFlag, 1);
+          // for (uint8_t bi = 0; bi < num; bi++) {
+          //   // uint8_t value = src[i];
+          //   // invokeCustomParameterChangedCallback(i, value);
+          // }
         }
         if (cmd == 0xa0) {
           // printf("handle custom parameters signle write\n");
-          uint8_t index = p[3];
+          uint8_t parameterIndex = p[3];
           uint8_t value = p[4];
-          dataMemory_writeByte(storageAddr_CustomSettingsBytes + index, value);
-          invokeCustomParameterChangedCallback(index, value);
+          // dataMemory_writeByte(storageAddr_CustomSettingsBytes + index, value);
+          // invokeCustomParameterChangedCallback(index, value);
+          optionManager_setSystemParameter(parameterIndex, value);
         }
       }
 
@@ -240,26 +245,32 @@ static void processReadGenericHidData() {
 //---------------------------------------------
 //custom parameter initial loading
 
-static void loadCustomParameters() {
-  bool isInitialized = dataMemory_readByte(storageAddr_CustomSettingsBytesInitializationFlag);
-  if (isInitialized) {
-    for (uint8_t i = 0; i < 10; i++) {
-      uint8_t value = dataMemory_readByte(storageAddr_CustomSettingsBytes + i);
-      invokeCustomParameterChangedCallback(i, value);
-    }
-  }
+// static void loadCustomParameters() {
+//   bool isInitialized = dataMemory_readByte(storageAddr_CustomSettingsBytesInitializationFlag);
+//   if (isInitialized) {
+//     for (uint8_t i = 0; i < 10; i++) {
+//       uint8_t value = dataMemory_readByte(storageAddr_CustomSettingsBytes + i);
+//       invokeCustomParameterChangedCallback(i, value);
+//     }
+//   }
+// }
+
+//parameter changed handler
+
+static void onParameterChanged(uint8_t parameterIndex, uint8_t value) {
+  //todo: PC側にパラメタの変更を通知する
 }
 
 //---------------------------------------------
 //exports
 
-void configuratorServant_initialize(
-    void (*_stateNotificationCallback)(uint8_t state),
-    void (*_customParameterChangedCallback)(uint8_t index, uint8_t value)) {
+void configuratorServant_initialize(void (*_stateNotificationCallback)(uint8_t state)) {
+  // void (*_customParameterChangedCallback)(uint8_t index, uint8_t value)) {
   stateNotificationCallback = _stateNotificationCallback;
-  customParameterChangedCallback = _customParameterChangedCallback;
+  ontionManager_addParameterChangeListener(onParameterChanged);
+  // customParameterChangedCallback = _customParameterChangedCallback;
   initializeDataAddresses();
-  loadCustomParameters();
+  // loadCustomParameters();
 }
 
 void configuratorServant_processUpdate() {

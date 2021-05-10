@@ -9,19 +9,13 @@
 #include "km0/deviceIo/boardIo.h"
 #include "km0/deviceIo/debugUart.h"
 #include "km0/deviceIo/usbIoCore.h"
+#include "optionManager.h"
+#include "systemCommand.h"
 #include "versionDefinitions.h"
 #include <stdio.h>
 
 //----------------------------------------------------------------------
 //definitions
-
-enum {
-  OptionSlot_EmitKeyStroke = 0,
-  OptionSlot_EmitRealtimeEvents = 1,
-  OptionSlot_AffectKeyHoldStateToLed = 2,
-  OptionSlot_UseHeartBeatLed = 3,
-  OptionSlot_MasterSide = 4
-};
 
 #ifndef KM0_KEYBOARD__NUM_SCAN_SLOTS
 #error KM0_KEYBOARD__NUM_SCAN_SLOTS is not defined
@@ -144,21 +138,21 @@ static bool checkIfSomeKeyPressed() {
 //callbacks
 
 //カスタムパラメタロード/変更時に呼ばれるハンドラ
-static void customParameterValueHandler(uint8_t slotIndex, uint8_t value) {
+static void parameterValueHandler(uint8_t slotIndex, uint8_t value) {
   if (callbacks && callbacks->customParameterHandlerOverride) {
     callbacks->customParameterHandlerOverride(slotIndex, value);
     return;
   }
 
-  if (slotIndex == OptionSlot_EmitKeyStroke) {
+  if (slotIndex == SystemParameter_EmitKeyStroke) {
     optionEmitKeyStroke = !!value;
-  } else if (slotIndex == OptionSlot_EmitRealtimeEvents) {
+  } else if (slotIndex == SystemParameter_EmitRealtimeEvents) {
     optionEmitRealtimeEvents = !!value;
-  } else if (slotIndex == OptionSlot_AffectKeyHoldStateToLed) {
+  } else if (slotIndex == SystemParameter_KeyHoldIndicatorLed) {
     optionAffectKeyHoldStateToLed = !!value;
-  } else if (slotIndex == OptionSlot_UseHeartBeatLed) {
+  } else if (slotIndex == SystemParameter_HeartbeatLed) {
     optionUseHeartbeatLed = !!value;
-  } else if (slotIndex == OptionSlot_MasterSide) {
+  } else if (slotIndex == SystemParameter_MasterSide) {
     //value: (0:unset, 1:left, 2:right)
     optionInvertSide = value == 2;
   }
@@ -307,11 +301,12 @@ void keyboardMain_initialize() {
     debugUart_disable();
   }
   dataStorage_initialize();
+  ontionManager_addParameterChangeListener(parameterValueHandler);
+  optionManager_initialize();
   setupSerialNumberText();
   usbIoCore_initialize();
   resetKeyboardCoreLogic();
-  configuratorServant_initialize(
-      configuratorServantStateHandler, customParameterValueHandler);
+  configuratorServant_initialize(configuratorServantStateHandler);
 }
 
 void keyboardMain_udpateKeyScanners() {
