@@ -40,6 +40,9 @@ typedef struct {
   uint8_t glowActive;
   uint8_t glowColor;
   uint8_t glowBrightness;
+  uint8_t glowPattern;
+  uint8_t glowDirection;
+  uint8_t glowSpeed;
 } T_SystemParametersSet;
 
 const uint16_t SystemDataSize = sizeof(T_SystemData);
@@ -56,7 +59,10 @@ static const T_SystemParametersSet systemParametersDefault = {
   .alterAssignsActive = false,
   .glowActive = false,
   .glowColor = 0,
-  .glowBrightness = 20
+  .glowBrightness = 20,
+  .glowPattern = 0,
+  .glowDirection = 1,
+  .glowSpeed = 4,
 };
 
 const uint16_t StorageHeadMagicNumber = 0xa37e;
