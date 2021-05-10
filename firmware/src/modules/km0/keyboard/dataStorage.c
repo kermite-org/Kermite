@@ -4,6 +4,7 @@
 #include "km0/deviceIo/dataMemory.h"
 #include "km0/deviceIo/system.h"
 #include "km0/types.h"
+#include "systemCommand.h"
 #include "versionDefinitions.h"
 #include <stdio.h>
 
@@ -20,7 +21,6 @@ const uint16_t UserStorageDataSize = KM0_STORAGE__USER_STORAGE_SIZE;
 #define KM0_KEYBOARD__NUM_CUSTOM_PARAMETERS 0
 #endif
 const uint16_t CustomParametersDataSize = KM0_KEYBOARD__NUM_CUSTOM_PARAMETERS;
-
 typedef struct {
   uint8_t projectId[8];
   uint8_t deviceInstanceCode[8];
@@ -28,43 +28,8 @@ typedef struct {
   uint8_t softwareStorageFomartRevision;
 } T_SystemData;
 
-typedef struct {
-  uint8_t emitKeyStroke;
-  uint8_t emitRealtimeEvents;
-  uint8_t keyHoldLedOutput;
-  uint8_t heartbeatLedOutput;
-  uint8_t masterSide;
-  uint8_t secondSystemLayoutActive;
-  uint8_t simulatorModeActive;
-  uint8_t alterAssignsActive;
-  uint8_t glowActive;
-  uint8_t glowColor;
-  uint8_t glowBrightness;
-  uint8_t glowPattern;
-  uint8_t glowDirection;
-  uint8_t glowSpeed;
-} T_SystemParametersSet;
-
 const uint16_t SystemDataSize = sizeof(T_SystemData);
 const uint16_t SystemParametersDataSize = sizeof(T_SystemParametersSet);
-
-static const T_SystemParametersSet systemParametersDefault = {
-  .emitKeyStroke = true,
-  .emitRealtimeEvents = true,
-  .keyHoldLedOutput = true,
-  .heartbeatLedOutput = true,
-  .masterSide = 0,
-  .secondSystemLayoutActive = false,
-  .simulatorModeActive = false,
-  .alterAssignsActive = false,
-  .glowActive = false,
-  .glowColor = 0,
-  .glowBrightness = 20,
-  .glowPattern = 0,
-  .glowDirection = 1,
-  .glowSpeed = 4,
-};
-
 const uint16_t StorageHeadMagicNumber = 0xa37e;
 
 //----------------------------------------------------------------------
@@ -212,10 +177,6 @@ static void resetDataStorage() {
   uint16_t posSystemDataBody = getChunkBodyAddress(ChunkSig_SystemData);
   if (posSystemDataBody) {
     dataMemory_writeBytes(posSystemDataBody, (uint8_t *)KERMITE_PROJECT_ID, 8);
-  }
-  uint16_t posSystemParameters = getChunkBodyAddress(ChunkSig_SystemParameters);
-  if (posSystemParameters) {
-    dataMemory_writeBytes(posSystemParameters, (uint8_t *)&systemParametersDefault, SystemParametersDataSize);
   }
 }
 

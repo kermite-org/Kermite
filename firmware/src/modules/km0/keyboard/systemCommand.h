@@ -21,6 +21,22 @@ enum {
   SystemParameter_GlowDirection,  //0-1
   SystemParameter_GlowSpeed,      //0-10(仮)
 };
+typedef struct {
+  uint8_t emitKeyStroke;
+  uint8_t emitRealtimeEvents;
+  uint8_t keyHoldLedOutput;
+  uint8_t heartbeatLedOutput;
+  uint8_t masterSide;
+  uint8_t secondSystemLayoutActive;
+  uint8_t simulatorModeActive;
+  uint8_t alterAssignsActive;
+  uint8_t glowActive;
+  uint8_t glowColor;
+  uint8_t glowBrightness;
+  uint8_t glowPattern;
+  uint8_t glowDirection;
+  uint8_t glowSpeed;
+} T_SystemParametersSet;
 
 enum {
   SystemAction_SetEmitKeyStroke = SystemParameterIndexBase,
