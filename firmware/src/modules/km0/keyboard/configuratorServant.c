@@ -206,6 +206,10 @@ static void processReadGenericHidData() {
           // invokeCustomParameterChangedCallback(index, value);
           optionManager_setSystemParameter(parameterIndex, value);
         }
+
+        if (cmd == 0xb0) {
+          optionManager_resetSystemParameters();
+        }
       }
 
       if (dataKind == 0x03) {
