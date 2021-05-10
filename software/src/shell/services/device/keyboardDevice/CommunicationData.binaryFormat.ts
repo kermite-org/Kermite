@@ -11,6 +11,7 @@ namespace CommunicationDataBinaryForamt {
 
   type VariableLength = any;
   type Bytes<N> = number[];
+  type BytesOf<N> = number[];
 
   type PacketHostToDevice = {};
   type PacketDeviceToHost = {};
@@ -78,7 +79,9 @@ namespace CommunicationDataBinaryForamt {
     [0]: { category: 0xb0 }; // 0xb0 for memory operation
     [1]: { dataKind: 0x02 }; // 0x02 for custom parameters
     [2]: { command: 0x90 }; // 0x90 for bulk write request
-    [3_12]: { data: Bytes<10> };
+    [3]: { parameterIndexBase: u8 };
+    [4]: { parameterCount: u8 };
+    '5__': { data: BytesOf<'parameterCount'> };
   };
 
   type PktCustomParameterSingleWriteOperation = PacketHostToDevice & {
@@ -87,6 +90,12 @@ namespace CommunicationDataBinaryForamt {
     [2]: { command: 0xa0 }; // 0xa0 for single write request
     [3]: { index: u8 }; // paramter index, 0~9
     [4]: { value: u8 }; // parameter value
+  };
+
+  type PktCustomParametersResetOperation = PacketHostToDevice & {
+    [0]: { category: 0xb0 }; // 0xb0 for memory operation
+    [1]: { dataKind: 0x02 }; // 0x02 for custom parameters
+    [2]: { command: 0xb0 }; // 0xb0 for reset request
   };
 
   // 書き込めたかどうかは書き込み後にbulk readすることで確認する
