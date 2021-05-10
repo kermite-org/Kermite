@@ -20,4 +20,7 @@ bool utils_readArrayedBitFlagsBit(uint8_t *bitFlagBytes, uint8_t flagIndex);
 #define utils_abs(a) ((a) < 0 ? -(a) : (a))
 #define utils_max(a, b) ((a) > (b) ? (a) : (b))
 
+#define utils_clamp(val, lo, hi) (val) < (lo) ? (lo) \
+                                              : ((val > hi) ? (hi) : (val))
+
 #endif
