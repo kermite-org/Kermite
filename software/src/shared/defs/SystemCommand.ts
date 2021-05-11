@@ -1,5 +1,5 @@
 export const enum SystemParameter {
-  EmitKeyStroke = 100,
+  EmitKeyStroke = 0,
   EmitRealtimeEvents,
   KeyHoldIndicatorLed,
   HeartbeatLed,
@@ -16,7 +16,7 @@ export const enum SystemParameter {
 }
 
 export const enum SystemAction {
-  SetEmitKeyStroke = 100,
+  SetEmitKeyStroke = 0,
   SetEmitRealtimeEvents,
   SetKeyHoldIndicatorLed,
   SetHeartbeatLed,
@@ -31,7 +31,7 @@ export const enum SystemAction {
   SetGlowDirection,
   SetGlowSpeed,
 
-  ShiftGlowColor = 150,
+  ShiftGlowColor = 30,
   ShiftGlowBrightness,
   ShiftGlowPattern,
   ShiftGlowDirection,

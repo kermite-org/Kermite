@@ -3,10 +3,11 @@
 
 static const int NumSystemParameters = 14;
 
-static const int SystemParameterIndexBase = 100;
+static const int SystemParameterIndexBase = 0;
+static const int ExtraParameterIndexBase = 128;
 
 enum {
-  SystemParameter_EmitKeyStroke = SystemParameterIndexBase,
+  SystemParameter_EmitKeyStroke = 0,
   SystemParameter_EmitRealtimeEvents,
   SystemParameter_KeyHoldIndicatorLed,
   SystemParameter_HeartbeatLed,
@@ -39,7 +40,7 @@ typedef struct {
 } T_SystemParametersSet;
 
 enum {
-  SystemAction_SetEmitKeyStroke = SystemParameterIndexBase,
+  SystemAction_SetEmitKeyStroke = 0,
   SystemAction_SetEmitRealtimeEvents,
   SystemAction_SetKeyHoldIndicatorLed,
   SystemAction_SetHeartbeatLed,
@@ -54,7 +55,7 @@ enum {
   SystemAction_SetGlowDirection,
   SystemAction_SetGlowSpeed,
 
-  SystemAction_ShiftGlowColor = 150,
+  SystemAction_ShiftGlowColor = 30,
   SystemAction_ShiftGlowBrightness,
   SystemAction_ShiftGlowPattern,
   SystemAction_ShiftGlowDirection,

@@ -125,7 +125,6 @@ static void shiftParameterValue(uint8_t parameterIndex, uint8_t payloadValue) {
   int dir = (payloadValue & 0x0F == 1) ? 1 : -1;
   bool clamp = payloadValue >> 4 & 0x0F > 0;
   uint8_t bi = parameterIndex - SystemParameterIndexBase;
-
   bool maxValue = ((uint8_t *)&systemParameterMaxValues)[bi];
   int oldValue = systemParameterValues[bi];
   int newValue;
@@ -140,12 +139,12 @@ static void shiftParameterValue(uint8_t parameterIndex, uint8_t payloadValue) {
 }
 
 void optionManager_handleSystemAction(uint8_t systemActionCode, uint8_t payloadValue) {
-  if (100 <= systemActionCode && systemActionCode < (100 + NumSystemParameters)) {
+  if (0 <= systemActionCode && systemActionCode < NumSystemParameters) {
     uint8_t parameterIndex = systemActionCode;
     optionManager_setSystemParameter(parameterIndex, payloadValue);
   }
-  if (150 <= systemActionCode && systemActionCode < (150 + 5)) {
-    uint8_t parameterIndex = systemActionCode - 50 + 9;
+  if (30 <= systemActionCode && systemActionCode < (30 + 5)) {
+    uint8_t parameterIndex = systemActionCode - 30 + 9;
     shiftParameterValue(parameterIndex, payloadValue);
   }
 }
