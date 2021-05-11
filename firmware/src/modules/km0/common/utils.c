@@ -56,15 +56,15 @@ void utils_fillBytes(uint8_t *dst, uint8_t val, uint16_t len) {
   }
 }
 
-int utils_clamp(int val, int lo, int hi) {
-  if (val < lo) {
-    return lo;
-  } else if (val > hi) {
-    return hi;
-  } else {
-    return val;
-  }
-}
+// int utils_clamp(int val, int lo, int hi) {
+//   if (val < lo) {
+//     return lo;
+//   } else if (val > hi) {
+//     return hi;
+//   } else {
+//     return val;
+//   }
+// }
 
 void utils_writeArrayedBitFlagsBit(uint8_t *bitFlagBytes, uint8_t flagIndex, bool state) {
   uint8_t byteIndex = flagIndex >> 3;
