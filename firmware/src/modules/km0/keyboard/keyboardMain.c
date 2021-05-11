@@ -344,4 +344,5 @@ void keyboardMain_updateDisplayModules(uint32_t tick) {
 void keyboardMain_processUpdate() {
   usbIoCore_processUpdate();
   configuratorServant_processUpdate();
+  configManager_processUpdate();
 }
