@@ -97,6 +97,14 @@ void configManager_initialize() {
   }
 }
 
+void configManager_readSystemParameterValues(uint8_t *buf, uint8_t len) {
+  utils_copyBytes(buf, systemParameterValues, len);
+}
+
+void configManager_readSystemParameterMaxValues(uint8_t *buf, uint8_t len) {
+  utils_copyBytes(buf, (uint8_t *)&systemParameterMaxValues, len);
+}
+
 void configManager_setSystemParameter(uint8_t parameterIndex, uint8_t value) {
   uint8_t bi = parameterIndex - SystemParameterIndexBase;
   systemParameterValues[bi] = value;

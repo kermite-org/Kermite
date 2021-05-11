@@ -5,6 +5,7 @@
 #include "km0/common/utils.h"
 #include "km0/deviceIo/dataMemory.h"
 #include "km0/deviceIo/usbIoCore.h"
+#include "systemCommand.h"
 #include "versionDefinitions.h"
 #include <stdio.h>
 #include <string.h>
@@ -32,15 +33,15 @@ static void emitStateNotification(uint8_t state) {
 //storage data addresses
 
 static uint16_t storageAddr_DeviceInstanceCode;
-static uint16_t storageAddr_CustomSettingsBytesInitializationFlag;
-static uint16_t storageAddr_CustomSettingsBytes;
+// static uint16_t storageAddr_CustomSettingsBytesInitializationFlag;
+// static uint16_t storageAddr_CustomSettingsBytes;
 static uint16_t storageAddr_profileData;
 static uint16_t keyAssignsDataCapacity;
 
 static void initializeDataAddresses() {
   storageAddr_DeviceInstanceCode = dataStorage_getDataAddress_deviceInstanceCode();
-  storageAddr_CustomSettingsBytesInitializationFlag = dataStorage_getDataAddress_parametersInitializationFlag();
-  storageAddr_CustomSettingsBytes = dataStorage_getDataAddress_systemParameters();
+  // storageAddr_CustomSettingsBytesInitializationFlag = dataStorage_getDataAddress_parametersInitializationFlag();
+  // storageAddr_CustomSettingsBytes = dataStorage_getDataAddress_systemParameters();
   storageAddr_profileData = dataStorage_getDataAddress_profileData();
   keyAssignsDataCapacity = dataStorage_getKeyAssignDataCapacity();
 }
@@ -50,6 +51,8 @@ static void initializeDataAddresses() {
 
 static uint8_t rawHidSendBuf[64] = { 0 };
 static uint8_t rawHidRcvBuf[64] = { 0 };
+
+static bool parametersResetting = false;
 
 static void emitGenericHidData(uint8_t *p) {
   bool done = usbIoCore_genericHid_writeData(p);
@@ -124,12 +127,17 @@ static void emitDeviceAttributesResponse() {
 }
 
 static void emitCustomParametersReadResponse() {
+  uint8_t num = NumSystemParameters;
   uint8_t *p = rawHidSendBuf;
   p[0] = 0xb0;
   p[1] = 0x02;
   p[2] = 0x81;
-  p[3] = dataMemory_readByte(storageAddr_CustomSettingsBytesInitializationFlag);
-  copyEepromBytesToBuffer(p, 4, storageAddr_CustomSettingsBytes, 10);
+  p[3] = num;
+  configManager_readSystemParameterValues(p + 3, num);
+  configManager_readSystemParameterMaxValues(p + 3 + num, num);
+  // utils_copyBytes(p + 3, )
+  // p[3] = dataMemory_readByte(storageAddr_CustomSettingsBytesInitializationFlag);
+  // copyEepromBytesToBuffer(p, 4, storageAddr_CustomSettingsBytes, 10);
   emitGenericHidData(rawHidSendBuf);
 }
 
@@ -208,7 +216,9 @@ static void processReadGenericHidData() {
         }
 
         if (cmd == 0xb0) {
+          parametersResetting = true;
           configManager_resetSystemParameters();
+          parametersResetting = false;
         }
       }
 
@@ -263,6 +273,8 @@ static void processReadGenericHidData() {
 
 static void onParameterChanged(uint8_t parameterIndex, uint8_t value) {
   //todo: PC側にパラメタの変更を通知する
+  if (!parametersResetting) {
+  }
 }
 
 //---------------------------------------------

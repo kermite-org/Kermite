@@ -71,8 +71,11 @@ namespace CommunicationDataBinaryForamt {
     [0]: { category: 0xb0 }; // 0xb0 for memory operation
     [1]: { dataKind: 0x02 }; // 0x02 for custom parameters
     [2]: { command: 0x81 }; // 0x81 for bulk read response
-    [3]: { initializedFlag: 0 | 1 };
-    [4_13]: { data: Bytes<10> };
+    [3]: { numParameters: u8 };
+    // [3]: { initializedFlag: 0 | 1 };
+    // [4_13]: { data: Bytes<10> };
+    '4__': { values: BytesOf<'numParameters'> };
+    '4+numParameters__': { maxValues: BytesOf<'numParameters'> };
   };
 
   type PktCustomParametersBulkWriteOperation = PacketHostToDevice & {
@@ -80,8 +83,8 @@ namespace CommunicationDataBinaryForamt {
     [1]: { dataKind: 0x02 }; // 0x02 for custom parameters
     [2]: { command: 0x90 }; // 0x90 for bulk write request
     [3]: { parameterIndexBase: u8 };
-    [4]: { parameterCount: u8 };
-    '5__': { data: BytesOf<'parameterCount'> };
+    [4]: { numParameters: u8 };
+    '5__': { data: BytesOf<'numParameters'> };
   };
 
   type PktCustomParameterSingleWriteOperation = PacketHostToDevice & {
