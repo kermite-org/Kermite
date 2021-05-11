@@ -1,5 +1,7 @@
-#ifndef __SYSTEM_COMMAND_H__
-#define __SYSTEM_COMMAND_H__
+#ifndef __COMMAND_DEFINITIONS_H__
+#define __COMMAND_DEFINITIONS_H__
+
+#include "km0/types.h"
 
 static const int NumSystemParameters = 14;
 

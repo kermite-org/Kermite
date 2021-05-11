@@ -1,4 +1,5 @@
 #include "keyboardMain.h"
+#include "commandDefinitions.h"
 #include "config.h"
 #include "configManager.h"
 #include "configuratorServant.h"
@@ -10,7 +11,6 @@
 #include "km0/deviceIo/boardIo.h"
 #include "km0/deviceIo/debugUart.h"
 #include "km0/deviceIo/usbIoCore.h"
-#include "systemCommand.h"
 #include "versionDefinitions.h"
 #include <stdio.h>
 

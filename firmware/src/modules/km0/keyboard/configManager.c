@@ -1,8 +1,8 @@
 #include "configManager.h"
+#include "commandDefinitions.h"
 #include "dataStorage.h"
 #include "km0/common/utils.h"
 #include "km0/deviceIo/dataMemory.h"
-#include "systemCommand.h"
 #include <stdio.h>
 
 typedef void (*ParameterChangedListener)(uint8_t parameterIndex, uint8_t value);

@@ -1,10 +1,10 @@
 #include "dataStorage.h"
+#include "commandDefinitions.h"
 #include "config.h"
 #include "km0/common/utils.h"
 #include "km0/deviceIo/dataMemory.h"
 #include "km0/deviceIo/system.h"
 #include "km0/types.h"
-#include "systemCommand.h"
 #include "versionDefinitions.h"
 #include <stdio.h>
 

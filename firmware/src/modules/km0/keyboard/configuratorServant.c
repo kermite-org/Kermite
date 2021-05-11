@@ -1,11 +1,11 @@
 #include "configuratorServant.h"
+#include "commandDefinitions.h"
 #include "config.h"
 #include "configManager.h"
 #include "dataStorage.h"
 #include "km0/common/utils.h"
 #include "km0/deviceIo/dataMemory.h"
 #include "km0/deviceIo/usbIoCore.h"
-#include "systemCommand.h"
 #include "versionDefinitions.h"
 #include <stdio.h>
 #include <string.h>
