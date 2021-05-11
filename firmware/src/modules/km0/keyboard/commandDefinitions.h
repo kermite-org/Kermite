@@ -13,7 +13,7 @@ enum {
   SystemParameter_EmitRealtimeEvents,
   SystemParameter_KeyHoldIndicatorLed,
   SystemParameter_HeartbeatLed,
-  SystemParameter_MasterSide,    //0:unset, 1:left, 2:right
+  SystemParameter_MasterSide,    //0:left, 1:right
   SystemParameter_SystemLayout,  //0:US, 1:JIS
   SystemParameter_SimulatorMode, //0:STD, 1:Simulator
   SystemParameter_WiringMode,    //0:Main, 1:Alter

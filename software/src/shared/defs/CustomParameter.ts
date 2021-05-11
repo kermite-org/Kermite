@@ -61,10 +61,10 @@ export const SystemParameterDefinitions: ICustromParameterSpec[] = [
     slotIndex: 4,
     label: 'Master Side',
     options: [
-      { value: 1, label: 'Left' },
-      { value: 2, label: 'Right' },
+      { value: 0, label: 'Left' },
+      { value: 1, label: 'Right' },
     ],
-    defaultValue: 1,
+    defaultValue: 0,
   },
   {
     type: 'selection',

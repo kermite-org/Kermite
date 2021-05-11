@@ -153,8 +153,8 @@ static void parameterValueHandler(uint8_t slotIndex, uint8_t value) {
   } else if (slotIndex == SystemParameter_HeartbeatLed) {
     optionUseHeartbeatLed = !!value;
   } else if (slotIndex == SystemParameter_MasterSide) {
-    //value: (0:unset, 1:left, 2:right)
-    optionInvertSide = value == 2;
+    //value: (0:left, 1:right)
+    optionInvertSide = value == 1;
   }
 
   if (callbacks && callbacks->customParameterHandlerChained) {
