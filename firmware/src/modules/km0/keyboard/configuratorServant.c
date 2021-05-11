@@ -52,7 +52,7 @@ static void initializeDataAddresses() {
 static uint8_t rawHidSendBuf[64] = { 0 };
 static uint8_t rawHidRcvBuf[64] = { 0 };
 
-static bool parametersResetting = false;
+static bool skipNotify = false;
 
 static void emitGenericHidData(uint8_t *p) {
   bool done = usbIoCore_genericHid_writeData(p);
@@ -198,7 +198,9 @@ static void processReadGenericHidData() {
           uint8_t parameterIndexBase = p[3];
           uint8_t count = p[4];
           uint8_t *ptr = p + 5;
+          skipNotify = true;
           configManager_bulkWriteParameters(ptr, count, parameterIndexBase);
+          skipNotify = false;
           // dataMemory_writeBytes(storageAddr_CustomSettingsBytes, ptr, num);
           // dataMemory_writeByte(storageAddr_CustomSettingsBytesInitializationFlag, 1);
           // for (uint8_t bi = 0; bi < num; bi++) {
@@ -212,13 +214,13 @@ static void processReadGenericHidData() {
           uint8_t value = p[4];
           // dataMemory_writeByte(storageAddr_CustomSettingsBytes + index, value);
           // invokeCustomParameterChangedCallback(index, value);
-          configManager_setSystemParameter(parameterIndex, value);
+          configManager_writeParameter(parameterIndex, value);
         }
 
         if (cmd == 0xb0) {
-          parametersResetting = true;
+          skipNotify = true;
           configManager_resetSystemParameters();
-          parametersResetting = false;
+          skipNotify = false;
         }
       }
 
@@ -273,7 +275,7 @@ static void processReadGenericHidData() {
 
 static void onParameterChanged(uint8_t parameterIndex, uint8_t value) {
   //todo: PC側にパラメタの変更を通知する
-  if (!parametersResetting) {
+  if (!skipNotify) {
   }
 }
 

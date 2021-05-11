@@ -105,7 +105,7 @@ void configManager_readSystemParameterMaxValues(uint8_t *buf, uint8_t len) {
   utils_copyBytes(buf, (uint8_t *)&systemParameterMaxValues, len);
 }
 
-void configManager_setSystemParameter(uint8_t parameterIndex, uint8_t value) {
+void configManager_writeParameter(uint8_t parameterIndex, uint8_t value) {
   uint8_t bi = parameterIndex - SystemParameterIndexBase;
   systemParameterValues[bi] = value;
   notifyParameterChanged(parameterIndex, value);
@@ -116,7 +116,7 @@ void configManager_bulkWriteParameters(uint8_t *buf, uint8_t len, uint8_t parame
   for (int i = 0; i < len; i++) {
     uint8_t parameterIndex = parameterIndexBase + i;
     uint8_t value = buf[i];
-    configManager_setSystemParameter(parameterIndex, value);
+    configManager_writeParameter(parameterIndex, value);
   }
 }
 
@@ -125,7 +125,7 @@ void configManager_resetSystemParameters() {
   for (int i = 0; i < NumSystemParameters; i++) {
     uint8_t parameterIndex = SystemParameterIndexBase + i;
     uint8_t value = pDefaultValues[i];
-    configManager_setSystemParameter(parameterIndex, value);
+    configManager_writeParameter(parameterIndex, value);
   }
 }
 
@@ -142,14 +142,14 @@ static void shiftParameterValue(uint8_t parameterIndex, uint8_t payloadValue) {
     newValue = utils_clamp(oldValue + dir, 0, maxValue);
   }
   if (newValue != oldValue) {
-    configManager_setSystemParameter(parameterIndex, (uint8_t)newValue);
+    configManager_writeParameter(parameterIndex, (uint8_t)newValue);
   }
 }
 
 void configManager_handleSystemAction(uint8_t systemActionCode, uint8_t payloadValue) {
   if (0 <= systemActionCode && systemActionCode < NumSystemParameters) {
     uint8_t parameterIndex = systemActionCode;
-    configManager_setSystemParameter(parameterIndex, payloadValue);
+    configManager_writeParameter(parameterIndex, payloadValue);
   }
   if (30 <= systemActionCode && systemActionCode < (30 + 5)) {
     uint8_t parameterIndex = systemActionCode - 30 + 9;
