@@ -15,6 +15,8 @@ export const enum SystemParameter {
   GlowSpeed,
 }
 
+export const NumSystemParameters = 14;
+
 export const enum SystemAction {
   SetEmitKeyStroke = 0,
   SetEmitRealtimeEvents,
