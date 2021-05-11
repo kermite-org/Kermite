@@ -3,7 +3,7 @@
 
 #include "km0/types.h"
 
-static const int NumSystemParameters = 14;
+#define NumSystemParameters 14
 
 static const int SystemParameterIndexBase = 0;
 static const int ExtraParameterIndexBase = 128;
