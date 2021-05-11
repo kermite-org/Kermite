@@ -1,10 +1,10 @@
 #include "configuratorServant.h"
 #include "config.h"
+#include "configManager.h"
 #include "dataStorage.h"
 #include "km0/common/utils.h"
 #include "km0/deviceIo/dataMemory.h"
 #include "km0/deviceIo/usbIoCore.h"
-#include "optionManager.h"
 #include "versionDefinitions.h"
 #include <stdio.h>
 #include <string.h>
@@ -190,7 +190,7 @@ static void processReadGenericHidData() {
           uint8_t parameterIndexBase = p[3];
           uint8_t count = p[4];
           uint8_t *ptr = p + 5;
-          optionManager_bulkWriteParameters(ptr, count, parameterIndexBase);
+          configManager_bulkWriteParameters(ptr, count, parameterIndexBase);
           // dataMemory_writeBytes(storageAddr_CustomSettingsBytes, ptr, num);
           // dataMemory_writeByte(storageAddr_CustomSettingsBytesInitializationFlag, 1);
           // for (uint8_t bi = 0; bi < num; bi++) {
@@ -204,11 +204,11 @@ static void processReadGenericHidData() {
           uint8_t value = p[4];
           // dataMemory_writeByte(storageAddr_CustomSettingsBytes + index, value);
           // invokeCustomParameterChangedCallback(index, value);
-          optionManager_setSystemParameter(parameterIndex, value);
+          configManager_setSystemParameter(parameterIndex, value);
         }
 
         if (cmd == 0xb0) {
-          optionManager_resetSystemParameters();
+          configManager_resetSystemParameters();
         }
       }
 
@@ -271,7 +271,7 @@ static void onParameterChanged(uint8_t parameterIndex, uint8_t value) {
 void configuratorServant_initialize(void (*_stateNotificationCallback)(uint8_t state)) {
   // void (*_customParameterChangedCallback)(uint8_t index, uint8_t value)) {
   stateNotificationCallback = _stateNotificationCallback;
-  ontionManager_addParameterChangeListener(onParameterChanged);
+  configManager_addParameterChangeListener(onParameterChanged);
   // customParameterChangedCallback = _customParameterChangedCallback;
   initializeDataAddresses();
   // loadCustomParameters();

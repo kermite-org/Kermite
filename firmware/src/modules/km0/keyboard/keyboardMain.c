@@ -1,5 +1,6 @@
 #include "keyboardMain.h"
 #include "config.h"
+#include "configManager.h"
 #include "configuratorServant.h"
 #include "dataStorage.h"
 #include "keyAssignsDataValidator.h"
@@ -9,7 +10,6 @@
 #include "km0/deviceIo/boardIo.h"
 #include "km0/deviceIo/debugUart.h"
 #include "km0/deviceIo/usbIoCore.h"
-#include "optionManager.h"
 #include "systemCommand.h"
 #include "versionDefinitions.h"
 #include <stdio.h>
@@ -301,8 +301,8 @@ void keyboardMain_initialize() {
     debugUart_disable();
   }
   dataStorage_initialize();
-  ontionManager_addParameterChangeListener(parameterValueHandler);
-  optionManager_initialize();
+  configManager_addParameterChangeListener(parameterValueHandler);
+  configManager_initialize();
   setupSerialNumberText();
   usbIoCore_initialize();
   resetKeyboardCoreLogic();

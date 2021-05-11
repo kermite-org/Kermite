@@ -1,4 +1,4 @@
-#include "optionManager.h"
+#include "configManager.h"
 #include "dataStorage.h"
 #include "km0/common/utils.h"
 #include "km0/deviceIo/dataMemory.h"
@@ -72,11 +72,11 @@ static void notifyParameterChanged(uint8_t parameterIndex, uint8_t value) {
   }
 }
 
-void ontionManager_addParameterChangeListener(ParameterChangedListener listener) {
+void configManager_addParameterChangeListener(ParameterChangedListener listener) {
   parameterChangedListeners[numParameterChangedListeners++] = listener;
 }
 
-void optionManager_initialize() {
+void configManager_initialize() {
   addrSystemParameters = dataStorage_getDataAddress_systemParameters();
 
   if (addrSystemParameters) {
@@ -97,27 +97,27 @@ void optionManager_initialize() {
   }
 }
 
-void optionManager_setSystemParameter(uint8_t parameterIndex, uint8_t value) {
+void configManager_setSystemParameter(uint8_t parameterIndex, uint8_t value) {
   uint8_t bi = parameterIndex - SystemParameterIndexBase;
   systemParameterValues[bi] = value;
   notifyParameterChanged(parameterIndex, value);
   lazySaveTick = 5000; //いずれかのパラメタが変更されてから5秒後にデータをストレージに書き込む
 }
 
-void optionManager_bulkWriteParameters(uint8_t *buf, uint8_t len, uint8_t parameterIndexBase) {
+void configManager_bulkWriteParameters(uint8_t *buf, uint8_t len, uint8_t parameterIndexBase) {
   for (int i = 0; i < len; i++) {
     uint8_t parameterIndex = parameterIndexBase + i;
     uint8_t value = buf[i];
-    optionManager_setSystemParameter(parameterIndex, value);
+    configManager_setSystemParameter(parameterIndex, value);
   }
 }
 
-void optionManager_resetSystemParameters() {
+void configManager_resetSystemParameters() {
   uint8_t *pDefaultValues = (uint8_t *)&systemParametersDefault;
   for (int i = 0; i < NumSystemParameters; i++) {
     uint8_t parameterIndex = SystemParameterIndexBase + i;
     uint8_t value = pDefaultValues[i];
-    optionManager_setSystemParameter(parameterIndex, value);
+    configManager_setSystemParameter(parameterIndex, value);
   }
 }
 
@@ -134,14 +134,14 @@ static void shiftParameterValue(uint8_t parameterIndex, uint8_t payloadValue) {
     newValue = utils_clamp(oldValue + dir, 0, maxValue);
   }
   if (newValue != oldValue) {
-    optionManager_setSystemParameter(parameterIndex, (uint8_t)newValue);
+    configManager_setSystemParameter(parameterIndex, (uint8_t)newValue);
   }
 }
 
-void optionManager_handleSystemAction(uint8_t systemActionCode, uint8_t payloadValue) {
+void configManager_handleSystemAction(uint8_t systemActionCode, uint8_t payloadValue) {
   if (0 <= systemActionCode && systemActionCode < NumSystemParameters) {
     uint8_t parameterIndex = systemActionCode;
-    optionManager_setSystemParameter(parameterIndex, payloadValue);
+    configManager_setSystemParameter(parameterIndex, payloadValue);
   }
   if (30 <= systemActionCode && systemActionCode < (30 + 5)) {
     uint8_t parameterIndex = systemActionCode - 30 + 9;
@@ -149,7 +149,7 @@ void optionManager_handleSystemAction(uint8_t systemActionCode, uint8_t payloadV
   }
 }
 
-void optionManager_processUpdate() {
+void configManager_processUpdate() {
   if (lazySaveTick > 0) {
     lazySaveTick--;
     if (lazySaveTick == 0) {
