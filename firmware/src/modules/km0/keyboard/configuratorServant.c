@@ -133,8 +133,8 @@ static void emitCustomParametersReadResponse() {
   p[1] = 0x02;
   p[2] = 0x81;
   p[3] = num;
-  configManager_readSystemParameterValues(p + 3, num);
-  configManager_readSystemParameterMaxValues(p + 3 + num, num);
+  configManager_readSystemParameterValues(p + 4, num);
+  configManager_readSystemParameterMaxValues(p + 4 + num, num);
   // utils_copyBytes(p + 3, )
   // p[3] = dataMemory_readByte(storageAddr_CustomSettingsBytesInitializationFlag);
   // copyEepromBytesToBuffer(p, 4, storageAddr_CustomSettingsBytes, 10);
