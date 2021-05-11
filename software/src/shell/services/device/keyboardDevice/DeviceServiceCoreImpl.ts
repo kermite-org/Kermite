@@ -32,7 +32,8 @@ function createConnectedStatus(
       portName: getPortNameFromDevicePath(devicePath) || devicePath,
       mcuName: attrsRes.firmwareMcuName,
     },
-    customParameterValues: custromParamsRes?.parameterValues,
+    systemParameterValues: custromParamsRes?.parameterValues,
+    systemParameterMaxValues: custromParamsRes?.parameterMaxValues,
   };
 }
 
@@ -79,7 +80,8 @@ export class KeyboardDeviceServiceCore {
     this.setStatus({
       isConnected: false,
       deviceAttrs: undefined,
-      customParameterValues: undefined,
+      systemParameterValues: undefined,
+      systemParameterMaxValues: undefined,
     });
     this.device = undefined;
   };
@@ -92,7 +94,7 @@ export class KeyboardDeviceServiceCore {
         value,
       );
       this.setStatus({
-        customParameterValues: newParameterValues,
+        systemParameterValues: newParameterValues,
       });
     }
   }

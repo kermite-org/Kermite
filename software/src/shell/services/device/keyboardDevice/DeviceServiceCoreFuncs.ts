@@ -1,13 +1,11 @@
 import {
   ConfigStorageFormatRevision,
   delayMs,
-  generateNumberSequence,
-  IProjectCustomDefinition,
   ProfileBinaryFormatRevision,
   RawHidMessageProtocolRevision,
 } from '~/shared';
+import { NumSystemParameters } from '~/shared/defs/SystemCommand';
 import { generateRandomDeviceInstanceCode } from '~/shared/funcs/DomainRelatedHelpers';
-import { projectResourceProvider } from '~/shell/projectResources';
 import { Packets } from '~/shell/services/device/keyboardDevice/Packets';
 import {
   ICustomParametersReadResponseData,
@@ -46,17 +44,17 @@ function checkDeviceRevisions(data: {
   }
 }
 
-function getDeviceInitialParameterValues(customDef: IProjectCustomDefinition) {
-  return generateNumberSequence(10).map((i) => {
-    const paramSpec = customDef.customParameterSpecs?.find(
-      (paramSpec) => paramSpec.slotIndex === i,
-    );
-    return paramSpec ? paramSpec.defaultValue : 1;
-    // 定義がないパラメタのデフォルト値は1とする。
-    // project.jsonでパラメタが定義されていない場合に基本的なオプションを設定値クリアで0にしてしまうと
-    // キーストローク出力/LED出力が無効化されてファームウェアが動作しているかどうかを判別できなくなるため
-  });
-}
+// function getDeviceInitialParameterValues(customDef: IProjectCustomDefinition) {
+//   return generateNumberSequence(10).map((i) => {
+//     const paramSpec = customDef.customParameterSpecs?.find(
+//       (paramSpec) => paramSpec.slotIndex === i,
+//     );
+//     return paramSpec ? paramSpec.defaultValue : 1;
+//     // 定義がないパラメタのデフォルト値は1とする。
+//     // project.jsonでパラメタが定義されていない場合に基本的なオプションを設定値クリアで0にしてしまうと
+//     // キーストローク出力/LED出力が無効化されてファームウェアが動作しているかどうかを判別できなくなるため
+//   });
+// }
 
 async function queryDeviceOperation<T>(
   device: IDeviceWrapper,
@@ -115,14 +113,14 @@ function writeDeviceInstanceCode(device: IDeviceWrapper, code: string) {
   );
 }
 
-function writeDeviceCustromParameters(
-  device: IDeviceWrapper,
-  initialParameters: number[],
-) {
-  device.writeSingleFrame(
-    Packets.makeCustomParametersBulkWriteOperationFrame(initialParameters),
-  );
-}
+// function writeDeviceCustromParameters(
+//   device: IDeviceWrapper,
+//   initialParameters: number[],
+// ) {
+//   device.writeSingleFrame(
+//     Packets.makeCustomParametersBulkWriteOperationFrame(initialParameters),
+//   );
+// }
 
 export async function deviceSetupTask(
   device: IDeviceWrapper,
@@ -142,30 +140,33 @@ export async function deviceSetupTask(
       throw new Error('failed to write device instance code');
     }
   }
-  let customParamsRes = await readDeviceCustomParameters(device);
-  // console.log({ customParamsRes });
-  if (!customParamsRes.isParametersInitialized) {
-    const customDef = await projectResourceProvider.getProjectCustomDefinition(
-      attrsRes.resourceOrigin,
-      attrsRes.projectId,
-      attrsRes.firmwareVariationName,
-    );
-    if (!customDef) {
-      // throw new Error('cannot find custom parameter definition');
-      console.log('cannot find custom parameter definition');
-      return {
-        attrsRes,
-        customParamsRes: undefined,
-      };
-    }
-    console.log(`writing initial custom parameters`);
-    const parameterValues = getDeviceInitialParameterValues(customDef);
-    writeDeviceCustromParameters(device, parameterValues);
-    customParamsRes = await readDeviceCustomParameters(device);
-    if (!customParamsRes.isParametersInitialized) {
-      throw new Error('failed to write initial custom parameters');
-    }
+  const customParamsRes = await readDeviceCustomParameters(device);
+  if (customParamsRes.numParameters !== NumSystemParameters) {
+    throw new Error('system parameters count mismatch');
   }
+  // console.log({ customParamsRes });
+  // if (!customParamsRes.isParametersInitialized) {
+  //   const customDef = await projectResourceProvider.getProjectCustomDefinition(
+  //     attrsRes.resourceOrigin,
+  //     attrsRes.projectId,
+  //     attrsRes.firmwareVariationName,
+  //   );
+  //   if (!customDef) {
+  //     // throw new Error('cannot find custom parameter definition');
+  //     console.log('cannot find custom parameter definition');
+  //     return {
+  //       attrsRes,
+  //       customParamsRes: undefined,
+  //     };
+  //   }
+  //   console.log(`writing initial custom parameters`);
+  //   const parameterValues = getDeviceInitialParameterValues(customDef);
+  //   writeDeviceCustromParameters(device, parameterValues);
+  //   customParamsRes = await readDeviceCustomParameters(device);
+  //   if (!customParamsRes.isParametersInitialized) {
+  //     throw new Error('failed to write initial custom parameters');
+  //   }
+  // }
   return {
     attrsRes,
     customParamsRes,
