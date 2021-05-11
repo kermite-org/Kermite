@@ -86,6 +86,7 @@ void configManager_initialize() {
       if (!isParametersInitialized) {
         dataMemory_writeBytes(addrSystemParameters, (uint8_t *)&systemParametersDefault, NumSystemParameters);
         dataMemory_writeByte(addrParameterInitializationFlag, 1);
+        printf("system parameters initialized\n");
       }
     }
 
@@ -109,7 +110,7 @@ void configManager_writeParameter(uint8_t parameterIndex, uint8_t value) {
   uint8_t bi = parameterIndex - SystemParameterIndexBase;
   systemParameterValues[bi] = value;
   notifyParameterChanged(parameterIndex, value);
-  lazySaveTick = 5000; //いずれかのパラメタが変更されてから5秒後にデータをストレージに書き込む
+  lazySaveTick = 3000; //いずれかのパラメタが変更されてから3秒後にデータをストレージに書き込む
 }
 
 void configManager_bulkWriteParameters(uint8_t *buf, uint8_t len, uint8_t parameterIndexBase) {
