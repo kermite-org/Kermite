@@ -1,6 +1,7 @@
 import { jsx } from 'qx';
 import { IKeyboardBehaviorMode, IKeyboardLayoutStandard } from '~/shared';
 import { texts } from '~/ui/common';
+import { useSystemLayoutModel } from '~/ui/common/sharedModels/SystemLayoutModel';
 import { DualItemsHoverSelector } from '~/ui/editor-page/components/fabrics/DualItemHoverSelector';
 import { keyboardConfigModel } from '~/ui/editor-page/profileManagement/models/KeyboardConfigModel';
 
@@ -27,19 +28,19 @@ export const BehaviorSelector = () => {
 };
 
 export const LayoutStandardSelector = () => {
-  const layouts: IKeyboardLayoutStandard[] = ['US', 'JIS'];
-  const currentLayout = keyboardConfigModel.layoutStandard;
-  const setCurrent = (layout: IKeyboardLayoutStandard) => {
-    keyboardConfigModel.layoutStandard = layout;
+  const { systemLayoutIndex, setSystemLayoutIndex } = useSystemLayoutModel();
+  const layoutIndices: number[] = [0, 1];
+  const setCurrent = (layoutIndex: number) => {
+    setSystemLayoutIndex(layoutIndex);
   };
-  const textDictionary: { [key in IKeyboardLayoutStandard]: string } = {
-    US: 'US',
-    JIS: 'JIS',
+  const textDictionary: { [key in number]: string } = {
+    0: 'US',
+    1: 'JIS',
   };
   return (
     <DualItemsHoverSelector
-      items={layouts}
-      currentItem={currentLayout}
+      items={layoutIndices}
+      currentItem={systemLayoutIndex}
       setCurrentItem={setCurrent}
       textDictionary={textDictionary}
       hint={texts.hint_assigner_topBar_keyboardSystemLayoutSelector}
