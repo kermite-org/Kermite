@@ -52,6 +52,22 @@ function readStorageWordBE(addr: u16): u16 {
 }
 
 // --------------------------------------------------------------------------------
+// execution options
+
+const logicOptions = new (class {
+  systemLayout: u8 = 0;
+  wiringMode: u8 = 0;
+})();
+
+function setSystemLayout(layout: u8) {
+  logicOptions.systemLayout = layout;
+}
+
+function setWiringMode(mode: u8) {
+  logicOptions.wiringMode = mode;
+}
+
+// --------------------------------------------------------------------------------
 // hid report
 
 const ModFlag = {
@@ -528,7 +544,7 @@ function handleOperationOn(opWord: u32) {
     if (logicalKey) {
       const hidKey = keyCodeTableImpl_mapLogicalKeyToHidKeyCode(
         logicalKey,
-        true, // todo: globalなuseSecondaryLayoutフラグを参照する
+        logicOptions.systemLayout > 0,
       );
       const isShiftCancellable = ((opWord >> 12) & 1) > 0;
       const keyCode = hidKey & 0xff;
@@ -592,7 +608,7 @@ function handleOperationOff(opWord: u32) {
     if (logicalKey) {
       const hidKey = keyCodeTableImpl_mapLogicalKeyToHidKeyCode(
         logicalKey,
-        true,
+        logicOptions.systemLayout > 0,
       );
       const isShiftCancellable = ((opWord >> 12) & 1) > 0;
       const keyCode = hidKey & 0xff;
@@ -1193,5 +1209,7 @@ export function getKeyboardCoreLogicInterface(): KeyboardCoreLogicInterface {
     keyboardCoreLogic_issuePhysicalKeyStateChanged,
     keyboardCoreLogic_processTicker,
     keyboardCoreLogic_halt,
+    keyboardCoreLogic_setSystemLayout: setSystemLayout,
+    keyboardCoreLogic_setWiringMode: setWiringMode,
   };
 }

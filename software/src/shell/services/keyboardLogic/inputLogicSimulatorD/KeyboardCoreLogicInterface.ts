@@ -9,4 +9,6 @@ export interface KeyboardCoreLogicInterface {
   ): void;
   keyboardCoreLogic_processTicker(ms: number): void;
   keyboardCoreLogic_halt(): void;
+  keyboardCoreLogic_setSystemLayout(layout: number): void;
+  keyboardCoreLogic_setWiringMode(mode: number): void;
 }
