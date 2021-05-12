@@ -131,3 +131,28 @@ export const SystemParameterDefinitions: ICustromParameterSpec[] = [
     maxValue: 255, // read from firmware
   },
 ];
+
+export function getSystemParameterDefinitionBySystemParameterKey(
+  systemParameterKey: string,
+): ICustromParameterSpec | undefined {
+  const keys = [
+    'emitKeyStroke',
+    'emitRealtimeEvents',
+    'keyHoldIndicatorLed',
+    'heartbeatLed',
+    'masterSide',
+    'systemLayout',
+    'wiringMode',
+    'glowActive',
+    'glowColor',
+    'glowBrightness',
+    'glowPattern',
+    'glowDirection',
+    'glowSpeed',
+  ];
+  const index = keys.indexOf(systemParameterKey);
+  if (index >= 0) {
+    return SystemParameterDefinitions[index];
+  }
+  return undefined;
+}

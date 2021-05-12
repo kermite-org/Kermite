@@ -1,4 +1,5 @@
 import {
+  getSystemParameterDefinitionBySystemParameterKey,
   ICustromParameterSpec,
   IFirmwareTargetDevice,
   IPersistKeyboardDesign,
@@ -35,7 +36,7 @@ export interface IPorjectFileJson {
   keyboardName: string;
   customParameterConfigurations: {
     targetVariationNames: string[];
-    customParameters: ICustromParameterSpec[];
+    systemParameterKeys: string[];
   }[];
 }
 interface IProjectResourceInfoSource {
@@ -55,7 +56,7 @@ interface IProjectResourceInfoSource {
   }[];
   customParameterConfigurations: {
     targetVariationNames: string[];
-    customParameters: ICustromParameterSpec[];
+    systemParameterKeys: string[];
   }[];
 }
 namespace ProjectResourceInfoSourceLoader {
@@ -277,7 +278,10 @@ export class ProjectResourceProviderImpl_Local
           it.targetVariationNames.includes('all'),
       );
       if (targetConfig) {
-        return { customParameterSpecs: targetConfig.customParameters };
+        const customParameterSpecs = targetConfig.systemParameterKeys
+          .map(getSystemParameterDefinitionBySystemParameterKey)
+          .filter((a) => !!a) as ICustromParameterSpec[];
+        return { customParameterSpecs };
       }
     }
     return undefined;
