@@ -4,8 +4,8 @@ import { createEventPort } from '~/shell/funcs';
 import { getPortNameFromDevicePath } from '~/shell/services/device/keyboardDevice/DeviceEnumerator';
 import {
   deviceSetupTask,
-  sendSideBrainHidReport,
-  sendSideBrainMode,
+  sendSimulatorHidReport,
+  sendSimulatorMode,
   updateDeviceCustomParameterSingle,
 } from '~/shell/services/device/keyboardDevice/DeviceServiceCoreFuncs';
 import {
@@ -109,18 +109,18 @@ export class KeyboardDeviceServiceCore {
     this.device = device;
   }
 
-  private isSideBrainMode = false;
+  private isSimulatorMode = false;
 
-  setSideBrainMode(enabled: boolean) {
-    this.isSideBrainMode = enabled;
+  setSimulatorMode(enabled: boolean) {
+    this.isSimulatorMode = enabled;
     if (this.device) {
-      sendSideBrainMode(this.device, enabled);
+      sendSimulatorMode(this.device, enabled);
     }
   }
 
-  writeSideBrainHidReport(report: number[]) {
-    if (this.device && this.isSideBrainMode) {
-      sendSideBrainHidReport(this.device, report);
+  writeSimulatorHidReport(report: number[]) {
+    if (this.device && this.isSimulatorMode) {
+      sendSimulatorHidReport(this.device, report);
     }
   }
 }

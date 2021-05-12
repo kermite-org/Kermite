@@ -80,7 +80,7 @@ export class InputLogicSimulatorD {
 
       const report = this.CL.keyboardCoreLogic_getOutputHidReportBytes();
       if (!compareArray(this.hidReportBytes, report)) {
-        this.deviceService.writeSideBrainHidReport(report);
+        this.deviceService.writeSimulatorHidReport(report);
         this.hidReportBytes = report.slice(0);
       }
       const newLayerActiveFlags = this.CL.keyboardCoreLogic_getLayerActiveFlags();
@@ -108,11 +108,11 @@ export class InputLogicSimulatorD {
 
   private updateSourceSetup = async () => {
     const config = this.keyboardConfigProvider.getKeyboardConfig();
-    const isSideBrainMode = config.behaviorMode === 'SideBrain';
-    if (this.isSideBranMode !== isSideBrainMode) {
-      console.log({ isSideBrainMode });
-      this.deviceService.setSideBrainMode(isSideBrainMode);
-      this.isSideBranMode = isSideBrainMode;
+    const isSimulatorMode = config.behaviorMode === 'Simulator';
+    if (this.isSideBranMode !== isSimulatorMode) {
+      console.log({ isSimulatorMode });
+      this.deviceService.setSimulatorMode(isSimulatorMode);
+      this.isSideBranMode = isSimulatorMode;
     }
 
     const prof =
@@ -162,7 +162,7 @@ export class InputLogicSimulatorD {
     );
     this.deviceService.statusEventPort.unsubscribe(this.onDeviceStatusEvent);
     if (this.isSideBranMode) {
-      this.deviceService.setSideBrainMode(false);
+      this.deviceService.setSimulatorMode(false);
       this.isSideBranMode = false;
     }
     this.tickerTimer.stop();

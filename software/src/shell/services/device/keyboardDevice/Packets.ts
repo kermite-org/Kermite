@@ -4,11 +4,11 @@ import { bhi, blo } from '~/shell/services/device/keyboardDevice/Helpers';
 export class Packets {
   static deviceAttributesRequestFrame = [0xf0, 0x10];
 
-  static makeSideBrainModeSpecFrame(enabled: boolean) {
+  static makeSimulatorModeSpecFrame(enabled: boolean) {
     return [0xd0, 0x10, enabled ? 1 : 0];
   }
 
-  static makeSideBrainHidReportFrame(report: number[]) {
+  static makeSimulatorHidReportFrame(report: number[]) {
     return [0xd0, 0x20, ...report];
   }
 

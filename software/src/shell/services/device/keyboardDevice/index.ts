@@ -38,12 +38,12 @@ export class KeyboardDeviceService implements IKeyboardDeviceServcie {
     this.core.setCustomParameterValue(index, value);
   }
 
-  setSideBrainMode(enabled: boolean) {
-    this.core.setSideBrainMode(enabled);
+  setSimulatorMode(enabled: boolean) {
+    this.core.setSimulatorMode(enabled);
   }
 
-  writeSideBrainHidReport(report: number[]) {
-    this.core.writeSideBrainHidReport(report);
+  writeSimulatorHidReport(report: number[]) {
+    this.core.writeSimulatorHidReport(report);
   }
 
   emitRealtimeEventFromSimulator(event: IRealtimeKeyboardEvent) {

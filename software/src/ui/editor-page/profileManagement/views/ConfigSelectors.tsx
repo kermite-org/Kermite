@@ -6,14 +6,14 @@ import { DualItemsHoverSelector } from '~/ui/editor-page/components/fabrics/Dual
 import { keyboardConfigModel } from '~/ui/editor-page/profileManagement/models/KeyboardConfigModel';
 
 export const BehaviorSelector = () => {
-  const modes: IKeyboardBehaviorMode[] = ['Standalone', 'SideBrain'];
+  const modes: IKeyboardBehaviorMode[] = ['Standalone', 'Simulator'];
   const currentMode = keyboardConfigModel.behaviorMode;
   const setCurrent = (mode: IKeyboardBehaviorMode) => {
     keyboardConfigModel.behaviorMode = mode;
   };
   const textDictionary: { [key in IKeyboardBehaviorMode]: string } = {
     Standalone: 'STD',
-    SideBrain: 'SIM',
+    Simulator: 'SIM',
   };
 
   return (

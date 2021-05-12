@@ -6,7 +6,7 @@ import { createEventPort } from '~/shell/funcs';
 // 環境に関連したキーボードの設定を保存する, レイアウト(US/JP)など
 
 const keyboardConfigDataSchema = vObject({
-  behaviorMode: vValueOneOf(['Standalone', 'SideBrain']),
+  behaviorMode: vValueOneOf(['Standalone', 'Simulator']),
 });
 
 const keyboardConfigDefault: IKeyboardConfig = {
