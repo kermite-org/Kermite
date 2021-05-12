@@ -256,9 +256,9 @@ static void processReadGenericHidData() {
       if (command == 0x10) {
         bool enabled = p[2] == 1;
         if (enabled) {
-          emitStateNotification(ConfiguratorServentState_SideBrainModeEnabled);
+          emitStateNotification(ConfiguratorServentState_SimulatorModeEnabled);
         } else {
-          emitStateNotification(ConfiguratorServentState_SideBrainModeDisabled);
+          emitStateNotification(ConfiguratorServentState_SimulatorModeDisabled);
         }
       }
       if (command == 0x20) {

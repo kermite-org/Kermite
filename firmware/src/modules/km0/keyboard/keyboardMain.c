@@ -49,7 +49,7 @@ static uint16_t localLayerFlags = 0;
 static uint8_t localHidReport[8] = { 0 };
 
 //メインロジックをPC側ユーティリティのLogicSimulatorに移譲するモード
-static bool isSideBrainModeEnabled = false;
+static bool isSimulatorModeEnabled = false;
 
 static KeyboardCallbackSet *callbacks = NULL;
 
@@ -174,11 +174,11 @@ static void configuratorServantStateHandler(uint8_t state) {
   if (state == ConfiguratorServentState_KeyMemoryUpdationDone) {
     resetKeyboardCoreLogic();
   }
-  if (state == ConfiguratorServentState_SideBrainModeEnabled) {
-    isSideBrainModeEnabled = true;
+  if (state == ConfiguratorServentState_SimulatorModeEnabled) {
+    isSimulatorModeEnabled = true;
   }
-  if (state == ConfiguratorServentState_SideBrainModeDisabled) {
-    isSideBrainModeEnabled = false;
+  if (state == ConfiguratorServentState_SimulatorModeDisabled) {
+    isSimulatorModeEnabled = false;
   }
 }
 
@@ -242,7 +242,7 @@ static void onPhysicalKeyStateChanged(uint8_t scanIndex, bool isDown) {
     callbacks->keyStateChanged(keyIndex, isDown);
   }
 
-  if (!isSideBrainModeEnabled) {
+  if (!isSimulatorModeEnabled) {
     //メインロジックでキー入力を処理
     keyboardCoreLogic_issuePhysicalKeyStateChanged(keyIndex, isDown);
   }
