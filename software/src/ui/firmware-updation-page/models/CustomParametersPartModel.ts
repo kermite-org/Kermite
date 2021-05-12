@@ -1,5 +1,4 @@
-import { SystemParameterDefinitions } from '~/shared';
-import { ipcAgent, useEventSource } from '~/ui/common';
+import { ipcAgent, useEventSource, useFetcher2 } from '~/ui/common';
 import {
   ICustomParameterModel,
   makeParameterModel,
@@ -26,25 +25,28 @@ export function useCustomParametersPartModel(): ICustomParametersPartModel {
     (deviceStatus.isConnected && deviceStatus.systemParameterMaxValues) ||
     undefined;
 
-  // const deviceAttrs =
-  //   (deviceStatus.isConnected && deviceStatus.deviceAttrs) || undefined;
+  const deviceAttrs =
+    (deviceStatus.isConnected && deviceStatus.deviceAttrs) || undefined;
 
-  // const customDef = useFetcher2(
-  //   () =>
-  //     deviceAttrs &&
-  //     ipcAgent.async.projects_getProjectCustomDefinition(
-  //       deviceAttrs.origin,
-  //       deviceAttrs.projectId,
-  //       deviceAttrs.firmwareVariationName,
-  //     ),
-  //   [deviceAttrs],
-  // );
+  const customDef = useFetcher2(
+    () =>
+      deviceAttrs &&
+      ipcAgent.async.projects_getProjectCustomDefinition(
+        deviceAttrs.origin,
+        deviceAttrs.projectId,
+        deviceAttrs.firmwareVariationName,
+      ),
+    [deviceAttrs],
+  );
+
+  const parameterSpec = customDef?.customParameterSpecs;
 
   return {
     parameterModels:
-      (parameterValues &&
+      (parameterSpec &&
+        parameterValues &&
         parameterMaxValues &&
-        SystemParameterDefinitions.map((spec) =>
+        parameterSpec.map((spec) =>
           makeParameterModel(
             spec,
             parameterValues[spec.slotIndex],
@@ -52,6 +54,6 @@ export function useCustomParametersPartModel(): ICustomParametersPartModel {
           ),
         )) ||
       [],
-    definitionUnavailable: false, // deviceStatus.isConnected && !customDef,
+    definitionUnavailable: deviceStatus.isConnected && !customDef,
   };
 }
