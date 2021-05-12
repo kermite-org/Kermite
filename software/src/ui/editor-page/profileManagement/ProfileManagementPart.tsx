@@ -1,5 +1,5 @@
 import { css, jsx } from 'qx';
-import { texts } from '~/ui/common';
+import { FcWithClassName, texts } from '~/ui/common';
 import {
   KeyboardProfileSelector,
   OperationButtonWithIcon,
@@ -17,7 +17,6 @@ import { ProfileSelectionMenuPart } from './views/ProfileSelectionMenu';
 const cssProfileManagementPart = css`
   /* background: #024; */
   flex-grow: 1;
-  margin-right: 80px;
   display: flex;
   align-items: center;
   padding: 4px;
@@ -28,37 +27,56 @@ const cssProfileManagementPart = css`
   > .spacer {
     flex-grow: 1;
   }
+
+  > .mode-selectors-box {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-right: 15px;
+  }
+
+  > .operation-buttons-box {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
 `;
 
-export const ProfileManagementPart = () => {
+export const ProfileManagementPart: FcWithClassName = ({ className }) => {
   const baseVm = makeProfileManagementPartViewModel();
   const menuModel = makeProfileSelectionMenuPartViewModel(baseVm);
 
   return (
-    <div css={cssProfileManagementPart}>
+    <div css={cssProfileManagementPart} className={className}>
       <ProfileSelectionMenuPart vm={menuModel} />
       <KeyboardProfileSelector
         selectorSource={baseVm.profileSelectorSource}
         hint={texts.hint_assigner_topBar_selectCurrentProfile}
       />
       <ConfigurationButton onClick={baseVm.openConfiguration} />
-      <BehaviorSelector />
-      <LayoutStandardSelector />
       <div class="spacer" />
-      <OperationButtonWithIcon
-        onClick={baseVm.onSaveButton}
-        disabled={!baseVm.canSave}
-        icon="save"
-        label={texts.label_assigner_topBar_saveAssignsButton}
-        hint={texts.hint_assigner_topBar_saveAssignsButton}
-      />
-      <OperationButtonWithIcon
-        onClick={baseVm.onWriteButton}
-        disabled={!baseVm.canWrite}
-        icon="double_arrow"
-        label={texts.label_assigner_topBar_writeAssignsButton}
-        hint={texts.hint_assigner_topBar_writeAssignsButton}
-      />
+      <div class="mode-selectors-box">
+        <BehaviorSelector />
+        <LayoutStandardSelector />
+      </div>
+
+      <div class="operation-buttons-box">
+        <OperationButtonWithIcon
+          onClick={baseVm.onSaveButton}
+          disabled={!baseVm.canSave}
+          icon="save"
+          label={texts.label_assigner_topBar_saveAssignsButton}
+          hint={texts.hint_assigner_topBar_saveAssignsButton}
+        />
+        <OperationButtonWithIcon
+          onClick={baseVm.onWriteButton}
+          disabled={!baseVm.canWrite}
+          icon="double_arrow"
+          label={texts.label_assigner_topBar_writeAssignsButton}
+          hint={texts.hint_assigner_topBar_writeAssignsButton}
+        />
+      </div>
+
       {baseVm.isExportingPresetSelectionModalOpen && (
         <SavingProjectPresetSelectionModal baseVm={baseVm} />
       )}
