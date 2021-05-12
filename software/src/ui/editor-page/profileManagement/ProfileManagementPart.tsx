@@ -1,11 +1,10 @@
-import { css, Hook, jsx } from 'qx';
+import { css, jsx } from 'qx';
 import { texts } from '~/ui/common';
 import {
   KeyboardProfileSelector,
   OperationButtonWithIcon,
 } from '~/ui/common/components';
 import { ConfigurationButton } from '~/ui/editor-page/components/controls/ConfigurationButton';
-import { keyboardConfigModel } from '~/ui/editor-page/profileManagement/models/KeyboardConfigModel';
 import { makeProfileManagementPartViewModel } from '~/ui/editor-page/profileManagement/viewModels/ProfileManagementPartViewModel';
 import { makeProfileSelectionMenuPartViewModel } from '~/ui/editor-page/profileManagement/viewModels/ProfileSelectionMenuPartViewModel';
 import {
@@ -34,10 +33,6 @@ const cssProfileManagementPart = css`
 export const ProfileManagementPart = () => {
   const baseVm = makeProfileManagementPartViewModel();
   const menuModel = makeProfileSelectionMenuPartViewModel(baseVm);
-
-  Hook.useEffect(() => {
-    keyboardConfigModel.initialize();
-  }, []);
 
   return (
     <div css={cssProfileManagementPart}>
