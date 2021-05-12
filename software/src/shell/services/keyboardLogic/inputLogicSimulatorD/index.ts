@@ -34,7 +34,7 @@ function createTimeIntervalCounter() {
 export class InputLogicSimulatorD {
   private CL = getKeyboardCoreLogicInterface();
   private tickerTimer = new IntervalTimerWrapper();
-  private isSideBranMode: boolean = false;
+  private isSimulatorMode: boolean = false;
   private layerActiveFlags: number = 0;
   private hidReportBytes: number[] = new Array(8).fill(0);
 
@@ -49,7 +49,7 @@ export class InputLogicSimulatorD {
   private onRealtimeKeyboardEvent = (event: IRealtimeKeyboardEvent) => {
     if (event.type === 'keyStateChanged') {
       const { keyIndex, isDown } = event;
-      if (this.isSideBranMode) {
+      if (this.isSimulatorMode) {
         this.CL.keyboardCoreLogic_issuePhysicalKeyStateChanged(
           keyIndex,
           isDown,
@@ -75,7 +75,7 @@ export class InputLogicSimulatorD {
   processTicker = () => {
     const elapsedMs = this.tickUpdator();
 
-    if (this.isSideBranMode) {
+    if (this.isSimulatorMode) {
       this.CL.keyboardCoreLogic_processTicker(elapsedMs);
 
       const report = this.CL.keyboardCoreLogic_getOutputHidReportBytes();
@@ -109,10 +109,10 @@ export class InputLogicSimulatorD {
   private updateSourceSetup = async () => {
     const config = this.keyboardConfigProvider.getKeyboardConfig();
     const isSimulatorMode = config.behaviorMode === 'Simulator';
-    if (this.isSideBranMode !== isSimulatorMode) {
+    if (this.isSimulatorMode !== isSimulatorMode) {
       console.log({ isSimulatorMode });
       this.deviceService.setSimulatorMode(isSimulatorMode);
-      this.isSideBranMode = isSimulatorMode;
+      this.isSimulatorMode = isSimulatorMode;
     }
 
     const prof =
@@ -161,9 +161,9 @@ export class InputLogicSimulatorD {
       this.onRealtimeKeyboardEvent,
     );
     this.deviceService.statusEventPort.unsubscribe(this.onDeviceStatusEvent);
-    if (this.isSideBranMode) {
+    if (this.isSimulatorMode) {
       this.deviceService.setSimulatorMode(false);
-      this.isSideBranMode = false;
+      this.isSimulatorMode = false;
     }
     this.tickerTimer.stop();
   }
