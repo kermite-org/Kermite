@@ -98,6 +98,16 @@ static void emitMemoryChecksumResult(uint8_t dataKind, uint8_t checksum) {
   emitGenericHidData(rawHidSendBuf);
 }
 
+static void emitSingleParameterChangedNotification(uint8_t parameterIndex, uint8_t value) {
+  uint8_t *p = rawHidSendBuf;
+  p[0] = 0xB0;
+  p[1] = 0x02;
+  p[2] = 0xE1;
+  p[3] = parameterIndex;
+  p[4] = value;
+  emitGenericHidData(rawHidSendBuf);
+}
+
 static void copyEepromBytesToBuffer(uint8_t *dstBuffer, int dstOffset, uint16_t srcEepromAddr, uint16_t len) {
   for (uint16_t i = 0; i < len; i++) {
     dstBuffer[dstOffset + i] = dataMemory_readByte(srcEepromAddr + i);
@@ -274,8 +284,8 @@ static void processReadGenericHidData() {
 //parameter changed handler
 
 static void onParameterChanged(uint8_t parameterIndex, uint8_t value) {
-  //todo: PC側にパラメタの変更を通知する
   if (!skipNotify) {
+    emitSingleParameterChangedNotification(parameterIndex, value);
   }
 }
 
