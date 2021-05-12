@@ -10,6 +10,7 @@ MODULE_SRCS += km0/deviceIo/atmega/boardIo.c
 MODULE_SRCS += km0/deviceIo/atmega/boardI2c.c
 MODULE_SRCS += km0/keyboard/keyScanner_directWired.c
 MODULE_SRCS += km0/keyboard/dataStorage.c
+MODULE_SRCS += km0/keyboard/configManager.c
 MODULE_SRCS += km0/keyboard/keyAssignsDataValidator.c
 MODULE_SRCS += km0/keyboard/configuratorServant.c
 MODULE_SRCS += km0/keyboard/keyCodeTable.c
