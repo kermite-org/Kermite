@@ -176,9 +176,11 @@ static void configuratorServantStateHandler(uint8_t state) {
   }
   if (state == ConfiguratorServentState_SimulatorModeEnabled) {
     isSimulatorModeEnabled = true;
+    printf("simulator mode\n");
   }
   if (state == ConfiguratorServentState_SimulatorModeDisabled) {
     isSimulatorModeEnabled = false;
+    printf("standalone mode\n");
   }
 }
 
