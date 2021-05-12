@@ -66,9 +66,7 @@ static const T_SystemParametersSet systemParameterMaxValues = {
 static void notifyParameterChanged(uint8_t parameterIndex, uint8_t value) {
   for (int i = 0; i < numParameterChangedListeners; i++) {
     ParameterChangedListener listener = parameterChangedListeners[i];
-    if (listener) {
-      listener(parameterIndex, value);
-    }
+    listener(parameterIndex, value);
   }
 }
 
