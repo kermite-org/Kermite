@@ -125,13 +125,8 @@ export class ApplicationRoot {
         this.keyboardConfigProvider.writeKeyboardConfig(config),
       config_writeKeyMappingToDevice: async () => {
         const profile = await this.profileManager.getCurrentProfileAsync();
-        const layoutStandard = this.keyboardConfigProvider.getKeyboardConfig()
-          .layoutStandard;
         if (profile) {
-          return await this.deviceService.emitKeyAssignsToDevice(
-            profile,
-            layoutStandard,
-          );
+          return await this.deviceService.emitKeyAssignsToDevice(profile);
         }
         return false;
       },

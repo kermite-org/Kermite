@@ -1,5 +1,5 @@
 import { jsx } from 'qx';
-import { IKeyboardBehaviorMode, IKeyboardLayoutStandard } from '~/shared';
+import { IKeyboardBehaviorMode } from '~/shared';
 import { texts } from '~/ui/common';
 import { useSystemLayoutModel } from '~/ui/common/sharedModels/SystemLayoutModel';
 import { DualItemsHoverSelector } from '~/ui/editor-page/components/fabrics/DualItemHoverSelector';

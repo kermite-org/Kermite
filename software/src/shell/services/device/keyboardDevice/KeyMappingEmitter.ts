@@ -1,4 +1,4 @@
-import { delayMs, IKeyboardLayoutStandard, IProfileData } from '~/shared';
+import { delayMs, IProfileData } from '~/shared';
 import { IDeviceWrapper } from '~/shell/services/device/keyboardDevice/DeviceWrapper';
 import { Packets } from '~/shell/services/device/keyboardDevice/Packets';
 import { makeProfileBinaryData } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/ProfileDataBinaryPacker';
@@ -7,7 +7,6 @@ import { calcChecksum } from './Helpers';
 export namespace KeyMappingEmitter {
   export async function emitKeyAssignsToDevice(
     profileData: IProfileData,
-    layout: IKeyboardLayoutStandard,
     device: IDeviceWrapper | undefined,
   ): Promise<boolean> {
     if (!device) {

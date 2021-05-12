@@ -1,8 +1,4 @@
-import {
-  IKeyboardLayoutStandard,
-  IProfileData,
-  IRealtimeKeyboardEvent,
-} from '~/shared';
+import { IProfileData, IRealtimeKeyboardEvent } from '~/shared';
 import { DeviceSelectionManager } from '~/shell/services/device/keyboardDevice/DeviceSelectionManager';
 import { KeyboardDeviceServiceCore } from '~/shell/services/device/keyboardDevice/DeviceServiceCoreImpl';
 import { IKeyboardDeviceServcie } from '~/shell/services/device/keyboardDevice/Interfaces';
@@ -54,13 +50,9 @@ export class KeyboardDeviceService implements IKeyboardDeviceServcie {
     this.realtimeEventPort.emit(event);
   }
 
-  async emitKeyAssignsToDevice(
-    editModel: IProfileData,
-    layout: IKeyboardLayoutStandard,
-  ): Promise<boolean> {
+  async emitKeyAssignsToDevice(editModel: IProfileData): Promise<boolean> {
     return await KeyMappingEmitter.emitKeyAssignsToDevice(
       editModel,
-      layout,
       this.selectionManager.getDevice(),
     );
   }

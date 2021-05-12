@@ -1,22 +1,19 @@
-import { IKeyboardBehaviorMode, IKeyboardLayoutStandard } from '~/shared';
+import { IKeyboardBehaviorMode } from '~/shared';
 import { ipcAgent, modalAlertTop } from '~/ui/common';
 
 export class KeyboardConfigModel {
   behaviorMode: IKeyboardBehaviorMode = 'Standalone';
-  layoutStandard: IKeyboardLayoutStandard = 'US';
 
   async loadKeyboardConfig() {
     const keyboardConfig = await ipcAgent.async.config_getKeyboardConfig();
-    const { behaviorMode, layoutStandard } = keyboardConfig;
+    const { behaviorMode } = keyboardConfig;
     this.behaviorMode = behaviorMode;
-    this.layoutStandard = layoutStandard;
   }
 
   async writeConfigurationToDevice() {
-    const { behaviorMode, layoutStandard } = this;
+    const { behaviorMode } = this;
     await ipcAgent.async.config_writeKeyboardConfig({
       behaviorMode,
-      layoutStandard,
     });
     if (behaviorMode === 'Standalone') {
       const done = await ipcAgent.async.config_writeKeyMappingToDevice();
