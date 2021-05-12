@@ -79,7 +79,7 @@ export const SystemParameterDefinitions: ICustromParameterSpec[] = [
   {
     type: 'toggle',
     slotIndex: 6,
-    label: 'Enable Simulator Mode',
+    label: 'Simulator Mode',
     defaultValue: 1,
   },
   {
