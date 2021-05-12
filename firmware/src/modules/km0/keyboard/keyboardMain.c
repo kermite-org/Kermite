@@ -266,6 +266,7 @@ static void processKeyStatesUpdate() {
 void keyboardMain_useDebugUart(uint32_t baud) {
   debugUart_initialize(baud);
   debugUartConfigured = true;
+  printf("--------\n");
 }
 
 void keyboardMain_useKeyScanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags)) {
