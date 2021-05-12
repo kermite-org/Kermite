@@ -4,6 +4,8 @@
 #include "km0/types.h"
 
 void keyboardCoreLogic_initialize();
+void keyboardCoreLogic_setSystemLayout(uint8_t layout);
+void keyboardCoreLogic_setWiringMode(uint8_t mode);
 uint16_t keyboardCoreLogic_getLayerActiveFlags();
 uint8_t *keyboardCoreLogic_getOutputHidReportBytes();
 uint16_t keyboardCoreLogic_peekAssignHitResult();
