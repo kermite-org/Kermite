@@ -542,9 +542,10 @@ function handleOperationOn(opWord: u32) {
       setModifiers(modFlags);
     }
     if (logicalKey) {
+      const isSecondaryLayout = logicOptions.systemLayout > 0;
       const hidKey = keyCodeTableImpl_mapLogicalKeyToHidKeyCode(
         logicalKey,
-        logicOptions.systemLayout > 0,
+        isSecondaryLayout,
       );
       const isShiftCancellable = ((opWord >> 12) & 1) > 0;
       const keyCode = hidKey & 0xff;
@@ -606,9 +607,10 @@ function handleOperationOff(opWord: u32) {
       clearModifiers(modFlags);
     }
     if (logicalKey) {
+      const isSecondaryLayout = logicOptions.systemLayout > 0;
       const hidKey = keyCodeTableImpl_mapLogicalKeyToHidKeyCode(
         logicalKey,
-        logicOptions.systemLayout > 0,
+        isSecondaryLayout,
       );
       const isShiftCancellable = ((opWord >> 12) & 1) > 0;
       const keyCode = hidKey & 0xff;
@@ -1203,13 +1205,13 @@ function keyboardCoreLogic_halt() {
 export function getKeyboardCoreLogicInterface(): KeyboardCoreLogicInterface {
   return {
     keyboardCoreLogic_initialize,
+    keyboardCoreLogic_setSystemLayout: setSystemLayout,
+    keyboardCoreLogic_setWiringMode: setWiringMode,
     keyboardCoreLogic_getOutputHidReportBytes,
     keyboardCoreLogic_getLayerActiveFlags,
     keyboardCoreLogic_peekAssignHitResult,
     keyboardCoreLogic_issuePhysicalKeyStateChanged,
     keyboardCoreLogic_processTicker,
     keyboardCoreLogic_halt,
-    keyboardCoreLogic_setSystemLayout: setSystemLayout,
-    keyboardCoreLogic_setWiringMode: setWiringMode,
   };
 }
