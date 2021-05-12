@@ -91,7 +91,7 @@ namespace CommunicationDataBinaryForamt {
     [0]: { category: 0xb0 }; // 0xb0 for memory operation
     [1]: { dataKind: 0x02 }; // 0x02 for custom parameters
     [2]: { command: 0xa0 }; // 0xa0 for single write request
-    [3]: { index: u8 }; // paramter index, 0~9
+    [3]: { index: u8 }; // paramter index
     [4]: { value: u8 }; // parameter value
   };
 
@@ -101,7 +101,13 @@ namespace CommunicationDataBinaryForamt {
     [2]: { command: 0xb0 }; // 0xb0 for reset request
   };
 
-  // 書き込めたかどうかは書き込み後にbulk readすることで確認する
+  type PktCustomParameterChangedNotification = PacketDeviceToHost & {
+    [0]: { category: 0xb0 }; // 0xb0 for memory operation
+    [1]: { dataKind: 0x02 }; // 0x02 for custom parameters
+    [2]: { command: 0xe1 }; // 0xe0 for notification
+    [3]: { index: u8 }; // paramter index
+    [4]: { value: u8 }; // parameter value
+  };
 
   // --------------------
   // device instance code write
