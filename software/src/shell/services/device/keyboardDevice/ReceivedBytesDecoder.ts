@@ -33,6 +33,11 @@ export type IReceivedBytesDecodeResult =
   | {
       type: 'custromParametersReadResponse';
       data: ICustomParametersReadResponseData;
+    }
+  | {
+      type: 'parameterChangedNotification';
+      parameterIndex: number;
+      value: number;
     };
 
 export function recievedBytesDecoder(
@@ -77,6 +82,16 @@ export function recievedBytesDecoder(
         parameterValues,
         parameterMaxValues,
       },
+    };
+  }
+
+  if (buf[0] === 0xb0 && buf[1] === 0x02 && buf[2] === 0xe1) {
+    const parameterIndex = buf[3];
+    const value = buf[4];
+    return {
+      type: 'parameterChangedNotification',
+      parameterIndex,
+      value,
     };
   }
 

@@ -173,7 +173,7 @@ export async function deviceSetupTask(
   };
 }
 
-export async function updateDeviceCustomParameterSingle(
+export function updateDeviceCustomParameterSingle(
   device: IDeviceWrapper,
   index: number,
   value: number,
@@ -181,8 +181,6 @@ export async function updateDeviceCustomParameterSingle(
   device.writeSingleFrame(
     Packets.makeCustomParameterSignleWriteOperationFrame(index, value),
   );
-  const paramsRes = await readDeviceCustomParameters(device);
-  return paramsRes.parameterValues;
 }
 
 export function sendSideBrainHidReport(
