@@ -1,10 +1,12 @@
 import {
   fallbackProfileData,
   generateNumberSequence,
+  IKeyboardDeviceStatus,
   IntervalTimerWrapper,
   IProfileManagerStatus,
   IRealtimeKeyboardEvent,
 } from '~/shared';
+import { SystemParameter } from '~/shared/defs/SystemCommand';
 import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
 import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
@@ -55,6 +57,18 @@ export class InputLogicSimulatorD {
       } else {
         console.log(`${event.isDown ? 'keydown' : 'keyup'} ${event.keyIndex}`);
       }
+    }
+  };
+
+  private onDeviceStatusEvent = (event: Partial<IKeyboardDeviceStatus>) => {
+    const values = event.systemParameterValues;
+    if (values) {
+      const systemLayout = values[SystemParameter.SystemLayout];
+      const isSimulatorMode = values[SystemParameter.SimulatorMode] > 0;
+      const wiringMode = values[SystemParameter.WiringMode];
+      console.log(
+        `systemlayout: ${systemLayout}, simulatorMode: ${isSimulatorMode}`,
+      );
     }
   };
 
@@ -125,6 +139,7 @@ export class InputLogicSimulatorD {
     this.deviceService.realtimeEventPort.subscribe(
       this.onRealtimeKeyboardEvent,
     );
+    this.deviceService.statusEventPort.subscribe(this.onDeviceStatusEvent);
     this.tickerTimer.start(
       withAppErrorHandler(
         this.processTicker,
@@ -145,6 +160,7 @@ export class InputLogicSimulatorD {
     this.deviceService.realtimeEventPort.unsubscribe(
       this.onRealtimeKeyboardEvent,
     );
+    this.deviceService.statusEventPort.unsubscribe(this.onDeviceStatusEvent);
     if (this.isSideBranMode) {
       this.deviceService.setSideBrainMode(false);
       this.isSideBranMode = false;
