@@ -77,14 +77,8 @@ export const SystemParameterDefinitions: ICustromParameterSpec[] = [
     defaultValue: 0,
   },
   {
-    type: 'toggle',
-    slotIndex: 6,
-    label: 'Simulator Mode',
-    defaultValue: 1,
-  },
-  {
     type: 'selection',
-    slotIndex: 7,
+    slotIndex: 6,
     label: 'Wiring Condition',
     options: [
       { value: 0, label: 'Main' },
@@ -93,34 +87,34 @@ export const SystemParameterDefinitions: ICustromParameterSpec[] = [
     defaultValue: 0,
   },
   {
-    slotIndex: 8,
+    slotIndex: 7,
     type: 'toggle',
     label: 'Glow Enabled',
     defaultValue: 0,
   },
   {
-    slotIndex: 9,
+    slotIndex: 8,
     type: 'linear',
     label: 'Glow Color',
     defaultValue: 0,
     maxValue: 255, // read from firmware
   },
   {
-    slotIndex: 10,
+    slotIndex: 9,
     type: 'linear',
     label: 'Glow Brightness',
     defaultValue: 10,
     maxValue: 255, // read from firmware
   },
   {
-    slotIndex: 11,
+    slotIndex: 10,
     type: 'linear',
     label: 'Glow Pattern',
     defaultValue: 0,
     maxValue: 255, // read from firmware
   },
   {
-    slotIndex: 12,
+    slotIndex: 11,
     type: 'selection',
     label: 'Glow Direction',
     defaultValue: 0,
@@ -130,7 +124,7 @@ export const SystemParameterDefinitions: ICustromParameterSpec[] = [
     ],
   },
   {
-    slotIndex: 13,
+    slotIndex: 12,
     type: 'linear',
     label: 'Glow Speed',
     defaultValue: 0,
