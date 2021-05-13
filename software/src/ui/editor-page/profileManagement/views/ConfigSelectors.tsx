@@ -1,26 +1,22 @@
 import { jsx } from 'qx';
 import { IKeyboardBehaviorMode } from '~/shared';
 import { texts } from '~/ui/common';
+import { useKeyboardBehaviorModeModel } from '~/ui/common/sharedModels/KeyboardBehaviorModeModel';
 import { useSystemLayoutModel } from '~/ui/common/sharedModels/SystemLayoutModel';
 import { DualItemsHoverSelector } from '~/ui/editor-page/components/fabrics/DualItemHoverSelector';
-import { keyboardConfigModel } from '~/ui/editor-page/profileManagement/models/KeyboardConfigModel';
 
 export const BehaviorSelector = () => {
-  const modes: IKeyboardBehaviorMode[] = ['Standalone', 'SideBrain'];
-  const currentMode = keyboardConfigModel.behaviorMode;
-  const setCurrent = (mode: IKeyboardBehaviorMode) => {
-    keyboardConfigModel.behaviorMode = mode;
-  };
+  const modes: IKeyboardBehaviorMode[] = ['Standalone', 'Simulator'];
+  const { behaviorMode, setBehaviorMode } = useKeyboardBehaviorModeModel();
   const textDictionary: { [key in IKeyboardBehaviorMode]: string } = {
     Standalone: 'STD',
-    SideBrain: 'SIM',
+    Simulator: 'SIM',
   };
-
   return (
     <DualItemsHoverSelector
       items={modes}
-      currentItem={currentMode}
-      setCurrentItem={setCurrent}
+      currentItem={behaviorMode}
+      setCurrentItem={setBehaviorMode}
       textDictionary={textDictionary}
       hint={texts.hint_assigner_topBar_keyboardBehaviorModeSelector}
     />

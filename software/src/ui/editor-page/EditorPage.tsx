@@ -17,6 +17,10 @@ const cssEditorPage = css`
     background: ${uiTheme.colors.clPanelBox};
     height: 40px;
     align-items: center;
+
+    > .profile-management-part {
+      margin-right: 50px;
+    }
   }
 
   > .mainRow {
@@ -33,7 +37,7 @@ export function EditorPage() {
   return (
     <div css={cssEditorPage}>
       <div className="topRow">
-        <ProfileManagementPart />
+        <ProfileManagementPart className="profile-management-part" />
         <DeviceControlSection />
       </div>
       <div className="mainRow">

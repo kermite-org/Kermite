@@ -183,22 +183,22 @@ export function updateDeviceCustomParameterSingle(
   );
 }
 
-export function sendSideBrainHidReport(
+export function sendSimulatorHidReport(
   device: IDeviceWrapper,
   report: number[],
 ) {
   if (report.length === 8) {
     console.log(JSON.stringify(report));
-    const pk = Packets.makeSideBrainHidReportFrame(report);
+    const pk = Packets.makeSimulatorHidReportFrame(report);
     device.writeSingleFrame(pk);
   }
 }
 
-export function sendSideBrainMode(device: IDeviceWrapper, enabled: boolean) {
-  console.log(`writeSideBrainMode ${enabled ? 1 : 0}`);
+export function sendSimulatorMode(device: IDeviceWrapper, enabled: boolean) {
+  console.log(`writeSimulatorMode ${enabled ? 1 : 0}`);
   if (!enabled) {
     const blankHidReport = [0, 0, 0, 0, 0, 0, 0, 0];
-    sendSideBrainHidReport(device, blankHidReport);
+    sendSimulatorHidReport(device, blankHidReport);
   }
-  device.writeSingleFrame(Packets.makeSideBrainModeSpecFrame(enabled));
+  device.writeSingleFrame(Packets.makeSimulatorModeSpecFrame(enabled));
 }

@@ -34,7 +34,7 @@ function createTimeIntervalCounter() {
 export class InputLogicSimulatorD {
   private CL = getKeyboardCoreLogicInterface();
   private tickerTimer = new IntervalTimerWrapper();
-  private isSideBranMode: boolean = false;
+  private isSimulatorMode: boolean = false;
   private layerActiveFlags: number = 0;
   private hidReportBytes: number[] = new Array(8).fill(0);
 
@@ -49,7 +49,7 @@ export class InputLogicSimulatorD {
   private onRealtimeKeyboardEvent = (event: IRealtimeKeyboardEvent) => {
     if (event.type === 'keyStateChanged') {
       const { keyIndex, isDown } = event;
-      if (this.isSideBranMode) {
+      if (this.isSimulatorMode) {
         this.CL.keyboardCoreLogic_issuePhysicalKeyStateChanged(
           keyIndex,
           isDown,
@@ -75,12 +75,12 @@ export class InputLogicSimulatorD {
   processTicker = () => {
     const elapsedMs = this.tickUpdator();
 
-    if (this.isSideBranMode) {
+    if (this.isSimulatorMode) {
       this.CL.keyboardCoreLogic_processTicker(elapsedMs);
 
       const report = this.CL.keyboardCoreLogic_getOutputHidReportBytes();
       if (!compareArray(this.hidReportBytes, report)) {
-        this.deviceService.writeSideBrainHidReport(report);
+        this.deviceService.writeSimulatorHidReport(report);
         this.hidReportBytes = report.slice(0);
       }
       const newLayerActiveFlags = this.CL.keyboardCoreLogic_getLayerActiveFlags();
@@ -108,11 +108,11 @@ export class InputLogicSimulatorD {
 
   private updateSourceSetup = async () => {
     const config = this.keyboardConfigProvider.getKeyboardConfig();
-    const isSideBrainMode = config.behaviorMode === 'SideBrain';
-    if (this.isSideBranMode !== isSideBrainMode) {
-      console.log({ isSideBrainMode });
-      this.deviceService.setSideBrainMode(isSideBrainMode);
-      this.isSideBranMode = isSideBrainMode;
+    const isSimulatorMode = config.behaviorMode === 'Simulator';
+    if (this.isSimulatorMode !== isSimulatorMode) {
+      console.log({ isSimulatorMode });
+      this.deviceService.setSimulatorMode(isSimulatorMode);
+      this.isSimulatorMode = isSimulatorMode;
     }
 
     const prof =
@@ -161,9 +161,9 @@ export class InputLogicSimulatorD {
       this.onRealtimeKeyboardEvent,
     );
     this.deviceService.statusEventPort.unsubscribe(this.onDeviceStatusEvent);
-    if (this.isSideBranMode) {
-      this.deviceService.setSideBrainMode(false);
-      this.isSideBranMode = false;
+    if (this.isSimulatorMode) {
+      this.deviceService.setSimulatorMode(false);
+      this.isSimulatorMode = false;
     }
     this.tickerTimer.stop();
   }

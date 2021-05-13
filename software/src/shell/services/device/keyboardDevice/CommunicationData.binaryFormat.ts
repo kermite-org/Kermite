@@ -187,15 +187,15 @@ namespace CommunicationDataBinaryForamt {
   // --------------------
   // device operation
 
-  type PktSpecSideBrainMode = PacketHostToDevice & {
+  type PktSpecSimulatorMode = PacketHostToDevice & {
     [0]: { category: 0xd0 }; // 0xd0 for device operation
     [1]: { command: 0x10 }; // 0x10 for side brain mode config
-    [2]: { isSideBrainMode: u8 }; // (0:normal, 1:sidebrain)
+    [2]: { isSimulatorMode: u8 }; // (0:normal, 1:simulator)
   };
 
-  type PktSetSideBrainHidReport = PacketHostToDevice & {
+  type PktSetSimulatorHidReport = PacketHostToDevice & {
     [0]: { category: 0xd0 }; // 0xd0 for device operation
-    [1]: { command: 0x20 }; // 0x20 for set sidebrain hid report
+    [1]: { command: 0x20 }; // 0x20 for set simulator hid report
     [2_9]: { hidReportBuf: Bytes<8> };
   };
 }

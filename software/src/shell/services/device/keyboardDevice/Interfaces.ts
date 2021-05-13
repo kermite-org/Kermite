@@ -11,8 +11,8 @@ export interface IKeyboardDeviceServcie {
   realtimeEventPort: IEventPort<IRealtimeKeyboardEvent>;
   statusEventPort: IEventPort<Partial<IKeyboardDeviceStatus>>;
   selectTargetDevice(path: string): void;
-  setSideBrainMode(enabled: boolean): void;
-  writeSideBrainHidReport(report: number[]): void;
+  setSimulatorMode(enabled: boolean): void;
+  writeSimulatorHidReport(report: number[]): void;
   setCustomParameterValue(index: number, value: number): void;
   emitRealtimeEventFromSimulator(event: IRealtimeKeyboardEvent): void;
   emitKeyAssignsToDevice(editModel: IProfileData): Promise<boolean>;

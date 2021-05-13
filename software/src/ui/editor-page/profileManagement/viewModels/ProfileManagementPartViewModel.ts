@@ -1,4 +1,4 @@
-import { Hook } from 'qx';
+import { asyncRerender, Hook } from 'qx';
 import { forceChangeFilePathExtension, IProfileEditSource } from '~/shared';
 import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import {
@@ -6,16 +6,17 @@ import {
   ipcAgent,
   ISelectorSource,
   makePlainSelectorOption,
-  useLocal,
   modalAlert,
+  modalAlertTop,
   modalConfirm,
   modalTextEdit,
-  useDeviceStatusModel,
   uiStatusModel,
+  useDeviceStatusModel,
+  useLocal,
 } from '~/ui/common';
+import { useKeyboardBehaviorModeModel } from '~/ui/common/sharedModels/KeyboardBehaviorModeModel';
 import { editorModel } from '~/ui/editor-page/editorMainPart/models/EditorModel';
 import { callProfileSetupModal } from '~/ui/editor-page/editorMainPart/views/modals/ProfileSetupModal';
-import { keyboardConfigModel } from '~/ui/editor-page/profileManagement/models/KeyboardConfigModel';
 import { ProfilesModel } from '~/ui/editor-page/profileManagement/models/ProfilesModel';
 
 export interface IProfileManagementPartViewModel {
@@ -181,11 +182,6 @@ const onSaveButton = () => {
   profilesModel.saveProfile();
 };
 
-const onWriteButton = async () => {
-  await profilesModel.saveProfile();
-  await keyboardConfigModel.writeConfigurationToDevice();
-};
-
 const handleImportFromFile = async () => {
   const filePath = await ipcAgent.async.file_getOpenJsonFilePathWithDialog();
   if (filePath) {
@@ -243,6 +239,24 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
 
   const openUserProfilesFolder = async () => {
     await ipcAgent.async.profile_openUserProfilesFolder();
+  };
+
+  const { behaviorMode } = useKeyboardBehaviorModeModel();
+
+  const onWriteButton = async () => {
+    await profilesModel.saveProfile();
+    if (behaviorMode === 'Standalone') {
+      const done = await ipcAgent.async.config_writeKeyMappingToDevice();
+      // todo: トーストにする
+      if (done) {
+        await modalAlertTop('write succeeded.');
+      } else {
+        await modalAlertTop('write failed.');
+      }
+    } else {
+      asyncRerender();
+      await modalAlertTop('write succeeded. (simulator mode)');
+    }
   };
 
   return {
