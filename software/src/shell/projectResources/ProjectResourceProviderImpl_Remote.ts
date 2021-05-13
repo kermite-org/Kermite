@@ -123,7 +123,7 @@ export class ProjectResourceProviderImpl_Remote
         fetchJson,
         uri,
       );
-      const targetConfig = projectJsonContent.customParameterConfigurations.find(
+      const targetConfig = projectJsonContent.parameterConfigurations.find(
         (it) =>
           it.targetVariationNames.includes(variationName) ||
           it.targetVariationNames.includes('all'),

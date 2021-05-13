@@ -1,7 +1,7 @@
 {
   "projectId": "066MbLCf",
   "keyboardName": "4x3pad",
-  "customParameterConfigurations": [
+  "parameterConfigurations": [
     {
       "targetVariationNames": ["promicro_atmega"],
       "systemParameterKeys": [

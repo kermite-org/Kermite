@@ -3,7 +3,7 @@
   "properties": {
     "projectId": { "type": "string" },
     "keyboardName": { "type": "string" },
-    "customParameterConfigurations": {
+    "parameterConfigurations": {
       "type": "array",
       "items": {
         "type": "object",
@@ -141,6 +141,6 @@
       }
     }
   },
-  "required": ["projectId", "keyboardName", "customParameterConfigurations"],
+  "required": ["projectId", "keyboardName", "parameterConfigurations"],
   "additionalProperties": false
 }

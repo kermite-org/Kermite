@@ -34,7 +34,7 @@ import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsPr
 export interface IPorjectFileJson {
   projectId: string;
   keyboardName: string;
-  customParameterConfigurations: {
+  parameterConfigurations: {
     targetVariationNames: string[];
     systemParameterKeys: string[];
   }[];
@@ -54,7 +54,7 @@ interface IProjectResourceInfoSource {
     buildRevision: number;
     buildTimestamp: string;
   }[];
-  customParameterConfigurations: {
+  parameterConfigurations: {
     targetVariationNames: string[];
     systemParameterKeys: string[];
   }[];
@@ -176,7 +176,7 @@ namespace ProjectResourceInfoSourceLoader {
         const {
           projectId,
           keyboardName,
-          customParameterConfigurations,
+          parameterConfigurations,
         } = await readProjectFile(projectFilePath);
 
         const presetsFolderPath = pathJoin(projectBaseDir, 'profiles');
@@ -194,7 +194,7 @@ namespace ProjectResourceInfoSourceLoader {
           presetNames,
           firmwares,
           origin: 'local' as const,
-          customParameterConfigurations,
+          parameterConfigurations,
         };
       }),
     );
@@ -272,7 +272,7 @@ export class ProjectResourceProviderImpl_Local
   ): Promise<IProjectCustomDefinition | undefined> {
     const info = this.getProjectInfoSourceById(projectId);
     if (info) {
-      const targetConfig = info.customParameterConfigurations.find(
+      const targetConfig = info.parameterConfigurations.find(
         (it) =>
           it.targetVariationNames.includes(variationName) ||
           it.targetVariationNames.includes('all'),
