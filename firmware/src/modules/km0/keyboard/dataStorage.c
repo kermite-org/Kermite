@@ -120,7 +120,7 @@ static uint16_t putBlankChunk(uint16_t addr, uint16_t chunkSig, uint16_t bodySiz
 }
 
 //profileDataのBodyの先頭からストレージ領域末尾までのサイズを得る
-static uint16_t getKeyAssignsDataBodyLengthMax() {
+static uint16_t getKeyMappingDataBodyLengthMax() {
   uint16_t addr = getChunkBodyAddress(ChunkSig_ProfileData);
   if (addr) {
     return dataMemory_getCapacity() - addr;
@@ -137,12 +137,12 @@ static bool validateStorageDataFormat() {
   uint16_t szSystemData = getChunkBodySize(ChunkSig_SystemData);
   uint16_t szSystemParameters = getChunkBodySize(ChunkSig_SystemParameters);
   uint16_t szCustomParameters = getChunkBodySize(ChunkSig_CustomParameters);
-  uint16_t posKeyAssignsDataBody = getChunkBodyAddress(ChunkSig_ProfileData);
+  uint16_t posKeyMappingDataBody = getChunkBodyAddress(ChunkSig_ProfileData);
   bool dataLayoutValid = (szUserData == UserStorageDataSize) &&
                          (szSystemData == SystemDataSize) &&
                          (szSystemParameters == SystemParametersDataSize) &&
                          (szCustomParameters == CustomParametersDataSize) &&
-                         (posKeyAssignsDataBody > 0);
+                         (posKeyMappingDataBody > 0);
   if (!dataLayoutValid) {
     return false;
   }
@@ -193,8 +193,8 @@ void dataStorage_initialize() {
   }
 }
 
-uint16_t dataStorage_getKeyAssignDataCapacity() {
-  return getKeyAssignsDataBodyLengthMax();
+uint16_t dataStorage_getKeyMappingDataCapacity() {
+  return getKeyMappingDataBodyLengthMax();
 }
 
 uint16_t dataStorage_getDataAddress_deviceInstanceCode() {

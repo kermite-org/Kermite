@@ -1,5 +1,5 @@
 import { Hook } from 'qx';
-import { SystemParameter } from '~/shared/defs/SystemCommand';
+import { SystemParameter } from '~/shared';
 import { ipcAgent } from '~/ui/common';
 
 interface ISystemLayoutModel {

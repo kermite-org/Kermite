@@ -4,7 +4,7 @@
 #include "configManager.h"
 #include "configuratorServant.h"
 #include "dataStorage.h"
-#include "keyAssignsDataValidator.h"
+#include "keyMappingDataValidator.h"
 #include "keyboardCoreLogic.h"
 #include "km0/common/bitOperations.h"
 #include "km0/common/utils.h"
@@ -99,8 +99,8 @@ static void setupSerialNumberText() {
 }
 
 static void resetKeyboardCoreLogic() {
-  bool keyAssignsDataValid = keyAssignsDataValidator_checkBinaryProfileDataHeader();
-  if (keyAssignsDataValid) {
+  bool keyMappingDataValid = keyMappingDataValidator_checkBinaryProfileDataHeader();
+  if (keyMappingDataValid) {
     keyboardCoreLogic_initialize();
   } else {
     keyboardCoreLogic_halt();

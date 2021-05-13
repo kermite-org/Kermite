@@ -1,5 +1,5 @@
-#ifndef __OPTION_MANAGER_H__
-#define __OPTION_MANAGER_H__
+#ifndef __CONFIG_MANAGER_H__
+#define __CONFIG_MANAGER_H__
 
 #include "km0/types.h"
 

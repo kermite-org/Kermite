@@ -8,3 +8,6 @@ export const RawHidMessageProtocolRevision = 1;
 
 // 210509 1, 初版
 export const ProfileBinaryFormatRevision = 1;
+
+// 210513, 1, 初版
+export const ConfigParametersRevision = 1;

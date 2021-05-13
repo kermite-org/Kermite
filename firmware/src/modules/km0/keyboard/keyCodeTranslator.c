@@ -1,4 +1,4 @@
-#include "keyCodeTable.h"
+#include "keyCodeTranslator.h"
 #include "km0/common/romData.h"
 
 enum LogicalKey {
@@ -505,7 +505,7 @@ static const LogicalKeyItem *getLogicalKeyItem(uint8_t logicalKey) {
   return 0;
 }
 
-uint16_t keyCodeTable_mapLogicalKeyToHidKeyCode(uint8_t logicalKey, bool isSecondaryLayout) {
+uint16_t keyCodeTranslator_mapLogicalKeyToHidKeyCode(uint8_t logicalKey, bool isSecondaryLayout) {
   const LogicalKeyItem *item = getLogicalKeyItem(logicalKey);
   if (item) {
     if (isSecondaryLayout && item->hidKeySecondary != 0) {
@@ -516,7 +516,7 @@ uint16_t keyCodeTable_mapLogicalKeyToHidKeyCode(uint8_t logicalKey, bool isSecon
   return 0;
 }
 
-char *keyCodeTable_mapLogicalKeyToKeyText(uint8_t logicalKey) {
+char *keyCodeTranslator_mapLogicalKeyToKeyText(uint8_t logicalKey) {
   const LogicalKeyItem *item = getLogicalKeyItem(logicalKey);
   if (item) {
     return item->text;

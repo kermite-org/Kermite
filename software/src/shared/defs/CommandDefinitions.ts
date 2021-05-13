@@ -1,3 +1,5 @@
+export const NumSystemParameters = 13;
+
 export const enum SystemParameter {
   EmitKeyStroke = 0,
   EmitRealtimeEvents,
@@ -5,7 +7,6 @@ export const enum SystemParameter {
   HeartbeatLed,
   MasterSide,
   SystemLayout,
-  SimulatorMode__Deprecated,
   WiringMode,
   GlowActive,
   GlowColor,
@@ -15,8 +16,6 @@ export const enum SystemParameter {
   GlowSpeed,
 }
 
-export const NumSystemParameters = 14;
-
 export const enum SystemAction {
   SetEmitKeyStroke = 0,
   SetEmitRealtimeEvents,
@@ -24,7 +23,6 @@ export const enum SystemAction {
   SetHeartbeatLed,
   SetMasterSide,
   SetSystemLayout,
-  SetSimulatorMode__Deprecated,
   SetWiringMode,
   SetGlowActive,
   SetGlowColor,

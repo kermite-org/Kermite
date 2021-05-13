@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
 import { dataStorage } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/DataStorage';
-import { keyCodeTableImpl_mapLogicalKeyToHidKeyCode } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/KeyCodeTableImpl';
+import { keyCodeTranslator_mapLogicalKeyToHidKeyCode } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/KeyCodeTranslator';
 import {
   AssignStorageBaseAddr,
   AssignStorageHeaderLength,
@@ -196,14 +196,14 @@ const assignMemoryReaderState = new (class {
 function initAssignMemoryReader() {
   const profileHeaderLocation = dataStorage.getChunk_profileHeader().address;
   const layerListDataLocation = dataStorage.getChunk_layerList().address;
-  const keyAssignsDataLocation = dataStorage.getChunk_keyAssigns().address;
-  const keyAssignsDataSize = dataStorage.getChunk_keyAssigns().size;
+  const keyMappingDataLocation = dataStorage.getChunk_keyAssigns().address;
+  const keyMappingDataSize = dataStorage.getChunk_keyAssigns().size;
   const rs = assignMemoryReaderState;
   const numLayers = readStorageByte(profileHeaderLocation + 4);
   rs.numLayers = numLayers;
-  rs.assignsStartAddress = keyAssignsDataLocation;
-  rs.assignsEndAddress = keyAssignsDataLocation + keyAssignsDataSize;
-  // console.log('nl:%d bl:%d\n', numLayers, keyAssignsDataSize);
+  rs.assignsStartAddress = keyMappingDataLocation;
+  rs.assignsEndAddress = keyMappingDataLocation + keyMappingDataSize;
+  // console.log('nl:%d bl:%d\n', numLayers, keyMappingDataSize);
   for (let i = 0; i < 16; i++) {
     rs.layerAttributeWords[i] =
       i < numLayers ? readStorageWordBE(layerListDataLocation + i * 2) : 0;
@@ -543,7 +543,7 @@ function handleOperationOn(opWord: u32) {
     }
     if (logicalKey) {
       const isSecondaryLayout = logicOptions.systemLayout > 0;
-      const hidKey = keyCodeTableImpl_mapLogicalKeyToHidKeyCode(
+      const hidKey = keyCodeTranslator_mapLogicalKeyToHidKeyCode(
         logicalKey,
         isSecondaryLayout,
       );
@@ -608,7 +608,7 @@ function handleOperationOff(opWord: u32) {
     }
     if (logicalKey) {
       const isSecondaryLayout = logicOptions.systemLayout > 0;
-      const hidKey = keyCodeTableImpl_mapLogicalKeyToHidKeyCode(
+      const hidKey = keyCodeTranslator_mapLogicalKeyToHidKeyCode(
         logicalKey,
         isSecondaryLayout,
       );

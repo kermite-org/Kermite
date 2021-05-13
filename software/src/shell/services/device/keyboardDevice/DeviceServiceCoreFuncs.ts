@@ -1,10 +1,11 @@
 import {
+  ConfigParametersRevision,
   ConfigStorageFormatRevision,
   delayMs,
   ProfileBinaryFormatRevision,
   RawHidMessageProtocolRevision,
 } from '~/shared';
-import { NumSystemParameters } from '~/shared/defs/SystemCommand';
+import { NumSystemParameters } from '~/shared/defs/CommandDefinitions';
 import { generateRandomDeviceInstanceCode } from '~/shared/funcs/DomainRelatedHelpers';
 import { Packets } from '~/shell/services/device/keyboardDevice/Packets';
 import {
@@ -15,33 +16,51 @@ import {
 } from '~/shell/services/device/keyboardDevice/ReceivedBytesDecoder';
 import { IDeviceWrapper } from './DeviceWrapper';
 
+function checkRevisionValue(
+  label: string,
+  firmwareValue: number,
+  softwareValue: number,
+) {
+  if (firmwareValue !== softwareValue) {
+    throw new Error(
+      `incompatible ${label} (software:${softwareValue}, firmware:${firmwareValue})`,
+    );
+  }
+}
+
 function checkDeviceRevisions(data: {
   projectReleaseBuildRevision: number;
   configStorageFormatRevision: number;
+  configParametersRevision: number;
   profileBinaryFormatRevision: number;
   rawHidMessageProtocolRevision: number;
 }) {
   const {
     configStorageFormatRevision,
-    rawHidMessageProtocolRevision,
+    configParametersRevision,
     profileBinaryFormatRevision,
+    rawHidMessageProtocolRevision,
   } = data;
-
-  if (configStorageFormatRevision !== ConfigStorageFormatRevision) {
-    throw new Error(
-      `incompatible config storage revision (software:${ConfigStorageFormatRevision}, firmware:${configStorageFormatRevision})`,
-    );
-  }
-  if (profileBinaryFormatRevision !== ProfileBinaryFormatRevision) {
-    throw new Error(
-      `incompatible config storage revision (software:${ProfileBinaryFormatRevision}, firmware:${profileBinaryFormatRevision})`,
-    );
-  }
-  if (rawHidMessageProtocolRevision !== RawHidMessageProtocolRevision) {
-    throw new Error(
-      `incompatible message protocol revision (software:${RawHidMessageProtocolRevision}, firmware:${rawHidMessageProtocolRevision})`,
-    );
-  }
+  checkRevisionValue(
+    'config storage revision',
+    configStorageFormatRevision,
+    ConfigStorageFormatRevision,
+  );
+  checkRevisionValue(
+    'config parameters revision',
+    configParametersRevision,
+    ConfigParametersRevision,
+  );
+  checkRevisionValue(
+    'profile binary format revision',
+    profileBinaryFormatRevision,
+    ProfileBinaryFormatRevision,
+  );
+  checkRevisionValue(
+    'message protocol revision',
+    rawHidMessageProtocolRevision,
+    RawHidMessageProtocolRevision,
+  );
 }
 
 // function getDeviceInitialParameterValues(customDef: IProjectCustomDefinition) {

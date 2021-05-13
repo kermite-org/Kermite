@@ -1,4 +1,6 @@
 import {
+  getSystemParameterDefinitionBySystemParameterKey,
+  ICustromParameterSpec,
   IFirmwareTargetDevice,
   IPersistKeyboardDesign,
   IProfileData,
@@ -121,13 +123,16 @@ export class ProjectResourceProviderImpl_Remote
         fetchJson,
         uri,
       );
-      const targetConfig = projectJsonContent.customParameterConfigurations.find(
+      const targetConfig = projectJsonContent.parameterConfigurations.find(
         (it) =>
           it.targetVariationNames.includes(variationName) ||
           it.targetVariationNames.includes('all'),
       );
       if (targetConfig) {
-        return { customParameterSpecs: targetConfig.customParameters };
+        const customParameterSpecs = targetConfig.systemParameterKeys
+          .map(getSystemParameterDefinitionBySystemParameterKey)
+          .filter((a) => !!a) as ICustromParameterSpec[];
+        return { customParameterSpecs };
       }
     }
     return undefined;

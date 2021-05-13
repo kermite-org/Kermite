@@ -20,7 +20,6 @@ static const T_SystemParametersSet systemParametersDefault = {
   .heartbeatLedOutput = true,
   .masterSide = 0,
   .secondSystemLayoutActive = false,
-  .simulatorModeActive__Deprecated = false,
   .alterAssignsActive = false,
   .glowActive = false,
   .glowColor = 0,
@@ -37,7 +36,6 @@ static const T_SystemParametersSet systemParameterMaxValues = {
   .heartbeatLedOutput = 1,
   .masterSide = 1,
   .secondSystemLayoutActive = 1,
-  .simulatorModeActive__Deprecated = 1,
   .alterAssignsActive = 1,
   .glowActive = 1,
   .glowColor = 12,
@@ -46,22 +44,6 @@ static const T_SystemParametersSet systemParameterMaxValues = {
   .glowDirection = 1,
   .glowSpeed = 10,
 };
-
-// static const uint8_t systemParameterMaxValues[NumSystemParameters] = {
-//   1,
-//   1,
-//   1,
-//   1,
-//   2, //master side
-//   1,
-//   1,
-//   1,
-//   12,  //glow color
-//   255, //glow brightness
-//   10,  //glow pattern
-//   1,   //glow direction
-//   10,  //glow speed
-// };
 
 static void notifyParameterChanged(uint8_t parameterIndex, uint8_t value) {
   for (int i = 0; i < numParameterChangedListeners; i++) {
@@ -129,8 +111,8 @@ void configManager_resetSystemParameters() {
 }
 
 static void shiftParameterValue(uint8_t parameterIndex, uint8_t payloadValue) {
-  int dir = (payloadValue & 0x0F == 1) ? 1 : -1;
-  bool clamp = payloadValue >> 4 & 0x0F > 0;
+  int dir = ((payloadValue & 0x0F) == 1) ? 1 : -1;
+  bool clamp = (payloadValue >> 4 & 0x0F) > 0;
   uint8_t bi = parameterIndex - SystemParameterIndexBase;
   bool maxValue = ((uint8_t *)&systemParameterMaxValues)[bi];
   int oldValue = systemParameterValues[bi];

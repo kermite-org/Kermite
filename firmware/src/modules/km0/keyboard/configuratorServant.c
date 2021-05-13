@@ -15,35 +15,23 @@
 
 static void (*stateNotificationCallback)(uint8_t state) = 0;
 
-// static void (*customParameterChangedCallback)(uint8_t slotIndex, uint8_t value) = 0;
-
 static void emitStateNotification(uint8_t state) {
   if (stateNotificationCallback) {
     stateNotificationCallback(state);
   }
 }
 
-// static void invokeCustomParameterChangedCallback(uint8_t index, uint8_t value) {
-//   if (customParameterChangedCallback) {
-//     customParameterChangedCallback(index, value);
-//   }
-// }
-
 //---------------------------------------------
 //storage data addresses
 
 static uint16_t storageAddr_DeviceInstanceCode;
-// static uint16_t storageAddr_CustomSettingsBytesInitializationFlag;
-// static uint16_t storageAddr_CustomSettingsBytes;
 static uint16_t storageAddr_profileData;
-static uint16_t keyAssignsDataCapacity;
+static uint16_t keyMappingDataCapacity;
 
 static void initializeDataAddresses() {
   storageAddr_DeviceInstanceCode = dataStorage_getDataAddress_deviceInstanceCode();
-  // storageAddr_CustomSettingsBytesInitializationFlag = dataStorage_getDataAddress_parametersInitializationFlag();
-  // storageAddr_CustomSettingsBytes = dataStorage_getDataAddress_systemParameters();
   storageAddr_profileData = dataStorage_getDataAddress_profileData();
-  keyAssignsDataCapacity = dataStorage_getKeyAssignDataCapacity();
+  keyMappingDataCapacity = dataStorage_getKeyMappingDataCapacity();
 }
 
 //---------------------------------------------
@@ -126,13 +114,14 @@ static void emitDeviceAttributesResponse() {
   p[14] = Kermite_Project_IsResourceOriginOnline;
   p[15] = 0;
   copyEepromBytesToBuffer(p, 16, storageAddr_DeviceInstanceCode, 8);
-  p[24] = keyAssignsDataCapacity >> 8 & 0xFF;
-  p[25] = keyAssignsDataCapacity & 0xFF;
+  p[24] = keyMappingDataCapacity >> 8 & 0xFF;
+  p[25] = keyMappingDataCapacity & 0xFF;
   utils_fillBytes(p + 26, 0, 16);
   size_t slen = utils_clamp(strlen(Kermite_Project_VariationName), 0, 16);
   utils_copyBytes(p + 26, (uint8_t *)Kermite_Project_VariationName, slen);
   utils_copyBytes(p + 42, (uint8_t *)Kermite_Project_McuCode, 8);
   p[50] = Kermite_ProfileBinaryFormatRevision;
+  p[51] = Kermite_ConfigParametersRevision;
   emitGenericHidData(rawHidSendBuf);
 }
 
@@ -145,9 +134,6 @@ static void emitCustomParametersReadResponse() {
   p[3] = num;
   configManager_readSystemParameterValues(p + 4, num);
   configManager_readSystemParameterMaxValues(p + 4 + num, num);
-  // utils_copyBytes(p + 3, )
-  // p[3] = dataMemory_readByte(storageAddr_CustomSettingsBytesInitializationFlag);
-  // copyEepromBytesToBuffer(p, 4, storageAddr_CustomSettingsBytes, 10);
   emitGenericHidData(rawHidSendBuf);
 }
 
@@ -211,19 +197,11 @@ static void processReadGenericHidData() {
           skipNotify = true;
           configManager_bulkWriteParameters(ptr, count, parameterIndexBase);
           skipNotify = false;
-          // dataMemory_writeBytes(storageAddr_CustomSettingsBytes, ptr, num);
-          // dataMemory_writeByte(storageAddr_CustomSettingsBytesInitializationFlag, 1);
-          // for (uint8_t bi = 0; bi < num; bi++) {
-          //   // uint8_t value = src[i];
-          //   // invokeCustomParameterChangedCallback(i, value);
-          // }
         }
         if (cmd == 0xa0) {
           // printf("handle custom parameters signle write\n");
           uint8_t parameterIndex = p[3];
           uint8_t value = p[4];
-          // dataMemory_writeByte(storageAddr_CustomSettingsBytes + index, value);
-          // invokeCustomParameterChangedCallback(index, value);
           configManager_writeParameter(parameterIndex, value);
         }
 
@@ -269,18 +247,6 @@ static void processReadGenericHidData() {
 }
 
 //---------------------------------------------
-//custom parameter initial loading
-
-// static void loadCustomParameters() {
-//   bool isInitialized = dataMemory_readByte(storageAddr_CustomSettingsBytesInitializationFlag);
-//   if (isInitialized) {
-//     for (uint8_t i = 0; i < 10; i++) {
-//       uint8_t value = dataMemory_readByte(storageAddr_CustomSettingsBytes + i);
-//       invokeCustomParameterChangedCallback(i, value);
-//     }
-//   }
-// }
-
 //parameter changed handler
 
 static void onParameterChanged(uint8_t parameterIndex, uint8_t value) {
@@ -293,12 +259,9 @@ static void onParameterChanged(uint8_t parameterIndex, uint8_t value) {
 //exports
 
 void configuratorServant_initialize(void (*_stateNotificationCallback)(uint8_t state)) {
-  // void (*_customParameterChangedCallback)(uint8_t index, uint8_t value)) {
   stateNotificationCallback = _stateNotificationCallback;
   configManager_addParameterChangeListener(onParameterChanged);
-  // customParameterChangedCallback = _customParameterChangedCallback;
   initializeDataAddresses();
-  // loadCustomParameters();
 }
 
 void configuratorServant_processUpdate() {

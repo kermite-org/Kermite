@@ -492,7 +492,7 @@ function getLogicalKeysItem(logicalKey: number): LogicalKeyItem | undefined {
   });
 }
 
-export function keyCodeTableImpl_mapLogicalKeyToHidKeyCode(
+export function keyCodeTranslator_mapLogicalKeyToHidKeyCode(
   logicalKey: number,
   isSecondaryLayout: boolean,
 ): number {
@@ -507,7 +507,7 @@ export function keyCodeTableImpl_mapLogicalKeyToHidKeyCode(
   return 0;
 }
 
-export function keyCodeTableImpl_mapLogicalKeyToKeyText(
+export function keyCodeTranslator_mapLogicalKeyToKeyText(
   logicalKey: number,
 ): string | undefined {
   const item = getLogicalKeysItem(logicalKey);

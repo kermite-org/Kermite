@@ -1,4 +1,5 @@
 import {
+  getSystemParameterDefinitionBySystemParameterKey,
   ICustromParameterSpec,
   IFirmwareTargetDevice,
   IPersistKeyboardDesign,
@@ -33,9 +34,9 @@ import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsPr
 export interface IPorjectFileJson {
   projectId: string;
   keyboardName: string;
-  customParameterConfigurations: {
+  parameterConfigurations: {
     targetVariationNames: string[];
-    customParameters: ICustromParameterSpec[];
+    systemParameterKeys: string[];
   }[];
 }
 interface IProjectResourceInfoSource {
@@ -53,9 +54,9 @@ interface IProjectResourceInfoSource {
     buildRevision: number;
     buildTimestamp: string;
   }[];
-  customParameterConfigurations: {
+  parameterConfigurations: {
     targetVariationNames: string[];
-    customParameters: ICustromParameterSpec[];
+    systemParameterKeys: string[];
   }[];
 }
 namespace ProjectResourceInfoSourceLoader {
@@ -175,7 +176,7 @@ namespace ProjectResourceInfoSourceLoader {
         const {
           projectId,
           keyboardName,
-          customParameterConfigurations,
+          parameterConfigurations,
         } = await readProjectFile(projectFilePath);
 
         const presetsFolderPath = pathJoin(projectBaseDir, 'profiles');
@@ -193,7 +194,7 @@ namespace ProjectResourceInfoSourceLoader {
           presetNames,
           firmwares,
           origin: 'local' as const,
-          customParameterConfigurations,
+          parameterConfigurations,
         };
       }),
     );
@@ -271,13 +272,16 @@ export class ProjectResourceProviderImpl_Local
   ): Promise<IProjectCustomDefinition | undefined> {
     const info = this.getProjectInfoSourceById(projectId);
     if (info) {
-      const targetConfig = info.customParameterConfigurations.find(
+      const targetConfig = info.parameterConfigurations.find(
         (it) =>
           it.targetVariationNames.includes(variationName) ||
           it.targetVariationNames.includes('all'),
       );
       if (targetConfig) {
-        return { customParameterSpecs: targetConfig.customParameters };
+        const customParameterSpecs = targetConfig.systemParameterKeys
+          .map(getSystemParameterDefinitionBySystemParameterKey)
+          .filter((a) => !!a) as ICustromParameterSpec[];
+        return { customParameterSpecs };
       }
     }
     return undefined;

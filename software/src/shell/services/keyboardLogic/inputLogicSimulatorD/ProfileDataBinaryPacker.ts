@@ -433,7 +433,7 @@ function encodeLayerListData(layers: ILayer[]): number[] {
   );
 }
 
-function encodeKeyAssignsData(profile: IProfileData): number[] {
+function encodeKeyMappingData(profile: IProfileData): number[] {
   const numLayers = profile.layers.length;
   const rawAssigns = makeRawAssignEntries(profile);
   rawAssigns.sort(
@@ -473,8 +473,8 @@ export function makeProfileBinaryData(profile: IProfileData): number[] {
   const layerListData = encodeLayerListData(profile.layers);
   const layerListChunk = createChunk(0xbb74, layerListData);
 
-  const keyAssignsData = encodeKeyAssignsData(profile);
-  const keyAssignsChunk = createChunk(0xbb78, keyAssignsData);
+  const keyMappingData = encodeKeyMappingData(profile);
+  const keyAssignsChunk = createChunk(0xbb78, keyMappingData);
 
   return [...profileHeaderChunk, ...layerListChunk, ...keyAssignsChunk];
 }
