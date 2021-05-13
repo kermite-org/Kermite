@@ -188,14 +188,14 @@ static AssignMemoryReaderState assignMemoryReaderState;
 static void initAssignMemoryReader() {
   uint16_t profileHeaderLocation = dataStorage_getDataAddress_profileData_profileHeader();
   uint16_t layerListDataLocation = dataStorage_getDataAddress_profileData_layerList();
-  uint16_t keyAssignsDataLocation = dataStorage_getDataAddress_profileData_keyAssigns();
-  uint16_t keyAssignsDataSize = dataStorage_getDataSize_profileData_keyAssigns();
+  uint16_t keyMappingDataLocation = dataStorage_getDataAddress_profileData_keyAssigns();
+  uint16_t keyMappingDataSize = dataStorage_getDataSize_profileData_keyAssigns();
   AssignMemoryReaderState *rs = &assignMemoryReaderState;
   uint8_t numLayers = readStorageByte(profileHeaderLocation + 4);
   rs->numLayers = numLayers;
-  rs->assignsStartAddress = keyAssignsDataLocation;
-  rs->assignsEndAddress = keyAssignsDataLocation + keyAssignsDataSize;
-  printf("nl:%d bl:%d\n", numLayers, keyAssignsDataSize);
+  rs->assignsStartAddress = keyMappingDataLocation;
+  rs->assignsEndAddress = keyMappingDataLocation + keyMappingDataSize;
+  printf("nl:%d bl:%d\n", numLayers, keyMappingDataSize);
   for (uint8_t i = 0; i < 16; i++) {
     rs->layerAttributeWords[i] = (i < numLayers) ? readStorageWordBE(layerListDataLocation + i * 2) : 0;
   }

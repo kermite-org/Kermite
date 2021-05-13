@@ -99,8 +99,8 @@ static void setupSerialNumberText() {
 }
 
 static void resetKeyboardCoreLogic() {
-  bool keyAssignsDataValid = keyMappingDataValidator_checkBinaryProfileDataHeader();
-  if (keyAssignsDataValid) {
+  bool keyMappingDataValid = keyMappingDataValidator_checkBinaryProfileDataHeader();
+  if (keyMappingDataValid) {
     keyboardCoreLogic_initialize();
   } else {
     keyboardCoreLogic_halt();

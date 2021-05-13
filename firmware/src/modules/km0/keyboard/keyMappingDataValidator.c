@@ -1,6 +1,6 @@
+#include "keyMappingDataValidator.h"
 #include "config.h"
 #include "dataStorage.h"
-#include "keyMappingDataValidator.h"
 #include "km0/common/utils.h"
 #include "km0/deviceIo/dataMemory.h"
 #include "versionDefinitions.h"
@@ -11,16 +11,16 @@
 #define decode_byte(p) (*(p))
 #define decode_word_be(p) ((*(p) << 8) | (*(p + 1)))
 
-#define KeyAssignsDataHeaderLength 5
+#define KeyMappingDataHeaderLength 5
 
-static uint8_t eepromTempBuf[KeyAssignsDataHeaderLength];
+static uint8_t eepromTempBuf[KeyMappingDataHeaderLength];
 
 bool keyMappingDataValidator_checkBinaryProfileDataHeader() {
-  uint16_t addrKeyAssignsDataHeader = dataStorage_getDataAddress_profileData_profileHeader();
-  uint16_t keyAssignsDataBodyLengthMax = dataStorage_getKeyAssignDataCapacity();
+  uint16_t addrKeyMappingDataHeader = dataStorage_getDataAddress_profileData_profileHeader();
+  uint16_t keyMappingDataBodyLengthMax = dataStorage_getKeyMappingDataCapacity();
   bool storageHeaderValid = false;
-  if (addrKeyAssignsDataHeader && keyAssignsDataBodyLengthMax) {
-    dataMemory_readBytes(addrKeyAssignsDataHeader, eepromTempBuf, KeyAssignsDataHeaderLength);
+  if (addrKeyMappingDataHeader && keyMappingDataBodyLengthMax) {
+    dataMemory_readBytes(addrKeyMappingDataHeader, eepromTempBuf, KeyMappingDataHeaderLength);
     uint8_t *p = eepromTempBuf;
     uint8_t logicModelType = decode_byte(p + 0);
     uint8_t configStorageFormatRevision = decode_byte(p + 1);
@@ -38,7 +38,7 @@ bool keyMappingDataValidator_checkBinaryProfileDataHeader() {
 
   if (!storageHeaderValid) {
     printf("invalid key assigns data\n");
-    // utils_debugShowBytes(eepromTempBuf, KeyAssignsDataHeaderLength);
+    // utils_debugShowBytes(eepromTempBuf, KeyMappingDataHeaderLength);
   } else {
     printf("key assigns storage data is valid\n");
   }

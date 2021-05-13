@@ -26,12 +26,12 @@ static void emitStateNotification(uint8_t state) {
 
 static uint16_t storageAddr_DeviceInstanceCode;
 static uint16_t storageAddr_profileData;
-static uint16_t keyAssignsDataCapacity;
+static uint16_t keyMappingDataCapacity;
 
 static void initializeDataAddresses() {
   storageAddr_DeviceInstanceCode = dataStorage_getDataAddress_deviceInstanceCode();
   storageAddr_profileData = dataStorage_getDataAddress_profileData();
-  keyAssignsDataCapacity = dataStorage_getKeyAssignDataCapacity();
+  keyMappingDataCapacity = dataStorage_getKeyMappingDataCapacity();
 }
 
 //---------------------------------------------
@@ -114,8 +114,8 @@ static void emitDeviceAttributesResponse() {
   p[14] = Kermite_Project_IsResourceOriginOnline;
   p[15] = 0;
   copyEepromBytesToBuffer(p, 16, storageAddr_DeviceInstanceCode, 8);
-  p[24] = keyAssignsDataCapacity >> 8 & 0xFF;
-  p[25] = keyAssignsDataCapacity & 0xFF;
+  p[24] = keyMappingDataCapacity >> 8 & 0xFF;
+  p[25] = keyMappingDataCapacity & 0xFF;
   utils_fillBytes(p + 26, 0, 16);
   size_t slen = utils_clamp(strlen(Kermite_Project_VariationName), 0, 16);
   utils_copyBytes(p + 26, (uint8_t *)Kermite_Project_VariationName, slen);
