@@ -1,5 +1,5 @@
-#ifndef __KEY_CODE_TABLE_H__
-#define __KEY_CODE_TABLE_H__
+#ifndef __KEY_CODE_TRANSLATOR_H__
+#define __KEY_CODE_TRANSLATOR_H__
 
 #include "km0/types.h"
 

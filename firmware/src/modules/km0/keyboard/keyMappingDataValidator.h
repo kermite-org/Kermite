@@ -1,4 +1,5 @@
-#ifndef __KEY_ASSIGNS_DATA_VALIDATOR_H__
+#ifndef __KEY_MAPPING_DATA_VALIDATOR_H__
+#define __KEY_MAPPING_DATA_VALIDATOR_H__
 
 #include "km0/types.h"
 
