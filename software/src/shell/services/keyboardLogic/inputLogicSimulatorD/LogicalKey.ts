@@ -172,6 +172,16 @@ export enum LogicalKey {
   LK_UU,
   LK_NextDouble,
   LK_PostDouble,
+  LK_U0,
+  LK_U1,
+  LK_U2,
+  LK_U3,
+  LK_U4,
+  LK_U5,
+  LK_U6,
+  LK_U7,
+  LK_U8,
+  LK_U9,
 }
 
 const virtualKeyToLogicalKeyMappingTable: {
@@ -348,6 +358,16 @@ const virtualKeyToLogicalKeyMappingTable: {
   K_UU: LogicalKey.LK_UU,
   K_NextDouble: LogicalKey.LK_NextDouble,
   K_PostDouble: LogicalKey.LK_PostDouble,
+  K_U0: LogicalKey.LK_U0,
+  K_U1: LogicalKey.LK_U1,
+  K_U2: LogicalKey.LK_U2,
+  K_U3: LogicalKey.LK_U3,
+  K_U4: LogicalKey.LK_U4,
+  K_U5: LogicalKey.LK_U5,
+  K_U6: LogicalKey.LK_U6,
+  K_U7: LogicalKey.LK_U7,
+  K_U8: LogicalKey.LK_U8,
+  K_U9: LogicalKey.LK_U9,
 };
 
 export function getLogicalKeyForVirtualKey(virtualKey: VirtualKey): number {

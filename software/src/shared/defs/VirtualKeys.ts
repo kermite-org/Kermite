@@ -169,7 +169,17 @@ export type VirtualKey =
   | 'K_LTU'
   | 'K_UU'
   | 'K_NextDouble'
-  | 'K_PostDouble';
+  | 'K_PostDouble'
+  | 'K_U0'
+  | 'K_U1'
+  | 'K_U2'
+  | 'K_U3'
+  | 'K_U4'
+  | 'K_U5'
+  | 'K_U6'
+  | 'K_U7'
+  | 'K_U8'
+  | 'K_U9';
 
 export type ModifierVirtualKey = 'K_Shift' | 'K_Ctrl' | 'K_Alt' | 'K_Gui';
 
