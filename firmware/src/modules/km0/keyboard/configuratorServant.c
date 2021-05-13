@@ -133,6 +133,7 @@ static void emitDeviceAttributesResponse() {
   utils_copyBytes(p + 26, (uint8_t *)Kermite_Project_VariationName, slen);
   utils_copyBytes(p + 42, (uint8_t *)Kermite_Project_McuCode, 8);
   p[50] = Kermite_ProfileBinaryFormatRevision;
+  p[51] = Kermite_ConfigParametersRevision;
   emitGenericHidData(rawHidSendBuf);
 }
 
