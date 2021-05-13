@@ -1,9 +1,9 @@
 #include "keyboardCoreLogic.h"
 #include "config.h"
+#include "dataStorage.h"
 #include "keyCodeTable.h"
 #include "km0/common/bitOperations.h"
 #include "km0/deviceIo/dataMemory.h"
-#include "storageLayout.h"
 #include <stdio.h>
 
 #ifndef KM0_KEYBOARD__NUM_KEY_SLOTS
@@ -155,8 +155,6 @@ static uint8_t getOutputModifiers() {
 //assing memory reader
 
 #define NumLayersMax 16
-#define KeyAssignsDataHeaderLocation StorageAddr_KeyAssignsDataHeader
-#define KeyAssignsDataBodyLocation StorageAddr_KeyAssignsDataBody
 typedef struct {
   uint8_t numLayers;
   uint16_t assignsStartAddress;
@@ -167,15 +165,18 @@ typedef struct {
 static AssignMemoryReaderState assignMemoryReaderState;
 
 static void initAssignMemoryReader() {
+  uint16_t profileHeaderLocation = dataStorage_getDataAddress_profileData_profileHeader();
+  uint16_t layerListDataLocation = dataStorage_getDataAddress_profileData_layerList();
+  uint16_t keyAssignsDataLocation = dataStorage_getDataAddress_profileData_keyAssigns();
+  uint16_t keyAssignsDataSize = dataStorage_getDataSize_profileData_keyAssigns();
   AssignMemoryReaderState *rs = &assignMemoryReaderState;
-  uint8_t numLayers = readStorageByte(KeyAssignsDataHeaderLocation + 8);
-  uint16_t bodyLength = readStorageWordBE(KeyAssignsDataHeaderLocation + 9);
+  uint8_t numLayers = readStorageByte(profileHeaderLocation + 4);
   rs->numLayers = numLayers;
-  rs->assignsStartAddress = KeyAssignsDataBodyLocation + numLayers * 2;
-  rs->assignsEndAddress = KeyAssignsDataBodyLocation + bodyLength;
-  printf("nl:%d bl:%d\n", numLayers, bodyLength);
+  rs->assignsStartAddress = keyAssignsDataLocation;
+  rs->assignsEndAddress = keyAssignsDataLocation + keyAssignsDataSize;
+  printf("nl:%d bl:%d\n", numLayers, keyAssignsDataSize);
   for (uint8_t i = 0; i < 16; i++) {
-    rs->layerAttributeWords[i] = (i < numLayers) ? readStorageWordBE(KeyAssignsDataBodyLocation + i * 2) : 0;
+    rs->layerAttributeWords[i] = (i < numLayers) ? readStorageWordBE(layerListDataLocation + i * 2) : 0;
   }
 }
 

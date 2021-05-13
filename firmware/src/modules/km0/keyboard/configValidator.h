@@ -2,7 +2,6 @@
 
 #include "km0/types.h"
 
-void configValidator_initializeDataStorage();
-bool configValidator_checkDataHeader();
+bool configValidator_checkBinaryProfileDataHeader();
 
 #endif

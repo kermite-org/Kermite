@@ -157,6 +157,7 @@ namespace CommunicationDataBinaryForamt {
     [24_25]: { assignStorageCapacity: u16 };
     [26_41]: { variationName: Bytes<16> };
     [42_49]: { kermiteMcuCode: Bytes<8> };
+    [50]: { profileBinaryFormatRevision: u8 };
   };
 
   type __draft__PktKeyboardSideConfiguration = PacketHostToDevice & {

@@ -2,6 +2,7 @@
 #include "config.h"
 #include "configValidator.h"
 #include "configuratorServant.h"
+#include "dataStorage.h"
 #include "keyboardCoreLogic.h"
 #include "km0/common/bitOperations.h"
 #include "km0/common/utils.h"
@@ -104,7 +105,7 @@ static void setupSerialNumberText() {
 }
 
 static void resetKeyboardCoreLogic() {
-  bool configMemoryValid = configValidator_checkDataHeader();
+  bool configMemoryValid = configValidator_checkBinaryProfileDataHeader();
   if (configMemoryValid) {
     keyboardCoreLogic_initialize();
   } else {
@@ -305,7 +306,7 @@ void keyboardMain_initialize() {
   if (!debugUartConfigured) {
     debugUart_disable();
   }
-  configValidator_initializeDataStorage();
+  dataStorage_initialize();
   setupSerialNumberText();
   usbIoCore_initialize();
   resetKeyboardCoreLogic();

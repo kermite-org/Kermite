@@ -23,16 +23,6 @@ namespace AssignStroageBinaryFormat {
   type b7 = number;
   type b8 = number;
 
-  // n bytes
-  type bytes1 = number[];
-  type bytes2 = number[];
-  type bytes3 = number[];
-  type bytes4 = number[];
-  type bytes5 = number[];
-  type bytes6 = number[];
-  type bytes7 = number[];
-  type bytes8 = number[];
-
   type Reserved = {};
   type BasedOn<T> = T;
   type DefineValues<T> = {};
@@ -146,11 +136,11 @@ namespace AssignStroageBinaryFormat {
     bit2_0: { fOpWordLengthCodeTertiary: b3 };
   };
 
-  type BlockAssignEntry = BasedOn<bytes1> & {
+  type BlockAssignEntry = BasedOn<u8> & {
     byte0: { header: AssignEntryHeaderA<4> };
   };
 
-  type TransparentAssignEntry = BasedOn<bytes1> & {
+  type TransparentAssignEntry = BasedOn<u8> & {
     byte0: { header: AssignEntryHeaderA<5> };
   };
 
@@ -213,22 +203,34 @@ namespace AssignStroageBinaryFormat {
   };
 
   // --------------------
+  // profile header
 
-  type ConfigStorageHeaderBytes = {
-    byte0_1: { magicNumber: Fixed<u16, 0xfe03> };
-    byte2_3: { reservedWord: Fixed<u16, Reserved> };
-    byte4: { logicModelType: Fixed<u8, 1> };
-    byte5: { formatRevision: u8 };
-    byte6: { assignDataStartOffset: Fixed<u8, 12> };
-    byte7: { numKeys: u8 }; // 1~255
-    byte8: { numLayers: u8 }; // 1~16
-    byte9_10: { bodyLength: u16 };
-    byte11: { reservedByte: u8 };
+  type ProfileHeaderContent = {
+    logicModelType: 0x01;
+    configStorageFormatRevision: u8;
+    profileBinaryFormatRevision: u8;
+    numKeys: u8; // 1~254
+    numLayers: u8; // 1-16
   };
 
-  type ConfigStorageDataBlobBytes = {
-    'pos(0),len(12)': { headerBytes: ConfigStorageHeaderBytes };
-    'pos(12),len(NL*2)': { layerAttributes: LayerAttributeWord[] }; // numLayers*2 bytes
-    'pos(12+NL*2),len(BL-NL*2)': { keyAssigns: KeyBoundAssignDataSet[] }; // bodyLength-numLayers*2 bytes
+  // --------------------
+  // data chunks
+
+  type Chunk<ChunkSignatureWord, Length = 0> = {};
+
+  type BinaryProfileData = Chunk<0xaa70> & {
+    profileHeader: Chunk<0xbb71> & {
+      data: ProfileHeaderContent;
+    };
+    layerList: Chunk<0xbb74> & {
+      items: LayerAttributeWord[]; // numLayers個の配列
+    };
+    // shortStringsBlock: Chunk<0xbb75> & {
+    //   //\0終端の文字列を続けて多数格納
+    // };
+    // selectiveAssignsBlock: Chunk<0xbb76> & {};
+    keyAssigns: Chunk<0xbb78> & {
+      items: KeyBoundAssignDataSet[];
+    };
   };
 }

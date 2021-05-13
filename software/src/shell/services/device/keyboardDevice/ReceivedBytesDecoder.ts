@@ -6,6 +6,7 @@ export type IDeviceAttributesReadResponseData = {
   firmwareVariationName: string;
   projectReleaseBuildRevision: number;
   configStorageFormatRevision: number;
+  profileBinaryFormatRevision: number;
   rawHidMessageProtocolRevision: number;
   resourceOrigin: IResourceOrigin;
   projectId: string;
@@ -46,12 +47,14 @@ export function recievedBytesDecoder(
     const assignStorageCapacity = (buf[24] << 8) | buf[25];
     const firmwareVariationName = bytesToString([...buf].slice(26, 42));
     const kermiteMcuCode = bytesToString([...buf].slice(42, 50));
+    const profileBinaryFormatRevision = buf[50];
     return {
       type: 'deviceAttributeResponse',
       data: {
         firmwareVariationName,
         projectReleaseBuildRevision,
         configStorageFormatRevision,
+        profileBinaryFormatRevision,
         rawHidMessageProtocolRevision,
         resourceOrigin: isProjectOriginOnline ? 'online' : 'local',
         projectId,

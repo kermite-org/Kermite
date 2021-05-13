@@ -3,6 +3,7 @@ import {
   delayMs,
   generateNumberSequence,
   IProjectCustomDefinition,
+  ProfileBinaryFormatRevision,
   RawHidMessageProtocolRevision,
 } from '~/shared';
 import { generateRandomDeviceInstanceCode } from '~/shared/funcs/DomainRelatedHelpers';
@@ -19,13 +20,23 @@ import { IDeviceWrapper } from './DeviceWrapper';
 function checkDeviceRevisions(data: {
   projectReleaseBuildRevision: number;
   configStorageFormatRevision: number;
+  profileBinaryFormatRevision: number;
   rawHidMessageProtocolRevision: number;
 }) {
-  const { configStorageFormatRevision, rawHidMessageProtocolRevision } = data;
+  const {
+    configStorageFormatRevision,
+    rawHidMessageProtocolRevision,
+    profileBinaryFormatRevision,
+  } = data;
 
   if (configStorageFormatRevision !== ConfigStorageFormatRevision) {
     throw new Error(
       `incompatible config storage revision (software:${ConfigStorageFormatRevision}, firmware:${configStorageFormatRevision})`,
+    );
+  }
+  if (profileBinaryFormatRevision !== ProfileBinaryFormatRevision) {
+    throw new Error(
+      `incompatible config storage revision (software:${ProfileBinaryFormatRevision}, firmware:${profileBinaryFormatRevision})`,
     );
   }
   if (rawHidMessageProtocolRevision !== RawHidMessageProtocolRevision) {
