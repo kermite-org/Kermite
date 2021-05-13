@@ -29,6 +29,27 @@ static uint16_t readStorageWordBE(uint16_t addr) {
 }
 
 //--------------------------------------------------------------------------------
+// execution options
+
+typedef struct {
+  uint8_t systemLayout;
+  uint8_t wiringMode;
+} LogicOptions;
+
+LogicOptions logicOptions = {
+  .systemLayout = 0,
+  .wiringMode = 0
+};
+
+void setSystemLayout(uint8_t layout) {
+  logicOptions.systemLayout = layout;
+}
+
+void setWiringMode(uint8_t mode) {
+  logicOptions.wiringMode = mode;
+}
+
+//--------------------------------------------------------------------------------
 //hid report
 
 enum {
@@ -509,7 +530,8 @@ static void handleOperationOn(uint32_t opWord) {
     }
     if (logicalKey) {
       // todo: globalなuseSecondaryLayoutフラグを参照する
-      uint16_t hidKey = keyCodeTable_mapLogicalKeyToHidKeyCode(logicalKey, true);
+      bool isSecondaryLayout = logicOptions.systemLayout > 0;
+      uint16_t hidKey = keyCodeTable_mapLogicalKeyToHidKeyCode(logicalKey, isSecondaryLayout);
       bool isShiftCancellable = ((opWord >> 12) & 1) > 0;
       uint8_t keyCode = hidKey & 0xff;
       bool shiftOn = (hidKey & 0x100) > 0;
@@ -570,7 +592,8 @@ static void handleOperationOff(uint32_t opWord) {
       clearModifiers(modFlags);
     }
     if (logicalKey) {
-      uint16_t hidKey = keyCodeTable_mapLogicalKeyToHidKeyCode(logicalKey, true);
+      bool isSecondaryLayout = logicOptions.systemLayout > 0;
+      uint16_t hidKey = keyCodeTable_mapLogicalKeyToHidKeyCode(logicalKey, isSecondaryLayout);
       bool isShiftCancellable = ((opWord >> 12) & 1) > 0;
       uint8_t keyCode = hidKey & 0xff;
       bool shiftOn = (hidKey & 0x100) > 0;
@@ -1130,6 +1153,14 @@ void keyboardCoreLogic_initialize() {
   resetAssignBinder();
   initResolverState();
   logicActive = true;
+}
+
+void keyboardCoreLogic_setSystemLayout(uint8_t layout) {
+  setSystemLayout(layout);
+}
+
+void keyboardCoreLogic_setWiringMode(uint8_t mode) {
+  setWiringMode(mode);
 }
 
 uint8_t *keyboardCoreLogic_getOutputHidReportBytes() {

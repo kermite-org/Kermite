@@ -155,6 +155,10 @@ static void parameterValueHandler(uint8_t slotIndex, uint8_t value) {
   } else if (slotIndex == SystemParameter_MasterSide) {
     //value: (0:left, 1:right)
     optionInvertSide = value == 1;
+  } else if (slotIndex == SystemParameter_SystemLayout) {
+    keyboardCoreLogic_setSystemLayout(value);
+  } else if (slotIndex == SystemParameter_WiringMode) {
+    keyboardCoreLogic_setWiringMode(value);
   }
 
   if (callbacks && callbacks->customParameterHandlerChained) {

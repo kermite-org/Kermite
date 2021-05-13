@@ -64,11 +64,11 @@ export class InputLogicSimulatorD {
     const values = event.systemParameterValues;
     if (values) {
       const systemLayout = values[SystemParameter.SystemLayout];
-      const isSimulatorMode = values[SystemParameter.SimulatorMode] > 0;
+      // const isSimulatorMode = values[SystemParameter.SimulatorMode] > 0;
       const wiringMode = values[SystemParameter.WiringMode];
-      console.log(
-        `systemlayout: ${systemLayout}, simulatorMode: ${isSimulatorMode}`,
-      );
+      console.log(`systemlayout: ${systemLayout}, wiringMode: ${wiringMode}`);
+      this.CL.keyboardCoreLogic_setSystemLayout(systemLayout);
+      this.CL.keyboardCoreLogic_setWiringMode(wiringMode);
     }
   };
 

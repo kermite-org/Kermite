@@ -7,12 +7,10 @@ import { createEventPort } from '~/shell/funcs';
 
 const keyboardConfigDataSchema = vObject({
   behaviorMode: vValueOneOf(['Standalone', 'SideBrain']),
-  layoutStandard: vValueOneOf(['US', 'JIS']),
 });
 
 const keyboardConfigDefault: IKeyboardConfig = {
   behaviorMode: 'Standalone',
-  layoutStandard: 'US',
 };
 export class KeyboardConfigProvider {
   internal_changedNotifier = createEventPort<void>();

@@ -31,7 +31,7 @@ BB BB ...: チャンクのボディデータ, LL LL で規定されるサイズ�
       heartBeatLedOutput: U8;
       masterSide: U8;
       secondSystemLayoutActive: U8;
-      simulatorModeActive: U8;
+      simulatorModeActive__deprecated: U8;
       alterAssignsActive: U8;
       glowActive: U8;
       glowColor: U8;

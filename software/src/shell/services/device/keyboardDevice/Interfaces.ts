@@ -1,7 +1,6 @@
 import {
   IDeviceSelectionStatus,
   IKeyboardDeviceStatus,
-  IKeyboardLayoutStandard,
   IProfileData,
   IRealtimeKeyboardEvent,
 } from '~/shared';
@@ -16,10 +15,7 @@ export interface IKeyboardDeviceServcie {
   writeSideBrainHidReport(report: number[]): void;
   setCustomParameterValue(index: number, value: number): void;
   emitRealtimeEventFromSimulator(event: IRealtimeKeyboardEvent): void;
-  emitKeyAssignsToDevice(
-    editModel: IProfileData,
-    layout: IKeyboardLayoutStandard,
-  ): Promise<boolean>;
+  emitKeyAssignsToDevice(editModel: IProfileData): Promise<boolean>;
   initialize(): void;
   terminate(): void;
 }

@@ -1,6 +1,6 @@
 import { jsx, css } from 'qx';
 
-interface IDualItemsHoverSelectorProps<T extends string> {
+interface IDualItemsHoverSelectorProps<T extends string | number> {
   items: T[];
   currentItem: T;
   setCurrentItem: (nextItem: T) => void;
@@ -40,7 +40,7 @@ const cssDualItemsSelector = css`
   }
 `;
 
-export function DualItemsHoverSelector<T extends string>(
+export function DualItemsHoverSelector<T extends string | number>(
   props: IDualItemsHoverSelectorProps<T>,
 ) {
   const { items, currentItem, setCurrentItem, textDictionary } = props;
