@@ -2,6 +2,6 @@
 
 #include "km0/types.h"
 
-bool keyAssignsDataValidator_checkBinaryProfileDataHeader();
+bool keyMappingDataValidator_checkBinaryProfileDataHeader();
 
 #endif
