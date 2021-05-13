@@ -45,22 +45,6 @@ static const T_SystemParametersSet systemParameterMaxValues = {
   .glowSpeed = 10,
 };
 
-// static const uint8_t systemParameterMaxValues[NumSystemParameters] = {
-//   1,
-//   1,
-//   1,
-//   1,
-//   2, //master side
-//   1,
-//   1,
-//   1,
-//   12,  //glow color
-//   255, //glow brightness
-//   10,  //glow pattern
-//   1,   //glow direction
-//   10,  //glow speed
-// };
-
 static void notifyParameterChanged(uint8_t parameterIndex, uint8_t value) {
   for (int i = 0; i < numParameterChangedListeners; i++) {
     ParameterChangedListener listener = parameterChangedListeners[i];
