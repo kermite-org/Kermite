@@ -5,7 +5,7 @@ import {
   ProfileBinaryFormatRevision,
   RawHidMessageProtocolRevision,
 } from '~/shared';
-import { NumSystemParameters } from '~/shared/defs/SystemCommand';
+import { NumSystemParameters } from '~/shared/defs/CommandDefinitions';
 import { generateRandomDeviceInstanceCode } from '~/shared/funcs/DomainRelatedHelpers';
 import { Packets } from '~/shell/services/device/keyboardDevice/Packets';
 import {

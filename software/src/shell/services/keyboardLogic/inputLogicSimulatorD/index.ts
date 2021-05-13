@@ -5,8 +5,8 @@ import {
   IntervalTimerWrapper,
   IProfileManagerStatus,
   IRealtimeKeyboardEvent,
+  SystemParameter,
 } from '~/shared';
-import { SystemParameter } from '~/shared/defs/SystemCommand';
 import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
 import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
