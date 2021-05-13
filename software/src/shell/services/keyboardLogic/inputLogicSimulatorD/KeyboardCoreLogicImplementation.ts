@@ -196,14 +196,14 @@ const assignMemoryReaderState = new (class {
 function initAssignMemoryReader() {
   const profileHeaderLocation = dataStorage.getChunk_profileHeader().address;
   const layerListDataLocation = dataStorage.getChunk_layerList().address;
-  const keyAssignsDataLocation = dataStorage.getChunk_keyAssigns().address;
-  const keyAssignsDataSize = dataStorage.getChunk_keyAssigns().size;
+  const keyMappingDataLocation = dataStorage.getChunk_keyAssigns().address;
+  const keyMappingDataSize = dataStorage.getChunk_keyAssigns().size;
   const rs = assignMemoryReaderState;
   const numLayers = readStorageByte(profileHeaderLocation + 4);
   rs.numLayers = numLayers;
-  rs.assignsStartAddress = keyAssignsDataLocation;
-  rs.assignsEndAddress = keyAssignsDataLocation + keyAssignsDataSize;
-  // console.log('nl:%d bl:%d\n', numLayers, keyAssignsDataSize);
+  rs.assignsStartAddress = keyMappingDataLocation;
+  rs.assignsEndAddress = keyMappingDataLocation + keyMappingDataSize;
+  // console.log('nl:%d bl:%d\n', numLayers, keyMappingDataSize);
   for (let i = 0; i < 16; i++) {
     rs.layerAttributeWords[i] =
       i < numLayers ? readStorageWordBE(layerListDataLocation + i * 2) : 0;
