@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
 import { dataStorage } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/DataStorage';
-import { keyCodeTableImpl_mapLogicalKeyToHidKeyCode } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/KeyCodeTableImpl';
+import { keyCodeTranslator_mapLogicalKeyToHidKeyCode } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/KeyCodeTranslator';
 import {
   AssignStorageBaseAddr,
   AssignStorageHeaderLength,
@@ -543,7 +543,7 @@ function handleOperationOn(opWord: u32) {
     }
     if (logicalKey) {
       const isSecondaryLayout = logicOptions.systemLayout > 0;
-      const hidKey = keyCodeTableImpl_mapLogicalKeyToHidKeyCode(
+      const hidKey = keyCodeTranslator_mapLogicalKeyToHidKeyCode(
         logicalKey,
         isSecondaryLayout,
       );
@@ -608,7 +608,7 @@ function handleOperationOff(opWord: u32) {
     }
     if (logicalKey) {
       const isSecondaryLayout = logicOptions.systemLayout > 0;
-      const hidKey = keyCodeTableImpl_mapLogicalKeyToHidKeyCode(
+      const hidKey = keyCodeTranslator_mapLogicalKeyToHidKeyCode(
         logicalKey,
         isSecondaryLayout,
       );
