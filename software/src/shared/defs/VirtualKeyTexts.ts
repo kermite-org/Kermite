@@ -109,7 +109,7 @@ export const VirtualKeyTexts: { [key in VirtualKey]?: string } = {
   K_Ctrl: 'ctrl',
   K_Shift: 'shift',
   K_Alt: 'alt',
-  K_OS: 'os',
+  K_Gui: 'os',
 
   K_NN: 'NN',
   K_LTU: 'LTU',

@@ -53,7 +53,7 @@ function makeAttachedModifiersModel(
     'K_Shift',
     'K_Ctrl',
     'K_Alt',
-    'K_OS',
+    'K_Gui',
   ];
 
   return modifierVirtualKeys.map((vk) => {

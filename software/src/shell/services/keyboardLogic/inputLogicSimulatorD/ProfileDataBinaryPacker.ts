@@ -55,7 +55,7 @@ function makeAttachedModifiersBits(
       m === 'K_Ctrl' && (bits |= 0x01);
       m === 'K_Shift' && (bits |= 0x02);
       m === 'K_Alt' && (bits |= 0x04);
-      m === 'K_OS' && (bits |= 0x08);
+      m === 'K_Gui' && (bits |= 0x08);
     }
   }
   return bits;

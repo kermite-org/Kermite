@@ -21,7 +21,7 @@ const modifierVirtualKeys: ModifierVirtualKey[] = [
   'K_Shift',
   'K_Ctrl',
   'K_Alt',
-  'K_OS',
+  'K_Gui',
 ];
 
 const RestrictDualSecondaryAssigns = false;
