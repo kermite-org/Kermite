@@ -60,10 +60,11 @@ namespace AssignStroageBinaryFormat {
 
   type OpKeyInput = BasedOn<u16> & {
     bit15_14: { fOperationType: Fixed<b2, 1> };
-    bit13_10: { fModifiers: AttachedModifiers };
-    bit9: { fShiftCancel: b1 };
-    bit8: { fShiftOn: b1 };
-    bit7_0: { fHidKeyCode: u8 };
+    bit13: Reserved;
+    bit12: { fIsShiftCancellable: b1 };
+    bit11_8: { fModifiers: AttachedModifiers };
+    bit7: Reserved;
+    bit6_0: { fLogicalKeyCode: b7 };
   };
 
   type LayerInvocationModeValues = DefineValues<b4> & {

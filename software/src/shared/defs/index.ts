@@ -1,7 +1,6 @@
 export * from './ConfigTypes';
 export * from './CustomErrors';
 export * from './CustomParameter';
-export * from './HidKeyCodes';
 export * from './IpcContract';
 export * from './KeyboardDesign';
 export * from './ProfileData';
