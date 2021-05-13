@@ -142,7 +142,7 @@ uint16_t iox_input(uint8_t slaveAddress) {
 
 int main() {
   uint8_t addrSlave0 = 0x21;
-  boardIo_setupLeds(P_B0, P_D5, true);
+  boardIo_setupLeds_proMicroAvr();
   __i2c_init();
 
   uint16_t portDirs = 0xFFFC;

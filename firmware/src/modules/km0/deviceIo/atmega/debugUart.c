@@ -29,7 +29,7 @@ static void uart_putchar(char byte) {
 
 static FILE mystdout = FDEV_SETUP_STREAM((void *)uart_putchar, NULL, _FDEV_SETUP_WRITE);
 
-void debugUart_setup(uint32_t baud) {
+void debugUart_initialize(uint32_t baud) {
   uart_init(baud);
   stdout = &mystdout;
   debug_uart_enabled = true;

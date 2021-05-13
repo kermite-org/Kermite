@@ -12,12 +12,12 @@
 
 static const uint8_t oledSlaveAddress = 0x3C;
 
-static const uint8_t *fontDataPtr;
+static const uint8_t *fontDataPtr = NULL;
 static int fontWidth = 0;
 static int fontLetterSpacing = 0;
 
 //文字バッファ, 横方向最大21文字, 横幅+文字間隔が6px以上のフォント配置に対応
-static uint8_t lcdTextBuf[4][21];
+static uint8_t lcdTextBuf[4][21] = { 0 };
 
 //----------------------------------------------------------------------
 
@@ -110,6 +110,9 @@ void oledCore_putText(int caretY, int caretX, char *text) {
 }
 
 void oledCore_drawFullTexts() {
+  if (fontDataPtr == NULL) {
+    return;
+  }
   sendRomData(commandResetPositionBytes, sizeof(commandResetPositionBytes));
   boardI2c_procedural_startWrite(oledSlaveAddress);
   boardI2c_procedural_putByte(0x40);

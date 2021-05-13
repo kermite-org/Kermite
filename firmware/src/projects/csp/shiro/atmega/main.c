@@ -1,4 +1,5 @@
 #include "config.h"
+#include "km0/deviceIo/boardIo.h"
 #include "km0/deviceIo/dio.h"
 #include "km0/keyboard/generalKeyboard.h"
 #include "km0/keyboard/keyScanner_basicMatrix.h"
@@ -22,7 +23,7 @@ static const int8_t keyIndexTable[NumScanSlots] = {
 // clang-format on
 
 int main() {
-  keyboardMain_useIndicatorLeds(P_B0, P_D5, true);
+  boardIo_setupLeds_proMicroAvr();
   keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
   keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
   keyboardMain_setKeyIndexTable(keyIndexTable);

@@ -20,8 +20,6 @@ void boardIo_setupLeds(int8_t pin1, int8_t pin2, bool invert) {
   }
 }
 
-void boardIo_setupLedsRgb(int8_t pin) {}
-
 void boardIo_writeLed1(bool value) {
   if (pin_led1 != -1) {
     dio_write(pin_led1, invert_output_logic ? !value : value);
@@ -44,4 +42,8 @@ void boardIo_toggleLed2() {
   if (pin_led2 != -1) {
     dio_toggle(pin_led2);
   }
+}
+
+void boardIo_setupLeds_rpiPico() {
+  boardIo_setupLeds(25, 25, false);
 }

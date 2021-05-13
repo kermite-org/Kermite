@@ -110,7 +110,7 @@ void runAsSlave() {
 //entry
 
 int main() {
-  debugUart_setup(115200);
+  debugUart_initialize(115200);
   initLed();
   dio_setInputPullup(GP14);
   delayMs(1);

@@ -25,8 +25,6 @@ extern KeyboardMainExposedState exposedState;
 extern bool optionInvertSide;
 uint8_t *keyboardMain_getNextScanSlotStateFlags();
 
-void keyboardMain_useIndicatorLeds(int8_t pin1, uint8_t pin2, bool invert);
-void keyboardMain_useIndicatorRgbLed(int8_t pin);
 void keyboardMain_useDebugUart(uint32_t baud);
 
 void keyboardMain_useKeyScanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags));

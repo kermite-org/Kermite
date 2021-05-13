@@ -148,7 +148,7 @@ void emitLedColorSpec() {
 }
 
 void neopixel_dev() {
-  debugUart_setup(38400);
+  debugUart_initialize(38400);
 
   printf("start\n");
   uint8_t c = sum(10, 20);
