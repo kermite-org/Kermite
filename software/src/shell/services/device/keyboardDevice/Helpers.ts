@@ -48,6 +48,10 @@ export function bytesToString(bytes: number[]) {
   );
 }
 
+export function bytesToHexString(bytes: number[]) {
+  return bytes.map((v) => ('00' + v.toString(16)).slice(-2)).join(' ');
+}
+
 export function getArrayFromBuffer(data: any) {
   return new Uint8Array(Buffer.from(data));
 }

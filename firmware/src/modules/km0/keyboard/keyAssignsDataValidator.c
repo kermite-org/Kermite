@@ -37,8 +37,8 @@ bool keyAssignsDataValidator_checkBinaryProfileDataHeader() {
   }
 
   if (!storageHeaderValid) {
-    printf("invalid key assigns stroage data\n");
-    utils_debugShowBytes(eepromTempBuf, KeyAssignsDataHeaderLength);
+    printf("invalid key assigns data\n");
+    // utils_debugShowBytes(eepromTempBuf, KeyAssignsDataHeaderLength);
   } else {
     printf("key assigns storage data is valid\n");
   }

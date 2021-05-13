@@ -11,6 +11,7 @@ namespace CommunicationDataBinaryForamt {
 
   type VariableLength = any;
   type Bytes<N> = number[];
+  type BytesOf<N> = number[];
 
   type PacketHostToDevice = {};
   type PacketDeviceToHost = {};
@@ -70,26 +71,43 @@ namespace CommunicationDataBinaryForamt {
     [0]: { category: 0xb0 }; // 0xb0 for memory operation
     [1]: { dataKind: 0x02 }; // 0x02 for custom parameters
     [2]: { command: 0x81 }; // 0x81 for bulk read response
-    [3]: { initializedFlag: 0 | 1 };
-    [4_13]: { data: Bytes<10> };
+    [3]: { numParameters: u8 };
+    // [3]: { initializedFlag: 0 | 1 };
+    // [4_13]: { data: Bytes<10> };
+    '4__': { values: BytesOf<'numParameters'> };
+    '4+numParameters__': { maxValues: BytesOf<'numParameters'> };
   };
 
   type PktCustomParametersBulkWriteOperation = PacketHostToDevice & {
     [0]: { category: 0xb0 }; // 0xb0 for memory operation
     [1]: { dataKind: 0x02 }; // 0x02 for custom parameters
     [2]: { command: 0x90 }; // 0x90 for bulk write request
-    [3_12]: { data: Bytes<10> };
+    [3]: { parameterIndexBase: u8 };
+    [4]: { numParameters: u8 };
+    '5__': { data: BytesOf<'numParameters'> };
   };
 
   type PktCustomParameterSingleWriteOperation = PacketHostToDevice & {
     [0]: { category: 0xb0 }; // 0xb0 for memory operation
     [1]: { dataKind: 0x02 }; // 0x02 for custom parameters
     [2]: { command: 0xa0 }; // 0xa0 for single write request
-    [3]: { index: u8 }; // paramter index, 0~9
+    [3]: { index: u8 }; // paramter index
     [4]: { value: u8 }; // parameter value
   };
 
-  // 書き込めたかどうかは書き込み後にbulk readすることで確認する
+  type PktCustomParametersResetOperation = PacketHostToDevice & {
+    [0]: { category: 0xb0 }; // 0xb0 for memory operation
+    [1]: { dataKind: 0x02 }; // 0x02 for custom parameters
+    [2]: { command: 0xb0 }; // 0xb0 for reset request
+  };
+
+  type PktCustomParameterChangedNotification = PacketDeviceToHost & {
+    [0]: { category: 0xb0 }; // 0xb0 for memory operation
+    [1]: { dataKind: 0x02 }; // 0x02 for custom parameters
+    [2]: { command: 0xe1 }; // 0xe0 for notification
+    [3]: { index: u8 }; // paramter index
+    [4]: { value: u8 }; // parameter value
+  };
 
   // --------------------
   // device instance code write

@@ -16,8 +16,9 @@ export type IDeviceAttributesReadResponseData = {
 };
 
 export type ICustomParametersReadResponseData = {
-  isParametersInitialized: boolean;
+  numParameters: number;
   parameterValues: number[];
+  parameterMaxValues: number[];
 };
 
 export type IReceivedBytesDecodeResult =
@@ -32,6 +33,11 @@ export type IReceivedBytesDecodeResult =
   | {
       type: 'custromParametersReadResponse';
       data: ICustomParametersReadResponseData;
+    }
+  | {
+      type: 'parameterChangedNotification';
+      parameterIndex: number;
+      value: number;
     };
 
 export function recievedBytesDecoder(
@@ -66,14 +72,26 @@ export function recievedBytesDecoder(
   }
 
   if (buf[0] === 0xb0 && buf[1] === 0x02 && buf[2] === 0x81) {
-    const isParametersInitialized = !!buf[3];
-    const parameterValues = [...buf.slice(4, 14)];
+    const sz = buf[3];
+    const parameterValues = [...buf.slice(4, 4 + sz)];
+    const parameterMaxValues = [...buf.slice(4 + sz, 4 + sz + sz)];
     return {
       type: 'custromParametersReadResponse',
       data: {
-        isParametersInitialized,
+        numParameters: sz,
         parameterValues,
+        parameterMaxValues,
       },
+    };
+  }
+
+  if (buf[0] === 0xb0 && buf[1] === 0x02 && buf[2] === 0xe1) {
+    const parameterIndex = buf[3];
+    const value = buf[4];
+    return {
+      type: 'parameterChangedNotification',
+      parameterIndex,
+      value,
     };
   }
 

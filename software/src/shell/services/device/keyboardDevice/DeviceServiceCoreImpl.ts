@@ -32,7 +32,8 @@ function createConnectedStatus(
       portName: getPortNameFromDevicePath(devicePath) || devicePath,
       mcuName: attrsRes.firmwareMcuName,
     },
-    customParameterValues: custromParamsRes?.parameterValues,
+    systemParameterValues: custromParamsRes?.parameterValues,
+    systemParameterMaxValues: custromParamsRes?.parameterMaxValues,
   };
 }
 
@@ -59,6 +60,13 @@ export class KeyboardDeviceServiceCore {
     if (res?.type === 'realtimeEvent') {
       this.realtimeEventPort.emit(res.event);
     }
+    if (res?.type === 'parameterChangedNotification') {
+      const newValues = this.deviceStatus.systemParameterValues!.slice();
+      newValues[res.parameterIndex] = res.value;
+      this.setStatus({
+        systemParameterValues: newValues,
+      });
+    }
   };
 
   private async loadDeviceInfo(device: IDeviceWrapper) {
@@ -79,21 +87,15 @@ export class KeyboardDeviceServiceCore {
     this.setStatus({
       isConnected: false,
       deviceAttrs: undefined,
-      customParameterValues: undefined,
+      systemParameterValues: undefined,
+      systemParameterMaxValues: undefined,
     });
     this.device = undefined;
   };
 
-  async setCustomParameterValue(index: number, value: number) {
+  setCustomParameterValue(index: number, value: number) {
     if (this.device) {
-      const newParameterValues = await updateDeviceCustomParameterSingle(
-        this.device,
-        index,
-        value,
-      );
-      this.setStatus({
-        customParameterValues: newParameterValues,
-      });
+      updateDeviceCustomParameterSingle(this.device, index, value);
     }
   }
 

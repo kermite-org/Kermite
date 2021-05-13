@@ -6,7 +6,6 @@
 void generalKeyboard_start() {
   system_initializeUserProgram();
   keyboardMain_initialize();
-  printf("start\n");
   system_enableInterrupts();
 
   uint32_t tick = 0;

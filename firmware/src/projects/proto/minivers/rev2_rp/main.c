@@ -3,6 +3,7 @@
 #include "km0/keyboard/keyScanner_basicMatrix.h"
 #include "km0/keyboard/keyboardMain.h"
 #include "km0/keyboard/splitKeyboard.h"
+#include <stdio.h>
 
 //---------------------------------------------
 
@@ -29,8 +30,8 @@ static const int8_t keyIndexTable[NumScanSlots]  = {
 // clang-format on
 
 int main() {
-  boardIo_setupLeds_proMicroRp();
   keyboardMain_useDebugUart(115200);
+  boardIo_setupLeds_proMicroRp();
   keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
   keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
   keyboardMain_setKeyIndexTable(keyIndexTable);

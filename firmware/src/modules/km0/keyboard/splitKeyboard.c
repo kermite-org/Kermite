@@ -193,8 +193,6 @@ static bool runMasterSlaveDetectionMode() {
 void splitKeyboard_start() {
   system_initializeUserProgram();
   keyboardMain_initialize();
-  printf("start\n");
-
   bool isMaster = runMasterSlaveDetectionMode();
   printf("isMaster:%d\n", isMaster);
   showModeByLedBlinkPattern(isMaster);

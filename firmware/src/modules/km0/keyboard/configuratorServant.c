@@ -1,5 +1,7 @@
 #include "configuratorServant.h"
+#include "commandDefinitions.h"
 #include "config.h"
+#include "configManager.h"
 #include "dataStorage.h"
 #include "km0/common/utils.h"
 #include "km0/deviceIo/dataMemory.h"
@@ -13,7 +15,7 @@
 
 static void (*stateNotificationCallback)(uint8_t state) = 0;
 
-static void (*customParameterChangedCallback)(uint8_t slotIndex, uint8_t value) = 0;
+// static void (*customParameterChangedCallback)(uint8_t slotIndex, uint8_t value) = 0;
 
 static void emitStateNotification(uint8_t state) {
   if (stateNotificationCallback) {
@@ -21,25 +23,25 @@ static void emitStateNotification(uint8_t state) {
   }
 }
 
-static void invokeCustomParameterChangedCallback(uint8_t index, uint8_t value) {
-  if (customParameterChangedCallback) {
-    customParameterChangedCallback(index, value);
-  }
-}
+// static void invokeCustomParameterChangedCallback(uint8_t index, uint8_t value) {
+//   if (customParameterChangedCallback) {
+//     customParameterChangedCallback(index, value);
+//   }
+// }
 
 //---------------------------------------------
 //storage data addresses
 
 static uint16_t storageAddr_DeviceInstanceCode;
-static uint16_t storageAddr_CustomSettingsBytesInitializationFlag;
-static uint16_t storageAddr_CustomSettingsBytes;
+// static uint16_t storageAddr_CustomSettingsBytesInitializationFlag;
+// static uint16_t storageAddr_CustomSettingsBytes;
 static uint16_t storageAddr_profileData;
 static uint16_t keyAssignsDataCapacity;
 
 static void initializeDataAddresses() {
   storageAddr_DeviceInstanceCode = dataStorage_getDataAddress_deviceInstanceCode();
-  storageAddr_CustomSettingsBytesInitializationFlag = dataStorage_getDataAddress_parametersInitializationFlag();
-  storageAddr_CustomSettingsBytes = dataStorage_getDataAddress_systemParameters();
+  // storageAddr_CustomSettingsBytesInitializationFlag = dataStorage_getDataAddress_parametersInitializationFlag();
+  // storageAddr_CustomSettingsBytes = dataStorage_getDataAddress_systemParameters();
   storageAddr_profileData = dataStorage_getDataAddress_profileData();
   keyAssignsDataCapacity = dataStorage_getKeyAssignDataCapacity();
 }
@@ -49,6 +51,8 @@ static void initializeDataAddresses() {
 
 static uint8_t rawHidSendBuf[64] = { 0 };
 static uint8_t rawHidRcvBuf[64] = { 0 };
+
+static bool skipNotify = false;
 
 static void emitGenericHidData(uint8_t *p) {
   bool done = usbIoCore_genericHid_writeData(p);
@@ -94,6 +98,16 @@ static void emitMemoryChecksumResult(uint8_t dataKind, uint8_t checksum) {
   emitGenericHidData(rawHidSendBuf);
 }
 
+static void emitSingleParameterChangedNotification(uint8_t parameterIndex, uint8_t value) {
+  uint8_t *p = rawHidSendBuf;
+  p[0] = 0xB0;
+  p[1] = 0x02;
+  p[2] = 0xE1;
+  p[3] = parameterIndex;
+  p[4] = value;
+  emitGenericHidData(rawHidSendBuf);
+}
+
 static void copyEepromBytesToBuffer(uint8_t *dstBuffer, int dstOffset, uint16_t srcEepromAddr, uint16_t len) {
   for (uint16_t i = 0; i < len; i++) {
     dstBuffer[dstOffset + i] = dataMemory_readByte(srcEepromAddr + i);
@@ -123,12 +137,17 @@ static void emitDeviceAttributesResponse() {
 }
 
 static void emitCustomParametersReadResponse() {
+  uint8_t num = NumSystemParameters;
   uint8_t *p = rawHidSendBuf;
   p[0] = 0xb0;
   p[1] = 0x02;
   p[2] = 0x81;
-  p[3] = dataMemory_readByte(storageAddr_CustomSettingsBytesInitializationFlag);
-  copyEepromBytesToBuffer(p, 4, storageAddr_CustomSettingsBytes, 10);
+  p[3] = num;
+  configManager_readSystemParameterValues(p + 4, num);
+  configManager_readSystemParameterMaxValues(p + 4 + num, num);
+  // utils_copyBytes(p + 3, )
+  // p[3] = dataMemory_readByte(storageAddr_CustomSettingsBytesInitializationFlag);
+  // copyEepromBytesToBuffer(p, 4, storageAddr_CustomSettingsBytes, 10);
   emitGenericHidData(rawHidSendBuf);
 }
 
@@ -186,20 +205,32 @@ static void processReadGenericHidData() {
         }
         if (cmd == 0x90) {
           // printf("handle custom parameters bluk write\n");
-          uint8_t *src = p + 3;
-          dataMemory_writeBytes(storageAddr_CustomSettingsBytes, src, 10);
-          dataMemory_writeByte(storageAddr_CustomSettingsBytesInitializationFlag, 1);
-          for (uint8_t i = 0; i < 10; i++) {
-            uint8_t value = src[i];
-            invokeCustomParameterChangedCallback(i, value);
-          }
+          uint8_t parameterIndexBase = p[3];
+          uint8_t count = p[4];
+          uint8_t *ptr = p + 5;
+          skipNotify = true;
+          configManager_bulkWriteParameters(ptr, count, parameterIndexBase);
+          skipNotify = false;
+          // dataMemory_writeBytes(storageAddr_CustomSettingsBytes, ptr, num);
+          // dataMemory_writeByte(storageAddr_CustomSettingsBytesInitializationFlag, 1);
+          // for (uint8_t bi = 0; bi < num; bi++) {
+          //   // uint8_t value = src[i];
+          //   // invokeCustomParameterChangedCallback(i, value);
+          // }
         }
         if (cmd == 0xa0) {
           // printf("handle custom parameters signle write\n");
-          uint8_t index = p[3];
+          uint8_t parameterIndex = p[3];
           uint8_t value = p[4];
-          dataMemory_writeByte(storageAddr_CustomSettingsBytes + index, value);
-          invokeCustomParameterChangedCallback(index, value);
+          // dataMemory_writeByte(storageAddr_CustomSettingsBytes + index, value);
+          // invokeCustomParameterChangedCallback(index, value);
+          configManager_writeParameter(parameterIndex, value);
+        }
+
+        if (cmd == 0xb0) {
+          skipNotify = true;
+          configManager_resetSystemParameters();
+          skipNotify = false;
         }
       }
 
@@ -240,26 +271,34 @@ static void processReadGenericHidData() {
 //---------------------------------------------
 //custom parameter initial loading
 
-static void loadCustomParameters() {
-  bool isInitialized = dataMemory_readByte(storageAddr_CustomSettingsBytesInitializationFlag);
-  if (isInitialized) {
-    for (uint8_t i = 0; i < 10; i++) {
-      uint8_t value = dataMemory_readByte(storageAddr_CustomSettingsBytes + i);
-      invokeCustomParameterChangedCallback(i, value);
-    }
+// static void loadCustomParameters() {
+//   bool isInitialized = dataMemory_readByte(storageAddr_CustomSettingsBytesInitializationFlag);
+//   if (isInitialized) {
+//     for (uint8_t i = 0; i < 10; i++) {
+//       uint8_t value = dataMemory_readByte(storageAddr_CustomSettingsBytes + i);
+//       invokeCustomParameterChangedCallback(i, value);
+//     }
+//   }
+// }
+
+//parameter changed handler
+
+static void onParameterChanged(uint8_t parameterIndex, uint8_t value) {
+  if (!skipNotify) {
+    emitSingleParameterChangedNotification(parameterIndex, value);
   }
 }
 
 //---------------------------------------------
 //exports
 
-void configuratorServant_initialize(
-    void (*_stateNotificationCallback)(uint8_t state),
-    void (*_customParameterChangedCallback)(uint8_t index, uint8_t value)) {
+void configuratorServant_initialize(void (*_stateNotificationCallback)(uint8_t state)) {
+  // void (*_customParameterChangedCallback)(uint8_t index, uint8_t value)) {
   stateNotificationCallback = _stateNotificationCallback;
-  customParameterChangedCallback = _customParameterChangedCallback;
+  configManager_addParameterChangeListener(onParameterChanged);
+  // customParameterChangedCallback = _customParameterChangedCallback;
   initializeDataAddresses();
-  loadCustomParameters();
+  // loadCustomParameters();
 }
 
 void configuratorServant_processUpdate() {

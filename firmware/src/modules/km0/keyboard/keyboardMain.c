@@ -1,5 +1,7 @@
 #include "keyboardMain.h"
+#include "commandDefinitions.h"
 #include "config.h"
+#include "configManager.h"
 #include "configuratorServant.h"
 #include "dataStorage.h"
 #include "keyAssignsDataValidator.h"
@@ -14,14 +16,6 @@
 
 //----------------------------------------------------------------------
 //definitions
-
-enum {
-  OptionSlot_EmitKeyStroke = 0,
-  OptionSlot_EmitRealtimeEvents = 1,
-  OptionSlot_AffectKeyHoldStateToLed = 2,
-  OptionSlot_UseHeartBeatLed = 3,
-  OptionSlot_MasterSide = 4
-};
 
 #ifndef KM0_KEYBOARD__NUM_SCAN_SLOTS
 #error KM0_KEYBOARD__NUM_SCAN_SLOTS is not defined
@@ -144,23 +138,23 @@ static bool checkIfSomeKeyPressed() {
 //callbacks
 
 //カスタムパラメタロード/変更時に呼ばれるハンドラ
-static void customParameterValueHandler(uint8_t slotIndex, uint8_t value) {
+static void parameterValueHandler(uint8_t slotIndex, uint8_t value) {
   if (callbacks && callbacks->customParameterHandlerOverride) {
     callbacks->customParameterHandlerOverride(slotIndex, value);
     return;
   }
 
-  if (slotIndex == OptionSlot_EmitKeyStroke) {
+  if (slotIndex == SystemParameter_EmitKeyStroke) {
     optionEmitKeyStroke = !!value;
-  } else if (slotIndex == OptionSlot_EmitRealtimeEvents) {
+  } else if (slotIndex == SystemParameter_EmitRealtimeEvents) {
     optionEmitRealtimeEvents = !!value;
-  } else if (slotIndex == OptionSlot_AffectKeyHoldStateToLed) {
+  } else if (slotIndex == SystemParameter_KeyHoldIndicatorLed) {
     optionAffectKeyHoldStateToLed = !!value;
-  } else if (slotIndex == OptionSlot_UseHeartBeatLed) {
+  } else if (slotIndex == SystemParameter_HeartbeatLed) {
     optionUseHeartbeatLed = !!value;
-  } else if (slotIndex == OptionSlot_MasterSide) {
-    //value: (0:unset, 1:left, 2:right)
-    optionInvertSide = value == 2;
+  } else if (slotIndex == SystemParameter_MasterSide) {
+    //value: (0:left, 1:right)
+    optionInvertSide = value == 1;
   }
 
   if (callbacks && callbacks->customParameterHandlerChained) {
@@ -272,6 +266,7 @@ static void processKeyStatesUpdate() {
 void keyboardMain_useDebugUart(uint32_t baud) {
   debugUart_initialize(baud);
   debugUartConfigured = true;
+  printf("--------\n");
 }
 
 void keyboardMain_useKeyScanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags)) {
@@ -307,11 +302,12 @@ void keyboardMain_initialize() {
     debugUart_disable();
   }
   dataStorage_initialize();
+  configManager_addParameterChangeListener(parameterValueHandler);
+  configManager_initialize();
   setupSerialNumberText();
   usbIoCore_initialize();
   resetKeyboardCoreLogic();
-  configuratorServant_initialize(
-      configuratorServantStateHandler, customParameterValueHandler);
+  configuratorServant_initialize(configuratorServantStateHandler);
 }
 
 void keyboardMain_udpateKeyScanners() {
@@ -349,4 +345,5 @@ void keyboardMain_updateDisplayModules(uint32_t tick) {
 void keyboardMain_processUpdate() {
   usbIoCore_processUpdate();
   configuratorServant_processUpdate();
+  configManager_processUpdate();
 }

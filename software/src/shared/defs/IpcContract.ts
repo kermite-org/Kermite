@@ -67,7 +67,8 @@ export interface IKeyboardDeviceAttributes {
 export interface IKeyboardDeviceStatus {
   isConnected: boolean;
   deviceAttrs?: IKeyboardDeviceAttributes;
-  customParameterValues?: number[];
+  systemParameterValues?: number[];
+  systemParameterMaxValues?: number[];
 }
 
 export type IRealtimeKeyboardEvent =

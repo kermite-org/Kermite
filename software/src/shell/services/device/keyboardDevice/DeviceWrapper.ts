@@ -45,6 +45,7 @@ export class DeviceWrapper implements IDeviceWrapper {
 
   private handleData = (data: any) => {
     const buf = getArrayFromBuffer(data);
+    // console.log(`received: ${bytesToHexString([...buf])}`);
     this.onData.emit(buf);
   };
 
@@ -72,8 +73,7 @@ export class DeviceWrapper implements IDeviceWrapper {
     const buf = [...bytes, ...padding];
 
     // console.log(`sending ${buf.length} bytes:`);
-    // console.log(buf.map(v => ('00' + v.toString(16)).slice(-2)).join(' '));
-    // console.log(bytes.map((v) => ('00' + v.toString(16)).slice(-2)).join(' '));
+    // console.log(`sending: ${bytesToHexString(bytes)}`);
 
     buf.unshift(0); // 先頭に0を付加して送信
 
