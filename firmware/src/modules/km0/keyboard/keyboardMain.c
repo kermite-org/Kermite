@@ -1,15 +1,15 @@
 #include "keyboardMain.h"
 #include "config.h"
-#include "configValidator.h"
 #include "configuratorServant.h"
 #include "dataStorage.h"
+#include "keyAssignsDataValidator.h"
 #include "keyboardCoreLogic.h"
 #include "km0/common/bitOperations.h"
 #include "km0/common/utils.h"
 #include "km0/deviceIo/boardIo.h"
 #include "km0/deviceIo/debugUart.h"
 #include "km0/deviceIo/usbIoCore.h"
-#include "versions.h"
+#include "versionDefinitions.h"
 #include <stdio.h>
 
 //----------------------------------------------------------------------
@@ -98,15 +98,15 @@ static void debugDumpLocalOutputState() {
 
 static void setupSerialNumberText() {
   static uint8_t serialNumberTextBuf[24];
-  utils_copyBytes(serialNumberTextBuf, (uint8_t *)KERMITE_MCU_CODE, 8);
-  utils_copyBytes(serialNumberTextBuf + 8, (uint8_t *)PROJECT_ID, 8);
+  utils_copyBytes(serialNumberTextBuf, (uint8_t *)Kermite_Project_McuCode, 8);
+  utils_copyBytes(serialNumberTextBuf + 8, (uint8_t *)KERMITE_PROJECT_ID, 8);
   configuratorServant_readDeviceInstanceCode(serialNumberTextBuf + 16);
   uibioCore_internal_setSerialNumberText(serialNumberTextBuf, 24);
 }
 
 static void resetKeyboardCoreLogic() {
-  bool configMemoryValid = configValidator_checkBinaryProfileDataHeader();
-  if (configMemoryValid) {
+  bool keyAssignsDataValid = keyAssignsDataValidator_checkBinaryProfileDataHeader();
+  if (keyAssignsDataValid) {
     keyboardCoreLogic_initialize();
   } else {
     keyboardCoreLogic_halt();

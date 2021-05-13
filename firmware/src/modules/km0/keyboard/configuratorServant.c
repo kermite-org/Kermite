@@ -4,7 +4,7 @@
 #include "km0/common/utils.h"
 #include "km0/deviceIo/dataMemory.h"
 #include "km0/deviceIo/usbIoCore.h"
-#include "versions.h"
+#include "versionDefinitions.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -104,21 +104,21 @@ static void emitDeviceAttributesResponse() {
   uint8_t *p = rawHidSendBuf;
   p[0] = 0xF0;
   p[1] = 0x11;
-  p[2] = KERMITE_PROJECT_RELEASE_BUILD_REVISION >> 8 & 0xFF;
-  p[3] = KERMITE_PROJECT_RELEASE_BUILD_REVISION & 0xFF;
-  p[4] = KERMITE_CONFIG_STORAGE_FORMAT_REVISION;
-  p[5] = KERMITE_RAWHID_MESSAGE_PROTOCOL_REVISION;
-  utils_copyBytes(p + 6, (uint8_t *)PROJECT_ID, 8);
-  p[14] = KERMITE_IS_RESOURCE_ORIGIN_ONLINE;
+  p[2] = Kermite_Project_ReleaseBuildRevision >> 8 & 0xFF;
+  p[3] = Kermite_Project_ReleaseBuildRevision & 0xFF;
+  p[4] = Kermite_ConfigStorageFormatRevision;
+  p[5] = Kermite_RawHidMessageProtocolRevision;
+  utils_copyBytes(p + 6, (uint8_t *)KERMITE_PROJECT_ID, 8);
+  p[14] = Kermite_Project_IsResourceOriginOnline;
   p[15] = 0;
   copyEepromBytesToBuffer(p, 16, storageAddr_DeviceInstanceCode, 8);
   p[24] = keyAssignsDataCapacity >> 8 & 0xFF;
   p[25] = keyAssignsDataCapacity & 0xFF;
   utils_fillBytes(p + 26, 0, 16);
-  size_t slen = utils_clamp(strlen(KERMITE_VARIATION_NAME), 0, 16);
-  utils_copyBytes(p + 26, (uint8_t *)KERMITE_VARIATION_NAME, slen);
-  utils_copyBytes(p + 42, (uint8_t *)KERMITE_MCU_CODE, 8);
-  p[50] = KermiteProfileBinaryFormatRevision;
+  size_t slen = utils_clamp(strlen(Kermite_Project_VariationName), 0, 16);
+  utils_copyBytes(p + 26, (uint8_t *)Kermite_Project_VariationName, slen);
+  utils_copyBytes(p + 42, (uint8_t *)Kermite_Project_McuCode, 8);
+  p[50] = Kermite_ProfileBinaryFormatRevision;
   emitGenericHidData(rawHidSendBuf);
 }
 

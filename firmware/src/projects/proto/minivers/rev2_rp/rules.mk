@@ -12,10 +12,11 @@ MODULE_PIOASM_SRCS += km0/deviceIo/rp2040/neoPixelCore.pio
 MODULE_SRCS += km0/deviceIo/rp2040/boardLink_singleWire.c
 MODULE_PIOASM_SRCS += km0/deviceIo/rp2040/singleWire4.pio
 MODULE_SRCS += km0/keyboard/keyScanner_basicMatrix.c
+MODULE_SRCS += km0/keyboard/dataStorage.c
+MODULE_SRCS += km0/keyboard/keyAssignsDataValidator.c
 MODULE_SRCS += km0/keyboard/configuratorServant.c
-MODULE_SRCS += km0/keyboard/configValidator.c
-MODULE_SRCS += km0/keyboard/keyboardCoreLogic.c
 MODULE_SRCS += km0/keyboard/keyCodeTable.c
+MODULE_SRCS += km0/keyboard/keyboardCoreLogic.c
 MODULE_SRCS += km0/keyboard/keyboardMain.c
 MODULE_SRCS += km0/keyboard/splitKeyboard.c
 

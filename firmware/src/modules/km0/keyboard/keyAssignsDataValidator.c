@@ -1,9 +1,9 @@
-#include "configValidator.h"
+#include "keyAssignsDataValidator.h"
 #include "config.h"
 #include "dataStorage.h"
 #include "km0/common/utils.h"
 #include "km0/deviceIo/dataMemory.h"
-#include "versions.h"
+#include "versionDefinitions.h"
 #include <stdio.h>
 
 //----------------------------------------------------------------------
@@ -15,7 +15,7 @@
 
 static uint8_t eepromTempBuf[KeyAssignsDataHeaderLength];
 
-bool configValidator_checkBinaryProfileDataHeader() {
+bool keyAssignsDataValidator_checkBinaryProfileDataHeader() {
   uint16_t addrKeyAssignsDataHeader = dataStorage_getDataAddress_profileData_profileHeader();
   uint16_t keyAssignsDataBodyLengthMax = dataStorage_getKeyAssignDataCapacity();
   bool storageHeaderValid = false;
@@ -30,8 +30,8 @@ bool configValidator_checkBinaryProfileDataHeader() {
     // printf("%d %d %d %d %d\n", logicModelType, configStorageFormatRevision, profileBinaryFormatRevision, numKeys, numLayers);
     storageHeaderValid =
         logicModelType == 0x01 &&
-        configStorageFormatRevision == KERMITE_CONFIG_STORAGE_FORMAT_REVISION &&
-        profileBinaryFormatRevision == KermiteProfileBinaryFormatRevision &&
+        configStorageFormatRevision == Kermite_ConfigStorageFormatRevision &&
+        profileBinaryFormatRevision == Kermite_ProfileBinaryFormatRevision &&
         numKeys <= 254 &&
         numLayers <= 16;
   }
