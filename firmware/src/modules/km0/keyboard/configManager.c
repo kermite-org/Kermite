@@ -127,8 +127,8 @@ void configManager_resetSystemParameters() {
 }
 
 static void shiftParameterValue(uint8_t parameterIndex, uint8_t payloadValue) {
-  int dir = (payloadValue & 0x0F == 1) ? 1 : -1;
-  bool clamp = payloadValue >> 4 & 0x0F > 0;
+  int dir = ((payloadValue & 0x0F) == 1) ? 1 : -1;
+  bool clamp = (payloadValue >> 4 & 0x0F) > 0;
   uint8_t bi = parameterIndex - SystemParameterIndexBase;
   bool maxValue = ((uint8_t *)&systemParameterMaxValues)[bi];
   int oldValue = systemParameterValues[bi];
