@@ -485,12 +485,18 @@ function encodeLayerListData(profile: IProfileData): number[] {
 }
 
 function encodeMappingEntriesData(profile: IProfileData): number[] {
-  const numItems = profile.mappingEntries.length;
+  const filteredEntries = profile.mappingEntries.filter((it) => {
+    const noTargetKey =
+      it.srcKey === 'K_NONE' || it.srcKey === 'K_RoutingSource_Any';
+    const noTargetModifiers = it.srcModifiers === 0 || it.srcModifiers === 255;
+    return !(noTargetKey && noTargetModifiers);
+  });
+  const numItems = filteredEntries.length;
   if (numItems > 255) {
     throw new Error('too many mapping entries');
   }
   const itemBytes: number[] = flattenArray(
-    profile.mappingEntries.map((it) => [
+    filteredEntries.map((it) => [
       it.channelIndex,
       getLogicalKeyForVirtualKey(it.srcKey),
       it.srcModifiers,
