@@ -484,10 +484,28 @@ function encodeLayerListData(profile: IProfileData): number[] {
   );
 }
 
+function encodeMappingEntriesData(profile: IProfileData): number[] {
+  const numItems = profile.mappingEntries.length;
+  if (numItems > 255) {
+    throw new Error('too many mapping entries');
+  }
+  const itemBytes: number[] = flattenArray(
+    profile.mappingEntries.map((it) => [
+      it.channelIndex,
+      getLogicalKeyForVirtualKey(it.srcKey),
+      it.srcModifiers,
+      getLogicalKeyForVirtualKey(it.dstKey),
+      it.dstModifiers,
+    ]),
+  );
+  return [numItems, ...itemBytes];
+}
+
 export function makeProfileBinaryData(profile: IProfileData): number[] {
   return [
     ...createChunk(0xbb71, encodeProfileHeaderData(profile)),
     ...createChunk(0xbb74, encodeLayerListData(profile)),
+    ...createChunk(0xbb76, encodeMappingEntriesData(profile)),
     ...createChunk(0xbb78, encodeKeyMappingData(profile)),
   ];
 }
