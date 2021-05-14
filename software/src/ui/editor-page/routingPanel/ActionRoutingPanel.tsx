@@ -7,6 +7,7 @@ import {
   uiTheme,
 } from '~/ui/common';
 import { editorModel } from '~/ui/editor-page/editorMainPart/models/EditorModel';
+import { editorPageModel } from '~/ui/editor-page/editorPageModel';
 import { RoutingTargetChannelSelector } from '~/ui/editor-page/routingPanel/Selectors/RoutingTargetChannelSelector';
 import { RoutingTargetKeySelector } from '~/ui/editor-page/routingPanel/Selectors/RoutingTargetKeySelector';
 import { RoutingTargetModifierSelector } from '~/ui/editor-page/routingPanel/Selectors/RoutingTargetModifierSelector';
@@ -23,6 +24,7 @@ const style = css`
   padding: 20px;
 
   > .panel {
+    position: absolute;
     width: 100%;
     max-width: 700px;
     height: 100%;
@@ -32,6 +34,20 @@ const style = css`
     background: ${uiTheme.colors.clPanelBox};
     display: flex;
     flex-direction: column;
+
+    > .closeButton {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 5px;
+      cursor: pointer;
+      font-size: 18px;
+    }
 
     > .topArea {
       flex-shrink: 0;
@@ -85,9 +101,17 @@ export const ActionRoutingPanel: FcWithClassName = ({ className }) => {
     }
   };
 
+  const handleClose = () => {
+    editorPageModel.routingPanelVisible = false;
+  };
+
   return (
     <div css={style} class={className}>
       <div class="panel">
+        <div class="closeButton" onClick={handleClose}>
+          <i class="fa fa-times" />
+        </div>
+
         <div class="topArea">
           <p>Dynamic Action Routing</p>
           <GeneralButton onClick={addMappingEntry}>add</GeneralButton>
