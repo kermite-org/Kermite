@@ -17,6 +17,7 @@ import {
 import { useKeyboardBehaviorModeModel } from '~/ui/common/sharedModels/KeyboardBehaviorModeModel';
 import { editorModel } from '~/ui/editor-page/editorMainPart/models/EditorModel';
 import { callProfileSetupModal } from '~/ui/editor-page/editorMainPart/views/modals/ProfileSetupModal';
+import { editorPageModel } from '~/ui/editor-page/editorPageModel';
 import { ProfilesModel } from '~/ui/editor-page/profileManagement/models/ProfilesModel';
 
 export interface IProfileManagementPartViewModel {
@@ -41,6 +42,8 @@ export interface IProfileManagementPartViewModel {
   isCurrentProfileInternal: boolean;
   handleSaveUnsavedProfile(): void;
   openUserProfilesFolder(): void;
+
+  toggleRoutingPanel(): void;
 }
 
 export const profilesModel = new ProfilesModel(editorModel);
@@ -259,6 +262,10 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     }
   };
 
+  const toggleRoutingPanel = () => {
+    editorPageModel.routingPanelVisible = !editorPageModel.routingPanelVisible;
+  };
+
   return {
     createProfile,
     saveProfile,
@@ -285,5 +292,6 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     handleImportFromFile,
     handleExportToFile,
     openUserProfilesFolder,
+    toggleRoutingPanel,
   };
 }

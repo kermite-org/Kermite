@@ -2,6 +2,7 @@ import { jsx, css } from 'qx';
 import { uiTheme, uiStatusModel } from '~/ui/common';
 import { BehaviorOptionsPartA } from '~/ui/editor-page/editorMainPart/views/BehaviorOptionsPartA';
 import { ProfileConfigurationPart } from '~/ui/editor-page/editorMainPart/views/ProfileConfigurationPart';
+import { editorPageModel } from '~/ui/editor-page/editorPageModel';
 import { ActionRoutingPanel } from '~/ui/editor-page/routingPanel/ActionRoutingPanel';
 import { KeyboardSection } from './editorMainPart/KeyboardSection';
 import { BehaviorOptionsPartB } from './editorMainPart/views/BehaviorOptionsPartB';
@@ -127,7 +128,7 @@ export const KeyAssignEditView = () => {
           <div class="assignPartBox">
             <AssignEditSection />
           </div>
-          <ActionRoutingPanel />
+          {editorPageModel.routingPanelVisible && <ActionRoutingPanel />}
         </div>
         <div css={cssEditSideBarColumn}>
           <div class="topPartBox">

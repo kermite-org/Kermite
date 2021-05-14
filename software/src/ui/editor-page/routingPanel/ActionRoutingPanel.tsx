@@ -64,12 +64,6 @@ const style = css`
 export const ActionRoutingPanel: FcWithClassName = ({ className }) => {
   const { mappingEntries } = editorModel.profileData;
 
-  console.log({ mappingEntries });
-
-  if (!mappingEntries) {
-    return null;
-  }
-
   const addMappingEntry = () => {
     const newId = generateNextSequentialId(
       're-',
