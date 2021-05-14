@@ -56,6 +56,10 @@ BB BB ...: チャンクのボディデータ, LL LL で規定されるサイズ�
           // layerNameStringPos: U8; //shortStrigsBlock内でのインデクス, レイヤ名は最大8文字
         }[]; //numLayers個の配列
       };
+      mappingEntries: Chunk<0xbb76> & {
+        numItems: U8;
+        items: Bytes<5>[];
+      };
       // shortStringsBlock: Chunk<0xbb75> & {
       //   //\0終端の文字列を続けて多数格納
       // };
