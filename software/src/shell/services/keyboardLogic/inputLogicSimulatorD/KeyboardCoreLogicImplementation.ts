@@ -2,7 +2,10 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
 import { dataStorage } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/DataStorage';
-import { keyActionRemapper_translateKeyOperation } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/KeyActionRemapper';
+import {
+  keyActionRemapper_setupDataReader,
+  keyActionRemapper_translateKeyOperation,
+} from '~/shell/services/keyboardLogic/inputLogicSimulatorD/KeyActionRemapper';
 import { keyCodeTranslator_mapLogicalKeyToHidKeyCode } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/KeyCodeTranslator';
 import {
   AssignStorageBaseAddr,
@@ -209,6 +212,7 @@ function initAssignMemoryReader() {
     rs.layerAttributeWords[i] =
       i < numLayers ? readStorageWordBE(layerListDataLocation + i * 2) : 0;
   }
+  keyActionRemapper_setupDataReader();
 }
 
 function getNumLayers() {
