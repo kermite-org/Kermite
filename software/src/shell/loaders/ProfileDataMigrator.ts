@@ -32,7 +32,7 @@ export namespace ProfileDataMigrator {
     // mappingEntriesを追加
     console.log(`PRF04 --> PRF05`);
     profile.formatRevision = 'PRF05';
-    profile.mappingEntires = [];
+    profile.mappingEntries = [];
   }
 
   export function fixProfileData(

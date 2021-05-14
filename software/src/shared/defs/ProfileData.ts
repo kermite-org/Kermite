@@ -125,9 +125,10 @@ export type IAssignsDictionary = {
 
 export type IMappingEntry = {
   itemId: string;
-  srcKey: VirtualKey;
+  channelIndex: number;
+  srcKey: VirtualKey | 'K_RoutingSource_Any';
   srcModifiers: number;
-  dstKey: VirtualKey;
+  dstKey: VirtualKey | 'K_RoutingDest_Keep' | 'K_RoutingDest_Stop';
   dstModifiers: number;
 };
 
@@ -137,7 +138,7 @@ export type IProfileData = {
   settings: IProfileSettings;
   layers: ILayer[];
   assigns: IAssignsDictionary;
-  mappingEntires: IMappingEntry[];
+  mappingEntries: IMappingEntry[];
 };
 
 export type IPersistAssignEntry = {
@@ -156,11 +157,10 @@ export type IPersistProfileData = {
   settings: IProfileSettings;
   layers: ILayer[];
   assigns: IPersistAssignEntry[];
-  mappingEntires: IMappingEntry[];
+  mappingEntries: IMappingEntry[];
 };
 
 export const fallbackProfileData: IProfileData = {
-  // revision: 'PRF03',
   projectId: '',
   keyboardDesign: createFallbackPersistKeyboardDesign(),
   settings: {
@@ -177,5 +177,5 @@ export const fallbackProfileData: IProfileData = {
     },
   ],
   assigns: {},
-  mappingEntires: [],
+  mappingEntries: [],
 };

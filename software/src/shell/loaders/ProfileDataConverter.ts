@@ -45,6 +45,7 @@ export namespace ProfileDataConverter {
       settings: source.settings,
       layers: source.layers,
       assigns: convertAssingsDictionaryToArray(source.assigns),
+      mappingEntries: source.mappingEntries,
     };
   }
 
@@ -57,6 +58,7 @@ export namespace ProfileDataConverter {
       settings: source.settings,
       layers: source.layers,
       assigns: convertAssignsArrayToDictionary(source.assigns),
+      mappingEntries: source.mappingEntries,
     };
   }
 }
