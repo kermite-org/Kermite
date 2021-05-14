@@ -1,7 +1,6 @@
 import { css, jsx } from 'qx';
 import { FcWithClassName, texts } from '~/ui/common';
 import {
-  GeneralButton,
   KeyboardProfileSelector,
   OperationButtonWithIcon,
 } from '~/ui/common/components';
