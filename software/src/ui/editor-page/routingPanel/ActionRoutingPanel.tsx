@@ -21,13 +21,12 @@ const style = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
 
   > .panel {
     position: absolute;
     width: 100%;
     max-width: 700px;
-    height: 100%;
+    height: calc(100% - 40px);
     max-height: 700px;
     padding: 15px 20px;
     border: solid 1px ${uiTheme.colors.clPrimary};
