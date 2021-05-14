@@ -126,9 +126,9 @@ export type IAssignsDictionary = {
 export type IMappingEntry = {
   itemId: string;
   channelIndex: number;
-  srcKey: VirtualKey | 'K_RoutingSource_Any';
+  srcKey: VirtualKey;
   srcModifiers: number;
-  dstKey: VirtualKey | 'K_RoutingDest_Keep' | 'K_RoutingDest_Stop';
+  dstKey: VirtualKey;
   dstModifiers: number;
 };
 
