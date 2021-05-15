@@ -10,6 +10,7 @@ import { makeProfileSelectionMenuPartViewModel } from '~/ui/editor-page/profileM
 import {
   BehaviorSelector,
   LayoutStandardSelector,
+  RoutingChannelSelector,
 } from '~/ui/editor-page/profileManagement/views/ConfigSelectors';
 import { SavingProjectPresetSelectionModal } from '~/ui/editor-page/profileManagement/views/SavingProjectPresetSelectionModal';
 import { ProfileSelectionMenuPart } from './views/ProfileSelectionMenu';
@@ -63,6 +64,7 @@ export const ProfileManagementPart: FcWithClassName = ({ className }) => {
       <div class="mode-selectors-box">
         <BehaviorSelector />
         <LayoutStandardSelector />
+        <RoutingChannelSelector />
       </div>
 
       <div class="operation-buttons-box">
