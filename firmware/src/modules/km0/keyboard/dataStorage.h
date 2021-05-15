@@ -18,4 +18,6 @@ uint16_t dataStorage_getDataAddress_profileData_layerList();
 uint16_t dataStorage_getDataAddress_profileData_keyAssigns();
 uint16_t dataStorage_getDataSize_profileData_keyAssigns();
 
+uint16_t dataStorage_getDataAddress_mappingEntreis();
+
 #endif

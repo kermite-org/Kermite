@@ -35,19 +35,18 @@ const uint16_t StorageHeadMagicNumber = 0xa37e;
 //----------------------------------------------------------------------
 
 enum {
-  ChunkSig_UserData = 0xAA10,
-  ChunkSig_SystemData = 0xAA20,
-  ChunkSig_SystemParameters = 0xAA30,
-  ChunkSig_CustomParameters = 0xAA40,
-  ChunkSig_ProfileData = 0xAA70
+  ChunkSig_UserData = 0xaa10,
+  ChunkSig_SystemData = 0xaa20,
+  ChunkSig_SystemParameters = 0xaa30,
+  ChunkSig_CustomParameters = 0xaa40,
+  ChunkSig_ProfileData = 0xaa70,
 };
 
 enum {
-  SubChunkSig_ProfileDataHeader = 0xBB71,
-  SubChunkSig_ProfileLayerList = 0xBB74,
-  SubChunkSig_ProfileShortStrings = 0xBB75,
-  SubChunkSig_ProfileSlectiveAssigns = 0xBB76,
-  SubChunkSig_ProfileKeyAssigns = 0xBB78,
+  SubChunkSig_ProfileDataHeader = 0xbb71,
+  SubChunkSig_ProfileLayerList = 0xbb74,
+  SubChunkSig_MappingEntries = 0xbb76,
+  SubChunkSig_ProfileKeyAssigns = 0xbb78,
 };
 
 //チャンク識別子を元にチャンクを探して、チャンクボディのアドレスとデータサイズを得る
@@ -233,4 +232,8 @@ uint16_t dataStorage_getDataAddress_profileData_keyAssigns() {
 
 uint16_t dataStorage_getDataSize_profileData_keyAssigns() {
   return getSubChunkBodySize(ChunkSig_ProfileData, SubChunkSig_ProfileKeyAssigns);
+}
+
+uint16_t dataStorage_getDataAddress_mappingEntreis() {
+  return getSubChunkBodySize(ChunkSig_ProfileData, SubChunkSig_MappingEntries);
 }
