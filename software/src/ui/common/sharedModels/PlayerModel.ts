@@ -9,6 +9,7 @@ import {
 } from '~/shared';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import { ipcAgent } from '~/ui/common/base';
+import { IPlayerModel } from '~/ui/common/sharedModels/Interfaces';
 
 class PlayerModelHelper {
   static translateKeyIndexToKeyUnitId(
@@ -38,7 +39,7 @@ class PlayerModelHelper {
   }
 }
 
-export class PlayerModel {
+export class PlayerModel implements IPlayerModel {
   private _profileData: IProfileData = fallbackProfileData;
   private _displayDesign: IDisplayKeyboardDesign = createFallbackDisplayKeyboardDesign();
 
