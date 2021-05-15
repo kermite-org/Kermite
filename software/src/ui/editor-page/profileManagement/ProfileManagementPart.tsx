@@ -54,6 +54,11 @@ export const ProfileManagementPart: FcWithClassName = ({ className }) => {
         hint={texts.hint_assigner_topBar_selectCurrentProfile}
       />
       <ConfigurationButton onClick={baseVm.openConfiguration} />
+
+      <p onClick={baseVm.toggleRoutingPanel} style={{ cursor: 'pointer' }}>
+        <i class="fa fa-list" />
+      </p>
+
       <div class="spacer" />
       <div class="mode-selectors-box">
         <BehaviorSelector />

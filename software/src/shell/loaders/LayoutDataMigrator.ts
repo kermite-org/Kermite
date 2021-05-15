@@ -5,7 +5,6 @@ export namespace LayoutDataMigrator {
     if (!layout.formatRevision) {
       throw new Error('layout file format too old');
     }
-
     // LA00 --> LA01
     // keySizeUnitに縦横のサイズを追加
     if (layout.formatRevision === <string>'LA00') {

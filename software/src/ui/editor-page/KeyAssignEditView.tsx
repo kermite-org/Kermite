@@ -2,6 +2,8 @@ import { jsx, css } from 'qx';
 import { uiTheme, uiStatusModel } from '~/ui/common';
 import { BehaviorOptionsPartA } from '~/ui/editor-page/editorMainPart/views/BehaviorOptionsPartA';
 import { ProfileConfigurationPart } from '~/ui/editor-page/editorMainPart/views/ProfileConfigurationPart';
+import { editorPageModel } from '~/ui/editor-page/editorPageModel';
+import { ActionRoutingPanel } from '~/ui/editor-page/routingPanel/ActionRoutingPanel';
 import { KeyboardSection } from './editorMainPart/KeyboardSection';
 import { BehaviorOptionsPartB } from './editorMainPart/views/BehaviorOptionsPartB';
 import { AssignEditSection } from './editorMainPart/views/assignEditSection';
@@ -54,32 +56,31 @@ const cssEditMainRow = css`
 `;
 
 const cssEditMainColumn = css`
+  position: relative;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  > div + div {
-    margin-top: ${mm};
+
+  > .keyboardPartBox {
+    background: ${clPanelBox};
+    border-radius: ${panelBoxBorderRadius};
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+    height: 50%;
+    flex-shrink: 0;
+    overflow: hidden;
   }
-`;
 
-const cssKeyboardPartBox = css`
-  background: ${clPanelBox};
-  border-radius: ${panelBoxBorderRadius};
-  display: flex;
-  flex-direction: column;
-  min-width: 200px;
-  height: 50%;
-  flex-shrink: 0;
-  overflow: hidden;
-`;
-
-const cssAssignPartBox = css`
-  background: ${clPanelBox};
-  border-radius: ${panelBoxBorderRadius};
-  flex-grow: 1;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
+  > .assignPartBox {
+    margin-top: ${mm};
+    background: ${clPanelBox};
+    border-radius: ${panelBoxBorderRadius};
+    flex-grow: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 const cssEditSideBarColumn = css`
@@ -90,24 +91,24 @@ const cssEditSideBarColumn = css`
   > div + div {
     margin-top: ${mm};
   }
-`;
 
-const cssTopPartBox = css`
-  background: ${clPanelBox};
-  border-radius: ${panelBoxBorderRadius};
-`;
+  > .topPartBox {
+    background: ${clPanelBox};
+    border-radius: ${panelBoxBorderRadius};
+  }
 
-const cssLayersPartBox = css`
-  background: ${clPanelBox};
-  border-radius: ${panelBoxBorderRadius};
-  height: 300px;
-  flex-shrink: 0;
-`;
+  > .layersPartBox {
+    background: ${clPanelBox};
+    border-radius: ${panelBoxBorderRadius};
+    height: 300px;
+    flex-shrink: 0;
+  }
 
-const cssRestPartBox = css`
-  background: ${clPanelBox};
-  border-radius: ${panelBoxBorderRadius};
-  flex-grow: 1;
+  > .restPartBox {
+    background: ${clPanelBox};
+    border-radius: ${panelBoxBorderRadius};
+    flex-grow: 1;
+  }
 `;
 
 export const KeyAssignEditView = () => {
@@ -121,21 +122,22 @@ export const KeyAssignEditView = () => {
       </div>
       <div css={cssEditMainRow}>
         <div css={cssEditMainColumn}>
-          <div css={cssKeyboardPartBox}>
+          <div class="keyboardPartBox">
             <KeyboardSection />
           </div>
-          <div css={cssAssignPartBox}>
+          <div class="assignPartBox">
             <AssignEditSection />
           </div>
+          {editorPageModel.routingPanelVisible && <ActionRoutingPanel />}
         </div>
         <div css={cssEditSideBarColumn}>
-          <div css={cssTopPartBox}>
+          <div class="topPartBox">
             <BehaviorOptionsPartA />
           </div>
-          <div css={cssLayersPartBox}>
+          <div class="layersPartBox">
             <LayersSection />
           </div>
-          <div css={cssRestPartBox}>
+          <div class="restPartBox">
             <ProfileConfigurationPart />
             <BehaviorOptionsPartB />
           </div>
