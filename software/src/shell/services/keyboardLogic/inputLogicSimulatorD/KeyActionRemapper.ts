@@ -1,5 +1,5 @@
+import { LogicalKey, remmaperConstants } from '~/shared';
 import { dataStorage } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/DataStorage';
-import { LogicalKey } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/LogicalKey';
 
 type u8 = number;
 type u16 = number;
@@ -12,15 +12,15 @@ type u16 = number;
 //   dstModifiers: u8;
 // };
 
-const KeyCodeSourceValueNone = LogicalKey.LK_NONE;
-const KeyCodeSourceValueAny = LogicalKey.LK_RoutingSource_Any;
-const KeyCodeDestinationValueKeep = LogicalKey.LK_RoutingDestination_Keep;
-const KeyCodeDestinationValueStop = LogicalKey.LK_RoutingDestination_Stop;
-
-const ModifierSourceValueNone = 0;
-const ModifierSourceValueAny = 255;
-const ModifierDestinationValueKeep = 254;
-
+const {
+  KeyCodeSourceValueNone,
+  KeyCodeSourceValueAny,
+  ModifierSourceValueNone,
+  ModifierSourceValueAny,
+  KeyCodeDestinationValueStop,
+  KeyCodeDestinationValueKeep,
+  ModifierDestinationValueKeep,
+} = remmaperConstants;
 const local = new (class {
   addrItems: number = 0;
   numItems: number = 0;

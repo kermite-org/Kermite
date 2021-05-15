@@ -1,4 +1,4 @@
-import { LogicalKey } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/LogicalKey';
+import { LogicalKey } from '~/shared';
 
 // HIDキーコード定義, キーボードの言語やレイアウトによらない共通部分
 const enum HidKey {

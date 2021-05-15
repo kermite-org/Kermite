@@ -1,4 +1,4 @@
-import { VirtualKey } from '~/shared';
+import { VirtualKey } from '~/shared/defs/VirtualKeys';
 
 export enum LogicalKey {
   LK_NONE = 0,
