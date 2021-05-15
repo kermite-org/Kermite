@@ -1,11 +1,11 @@
 import { IDisplayKeyEntity } from '~/shared';
-import { PlayerModel } from '~/ui/common';
+import { IPlayerModel } from '~/ui/common';
 import { getAssignEntryTexts } from '~/ui/common-svg/keyUnitCardModels/KeyUnitCardViewModelCommon';
 import { IWidgetKeyUnitCardViewModel } from '~/ui/common-svg/keyUnitCards/WidgetKeyUnitCard';
 
 export function useWidgetKeyUnitCardViewModel(
   ke: IDisplayKeyEntity,
-  playerModel: PlayerModel,
+  playerModel: IPlayerModel,
 ): IWidgetKeyUnitCardViewModel {
   const keyUnitId = ke.keyId;
   const pos = { x: ke.x, y: ke.y, r: ke.angle || 0 };
@@ -27,6 +27,6 @@ export function useWidgetKeyUnitCardViewModel(
     isLayerFallback: isLayerFallback || false,
     isHold,
     shape: ke.shape,
-    shiftHold: playerModel.checkShiftHold(),
+    shiftHold: playerModel.shiftHold,
   };
 }

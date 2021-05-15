@@ -1,7 +1,6 @@
 import { css, jsx } from 'qx';
-import { texts } from '~/ui/common';
+import { IPlayerModel, texts } from '~/ui/common';
 import { useDeviceStatusModel } from '~/ui/common/sharedModels/DeviceStatusModelHook';
-import { PlayerModel } from '~/ui/common/sharedModels/PlayerModel';
 
 const cssLayerStateView = css`
   position: absolute;
@@ -30,7 +29,7 @@ const cssLayerCard = css`
   overflow: hidden;
 `;
 
-export const LayerStateView = (props: { playerModel: PlayerModel }) => {
+export const LayerStateView = (props: { playerModel: IPlayerModel }) => {
   const { isConnected } = useDeviceStatusModel();
 
   return (
@@ -38,7 +37,7 @@ export const LayerStateView = (props: { playerModel: PlayerModel }) => {
       css={cssLayerStateView}
       data-hint={texts.hint_assigner_keyboardView_layerStates}
     >
-      {props.playerModel.layerStackViewSource.map((la) => {
+      {props.playerModel.layerStackItems.map((la) => {
         return (
           <div
             key={la.layerId}

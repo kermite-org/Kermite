@@ -15,7 +15,7 @@ export interface IRoutingChannelModel {
   setRoutingChannel(channel: number): void;
 }
 
-export interface ILayerStackLayerItem {
+export interface ILayerStackItem {
   layerId: string;
   layerName: string;
   isActive: boolean;
@@ -25,10 +25,8 @@ export interface IPlayerModel {
   keyStates: { [keyId: string]: boolean };
   layers: ILayer[];
   displayDesign: IDisplayKeyboardDesign;
-  layerStackViewSource: ILayerStackLayerItem[];
+  layerStackItems: ILayerStackItem[];
+  shiftHold: boolean;
   getDynamicKeyAssign(keyUnitId: string): IAssignEntry | undefined;
-  checkShiftHold(): boolean;
   setProfileData(profile: IProfileData): void;
-  initialize(): void;
-  finalize(): void;
 }
