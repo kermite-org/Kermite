@@ -129,7 +129,7 @@ const assignKeysGroup5: VirtualKey[] = [
   'K_Muhenkan',
 ];
 
-const assignKeysGroup6: VirtualKey[] = ['K_Shift', 'K_Ctrl', 'K_Alt', 'K_OS'];
+const assignKeysGroup6: VirtualKey[] = ['K_Shift', 'K_Ctrl', 'K_Alt', 'K_Gui'];
 
 const assignKeysGroup7: VirtualKey[] = [
   'K_NN',

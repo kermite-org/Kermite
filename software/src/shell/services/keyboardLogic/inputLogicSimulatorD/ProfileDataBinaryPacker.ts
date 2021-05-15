@@ -55,7 +55,7 @@ function makeAttachedModifiersBits(
       m === 'K_Ctrl' && (bits |= 0x01);
       m === 'K_Shift' && (bits |= 0x02);
       m === 'K_Alt' && (bits |= 0x04);
-      m === 'K_OS' && (bits |= 0x08);
+      m === 'K_Gui' && (bits |= 0x08);
     }
   }
   return bits;
@@ -71,6 +71,12 @@ function makeLayerInvocationModeBits(mode: LayerInvocationMode): number {
   };
   return mapper[mode] || 0;
 }
+
+// 単独のモディファイヤキーの扱い
+// ctrl/shift/alt/osをキーコード224,225,226,227で出力
+const encodeSoloModifierActionToModifierFlags = false;
+// ctrl/shift/alt/osをモディファイヤキーのフラグとして埋め込む
+// const encodeSoloModifierActionToModifierFlags = true;
 
 /*
 noOperation
@@ -127,20 +133,18 @@ function encodeAssignOperation(
   if (op?.type === 'keyInput') {
     const fAssignType = 0b01;
     const vk = op.virtualKey;
-    if (isModifierVirtualKey(vk)) {
-      const mods = makeAttachedModifiersBits([vk]);
-      return [(fAssignType << 6) | mods, 0];
-    } else {
-      const { useShiftCancel } = localContext;
-      const mods = makeAttachedModifiersBits(op.attachedModifiers);
-      const logicalKey = getLogicalKeyForVirtualKey(vk);
-      // ShiftCancelオプションが有効でshiftレイヤの場合のみ、shiftCancelを適用可能にする
-      const fIsShiftCancellable = useShiftCancel && layer.isShiftLayer ? 1 : 0;
-      return [
-        (fAssignType << 6) | (fIsShiftCancellable << 4) | mods,
-        logicalKey,
-      ];
+    if (encodeSoloModifierActionToModifierFlags) {
+      if (isModifierVirtualKey(vk)) {
+        const mods = makeAttachedModifiersBits([vk]);
+        return [(fAssignType << 6) | mods, 0];
+      }
     }
+    const { useShiftCancel } = localContext;
+    const mods = makeAttachedModifiersBits(op.attachedModifiers);
+    const logicalKey = getLogicalKeyForVirtualKey(vk);
+    // ShiftCancelオプションが有効でshiftレイヤの場合のみ、shiftCancelを適用可能にする
+    const fIsShiftCancellable = useShiftCancel && layer.isShiftLayer ? 1 : 0;
+    return [(fAssignType << 6) | (fIsShiftCancellable << 4) | mods, logicalKey];
   }
   if (op?.type === 'layerCall') {
     const fAssignType = 0b10;

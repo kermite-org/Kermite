@@ -11,7 +11,7 @@ import {
 } from '~/shared/modules/SchemaValidationHelper';
 import { persistEditKeyboardDesignSchemaChecker } from '~/shell/loaders/LayoutFileSchemaChecker';
 
-const vModiferKey = vValueOneOf(['K_Ctrl', 'K_Shift', 'K_Alt', 'K_OS']);
+const vModiferKey = vValueOneOf(['K_Ctrl', 'K_Shift', 'K_Alt', 'K_Gui']);
 
 const vAssignOperation = () =>
   vSchemaOneOf([
@@ -63,7 +63,7 @@ export const profileDataSchemaChecker = vObject({
       layerId: vString(),
       layerName: vString(),
       attachedModifiers: vArray(
-        vValueOneOf(['K_Ctrl', 'K_Shift', 'K_Alt', 'K_OS']),
+        vValueOneOf(['K_Ctrl', 'K_Shift', 'K_Alt', 'K_Gui']),
       ).optional,
       defaultScheme: vValueOneOf(['block', 'transparent']),
       exclusionGroup: vNumber(),

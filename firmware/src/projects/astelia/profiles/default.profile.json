@@ -1139,7 +1139,7 @@
         "type": "single",
         "op": {
           "type": "keyInput",
-          "virtualKey": "K_OS"
+          "virtualKey": "K_Gui"
         }
       }
     },

@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
 import { dataStorage } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/DataStorage';
+import { keyActionRemapper_translateKeyOperation } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/KeyActionRemapper';
 import { keyCodeTranslator_mapLogicalKeyToHidKeyCode } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/KeyCodeTranslator';
 import {
   AssignStorageBaseAddr,
@@ -536,6 +537,10 @@ function handleOperationOn(opWord: u32) {
   const opType = (opWord >> 30) & 0b11;
   if (opType === OpType.KeyInput) {
     opWord >>= 16;
+    opWord = keyActionRemapper_translateKeyOperation(
+      opWord,
+      logicOptions.wiringMode,
+    );
     const logicalKey = opWord & 0x7f;
     const modFlags = (opWord >> 8) & 0b1111;
     if (modFlags) {
@@ -601,6 +606,10 @@ function handleOperationOff(opWord: u32) {
   const opType = (opWord >> 30) & 0b11;
   if (opType === OpType.KeyInput) {
     opWord >>= 16;
+    opWord = keyActionRemapper_translateKeyOperation(
+      opWord,
+      logicOptions.wiringMode,
+    );
     const logicalKey = opWord & 0x7f;
     const modFlags = (opWord >> 8) & 0b1111;
     if (modFlags) {
