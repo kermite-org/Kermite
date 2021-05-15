@@ -57,8 +57,8 @@ export function keyActionRemapper_translateKeyOperation(
         continue;
       }
       if (
-        (logicalKey === srcKeyCode || logicalKey === KeyCodeSourceValueAny) &&
-        (modifiers === srcModifiers || modifiers === ModifierSourceValueAny)
+        (logicalKey === srcKeyCode || srcKeyCode === KeyCodeSourceValueAny) &&
+        (modifiers === srcModifiers || srcModifiers === ModifierSourceValueAny)
       ) {
         const dstKeyCode = dataStorage.readByte(addrItem + 3);
         const dstModifiers = dataStorage.readByte(addrItem + 4);

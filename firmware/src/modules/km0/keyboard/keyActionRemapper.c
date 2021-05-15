@@ -47,8 +47,8 @@ uint16_t keyActionRemapper_translateKeyOperation(uint16_t opWord, uint8_t routin
         continue;
       }
       if (
-          (logicalKey == srcKeyCode || logicalKey == KeyCodeSourceValueAny) &&
-          (modifiers == srcModifiers || modifiers == ModifierSourceValueAny)) {
+          (logicalKey == srcKeyCode || srcKeyCode == KeyCodeSourceValueAny) &&
+          (modifiers == srcModifiers || srcModifiers == ModifierSourceValueAny)) {
         uint8_t dstKeyCode = dataMemory_readByte(addrItem + 3);
         uint8_t dstModifiers = dataMemory_readByte(addrItem + 4);
         if (dstKeyCode == KeyCodeDestinationValueStop) {
