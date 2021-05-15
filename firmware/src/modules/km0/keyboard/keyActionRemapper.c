@@ -2,6 +2,7 @@
 #include "dataStorage.h"
 #include "keyCodes.h"
 #include "km0/deviceIo/dataMemory.h"
+#include <stdio.h>
 
 static const uint8_t RoutingChannelValueAny = 15;
 static const uint8_t KeyCodeSourceValueNone = LK_NONE;
@@ -21,7 +22,7 @@ struct {
 };
 
 void keyActionRemapper_setupDataReader() {
-  uint16_t addrMappingEntriesBlock = dataStorage_getDataAddress_mappingEntreis();
+  uint16_t addrMappingEntriesBlock = dataStorage_getDataAddress_mappingEntries();
   if (addrMappingEntriesBlock) {
     local.numItems = dataMemory_readByte(addrMappingEntriesBlock);
     local.addrItems = addrMappingEntriesBlock + 1;

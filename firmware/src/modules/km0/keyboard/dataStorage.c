@@ -234,6 +234,6 @@ uint16_t dataStorage_getDataSize_profileData_keyAssigns() {
   return getSubChunkBodySize(ChunkSig_ProfileData, SubChunkSig_ProfileKeyAssigns);
 }
 
-uint16_t dataStorage_getDataAddress_mappingEntreis() {
-  return getSubChunkBodySize(ChunkSig_ProfileData, SubChunkSig_MappingEntries);
+uint16_t dataStorage_getDataAddress_mappingEntries() {
+  return getSubChunkBodyAddress(ChunkSig_ProfileData, SubChunkSig_MappingEntries);
 }
