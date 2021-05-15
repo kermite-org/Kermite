@@ -13,6 +13,7 @@ MODULE_SRCS += km0/keyboard/configManager.c
 MODULE_SRCS += km0/keyboard/keyMappingDataValidator.c
 MODULE_SRCS += km0/keyboard/configuratorServant.c
 MODULE_SRCS += km0/keyboard/keyCodeTranslator.c
+MODULE_SRCS += km0/keyboard/keyActionRemapper.c
 MODULE_SRCS += km0/keyboard/keyboardCoreLogic.c
 MODULE_SRCS += km0/deviceIo/rp2040/boardLink_singleWire.c
 MODULE_PIOASM_SRCS += km0/deviceIo/rp2040/singleWire4.pio
