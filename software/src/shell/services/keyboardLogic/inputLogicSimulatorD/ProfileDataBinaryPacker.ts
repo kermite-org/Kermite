@@ -511,10 +511,12 @@ function encodeMappingEntriesData(profile: IProfileData): number[] {
 }
 
 export function makeProfileBinaryData(profile: IProfileData): number[] {
-  return [
+  const data = [
     ...createChunk(0xbb71, encodeProfileHeaderData(profile)),
     ...createChunk(0xbb74, encodeLayerListData(profile)),
     ...createChunk(0xbb76, encodeMappingEntriesData(profile)),
     ...createChunk(0xbb78, encodeKeyMappingData(profile)),
   ];
+  // console.log(`profile binary data, ${data.length} bytes`);
+  return data;
 }
