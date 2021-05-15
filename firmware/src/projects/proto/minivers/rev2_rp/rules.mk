@@ -17,6 +17,7 @@ MODULE_SRCS += km0/keyboard/configManager.c
 MODULE_SRCS += km0/keyboard/keyMappingDataValidator.c
 MODULE_SRCS += km0/keyboard/configuratorServant.c
 MODULE_SRCS += km0/keyboard/keyCodeTranslator.c
+MODULE_SRCS += km0/keyboard/keyActionRemapper.c
 MODULE_SRCS += km0/keyboard/keyboardCoreLogic.c
 MODULE_SRCS += km0/keyboard/keyboardMain.c
 MODULE_SRCS += km0/keyboard/splitKeyboard.c
