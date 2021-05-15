@@ -2,14 +2,19 @@ import { Hook } from 'qx';
 import {
   addArrayItemIfNotExist,
   createFallbackDisplayKeyboardDesign,
+  decodeModifierVirtualKeys,
+  encodeModifierVirtualKeys,
   fallbackProfileData,
   IAssignEntry,
   IAssignOperation,
+  IAssingOperationKeyInput,
   IDisplayKeyboardDesign,
   ILayer,
   IProfileData,
   IRealtimeKeyboardEvent,
   removeArrayItems,
+  routerConstants,
+  VirtualKey,
 } from '~/shared';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import { ipcAgent } from '~/ui/common/base';
@@ -17,6 +22,7 @@ import {
   ILayerStackItem,
   IPlayerModel,
 } from '~/ui/common/sharedModels/Interfaces';
+import { useRoutingChannelModel } from '~/ui/common/sharedModels/ParameterBasedModeModels';
 
 function translateKeyIndexToKeyUnitId(
   keyIndex: number,
@@ -58,10 +64,106 @@ function makeLayerStackItems(
   }));
 }
 
+const {
+  RoutingChannelValueAny,
+  ModifierSourceValueAny,
+  ModifierDestinationValueKeep,
+} = routerConstants;
+const VirutalKeySourceValueAny: VirtualKey = 'K_RoutingSource_Any';
+const VirtualKeyDestinationValueStop: VirtualKey = 'K_RoutingDestination_Stop';
+const VirtualKeyDestinationValueKeep: VirtualKey = 'K_RoutingDestination_Keep';
+
+function translateKeyInputOperation(
+  op: IAssingOperationKeyInput,
+  profile: IProfileData,
+  routingChannel: number,
+): IAssingOperationKeyInput {
+  let virtualKey = op.virtualKey;
+  let modifiers = encodeModifierVirtualKeys(op.attachedModifiers);
+
+  for (const re of profile.mappingEntries) {
+    const ch = re.channelIndex;
+    if (ch === routingChannel || ch === RoutingChannelValueAny) {
+      const srcVirtualKey = re.srcKey;
+      const srcModifiers = re.srcModifiers;
+      if (
+        (virtualKey === srcVirtualKey ||
+          srcVirtualKey === VirutalKeySourceValueAny) &&
+        (modifiers === srcModifiers || srcModifiers === ModifierSourceValueAny)
+      ) {
+        const dstVirtualKey = re.dstKey;
+        const dstModifiers = re.dstModifiers;
+        if (dstVirtualKey === VirtualKeyDestinationValueStop) {
+          virtualKey = 'K_NONE';
+          modifiers = 0;
+        } else {
+          if (dstVirtualKey !== VirtualKeyDestinationValueKeep) {
+            virtualKey = dstVirtualKey;
+          }
+          if (dstModifiers !== ModifierDestinationValueKeep) {
+            modifiers = dstModifiers;
+          }
+        }
+        return {
+          ...op,
+          virtualKey,
+          attachedModifiers: decodeModifierVirtualKeys(modifiers),
+        };
+      }
+    }
+  }
+  return op;
+}
+
+function applyOperationRouting(
+  op: IAssignOperation | undefined,
+  profile: IProfileData,
+  routingChannel: number,
+): IAssignOperation | undefined {
+  if (op?.type === 'keyInput') {
+    return translateKeyInputOperation(op, profile, routingChannel);
+  }
+  return op;
+}
+
+function applyAssignRouting(
+  assign: IAssignEntry,
+  profile: IProfileData,
+  routingChannel: number,
+): IAssignEntry {
+  if (assign.type === 'single') {
+    return {
+      ...assign,
+      op: applyOperationRouting(assign.op, profile, routingChannel),
+    };
+  } else if (assign.type === 'dual') {
+    return {
+      ...assign,
+      primaryOp: applyOperationRouting(
+        assign.primaryOp,
+        profile,
+        routingChannel,
+      ),
+      secondaryOp: applyOperationRouting(
+        assign.secondaryOp,
+        profile,
+        routingChannel,
+      ),
+      tertiaryOp: applyOperationRouting(
+        assign.tertiaryOp,
+        profile,
+        routingChannel,
+      ),
+    };
+  }
+  return assign;
+}
+
 function getDynamicKeyAssign(
   profileData: IProfileData,
   layerStateFlags: number,
   keyUnitId: string,
+  routingChannel: number,
 ): IAssignEntry | undefined {
   const { layers } = profileData;
   for (let i = layers.length - 1; i >= 0; i--) {
@@ -79,7 +181,7 @@ function getDynamicKeyAssign(
         return undefined;
       }
       if (assign) {
-        return assign;
+        return applyAssignRouting(assign, profileData, routingChannel);
       }
     }
   }
@@ -108,6 +210,7 @@ type ILocalState = {
   layerStateFlags: number;
   holdKeyIndices: number[];
   plainShiftPressed: boolean;
+  routingChannel: number;
 };
 
 const setProfileData = (profile: IProfileData, local: ILocalState) => {
@@ -134,6 +237,7 @@ const handlekeyEvents = (ev: IRealtimeKeyboardEvent, local: ILocalState) => {
         local.profileData,
         local.layerStateFlags,
         keyUnitId,
+        local.routingChannel,
       );
       if (isAssignShift(assign)) {
         local.plainShiftPressed = isDown;
@@ -154,11 +258,21 @@ function createLocalState(): ILocalState {
     layerStateFlags: 1,
     holdKeyIndices: [],
     plainShiftPressed: false,
+    routingChannel: 0,
   };
 }
 
 export function usePlayerModel(): IPlayerModel {
   const local = Hook.useMemo<ILocalState>(createLocalState, []);
+  Hook.useEffect(
+    () =>
+      ipcAgent.events.device_keyEvents.subscribe((ev) =>
+        handlekeyEvents(ev, local),
+      ),
+    [],
+  );
+  const { routingChannel } = useRoutingChannelModel();
+  local.routingChannel = routingChannel;
   const {
     keyStates,
     displayDesign,
@@ -168,13 +282,6 @@ export function usePlayerModel(): IPlayerModel {
     plainShiftPressed,
   } = local;
   const { layers } = profileData;
-  Hook.useEffect(
-    () =>
-      ipcAgent.events.device_keyEvents.subscribe((ev) =>
-        handlekeyEvents(ev, local),
-      ),
-    [],
-  );
   return {
     holdKeyIndices,
     keyStates,
@@ -183,7 +290,12 @@ export function usePlayerModel(): IPlayerModel {
     layerStackItems: makeLayerStackItems(layers, layerStateFlags),
     shiftHold: checkShiftHold(layers, layerStateFlags, plainShiftPressed),
     getDynamicKeyAssign: (keyUnitId: string) =>
-      getDynamicKeyAssign(profileData, layerStateFlags, keyUnitId),
+      getDynamicKeyAssign(
+        profileData,
+        layerStateFlags,
+        keyUnitId,
+        routingChannel,
+      ),
     setProfileData: (profile: IProfileData) => setProfileData(profile, local),
   };
 }
