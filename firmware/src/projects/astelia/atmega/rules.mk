@@ -7,13 +7,14 @@ MODULE_SRCS += km0/deviceIo/atmega/usbIoCore.c
 MODULE_SRCS += km0/deviceIo/atmega/dataMemory.c
 MODULE_SRCS += km0/deviceIo/atmega/debugUart.c
 MODULE_SRCS += km0/deviceIo/atmega/boardIo.c
-MODULE_SRCS += km0/keyboard/keyScanner_basicMatrix.c
 MODULE_SRCS += km0/keyboard/dataStorage.c
 MODULE_SRCS += km0/keyboard/configManager.c
 MODULE_SRCS += km0/keyboard/keyMappingDataValidator.c
 MODULE_SRCS += km0/keyboard/configuratorServant.c
 MODULE_SRCS += km0/keyboard/keyCodeTranslator.c
+MODULE_SRCS += km0/keyboard/keyActionRemapper.c
 MODULE_SRCS += km0/keyboard/keyboardCoreLogic.c
+MODULE_SRCS += km0/keyboard/keyScanner_basicMatrix.c
 MODULE_SRCS += km0/keyboard/keyboardMain.c
 MODULE_SRCS += km0/keyboard/generalKeyboard.c
 
