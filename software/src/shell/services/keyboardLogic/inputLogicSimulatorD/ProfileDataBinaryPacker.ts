@@ -12,7 +12,7 @@ import {
   ProfileBinaryFormatRevision,
   sortOrderBy,
   getLogicalKeyForVirtualKey,
-  remmaperConstants,
+  routerConstants,
 } from '~/shared';
 import {
   writeBytes,
@@ -490,8 +490,8 @@ function encodeMappingEntriesData(profile: IProfileData): number[] {
     const noTargetKey =
       it.srcKey === 'K_NONE' || it.srcKey === 'K_RoutingSource_Any';
     const noTargetModifiers =
-      it.srcModifiers === remmaperConstants.ModifierSourceValueNone ||
-      it.srcModifiers === remmaperConstants.ModifierSourceValueAny;
+      it.srcModifiers === routerConstants.ModifierSourceValueNone ||
+      it.srcModifiers === routerConstants.ModifierSourceValueAny;
     return !(noTargetKey && noTargetModifiers);
   });
   const numItems = filteredEntries.length;

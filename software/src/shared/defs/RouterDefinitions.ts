@@ -1,6 +1,6 @@
 import { LogicalKey } from '~/shared/defs/LogicalKey';
 
-export const remmaperConstants = {
+export const routerConstants = {
   KeyCodeSourceValueNone: LogicalKey.LK_NONE,
   KeyCodeSourceValueAny: LogicalKey.LK_RoutingSource_Any,
   KeyCodeDestinationValueKeep: LogicalKey.LK_RoutingDestination_Keep,

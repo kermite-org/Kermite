@@ -1,4 +1,4 @@
-import { LogicalKey, remmaperConstants } from '~/shared';
+import { LogicalKey, routerConstants } from '~/shared';
 import { dataStorage } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/DataStorage';
 
 type u8 = number;
@@ -20,7 +20,7 @@ const {
   KeyCodeDestinationValueStop,
   KeyCodeDestinationValueKeep,
   ModifierDestinationValueKeep,
-} = remmaperConstants;
+} = routerConstants;
 const local = new (class {
   addrItems: number = 0;
   numItems: number = 0;

@@ -6,7 +6,7 @@ export * from './IpcContract';
 export * from './KeyboardDesign';
 export * from './LogicalKey';
 export * from './ProfileData';
-export * from './RemapperDefs';
+export * from './RouterDefinitions';
 export * from './VersionDefinitions';
 export * from './VirtualKeyTexts';
 export * from './VirtualKeys';

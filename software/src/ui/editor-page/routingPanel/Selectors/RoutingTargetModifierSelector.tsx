@@ -1,5 +1,5 @@
 import { FC, jsx } from 'qx';
-import { remmaperConstants } from '~/shared';
+import { routerConstants } from '~/shared';
 import { ISelectorOptionN } from '~/ui/common';
 import { GeneralSelectorN } from '~/ui/common/components/atoms/GeneralSelectorN';
 
@@ -13,8 +13,8 @@ const fCtrl = 1;
 const fShift = 2;
 const fAlt = 4;
 const fGui = 8;
-const vAny = remmaperConstants.ModifierSourceValueAny;
-const vKeep = remmaperConstants.ModifierDestinationValueKeep;
+const vAny = routerConstants.ModifierSourceValueAny;
+const vKeep = routerConstants.ModifierDestinationValueKeep;
 
 const optionsBase: ISelectorOptionN[] = [
   { value: 0, label: 'None' },
