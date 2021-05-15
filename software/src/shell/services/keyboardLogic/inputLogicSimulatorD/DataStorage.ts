@@ -55,7 +55,7 @@ class DataStorage {
     return this.seekChunk(SubChunkSig.ProfileLayerList);
   }
 
-  getChunk_mpaaingEntreis(): IChunkSpan {
+  getChunk_mappingEntreis(): IChunkSpan {
     return this.seekChunk(SubChunkSig.MappingEntries);
   }
 
