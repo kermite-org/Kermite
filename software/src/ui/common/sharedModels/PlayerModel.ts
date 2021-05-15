@@ -70,7 +70,6 @@ const {
   ModifierDestinationValueKeep,
 } = routerConstants;
 const VirutalKeySourceValueAny: VirtualKey = 'K_RoutingSource_Any';
-const VirtualKeyDestinationValueStop: VirtualKey = 'K_RoutingDestination_Stop';
 const VirtualKeyDestinationValueKeep: VirtualKey = 'K_RoutingDestination_Keep';
 
 function translateKeyInputOperation(
@@ -93,16 +92,11 @@ function translateKeyInputOperation(
       ) {
         const dstVirtualKey = re.dstKey;
         const dstModifiers = re.dstModifiers;
-        if (dstVirtualKey === VirtualKeyDestinationValueStop) {
-          virtualKey = 'K_NONE';
-          modifiers = 0;
-        } else {
-          if (dstVirtualKey !== VirtualKeyDestinationValueKeep) {
-            virtualKey = dstVirtualKey;
-          }
-          if (dstModifiers !== ModifierDestinationValueKeep) {
-            modifiers = dstModifiers;
-          }
+        if (dstVirtualKey !== VirtualKeyDestinationValueKeep) {
+          virtualKey = dstVirtualKey;
+        }
+        if (dstModifiers !== ModifierDestinationValueKeep) {
+          modifiers = dstModifiers;
         }
         return {
           ...op,

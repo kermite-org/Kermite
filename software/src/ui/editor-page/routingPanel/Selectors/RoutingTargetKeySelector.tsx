@@ -137,7 +137,6 @@ const exOptionsForSource: ISelectorOption[] = [
 
 const exOptionsForDestination: ISelectorOption[] = [
   { value: 'K_RoutingDestination_Keep', label: 'keep' },
-  { value: 'K_RoutingDestination_Stop', label: 'stop' },
 ];
 
 export const RoutingTargetKeySelector: FC<{
