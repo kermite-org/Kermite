@@ -24,8 +24,6 @@
                 "keyHoldIndicatorLed",
                 "heartbeatLed",
                 "masterSide",
-                "systemLayout",
-                "wiringMode",
                 "glowActive",
                 "glowColor",
                 "glowBrightness",

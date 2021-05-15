@@ -9,9 +9,7 @@
         "emitRealtimeEvents",
         "keyHoldIndicatorLed",
         "heartbeatLed",
-        "masterSide",
-        "systemLayout",
-        "wiringMode"
+        "masterSide"
       ]
     }
   ]
