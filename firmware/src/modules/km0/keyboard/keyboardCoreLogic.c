@@ -1,6 +1,7 @@
 #include "keyboardCoreLogic.h"
 #include "config.h"
 #include "dataStorage.h"
+#include "keyActionRemapper.h"
 #include "keyCodeTranslator.h"
 #include "km0/common/bitOperations.h"
 #include "km0/deviceIo/dataMemory.h"
@@ -199,6 +200,7 @@ static void initAssignMemoryReader() {
   for (uint8_t i = 0; i < 16; i++) {
     rs->layerAttributeWords[i] = (i < numLayers) ? readStorageWordBE(layerListDataLocation + i * 2) : 0;
   }
+  keyActionRemapper_setupDataReader();
 }
 
 static uint8_t getNumLayers() {
@@ -523,6 +525,7 @@ static void handleOperationOn(uint32_t opWord) {
   uint8_t opType = (opWord >> 30) & 0b11;
   if (opType == OpType_KeyInput) {
     opWord >>= 16;
+    opWord = keyActionRemapper_translateKeyOperation(opWord, logicOptions.wiringMode);
     uint8_t logicalKey = opWord & 0x7f;
     uint8_t modFlags = (opWord >> 8) & 0b1111;
     if (modFlags) {
@@ -586,6 +589,7 @@ static void handleOperationOff(uint32_t opWord) {
   uint8_t opType = (opWord >> 30) & 0b11;
   if (opType == OpType_KeyInput) {
     opWord >>= 16;
+    opWord = keyActionRemapper_translateKeyOperation(opWord, logicOptions.wiringMode);
     uint8_t logicalKey = opWord & 0x7f;
     uint8_t modFlags = (opWord >> 8) & 0b1111;
     if (modFlags) {
