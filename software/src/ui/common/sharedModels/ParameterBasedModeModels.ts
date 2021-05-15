@@ -1,14 +1,20 @@
 import { Hook } from 'qx';
 import { SystemParameter } from '~/shared';
-import { ipcAgent } from '~/ui/common';
+import { ipcAgent } from '~/ui/common/base';
+import {
+  IRoutingChannelModel,
+  ISystemLayoutModel,
+} from '~/ui/common/sharedModels/Interfaces';
+
+interface ISystemParameterModel {
+  value: number;
+  setValue: (value: number) => void;
+}
 
 function useSystemParameterModel(
   parameterIndex: number,
   defaultValue: number,
-): {
-  value: number;
-  setValue: (value: number) => void;
-} {
+): ISystemParameterModel {
   const [value, _setValue] = Hook.useState(defaultValue);
   Hook.useEffect(
     () =>
@@ -29,11 +35,6 @@ function useSystemParameterModel(
   };
 }
 
-interface ISystemLayoutModel {
-  systemLayoutIndex: number;
-  setSystemLayoutIndex(layoutIndex: number): void;
-}
-
 export function useSystemLayoutModel(): ISystemLayoutModel {
   const { value, setValue } = useSystemParameterModel(
     SystemParameter.SystemLayout,
@@ -43,10 +44,6 @@ export function useSystemLayoutModel(): ISystemLayoutModel {
     systemLayoutIndex: value,
     setSystemLayoutIndex: setValue,
   };
-}
-interface IRoutingChannelModel {
-  routingChannel: number;
-  setRoutingChannel(channel: number): void;
 }
 
 export function useRoutingChannelModel(): IRoutingChannelModel {
