@@ -13,6 +13,7 @@ type u16 = number;
 // };
 
 const {
+  RoutingChannelValueAny,
   KeyCodeSourceValueNone,
   KeyCodeSourceValueAny,
   ModifierSourceValueNone,
@@ -36,7 +37,7 @@ export function keyActionRemapper_setupDataReader() {
 
 export function keyActionRemapper_translateKeyOperation(
   opWord: u16,
-  wiringMode: u8,
+  routingChannel: u8,
 ): u16 {
   let logicalKey = opWord & 0x7f;
   let modifiers = (opWord >> 8) & 0b1111;
@@ -44,7 +45,7 @@ export function keyActionRemapper_translateKeyOperation(
   for (let i = 0; i < local.numItems; i++) {
     const addrItem = local.addrItems + i * 5;
     const ch = dataStorage.readByte(addrItem + 0);
-    if (ch === wiringMode) {
+    if (ch === routingChannel || ch === RoutingChannelValueAny) {
       const srcKeyCode = dataStorage.readByte(addrItem + 1);
       const srcModifiers = dataStorage.readByte(addrItem + 2);
       if (

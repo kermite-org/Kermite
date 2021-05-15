@@ -132,12 +132,12 @@ const optionsBase: ISelectorOption[] = optionVirtualKeys.map((vk) => ({
 }));
 
 const exOptionsForSource: ISelectorOption[] = [
-  { value: 'K_RoutingSource_Any', label: 'Any' },
+  { value: 'K_RoutingSource_Any', label: 'any' },
 ];
 
 const exOptionsForDestination: ISelectorOption[] = [
-  { value: 'K_RoutingDestination_Keep', label: 'Keep' },
-  { value: 'K_RoutingDestination_Stop', label: 'Stop' },
+  { value: 'K_RoutingDestination_Keep', label: 'keep' },
+  { value: 'K_RoutingDestination_Stop', label: 'stop' },
 ];
 
 export const RoutingTargetKeySelector: FC<{

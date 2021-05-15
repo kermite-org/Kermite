@@ -3,6 +3,7 @@
 #include "keyCodes.h"
 #include "km0/deviceIo/dataMemory.h"
 
+static const uint8_t RoutingChannelValueAny = 15;
 static const uint8_t KeyCodeSourceValueNone = LK_NONE;
 static const uint8_t KeyCodeSourceValueAny = LK_RoutingSource_Any;
 static const uint8_t KeyCodeDestinationValueKeep = LK_RoutingDestination_Keep;
@@ -27,14 +28,14 @@ void keyActionRemapper_setupDataReader() {
   }
 }
 
-uint16_t keyActionRemapper_translateKeyOperation(uint16_t opWord, uint8_t wiringMode) {
+uint16_t keyActionRemapper_translateKeyOperation(uint16_t opWord, uint8_t routingChannel) {
   uint8_t logicalKey = opWord & 0x7f;
   uint8_t modifiers = (opWord >> 8) & 0b1111;
 
   for (uint8_t i = 0; i < local.numItems; i++) {
     uint16_t addrItem = local.addrItems + i * 5;
     uint8_t ch = dataMemory_readByte(addrItem + 0);
-    if (ch == wiringMode) {
+    if (ch == routingChannel || ch == RoutingChannelValueAny) {
       uint8_t srcKeyCode = dataMemory_readByte(addrItem + 1);
       uint8_t srcModifiers = dataMemory_readByte(addrItem + 2);
       if (
