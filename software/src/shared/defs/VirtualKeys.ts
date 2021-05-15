@@ -179,7 +179,10 @@ export type VirtualKey =
   | 'K_U6'
   | 'K_U7'
   | 'K_U8'
-  | 'K_U9';
+  | 'K_U9'
+  | 'K_RoutingSource_Any'
+  | 'K_RoutingDestination_Keep'
+  | 'K_RoutingDestination_Stop';
 
 export type ModifierVirtualKey = 'K_Shift' | 'K_Ctrl' | 'K_Alt' | 'K_Gui';
 

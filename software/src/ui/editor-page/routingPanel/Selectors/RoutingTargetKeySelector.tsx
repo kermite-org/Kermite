@@ -2,12 +2,6 @@ import { FC, jsx } from 'qx';
 import { VirtualKey, VirtualKeyTexts } from '~/shared';
 import { GeneralSelector, ISelectorOption } from '~/ui/common';
 
-type IRewireVirtualKey =
-  | VirtualKey
-  | 'K_RoutingSource_Any'
-  | 'K_RoutingDest_Keep'
-  | 'K_RoutingDest_Stop';
-
 const optionVirtualKeys: VirtualKey[] = [
   'K_NONE',
   'K_A',
@@ -142,13 +136,13 @@ const exOptionsForSource: ISelectorOption[] = [
 ];
 
 const exOptionsForDestination: ISelectorOption[] = [
-  { value: 'K_RoutingDest_Keep', label: 'Keep' },
-  { value: 'K_RoutingDest_Stop', label: 'Stop' },
+  { value: 'K_RoutingDestination_Keep', label: 'Keep' },
+  { value: 'K_RoutingDestination_Stop', label: 'Stop' },
 ];
 
 export const RoutingTargetKeySelector: FC<{
-  value: IRewireVirtualKey;
-  onChange: (newValue: IRewireVirtualKey) => void;
+  value: VirtualKey;
+  onChange: (newValue: VirtualKey) => void;
   target: 'source' | 'dest';
 }> = ({ value, onChange, target }) => {
   const options =

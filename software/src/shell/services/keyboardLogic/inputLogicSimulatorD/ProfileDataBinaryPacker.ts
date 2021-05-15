@@ -5,20 +5,20 @@ import {
   flattenArray,
   IAssignEntry,
   IAssignOperation,
-  ILayer,
   IProfileData,
   isModifierVirtualKey,
   LayerInvocationMode,
   ModifierVirtualKey,
   ProfileBinaryFormatRevision,
   sortOrderBy,
+  getLogicalKeyForVirtualKey,
+  routerConstants,
 } from '~/shared';
 import {
   writeBytes,
   writeUint16LE,
   writeUint8,
 } from '~/shell/services/device/keyboardDevice/Helpers';
-import { getLogicalKeyForVirtualKey } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/LogicalKey';
 
 /*
 Key Assigns Restriction
@@ -41,10 +41,10 @@ interface IRawLayerInfo {
   isShiftLayer: boolean;
 }
 
-const localContext = new (class {
-  layersDict: { [layerId: string]: IRawLayerInfo } = {};
-  useShiftCancel: boolean = false;
-})();
+type IProfileContenxt = {
+  layersDict: { [layerId: string]: IRawLayerInfo };
+  useShiftCancel: boolean;
+};
 
 function makeAttachedModifiersBits(
   attachedModifiers?: ModifierVirtualKey[],
@@ -129,6 +129,7 @@ CCCC_CCCC: user custom command index
 function encodeAssignOperation(
   op: IAssignOperation | undefined,
   layer: IRawLayerInfo,
+  context: IProfileContenxt,
 ): number[] {
   if (op?.type === 'keyInput') {
     const fAssignType = 0b01;
@@ -139,16 +140,16 @@ function encodeAssignOperation(
         return [(fAssignType << 6) | mods, 0];
       }
     }
-    const { useShiftCancel } = localContext;
     const mods = makeAttachedModifiersBits(op.attachedModifiers);
     const logicalKey = getLogicalKeyForVirtualKey(vk);
     // ShiftCancelオプションが有効でshiftレイヤの場合のみ、shiftCancelを適用可能にする
-    const fIsShiftCancellable = useShiftCancel && layer.isShiftLayer ? 1 : 0;
+    const fIsShiftCancellable =
+      context.useShiftCancel && layer.isShiftLayer ? 1 : 0;
     return [(fAssignType << 6) | (fIsShiftCancellable << 4) | mods, logicalKey];
   }
   if (op?.type === 'layerCall') {
     const fAssignType = 0b10;
-    const layerInfo = localContext.layersDict[op.targetLayerId];
+    const layerInfo = context.layersDict[op.targetLayerId];
     if (layerInfo) {
       const { layerIndex } = layerInfo;
       const fInvocationMode = makeLayerInvocationModeBits(op.invocationMode);
@@ -222,18 +223,19 @@ PP: primary operation (variable length, 1~4bytes)
 SS: secondary operation (variable length, 1~4bytes)
 TT: tertiary operation (variable length, 1~4bytes)
 */
-function encodeRawAssignEntry(ra: IRawAssignEntry): number[] {
+function encodeRawAssignEntry(
+  ra: IRawAssignEntry,
+  context: IProfileContenxt,
+): number[] {
   const { entry } = ra;
-
-  const layer = localContext.layersDict[ra.layerId];
-
+  const layer = context.layersDict[ra.layerId];
   if (entry.type === 'block') {
     return encodeRawAssignEntryHeaderBytes('block', ra.layerIndex);
   } else if (entry.type === 'transparent') {
     return encodeRawAssignEntryHeaderBytes('transparent', ra.layerIndex);
   } else if (entry.type === 'single') {
     // single
-    const primaryOpWord = encodeAssignOperation(entry.op, layer);
+    const primaryOpWord = encodeAssignOperation(entry.op, layer, context);
     return [
       ...encodeRawAssignEntryHeaderBytes('single', ra.layerIndex, [
         primaryOpWord.length,
@@ -244,9 +246,9 @@ function encodeRawAssignEntry(ra: IRawAssignEntry): number[] {
     // dual
     if (entry.tertiaryOp) {
       const operationWords = [
-        encodeAssignOperation(entry.primaryOp, layer),
-        encodeAssignOperation(entry.secondaryOp, layer),
-        encodeAssignOperation(entry.tertiaryOp, layer),
+        encodeAssignOperation(entry.primaryOp, layer, context),
+        encodeAssignOperation(entry.secondaryOp, layer, context),
+        encodeAssignOperation(entry.tertiaryOp, layer, context),
       ];
       return [
         ...encodeRawAssignEntryHeaderBytes(
@@ -258,8 +260,8 @@ function encodeRawAssignEntry(ra: IRawAssignEntry): number[] {
       ];
     } else if (entry.secondaryOp) {
       const operationWords = [
-        encodeAssignOperation(entry.primaryOp, layer),
-        encodeAssignOperation(entry.secondaryOp, layer),
+        encodeAssignOperation(entry.primaryOp, layer, context),
+        encodeAssignOperation(entry.secondaryOp, layer, context),
       ];
       return [
         ...encodeRawAssignEntryHeaderBytes(
@@ -270,7 +272,11 @@ function encodeRawAssignEntry(ra: IRawAssignEntry): number[] {
         ...flattenArray(operationWords),
       ];
     } else {
-      const primaryOpWord = encodeAssignOperation(entry.primaryOp, layer);
+      const primaryOpWord = encodeAssignOperation(
+        entry.primaryOp,
+        layer,
+        context,
+      );
       return [
         ...encodeRawAssignEntryHeaderBytes('single', ra.layerIndex, [
           primaryOpWord.length,
@@ -304,9 +310,16 @@ function encodeKeyBoundAssignsSetHeder(
 HH HH: header bytes
 VV VV ...: body bytes, variable length
 */
-function encodeKeyBoundAssignsSet(assigns: IRawAssignEntry[]): number[] {
+function encodeKeyBoundAssignsSet(
+  assigns: IRawAssignEntry[],
+  context: IProfileContenxt,
+): number[] {
   const { keyIndex } = assigns[0];
-  const bodyBytes = [...flattenArray(assigns.map(encodeRawAssignEntry))];
+  const bodyBytes = [
+    ...flattenArray(
+      assigns.map((assign) => encodeRawAssignEntry(assign, context)),
+    ),
+  ];
   const headBytes = encodeKeyBoundAssignsSetHeder(keyIndex, bodyBytes.length);
   return [...headBytes, ...bodyBytes];
 }
@@ -338,6 +351,39 @@ function makeRawAssignEntries(profile: IProfileData): IRawAssignEntry[] {
       return undefined!;
     })
     .filter((ra) => !!ra);
+}
+
+function createProfileContext(profile: IProfileData): IProfileContenxt {
+  const layersDict = createDictionaryFromKeyValues(
+    profile.layers.map((la, idx) => [
+      la.layerId,
+      {
+        layerIndex: idx,
+        isShiftLayer: la.attachedModifiers?.includes('K_Shift') || false,
+      },
+    ]),
+  );
+  const useShiftCancel = profile.settings.useShiftCancel;
+  return {
+    layersDict,
+    useShiftCancel,
+  };
+}
+
+function encodeKeyMappingData(profile: IProfileData): number[] {
+  const context = createProfileContext(profile);
+  const numLayers = profile.layers.length;
+  const rawAssigns = makeRawAssignEntries(profile);
+  rawAssigns.sort(
+    sortOrderBy((ra) => ra.keyIndex * 100 + (numLayers - ra.layerIndex)),
+  );
+  // console.log(rawAssigns);
+  const groupedAssignBytes = createGroupedArrayByKey(
+    rawAssigns,
+    'keyIndex',
+  ).map((assign) => encodeKeyBoundAssignsSet(assign, context));
+  // console.log(groupedAssignBytes.map((a) => hexBytes(a, ' ')));
+  return flattenArray(groupedAssignBytes);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -405,7 +451,9 @@ function createChunk(headerWord: number, bodyBytes: number[]) {
   return buffer;
 }
 
-function encodeProfileHeaderData(numKeys: number, numLayers: number): number[] {
+function encodeProfileHeaderData(profile: IProfileData): number[] {
+  const numKeys = profile.keyboardDesign.keyEntities.length;
+  const numLayers = profile.layers.length;
   const buffer = Array(5).fill(0);
   writeUint8(buffer, 0, 0x01);
   writeUint8(buffer, 1, ConfigStorageFormatRevision);
@@ -421,9 +469,9 @@ function encodeProfileHeaderData(numKeys: number, numLayers: number): number[] {
 // I: initialActive
 // MMMM: attachedModifiers
 // QQQ: exclusion group, 0~7
-function encodeLayerListData(layers: ILayer[]): number[] {
+function encodeLayerListData(profile: IProfileData): number[] {
   return flattenArray(
-    layers.map((la) => {
+    profile.layers.map((la) => {
       const fDefaultScheme = la.defaultScheme === 'block' ? 1 : 0;
       const fInitialActive = la.initialActive ? 1 : 0;
       const fAttachedModifiers = makeAttachedModifiersBits(
@@ -437,48 +485,36 @@ function encodeLayerListData(layers: ILayer[]): number[] {
   );
 }
 
-function encodeKeyMappingData(profile: IProfileData): number[] {
-  const numLayers = profile.layers.length;
-  const rawAssigns = makeRawAssignEntries(profile);
-  rawAssigns.sort(
-    sortOrderBy((ra) => ra.keyIndex * 100 + (numLayers - ra.layerIndex)),
-  );
-  // console.log(rawAssigns);
-  const groupedAssignBytes = createGroupedArrayByKey(
-    rawAssigns,
-    'keyIndex',
-  ).map(encodeKeyBoundAssignsSet);
-  // console.log(groupedAssignBytes.map((a) => hexBytes(a, ' ')));
-  return flattenArray(groupedAssignBytes);
-}
-
-function setupLocalContext(profile: IProfileData) {
-  // レイヤ情報をグローバル変数に格納(末端の関数でこれを参照する)
-  localContext.layersDict = createDictionaryFromKeyValues(
-    profile.layers.map((la, idx) => [
-      la.layerId,
-      {
-        layerIndex: idx,
-        isShiftLayer: la.attachedModifiers?.includes('K_Shift') || false,
-      },
+function encodeMappingEntriesData(profile: IProfileData): number[] {
+  const filteredEntries = profile.mappingEntries.filter((it) => {
+    const noTargetKey =
+      it.srcKey === 'K_NONE' || it.srcKey === 'K_RoutingSource_Any';
+    const noTargetModifiers =
+      it.srcModifiers === routerConstants.ModifierSourceValueNone ||
+      it.srcModifiers === routerConstants.ModifierSourceValueAny;
+    return !(noTargetKey && noTargetModifiers);
+  });
+  const numItems = filteredEntries.length;
+  if (numItems > 255) {
+    throw new Error('too many mapping entries');
+  }
+  const itemBytes: number[] = flattenArray(
+    filteredEntries.map((it) => [
+      it.channelIndex,
+      getLogicalKeyForVirtualKey(it.srcKey),
+      it.srcModifiers,
+      getLogicalKeyForVirtualKey(it.dstKey),
+      it.dstModifiers,
     ]),
   );
-  localContext.useShiftCancel = profile.settings.useShiftCancel;
+  return [numItems, ...itemBytes];
 }
 
 export function makeProfileBinaryData(profile: IProfileData): number[] {
-  setupLocalContext(profile);
-  const numKeys = profile.keyboardDesign.keyEntities.length;
-  const numLayers = profile.layers.length;
-
-  const profileHeaderData = encodeProfileHeaderData(numKeys, numLayers);
-  const profileHeaderChunk = createChunk(0xbb71, profileHeaderData);
-
-  const layerListData = encodeLayerListData(profile.layers);
-  const layerListChunk = createChunk(0xbb74, layerListData);
-
-  const keyMappingData = encodeKeyMappingData(profile);
-  const keyAssignsChunk = createChunk(0xbb78, keyMappingData);
-
-  return [...profileHeaderChunk, ...layerListChunk, ...keyAssignsChunk];
+  return [
+    ...createChunk(0xbb71, encodeProfileHeaderData(profile)),
+    ...createChunk(0xbb74, encodeLayerListData(profile)),
+    ...createChunk(0xbb76, encodeMappingEntriesData(profile)),
+    ...createChunk(0xbb78, encodeKeyMappingData(profile)),
+  ];
 }

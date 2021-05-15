@@ -214,6 +214,17 @@ namespace AssignStroageBinaryFormat {
   };
 
   // --------------------
+  // mapping entry
+
+  type MappingEntryItem = {
+    channelIndex: u8;
+    srcKeyCode: u8;
+    srcModifiers: u8;
+    dstKeyCode: u8;
+    dstModifiers: u8;
+  };
+
+  // --------------------
   // data chunks
 
   type Chunk<ChunkSignatureWord, Length = 0> = {};
@@ -224,6 +235,10 @@ namespace AssignStroageBinaryFormat {
     };
     layerList: Chunk<0xbb74> & {
       items: LayerAttributeWord[]; // numLayers個の配列
+    };
+    mappingEntries: Chunk<0xbb76> & {
+      numItems: u8;
+      items: MappingEntryItem[];
     };
     // shortStringsBlock: Chunk<0xbb75> & {
     //   //\0終端の文字列を続けて多数格納

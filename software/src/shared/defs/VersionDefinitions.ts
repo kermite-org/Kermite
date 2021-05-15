@@ -7,7 +7,8 @@ export const ConfigStorageFormatRevision = 6;
 export const RawHidMessageProtocolRevision = 1;
 
 // 210509 1, 初版
-export const ProfileBinaryFormatRevision = 1;
+// 210515 2, mappingEntriesを追加
+export const ProfileBinaryFormatRevision = 2;
 
 // 210513, 1, 初版
 export const ConfigParametersRevision = 1;

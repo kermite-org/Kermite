@@ -1,4 +1,5 @@
 import { FC, jsx } from 'qx';
+import { routerConstants } from '~/shared';
 import { ISelectorOptionN } from '~/ui/common';
 import { GeneralSelectorN } from '~/ui/common/components/atoms/GeneralSelectorN';
 
@@ -8,12 +9,12 @@ type Props = {
   target: 'source' | 'dest';
 };
 
-const fShift = 1;
-const fCtrl = 2;
+const fCtrl = 1;
+const fShift = 2;
 const fAlt = 4;
 const fGui = 8;
-const vAny = 255;
-const vKeep = 254;
+const vAny = routerConstants.ModifierSourceValueAny;
+const vKeep = routerConstants.ModifierDestinationValueKeep;
 
 const optionsBase: ISelectorOptionN[] = [
   { value: 0, label: 'None' },

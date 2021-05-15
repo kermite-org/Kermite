@@ -1,4 +1,4 @@
-import { VirtualKey } from '~/shared';
+import { VirtualKey } from '~/shared/defs/VirtualKeys';
 
 export enum LogicalKey {
   LK_NONE = 0,
@@ -182,6 +182,9 @@ export enum LogicalKey {
   LK_U7,
   LK_U8,
   LK_U9,
+  LK_RoutingSource_Any,
+  LK_RoutingDestination_Keep,
+  LK_RoutingDestination_Stop,
 }
 
 const virtualKeyToLogicalKeyMappingTable: {
@@ -368,6 +371,9 @@ const virtualKeyToLogicalKeyMappingTable: {
   K_U7: LogicalKey.LK_U7,
   K_U8: LogicalKey.LK_U8,
   K_U9: LogicalKey.LK_U9,
+  K_RoutingSource_Any: LogicalKey.LK_RoutingSource_Any,
+  K_RoutingDestination_Keep: LogicalKey.LK_RoutingDestination_Keep,
+  K_RoutingDestination_Stop: LogicalKey.LK_RoutingDestination_Stop,
 };
 
 export function getLogicalKeyForVirtualKey(virtualKey: VirtualKey): number {

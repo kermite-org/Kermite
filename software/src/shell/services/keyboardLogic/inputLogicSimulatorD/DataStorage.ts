@@ -6,6 +6,7 @@ interface IChunkSpan {
 const enum SubChunkSig {
   ProfileDataHeader = 0xbb71,
   ProfileLayerList = 0xbb74,
+  MappingEntries = 0xbb76,
   ProfileKeyAssigns = 0xbb78,
 }
 
@@ -52,6 +53,10 @@ class DataStorage {
 
   getChunk_layerList(): IChunkSpan {
     return this.seekChunk(SubChunkSig.ProfileLayerList);
+  }
+
+  getChunk_mpaaingEntreis(): IChunkSpan {
+    return this.seekChunk(SubChunkSig.MappingEntries);
   }
 
   getChunk_keyAssigns(): IChunkSpan {
