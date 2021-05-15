@@ -39,6 +39,11 @@ export interface IPorjectFileJson {
     systemParameterKeys: string[];
   }[];
 }
+
+interface IParameterConfigurationEntry {
+  targetVariationNames: string[];
+  systemParameterKeys: string[];
+}
 interface IProjectResourceInfoSource {
   origin: IResourceOrigin;
   projectId: string;
@@ -54,10 +59,7 @@ interface IProjectResourceInfoSource {
     buildRevision: number;
     buildTimestamp: string;
   }[];
-  parameterConfigurations: {
-    targetVariationNames: string[];
-    systemParameterKeys: string[];
-  }[];
+  parameterConfigurations: IParameterConfigurationEntry[];
 }
 namespace ProjectResourceInfoSourceLoader {
   function checkFileExistsOrBlank(filePath: string): string | undefined {
@@ -201,6 +203,24 @@ namespace ProjectResourceInfoSourceLoader {
   }
 }
 
+export function readCustomParameterDefinition(
+  parameterConfigurations: IParameterConfigurationEntry[],
+  variationName: string,
+): IProjectCustomDefinition | undefined {
+  const targetConfig = parameterConfigurations.find(
+    (it) =>
+      it.targetVariationNames.includes(variationName) ||
+      it.targetVariationNames.includes('all'),
+  );
+  if (targetConfig) {
+    const customParameterSpecs = targetConfig.systemParameterKeys
+      .map(getSystemParameterDefinitionBySystemParameterKey)
+      .filter((a) => !!a) as ICustromParameterSpec[];
+    return { customParameterSpecs };
+  }
+  return undefined;
+}
+
 export class ProjectResourceProviderImpl_Local
   implements IProjectResourceProviderImpl {
   private projectInfoSources: IProjectResourceInfoSource[] = [];
@@ -272,17 +292,10 @@ export class ProjectResourceProviderImpl_Local
   ): Promise<IProjectCustomDefinition | undefined> {
     const info = this.getProjectInfoSourceById(projectId);
     if (info) {
-      const targetConfig = info.parameterConfigurations.find(
-        (it) =>
-          it.targetVariationNames.includes(variationName) ||
-          it.targetVariationNames.includes('all'),
+      return readCustomParameterDefinition(
+        info.parameterConfigurations,
+        variationName,
       );
-      if (targetConfig) {
-        const customParameterSpecs = targetConfig.systemParameterKeys
-          .map(getSystemParameterDefinitionBySystemParameterKey)
-          .filter((a) => !!a) as ICustromParameterSpec[];
-        return { customParameterSpecs };
-      }
     }
     return undefined;
   }

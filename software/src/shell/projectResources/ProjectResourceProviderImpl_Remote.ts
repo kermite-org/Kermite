@@ -1,6 +1,4 @@
 import {
-  getSystemParameterDefinitionBySystemParameterKey,
-  ICustromParameterSpec,
   IFirmwareTargetDevice,
   IPersistKeyboardDesign,
   IProfileData,
@@ -24,7 +22,10 @@ import {
   IFirmwareBinaryFileSpec,
   IProjectResourceProviderImpl,
 } from '~/shell/projectResources/Interfaces';
-import { IPorjectFileJson } from '~/shell/projectResources/ProjectResourceProviderImpl_Local';
+import {
+  IPorjectFileJson,
+  readCustomParameterDefinition,
+} from '~/shell/projectResources/ProjectResourceProviderImpl_Local';
 import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 
 const remoteBaseUri =
@@ -123,17 +124,10 @@ export class ProjectResourceProviderImpl_Remote
         fetchJson,
         uri,
       );
-      const targetConfig = projectJsonContent.parameterConfigurations.find(
-        (it) =>
-          it.targetVariationNames.includes(variationName) ||
-          it.targetVariationNames.includes('all'),
+      return readCustomParameterDefinition(
+        projectJsonContent.parameterConfigurations,
+        variationName,
       );
-      if (targetConfig) {
-        const customParameterSpecs = targetConfig.systemParameterKeys
-          .map(getSystemParameterDefinitionBySystemParameterKey)
-          .filter((a) => !!a) as ICustromParameterSpec[];
-        return { customParameterSpecs };
-      }
     }
     return undefined;
   }
