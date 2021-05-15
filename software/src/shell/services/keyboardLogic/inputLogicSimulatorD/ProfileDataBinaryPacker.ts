@@ -8,11 +8,11 @@ import {
   IProfileData,
   isModifierVirtualKey,
   LayerInvocationMode,
-  ModifierVirtualKey,
   ProfileBinaryFormatRevision,
   sortOrderBy,
   getLogicalKeyForVirtualKey,
   routerConstants,
+  encodeModifierVirtualKeys,
 } from '~/shared';
 import {
   writeBytes,
@@ -45,21 +45,6 @@ type IProfileContenxt = {
   layersDict: { [layerId: string]: IRawLayerInfo };
   useShiftCancel: boolean;
 };
-
-function makeAttachedModifiersBits(
-  attachedModifiers?: ModifierVirtualKey[],
-): number {
-  let bits = 0;
-  if (attachedModifiers) {
-    for (const m of attachedModifiers) {
-      m === 'K_Ctrl' && (bits |= 0x01);
-      m === 'K_Shift' && (bits |= 0x02);
-      m === 'K_Alt' && (bits |= 0x04);
-      m === 'K_Gui' && (bits |= 0x08);
-    }
-  }
-  return bits;
-}
 
 function makeLayerInvocationModeBits(mode: LayerInvocationMode): number {
   const mapper: { [key in LayerInvocationMode]: number } = {
@@ -136,11 +121,11 @@ function encodeAssignOperation(
     const vk = op.virtualKey;
     if (encodeSoloModifierActionToModifierFlags) {
       if (isModifierVirtualKey(vk)) {
-        const mods = makeAttachedModifiersBits([vk]);
+        const mods = encodeModifierVirtualKeys([vk]);
         return [(fAssignType << 6) | mods, 0];
       }
     }
-    const mods = makeAttachedModifiersBits(op.attachedModifiers);
+    const mods = encodeModifierVirtualKeys(op.attachedModifiers);
     const logicalKey = getLogicalKeyForVirtualKey(vk);
     // ShiftCancelオプションが有効でshiftレイヤの場合のみ、shiftCancelを適用可能にする
     const fIsShiftCancellable =
@@ -417,7 +402,7 @@ function encodeLayerListData(profile: IProfileData): number[] {
     profile.layers.map((la) => {
       const fDefaultScheme = la.defaultScheme === 'block' ? 1 : 0;
       const fInitialActive = la.initialActive ? 1 : 0;
-      const fAttachedModifiers = makeAttachedModifiersBits(
+      const fAttachedModifiers = encodeModifierVirtualKeys(
         la.attachedModifiers,
       );
       return [

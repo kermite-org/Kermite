@@ -1,5 +1,5 @@
 import { IAssignEntryWithLayerFallback, IDisplayKeyEntity } from '~/shared';
-import { PlayerModel, uiStatusModel } from '~/ui/common';
+import { IPlayerModel, uiStatusModel } from '~/ui/common';
 import { getAssignEntryTexts } from '~/ui/common-svg/keyUnitCardModels/KeyUnitCardViewModelCommon';
 import { IEditKeyUnitCardViewModel } from '~/ui/common-svg/keyUnitCards/EditKeyUnitCard';
 import { EditorModel } from '~/ui/editor-page/editorMainPart/models/EditorModel';
@@ -11,7 +11,7 @@ export interface IEditKeyUnitCardPartViewModel {
 
 function getAssignForKeyUnit(
   keyUnitId: string,
-  playerModel: PlayerModel,
+  playerModel: IPlayerModel,
   editorModel: EditorModel,
 ): IAssignEntryWithLayerFallback | undefined {
   const dynamic = uiStatusModel.settings.showLayersDynamic;
@@ -24,7 +24,7 @@ function getAssignForKeyUnit(
 
 function makeEditKeyUnitCardViewModel(
   ke: IDisplayKeyEntity,
-  playerModel: PlayerModel,
+  playerModel: IPlayerModel,
   editorModel: EditorModel,
 ): IEditKeyUnitCardViewModel {
   const keyUnitId = ke.keyId;
@@ -55,12 +55,12 @@ function makeEditKeyUnitCardViewModel(
     secondaryText,
     isLayerFallback: isLayerFallback || false,
     isHold,
-    shiftHold: dynamic && playerModel.checkShiftHold(),
+    shiftHold: dynamic && playerModel.shiftHold,
   };
 }
 
 export function makeEditKeyUnitCardsPartViewModel(
-  playerModel: PlayerModel,
+  playerModel: IPlayerModel,
   editorModel: EditorModel,
 ): IEditKeyUnitCardPartViewModel {
   const { showLayerDefaultAssign } = uiStatusModel.settings;

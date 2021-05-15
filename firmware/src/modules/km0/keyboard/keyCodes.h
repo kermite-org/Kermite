@@ -185,7 +185,6 @@ enum LogicalKey {
   LK_U9,
   LK_RoutingSource_Any,
   LK_RoutingDestination_Keep,
-  LK_RoutingDestination_Stop,
 };
 
 #endif

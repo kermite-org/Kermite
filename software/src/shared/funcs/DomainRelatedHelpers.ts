@@ -1,5 +1,5 @@
-import { generateNumberSequence } from '~/shared';
 import { IPresetSpec, IPresetType, IResourceOrigin } from '~/shared/defs';
+import { generateNumberSequence } from '~/shared/funcs/Utils';
 
 // プロジェクトソースの単一文字列表現 `local#${projectId}` or `online#${projectId}`
 export function createProjectSig(origin: IResourceOrigin, projectId: string) {

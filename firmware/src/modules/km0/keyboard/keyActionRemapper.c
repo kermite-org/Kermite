@@ -8,7 +8,6 @@ static const uint8_t RoutingChannelValueAny = 15;
 static const uint8_t KeyCodeSourceValueNone = LK_NONE;
 static const uint8_t KeyCodeSourceValueAny = LK_RoutingSource_Any;
 static const uint8_t KeyCodeDestinationValueKeep = LK_RoutingDestination_Keep;
-static const uint8_t KeyCodeDestinationValueStop = LK_RoutingDestination_Stop;
 static const uint8_t ModifierSourceValueNone = 0;
 static const uint8_t ModifierSourceValueAny = 255;
 static const uint8_t ModifierDestinationValueKeep = 254;
@@ -47,20 +46,15 @@ uint16_t keyActionRemapper_translateKeyOperation(uint16_t opWord, uint8_t routin
         continue;
       }
       if (
-          (logicalKey == srcKeyCode || logicalKey == KeyCodeSourceValueAny) &&
-          (modifiers == srcModifiers || modifiers == ModifierSourceValueAny)) {
+          (logicalKey == srcKeyCode || srcKeyCode == KeyCodeSourceValueAny) &&
+          (modifiers == srcModifiers || srcModifiers == ModifierSourceValueAny)) {
         uint8_t dstKeyCode = dataMemory_readByte(addrItem + 3);
         uint8_t dstModifiers = dataMemory_readByte(addrItem + 4);
-        if (dstKeyCode == KeyCodeDestinationValueStop) {
-          logicalKey = LK_NONE;
-          modifiers = 0;
-        } else {
-          if (dstKeyCode != KeyCodeDestinationValueKeep) {
-            logicalKey = dstKeyCode;
-          }
-          if (dstModifiers != ModifierDestinationValueKeep) {
-            modifiers = dstModifiers;
-          }
+        if (dstKeyCode != KeyCodeDestinationValueKeep) {
+          logicalKey = dstKeyCode;
+        }
+        if (dstModifiers != ModifierDestinationValueKeep) {
+          modifiers = dstModifiers;
         }
         break;
       }

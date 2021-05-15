@@ -1,17 +1,12 @@
-import { jsx, Hook, css } from 'qx';
-import { PlayerModel } from '~/ui/common';
+import { css, jsx } from 'qx';
+import { usePlayerModel } from '~/ui/common';
 import { EditorKeyboardView } from '~/ui/common-svg/panels/EditorKeyboardView';
 import { makeEditKeyUnitCardsPartViewModel } from '~/ui/editor-page/editorMainPart/EditKeyUnitCardsPartViewModel';
 import { editorModel } from '~/ui/editor-page/editorMainPart/models/EditorModel';
 import { LayerStateView } from './views/LayerStateView';
 
-const playerModel = new PlayerModel();
-
 export function KeyboardSection() {
-  Hook.useEffect(() => {
-    playerModel.initialize();
-    return () => playerModel.finalize();
-  }, []);
+  const playerModel = usePlayerModel();
 
   const cssKeyboardSection = css`
     position: relative;

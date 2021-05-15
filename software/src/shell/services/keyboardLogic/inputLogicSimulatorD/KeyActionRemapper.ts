@@ -1,4 +1,4 @@
-import { LogicalKey, routerConstants } from '~/shared';
+import { routerConstants } from '~/shared';
 import { dataStorage } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/DataStorage';
 
 type u8 = number;
@@ -18,7 +18,6 @@ const {
   KeyCodeSourceValueAny,
   ModifierSourceValueNone,
   ModifierSourceValueAny,
-  KeyCodeDestinationValueStop,
   KeyCodeDestinationValueKeep,
   ModifierDestinationValueKeep,
 } = routerConstants;
@@ -57,22 +56,16 @@ export function keyActionRemapper_translateKeyOperation(
         continue;
       }
       if (
-        (logicalKey === srcKeyCode || logicalKey === KeyCodeSourceValueAny) &&
-        (modifiers === srcModifiers || modifiers === ModifierSourceValueAny)
+        (logicalKey === srcKeyCode || srcKeyCode === KeyCodeSourceValueAny) &&
+        (modifiers === srcModifiers || srcModifiers === ModifierSourceValueAny)
       ) {
         const dstKeyCode = dataStorage.readByte(addrItem + 3);
         const dstModifiers = dataStorage.readByte(addrItem + 4);
-
-        if (dstKeyCode === KeyCodeDestinationValueStop) {
-          logicalKey = LogicalKey.LK_NONE;
-          modifiers = 0;
-        } else {
-          if (dstKeyCode !== KeyCodeDestinationValueKeep) {
-            logicalKey = dstKeyCode;
-          }
-          if (dstModifiers !== ModifierDestinationValueKeep) {
-            modifiers = dstModifiers;
-          }
+        if (dstKeyCode !== KeyCodeDestinationValueKeep) {
+          logicalKey = dstKeyCode;
+        }
+        if (dstModifiers !== ModifierDestinationValueKeep) {
+          modifiers = dstModifiers;
         }
         break;
       }

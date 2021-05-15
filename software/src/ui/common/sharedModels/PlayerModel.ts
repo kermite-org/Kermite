@@ -1,162 +1,295 @@
+import { Hook } from 'qx';
 import {
+  addArrayItemIfNotExist,
   createFallbackDisplayKeyboardDesign,
+  decodeModifierVirtualKeys,
+  encodeModifierVirtualKeys,
   fallbackProfileData,
   IAssignEntry,
   IAssignOperation,
+  IAssingOperationKeyInput,
   IDisplayKeyboardDesign,
+  ILayer,
   IProfileData,
   IRealtimeKeyboardEvent,
+  removeArrayItems,
+  routerConstants,
+  VirtualKey,
 } from '~/shared';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import { ipcAgent } from '~/ui/common/base';
+import {
+  ILayerStackItem,
+  IPlayerModel,
+} from '~/ui/common/sharedModels/Interfaces';
+import { useRoutingChannelModel } from '~/ui/common/sharedModels/ParameterBasedModeModels';
 
-class PlayerModelHelper {
-  static translateKeyIndexToKeyUnitId(
-    keyIndex: number,
-    profileData: IProfileData,
-  ): string | undefined {
-    const keyEntity = profileData.keyboardDesign.keyEntities.find(
-      (kp) => kp.keyIndex === keyIndex,
+function translateKeyIndexToKeyUnitId(
+  keyIndex: number,
+  profileData: IProfileData,
+): string | undefined {
+  const keyEntity = profileData.keyboardDesign.keyEntities.find(
+    (kp) => kp.keyIndex === keyIndex,
+  );
+  return keyEntity?.keyId;
+}
+
+function isOperationShift(op: IAssignOperation | undefined) {
+  return op?.type === 'keyInput' && op.virtualKey === 'K_Shift';
+}
+
+function isAssignShift(assign: IAssignEntry | undefined) {
+  if (assign?.type === 'single') {
+    return isOperationShift(assign.op);
+  }
+  if (assign?.type === 'dual') {
+    return (
+      isOperationShift(assign.primaryOp) || isOperationShift(assign.secondaryOp)
     );
-    return keyEntity?.keyId;
-  }
-
-  static isOperationShift(op: IAssignOperation | undefined) {
-    return op?.type === 'keyInput' && op.virtualKey === 'K_Shift';
-  }
-
-  static isAssignShift(assign: IAssignEntry | undefined) {
-    if (assign?.type === 'single') {
-      return this.isOperationShift(assign.op);
-    }
-    if (assign?.type === 'dual') {
-      return (
-        this.isOperationShift(assign.primaryOp) ||
-        this.isOperationShift(assign.secondaryOp)
-      );
-    }
   }
 }
 
-export class PlayerModel {
-  private _profileData: IProfileData = fallbackProfileData;
-  private _displayDesign: IDisplayKeyboardDesign = createFallbackDisplayKeyboardDesign();
+function isLayerActive(layerStateFlags: number, layerIndex: number) {
+  return ((layerStateFlags >> layerIndex) & 1) > 0;
+}
 
-  private _keyStates: { [keyId: string]: boolean } = {};
-  private _layerActiveFlags: number = 1;
-  private _holdKeyIndices: Set<number> = new Set();
+function makeLayerStackItems(
+  layers: ILayer[],
+  layerActiveFlags: number,
+): ILayerStackItem[] {
+  return layers.map((la, index) => ({
+    layerId: la.layerId,
+    layerName: la.layerName,
+    isActive: isLayerActive(layerActiveFlags, index),
+  }));
+}
 
-  get holdKeyIndices(): number[] {
-    return this._holdKeyIndices.size > 0 ? [...this._holdKeyIndices] : [];
-  }
+const {
+  RoutingChannelValueAny,
+  ModifierSourceValueAny,
+  ModifierDestinationValueKeep,
+} = routerConstants;
+const VirutalKeySourceValueAny: VirtualKey = 'K_RoutingSource_Any';
+const VirtualKeyDestinationValueKeep: VirtualKey = 'K_RoutingDestination_Keep';
 
-  get keyStates() {
-    return this._keyStates;
-  }
+function translateKeyInputOperation(
+  op: IAssingOperationKeyInput,
+  profile: IProfileData,
+  routingChannel: number,
+): IAssingOperationKeyInput {
+  let virtualKey = op.virtualKey;
+  let modifiers = encodeModifierVirtualKeys(op.attachedModifiers);
 
-  get layers() {
-    return this._profileData.layers;
-  }
-
-  get displayDesign() {
-    return this._displayDesign;
-  }
-
-  private isLayerActive(layerIndex: number) {
-    return ((this._layerActiveFlags >> layerIndex) & 1) > 0;
-  }
-
-  get layerStackViewSource(): {
-    layerId: string;
-    layerName: string;
-    isActive: boolean;
-  }[] {
-    return this._profileData.layers.map((la, index) => ({
-      layerId: la.layerId,
-      layerName: la.layerName,
-      isActive: this.isLayerActive(index),
-    }));
-  }
-
-  getDynamicKeyAssign = (keyUnitId: string) => {
-    const { layers } = this._profileData;
-    for (let i = layers.length - 1; i >= 0; i--) {
-      if (this.isLayerActive(i)) {
-        const layer = layers[i];
-        const assign = this._profileData.assigns[
-          `${layer.layerId}.${keyUnitId}`
-        ];
-
-        if (assign?.type === 'transparent') {
-          continue;
+  for (const re of profile.mappingEntries) {
+    const ch = re.channelIndex;
+    if (ch === routingChannel || ch === RoutingChannelValueAny) {
+      const srcVirtualKey = re.srcKey;
+      const srcModifiers = re.srcModifiers;
+      if (
+        (virtualKey === srcVirtualKey ||
+          srcVirtualKey === VirutalKeySourceValueAny) &&
+        (modifiers === srcModifiers || srcModifiers === ModifierSourceValueAny)
+      ) {
+        const dstVirtualKey = re.dstKey;
+        const dstModifiers = re.dstModifiers;
+        if (dstVirtualKey !== VirtualKeyDestinationValueKeep) {
+          virtualKey = dstVirtualKey;
         }
-        if (assign?.type === 'block') {
-          return undefined;
+        if (dstModifiers !== ModifierDestinationValueKeep) {
+          modifiers = dstModifiers;
         }
-        if (!assign && layer.defaultScheme === 'block') {
-          return undefined;
-        }
-        if (assign) {
-          return assign;
-        }
+        return {
+          ...op,
+          virtualKey,
+          attachedModifiers: decodeModifierVirtualKeys(modifiers),
+        };
       }
     }
-    return undefined;
-  };
+  }
+  return op;
+}
 
-  private plainShiftPressed: boolean = false;
+function applyOperationRouting(
+  op: IAssignOperation | undefined,
+  profile: IProfileData,
+  routingChannel: number,
+): IAssignOperation | undefined {
+  if (op?.type === 'keyInput') {
+    return translateKeyInputOperation(op, profile, routingChannel);
+  }
+  return op;
+}
 
-  checkShiftHold(): boolean {
-    const shiftLayerHold = this._profileData.layers.some(
-      (layer, layerIndex) =>
-        this.isLayerActive(layerIndex) &&
-        layer.attachedModifiers?.includes('K_Shift'),
+function applyAssignRouting(
+  assign: IAssignEntry,
+  profile: IProfileData,
+  routingChannel: number,
+): IAssignEntry {
+  if (assign.type === 'single') {
+    return {
+      ...assign,
+      op: applyOperationRouting(assign.op, profile, routingChannel),
+    };
+  } else if (assign.type === 'dual') {
+    return {
+      ...assign,
+      primaryOp: applyOperationRouting(
+        assign.primaryOp,
+        profile,
+        routingChannel,
+      ),
+      secondaryOp: applyOperationRouting(
+        assign.secondaryOp,
+        profile,
+        routingChannel,
+      ),
+      tertiaryOp: applyOperationRouting(
+        assign.tertiaryOp,
+        profile,
+        routingChannel,
+      ),
+    };
+  }
+  return assign;
+}
+
+function getDynamicKeyAssign(
+  profileData: IProfileData,
+  layerStateFlags: number,
+  keyUnitId: string,
+  routingChannel: number,
+): IAssignEntry | undefined {
+  const { layers } = profileData;
+  for (let i = layers.length - 1; i >= 0; i--) {
+    if (isLayerActive(layerStateFlags, i)) {
+      const layer = layers[i];
+      const assign = profileData.assigns[`${layer.layerId}.${keyUnitId}`];
+
+      if (assign?.type === 'transparent') {
+        continue;
+      }
+      if (assign?.type === 'block') {
+        return undefined;
+      }
+      if (!assign && layer.defaultScheme === 'block') {
+        return undefined;
+      }
+      if (assign) {
+        return applyAssignRouting(assign, profileData, routingChannel);
+      }
+    }
+  }
+  return undefined;
+}
+
+function checkShiftHold(
+  layers: ILayer[],
+  layerStateFlags: number,
+  plainShiftPressed: boolean,
+): boolean {
+  const shiftLayerHold = layers.some(
+    (layer, layerIndex) =>
+      isLayerActive(layerStateFlags, layerIndex) &&
+      layer.attachedModifiers?.includes('K_Shift'),
+  );
+  return shiftLayerHold || plainShiftPressed;
+}
+
+// ----------------------------------------------------------------------
+
+type ILocalState = {
+  profileData: IProfileData;
+  displayDesign: IDisplayKeyboardDesign;
+  keyStates: { [keyId: string]: boolean };
+  layerStateFlags: number;
+  holdKeyIndices: number[];
+  plainShiftPressed: boolean;
+  routingChannel: number;
+};
+
+const setProfileData = (profile: IProfileData, local: ILocalState) => {
+  if (local.profileData !== profile) {
+    local.profileData = profile;
+    local.displayDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
+      profile.keyboardDesign,
     );
-    return shiftLayerHold || this.plainShiftPressed;
   }
+};
 
-  private shiftResolver = (keyUnitId: string, isDown: boolean) => {
-    const assign = this.getDynamicKeyAssign(keyUnitId);
-    if (PlayerModelHelper.isAssignShift(assign)) {
-      this.plainShiftPressed = isDown;
+const handlekeyEvents = (ev: IRealtimeKeyboardEvent, local: ILocalState) => {
+  if (ev.type === 'keyStateChanged') {
+    const { keyIndex, isDown } = ev;
+    if (isDown) {
+      addArrayItemIfNotExist(local.holdKeyIndices, keyIndex);
+    } else {
+      removeArrayItems(local.holdKeyIndices, keyIndex);
     }
-  };
-
-  private handlekeyEvents = (ev: IRealtimeKeyboardEvent) => {
-    if (ev.type === 'keyStateChanged') {
-      const { keyIndex, isDown } = ev;
-      if (isDown) {
-        this._holdKeyIndices.add(keyIndex);
-      } else {
-        this._holdKeyIndices.delete(keyIndex);
-      }
-      const keyUnitId = PlayerModelHelper.translateKeyIndexToKeyUnitId(
-        keyIndex,
-        this._profileData,
+    const keyUnitId = translateKeyIndexToKeyUnitId(keyIndex, local.profileData);
+    if (keyUnitId) {
+      local.keyStates[keyUnitId] = isDown;
+      const assign = getDynamicKeyAssign(
+        local.profileData,
+        local.layerStateFlags,
+        keyUnitId,
+        local.routingChannel,
       );
-      if (keyUnitId) {
-        this._keyStates[keyUnitId] = isDown;
-        this.shiftResolver(keyUnitId, isDown);
+      if (isAssignShift(assign)) {
+        local.plainShiftPressed = isDown;
       }
-    } else if (ev.type === 'layerChanged') {
-      this._layerActiveFlags = ev.layerActiveFlags;
     }
+  } else if (ev.type === 'layerChanged') {
+    local.layerStateFlags = ev.layerActiveFlags;
+  }
+};
+
+// ----------------------------------------------------------------------
+
+function createLocalState(): ILocalState {
+  return {
+    profileData: fallbackProfileData,
+    displayDesign: createFallbackDisplayKeyboardDesign(),
+    keyStates: {},
+    layerStateFlags: 1,
+    holdKeyIndices: [],
+    plainShiftPressed: false,
+    routingChannel: 0,
   };
+}
 
-  setProfileData(profile: IProfileData) {
-    if (this._profileData !== profile) {
-      this._profileData = profile;
-      this._displayDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
-        profile.keyboardDesign,
-      );
-    }
-  }
-
-  initialize() {
-    ipcAgent.events.device_keyEvents.subscribe(this.handlekeyEvents);
-  }
-
-  finalize() {
-    ipcAgent.events.device_keyEvents.unsubscribe(this.handlekeyEvents);
-  }
+export function usePlayerModel(): IPlayerModel {
+  const local = Hook.useMemo<ILocalState>(createLocalState, []);
+  Hook.useEffect(
+    () =>
+      ipcAgent.events.device_keyEvents.subscribe((ev) =>
+        handlekeyEvents(ev, local),
+      ),
+    [],
+  );
+  const { routingChannel } = useRoutingChannelModel();
+  local.routingChannel = routingChannel;
+  const {
+    keyStates,
+    displayDesign,
+    profileData,
+    layerStateFlags,
+    holdKeyIndices,
+    plainShiftPressed,
+  } = local;
+  const { layers } = profileData;
+  return {
+    holdKeyIndices,
+    keyStates,
+    layers,
+    displayDesign,
+    layerStackItems: makeLayerStackItems(layers, layerStateFlags),
+    shiftHold: checkShiftHold(layers, layerStateFlags, plainShiftPressed),
+    getDynamicKeyAssign: (keyUnitId: string) =>
+      getDynamicKeyAssign(
+        profileData,
+        layerStateFlags,
+        keyUnitId,
+        routingChannel,
+      ),
+    setProfileData: (profile: IProfileData) => setProfileData(profile, local),
+  };
 }
