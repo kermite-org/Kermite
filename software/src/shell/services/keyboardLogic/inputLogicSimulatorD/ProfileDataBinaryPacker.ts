@@ -386,63 +386,6 @@ function encodeKeyMappingData(profile: IProfileData): number[] {
   return flattenArray(groupedAssignBytes);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// function hexBytes(bytes: number[], splitter = ',') {
-//   return bytes.map((b) => ('00' + b.toString(16)).slice(-2)).join(splitter);
-// }
-
-/*
-function fixAssignOperation(
-  op: IAssignOperation,
-  layout: IKeyboardLayoutStandard,
-) {
-  if (op.type === 'keyInput') {
-    const vk = op.virtualKey;
-    let mods = op.attachedModifiers;
-
-    const isMacOS = true;
-    if (isMacOS) {
-      // MACでJIS配列の場合,バックスラッシュをAlt+¥に置き換える
-      if (layout === 'JIS' && vk === 'K_BackSlash') {
-        if (!mods) {
-          mods = ['K_Alt'];
-        }
-        if (mods && !mods.includes('K_Alt')) {
-          mods.push('K_Alt');
-        }
-        op.virtualKey = 'K_Yen';
-        op.attachedModifiers = mods;
-      }
-    }
-  }
-}
-
-function fixProfileData(
-  profile: IProfileData,
-  layout: IKeyboardLayoutStandard,
-) {
-  for (const key in profile.assigns) {
-    const assign = profile.assigns[key];
-    if (assign) {
-      if (assign.type === 'single' && assign.op) {
-        fixAssignOperation(assign.op, layout);
-      }
-      if (assign.type === 'dual') {
-        if (assign.primaryOp) {
-          fixAssignOperation(assign.primaryOp, layout);
-        }
-        if (assign.secondaryOp) {
-          fixAssignOperation(assign.secondaryOp, layout);
-        }
-        if (assign.tertiaryOp) {
-          fixAssignOperation(assign.tertiaryOp, layout);
-        }
-      }
-    }
-  }
-}
-*/
-
 function createChunk(headerWord: number, bodyBytes: number[]) {
   const buffer = Array(bodyBytes.length + 4).fill(0);
   writeUint16LE(buffer, 0, headerWord);
