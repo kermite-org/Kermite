@@ -8,9 +8,7 @@
         "emitKeyStroke",
         "emitRealtimeEvents",
         "keyHoldIndicatorLed",
-        "heartbeatLed",
-        "systemLayout",
-        "wiringMode"
+        "heartbeatLed"
       ]
     },
     {
