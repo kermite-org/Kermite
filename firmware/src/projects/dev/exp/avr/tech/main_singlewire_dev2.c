@@ -1,5 +1,5 @@
 #include "debug_uart.h"
-#include "dio.h"
+#include "digitalIo.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <stdio.h>
@@ -17,25 +17,25 @@
 #define pin_BT0 P_B6
 
 static void initBoardIo() {
-  dio_setOutput(pin_LED0);
-  dio_setOutput(pin_LED1);
-  dio_setInputPullup(pin_BT0);
+  digitalIo_setOutput(pin_LED0);
+  digitalIo_setOutput(pin_LED1);
+  digitalIo_setInputPullup(pin_BT0);
 }
 
 static void toggleLED0() {
-  dio_toggle(pin_LED0);
+  digitalIo_toggle(pin_LED0);
 }
 
 static void outputLED1(bool val) {
-  dio_write(pin_LED1, val);
+  digitalIo_write(pin_LED1, val);
 }
 
 static void toggleLED1() {
-  dio_toggle(pin_LED1);
+  digitalIo_toggle(pin_LED1);
 }
 
 static bool readButton0() {
-  return dio_read(pin_BT0) == 0;
+  return digitalIo_read(pin_BT0) == 0;
 }
 
 //---------------------------------------------
@@ -43,27 +43,27 @@ static bool readButton0() {
 
 #if 1
 static void debug_initDebug3Pin() {
-  dio_setOutput(P_B3);
+  digitalIo_setOutput(P_B3);
 }
 
 static void debug_toggleDebug3Pin() {
-  dio_toggle(P_B3);
+  digitalIo_toggle(P_B3);
 }
 
 static void debug_outputDebug3Pin(bool val) {
-  dio_write(P_B3, val);
+  digitalIo_write(P_B3, val);
 }
 
 static void debug_initDebug4Pin() {
-  dio_setOutput(P_B2);
+  digitalIo_setOutput(P_B2);
 }
 
 static void debug_toggleDebug4Pin() {
-  dio_toggle(P_B2);
+  digitalIo_toggle(P_B2);
 }
 
 static void debug_outputDebug4Pin(bool val) {
-  dio_write(P_B2, val);
+  digitalIo_write(P_B2, val);
 }
 
 #else
@@ -77,8 +77,8 @@ static void debug_toggleIntervalPin() {}
 #define pin_SlaveCheck P_C6
 
 static bool checkIsMaster() {
-  dio_setInputPullup(pin_SlaveCheck);
-  return dio_read(pin_SlaveCheck) == 1;
+  digitalIo_setInputPullup(pin_SlaveCheck);
+  return digitalIo_read(pin_SlaveCheck) == 1;
 }
 
 //---------------------------------------------

@@ -1,5 +1,6 @@
 #include "km0/deviceIo/boardIo.h"
 #include "neoPixelCore.h"
+#include "pico_sdk/src/common/include/pico/stdlib.h"
 
 #ifndef KM0_RP_BOARD_IO_RGBLED__PIO_INSTANCE
 #define KM0_RP_BOARD_IO_RGBLED__PIO_INSTANCE pio0
@@ -18,8 +19,13 @@ static const int sm_rgbled = KM0_RP_BOARD_IO_RGBLED__PIO_SM;
 static bool state_led1 = false;
 static bool state_led2 = false;
 
-void boardIo_setupLedsRgb(int8_t pin) {
-  neoPixelCore_initialize(pio_rgbled, sm_rgbled, pin);
+void boardIo_setupLedsRgb(int8_t pin_led, int8_t pin_led_power) {
+  neoPixelCore_initialize(pio_rgbled, sm_rgbled, pin_led);
+  if (pin_led_power != -1) {
+    gpio_init(pin_led_power);
+    gpio_set_dir(pin_led_power, GPIO_OUT);
+    gpio_put(pin_led_power, 1);
+  }
 }
 
 static inline uint32_t pixelARGB(uint8_t a, uint8_t r, uint8_t g, uint8_t b) {
@@ -45,5 +51,9 @@ void boardIo_writeLed2(bool val) {
 }
 
 void boardIo_setupLeds_proMicroRp() {
-  boardIo_setupLedsRgb(25);
+  boardIo_setupLedsRgb(25, -1);
+}
+
+void boardIo_setupLeds_qtPyRp() {
+  boardIo_setupLedsRgb(12, 11);
 }

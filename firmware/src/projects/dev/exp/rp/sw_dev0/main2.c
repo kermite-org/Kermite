@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 #include "hardware/clocks.h"
-#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/digitalIo.h"
 #include "pico/multicore.h"
 #include "pico/stdlib.h"
 #include "swtxrx.pio.h"
@@ -74,11 +74,11 @@ static inline void swrx_program_init(PIO pio, uint sm, uint offset, uint pin, ui
 const int PIN_LED = 25;
 
 void initLed() {
-  dio_setOutput(PIN_LED);
+  digitalIo_setOutput(PIN_LED);
 }
 
 void tick_blink() {
-  dio_toggle(PIN_LED);
+  digitalIo_toggle(PIN_LED);
 }
 
 //------------------------------------
@@ -231,11 +231,11 @@ const int PIN_DEBUG2 = 15;
 
 void on_pin_slave_falling_edge() {
   gpio_set_irq_enabled(PIN_SLAVE, 4, false);
-  dio_write(PIN_DEBUG2, 0);
+  digitalIo_write(PIN_DEBUG2, 0);
   tick_rxin2();
   busy_wait_us(10);
   tick_txout2();
-  dio_write(PIN_DEBUG2, 1);
+  digitalIo_write(PIN_DEBUG2, 1);
   gpio_set_irq_enabled(PIN_SLAVE, 4, true);
 }
 
@@ -246,7 +246,7 @@ void pin_change_interrupt_handler(uint gpio, uint32_t events) {
 }
 
 void setup_rxin2_pcint() {
-  dio_setOutput(PIN_DEBUG2);
+  digitalIo_setOutput(PIN_DEBUG2);
   gpio_set_irq_enabled_with_callback(PIN_SLAVE, GPIO_IRQ_EDGE_FALL, true, &pin_change_interrupt_handler);
 }
 

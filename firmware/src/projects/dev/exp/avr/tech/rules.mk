@@ -4,7 +4,7 @@
 #DevTarget := singlekey
 
 ifeq ($(DevTarget), keyboardMatrix)
-MODULE_SRCS += dio.c
+MODULE_SRCS += digitalIo.c
 MODULE_SRCS += debug_uart.c
 MODULE_SRCS += keyMatrixScanner8x8.c
 MODULE_SRCS += usbioore.c
@@ -19,7 +19,7 @@ PROJECT_SRCS += main_keyboard_dev_matrix.c
 endif
 
 ifeq ($(DevTarget), singlewire)
-MODULE_SRCS += dio.c
+MODULE_SRCS += digitalIo.c
 MODULE_SRCS += debug_uart.c
 MODULE_SRCS += dataMemory.c
 MODULE_SRCS += generalUtils.c
@@ -55,14 +55,14 @@ endif
 
 
 ifeq ($(DevTarget), neopixel)
-MODULE_SRCS += dio.c
+MODULE_SRCS += digitalIo.c
 MODULE_SRCS += debug_uart.c
 PROJECT_SRCS += main_neopixel_dev.c
 PROJECT_ASM_SRCS += asmdev.S
 endif
 
 ifeq ($(DevTarget), singlekey)
-MODULE_SRCS += dio.c
+MODULE_SRCS += digitalIo.c
 MODULE_SRCS += debug_uart.c
 MODULE_SRCS += usbIoCore.c
 PROJECT_SRCS += main_keyboard_dev_singlekey.c

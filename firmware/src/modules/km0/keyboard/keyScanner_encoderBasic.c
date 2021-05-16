@@ -1,7 +1,7 @@
 #include "keyScanner_encoderBasic.h"
 #include "km0/common/bitOperations.h"
 #include "km0/common/utils.h"
-#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/digitalIo.h"
 #if __has_include("config.h")
 #include "config.h"
 #endif
@@ -31,8 +31,8 @@ static const int encoder_count_delta_table[16] = {
 
 static void updateEncoderInstance(EncoderConfig *config, EncoderState *state) {
 
-  int a = dio_read(config->pin1) == 0 ? 1 : 0;
-  int b = dio_read(config->pin2) == 0 ? 1 : 0;
+  int a = digitalIo_read(config->pin1) == 0 ? 1 : 0;
+  int b = digitalIo_read(config->pin2) == 0 ? 1 : 0;
 
   int prev_bin = state->bin;
   state->bin = ((a << 1) | b) & 0b11;
@@ -57,8 +57,8 @@ void keyScanner_encoderBasic_initialize(uint8_t num, EncoderConfig *_encoderConf
   encoderConfigs = _encoderConfigs;
   for (int i = 0; i < numEncoders; i++) {
     EncoderConfig *config = &encoderConfigs[i];
-    dio_setInputPullup(config->pin1);
-    dio_setInputPullup(config->pin2);
+    digitalIo_setInputPullup(config->pin1);
+    digitalIo_setInputPullup(config->pin2);
   }
 }
 

@@ -43,6 +43,9 @@ static uint8_t rawHidRcvBuf[64] = { 0 };
 static bool skipNotify = false;
 
 static void emitGenericHidData(uint8_t *p) {
+  if (!usbIoCore_isConnectedToHost()) {
+    return;
+  }
   bool done = usbIoCore_genericHid_writeData(p);
   if (!done) {
     printf("[warn] failed to write rawhid data\n");

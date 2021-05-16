@@ -1,4 +1,4 @@
-#include "dio.h"
+#include "digitalIo.h"
 #include "usbIoCore.h"
 
 #include <avr/io.h>
@@ -18,29 +18,29 @@
 #define pin_BT0 P_B6
 
 static void initBoardIo() {
-  dio_setOutput(pin_LED0);
-  dio_setOutput(pin_LED1);
-  dio_setInputPullup(pin_BT0);
+  digitalIo_setOutput(pin_LED0);
+  digitalIo_setOutput(pin_LED1);
+  digitalIo_setInputPullup(pin_BT0);
 }
 
 static void toggleLED0() {
-  dio_toggle(pin_LED0);
+  digitalIo_toggle(pin_LED0);
 }
 
 static void outputLED1(bool val) {
-  dio_write(pin_LED1, val);
+  digitalIo_write(pin_LED1, val);
 }
 
 static bool readButton0() {
-  return dio_read(pin_BT0) == 0;
+  return digitalIo_read(pin_BT0) == 0;
 }
 
 //---------------------------------------------
 //timing debug pin
 
 static void debug_initTimeDebugPin() {
-  // dio_setOutput(P_D7);
-  dio_setOutput(P_E6);
+  // digitalIo_setOutput(P_D7);
+  digitalIo_setOutput(P_E6);
   bit_on(PORTE, 6);
 }
 
@@ -55,7 +55,7 @@ static inline void debug_timingPinHigh() {
 static inline void debug_toggleTimeDebugPin() {
   bit_on(PINE, 6);
   // bit_invert(PORTD, 7);
-  //dio_toggle(P_D7);
+  //digitalIo_toggle(P_D7);
 }
 
 //---------------------------------------------
@@ -67,21 +67,21 @@ static inline void debug_toggleTimeDebugPin() {
 // #define pin_BUTTON0 P_B6
 
 // static void initBoardIo() {
-//   dio_setOutput(pin_LED0);
-//   dio_setOutput(pin_LED1);
-//   dio_setInputPullup(pin_BUTTON0);
+//   digitalIo_setOutput(pin_LED0);
+//   digitalIo_setOutput(pin_LED1);
+//   digitalIo_setInputPullup(pin_BUTTON0);
 // }
 
 // static void toggleLED0() {
-//   dio_toggle(pin_LED0);
+//   digitalIo_toggle(pin_LED0);
 // }
 
 // static void outputLED1(bool val) {
-//   dio_write(pin_LED1, val);
+//   digitalIo_write(pin_LED1, val);
 // }
 
 // static bool readButton0() {
-//   return dio_read(pin_BUTTON0) == 0;
+//   return digitalIo_read(pin_BUTTON0) == 0;
 // }
 
 //---------------------------------------------
