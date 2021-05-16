@@ -4,7 +4,7 @@
 
 自作キーボード用のソフトウェアです。MCU上で動くファームウェアと、キーマッピングを設定するためのユーティリティソフトがあります。ProMicro(マイコンボード)を使用した自作キーボードに対応しています。
 
-<img src=https://i.gyazo.com/50fab2c42d9a2750b437f17722d014e0.png width="200px"/>
+<img src=https://i.gyazo.com/dd06a2d9e1c98815cd69394911a5a29b.png width="200px"/>
 
 ## 機能
 ### キーマッピングの変更
