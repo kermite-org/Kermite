@@ -1,6 +1,6 @@
 #include "config.h"
 #include "km0/deviceIo/boardIo.h"
-#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/digitalIo.h"
 #include "km0/keyboard/generalKeyboard.h"
 #include "km0/keyboard/keyScanner_basicMatrix.h"
 #include "km0/keyboard/keyboardMain.h"

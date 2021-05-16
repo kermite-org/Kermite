@@ -196,7 +196,7 @@ static void initAssignMemoryReader() {
   rs->numLayers = numLayers;
   rs->assignsStartAddress = keyMappingDataLocation;
   rs->assignsEndAddress = keyMappingDataLocation + keyMappingDataSize;
-  printf("nl:%d bl:%d\n", numLayers, keyMappingDataSize);
+  printf("numLayers:%d keyMappingDataSize:%d\n", numLayers, keyMappingDataSize);
   for (uint8_t i = 0; i < 16; i++) {
     rs->layerAttributeWords[i] = (i < numLayers) ? readStorageWordBE(layerListDataLocation + i * 2) : 0;
   }

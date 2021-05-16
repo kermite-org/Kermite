@@ -1,6 +1,6 @@
 #include "km0/deviceIo/dataMemory.h"
 #include "km0/deviceIo/debugUart.h"
-#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/digitalIo.h"
 #include "km0/deviceIo/system.h"
 #include <stdio.h>
 
@@ -9,11 +9,11 @@
 //D3 (TX) ---> USB UART ---> PC
 
 void initLED0() {
-  dio_setOutput(P_B0);
+  digitalIo_setOutput(P_B0);
 }
 
 void toggleLED0() {
-  dio_toggle(P_B0);
+  digitalIo_toggle(P_B0);
 }
 
 void debugShowBytes(char *name, uint8_t *buf, int len) {

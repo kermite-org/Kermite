@@ -1,7 +1,7 @@
 
 #include "km0/common/utils.h"
 #include "km0/deviceIo/boardLink.h"
-#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/digitalIo.h"
 #include "pico_sdk/src/common/include/pico/stdlib.h"
 #include "pico_sdk/src/rp2_common/include/hardware/clocks.h"
 #include "pico_sdk/src/rp2_common/include/pico/multicore.h"
@@ -194,7 +194,7 @@ static void (*interrupted_receiver_func)(void) = 0;
 static void pin_change_interrupt_handler(uint gpio, uint32_t events) {
   if (gpio == pin_signal && (events & GPIO_IRQ_EDGE_FALL)) {
     gpio_set_irq_enabled(pin_signal, GPIO_IRQ_EDGE_FALL, false);
-    // dio_write(pin_debug2, 0);
+    // digitalIo_write(pin_debug2, 0);
     raw_rx_len = rx_receive_frame(raw_rx_buf, RawBufferSize);
     raw_tx_len = 0;
     if (interrupted_receiver_func) {
@@ -203,13 +203,13 @@ static void pin_change_interrupt_handler(uint gpio, uint32_t events) {
     if (raw_tx_len > 0) {
       tx_send_frame(raw_tx_buf, raw_tx_len);
     }
-    // dio_write(pin_debug2, 1);
+    // digitalIo_write(pin_debug2, 1);
     gpio_set_irq_enabled(pin_signal, GPIO_IRQ_EDGE_FALL, true);
   }
 }
 
 static void setup_rx_pcint() {
-  // dio_setOutput(pin_debug2);
+  // digitalIo_setOutput(pin_debug2);
   gpio_set_irq_enabled_with_callback(pin_signal, GPIO_IRQ_EDGE_FALL, true, &pin_change_interrupt_handler);
 }
 

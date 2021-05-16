@@ -1,5 +1,5 @@
 #include "km0/deviceIo/debugUart.h"
-#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/digitalIo.h"
 #include "km0/deviceIo/system.h"
 #include "km0/deviceIo/usbIoCore.h"
 #include <stdio.h>
@@ -11,23 +11,23 @@
 //GP16 (internal pullup) <--- button <--- GND
 
 void initLED() {
-  dio_setOutput(GP25);
+  digitalIo_setOutput(GP25);
 }
 
 void toggleLED() {
-  dio_toggle(GP25);
+  digitalIo_toggle(GP25);
 }
 
 void outputLED(bool value) {
-  dio_write(GP25, value);
+  digitalIo_write(GP25, value);
 }
 
 void initButton() {
-  dio_setInputPullup(GP16);
+  digitalIo_setInputPullup(GP16);
 }
 
 bool isButtonPressed() {
-  return dio_read(GP16) == 0;
+  return digitalIo_read(GP16) == 0;
 }
 
 static bool pressed = false;

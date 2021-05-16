@@ -1,5 +1,5 @@
-#ifndef __PIO_H__
-#define __PIO_H__
+#ifndef __DIGITAL_IO_H__
+#define __DIGITAL_IO_H__
 
 #include "km0/types.h"
 
@@ -83,13 +83,13 @@ enum {
 };
 #endif
 
-void dio_setOutput(uint8_t pin);
-void dio_setInput(uint8_t pin);
-void dio_setInputPullup(uint8_t pin);
-void dio_write(uint8_t pin, bool val);
-bool dio_read(uint8_t pin);
-void dio_toggle(uint8_t pin);
-void dio_setHigh(uint8_t pin);
-void dio_setLow(uint8_t pin);
+void digitalIo_setOutput(uint8_t pin);
+void digitalIo_setInput(uint8_t pin);
+void digitalIo_setInputPullup(uint8_t pin);
+void digitalIo_write(uint8_t pin, bool val);
+bool digitalIo_read(uint8_t pin);
+void digitalIo_toggle(uint8_t pin);
+void digitalIo_setHigh(uint8_t pin);
+void digitalIo_setLow(uint8_t pin);
 
 #endif

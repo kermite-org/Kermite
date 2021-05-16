@@ -1,5 +1,5 @@
 #include "km0/deviceIo/debugUart.h"
-#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/digitalIo.h"
 #include "km0/deviceIo/system.h"
 
 //board ProMicro
@@ -8,18 +8,18 @@
 //B6 (internal pullup) <--- button <--- GND
 
 void buttonTest() {
-  dio_setOutput(P_B0);
-  dio_setOutput(P_D5);
+  digitalIo_setOutput(P_B0);
+  digitalIo_setOutput(P_D5);
 
-  dio_setInputPullup(P_B6);
+  digitalIo_setInputPullup(P_B6);
 
   while (1) {
-    dio_write(P_B0, 0);
+    digitalIo_write(P_B0, 0);
     delayMs(100);
-    dio_write(P_B0, 1);
+    digitalIo_write(P_B0, 1);
     delayMs(100);
-    bool isPressed = dio_read(P_B6) == 0;
-    dio_write(P_D5, isPressed ? 0 : 1);
+    bool isPressed = digitalIo_read(P_B6) == 0;
+    digitalIo_write(P_D5, isPressed ? 0 : 1);
   }
 }
 

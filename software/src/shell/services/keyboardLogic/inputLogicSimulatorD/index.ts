@@ -66,7 +66,7 @@ export class InputLogicSimulatorD {
       const systemLayout = values[SystemParameter.SystemLayout];
       // const isSimulatorMode = values[SystemParameter.SimulatorMode] > 0;
       const wiringMode = values[SystemParameter.WiringMode];
-      console.log(`systemlayout: ${systemLayout}, wiringMode: ${wiringMode}`);
+      // console.log(`systemlayout: ${systemLayout}, wiringMode: ${wiringMode}`);
       this.CL.keyboardCoreLogic_setSystemLayout(systemLayout);
       this.CL.keyboardCoreLogic_setWiringMode(wiringMode);
     }
@@ -110,7 +110,7 @@ export class InputLogicSimulatorD {
     const config = this.keyboardConfigProvider.getKeyboardConfig();
     const isSimulatorMode = config.behaviorMode === 'Simulator';
     if (this.isSimulatorMode !== isSimulatorMode) {
-      console.log({ isSimulatorMode });
+      // console.log({ isSimulatorMode });
       this.deviceService.setSimulatorMode(isSimulatorMode);
       this.isSimulatorMode = isSimulatorMode;
     }

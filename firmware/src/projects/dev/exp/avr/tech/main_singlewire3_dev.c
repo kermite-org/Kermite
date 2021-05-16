@@ -6,7 +6,7 @@
 
 #include "dataMemory.h"
 #include "debugUart.h"
-#include "dio.h"
+#include "digitalIo.h"
 #include "km0/common/bitOperations.h"
 #include "singlewire3.h"
 #include "utils.h"
@@ -20,24 +20,24 @@ extern uint8_t singlewire3_debugValues[4];
 #define pin_LED1 P_B0 //RXLED on ProMicro
 
 void initBoardIo() {
-  dio_setOutput(pin_LED0);
-  dio_setOutput(pin_LED1);
+  digitalIo_setOutput(pin_LED0);
+  digitalIo_setOutput(pin_LED1);
 }
 
 void outputLED0(bool val) {
-  dio_write(pin_LED0, !val);
+  digitalIo_write(pin_LED0, !val);
 }
 
 void toggleLED0() {
-  dio_toggle(pin_LED0);
+  digitalIo_toggle(pin_LED0);
 }
 
 void outputLED1(bool val) {
-  dio_write(pin_LED1, !val);
+  digitalIo_write(pin_LED1, !val);
 }
 
 void toggleLED1() {
-  dio_toggle(pin_LED1);
+  digitalIo_toggle(pin_LED1);
 }
 
 //---------------------------------------------

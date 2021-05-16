@@ -1,4 +1,4 @@
-#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/digitalIo.h"
 #include "km0/deviceIo/system.h"
 
 //board ProMicro
@@ -6,15 +6,15 @@
 //D5: onboard TX LED
 
 void blink() {
-  dio_setOutput(P_B0);
-  dio_setOutput(P_D5);
+  digitalIo_setOutput(P_B0);
+  digitalIo_setOutput(P_D5);
 
   while (1) {
-    dio_write(P_B0, 1);
-    dio_write(P_D5, 1);
+    digitalIo_write(P_B0, 1);
+    digitalIo_write(P_D5, 1);
     delayMs(500);
-    dio_write(P_B0, 0);
-    dio_write(P_D5, 0);
+    digitalIo_write(P_B0, 0);
+    digitalIo_write(P_D5, 0);
     delayMs(500);
   }
 }

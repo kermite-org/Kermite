@@ -1,6 +1,6 @@
 #include "km0/common/bitOperations.h"
 #include "km0/deviceIo/boardIo.h"
-#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/digitalIo.h"
 #include "km0/deviceIo/system.h"
 #include <avr/io.h>
 #include <stdio.h>
@@ -23,8 +23,8 @@
 //----------------------------------------------------------------------
 
 void __i2c_init() {
-  dio_setInputPullup(P_D0);
-  dio_setInputPullup(P_D1);
+  digitalIo_setInputPullup(P_D0);
+  digitalIo_setInputPullup(P_D1);
   uint32_t clockFreq = 400000;
   TWSR = 0;
   TWBR = (F_CPU / clockFreq - 16) / 2;

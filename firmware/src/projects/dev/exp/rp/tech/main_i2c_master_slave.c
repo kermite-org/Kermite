@@ -3,7 +3,7 @@
 #include "km0/common/utils.h"
 #include "km0/deviceIo/boardIo.h"
 #include "km0/deviceIo/debugUart.h"
-#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/digitalIo.h"
 #include "km0/deviceIo/system.h"
 #include "pico/binary_info.h"
 #include "pico/stdlib.h"
@@ -39,20 +39,20 @@
 const int pin_debug0 = GP22;
 
 void initDebugPins() {
-  dio_setOutput(pin_debug0);
-  dio_write(pin_debug0, 1);
+  digitalIo_setOutput(pin_debug0);
+  digitalIo_write(pin_debug0, 1);
 }
 
 void debugPin0_setHigh() {
-  dio_write(pin_debug0, 1);
+  digitalIo_write(pin_debug0, 1);
 }
 
 void debugPin0_setLow() {
-  dio_write(pin_debug0, 0);
+  digitalIo_write(pin_debug0, 0);
 }
 
 void debugPin0_toggle() {
-  dio_toggle(pin_debug0);
+  digitalIo_toggle(pin_debug0);
 }
 
 //----------------------------------------------------------------------
@@ -250,9 +250,9 @@ const int pin_master_slave_flag = GP28;
 int main() {
   debugUart_initialize(115200);
   boardIo_setupLeds_rpiPico();
-  dio_setInputPullup(pin_master_slave_flag);
+  digitalIo_setInputPullup(pin_master_slave_flag);
   delayMs(1);
-  bool isMaster = dio_read(pin_master_slave_flag) == 0;
+  bool isMaster = digitalIo_read(pin_master_slave_flag) == 0;
   if (isMaster) {
     runAsMaster();
   } else {

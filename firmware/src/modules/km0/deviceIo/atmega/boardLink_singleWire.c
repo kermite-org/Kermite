@@ -2,7 +2,7 @@
 #include "km0/common/bitOperations.h"
 #include "km0/common/utils.h"
 #include "km0/deviceIo/boardLink.h"
-#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/digitalIo.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <string.h>
@@ -74,7 +74,7 @@ static inline uint8_t signalPin_read() {
 #define pinDebug_Bit 4
 
 static void debug_initTimeDebugPin() {
-  dio_setOutput(pinDebug);
+  digitalIo_setOutput(pinDebug);
 }
 
 static void debug_timingPinHigh() {

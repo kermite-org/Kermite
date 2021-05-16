@@ -1,7 +1,7 @@
 #include "keyScanner_basicMatrix.h"
 #include "km0/common/bitOperations.h"
 #include "km0/common/utils.h"
-#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/digitalIo.h"
 #include "km0/deviceIo/system.h"
 
 static uint8_t numRows;
@@ -22,12 +22,12 @@ void keyScanner_basicMatrix_initialize(
 
   for (uint8_t i = 0; i < numRows; i++) {
     uint8_t rowPin = rowPins[i];
-    dio_setOutput(rowPin);
-    dio_setHigh(rowPin);
+    digitalIo_setOutput(rowPin);
+    digitalIo_setHigh(rowPin);
   }
   for (uint8_t i = 0; i < numColumns; i++) {
     uint8_t columnPin = columnPins[i];
-    dio_setInputPullup(columnPin);
+    digitalIo_setInputPullup(columnPin);
   }
   initialized = true;
 }
@@ -39,14 +39,14 @@ void keyScanner_basicMatrix_update(uint8_t *keyStateBitFlags) {
   uint8_t keySlotIndex = 0;
   for (uint8_t i = 0; i < numRows; i++) {
     uint8_t rowPin = rowPins[i];
-    dio_setLow(rowPin);
+    digitalIo_setLow(rowPin);
     delayUs(1); //RP2040の場合僅かに待たないとキーの状態を正しく読み出せない
     for (uint8_t j = 0; j < numColumns; j++) {
       uint8_t columnPin = columnPins[j];
-      bool isDown = dio_read(columnPin) == 0;
+      bool isDown = digitalIo_read(columnPin) == 0;
       utils_writeArrayedBitFlagsBit(keyStateBitFlags, keySlotIndex, isDown);
       keySlotIndex++;
     }
-    dio_setHigh(rowPin);
+    digitalIo_setHigh(rowPin);
   }
 }

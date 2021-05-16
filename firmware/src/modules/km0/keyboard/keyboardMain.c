@@ -157,8 +157,10 @@ static void parameterValueHandler(uint8_t slotIndex, uint8_t value) {
     optionInvertSide = value == 1;
   } else if (slotIndex == SystemParameter_SystemLayout) {
     keyboardCoreLogic_setSystemLayout(value);
+    printf("system layout: %s\n", value == 1 ? "JIS" : "US");
   } else if (slotIndex == SystemParameter_WiringMode) {
     keyboardCoreLogic_setWiringMode(value);
+    printf("routing channel: %s\n", value == 1 ? "Alter" : "Main");
   }
 
   if (callbacks && callbacks->customParameterHandlerChained) {
@@ -176,11 +178,11 @@ static void configuratorServantStateHandler(uint8_t state) {
   }
   if (state == ConfiguratorServentState_SimulatorModeEnabled) {
     isSimulatorModeEnabled = true;
-    printf("simulator mode\n");
+    printf("behavior mode: Simulator\n");
   }
   if (state == ConfiguratorServentState_SimulatorModeDisabled) {
     isSimulatorModeEnabled = false;
-    printf("standalone mode\n");
+    printf("behavior mode: Standalone\n");
   }
 }
 

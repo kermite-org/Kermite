@@ -1,12 +1,13 @@
 #include "km0/deviceIo/boardIo.h"
-#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/digitalIo.h"
 #include "km0/deviceIo/system.h"
 
 //board ProMicro Pico
 //GP25: onboard RGB LED
 
 int main() {
-  boardIo_setupLedsRgb(GP25);
+  boardIo_setupLeds_proMicroRp();
+  // boardIo_setupLeds_qtPyRp();
   while (true) {
     boardIo_writeLed1(true);
     delayMs(1);

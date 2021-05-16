@@ -1,7 +1,7 @@
 #include "keyScanner_directWired.h"
 #include "km0/common/bitOperations.h"
 #include "km0/common/utils.h"
-#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/digitalIo.h"
 
 #ifndef KM0_KEYSCANNER_DIRECTWIRED__SCAN_SLOT_INDEX_BASE
 #define KM0_KEYSCANNER_DIRECTWIRED__SCAN_SLOT_INDEX_BASE 0
@@ -16,13 +16,13 @@ void keyScanner_directWired_initialize(uint8_t _numPins, const uint8_t *_pins) {
   numPins = _numPins;
   pins = _pins;
   for (uint8_t i = 0; i < numPins; i++) {
-    dio_setInputPullup(pins[i]);
+    digitalIo_setInputPullup(pins[i]);
   }
 }
 
 void keyScanner_directWired_update(uint8_t *keyStateBitFlags) {
   for (uint8_t i = 0; i < numPins; i++) {
-    bool isDown = dio_read(pins[i]) == 0;
+    bool isDown = digitalIo_read(pins[i]) == 0;
     utils_writeArrayedBitFlagsBit(keyStateBitFlags, scanSlotIndexBase + i, isDown);
   }
 }

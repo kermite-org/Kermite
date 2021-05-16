@@ -1,4 +1,4 @@
-#include "dio.h"
+#include "digitalIo.h"
 #include "km0/common/bitOperations.h"
 #include "singlewire3.h"
 #include <avr/interrupt.h>
@@ -74,7 +74,7 @@ static inline uint8_t signalPin_read() {
 #define pinDebug_Bit 4
 
 static inline void debug_initTimeDebugPin() {
-  dio_setOutput(pinDebug);
+  digitalIo_setOutput(pinDebug);
 }
 
 static inline void debug_timingPinHigh() {

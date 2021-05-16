@@ -1,5 +1,5 @@
 #include "debug_uart.h"
-#include "dio.h"
+#include "digitalIo.h"
 #include "km0/common/bitOperations.h"
 #include <avr/io.h>
 #include <avr/pgmspace.h>
@@ -16,16 +16,16 @@
 #define pin_LED1 P_F5
 
 static void initBoardIo() {
-  dio_setOutput(pin_LED0);
-  dio_setOutput(pin_LED1);
+  digitalIo_setOutput(pin_LED0);
+  digitalIo_setOutput(pin_LED1);
 }
 
 static void toggleLED0() {
-  dio_toggle(pin_LED0);
+  digitalIo_toggle(pin_LED0);
 }
 
 static void outputLED1(bool val) {
-  dio_write(pin_LED1, val);
+  digitalIo_write(pin_LED1, val);
 }
 
 //---------------------------------------------
