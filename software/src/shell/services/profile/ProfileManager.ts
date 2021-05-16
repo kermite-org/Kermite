@@ -1,3 +1,4 @@
+import { shell } from 'electron';
 import {
   IProfileManagerStatus,
   IProfileData,
@@ -18,8 +19,8 @@ import {
 import { applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
+import { IPresetProfileLoader, IProfileManager } from './Interfaces';
 import { ProfileManagerCore } from './ProfileManagerCore';
-import { IPresetProfileLoader, IProfileManager } from './interfaces';
 
 const defaultProfileName = 'default';
 
@@ -402,5 +403,9 @@ export class ProfileManager implements IProfileManager {
     for (const cmd of commands) {
       await this.executeCommand(cmd);
     }
+  }
+
+  async openUserProfilesFolder() {
+    await shell.openPath(this.core.getProfilesFolderPath());
   }
 }

@@ -18,7 +18,11 @@ export function useCustomParametersPartModel(): ICustomParametersPartModel {
   );
 
   const parameterValues =
-    (deviceStatus.isConnected && deviceStatus.customParameterValues) ||
+    (deviceStatus.isConnected && deviceStatus.systemParameterValues) ||
+    undefined;
+
+  const parameterMaxValues =
+    (deviceStatus.isConnected && deviceStatus.systemParameterMaxValues) ||
     undefined;
 
   const deviceAttrs =
@@ -34,11 +38,20 @@ export function useCustomParametersPartModel(): ICustomParametersPartModel {
       ),
     [deviceAttrs],
   );
+
+  const parameterSpec = customDef?.customParameterSpecs;
+
   return {
     parameterModels:
-      (parameterValues &&
-        customDef?.customParameterSpecs?.map((spec) =>
-          makeParameterModel(spec, parameterValues[spec.slotIndex]),
+      (parameterSpec &&
+        parameterValues &&
+        parameterMaxValues &&
+        parameterSpec.map((spec) =>
+          makeParameterModel(
+            spec,
+            parameterValues[spec.slotIndex],
+            parameterMaxValues[spec.slotIndex],
+          ),
         )) ||
       [],
     definitionUnavailable: deviceStatus.isConnected && !customDef,

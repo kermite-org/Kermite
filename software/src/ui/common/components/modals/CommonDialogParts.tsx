@@ -4,6 +4,7 @@ import { useLocal } from '~/ui/common/helpers';
 export function ClosableOverlay(props: {
   close: () => void;
   children: JSX.Element;
+  placeAtTop?: boolean;
 }) {
   const cssDiv = css`
     position: absolute;
@@ -13,7 +14,7 @@ export function ClosableOverlay(props: {
     height: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: ${props.placeAtTop ? 'flex-start' : 'center'};
     background: rgba(0, 0, 0, 0.4);
     z-index: 1;
   `;
@@ -104,9 +105,11 @@ export const DialogContentRow = (props: { children: any }) => {
     max-width: 700px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     word-break: break-all;
     white-space: pre-wrap;
+    overflow-y: auto;
+    max-height: 600px;
   `;
   return <div css={cssBody}>{props.children}</div>;
 };

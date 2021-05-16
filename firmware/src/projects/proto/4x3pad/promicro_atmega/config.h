@@ -1,7 +1,8 @@
 #ifndef __CONFIG_H__
 
-#define PROJECT_ID "066MbLCf"
+#define KERMITE_PROJECT_ID "066MbLCf"
 
-#define KM0_NUM_KEYSLOTS 12
+#define KM0_KEYBOARD__NUM_SCAN_SLOTS 12
+#define KM0_KEYBOARD__NUM_KEY_SLOTS 12
 
 #endif

@@ -5,7 +5,7 @@
 
 #include <util/delay.h>
 
-#include "bitOperations.h"
+#include "km0/common/bitOperations.h"
 #include <avr/interrupt.h>
 #include <util/delay_basic.h>
 
@@ -148,7 +148,7 @@ void emitLedColorSpec() {
 }
 
 void neopixel_dev() {
-  debugUart_setup(38400);
+  debugUart_initialize(38400);
 
   printf("start\n");
   uint8_t c = sum(10, 20);

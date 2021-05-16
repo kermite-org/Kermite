@@ -7,7 +7,6 @@ export type PagePaths =
   | '/shapePreview'
   | '/firmwareUpdation'
   | '/presetBrowser'
-  | '/presetBrowser2'
   | '/heatmap'
   | '/settings'
   | '/widget';
@@ -52,6 +51,10 @@ export class UiStatusModel {
   save() {
     const settingsText = JSON.stringify(this.settings);
     localStorage.setItem('uiSettings', settingsText);
+  }
+
+  stopLiveMode() {
+    this.settings.showLayersDynamic = false;
   }
 
   finalize() {

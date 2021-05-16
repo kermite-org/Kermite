@@ -1,8 +1,10 @@
 #ifndef __CONFIG_H__
 
-#define PROJECT_ID "Di6V4KvF"
-#define SINGLEWIRE_SIGNAL_PIN_PD2
+#define KERMITE_PROJECT_ID "Di6V4KvF"
+#define KM0_ATMEGA_SINGLEWIRE__PIN_SIGNAL_PD2
 
-#define KM0_NUM_KEYSLOTS 48 //本来80キーだがRAMが足りないためキー数を減らしてデバッグ
+#define KM0_KEYBOARD__NUM_SCAN_SLOTS 80
+#define KM0_KEYBOARD__NUM_KEY_SLOTS 78
+// #define KM0_KEYBOARD__NUM_KEY_SLOTS 64 //debug64
 
 #endif

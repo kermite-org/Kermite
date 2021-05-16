@@ -1,4 +1,5 @@
 import {
+  getSystemParameterDefinitionBySystemParameterKey,
   ICustromParameterSpec,
   IFirmwareTargetDevice,
   IPersistKeyboardDesign,
@@ -27,16 +28,21 @@ import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
 import {
   IFirmwareBinaryFileSpec,
   IProjectResourceProviderImpl,
-} from '~/shell/projectResources/interfaces';
+} from '~/shell/projectResources/Interfaces';
 import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 
 export interface IPorjectFileJson {
   projectId: string;
   keyboardName: string;
-  customParameterConfigurations: {
+  parameterConfigurations: {
     targetVariationNames: string[];
-    customParameters: ICustromParameterSpec[];
+    systemParameterKeys: string[];
   }[];
+}
+
+interface IParameterConfigurationEntry {
+  targetVariationNames: string[];
+  systemParameterKeys: string[];
 }
 interface IProjectResourceInfoSource {
   origin: IResourceOrigin;
@@ -53,10 +59,7 @@ interface IProjectResourceInfoSource {
     buildRevision: number;
     buildTimestamp: string;
   }[];
-  customParameterConfigurations: {
-    targetVariationNames: string[];
-    customParameters: ICustromParameterSpec[];
-  }[];
+  parameterConfigurations: IParameterConfigurationEntry[];
 }
 namespace ProjectResourceInfoSourceLoader {
   function checkFileExistsOrBlank(filePath: string): string | undefined {
@@ -86,6 +89,11 @@ namespace ProjectResourceInfoSourceLoader {
     return (await fsxReadJsonFile(projectFilePath)) as IPorjectFileJson;
   }
 
+  const workerToMcuNameMap: { [key in string]: IFirmwareTargetDevice } = {
+    worker_atmega32u4: 'atmega32u4',
+    worker_rp2040: 'rp2040',
+  };
+
   async function gatherFirmwares(
     localRepositoryRootDir: string,
     projectPath: string,
@@ -95,11 +103,8 @@ namespace ProjectResourceInfoSourceLoader {
       'firmware/src/projects',
     );
     const buildsRoot = pathJoin(localRepositoryRootDir, 'firmware/build');
-
     const projectBaseDir = pathJoin(projectsRoot, projectPath);
-
     const rulesMks = await globAsync('**/rules.mk', projectBaseDir);
-
     const coreName = pathBasename(projectPath);
 
     return (
@@ -107,11 +112,9 @@ namespace ProjectResourceInfoSourceLoader {
         rulesMks.map(async (rulesMk) => {
           const variationName = pathDirname(rulesMk);
           const content = await fsxReadFile(pathJoin(projectBaseDir, rulesMk));
-          const m = content.match(/^TARGET_MCU\s?=\s?(.+)$/m);
+          const m = content.match(/^WORKER\s?=\s?(.+)$/m);
           const _targetDevice = m?.[1] || '';
-          const targetDevice = (['atmega32u4', 'rp2040'].includes(_targetDevice)
-            ? _targetDevice
-            : undefined) as IFirmwareTargetDevice;
+          const targetDevice = workerToMcuNameMap[_targetDevice];
           const extension = targetDevice === 'atmega32u4' ? 'hex' : 'uf2';
           const _binaryFilePath = pathJoin(
             buildsRoot,
@@ -175,7 +178,7 @@ namespace ProjectResourceInfoSourceLoader {
         const {
           projectId,
           keyboardName,
-          customParameterConfigurations,
+          parameterConfigurations,
         } = await readProjectFile(projectFilePath);
 
         const presetsFolderPath = pathJoin(projectBaseDir, 'profiles');
@@ -193,11 +196,29 @@ namespace ProjectResourceInfoSourceLoader {
           presetNames,
           firmwares,
           origin: 'local' as const,
-          customParameterConfigurations,
+          parameterConfigurations,
         };
       }),
     );
   }
+}
+
+export function readCustomParameterDefinition(
+  parameterConfigurations: IParameterConfigurationEntry[],
+  variationName: string,
+): IProjectCustomDefinition | undefined {
+  const targetConfig = parameterConfigurations.find(
+    (it) =>
+      it.targetVariationNames.includes(variationName) ||
+      it.targetVariationNames.includes('all'),
+  );
+  if (targetConfig) {
+    const customParameterSpecs = targetConfig.systemParameterKeys
+      .map(getSystemParameterDefinitionBySystemParameterKey)
+      .filter((a) => !!a) as ICustromParameterSpec[];
+    return { customParameterSpecs };
+  }
+  return undefined;
 }
 
 export class ProjectResourceProviderImpl_Local
@@ -271,14 +292,10 @@ export class ProjectResourceProviderImpl_Local
   ): Promise<IProjectCustomDefinition | undefined> {
     const info = this.getProjectInfoSourceById(projectId);
     if (info) {
-      const targetConfig = info.customParameterConfigurations.find(
-        (it) =>
-          it.targetVariationNames.includes(variationName) ||
-          it.targetVariationNames.includes('all'),
+      return readCustomParameterDefinition(
+        info.parameterConfigurations,
+        variationName,
       );
-      if (targetConfig) {
-        return { customParameterSpecs: targetConfig.customParameters };
-      }
     }
     return undefined;
   }

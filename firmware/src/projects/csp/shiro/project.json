@@ -1,34 +1,14 @@
 {
   "projectId": "dx5kE9SU",
   "keyboardName": "Shiro",
-  "customParameterConfigurations": [
+  "parameterConfigurations": [
     {
       "targetVariationNames": ["all"],
-      "customParameters": [
-        {
-          "type": "toggle",
-          "slotIndex": 0,
-          "label": "Emit Key Stroke",
-          "defaultValue": 1
-        },
-        {
-          "type": "toggle",
-          "slotIndex": 1,
-          "label": "Emit Realtime Events",
-          "defaultValue": 1
-        },
-        {
-          "type": "toggle",
-          "slotIndex": 2,
-          "label": "Key Hold LED Output",
-          "defaultValue": 1
-        },
-        {
-          "type": "toggle",
-          "slotIndex": 3,
-          "label": "Heartbeat LED Output",
-          "defaultValue": 1
-        }
+      "systemParameterKeys": [
+        "emitKeyStroke",
+        "emitRealtimeEvents",
+        "keyHoldIndicatorLed",
+        "heartbeatLed"
       ]
     }
   ]

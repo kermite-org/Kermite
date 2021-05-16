@@ -1,7 +1,6 @@
 import {
   degToRad,
   IKeyPlacementAnchor,
-  IKeySizeUnit,
   rotateCoord,
   translateCoord,
 } from '~/shared';
@@ -19,11 +18,10 @@ import {
 
 function getKeyCornerPoints(
   ke: IEditKeyEntity,
-  coordUnit: ICoordUnit,
-  keySizeUnit: IKeySizeUnit,
+  sizeUnit: ICoordUnit,
   placementAnchor: IKeyPlacementAnchor,
 ) {
-  const [w, h] = getKeySize(ke.shape, coordUnit, keySizeUnit);
+  const [w, h] = getKeySize(ke.shape, sizeUnit);
   const dx = w / 2;
   const dy = h / 2;
 
@@ -54,6 +52,7 @@ function addKeyPoints(
   ys: number[],
   ke: IEditKeyEntity,
   coordUnit: ICoordUnit,
+  sizeUnit: ICoordUnit,
   design: IEditKeyboardDesign,
   isMirror: boolean,
 ) {
@@ -66,12 +65,7 @@ function addKeyPoints(
   const group = design.transGroups[ke.groupId];
   const { groupX, groupY, groupRot } = getGroupTransAmount(group);
 
-  const points = getKeyCornerPoints(
-    ke,
-    coordUnit,
-    design.setup.keySizeUnit,
-    design.setup.placementAnchor,
-  );
+  const points = getKeyCornerPoints(ke, sizeUnit, design.setup.placementAnchor);
 
   points.forEach(([px, py]) => {
     const p = { x: px, y: py };
@@ -107,15 +101,16 @@ function addShapePoints(
 
 export function getKeyboardDesignBoundingBox(design: IEditKeyboardDesign) {
   const coordUnit = getCoordUnitFromUnitSpec(design.setup.placementUnit);
+  const sizeUnit = getCoordUnitFromUnitSpec(design.setup.keySizeUnit);
   const xs: number[] = [];
   const ys: number[] = [];
 
   Object.values(design.keyEntities).forEach((ke) => {
     const group = design.transGroups[ke.groupId];
     if (group?.mirror) {
-      addKeyPoints(xs, ys, ke, coordUnit, design, true);
+      addKeyPoints(xs, ys, ke, coordUnit, sizeUnit, design, true);
     }
-    addKeyPoints(xs, ys, ke, coordUnit, design, false);
+    addKeyPoints(xs, ys, ke, coordUnit, sizeUnit, design, false);
   });
 
   Object.values(design.outlineShapes).forEach((shape) => {

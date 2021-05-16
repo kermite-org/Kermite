@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { app, Menu } from 'electron';
 import { makeListenerPort } from '~/shell/funcs';
-import { IMenuManager } from './interfaces';
+import { IMenuManager } from './Interfaces';
 
 export class MenuManager implements IMenuManager {
   onMenuRequestReload = makeListenerPort<void>();
@@ -30,6 +30,14 @@ export class MenuManager implements IMenuManager {
             label: 'Quit',
             click: () => this.onMenuCloseMainWindow.emit(),
           },
+        ],
+      },
+      {
+        label: 'Edit',
+        submenu: [
+          { label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:' } as any,
+          { label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:' },
+          { label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:' },
         ],
       },
     ];

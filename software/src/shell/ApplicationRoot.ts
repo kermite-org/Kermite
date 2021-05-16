@@ -6,15 +6,14 @@ import { pathResolve } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
 import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
-import { KeyboardDeviceService } from '~/shell/services/device/KeyboardDevice';
+import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
 import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStatic';
 import { FirmwareUpdationService } from '~/shell/services/firmwareUpdation';
-import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/InputLogicSimulatorD';
+import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/inputLogicSimulatorD';
 import { KeyboardLayoutFilesWatcher } from '~/shell/services/layout/KeyboardLayoutFilesWatcher';
 import { LayoutManager } from '~/shell/services/layout/LayoutManager';
 import { PresetProfileLoader } from '~/shell/services/profile/PresetProfileLoader';
 import { ProfileManager } from '~/shell/services/profile/ProfileManager';
-import { UserPresetHubService } from '~/shell/services/userPresetHub/UserPresetHubService';
 import { AppWindowWrapper } from '~/shell/services/window';
 
 export class ApplicationRoot {
@@ -42,8 +41,6 @@ export class ApplicationRoot {
   );
 
   private windowWrapper = new AppWindowWrapper(this.profileManager);
-
-  private presetHubService = new UserPresetHubService();
 
   // ------------------------------------------------------------
 
@@ -80,6 +77,8 @@ export class ApplicationRoot {
         this.profileManager.executeCommands(commands),
       profile_getAllProfileNames: () =>
         this.profileManager.getAllProfileNamesAsync(),
+      profile_openUserProfilesFolder: () =>
+        this.profileManager.openUserProfilesFolder(),
       layout_executeLayoutManagerCommands: (commands) =>
         this.layoutManager.executeCommands(commands),
       // layout_getAllProjectLayoutsInfos: () =>
@@ -120,23 +119,14 @@ export class ApplicationRoot {
           profileId,
           presetSpec,
         ),
-      presetHub_getServerProjectIds: () =>
-        this.presetHubService.getServerProjectIds(),
-      presetHub_getServerProfiles: (projectId: string) =>
-        this.presetHubService.getServerProfiles(projectId),
       config_getKeyboardConfig: async () =>
         this.keyboardConfigProvider.getKeyboardConfig(),
       config_writeKeyboardConfig: async (config) =>
         this.keyboardConfigProvider.writeKeyboardConfig(config),
       config_writeKeyMappingToDevice: async () => {
         const profile = await this.profileManager.getCurrentProfileAsync();
-        const layoutStandard = this.keyboardConfigProvider.getKeyboardConfig()
-          .layoutStandard;
         if (profile) {
-          return await this.deviceService.emitKeyAssignsToDevice(
-            profile,
-            layoutStandard,
-          );
+          return await this.deviceService.emitKeyAssignsToDevice(profile);
         }
         return false;
       },

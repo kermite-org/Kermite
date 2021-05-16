@@ -1,7 +1,6 @@
-#include "debugUart.h"
-#include "dio.h"
-#include "system.h"
-#include <avr/io.h>
+#include "km0/deviceIo/debugUart.h"
+#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/system.h"
 
 //board ProMicro
 //B0: onboard LED (sink)
@@ -25,7 +24,7 @@ void buttonTest() {
 }
 
 int main() {
-  USBCON = 0;
+  system_initializeUserProgram();
   buttonTest();
   return 0;
 }

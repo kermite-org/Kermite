@@ -1,6 +1,5 @@
-#include "dio.h"
-#include <avr/delay.h>
-#include <avr/io.h>
+#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/system.h"
 
 //board ProMicro
 //B0: onboard RX LED
@@ -13,15 +12,15 @@ void blink() {
   while (1) {
     dio_write(P_B0, 1);
     dio_write(P_D5, 1);
-    _delay_ms(500);
+    delayMs(500);
     dio_write(P_B0, 0);
     dio_write(P_D5, 0);
-    _delay_ms(500);
+    delayMs(500);
   }
 }
 
 int main() {
-  USBCON = 0;
+  system_initializeUserProgram();
   blink();
   return 0;
 }

@@ -2,11 +2,11 @@ import { IPersistKeyboardDesign } from '~/shared';
 
 function createFallbackKeyboardDesign(): IPersistKeyboardDesign {
   return {
-    formatRevision: 'LA00',
+    formatRevision: 'LA01',
     setup: {
       placementUnit: 'mm',
       placementAnchor: 'center',
-      keySizeUnit: 'KP',
+      keySizeUnit: 'KP 19',
       keyIdMode: 'auto',
     },
     keyEntities: [],

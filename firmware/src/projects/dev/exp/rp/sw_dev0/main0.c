@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "dio.h"
 #include "hardware/clocks.h"
+#include "km0/deviceIo/dio.h"
 #include "pico/stdlib.h"
 #include "swtxrx.pio.h"
 

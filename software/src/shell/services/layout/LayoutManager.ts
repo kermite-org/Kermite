@@ -20,11 +20,11 @@ import { createEventPort } from '~/shell/funcs';
 import { FileWather } from '~/shell/funcs/FileWatcher';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { projectResourceProvider } from '~/shell/projectResources';
-import { ILayoutManager } from '~/shell/services/layout/interfaces';
+import { ILayoutManager } from '~/shell/services/layout/Interfaces';
 import {
   IPresetProfileLoader,
   IProfileManager,
-} from '~/shell/services/profile/interfaces';
+} from '~/shell/services/profile/Interfaces';
 
 const layoutEditSourceSchema = vSchemaOneOf([
   vObject({

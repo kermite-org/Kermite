@@ -89,7 +89,7 @@ export type VirtualKey =
   | 'K_Shift'
   | 'K_Ctrl'
   | 'K_Alt'
-  | 'K_OS'
+  | 'K_Gui'
   | 'K_Home'
   | 'K_End'
   | 'K_Insert'
@@ -160,24 +160,36 @@ export type VirtualKey =
   | 'K_LShift'
   | 'K_LCtrl'
   | 'K_LAlt'
-  | 'K_LOS'
+  | 'K_LGui'
   | 'K_RShift'
   | 'K_RCtrl'
   | 'K_RAlt'
-  | 'K_ROS'
+  | 'K_RGui'
   | 'K_NN'
   | 'K_LTU'
   | 'K_UU'
   | 'K_NextDouble'
-  | 'K_PostDouble';
+  | 'K_PostDouble'
+  | 'K_U0'
+  | 'K_U1'
+  | 'K_U2'
+  | 'K_U3'
+  | 'K_U4'
+  | 'K_U5'
+  | 'K_U6'
+  | 'K_U7'
+  | 'K_U8'
+  | 'K_U9'
+  | 'K_RoutingSource_Any'
+  | 'K_RoutingDestination_Keep';
 
-export type ModifierVirtualKey = 'K_Shift' | 'K_Ctrl' | 'K_Alt' | 'K_OS';
+export type ModifierVirtualKey = 'K_Shift' | 'K_Ctrl' | 'K_Alt' | 'K_Gui';
 
 const modfierVirutalKeys: ModifierVirtualKey[] = [
   'K_Ctrl',
   'K_Shift',
   'K_Alt',
-  'K_OS',
+  'K_Gui',
 ];
 
 export function isModifierVirtualKey(vk: VirtualKey): vk is ModifierVirtualKey {

@@ -1,10 +1,12 @@
 #include "configuratorServant.h"
+#include "commandDefinitions.h"
 #include "config.h"
-#include "dataMemory.h"
-#include "storageLayout.h"
-#include "usbIoCore.h"
-#include "utils.h"
-#include "versions.h"
+#include "configManager.h"
+#include "dataStorage.h"
+#include "km0/common/utils.h"
+#include "km0/deviceIo/dataMemory.h"
+#include "km0/deviceIo/usbIoCore.h"
+#include "versionDefinitions.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -13,25 +15,32 @@
 
 static void (*stateNotificationCallback)(uint8_t state) = 0;
 
-static void (*customParameterChangedCallback)(uint8_t slotIndex, uint8_t value) = 0;
-
 static void emitStateNotification(uint8_t state) {
   if (stateNotificationCallback) {
     stateNotificationCallback(state);
   }
 }
 
-static void invokeCustomParameterChangedCallback(uint8_t index, uint8_t value) {
-  if (customParameterChangedCallback) {
-    customParameterChangedCallback(index, value);
-  }
+//---------------------------------------------
+//storage data addresses
+
+static uint16_t storageAddr_DeviceInstanceCode;
+static uint16_t storageAddr_profileData;
+static uint16_t keyMappingDataCapacity;
+
+static void initializeDataAddresses() {
+  storageAddr_DeviceInstanceCode = dataStorage_getDataAddress_deviceInstanceCode();
+  storageAddr_profileData = dataStorage_getDataAddress_profileData();
+  keyMappingDataCapacity = dataStorage_getKeyMappingDataCapacity();
 }
 
 //---------------------------------------------
-//usbio
+//rawhid interface
 
 static uint8_t rawHidSendBuf[64] = { 0 };
 static uint8_t rawHidRcvBuf[64] = { 0 };
+
+static bool skipNotify = false;
 
 static void emitGenericHidData(uint8_t *p) {
   bool done = usbIoCore_genericHid_writeData(p);
@@ -77,6 +86,16 @@ static void emitMemoryChecksumResult(uint8_t dataKind, uint8_t checksum) {
   emitGenericHidData(rawHidSendBuf);
 }
 
+static void emitSingleParameterChangedNotification(uint8_t parameterIndex, uint8_t value) {
+  uint8_t *p = rawHidSendBuf;
+  p[0] = 0xB0;
+  p[1] = 0x02;
+  p[2] = 0xE1;
+  p[3] = parameterIndex;
+  p[4] = value;
+  emitGenericHidData(rawHidSendBuf);
+}
+
 static void copyEepromBytesToBuffer(uint8_t *dstBuffer, int dstOffset, uint16_t srcEepromAddr, uint16_t len) {
   for (uint16_t i = 0; i < len; i++) {
     dstBuffer[dstOffset + i] = dataMemory_readByte(srcEepromAddr + i);
@@ -87,30 +106,34 @@ static void emitDeviceAttributesResponse() {
   uint8_t *p = rawHidSendBuf;
   p[0] = 0xF0;
   p[1] = 0x11;
-  p[2] = PROJECT_RELEASE_BUILD_REVISION >> 8 & 0xFF;
-  p[3] = PROJECT_RELEASE_BUILD_REVISION & 0xFF;
-  p[4] = CONFIG_STORAGE_FORMAT_REVISION;
-  p[5] = RAWHID_MESSAGE_PROTOCOL_REVISION;
-  utils_copyBytes(p + 6, (uint8_t *)PROJECT_ID, 8);
-  p[14] = IS_RESOURCE_ORIGIN_ONLINE;
+  p[2] = Kermite_Project_ReleaseBuildRevision >> 8 & 0xFF;
+  p[3] = Kermite_Project_ReleaseBuildRevision & 0xFF;
+  p[4] = Kermite_ConfigStorageFormatRevision;
+  p[5] = Kermite_RawHidMessageProtocolRevision;
+  utils_copyBytes(p + 6, (uint8_t *)KERMITE_PROJECT_ID, 8);
+  p[14] = Kermite_Project_IsResourceOriginOnline;
   p[15] = 0;
-  copyEepromBytesToBuffer(p, 16, StorageAddr_DeviceInstanceCode, 8);
-  p[24] = KeyAssignsDataCapacity >> 8 & 0xFF;
-  p[25] = KeyAssignsDataCapacity & 0xFF;
+  copyEepromBytesToBuffer(p, 16, storageAddr_DeviceInstanceCode, 8);
+  p[24] = keyMappingDataCapacity >> 8 & 0xFF;
+  p[25] = keyMappingDataCapacity & 0xFF;
   utils_fillBytes(p + 26, 0, 16);
-  size_t slen = utils_clamp(strlen(VARIATION_NAME), 0, 16);
-  utils_copyBytes(p + 26, (uint8_t *)VARIATION_NAME, slen);
-  utils_copyBytes(p + 42, (uint8_t *)KERMITE_MCU_CODE, 8);
+  size_t slen = utils_clamp(strlen(Kermite_Project_VariationName), 0, 16);
+  utils_copyBytes(p + 26, (uint8_t *)Kermite_Project_VariationName, slen);
+  utils_copyBytes(p + 42, (uint8_t *)Kermite_Project_McuCode, 8);
+  p[50] = Kermite_ProfileBinaryFormatRevision;
+  p[51] = Kermite_ConfigParametersRevision;
   emitGenericHidData(rawHidSendBuf);
 }
 
 static void emitCustomParametersReadResponse() {
+  uint8_t num = NumSystemParameters;
   uint8_t *p = rawHidSendBuf;
   p[0] = 0xb0;
   p[1] = 0x02;
   p[2] = 0x81;
-  p[3] = dataMemory_readByte(StorageAddr_CustomSettingsBytesInitializationFlag);
-  copyEepromBytesToBuffer(p, 4, StorageAddr_CustomSettingsBytes, 10);
+  p[3] = num;
+  configManager_readSystemParameterValues(p + 4, num);
+  configManager_readSystemParameterMaxValues(p + 4 + num, num);
   emitGenericHidData(rawHidSendBuf);
 }
 
@@ -132,7 +155,7 @@ static void processReadGenericHidData() {
 
         if (cmd == 0x20) {
           //write keymapping data to ROM
-          uint16_t addr = StorageBaseAddr_KeyAssignsData + (p[3] << 8 | p[4]);
+          uint16_t addr = storageAddr_profileData + (p[3] << 8 | p[4]);
           uint8_t len = p[5];
           uint8_t *src = p + 6;
           dataMemory_writeBytes(addr, src, len);
@@ -140,7 +163,7 @@ static void processReadGenericHidData() {
         }
         if (cmd == 0x21) {
           //read memory checksum for keymapping data
-          uint16_t addr = StorageBaseAddr_KeyAssignsData + (p[3] << 8 | p[4]);
+          uint16_t addr = storageAddr_profileData + (p[3] << 8 | p[4]);
           uint16_t len = p[5] << 8 | p[6];
           uint8_t ck = 0;
           printf("check, addr %d, len %d\n", addr, len);
@@ -149,6 +172,9 @@ static void processReadGenericHidData() {
           }
           printf("ck: %d\n", ck);
           emitMemoryChecksumResult(0x01, ck);
+
+          //チャンクボディデータサイズを書き込む
+          dataMemory_writeWord(storageAddr_profileData - 2, len);
         }
 
         if (cmd == 0x11) {
@@ -165,20 +191,24 @@ static void processReadGenericHidData() {
         }
         if (cmd == 0x90) {
           // printf("handle custom parameters bluk write\n");
-          uint8_t *src = p + 3;
-          dataMemory_writeBytes(StorageAddr_CustomSettingsBytes, src, 10);
-          dataMemory_writeByte(StorageAddr_CustomSettingsBytesInitializationFlag, 1);
-          for (uint8_t i = 0; i < 10; i++) {
-            uint8_t value = src[i];
-            invokeCustomParameterChangedCallback(i, value);
-          }
+          uint8_t parameterIndexBase = p[3];
+          uint8_t count = p[4];
+          uint8_t *ptr = p + 5;
+          skipNotify = true;
+          configManager_bulkWriteParameters(ptr, count, parameterIndexBase);
+          skipNotify = false;
         }
         if (cmd == 0xa0) {
           // printf("handle custom parameters signle write\n");
-          uint8_t index = p[3];
+          uint8_t parameterIndex = p[3];
           uint8_t value = p[4];
-          dataMemory_writeByte(StorageAddr_CustomSettingsBytes + index, value);
-          invokeCustomParameterChangedCallback(index, value);
+          configManager_writeParameter(parameterIndex, value);
+        }
+
+        if (cmd == 0xb0) {
+          skipNotify = true;
+          configManager_resetSystemParameters();
+          skipNotify = false;
         }
       }
 
@@ -186,7 +216,7 @@ static void processReadGenericHidData() {
         if (cmd == 0x90) {
           // printf("write device instance code\n");
           uint8_t *src = p + 3;
-          dataMemory_writeBytes(StorageAddr_DeviceInstanceCode, src, 8);
+          dataMemory_writeBytes(storageAddr_DeviceInstanceCode, src, 8);
         }
       }
     }
@@ -204,9 +234,9 @@ static void processReadGenericHidData() {
       if (command == 0x10) {
         bool enabled = p[2] == 1;
         if (enabled) {
-          emitStateNotification(ConfiguratorServentState_SideBrainModeEnabled);
+          emitStateNotification(ConfiguratorServentState_SimulatorModeEnabled);
         } else {
-          emitStateNotification(ConfiguratorServentState_SideBrainModeDisabled);
+          emitStateNotification(ConfiguratorServentState_SimulatorModeDisabled);
         }
       }
       if (command == 0x20) {
@@ -217,27 +247,21 @@ static void processReadGenericHidData() {
 }
 
 //---------------------------------------------
-//custom parameter initial loading
+//parameter changed handler
 
-static void loadCustomParameters() {
-  bool isInitialized = dataMemory_readByte(StorageAddr_CustomSettingsBytesInitializationFlag);
-  if (isInitialized) {
-    for (uint8_t i = 0; i < 10; i++) {
-      uint8_t value = dataMemory_readByte(StorageAddr_CustomSettingsBytes + i);
-      invokeCustomParameterChangedCallback(i, value);
-    }
+static void onParameterChanged(uint8_t parameterIndex, uint8_t value) {
+  if (!skipNotify) {
+    emitSingleParameterChangedNotification(parameterIndex, value);
   }
 }
 
 //---------------------------------------------
 //exports
 
-void configuratorServant_initialize(
-    void (*_stateNotificationCallback)(uint8_t state),
-    void (*_customParameterChangedCallback)(uint8_t index, uint8_t value)) {
+void configuratorServant_initialize(void (*_stateNotificationCallback)(uint8_t state)) {
   stateNotificationCallback = _stateNotificationCallback;
-  customParameterChangedCallback = _customParameterChangedCallback;
-  loadCustomParameters();
+  configManager_addParameterChangeListener(onParameterChanged);
+  initializeDataAddresses();
 }
 
 void configuratorServant_processUpdate() {
@@ -257,5 +281,5 @@ void configuratorServant_emitRelatimeAssignHitEvent(uint16_t assignHitResult) {
 }
 
 void configuratorServant_readDeviceInstanceCode(uint8_t *buffer) {
-  copyEepromBytesToBuffer(buffer, 0, StorageAddr_DeviceInstanceCode, 8);
+  copyEepromBytesToBuffer(buffer, 0, storageAddr_DeviceInstanceCode, 8);
 }

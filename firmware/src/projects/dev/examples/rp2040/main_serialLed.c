@@ -1,14 +1,14 @@
-#include "dio.h"
-#include "serialLed.h"
-#include "system.h"
+#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/serialLed.h"
+#include "km0/deviceIo/system.h"
 
 //board RPi Pico
-//GP17 ---> NeoPixel Strip 8LEDs
+//GP10 ---> NeoPixel Strip 8LEDs
 
 uint32_t colors[] = { 0xFF0000, 0x00FF00, 0x0000FF, 0x00FFFF, 0xFF00FF, 0xFFFF00, 0xFFFFFF };
 
 void main() {
-  serialLed_initialize(GP17);
+  serialLed_initialize(GP10);
 
   int cnt = 0;
   while (1) {

@@ -25,6 +25,22 @@ export const modalAlert = createModal((message: string) => {
   };
 });
 
+export const modalAlertTop = createModal((message: string) => {
+  return (props: { close: () => void }) => {
+    const { close } = props;
+    return (
+      <ClosableOverlay close={close} placeAtTop={true}>
+        <CommonDialogFrame caption="Alert">
+          <DialogContentRow>{message}</DialogContentRow>
+          <DialogButtonsRow>
+            <DialogButton onClick={close}>OK</DialogButton>
+          </DialogButtonsRow>
+        </CommonDialogFrame>
+      </ClosableOverlay>
+    );
+  };
+});
+
 export const modalError = createModal((message: string) => {
   return (props: { close: () => void }) => {
     const { close } = props;
@@ -94,6 +110,7 @@ export const modalTextEdit = createModal(
                   css={cssCommonTextInput}
                   value={editValues.text}
                   onChange={reflectFieldValue(editValues, 'text')}
+                  spellcheck={'false' as any}
                 />
               </div>
             </DialogContentRow>

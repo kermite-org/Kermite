@@ -70,6 +70,7 @@ export const GeneralInput: FC<Props> = ({
       onFocus={onFocus}
       onBlur={onBlur}
       data-hint={hint}
+      spellcheck={'false' as any}
     />
   );
 };

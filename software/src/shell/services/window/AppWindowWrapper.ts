@@ -9,9 +9,9 @@ import {
 } from '~/shared/modules/SchemaValidationHelper';
 import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { createEventPort, pathRelative } from '~/shell/funcs';
-import { IProfileManager } from '~/shell/services/profile/interfaces';
+import { IProfileManager } from '~/shell/services/profile/Interfaces';
 import { MenuManager } from '~/shell/services/window/MenuManager';
-import { IAppWindowWrapper } from './interfaces';
+import { IAppWindowWrapper } from './Interfaces';
 import {
   PageSourceWatcher,
   preparePreloadJsFile,
@@ -253,6 +253,8 @@ export class AppWindowWrapper implements IAppWindowWrapper {
       return;
     }
     if (this.isWidgetMode) {
+      this.mainWindow.setAlwaysOnTop(true);
+
       const currentProfile = await this.profileManager.getCurrentProfileAsync();
       if (!currentProfile) {
         return;
@@ -266,7 +268,6 @@ export class AppWindowWrapper implements IAppWindowWrapper {
         const w = design.displayArea.width * 4;
         const h = design.displayArea.height * 4 + 40;
         this.mainWindow.setSize(w, h);
-        this.mainWindow.setAlwaysOnTop(true);
       }
     } else {
       const bounds = this.state.placement.main?.bounds;

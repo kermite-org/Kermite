@@ -1,7 +1,6 @@
-#include "debugUart.h"
-#include "dio.h"
-#include "system.h"
-#include <avr/io.h>
+#include "km0/deviceIo/debugUart.h"
+#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/system.h"
 #include <stdio.h>
 
 //board ProMicro
@@ -10,7 +9,7 @@
 
 void uartTest() {
   dio_setOutput(P_B0);
-  debugUart_setup(38400);
+  debugUart_initialize(38400);
   printf("start\n");
   int cnt = 0;
   while (1) {
@@ -21,7 +20,7 @@ void uartTest() {
 }
 
 int main() {
-  USBCON = 0;
+  system_initializeUserProgram();
   uartTest();
   return 0;
 }

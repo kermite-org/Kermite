@@ -14,7 +14,11 @@ import {
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
 
 export class ProfileManagerCore {
-  getDataFilePath(profName: string): string {
+  getProfilesFolderPath(): string {
+    return appEnv.resolveUserDataFilePath(`data/profiles`);
+  }
+
+  private getProfileFilePath(profName: string): string {
     return appEnv.resolveUserDataFilePath(
       `data/profiles/${profName}.profile.json`,
     );
@@ -41,7 +45,7 @@ export class ProfileManagerCore {
   }
 
   async loadProfile(profName: string): Promise<IProfileData> {
-    const filePath = this.getDataFilePath(profName);
+    const filePath = this.getProfileFilePath(profName);
     return await ProfileFileLoader.loadProfileFromFile(filePath);
   }
 
@@ -49,7 +53,7 @@ export class ProfileManagerCore {
     profName: string,
     profileData: IProfileData,
   ): Promise<void> {
-    const filePath = this.getDataFilePath(profName);
+    const filePath = this.getProfileFilePath(profName);
     console.log(`saving current profile to ${pathBasename(filePath)}`);
     await ProfileFileLoader.saveProfileToFile(filePath, profileData);
   }
@@ -75,19 +79,19 @@ export class ProfileManagerCore {
   }
 
   async deleteProfile(profName: string): Promise<void> {
-    const fpath = this.getDataFilePath(profName);
+    const fpath = this.getProfileFilePath(profName);
     await fspUnlink(fpath);
   }
 
   async renameProfile(profName: string, newProfName: string): Promise<void> {
-    const srcPath = this.getDataFilePath(profName);
-    const dstPath = this.getDataFilePath(newProfName);
+    const srcPath = this.getProfileFilePath(profName);
+    const dstPath = this.getProfileFilePath(newProfName);
     await fspRename(srcPath, dstPath);
   }
 
   async copyProfile(profName: string, newProfName: string): Promise<void> {
-    const srcPath = this.getDataFilePath(profName);
-    const dstPath = this.getDataFilePath(newProfName);
+    const srcPath = this.getProfileFilePath(profName);
+    const dstPath = this.getProfileFilePath(newProfName);
     await fspCopyFile(srcPath, dstPath);
   }
 }

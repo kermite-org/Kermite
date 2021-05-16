@@ -1,7 +1,7 @@
-#include "debugUart.h"
-#include "dio.h"
-#include "system.h"
-#include "usbIoCore.h"
+#include "km0/deviceIo/debugUart.h"
+#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/system.h"
+#include "km0/deviceIo/usbIoCore.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -70,7 +70,7 @@ void rawHidReceiveTask() {
 int main() {
   initLED();
   initButton();
-  debugUart_setup(38400);
+  debugUart_initialize(38400);
   printf("start\n");
 
   usbIoCore_initialize();

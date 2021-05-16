@@ -67,7 +67,8 @@ export interface IKeyboardDeviceAttributes {
 export interface IKeyboardDeviceStatus {
   isConnected: boolean;
   deviceAttrs?: IKeyboardDeviceAttributes;
-  customParameterValues?: number[];
+  systemParameterValues?: number[];
+  systemParameterMaxValues?: number[];
 }
 
 export type IRealtimeKeyboardEvent =
@@ -211,14 +212,6 @@ export interface IGlobalSettings {
   useLocalResouces: boolean;
   localProjectRootFolderPath: string;
 }
-
-export interface IServerPorfileInfo {
-  id: string;
-  profileName: string;
-  userName: string;
-  profileData: IProfileData;
-}
-
 export interface IApplicationVersionInfo {
   version: string;
 }
@@ -242,6 +235,7 @@ export interface IAppIpcContract {
     profile_executeProfileManagerCommands(
       commands: IProfileManagerCommand[],
     ): Promise<void>;
+    profile_openUserProfilesFolder(): Promise<void>;
 
     layout_executeLayoutManagerCommands(
       commands: ILayoutManagerCommand[],
@@ -274,11 +268,6 @@ export interface IAppIpcContract {
       projectId: string,
       layoutName: string,
     ): Promise<IPersistKeyboardDesign | undefined>;
-
-    presetHub_getServerProjectIds(): Promise<string[]>;
-    presetHub_getServerProfiles(
-      projectId: string,
-    ): Promise<IServerPorfileInfo[]>;
 
     device_connectToDevice(path: string): Promise<void>;
     device_setCustomParameterValue(index: number, value: number): Promise<void>;

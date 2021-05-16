@@ -4,10 +4,10 @@
 #include <stdio.h>
 #include <util/delay.h>
 
-#include "bitOperations.h"
 #include "dataMemory.h"
 #include "debugUart.h"
 #include "dio.h"
+#include "km0/common/bitOperations.h"
 #include "singlewire3.h"
 #include "utils.h"
 
@@ -76,7 +76,7 @@ void emitDev() {
   cli();
   singlewire_sendFrame(txbuf, n);
   // _delay_us(10);
-  uint8_t len = singlewire_receiveFrame(rxbuf, n);
+  uint8_t len = singlewire_receiveFrameBlocking(rxbuf, n);
   sei();
   if (len > 0) {
     utils_debugShowBytes(rxbuf, len);
@@ -116,7 +116,7 @@ void runAsMaster() {
 
 void onRecevierInterruption() {
   tryCount++;
-  uint8_t len = singlewire_receiveFrame(rxbuf, NumMaxDataBytes);
+  uint8_t len = singlewire_receiveFrameBlocking(rxbuf, NumMaxDataBytes);
   // printf("len: %d\n", len);
   if (len > 0) {
     utils_copyBytes(txbuf, rxbuf, len);
@@ -161,7 +161,7 @@ void runAsSlave() {
 //---------------------------------------------
 
 void devEntry() {
-  debugUart_setup(38400);
+  debugUart_initialize(38400);
   printf("start\n");
   initBoardIo();
   bool isMaster = checkIsMaster();

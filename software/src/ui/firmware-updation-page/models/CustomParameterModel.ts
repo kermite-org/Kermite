@@ -35,6 +35,7 @@ export type ICustomParameterModel =
 export function makeParameterModel(
   parameterSpec: ICustromParameterSpec,
   currentValue: number,
+  maxValueOverride: number,
 ): ICustomParameterModel {
   const { label, slotIndex } = parameterSpec;
   if (parameterSpec.type === 'toggle') {
@@ -81,7 +82,7 @@ export function makeParameterModel(
       slotIndex,
       label,
       min: 0,
-      max: parameterSpec.maxValue,
+      max: maxValueOverride,
       value: currentValue,
       setValue,
     };

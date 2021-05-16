@@ -1,5 +1,5 @@
 import {
-  converNullToUndefinedRecursive,
+  convertNullToUndefinedRecursive,
   createDictionaryFromKeyValues,
   IDisplayArea,
   IDisplayKeyEntity,
@@ -15,7 +15,7 @@ import { ProfileDataMigrator } from '~/shell/loaders/ProfileDataMigrator';
 import {
   getAssignEntryTexts,
   getAssignForKeyUnitWithLayerFallback,
-} from '~/ui/common-svg/KeyUnitCardModels/KeyUnitCardViewModelCommon';
+} from '~/ui/common-svg/keyUnitCardModels/KeyUnitCardViewModelCommon';
 
 interface IKeyUnitDisplayModel {
   keyId: string;
@@ -76,7 +76,9 @@ function createKeyUnitTextDisplayModel(
 function createProfileLayersDisplayModel(
   sourcePersistProfileData: IPersistProfileData,
 ): IProfileLayersDisplayModel {
-  const nullReplaced = converNullToUndefinedRecursive(sourcePersistProfileData);
+  const nullReplaced = convertNullToUndefinedRecursive(
+    sourcePersistProfileData,
+  );
   const formatFixed = ProfileDataMigrator.fixProfileData(nullReplaced);
   const profileData = ProfileDataConverter.convertProfileDataFromPersist(
     formatFixed,

@@ -123,12 +123,22 @@ export type IAssignsDictionary = {
   [address: string]: IAssignEntry | undefined;
 };
 
+export type IMappingEntry = {
+  itemId: string;
+  channelIndex: number;
+  srcKey: VirtualKey;
+  srcModifiers: number;
+  dstKey: VirtualKey;
+  dstModifiers: number;
+};
+
 export type IProfileData = {
   projectId: string;
   keyboardDesign: IPersistKeyboardDesign;
   settings: IProfileSettings;
   layers: ILayer[];
   assigns: IAssignsDictionary;
+  mappingEntries: IMappingEntry[];
 };
 
 export type IPersistAssignEntry = {
@@ -137,17 +147,20 @@ export type IPersistAssignEntry = {
   usage: IAssignEntry;
 };
 
+export type ProfileFormatRevisionLatest = 'PRF05';
+export const profileFormatRevisionLatest = 'PRF05';
+
 export type IPersistProfileData = {
-  formatRevision: 'PRF03';
+  formatRevision: ProfileFormatRevisionLatest;
   projectId: string;
   keyboardDesign: IPersistKeyboardDesign;
   settings: IProfileSettings;
   layers: ILayer[];
   assigns: IPersistAssignEntry[];
+  mappingEntries: IMappingEntry[];
 };
 
 export const fallbackProfileData: IProfileData = {
-  // revision: 'PRF03',
   projectId: '',
   keyboardDesign: createFallbackPersistKeyboardDesign(),
   settings: {
@@ -164,4 +177,5 @@ export const fallbackProfileData: IProfileData = {
     },
   ],
   assigns: {},
+  mappingEntries: [],
 };

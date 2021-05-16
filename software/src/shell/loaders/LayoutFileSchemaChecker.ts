@@ -15,7 +15,7 @@ export const persistEditKeyboardDesignSchemaChecker = vObject({
   setup: vObject({
     placementUnit: vStringMatchesTo([/^mm$/, /^KP [\d.]+( [\d.]+)?$/]),
     placementAnchor: vValueOneOf(['center', 'topLeft']),
-    keySizeUnit: vValueOneOf(['mm', 'KP']),
+    keySizeUnit: vStringMatchesTo([/^mm$/, /^KP [\d.]+( [\d.]+)?$/]),
     keyIdMode: vValueOneOf(['auto', 'manual']),
   }),
   outlineShapes: vArray(

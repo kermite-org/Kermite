@@ -1,9 +1,9 @@
-#include "boardIo.h"
-#include "dio.h"
 #include "hardware/clocks.h"
 #include "hardware/pio.h"
+#include "km0/deviceIo/boardIo.h"
+#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/system.h"
 #include "neoPixelCore.pio.h"
-#include "system.h"
 
 static void neoPixelCore_initProgram(PIO pio, uint sm, uint offset, uint pin) {
   pio_gpio_init(pio, pin);
@@ -57,7 +57,7 @@ void serialLed_initialize(uint pin) {
 uint32_t colors[] = { 0xFF0000, 0x00FF00, 0x0000FF, 0x00FFFF, 0xFF00FF, 0xFFFF00 };
 
 void main() {
-  boardIo_setupLeds(GP25, GP25, false);
+  boardIo_setupLeds_rpiPico();
   serialLed_initialize(GP17);
 
   int cnt = 0;

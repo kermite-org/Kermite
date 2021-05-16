@@ -5,6 +5,7 @@ KRS/
 .sub/
 .tmp/
 node_modules/
+.VSCodeCounter/
 
 .vscode/c_cpp_properties.json
 .vscode/settings.json
@@ -12,3 +13,4 @@ node_modules/
 .~lock.*.ods#
 
 Makefile.user
+

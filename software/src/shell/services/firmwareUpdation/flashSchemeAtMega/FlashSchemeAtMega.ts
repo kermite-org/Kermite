@@ -1,6 +1,6 @@
+import { IFirmwareUpdationScheme } from '~/shell/services/firmwareUpdation/Interfaces';
 import { ComPortsMonitor } from '~/shell/services/firmwareUpdation/flashSchemeAtMega/ComPortsMonitor';
 import { FlashCommander } from '~/shell/services/firmwareUpdation/flashSchemeAtMega/FlashCommander';
-import { IFirmwareUpdationScheme } from '~/shell/services/firmwareUpdation/interfaces';
 
 export class FirmwareUpdationSchemeAtMega implements IFirmwareUpdationScheme {
   private comPortsMonitor = new ComPortsMonitor();

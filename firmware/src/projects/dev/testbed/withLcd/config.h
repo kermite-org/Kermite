@@ -1,0 +1,10 @@
+#ifndef __CONFIG_H__
+
+#define KERMITE_PROJECT_ID "RcYEeqNX"
+
+#define KM0_KEYBOARD__NUM_SCAN_SLOTS 4
+#define KM0_KEYBOARD__NUM_KEY_SLOTS 4
+
+// #define KM0_OLED_DISPLAY__USE_DEFAULT_FONT_ROUND
+
+#endif

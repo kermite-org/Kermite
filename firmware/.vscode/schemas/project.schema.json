@@ -3,7 +3,7 @@
   "properties": {
     "projectId": { "type": "string" },
     "keyboardName": { "type": "string" },
-    "customParameterConfigurations": {
+    "parameterConfigurations": {
       "type": "array",
       "items": {
         "type": "object",
@@ -12,6 +12,25 @@
             "type": "array",
             "items": {
               "type": "string"
+            }
+          },
+          "systemParameterKeys": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "emitKeyStroke",
+                "emitRealtimeEvents",
+                "keyHoldIndicatorLed",
+                "heartbeatLed",
+                "masterSide",
+                "glowActive",
+                "glowColor",
+                "glowBrightness",
+                "glowPattern",
+                "glowDirection",
+                "glowSpeed"
+              ]
             }
           },
           "customParameters": {
@@ -115,11 +134,11 @@
             }
           }
         },
-        "required": ["targetVariationNames", "customParameters"],
+        "required": ["targetVariationNames", "systemParameterKeys"],
         "additionalProperties": false
       }
     }
   },
-  "required": ["projectId", "keyboardName", "customParameterConfigurations"],
+  "required": ["projectId", "keyboardName", "parameterConfigurations"],
   "additionalProperties": false
 }

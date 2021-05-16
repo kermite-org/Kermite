@@ -1,8 +1,7 @@
-#include "dataMemory.h"
-#include "debugUart.h"
-#include "dio.h"
-#include "system.h"
-#include <avr/io.h>
+#include "km0/deviceIo/dataMemory.h"
+#include "km0/deviceIo/debugUart.h"
+#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/system.h"
 #include <stdio.h>
 
 //board ProMicro
@@ -26,7 +25,7 @@ void debugShowBytes(char *name, uint8_t *buf, int len) {
 }
 
 void eepromDev() {
-  debugUart_setup(38400);
+  debugUart_initialize(38400);
   printf("start\n");
 
   uint16_t addr = 0;
@@ -54,7 +53,7 @@ void eepromDev() {
 }
 
 int main() {
-  USBCON = 0;
+  system_initializeUserProgram();
   eepromDev();
   return 0;
 }

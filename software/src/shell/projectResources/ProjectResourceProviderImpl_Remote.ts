@@ -18,11 +18,14 @@ import {
 } from '~/shell/funcs';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
-import { IPorjectFileJson } from '~/shell/projectResources/ProjectResourceProviderImpl_Local';
 import {
   IFirmwareBinaryFileSpec,
   IProjectResourceProviderImpl,
-} from '~/shell/projectResources/interfaces';
+} from '~/shell/projectResources/Interfaces';
+import {
+  IPorjectFileJson,
+  readCustomParameterDefinition,
+} from '~/shell/projectResources/ProjectResourceProviderImpl_Local';
 import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 
 const remoteBaseUri =
@@ -121,14 +124,10 @@ export class ProjectResourceProviderImpl_Remote
         fetchJson,
         uri,
       );
-      const targetConfig = projectJsonContent.customParameterConfigurations.find(
-        (it) =>
-          it.targetVariationNames.includes(variationName) ||
-          it.targetVariationNames.includes('all'),
+      return readCustomParameterDefinition(
+        projectJsonContent.parameterConfigurations,
+        variationName,
       );
-      if (targetConfig) {
-        return { customParameterSpecs: targetConfig.customParameters };
-      }
     }
     return undefined;
   }

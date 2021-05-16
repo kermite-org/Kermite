@@ -1,10 +1,10 @@
 import { jsx, css, FC } from 'qx';
 import { IDisplayArea, IDisplayOutlineShape } from '~/shared';
+import { KeyboardSvgFrameWithAutoScaler } from '~/ui/common-svg/frames/KeyboardSvgFrameWithAutoScaler';
 import {
   IPresetKeyUnitViewModel,
   PresetKeyUnitCard,
-} from '~/ui/common-svg/KeyUnitCards/PresetKeyUnitCard';
-import { KeyboardSvgFrameWithAutoScaler } from '~/ui/common-svg/frames/KeyboardSvgFrameWithAutoScaler';
+} from '~/ui/common-svg/keyUnitCards/PresetKeyUnitCard';
 import { KeyboardBodyShape } from '~/ui/common-svg/keyboardBody/KeyboardBodyShape';
 
 export type IPresetKeyboardViewProps = {

@@ -1,8 +1,8 @@
-#include "debugUart.h"
-#include "dio.h"
-#include "singleWire4.h"
-#include "system.h"
-#include "utils.h"
+#include "km0/common/utils.h"
+#include "km0/deviceIo/debugUart.h"
+#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/interLink.h"
+#include "km0/deviceIo/system.h"
 #include <stdio.h>
 
 //board RPi Pico
@@ -47,10 +47,10 @@ uint8_t rxbuf[10];
 void processSendData() {
   txbuf[0] = 0x12;
   txbuf[1] = 0x34;
-  singleWire_startBurstSection();
-  singleWire_transmitFrame(txbuf, 2);
-  int sz = singleWire_receiveFrame(rxbuf, 10);
-  singleWire_endBurstSection();
+
+  interLink_writeTxBuffer(txbuf, 2);
+  interLink_exchangeFramesBlocking();
+  int sz = interLink_readRxBuffer(rxbuf, 10);
   printf("received @master: ");
   utils_debugShowBytes(rxbuf, sz);
 }
@@ -59,16 +59,15 @@ void processSendData2() {
   for (int i = 0; i < 10; i++) {
     txbuf[i] = 0x10 * i + i;
   }
-  singleWire_startBurstSection();
-  singleWire_transmitFrame(txbuf, 10);
-  int sz = singleWire_receiveFrame(rxbuf, 10);
-  singleWire_endBurstSection();
+  interLink_writeTxBuffer(txbuf, 10);
+  interLink_exchangeFramesBlocking();
+  int sz = interLink_readRxBuffer(rxbuf, 10);
   printf("received @master: ");
   utils_debugShowBytes(rxbuf, sz);
 }
 
 void runAsMaster() {
-  singleWire_initialize();
+  interLink_initialize();
   delayMs(100);
 
   while (true) {
@@ -85,19 +84,17 @@ void runAsMaster() {
 int receivedCount = -1;
 
 void onRecieverInterrupted() {
-  singleWire_startBurstSection();
-  receivedCount = singleWire_receiveFrame(rxbuf, 10);
+  receivedCount = interLink_readRxBuffer(rxbuf, 10);
   //echo back
   for (int i = 0; i < receivedCount; i++) {
     txbuf[i] = rxbuf[i] + 1;
   }
-  singleWire_transmitFrame(txbuf, receivedCount);
-  singleWire_endBurstSection();
+  interLink_writeTxBuffer(txbuf, receivedCount);
 }
 
 void runAsSlave() {
-  singleWire_initialize();
-  singleWire_setInterruptedReceiver(onRecieverInterrupted);
+  interLink_initialize();
+  interLink_setupSlaveReceiver(onRecieverInterrupted);
   while (true) {
     if (receivedCount > 0) {
       printf("received @slave: ");
@@ -113,7 +110,7 @@ void runAsSlave() {
 //entry
 
 int main() {
-  debugUart_setup(115200);
+  debugUart_initialize(115200);
   initLed();
   dio_setInputPullup(GP14);
   delayMs(1);
