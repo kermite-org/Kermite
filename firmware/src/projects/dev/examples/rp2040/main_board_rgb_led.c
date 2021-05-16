@@ -6,7 +6,8 @@
 //GP25: onboard RGB LED
 
 int main() {
-  boardIo_setupLedsRgb(GP25);
+  boardIo_setupLeds_proMicroRp();
+  // boardIo_setupLeds_qtPyRp();
   while (true) {
     boardIo_writeLed1(true);
     delayMs(1);
