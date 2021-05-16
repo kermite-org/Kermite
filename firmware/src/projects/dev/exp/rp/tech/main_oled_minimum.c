@@ -1,6 +1,6 @@
 #include "hardware/i2c.h"
 #include "km0/deviceIo/boardIo.h"
-#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/digitalIo.h"
 #include "km0/deviceIo/system.h"
 #include "pico/stdlib.h"
 

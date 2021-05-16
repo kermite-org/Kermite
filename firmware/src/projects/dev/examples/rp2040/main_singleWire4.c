@@ -1,6 +1,6 @@
 #include "km0/common/utils.h"
 #include "km0/deviceIo/debugUart.h"
-#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/digitalIo.h"
 #include "km0/deviceIo/interLink.h"
 #include "km0/deviceIo/system.h"
 #include <stdio.h>
@@ -29,11 +29,11 @@
 //led
 
 void initLed() {
-  dio_setOutput(GP25);
+  digitalIo_setOutput(GP25);
 }
 
 void toggleLed() {
-  dio_toggle(GP25);
+  digitalIo_toggle(GP25);
 }
 
 //----------------------------------------
@@ -112,9 +112,9 @@ void runAsSlave() {
 int main() {
   debugUart_initialize(115200);
   initLed();
-  dio_setInputPullup(GP14);
+  digitalIo_setInputPullup(GP14);
   delayMs(1);
-  bool isMaster = dio_read(GP14) == 0;
+  bool isMaster = digitalIo_read(GP14) == 0;
   printf("mode: %s\n", isMaster ? "master" : "slave");
 
   if (isMaster) {

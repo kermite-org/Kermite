@@ -1,4 +1,4 @@
-#include "dio.h"
+#include "digitalIo.h"
 #include <avr/io.h>
 #include <util/delay.h>
 
@@ -22,16 +22,16 @@
 #define pin_LED1 P_F5
 
 static void initLEDs() {
-  dio_setOutput(pin_LED0);
-  dio_setOutput(pin_LED1);
+  digitalIo_setOutput(pin_LED0);
+  digitalIo_setOutput(pin_LED1);
 }
 
 static void toggleLED0() {
-  dio_toggle(pin_LED0);
+  digitalIo_toggle(pin_LED0);
 }
 
 static void outputLED1(bool val) {
-  dio_write(pin_LED1, val);
+  digitalIo_write(pin_LED1, val);
 }
 
 //---------------------------------------------
@@ -40,14 +40,14 @@ static void outputLED1(bool val) {
 //bool isMaster = false;
 
 static void debug_initTimeDebugPin() {
-  // dio_setOutput(P_D7);
-  dio_setOutput(P_E6);
+  // digitalIo_setOutput(P_D7);
+  digitalIo_setOutput(P_E6);
 }
 
 static void debug_toggleTimeDebugPin() {
   bit_on(PINE, 6);
   // bit_invert(PORTD, 7);
-  //dio_toggle(P_D7);
+  //digitalIo_toggle(P_D7);
 }
 
 uint16_t gTimerTopLogicalValue = 1666; //default 9600baud
@@ -72,7 +72,7 @@ void timingDev1() {
     bit_on(PINF, 6);
     debug_toggleTimeDebugPin();
     // _delay_us(200);
-    // dio_toggle(pin_DebugUART);
+    // digitalIo_toggle(pin_DebugUART);
   }
 }
 void unitDelay() {
@@ -200,8 +200,8 @@ void softwareUART_devEntry() {
   // printf("start\n");
   initLEDs();
 
-  dio_setOutput(pin_DebugUART);
-  dio_setHigh(pin_DebugUART);
+  digitalIo_setOutput(pin_DebugUART);
+  digitalIo_setHigh(pin_DebugUART);
 
   bits_spec(TCCR1B, CS10, 0b111, 0b001);
 
@@ -212,7 +212,7 @@ void softwareUART_devEntry() {
   //freqAdjust();
 
   while (1) {
-    // dio_toggle(pin_DebugUART);
+    // digitalIo_toggle(pin_DebugUART);
     // unitDelay();
 
     toggleLED0();

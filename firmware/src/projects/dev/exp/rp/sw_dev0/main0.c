@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 #include "hardware/clocks.h"
-#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/digitalIo.h"
 #include "pico/stdlib.h"
 #include "swtxrx.pio.h"
 
@@ -70,11 +70,11 @@ static inline void swrx_program_init(PIO pio, uint sm, uint offset, uint pin, ui
 const int PIN_LED = 25;
 
 void initLed() {
-  dio_setOutput(PIN_LED);
+  digitalIo_setOutput(PIN_LED);
 }
 
 void tick_blink() {
-  dio_toggle(PIN_LED);
+  digitalIo_toggle(PIN_LED);
 }
 
 //------------------------------------

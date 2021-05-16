@@ -1,4 +1,4 @@
-#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/digitalIo.h"
 #include "km0/deviceIo/serialLed.h"
 #include "km0/deviceIo/system.h"
 

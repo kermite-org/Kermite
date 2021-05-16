@@ -1,5 +1,5 @@
 #include "km0/deviceIo/debugUart.h"
-#include "km0/deviceIo/dio.h"
+#include "km0/deviceIo/digitalIo.h"
 #include "pico_sdk/src/rp2_common/include/pico/stdio_uart.h"
 #if __has_include("config.h")
 #include "config.h"
