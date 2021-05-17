@@ -73,6 +73,10 @@ LDFLAGS += -Os
 LDFLAGS += -g
 LDFLAGS += -Wall
 LDFLAGS += -Wl,-Map=$(MAP),--cref
+LDFLAGS += -Wl,--print-memory-usage
+LDFLAGS += -Wl,--cref,--defsym=__TEXT_REGION_LENGTH__=32768
+LDFLAGS += -Wl,--cref,--defsym=__DATA_REGION_LENGTH__=2560
+LDFLAGS += -Wl,--cref,--defsym=__EEPROM_REGION_LENGTH__=1024
 
 
 all: build
@@ -103,8 +107,7 @@ $(LST): $(ELF)
 	@$(OBJDUMP) -h -S $< > $@
 
 size: $(ELF)
-	$(OBJSIZE) -C --mcu=atmega32u4 $(ELF)
-
+	$(OBJSIZE) $(ELF)
 
 flash: build
 ifndef AVRDUDE_COM_PORT
