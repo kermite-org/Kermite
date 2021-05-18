@@ -107,7 +107,7 @@ $(LST): $(ELF)
 	@$(OBJDUMP) -h -S $< > $@
 
 size: $(ELF)
-	$(OBJSIZE) $(ELF)
+	$(OBJSIZE) -C --mcu=atmega32u4 $(ELF)
 
 flash: build
 ifndef AVRDUDE_COM_PORT
