@@ -10,11 +10,11 @@
     "appId": "org.kermite.electron-app",
     "mac": {
       "target": "pkg",
-      "icon": "misc/icon.png"
+      "icon": "misc/iconC.png"
     },
     "win": {
       "target": "nsis",
-      "icon": "misc/icon.png"
+      "icon": "misc/iconC.png"
     },
     "nsis": {
       "oneClick": false,
