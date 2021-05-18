@@ -10,6 +10,8 @@ const puts = console.log;
 const AbortOnError = process.argv.includes("--abortOnError");
 const failIfError = process.argv.includes("--failIfError");
 
+class BuildStepError extends Error {}
+
 function getAllProjectVariationPaths() {
   return glob
     .sync("src/projects/**/rules.mk")
@@ -26,13 +28,15 @@ function makeFirmwareBuild(projectPath: string, variationName: string) {
   const command = `make ${projectPath}:${variationName}:build IS_RESOURCE_ORIGIN_ONLINE=1`;
   const [_stdout, stderr, status] = executeCommand(command);
   if (status !== 0) {
-    throw new Error(`>${command}\n${stderr}`);
+    throw new BuildStepError(`>${command}\n${stderr}`);
   }
 }
 
 function checkFirmwareBinarySize(projectPath: string, variationName: string) {
   const sizeCommand = `make ${projectPath}:${variationName}:size`;
   const [sizeOutputText] = executeCommand(sizeCommand);
+
+  console.log(sizeOutputText);
 
   let usageProg = -1;
   let usageData = -1;
@@ -47,12 +51,12 @@ function checkFirmwareBinarySize(projectPath: string, variationName: string) {
     usageProg = parseFloat(sizeOutputText.match(/FLASH:.*\s([\d.]+)%/m)![1]);
     usageData = parseFloat(sizeOutputText.match(/RAM:.*\s([\d.]+)%/m)![1]);
   } else {
-    throw new Error("unexpected size command output");
+    throw new BuildStepError("unexpected size command output");
   }
   if (
     !(0 < usageProg && usageProg < 100.0 && 0 < usageData && usageData < 100.0)
   ) {
-    throw new Error(
+    throw new BuildStepError(
       `firmware footprint overrun (FLASH: ${usageProg}%, RAM: ${usageData}%)`
     );
   }
@@ -68,14 +72,19 @@ function buildFirmware(projectPath: string, variationName: string): boolean {
     puts(`build ${targetName} ... OK`);
     return true;
   } catch (error) {
-    puts(error.message);
-    if (AbortOnError) {
-      console.warn(`abort: failed to build ${targetName}`);
+    if (error instanceof BuildStepError) {
+      puts(error.message);
+      if (AbortOnError) {
+        console.warn(`abort: failed to build ${targetName}`);
+        process.exit(1);
+      }
+      puts(`build ${targetName} ... NG`);
+      puts();
+      return false;
+    } else {
+      console.error(error);
       process.exit(1);
     }
-    puts(`build ${targetName} ... NG`);
-    puts();
-    return false;
   }
 }
 
