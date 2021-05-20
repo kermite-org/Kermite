@@ -1,10 +1,8 @@
 #include "keyScanner_encoderBasic.h"
 #include "km0/common/bitOperations.h"
+#include "km0/common/configImport.h"
 #include "km0/common/utils.h"
 #include "km0/deviceIo/digitalIo.h"
-#if __has_include("config.h")
-#include "config.h"
-#endif
 
 #ifndef KM0_ENCODER_SCANNER__NUM_ENCODERS_MAX
 #define KM0_ENCODER_SCANNER__NUM_ENCODERS_MAX 4
