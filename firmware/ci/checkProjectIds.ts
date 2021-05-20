@@ -42,7 +42,7 @@ function loadProjectInfo(projectVariationPath: string): IProjectInfo {
   const configContent = fsxReadTextFile(configFilePath);
   const configProjectId = getMatched(
     configContent,
-    /^#define PROJECT_ID "([a-zA-Z0-9]+)"$/m
+    /^#define KERMITE_PROJECT_ID "([a-zA-Z0-9]+)"$/m
   );
 
   try {
@@ -51,7 +51,7 @@ function loadProjectInfo(projectVariationPath: string): IProjectInfo {
     }
 
     if (!configProjectId) {
-      throw `PROJECT_ID is not defined in ${projectVariationPath}/config.h`;
+      throw `KERMITE_PROJECT_ID is not defined in ${projectVariationPath}/config.h`;
     }
 
     if (!projectId?.match(/^[a-zA-Z0-9]{8}$/)) {
@@ -76,7 +76,7 @@ function loadProjectInfo(projectVariationPath: string): IProjectInfo {
 
 function checkAllProjectIds(_projectInfos: IProjectInfo[]) {
   const projectInfos = uniqueArrayItemsDeep(_projectInfos);
-  // console.log({ _projectInfos, projectInfos });
+  // console.log({ projectInfos });
   const allProjectIds = projectInfos
     .map((info) => info.projectId)
     .filter((a) => !!a);

@@ -43,3 +43,14 @@ export function arrayCount<T>(ar: T[], cond: (arg: T) => boolean) {
 }
 
 export const puts = console.log;
+
+export function mapRecord<P extends Record<string, any>>(
+  src: P,
+  proc: (value: keyof P) => any
+): Record<keyof P, any> {
+  const dst: { [key in keyof P]: string } = {} as any;
+  for (const key in src) {
+    dst[key] = proc(src[key]);
+  }
+  return dst;
+}
