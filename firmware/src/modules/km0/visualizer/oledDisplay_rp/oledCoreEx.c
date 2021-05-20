@@ -1,8 +1,15 @@
 #include "oledCoreEx.h"
 #include "km0/common/bitOperations.h"
+#include "km0/common/configImport.h"
 #include "km0/common/utils.h"
 #include "km0/deviceIo/boardI2c.h"
 #include <string.h>
+
+#ifdef KM0_OLED_ORIENTATION_HORIZONTALVIEW_ROT180
+const bool rot180_horizontalView = true;
+#else
+const bool rot180_horizontalView = false;
+#endif
 
 //----------------------------------------------------------------------
 
@@ -13,9 +20,7 @@ static const uint8_t commandInitializationBytes[] = {
   0xD3, 0x00, //Display Offset
   0x40,       //Display Start Line
   0xA1,       //Segment re-map
-  // 0xA0, //Segment re-map
-  0xC8, //COM Output Scan Direction
-  // 0xC0, //COM Output Scan Direction
+  0xC8,       //COM Output Scan Direction
   0xDA, 0x02, //COM Pins hadware configuration
   // 0x81, 0x8F, //Contrast Control
   0x81, 0x3F, //Contrast Control
@@ -35,20 +40,34 @@ static const uint8_t commandResetPositionBytes[] = {
 
 static const uint8_t oledSlaveAddress = 0x3C;
 
-static void initializeOled() {
+static void oledInternal_initializeOled() {
   boardI2c_initialize();
   boardI2c_write(oledSlaveAddress, (uint8_t *)commandInitializationBytes, sizeof(commandInitializationBytes));
 }
 
 static uint8_t txbuf[513];
 
-static void flushScreenPixels(uint8_t *pPixelsBuf512) {
+static void oledInternal_flushScreenPixels(uint8_t *pPixelsBuf512) {
   boardI2c_write(oledSlaveAddress, (uint8_t *)commandResetPositionBytes, sizeof(commandResetPositionBytes));
   boardI2c_procedural_startWrite(oledSlaveAddress);
   txbuf[0] = 0x40;
   memcpy(txbuf + 1, pPixelsBuf512, 512);
   boardI2c_write(oledSlaveAddress, txbuf, 513);
 }
+
+static void oledInternal_setRotate180(bool rot180) {
+  if (!rot180) {
+    txbuf[0] = 0;
+    txbuf[1] = 0xA0; //Segment re-map
+    txbuf[2] = 0xC0; //COM Output Scan Direction
+  } else {
+    txbuf[0] = 0;
+    txbuf[1] = 0xA1; //Segment re-map
+    txbuf[2] = 0xC8; //COM Output Scan Direction
+  }
+  boardI2c_write(oledSlaveAddress, txbuf, 3);
+}
+
 //----------------------------------------------------------------------
 
 #define NumScanLine 128
@@ -56,11 +75,12 @@ static void flushScreenPixels(uint8_t *pPixelsBuf512) {
 static uint32_t scanLines[NumScanLine];
 
 void oledCoreEx_initialize() {
-  initializeOled();
+  oledInternal_initializeOled();
+  oledInternal_setRotate180(rot180_horizontalView);
 }
 
 void oledCoreEx_flushScreen() {
-  flushScreenPixels((uint8_t *)scanLines);
+  oledInternal_flushScreenPixels((uint8_t *)scanLines);
 }
 
 //----------------------------------------------------------------------
