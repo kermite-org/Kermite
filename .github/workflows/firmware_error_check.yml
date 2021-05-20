@@ -28,17 +28,12 @@ jobs:
         with:
           submodules: true
 
-      # - name: Install Dependencies
-      #   run: sudo apt install gcc-avr avr-libc binutils-avr
-
-      - uses: engineerd/configurator@v0.0.6
-        with:
-          name: "avr-gcc"
-          url: "http://depot.kermite.org/materials/avr-gcc-11.1.0-x64-linux.tar.bz2"
-          pathInArchive: "bin/avr-gcc"
-
-      - run: avr-gcc --version
-      - run: avr-size --version
+      - name: install avr-gcc
+        run: |
+          mkdir -p ~/tools
+          wget http://depot.kermite.org/materials/avr-gcc-11.1.0-x64-linux.tar.bz2
+          tar -C ~/tools -xf avr-gcc-11.1.0-x64-linux.tar.bz2
+          echo `echo ~/tools/avr-gcc-11.1.0-x64-linux/bin` >> $GITHUB_PATH
 
       - name: install arm-none-eabi-gcc
         uses: fiam/arm-none-eabi-gcc@v1
@@ -66,5 +61,5 @@ jobs:
         working-directory: ./firmware/ci
 
       - name: Check Firmware Build Errors
-        run: yarn buildAll --abortOnError
+        run: yarn buildAll
         working-directory: ./firmware/ci
