@@ -19,37 +19,11 @@ def make_firmware_build(project_path, variation_name)
   { result: :ng, error_log: ">#{command}\n#{stderr}" }
 end
 
-def check_firmware_binary_size(project_path, variation_name)
-  size_command = "make #{project_path}:#{variation_name}:size"
-  size_output_text = `#{size_command}`
-
-  usage_prog = -1
-  usage_data = -1
-  if size_output_text.include?('workers/worker_atmega32u4.mk')
-    usage_prog = size_output_text.match(/^Program.*\(([\d.]+)% Full\)/)[1].to_f
-    usage_data = size_output_text.match(/^Data.*\(([\d.]+)% Full\)/)[1].to_f
-  elsif size_output_text.include?('workers/worker_rp2040.mk')
-    usage_prog = size_output_text.match(/FLASH:.*\s([\d.]+)%/)[1].to_f
-    usage_data = size_output_text.match(/RAM:.*\s([\d.]+)%/)[1].to_f
-  else
-    raise 'unexpected size command output'
-  end
-
-  if 0 < usage_prog && usage_prog < 100.0 && 0 < usage_data && usage_data < 100.0
-    { result: :ok }
-  else
-    { result: :ng, error_log: "firmware footprint overrun (FLASH: #{usage_prog}, RAM: #{usage_data})" }
-  end
-end
-
 def build_firmware(project_path, variation_name)
   puts "build #{project_path}--#{variation_name} ..."
 
   # `make #{project_path}:#{variation_name}:clean`
-
   res = make_firmware_build(project_path, variation_name)
-  res = check_firmware_binary_size(project_path, variation_name) if res[:result] == :ok
-
   if res[:result] == :ok
     print "\e[A\e[K"
     puts "build #{project_path}--#{variation_name} ... OK"
