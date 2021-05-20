@@ -1,6 +1,7 @@
 
 #include "rgbLighting.h"
 #include "km0/deviceIo/serialLed.h"
+#include "km0/keyboard/commandDefinitions.h"
 #include "km0/keyboard/keyboardMain.h"
 
 static bool glowEnabled = false;
@@ -35,11 +36,11 @@ static void updateGlowLeds() {
 }
 
 static void customParameterHandlerExtended(uint8_t slotIndex, uint8_t value) {
-  if (slotIndex == 5) {
+  if (slotIndex == SystemParameter_GlowActive) {
     glowEnabled = value;
-  } else if (slotIndex == 6) {
+  } else if (slotIndex == SystemParameter_GlowColor) {
     glowColor = value;
-  } else if (slotIndex == 7) {
+  } else if (slotIndex == SystemParameter_GlowBrightness) {
     glowBrightness = value;
   }
 }

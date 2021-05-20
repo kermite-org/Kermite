@@ -1,42 +1,20 @@
 {
   "projectId": "LN9M6TPO",
   "keyboardName": "flash4",
-  "customParameterConfigurations": [
+  "parameterConfigurations": [
     {
       "targetVariationNames": ["all"],
-      "customParameters": [
-        {
-          "slotIndex": 2,
-          "type": "toggle",
-          "label": "Key Hold LED Output",
-          "defaultValue": 1
-        },
-        {
-          "slotIndex": 3,
-          "type": "toggle",
-          "label": "Heartbeat LED Output",
-          "defaultValue": 1
-        },
-        {
-          "slotIndex": 5,
-          "type": "toggle",
-          "label": "Enable Glow",
-          "defaultValue": 0
-        },
-        {
-          "slotIndex": 6,
-          "type": "linear",
-          "label": "Glow Color",
-          "defaultValue": 0,
-          "maxValue": 12
-        },
-        {
-          "slotIndex": 7,
-          "type": "linear",
-          "label": "Glow Brightness",
-          "defaultValue": 10,
-          "maxValue": 255
-        }
+      "systemParameterKeys": [
+        "emitKeyStroke",
+        "emitRealtimeEvents",
+        "keyHoldIndicatorLed",
+        "heartbeatLed",
+        "glowActive",
+        "glowColor",
+        "glowBrightness",
+        "glowPattern",
+        "glowDirection",
+        "glowSpeed"
       ]
     }
   ]
