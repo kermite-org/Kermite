@@ -3,57 +3,64 @@ import {
   compareObjectByJsonStringifyParse,
   fsxReadTextFile,
   getMatched,
+  mapRecord,
 } from "./helpers";
 
 process.chdir("..");
 
 const sourceFilePaths = {
-  softwareVersions: "../software/src/shared/defs/Versions.ts",
-  firmwareVersions: "./src/modules/km0/keyboard/versions.h",
+  softwareVersions: "../software/src/shared/defs/VersionDefinitions.ts",
+  firmwareVersions: "./src/modules/km0/keyboard/versionDefinitions.h",
 };
 
 interface ISynchronousVersionsSet {
   configStorageFormatRevision: string;
   rawHidProtocolRevision: string;
+  profileBinaryFormatRevision: string;
+  configParametersRevision: string;
 }
 
 const requiredFields: (keyof ISynchronousVersionsSet)[] = [
   "configStorageFormatRevision",
   "rawHidProtocolRevision",
+  "profileBinaryFormatRevision",
+  "configParametersRevision",
 ];
 
 function readSoftwareCommonVersions(): ISynchronousVersionsSet {
   const text = fsxReadTextFile(sourceFilePaths.softwareVersions);
-  return {
-    configStorageFormatRevision: getMatched(
-      text,
-      /^export const ConfigStorageFormatRevision = (\d+);$/m
-    )!,
-    rawHidProtocolRevision: getMatched(
-      text,
-      /^export const RawHidMessageProtocolRevision = (\d+);$/m
-    )!,
+  const constantKeys = {
+    configStorageFormatRevision: "ConfigStorageFormatRevision",
+    rawHidProtocolRevision: "RawHidMessageProtocolRevision",
+    profileBinaryFormatRevision: "ProfileBinaryFormatRevision",
+    configParametersRevision: "ConfigParametersRevision",
   };
+  return mapRecord(
+    constantKeys,
+    (key) =>
+      getMatched(text, new RegExp(`^export const ${key} = (\\d+);$`, "m"))!
+  );
 }
 
 function readFirmwareCommonVersions(): ISynchronousVersionsSet {
   const text = fsxReadTextFile(sourceFilePaths.firmwareVersions);
-  return {
-    configStorageFormatRevision: getMatched(
-      text,
-      /^#define CONFIG_STORAGE_FORMAT_REVISION (\d+)$/m
-    )!,
-    rawHidProtocolRevision: getMatched(
-      text,
-      /^#define RAWHID_MESSAGE_PROTOCOL_REVISION (\d+)$/m
-    )!,
+  const constantKeys = {
+    configStorageFormatRevision: "Kermite_ConfigStorageFormatRevision",
+    rawHidProtocolRevision: "Kermite_RawHidMessageProtocolRevision",
+    profileBinaryFormatRevision: "Kermite_ProfileBinaryFormatRevision",
+    configParametersRevision: "Kermite_ConfigParametersRevision",
   };
+  return mapRecord(
+    constantKeys,
+    (key) => getMatched(text, new RegExp(`^#define ${key} (\\d+)$`, "m"))!
+  );
 }
 
 function checkVersions() {
   console.log("check version defintions ...");
   const softwareVersions = readSoftwareCommonVersions();
   const firmwareVersions = readFirmwareCommonVersions();
+  // console.log({ softwareVersions, firmwareVersions });
   const vSoftOk = checkHasFields(softwareVersions, requiredFields);
   const vFirmOk = checkHasFields(firmwareVersions, requiredFields);
   const equivalent = compareObjectByJsonStringifyParse(

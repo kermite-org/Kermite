@@ -222,23 +222,23 @@ build: $(UF2)
 	$(PIOASM_BIN) -o c-sdk $< $@
 
 $(OBJ_DIR)/%.c.obj: %.c
-	@echo "compiling $<"
-	@mkdir -p $(dir $@)
+	@echo compiling $<
+	@"mkdir" -p $(dir $@)
 	@$(CC) $(C_FLAGS) -o $@ -c $<
 
 $(SHARED_OBJ_DIR)/%.c.obj: %.c
-	@echo "compiling $<"
-	@mkdir -p $(dir $@)
+	@echo compiling $<
+	@"mkdir" -p $(dir $@)
 	@$(CC) $(C_FLAGS) -o $@ -c $<
 
 $(SHARED_OBJ_DIR)/%.S.obj: %.S
-	@echo "compiling $<"
-	@mkdir -p $(dir $@)
+	@echo compiling $<
+	@"mkdir" -p $(dir $@)
 	@$(AS) $(AS_FLAGS) -o $@ -c $<
 
 $(ELF): $(PIOASM_GENERATED_HEADERS) $(OBJS)
-	@echo "linking"
-	@mkdir -p $(dir $@)
+	@echo linking
+	@"mkdir" -p $(dir $@)
 	@$(LD) $(LD_FLAGS) $(OBJS) -o $(ELF) $(BOOT_S)
 	@$(OBJCOPY) -Oihex $(ELF) $(HEX)
 	@$(OBJCOPY) -Obinary $(ELF) $(BIN)
@@ -253,7 +253,7 @@ $(PIOASM_BIN):
 
 $(UF2): $(ELF) $(ELF2UF2_BIN)
 	$(ELF2UF2_BIN) $(ELF) $(UF2)
-	@echo "output: $(UF2)"
+	@echo output: $(UF2)
 
 size: $(OBJS)
 	@$(LD) $(LD_FLAGS) $(OBJS) -o $(ELF) $(BOOT_S)

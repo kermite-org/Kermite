@@ -14,6 +14,7 @@ import {
   generateMd5,
   getMatched,
   globSync,
+  mapRecord,
   pathBasename,
   pathDirname,
   pathJoin,
@@ -38,21 +39,29 @@ function gatherTargetProjectVariationPaths() {
 }
 
 function loadFirmwareCommonRevisions(): ICommonRevisions {
-  const versionFilePath = "./src/modules/km0/keyboard/versions.h";
+  const versionFilePath = "./src/modules/km0/keyboard/versionDefinitions.h";
   const content = fsxReadTextFile(versionFilePath);
-  return {
-    storageFormatRevision: parseInt(
-      getMatched(content, /^\#define CONFIG_STORAGE_FORMAT_REVISION (\d+)$/m)!
-    ),
-    messageProtocolRevision: parseInt(
-      getMatched(content, /^\#define RAWHID_MESSAGE_PROTOCOL_REVISION (\d+)$/m)!
-    ),
+  const keys = {
+    storageFormatRevision: "Kermite_ConfigStorageFormatRevision",
+    messageProtocolRevision: "Kermite_RawHidMessageProtocolRevision",
+    profileBinaryFormatRevision: "Kermite_ProfileBinaryFormatRevision",
+    configParametersRevision: "Kermite_ConfigParametersRevision",
   };
+  const revisions = mapRecord(keys, (key) =>
+    parseInt(getMatched(content, new RegExp(`^\\#define ${key} (\\d+)$`, "m"))!)
+  );
+  if (Object.values(revisions).some((a) => !a)) {
+    console.log({ result: revisions });
+    throw new Error(`invalid revision constants`);
+  }
+  return revisions;
 }
 
 interface ICommonRevisions {
   storageFormatRevision: number;
   messageProtocolRevision: number;
+  profileBinaryFormatRevision: number;
+  configParametersRevision: number;
 }
 
 interface IProjectSourceAttributes {
@@ -235,6 +244,8 @@ function makeSuccessMetadataContent(
     buildTimestamp: ua.buildTimestamp,
     storageFormatRevision: commonRevisions.storageFormatRevision,
     messageProtocolRevision: commonRevisions.messageProtocolRevision,
+    profileBinaryFormatRevision: commonRevisions.profileBinaryFormatRevision,
+    configParametersRevision: commonRevisions.configParametersRevision,
     flashUsage: ua.flashUsage,
     ramUsage: ua.ramUsage,
     firmwareFileSize: ua.firmwareFileSize,

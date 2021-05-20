@@ -73,6 +73,10 @@ LDFLAGS += -Os
 LDFLAGS += -g
 LDFLAGS += -Wall
 LDFLAGS += -Wl,-Map=$(MAP),--cref
+LDFLAGS += -Wl,--print-memory-usage
+LDFLAGS += -Wl,--cref,--defsym=__TEXT_REGION_LENGTH__=32768
+LDFLAGS += -Wl,--cref,--defsym=__DATA_REGION_LENGTH__=2560
+LDFLAGS += -Wl,--cref,--defsym=__EEPROM_REGION_LENGTH__=1024
 
 
 all: build
@@ -80,31 +84,30 @@ all: build
 build: $(HEX) $(LST)
 
 $(OBJ_DIR)/%.o: %.c
-	@echo "compiling $<"
-	@mkdir -p $(dir $@)
+	@echo compiling $<
+	@"mkdir" -p $(dir $@)
 	@$(CC) -c $(CFLAGS) -o $@ $<
 
 $(OBJ_DIR)/%.o: %.S
-	@echo "compiling $<"
-	@mkdir -p $(dir $@)
+	@echo compiling $<
+	@"mkdir" -p $(dir $@)
 	$(CC) -c $(ASFLAGS) $< -o $@
 
 $(ELF): $(OBJS)
-	@echo "linking"
-	@mkdir -p $(dir $@)
+	@echo linking
+	@"mkdir" -p $(dir $@)
 	@$(CC) $(LDFLAGS) -o $(ELF) $(OBJS)
-	@$(OBJSIZE) -C --mcu=atmega32u4 $(ELF)
+# @$(OBJSIZE) -C --mcu=atmega32u4 $(ELF)
 
 $(HEX) : $(ELF)
 	@$(OBJCOPY) -O ihex $(ELF) $(HEX)
-	@echo "output: $(HEX)"
+	@echo output: $(HEX)
 
 $(LST): $(ELF)
 	@$(OBJDUMP) -h -S $< > $@
 
 size: $(ELF)
 	$(OBJSIZE) -C --mcu=atmega32u4 $(ELF)
-
 
 flash: build
 ifndef AVRDUDE_COM_PORT

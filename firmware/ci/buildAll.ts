@@ -8,6 +8,7 @@ process.chdir("..");
 const puts = console.log;
 
 const AbortOnError = process.argv.includes("--abortOnError");
+const failIfError = process.argv.includes("--failIfError");
 
 function getAllProjectVariationPaths() {
   return glob
@@ -95,6 +96,10 @@ function buildProjects() {
   const numTotal = results.length;
   if (numTotal > 0) {
     puts(`buildStats ${numSuccess}/${numTotal}`);
+  }
+  if (failIfError && numSuccess !== numTotal) {
+    puts(`errors in some projects`);
+    process.exit(1);
   }
   puts("done");
 }
