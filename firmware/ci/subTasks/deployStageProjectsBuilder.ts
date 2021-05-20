@@ -356,7 +356,7 @@ function buildProjectVariationEntry(
     return true;
   } catch (error) {
     if (error instanceof BuildStepError) {
-      puts(error);
+      puts(error.message);
       fsxWriteTextFile(
         `${destDir}/build_error_${variationName}.log`,
         error.message
