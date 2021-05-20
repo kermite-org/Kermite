@@ -97,7 +97,6 @@ $(ELF): $(OBJS)
 	@echo linking
 	@"mkdir" -p $(dir $@)
 	@$(CC) $(LDFLAGS) -o $(ELF) $(OBJS)
-# @$(OBJSIZE) -C --mcu=atmega32u4 $(ELF)
 
 $(HEX) : $(ELF)
 	@$(OBJCOPY) -O ihex $(ELF) $(HEX)
@@ -107,7 +106,8 @@ $(LST): $(ELF)
 	@$(OBJDUMP) -h -S $< > $@
 
 size: $(ELF)
-	$(OBJSIZE) -C --mcu=atmega32u4 $(ELF)
+	$(OBJSIZE) $(ELF)
+#	$(OBJSIZE) -C --mcu=atmega32u4 $(ELF)
 
 flash: build
 ifndef AVRDUDE_COM_PORT
