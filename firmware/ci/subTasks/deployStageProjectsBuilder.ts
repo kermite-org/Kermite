@@ -25,6 +25,8 @@ import {
   uniqueArrayItemsDeep,
 } from "../helpers";
 
+class BuildStepError extends Error {}
+
 type ITargetDevice = "atmega32u4" | "rp2040";
 
 function gatherTargetProjectVariationPaths() {
@@ -99,8 +101,43 @@ function makeFirmwareBuild(
   const [_stdout, stderr, status] = executeCommand(command);
   // console.log(_stdout);
   if (status !== 0) {
-    throw `>${command}\n${stderr}`;
+    throw new BuildStepError(`>${command}\n${stderr}`);
   }
+}
+
+//avr-size -C --mcu=atmega32u4 $(ELF) の結果からROM/RAM使用率を抽出
+function readRomRamUsageFromSizeCommandChipOutput(sizeOutputText: string) {
+  const match0 = sizeOutputText.match(/^Program.*\(([\d.]+)% Full\)/m);
+  const match1 = sizeOutputText.match(/^Data.*\(([\d.]+)% Full\)/m);
+  if (match0 && match1) {
+    const usageProg = parseFloat(match0[1]);
+    const usageData = parseFloat(match1[1]);
+    return [usageProg, usageData];
+  }
+  throw new Error(`invalid size command output`);
+}
+
+//avr-size $(ELF) の結果からROM/RAM使用率を抽出
+function readRomRamUsageFromSizeCommandRawOutput(
+  sizeOutputText: string,
+  romMax: number,
+  ramMax: number
+) {
+  const lastLine = sizeOutputText.trim().split(/\r?\n/).pop();
+  if (lastLine) {
+    const m = lastLine.match(/^\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)/);
+    if (m) {
+      const nText = parseInt(m[1]);
+      const nData = parseInt(m[2]);
+      const nBss = parseInt(m[3]);
+      const nRom = nText + nData;
+      const nRam = nData + nBss;
+      const usageProg = (nRom / romMax) * 100;
+      const usageData = (nRam / ramMax) * 100;
+      return [usageProg, usageData];
+    }
+  }
+  throw new Error(`invalid size command output`);
 }
 
 function checkFirmwareBinarySize(
@@ -114,22 +151,23 @@ function checkFirmwareBinarySize(
   let usageProg = -1;
   let usageData = -1;
   if (targetDevice === "atmega32u4") {
-    usageProg = parseFloat(
-      sizeOutputText.match(/^Program.*\(([\d.]+)% Full\)/m)![1]
-    );
-    usageData = parseFloat(
-      sizeOutputText.match(/^Data.*\(([\d.]+)% Full\)/m)![1]
+    [usageProg, usageData] = readRomRamUsageFromSizeCommandRawOutput(
+      sizeOutputText,
+      32768,
+      2560
     );
   } else if (targetDevice == "rp2040") {
     usageProg = parseFloat(sizeOutputText.match(/FLASH:.*\s([\d.]+)%/m)![1]);
     usageData = parseFloat(sizeOutputText.match(/RAM:.*\s([\d.]+)%/m)![1]);
   } else {
-    throw "unexpected size command output";
+    throw new Error("unexpected size command output");
   }
   if (
     !(0 < usageProg && usageProg < 100.0 && 0 < usageData && usageData < 100.0)
   ) {
-    throw `firmware footprint overrun (FLASH: ${usageProg}%, RAM: ${usageData}%)`;
+    throw new BuildStepError(
+      `firmware footprint overrun (FLASH: ${usageProg}%, RAM: ${usageData}%)`
+    );
   }
   return {
     flash: usageProg,
@@ -283,7 +321,7 @@ function buildProjectVariationEntry(
 
   const targetDevice = detectTargetDeviceFromRulesMk(projectVariationPath);
   if (!targetDevice) {
-    throw `cannot detecte target device for ${targetName}`;
+    throw new BuildStepError(`cannot detecte target device for ${targetName}`);
   }
   const extension = targetDevice === "atmega32u4" ? "hex" : "uf2";
 
@@ -317,13 +355,24 @@ function buildProjectVariationEntry(
     puts(`build ${targetName} ... OK`);
     return true;
   } catch (error) {
-    puts(error);
-    fsxWriteTextFile(`${destDir}/build_error_${variationName}.log`, error);
-    const metadataObj = makeFailureMetadataContent(sourceAttrs);
-    fsxWriteJsonFile(`${destDir}/metadata_${variationName}.json`, metadataObj);
-    puts(`build ${targetName} ... NG`);
-    puts();
-    return false;
+    if (error instanceof BuildStepError) {
+      puts(error);
+      fsxWriteTextFile(
+        `${destDir}/build_error_${variationName}.log`,
+        error.message
+      );
+      const metadataObj = makeFailureMetadataContent(sourceAttrs);
+      fsxWriteJsonFile(
+        `${destDir}/metadata_${variationName}.json`,
+        metadataObj
+      );
+      puts(`build ${targetName} ... NG`);
+      puts();
+      return false;
+    } else {
+      console.error(error);
+      process.exit(1);
+    }
   }
 }
 
