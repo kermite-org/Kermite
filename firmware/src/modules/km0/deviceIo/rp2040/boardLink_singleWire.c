@@ -1,4 +1,5 @@
 
+#include "km0/common/configImport.h"
 #include "km0/common/utils.h"
 #include "km0/deviceIo/boardLink.h"
 #include "km0/deviceIo/digitalIo.h"
@@ -9,9 +10,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#if __has_include("config.h")
-#include "config.h"
-#endif
 
 //------------------------------------------------------------
 //program initializers
