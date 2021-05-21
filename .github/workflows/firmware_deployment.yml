@@ -19,8 +19,12 @@ jobs:
         with:
           submodules: true
 
-      - name: Install Dependencies
-        run: sudo apt install gcc-avr avr-libc binutils-avr
+      - name: install avr-gcc
+        run: |
+          mkdir -p ~/tools
+          wget http://depot.kermite.org/materials/avr-gcc-11.1.0-x64-linux.tar.bz2
+          tar -C ~/tools -xf avr-gcc-11.1.0-x64-linux.tar.bz2
+          echo `echo ~/tools/avr-gcc-11.1.0-x64-linux/bin` >> $GITHUB_PATH
 
       - name: install arm-none-eabi-gcc
         uses: fiam/arm-none-eabi-gcc@v1

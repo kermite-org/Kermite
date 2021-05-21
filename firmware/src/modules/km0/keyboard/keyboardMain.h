@@ -5,7 +5,7 @@
 
 typedef struct {
   void (*customParameterHandlerOverride)(uint8_t slotIndex, uint8_t value);
-  void (*customParameterHandlerChained)(uint8_t slotIndex, uint8_t value);
+  void (*customParameterHandlerExtended)(uint8_t slotIndex, uint8_t value);
   // void (*customCommandHandler)(uint8_t commandIndex);
   void (*layerStateChanged)(uint16_t layerStateFlags);
   void (*keyStateChanged)(uint8_t keyIndex, bool isDown);
@@ -32,6 +32,7 @@ void keyboardMain_useKeyScannerExtra(void (*_keyScannerUpdateFunc)(uint8_t *keyS
 void keyboardMain_setKeyIndexTable(const int8_t *_scanIndexToKeyIndexMap);
 void keyboardMain_useDisplayModule(void (*_displayModuleUpdateFunc)(void));
 void keyboardMain_setAsSplitSlave();
+void keyboardMain_setCallbacks(KeyboardCallbackSet *_callbacks);
 
 void keyboardMain_initialize();
 void keyboardMain_udpateKeyScanners();
