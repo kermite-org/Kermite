@@ -91,7 +91,7 @@ static void scene2_updateFrame() {
 //scene 3
 
 static void scene3_updateFrame() {
-  if (frameTick % 40 == 0) {
+  if (frameTick % 20 == 0) {
     for (int i = 0; i < numLeds; i++) {
       int colorIndex = pseudoRandom() % NumTableColors;
       uint32_t color = commonColorTable[colorIndex];
