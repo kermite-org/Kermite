@@ -15,10 +15,9 @@ void main() {
     uint termMs = 2000;
     float p = (cnt % termMs) / (float)termMs;
     float q = p < 0.5 ? 2 * p : (2 - 2 * p);
-    uint32_t alpha = q * 20;
+    uint8_t alpha = q * 20;
     for (int i = 0; i < 7; i++) {
-      uint32_t col = (alpha << 24) | colors[i];
-      serialLed_putPixelWithAlpha(col);
+      serialLed_putPixelWithAlpha(colors[i], alpha);
     }
     delayMs(1);
     cnt++;
