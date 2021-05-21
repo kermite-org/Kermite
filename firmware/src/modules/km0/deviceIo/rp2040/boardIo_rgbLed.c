@@ -28,15 +28,17 @@ void boardIo_setupLedsRgb(int8_t pin_led, int8_t pin_led_power) {
   }
 }
 
-static inline uint32_t pixelARGB(uint8_t a, uint8_t r, uint8_t g, uint8_t b) {
-  return (uint32_t)(a) << 24 | (uint32_t)(r) << 16 | ((uint32_t)(g) << 8) | (uint32_t)(b);
+void boardIo_setupLeds(int8_t pin1, int8_t pin2, bool invert) {}
+
+static inline uint32_t pixelRGB(uint8_t r, uint8_t g, uint8_t b) {
+  return (uint32_t)(r) << 16 | ((uint32_t)(g) << 8) | (uint32_t)(b);
 }
 
 static void updateLedColor() {
   uint8_t rr = 0;
   uint8_t gg = state_led1 ? brightness_g : 0;
   uint8_t bb = state_led2 ? brightness_b : 0;
-  uint32_t color = pixelARGB(0xFF, rr, gg, bb);
+  uint32_t color = pixelRGB(rr, gg, bb);
   neoPixelCore_putPixel(pio_rgbled, sm_rgbled, color);
 }
 

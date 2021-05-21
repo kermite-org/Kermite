@@ -1,0 +1,21 @@
+{
+  "projectId": "LN9M6TPO",
+  "keyboardName": "flash4",
+  "parameterConfigurations": [
+    {
+      "targetVariationNames": ["all"],
+      "systemParameterKeys": [
+        "emitKeyStroke",
+        "emitRealtimeEvents",
+        "keyHoldIndicatorLed",
+        "heartbeatLed",
+        "glowActive",
+        "glowColor",
+        "glowBrightness",
+        "glowPattern",
+        "glowDirection",
+        "glowSpeed"
+      ]
+    }
+  ]
+}
