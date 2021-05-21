@@ -5,7 +5,7 @@
 #include "km0/deviceIo/boardI2c.h"
 #include <string.h>
 
-#ifdef KM0_OLED_ORIENTATION_HORIZONTALVIEW_ROT180
+#ifdef KM0_OLED__ORIENTATION_HORIZONTALVIEW_ROT180
 const bool rot180_horizontalView = true;
 #else
 const bool rot180_horizontalView = false;
