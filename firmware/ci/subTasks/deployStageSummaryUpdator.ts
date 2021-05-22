@@ -103,9 +103,7 @@ function readArmNoneEabiGccVersion(): string {
 
 function readEnvironmentVersions(): IEnvironmentVersions {
   const osVersion = readOsVersion();
-  const avrGccVersion = execueteOneliner(
-    `avr-gcc -v 2>&1 >/dev/null | grep "gcc version"`
-  );
+  const avrGccVersion = execueteOneliner(`avr-gcc --version | grep "avr-gcc"`);
   const makeVersion = execueteOneliner(`make -v | grep "GNU Make"`);
   const armNoneEabiGccVersion = readArmNoneEabiGccVersion();
   return {
