@@ -56,15 +56,19 @@ void configManager_addParameterChangeListener(ParameterChangedListener listener)
   parameterChangedListeners[numParameterChangedListeners++] = listener;
 }
 
+bool validateParameter(uint8_t parameterIndex, uint8_t value) {
+  uint8_t min = 0;
+  if (parameterIndex == SystemParameter_SystemLayout) {
+    min = 1;
+  }
+  uint8_t max = ((uint8_t *)&systemParameterMaxValues)[parameterIndex];
+  return utils_inRange(value, min, max);
+}
+
 void fixSystemParametersLoaded() {
   for (int i = 0; i < NumSystemParameters; i++) {
     uint8_t value = systemParameterValues[i];
-    uint8_t min = 0;
-    if (i == SystemParameter_SystemLayout) {
-      min = 1;
-    }
-    uint8_t max = ((uint8_t *)&systemParameterMaxValues)[i];
-    if (!utils_inRange(value, min, max)) {
+    if (!validateParameter(i, value)) {
       uint8_t defaultValue = ((uint8_t *)&systemParametersDefault)[i];
       systemParameterValues[i] = defaultValue;
       printf("system parameter value fixed %d, %d --> %d\n", i, value, defaultValue);
@@ -88,9 +92,8 @@ void configManager_initialize() {
 
     dataMemory_readBytes(addrSystemParameters, systemParameterValues, NumSystemParameters);
     fixSystemParametersLoaded();
-    for (int bi = 0; bi < NumSystemParameters; bi++) {
-      uint8_t parameterIndex = SystemParameterIndexBase + bi;
-      notifyParameterChanged(parameterIndex, systemParameterValues[bi]);
+    for (int i = 0; i < NumSystemParameters; i++) {
+      notifyParameterChanged(i, systemParameterValues[i]);
     }
   }
 }
@@ -104,17 +107,17 @@ void configManager_readSystemParameterMaxValues(uint8_t *buf, uint8_t len) {
 }
 
 void configManager_writeParameter(uint8_t parameterIndex, uint8_t value) {
-  uint8_t bi = parameterIndex - SystemParameterIndexBase;
-  systemParameterValues[bi] = value;
-  notifyParameterChanged(parameterIndex, value);
-  lazySaveTick = 3000; //いずれかのパラメタが変更されてから3秒後にデータをストレージに書き込む
+  if (validateParameter(parameterIndex, value)) {
+    systemParameterValues[parameterIndex] = value;
+    notifyParameterChanged(parameterIndex, value);
+    lazySaveTick = 3000; //いずれかのパラメタが変更されてから3秒後にデータをストレージに書き込む
+  }
 }
 
 void configManager_bulkWriteParameters(uint8_t *buf, uint8_t len, uint8_t parameterIndexBase) {
   for (int i = 0; i < len; i++) {
-    uint8_t parameterIndex = parameterIndexBase + i;
     uint8_t value = buf[i];
-    configManager_writeParameter(parameterIndex, value);
+    configManager_writeParameter(i, value);
   }
 }
 
@@ -130,9 +133,8 @@ void configManager_resetSystemParameters() {
 static void shiftParameterValue(uint8_t parameterIndex, uint8_t payloadValue) {
   int dir = ((payloadValue & 0x0F) == 1) ? 1 : -1;
   bool clamp = (payloadValue >> 4 & 0x0F) > 0;
-  uint8_t bi = parameterIndex - SystemParameterIndexBase;
-  bool maxValue = ((uint8_t *)&systemParameterMaxValues)[bi];
-  int oldValue = systemParameterValues[bi];
+  bool maxValue = ((uint8_t *)&systemParameterMaxValues)[parameterIndex];
+  int oldValue = systemParameterValues[parameterIndex];
   int newValue;
   if (!clamp) {
     newValue = (oldValue + dir + maxValue) % maxValue;
