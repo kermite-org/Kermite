@@ -5,7 +5,7 @@
 #include "km0/device/boardLink.h"
 #include "km0/device/system.h"
 #include "km0/device/usbIoCore.h"
-#include "km0/kernel/keyboardMain.h"
+#include "km0/kernel/keyboardMainInternal.h"
 #include <stdio.h>
 
 //---------------------------------------------
@@ -70,7 +70,7 @@ static void runAsMaster() {
   while (1) {
     if (tick % 4 == 0) {
       keyboardMain_udpateKeyScanners();
-      if (!optionInvertSide) {
+      if (!keyboardMain_exposedState.optionInvertSide) {
         keyboardMain_processKeyInputUpdate(4);
       } else {
         swapNextScanSlotStateFlagsFirstLastHalf(); //nextScanSlotStateFlagsの前半と後半を入れ替える

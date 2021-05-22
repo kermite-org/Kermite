@@ -6,6 +6,7 @@
 #include "dataStorage.h"
 #include "keyMappingDataValidator.h"
 #include "keyboardCoreLogic.h"
+#include "keyboardMainInternal.h"
 #include "km0/base/bitOperations.h"
 #include "km0/base/utils.h"
 #include "km0/device/boardIo.h"
@@ -67,15 +68,16 @@ static bool optionEmitKeyStroke = true;
 static bool optionEmitRealtimeEvents = true;
 static bool optionAffectKeyHoldStateToLed = true;
 static bool optionUseHeartbeatLed = true;
-bool optionInvertSide = false;
+// bool keyboardMain_internal_optionInvertSide = false;
 
 static bool debugUartConfigured = false;
 
-KeyboardMainExposedState exposedState = {
+KeyboardMainExposedState keyboardMain_exposedState = {
   .layerStateFlags = 0,
   .hidReportBuf = localHidReport,
   .pressedKeyIndex = KEYINDEX_NONE,
   .isSplitSlave = false,
+  .optionInvertSide = false,
 };
 
 //----------------------------------------------------------------------
@@ -154,7 +156,7 @@ static void parameterValueHandler(uint8_t slotIndex, uint8_t value) {
     optionUseHeartbeatLed = !!value;
   } else if (slotIndex == SystemParameter_MasterSide) {
     //value: (0:left, 1:right)
-    optionInvertSide = value == 1;
+    keyboardMain_exposedState.optionInvertSide = value == 1;
   } else if (slotIndex == SystemParameter_SystemLayout) {
     keyboardCoreLogic_setSystemLayout(value);
     printf("system layout: %s\n", value == 1 ? "JIS" : "US");
@@ -200,7 +202,7 @@ static void processKeyboardCoreLogicOutput() {
       callbacks->layerStateChanged(layerFlags);
     }
     localLayerFlags = layerFlags;
-    exposedState.layerStateFlags = layerFlags;
+    keyboardMain_exposedState.layerStateFlags = layerFlags;
     changed = true;
   }
   if (!utils_compareBytes(hidReport, localHidReport, 8)) {
@@ -231,10 +233,10 @@ static void onPhysicalKeyStateChanged(uint8_t scanIndex, bool isDown) {
   }
   if (isDown) {
     printf("keydown %d\n", keyIndex);
-    exposedState.pressedKeyIndex = keyIndex;
+    keyboardMain_exposedState.pressedKeyIndex = keyIndex;
   } else {
     printf("keyup %d\n", keyIndex);
-    exposedState.pressedKeyIndex = KEYINDEX_NONE;
+    keyboardMain_exposedState.pressedKeyIndex = KEYINDEX_NONE;
   }
 
   //ユーティリティにキー状態変化イベントを送信
@@ -298,7 +300,7 @@ void keyboardMain_setCallbacks(KeyboardCallbackSet *_callbacks) {
 }
 
 void keyboardMain_setAsSplitSlave() {
-  exposedState.isSplitSlave = true;
+  keyboardMain_exposedState.isSplitSlave = true;
 }
 
 uint8_t *keyboardMain_getNextScanSlotStateFlags() {

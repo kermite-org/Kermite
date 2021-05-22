@@ -1,6 +1,6 @@
 #include "generalKeyboard.h"
 #include "km0/device/system.h"
-#include "km0/kernel/keyboardMain.h"
+#include "km0/kernel/keyboardMainInternal.h"
 #include <stdio.h>
 
 void generalKeyboard_start() {
