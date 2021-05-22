@@ -1,11 +1,11 @@
 #include "oledCoreEx.h"
-#include "km0/common/bitOperations.h"
-#include "km0/common/configImport.h"
-#include "km0/common/utils.h"
-#include "km0/deviceIo/boardI2c.h"
+#include "km0/base/bitOperations.h"
+#include "km0/base/configImport.h"
+#include "km0/base/utils.h"
+#include "km0/device/boardI2c.h"
 #include <string.h>
 
-#ifdef KM0_OLED_ORIENTATION_HORIZONTALVIEW_ROT180
+#ifdef KM0_OLED__ORIENTATION_HORIZONTALVIEW_ROT180
 const bool rot180_horizontalView = true;
 #else
 const bool rot180_horizontalView = false;

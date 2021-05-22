@@ -1,9 +1,9 @@
 
 #include "rgbLighting.h"
-#include "km0/common/utils.h"
-#include "km0/deviceIo/serialLed.h"
-#include "km0/keyboard/commandDefinitions.h"
-#include "km0/keyboard/keyboardMain.h"
+#include "km0/base/utils.h"
+#include "km0/device/serialLed.h"
+#include "km0/kernel/commandDefinitions.h"
+#include "km0/kernel/keyboardMainInternal.h"
 
 //----------------------------------------------------------------------
 

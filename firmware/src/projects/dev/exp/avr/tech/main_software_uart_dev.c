@@ -3,7 +3,7 @@
 #include <util/delay.h>
 
 #include "debug_uart.h"
-#include "km0/common/bitOperations.h"
+#include "km0/base/bitOperations.h"
 
 #include <stdio.h>
 #include <stdlib.h>

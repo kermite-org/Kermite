@@ -10,7 +10,7 @@ process.chdir("..");
 
 const sourceFilePaths = {
   softwareVersions: "../software/src/shared/defs/VersionDefinitions.ts",
-  firmwareVersions: "./src/modules/km0/keyboard/versionDefinitions.h",
+  firmwareVersions: "./src/modules/km0/kernel/versionDefinitions.h",
 };
 
 interface ISynchronousVersionsSet {

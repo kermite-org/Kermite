@@ -1,11 +1,11 @@
 #include "config.h"
-#include "km0/common/bitOperations.h"
-#include "km0/common/romData.h"
-#include "km0/common/utils.h"
-#include "km0/deviceIo/boardI2c.h"
-#include "km0/deviceIo/boardIo.h"
-#include "km0/deviceIo/system.h"
-#include "km0/keyboard/keyboardMain.h"
+#include "km0/base/bitOperations.h"
+#include "km0/base/romData.h"
+#include "km0/base/utils.h"
+#include "km0/device/boardI2c.h"
+#include "km0/device/boardIo.h"
+#include "km0/device/system.h"
+#include "km0/kernel/keyboardMainInternal.h"
 #include "km0/visualizer/oledDisplay.h"
 #include "oledCore.h"
 #include <stdio.h>
@@ -55,19 +55,21 @@ static void renderStatusView() {
 
   oledCore_putText(0, 0, "Status");
 
+  KeyboardMainExposedState *exposedState = &keyboardMain_exposedState;
+
   //hid key slots
-  const uint8_t *b = exposedState.hidReportBuf;
+  const uint8_t *b = exposedState->hidReportBuf;
   sprintf(strbuf, "%c%c%c%c%c%c", pm(b[2]), pm(b[3]), pm(b[4]), pm(b[5]), pm(b[6]), pm(b[7]));
   oledCore_putText(0, 15, strbuf);
 
   //key index
-  uint8_t ki = exposedState.pressedKeyIndex;
+  uint8_t ki = exposedState->pressedKeyIndex;
 
   if (ki != KEYINDEX_NONE) {
     //keycode
-    uint8_t kc = getPressedKeyCode(exposedState.hidReportBuf);
+    uint8_t kc = getPressedKeyCode(exposedState->hidReportBuf);
     //modifiers
-    uint8_t m = exposedState.hidReportBuf[0];
+    uint8_t m = exposedState->hidReportBuf[0];
 
     sprintf(strbuf, "KI:%d", ki);
     oledCore_putText(3, 0, strbuf);
@@ -85,7 +87,7 @@ static void renderStatusView() {
   }
 
   //layers
-  uint8_t lsf = exposedState.layerStateFlags;
+  uint8_t lsf = exposedState->layerStateFlags;
   sprintf(strbuf, "L:%x", lsf);
   oledCore_putText(3, 18, strbuf);
 
@@ -123,7 +125,7 @@ static void updateFrame() {
     cnt--;
   }
   bool bootComplete = cnt == 0;
-  bool isMaster = !exposedState.isSplitSlave;
+  bool isMaster = !keyboardMain_exposedState.isSplitSlave;
   if (bootComplete && isMaster) {
     renderStatusView();
   } else {

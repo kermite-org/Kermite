@@ -1,6 +1,6 @@
 #include "singlewire.h"
 
-#include "km0/common/bitOperations.h"
+#include "km0/base/bitOperations.h"
 
 #include "digitalIo.h"
 #include "km0/types.h"

@@ -1,10 +1,11 @@
 #include "config.h"
-#include "km0/deviceIo/boardIo.h"
-#include "km0/deviceIo/digitalIo.h"
-#include "km0/keyboard/generalKeyboard.h"
-#include "km0/keyboard/keyScanner_directWired.h"
-#include "km0/keyboard/keyScanner_encoderBasic.h"
-#include "km0/keyboard/keyboardMain.h"
+#include "km0/device/boardIo.h"
+#include "km0/device/debugUart.h"
+#include "km0/device/digitalIo.h"
+#include "km0/kernel/keyboardMain.h"
+#include "km0/scanner/keyScanner_directWired.h"
+#include "km0/scanner/keyScanner_encoderBasic.h"
+#include "km0/wrapper/generalKeyboard.h"
 
 #define NumKeyScanSlots 4
 #define NumEncoderScanSlots 4
@@ -20,9 +21,9 @@ static EncoderConfig encoderConfigs[] = {
 
 int main() {
   boardIo_setupLeds_proMicroAvr();
-  keyboardMain_useDebugUart(38400);
+  debugUart_initialize(38400);
   keyScanner_directWired_initialize(NumKeyScanSlots, keyInputPins);
-  keyScanner_encoderBasic_initialize(2, encoderConfigs);
+  keyScanner_encoderBasic_initialize(encoderConfigs, 2);
   keyboardMain_useKeyScanner(keyScanner_directWired_update);
   keyboardMain_useKeyScannerExtra(keyScanner_encoderBasic_update);
   keyboardMain_setKeyIndexTable(keyIndexTable);
