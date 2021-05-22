@@ -22,7 +22,7 @@ int main() {
   printf("start\n");
 
   digitalIo_setOutput(GP25);
-  keyScanner_encoderBasic_initialize(2, appEncoderConfigs);
+  keyScanner_encoderBasic_initialize(appEncoderConfigs, 2);
 
   int cnt = 0;
   while (true) {

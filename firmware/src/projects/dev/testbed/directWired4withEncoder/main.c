@@ -22,7 +22,7 @@ int main() {
   boardIo_setupLeds_proMicroAvr();
   keyboardMain_useDebugUart(38400);
   keyScanner_directWired_initialize(NumKeyScanSlots, keyInputPins);
-  keyScanner_encoderBasic_initialize(2, encoderConfigs);
+  keyScanner_encoderBasic_initialize(encoderConfigs, 2);
   keyboardMain_useKeyScanner(keyScanner_directWired_update);
   keyboardMain_useKeyScannerExtra(keyScanner_encoderBasic_update);
   keyboardMain_setKeyIndexTable(keyIndexTable);
