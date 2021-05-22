@@ -15,7 +15,7 @@ int main() {
   boardIo_setupLeds_proMicroAvr();
   oledDisplay_initialize();
   keyScanner_directWired_initialize(NumScanSlots, keyInputPins);
-  keyboardMain_useDebugUart(115200);
+  keyboardMain_useDebugUart(38400);
   keyboardMain_useKeyScanner(keyScanner_directWired_update);
   keyboardMain_setKeyIndexTable(keyIndexTable);
   keyboardMain_useDisplayModule(oledDisplay_update);

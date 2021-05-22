@@ -68,9 +68,6 @@ static bool optionEmitKeyStroke = true;
 static bool optionEmitRealtimeEvents = true;
 static bool optionAffectKeyHoldStateToLed = true;
 static bool optionUseHeartbeatLed = true;
-// bool keyboardMain_internal_optionInvertSide = false;
-
-static bool debugUartConfigured = false;
 
 KeyboardMainExposedState keyboardMain_exposedState = {
   .layerStateFlags = 0,
@@ -275,7 +272,6 @@ static void processKeyStatesUpdate() {
 
 void keyboardMain_useDebugUart(uint32_t baud) {
   debugUart_initialize(baud);
-  debugUartConfigured = true;
   printf("--------\n");
 }
 
@@ -308,9 +304,6 @@ uint8_t *keyboardMain_getNextScanSlotStateFlags() {
 }
 
 void keyboardMain_initialize() {
-  if (!debugUartConfigured) {
-    debugUart_disable();
-  }
   dataStorage_initialize();
   configManager_addParameterChangeListener(parameterValueHandler);
   configManager_initialize();
