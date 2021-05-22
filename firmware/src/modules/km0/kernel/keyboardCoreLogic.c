@@ -532,8 +532,7 @@ static void handleOperationOn(uint32_t opWord) {
       setModifiers(modFlags);
     }
     if (logicalKey) {
-      // todo: globalなuseSecondaryLayoutフラグを参照する
-      bool isSecondaryLayout = logicOptions.systemLayout > 0;
+      bool isSecondaryLayout = logicOptions.systemLayout == 2;
       uint16_t hidKey = keyCodeTranslator_mapLogicalKeyToHidKeyCode(logicalKey, isSecondaryLayout);
       bool isShiftCancellable = ((opWord >> 12) & 1) > 0;
       uint8_t keyCode = hidKey & 0xff;
@@ -596,7 +595,7 @@ static void handleOperationOff(uint32_t opWord) {
       clearModifiers(modFlags);
     }
     if (logicalKey) {
-      bool isSecondaryLayout = logicOptions.systemLayout > 0;
+      bool isSecondaryLayout = logicOptions.systemLayout == 2;
       uint16_t hidKey = keyCodeTranslator_mapLogicalKeyToHidKeyCode(logicalKey, isSecondaryLayout);
       bool isShiftCancellable = ((opWord >> 12) & 1) > 0;
       uint8_t keyCode = hidKey & 0xff;

@@ -28,10 +28,10 @@ export const BehaviorSelector = () => {
 
 export const LayoutStandardSelector = () => {
   const { systemLayoutIndex, setSystemLayoutIndex } = useSystemLayoutModel();
-  const layoutIndices: number[] = [0, 1];
+  const layoutIndices: number[] = [1, 2];
   const textDictionary: { [key in number]: string } = {
-    0: 'US',
-    1: 'JIS',
+    1: 'US',
+    2: 'JIS',
   };
   return (
     <DualItemsHoverSelector
