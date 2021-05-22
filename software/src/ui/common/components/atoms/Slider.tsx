@@ -18,7 +18,7 @@ export const Slider: FC<Props> = (props) => {
       value={props.value}
       min={props.min}
       max={props.max}
-      onChange={handleChange}
+      onInput={handleChange}
     />
   );
 };
