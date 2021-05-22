@@ -2,7 +2,7 @@
 
 #include "debug_uart.h"
 #include "digitalIo.h"
-#include "km0/common/bitOperations.h"
+#include "km0/base/bitOperations.h"
 #include "km0/types.h"
 
 #include <avr/interrupt.h>

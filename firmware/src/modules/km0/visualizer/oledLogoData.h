@@ -1,7 +1,7 @@
 #ifndef __OLED_LOGO_DATA_H__
 #define __OLED_LOGO_DATA_H__
 
-#include "km0/common/romData.h"
+#include "km0/base/romData.h"
 #include "km0/types.h"
 
 const uint32_t oledLogoDataKermite[] ROM_DATA = {

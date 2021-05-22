@@ -1,8 +1,8 @@
 #include "oledCore.h"
-#include "km0/common/bitOperations.h"
-#include "km0/common/romData.h"
-#include "km0/common/utils.h"
-#include "km0/deviceIo/boardI2c.h"
+#include "km0/base/bitOperations.h"
+#include "km0/base/romData.h"
+#include "km0/base/utils.h"
+#include "km0/device/boardI2c.h"
 #include <string.h>
 
 //OLED描画処理モジュール

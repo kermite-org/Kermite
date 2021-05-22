@@ -1,9 +1,9 @@
 #include "config.h"
-#include "km0/deviceIo/boardIo.h"
-#include "km0/deviceIo/digitalIo.h"
-#include "km0/keyboard/generalKeyboard.h"
-#include "km0/keyboard/keyScanner_basicMatrix.h"
-#include "km0/keyboard/keyboardMain.h"
+#include "km0/device/boardIo.h"
+#include "km0/device/digitalIo.h"
+#include "km0/kernel/keyboardMain.h"
+#include "km0/scanner/keyScanner_basicMatrix.h"
+#include "km0/wrapper/generalKeyboard.h"
 
 #define NumColumns 6
 #define NumRows 8

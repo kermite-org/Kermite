@@ -1,8 +1,8 @@
-#include "km0/common/utils.h"
-#include "km0/deviceIo/debugUart.h"
-#include "km0/deviceIo/digitalIo.h"
-#include "km0/deviceIo/interLink.h"
-#include "km0/deviceIo/system.h"
+#include "km0/base/utils.h"
+#include "km0/device/debugUart.h"
+#include "km0/device/digitalIo.h"
+#include "km0/device/interLink.h"
+#include "km0/device/system.h"
 #include <stdio.h>
 
 //board RPi Pico

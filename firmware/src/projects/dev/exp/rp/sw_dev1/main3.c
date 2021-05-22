@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 #include "hardware/clocks.h"
-#include "km0/deviceIo/digitalIo.h"
+#include "km0/device/digitalIo.h"
 #include "pico/multicore.h"
 #include "pico/stdlib.h"
 #include "swtxrx.pio.h"

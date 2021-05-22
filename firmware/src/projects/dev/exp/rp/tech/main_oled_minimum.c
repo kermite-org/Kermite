@@ -1,7 +1,7 @@
 #include "hardware/i2c.h"
-#include "km0/deviceIo/boardIo.h"
-#include "km0/deviceIo/digitalIo.h"
-#include "km0/deviceIo/system.h"
+#include "km0/device/boardIo.h"
+#include "km0/device/digitalIo.h"
+#include "km0/device/system.h"
 #include "pico/stdlib.h"
 
 //board RPi Pico

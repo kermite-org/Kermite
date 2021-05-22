@@ -1,8 +1,8 @@
 #include "hardware/clocks.h"
 #include "hardware/pio.h"
-#include "km0/deviceIo/boardIo.h"
-#include "km0/deviceIo/digitalIo.h"
-#include "km0/deviceIo/system.h"
+#include "km0/device/boardIo.h"
+#include "km0/device/digitalIo.h"
+#include "km0/device/system.h"
 #include "neoPixelCore.pio.h"
 
 static void neoPixelCoreDev_initProgram(PIO pio, uint sm, uint offset, uint pin) {
