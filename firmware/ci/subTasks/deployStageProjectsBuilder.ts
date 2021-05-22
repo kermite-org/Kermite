@@ -41,7 +41,7 @@ function gatherTargetProjectVariationPaths() {
 }
 
 function loadFirmwareCommonRevisions(): ICommonRevisions {
-  const versionFilePath = "./src/modules/km0/keyboard/versionDefinitions.h";
+  const versionFilePath = "./src/modules/km0/kernel/versionDefinitions.h";
   const content = fsxReadTextFile(versionFilePath);
   const keys = {
     storageFormatRevision: "Kermite_ConfigStorageFormatRevision",
