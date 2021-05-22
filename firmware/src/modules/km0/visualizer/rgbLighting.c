@@ -120,7 +120,7 @@ static void customParameterHandlerExtended(uint8_t slotIndex, uint8_t value) {
   } else if (slotIndex == SystemParameter_GlowColor) {
     glowColor = value;
   } else if (slotIndex == SystemParameter_GlowBrightness) {
-    glowBrightness = value;
+    glowBrightness = (((uint16_t)value * value) >> 8) + 1; //apply A curve
   } else if (slotIndex == SystemParameter_GlowPattern) {
     glowPattern = value;
   }
