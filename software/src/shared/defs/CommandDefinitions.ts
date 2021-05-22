@@ -17,23 +17,27 @@ export const enum SystemParameter {
 }
 
 export const enum SystemAction {
-  SetEmitKeyStroke = 0,
-  SetEmitRealtimeEvents,
-  SetKeyHoldIndicatorLed,
-  SetHeartbeatLed,
-  SetMasterSide,
-  SetSystemLayout,
-  SetWiringMode,
-  SetGlowActive,
-  SetGlowColor,
-  SetGlowBrightness,
-  SetGlowPattern,
-  SetGlowDirection,
-  SetGlowSpeed,
+  None = 0,
+  GlowOn,
+  GlowOff,
+  GlowToggle,
 
-  ShiftGlowColor = 30,
-  ShiftGlowBrightness,
-  ShiftGlowPattern,
-  ShiftGlowDirection,
-  ShiftGlowSpeed,
+  // SetEmitKeyStroke = 0,
+  // SetEmitRealtimeEvents,
+  // SetKeyHoldIndicatorLed,
+  // SetHeartbeatLed,
+  // SetMasterSide,
+
+  // SetSystemLayout = 1, // 1:US, 2:JIS
+  // SetWiringMode, // 0:Main, 1:Alter
+  // ShiftGlowPattern,
+  // SetGlowColor,
+  // SetGlowBrightness,
+  // SetGlowPattern,
+  // SetGlowDirection,
+  // SetGlowSpeed,
+  // ShiftGlowColor,
+  // ShiftGlowBrightness,
+  // ShiftGlowDirection,
+  // ShiftGlowSpeed,
 }

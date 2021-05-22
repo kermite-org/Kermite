@@ -76,6 +76,14 @@ void fixSystemParametersLoaded() {
   }
 }
 
+void writeParameter(uint8_t parameterIndex, uint8_t value) {
+  if (validateParameter(parameterIndex, value)) {
+    systemParameterValues[parameterIndex] = value;
+    notifyParameterChanged(parameterIndex, value);
+    lazySaveTick = 3000; //いずれかのパラメタが変更されてから3秒後にデータをストレージに書き込む
+  }
+}
+
 void configManager_initialize() {
   addrSystemParameters = dataStorage_getDataAddress_systemParameters();
 
@@ -107,11 +115,7 @@ void configManager_readSystemParameterMaxValues(uint8_t *buf, uint8_t len) {
 }
 
 void configManager_writeParameter(uint8_t parameterIndex, uint8_t value) {
-  if (validateParameter(parameterIndex, value)) {
-    systemParameterValues[parameterIndex] = value;
-    notifyParameterChanged(parameterIndex, value);
-    lazySaveTick = 3000; //いずれかのパラメタが変更されてから3秒後にデータをストレージに書き込む
-  }
+  writeParameter(parameterIndex, value);
 }
 
 void configManager_bulkWriteParameters(uint8_t *buf, uint8_t len, uint8_t parameterIndexBase) {
@@ -124,13 +128,12 @@ void configManager_bulkWriteParameters(uint8_t *buf, uint8_t len, uint8_t parame
 void configManager_resetSystemParameters() {
   uint8_t *pDefaultValues = (uint8_t *)&systemParametersDefault;
   for (int i = 0; i < NumSystemParameters; i++) {
-    uint8_t parameterIndex = SystemParameterIndexBase + i;
     uint8_t value = pDefaultValues[i];
-    configManager_writeParameter(parameterIndex, value);
+    configManager_writeParameter(i, value);
   }
 }
 
-static void shiftParameterValue(uint8_t parameterIndex, uint8_t payloadValue) {
+static void shiftParameterValue__UNTESTED(uint8_t parameterIndex, uint8_t payloadValue) {
   int dir = ((payloadValue & 0x0F) == 1) ? 1 : -1;
   bool clamp = (payloadValue >> 4 & 0x0F) > 0;
   bool maxValue = ((uint8_t *)&systemParameterMaxValues)[parameterIndex];
@@ -146,15 +149,25 @@ static void shiftParameterValue(uint8_t parameterIndex, uint8_t payloadValue) {
   }
 }
 
-void configManager_handleSystemAction(uint8_t systemActionCode, uint8_t payloadValue) {
-  if (0 <= systemActionCode && systemActionCode < NumSystemParameters) {
-    uint8_t parameterIndex = systemActionCode;
-    configManager_writeParameter(parameterIndex, payloadValue);
+void configManager_handleSystemAction(uint8_t code, uint8_t payloadValue) {
+  if (code == SystemAction_GlowOff) {
+    writeParameter(SystemParameter_GlowActive, 0);
   }
-  if (30 <= systemActionCode && systemActionCode < (30 + 5)) {
-    uint8_t parameterIndex = systemActionCode - 30 + 9;
-    shiftParameterValue(parameterIndex, payloadValue);
+  if (code == SystemAction_GlowOn) {
+    writeParameter(SystemParameter_GlowActive, 1);
   }
+  if (code == SystemAction_GlowToggle) {
+    uint8_t isOn = systemParameterValues[SystemParameter_GlowActive];
+    writeParameter(SystemParameter_GlowActive, isOn ^ 1);
+  }
+  // if (0 <= systemActionCode && systemActionCode < NumSystemParameters) {
+  //   uint8_t parameterIndex = systemActionCode;
+  //   configManager_writeParameter(parameterIndex, payloadValue);
+  // }
+  // if (30 <= systemActionCode && systemActionCode < (30 + 5)) {
+  //   uint8_t parameterIndex = systemActionCode - 30 + 9;
+  //   shiftParameterValue(parameterIndex, payloadValue);
+  // }
 }
 
 void configManager_processUpdate() {
