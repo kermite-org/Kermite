@@ -56,6 +56,22 @@ void configManager_addParameterChangeListener(ParameterChangedListener listener)
   parameterChangedListeners[numParameterChangedListeners++] = listener;
 }
 
+void fixSystemParametersLoaded() {
+  for (int i = 0; i < NumSystemParameters; i++) {
+    uint8_t value = systemParameterValues[i];
+    uint8_t min = 0;
+    if (i == SystemParameter_SystemLayout) {
+      min = 1;
+    }
+    uint8_t max = ((uint8_t *)&systemParameterMaxValues)[i];
+    if (!utils_inRange(value, min, max)) {
+      uint8_t defaultValue = ((uint8_t *)&systemParametersDefault)[i];
+      systemParameterValues[i] = defaultValue;
+      printf("system parameter value fixed %d, %d --> %d\n", i, value, defaultValue);
+    }
+  }
+}
+
 void configManager_initialize() {
   addrSystemParameters = dataStorage_getDataAddress_systemParameters();
 
@@ -71,6 +87,7 @@ void configManager_initialize() {
     }
 
     dataMemory_readBytes(addrSystemParameters, systemParameterValues, NumSystemParameters);
+    fixSystemParametersLoaded();
     for (int bi = 0; bi < NumSystemParameters; bi++) {
       uint8_t parameterIndex = SystemParameterIndexBase + bi;
       notifyParameterChanged(parameterIndex, systemParameterValues[bi]);
