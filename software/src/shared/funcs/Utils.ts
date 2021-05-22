@@ -115,13 +115,8 @@ export function removeOptionFromOptionsArray<T>(
 export function createDictionaryFromKeyValues<K extends string | number, V>(
   arr: [K, V][],
 ): { [key in K]: V } {
-  const obj: { [key in K]: V } = {} as any;
-  arr.forEach((el) => {
-    const key = el[0];
-    const value = el[1];
-    obj[key] = value;
-  });
-  return obj;
+  const res = Object.fromEntries(arr) as { [key in K]: V };
+  return res;
 }
 
 export function clonePlainOldObject(src: any): any {
@@ -157,11 +152,9 @@ export function mapObjectValues<P, Q>(
   },
   proc: (value: P) => Q,
 ): { [key: string]: Q } {
-  const dst: { [key: string]: Q } = {};
-  for (const key in src) {
-    dst[key] = proc(src[key]);
-  }
-  return dst;
+  return Object.fromEntries(
+    Object.keys(src).map((key) => [key, proc(src[key])]),
+  );
 }
 
 export function linerInterpolateValue(
