@@ -1,4 +1,5 @@
 #include "km0/device/boardIo.h"
+#include "km0/device/debugUart.h"
 #include "km0/device/digitalIo.h"
 #include "km0/kernel/keyboardMain.h"
 #include "km0/scanner/keyScanner_basicMatrix.h"
@@ -30,7 +31,7 @@ static const int8_t keyIndexTable[NumScanSlots]  = {
 // clang-format on
 
 int main() {
-  keyboardMain_useDebugUart(115200);
+  debugUart_initialize(115200);
   boardIo_setupLeds_proMicroRp();
   keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
   keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);

@@ -1,5 +1,6 @@
 #include "config.h"
 #include "km0/device/boardIo.h"
+#include "km0/device/debugUart.h"
 #include "km0/device/digitalIo.h"
 #include "km0/kernel/keyboardMain.h"
 #include "km0/scanner/keyScanner_basicMatrix.h"
@@ -23,7 +24,7 @@ static const int8_t keyIndexTable[NumScanSlots] = {
 int main() {
   // boardIo_setupLeds_rpiPico(); //RPi pico
   boardIo_setupLeds_proMicroRp(); //promicro rp2040
-  keyboardMain_useDebugUart(38400);
+  debugUart_initialize(38400);
   keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
   keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
   keyboardMain_setKeyIndexTable(keyIndexTable);

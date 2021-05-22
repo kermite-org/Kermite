@@ -1,5 +1,6 @@
 #include "config.h"
 #include "km0/device/boardIo.h"
+#include "km0/device/debugUart.h"
 #include "km0/device/digitalIo.h"
 #include "km0/kernel/keyboardMain.h"
 #include "km0/scanner/keyScanner_directWired.h"
@@ -16,7 +17,7 @@ int main() {
   boardIo_setupLeds_rpiPico();
   oledDisplay_initialize();
   keyScanner_directWired_initialize(NumScanSlots, keyInputPins);
-  keyboardMain_useDebugUart(115200);
+  debugUart_initialize(115200);
   keyboardMain_useKeyScanner(keyScanner_directWired_update);
   keyboardMain_setKeyIndexTable(keyIndexTable);
   keyboardMain_useDisplayModule(oledDisplay_update);

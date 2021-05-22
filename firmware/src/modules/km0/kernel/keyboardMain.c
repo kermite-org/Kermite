@@ -10,7 +10,6 @@
 #include "km0/base/bitOperations.h"
 #include "km0/base/utils.h"
 #include "km0/device/boardIo.h"
-#include "km0/device/debugUart.h"
 #include "km0/device/usbIoCore.h"
 #include "versionDefinitions.h"
 #include <stdio.h>
@@ -269,11 +268,6 @@ static void processKeyStatesUpdate() {
 }
 
 //----------------------------------------------------------------------
-
-void keyboardMain_useDebugUart(uint32_t baud) {
-  debugUart_initialize(baud);
-  printf("--------\n");
-}
 
 void keyboardMain_useKeyScanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags)) {
   keyScannerUpdateFunc = _keyScannerUpdateFunc;

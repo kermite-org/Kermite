@@ -1,5 +1,6 @@
 #include "config.h"
 #include "km0/device/boardIo.h"
+#include "km0/device/debugUart.h"
 #include "km0/device/digitalIo.h"
 #include "km0/kernel/keyboardMain.h"
 #include "km0/scanner/keyScanner_directWired.h"
@@ -20,7 +21,7 @@ static EncoderConfig encoderConfigs[] = {
 
 int main() {
   boardIo_setupLeds_proMicroAvr();
-  keyboardMain_useDebugUart(38400);
+  debugUart_initialize(38400);
   keyScanner_directWired_initialize(NumKeyScanSlots, keyInputPins);
   keyScanner_encoderBasic_initialize(encoderConfigs, 2);
   keyboardMain_useKeyScanner(keyScanner_directWired_update);

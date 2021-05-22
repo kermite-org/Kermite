@@ -33,6 +33,7 @@ void debugUart_initialize(uint32_t baud) {
   uart_init(baud);
   stdout = &mystdout;
   debug_uart_enabled = true;
+  printf("--------\n");
 }
 
 void debugUart_disable() {
