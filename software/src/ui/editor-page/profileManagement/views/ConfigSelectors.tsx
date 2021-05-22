@@ -28,7 +28,7 @@ export const BehaviorSelector = () => {
 
 export const LayoutStandardSelector = () => {
   const { systemLayoutIndex, setSystemLayoutIndex } = useSystemLayoutModel();
-  const layoutIndices: number[] = [1, 2];
+  const layoutIndices: number[] = [2, 1];
   const textDictionary: { [key in number]: string } = {
     1: 'US',
     2: 'JIS',
@@ -57,7 +57,6 @@ export const RoutingChannelSelector = () => {
       currentItem={routingChannel}
       setCurrentItem={setRoutingChannel}
       textDictionary={textDictionary}
-      hint={texts.hint_assigner_topBar_keyboardSystemLayoutSelector}
     />
   );
 };
