@@ -1,14 +1,15 @@
 #include "config.h"
-#include "km0/deviceIo/boardIo.h"
-#include "km0/deviceIo/digitalIo.h"
-#include "km0/deviceIo/serialLed.h"
-#include "km0/deviceIo/system.h"
-#include "km0/keyboard/generalKeyboard.h"
-#include "km0/keyboard/keyScanner_basicMatrix.h"
-#include "km0/keyboard/keyScanner_encoderBasic.h"
-#include "km0/keyboard/keyboardMain.h"
+#include "km0/device/boardIo.h"
+#include "km0/device/debugUart.h"
+#include "km0/device/digitalIo.h"
+#include "km0/device/serialLed.h"
+#include "km0/device/system.h"
+#include "km0/kernel/keyboardMain.h"
+#include "km0/scanner/keyScanner_basicMatrix.h"
+#include "km0/scanner/keyScanner_encoderBasic.h"
 #include "km0/visualizer/oledDisplay.h"
 #include "km0/visualizer/rgbLighting.h"
+#include "km0/wrapper/generalKeyboard.h"
 
 #define NumColumns 4
 #define NumRows 3
@@ -34,21 +35,16 @@ static EncoderConfig encoderConfigs[] = {
 
 int main() {
   boardIo_setupLeds_proMicroRp();
-  keyboardMain_useDebugUart(115200);
-  keyboardMain_setKeyIndexTable(keyIndexTable);
-
-  keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
-  keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
-
-  keyScanner_encoderBasic_initialize(1, encoderConfigs);
-  keyboardMain_useKeyScannerExtra(keyScanner_encoderBasic_update);
-
+  debugUart_initialize(115200);
   oledDisplay_initialize();
-  keyboardMain_useDisplayModule(oledDisplay_update);
-
   rgbLighting_initialize(GP29, NumKeys);
+  keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
+  keyScanner_encoderBasic_initialize(encoderConfigs, 1);
+  keyboardMain_setKeyIndexTable(keyIndexTable);
+  keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
+  keyboardMain_useKeyScannerExtra(keyScanner_encoderBasic_update);
+  keyboardMain_useDisplayModule(oledDisplay_update);
   keyboardMain_useDisplayModule(rgbLighting_update);
-
   generalKeyboard_start();
   return 0;
 }
