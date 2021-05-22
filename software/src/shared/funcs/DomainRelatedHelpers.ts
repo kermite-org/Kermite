@@ -43,6 +43,10 @@ export function generateRandomDeviceInstanceCode(): string {
     .join('');
 }
 
+export function checkDeviceInstanceCodeFormat(code: string): boolean {
+  return /^[0-9a-f]{8}$/.test(code);
+}
+
 const kermiteMcuCodeToMcuNameMap: { [key in string]: string } = {
   A152FD20: 'ATmega32U4',
   A152FD21: 'RP2040',
