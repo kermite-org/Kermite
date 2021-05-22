@@ -127,6 +127,8 @@ static uint16_t getKeyMappingDataBodyLengthMax() {
   return 0;
 }
 
+static uint8_t tempDataBuf[10];
+
 static bool validateStorageDataFormat() {
   uint16_t first = dataMemory_readWord(0);
   if (first != StorageHeadMagicNumber) {
@@ -146,7 +148,6 @@ static bool validateStorageDataFormat() {
     return false;
   }
   //check project id stored in system data body
-  static uint8_t tempDataBuf[10];
   uint16_t posSystemDataBody = getChunkBodyAddress(ChunkSig_SystemData);
   dataMemory_readBytes(posSystemDataBody, tempDataBuf, 8);
   bool projectIdValid = utils_compareBytes(tempDataBuf, (uint8_t *)KERMITE_PROJECT_ID, 8);
@@ -175,7 +176,11 @@ static void resetDataStorage() {
   //fill initial data
   uint16_t posSystemDataBody = getChunkBodyAddress(ChunkSig_SystemData);
   if (posSystemDataBody) {
+    //write project id
     dataMemory_writeBytes(posSystemDataBody, (uint8_t *)KERMITE_PROJECT_ID, 8);
+    //clear device instance code
+    utils_fillBytes(tempDataBuf, 0, 8);
+    dataMemory_writeBytes(posSystemDataBody + 8, tempDataBuf, 8);
   }
 }
 
@@ -203,7 +208,7 @@ uint16_t dataStorage_getDataAddress_deviceInstanceCode() {
 
 uint16_t dataStorage_getDataAddress_parametersInitializationFlag() {
   uint16_t base = getChunkBodyAddress(ChunkSig_SystemData);
-  return base + 9;
+  return base + 16;
 }
 
 uint16_t dataStorage_getDataAddress_systemParameters() {

@@ -100,9 +100,7 @@ static void emitSingleParameterChangedNotification(uint8_t parameterIndex, uint8
 }
 
 static void copyEepromBytesToBuffer(uint8_t *dstBuffer, int dstOffset, uint16_t srcEepromAddr, uint16_t len) {
-  for (uint16_t i = 0; i < len; i++) {
-    dstBuffer[dstOffset + i] = dataMemory_readByte(srcEepromAddr + i);
-  }
+  dataMemory_readBytes(srcEepromAddr, dstBuffer + dstOffset, len);
 }
 
 static void emitDeviceAttributesResponse() {
