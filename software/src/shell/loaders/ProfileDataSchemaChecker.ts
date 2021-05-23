@@ -40,6 +40,11 @@ const vAssignOperation = () =>
       type: vValueEquals('layerClearExclusive'),
       targetExclusionGroup: vNumber(),
     }),
+    vObject({
+      type: vValueEquals('systemAction'),
+      action: vString(),
+      payloadValue: vNumber(),
+    }),
   ]);
 
 export const profileDataSchemaChecker = vObject({
