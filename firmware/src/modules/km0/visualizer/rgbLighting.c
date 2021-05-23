@@ -3,6 +3,7 @@
 #include "km0/base/utils.h"
 #include "km0/device/serialLed.h"
 #include "km0/kernel/commandDefinitions.h"
+#include "km0/kernel/configManager.h"
 #include "km0/kernel/keyboardMainInternal.h"
 
 //----------------------------------------------------------------------
@@ -141,6 +142,8 @@ static void updateFrame() {
 }
 
 void rgbLighting_initialize(uint8_t _pin, uint8_t _numLeds) {
+  configManager_overrideParameterMaxValue(SystemParameter_GlowColor, 12);
+  configManager_overrideParameterMaxValue(SystemParameter_GlowPattern, 3);
   keyboardMain_setCallbacks(&callbacks);
   serialLed_initialize(_pin);
   numLeds = _numLeds;

@@ -29,7 +29,7 @@ static const T_SystemParametersSet systemParametersDefault = {
   .glowSpeed = 4,
 };
 
-static const T_SystemParametersSet systemParameterMaxValues = {
+static T_SystemParametersSet systemParameterMaxValues = {
   .emitKeyStroke = 1,
   .emitRealtimeEvents = 1,
   .keyHoldLedOutput = 1,
@@ -38,9 +38,9 @@ static const T_SystemParametersSet systemParameterMaxValues = {
   .systemLayout = 2,
   .wiringMode = 1,
   .glowActive = 1,
-  .glowColor = 12,
+  .glowColor = 255,
   .glowBrightness = 255,
-  .glowPattern = 3,
+  .glowPattern = 255,
   .glowDirection = 1,
   .glowSpeed = 10,
 };
@@ -54,6 +54,11 @@ static void notifyParameterChanged(uint8_t parameterIndex, uint8_t value) {
 
 void configManager_addParameterChangeListener(ParameterChangedListener listener) {
   parameterChangedListeners[numParameterChangedListeners++] = listener;
+}
+
+void configManager_overrideParameterMaxValue(uint8_t parameterIndex, uint8_t value) {
+  uint8_t *pMaxValues = (uint8_t *)&systemParameterMaxValues;
+  pMaxValues[parameterIndex] = value;
 }
 
 bool validateParameter(uint8_t parameterIndex, uint8_t value) {
