@@ -4,7 +4,6 @@
 #include "km0/device/serialLed.h"
 #include "km0/kernel/commandDefinitions.h"
 #include "km0/kernel/configManager.h"
-#include "km0/kernel/keyboardMainInternal.h"
 
 //----------------------------------------------------------------------
 
@@ -115,7 +114,7 @@ SceneFunc sceneFuncs[] = {
 static const int NumSceneFuncs = sizeof(sceneFuncs) / sizeof(SceneFunc);
 static uint8_t glowPattern = 0;
 
-static void customParameterHandlerExtended(uint8_t slotIndex, uint8_t value) {
+static void parameterChangeHandler(uint8_t slotIndex, uint8_t value) {
   if (slotIndex == SystemParameter_GlowActive) {
     glowEnabled = value;
   } else if (slotIndex == SystemParameter_GlowColor) {
@@ -126,10 +125,6 @@ static void customParameterHandlerExtended(uint8_t slotIndex, uint8_t value) {
     glowPattern = value;
   }
 }
-
-static KeyboardCallbackSet callbacks = {
-  .customParameterHandlerExtended = customParameterHandlerExtended
-};
 
 static void updateFrame() {
   if (!glowEnabled) {
@@ -144,7 +139,7 @@ static void updateFrame() {
 void rgbLighting_initialize(uint8_t _pin, uint8_t _numLeds) {
   configManager_overrideParameterMaxValue(SystemParameter_GlowColor, 12);
   configManager_overrideParameterMaxValue(SystemParameter_GlowPattern, 3);
-  keyboardMain_setCallbacks(&callbacks);
+  configManager_addParameterChangeListener(parameterChangeHandler);
   serialLed_initialize(_pin);
   numLeds = _numLeds;
 }
