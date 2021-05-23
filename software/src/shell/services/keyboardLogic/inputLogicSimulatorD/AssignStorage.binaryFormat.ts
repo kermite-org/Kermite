@@ -49,7 +49,7 @@ namespace AssignStroageBinaryFormat {
   };
 
   type OpKeyInput = BasedOn<u16> & {
-    bit15_14: { fOperationType: Fixed<b2, 1> };
+    bit15_14: { fOperationType: Fixed<b2, 0b01> };
     bit13: Reserved;
     bit12: { fIsShiftCancellable: b1 };
     bit11_8: { fModifiers: AttachedModifiers };
@@ -66,7 +66,7 @@ namespace AssignStroageBinaryFormat {
   };
 
   type OpLayerCall = BasedOn<u16> & {
-    bit15_14: { fOperationType: Fixed<b2, 2> };
+    bit15_14: { fOperationType: Fixed<b2, 0b10> };
     bit13_12: Reserved;
     bit11_8: { fTargetLayerIndex: b4 };
     bit7_4: { fLayerInvocationMode: OneOf<b4, LayerInvocationModeValues> };
@@ -74,26 +74,26 @@ namespace AssignStroageBinaryFormat {
   };
 
   type ExOperationHeadByte<F extends number> = {
-    bit7_6: { fOperationType: Fixed<b2, 3> };
+    bit7_6: { fOperationType: Fixed<b2, 0b11> };
     bit5_3: Reserved;
     bit2_0: { fExOperationType: Fixed<b3, F> };
   };
 
   type OpLayerClearExclusive = BasedOn<u16> & {
-    bit15_8: { headByte: ExOperationHeadByte<1> };
+    bit15_8: { headByte: ExOperationHeadByte<0b001> };
     bit7_3: Reserved;
     bit2_0: { fTargetExclusionGroup: b3 };
   };
 
-  type OpMousePointerMove = BasedOn<u24> & {
-    bit23_16: { headByte: ExOperationHeadByte<2> };
-    bit15_8: { fMoveAmountX: s8 };
-    bit7_0: { fMoveAmountY: s8 };
+  type OpSystemAction = BasedOn<u16> & {
+    bit15_8: { headByte: ExOperationHeadByte<0b010> };
+    bit7_0: { fCommandIndex: u8 };
   };
 
-  type OpCustomCommand = BasedOn<u16> & {
-    bit15_8: { headByte: ExOperationHeadByte<3> };
-    bit7_0: { fCommandIndex: u8 };
+  type OpMousePointerMove = BasedOn<u24> & {
+    bit23_16: { headByte: ExOperationHeadByte<0b011> };
+    bit15_8: { fMoveAmountX: s8 };
+    bit7_0: { fMoveAmountY: s8 };
   };
 
   type AssignOpeartion = VariableLength<1, 4> &
@@ -102,8 +102,8 @@ namespace AssignStroageBinaryFormat {
       | OpKeyInput
       | OpLayerCall
       | OpLayerClearExclusive
+      | OpSystemAction
       | OpMousePointerMove
-      | OpCustomCommand
     );
 
   // --------------------

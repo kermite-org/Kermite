@@ -13,6 +13,7 @@ import {
   getLogicalKeyForVirtualKey,
   routerConstants,
   encodeModifierVirtualKeys,
+  SystemActionToCodeMap,
 } from '~/shared';
 import {
   writeBytes,
@@ -96,20 +97,22 @@ TT: type, 0b11 for extended operations
 FFF: extended operation type, 0b001 for layer clear exclusive
 QQQ: target exclusion group
 
+SystemAction
+0bTTxx_xFFF CCCC_CCCC VVVV_VVVV
+0b11xx_x010 ~
+TT: type, 0b10 for extended operations
+FFF: extended operation type, 0b010 for user system action
+CCCC_CCCC: system action code
+VVVV_VVVV: payload value
+
 MousePointerMovement (NOT IMPLEMENTED YET)
 0bTTxx_xFFF AAAA_AAAA BBBB_BBBB
-0b11xx_x010 ~
+0b11xx_x011 ~
 TT: type, 0b11 for extended operations
-FFF: extended operation type, 0b010 for mouse pointer movement
+FFF: extended operation type, 0b011 for mouse pointer movement
 AAAA_AAAA: movement amount x, -128~127
 BBBB_BBBB: movement amount y, -128~127
 
-CustomCommand (NOT IMPLEMENTED YET)
-0bTTxx_xFFF CCCC_CCCC
-0b11xx_x011 ~
-TT: type, 0b11 for extended operations
-FFF: extended operation type, 0b011 for user custom command
-CCCC_CCCC: user custom command index
 */
 function encodeAssignOperation(
   op: IAssignOperation | undefined,
@@ -143,9 +146,15 @@ function encodeAssignOperation(
   }
   if (op?.type === 'layerClearExclusive') {
     const fAssingType = 0b11;
-    const fExOperationType = 1;
+    const fExOperationType = 0b001;
     const targetGroup = op.targetExclusionGroup;
     return [(fAssingType << 6) | fExOperationType, targetGroup];
+  }
+  if (op?.type === 'systemAction') {
+    const fAssingType = 0b11;
+    const fExOperationType = 0b010;
+    const actionCode = SystemActionToCodeMap[op.action] || 0;
+    return [(fAssingType << 6) | fExOperationType, actionCode, op.payloadValue];
   }
   return [0];
 }
