@@ -150,6 +150,7 @@ static void shiftParameterValue__UNTESTED(uint8_t parameterIndex, uint8_t payloa
 }
 
 void configManager_handleSystemAction(uint8_t code, uint8_t payloadValue) {
+  // printf("handle system action %d %d\n", code, payloadValue);
   if (code == SystemAction_GlowOff) {
     writeParameter(SystemParameter_GlowActive, 0);
   }
