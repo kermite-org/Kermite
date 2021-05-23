@@ -1,5 +1,6 @@
 #include "keyboardCoreLogic.h"
 #include "config.h"
+#include "configManager.h"
 #include "dataStorage.h"
 #include "keyActionRemapper.h"
 #include "keyCodeTranslator.h"
@@ -509,8 +510,8 @@ enum {
 
 enum {
   ExOpType_LayerClearExclusive = 1,
-  ExOpType_MovePointerMovement = 2,
-  ExOpType_CustomCommand = 3,
+  ExOpType_SystemAction = 2,
+  ExOpType_MovePointerMovement = 3,
 };
 
 enum {
@@ -575,6 +576,11 @@ static void handleOperationOn(uint32_t opWord) {
       opWord >>= 16;
       uint8_t targetGroup = opWord & 0b111;
       layerMutations_clearExclusive(targetGroup, -1);
+    }
+    if (exOpType == ExOpType_SystemAction) {
+      uint8_t actionCode = (opWord >> 16) & 0xff;
+      uint8_t payloadValue = (opWord >> 8) & 0xff;
+      configManager_handleSystemAction(actionCode, payloadValue);
     }
   }
 
