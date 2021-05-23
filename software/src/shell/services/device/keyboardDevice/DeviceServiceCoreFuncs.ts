@@ -6,7 +6,10 @@ import {
   RawHidMessageProtocolRevision,
 } from '~/shared';
 import { NumSystemParameters } from '~/shared/defs/CommandDefinitions';
-import { generateRandomDeviceInstanceCode } from '~/shared/funcs/DomainRelatedHelpers';
+import {
+  checkDeviceInstanceCodeFormat,
+  generateRandomDeviceInstanceCode,
+} from '~/shared/funcs/DomainRelatedHelpers';
 import { Packets } from '~/shell/services/device/keyboardDevice/Packets';
 import {
   ICustomParametersReadResponseData,
@@ -149,8 +152,7 @@ export async function deviceSetupTask(
 }> {
   let attrsRes = await readDeviceAttributes(device);
   checkDeviceRevisions(attrsRes);
-  // console.log({ attrsRes });
-  if (!attrsRes.deviceInstanceCode) {
+  if (!checkDeviceInstanceCodeFormat(attrsRes.deviceInstanceCode)) {
     console.log('write device instance code');
     const code = generateRandomDeviceInstanceCode();
     writeDeviceInstanceCode(device, code);

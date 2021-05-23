@@ -19,8 +19,8 @@ static const T_SystemParametersSet systemParametersDefault = {
   .keyHoldLedOutput = true,
   .heartbeatLedOutput = true,
   .masterSide = 0,
-  .secondSystemLayoutActive = false,
-  .alterAssignsActive = false,
+  .systemLayout = 2,
+  .wiringMode = 0,
   .glowActive = false,
   .glowColor = 0,
   .glowBrightness = 20,
@@ -35,8 +35,8 @@ static const T_SystemParametersSet systemParameterMaxValues = {
   .keyHoldLedOutput = 1,
   .heartbeatLedOutput = 1,
   .masterSide = 1,
-  .secondSystemLayoutActive = 1,
-  .alterAssignsActive = 1,
+  .systemLayout = 2,
+  .wiringMode = 1,
   .glowActive = 1,
   .glowColor = 12,
   .glowBrightness = 255,
@@ -56,6 +56,22 @@ void configManager_addParameterChangeListener(ParameterChangedListener listener)
   parameterChangedListeners[numParameterChangedListeners++] = listener;
 }
 
+void fixSystemParametersLoaded() {
+  for (int i = 0; i < NumSystemParameters; i++) {
+    uint8_t value = systemParameterValues[i];
+    uint8_t min = 0;
+    if (i == SystemParameter_SystemLayout) {
+      min = 1;
+    }
+    uint8_t max = ((uint8_t *)&systemParameterMaxValues)[i];
+    if (!utils_inRange(value, min, max)) {
+      uint8_t defaultValue = ((uint8_t *)&systemParametersDefault)[i];
+      systemParameterValues[i] = defaultValue;
+      printf("system parameter value fixed %d, %d --> %d\n", i, value, defaultValue);
+    }
+  }
+}
+
 void configManager_initialize() {
   addrSystemParameters = dataStorage_getDataAddress_systemParameters();
 
@@ -71,6 +87,7 @@ void configManager_initialize() {
     }
 
     dataMemory_readBytes(addrSystemParameters, systemParameterValues, NumSystemParameters);
+    fixSystemParametersLoaded();
     for (int bi = 0; bi < NumSystemParameters; bi++) {
       uint8_t parameterIndex = SystemParameterIndexBase + bi;
       notifyParameterChanged(parameterIndex, systemParameterValues[bi]);

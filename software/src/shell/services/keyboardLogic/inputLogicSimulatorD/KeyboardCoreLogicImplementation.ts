@@ -551,7 +551,7 @@ function handleOperationOn(opWord: u32) {
       setModifiers(modFlags);
     }
     if (logicalKey) {
-      const isSecondaryLayout = logicOptions.systemLayout > 0;
+      const isSecondaryLayout = logicOptions.systemLayout === 2;
       const hidKey = keyCodeTranslator_mapLogicalKeyToHidKeyCode(
         logicalKey,
         isSecondaryLayout,
@@ -620,7 +620,7 @@ function handleOperationOff(opWord: u32) {
       clearModifiers(modFlags);
     }
     if (logicalKey) {
-      const isSecondaryLayout = logicOptions.systemLayout > 0;
+      const isSecondaryLayout = logicOptions.systemLayout === 2;
       const hidKey = keyCodeTranslator_mapLogicalKeyToHidKeyCode(
         logicalKey,
         isSecondaryLayout,

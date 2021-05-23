@@ -11,4 +11,5 @@ export const RawHidMessageProtocolRevision = 1;
 export const ProfileBinaryFormatRevision = 2;
 
 // 210513, 1, 初版
-export const ConfigParametersRevision = 1;
+// 210522, 2, sytemLayoutをUS:1,JIS:2に変更
+export const ConfigParametersRevision = 2;

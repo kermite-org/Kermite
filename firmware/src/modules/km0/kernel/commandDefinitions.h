@@ -14,7 +14,7 @@ enum {
   SystemParameter_KeyHoldIndicatorLed,
   SystemParameter_HeartbeatLed,
   SystemParameter_MasterSide,   //0:left, 1:right
-  SystemParameter_SystemLayout, //0:US, 1:JIS
+  SystemParameter_SystemLayout, //0:None(fallback to US), 1:US, 2:JIS
   SystemParameter_WiringMode,   //0:Main, 1:Alter
   SystemParameter_GlowActive,
   SystemParameter_GlowColor,      //0-12
@@ -29,8 +29,8 @@ typedef struct {
   uint8_t keyHoldLedOutput;
   uint8_t heartbeatLedOutput;
   uint8_t masterSide;
-  uint8_t secondSystemLayoutActive;
-  uint8_t alterAssignsActive;
+  uint8_t systemLayout;
+  uint8_t wiringMode;
   uint8_t glowActive;
   uint8_t glowColor;
   uint8_t glowBrightness;
