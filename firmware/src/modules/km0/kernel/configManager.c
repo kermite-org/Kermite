@@ -40,7 +40,7 @@ static const T_SystemParametersSet systemParameterMaxValues = {
   .glowActive = 1,
   .glowColor = 12,
   .glowBrightness = 255,
-  .glowPattern = 10,
+  .glowPattern = 3,
   .glowDirection = 1,
   .glowSpeed = 10,
 };
@@ -133,14 +133,13 @@ void configManager_resetSystemParameters() {
   }
 }
 
-static void shiftParameterValue__UNTESTED(uint8_t parameterIndex, uint8_t payloadValue) {
-  int dir = ((payloadValue & 0x0F) == 1) ? 1 : -1;
-  bool clamp = (payloadValue >> 4 & 0x0F) > 0;
-  bool maxValue = ((uint8_t *)&systemParameterMaxValues)[parameterIndex];
-  int oldValue = systemParameterValues[parameterIndex];
-  int newValue;
-  if (!clamp) {
-    newValue = (oldValue + dir + maxValue) % maxValue;
+static void shiftParameter(uint8_t parameterIndex, int dir, bool roll) {
+  uint8_t maxValue = ((uint8_t *)&systemParameterMaxValues)[parameterIndex];
+  int16_t oldValue = systemParameterValues[parameterIndex];
+  int16_t newValue;
+  if (roll) {
+    int16_t n = maxValue + 1;
+    newValue = (oldValue + dir + n) % n;
   } else {
     newValue = utils_clamp(oldValue + dir, 0, maxValue);
   }
@@ -151,24 +150,25 @@ static void shiftParameterValue__UNTESTED(uint8_t parameterIndex, uint8_t payloa
 
 void configManager_handleSystemAction(uint8_t code, uint8_t payloadValue) {
   // printf("handle system action %d %d\n", code, payloadValue);
-  if (code == SystemAction_GlowOff) {
-    writeParameter(SystemParameter_GlowActive, 0);
-  }
-  if (code == SystemAction_GlowOn) {
-    writeParameter(SystemParameter_GlowActive, 1);
-  }
   if (code == SystemAction_GlowToggle) {
     uint8_t isOn = systemParameterValues[SystemParameter_GlowActive];
     writeParameter(SystemParameter_GlowActive, isOn ^ 1);
   }
-  // if (0 <= systemActionCode && systemActionCode < NumSystemParameters) {
-  //   uint8_t parameterIndex = systemActionCode;
-  //   configManager_writeParameter(parameterIndex, payloadValue);
-  // }
-  // if (30 <= systemActionCode && systemActionCode < (30 + 5)) {
-  //   uint8_t parameterIndex = systemActionCode - 30 + 9;
-  //   shiftParameterValue(parameterIndex, payloadValue);
-  // }
+  if (code == SystemAction_GlowPatternRoll) {
+    shiftParameter(SystemParameter_GlowPattern, 1, true);
+  }
+  if (code == SystemAction_GlowColorPrev) {
+    shiftParameter(SystemParameter_GlowColor, -1, true);
+  }
+  if (code == SystemAction_GlowColorNext) {
+    shiftParameter(SystemParameter_GlowColor, 1, true);
+  }
+  if (code == SystemAction_GlowBrightnessMinus) {
+    shiftParameter(SystemParameter_GlowBrightness, -16, false);
+  }
+  if (code == SystemAction_GlowBrightnessPlus) {
+    shiftParameter(SystemParameter_GlowBrightness, 16, false);
+  }
 }
 
 void configManager_processUpdate() {
