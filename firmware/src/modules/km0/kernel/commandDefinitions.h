@@ -41,9 +41,12 @@ typedef struct {
 
 enum {
   SystemAction_None = 0,
-  SystemAction_GlowOn,
-  SystemAction_GlowOff,
-  SystemAction_GlowToggle,
+  SystemAction_GlowToggle = 1,
+  SystemAction_GlowPatternRoll = 2,
+  SystemAction_GlowColorPrev = 3,
+  SystemAction_GlowColorNext = 4,
+  SystemAction_GlowBrightnessMinus = 5,
+  SystemAction_GlowBrightnessPlus = 6
 };
 
 #endif

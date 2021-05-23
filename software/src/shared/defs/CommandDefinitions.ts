@@ -16,44 +16,40 @@ export const enum SystemParameter {
   GlowSpeed,
 }
 
-export type SystemAction = 'None' | 'GlowOn' | 'GlowOff' | 'GlowToggle';
+export type SystemAction =
+  | 'None'
+  | 'GlowToggle'
+  | 'GlowPatternRoll'
+  | 'GlowColorPrev'
+  | 'GlowColorNext'
+  | 'GlowBrightnessMinus'
+  | 'GlowBrightnessPlus';
 
-export const SystemActionToCodeMap: { [key in SystemAction]: number } = {
+export const systemActionToCodeMap: { [key in SystemAction]: number } = {
   None: 0,
-  GlowOn: 1,
-  GlowOff: 2,
-  GlowToggle: 3,
+  GlowToggle: 1,
+  GlowPatternRoll: 2,
+  GlowColorPrev: 3,
+  GlowColorNext: 4,
+  GlowBrightnessMinus: 5,
+  GlowBrightnessPlus: 6,
 };
 
-export const SystemActionToLabelTextMap: { [key in SystemAction]: string } = {
+export const systemActionToLabelTextMap: { [key in SystemAction]: string } = {
   None: 'none',
-  GlowOn: 'led on',
-  GlowOff: 'led off',
-  GlowToggle: 'led x',
+  GlowToggle: 'led on^',
+  GlowPatternRoll: 'led p>',
+  GlowColorPrev: 'led <c',
+  GlowColorNext: 'led c>',
+  GlowBrightnessMinus: 'led b-',
+  GlowBrightnessPlus: 'led b+',
 };
 
-// export const enum SystemActionCode {
-//   None = 0,
-//   GlowOn,
-//   GlowOff,
-//   GlowToggle,
-
-//   // SetEmitKeyStroke = 0,
-//   // SetEmitRealtimeEvents,
-//   // SetKeyHoldIndicatorLed,
-//   // SetHeartbeatLed,
-//   // SetMasterSide,
-
-//   // SetSystemLayout = 1, // 1:US, 2:JIS
-//   // SetWiringMode, // 0:Main, 1:Alter
-//   // ShiftGlowPattern,
-//   // SetGlowColor,
-//   // SetGlowBrightness,
-//   // SetGlowPattern,
-//   // SetGlowDirection,
-//   // SetGlowSpeed,
-//   // ShiftGlowColor,
-//   // ShiftGlowBrightness,
-//   // ShiftGlowDirection,
-//   // ShiftGlowSpeed,
-// }
+export const systemActionAssignSelectionSource: SystemAction[] = [
+  'GlowToggle',
+  'GlowBrightnessMinus',
+  'GlowBrightnessPlus',
+  'GlowColorPrev',
+  'GlowColorNext',
+  'GlowPatternRoll',
+];
