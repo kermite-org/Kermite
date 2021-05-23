@@ -3,8 +3,8 @@ import {
   VirtualKeyTexts,
   addOptionToOptionsArray,
   removeOptionFromOptionsArray,
-  SystemAction,
-  SystemActionToLabelTextMap,
+  systemActionToLabelTextMap,
+  systemActionAssignSelectionSource,
 } from '~/shared';
 import { texts } from '~/ui/common';
 import { editorModel } from '~/ui/editor-page/editorMainPart/models/EditorModel';
@@ -25,8 +25,6 @@ const modifierVirtualKeys: ModifierVirtualKey[] = [
   'K_Alt',
   'K_Gui',
 ];
-
-const systemActions: SystemAction[] = ['GlowOff', 'GlowOn', 'GlowToggle'];
 
 const RestrictDualSecondaryAssigns = false;
 
@@ -175,10 +173,10 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
 
   layerCallEntries.push(layerCallEntryClearExclusive);
 
-  const systemActionEntries: IOperationCardViewModel[] = systemActions.map(
+  const systemActionEntries: IOperationCardViewModel[] = systemActionAssignSelectionSource.map(
     (sa) => ({
       sig: sa,
-      text: SystemActionToLabelTextMap[sa],
+      text: systemActionToLabelTextMap[sa],
       isCurrent:
         editOperation?.type === 'systemAction' && editOperation.action === sa,
       setCurrent: () =>

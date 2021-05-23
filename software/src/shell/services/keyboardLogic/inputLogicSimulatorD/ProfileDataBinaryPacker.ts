@@ -13,7 +13,7 @@ import {
   getLogicalKeyForVirtualKey,
   routerConstants,
   encodeModifierVirtualKeys,
-  SystemActionToCodeMap,
+  systemActionToCodeMap,
 } from '~/shared';
 import {
   writeBytes,
@@ -153,7 +153,7 @@ function encodeAssignOperation(
   if (op?.type === 'systemAction') {
     const fAssingType = 0b11;
     const fExOperationType = 0b010;
-    const actionCode = SystemActionToCodeMap[op.action] || 0;
+    const actionCode = systemActionToCodeMap[op.action] || 0;
     return [(fAssingType << 6) | fExOperationType, actionCode, op.payloadValue];
   }
   return [0];
