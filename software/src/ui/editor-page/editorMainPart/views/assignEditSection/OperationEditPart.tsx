@@ -51,6 +51,7 @@ export function OpertionEditPart(props: {
     virtualKeyEntryGroups,
     attachedModifierEntries,
     layerCallEntries,
+    systemActionEntries,
   } = props.operationEditPartVM;
 
   return (
@@ -66,11 +67,7 @@ export function OpertionEditPart(props: {
             {virtualKeyEntryGroups.map((group, index) => (
               <div css={cssGroupBox} key={index}>
                 {group.map((model) => (
-                  <OperationCard
-                    model={model}
-                    key={model.sig}
-                    // qxOptimizer="deepEqualExFn"
-                  />
+                  <OperationCard model={model} key={model.sig} />
                 ))}
               </div>
             ))}
@@ -86,13 +83,16 @@ export function OpertionEditPart(props: {
         <div css={cssLayerAssignsRow}>
           <div css={cssGroupBox}>
             {layerCallEntries.map((model) => (
-              <OperationCard
-                model={model}
-                key={model.sig}
-                // qxOptimizer="deepEqualExFn"
-              />
+              <OperationCard model={model} key={model.sig} />
             ))}
             <OperationLayerOptionSelector {...props.layoutOptionEditVM} />
+          </div>
+        </div>
+        <div css={cssLayerAssignsRow}>
+          <div css={cssGroupBox}>
+            {systemActionEntries.map((model) => (
+              <OperationCard model={model} key={model.sig} />
+            ))}
           </div>
         </div>
       </div>

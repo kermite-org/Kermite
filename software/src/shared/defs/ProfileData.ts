@@ -1,3 +1,4 @@
+import { SystemAction } from '~/shared/defs/CommandDefinitions';
 import {
   createFallbackPersistKeyboardDesign,
   IPersistKeyboardDesign,
@@ -53,19 +54,18 @@ export type IAssignOperationClearExclusiveLayers = {
   targetExclusionGroup: number;
 };
 
+export type IAssignOperationSystemAction = {
+  type: 'systemAction';
+  action: SystemAction;
+  payloadValue: number;
+};
+
 export type IAssignOperation =
   | IAssingOperationKeyInput
   | IAssignOperationLayerCall
   | IAssignOperationModifierCall
-  | IAssignOperationClearExclusiveLayers;
-// | {
-//     type: 'fixedText';
-//     text: string;
-//   }
-// | {
-//     type: 'mouseOperation';
-//     action: 'leftdown' | 'leftup' | 'leftclick';
-//   };
+  | IAssignOperationClearExclusiveLayers
+  | IAssignOperationSystemAction;
 
 export type IProfileAssignType = 'single' | 'dual';
 

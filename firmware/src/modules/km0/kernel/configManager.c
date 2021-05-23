@@ -29,7 +29,7 @@ static const T_SystemParametersSet systemParametersDefault = {
   .glowSpeed = 4,
 };
 
-static const T_SystemParametersSet systemParameterMaxValues = {
+static T_SystemParametersSet systemParameterMaxValues = {
   .emitKeyStroke = 1,
   .emitRealtimeEvents = 1,
   .keyHoldLedOutput = 1,
@@ -38,9 +38,9 @@ static const T_SystemParametersSet systemParameterMaxValues = {
   .systemLayout = 2,
   .wiringMode = 1,
   .glowActive = 1,
-  .glowColor = 12,
+  .glowColor = 255,
   .glowBrightness = 255,
-  .glowPattern = 10,
+  .glowPattern = 255,
   .glowDirection = 1,
   .glowSpeed = 10,
 };
@@ -56,19 +56,36 @@ void configManager_addParameterChangeListener(ParameterChangedListener listener)
   parameterChangedListeners[numParameterChangedListeners++] = listener;
 }
 
+void configManager_overrideParameterMaxValue(uint8_t parameterIndex, uint8_t value) {
+  uint8_t *pMaxValues = (uint8_t *)&systemParameterMaxValues;
+  pMaxValues[parameterIndex] = value;
+}
+
+bool validateParameter(uint8_t parameterIndex, uint8_t value) {
+  uint8_t min = 0;
+  if (parameterIndex == SystemParameter_SystemLayout) {
+    min = 1;
+  }
+  uint8_t max = ((uint8_t *)&systemParameterMaxValues)[parameterIndex];
+  return utils_inRange(value, min, max);
+}
+
 void fixSystemParametersLoaded() {
   for (int i = 0; i < NumSystemParameters; i++) {
     uint8_t value = systemParameterValues[i];
-    uint8_t min = 0;
-    if (i == SystemParameter_SystemLayout) {
-      min = 1;
-    }
-    uint8_t max = ((uint8_t *)&systemParameterMaxValues)[i];
-    if (!utils_inRange(value, min, max)) {
+    if (!validateParameter(i, value)) {
       uint8_t defaultValue = ((uint8_t *)&systemParametersDefault)[i];
       systemParameterValues[i] = defaultValue;
       printf("system parameter value fixed %d, %d --> %d\n", i, value, defaultValue);
     }
+  }
+}
+
+void writeParameter(uint8_t parameterIndex, uint8_t value) {
+  if (validateParameter(parameterIndex, value)) {
+    systemParameterValues[parameterIndex] = value;
+    notifyParameterChanged(parameterIndex, value);
+    lazySaveTick = 3000; //いずれかのパラメタが変更されてから3秒後にデータをストレージに書き込む
   }
 }
 
@@ -88,9 +105,8 @@ void configManager_initialize() {
 
     dataMemory_readBytes(addrSystemParameters, systemParameterValues, NumSystemParameters);
     fixSystemParametersLoaded();
-    for (int bi = 0; bi < NumSystemParameters; bi++) {
-      uint8_t parameterIndex = SystemParameterIndexBase + bi;
-      notifyParameterChanged(parameterIndex, systemParameterValues[bi]);
+    for (int i = 0; i < NumSystemParameters; i++) {
+      notifyParameterChanged(i, systemParameterValues[i]);
     }
   }
 }
@@ -104,38 +120,31 @@ void configManager_readSystemParameterMaxValues(uint8_t *buf, uint8_t len) {
 }
 
 void configManager_writeParameter(uint8_t parameterIndex, uint8_t value) {
-  uint8_t bi = parameterIndex - SystemParameterIndexBase;
-  systemParameterValues[bi] = value;
-  notifyParameterChanged(parameterIndex, value);
-  lazySaveTick = 3000; //いずれかのパラメタが変更されてから3秒後にデータをストレージに書き込む
+  writeParameter(parameterIndex, value);
 }
 
 void configManager_bulkWriteParameters(uint8_t *buf, uint8_t len, uint8_t parameterIndexBase) {
   for (int i = 0; i < len; i++) {
-    uint8_t parameterIndex = parameterIndexBase + i;
     uint8_t value = buf[i];
-    configManager_writeParameter(parameterIndex, value);
+    configManager_writeParameter(i, value);
   }
 }
 
 void configManager_resetSystemParameters() {
   uint8_t *pDefaultValues = (uint8_t *)&systemParametersDefault;
   for (int i = 0; i < NumSystemParameters; i++) {
-    uint8_t parameterIndex = SystemParameterIndexBase + i;
     uint8_t value = pDefaultValues[i];
-    configManager_writeParameter(parameterIndex, value);
+    configManager_writeParameter(i, value);
   }
 }
 
-static void shiftParameterValue(uint8_t parameterIndex, uint8_t payloadValue) {
-  int dir = ((payloadValue & 0x0F) == 1) ? 1 : -1;
-  bool clamp = (payloadValue >> 4 & 0x0F) > 0;
-  uint8_t bi = parameterIndex - SystemParameterIndexBase;
-  bool maxValue = ((uint8_t *)&systemParameterMaxValues)[bi];
-  int oldValue = systemParameterValues[bi];
-  int newValue;
-  if (!clamp) {
-    newValue = (oldValue + dir + maxValue) % maxValue;
+static void shiftParameter(uint8_t parameterIndex, int dir, bool roll) {
+  uint8_t maxValue = ((uint8_t *)&systemParameterMaxValues)[parameterIndex];
+  int16_t oldValue = systemParameterValues[parameterIndex];
+  int16_t newValue;
+  if (roll) {
+    int16_t n = maxValue + 1;
+    newValue = (oldValue + dir + n) % n;
   } else {
     newValue = utils_clamp(oldValue + dir, 0, maxValue);
   }
@@ -144,14 +153,26 @@ static void shiftParameterValue(uint8_t parameterIndex, uint8_t payloadValue) {
   }
 }
 
-void configManager_handleSystemAction(uint8_t systemActionCode, uint8_t payloadValue) {
-  if (0 <= systemActionCode && systemActionCode < NumSystemParameters) {
-    uint8_t parameterIndex = systemActionCode;
-    configManager_writeParameter(parameterIndex, payloadValue);
+void configManager_handleSystemAction(uint8_t code, uint8_t payloadValue) {
+  // printf("handle system action %d %d\n", code, payloadValue);
+  if (code == SystemAction_GlowToggle) {
+    uint8_t isOn = systemParameterValues[SystemParameter_GlowActive];
+    writeParameter(SystemParameter_GlowActive, isOn ^ 1);
   }
-  if (30 <= systemActionCode && systemActionCode < (30 + 5)) {
-    uint8_t parameterIndex = systemActionCode - 30 + 9;
-    shiftParameterValue(parameterIndex, payloadValue);
+  if (code == SystemAction_GlowPatternRoll) {
+    shiftParameter(SystemParameter_GlowPattern, 1, true);
+  }
+  if (code == SystemAction_GlowColorPrev) {
+    shiftParameter(SystemParameter_GlowColor, -1, true);
+  }
+  if (code == SystemAction_GlowColorNext) {
+    shiftParameter(SystemParameter_GlowColor, 1, true);
+  }
+  if (code == SystemAction_GlowBrightnessMinus) {
+    shiftParameter(SystemParameter_GlowBrightness, -16, false);
+  }
+  if (code == SystemAction_GlowBrightnessPlus) {
+    shiftParameter(SystemParameter_GlowBrightness, 16, false);
   }
 }
 

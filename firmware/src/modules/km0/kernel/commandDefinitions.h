@@ -5,8 +5,8 @@
 
 #define NumSystemParameters 13
 
-static const int SystemParameterIndexBase = 0;
-static const int ExtraParameterIndexBase = 128;
+// static const int SystemParameterIndexBase = 0;
+// static const int ExtraParameterIndexBase = 128;
 
 enum {
   SystemParameter_EmitKeyStroke = 0,
@@ -40,25 +40,13 @@ typedef struct {
 } T_SystemParametersSet;
 
 enum {
-  SystemAction_SetEmitKeyStroke = 0,
-  SystemAction_SetEmitRealtimeEvents,
-  SystemAction_SetKeyHoldIndicatorLed,
-  SystemAction_SetHeartbeatLed,
-  SystemAction_SetMasterSide,
-  SystemAction_SetSystemLayout,
-  SystemAction_SetWiringMode,
-  SystemAction_SetGlowActive,
-  SystemAction_SetGlowColor,
-  SystemAction_SetGlowBrightness,
-  SystemAction_SetGlowPattern,
-  SystemAction_SetGlowDirection,
-  SystemAction_SetGlowSpeed,
-
-  SystemAction_ShiftGlowColor = 30,
-  SystemAction_ShiftGlowBrightness,
-  SystemAction_ShiftGlowPattern,
-  SystemAction_ShiftGlowDirection,
-  SystemAction_ShiftGlowSpeed,
+  SystemAction_None = 0,
+  SystemAction_GlowToggle = 1,
+  SystemAction_GlowPatternRoll = 2,
+  SystemAction_GlowColorPrev = 3,
+  SystemAction_GlowColorNext = 4,
+  SystemAction_GlowBrightnessMinus = 5,
+  SystemAction_GlowBrightnessPlus = 6
 };
 
 #endif

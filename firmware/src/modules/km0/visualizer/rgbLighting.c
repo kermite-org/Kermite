@@ -3,7 +3,7 @@
 #include "km0/base/utils.h"
 #include "km0/device/serialLed.h"
 #include "km0/kernel/commandDefinitions.h"
-#include "km0/kernel/keyboardMainInternal.h"
+#include "km0/kernel/configManager.h"
 
 //----------------------------------------------------------------------
 
@@ -41,6 +41,30 @@ static uint32_t pseudoRandom() {
   static uint32_t val = 345234;
   val = (51345613 * val) + 11;
   return val;
+}
+
+#define getR(x) ((x) >> 16 & 0xFF)
+#define getG(x) ((x) >> 8 & 0xFF)
+#define getB(x) ((x)&0xFF)
+
+static uint8_t lerpElement(uint8_t e0, uint8_t e1, float p) {
+  return (uint8_t)((1.0f - p) * e0 + p * e1);
+}
+
+static uint32_t lerpColor(uint32_t col0, uint32_t col1, float p) {
+  uint8_t rr = lerpElement(getR(col0), getR(col1), p);
+  uint8_t gg = lerpElement(getG(col0), getG(col1), p);
+  uint8_t bb = lerpElement(getB(col0), getB(col1), p);
+  return (uint32_t)rr << 16 | (uint32_t)gg << 8 | bb;
+}
+
+static uint32_t shiftRgb(uint32_t col, uint8_t shift) {
+  if (shift == 1) {
+    return (col >> 8) | ((col & 0xFF) << 16);
+  } else if (shift == 2) {
+    return (col >> 16) | ((col & 0xFFFF) << 8);
+  }
+  return col;
 }
 
 //----------------------------------------------------------------------
@@ -101,6 +125,46 @@ static void scene3_updateFrame() {
 }
 
 //----------------------------------------------------------------------
+//scene 4
+
+static const uint32_t scene4_period = 25 * 6;
+
+static void scene4_updateFrame() {
+  float phase = (float)(frameTick % scene4_period) / scene4_period; //0~1
+
+  uint32_t colorA = getCurrentColor();
+  if (colorA == 0xFFFFFF) {
+    colorA = 0xFFFF88;
+  }
+  uint32_t colorB = shiftRgb(colorA, 1);
+  uint32_t colorC = shiftRgb(colorA, 2);
+
+  float phase2 = phase * 3.0f;
+  uint32_t col0, col1;
+  float p = phase2;
+  if (p < 1.0f) {
+    col0 = colorA;
+    col1 = colorB;
+  } else if (p < 2.0f) {
+    p -= 1.0f;
+    col0 = colorB;
+    col1 = colorC;
+  } else {
+    p -= 2.0f;
+    col0 = colorC;
+    col1 = colorA;
+  }
+
+  for (int i = 0; i < numLeds; i++) {
+    float q = ((float)i / numLeds);
+    float p2 = 3.0f * p - q * 2.0f;
+    // float p2 = 1.5f * p - q * 0.5f;
+    uint32_t color = lerpColor(col0, col1, utils_clamp(p2, 0.0f, 1.0f));
+    serialLed_putPixelWithAlpha(color, glowBrightness);
+  }
+}
+
+//----------------------------------------------------------------------
 
 typedef void (*SceneFunc)(void);
 
@@ -108,13 +172,14 @@ SceneFunc sceneFuncs[] = {
   scene0_updateFrame,
   scene1_updateFrame,
   scene2_updateFrame,
-  scene3_updateFrame
+  scene3_updateFrame,
+  scene4_updateFrame
 };
 
 static const int NumSceneFuncs = sizeof(sceneFuncs) / sizeof(SceneFunc);
 static uint8_t glowPattern = 0;
 
-static void customParameterHandlerExtended(uint8_t slotIndex, uint8_t value) {
+static void parameterChangeHandler(uint8_t slotIndex, uint8_t value) {
   if (slotIndex == SystemParameter_GlowActive) {
     glowEnabled = value;
   } else if (slotIndex == SystemParameter_GlowColor) {
@@ -125,10 +190,6 @@ static void customParameterHandlerExtended(uint8_t slotIndex, uint8_t value) {
     glowPattern = value;
   }
 }
-
-static KeyboardCallbackSet callbacks = {
-  .customParameterHandlerExtended = customParameterHandlerExtended
-};
 
 static void updateFrame() {
   if (!glowEnabled) {
@@ -141,7 +202,9 @@ static void updateFrame() {
 }
 
 void rgbLighting_initialize(uint8_t _pin, uint8_t _numLeds) {
-  keyboardMain_setCallbacks(&callbacks);
+  configManager_overrideParameterMaxValue(SystemParameter_GlowColor, 12);
+  configManager_overrideParameterMaxValue(SystemParameter_GlowPattern, 4);
+  configManager_addParameterChangeListener(parameterChangeHandler);
   serialLed_initialize(_pin);
   numLeds = _numLeds;
 }
