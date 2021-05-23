@@ -1,8 +1,8 @@
-#include "km0/common/bitOperations.h"
-#include "km0/deviceIo/debugUart.h"
-#include "km0/deviceIo/digitalIo.h"
-#include "km0/deviceIo/system.h"
-#include "km0/keyboard/keyScanner_encoderBasic.h"
+#include "km0/base/bitOperations.h"
+#include "km0/device/debugUart.h"
+#include "km0/device/digitalIo.h"
+#include "km0/device/system.h"
+#include "km0/scanner/keyScanner_encoderBasic.h"
 #include <stdio.h>
 
 //board RPi Pico
@@ -22,7 +22,7 @@ int main() {
   printf("start\n");
 
   digitalIo_setOutput(GP25);
-  keyScanner_encoderBasic_initialize(2, appEncoderConfigs);
+  keyScanner_encoderBasic_initialize(appEncoderConfigs, 2);
 
   int cnt = 0;
   while (true) {

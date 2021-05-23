@@ -1,5 +1,5 @@
 #include "digitalIo.h"
-#include "km0/common/bitOperations.h"
+#include "km0/base/bitOperations.h"
 #include "singlewire3.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>

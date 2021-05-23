@@ -1,6 +1,6 @@
 #include "debug_uart.h"
 #include "digitalIo.h"
-#include "km0/common/bitOperations.h"
+#include "km0/base/bitOperations.h"
 #include <avr/io.h>
 #include <avr/pgmspace.h>
 #include <stdio.h>

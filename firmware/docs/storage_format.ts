@@ -30,8 +30,8 @@ BB BB ...: チャンクのボディデータ, LL LL で規定されるサイズ�
       keyHoldLedOutput: U8;
       heartBeatLedOutput: U8;
       masterSide: U8;
-      secondSystemLayoutActive: U8;
-      alterAssignsActive: U8;
+      systemLayout: U8;
+      wiringMode: U8;
       glowActive: U8;
       glowColor: U8;
       glowBrightness: U8;

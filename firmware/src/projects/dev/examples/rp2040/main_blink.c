@@ -1,5 +1,5 @@
-#include "km0/deviceIo/digitalIo.h"
-#include "km0/deviceIo/system.h"
+#include "km0/device/digitalIo.h"
+#include "km0/device/system.h"
 
 //board RPi Pico
 //GP25: onboard LED

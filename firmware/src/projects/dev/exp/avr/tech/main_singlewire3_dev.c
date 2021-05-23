@@ -7,7 +7,7 @@
 #include "dataMemory.h"
 #include "debugUart.h"
 #include "digitalIo.h"
-#include "km0/common/bitOperations.h"
+#include "km0/base/bitOperations.h"
 #include "singlewire3.h"
 #include "utils.h"
 

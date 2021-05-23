@@ -71,8 +71,8 @@ export const SystemParameterDefinitions: ICustromParameterSpec[] = [
     slotIndex: 5,
     label: 'System Layout',
     options: [
-      { value: 0, label: 'US' },
-      { value: 1, label: 'JIS' },
+      { value: 1, label: 'US' },
+      { value: 2, label: 'JIS' },
     ],
     defaultValue: 0,
   },

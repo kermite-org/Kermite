@@ -375,5 +375,5 @@ const virtualKeyToLogicalKeyMappingTable: {
 };
 
 export function getLogicalKeyForVirtualKey(virtualKey: VirtualKey): number {
-  return virtualKeyToLogicalKeyMappingTable[virtualKey];
+  return virtualKeyToLogicalKeyMappingTable[virtualKey] || LogicalKey.LK_NONE;
 }

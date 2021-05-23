@@ -3,6 +3,8 @@ import {
   VirtualKeyTexts,
   addOptionToOptionsArray,
   removeOptionFromOptionsArray,
+  systemActionToLabelTextMap,
+  systemActionAssignSelectionSource,
 } from '~/shared';
 import { texts } from '~/ui/common';
 import { editorModel } from '~/ui/editor-page/editorMainPart/models/EditorModel';
@@ -83,6 +85,7 @@ export interface IOperationEditPartViewModel {
   virtualKeyEntryGroups: IOperationCardViewModel[][];
   attachedModifierEntries: IOperationCardViewModel[];
   layerCallEntries: IOperationCardViewModel[];
+  systemActionEntries: IOperationCardViewModel[];
 }
 
 export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
@@ -170,9 +173,27 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
 
   layerCallEntries.push(layerCallEntryClearExclusive);
 
+  const systemActionEntries: IOperationCardViewModel[] = systemActionAssignSelectionSource.map(
+    (sa) => ({
+      sig: sa,
+      text: systemActionToLabelTextMap[sa],
+      isCurrent:
+        editOperation?.type === 'systemAction' && editOperation.action === sa,
+      setCurrent: () =>
+        writeEditOperation({
+          type: 'systemAction',
+          action: sa,
+          payloadValue: 0,
+        }),
+      isEnabled: true,
+      hint: '',
+    }),
+  );
+
   return {
     virtualKeyEntryGroups,
     attachedModifierEntries,
     layerCallEntries,
+    systemActionEntries,
   };
 }

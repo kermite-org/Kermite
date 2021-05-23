@@ -1,11 +1,12 @@
 #include "config.h"
-#include "km0/deviceIo/boardIo.h"
-#include "km0/deviceIo/digitalIo.h"
-#include "km0/deviceIo/serialLed.h"
-#include "km0/keyboard/generalKeyboard.h"
-#include "km0/keyboard/keyScanner_directWired.h"
-#include "km0/keyboard/keyboardMain.h"
+#include "km0/device/boardIo.h"
+#include "km0/device/debugUart.h"
+#include "km0/device/digitalIo.h"
+#include "km0/device/serialLed.h"
+#include "km0/kernel/keyboardMain.h"
+#include "km0/scanner/keyScanner_directWired.h"
 #include "km0/visualizer/rgbLighting.h"
+#include "km0/wrapper/generalKeyboard.h"
 #include <stdio.h>
 
 #define NumKeys 4
@@ -16,7 +17,7 @@ int main() {
   rgbLighting_initialize(GP28, 15);
   keyScanner_directWired_initialize(NumKeys, keyInputPins);
   boardIo_setupLeds_rpiPico();
-  keyboardMain_useDebugUart(115200);
+  debugUart_initialize(115200);
   keyboardMain_setKeyIndexTable(keyIndexTable);
   keyboardMain_useDisplayModule(rgbLighting_update);
   generalKeyboard_start();

@@ -1,7 +1,7 @@
-#include "km0/deviceIo/debugUart.h"
-#include "km0/deviceIo/digitalIo.h"
-#include "km0/deviceIo/system.h"
-#include "km0/deviceIo/usbIoCore.h"
+#include "km0/device/debugUart.h"
+#include "km0/device/digitalIo.h"
+#include "km0/device/system.h"
+#include "km0/device/usbIoCore.h"
 #include <stdio.h>
 #include <stdlib.h>
 

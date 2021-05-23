@@ -1,0 +1,21 @@
+{
+  "projectId": "2xUWcB80",
+  "keyboardName": "mp2105",
+  "parameterConfigurations": [
+    {
+      "targetVariationNames": ["all"],
+      "systemParameterKeys": [
+        "emitKeyStroke",
+        "emitRealtimeEvents",
+        "keyHoldIndicatorLed",
+        "heartbeatLed",
+        "glowActive",
+        "glowColor",
+        "glowBrightness",
+        "glowPattern",
+        "glowDirection",
+        "glowSpeed"
+      ]
+    }
+  ]
+}

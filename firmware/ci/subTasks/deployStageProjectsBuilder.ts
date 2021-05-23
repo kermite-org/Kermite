@@ -41,7 +41,7 @@ function gatherTargetProjectVariationPaths() {
 }
 
 function loadFirmwareCommonRevisions(): ICommonRevisions {
-  const versionFilePath = "./src/modules/km0/keyboard/versionDefinitions.h";
+  const versionFilePath = "./src/modules/km0/kernel/versionDefinitions.h";
   const content = fsxReadTextFile(versionFilePath);
   const keys = {
     storageFormatRevision: "Kermite_ConfigStorageFormatRevision",
@@ -132,8 +132,8 @@ function readRomRamUsageFromSizeCommandRawOutput(
       const nBss = parseInt(m[3]);
       const nRom = nText + nData;
       const nRam = nData + nBss;
-      const usageProg = (nRom / romMax) * 100;
-      const usageData = (nRam / ramMax) * 100;
+      const usageProg = Number(((nRom / romMax) * 100).toFixed(2));
+      const usageData = Number(((nRam / ramMax) * 100).toFixed(2));
       return [usageProg, usageData];
     }
   }

@@ -525,8 +525,8 @@ const OpType = {
 
 const ExOpType = {
   LayerClearExclusive: 1,
-  MovePointerMovement: 2,
-  CustomCommand: 3,
+  SystemAction: 2,
+  MovePointerMovement: 3,
 };
 
 const InvocationMode = {
@@ -551,7 +551,7 @@ function handleOperationOn(opWord: u32) {
       setModifiers(modFlags);
     }
     if (logicalKey) {
-      const isSecondaryLayout = logicOptions.systemLayout > 0;
+      const isSecondaryLayout = logicOptions.systemLayout === 2;
       const hidKey = keyCodeTranslator_mapLogicalKeyToHidKeyCode(
         logicalKey,
         isSecondaryLayout,
@@ -598,6 +598,11 @@ function handleOperationOn(opWord: u32) {
       const targetGroup = opWord & 0b111;
       layerMutations_clearExclusive(targetGroup);
     }
+    if (exOpType === ExOpType.SystemAction) {
+      const actionCode = (opWord >> 16) & 0xff;
+      const payloadValue = (opWord >> 8) & 0xff;
+      console.log(`system action ${actionCode}`);
+    }
   }
 
   if (opType !== OpType.LayerCall) {
@@ -620,7 +625,7 @@ function handleOperationOff(opWord: u32) {
       clearModifiers(modFlags);
     }
     if (logicalKey) {
-      const isSecondaryLayout = logicOptions.systemLayout > 0;
+      const isSecondaryLayout = logicOptions.systemLayout === 2;
       const hidKey = keyCodeTranslator_mapLogicalKeyToHidKeyCode(
         logicalKey,
         isSecondaryLayout,

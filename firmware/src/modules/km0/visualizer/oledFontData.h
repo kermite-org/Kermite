@@ -1,7 +1,7 @@
 #ifndef __OLED_FONT_DATA_H__
 #define __OLED_FONT_DATA_H__
 
-#include "km0/common/romData.h"
+#include "km0/base/romData.h"
 #include "km0/types.h"
 
 #if !defined(KM0_OLED_DISPLAY__DEFAULT_FONT_SQUARE) && !defined(KM0_OLED_DISPLAY__DEFAULT_FONT_ROUND)

@@ -1,7 +1,7 @@
-#include "km0/common/bitOperations.h"
-#include "km0/deviceIo/boardIo.h"
-#include "km0/deviceIo/digitalIo.h"
-#include "km0/deviceIo/system.h"
+#include "km0/base/bitOperations.h"
+#include "km0/device/boardIo.h"
+#include "km0/device/digitalIo.h"
+#include "km0/device/system.h"
 #include <avr/io.h>
 #include <stdio.h>
 #include <util/twi.h>
