@@ -74,3 +74,16 @@ export const fsRmdirSync = fs.rmdirSync;
 export const fsStatSync = fs.statSync;
 
 export const fsReaddirSync = fs.readdirSync;
+
+export function fsxListFileBaseNames(
+  folderPath: string,
+  extension: string
+): string[] {
+  if (fsExistsSync(folderPath)) {
+    return fsReaddirSync(folderPath)
+      .filter((fileName) => fileName.endsWith(extension))
+      .map((fileName) => pathBasename(fileName, extension));
+  } else {
+    return [];
+  }
+}

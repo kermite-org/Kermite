@@ -12,8 +12,9 @@ import { IProfileManagementPartViewModel } from '~/ui/editor-page/profileManagem
 
 function getTargetPresetNameFilePath(projectPath: string, presetName: string) {
   if (projectPath && presetName) {
-    return `projects/${projectPath}/profiles/${presetName}.profile.json`;
-    // return `<KermiteRoot>/firmare/src/projects/${projectPath}/profiles/${fileNamePart}.json`;
+    // todo: __dataフォルダがあるかどうかで保存場所を切り替える
+    // return `projects/${projectPath}/__data/${presetName}.profile.json`;
+    return `projects/${projectPath}/${presetName}.profile.json`;
   }
   return '';
 }
