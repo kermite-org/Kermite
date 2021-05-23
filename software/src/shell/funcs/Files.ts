@@ -151,3 +151,16 @@ export function globAsync(
     });
   });
 }
+
+export async function fsxListFileBaseNames(
+  folderPath: string,
+  extension: string,
+): Promise<string[]> {
+  if (fsExistsSync(folderPath)) {
+    return (await fsxReaddir(folderPath))
+      .filter((fileName) => fileName.endsWith(extension))
+      .map((fileName) => pathBasename(fileName, extension));
+  } else {
+    return [];
+  }
+}

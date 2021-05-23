@@ -24,7 +24,7 @@ function checkFiles(
   console.log(`cheking ${target} json schemas ...`);
 
   const filePaths = globSync(globPttern);
-  // console.log("target files", filePaths);
+  console.log("target files", filePaths);
 
   const results = filePaths
     .map((filePath) => {
@@ -46,14 +46,14 @@ function checkFiles(
 function projectJsonSchemaCheckerEntry() {
   checkFiles(
     "project",
-    "src/projects/**/*/project.json",
+    "src/projects/**/project.json",
     projectJsonDataValidator
   );
-  checkFiles("layout", "src/projects/**/*/*.layout.json", (layout) => {
+  checkFiles("layout", "src/projects/**/*.layout.json", (layout) => {
     LayoutDataMigrator.patchOldFormatLayoutData(layout);
     return persistEditKeyboardDesignSchemaChecker(layout);
   });
-  checkFiles("preset", "src/projects/**/profiles/*.json", (profile) => {
+  checkFiles("preset", "src/projects/**/*.profile.json", (profile) => {
     profile = ProfileDataMigrator.fixProfileData(profile);
     return profileDataSchemaChecker(profile);
   });

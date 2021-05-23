@@ -13,7 +13,7 @@ import { appEnv } from '~/shell/base';
 import {
   fsExistsSync,
   fsLstatSync,
-  fsxReaddir,
+  fsxListFileBaseNames,
   fsxReadFile,
   fsxReadJsonFile,
   globAsync,
@@ -66,20 +66,15 @@ namespace ProjectResourceInfoSourceLoader {
     return (fsExistsSync(filePath) && filePath) || undefined;
   }
 
-  async function readPresetNames(presetsFolderPath: string): Promise<string[]> {
-    if (fsExistsSync(presetsFolderPath)) {
-      return (await fsxReaddir(presetsFolderPath))
-        .filter((fpath) => fpath.endsWith('.profile.json'))
-        .map((fpath) => pathBasename(fpath, '.profile.json'));
-    } else {
-      return [];
-    }
-  }
-
-  async function readLayoutNames(projectFolderPath: string): Promise<string[]> {
-    return (await fsxReaddir(projectFolderPath))
-      .filter((fileName) => fileName.endsWith('.layout.json'))
-      .map((fileName) => pathBasename(fileName, '.layout.json'));
+  async function readProjectDataFileNames(
+    projectBaseDir: string,
+    extension: string,
+  ): Promise<string[]> {
+    const projectDataDir = pathJoin(projectBaseDir, '__data');
+    return [
+      ...(await fsxListFileBaseNames(projectBaseDir, extension)),
+      ...(await fsxListFileBaseNames(projectDataDir, extension)),
+    ];
   }
 
   async function readProjectFile(
@@ -181,11 +176,14 @@ namespace ProjectResourceInfoSourceLoader {
           parameterConfigurations,
         } = await readProjectFile(projectFilePath);
 
-        const presetsFolderPath = pathJoin(projectBaseDir, 'profiles');
-
-        const presetNames = await readPresetNames(presetsFolderPath);
-
-        const layoutNames = await readLayoutNames(projectBaseDir);
+        const presetNames = await readProjectDataFileNames(
+          projectBaseDir,
+          '.profile.json',
+        );
+        const layoutNames = await readProjectDataFileNames(
+          projectBaseDir,
+          '.layout.json',
+        );
 
         return {
           projectId,
@@ -313,17 +311,26 @@ export class ProjectResourceProviderImpl_Local
   // }
   // internal_getProjectInfoSourceById = this.getProjectInfoSourceById;
 
-  getLocalPresetProfileFilePath(
+  private getLocalDataFilePath(
     projectId: string,
-    presetName: string,
+    namePart: string,
+    extension: string,
   ): string | undefined {
     const info = this.getProjectInfoSourceById(projectId);
     if (info) {
-      return pathJoin(
+      const filePath = pathJoin(
         info.projectFolderPath,
-        'profiles',
-        `${presetName}.profile.json`,
+        `${namePart}${extension}`,
       );
+      const filePathAlt = pathJoin(
+        info.projectFolderPath,
+        '__data',
+        `${namePart}${extension}`,
+      );
+      if (fsExistsSync(filePathAlt)) {
+        return filePathAlt;
+      }
+      return filePath;
     }
   }
 
@@ -346,21 +353,15 @@ export class ProjectResourceProviderImpl_Local
     return undefined;
   }
 
-  getLocalLayoutFilePath(
-    projectId: string,
-    layoutName: string,
-  ): string | undefined {
-    const info = this.getProjectInfoSourceById(projectId);
-    if (info) {
-      return pathJoin(info.projectFolderPath, `${layoutName}.layout.json`);
-    }
-  }
-
   async loadProjectPreset(
     projectId: string,
     presetName: string,
   ): Promise<IProfileData | undefined> {
-    const filePath = this.getLocalPresetProfileFilePath(projectId, presetName);
+    const filePath = this.getLocalDataFilePath(
+      projectId,
+      presetName,
+      '.profile.json',
+    );
     if (filePath) {
       try {
         return await ProfileFileLoader.loadProfileFromFile(filePath);
@@ -376,7 +377,11 @@ export class ProjectResourceProviderImpl_Local
     projectId: string,
     layoutName: string,
   ): Promise<IPersistKeyboardDesign | undefined> {
-    const filePath = this.getLocalLayoutFilePath(projectId, layoutName);
+    const filePath = this.getLocalDataFilePath(
+      projectId,
+      layoutName,
+      '.layout.json',
+    );
     if (filePath) {
       return await LayoutFileLoader.loadLayoutFromFile(filePath);
     }

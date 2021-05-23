@@ -1,12 +1,11 @@
 import {
   execueteOneliner,
   fsCopyFileSync,
-  fsExistsSync,
+  fsxListFileBaseNames,
   fsReaddirSync,
   fsxReadJsonFile,
   fsxWriteJsonFile,
   globSync,
-  pathBasename,
   pathDirname,
   pathJoin,
   pathRelative,
@@ -123,33 +122,21 @@ function makeSummaryFileContent(
     const projectPath = pathDirname(
       pathRelative("./dist/variants", projectJsonFilePath)
     );
+    const distProjectDir = `./dist/variants/${projectPath}`;
     const projectObj = fsxReadJsonFile(
       projectJsonFilePath
     ) as IProjectJsonPartial;
 
-    let presetNames: string[] = [];
+    const presetNames = fsxListFileBaseNames(distProjectDir, ".profile.json");
+    const layoutNames = fsxListFileBaseNames(distProjectDir, ".layout.json");
 
-    const profilesDir = `./dist/variants/${projectPath}/profiles`;
-    if (fsExistsSync(profilesDir)) {
-      presetNames = fsReaddirSync(profilesDir)
-        .filter((fileName) => fileName.endsWith(".profile.json"))
-        .map((fileName) => pathBasename(fileName, ".profile.json"));
-    }
-
-    const layoutNames = fsReaddirSync(`./dist/variants/${projectPath}`)
-      .filter((fileName) => fileName.endsWith(".layout.json"))
-      .map((fileName) => pathBasename(fileName, ".layout.json"));
-
-    const metadataFileNames = fsReaddirSync(
-      `./dist/variants/${projectPath}`
-    ).filter((fileName) => fileName.match(/^metadata_.*\.json$/));
+    const metadataFileNames = fsReaddirSync(distProjectDir).filter((fileName) =>
+      fileName.match(/^metadata_.*\.json$/)
+    );
 
     const firmwares = metadataFileNames
       .map((metadataFileName) => {
-        const filePath = pathJoin(
-          `./dist/variants/${projectPath}`,
-          metadataFileName
-        );
+        const filePath = pathJoin(distProjectDir, metadataFileName);
         return fsxReadJsonFile(filePath) as IMetadataJson;
       })
       .filter((metadata) => metadata.buildResult === "success")
