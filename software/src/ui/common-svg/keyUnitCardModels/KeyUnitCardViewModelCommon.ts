@@ -4,6 +4,7 @@ import {
   VirtualKeyTexts,
   IAssignEntryWithLayerFallback,
   IProfileData,
+  SystemActionToLabelTextMap,
 } from '~/shared';
 
 function getAssignOperationText(
@@ -32,6 +33,9 @@ function getAssignOperationText(
   }
   if (op?.type === 'modifierCall') {
     return VirtualKeyTexts[op.modifierKey] || '';
+  }
+  if (op?.type === 'systemAction') {
+    return SystemActionToLabelTextMap[op.action] || '';
   }
   return '';
 }
