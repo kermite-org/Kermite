@@ -215,7 +215,7 @@ export const textSourceJapanese = {
   label_assigner_profileConfigModal_shiftCancel: 'Shiftキャンセル機能を使用',
   hint_assigner_profileConfigModal_assignModel: 'ロジックモデルを選択します。(single: キーに対して単一の機能を割り当てるモデル, dual: キー毎にタップ/ホールドによって切り替わる複数の機能を割り当てるモデル)',
   hint_assigner_profileConfigModal_dualMode_header: 'ロジックモデル:dual に固有の設定です',
-  hint_assigner_profileConfigModal_dualMode_primaryDefaultTrigger: '"“セカンダリアサインがない場合のプライマリアサインの実行トリガを指定します。(down: 押下時に適用',
+  hint_assigner_profileConfigModal_dualMode_primaryDefaultTrigger: 'セカンダリアサインがない場合のプライマリアサインの実行トリガを指定します。(down: 押下時に適用, tap: タップで適用)',
   hint_assigner_profileConfigModal_dualMode_tapHoldThreshold: 'キーを押し続けたときにホールドしたとみなされる時間を指定します。',
   hint_assigner_profileConfigModal_dualMode_useInterruptHold: 'ホールド時間に満たないときに割り込んで他のキーが押された場合に、1つ目のキーをホールド状態に移行します。',
   hint_assigner_profileConfigModal_shiftCancel: 'shiftを押しながら本来shiftなしで入力される記号を入力したい場合に、shiftを一時的にキャンセル状態にします。',
