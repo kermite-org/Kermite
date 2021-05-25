@@ -63,6 +63,7 @@ export const RoutingChannelSelector = () => {
       setCurrentItem={setRoutingChannel}
       textDictionary={textDictionary}
       disabled={!isConnected}
+      hint={texts.hint_assigner_topBar_routingChannelSelector}
     />
   );
 };

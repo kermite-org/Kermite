@@ -51,7 +51,8 @@ hint_assigner_topBar_writeAssignsButton;Save edit profile and write keymapping t
 hint_assigner_topBar_selectCurrentProfile;Select current profile;プロファイルを選択します。
 hint_assigner_topBar_profileConfigurationButton;Open profile configuration modal;プロファイル設定ダイアログを開きます。
 hint_assigner_topBar_keyboardBehaviorModeSelector;Select keyboard behavior mode. (STD: Standalone Mode, SIM: Simulation Mode);キーボードの動作モードを設定します。(STD: スタンドアロン動作, SIM: シミュレーション動作)
-hint_assigner_topBar_keyboardSystemLayoutSelector;Select keyboard layout recognized by OS;OSが認識するキーボードレイアウトを設定します
+hint_assigner_topBar_keyboardSystemLayoutSelector;Select keyboard layout recognized by OS;OSが認識するキーボードレイアウトを設定します。
+hint_assigner_topBar_routingChannelSelector;Select assign routing channel;アサインルーティングチャネルを選択します。
 hint_assigner_topBar_connectedKeyboardName;Connected keyboard name;接続しているキーボードの品種名を表示しています。
 hint_assigner_topBar_deviceConnectionStatus;Device connection status;キーボードの接続状態を表示しています。
 ;;
