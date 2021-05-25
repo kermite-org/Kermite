@@ -355,3 +355,7 @@ export function convertNullToUndefinedRecursive(src: any): any {
     return src;
   }
 }
+
+export function uniqueArrayItems<T>(arr: T[]): T[] {
+  return arr.filter((a, idx) => arr.indexOf(a) === idx);
+}

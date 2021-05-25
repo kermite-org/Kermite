@@ -1,4 +1,4 @@
-//npx ts-node ui_texts_code_generator.ts
+// npx ts-node ui_csv_texts_forward.ts
 
 import * as fs from 'fs';
 
@@ -20,7 +20,7 @@ function formatTextDict(dict: any) {
 }
 
 function splitRowText(line: string) {
-  //"“と”"で囲まれる','を$__COMMA__に一旦退避して、その後','で行を分割し、分割して得た要素それぞれを再度もとの','に戻す
+  // "“と”"で囲まれる','を$__COMMA__に一旦退避して、その後','で行を分割し、分割して得た要素それぞれを再度もとの','に戻す
   const line1 = line.replace(/"“(.*?)”"/g, (m, p1) => {
     return p1.replace(',', '$__COMMA__');
   });
