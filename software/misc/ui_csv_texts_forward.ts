@@ -1,4 +1,4 @@
-//npx ts-node ui_texts_code_generator.ts
+// npx ts-node ui_csv_texts_forward.ts
 
 import * as fs from 'fs';
 
@@ -19,15 +19,6 @@ function formatTextDict(dict: any) {
   return ['{', ...innerLines, '}'].join('\n');
 }
 
-function splitRowText(line: string) {
-  //"“と”"で囲まれる','を$__COMMA__に一旦退避して、その後','で行を分割し、分割して得た要素それぞれを再度もとの','に戻す
-  const line1 = line.replace(/"“(.*?)”"/g, (m, p1) => {
-    return p1.replace(',', '$__COMMA__');
-  });
-  const cellTexts = line1.split(',');
-  return cellTexts.map((text) => text.replace('$__COMMA__', ','));
-}
-
 function run() {
   const csvData = fs.readFileSync('ui_texts.csv', { encoding: 'utf-8' });
   const lines = csvData.split(/\r?\n/).slice(1);
@@ -35,7 +26,7 @@ function run() {
   const dict_en: any = {};
   const dict_ja: any = {};
   lines.forEach((line) => {
-    const [key, text_en, text_ja] = splitRowText(line);
+    const [key, text_en, text_ja] = line.split(';');
     if (key) {
       dict_en[key] = text_en;
       dict_ja[key] = text_ja;

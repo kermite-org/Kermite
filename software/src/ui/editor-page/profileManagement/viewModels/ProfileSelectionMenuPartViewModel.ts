@@ -52,8 +52,8 @@ function createMenuItemSources(
     },
     {
       key: 'saveAs',
-      text: 'save',
-      hint: 'save',
+      text: texts.label_assigner_menu_saveProfile,
+      hint: texts.hint_assigner_menu_saveProfile,
       handler: vm.handleSaveUnsavedProfile,
       enabled: !vm.isCurrentProfileInternal,
     },
@@ -80,8 +80,8 @@ function createMenuItemSources(
     },
     {
       key: 'openUserProfilesFolder',
-      text: 'Open User Profiles Folder',
-      hint: 'Open user profiles folder in default file manager of OS.',
+      text: texts.label_assigner_menu_openUserProfilesFolder,
+      hint: texts.hint_assigner_menu_openUserProfilesFolder,
       handler: vm.openUserProfilesFolder,
       enabled: true,
     },

@@ -10,6 +10,7 @@ import {
   modalAlertTop,
   modalConfirm,
   modalTextEdit,
+  texts,
   uiStatusModel,
   useDeviceStatusModel,
   useLocal,
@@ -121,7 +122,7 @@ const inputNewProfileName = async (
   caption: string,
 ): Promise<string | undefined> => {
   const newProfileName = await modalTextEdit({
-    message: 'New Profile Name',
+    message: texts.label_assigner_profileNameEditModal_newProfileName,
     defaultText: profilesModel.currentProfileName,
     caption,
   });
@@ -138,7 +139,9 @@ const renameProfile = async () => {
   if (profilesModel.editSource.type !== 'InternalProfile') {
     return;
   }
-  const newProfileName = await inputNewProfileName('Rename Profile');
+  const newProfileName = await inputNewProfileName(
+    texts.label_assigner_profileNameEditModal_modalTitleRename,
+  );
   if (newProfileName) {
     profilesModel.renameProfile(newProfileName);
   }
@@ -148,7 +151,9 @@ const copyProfile = async () => {
   if (profilesModel.editSource.type !== 'InternalProfile') {
     return;
   }
-  const newProfileName = await inputNewProfileName('Copy Profile');
+  const newProfileName = await inputNewProfileName(
+    texts.label_assigner_profileNameEditModal_modalTitleCopy,
+  );
   if (newProfileName) {
     profilesModel.copyProfile(newProfileName);
   }
@@ -159,8 +164,11 @@ const deleteProfile = async () => {
     return;
   }
   const ok = await modalConfirm({
-    message: `Profile ${profilesModel.currentProfileName} will be deleted. Are you sure?`,
-    caption: 'Delete Profile',
+    message: texts.label_assigner_confirmModal_deleteProfile_modalMessage.replace(
+      '{PROFILE_NAME}',
+      profilesModel.currentProfileName,
+    ),
+    caption: texts.label_assigner_confirmModal_deleteProfile_modalTitle,
   });
   if (ok) {
     profilesModel.deleteProfile();
@@ -171,7 +179,9 @@ const handleSaveUnsavedProfile = async () => {
   if (profilesModel.editSource.type === 'InternalProfile') {
     return;
   }
-  const newProfileName = await inputNewProfileName('Save Profile');
+  const newProfileName = await inputNewProfileName(
+    texts.label_assigner_profileNameEditModal_modalTitleSave,
+  );
   if (newProfileName) {
     profilesModel.saveUnsavedProfileAs(newProfileName);
   }
@@ -230,8 +240,8 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
   const loadProfile = async (profileName: string) => {
     if (profilesModel.checkDirty()) {
       const ok = await modalConfirm({
-        caption: 'Load Profile',
-        message: 'Unsaved changes will be lost. Are you ok?',
+        caption: texts.label_assigner_confirmModal_loadProfile_modalTitle,
+        message: texts.label_assigner_confirmModal_loadProfile_modalMessage,
       });
       if (!ok) {
         return;

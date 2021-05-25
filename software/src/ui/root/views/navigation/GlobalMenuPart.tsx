@@ -68,7 +68,7 @@ export const GlobalMenuPart = () => {
         </div>
         <div css={cssMenuPopup} qxIf={isOpen}>
           {menuItems.map((mi) => (
-            <div key={mi.key} onMouseUp={mi.handler}>
+            <div key={mi.key} onMouseUp={mi.handler} data-hint={mi.hint}>
               {mi.active ? '✓' : ''} {mi.text}
             </div>
           ))}

@@ -1,4 +1,4 @@
-import { appUi, useLocal } from '~/ui/common';
+import { appUi, texts, useLocal } from '~/ui/common';
 import { uiStatusModel } from '~/ui/common/sharedModels/UiStatusModel';
 import { useLanguageSelectionModel } from '~/ui/root/models/LanguageSelectionModel';
 import { useThemeSelectionModel } from '~/ui/root/models/ThemeSelectionModel';
@@ -8,6 +8,7 @@ export interface IGlobalMenuItem {
   text: string;
   handler: () => void;
   active: boolean;
+  hint: string;
 }
 
 function createMenuItems(): IGlobalMenuItem[] {
@@ -18,44 +19,49 @@ function createMenuItems(): IGlobalMenuItem[] {
   const menuItems: IGlobalMenuItem[] = [
     {
       key: 'miShowInputArea',
-      text: 'Show test input area',
+      text: texts.label_globalMenu_showTestInputArea,
       handler() {
         settings.showTestInputArea = !settings.showTestInputArea;
       },
       active: settings.showTestInputArea,
+      hint: texts.hint_globalMenu_showTestInputArea,
     },
     {
       key: 'miThemeLight',
-      text: 'Light Theme',
+      text: texts.label_globalMenu_theme_light,
       handler() {
         themeSelectionModel.changeTheme('light');
       },
       active: themeSelectionModel.currentThemeKey === 'light',
+      hint: texts.hint_globalMenu_theme_light,
     },
     {
       key: 'miThemeDark',
-      text: 'Dark Theme',
+      text: texts.label_globalMenu_theme_dark,
       handler() {
         themeSelectionModel.changeTheme('dark');
       },
       active: themeSelectionModel.currentThemeKey === 'dark',
+      hint: texts.hint_globalMenu_theme_dark,
     },
 
     {
       key: 'miLanguageEnglish',
-      text: 'English',
+      text: texts.label_globalMenu_language_english,
       handler() {
         languageSelectionModel.changeLanguage('english');
       },
       active: languageSelectionModel.currrentLanguage === 'english',
+      hint: texts.hint_globalMenu_language_english,
     },
     {
       key: 'miLanguageJapanese',
-      text: 'Japanese',
+      text: texts.label_globalMenu_language_japanese,
       handler() {
         languageSelectionModel.changeLanguage('japanese');
       },
       active: languageSelectionModel.currrentLanguage === 'japanese',
+      hint: texts.hint_globalMenu_language_japanese,
     },
   ];
 
