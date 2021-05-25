@@ -149,7 +149,7 @@ label_device_firmwareUpdation_sectionTitle,Firmware Updation,ファームウェ�
 label_deivce_firmwareUpdation_operationAlertText,Note: Wrong firmware selection may damage the hardware. Be careful.,誤ったファームウェアを書き込むとデバイスが破損する可能性があります。ご注意ください。
 label_device_firmwareUpdation_projectSelector,Select target keyboard project.,デバイスに書き込むファームウェアを選択します。
 label_device_firmwareUpdation_usageText,Double tap the reset button on the device.,デバイスのリセットボタンを2回タップして、ファームウェア書き込みモードにしてください。
-label_device_firmwareUpdation_deviceDetected,{DEVICE_NAME} detected. Ready to flash.,{DEVICE_NAME}が検出されました。書き込みできます。
+label_device_firmwareUpdation_deviceDetected,{DEVICE_NAME} detected. Ready to flash.,{DEVICE_NAME}に対応デバイスを認識しました。書き込みできます。
 label_device_firmwareUpdation_writeButton,write,書き込む
 label_device_firmwareUpdation_writing,Writing...,書き込んでいます...
 label_device_firmwareUpdation_success,Success!,成功しました!
