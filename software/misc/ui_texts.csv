@@ -8,24 +8,40 @@ hint_titleBar_closeApplication;Close application;アプリケーションを終�
 ;;
 hint_globalMenuButton;Show global menu;グローバルメニューを表示します。
 ;;
+label_globalMenu_showTestInputArea;Show test input area;テスト入力欄を表示
+label_globalMenu_theme_light;Light Theme;ライトテーマ
+label_globalMenu_theme_dark;Dark Theme;ダークテーマ
+label_globalMenu_language_english;English;English
+label_globalMenu_language_japanese;Japanese;日本語
+;;
+hint_globalMenu_showTestInputArea;Show text filed for key input test;テスト入力欄を表示します。
+hint_globalMenu_theme_light;Switch to light theme;ライトテーマに切り替えます。
+hint_globalMenu_theme_dark;Switch to dark theme;ダークテーマに切り替えます。
+hint_globalMenu_language_english;Show UI in English;UIを英語表示に切り替えます。
+hint_globalMenu_language_japanese;Show UI in Japanese;UIを日本語表示に切り替えます。
+;;
+;;
 hint_assigner_topBar_profileOperationsMenu;Open profile operations menu;プロファイル管理メニューを開きます。
 ;;
 label_assigner_menu_newProfile;new;新規作成
+label_assigner_menu_saveProfile;save;保存
 label_assigner_menu_renameProfile;rename;名前を変更
 label_assigner_menu_copyProfile;copy;複製
 label_assigner_menu_deleteProfile;delete;削除
-label_assigner_menu_importFromFile;import from file;ファイルから読み込む
-label_assigner_menu_exportToFile;export to file;ファイルへ保存
+label_assigner_menu_importFromFile;import from file;インポート
+label_assigner_menu_exportToFile;export to file;エクスポート
 label_assigner_menu_saveAsPreset;save as preset;プリセットとして保存
+label_assigner_menu_openUserProfilesFolder;open user profiles folder;データの保存場所を開く
 ;;
 hint_assigner_menu_newProfile;Create new profile;新規プロファイルを作成します。
+hint_assigner_menu_saveProfile;Save profile;プロファイルを保存します。
 hint_assigner_menu_renameProfile;Rename profile;プロファイルの名前を変更します。
 hint_assigner_menu_copyProfile;Duplicate profile;プロファイルを複製します。
 hint_assigner_menu_deleteProfile;Delete profile;プロファイルを削除します。
 hint_assigner_menu_importFromFile;;ディスク上の任意にあるファイルからプロファイルを読み込みます。
 hint_assigner_menu_exportToFile;;プロファイルをディスク上の任意の場所にファイルとして保存します。
 hint_assigner_menu_saveAsPreset;Save profile as preset;プロファイルをプロジェクトのプリセットとして保存します。
-;;
+hint_assigner_menu_openUserProfilesFolder;Open user profiles folder in default file manager of OS.;プロファイルの保存場所をOSのファイルマネージャで開きます。
 ;;
 label_assigner_topBar_saveAssignsButton;save;保存
 label_assigner_topBar_writeAssignsButton;write;書き込み
@@ -106,6 +122,28 @@ hint_assigner_layerModal_attachedModifiers;Set attached modifiers activated toge
 hint_assigner_layerModal_exclusionGroup;Set layer exlusive group. Only at least one layer would activated at a time for layers within same group.;レイヤ排他グループを設定します。同じグループに所属するレイヤのうち、1つのみが有効になります。
 hint_assigner_layerModal_initialActive;Activate layer on startup.;キーボードの起動時に、レイヤが始めから有効化された状態にします。
 ;;
+label_assigner_newProfileModal_modalTitle;Create Profile;プロファイルを作成
+label_assigner_newProfileModal_profileName;Profile Name;プロファイル名
+label_assigner_newProfileModal_targetKeyboard;Target Keyboard;キーボード
+label_assigner_newProfileModal_layout;Layout;レイアウト
+;;
+label_assigner_profileNameEditModal_modalTitleRename;Rename Profile;プロファイルの名前を変更
+label_assigner_profileNameEditModal_modalTitleCopy;Copy Profile;プロファイルをコピー
+label_assigner_profileNameEditModal_modalTitleSave;Save Profile;プロファイルを保存
+label_assigner_profileNameEditModal_newProfileName;New Profile Name;プロファイル名
+;;
+label_assigner_confirmModal_deleteProfile_modalTitle;Delete Profile;プロファイルを削除
+label_assigner_confirmModal_deleteProfile_modalMessage;Profile {PROFILE_NAME} will be deleted. Are you sure?;プロファイル {PROFILE_NAME} が削除されます。よろしいですか?
+;;
+label_assigner_confirmModal_loadProfile_modalTitle;Load Profile;プロファイルを読み込み
+label_assigner_confirmModal_loadProfile_modalMessage;Unsaved changes will be lost. Are you ok?;保存されていない変更は破棄されます。よろしいですか。
+;;
+;;
+;;
+;;
+;;
+;;
+;;
 ;;
 ;;
 ;;
@@ -176,3 +214,20 @@ hint_settings_configUseOnlineProjectResources;Use online resource. Access to Ker
 hint_settings_configUseLocalProjectResources;Use data resources on local machine.  Location of Kermite source code directory should be specified.;ローカルマシンにあるリソースを使用します。Kermiteのソースコードの場所の指定が必要です。
 hint_settings_configKermiteRootDirectory;Specify source code directory of Kermite. (for developers);Kermiteのソースコードのルートフォルダを指定します (ファームウェア開発者向け)
 hint_settings_configUiScaling;Set scaling value for UI.;画面のスケーリング値を設定します。文字の大きさが変わります。
+;;
+hint_statusBar_toggleHintMessageVisibility;Toggle visibility for UI hints.;ヒントの表示/非表示を切り替えます。
+;;
+label_projectAttachmentFileSelectionModal_savePreset_modalTitle;Save As Project Preset;プロジェクトのプリセットとして保存
+label_projectAttachmentFileSelectionModal_saveLayout_modalTitle;Save As Project Layout;プロジェクトのレイアウトとして保存
+label_projectAttachmentFileSelectionModal_loadLayout_modalTitle;Load From Project Layout;プロジェクトのレイアウトを読み込み
+label_projectAttachmentFileSelectionModal_project;Project;プロジェクト
+label_projectAttachmentFileSelectionModal_preset;Preset;プリセット
+label_projectAttachmentFileSelectionModal_layout;Layout;レイアウト
+;;
+label_sideMenu_app_assigner;Assigner;アサイン
+label_sideMenu_app_layouter;Layouter;レイアウト
+label_sideMenu_app_presetBrowser;Presets;プリセット
+label_sideMenu_app_shapePreview;Preview;プレビュー
+label_sideMenu_app_heatmap;Heatmap;ヒートマップ
+label_sideMenu_app_firmwareUpdation;Device;デバイス
+label_sideMenu_app_settings;Settings;設定
