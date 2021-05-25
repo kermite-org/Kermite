@@ -1,0 +1,8 @@
+#ifndef __CONFIG_H__
+
+#define KERMITE_PROJECT_ID "2xUWcB80"
+
+#define KM0_KEYBOARD__NUM_SCAN_SLOTS 14
+#define KM0_KEYBOARD__NUM_KEY_SLOTS 14
+
+#endif
