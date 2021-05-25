@@ -30,9 +30,14 @@ const cssNavigationButton = css`
 `;
 
 export const NavigationButton = (props: { vm: NavigationEntryViewModel }) => {
-  const { iconSpec, pageName, isCurrent, onClick } = props.vm;
+  const { iconSpec, pageName, isCurrent, onClick, hint } = props.vm;
   return (
-    <div onClick={onClick} css={cssNavigationButton} data-current={isCurrent}>
+    <div
+      onClick={onClick}
+      css={cssNavigationButton}
+      data-current={isCurrent}
+      data-hint={hint}
+    >
       <Icon spec={iconSpec} />
       <span>{pageName}</span>
     </div>

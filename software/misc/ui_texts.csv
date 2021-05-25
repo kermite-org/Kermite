@@ -196,11 +196,6 @@ label_device_firmwareUpdation_logButton;log;ログ
 label_device_firmwareUpdation_doneButton;done;完了
 ;;
 ;;
-;;
-;;
-;;
-;;
-;;
 label_settings_pageTitle;Configurations;設定
 label_settings_header_resources;Resources;リソース
 label_settings_configUseOnlineProjectResources;Use Online Project Resources;オンラインプロジェクトリソースを使用
@@ -231,3 +226,11 @@ label_sideMenu_app_shapePreview;Preview;プレビュー
 label_sideMenu_app_heatmap;Heatmap;ヒートマップ
 label_sideMenu_app_firmwareUpdation;Device;デバイス
 label_sideMenu_app_settings;Settings;設定
+;;
+hint_sideMenu_app_assigner;Edit key assigns;キーアサインを編集します。
+hint_sideMenu_app_layouter;Edit keyboard layout;キーの配置を編集します。
+hint_sideMenu_app_presetBrowser;View presets;プリセットを閲覧します。
+hint_sideMenu_app_shapePreview;Preview keyboard shapes;キーボードの形状を表示します。
+hint_sideMenu_app_heatmap;Analyze heatmap dynamically;ヒートマップを動的に解析します。
+hint_sideMenu_app_firmwareUpdation;Manage supported keyboard devices;デバイスの管理を行います。
+hint_sideMenu_app_settings;Manage application settings;アプリの設定を行います。

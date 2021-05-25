@@ -181,6 +181,13 @@ export const textSourceEnglish = {
   label_sideMenu_app_heatmap: 'Heatmap',
   label_sideMenu_app_firmwareUpdation: 'Device',
   label_sideMenu_app_settings: 'Settings',
+  hint_sideMenu_app_assigner: 'Edit key assigns',
+  hint_sideMenu_app_layouter: 'Edit keyboard layout',
+  hint_sideMenu_app_presetBrowser: 'View presets',
+  hint_sideMenu_app_shapePreview: 'Preview keyboard shapes',
+  hint_sideMenu_app_heatmap: 'Analyze heatmap dynamically',
+  hint_sideMenu_app_firmwareUpdation: 'Manage supported keyboard devices',
+  hint_sideMenu_app_settings: 'Manage application settings',
 };
 
 // prettier-ignore
@@ -364,4 +371,11 @@ export const textSourceJapanese = {
   label_sideMenu_app_heatmap: 'ヒートマップ',
   label_sideMenu_app_firmwareUpdation: 'デバイス',
   label_sideMenu_app_settings: '設定',
+  hint_sideMenu_app_assigner: 'キーアサインを編集します。',
+  hint_sideMenu_app_layouter: 'キーの配置を編集します。',
+  hint_sideMenu_app_presetBrowser: 'プリセットを閲覧します。',
+  hint_sideMenu_app_shapePreview: 'キーボードの形状を表示します。',
+  hint_sideMenu_app_heatmap: 'ヒートマップを動的に解析します。',
+  hint_sideMenu_app_firmwareUpdation: 'デバイスの管理を行います。',
+  hint_sideMenu_app_settings: 'アプリの設定を行います。',
 };
