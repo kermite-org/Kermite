@@ -7,6 +7,7 @@ import {
   IProjectAttachmentFileSelectorModalModel,
   ProjectAttachmentFileSelectorModal,
   modalConfirm,
+  texts,
 } from '~/ui/common';
 import { IProfileManagementPartViewModel } from '~/ui/editor-page/profileManagement/viewModels/ProfileManagementPartViewModel';
 
@@ -61,7 +62,8 @@ function useProjectAttachmentFileSelectorViewModel(
     })) || [];
 
   return {
-    titleText: 'Save As Project Preset',
+    titleText:
+      texts.label_projectAttachmentFileSelectionModal_savePreset_modalTitle,
     closeModal: baseVm.closeExportingPresetSelectionModal,
     selectorSize: 7,
     canSelectProject: false,
@@ -69,7 +71,8 @@ function useProjectAttachmentFileSelectorViewModel(
     currentProjectId,
     setCurrentProjectId: () => {},
     currentProejctKeyboardName: currentProject?.keyboardName || '',
-    attachmentFileTypeHeader: 'Preset',
+    attachmentFileTypeHeader:
+      texts.label_projectAttachmentFileSelectionModal_preset,
     attachmentFileNameOptions: presetNameOptions,
     currentAttachmentFileName: local.currentPresetName,
     setCurrentAttachmentFileName: fieldSetter(local, 'currentPresetName'),

@@ -1,5 +1,5 @@
 import { jsx, css } from 'qx';
-import { ISelectorOption } from '~/ui/common/base';
+import { ISelectorOption, texts } from '~/ui/common/base';
 import { FlatListSelector } from '~/ui/common/components/atoms/FlatListSelector';
 import { ClosableOverlay } from '~/ui/common/components/modals/CommonDialogParts';
 import { reflectValue } from '~/ui/common/helpers';
@@ -147,7 +147,9 @@ export const ProjectAttachmentFileSelectorModal = (props: {
           <div css={cssProjectLayoutContent}>
             <div class="primaryRow">
               <div class="column listColumn">
-                <div>Project</div>
+                <div>
+                  {texts.label_projectAttachmentFileSelectionModal_project}
+                </div>
                 <FlatListSelector
                   options={projectOptions}
                   value={currentProjectId}

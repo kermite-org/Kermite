@@ -1,4 +1,4 @@
-import { router, PagePaths } from '~/ui/common';
+import { router, PagePaths, texts } from '~/ui/common';
 
 export interface NavigationEntryViewModel {
   pagePath: PagePaths;
@@ -15,25 +15,41 @@ interface NavigationEntrySource {
 }
 
 const entrySources: NavigationEntrySource[] = [
-  { pagePath: '/editor', pageName: 'Assigner', iconSpec: 'fa fa-keyboard' },
+  {
+    pagePath: '/editor',
+    pageName: texts.label_sideMenu_app_assigner,
+    iconSpec: 'fa fa-keyboard',
+  },
   {
     pagePath: '/layouter',
-    pageName: 'Layouter',
+    pageName: texts.label_sideMenu_app_layouter,
     iconSpec: 'fa fa-drafting-compass',
   },
-  { pagePath: '/presetBrowser', pageName: 'Presets', iconSpec: 'fa fa-book' },
+  {
+    pagePath: '/presetBrowser',
+    pageName: texts.label_sideMenu_app_presetBrowser,
+    iconSpec: 'fa fa-book',
+  },
   {
     pagePath: '/shapePreview',
-    pageName: 'Preview',
+    pageName: texts.label_sideMenu_app_shapePreview,
     iconSpec: 'fa fa-file-code',
   },
-  { pagePath: '/heatmap', pageName: 'Heatmap', iconSpec: 'fa fa-chart-bar' },
+  {
+    pagePath: '/heatmap',
+    pageName: texts.label_sideMenu_app_heatmap,
+    iconSpec: 'fa fa-chart-bar',
+  },
   {
     pagePath: '/firmwareUpdation',
-    pageName: 'Device',
+    pageName: texts.label_sideMenu_app_firmwareUpdation,
     iconSpec: 'fa fa-microchip',
   },
-  { pagePath: '/settings', pageName: 'Settings', iconSpec: 'fa fa-cog' },
+  {
+    pagePath: '/settings',
+    pageName: texts.label_sideMenu_app_settings,
+    iconSpec: 'fa fa-cog',
+  },
 ];
 
 // const entrySources: NavigationEntrySource[] = [
