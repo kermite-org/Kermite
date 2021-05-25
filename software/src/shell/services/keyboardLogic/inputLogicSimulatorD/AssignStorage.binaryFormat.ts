@@ -53,8 +53,7 @@ namespace AssignStroageBinaryFormat {
     bit13: Reserved;
     bit12: { fIsShiftCancellable: b1 };
     bit11_8: { fModifiers: AttachedModifiers };
-    bit7: Reserved;
-    bit6_0: { fLogicalKeyCode: b7 };
+    bit7_0: { fLogicalKeyCode: b8 };
   };
 
   type LayerInvocationModeValues = DefineValues<b4> & {

@@ -6,6 +6,7 @@ interface IDualItemsHoverSelectorProps<T extends string | number> {
   setCurrentItem: (nextItem: T) => void;
   textDictionary: { [key in T]: string };
   hint?: string;
+  disabled?: boolean;
 }
 
 const cssDualItemsSelector = css`
@@ -14,6 +15,11 @@ const cssDualItemsSelector = css`
   > .fixedView {
     text-align: center;
     cursor: pointer;
+  }
+
+  &.--disabled {
+    opacity: 0.5;
+    pointer-events: none;
   }
 
   > .selectable {
@@ -43,9 +49,19 @@ const cssDualItemsSelector = css`
 export function DualItemsHoverSelector<T extends string | number>(
   props: IDualItemsHoverSelectorProps<T>,
 ) {
-  const { items, currentItem, setCurrentItem, textDictionary } = props;
+  const {
+    items,
+    currentItem,
+    setCurrentItem,
+    textDictionary,
+    disabled,
+  } = props;
   return (
-    <div css={cssDualItemsSelector} data-hint={props.hint}>
+    <div
+      css={cssDualItemsSelector}
+      data-hint={props.hint}
+      className={(disabled && '--disabled') || ''}
+    >
       <div class="fixedView">{textDictionary[currentItem]}</div>
       <div class="selectable">
         {items.map((it) => (
