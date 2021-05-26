@@ -8,6 +8,12 @@
 //OLED描画処理モジュール
 //RAM上にグラフィックスデータを持たない実装
 
+#ifdef KM0_OLED__ORIENTATION_HORIZONTALVIEW_ROT180
+const bool rot180_horizontalView = true;
+#else
+const bool rot180_horizontalView = false;
+#endif
+
 //----------------------------------------------------------------------
 
 static const uint8_t oledSlaveAddress = 0x3C;
@@ -57,9 +63,27 @@ static void sendRomData(const uint8_t *buf, int len) {
   boardI2c_procedural_endWrite();
 }
 
+static uint8_t cmdbuf[4];
+
+static void setRotate180(bool rot180) {
+  if (!rot180) {
+    cmdbuf[0] = 0;
+    cmdbuf[1] = 0xA0; //Segment re-map
+    cmdbuf[2] = 0xC0; //COM Output Scan Direction
+  } else {
+    cmdbuf[0] = 0;
+    cmdbuf[1] = 0xA1; //Segment re-map
+    cmdbuf[2] = 0xC8; //COM Output Scan Direction
+  }
+  boardI2c_write(oledSlaveAddress, cmdbuf, 3);
+}
+
+//----------------------------------------------------------------------
+
 void oledCore_initialize() {
   boardI2c_initialize();
   sendRomData(commandInitializationBytes, sizeof(commandInitializationBytes));
+  setRotate180(rot180_horizontalView);
 }
 
 void oledCore_clear() {

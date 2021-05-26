@@ -4,13 +4,14 @@
 #include <util/twi.h>
 
 void boardI2c_initialize() {
-  //PD0 (SDA), input pullup
-  bit_off(DDRD, 0);
-  bit_on(PORTD, 0);
 
-  //PD1 (SCL), input pullup
+  //PD1 (SDA), input pullup
   bit_off(DDRD, 1);
   bit_on(PORTD, 1);
+
+  //PD0 (SCL), input pullup
+  bit_off(DDRD, 0);
+  bit_on(PORTD, 0);
 
   uint32_t clockFreq = 400000;
   TWSR = 0;
