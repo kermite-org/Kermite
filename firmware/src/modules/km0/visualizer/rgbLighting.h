@@ -3,7 +3,7 @@
 
 #include "km0/types.h"
 
-void rgbLighting_initialize(uint8_t pin, uint8_t numLeds);
+void rgbLighting_initialize();
 
 void rgbLighting_update();
 

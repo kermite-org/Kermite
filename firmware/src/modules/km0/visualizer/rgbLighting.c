@@ -1,18 +1,25 @@
 
 #include "rgbLighting.h"
+#include "config.h"
 #include "km0/base/utils.h"
 #include "km0/device/serialLed.h"
 #include "km0/kernel/commandDefinitions.h"
 #include "km0/kernel/configManager.h"
+
+#ifndef KM0_RGB_LIGHTING__NUM_LEDS
+#error KM0_RGB_LIGHTING__NUM_LEDS is not defined
+#endif
+
+#define NumLeds KM0_RGB_LIGHTING__NUM_LEDS
 
 //----------------------------------------------------------------------
 
 static bool glowEnabled = false;
 static uint8_t glowColor = 0;
 static uint8_t glowBrightness = 0;
-static uint8_t numLeds = 0;
-
 static uint32_t frameTick = 0;
+
+static uint32_t colorBuf[NumLeds];
 
 #define NumTableColors 13
 
@@ -69,63 +76,67 @@ static uint32_t shiftRgb(uint32_t col, uint8_t shift) {
 
 //----------------------------------------------------------------------
 //blank output
+
 static void scene_fallbackBlank_updateFrame() {
-  for (int i = 0; i < numLeds; i++) {
+  for (int i = 0; i < NumLeds; i++) {
     serialLed_putPixel(0);
   }
 }
 
 //----------------------------------------------------------------------
-//scene 0
+//scene 0, fixed lighting
 
 static void scene0_updateFrame() {
   uint32_t color = getCurrentColor();
-  for (int i = 0; i < numLeds; i++) {
+  for (int i = 0; i < NumLeds; i++) {
     serialLed_putPixelWithAlpha(color, glowBrightness);
   }
 }
 
 //----------------------------------------------------------------------
-//scene 1
+//scene 1, breathing
 
 static void scene1_updateFrame() {
   uint32_t color = getCurrentColor();
   int p = (frameTick << 3) & 0x1FF;
   int p2 = (p > 0x100) ? 0x200 - p : p;
   int bri = p2 * glowBrightness >> 8;
-  for (int i = 0; i < numLeds; i++) {
+  for (int i = 0; i < NumLeds; i++) {
     serialLed_putPixelWithAlpha(color, bri);
   }
 }
 
 //----------------------------------------------------------------------
-//scene 2
+//scene 2, snake
 
 static void scene2_updateFrame() {
   uint32_t color = getCurrentColor();
-  int n = numLeds;
+  int n = NumLeds;
   int p = (frameTick >> 1) % (n * 2);
   int activeIndex = (p > n) ? (2 * n - p) : p;
-  for (int i = 0; i < numLeds; i++) {
+  for (int i = 0; i < NumLeds; i++) {
     serialLed_putPixelWithAlpha(i == activeIndex ? color : 0, glowBrightness);
   }
 }
 
 //----------------------------------------------------------------------
-//scene 3
+//scene 3, party
 
 static void scene3_updateFrame() {
   if (frameTick % 20 == 0) {
-    for (int i = 0; i < numLeds; i++) {
+    for (int i = 0; i < NumLeds; i++) {
       int colorIndex = pseudoRandom() % NumTableColors;
       uint32_t color = commonColorTable[colorIndex];
-      serialLed_putPixelWithAlpha(color, glowBrightness);
+      colorBuf[i] = color;
+    }
+    for (int i = 0; i < NumLeds; i++) {
+      serialLed_putPixelWithAlpha(colorBuf[i], glowBrightness);
     }
   }
 }
 
 //----------------------------------------------------------------------
-//scene 4
+//scene 4, gradation color transition
 
 static const uint32_t scene4_period = 25 * 6;
 
@@ -155,12 +166,15 @@ static void scene4_updateFrame() {
     col1 = colorA;
   }
 
-  for (int i = 0; i < numLeds; i++) {
-    float q = ((float)i / numLeds);
+  for (int i = 0; i < NumLeds; i++) {
+    float q = ((float)i / NumLeds);
     float p2 = 3.0f * p - q * 2.0f;
     // float p2 = 1.5f * p - q * 0.5f;
     uint32_t color = lerpColor(col0, col1, utils_clamp(p2, 0.0f, 1.0f));
-    serialLed_putPixelWithAlpha(color, glowBrightness);
+    colorBuf[i] = color;
+  }
+  for (int i = 0; i < NumLeds; i++) {
+    serialLed_putPixelWithAlpha(colorBuf[i], glowBrightness);
   }
 }
 
@@ -201,12 +215,11 @@ static void updateFrame() {
   }
 }
 
-void rgbLighting_initialize(uint8_t _pin, uint8_t _numLeds) {
+void rgbLighting_initialize() {
   configManager_overrideParameterMaxValue(SystemParameter_GlowColor, 12);
   configManager_overrideParameterMaxValue(SystemParameter_GlowPattern, 4);
   configManager_addParameterChangeListener(parameterChangeHandler);
-  serialLed_initialize(_pin);
-  numLeds = _numLeds;
+  serialLed_initialize();
 }
 
 void rgbLighting_update() {
