@@ -1,6 +1,8 @@
+TARGET_MCU = atmega32u4
+
 #DevTarget := keyboardMatrix
 #DevTarget := singlewire
-#DevTarget := neopixel
+DevTarget := neopixel
 #DevTarget := singlekey
 
 ifeq ($(DevTarget), keyboardMatrix)
@@ -55,10 +57,13 @@ endif
 
 
 ifeq ($(DevTarget), neopixel)
-MODULE_SRCS += digitalIo.c
-MODULE_SRCS += debug_uart.c
+MODULE_SRCS += km0/device/atmega/system.c
+MODULE_SRCS += km0/device/atmega/debugUart.c
+MODULE_SRCS += km0/device/atmega/digitalIo.c
+MODULE_SRCS += km0/device/atmega/boardIo.c
+MODULE_SRCS += km0/device/atmega/serialLed.c
+MODULE_ASM_SRCS += km0/device/atmega/neoPixelCore.S
 PROJECT_SRCS += main_neopixel_dev.c
-PROJECT_ASM_SRCS += asmdev.S
 endif
 
 ifeq ($(DevTarget), singlekey)
