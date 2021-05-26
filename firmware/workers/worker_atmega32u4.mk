@@ -10,6 +10,9 @@ CORE_NAME = $(notdir $(PROJECT))_$(VARIATION)
 
 MODULE_SRCS =
 PROJECT_SRCS =
+MODULE_ASM_SRCS =
+PROJECT_ASM_SRCS =
+
 RULES_MK = $(PROJECT_CODE_DIR)/rules.mk
 -include $(RULES_MK)
 
@@ -26,9 +29,6 @@ MAP = $(OUT_DIR)/$(CORE_NAME).map
 INC_PATHS =
 INC_PATHS += -Isrc/modules
 INC_PATHS += -I$(PROJECT_CODE_DIR)
-
-MODULE_ASM_SRCS =
-PROJECT_ASM_SRCS =
 
 CFLAGS =
 ASFLAGS =
@@ -65,7 +65,7 @@ CFLAGS += -DKERMITE_TARGET_MCU_ATMEGA
 
 ASFLAGS += -gstabs 
 ASFLAGS += -mmcu=atmega32u4
-ASFLAGS += -Isrc
+ASFLAGS += $(INC_PATHS)
 ASFLAGS += -x assembler-with-cpp
 
 LDFLAGS += -mmcu=atmega32u4
@@ -91,7 +91,7 @@ $(OBJ_DIR)/%.o: %.c
 $(OBJ_DIR)/%.o: %.S
 	@echo compiling $<
 	@"mkdir" -p $(dir $@)
-	$(CC) -c $(ASFLAGS) $< -o $@
+	@$(CC) -c $(ASFLAGS) $< -o $@
 
 $(ELF): $(OBJS)
 	@echo linking
