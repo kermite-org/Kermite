@@ -69,6 +69,7 @@ static uint32_t shiftRgb(uint32_t col, uint8_t shift) {
 
 //----------------------------------------------------------------------
 //blank output
+
 static void scene_fallbackBlank_updateFrame() {
   for (int i = 0; i < numLeds; i++) {
     serialLed_putPixel(0);
@@ -76,7 +77,7 @@ static void scene_fallbackBlank_updateFrame() {
 }
 
 //----------------------------------------------------------------------
-//scene 0
+//scene 0, fixed lighting
 
 static void scene0_updateFrame() {
   uint32_t color = getCurrentColor();
@@ -86,7 +87,7 @@ static void scene0_updateFrame() {
 }
 
 //----------------------------------------------------------------------
-//scene 1
+//scene 1, breathing
 
 static void scene1_updateFrame() {
   uint32_t color = getCurrentColor();
@@ -99,7 +100,7 @@ static void scene1_updateFrame() {
 }
 
 //----------------------------------------------------------------------
-//scene 2
+//scene 2, snake
 
 static void scene2_updateFrame() {
   uint32_t color = getCurrentColor();
@@ -112,7 +113,7 @@ static void scene2_updateFrame() {
 }
 
 //----------------------------------------------------------------------
-//scene 3
+//scene 3, party
 
 static void scene3_updateFrame() {
   if (frameTick % 20 == 0) {
@@ -125,7 +126,7 @@ static void scene3_updateFrame() {
 }
 
 //----------------------------------------------------------------------
-//scene 4
+//scene 4, gradation color transition
 
 static const uint32_t scene4_period = 25 * 6;
 
