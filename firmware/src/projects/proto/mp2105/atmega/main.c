@@ -8,7 +8,7 @@
 #include "km0/scanner/keyScanner_basicMatrix.h"
 #include "km0/scanner/keyScanner_encoderBasic.h"
 #include "km0/visualizer/oledDisplay.h"
-// #include "km0/visualizer/rgbLighting.h"
+#include "km0/visualizer/rgbLighting.h"
 #include "km0/wrapper/generalKeyboard.h"
 
 #define NumColumns 4
@@ -37,14 +37,14 @@ int main() {
   boardIo_setupLeds_proMicroAvr();
   debugUart_initialize(38400);
   oledDisplay_initialize();
-  // rgbLighting_initialize(P_F4, NumKeys);
+  rgbLighting_initialize();
   keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
   keyScanner_encoderBasic_initialize(encoderConfigs, 1);
   keyboardMain_setKeyIndexTable(keyIndexTable);
   keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
   keyboardMain_useKeyScannerExtra(keyScanner_encoderBasic_update);
   keyboardMain_useDisplayModule(oledDisplay_update);
-  // keyboardMain_useDisplayModule(rgbLighting_update);
+  keyboardMain_useDisplayModule(rgbLighting_update);
   generalKeyboard_start();
   return 0;
 }

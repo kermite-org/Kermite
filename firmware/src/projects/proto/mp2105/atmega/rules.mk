@@ -8,6 +8,8 @@ MODULE_SRCS += km0/device/atmega/dataMemory.c
 MODULE_SRCS += km0/device/atmega/debugUart.c
 MODULE_SRCS += km0/device/atmega/boardIo.c
 MODULE_SRCS += km0/device/atmega/boardI2c.c
+MODULE_SRCS += km0/device/atmega/serialLed.c
+MODULE_ASM_SRCS += km0/device/atmega/neoPixelCore.S
 MODULE_SRCS += km0/kernel/dataStorage.c
 MODULE_SRCS += km0/kernel/configManager.c
 MODULE_SRCS += km0/kernel/keyMappingDataValidator.c
@@ -21,8 +23,6 @@ MODULE_SRCS += km0/scanner/keyScanner_encoderBasic.c
 MODULE_SRCS += km0/wrapper/generalKeyboard.c
 MODULE_SRCS += km0/visualizer/oledDisplay_atmega/oledCore.c
 MODULE_SRCS += km0/visualizer/oledDisplay_atmega/oledDisplay_default.c
-# MODULE_SRCS += km0/visualizer/rgbLighting.c
-
-
+MODULE_SRCS += km0/visualizer/rgbLighting.c
 
 PROJECT_SRCS += main.c
