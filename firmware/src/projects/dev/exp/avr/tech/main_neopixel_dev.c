@@ -53,7 +53,7 @@ int main() {
   debugUart_initialize(38400);
   boardIo_setupLeds_proMicroAvr();
   printf("start\n");
-  serialLed_initialize(-1);
+  serialLed_initialize();
   debug_initTimeDebugPin();
 
   uint32_t cnt = 0;

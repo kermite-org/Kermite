@@ -37,7 +37,7 @@ int main() {
   boardIo_setupLeds_proMicroRp();
   debugUart_initialize(115200);
   oledDisplay_initialize();
-  rgbLighting_initialize(GP29, NumKeys);
+  rgbLighting_initialize();
   keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
   keyScanner_encoderBasic_initialize(encoderConfigs, 1);
   keyboardMain_setKeyIndexTable(keyIndexTable);

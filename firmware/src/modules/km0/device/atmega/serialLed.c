@@ -3,7 +3,7 @@
 #include "neoPixelCore.h"
 #include <avr/interrupt.h>
 
-void serialLed_initialize(uint8_t pin) {
+void serialLed_initialize() {
   neoPixelCore_initialize();
 }
 

@@ -15,7 +15,7 @@ static const int8_t keyIndexTable[NumKeys] = { 0, 1, 2, 3 };
 int main() {
   debugUart_initialize(38400);
   boardIo_setupLeds_proMicroAvr();
-  rgbLighting_initialize(-1, 15);
+  rgbLighting_initialize();
   keyScanner_directWired_initialize(NumKeys, keyInputPins);
   keyboardMain_setKeyIndexTable(keyIndexTable);
   keyboardMain_useKeyScanner(keyScanner_directWired_update);

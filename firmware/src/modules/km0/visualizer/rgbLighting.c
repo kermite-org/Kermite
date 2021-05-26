@@ -215,11 +215,11 @@ static void updateFrame() {
   }
 }
 
-void rgbLighting_initialize(uint8_t _pin, uint8_t _numLeds) {
+void rgbLighting_initialize() {
   configManager_overrideParameterMaxValue(SystemParameter_GlowColor, 12);
   configManager_overrideParameterMaxValue(SystemParameter_GlowPattern, 4);
   configManager_addParameterChangeListener(parameterChangeHandler);
-  serialLed_initialize(_pin);
+  serialLed_initialize();
 }
 
 void rgbLighting_update() {
