@@ -1,18 +1,25 @@
 #include "keyScanner_encoderBasic.h"
 #include "km0/base/bitOperations.h"
 #include "km0/base/configImport.h"
+#include "km0/base/romData.h"
 #include "km0/base/utils.h"
 #include "km0/device/digitalIo.h"
+#include <stdio.h>
 
 #ifndef KM0_ENCODER_SCANNER__NUM_ENCODERS_MAX
 #define KM0_ENCODER_SCANNER__NUM_ENCODERS_MAX 4
+#endif
+
+#ifndef KM0_ENCODER_SCANNER__USE_SIMPLE_CAPTURE_METHOD
+static const bool useSimplifiedLogic = false;
+#else
+static const bool useSimplifiedLogic = true;
 #endif
 
 #define NumEncodersMax KM0_ENCODER_SCANNER__NUM_ENCODERS_MAX
 
 typedef struct {
   uint8_t bin : 2;
-  int8_t dir : 2;
   bool holdA : 1;
   bool holdB : 1;
 } EncoderState;
@@ -23,29 +30,36 @@ static EncoderState encoderStates[NumEncodersMax];
 
 static const int err = 2;
 
-static const int encoder_count_delta_table[16] = {
-  0, -1, 1, err, 1, 0, err, -1, -1, err, 0, 1, err, 1, -1, 0
+static const int8_t encoder_count_delta_table[16] ROM_DATA = {
+  0, 1, -1, err,
+  -1, 0, err, 1,
+  1, err, 0, -1,
+  err, -1, 1, 0
 };
 
 static void updateEncoderInstance(EncoderConfig *config, EncoderState *state) {
 
   int a = digitalIo_read(config->pin1) == 0 ? 1 : 0;
   int b = digitalIo_read(config->pin2) == 0 ? 1 : 0;
-
+  int delta = 0;
   int prev_bin = state->bin;
-  state->bin = ((a << 1) | b) & 0b11;
+  int bin = ((b << 1) | a);
 
-  int table_index = ((prev_bin << 2) | state->bin) & 0x0F;
-  int delta = encoder_count_delta_table[table_index];
-
-  if (delta == err) {
-    // delta = (dir)*2;
-    delta = state->dir;
-    // delta = 0;
+  if (!useSimplifiedLogic) {
+    //ノンクリックタイプのエンコーダ
+    int table_index = (prev_bin << 2) | bin;
+    delta = romData_readByte(encoder_count_delta_table + table_index);
   } else {
-    state->dir = delta;
+    //クリックタイプのエンコーダ, クリック安定点でB相の出力が不定のものの対応
+    //EC12E2420801
+    //A相の立ち上がりでB相を見て回転方向を判定する
+    int prev_a = prev_bin & 1;
+    if (!prev_a && a) {
+      delta = b ? -1 : 1;
+    }
   }
 
+  state->bin = bin;
   state->holdA = delta == -1;
   state->holdB = delta == 1;
 }
