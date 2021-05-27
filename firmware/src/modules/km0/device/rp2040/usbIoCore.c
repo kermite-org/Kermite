@@ -2,6 +2,7 @@
 
 #include "km0/device/usbIoCore.h"
 #include "config.h"
+#include "km0/base/utils.h"
 #include "tinyusb/src/tusb.h"
 
 //--------------------------------------------------------------------
@@ -254,34 +255,62 @@ void tud_hid_set_report_cb(uint8_t itf, uint8_t report_id, hid_report_type_t rep
 //多面バッファを使用して送信する
 //TODO: 無駄が多いので、複数のリアルタイムイベントを1つのフレームに詰めて送る実装にしたい
 
-#define EmitNumPages 8
-static uint8_t emitBuffers[EmitNumPages][64] = { 0 };
-static bool emitPageFlags[EmitNumPages] = { 0 };
-static int emitWritePageIndex = 0;
-static int emitReadPageIndex = 0;
+#define RawHidTxBufPageNum 8
+static uint8_t rawhid_txbuf[RawHidTxBufPageNum][64] = { 0 };
+static bool rawhid_txbuf_flags[RawHidTxBufPageNum] = { 0 };
+static int rawhid_txbuf_wi = 0;
+static int rawhid_txbuf_ri = 0;
 
 static void enqueueRawHidEmitInternalBuffer(uint8_t *pDataBytes64) {
-  memcpy(emitBuffers[emitWritePageIndex], pDataBytes64, 64);
-  emitPageFlags[emitWritePageIndex] = true;
-  emitWritePageIndex = (emitWritePageIndex + 1) % EmitNumPages;
+  memcpy(rawhid_txbuf[rawhid_txbuf_wi], pDataBytes64, 64);
+  rawhid_txbuf_flags[rawhid_txbuf_wi] = true;
+  rawhid_txbuf_wi = (rawhid_txbuf_wi + 1) % RawHidTxBufPageNum;
 }
 
 static void shiftOutRawHidEmitInternalBuffer() {
-  if (emitPageFlags[emitReadPageIndex]) {
+  if (rawhid_txbuf_flags[rawhid_txbuf_ri]) {
     if (tud_hid_n_ready(ITF_RAWHID)) {
-      tud_hid_n_report(ITF_RAWHID, 0, emitBuffers[emitReadPageIndex], 64);
-      emitPageFlags[emitReadPageIndex] = false;
-      emitReadPageIndex = (emitReadPageIndex + 1) % EmitNumPages;
+      tud_hid_n_report(ITF_RAWHID, 0, rawhid_txbuf[rawhid_txbuf_ri], 64);
+      rawhid_txbuf_flags[rawhid_txbuf_ri] = false;
+      rawhid_txbuf_ri = (rawhid_txbuf_ri + 1) % RawHidTxBufPageNum;
     }
   }
 }
+
+//--------------------------------------------------------------------
+
+#define KeyboardTxBufPageNum 4
+static uint8_t keboard_txbuf[KeyboardTxBufPageNum][8] = { 0 };
+static bool keboard_txbuf_flags[KeyboardTxBufPageNum] = { 0 };
+static int keboard_txbuf_wi = 0;
+static int keboard_txbuf_ri = 0;
+
+static void enqueueKeyboardEmitInternalBuffer(uint8_t *pDataBytes64) {
+  memcpy(keboard_txbuf[keboard_txbuf_wi], pDataBytes64, 8);
+  keboard_txbuf_flags[keboard_txbuf_wi] = true;
+  keboard_txbuf_wi = (keboard_txbuf_wi + 1) % KeyboardTxBufPageNum;
+}
+
+static void shiftOutKeyboardEmitInternalBuffer() {
+  if (keboard_txbuf_flags[keboard_txbuf_ri]) {
+    if (tud_hid_n_ready(ITF_KEYBOARD)) {
+      tud_hid_n_report(ITF_KEYBOARD, 0, keboard_txbuf[keboard_txbuf_ri], 8);
+      keboard_txbuf_flags[keboard_txbuf_ri] = false;
+      keboard_txbuf_ri = (keboard_txbuf_ri + 1) % KeyboardTxBufPageNum;
+    }
+  }
+}
+
+//--------------------------------------------------------------------
 
 // Invoked when sent REPORT successfully to host
 // Application can use this to send the next report
 // Note: For composite reports, report[0] is report ID
 void tud_hid_report_complete_cb(uint8_t itf, uint8_t const *report, uint8_t len) {
   (void)len;
-  if (itf == ITF_RAWHID) {
+  if (itf == ITF_KEYBOARD) {
+    shiftOutKeyboardEmitInternalBuffer();
+  } else if (itf == ITF_RAWHID) {
     shiftOutRawHidEmitInternalBuffer();
   }
 }
@@ -297,6 +326,8 @@ bool usbIoCore_hidKeyboard_writeReport(uint8_t *pReportBytes8) {
   if (tud_hid_n_ready(ITF_KEYBOARD)) {
     uint8_t *p = pReportBytes8;
     tud_hid_n_report(ITF_KEYBOARD, 0, pReportBytes8, 8);
+  } else {
+    enqueueKeyboardEmitInternalBuffer(pReportBytes8);
   }
   return true;
 }
