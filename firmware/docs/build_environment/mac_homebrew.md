@@ -30,12 +30,12 @@ $ brew install arm-none-eabi-gcc
 
 ### ビルドの確認
 
-Kermite/firmwareでターミナルを開ます。
+Kermite/firmwareでターミナルを開きます。
 ```
-$ make --version
-$ avr-gcc --version
-$ g++ --version
-$ arm-none-eabi-gcc --version
+$ make -v
+$ avr-gcc -v
+$ g++ -v
+$ arm-none-eabi-gcc -v
 $ avrdude -v
 ```
 などのコマンドで、各ツールが使えるようになっていることを確認します。
