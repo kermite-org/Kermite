@@ -11,8 +11,8 @@
 //GP18, GP19 <-- Rotary Encoder 2
 
 static EncoderConfig appEncoderConfigs[] = {
-  { .pin1 = GP16, .pin2 = GP17, .scanIndexBase = 0 },
-  { .pin1 = GP18, .pin2 = GP19, .scanIndexBase = 2 },
+  { .pinA = GP16, .pinB = GP17, .scanIndexBase = 0 },
+  { .pinA = GP18, .pinB = GP19, .scanIndexBase = 2 },
 };
 
 static uint8_t keyStateBitFlags[1] = { 0 };

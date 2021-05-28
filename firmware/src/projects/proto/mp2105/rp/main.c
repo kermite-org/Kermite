@@ -30,7 +30,7 @@ static const int8_t keyIndexTable[NumScanSlots] = {
 // clang-format on
 
 static EncoderConfig encoderConfigs[] = {
-  { .pin1 = GP22, .pin2 = GP26, .scanIndexBase = 12 },
+  { .pinA = GP26, .pinB = GP22, .scanIndexBase = 12 },
 };
 
 int main() {

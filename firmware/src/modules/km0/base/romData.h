@@ -14,9 +14,9 @@
 #elif defined KERMITE_TARGET_MCU_RP2040
 #define ROM_DATA
 
-inline uint8_t romData_readByte(const uint8_t *ptr) { return *ptr; }
-inline uint16_t romData_readWord(const uint16_t *ptr) { return *ptr; }
-inline uint32_t romData_readDoubleWord(const uint32_t *ptr) { return *ptr; }
+#define romData_readByte(ptr) (*(ptr))
+#define romData_readWord(ptr) (*(ptr))
+#define romData_readDoubleWord(ptr) (*(ptr))
 
 #else
 #error KERMITE_TARGET_MCU_* is not defined
