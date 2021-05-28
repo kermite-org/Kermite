@@ -334,6 +334,14 @@ export class ProjectResourceProviderImpl_Local
     }
   }
 
+  getLocalPresetProfileFilePath(projectId: string, namePart: string) {
+    return this.getLocalDataFilePath(projectId, namePart, '.profile.json');
+  }
+
+  getLocalLayoutFilePath(projectId: string, namePart: string) {
+    return this.getLocalDataFilePath(projectId, namePart, '.layout.json');
+  }
+
   private getLocalFirmwareFileSpec(
     projectId: string,
     variationName: string,
