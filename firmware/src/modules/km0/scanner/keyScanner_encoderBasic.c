@@ -10,10 +10,10 @@
 #define KM0_ENCODER_SCANNER__NUM_ENCODERS_MAX 4
 #endif
 
-#ifndef KM0_ENCODER_SCANNER__USE_SIMPLE_CAPTURE_METHOD
-static const bool useSimplifiedLogic = false;
+#ifdef KM0_ENCODER_SCANNER__USE_FULL_STEP_DECODER
+static const bool useFullStepDecoder = true;
 #else
-static const bool useSimplifiedLogic = true;
+static const bool useFullStepDecoder = false;
 #endif
 
 #define NumEncodersMax KM0_ENCODER_SCANNER__NUM_ENCODERS_MAX
@@ -45,7 +45,7 @@ static void updateEncoderInstance(EncoderConfig *config, EncoderState *state) {
   int prev_bin = state->bin;
   int bin = ((b << 1) | a);
 
-  if (!useSimplifiedLogic) {
+  if (useFullStepDecoder) {
     //ノンクリックタイプのエンコーダ
     int table_index = (prev_bin << 2) | bin;
     delta = romData_readByte(encoder_count_delta_table + table_index);
