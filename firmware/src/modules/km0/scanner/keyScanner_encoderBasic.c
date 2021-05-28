@@ -39,8 +39,8 @@ static const int8_t encoder_count_delta_table[16] ROM_DATA = {
 
 static void updateEncoderInstance(EncoderConfig *config, EncoderState *state) {
 
-  int a = digitalIo_read(config->pin1) == 0 ? 1 : 0;
-  int b = digitalIo_read(config->pin2) == 0 ? 1 : 0;
+  int a = digitalIo_read(config->pinA) == 0 ? 1 : 0;
+  int b = digitalIo_read(config->pinB) == 0 ? 1 : 0;
   int delta = 0;
   int prev_bin = state->bin;
   int bin = ((b << 1) | a);
@@ -69,8 +69,8 @@ void keyScanner_encoderBasic_initialize(EncoderConfig *_encoderConfigs, uint8_t 
   encoderConfigs = _encoderConfigs;
   for (int i = 0; i < numEncoders; i++) {
     EncoderConfig *config = &encoderConfigs[i];
-    digitalIo_setInputPullup(config->pin1);
-    digitalIo_setInputPullup(config->pin2);
+    digitalIo_setInputPullup(config->pinA);
+    digitalIo_setInputPullup(config->pinB);
   }
 }
 

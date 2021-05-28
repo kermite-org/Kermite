@@ -4,8 +4,8 @@
 #include "km0/types.h"
 
 typedef struct {
-  uint8_t pin1;
-  uint8_t pin2;
+  uint8_t pinA;
+  uint8_t pinB;
   uint8_t scanIndexBase;
 } EncoderConfig;
 

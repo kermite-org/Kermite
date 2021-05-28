@@ -15,8 +15,8 @@ static const uint8_t keyInputPins[NumKeyScanSlots] = { P_D7, P_E6, P_B4, P_B5 };
 static const int8_t keyIndexTable[NumScanSlots] = { 0, 1, 2, 3, 4, 5, 6, 7 };
 
 static EncoderConfig encoderConfigs[] = {
-  { .pin1 = P_B6, .pin2 = P_B2, .scanIndexBase = 4 },
-  { .pin1 = P_B3, .pin2 = P_B1, .scanIndexBase = 6 },
+  { .pinA = P_B6, .pinB = P_B2, .scanIndexBase = 4 },
+  { .pinA = P_B3, .pinB = P_B1, .scanIndexBase = 6 },
 };
 
 int main() {
