@@ -13,8 +13,15 @@
 GNU Makeをグローバルにインストールしてパスを通し、他のツールはパスを通さずMakefile内だけから参照するようにします。追加するツールのうち、コマンドプロンプトから直接呼び出せるものはmakeだけにします。
 他のプロジェクトのビルド環境に影響を与えたくない場合にこの構成を検討してください。
 ## ツールの導入
+### Make for Windows
+| ツール   | [Make for Windows](http://gnuwin32.sourceforge.net/packages/make.htm)    
+| -------- | :------------------------------------------ | 
+| ファイル | make-3.81.exe          | 
+| 導入方法 | DL, インストール, binにパスを通す        | 
 
-ツールの導入手順は[CoreUtilsを使う場合](./win1_coreutils.md)と同様です。Make以外にはパスを通しません。
+Make for Windowsを取得して導入します。インストーラを使用します。
+### Make以外のソフトウェア
+Make以外のツールの導入手順は[CoreUtilsを使う場合](./win1_coreutils.md)と同様です。Make以外にはパスを通しません。
 GnuWin32のCoreUtilsとMakeが同じフォルダにインストールされてしまうため、CoreUtilsは導入せず代わりにGOWを使用するのがよいでしょう。
 ## Makefile内でのパスの指定
 Makefile.user.exampleをコピーしてMakefile.userを作成します。
