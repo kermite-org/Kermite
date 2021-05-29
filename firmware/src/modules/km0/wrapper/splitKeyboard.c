@@ -1,8 +1,9 @@
 #include "splitKeyboard.h"
-#include "config.h"
+#include "km0/base/configImport.h"
 #include "km0/base/utils.h"
 #include "km0/device/boardIo.h"
 #include "km0/device/boardLink.h"
+#include "km0/device/digitalIo.h"
 #include "km0/device/system.h"
 #include "km0/device/usbIoCore.h"
 #include "km0/kernel/keyboardMainInternal.h"
@@ -10,6 +11,12 @@
 
 //---------------------------------------------
 //definitions
+
+#ifdef KM0_SPLIT_KEYBOARD__MASTER_SLAVE_DETEMINATION_PIN
+static const int pin_masterSlaveDetermination = KM0_SPLIT_KEYBOARD__MASTER_SLAVE_DETEMINATION_PIN;
+#else
+static const int pin_masterSlaveDetermination = -1;
+#endif
 
 #ifndef KM0_KEYBOARD__NUM_SCAN_SLOTS
 #error KM0_KEYBOARD__NUM_SCAN_SLOTS is not defined
@@ -43,8 +50,6 @@ static uint8_t sw_txbuf[SingleWireMaxPacketSize] = { 0 };
 static uint8_t sw_rxbuf[SingleWireMaxPacketSize] = { 0 };
 
 static bool hasMasterOathReceived = false;
-
-static uint8_t splitCommandBuf[16][3] = { 0 };
 
 //---------------------------------------------
 //master
@@ -201,12 +206,23 @@ static bool runMasterSlaveDetectionMode() {
   return isMaster;
 }
 
+static bool detemineMasterSlaveByPin() {
+  digitalIo_setInputPullup(pin_masterSlaveDetermination);
+  delayMs(1);
+  return digitalIo_read(pin_masterSlaveDetermination) == 1;
+}
+
 //---------------------------------------------
 
 void splitKeyboard_start() {
   system_initializeUserProgram();
   keyboardMain_initialize();
-  bool isMaster = runMasterSlaveDetectionMode();
+  bool isMaster = false;
+  if (pin_masterSlaveDetermination == -1) {
+    isMaster = runMasterSlaveDetectionMode();
+  } else {
+    isMaster = detemineMasterSlaveByPin();
+  }
   printf("isMaster:%d\n", isMaster);
   showModeByLedBlinkPattern(isMaster);
   if (isMaster) {
