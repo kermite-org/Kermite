@@ -22,7 +22,18 @@
 #define NumScanSlotBytesHalf ((NumScanSlotsHalf + 7) >> 3)
 #define NumScanSlotBytes (NumScanSlotBytesHalf * 2)
 
-#define SingleWireMaxPacketSize (NumScanSlotBytesHalf + 1)
+#define SingleWireMaxPacketSizeTmp (NumScanSlotBytesHalf + 1)
+
+#define SingleWireMaxPacketSize (SingleWireMaxPacketSizeTmp > 4 ? SingleWireMaxPacketSizeTmp : 4)
+
+enum {
+  SplitOp_MasterOath = 0xA0,             //Master --> Slave
+  SplitOp_ScanSlotStatesRequest = 0x40,  //Master --> Slave
+  SplitOp_ScanSlotStatesResponse = 0x41, //Masetr <-- Slave
+  SplitOp_KeyStateChanged = 0xC0,        //Master --> Slave
+  SplitOp_ParameterChanged = 0xC1,       //Master --> Slave
+  SplitOp_SlaveAck = 0xF0,               //Master <-- Slave
+};
 
 //---------------------------------------------
 //variables
@@ -33,19 +44,21 @@ static uint8_t sw_rxbuf[SingleWireMaxPacketSize] = { 0 };
 
 static bool hasMasterOathReceived = false;
 
+static uint8_t splitCommandBuf[16][3] = { 0 };
+
 //---------------------------------------------
 //master
 
 //反対側のコントローラからキー状態を受け取る処理
 static void pullAltSideKeyStates() {
-  sw_txbuf[0] = 0x40;
+  sw_txbuf[0] = SplitOp_ScanSlotStatesRequest;
   boardLink_writeTxBuffer(sw_txbuf, 1); //キー状態要求パケットを送信
   boardLink_exchangeFramesBlocking();
   uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
 
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
-    if (cmd == 0x41 && sz == 1 + NumScanSlotBytesHalf) {
+    if (cmd == SplitOp_ScanSlotStatesResponse && sz == 1 + NumScanSlotBytesHalf) {
       uint8_t *payloadBytes = sw_rxbuf + 1;
       //子-->親, キー状態応答パケット受信, 子のキー状態を受け取り保持
       uint8_t *nextScanSlotStateFlags = keyboardMain_getNextScanSlotStateFlags();
@@ -98,10 +111,10 @@ static void onRecevierInterruption() {
   uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
-    if (cmd == 0x40 && sz == 1) {
+    if (cmd == SplitOp_ScanSlotStatesRequest && sz == 1) {
       //親-->子, キー状態要求パケット受信, キー状態応答パケットを返す
       //子から親に対してキー状態応答パケットを送る
-      sw_txbuf[0] = 0x41;
+      sw_txbuf[0] = SplitOp_ScanSlotStatesResponse;
       uint8_t *nextScanSlotStateFlags = keyboardMain_getNextScanSlotStateFlags();
       //slave側でnextScanSlotStateFlagsの前半分に入っているキー状態をmasterに送信する
       utils_copyBytes(sw_txbuf + 1, nextScanSlotStateFlags, NumScanSlotBytesHalf);
@@ -152,7 +165,7 @@ static void masterSlaveDetectionMode_onSlaveDataReceived() {
   uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
-    if (cmd == 0xA0 && sz == 1) {
+    if (cmd == SplitOp_MasterOath && sz == 1) {
       //親-->子, Master確定通知パケット受信
       hasMasterOathReceived = true;
     }
@@ -171,7 +184,7 @@ static bool runMasterSlaveDetectionMode() {
   while (true) {
     if (usbIoCore_isConnectedToHost()) {
       //Master確定通知パケットを送信
-      sw_txbuf[0] = 0xA0;
+      sw_txbuf[0] = SplitOp_MasterOath;
       boardLink_writeTxBuffer(sw_txbuf, 1);
       boardLink_exchangeFramesBlocking();
       isMaster = true;
