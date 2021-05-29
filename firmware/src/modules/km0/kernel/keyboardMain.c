@@ -336,7 +336,7 @@ void keyboardMain_initialize() {
   configManager_addParameterChangeListener(parameterValueHandler);
   configManager_initialize();
   setupSerialNumberText();
-  usbIoCore_initialize();
+  // usbIoCore_initialize();
   resetKeyboardCoreLogic();
   configuratorServant_initialize(configuratorServantStateHandler);
 }
