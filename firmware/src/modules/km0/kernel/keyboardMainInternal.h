@@ -33,5 +33,6 @@ void keyboardMain_updateKeyInidicatorLed();
 void keyboardMain_updateDisplayModules(uint32_t tick);
 void keyboardMain_updateHeartBeatLed(uint32_t tick);
 void keyboardMain_processUpdate();
+void keyboardMain_setKeySlotStateChangedCallback(void (*callback)(uint8_t slotIndex, bool isDown));
 
 #endif

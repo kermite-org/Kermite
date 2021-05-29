@@ -36,12 +36,12 @@ static const int pin_masterSlaveDetermination = -1;
 #define SingleWireMaxPacketSize (SingleWireMaxPacketSizeTmp > 4 ? SingleWireMaxPacketSizeTmp : 4)
 
 enum {
-  SplitOp_MasterOath = 0xA0,             //Master --> Slave
-  SplitOp_ScanSlotStatesRequest = 0x40,  //Master --> Slave
-  SplitOp_ScanSlotStatesResponse = 0x41, //Masetr <-- Slave
-  SplitOp_KeyStateChanged = 0xC0,        //Master --> Slave
-  SplitOp_ParameterChanged = 0xC1,       //Master --> Slave
-  SplitOp_SlaveAck = 0xF0,               //Master <-- Slave
+  SplitOp_MasterOath = 0xA0,                //Master --> Slave
+  SplitOp_ScanSlotStatesRequest = 0x40,     //Master --> Slave
+  SplitOp_ScanSlotStatesResponse = 0x41,    //Masetr <-- Slave
+  SplitOp_MasterKeySlotStateChanged = 0xC0, //Master --> Slave
+  SplitOp_MasterParameterChanged = 0xC1,    //Master --> Slave
+  SplitOp_SlaveAck = 0xF0,                  //Master <-- Slave
 };
 
 //---------------------------------------------
@@ -145,7 +145,7 @@ static void handleMasterParameterChanged(uint8_t parameterIndex, uint8_t value) 
       pi == SystemParameter_GlowColor ||
       pi == SystemParameter_GlowBrightness ||
       pi == SystemParameter_GlowPattern) {
-    enqueueMasterStatePacket(SplitOp_ParameterChanged, parameterIndex, value);
+    enqueueMasterStatePacket(SplitOp_MasterParameterChanged, parameterIndex, value);
   }
 }
 
@@ -156,8 +156,13 @@ static void sendInitialParameteresAll() {
   }
 }
 
+static void handleMasterKeySlotStateChanged(uint8_t slotIndex, bool isDown) {
+  enqueueMasterStatePacket(SplitOp_MasterKeySlotStateChanged, slotIndex, isDown);
+}
+
 static void runAsMaster() {
   sendInitialParameteresAll();
+  keyboardMain_setKeySlotStateChangedCallback(handleMasterKeySlotStateChanged);
   configManager_addParameterChangeListener(handleMasterParameterChanged);
   uint32_t tick = 0;
   while (1) {
@@ -205,7 +210,9 @@ static void onRecevierInterruption() {
       boardLink_writeTxBuffer(sw_txbuf, 1 + NumScanSlotBytesHalf);
     }
 
-    if ((cmd == SplitOp_KeyStateChanged || cmd == SplitOp_ParameterChanged) && sz == 3) {
+    if ((cmd == SplitOp_MasterKeySlotStateChanged ||
+         cmd == SplitOp_MasterParameterChanged) &&
+        sz == 3) {
       uint8_t arg1 = sw_rxbuf[1];
       uint8_t arg2 = sw_rxbuf[2];
       enqueueMasterStatePacket(cmd, arg1, arg2);
@@ -221,9 +228,14 @@ static void consumeMasterStatePackets() {
     uint8_t op = data & 0xFF;
     uint8_t arg1 = data >> 8 & 0xFF;
     uint8_t arg2 = data >> 16 & 0xFF;
-    if (op == SplitOp_KeyStateChanged) {
+    if (op == SplitOp_MasterKeySlotStateChanged) {
+      uint8_t slotIndex = arg1;
+      bool isDown = arg2;
+      // uint8_t *nextScanSlotStateFlags = keyboardMain_getNextScanSlotStateFlags();
+      // utils_writeArrayedBitFlagsBit(nextScanSlotStateFlags, slotIndex, isDown);
+      printf("master slot changed %d %d\n", slotIndex, isDown);
     }
-    if (op == SplitOp_ParameterChanged) {
+    if (op == SplitOp_MasterParameterChanged) {
       uint8_t parameterIndex = arg1;
       uint8_t value = arg2;
       configManager_writeParameter(parameterIndex, value);

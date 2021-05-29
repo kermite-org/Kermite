@@ -76,6 +76,10 @@ KeyboardMainExposedState keyboardMain_exposedState = {
   .optionInvertSide = false,
 };
 
+typedef void (*KeySlotStateChangedCallback)(uint8_t slotIndex, bool isDown);
+
+KeySlotStateChangedCallback keySlotStateChangedCallback = NULL;
+
 //----------------------------------------------------------------------
 //helpers
 
@@ -223,6 +227,9 @@ static void onPhysicalKeyStateChanged(uint8_t scanIndex, bool isDown) {
   if (scanIndex >= NumScanSlots) {
     return;
   }
+  if (keySlotStateChangedCallback) {
+    keySlotStateChangedCallback(scanIndex, isDown);
+  }
   uint8_t keyIndex = scanIndexToKeyIndexMap[scanIndex];
   if (keyIndex == KEYINDEX_NONE) {
     return;
@@ -343,4 +350,8 @@ void keyboardMain_processUpdate() {
   usbIoCore_processUpdate();
   configuratorServant_processUpdate();
   configManager_processUpdate();
+}
+
+void keyboardMain_setKeySlotStateChangedCallback(void (*callback)(uint8_t slotIndex, bool isDown)) {
+  keySlotStateChangedCallback = callback;
 }
