@@ -27,7 +27,7 @@ static const int pin_masterSlaveDetermination = -1;
 #define NumScanSlots KM0_KEYBOARD__NUM_SCAN_SLOTS
 #define NumScanSlotsHalf (NumScanSlots >> 1)
 
-//#define NumScanSlotBytesHalf Ceil(NumScanSlotsHalf / 8)
+// #define NumScanSlotBytesHalf Ceil(NumScanSlotsHalf / 8)
 #define NumScanSlotBytesHalf ((NumScanSlotsHalf + 7) >> 3)
 #define NumScanSlotBytes (NumScanSlotBytesHalf * 2)
 
@@ -36,12 +36,12 @@ static const int pin_masterSlaveDetermination = -1;
 #define SingleWireMaxPacketSize (SingleWireMaxPacketSizeTmp > 4 ? SingleWireMaxPacketSizeTmp : 4)
 
 enum {
-  SplitOp_MasterOath = 0xA0,                //Master --> Slave
-  SplitOp_ScanSlotStatesRequest = 0x40,     //Master --> Slave
-  SplitOp_ScanSlotStatesResponse = 0x41,    //Masetr <-- Slave
-  SplitOp_MasterKeySlotStateChanged = 0xC0, //Master --> Slave
-  SplitOp_MasterParameterChanged = 0xC1,    //Master --> Slave
-  SplitOp_SlaveAck = 0xF0,                  //Master <-- Slave
+  SplitOp_MasterOath = 0xA0,                  //Master --> Slave
+  SplitOp_InputScanSlotStatesRequest = 0x40,  //Master --> Slave
+  SplitOp_InputScanSlotStatesResponse = 0x41, //Masetr <-- Slave
+  SplitOp_MasterScanSlotStateChanged = 0xC0,  //Master --> Slave
+  SplitOp_MasterParameterChanged = 0xC1,      //Master --> Slave
+  SplitOp_SlaveAck = 0xF0,                    //Master <-- Slave
 };
 
 //---------------------------------------------
@@ -90,14 +90,14 @@ static void shiftMasterStatePacket() {
 
 //反対側のコントローラからキー状態を受け取る処理
 static void master_pullAltSideKeyStates() {
-  sw_txbuf[0] = SplitOp_ScanSlotStatesRequest;
+  sw_txbuf[0] = SplitOp_InputScanSlotStatesRequest;
   boardLink_writeTxBuffer(sw_txbuf, 1); //キー状態要求パケットを送信
   boardLink_exchangeFramesBlocking();
   uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
 
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
-    if (cmd == SplitOp_ScanSlotStatesResponse && sz == 1 + NumScanSlotBytesHalf) {
+    if (cmd == SplitOp_InputScanSlotStatesResponse && sz == 1 + NumScanSlotBytesHalf) {
       uint8_t *payloadBytes = sw_rxbuf + 1;
       //子-->親, キー状態応答パケット受信, 子のキー状態を受け取り保持
       uint8_t *inputScanSlotFlags = keyboardMain_getInputScanSlotFlags();
@@ -147,7 +147,7 @@ static void master_sendInitialParameteresAll() {
 }
 
 static void master_handleMasterKeySlotStateChanged(uint8_t slotIndex, bool isDown) {
-  enqueueMasterStatePacket(SplitOp_MasterKeySlotStateChanged, slotIndex, isDown);
+  enqueueMasterStatePacket(SplitOp_MasterScanSlotStateChanged, slotIndex, isDown);
 }
 
 static void master_start() {
@@ -184,17 +184,17 @@ static void slave_onRecevierInterruption() {
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
 
-    if (cmd == SplitOp_ScanSlotStatesRequest && sz == 1) {
+    if (cmd == SplitOp_InputScanSlotStatesRequest && sz == 1) {
       //親-->子, キー状態要求パケット受信, キー状態応答パケットを返す
       //子から親に対してキー状態応答パケットを送る
-      sw_txbuf[0] = SplitOp_ScanSlotStatesResponse;
+      sw_txbuf[0] = SplitOp_InputScanSlotStatesResponse;
       uint8_t *inputScanSlotFlags = keyboardMain_getInputScanSlotFlags();
       //slave側でnextScanSlotStateFlagsの前半分に入っているキー状態をmasterに送信する
       utils_copyBytes(sw_txbuf + 1, inputScanSlotFlags, NumScanSlotBytesHalf);
       boardLink_writeTxBuffer(sw_txbuf, 1 + NumScanSlotBytesHalf);
     }
 
-    if ((cmd == SplitOp_MasterKeySlotStateChanged ||
+    if ((cmd == SplitOp_MasterScanSlotStateChanged ||
          cmd == SplitOp_MasterParameterChanged) &&
         sz == 3) {
       uint8_t arg1 = sw_rxbuf[1];
@@ -212,7 +212,7 @@ static void slave_consumeMasterStatePackets() {
     uint8_t op = data & 0xFF;
     uint8_t arg1 = data >> 8 & 0xFF;
     uint8_t arg2 = data >> 16 & 0xFF;
-    if (op == SplitOp_MasterKeySlotStateChanged) {
+    if (op == SplitOp_MasterScanSlotStateChanged) {
       uint8_t slotIndex = arg1;
       bool isDown = arg2;
       uint8_t *nextScanSlotStateFlags = keyboardMain_getNextScanSlotFlags();
