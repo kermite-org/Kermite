@@ -22,7 +22,8 @@ typedef struct {
 } KeyboardMainExposedState;
 
 extern KeyboardMainExposedState keyboardMain_exposedState;
-uint8_t *keyboardMain_getNextScanSlotStateFlags();
+uint8_t *keyboardMain_getNextScanSlotFlags();
+uint8_t *keyboardMain_getInputScanSlotFlags();
 
 void keyboardMain_setAsSplitSlave();
 void keyboardMain_setCallbacks(KeyboardCallbackSet *_callbacks);

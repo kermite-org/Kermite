@@ -100,20 +100,10 @@ static void pullAltSideKeyStates() {
     if (cmd == SplitOp_ScanSlotStatesResponse && sz == 1 + NumScanSlotBytesHalf) {
       uint8_t *payloadBytes = sw_rxbuf + 1;
       //子-->親, キー状態応答パケット受信, 子のキー状態を受け取り保持
-      uint8_t *nextScanSlotStateFlags = keyboardMain_getNextScanSlotStateFlags();
-      //nextScanSlotStateFlagsの後ろ半分にslave側のボードのキー状態を格納する
-      utils_copyBitFlagsBuf(nextScanSlotStateFlags, NumScanSlotsHalf, payloadBytes, 0, NumScanSlotsHalf);
+      uint8_t *inputScanSlotFlags = keyboardMain_getInputScanSlotFlags();
+      //inputScanSlotFlagsの後ろ半分にslave側のボードのキー状態を格納する
+      utils_copyBitFlagsBuf(inputScanSlotFlags, NumScanSlotsHalf, payloadBytes, 0, NumScanSlotsHalf);
     }
-  }
-}
-
-static void swapNextScanSlotStateFlagsFirstLastHalf() {
-  uint8_t *nextScanSlotStateFlags = keyboardMain_getNextScanSlotStateFlags();
-  for (int i = 0; i < NumScanSlotsHalf; i++) {
-    bool a = utils_readArrayedBitFlagsBit(nextScanSlotStateFlags, i);
-    bool b = utils_readArrayedBitFlagsBit(nextScanSlotStateFlags, NumScanSlotsHalf + i);
-    utils_writeArrayedBitFlagsBit(nextScanSlotStateFlags, i, b);
-    utils_writeArrayedBitFlagsBit(nextScanSlotStateFlags, NumScanSlotsHalf + i, a);
   }
 }
 
@@ -168,13 +158,7 @@ static void runAsMaster() {
   while (1) {
     if (tick % 4 == 0) {
       keyboardMain_udpateKeyScanners();
-      if (!keyboardMain_exposedState.optionInvertSide) {
-        keyboardMain_processKeyInputUpdate(4);
-      } else {
-        swapNextScanSlotStateFlagsFirstLastHalf(); //nextScanSlotStateFlagsの前半と後半を入れ替える
-        keyboardMain_processKeyInputUpdate(4);
-        swapNextScanSlotStateFlagsFirstLastHalf(); //戻す
-      }
+      keyboardMain_processKeyInputUpdate(4);
       keyboardMain_updateKeyInidicatorLed();
     }
     if (tick % 4 == 1) {
@@ -204,9 +188,9 @@ static void onRecevierInterruption() {
       //親-->子, キー状態要求パケット受信, キー状態応答パケットを返す
       //子から親に対してキー状態応答パケットを送る
       sw_txbuf[0] = SplitOp_ScanSlotStatesResponse;
-      uint8_t *nextScanSlotStateFlags = keyboardMain_getNextScanSlotStateFlags();
+      uint8_t *inputScanSlotFlags = keyboardMain_getInputScanSlotFlags();
       //slave側でnextScanSlotStateFlagsの前半分に入っているキー状態をmasterに送信する
-      utils_copyBytes(sw_txbuf + 1, nextScanSlotStateFlags, NumScanSlotBytesHalf);
+      utils_copyBytes(sw_txbuf + 1, inputScanSlotFlags, NumScanSlotBytesHalf);
       boardLink_writeTxBuffer(sw_txbuf, 1 + NumScanSlotBytesHalf);
     }
 
@@ -231,9 +215,9 @@ static void consumeMasterStatePackets() {
     if (op == SplitOp_MasterKeySlotStateChanged) {
       uint8_t slotIndex = arg1;
       bool isDown = arg2;
-      // uint8_t *nextScanSlotStateFlags = keyboardMain_getNextScanSlotStateFlags();
-      // utils_writeArrayedBitFlagsBit(nextScanSlotStateFlags, slotIndex, isDown);
-      printf("master slot changed %d %d\n", slotIndex, isDown);
+      uint8_t *nextScanSlotStateFlags = keyboardMain_getNextScanSlotFlags();
+      utils_writeArrayedBitFlagsBit(nextScanSlotStateFlags, slotIndex, isDown);
+      // printf("master slot changed %d %d\n", slotIndex, isDown);
     }
     if (op == SplitOp_MasterParameterChanged) {
       uint8_t parameterIndex = arg1;

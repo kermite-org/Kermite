@@ -22,6 +22,7 @@
 #endif
 
 #define NumScanSlots KM0_KEYBOARD__NUM_SCAN_SLOTS
+#define NumScanSlotsHalf (NumScanSlots >> 1)
 
 //#define NumScanSlotBytes Ceil(NumScanSlots / 8)
 #define NumScanSlotBytes ((NumScanSlots + 7) >> 3)
@@ -42,8 +43,20 @@
 static uint8_t *scanIndexToKeyIndexMap;
 
 //キー状態
-static uint8_t scanSlotStateFlags[NumScanSlotBytes] = { 0 };
-static uint8_t nextScanSlotStateFlags[NumScanSlotBytes] = { 0 };
+
+/*
+inputScanSlotFlags:
+ master, slaveとも前半部分に自分側のキー状態を持つ
+ masterは後半部分にslave側のキー状態も持つ
+*/
+static uint8_t inputScanSlotFlags[NumScanSlotBytes] = { 0 };
+/*
+scanSlotFlags, nextScanSlotFlags
+左手側がmasterの場合、右手側がmaseterの場合どちらの場合でも
+ 前半に左手側,後半に右手側のキー状態を持つ
+*/
+static uint8_t scanSlotFlags[NumScanSlotBytes] = { 0 };
+static uint8_t nextScanSlotFlags[NumScanSlotBytes] = { 0 };
 
 static uint16_t localLayerFlags = 0;
 static uint8_t localHidReport[8] = { 0 };
@@ -111,12 +124,12 @@ static void resetKeyboardCoreLogic() {
 
 static void updateKeyScanners() {
   if (keyScannerUpdateFunc) {
-    keyScannerUpdateFunc(nextScanSlotStateFlags);
+    keyScannerUpdateFunc(inputScanSlotFlags);
   }
   for (uint8_t i = 0; i < extraKeyScannersLength; i++) {
     KeyScannerUpdateFunc updateFunc = extraKeyScannerUpdateFuncs[i];
     if (updateFunc) {
-      updateFunc(nextScanSlotStateFlags);
+      updateFunc(inputScanSlotFlags);
     }
   }
 }
@@ -129,7 +142,7 @@ static void updateDisplayModules(uint32_t tick) {
 
 static bool checkIfSomeKeyPressed() {
   for (uint8_t i = 0; i < NumScanSlotBytes; i++) {
-    if (nextScanSlotStateFlags[i] > 0) {
+    if (nextScanSlotFlags[i] > 0) {
       return true;
     }
   }
@@ -261,16 +274,26 @@ static void onPhysicalKeyStateChanged(uint8_t scanIndex, bool isDown) {
 
 //キー状態更新処理
 static void processKeyStatesUpdate() {
+  if (!keyboardMain_exposedState.optionInvertSide) {
+    utils_copyBytes(nextScanSlotFlags, inputScanSlotFlags, NumScanSlotBytes);
+  } else {
+    for (int i = 0; i < NumScanSlotsHalf; i++) {
+      bool a = utils_readArrayedBitFlagsBit(inputScanSlotFlags, i);
+      bool b = utils_readArrayedBitFlagsBit(inputScanSlotFlags, NumScanSlotsHalf + i);
+      utils_writeArrayedBitFlagsBit(nextScanSlotFlags, i, b);
+      utils_writeArrayedBitFlagsBit(nextScanSlotFlags, NumScanSlotsHalf + i, a);
+    }
+  }
   for (uint8_t i = 0; i < NumScanSlots; i++) {
-    uint8_t curr = utils_readArrayedBitFlagsBit(scanSlotStateFlags, i);
-    uint8_t next = utils_readArrayedBitFlagsBit(nextScanSlotStateFlags, i);
+    uint8_t curr = utils_readArrayedBitFlagsBit(scanSlotFlags, i);
+    uint8_t next = utils_readArrayedBitFlagsBit(nextScanSlotFlags, i);
     if (!curr && next) {
       onPhysicalKeyStateChanged(i, true);
     }
     if (curr && !next) {
       onPhysicalKeyStateChanged(i, false);
     }
-    utils_writeArrayedBitFlagsBit(scanSlotStateFlags, i, next);
+    utils_writeArrayedBitFlagsBit(scanSlotFlags, i, next);
   }
 }
 
@@ -300,8 +323,12 @@ void keyboardMain_setAsSplitSlave() {
   keyboardMain_exposedState.isSplitSlave = true;
 }
 
-uint8_t *keyboardMain_getNextScanSlotStateFlags() {
-  return nextScanSlotStateFlags;
+uint8_t *keyboardMain_getNextScanSlotFlags() {
+  return nextScanSlotFlags;
+}
+
+uint8_t *keyboardMain_getInputScanSlotFlags() {
+  return inputScanSlotFlags;
 }
 
 void keyboardMain_initialize() {
