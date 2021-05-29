@@ -15,4 +15,6 @@ void configManager_resetSystemParameters();
 void configManager_handleSystemAction(uint8_t systemActionCode, uint8_t payloadValue);
 void configManager_processUpdate();
 
+uint8_t *configManager_getParameterValuesRawPointer();
+
 #endif

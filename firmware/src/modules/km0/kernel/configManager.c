@@ -187,3 +187,7 @@ void configManager_processUpdate() {
     }
   }
 }
+
+uint8_t *configManager_getParameterValuesRawPointer() {
+  return systemParameterValues;
+}
