@@ -89,7 +89,7 @@ static void shiftMasterStatePacket() {
 //master
 
 //反対側のコントローラからキー状態を受け取る処理
-static void pullAltSideKeyStates() {
+static void master_pullAltSideKeyStates() {
   sw_txbuf[0] = SplitOp_ScanSlotStatesRequest;
   boardLink_writeTxBuffer(sw_txbuf, 1); //キー状態要求パケットを送信
   boardLink_exchangeFramesBlocking();
@@ -108,7 +108,7 @@ static void pullAltSideKeyStates() {
 }
 
 //masterのキー状態変化やパラメタの変更通知をslaveに送信する処理
-static void pushMasterStatePacketOne() {
+static void master_pushMasterStatePacketOne() {
   //パケットキューからデータを一つ取り出しスレーブに送信, 送信が成功したらキューから除去
   uint32_t data = peekMasterStatePacket();
   if (data) {
@@ -126,7 +126,7 @@ static void pushMasterStatePacketOne() {
   }
 }
 
-static void handleMasterParameterChanged(uint8_t parameterIndex, uint8_t value) {
+static void master_handleMasterParameterChanged(uint8_t parameterIndex, uint8_t value) {
   uint8_t pi = parameterIndex;
   if (pi == SystemParameter_KeyHoldIndicatorLed ||
       pi == SystemParameter_HeartbeatLed ||
@@ -139,21 +139,21 @@ static void handleMasterParameterChanged(uint8_t parameterIndex, uint8_t value) 
   }
 }
 
-static void sendInitialParameteresAll() {
+static void master_sendInitialParameteresAll() {
   uint8_t *pp = configManager_getParameterValuesRawPointer();
   for (int i = 0; i < NumSystemParameters; i++) {
-    handleMasterParameterChanged(i, pp[i]);
+    master_handleMasterParameterChanged(i, pp[i]);
   }
 }
 
-static void handleMasterKeySlotStateChanged(uint8_t slotIndex, bool isDown) {
+static void master_handleMasterKeySlotStateChanged(uint8_t slotIndex, bool isDown) {
   enqueueMasterStatePacket(SplitOp_MasterKeySlotStateChanged, slotIndex, isDown);
 }
 
-static void runAsMaster() {
-  sendInitialParameteresAll();
-  keyboardMain_setKeySlotStateChangedCallback(handleMasterKeySlotStateChanged);
-  configManager_addParameterChangeListener(handleMasterParameterChanged);
+static void master_start() {
+  master_sendInitialParameteresAll();
+  keyboardMain_setKeySlotStateChangedCallback(master_handleMasterKeySlotStateChanged);
+  configManager_addParameterChangeListener(master_handleMasterParameterChanged);
   uint32_t tick = 0;
   while (1) {
     if (tick % 4 == 0) {
@@ -162,10 +162,10 @@ static void runAsMaster() {
       keyboardMain_updateKeyInidicatorLed();
     }
     if (tick % 4 == 1) {
-      pullAltSideKeyStates();
+      master_pullAltSideKeyStates();
     }
     if (tick % 4 == 2) {
-      pushMasterStatePacketOne();
+      master_pushMasterStatePacketOne();
     }
     keyboardMain_updateDisplayModules(tick);
     keyboardMain_updateHeartBeatLed(tick);
@@ -179,7 +179,7 @@ static void runAsMaster() {
 //slave
 
 //単線通信の受信割り込みコールバック
-static void onRecevierInterruption() {
+static void slave_onRecevierInterruption() {
   uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
@@ -206,7 +206,7 @@ static void onRecevierInterruption() {
   }
 }
 
-static void consumeMasterStatePackets() {
+static void slave_consumeMasterStatePackets() {
   uint32_t data = popMasterStatePacket();
   if (data) {
     uint8_t op = data & 0xFF;
@@ -227,8 +227,8 @@ static void consumeMasterStatePackets() {
   }
 }
 
-static void runAsSlave() {
-  boardLink_setupSlaveReceiver(onRecevierInterruption);
+static void slave_start() {
+  boardLink_setupSlaveReceiver(slave_onRecevierInterruption);
   keyboardMain_setAsSplitSlave();
 
   uint32_t tick = 0;
@@ -237,7 +237,7 @@ static void runAsSlave() {
       keyboardMain_udpateKeyScanners();
       keyboardMain_updateKeyInidicatorLed();
     }
-    consumeMasterStatePackets();
+    slave_consumeMasterStatePackets();
     keyboardMain_updateDisplayModules(tick);
     keyboardMain_updateHeartBeatLed(tick);
     delayMs(1);
@@ -248,26 +248,8 @@ static void runAsSlave() {
 //---------------------------------------------
 //detection
 
-//master/slave確定後にどちらになったかをLEDで表示
-static void showModeByLedBlinkPattern(bool isMaster) {
-  if (isMaster) {
-    //masterの場合高速に4回点滅
-    for (uint8_t i = 0; i < 4; i++) {
-      boardIo_writeLed1(true);
-      delayMs(2);
-      boardIo_writeLed1(false);
-      delayMs(100);
-    }
-  } else {
-    //slaveの場合長く1回点灯
-    boardIo_writeLed1(true);
-    delayMs(500);
-    boardIo_writeLed1(false);
-  }
-}
-
 //単線通信受信割り込みコールバック
-static void masterSlaveDetectionMode_onSlaveDataReceived() {
+static void detection_onDataReceivedFromMaster() {
   uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
@@ -280,9 +262,9 @@ static void masterSlaveDetectionMode_onSlaveDataReceived() {
 
 //USB接続が確立していない期間の動作
 //双方待機し、USB接続が確立すると自分がMasterになり、相手にMaseter確定通知パケットを送る
-static bool runMasterSlaveDetectionMode() {
+static bool detenction_determineMasterSlaveByUsbConnection() {
   boardLink_initialize();
-  boardLink_setupSlaveReceiver(masterSlaveDetectionMode_onSlaveDataReceived);
+  boardLink_setupSlaveReceiver(detection_onDataReceivedFromMaster);
   system_enableInterrupts();
 
   bool isMaster = true;
@@ -307,7 +289,7 @@ static bool runMasterSlaveDetectionMode() {
   return isMaster;
 }
 
-static bool detemineMasterSlaveByPin() {
+static bool detection_detemineMasterSlaveByPin() {
   digitalIo_setInputPullup(pin_masterSlaveDetermination);
   delayMs(1);
   return digitalIo_read(pin_masterSlaveDetermination) == 1;
@@ -315,20 +297,55 @@ static bool detemineMasterSlaveByPin() {
 
 //---------------------------------------------
 
-void splitKeyboard_start() {
-  system_initializeUserProgram();
-  keyboardMain_initialize();
-  bool isMaster = false;
-  if (pin_masterSlaveDetermination == -1) {
-    isMaster = runMasterSlaveDetectionMode();
+//master/slave確定後にどちらになったかをLEDで表示
+static void showModeByLedBlinkPattern(bool isMaster) {
+  if (isMaster) {
+    //masterの場合高速に4回点滅
+    for (uint8_t i = 0; i < 4; i++) {
+      boardIo_writeLed1(true);
+      delayMs(2);
+      boardIo_writeLed1(false);
+      delayMs(100);
+    }
   } else {
-    isMaster = detemineMasterSlaveByPin();
+    //slaveの場合長く1回点灯
+    boardIo_writeLed1(true);
+    delayMs(500);
+    boardIo_writeLed1(false);
   }
+}
+
+static void startFixedMode() {
+  keyboardMain_initialize();
+  bool isMaster = detection_detemineMasterSlaveByPin();
   printf("isMaster:%d\n", isMaster);
   showModeByLedBlinkPattern(isMaster);
   if (isMaster) {
-    runAsMaster();
+    usbIoCore_initialize();
+    master_start();
   } else {
-    runAsSlave();
+    slave_start();
+  }
+}
+
+static void startDynamicMode() {
+  keyboardMain_initialize();
+  usbIoCore_initialize();
+  bool isMaster = detenction_determineMasterSlaveByUsbConnection();
+  printf("isMaster:%d\n", isMaster);
+  showModeByLedBlinkPattern(isMaster);
+  if (isMaster) {
+    master_start();
+  } else {
+    slave_start();
+  }
+}
+
+void splitKeyboard_start() {
+  system_initializeUserProgram();
+  if (pin_masterSlaveDetermination != -1) {
+    startFixedMode();
+  } else {
+    startDynamicMode();
   }
 }
