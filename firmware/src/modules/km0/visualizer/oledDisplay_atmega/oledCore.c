@@ -21,7 +21,7 @@ const bool rot180_horizontalView = false;
 
 static const uint8_t oledSlaveAddress = 0x3C;
 
-static const uint8_t *fontDataPtr = NULL;
+__flash static const uint8_t *fontDataPtr = NULL;
 static int fontWidth = 0;
 static int fontLetterSpacing = 0;
 
