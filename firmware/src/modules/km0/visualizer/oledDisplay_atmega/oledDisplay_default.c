@@ -1,16 +1,8 @@
-#include "config.h"
-#include "km0/base/bitOperations.h"
-#include "km0/base/romData.h"
-#include "km0/base/utils.h"
-#include "km0/device/boardI2c.h"
-#include "km0/device/boardIo.h"
-#include "km0/device/digitalIo.h"
-#include "km0/device/system.h"
+#include "km0/base/configImport.h"
 #include "km0/kernel/keyboardMainInternal.h"
 #include "km0/visualizer/oledDisplay.h"
 #include "oledCore.h"
 #include <stdio.h>
-#include <string.h>
 
 #ifdef KM0_OLED_DISPLAY__NO_DEFAULT_LOGO
 static const uint32_t *mainLogoData = NULL;
