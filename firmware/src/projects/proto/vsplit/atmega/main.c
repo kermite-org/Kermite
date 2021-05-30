@@ -77,7 +77,7 @@ int main() {
   keyScanner_directWired_initialize(NumExtraKeys, extraPins);
   keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
   keyboardMain_useKeyScanner(keyScanner_directWired_update);
-  // keyboardMain_useDisplayModule(oledDisplay_update);
+  keyboardMain_useDisplayModule(oledDisplay_update);
   keyboardMain_useDisplayModule(rgbLighting_update);
   keyboardMain_setKeyIndexTable(keyIndexTable);
   splitKeyboard_start();
