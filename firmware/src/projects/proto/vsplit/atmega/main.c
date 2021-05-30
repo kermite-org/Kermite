@@ -58,13 +58,13 @@ static const int8_t keyIndexTable[NumScanSlots] = {
 #endif
 
 // clang-format off
-static const int8_t keyIndexTable[NumScanSlots] = {
+static const __flash int8_t keyIndexTable[NumScanSlots] = {
   -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-  4,
+  40,
   -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-  5,
+  50,
 };
 // clang-format on
 

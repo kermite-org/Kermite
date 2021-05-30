@@ -5,7 +5,7 @@
 
 void keyboardMain_useKeyScanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags));
 void keyboardMain_useKeyScannerExtra(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags));
-void keyboardMain_setKeyIndexTable(const int8_t *_scanIndexToKeyIndexMap);
+void keyboardMain_setKeyIndexTable(const __flash int8_t *_scanIndexToKeyIndexMap);
 void keyboardMain_useDisplayModule(void (*_displayModuleUpdateFunc)(void));
 
 #endif
