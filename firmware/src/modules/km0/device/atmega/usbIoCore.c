@@ -1083,11 +1083,8 @@ bool usbIoCore_isConnectedToHost() {
   return usb_configuration != 0;
 }
 
-void uibioCore_internal_setSerialNumberText(uint8_t *pTextBuf, uint8_t len) {
-  if (len > 24) {
-    len = 24;
-  }
-  utils_copyBytes(serialNumberTextBuf, pTextBuf, len);
+uint8_t *usbioCore_getSerialNumberTextBufferPointer() {
+  return serialNumberTextBuf;
 }
 
 void usbIoCore_processUpdate() {}

@@ -350,12 +350,8 @@ bool usbIoCore_genericHid_readDataIfExists(uint8_t *pDataBytes64) {
   return false;
 }
 
-void uibioCore_internal_setSerialNumberText(uint8_t *pTextBuf, uint8_t len) {
-  if (len > 24) {
-    len = 24;
-  }
-  memcpy(altSerialNumberTextBuf, pTextBuf, len);
-  altSerialNumberTextBuf[len] = '\0';
+uint8_t *usbioCore_getSerialNumberTextBufferPointer() {
+  return altSerialNumberTextBuf
 }
 
 bool usbIoCore_isConnectedToHost() {

@@ -8,7 +8,7 @@ bool usbIoCore_hidKeyboard_writeReport(uint8_t *pReportBytes8);
 bool usbIoCore_genericHid_writeData(uint8_t *pDataBytes64);
 bool usbIoCore_genericHid_readDataIfExists(uint8_t *pDataBytes64);
 bool usbIoCore_isConnectedToHost();
-void uibioCore_internal_setSerialNumberText(uint8_t *pTextBuf, uint8_t len);
+uint8_t *usbioCore_getSerialNumberTextBufferPointer();
 void usbIoCore_processUpdate();
 
 #endif
