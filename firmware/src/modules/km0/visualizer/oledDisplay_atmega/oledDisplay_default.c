@@ -144,14 +144,11 @@ void oledDisplay_setCustomFont(const uint8_t *fontData, uint8_t fontWidth, uint8
 void oledDisplay_initialize() {
   oledCore_initialize();
   oledCore_setFontData(mainFontData, mainFontWidth, mainFontLetterSpacing);
-  digitalIo_setOutput(P_F4);
 }
 
 void oledDisplay_update() {
   static uint32_t tick = 0;
   if (++tick % 50 == 0) {
-    digitalIo_setHigh(P_F4);
     updateFrame();
-    digitalIo_setLow(P_F4);
   }
 }
