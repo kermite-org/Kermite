@@ -158,7 +158,7 @@ static void renderCharAt(int caretY, int caretX, char chr) {
   boardI2c_procedural_putByte(0x40);
   int fontIndexBase = (chr == 0) ? 0 : ((chr - 32) * fontWidth);
   for (int i = 0; i < fontWidth; i++) {
-    uint8_t data = romData_readByte(fontDataPtr + fontIndexBase + i);
+    uint8_t data = fontDataPtr[fontIndexBase + i];
     boardI2c_procedural_putByte(data);
   }
   boardI2c_procedural_endWrite();
