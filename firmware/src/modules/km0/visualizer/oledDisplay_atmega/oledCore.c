@@ -1,9 +1,9 @@
 #include "oledCore.h"
-#include "km0/base/bitOperations.h"
 #include "km0/base/romData.h"
 #include "km0/base/utils.h"
 #include "km0/device/boardI2c.h"
-#include <string.h>
+#include "km0/device/system.h"
+#include <stdio.h>
 
 //OLED描画処理モジュール
 //RAM上にグラフィックスデータを持たない実装
@@ -13,6 +13,9 @@ const bool rot180_horizontalView = true;
 #else
 const bool rot180_horizontalView = false;
 #endif
+
+#define bit_on_32(p, b) (p) |= (1UL << (b))
+#define bit_is_on_32(p, b) ((p) >> (b)&1) > 0
 
 //----------------------------------------------------------------------
 
@@ -24,6 +27,8 @@ static int fontLetterSpacing = 0;
 
 //文字バッファ, 横方向最大21文字, 横幅+文字間隔が6px以上のフォント配置に対応
 static uint8_t lcdTextBuf[4][21] = { 0 };
+
+static uint32_t lcdTextChangedFlags[4] = { 0 };
 
 //----------------------------------------------------------------------
 
@@ -44,15 +49,10 @@ static const uint8_t commandInitializationBytes[] ROM_DATA = {
   0xA6,       //Normal Display
   0xD5, 0x80, //Osc Frequency
   0x8D, 0x14, //Enable charge pump regulator
-  0x20, 0x00, //Memory Addressing Mode, Horizontal
+  // 0x20, 0x00, //Memory Addressing Mode, Horizontal
   // 0x20, 0x01, //Memory Addressing Mode, Vertical
-  0xAF //Display On
-};
-
-static const uint8_t commandResetPositionBytes[] ROM_DATA = {
-  0x00,             //Control Byte
-  0x22, 0x00, 0x03, //Page Start Address
-  0x21, 0x00, 0x7F, //Column Start Address
+  0x20, 0x02, //Memory Addressing Mode, Page
+  0xAF        //Display On
 };
 
 static void sendRomData(const uint8_t *buf, int len) {
@@ -78,6 +78,15 @@ static void setRotate180(bool rot180) {
   boardI2c_write(oledSlaveAddress, cmdbuf, 3);
 }
 
+static void setGdRamAddress(uint8_t page, uint8_t column) {
+  boardI2c_procedural_startWrite(oledSlaveAddress);
+  boardI2c_procedural_putByte(0x00);
+  boardI2c_procedural_putByte(0xB0 | page);                 //page
+  boardI2c_procedural_putByte(column & 0x0F);               //column lo
+  boardI2c_procedural_putByte(0x10 | (column >> 4 & 0x0F)); //column hi
+  boardI2c_procedural_endWrite();
+}
+
 //----------------------------------------------------------------------
 
 void oledCore_initialize() {
@@ -86,28 +95,31 @@ void oledCore_initialize() {
   setRotate180(rot180_horizontalView);
 }
 
-void oledCore_clear() {
-  sendRomData(commandResetPositionBytes, sizeof(commandResetPositionBytes));
-  boardI2c_procedural_startWrite(oledSlaveAddress);
-  boardI2c_procedural_putByte(0x40);
-  for (int i = 0; i < 512; i++) {
-    boardI2c_procedural_putByte(0);
+void oledCore_renderClear() {
+  for (int i = 0; i < 4; i++) {
+    setGdRamAddress(i, 0);
+    boardI2c_procedural_startWrite(oledSlaveAddress);
+    boardI2c_procedural_putByte(0x40);
+    for (int i = 0; i < 128; i++) {
+      boardI2c_procedural_putByte(0);
+    }
+    boardI2c_procedural_endWrite();
   }
-  boardI2c_procedural_endWrite();
 }
 
-void oledCore_drawFullImage(const uint32_t *pLineBuffers128) {
+void oledCore_renderFullImage(const uint32_t *pLineBuffers128) {
   const uint8_t *pPixelsBuf512 = (const uint8_t *)pLineBuffers128;
-  sendRomData(commandResetPositionBytes, sizeof(commandResetPositionBytes));
-  boardI2c_procedural_startWrite(oledSlaveAddress);
-  boardI2c_procedural_putByte(0x40);
   for (int i = 0; i < 4; i++) {
+    setGdRamAddress(i, 0);
+    boardI2c_procedural_startWrite(oledSlaveAddress);
+    boardI2c_procedural_putByte(0x40);
     for (int j = 0; j < 128; j++) {
       int index = j * 4 + i;
-      boardI2c_procedural_putByte(romData_readByte(pPixelsBuf512 + index));
+      uint8_t data = romData_readByte(pPixelsBuf512 + index);
+      boardI2c_procedural_putByte(data);
     }
+    boardI2c_procedural_endWrite();
   }
-  boardI2c_procedural_endWrite();
 }
 
 void oledCore_setFontData(const uint8_t *_fontDataPtr, int _fontWidth, int _fontLetterSpacing) {
@@ -119,56 +131,53 @@ void oledCore_setFontData(const uint8_t *_fontDataPtr, int _fontWidth, int _font
 void oledCore_clearTexts() {
   for (int row = 0; row < 4; row++) {
     for (int col = 0; col < 21; col++) {
-      lcdTextBuf[row][col] = 0;
+      if (lcdTextBuf[row][col] != 0) {
+        lcdTextBuf[row][col] = 0;
+        bit_on_32(lcdTextChangedFlags[row], col);
+      }
     }
   }
 }
 
 void oledCore_putText(int caretY, int caretX, char *text) {
-  uint8_t i = 0;
+  uint8_t yi = caretY;
+  uint8_t xi = caretX;
   char chr;
   while ((chr = *text++) != '\0') {
-    lcdTextBuf[caretY][caretX + i] = chr;
-    i++;
+    if (chr != lcdTextBuf[yi][xi]) {
+      lcdTextBuf[yi][xi] = chr;
+      bit_on_32(lcdTextChangedFlags[yi], xi);
+    }
+    xi++;
   }
 }
 
-void oledCore_drawFullTexts() {
-  if (fontDataPtr == NULL) {
-    return;
-  }
-  sendRomData(commandResetPositionBytes, sizeof(commandResetPositionBytes));
+static void renderCharAt(int caretY, int caretX, char chr) {
+  uint8_t xi = caretX * (fontWidth + fontLetterSpacing);
+  setGdRamAddress(caretY, xi);
   boardI2c_procedural_startWrite(oledSlaveAddress);
   boardI2c_procedural_putByte(0x40);
-
-  int xStride = fontWidth + fontLetterSpacing;
-  int numColumns = 128 / xStride;
-  int rightPadding = 128 % xStride;
-
-  for (int row = 0; row < 4; row++) {
-    for (int col = 0; col < numColumns; col++) {
-      uint8_t chr = lcdTextBuf[row][col];
-      if (chr == 0) {
-        //空文字
-        for (int i = 0; i < fontWidth; i++) {
-          boardI2c_procedural_putByte(0);
-        }
-      } else {
-        //文字
-        int fontIndexBase = (chr - 32) * fontWidth;
-        for (int i = 0; i < fontWidth; i++) {
-          boardI2c_procedural_putByte(romData_readByte(fontDataPtr + fontIndexBase + i));
-        }
-      }
-      //文字間のスペーシング
-      for (int i = 0; i < fontLetterSpacing; i++) {
-        boardI2c_procedural_putByte(0);
-      }
-    }
-    //画面右端余白
-    for (int i = 0; i < rightPadding; i++) {
-      boardI2c_procedural_putByte(0);
-    }
+  int fontIndexBase = (chr == 0) ? 0 : ((chr - 32) * fontWidth);
+  for (int i = 0; i < fontWidth; i++) {
+    uint8_t data = romData_readByte(fontDataPtr + fontIndexBase + i);
+    boardI2c_procedural_putByte(data);
   }
   boardI2c_procedural_endWrite();
+}
+
+void oledCore_renderFullTexts() {
+  int xStride = fontWidth + fontLetterSpacing;
+  int numColumns = 128 / xStride;
+  for (int row = 0; row < 4; row++) {
+    for (int col = 0; col < numColumns; col++) {
+      bool changed = bit_is_on_32(lcdTextChangedFlags[row], col);
+      if (changed) {
+        uint8_t chr = lcdTextBuf[row][col];
+        renderCharAt(row, col, chr);
+      }
+    }
+  }
+  for (int i = 0; i < 4; i++) {
+    lcdTextChangedFlags[i] = 0;
+  }
 }
