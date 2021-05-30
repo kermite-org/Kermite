@@ -24,7 +24,7 @@ static uint32_t colorBuf[NumLeds];
 
 #define NumTableColors 13
 
-static uint32_t commonColorTable[NumTableColors] = {
+__flash static const uint32_t commonColorTable[NumTableColors] = {
   0xFF0000,
   0xFF4400,
   0xFFFF00,
