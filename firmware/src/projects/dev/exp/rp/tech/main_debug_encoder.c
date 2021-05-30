@@ -1,5 +1,3 @@
-
-#include "km0/base/romData.h"
 #include "km0/base/utils.h"
 #include "km0/device/boardIo.h"
 #include "km0/device/debugUart.h"

@@ -1,7 +1,6 @@
 #include "keyScanner_encoderBasic.h"
 #include "km0/base/bitOperations.h"
 #include "km0/base/configImport.h"
-#include "km0/base/romData.h"
 #include "km0/base/utils.h"
 #include "km0/device/digitalIo.h"
 #include <stdio.h>

@@ -1,6 +1,5 @@
 #include "keyCodeTranslator.h"
 #include "keyCodes.h"
-#include "km0/base/romData.h"
 
 enum HidKey {
   KU_RESERVED = 0,

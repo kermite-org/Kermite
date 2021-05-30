@@ -1,5 +1,4 @@
 #include "oledCore.h"
-#include "km0/base/romData.h"
 #include "km0/base/utils.h"
 #include "km0/device/boardI2c.h"
 #include "km0/device/system.h"
