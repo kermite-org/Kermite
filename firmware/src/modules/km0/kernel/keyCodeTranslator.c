@@ -199,7 +199,7 @@ typedef struct {
   uint16_t hidKeySecondary; //hid keycode with shift (jis mapping)
 } LogicalKeyItem;
 
-static const LogicalKeyItem logicalKeyItems[] ROM_DATA = {
+__flash static const LogicalKeyItem logicalKeyItems[] = {
   { LK_A, "A", KU_A },
   { LK_B, "B", KU_B },
   { LK_C, "C", KU_C },
@@ -317,23 +317,17 @@ static const LogicalKeyItem logicalKeyItems[] ROM_DATA = {
 #define SizeLogicalKeyItem sizeof(LogicalKeyItem)
 #define NumLogicalKeyItems sizeof(logicalKeyItems) / sizeof(LogicalKeyItem)
 
-static uint8_t itembuf[SizeLogicalKeyItem];
-
-static const LogicalKeyItem *getLogicalKeyItem(uint8_t logicalKey) {
+__flash static const LogicalKeyItem *getLogicalKeyItem(uint8_t logicalKey) {
   for (int i = 0; i < NumLogicalKeyItems; i++) {
-    uint8_t itemLogicalKey = romData_readByte(&logicalKeyItems[i].logicalKey);
-    if (itemLogicalKey == logicalKey) {
-      for (int j = 0; j < SizeLogicalKeyItem; j++) {
-        itembuf[j] = romData_readByte((uint8_t *)(logicalKeyItems + i) + j);
-      }
-      return (LogicalKeyItem *)&itembuf;
+    if (logicalKeyItems[i].logicalKey == logicalKey) {
+      return &logicalKeyItems[i];
     }
   }
   return 0;
 }
 
 uint16_t keyCodeTranslator_mapLogicalKeyToHidKeyCode(uint8_t logicalKey, bool isSecondaryLayout) {
-  const LogicalKeyItem *item = getLogicalKeyItem(logicalKey);
+  __flash const LogicalKeyItem *item = getLogicalKeyItem(logicalKey);
   if (item) {
     if (isSecondaryLayout && item->hidKeySecondary != 0) {
       return item->hidKeySecondary;
@@ -344,7 +338,7 @@ uint16_t keyCodeTranslator_mapLogicalKeyToHidKeyCode(uint8_t logicalKey, bool is
 }
 
 char *keyCodeTranslator_mapLogicalKeyToKeyText(uint8_t logicalKey) {
-  const LogicalKeyItem *item = getLogicalKeyItem(logicalKey);
+  __flash const LogicalKeyItem *item = getLogicalKeyItem(logicalKey);
   if (item) {
     return item->text;
   }
