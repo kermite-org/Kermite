@@ -55,14 +55,25 @@ static uint16_t pseudoRandom() {
 #define getG(x) ((x) >> 8 & 0xFF)
 #define getB(x) ((x)&0xFF)
 
-static uint8_t lerpElement(uint8_t e0, uint8_t e1, float p) {
-  return (uint8_t)((1.0f - p) * e0 + p * e1);
+// static uint8_t lerpElementF(uint8_t e0, uint8_t e1, float p) {
+//   return (uint8_t)((1.0f - p) * e0 + p * e1);
+// }
+
+// static uint32_t lerpColorF(uint32_t col0, uint32_t col1, float p) {
+//   uint8_t rr = lerpElement(getR(col0), getR(col1), p);
+//   uint8_t gg = lerpElement(getG(col0), getG(col1), p);
+//   uint8_t bb = lerpElement(getB(col0), getB(col1), p);
+//   return (uint32_t)rr << 16 | (uint32_t)gg << 8 | bb;
+// }
+
+static uint8_t lerpElement(uint8_t e0, uint8_t e1, uint8_t m) {
+  return ((255 - m) * (uint16_t)e0 + m * (uint16_t)e1) >> 8;
 }
 
-static uint32_t lerpColor(uint32_t col0, uint32_t col1, float p) {
-  uint8_t rr = lerpElement(getR(col0), getR(col1), p);
-  uint8_t gg = lerpElement(getG(col0), getG(col1), p);
-  uint8_t bb = lerpElement(getB(col0), getB(col1), p);
+static uint32_t lerpColor(uint32_t col0, uint32_t col1, uint8_t m) {
+  uint8_t rr = lerpElement(getR(col0), getR(col1), m);
+  uint8_t gg = lerpElement(getG(col0), getG(col1), m);
+  uint8_t bb = lerpElement(getB(col0), getB(col1), m);
   return (uint32_t)rr << 16 | (uint32_t)gg << 8 | bb;
 }
 
@@ -146,7 +157,7 @@ static void scene3_updateFrame() {
 //----------------------------------------------------------------------
 //scene 4, gradation color transition
 
-static const uint32_t scene4_period = 25 * 6;
+static const uint32_t scene4_period = 150;
 
 static void scene4_updateFrame() {
   float phase = (float)(frameTick % scene4_period) / scene4_period; //0~1
@@ -160,30 +171,33 @@ static void scene4_updateFrame() {
 
   float phase2 = phase * 3.0f;
   uint32_t col0, col1;
-  float p = phase2;
-  if (p < 1.0f) {
+  float _p = phase2;
+  if (_p < 1.0f) {
     col0 = colorA;
     col1 = colorB;
-  } else if (p < 2.0f) {
-    p -= 1.0f;
+  } else if (_p < 2.0f) {
+    _p -= 1.0f;
     col0 = colorB;
     col1 = colorC;
   } else {
-    p -= 2.0f;
+    _p -= 2.0f;
     col0 = colorC;
     col1 = colorA;
   }
 
-  for (int i = 0; i < NumLeds; i++) {
-    float q = ((float)i / NumLeds);
-    float p2 = 3.0f * p - q * 2.0f;
-    // float p2 = 1.5f * p - q * 0.5f;
-    uint32_t color = lerpColor(col0, col1, utils_clamp(p2, 0.0f, 1.0f));
-    colorBuf[i] = color;
-  }
+  //_p: 0~1
+  uint8_t p = (uint8_t)(_p * 256); //0~255
+  uint16_t _divNumLeds = 65536 / NumLeds;
   system_disableInterrupts();
-  for (int i = 0; i < NumLeds; i++) {
-    serialLed_putPixelWithAlpha(colorBuf[i], glowBrightness);
+  for (uint8_t i = 0; i < NumLeds; i++) {
+    // float q = (float)i * _divNumLeds;
+    // float p2 = 3.0f * _p - q * 2.0f;
+    // flot m = utils_clamp(p2, 0.0f, 1.0f);
+    uint16_t q = i * _divNumLeds >> 8; //0~255
+    int16_t p2 = 3 * (int16_t)p - (int16_t)q * 2;
+    uint8_t m = utils_clamp(p2, 0, 255);
+    uint32_t color = lerpColor(col0, col1, m);
+    serialLed_putPixelWithAlpha(color, glowBrightness);
   }
   system_enableInterrupts();
 }
