@@ -45,9 +45,9 @@ static uint32_t getCurrentColor() {
   return commonColorTable[colorIndex];
 }
 
-static uint32_t pseudoRandom() {
-  static uint32_t val = 345234;
-  val = (51345613 * val) + 11;
+static uint16_t pseudoRandom() {
+  static uint16_t val = 3459;
+  val = (5613 * val) + 17;
   return val;
 }
 
@@ -133,14 +133,11 @@ static void scene2_updateFrame() {
 
 static void scene3_updateFrame() {
   if (frameTick % 20 == 0) {
-    for (int i = 0; i < NumLeds; i++) {
-      int colorIndex = pseudoRandom() % NumTableColors;
-      uint32_t color = commonColorTable[colorIndex];
-      colorBuf[i] = color;
-    }
     system_disableInterrupts();
     for (int i = 0; i < NumLeds; i++) {
-      serialLed_putPixelWithAlpha(colorBuf[i], glowBrightness);
+      int colorIndex = (uint8_t)(pseudoRandom() & 0xFF) % NumTableColors;
+      uint32_t color = commonColorTable[colorIndex];
+      serialLed_putPixelWithAlpha(color, glowBrightness);
     }
     system_enableInterrupts();
   }
