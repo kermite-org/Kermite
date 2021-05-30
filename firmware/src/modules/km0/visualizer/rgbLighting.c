@@ -53,17 +53,6 @@ static uint16_t pseudoRandom() {
 #define getG(x) ((x) >> 8 & 0xFF)
 #define getB(x) ((x)&0xFF)
 
-// static uint8_t lerpElementF(uint8_t e0, uint8_t e1, float p) {
-//   return (uint8_t)((1.0f - p) * e0 + p * e1);
-// }
-
-// static uint32_t lerpColorF(uint32_t col0, uint32_t col1, float p) {
-//   uint8_t rr = lerpElement(getR(col0), getR(col1), p);
-//   uint8_t gg = lerpElement(getG(col0), getG(col1), p);
-//   uint8_t bb = lerpElement(getB(col0), getB(col1), p);
-//   return (uint32_t)rr << 16 | (uint32_t)gg << 8 | bb;
-// }
-
 static uint8_t lerpElement(uint8_t e0, uint8_t e1, uint8_t m) {
   return ((255 - m) * (uint16_t)e0 + m * (uint16_t)e1) >> 8;
 }
