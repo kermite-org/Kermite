@@ -37,8 +37,7 @@ static void initializeDataAddresses() {
 //---------------------------------------------
 //rawhid interface
 
-static uint8_t rawHidSendBuf[64] = { 0 };
-static uint8_t rawHidRcvBuf[64] = { 0 };
+static uint8_t rawHidTempBuf[64] = { 0 };
 
 static bool skipNotify = false;
 
@@ -53,7 +52,7 @@ static void emitGenericHidData(uint8_t *p) {
 }
 
 static void emitRealtimePhysicalKeyStateEvent(uint8_t keyIndex, bool isDown) {
-  uint8_t *p = rawHidSendBuf;
+  uint8_t *p = rawHidTempBuf;
   p[0] = 0xE0;
   p[1] = 0x90;
   p[2] = keyIndex;
@@ -62,7 +61,7 @@ static void emitRealtimePhysicalKeyStateEvent(uint8_t keyIndex, bool isDown) {
 }
 
 static void emitRealtimeLayerStateEvent(uint16_t layerFlags) {
-  uint8_t *p = rawHidSendBuf;
+  uint8_t *p = rawHidTempBuf;
   p[0] = 0xE0;
   p[1] = 0x91;
   p[2] = layerFlags >> 8 & 0xFF;
@@ -71,7 +70,7 @@ static void emitRealtimeLayerStateEvent(uint16_t layerFlags) {
 }
 
 static void emitRealtimeAssignHitEvent(uint16_t assignHitResult) {
-  uint8_t *p = rawHidSendBuf;
+  uint8_t *p = rawHidTempBuf;
   p[0] = 0xE0;
   p[1] = 0x92;
   p[2] = assignHitResult >> 8 & 0xFF;
@@ -80,23 +79,23 @@ static void emitRealtimeAssignHitEvent(uint16_t assignHitResult) {
 }
 
 static void emitMemoryChecksumResult(uint8_t dataKind, uint8_t checksum) {
-  uint8_t *p = rawHidSendBuf;
+  uint8_t *p = rawHidTempBuf;
   p[0] = 0xB0;
   p[1] = dataKind;
   p[2] = 0x22;
   p[3] = checksum;
   p[4] = 0;
-  emitGenericHidData(rawHidSendBuf);
+  emitGenericHidData(rawHidTempBuf);
 }
 
 static void emitSingleParameterChangedNotification(uint8_t parameterIndex, uint8_t value) {
-  uint8_t *p = rawHidSendBuf;
+  uint8_t *p = rawHidTempBuf;
   p[0] = 0xB0;
   p[1] = 0x02;
   p[2] = 0xE1;
   p[3] = parameterIndex;
   p[4] = value;
-  emitGenericHidData(rawHidSendBuf);
+  emitGenericHidData(rawHidTempBuf);
 }
 
 static void copyEepromBytesToBuffer(uint8_t *dstBuffer, int dstOffset, uint16_t srcEepromAddr, uint16_t len) {
@@ -104,7 +103,7 @@ static void copyEepromBytesToBuffer(uint8_t *dstBuffer, int dstOffset, uint16_t 
 }
 
 static void emitDeviceAttributesResponse() {
-  uint8_t *p = rawHidSendBuf;
+  uint8_t *p = rawHidTempBuf;
   p[0] = 0xF0;
   p[1] = 0x11;
   p[2] = Kermite_Project_ReleaseBuildRevision >> 8 & 0xFF;
@@ -123,25 +122,25 @@ static void emitDeviceAttributesResponse() {
   utils_copyBytes(p + 42, (uint8_t *)Kermite_Project_McuCode, 8);
   p[50] = Kermite_ProfileBinaryFormatRevision;
   p[51] = Kermite_ConfigParametersRevision;
-  emitGenericHidData(rawHidSendBuf);
+  emitGenericHidData(rawHidTempBuf);
 }
 
 static void emitCustomParametersReadResponse() {
   uint8_t num = NumSystemParameters;
-  uint8_t *p = rawHidSendBuf;
+  uint8_t *p = rawHidTempBuf;
   p[0] = 0xb0;
   p[1] = 0x02;
   p[2] = 0x81;
   p[3] = num;
   configManager_readSystemParameterValues(p + 4, num);
   configManager_readSystemParameterMaxValues(p + 4 + num, num);
-  emitGenericHidData(rawHidSendBuf);
+  emitGenericHidData(rawHidTempBuf);
 }
 
 static void processReadGenericHidData() {
-  bool hasData = usbIoCore_genericHid_readDataIfExists(rawHidRcvBuf);
+  bool hasData = usbIoCore_genericHid_readDataIfExists(rawHidTempBuf);
   if (hasData) {
-    uint8_t *p = rawHidRcvBuf;
+    uint8_t *p = rawHidTempBuf;
     uint8_t category = p[0];
     if (category == 0xB0) {
       //memory operation
