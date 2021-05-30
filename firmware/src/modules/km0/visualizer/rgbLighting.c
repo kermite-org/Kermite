@@ -20,8 +20,6 @@ static uint8_t glowColor = 0;
 static uint8_t glowBrightness = 0;
 static uint32_t frameTick = 0;
 
-static uint32_t colorBuf[NumLeds];
-
 #define NumTableColors 13
 
 __flash static const uint32_t commonColorTable[NumTableColors] = {
