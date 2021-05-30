@@ -7,10 +7,6 @@ import {
   keyActionRemapper_translateKeyOperation,
 } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/KeyActionRemapper';
 import { keyCodeTranslator_mapLogicalKeyToHidKeyCode } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/KeyCodeTranslator';
-import {
-  AssignStorageBaseAddr,
-  AssignStorageHeaderLength,
-} from '~/shell/services/keyboardLogic/inputLogicSimulatorD/MemoryDefs';
 import { KeyboardCoreLogicInterface } from './KeyboardCoreLogicInterface';
 
 // --------------------------------------------------------------------------------
@@ -659,68 +655,48 @@ function handleOperationOff(opWord: u32) {
 // --------------------------------------------------------------------------------
 // assign binder
 
-const NumKeySlotsMax = 255;
-const NumRecallKeyEntries = 4;
 const ImmediateReleaseStrokeDuration = 50;
-
-interface RecallKeyEntry {
-  keyIndex: s8;
-  tick: u8;
+interface IBinderKeySlot {
+  isActive: boolean;
+  keyIndex: u8;
+  opWord: u32;
+  autoReleaseTick: u8;
 }
 
-const assignBinderState = new (class {
-  keyAttachedOperationWords: u32[] = Array(NumKeySlotsMax).fill(0);
-  recallKeyEntries: RecallKeyEntry[] = [];
-})();
-
-function resetAssignBinder() {
-  assignBinderState.keyAttachedOperationWords.fill(0);
-  assignBinderState.recallKeyEntries = Array(NumRecallKeyEntries)
-    .fill(0)
-    .map(() => ({
-      keyIndex: -1,
-      tick: 0,
-    }));
-}
-
-function assignBinder_handleKeyOn(keyIndex: u8, opWord: u32) {
+function assignBinder_handleKeyOn(slot: IBinderKeySlot, opWord: u32) {
   // console.log(`keyOn ${keyIndex} ${opWord}`);
   handleOperationOn(opWord);
-  assignBinderState.keyAttachedOperationWords[keyIndex] = opWord;
+  slot.opWord = opWord;
 }
 
-function assignBinder_handleKeyOff(keyIndex: u8) {
-  const opWord = assignBinderState.keyAttachedOperationWords[keyIndex];
-  if (opWord) {
+function assignBinder_handleKeyOff(slot: IBinderKeySlot) {
+  if (slot.opWord) {
     // console.log(`keyOff ${keyIndex} ${opWord}`);
-    handleOperationOff(opWord);
-    assignBinderState.keyAttachedOperationWords[keyIndex] = 0;
+    handleOperationOff(slot.opWord);
+    slot.opWord = 0;
   }
 }
 
-function assignBinder_recallKeyOff(keyIndex: u8) {
-  const ke = assignBinderState.recallKeyEntries.find((a) => a.keyIndex === -1);
-  if (ke) {
-    ke.keyIndex = keyIndex;
-    ke.tick = 0;
-  }
+function assignBinder_recallKeyOff(slot: IBinderKeySlot) {
+  slot.autoReleaseTick = 1;
 }
 
-function assignBinder_ticker(ms: u16) {
-  for (const ke of assignBinderState.recallKeyEntries) {
-    if (ke.keyIndex !== -1) {
-      ke.tick += ms;
-      if (ke.tick > ImmediateReleaseStrokeDuration) {
-        assignBinder_handleKeyOff(ke.keyIndex);
-        ke.keyIndex = -1;
+function assignBinder_tick(ms: u16, slots: IBinderKeySlot[]) {
+  slots.forEach((slot) => {
+    if (slot.isActive && slot.autoReleaseTick > 0) {
+      slot.autoReleaseTick += ms;
+      if (slot.autoReleaseTick > ImmediateReleaseStrokeDuration) {
+        assignBinder_handleKeyOff(slot);
+        slot.autoReleaseTick = 0;
       }
     }
-  }
+  });
 }
 
 // --------------------------------------------------------------------------------
 // resolver common
 
+const NumKeySlotsMax = 10;
 const TH = 200;
 
 const InputEdge = {
@@ -743,6 +719,7 @@ const resolverConfig = {
 // resolverConfig.emitOutputStroke = false;
 
 interface KeySlot {
+  isActive: boolean;
   keyIndex: u8;
   steps: string;
   hold: boolean;
@@ -754,6 +731,8 @@ interface KeySlot {
   liveLayerStateFlags: u16;
   resolverProc: ((slot: KeySlot) => boolean) | undefined;
   inputEdge: u8;
+  opWord: u32;
+  autoReleaseTick: u8;
 }
 
 const resolverState = new (class {
@@ -768,7 +747,8 @@ function initResolverState() {
   resolverState.keySlots = Array(NumKeySlotsMax)
     .fill(0)
     .map((_, i) => ({
-      keyIndex: i,
+      isActive: false,
+      keyIndex: -1,
       steps: '',
       hold: false,
       nextHold: false,
@@ -779,6 +759,8 @@ function initResolverState() {
       liveLayerStateFlags: 0,
       resolverProc: undefined,
       inputEdge: 0,
+      opWord: 0,
+      autoReleaseTick: 0,
     }));
 }
 
@@ -789,6 +771,23 @@ function peekAssignHitResult() {
     return res;
   }
   return 0;
+}
+
+function keySlot_attachKey(slot: KeySlot, keyIndex: number) {
+  slot.isActive = true;
+  slot.keyIndex = keyIndex;
+  slot.steps = '';
+  slot.hold = false;
+  slot.nextHold = false;
+  slot.tick = 0;
+  slot.interrupted = false;
+  slot.resolving = false;
+  slot.liveLayerIndex = -1;
+  slot.liveLayerStateFlags = 0;
+  slot.resolverProc = undefined;
+  slot.inputEdge = 0;
+  slot.opWord = 0;
+  slot.autoReleaseTick = 0;
 }
 
 function keySlot_storeAssignHitResult(slot: KeySlot, assignOrder: u8) {
@@ -815,17 +814,17 @@ function keySlot_handleKeyOn(slot: KeySlot, order: u8) {
   );
   if (assignSet) {
     if (order === AssignOrder.Pri) {
-      assignBinder_handleKeyOn(slot.keyIndex, assignSet.pri);
+      assignBinder_handleKeyOn(slot, assignSet.pri);
     } else if (order === AssignOrder.Sec) {
-      assignBinder_handleKeyOn(slot.keyIndex, assignSet.sec);
+      assignBinder_handleKeyOn(slot, assignSet.sec);
     } else if (order === AssignOrder.Ter) {
-      assignBinder_handleKeyOn(slot.keyIndex, assignSet.ter);
+      assignBinder_handleKeyOn(slot, assignSet.ter);
     }
   }
 }
 
 function keySlot_handleKeyOff(slot: KeySlot) {
-  assignBinder_handleKeyOff(slot.keyIndex);
+  assignBinder_handleKeyOff(slot);
 }
 
 // --------------------------------------------------------------------------------
@@ -901,7 +900,7 @@ function keySlot_pushStepB(slot: KeySlot, step: 'D' | 'U' | '_') {
     keySlot_debugShowSlotTrigger(slot, TriggerB);
   }
 
-  const { steps, keyIndex } = slot;
+  const { steps } = slot;
 
   if (resolverConfig.emitOutputStroke) {
     if (steps === TriggerB.Down) {
@@ -909,7 +908,7 @@ function keySlot_pushStepB(slot: KeySlot, step: 'D' | 'U' | '_') {
 
     if (steps === TriggerB.Tap) {
       keySlot_handleKeyOn(slot, AssignOrder.Pri);
-      assignBinder_recallKeyOff(keyIndex);
+      assignBinder_recallKeyOff(slot);
       keySlot_storeAssignHitResult(slot, AssignOrder.Pri);
     }
 
@@ -1001,7 +1000,7 @@ function keySlot_pushStepC(slot: KeySlot, step: 'D' | 'U' | '_') {
 
     if (steps === TriggerC.Tap) {
       keySlot_handleKeyOn(slot, AssignOrder.Pri);
-      assignBinder_recallKeyOff(keyIndex);
+      assignBinder_recallKeyOff(slot);
       keySlot_storeAssignHitResult(slot, AssignOrder.Pri);
     }
 
@@ -1016,7 +1015,7 @@ function keySlot_pushStepC(slot: KeySlot, step: 'D' | 'U' | '_') {
 
     if (steps === TriggerC.Tap2) {
       keySlot_handleKeyOn(slot, AssignOrder.Ter);
-      assignBinder_recallKeyOff(keyIndex);
+      assignBinder_recallKeyOff(slot);
       keySlot_storeAssignHitResult(slot, AssignOrder.Ter);
     }
 
@@ -1136,28 +1135,70 @@ function keySlot_tick(slot: KeySlot, ms: number) {
 }
 
 function triggerResolver_tick(ms: number) {
-  const { keySlots } = resolverState;
-  const hotSlot = keySlots[resolverState.interruptKeyIndex];
-  keySlots.forEach((slot) => {
-    if (slot !== hotSlot) {
+  const rs = resolverState;
+  rs.keySlots.forEach((slot) => {
+    if (slot.isActive && slot.keyIndex !== rs.interruptKeyIndex) {
       keySlot_tick(slot, ms);
     }
   });
-  if (hotSlot) {
-    keySlot_tick(hotSlot, ms);
-  }
+  rs.keySlots.forEach((slot) => {
+    if (slot.isActive && slot.keyIndex === rs.interruptKeyIndex) {
+      keySlot_tick(slot, ms);
+    }
+  });
   resolverState.interruptKeyIndex = -1;
+
+  rs.keySlots.forEach((slot) => {
+    if (
+      slot.isActive &&
+      !slot.hold &&
+      slot.resolverProc === undefined &&
+      slot.autoReleaseTick === 0
+    ) {
+      // console.log(`key ${slot.keyIndex} detached from slot`);
+      slot.isActive = false;
+    }
+  });
+}
+
+function triggerResoler_attachKeyToFreeSlot(
+  keyIndex: number,
+): KeySlot | undefined {
+  const slot = resolverState.keySlots.find((ks) => !ks.isActive);
+  if (slot) {
+    keySlot_attachKey(slot, keyIndex);
+    // console.log(`key ${keyIndex} attached to slot`);
+    return slot;
+  }
+  return undefined;
+}
+
+function triggerResoler_getActiveKeySlotByKeyIndex(
+  keyIndex: number,
+): KeySlot | undefined {
+  return resolverState.keySlots.find(
+    (ks) => ks.isActive && ks.keyIndex === keyIndex,
+  );
 }
 
 function triggerResolver_handleKeyInput(keyIndex: u8, isDown: boolean) {
-  const slot = resolverState.keySlots[keyIndex];
   if (isDown) {
     console.log(`down ${keyIndex}`);
-    resolverState.interruptKeyIndex = keyIndex;
-    slot.nextHold = true;
+    const slot =
+      triggerResoler_getActiveKeySlotByKeyIndex(keyIndex) ||
+      triggerResoler_attachKeyToFreeSlot(keyIndex);
+    if (slot) {
+      resolverState.interruptKeyIndex = keyIndex;
+      slot.nextHold = true;
+    } else {
+      console.log(`cannot attach key ${keyIndex} to slot`);
+    }
   } else {
     console.log(`up ${keyIndex}`);
-    slot.nextHold = false;
+    const slot = triggerResoler_getActiveKeySlotByKeyIndex(keyIndex);
+    if (slot) {
+      slot.nextHold = false;
+    }
   }
 }
 
@@ -1170,7 +1211,6 @@ function keyboardCoreLogic_initialize() {
   initAssignMemoryReader();
   resetHidReportState();
   resetLayerState();
-  resetAssignBinder();
   initResolverState();
   logicActive = true;
 }
@@ -1211,7 +1251,7 @@ function keyboardCoreLogic_issuePhysicalKeyStateChanged(
 function keyboardCoreLogic_processTicker(ms: number) {
   if (logicActive) {
     triggerResolver_tick(ms);
-    assignBinder_ticker(ms);
+    assignBinder_tick(ms, resolverState.keySlots);
     layerMutations_oneshotCancellerTicker(ms);
   }
 }
