@@ -73,10 +73,10 @@ LDFLAGS += -Os
 LDFLAGS += -g
 LDFLAGS += -Wall
 LDFLAGS += -Wl,-Map=$(MAP),--cref
-LDFLAGS += -Wl,--print-memory-usage
-LDFLAGS += -Wl,--cref,--defsym=__TEXT_REGION_LENGTH__=32768
-LDFLAGS += -Wl,--cref,--defsym=__DATA_REGION_LENGTH__=2560
-LDFLAGS += -Wl,--cref,--defsym=__EEPROM_REGION_LENGTH__=1024
+# LDFLAGS += -Wl,--print-memory-usage
+# LDFLAGS += -Wl,--cref,--defsym=__TEXT_REGION_LENGTH__=32768
+# LDFLAGS += -Wl,--cref,--defsym=__DATA_REGION_LENGTH__=2560
+# LDFLAGS += -Wl,--cref,--defsym=__EEPROM_REGION_LENGTH__=1024
 
 
 all: build
@@ -97,6 +97,7 @@ $(ELF): $(OBJS)
 	@echo linking
 	@"mkdir" -p $(dir $@)
 	@$(CC) $(LDFLAGS) -o $(ELF) $(OBJS)
+	$(OBJSIZE) -C --mcu=atmega32u4 $(ELF)
 
 $(HEX) : $(ELF)
 	@$(OBJCOPY) -O ihex $(ELF) $(HEX)
