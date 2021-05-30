@@ -4,7 +4,7 @@
 #include "km0/base/romData.h"
 #include "km0/types.h"
 
-const uint32_t oledLogoDataKermite[] ROM_DATA = {
+__flash const uint32_t oledLogoDataKermite[] = {
   0x00000000, 0x00000000, 0x00000000, 0x00000000,
   0x07ffff80, 0x07ffff80, 0x07ffff80, 0x07ffff80,
   0x00070000, 0x000f8000, 0x001fc000, 0x003ff000,

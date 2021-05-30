@@ -5,7 +5,7 @@
 
 void oledCore_initialize();
 void oledCore_renderClear();
-void oledCore_renderFullImage(const uint32_t *pLineBuffers128);
+void oledCore_renderFullImage(__flash const uint32_t *pLineBuffers128);
 
 void oledCore_setFontData(const uint8_t *fontDataPtr, int fontWidth, int fontLetterSpacing);
 void oledCore_clearTexts();

@@ -107,15 +107,15 @@ void oledCore_renderClear() {
   }
 }
 
-void oledCore_renderFullImage(const uint32_t *pLineBuffers128) {
-  const uint8_t *pPixelsBuf512 = (const uint8_t *)pLineBuffers128;
+void oledCore_renderFullImage(__flash const uint32_t *pLineBuffers128) {
+  __flash const uint8_t *pPixelsBuf512 = (__flash const uint8_t *)pLineBuffers128;
   for (int i = 0; i < 4; i++) {
     setGdRamAddress(i, 0);
     boardI2c_procedural_startWrite(oledSlaveAddress);
     boardI2c_procedural_putByte(0x40);
     for (int j = 0; j < 128; j++) {
       int index = j * 4 + i;
-      uint8_t data = romData_readByte(pPixelsBuf512 + index);
+      uint8_t data = pPixelsBuf512[index];
       boardI2c_procedural_putByte(data);
     }
     boardI2c_procedural_endWrite();

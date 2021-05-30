@@ -5,10 +5,10 @@
 #include <stdio.h>
 
 #ifdef KM0_OLED_DISPLAY__NO_DEFAULT_LOGO
-static const uint32_t *mainLogoData = NULL;
+static __flash const uint32_t *mainLogoData = NULL;
 #else
 #include "km0/visualizer/oledLogoData.h"
-static const uint32_t *mainLogoData = oledLogoDataKermite;
+static __flash const uint32_t *mainLogoData = oledLogoDataKermite;
 #endif
 
 #ifdef KM0_OLED_DISPLAY__NO_DEFAULT_FONT
