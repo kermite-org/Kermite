@@ -25,6 +25,5 @@ MODULE_SRCS += km0/visualizer/oledDisplay_atmega/oledCore.c
 MODULE_SRCS += km0/visualizer/oledDisplay_atmega/oledDisplay_default.c
 MODULE_SRCS += km0/visualizer/rgbLighting.c
 MODULE_SRCS += km0/wrapper/splitKeyboard.c
-# MODULE_SRCS += km0/wrapper/splitKeyboard_debug.c
 
 PROJECT_SRCS += main.c
