@@ -82,7 +82,6 @@ const NumHidReportBytes = 8;
 const NumHidHoldKeySlots = 6;
 
 const hidReportState = new (class {
-  hidReportZerosBuf: u8[] = Array(NumHidReportBytes).fill(0);
   hidReportBuf: u8[] = Array(NumHidReportBytes).fill(0);
   layerModFlags: u8 = 0;
   modFlags: u8 = 0;
@@ -94,7 +93,6 @@ const hidReportState = new (class {
 
 function resetHidReportState() {
   const rs = hidReportState;
-  rs.hidReportZerosBuf.fill(0);
   rs.hidReportBuf.fill(0);
   rs.layerModFlags = 0;
   rs.modFlags = 0;
@@ -119,7 +117,8 @@ function getOutputHidReport(): u8[] {
 }
 
 function getOutputHidReportZeros(): u8[] {
-  return hidReportState.hidReportZerosBuf;
+  hidReportState.hidReportBuf.fill(0);
+  return hidReportState.hidReportBuf;
 }
 
 function setLayerModifiers(modFlags: u8) {
