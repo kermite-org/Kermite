@@ -32,7 +32,7 @@ static uint32_t lcdTextChangedFlags[4] = { 0 };
 
 //----------------------------------------------------------------------
 
-static const uint8_t commandInitializationBytes[] ROM_DATA = {
+__flash static const uint8_t commandInitializationBytes[] = {
   0x00,       //Control Byte
   0xAE,       //Display Off
   0xA8, 0x1F, //MUX Ratio
@@ -55,10 +55,10 @@ static const uint8_t commandInitializationBytes[] ROM_DATA = {
   0xAF        //Display On
 };
 
-static void sendRomData(const uint8_t *buf, int len) {
+static void sendRomData(__flash const uint8_t *buf, int len) {
   boardI2c_procedural_startWrite(oledSlaveAddress);
   for (int i = 0; i < len; i++) {
-    boardI2c_procedural_putByte(romData_readByte(buf + i));
+    boardI2c_procedural_putByte(buf[i]);
   }
   boardI2c_procedural_endWrite();
 }
