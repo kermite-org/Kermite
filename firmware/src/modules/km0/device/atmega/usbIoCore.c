@@ -132,6 +132,8 @@ void dprintf() {
 #define STR_PRODUCT KM0_USB__PRODUCT_TEXT
 #define STR_SERIALNUMBER_DUMMY L"000000000000000000000000"
 
+static uint8_t serialNumberTextBuf[24];
+
 // USB devices are supposed to implment a halt feature, which is
 // rarely (if ever) used.  If you comment this line out, the halt
 // code will be removed, saving 102 bytes of space (gcc 4.3.0).
@@ -458,11 +460,6 @@ static struct usb_string_descriptor_struct const PROGMEM string3_dummy = {
   sizeof(STR_SERIALNUMBER_DUMMY), 3, STR_SERIALNUMBER_DUMMY
 };
 
-//動的にシリアルナンバを指定するのためのバッファをRAM上に配置
-static struct usb_string_descriptor_struct serialNumberStringDescriptorStruct = {
-  sizeof(STR_SERIALNUMBER_DUMMY), 3, STR_SERIALNUMBER_DUMMY
-};
-
 // This table defines which descriptor data is sent for each specific
 // request from the host (in wValue and wIndex).
 static struct descriptor_list_struct {
@@ -699,6 +696,7 @@ ISR(USB_COM_vect) {
   uint16_t wIndex;
   uint16_t wLength;
   uint16_t desc_val;
+  const uint8_t *desc_addr_0;
   const uint8_t *desc_addr;
   uint8_t desc_length;
 
@@ -742,14 +740,13 @@ ISR(USB_COM_vect) {
         }
         list += 2;
         desc_addr = (const uint8_t *)pgm_read_word(list);
+        desc_addr_0 = desc_addr;
         list += 2;
         desc_length = pgm_read_byte(list);
         break;
       }
 
       dprintf("desc length, %d\n", desc_length);
-
-      uint8_t *desc_add_serialnumber = (uint8_t *)&serialNumberStringDescriptorStruct;
 
       len = (wLength < 256) ? wLength : 255;
       if (len > desc_length)
@@ -765,9 +762,20 @@ ISR(USB_COM_vect) {
         n = len < ENDPOINT0_SIZE ? len : ENDPOINT0_SIZE;
 
         if (wValue == 0x0303) {
-          //serialNumberの読み出しの場合、ROM上の固定のDescriptor定義ではなくRAM上にあるバッファから値を読み取る
+          //serialNumberの読み出しの場合、RAM上のバッファから読み取った文字列で差し替える
           for (i = n; i; i--) {
-            UEDATX = *(desc_add_serialnumber++);
+            uint8_t offset = desc_addr - desc_addr_0;
+            uint8_t value = pgm_read_byte(desc_addr++);
+            if (offset >= 2) {
+              //RAM上の文字列で差し替える
+              uint8_t j = (offset - 2);
+              if ((j & 1) == 0) {
+                value = serialNumberTextBuf[j >> 1];
+              } else {
+                value = 0;
+              }
+            }
+            UEDATX = value;
           }
         } else {
           for (i = n; i; i--) {
@@ -1079,7 +1087,7 @@ void uibioCore_internal_setSerialNumberText(uint8_t *pTextBuf, uint8_t len) {
   if (len > 24) {
     len = 24;
   }
-  utils_copyStringToWideString(serialNumberStringDescriptorStruct.wString, pTextBuf, len);
+  utils_copyBytes(serialNumberTextBuf, pTextBuf, len);
 }
 
 void usbIoCore_processUpdate() {}
