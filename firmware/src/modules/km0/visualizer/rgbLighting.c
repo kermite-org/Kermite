@@ -193,7 +193,7 @@ static void scene4_updateFrame() {
 
 typedef void (*SceneFunc)(void);
 
-SceneFunc sceneFuncs[] = {
+__flash static const SceneFunc sceneFuncs[] = {
   scene0_updateFrame,
   scene1_updateFrame,
   scene2_updateFrame,
