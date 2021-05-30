@@ -127,7 +127,7 @@ static uint16_t getKeyMappingDataBodyLengthMax() {
   return 0;
 }
 
-static uint8_t tempDataBuf[10];
+static uint8_t tempDataBuf[8];
 
 static bool validateStorageDataFormat() {
   uint16_t first = dataMemory_readWord(0);
