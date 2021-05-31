@@ -40,7 +40,7 @@
 //----------------------------------------------------------------------
 //variables
 
-static const __flash uint8_t *scanIndexToKeyIndexMap;
+static uint8_t *scanIndexToKeyIndexMap;
 
 //キー状態
 
@@ -310,7 +310,7 @@ void keyboardMain_useDisplayModule(void (*_displayModuleUpdateFunc)(void)) {
   displayUpdateFuncs[displayModulesLength++] = _displayModuleUpdateFunc;
 }
 
-void keyboardMain_setKeyIndexTable(const __flash int8_t *_scanIndexToKeyIndexMap) {
+void keyboardMain_setKeyIndexTable(const int8_t *_scanIndexToKeyIndexMap) {
   scanIndexToKeyIndexMap = (uint8_t *)_scanIndexToKeyIndexMap;
 }
 
