@@ -655,21 +655,33 @@ function handleOperationOff(opWord: u32) {
 // --------------------------------------------------------------------------------
 // assign binder
 
+const KeyIndexNone = 255;
+const NumKeySlotsMax = 10;
 const ImmediateReleaseStrokeDuration = 50;
-interface IBinderKeySlot {
+interface KeySlot {
   isActive: boolean;
+  hold: boolean;
+  nextHold: boolean;
+  interrupted: boolean;
+  resolving: boolean;
+  inputEdge: u8;
   keyIndex: u8;
+  steps: string;
+  tick: u16;
+  liveLayerIndex: s8;
+  liveLayerStateFlags: u16;
+  resolverProc: ((slot: KeySlot) => boolean) | undefined;
   opWord: u32;
   autoReleaseTick: u8;
 }
 
-function assignBinder_handleKeyOn(slot: IBinderKeySlot, opWord: u32) {
+function assignBinder_handleKeyOn(slot: KeySlot, opWord: u32) {
   // console.log(`keyOn ${keyIndex} ${opWord}`);
   handleOperationOn(opWord);
   slot.opWord = opWord;
 }
 
-function assignBinder_handleKeyOff(slot: IBinderKeySlot) {
+function assignBinder_handleKeyOff(slot: KeySlot) {
   if (slot.opWord) {
     // console.log(`keyOff ${keyIndex} ${opWord}`);
     handleOperationOff(slot.opWord);
@@ -677,11 +689,11 @@ function assignBinder_handleKeyOff(slot: IBinderKeySlot) {
   }
 }
 
-function assignBinder_recallKeyOff(slot: IBinderKeySlot) {
+function assignBinder_recallKeyOff(slot: KeySlot) {
   slot.autoReleaseTick = 1;
 }
 
-function assignBinder_tick(ms: u16, slots: IBinderKeySlot[]) {
+function assignBinder_tick(ms: u16, slots: KeySlot[]) {
   slots.forEach((slot) => {
     if (slot.isActive && slot.autoReleaseTick > 0) {
       slot.autoReleaseTick += ms;
@@ -696,7 +708,6 @@ function assignBinder_tick(ms: u16, slots: IBinderKeySlot[]) {
 // --------------------------------------------------------------------------------
 // resolver common
 
-const NumKeySlotsMax = 10;
 const TH = 200;
 
 const InputEdge = {
@@ -716,39 +727,21 @@ const resolverConfig = {
   emitOutputStroke: true,
 };
 // resolverConfig.debugShowTrigger = true;
-// resolverConfig.emitOutputStroke = false;
-
-interface KeySlot {
-  isActive: boolean;
-  keyIndex: u8;
-  steps: string;
-  hold: boolean;
-  nextHold: boolean;
-  tick: u16;
-  interrupted: boolean;
-  resolving: boolean;
-  liveLayerIndex: s8;
-  liveLayerStateFlags: u16;
-  resolverProc: ((slot: KeySlot) => boolean) | undefined;
-  inputEdge: u8;
-  opWord: u32;
-  autoReleaseTick: u8;
-}
-
+// resolverConfig.emitOutputStroke = false;KeyIndexNone
 const resolverState = new (class {
-  interruptKeyIndex: number = -1;
+  interruptKeyIndex: number = KeyIndexNone;
   keySlots: KeySlot[] = [];
   assignHitResultWord: number = 0;
 })();
 
 function initResolverState() {
-  resolverState.interruptKeyIndex = -1;
+  resolverState.interruptKeyIndex = KeyIndexNone;
   resolverState.assignHitResultWord = 0;
   resolverState.keySlots = Array(NumKeySlotsMax)
     .fill(0)
     .map((_, i) => ({
       isActive: false,
-      keyIndex: -1,
+      keyIndex: KeyIndexNone,
       steps: '',
       hold: false,
       nextHold: false,
@@ -798,15 +791,6 @@ function keySlot_storeAssignHitResult(slot: KeySlot, assignOrder: u8) {
     (1 << 15) | (fSlotSpec << 12) | (fLayerIndex << 8) | fKeyIndex;
 }
 
-function keySlot_clearSteps(slot: KeySlot) {
-  slot.steps = '';
-}
-
-function keySlot_debugShowSlotTrigger(slot: KeySlot, triggerObj: any) {
-  const trigger = getFieldNameByValue(triggerObj, slot.steps) || '--';
-  console.log(`[TRIGGER] ${slot.keyIndex} ${slot.steps} ${trigger}`);
-}
-
 function keySlot_handleKeyOn(slot: KeySlot, order: u8) {
   const assignSet = findAssignInLayerStack(
     slot.keyIndex,
@@ -825,6 +809,15 @@ function keySlot_handleKeyOn(slot: KeySlot, order: u8) {
 
 function keySlot_handleKeyOff(slot: KeySlot) {
   assignBinder_handleKeyOff(slot);
+}
+
+function keySlot_clearSteps(slot: KeySlot) {
+  slot.steps = '';
+}
+
+function keySlot_debugShowSlotTrigger(slot: KeySlot, triggerObj: any) {
+  const trigger = getFieldNameByValue(triggerObj, slot.steps) || '--';
+  console.log(`[TRIGGER] ${slot.keyIndex} ${slot.steps} ${trigger}`);
 }
 
 // --------------------------------------------------------------------------------
