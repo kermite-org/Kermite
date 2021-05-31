@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
+import { LogicalKey } from '~/shared';
 import { dataStorage } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/DataStorage';
 import {
   keyActionRemapper_setupDataReader,
@@ -533,6 +534,17 @@ const InvocationMode = {
   Oneshot: 5,
 };
 
+function convertSingleModifierToFlags(opWord: u16): u16 {
+  const wordBase = opWord & 0xf000;
+  let modifiers = (opWord >> 8) & 0x0f;
+  let logicalKey = opWord & 0x7f;
+  if (LogicalKey.LK_Ctrl <= logicalKey && logicalKey <= LogicalKey.LK_Gui) {
+    modifiers |= 1 << (logicalKey - LogicalKey.LK_Ctrl);
+    logicalKey = 0;
+  }
+  return wordBase | (modifiers << 8) | logicalKey;
+}
+
 function handleOperationOn(opWord: u32) {
   const opType = (opWord >> 30) & 0b11;
   if (opType === OpType.KeyInput) {
@@ -541,6 +553,7 @@ function handleOperationOn(opWord: u32) {
       opWord,
       logicOptions.wiringMode,
     );
+    opWord = convertSingleModifierToFlags(opWord);
     const logicalKey = opWord & 0x7f;
     const modFlags = (opWord >> 8) & 0b1111;
     if (modFlags) {
@@ -615,6 +628,7 @@ function handleOperationOff(opWord: u32) {
       opWord,
       logicOptions.wiringMode,
     );
+    opWord = convertSingleModifierToFlags(opWord);
     const logicalKey = opWord & 0x7f;
     const modFlags = (opWord >> 8) & 0b1111;
     if (modFlags) {
