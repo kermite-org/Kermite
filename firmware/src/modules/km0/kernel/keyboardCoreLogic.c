@@ -4,6 +4,7 @@
 #include "dataStorage.h"
 #include "keyActionRemapper.h"
 #include "keyCodeTranslator.h"
+#include "keyCodes.h"
 #include "km0/base/bitOperations.h"
 #include "km0/device/dataMemory.h"
 #include <stdio.h>
@@ -522,11 +523,23 @@ enum {
   InvocationMode_Oneshot = 5,
 };
 
+static uint16_t convertSingleModifierToFlags(uint16_t opWord) {
+  uint16_t wordBase = opWord & 0xf000;
+  uint8_t modifiers = (opWord >> 8) & 0x0f;
+  uint8_t logicalKey = opWord & 0x7f;
+  if (LK_Ctrl <= logicalKey && logicalKey <= LK_Gui) {
+    modifiers |= 1 << (logicalKey - LK_Ctrl);
+    logicalKey = 0;
+  }
+  return wordBase | (modifiers << 8) | logicalKey;
+}
+
 static void handleOperationOn(uint32_t opWord) {
   uint8_t opType = (opWord >> 30) & 0b11;
   if (opType == OpType_KeyInput) {
     opWord >>= 16;
     opWord = keyActionRemapper_translateKeyOperation(opWord, logicOptions.wiringMode);
+    opWord = convertSingleModifierToFlags(opWord);
     uint8_t logicalKey = opWord & 0x7f;
     uint8_t modFlags = (opWord >> 8) & 0b1111;
     if (modFlags) {
@@ -595,6 +608,7 @@ static void handleOperationOff(uint32_t opWord) {
   if (opType == OpType_KeyInput) {
     opWord >>= 16;
     opWord = keyActionRemapper_translateKeyOperation(opWord, logicOptions.wiringMode);
+    opWord = convertSingleModifierToFlags(opWord);
     uint8_t logicalKey = opWord & 0x7f;
     uint8_t modFlags = (opWord >> 8) & 0b1111;
     if (modFlags) {
