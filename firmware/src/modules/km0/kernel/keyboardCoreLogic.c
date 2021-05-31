@@ -649,8 +649,11 @@ static void handleOperationOff(uint32_t opWord) {
 
 #define KIDX_NONE 255
 
-//#define NumKeySlots KM0_KEYBOARD__NUM_KEY_SLOTS
-#define NumKeySlots 10
+#ifndef KM0_KEYBOARD_CORELOGIC__NUM_INPUT_KEY_SLOTS
+#define KM0_KEYBOARD_CORELOGIC__NUM_INPUT_KEY_SLOTS 10
+#endif
+
+#define NumKeySlots KM0_KEYBOARD_CORELOGIC__NUM_INPUT_KEY_SLOTS
 
 #define ImmediateReleaseStrokeDuration 50
 
