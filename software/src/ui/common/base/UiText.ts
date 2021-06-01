@@ -18,7 +18,7 @@ export const uiTextConfigLoader = {
     if (Object.keys(textSources).includes(languageKey)) {
       return languageKey;
     }
-    return 'japanese';
+    return 'english';
   },
   saveLanguageKey(languageKey: ILanguageKey) {
     localStorage.setItem('languageKey', languageKey);
