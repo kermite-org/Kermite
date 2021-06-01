@@ -1,4 +1,4 @@
-# Windowsでの環境構築 (CoreUtilsを使う場合)
+# Windowsでの環境構築
 
 ## ツールの導入
 
