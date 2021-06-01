@@ -1,4 +1,4 @@
-import { IPersistProfileData } from '~/shared';
+import { bumpObjectProps, IPersistProfileData } from '~/shared';
 import { LayoutDataMigrator } from '~/shell/loaders/LayoutDataMigrator';
 import { ProfileDataConverter } from '~/shell/loaders/ProfileDataConverter';
 
@@ -30,9 +30,15 @@ export namespace ProfileDataMigrator {
   function fixProfileDataPRF04toPRF05(profile: IPersistProfileData) {
     // PRF04 --> PRF05
     // mappingEntriesを追加
+    // K_OSをK_Guiに変更
     console.log(`PRF04 --> PRF05`);
     profile.formatRevision = 'PRF05';
     profile.mappingEntries = [];
+
+    const replaced = JSON.parse(
+      JSON.stringify(profile).replace(/"K_OS"/g, '"K_Gui"'),
+    );
+    bumpObjectProps(profile, replaced);
   }
 
   export function fixProfileData(
