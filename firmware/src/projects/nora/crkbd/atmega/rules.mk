@@ -6,7 +6,6 @@ MODULE_SRCS += km0/device/atmega/digitalIo.c
 MODULE_SRCS += km0/device/atmega/boardIo.c
 MODULE_SRCS += km0/device/atmega/usbIoCore.c
 MODULE_SRCS += km0/device/atmega/dataMemory.c
-MODULE_SRCS += km0/device/atmega/debugUart.c
 MODULE_SRCS += km0/device/atmega/boardI2c.c
 MODULE_SRCS += km0/device/atmega/boardLink_singleWire.c
 MODULE_SRCS += km0/device/atmega/serialLed.c

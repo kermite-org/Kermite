@@ -1,5 +1,4 @@
 #include "km0/device/boardIo.h"
-#include "km0/device/debugUart.h"
 #include "km0/device/digitalIo.h"
 #include "km0/kernel/keyboardMain.h"
 #include "km0/scanner/keyScanner_basicMatrix.h"
@@ -32,14 +31,13 @@ static const int8_t keyIndexTable[NumScanSlots] = {
 // clang-format on
 
 int main() {
-  debugUart_initialize(38400);
   boardIo_setupLeds_proMicroAvr();
   oledDisplay_initialize();
-  // rgbLighting_initialize();
+  rgbLighting_initialize();
   keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
   keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
   keyboardMain_useDisplayModule(oledDisplay_update);
-  // keyboardMain_useDisplayModule(rgbLighting_update);
+  keyboardMain_useDisplayModule(rgbLighting_update);
   keyboardMain_setKeyIndexTable(keyIndexTable);
   splitKeyboard_start();
   return 0;
