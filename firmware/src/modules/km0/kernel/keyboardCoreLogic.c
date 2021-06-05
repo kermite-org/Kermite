@@ -4,6 +4,7 @@
 #include "dataStorage.h"
 #include "keyActionRemapper.h"
 #include "keyCodeTranslator.h"
+#include "keyCodes.h"
 #include "km0/base/bitOperations.h"
 #include "km0/device/dataMemory.h"
 #include <stdio.h>
@@ -522,11 +523,23 @@ enum {
   InvocationMode_Oneshot = 5,
 };
 
+static uint16_t convertSingleModifierToFlags(uint16_t opWord) {
+  uint16_t wordBase = opWord & 0xf000;
+  uint8_t modifiers = (opWord >> 8) & 0x0f;
+  uint8_t logicalKey = opWord & 0x7f;
+  if (LK_Ctrl <= logicalKey && logicalKey <= LK_Gui) {
+    modifiers |= 1 << (logicalKey - LK_Ctrl);
+    logicalKey = 0;
+  }
+  return wordBase | (modifiers << 8) | logicalKey;
+}
+
 static void handleOperationOn(uint32_t opWord) {
   uint8_t opType = (opWord >> 30) & 0b11;
   if (opType == OpType_KeyInput) {
     opWord >>= 16;
     opWord = keyActionRemapper_translateKeyOperation(opWord, logicOptions.wiringMode);
+    opWord = convertSingleModifierToFlags(opWord);
     uint8_t logicalKey = opWord & 0x7f;
     uint8_t modFlags = (opWord >> 8) & 0b1111;
     if (modFlags) {
@@ -595,6 +608,7 @@ static void handleOperationOff(uint32_t opWord) {
   if (opType == OpType_KeyInput) {
     opWord >>= 16;
     opWord = keyActionRemapper_translateKeyOperation(opWord, logicOptions.wiringMode);
+    opWord = convertSingleModifierToFlags(opWord);
     uint8_t logicalKey = opWord & 0x7f;
     uint8_t modFlags = (opWord >> 8) & 0b1111;
     if (modFlags) {
@@ -635,69 +649,59 @@ static void handleOperationOff(uint32_t opWord) {
 
 #define KIDX_NONE 255
 
-#define NumKeySlots KM0_KEYBOARD__NUM_KEY_SLOTS
-#define NumRecallKeyEntries 4
+#ifndef KM0_KEYBOARD_CORELOGIC__NUM_INPUT_KEY_SLOTS
+#define KM0_KEYBOARD_CORELOGIC__NUM_INPUT_KEY_SLOTS 10
+#endif
+
+#define NumKeySlots KM0_KEYBOARD_CORELOGIC__NUM_INPUT_KEY_SLOTS
+
 #define ImmediateReleaseStrokeDuration 50
 
-typedef struct {
+// 15bytes/key
+typedef struct _KeySlot {
+  bool isActive : 1;
+  bool hold : 1;
+  bool nextHold : 1;
+  bool interrupted : 1;
+  bool resolving : 1;
+  uint8_t inputEdge : 2;
   uint8_t keyIndex;
-  uint8_t tick;
-} RecallKeyEntry;
+  uint8_t steps;
+  uint16_t tick;
+  int8_t liveLayerIndex;
+  uint16_t liveLayerStateFlags;
+  bool (*resolverProc)(struct _KeySlot *slot); //2bytes for AVR
+  uint32_t opWord;
+  uint8_t autoReleaseTick;
+} KeySlot;
 
-typedef struct {
-  uint32_t keyAttachedOperationWords[NumKeySlots];
-  RecallKeyEntry recallKeyEntries[NumRecallKeyEntries];
-} AssignBinderState;
-
-static AssignBinderState assignBinderState;
-
-static void resetAssignBinder() {
-  for (uint8_t i = 0; i < NumKeySlots; i++) {
-    assignBinderState.keyAttachedOperationWords[i] = 0;
-  }
-  for (uint8_t i = 0; i < NumRecallKeyEntries; i++) {
-    RecallKeyEntry *ke = &assignBinderState.recallKeyEntries[i];
-    ke->keyIndex = KIDX_NONE;
-    ke->tick = 0;
-  }
-}
-
-static void assignBinder_handleKeyOn(uint8_t keyIndex, uint32_t opWord) {
+static void assignBinder_handleKeyOn(KeySlot *slot, uint32_t opWord) {
   //printf("handleKeyOn %d %d\n", keyIndex, opWord);
   handleOperationOn(opWord);
-  assignBinderState.keyAttachedOperationWords[keyIndex] = opWord;
+  slot->opWord = opWord;
 }
 
-static void assignBinder_handleKeyOff(uint8_t keyIndex) {
-  uint32_t opWord = assignBinderState.keyAttachedOperationWords[keyIndex];
-  if (opWord) {
+static void assignBinder_handleKeyOff(KeySlot *slot) {
+  if (slot->opWord) {
     //printf("handleKeyOff %d\n", keyIndex);
-    handleOperationOff(opWord);
-    assignBinderState.keyAttachedOperationWords[keyIndex] = 0;
+    handleOperationOff(slot->opWord);
+    slot->opWord = 0;
   }
 }
 
-static void assignBinder_recallKeyOff(uint8_t keyIndex) {
-  for (uint8_t i = 0; i < NumRecallKeyEntries; i++) {
-    RecallKeyEntry *ke = &assignBinderState.recallKeyEntries[i];
-    if (ke->keyIndex == KIDX_NONE) {
-      //printf("reserve recall %d\n", keyIndex);
-      ke->keyIndex = keyIndex;
-      ke->tick = 0;
-      break;
-    }
-  }
+static void assignBinder_recallKeyOff(KeySlot *slot) {
+  // printf("recallKeyOff %d\n", slot->keyIndex);
+  slot->autoReleaseTick = 1;
 }
 
-static void assignBinder_ticker(uint8_t ms) {
-  for (uint8_t i = 0; i < NumRecallKeyEntries; i++) {
-    RecallKeyEntry *ke = &assignBinderState.recallKeyEntries[i];
-    if (ke->keyIndex != KIDX_NONE) {
-      ke->tick += ms;
-      if (ke->tick > ImmediateReleaseStrokeDuration) {
-        //printf("exec recall %d\n", ke->keyIndex);
-        assignBinder_handleKeyOff(ke->keyIndex);
-        ke->keyIndex = KIDX_NONE;
+static void assignBinder_ticker(uint8_t ms, KeySlot *slots) {
+  for (int i = 0; i < NumKeySlots; i++) {
+    KeySlot *slot = slots + i;
+    if (slot->isActive && slot->autoReleaseTick > 0) {
+      slot->autoReleaseTick += ms;
+      if (slot->autoReleaseTick > ImmediateReleaseStrokeDuration) {
+        assignBinder_handleKeyOff(slot);
+        slot->autoReleaseTick = 0;
       }
     }
   }
@@ -738,21 +742,6 @@ enum {
   Steps_DUDU = 0b01100110,
 };
 
-// 10bytes/key
-typedef struct _KeySlot {
-  uint8_t keyIndex;
-  uint8_t steps;
-  uint16_t tick;
-  int8_t liveLayerIndex;
-  uint16_t liveLayerStateFlags;
-  bool (*resolverProc)(struct _KeySlot *slot); //2bytes for AVR
-  bool hold : 1;
-  bool nextHold : 1;
-  bool interrupted : 1;
-  bool resolving : 1;
-  uint8_t inputEdge : 2;
-} KeySlot;
-
 typedef struct {
   uint8_t interruptKeyIndex;
   KeySlot keySlots[NumKeySlots];
@@ -766,7 +755,8 @@ static void initResolverState() {
   resolverState.assignHitResultWord = 0;
   for (uint8_t i = 0; i < NumKeySlots; i++) {
     KeySlot *slot = &resolverState.keySlots[i];
-    slot->keyIndex = i;
+    slot->isActive = false;
+    slot->keyIndex = KIDX_NONE;
     slot->steps = 0;
     slot->hold = false;
     slot->nextHold = false;
@@ -777,7 +767,8 @@ static void initResolverState() {
     slot->liveLayerStateFlags = 0;
     slot->resolverProc = NULL;
     slot->inputEdge = 0;
-    slot->tick = 0;
+    slot->opWord = 0;
+    slot->autoReleaseTick = 0;
   }
 }
 
@@ -788,6 +779,23 @@ static uint16_t peekAssignHitResult() {
     return res;
   }
   return 0;
+}
+
+static void keySlot_attachKey(KeySlot *slot, uint8_t keyIndex) {
+  slot->isActive = true;
+  slot->keyIndex = keyIndex;
+  slot->steps = 0;
+  slot->hold = false;
+  slot->nextHold = false;
+  slot->tick = 0;
+  slot->interrupted = false;
+  slot->resolving = false;
+  slot->liveLayerIndex = -1;
+  slot->liveLayerStateFlags = 0;
+  slot->resolverProc = NULL;
+  slot->inputEdge = 0;
+  slot->opWord = 0;
+  slot->autoReleaseTick = 0;
 }
 
 static void keySlot_storeAssignHitResult(
@@ -804,17 +812,17 @@ static void keySlot_handleKeyOn(KeySlot *slot, uint8_t order) {
   AssignSet *pAssignSet = findAssignInLayerStack(slot->keyIndex, slot->liveLayerStateFlags);
   if (pAssignSet != NULL) {
     if (order == AssignOrder_Pri) {
-      assignBinder_handleKeyOn(slot->keyIndex, pAssignSet->pri);
+      assignBinder_handleKeyOn(slot, pAssignSet->pri);
     } else if (order == AssignOrder_Sec) {
-      assignBinder_handleKeyOn(slot->keyIndex, pAssignSet->sec);
+      assignBinder_handleKeyOn(slot, pAssignSet->sec);
     } else if (order == AssignOrder_Ter) {
-      assignBinder_handleKeyOn(slot->keyIndex, pAssignSet->ter);
+      assignBinder_handleKeyOn(slot, pAssignSet->ter);
     }
   }
 }
 
 static void keySlot_handleKeyOff(KeySlot *slot) {
-  assignBinder_handleKeyOff(slot->keyIndex);
+  assignBinder_handleKeyOff(slot);
 }
 
 static void keySlot_clearSteps(KeySlot *slot) {
@@ -895,7 +903,7 @@ static void keySlot_pushStepB(KeySlot *slot, uint8_t step) {
 
   if (steps == TriggerB_Tap) {
     keySlot_handleKeyOn(slot, AssignOrder_Pri);
-    assignBinder_recallKeyOff(slot->keyIndex);
+    assignBinder_recallKeyOff(slot);
     keySlot_storeAssignHitResult(slot, AssignOrder_Pri);
   }
 
@@ -985,7 +993,7 @@ static void keySlot_pushStepC(KeySlot *slot, uint8_t step) {
 
   if (steps == TriggerC_Tap) {
     keySlot_handleKeyOn(slot, AssignOrder_Pri);
-    assignBinder_recallKeyOff(slot->keyIndex);
+    assignBinder_recallKeyOff(slot);
     keySlot_storeAssignHitResult(slot, AssignOrder_Pri);
   }
 
@@ -1000,7 +1008,7 @@ static void keySlot_pushStepC(KeySlot *slot, uint8_t step) {
 
   if (steps == TriggerC_Tap2) {
     keySlot_handleKeyOn(slot, AssignOrder_Ter);
-    assignBinder_recallKeyOff(slot->keyIndex);
+    assignBinder_recallKeyOff(slot);
     keySlot_storeAssignHitResult(slot, AssignOrder_Ter);
   }
 
@@ -1121,32 +1129,72 @@ static void keySlot_tick(KeySlot *slot, uint8_t ms) {
 static void triggerResolver_tick(uint8_t ms) {
   ResolverState *rs = &resolverState;
   for (uint8_t i = 0; i < NumKeySlots; i++) {
-    if (i != rs->interruptKeyIndex) {
-      KeySlot *slot = &rs->keySlots[i];
+    KeySlot *slot = &rs->keySlots[i];
+    if (slot->isActive && slot->keyIndex != rs->interruptKeyIndex) {
       keySlot_tick(slot, ms);
     }
   }
-  if (rs->interruptKeyIndex != KIDX_NONE) {
-    KeySlot *slot = &rs->keySlots[rs->interruptKeyIndex];
-    keySlot_tick(slot, ms);
+  for (uint8_t i = 0; i < NumKeySlots; i++) {
+    KeySlot *slot = &rs->keySlots[i];
+    if (slot->isActive && slot->keyIndex == rs->interruptKeyIndex) {
+      keySlot_tick(slot, ms);
+    }
   }
   rs->interruptKeyIndex = KIDX_NONE;
+
+  for (uint8_t i = 0; i < NumKeySlots; i++) {
+    KeySlot *slot = &rs->keySlots[i];
+    if (slot->isActive &&
+        !slot->hold &&
+        slot->resolverProc == NULL &&
+        slot->autoReleaseTick == 0) {
+      printf("key %d detached from slot\n", slot->keyIndex);
+      slot->isActive = false;
+    }
+  }
+}
+
+static KeySlot *triggerResoler_attachKeyToFreeSlot(uint8_t keyIndex) {
+  for (uint8_t i = 0; i < NumKeySlots; i++) {
+    KeySlot *slot = &resolverState.keySlots[i];
+    if (!slot->isActive) {
+      keySlot_attachKey(slot, keyIndex);
+      printf("key %d attached to slot\n", keyIndex);
+      return slot;
+    }
+  }
+  return NULL;
+}
+
+static KeySlot *triggerResoler_getActiveKeySlotByKeyIndex(uint8_t keyIndex) {
+  for (uint8_t i = 0; i < NumKeySlots; i++) {
+    KeySlot *slot = &resolverState.keySlots[i];
+    if (slot->isActive && slot->keyIndex == keyIndex) {
+      return slot;
+    }
+  }
+  return NULL;
 }
 
 static void triggerResolver_handleKeyInput(uint8_t keyIndex, bool isDown) {
-  if (keyIndex >= NumKeySlots) {
-    return;
-  }
-  ResolverState *rs = &resolverState;
-
-  KeySlot *slot = &rs->keySlots[keyIndex];
   if (isDown) {
-    rs->interruptKeyIndex = keyIndex;
-    slot->nextHold = true;
-    //printf("corelogic, down %d\n", keyIndex);
+    //printf("corelogic, keydown %d\n", keyIndex);
+    KeySlot *slot = triggerResoler_getActiveKeySlotByKeyIndex(keyIndex);
+    if (!slot) {
+      slot = triggerResoler_attachKeyToFreeSlot(keyIndex);
+    }
+    if (slot) {
+      resolverState.interruptKeyIndex = keyIndex;
+      slot->nextHold = true;
+    } else {
+      printf("cannot attach key %d to slot\n", keyIndex);
+    }
   } else {
-    slot->nextHold = false;
-    //printf("corelogic, up %d\n", keyIndex);
+    //printf("corelogic, keyup %d\n", keyIndex);
+    KeySlot *slot = triggerResoler_getActiveKeySlotByKeyIndex(keyIndex);
+    if (slot) {
+      slot->nextHold = false;
+    }
   }
 }
 
@@ -1159,7 +1207,6 @@ void keyboardCoreLogic_initialize() {
   initAssignMemoryReader();
   resetHidReportState();
   resetLayerState();
-  resetAssignBinder();
   initResolverState();
   logicActive = true;
 }
@@ -1205,7 +1252,7 @@ void keyboardCoreLogic_issuePhysicalKeyStateChanged(uint8_t keyIndex, bool isDow
 void keyboardCoreLogic_processTicker(uint8_t ms) {
   if (logicActive) {
     triggerResolver_tick(ms);
-    assignBinder_ticker(ms);
+    assignBinder_ticker(ms, resolverState.keySlots);
     layerMutations_oneshotCancellerTicker(ms);
   }
 }

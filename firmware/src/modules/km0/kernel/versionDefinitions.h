@@ -2,7 +2,7 @@
 
 #define Kermite_ConfigStorageFormatRevision 6
 #define Kermite_RawHidMessageProtocolRevision 1
-#define Kermite_ProfileBinaryFormatRevision 2
+#define Kermite_ProfileBinaryFormatRevision 3
 #define Kermite_ConfigParametersRevision 2
 
 #define Kermite_Project_ReleaseBuildRevision EXTR_KERMITE_PROJECT_RELEASE_BUILD_REVISION
