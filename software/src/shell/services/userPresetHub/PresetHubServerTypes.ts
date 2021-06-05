@@ -6,11 +6,14 @@ export namespace PresetHubServerTypes {
   export type PublicProfileInfomation = {
     id: string;
     name: string;
-    userId: string;
-    userViewName: string;
+    description: string;
     projectId: string;
     data: string;
     lastUpdate: string;
+    userId: string;
+    userDisplayName: string;
+    loginProvider: string | null;
+    showLinkId: boolean | null;
   };
 
   export type GetPublicProfilesResponse = {
