@@ -9,6 +9,7 @@ import {
 interface Props {
   pageTitle: string;
   viewModel: IPresetBrowserViewModel;
+  customContent?: JSX.Element;
 }
 
 const style = css`
@@ -22,7 +23,11 @@ const style = css`
   }
 `;
 
-export const PresetBrowserPageView: FC<Props> = ({ pageTitle, viewModel }) => (
+export const PresetBrowserPageView: FC<Props> = ({
+  pageTitle,
+  viewModel,
+  customContent,
+}) => (
   <div css={style}>
     <div>{pageTitle}</div>
     <PresetSelectionSection
@@ -31,5 +36,6 @@ export const PresetBrowserPageView: FC<Props> = ({ pageTitle, viewModel }) => (
     <PresetKeyboardSection
       viewModel={viewModel.presetKeyboardSectionViewModel}
     />
+    {customContent && <div>{customContent}</div>}
   </div>
 );
