@@ -177,6 +177,7 @@ export const vSchemaOneOf = createCheckerWithArrrayArguments(
       const errors = checkers.map((checker) => checker(value));
       if (!errors.includes(undefined)) {
         return {
+          the_value: value,
           must_matches_to_one_of: errors as any,
         };
       }
