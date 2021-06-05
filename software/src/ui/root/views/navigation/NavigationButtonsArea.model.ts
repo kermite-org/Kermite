@@ -1,4 +1,4 @@
-import { router, PagePaths, texts } from '~/ui/common';
+import { router, PagePaths, texts, uiStatusModel } from '~/ui/common';
 
 export interface NavigationEntryViewModel {
   pagePath: PagePaths;
@@ -14,6 +14,7 @@ interface NavigationEntrySource {
   pageName: string;
   iconSpec: string;
   hint: string;
+  isAvailable?: () => boolean;
 }
 
 const entrySources: NavigationEntrySource[] = [
@@ -40,6 +41,7 @@ const entrySources: NavigationEntrySource[] = [
     pageName: 'Presets2',
     iconSpec: 'fa fa-book',
     hint: texts.hint_sideMenu_app_presetBrowser,
+    isAvailable: () => uiStatusModel.settings.integrateUserPresetHub,
   },
   {
     pagePath: '/shapePreview',
@@ -92,13 +94,15 @@ export interface INavigationViewModel {
 export function makeNavigationViewModel(): INavigationViewModel {
   const currentPagePath = router.getPagePath();
   return {
-    entries: entrySources.map((it) => ({
-      pagePath: it.pagePath,
-      pageName: it.pageName,
-      iconSpec: it.iconSpec,
-      hint: it.hint,
-      isCurrent: it.pagePath === currentPagePath,
-      onClick: () => router.navigateTo(it.pagePath),
-    })),
+    entries: entrySources
+      .filter((it) => (it.isAvailable ? it.isAvailable() : true))
+      .map((it) => ({
+        pagePath: it.pagePath,
+        pageName: it.pageName,
+        iconSpec: it.iconSpec,
+        hint: it.hint,
+        isCurrent: it.pagePath === currentPagePath,
+        onClick: () => router.navigateTo(it.pagePath),
+      })),
   };
 }
