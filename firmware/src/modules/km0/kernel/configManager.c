@@ -13,7 +13,7 @@ static int lazySaveTick = -1;
 static ParameterChangedListener parameterChangedListeners[4] = { 0 };
 static int numParameterChangedListeners = 0;
 
-__flash static const T_SystemParametersSet systemParametersDefault = {
+static const T_SystemParametersSet systemParametersDefault = {
   .emitKeyStroke = true,
   .emitRealtimeEvents = true,
   .keyHoldLedOutput = true,
@@ -29,7 +29,7 @@ __flash static const T_SystemParametersSet systemParametersDefault = {
   .glowSpeed = 4,
 };
 
-__flash static const T_SystemParametersSet systemParameterMaxValues = {
+static const T_SystemParametersSet systemParameterMaxValues = {
   .emitKeyStroke = 1,
   .emitRealtimeEvents = 1,
   .keyHoldLedOutput = 1,

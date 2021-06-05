@@ -10,10 +10,6 @@
 #include "km0/device/dataMemory.h"
 #include <stdio.h>
 
-#ifndef KM0_KEYBOARD__NUM_KEY_SLOTS
-#error corelogic option KM0_KEYBOARD__NUM_KEY_SLOTS is not provided.
-#endif
-
 /*
 software/src/shell/services/keyboardLogic/inputLogicSimulatorD/KeyboardCoreLogicImplementation.ts
 プロトタイプ/シミュレータ実装のコードを元にC言語に移植

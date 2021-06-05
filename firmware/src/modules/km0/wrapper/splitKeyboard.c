@@ -121,10 +121,12 @@ static void master_pushMasterStatePacketOne() {
     boardLink_writeTxBuffer(sw_txbuf, 3);
     boardLink_exchangeFramesBlocking();
     uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
+
+    shiftMasterStatePacket();
     if (sz == 1 && sw_rxbuf[0] == SplitOp_SlaveAck) {
-      shiftMasterStatePacket();
+
     } else {
-      printf("master state NACKed\n");
+      // printf("master state NACKed\n");
     }
   }
 }
