@@ -297,6 +297,8 @@ export interface IAppIpcContract {
     file_saveObjectToJsonWithFileDialog(obj: any): Promise<boolean>;
     file_getOpenDirectoryWithDialog(): Promise<string | undefined>;
 
+    platform_openUrlInDefaultBrowser(path: string): Promise<void>;
+
     global_triggerLazyInitializeServices(): Promise<void>;
   };
   events: {

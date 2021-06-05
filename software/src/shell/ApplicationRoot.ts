@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/require-await */
+import { shell } from 'electron';
 import { getAppErrorData, IPresetSpec, makeCompactStackTrace } from '~/shared';
 import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
@@ -159,6 +160,8 @@ export class ApplicationRoot {
         JsonFileServiceStatic.saveObjectToJsonWithFileDialog,
       file_getOpenDirectoryWithDialog:
         JsonFileServiceStatic.getOpeningDirectoryPathWithDialog,
+
+      platform_openUrlInDefaultBrowser: (path) => shell.openExternal(path),
       global_triggerLazyInitializeServices: async () =>
         this.lazyInitialzeServices(),
     });
