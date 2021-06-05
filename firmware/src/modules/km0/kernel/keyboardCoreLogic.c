@@ -6,6 +6,7 @@
 #include "keyCodeTranslator.h"
 #include "keyCodes.h"
 #include "km0/base/bitOperations.h"
+#include "km0/base/utils.h"
 #include "km0/device/dataMemory.h"
 #include <stdio.h>
 
@@ -66,7 +67,6 @@ enum {
 #define NumHidHoldKeySlots 6
 
 typedef struct {
-  uint8_t hidReportZerosBuf[NumHidReportBytes];
   uint8_t hidReportBuf[NumHidReportBytes];
   uint8_t layerModFlags;
   uint8_t modFlags;
@@ -81,7 +81,6 @@ static HidReportState hidReportState;
 static void resetHidReportState() {
   HidReportState *rs = &hidReportState;
   for (uint8_t i = 0; i < NumHidReportBytes; i++) {
-    rs->hidReportZerosBuf[i] = 0;
     rs->hidReportBuf[i] = 0;
   }
   rs->layerModFlags = 0;
@@ -108,7 +107,8 @@ static uint8_t *getOutputHidReport() {
 }
 
 static uint8_t *getOutputHidReportZeros() {
-  return hidReportState.hidReportZerosBuf;
+  utils_fillBytes(hidReportState.hidReportBuf, 0, 8);
+  return hidReportState.hidReportBuf;
 }
 
 static void setLayerModifiers(uint8_t modFlags) {

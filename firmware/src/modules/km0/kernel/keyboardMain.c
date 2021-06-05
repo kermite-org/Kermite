@@ -40,7 +40,7 @@
 //----------------------------------------------------------------------
 //variables
 
-static const __flash uint8_t *scanIndexToKeyIndexMap;
+static uint8_t *scanIndexToKeyIndexMap;
 
 //キー状態
 
@@ -106,11 +106,10 @@ static void debugDumpLocalOutputState() {
 }
 
 static void setupSerialNumberText() {
-  static uint8_t serialNumberTextBuf[24];
+  uint8_t *serialNumberTextBuf = usbioCore_getSerialNumberTextBufferPointer();
   utils_copyBytes(serialNumberTextBuf, (uint8_t *)Kermite_Project_McuCode, 8);
   utils_copyBytes(serialNumberTextBuf + 8, (uint8_t *)KERMITE_PROJECT_ID, 8);
   configuratorServant_readDeviceInstanceCode(serialNumberTextBuf + 16);
-  uibioCore_internal_setSerialNumberText(serialNumberTextBuf, 24);
 }
 
 static void resetKeyboardCoreLogic() {
@@ -311,7 +310,7 @@ void keyboardMain_useDisplayModule(void (*_displayModuleUpdateFunc)(void)) {
   displayUpdateFuncs[displayModulesLength++] = _displayModuleUpdateFunc;
 }
 
-void keyboardMain_setKeyIndexTable(const __flash int8_t *_scanIndexToKeyIndexMap) {
+void keyboardMain_setKeyIndexTable(const int8_t *_scanIndexToKeyIndexMap) {
   scanIndexToKeyIndexMap = (uint8_t *)_scanIndexToKeyIndexMap;
 }
 

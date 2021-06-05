@@ -56,21 +56,24 @@ static bool hasMasterOathReceived = false;
 //---------------------------------------------
 //masterの状態通知パケットキュー
 
-static uint32_t masterStatePackets_buf[16];
+#define MasterStatePacketBufferCapacity 8
+#define MasterStatePacketBufferIndexMask (MasterStatePacketBufferCapacity - 1)
+
+static uint32_t masterStatePackets_buf[MasterStatePacketBufferCapacity];
 static uint8_t masterStatePackets_wi = 0;
 static uint8_t masterStatePackets_ri = 0;
 
 static void enqueueMasterStatePacket(uint8_t op, uint8_t arg1, uint8_t arg2) {
   uint32_t data = (uint32_t)arg2 << 16 | (uint32_t)arg1 << 8 | op;
   masterStatePackets_buf[masterStatePackets_wi] = data;
-  masterStatePackets_wi = (masterStatePackets_wi + 1) & 15;
+  masterStatePackets_wi = (masterStatePackets_wi + 1) & MasterStatePacketBufferIndexMask;
 }
 
 static uint32_t popMasterStatePacket() {
   uint32_t data = masterStatePackets_buf[masterStatePackets_ri];
   if (data != 0) {
     masterStatePackets_buf[masterStatePackets_ri] = 0;
-    masterStatePackets_ri = (masterStatePackets_ri + 1) & 15;
+    masterStatePackets_ri = (masterStatePackets_ri + 1) & MasterStatePacketBufferIndexMask;
     return data;
   }
   return 0;
@@ -82,7 +85,7 @@ static uint32_t peekMasterStatePacket() {
 
 static void shiftMasterStatePacket() {
   masterStatePackets_buf[masterStatePackets_ri] = 0;
-  masterStatePackets_ri = (masterStatePackets_ri + 1) & 15;
+  masterStatePackets_ri = (masterStatePackets_ri + 1) & MasterStatePacketBufferIndexMask;
 }
 
 //---------------------------------------------
