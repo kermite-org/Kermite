@@ -11,11 +11,11 @@ void serialLed_putPixel(uint32_t pixel_rrggbb) {
   uint8_t r = pixel_rrggbb >> 16 & 0xFF;
   uint8_t g = pixel_rrggbb >> 8 & 0xFF;
   uint8_t b = pixel_rrggbb & 0xFF;
-  cli();
+  // cli();
   neoPixelCore_emitByte(g);
   neoPixelCore_emitByte(r);
   neoPixelCore_emitByte(b);
-  sei();
+  // sei();
 }
 
 void serialLed_putPixelWithAlpha(uint32_t pixel_rrggbb, uint8_t alpha) {

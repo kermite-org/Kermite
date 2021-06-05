@@ -3,6 +3,7 @@
 #include "config.h"
 #include "km0/base/utils.h"
 #include "km0/device/serialLed.h"
+#include "km0/device/system.h"
 #include "km0/kernel/commandDefinitions.h"
 #include "km0/kernel/configManager.h"
 
@@ -78,9 +79,11 @@ static uint32_t shiftRgb(uint32_t col, uint8_t shift) {
 //blank output
 
 static void scene_fallbackBlank_updateFrame() {
+  system_disableInterrupts();
   for (int i = 0; i < NumLeds; i++) {
     serialLed_putPixel(0);
   }
+  system_enableInterrupts();
 }
 
 //----------------------------------------------------------------------
@@ -88,9 +91,11 @@ static void scene_fallbackBlank_updateFrame() {
 
 static void scene0_updateFrame() {
   uint32_t color = getCurrentColor();
+  system_disableInterrupts();
   for (int i = 0; i < NumLeds; i++) {
     serialLed_putPixelWithAlpha(color, glowBrightness);
   }
+  system_enableInterrupts();
 }
 
 //----------------------------------------------------------------------
@@ -101,9 +106,11 @@ static void scene1_updateFrame() {
   int p = (frameTick << 3) & 0x1FF;
   int p2 = (p > 0x100) ? 0x200 - p : p;
   int bri = p2 * glowBrightness >> 8;
+  system_disableInterrupts();
   for (int i = 0; i < NumLeds; i++) {
     serialLed_putPixelWithAlpha(color, bri);
   }
+  system_enableInterrupts();
 }
 
 //----------------------------------------------------------------------
@@ -114,9 +121,11 @@ static void scene2_updateFrame() {
   int n = NumLeds;
   int p = (frameTick >> 1) % (n * 2);
   int activeIndex = (p > n) ? (2 * n - p) : p;
+  system_disableInterrupts();
   for (int i = 0; i < NumLeds; i++) {
     serialLed_putPixelWithAlpha(i == activeIndex ? color : 0, glowBrightness);
   }
+  system_enableInterrupts();
 }
 
 //----------------------------------------------------------------------
@@ -129,9 +138,11 @@ static void scene3_updateFrame() {
       uint32_t color = commonColorTable[colorIndex];
       colorBuf[i] = color;
     }
+    system_disableInterrupts();
     for (int i = 0; i < NumLeds; i++) {
       serialLed_putPixelWithAlpha(colorBuf[i], glowBrightness);
     }
+    system_enableInterrupts();
   }
 }
 
@@ -173,9 +184,11 @@ static void scene4_updateFrame() {
     uint32_t color = lerpColor(col0, col1, utils_clamp(p2, 0.0f, 1.0f));
     colorBuf[i] = color;
   }
+  system_disableInterrupts();
   for (int i = 0; i < NumLeds; i++) {
     serialLed_putPixelWithAlpha(colorBuf[i], glowBrightness);
   }
+  system_enableInterrupts();
 }
 
 //----------------------------------------------------------------------

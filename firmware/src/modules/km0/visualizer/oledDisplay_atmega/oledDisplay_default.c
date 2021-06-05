@@ -1,16 +1,8 @@
-#include "config.h"
-#include "km0/base/bitOperations.h"
-#include "km0/base/romData.h"
-#include "km0/base/utils.h"
-#include "km0/device/boardI2c.h"
-#include "km0/device/boardIo.h"
-#include "km0/device/digitalIo.h"
-#include "km0/device/system.h"
+#include "km0/base/configImport.h"
 #include "km0/kernel/keyboardMainInternal.h"
 #include "km0/visualizer/oledDisplay.h"
 #include "oledCore.h"
 #include <stdio.h>
-#include <string.h>
 
 #ifdef KM0_OLED_DISPLAY__NO_DEFAULT_LOGO
 static const uint32_t *mainLogoData = NULL;
@@ -144,14 +136,11 @@ void oledDisplay_setCustomFont(const uint8_t *fontData, uint8_t fontWidth, uint8
 void oledDisplay_initialize() {
   oledCore_initialize();
   oledCore_setFontData(mainFontData, mainFontWidth, mainFontLetterSpacing);
-  digitalIo_setOutput(P_F4);
 }
 
 void oledDisplay_update() {
   static uint32_t tick = 0;
   if (++tick % 50 == 0) {
-    digitalIo_setHigh(P_F4);
     updateFrame();
-    digitalIo_setLow(P_F4);
   }
 }
