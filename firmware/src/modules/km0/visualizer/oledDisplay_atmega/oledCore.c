@@ -1,5 +1,4 @@
 #include "oledCore.h"
-#include "km0/base/romData.h"
 #include "km0/base/utils.h"
 #include "km0/device/boardI2c.h"
 #include "km0/device/system.h"
@@ -21,7 +20,7 @@ const bool rot180_horizontalView = false;
 
 static const uint8_t oledSlaveAddress = 0x3C;
 
-static const uint8_t *fontDataPtr = NULL;
+__flash static const uint8_t *fontDataPtr = NULL;
 static int fontWidth = 0;
 static int fontLetterSpacing = 0;
 
@@ -32,7 +31,7 @@ static uint32_t lcdTextChangedFlags[4] = { 0 };
 
 //----------------------------------------------------------------------
 
-static const uint8_t commandInitializationBytes[] ROM_DATA = {
+__flash static const uint8_t commandInitializationBytes[] = {
   0x00,       //Control Byte
   0xAE,       //Display Off
   0xA8, 0x1F, //MUX Ratio
@@ -55,10 +54,10 @@ static const uint8_t commandInitializationBytes[] ROM_DATA = {
   0xAF        //Display On
 };
 
-static void sendRomData(const uint8_t *buf, int len) {
+static void sendRomData(__flash const uint8_t *buf, int len) {
   boardI2c_procedural_startWrite(oledSlaveAddress);
   for (int i = 0; i < len; i++) {
-    boardI2c_procedural_putByte(romData_readByte(buf + i));
+    boardI2c_procedural_putByte(buf[i]);
   }
   boardI2c_procedural_endWrite();
 }
@@ -107,15 +106,15 @@ void oledCore_renderClear() {
   }
 }
 
-void oledCore_renderFullImage(const uint32_t *pLineBuffers128) {
-  const uint8_t *pPixelsBuf512 = (const uint8_t *)pLineBuffers128;
+void oledCore_renderFullImage(__flash const uint32_t *pLineBuffers128) {
+  __flash const uint8_t *pPixelsBuf512 = (__flash const uint8_t *)pLineBuffers128;
   for (int i = 0; i < 4; i++) {
     setGdRamAddress(i, 0);
     boardI2c_procedural_startWrite(oledSlaveAddress);
     boardI2c_procedural_putByte(0x40);
     for (int j = 0; j < 128; j++) {
       int index = j * 4 + i;
-      uint8_t data = romData_readByte(pPixelsBuf512 + index);
+      uint8_t data = pPixelsBuf512[index];
       boardI2c_procedural_putByte(data);
     }
     boardI2c_procedural_endWrite();
@@ -159,7 +158,7 @@ static void renderCharAt(int caretY, int caretX, char chr) {
   boardI2c_procedural_putByte(0x40);
   int fontIndexBase = (chr == 0) ? 0 : ((chr - 32) * fontWidth);
   for (int i = 0; i < fontWidth; i++) {
-    uint8_t data = romData_readByte(fontDataPtr + fontIndexBase + i);
+    uint8_t data = fontDataPtr[fontIndexBase + i];
     boardI2c_procedural_putByte(data);
   }
   boardI2c_procedural_endWrite();

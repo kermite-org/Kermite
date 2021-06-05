@@ -1,5 +1,3 @@
-
-#include "km0/base/romData.h"
 #include "km0/base/utils.h"
 #include "km0/device/boardIo.h"
 #include "km0/device/debugUart.h"
@@ -22,7 +20,7 @@ typedef struct {
 
 static const int err = 2;
 
-static const uint8_t encoder_count_delta_table[16] ROM_DATA = {
+__flash static const uint8_t encoder_count_delta_table[16] = {
   0, 1, -1, err,
   -1, 0, err, 1,
   1, err, 0, -1,
@@ -47,7 +45,7 @@ static void updateEncoderInstance(EncoderConfig *config, EncoderState *state) {
   int delta = 0;
   if (0) {
     int table_index = (prev_bin << 2) | bin;
-    delta = romData_readByte(&encoder_count_delta_table[table_index]);
+    delta = encoder_count_delta_table[table_index];
   } else {
     int prev_a = prev_bin & 1;
     if (!prev_a && a) {

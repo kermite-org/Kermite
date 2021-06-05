@@ -1,7 +1,6 @@
 #ifndef __OLED_FONT_DATA_H__
 #define __OLED_FONT_DATA_H__
 
-#include "km0/base/romData.h"
 #include "km0/types.h"
 
 #if !defined(KM0_OLED_DISPLAY__DEFAULT_FONT_SQUARE) && !defined(KM0_OLED_DISPLAY__DEFAULT_FONT_ROUND)
@@ -12,7 +11,7 @@
 //square font
 const uint8_t oledFontWidth = 5;
 const uint8_t oledFontLetterSpacing = 1;
-const uint8_t oledFontData[] ROM_DATA = {
+__flash const uint8_t oledFontData[] = {
   0x00, 0x00, 0x00, 0x00, 0x00,
   0x00, 0x00, 0x5e, 0x00, 0x00,
   0x00, 0x06, 0x00, 0x06, 0x00,
@@ -115,7 +114,7 @@ const uint8_t oledFontData[] ROM_DATA = {
 //round font
 const uint8_t oledFontWidth = 5;
 const uint8_t oledFontLetterSpacing = 1;
-const uint8_t oledFontData[] ROM_DATA = {
+__flash const uint8_t oledFontData[] = {
   0x00, 0x00, 0x00, 0x00, 0x00,
   0x00, 0x00, 0x5e, 0x00, 0x00,
   0x00, 0x06, 0x00, 0x06, 0x00,

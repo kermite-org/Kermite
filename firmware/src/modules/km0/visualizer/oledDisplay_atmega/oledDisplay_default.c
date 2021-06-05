@@ -5,19 +5,19 @@
 #include <stdio.h>
 
 #ifdef KM0_OLED_DISPLAY__NO_DEFAULT_LOGO
-static const uint32_t *mainLogoData = NULL;
+static __flash const uint32_t *mainLogoData = NULL;
 #else
 #include "km0/visualizer/oledLogoData.h"
-static const uint32_t *mainLogoData = oledLogoDataKermite;
+static __flash const uint32_t *mainLogoData = oledLogoDataKermite;
 #endif
 
 #ifdef KM0_OLED_DISPLAY__NO_DEFAULT_FONT
-const uint8_t *mainFontData = NULL;
+__flash const uint8_t *mainFontData = NULL;
 uint8_t mainFontWidth = 0;
 uint8_t mainFontLetterSpacing = 0;
 #else
 #include "km0/visualizer/oledFontData.h"
-const uint8_t *mainFontData = oledFontData;
+__flash const uint8_t *mainFontData = oledFontData;
 uint8_t mainFontWidth = oledFontWidth;
 uint8_t mainFontLetterSpacing = oledFontLetterSpacing;
 #endif
@@ -123,11 +123,11 @@ static void updateFrame() {
 
 //----------------------------------------------------------------------
 
-void oledDisplay_setCustomLogo(const uint32_t *logoData) {
+void oledDisplay_setCustomLogo(__flash const uint32_t *logoData) {
   mainLogoData = logoData;
 }
 
-void oledDisplay_setCustomFont(const uint8_t *fontData, uint8_t fontWidth, uint8_t fontLetterSpacing) {
+void oledDisplay_setCustomFont(__flash const uint8_t *fontData, uint8_t fontWidth, uint8_t fontLetterSpacing) {
   mainFontData = fontData;
   mainFontWidth = fontWidth;
   mainFontLetterSpacing = fontLetterSpacing;
