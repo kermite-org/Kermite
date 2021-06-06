@@ -38,8 +38,9 @@ export function keyActionRemapper_translateKeyOperation(
   opWord: u16,
   routingChannel: u8,
 ): u16 {
-  let logicalKey = opWord & 0x7f;
-  let modifiers = (opWord >> 8) & 0b1111;
+  const wordBase = opWord & 0xf000;
+  let modifiers = (opWord >> 8) & 0x0f;
+  let logicalKey = opWord & 0xff;
 
   for (let i = 0; i < local.numItems; i++) {
     const addrItem = local.addrItems + i * 5;
@@ -72,5 +73,5 @@ export function keyActionRemapper_translateKeyOperation(
     }
   }
 
-  return (modifiers << 8) | logicalKey;
+  return wordBase | (modifiers << 8) | logicalKey;
 }

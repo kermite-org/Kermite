@@ -30,14 +30,14 @@ static const int8_t keyIndexTable[NumScanSlots] = {
 // clang-format on
 
 static EncoderConfig encoderConfigs[] = {
-  { .pin1 = GP22, .pin2 = GP26, .scanIndexBase = 12 },
+  { .pinA = GP26, .pinB = GP22, .scanIndexBase = 12 },
 };
 
 int main() {
   boardIo_setupLeds_proMicroRp();
   debugUart_initialize(115200);
   oledDisplay_initialize();
-  rgbLighting_initialize(GP29, NumKeys);
+  rgbLighting_initialize();
   keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
   keyScanner_encoderBasic_initialize(encoderConfigs, 1);
   keyboardMain_setKeyIndexTable(keyIndexTable);

@@ -10,6 +10,9 @@ CORE_NAME = $(notdir $(PROJECT))_$(VARIATION)
 
 MODULE_SRCS =
 PROJECT_SRCS =
+MODULE_ASM_SRCS =
+PROJECT_ASM_SRCS =
+
 RULES_MK = $(PROJECT_CODE_DIR)/rules.mk
 -include $(RULES_MK)
 
@@ -26,9 +29,6 @@ MAP = $(OUT_DIR)/$(CORE_NAME).map
 INC_PATHS =
 INC_PATHS += -Isrc/modules
 INC_PATHS += -I$(PROJECT_CODE_DIR)
-
-MODULE_ASM_SRCS =
-PROJECT_ASM_SRCS =
 
 CFLAGS =
 ASFLAGS =
@@ -65,7 +65,7 @@ CFLAGS += -DKERMITE_TARGET_MCU_ATMEGA
 
 ASFLAGS += -gstabs 
 ASFLAGS += -mmcu=atmega32u4
-ASFLAGS += -Isrc
+ASFLAGS += $(INC_PATHS)
 ASFLAGS += -x assembler-with-cpp
 
 LDFLAGS += -mmcu=atmega32u4
@@ -73,10 +73,10 @@ LDFLAGS += -Os
 LDFLAGS += -g
 LDFLAGS += -Wall
 LDFLAGS += -Wl,-Map=$(MAP),--cref
-LDFLAGS += -Wl,--print-memory-usage
-LDFLAGS += -Wl,--cref,--defsym=__TEXT_REGION_LENGTH__=32768
-LDFLAGS += -Wl,--cref,--defsym=__DATA_REGION_LENGTH__=2560
-LDFLAGS += -Wl,--cref,--defsym=__EEPROM_REGION_LENGTH__=1024
+# LDFLAGS += -Wl,--print-memory-usage
+# LDFLAGS += -Wl,--cref,--defsym=__TEXT_REGION_LENGTH__=32768
+# LDFLAGS += -Wl,--cref,--defsym=__DATA_REGION_LENGTH__=2560
+# LDFLAGS += -Wl,--cref,--defsym=__EEPROM_REGION_LENGTH__=1024
 
 
 all: build
@@ -91,12 +91,13 @@ $(OBJ_DIR)/%.o: %.c
 $(OBJ_DIR)/%.o: %.S
 	@echo compiling $<
 	@"mkdir" -p $(dir $@)
-	$(CC) -c $(ASFLAGS) $< -o $@
+	@$(CC) -c $(ASFLAGS) $< -o $@
 
 $(ELF): $(OBJS)
 	@echo linking
 	@"mkdir" -p $(dir $@)
 	@$(CC) $(LDFLAGS) -o $(ELF) $(OBJS)
+	$(OBJSIZE) -C --mcu=atmega32u4 $(ELF)
 
 $(HEX) : $(ELF)
 	@$(OBJCOPY) -O ihex $(ELF) $(HEX)

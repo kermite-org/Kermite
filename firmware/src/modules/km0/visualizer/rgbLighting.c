@@ -1,22 +1,28 @@
 
 #include "rgbLighting.h"
+#include "config.h"
 #include "km0/base/utils.h"
 #include "km0/device/serialLed.h"
+#include "km0/device/system.h"
 #include "km0/kernel/commandDefinitions.h"
 #include "km0/kernel/configManager.h"
+
+#ifndef KM0_RGB_LIGHTING__NUM_LEDS
+#error KM0_RGB_LIGHTING__NUM_LEDS is not defined
+#endif
+
+#define NumLeds KM0_RGB_LIGHTING__NUM_LEDS
 
 //----------------------------------------------------------------------
 
 static bool glowEnabled = false;
 static uint8_t glowColor = 0;
 static uint8_t glowBrightness = 0;
-static uint8_t numLeds = 0;
-
 static uint32_t frameTick = 0;
 
 #define NumTableColors 13
 
-static uint32_t commonColorTable[NumTableColors] = {
+__flash static const uint32_t commonColorTable[NumTableColors] = {
   0xFF0000,
   0xFF4400,
   0xFFFF00,
@@ -37,9 +43,9 @@ static uint32_t getCurrentColor() {
   return commonColorTable[colorIndex];
 }
 
-static uint32_t pseudoRandom() {
-  static uint32_t val = 345234;
-  val = (51345613 * val) + 11;
+static uint16_t pseudoRandom() {
+  static uint16_t val = 3459;
+  val = (5613 * val) + 17;
   return val;
 }
 
@@ -47,14 +53,14 @@ static uint32_t pseudoRandom() {
 #define getG(x) ((x) >> 8 & 0xFF)
 #define getB(x) ((x)&0xFF)
 
-static uint8_t lerpElement(uint8_t e0, uint8_t e1, float p) {
-  return (uint8_t)((1.0f - p) * e0 + p * e1);
+static uint8_t lerpElement(uint8_t e0, uint8_t e1, uint8_t m) {
+  return ((255 - m) * (uint16_t)e0 + m * (uint16_t)e1) >> 8;
 }
 
-static uint32_t lerpColor(uint32_t col0, uint32_t col1, float p) {
-  uint8_t rr = lerpElement(getR(col0), getR(col1), p);
-  uint8_t gg = lerpElement(getG(col0), getG(col1), p);
-  uint8_t bb = lerpElement(getB(col0), getB(col1), p);
+static uint32_t lerpColor(uint32_t col0, uint32_t col1, uint8_t m) {
+  uint8_t rr = lerpElement(getR(col0), getR(col1), m);
+  uint8_t gg = lerpElement(getG(col0), getG(col1), m);
+  uint8_t bb = lerpElement(getB(col0), getB(col1), m);
   return (uint32_t)rr << 16 | (uint32_t)gg << 8 | bb;
 }
 
@@ -69,65 +75,76 @@ static uint32_t shiftRgb(uint32_t col, uint8_t shift) {
 
 //----------------------------------------------------------------------
 //blank output
+
 static void scene_fallbackBlank_updateFrame() {
-  for (int i = 0; i < numLeds; i++) {
+  system_disableInterrupts();
+  for (int i = 0; i < NumLeds; i++) {
     serialLed_putPixel(0);
   }
+  system_enableInterrupts();
 }
 
 //----------------------------------------------------------------------
-//scene 0
+//scene 0, fixed lighting
 
 static void scene0_updateFrame() {
   uint32_t color = getCurrentColor();
-  for (int i = 0; i < numLeds; i++) {
+  system_disableInterrupts();
+  for (int i = 0; i < NumLeds; i++) {
     serialLed_putPixelWithAlpha(color, glowBrightness);
   }
+  system_enableInterrupts();
 }
 
 //----------------------------------------------------------------------
-//scene 1
+//scene 1, breathing
 
 static void scene1_updateFrame() {
   uint32_t color = getCurrentColor();
   int p = (frameTick << 3) & 0x1FF;
   int p2 = (p > 0x100) ? 0x200 - p : p;
   int bri = p2 * glowBrightness >> 8;
-  for (int i = 0; i < numLeds; i++) {
+  system_disableInterrupts();
+  for (int i = 0; i < NumLeds; i++) {
     serialLed_putPixelWithAlpha(color, bri);
   }
+  system_enableInterrupts();
 }
 
 //----------------------------------------------------------------------
-//scene 2
+//scene 2, snake
 
 static void scene2_updateFrame() {
   uint32_t color = getCurrentColor();
-  int n = numLeds;
+  int n = NumLeds;
   int p = (frameTick >> 1) % (n * 2);
   int activeIndex = (p > n) ? (2 * n - p) : p;
-  for (int i = 0; i < numLeds; i++) {
+  system_disableInterrupts();
+  for (int i = 0; i < NumLeds; i++) {
     serialLed_putPixelWithAlpha(i == activeIndex ? color : 0, glowBrightness);
   }
+  system_enableInterrupts();
 }
 
 //----------------------------------------------------------------------
-//scene 3
+//scene 3, party
 
 static void scene3_updateFrame() {
   if (frameTick % 20 == 0) {
-    for (int i = 0; i < numLeds; i++) {
-      int colorIndex = pseudoRandom() % NumTableColors;
+    system_disableInterrupts();
+    for (int i = 0; i < NumLeds; i++) {
+      int colorIndex = (uint8_t)(pseudoRandom() & 0xFF) % NumTableColors;
       uint32_t color = commonColorTable[colorIndex];
       serialLed_putPixelWithAlpha(color, glowBrightness);
     }
+    system_enableInterrupts();
   }
 }
 
 //----------------------------------------------------------------------
-//scene 4
+//scene 4, gradation color transition
 
-static const uint32_t scene4_period = 25 * 6;
+static const uint32_t scene4_period = 150;
 
 static void scene4_updateFrame() {
   float phase = (float)(frameTick % scene4_period) / scene4_period; //0~1
@@ -141,34 +158,42 @@ static void scene4_updateFrame() {
 
   float phase2 = phase * 3.0f;
   uint32_t col0, col1;
-  float p = phase2;
-  if (p < 1.0f) {
+  float _p = phase2;
+  if (_p < 1.0f) {
     col0 = colorA;
     col1 = colorB;
-  } else if (p < 2.0f) {
-    p -= 1.0f;
+  } else if (_p < 2.0f) {
+    _p -= 1.0f;
     col0 = colorB;
     col1 = colorC;
   } else {
-    p -= 2.0f;
+    _p -= 2.0f;
     col0 = colorC;
     col1 = colorA;
   }
 
-  for (int i = 0; i < numLeds; i++) {
-    float q = ((float)i / numLeds);
-    float p2 = 3.0f * p - q * 2.0f;
-    // float p2 = 1.5f * p - q * 0.5f;
-    uint32_t color = lerpColor(col0, col1, utils_clamp(p2, 0.0f, 1.0f));
+  //_p: 0~1
+  uint8_t p = (uint8_t)(_p * 256); //0~255
+  uint16_t _divNumLeds = 65536 / NumLeds;
+  system_disableInterrupts();
+  for (uint8_t i = 0; i < NumLeds; i++) {
+    // float q = (float)i * _divNumLeds;
+    // float p2 = 3.0f * _p - q * 2.0f;
+    // flot m = utils_clamp(p2, 0.0f, 1.0f);
+    uint16_t q = i * _divNumLeds >> 8; //0~255
+    int16_t p2 = 3 * (int16_t)p - (int16_t)q * 2;
+    uint8_t m = utils_clamp(p2, 0, 255);
+    uint32_t color = lerpColor(col0, col1, m);
     serialLed_putPixelWithAlpha(color, glowBrightness);
   }
+  system_enableInterrupts();
 }
 
 //----------------------------------------------------------------------
 
 typedef void (*SceneFunc)(void);
 
-SceneFunc sceneFuncs[] = {
+__flash static const SceneFunc sceneFuncs[] = {
   scene0_updateFrame,
   scene1_updateFrame,
   scene2_updateFrame,
@@ -201,12 +226,11 @@ static void updateFrame() {
   }
 }
 
-void rgbLighting_initialize(uint8_t _pin, uint8_t _numLeds) {
+void rgbLighting_initialize() {
   configManager_overrideParameterMaxValue(SystemParameter_GlowColor, 12);
   configManager_overrideParameterMaxValue(SystemParameter_GlowPattern, 4);
   configManager_addParameterChangeListener(parameterChangeHandler);
-  serialLed_initialize(_pin);
-  numLeds = _numLeds;
+  serialLed_initialize();
 }
 
 void rgbLighting_update() {

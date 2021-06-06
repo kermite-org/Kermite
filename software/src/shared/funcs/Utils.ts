@@ -355,3 +355,12 @@ export function convertNullToUndefinedRecursive(src: any): any {
     return src;
   }
 }
+
+export function uniqueArrayItems<T>(arr: T[]): T[] {
+  return arr.filter((a, idx) => arr.indexOf(a) === idx);
+}
+
+export function bumpObjectProps<T extends {}>(obj: T, source: T) {
+  getObjectKeys(obj).forEach((key) => obj[key]);
+  getObjectKeys(source).forEach((key) => (obj[key] = source[key]));
+}

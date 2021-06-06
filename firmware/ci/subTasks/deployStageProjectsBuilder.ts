@@ -5,7 +5,6 @@ import {
   fsExistsSync,
   fsReaddirSync,
   fsStatSync,
-  fsxCopyDirectory,
   fsxMakeDirectory,
   fsxReadJsonFile,
   fsxReadTextFile,
@@ -376,19 +375,28 @@ function buildProjectVariationEntry(
   }
 }
 
+function copyFilesInFolder(srcDir: string, destDir: string, extension: string) {
+  const targetFiles = fsReaddirSync(srcDir).filter((fileName) =>
+    fileName.endsWith(extension)
+  );
+  targetFiles.forEach((fileName) =>
+    fsCopyFileSync(`${srcDir}/${fileName}`, `${destDir}/${fileName}`)
+  );
+}
+
 function copyProjectDataResources(projectPath: string) {
   const srcDir = `./src/projects/${projectPath}`;
   const destDir = `./dist/variants/${projectPath}`;
 
   fsCopyFileSync(`${srcDir}/project.json`, `${destDir}/project.json`);
-  const layoutFileNames = fsReaddirSync(srcDir).filter((fileName) =>
-    fileName.endsWith(".layout.json")
-  );
-  layoutFileNames.forEach((fileName) =>
-    fsCopyFileSync(`${srcDir}/${fileName}`, `${destDir}/${fileName}`)
-  );
-  if (fsExistsSync(`${srcDir}/profiles`)) {
-    fsxCopyDirectory(`${srcDir}/profiles`, `${destDir}/profiles`);
+
+  copyFilesInFolder(srcDir, destDir, ".profile.json");
+  copyFilesInFolder(srcDir, destDir, ".layout.json");
+
+  const srcDataDir = pathJoin(srcDir, "__data");
+  if (fsExistsSync(srcDataDir)) {
+    copyFilesInFolder(srcDataDir, destDir, ".profile.json");
+    copyFilesInFolder(srcDataDir, destDir, ".layout.json");
   }
 }
 

@@ -3,16 +3,22 @@
 #include "km0/base/configImport.h"
 #include "km0/base/utils.h"
 #include "km0/device/digitalIo.h"
+#include <stdio.h>
 
 #ifndef KM0_ENCODER_SCANNER__NUM_ENCODERS_MAX
 #define KM0_ENCODER_SCANNER__NUM_ENCODERS_MAX 4
+#endif
+
+#ifdef KM0_ENCODER_SCANNER__USE_FULL_STEP_DECODER
+static const bool useFullStepDecoder = true;
+#else
+static const bool useFullStepDecoder = false;
 #endif
 
 #define NumEncodersMax KM0_ENCODER_SCANNER__NUM_ENCODERS_MAX
 
 typedef struct {
   uint8_t bin : 2;
-  int8_t dir : 2;
   bool holdA : 1;
   bool holdB : 1;
 } EncoderState;
@@ -23,29 +29,36 @@ static EncoderState encoderStates[NumEncodersMax];
 
 static const int err = 2;
 
-static const int encoder_count_delta_table[16] = {
-  0, -1, 1, err, 1, 0, err, -1, -1, err, 0, 1, err, 1, -1, 0
+__flash static const int8_t encoder_count_delta_table[16] = {
+  0, 1, -1, err,
+  -1, 0, err, 1,
+  1, err, 0, -1,
+  err, -1, 1, 0
 };
 
 static void updateEncoderInstance(EncoderConfig *config, EncoderState *state) {
 
-  int a = digitalIo_read(config->pin1) == 0 ? 1 : 0;
-  int b = digitalIo_read(config->pin2) == 0 ? 1 : 0;
-
+  int a = digitalIo_read(config->pinA) == 0 ? 1 : 0;
+  int b = digitalIo_read(config->pinB) == 0 ? 1 : 0;
+  int delta = 0;
   int prev_bin = state->bin;
-  state->bin = ((a << 1) | b) & 0b11;
+  int bin = ((b << 1) | a);
 
-  int table_index = ((prev_bin << 2) | state->bin) & 0x0F;
-  int delta = encoder_count_delta_table[table_index];
-
-  if (delta == err) {
-    // delta = (dir)*2;
-    delta = state->dir;
-    // delta = 0;
+  if (useFullStepDecoder) {
+    //ノンクリックタイプのエンコーダ
+    int table_index = (prev_bin << 2) | bin;
+    delta = encoder_count_delta_table[table_index];
   } else {
-    state->dir = delta;
+    //クリックタイプのエンコーダ, クリック安定点でB相の出力が不定のものの対応
+    //EC12E2420801
+    //A相の立ち上がりでB相を見て回転方向を判定する
+    int prev_a = prev_bin & 1;
+    if (!prev_a && a) {
+      delta = b ? -1 : 1;
+    }
   }
 
+  state->bin = bin;
   state->holdA = delta == -1;
   state->holdB = delta == 1;
 }
@@ -55,8 +68,8 @@ void keyScanner_encoderBasic_initialize(EncoderConfig *_encoderConfigs, uint8_t 
   encoderConfigs = _encoderConfigs;
   for (int i = 0; i < numEncoders; i++) {
     EncoderConfig *config = &encoderConfigs[i];
-    digitalIo_setInputPullup(config->pin1);
-    digitalIo_setInputPullup(config->pin2);
+    digitalIo_setInputPullup(config->pinA);
+    digitalIo_setInputPullup(config->pinB);
   }
 }
 

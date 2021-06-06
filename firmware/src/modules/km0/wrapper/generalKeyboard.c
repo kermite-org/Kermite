@@ -1,11 +1,13 @@
 #include "generalKeyboard.h"
 #include "km0/device/system.h"
+#include "km0/device/usbIoCore.h"
 #include "km0/kernel/keyboardMainInternal.h"
 #include <stdio.h>
 
 void generalKeyboard_start() {
   system_initializeUserProgram();
   keyboardMain_initialize();
+  usbIoCore_initialize();
   system_enableInterrupts();
 
   uint32_t tick = 0;

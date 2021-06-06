@@ -7,6 +7,7 @@ export type PagePaths =
   | '/shapePreview'
   | '/firmwareUpdation'
   | '/presetBrowser'
+  | '/presetBrowser2'
   | '/heatmap'
   | '/settings'
   | '/widget';
@@ -17,6 +18,7 @@ export interface IUiSettings {
   showLayerDefaultAssign: boolean;
   siteDpiScale: number;
   showGlobalHint: boolean;
+  integrateUserPresetHub: boolean;
 }
 
 const defaultUiSettings: IUiSettings = {
@@ -25,6 +27,7 @@ const defaultUiSettings: IUiSettings = {
   showLayerDefaultAssign: false,
   siteDpiScale: 1.0,
   showGlobalHint: true,
+  integrateUserPresetHub: false,
 };
 
 export interface IUiStatus {

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/require-await */
+import { shell } from 'electron';
 import { getAppErrorData, IPresetSpec, makeCompactStackTrace } from '~/shared';
 import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
@@ -14,6 +15,7 @@ import { KeyboardLayoutFilesWatcher } from '~/shell/services/layout/KeyboardLayo
 import { LayoutManager } from '~/shell/services/layout/LayoutManager';
 import { PresetProfileLoader } from '~/shell/services/profile/PresetProfileLoader';
 import { ProfileManager } from '~/shell/services/profile/ProfileManager';
+import { UserPresetHubService } from '~/shell/services/userPresetHub/UserPresetHubService';
 import { AppWindowWrapper } from '~/shell/services/window';
 
 export class ApplicationRoot {
@@ -41,6 +43,8 @@ export class ApplicationRoot {
   );
 
   private windowWrapper = new AppWindowWrapper(this.profileManager);
+
+  private presetHubService = new UserPresetHubService();
 
   // ------------------------------------------------------------
 
@@ -119,6 +123,10 @@ export class ApplicationRoot {
           profileId,
           presetSpec,
         ),
+      presetHub_getServerProjectIds: () =>
+        this.presetHubService.getServerProjectIds(),
+      presetHub_getServerProfiles: (projectId: string) =>
+        this.presetHubService.getServerProfiles(projectId),
       config_getKeyboardConfig: async () =>
         this.keyboardConfigProvider.getKeyboardConfig(),
       config_writeKeyboardConfig: async (config) =>
@@ -152,6 +160,8 @@ export class ApplicationRoot {
         JsonFileServiceStatic.saveObjectToJsonWithFileDialog,
       file_getOpenDirectoryWithDialog:
         JsonFileServiceStatic.getOpeningDirectoryPathWithDialog,
+
+      platform_openUrlInDefaultBrowser: (path) => shell.openExternal(path),
       global_triggerLazyInitializeServices: async () =>
         this.lazyInitialzeServices(),
     });

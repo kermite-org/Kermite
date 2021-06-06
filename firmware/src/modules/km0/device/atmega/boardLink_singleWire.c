@@ -1,5 +1,5 @@
-#include "config.h"
 #include "km0/base/bitOperations.h"
+#include "km0/base/configImport.h"
 #include "km0/base/utils.h"
 #include "km0/device/boardLink.h"
 #include "km0/device/digitalIo.h"
@@ -69,9 +69,9 @@ static inline uint8_t signalPin_read() {
 
 #ifdef KM0_ATMEGA_SINGLEWIRE__ENABLE_TIMING_DEBUG_PINS
 
-#define pinDebug P_F4
+#define pinDebug P_F5
 #define pinDebug_PORT PORTF
-#define pinDebug_Bit 4
+#define pinDebug_Bit 5
 
 static void debug_initTimeDebugPin() {
   digitalIo_setOutput(pinDebug);

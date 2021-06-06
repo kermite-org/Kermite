@@ -1,14 +1,14 @@
 import { jsx, css } from 'qx';
 import { uiTheme, uiStatusModel } from '~/ui/common';
-import { BehaviorOptionsPartA } from '~/ui/editor-page/editorMainPart/views/BehaviorOptionsPartA';
-import { ProfileConfigurationPart } from '~/ui/editor-page/editorMainPart/views/ProfileConfigurationPart';
-import { editorPageModel } from '~/ui/editor-page/editorPageModel';
-import { ActionRoutingPanel } from '~/ui/editor-page/routingPanel/ActionRoutingPanel';
-import { KeyboardSection } from './editorMainPart/KeyboardSection';
-import { BehaviorOptionsPartB } from './editorMainPart/views/BehaviorOptionsPartB';
-import { AssignEditSection } from './editorMainPart/views/assignEditSection';
-import { LayersSection } from './editorMainPart/views/layersSection';
-import { TestInputArea } from './testInputArea/TestInputArea';
+import { editorPageModel } from '~/ui/editor-page/models/editorPageModel';
+import { BehaviorOptionsPartA } from '~/ui/editor-page/ui_editor_sideConfigPart/BehaviorOptionsPartA';
+import { BehaviorOptionsPartB } from '~/ui/editor-page/ui_editor_sideConfigPart/BehaviorOptionsPartB';
+import { ProfileConfigurationPart } from '~/ui/editor-page/ui_editor_sideConfigPart/ProfileConfigurationPart';
+import { ActionRoutingPanel } from '~/ui/editor-page/ui_modal_routingPanel/ActionRoutingPanel';
+import { TestInputArea } from './ui_bar_testInputArea/TestInputArea';
+import { AssignEditSection } from './ui_editor_assignsSection';
+import { KeyboardSection } from './ui_editor_keyboardSection/KeyboardSection';
+import { LayersSection } from './ui_editor_layerManagement';
 
 const localStyleConstants = {
   editorPartMargin: '4px',

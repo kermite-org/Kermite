@@ -42,8 +42,7 @@ src
   │   ├── main.c
   │   └── rules.mk
   ├── default.layout.json
-  ├── profiles
-  │   └── profile1.json
+  ├── default.profile.json
   └── project.json
 </pre>
 
@@ -55,8 +54,8 @@ keyboard1がプロジェクト名です。プロジェクトは複数のファ�
 | config.h | ファームウェア内で参照する値を定義します。 |
 | main.c | プログラムのエントリポイントです。 | 
 | rules.mk | ビルド時に親のMakefileから呼ばれます。 | 
-| layout.json | キーの配置とキーボードの外形を定義します。 |
-| profiles | プリセットプロファイルをここに格納します。 | 
+| *.layout.json | キーの配置とキーボードの外形を定義します。 |
+| *.profile.json | プリセットプロファイルです。 | 
 | project.json | プロジェクト固有の情報を記述します。 | 
 
 (※) レイアウトやプリセットのJSONは、ユーティリティソフトを使って作成できます。

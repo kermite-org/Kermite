@@ -29,8 +29,9 @@ void keyActionRemapper_setupDataReader() {
 }
 
 uint16_t keyActionRemapper_translateKeyOperation(uint16_t opWord, uint8_t routingChannel) {
-  uint8_t logicalKey = opWord & 0x7f;
-  uint8_t modifiers = (opWord >> 8) & 0b1111;
+  uint16_t wordBase = opWord & 0xf000;
+  uint8_t modifiers = (opWord >> 8) & 0x0f;
+  uint8_t logicalKey = opWord & 0xff;
 
   for (uint8_t i = 0; i < local.numItems; i++) {
     uint16_t addrItem = local.addrItems + i * 5;
@@ -61,5 +62,5 @@ uint16_t keyActionRemapper_translateKeyOperation(uint16_t opWord, uint8_t routin
     }
   }
 
-  return (modifiers << 8) | logicalKey;
+  return wordBase | (modifiers << 8) | logicalKey;
 }

@@ -7,4 +7,6 @@
 
 #define KM0_ATMEGA_SINGLEWIRE__PIN_SIGNAL_PD0
 
+#define KM0_RGB_LIGHTING__NUM_LEDS 40
+
 #endif

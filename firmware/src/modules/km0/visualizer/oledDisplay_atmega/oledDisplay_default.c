@@ -1,30 +1,23 @@
-#include "config.h"
-#include "km0/base/bitOperations.h"
-#include "km0/base/romData.h"
-#include "km0/base/utils.h"
-#include "km0/device/boardI2c.h"
-#include "km0/device/boardIo.h"
-#include "km0/device/system.h"
+#include "km0/base/configImport.h"
 #include "km0/kernel/keyboardMainInternal.h"
 #include "km0/visualizer/oledDisplay.h"
 #include "oledCore.h"
 #include <stdio.h>
-#include <string.h>
 
 #ifdef KM0_OLED_DISPLAY__NO_DEFAULT_LOGO
-static const uint32_t *mainLogoData = NULL;
+static __flash const uint32_t *mainLogoData = NULL;
 #else
 #include "km0/visualizer/oledLogoData.h"
-static const uint32_t *mainLogoData = oledLogoDataKermite;
+static __flash const uint32_t *mainLogoData = oledLogoDataKermite;
 #endif
 
 #ifdef KM0_OLED_DISPLAY__NO_DEFAULT_FONT
-const uint8_t *mainFontData = NULL;
+__flash const uint8_t *mainFontData = NULL;
 uint8_t mainFontWidth = 0;
 uint8_t mainFontLetterSpacing = 0;
 #else
 #include "km0/visualizer/oledFontData.h"
-const uint8_t *mainFontData = oledFontData;
+__flash const uint8_t *mainFontData = oledFontData;
 uint8_t mainFontWidth = oledFontWidth;
 uint8_t mainFontLetterSpacing = oledFontLetterSpacing;
 #endif
@@ -45,13 +38,14 @@ static char strbuf[8];
 
 #define pm(x) (x > 0 ? '+' : '-')
 
+static const int SplashTickEnd = 60;
+static uint8_t frameCount = 0;
+static uint8_t splashTick = 0;
+
 static void renderStatusView() {
   if (!mainFontData) {
-    oledCore_clear();
     return;
   }
-
-  oledCore_clearTexts();
 
   oledCore_putText(0, 0, "Status");
 
@@ -78,11 +72,11 @@ static void renderStatusView() {
     sprintf(strbuf, "M:%x", m);
     oledCore_putText(3, 13, strbuf);
   } else {
-    sprintf(strbuf, "KI:");
+    sprintf(strbuf, "KI:  ");
     oledCore_putText(3, 0, strbuf);
-    sprintf(strbuf, "KC:");
+    sprintf(strbuf, "KC:  ");
     oledCore_putText(3, 6, strbuf);
-    sprintf(strbuf, "M:");
+    sprintf(strbuf, "M:  ");
     oledCore_putText(3, 13, strbuf);
   }
 
@@ -91,24 +85,49 @@ static void renderStatusView() {
   sprintf(strbuf, "L:%x", lsf);
   oledCore_putText(3, 18, strbuf);
 
-  oledCore_drawFullTexts();
+  //debug
+  // sprintf(strbuf, "%d", frameCount);
+  // oledCore_putText(0, 8, strbuf);
+
+  oledCore_renderFullTexts();
+
+  frameCount++;
+}
+
+static void renderMainLogo() {
+  if (mainLogoData) {
+    oledCore_renderFullImage(mainLogoData);
+  } else {
+    oledCore_renderClear();
+  }
+}
+
+static void updateFrame() {
+  if (splashTick == 0) {
+    renderMainLogo();
+    splashTick++;
+    return;
+  }
+  bool isMaster = !keyboardMain_exposedState.isSplitSlave;
+  if (isMaster) {
+    if (splashTick < SplashTickEnd) {
+      splashTick++;
+    } else if (splashTick == SplashTickEnd) {
+      oledCore_renderClear();
+      splashTick++;
+    } else {
+      renderStatusView();
+    }
+  }
 }
 
 //----------------------------------------------------------------------
 
-static void renderMainLogo() {
-  if (mainLogoData) {
-    oledCore_drawFullImage(mainLogoData);
-  } else {
-    oledCore_clear();
-  }
-}
-
-void oledDisplay_setCustomLogo(const uint32_t *logoData) {
+void oledDisplay_setCustomLogo(__flash const uint32_t *logoData) {
   mainLogoData = logoData;
 }
 
-void oledDisplay_setCustomFont(const uint8_t *fontData, uint8_t fontWidth, uint8_t fontLetterSpacing) {
+void oledDisplay_setCustomFont(__flash const uint8_t *fontData, uint8_t fontWidth, uint8_t fontLetterSpacing) {
   mainFontData = fontData;
   mainFontWidth = fontWidth;
   mainFontLetterSpacing = fontLetterSpacing;
@@ -117,20 +136,6 @@ void oledDisplay_setCustomFont(const uint8_t *fontData, uint8_t fontWidth, uint8
 void oledDisplay_initialize() {
   oledCore_initialize();
   oledCore_setFontData(mainFontData, mainFontWidth, mainFontLetterSpacing);
-}
-
-static void updateFrame() {
-  static int cnt = 60;
-  if (cnt > 0) {
-    cnt--;
-  }
-  bool bootComplete = cnt == 0;
-  bool isMaster = !keyboardMain_exposedState.isSplitSlave;
-  if (bootComplete && isMaster) {
-    renderStatusView();
-  } else {
-    renderMainLogo();
-  }
 }
 
 void oledDisplay_update() {

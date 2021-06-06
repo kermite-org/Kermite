@@ -71,12 +71,12 @@ noOperation
 TT: type, 0b00 for no operation
 
 keyInput (logicalKey)
-0bTTxS_MMMM 0bxKKK_KKKK
+0bTTxS_MMMM 0bKKKK_KKKK
 0b01~
 TT: type, 0b01 for keyInput
 S: isShiftLayer
 MMMM: modifiers, [os, alt, shift, ctrl] for msb-lsb
-KKK_KKKK: logical keycode
+KKKK_KKKK: logical keycode
 
 layerCall
 0bTTxx_LLLL 0bIIII_xxxx

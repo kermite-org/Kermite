@@ -19,7 +19,7 @@ static const T_SystemParametersSet systemParametersDefault = {
   .keyHoldLedOutput = true,
   .heartbeatLedOutput = true,
   .masterSide = 0,
-  .systemLayout = 2,
+  .systemLayout = 1,
   .wiringMode = 0,
   .glowActive = false,
   .glowColor = 0,
@@ -29,7 +29,7 @@ static const T_SystemParametersSet systemParametersDefault = {
   .glowSpeed = 4,
 };
 
-static T_SystemParametersSet systemParameterMaxValues = {
+static const T_SystemParametersSet systemParameterMaxValues = {
   .emitKeyStroke = 1,
   .emitRealtimeEvents = 1,
   .keyHoldLedOutput = 1,
@@ -186,4 +186,8 @@ void configManager_processUpdate() {
       }
     }
   }
+}
+
+uint8_t *configManager_getParameterValuesRawPointer() {
+  return systemParameterValues;
 }
