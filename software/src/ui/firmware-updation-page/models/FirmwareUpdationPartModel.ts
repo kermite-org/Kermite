@@ -11,6 +11,7 @@ interface IFirmwareUpdationPartModel {
   detectedDeviceSig: string | undefined;
   canSelectTargetFirmware: boolean;
   projectSelectorSource: ISelectorSource;
+  canFlashSelectedFirmwareToDetectedDevice: boolean;
   onWriteButton(): void;
   onResetButton(): void;
   onLogButton(): void;
@@ -27,6 +28,9 @@ export function useFirmwareUpdationPartModel(): IFirmwareUpdationPartModel {
       options: model.projectOptions,
       value: model.currentProjectFirmwareSpec,
       setValue: model.setCurrentProjectFirmwareSpec,
+    },
+    get canFlashSelectedFirmwareToDetectedDevice() {
+      return model.canFlashSelectedFirmwareToDetectedDevice;
     },
     onWriteButton() {
       model.uploadFirmware();
