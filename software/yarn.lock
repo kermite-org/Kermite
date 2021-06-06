@@ -293,10 +293,15 @@
   dependencies:
     "@types/node" "*"
 
-"@types/node@*", "@types/node@^14.6.2":
+"@types/node@*":
   version "14.14.37"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.37.tgz#a3dd8da4eb84a996c36e331df98d82abd76b516e"
   integrity sha512-XYmBiy+ohOR4Lh5jE379fV2IU+6Jn4g5qASinhitfyO71b/sCo6MKsMLF5tc7Zf2CE8hViVQyYSobJNke8OvUw==
+
+"@types/node@^12.0.12":
+  version "12.20.14"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.20.14.tgz#9caf7eea0df08b406829889cc015256a6d81ab10"
+  integrity sha512-iFJOS5Q470FF+r4Ol2pSley7/wCNVqf+jgjhtxLLaJcDs+To2iCxlXIkJXrGLD9w9G/oJ9ibySu7z92DCwr7Pg==
 
 "@types/plist@^3.0.1":
   version "3.0.2"
@@ -1399,13 +1404,13 @@ electron-rebuild@^2.3.5:
     tar "^6.0.5"
     yargs "^16.0.0"
 
-electron@12.0.2:
-  version "12.0.2"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-12.0.2.tgz#d92be205f1937627bd6718aad44ac161382b4c2d"
-  integrity sha512-14luh9mGzfL4e0sncyy0+kW37IU7Y0Y1tvI97FDRSW0ZBQxi5cmAwSs5dmPmNBFBIGtzkaGaEB01j9RjZuCmow==
+electron@11.0.0:
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-11.0.0.tgz#e4966d358832e47189069444799e3b72224e37d9"
+  integrity sha512-bbT6vmc04I0+cuG5e26+2rAOQYLH90Exf11a+NpGCSMTXsSjSpSZdjWGffWRIowOJzSwcSk8EHdCKdeet1rz9A==
   dependencies:
     "@electron/get" "^1.0.1"
-    "@types/node" "^14.6.2"
+    "@types/node" "^12.0.12"
     extract-zip "^1.0.3"
 
 emoji-regex@^7.0.1:
