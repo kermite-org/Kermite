@@ -351,7 +351,7 @@ bool usbIoCore_genericHid_readDataIfExists(uint8_t *pDataBytes64) {
 }
 
 uint8_t *usbioCore_getSerialNumberTextBufferPointer() {
-  return altSerialNumberTextBuf
+  return altSerialNumberTextBuf;
 }
 
 bool usbIoCore_isConnectedToHost() {
