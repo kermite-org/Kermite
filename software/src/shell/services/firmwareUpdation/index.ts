@@ -8,7 +8,7 @@ import { appEnv } from '~/shell/base';
 import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { createEventPort } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
-import { FirmwareUpdationSchemeAtMega } from '~/shell/services/firmwareUpdation/flashSchemeAtMega/FlashSchemeAtMega';
+import { FirmwareUpdationSchemeAtMegaCaterina } from '~/shell/services/firmwareUpdation/flashSchemeAtMegaCaterina/FlashSchemeAtMegaCaterina';
 import { FirmwareUpdationSchemeRp_Mac } from '~/shell/services/firmwareUpdation/flashSchemeRp/FlashSchemeRp_Mac';
 import { FirmwareUpdationSchemeRp_Windows } from '~/shell/services/firmwareUpdation/flashSchemeRp/FlashSchemeRp_Windows';
 
@@ -20,7 +20,7 @@ const FirmwareUpdationSchemeRp =
 export class FirmwareUpdationService {
   private timerWrapper = new IntervalTimerWrapper();
 
-  private schemeAtMega = new FirmwareUpdationSchemeAtMega();
+  private schemeAtMegaCaterina = new FirmwareUpdationSchemeAtMegaCaterina();
   private schemeRp = new FirmwareUpdationSchemeRp();
 
   private pluggedAvrCaterinaComPortName: string | undefined;
@@ -48,7 +48,8 @@ export class FirmwareUpdationService {
   }
 
   private updateDetection = async () => {
-    const pluggedComPortName = await this.schemeAtMega.updateDeviceDetection();
+    const pluggedComPortName =
+      await this.schemeAtMegaCaterina.updateDeviceDetection();
     if (this.pluggedAvrCaterinaComPortName !== pluggedComPortName) {
       this.pluggedAvrCaterinaComPortName = pluggedComPortName;
       this.emitDetectionEvent('avrCaterina', pluggedComPortName);
@@ -62,7 +63,7 @@ export class FirmwareUpdationService {
 
   private startDetection() {
     this.pluggedAvrCaterinaComPortName = undefined;
-    this.schemeAtMega.resetDeviceDetectionStatus();
+    this.schemeAtMegaCaterina.resetDeviceDetectionStatus();
     this.timerWrapper.start(
       withAppErrorHandler(
         this.updateDetection,
@@ -96,7 +97,7 @@ export class FirmwareUpdationService {
       if (!this.pluggedAvrCaterinaComPortName) {
         return `target com port unavailable`;
       }
-      return await this.schemeAtMega.flashFirmware(
+      return await this.schemeAtMegaCaterina.flashFirmware(
         this.pluggedAvrCaterinaComPortName,
         binarySpec.filePath,
       );
