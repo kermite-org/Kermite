@@ -1,4 +1,9 @@
-import { IntervalTimerWrapper, IResourceOrigin } from '~/shared';
+import {
+  IBootloaderDeviceDetectionStatus,
+  IBootloaderType,
+  IntervalTimerWrapper,
+  IResourceOrigin,
+} from '~/shared';
 import { appEnv } from '~/shell/base';
 import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { createEventPort } from '~/shell/funcs';
@@ -12,46 +17,51 @@ const FirmwareUpdationSchemeRp =
     ? FirmwareUpdationSchemeRp_Windows
     : FirmwareUpdationSchemeRp_Mac;
 
-interface IDeviceDetectionEvent {
-  comPortName?: string;
-  driveName?: string;
-}
-
 export class FirmwareUpdationService {
   private timerWrapper = new IntervalTimerWrapper();
 
   private schemeAtMega = new FirmwareUpdationSchemeAtMega();
   private schemeRp = new FirmwareUpdationSchemeRp();
-  private pluggedComPortName: string | undefined;
-  private pluggedDriveName: string | undefined;
 
-  deviceDetectionEvents = createEventPort<IDeviceDetectionEvent>({
+  private pluggedAvrCaterinaComPortName: string | undefined;
+  private pluggedRp2040Uf2DriveName: string | undefined;
+
+  deviceDetectionEvents = createEventPort<IBootloaderDeviceDetectionStatus>({
     onFirstSubscriptionStarting: () => this.startDetection(),
     onLastSubscriptionEnded: () => this.stopDetection(),
   });
 
-  private emitDetectionEvent() {
-    this.deviceDetectionEvents.emit({
-      comPortName: this.pluggedComPortName,
-      driveName: this.pluggedDriveName,
-    });
+  private emitDetectionEvent(
+    bootloaderType: IBootloaderType,
+    targetDeviceSig: string | undefined,
+  ) {
+    // console.log({ bootloaderType, targetDeviceSig });
+    if (targetDeviceSig) {
+      this.deviceDetectionEvents.emit({
+        detected: true,
+        bootloaderType,
+        targetDeviceSig,
+      });
+    } else {
+      this.deviceDetectionEvents.emit({ detected: false });
+    }
   }
 
   private updateDetection = async () => {
     const pluggedComPortName = await this.schemeAtMega.updateDeviceDetection();
-    if (this.pluggedComPortName !== pluggedComPortName) {
-      this.pluggedComPortName = pluggedComPortName;
-      this.emitDetectionEvent();
+    if (this.pluggedAvrCaterinaComPortName !== pluggedComPortName) {
+      this.pluggedAvrCaterinaComPortName = pluggedComPortName;
+      this.emitDetectionEvent('avrCaterina', pluggedComPortName);
     }
     const pluggedDriveName = await this.schemeRp.updateDeviceDetection();
-    if (this.pluggedDriveName !== pluggedDriveName) {
-      this.pluggedDriveName = pluggedDriveName;
-      this.emitDetectionEvent();
+    if (this.pluggedRp2040Uf2DriveName !== pluggedDriveName) {
+      this.pluggedRp2040Uf2DriveName = pluggedDriveName;
+      this.emitDetectionEvent('rp2040uf2', pluggedDriveName);
     }
   };
 
   private startDetection() {
-    this.pluggedComPortName = undefined;
+    this.pluggedAvrCaterinaComPortName = undefined;
     this.schemeAtMega.resetDeviceDetectionStatus();
     this.timerWrapper.start(
       withAppErrorHandler(
@@ -83,20 +93,20 @@ export class FirmwareUpdationService {
     }
 
     if (binarySpec.targetDevice === 'atmega32u4') {
-      if (!this.pluggedComPortName) {
+      if (!this.pluggedAvrCaterinaComPortName) {
         return `target com port unavailable`;
       }
       return await this.schemeAtMega.flashFirmware(
-        this.pluggedComPortName,
+        this.pluggedAvrCaterinaComPortName,
         binarySpec.filePath,
       );
     }
     if (binarySpec.targetDevice === 'rp2040') {
-      if (!this.pluggedDriveName) {
+      if (!this.pluggedRp2040Uf2DriveName) {
         return `target drive unavailable`;
       }
       return await this.schemeRp.flashFirmware(
-        this.pluggedDriveName,
+        this.pluggedRp2040Uf2DriveName,
         binarySpec.filePath,
       );
     }
