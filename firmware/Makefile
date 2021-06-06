@@ -28,7 +28,10 @@ endif
 
 
 clean:
-	rm -rf build dist 
+	rm -rf build dist
+
+clean_full:
+	rm -rf build dist
 	rm -rf deps/rp2040/pico_sdk_import/pico_sdk_tools/elf2uf2/build
 	rm -rf deps/rp2040/pico_sdk_import/pico_sdk_tools/pioasm/build
 
