@@ -133,14 +133,15 @@ void oledDisplay_setCustomFont(__flash const uint8_t *fontData, uint8_t fontWidt
   mainFontLetterSpacing = fontLetterSpacing;
 }
 
-void oledDisplay_initialize() {
-  oledCore_initialize();
-  oledCore_setFontData(mainFontData, mainFontWidth, mainFontLetterSpacing);
-}
-
-void oledDisplay_update() {
+static void oledDisplay_update() {
   static uint32_t tick = 0;
   if (++tick % 50 == 0) {
     updateFrame();
   }
+}
+
+void oledDisplay_initialize() {
+  oledCore_initialize();
+  oledCore_setFontData(mainFontData, mainFontWidth, mainFontLetterSpacing);
+  keyboardMain_useVisualModule(oledDisplay_update);
 }

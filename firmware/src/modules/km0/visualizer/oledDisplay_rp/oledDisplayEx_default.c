@@ -113,11 +113,6 @@ void oledDisplay_setCustomFont(const uint8_t *fontData, uint8_t fontWidth, uint8
   mainFontLetterSpacing = fontLetterSpacing;
 }
 
-void oledDisplay_initialize() {
-  oledCoreEx_initialize();
-  oledCoreEx_graphics_setFontData(mainFontData, mainFontWidth, mainFontLetterSpacing);
-}
-
 static void updateFrame() {
   static int cnt = 60;
   if (cnt > 0) {
@@ -132,9 +127,15 @@ static void updateFrame() {
   }
 }
 
-void oledDisplay_update() {
+static void oledDisplay_update() {
   static uint32_t tick = 0;
   if (++tick % 50 == 0) {
     updateFrame();
   }
+}
+
+void oledDisplay_initialize() {
+  oledCoreEx_initialize();
+  oledCoreEx_graphics_setFontData(mainFontData, mainFontWidth, mainFontLetterSpacing);
+  keyboardMain_useVisualModule(oledDisplay_update);
 }

@@ -16,11 +16,9 @@ static const int8_t keyIndexTable[NumScanSlots] = { 0, 1, 2, 3 };
 int main() {
   boardIo_setupLeds_rpiPico();
   oledDisplay_initialize();
-  keyScanner_directWired_initialize(NumScanSlots, keyInputPins);
   debugUart_initialize(115200);
-  keyboardMain_useKeyScanner(keyScanner_directWired_update);
+  keyScanner_directWired_initialize(NumScanSlots, keyInputPins);
   keyboardMain_setKeyIndexTable(keyIndexTable);
-  keyboardMain_useVisualModule(oledDisplay_update);
   generalKeyboard_start();
   return 0;
 }

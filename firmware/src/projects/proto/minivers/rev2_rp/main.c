@@ -34,7 +34,6 @@ int main() {
   debugUart_initialize(115200);
   boardIo_setupLeds_proMicroRp();
   keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
-  keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
   keyboardMain_setKeyIndexTable(keyIndexTable);
   splitKeyboard_start();
   return 0;

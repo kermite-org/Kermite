@@ -19,8 +19,6 @@ int main() {
   boardIo_setupLeds_rpiPico();
   debugUart_initialize(115200);
   keyboardMain_setKeyIndexTable(keyIndexTable);
-  keyboardMain_useKeyScanner(keyScanner_directWired_update);
-  keyboardMain_useVisualModule(rgbLighting_update);
   generalKeyboard_start();
   return 0;
 }

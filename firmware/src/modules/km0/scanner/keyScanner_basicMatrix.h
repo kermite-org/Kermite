@@ -9,6 +9,4 @@ void keyScanner_basicMatrix_initialize(
     const uint8_t *rowPins,
     const uint8_t *columnPins);
 
-void keyScanner_basicMatrix_update(uint8_t *keyStateBitFlags);
-
 #endif

@@ -5,6 +5,4 @@
 
 void keyScanner_directWired_initialize(uint8_t numPins, const uint8_t *pins);
 
-void keyScanner_directWired_update(uint8_t *keyStateBitFlags);
-
 #endif
