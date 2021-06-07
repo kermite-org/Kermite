@@ -138,10 +138,10 @@ static void master_pushMasterStatePacketOne() {
     boardLink_exchangeFramesBlocking();
     uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
 
+    shiftMasterStatePacket();
     if (sz == 1 && sw_rxbuf[0] == SplitOp_SlaveAck) {
-      shiftMasterStatePacket();
     } else {
-      printf("failed to send master state packet, queued:%d\n", masterStatePackets_n);
+      // printf("failed to send master state packet, queued:%d\n", masterStatePackets_n);
     }
   }
 }
