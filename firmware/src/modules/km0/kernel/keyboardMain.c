@@ -306,7 +306,7 @@ void keyboardMain_useKeyScannerExtra(void (*_keyScannerUpdateFunc)(uint8_t *keyS
   extraKeyScannerUpdateFuncs[extraKeyScannersLength++] = _keyScannerUpdateFunc;
 }
 
-void keyboardMain_useDisplayModule(void (*_displayModuleUpdateFunc)(void)) {
+void keyboardMain_useVisualModule(void (*_displayModuleUpdateFunc)(void)) {
   displayUpdateFuncs[displayModulesLength++] = _displayModuleUpdateFunc;
 }
 

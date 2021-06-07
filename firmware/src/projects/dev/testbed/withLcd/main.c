@@ -20,7 +20,7 @@ int main() {
   debugUart_initialize(115200);
   keyboardMain_useKeyScanner(keyScanner_directWired_update);
   keyboardMain_setKeyIndexTable(keyIndexTable);
-  keyboardMain_useDisplayModule(oledDisplay_update);
+  keyboardMain_useVisualModule(oledDisplay_update);
   generalKeyboard_start();
   return 0;
 }

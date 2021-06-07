@@ -43,8 +43,8 @@ int main() {
   keyboardMain_setKeyIndexTable(keyIndexTable);
   keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
   keyboardMain_useKeyScannerExtra(keyScanner_encoderBasic_update);
-  keyboardMain_useDisplayModule(oledDisplay_update);
-  keyboardMain_useDisplayModule(rgbLighting_update);
+  keyboardMain_useVisualModule(oledDisplay_update);
+  keyboardMain_useVisualModule(rgbLighting_update);
   generalKeyboard_start();
   return 0;
 }
