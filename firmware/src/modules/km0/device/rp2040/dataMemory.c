@@ -6,27 +6,13 @@
 
 #define FLASH_TARGET_OFFSET (256 * 1024)
 
+//----------------------------------------------------------------------
+
 static uint8_t ramData[FLASH_SECTOR_SIZE] = { 0 };
 
 static const uint8_t *ptrFlashRomData = (const uint8_t *)(XIP_BASE + FLASH_TARGET_OFFSET);
 
-uint16_t dataMemory_getCapacity() {
-  return FLASH_SECTOR_SIZE;
-}
-
-uint8_t dataMemory_readByte(uint16_t addr) {
-  return ptrFlashRomData[addr];
-}
-
-uint16_t dataMemory_readWord(uint16_t addr) {
-  uint8_t lo = ptrFlashRomData[addr];
-  uint8_t hi = ptrFlashRomData[addr + 1];
-  return (hi << 8) | lo;
-}
-
-void dataMemory_readBytes(uint16_t addr, uint8_t *buf, uint16_t len) {
-  memcpy(buf, ptrFlashRomData + addr, len);
-}
+static uint32_t saveCount = 0;
 
 static void loadRamDataFromFlash() {
   memcpy(ramData, ptrFlashRomData, FLASH_SECTOR_SIZE);
@@ -39,27 +25,64 @@ static void storeRamDataToFlash() {
   restore_interrupts(status);
 }
 
+static void saveLazy() {
+  saveCount = 3000;
+}
+
+static void processSaving() {
+  if (saveCount > 0) {
+    saveCount--;
+    if (saveCount == 0) {
+      storeRamDataToFlash();
+    }
+  }
+}
+
+//----------------------------------------------------------------------
+
+uint16_t dataMemory_getCapacity() {
+  return FLASH_SECTOR_SIZE;
+}
+
+uint8_t dataMemory_readByte(uint16_t addr) {
+  return ramData[addr];
+}
+
+uint16_t dataMemory_readWord(uint16_t addr) {
+  uint8_t lo = ramData[addr];
+  uint8_t hi = ramData[addr + 1];
+  return (hi << 8) | lo;
+}
+
+void dataMemory_readBytes(uint16_t addr, uint8_t *buf, uint16_t len) {
+  memcpy(buf, ramData + addr, len);
+}
+
 void dataMemory_writeByte(uint16_t addr, uint8_t val) {
-  loadRamDataFromFlash();
   ramData[addr] = val;
-  storeRamDataToFlash();
+  saveLazy();
 }
 
 void dataMemory_writeWord(uint16_t addr, uint16_t val) {
-  loadRamDataFromFlash();
   ramData[addr] = val & 0xFF;
   ramData[addr + 1] = (val >> 8) & 0xFF;
-  storeRamDataToFlash();
+  saveLazy();
 }
 
 void dataMemory_writeBytes(uint16_t addr, uint8_t *buf, uint16_t len) {
-  loadRamDataFromFlash();
   memcpy(ramData + addr, buf, len);
-  storeRamDataToFlash();
+  saveLazy();
 }
 
 void dataMemory_clearAllZero() {
-  loadRamDataFromFlash();
   memset(ramData, 0, FLASH_SECTOR_SIZE);
-  storeRamDataToFlash();
+  saveLazy();
+}
+
+void dataMemory_initialize() {
+  loadRamDataFromFlash();
+}
+
+void dataMemory_processTick() {
+  processSaving();
 }

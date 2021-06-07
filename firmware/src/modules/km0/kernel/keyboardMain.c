@@ -10,6 +10,7 @@
 #include "km0/base/bitOperations.h"
 #include "km0/base/utils.h"
 #include "km0/device/boardIo.h"
+#include "km0/device/dataMemory.h"
 #include "km0/device/usbIoCore.h"
 #include "versionDefinitions.h"
 #include <stdio.h>
@@ -323,6 +324,7 @@ uint8_t *keyboardMain_getInputScanSlotFlags() {
 }
 
 void keyboardMain_initialize() {
+  dataMemory_initialize();
   dataStorage_initialize();
   configManager_addParameterChangeListener(parameterValueHandler);
   configManager_initialize();
@@ -368,6 +370,7 @@ void keyboardMain_processUpdate() {
   usbIoCore_processUpdate();
   configuratorServant_processUpdate();
   configManager_processUpdate();
+  dataMemory_processTick();
 }
 
 void keyboardMain_setKeySlotStateChangedCallback(void (*callback)(uint8_t slotIndex, bool isDown)) {

@@ -40,3 +40,7 @@ void dataMemory_clearAllZero() {
     dataMemory_writeByte(i, 0);
   }
 }
+
+void dataMemory_initialize() {}
+
+void dataMemory_processTick() {}
