@@ -35,9 +35,6 @@ int main() {
   oledDisplay_initialize();
   rgbLighting_initialize();
   keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
-  keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
-  keyboardMain_useDisplayModule(oledDisplay_update);
-  keyboardMain_useDisplayModule(rgbLighting_update);
   keyboardMain_setKeyIndexTable(keyIndexTable);
   splitKeyboard_start();
   return 0;
