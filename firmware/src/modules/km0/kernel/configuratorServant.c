@@ -202,9 +202,9 @@ static void processReadGenericHidData() {
           // printf("handle custom parameters signle write\n");
           uint8_t parameterIndex = p[3];
           uint8_t value = p[4];
-          skipNotify = true;
+          // skipNotify = true;
           configManager_writeParameter(parameterIndex, value);
-          skipNotify = false;
+          // skipNotify = false;
         }
 
         if (cmd == 0xb0) {
