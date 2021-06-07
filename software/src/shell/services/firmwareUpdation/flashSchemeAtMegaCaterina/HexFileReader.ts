@@ -103,9 +103,7 @@ function sliceCodeBytesIntoBlocks(bytes: number[], n: number) {
     .map((a) => (a.length < n ? [...a, ...Array(n - a.length).fill(0xff)] : a));
 }
 
-// Hexファイルを読み込み機械語を128バイト毎に区切った2次元配列で返す
-// 末尾ブロックの余りは0xFFでパディング
-export function readHexFileBytesBlocks(filePath: string): number[][] {
+export function readHexFileBytes(filePath: string): number[] {
   const hexFileRecords = fs
     .readFileSync(filePath, { encoding: 'utf-8' })
     .split(/\r?\n/)
@@ -120,9 +118,13 @@ export function readHexFileBytesBlocks(filePath: string): number[][] {
   if (!checkHexLineRecordsValid(bodyRecords)) {
     throw new Error('The hex file is not compatible with this application.');
   }
+  return extractCodeBytesFromHexRecords(bodyRecords);
+}
 
-  const codeBytes = extractCodeBytesFromHexRecords(bodyRecords);
-
+// Hexファイルを読み込み機械語を128バイト毎に区切った2次元配列で返す
+// 末尾ブロックの余りは0xFFでパディング
+export function readHexFileBytesBlocks128(filePath: string): number[][] {
+  const codeBytes = readHexFileBytes(filePath);
   const codeBlocks = sliceCodeBytesIntoBlocks(codeBytes, 128);
   return codeBlocks;
 }

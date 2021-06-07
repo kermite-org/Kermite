@@ -30,6 +30,10 @@ const style = css`
   button {
     padding: 0 5px;
   }
+
+  .note {
+    margin-top: 10px;
+  }
 `;
 
 export const FirmwareUpdationPart: FC = () => {
@@ -38,6 +42,7 @@ export const FirmwareUpdationPart: FC = () => {
     detectedDeviceSig,
     canSelectTargetFirmware,
     projectSelectorSource,
+    canFlashSelectedFirmwareToDetectedDevice,
     onWriteButton,
     onResetButton,
     onLogButton,
@@ -75,12 +80,24 @@ export const FirmwareUpdationPart: FC = () => {
                 detectedDeviceSig,
               )}
             </div>
-            <GeneralButton
-              onClick={onWriteButton}
-              text={texts.label_device_firmwareUpdation_writeButton}
-            />
+            {canFlashSelectedFirmwareToDetectedDevice && (
+              <GeneralButton
+                onClick={onWriteButton}
+                text={texts.label_device_firmwareUpdation_writeButton}
+              />
+            )}
           </div>
         )}
+
+        {phase === 'WaitingUploadOrder' &&
+          detectedDeviceSig &&
+          !canFlashSelectedFirmwareToDetectedDevice && (
+            <div className="note">
+              {projectSelectorSource.value
+                ? 'Selected firmware is not supposed to be flashed into this device.'
+                : 'Please select firmware.'}
+            </div>
+          )}
 
         {phase === 'Uploading' && (
           <div>

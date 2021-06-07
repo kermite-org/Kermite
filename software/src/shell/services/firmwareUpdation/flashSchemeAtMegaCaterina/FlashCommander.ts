@@ -1,7 +1,8 @@
 /* eslint-disable import/first */
 import SerialPort = require('serialport');
 import { compareArray, delayMs } from '~/shared';
-import { readHexFileBytesBlocks } from './HexFileReader';
+import { CommandLogger } from '~/shell/services/firmwareUpdation/flashSchemeAtMegaCaterina/CommandLogger';
+import { readHexFileBytesBlocks128 } from './HexFileReader';
 import {
   bhi,
   blo,
@@ -10,22 +11,7 @@ import {
 } from './helpers';
 
 export namespace FlashCommander {
-  const logger = new (class {
-    logText: string = '';
-
-    reset() {
-      this.logText = '';
-    }
-
-    log(text: string) {
-      console.log(text);
-      this.logText += `${text}\r\n`;
-    }
-
-    flush(): string {
-      return this.logText;
-    }
-  })();
+  const logger = new CommandLogger();
 
   const queryTimeoutMs = 3000;
 
@@ -266,7 +252,7 @@ export namespace FlashCommander {
     logger.reset();
     try {
       logger.log(`#### start firmware upload`);
-      const sourceBlocks = readHexFileBytesBlocks(hexFilePath);
+      const sourceBlocks = readHexFileBytesBlocks128(hexFilePath);
       serial = await SerialPortBridge.open(comPortName);
       await executeFlashCommandSequence(serial, sourceBlocks);
       logger.log(`#### firmware upload complete`);
