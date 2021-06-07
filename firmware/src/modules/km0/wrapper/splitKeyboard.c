@@ -64,11 +64,17 @@ static bool isSlaveExists = false;
 static uint32_t masterStatePackets_buf[MasterStatePacketBufferCapacity];
 static uint8_t masterStatePackets_wi = 0;
 static uint8_t masterStatePackets_ri = 0;
+static uint8_t masterStatePackets_n = 0;
 
 static void enqueueMasterStatePacket(uint8_t op, uint8_t arg1, uint8_t arg2) {
-  uint32_t data = (uint32_t)arg2 << 16 | (uint32_t)arg1 << 8 | op;
-  masterStatePackets_buf[masterStatePackets_wi] = data;
-  masterStatePackets_wi = (masterStatePackets_wi + 1) & MasterStatePacketBufferIndexMask;
+  if (masterStatePackets_n < MasterStatePacketBufferCapacity) {
+    uint32_t data = (uint32_t)arg2 << 16 | (uint32_t)arg1 << 8 | op;
+    masterStatePackets_buf[masterStatePackets_wi] = data;
+    masterStatePackets_wi = (masterStatePackets_wi + 1) & MasterStatePacketBufferIndexMask;
+    masterStatePackets_n++;
+  } else {
+    printf("buffer is full, cannot enqueue master state packet\n");
+  }
 }
 
 static uint32_t popMasterStatePacket() {
@@ -76,6 +82,7 @@ static uint32_t popMasterStatePacket() {
   if (data != 0) {
     masterStatePackets_buf[masterStatePackets_ri] = 0;
     masterStatePackets_ri = (masterStatePackets_ri + 1) & MasterStatePacketBufferIndexMask;
+    masterStatePackets_n--;
     return data;
   }
   return 0;
@@ -88,6 +95,7 @@ static uint32_t peekMasterStatePacket() {
 static void shiftMasterStatePacket() {
   masterStatePackets_buf[masterStatePackets_ri] = 0;
   masterStatePackets_ri = (masterStatePackets_ri + 1) & MasterStatePacketBufferIndexMask;
+  masterStatePackets_n--;
 }
 
 //---------------------------------------------
@@ -130,11 +138,10 @@ static void master_pushMasterStatePacketOne() {
     boardLink_exchangeFramesBlocking();
     uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
 
-    shiftMasterStatePacket();
     if (sz == 1 && sw_rxbuf[0] == SplitOp_SlaveAck) {
-
+      shiftMasterStatePacket();
     } else {
-      // printf("master state NACKed\n");
+      printf("failed to send master state packet, queued:%d\n", masterStatePackets_n);
     }
   }
 }
