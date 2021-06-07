@@ -14,8 +14,8 @@
 //---------------------------------------------
 //definitions
 
-#ifdef KM0_SPLIT_KEYBOARD__MASTER_SLAVE_DETEMINATION_PIN
-static const int pin_masterSlaveDetermination = KM0_SPLIT_KEYBOARD__MASTER_SLAVE_DETEMINATION_PIN;
+#ifdef KM0_SPLIT_KEYBOARD__DEBUG_MASTER_SLAVE_DETEMINATION_PIN
+static const int pin_masterSlaveDetermination = KM0_SPLIT_KEYBOARD__DEBUG_MASTER_SLAVE_DETEMINATION_PIN;
 #else
 static const int pin_masterSlaveDetermination = -1;
 #endif
@@ -52,6 +52,8 @@ static uint8_t sw_txbuf[SingleWireMaxPacketSize] = { 0 };
 static uint8_t sw_rxbuf[SingleWireMaxPacketSize] = { 0 };
 
 static bool hasMasterOathReceived = false;
+
+static bool isSlaveExists = false;
 
 //---------------------------------------------
 //masterの状態通知パケットキュー
@@ -93,6 +95,9 @@ static void shiftMasterStatePacket() {
 
 //反対側のコントローラからキー状態を受け取る処理
 static void master_pullAltSideKeyStates() {
+  if (!isSlaveExists) {
+    return;
+  }
   sw_txbuf[0] = SplitOp_InputScanSlotStatesRequest;
   boardLink_writeTxBuffer(sw_txbuf, 1); //キー状態要求パケットを送信
   boardLink_exchangeFramesBlocking();
@@ -112,6 +117,9 @@ static void master_pullAltSideKeyStates() {
 
 //masterのキー状態変化やパラメタの変更通知をslaveに送信する処理
 static void master_pushMasterStatePacketOne() {
+  if (!isSlaveExists) {
+    return;
+  }
   //パケットキューからデータを一つ取り出しスレーブに送信, 送信が成功したらキューから除去
   uint32_t data = peekMasterStatePacket();
   if (data) {
@@ -156,6 +164,7 @@ static void master_handleMasterKeySlotStateChanged(uint8_t slotIndex, bool isDow
 }
 
 static void master_start() {
+  printf("isSlaveExists:%d\n", isSlaveExists);
   master_sendInitialParameteresAll();
   keyboardMain_setKeySlotStateChangedCallback(master_handleMasterKeySlotStateChanged);
   configManager_addParameterChangeListener(master_handleMasterParameterChanged);
@@ -261,8 +270,19 @@ static void detection_onDataReceivedFromMaster() {
     if (cmd == SplitOp_MasterOath && sz == 1) {
       //親-->子, Master確定通知パケット受信
       hasMasterOathReceived = true;
+      sw_txbuf[0] = SplitOp_SlaveAck;
+      boardLink_writeTxBuffer(sw_txbuf, 1);
     }
   }
+}
+
+static void detection_sendMasterOath() {
+  //Master確定通知パケットを送信
+  sw_txbuf[0] = SplitOp_MasterOath;
+  boardLink_writeTxBuffer(sw_txbuf, 1);
+  boardLink_exchangeFramesBlocking();
+  uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
+  isSlaveExists = sz == 1 && sw_rxbuf[0] == SplitOp_SlaveAck;
 }
 
 //USB接続が確立していない期間の動作
@@ -276,10 +296,7 @@ static bool detenction_determineMasterSlaveByUsbConnection() {
 
   while (true) {
     if (usbIoCore_isConnectedToHost()) {
-      //Master確定通知パケットを送信
-      sw_txbuf[0] = SplitOp_MasterOath;
-      boardLink_writeTxBuffer(sw_txbuf, 1);
-      boardLink_exchangeFramesBlocking();
+      detection_sendMasterOath();
       isMaster = true;
       break;
     }
@@ -320,10 +337,17 @@ static void showModeByLedBlinkPattern(bool isMaster) {
   }
 }
 
+//ピンによる判定でMaster/Slaveを固定して動作させるモード
+//主にデバッグ用途で使用
 static void startFixedMode() {
+  printf("master/slave fixed mode\n");
   keyboardMain_initialize();
   bool isMaster = detection_detemineMasterSlaveByPin();
   printf("isMaster:%d\n", isMaster);
+  if (isMaster) {
+    //Master/Slave間の接続は必ずあるものとみなす
+    isSlaveExists = true;
+  }
   showModeByLedBlinkPattern(isMaster);
   if (isMaster) {
     usbIoCore_initialize();
