@@ -14,8 +14,9 @@
 #define NumColumns 4
 #define NumRows 3
 #define NumKeys (NumColumns * NumRows)
-#define NumEncoderScanSlots 2
-#define NumScanSlots (NumKeys + NumEncoderScanSlots)
+#define NumEncoders 1
+
+#define NumScanSlots (NumKeys + NumEncoders * 2)
 
 static const uint8_t columnPins[NumColumns] = { P_D7, P_E6, P_B4, P_B5 };
 static const uint8_t rowPins[NumRows] = { P_B3, P_B2, P_B6 };
@@ -29,7 +30,7 @@ static const int8_t keyIndexTable[NumScanSlots] = {
 };
 // clang-format on
 
-static EncoderConfig encoderConfigs[] = {
+static EncoderConfig encoderConfigs[NumEncoders] = {
   { .pinA = P_B1, .pinB = P_F7, .scanIndexBase = 12 },
 };
 
@@ -39,7 +40,7 @@ int main() {
   oledDisplay_initialize();
   rgbLighting_initialize();
   keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
-  keyScanner_encoderBasic_initialize(encoderConfigs, 1);
+  keyScanner_encoderBasic_initialize(NumEncoders, encoderConfigs);
   keyboardMain_setKeyIndexTable(keyIndexTable);
   keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
   keyboardMain_useKeyScannerExtra(keyScanner_encoderBasic_update);
