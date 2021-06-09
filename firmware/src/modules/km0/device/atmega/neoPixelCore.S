@@ -3,6 +3,7 @@
 #include "config.h"
 .list
 
+
 #define P_B0 0
 #define P_B1 1
 #define P_B2 2
@@ -47,6 +48,51 @@
 #define P_F5 37
 #define P_F6 38
 #define P_F7 39
+
+#define B0 0
+#define B1 1
+#define B2 2
+#define B3 3
+#define B4 4
+#define B5 5
+#define B6 6
+#define B7 7
+
+#define C0 8
+#define C1 9
+#define C2 10
+#define C3 11
+#define C4 12
+#define C5 13
+#define C6 14
+#define C7 15
+
+#define D0 16
+#define D1 17
+#define D2 18
+#define D3 19
+#define D4 20
+#define D5 21
+#define D6 22
+#define D7 23
+
+#define E0 24
+#define E1 25
+#define E2 26
+#define E3 27
+#define E4 28
+#define E5 29
+#define E6 30
+#define E7 31
+
+#define F0 32
+#define F1 33
+#define F2 34
+#define F3 35
+#define F4 36
+#define F5 37
+#define F6 38
+#define F7 39
 
 
 #define portIndex(p) ((p) >> 3)
