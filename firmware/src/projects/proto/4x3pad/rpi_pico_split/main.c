@@ -27,8 +27,7 @@ static const int8_t keyIndexTable[NumScanSlots] = {
 // clang-format on
 
 int main() {
-  boardIo_setupLeds_rpiPico(); //RPi pico
-  // boardIo_setupLeds_proMicroRp(); //promicro rp2040
+  boardIo_setupLeds_rpiPico();
   debugUart_initialize(115200);
   keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
   keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
