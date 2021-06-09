@@ -10,8 +10,8 @@
 #define NumRows 8
 #define NumScanSlots (NumColumns * NumRows)
 
-static const uint8_t columnPins[NumColumns] = { P_C6, P_D4, P_F7, P_F6, P_F5, P_F4 };
-static const uint8_t rowPins[NumRows] = { P_D7, P_E6, P_B4, P_B5, P_B1, P_B3, P_B2, P_B6 };
+static const uint8_t columnPins[NumColumns] = { C6, D4, F7, F6, F5, F4 };
+static const uint8_t rowPins[NumRows] = { D7, E6, B4, B5, B1, B3, B2, B6 };
 
 // clang-format off
 static const int8_t keyIndexTable[NumScanSlots] = {
