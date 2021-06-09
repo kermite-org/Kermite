@@ -25,10 +25,16 @@ void system_disableInterrupts() {
 }
 
 void system_initializeUserProgram() {
-  USBCON = 0;
+  //disable jtag (use PF4~PF7 as general ports)
+  MCUCR = 0x80;
+  MCUCR = 0x80;
+
   //disable watchdog timer
   wdt_reset();
   MCUSR = 0;
   WDTCSR |= _BV(WDCE) | _BV(WDE);
   WDTCSR = 0;
+
+  //deinit USB
+  USBCON = 0;
 }
