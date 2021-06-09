@@ -5,4 +5,6 @@
 
 void rgbLighting_initialize();
 
+void rgbLighting_update();
+
 #endif

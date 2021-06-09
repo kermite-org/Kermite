@@ -17,7 +17,9 @@ int main() {
   boardIo_setupLeds_proMicroAvr();
   oledDisplay_initialize();
   keyScanner_directWired_initialize(NumScanSlots, keyInputPins);
+  keyboardMain_useKeyScanner(keyScanner_directWired_update);
   keyboardMain_setKeyIndexTable(keyIndexTable);
+  keyboardMain_useVisualModule(oledDisplay_update);
   generalKeyboard_start();
   return 0;
 }

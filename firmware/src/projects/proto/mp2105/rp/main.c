@@ -41,6 +41,10 @@ int main() {
   keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
   keyScanner_encoderBasic_initialize(NumEncoders, encoderConfigs);
   keyboardMain_setKeyIndexTable(keyIndexTable);
+  keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
+  keyboardMain_useKeyScannerExtra(keyScanner_encoderBasic_update);
+  keyboardMain_useVisualModule(oledDisplay_update);
+  keyboardMain_useVisualModule(rgbLighting_update);
   generalKeyboard_start();
   return 0;
 }

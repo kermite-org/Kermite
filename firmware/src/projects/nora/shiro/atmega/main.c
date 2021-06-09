@@ -25,6 +25,7 @@ static const int8_t keyIndexTable[NumScanSlots] = {
 int main() {
   boardIo_setupLeds_proMicroAvr();
   keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
+  keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
   keyboardMain_setKeyIndexTable(keyIndexTable);
   generalKeyboard_start();
   return 0;

@@ -75,6 +75,10 @@ int main() {
   rgbLighting_initialize();
   keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
   keyScanner_directWired_initialize(NumExtraKeys, extraPins);
+  keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
+  keyboardMain_useKeyScanner(keyScanner_directWired_update);
+  keyboardMain_useVisualModule(oledDisplay_update);
+  keyboardMain_useVisualModule(rgbLighting_update);
   keyboardMain_setKeyIndexTable(keyIndexTable);
   splitKeyboard_start();
   return 0;

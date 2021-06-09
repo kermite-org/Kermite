@@ -10,5 +10,6 @@ typedef struct {
 } EncoderConfig;
 
 void keyScanner_encoderBasic_initialize(uint8_t num, EncoderConfig *_encoderConfigs);
+void keyScanner_encoderBasic_update(uint8_t *keyStateBitFlags);
 
 #endif

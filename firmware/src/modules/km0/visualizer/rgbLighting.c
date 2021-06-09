@@ -6,7 +6,6 @@
 #include "km0/device/system.h"
 #include "km0/kernel/commandDefinitions.h"
 #include "km0/kernel/configManager.h"
-#include "km0/kernel/keyboardMainInternal.h"
 
 #ifndef KM0_RGB_LIGHTING__NUM_LEDS
 #error KM0_RGB_LIGHTING__NUM_LEDS is not defined
@@ -227,18 +226,17 @@ static void updateFrame() {
   }
 }
 
-static void rgbLighting_update() {
-  static uint32_t tick = 0;
-  if (++tick % 40 == 0) {
-    updateFrame();
-    frameTick++;
-  }
-}
-
 void rgbLighting_initialize() {
   configManager_overrideParameterMaxValue(SystemParameter_GlowColor, 12);
   configManager_overrideParameterMaxValue(SystemParameter_GlowPattern, 4);
   configManager_addParameterChangeListener(parameterChangeHandler);
   serialLed_initialize();
-  keyboardMain_useVisualModule(rgbLighting_update);
+}
+
+void rgbLighting_update() {
+  static uint32_t tick = 0;
+  if (++tick % 40 == 0) {
+    updateFrame();
+    frameTick++;
+  }
 }

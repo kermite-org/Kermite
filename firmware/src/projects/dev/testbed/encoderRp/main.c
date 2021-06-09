@@ -23,6 +23,8 @@ int main() {
   boardIo_setupLeds_rpiPico();
   keyScanner_directWired_initialize(NumKeys, keyInputPins);
   keyScanner_encoderBasic_initialize(NumEncoders, encoderConfigs);
+  keyboardMain_useKeyScanner(keyScanner_directWired_update);
+  keyboardMain_useKeyScannerExtra(keyScanner_encoderBasic_update);
   keyboardMain_setKeyIndexTable(keyIndexTable);
   generalKeyboard_start();
   return 0;

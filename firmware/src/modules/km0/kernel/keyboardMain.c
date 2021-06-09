@@ -28,10 +28,10 @@
 //#define NumScanSlotBytes Ceil(NumScanSlots / 8)
 #define NumScanSlotBytes ((NumScanSlots + 7) >> 3)
 
-#ifndef KM0_KEYBOARD__NUM_MAX_KEY_SCANNERS
-#define KM0_KEYBOARD__NUM_MAX_KEY_SCANNERS 4
+#ifndef KM0_KEYBOARD__NUM_MAX_EXTRA_KEY_SCANNERS
+#define KM0_KEYBOARD__NUM_MAX_EXTRA_KEY_SCANNERS 1
 #endif
-#define NumMaxKeyScanners KM0_KEYBOARD__NUM_MAX_KEY_SCANNERS
+#define NumMaxExtraKeyScanners KM0_KEYBOARD__NUM_MAX_EXTRA_KEY_SCANNERS
 
 #ifndef KM0_KEYBOARD__NUM_MAX_DISPLAY_MODULES
 #define KM0_KEYBOARD__NUM_MAX_DISPLAY_MODULES 2
@@ -68,8 +68,9 @@ static bool isSimulatorModeEnabled = false;
 static KeyboardCallbackSet *callbacks = NULL;
 
 typedef void (*KeyScannerUpdateFunc)(uint8_t *keyStateBitFlags);
-static KeyScannerUpdateFunc keyScannerUpdateFuncs[NumMaxKeyScanners] = { 0 };
-static uint8_t keyScannersLength = 0;
+static KeyScannerUpdateFunc keyScannerUpdateFunc = NULL;
+static KeyScannerUpdateFunc extraKeyScannerUpdateFuncs[NumMaxExtraKeyScanners] = { 0 };
+static uint8_t extraKeyScannersLength = 0;
 
 typedef void (*DisplayUpdateFunc)(void);
 static DisplayUpdateFunc displayUpdateFuncs[NumsMaxDisplayModules] = { 0 };
@@ -122,8 +123,11 @@ static void resetKeyboardCoreLogic() {
 }
 
 static void updateKeyScanners() {
-  for (uint8_t i = 0; i < keyScannersLength; i++) {
-    KeyScannerUpdateFunc updateFunc = keyScannerUpdateFuncs[i];
+  if (keyScannerUpdateFunc) {
+    keyScannerUpdateFunc(inputScanSlotFlags);
+  }
+  for (uint8_t i = 0; i < extraKeyScannersLength; i++) {
+    KeyScannerUpdateFunc updateFunc = extraKeyScannerUpdateFuncs[i];
     if (updateFunc) {
       updateFunc(inputScanSlotFlags);
     }
@@ -296,7 +300,11 @@ static void processKeyStatesUpdate() {
 //----------------------------------------------------------------------
 
 void keyboardMain_useKeyScanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags)) {
-  keyScannerUpdateFuncs[keyScannersLength++] = _keyScannerUpdateFunc;
+  keyScannerUpdateFunc = _keyScannerUpdateFunc;
+}
+
+void keyboardMain_useKeyScannerExtra(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags)) {
+  extraKeyScannerUpdateFuncs[extraKeyScannersLength++] = _keyScannerUpdateFunc;
 }
 
 void keyboardMain_useVisualModule(void (*_displayModuleUpdateFunc)(void)) {

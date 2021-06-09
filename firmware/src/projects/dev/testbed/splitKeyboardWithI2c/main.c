@@ -22,6 +22,7 @@ int main() {
   boardIo_setupLeds_rpiPico();
   debugUart_initialize(115200);
   keyScanner_directWired_initialize(NumScanSlotsHalf, keyInputPins);
+  keyboardMain_useKeyScanner(keyScanner_directWired_update);
   keyboardMain_setKeyIndexTable(keyIndexTable);
   splitKeyboard_start();
   return 0;

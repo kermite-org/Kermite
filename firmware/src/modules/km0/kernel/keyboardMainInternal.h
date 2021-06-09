@@ -36,7 +36,4 @@ void keyboardMain_updateHeartBeatLed(uint32_t tick);
 void keyboardMain_processUpdate();
 void keyboardMain_setKeySlotStateChangedCallback(void (*callback)(uint8_t slotIndex, bool isDown));
 
-void keyboardMain_useKeyScanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags));
-void keyboardMain_useVisualModule(void (*_displayModuleUpdateFunc)(void));
-
 #endif

@@ -3,7 +3,7 @@
 #include "km0/base/configImport.h"
 #include "km0/base/utils.h"
 #include "km0/device/digitalIo.h"
-#include "km0/kernel/keyboardMainInternal.h"
+#include <stdio.h>
 
 #ifndef KM0_ENCODER_SCANNER__NUM_ENCODERS_MAX
 #define KM0_ENCODER_SCANNER__NUM_ENCODERS_MAX 4
@@ -63,16 +63,6 @@ static void updateEncoderInstance(EncoderConfig *config, EncoderState *state) {
   state->holdB = delta == 1;
 }
 
-static void keyScanner_encoderBasic_update(uint8_t *keyStateBitFlags) {
-  for (int i = 0; i < numEncoders; i++) {
-    EncoderConfig *config = &encoderConfigs[i];
-    EncoderState *state = &encoderStates[i];
-    updateEncoderInstance(config, state);
-    utils_writeArrayedBitFlagsBit(keyStateBitFlags, config->scanIndexBase + 0, state->holdA);
-    utils_writeArrayedBitFlagsBit(keyStateBitFlags, config->scanIndexBase + 1, state->holdB);
-  }
-}
-
 void keyScanner_encoderBasic_initialize(uint8_t num, EncoderConfig *_encoderConfigs) {
   numEncoders = num;
   encoderConfigs = _encoderConfigs;
@@ -81,5 +71,14 @@ void keyScanner_encoderBasic_initialize(uint8_t num, EncoderConfig *_encoderConf
     digitalIo_setInputPullup(config->pinA);
     digitalIo_setInputPullup(config->pinB);
   }
-  keyboardMain_useKeyScanner(keyScanner_encoderBasic_update);
+}
+
+void keyScanner_encoderBasic_update(uint8_t *keyStateBitFlags) {
+  for (int i = 0; i < numEncoders; i++) {
+    EncoderConfig *config = &encoderConfigs[i];
+    EncoderState *state = &encoderStates[i];
+    updateEncoderInstance(config, state);
+    utils_writeArrayedBitFlagsBit(keyStateBitFlags, config->scanIndexBase + 0, state->holdA);
+    utils_writeArrayedBitFlagsBit(keyStateBitFlags, config->scanIndexBase + 1, state->holdB);
+  }
 }
