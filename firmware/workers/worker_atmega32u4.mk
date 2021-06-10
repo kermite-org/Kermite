@@ -1,8 +1,7 @@
 -include Makefile.user
 
-REL_PROJECT_CODE_DIR := $(PROJECT)/$(VARIATION)
-PROJECT_CODE_DIR := src/projects/$(REL_PROJECT_CODE_DIR)
-PROJECT_HEADER_DIR := $(PROJECT_CODE_DIR)
+REL_PROJECT_CODE_DIR = $(PROJECT)/$(VARIATION)
+PROJECT_CODE_DIR = src/projects/$(REL_PROJECT_CODE_DIR)
 
 BUILD_DIR = build
 OUT_DIR = build/$(REL_PROJECT_CODE_DIR)
@@ -13,14 +12,15 @@ MODULE_SRCS =
 PROJECT_SRCS =
 MODULE_ASM_SRCS =
 PROJECT_ASM_SRCS =
+PROJECT_STENCIL_SRCS =
 
 RULES_MK = $(PROJECT_CODE_DIR)/rules.mk
 -include $(RULES_MK)
 
+PROJECT_STENCIL_DIR :=
 ifneq ($(TARGET_STENCIL),)
-	STENCIL_DIR := src/projects/__stencil/$(TARGET_STENCIL)
-	include $(STENCIL_DIR)/rules.mk
-	PROJECT_CODE_DIR := $(STENCIL_DIR)
+	PROJECT_STENCIL_DIR := src/projects/__stencil/$(TARGET_STENCIL)
+	include $(PROJECT_STENCIL_DIR)/rules.mk
 endif
 
 RELEASE_REVISION ?= 0
@@ -35,14 +35,18 @@ MAP = $(OUT_DIR)/$(CORE_NAME).map
 
 INC_PATHS =
 INC_PATHS += -Isrc/modules
-INC_PATHS += -I$(PROJECT_HEADER_DIR)
+INC_PATHS += -I$(PROJECT_CODE_DIR)
 
 CFLAGS =
 ASFLAGS =
 LDFLAGS =
 
-C_SRCS = $(addprefix src/modules/,$(MODULE_SRCS)) $(addprefix $(PROJECT_CODE_DIR)/, $(PROJECT_SRCS))
-ASM_SRCS = $(addprefix src/modules/,$(MODULE_ASM_SRCS)) $(addprefix $(PROJECT_CODE_DIR)/, $(PROJECT_ASM_SRCS))
+C_SRCS = $(addprefix src/modules/,$(MODULE_SRCS))
+C_SRCS += $(addprefix $(PROJECT_CODE_DIR)/, $(PROJECT_SRCS))
+C_SRCS += $(addprefix $(PROJECT_STENCIL_DIR)/, $(PROJECT_STENCIL_SRCS))
+
+ASM_SRCS = $(addprefix src/modules/,$(MODULE_ASM_SRCS))
+ASM_SRFCS += $(addprefix $(PROJECT_CODE_DIR)/, $(PROJECT_ASM_SRCS))
 
 C_OBJS = $(addprefix $(OBJ_DIR)/,$(C_SRCS:.c=.o))
 ASM_OBJS = $(addprefix $(OBJ_DIR)/,$(ASM_SRCS:.S=.o))

@@ -18,4 +18,4 @@ MODULE_SRCS += km0/kernel/keyboardMain.c
 MODULE_SRCS += km0/scanner/keyScanner_basicMatrix.c
 MODULE_SRCS += km0/wrapper/generalKeyboard.c
 
-PROJECT_SRCS += main.c
+PROJECT_STENCIL_SRCS += main.c
