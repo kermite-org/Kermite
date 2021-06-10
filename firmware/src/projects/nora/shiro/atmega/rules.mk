@@ -1,2 +1,4 @@
 TARGET_MCU = atmega32u4
 TARGET_STENCIL = atmega_unified
+
+KL_USE_PROMICRO_BOARD_LEDS = 1
