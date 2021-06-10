@@ -12,3 +12,5 @@
 
 #define KS_ROW_PINS \
   { D4, C6, D7, E6, B4 }
+
+#define KS_USE_PROMICRO_BOARD_LEDS
