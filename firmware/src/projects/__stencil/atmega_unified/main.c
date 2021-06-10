@@ -5,11 +5,11 @@
 #include "km0/scanner/keyScanner_basicMatrix.h"
 #include "km0/wrapper/generalKeyboard.h"
 
-#define NumColumns 3
-#define NumRows 5
+#define NumColumns KS_NUM_COLUMNS
+#define NumRows KS_NUM_ROWS
 
-static const uint8_t columnPins[NumColumns] = { F4, F5, F6 };
-static const uint8_t rowPins[NumRows] = { D4, C6, D7, E6, B4 };
+static const uint8_t columnPins[NumColumns] = KS_COLUMN_PINS;
+static const uint8_t rowPins[NumRows] = KS_ROW_PINS;
 
 int main() {
   boardIo_setupLeds_proMicroAvr();
