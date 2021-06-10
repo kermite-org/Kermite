@@ -41,7 +41,7 @@
 //----------------------------------------------------------------------
 //variables
 
-static uint8_t *scanIndexToKeyIndexMap;
+static uint8_t *scanIndexToKeyIndexMap = NULL;
 
 //キー状態
 
@@ -239,10 +239,14 @@ static void onPhysicalKeyStateChanged(uint8_t scanIndex, bool isDown) {
   if (keySlotStateChangedCallback) {
     keySlotStateChangedCallback(scanIndex, isDown);
   }
-  uint8_t keyIndex = scanIndexToKeyIndexMap[scanIndex];
-  if (keyIndex == KEYINDEX_NONE) {
-    return;
+  uint8_t keyIndex = scanIndex;
+  if (scanIndexToKeyIndexMap) {
+    keyIndex = scanIndexToKeyIndexMap[scanIndex];
+    if (keyIndex == KEYINDEX_NONE) {
+      return;
+    }
   }
+
   if (isDown) {
     printf("keydown %d\n", keyIndex);
     keyboardMain_exposedState.pressedKeyIndex = keyIndex;
