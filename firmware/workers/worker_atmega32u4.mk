@@ -20,7 +20,7 @@ RULES_MK = $(PROJECT_CODE_DIR)/rules.mk
 
 PROJECT_STENCIL_DIR :=
 ifneq ($(TARGET_STENCIL),)
-	PROJECT_STENCIL_DIR := src/projects/__stencil/$(TARGET_STENCIL)
+	PROJECT_STENCIL_DIR := src/projects/__stencils/$(TARGET_STENCIL)
 	include $(PROJECT_STENCIL_DIR)/rules.mk
 endif
 
