@@ -12,6 +12,7 @@ int main() {
 #ifdef KS_USE_PROMICRO_BOARD_LEDS
   boardIo_setupLeds_proMicroAvr();
 #endif
+  // debugUart_initialize(38400);
   keyScanner_basicMatrix_initialize(KS_NUM_ROWS, KS_NUM_COLUMNS, rowPins, columnPins);
   keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
   generalKeyboard_start();
