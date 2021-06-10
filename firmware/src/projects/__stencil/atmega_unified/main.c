@@ -1,5 +1,6 @@
 #include "config.h"
 #include "km0/device/boardIo.h"
+#include "km0/device/debugUart.h"
 #include "km0/device/digitalIo.h"
 #include "km0/kernel/keyboardMain.h"
 #include "km0/scanner/keyScanner_basicMatrix.h"
@@ -12,7 +13,9 @@ int main() {
 #ifdef KS_USE_PROMICRO_BOARD_LEDS
   boardIo_setupLeds_proMicroAvr();
 #endif
-  // debugUart_initialize(38400);
+#ifdef KS_USE_DEBUG_UART
+  debugUart_initialize(38400);
+#endif
   keyScanner_basicMatrix_initialize(KS_NUM_ROWS, KS_NUM_COLUMNS, rowPins, columnPins);
   keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
   generalKeyboard_start();
