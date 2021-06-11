@@ -22,6 +22,7 @@ MODULE_SRCS += km0/kernel/keyboardMain.c
 #matrix key scanner
 ifneq ($(KL_USE_KEY_MATRIX),)
 MODULE_SRCS += km0/scanner/keyScanner_basicMatrix.c
+DEFINES += KS_USE_KEY_MATRIX
 endif
 
 #direct wired key scanner
