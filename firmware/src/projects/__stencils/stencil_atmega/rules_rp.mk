@@ -1,14 +1,13 @@
-TARGET_MCU = atmega32u4
+TARGET_MCU = rp2040
 
-#helpers 
+#helpers
 MODULE_SRCS += km0/base/utils.c
 
 #peripheral wrappers
-MODULE_SRCS += km0/device/atmega/system.c
-MODULE_SRCS += km0/device/atmega/digitalIo.c
-MODULE_SRCS += km0/device/atmega/usbIoCore.c
-MODULE_SRCS += km0/device/atmega/dataMemory.c
-MODULE_SRCS += km0/device/atmega/boardI2c.c
+MODULE_SRCS += km0/device/rp2040/system.c
+MODULE_SRCS += km0/device/rp2040/digitalIo.c
+MODULE_SRCS += km0/device/rp2040/usbIoCore.c
+MODULE_SRCS += km0/device/rp2040/dataMemory.c
 
 #keyboard core modules
 MODULE_SRCS += km0/kernel/dataStorage.c
@@ -23,7 +22,6 @@ MODULE_SRCS += km0/kernel/keyboardMain.c
 #matrix key scanner
 ifneq ($(KL_USE_KEY_MATRIX),)
 MODULE_SRCS += km0/scanner/keyScanner_basicMatrix.c
-DEFINES += KS_USE_KEY_MATRIX
 endif
 
 #direct wired key scanner
@@ -38,41 +36,50 @@ MODULE_SRCS += km0/scanner/keyScanner_encoderBasic.c
 DEFINES += KS_USE_ENCODERS
 endif
 
+
+REQ_NEOPIXEL_CORE =
+
 #board leds
 ifneq ($(KL_USE_PROMICRO_BOARD_LEDS),)
-MODULE_SRCS += km0/device/atmega/boardIo.c
+REQ_NEOPIXEL_CORE = 1
+MODULE_SRCS += km0/device/rp2040/boardIo_rgbLed.c
 DEFINES += KS_USE_PROMICRO_BOARD_LEDS
 else
 # MODULE_SRCS += km0/device/boardIo_dummy.c	//TODO: use this
-MODULE_SRCS += km0/device/atmega/boardIo.c
+MODULE_SRCS += km0/device/rp2040/boardIo.c
 endif
 
 #debug uart
 ifneq ($(KL_USE_DEBUG_UART),)
-MODULE_SRCS += km0/device/atmega/debugUart.c
-DEFINES += KS_USE_DEBUG_UART
+MODULE_SRCS += km0/device/rp2040/debugUart.c
 endif
 
 #oled
 ifneq ($(KL_USE_OLED),)
-MODULE_SRCS += km0/visualizer/oledDisplay_atmega/oledCore.c
-MODULE_SRCS += km0/visualizer/oledDisplay_atmega/oledDisplay_default.c
+MODULE_SRCS += km0/device/rp2040/boardI2c.c
+MODULE_SRCS += km0/visualizer/oledDisplay_rp/oledCoreEx.c
+MODULE_SRCS += km0/visualizer/oledDisplay_rp/oledDisplayEx_default.c
 DEFINES += KS_USE_OLED
 endif
 
 #rgb lighting
 ifneq ($(KL_USE_RGB_LIGHTING),)
-MODULE_ASM_SRCS += km0/device/atmega/neoPixelCore.S
-MODULE_SRCS += km0/device/atmega/serialLed.c
+REQ_NEOPIXEL_CORE = 1
+MODULE_SRCS += km0/device/rp2040/serialLed.c
 MODULE_SRCS += km0/visualizer/rgbLighting.c
 DEFINES += KS_USE_RGB_LIGHTING
 endif
 
+ifneq ($(REQ_NEOPIXEL_CORE),)
+MODULE_SRCS += km0/device/rp2040/neoPixelCore.c
+MODULE_PIOASM_SRCS += km0/device/rp2040/neoPixelCore.pio
+endif
+
 ifneq ($(KL_USE_SPLIT_KEYBOARD),)
 #split keyboard
-MODULE_SRCS += km0/device/atmega/boardLink_singleWire.c
+MODULE_PIOASM_SRCS += km0/device/rp2040/singleWire4.pio
+MODULE_SRCS += km0/device/rp2040/boardLink_singleWire.c
 MODULE_SRCS += km0/wrapper/splitKeyboard.c
-DEFINES += KS_USE_SPLIT_KEYBOARD
 else
 #unified keyboard
 MODULE_SRCS += km0/wrapper/generalKeyboard.c
