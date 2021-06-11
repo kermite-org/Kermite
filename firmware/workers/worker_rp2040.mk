@@ -20,7 +20,7 @@ PROJECT_STENCIL_SRCS =
 PROJECT_STENCIL_DIR :=
 ifneq ($(TARGET_STENCIL),)
 	PROJECT_STENCIL_DIR := src/projects/__stencils/$(TARGET_STENCIL)
-	include $(PROJECT_STENCIL_DIR)/rules_rp.mk
+	include $(PROJECT_STENCIL_DIR)/rules_rp2040.mk
 endif
 
 RELEASE_REVISION ?= 0
