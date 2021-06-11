@@ -41,7 +41,7 @@ endif
 REQ_NEOPIXEL_CORE =
 
 #board leds
-ifneq ($(KL_USE_PROMICRO_BOARD_LEDS),)
+ifneq ($(KL_USE_BOARD_LEDS_PROMICRO_RP),)
 	REQ_NEOPIXEL_CORE = 1
 	MODULE_SRCS += km0/device/rp2040/boardIo_rgbLed.c
 	DEFINES += KS_USE_BOARD_LEDS
