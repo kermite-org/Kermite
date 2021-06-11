@@ -42,13 +42,19 @@ REQ_NEOPIXEL_CORE =
 
 #board leds
 ifneq ($(KL_USE_PROMICRO_BOARD_LEDS),)
-REQ_NEOPIXEL_CORE = 1
-MODULE_SRCS += km0/device/rp2040/boardIo_rgbLed.c
-DEFINES += KS_USE_BOARD_LEDS
-DEFINES += KS_USE_BOARD_LEDS_PROMICRO_RP
+	REQ_NEOPIXEL_CORE = 1
+	MODULE_SRCS += km0/device/rp2040/boardIo_rgbLed.c
+	DEFINES += KS_USE_BOARD_LEDS
+	DEFINES += KS_USE_BOARD_LEDS_PROMICRO_RP
 else
-# MODULE_SRCS += km0/device/boardIo_dummy.c	//TODO: use this
-MODULE_SRCS += km0/device/rp2040/boardIo.c
+	ifneq ($(KL_USE_BOARD_LEDS_RPI_PICO),)
+		MODULE_SRCS += km0/device/rp2040/boardIo.c
+		DEFINES += KS_USE_BOARD_LEDS
+		DEFINES += KS_USE_BOARD_LEDS_RPI_PICO
+	else
+		# MODULE_SRCS += km0/device/boardIo_dummy.c	//TODO: use this
+		MODULE_SRCS += km0/device/rp2040/boardIo.c
+	endif
 endif
 
 #debug uart

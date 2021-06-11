@@ -60,6 +60,10 @@ int main() {
   boardIo_setupLeds_proMicroRp();
 #endif
 
+#ifdef KS_USE_BOARD_LEDS_RPI_PICO
+  boardIo_setupLeds_rpiPico();
+#endif
+
 #ifdef KS_USE_DEBUG_UART
   debugUart_initialize(38400);
 #endif
