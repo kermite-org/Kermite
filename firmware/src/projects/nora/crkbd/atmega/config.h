@@ -1,4 +1,4 @@
-#ifndef __CONFIG_H__
+#pragma once
 
 #define KERMITE_PROJECT_ID "GCX88nns"
 
@@ -17,5 +17,3 @@
 
 #define KS_ROW_PINS \
   { D4, C6, D7, E6 }
-
-#endif
