@@ -18,8 +18,23 @@ MODULE_SRCS += km0/kernel/keyActionRemapper.c
 MODULE_SRCS += km0/kernel/keyboardCoreLogic.c
 MODULE_SRCS += km0/kernel/keyboardMain.c
 
-#scanner
+#matrix key scanner
+ifneq ($(KL_USE_KEY_MATRIX),)
 MODULE_SRCS += km0/scanner/keyScanner_basicMatrix.c
+DEFINES += KS_USE_KEY_MATRIX
+endif
+
+#direct wired key scanner
+ifneq ($(KL_USE_KEYS_DIRECT_WIRED),)
+MODULE_SRCS += km0/scanner/keyScanner_directWired.c
+DEFINES += KS_USE_KEYS_DIRECT_WIRED
+endif
+
+#encoder key scanner
+ifneq ($(KL_USE_ENCODERS),)
+MODULE_SRCS += km0/scanner/keyScanner_encoderBasic.c
+DEFINES += KS_USE_ENCODERS
+endif
 
 #board leds
 ifneq ($(KL_USE_PROMICRO_BOARD_LEDS),)
