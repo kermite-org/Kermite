@@ -64,7 +64,7 @@ DEFINES += KS_USE_DEBUG_UART
 endif
 
 #oled
-ifneq ($(KL_USE_OLED),)
+ifneq ($(KL_USE_OLED_DISPLAY),)
 MODULE_SRCS += km0/device/rp2040/boardI2c.c
 MODULE_SRCS += km0/visualizer/oledDisplay_rp/oledCoreEx.c
 MODULE_SRCS += km0/visualizer/oledDisplay_rp/oledDisplayEx_default.c
