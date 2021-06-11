@@ -60,6 +60,7 @@ endif
 #debug uart
 ifneq ($(KL_USE_DEBUG_UART),)
 MODULE_SRCS += km0/device/rp2040/debugUart.c
+DEFINES += KS_USE_DEBUG_UART
 endif
 
 #oled
@@ -88,6 +89,7 @@ ifneq ($(KL_USE_SPLIT_KEYBOARD),)
 MODULE_PIOASM_SRCS += km0/device/rp2040/singleWire4.pio
 MODULE_SRCS += km0/device/rp2040/boardLink_singleWire.c
 MODULE_SRCS += km0/wrapper/splitKeyboard.c
+DEFINES += KS_USE_SPLIT_KEYBOARD
 else
 #unified keyboard
 MODULE_SRCS += km0/wrapper/generalKeyboard.c
