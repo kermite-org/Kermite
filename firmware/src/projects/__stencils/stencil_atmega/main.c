@@ -15,7 +15,7 @@
 #include "km0/scanner/keyScanner_encoderBasic.h"
 #endif
 
-#ifdef KS_USE_PROMICRO_BOARD_LEDS
+#ifdef KS_USE_BOARD_LEDS
 #include "km0/device/boardIo.h"
 #endif
 
@@ -52,8 +52,12 @@ static EncoderConfig encoderConfigs[KS_NUM_ENCODERS] = KS_ENCODER_CONFIGS;
 
 int main() {
 
-#ifdef KS_USE_PROMICRO_BOARD_LEDS
+#ifdef KS_USE_BOARD_LEDS_PROMICRO_AVR
   boardIo_setupLeds_proMicroAvr();
+#endif
+
+#ifdef KS_USE_BOARD_LEDS_PROMICRO_RP
+  boardIo_setupLeds_proMicroRp();
 #endif
 
 #ifdef KS_USE_DEBUG_UART
