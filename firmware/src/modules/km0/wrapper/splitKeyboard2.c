@@ -11,6 +11,7 @@
 #include "splitKeyboard.h"
 #include <stdio.h>
 
+#if 0
 #define NumDebugPins 4
 static uint8_t debugPins[NumDebugPins] = { P_F5, P_F6, P_F7 };
 static void initDebugPins() {
@@ -26,6 +27,11 @@ static void debugPinHigh(int index) {
 static void debugPinLow(int index) {
   digitalIo_setLow(debugPins[index]);
 }
+#else
+static void initDebugPins() {}
+static void debugPinHigh(int index) {}
+static void debugPinLow(int index) {}
+#endif
 
 //-------------------------------------------------------
 //definitions
@@ -52,15 +58,17 @@ enum {
   SplitOp_MasterOath = 0xA0,                  //Master --> Slave
   SplitOp_InputScanSlotStatesRequest = 0x40,  //Master --> Slave
   SplitOp_InputScanSlotStatesResponse = 0x41, //Masetr <-- Slave
-  SplitOp_MasterScanSlotStateChanged = 0xC0,  //Master --> Slave
-  SplitOp_MasterParameterChanged = 0xC1,      //Master --> Slave
-  SplitOp_SlaveAck = 0xF0,                    //Master <-- Slave
-  SplitOp_SlaveNack = 0xF1,
+  //Masater-->Slave
+  SplitOp_MasterScanSlotStateChanged = 0xC0,
+  SplitOp_MasterParameterChanged = 0xC1,
   SplitOp_TaskOrder_FlashHeartbeat = 0x91,
   SplitOp_TaskOrder_ScanKeyStates = 0x92,
   SplitOp_TaskOrder_UpdateRgbLeds = 0x93,
   SplitOp_TaskOrder_UpdateOled = 0x94,
   SplitOp_IdleCheck = 0x9F,
+  //Master <-- Slave
+  SplitOp_SlaveAck = 0xF0,
+  SplitOp_SlaveNack = 0xF1,
 };
 
 //---------------------------------------------
@@ -69,9 +77,6 @@ enum {
 //左右間通信用バッファ
 static uint8_t sw_txbuf[SingleWireMaxPacketSize] = { 0 };
 static uint8_t sw_rxbuf[SingleWireMaxPacketSize] = { 0 };
-
-static bool isMaster = false;
-static bool isSlave = false;
 
 //---------------------------------------------
 //masterの状態通知パケットキュー
@@ -128,8 +133,6 @@ static void taskFlashHeartbeatLed() {
 
 //-------------------------------------------------------
 //master
-
-static bool isConnectionActive = false;
 
 static void master_sendSlaveTaskOrder(uint8_t op) {
   sw_txbuf[0] = op;
@@ -217,8 +220,6 @@ static void master_handleMasterKeySlotStateChanged(uint8_t slotIndex, bool isDow
 }
 
 static void master_start() {
-  isMaster = true;
-  isConnectionActive = true;
   master_sendInitialParameteresAll();
   configManager_addParameterChangeListener(master_handleMasterParameterChanged);
   keyboardMain_setKeySlotStateChangedCallback(master_handleMasterKeySlotStateChanged);
@@ -346,7 +347,6 @@ static void slave_consumeMasterStatePackets() {
 }
 
 static void slave_start() {
-  isSlave = true;
   keyboardMain_setAsSplitSlave();
   boardLink_setupSlaveReceiver(slave_onRecevierInterruption);
 
