@@ -40,6 +40,7 @@ enum {
   SplitOp_MasterParameterChanged = 0xC1,      //Master --> Slave
   SplitOp_SlaveAck = 0xF0,                    //Master <-- Slave
   SplitOp_TaskOrder_FlashHeartbeat = 0x91,
+  SplitOp_IdleCheck = 0x9F,
 };
 
 //---------------------------------------------
@@ -49,12 +50,29 @@ enum {
 static uint8_t sw_txbuf[SingleWireMaxPacketSize] = { 0 };
 static uint8_t sw_rxbuf[SingleWireMaxPacketSize] = { 0 };
 
+static bool isMaster = false;
+static bool isSlave = false;
+
 //-------------------------------------------------------
 
+static void startTaskBlocking() {
+  if (isSlave) {
+    system_disableInterrupts();
+  }
+}
+
+static void endTaskBlocking() {
+  if (isSlave) {
+    system_enableInterrupts();
+  }
+}
+
 static void taskFlashHeartbeatLed() {
+  startTaskBlocking();
   boardIo_writeLed1(true);
   delayMs(5);
   boardIo_writeLed1(false);
+  endTaskBlocking();
 }
 
 //-------------------------------------------------------
@@ -62,7 +80,7 @@ static void taskFlashHeartbeatLed() {
 
 static bool isConnectionActive = false;
 
-static void master_sendTaskOrder(uint8_t op) {
+static void master_sendSlaveTaskOrder(uint8_t op) {
   sw_txbuf[0] = op;
   boardLink_writeTxBuffer(sw_txbuf, 1);
   boardLink_exchangeFramesBlocking();
@@ -71,13 +89,28 @@ static void master_sendTaskOrder(uint8_t op) {
   }
 }
 
+static void master_waitSlaveTaskCompletion() {
+  sw_txbuf[0] = SplitOp_IdleCheck;
+  while (1) {
+    boardLink_writeTxBuffer(sw_txbuf, 1);
+    boardLink_exchangeFramesBlocking();
+    uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
+    if (sz == 1 && sw_rxbuf[0] == SplitOp_SlaveAck) {
+      break;
+    }
+    delayMs(1);
+  }
+}
+
 static void master_start() {
+  isMaster = true;
   isConnectionActive = true;
   uint32_t tick = 0;
   while (1) {
     if (tick % 4000 == 0) {
-      master_sendTaskOrder(SplitOp_TaskOrder_FlashHeartbeat);
+      master_sendSlaveTaskOrder(SplitOp_TaskOrder_FlashHeartbeat);
       taskFlashHeartbeatLed();
+      master_waitSlaveTaskCompletion();
     }
     delayMs(1);
     tick++;
@@ -99,6 +132,9 @@ static void slave_onRecevierInterruption() {
   uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
+    if (cmd == SplitOp_IdleCheck) {
+      slave_respondAck();
+    }
     if (cmd == SplitOp_TaskOrder_FlashHeartbeat) {
       flagSyncHeartbeat = true;
       slave_respondAck();
@@ -107,6 +143,7 @@ static void slave_onRecevierInterruption() {
 }
 
 static void slave_start() {
+  isSlave = true;
   keyboardMain_setAsSplitSlave();
   boardLink_setupSlaveReceiver(slave_onRecevierInterruption);
 
