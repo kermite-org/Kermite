@@ -71,14 +71,14 @@ enum {
   SplitOp_SlaveNack = 0xF1,
 };
 
-//---------------------------------------------
+//-------------------------------------------------------
 //variables
 
 //左右間通信用バッファ
 static uint8_t sw_txbuf[SingleWireMaxPacketSize] = { 0 };
 static uint8_t sw_rxbuf[SingleWireMaxPacketSize] = { 0 };
 
-//---------------------------------------------
+//-------------------------------------------------------
 //masterの状態通知パケットキュー
 
 #define MasterStatePacketBufferCapacity 16
@@ -383,12 +383,61 @@ static void slave_start() {
 }
 
 //-------------------------------------------------------
+//detection
+
+volatile static bool hasMasterOathReceived = false;
+
+//単線通信受信割り込みコールバック
+static void detection_onDataReceivedFromMaster() {
+  uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
+  if (sz == 1 && sw_rxbuf[0] == SplitOp_MasterOath) {
+    //Master確定通知パケット受信
+    hasMasterOathReceived = true;
+    sw_txbuf[0] = SplitOp_SlaveAck;
+    boardLink_writeTxBuffer(sw_txbuf, 1);
+  }
+}
+
+static void detection_sendMasterOath() {
+  //Master確定通知パケットを送信
+  sw_txbuf[0] = SplitOp_MasterOath;
+  boardLink_writeTxBuffer(sw_txbuf, 1);
+  boardLink_exchangeFramesBlocking();
+}
+
+//USB接続が確立していない期間の動作
+//双方待機し、USB接続が確立すると自分がMasterになり、相手にMaseter確定通知パケットを送る
+static bool detenction_determineMasterSlaveByUsbConnection() {
+  boardLink_initialize();
+  boardLink_setupSlaveReceiver(detection_onDataReceivedFromMaster);
+  system_enableInterrupts();
+
+  bool isMaster = true;
+
+  while (true) {
+    if (usbIoCore_isConnectedToHost()) {
+      detection_sendMasterOath();
+      isMaster = true;
+      break;
+    }
+    if (hasMasterOathReceived) {
+      isMaster = false;
+      break;
+    }
+    usbIoCore_processUpdate();
+    delayMs(1);
+  }
+  boardLink_clearSlaveReceiver();
+  return isMaster;
+}
 
 static bool detection_detemineMasterSlaveByPin() {
   digitalIo_setInputPullup(pin_masterSlaveDetermination);
   delayMs(1);
   return digitalIo_read(pin_masterSlaveDetermination) == 1;
 }
+
+//-------------------------------------------------------
 
 //master/slave確定後にどちらになったかをLEDで表示
 static void showModeByLedBlinkPattern(bool isMaster) {
@@ -427,12 +476,26 @@ static void startFixedMode() {
   }
 }
 
+static void startDynamicMode() {
+  keyboardMain_initialize();
+  usbIoCore_initialize();
+  bool isMaster = detenction_determineMasterSlaveByUsbConnection();
+  printf("isMaster:%d\n", isMaster);
+  showModeByLedBlinkPattern(isMaster);
+  if (isMaster) {
+    master_start();
+  } else {
+    usbIoCore_deInit();
+    slave_start();
+  }
+}
+
 void splitKeyboard_start() {
   initDebugPins();
   system_initializeUserProgram();
   if (pin_masterSlaveDetermination != -1) {
     startFixedMode();
   } else {
-    // startDynamicMode();
+    startDynamicMode();
   }
 }
