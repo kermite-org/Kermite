@@ -261,6 +261,7 @@ static void slave_start() {
     slave_consumeMasterStatePackets();
     keyboardMain_updateDisplayModules(tick);
     keyboardMain_updateHeartBeatLed(tick);
+    configManager_processUpdate();
     delayMs(1);
     tick++;
   }
