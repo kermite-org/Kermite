@@ -39,7 +39,7 @@ enum {
   SplitOp_MasterScanSlotStateChanged = 0xC0,  //Master --> Slave
   SplitOp_MasterParameterChanged = 0xC1,      //Master --> Slave
   SplitOp_SlaveAck = 0xF0,                    //Master <-- Slave
-  SplitOp_Sync_Heartbeat = 0x90
+  SplitOp_TaskOrder_FlashHeartbeat = 0x91,
 };
 
 //---------------------------------------------
@@ -51,20 +51,10 @@ static uint8_t sw_rxbuf[SingleWireMaxPacketSize] = { 0 };
 
 //-------------------------------------------------------
 
-static uint8_t heatbeatLed_tick = 0;
-
-static void heartbeatLed_update() {
-  if (heatbeatLed_tick > 0) {
-    heatbeatLed_tick--;
-    if (heatbeatLed_tick == 0) {
-      boardIo_writeLed1(false);
-    }
-  }
-}
-
-static void heartbeatLed_flash() {
+static void taskFlashHeartbeatLed() {
   boardIo_writeLed1(true);
-  heatbeatLed_tick = 4;
+  delayMs(5);
+  boardIo_writeLed1(false);
 }
 
 //-------------------------------------------------------
@@ -72,7 +62,7 @@ static void heartbeatLed_flash() {
 
 static bool isConnectionActive = false;
 
-static void master_sendSyncSignal(uint8_t op) {
+static void master_sendTaskOrder(uint8_t op) {
   sw_txbuf[0] = op;
   boardLink_writeTxBuffer(sw_txbuf, 1);
   boardLink_exchangeFramesBlocking();
@@ -86,10 +76,9 @@ static void master_start() {
   uint32_t tick = 0;
   while (1) {
     if (tick % 4000 == 0) {
-      master_sendSyncSignal(SplitOp_Sync_Heartbeat);
-      heartbeatLed_flash();
+      master_sendTaskOrder(SplitOp_TaskOrder_FlashHeartbeat);
+      taskFlashHeartbeatLed();
     }
-    heartbeatLed_update();
     delayMs(1);
     tick++;
   }
@@ -110,7 +99,7 @@ static void slave_onRecevierInterruption() {
   uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
-    if (cmd == SplitOp_Sync_Heartbeat) {
+    if (cmd == SplitOp_TaskOrder_FlashHeartbeat) {
       flagSyncHeartbeat = true;
       slave_respondAck();
     }
@@ -124,9 +113,8 @@ static void slave_start() {
   while (1) {
     if (flagSyncHeartbeat) {
       flagSyncHeartbeat = false;
-      heartbeatLed_flash();
+      taskFlashHeartbeatLed();
     }
-    heartbeatLed_update();
     delayMs(1);
   }
 }
