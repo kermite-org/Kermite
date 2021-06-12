@@ -11,6 +11,22 @@
 #include "splitKeyboard.h"
 #include <stdio.h>
 
+#define NumDebugPins 4
+static uint8_t debugPins[NumDebugPins] = { P_F5, P_F6, P_F7 };
+static void initDebugPins() {
+  for (int i = 0; i < NumDebugPins; i++) {
+    digitalIo_setOutput(debugPins[i]);
+  }
+}
+
+static void debugPinHigh(int index) {
+  digitalIo_setHigh(debugPins[index]);
+}
+
+static void debugPinLow(int index) {
+  digitalIo_setLow(debugPins[index]);
+}
+
 //-------------------------------------------------------
 //definitions
 
@@ -95,18 +111,22 @@ static void master_start() {
   isConnectionActive = true;
   uint32_t tick = 0;
   while (1) {
+    debugPinHigh(0);
     if (tick % 4000 == 0) {
       master_sendSlaveTaskOrder(SplitOp_TaskOrder_FlashHeartbeat);
       taskFlashHeartbeatLed();
       master_waitSlaveTaskCompletion();
     }
     if (tick % 10 == 0) {
+      debugPinHigh(1);
       master_sendSlaveTaskOrder(SplitOp_TaskOrder_ScanKeyStates);
       keyboardMain_udpateKeyScanners();
       keyboardMain_processKeyInputUpdate(15);
       keyboardMain_updateKeyInidicatorLed();
       master_waitSlaveTaskCompletion();
+      debugPinLow(1);
     }
+    debugPinLow(0);
     delayMs(1);
     tick++;
   }
@@ -168,13 +188,15 @@ static void slave_start() {
       taskOrder = 0;
     }
     if (taskOrder == SplitOp_TaskOrder_ScanKeyStates) {
+      debugPinHigh(1);
       startTaskBlocking();
       keyboardMain_udpateKeyScanners();
       keyboardMain_updateKeyInidicatorLed();
       endTaskBlocking();
       taskOrder = 0;
+      debugPinLow(1);
     }
-    delayMs(1);
+    delayUs(10);
   }
 }
 
@@ -224,6 +246,7 @@ static void startFixedMode() {
 }
 
 void splitKeyboard_start() {
+  initDebugPins();
   system_initializeUserProgram();
   if (pin_masterSlaveDetermination != -1) {
     startFixedMode();
