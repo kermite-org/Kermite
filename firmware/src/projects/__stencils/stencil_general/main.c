@@ -70,12 +70,12 @@ int main() {
 
 #ifdef KS_USE_OLED
   oledDisplay_initialize();
-  keyboardMain_useVisualModule(oledDisplay_update);
+  keyboardMain_useOledDisplayModule(oledDisplay_update);
 #endif
 
 #ifdef KS_USE_RGB_LIGHTING
   rgbLighting_initialize();
-  keyboardMain_useVisualModule(rgbLighting_update);
+  keyboardMain_useRgbLightingModule(rgbLighting_update);
 #endif
 
 #ifdef KS_USE_KEY_MATRIX
@@ -95,7 +95,9 @@ int main() {
 
 #ifdef KS_USE_SPLIT_KEYBOARD
   splitKeyboard_start();
-#else
+#endif
+
+#ifdef KS_USE_UNIFIED_KEYBOARD
   generalKeyboard_start();
 #endif
   return 0;
