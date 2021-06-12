@@ -58,31 +58,31 @@ static bool isSlaveExists = false;
 //---------------------------------------------
 //masterの状態通知パケットキュー
 
-#define MasterStatePacketBufferCapacity 8
+#define MasterStatePacketBufferCapacity 16
 #define MasterStatePacketBufferIndexMask (MasterStatePacketBufferCapacity - 1)
 
 static uint32_t masterStatePackets_buf[MasterStatePacketBufferCapacity];
 static uint8_t masterStatePackets_wi = 0;
 static uint8_t masterStatePackets_ri = 0;
-static uint8_t masterStatePackets_n = 0;
+static uint8_t masterStatePackets_cnt = 0;
 
 static void enqueueMasterStatePacket(uint8_t op, uint8_t arg1, uint8_t arg2) {
-  if (masterStatePackets_n < MasterStatePacketBufferCapacity) {
+  if (masterStatePackets_cnt < MasterStatePacketBufferCapacity) {
     uint32_t data = (uint32_t)arg2 << 16 | (uint32_t)arg1 << 8 | op;
     masterStatePackets_buf[masterStatePackets_wi] = data;
     masterStatePackets_wi = (masterStatePackets_wi + 1) & MasterStatePacketBufferIndexMask;
-    masterStatePackets_n++;
+    masterStatePackets_cnt++;
   } else {
     printf("buffer is full, cannot enqueue master state packet\n");
   }
 }
 
 static uint32_t popMasterStatePacket() {
-  uint32_t data = masterStatePackets_buf[masterStatePackets_ri];
-  if (data != 0) {
+  if (masterStatePackets_cnt > 0) {
+    uint32_t data = masterStatePackets_buf[masterStatePackets_ri];
     masterStatePackets_buf[masterStatePackets_ri] = 0;
     masterStatePackets_ri = (masterStatePackets_ri + 1) & MasterStatePacketBufferIndexMask;
-    masterStatePackets_n--;
+    masterStatePackets_cnt--;
     return data;
   }
   return 0;
@@ -93,9 +93,11 @@ static uint32_t peekMasterStatePacket() {
 }
 
 static void shiftMasterStatePacket() {
-  masterStatePackets_buf[masterStatePackets_ri] = 0;
-  masterStatePackets_ri = (masterStatePackets_ri + 1) & MasterStatePacketBufferIndexMask;
-  masterStatePackets_n--;
+  if (masterStatePackets_cnt > 0) {
+    masterStatePackets_buf[masterStatePackets_ri] = 0;
+    masterStatePackets_ri = (masterStatePackets_ri + 1) & MasterStatePacketBufferIndexMask;
+    masterStatePackets_cnt--;
+  }
 }
 
 //---------------------------------------------
@@ -138,10 +140,15 @@ static void master_pushMasterStatePacketOne() {
     boardLink_exchangeFramesBlocking();
     uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
 
-    shiftMasterStatePacket();
     if (sz == 1 && sw_rxbuf[0] == SplitOp_SlaveAck) {
+      //printf("master state packet sent, %d %d %d\n", sw_txbuf[0], sw_txbuf[1], sw_txbuf[2]);
+      shiftMasterStatePacket();
     } else {
-      // printf("failed to send master state packet, queued:%d\n", masterStatePackets_n);
+      printf("failed to send master state packet, queued:%d\n", masterStatePackets_cnt);
+      if (masterStatePackets_cnt >= MasterStatePacketBufferCapacity - 1) {
+        printf("too many transmit failure, regard as connection lost\n");
+        isSlaveExists = false;
+      }
     }
   }
 }
@@ -243,6 +250,7 @@ static void slave_consumeMasterStatePackets() {
     if (op == SplitOp_MasterParameterChanged) {
       uint8_t parameterIndex = arg1;
       uint8_t value = arg2;
+      // printf("master parameter changed %d %d\n", parameterIndex, value);
       configManager_writeParameter(parameterIndex, value);
     }
   }
