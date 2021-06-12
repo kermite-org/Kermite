@@ -40,6 +40,7 @@ enum {
   SplitOp_MasterParameterChanged = 0xC1,      //Master --> Slave
   SplitOp_SlaveAck = 0xF0,                    //Master <-- Slave
   SplitOp_TaskOrder_FlashHeartbeat = 0x91,
+  SplitOp_TaskOrder_ScanKeyStates = 0x92,
   SplitOp_IdleCheck = 0x9F,
 };
 
@@ -55,28 +56,14 @@ static bool isSlave = false;
 
 //-------------------------------------------------------
 
-static void startTaskBlocking() {
-  if (isSlave) {
-    system_disableInterrupts();
-  }
-}
-
-static void endTaskBlocking() {
-  if (isSlave) {
-    system_enableInterrupts();
-  }
-}
-
 static void taskFlashHeartbeatLed() {
-  startTaskBlocking();
   boardIo_writeLed1(true);
   delayMs(5);
   boardIo_writeLed1(false);
-  endTaskBlocking();
 }
 
 //-------------------------------------------------------
-//masater
+//master
 
 static bool isConnectionActive = false;
 
@@ -112,6 +99,13 @@ static void master_start() {
       taskFlashHeartbeatLed();
       master_waitSlaveTaskCompletion();
     }
+    if (tick % 10 == 0) {
+      master_sendSlaveTaskOrder(SplitOp_TaskOrder_ScanKeyStates);
+      keyboardMain_udpateKeyScanners();
+      keyboardMain_processKeyInputUpdate(15);
+      keyboardMain_updateKeyInidicatorLed();
+      master_waitSlaveTaskCompletion();
+    }
     delayMs(1);
     tick++;
   }
@@ -120,7 +114,15 @@ static void master_start() {
 //-------------------------------------------------------
 //slave
 
-volatile static bool flagSyncHeartbeat = false;
+static uint8_t taskOrder = 0;
+
+static void startTaskBlocking() {
+  system_disableInterrupts();
+}
+
+static void endTaskBlocking() {
+  system_enableInterrupts();
+}
 
 static void slave_respondAck() {
   sw_txbuf[0] = SplitOp_SlaveAck;
@@ -135,8 +137,9 @@ static void slave_onRecevierInterruption() {
     if (cmd == SplitOp_IdleCheck) {
       slave_respondAck();
     }
-    if (cmd == SplitOp_TaskOrder_FlashHeartbeat) {
-      flagSyncHeartbeat = true;
+    if (cmd == SplitOp_TaskOrder_FlashHeartbeat ||
+        cmd == SplitOp_TaskOrder_ScanKeyStates) {
+      taskOrder = cmd;
       slave_respondAck();
     }
   }
@@ -148,9 +151,18 @@ static void slave_start() {
   boardLink_setupSlaveReceiver(slave_onRecevierInterruption);
 
   while (1) {
-    if (flagSyncHeartbeat) {
-      flagSyncHeartbeat = false;
+    if (taskOrder == SplitOp_TaskOrder_FlashHeartbeat) {
+      startTaskBlocking();
       taskFlashHeartbeatLed();
+      endTaskBlocking();
+      taskOrder = 0;
+    }
+    if (taskOrder == SplitOp_TaskOrder_ScanKeyStates) {
+      startTaskBlocking();
+      keyboardMain_udpateKeyScanners();
+      keyboardMain_updateKeyInidicatorLed();
+      endTaskBlocking();
+      taskOrder = 0;
     }
     delayMs(1);
   }
