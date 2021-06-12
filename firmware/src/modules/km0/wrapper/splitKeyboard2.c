@@ -58,6 +58,8 @@ enum {
   SplitOp_SlaveNack = 0xF1,
   SplitOp_TaskOrder_FlashHeartbeat = 0x91,
   SplitOp_TaskOrder_ScanKeyStates = 0x92,
+  SplitOp_TaskOrder_UpdateRgbLeds = 0x93,
+  SplitOp_TaskOrder_UpdateOled = 0x94,
   SplitOp_IdleCheck = 0x9F,
 };
 
@@ -140,6 +142,7 @@ static void master_sendSlaveTaskOrder(uint8_t op) {
 
 static void master_waitSlaveTaskCompletion() {
   sw_txbuf[0] = SplitOp_IdleCheck;
+  delayUs(50);
   while (1) {
     boardLink_writeTxBuffer(sw_txbuf, 1);
     boardLink_exchangeFramesBlocking();
@@ -147,7 +150,7 @@ static void master_waitSlaveTaskCompletion() {
     if (sz == 1 && sw_rxbuf[0] == SplitOp_SlaveAck) {
       break;
     }
-    delayMs(1);
+    delayUs(500);
   }
 }
 
@@ -223,11 +226,6 @@ static void master_start() {
   uint32_t tick = 0;
   while (1) {
     debugPinHigh(0);
-    if (tick % 4000 == 0) {
-      master_sendSlaveTaskOrder(SplitOp_TaskOrder_FlashHeartbeat);
-      taskFlashHeartbeatLed();
-      master_waitSlaveTaskCompletion();
-    }
     if (tick % 10 == 0) {
       debugPinHigh(1);
       master_sendSlaveTaskOrder(SplitOp_TaskOrder_ScanKeyStates);
@@ -242,6 +240,23 @@ static void master_start() {
     }
     if (tick % 10 == 2) {
       master_pushMasterStatePacketOne();
+    }
+    if (tick % 40 == 3) {
+      debugPinHigh(2);
+      master_sendSlaveTaskOrder(SplitOp_TaskOrder_UpdateRgbLeds);
+      keyboardMain_updateRgbLightingModules(tick);
+      master_waitSlaveTaskCompletion();
+      debugPinLow(2);
+    }
+    if (tick % 50 == 4) {
+      master_sendSlaveTaskOrder(SplitOp_TaskOrder_UpdateOled);
+      keyboardMain_updateOledDisplayModule(tick);
+      master_waitSlaveTaskCompletion();
+    }
+    if (tick % 4000 == 5) {
+      master_sendSlaveTaskOrder(SplitOp_TaskOrder_FlashHeartbeat);
+      taskFlashHeartbeatLed();
+      master_waitSlaveTaskCompletion();
     }
     keyboardMain_processUpdate();
     debugPinLow(0);
@@ -287,7 +302,9 @@ static void slave_onRecevierInterruption() {
       }
     }
     if (cmd == SplitOp_TaskOrder_FlashHeartbeat ||
-        cmd == SplitOp_TaskOrder_ScanKeyStates) {
+        cmd == SplitOp_TaskOrder_ScanKeyStates ||
+        cmd == SplitOp_TaskOrder_UpdateRgbLeds ||
+        cmd == SplitOp_TaskOrder_UpdateOled) {
       taskOrder = cmd;
       slave_respondAck();
     }
@@ -331,6 +348,7 @@ static void slave_consumeMasterStatePackets() {
       uint8_t value = arg2;
       // printf("master parameter changed %d %d\n", parameterIndex, value);
       configManager_writeParameter(parameterIndex, value);
+      configManager_processUpdateNoSave();
     }
   }
 }
@@ -352,6 +370,22 @@ static void slave_start() {
       startTaskBlocking();
       keyboardMain_udpateKeyScanners();
       keyboardMain_updateKeyInidicatorLed();
+      endTaskBlocking();
+      taskOrder = 0;
+      debugPinLow(1);
+    }
+    if (taskOrder == SplitOp_TaskOrder_UpdateRgbLeds) {
+      debugPinHigh(1);
+      startTaskBlocking();
+      keyboardMain_updateRgbLightingModules(0);
+      endTaskBlocking();
+      taskOrder = 0;
+      debugPinLow(1);
+    }
+    if (taskOrder == SplitOp_TaskOrder_UpdateOled) {
+      debugPinHigh(1);
+      startTaskBlocking();
+      keyboardMain_updateOledDisplayModule(0);
       endTaskBlocking();
       taskOrder = 0;
       debugPinLow(1);

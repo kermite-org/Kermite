@@ -14,6 +14,7 @@ void configManager_bulkWriteParameters(uint8_t *buf, uint8_t len, uint8_t parame
 void configManager_resetSystemParameters();
 void configManager_handleSystemAction(uint8_t systemActionCode, uint8_t payloadValue);
 void configManager_processUpdate();
+void configManager_processUpdateNoSave();
 
 uint8_t *configManager_getParameterValuesRawPointer();
 

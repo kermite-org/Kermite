@@ -235,4 +235,5 @@ void rgbLighting_initialize() {
 
 void rgbLighting_update() {
   updateFrame();
+  frameTick++;
 }
