@@ -53,7 +53,7 @@ static uint8_t sw_rxbuf[SingleWireMaxPacketSize] = { 0 };
 
 static bool hasMasterOathReceived = false;
 
-static bool isSlaveExists = false;
+static bool isConnectionActive = false;
 
 //---------------------------------------------
 //masterの状態通知パケットキュー
@@ -105,29 +105,36 @@ static void shiftMasterStatePacket() {
 
 //反対側のコントローラからキー状態を受け取る処理
 static void master_pullAltSideKeyStates() {
-  if (!isSlaveExists) {
+  if (!isConnectionActive) {
     return;
   }
+  static bool failCount = 0;
+
   sw_txbuf[0] = SplitOp_InputScanSlotStatesRequest;
   boardLink_writeTxBuffer(sw_txbuf, 1); //キー状態要求パケットを送信
   boardLink_exchangeFramesBlocking();
   uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
 
-  if (sz > 0) {
-    uint8_t cmd = sw_rxbuf[0];
-    if (cmd == SplitOp_InputScanSlotStatesResponse && sz == 1 + NumScanSlotBytesHalf) {
-      uint8_t *payloadBytes = sw_rxbuf + 1;
-      //子-->親, キー状態応答パケット受信, 子のキー状態を受け取り保持
-      uint8_t *inputScanSlotFlags = keyboardMain_getInputScanSlotFlags();
-      //inputScanSlotFlagsの後ろ半分にslave側のボードのキー状態を格納する
-      utils_copyBitFlagsBuf(inputScanSlotFlags, NumScanSlotsHalf, payloadBytes, 0, NumScanSlotsHalf);
+  if (sw_rxbuf[0] == SplitOp_InputScanSlotStatesResponse && sz == 1 + NumScanSlotBytesHalf) {
+    uint8_t *payloadBytes = sw_rxbuf + 1;
+    //子-->親, キー状態応答パケット受信, 子のキー状態を受け取り保持
+    uint8_t *inputScanSlotFlags = keyboardMain_getInputScanSlotFlags();
+    //inputScanSlotFlagsの後ろ半分にslave側のボードのキー状態を格納する
+    utils_copyBitFlagsBuf(inputScanSlotFlags, NumScanSlotsHalf, payloadBytes, 0, NumScanSlotsHalf);
+    failCount = 0;
+  } else {
+    failCount++;
+    printf("no keystate response from slave\n");
+    if (failCount > 10) {
+      printf("too many comminucation failure, regard as slave lost\n");
+      isConnectionActive = false;
     }
   }
 }
 
 //masterのキー状態変化やパラメタの変更通知をslaveに送信する処理
 static void master_pushMasterStatePacketOne() {
-  if (!isSlaveExists) {
+  if (!isConnectionActive) {
     return;
   }
   //パケットキューからデータを一つ取り出しスレーブに送信, 送信が成功したらキューから除去
@@ -147,7 +154,7 @@ static void master_pushMasterStatePacketOne() {
       printf("failed to send master state packet, queued:%d\n", masterStatePackets_cnt);
       if (masterStatePackets_cnt >= MasterStatePacketBufferCapacity - 1) {
         printf("too many transmit failure, regard as connection lost\n");
-        isSlaveExists = false;
+        isConnectionActive = false;
       }
     }
   }
@@ -178,7 +185,7 @@ static void master_handleMasterKeySlotStateChanged(uint8_t slotIndex, bool isDow
 }
 
 static void master_start() {
-  printf("isSlaveExists:%d\n", isSlaveExists);
+  isConnectionActive = true;
   master_sendInitialParameteresAll();
   keyboardMain_setKeySlotStateChangedCallback(master_handleMasterKeySlotStateChanged);
   configManager_addParameterChangeListener(master_handleMasterParameterChanged);
@@ -297,8 +304,6 @@ static void detection_sendMasterOath() {
   sw_txbuf[0] = SplitOp_MasterOath;
   boardLink_writeTxBuffer(sw_txbuf, 1);
   boardLink_exchangeFramesBlocking();
-  uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
-  isSlaveExists = sz == 1 && sw_rxbuf[0] == SplitOp_SlaveAck;
 }
 
 //USB接続が確立していない期間の動作
@@ -360,10 +365,6 @@ static void startFixedMode() {
   keyboardMain_initialize();
   bool isMaster = detection_detemineMasterSlaveByPin();
   printf("isMaster:%d\n", isMaster);
-  if (isMaster) {
-    //Master/Slave間の接続は必ずあるものとみなす
-    isSlaveExists = true;
-  }
   showModeByLedBlinkPattern(isMaster);
   if (isMaster) {
     usbIoCore_initialize();
