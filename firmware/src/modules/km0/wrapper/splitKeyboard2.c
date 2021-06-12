@@ -71,6 +71,51 @@ static uint8_t sw_rxbuf[SingleWireMaxPacketSize] = { 0 };
 static bool isMaster = false;
 static bool isSlave = false;
 
+//---------------------------------------------
+//masterの状態通知パケットキュー
+
+#define MasterStatePacketBufferCapacity 16
+#define MasterStatePacketBufferIndexMask (MasterStatePacketBufferCapacity - 1)
+
+static uint32_t masterStatePackets_buf[MasterStatePacketBufferCapacity];
+static uint8_t masterStatePackets_wi = 0;
+static uint8_t masterStatePackets_ri = 0;
+static uint8_t masterStatePackets_cnt = 0;
+
+static void enqueueMasterStatePacket(uint8_t op, uint8_t arg1, uint8_t arg2) {
+  if (masterStatePackets_cnt < MasterStatePacketBufferCapacity) {
+    uint32_t data = (uint32_t)arg2 << 16 | (uint32_t)arg1 << 8 | op;
+    masterStatePackets_buf[masterStatePackets_wi] = data;
+    masterStatePackets_wi = (masterStatePackets_wi + 1) & MasterStatePacketBufferIndexMask;
+    masterStatePackets_cnt++;
+  } else {
+    printf("buffer is full, cannot enqueue master state packet\n");
+  }
+}
+
+static uint32_t popMasterStatePacket() {
+  if (masterStatePackets_cnt > 0) {
+    uint32_t data = masterStatePackets_buf[masterStatePackets_ri];
+    masterStatePackets_buf[masterStatePackets_ri] = 0;
+    masterStatePackets_ri = (masterStatePackets_ri + 1) & MasterStatePacketBufferIndexMask;
+    masterStatePackets_cnt--;
+    return data;
+  }
+  return 0;
+}
+
+static uint32_t peekMasterStatePacket() {
+  return masterStatePackets_buf[masterStatePackets_ri];
+}
+
+static void shiftMasterStatePacket() {
+  if (masterStatePackets_cnt > 0) {
+    masterStatePackets_buf[masterStatePackets_ri] = 0;
+    masterStatePackets_ri = (masterStatePackets_ri + 1) & MasterStatePacketBufferIndexMask;
+    masterStatePackets_cnt--;
+  }
+}
+
 //-------------------------------------------------------
 
 static void taskFlashHeartbeatLed() {
@@ -119,12 +164,40 @@ static void master_pullAltSideKeyStates() {
     uint8_t *inputScanSlotFlags = keyboardMain_getInputScanSlotFlags();
     //inputScanSlotFlagsの後ろ半分にslave側のボードのキー状態を格納する
     utils_copyBitFlagsBuf(inputScanSlotFlags, NumScanSlotsHalf, payloadBytes, 0, NumScanSlotsHalf);
+  } else {
+    printf("no keystate response from slave\n");
   }
+}
+
+//masterのキー状態変化やパラメタの変更通知をslaveに送信する処理
+static void master_pushMasterStatePacketOne() {
+  //パケットキューからデータを一つ取り出しスレーブに送信, 送信が成功したらキューから除去
+  uint32_t data = peekMasterStatePacket();
+  if (data) {
+    sw_txbuf[0] = data & 0xFF;
+    sw_txbuf[1] = data >> 8 & 0xFF;
+    sw_txbuf[2] = data >> 16 & 0xFF;
+    boardLink_writeTxBuffer(sw_txbuf, 3);
+    boardLink_exchangeFramesBlocking();
+    uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
+
+    if (sz == 1 && sw_rxbuf[0] == SplitOp_SlaveAck) {
+      shiftMasterStatePacket();
+    } else {
+      printf("failed to send master state packet\n");
+    }
+  }
+}
+
+static void master_handleMasterKeySlotStateChanged(uint8_t slotIndex, bool isDown) {
+  enqueueMasterStatePacket(SplitOp_MasterScanSlotStateChanged, slotIndex, isDown);
 }
 
 static void master_start() {
   isMaster = true;
   isConnectionActive = true;
+  keyboardMain_setKeySlotStateChangedCallback(master_handleMasterKeySlotStateChanged);
+
   uint32_t tick = 0;
   while (1) {
     debugPinHigh(0);
@@ -145,6 +218,9 @@ static void master_start() {
     if (tick % 10 == 1) {
       master_pullAltSideKeyStates();
     }
+    if (tick % 10 == 2) {
+      master_pushMasterStatePacketOne();
+    }
     debugPinLow(0);
     delayMs(1);
     tick++;
@@ -155,6 +231,7 @@ static void master_start() {
 //slave
 
 static uint8_t taskOrder = 0;
+static bool masterStateReceived = false;
 
 static void startTaskBlocking() {
   system_disableInterrupts();
@@ -201,6 +278,37 @@ static void slave_onRecevierInterruption() {
       utils_copyBytes(sw_txbuf + 1, inputScanSlotFlags, NumScanSlotBytesHalf);
       boardLink_writeTxBuffer(sw_txbuf, 1 + NumScanSlotBytesHalf);
     }
+
+    if (cmd == SplitOp_MasterScanSlotStateChanged ||
+        cmd == SplitOp_MasterParameterChanged) {
+      uint8_t arg1 = sw_rxbuf[1];
+      uint8_t arg2 = sw_rxbuf[2];
+      enqueueMasterStatePacket(cmd, arg1, arg2);
+      masterStateReceived = true;
+      slave_respondAck();
+    }
+  }
+}
+
+static void slave_consumeMasterStatePackets() {
+  uint32_t data = popMasterStatePacket();
+  if (data) {
+    uint8_t op = data & 0xFF;
+    uint8_t arg1 = data >> 8 & 0xFF;
+    uint8_t arg2 = data >> 16 & 0xFF;
+    if (op == SplitOp_MasterScanSlotStateChanged) {
+      uint8_t slotIndex = arg1;
+      bool isDown = arg2;
+      uint8_t *nextScanSlotStateFlags = keyboardMain_getNextScanSlotFlags();
+      utils_writeArrayedBitFlagsBit(nextScanSlotStateFlags, slotIndex, isDown);
+      // printf("master slot changed %d %d\n", slotIndex, isDown);
+    }
+    if (op == SplitOp_MasterParameterChanged) {
+      uint8_t parameterIndex = arg1;
+      uint8_t value = arg2;
+      // printf("master parameter changed %d %d\n", parameterIndex, value);
+      configManager_writeParameter(parameterIndex, value);
+    }
   }
 }
 
@@ -224,6 +332,10 @@ static void slave_start() {
       endTaskBlocking();
       taskOrder = 0;
       debugPinLow(1);
+    }
+    if (masterStateReceived) {
+      slave_consumeMasterStatePackets();
+      masterStateReceived = false;
     }
     delayUs(10);
   }
