@@ -106,6 +106,22 @@ static void master_waitSlaveTaskCompletion() {
   }
 }
 
+//反対側のコントローラからキー状態を受け取る処理
+static void master_pullAltSideKeyStates() {
+  sw_txbuf[0] = SplitOp_InputScanSlotStatesRequest;
+  boardLink_writeTxBuffer(sw_txbuf, 1); //キー状態要求パケットを送信
+  boardLink_exchangeFramesBlocking();
+  uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
+
+  if (sz == 1 + NumScanSlotBytesHalf && sw_rxbuf[0] == SplitOp_InputScanSlotStatesResponse) {
+    uint8_t *payloadBytes = sw_rxbuf + 1;
+    //子-->親, キー状態応答パケット受信, 子のキー状態を受け取り保持
+    uint8_t *inputScanSlotFlags = keyboardMain_getInputScanSlotFlags();
+    //inputScanSlotFlagsの後ろ半分にslave側のボードのキー状態を格納する
+    utils_copyBitFlagsBuf(inputScanSlotFlags, NumScanSlotsHalf, payloadBytes, 0, NumScanSlotsHalf);
+  }
+}
+
 static void master_start() {
   isMaster = true;
   isConnectionActive = true;
@@ -125,6 +141,9 @@ static void master_start() {
       keyboardMain_updateKeyInidicatorLed();
       master_waitSlaveTaskCompletion();
       debugPinLow(1);
+    }
+    if (tick % 10 == 1) {
+      master_pullAltSideKeyStates();
     }
     debugPinLow(0);
     delayMs(1);
@@ -171,6 +190,16 @@ static void slave_onRecevierInterruption() {
         cmd == SplitOp_TaskOrder_ScanKeyStates) {
       taskOrder = cmd;
       slave_respondAck();
+    }
+
+    if (cmd == SplitOp_InputScanSlotStatesRequest) {
+      //親-->子, キー状態要求パケット受信, キー状態応答パケットを返す
+      //子から親に対してキー状態応答パケットを送る
+      sw_txbuf[0] = SplitOp_InputScanSlotStatesResponse;
+      uint8_t *inputScanSlotFlags = keyboardMain_getInputScanSlotFlags();
+      //slave側でnextScanSlotStateFlagsの前半分に入っているキー状態をmasterに送信する
+      utils_copyBytes(sw_txbuf + 1, inputScanSlotFlags, NumScanSlotBytesHalf);
+      boardLink_writeTxBuffer(sw_txbuf, 1 + NumScanSlotBytesHalf);
     }
   }
 }
