@@ -39,6 +39,7 @@ enum {
   SplitOp_MasterScanSlotStateChanged = 0xC0,  //Master --> Slave
   SplitOp_MasterParameterChanged = 0xC1,      //Master --> Slave
   SplitOp_SlaveAck = 0xF0,                    //Master <-- Slave
+  SplitOp_SlaveNack = 0xF1,
   SplitOp_TaskOrder_FlashHeartbeat = 0x91,
   SplitOp_TaskOrder_ScanKeyStates = 0x92,
   SplitOp_IdleCheck = 0x9F,
@@ -129,13 +130,22 @@ static void slave_respondAck() {
   boardLink_writeTxBuffer(sw_txbuf, 1);
 }
 
+static void slave_respondNack() {
+  sw_txbuf[0] = SplitOp_SlaveNack;
+  boardLink_writeTxBuffer(sw_txbuf, 1);
+}
+
 //単線通信の受信割り込みコールバック
 static void slave_onRecevierInterruption() {
   uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
     if (cmd == SplitOp_IdleCheck) {
-      slave_respondAck();
+      if (taskOrder != 0) {
+        slave_respondNack();
+      } else {
+        slave_respondAck();
+      }
     }
     if (cmd == SplitOp_TaskOrder_FlashHeartbeat ||
         cmd == SplitOp_TaskOrder_ScanKeyStates) {
