@@ -268,16 +268,8 @@ static void master_start() {
 //-------------------------------------------------------
 //slave
 
-static uint8_t taskOrder = 0;
-static bool masterStateReceived = false;
-
-static void startTaskBlocking() {
-  system_disableInterrupts();
-}
-
-static void endTaskBlocking() {
-  system_enableInterrupts();
-}
+volatile static uint8_t taskOrder = 0;
+volatile static bool masterStateReceived = false;
 
 static void slave_respondAck() {
   sw_txbuf[0] = SplitOp_SlaveAck;
@@ -360,33 +352,25 @@ static void slave_start() {
 
   while (1) {
     if (taskOrder == SplitOp_TaskOrder_FlashHeartbeat) {
-      startTaskBlocking();
       taskFlashHeartbeatLed();
-      endTaskBlocking();
       taskOrder = 0;
     }
     if (taskOrder == SplitOp_TaskOrder_ScanKeyStates) {
       debugPinHigh(1);
-      startTaskBlocking();
       keyboardMain_udpateKeyScanners();
       keyboardMain_updateKeyInidicatorLed();
-      endTaskBlocking();
       taskOrder = 0;
       debugPinLow(1);
     }
     if (taskOrder == SplitOp_TaskOrder_UpdateRgbLeds) {
       debugPinHigh(1);
-      startTaskBlocking();
       keyboardMain_updateRgbLightingModules(0);
-      endTaskBlocking();
       taskOrder = 0;
       debugPinLow(1);
     }
     if (taskOrder == SplitOp_TaskOrder_UpdateOled) {
       debugPinHigh(1);
-      startTaskBlocking();
       keyboardMain_updateOledDisplayModule(0);
-      endTaskBlocking();
       taskOrder = 0;
       debugPinLow(1);
     }
