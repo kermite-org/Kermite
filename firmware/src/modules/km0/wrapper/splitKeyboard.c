@@ -373,6 +373,7 @@ static void startDynamicMode() {
   if (isMaster) {
     master_start();
   } else {
+    usbIoCore_deInit();
     slave_start();
   }
 }

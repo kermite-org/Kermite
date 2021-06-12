@@ -1088,4 +1088,8 @@ uint8_t *usbioCore_getSerialNumberTextBufferPointer() {
 }
 
 void usbIoCore_processUpdate() {}
+
+void usbIoCore_deInit() {
+  USBCON = 0;
+}
 //------------------------------------------------------------

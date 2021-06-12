@@ -11,4 +11,6 @@ bool usbIoCore_isConnectedToHost();
 uint8_t *usbioCore_getSerialNumberTextBufferPointer();
 void usbIoCore_processUpdate();
 
+void usbIoCore_deInit();
+
 #endif
