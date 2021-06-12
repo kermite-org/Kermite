@@ -122,7 +122,7 @@ static void shiftMasterStatePacket() {
 
 static void taskFlashHeartbeatLed() {
   boardIo_writeLed1(true);
-  delayMs(5);
+  delayMs(2);
   boardIo_writeLed1(false);
 }
 
@@ -226,7 +226,7 @@ static void master_start() {
   uint32_t tick = 0;
   while (1) {
     debugPinHigh(0);
-    if (tick % 10 == 0) {
+    if (tick % 4 == 0) {
       debugPinHigh(1);
       master_sendSlaveTaskOrder(SplitOp_TaskOrder_ScanKeyStates);
       keyboardMain_udpateKeyScanners();
@@ -235,32 +235,32 @@ static void master_start() {
       master_waitSlaveTaskCompletion();
       debugPinLow(1);
     }
-    if (tick % 10 == 1) {
+    if (tick % 4 == 1) {
       master_pullAltSideKeyStates();
     }
-    if (tick % 10 == 2) {
+    if (tick % 4 == 2) {
       master_pushMasterStatePacketOne();
     }
-    if (tick % 40 == 3) {
+    if (tick % 40 == 1) {
       debugPinHigh(2);
       master_sendSlaveTaskOrder(SplitOp_TaskOrder_UpdateRgbLeds);
       keyboardMain_updateRgbLightingModules(tick);
       master_waitSlaveTaskCompletion();
       debugPinLow(2);
     }
-    if (tick % 50 == 4) {
+    if (tick % 48 == 2) {
       master_sendSlaveTaskOrder(SplitOp_TaskOrder_UpdateOled);
       keyboardMain_updateOledDisplayModule(tick);
       master_waitSlaveTaskCompletion();
     }
-    if (tick % 4000 == 5) {
+    if (tick % 4000 == 3) {
       master_sendSlaveTaskOrder(SplitOp_TaskOrder_FlashHeartbeat);
       taskFlashHeartbeatLed();
       master_waitSlaveTaskCompletion();
     }
     keyboardMain_processUpdate();
     debugPinLow(0);
-    delayMs(1);
+    delayUs(500);
     tick++;
   }
 }
