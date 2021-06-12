@@ -189,6 +189,26 @@ static void master_pushMasterStatePacketOne() {
   }
 }
 
+static void master_handleMasterParameterChanged(uint8_t parameterIndex, uint8_t value) {
+  uint8_t pi = parameterIndex;
+  if (pi == SystemParameter_KeyHoldIndicatorLed ||
+      pi == SystemParameter_HeartbeatLed ||
+      pi == SystemParameter_MasterSide ||
+      pi == SystemParameter_GlowActive ||
+      pi == SystemParameter_GlowColor ||
+      pi == SystemParameter_GlowBrightness ||
+      pi == SystemParameter_GlowPattern) {
+    enqueueMasterStatePacket(SplitOp_MasterParameterChanged, parameterIndex, value);
+  }
+}
+
+static void master_sendInitialParameteresAll() {
+  uint8_t *pp = configManager_getParameterValuesRawPointer();
+  for (int i = 0; i < NumSystemParameters; i++) {
+    master_handleMasterParameterChanged(i, pp[i]);
+  }
+}
+
 static void master_handleMasterKeySlotStateChanged(uint8_t slotIndex, bool isDown) {
   enqueueMasterStatePacket(SplitOp_MasterScanSlotStateChanged, slotIndex, isDown);
 }
@@ -196,6 +216,8 @@ static void master_handleMasterKeySlotStateChanged(uint8_t slotIndex, bool isDow
 static void master_start() {
   isMaster = true;
   isConnectionActive = true;
+  master_sendInitialParameteresAll();
+  configManager_addParameterChangeListener(master_handleMasterParameterChanged);
   keyboardMain_setKeySlotStateChangedCallback(master_handleMasterKeySlotStateChanged);
 
   uint32_t tick = 0;
@@ -221,6 +243,7 @@ static void master_start() {
     if (tick % 10 == 2) {
       master_pushMasterStatePacketOne();
     }
+    keyboardMain_processUpdate();
     debugPinLow(0);
     delayMs(1);
     tick++;
