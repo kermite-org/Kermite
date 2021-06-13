@@ -146,7 +146,8 @@ static void master_sendSlaveTaskOrder(uint8_t op) {
 static void master_waitSlaveTaskCompletion() {
   sw_txbuf[0] = SplitOp_IdleCheck;
   delayUs(50);
-  while (1) {
+  uint8_t cnt = 0;
+  while (cnt < 100) {
     boardLink_writeTxBuffer(sw_txbuf, 1);
     boardLink_exchangeFramesBlocking();
     uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
@@ -154,6 +155,7 @@ static void master_waitSlaveTaskCompletion() {
       break;
     }
     delayUs(500);
+    cnt++;
   }
 }
 
