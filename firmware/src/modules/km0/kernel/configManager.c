@@ -113,6 +113,10 @@ void fixSystemParametersLoaded() {
   }
 }
 
+uint8_t readParameter(uint8_t parameterIndex) {
+  return systemParameterValues[parameterIndex];
+}
+
 void writeParameter(uint8_t parameterIndex, uint8_t value) {
   if (validateParameter(parameterIndex, value)) {
     systemParameterValues[parameterIndex] = value;
