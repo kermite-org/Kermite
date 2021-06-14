@@ -11,6 +11,7 @@
 #include "km0/base/utils.h"
 #include "km0/device/boardIo.h"
 #include "km0/device/dataMemory.h"
+#include "km0/device/system.h"
 #include "km0/device/usbIoCore.h"
 #include "versionDefinitions.h"
 #include <stdio.h>
@@ -367,14 +368,11 @@ void keyboardMain_updateKeyInidicatorLed() {
   }
 }
 
-void keyboardMain_updateHeartBeatLed(uint32_t tick) {
+void keyboardMain_taskFlashHeartbeatLed() {
   if (optionUseHeartbeatLed) {
-    if (tick % 4000 == 0) {
-      boardIo_writeLed1(true);
-    }
-    if (tick % 4000 == 4) {
-      boardIo_writeLed1(false);
-    }
+    boardIo_writeLed1(true);
+    delayMs(2);
+    boardIo_writeLed1(false);
   }
 }
 

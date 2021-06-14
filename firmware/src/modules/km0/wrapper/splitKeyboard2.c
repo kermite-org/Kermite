@@ -124,14 +124,6 @@ static void shiftMasterStatePacket() {
 }
 
 //-------------------------------------------------------
-
-static void taskFlashHeartbeatLed() {
-  boardIo_writeLed1(true);
-  delayMs(2);
-  boardIo_writeLed1(false);
-}
-
-//-------------------------------------------------------
 //master
 
 static bool isSlaveActive = false;
@@ -268,7 +260,7 @@ static void master_start() {
     }
     if (tick % 4000 == 3) {
       master_sendSlaveTaskOrder(SplitOp_TaskOrder_FlashHeartbeat);
-      taskFlashHeartbeatLed();
+      keyboardMain_taskFlashHeartbeatLed();
       master_waitSlaveTaskCompletion();
     }
     keyboardMain_processUpdate();
@@ -364,7 +356,7 @@ static void slave_start() {
 
   while (1) {
     if (taskOrder == SplitOp_TaskOrder_FlashHeartbeat) {
-      taskFlashHeartbeatLed();
+      keyboardMain_taskFlashHeartbeatLed();
       taskOrder = 0;
     }
     if (taskOrder == SplitOp_TaskOrder_ScanKeyStates) {
