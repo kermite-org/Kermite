@@ -90,9 +90,13 @@ MODULE_PIOASM_SRCS += km0/device/rp2040/singleWire4.pio
 MODULE_SRCS += km0/device/rp2040/boardLink_singleWire.c
 MODULE_SRCS += km0/wrapper/splitKeyboard.c
 DEFINES += KS_USE_SPLIT_KEYBOARD
-else
+endif
+
+
+ifneq ($(KL_USE_UNIFIED_KEYBOARD),)
 #unified keyboard
 MODULE_SRCS += km0/wrapper/generalKeyboard.c
+DEFINES += KS_USE_UNIFIED_KEYBOARD
 endif
 
 PROJECT_STENCIL_SRCS += main.c
