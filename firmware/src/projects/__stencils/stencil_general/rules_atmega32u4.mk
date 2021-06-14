@@ -72,7 +72,7 @@ endif
 ifneq ($(KL_USE_SPLIT_KEYBOARD),)
 #split keyboard
 MODULE_SRCS += km0/device/atmega/boardLink_singleWire.c
-MODULE_SRCS += km0/wrapper/splitKeyboard2.c
+MODULE_SRCS += km0/wrapper/splitKeyboard.c
 DEFINES += KS_USE_SPLIT_KEYBOARD
 endif
 
