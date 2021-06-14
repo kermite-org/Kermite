@@ -1,5 +1,5 @@
 TARGET_MCU = atmega32u4
-TARGET_STENCIL = stencil_general
+TARGET_STENCIL = stencil_default
 
 KL_USE_BOARD_LEDS_PROMICRO_AVR = 1
 KL_USE_OLED_DISPLAY = 1
