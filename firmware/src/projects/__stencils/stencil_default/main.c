@@ -23,7 +23,7 @@
 #include "km0/device/debugUart.h"
 #endif
 
-#ifdef KS_USE_OLED
+#ifdef KS_USE_OLED_DISPLAY
 #include "km0/visualizer/oledDisplay.h"
 #endif
 
@@ -68,7 +68,7 @@ int main() {
   debugUart_initialize(38400);
 #endif
 
-#ifdef KS_USE_OLED
+#ifdef KS_USE_OLED_DISPLAY
   oledDisplay_initialize();
   keyboardMain_useOledDisplayModule(oledDisplay_update);
 #endif

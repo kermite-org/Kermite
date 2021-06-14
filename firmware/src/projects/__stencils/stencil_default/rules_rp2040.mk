@@ -68,7 +68,7 @@ ifneq ($(KL_USE_OLED_DISPLAY),)
 MODULE_SRCS += km0/device/rp2040/boardI2c.c
 MODULE_SRCS += km0/visualizer/oledDisplay_rp/oledCoreEx.c
 MODULE_SRCS += km0/visualizer/oledDisplay_rp/oledDisplayEx_default.c
-DEFINES += KS_USE_OLED
+DEFINES += KS_USE_OLED_DISPLAY
 endif
 
 #rgb lighting

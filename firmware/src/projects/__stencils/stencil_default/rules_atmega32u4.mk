@@ -58,7 +58,7 @@ endif
 ifneq ($(KL_USE_OLED_DISPLAY),)
 MODULE_SRCS += km0/visualizer/oledDisplay_atmega/oledCore.c
 MODULE_SRCS += km0/visualizer/oledDisplay_atmega/oledDisplay_default.c
-DEFINES += KS_USE_OLED
+DEFINES += KS_USE_OLED_DISPLAY
 endif
 
 #rgb lighting
