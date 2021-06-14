@@ -1,3 +1,4 @@
+#include "splitKeyboard.h"
 #include "km0/base/configImport.h"
 #include "km0/base/utils.h"
 #include "km0/device/boardIo.h"
@@ -8,30 +9,7 @@
 #include "km0/kernel/commandDefinitions.h"
 #include "km0/kernel/configManager.h"
 #include "km0/kernel/keyboardMainInternal.h"
-#include "splitKeyboard.h"
 #include <stdio.h>
-
-#if 0
-#define NumDebugPins 4
-static uint8_t debugPins[NumDebugPins] = { P_F5, P_F6, P_F7 };
-static void initDebugPins() {
-  for (int i = 0; i < NumDebugPins; i++) {
-    digitalIo_setOutput(debugPins[i]);
-  }
-}
-
-static void debugPinHigh(int index) {
-  digitalIo_setHigh(debugPins[index]);
-}
-
-static void debugPinLow(int index) {
-  digitalIo_setLow(debugPins[index]);
-}
-#else
-static void initDebugPins() {}
-static void debugPinHigh(int index) {}
-static void debugPinLow(int index) {}
-#endif
 
 //-------------------------------------------------------
 //definitions
@@ -230,15 +208,12 @@ static void master_start() {
 
   uint32_t tick = 0;
   while (1) {
-    debugPinHigh(0);
     if (tick % 4 == 0) {
-      debugPinHigh(1);
       master_sendSlaveTaskOrder(SplitOp_TaskOrder_ScanKeyStates);
       keyboardMain_udpateKeyScanners();
       keyboardMain_processKeyInputUpdate(15);
       keyboardMain_updateKeyInidicatorLed();
       master_waitSlaveTaskCompletion();
-      debugPinLow(1);
     }
     if (tick % 4 == 1) {
       master_pullAltSideKeyStates();
@@ -247,11 +222,9 @@ static void master_start() {
       master_pushMasterStatePacketOne();
     }
     if (tick % 40 == 1) {
-      debugPinHigh(2);
       master_sendSlaveTaskOrder(SplitOp_TaskOrder_UpdateRgbLeds);
       keyboardMain_updateRgbLightingModules(tick);
       master_waitSlaveTaskCompletion();
-      debugPinLow(2);
     }
     if (tick % 48 == 2) {
       master_sendSlaveTaskOrder(SplitOp_TaskOrder_UpdateOled);
@@ -264,7 +237,6 @@ static void master_start() {
       master_waitSlaveTaskCompletion();
     }
     keyboardMain_processUpdate();
-    debugPinLow(0);
     delayUs(500);
     tick++;
   }
@@ -360,23 +332,17 @@ static void slave_start() {
       taskOrder = 0;
     }
     if (taskOrder == SplitOp_TaskOrder_ScanKeyStates) {
-      debugPinHigh(1);
       keyboardMain_udpateKeyScanners();
       keyboardMain_updateKeyInidicatorLed();
       taskOrder = 0;
-      debugPinLow(1);
     }
     if (taskOrder == SplitOp_TaskOrder_UpdateRgbLeds) {
-      debugPinHigh(1);
       keyboardMain_updateRgbLightingModules(0);
       taskOrder = 0;
-      debugPinLow(1);
     }
     if (taskOrder == SplitOp_TaskOrder_UpdateOled) {
-      debugPinHigh(1);
       keyboardMain_updateOledDisplayModule(0);
       taskOrder = 0;
-      debugPinLow(1);
     }
     if (masterStateReceived) {
       slave_consumeMasterStatePackets();
@@ -495,7 +461,6 @@ static void startDynamicMode() {
 }
 
 void splitKeyboard_start() {
-  initDebugPins();
   system_initializeUserProgram();
   if (pin_masterSlaveDetermination != -1) {
     startFixedMode();
