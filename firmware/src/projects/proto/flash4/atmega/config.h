@@ -1,4 +1,4 @@
-#ifndef __CONFIG_H__
+#pragma once
 
 #define KERMITE_PROJECT_ID "LN9M6TPO"
 
@@ -8,4 +8,7 @@
 
 #define KM0_RGB_LIGHTING__NUM_LEDS 15
 
-#endif
+#define KS_NUM_DW_KEYS 4
+
+#define KS_DW_KEY_INPUT_PINS \
+  { P_D7, P_E6, P_B4, P_B5 }
