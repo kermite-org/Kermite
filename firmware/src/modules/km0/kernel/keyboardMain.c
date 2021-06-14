@@ -10,6 +10,7 @@
 #include "km0/base/bitOperations.h"
 #include "km0/base/utils.h"
 #include "km0/device/boardIo.h"
+#include "km0/device/dataMemory.h"
 #include "km0/device/usbIoCore.h"
 #include "versionDefinitions.h"
 #include <stdio.h>
@@ -27,10 +28,10 @@
 //#define NumScanSlotBytes Ceil(NumScanSlots / 8)
 #define NumScanSlotBytes ((NumScanSlots + 7) >> 3)
 
-#ifndef KM0_KEYBOARD__NUM_MAX_EXTRA_KEY_SCANNERS
-#define KM0_KEYBOARD__NUM_MAX_EXTRA_KEY_SCANNERS 1
+#ifndef KM0_KEYBOARD__NUM_MAX_KEY_SCANNERS
+#define KM0_KEYBOARD__NUM_MAX_KEY_SCANNERS 4
 #endif
-#define NumMaxExtraKeyScanners KM0_KEYBOARD__NUM_MAX_EXTRA_KEY_SCANNERS
+#define NumMaxKeyScanners KM0_KEYBOARD__NUM_MAX_KEY_SCANNERS
 
 #ifndef KM0_KEYBOARD__NUM_MAX_DISPLAY_MODULES
 #define KM0_KEYBOARD__NUM_MAX_DISPLAY_MODULES 2
@@ -40,7 +41,7 @@
 //----------------------------------------------------------------------
 //variables
 
-static uint8_t *scanIndexToKeyIndexMap;
+static uint8_t *scanIndexToKeyIndexMap = NULL;
 
 //キー状態
 
@@ -67,9 +68,8 @@ static bool isSimulatorModeEnabled = false;
 static KeyboardCallbackSet *callbacks = NULL;
 
 typedef void (*KeyScannerUpdateFunc)(uint8_t *keyStateBitFlags);
-static KeyScannerUpdateFunc keyScannerUpdateFunc = NULL;
-static KeyScannerUpdateFunc extraKeyScannerUpdateFuncs[NumMaxExtraKeyScanners] = { 0 };
-static uint8_t extraKeyScannersLength = 0;
+static KeyScannerUpdateFunc keyScannerUpdateFuncs[NumMaxKeyScanners] = { 0 };
+static uint8_t keyScannersLength = 0;
 
 typedef void (*DisplayUpdateFunc)(void);
 static DisplayUpdateFunc displayUpdateFuncs[NumsMaxDisplayModules] = { 0 };
@@ -122,11 +122,8 @@ static void resetKeyboardCoreLogic() {
 }
 
 static void updateKeyScanners() {
-  if (keyScannerUpdateFunc) {
-    keyScannerUpdateFunc(inputScanSlotFlags);
-  }
-  for (uint8_t i = 0; i < extraKeyScannersLength; i++) {
-    KeyScannerUpdateFunc updateFunc = extraKeyScannerUpdateFuncs[i];
+  for (uint8_t i = 0; i < keyScannersLength; i++) {
+    KeyScannerUpdateFunc updateFunc = keyScannerUpdateFuncs[i];
     if (updateFunc) {
       updateFunc(inputScanSlotFlags);
     }
@@ -242,10 +239,14 @@ static void onPhysicalKeyStateChanged(uint8_t scanIndex, bool isDown) {
   if (keySlotStateChangedCallback) {
     keySlotStateChangedCallback(scanIndex, isDown);
   }
-  uint8_t keyIndex = scanIndexToKeyIndexMap[scanIndex];
-  if (keyIndex == KEYINDEX_NONE) {
-    return;
+  uint8_t keyIndex = scanIndex;
+  if (scanIndexToKeyIndexMap) {
+    keyIndex = scanIndexToKeyIndexMap[scanIndex];
+    if (keyIndex == KEYINDEX_NONE) {
+      return;
+    }
   }
+
   if (isDown) {
     printf("keydown %d\n", keyIndex);
     keyboardMain_exposedState.pressedKeyIndex = keyIndex;
@@ -299,14 +300,10 @@ static void processKeyStatesUpdate() {
 //----------------------------------------------------------------------
 
 void keyboardMain_useKeyScanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags)) {
-  keyScannerUpdateFunc = _keyScannerUpdateFunc;
+  keyScannerUpdateFuncs[keyScannersLength++] = _keyScannerUpdateFunc;
 }
 
-void keyboardMain_useKeyScannerExtra(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags)) {
-  extraKeyScannerUpdateFuncs[extraKeyScannersLength++] = _keyScannerUpdateFunc;
-}
-
-void keyboardMain_useDisplayModule(void (*_displayModuleUpdateFunc)(void)) {
+void keyboardMain_useVisualModule(void (*_displayModuleUpdateFunc)(void)) {
   displayUpdateFuncs[displayModulesLength++] = _displayModuleUpdateFunc;
 }
 
@@ -331,6 +328,7 @@ uint8_t *keyboardMain_getInputScanSlotFlags() {
 }
 
 void keyboardMain_initialize() {
+  dataMemory_initialize();
   dataStorage_initialize();
   configManager_addParameterChangeListener(parameterValueHandler);
   configManager_initialize();
@@ -376,6 +374,7 @@ void keyboardMain_processUpdate() {
   usbIoCore_processUpdate();
   configuratorServant_processUpdate();
   configManager_processUpdate();
+  dataMemory_processTick();
 }
 
 void keyboardMain_setKeySlotStateChangedCallback(void (*callback)(uint8_t slotIndex, bool isDown)) {

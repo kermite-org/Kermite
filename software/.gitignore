@@ -1,20 +1,22 @@
 node_modules/
 .local/
 .sub/
-dist/
-release/
+/dist/
+/release/
+/build/
 
 package-lock.json
 yarn-error.log
 
-.vscode/settings.json
-.vscode/launch.json
+/.vscode/settings.json
+/.vscode/launch.json
+/.VSCodeCounter
 
 tsconfig.tsbuildinfo
 .node-version
-.VSCodeCounter
 
 .~*.csv#
+
 
 
 
