@@ -58,7 +58,7 @@ endif
 ifneq ($(KL_USE_OLED_DISPLAY),)
 MODULE_SRCS += km0/visualizer/oledDisplay_atmega/oledCore.c
 MODULE_SRCS += km0/visualizer/oledDisplay_atmega/oledDisplay_default.c
-DEFINES += KS_USE_OLED
+DEFINES += KS_USE_OLED_DISPLAY
 endif
 
 #rgb lighting
@@ -74,9 +74,12 @@ ifneq ($(KL_USE_SPLIT_KEYBOARD),)
 MODULE_SRCS += km0/device/atmega/boardLink_singleWire.c
 MODULE_SRCS += km0/wrapper/splitKeyboard.c
 DEFINES += KS_USE_SPLIT_KEYBOARD
-else
+endif
+
+ifneq ($(KL_USE_UNIFIED_KEYBOARD),)
 #unified keyboard
 MODULE_SRCS += km0/wrapper/generalKeyboard.c
+DEFINES += KS_USE_UNIFIED_KEYBOARD
 endif
 
 PROJECT_STENCIL_SRCS += main.c

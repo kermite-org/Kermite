@@ -23,7 +23,7 @@
 #include "km0/device/debugUart.h"
 #endif
 
-#ifdef KS_USE_OLED
+#ifdef KS_USE_OLED_DISPLAY
 #include "km0/visualizer/oledDisplay.h"
 #endif
 
@@ -68,14 +68,14 @@ int main() {
   debugUart_initialize(38400);
 #endif
 
-#ifdef KS_USE_OLED
+#ifdef KS_USE_OLED_DISPLAY
   oledDisplay_initialize();
-  keyboardMain_useVisualModule(oledDisplay_update);
+  keyboardMain_useOledDisplayModule(oledDisplay_update);
 #endif
 
 #ifdef KS_USE_RGB_LIGHTING
   rgbLighting_initialize();
-  keyboardMain_useVisualModule(rgbLighting_update);
+  keyboardMain_useRgbLightingModule(rgbLighting_update);
 #endif
 
 #ifdef KS_USE_KEY_MATRIX
@@ -95,7 +95,9 @@ int main() {
 
 #ifdef KS_USE_SPLIT_KEYBOARD
   splitKeyboard_start();
-#else
+#endif
+
+#ifdef KS_USE_UNIFIED_KEYBOARD
   generalKeyboard_start();
 #endif
   return 0;

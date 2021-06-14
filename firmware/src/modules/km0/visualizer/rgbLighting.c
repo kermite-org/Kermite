@@ -234,9 +234,6 @@ void rgbLighting_initialize() {
 }
 
 void rgbLighting_update() {
-  static uint32_t tick = 0;
-  if (++tick % 40 == 0) {
-    updateFrame();
-    frameTick++;
-  }
+  updateFrame();
+  frameTick++;
 }

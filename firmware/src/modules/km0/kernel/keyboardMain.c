@@ -11,6 +11,7 @@
 #include "km0/base/utils.h"
 #include "km0/device/boardIo.h"
 #include "km0/device/dataMemory.h"
+#include "km0/device/system.h"
 #include "km0/device/usbIoCore.h"
 #include "versionDefinitions.h"
 #include <stdio.h>
@@ -33,10 +34,10 @@
 #endif
 #define NumMaxKeyScanners KM0_KEYBOARD__NUM_MAX_KEY_SCANNERS
 
-#ifndef KM0_KEYBOARD__NUM_MAX_DISPLAY_MODULES
-#define KM0_KEYBOARD__NUM_MAX_DISPLAY_MODULES 2
+#ifndef KM0_KEYBOARD__NUM_MAX_RGB_LIGHTING_MODULES
+#define KM0_KEYBOARD__NUM_MAX_RGB_LIGHTING_MODULES 1
 #endif
-#define NumsMaxDisplayModules KM0_KEYBOARD__NUM_MAX_DISPLAY_MODULES
+#define NumsMaxRgbLightingModules KM0_KEYBOARD__NUM_MAX_RGB_LIGHTING_MODULES
 
 //----------------------------------------------------------------------
 //variables
@@ -71,9 +72,11 @@ typedef void (*KeyScannerUpdateFunc)(uint8_t *keyStateBitFlags);
 static KeyScannerUpdateFunc keyScannerUpdateFuncs[NumMaxKeyScanners] = { 0 };
 static uint8_t keyScannersLength = 0;
 
-typedef void (*DisplayUpdateFunc)(void);
-static DisplayUpdateFunc displayUpdateFuncs[NumsMaxDisplayModules] = { 0 };
-static uint8_t displayModulesLength = 0;
+typedef void (*VisualModuleUpdateFunc)(void);
+static VisualModuleUpdateFunc rgbLightingUpdateFuncs[NumsMaxRgbLightingModules] = { 0 };
+static uint8_t rgbLightingModulesLength = 0;
+
+static VisualModuleUpdateFunc oledDisplayUpdateFunc = NULL;
 
 //動的に変更可能なオプション
 static bool optionEmitKeyStroke = true;
@@ -130,9 +133,15 @@ static void updateKeyScanners() {
   }
 }
 
-static void updateDisplayModules(uint32_t tick) {
-  for (uint8_t i = 0; i < displayModulesLength; i++) {
-    displayUpdateFuncs[i]();
+static void updateRgbLightingModules(uint32_t tick) {
+  for (uint8_t i = 0; i < rgbLightingModulesLength; i++) {
+    rgbLightingUpdateFuncs[i]();
+  }
+}
+
+static void updateOledDisplayModule(uint32_t tick) {
+  if (oledDisplayUpdateFunc) {
+    oledDisplayUpdateFunc();
   }
 }
 
@@ -303,8 +312,12 @@ void keyboardMain_useKeyScanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateB
   keyScannerUpdateFuncs[keyScannersLength++] = _keyScannerUpdateFunc;
 }
 
-void keyboardMain_useVisualModule(void (*_displayModuleUpdateFunc)(void)) {
-  displayUpdateFuncs[displayModulesLength++] = _displayModuleUpdateFunc;
+void keyboardMain_useRgbLightingModule(void (*_updateFn)(void)) {
+  rgbLightingUpdateFuncs[rgbLightingModulesLength++] = _updateFn;
+}
+
+void keyboardMain_useOledDisplayModule(void (*_updateFn)(void)) {
+  oledDisplayUpdateFunc = _updateFn;
 }
 
 void keyboardMain_setKeyIndexTable(const int8_t *_scanIndexToKeyIndexMap) {
@@ -355,19 +368,20 @@ void keyboardMain_updateKeyInidicatorLed() {
   }
 }
 
-void keyboardMain_updateHeartBeatLed(uint32_t tick) {
+void keyboardMain_taskFlashHeartbeatLed() {
   if (optionUseHeartbeatLed) {
-    if (tick % 4000 == 0) {
-      boardIo_writeLed1(true);
-    }
-    if (tick % 4000 == 4) {
-      boardIo_writeLed1(false);
-    }
+    boardIo_writeLed1(true);
+    delayMs(2);
+    boardIo_writeLed1(false);
   }
 }
 
-void keyboardMain_updateDisplayModules(uint32_t tick) {
-  updateDisplayModules(tick);
+void keyboardMain_updateRgbLightingModules(uint32_t tick) {
+  updateRgbLightingModules(tick);
+}
+
+void keyboardMain_updateOledDisplayModule(uint32_t tick) {
+  updateOledDisplayModule(tick);
 }
 
 void keyboardMain_processUpdate() {

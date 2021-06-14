@@ -17,8 +17,15 @@ void generalKeyboard_start() {
       keyboardMain_processKeyInputUpdate(4);
       keyboardMain_updateKeyInidicatorLed();
     }
-    keyboardMain_updateHeartBeatLed(tick);
-    keyboardMain_updateDisplayModules(tick);
+    if (tick % 40 == 1) {
+      keyboardMain_updateRgbLightingModules(tick);
+    }
+    if (tick % 48 == 2) {
+      keyboardMain_updateOledDisplayModule(tick);
+    }
+    if (tick % 4000 == 3) {
+      keyboardMain_taskFlashHeartbeatLed();
+    }
     keyboardMain_processUpdate();
     delayMs(1);
     tick++;

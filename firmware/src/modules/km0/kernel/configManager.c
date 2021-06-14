@@ -213,6 +213,10 @@ void configManager_processUpdate() {
   taskChangedParameterNotification();
 }
 
+void configManager_processUpdateNoSave() {
+  taskChangedParameterNotification();
+}
+
 uint8_t *configManager_getParameterValuesRawPointer() {
   return systemParameterValues;
 }
