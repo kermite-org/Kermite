@@ -56,6 +56,16 @@ enum {
 static uint8_t sw_txbuf[SingleWireMaxPacketSize] = { 0 };
 static uint8_t sw_rxbuf[SingleWireMaxPacketSize] = { 0 };
 
+void (*boardConfigCallback)(uint8_t side) = NULL;
+
+//-------------------------------------------------------
+
+static void invokeBoadConfigCallback(uint8_t side) {
+  if (boardConfigCallback) {
+    boardConfigCallback(side);
+  }
+}
+
 //-------------------------------------------------------
 //masterの状態通知パケットキュー
 
@@ -201,7 +211,13 @@ static void master_handleMasterKeySlotStateChanged(uint8_t slotIndex, bool isDow
   enqueueMasterStatePacket(SplitOp_MasterScanSlotStateChanged, slotIndex, isDown);
 }
 
+static void master_setupBoard() {
+  uint8_t side = configManager_readParameter(SystemParameter_MasterSide);
+  invokeBoadConfigCallback(side);
+}
+
 static void master_start() {
+  master_setupBoard();
   master_sendInitialParameteresAll();
   configManager_addParameterChangeListener(master_handleMasterParameterChanged);
   keyboardMain_setKeySlotStateChangedCallback(master_handleMasterKeySlotStateChanged);
@@ -318,6 +334,12 @@ static void slave_consumeMasterStatePackets() {
       // printf("master parameter changed %d %d\n", parameterIndex, value);
       configManager_writeParameter(parameterIndex, value);
       configManager_processUpdateNoSave();
+
+      if (parameterIndex == SystemParameter_MasterSide) {
+        uint8_t masterSide = value;
+        uint8_t slaveSide = (masterSide == 0) ? 1 : 0;
+        invokeBoadConfigCallback(slaveSide);
+      }
     }
   }
 }
@@ -458,6 +480,10 @@ static void startDynamicMode() {
     usbIoCore_deInit();
     slave_start();
   }
+}
+
+void splitKeyboard_setBoardConfigCallback(void (*callback)(uint8_t side)) {
+  boardConfigCallback = callback;
 }
 
 void splitKeyboard_start() {
