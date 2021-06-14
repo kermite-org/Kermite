@@ -134,16 +134,20 @@ static void taskFlashHeartbeatLed() {
 //-------------------------------------------------------
 //master
 
+static bool isSlaveActive = false;
+
 static void master_sendSlaveTaskOrder(uint8_t op) {
   sw_txbuf[0] = op;
   boardLink_writeTxBuffer(sw_txbuf, 1);
   boardLink_exchangeFramesBlocking();
   uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
-  if (sz == 1 && sw_rxbuf[0] == SplitOp_SlaveAck) {
-  }
+  isSlaveActive = (sz == 1 && sw_rxbuf[0] == SplitOp_SlaveAck);
 }
 
 static void master_waitSlaveTaskCompletion() {
+  if (!isSlaveActive) {
+    return;
+  }
   sw_txbuf[0] = SplitOp_IdleCheck;
   delayUs(50);
   uint8_t cnt = 0;
@@ -161,6 +165,9 @@ static void master_waitSlaveTaskCompletion() {
 
 //反対側のコントローラからキー状態を受け取る処理
 static void master_pullAltSideKeyStates() {
+  if (!isSlaveActive) {
+    return;
+  }
   sw_txbuf[0] = SplitOp_InputScanSlotStatesRequest;
   boardLink_writeTxBuffer(sw_txbuf, 1); //キー状態要求パケットを送信
   boardLink_exchangeFramesBlocking();
@@ -179,6 +186,9 @@ static void master_pullAltSideKeyStates() {
 
 //masterのキー状態変化やパラメタの変更通知をslaveに送信する処理
 static void master_pushMasterStatePacketOne() {
+  if (!isSlaveActive) {
+    return;
+  }
   //パケットキューからデータを一つ取り出しスレーブに送信, 送信が成功したらキューから除去
   uint32_t data = peekMasterStatePacket();
   if (data) {
