@@ -31,7 +31,7 @@
 #include "km0/visualizer/rgbLighting.h"
 #endif
 
-#ifdef KS_USE_UNIFIED_KEYBOARD
+#ifdef KS_USE_GENERAL_KEYBOARD
 #include "km0/wrapper/generalKeyboard.h"
 #endif
 
@@ -95,7 +95,7 @@ int main() {
   keyboardMain_useKeyScanner(keyScanner_encoderBasic_update);
 #endif
 
-#ifdef KS_USE_UNIFIED_KEYBOARD
+#ifdef KS_USE_GENERAL_KEYBOARD
   generalKeyboard_start();
 #endif
 
