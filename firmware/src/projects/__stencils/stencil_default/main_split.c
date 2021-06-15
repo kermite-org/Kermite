@@ -50,6 +50,12 @@
 #ifndef KS_ROW_PINS_RIGHT
 #define KS_ROW_PINS_RIGHT KS_ROW_PINS
 #endif
+#ifndef KS_MATRIX_SCAN_INDEX_BASE_LEFT
+#define KS_MATRIX_SCAN_INDEX_BASE_LEFT 0
+#endif
+#ifndef KS_MATRIX_SCAN_INDEX_BASE_RIGHT
+#define KS_MATRIX_SCAN_INDEX_BASE_RIGHT KM0_KEYBOARD__RIGHTHAND_SCAN_SLOTS_OFFSET
+#endif
 
 #endif
 
@@ -62,6 +68,14 @@
 #define KS_DIRECT_WIRED_KEY_INPUT_PINS_RIGHT KS_DIRECT_WIRED_KEY_INPUT_PINS
 #endif
 
+#ifndef KS_DIRECT_WIRED_KEY_INPUT_SCAN_INDEX_BASE_LEFT
+#define KS_DIRECT_WIRED_KEY_INPUT_SCAN_INDEX_BASE_LEFT 0
+#endif
+
+#ifndef KS_DIRECT_WIRED_KEY_INPUT_SCAN_INDEX_BASE_RIGHT
+#define KS_DIRECT_WIRED_KEY_INPUT_SCAN_INDEX_BASE_RIGHT KM0_KEYBOARD__RIGHTHAND_SCAN_SLOTS_OFFSET
+#endif
+
 #endif
 
 static void setupBoard(int8_t side) {
@@ -70,12 +84,13 @@ static void setupBoard(int8_t side) {
   if (side == 0) {
     static const uint8_t columnPins[KS_NUM_COLUMNS] = KS_COLUMN_PINS;
     static const uint8_t rowPins[KS_NUM_ROWS] = KS_ROW_PINS;
-    keyScanner_basicMatrix_initialize(KS_NUM_ROWS, KS_NUM_COLUMNS, rowPins, columnPins, 0);
+    keyScanner_basicMatrix_initialize(KS_NUM_ROWS, KS_NUM_COLUMNS,
+                                      rowPins, columnPins, KS_MATRIX_SCAN_INDEX_BASE_LEFT);
   } else {
     static const uint8_t columnPinsR[KS_NUM_COLUMNS_RIGHT] = KS_COLUMN_PINS_RIGHT;
     static const uint8_t rowPinsR[KS_NUM_ROWS_RIGHT] = KS_ROW_PINS_RIGHT;
     keyScanner_basicMatrix_initialize(KS_NUM_ROWS_RIGHT, KS_NUM_COLUMNS_RIGHT,
-                                      rowPinsR, columnPinsR, KM0_KEYBOARD__RIGHTHAND_SCAN_SLOTS_OFFSET);
+                                      rowPinsR, columnPinsR, KS_MATRIX_SCAN_INDEX_BASE_RIGHT);
   }
   keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
 #endif
@@ -83,11 +98,12 @@ static void setupBoard(int8_t side) {
 #ifdef KS_USE_KEYS_DIRECT_WIRED
   if (side == 0) {
     static const uint8_t directWiredKeyInputPins[KS_NUM_DIRECT_WIRED_KEYS] = KS_DIRECT_WIRED_KEY_INPUT_PINS;
-    keyScanner_directWired_initialize(KS_NUM_DIRECT_WIRED_KEYS, directWiredKeyInputPins, 0);
+    keyScanner_directWired_initialize(KS_NUM_DIRECT_WIRED_KEYS,
+                                      directWiredKeyInputPins, KS_DIRECT_WIRED_KEY_INPUT_SCAN_INDEX_BASE_LEFT);
   } else {
     static const uint8_t directWiredKeyInputPinsR[KS_NUM_DIRECT_WIRED_KEYS_RIGHT] = KS_DIRECT_WIRED_KEY_INPUT_PINS_RIGHT;
     keyScanner_directWired_initialize(KS_NUM_DIRECT_WIRED_KEYS_RIGHT,
-                                      directWiredKeyInputPinsR, KM0_KEYBOARD__RIGHTHAND_SCAN_SLOTS_OFFSET);
+                                      directWiredKeyInputPinsR, KS_DIRECT_WIRED_KEY_INPUT_SCAN_INDEX_BASE_RIGHT);
   }
   keyboardMain_useKeyScanner(keyScanner_directWired_update);
 #endif
