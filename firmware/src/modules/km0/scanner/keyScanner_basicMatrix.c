@@ -14,11 +14,12 @@ void keyScanner_basicMatrix_initialize(
     uint8_t _numRows,
     uint8_t _numColumns,
     const uint8_t *_rowPins,
-    const uint8_t *_columnPins, uint8_t scanIndexBase) {
+    const uint8_t *_columnPins, uint8_t _scanIndexBase) {
   numRows = _numRows;
   numColumns = _numColumns;
   rowPins = _rowPins;
   columnPins = _columnPins;
+  scanIndexBase = _scanIndexBase;
 
   for (uint8_t i = 0; i < numRows; i++) {
     uint8_t rowPin = rowPins[i];
