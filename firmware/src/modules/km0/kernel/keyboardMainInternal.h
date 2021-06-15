@@ -31,6 +31,7 @@ void keyboardMain_initialize();
 void keyboardMain_udpateKeyScanners();
 void keyboardMain_processKeyInputUpdate(uint8_t tickInterval);
 void keyboardMain_updateKeyInidicatorLed();
+void keyboardMain_updateInputSlotInidicatorLed();
 void keyboardMain_updateRgbLightingModules(uint32_t tick);
 void keyboardMain_updateOledDisplayModule(uint32_t tick);
 void keyboardMain_taskFlashHeartbeatLed();

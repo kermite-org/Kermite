@@ -389,7 +389,8 @@ static void slave_start() {
   while (1) {
     if (taskOrder == SplitOp_TaskOrder_ScanKeyStates) {
       keyboardMain_udpateKeyScanners();
-      keyboardMain_updateKeyInidicatorLed();
+      // keyboardMain_updateKeyInidicatorLed();
+      keyboardMain_updateInputSlotInidicatorLed();
       slave_prepareKeyStateSendingBytes();
       taskOrder = 0;
     }

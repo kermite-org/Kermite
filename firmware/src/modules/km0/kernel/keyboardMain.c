@@ -145,6 +145,15 @@ static bool checkIfSomeKeyPressed() {
   return false;
 }
 
+static bool checkIfSomeInputSlotKeyPressed() {
+  for (uint8_t i = 0; i < NumScanSlotBytes; i++) {
+    if (inputScanSlotFlags[i] > 0) {
+      return true;
+    }
+  }
+  return false;
+}
+
 //----------------------------------------------------------------------
 //callbacks
 
@@ -345,6 +354,13 @@ void keyboardMain_processKeyInputUpdate(uint8_t tickInterval) {
 void keyboardMain_updateKeyInidicatorLed() {
   if (optionAffectKeyHoldStateToLed) {
     bool isKeyPressed = checkIfSomeKeyPressed();
+    boardIo_writeLed2(isKeyPressed);
+  }
+}
+
+void keyboardMain_updateInputSlotInidicatorLed() {
+  if (optionAffectKeyHoldStateToLed) {
+    bool isKeyPressed = checkIfSomeInputSlotKeyPressed();
     boardIo_writeLed2(isKeyPressed);
   }
 }
