@@ -7,19 +7,24 @@
 
 //---------------------------------------------
 
+//左右非対称のキーマトリクスを実験
+
 #define NumColumns 8
 #define NumRows 5
-#define NumScanSlots (NumColumns * NumRows * 2)
-
 static const uint8_t columnPins[NumColumns] = { P_F4, P_F5, P_F6, P_F7, P_B1, P_B3, P_B2, P_B6 };
 static const uint8_t rowPins[NumRows] = { P_C6, P_D7, P_E6, P_B4, P_B5 };
+
+#define NumColumnsR 4
+#define NumRowsR 5
+static const uint8_t columnPinsR[NumColumnsR] = { P_F6, P_F7, P_B1, P_B3 };
+static const uint8_t rowPinsR[NumRowsR] = { P_C6, P_D7, P_E6, P_B4, P_B5 };
 
 static void setupBoard(int8_t side) {
   if (side == 0) {
     keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins, 0);
     keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
   } else {
-    keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins, 40);
+    keyScanner_basicMatrix_initialize(NumRowsR, NumColumnsR, rowPinsR, columnPinsR, 40);
     keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
   }
 }
