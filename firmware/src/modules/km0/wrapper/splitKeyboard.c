@@ -34,9 +34,9 @@ static const int pin_masterSlaveDetermination = -1;
 #define NumScanSlotsLeft RighthandScanSlotsOffset
 #define NumScanSlotsRight (NumScanSlotsAll - NumScanSlotsLeft)
 
-// #define NumScanSlotBytesLeftHalf Ceil(NumScanSlotsLeft / 8)
-#define NumScanSlotBytesLeft ((NumScanSlotsLeft + 7) >> 3)
-#define NumScanSlotBytesRight ((NumScanSlotsRight + 7) >> 3)
+// #define NumScanSlotBytesLeft Ceil(NumScanSlotsLeft / 8)
+#define NumScanSlotBytesLeft ((NumScanSlotsLeft + 7) / 8)
+#define NumScanSlotBytesRight ((NumScanSlotsRight + 7) / 8)
 
 #define NumScanSlotBytesLarger (NumScanSlotBytesLeft > NumScanSlotBytesRight ? NumScanSlotBytesLeft : NumScanSlotBytesRight)
 #define SingleWireMaxPacketSizeTmp (NumScanSlotBytesLarger + 1)
@@ -66,13 +66,14 @@ enum {
 static uint8_t sw_txbuf[SingleWireMaxPacketSize] = { 0 };
 static uint8_t sw_rxbuf[SingleWireMaxPacketSize] = { 0 };
 
-bool isRighthand = false;
+bool isRightHand = false;
 void (*boardConfigCallback)(uint8_t side) = NULL;
 
 //-------------------------------------------------------
 
 static void setupBoardSide(uint8_t side) {
-  isRighthand = side == 1;
+  isRightHand = side == 1;
+  printf("isRightHand: %d\n", isRightHand);
   if (boardConfigCallback) {
     boardConfigCallback(side);
   }
@@ -165,14 +166,14 @@ static void master_pullAltSideKeyStates() {
   boardLink_exchangeFramesBlocking();
   uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
 
-  bool refSize = (isRighthand ? NumScanSlotBytesLeft : NumScanSlotBytesRight) + 1;
+  bool isSlaveRight = !isRightHand;
+  uint8_t refSize = (isSlaveRight ? NumScanSlotBytesRight : NumScanSlotBytesLeft) + 1;
 
   if (sz == refSize && sw_rxbuf[0] == SplitOp_InputScanSlotStatesResponse) {
     uint8_t *payloadBytes = sw_rxbuf + 1;
-    //子-->親, キー状態応答パケット受信, 子のキー状態を受け取り保持
     uint8_t *inputScanSlotFlags = keyboardMain_getInputScanSlotFlags();
 
-    if (!isRighthand) {
+    if (isSlaveRight) {
       //masterが左手側の場合inputScanSlotFlagsの後半部分にslave側のボードのキー状態を格納する
       utils_copyBitFlagsBuf(inputScanSlotFlags, RighthandScanSlotsOffset, payloadBytes, 0, NumScanSlotsRight);
     } else {
@@ -284,6 +285,9 @@ static void master_start() {
 volatile static uint8_t taskOrder = 0;
 volatile static bool masterStateReceived = false;
 
+static uint8_t slaveSendingKeyStateBytes[NumScanSlotBytesLarger] = { 0 };
+static uint8_t slaveSendingKeyStateBytesLen = 0;
+
 static void slave_respondAck() {
   sw_txbuf[0] = SplitOp_SlaveAck;
   boardLink_writeTxBuffer(sw_txbuf, 1);
@@ -292,6 +296,19 @@ static void slave_respondAck() {
 static void slave_respondNack() {
   sw_txbuf[0] = SplitOp_SlaveNack;
   boardLink_writeTxBuffer(sw_txbuf, 1);
+}
+
+static void slave_prepareKeyStateSendingBytes() {
+  uint8_t *inputScanSlotFlags = keyboardMain_getInputScanSlotFlags();
+  if (isRightHand) {
+    //slaveが右手側の場合inputScanSlotFlagsの後ろ半分にあるキー状態をmasaterに送る
+    utils_copyBitFlagsBuf(slaveSendingKeyStateBytes, 0, inputScanSlotFlags, RighthandScanSlotsOffset, NumScanSlotsRight); //遅いかも
+    slaveSendingKeyStateBytesLen = NumScanSlotBytesRight;
+  } else {
+    //slaveが左手側の場合inputScanSlotFlagsの前半分にあるキー状態をmasaterに送る
+    utils_copyBitFlagsBuf(slaveSendingKeyStateBytes, 0, inputScanSlotFlags, 0, NumScanSlotsLeft);
+    slaveSendingKeyStateBytesLen = NumScanSlotBytesLeft;
+  }
 }
 
 //単線通信の受信割り込みコールバック
@@ -315,19 +332,11 @@ static void slave_onRecevierInterruption() {
     }
 
     if (cmd == SplitOp_InputScanSlotStatesRequest) {
-      //親-->子, キー状態要求パケット受信, キー状態応答パケットを返す
-      //子から親に対してキー状態応答パケットを送る
+      //masterからslaveへのキー状態要求パケット
+      //キー状態応答パケットを返す
       sw_txbuf[0] = SplitOp_InputScanSlotStatesResponse;
-      uint8_t *inputScanSlotFlags = keyboardMain_getInputScanSlotFlags();
-      if (isRighthand) {
-        //slaveが右手側の場合inputScanSlotFlagsの後ろ半分にあるキー状態をmasaterに送る
-        utils_copyBitFlagsBuf(sw_txbuf + 1, 0, inputScanSlotFlags, RighthandScanSlotsOffset, NumScanSlotsRight); //遅いかも
-        boardLink_writeTxBuffer(sw_txbuf, 1 + NumScanSlotBytesRight);
-      } else {
-        //slaveが左手側の場合inputScanSlotFlagsの前半分にあるキー状態をmasaterに送る
-        utils_copyBytes(sw_txbuf + 1, inputScanSlotFlags, NumScanSlotBytesLeft);
-        boardLink_writeTxBuffer(sw_txbuf, 1 + NumScanSlotBytesLeft);
-      }
+      utils_copyBytes(sw_txbuf + 1, slaveSendingKeyStateBytes, slaveSendingKeyStateBytesLen);
+      boardLink_writeTxBuffer(sw_txbuf, 1 + slaveSendingKeyStateBytesLen);
     }
 
     if (cmd == SplitOp_MasterScanSlotStateChanged ||
@@ -350,8 +359,8 @@ static void slave_consumeMasterStatePackets() {
     if (op == SplitOp_MasterScanSlotStateChanged) {
       uint8_t slotIndex = arg1;
       bool isDown = arg2;
-      uint8_t *nextScanSlotStateFlags = keyboardMain_getNextScanSlotFlags();
-      utils_writeArrayedBitFlagsBit(nextScanSlotStateFlags, slotIndex, isDown);
+      uint8_t *scanSlotStateFlags = keyboardMain_getScanSlotFlags();
+      utils_writeArrayedBitFlagsBit(scanSlotStateFlags, slotIndex, isDown);
       // printf("master slot changed %d %d\n", slotIndex, isDown);
     }
     if (op == SplitOp_MasterParameterChanged) {
@@ -375,13 +384,10 @@ static void slave_start() {
   boardLink_setupSlaveReceiver(slave_onRecevierInterruption);
 
   while (1) {
-    if (taskOrder == SplitOp_TaskOrder_FlashHeartbeat) {
-      keyboardMain_taskFlashHeartbeatLed();
-      taskOrder = 0;
-    }
     if (taskOrder == SplitOp_TaskOrder_ScanKeyStates) {
       keyboardMain_udpateKeyScanners();
       keyboardMain_updateKeyInidicatorLed();
+      slave_prepareKeyStateSendingBytes();
       taskOrder = 0;
     }
     if (taskOrder == SplitOp_TaskOrder_UpdateRgbLeds) {
@@ -390,6 +396,10 @@ static void slave_start() {
     }
     if (taskOrder == SplitOp_TaskOrder_UpdateOled) {
       keyboardMain_updateOledDisplayModule(0);
+      taskOrder = 0;
+    }
+    if (taskOrder == SplitOp_TaskOrder_FlashHeartbeat) {
+      keyboardMain_taskFlashHeartbeatLed();
       taskOrder = 0;
     }
     if (masterStateReceived) {

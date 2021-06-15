@@ -49,7 +49,7 @@ scanSlotFlags, nextScanSlotFlags
  前半に左手側,後半に右手側のキー状態を持つ
 */
 static uint8_t scanSlotFlags[NumScanSlotBytes] = { 0 };
-static uint8_t nextScanSlotFlags[NumScanSlotBytes] = { 0 };
+static uint8_t inputScanSlotFlags[NumScanSlotBytes] = { 0 };
 
 static uint16_t localLayerFlags = 0;
 static uint8_t localHidReport[8] = { 0 };
@@ -119,7 +119,7 @@ static void updateKeyScanners() {
   for (uint8_t i = 0; i < keyScannersLength; i++) {
     KeyScannerUpdateFunc updateFunc = keyScannerUpdateFuncs[i];
     if (updateFunc) {
-      updateFunc(scanSlotFlags);
+      updateFunc(inputScanSlotFlags);
     }
   }
 }
@@ -138,7 +138,7 @@ static void updateOledDisplayModule(uint32_t tick) {
 
 static bool checkIfSomeKeyPressed() {
   for (uint8_t i = 0; i < NumScanSlotBytes; i++) {
-    if (nextScanSlotFlags[i] > 0) {
+    if (scanSlotFlags[i] > 0) {
       return true;
     }
   }
@@ -276,7 +276,7 @@ static void onPhysicalKeyStateChanged(uint8_t scanIndex, bool isDown) {
 static void processKeyStatesUpdate() {
   for (uint8_t i = 0; i < NumScanSlots; i++) {
     uint8_t curr = utils_readArrayedBitFlagsBit(scanSlotFlags, i);
-    uint8_t next = utils_readArrayedBitFlagsBit(nextScanSlotFlags, i);
+    uint8_t next = utils_readArrayedBitFlagsBit(inputScanSlotFlags, i);
     if (!curr && next) {
       onPhysicalKeyStateChanged(i, true);
     }
@@ -313,12 +313,12 @@ void keyboardMain_setAsSplitSlave() {
   keyboardMain_exposedState.isSplitSlave = true;
 }
 
-uint8_t *keyboardMain_getNextScanSlotFlags() {
-  return nextScanSlotFlags;
+uint8_t *keyboardMain_getScanSlotFlags() {
+  return scanSlotFlags;
 }
 
 uint8_t *keyboardMain_getInputScanSlotFlags() {
-  return scanSlotFlags;
+  return inputScanSlotFlags;
 }
 
 void keyboardMain_initialize() {

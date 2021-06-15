@@ -22,7 +22,7 @@ typedef struct {
 } KeyboardMainExposedState;
 
 extern KeyboardMainExposedState keyboardMain_exposedState;
-uint8_t *keyboardMain_getNextScanSlotFlags();
+uint8_t *keyboardMain_getScanSlotFlags();
 uint8_t *keyboardMain_getInputScanSlotFlags();
 
 void keyboardMain_setAsSplitSlave();
