@@ -11,7 +11,7 @@
 static const uint8_t keyInputPinsL[NumKeysL] = { B5, B6 };
 static const uint8_t keyInputPinsR[NumKeysR] = { E6, B4, B5, B6 };
 
-static void setupBoard(uint8_t side) {
+static void setupBoard(int8_t side) {
   if (side == 0) {
     keyScanner_directWired_initialize(NumKeysL, keyInputPinsL, 0);
     keyboardMain_useKeyScanner(keyScanner_directWired_update);

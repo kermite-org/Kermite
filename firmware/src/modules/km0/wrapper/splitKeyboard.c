@@ -67,15 +67,20 @@ static uint8_t sw_txbuf[SingleWireMaxPacketSize] = { 0 };
 static uint8_t sw_rxbuf[SingleWireMaxPacketSize] = { 0 };
 
 bool isRightHand = false;
-void (*boardConfigCallback)(uint8_t side) = NULL;
+void (*boardConfigCallback)(int8_t side) = NULL;
+
+int8_t configuredBoardSide = -1;
 
 //-------------------------------------------------------
 
-static void setupBoardSide(uint8_t side) {
-  isRightHand = side == 1;
-  printf("isRightHand: %d\n", isRightHand);
-  if (boardConfigCallback) {
-    boardConfigCallback(side);
+static void setBoardSide(int8_t side) {
+  if (side != configuredBoardSide) {
+    isRightHand = side == 1;
+    printf("board side: %s\n", isRightHand ? "RIGHT" : "LEFT");
+    if (boardConfigCallback) {
+      boardConfigCallback(side);
+    }
+    configuredBoardSide = side;
   }
 }
 
@@ -219,6 +224,9 @@ static void master_handleMasterParameterChanged(uint8_t parameterIndex, uint8_t 
       pi == SystemParameter_GlowPattern) {
     enqueueMasterStatePacket(SplitOp_MasterParameterChanged, parameterIndex, value);
   }
+  if (pi == SystemParameter_MasterSide) {
+    setBoardSide(value);
+  }
 }
 
 static void master_sendInitialParameteresAll() {
@@ -234,7 +242,7 @@ static void master_handleMasterKeySlotStateChanged(uint8_t slotIndex, bool isDow
 
 static void master_setupBoard() {
   uint8_t side = configManager_readParameter(SystemParameter_MasterSide);
-  setupBoardSide(side);
+  setBoardSide(side);
 }
 
 static void master_start() {
@@ -376,7 +384,7 @@ static void slave_consumeMasterStatePackets() {
       if (parameterIndex == SystemParameter_MasterSide) {
         uint8_t masterSide = value;
         uint8_t slaveSide = (masterSide == 0) ? 1 : 0;
-        setupBoardSide(slaveSide);
+        setBoardSide(slaveSide);
       }
     }
   }
@@ -528,7 +536,7 @@ static void startDynamicMode() {
   }
 }
 
-void splitKeyboard_setBoardConfigCallback(void (*callback)(uint8_t side)) {
+void splitKeyboard_setBoardConfigCallback(void (*callback)(int8_t side)) {
   boardConfigCallback = callback;
 }
 
