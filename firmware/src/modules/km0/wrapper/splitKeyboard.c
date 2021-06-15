@@ -165,7 +165,9 @@ static void master_pullAltSideKeyStates() {
   boardLink_exchangeFramesBlocking();
   uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
 
-  if (sw_rxbuf[0] == SplitOp_InputScanSlotStatesResponse) {
+  bool refSize = (isRighthand ? NumScanSlotBytesLeft : NumScanSlotBytesRight) + 1;
+
+  if (sz == refSize && sw_rxbuf[0] == SplitOp_InputScanSlotStatesResponse) {
     uint8_t *payloadBytes = sw_rxbuf + 1;
     //子-->親, キー状態応答パケット受信, 子のキー状態を受け取り保持
     uint8_t *inputScanSlotFlags = keyboardMain_getInputScanSlotFlags();
