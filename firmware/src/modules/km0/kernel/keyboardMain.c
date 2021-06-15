@@ -299,10 +299,16 @@ static void processKeyStatesUpdate() {
 //----------------------------------------------------------------------
 
 void keyboardMain_useKeyScanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags)) {
+  if (utils_checkPointerArrayIncludes((void **)keyScannerUpdateFuncs, keyScannersLength, _keyScannerUpdateFunc)) {
+    return;
+  }
   keyScannerUpdateFuncs[keyScannersLength++] = _keyScannerUpdateFunc;
 }
 
 void keyboardMain_useRgbLightingModule(void (*_updateFn)(void)) {
+  if (utils_checkPointerArrayIncludes((void **)rgbLightingUpdateFuncs, rgbLightingModulesLength, _updateFn)) {
+    return;
+  }
   rgbLightingUpdateFuncs[rgbLightingModulesLength++] = _updateFn;
 }
 
