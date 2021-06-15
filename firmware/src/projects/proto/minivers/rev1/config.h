@@ -1,4 +1,4 @@
-#ifndef __CONFIG_H__
+#pragma once
 
 #define KERMITE_PROJECT_ID "Di6V4KvF"
 #define KM0_ATMEGA_SINGLEWIRE__PIN_SIGNAL_PD2
@@ -20,5 +20,3 @@
   { P_F6, P_F7, P_B1, P_B3 }
 #define KS_ROW_PINS_RIGHT \
   { P_C6, P_D7, P_E6, P_B4, P_B5 }
-
-#endif
