@@ -76,7 +76,7 @@ MODULE_SRCS += km0/wrapper/splitKeyboard.c
 DEFINES += KS_USE_SPLIT_KEYBOARD
 endif
 
-ifneq ($(KL_USE_UNIFIED_KEYBOARD),)
+ifneq ($(KL_USE_GENERAL_KEYBOARD),)
 #unified keyboard
 MODULE_SRCS += km0/wrapper/generalKeyboard.c
 DEFINES += KS_USE_GENERAL_KEYBOARD
