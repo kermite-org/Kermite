@@ -51,12 +51,6 @@
 #define KS_ROW_PINS_RIGHT KS_ROW_PINS
 #endif
 
-static const uint8_t columnPins[KS_NUM_COLUMNS] = KS_COLUMN_PINS;
-static const uint8_t rowPins[KS_NUM_ROWS] = KS_ROW_PINS;
-
-static const uint8_t columnPinsR[KS_NUM_COLUMNS_RIGHT] = KS_COLUMN_PINS_RIGHT;
-static const uint8_t rowPinsR[KS_NUM_ROWS_RIGHT] = KS_ROW_PINS_RIGHT;
-
 #endif
 
 #ifdef KS_USE_KEYS_DIRECT_WIRED
@@ -68,21 +62,18 @@ static const uint8_t rowPinsR[KS_NUM_ROWS_RIGHT] = KS_ROW_PINS_RIGHT;
 #define KS_DIRECT_WIRED_KEY_INPUT_PINS_RIGHT KS_DIRECT_WIRED_KEY_INPUT_PINS
 #endif
 
-static const uint8_t directWiredKeyInputPins[KS_NUM_DIRECT_WIRED_KEYS] = KS_DIRECT_WIRED_KEY_INPUT_PINS;
-static const uint8_t directWiredKeyInputPinsR[KS_NUM_DIRECT_WIRED_KEYS_RIGHT] = KS_DIRECT_WIRED_KEY_INPUT_PINS_RIGHT;
-
-#endif
-
-#ifdef KS_USE_ENCODERS
-static EncoderConfig encoderConfigs[KS_NUM_ENCODERS] = KS_ENCODER_CONFIGS;
 #endif
 
 static void setupBoard(int8_t side) {
 
 #ifdef KS_USE_KEY_MATRIX
   if (side == 0) {
+    static const uint8_t columnPins[KS_NUM_COLUMNS] = KS_COLUMN_PINS;
+    static const uint8_t rowPins[KS_NUM_ROWS] = KS_ROW_PINS;
     keyScanner_basicMatrix_initialize(KS_NUM_ROWS, KS_NUM_COLUMNS, rowPins, columnPins, 0);
   } else {
+    static const uint8_t columnPinsR[KS_NUM_COLUMNS_RIGHT] = KS_COLUMN_PINS_RIGHT;
+    static const uint8_t rowPinsR[KS_NUM_ROWS_RIGHT] = KS_ROW_PINS_RIGHT;
     keyScanner_basicMatrix_initialize(KS_NUM_ROWS_RIGHT, KS_NUM_COLUMNS_RIGHT,
                                       rowPinsR, columnPinsR, KM0_KEYBOARD__RIGHTHAND_SCAN_SLOTS_OFFSET);
   }
@@ -91,18 +82,47 @@ static void setupBoard(int8_t side) {
 
 #ifdef KS_USE_KEYS_DIRECT_WIRED
   if (side == 0) {
+    static const uint8_t directWiredKeyInputPins[KS_NUM_DIRECT_WIRED_KEYS] = KS_DIRECT_WIRED_KEY_INPUT_PINS;
     keyScanner_directWired_initialize(KS_NUM_DIRECT_WIRED_KEYS, directWiredKeyInputPins, 0);
   } else {
+    static const uint8_t directWiredKeyInputPinsR[KS_NUM_DIRECT_WIRED_KEYS_RIGHT] = KS_DIRECT_WIRED_KEY_INPUT_PINS_RIGHT;
     keyScanner_directWired_initialize(KS_NUM_DIRECT_WIRED_KEYS_RIGHT,
                                       directWiredKeyInputPinsR, KM0_KEYBOARD__RIGHTHAND_SCAN_SLOTS_OFFSET);
   }
   keyboardMain_useKeyScanner(keyScanner_directWired_update);
 #endif
 
-  // #ifdef KS_USE_ENCODERS
-  //     keyScanner_encoderBasic_initialize(KS_NUM_ENCODERS, encoderConfigs);
-  //     keyboardMain_useKeyScanner(keyScanner_encoderBasic_update);
-  // #endif
+#ifdef KS_USE_ENCODERS
+
+#ifdef KS_ENCODER_CONFIG_LEFT
+  if (side == 0) {
+    static EncoderConfig encoderConfigsL[1] = { KS_ENCODER_CONFIG_LEFT };
+    keyScanner_encoderBasic_initialize(1, encoderConfigsL);
+  }
+#endif
+
+#ifdef KS_ENCODER_CONFIG_RIGHT
+  if (side == 1) {
+    static EncoderConfig encoderConfigsR[1] = { KS_ENCODER_CONFIG_RIGHT };
+    keyScanner_encoderBasic_initialize(1, encoderConfigsR);
+  }
+#endif
+
+#ifdef KS_ENCODER_CONFIGS_LEFT
+  if (side == 0) {
+    static EncoderConfig encoderConfigsL[KS_NUM_ENCODERS_LEFT] = KS_ENCODER_CONFIGS_LEFT;
+    keyScanner_encoderBasic_initialize(KS_NUM_ENCODERS_LEFT, encoderConfigsL);
+  }
+#endif
+
+#ifdef KS_ENCODER_CONFIGS_RIGHT
+  if (side == 1) {
+    static EncoderConfig encoderConfigsR[KS_NUM_ENCODERS_RIGHT = KS_ENCODER_CONFIGS_RIGHT;
+    keyScanner_encoderBasic_initialize(KS_NUM_ENCODERS_LEFT, encoderConfigsR);
+  }
+#endif
+  keyboardMain_useKeyScanner(keyScanner_encoderBasic_update);
+#endif
 }
 
 int main() {
