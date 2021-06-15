@@ -24,12 +24,12 @@ static const int pin_masterSlaveDetermination = -1;
 #error KM0_KEYBOARD__NUM_SCAN_SLOTS is not defined
 #endif
 
-#ifndef KM0_KEYBOARD__RIGHTHAND_SCAN_SLOT_INDEX_OFFSET
-#define KM0_KEYBOARD__RIGHTHAND_SCAN_SLOT_INDEX_OFFSET (KM0_KEYBOARD__NUM_SCAN_SLOTS >> 1)
+#ifndef KM0_KEYBOARD__RIGHTHAND_SCAN_SLOTS_OFFSET
+#define KM0_KEYBOARD__RIGHTHAND_SCAN_SLOTS_OFFSET (KM0_KEYBOARD__NUM_SCAN_SLOTS / 2)
 #endif
 
 #define NumScanSlotsAll KM0_KEYBOARD__NUM_SCAN_SLOTS
-#define RighthandScanSlotsOffset KM0_KEYBOARD__RIGHTHAND_SCAN_SLOT_INDEX_OFFSET
+#define RighthandScanSlotsOffset KM0_KEYBOARD__RIGHTHAND_SCAN_SLOTS_OFFSET
 
 #define NumScanSlotsLeft RighthandScanSlotsOffset
 #define NumScanSlotsRight (NumScanSlotsAll - NumScanSlotsLeft)
