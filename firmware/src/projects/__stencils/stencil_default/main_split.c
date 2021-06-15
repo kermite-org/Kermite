@@ -32,6 +32,10 @@
 #include "km0/visualizer/rgbLighting.h"
 #endif
 
+#ifndef KM0_KEYBOARD__RIGHTHAND_SCAN_SLOTS_OFFSET
+#define KM0_KEYBOARD__RIGHTHAND_SCAN_SLOTS_OFFSET (KM0_KEYBOARD__NUM_SCAN_SLOTS / 2)
+#endif
+
 #ifdef KS_USE_KEY_MATRIX
 
 #ifndef KS_NUM_COLUMNS_RIGHT
@@ -47,10 +51,6 @@
 #define KS_ROW_PINS_RIGHT KS_ROW_PINS
 #endif
 
-#ifndef KM0_KEYBOARD__RIGHTHAND_SCAN_SLOTS_OFFSET
-#define KM0_KEYBOARD__RIGHTHAND_SCAN_SLOTS_OFFSET (KM0_KEYBOARD__NUM_SCAN_SLOTS / 2)
-#endif
-
 static const uint8_t columnPins[KS_NUM_COLUMNS] = KS_COLUMN_PINS;
 static const uint8_t rowPins[KS_NUM_ROWS] = KS_ROW_PINS;
 
@@ -60,7 +60,17 @@ static const uint8_t rowPinsR[KS_NUM_ROWS_RIGHT] = KS_ROW_PINS_RIGHT;
 #endif
 
 #ifdef KS_USE_KEYS_DIRECT_WIRED
-static const uint8_t keyInputPins[KS_NUM_DIRECT_WIRED_KEYS] = KS_DIRECT_WIRED_KEY_INPUT_PINS;
+
+#ifndef KS_NUM_DIRECT_WIRED_KEYS_RIGHT
+#define KS_NUM_DIRECT_WIRED_KEYS_RIGHT KS_NUM_DIRECT_WIRED_KEYS
+#endif
+#ifndef KS_DIRECT_WIRED_KEY_INPUT_PINS_RIGHT
+#define KS_DIRECT_WIRED_KEY_INPUT_PINS_RIGHT KS_DIRECT_WIRED_KEY_INPUT_PINS
+#endif
+
+static const uint8_t directWiredKeyInputPins[KS_NUM_DIRECT_WIRED_KEYS] = KS_DIRECT_WIRED_KEY_INPUT_PINS;
+static const uint8_t directWiredKeyInputPinsR[KS_NUM_DIRECT_WIRED_KEYS_RIGHT] = KS_DIRECT_WIRED_KEY_INPUT_PINS_RIGHT;
+
 #endif
 
 #ifdef KS_USE_ENCODERS
@@ -79,20 +89,19 @@ static void setupBoard(int8_t side) {
   keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
 #endif
 
-  //TODO
-  // #ifdef KS_USE_KEYS_DIRECT_WIRED
-  //     keyScanner_directWired_initialize(KS_NUM_DIRECT_WIRED_KEYS, keyInputPins);
-  //     keyboardMain_useKeyScanner(keyScanner_directWired_update);
-  // #endif
+#ifdef KS_USE_KEYS_DIRECT_WIRED
+  if (side == 0) {
+    keyScanner_directWired_initialize(KS_NUM_DIRECT_WIRED_KEYS, directWiredKeyInputPins, 0);
+  } else {
+    keyScanner_directWired_initialize(KS_NUM_DIRECT_WIRED_KEYS_RIGHT,
+                                      directWiredKeyInputPinsR, KM0_KEYBOARD__RIGHTHAND_SCAN_SLOTS_OFFSET);
+  }
+  keyboardMain_useKeyScanner(keyScanner_directWired_update);
+#endif
 
   // #ifdef KS_USE_ENCODERS
   //     keyScanner_encoderBasic_initialize(KS_NUM_ENCODERS, encoderConfigs);
   //     keyboardMain_useKeyScanner(keyScanner_encoderBasic_update);
-  // #endif
-
-  // #ifdef KS_USE_RGB_LIGHTING
-  //     rgbLighting_initialize();
-  //     keyboardMain_useRgbLightingModule(rgbLighting_update);
   // #endif
 }
 
@@ -117,6 +126,11 @@ int main() {
 #ifdef KS_USE_OLED_DISPLAY
   oledDisplay_initialize();
   keyboardMain_useOledDisplayModule(oledDisplay_update);
+#endif
+
+#ifdef KS_USE_RGB_LIGHTING
+  rgbLighting_initialize();
+  keyboardMain_useRgbLightingModule(rgbLighting_update);
 #endif
 
   splitKeyboard_setBoardConfigCallback(setupBoard);
