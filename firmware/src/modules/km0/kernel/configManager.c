@@ -113,10 +113,6 @@ void fixSystemParametersLoaded() {
   }
 }
 
-uint8_t readParameter(uint8_t parameterIndex) {
-  return systemParameterValues[parameterIndex];
-}
-
 void writeParameter(uint8_t parameterIndex, uint8_t value) {
   if (validateParameter(parameterIndex, value)) {
     systemParameterValues[parameterIndex] = value;
@@ -153,6 +149,10 @@ void configManager_readSystemParameterValues(uint8_t *buf, uint8_t len) {
 
 void configManager_readSystemParameterMaxValues(uint8_t *buf, uint8_t len) {
   utils_copyBytes(buf, (uint8_t *)&systemParameterMaxValues, len);
+}
+
+uint8_t configManager_readParameter(uint8_t parameterIndex) {
+  return systemParameterValues[parameterIndex];
 }
 
 void configManager_writeParameter(uint8_t parameterIndex, uint8_t value) {
