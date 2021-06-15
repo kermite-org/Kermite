@@ -24,12 +24,22 @@ static const int pin_masterSlaveDetermination = -1;
 #error KM0_KEYBOARD__NUM_SCAN_SLOTS is not defined
 #endif
 
-#define NumScanSlots KM0_KEYBOARD__NUM_SCAN_SLOTS
-#define NumScanSlotsHalf (NumScanSlots >> 1)
-// #define NumScanSlotBytesHalf Ceil(NumScanSlotsHalf / 8)
-#define NumScanSlotBytesHalf ((NumScanSlotsHalf + 7) >> 3)
-#define NumScanSlotBytes (NumScanSlotBytesHalf * 2)
-#define SingleWireMaxPacketSizeTmp (NumScanSlotBytesHalf + 1)
+#ifndef KM0_KEYBOARD__RIGHTHAND_SCAN_SLOT_INDEX_OFFSET
+#define KM0_KEYBOARD__RIGHTHAND_SCAN_SLOT_INDEX_OFFSET (KM0_KEYBOARD__NUM_SCAN_SLOTS >> 1)
+#endif
+
+#define NumScanSlotsAll KM0_KEYBOARD__NUM_SCAN_SLOTS
+#define RighthandScanSlotsOffset KM0_KEYBOARD__RIGHTHAND_SCAN_SLOT_INDEX_OFFSET
+
+#define NumScanSlotsLeft RighthandScanSlotsOffset
+#define NumScanSlotsRight (NumScanSlotsAll - NumScanSlotsLeft)
+
+// #define NumScanSlotBytesLeftHalf Ceil(NumScanSlotsLeft / 8)
+#define NumScanSlotBytesLeft ((NumScanSlotsLeft + 7) >> 3)
+#define NumScanSlotBytesRight ((NumScanSlotsRight + 7) >> 3)
+
+#define NumScanSlotBytesLarger (NumScanSlotBytesLeft > NumScanSlotBytesRight ? NumScanSlotBytesLeft : NumScanSlotBytesRight)
+#define SingleWireMaxPacketSizeTmp (NumScanSlotBytesLarger + 1)
 #define SingleWireMaxPacketSize (SingleWireMaxPacketSizeTmp > 4 ? SingleWireMaxPacketSizeTmp : 4)
 
 enum {
@@ -56,11 +66,13 @@ enum {
 static uint8_t sw_txbuf[SingleWireMaxPacketSize] = { 0 };
 static uint8_t sw_rxbuf[SingleWireMaxPacketSize] = { 0 };
 
+bool isRighthand = false;
 void (*boardConfigCallback)(uint8_t side) = NULL;
 
 //-------------------------------------------------------
 
-static void invokeBoadConfigCallback(uint8_t side) {
+static void setupBoardSide(uint8_t side) {
+  isRighthand = side == 1;
   if (boardConfigCallback) {
     boardConfigCallback(side);
   }
@@ -153,12 +165,18 @@ static void master_pullAltSideKeyStates() {
   boardLink_exchangeFramesBlocking();
   uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
 
-  if (sz == 1 + NumScanSlotBytesHalf && sw_rxbuf[0] == SplitOp_InputScanSlotStatesResponse) {
+  if (sw_rxbuf[0] == SplitOp_InputScanSlotStatesResponse) {
     uint8_t *payloadBytes = sw_rxbuf + 1;
     //子-->親, キー状態応答パケット受信, 子のキー状態を受け取り保持
     uint8_t *inputScanSlotFlags = keyboardMain_getInputScanSlotFlags();
-    //inputScanSlotFlagsの後ろ半分にslave側のボードのキー状態を格納する
-    utils_copyBitFlagsBuf(inputScanSlotFlags, NumScanSlotsHalf, payloadBytes, 0, NumScanSlotsHalf);
+
+    if (!isRighthand) {
+      //masterが左手側の場合inputScanSlotFlagsの後半部分にslave側のボードのキー状態を格納する
+      utils_copyBitFlagsBuf(inputScanSlotFlags, RighthandScanSlotsOffset, payloadBytes, 0, NumScanSlotsRight);
+    } else {
+      //masterが右手側の場合inputScanSlotFlagsの前半部分にslave側のボードのキー状態を格納する
+      utils_copyBitFlagsBuf(inputScanSlotFlags, 0, payloadBytes, 0, NumScanSlotsLeft);
+    }
   } else {
     printf("no keystate response from slave\n");
   }
@@ -213,7 +231,7 @@ static void master_handleMasterKeySlotStateChanged(uint8_t slotIndex, bool isDow
 
 static void master_setupBoard() {
   uint8_t side = configManager_readParameter(SystemParameter_MasterSide);
-  invokeBoadConfigCallback(side);
+  setupBoardSide(side);
 }
 
 static void master_start() {
@@ -299,9 +317,15 @@ static void slave_onRecevierInterruption() {
       //子から親に対してキー状態応答パケットを送る
       sw_txbuf[0] = SplitOp_InputScanSlotStatesResponse;
       uint8_t *inputScanSlotFlags = keyboardMain_getInputScanSlotFlags();
-      //slave側でnextScanSlotStateFlagsの前半分に入っているキー状態をmasterに送信する
-      utils_copyBytes(sw_txbuf + 1, inputScanSlotFlags, NumScanSlotBytesHalf);
-      boardLink_writeTxBuffer(sw_txbuf, 1 + NumScanSlotBytesHalf);
+      if (isRighthand) {
+        //slaveが右手側の場合inputScanSlotFlagsの後ろ半分にあるキー状態をmasaterに送る
+        utils_copyBitFlagsBuf(sw_txbuf + 1, 0, inputScanSlotFlags, RighthandScanSlotsOffset, NumScanSlotsRight); //遅いかも
+        boardLink_writeTxBuffer(sw_txbuf, 1 + NumScanSlotBytesRight);
+      } else {
+        //slaveが左手側の場合inputScanSlotFlagsの前半分にあるキー状態をmasaterに送る
+        utils_copyBytes(sw_txbuf + 1, inputScanSlotFlags, NumScanSlotBytesLeft);
+        boardLink_writeTxBuffer(sw_txbuf, 1 + NumScanSlotBytesLeft);
+      }
     }
 
     if (cmd == SplitOp_MasterScanSlotStateChanged ||
@@ -338,7 +362,7 @@ static void slave_consumeMasterStatePackets() {
       if (parameterIndex == SystemParameter_MasterSide) {
         uint8_t masterSide = value;
         uint8_t slaveSide = (masterSide == 0) ? 1 : 0;
-        invokeBoadConfigCallback(slaveSide);
+        setupBoardSide(slaveSide);
       }
     }
   }
