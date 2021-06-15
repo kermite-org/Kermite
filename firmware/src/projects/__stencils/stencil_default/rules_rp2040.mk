@@ -52,8 +52,8 @@ else
 		DEFINES += KS_USE_BOARD_LEDS
 		DEFINES += KS_USE_BOARD_LEDS_RPI_PICO
 	else
-		# MODULE_SRCS += km0/device/boardIo_dummy.c	//TODO: use this
-		MODULE_SRCS += km0/device/rp2040/boardIo.c
+		MODULE_SRCS += km0/device/boardIo_dummy.c
+		DEFINES += KS_USE_BOARD_LEDS
 	endif
 endif
 
