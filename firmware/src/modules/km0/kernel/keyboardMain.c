@@ -25,7 +25,7 @@
 
 #define NumScanSlots KM0_KEYBOARD__NUM_SCAN_SLOTS
 //#define NumScanSlotBytes Ceil(NumScanSlots / 8)
-#define NumScanSlotBytes ((NumScanSlots + 7) >> 3)
+#define NumScanSlotBytes ((NumScanSlots + 7) / 8)
 
 #ifndef KM0_KEYBOARD__NUM_MAX_KEY_SCANNERS
 #define KM0_KEYBOARD__NUM_MAX_KEY_SCANNERS 4
