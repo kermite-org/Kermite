@@ -31,10 +31,12 @@
 #include "km0/visualizer/rgbLighting.h"
 #endif
 
+#ifdef KS_USE_UNIFIED_KEYBOARD
+#include "km0/wrapper/generalKeyboard.h"
+#endif
+
 #ifdef KS_USE_SPLIT_KEYBOARD
 #include "km0/wrapper/splitKeyboard.h"
-#else
-#include "km0/wrapper/generalKeyboard.h"
 #endif
 
 #ifdef KS_USE_KEY_MATRIX
@@ -93,12 +95,13 @@ int main() {
   keyboardMain_useKeyScanner(keyScanner_encoderBasic_update);
 #endif
 
+#ifdef KS_USE_UNIFIED_KEYBOARD
+  generalKeyboard_start();
+#endif
+
 #ifdef KS_USE_SPLIT_KEYBOARD
   splitKeyboard_start();
 #endif
 
-#ifdef KS_USE_UNIFIED_KEYBOARD
-  generalKeyboard_start();
-#endif
   return 0;
 }
