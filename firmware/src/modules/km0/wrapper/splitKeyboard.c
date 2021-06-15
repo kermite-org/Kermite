@@ -243,7 +243,7 @@ static void master_start() {
   configManager_addParameterChangeListener(master_handleMasterParameterChanged);
   keyboardMain_setKeySlotStateChangedCallback(master_handleMasterKeySlotStateChanged);
 
-  uint32_t tick = 0;
+  uint32_t tick = 4;
   while (1) {
     if (tick % 4 == 0) {
       master_sendSlaveTaskOrder(SplitOp_TaskOrder_ScanKeyStates);
@@ -268,10 +268,13 @@ static void master_start() {
       keyboardMain_updateOledDisplayModule(tick);
       master_waitSlaveTaskCompletion();
     }
-    if (tick % 4000 == 3) {
+    if (tick % 4000 == 3 && isSlaveActive) {
       master_sendSlaveTaskOrder(SplitOp_TaskOrder_FlashHeartbeat);
       keyboardMain_taskFlashHeartbeatLed();
       master_waitSlaveTaskCompletion();
+    }
+    if (tick % 1000 == 0 && !isSlaveActive) {
+      boardIo_toggleLed1();
     }
     keyboardMain_processUpdate();
     delayUs(500);
@@ -442,6 +445,7 @@ static bool detenction_determineMasterSlaveByUsbConnection() {
 
   bool isMaster = true;
 
+  uint32_t tick = 0;
   while (true) {
     if (usbIoCore_isConnectedToHost()) {
       detection_sendMasterOath();
@@ -453,8 +457,13 @@ static bool detenction_determineMasterSlaveByUsbConnection() {
       break;
     }
     usbIoCore_processUpdate();
+    if (tick % 1000 == 0 && tick > 0) {
+      boardIo_toggleLed1();
+    }
     delayMs(1);
+    tick++;
   }
+  boardIo_writeLed1(0);
   boardLink_clearSlaveReceiver();
   return isMaster;
 }
