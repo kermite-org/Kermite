@@ -305,7 +305,7 @@ static void slave_prepareKeyStateSendingBytes() {
   uint8_t *inputScanSlotFlags = keyboardMain_getInputScanSlotFlags();
   if (isRightHand) {
     //slaveが右手側の場合inputScanSlotFlagsの後ろ半分にあるキー状態をmasaterに送る
-    utils_copyBitFlagsBuf(slaveSendingKeyStateBytes, 0, inputScanSlotFlags, RighthandScanSlotsOffset, NumScanSlotsRight); //遅いかも
+    utils_copyBitFlagsBuf(slaveSendingKeyStateBytes, 0, inputScanSlotFlags, RighthandScanSlotsOffset, NumScanSlotsRight);
     slaveSendingKeyStateBytesLen = NumScanSlotBytesRight;
   } else {
     //slaveが左手側の場合inputScanSlotFlagsの前半分にあるキー状態をmasaterに送る
