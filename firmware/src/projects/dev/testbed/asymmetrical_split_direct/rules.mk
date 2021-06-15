@@ -1,13 +1,13 @@
-TARGET_MCU = rp2040
+TARGET_MCU = atmega32u4
 
 MODULE_SRCS += km0/base/utils.c
-MODULE_SRCS += km0/device/rp2040/system.c
-MODULE_SRCS += km0/device/rp2040/digitalIo.c
-MODULE_SRCS += km0/device/rp2040/usbIoCore.c
-MODULE_SRCS += km0/device/rp2040/dataMemory.c
-MODULE_SRCS += km0/device/rp2040/debugUart.c
-MODULE_SRCS += km0/device/rp2040/boardIo.c
-MODULE_SRCS += km0/device/rp2040/boardLink_i2c.c
+MODULE_SRCS += km0/device/atmega/system.c
+MODULE_SRCS += km0/device/atmega/digitalIo.c
+MODULE_SRCS += km0/device/atmega/usbIoCore.c
+MODULE_SRCS += km0/device/atmega/dataMemory.c
+MODULE_SRCS += km0/device/atmega/debugUart.c
+MODULE_SRCS += km0/device/atmega/boardIo.c
+MODULE_SRCS += km0/device/atmega/boardLink_singleWire.c
 MODULE_SRCS += km0/kernel/dataStorage.c
 MODULE_SRCS += km0/kernel/configManager.c
 MODULE_SRCS += km0/kernel/keyMappingDataValidator.c
