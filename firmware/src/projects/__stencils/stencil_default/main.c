@@ -38,7 +38,7 @@ static const uint8_t rowPins[KS_NUM_ROWS] = KS_ROW_PINS;
 #endif
 
 #ifdef KS_USE_KEYS_DIRECT_WIRED
-static const uint8_t keyInputPins[KS_NUM_DW_KEYS] = KS_DW_KEY_INPUT_PINS;
+static const uint8_t keyInputPins[KS_NUM_DIRECT_WIRED_KEYS] = KS_DIRECT_WIRED_KEY_INPUT_PINS;
 #endif
 
 #ifdef KS_USE_ENCODERS
@@ -79,7 +79,7 @@ int main() {
 #endif
 
 #ifdef KS_USE_KEYS_DIRECT_WIRED
-  keyScanner_directWired_initialize(KS_NUM_DW_KEYS, keyInputPins);
+  keyScanner_directWired_initialize(KS_NUM_DIRECT_WIRED_KEYS, keyInputPins);
   keyboardMain_useKeyScanner(keyScanner_directWired_update);
 #endif
 
