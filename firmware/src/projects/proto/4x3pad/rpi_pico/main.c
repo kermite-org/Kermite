@@ -15,7 +15,7 @@ static const uint8_t rowPins[NumRows] = { GP7, GP8, GP9 };
 int main() {
   boardIo_setupLeds_rpiPico();
   debugUart_initialize(115200);
-  keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
+  keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins, 0);
   keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
   generalKeyboard_start();
   return 0;

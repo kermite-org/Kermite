@@ -15,7 +15,7 @@ static const uint8_t rowPins[NumRows] = { P_B3, P_B2, P_B6 };
 int main() {
   boardIo_setupLeds_proMicroAvr();
   debugUart_initialize(38400);
-  keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
+  keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins, 0);
   keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
   generalKeyboard_start();
   return 0;

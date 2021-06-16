@@ -12,11 +12,16 @@
 static const uint8_t columnPins[NumColumns] = { GP2, GP3, GP4, GP5 };
 static const uint8_t rowPins[NumRows] = { GP7, GP8, GP9 };
 
+static void setupBoard(int8_t side) {
+  uint8_t scanOffset = side == 0 ? 0 : 12;
+  keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins, scanOffset);
+  keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
+}
+
 int main() {
   boardIo_setupLeds_rpiPico();
   debugUart_initialize(115200);
-  keyScanner_basicMatrix_initialize(NumRows, NumColumns, rowPins, columnPins);
-  keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
+  splitKeyboard_setBoardConfigCallback(setupBoard);
   splitKeyboard_start();
   return 0;
 }
