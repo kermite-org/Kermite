@@ -53,8 +53,8 @@ const cssOutlinePoint = css`
 
 export function startOutlinePointDragOperation(
   e: MouseEvent,
-  emitStartEdit: boolean,
   isMirror: boolean,
+  completeCallback: () => void,
 ) {
   const {
     sight,
@@ -90,12 +90,9 @@ export function startOutlinePointDragOperation(
     rerender();
   };
   const upCallback = () => {
-    editMutations.endEdit();
+    completeCallback();
     rerender();
   };
-  if (emitStartEdit) {
-    editMutations.startEdit();
-  }
 
   startDragSession(e, moveCallback, upCallback);
 }
@@ -145,7 +142,10 @@ const OutlinePoint = (props: {
           editMutations.unsetCurrentKeyEntity();
           editMutations.setCurrentShapeId(shapeId);
           editMutations.setCurrentPointIndex(index);
-          startOutlinePointDragOperation(e, true, isMirror);
+          editMutations.startEdit();
+          startOutlinePointDragOperation(e, isMirror, () => {
+            editMutations.endEdit();
+          });
           e.stopPropagation();
         } else if (editMode === 'delete') {
           editMutations.setCurrentShapeId(shapeId);
@@ -224,7 +224,9 @@ const HittestLine = (props: {
       editMutations.setCurrentShapeId(shapeId);
       editMutations.splitOutlineLine(dstPointIndex, mx * mirrorMultX, my);
       editMutations.setCurrentPointIndex(dstPointIndex);
-      startOutlinePointDragOperation(e, false, isMirror);
+      startOutlinePointDragOperation(e, isMirror, () => {
+        editMutations.endEdit();
+      });
       e.stopPropagation();
     }
   };

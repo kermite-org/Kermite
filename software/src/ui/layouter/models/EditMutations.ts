@@ -130,7 +130,7 @@ class EditMutations {
     if (!shapeId) {
       return;
     }
-    editUpdator.commitEditor((editor) => {
+    editUpdator.patchEditor((editor) => {
       const shape = editor.design.outlineShapes[shapeId];
       shape.points.push({ x, y });
       editor.currentPointIndex = shape.points.length - 1;
