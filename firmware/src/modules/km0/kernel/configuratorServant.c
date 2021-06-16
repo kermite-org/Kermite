@@ -39,6 +39,7 @@ static void initializeDataAddresses() {
 
 static uint8_t rawHidTempBuf[64] = { 0 };
 
+static bool rawHidFirstConnectDone = false;
 static bool skipNotify = false;
 
 static void emitGenericHidData(uint8_t *p) {
@@ -228,6 +229,7 @@ static void processReadGenericHidData() {
       if (command == 0x10) {
         // printf("device attributes requested\n");
         emitDeviceAttributesResponse();
+        rawHidFirstConnectDone = true;
       }
     }
 
@@ -252,7 +254,7 @@ static void processReadGenericHidData() {
 //parameter changed handler
 
 static void onParameterChanged(uint8_t parameterIndex, uint8_t value) {
-  if (!skipNotify) {
+  if (rawHidFirstConnectDone && !skipNotify) {
     emitSingleParameterChangedNotification(parameterIndex, value);
   }
 }
