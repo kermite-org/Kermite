@@ -1,4 +1,4 @@
-import { jsx, rerender, css } from 'qx';
+import { jsx, css } from 'qx';
 import { degToRad } from '~/shared';
 import { getKeySize } from '~/shared/modules/PlacementUnitHelper';
 import { uiTheme } from '~/ui/common';
@@ -39,13 +39,9 @@ export function startKeyEntityDragOperation(
     destPos.y += deltaYM;
 
     editMutations.setKeyPosition(destPos.x, destPos.y);
-    rerender();
   };
-  const upCallback = () => {
-    completeCallback?.();
-    rerender();
-  };
-  startDragSession(e, moveCallback, upCallback);
+
+  startDragSession(e, moveCallback, completeCallback);
 }
 
 // no shrink

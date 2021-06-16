@@ -1,4 +1,4 @@
-import { rerender, jsx, css } from 'qx';
+import { jsx, css } from 'qx';
 import { degToRad } from '~/shared';
 import { makeCssColor, uiTheme } from '~/ui/common';
 import { IPosition, startDragSession } from '~/ui/layouter/common';
@@ -87,14 +87,9 @@ export function startOutlinePointDragOperation(
     destPos.y += deltaYM;
 
     editMutations.setOutlinePointPosition(destPos.x, destPos.y);
-    rerender();
-  };
-  const upCallback = () => {
-    completeCallback();
-    rerender();
   };
 
-  startDragSession(e, moveCallback, upCallback);
+  startDragSession(e, moveCallback, completeCallback);
 }
 
 const OutlinePoint = (props: {

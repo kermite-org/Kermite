@@ -1,3 +1,5 @@
+import { asyncRerender, rerender } from 'qx';
+
 export function getRelativeMousePosition(e: MouseEvent) {
   const el = e.currentTarget as HTMLElement;
   const bounds = el.getBoundingClientRect();
@@ -22,12 +24,14 @@ export function startDragSession(
     const pos = { x: e.clientX, y: e.clientY };
     moveCallback(pos, prevPos);
     prevPos = pos;
+    asyncRerender();
   };
 
   const onMouseUp = () => {
     window.removeEventListener('mousemove', onMouseMove);
     window.removeEventListener('mouseup', onMouseUp);
     upCallback();
+    rerender();
   };
 
   window.addEventListener('mousemove', onMouseMove);
