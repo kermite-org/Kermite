@@ -139,6 +139,10 @@ static void setupBoard(int8_t side) {
 #endif
   keyboardMain_useKeyScanner(keyScanner_encoderBasic_update);
 #endif
+
+#ifdef KS_USE_RGB_LIGHTING
+  rgbLighting_setBoardSide(side);
+#endif
 }
 
 int main() {

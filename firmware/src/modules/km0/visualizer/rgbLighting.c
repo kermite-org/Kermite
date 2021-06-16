@@ -11,9 +11,16 @@
 #error KM0_RGB_LIGHTING__NUM_LEDS is not defined
 #endif
 
-#define NumLeds KM0_RGB_LIGHTING__NUM_LEDS
+#ifndef KM0_RGB_LIGHTING__NUM_LEDS_RIGHT
+#define KM0_RGB_LIGHTING__NUM_LEDS_RIGHT KM0_RGB_LIGHTING__NUM_LEDS
+#endif
+
+static const int NumLedsDefault = KM0_RGB_LIGHTING__NUM_LEDS;
+static const int NumLedsRight = KM0_RGB_LIGHTING__NUM_LEDS_RIGHT;
 
 //----------------------------------------------------------------------
+
+static int numLeds = NumLedsDefault;
 
 static bool glowEnabled = false;
 static uint8_t glowColor = 0;
@@ -78,7 +85,7 @@ static uint32_t shiftRgb(uint32_t col, uint8_t shift) {
 
 static void scene_fallbackBlank_updateFrame() {
   system_disableInterrupts();
-  for (int i = 0; i < NumLeds; i++) {
+  for (int i = 0; i < numLeds; i++) {
     serialLed_putPixel(0);
   }
   system_enableInterrupts();
@@ -90,7 +97,7 @@ static void scene_fallbackBlank_updateFrame() {
 static void scene0_updateFrame() {
   uint32_t color = getCurrentColor();
   system_disableInterrupts();
-  for (int i = 0; i < NumLeds; i++) {
+  for (int i = 0; i < numLeds; i++) {
     serialLed_putPixelWithAlpha(color, glowBrightness);
   }
   system_enableInterrupts();
@@ -105,7 +112,7 @@ static void scene1_updateFrame() {
   int p2 = (p > 0x100) ? 0x200 - p : p;
   int bri = p2 * glowBrightness >> 8;
   system_disableInterrupts();
-  for (int i = 0; i < NumLeds; i++) {
+  for (int i = 0; i < numLeds; i++) {
     serialLed_putPixelWithAlpha(color, bri);
   }
   system_enableInterrupts();
@@ -116,11 +123,11 @@ static void scene1_updateFrame() {
 
 static void scene2_updateFrame() {
   uint32_t color = getCurrentColor();
-  int n = NumLeds;
+  int n = numLeds;
   int p = (frameTick >> 1) % (n * 2);
   int activeIndex = (p > n) ? (2 * n - p) : p;
   system_disableInterrupts();
-  for (int i = 0; i < NumLeds; i++) {
+  for (int i = 0; i < numLeds; i++) {
     serialLed_putPixelWithAlpha(i == activeIndex ? color : 0, glowBrightness);
   }
   system_enableInterrupts();
@@ -132,7 +139,7 @@ static void scene2_updateFrame() {
 static void scene3_updateFrame() {
   if (frameTick % 20 == 0) {
     system_disableInterrupts();
-    for (int i = 0; i < NumLeds; i++) {
+    for (int i = 0; i < numLeds; i++) {
       int colorIndex = (uint8_t)(pseudoRandom() & 0xFF) % NumTableColors;
       uint32_t color = commonColorTable[colorIndex];
       serialLed_putPixelWithAlpha(color, glowBrightness);
@@ -174,9 +181,9 @@ static void scene4_updateFrame() {
 
   //_p: 0~1
   uint8_t p = (uint8_t)(_p * 256); //0~255
-  uint16_t _divNumLeds = 65536 / NumLeds;
+  uint16_t _divNumLeds = 65536 / numLeds;
   system_disableInterrupts();
-  for (uint8_t i = 0; i < NumLeds; i++) {
+  for (uint8_t i = 0; i < numLeds; i++) {
     // float q = (float)i * _divNumLeds;
     // float p2 = 3.0f * _p - q * 2.0f;
     // flot m = utils_clamp(p2, 0.0f, 1.0f);
@@ -231,6 +238,14 @@ void rgbLighting_initialize() {
   configManager_overrideParameterMaxValue(SystemParameter_GlowPattern, 4);
   configManager_addParameterChangeListener(parameterChangeHandler);
   serialLed_initialize();
+}
+
+void rgbLighting_setBoardSide(int8_t side) {
+  if (side == 0) {
+    numLeds = NumLedsDefault;
+  } else {
+    numLeds = NumLedsRight;
+  }
 }
 
 void rgbLighting_update() {
