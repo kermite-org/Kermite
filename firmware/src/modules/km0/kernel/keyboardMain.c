@@ -24,10 +24,8 @@
 #endif
 
 #define NumScanSlots KM0_KEYBOARD__NUM_SCAN_SLOTS
-#define NumScanSlotsHalf (NumScanSlots >> 1)
-
 //#define NumScanSlotBytes Ceil(NumScanSlots / 8)
-#define NumScanSlotBytes ((NumScanSlots + 7) >> 3)
+#define NumScanSlotBytes ((NumScanSlots + 7) / 8)
 
 #ifndef KM0_KEYBOARD__NUM_MAX_KEY_SCANNERS
 #define KM0_KEYBOARD__NUM_MAX_KEY_SCANNERS 4
@@ -47,18 +45,11 @@ static uint8_t *scanIndexToKeyIndexMap = NULL;
 //キー状態
 
 /*
-inputScanSlotFlags:
- master, slaveとも前半部分に自分側のキー状態を持つ
- masterは後半部分にslave側のキー状態も持つ
-*/
-static uint8_t inputScanSlotFlags[NumScanSlotBytes] = { 0 };
-/*
 scanSlotFlags, nextScanSlotFlags
-左手側がmasterの場合、右手側がmaseterの場合どちらの場合でも
  前半に左手側,後半に右手側のキー状態を持つ
 */
 static uint8_t scanSlotFlags[NumScanSlotBytes] = { 0 };
-static uint8_t nextScanSlotFlags[NumScanSlotBytes] = { 0 };
+static uint8_t inputScanSlotFlags[NumScanSlotBytes] = { 0 };
 
 static uint16_t localLayerFlags = 0;
 static uint8_t localHidReport[8] = { 0 };
@@ -147,7 +138,16 @@ static void updateOledDisplayModule(uint32_t tick) {
 
 static bool checkIfSomeKeyPressed() {
   for (uint8_t i = 0; i < NumScanSlotBytes; i++) {
-    if (nextScanSlotFlags[i] > 0) {
+    if (scanSlotFlags[i] > 0) {
+      return true;
+    }
+  }
+  return false;
+}
+
+static bool checkIfSomeInputSlotKeyPressed() {
+  for (uint8_t i = 0; i < NumScanSlotBytes; i++) {
+    if (inputScanSlotFlags[i] > 0) {
       return true;
     }
   }
@@ -283,19 +283,9 @@ static void onPhysicalKeyStateChanged(uint8_t scanIndex, bool isDown) {
 
 //キー状態更新処理
 static void processKeyStatesUpdate() {
-  if (!keyboardMain_exposedState.optionInvertSide) {
-    utils_copyBytes(nextScanSlotFlags, inputScanSlotFlags, NumScanSlotBytes);
-  } else {
-    for (int i = 0; i < NumScanSlotsHalf; i++) {
-      bool a = utils_readArrayedBitFlagsBit(inputScanSlotFlags, i);
-      bool b = utils_readArrayedBitFlagsBit(inputScanSlotFlags, NumScanSlotsHalf + i);
-      utils_writeArrayedBitFlagsBit(nextScanSlotFlags, i, b);
-      utils_writeArrayedBitFlagsBit(nextScanSlotFlags, NumScanSlotsHalf + i, a);
-    }
-  }
   for (uint8_t i = 0; i < NumScanSlots; i++) {
     uint8_t curr = utils_readArrayedBitFlagsBit(scanSlotFlags, i);
-    uint8_t next = utils_readArrayedBitFlagsBit(nextScanSlotFlags, i);
+    uint8_t next = utils_readArrayedBitFlagsBit(inputScanSlotFlags, i);
     if (!curr && next) {
       onPhysicalKeyStateChanged(i, true);
     }
@@ -309,10 +299,16 @@ static void processKeyStatesUpdate() {
 //----------------------------------------------------------------------
 
 void keyboardMain_useKeyScanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags)) {
+  if (utils_checkPointerArrayIncludes((void **)keyScannerUpdateFuncs, keyScannersLength, _keyScannerUpdateFunc)) {
+    return;
+  }
   keyScannerUpdateFuncs[keyScannersLength++] = _keyScannerUpdateFunc;
 }
 
 void keyboardMain_useRgbLightingModule(void (*_updateFn)(void)) {
+  if (utils_checkPointerArrayIncludes((void **)rgbLightingUpdateFuncs, rgbLightingModulesLength, _updateFn)) {
+    return;
+  }
   rgbLightingUpdateFuncs[rgbLightingModulesLength++] = _updateFn;
 }
 
@@ -332,8 +328,8 @@ void keyboardMain_setAsSplitSlave() {
   keyboardMain_exposedState.isSplitSlave = true;
 }
 
-uint8_t *keyboardMain_getNextScanSlotFlags() {
-  return nextScanSlotFlags;
+uint8_t *keyboardMain_getScanSlotFlags() {
+  return scanSlotFlags;
 }
 
 uint8_t *keyboardMain_getInputScanSlotFlags() {
@@ -364,6 +360,13 @@ void keyboardMain_processKeyInputUpdate(uint8_t tickInterval) {
 void keyboardMain_updateKeyInidicatorLed() {
   if (optionAffectKeyHoldStateToLed) {
     bool isKeyPressed = checkIfSomeKeyPressed();
+    boardIo_writeLed2(isKeyPressed);
+  }
+}
+
+void keyboardMain_updateInputSlotInidicatorLed() {
+  if (optionAffectKeyHoldStateToLed) {
+    bool isKeyPressed = checkIfSomeInputSlotKeyPressed();
     boardIo_writeLed2(isKeyPressed);
   }
 }

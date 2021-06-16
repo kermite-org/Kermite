@@ -1,4 +1,4 @@
-#ifndef __CONFIG_H__
+#pragma once
 
 #define KERMITE_PROJECT_ID "2xUWcB80"
 
@@ -16,12 +16,5 @@
 #define KS_ROW_PINS \
   { GP20, GP23, GP21 }
 
-#define KS_NUM_ENCODERS 1
-
-// clang-format off
-#define KS_ENCODER_CONFIGS { \
-  { .pinA = GP26, .pinB = GP22, .scanIndexBase = 12 } \
-}
-// clang-format on
-
-#endif
+#define KS_ENCODER_CONFIG \
+  { .pinA = GP26, .pinB = GP22, .scanIndexBase = 12 }

@@ -16,10 +16,5 @@
 #define KS_ROW_PINS \
   { P_B3, P_B2, P_B6 }
 
-#define KS_NUM_ENCODERS 1
-
-// clang-format off
-#define KS_ENCODER_CONFIGS { \
-  { .pinA = P_B1, .pinB = P_F7, .scanIndexBase = 12 } \
-}
-// clang-format on
+#define KS_ENCODER_CONFIG \
+  { .pinA = P_B1, .pinB = P_F7, .scanIndexBase = 12 }

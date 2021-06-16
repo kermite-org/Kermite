@@ -52,8 +52,8 @@ else
 		DEFINES += KS_USE_BOARD_LEDS
 		DEFINES += KS_USE_BOARD_LEDS_RPI_PICO
 	else
-		# MODULE_SRCS += km0/device/boardIo_dummy.c	//TODO: use this
-		MODULE_SRCS += km0/device/rp2040/boardIo.c
+		MODULE_SRCS += km0/device/boardIo_dummy.c
+		DEFINES += KS_USE_BOARD_LEDS
 	endif
 endif
 
@@ -79,24 +79,24 @@ MODULE_SRCS += km0/visualizer/rgbLighting.c
 DEFINES += KS_USE_RGB_LIGHTING
 endif
 
+#neopixel core
 ifneq ($(REQ_NEOPIXEL_CORE),)
 MODULE_SRCS += km0/device/rp2040/neoPixelCore.c
 MODULE_PIOASM_SRCS += km0/device/rp2040/neoPixelCore.pio
 endif
 
-ifneq ($(KL_USE_SPLIT_KEYBOARD),)
+#unified keyboard
+ifneq ($(KL_USE_GENERAL_KEYBOARD),)
+MODULE_SRCS += km0/wrapper/generalKeyboard.c
+PROJECT_STENCIL_SRCS += main.c
+endif
+
 #split keyboard
+ifneq ($(KL_USE_SPLIT_KEYBOARD),)
 MODULE_PIOASM_SRCS += km0/device/rp2040/singleWire4.pio
 MODULE_SRCS += km0/device/rp2040/boardLink_singleWire.c
 MODULE_SRCS += km0/wrapper/splitKeyboard.c
-DEFINES += KS_USE_SPLIT_KEYBOARD
+PROJECT_STENCIL_SRCS += main_split.c
 endif
 
 
-ifneq ($(KL_USE_UNIFIED_KEYBOARD),)
-#unified keyboard
-MODULE_SRCS += km0/wrapper/generalKeyboard.c
-DEFINES += KS_USE_UNIFIED_KEYBOARD
-endif
-
-PROJECT_STENCIL_SRCS += main.c
