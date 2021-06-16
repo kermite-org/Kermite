@@ -8,13 +8,20 @@ OUT_DIR = build/$(REL_PROJECT_CODE_DIR)
 OBJ_DIR = $(OUT_DIR)/obj
 CORE_NAME = $(notdir $(PROJECT))_$(VARIATION)
 
+DEFINES =
 MODULE_SRCS =
 PROJECT_SRCS =
 MODULE_ASM_SRCS =
 PROJECT_ASM_SRCS =
+PROJECT_STENCIL_SRCS =
 
-RULES_MK = $(PROJECT_CODE_DIR)/rules.mk
--include $(RULES_MK)
+-include $(PROJECT_CODE_DIR)/rules.mk
+
+PROJECT_STENCIL_DIR :=
+ifneq ($(TARGET_STENCIL),)
+	PROJECT_STENCIL_DIR := src/projects/__stencils/$(TARGET_STENCIL)
+	include $(PROJECT_STENCIL_DIR)/rules_atmega32u4.mk
+endif
 
 RELEASE_REVISION ?= 0
 IS_RESOURCE_ORIGIN_ONLINE ?= 0
@@ -34,8 +41,12 @@ CFLAGS =
 ASFLAGS =
 LDFLAGS =
 
-C_SRCS = $(addprefix src/modules/,$(MODULE_SRCS)) $(addprefix $(PROJECT_CODE_DIR)/, $(PROJECT_SRCS))
-ASM_SRCS = $(addprefix src/modules/,$(MODULE_ASM_SRCS)) $(addprefix $(PROJECT_CODE_DIR)/, $(PROJECT_ASM_SRCS))
+C_SRCS = $(addprefix src/modules/,$(MODULE_SRCS))
+C_SRCS += $(addprefix $(PROJECT_CODE_DIR)/, $(PROJECT_SRCS))
+C_SRCS += $(addprefix $(PROJECT_STENCIL_DIR)/, $(PROJECT_STENCIL_SRCS))
+
+ASM_SRCS = $(addprefix src/modules/,$(MODULE_ASM_SRCS))
+ASM_SRFCS += $(addprefix $(PROJECT_CODE_DIR)/, $(PROJECT_ASM_SRCS))
 
 C_OBJS = $(addprefix $(OBJ_DIR)/,$(C_SRCS:.c=.o))
 ASM_OBJS = $(addprefix $(OBJ_DIR)/,$(ASM_SRCS:.S=.o))
@@ -62,6 +73,7 @@ CFLAGS += -DEXTR_KERMITE_PROJECT_RELEASE_BUILD_REVISION=$(RELEASE_REVISION)
 CFLAGS += -DEXTR_KERMITE_IS_RESOURCE_ORIGIN_ONLINE=$(IS_RESOURCE_ORIGIN_ONLINE)
 CFLAGS += -DEXTR_KERMITE_VARIATION_NAME=\"$(VARIATION)\"
 CFLAGS += -DKERMITE_TARGET_MCU_ATMEGA
+CFLAGS += $(addprefix -D,$(DEFINES))
 
 ASFLAGS += -gstabs 
 ASFLAGS += -mmcu=atmega32u4
@@ -73,10 +85,10 @@ LDFLAGS += -Os
 LDFLAGS += -g
 LDFLAGS += -Wall
 LDFLAGS += -Wl,-Map=$(MAP),--cref
-# LDFLAGS += -Wl,--print-memory-usage
-# LDFLAGS += -Wl,--cref,--defsym=__TEXT_REGION_LENGTH__=32768
-# LDFLAGS += -Wl,--cref,--defsym=__DATA_REGION_LENGTH__=2560
-# LDFLAGS += -Wl,--cref,--defsym=__EEPROM_REGION_LENGTH__=1024
+LDFLAGS += -Wl,--print-memory-usage
+LDFLAGS += -Wl,--cref,--defsym=__TEXT_REGION_LENGTH__=32768
+LDFLAGS += -Wl,--cref,--defsym=__DATA_REGION_LENGTH__=2560
+LDFLAGS += -Wl,--cref,--defsym=__EEPROM_REGION_LENGTH__=1024
 
 
 all: build
@@ -97,7 +109,6 @@ $(ELF): $(OBJS)
 	@echo linking
 	@"mkdir" -p $(dir $@)
 	@$(CC) $(LDFLAGS) -o $(ELF) $(OBJS)
-	$(OBJSIZE) -C --mcu=atmega32u4 $(ELF)
 
 $(HEX) : $(ELF)
 	@$(OBJCOPY) -O ihex $(ELF) $(HEX)

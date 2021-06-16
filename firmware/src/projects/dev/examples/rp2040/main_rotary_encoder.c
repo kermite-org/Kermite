@@ -10,7 +10,9 @@
 //GP16, GP17 <-- Rotary Encoder 1
 //GP18, GP19 <-- Rotary Encoder 2
 
-static EncoderConfig appEncoderConfigs[] = {
+#define NumEncoders 2
+
+static EncoderConfig appEncoderConfigs[NumEncoders] = {
   { .pinA = GP16, .pinB = GP17, .scanIndexBase = 0 },
   { .pinA = GP18, .pinB = GP19, .scanIndexBase = 2 },
 };
@@ -22,7 +24,7 @@ int main() {
   printf("start\n");
 
   digitalIo_setOutput(GP25);
-  keyScanner_encoderBasic_initialize(appEncoderConfigs, 2);
+  keyScanner_encoderBasic_initialize(NumEncoders, appEncoderConfigs);
 
   int cnt = 0;
   while (true) {

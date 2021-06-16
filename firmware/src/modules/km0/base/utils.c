@@ -67,3 +67,12 @@ bool utils_readArrayedBitFlagsBit(uint8_t *bitFlagBytes, uint8_t flagIndex) {
   uint8_t bitIndex = flagIndex & 7;
   return bit_read(bitFlagBytes[byteIndex], bitIndex);
 }
+
+bool utils_checkPointerArrayIncludes(void **arr, int len, void *ptr) {
+  for (int i = 0; i < len; i++) {
+    if (arr[i] == ptr) {
+      return true;
+    }
+  }
+  return false;
+}

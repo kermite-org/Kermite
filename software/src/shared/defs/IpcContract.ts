@@ -223,6 +223,17 @@ export interface IServerPorfileInfo {
 export interface IApplicationVersionInfo {
   version: string;
 }
+
+export type IBootloaderType = 'avrCaterina' | 'rp2040uf2' | 'avrDfu';
+export type IBootloaderDeviceDetectionStatus =
+  | {
+      detected: false;
+    }
+  | {
+      detected: true;
+      bootloaderType: IBootloaderType;
+      targetDeviceSig: string;
+    };
 export interface IAppIpcContract {
   sync: {
     dev_debugMessage(message: string): void;
@@ -312,7 +323,7 @@ export interface IAppIpcContract {
     device_keyEvents: IRealtimeKeyboardEvent;
     device_keyboardDeviceStatusEvents: Partial<IKeyboardDeviceStatus>;
 
-    firmup_deviceDetectionEvents: { comPortName?: string; driveName?: string };
+    firmup_deviceDetectionEvents: IBootloaderDeviceDetectionStatus;
     projects_layoutFileUpdationEvents: { projectId: string };
   };
 }

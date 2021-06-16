@@ -85,6 +85,7 @@ async function makeShell() {
         'node-hid',
         'iconv-lite',
         'glob',
+        'usb',
       ],
       bundle: true,
       minify: false,

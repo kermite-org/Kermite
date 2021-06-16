@@ -1144,7 +1144,7 @@ static void triggerResolver_tick(uint8_t ms) {
         !slot->hold &&
         slot->resolverProc == NULL &&
         slot->autoReleaseTick == 0) {
-      printf("key %d detached from slot\n", slot->keyIndex);
+      // printf("key %d detached from slot\n", slot->keyIndex);
       slot->isActive = false;
     }
   }
@@ -1155,7 +1155,7 @@ static KeySlot *triggerResoler_attachKeyToFreeSlot(uint8_t keyIndex) {
     KeySlot *slot = &resolverState.keySlots[i];
     if (!slot->isActive) {
       keySlot_attachKey(slot, keyIndex);
-      printf("key %d attached to slot\n", keyIndex);
+      // printf("key %d attached to slot\n", keyIndex);
       return slot;
     }
   }

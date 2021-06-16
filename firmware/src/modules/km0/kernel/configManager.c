@@ -1,6 +1,7 @@
 #include "configManager.h"
 #include "commandDefinitions.h"
 #include "dataStorage.h"
+#include "km0/base/bitOperations.h"
 #include "km0/base/utils.h"
 #include "km0/device/dataMemory.h"
 #include <stdio.h>
@@ -12,6 +13,8 @@ static uint16_t addrSystemParameters = 0;
 static int lazySaveTick = -1;
 static ParameterChangedListener parameterChangedListeners[4] = { 0 };
 static int numParameterChangedListeners = 0;
+
+static uint16_t parameterChangedFlags = 0;
 
 static const T_SystemParametersSet systemParametersDefault = {
   .emitKeyStroke = true,
@@ -29,7 +32,7 @@ static const T_SystemParametersSet systemParametersDefault = {
   .glowSpeed = 4,
 };
 
-static const T_SystemParametersSet systemParameterMaxValues = {
+static T_SystemParametersSet systemParameterMaxValues = {
   .emitKeyStroke = 1,
   .emitRealtimeEvents = 1,
   .keyHoldLedOutput = 1,
@@ -52,7 +55,39 @@ static void notifyParameterChanged(uint8_t parameterIndex, uint8_t value) {
   }
 }
 
+static void taskChangedParameterNotification() {
+  for (int i = 0; i < NumSystemParameters; i++) {
+    if (bit_is_on(parameterChangedFlags, i)) {
+      notifyParameterChanged(i, systemParameterValues[i]);
+      bit_off(parameterChangedFlags, i);
+    }
+  }
+}
+
+static void reserveParameterChangedNotification(uint8_t parameterIndex) {
+  bit_on(parameterChangedFlags, parameterIndex);
+}
+
+static void reserveLazySave() {
+  lazySaveTick = 3000; //およそ3秒後にデータをストレージに書き込む
+}
+
+static void taskLazySave() {
+  if (lazySaveTick > 0) {
+    lazySaveTick--;
+    if (lazySaveTick == 0) {
+      if (addrSystemParameters) {
+        dataMemory_writeBytes(addrSystemParameters, systemParameterValues, NumSystemParameters);
+        printf("parameters saved\n");
+      }
+    }
+  }
+}
+
 void configManager_addParameterChangeListener(ParameterChangedListener listener) {
+  if (utils_checkPointerArrayIncludes((void **)parameterChangedListeners, numParameterChangedListeners, listener)) {
+    return;
+  }
   parameterChangedListeners[numParameterChangedListeners++] = listener;
 }
 
@@ -84,8 +119,8 @@ void fixSystemParametersLoaded() {
 void writeParameter(uint8_t parameterIndex, uint8_t value) {
   if (validateParameter(parameterIndex, value)) {
     systemParameterValues[parameterIndex] = value;
-    notifyParameterChanged(parameterIndex, value);
-    lazySaveTick = 3000; //いずれかのパラメタが変更されてから3秒後にデータをストレージに書き込む
+    reserveParameterChangedNotification(parameterIndex);
+    reserveLazySave();
   }
 }
 
@@ -106,7 +141,7 @@ void configManager_initialize() {
     dataMemory_readBytes(addrSystemParameters, systemParameterValues, NumSystemParameters);
     fixSystemParametersLoaded();
     for (int i = 0; i < NumSystemParameters; i++) {
-      notifyParameterChanged(i, systemParameterValues[i]);
+      reserveParameterChangedNotification(i);
     }
   }
 }
@@ -117,6 +152,10 @@ void configManager_readSystemParameterValues(uint8_t *buf, uint8_t len) {
 
 void configManager_readSystemParameterMaxValues(uint8_t *buf, uint8_t len) {
   utils_copyBytes(buf, (uint8_t *)&systemParameterMaxValues, len);
+}
+
+uint8_t configManager_readParameter(uint8_t parameterIndex) {
+  return systemParameterValues[parameterIndex];
 }
 
 void configManager_writeParameter(uint8_t parameterIndex, uint8_t value) {
@@ -177,15 +216,12 @@ void configManager_handleSystemAction(uint8_t code, uint8_t payloadValue) {
 }
 
 void configManager_processUpdate() {
-  if (lazySaveTick > 0) {
-    lazySaveTick--;
-    if (lazySaveTick == 0) {
-      if (addrSystemParameters) {
-        dataMemory_writeBytes(addrSystemParameters, systemParameterValues, NumSystemParameters);
-        printf("parameters saved\n");
-      }
-    }
-  }
+  taskLazySave();
+  taskChangedParameterNotification();
+}
+
+void configManager_processUpdateNoSave() {
+  taskChangedParameterNotification();
 }
 
 uint8_t *configManager_getParameterValuesRawPointer() {

@@ -1,8 +1,10 @@
 import { IFirmwareUpdationScheme } from '~/shell/services/firmwareUpdation/Interfaces';
-import { ComPortsMonitor } from '~/shell/services/firmwareUpdation/flashSchemeAtMega/ComPortsMonitor';
-import { FlashCommander } from '~/shell/services/firmwareUpdation/flashSchemeAtMega/FlashCommander';
+import { ComPortsMonitor } from '~/shell/services/firmwareUpdation/flashSchemeAtMegaCaterina/ComPortsMonitor';
+import { FlashCommander } from '~/shell/services/firmwareUpdation/flashSchemeAtMegaCaterina/FlashCommander';
 
-export class FirmwareUpdationSchemeAtMega implements IFirmwareUpdationScheme {
+export class FirmwareUpdationSchemeAtMegaCaterina
+  implements IFirmwareUpdationScheme
+{
   private comPortsMonitor = new ComPortsMonitor();
 
   resetDeviceDetectionStatus() {

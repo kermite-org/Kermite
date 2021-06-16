@@ -1,4 +1,10 @@
-import { flattenArray, IProjectResourceInfo } from '~/shared';
+import {
+  flattenArray,
+  IBootloaderDeviceDetectionStatus,
+  IBootloaderType,
+  IFirmwareTargetDevice,
+  IProjectResourceInfo,
+} from '~/shared';
 import { ipcAgent, modalAlert } from '~/ui/common';
 
 export type FirmwareUpdationPhase =
@@ -8,13 +14,37 @@ export type FirmwareUpdationPhase =
   | 'UploadSuccess'
   | 'UploadFailure';
 
+function checkDeviceBootloaderMatch(
+  bootloaderType: IBootloaderType,
+  firmwareTargetDevice: IFirmwareTargetDevice,
+): boolean {
+  const isBootloaderAvr =
+    bootloaderType === 'avrCaterina' || bootloaderType === 'avrDfu';
+  const isBootloaderRp2040 = bootloaderType === 'rp2040uf2';
+  return (
+    (isBootloaderAvr && firmwareTargetDevice === 'atmega32u4') ||
+    (isBootloaderRp2040 && firmwareTargetDevice === 'rp2040')
+  );
+}
 export class FirmwareUpdationModel {
   currentProjectFirmwareSpec: string = '';
   phase: FirmwareUpdationPhase = 'WaitingReset';
-  detectedDeviceSig: string | undefined = undefined;
+
   firmwareUploadResult: string | undefined = undefined;
 
   private projectInfosWithFirmware: IProjectResourceInfo[] = [];
+
+  private deviceDetectionStatus: IBootloaderDeviceDetectionStatus = {
+    detected: false,
+  };
+
+  get detectedDeviceSig(): string | undefined {
+    return (
+      (this.deviceDetectionStatus.detected &&
+        this.deviceDetectionStatus.targetDeviceSig) ||
+      undefined
+    );
+  }
 
   setCurrentProjectFirmwareSpec = (spec: string) => {
     this.currentProjectFirmwareSpec = spec;
@@ -46,21 +76,38 @@ export class FirmwareUpdationModel {
   };
 
   // 1: WaitingReset --> WaitingUploadOrder
-  private onDeviceDetectionEvent = ({
-    comPortName,
-    driveName,
-  }: {
-    comPortName?: string;
-    driveName?: string;
-  }) => {
-    this.detectedDeviceSig = comPortName || driveName;
-    if (this.phase === 'WaitingReset' && this.detectedDeviceSig) {
+  private onDeviceDetectionEvent = (ev: IBootloaderDeviceDetectionStatus) => {
+    this.deviceDetectionStatus = ev;
+    if (this.phase === 'WaitingReset' && this.deviceDetectionStatus.detected) {
       this.phase = 'WaitingUploadOrder';
     }
-    if (this.phase === 'WaitingUploadOrder' && !this.detectedDeviceSig) {
+    if (
+      this.phase === 'WaitingUploadOrder' &&
+      !this.deviceDetectionStatus.detected
+    ) {
       this.phase = 'WaitingReset';
     }
   };
+
+  get canFlashSelectedFirmwareToDetectedDevice(): boolean {
+    if (this.deviceDetectionStatus.detected) {
+      const [projectSig, variationName] =
+        this.currentProjectFirmwareSpec.split(':');
+      const projectaInfo = this.projectInfosWithFirmware.find((it) =>
+        it.sig.startsWith(projectSig),
+      );
+      const firmwareInfo = projectaInfo?.firmwares.find(
+        (f) => f.variationName === variationName,
+      );
+      if (firmwareInfo) {
+        return checkDeviceBootloaderMatch(
+          this.deviceDetectionStatus.bootloaderType,
+          firmwareInfo.targetDevice,
+        );
+      }
+    }
+    return false;
+  }
 
   // 2: WaitingUploadOrder --> Uploading --> UploadSuccess,UploadFailure
   uploadFirmware = async () => {
@@ -68,10 +115,12 @@ export class FirmwareUpdationModel {
       await modalAlert('please select firmware');
       return;
     }
-    if (this.phase === 'WaitingUploadOrder' && this.detectedDeviceSig) {
-      const [projectSig, variationName] = this.currentProjectFirmwareSpec.split(
-        ':',
-      );
+    if (
+      this.phase === 'WaitingUploadOrder' &&
+      this.deviceDetectionStatus.detected
+    ) {
+      const [projectSig, variationName] =
+        this.currentProjectFirmwareSpec.split(':');
       const info = this.projectInfosWithFirmware.find((it) =>
         it.sig.startsWith(projectSig),
       );
@@ -93,7 +142,8 @@ export class FirmwareUpdationModel {
   };
 
   private async fechProjectInfos() {
-    const projectResourceInfos = await ipcAgent.async.projects_getAllProjectResourceInfos();
+    const projectResourceInfos =
+      await ipcAgent.async.projects_getAllProjectResourceInfos();
     this.projectInfosWithFirmware = projectResourceInfos.filter(
       (info) => info.firmwares.length > 0,
     );

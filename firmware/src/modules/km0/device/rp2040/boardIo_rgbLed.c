@@ -52,6 +52,16 @@ void boardIo_writeLed2(bool val) {
   updateLedColor();
 }
 
+void boardIo_toggleLed1() {
+  state_led1 = !state_led1;
+  updateLedColor();
+}
+
+void boardIo_toggleLed2() {
+  state_led2 = !state_led2;
+  updateLedColor();
+}
+
 void boardIo_setupLeds_proMicroRp() {
   boardIo_setupLedsRgb(25, -1);
 }

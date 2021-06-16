@@ -16,10 +16,10 @@ int main() {
   debugUart_initialize(38400);
   boardIo_setupLeds_proMicroAvr();
   oledDisplay_initialize();
-  keyScanner_directWired_initialize(NumScanSlots, keyInputPins);
+  keyScanner_directWired_initialize(NumScanSlots, keyInputPins, 0);
   keyboardMain_useKeyScanner(keyScanner_directWired_update);
   keyboardMain_setKeyIndexTable(keyIndexTable);
-  keyboardMain_useDisplayModule(oledDisplay_update);
+  keyboardMain_useOledDisplayModule(oledDisplay_update);
   generalKeyboard_start();
   return 0;
 }

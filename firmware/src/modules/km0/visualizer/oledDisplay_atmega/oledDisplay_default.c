@@ -139,8 +139,5 @@ void oledDisplay_initialize() {
 }
 
 void oledDisplay_update() {
-  static uint32_t tick = 0;
-  if (++tick % 50 == 0) {
-    updateFrame();
-  }
+  updateFrame();
 }
