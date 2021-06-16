@@ -1,10 +1,16 @@
-#ifndef __CONFIG_H__
+#pragma once
 
 #define KERMITE_PROJECT_ID "Di6V4KvF"
 
 #define KM0_KEYBOARD__NUM_SCAN_SLOTS 56
-#define KM0_KEYBOARD__NUM_KEY_SLOTS 56
 
 #define KM0_RP_SINGLEWIRE__PIN_SIGNAL GP1
 
-#endif
+#define KS_NUM_COLUMNS 7
+#define KS_NUM_ROWS 4
+
+#define KS_COLUMN_PINS \
+  { GP28, GP27, GP26, GP22, GP20, GP23, GP21 }
+
+#define KS_ROW_PINS \
+  { GP6, GP7, GP8, GP9 }

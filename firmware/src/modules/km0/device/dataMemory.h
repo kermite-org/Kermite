@@ -12,4 +12,7 @@ void dataMemory_readBytes(uint16_t addr, uint8_t *buf, uint16_t len);
 void dataMemory_writeBytes(uint16_t addr, uint8_t *buf, uint16_t len);
 void dataMemory_clearAllZero();
 
+void dataMemory_initialize();
+void dataMemory_processTick();
+
 #endif

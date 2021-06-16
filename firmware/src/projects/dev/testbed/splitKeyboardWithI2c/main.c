@@ -11,19 +11,16 @@
 
 static const uint8_t keyInputPins[NumScanSlotsHalf] = { GP12, GP13, GP14, GP15 };
 
-static const int8_t keyIndexTable[NumScanSlots] = {
-  //left
-  0, 1, 2, 3,
-  //right
-  4, 5, 6, 7
-};
+static void setupBoard(int8_t side) {
+  uint8_t scanOffset = side == 0 ? 0 : 4;
+  keyScanner_directWired_initialize(NumScanSlotsHalf, keyInputPins, scanOffset);
+  keyboardMain_useKeyScanner(keyScanner_directWired_update);
+}
 
 int main() {
   boardIo_setupLeds_rpiPico();
   debugUart_initialize(115200);
-  keyScanner_directWired_initialize(NumScanSlotsHalf, keyInputPins);
-  keyboardMain_useKeyScanner(keyScanner_directWired_update);
-  keyboardMain_setKeyIndexTable(keyIndexTable);
+  splitKeyboard_setBoardConfigCallback(setupBoard);
   splitKeyboard_start();
   return 0;
 }

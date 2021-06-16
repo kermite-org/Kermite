@@ -4,8 +4,8 @@
 #include "km0/types.h"
 
 void keyboardMain_useKeyScanner(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags));
-void keyboardMain_useKeyScannerExtra(void (*_keyScannerUpdateFunc)(uint8_t *keyStateBitFlags));
 void keyboardMain_setKeyIndexTable(const int8_t *_scanIndexToKeyIndexMap);
-void keyboardMain_useDisplayModule(void (*_displayModuleUpdateFunc)(void));
+void keyboardMain_useRgbLightingModule(void (*_updateFn)(void));
+void keyboardMain_useOledDisplayModule(void (*_updateFn)(void));
 
 #endif

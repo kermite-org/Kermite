@@ -63,7 +63,7 @@ static void updateEncoderInstance(EncoderConfig *config, EncoderState *state) {
   state->holdB = delta == 1;
 }
 
-void keyScanner_encoderBasic_initialize(EncoderConfig *_encoderConfigs, uint8_t num) {
+void keyScanner_encoderBasic_initialize(uint8_t num, EncoderConfig *_encoderConfigs) {
   numEncoders = num;
   encoderConfigs = _encoderConfigs;
   for (int i = 0; i < numEncoders; i++) {

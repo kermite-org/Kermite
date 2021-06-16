@@ -12,6 +12,7 @@ void utils_copyStringToWideString(int16_t *dst, uint8_t *src, uint16_t len);
 void utils_fillBytes(uint8_t *dst, uint8_t val, uint16_t len);
 void utils_writeArrayedBitFlagsBit(uint8_t *bitFlagBytes, uint8_t flagIndex, bool state);
 bool utils_readArrayedBitFlagsBit(uint8_t *bitFlagBytes, uint8_t flagIndex);
+bool utils_checkPointerArrayIncludes(void **arr, int len, void *ptr);
 
 #define valueMinimum(a, b) ((a) < (b) ? (a) : (b))
 
