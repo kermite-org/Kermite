@@ -1,4 +1,4 @@
-import { jsx } from 'qx';
+import { asyncRerender, jsx } from 'qx';
 
 export namespace ForegroundModalLayerDomain {
   type JsxElement = any;
@@ -28,6 +28,7 @@ export namespace ForegroundModalLayerDomain {
         this.modalPromiseResolver(result);
         this.modalPromiseResolver = undefined;
       }
+      asyncRerender();
     }
   }
   const modalModel = new ForegroundModalModel();
