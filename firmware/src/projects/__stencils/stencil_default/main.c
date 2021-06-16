@@ -32,19 +32,6 @@
 #include "km0/visualizer/rgbLighting.h"
 #endif
 
-#ifdef KS_USE_KEY_MATRIX
-static const uint8_t columnPins[KS_NUM_COLUMNS] = KS_COLUMN_PINS;
-static const uint8_t rowPins[KS_NUM_ROWS] = KS_ROW_PINS;
-#endif
-
-#ifdef KS_USE_KEYS_DIRECT_WIRED
-static const uint8_t keyInputPins[KS_NUM_DIRECT_WIRED_KEYS] = KS_DIRECT_WIRED_KEY_INPUT_PINS;
-#endif
-
-#ifdef KS_USE_ENCODERS
-static EncoderConfig encoderConfigs[KS_NUM_ENCODERS] = KS_ENCODER_CONFIGS;
-#endif
-
 int main() {
 
 #ifdef KS_USE_BOARD_LEDS_PROMICRO_AVR
@@ -74,18 +61,40 @@ int main() {
 #endif
 
 #ifdef KS_USE_KEY_MATRIX
-  keyScanner_basicMatrix_initialize(KS_NUM_ROWS, KS_NUM_COLUMNS, rowPins, columnPins);
+#ifndef KS_MATRIX_SCAN_INDEX_BASE
+#define KS_MATRIX_SCAN_INDEX_BASE 0
+#endif
+  static const uint8_t columnPins[KS_NUM_COLUMNS] = KS_COLUMN_PINS;
+  static const uint8_t rowPins[KS_NUM_ROWS] = KS_ROW_PINS;
+  keyScanner_basicMatrix_initialize(KS_NUM_ROWS, KS_NUM_COLUMNS,
+                                    rowPins, columnPins, KS_MATRIX_SCAN_INDEX_BASE);
   keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
 #endif
 
 #ifdef KS_USE_KEYS_DIRECT_WIRED
-  keyScanner_directWired_initialize(KS_NUM_DIRECT_WIRED_KEYS, keyInputPins);
+#ifndef KS_DIRECT_WIRED_KEY_INPUT_SCAN_INDEX_BASE
+#define KS_DIRECT_WIRED_KEY_INPUT_SCAN_INDEX_BASE 0
+#endif
+  static const uint8_t directWiredKeyInputPins[KS_NUM_DIRECT_WIRED_KEYS] = KS_DIRECT_WIRED_KEY_INPUT_PINS;
+  keyScanner_directWired_initialize(KS_NUM_DIRECT_WIRED_KEYS,
+                                    directWiredKeyInputPins, KS_DIRECT_WIRED_KEY_INPUT_SCAN_INDEX_BASE);
   keyboardMain_useKeyScanner(keyScanner_directWired_update);
 #endif
 
 #ifdef KS_USE_ENCODERS
-  keyScanner_encoderBasic_initialize(KS_NUM_ENCODERS, encoderConfigs);
-  keyboardMain_useKeyScanner(keyScanner_encoderBasic_update);
+
+#if defined(KS_ENCODER_CONFIG)
+  if (side == 0) {
+    static EncoderConfig encoderConfigs[1] = { KS_ENCODER_CONFIG };
+    keyScanner_encoderBasic_initialize(1, encoderConfigs);
+  }
+#else if defined(KS_ENCODER_CONFIGS)
+  if (side == 0) {
+    static EncoderConfig encoderConfigs[KS_NUM_ENCODERS] = KS_ENCODER_CONFIGS;
+    keyScanner_encoderBasic_initialize(KS_NUM_ENCODERS, encoderConfigs);
+  }
+#endif
+
 #endif
 
   generalKeyboard_start();
