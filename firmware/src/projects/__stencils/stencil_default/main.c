@@ -84,17 +84,13 @@ int main() {
 #ifdef KS_USE_ENCODERS
 
 #if defined(KS_ENCODER_CONFIG)
-  if (side == 0) {
-    static EncoderConfig encoderConfigs[1] = { KS_ENCODER_CONFIG };
-    keyScanner_encoderBasic_initialize(1, encoderConfigs);
-  }
-#else if defined(KS_ENCODER_CONFIGS)
-  if (side == 0) {
-    static EncoderConfig encoderConfigs[KS_NUM_ENCODERS] = KS_ENCODER_CONFIGS;
-    keyScanner_encoderBasic_initialize(KS_NUM_ENCODERS, encoderConfigs);
-  }
+#define KS_NUM_ENCODERS 1
+  static EncoderConfig encoderConfigs[1] = { KS_ENCODER_CONFIG };
+#elif defined(KS_ENCODER_CONFIGS)
+  static EncoderConfig encoderConfigs[KS_NUM_ENCODERS] = KS_ENCODER_CONFIGS;
 #endif
-
+  keyboardMain_useKeyScanner(keyScanner_encoderBasic_update);
+  keyScanner_encoderBasic_initialize(KS_NUM_ENCODERS, encoderConfigs);
 #endif
 
   generalKeyboard_start();
