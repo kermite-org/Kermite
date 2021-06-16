@@ -1,4 +1,4 @@
-#ifndef __CONFIG_H__
+#pragma once
 
 #define KERMITE_PROJECT_ID "2xUWcB80"
 
@@ -18,5 +18,3 @@
 
 #define KS_ENCODER_CONFIG \
   { .pinA = GP26, .pinB = GP22, .scanIndexBase = 12 }
-
-#endif
