@@ -15,7 +15,7 @@
       "name": "ConfigAVR",
       "includePath": [
         "src/modules",
-        "src/projects/dev/dummy_header_provider_project",
+        "src/projects/__stencils/dummy_header_provider_project",
         "${myAvrCompilerBaseDirectory}/avr/include"
       ],
       "defines": [
@@ -44,7 +44,7 @@
       "name": "ConfigRP",
       "includePath": [
         "src/modules",
-        "src/projects/dev/dummy_header_provider_project",
+        "src/projects/__stencils/dummy_header_provider_project",
         "${picoLocalDir}/include",
         "${picoSdkOuterDir}",
         "${picoSdkRoot}/src/rp2040/include",
