@@ -4,7 +4,7 @@ import {
   startDragSession,
   getRelativeMousePosition,
 } from '~/ui/layouter/common';
-import { editReader, editMutations } from '~/ui/layouter/models';
+import { editReader, editMutations, editUpdator } from '~/ui/layouter/models';
 import { screenToWorld } from './CoordHelpers';
 import { FieldGrid, FieldAxis } from './svgParts/FieldParts';
 import {
@@ -56,15 +56,17 @@ const onSvgMouseDown = (e: MouseEvent) => {
       if (editMode === 'add') {
         const [sx, sy] = getRelativeMousePosition(e);
         const [x, y] = screenToWorld(sx, sy);
+        editUpdator.startEditSession();
         editMutations.addKeyEntity(x, y);
-        startKeyEntityDragOperation(e, false, false);
+        startKeyEntityDragOperation(e, false, () => {
+          editUpdator.endEditSession();
+        });
       }
     }
     if (editorTarget === 'outline') {
       if (editMode === 'add') {
         const [sx, sy] = getRelativeMousePosition(e);
         const [x, y] = screenToWorld(sx, sy);
-
         editMutations.startEdit();
         editMutations.startShapeDrawing();
         editMutations.addOutlinePoint(x, y);

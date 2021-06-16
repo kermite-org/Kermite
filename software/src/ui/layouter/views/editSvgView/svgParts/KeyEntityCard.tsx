@@ -11,12 +11,10 @@ import {
 import { getKeyIdentifierText } from '~/ui/layouter/models/DomainRelatedHelpers';
 import { unitValueToMm } from '~/ui/layouter/models/PlacementUnitHelperEx';
 
-let temporaryChangingModeAddToMove = false;
-
 export function startKeyEntityDragOperation(
   e: MouseEvent,
-  useGhost: boolean,
   isMirror: boolean,
+  completeCallback: () => void,
 ) {
   const { sight, currentKeyEntity: ck, coordUnit } = editReader;
 
@@ -44,15 +42,9 @@ export function startKeyEntityDragOperation(
     rerender();
   };
   const upCallback = () => {
-    editMutations.endKeyEdit();
-    if (temporaryChangingModeAddToMove) {
-      editMutations.setEditMode('add');
-      temporaryChangingModeAddToMove = false;
-    }
+    completeCallback?.();
     rerender();
   };
-
-  editMutations.startKeyEdit(useGhost);
   startDragSession(e, moveCallback, upCallback);
 }
 
@@ -118,13 +110,12 @@ export const KeyEntityCardSingle = (props: {
           editMutations.setCurrentPointIndex(-1);
           e.stopPropagation();
         } else if (editMode === 'move' || editMode === 'add') {
-          if (editMode === 'add') {
-            editMutations.setEditMode('move');
-            temporaryChangingModeAddToMove = true;
-          }
           editMutations.setCurrentKeyEntity(ke.id, isMirror);
           editMutations.setCurrentPointIndex(-1);
-          startKeyEntityDragOperation(e, true, isMirror);
+          editMutations.startKeyEdit(true);
+          startKeyEntityDragOperation(e, isMirror, () => {
+            editMutations.endKeyEdit();
+          });
           e.stopPropagation();
         } else if (editMode === 'delete') {
           editMutations.setCurrentKeyEntity(ke.id, isMirror);

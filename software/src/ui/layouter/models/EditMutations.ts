@@ -83,7 +83,7 @@ class EditMutations {
       mirrorKeyIndex: -1,
       groupId: '',
     };
-    editUpdator.commitEditor((editor) => {
+    editUpdator.patchEditor((editor) => {
       editor.design.keyEntities[id] = keyEntity;
       editor.currentkeyEntityId = id;
     });
