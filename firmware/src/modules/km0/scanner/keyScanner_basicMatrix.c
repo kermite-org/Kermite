@@ -15,6 +15,13 @@ void keyScanner_basicMatrix_initialize(
     uint8_t _numColumns,
     const uint8_t *_rowPins,
     const uint8_t *_columnPins, uint8_t _scanIndexBase) {
+  for (uint8_t i = 0; i < numRows; i++) {
+    digitalIo_setInputPullup(rowPins[i]);
+  }
+  for (uint8_t i = 0; i < numColumns; i++) {
+    digitalIo_setInputPullup(columnPins[i]);
+  }
+
   numRows = _numRows;
   numColumns = _numColumns;
   rowPins = _rowPins;
