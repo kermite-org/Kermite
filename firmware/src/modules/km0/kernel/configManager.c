@@ -85,6 +85,9 @@ static void taskLazySave() {
 }
 
 void configManager_addParameterChangeListener(ParameterChangedListener listener) {
+  if (utils_checkPointerArrayIncludes((void **)parameterChangedListeners, numParameterChangedListeners, listener)) {
+    return;
+  }
   parameterChangedListeners[numParameterChangedListeners++] = listener;
 }
 
