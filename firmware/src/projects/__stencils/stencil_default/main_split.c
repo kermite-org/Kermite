@@ -169,6 +169,7 @@ int main() {
 #endif
 
 #ifdef KS_USE_RGB_LIGHTING
+  rgbLighting_preConfigure();
   rgbLighting_initialize();
   keyboardMain_useRgbLightingModule(rgbLighting_update);
 #endif

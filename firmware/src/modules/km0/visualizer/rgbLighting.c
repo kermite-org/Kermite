@@ -233,9 +233,12 @@ static void updateFrame() {
   }
 }
 
-void rgbLighting_initialize() {
+void rgbLighting_preConfigure() {
   configManager_overrideParameterMaxValue(SystemParameter_GlowColor, 12);
   configManager_overrideParameterMaxValue(SystemParameter_GlowPattern, 4);
+}
+
+void rgbLighting_initialize() {
   configManager_addParameterChangeListener(parameterChangeHandler);
   serialLed_initialize();
 }

@@ -47,6 +47,7 @@ int main() {
   debugUart_initialize(38400);
   boardIo_setupLeds_proMicroAvr();
   oledDisplay_initialize();
+  rgbLighting_preConfigure();
   rgbLighting_initialize();
   keyboardMain_useOledDisplayModule(oledDisplay_update);
   keyboardMain_useRgbLightingModule(rgbLighting_update);
