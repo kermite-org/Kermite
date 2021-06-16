@@ -1,24 +1,16 @@
 import { appState, IEditState } from './AppState';
 
-interface IModification {
-  oldState: IEditState;
-  newState: IEditState;
-}
-
 class EditManager {
-  private undoStack: IModification[] = [];
-  private redoStack: IModification[] = [];
+  private undoStack: IEditState[] = [];
+  private redoStack: IEditState[] = [];
 
   reset() {
     this.undoStack = [];
     this.redoStack = [];
   }
 
-  pushUndoStack(oldState: IEditState, newState: IEditState) {
-    this.undoStack.push({
-      oldState,
-      newState,
-    });
+  pushUndoStack(oldState: IEditState) {
+    this.undoStack.push(oldState);
     this.redoStack = [];
   }
 
@@ -32,17 +24,15 @@ class EditManager {
 
   undo() {
     if (this.undoStack.length > 0) {
-      const modification = this.undoStack.pop()!;
-      this.redoStack.push(modification);
-      appState.editor = modification.oldState;
+      this.redoStack.push(appState.editor);
+      appState.editor = this.undoStack.pop()!;
     }
   }
 
   redo() {
     if (this.redoStack.length > 0) {
-      const modification = this.redoStack.pop()!;
-      this.undoStack.push(modification);
-      appState.editor = modification.newState;
+      this.undoStack.push(appState.editor);
+      appState.editor = this.redoStack.pop()!;
     }
   }
 }
