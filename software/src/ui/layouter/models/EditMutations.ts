@@ -21,6 +21,7 @@ import {
 import {
   IEditKeyboardDesign,
   IEditKeyEntity,
+  IEditOutlineShape,
   IEditPropKey,
 } from './DataSchema';
 import { editReader } from './EditReader';
@@ -166,11 +167,22 @@ class EditMutations {
   }
 
   setEditMode(mode: IEditMode) {
-    editUpdator.patchEditor((editor) => (editor.editMode = mode));
+    editUpdator.patchEditor((editor) => {
+      editor.editMode = mode;
+    });
   }
 
   setMode(mode: IEditMode) {
+    const currentMode = editReader.editMode;
+    if (currentMode === mode) {
+      return;
+    }
     editUpdator.patchEditor((state) => {
+      state.shapeDrawing = false;
+      state.currentkeyEntityId = undefined;
+      state.isCurrentKeyMirror = false;
+      state.currentShapeId = undefined;
+      state.currentPointIndex = -1;
       state.editMode = mode;
     });
   }
