@@ -16,6 +16,7 @@ import {
   appState,
   createFallbackEditKeyboardDesign,
   IEditMode,
+  IEditState,
   IEnvBoolPropKey,
 } from './AppState';
 import {
@@ -27,6 +28,15 @@ import {
 import { editReader } from './EditReader';
 import { editUpdator } from './EditUpdator';
 
+function cleanupInvalidPolygons(design: IEditKeyboardDesign) {
+  const { outlineShapes } = design;
+  for (const key in outlineShapes) {
+    const shape = outlineShapes[key];
+    if (shape && shape.points.length < 3) {
+      delete outlineShapes[key];
+    }
+  }
+}
 class EditMutations {
   startEdit = () => {
     editUpdator.startEditSession();
@@ -178,6 +188,7 @@ class EditMutations {
       return;
     }
     editUpdator.patchEditor((state) => {
+      cleanupInvalidPolygons(state.design);
       state.shapeDrawing = false;
       state.currentkeyEntityId = undefined;
       state.isCurrentKeyMirror = false;
@@ -427,6 +438,7 @@ class EditMutations {
   endShapeDrawing() {
     if (appState.editor.shapeDrawing) {
       editUpdator.patchEditor((editor) => {
+        cleanupInvalidPolygons(editor.design);
         editor.shapeDrawing = false;
       });
     }
