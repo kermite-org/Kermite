@@ -1,24 +1,23 @@
 import { getObjectKeys } from '~/shared';
 import { ISelectorOption } from '~/ui/common';
 import {
-  IModeState,
-  editReader,
-  editMutations,
-  IEnvBoolPropKey,
   editManager,
+  editMutations,
+  editReader,
+  IEditMode,
+  IEnvBoolPropKey,
 } from '~/ui/layouter/models';
 
-function createModeSelectionViewModel<K extends 'editorTarget' | 'editMode'>(
-  targetKey: K,
-  sources: { [key in IModeState[K]]?: string },
+function createModeSelectionViewModel(
+  sources: { [key in IEditMode]?: string },
 ) {
   const options: ISelectorOption[] = getObjectKeys(sources).map((key) => ({
     value: key,
     label: sources[key]!,
   }));
-  const value = editReader.getMode(targetKey);
-  const setValue = (value: Extract<IModeState[K], string>) => {
-    editMutations.setMode(targetKey, value);
+  const value = editReader.editMode;
+  const setValue = (value: IEditMode) => {
+    editMutations.setMode(value);
   };
   return {
     options,
@@ -52,15 +51,10 @@ function makeSnapDivisionViewModel() {
 }
 
 export function makeEditMenuBarViewModel() {
-  const editorTargetVm = createModeSelectionViewModel('editorTarget', {
-    key: 'key',
-    outline: 'outline',
-  });
-
-  const editModeVm = createModeSelectionViewModel('editMode', {
+  const editModeVm = createModeSelectionViewModel({
     select: 'select',
-    move: 'move',
-    add: 'add',
+    key: 'key',
+    shape: 'shape',
     delete: 'delete',
   });
 
@@ -69,10 +63,6 @@ export function makeEditMenuBarViewModel() {
   const vmSnapToGrid = createToggleOptionViewModel('snapToGrid');
 
   const vmSnapDivision = makeSnapDivisionViewModel();
-
-  const { editorTarget } = editReader;
-  const canSelectEditMode =
-    editorTarget === 'key' || editorTarget === 'outline';
 
   const resetKeyboardDesign = () => editMutations.resetKeyboardDesign();
 
@@ -84,13 +74,11 @@ export function makeEditMenuBarViewModel() {
     canRedo: editManager.canRedo,
     undo: () => editManager.undo(),
     redo: () => editManager.redo(),
-    editorTargetVm,
     editModeVm,
     vmShowAxis,
     vmShowGrid,
     vmSnapToGrid,
     vmSnapDivision,
-    canSelectEditMode,
     resetKeyboardDesign,
     vmShowKeyId,
     vmShowKeyIndex,

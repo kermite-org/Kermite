@@ -3,7 +3,7 @@ import {
   ICoordUnit,
 } from '~/shared/modules/PlacementUnitHelper';
 import { createSimpleSelector } from '~/ui/common';
-import { appState, IEnvBoolPropKey, IModeState } from './AppState';
+import { appState, IEnvBoolPropKey } from './AppState';
 import { getKeyboardDesignBoundingBox } from './BoundingBoxCalculator';
 import {
   IEditKeyEntity,
@@ -13,10 +13,6 @@ import {
 } from './DataSchema';
 
 class EditReader {
-  get editorTarget() {
-    return appState.editor.editorTarget;
-  }
-
   get editMode() {
     return appState.editor.editMode;
   }
@@ -65,7 +61,7 @@ class EditReader {
 
   get gridPitches(): [number, number] {
     const cu = this.coordUnit;
-    if (this.editorTarget === 'key' && cu.mode === 'KP') {
+    if (this.editMode === 'key' && cu.mode === 'KP') {
       return [cu.x, cu.y];
     } else {
       return [10, 10];
@@ -74,10 +70,6 @@ class EditReader {
 
   get snapDivision(): number {
     return appState.env.snapDivision;
-  }
-
-  getMode<K extends 'editorTarget' | 'editMode'>(fieldKey: K): IModeState[K] {
-    return appState.editor[fieldKey];
   }
 
   getBoolOption<K extends IEnvBoolPropKey>(propKey: K) {

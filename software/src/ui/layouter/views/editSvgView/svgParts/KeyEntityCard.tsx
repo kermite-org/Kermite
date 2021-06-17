@@ -94,29 +94,22 @@ export const KeyEntityCardSingle = (props: {
 
   const onMouseDown = (e: MouseEvent) => {
     if (e.button === 0) {
-      if (editReader.editorTarget !== 'key') {
-        editMutations.setEditorTarget('key');
-      }
-      const { editorTarget } = editReader;
-
-      if (editorTarget === 'key') {
-        const { editMode } = editReader;
-        if (editMode === 'select') {
-          editMutations.setCurrentKeyEntity(ke.id, isMirror);
-          editMutations.setCurrentPointIndex(-1);
-          e.stopPropagation();
-        } else if (editMode === 'move' || editMode === 'add') {
-          editMutations.setCurrentKeyEntity(ke.id, isMirror);
-          editMutations.setCurrentPointIndex(-1);
-          editMutations.startKeyEdit(true);
-          startKeyEntityDragOperation(e, isMirror, () => {
-            editMutations.endKeyEdit();
-          });
-          e.stopPropagation();
-        } else if (editMode === 'delete') {
-          editMutations.setCurrentKeyEntity(ke.id, isMirror);
-          editMutations.deleteCurrentKeyEntity();
-        }
+      const { editMode } = editReader;
+      if (editMode === 'select') {
+        editMutations.setCurrentKeyEntity(ke.id, isMirror);
+        editMutations.setCurrentPointIndex(-1);
+        e.stopPropagation();
+      } else if (editMode === 'key') {
+        editMutations.setCurrentKeyEntity(ke.id, isMirror);
+        editMutations.setCurrentPointIndex(-1);
+        editMutations.startKeyEdit(true);
+        startKeyEntityDragOperation(e, isMirror, () => {
+          editMutations.endKeyEdit();
+        });
+        e.stopPropagation();
+      } else if (editMode === 'delete') {
+        editMutations.setCurrentKeyEntity(ke.id, isMirror);
+        editMutations.deleteCurrentKeyEntity();
       }
     }
   };

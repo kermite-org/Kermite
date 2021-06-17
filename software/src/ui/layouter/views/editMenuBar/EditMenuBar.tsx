@@ -35,13 +35,11 @@ export const EditMenuBar = () => {
     canRedo,
     undo,
     redo,
-    editorTargetVm,
     editModeVm,
     vmShowAxis,
     vmShowGrid,
     vmSnapToGrid,
     vmSnapDivision,
-    canSelectEditMode,
     resetKeyboardDesign,
     vmShowKeyId,
     vmShowKeyIndex,
@@ -50,18 +48,10 @@ export const EditMenuBar = () => {
   return (
     <div class={cssEditMenuBar}>
       <RibbonSelector
-        options={editorTargetVm.options}
-        value={editorTargetVm.value}
-        setValue={editorTargetVm.setValue}
-        buttonWidth={55}
-      />
-
-      <RibbonSelector
         options={editModeVm.options}
         value={editModeVm.value}
         setValue={editModeVm.setValue}
         buttonWidth={55}
-        disabled={!canSelectEditMode}
       />
 
       <div class="buttonsBox">

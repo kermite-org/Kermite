@@ -45,34 +45,30 @@ function startSightDragOperation(e: MouseEvent) {
 
 const onSvgMouseDown = (e: MouseEvent) => {
   if (e.button === 0) {
-    const { editorTarget, editMode } = editReader;
-    if (editMode === 'select' || editMode === 'move') {
+    const { editMode } = editReader;
+    if (editMode === 'select') {
       editMutations.setCurrentShapeId(undefined);
       editMutations.unsetCurrentKeyEntity();
       editMutations.setCurrentPointIndex(-1);
     }
-    if (editorTarget === 'key') {
-      if (editMode === 'add') {
-        const [sx, sy] = getRelativeMousePosition(e);
-        const [x, y] = screenToWorld(sx, sy);
-        editMutations.startEdit();
-        editMutations.addKeyEntity(x, y);
-        startKeyEntityDragOperation(e, false, () => {
-          editMutations.endEdit();
-        });
-      }
+    if (editMode === 'key') {
+      const [sx, sy] = getRelativeMousePosition(e);
+      const [x, y] = screenToWorld(sx, sy);
+      editMutations.startEdit();
+      editMutations.addKeyEntity(x, y);
+      startKeyEntityDragOperation(e, false, () => {
+        editMutations.endEdit();
+      });
     }
-    if (editorTarget === 'outline') {
-      if (editMode === 'add') {
-        const [sx, sy] = getRelativeMousePosition(e);
-        const [x, y] = screenToWorld(sx, sy);
-        editMutations.startEdit();
-        editMutations.startShapeDrawing();
-        editMutations.addOutlinePoint(x, y);
-        startOutlinePointDragOperation(e, false, () => {
-          editMutations.endEdit();
-        });
-      }
+    if (editMode === 'shape') {
+      const [sx, sy] = getRelativeMousePosition(e);
+      const [x, y] = screenToWorld(sx, sy);
+      editMutations.startEdit();
+      editMutations.startShapeDrawing();
+      editMutations.addOutlinePoint(x, y);
+      startOutlinePointDragOperation(e, false, () => {
+        editMutations.endEdit();
+      });
     }
   }
   if (e.button === 1) {

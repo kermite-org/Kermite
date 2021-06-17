@@ -1,12 +1,6 @@
 import { IEditKeyboardDesign, IEditKeyEntity } from './DataSchema';
 
-export type IEditorTarget = 'key' | 'outline';
-export type IEditMode = 'select' | 'add' | 'move' | 'delete';
-
-export interface IModeState {
-  editMode: IEditMode;
-  editorTarget: IEditorTarget;
-}
+export type IEditMode = 'select' | 'key' | 'shape' | 'delete';
 export interface IEditState {
   loadedDesign: IEditKeyboardDesign;
   design: IEditKeyboardDesign;
@@ -15,7 +9,6 @@ export interface IEditState {
   currentShapeId: string | undefined;
   currentPointIndex: number;
   editMode: IEditMode;
-  editorTarget: IEditorTarget;
   shapeDrawing: boolean;
   currentTransGroupId: string | undefined;
 }
@@ -83,8 +76,7 @@ export const appState: IAppState = {
     isCurrentKeyMirror: false,
     currentShapeId: undefined,
     currentPointIndex: -1,
-    editorTarget: 'key',
-    editMode: 'move',
+    editMode: 'key',
     shapeDrawing: false,
     currentTransGroupId: undefined,
   },

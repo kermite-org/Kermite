@@ -16,9 +16,7 @@ import {
   appState,
   createFallbackEditKeyboardDesign,
   IEditMode,
-  IEditorTarget,
   IEnvBoolPropKey,
-  IModeState,
 } from './AppState';
 import {
   IEditKeyboardDesign,
@@ -167,20 +165,13 @@ class EditMutations {
     });
   }
 
-  setEditorTarget(target: IEditorTarget) {
-    editUpdator.patchEditor((editor) => (editor.editorTarget = target));
-  }
-
   setEditMode(mode: IEditMode) {
     editUpdator.patchEditor((editor) => (editor.editMode = mode));
   }
 
-  setMode<K extends 'editorTarget' | 'editMode'>(
-    fieldKey: K,
-    mode: IModeState[K],
-  ) {
+  setMode(mode: IEditMode) {
     editUpdator.patchEditor((state) => {
-      state[fieldKey] = mode as any;
+      state.editMode = mode;
     });
   }
 

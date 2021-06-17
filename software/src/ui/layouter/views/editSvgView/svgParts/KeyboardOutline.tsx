@@ -107,14 +107,10 @@ const OutlinePoint = (props: {
   const isSelected = shapeId === currentShapeId && index === currentPointIndex;
 
   const onMouseDown = (e: MouseEvent) => {
-    if (editReader.editorTarget !== 'outline') {
-      editMutations.setEditorTarget('outline');
-    }
-    const { editorTarget, editMode, shapeDrawing } = editReader;
+    const { editMode, shapeDrawing } = editReader;
     if (e.button === 0) {
       if (
-        editorTarget === 'outline' &&
-        editMode === 'add' &&
+        editMode === 'shape' &&
         shapeDrawing
         // index === 0
       ) {
@@ -126,27 +122,24 @@ const OutlinePoint = (props: {
         e.stopPropagation();
         return;
       }
-
-      if (editorTarget === 'outline') {
-        if (editMode === 'select') {
-          editMutations.setCurrentShapeId(shapeId);
-          editMutations.setCurrentPointIndex(index);
-          editMutations.unsetCurrentKeyEntity();
-          e.stopPropagation();
-        } else if (editMode === 'move' || editMode === 'add') {
-          editMutations.unsetCurrentKeyEntity();
-          editMutations.setCurrentShapeId(shapeId);
-          editMutations.setCurrentPointIndex(index);
-          editMutations.startEdit();
-          startOutlinePointDragOperation(e, isMirror, () => {
-            editMutations.endEdit();
-          });
-          e.stopPropagation();
-        } else if (editMode === 'delete') {
-          editMutations.setCurrentShapeId(shapeId);
-          editMutations.setCurrentPointIndex(index);
-          editMutations.deleteCurrentOutlinePoint();
-        }
+      if (editMode === 'select') {
+        editMutations.setCurrentShapeId(shapeId);
+        editMutations.setCurrentPointIndex(index);
+        editMutations.unsetCurrentKeyEntity();
+        e.stopPropagation();
+      } else if (editMode === 'shape') {
+        editMutations.unsetCurrentKeyEntity();
+        editMutations.setCurrentShapeId(shapeId);
+        editMutations.setCurrentPointIndex(index);
+        editMutations.startEdit();
+        startOutlinePointDragOperation(e, isMirror, () => {
+          editMutations.endEdit();
+        });
+        e.stopPropagation();
+      } else if (editMode === 'delete') {
+        editMutations.setCurrentShapeId(shapeId);
+        editMutations.setCurrentPointIndex(index);
+        editMutations.deleteCurrentOutlinePoint();
       }
     }
   };
