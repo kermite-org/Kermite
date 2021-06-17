@@ -45,5 +45,12 @@ void boardIo_toggleLed2() {
 }
 
 void boardIo_setupLeds_rpiPico() {
-  boardIo_setupLeds(25, 25, false);
+  boardIo_setupLeds(GP25, GP25, false);
+}
+
+void boardIo_setupLeds_tiny2040() {
+  boardIo_setupLeds(GP19, GP20, true);
+  //red off
+  digitalIo_setOutput(GP18);
+  digitalIo_setHigh(GP18);
 }
