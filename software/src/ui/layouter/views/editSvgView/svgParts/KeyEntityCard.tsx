@@ -94,7 +94,13 @@ export const KeyEntityCardSingle = (props: {
 
   const onMouseDown = (e: MouseEvent) => {
     if (e.button === 0) {
-      const { editMode } = editReader;
+      let { editMode } = editReader;
+
+      if (editMode === 'shape') {
+        editMutations.setEditMode('key');
+        editMode = 'key';
+      }
+
       if (editMode === 'select') {
         editMutations.setCurrentKeyEntity(ke.id, isMirror);
         editMutations.setCurrentPointIndex(-1);

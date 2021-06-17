@@ -107,13 +107,13 @@ const OutlinePoint = (props: {
   const isSelected = shapeId === currentShapeId && index === currentPointIndex;
 
   const onMouseDown = (e: MouseEvent) => {
-    const { editMode, shapeDrawing } = editReader;
+    let { editMode, shapeDrawing } = editReader;
     if (e.button === 0) {
-      if (
-        editMode === 'shape' &&
-        shapeDrawing
-        // index === 0
-      ) {
+      if (editMode === 'key') {
+        editMutations.setEditMode('shape');
+        editMode = 'shape';
+      }
+      if (editMode === 'shape' && shapeDrawing) {
         // shapeを閉じる
         editMutations.endShapeDrawing();
         editMutations.setCurrentShapeId(undefined);
