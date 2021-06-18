@@ -16,13 +16,11 @@ import {
   appState,
   createFallbackEditKeyboardDesign,
   IEditMode,
-  IEditState,
   IEnvBoolPropKey,
 } from './AppState';
 import {
   IEditKeyboardDesign,
   IEditKeyEntity,
-  IEditOutlineShape,
   IEditPropKey,
 } from './DataSchema';
 import { editReader } from './EditReader';
