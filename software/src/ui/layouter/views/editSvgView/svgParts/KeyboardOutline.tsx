@@ -249,9 +249,17 @@ export const KeyboardOutlineShapeViewSingle = (props: {
   const mirrorMultX = isMirror ? -1 : 1;
   const outerTransformSpec = `scale(${mirrorMultX}, 1) translate(${ox}, ${oy}) rotate(${orot})`;
 
+  const isDrawing =
+    editReader.shapeDrawing && editReader.currentOutlineShape === shape;
+
   return (
     <g transform={outerTransformSpec}>
-      <polygon points={pointsSpec} css={cssKeyboardOutlineShapeView} />
+      {!isDrawing && (
+        <polygon points={pointsSpec} css={cssKeyboardOutlineShapeView} />
+      )}
+      {isDrawing && (
+        <polyline points={pointsSpec} css={cssKeyboardOutlineShapeView} />
+      )}
       <g>
         {vmLines.map((vm) => (
           <HittestLine key={vm.dstPointIndex} vm={vm} isMirror={isMirror} />
