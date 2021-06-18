@@ -1,8 +1,5 @@
 import {
   SVG_NS,
-  REF_SINGLE,
-  REF_ARRAY,
-  REF_PARENT,
   DOM_PROPS_DIRECTIVES,
   insertDom,
   replaceDom,
@@ -24,14 +21,29 @@ import {
   isNonEmptyArray,
   isRenderFunction,
 } from './h';
+import {
+  IEnv,
+  IProps,
+  IRef,
+  IRenderer,
+  IRendererState,
+  REF_ARRAY,
+  REF_PARENT,
+  REF_SINGLE,
+  VNode,
+} from './types';
 
 export const DEFAULT_ENV = {
   isSvg: false,
   directives: DOM_PROPS_DIRECTIVES,
 };
 
-class Renderer {
-  constructor(props, env) {
+class Renderer implements IRenderer {
+  oldProps?: IProps;
+  props: IProps;
+  _STATE_: IRendererState;
+
+  constructor(props: IProps, env: IEnv) {
     this.props = props;
     this._STATE_ = {
       env,
@@ -42,22 +54,22 @@ class Renderer {
     this.render = this.render.bind(this);
   }
 
-  setProps(props) {
+  setProps(props: IProps) {
     this.oldProps = this.props;
     this.props = props;
   }
 
-  render(vnode) {
+  render(vnode: VNode) {
     const state = this._STATE_;
     const oldVNode = state.vnode;
     state.vnode = vnode;
-    if (state.parentDomNode == null) {
+    if (state.parentDomNode === null) {
       const parentNode = getParentNode(state.ref);
-      if (parentNode == null) {
+      if (parentNode === null) {
         state.ref = mount(vnode, state.env);
         return;
       } else {
-        state.parentDomNode = parentNode;
+        state.parentDomNode = parentNode as Element;
       }
     }
     // here we're sure state.parentDOMNode is defined
@@ -71,7 +83,8 @@ class Renderer {
   }
 }
 
-export function mount(vnode, env = DEFAULT_ENV) {
+export function mount(vnode: VNode, env: IEnv = DEFAULT_ENV): IRef {
+  // console.log("mount", { vnode });
   if (isEmpty(vnode)) {
     return {
       type: REF_SINGLE,
@@ -89,19 +102,19 @@ export function mount(vnode, env = DEFAULT_ENV) {
       env = Object.assign({}, env, { isSVG: true });
     }
     // TODO : {is} for custom elements
-    if (!env.isSVG) {
+    if (!env.isSvg) {
       node = document.createElement(type);
     } else {
       node = document.createElementNS(SVG_NS, type);
     }
     mountAttributes(node, props, env);
     const childrenRef =
-      props.children == null ? props.children : mount(props.children, env);
+      props.children === null ? props.children : mount(props.children, env);
     /**
      * We need to insert content before setting interactive props
      * that rely on children been present (e.g select)
      */
-    if (childrenRef != null) insertDom(node, childrenRef);
+    if (childrenRef !== null) insertDom(node, childrenRef, null);
     mountDirectives(node, props, env);
     return {
       type: REF_SINGLE,
@@ -129,26 +142,25 @@ export function mount(vnode, env = DEFAULT_ENV) {
       childRef: renderer._STATE_.ref,
       childState: renderer,
     };
-  } else if (vnode instanceof Node) {
+  } else if ((vnode as any) instanceof Node) {
     return {
       type: REF_SINGLE,
-      node: vnode,
+      node: vnode as any,
     };
   }
   if (vnode === undefined) {
     throw new Error('mount: vnode is undefined!');
   }
-
   throw new Error('mount: Invalid Vnode!');
 }
 
 export function patch(
-  parentDomNode,
-  newVNode,
-  oldVNode,
-  ref,
-  env = DEFAULT_ENV,
-) {
+  parentDomNode: Element,
+  newVNode: VNode,
+  oldVNode: VNode,
+  ref: any,
+  env: IEnv = DEFAULT_ENV,
+): IRef {
   if (oldVNode === newVNode) {
     return ref;
   } else if (isEmpty(newVNode) && isEmpty(oldVNode)) {
@@ -167,13 +179,13 @@ export function patch(
     patchAttributes(ref.node, newVNode.props, oldVNode.props, env);
     const oldChildren = oldVNode.props.children;
     const newChildren = newVNode.props.children;
-    if (oldChildren == null) {
-      if (newChildren != null) {
+    if (oldChildren === null) {
+      if (newChildren !== null) {
         ref.children = mount(newChildren, env);
-        insertDom(ref.node, ref.children);
+        insertDom(ref.node, ref.children, null);
       }
     } else {
-      if (newChildren == null) {
+      if (newChildren === null) {
         ref.node.textContent = '';
         unmount(oldChildren, ref.children, env);
         ref.children = null;
@@ -199,7 +211,7 @@ export function patch(
   ) {
     const renderFn = newVNode.type;
     const shouldUpdate =
-      renderFn.shouldUpdate != null
+      renderFn.shouldUpdate !== null
         ? renderFn.shouldUpdate(oldVNode.props, newVNode.props)
         : defaultShouldUpdate(oldVNode.props, newVNode.props);
     if (shouldUpdate) {
@@ -257,11 +269,11 @@ export function patch(
 /**
  * Execute any compoenent specific unmount code
  */
-export function unmount(vnode, ref, env) {
+export function unmount(vnode: VNode, ref: any, env: IEnv) {
   // if (vnode instanceof Node ||  isEmpty(vnode) || isLeaf(vnode)) return;
   if (isElement(vnode)) {
     unmountDirectives(ref.node, vnode.props, env);
-    if (vnode.props.children != null)
+    if (vnode.props.children !== null)
       unmount(vnode.props.children, ref.children, env);
   } else if (isNonEmptyArray(vnode)) {
     vnode.forEach((childVNode, index) =>
@@ -274,7 +286,13 @@ export function unmount(vnode, ref, env) {
   }
 }
 
-export function patchInPlace(parentDomNode, newVNode, oldVNode, ref, env) {
+export function patchInPlace(
+  parentDomNode: Element,
+  newVNode: VNode,
+  oldVNode: VNode,
+  ref: any,
+  env: IEnv,
+) {
   const newRef = patch(parentDomNode, newVNode, oldVNode, ref, env);
   if (newRef !== ref) {
     replaceDom(parentDomNode, newRef, ref);
@@ -283,7 +301,13 @@ export function patchInPlace(parentDomNode, newVNode, oldVNode, ref, env) {
   return newRef;
 }
 
-function patchChildren(parentDomNode, newChildren, oldchildren, ref, env) {
+function patchChildren(
+  parentDomNode: Element,
+  newChildren: any[],
+  oldchildren: any[],
+  ref: any,
+  env: IEnv,
+) {
   // We need to retreive the next sibling before the old children
   // get eventually removed from the current DOM document
   const nextNode = getNextSibling(ref);
@@ -293,7 +317,7 @@ function patchChildren(parentDomNode, newChildren, oldchildren, ref, env) {
   let oldStart = 0;
   let newEnd = newChildren.length - 1;
   let oldEnd = oldchildren.length - 1;
-  let oldVNode, newVNode, oldRef, newRef, refMap;
+  let oldVNode, newVNode, oldRef, newRef, refMap: any;
 
   while (newStart <= newEnd && oldStart <= oldEnd) {
     if (refChildren[oldStart] === null) {
@@ -337,19 +361,19 @@ function patchChildren(parentDomNode, newChildren, oldchildren, ref, env) {
       continue;
     }
 
-    if (refMap == null) {
+    if (refMap === null) {
       refMap = {};
       for (let i = oldStart; i <= oldEnd; i++) {
         oldVNode = oldchildren[i];
-        if (oldVNode?.key != null) {
+        if (oldVNode?.key !== null) {
           refMap[oldVNode.key] = i;
         }
       }
     }
 
     newVNode = newChildren[newStart];
-    const idx = newVNode?.key != null ? refMap[newVNode.key] : null;
-    if (idx != null) {
+    const idx = newVNode?.key !== null ? refMap[newVNode.key] : null;
+    if (idx !== null) {
       oldVNode = oldchildren[idx];
       oldRef = refChildren[idx];
       newRef = children[newStart] = patch(
@@ -384,7 +408,7 @@ function patchChildren(parentDomNode, newChildren, oldchildren, ref, env) {
   }
   while (oldStart <= oldEnd) {
     oldRef = refChildren[oldStart];
-    if (oldRef != null) {
+    if (oldRef !== null) {
       removeDom(parentDomNode, oldRef);
       unmount(oldchildren[oldStart], oldRef, env);
     }
@@ -393,7 +417,7 @@ function patchChildren(parentDomNode, newChildren, oldchildren, ref, env) {
   ref.children = children;
 }
 
-function defaultShouldUpdate(p1, p2) {
+function defaultShouldUpdate(p1: IProps, p2: IProps): boolean {
   if (p1 === p2) return false;
   for (const key in p2) {
     if (p1[key] !== p2[key]) return true;
