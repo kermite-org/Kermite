@@ -78,6 +78,10 @@
 
 #endif
 
+#ifdef KS_USE_CUSTOM_KEYINDEX_TABLE
+extern const int8_t customData_keyIndexTable[KM0_KEYBOARD__NUM_SCAN_SLOTS];
+#endif
+
 static void setupBoard(int8_t side) {
 
 #ifdef KS_USE_KEY_MATRIX
@@ -172,6 +176,10 @@ int main() {
   rgbLighting_preConfigure();
   rgbLighting_initialize();
   keyboardMain_useRgbLightingModule(rgbLighting_update);
+#endif
+
+#ifdef KS_USE_CUSTOM_KEYINDEX_TABLE
+  keyboardMain_setKeyIndexTable(customData_keyIndexTable);
 #endif
 
   splitKeyboard_setBoardConfigCallback(setupBoard);

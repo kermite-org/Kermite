@@ -17,3 +17,5 @@
 
 #define KS_ROW_PINS \
   { D4, C6, D7, E6 }
+
+#define KS_USE_CUSTOM_KEYINDEX_TABLE
