@@ -23,10 +23,12 @@ export interface IPresetSelectionModel {
 }
 
 function makeProjectOptions(infos: IProjectResourceInfo[]): ISelectorOption[] {
-  return infos.map((it) => ({
-    value: it.sig,
-    label: (it.origin === 'local' ? '[L]' : '[R]') + it.keyboardName,
-  }));
+  return infos
+    .filter((it) => it.presetNames.length > 0 || it.layoutNames.length > 0)
+    .map((it) => ({
+      value: it.sig,
+      label: (it.origin === 'local' ? '[L]' : '[R]') + it.keyboardName,
+    }));
 }
 
 type IPresetSelectorOption = ISelectorOption & {
