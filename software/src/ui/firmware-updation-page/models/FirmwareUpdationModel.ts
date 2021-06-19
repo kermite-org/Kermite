@@ -4,6 +4,7 @@ import {
   IBootloaderType,
   IFirmwareTargetDevice,
   IProjectResourceInfo,
+  sortOrderBy,
 } from '~/shared';
 import { ipcAgent, modalAlert } from '~/ui/common';
 
@@ -57,8 +58,8 @@ export class FirmwareUpdationModel {
         info.firmwares.map((firmware) => ({
           value: `${info.sig}:${firmware.variationName}`,
           label: `${info.origin === 'local' ? '[L]' : '[R]'} ${
-            info.projectPath
-          } ${firmware.variationName}`,
+            info.keyboardName
+          } (${info.projectPath} ${firmware.variationName})`,
         })),
       ),
     );
@@ -91,8 +92,9 @@ export class FirmwareUpdationModel {
 
   get canFlashSelectedFirmwareToDetectedDevice(): boolean {
     if (this.deviceDetectionStatus.detected) {
-      const [projectSig, variationName] =
-        this.currentProjectFirmwareSpec.split(':');
+      const [projectSig, variationName] = this.currentProjectFirmwareSpec.split(
+        ':',
+      );
       const projectaInfo = this.projectInfosWithFirmware.find((it) =>
         it.sig.startsWith(projectSig),
       );
@@ -119,8 +121,9 @@ export class FirmwareUpdationModel {
       this.phase === 'WaitingUploadOrder' &&
       this.deviceDetectionStatus.detected
     ) {
-      const [projectSig, variationName] =
-        this.currentProjectFirmwareSpec.split(':');
+      const [projectSig, variationName] = this.currentProjectFirmwareSpec.split(
+        ':',
+      );
       const info = this.projectInfosWithFirmware.find((it) =>
         it.sig.startsWith(projectSig),
       );
@@ -142,11 +145,12 @@ export class FirmwareUpdationModel {
   };
 
   private async fechProjectInfos() {
-    const projectResourceInfos =
-      await ipcAgent.async.projects_getAllProjectResourceInfos();
-    this.projectInfosWithFirmware = projectResourceInfos.filter(
-      (info) => info.firmwares.length > 0,
-    );
+    const projectResourceInfos = await ipcAgent.async.projects_getAllProjectResourceInfos();
+    this.projectInfosWithFirmware = projectResourceInfos
+      .filter((info) => info.firmwares.length > 0)
+      .sort(
+        sortOrderBy((it) => `${it.origin}${it.keyboardName}${it.projectPath}`),
+      );
   }
 
   startPageSession = () => {
