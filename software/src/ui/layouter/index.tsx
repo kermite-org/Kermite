@@ -1,13 +1,13 @@
 import { jsx, Hook } from 'qx';
 import { IPersistKeyboardDesign } from '~/shared';
 import { windowKeyboardEventEffect } from '~/ui/common';
-import { editMutations, editReader } from '~/ui/layouter/editor/store';
+import { editMutations, editReader } from '~/ui/layouter/models';
+import { PageRoot } from '~/ui/layouter/views/PageRoot';
 import {
   KeyboardDesignConverter,
   keyboardOperationHander,
   setupDeviceKeyEventsListener,
-} from '~/ui/layouter/editor/unification';
-import { PageRoot } from '~/ui/layouter/editor/views/PageRoot';
+} from '~/ui/layouter/wrapper';
 
 export namespace UiLayouterCore {
   export function loadEditDesign(persistDesign: IPersistKeyboardDesign) {
