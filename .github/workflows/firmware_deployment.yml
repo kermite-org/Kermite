@@ -22,7 +22,7 @@ jobs:
       - name: install avr-gcc
         run: |
           mkdir -p ~/tools
-          wget http://depot.kermite.org/materials/avr-gcc-11.1.0-x64-linux.tar.bz2
+          wget https://app.kermite.org/toolset/avr-gcc-11.1.0-x64-linux.tar.bz2
           tar -C ~/tools -xf avr-gcc-11.1.0-x64-linux.tar.bz2
           echo `echo ~/tools/avr-gcc-11.1.0-x64-linux/bin` >> $GITHUB_PATH
 

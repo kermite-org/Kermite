@@ -1,5 +1,9 @@
 import { Hook } from 'qx';
-import { IDisplayKeyboardDesign, IProjectResourceInfo } from '~/shared';
+import {
+  IDisplayKeyboardDesign,
+  IProjectResourceInfo,
+  sortOrderBy,
+} from '~/shared';
 import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import { ipcAgent, UiLocalStorage } from '~/ui/common';
@@ -103,8 +107,11 @@ class KeyboardShapesModel {
   private async initialize() {
     this.projectInfos = (
       await ipcAgent.async.projects_getAllProjectResourceInfos()
-    ).filter((info) => info.layoutNames.length > 0);
-
+    )
+      .filter((info) => info.layoutNames.length > 0)
+      .sort(
+        sortOrderBy((it) => `${it.origin}${it.keyboardName}${it.projectPath}`),
+      );
     if (this.projectInfos.length === 0) {
       this._currentLayoutName = undefined;
       this._currentLayoutName = undefined;

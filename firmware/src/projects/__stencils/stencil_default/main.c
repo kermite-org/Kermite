@@ -32,6 +32,10 @@
 #include "km0/visualizer/rgbLighting.h"
 #endif
 
+#ifdef KS_USE_CUSTOM_KEYINDEX_TABLE
+extern const int8_t customData_keyIndexTable[KM0_KEYBOARD__NUM_SCAN_SLOTS];
+#endif
+
 int main() {
 
 #ifdef KS_USE_BOARD_LEDS_PROMICRO_AVR
@@ -92,6 +96,10 @@ int main() {
 #endif
   keyboardMain_useKeyScanner(keyScanner_encoderBasic_update);
   keyScanner_encoderBasic_initialize(KS_NUM_ENCODERS, encoderConfigs);
+#endif
+
+#ifdef KS_USE_CUSTOM_KEYINDEX_TABLE
+  keyboardMain_setKeyIndexTable(customData_keyIndexTable);
 #endif
 
   generalKeyboard_start();

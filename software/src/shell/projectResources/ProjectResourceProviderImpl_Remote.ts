@@ -28,8 +28,7 @@ import {
 } from '~/shell/projectResources/ProjectResourceProviderImpl_Local';
 import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 
-const remoteBaseUri =
-  'https://raw.githubusercontent.com/kermite-org/KermiteResourceStore/master/resources';
+const remoteBaseUri = 'https://app.kermite.org/krs/resources';
 
 interface IRemoteProjectResourceInfoSource {
   projectId: string;

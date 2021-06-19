@@ -99,4 +99,6 @@ MODULE_SRCS += km0/wrapper/splitKeyboard.c
 PROJECT_STENCIL_SRCS += main_split.c
 endif
 
-
+ifneq ($(KL_USE_CUSTOM_DATA),)
+PROJECT_SRCS += customData.c
+endif

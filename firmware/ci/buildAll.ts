@@ -21,7 +21,8 @@ function getAllProjectVariationPaths() {
         fs.existsSync(path.join(fpath, "config.h")) &&
         fs.existsSync(path.join(path.dirname(fpath), "project.json"))
     )
-    .map((fpath) => path.relative("src/projects", fpath));
+    .map((fpath) => path.relative("src/projects", fpath))
+    .filter((vp) => !vp.startsWith("dev/"));
 }
 
 function makeFirmwareBuild(projectPath: string, variationName: string) {

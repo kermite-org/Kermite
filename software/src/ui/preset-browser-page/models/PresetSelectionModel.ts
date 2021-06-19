@@ -3,11 +3,10 @@ import { createPresetKey } from '~/shared/funcs/DomainRelatedHelpers';
 import {
   fieldSetter,
   getSelectionValueCorrected,
-  ipcAgent,
   ISelectorOption,
   ISelectorSource,
-  useFetcher,
   usePersistState,
+  useProjectResourceInfos,
 } from '~/ui/common';
 import { editSelectedProjectPreset as editSelectedProjectPresetOriginal } from '~/ui/preset-browser-page/models/ProfileCreator';
 import { useProfileDataLoaded } from '~/ui/preset-browser-page/models/ProfileDataLoader';
@@ -23,10 +22,12 @@ export interface IPresetSelectionModel {
 }
 
 function makeProjectOptions(infos: IProjectResourceInfo[]): ISelectorOption[] {
-  return infos.map((it) => ({
-    value: it.sig,
-    label: (it.origin === 'local' ? '[L]' : '[R]') + it.keyboardName,
-  }));
+  return infos
+    .filter((it) => it.presetNames.length > 0 || it.layoutNames.length > 0)
+    .map((it) => ({
+      value: it.sig,
+      label: (it.origin === 'local' ? '[L]' : '[R]') + it.keyboardName,
+    }));
 }
 
 type IPresetSelectorOption = ISelectorOption & {
@@ -67,10 +68,7 @@ export function usePresetSelectionModel(): IPresetSelectionModel {
     presetKey: '', // blank:${layoutName} or preset:${presetName}
   });
 
-  const resourceInfos = useFetcher(
-    ipcAgent.async.projects_getAllProjectResourceInfos,
-    [],
-  );
+  const resourceInfos = useProjectResourceInfos('projectsSortedByKeyboardName');
   const projectOptions = makeProjectOptions(resourceInfos);
   const presetOptions = makePresetOptions(resourceInfos, sel.projectKey);
 

@@ -84,11 +84,6 @@ namespace ProjectResourceInfoSourceLoader {
     return (await fsxReadJsonFile(projectFilePath)) as IPorjectFileJson;
   }
 
-  const workerToMcuNameMap: { [key in string]: IFirmwareTargetDevice } = {
-    worker_atmega32u4: 'atmega32u4',
-    worker_rp2040: 'rp2040',
-  };
-
   async function gatherFirmwares(
     localRepositoryRootDir: string,
     projectPath: string,
@@ -107,9 +102,8 @@ namespace ProjectResourceInfoSourceLoader {
         rulesMks.map(async (rulesMk) => {
           const variationName = pathDirname(rulesMk);
           const content = await fsxReadFile(pathJoin(projectBaseDir, rulesMk));
-          const m = content.match(/^WORKER\s?=\s?(.+)$/m);
-          const _targetDevice = m?.[1] || '';
-          const targetDevice = workerToMcuNameMap[_targetDevice];
+          const m = content.match(/^TARGET_MCU\s?=\s?(.+)$/m);
+          const targetDevice = (m?.[1] || '') as IFirmwareTargetDevice;
           const extension = targetDevice === 'atmega32u4' ? 'hex' : 'uf2';
           const _binaryFilePath = pathJoin(
             buildsRoot,

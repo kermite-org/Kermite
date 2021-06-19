@@ -36,7 +36,8 @@ function gatherTargetProjectVariationPaths() {
         fsExistsSync(pathJoin(fpath, "config.h")) &&
         fsExistsSync(pathJoin(pathDirname(fpath), "project.json"))
     )
-    .map((fpath) => pathRelative("src/projects", fpath));
+    .map((fpath) => pathRelative("src/projects", fpath))
+    .filter((vp) => !vp.startsWith("dev/"));
 }
 
 function loadFirmwareCommonRevisions(): ICommonRevisions {
