@@ -41,7 +41,9 @@ export function useShapePreviewPageModel(): IShapePreviewPageModel {
     projectSelectorSource: {
       options: shapesModel.projectInfos.map((info) => ({
         value: info.sig,
-        label: (info.origin === 'local' ? '[L]' : '[R]') + info.projectPath,
+        label: `${info.origin === 'local' ? '[L]' : '[R]'} ${
+          info.keyboardName
+        }`,
       })),
       value: shapesModel.currentProjectSig,
       setValue: shapesModel.setCurrentProjectSig,

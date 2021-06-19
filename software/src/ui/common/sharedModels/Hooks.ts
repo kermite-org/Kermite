@@ -1,4 +1,5 @@
-import { IResourceOrigin } from '~/shared';
+import { Hook } from 'qx';
+import { IResourceOrigin, sortOrderBy } from '~/shared';
 import { ipcAgent, appUi } from '~/ui/common/base';
 import { useFetcher } from '~/ui/common/helpers';
 
@@ -14,4 +15,25 @@ export function useProjectResourcePresenceChecker(
     [],
   );
   return resourceInfos.some((info) => info.origin === origin);
+}
+
+export function useProjectResourceInfos(
+  sortMethod: 'projectsSortedByKeyboardName' | 'projectsSortedByProjectPath',
+) {
+  const resourceInfos = useFetcher(
+    ipcAgent.async.projects_getAllProjectResourceInfos,
+    [],
+  );
+  const sorted = Hook.useMemo(
+    () =>
+      resourceInfos.sort(
+        sortOrderBy((it) =>
+          sortMethod === 'projectsSortedByKeyboardName'
+            ? `${it.origin}${it.keyboardName}${it.projectPath}`
+            : `${it.origin}${it.projectPath}`,
+        ),
+      ),
+    [resourceInfos],
+  );
+  return sorted;
 }

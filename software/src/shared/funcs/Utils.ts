@@ -135,14 +135,34 @@ export function clonePlainOldObject(src: any): any {
 
 export const cloneObject = clonePlainOldObject;
 
+export function compareString(a: string, b: string) {
+  if (a > b) {
+    return 1;
+  } else if (a < b) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+
+export function compareStringOrNumber(a: string | number, b: string | number) {
+  if (a > b) {
+    return 1;
+  } else if (a < b) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+
 export function sortOrderBy<T>(
-  proc: (arg: T) => number,
+  proc: (arg: T) => string | number,
   method: 'asc' | 'dsc' = 'asc',
 ): (a: T, b: T) => number {
   if (method === 'asc') {
-    return (a, b) => proc(a) - proc(b);
+    return (a, b) => compareStringOrNumber(proc(a), proc(b));
   } else {
-    return (a, b) => proc(b) - proc(a);
+    return (a, b) => compareStringOrNumber(proc(b), proc(a));
   }
 }
 
@@ -309,16 +329,6 @@ export function forceChangeFilePathExtension(
   const fileName = filePath.replace(/^.*[\\/]/, '');
   const namePart = fileName.split('.')[0];
   return filePath.replace(fileName, namePart + extension);
-}
-
-export function compareString(a: string, b: string) {
-  if (a > b) {
-    return 1;
-  } else if (a < b) {
-    return -1;
-  } else {
-    return 0;
-  }
 }
 
 export function compareArray(ar0: any[], ar1: any[]): boolean {

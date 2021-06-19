@@ -14,6 +14,7 @@ import {
   useFetcher,
   useLocal,
   usePersistState,
+  useProjectResourceInfos,
 } from '~/ui/common';
 import { IPresetSelectionModel } from '~/ui/preset-browser-page/models';
 
@@ -56,10 +57,7 @@ export function usePresetSelectionModel2(): IPresetSelectionModel {
     projectProfiles: [],
   });
 
-  const resourceInfos = useFetcher(
-    ipcAgent.async.projects_getAllProjectResourceInfos,
-    [],
-  );
+  const resourceInfos = useProjectResourceInfos('projectsSortedByKeyboardName');
   const projectIds = useFetcher(
     ipcAgent.async.presetHub_getServerProjectIds,
     [],

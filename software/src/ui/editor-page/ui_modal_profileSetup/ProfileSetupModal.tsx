@@ -1,20 +1,19 @@
-import { jsx, Hook } from 'qx';
+import { Hook, jsx } from 'qx';
 import { IProjectResourceInfo } from '~/shared';
 import {
-  fieldSetter,
-  ipcAgent,
-  ISelectorOption,
-  reflectFieldValue,
-  useFetcher,
-  useLocal,
-  useMemoEx,
-  GeneralSelector,
   ClosableOverlay,
   CommonDialogFrame,
+  createModal,
   DialogButton,
   DialogButtonsRow,
   DialogContentRow,
-  createModal,
+  fieldSetter,
+  GeneralSelector,
+  ISelectorOption,
+  reflectFieldValue,
+  useLocal,
+  useMemoEx,
+  useProjectResourceInfos,
 } from '~/ui/common';
 import {
   cssCommonPropertiesTable,
@@ -108,7 +107,7 @@ function makeProjectOptions(infos: IProjectResourceInfo[]): ISelectorOption[] {
     .filter((info) => info.layoutNames.length > 0)
     .map((info) => ({
       value: info.sig,
-      label: info.projectPath,
+      label: `${info.origin === 'local' ? '[L]' : '[R]'}${info.keyboardName}`,
     }));
 }
 
@@ -127,10 +126,7 @@ function useProfileSetupModalViewModel(): IProfileSetupModalViewModel {
     layoutKey: '',
   });
 
-  const resourceInfos = useFetcher(
-    ipcAgent.async.projects_getAllProjectResourceInfos,
-    [],
-  );
+  const resourceInfos = useProjectResourceInfos('projectsSortedByKeyboardName');
   const projectOptions = useMemoEx(makeProjectOptions, [resourceInfos]);
 
   Hook.useInlineEffect(() => {
