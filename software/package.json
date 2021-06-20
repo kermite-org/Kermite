@@ -50,7 +50,7 @@
     "immer": "^9.0.1",
     "node-fetch": "^2.6.1",
     "node-hid": "^2.1.1",
-    "serialport": "^9.0.7",
+    "serialport": "^9.2.0",
     "usb": "1.6.5"
   },
   "devDependencies": {
