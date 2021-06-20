@@ -15,7 +15,9 @@ MODULE_ASM_SRCS =
 PROJECT_ASM_SRCS =
 PROJECT_STENCIL_SRCS =
 
--include $(PROJECT_CODE_DIR)/rules.mk
+RULES_MK = $(PROJECT_CODE_DIR)/rules.mk
+
+-include $(RULES_MK)
 
 PROJECT_STENCIL_DIR :=
 ifneq ($(TARGET_STENCIL),)
@@ -95,7 +97,9 @@ all: build
 
 build: $(HEX) $(LST)
 
-$(OBJ_DIR)/%.o: %.c
+$(OBJS): $(RULES_MK)
+
+$(OBJ_DIR)/%.o: %.c 
 	@echo compiling $<
 	@"mkdir" -p $(dir $@)
 	@$(CC) -c $(CFLAGS) -o $@ $<
