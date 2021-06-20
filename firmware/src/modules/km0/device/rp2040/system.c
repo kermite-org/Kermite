@@ -17,3 +17,5 @@ void system_disableInterrupts() {
 
 void system_initializeUserProgram() {
 }
+
+void system_jumpToDfuBootloader() {}

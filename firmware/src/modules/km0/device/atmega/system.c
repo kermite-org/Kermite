@@ -49,3 +49,8 @@ void system_initializeUserProgram() {
   //make dummy stdout
   disableStdout();
 }
+
+void system_jumpToDfuBootloader() {
+  system_disableInterrupts();
+  asm volatile("jmp 0x3800");
+}
