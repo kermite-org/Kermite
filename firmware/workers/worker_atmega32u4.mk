@@ -130,6 +130,11 @@ ifdef AVRDUDE_COM_PORT_ALT
 endif
 	avrdude -p m32u4 -P $(AVRDUDE_COM_PORT) -c avr109 -U flash:w:$(HEX)
 
+flash_with_dfu: build
+	dfu-programmer atmega32u4 erase
+	dfu-programmer atmega32u4 flash $(HEX)
+	dfu-programmer atmega32u4 reset
+
 purge:
 	rm -rf $(ELF) $(HEX) $(LIST) $(OBJS)
 
