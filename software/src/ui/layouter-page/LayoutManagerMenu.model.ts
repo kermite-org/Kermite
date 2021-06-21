@@ -9,7 +9,8 @@ type ILayoutManagerViewModelCommandFunctionKey =
   | 'openLoadFromProjectModal'
   | 'openSaveToProjectModal'
   | 'overwriteLayout'
-  | 'showEditLayoutFileInFiler';
+  | 'showEditLayoutFileInFiler'
+  | 'createNewProfileFromCurrentLayout';
 
 type ILayoutManagerViewModelCommandActiveFlagKey =
   | 'canShowEditLayoutFileInFiler'
@@ -41,6 +42,7 @@ const menuItemSources: (IMenuItemSource | IMenuItemSeparator)[] = [
     commandActiveFlagKey: 'canOpenProjectIoModal',
   },
   { separator: true },
+  { text: 'create profile', command: 'createNewProfileFromCurrentLayout' },
   {
     text: 'show edit file in folder',
     command: 'showEditLayoutFileInFiler',

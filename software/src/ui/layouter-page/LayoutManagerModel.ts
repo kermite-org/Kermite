@@ -9,7 +9,7 @@ import {
   IProfileManagerStatus,
   IProjectLayoutsInfo,
 } from '~/shared';
-import { appUi, ipcAgent, modalConfirm } from '~/ui/common';
+import { appUi, ipcAgent, modalConfirm, router } from '~/ui/common';
 import { UiLayouterCore } from '~/ui/layouter';
 
 interface ILayoutManagerModel {
@@ -150,6 +150,27 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     if (ok) {
       this.sendCommand({ type: 'save', design });
     }
+  }
+
+  async createNewProfileFromCurrentLayout() {
+    let projectId = 'none';
+    if (this.editSource.type === 'ProjectLayout') {
+      projectId = this.editSource.projectId;
+    }
+    if (this.editSource.type === 'CurrentProfile') {
+      const profile = await ipcAgent.async.profile_getCurrentProfile();
+      projectId = profile.projectId;
+    }
+    const layout = UiLayouterCore.emitSavingDesign();
+    await ipcAgent.async.profile_executeProfileManagerCommands([
+      {
+        createProfileFromLayout: {
+          projectId,
+          layout,
+        },
+      },
+    ]);
+    router.navigateTo('/editor');
   }
 
   async showEditLayoutFileInFiler() {

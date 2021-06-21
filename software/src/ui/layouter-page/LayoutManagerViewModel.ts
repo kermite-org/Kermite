@@ -45,6 +45,7 @@ export interface ILayoutManagerViewModel {
   canShowEditLayoutFileInFiler: boolean;
   showEditLayoutFileInFiler(): void;
   canOpenProjectIoModal: boolean;
+  createNewProfileFromCurrentLayout(): void;
 }
 
 function getTargetProjectLayoutFilePath(
@@ -173,6 +174,8 @@ function useLayoutManagerViewModelImpl(
       model.editSource.type === 'ProjectLayout',
     showEditLayoutFileInFiler: () => model.showEditLayoutFileInFiler(),
     canOpenProjectIoModal: isLocalProjectsAvailable,
+    createNewProfileFromCurrentLayout: () =>
+      model.createNewProfileFromCurrentLayout(),
   };
 }
 
