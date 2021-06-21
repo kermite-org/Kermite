@@ -6,6 +6,7 @@ import {
   ILayoutManagerCommand,
   ILayoutManagerStatus,
   IPersistKeyboardDesign,
+  IProfileManagerStatus,
   IProjectLayoutsInfo,
 } from '~/shared';
 import { appUi, ipcAgent, modalConfirm } from '~/ui/common';
@@ -188,12 +189,30 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     }
   };
 
+  private onProfileManagerStatus = (
+    payload: Partial<IProfileManagerStatus>,
+  ) => {
+    if (payload.loadedProfileData) {
+      if (this.editSource.type === 'CurrentProfile') {
+        this.sendCommand({ type: 'loadCurrentProfileLayout' });
+      }
+    }
+  };
+
   startLifecycle() {
     if (!appUi.isExecutedInApp) {
       return () => {};
     }
-    return ipcAgent.events.layout_layoutManagerStatus.subscribe(
+    const unbsub = ipcAgent.events.layout_layoutManagerStatus.subscribe(
       this.onLayoutManagerStatus,
     );
+    const unsub2 = ipcAgent.events.profile_profileManagerStatus.subscribe(
+      this.onProfileManagerStatus,
+    );
+
+    return () => {
+      unbsub();
+      unsub2();
+    };
   }
 }
