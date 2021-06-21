@@ -3,7 +3,7 @@ import { ILayoutManagerViewModel } from '~/ui/layouter-page/LayoutManagerViewMod
 
 type ILayoutManagerViewModelCommandFunctionKey =
   | 'createNewLayout'
-  // | 'loadCurrentProfileLayout'
+  | 'loadCurrentProfileLayout'
   | 'loadFromFileWithDialog'
   | 'saveToFileWithDialog'
   | 'openLoadFromProjectModal'
@@ -25,6 +25,7 @@ type IMenuItemSeparator = { separator: true };
 
 const menuItemSources: (IMenuItemSource | IMenuItemSeparator)[] = [
   { text: 'new design', command: 'createNewLayout' },
+  { text: 'edit current profile layout', command: 'loadCurrentProfileLayout' },
   { separator: true },
   { text: 'load from file...', command: 'loadFromFileWithDialog' },
   { text: 'save to file...', command: 'saveToFileWithDialog' },
