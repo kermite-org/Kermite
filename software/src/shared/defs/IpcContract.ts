@@ -122,6 +122,10 @@ export interface IProfileManagerCommand {
   createProfileExternal?: {
     profileData: IProfileData;
   };
+  createProfileFromLayout?: {
+    projectId: string;
+    layout: IPersistKeyboardDesign;
+  };
   loadProfile?: { name: string };
   saveCurrentProfile?: { profileData: IProfileData };
   deleteProfile?: { name: string };
