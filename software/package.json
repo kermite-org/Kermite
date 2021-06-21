@@ -65,7 +65,7 @@
     "child_process": "^1.0.2",
     "cross-env": "^7.0.3",
     "electron": "11.4.8",
-    "electron-builder": "^22.10.5",
+    "electron-builder": "^22.11.7",
     "electron-rebuild": "^2.3.5",
     "eslint": "^7.23.0",
     "eslint-config-prettier": "^8.1.0",
