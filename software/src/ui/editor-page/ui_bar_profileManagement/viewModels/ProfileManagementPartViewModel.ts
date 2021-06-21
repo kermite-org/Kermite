@@ -93,7 +93,11 @@ const checkValidNewProfileName = async (
     );
     return false;
   }
-  if (profilesModel.allProfileNames.includes(newProfileName)) {
+
+  const lowered = newProfileName.toLowerCase();
+  if (
+    profilesModel.allProfileNames.find((name) => name.toLowerCase() === lowered)
+  ) {
     await modalAlert(
       `${newProfileName} is already exists. operation cancelled.`,
     );
