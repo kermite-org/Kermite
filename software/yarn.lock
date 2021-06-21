@@ -1404,10 +1404,10 @@ electron-rebuild@^2.3.5:
     tar "^6.0.5"
     yargs "^16.0.0"
 
-electron@11.3.0:
-  version "11.3.0"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-11.3.0.tgz#87e8528fd23ae53b0eeb3a738f1fe0a3ad27c2db"
-  integrity sha512-MhdS0gok3wZBTscLBbYrOhLaQybCSAfkupazbK1dMP5c+84eVMxJE/QGohiWQkzs0tVFIJsAHyN19YKPbelNrQ==
+electron@11.4.8:
+  version "11.4.8"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-11.4.8.tgz#6f89be903bd917bda52afacf7cd3bdf2154b5c79"
+  integrity sha512-NrxlDZN1sWiDCWWOm5aX+tPGtiLgsCUwNqNFP3eJfY+RPdYLsxYRJDFa1vc4GcuCZEp9kZusINjmpPWsvJdspQ==
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^12.0.12"
