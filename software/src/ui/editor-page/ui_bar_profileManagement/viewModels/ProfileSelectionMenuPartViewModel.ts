@@ -76,10 +76,7 @@ function createMenuItemSources(
       text: texts.label_assigner_menu_saveAsPreset,
       hint: texts.hint_assigner_menu_saveAsPreset,
       handler: vm.openExportingPresetSelectionModal,
-      enabled:
-        isLocalProjectsAvailable &&
-        !!vm.currentProfileProjectId &&
-        vm.currentProfileProjectId !== 'none',
+      enabled: isLocalProjectsAvailable && !!vm.currentProfileProjectId,
     },
     {
       key: 'openUserProfilesFolder',

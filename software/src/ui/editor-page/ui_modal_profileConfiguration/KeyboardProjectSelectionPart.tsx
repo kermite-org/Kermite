@@ -22,11 +22,15 @@ export const KeyboardProjectSelectionPart = () => {
     .map((it) => ({ label: it.keyboardName, value: it.projectId }));
 
   if (options.length > 0) {
-    options.push({ label: 'unspecified', value: 'none' });
+    options.push({ label: 'unspecified', value: '__PROJECT_ID_UNSPECIFIED' });
   }
 
-  const value = editorModel.profileData.projectId;
-  const setValue = editorModel.changeProjectId;
+  const value = editorModel.profileData.projectId || '__PROJECT_ID_UNSPECIFIED';
+  const setValue = (value: string) => {
+    editorModel.changeProjectId(
+      value === '__PROJECT_ID_UNSPECIFIED' ? '' : value,
+    );
+  };
 
   return (
     <div css={cssAttrsRow}>
