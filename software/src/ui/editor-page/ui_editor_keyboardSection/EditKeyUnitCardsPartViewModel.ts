@@ -65,7 +65,7 @@ export function makeEditKeyUnitCardsPartViewModel(
 ): IEditKeyUnitCardPartViewModel {
   const { showLayerDefaultAssign } = uiStatusModel.settings;
   return {
-    cards: playerModel.displayDesign.keyEntities.map((kp) =>
+    cards: editorModel.displayDesign.keyEntities.map((kp) =>
       makeEditKeyUnitCardViewModel(kp, playerModel, editorModel),
     ),
     showLayerDefaultAssign,
