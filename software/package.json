@@ -25,7 +25,8 @@
     ],
     "directories": {
       "output": "release"
-    }
+    },
+    "buildDependenciesFromSource": true
   },
   "private": true,
   "scripts": {
