@@ -15,7 +15,6 @@ export type ILayoutManagerModalState =
 
 export interface ILayoutManagerViewModel {
   editSourceText: string;
-  isEditCurrnetProfileLayoutActive: boolean;
 
   projectOptions: ISelectorOption[];
   setCurrentProjectId(projectId: string): void;
@@ -30,7 +29,6 @@ export interface ILayoutManagerViewModel {
 
   createNewLayout(): void;
   loadCurrentProfileLayout(): void;
-  toggleCurrentProfileEdit(): void;
   canLoadFromProject: boolean;
   createForProject(): void;
   loadFromProject(): void;
@@ -125,8 +123,6 @@ function useLayoutManagerViewModelImpl(
   const isLocalProjectsAvailable = useProjectResourcePresenceChecker('local');
 
   return {
-    isEditCurrnetProfileLayoutActive:
-      model.editSource.type === 'CurrentProfile',
     editSourceText: getEditSourceDisplayText(
       model.editSource,
       model.projectLayoutsInfos,
@@ -145,13 +141,6 @@ function useLayoutManagerViewModelImpl(
     ),
     createNewLayout: () => model.createNewLayout(),
     loadCurrentProfileLayout: () => model.loadCurrentProfileLayout(),
-    toggleCurrentProfileEdit: () => {
-      if (model.editSource.type !== 'CurrentProfile') {
-        model.loadCurrentProfileLayout();
-      } else {
-        // model.unloadCurrentProfileLayout();
-      }
-    },
     canLoadFromProject: isProjectLayoutSourceSpecified,
     createForProject: () => {
       model.createForProject(local.currentProjectId, local.currentLayoutName);
