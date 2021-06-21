@@ -50,10 +50,6 @@ export class LayoutManager implements ILayoutManager {
     private profileManager: IProfileManager,
   ) {}
 
-  // CurrentProfileLayoutとそれ以外との切り替えのために、
-  // CurrentProfileLayout以外のEditSourceをbackEditSourceとして保持
-  private backEditSource: ILayoutEditSource = { type: 'NewlyCreated' };
-
   private fileWatcher = new FileWather();
 
   private status: ILayoutManagerStatus = {
@@ -115,10 +111,6 @@ export class LayoutManager implements ILayoutManager {
   private setStatus(newStatusPartial: Partial<ILayoutManagerStatus>) {
     this.status = { ...this.status, ...newStatusPartial };
     this.statusEvents.emit(newStatusPartial);
-    const { editSource } = newStatusPartial;
-    if (editSource && editSource.type !== 'CurrentProfile') {
-      this.backEditSource = editSource;
-    }
   }
 
   private onObservedFileChanged = async () => {
@@ -147,10 +139,6 @@ export class LayoutManager implements ILayoutManager {
         loadedDesign: profile.keyboardDesign,
       });
     }
-  }
-
-  private async unloadCurrentProfileLayout() {
-    await this.loadLayoutByEditSource(this.backEditSource);
   }
 
   private async loadLayoutFromFile(filePath: string) {
@@ -319,8 +307,6 @@ export class LayoutManager implements ILayoutManager {
     } else if (command.type === 'save') {
       const { design } = command;
       await this.overwriteCurrentLayout(design);
-    } else if (command.type === 'unloadCurrentProfileLayout') {
-      await this.unloadCurrentProfileLayout();
     } else if (command.type === 'createForProject') {
       const { projectId, layoutName } = command;
       await this.createLayoutForProject(projectId, layoutName);

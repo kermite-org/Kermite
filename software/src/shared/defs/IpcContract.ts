@@ -167,9 +167,6 @@ export type ILayoutManagerCommand =
       type: 'loadCurrentProfileLayout';
     }
   | {
-      type: 'unloadCurrentProfileLayout';
-    }
-  | {
       type: 'save';
       design: IPersistKeyboardDesign;
     }

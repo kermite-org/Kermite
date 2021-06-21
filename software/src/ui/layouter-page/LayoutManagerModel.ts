@@ -85,13 +85,6 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     this.sendCommand({ type: 'loadCurrentProfileLayout' });
   }
 
-  async unloadCurrentProfileLayout() {
-    if (!(await this.checkShallLoadData())) {
-      return;
-    }
-    this.sendCommand({ type: 'unloadCurrentProfileLayout' });
-  }
-
   async createForProject(projectId: string, layoutName: string) {
     if (!(await this.checkShallLoadData())) {
       return;
