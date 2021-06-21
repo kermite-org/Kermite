@@ -171,6 +171,7 @@ export class LayoutManagerModel implements ILayoutManagerModel {
       },
     ]);
     router.navigateTo('/editor');
+    this.sendCommand({ type: 'loadCurrentProfileLayout' });
   }
 
   async showEditLayoutFileInFiler() {
