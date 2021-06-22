@@ -25,13 +25,6 @@ void system_disableInterrupts() {
   cli();
 }
 
-static void putCharDummy() {}
-
-static void disableStdout() {
-  static FILE mystdout = FDEV_SETUP_STREAM((void *)putCharDummy, NULL, _FDEV_SETUP_WRITE);
-  stdout = &mystdout;
-}
-
 void system_initializeUserProgram() {
   //disable watchdog timer
   wdt_reset();
@@ -45,12 +38,16 @@ void system_initializeUserProgram() {
 
   //deinit USB
   USBCON = 0;
-
-  //make dummy stdout
-  disableStdout();
 }
 
 void system_jumpToDfuBootloader() {
   system_disableInterrupts();
   asm volatile("jmp 0x3800");
+}
+
+static void putCharDummy() {}
+
+void system_setupFallbackStdout() {
+  static FILE mystdout = FDEV_SETUP_STREAM((void *)putCharDummy, NULL, _FDEV_SETUP_WRITE);
+  stdout = &mystdout;
 }
