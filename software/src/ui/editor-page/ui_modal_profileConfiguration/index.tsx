@@ -5,7 +5,6 @@ import { uiStatusModel } from '~/ui/common/sharedModels/UiStatusModel';
 import { KeyboardProjectSelectionPart } from '~/ui/editor-page/ui_modal_profileConfiguration/KeyboardProjectSelectionPart';
 import { ShiftCancelOptionPart } from '~/ui/editor-page/ui_modal_profileConfiguration/ShiftCancelOptionPart';
 import { AssignTypeSelectionPart } from './AssignTypeSelectionPart';
-import { DualModeSettingsPart } from './DualModeSettingsPart';
 
 export const ProfileConfigratuionModalLayer = () => {
   const uiStatus = uiStatusModel.status;
@@ -37,7 +36,8 @@ export const ProfileConfigratuionModalLayer = () => {
         <div css={cssDialogContent}>
           <KeyboardProjectSelectionPart />
           <AssignTypeSelectionPart />
-          <DualModeSettingsPart />
+          {/* Dualモードの挙動オプションUI, ロジックでのオプション変更への対応が未実装のため非表示 */}
+          {/* <DualModeSettingsPart /> */}
           <ShiftCancelOptionPart />
         </div>
       </CommonDialogFrame>
