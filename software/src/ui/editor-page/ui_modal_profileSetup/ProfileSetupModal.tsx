@@ -107,7 +107,7 @@ function makeProjectOptions(infos: IProjectResourceInfo[]): ISelectorOption[] {
     .filter((info) => info.layoutNames.length > 0)
     .map((info) => ({
       value: info.sig,
-      label: `${info.origin === 'local' ? '[L]' : '[R]'}${info.keyboardName}`,
+      label: `${info.origin === 'local' ? '(local) ' : ''}${info.keyboardName}`,
     }));
 }
 

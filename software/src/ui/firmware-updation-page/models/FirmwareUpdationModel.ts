@@ -57,7 +57,7 @@ export class FirmwareUpdationModel {
       this.projectInfosWithFirmware.map((info) =>
         info.firmwares.map((firmware) => ({
           value: `${info.sig}:${firmware.variationName}`,
-          label: `${info.origin === 'local' ? '[L]' : '[R]'} ${
+          label: `${info.origin === 'local' ? '(local) ' : ''} ${
             info.keyboardName
           } (${info.projectPath} ${firmware.variationName})`,
         })),

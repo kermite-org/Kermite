@@ -26,7 +26,7 @@ function makeProjectOptions(infos: IProjectResourceInfo[]): ISelectorOption[] {
     .filter((it) => it.presetNames.length > 0 || it.layoutNames.length > 0)
     .map((it) => ({
       value: it.sig,
-      label: (it.origin === 'local' ? '[L]' : '[R]') + it.keyboardName,
+      label: (it.origin === 'local' ? '(local) ' : '') + it.keyboardName,
     }));
 }
 
