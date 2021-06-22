@@ -10,5 +10,6 @@ void system_enableInterrupts();
 void system_disableInterrupts();
 void system_initializeUserProgram();
 void system_jumpToDfuBootloader();
+void system_setupFallbackStdout();
 
 #endif
