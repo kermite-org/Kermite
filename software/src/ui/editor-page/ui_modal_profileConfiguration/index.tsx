@@ -1,30 +1,11 @@
 import { css, jsx } from 'qx';
-import { reflectFieldChecked, texts } from '~/ui/common';
+import { texts } from '~/ui/common';
 import { ClosableOverlay, CommonDialogFrame } from '~/ui/common/components';
 import { uiStatusModel } from '~/ui/common/sharedModels/UiStatusModel';
-import { editorModel } from '~/ui/editor-page/models/EditorModel';
+import { KeyboardProjectSelectionPart } from '~/ui/editor-page/ui_modal_profileConfiguration/KeyboardProjectSelectionPart';
+import { ShiftCancelOptionPart } from '~/ui/editor-page/ui_modal_profileConfiguration/ShiftCancelOptionPart';
 import { AssignTypeSelectionPart } from './AssignTypeSelectionPart';
 import { DualModeSettingsPart } from './DualModeSettingsPart';
-
-const ShiftCancelOptionPart = () => {
-  const { settings } = editorModel.profileData;
-  return (
-    <div
-      css={css`
-        margin-top: 10px;
-      `}
-    >
-      <label data-hint={texts.hint_assigner_profileConfigModal_shiftCancel}>
-        {texts.label_assigner_profileConfigModal_shiftCancel}
-        <input
-          type="checkbox"
-          checked={settings.useShiftCancel}
-          onChange={reflectFieldChecked(settings, 'useShiftCancel')}
-        />
-      </label>
-    </div>
-  );
-};
 
 export const ProfileConfigratuionModalLayer = () => {
   const uiStatus = uiStatusModel.status;
@@ -41,6 +22,10 @@ export const ProfileConfigratuionModalLayer = () => {
     margin: 10px;
     color: black;
     min-height: 140px;
+
+    > * + * {
+      margin-top: 10px;
+    }
   `;
 
   return (
@@ -50,6 +35,7 @@ export const ProfileConfigratuionModalLayer = () => {
         close={closeModal}
       >
         <div css={cssDialogContent}>
+          <KeyboardProjectSelectionPart />
           <AssignTypeSelectionPart />
           <DualModeSettingsPart />
           <ShiftCancelOptionPart />

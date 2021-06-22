@@ -4,7 +4,6 @@ import {
   OperationButtonWithIcon,
   ProjectAttachmentFileSelectorModal,
 } from '~/ui/common';
-import { LayoutManagerButton } from '~/ui/layouter-page/LayoutManagerButton';
 import { LayoutManagerMenu } from '~/ui/layouter-page/LayoutManagerMenu';
 import { useLayoutManagerViewModel } from '~/ui/layouter-page/LayoutManagerViewModel';
 import { makeLayoutSelectorModalViewModel } from '~/ui/layouter-page/ProjectLayoutSelectorModalViewModel';
@@ -35,12 +34,6 @@ export const LayoutManagerTopBar = () => {
   return (
     <div css={cssLayoutManagementBar}>
       <LayoutManagerMenu baseVm={vm} />
-      <LayoutManagerButton
-        active={vm.isEditCurrnetProfileLayoutActive}
-        handler={vm.toggleCurrentProfileEdit}
-      >
-        <i class="fa fa-link" />
-      </LayoutManagerButton>
       <div class="targetDisplayArea">{vm.editSourceText}</div>
       <OperationButtonWithIcon
         icon="save"

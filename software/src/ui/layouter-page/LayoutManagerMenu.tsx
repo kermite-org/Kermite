@@ -9,7 +9,7 @@ const cssMenuBase = css`
 const cssMenuPanel = css`
   position: absolute;
   z-index: 2;
-  width: 200px;
+  width: 220px;
 
   background: #fff;
   border: solid 1px #888;
