@@ -13,9 +13,7 @@
 #define KS_NUM_ROWS 4
 
 #define KS_COLUMN_PINS \
-  { B3, B1, F7, F6, F5, F4 }
+  { F4, F5, F6, F7, B1, B3 }
 
 #define KS_ROW_PINS \
   { D4, C6, D7, E6 }
-
-#define KS_USE_CUSTOM_KEYINDEX_TABLE
