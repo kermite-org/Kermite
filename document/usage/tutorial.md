@@ -1,8 +1,20 @@
 # Kermite 導入方法
 
 このページでは、Kermiteを使ってキーボードを運用する方法を解説します。
-
 例としてT.Shinohara氏の<a href="https://booth.pm/ja/items/1444895" target='_blank'>shiro</a>に対応ファームウェアを書き込んで、Kermite上で使えるようにしてみます。
+## 目次
+- インストール
+- 起動
+- 日本語表示の設定
+- ファームウェアの書き込み
+- プロファイルの作成
+- キーマッピングの書き込み
+- 文字入力の動作確認
+- レイヤの動作確認
+- リアルタイム表示の動作確認
+- ウィジェット表示
+- まとめ
+- Tips(開発者向け)
 
 ## インストール
 
@@ -11,9 +23,8 @@
 以下では署名がないために出るOSの保護機能を抑止しています。
 
 <details><summary>コード署名についての詳細</summary><div>
-
-WindowsやMacOSは、コード署名や公証によってアプリが配布元が提供しているものであることを証明することを推奨しています。署名には費用がかかるため、無料で配布しているソフトウェアでは適用するのが難しいです。Kermiteではソースコードやビルド過程を公開しており、それによって配布されるプログラムの透明性を保っています。
-
+WindowsやMacOSは、コード署名によってアプリが改ざんされていないことを証明することを推奨しています。コード署名には費用がかかるため、無償で提供しているソフトウェアでは適用するのが難しいです。
+Kermiteではソースコードやビルド過程を公開しており、それによって配布されるプログラムの透明性を保っています。
 </div></details>
 
 ### Windows
@@ -36,16 +47,17 @@ WindowsやMacOSは、コード署名や公証によってアプリが配布元�
 
 Kermiteを起動するとこのような画面になります。
 
-<img src="images/0417/capture0.png"  width="700" />
-
+<!-- <img src="images/0417/capture0.png"  width="700" /> -->
+<img src="https://i.gyazo.com/fe8af658c9d9bcd52c673b6296a1a43a.png" />
 
 ## 日本語の表示に変更
 
-初期状態では英語のUIが表示されます。このドキュメントでは日本語の表示にして解説を行います。
+初期状態では英語のUIが表示されます。このドキュメントでは日本語の表示で解説を行います。
 
-画面左上のグローバルメニューで`Japanese`を選ぶと、日本語表示に切替わります。
+<!-- <img src="images/0417/capture1.png" /> -->
+<img src="https://i.gyazo.com/404503bc9a34012af882c30bad87636b.png" />
 
-<img src="images/0417/capture1.png" />
+画面左上のグローバルメニューで`Japanese`を選ぶと、日本語の表示に切替わります。
 
 ## ファームウェアの書き込み
 
@@ -54,101 +66,117 @@ Kermiteを起動するとこのような画面になります。
 ファームウェアはキーボードの品種ごとに対応が必要で、事前にKermiteのリポジトリに取り込まれている必要があります。
 
 サイドバーで、
-
-<img src="images/0417/capture2.png" />
+<!-- <img src="images/0417/capture2.png" /> -->
+<img src="https://i.gyazo.com/84d35655be52bf654f565c215b52428c.png" />
 
 をクリックしてデバイス管理画面に移動します。
 
-デバイス管理画面には、接続するデバイスの選択、接続中のデバイスの情報の表示、カスタムパラメータの設定、ファームウェアの書き込みのUIがあります。
+<!-- <img src="images/0417/capture3.png" width="700" /> -->
+<img src="https://i.gyazo.com/203d4a957acef2497be085747a4153f5.png" />
 
-<img src="images/0417/capture3.png" width="700" />
+デバイス管理画面には、デバイスの選択、デバイス情報の表示、パラメータの設定、ファームウェア書き込みのUIがあります。
+
+<!-- <img src="images/0417a/capture1.png" /> -->
+<img src="https://i.gyazo.com/c049762367adc7746b1f07cc1d9bfcce.png" />
 
 ファームウェア書き込みのセクションで、書き込むファームウェアを選びます。
-
-<img src="images/0417a/capture1.png" />
-
 ここでは
 ```
-[R] csp/shiro atmega
+Shiro (nora/shiro atmega)
 ```
 を選びます。
 
 キーボードのリセットボタンを2回押して書き込みモードにします。
 
+<!-- <img src="images/0417/capture4.png" /> -->
+<img src="https://i.gyazo.com/63f49d3b175fda0bb648208fa5753e3c.png" />
+
 仮想COMポートが検出され、書き込み可能な状態になりました。
-
-<img src="images/0417/capture4.png" />
-
 `書き込む`ボタンを押します。
+
+<!-- <img src="images/0417/capture6.png" /> -->
+<img src="https://i.gyazo.com/c8e8109b04b8357cf090c4b02c11f5ee.png" />
 
 書き込みに成功するとこのような表示になります。
 
-<img src="images/0417/capture6.png" />
+<!-- <img src="images/0417/capture7.png" /> -->
+<img src="https://i.gyazo.com/2672a951861608d64c0d4b64d75912d0.png" />
 
 キーボードがKermiteの対応デバイスになり、デバイス選択欄に表示されるようになりました。選択して接続します。
 
-<img src="images/0417/capture7.png" />
+<!-- <img src="images/0417/capture8.png" width="700" /> -->
+<img src="https://i.gyazo.com/a9913e3652b4d75f77ce5f12197eb3f6.png" />
 
-接続がうまくいくと、デバイス情報やカスタムパラメータの設定UIが表示されます。
-
-<img src="images/0417/capture8.png" width="700" />
-
+接続がうまくいくと、デバイス情報やパラメータの設定UIが表示されます。
 ## プロファイルの作成
 
 Kermiteでは、キーボードの配列設定をプロファイルと呼んでいます。
-ここではプリセットを元に、新しいプロファイルを作成します。
+ここでは規定のレイアウトを元に、新しいプロファイルを作成します。
 
 サイドバーで、
 
-<img src="images/0417/capture11.png" />
+<!-- <img src="images/0417/capture11.png" /> -->
+<img src="https://i.gyazo.com/b37cf6ca1ac17015515014a75e6763ab.png" />
+
 
 をクリックしてプリセットブラウザに移動します。
 
 プリセットブラウザでは、登録されているキーボードのプリセットを閲覧したり、取り込むことができます。
 
-<img src="images/0417a/capture2.png" width="700" />
+<!-- <img src="images/0417a/capture2.png" width="700" /> -->
+<img src="https://i.gyazo.com/4d54b5de9908fbbd808cd7fb84c07b02.png" />
 
-キーボードの品種とプロファイルを選びます。
+
+キーボードの品種とプリセットを選びます。
 ここでは、キーボードは
 ```
-[R]Shiro
+Shiro (nora/shiro)
 ```
 プリセットは
 ```
-[R]shiro_test1
+[blank]default
 ```
-を選びます。
+を選び、空のプリセットを読み込みます。
 
 `プロファイルを作成`ボタンを押して、このプリセットを元に新しいプロファイルを作成します。
 
+<!-- <img src="images/0417a/capture3.png" width="700" /> -->
+<img src="https://i.gyazo.com/be330f9d4682a836fb3cef8be460ba97.png">
 
-キーマッピング編集画面に自動で遷移します。新しいプロファイルが未保存の状態で作成されています。
+キーマッピング編集画面に自動で遷移します。
+新しいプロファイルが未保存の状態で作成されています。
 
-<img src="images/0417a/capture3.png" width="700" />
+<!-- <img src="images/0417a/capture4.png" /> -->
+<img src="https://i.gyazo.com/ea8a9cae20bb12e5580d1eb1e9f25667.png" />
 
 メニューから`保存`を選びます。
 
-<img src="images/0417a/capture4.png" />
+<!-- <img src="images/0417a/capture5.png" /> -->
+<img src="https://i.gyazo.com/1f9f879c122b9f6d6f3428e07e0c5380.png" />
 
 プロファイルの名前を指定するダイアログが出ます。適当な名前をつけてOKボタンを押します。
 
-<img src="images/0417a/capture5.png" />
+<!-- <img src="images/0417a/capture6.png" /> -->
+<img src="https://i.gyazo.com/6384b71bf406f78f7a1ac60a96d4643b.png" />
 
-プロファイルが保存されました。保存されているプロファイルはセレクタで名前を選んで切り替えられるようになります。
-
-<img src="images/0417a/capture6.png" />
-
-
+プロファイルが保存されました。保存されているプロファイルはセレクタで名前を選んで切り替えられます。
 ## キーマッピングの書き込み
 
-キーボードにキーマッピングを書き込みます。
+ここではキーマッピングを編集して、デバイスに書き込みます。
 
-<img src="images/0417a/capture7b.png" />
+<img src="https://i.gyazo.com/b300115494aa5e7a663f719797ed2068.png" />
+
+キーボードの表示でアサインを割り当てるキーを選択し、下のパレットで割り当てる文字や機能を選びます。
+ここでは、上段の３つのキーに'A', 'B', 'C'の文字を割り当てました。
+
+<!-- <img src="images/0417a/capture7b.png" /> -->
+<img src="https://i.gyazo.com/82e3d2fa3f69a605ea0dc717fed2ca7a.png" />
 
 `書き込み`ボタンを押して、キーボードにキーマッピングを書き込みます。
 
 
-<img src="images/0417a/capture8.png" width="700" />
+<!-- <img src="images/0417a/capture8.png" width="700" /> -->
+<img src="https://i.gyazo.com/b2f2534ec717fafa2a58a8d07360acc0.png" />
 
 書き込みが成功すると、ダイアログが表示されます。
 ## 文字入力の動作確認
@@ -157,44 +185,94 @@ Kermiteでは、キーボードの配列設定をプロファイルと呼んで�
 
 文字入力の動作を確認する前に、キーボードレイアウト(US/JIS)を指定しておきます。OSの設定に合わせてください。
 
-<img src="images/0417a/capture17.png" />
+<!-- <img src="images/0417a/capture17.png" /> -->
+<img src="https://i.gyazo.com/4c0a8cac8389b223ac137b706b2c8d75.png" />
 
 テキストエディタなどを開いて文字が入力されることを確認します。
-<img src="images/0417a/capture10.png"  width="700"/>
+<!-- <img src="images/0417a/capture10.png"  width="700"/> -->
+<img src="https://i.gyazo.com/8cb3507d1234485049a60cec8ac87eec.png" />
 
-また、アプリ内部にもテスト用の文字入力欄があり、文字入力の確認に使えます。メニューから有効化すると表示されます。
+また、アプリ内部にもテスト用の文字入力欄があり、文字入力の確認に利用できます。メニューから有効化すると表示されます。
 
-<img src="images/0417/capture24.png" /> <br />
+<!-- <img src="images/0417/capture24.png" /> <br /> -->
+<img src="https://i.gyazo.com/57719c4b3a5f4785c9896b36071d002f.png" /> <br />
 
-<img src="images/0417/capture26.png" />
-
-## レイヤ表示の動作確認
-
-Kermiteでは、接続しているキーボードのキーの押下状態が画面に表示されます。また、接続されているキーボードの実際のレイヤ状態を反映して表示するモードがあります。それらの動作を確認します。
-
-キーボードのキーを押すと押したキーが画面上の表示に反映されます。
-
-<img src="images/0417/capture18.png" />
-
-レイヤのリアルタイム表示の動作を確認します。
-
-右上にレイヤ表示モードの切り替えUIがあります。
-
-<img src="images/0417/capture19.png" />
+<!-- <img src="images/0417/capture26.png" /> -->
+<img src="https://i.gyazo.com/a27e3a16fe752db56a54029f6d74eac1.png" />
 
 
-- `EDIT` では編集用に選択しているレイヤが表示されます。
-- `LIVE` では接続しているキーボードの実際のレイヤ状態を反映して表示します。
+## レイヤの動作確認
 
-ここではレイヤ表示モードを`LIVE`にします。
+以下では、レイヤを追加してその動作を確認します。
 
-キーボードのレイヤキーを押したときに表示が切り替わるようになります。
+<img src="https://i.gyazo.com/59c099574032cec2175eded5ba29c58b.png" />
 
-<img src="images/0417/capture20.png" />
+レイヤリスト表示の下にあるボタンで、一番左の'+'ボタンを押します。
+
+
+<img src="https://i.gyazo.com/e8e5d7d77d17064400015209a851470d.png" />
+
+追加するレイヤを設定するダイアログが出ます。名前を入力して保存します。
+ここではこのレイヤに数値を割り当てる想定のため、'num'という名前にしました。
+
+<img src="https://i.gyazo.com/7bfe31ec8caa18ade3e0b5c2f57fab70.png" />
+
+新しく作成したレイヤを選んで、キーに数値を割り当てます。
+
+<img src="https://i.gyazo.com/5b104903aa2600d0bee64fb085a774f0.png" />
+
+mainレイヤで、キーにレイヤの呼び出しの機能を割り当てます。ここではshiftキーのアサインも追加しています。
+
+エディタやテスト入力欄に文字を入力して、レイヤキーやShiftキーが機能することを確認します。
+<img src="https://i.gyazo.com/6b3eacc22b4e7e543cd5c782f53711e8.png" />
+
+<!-- <img src="https://i.gyazo.com/8cc17c0276f80213e53d17cd9be3420a.png" /> -->
+
+
+## リアルタイム表示の動作確認
+
+Kermiteには、接続されているキーボードのキーやレイヤの状態を画面に反映して表示するモードがあります。ここではその動作を確認します。
+
+<!-- <img src="images/0417/capture18.png" /> -->
+
+<!-- レイヤのリアルタイム表示の動作を確認します。 -->
+
+<!-- 画面の表示モードを編集モードからライブモードに切り替えます。 -->
+
+<!-- <img src="images/0417/capture19.png" /> -->
+<img src="https://i.gyazo.com/c4bc6c1e026af6c6d9027e992b30d3e5.png" />
+
+画面右上に表示モードの切り替えUIがあります。
+
+- `EDIT` では編集用に選択しているレイヤのキーマッピングが表示されます。
+- `LIVE` では接続しているキーボードのキーやレイヤの状態を反映して画面を表示します。
+
+レイヤ表示モードを`LIVE`にします。
+
+
+キーボードのキーを押すと押したキーが画面上でハイライトされます。
+
+<img src="https://i.gyazo.com/625938cf9f37f028d4717fe4e7124c04.png" />
+<!-- <img src="https://i.gyazo.com/e1061a265eca3a3cedc2a8455280f380.png"  /> -->
+
+<!-- <img src="https://i.gyazo.com/8dbba4f3162c497552f25c5f286a8b1d.png" /> -->
+
+また、キーボードのShiftキーやレイヤキーを押したときに、現在のレイヤのキーマッピングが表示に反映されます。
+
+<img src="https://i.gyazo.com/d11006fbc814410e7eb463b66d791670.png" /><br />
+<img src="https://i.gyazo.com/744a1f3342546c45c58235ac8528d3c9.png" />
+
+
+
+<!-- <img src="images/0417/capture20.png" />
 <img src="images/0417/capture21.png" />
-<img src="images/0417/capture22.png" />
+<img src="images/0417/capture22.png" /> -->
 
-## キーマッピングの変更
+
+
+
+
+<!-- ## キーマッピングの変更
 
 キーマッピングを変更します。
 
@@ -204,21 +282,21 @@ Kermiteでは、接続しているキーボードのキーの押下状態が画�
 
 変更したら書き込みを行い、デバイスに反映されていることを確認します。
 
-<img src="images/0417/capture29.png" width="600"/>
+<img src="images/0417/capture29.png" width="600"/> -->
 
 
 ## ウィジェット表示
 
 画面右上の
 
-<img src="images/0417a/capture11.png" />
+<img src="https://i.gyazo.com/0a9b3a7f4dd2bc21cafa29d6204c8b02.png" />
 
 を押すとウインドウ枠のないウィジェット表示になります。
 
-デスクトップの端に置いてレイヤ状態の確認などに使用できます。
+デスクトップの端に置いてキーマッピングの確認などに利用できます。
 
-<img src="images/0417a/capture13.png" width="500" />
-
+<!-- <img src="images/0417a/capture13.png" width="500" /> -->
+<img src="https://i.gyazo.com/a61e8e1ae79311197ffd466f70fbdb8c.png" />
 
 <!--
 ## キー配置の変更
@@ -280,6 +358,3 @@ Kermiteには、キーの配置をGUIで編集できるレイアウトエディ�
 * プリセットブラウザでローカルにあるプロジェクトが持つプロファイルが列挙されるようになります。
 * レイアウト編集画面のメニューでローカルのプロジェクトのレイアウトファイルを読み込み/保存できるようになります。
 * デバイス管理画面でローカルでビルドしたファームウェアを書き込みできるようになります。
-
-プロジェクトを選択する際のセレクタで`[L]`はローカル,`[R]`はリモート(オンライン)のリソースを表しています。
-
