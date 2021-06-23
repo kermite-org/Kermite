@@ -43,7 +43,8 @@ function makeEditKeyUnitCardViewModel(
   );
 
   const dynamic = uiStatusModel.settings.showLayersDynamic;
-  const isHold = playerModel.keyStates[ke.keyId];
+  const isHold = (dynamic && playerModel.keyStates[ke.keyId]) || false;
+  const shiftHold = dynamic && playerModel.shiftHold;
 
   return {
     keyUnitId,
@@ -55,7 +56,7 @@ function makeEditKeyUnitCardViewModel(
     secondaryText,
     isLayerFallback: isLayerFallback || false,
     isHold,
-    shiftHold: dynamic && playerModel.shiftHold,
+    shiftHold,
   };
 }
 
