@@ -10,3 +10,10 @@ export function fieldSetter<T, K extends keyof T>(obj: T, key: K) {
 export function getFileNameFromPath(path: string) {
   return path.split(/[/\\]/).pop();
 }
+
+export function withStopPropagation(handler: (e: Event) => void) {
+  return (e: Event) => {
+    handler(e);
+    e.stopPropagation();
+  };
+}
