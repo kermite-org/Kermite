@@ -1,5 +1,11 @@
 #pragma once
 
+#if defined(KERMITE_TARGET_MCU_ATMEGA)
+#define __IS_ATMEGA
+#elif defined(KERMITE_TARGET_MCU_RP2040)
+#define __IS_RP2040
+#endif
+
 #ifdef KS_NUM_SCAN_SLOTS
 #define KM0_KEYBOARD__NUM_SCAN_SLOTS KS_NUM_SCAN_SLOTS
 #endif
@@ -21,7 +27,12 @@
 #endif
 
 #ifdef KS_RGBLED_PIN
+#ifdef __IS_ATMEGA
 #define KM0_ATMEGA_NEOPIXELCORE__PIN_RGBLED KS_RGBLED_PIN
+#endif
+#ifdef __IS_RP2040
+#define KM0_RP_SERIAL_LED__PIN_LED KS_RGBLED_PIN
+#endif
 #endif
 
 #ifdef KS_SNGLEWIRE_PIN_PD0
@@ -30,6 +41,10 @@
 
 #ifdef KS_SNGLEWIRE_PIN_PD2
 #define KM0_ATMEGA_SINGLEWIRE__PIN_SIGNAL_PD2
+#endif
+
+#ifdef KS_RP_SINGLEWIRE_PIN
+#define KM0_RP_SINGLEWIRE__PIN_SIGNAL KS_RP_SINGLEWIRE_PIN
 #endif
 
 #ifdef KS_OLED_ROT180
