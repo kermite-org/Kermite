@@ -1,6 +1,6 @@
 #include "keyMappingDataValidator.h"
-#include "config.h"
 #include "dataStorage.h"
+#include "km0/base/configImport.h"
 #include "km0/base/utils.h"
 #include "km0/device/dataMemory.h"
 #include "versionDefinitions.h"

@@ -1,5 +1,5 @@
 #include "km0/device/serialLed.h"
-#include "config.h"
+#include "km0/base/configImport.h"
 #include "neoPixelCore.h"
 #include <avr/interrupt.h>
 
