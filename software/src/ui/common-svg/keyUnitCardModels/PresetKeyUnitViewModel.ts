@@ -7,6 +7,7 @@ import {
 import {
   getAssignForKeyUnitWithLayerFallback,
   getAssignEntryTexts,
+  getAssignForKeyUnitInInitialLayerStack,
 } from '~/ui/common-svg/keyUnitCardModels/KeyUnitCardViewModelCommon';
 import { IPresetKeyUnitViewModel } from '~/ui/common-svg/keyUnitCards/PresetKeyUnitCard';
 
@@ -23,12 +24,14 @@ function createPresetKeyUnitViewModel(
     r: ke.angle || 0,
   };
 
-  const assign = getAssignForKeyUnitWithLayerFallback(
-    keyUnitId,
-    targetLayerId,
-    layers,
-    assigns,
-  );
+  const assign = targetLayerId
+    ? getAssignForKeyUnitWithLayerFallback(
+        keyUnitId,
+        targetLayerId,
+        layers,
+        assigns,
+      )
+    : getAssignForKeyUnitInInitialLayerStack(keyUnitId, layers, assigns);
 
   const { primaryText, secondaryText, isLayerFallback } = getAssignEntryTexts(
     assign,
