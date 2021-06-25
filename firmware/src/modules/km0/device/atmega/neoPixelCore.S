@@ -1,6 +1,6 @@
 .nolist
 #include "asmGpioDefs.h"
-#include "config.h"
+#include "km0/base/configImport.h"
 .list
 
 #ifndef KM0_ATMEGA_NEOPIXELCORE__PIN_RGBLED

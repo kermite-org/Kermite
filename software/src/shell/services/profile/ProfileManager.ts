@@ -9,6 +9,7 @@ import {
   IPresetSpec,
   IResourceOrigin,
   IProfileEditSource,
+  IPersistKeyboardDesign,
 } from '~/shared';
 import {
   vObject,
@@ -268,6 +269,21 @@ export class ProfileManager implements IProfileManager {
     });
   }
 
+  private createProfileFromLayout(
+    projectId: string,
+    layout: IPersistKeyboardDesign,
+  ) {
+    const profileData: IProfileData = duplicateObjectByJsonStringifyParse(
+      fallbackProfileData,
+    );
+    profileData.projectId = projectId;
+    profileData.keyboardDesign = layout;
+    this.setStatus({
+      editSource: { type: 'NewlyCreated' },
+      loadedProfileData: profileData,
+    });
+  }
+
   private async deleteProfile(profName: string) {
     if (this.status.editSource.type !== 'InternalProfile') {
       return;
@@ -368,6 +384,11 @@ export class ProfileManager implements IProfileManager {
       }
     } else if (cmd.createProfileExternal) {
       this.createProfileExternal(cmd.createProfileExternal.profileData);
+    } else if (cmd.createProfileFromLayout) {
+      this.createProfileFromLayout(
+        cmd.createProfileFromLayout.projectId,
+        cmd.createProfileFromLayout.layout,
+      );
     } else if (cmd.deleteProfile) {
       await this.deleteProfile(cmd.deleteProfile.name);
     } else if (cmd.loadProfile) {

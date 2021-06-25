@@ -1,11 +1,11 @@
 #include "keyboardCoreLogic.h"
-#include "config.h"
 #include "configManager.h"
 #include "dataStorage.h"
 #include "keyActionRemapper.h"
 #include "keyCodeTranslator.h"
 #include "keyCodes.h"
 #include "km0/base/bitOperations.h"
+#include "km0/base/configImport.h"
 #include "km0/base/utils.h"
 #include "km0/device/dataMemory.h"
 #include <stdio.h>

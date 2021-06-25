@@ -15,7 +15,9 @@ MODULE_ASM_SRCS =
 PROJECT_ASM_SRCS =
 PROJECT_STENCIL_SRCS =
 
--include $(PROJECT_CODE_DIR)/rules.mk
+RULES_MK = $(PROJECT_CODE_DIR)/rules.mk
+
+-include $(RULES_MK)
 
 PROJECT_STENCIL_DIR :=
 ifneq ($(TARGET_STENCIL),)
@@ -36,6 +38,7 @@ MAP = $(OUT_DIR)/$(CORE_NAME).map
 INC_PATHS =
 INC_PATHS += -Isrc/modules
 INC_PATHS += -I$(PROJECT_CODE_DIR)
+INC_PATHS += -I$(PROJECT_STENCIL_DIR)
 
 CFLAGS =
 ASFLAGS =
@@ -95,7 +98,9 @@ all: build
 
 build: $(HEX) $(LST)
 
-$(OBJ_DIR)/%.o: %.c
+$(OBJS): $(RULES_MK)
+
+$(OBJ_DIR)/%.o: %.c 
 	@echo compiling $<
 	@"mkdir" -p $(dir $@)
 	@$(CC) -c $(CFLAGS) -o $@ $<
@@ -129,6 +134,11 @@ ifdef AVRDUDE_COM_PORT_ALT
 	-avrdude -p m32u4 -P $(AVRDUDE_COM_PORT_ALT) -c avr109 -U flash:w:$(HEX)
 endif
 	avrdude -p m32u4 -P $(AVRDUDE_COM_PORT) -c avr109 -U flash:w:$(HEX)
+
+flash_with_dfu: build
+	dfu-programmer atmega32u4 erase
+	dfu-programmer atmega32u4 flash $(HEX)
+	dfu-programmer atmega32u4 reset
 
 purge:
 	rm -rf $(ELF) $(HEX) $(LIST) $(OBJS)

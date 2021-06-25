@@ -24,7 +24,7 @@ export function usePresetKeyboardSectionViewModel(
 ): IPresetKeyboardSectionViewModel {
   const state = useLocal({ currentLayerId: '' });
   Hook.useEffect(() => {
-    state.currentLayerId = profileData.layers[0].layerId;
+    state.currentLayerId = '';
   }, [profileData]);
   return {
     keyboard: usePresetKeyboardViewModel(profileData, state.currentLayerId),

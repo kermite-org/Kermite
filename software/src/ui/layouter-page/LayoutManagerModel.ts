@@ -6,9 +6,10 @@ import {
   ILayoutManagerCommand,
   ILayoutManagerStatus,
   IPersistKeyboardDesign,
+  IProfileManagerStatus,
   IProjectLayoutsInfo,
 } from '~/shared';
-import { appUi, ipcAgent, modalConfirm } from '~/ui/common';
+import { appUi, ipcAgent, modalConfirm, router } from '~/ui/common';
 import { UiLayouterCore } from '~/ui/layouter';
 
 interface ILayoutManagerModel {
@@ -84,13 +85,6 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     this.sendCommand({ type: 'loadCurrentProfileLayout' });
   }
 
-  async unloadCurrentProfileLayout() {
-    if (!(await this.checkShallLoadData())) {
-      return;
-    }
-    this.sendCommand({ type: 'unloadCurrentProfileLayout' });
-  }
-
   async createForProject(projectId: string, layoutName: string) {
     if (!(await this.checkShallLoadData())) {
       return;
@@ -158,6 +152,28 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     }
   }
 
+  async createNewProfileFromCurrentLayout() {
+    let projectId = '';
+    if (this.editSource.type === 'ProjectLayout') {
+      projectId = this.editSource.projectId;
+    }
+    if (this.editSource.type === 'CurrentProfile') {
+      const profile = await ipcAgent.async.profile_getCurrentProfile();
+      projectId = profile.projectId;
+    }
+    const layout = UiLayouterCore.emitSavingDesign();
+    await ipcAgent.async.profile_executeProfileManagerCommands([
+      {
+        createProfileFromLayout: {
+          projectId,
+          layout,
+        },
+      },
+    ]);
+    router.navigateTo('/editor');
+    this.sendCommand({ type: 'loadCurrentProfileLayout' });
+  }
+
   async showEditLayoutFileInFiler() {
     await ipcAgent.async.layout_showEditLayoutFileInFiler();
   }
@@ -188,12 +204,30 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     }
   };
 
+  private onProfileManagerStatus = (
+    payload: Partial<IProfileManagerStatus>,
+  ) => {
+    if (payload.loadedProfileData) {
+      if (this.editSource.type === 'CurrentProfile') {
+        this.sendCommand({ type: 'loadCurrentProfileLayout' });
+      }
+    }
+  };
+
   startLifecycle() {
     if (!appUi.isExecutedInApp) {
       return () => {};
     }
-    return ipcAgent.events.layout_layoutManagerStatus.subscribe(
+    const unbsub = ipcAgent.events.layout_layoutManagerStatus.subscribe(
       this.onLayoutManagerStatus,
     );
+    const unsub2 = ipcAgent.events.profile_profileManagerStatus.subscribe(
+      this.onProfileManagerStatus,
+    );
+
+    return () => {
+      unbsub();
+      unsub2();
+    };
   }
 }

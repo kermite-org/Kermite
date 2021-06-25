@@ -43,17 +43,18 @@ static const int pin_masterSlaveDetermination = -1;
 #define SingleWireMaxPacketSize (SingleWireMaxPacketSizeTmp > 4 ? SingleWireMaxPacketSizeTmp : 4)
 
 enum {
-  SplitOp_MasterOath = 0xA0,                  //Master --> Slave
-  SplitOp_InputScanSlotStatesRequest = 0x40,  //Master --> Slave
-  SplitOp_InputScanSlotStatesResponse = 0x41, //Masetr <-- Slave
+  SplitOp_MasterOath = 0xC0,                  //Master --> Slave
+  SplitOp_InputScanSlotStatesRequest = 0xC1,  //Master --> Slave
+  SplitOp_InputScanSlotStatesResponse = 0xC2, //Masetr <-- Slave
   //Masater-->Slave
-  SplitOp_MasterScanSlotStateChanged = 0xC0,
-  SplitOp_MasterParameterChanged = 0xC1,
-  SplitOp_TaskOrder_FlashHeartbeat = 0x91,
-  SplitOp_TaskOrder_ScanKeyStates = 0x92,
-  SplitOp_TaskOrder_UpdateRgbLeds = 0x93,
-  SplitOp_TaskOrder_UpdateOled = 0x94,
-  SplitOp_IdleCheck = 0x9F,
+  SplitOp_TaskOrder_FlashHeartbeat = 0xD1,
+  SplitOp_TaskOrder_ScanKeyStates = 0xD2,
+  SplitOp_TaskOrder_UpdateRgbLeds = 0xD3,
+  SplitOp_TaskOrder_UpdateOled = 0xD4,
+  SplitOp_IdleCheck = 0xDF,
+  //Masater-->Slave
+  SplitOp_MasterScanSlotStateChanged = 0xE1,
+  SplitOp_MasterParameterChanged = 0xE2,
   //Master <-- Slave
   SplitOp_SlaveAck = 0xF0,
   SplitOp_SlaveNack = 0xF1,

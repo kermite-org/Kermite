@@ -300,9 +300,9 @@ export class AppWindowWrapper implements IAppWindowWrapper {
   }
 
   terminate() {
-    if (this.mainWindow?.isVisible()) {
-      this.reserveWindowSize();
-    }
+    // if (this.mainWindow?.isVisible()) {
+    //   this.reserveWindowSize();
+    // }
     applicationStorage.writeItem('windowState', this.state);
   }
 }

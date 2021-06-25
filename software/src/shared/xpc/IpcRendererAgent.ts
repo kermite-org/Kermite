@@ -43,7 +43,7 @@ interface ISubscriptionEntry {
 export function getIpcRendererAgent<
   T extends IIpcContractBase
 >(): IIpcRendererAgent<T> {
-  const ipcRenderer = (window.top as any).ipcRenderer as IpcRenderer;
+  const ipcRenderer = (window as any).ipcRenderer as IpcRenderer;
 
   if (!ipcRenderer) {
     return createDummeyIpcRendererAgentForMockDevelopment();

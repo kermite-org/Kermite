@@ -207,6 +207,10 @@ export class EditorModel {
     );
   };
 
+  changeProjectId = (projectId: string) => {
+    this.profileData.projectId = projectId;
+  };
+
   translateKeyIndexToKeyUnitId(keyIndex: number): string | undefined {
     const keyEntity = this.displayDesign.keyEntities.find(
       (kp) => kp.keyIndex === keyIndex,

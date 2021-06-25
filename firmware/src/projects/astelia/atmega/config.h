@@ -2,10 +2,10 @@
 
 #define KERMITE_PROJECT_ID "79xv6ZbA"
 
-#define KM0_KEYBOARD__NUM_SCAN_SLOTS 48
+#define KS_NUM_SCAN_SLOTS 48
 
-#define KM0_USB__MANUFACTURER_TEXT L"yahiro"
-#define KM0_USB__PRODUCT_TEXT L"Astelia"
+#define KS_USB_MANUFATURER L"yahiro"
+#define KS_USB_PRODUCT L"Astelia"
 
 #define KS_NUM_COLUMNS 6
 #define KS_NUM_ROWS 8

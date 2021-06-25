@@ -1,6 +1,6 @@
-#include "config.h"
-
+#include "km0/base/configImport.h"
 #include "km0/device/digitalIo.h"
+#include "km0/device/system.h"
 #include "km0/kernel/keyboardMain.h"
 #include "km0/wrapper/generalKeyboard.h"
 
@@ -52,6 +52,8 @@ int main() {
 
 #ifdef KS_USE_DEBUG_UART
   debugUart_initialize(38400);
+#else
+  system_setupFallbackStdout();
 #endif
 
 #ifdef KS_USE_OLED_DISPLAY

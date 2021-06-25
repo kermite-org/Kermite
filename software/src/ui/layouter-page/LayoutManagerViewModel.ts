@@ -15,7 +15,6 @@ export type ILayoutManagerModalState =
 
 export interface ILayoutManagerViewModel {
   editSourceText: string;
-  isEditCurrnetProfileLayoutActive: boolean;
 
   projectOptions: ISelectorOption[];
   setCurrentProjectId(projectId: string): void;
@@ -29,7 +28,7 @@ export interface ILayoutManagerViewModel {
   setCurrentLayoutName(text: string): void;
 
   createNewLayout(): void;
-  toggleCurrentProfileEdit(): void;
+  loadCurrentProfileLayout(): void;
   canLoadFromProject: boolean;
   createForProject(): void;
   loadFromProject(): void;
@@ -46,6 +45,7 @@ export interface ILayoutManagerViewModel {
   canShowEditLayoutFileInFiler: boolean;
   showEditLayoutFileInFiler(): void;
   canOpenProjectIoModal: boolean;
+  createNewProfileFromCurrentLayout(): void;
 }
 
 function getTargetProjectLayoutFilePath(
@@ -124,8 +124,6 @@ function useLayoutManagerViewModelImpl(
   const isLocalProjectsAvailable = useProjectResourcePresenceChecker('local');
 
   return {
-    isEditCurrnetProfileLayoutActive:
-      model.editSource.type === 'CurrentProfile',
     editSourceText: getEditSourceDisplayText(
       model.editSource,
       model.projectLayoutsInfos,
@@ -143,13 +141,7 @@ function useLayoutManagerViewModelImpl(
       local.currentLayoutName,
     ),
     createNewLayout: () => model.createNewLayout(),
-    toggleCurrentProfileEdit: () => {
-      if (model.editSource.type !== 'CurrentProfile') {
-        model.loadCurrentProfileLayout();
-      } else {
-        // model.unloadCurrentProfileLayout();
-      }
-    },
+    loadCurrentProfileLayout: () => model.loadCurrentProfileLayout(),
     canLoadFromProject: isProjectLayoutSourceSpecified,
     createForProject: () => {
       model.createForProject(local.currentProjectId, local.currentLayoutName);
@@ -182,6 +174,8 @@ function useLayoutManagerViewModelImpl(
       model.editSource.type === 'ProjectLayout',
     showEditLayoutFileInFiler: () => model.showEditLayoutFileInFiler(),
     canOpenProjectIoModal: isLocalProjectsAvailable,
+    createNewProfileFromCurrentLayout: () =>
+      model.createNewProfileFromCurrentLayout(),
   };
 }
 

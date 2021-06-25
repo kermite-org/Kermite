@@ -5,6 +5,7 @@ import {
   IAssignEntryWithLayerFallback,
   IProfileData,
   systemActionToLabelTextMap,
+  IAssignEntry,
 } from '~/shared';
 
 function getAssignOperationText(
@@ -115,4 +116,18 @@ export function getAssignForKeyUnitWithLayerFallback(
     }
   }
   return assign;
+}
+
+export function getAssignForKeyUnitInInitialLayerStack(
+  keyUnitId: string,
+  layers: ILayer[],
+  assigns: IProfileData['assigns'],
+): IAssignEntry | undefined {
+  const activeLayers = layers.filter((la) => la.initialActive);
+  for (const layer of activeLayers) {
+    const assign = assigns[`${layer.layerId}.${keyUnitId}`];
+    if (assign) {
+      return assign;
+    }
+  }
 }

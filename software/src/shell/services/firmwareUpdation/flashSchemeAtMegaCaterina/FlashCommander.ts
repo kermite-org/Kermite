@@ -259,7 +259,7 @@ export namespace FlashCommander {
       return 'ok';
     } catch (err) {
       logger.log(`#### an error occured while writing firmware`);
-      logger.log(`error: ${err}`);
+      logger.log(`error: ${err.stack}`);
       if (serial) {
         serial.close();
       }

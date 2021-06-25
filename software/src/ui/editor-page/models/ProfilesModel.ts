@@ -16,6 +16,9 @@ export class ProfilesModel {
   editSource: IProfileEditSource = { type: 'NewlyCreated' };
   allProfileNames: string[] = [];
 
+  profileLoaded: boolean = false;
+  loadedProfileReceived: boolean = false;
+
   // listeners
 
   private handleProfileStatusChange = (
@@ -35,7 +38,9 @@ export class ProfilesModel {
         )
       ) {
         this.editorModel.loadProfileData(payload.loadedProfileData);
+        this.profileLoaded = true;
       }
+      this.loadedProfileReceived = true;
     }
   };
 
@@ -51,10 +56,6 @@ export class ProfilesModel {
 
   checkDirty() {
     return this.editorModel.checkDirty(false);
-  }
-
-  getCurrentProfileProjectId() {
-    return this.editorModel.loadedPorfileData.projectId;
   }
 
   // actions

@@ -1,6 +1,6 @@
 
 #include "rgbLighting.h"
-#include "config.h"
+#include "km0/base/configImport.h"
 #include "km0/base/utils.h"
 #include "km0/device/serialLed.h"
 #include "km0/device/system.h"
