@@ -21,6 +21,15 @@ const style = css`
     width: 100px;
     border: solid 1px #48a;
     padding: 5px;
+
+    display: flex;
+    flex-direction: column;
+    > h3 {
+      flex-shrink: 0;
+    }
+    > .layersBox {
+      flex-grow: 1;
+    }
   }
 `;
 
@@ -33,7 +42,7 @@ export const PresetKeyboardSection: FC<Props> = ({
     </div>
     <div class="layersPart">
       <h3>{texts.label_presetBrowser_layers}</h3>
-      <PresetLayersBox {...layerList} />
+      <PresetLayersBox {...layerList} className="layersBox" />
     </div>
   </div>
 );

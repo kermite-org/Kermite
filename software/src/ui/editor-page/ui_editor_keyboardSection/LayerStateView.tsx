@@ -1,5 +1,5 @@
 import { css, jsx } from 'qx';
-import { IPlayerModel, texts } from '~/ui/common';
+import { IPlayerModel, texts, uiStatusModel } from '~/ui/common';
 import { useDeviceStatusModel } from '~/ui/common/sharedModels/DeviceStatusModelHook';
 
 const cssLayerStateView = css`
@@ -31,11 +31,13 @@ const cssLayerCard = css`
 
 export const LayerStateView = (props: { playerModel: IPlayerModel }) => {
   const { isConnected } = useDeviceStatusModel();
+  const visible = uiStatusModel.settings.showLayersDynamic;
 
   return (
     <div
       css={cssLayerStateView}
       data-hint={texts.hint_assigner_keyboardView_layerStates}
+      qxIf={visible}
     >
       {props.playerModel.layerStackItems.map((la) => {
         return (

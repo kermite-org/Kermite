@@ -49,7 +49,7 @@ export function LayersListBoxPart(props: { vm: ILayerListBoxPartViewModel }) {
   return (
     <div css={cssLayersListBox}>
       {layers.map((la) => (
-        <LayerCard layerModel={la} key={la.layerId} />
+        <LayerCard layerModel={la} key={`${la.layerId}_${la.layerName}`} />
       ))}
     </div>
   );

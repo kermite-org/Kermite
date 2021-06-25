@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { uiTheme } from '~/ui/common';
+import { uiTheme, withStopPropagation } from '~/ui/common';
 
 type Props = {
   layerName: string;
@@ -25,7 +25,11 @@ export const PresetLayerItem: FC<Props> = ({
   isActive,
   onClick,
 }) => (
-  <div css={style} onClick={onClick} data-active={isActive}>
+  <div
+    css={style}
+    onClick={withStopPropagation(onClick)}
+    data-active={isActive}
+  >
     {layerName}
   </div>
 );
