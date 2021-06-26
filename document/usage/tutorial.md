@@ -47,14 +47,12 @@ Kermiteではソースコードやビルド過程を公開しており、それ�
 
 Kermiteを起動するとこのような画面になります。
 
-<!-- <img src="images/0417/capture0.png"  width="700" /> -->
 <img src="https://i.gyazo.com/fe8af658c9d9bcd52c673b6296a1a43a.png" />
 
 ## 日本語の表示に変更
 
 初期状態では英語のUIが表示されます。このドキュメントでは日本語の表示で解説を行います。
 
-<!-- <img src="images/0417/capture1.png" /> -->
 <img src="https://i.gyazo.com/404503bc9a34012af882c30bad87636b.png" />
 
 画面左上のグローバルメニューで`Japanese`を選ぶと、日本語の表示に切替わります。
@@ -66,46 +64,38 @@ Kermiteを起動するとこのような画面になります。
 ファームウェアはキーボードの品種ごとに対応が必要で、事前にKermiteのリポジトリに取り込まれている必要があります。
 
 サイドバーで、
-<!-- <img src="images/0417/capture2.png" /> -->
 <img src="https://i.gyazo.com/84d35655be52bf654f565c215b52428c.png" />
 
 をクリックしてデバイス管理画面に移動します。
 
-<!-- <img src="images/0417/capture3.png" width="700" /> -->
 <img src="https://i.gyazo.com/203d4a957acef2497be085747a4153f5.png" />
 
 デバイス管理画面には、デバイスの選択、デバイス情報の表示、パラメータの設定、ファームウェア書き込みのUIがあります。
 
-<!-- <img src="images/0417a/capture1.png" /> -->
-<img src="https://i.gyazo.com/c049762367adc7746b1f07cc1d9bfcce.png" />
+<img src="https://i.gyazo.com/3732bbd11b90fba16a65eee1171359f5.png" />
 
 ファームウェア書き込みのセクションで、書き込むファームウェアを選びます。
 ここでは
 ```
-Shiro (nora/shiro atmega)
+Shiro (shiro atmega)
 ```
 を選びます。
 
 キーボードのリセットボタンを2回押して書き込みモードにします。
 
-<!-- <img src="images/0417/capture4.png" /> -->
-<img src="https://i.gyazo.com/63f49d3b175fda0bb648208fa5753e3c.png" />
-
+<img src="https://i.gyazo.com/94ab62e6234fcb208cf9ee77696574c6.png" />
 仮想COMポートが検出され、書き込み可能な状態になりました。
 `書き込む`ボタンを押します。
 
-<!-- <img src="images/0417/capture6.png" /> -->
-<img src="https://i.gyazo.com/c8e8109b04b8357cf090c4b02c11f5ee.png" />
+<img src="https://i.gyazo.com/cb867648e7454e6997af2209b1e3cedb.png" />
 
 書き込みに成功するとこのような表示になります。
 
-<!-- <img src="images/0417/capture7.png" /> -->
 <img src="https://i.gyazo.com/2672a951861608d64c0d4b64d75912d0.png" />
 
 キーボードがKermiteの対応デバイスになり、デバイス選択欄に表示されるようになりました。選択して接続します。
 
-<!-- <img src="images/0417/capture8.png" width="700" /> -->
-<img src="https://i.gyazo.com/a9913e3652b4d75f77ce5f12197eb3f6.png" />
+<img src="https://i.gyazo.com/a757b675eac09f41ffa8ea81dbffdd1a.png" />
 
 接続がうまくいくと、デバイス情報やパラメータの設定UIが表示されます。
 ## プロファイルの作成
@@ -115,7 +105,6 @@ Kermiteでは、キーボードの配列設定をプロファイルと呼んで�
 
 サイドバーで、
 
-<!-- <img src="images/0417/capture11.png" /> -->
 <img src="https://i.gyazo.com/b37cf6ca1ac17015515014a75e6763ab.png" />
 
 
@@ -123,14 +112,12 @@ Kermiteでは、キーボードの配列設定をプロファイルと呼んで�
 
 プリセットブラウザでは、登録されているキーボードのプリセットを閲覧したり、取り込むことができます。
 
-<!-- <img src="images/0417a/capture2.png" width="700" /> -->
-<img src="https://i.gyazo.com/4d54b5de9908fbbd808cd7fb84c07b02.png" />
-
+<img src="https://i.gyazo.com/75af09042af93da822b68aff4d82dad9.png" />
 
 キーボードの品種とプリセットを選びます。
 ここでは、キーボードは
 ```
-Shiro (nora/shiro)
+Shiro (shiro)
 ```
 プリセットは
 ```
@@ -140,23 +127,19 @@ Shiro (nora/shiro)
 
 `プロファイルを作成`ボタンを押して、このプリセットを元に新しいプロファイルを作成します。
 
-<!-- <img src="images/0417a/capture3.png" width="700" /> -->
 <img src="https://i.gyazo.com/be330f9d4682a836fb3cef8be460ba97.png">
 
 キーマッピング編集画面に自動で遷移します。
 新しいプロファイルが未保存の状態で作成されています。
 
-<!-- <img src="images/0417a/capture4.png" /> -->
 <img src="https://i.gyazo.com/ea8a9cae20bb12e5580d1eb1e9f25667.png" />
 
 メニューから`保存`を選びます。
 
-<!-- <img src="images/0417a/capture5.png" /> -->
 <img src="https://i.gyazo.com/1f9f879c122b9f6d6f3428e07e0c5380.png" />
 
 プロファイルの名前を指定するダイアログが出ます。適当な名前をつけてOKボタンを押します。
 
-<!-- <img src="images/0417a/capture6.png" /> -->
 <img src="https://i.gyazo.com/6384b71bf406f78f7a1ac60a96d4643b.png" />
 
 プロファイルが保存されました。保存されているプロファイルはセレクタで名前を選んで切り替えられます。
@@ -169,13 +152,11 @@ Shiro (nora/shiro)
 キーボードの表示でアサインを割り当てるキーを選択し、下のパレットで割り当てる文字や機能を選びます。
 ここでは、上段の３つのキーに'A', 'B', 'C'の文字を割り当てました。
 
-<!-- <img src="images/0417a/capture7b.png" /> -->
 <img src="https://i.gyazo.com/82e3d2fa3f69a605ea0dc717fed2ca7a.png" />
 
 `書き込み`ボタンを押して、キーボードにキーマッピングを書き込みます。
 
 
-<!-- <img src="images/0417a/capture8.png" width="700" /> -->
 <img src="https://i.gyazo.com/b2f2534ec717fafa2a58a8d07360acc0.png" />
 
 書き込みが成功すると、ダイアログが表示されます。
@@ -185,19 +166,15 @@ Shiro (nora/shiro)
 
 文字入力の動作を確認する前に、キーボードレイアウト(US/JIS)を指定しておきます。OSの設定に合わせてください。
 
-<!-- <img src="images/0417a/capture17.png" /> -->
 <img src="https://i.gyazo.com/4c0a8cac8389b223ac137b706b2c8d75.png" />
 
 テキストエディタなどを開いて文字が入力されることを確認します。
-<!-- <img src="images/0417a/capture10.png"  width="700"/> -->
 <img src="https://i.gyazo.com/8cb3507d1234485049a60cec8ac87eec.png" />
 
 また、アプリ内部にもテスト用の文字入力欄があり、文字入力の確認に利用できます。メニューから有効化すると表示されます。
 
-<!-- <img src="images/0417/capture24.png" /> <br /> -->
 <img src="https://i.gyazo.com/57719c4b3a5f4785c9896b36071d002f.png" /> <br />
 
-<!-- <img src="images/0417/capture26.png" /> -->
 <img src="https://i.gyazo.com/a27e3a16fe752db56a54029f6d74eac1.png" />
 
 
@@ -295,7 +272,6 @@ Kermiteには、接続されているキーボードのキーやレイヤの状�
 
 デスクトップの端に置いてキーマッピングの確認などに利用できます。
 
-<!-- <img src="images/0417a/capture13.png" width="500" /> -->
 <img src="https://i.gyazo.com/a61e8e1ae79311197ffd466f70fbdb8c.png" />
 
 <!--
