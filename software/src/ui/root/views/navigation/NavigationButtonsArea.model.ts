@@ -50,12 +50,6 @@ const entrySources: NavigationEntrySource[] = [
     hint: texts.hint_sideMenu_app_shapePreview,
   },
   {
-    pagePath: '/heatmap',
-    pageName: texts.label_sideMenu_app_heatmap,
-    iconSpec: 'fa fa-chart-bar',
-    hint: texts.hint_sideMenu_app_heatmap,
-  },
-  {
     pagePath: '/firmwareUpdation',
     pageName: texts.label_sideMenu_app_firmwareUpdation,
     iconSpec: 'fa fa-microchip',
@@ -78,7 +72,6 @@ const entrySources: NavigationEntrySource[] = [
 //   },
 //   { pagePath: '/presetBrowser', pageName: 'Presets', iconSpec: 'menu_book' },
 //   { pagePath: '/shapePreview', pageName: 'Preview', iconSpec: 'format_shapes' },
-//   { pagePath: '/heatmap', pageName: 'Heatmap', iconSpec: 'analytics' },
 //   {
 //     pagePath: '/firmwareUpdation',
 //     pageName: 'Firmware',

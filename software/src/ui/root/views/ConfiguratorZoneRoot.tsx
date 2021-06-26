@@ -2,7 +2,6 @@ import { jsx, css } from 'qx';
 import { appUi, router, uiTheme } from '~/ui/common';
 import { EditorPage } from '~/ui/editor-page';
 import { FirmwareUpdationPage } from '~/ui/firmware-updation-page';
-import { RealtimeHeatmapPage } from '~/ui/heatmap-page';
 import { UiLayouterPageComponent } from '~/ui/layouter-page';
 import { PresetBrowserPage } from '~/ui/preset-browser-page';
 import { PresetBrowserPage2 } from '~/ui/preset-browser-page2';
@@ -42,7 +41,6 @@ export const ConfiguratorZoneRoot = () => {
           {pagePath === '/firmwareUpdation' && <FirmwareUpdationPage />}
           {pagePath === '/presetBrowser' && <PresetBrowserPage />}
           {pagePath === '/presetBrowser2' && <PresetBrowserPage2 />}
-          {pagePath === '/heatmap' && <RealtimeHeatmapPage />}
           {pagePath === '/settings' && <UiSettingsPage />}
         </div>
         <DevToolPullTab qxIf={appUi.isDevelopment} />
