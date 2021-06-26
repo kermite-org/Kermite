@@ -27,7 +27,9 @@ function getAllProjectVariationPaths() {
 }
 
 function getUpdatedProjectVariationPaths() {
-  const [gitOutput] = executeCommand(`git diff variants...HEAD --name-only`);
+  const [gitOutput] = executeCommand(
+    `git diff origin/variants...HEAD --name-only`
+  );
   const dirs = uniqueArrayItems(
     gitOutput.split(/\r?\n/).map((fpath) => path.dirname(fpath))
   );
