@@ -61,5 +61,5 @@ jobs:
         working-directory: ./firmware/ci
 
       - name: Check Firmware Build Errors
-        run: yarn buildAll
+        run: yarn buildUpdatedProjects
         working-directory: ./firmware/ci

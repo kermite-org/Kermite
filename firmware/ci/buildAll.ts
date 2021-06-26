@@ -1,14 +1,15 @@
 import * as fs from "fs";
 import glob from "glob";
 import path from "path";
-import { executeCommand, stringifyArray } from "./helpers";
+import { executeCommand, stringifyArray, uniqueArrayItems } from "./helpers";
 
 process.chdir("..");
 
 const puts = console.log;
 
-const AbortOnError = process.argv.includes("--abortOnError");
+const abortOnError = process.argv.includes("--abortOnError");
 const failIfError = process.argv.includes("--failIfError");
+const buildUpdatedOnly = process.argv.includes("--updatedOnly");
 
 class BuildStepError extends Error {}
 
@@ -18,6 +19,24 @@ function getAllProjectVariationPaths() {
     .map((fpath) => path.dirname(fpath))
     .filter(
       (fpath) =>
+        fs.existsSync(path.join(fpath, "config.h")) &&
+        fs.existsSync(path.join(path.dirname(fpath), "project.json"))
+    )
+    .map((fpath) => path.relative("src/projects", fpath))
+    .filter((vp) => !vp.startsWith("dev/"));
+}
+
+function getUpdatedProjectVariationPaths() {
+  const [gitOutput] = executeCommand(`git diff variants...HEAD --name-only`);
+  const dirs = uniqueArrayItems(
+    gitOutput.split(/\r?\n/).map((fpath) => path.dirname(fpath))
+  );
+  return dirs
+    .filter((fpath) => fpath.startsWith("firmware/src/projects"))
+    .map((fpath) => path.relative("firmware", fpath))
+    .filter(
+      (fpath) =>
+        fs.existsSync(path.join(fpath, "rules.mk")) &&
         fs.existsSync(path.join(fpath, "config.h")) &&
         fs.existsSync(path.join(path.dirname(fpath), "project.json"))
     )
@@ -44,7 +63,7 @@ function buildFirmware(projectPath: string, variationName: string): boolean {
   } catch (error) {
     if (error instanceof BuildStepError) {
       puts(error.message);
-      if (AbortOnError) {
+      if (abortOnError) {
         console.warn(`abort: failed to build ${targetName}`);
         process.exit(1);
       }
@@ -65,7 +84,9 @@ function buildProjectVariation(projectVariationPath: string) {
 }
 
 function buildProjects() {
-  const projectVariationPaths = getAllProjectVariationPaths();
+  const projectVariationPaths = buildUpdatedOnly
+    ? getUpdatedProjectVariationPaths()
+    : getAllProjectVariationPaths();
   puts(`target project variations: ${stringifyArray(projectVariationPaths)}`);
 
   // executeCommand("make clean");
