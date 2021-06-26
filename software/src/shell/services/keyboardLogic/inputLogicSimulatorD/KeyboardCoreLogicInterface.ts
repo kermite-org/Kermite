@@ -4,7 +4,6 @@ export interface KeyboardCoreLogicInterface {
   keyboardCoreLogic_setWiringMode(mode: number): void;
   keyboardCoreLogic_getLayerActiveFlags(): number;
   keyboardCoreLogic_getOutputHidReportBytes(): number[];
-  keyboardCoreLogic_peekAssignHitResult(): number;
   keyboardCoreLogic_issuePhysicalKeyStateChanged(
     keyIndex: number,
     isDown: boolean,

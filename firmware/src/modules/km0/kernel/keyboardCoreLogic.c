@@ -741,14 +741,12 @@ enum {
 typedef struct {
   uint8_t interruptKeyIndex;
   KeySlot keySlots[NumKeySlots];
-  uint16_t assignHitResultWord;
 } ResolverState;
 
 static ResolverState resolverState;
 
 static void initResolverState() {
   resolverState.interruptKeyIndex = KIDX_NONE;
-  resolverState.assignHitResultWord = 0;
   for (uint8_t i = 0; i < NumKeySlots; i++) {
     KeySlot *slot = &resolverState.keySlots[i];
     slot->isActive = false;
@@ -768,15 +766,6 @@ static void initResolverState() {
   }
 }
 
-static uint16_t peekAssignHitResult() {
-  if (resolverState.assignHitResultWord != 0) {
-    uint16_t res = resolverState.assignHitResultWord;
-    resolverState.assignHitResultWord = 0;
-    return res;
-  }
-  return 0;
-}
-
 static void keySlot_attachKey(KeySlot *slot, uint8_t keyIndex) {
   slot->isActive = true;
   slot->keyIndex = keyIndex;
@@ -792,16 +781,6 @@ static void keySlot_attachKey(KeySlot *slot, uint8_t keyIndex) {
   slot->inputEdge = 0;
   slot->opWord = 0;
   slot->autoReleaseTick = 0;
-}
-
-static void keySlot_storeAssignHitResult(
-    KeySlot *slot,
-    uint8_t assignOrder) {
-  uint8_t fKeyIndex = slot->keyIndex;
-  uint8_t fLayerIndex = slot->liveLayerIndex;
-  uint8_t fSlotSpec = assignOrder;
-  resolverState.assignHitResultWord =
-      (1 << 15) | (fSlotSpec << 12) | (fLayerIndex << 8) | fKeyIndex;
 }
 
 static void keySlot_handleKeyOn(KeySlot *slot, uint8_t order) {
@@ -854,7 +833,6 @@ static void keySlot_pushStepA(KeySlot *slot, uint8_t step) {
 
   if (steps == TriggerA_Down) {
     keySlot_handleKeyOn(slot, AssignOrder_Pri);
-    keySlot_storeAssignHitResult(slot, AssignOrder_Pri);
   }
 
   if (steps == TriggerA_Up) {
@@ -900,12 +878,10 @@ static void keySlot_pushStepB(KeySlot *slot, uint8_t step) {
   if (steps == TriggerB_Tap) {
     keySlot_handleKeyOn(slot, AssignOrder_Pri);
     assignBinder_recallKeyOff(slot);
-    keySlot_storeAssignHitResult(slot, AssignOrder_Pri);
   }
 
   if (steps == TriggerB_Hold) {
     keySlot_handleKeyOn(slot, AssignOrder_Sec);
-    keySlot_storeAssignHitResult(slot, AssignOrder_Sec);
   }
 
   if (steps == TriggerB_Rehold) {
@@ -990,12 +966,10 @@ static void keySlot_pushStepC(KeySlot *slot, uint8_t step) {
   if (steps == TriggerC_Tap) {
     keySlot_handleKeyOn(slot, AssignOrder_Pri);
     assignBinder_recallKeyOff(slot);
-    keySlot_storeAssignHitResult(slot, AssignOrder_Pri);
   }
 
   if (steps == TriggerC_Hold) {
     keySlot_handleKeyOn(slot, AssignOrder_Sec);
-    keySlot_storeAssignHitResult(slot, AssignOrder_Sec);
   }
 
   if (steps == TriggerC_Hold2) {
@@ -1005,7 +979,6 @@ static void keySlot_pushStepC(KeySlot *slot, uint8_t step) {
   if (steps == TriggerC_Tap2) {
     keySlot_handleKeyOn(slot, AssignOrder_Ter);
     assignBinder_recallKeyOff(slot);
-    keySlot_storeAssignHitResult(slot, AssignOrder_Ter);
   }
 
   if (steps == TriggerC_Up) {
@@ -1226,14 +1199,6 @@ uint8_t *keyboardCoreLogic_getOutputHidReportBytes() {
 uint16_t keyboardCoreLogic_getLayerActiveFlags() {
   if (logicActive) {
     return getLayerActiveFlags();
-  } else {
-    return 0;
-  }
-}
-
-uint16_t keyboardCoreLogic_peekAssignHitResult() {
-  if (logicActive) {
-    return peekAssignHitResult();
   } else {
     return 0;
   }
