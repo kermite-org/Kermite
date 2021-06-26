@@ -5,7 +5,7 @@
 #define KS_SNGLEWIRE_PIN_PD2
 
 //左右非対称のキーマトリクスを実験
-// #define KS_NUM_SCAN_SLOTS 60
+#define KS_NUM_SCAN_SLOTS 60
 #define KS_RIGHTHAND_SCAN_SLOTS_OFFSET 40
 
 #define KS_NUM_COLUMNS 8
