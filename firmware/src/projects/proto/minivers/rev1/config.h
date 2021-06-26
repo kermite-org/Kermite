@@ -4,6 +4,8 @@
 
 #define KS_SNGLEWIRE_PIN_PD2
 
+#define KS_NUM_SCAN_SLOTS 80
+
 #define KS_NUM_COLUMNS 8
 #define KS_NUM_ROWS 5
 #define KS_COLUMN_PINS \
