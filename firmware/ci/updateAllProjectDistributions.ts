@@ -26,6 +26,11 @@ function copyResourcesToLocalResourceStoreRepo() {
 function buildAllProjectDistributions() {
   pullResourceStoreRepo();
   const buildStats = deployStageProjectsBuilder_buildProjects();
+  const successRate = buildStats.numSuccess / buildStats.numTotal;
+  if (!(successRate > 0.9)) {
+    console.log(`failed to build some projects, abort`);
+    process.exit(-1);
+  }
   const changeRes = deployStageIndexUpdator_updateIndexIfFilesChanged();
   deployStageSummaryUpdator_outputSummaryFile(buildStats, changeRes);
   copyResourcesToLocalResourceStoreRepo();
