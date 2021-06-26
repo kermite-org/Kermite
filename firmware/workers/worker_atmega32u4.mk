@@ -82,7 +82,6 @@ CFLAGS += $(addprefix -D,$(DEFINES))
 ASFLAGS += -gstabs 
 ASFLAGS += -mmcu=atmega32u4
 ASFLAGS += $(INC_PATHS)
-ASFLAGS += -x assembler-with-cpp
 ASFLAGS += $(addprefix -D,$(DEFINES))
 
 LDFLAGS += -mmcu=atmega32u4
