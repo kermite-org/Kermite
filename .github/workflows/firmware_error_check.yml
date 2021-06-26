@@ -2,7 +2,7 @@ name: Firmware ErrorCheck
 
 on:
   push:
-    branches: [variants, variants-dev]
+    branches: [variants-dev]
     paths:
       - ".github/workflows/firmware_error_check.yml"
       - "firmware/ci/**/*.ts"
