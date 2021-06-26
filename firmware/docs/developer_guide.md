@@ -10,23 +10,18 @@ src
     ├── __stencils
     ├── keyboard1
     ├── keyboard2
-    ├── nora
+    ├── dev
     │   ├── keyboard3
     │   ├── keyboard4
-    ├── dev
+    ├── study
     │   ├── keyboard5
     │   └── keyboard6
-    └── proto
-        ├── keyboard7
-        └── keyboard8
-        └── ...
+    └── ...
 </pre>
 `Kermite/firmware`の`src`配下では以下のようなフォルダ構成になっています。
 * `modules`以下では共通で使われるキーボードの機能を提供しています。
 * `projects`以下に各キーボードの実装を配置しています。
   * キット開発者による公式の実装は`projects`直下に配置
-  * 有志による非公式の対応は`projects/nora`以下に配置
-  * キット未公開のプロトタイプなどは`projects/proto`以下に配置
   * `projects/__stencils`には各プロジェクトから利用する雛形のコードが置いてあります。
   * `projects/dev`にはデバッグ用のプロジェクトがあります。CIでのビルドからは除外されます。
   * `projects/study`にはモジュール開発用の実験コードを置いています。
