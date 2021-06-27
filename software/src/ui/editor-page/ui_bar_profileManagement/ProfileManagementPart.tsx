@@ -1,5 +1,5 @@
 import { css, jsx } from 'qx';
-import { FcWithClassName, texts } from '~/ui/common';
+import { appUi, FcWithClassName, texts } from '~/ui/common';
 import {
   KeyboardProfileSelector,
   OperationButtonWithIcon,
@@ -62,7 +62,7 @@ export const ProfileManagementPart: FcWithClassName = ({ className }) => {
 
       <div class="spacer" />
       <div class="mode-selectors-box">
-        <BehaviorSelector />
+        {appUi.isDevelopment && <BehaviorSelector />}
         <LayoutStandardSelector />
         <RoutingChannelSelector />
       </div>
