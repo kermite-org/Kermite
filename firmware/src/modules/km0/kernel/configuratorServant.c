@@ -70,15 +70,6 @@ static void emitRealtimeLayerStateEvent(uint16_t layerFlags) {
   emitGenericHidData(p);
 }
 
-static void emitRealtimeAssignHitEvent(uint16_t assignHitResult) {
-  uint8_t *p = rawHidTempBuf;
-  p[0] = 0xE0;
-  p[1] = 0x92;
-  p[2] = assignHitResult >> 8 & 0xFF;
-  p[3] = assignHitResult & 0xFF;
-  emitGenericHidData(p);
-}
-
 static void emitMemoryChecksumResult(uint8_t dataKind, uint8_t checksum) {
   uint8_t *p = rawHidTempBuf;
   p[0] = 0xB0;
@@ -278,10 +269,6 @@ void configuratorServant_emitRealtimeKeyEvent(uint8_t keyIndex, bool isDown) {
 
 void configuratorServant_emitRelatimeLayerEvent(uint16_t layerFlags) {
   emitRealtimeLayerStateEvent(layerFlags);
-}
-
-void configuratorServant_emitRelatimeAssignHitEvent(uint16_t assignHitResult) {
-  emitRealtimeAssignHitEvent(assignHitResult);
 }
 
 void configuratorServant_readDeviceInstanceCode(uint8_t *buffer) {

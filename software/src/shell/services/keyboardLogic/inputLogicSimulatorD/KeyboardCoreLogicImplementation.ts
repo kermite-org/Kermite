@@ -744,12 +744,10 @@ const resolverConfig = {
 const resolverState = new (class {
   interruptKeyIndex: number = KeyIndexNone;
   keySlots: KeySlot[] = [];
-  assignHitResultWord: number = 0;
 })();
 
 function initResolverState() {
   resolverState.interruptKeyIndex = KeyIndexNone;
-  resolverState.assignHitResultWord = 0;
   resolverState.keySlots = Array(NumKeySlotsMax)
     .fill(0)
     .map((_, i) => ({
@@ -770,15 +768,6 @@ function initResolverState() {
     }));
 }
 
-function peekAssignHitResult() {
-  if (resolverState.assignHitResultWord !== 0) {
-    const res = resolverState.assignHitResultWord;
-    resolverState.assignHitResultWord = 0;
-    return res;
-  }
-  return 0;
-}
-
 function keySlot_attachKey(slot: KeySlot, keyIndex: number) {
   slot.isActive = true;
   slot.keyIndex = keyIndex;
@@ -794,14 +783,6 @@ function keySlot_attachKey(slot: KeySlot, keyIndex: number) {
   slot.inputEdge = 0;
   slot.opWord = 0;
   slot.autoReleaseTick = 0;
-}
-
-function keySlot_storeAssignHitResult(slot: KeySlot, assignOrder: u8) {
-  const fKeyIndex = slot.keyIndex;
-  const fLayerIndex = slot.liveLayerIndex;
-  const fSlotSpec = assignOrder;
-  resolverState.assignHitResultWord =
-    (1 << 15) | (fSlotSpec << 12) | (fLayerIndex << 8) | fKeyIndex;
 }
 
 function keySlot_handleKeyOn(slot: KeySlot, order: u8) {
@@ -863,7 +844,6 @@ function keySlot_pushStepA(slot: KeySlot, step: 'D' | 'U' | '_') {
   if (resolverConfig.emitOutputStroke) {
     if (steps === TriggerA.Down) {
       keySlot_handleKeyOn(slot, AssignOrder.Pri);
-      keySlot_storeAssignHitResult(slot, AssignOrder.Pri);
     }
 
     if (steps === TriggerA.Up) {
@@ -915,12 +895,10 @@ function keySlot_pushStepB(slot: KeySlot, step: 'D' | 'U' | '_') {
     if (steps === TriggerB.Tap) {
       keySlot_handleKeyOn(slot, AssignOrder.Pri);
       assignBinder_recallKeyOff(slot);
-      keySlot_storeAssignHitResult(slot, AssignOrder.Pri);
     }
 
     if (steps === TriggerB.Hold) {
       keySlot_handleKeyOn(slot, AssignOrder.Sec);
-      keySlot_storeAssignHitResult(slot, AssignOrder.Sec);
     }
 
     if (steps === TriggerB.Rehold) {
@@ -1007,12 +985,10 @@ function keySlot_pushStepC(slot: KeySlot, step: 'D' | 'U' | '_') {
     if (steps === TriggerC.Tap) {
       keySlot_handleKeyOn(slot, AssignOrder.Pri);
       assignBinder_recallKeyOff(slot);
-      keySlot_storeAssignHitResult(slot, AssignOrder.Pri);
     }
 
     if (steps === TriggerC.Hold) {
       keySlot_handleKeyOn(slot, AssignOrder.Sec);
-      keySlot_storeAssignHitResult(slot, AssignOrder.Sec);
     }
 
     if (steps === TriggerC.Hold2) {
@@ -1022,7 +998,6 @@ function keySlot_pushStepC(slot: KeySlot, step: 'D' | 'U' | '_') {
     if (steps === TriggerC.Tap2) {
       keySlot_handleKeyOn(slot, AssignOrder.Ter);
       assignBinder_recallKeyOff(slot);
-      keySlot_storeAssignHitResult(slot, AssignOrder.Ter);
     }
 
     if (steps === TriggerC.Up) {
@@ -1237,14 +1212,6 @@ function keyboardCoreLogic_getLayerActiveFlags(): number {
   }
 }
 
-function keyboardCoreLogic_peekAssignHitResult(): number {
-  if (logicActive) {
-    return peekAssignHitResult();
-  } else {
-    return 0;
-  }
-}
-
 function keyboardCoreLogic_issuePhysicalKeyStateChanged(
   keyIndex: number,
   isDown: boolean,
@@ -1273,7 +1240,6 @@ export function getKeyboardCoreLogicInterface(): KeyboardCoreLogicInterface {
     keyboardCoreLogic_setWiringMode: setWiringMode,
     keyboardCoreLogic_getOutputHidReportBytes,
     keyboardCoreLogic_getLayerActiveFlags,
-    keyboardCoreLogic_peekAssignHitResult,
     keyboardCoreLogic_issuePhysicalKeyStateChanged,
     keyboardCoreLogic_processTicker,
     keyboardCoreLogic_halt,

@@ -91,18 +91,6 @@ export class InputLogicSimulatorD {
         });
         this.layerActiveFlags = newLayerActiveFlags;
       }
-      const assignHitResult = this.CL.keyboardCoreLogic_peekAssignHitResult();
-      if (assignHitResult !== 0) {
-        const keyIndex = assignHitResult & 0xff;
-        const layerIndex = (assignHitResult >> 8) & 0x0f;
-        const prioritySpec = (assignHitResult >> 12) & 0x03;
-        this.deviceService.emitRealtimeEventFromSimulator({
-          type: 'assignHit',
-          layerIndex,
-          keyIndex,
-          prioritySpec,
-        });
-      }
     }
   };
 

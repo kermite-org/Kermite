@@ -233,11 +233,6 @@ static void processKeyboardCoreLogicOutput() {
   if (changed) {
     debugDumpLocalOutputState();
   }
-
-  uint16_t assignHitResult = keyboardCoreLogic_peekAssignHitResult();
-  if (assignHitResult != 0 && optionEmitRealtimeEvents) {
-    configuratorServant_emitRelatimeAssignHitEvent(assignHitResult);
-  }
 }
 
 //キーが押された/離されたときに呼ばれるハンドラ
