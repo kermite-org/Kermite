@@ -64,8 +64,8 @@ enum {
 
 typedef struct {
   uint8_t hidReportBuf[NumHidReportBytes];
+  uint8_t modCounts[4];
   uint8_t layerModFlags;
-  uint8_t modFlags;
   uint8_t adhocModFlags;
   bool shiftCancelActive;
   uint8_t hidKeyCodes[NumHidHoldKeySlots];
@@ -74,13 +74,26 @@ typedef struct {
 
 static HidReportState hidReportState;
 
+static uint8_t getModFlagsFromModCounts() {
+  HidReportState *rs = &hidReportState;
+  uint8_t modFlags = 0;
+  for (int i = 0; i < 4; i++) {
+    if (rs->modCounts[i] > 0) {
+      modFlags |= 1 << i;
+    }
+  }
+  return modFlags;
+}
+
 static void resetHidReportState() {
   HidReportState *rs = &hidReportState;
   for (uint8_t i = 0; i < NumHidReportBytes; i++) {
     rs->hidReportBuf[i] = 0;
   }
+  for (uint8_t i = 0; i < 4; i++) {
+    rs->modCounts[i] = 0;
+  }
   rs->layerModFlags = 0;
-  rs->modFlags = 0;
   rs->adhocModFlags = 0;
   rs->shiftCancelActive = false;
   for (uint8_t i = 0; i < NumHidHoldKeySlots; i++) {
@@ -91,7 +104,8 @@ static void resetHidReportState() {
 
 static uint8_t *getOutputHidReport() {
   HidReportState *rs = &hidReportState;
-  uint8_t modifiers = rs->layerModFlags | rs->modFlags | rs->adhocModFlags;
+  uint8_t modFlags = getModFlagsFromModCounts();
+  uint8_t modifiers = modFlags | rs->layerModFlags | rs->adhocModFlags;
   if (rs->shiftCancelActive) {
     modifiers &= ~ModFlag_Shift;
   }
@@ -116,11 +130,21 @@ static void clearLayerModifiers(uint8_t modFlags) {
 }
 
 static void setModifiers(uint8_t modFlags) {
-  hidReportState.modFlags |= modFlags;
+  HidReportState *rs = &hidReportState;
+  for (int i = 0; i < 4; i++) {
+    if (((modFlags >> i) & 1) > 0) {
+      rs->modCounts[i]++;
+    }
+  }
 }
 
 static void clearModifiers(uint8_t modFlags) {
-  hidReportState.modFlags &= ~modFlags;
+  HidReportState *rs = &hidReportState;
+  for (int i = 0; i < 4; i++) {
+    if (((modFlags >> i) & 1) > 0 && rs->modCounts[i] > 0) {
+      rs->modCounts[i]--;
+    }
+  }
 }
 
 static void setAdhocModifiers(uint8_t modFlags) {
