@@ -83,19 +83,30 @@ const NumHidHoldKeySlots = 6;
 
 const hidReportState = new (class {
   hidReportBuf: u8[] = Array(NumHidReportBytes).fill(0);
+  modCounts: number[] = Array(4).fill(0);
   layerModFlags: u8 = 0;
-  modFlags: u8 = 0;
   adhocModFlags: u8 = 0;
   shiftCancelActive: boolean = false;
   hidKeyCodes: u8[] = Array(NumHidHoldKeySlots).fill(0);
   nextKeyPos: u8 = 0;
 })();
 
+function getModFlagsFromModCounts(): u8 {
+  const { modCounts } = hidReportState;
+  let modFlags = 0;
+  for (let i = 0; i < 4; i++) {
+    if (modCounts[i] > 0) {
+      modFlags |= 1 << i;
+    }
+  }
+  return modFlags;
+}
+
 function resetHidReportState() {
   const rs = hidReportState;
   rs.hidReportBuf.fill(0);
+  rs.modCounts.fill(0);
   rs.layerModFlags = 0;
-  rs.modFlags = 0;
   rs.adhocModFlags = 0;
   rs.shiftCancelActive = false;
   rs.hidKeyCodes.fill(0);
@@ -105,7 +116,8 @@ function resetHidReportState() {
 function getOutputHidReport(): u8[] {
   const rs = hidReportState;
 
-  let modifiers = rs.layerModFlags | rs.modFlags | rs.adhocModFlags;
+  const modFlags = getModFlagsFromModCounts();
+  let modifiers = modFlags | rs.layerModFlags | rs.adhocModFlags;
   if (rs.shiftCancelActive) {
     modifiers &= ~ModFlag.Shift;
   }
@@ -130,11 +142,21 @@ function clearLayerModifiers(modFlags: u8) {
 }
 
 function setModifiers(modFlags: u8) {
-  hidReportState.modFlags |= modFlags;
+  const { modCounts } = hidReportState;
+  for (let i = 0; i < 4; i++) {
+    if (((modFlags >> i) & 1) > 0) {
+      modCounts[i]++;
+    }
+  }
 }
 
 function clearModifiers(modFlags: u8) {
-  hidReportState.modFlags &= ~modFlags;
+  const { modCounts } = hidReportState;
+  for (let i = 0; i < 4; i++) {
+    if (((modFlags >> i) & 1) > 0 && modCounts[i] > 0) {
+      modCounts[i]--;
+    }
+  }
 }
 
 function setAdhocModifiers(modFlags: u8) {
