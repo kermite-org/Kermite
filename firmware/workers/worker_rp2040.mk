@@ -76,6 +76,22 @@ DEFINES += EXTR_KERMITE_PROJECT_RELEASE_BUILD_REVISION=$(RELEASE_REVISION)
 DEFINES += EXTR_KERMITE_IS_RESOURCE_ORIGIN_ONLINE=$(IS_RESOURCE_ORIGIN_ONLINE)
 DEFINES += EXTR_KERMITE_VARIATION_NAME=\"$(VARIATION)\"
 
+INC_PATHS =
+INC_PATHS += -I$(PROJECT_CODE_DIR)
+INC_PATHS += -I$(PICO_LOCAL_DIR)/include
+INC_PATHS += -I$(MODULES_DIR)
+INC_PATHS += -I$(PICO_SDK_OUTER_DIR)
+INC_PATHS += -I$(PICO_SDK_DIR)/src/common/include
+INC_PATHS += -I$(PICO_SDK_DIR)/src/rp2_common/include
+INC_PATHS += -I$(PICO_SDK_DIR)/src/rp2040/include
+INC_PATHS += -I$(TINYUSB_DIR)/src
+INC_PATHS += -I$(TINYUSB_DIR)/src/common
+INC_PATHS += -I$(PICO_SDK_DIR)/src/rp2_common/rp2040_usb_device_enumeration/include
+
+ifneq ($(PROJECT_STENCIL_DIR),)
+INC_PATHS += -I$(PROJECT_STENCIL_DIR)
+endif
+
 CORE_FLAGS = $(INC_PATHS) -march=armv6-m -mcpu=cortex-m0plus -mthumb -Og -g -ffunction-sections -fdata-sections
 CORE_FLAGS += $(addprefix -D,$(DEFINES))
 
@@ -122,19 +138,6 @@ LD_FLAGS += $(addprefix $(WL_PREFIX),$(FUNCS_WRAPPED))
 
 #--------------------
 #files
-
-INC_PATHS =
-INC_PATHS += -I$(PROJECT_CODE_DIR)
-INC_PATHS += -I$(PROJECT_STENCIL_DIR)
-INC_PATHS += -I$(PICO_LOCAL_DIR)/include
-INC_PATHS += -I$(MODULES_DIR)
-INC_PATHS += -I$(PICO_SDK_OUTER_DIR)
-INC_PATHS += -I$(PICO_SDK_DIR)/src/common/include
-INC_PATHS += -I$(PICO_SDK_DIR)/src/rp2_common/include
-INC_PATHS += -I$(PICO_SDK_DIR)/src/rp2040/include
-INC_PATHS += -I$(TINYUSB_DIR)/src
-INC_PATHS += -I$(TINYUSB_DIR)/src/common
-INC_PATHS += -I$(PICO_SDK_DIR)/src/rp2_common/rp2040_usb_device_enumeration/include
 
 SDK_C_SRCS =
 SDK_C_SRCS += $(PICO_SDK_DIR)/src/common/time.c

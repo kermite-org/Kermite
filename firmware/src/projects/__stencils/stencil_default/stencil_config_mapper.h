@@ -4,6 +4,8 @@
 #define __IS_ATMEGA
 #elif defined(KERMITE_TARGET_MCU_RP2040)
 #define __IS_RP2040
+#else
+#error KERMITE_TARGET_MCU_* is not defined
 #endif
 
 #ifdef KS_NUM_SCAN_SLOTS
