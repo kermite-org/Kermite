@@ -46,7 +46,8 @@ enum {
   SystemAction_GlowColorPrev = 3,
   SystemAction_GlowColorNext = 4,
   SystemAction_GlowBrightnessMinus = 5,
-  SystemAction_GlowBrightnessPlus = 6
+  SystemAction_GlowBrightnessPlus = 6,
+  SystemAction_ResetToDfuMode = 0x7e,
 };
 
 #endif

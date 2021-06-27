@@ -4,6 +4,7 @@
 #include "km0/base/bitOperations.h"
 #include "km0/base/utils.h"
 #include "km0/device/dataMemory.h"
+#include "km0/device/system.h"
 #include <stdio.h>
 
 typedef void (*ParameterChangedListener)(uint8_t parameterIndex, uint8_t value);
@@ -15,6 +16,8 @@ static ParameterChangedListener parameterChangedListeners[4] = { 0 };
 static int numParameterChangedListeners = 0;
 
 static uint16_t parameterChangedFlags = 0;
+
+static bool reqRestToDfu = false;
 
 static const T_SystemParametersSet systemParametersDefault = {
   .emitKeyStroke = true,
@@ -213,11 +216,18 @@ void configManager_handleSystemAction(uint8_t code, uint8_t payloadValue) {
   if (code == SystemAction_GlowBrightnessPlus) {
     shiftParameter(SystemParameter_GlowBrightness, 16, false);
   }
+  if (code == SystemAction_ResetToDfuMode) {
+    reqRestToDfu = true;
+  }
 }
 
 void configManager_processUpdate() {
   taskLazySave();
   taskChangedParameterNotification();
+  if (reqRestToDfu) {
+    reqRestToDfu = false;
+    system_jumpToDfuBootloader();
+  }
 }
 
 void configManager_processUpdateNoSave() {
