@@ -42,7 +42,7 @@ void system_initializeUserProgram() {
 
 void system_jumpToDfuBootloader() {
   system_disableInterrupts();
-  asm volatile("jmp 0x3800");
+  asm volatile("jmp 0x7000");
 }
 
 static void putCharDummy() {}
