@@ -1,8 +1,8 @@
+#include "asmGpioDefs.h"
 #include "km0/base/bitOperations.h"
 #include "km0/base/configImport.h"
 #include "km0/base/utils.h"
 #include "km0/device/boardLink.h"
-#include "km0/device/digitalIo.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <string.h>
@@ -15,26 +15,24 @@
 //---------------------------------------------
 
 //信号ピン設定
-//以下のいずれかをコンパイル時のフラグで注入して指定
-//KM0_ATMEGA_SINGLEWIRE__PIN_SIGNAL_PD0
-//KM0_ATMEGA_SINGLEWIRE__PIN_SIGNAL_PD2
+//D0, D2のいずれかを利用元から注入して指定
 
 #define dDDR DDRD
 #define dPORT PORTD
 #define dPIN PIND
 
-#if defined(KM0_ATMEGA_SINGLEWIRE__PIN_SIGNAL_PD0)
+#if KM0_ATMEGA_SINGLEWIRE__PIN_SIGNAL == P_D0
 #define dBit 0
 #define dISCx0 ISC00
 #define dINTx INT0
 #define dINTx_vect INT0_vect
-#elif defined(KM0_ATMEGA_SINGLEWIRE__PIN_SIGNAL_PD2)
+#elif KM0_ATMEGA_SINGLEWIRE__PIN_SIGNAL == P_D2
 #define dBit 2
 #define dISCx0 ISC20
 #define dINTx INT2
 #define dINTx_vect INT2_vect
 #else
-#error Singlewire pin configuration option SINGLEWIRE_SIGNAL_PIN_PDx is not provided.
+#error Singlewire pin configuration option KM0_ATMEGA_SINGLEWIRE__PIN_SIGNAL is not valid.
 #endif
 
 //---------------------------------------------
