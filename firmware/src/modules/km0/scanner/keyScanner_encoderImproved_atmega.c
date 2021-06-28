@@ -13,10 +13,11 @@
 #endif
 #define NumEncodersMax KM0_ENCODER_SCANNER__NUM_ENCODERS_MAX
 
+static const int EncoderPinChangeInterruptProcessWaitTimeUs = 50;
+
 static const int rot_none = 2;
 static const int rot_ccw = 0;
 static const int rot_cw = 1;
-
 typedef struct {
   int prev_a;
   uint32_t rots_buf;
@@ -57,6 +58,9 @@ static int encoderInstance_pullRotationEventOne(EncoderState *state) {
 }
 
 ISR(PCINT0_vect) {
+  if (EncoderPinChangeInterruptProcessWaitTimeUs > 0) {
+    delayUs(EncoderPinChangeInterruptProcessWaitTimeUs);
+  }
   for (int i = 0; i < numEncoders; i++) {
     EncoderConfig *config = &encoderConfigs[i];
     EncoderState *state = &encoderStates[i];
