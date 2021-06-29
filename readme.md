@@ -55,8 +55,10 @@
 
 ## 開発状況
 キー入力やレイヤなどの基本的な機能は実装が概ね固まりました。現在周辺部品(LCD,RGBLEDなど)の対応を進めています。またユーティリティソフトの改修を行っています。2021年の夏頃にリリースする予定です。
-## サーバー
+## その他
 [KermiteServer](https://dev.server.kermite.org/) プロファイルを投稿できるサーバーです。(試験運用中)
+
+[Firmwave Build Status](https://app.kermite.org/firmware-stats/) 対応ファームウェアのビルド状況です
 ## ライセンス
 MITライセンスです。
 
