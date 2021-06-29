@@ -59,6 +59,8 @@
 [KermiteServer](https://dev.server.kermite.org/) プロファイルを投稿できるサーバーです。(試験運用中)
 
 [Firmwave Build Status](https://app.kermite.org/firmware-stats/) 対応ファームウェアのビルド状況です
+
+[Project Id Generator](https://app.kermite.org/krs/generator/) ファームウェアを新しく作る際に必要なProjectIdのジェネレータです
 ## ライセンス
 MITライセンスです。
 
