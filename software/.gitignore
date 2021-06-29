@@ -2,6 +2,7 @@ node_modules/
 .local/
 .sub/
 /dist/
+/dist_ex/
 /release/
 /build/
 
