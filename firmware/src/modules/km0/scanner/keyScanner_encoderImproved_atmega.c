@@ -4,8 +4,8 @@
 #include "km0/device/boardIo.h"
 #include "km0/device/debugUart.h"
 #include "km0/device/digitalIo.h"
+#include "km0/device/pinObserver.h"
 #include "km0/device/system.h"
-#include <avr/interrupt.h>
 #include <stdio.h>
 
 #ifndef KM0_ENCODER_SCANNER__NUM_ENCODERS_MAX
@@ -13,7 +13,7 @@
 #endif
 #define NumEncodersMax KM0_ENCODER_SCANNER__NUM_ENCODERS_MAX
 
-static const int EncoderPinChangeInterruptProcessWaitTimeUs = 50;
+static const int EncoderPinChangeInterruptPinStateReadWaitTimeUs = 50;
 
 static const int rot_none = 2;
 static const int rot_ccw = 0;
@@ -28,7 +28,10 @@ static int numEncoders = 0;
 static EncoderConfig *encoderConfigs;
 static EncoderState encoderStates[NumEncodersMax];
 
-static void encoderInstance_decodeInputOnPhaseAEdge(EncoderConfig *config, EncoderState *state) {
+static void encoderInstance_decodeInputOnPhaseAEdge(EncoderConfig *config, EncoderState *state, int edge) {
+  if (EncoderPinChangeInterruptPinStateReadWaitTimeUs > 0) {
+    delayUs(EncoderPinChangeInterruptPinStateReadWaitTimeUs);
+  }
   int a = digitalIo_read(config->pinA);
   if (a != state->prev_a) {
     int b = digitalIo_read(config->pinB);
@@ -57,35 +60,31 @@ static int encoderInstance_pullRotationEventOne(EncoderState *state) {
   return 0;
 }
 
-ISR(PCINT0_vect) {
-  if (EncoderPinChangeInterruptProcessWaitTimeUs > 0) {
-    delayUs(EncoderPinChangeInterruptProcessWaitTimeUs);
-  }
+static void pinObserverCallback(int pin, int edge) {
   for (int i = 0; i < numEncoders; i++) {
     EncoderConfig *config = &encoderConfigs[i];
     EncoderState *state = &encoderStates[i];
-    encoderInstance_decodeInputOnPhaseAEdge(config, state);
+    if (pin == config->pinA) {
+      encoderInstance_decodeInputOnPhaseAEdge(config, state, edge);
+    }
   }
 }
 
 void keyScanner_encoderBasic_initialize(uint8_t num, EncoderConfig *_encoderConfigs) {
+  for (int i = 0; i < numEncoders; i++) {
+    EncoderConfig *config = &encoderConfigs[i];
+    pinObserver_unobservePin(config->pinA);
+  }
+
   numEncoders = num;
   encoderConfigs = _encoderConfigs;
 
-  uint8_t pcmsk = 0;
   for (int i = 0; i < numEncoders; i++) {
     EncoderConfig *config = &encoderConfigs[i];
-    if (!(P_B0 <= config->pinA && config->pinA <= P_B7)) {
-      //pinA must be one of B0~B7 (which belongs to PCINT)
-      continue;
-    }
     digitalIo_setInputPullup(config->pinA);
     digitalIo_setInputPullup(config->pinB);
-    uint8_t portBit = config->pinA & 7;
-    pcmsk = 1 << portBit;
+    pinObserver_observePin(config->pinA, pinObserverCallback);
   }
-  PCICR |= _BV(PCIE0);
-  PCMSK0 = pcmsk;
 }
 
 void keyScanner_encoderBasic_update(uint8_t *keyStateBitFlags) {
