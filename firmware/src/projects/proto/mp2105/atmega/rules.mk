@@ -10,6 +10,6 @@ KL_USE_KEY_MATRIX = 1
 
 # KL_USE_ENCODERS = 1
 # use new implementation
-MODULE_SRCS += km0/scanner/keyScanner_encoderImproved_atmega.c
+MODULE_SRCS += km0/scanner/keyScanner_encoderImproved.c
 MODULE_SRCS += km0/device/atmega/pinObserver.c
 DEFINES += KS_USE_ENCODERS

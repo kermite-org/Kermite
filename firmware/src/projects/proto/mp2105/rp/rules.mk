@@ -7,4 +7,9 @@ KL_USE_DEBUG_UART = 1
 KL_USE_OLED_DISPLAY = 1
 KL_USE_RGB_LIGHTING = 1
 KL_USE_KEY_MATRIX = 1
-KL_USE_ENCODERS = 1
+
+# KL_USE_ENCODERS = 1
+# use new implementation
+MODULE_SRCS += km0/scanner/keyScanner_encoderImproved.c
+MODULE_SRCS += km0/device/rp2040/pinObserver.c
+DEFINES += KS_USE_ENCODERS
