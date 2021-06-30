@@ -4,17 +4,17 @@
 #include <avr/interrupt.h>
 
 static uint8_t observed_pin_flags = 0;
-static uint8_t prev_portb = 0;
+static uint8_t prev_levels = 0;
 
 typedef void (*PinObserverCallback)(int, int);
 
 static PinObserverCallback pin_observer_callbacks[8] = { 0 };
 
 ISR(PCINT0_vect) {
-  uint8_t portb = PORTB;
+  uint8_t levels = PINB;
   for (int i = 0; i < 8; i++) {
-    bool prev = bit_read(prev_portb, i);
-    bool curr = bit_read(portb, i);
+    bool prev = bit_read(prev_levels, i);
+    bool curr = bit_read(levels, i);
     if (curr != prev) {
       int pin = P_B0 | i;
       int edge = curr ? PIN_OBSERVER_EDGE_RISE : PIN_OBSERVER_EDGE_FALL;
@@ -23,7 +23,7 @@ ISR(PCINT0_vect) {
       }
     }
   }
-  prev_portb = portb;
+  prev_levels = levels;
 }
 
 static void updatePcintConfig() {
@@ -43,7 +43,7 @@ void pinObserver_observePin(int pin, void (*callback)(int, int)) {
   }
   int bit = pin & 7;
   bit_on(observed_pin_flags, bit);
-  bit_spec(prev_portb, bit, digitalIo_read(pin));
+  bit_spec(prev_levels, bit, digitalIo_read(pin));
   pin_observer_callbacks[bit] = callback;
   updatePcintConfig();
 }
