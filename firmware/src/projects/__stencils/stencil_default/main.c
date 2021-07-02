@@ -13,7 +13,7 @@
 #endif
 
 #ifdef KS_USE_ENCODERS
-#include "km0/scanner/keyScanner_encoderBasic.h"
+#include "km0/scanner/keyScanner_encoders.h"
 #endif
 
 #ifdef KS_USE_BOARD_LEDS
@@ -96,8 +96,8 @@ int main() {
 #elif defined(KS_ENCODER_CONFIGS)
   static EncoderConfig encoderConfigs[KS_NUM_ENCODERS] = KS_ENCODER_CONFIGS;
 #endif
-  keyboardMain_useKeyScanner(keyScanner_encoderBasic_update);
-  keyScanner_encoderBasic_initialize(KS_NUM_ENCODERS, encoderConfigs);
+  keyboardMain_useKeyScanner(keyScanner_encoders_update);
+  keyScanner_encoders_initialize(KS_NUM_ENCODERS, encoderConfigs);
 #endif
 
 #ifdef KS_USE_CUSTOM_KEYINDEX_TABLE

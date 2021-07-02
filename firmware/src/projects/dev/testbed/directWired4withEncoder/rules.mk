@@ -16,7 +16,7 @@ MODULE_SRCS += km0/kernel/keyActionRemapper.c
 MODULE_SRCS += km0/kernel/keyboardCoreLogic.c
 MODULE_SRCS += km0/kernel/keyboardMain.c
 MODULE_SRCS += km0/scanner/keyScanner_directWired.c
-MODULE_SRCS += km0/scanner/keyScanner_encoderBasic.c
+MODULE_SRCS += km0/scanner/keyScanner_encoders.c
 MODULE_SRCS += km0/wrapper/generalKeyboard.c
 
 PROJECT_SRCS += main.c

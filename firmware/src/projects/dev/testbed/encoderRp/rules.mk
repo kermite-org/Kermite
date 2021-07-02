@@ -7,6 +7,7 @@ MODULE_SRCS += km0/device/rp2040/usbIoCore.c
 MODULE_SRCS += km0/device/rp2040/dataMemory.c
 MODULE_SRCS += km0/device/rp2040/debugUart.c
 MODULE_SRCS += km0/device/rp2040/boardIo.c
+MODULE_SRCS += km0/device/rp2040/pinObserver.c
 MODULE_SRCS += km0/kernel/dataStorage.c
 MODULE_SRCS += km0/kernel/configManager.c
 MODULE_SRCS += km0/kernel/keyMappingDataValidator.c
@@ -16,10 +17,7 @@ MODULE_SRCS += km0/kernel/keyActionRemapper.c
 MODULE_SRCS += km0/kernel/keyboardCoreLogic.c
 MODULE_SRCS += km0/kernel/keyboardMain.c
 MODULE_SRCS += km0/scanner/keyScanner_directWired.c
+MODULE_SRCS += km0/scanner/keyScanner_encoders.c
 MODULE_SRCS += km0/wrapper/generalKeyboard.c
-
-MODULE_SRCS += km0/scanner/keyScanner_encoderImproved.c
-MODULE_SRCS += km0/device/rp2040/pinObserver.c
-
 
 PROJECT_SRCS += main.c
