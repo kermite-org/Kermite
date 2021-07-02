@@ -34,6 +34,7 @@ endif
 
 #encoder key scanner
 ifneq ($(KL_USE_ENCODERS),)
+MODULE_SRCS += km0/device/atmega/pinObserver.c
 MODULE_SRCS += km0/scanner/keyScanner_encoders.c
 DEFINES += KS_USE_ENCODERS
 endif
