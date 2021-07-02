@@ -14,7 +14,7 @@
 static const uint8_t keyInputPins[NumKeys] = { GP12, GP13, GP14, GP15 };
 
 static EncoderConfig encoderConfigs[NumEncoders] = {
-  { .pinA = GP21, .pinB = GP20, .scanIndexBase = 4 },
+  { .pinA = GP20, .pinB = GP21, .scanIndexBase = 4 },
 };
 
 int main() {
