@@ -6,7 +6,8 @@ void delayMs(uint16_t ms) {
 }
 
 void delayUs(uint16_t us) {
-  sleep_us(us);
+  // sleep_us(us);  //cannot invoke in irq handler
+  busy_wait_us_32(us);
 }
 
 void system_enableInterrupts() {

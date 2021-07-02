@@ -18,7 +18,7 @@ static EncoderConfig encoderConfigs[NumEncoders] = {
 };
 
 int main() {
-  debugUart_initialize(115200);
+  // debugUart_initialize(38400);
   boardIo_setupLeds_rpiPico();
   keyScanner_directWired_initialize(NumKeys, keyInputPins, 0);
   keyScanner_encoderBasic_initialize(NumEncoders, encoderConfigs);

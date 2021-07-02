@@ -16,7 +16,10 @@ MODULE_SRCS += km0/kernel/keyActionRemapper.c
 MODULE_SRCS += km0/kernel/keyboardCoreLogic.c
 MODULE_SRCS += km0/kernel/keyboardMain.c
 MODULE_SRCS += km0/scanner/keyScanner_directWired.c
-MODULE_SRCS += km0/scanner/keyScanner_encoderBasic.c
 MODULE_SRCS += km0/wrapper/generalKeyboard.c
+
+MODULE_SRCS += km0/scanner/keyScanner_encoderImproved.c
+MODULE_SRCS += km0/device/rp2040/pinObserver.c
+
 
 PROJECT_SRCS += main.c
