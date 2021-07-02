@@ -29,8 +29,8 @@ enum {
   ev_b_high_a_fall = 4
 };
 typedef struct {
-  int prev_a;
-  int prev_ev;
+  uint8_t prev_a;
+  uint8_t prev_ev;
   uint32_t rots_buf;
   uint8_t rots_num;
 } EncoderState;
@@ -63,19 +63,19 @@ static void encoderInstance_decodeInputOnPhaseAEdge(EncoderConfig *config, Encod
   if (EncoderPinChangeInterruptPinStateReadWaitTimeUs > 0) {
     delayUs(EncoderPinChangeInterruptPinStateReadWaitTimeUs);
   }
-  int a = digitalIo_read(config->pinA);
+  uint8_t a = digitalIo_read(config->pinA);
   if (a != state->prev_a) {
-    int b = digitalIo_read(config->pinB);
-    int ev = decodeSignalEdgeEvent(b, state->prev_a, a);
-    int rot = rot_none;
-    if (state->prev_ev == ev_b_high_a_fall && ev == ev_b_low_a_rise) {
+    uint8_t b = digitalIo_read(config->pinB);
+    uint8_t ev = decodeSignalEdgeEvent(b, state->prev_a, a);
+    uint8_t rot = rot_none;
+    if (state->prev_ev == ev_b_low_a_fall && ev == ev_b_high_a_rise) {
       rot = rot_cw;
     }
-    if (state->prev_ev == ev_b_low_a_fall && ev == ev_b_high_a_rise) {
+    if (state->prev_ev == ev_b_high_a_fall && ev == ev_b_low_a_rise) {
       rot = rot_ccw;
     }
     if (rot != rot_none) {
-      bit_spec(state->rots_buf, state->rots_num, rot);
+      bit_spec(state->rots_buf, state->rots_num, rot == rot_cw);
       state->rots_num++;
     }
     state->prev_a = a;
@@ -83,17 +83,17 @@ static void encoderInstance_decodeInputOnPhaseAEdge(EncoderConfig *config, Encod
   }
 }
 
-static int encoderInstance_pullRotationEventOne(EncoderState *state) {
+static uint8_t encoderInstance_pullRotationEventOne(EncoderState *state) {
   static uint32_t tick = 0;
   if ((++tick & 3) == 0) {
     if (state->rots_num > 0) {
-      int rot = state->rots_buf & 1;
+      uint8_t rot = state->rots_buf & 1;
       state->rots_buf >>= 1;
       state->rots_num--;
-      return rot == rot_cw ? 1 : -1;
+      return rot;
     }
   }
-  return 0;
+  return rot_none;
 }
 
 static void pinObserverCallback(int pin, int edge) {
@@ -127,8 +127,8 @@ void keyScanner_encoders_update(uint8_t *keyStateBitFlags) {
   for (int i = 0; i < numEncoders; i++) {
     EncoderConfig *config = &encoderConfigs[i];
     EncoderState *state = &encoderStates[i];
-    int dir = encoderInstance_pullRotationEventOne(state);
-    utils_writeArrayedBitFlagsBit(keyStateBitFlags, config->scanIndexBase + 0, dir == -1);
-    utils_writeArrayedBitFlagsBit(keyStateBitFlags, config->scanIndexBase + 1, dir == 1);
+    uint8_t rot = encoderInstance_pullRotationEventOne(state);
+    utils_writeArrayedBitFlagsBit(keyStateBitFlags, config->scanIndexBase + 0, rot == rot_ccw);
+    utils_writeArrayedBitFlagsBit(keyStateBitFlags, config->scanIndexBase + 1, rot == rot_cw);
   }
 }
