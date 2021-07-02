@@ -8,4 +8,5 @@ MODULE_SRCS += km0/device/atmega/boardIo.c
 
 # PROJECT_SRCS += main_i2c_oled_minimum.c
 # PROJECT_SRCS += main_i2c_tca9555.c
-PROJECT_SRCS += main_encoder_dev.c
+# PROJECT_SRCS += main_encoder_dev.c
+PROJECT_SRCS += main_systick_dev.c
