@@ -29,8 +29,8 @@ enum {
   ev_b_high_a_fall = 4
 };
 typedef struct {
-  uint8_t prev_a;
-  uint8_t prev_ev;
+  uint8_t prev_a : 4;
+  uint8_t prev_ev : 4;
   uint32_t rots_buf;
   uint8_t rots_num;
 } EncoderState;
