@@ -25,6 +25,25 @@ void system_disableInterrupts() {
   cli();
 }
 
+static volatile uint32_t systemTimeMs = 0;
+
+ISR(TIMER3_COMPA_vect) {
+  systemTimeMs++;
+}
+
+static void setupMsTimer() {
+  //CTC mode, no prescaler, compare A match interrupt
+  TCCR3A = 0;
+  TCCR3B = _BV(WGM32) | _BV(CS30);
+  TIMSK3 = _BV(OCIE3A);
+  OCR3A = 16000;
+  TCNT3 = 0;
+}
+
+uint32_t system_getSystemTimeMs() {
+  return systemTimeMs;
+}
+
 void system_initializeUserProgram() {
   //disable watchdog timer
   wdt_reset();
@@ -38,6 +57,8 @@ void system_initializeUserProgram() {
 
   //deinit USB
   USBCON = 0;
+
+  setupMsTimer();
 }
 
 void system_jumpToDfuBootloader() {
