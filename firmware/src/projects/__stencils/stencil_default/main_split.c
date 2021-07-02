@@ -13,7 +13,7 @@
 #endif
 
 #ifdef KS_USE_ENCODERS
-#include "km0/scanner/keyScanner_encoderBasic.h"
+#include "km0/scanner/keyScanner_encoders.h"
 #endif
 
 #ifdef KS_USE_BOARD_LEDS
@@ -117,31 +117,31 @@ static void setupBoard(int8_t side) {
 #ifdef KS_ENCODER_CONFIG_LEFT
   if (side == 0) {
     static EncoderConfig encoderConfigsL[1] = { KS_ENCODER_CONFIG_LEFT };
-    keyScanner_encoderBasic_initialize(1, encoderConfigsL);
+    keyScanner_encoders_initialize(1, encoderConfigsL);
   }
 #endif
 
 #ifdef KS_ENCODER_CONFIG_RIGHT
   if (side == 1) {
     static EncoderConfig encoderConfigsR[1] = { KS_ENCODER_CONFIG_RIGHT };
-    keyScanner_encoderBasic_initialize(1, encoderConfigsR);
+    keyScanner_encoders_initialize(1, encoderConfigsR);
   }
 #endif
 
 #ifdef KS_ENCODER_CONFIGS_LEFT
   if (side == 0) {
     static EncoderConfig encoderConfigsL[KS_NUM_ENCODERS_LEFT] = KS_ENCODER_CONFIGS_LEFT;
-    keyScanner_encoderBasic_initialize(KS_NUM_ENCODERS_LEFT, encoderConfigsL);
+    keyScanner_encoders_initialize(KS_NUM_ENCODERS_LEFT, encoderConfigsL);
   }
 #endif
 
 #ifdef KS_ENCODER_CONFIGS_RIGHT
   if (side == 1) {
     static EncoderConfig encoderConfigsR[KS_NUM_ENCODERS_RIGHT = KS_ENCODER_CONFIGS_RIGHT;
-    keyScanner_encoderBasic_initialize(KS_NUM_ENCODERS_LEFT, encoderConfigsR);
+    keyScanner_encoders_initialize(KS_NUM_ENCODERS_LEFT, encoderConfigsR);
   }
 #endif
-  keyboardMain_useKeyScanner(keyScanner_encoderBasic_update);
+  keyboardMain_useKeyScanner(keyScanner_encoders_update);
 #endif
 
 #ifdef KS_USE_RGB_LIGHTING

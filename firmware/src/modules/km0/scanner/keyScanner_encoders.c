@@ -1,4 +1,4 @@
-#include "keyScanner_encoderBasic.h"
+#include "keyScanner_encoders.h"
 #include "km0/base/bitOperations.h"
 #include "km0/base/configImport.h"
 #include "km0/base/utils.h"
@@ -63,7 +63,7 @@ static void updateEncoderInstance(EncoderConfig *config, EncoderState *state) {
   state->holdB = delta == 1;
 }
 
-void keyScanner_encoderBasic_initialize(uint8_t num, EncoderConfig *_encoderConfigs) {
+void keyScanner_encoders_initialize(uint8_t num, EncoderConfig *_encoderConfigs) {
   numEncoders = num;
   encoderConfigs = _encoderConfigs;
   for (int i = 0; i < numEncoders; i++) {
@@ -73,7 +73,7 @@ void keyScanner_encoderBasic_initialize(uint8_t num, EncoderConfig *_encoderConf
   }
 }
 
-void keyScanner_encoderBasic_update(uint8_t *keyStateBitFlags) {
+void keyScanner_encoders_update(uint8_t *keyStateBitFlags) {
   for (int i = 0; i < numEncoders; i++) {
     EncoderConfig *config = &encoderConfigs[i];
     EncoderState *state = &encoderStates[i];
