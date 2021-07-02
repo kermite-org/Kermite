@@ -15,21 +15,24 @@
 
 static const int EncoderPinChangeInterruptPinStateReadWaitTimeUs = 50;
 
-static const int rot_none = 2;
-static const int rot_ccw = 0;
-static const int rot_cw = 1;
+enum {
+  rot_ccw = 0,
+  rot_cw = 1,
+  rot_none = 2
+};
 
-static const int ev_none = 0;
-static const int ev_b_low_a_rise = 1;
-static const int ev_b_low_a_fall = 2;
-static const int ev_b_high_a_rise = 3;
-static const int ev_b_high_a_fall = 4;
-
+enum {
+  ev_none = 0,
+  ev_b_low_a_rise = 1,
+  ev_b_low_a_fall = 2,
+  ev_b_high_a_rise = 3,
+  ev_b_high_a_fall = 4
+};
 typedef struct {
   int prev_a;
   int prev_ev;
   uint32_t rots_buf;
-  int rots_num;
+  uint8_t rots_num;
 } EncoderState;
 
 static int numEncoders = 0;
