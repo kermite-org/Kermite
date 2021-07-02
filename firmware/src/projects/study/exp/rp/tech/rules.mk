@@ -10,4 +10,5 @@ MODULE_SRCS += km0/device/rp2040/boardIo.c
 # PROJECT_SRCS += main_i2c_tca9555.c
 # PROJECT_SRCS += main_i2c_master_slave.c
 # PROJECT_SRCS += main_oled_minimum.c
-PROJECT_SRCS += main_debug_encoder.c
+# PROJECT_SRCS += main_debug_encoder.c
+PROJECT_SRCS += main_pin_observer_dev.c
