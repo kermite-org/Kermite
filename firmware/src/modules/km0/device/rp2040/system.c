@@ -10,6 +10,11 @@ void delayUs(uint16_t us) {
   busy_wait_us_32(us);
 }
 
+uint32_t system_getSystemTimeMs() {
+  absolute_time_t tt = get_absolute_time();
+  return to_ms_since_boot(tt);
+}
+
 void system_enableInterrupts() {
 }
 
