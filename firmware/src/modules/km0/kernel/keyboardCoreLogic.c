@@ -65,9 +65,7 @@ enum {
 typedef struct {
   uint8_t hidReportBuf[NumHidReportBytes];
   uint8_t modCounts[4];
-  uint8_t layerModFlags;
-  uint8_t adhocModFlags;
-  bool shiftCancelActive;
+  uint8_t shiftCancelCount;
   uint8_t hidKeyCodes[NumHidHoldKeySlots];
   uint8_t nextKeyPos;
 } HidReportState;
@@ -93,9 +91,7 @@ static void resetHidReportState() {
   for (uint8_t i = 0; i < 4; i++) {
     rs->modCounts[i] = 0;
   }
-  rs->layerModFlags = 0;
-  rs->adhocModFlags = 0;
-  rs->shiftCancelActive = false;
+  rs->shiftCancelCount = 0;
   for (uint8_t i = 0; i < NumHidHoldKeySlots; i++) {
     rs->hidKeyCodes[i] = 0;
   }
@@ -104,10 +100,9 @@ static void resetHidReportState() {
 
 static uint8_t *getOutputHidReport() {
   HidReportState *rs = &hidReportState;
-  uint8_t modFlags = getModFlagsFromModCounts();
-  uint8_t modifiers = modFlags | rs->layerModFlags | rs->adhocModFlags;
-  if (rs->shiftCancelActive) {
-    modifiers &= ~ModFlag_Shift;
+  uint8_t modifiers = getModFlagsFromModCounts();
+  if (modifiers == 0b0010 && rs->shiftCancelCount > 0) {
+    modifiers = 0;
   }
   rs->hidReportBuf[0] = modifiers;
   for (uint8_t i = 0; i < NumHidHoldKeySlots; i++) {
@@ -119,14 +114,6 @@ static uint8_t *getOutputHidReport() {
 static uint8_t *getOutputHidReportZeros() {
   utils_fillBytes(hidReportState.hidReportBuf, 0, 8);
   return hidReportState.hidReportBuf;
-}
-
-static void setLayerModifiers(uint8_t modFlags) {
-  hidReportState.layerModFlags |= modFlags;
-}
-
-static void clearLayerModifiers(uint8_t modFlags) {
-  hidReportState.layerModFlags &= ~modFlags;
 }
 
 static void setModifiers(uint8_t modFlags) {
@@ -147,14 +134,6 @@ static void clearModifiers(uint8_t modFlags) {
   }
 }
 
-static void setAdhocModifiers(uint8_t modFlags) {
-  hidReportState.adhocModFlags |= modFlags;
-}
-
-static void clearAdhocModifiers(uint8_t modFlags) {
-  hidReportState.adhocModFlags &= ~modFlags;
-}
-
 static uint8_t rollNextKeyPos() {
   HidReportState *rs = &hidReportState;
   for (uint8_t i = 0; i < NumHidHoldKeySlots; i++) {
@@ -169,30 +148,93 @@ static uint8_t rollNextKeyPos() {
   return rs->nextKeyPos;
 }
 
-static void setOutputKeyCode(uint8_t hidKeyCode) {
+static void pushOutputKeyCode(uint8_t hidKeyCode) {
   uint8_t pos = rollNextKeyPos();
   hidReportState.hidKeyCodes[pos] = hidKeyCode;
 }
 
-static void clearOutputKeyCode(uint8_t hidKeyCode) {
+static void removeOutputKeyCode(uint8_t hidKeyCode) {
   HidReportState *rs = &hidReportState;
   for (uint8_t i = 0; i < NumHidHoldKeySlots; i++) {
     if (rs->hidKeyCodes[i] == hidKeyCode) {
       rs->hidKeyCodes[i] = 0;
+      break;
     }
   }
 }
 
 static void startShiftCancel() {
-  hidReportState.shiftCancelActive = true;
+  hidReportState.shiftCancelCount++;
 }
 
 static void endShiftCancel() {
-  hidReportState.shiftCancelActive = false;
+  if (hidReportState.shiftCancelCount > 0) {
+    hidReportState.shiftCancelCount--;
+  }
 }
 
-static uint8_t getOutputModifiers() {
-  return hidReportState.hidReportBuf[0];
+// --------------------------------------------------------------------------------
+// key stroke action queue
+typedef struct {
+  bool isDown : 1;
+  bool shiftCancel : 1;
+  uint8_t reserved : 2;
+  uint8_t modFlags : 4;
+  uint8_t hidKeyCode;
+} OutputKeyStrokeAction;
+
+#define OutputActionQueueSize 8
+#define OutputActionQueueIndexMask 7
+
+typedef struct {
+  OutputKeyStrokeAction buffer[OutputActionQueueSize];
+  uint8_t writePos;
+  uint8_t readPos;
+} KeyStrokeActionQueueState;
+
+static KeyStrokeActionQueueState keyStrokeActionQueueState;
+
+static void keyStrokeActionQueue_enqueueAction(OutputKeyStrokeAction action) {
+  uint8_t size = OutputActionQueueSize;
+  uint8_t mask = OutputActionQueueIndexMask;
+  KeyStrokeActionQueueState *qs = &keyStrokeActionQueueState;
+  uint8_t count = (qs->writePos - qs->readPos + size) & mask;
+  if (count < OutputActionQueueSize) {
+    qs->buffer[qs->writePos] = action;
+    qs->writePos = (qs->writePos + 1) & mask;
+  }
+}
+
+static void keyStrokeActionQueue_executeAction(OutputKeyStrokeAction action) {
+  if (action.isDown) {
+    if (action.shiftCancel) {
+      startShiftCancel();
+    }
+    setModifiers(action.modFlags);
+    if (action.hidKeyCode) {
+      pushOutputKeyCode(action.hidKeyCode);
+    }
+  } else {
+    if (action.shiftCancel) {
+      endShiftCancel();
+    }
+    clearModifiers(action.modFlags);
+    if (action.hidKeyCode) {
+      removeOutputKeyCode(action.hidKeyCode);
+    }
+  }
+}
+
+static void keyStrokeActionQueue_shiftQueuedActionOne() {
+  uint8_t size = OutputActionQueueSize;
+  uint8_t mask = OutputActionQueueIndexMask;
+  KeyStrokeActionQueueState *qs = &keyStrokeActionQueueState;
+  uint8_t count = (qs->writePos - qs->readPos + size) & mask;
+  if (count > 0) {
+    OutputKeyStrokeAction action = qs->buffer[qs->readPos];
+    qs->readPos = (qs->readPos + 1) & mask;
+    keyStrokeActionQueue_executeAction(action);
+  }
 }
 
 //--------------------------------------------------------------------------------
@@ -443,6 +485,19 @@ static void layerMutations_turnOffSiblingLayersIfNeed(uint8_t layerIndex) {
   }
 }
 
+static OutputKeyStrokeAction createLayerModifierOutputAction(
+    uint8_t modifiers,
+    bool isDown) {
+  OutputKeyStrokeAction action = {
+    isDown : isDown,
+    shiftCancel : 0,
+    reserved : 0,
+    modFlags : modifiers,
+    hidKeyCode : 0,
+  };
+  return action;
+}
+
 static void layerMutations_activate(uint8_t layerIndex) {
   if (!layerMutations_isActive(layerIndex)) {
     layerMutations_turnOffSiblingLayersIfNeed(layerIndex);
@@ -451,7 +506,8 @@ static void layerMutations_activate(uint8_t layerIndex) {
     printf("layer on %d\n", layerIndex);
     uint8_t modifiers = getLayerAttachedModifiers(layerIndex);
     if (modifiers) {
-      setLayerModifiers(modifiers);
+      OutputKeyStrokeAction action = createLayerModifierOutputAction(modifiers, true);
+      keyStrokeActionQueue_enqueueAction(action);
     }
   }
 }
@@ -463,7 +519,8 @@ static void layerMutations_deactivate(uint8_t layerIndex) {
     printf("layer off %d\n", layerIndex);
     uint8_t modifiers = getLayerAttachedModifiers(layerIndex);
     if (modifiers) {
-      clearLayerModifiers(modifiers);
+      OutputKeyStrokeAction action = createLayerModifierOutputAction(modifiers, false);
+      keyStrokeActionQueue_enqueueAction(action);
     }
   }
 }
@@ -554,37 +611,47 @@ static uint16_t convertSingleModifierToFlags(uint16_t opWord) {
   return wordBase | (modifiers << 8) | logicalKey;
 }
 
+static OutputKeyStrokeAction convertKeyInputOperationWordToOutputKeyStrokeAction(
+    uint32_t opWord,
+    bool isDown) {
+  OutputKeyStrokeAction action = {
+    isDown : 0,
+    shiftCancel : 0,
+    reserved : 0,
+    modFlags : 0,
+    hidKeyCode : 0,
+  };
+  action.isDown = isDown;
+  opWord >>= 16;
+  opWord = keyActionRemapper_translateKeyOperation(opWord, logicOptions.wiringMode);
+  opWord = convertSingleModifierToFlags(opWord);
+  uint8_t logicalKey = opWord & 0x7f;
+  action.modFlags = (opWord >> 8) & 0b1111;
+  if (logicalKey) {
+    bool isSecondaryLayout = logicOptions.systemLayout == 2;
+    uint16_t hidKey = keyCodeTranslator_mapLogicalKeyToHidKeyCode(
+        logicalKey, isSecondaryLayout);
+    bool isInShiftCancelLayer = ((opWord >> 12) & 1) > 0;
+    action.shiftCancel = isInShiftCancelLayer && (hidKey & 0x200) > 0;
+    bool shiftOn = (hidKey & 0x100) > 0;
+    if (shiftOn) {
+      action.modFlags |= ModFlag_Shift;
+    }
+    uint8_t keyCode = hidKey & 0xff;
+    if (keyCode) {
+      action.hidKeyCode = keyCode;
+    }
+  }
+  return action;
+}
+
 static void handleOperationOn(uint32_t opWord) {
   uint8_t opType = (opWord >> 30) & 0b11;
   if (opType == OpType_KeyInput) {
-    opWord >>= 16;
-    opWord = keyActionRemapper_translateKeyOperation(opWord, logicOptions.wiringMode);
-    opWord = convertSingleModifierToFlags(opWord);
-    uint8_t logicalKey = opWord & 0x7f;
-    uint8_t modFlags = (opWord >> 8) & 0b1111;
-    if (modFlags) {
-      setModifiers(modFlags);
-    }
-    if (logicalKey) {
-      bool isSecondaryLayout = logicOptions.systemLayout == 2;
-      uint16_t hidKey = keyCodeTranslator_mapLogicalKeyToHidKeyCode(logicalKey, isSecondaryLayout);
-      bool isShiftCancellable = ((opWord >> 12) & 1) > 0;
-      uint8_t keyCode = hidKey & 0xff;
-      bool shiftOn = (hidKey & 0x100) > 0;
-      bool shiftCancel = isShiftCancellable && (hidKey & 0x200) > 0;
-
-      uint8_t outputModifiers = getOutputModifiers();
-      bool isOtherModifiersClean = (outputModifiers & 0b1101) == 0;
-      if (shiftOn) {
-        setAdhocModifiers(ModFlag_Shift);
-      }
-      if (shiftCancel && isOtherModifiersClean) {
-        startShiftCancel();
-      }
-      if (keyCode) {
-        setOutputKeyCode(keyCode);
-      }
-    }
+    OutputKeyStrokeAction strokeAction = convertKeyInputOperationWordToOutputKeyStrokeAction(
+        opWord,
+        true);
+    keyStrokeActionQueue_enqueueAction(strokeAction);
   }
   if (opType == OpType_LayerCall) {
     opWord >>= 16;
@@ -626,32 +693,10 @@ static void handleOperationOn(uint32_t opWord) {
 static void handleOperationOff(uint32_t opWord) {
   uint8_t opType = (opWord >> 30) & 0b11;
   if (opType == OpType_KeyInput) {
-    opWord >>= 16;
-    opWord = keyActionRemapper_translateKeyOperation(opWord, logicOptions.wiringMode);
-    opWord = convertSingleModifierToFlags(opWord);
-    uint8_t logicalKey = opWord & 0x7f;
-    uint8_t modFlags = (opWord >> 8) & 0b1111;
-    if (modFlags) {
-      clearModifiers(modFlags);
-    }
-    if (logicalKey) {
-      bool isSecondaryLayout = logicOptions.systemLayout == 2;
-      uint16_t hidKey = keyCodeTranslator_mapLogicalKeyToHidKeyCode(logicalKey, isSecondaryLayout);
-      bool isShiftCancellable = ((opWord >> 12) & 1) > 0;
-      uint8_t keyCode = hidKey & 0xff;
-      bool shiftOn = (hidKey & 0x100) > 0;
-      bool shiftCancel = isShiftCancellable && (hidKey & 0x200) > 0;
-
-      if (shiftOn) {
-        clearAdhocModifiers(ModFlag_Shift);
-      }
-      if (shiftCancel) {
-        endShiftCancel();
-      }
-      if (keyCode) {
-        clearOutputKeyCode(keyCode);
-      }
-    }
+    OutputKeyStrokeAction strokeAction = convertKeyInputOperationWordToOutputKeyStrokeAction(
+        opWord,
+        false);
+    keyStrokeActionQueue_enqueueAction(strokeAction);
   }
   if (opType == OpType_LayerCall) {
     opWord >>= 16;
@@ -675,8 +720,6 @@ static void handleOperationOff(uint32_t opWord) {
 
 #define NumKeySlots KM0_KEYBOARD_CORELOGIC__NUM_INPUT_KEY_SLOTS
 
-#define ImmediateReleaseStrokeDuration 50
-
 // 15bytes/key
 typedef struct _KeySlot {
   bool isActive : 1;
@@ -692,7 +735,6 @@ typedef struct _KeySlot {
   uint16_t liveLayerStateFlags;
   bool (*resolverProc)(struct _KeySlot *slot); //2bytes for AVR
   uint32_t opWord;
-  uint8_t autoReleaseTick;
 } KeySlot;
 
 static void assignBinder_handleKeyOn(KeySlot *slot, uint32_t opWord) {
@@ -706,24 +748,6 @@ static void assignBinder_handleKeyOff(KeySlot *slot) {
     //printf("handleKeyOff %d\n", keyIndex);
     handleOperationOff(slot->opWord);
     slot->opWord = 0;
-  }
-}
-
-static void assignBinder_recallKeyOff(KeySlot *slot) {
-  // printf("recallKeyOff %d\n", slot->keyIndex);
-  slot->autoReleaseTick = 1;
-}
-
-static void assignBinder_ticker(uint8_t ms, KeySlot *slots) {
-  for (int i = 0; i < NumKeySlots; i++) {
-    KeySlot *slot = slots + i;
-    if (slot->isActive && slot->autoReleaseTick > 0) {
-      slot->autoReleaseTick += ms;
-      if (slot->autoReleaseTick > ImmediateReleaseStrokeDuration) {
-        assignBinder_handleKeyOff(slot);
-        slot->autoReleaseTick = 0;
-      }
-    }
   }
 }
 
@@ -786,7 +810,6 @@ static void initResolverState() {
     slot->resolverProc = NULL;
     slot->inputEdge = 0;
     slot->opWord = 0;
-    slot->autoReleaseTick = 0;
   }
 }
 
@@ -804,7 +827,6 @@ static void keySlot_attachKey(KeySlot *slot, uint8_t keyIndex) {
   slot->resolverProc = NULL;
   slot->inputEdge = 0;
   slot->opWord = 0;
-  slot->autoReleaseTick = 0;
 }
 
 static void keySlot_handleKeyOn(KeySlot *slot, uint8_t order) {
@@ -901,7 +923,7 @@ static void keySlot_pushStepB(KeySlot *slot, uint8_t step) {
 
   if (steps == TriggerB_Tap) {
     keySlot_handleKeyOn(slot, AssignOrder_Pri);
-    assignBinder_recallKeyOff(slot);
+    keySlot_handleKeyOff(slot);
   }
 
   if (steps == TriggerB_Hold) {
@@ -989,7 +1011,7 @@ static void keySlot_pushStepC(KeySlot *slot, uint8_t step) {
 
   if (steps == TriggerC_Tap) {
     keySlot_handleKeyOn(slot, AssignOrder_Pri);
-    assignBinder_recallKeyOff(slot);
+    keySlot_handleKeyOff(slot);
   }
 
   if (steps == TriggerC_Hold) {
@@ -1002,7 +1024,7 @@ static void keySlot_pushStepC(KeySlot *slot, uint8_t step) {
 
   if (steps == TriggerC_Tap2) {
     keySlot_handleKeyOn(slot, AssignOrder_Ter);
-    assignBinder_recallKeyOff(slot);
+    keySlot_handleKeyOff(slot);
   }
 
   if (steps == TriggerC_Up) {
@@ -1139,8 +1161,7 @@ static void triggerResolver_tick(uint8_t ms) {
     KeySlot *slot = &rs->keySlots[i];
     if (slot->isActive &&
         !slot->hold &&
-        slot->resolverProc == NULL &&
-        slot->autoReleaseTick == 0) {
+        slot->resolverProc == NULL) {
       // printf("key %d detached from slot\n", slot->keyIndex);
       slot->isActive = false;
     }
@@ -1222,6 +1243,7 @@ uint8_t *keyboardCoreLogic_getOutputHidReportBytes() {
 
 uint16_t keyboardCoreLogic_getLayerActiveFlags() {
   if (logicActive) {
+    keyStrokeActionQueue_shiftQueuedActionOne();
     return getLayerActiveFlags();
   } else {
     return 0;
@@ -1237,7 +1259,6 @@ void keyboardCoreLogic_issuePhysicalKeyStateChanged(uint8_t keyIndex, bool isDow
 void keyboardCoreLogic_processTicker(uint8_t ms) {
   if (logicActive) {
     triggerResolver_tick(ms);
-    assignBinder_ticker(ms, resolverState.keySlots);
     layerMutations_oneshotCancellerTicker(ms);
   }
 }
