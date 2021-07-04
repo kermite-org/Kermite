@@ -81,9 +81,15 @@ export function getAssignEntryTexts(
       };
     }
     if (assign.type === 'dual') {
-      const prmText = getAssignOperationText(assign.primaryOp, layers);
-      const secText = getAssignOperationText(assign.secondaryOp, layers);
+      let prmText = getAssignOperationText(assign.primaryOp, layers);
+      let secText = getAssignOperationText(assign.secondaryOp, layers);
       const terText = getAssignOperationText(assign.tertiaryOp, layers);
+
+      if (!prmText && secText && !terText) {
+        prmText = secText;
+        secText = '';
+      }
+
       if (assign.tertiaryOp) {
         return {
           primaryText: prmText,
