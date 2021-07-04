@@ -12,10 +12,12 @@ export function useWidgetKeyUnitCardViewModel(
   const assign = playerModel.getDynamicKeyAssign(keyUnitId) || {
     type: 'layerFallbackBlock',
   };
-  const { primaryText, secondaryText, isLayerFallback } = getAssignEntryTexts(
-    assign,
-    playerModel.layers,
-  );
+  const {
+    primaryText,
+    secondaryText,
+    tertiaryText,
+    isLayerFallback,
+  } = getAssignEntryTexts(assign, playerModel.layers);
 
   const isHold = playerModel.keyStates[ke.keyId];
 
@@ -24,6 +26,7 @@ export function useWidgetKeyUnitCardViewModel(
     pos,
     primaryText,
     secondaryText,
+    tertiaryText,
     isLayerFallback: isLayerFallback || false,
     isHold,
     shape: ke.shape,
