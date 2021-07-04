@@ -1,5 +1,4 @@
-#ifndef __DATA_STORAGE_H__
-#define __DATA_STORAGE_H__
+#pragma once
 
 #include "km0/types.h"
 
@@ -19,5 +18,3 @@ uint16_t dataStorage_getDataAddress_profileData_keyAssigns();
 uint16_t dataStorage_getDataSize_profileData_keyAssigns();
 
 uint16_t dataStorage_getDataAddress_mappingEntries();
-
-#endif

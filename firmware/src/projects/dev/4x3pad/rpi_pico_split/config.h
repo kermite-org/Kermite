@@ -1,4 +1,4 @@
-#ifndef __CONFIG_H__
+#pragma once
 
 #define KERMITE_PROJECT_ID "066MbLCf"
 
@@ -6,5 +6,3 @@
 
 #define KM0_RP_SINGLEWIRE__PIN_SIGNAL GP20
 #define KM0_RP_SINGLEWIRE__PIN_DEBUG_TIMING_MONITOR GP21
-
-#endif

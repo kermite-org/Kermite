@@ -1,5 +1,4 @@
-#ifndef __BOARD_I2C_H__
-#define __BOARD_I2C_H__
+#pragma once
 #include "km0/types.h"
 
 void boardI2c_initialize();
@@ -12,5 +11,3 @@ void boardI2c_read(uint8_t slaveAddress, uint8_t *buf, int len);
 void boardI2c_procedural_startWrite(uint8_t slaveAddress);
 void boardI2c_procedural_putByte(uint8_t data);
 void boardI2c_procedural_endWrite();
-
-#endif

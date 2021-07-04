@@ -1,5 +1,4 @@
-#ifndef __UTILS_H__
-#define __UTILS_H__
+#pragma once
 
 #include "km0/types.h"
 
@@ -22,5 +21,3 @@ bool utils_checkPointerArrayIncludes(void **arr, int len, void *ptr);
 #define utils_clamp(val, lo, hi) ((val) < (lo) ? (lo) : ((val) > (hi) ? (hi) : (val)))
 
 #define utils_inRange(val, lo, hi) (((lo) <= (val)) && ((val) <= (hi)))
-
-#endif

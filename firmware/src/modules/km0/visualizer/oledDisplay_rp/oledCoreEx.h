@@ -1,5 +1,4 @@
-#ifndef __OLED_CORE_EX_H__
-#define __OLED_CORE_EX_H__
+#pragma once
 
 #include "km0/types.h"
 
@@ -13,5 +12,3 @@ void oledCoreEx_graphics_drawFullImage(const uint32_t *pLineBuffers128);
 
 void oledCoreEx_graphics_setFontData(const uint8_t *fontDataPtr, int fontWidth, int fontLetterSpacing);
 void oledCoreEx_graphics_drawText(int caretY, int caretX, char *text);
-
-#endif

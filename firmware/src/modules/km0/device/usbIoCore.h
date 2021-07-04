@@ -1,5 +1,4 @@
-#ifndef __USBIO_CORE_H__
-#define __USBIO_CORE_H__
+#pragma once
 
 #include "km0/types.h"
 
@@ -12,5 +11,3 @@ uint8_t *usbioCore_getSerialNumberTextBufferPointer();
 void usbIoCore_processUpdate();
 
 void usbIoCore_deInit();
-
-#endif

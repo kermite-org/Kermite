@@ -1,5 +1,4 @@
-#ifndef __KEY_SCANNER_BASIC_MATRIX_H__
-#define __KEY_SCANNER_BASIC_MATRIX_H__
+#pragma once
 
 #include "km0/types.h"
 
@@ -10,5 +9,3 @@ void keyScanner_basicMatrix_initialize(
     const uint8_t *columnPins, uint8_t _scanIndexBase);
 
 void keyScanner_basicMatrix_update(uint8_t *keyStateBitFlags);
-
-#endif

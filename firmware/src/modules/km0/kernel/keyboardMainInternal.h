@@ -1,5 +1,4 @@
-#ifndef __KEYBOARD_MAIN_INTERNAL_H__
-#define __KEYBOARD_MAIN_INTERNAL_H__
+#pragma once
 
 #include "km0/types.h"
 
@@ -37,5 +36,3 @@ void keyboardMain_updateOledDisplayModule(uint32_t tick);
 void keyboardMain_taskFlashHeartbeatLed();
 void keyboardMain_processUpdate();
 void keyboardMain_setKeySlotStateChangedCallback(void (*callback)(uint8_t slotIndex, bool isDown));
-
-#endif

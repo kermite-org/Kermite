@@ -1,5 +1,4 @@
-#ifndef __COMMAND_DEFINITIONS_H__
-#define __COMMAND_DEFINITIONS_H__
+#pragma once
 
 #include "km0/types.h"
 
@@ -49,5 +48,3 @@ enum {
   SystemAction_GlowBrightnessPlus = 6,
   SystemAction_ResetToDfuMode = 0x7e,
 };
-
-#endif

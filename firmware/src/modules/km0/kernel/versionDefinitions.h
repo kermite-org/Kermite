@@ -1,4 +1,4 @@
-#ifndef __VERSION_DEFINITIONS_H__
+#pragma once
 
 #define Kermite_ConfigStorageFormatRevision 6
 #define Kermite_RawHidMessageProtocolRevision 1
@@ -15,6 +15,4 @@
 #define Kermite_Project_McuCode "A152FD21"
 #else
 #error KERMITE_TARGET_MCU_* is not defined
-#endif
-
 #endif
