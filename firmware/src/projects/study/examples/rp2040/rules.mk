@@ -14,7 +14,7 @@ MODULE_SRCS += km0/device/rp2040/boardLink_singleWire.c
 MODULE_PIOASM_SRCS += km0/device/rp2040/neoPixelCore.pio
 MODULE_PIOASM_SRCS += km0/device/rp2040/singleWire4.pio
 
-MODULE_SRCS += km0/scanner/keyScanner_encoderBasic.c
+# MODULE_SRCS += km0/scanner/keyScanner_encoders.c
 
 PROJECT_SRCS += main_blink.c
 #PROJECT_SRCS += main_debug_uart.c

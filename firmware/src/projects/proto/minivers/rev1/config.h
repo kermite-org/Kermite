@@ -2,7 +2,7 @@
 
 #define KERMITE_PROJECT_ID "Di6V4KvF"
 
-#define KS_SNGLEWIRE_PIN_PD2
+#define KS_SNGLEWIRE_PIN D2
 
 #define KS_NUM_SCAN_SLOTS 80
 

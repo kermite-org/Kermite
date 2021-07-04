@@ -4,7 +4,7 @@
 #include "km0/device/digitalIo.h"
 #include "km0/kernel/keyboardMain.h"
 #include "km0/scanner/keyScanner_directWired.h"
-#include "km0/scanner/keyScanner_encoderBasic.h"
+#include "km0/scanner/keyScanner_encoders.h"
 #include "km0/wrapper/generalKeyboard.h"
 
 #define NumKeys 4
@@ -22,9 +22,9 @@ int main() {
   boardIo_setupLeds_proMicroAvr();
   debugUart_initialize(38400);
   keyScanner_directWired_initialize(NumKeys, keyInputPins, 0);
-  keyScanner_encoderBasic_initialize(NumEncoders, encoderConfigs);
+  keyScanner_encoders_initialize(NumEncoders, encoderConfigs);
   keyboardMain_useKeyScanner(keyScanner_directWired_update);
-  keyboardMain_useKeyScanner(keyScanner_encoderBasic_update);
+  keyboardMain_useKeyScanner(keyScanner_encoders_update);
   generalKeyboard_start();
   return 0;
 }

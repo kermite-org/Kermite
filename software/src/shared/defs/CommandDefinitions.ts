@@ -23,7 +23,8 @@ export type SystemAction =
   | 'GlowColorPrev'
   | 'GlowColorNext'
   | 'GlowBrightnessMinus'
-  | 'GlowBrightnessPlus';
+  | 'GlowBrightnessPlus'
+  | 'ResetToDfuMode';
 
 export const systemActionToCodeMap: { [key in SystemAction]: number } = {
   None: 0,
@@ -33,6 +34,7 @@ export const systemActionToCodeMap: { [key in SystemAction]: number } = {
   GlowColorNext: 4,
   GlowBrightnessMinus: 5,
   GlowBrightnessPlus: 6,
+  ResetToDfuMode: 0x7e,
 };
 
 export const systemActionToLabelTextMap: { [key in SystemAction]: string } = {
@@ -43,6 +45,7 @@ export const systemActionToLabelTextMap: { [key in SystemAction]: string } = {
   GlowColorNext: 'led c>',
   GlowBrightnessMinus: 'led b-',
   GlowBrightnessPlus: 'led b+',
+  ResetToDfuMode: 'dfu',
 };
 
 export const systemActionAssignSelectionSource: SystemAction[] = [
@@ -52,4 +55,5 @@ export const systemActionAssignSelectionSource: SystemAction[] = [
   'GlowColorPrev',
   'GlowColorNext',
   'GlowPatternRoll',
+  'ResetToDfuMode',
 ];

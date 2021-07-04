@@ -233,11 +233,6 @@ static void processKeyboardCoreLogicOutput() {
   if (changed) {
     debugDumpLocalOutputState();
   }
-
-  uint16_t assignHitResult = keyboardCoreLogic_peekAssignHitResult();
-  if (assignHitResult != 0 && optionEmitRealtimeEvents) {
-    configuratorServant_emitRelatimeAssignHitEvent(assignHitResult);
-  }
 }
 
 //キーが押された/離されたときに呼ばれるハンドラ
@@ -351,10 +346,16 @@ void keyboardMain_udpateKeyScanners() {
   updateKeyScanners();
 }
 
-void keyboardMain_processKeyInputUpdate(uint8_t tickInterval) {
+void keyboardMain_processKeyInputUpdate() {
+  static uint32_t prevTickMs = 0;
+  uint32_t tickMs = system_getSystemTimeMs();
+  uint32_t elapsed = utils_clamp(tickMs - prevTickMs, 0, 100);
+
   processKeyStatesUpdate();
-  keyboardCoreLogic_processTicker(tickInterval);
+  keyboardCoreLogic_processTicker(elapsed);
   processKeyboardCoreLogicOutput();
+
+  prevTickMs = tickMs;
 }
 
 void keyboardMain_updateKeyInidicatorLed() {

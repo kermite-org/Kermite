@@ -257,7 +257,7 @@ static void master_start() {
     if (tick % 4 == 0) {
       master_sendSlaveTaskOrder(SplitOp_TaskOrder_ScanKeyStates);
       keyboardMain_udpateKeyScanners();
-      keyboardMain_processKeyInputUpdate(15);
+      keyboardMain_processKeyInputUpdate();
       keyboardMain_updateKeyInidicatorLed();
       master_waitSlaveTaskCompletion();
     }

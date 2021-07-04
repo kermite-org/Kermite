@@ -9,7 +9,7 @@ typedef struct {
   uint8_t scanIndexBase;
 } EncoderConfig;
 
-void keyScanner_encoderBasic_initialize(uint8_t num, EncoderConfig *_encoderConfigs);
-void keyScanner_encoderBasic_update(uint8_t *keyStateBitFlags);
+void keyScanner_encoders_initialize(uint8_t num, EncoderConfig *_encoderConfigs);
+void keyScanner_encoders_update(uint8_t *keyStateBitFlags);
 
 #endif

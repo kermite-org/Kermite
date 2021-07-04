@@ -121,23 +121,5 @@ export function recievedBytesDecoder(
       },
     };
   }
-
-  if (buf[0] === 0xe0 && buf[1] === 0x92) {
-    const assignHitResultWord = (buf[2] << 8) | buf[3];
-    const keyIndex = assignHitResultWord & 0xff;
-    const layerIndex = (assignHitResultWord >> 8) & 0x0f;
-    const prioritySpec = (assignHitResultWord >> 12) & 0x03;
-    // console.log(`assign hit @ device ${keyIndex} ${layerIndex}`);
-    return {
-      type: 'realtimeEvent',
-      event: {
-        type: 'assignHit',
-        layerIndex,
-        keyIndex,
-        prioritySpec,
-      },
-    };
-  }
-
   return undefined;
 }

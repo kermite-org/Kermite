@@ -83,21 +83,28 @@ const NumHidHoldKeySlots = 6;
 
 const hidReportState = new (class {
   hidReportBuf: u8[] = Array(NumHidReportBytes).fill(0);
-  layerModFlags: u8 = 0;
-  modFlags: u8 = 0;
-  adhocModFlags: u8 = 0;
-  shiftCancelActive: boolean = false;
+  modCounts: number[] = Array(4).fill(0);
+  shiftCancelCount: u8 = 0;
   hidKeyCodes: u8[] = Array(NumHidHoldKeySlots).fill(0);
   nextKeyPos: u8 = 0;
 })();
 
+function getModFlagsFromModCounts(): u8 {
+  const { modCounts } = hidReportState;
+  let modFlags = 0;
+  for (let i = 0; i < 4; i++) {
+    if (modCounts[i] > 0) {
+      modFlags |= 1 << i;
+    }
+  }
+  return modFlags;
+}
+
 function resetHidReportState() {
   const rs = hidReportState;
   rs.hidReportBuf.fill(0);
-  rs.layerModFlags = 0;
-  rs.modFlags = 0;
-  rs.adhocModFlags = 0;
-  rs.shiftCancelActive = false;
+  rs.modCounts.fill(0);
+  rs.shiftCancelCount = 0;
   rs.hidKeyCodes.fill(0);
   rs.nextKeyPos = 0;
 }
@@ -105,9 +112,9 @@ function resetHidReportState() {
 function getOutputHidReport(): u8[] {
   const rs = hidReportState;
 
-  let modifiers = rs.layerModFlags | rs.modFlags | rs.adhocModFlags;
-  if (rs.shiftCancelActive) {
-    modifiers &= ~ModFlag.Shift;
+  let modifiers = getModFlagsFromModCounts();
+  if (modifiers === 0b0010 && rs.shiftCancelCount > 0) {
+    modifiers = 0;
   }
   rs.hidReportBuf[0] = modifiers;
   for (let i = 0; i < NumHidHoldKeySlots; i++) {
@@ -121,28 +128,22 @@ function getOutputHidReportZeros(): u8[] {
   return hidReportState.hidReportBuf;
 }
 
-function setLayerModifiers(modFlags: u8) {
-  hidReportState.layerModFlags |= modFlags;
-}
-
-function clearLayerModifiers(modFlags: u8) {
-  hidReportState.layerModFlags &= ~modFlags;
-}
-
 function setModifiers(modFlags: u8) {
-  hidReportState.modFlags |= modFlags;
+  const { modCounts } = hidReportState;
+  for (let i = 0; i < 4; i++) {
+    if (((modFlags >> i) & 1) > 0) {
+      modCounts[i]++;
+    }
+  }
 }
 
 function clearModifiers(modFlags: u8) {
-  hidReportState.modFlags &= ~modFlags;
-}
-
-function setAdhocModifiers(modFlags: u8) {
-  hidReportState.adhocModFlags |= modFlags;
-}
-
-function clearAdhocModifiers(modFlags: u8) {
-  hidReportState.adhocModFlags &= ~modFlags;
+  const { modCounts } = hidReportState;
+  for (let i = 0; i < 4; i++) {
+    if (((modFlags >> i) & 1) > 0 && modCounts[i] > 0) {
+      modCounts[i]--;
+    }
+  }
 }
 
 function rollNextKeyPos() {
@@ -156,30 +157,92 @@ function rollNextKeyPos() {
   return rs.nextKeyPos;
 }
 
-function setOutputKeyCode(hidKeyCode: u8) {
+function pushOutputKeyCode(hidKeyCode: u8) {
   const pos = rollNextKeyPos();
   hidReportState.hidKeyCodes[pos] = hidKeyCode;
 }
 
-function clearOutputKeyCode(hidKeyCode: u8) {
+function removeOutputKeyCode(hidKeyCode: u8) {
   const rs = hidReportState;
   for (let i = 0; i < NumHidHoldKeySlots; i++) {
     if (rs.hidKeyCodes[i] === hidKeyCode) {
       rs.hidKeyCodes[i] = 0;
+      break;
     }
   }
 }
 
 function startShiftCancel() {
-  hidReportState.shiftCancelActive = true;
+  hidReportState.shiftCancelCount++;
 }
 
 function endShiftCancel() {
-  hidReportState.shiftCancelActive = false;
+  if (hidReportState.shiftCancelCount > 0) {
+    hidReportState.shiftCancelCount--;
+  }
 }
 
-function getOutputModifiers() {
-  return hidReportState.hidReportBuf[0];
+// --------------------------------------------------------------------------------
+// key stroke action queue
+
+type BitField<N> = number;
+interface OutputKeyStrokeAction {
+  isDown: BitField<1>;
+  shiftCancel: BitField<1>;
+  reserved: BitField<2>;
+  modFlags: BitField<4>;
+  hidKeyCode: BitField<8>;
+}
+
+const OutputActionQueueSize = 8;
+const OutputActionQueueIndexMask = 7;
+const keyStrokeActionQueueState = new (class {
+  buffer: OutputKeyStrokeAction[] = Array(OutputActionQueueSize).fill(0);
+  writePos: u8 = 0;
+  readPos: u8 = 0;
+})();
+
+function keyStrokeActionQueue_enqueueAction(action: OutputKeyStrokeAction) {
+  const size = OutputActionQueueSize;
+  const mask = OutputActionQueueIndexMask;
+  const qs = keyStrokeActionQueueState;
+  const count = (qs.writePos - qs.readPos + size) & mask;
+  if (count < OutputActionQueueSize) {
+    qs.buffer[qs.writePos] = action;
+    qs.writePos = (qs.writePos + 1) & mask;
+  }
+}
+
+function keyStrokeActionQueue_executeAction(action: OutputKeyStrokeAction) {
+  if (action.isDown) {
+    if (action.shiftCancel) {
+      startShiftCancel();
+    }
+    setModifiers(action.modFlags);
+    if (action.hidKeyCode) {
+      pushOutputKeyCode(action.hidKeyCode);
+    }
+  } else {
+    if (action.shiftCancel) {
+      endShiftCancel();
+    }
+    clearModifiers(action.modFlags);
+    if (action.hidKeyCode) {
+      removeOutputKeyCode(action.hidKeyCode);
+    }
+  }
+}
+
+function keyStrokeActionQueue_shiftQueuedActionOne() {
+  const size = OutputActionQueueSize;
+  const mask = OutputActionQueueIndexMask;
+  const qs = keyStrokeActionQueueState;
+  const count = (qs.writePos - qs.readPos + size) & mask;
+  if (count > 0) {
+    const action = qs.buffer[qs.readPos];
+    qs.readPos = (qs.readPos + 1) & mask;
+    keyStrokeActionQueue_executeAction(action);
+  }
 }
 
 // --------------------------------------------------------------------------------
@@ -427,6 +490,19 @@ function layerMutations_turnOffSiblingLayersIfNeed(layerIndex: number) {
   }
 }
 
+function createLayerModifierOutputAction(
+  modifiers: u8,
+  isDown: boolean,
+): OutputKeyStrokeAction {
+  return {
+    isDown: isDown ? 1 : 0,
+    shiftCancel: 0,
+    reserved: 0,
+    modFlags: modifiers,
+    hidKeyCode: 0,
+  };
+}
+
 function layerMutations_activate(layerIndex: number) {
   if (!layerMutations_isActive(layerIndex)) {
     layerMutations_turnOffSiblingLayersIfNeed(layerIndex);
@@ -435,7 +511,8 @@ function layerMutations_activate(layerIndex: number) {
     console.log(`layer on ${layerIndex}`);
     const modifiers = getLayerAttachedModifiers(layerIndex);
     if (modifiers) {
-      setLayerModifiers(modifiers);
+      const action = createLayerModifierOutputAction(modifiers, true);
+      keyStrokeActionQueue_enqueueAction(action);
     }
   }
 }
@@ -447,7 +524,8 @@ function layerMutations_deactivate(layerIndex: number) {
     console.log(`layer off ${layerIndex}`);
     const modifiers = getLayerAttachedModifiers(layerIndex);
     if (modifiers) {
-      clearLayerModifiers(modifiers);
+      const action = createLayerModifierOutputAction(modifiers, false);
+      keyStrokeActionQueue_enqueueAction(action);
     }
   }
 }
@@ -544,43 +622,55 @@ function convertSingleModifierToFlags(opWord: u16): u16 {
   return wordBase | (modifiers << 8) | logicalKey;
 }
 
+function convertKeyInputOperationWordToOutputKeyStrokeAction(
+  opWord: u32,
+  isDown: boolean,
+): OutputKeyStrokeAction {
+  const action: OutputKeyStrokeAction = {
+    isDown: 0,
+    shiftCancel: 0,
+    reserved: 0,
+    modFlags: 0,
+    hidKeyCode: 0,
+  };
+  action.isDown = isDown ? 1 : 0;
+  opWord >>= 16;
+  opWord = keyActionRemapper_translateKeyOperation(
+    opWord,
+    logicOptions.wiringMode,
+  );
+  opWord = convertSingleModifierToFlags(opWord);
+  const logicalKey = opWord & 0x7f;
+  action.modFlags = (opWord >> 8) & 0b1111;
+
+  if (logicalKey) {
+    const isSecondaryLayout = logicOptions.systemLayout === 2;
+    const hidKey = keyCodeTranslator_mapLogicalKeyToHidKeyCode(
+      logicalKey,
+      isSecondaryLayout,
+    );
+    const isInShiftCancellableLayer = ((opWord >> 12) & 1) > 0;
+    action.shiftCancel = isInShiftCancellableLayer && hidKey & 0x200 ? 1 : 0;
+    const shiftOn = (hidKey & 0x100) > 0;
+    if (shiftOn) {
+      action.modFlags |= ModFlag.Shift;
+    }
+    const keyCode = hidKey & 0xff;
+    if (keyCode) {
+      action.hidKeyCode = keyCode;
+    }
+  }
+  return action;
+}
+
 function handleOperationOn(opWord: u32) {
   const opType = (opWord >> 30) & 0b11;
   if (opType === OpType.KeyInput) {
-    opWord >>= 16;
-    opWord = keyActionRemapper_translateKeyOperation(
+    const strokeAction = convertKeyInputOperationWordToOutputKeyStrokeAction(
       opWord,
-      logicOptions.wiringMode,
+      true,
     );
-    opWord = convertSingleModifierToFlags(opWord);
-    const logicalKey = opWord & 0x7f;
-    const modFlags = (opWord >> 8) & 0b1111;
-    if (modFlags) {
-      setModifiers(modFlags);
-    }
-    if (logicalKey) {
-      const isSecondaryLayout = logicOptions.systemLayout === 2;
-      const hidKey = keyCodeTranslator_mapLogicalKeyToHidKeyCode(
-        logicalKey,
-        isSecondaryLayout,
-      );
-      const isShiftCancellable = ((opWord >> 12) & 1) > 0;
-      const keyCode = hidKey & 0xff;
-      const shiftOn = (hidKey & 0x100) > 0;
-      const shiftCancel = isShiftCancellable && (hidKey & 0x200) > 0;
-      const outputModifiers = getOutputModifiers();
-      const isOtherModifiersClean = (outputModifiers & 0b1101) === 0;
-      if (shiftOn) {
-        setAdhocModifiers(ModFlag.Shift);
-      }
-      if (shiftCancel && isOtherModifiersClean) {
-        // shift cancel
-        startShiftCancel();
-      }
-      if (keyCode) {
-        setOutputKeyCode(keyCode);
-      }
-    }
+    keyStrokeActionQueue_enqueueAction(strokeAction);
   }
   if (opType === OpType.LayerCall) {
     opWord >>= 16;
@@ -622,37 +712,11 @@ function handleOperationOn(opWord: u32) {
 function handleOperationOff(opWord: u32) {
   const opType = (opWord >> 30) & 0b11;
   if (opType === OpType.KeyInput) {
-    opWord >>= 16;
-    opWord = keyActionRemapper_translateKeyOperation(
+    const strokeAction = convertKeyInputOperationWordToOutputKeyStrokeAction(
       opWord,
-      logicOptions.wiringMode,
+      false,
     );
-    opWord = convertSingleModifierToFlags(opWord);
-    const logicalKey = opWord & 0x7f;
-    const modFlags = (opWord >> 8) & 0b1111;
-    if (modFlags) {
-      clearModifiers(modFlags);
-    }
-    if (logicalKey) {
-      const isSecondaryLayout = logicOptions.systemLayout === 2;
-      const hidKey = keyCodeTranslator_mapLogicalKeyToHidKeyCode(
-        logicalKey,
-        isSecondaryLayout,
-      );
-      const isShiftCancellable = ((opWord >> 12) & 1) > 0;
-      const keyCode = hidKey & 0xff;
-      const shiftOn = (hidKey & 0x100) > 0;
-      const shiftCancel = isShiftCancellable && (hidKey & 0x200) > 0;
-      if (shiftOn) {
-        clearAdhocModifiers(ModFlag.Shift);
-      }
-      if (shiftCancel) {
-        endShiftCancel();
-      }
-      if (keyCode) {
-        clearOutputKeyCode(keyCode);
-      }
-    }
+    keyStrokeActionQueue_enqueueAction(strokeAction);
   }
   if (opType === OpType.LayerCall) {
     opWord >>= 16;
@@ -670,7 +734,6 @@ function handleOperationOff(opWord: u32) {
 
 const KeyIndexNone = 255;
 const NumKeySlotsMax = 10;
-const ImmediateReleaseStrokeDuration = 50;
 interface KeySlot {
   isActive: boolean;
   hold: boolean;
@@ -685,7 +748,6 @@ interface KeySlot {
   liveLayerStateFlags: u16;
   resolverProc: ((slot: KeySlot) => boolean) | undefined;
   opWord: u32;
-  autoReleaseTick: u8;
 }
 
 function assignBinder_handleKeyOn(slot: KeySlot, opWord: u32) {
@@ -700,22 +762,6 @@ function assignBinder_handleKeyOff(slot: KeySlot) {
     handleOperationOff(slot.opWord);
     slot.opWord = 0;
   }
-}
-
-function assignBinder_recallKeyOff(slot: KeySlot) {
-  slot.autoReleaseTick = 1;
-}
-
-function assignBinder_tick(ms: u16, slots: KeySlot[]) {
-  slots.forEach((slot) => {
-    if (slot.isActive && slot.autoReleaseTick > 0) {
-      slot.autoReleaseTick += ms;
-      if (slot.autoReleaseTick > ImmediateReleaseStrokeDuration) {
-        assignBinder_handleKeyOff(slot);
-        slot.autoReleaseTick = 0;
-      }
-    }
-  });
 }
 
 // --------------------------------------------------------------------------------
@@ -744,12 +790,10 @@ const resolverConfig = {
 const resolverState = new (class {
   interruptKeyIndex: number = KeyIndexNone;
   keySlots: KeySlot[] = [];
-  assignHitResultWord: number = 0;
 })();
 
 function initResolverState() {
   resolverState.interruptKeyIndex = KeyIndexNone;
-  resolverState.assignHitResultWord = 0;
   resolverState.keySlots = Array(NumKeySlotsMax)
     .fill(0)
     .map((_, i) => ({
@@ -770,15 +814,6 @@ function initResolverState() {
     }));
 }
 
-function peekAssignHitResult() {
-  if (resolverState.assignHitResultWord !== 0) {
-    const res = resolverState.assignHitResultWord;
-    resolverState.assignHitResultWord = 0;
-    return res;
-  }
-  return 0;
-}
-
 function keySlot_attachKey(slot: KeySlot, keyIndex: number) {
   slot.isActive = true;
   slot.keyIndex = keyIndex;
@@ -793,15 +828,6 @@ function keySlot_attachKey(slot: KeySlot, keyIndex: number) {
   slot.resolverProc = undefined;
   slot.inputEdge = 0;
   slot.opWord = 0;
-  slot.autoReleaseTick = 0;
-}
-
-function keySlot_storeAssignHitResult(slot: KeySlot, assignOrder: u8) {
-  const fKeyIndex = slot.keyIndex;
-  const fLayerIndex = slot.liveLayerIndex;
-  const fSlotSpec = assignOrder;
-  resolverState.assignHitResultWord =
-    (1 << 15) | (fSlotSpec << 12) | (fLayerIndex << 8) | fKeyIndex;
 }
 
 function keySlot_handleKeyOn(slot: KeySlot, order: u8) {
@@ -863,7 +889,6 @@ function keySlot_pushStepA(slot: KeySlot, step: 'D' | 'U' | '_') {
   if (resolverConfig.emitOutputStroke) {
     if (steps === TriggerA.Down) {
       keySlot_handleKeyOn(slot, AssignOrder.Pri);
-      keySlot_storeAssignHitResult(slot, AssignOrder.Pri);
     }
 
     if (steps === TriggerA.Up) {
@@ -914,13 +939,11 @@ function keySlot_pushStepB(slot: KeySlot, step: 'D' | 'U' | '_') {
 
     if (steps === TriggerB.Tap) {
       keySlot_handleKeyOn(slot, AssignOrder.Pri);
-      assignBinder_recallKeyOff(slot);
-      keySlot_storeAssignHitResult(slot, AssignOrder.Pri);
+      keySlot_handleKeyOff(slot);
     }
 
     if (steps === TriggerB.Hold) {
       keySlot_handleKeyOn(slot, AssignOrder.Sec);
-      keySlot_storeAssignHitResult(slot, AssignOrder.Sec);
     }
 
     if (steps === TriggerB.Rehold) {
@@ -1006,13 +1029,11 @@ function keySlot_pushStepC(slot: KeySlot, step: 'D' | 'U' | '_') {
 
     if (steps === TriggerC.Tap) {
       keySlot_handleKeyOn(slot, AssignOrder.Pri);
-      assignBinder_recallKeyOff(slot);
-      keySlot_storeAssignHitResult(slot, AssignOrder.Pri);
+      keySlot_handleKeyOff(slot);
     }
 
     if (steps === TriggerC.Hold) {
       keySlot_handleKeyOn(slot, AssignOrder.Sec);
-      keySlot_storeAssignHitResult(slot, AssignOrder.Sec);
     }
 
     if (steps === TriggerC.Hold2) {
@@ -1021,8 +1042,7 @@ function keySlot_pushStepC(slot: KeySlot, step: 'D' | 'U' | '_') {
 
     if (steps === TriggerC.Tap2) {
       keySlot_handleKeyOn(slot, AssignOrder.Ter);
-      assignBinder_recallKeyOff(slot);
-      keySlot_storeAssignHitResult(slot, AssignOrder.Ter);
+      keySlot_handleKeyOff(slot);
     }
 
     if (steps === TriggerC.Up) {
@@ -1155,12 +1175,7 @@ function triggerResolver_tick(ms: number) {
   resolverState.interruptKeyIndex = -1;
 
   rs.keySlots.forEach((slot) => {
-    if (
-      slot.isActive &&
-      !slot.hold &&
-      slot.resolverProc === undefined &&
-      slot.autoReleaseTick === 0
-    ) {
+    if (slot.isActive && !slot.hold && slot.resolverProc === undefined) {
       // console.log(`key ${slot.keyIndex} detached from slot`);
       slot.isActive = false;
     }
@@ -1223,6 +1238,7 @@ function keyboardCoreLogic_initialize() {
 
 function keyboardCoreLogic_getOutputHidReportBytes(): number[] {
   if (logicActive) {
+    keyStrokeActionQueue_shiftQueuedActionOne();
     return getOutputHidReport();
   } else {
     return getOutputHidReportZeros();
@@ -1232,14 +1248,6 @@ function keyboardCoreLogic_getOutputHidReportBytes(): number[] {
 function keyboardCoreLogic_getLayerActiveFlags(): number {
   if (logicActive) {
     return getLayerActiveFlags();
-  } else {
-    return 0;
-  }
-}
-
-function keyboardCoreLogic_peekAssignHitResult(): number {
-  if (logicActive) {
-    return peekAssignHitResult();
   } else {
     return 0;
   }
@@ -1257,7 +1265,6 @@ function keyboardCoreLogic_issuePhysicalKeyStateChanged(
 function keyboardCoreLogic_processTicker(ms: number) {
   if (logicActive) {
     triggerResolver_tick(ms);
-    assignBinder_tick(ms, resolverState.keySlots);
     layerMutations_oneshotCancellerTicker(ms);
   }
 }
@@ -1273,7 +1280,6 @@ export function getKeyboardCoreLogicInterface(): KeyboardCoreLogicInterface {
     keyboardCoreLogic_setWiringMode: setWiringMode,
     keyboardCoreLogic_getOutputHidReportBytes,
     keyboardCoreLogic_getLayerActiveFlags,
-    keyboardCoreLogic_peekAssignHitResult,
     keyboardCoreLogic_issuePhysicalKeyStateChanged,
     keyboardCoreLogic_processTicker,
     keyboardCoreLogic_halt,
