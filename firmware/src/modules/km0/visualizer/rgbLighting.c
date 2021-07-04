@@ -252,6 +252,6 @@ void rgbLighting_setBoardSide(int8_t side) {
 }
 
 void rgbLighting_update() {
+  frameTick = system_getSystemTimeMs() >> 6;
   updateFrame();
-  frameTick++;
 }

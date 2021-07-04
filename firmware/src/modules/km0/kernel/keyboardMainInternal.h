@@ -29,7 +29,7 @@ void keyboardMain_setAsSplitSlave();
 void keyboardMain_setCallbacks(KeyboardCallbackSet *_callbacks);
 void keyboardMain_initialize();
 void keyboardMain_udpateKeyScanners();
-void keyboardMain_processKeyInputUpdate(uint8_t tickInterval);
+void keyboardMain_processKeyInputUpdate();
 void keyboardMain_updateKeyInidicatorLed();
 void keyboardMain_updateInputSlotInidicatorLed();
 void keyboardMain_updateRgbLightingModules(uint32_t tick);

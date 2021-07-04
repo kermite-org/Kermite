@@ -35,7 +35,7 @@ void debug_generalKeyboard_start() {
   while (1) {
     if (tick % 4 == 0) {
       keyboardMain_udpateKeyScanners();
-      keyboardMain_processKeyInputUpdate(4);
+      keyboardMain_processKeyInputUpdate();
       keyboardMain_updateKeyInidicatorLed();
     }
     if (tick % 1000 == 0) {
