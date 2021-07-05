@@ -593,14 +593,15 @@ function layerMutations_recoverMainLayerIfAllLayeresDisabled() {
 
 const OpType = {
   KeyInput: 1,
-  LayerCall: 2,
+  __Reserved: 2,
   ExtendedOperation: 3,
 };
 
 const ExOpType = {
-  LayerClearExclusive: 1,
-  SystemAction: 2,
-  MovePointerMovement: 3,
+  LayerCall: 1,
+  LayerClearExclusive: 2,
+  SystemAction: 3,
+  MovePointerMovement: 4,
 };
 
 const InvocationMode = {
@@ -672,25 +673,30 @@ function handleOperationOn(opWord: u32) {
     );
     keyStrokeActionQueue_enqueueAction(strokeAction);
   }
-  if (opType === OpType.LayerCall) {
-    opWord >>= 16;
-    const layerIndex = (opWord >> 8) & 0b1111;
-    const fInvocationMode = (opWord >> 4) & 0b1111;
 
-    if (fInvocationMode === InvocationMode.Hold) {
-      layerMutations_activate(layerIndex);
-    } else if (fInvocationMode === InvocationMode.TurnOn) {
-      layerMutations_activate(layerIndex);
-    } else if (fInvocationMode === InvocationMode.TurnOff) {
-      layerMutations_deactivate(layerIndex);
-    } else if (fInvocationMode === InvocationMode.Toggle) {
-      layerMutations_toggle(layerIndex);
-    } else if (fInvocationMode === InvocationMode.Oneshot) {
-      layerMutations_oneshot(layerIndex);
-    }
-  }
+  let isLayerCall: boolean = false;
+
   if (opType === OpType.ExtendedOperation) {
     const exOpType = (opWord >> 24) & 0b111;
+    if (exOpType === ExOpType.LayerCall) {
+      isLayerCall = true;
+      opWord >>= 16;
+      const fInvocationMode = (opWord >> 4) & 0b1111;
+      const layerIndex = opWord & 0b1111;
+
+      if (fInvocationMode === InvocationMode.Hold) {
+        layerMutations_activate(layerIndex);
+      } else if (fInvocationMode === InvocationMode.TurnOn) {
+        layerMutations_activate(layerIndex);
+      } else if (fInvocationMode === InvocationMode.TurnOff) {
+        layerMutations_deactivate(layerIndex);
+      } else if (fInvocationMode === InvocationMode.Toggle) {
+        layerMutations_toggle(layerIndex);
+      } else if (fInvocationMode === InvocationMode.Oneshot) {
+        layerMutations_oneshot(layerIndex);
+      }
+    }
+
     if (exOpType === ExOpType.LayerClearExclusive) {
       opWord >>= 16;
       const targetGroup = opWord & 0b111;
@@ -703,7 +709,7 @@ function handleOperationOn(opWord: u32) {
     }
   }
 
-  if (opType !== OpType.LayerCall) {
+  if (!isLayerCall) {
     layerMutations_clearOneshot();
   }
   layerMutations_recoverMainLayerIfAllLayeresDisabled();
@@ -718,12 +724,15 @@ function handleOperationOff(opWord: u32) {
     );
     keyStrokeActionQueue_enqueueAction(strokeAction);
   }
-  if (opType === OpType.LayerCall) {
-    opWord >>= 16;
-    const layerIndex = (opWord >> 8) & 0b1111;
-    const fInvocationMode = (opWord >> 4) & 0b1111;
-    if (fInvocationMode === InvocationMode.Hold) {
-      layerMutations_deactivate(layerIndex);
+  if (opType === OpType.ExtendedOperation) {
+    const exOpType = (opWord >> 24) & 0b111;
+    if (exOpType === ExOpType.LayerCall) {
+      opWord >>= 16;
+      const fInvocationMode = (opWord >> 4) & 0b1111;
+      const layerIndex = opWord & 0b1111;
+      if (fInvocationMode === InvocationMode.Hold) {
+        layerMutations_deactivate(layerIndex);
+      }
     }
   }
   layerMutations_recoverMainLayerIfAllLayeresDisabled();

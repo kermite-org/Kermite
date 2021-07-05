@@ -9,7 +9,8 @@ export const RawHidMessageProtocolRevision = 1;
 // 210509 1, 初版
 // 210515 2, mappingEntriesを追加
 // 210601 3, 論理キーのshiftとctrlの値を修正
-export const ProfileBinaryFormatRevision = 3;
+// 210705 4, OpType/ExOpTypeを整理
+export const ProfileBinaryFormatRevision = 4;
 
 // 210513, 1, 初版
 // 210522, 2, sytemLayoutをUS:1,JIS:2に変更
