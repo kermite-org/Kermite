@@ -1,16 +1,18 @@
 import { IKeyboardConfig } from '~/shared';
-import { vObject, vValueOneOf } from '~/shared/modules/SchemaValidationHelper';
+import { vBoolean, vObject } from '~/shared/modules/SchemaValidationHelper';
 import { applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
 
-// 環境に関連したキーボードの設定を保存する, レイアウト(US/JP)など
+// 環境に関連したキーボードの設定を保存する
 
 const keyboardConfigDataSchema = vObject({
-  behaviorMode: vValueOneOf(['Standalone', 'Simulator']),
+  isSimulatorMode: vBoolean(),
+  isMuteMode: vBoolean(),
 });
 
 const keyboardConfigDefault: IKeyboardConfig = {
-  behaviorMode: 'Standalone',
+  isSimulatorMode: false,
+  isMuteMode: false,
 };
 export class KeyboardConfigProvider {
   internal_changedNotifier = createEventPort<void>();

@@ -42,6 +42,10 @@ export class KeyboardDeviceService implements IKeyboardDeviceServcie {
     this.core.setSimulatorMode(enabled);
   }
 
+  setMuteMode(enabled: boolean) {
+    this.core.setMuteMode(enabled);
+  }
+
   writeSimulatorHidReport(report: number[]) {
     this.core.writeSimulatorHidReport(report);
   }

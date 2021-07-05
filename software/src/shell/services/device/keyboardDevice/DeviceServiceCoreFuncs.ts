@@ -216,10 +216,17 @@ export function sendSimulatorHidReport(
 }
 
 export function sendSimulatorMode(device: IDeviceWrapper, enabled: boolean) {
-  // console.log(`writeSimulatorMode ${enabled ? 1 : 0}`);
-  if (!enabled) {
-    const blankHidReport = [0, 0, 0, 0, 0, 0, 0, 0];
-    sendSimulatorHidReport(device, blankHidReport);
-  }
   device.writeSingleFrame(Packets.makeSimulatorModeSpecFrame(enabled));
+}
+
+export function sendMuteMode(device: IDeviceWrapper, enabled: boolean) {
+  device.writeSingleFrame(Packets.makeMuteModeSpecFrame(enabled));
+}
+
+export function sendDeviceOpenNotification(device: IDeviceWrapper) {
+  device.writeSingleFrame(Packets.connectionOpenedFrame);
+}
+
+export function sendDeviceClosingNotification(device: IDeviceWrapper) {
+  device.writeSingleFrame(Packets.connectionClosingFrame);
 }

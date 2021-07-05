@@ -35,6 +35,7 @@ export class InputLogicSimulatorD {
   private CL = getKeyboardCoreLogicInterface();
   private tickerTimer = new IntervalTimerWrapper();
   private isSimulatorMode: boolean = false;
+  private isMuteMode: boolean = false;
   private layerActiveFlags: number = 0;
   private hidReportBytes: number[] = new Array(8).fill(0);
 
@@ -46,10 +47,14 @@ export class InputLogicSimulatorD {
     private deviceService: KeyboardDeviceService,
   ) {}
 
+  private get simulationActive(): boolean {
+    return this.isSimulatorMode && !this.isMuteMode;
+  }
+
   private onRealtimeKeyboardEvent = (event: IRealtimeKeyboardEvent) => {
     if (event.type === 'keyStateChanged') {
       const { keyIndex, isDown } = event;
-      if (this.isSimulatorMode) {
+      if (this.simulationActive) {
         this.CL.keyboardCoreLogic_issuePhysicalKeyStateChanged(
           keyIndex,
           isDown,
@@ -75,7 +80,7 @@ export class InputLogicSimulatorD {
   processTicker = () => {
     const elapsedMs = this.tickUpdator();
 
-    if (this.isSimulatorMode) {
+    if (this.simulationActive) {
       this.CL.keyboardCoreLogic_processTicker(elapsedMs);
 
       const report = this.CL.keyboardCoreLogic_getOutputHidReportBytes();
@@ -96,11 +101,15 @@ export class InputLogicSimulatorD {
 
   private updateSourceSetup = async () => {
     const config = this.keyboardConfigProvider.getKeyboardConfig();
-    const isSimulatorMode = config.behaviorMode === 'Simulator';
+    const { isSimulatorMode, isMuteMode } = config;
     if (this.isSimulatorMode !== isSimulatorMode) {
       // console.log({ isSimulatorMode });
       this.deviceService.setSimulatorMode(isSimulatorMode);
       this.isSimulatorMode = isSimulatorMode;
+    }
+    if (this.isMuteMode !== isMuteMode) {
+      this.deviceService.setMuteMode(isMuteMode);
+      this.isMuteMode = isMuteMode;
     }
 
     const prof =
@@ -149,10 +158,6 @@ export class InputLogicSimulatorD {
       this.onRealtimeKeyboardEvent,
     );
     this.deviceService.statusEventPort.unsubscribe(this.onDeviceStatusEvent);
-    if (this.isSimulatorMode) {
-      this.deviceService.setSimulatorMode(false);
-      this.isSimulatorMode = false;
-    }
     this.tickerTimer.stop();
   }
 }

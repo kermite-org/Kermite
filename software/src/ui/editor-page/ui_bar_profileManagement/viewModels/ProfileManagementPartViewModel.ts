@@ -264,11 +264,12 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     await ipcAgent.async.profile_openUserProfilesFolder();
   };
 
-  const { behaviorMode } = useKeyboardBehaviorModeModel();
+  const { isSimulatorMode } = useKeyboardBehaviorModeModel();
 
   const onWriteButton = async () => {
     await profilesModel.saveProfile();
-    if (behaviorMode === 'Standalone') {
+
+    if (!isSimulatorMode) {
       uiStatusModel.status.isLoading = true;
       const done = await ipcAgent.async.config_writeKeyMappingToDevice();
       uiStatusModel.status.isLoading = false;

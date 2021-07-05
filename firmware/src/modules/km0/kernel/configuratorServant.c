@@ -157,6 +157,14 @@ static void processReadGenericHidData() {
   uint8_t *p = rawHidTempBuf;
   uint8_t cmd = p[0];
 
+  if (cmd == RawHidOpcode_ConnectionOpened) {
+    emitStateNotification(ConfiguratorServantEvent_ConnectedByHost);
+  }
+
+  if (cmd == RawHidOpcode_ConnectionClosing) {
+    emitStateNotification(ConfiguratorServantEvent_ConnectionClosingByHost);
+  }
+
   if (cmd == RawHidOpcode_DeviceAttributesRequest) {
     // printf("device attributes requested\n");
     emitDeviceAttributesResponse();
@@ -172,7 +180,7 @@ static void processReadGenericHidData() {
   if (cmd == RawHidOpcode_MemoryWriteTransactionStart) {
     printf("memory write transaction start\n");
     //configurationMemoryReader_stop();
-    emitStateNotification(ConfiguratorServantState_KeyMemoryUpdationStarted);
+    emitStateNotification(ConfiguratorServantEvent_KeyMemoryUpdationStarted);
   }
 
   if (cmd == RawHidOpcode_MemoryWriteOperation) {
@@ -203,7 +211,7 @@ static void processReadGenericHidData() {
   if (cmd == RawHidOpcode_MemoryWriteTransactionDone) {
     printf("memory write transaction done\n");
     // configurationMemoryReader_initialize();
-    emitStateNotification(ConfiguratorServentState_KeyMemoryUpdationDone);
+    emitStateNotification(ConfiguratorServantEvent_KeyMemoryUpdationDone);
   }
 
   if (cmd == RawHidOpcode_ParametersReadAllRequest) {
@@ -238,15 +246,18 @@ static void processReadGenericHidData() {
 
   if (cmd == RawHidOpcode_SimulationModeSpec) {
     bool enabled = p[1] == 1;
-    if (enabled) {
-      emitStateNotification(ConfiguratorServentState_SimulatorModeEnabled);
-    } else {
-      emitStateNotification(ConfiguratorServentState_SimulatorModeDisabled);
-    }
+    uint8_t event = enabled ? ConfiguratorServantEvent_SimulatorModeEnabled : ConfiguratorServantEvent_SimulatorModeDisabled;
+    emitStateNotification(event);
   }
 
   if (cmd == RawHidOpcode_SimulationModeOutputHidReportWrite) {
     usbIoCore_hidKeyboard_writeReport(&p[2]);
+  }
+
+  if (cmd == RawHidOpcode_MuteModeSpec) {
+    bool enabled = p[1] == 1;
+    uint8_t event = enabled ? ConfiguratorServantEvent_MuteModeEnabled : ConfiguratorServantEvent_MuteModeDisabled;
+    emitStateNotification(event);
   }
 }
 

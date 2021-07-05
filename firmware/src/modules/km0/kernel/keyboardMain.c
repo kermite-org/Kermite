@@ -57,6 +57,9 @@ static uint8_t localHidReport[8] = { 0 };
 //メインロジックをPC側ユーティリティのLogicSimulatorに移譲するモード
 static bool isSimulatorModeEnabled = false;
 
+//一時的にキー出力を無効にするモード
+static bool isMuteModeEnabled = false;
+
 static KeyboardCallbackSet *callbacks = NULL;
 
 typedef void (*KeyScannerUpdateFunc)(uint8_t *keyStateBitFlags);
@@ -70,7 +73,7 @@ static uint8_t rgbLightingModulesLength = 0;
 static VisualModuleUpdateFunc oledDisplayUpdateFunc = NULL;
 
 //動的に変更可能なオプション
-static bool optionEmitKeyStroke = true;
+// static bool optionEmitKeyStroke = true;
 static bool optionEmitRealtimeEvents = true;
 static bool optionAffectKeyHoldStateToLed = true;
 static bool optionUseHeartbeatLed = true;
@@ -86,6 +89,8 @@ KeyboardMainExposedState keyboardMain_exposedState = {
 typedef void (*KeySlotStateChangedCallback)(uint8_t slotIndex, bool isDown);
 
 KeySlotStateChangedCallback keySlotStateChangedCallback = NULL;
+
+static uint8_t blankHidReport[8] = { 0 };
 
 //----------------------------------------------------------------------
 //helpers
@@ -165,7 +170,7 @@ static void parameterValueHandler(uint8_t slotIndex, uint8_t value) {
   }
 
   if (slotIndex == SystemParameter_EmitKeyStroke) {
-    optionEmitKeyStroke = !!value;
+    // optionEmitKeyStroke = !!value;
   } else if (slotIndex == SystemParameter_EmitRealtimeEvents) {
     optionEmitRealtimeEvents = !!value;
   } else if (slotIndex == SystemParameter_KeyHoldIndicatorLed) {
@@ -188,21 +193,48 @@ static void parameterValueHandler(uint8_t slotIndex, uint8_t value) {
   }
 }
 
+static void setSimulatorMode(bool enabled) {
+  if (isSimulatorModeEnabled != enabled) {
+    printf("simulator mode: %s\n", enabled ? "on" : "off");
+    isSimulatorModeEnabled = enabled;
+    if (!enabled) {
+      usbIoCore_hidKeyboard_writeReport(blankHidReport);
+    }
+  }
+}
+
+static void setMuteMode(bool enabled) {
+  if (isMuteModeEnabled != enabled) {
+    printf("output mute: %s\n", enabled ? "on" : "off");
+    isMuteModeEnabled = enabled;
+  }
+}
+
 //ユーティリティによる設定書き込み時に呼ばれるハンドラ
-static void configuratorServantStateHandler(uint8_t state) {
-  if (state == ConfiguratorServantState_KeyMemoryUpdationStarted) {
+static void ConfiguratorServantEventHandler(uint8_t event) {
+  if (event == ConfiguratorServantEvent_ConnectedByHost) {
+  }
+  if (event == ConfiguratorServantEvent_ConnectionClosingByHost) {
+    setSimulatorMode(false);
+    setMuteMode(false);
+  }
+  if (event == ConfiguratorServantEvent_KeyMemoryUpdationStarted) {
     keyboardCoreLogic_halt();
   }
-  if (state == ConfiguratorServentState_KeyMemoryUpdationDone) {
+  if (event == ConfiguratorServantEvent_KeyMemoryUpdationDone) {
     resetKeyboardCoreLogic();
   }
-  if (state == ConfiguratorServentState_SimulatorModeEnabled) {
-    isSimulatorModeEnabled = true;
-    printf("behavior mode: Simulator\n");
+  if (event == ConfiguratorServantEvent_SimulatorModeEnabled) {
+    setSimulatorMode(true);
   }
-  if (state == ConfiguratorServentState_SimulatorModeDisabled) {
-    isSimulatorModeEnabled = false;
-    printf("behavior mode: Standalone\n");
+  if (event == ConfiguratorServantEvent_SimulatorModeDisabled) {
+    setSimulatorMode(false);
+  }
+  if (event == ConfiguratorServantEvent_MuteModeEnabled) {
+    setMuteMode(true);
+  }
+  if (event == ConfiguratorServantEvent_MuteModeDisabled) {
+    setMuteMode(false);
   }
 }
 
@@ -224,7 +256,7 @@ static void processKeyboardCoreLogicOutput() {
     changed = true;
   }
   if (!utils_compareBytes(hidReport, localHidReport, 8)) {
-    if (optionEmitKeyStroke) {
+    if (!isMuteModeEnabled) {
       usbIoCore_hidKeyboard_writeReport(hidReport);
     }
     utils_copyBytes(localHidReport, hidReport, 8);
@@ -339,7 +371,7 @@ void keyboardMain_initialize() {
   setupSerialNumberText();
   // usbIoCore_initialize();
   resetKeyboardCoreLogic();
-  configuratorServant_initialize(configuratorServantStateHandler);
+  configuratorServant_initialize(ConfiguratorServantEventHandler);
 }
 
 void keyboardMain_udpateKeyScanners() {
