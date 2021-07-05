@@ -83,39 +83,32 @@ static void emitGenericHidData(uint8_t *p) {
 
 static void emitRealtimePhysicalKeyStateEvent(uint8_t keyIndex, bool isDown) {
   uint8_t *p = rawHidTempBuf;
-  p[0] = 0xE0;
-  p[1] = 0x90;
-  p[2] = keyIndex;
-  p[3] = isDown ? 1 : 0;
+  p[0] = RawHidOpcode_RealtimeKeyStateEvent;
+  p[1] = keyIndex;
+  p[2] = isDown ? 1 : 0;
   emitGenericHidData(p);
 }
 
 static void emitRealtimeLayerStateEvent(uint16_t layerFlags) {
   uint8_t *p = rawHidTempBuf;
-  p[0] = 0xE0;
-  p[1] = 0x91;
-  p[2] = layerFlags >> 8 & 0xFF;
-  p[3] = layerFlags & 0xFF;
+  p[0] = RawHidOpcode_RealtimeLayerStateEvent;
+  p[1] = layerFlags >> 8 & 0xFF;
+  p[2] = layerFlags & 0xFF;
   emitGenericHidData(p);
 }
 
-static void emitMemoryChecksumResult(uint8_t dataKind, uint8_t checksum) {
+static void emitMemoryChecksumResult(uint8_t checksum) {
   uint8_t *p = rawHidTempBuf;
-  p[0] = 0xB0;
-  p[1] = dataKind;
-  p[2] = 0x22;
-  p[3] = checksum;
-  p[4] = 0;
+  p[0] = RawHidOpcode_MemoryChecksumResponse;
+  p[1] = checksum;
   emitGenericHidData(rawHidTempBuf);
 }
 
 static void emitSingleParameterChangedNotification(uint8_t parameterIndex, uint8_t value) {
   uint8_t *p = rawHidTempBuf;
-  p[0] = 0xB0;
-  p[1] = 0x02;
-  p[2] = 0xE1;
-  p[3] = parameterIndex;
-  p[4] = value;
+  p[0] = RawHidOpcode_ParameterChangedNotification;
+  p[1] = parameterIndex;
+  p[2] = value;
   emitGenericHidData(rawHidTempBuf);
 }
 
@@ -125,148 +118,135 @@ static void copyEepromBytesToBuffer(uint8_t *dstBuffer, int dstOffset, uint16_t 
 
 static void emitDeviceAttributesResponse() {
   uint8_t *p = rawHidTempBuf;
-  p[0] = 0xF0;
-  p[1] = 0x11;
-  p[2] = Kermite_Project_ReleaseBuildRevision >> 8 & 0xFF;
-  p[3] = Kermite_Project_ReleaseBuildRevision & 0xFF;
-  p[4] = Kermite_ConfigStorageFormatRevision;
-  p[5] = Kermite_RawHidMessageProtocolRevision;
-  utils_copyBytes(p + 6, (uint8_t *)KERMITE_PROJECT_ID, 8);
-  p[14] = Kermite_Project_IsResourceOriginOnline;
-  p[15] = 0;
-  copyEepromBytesToBuffer(p, 16, storageAddr_DeviceInstanceCode, 8);
-  p[24] = keyMappingDataCapacity >> 8 & 0xFF;
-  p[25] = keyMappingDataCapacity & 0xFF;
-  utils_fillBytes(p + 26, 0, 16);
+  p[0] = RawHidOpcode_DeviceAttributesResponse;
+  p[1] = Kermite_Project_ReleaseBuildRevision >> 8 & 0xFF;
+  p[2] = Kermite_Project_ReleaseBuildRevision & 0xFF;
+  p[3] = Kermite_ConfigStorageFormatRevision;
+  p[4] = Kermite_RawHidMessageProtocolRevision;
+  utils_copyBytes(p + 5, (uint8_t *)KERMITE_PROJECT_ID, 8);
+  p[13] = Kermite_Project_IsResourceOriginOnline;
+  p[14] = 0;
+  copyEepromBytesToBuffer(p, 15, storageAddr_DeviceInstanceCode, 8);
+  p[23] = keyMappingDataCapacity >> 8 & 0xFF;
+  p[24] = keyMappingDataCapacity & 0xFF;
+  utils_fillBytes(p + 25, 0, 16);
   size_t slen = utils_clamp(strlen(Kermite_Project_VariationName), 0, 16);
-  utils_copyBytes(p + 26, (uint8_t *)Kermite_Project_VariationName, slen);
-  utils_copyBytes(p + 42, (uint8_t *)Kermite_Project_McuCode, 8);
-  p[50] = Kermite_ProfileBinaryFormatRevision;
-  p[51] = Kermite_ConfigParametersRevision;
+  utils_copyBytes(p + 25, (uint8_t *)Kermite_Project_VariationName, slen);
+  utils_copyBytes(p + 41, (uint8_t *)Kermite_Project_McuCode, 8);
+  p[49] = Kermite_ProfileBinaryFormatRevision;
+  p[50] = Kermite_ConfigParametersRevision;
   emitGenericHidData(rawHidTempBuf);
 }
 
 static void emitCustomParametersReadResponse() {
   uint8_t num = NumSystemParameters;
   uint8_t *p = rawHidTempBuf;
-  p[0] = 0xb0;
-  p[1] = 0x02;
-  p[2] = 0x81;
-  p[3] = num;
-  configManager_readSystemParameterValues(p + 4, num);
-  configManager_readSystemParameterMaxValues(p + 4 + num, num);
+  p[0] = RawHidOpcode_ParametersReadAllResponse;
+  p[1] = num;
+  configManager_readSystemParameterValues(p + 2, num);
+  configManager_readSystemParameterMaxValues(p + 2 + num, num);
   emitGenericHidData(rawHidTempBuf);
 }
 
 static void processReadGenericHidData() {
   bool hasData = usbIoCore_genericHid_readDataIfExists(rawHidTempBuf);
-  if (hasData) {
-    uint8_t *p = rawHidTempBuf;
-    uint8_t category = p[0];
-    if (category == 0xB0) {
-      //memory operation
-      uint8_t dataKind = p[1];
-      uint8_t cmd = p[2];
-      if (dataKind == 0x01) {
-        if (cmd == 0x10) {
-          printf("memory write transaction start\n");
-          //configurationMemoryReader_stop();
-          emitStateNotification(ConfiguratorServantState_KeyMemoryUpdationStarted);
-        }
+  if (!hasData) {
+    return;
+  }
 
-        if (cmd == 0x20) {
-          //write keymapping data to ROM
-          uint16_t addr = storageAddr_profileData + (p[3] << 8 | p[4]);
-          uint8_t len = p[5];
-          uint8_t *src = p + 6;
-          dataMemory_writeBytes(addr, src, len);
-          printf("%d bytes written at %d\n", len, addr);
-        }
-        if (cmd == 0x21) {
-          //read memory checksum for keymapping data
-          uint16_t addr = storageAddr_profileData + (p[3] << 8 | p[4]);
-          uint16_t len = p[5] << 8 | p[6];
-          uint8_t ck = 0;
-          printf("check, addr %d, len %d\n", addr, len);
-          for (uint16_t i = 0; i < len; i++) {
-            ck ^= dataMemory_readByte(addr + i);
-          }
-          printf("ck: %d\n", ck);
-          emitMemoryChecksumResult(0x01, ck);
+  uint8_t *p = rawHidTempBuf;
+  uint8_t cmd = p[0];
 
-          //チャンクボディデータサイズを書き込む
-          dataMemory_writeWord(storageAddr_profileData - 2, len);
-        }
+  if (cmd == RawHidOpcode_DeviceAttributesRequest) {
+    // printf("device attributes requested\n");
+    emitDeviceAttributesResponse();
+    rawHidFirstConnectDone = true;
+  }
 
-        if (cmd == 0x11) {
-          printf("memory write transaction done\n");
-          // configurationMemoryReader_initialize();
-          emitStateNotification(ConfiguratorServentState_KeyMemoryUpdationDone);
-        }
-      }
+  if (cmd == RawHidOpcode_DeviceInstanceCodeWrite) {
+    // printf("write device instance code\n");
+    uint8_t *src = p + 1;
+    dataMemory_writeBytes(storageAddr_DeviceInstanceCode, src, 8);
+  }
 
-      if (dataKind == 0x02) {
-        if (cmd == 0x80) {
-          // printf("custom parameters read requested\n");
-          emitCustomParametersReadResponse();
-        }
-        if (cmd == 0x90) {
-          // printf("handle custom parameters bluk write\n");
-          uint8_t parameterIndexBase = p[3];
-          uint8_t count = p[4];
-          uint8_t *ptr = p + 5;
-          skipNotify = true;
-          configManager_bulkWriteParameters(ptr, count, parameterIndexBase);
-          skipNotify = false;
-        }
-        if (cmd == 0xa0) {
-          // printf("handle custom parameters signle write\n");
-          uint8_t parameterIndex = p[3];
-          uint8_t value = p[4];
-          // skipNotify = true;
-          configManager_writeParameter(parameterIndex, value);
-          // skipNotify = false;
-        }
+  if (cmd == RawHidOpcode_MemoryWriteTransactionStart) {
+    printf("memory write transaction start\n");
+    //configurationMemoryReader_stop();
+    emitStateNotification(ConfiguratorServantState_KeyMemoryUpdationStarted);
+  }
 
-        if (cmd == 0xb0) {
-          skipNotify = true;
-          configManager_resetSystemParameters();
-          skipNotify = false;
-        }
-      }
+  if (cmd == RawHidOpcode_MemoryWriteOperation) {
+    //write keymapping data to ROM
+    uint16_t addr = storageAddr_profileData + (p[1] << 8 | p[2]);
+    uint8_t len = p[3];
+    uint8_t *src = p + 4;
+    dataMemory_writeBytes(addr, src, len);
+    printf("%d bytes written at %d\n", len, addr);
+  }
 
-      if (dataKind == 0x03) {
-        if (cmd == 0x90) {
-          // printf("write device instance code\n");
-          uint8_t *src = p + 3;
-          dataMemory_writeBytes(storageAddr_DeviceInstanceCode, src, 8);
-        }
-      }
+  if (cmd == RawHidOpcode_MemoryChecksumRequest) {
+    //read memory checksum for keymapping data
+    uint16_t addr = storageAddr_profileData + (p[1] << 8 | p[2]);
+    uint16_t len = p[3] << 8 | p[4];
+    uint8_t ck = 0;
+    printf("check, addr %d, len %d\n", addr, len);
+    for (uint16_t i = 0; i < len; i++) {
+      ck ^= dataMemory_readByte(addr + i);
     }
+    printf("ck: %d\n", ck);
+    emitMemoryChecksumResult(ck);
 
-    if (category == 0xF0) {
-      uint8_t command = p[1];
-      if (command == 0x10) {
-        // printf("device attributes requested\n");
-        emitDeviceAttributesResponse();
-        rawHidFirstConnectDone = true;
-      }
-    }
+    //チャンクボディデータサイズを書き込む
+    dataMemory_writeWord(storageAddr_profileData - 2, len);
+  }
 
-    if (category == 0xD0) {
-      uint8_t command = p[1];
-      if (command == 0x10) {
-        bool enabled = p[2] == 1;
-        if (enabled) {
-          emitStateNotification(ConfiguratorServentState_SimulatorModeEnabled);
-        } else {
-          emitStateNotification(ConfiguratorServentState_SimulatorModeDisabled);
-        }
-      }
-      if (command == 0x20) {
-        usbIoCore_hidKeyboard_writeReport(&p[2]);
-      }
+  if (cmd == RawHidOpcode_MemoryWriteTransactionDone) {
+    printf("memory write transaction done\n");
+    // configurationMemoryReader_initialize();
+    emitStateNotification(ConfiguratorServentState_KeyMemoryUpdationDone);
+  }
+
+  if (cmd == RawHidOpcode_ParametersReadAllRequest) {
+    // printf("custom parameters read requested\n");
+    emitCustomParametersReadResponse();
+  }
+
+  if (cmd == RawHidOpcode_ParametersWriteAllOperation) {
+    // printf("handle custom parameters bluk write\n");
+    uint8_t parameterIndexBase = p[1];
+    uint8_t count = p[2];
+    uint8_t *ptr = p + 3;
+    skipNotify = true;
+    configManager_bulkWriteParameters(ptr, count, parameterIndexBase);
+    skipNotify = false;
+  }
+
+  if (cmd == RawHidOpcode_ParameterSingleWriteOperation) {
+    // printf("handle custom parameters signle write\n");
+    uint8_t parameterIndex = p[1];
+    uint8_t value = p[2];
+    // skipNotify = true;
+    configManager_writeParameter(parameterIndex, value);
+    // skipNotify = false;
+  }
+
+  if (cmd == RawHidOpcode_ParametersResetOperation) {
+    skipNotify = true;
+    configManager_resetSystemParameters();
+    skipNotify = false;
+  }
+
+  if (cmd == RawHidOpcode_SimulationModeSpec) {
+    bool enabled = p[1] == 1;
+    if (enabled) {
+      emitStateNotification(ConfiguratorServentState_SimulatorModeEnabled);
+    } else {
+      emitStateNotification(ConfiguratorServentState_SimulatorModeDisabled);
     }
+  }
+
+  if (cmd == RawHidOpcode_SimulationModeOutputHidReportWrite) {
+    usbIoCore_hidKeyboard_writeReport(&p[2]);
   }
 }
 

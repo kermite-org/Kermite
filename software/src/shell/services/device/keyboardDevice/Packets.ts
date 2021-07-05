@@ -1,60 +1,36 @@
 import { generateNumberSequence } from '~/shared';
 import { bhi, blo } from '~/shell/services/device/keyboardDevice/Helpers';
+import { RawHidOpcode } from '~/shell/services/device/keyboardDevice/RawHidOpcode';
 
 export class Packets {
-  static deviceAttributesRequestFrame = [0xf0, 0x10];
-
-  static makeSimulatorModeSpecFrame(enabled: boolean) {
-    return [0xd0, 0x10, enabled ? 1 : 0];
-  }
-
-  static makeSimulatorHidReportFrame(report: number[]) {
-    return [0xd0, 0x20, ...report];
-  }
-
-  // ------------------------------------------------------------
-
-  static customParametersBulkReadRequestFrame = [0xb0, 0x02, 0x80];
-
-  static makeCustomParametersBulkWriteOperationFrame(data: number[]) {
-    return [0xb0, 0x02, 0x90, ...data];
-  }
-
-  static makeCustomParameterSignleWriteOperationFrame(
-    index: number,
-    value: number,
-  ) {
-    return [0xb0, 0x02, 0xa0, index, value];
-  }
-
-  // ------------------------------------------------------------
+  static connectionOpenedFrame = [RawHidOpcode.ConnectionOpened];
+  static connectionClosingFrame = [RawHidOpcode.ConnectionClosing];
+  static deviceAttributesRequestFrame = [RawHidOpcode.DeviceAttributesRequest];
 
   static makeDeviceInstanceCodeWriteOperationFrame(code: string) {
     const bytes = generateNumberSequence(8).map((i) => code.charCodeAt(i) || 0);
-    return [0xb0, 0x03, 0x90, ...bytes];
+    return [RawHidOpcode.DeviceInstanceCodeWrite, ...bytes];
   }
 
   // ------------------------------------------------------------
 
-  static memoryWriteTransactionStartFrame = [0xb0, 0x01, 0x10];
+  static memoryWriteTransactionStartFrame = [
+    RawHidOpcode.MemoryWriteTransactionStart,
+  ];
 
-  static memoryWriteTransactionEndFrame = [0xb0, 0x01, 0x11];
+  static memoryWriteTransactionEndFrame = [
+    RawHidOpcode.MemoryWriteTransactionDone,
+  ];
 
-  static makeMemoryWriteOperationFrames(
-    bytes: number[],
-    dataKind: 'keyMapping',
-  ): number[][] {
+  static makeMemoryWriteOperationFrames(bytes: number[]): number[][] {
     const sz = 64 - 6;
     const numFrames = Math.ceil(bytes.length / sz);
-    const dataKindByte = (dataKind === 'keyMapping' && 0x01) || 0;
 
     return generateNumberSequence(numFrames).map((k) => {
       const offset = k * sz;
       const data = bytes.slice(offset, offset + sz);
       return [
-        0xb0,
-        dataKindByte,
-        0x20,
+        RawHidOpcode.MemoryWriteOperation,
         bhi(offset),
         blo(offset),
         data.length,
@@ -64,19 +40,46 @@ export class Packets {
   }
 
   static makeMemoryChecksumRequestFrame(
-    dataKind: 'keyMapping',
     offset: number,
     length: number,
   ): number[] {
-    const dataKindByte = (dataKind === 'keyMapping' && 0x01) || 0;
     return [
-      0xb0,
-      dataKindByte,
-      0x21,
+      RawHidOpcode.MemoryChecksumRequest,
       bhi(offset),
       blo(offset),
       bhi(length),
       blo(length),
     ];
+  }
+
+  // ------------------------------------------------------------
+
+  static customParametersBulkReadRequestFrame = [
+    RawHidOpcode.ParametersReadAllRequest,
+  ];
+
+  static makeCustomParametersBulkWriteOperationFrame(data: number[]) {
+    return [RawHidOpcode.ParametersWriteAllOperation, ...data];
+  }
+
+  static makeCustomParameterSignleWriteOperationFrame(
+    index: number,
+    value: number,
+  ) {
+    return [RawHidOpcode.ParameterSingleWriteOperation, index, value];
+  }
+
+  // ------------------------------------------------------------
+
+  static makeMuteModeSpecFrame(muted: boolean) {
+    return [RawHidOpcode.MuteModeSpec, muted ? 1 : 0];
+  }
+
+  static makeSimulatorModeSpecFrame(enabled: boolean) {
+    return [RawHidOpcode.SimulationModeSpec, enabled ? 1 : 0];
+  }
+
+  static makeSimulatorHidReportFrame(report: number[]) {
+    return [RawHidOpcode.SimulationModeOutputHidReportWrite, ...report];
   }
 }
