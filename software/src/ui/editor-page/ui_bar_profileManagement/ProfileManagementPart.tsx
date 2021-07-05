@@ -1,5 +1,5 @@
 import { css, jsx } from 'qx';
-import { appUi, FcWithClassName, texts } from '~/ui/common';
+import { FcWithClassName, texts } from '~/ui/common';
 import {
   KeyboardProfileSelector,
   OperationButtonWithIcon,
@@ -10,6 +10,7 @@ import { makeProfileSelectionMenuPartViewModel } from '~/ui/editor-page/ui_bar_p
 import {
   BehaviorSelector,
   LayoutStandardSelector,
+  MuteModeSelector,
   RoutingChannelSelector,
 } from '~/ui/editor-page/ui_bar_profileManagement/views/ConfigSelectors';
 import { SavingProjectPresetSelectionModal } from '~/ui/editor-page/ui_bar_profileManagement/views/SavingProjectPresetSelectionModal';
@@ -62,7 +63,8 @@ export const ProfileManagementPart: FcWithClassName = ({ className }) => {
 
       <div class="spacer" />
       <div class="mode-selectors-box">
-        {appUi.isDevelopment && <BehaviorSelector />}
+        <BehaviorSelector />
+        <MuteModeSelector />
         <LayoutStandardSelector />
         <RoutingChannelSelector />
       </div>
