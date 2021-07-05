@@ -158,9 +158,11 @@ static void processReadGenericHidData() {
   uint8_t cmd = p[0];
 
   if (cmd == RawHidOpcode_ConnectionOpened) {
+    emitStateNotification(ConfiguratorServantEvent_ConnectedByHost);
   }
 
   if (cmd == RawHidOpcode_ConnectionClosing) {
+    emitStateNotification(ConfiguratorServantEvent_ConnectionClosingByHost);
   }
 
   if (cmd == RawHidOpcode_DeviceAttributesRequest) {

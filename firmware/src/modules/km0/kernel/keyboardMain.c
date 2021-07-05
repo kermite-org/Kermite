@@ -189,18 +189,23 @@ static void parameterValueHandler(uint8_t slotIndex, uint8_t value) {
 }
 
 //ユーティリティによる設定書き込み時に呼ばれるハンドラ
-static void ConfiguratorServantEventHandler(uint8_t state) {
-  if (state == ConfiguratorServantEvent_KeyMemoryUpdationStarted) {
+static void ConfiguratorServantEventHandler(uint8_t event) {
+  if (event == ConfiguratorServantEvent_ConnectedByHost) {
+  }
+  if (event == ConfiguratorServantEvent_ConnectionClosingByHost) {
+    isSimulatorModeEnabled = false;
+  }
+  if (event == ConfiguratorServantEvent_KeyMemoryUpdationStarted) {
     keyboardCoreLogic_halt();
   }
-  if (state == ConfiguratorServantEvent_KeyMemoryUpdationDone) {
+  if (event == ConfiguratorServantEvent_KeyMemoryUpdationDone) {
     resetKeyboardCoreLogic();
   }
-  if (state == ConfiguratorServantEvent_SimulatorModeEnabled) {
+  if (event == ConfiguratorServantEvent_SimulatorModeEnabled) {
     isSimulatorModeEnabled = true;
     printf("behavior mode: Simulator\n");
   }
-  if (state == ConfiguratorServantEvent_SimulatorModeDisabled) {
+  if (event == ConfiguratorServantEvent_SimulatorModeDisabled) {
     isSimulatorModeEnabled = false;
     printf("behavior mode: Standalone\n");
   }
