@@ -1,7 +1,29 @@
 import { ModifierVirtualKey } from '~/shared/defs';
 
+export function encodeSingleModifierVirtualKey(
+  modifier: ModifierVirtualKey,
+): number {
+  return {
+    K_Ctrl: 1,
+    K_Shift: 2,
+    K_Alt: 3,
+    K_Gui: 4,
+  }[modifier];
+}
+
+export function decodeSingleModifierVirtualKey(
+  modifierFlag: number,
+): ModifierVirtualKey {
+  return [
+    'K_Ctrl' as const,
+    'K_Shift' as const,
+    'K_Alt' as const,
+    'K_Gui' as const,
+  ][modifierFlag];
+}
+
 export function encodeModifierVirtualKeys(
-  attachedModifiers?: ModifierVirtualKey[],
+  attachedModifiers: ModifierVirtualKey[],
 ): number {
   let bits = 0;
   if (attachedModifiers) {
@@ -15,12 +37,7 @@ export function encodeModifierVirtualKeys(
   return bits;
 }
 
-export function decodeModifierVirtualKeys(
-  bits: number,
-): ModifierVirtualKey[] | undefined {
-  if (bits === 0) {
-    return undefined;
-  }
+export function decodeModifierVirtualKeys(bits: number): ModifierVirtualKey[] {
   const mCtlr = (bits & 1) > 0;
   const mShift = (bits & 2) > 0;
   const mAlt = (bits & 4) > 0;
