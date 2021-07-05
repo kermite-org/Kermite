@@ -1,5 +1,4 @@
-#ifndef __TYPES_H__
-#define __TYPES_H__
+#pragma once
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -9,5 +8,3 @@
 #endif
 
 typedef unsigned int uint;
-
-#endif

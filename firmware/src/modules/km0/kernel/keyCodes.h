@@ -1,5 +1,4 @@
-#ifndef __KEYCODES_H__
-#define __KEYCODES_H__
+#pragma once
 
 enum LogicalKey {
   LK_NONE = 0,
@@ -186,5 +185,3 @@ enum LogicalKey {
   LK_RoutingSource_Any,
   LK_RoutingDestination_Keep,
 };
-
-#endif

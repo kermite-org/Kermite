@@ -1,4 +1,4 @@
-#ifndef __CONFIG_H__
+#pragma once
 
 #define KERMITE_PROJECT_ID "mVjx4qkV"
 
@@ -9,5 +9,3 @@
 #define KM0_SPLIT_KEYBOARD__DEBUG_MASTER_SLAVE_DETEMINATION_PIN P_B2
 
 #define KM0_KEYBOARD__NUM_SCAN_SLOTS 42
-
-#endif

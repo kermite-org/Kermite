@@ -1,5 +1,4 @@
-#ifndef __OLED_CORE_H__
-#define __OLED_CORE_H__
+#pragma once
 
 #include "km0/types.h"
 
@@ -12,5 +11,3 @@ void oledCore_clearTexts();
 void oledCore_putText(int caretY, int caretX, char *text);
 
 void oledCore_renderFullTexts();
-
-#endif

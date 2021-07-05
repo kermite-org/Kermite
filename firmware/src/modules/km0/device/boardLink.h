@@ -1,5 +1,4 @@
-#ifndef __BOARD_LINK_H__
-#define __BOARD_LINK_H__
+#pragma once
 
 #include "km0/types.h"
 
@@ -12,5 +11,3 @@ void boardLink_exchangeFramesBlocking(); //送信+受信
 
 void boardLink_setupSlaveReceiver(void (*f)(void));
 void boardLink_clearSlaveReceiver();
-
-#endif

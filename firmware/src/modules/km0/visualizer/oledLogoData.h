@@ -1,5 +1,4 @@
-#ifndef __OLED_LOGO_DATA_H__
-#define __OLED_LOGO_DATA_H__
+#pragma once
 
 #include "km0/types.h"
 
@@ -37,5 +36,3 @@ __flash const uint32_t oledLogoDataKermite[] = {
   0x07878780, 0x07878780, 0x07878780, 0x07878780,
   0x07800780, 0x00000000, 0x00000000, 0x00000000
 };
-
-#endif

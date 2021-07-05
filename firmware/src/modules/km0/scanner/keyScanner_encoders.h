@@ -1,5 +1,4 @@
-#ifndef __KEY_SCANNER_ENCODER_BASIC_H__
-#define __KEY_SCANNER_ENCODER_BASIC_H__
+#pragma once
 
 #include "km0/types.h"
 
@@ -11,5 +10,3 @@ typedef struct {
 
 void keyScanner_encoders_initialize(uint8_t num, EncoderConfig *_encoderConfigs);
 void keyScanner_encoders_update(uint8_t *keyStateBitFlags);
-
-#endif
