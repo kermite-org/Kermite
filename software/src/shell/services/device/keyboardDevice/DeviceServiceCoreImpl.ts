@@ -110,17 +110,14 @@ export class KeyboardDeviceServiceCore {
     this.device = device;
   }
 
-  private isSimulatorMode = false;
-
   setSimulatorMode(enabled: boolean) {
-    this.isSimulatorMode = enabled;
     if (this.device) {
       sendSimulatorMode(this.device, enabled);
     }
   }
 
   writeSimulatorHidReport(report: number[]) {
-    if (this.device && this.isSimulatorMode) {
+    if (this.device) {
       sendSimulatorHidReport(this.device, report);
     }
   }
