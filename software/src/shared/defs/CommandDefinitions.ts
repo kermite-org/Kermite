@@ -1,8 +1,7 @@
-export const NumSystemParameters = 13;
+export const NumSystemParameters = 12;
 
 export const enum SystemParameter {
-  EmitKeyStroke = 0,
-  EmitRealtimeEvents,
+  EmitRealtimeEvents = 0,
   KeyHoldIndicatorLed,
   HeartbeatLed,
   MasterSide,

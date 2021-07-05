@@ -16,4 +16,6 @@ export const ProfileBinaryFormatRevision = 4;
 
 // 210513, 1, 初版
 // 210522, 2, sytemLayoutをUS:1,JIS:2に変更
-export const ConfigParametersRevision = 2;
+// 210706, 3, emitKeyStrokeを削除
+// 210706, 4, systemLayoutをUS:0,JIS:1に戻す
+export const ConfigParametersRevision = 4;

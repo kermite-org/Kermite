@@ -1,20 +1,16 @@
 {
   "projectId": "ZnVSZMbi",
   "keyboardName": "dw4s",
-  "parameterConfigurations": [
-    {
-      "targetVariationNames": ["all"],
-      "systemParameterKeys": [
-        "emitKeyStroke",
-        "emitRealtimeEvents",
-        "keyHoldIndicatorLed",
-        "heartbeatLed",
-        "masterSide",
-        "glowActive",
-        "glowColor",
-        "glowBrightness",
-        "glowPattern"
-      ]
-    }
-  ]
+  "parameterConfigurations": {
+    "systemParameterKeys": [
+      "emitRealtimeEvents",
+      "keyHoldIndicatorLed",
+      "heartbeatLed",
+      "masterSide",
+      "glowActive",
+      "glowColor",
+      "glowBrightness",
+      "glowPattern"
+    ]
+  }
 }

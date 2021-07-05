@@ -645,7 +645,7 @@ function convertKeyInputOperationWordToOutputKeyStrokeAction(
   action.modFlags = (opWord >> 8) & 0b1111;
 
   if (logicalKey) {
-    const isSecondaryLayout = logicOptions.systemLayout === 2;
+    const isSecondaryLayout = logicOptions.systemLayout === 1;
     const hidKey = keyCodeTranslator_mapLogicalKeyToHidKeyCode(
       logicalKey,
       isSecondaryLayout,

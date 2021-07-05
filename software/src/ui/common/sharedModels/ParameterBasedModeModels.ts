@@ -38,7 +38,7 @@ function useSystemParameterModel(
 export function useSystemLayoutModel(): ISystemLayoutModel {
   const { value, setValue } = useSystemParameterModel(
     SystemParameter.SystemLayout,
-    1,
+    0,
   );
   return {
     systemLayoutIndex: value,

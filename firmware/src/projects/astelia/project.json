@@ -1,15 +1,11 @@
 {
   "projectId": "79xv6ZbA",
   "keyboardName": "Astelia",
-  "parameterConfigurations": [
-    {
-      "targetVariationNames": ["all"],
-      "systemParameterKeys": [
-        "emitKeyStroke",
-        "emitRealtimeEvents",
-        "keyHoldIndicatorLed",
-        "heartbeatLed"
-      ]
-    }
-  ]
+  "parameterConfigurations": {
+    "systemParameterKeys": [
+      "emitRealtimeEvents",
+      "keyHoldIndicatorLed",
+      "heartbeatLed"
+    ]
+  }
 }

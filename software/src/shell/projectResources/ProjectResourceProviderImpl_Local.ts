@@ -31,19 +31,18 @@ import {
 } from '~/shell/projectResources/Interfaces';
 import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 
+interface IParameterConfigurationEntry {
+  targetVariationNames?: string[];
+  systemParameterKeys: string[];
+}
 export interface IPorjectFileJson {
   projectId: string;
   keyboardName: string;
-  parameterConfigurations: {
-    targetVariationNames: string[];
-    systemParameterKeys: string[];
-  }[];
+  parameterConfigurations:
+    | IParameterConfigurationEntry
+    | IParameterConfigurationEntry[];
 }
 
-interface IParameterConfigurationEntry {
-  targetVariationNames: string[];
-  systemParameterKeys: string[];
-}
 interface IProjectResourceInfoSource {
   origin: IResourceOrigin;
   projectId: string;
@@ -167,8 +166,12 @@ namespace ProjectResourceInfoSourceLoader {
         const {
           projectId,
           keyboardName,
-          parameterConfigurations,
+          parameterConfigurations: _parameterConfigurations,
         } = await readProjectFile(projectFilePath);
+
+        const parameterConfigurations = Array.isArray(_parameterConfigurations)
+          ? _parameterConfigurations
+          : [_parameterConfigurations];
 
         const presetNames = await readProjectDataFileNames(
           projectBaseDir,
@@ -201,6 +204,7 @@ export function readCustomParameterDefinition(
 ): IProjectCustomDefinition | undefined {
   const targetConfig = parameterConfigurations.find(
     (it) =>
+      !it.targetVariationNames ||
       it.targetVariationNames.includes(variationName) ||
       it.targetVariationNames.includes('all'),
   );

@@ -73,7 +73,6 @@ static uint8_t rgbLightingModulesLength = 0;
 static VisualModuleUpdateFunc oledDisplayUpdateFunc = NULL;
 
 //動的に変更可能なオプション
-// static bool optionEmitKeyStroke = true;
 static bool optionEmitRealtimeEvents = true;
 static bool optionAffectKeyHoldStateToLed = true;
 static bool optionUseHeartbeatLed = true;
@@ -169,9 +168,7 @@ static void parameterValueHandler(uint8_t slotIndex, uint8_t value) {
     return;
   }
 
-  if (slotIndex == SystemParameter_EmitKeyStroke) {
-    // optionEmitKeyStroke = !!value;
-  } else if (slotIndex == SystemParameter_EmitRealtimeEvents) {
+  if (slotIndex == SystemParameter_EmitRealtimeEvents) {
     optionEmitRealtimeEvents = !!value;
   } else if (slotIndex == SystemParameter_KeyHoldIndicatorLed) {
     optionAffectKeyHoldStateToLed = !!value;
@@ -182,7 +179,7 @@ static void parameterValueHandler(uint8_t slotIndex, uint8_t value) {
     keyboardMain_exposedState.optionInvertSide = value == 1;
   } else if (slotIndex == SystemParameter_SystemLayout) {
     keyboardCoreLogic_setSystemLayout(value);
-    printf("system layout: %s\n", value == 2 ? "JIS" : "US");
+    printf("system layout: %s\n", value == 1 ? "JIS" : "US");
   } else if (slotIndex == SystemParameter_WiringMode) {
     keyboardCoreLogic_setWiringMode(value);
     printf("routing channel: %s\n", value == 1 ? "Alter" : "Main");

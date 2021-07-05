@@ -2,18 +2,17 @@
 
 #include "km0/types.h"
 
-#define NumSystemParameters 13
+#define NumSystemParameters 12
 
 // static const int SystemParameterIndexBase = 0;
 // static const int ExtraParameterIndexBase = 128;
 
 enum {
-  SystemParameter_EmitKeyStroke = 0,
-  SystemParameter_EmitRealtimeEvents,
+  SystemParameter_EmitRealtimeEvents = 0,
   SystemParameter_KeyHoldIndicatorLed,
   SystemParameter_HeartbeatLed,
   SystemParameter_MasterSide,   //0:left, 1:right
-  SystemParameter_SystemLayout, //0:None(fallback to US), 1:US, 2:JIS
+  SystemParameter_SystemLayout, //0:US, 1:JIS
   SystemParameter_WiringMode,   //0:Main, 1:Alter
   SystemParameter_GlowActive,
   SystemParameter_GlowColor,      //0-12
@@ -23,7 +22,6 @@ enum {
   SystemParameter_GlowSpeed,      //0-10(仮)
 };
 typedef struct {
-  uint8_t emitKeyStroke;
   uint8_t emitRealtimeEvents;
   uint8_t keyHoldLedOutput;
   uint8_t heartbeatLedOutput;

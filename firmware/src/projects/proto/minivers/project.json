@@ -1,16 +1,12 @@
 {
   "projectId": "Di6V4KvF",
   "keyboardName": "Minivers",
-  "parameterConfigurations": [
-    {
-      "targetVariationNames": ["all"],
-      "systemParameterKeys": [
-        "emitKeyStroke",
-        "emitRealtimeEvents",
-        "keyHoldIndicatorLed",
-        "heartbeatLed",
-        "masterSide"
-      ]
-    }
-  ]
+  "parameterConfigurations": {
+    "systemParameterKeys": [
+      "emitRealtimeEvents",
+      "keyHoldIndicatorLed",
+      "heartbeatLed",
+      "masterSide"
+    ]
+  }
 }
