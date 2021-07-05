@@ -5,7 +5,6 @@
     {
       "targetVariationNames": ["all"],
       "systemParameterKeys": [
-        "emitKeyStroke",
         "emitRealtimeEvents",
         "keyHoldIndicatorLed",
         "heartbeatLed",
