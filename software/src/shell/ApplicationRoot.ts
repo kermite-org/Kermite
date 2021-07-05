@@ -164,6 +164,9 @@ export class ApplicationRoot {
       platform_openUrlInDefaultBrowser: (path) => shell.openExternal(path),
       global_triggerLazyInitializeServices: async () =>
         this.lazyInitialzeServices(),
+
+      simulator_postSimulationTargetProfile: async (profile) =>
+        this.inputLogicSimulator.postSimulationTargetProfile(profile),
     });
 
     appGlobal.icpMainAgent.supplySubscriptionHandlers({

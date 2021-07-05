@@ -3,6 +3,7 @@ import {
   generateNumberSequence,
   IKeyboardDeviceStatus,
   IntervalTimerWrapper,
+  IProfileData,
   IProfileManagerStatus,
   IRealtimeKeyboardEvent,
   SystemParameter,
@@ -99,6 +100,12 @@ export class InputLogicSimulatorD {
     }
   };
 
+  private loadSimulationProfile(profile: IProfileData) {
+    const bytes = makeProfileBinaryData(profile);
+    dataStorage.writeBinaryProfileData(bytes);
+    this.CL.keyboardCoreLogic_initialize();
+  }
+
   private updateSourceSetup = async () => {
     const config = this.keyboardConfigProvider.getKeyboardConfig();
     const { isSimulatorMode, isMuteMode } = config;
@@ -115,9 +122,7 @@ export class InputLogicSimulatorD {
     const prof =
       (await this.profileManager.getCurrentProfileAsync()) ||
       fallbackProfileData;
-    const bytes = makeProfileBinaryData(prof);
-    dataStorage.writeBinaryProfileData(bytes);
-    this.CL.keyboardCoreLogic_initialize();
+    this.loadSimulationProfile(prof);
   };
 
   private onProfileStatusChanged = (
@@ -127,6 +132,10 @@ export class InputLogicSimulatorD {
       this.updateSourceSetup();
     }
   };
+
+  postSimulationTargetProfile(profile: IProfileData) {
+    this.loadSimulationProfile(profile);
+  }
 
   initialize() {
     this.profileManager.statusEventPort.subscribe(this.onProfileStatusChanged);

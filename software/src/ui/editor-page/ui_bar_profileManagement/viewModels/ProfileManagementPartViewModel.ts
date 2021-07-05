@@ -1,5 +1,9 @@
 import { asyncRerender, Hook } from 'qx';
-import { forceChangeFilePathExtension, IProfileEditSource } from '~/shared';
+import {
+  forceChangeFilePathExtension,
+  IProfileData,
+  IProfileEditSource,
+} from '~/shared';
 import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import {
   getFileNameFromPath,
@@ -214,6 +218,23 @@ const handleExportToFile = async () => {
   }
 };
 
+const simulatorProfileUpdator = new (class {
+  private profileStringified: string = '';
+
+  affectToSimulatorIfEditProfileChanged(
+    profile: IProfileData,
+    isSimulatorMode: boolean,
+  ) {
+    if (isSimulatorMode) {
+      const str = JSON.stringify(profile);
+      if (str !== this.profileStringified) {
+        this.profileStringified = str;
+        ipcAgent.async.simulator_postSimulationTargetProfile(profile);
+      }
+    }
+  }
+})();
+
 export function makeProfileManagementPartViewModel(): IProfileManagementPartViewModel {
   Hook.useEffect(profilesModel.startPageSession, []);
 
@@ -259,6 +280,11 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
   };
 
   const { isSimulatorMode } = useKeyboardBehaviorModeModel();
+
+  simulatorProfileUpdator.affectToSimulatorIfEditProfileChanged(
+    editorModel.profileData,
+    isSimulatorMode,
+  );
 
   const onWriteButton = async () => {
     await profilesModel.saveProfile();
