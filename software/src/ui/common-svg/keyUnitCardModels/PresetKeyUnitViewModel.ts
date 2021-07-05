@@ -33,16 +33,19 @@ function createPresetKeyUnitViewModel(
       )
     : getAssignForKeyUnitInInitialLayerStack(keyUnitId, layers, assigns);
 
-  const { primaryText, secondaryText, isLayerFallback } = getAssignEntryTexts(
-    assign,
-    layers,
-  );
+  const {
+    primaryText,
+    secondaryText,
+    tertiaryText,
+    isLayerFallback,
+  } = getAssignEntryTexts(assign, layers);
 
   return {
     keyUnitId,
     pos,
     primaryText,
     secondaryText,
+    tertiaryText,
     isLayerFallback,
     shape: ke.shape,
   };

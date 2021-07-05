@@ -252,7 +252,7 @@ function encodeRawAssignEntry(
         ),
         ...flattenArray(operationWords),
       ];
-    } else if (entry.secondaryOp) {
+    } else if (entry.primaryOp && entry.secondaryOp) {
       const operationWords = [
         encodeAssignOperation(entry.primaryOp, layer, context),
         encodeAssignOperation(entry.secondaryOp, layer, context),
@@ -265,17 +265,21 @@ function encodeRawAssignEntry(
         ),
         ...flattenArray(operationWords),
       ];
-    } else {
-      const primaryOpWord = encodeAssignOperation(
-        entry.primaryOp,
-        layer,
-        context,
-      );
+    } else if (entry.secondaryOp) {
+      const opWord = encodeAssignOperation(entry.secondaryOp, layer, context);
       return [
         ...encodeRawAssignEntryHeaderBytes('single', ra.layerIndex, [
-          primaryOpWord.length,
+          opWord.length,
         ]),
-        ...primaryOpWord,
+        ...opWord,
+      ];
+    } else {
+      const opWord = encodeAssignOperation(entry.primaryOp, layer, context);
+      return [
+        ...encodeRawAssignEntryHeaderBytes('single', ra.layerIndex, [
+          opWord.length,
+        ]),
+        ...opWord,
       ];
     }
   }

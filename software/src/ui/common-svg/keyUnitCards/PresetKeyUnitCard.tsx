@@ -12,6 +12,7 @@ export interface IPresetKeyUnitViewModel {
   };
   primaryText: string;
   secondaryText: string;
+  tertiaryText: string;
   isLayerFallback: boolean;
   shape: IDisplayKeyShape;
 }
@@ -34,6 +35,7 @@ export const PresetKeyUnitCard = mvvmView((ku: IPresetKeyUnitViewModel) => {
     pos,
     primaryText,
     secondaryText,
+    tertiaryText,
     isLayerFallback,
     shape,
   } = ku;
@@ -50,6 +52,10 @@ export const PresetKeyUnitCard = mvvmView((ku: IPresetKeyUnitViewModel) => {
 
       <text css={cssKeyText} x={0} y={4} qxIf={!isLayerFallback}>
         {secondaryText}
+      </text>
+
+      <text css={cssKeyText} x={4} y={-6} qxIf={!isLayerFallback}>
+        {tertiaryText}
       </text>
     </g>
   );

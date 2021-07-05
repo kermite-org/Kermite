@@ -11,6 +11,7 @@ export interface IWidgetKeyUnitCardViewModel {
   };
   primaryText: string;
   secondaryText: string;
+  tertiaryText: string;
   isLayerFallback: boolean;
   isHold: boolean;
   shape: IDisplayKeyShape;
@@ -27,6 +28,7 @@ export function WidgetKeyUnitCard({
     pos,
     primaryText,
     secondaryText,
+    tertiaryText,
     isHold,
     shape,
     isLayerFallback,
@@ -88,6 +90,19 @@ export function WidgetKeyUnitCard({
         qxIf={!isLayerFallback}
       >
         {secondaryText}
+      </text>
+
+      <text
+        css={cssKeyText}
+        x={4}
+        y={-4}
+        font-size={getFontSize(tertiaryText)}
+        font-weight={getFontWeight(tertiaryText)}
+        text-anchor="middle"
+        dominant-baseline="center"
+        qxIf={!isLayerFallback}
+      >
+        {tertiaryText}
       </text>
     </g>
   );

@@ -44,13 +44,19 @@ function getAssignOperationText(
 export function getAssignEntryTexts(
   assign: IAssignEntryWithLayerFallback | undefined,
   layers: ILayer[],
-): { primaryText: string; secondaryText: string; isLayerFallback: boolean } {
+): {
+  primaryText: string;
+  secondaryText: string;
+  tertiaryText: string;
+  isLayerFallback: boolean;
+} {
   if (assign) {
     if (assign.type === 'block' || assign.type === 'layerFallbackBlock') {
       return {
         primaryText: '□',
         // primaryTest: '⬡',
         secondaryText: '',
+        tertiaryText: '',
         isLayerFallback: assign.type === 'layerFallbackBlock',
       };
     }
@@ -61,6 +67,7 @@ export function getAssignEntryTexts(
       return {
         primaryText: '↡',
         secondaryText: '',
+        tertiaryText: '',
         isLayerFallback: assign.type === 'layerFallbackTransparent',
       };
     }
@@ -69,23 +76,32 @@ export function getAssignEntryTexts(
       return {
         primaryText: getAssignOperationText(assign.op, layers),
         secondaryText: '',
+        tertiaryText: '',
         isLayerFallback: false,
       };
     }
     if (assign.type === 'dual') {
-      const prmText = getAssignOperationText(assign.primaryOp, layers);
-      const secText = getAssignOperationText(assign.secondaryOp, layers);
+      let prmText = getAssignOperationText(assign.primaryOp, layers);
+      let secText = getAssignOperationText(assign.secondaryOp, layers);
       const terText = getAssignOperationText(assign.tertiaryOp, layers);
+
+      if (!prmText && secText && !terText) {
+        prmText = secText;
+        secText = '';
+      }
+
       if (assign.tertiaryOp) {
         return {
-          primaryText: `${prmText} ${terText}`,
+          primaryText: prmText,
           secondaryText: secText,
+          tertiaryText: terText,
           isLayerFallback: false,
         };
       } else {
         return {
           primaryText: prmText,
           secondaryText: secText,
+          tertiaryText: '',
           isLayerFallback: false,
         };
       }
@@ -94,6 +110,7 @@ export function getAssignEntryTexts(
   return {
     primaryText: '',
     secondaryText: '',
+    tertiaryText: '',
     isLayerFallback: false,
   };
 }
