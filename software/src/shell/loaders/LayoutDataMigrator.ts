@@ -1,4 +1,4 @@
-import { IPersistKeyboardDesign } from '~/shared';
+import { defaultKeyboardDesignSetup, IPersistKeyboardDesign } from '~/shared';
 
 export namespace LayoutDataMigrator {
   export function patchOldFormatLayoutData(layout: IPersistKeyboardDesign) {
@@ -13,7 +13,7 @@ export namespace LayoutDataMigrator {
         if (layout.setup.placementUnit.startsWith('KP')) {
           layout.setup.keySizeUnit = layout.setup.placementUnit;
         } else {
-          layout.setup.keySizeUnit = 'KP 19';
+          layout.setup.keySizeUnit = defaultKeyboardDesignSetup.keySizeUnit;
         }
       }
     }

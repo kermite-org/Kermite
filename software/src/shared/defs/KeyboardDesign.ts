@@ -42,15 +42,17 @@ export interface IPersistKeyboardDesign {
   }[];
 }
 
+export const defaultKeyboardDesignSetup: IPersistKeyboardDesign['setup'] = {
+  placementUnit: 'KP 19.05',
+  placementAnchor: 'topLeft',
+  keySizeUnit: 'KP 19.05',
+  keyIdMode: 'auto',
+};
+
 export function createFallbackPersistKeyboardDesign(): IPersistKeyboardDesign {
   return {
     formatRevision: 'LA01',
-    setup: {
-      placementUnit: 'KP 19',
-      placementAnchor: 'center',
-      keySizeUnit: 'KP 19',
-      keyIdMode: 'auto',
-    },
+    setup: { ...defaultKeyboardDesignSetup },
     keyEntities: [],
     outlineShapes: [],
     transformationGroups: [],

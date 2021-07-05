@@ -1,3 +1,4 @@
+import { defaultKeyboardDesignSetup } from '~/shared';
 import { IEditKeyboardDesign, IEditKeyEntity } from './DataSchema';
 
 export type IEditMode = 'select' | 'key' | 'shape' | 'delete';
@@ -48,12 +49,7 @@ interface IAppState {
 
 export function createFallbackEditKeyboardDesign(): IEditKeyboardDesign {
   return {
-    setup: {
-      placementUnit: 'mm',
-      placementAnchor: 'center',
-      keySizeUnit: 'KP 19',
-      keyIdMode: 'auto',
-    },
+    setup: { ...defaultKeyboardDesignSetup },
     keyEntities: {},
     outlineShapes: {},
     transGroups: {

@@ -7,7 +7,6 @@ import {
   ISelectorSource,
   makePlainSelectorOption,
   modalAlert,
-  modalAlertTop,
   modalConfirm,
   modalTextEdit,
   texts,
@@ -196,7 +195,12 @@ const openConfiguration = () => {
 };
 
 const onSaveButton = () => {
-  profilesModel.saveProfile();
+  const editSourceType = profilesModel.editSource.type;
+  if (editSourceType === 'NewlyCreated' || editSourceType === 'ExternalFile') {
+    handleSaveUnsavedProfile();
+  } else {
+    profilesModel.saveProfile();
+  }
 };
 
 const handleImportFromFile = async () => {
@@ -231,7 +235,9 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
   const { editSource, allProfileNames, saveProfile } = profilesModel;
 
   const canSave =
-    editSource.type === 'InternalProfile' && profilesModel.checkDirty();
+    editSource.type === 'NewlyCreated' ||
+    editSource.type === 'ExternalFile' ||
+    (editSource.type === 'InternalProfile' && profilesModel.checkDirty());
 
   // todo: デフォルトではProjetIDが異なるデバイスには書き込めないようにする
   // const refProjectId = profilesModel.getCurrentProfileProjectId();
@@ -263,16 +269,18 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
   const onWriteButton = async () => {
     await profilesModel.saveProfile();
     if (behaviorMode === 'Standalone') {
+      uiStatusModel.status.isLoading = true;
       const done = await ipcAgent.async.config_writeKeyMappingToDevice();
+      uiStatusModel.status.isLoading = false;
       // todo: トーストにする
       if (done) {
-        await modalAlertTop('write succeeded.');
+        await modalAlert('write succeeded.');
       } else {
-        await modalAlertTop('write failed.');
+        await modalAlert('write failed.');
       }
     } else {
       asyncRerender();
-      await modalAlertTop('write succeeded. (simulator mode)');
+      await modalAlert('write succeeded. (simulator mode)');
     }
   };
 

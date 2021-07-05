@@ -158,6 +158,7 @@ export class EditorModel {
 
   setCurrentKeyUnitId = (keyUnitId: string) => {
     this.currentKeyUnitId = keyUnitId;
+    this.dualModeEditTargetOperationSig = 'pri';
     this.updateEditAssignSlot();
   };
 

@@ -1,4 +1,8 @@
-import { IKeyIdMode, IKeyPlacementAnchor } from '~/shared';
+import {
+  defaultKeyboardDesignSetup,
+  IKeyIdMode,
+  IKeyPlacementAnchor,
+} from '~/shared';
 import { ICommonSelectorViewModel } from '~/ui/common';
 import { useClosureModel } from '~/ui/layouter/common';
 import { editReader, editMutations } from '~/ui/layouter/models';
@@ -34,6 +38,9 @@ function getKeySizeUnitInputTextFromModel(): string | undefined {
 }
 
 function createModels(): () => IDesignConfigurationPanelModel {
+  const defaultKeyUnitSpec = defaultKeyboardDesignSetup.placementUnit;
+  const defaultKeySizeSpec = defaultKeyboardDesignSetup.keySizeUnit;
+
   const vmPlacementUnitMode = makeSelectorModel<'mm' | 'KP'>({
     sources: [
       ['mm', 'mm'],
@@ -41,7 +48,7 @@ function createModels(): () => IDesignConfigurationPanelModel {
     ],
     reader: () => editReader.coordUnitSuffix,
     writer: (newValue: 'mm' | 'KP') => {
-      const unitSpec = newValue === 'mm' ? 'mm' : 'KP 19';
+      const unitSpec = newValue === 'mm' ? 'mm' : defaultKeyUnitSpec;
       editMutations.setPlacementUnit(unitSpec);
     },
   });
@@ -69,7 +76,7 @@ function createModels(): () => IDesignConfigurationPanelModel {
     ],
     reader: () => editReader.sizeUnitSuffix,
     writer: (newValue: 'mm' | 'KP') => {
-      const unitSpec = newValue === 'mm' ? 'mm' : 'KP 19';
+      const unitSpec = newValue === 'mm' ? 'mm' : defaultKeySizeSpec;
       editMutations.setKeySizeUnit(unitSpec);
     },
   });
