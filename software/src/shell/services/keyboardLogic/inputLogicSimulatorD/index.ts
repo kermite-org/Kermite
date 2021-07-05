@@ -35,6 +35,7 @@ export class InputLogicSimulatorD {
   private CL = getKeyboardCoreLogicInterface();
   private tickerTimer = new IntervalTimerWrapper();
   private isSimulatorMode: boolean = false;
+  private isMuteMode: boolean = false;
   private layerActiveFlags: number = 0;
   private hidReportBytes: number[] = new Array(8).fill(0);
 
@@ -96,11 +97,15 @@ export class InputLogicSimulatorD {
 
   private updateSourceSetup = async () => {
     const config = this.keyboardConfigProvider.getKeyboardConfig();
-    const { isSimulatorMode } = config;
+    const { isSimulatorMode, isMuteMode } = config;
     if (this.isSimulatorMode !== isSimulatorMode) {
       // console.log({ isSimulatorMode });
       this.deviceService.setSimulatorMode(isSimulatorMode);
       this.isSimulatorMode = isSimulatorMode;
+    }
+    if (this.isMuteMode !== isMuteMode) {
+      this.deviceService.setMuteMode(isMuteMode);
+      this.isMuteMode = isMuteMode;
     }
 
     const prof =

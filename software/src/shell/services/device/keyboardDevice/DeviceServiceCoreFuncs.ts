@@ -224,6 +224,10 @@ export function sendSimulatorMode(device: IDeviceWrapper, enabled: boolean) {
   device.writeSingleFrame(Packets.makeSimulatorModeSpecFrame(enabled));
 }
 
+export function sendMuteMode(device: IDeviceWrapper, enabled: boolean) {
+  device.writeSingleFrame(Packets.makeMuteModeSpecFrame(enabled));
+}
+
 export function sendDeviceOpenNotification(device: IDeviceWrapper) {
   device.writeSingleFrame(Packets.connectionOpenedFrame);
 }

@@ -4,6 +4,7 @@ import { createEventPort } from '~/shell/funcs';
 import { getPortNameFromDevicePath } from '~/shell/services/device/keyboardDevice/DeviceEnumerator';
 import {
   deviceSetupTask,
+  sendMuteMode,
   sendSimulatorHidReport,
   sendSimulatorMode,
   updateDeviceCustomParameterSingle,
@@ -121,6 +122,12 @@ export class KeyboardDeviceServiceCore {
   writeSimulatorHidReport(report: number[]) {
     if (this.device && this.isSimulatorMode) {
       sendSimulatorHidReport(this.device, report);
+    }
+  }
+
+  setMuteMode(enabled: boolean) {
+    if (this.device) {
+      sendMuteMode(this.device, enabled);
     }
   }
 }
