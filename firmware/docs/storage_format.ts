@@ -24,8 +24,7 @@ BB BB ...: チャンクのボディデータ, LL LL で規定されるサイズ�
       parametersDataInitializationFlag: U8;
       softwareStorageFomartRevision: U8;
     };
-    systemParameters: Chunk<0xaa30, 14> & {
-      emitKeyStroke: U8;
+    systemParameters: Chunk<0xaa30, 12> & {
       emitRealtimeEvents: U8;
       keyHoldLedOutput: U8;
       heartBeatLedOutput: U8;
