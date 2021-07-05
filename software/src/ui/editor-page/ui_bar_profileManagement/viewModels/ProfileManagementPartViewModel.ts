@@ -1,5 +1,9 @@
-import { asyncRerender, Hook } from 'qx';
-import { forceChangeFilePathExtension, IProfileEditSource } from '~/shared';
+import { Hook } from 'qx';
+import {
+  forceChangeFilePathExtension,
+  IProfileData,
+  IProfileEditSource,
+} from '~/shared';
 import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import {
   getFileNameFromPath,
@@ -218,6 +222,23 @@ const handleExportToFile = async () => {
   }
 };
 
+const simulatorProfileUpdator = new (class {
+  private profileStringified: string = '';
+
+  affectToSimulatorIfEditProfileChanged(
+    profile: IProfileData,
+    isSimulatorMode: boolean,
+  ) {
+    if (isSimulatorMode) {
+      const str = JSON.stringify(profile);
+      if (str !== this.profileStringified) {
+        this.profileStringified = str;
+        ipcAgent.async.simulator_postSimulationTargetProfile(profile);
+      }
+    }
+  }
+})();
+
 export function makeProfileManagementPartViewModel(): IProfileManagementPartViewModel {
   Hook.useEffect(profilesModel.startPageSession, []);
 
@@ -266,22 +287,21 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
 
   const { isSimulatorMode } = useKeyboardBehaviorModeModel();
 
+  simulatorProfileUpdator.affectToSimulatorIfEditProfileChanged(
+    editorModel.profileData,
+    isSimulatorMode,
+  );
+
   const onWriteButton = async () => {
     await profilesModel.saveProfile();
-
-    if (!isSimulatorMode) {
-      uiStatusModel.status.isLoading = true;
-      const done = await ipcAgent.async.config_writeKeyMappingToDevice();
-      uiStatusModel.status.isLoading = false;
-      // todo: トーストにする
-      if (done) {
-        await modalAlert('write succeeded.');
-      } else {
-        await modalAlert('write failed.');
-      }
+    uiStatusModel.status.isLoading = true;
+    const done = await ipcAgent.async.config_writeKeyMappingToDevice();
+    uiStatusModel.status.isLoading = false;
+    // todo: トーストにする?
+    if (done) {
+      await modalAlert('write succeeded.');
     } else {
-      asyncRerender();
-      await modalAlert('write succeeded. (simulator mode)');
+      await modalAlert('write failed.');
     }
   };
 
