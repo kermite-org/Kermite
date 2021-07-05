@@ -96,7 +96,7 @@ export class InputLogicSimulatorD {
 
   private updateSourceSetup = async () => {
     const config = this.keyboardConfigProvider.getKeyboardConfig();
-    const isSimulatorMode = config.behaviorMode === 'Simulator';
+    const { isSimulatorMode } = config;
     if (this.isSimulatorMode !== isSimulatorMode) {
       // console.log({ isSimulatorMode });
       this.deviceService.setSimulatorMode(isSimulatorMode);

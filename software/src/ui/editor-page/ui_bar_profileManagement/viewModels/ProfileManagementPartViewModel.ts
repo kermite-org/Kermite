@@ -258,11 +258,11 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     await ipcAgent.async.profile_openUserProfilesFolder();
   };
 
-  const { behaviorMode } = useKeyboardBehaviorModeModel();
+  const { isSimulatorMode } = useKeyboardBehaviorModeModel();
 
   const onWriteButton = async () => {
     await profilesModel.saveProfile();
-    if (behaviorMode === 'Standalone') {
+    if (!isSimulatorMode) {
       const done = await ipcAgent.async.config_writeKeyMappingToDevice();
       // todo: トーストにする
       if (done) {
