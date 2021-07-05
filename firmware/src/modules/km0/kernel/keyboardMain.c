@@ -57,6 +57,9 @@ static uint8_t localHidReport[8] = { 0 };
 //メインロジックをPC側ユーティリティのLogicSimulatorに移譲するモード
 static bool isSimulatorModeEnabled = false;
 
+//一時的にキー出力を無効にするモード
+static bool isMuteModeEnabled = false;
+
 static KeyboardCallbackSet *callbacks = NULL;
 
 typedef void (*KeyScannerUpdateFunc)(uint8_t *keyStateBitFlags);
@@ -70,7 +73,7 @@ static uint8_t rgbLightingModulesLength = 0;
 static VisualModuleUpdateFunc oledDisplayUpdateFunc = NULL;
 
 //動的に変更可能なオプション
-static bool optionEmitKeyStroke = true;
+// static bool optionEmitKeyStroke = true;
 static bool optionEmitRealtimeEvents = true;
 static bool optionAffectKeyHoldStateToLed = true;
 static bool optionUseHeartbeatLed = true;
@@ -165,7 +168,7 @@ static void parameterValueHandler(uint8_t slotIndex, uint8_t value) {
   }
 
   if (slotIndex == SystemParameter_EmitKeyStroke) {
-    optionEmitKeyStroke = !!value;
+    // optionEmitKeyStroke = !!value;
   } else if (slotIndex == SystemParameter_EmitRealtimeEvents) {
     optionEmitRealtimeEvents = !!value;
   } else if (slotIndex == SystemParameter_KeyHoldIndicatorLed) {
@@ -194,6 +197,7 @@ static void ConfiguratorServantEventHandler(uint8_t event) {
   }
   if (event == ConfiguratorServantEvent_ConnectionClosingByHost) {
     isSimulatorModeEnabled = false;
+    isMuteModeEnabled = false;
   }
   if (event == ConfiguratorServantEvent_KeyMemoryUpdationStarted) {
     keyboardCoreLogic_halt();
@@ -208,6 +212,14 @@ static void ConfiguratorServantEventHandler(uint8_t event) {
   if (event == ConfiguratorServantEvent_SimulatorModeDisabled) {
     isSimulatorModeEnabled = false;
     printf("behavior mode: Standalone\n");
+  }
+  if (event == ConfiguratorServantEvent_MuteModeEnabled) {
+    isMuteModeEnabled = true;
+    printf("output mute on\n");
+  }
+  if (event == ConfiguratorServantEvent_MuteModeDisabled) {
+    isMuteModeEnabled = false;
+    printf("output mtue off\n");
   }
 }
 
@@ -229,7 +241,7 @@ static void processKeyboardCoreLogicOutput() {
     changed = true;
   }
   if (!utils_compareBytes(hidReport, localHidReport, 8)) {
-    if (optionEmitKeyStroke) {
+    if (!isMuteModeEnabled) {
       usbIoCore_hidKeyboard_writeReport(hidReport);
     }
     utils_copyBytes(localHidReport, hidReport, 8);

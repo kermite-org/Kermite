@@ -246,15 +246,18 @@ static void processReadGenericHidData() {
 
   if (cmd == RawHidOpcode_SimulationModeSpec) {
     bool enabled = p[1] == 1;
-    if (enabled) {
-      emitStateNotification(ConfiguratorServantEvent_SimulatorModeEnabled);
-    } else {
-      emitStateNotification(ConfiguratorServantEvent_SimulatorModeDisabled);
-    }
+    uint8_t event = enabled ? ConfiguratorServantEvent_SimulatorModeEnabled : ConfiguratorServantEvent_SimulatorModeDisabled;
+    emitStateNotification(event);
   }
 
   if (cmd == RawHidOpcode_SimulationModeOutputHidReportWrite) {
     usbIoCore_hidKeyboard_writeReport(&p[2]);
+  }
+
+  if (cmd == RawHidOpcode_MuteModeSpec) {
+    bool enabled = p[1] == 1;
+    uint8_t event = enabled ? ConfiguratorServantEvent_MuteModeEnabled : ConfiguratorServantEvent_MuteModeDisabled;
+    emitStateNotification(event);
   }
 }
 
