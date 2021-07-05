@@ -147,8 +147,8 @@ export type IPersistAssignEntry = {
   usage: IAssignEntry;
 };
 
-export type ProfileFormatRevisionLatest = 'PRF05';
-export const profileFormatRevisionLatest = 'PRF05';
+export type ProfileFormatRevisionLatest = 'PRF06';
+export const profileFormatRevisionLatest = 'PRF06';
 
 export type IPersistProfileData = {
   formatRevision: ProfileFormatRevisionLatest;
