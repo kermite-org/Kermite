@@ -1,4 +1,4 @@
-import { IKeyboardConfig } from '~/shared';
+import { fallbackKeyboardConfig, IKeyboardConfig } from '~/shared';
 import { vBoolean, vObject } from '~/shared/modules/SchemaValidationHelper';
 import { applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
@@ -10,25 +10,14 @@ const keyboardConfigDataSchema = vObject({
   isMuteMode: vBoolean(),
 });
 
-const keyboardConfigDefault: IKeyboardConfig = {
-  isSimulatorMode: false,
-  isMuteMode: false,
-};
 export class KeyboardConfigProvider {
-  private keyboardConfig: IKeyboardConfig = undefined!;
+  private keyboardConfig: IKeyboardConfig = fallbackKeyboardConfig;
 
   keyboardConfigEventPort = createEventPort<Partial<IKeyboardConfig>>({
     onFirstSubscriptionStarting: () => this.loadFromBackingStore(),
     onLastSubscriptionEnded: () => this.saveToBackingStore(),
     initialValueGetter: () => this.keyboardConfig,
   });
-
-  getKeyboardConfig(): IKeyboardConfig {
-    if (!this.keyboardConfig) {
-      this.loadFromBackingStore();
-    }
-    return this.keyboardConfig;
-  }
 
   writeKeyboardConfig(partialConfig: Partial<IKeyboardConfig>) {
     this.keyboardConfig = {
@@ -42,7 +31,7 @@ export class KeyboardConfigProvider {
     this.keyboardConfig = applicationStorage.readItemSafe(
       'keyboardConfig',
       keyboardConfigDataSchema,
-      keyboardConfigDefault,
+      fallbackKeyboardConfig,
     );
   }
 
