@@ -1,7 +1,7 @@
 #ifndef __VERSION_DEFINITIONS_H__
 
 #define Kermite_ConfigStorageFormatRevision 6
-#define Kermite_RawHidMessageProtocolRevision 1
+#define Kermite_RawHidMessageProtocolRevision 2
 #define Kermite_ProfileBinaryFormatRevision 4
 #define Kermite_ConfigParametersRevision 2
 
