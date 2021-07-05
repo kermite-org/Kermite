@@ -15,19 +15,38 @@ const keyboardConfigDefault: IKeyboardConfig = {
   isMuteMode: false,
 };
 export class KeyboardConfigProvider {
-  internal_changedNotifier = createEventPort<void>();
+  private keyboardConfig: IKeyboardConfig = undefined!;
+
+  keyboardConfigEventPort = createEventPort<Partial<IKeyboardConfig>>({
+    onFirstSubscriptionStarting: () => this.loadFromBackingStore(),
+    onLastSubscriptionEnded: () => this.saveToBackingStore(),
+    initialValueGetter: () => this.keyboardConfig,
+  });
 
   getKeyboardConfig(): IKeyboardConfig {
-    return applicationStorage.readItemSafe(
+    if (!this.keyboardConfig) {
+      this.loadFromBackingStore();
+    }
+    return this.keyboardConfig;
+  }
+
+  writeKeyboardConfig(partialConfig: Partial<IKeyboardConfig>) {
+    this.keyboardConfig = {
+      ...this.keyboardConfig,
+      ...partialConfig,
+    };
+    this.keyboardConfigEventPort.emit(partialConfig);
+  }
+
+  loadFromBackingStore() {
+    this.keyboardConfig = applicationStorage.readItemSafe(
       'keyboardConfig',
       keyboardConfigDataSchema,
       keyboardConfigDefault,
     );
   }
 
-  writeKeyboardConfig(config: IKeyboardConfig) {
-    applicationStorage.writeItem('keyboardConfig', config);
-    // appGlobal.eventBus.emit('keyboardConfigChanged', config);
-    this.internal_changedNotifier.emit();
+  saveToBackingStore() {
+    applicationStorage.writeItem('keyboardConfig', this.keyboardConfig);
   }
 }
