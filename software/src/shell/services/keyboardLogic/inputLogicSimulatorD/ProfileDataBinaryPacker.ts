@@ -12,8 +12,8 @@ import {
   sortOrderBy,
   getLogicalKeyForVirtualKey,
   routerConstants,
-  encodeModifierVirtualKeys,
   systemActionToCodeMap,
+  encodeModifierVirtualKeys,
 } from '~/shared';
 import {
   writeBytes,
@@ -125,16 +125,19 @@ function encodeAssignOperation(
     const vk = op.virtualKey;
     if (encodeSoloModifierActionToModifierFlags) {
       if (isModifierVirtualKey(vk)) {
-        const mods = encodeModifierVirtualKeys([vk]);
-        return [(fAssignType << 6) | mods, 0];
+        const modifiers = encodeModifierVirtualKeys([vk]);
+        return [(fAssignType << 6) | modifiers, 0];
       }
     }
-    const mods = encodeModifierVirtualKeys(op.attachedModifiers);
+    const modifiers = op.attachedModifiers;
     const logicalKey = getLogicalKeyForVirtualKey(vk);
     // ShiftCancelオプションが有効でshiftレイヤの場合のみ、shiftCancelを適用可能にする
     const fIsShiftCancellable =
       context.useShiftCancel && layer.isShiftLayer ? 1 : 0;
-    return [(fAssignType << 6) | (fIsShiftCancellable << 4) | mods, logicalKey];
+    return [
+      (fAssignType << 6) | (fIsShiftCancellable << 4) | modifiers,
+      logicalKey,
+    ];
   }
   if (op?.type === 'layerCall') {
     const fAssignType = 0b11;
@@ -362,7 +365,7 @@ function createProfileContext(profile: IProfileData): IProfileContenxt {
       la.layerId,
       {
         layerIndex: idx,
-        isShiftLayer: la.attachedModifiers?.includes('K_Shift') || false,
+        isShiftLayer: (la.attachedModifiers & 0b0010) > 0,
       },
     ]),
   );
@@ -420,9 +423,7 @@ function encodeLayerListData(profile: IProfileData): number[] {
     profile.layers.map((la) => {
       const fDefaultScheme = la.defaultScheme === 'block' ? 1 : 0;
       const fInitialActive = la.initialActive ? 1 : 0;
-      const fAttachedModifiers = encodeModifierVirtualKeys(
-        la.attachedModifiers,
-      );
+      const fAttachedModifiers = la.attachedModifiers;
       return [
         (fDefaultScheme << 7) | (fInitialActive << 5) | fAttachedModifiers,
         la.exclusionGroup,

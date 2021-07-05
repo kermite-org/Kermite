@@ -9,7 +9,7 @@ export type ILayerDefaultScheme = 'block' | 'transparent';
 export interface ILayer {
   layerId: string;
   layerName: string;
-  attachedModifiers?: ModifierVirtualKey[];
+  attachedModifiers: number;
   defaultScheme: ILayerDefaultScheme;
   exclusionGroup: number;
   initialActive: boolean;
@@ -33,7 +33,7 @@ export type IAssignOperationType =
 export type IAssingOperationKeyInput = {
   type: 'keyInput';
   virtualKey: VirtualKey;
-  attachedModifiers?: ModifierVirtualKey[];
+  attachedModifiers: number;
   immediateRelease?: boolean;
 };
 
@@ -147,8 +147,8 @@ export type IPersistAssignEntry = {
   usage: IAssignEntry;
 };
 
-export type ProfileFormatRevisionLatest = 'PRF05';
-export const profileFormatRevisionLatest = 'PRF05';
+export type ProfileFormatRevisionLatest = 'PRF06';
+export const profileFormatRevisionLatest = 'PRF06';
 
 export type IPersistProfileData = {
   formatRevision: ProfileFormatRevisionLatest;
@@ -172,6 +172,7 @@ export const fallbackProfileData: IProfileData = {
       layerId: 'la0',
       layerName: 'main',
       defaultScheme: 'block',
+      attachedModifiers: 0,
       exclusionGroup: 0,
       initialActive: true,
     },

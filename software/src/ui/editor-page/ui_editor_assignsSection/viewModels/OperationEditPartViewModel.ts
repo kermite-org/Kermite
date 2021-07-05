@@ -1,10 +1,9 @@
 import {
   ModifierVirtualKey,
   VirtualKeyTexts,
-  addOptionToOptionsArray,
-  removeOptionFromOptionsArray,
   systemActionToLabelTextMap,
   systemActionAssignSelectionSource,
+  encodeSingleModifierVirtualKey,
 } from '~/shared';
 import { texts } from '~/ui/common';
 import { editorModel } from '~/ui/editor-page/models/EditorModel';
@@ -104,7 +103,11 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
         isCurrent:
           editOperation?.type === 'keyInput' && editOperation.virtualKey === vk,
         setCurrent: () =>
-          writeEditOperation({ type: 'keyInput', virtualKey: vk }),
+          writeEditOperation({
+            type: 'keyInput',
+            virtualKey: vk,
+            attachedModifiers: 0,
+          }),
         isEnabled:
           !isDualSecondary ||
           (isDualSecondary &&
@@ -115,17 +118,17 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
 
   const attachedModifierEntries: IOperationCardViewModel[] = modifierVirtualKeys.map(
     (vk) => {
+      const bitFlag = encodeSingleModifierVirtualKey(vk);
       const isCurrent =
-        (editOperation?.type === 'keyInput' &&
-          editOperation.attachedModifiers?.includes(vk)) ||
-        false;
+        editOperation?.type === 'keyInput' &&
+        (editOperation.attachedModifiers & bitFlag) > 0;
 
       const setCurrent = () => {
         if (editOperation?.type === 'keyInput') {
           const currMods = editOperation.attachedModifiers;
           const nextMods = !isCurrent
-            ? addOptionToOptionsArray(currMods, vk)
-            : removeOptionFromOptionsArray(currMods, vk);
+            ? currMods | bitFlag
+            : currMods & ~bitFlag;
           writeEditOperation({ ...editOperation, attachedModifiers: nextMods });
         }
       };

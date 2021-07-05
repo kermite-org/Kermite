@@ -6,6 +6,7 @@ import {
   IProfileData,
   systemActionToLabelTextMap,
   IAssignEntry,
+  decodeModifierVirtualKeys,
 } from '~/shared';
 
 function getAssignOperationText(
@@ -15,7 +16,7 @@ function getAssignOperationText(
   if (op?.type === 'keyInput') {
     const keyText = VirtualKeyTexts[op.virtualKey] || '';
     if (op.attachedModifiers) {
-      const modText = op.attachedModifiers
+      const modText = decodeModifierVirtualKeys(op.attachedModifiers)
         .map((m) => VirtualKeyTexts[m]?.charAt(0))
         .join('+');
       return `${modText}+${keyText}`;
