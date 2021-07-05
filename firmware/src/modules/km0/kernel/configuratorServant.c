@@ -11,6 +11,35 @@
 #include <string.h>
 
 //---------------------------------------------
+enum {
+  RawHidOpcode_ConnectionOpened = 0xf0,
+  RawHidOpcode_ConnectionClosing = 0xf1,
+  RawHidOpcode_DeviceAttributesRequest = 0xf2,
+  RawHidOpcode_DeviceAttributesResponse = 0xf3,
+  RawHidOpcode_DeviceInstanceCodeWrite = 0xf4,
+
+  RawHidOpcode_RealtimeKeyStateEvent = 0xa0,
+  RawHidOpcode_RealtimeLayerStateEvent = 0xa1,
+
+  RawHidOpcode_MemoryWriteTransactionStart = 0xb0,
+  RawHidOpcode_MemoryWriteTransactionDone = 0xb1,
+  RawHidOpcode_MemoryWriteOperation = 0xb2,
+  RawHidOpcode_MemoryChecksumRequest = 0xb3,
+  RawHidOpcode_MemoryChecksumResponse = 0xb4,
+
+  RawHidOpcode_ParametersReadAllRequest = 0xc0,
+  RawHidOpcode_ParametersReadAllResponse = 0xc1,
+  RawHidOpcode_ParametersWriteAllOperation = 0xc2,
+  RawHidOpcode_ParameterSingleWriteOperation = 0xc3,
+  RawHidOpcode_ParametersResetOperation = 0xc4,
+  RawHidOpcode_ParameterChangedNotification = 0xc5,
+
+  RawHidOpcode_MuteModeSpec = 0xd0,
+  RawHidOpcode_SimulationModeSpec = 0xd1,
+  RawHidOpcode_SimulationModeOutputHidReportWrite = 0xd2,
+};
+
+//---------------------------------------------
 //callbacks
 
 static void (*stateNotificationCallback)(uint8_t state) = 0;
