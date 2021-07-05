@@ -1,6 +1,7 @@
 import { IRealtimeKeyboardEvent, IResourceOrigin } from '~/shared';
 import { getMcuNameFromKermiteMcuCode } from '~/shared/funcs/DomainRelatedHelpers';
 import { bytesToString } from '~/shell/services/device/keyboardDevice/Helpers';
+import { RawHidOpcode } from '~/shell/services/device/keyboardDevice/RawHidOpcode';
 
 export type IDeviceAttributesReadResponseData = {
   firmwareVariationName: string;
@@ -44,18 +45,19 @@ export type IReceivedBytesDecodeResult =
 export function recievedBytesDecoder(
   buf: Uint8Array,
 ): IReceivedBytesDecodeResult | undefined {
-  if (buf[0] === 0xf0 && buf[1] === 0x11) {
-    const projectReleaseBuildRevision = (buf[2] << 8) | buf[3];
-    const configStorageFormatRevision = buf[4];
-    const rawHidMessageProtocolRevision = buf[5];
-    const projectId = bytesToString([...buf].slice(6, 14));
-    const isProjectOriginOnline = !!buf[14];
-    const deviceInstanceCode = bytesToString([...buf].slice(16, 24));
-    const assignStorageCapacity = (buf[24] << 8) | buf[25];
-    const firmwareVariationName = bytesToString([...buf].slice(26, 42));
-    const kermiteMcuCode = bytesToString([...buf].slice(42, 50));
-    const profileBinaryFormatRevision = buf[50];
-    const configParametersRevision = buf[51];
+  const cmd = buf[0];
+  if (cmd === RawHidOpcode.DeviceAttributesResponse) {
+    const projectReleaseBuildRevision = (buf[1] << 8) | buf[2];
+    const configStorageFormatRevision = buf[3];
+    const rawHidMessageProtocolRevision = buf[4];
+    const projectId = bytesToString([...buf].slice(5, 13));
+    const isProjectOriginOnline = !!buf[13];
+    const deviceInstanceCode = bytesToString([...buf].slice(15, 23));
+    const assignStorageCapacity = (buf[23] << 8) | buf[24];
+    const firmwareVariationName = bytesToString([...buf].slice(25, 41));
+    const kermiteMcuCode = bytesToString([...buf].slice(41, 49));
+    const profileBinaryFormatRevision = buf[49];
+    const configParametersRevision = buf[50];
     return {
       type: 'deviceAttributeResponse',
       data: {
@@ -74,10 +76,10 @@ export function recievedBytesDecoder(
     };
   }
 
-  if (buf[0] === 0xb0 && buf[1] === 0x02 && buf[2] === 0x81) {
-    const sz = buf[3];
-    const parameterValues = [...buf.slice(4, 4 + sz)];
-    const parameterMaxValues = [...buf.slice(4 + sz, 4 + sz + sz)];
+  if (cmd === RawHidOpcode.ParametersReadAllResponse) {
+    const sz = buf[1];
+    const parameterValues = [...buf.slice(2, 2 + sz)];
+    const parameterMaxValues = [...buf.slice(2 + sz, 2 + sz + sz)];
     return {
       type: 'custromParametersReadResponse',
       data: {
@@ -88,9 +90,9 @@ export function recievedBytesDecoder(
     };
   }
 
-  if (buf[0] === 0xb0 && buf[1] === 0x02 && buf[2] === 0xe1) {
-    const parameterIndex = buf[3];
-    const value = buf[4];
+  if (cmd === RawHidOpcode.ParameterChangedNotification) {
+    const parameterIndex = buf[1];
+    const value = buf[2];
     return {
       type: 'parameterChangedNotification',
       parameterIndex,
@@ -98,9 +100,9 @@ export function recievedBytesDecoder(
     };
   }
 
-  if (buf[0] === 0xe0 && buf[1] === 0x90) {
-    const keyIndex = buf[2];
-    const isDown = buf[3] !== 0;
+  if (cmd === RawHidOpcode.RealtimeKeyStateEvent) {
+    const keyIndex = buf[1];
+    const isDown = buf[2] !== 0;
     return {
       type: 'realtimeEvent',
       event: {
@@ -111,8 +113,8 @@ export function recievedBytesDecoder(
     };
   }
 
-  if (buf[0] === 0xe0 && buf[1] === 0x91) {
-    const layerActiveFlags = (buf[2] << 8) | buf[3];
+  if (cmd === RawHidOpcode.RealtimeLayerStateEvent) {
+    const layerActiveFlags = (buf[1] << 8) | buf[2];
     return {
       type: 'realtimeEvent',
       event: {

@@ -4,7 +4,9 @@
 // 210509 5-->6, チャンク単位でデータを格納するように変更
 export const ConfigStorageFormatRevision = 6;
 
-export const RawHidMessageProtocolRevision = 1;
+// 210705, 2, メッセージ形式を簡素化
+// export const RawHidMessageProtocolRevision = 1;
+export const RawHidMessageProtocolRevision = 2;
 
 // 210509 1, 初版
 // 210515 2, mappingEntriesを追加

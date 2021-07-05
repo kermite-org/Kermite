@@ -25,12 +25,8 @@ export namespace KeyMappingEmitter {
 
     console.log(`len: ${dataLength}, checksum: ${checksum}`);
 
-    const keyAssingnDataFrames = Packets.makeMemoryWriteOperationFrames(
-      data,
-      'keyMapping',
-    );
+    const keyAssingnDataFrames = Packets.makeMemoryWriteOperationFrames(data);
     const checksumRequestFrame = Packets.makeMemoryChecksumRequestFrame(
-      'keyMapping',
       0,
       dataLength,
     );
