@@ -1,4 +1,4 @@
-import { asyncRerender, Hook } from 'qx';
+import { Hook } from 'qx';
 import {
   forceChangeFilePathExtension,
   IProfileData,
@@ -288,17 +288,12 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
 
   const onWriteButton = async () => {
     await profilesModel.saveProfile();
-    if (!isSimulatorMode) {
-      const done = await ipcAgent.async.config_writeKeyMappingToDevice();
-      // todo: トーストにする
-      if (done) {
-        await modalAlertTop('write succeeded.');
-      } else {
-        await modalAlertTop('write failed.');
-      }
+    const done = await ipcAgent.async.config_writeKeyMappingToDevice();
+    // todo: トーストにする?
+    if (done) {
+      await modalAlertTop('write succeeded.');
     } else {
-      asyncRerender();
-      await modalAlertTop('write succeeded. (simulator mode)');
+      await modalAlertTop('write failed.');
     }
   };
 
