@@ -7,7 +7,6 @@ import {
   ISelectorSource,
   makePlainSelectorOption,
   modalAlert,
-  modalAlertTop,
   modalConfirm,
   modalTextEdit,
   texts,
@@ -270,16 +269,18 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
   const onWriteButton = async () => {
     await profilesModel.saveProfile();
     if (behaviorMode === 'Standalone') {
+      uiStatusModel.status.isLoading = true;
       const done = await ipcAgent.async.config_writeKeyMappingToDevice();
+      uiStatusModel.status.isLoading = false;
       // todo: トーストにする
       if (done) {
-        await modalAlertTop('write succeeded.');
+        await modalAlert('write succeeded.');
       } else {
-        await modalAlertTop('write failed.');
+        await modalAlert('write failed.');
       }
     } else {
       asyncRerender();
-      await modalAlertTop('write succeeded. (simulator mode)');
+      await modalAlert('write succeeded. (simulator mode)');
     }
   };
 
