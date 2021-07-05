@@ -216,11 +216,6 @@ export function sendSimulatorHidReport(
 }
 
 export function sendSimulatorMode(device: IDeviceWrapper, enabled: boolean) {
-  // console.log(`writeSimulatorMode ${enabled ? 1 : 0}`);
-  if (!enabled) {
-    const blankHidReport = [0, 0, 0, 0, 0, 0, 0, 0];
-    sendSimulatorHidReport(device, blankHidReport);
-  }
   device.writeSingleFrame(Packets.makeSimulatorModeSpecFrame(enabled));
 }
 

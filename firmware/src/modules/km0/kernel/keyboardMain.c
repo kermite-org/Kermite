@@ -90,6 +90,8 @@ typedef void (*KeySlotStateChangedCallback)(uint8_t slotIndex, bool isDown);
 
 KeySlotStateChangedCallback keySlotStateChangedCallback = NULL;
 
+static uint8_t blankHidReport[8] = { 0 };
+
 //----------------------------------------------------------------------
 //helpers
 
@@ -191,13 +193,30 @@ static void parameterValueHandler(uint8_t slotIndex, uint8_t value) {
   }
 }
 
+static void setSimulatorMode(bool enabled) {
+  if (isSimulatorModeEnabled != enabled) {
+    printf("simulator mode: %s\n", enabled ? "on" : "off");
+    isSimulatorModeEnabled = enabled;
+    if (!enabled) {
+      usbIoCore_hidKeyboard_writeReport(blankHidReport);
+    }
+  }
+}
+
+static void setMuteMode(bool enabled) {
+  if (isMuteModeEnabled != enabled) {
+    printf("output mute: %s\n", enabled ? "on" : "off");
+    isMuteModeEnabled = enabled;
+  }
+}
+
 //ユーティリティによる設定書き込み時に呼ばれるハンドラ
 static void ConfiguratorServantEventHandler(uint8_t event) {
   if (event == ConfiguratorServantEvent_ConnectedByHost) {
   }
   if (event == ConfiguratorServantEvent_ConnectionClosingByHost) {
-    isSimulatorModeEnabled = false;
-    isMuteModeEnabled = false;
+    setSimulatorMode(false);
+    setMuteMode(false);
   }
   if (event == ConfiguratorServantEvent_KeyMemoryUpdationStarted) {
     keyboardCoreLogic_halt();
@@ -206,20 +225,16 @@ static void ConfiguratorServantEventHandler(uint8_t event) {
     resetKeyboardCoreLogic();
   }
   if (event == ConfiguratorServantEvent_SimulatorModeEnabled) {
-    isSimulatorModeEnabled = true;
-    printf("behavior mode: Simulator\n");
+    setSimulatorMode(true);
   }
   if (event == ConfiguratorServantEvent_SimulatorModeDisabled) {
-    isSimulatorModeEnabled = false;
-    printf("behavior mode: Standalone\n");
+    setSimulatorMode(false);
   }
   if (event == ConfiguratorServantEvent_MuteModeEnabled) {
-    isMuteModeEnabled = true;
-    printf("output mute on\n");
+    setMuteMode(true);
   }
   if (event == ConfiguratorServantEvent_MuteModeDisabled) {
-    isMuteModeEnabled = false;
-    printf("output mtue off\n");
+    setMuteMode(false);
   }
 }
 

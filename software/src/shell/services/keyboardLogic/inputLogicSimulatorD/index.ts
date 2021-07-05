@@ -154,10 +154,6 @@ export class InputLogicSimulatorD {
       this.onRealtimeKeyboardEvent,
     );
     this.deviceService.statusEventPort.unsubscribe(this.onDeviceStatusEvent);
-    if (this.isSimulatorMode) {
-      this.deviceService.setSimulatorMode(false);
-      this.isSimulatorMode = false;
-    }
     this.tickerTimer.stop();
   }
 }
