@@ -33,9 +33,6 @@ function getAssignOperationText(
     }
     return layer?.layerName || '';
   }
-  if (op?.type === 'modifierCall') {
-    return VirtualKeyTexts[op.modifierKey] || '';
-  }
   if (op?.type === 'systemAction') {
     return systemActionToLabelTextMap[op.action] || '';
   }
