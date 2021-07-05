@@ -258,8 +258,7 @@ export interface IAppIpcContract {
     layout_showEditLayoutFileInFiler(): Promise<void>;
     // layout_getAllProjectLayoutsInfos(): Promise<IProjectLayoutsInfo[]>;
 
-    config_getKeyboardConfig(): Promise<IKeyboardConfig>;
-    config_writeKeyboardConfig(config: IKeyboardConfig): Promise<void>;
+    config_writeKeyboardConfig(config: Partial<IKeyboardConfig>): Promise<void>;
     config_writeKeyMappingToDevice(): Promise<boolean>;
 
     config_getGlobalSettings(): Promise<IGlobalSettings>;
@@ -322,5 +321,7 @@ export interface IAppIpcContract {
 
     firmup_deviceDetectionEvents: IBootloaderDeviceDetectionStatus;
     projects_layoutFileUpdationEvents: { projectId: string };
+
+    config_keyboardConfigEvents: Partial<IKeyboardConfig>;
   };
 }
