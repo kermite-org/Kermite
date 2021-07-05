@@ -20,7 +20,6 @@ static uint16_t parameterChangedFlags = 0;
 static bool reqRestToDfu = false;
 
 static const T_SystemParametersSet systemParametersDefault = {
-  .emitKeyStroke = true,
   .emitRealtimeEvents = true,
   .keyHoldLedOutput = true,
   .heartbeatLedOutput = true,
@@ -36,7 +35,6 @@ static const T_SystemParametersSet systemParametersDefault = {
 };
 
 static T_SystemParametersSet systemParameterMaxValues = {
-  .emitKeyStroke = 1,
   .emitRealtimeEvents = 1,
   .keyHoldLedOutput = 1,
   .heartbeatLedOutput = 1,
