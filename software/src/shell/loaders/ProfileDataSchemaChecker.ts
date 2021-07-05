@@ -3,6 +3,7 @@ import {
   vArray,
   vBoolean,
   vNumber,
+  vNumberRanged,
   vObject,
   vSchemaOneOf,
   vString,
@@ -18,7 +19,7 @@ const vAssignOperation = () =>
     vObject({
       type: vValueEquals('keyInput'),
       virtualKey: vString(),
-      attachedModifiers: vArray(vModiferKey).optional,
+      attachedModifiers: vNumberRanged(0x00, 0x0f),
     }),
     vObject({
       type: vValueEquals('layerCall'),
@@ -67,9 +68,7 @@ export const profileDataSchemaChecker = vObject({
     vObject({
       layerId: vString(),
       layerName: vString(),
-      attachedModifiers: vArray(
-        vValueOneOf(['K_Ctrl', 'K_Shift', 'K_Alt', 'K_Gui']),
-      ).optional,
+      attachedModifiers: vNumberRanged(0x00, 0x0f),
       defaultScheme: vValueOneOf(['block', 'transparent']),
       exclusionGroup: vNumber(),
       initialActive: vBoolean(),
