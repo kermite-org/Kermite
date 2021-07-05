@@ -223,3 +223,11 @@ export function sendSimulatorMode(device: IDeviceWrapper, enabled: boolean) {
   }
   device.writeSingleFrame(Packets.makeSimulatorModeSpecFrame(enabled));
 }
+
+export function sendDeviceOpenNotification(device: IDeviceWrapper) {
+  device.writeSingleFrame(Packets.connectionOpenedFrame);
+}
+
+export function sendDeviceClosingNotification(device: IDeviceWrapper) {
+  device.writeSingleFrame(Packets.connectionClosingFrame);
+}

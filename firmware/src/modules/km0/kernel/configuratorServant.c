@@ -157,6 +157,12 @@ static void processReadGenericHidData() {
   uint8_t *p = rawHidTempBuf;
   uint8_t cmd = p[0];
 
+  if (cmd == RawHidOpcode_ConnectionOpened) {
+  }
+
+  if (cmd == RawHidOpcode_ConnectionClosing) {
+  }
+
   if (cmd == RawHidOpcode_DeviceAttributesRequest) {
     // printf("device attributes requested\n");
     emitDeviceAttributesResponse();
