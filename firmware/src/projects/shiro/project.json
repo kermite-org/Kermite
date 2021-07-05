@@ -1,14 +1,11 @@
 {
   "projectId": "dx5kE9SU",
   "keyboardName": "Shiro",
-  "parameterConfigurations": [
-    {
-      "targetVariationNames": ["all"],
-      "systemParameterKeys": [
-        "emitRealtimeEvents",
-        "keyHoldIndicatorLed",
-        "heartbeatLed"
-      ]
-    }
-  ]
+  "parameterConfigurations": {
+    "systemParameterKeys": [
+      "emitRealtimeEvents",
+      "keyHoldIndicatorLed",
+      "heartbeatLed"
+    ]
+  }
 }
