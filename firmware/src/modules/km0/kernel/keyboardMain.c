@@ -189,18 +189,18 @@ static void parameterValueHandler(uint8_t slotIndex, uint8_t value) {
 }
 
 //ユーティリティによる設定書き込み時に呼ばれるハンドラ
-static void configuratorServantStateHandler(uint8_t state) {
-  if (state == ConfiguratorServantState_KeyMemoryUpdationStarted) {
+static void ConfiguratorServantEventHandler(uint8_t state) {
+  if (state == ConfiguratorServantEvent_KeyMemoryUpdationStarted) {
     keyboardCoreLogic_halt();
   }
-  if (state == ConfiguratorServentState_KeyMemoryUpdationDone) {
+  if (state == ConfiguratorServantEvent_KeyMemoryUpdationDone) {
     resetKeyboardCoreLogic();
   }
-  if (state == ConfiguratorServentState_SimulatorModeEnabled) {
+  if (state == ConfiguratorServantEvent_SimulatorModeEnabled) {
     isSimulatorModeEnabled = true;
     printf("behavior mode: Simulator\n");
   }
-  if (state == ConfiguratorServentState_SimulatorModeDisabled) {
+  if (state == ConfiguratorServantEvent_SimulatorModeDisabled) {
     isSimulatorModeEnabled = false;
     printf("behavior mode: Standalone\n");
   }
@@ -339,7 +339,7 @@ void keyboardMain_initialize() {
   setupSerialNumberText();
   // usbIoCore_initialize();
   resetKeyboardCoreLogic();
-  configuratorServant_initialize(configuratorServantStateHandler);
+  configuratorServant_initialize(ConfiguratorServantEventHandler);
 }
 
 void keyboardMain_udpateKeyScanners() {

@@ -178,7 +178,7 @@ static void processReadGenericHidData() {
   if (cmd == RawHidOpcode_MemoryWriteTransactionStart) {
     printf("memory write transaction start\n");
     //configurationMemoryReader_stop();
-    emitStateNotification(ConfiguratorServantState_KeyMemoryUpdationStarted);
+    emitStateNotification(ConfiguratorServantEvent_KeyMemoryUpdationStarted);
   }
 
   if (cmd == RawHidOpcode_MemoryWriteOperation) {
@@ -209,7 +209,7 @@ static void processReadGenericHidData() {
   if (cmd == RawHidOpcode_MemoryWriteTransactionDone) {
     printf("memory write transaction done\n");
     // configurationMemoryReader_initialize();
-    emitStateNotification(ConfiguratorServentState_KeyMemoryUpdationDone);
+    emitStateNotification(ConfiguratorServantEvent_KeyMemoryUpdationDone);
   }
 
   if (cmd == RawHidOpcode_ParametersReadAllRequest) {
@@ -245,9 +245,9 @@ static void processReadGenericHidData() {
   if (cmd == RawHidOpcode_SimulationModeSpec) {
     bool enabled = p[1] == 1;
     if (enabled) {
-      emitStateNotification(ConfiguratorServentState_SimulatorModeEnabled);
+      emitStateNotification(ConfiguratorServantEvent_SimulatorModeEnabled);
     } else {
-      emitStateNotification(ConfiguratorServentState_SimulatorModeDisabled);
+      emitStateNotification(ConfiguratorServantEvent_SimulatorModeDisabled);
     }
   }
 
