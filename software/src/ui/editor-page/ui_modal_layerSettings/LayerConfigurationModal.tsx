@@ -1,9 +1,8 @@
 import { css, jsx } from 'qx';
 import {
-  addOptionToOptionsArray,
+  encodeSingleModifierVirtualKey,
   ILayerDefaultScheme,
   ModifierVirtualKey,
-  removeOptionFromOptionsArray,
   VirtualKeyTexts,
 } from '~/shared';
 import {
@@ -28,7 +27,7 @@ import { DefaultSchemeButton } from '~/ui/editor-page/components/controls/Defaul
 export interface ILayerConfigurationModelEditValues {
   layerName: string;
   defaultScheme: ILayerDefaultScheme;
-  attachedModifiers?: ModifierVirtualKey[];
+  attachedModifiers: number;
   exclusionGroup: number;
   initialActive: boolean;
 }
@@ -47,7 +46,7 @@ type AttachedModifierModel = {
 function makeAttachedModifiersModel(
   editValues: ILayerConfigurationModelEditValues,
 ): AttachedModifierModel {
-  const mods = editValues.attachedModifiers || [];
+  const mods = editValues.attachedModifiers;
 
   const modifierVirtualKeys: ModifierVirtualKey[] = [
     'K_Shift',
@@ -57,13 +56,14 @@ function makeAttachedModifiersModel(
   ];
 
   return modifierVirtualKeys.map((vk) => {
+    const bitFlag = encodeSingleModifierVirtualKey(vk);
     return {
       sig: vk,
-      isEnabled: mods.includes(vk),
+      isEnabled: (mods & bitFlag) > 0,
       setEnabled(enabled) {
         editValues.attachedModifiers = enabled
-          ? addOptionToOptionsArray(mods, vk)
-          : removeOptionFromOptionsArray(mods, vk);
+          ? mods | bitFlag
+          : mods & ~bitFlag;
       },
     };
   });

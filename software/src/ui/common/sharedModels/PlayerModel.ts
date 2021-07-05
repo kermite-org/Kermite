@@ -2,8 +2,6 @@ import { Hook } from 'qx';
 import {
   addArrayItemIfNotExist,
   createFallbackDisplayKeyboardDesign,
-  decodeModifierVirtualKeys,
-  encodeModifierVirtualKeys,
   fallbackProfileData,
   IAssignEntry,
   IAssignOperation,
@@ -78,7 +76,7 @@ function translateKeyInputOperation(
   routingChannel: number,
 ): IAssingOperationKeyInput {
   let virtualKey = op.virtualKey;
-  let modifiers = encodeModifierVirtualKeys(op.attachedModifiers);
+  let modifiers = op.attachedModifiers;
 
   for (const re of profile.mappingEntries) {
     const ch = re.channelIndex;
@@ -101,7 +99,7 @@ function translateKeyInputOperation(
         return {
           ...op,
           virtualKey,
-          attachedModifiers: decodeModifierVirtualKeys(modifiers),
+          attachedModifiers: modifiers,
         };
       }
     }
@@ -190,7 +188,7 @@ function checkShiftHold(
   const shiftLayerHold = layers.some(
     (layer, layerIndex) =>
       isLayerActive(layerStateFlags, layerIndex) &&
-      layer.attachedModifiers?.includes('K_Shift'),
+      (layer.attachedModifiers & 0b0010) > 0,
   );
   return shiftLayerHold || plainShiftPressed;
 }

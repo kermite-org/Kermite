@@ -91,7 +91,7 @@ export function makeLayerManagementPartViewModel(): ILayerManagementPartViewMode
         sourceValues: {
           layerName: '',
           defaultScheme: 'transparent',
-          attachedModifiers: undefined,
+          attachedModifiers: 0,
           exclusionGroup: 0,
           initialActive: false,
         },
