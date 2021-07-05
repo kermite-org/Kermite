@@ -1,6 +1,5 @@
 import { jsx } from 'qx';
-import { IKeyboardBehaviorMode } from '~/shared';
-import { texts, useDeviceStatusModel } from '~/ui/common';
+import { CheckBox, texts, useDeviceStatusModel } from '~/ui/common';
 import { useKeyboardBehaviorModeModel } from '~/ui/common/sharedModels/KeyboardBehaviorModeModel';
 import {
   useRoutingChannelModel,
@@ -9,22 +8,25 @@ import {
 import { DualItemsHoverSelector } from '~/ui/editor-page/components/fabrics/DualItemHoverSelector';
 
 export const BehaviorSelector = () => {
-  const modes: IKeyboardBehaviorMode[] = ['Standalone', 'Simulator'];
-  const { behaviorMode, setBehaviorMode } = useKeyboardBehaviorModeModel();
-  const textDictionary: { [key in IKeyboardBehaviorMode]: string } = {
-    Standalone: 'STD',
-    Simulator: 'SIM',
-  };
+  const { isSimulatorMode, setSimulatorMode } = useKeyboardBehaviorModeModel();
   const { isConnected } = useDeviceStatusModel();
   return (
-    <DualItemsHoverSelector
-      items={modes}
-      currentItem={behaviorMode}
-      setCurrentItem={setBehaviorMode}
-      textDictionary={textDictionary}
-      disabled={!isConnected}
-      hint={texts.hint_assigner_topBar_keyboardBehaviorModeSelector}
-    />
+    <div>
+      <CheckBox
+        checked={isSimulatorMode}
+        setChecked={setSimulatorMode}
+        disabled={!isConnected}
+      />
+      <div>SIM</div>
+    </div>
+    // <DualItemsHoverSelector
+    //   items={modes}
+    //   currentItem={behaviorMode}
+    //   setCurrentItem={setBehaviorMode}
+    //   textDictionary={textDictionary}
+    //   disabled={!isConnected}
+    //   hint={texts.hint_assigner_topBar_keyboardBehaviorModeSelector}
+    // />
   );
 };
 
