@@ -36,10 +36,10 @@ export const MuteModeSelector = () => {
 
 export const LayoutStandardSelector = () => {
   const { systemLayoutIndex, setSystemLayoutIndex } = useSystemLayoutModel();
-  const layoutIndices: number[] = [1, 2];
+  const layoutIndices: number[] = [0, 1];
   const textDictionary: { [key in number]: string } = {
-    1: 'US',
-    2: 'JIS',
+    0: 'US',
+    1: 'JIS',
   };
   const { isConnected } = useDeviceStatusModel();
   return (

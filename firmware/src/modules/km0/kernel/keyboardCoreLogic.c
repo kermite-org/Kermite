@@ -629,7 +629,7 @@ static OutputKeyStrokeAction convertKeyInputOperationWordToOutputKeyStrokeAction
   uint8_t logicalKey = opWord & 0x7f;
   action.modFlags = (opWord >> 8) & 0b1111;
   if (logicalKey) {
-    bool isSecondaryLayout = logicOptions.systemLayout == 2;
+    bool isSecondaryLayout = logicOptions.systemLayout == 1;
     uint16_t hidKey = keyCodeTranslator_mapLogicalKeyToHidKeyCode(
         logicalKey, isSecondaryLayout);
     bool isInShiftCancelLayer = ((opWord >> 12) & 1) > 0;

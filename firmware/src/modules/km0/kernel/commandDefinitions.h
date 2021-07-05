@@ -13,7 +13,7 @@ enum {
   SystemParameter_KeyHoldIndicatorLed,
   SystemParameter_HeartbeatLed,
   SystemParameter_MasterSide,   //0:left, 1:right
-  SystemParameter_SystemLayout, //0:None(fallback to US), 1:US, 2:JIS
+  SystemParameter_SystemLayout, //0:US, 1:JIS
   SystemParameter_WiringMode,   //0:Main, 1:Alter
   SystemParameter_GlowActive,
   SystemParameter_GlowColor,      //0-12
