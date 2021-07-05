@@ -47,10 +47,14 @@ export class InputLogicSimulatorD {
     private deviceService: KeyboardDeviceService,
   ) {}
 
+  private get simulationActive(): boolean {
+    return this.isSimulatorMode && !this.isMuteMode;
+  }
+
   private onRealtimeKeyboardEvent = (event: IRealtimeKeyboardEvent) => {
     if (event.type === 'keyStateChanged') {
       const { keyIndex, isDown } = event;
-      if (this.isSimulatorMode) {
+      if (this.simulationActive) {
         this.CL.keyboardCoreLogic_issuePhysicalKeyStateChanged(
           keyIndex,
           isDown,
@@ -76,7 +80,7 @@ export class InputLogicSimulatorD {
   processTicker = () => {
     const elapsedMs = this.tickUpdator();
 
-    if (this.isSimulatorMode) {
+    if (this.simulationActive) {
       this.CL.keyboardCoreLogic_processTicker(elapsedMs);
 
       const report = this.CL.keyboardCoreLogic_getOutputHidReportBytes();
