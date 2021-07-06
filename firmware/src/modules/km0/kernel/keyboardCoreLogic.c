@@ -604,7 +604,7 @@ enum {
 static uint16_t convertSingleModifierToFlags(uint16_t opWord) {
   uint16_t wordBase = opWord & 0xf000;
   uint8_t modifiers = (opWord >> 8) & 0x0f;
-  uint8_t logicalKey = opWord & 0x7f;
+  uint8_t logicalKey = opWord & 0xff;
   if (LK_Ctrl <= logicalKey && logicalKey <= LK_Gui) {
     modifiers |= 1 << (logicalKey - LK_Ctrl);
     logicalKey = 0;
@@ -626,7 +626,7 @@ static OutputKeyStrokeAction convertKeyInputOperationWordToOutputKeyStrokeAction
   opWord >>= 16;
   opWord = keyActionRemapper_translateKeyOperation(opWord, logicOptions.wiringMode);
   opWord = convertSingleModifierToFlags(opWord);
-  uint8_t logicalKey = opWord & 0x7f;
+  uint8_t logicalKey = opWord & 0xff;
   action.modFlags = (opWord >> 8) & 0b1111;
   if (logicalKey) {
     bool isSecondaryLayout = logicOptions.systemLayout == 1;
