@@ -361,7 +361,7 @@ function patchChildren(
       continue;
     }
 
-    if (refMap === null) {
+    if (refMap === null || refMap === undefined) {
       refMap = {};
       for (let i = oldStart; i <= oldEnd; i++) {
         oldVNode = oldchildren[i];
