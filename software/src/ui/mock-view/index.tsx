@@ -9,6 +9,7 @@ import { HoverHintDevelopmentPage } from '~/ui/mock-view/HoverHintDevelopmentPag
 import { MockPageComponentDevelopment } from '~/ui/mock-view/MockPageComponentDevelopment';
 import { MockPageLoadedDesignDrawing } from '~/ui/mock-view/MockPageLoadedDesignDrawing';
 import { QxDebugPage } from '~/ui/mock-view/QxDebugPage';
+import { QxDebugPage2 } from '~/ui/mock-view/QxDebugPage2';
 import { RoutingDevelopmentPage } from '~/ui/mock-view/RoutingDevelopmentPage';
 import { ShortCssDevPage } from '~/ui/mock-view/ShortCssDevPage';
 import { MockPageLayouterDevelopment } from './MockPageLayouterDevelopment';
@@ -24,9 +25,10 @@ const PageRoot = () => {
       {/* <MockPageComponentDevelopment /> */}
       {/* <HoverHintDevelopmentPage /> */}
       {/* <QxDebugPage /> */}
+      <QxDebugPage2 />
       {/* <GooberDevelopmentPage /> */}
       {/* <GooberDevelopmentPage2 /> */}
-      <ShortCssDevPage />
+      {/* <ShortCssDevPage /> */}
     </div>
   );
 };
