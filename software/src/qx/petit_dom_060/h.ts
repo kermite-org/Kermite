@@ -56,6 +56,10 @@ export function jsx(
   // eslint-disable-next-line no-self-compare
   if (key !== key) throw new Error('Invalid NaN key');
 
+  if (props.children === undefined) {
+    props.children = null;
+  }
+
   // const vtype =
   //   typeof type === "string"
   //     ? VTYPE_ELEMENT

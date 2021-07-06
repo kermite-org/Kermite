@@ -6,12 +6,21 @@ import { qxInterposeProps } from './qxInterposeProps';
 export function jsx(
   type: string | Function,
   props: IProps,
-  ...children: VNode[]
+  ...argsChildren: VNode[]
 ): VNode {
   const skip = props && 'qxIf' in props && !props.qxIf;
   if (skip) {
     return null;
   }
+
+  const children = props?.children || argsChildren;
+
+  for (let i = 0; i < children.length; i++) {
+    if (children[i] === undefined || children[i] === false) {
+      children[i] = null;
+    }
+  }
+
   qxInterposeProps(props, type);
 
   if (typeof type === 'function') {
