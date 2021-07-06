@@ -14,16 +14,20 @@ function createFunctionComponentWrapper(renderFunction: Function) {
   return {
     mount(self: any) {
       self.hook = createHookInstance();
+      self.renderWithHook = (props: any) => {
+        startHooks(self.hook);
+        const vnode = renderFunction(props);
+        if (vnode) {
+          vnode.marker = renderFunction.name;
+        }
+        endHooks();
+        doLater(() => flushHookEffects(self.hook));
+        return vnode;
+      };
+      self.render(self.renderWithHook(self.props));
     },
     patch(self: any) {
-      startHooks(self.hook);
-      const vnode = renderFunction(self.props);
-      if (vnode) {
-        vnode.marker = renderFunction.name;
-      }
-      endHooks();
-      doLater(() => flushHookEffects(self.hook));
-      self.render(vnode);
+      self.render(self.renderWithHook(self.props));
     },
     unmount(self: any) {
       flushHookEffects(self.hook, true);
