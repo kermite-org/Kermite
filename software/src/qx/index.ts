@@ -5,9 +5,9 @@ import {
   setJsxCreateElementFunction,
   styled,
 } from './cssInJs';
+import { Hook } from './hookImpl';
 import { qxGlobal } from './qxGlobal';
 import { render as petitDomRender } from './qxinternal_petit_dom';
-import { Hook } from './qxinternal_petit_dom/hookImpl';
 import { VNode } from './qxinternal_petit_dom/types';
 import { setShortCssProcessor } from './shortCss';
 

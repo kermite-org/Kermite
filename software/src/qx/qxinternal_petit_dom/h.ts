@@ -1,6 +1,6 @@
+import { createFunctionComponent } from '../createRenderComponent';
 import { qxInterposeProps } from '../qxInterposeProps';
 import { isValidComponentType } from './checker';
-import { createFunctionComponent } from './createRenderComponent';
 import {
   IComponentFunction,
   VNode,

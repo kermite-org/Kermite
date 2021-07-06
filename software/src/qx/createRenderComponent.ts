@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { deepEqual } from 'fast-equals';
 // import { QxOptimizerSpec } from '../qx';
-import { qxGlobal } from '../qxGlobal';
-import { deepEqualValuesBesidesFunction } from '../qxUtils';
 import {
   createHookInstance,
   endHooks,
@@ -10,13 +8,20 @@ import {
   IHookInstance,
   startHooks,
 } from './hookImpl';
+import { qxGlobal } from './qxGlobal';
+import { deepEqualValuesBesidesFunction } from './qxUtils';
 // import {
 //   createHookInstance,
 //   IHook,
 //   switchGlobalHookInstance,
 // } from './hookImpl';
-import { IEnv, VNode, IComponentFunction, IComponentObject } from './types';
-import { mount, patch, unmount } from './vdom';
+import {
+  IEnv,
+  VNode,
+  IComponentFunction,
+  IComponentObject,
+} from './qxinternal_petit_dom/types';
+import { mount, patch, unmount } from './qxinternal_petit_dom/vdom';
 
 const promise = Promise.resolve();
 function doLater(fn: () => void) {
