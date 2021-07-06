@@ -10,3 +10,4 @@ export * from './RouterDefinitions';
 export * from './VersionDefinitions';
 export * from './VirtualKeyTexts';
 export * from './VirtualKeys';
+export * from './KeyCodeTranslator';

@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
-import { LogicalKey } from '~/shared';
+import {
+  LogicalKey,
+  keyCodeTranslator_mapLogicalKeyToHidKeyCode,
+} from '~/shared';
 import { dataStorage } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/DataStorage';
 import {
   keyActionRemapper_setupDataReader,
   keyActionRemapper_translateKeyOperation,
 } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/KeyActionRemapper';
-import { keyCodeTranslator_mapLogicalKeyToHidKeyCode } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/KeyCodeTranslator';
 import { KeyboardCoreLogicInterface } from './KeyboardCoreLogicInterface';
 
 // --------------------------------------------------------------------------------
