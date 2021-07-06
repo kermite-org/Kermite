@@ -200,14 +200,14 @@ function setDOMAttribute(
   el: Element,
   attr: string,
   value: string | boolean,
-  isSVG: boolean,
+  isSvg: boolean,
 ) {
   if (value === true) {
     el.setAttribute(attr, '');
   } else if (value === false) {
     el.removeAttribute(attr);
   } else {
-    const namespace = isSVG ? (NS_ATTRS as any)[attr] : undefined;
+    const namespace = isSvg ? (NS_ATTRS as any)[attr] : undefined;
     if (namespace !== undefined) {
       el.setAttributeNS(namespace, attr, value);
     } else {

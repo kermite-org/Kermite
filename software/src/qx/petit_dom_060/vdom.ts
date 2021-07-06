@@ -99,7 +99,7 @@ export function mount(vnode: VNode, env: IEnv = DEFAULT_ENV): IRef {
     let node;
     const { type, props } = vnode;
     if (type === 'svg' && !env.isSvg) {
-      env = Object.assign({}, env, { isSVG: true });
+      env = Object.assign({}, env, { isSvg: true });
     }
     // TODO : {is} for custom elements
     if (!env.isSvg) {
@@ -174,7 +174,7 @@ export function patch(
     newVNode.type === oldVNode.type
   ) {
     if (newVNode.type === 'svg' && !env.isSvg) {
-      env = Object.assign({}, env, { isSVG: true });
+      env = Object.assign({}, env, { isSvg: true });
     }
     patchAttributes(ref.node, newVNode.props, oldVNode.props, env);
     const oldChildren = oldVNode.props.children;
