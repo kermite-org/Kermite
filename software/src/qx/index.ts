@@ -1,4 +1,3 @@
-import { jsx } from 'qx/qxinternal_petit_dom/h';
 import {
   applyGlobalStyle,
   css,
@@ -6,9 +5,10 @@ import {
   styled,
 } from './cssInJs';
 import { Hook } from './hookImpl';
+import { jsx } from './jsx';
+import { render as petitDomRender } from './petit_dom_060';
+import { VNode } from './petit_dom_060/types';
 import { qxGlobal } from './qxGlobal';
-import { render as petitDomRender } from './qxinternal_petit_dom';
-import { VNode } from './qxinternal_petit_dom/types';
 import { setShortCssProcessor } from './shortCss';
 
 export { jsx, Hook, css, styled, applyGlobalStyle, setShortCssProcessor };
