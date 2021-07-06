@@ -184,4 +184,6 @@ enum LogicalKey {
   LK_U9,
   LK_RoutingSource_Any,
   LK_RoutingDestination_Keep,
+  LK_Lang1Kana,
+  LK_Lang2Eisu
 };
