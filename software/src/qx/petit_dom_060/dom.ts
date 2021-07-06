@@ -204,7 +204,7 @@ function setDOMAttribute(
 ) {
   if (value === true) {
     el.setAttribute(attr, '');
-  } else if (value === false) {
+  } else if (value === false || value === undefined) {
     el.removeAttribute(attr);
   } else {
     const namespace = isSvg ? (NS_ATTRS as any)[attr] : undefined;
