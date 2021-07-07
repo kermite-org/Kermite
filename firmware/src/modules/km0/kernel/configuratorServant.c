@@ -251,7 +251,7 @@ static void processReadGenericHidData() {
   }
 
   if (cmd == RawHidOpcode_SimulationModeOutputHidReportWrite) {
-    usbIoCore_hidKeyboard_writeReport(&p[2]);
+    usbIoCore_hidKeyboard_writeReport(&p[1]);
   }
 
   if (cmd == RawHidOpcode_MuteModeSpec) {
