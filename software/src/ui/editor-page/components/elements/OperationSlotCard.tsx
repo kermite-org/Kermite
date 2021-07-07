@@ -2,7 +2,7 @@ import { jsx, css } from 'qx';
 import { uiTheme } from '~/ui/common';
 
 const cssOperationSlotCard = css`
-  width: 28px;
+  min-width: 28px;
   height: 28px;
   font-size: 14px;
   cursor: pointer;
