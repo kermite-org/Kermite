@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import {
   SVG_NS,
   DOM_PROPS_DIRECTIVES,
@@ -63,9 +64,9 @@ class Renderer implements IRenderer {
     const state = this._STATE_;
     const oldVNode = state.vnode;
     state.vnode = vnode;
-    if (state.parentDomNode === null) {
+    if (state.parentDomNode == null) {
       const parentNode = getParentNode(state.ref);
-      if (parentNode === null) {
+      if (parentNode == null) {
         state.ref = mount(vnode, state.env);
         return;
       } else {
@@ -109,12 +110,12 @@ export function mount(vnode: VNode, env: IEnv = DEFAULT_ENV): IRef {
     }
     mountAttributes(node, props, env);
     const childrenRef =
-      props.children === null ? props.children : mount(props.children, env);
+      props.children == null ? props.children : mount(props.children, env);
     /**
      * We need to insert content before setting interactive props
      * that rely on children been present (e.g select)
      */
-    if (childrenRef !== null) insertDom(node, childrenRef, null);
+    if (childrenRef != null) insertDom(node, childrenRef, null);
     mountDirectives(node, props, env);
     return {
       type: REF_SINGLE,
@@ -179,13 +180,13 @@ export function patch(
     patchAttributes(ref.node, newVNode.props, oldVNode.props, env);
     const oldChildren = oldVNode.props.children;
     const newChildren = newVNode.props.children;
-    if (oldChildren === null) {
-      if (newChildren !== null) {
+    if (oldChildren == null) {
+      if (newChildren != null) {
         ref.children = mount(newChildren, env);
         insertDom(ref.node, ref.children, null);
       }
     } else {
-      if (newChildren === null) {
+      if (newChildren == null) {
         ref.node.textContent = '';
         unmount(oldChildren, ref.children, env);
         ref.children = null;
@@ -211,7 +212,7 @@ export function patch(
   ) {
     const renderFn = newVNode.type;
     const shouldUpdate =
-      renderFn.shouldUpdate !== null
+      renderFn.shouldUpdate != null
         ? renderFn.shouldUpdate(oldVNode.props, newVNode.props)
         : defaultShouldUpdate(oldVNode.props, newVNode.props);
     if (shouldUpdate) {
@@ -273,7 +274,7 @@ export function unmount(vnode: VNode, ref: any, env: IEnv) {
   // if (vnode instanceof Node ||  isEmpty(vnode) || isLeaf(vnode)) return;
   if (isElement(vnode)) {
     unmountDirectives(ref.node, vnode.props, env);
-    if (vnode.props.children !== null)
+    if (vnode.props.children != null)
       unmount(vnode.props.children, ref.children, env);
   } else if (isNonEmptyArray(vnode)) {
     vnode.forEach((childVNode, index) =>
@@ -361,19 +362,19 @@ function patchChildren(
       continue;
     }
 
-    if (refMap === null || refMap === undefined) {
+    if (refMap == null) {
       refMap = {};
       for (let i = oldStart; i <= oldEnd; i++) {
         oldVNode = oldchildren[i];
-        if (oldVNode?.key !== null) {
+        if (oldVNode?.key != null) {
           refMap[oldVNode.key] = i;
         }
       }
     }
 
     newVNode = newChildren[newStart];
-    const idx = newVNode?.key !== null ? refMap[newVNode.key] : null;
-    if (idx !== null) {
+    const idx = newVNode?.key != null ? refMap[newVNode.key] : null;
+    if (idx != null) {
       oldVNode = oldchildren[idx];
       oldRef = refChildren[idx];
       newRef = children[newStart] = patch(
@@ -408,7 +409,7 @@ function patchChildren(
   }
   while (oldStart <= oldEnd) {
     oldRef = refChildren[oldStart];
-    if (oldRef !== null) {
+    if (oldRef != null) {
       removeDom(parentDomNode, oldRef);
       unmount(oldchildren[oldStart], oldRef, env);
     }
