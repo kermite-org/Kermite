@@ -277,13 +277,21 @@ static void master_start() {
       keyboardMain_updateOledDisplayModule(tick);
       master_waitSlaveTaskCompletion();
     }
-    if (tick % 4000 == 3 && isSlaveActive) {
-      master_sendSlaveTaskOrder(SplitOp_TaskOrder_FlashHeartbeat);
-      keyboardMain_taskFlashHeartbeatLed();
-      master_waitSlaveTaskCompletion();
-    }
-    if (tick % 1000 == 0 && !isSlaveActive) {
-      boardIo_toggleLed1();
+    if (isSlaveActive) {
+      //左右間の通信ができている場合同期して1回ずつ点滅
+      if (tick % 2000 == 0) {
+        master_sendSlaveTaskOrder(SplitOp_TaskOrder_FlashHeartbeat);
+        keyboardMain_taskFlashHeartbeatLed();
+        master_waitSlaveTaskCompletion();
+      }
+    } else {
+      //slaveとの疎通が取れない場合2回ずつ点滅
+      if (tick % 3000 == 0) {
+        keyboardMain_taskFlashHeartbeatLed();
+      };
+      if (tick % 3000 == 200 && tick > 200) {
+        keyboardMain_taskFlashHeartbeatLed();
+      };
     }
     keyboardMain_processUpdate();
     delayUs(500);
@@ -395,7 +403,13 @@ static void slave_start() {
   keyboardMain_setAsSplitSlave();
   boardLink_setupSlaveReceiver(slave_onRecevierInterruption);
 
+  uint32_t tick = 0;
+  uint16_t liveCounter = 0;
+  uint8_t subCount = 0;
   while (1) {
+    if (taskOrder != 0) {
+      liveCounter = 100;
+    }
     if (taskOrder == SplitOp_TaskOrder_ScanKeyStates) {
       keyboardMain_udpateKeyScanners();
       // keyboardMain_updateKeyInidicatorLed();
@@ -418,6 +432,22 @@ static void slave_start() {
     if (masterStateReceived) {
       slave_consumeMasterStatePackets();
       masterStateReceived = false;
+    }
+    if (liveCounter == 0) {
+      //masterから通信が途絶した場合2回ずつ点滅
+      if (tick % 3000 == 0) {
+        keyboardMain_taskFlashHeartbeatLed();
+      };
+      if (tick % 3000 == 200) {
+        keyboardMain_taskFlashHeartbeatLed();
+      };
+    }
+    subCount++;
+    if ((subCount & 15) == 0) {
+      tick++;
+      if (liveCounter > 0) {
+        liveCounter--;
+      }
     }
     delayUs(10);
   }
@@ -446,6 +476,25 @@ static void detection_sendMasterOath() {
   boardLink_exchangeFramesBlocking();
 }
 
+static void detection_showLed(uint32_t tick) {
+  if (tick > 300) {
+    //2回ずつ点滅
+    uint32_t tt = tick % 3000;
+    if (tt == 0) {
+      boardIo_writeLed1(1);
+    }
+    if (tt == 3) {
+      boardIo_writeLed1(0);
+    }
+    if (tt == 200) {
+      boardIo_writeLed1(1);
+    }
+    if (tt == 203) {
+      boardIo_writeLed1(0);
+    }
+  }
+}
+
 //USB接続が確立していない期間の動作
 //双方待機し、USB接続が確立すると自分がMasterになり、相手にMaseter確定通知パケットを送る
 static bool detenction_determineMasterSlaveByUsbConnection() {
@@ -467,9 +516,7 @@ static bool detenction_determineMasterSlaveByUsbConnection() {
       break;
     }
     usbIoCore_processUpdate();
-    if (tick % 1000 == 0 && tick > 0) {
-      boardIo_toggleLed1();
-    }
+    detection_showLed(tick);
     delayMs(1);
     tick++;
   }
