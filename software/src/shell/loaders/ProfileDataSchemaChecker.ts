@@ -12,8 +12,6 @@ import {
 } from '~/shared/modules/SchemaValidationHelper';
 import { persistEditKeyboardDesignSchemaChecker } from '~/shell/loaders/LayoutFileSchemaChecker';
 
-const vModiferKey = vValueOneOf(['K_Ctrl', 'K_Shift', 'K_Alt', 'K_Gui']);
-
 const vAssignOperation = () =>
   vSchemaOneOf([
     vObject({
@@ -31,11 +29,6 @@ const vAssignOperation = () =>
         'toggle',
         'oneshot',
       ]),
-    }),
-    vObject({
-      type: vValueEquals('modifierCall'),
-      modiferKey: vModiferKey,
-      isOneShot: vBoolean(),
     }),
     vObject({
       type: vValueEquals('layerClearExclusive'),

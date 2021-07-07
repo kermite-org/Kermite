@@ -1,5 +1,6 @@
-import { asyncRerender, Hook } from 'qx';
+import { fallbackKeyboardConfig } from '~/shared';
 import { ipcAgent } from '~/ui/common/base';
+import { useEventSource } from '~/ui/common/helpers';
 
 interface IKeyboardBehaviorModeModel {
   isSimulatorMode: boolean;
@@ -8,36 +9,25 @@ interface IKeyboardBehaviorModeModel {
   setMuteMode(enabled: boolean): void;
 }
 
-// 複数箇所から利用した場合に別のHookインスタンスになり状態が同期されないため、グローバル変数で状態を共有
-const gModeState = new (class {
-  isSimulatorMode: boolean = false;
-  isMuteMode: boolean = false;
-})();
-
 export function useKeyboardBehaviorModeModel(): IKeyboardBehaviorModeModel {
-  Hook.useEffect(() => {
-    (async () => {
-      const keyboardConfig = await ipcAgent.async.config_getKeyboardConfig();
-      gModeState.isSimulatorMode = keyboardConfig.isSimulatorMode;
-      gModeState.isMuteMode = keyboardConfig.isMuteMode;
-    })();
-  }, []);
+  const keyboardConfig = useEventSource(
+    ipcAgent.events.config_keyboardConfigEvents,
+    fallbackKeyboardConfig,
+  );
 
   const setSimulatorMode = async (enabled: boolean) => {
-    gModeState.isSimulatorMode = enabled;
-    await ipcAgent.async.config_writeKeyboardConfig(gModeState);
-    asyncRerender();
+    await ipcAgent.async.config_writeKeyboardConfig({
+      isSimulatorMode: enabled,
+    });
   };
 
   const setMuteMode = async (enabled: boolean) => {
-    gModeState.isMuteMode = enabled;
-    await ipcAgent.async.config_writeKeyboardConfig(gModeState);
-    asyncRerender();
+    await ipcAgent.async.config_writeKeyboardConfig({ isMuteMode: enabled });
   };
 
   return {
-    isSimulatorMode: gModeState.isSimulatorMode,
-    isMuteMode: gModeState.isMuteMode,
+    isSimulatorMode: keyboardConfig.isSimulatorMode,
+    isMuteMode: keyboardConfig.isMuteMode,
     setSimulatorMode,
     setMuteMode,
   };

@@ -1,6 +1,6 @@
 import {
-  fallbackProfileData,
   generateNumberSequence,
+  IKeyboardConfig,
   IKeyboardDeviceStatus,
   IntervalTimerWrapper,
   IProfileData,
@@ -78,7 +78,7 @@ export class InputLogicSimulatorD {
     }
   };
 
-  processTicker = () => {
+  private processTicker = () => {
     const elapsedMs = this.tickUpdator();
 
     if (this.simulationActive) {
@@ -106,30 +106,26 @@ export class InputLogicSimulatorD {
     this.CL.keyboardCoreLogic_initialize();
   }
 
-  private updateSourceSetup = async () => {
-    const config = this.keyboardConfigProvider.getKeyboardConfig();
-    const { isSimulatorMode, isMuteMode } = config;
-    if (this.isSimulatorMode !== isSimulatorMode) {
-      // console.log({ isSimulatorMode });
-      this.deviceService.setSimulatorMode(isSimulatorMode);
-      this.isSimulatorMode = isSimulatorMode;
-    }
-    if (this.isMuteMode !== isMuteMode) {
-      this.deviceService.setMuteMode(isMuteMode);
-      this.isMuteMode = isMuteMode;
-    }
-
-    const prof =
-      (await this.profileManager.getCurrentProfileAsync()) ||
-      fallbackProfileData;
-    this.loadSimulationProfile(prof);
-  };
-
   private onProfileStatusChanged = (
     changedStatus: Partial<IProfileManagerStatus>,
   ) => {
     if (changedStatus.loadedProfileData) {
-      this.updateSourceSetup();
+      this.loadSimulationProfile(changedStatus.loadedProfileData);
+    }
+  };
+
+  private keyboardConfigHandler = (config: Partial<IKeyboardConfig>) => {
+    const { isSimulatorMode, isMuteMode } = config;
+    if (
+      isSimulatorMode !== undefined &&
+      this.isSimulatorMode !== isSimulatorMode
+    ) {
+      this.deviceService.setSimulatorMode(isSimulatorMode);
+      this.isSimulatorMode = isSimulatorMode;
+    }
+    if (isMuteMode !== undefined && this.isMuteMode !== isMuteMode) {
+      this.deviceService.setMuteMode(isMuteMode);
+      this.isMuteMode = isMuteMode;
     }
   };
 
@@ -139,8 +135,8 @@ export class InputLogicSimulatorD {
 
   initialize() {
     this.profileManager.statusEventPort.subscribe(this.onProfileStatusChanged);
-    this.keyboardConfigProvider.internal_changedNotifier.subscribe(
-      this.updateSourceSetup,
+    this.keyboardConfigProvider.keyboardConfigEventPort.subscribe(
+      this.keyboardConfigHandler,
     );
     this.deviceService.realtimeEventPort.subscribe(
       this.onRealtimeKeyboardEvent,
@@ -153,15 +149,14 @@ export class InputLogicSimulatorD {
       ),
       5,
     );
-    this.updateSourceSetup();
   }
 
   terminate() {
     this.profileManager.statusEventPort.unsubscribe(
       this.onProfileStatusChanged,
     );
-    this.keyboardConfigProvider.internal_changedNotifier.unsubscribe(
-      this.updateSourceSetup,
+    this.keyboardConfigProvider.keyboardConfigEventPort.unsubscribe(
+      this.keyboardConfigHandler,
     );
     this.deviceService.realtimeEventPort.unsubscribe(
       this.onRealtimeKeyboardEvent,

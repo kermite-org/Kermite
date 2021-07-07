@@ -52,7 +52,7 @@ namespace ProfileDataMigratorHelper {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function showLog(text: string) {
-  console.log(text);
+  // console.log(text);
 }
 
 export namespace ProfileDataMigrator {

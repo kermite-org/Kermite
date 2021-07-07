@@ -3,7 +3,7 @@ import {
   createFallbackPersistKeyboardDesign,
   IPersistKeyboardDesign,
 } from './KeyboardDesign';
-import { ModifierVirtualKey, VirtualKey } from './VirtualKeys';
+import { VirtualKey } from './VirtualKeys';
 
 export type ILayerDefaultScheme = 'block' | 'transparent';
 export interface ILayer {
@@ -24,11 +24,7 @@ export type IHoldFunctionInvocationMode =
 
 export type LayerInvocationMode = IHoldFunctionInvocationMode;
 
-export type IAssignOperationType =
-  | 'none'
-  | 'keyInput'
-  | 'layerCall'
-  | 'modifierCall';
+export type IAssignOperationType = 'none' | 'keyInput' | 'layerCall';
 
 export type IAssingOperationKeyInput = {
   type: 'keyInput';
@@ -41,12 +37,6 @@ export type IAssignOperationLayerCall = {
   type: 'layerCall';
   targetLayerId: string;
   invocationMode: IHoldFunctionInvocationMode;
-};
-
-export type IAssignOperationModifierCall = {
-  type: 'modifierCall';
-  modifierKey: ModifierVirtualKey;
-  isOneShot: boolean;
 };
 
 export type IAssignOperationClearExclusiveLayers = {
@@ -63,7 +53,6 @@ export type IAssignOperationSystemAction = {
 export type IAssignOperation =
   | IAssingOperationKeyInput
   | IAssignOperationLayerCall
-  | IAssignOperationModifierCall
   | IAssignOperationClearExclusiveLayers
   | IAssignOperationSystemAction;
 

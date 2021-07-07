@@ -1,4 +1,4 @@
-import { IKeyboardConfig } from '~/shared';
+import { fallbackKeyboardConfig, IKeyboardConfig } from '~/shared';
 import { vBoolean, vObject } from '~/shared/modules/SchemaValidationHelper';
 import { applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
@@ -10,24 +10,32 @@ const keyboardConfigDataSchema = vObject({
   isMuteMode: vBoolean(),
 });
 
-const keyboardConfigDefault: IKeyboardConfig = {
-  isSimulatorMode: false,
-  isMuteMode: false,
-};
 export class KeyboardConfigProvider {
-  internal_changedNotifier = createEventPort<void>();
+  private keyboardConfig: IKeyboardConfig = fallbackKeyboardConfig;
 
-  getKeyboardConfig(): IKeyboardConfig {
-    return applicationStorage.readItemSafe(
+  keyboardConfigEventPort = createEventPort<Partial<IKeyboardConfig>>({
+    onFirstSubscriptionStarting: () => this.loadFromBackingStore(),
+    onLastSubscriptionEnded: () => this.saveToBackingStore(),
+    initialValueGetter: () => this.keyboardConfig,
+  });
+
+  writeKeyboardConfig(partialConfig: Partial<IKeyboardConfig>) {
+    this.keyboardConfig = {
+      ...this.keyboardConfig,
+      ...partialConfig,
+    };
+    this.keyboardConfigEventPort.emit(partialConfig);
+  }
+
+  loadFromBackingStore() {
+    this.keyboardConfig = applicationStorage.readItemSafe(
       'keyboardConfig',
       keyboardConfigDataSchema,
-      keyboardConfigDefault,
+      fallbackKeyboardConfig,
     );
   }
 
-  writeKeyboardConfig(config: IKeyboardConfig) {
-    applicationStorage.writeItem('keyboardConfig', config);
-    // appGlobal.eventBus.emit('keyboardConfigChanged', config);
-    this.internal_changedNotifier.emit();
+  saveToBackingStore() {
+    applicationStorage.writeItem('keyboardConfig', this.keyboardConfig);
   }
 }
