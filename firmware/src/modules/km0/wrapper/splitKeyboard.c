@@ -42,11 +42,11 @@ static const int pin_masterSlaveDetermination = -1;
 #define SingleWireMaxPacketSizeTmp (NumScanSlotBytesLarger + 1)
 #define SingleWireMaxPacketSize (SingleWireMaxPacketSizeTmp > 4 ? SingleWireMaxPacketSizeTmp : 4)
 
-#ifdef KERMITE_TARGET_MCU_RP2040
-static const int heartbeat_led_tick_division_shift = 1;
-#else
-static const int heartbeat_led_tick_division_shift = 0;
-#endif
+// #ifdef KERMITE_TARGET_MCU_RP2040
+// static const int heartbeat_led_tick_division_shift = 1;
+// #else
+// static const int heartbeat_led_tick_division_shift = 0;
+// #endif
 
 enum {
   SplitOp_MasterOath = 0xC0,                  //Master --> Slave
@@ -77,6 +77,21 @@ bool isRightHand = false;
 void (*boardConfigCallback)(int8_t side) = NULL;
 
 int8_t configuredBoardSide = -1;
+
+//-------------------------------------------------------
+//100ms周期のタスク, ステータスLED用
+
+static uint32_t taskHmsNextTimeMs = 0;
+static uint32_t taskHmsStep = 0;
+
+static void taskForEach100ms(void (*taskFunc)(uint32_t)) {
+  uint32_t timeMs = system_getSystemTimeMs();
+  if (timeMs > taskHmsNextTimeMs) {
+    taskFunc(taskHmsStep);
+    taskHmsStep++;
+    taskHmsNextTimeMs = timeMs + 100;
+  }
+}
 
 //-------------------------------------------------------
 
@@ -252,6 +267,25 @@ static void master_setupBoard() {
   setBoardSide(side);
 }
 
+static void master_ledTask(uint32_t step) {
+  if (isSlaveActive) {
+    //左右間の通信が機能している場合同期して1回ずつ点滅
+    if (step % 30 == 0) {
+      master_sendSlaveTaskOrder(SplitOp_TaskOrder_FlashHeartbeat);
+      keyboardMain_taskFlashHeartbeatLed();
+      master_waitSlaveTaskCompletion();
+    }
+  } else {
+    //slaveとの疎通が取れなくなっている場合2回ずつ点滅
+    if (step % 30 == 0) {
+      keyboardMain_taskFlashHeartbeatLed();
+    };
+    if (step % 30 == 2) {
+      keyboardMain_taskFlashHeartbeatLed();
+    };
+  }
+}
+
 static void master_start() {
   master_setupBoard();
   master_sendInitialParameteresAll();
@@ -283,23 +317,7 @@ static void master_start() {
       keyboardMain_updateOledDisplayModule(tick);
       master_waitSlaveTaskCompletion();
     }
-    uint32_t ledTick = tick >> heartbeat_led_tick_division_shift;
-    if (isSlaveActive) {
-      //左右間の通信ができている場合同期して1回ずつ点滅
-      if (ledTick % 2000 == 0) {
-        master_sendSlaveTaskOrder(SplitOp_TaskOrder_FlashHeartbeat);
-        keyboardMain_taskFlashHeartbeatLed();
-        master_waitSlaveTaskCompletion();
-      }
-    } else {
-      //slaveとの疎通が取れない場合2回ずつ点滅
-      if (ledTick % 3000 == 0) {
-        keyboardMain_taskFlashHeartbeatLed();
-      };
-      if (ledTick % 3000 == 200 && ledTick > 200) {
-        keyboardMain_taskFlashHeartbeatLed();
-      };
-    }
+    taskForEach100ms(master_ledTask);
     keyboardMain_processUpdate();
     delayUs(500);
     tick++;
@@ -314,6 +332,8 @@ volatile static bool masterStateReceived = false;
 
 static uint8_t slaveSendingKeyStateBytes[NumScanSlotBytesLarger] = { 0 };
 static uint8_t slaveSendingKeyStateBytesLen = 0;
+
+volatile static uint8_t slavePacketReceivedFromMaster = false;
 
 static void slave_respondAck() {
   sw_txbuf[0] = SplitOp_SlaveAck;
@@ -374,6 +394,7 @@ static void slave_onRecevierInterruption() {
       masterStateReceived = true;
       slave_respondAck();
     }
+    slavePacketReceivedFromMaster = true;
   }
 }
 
@@ -406,17 +427,25 @@ static void slave_consumeMasterStatePackets() {
   }
 }
 
+static void slave_ledTask(uint32_t step) {
+  bool isConnected = slavePacketReceivedFromMaster;
+  if (!isConnected) {
+    //masterからの通信が途絶している場合2回ずつ点滅
+    if (step % 30 == 0) {
+      keyboardMain_taskFlashHeartbeatLed();
+    };
+    if (step % 30 == 2) {
+      keyboardMain_taskFlashHeartbeatLed();
+    };
+  }
+  slavePacketReceivedFromMaster = false;
+}
+
 static void slave_start() {
   keyboardMain_setAsSplitSlave();
   boardLink_setupSlaveReceiver(slave_onRecevierInterruption);
 
-  uint32_t tick = 0;
-  uint16_t liveCounter = 0;
-  uint8_t subCount = 0;
   while (1) {
-    if (taskOrder != 0) {
-      liveCounter = 100;
-    }
     if (taskOrder == SplitOp_TaskOrder_ScanKeyStates) {
       keyboardMain_udpateKeyScanners();
       // keyboardMain_updateKeyInidicatorLed();
@@ -440,23 +469,7 @@ static void slave_start() {
       slave_consumeMasterStatePackets();
       masterStateReceived = false;
     }
-    if (liveCounter == 0) {
-      uint32_t ledTick = tick >> heartbeat_led_tick_division_shift;
-      //masterから通信が途絶した場合2回ずつ点滅
-      if (ledTick % 3000 == 0) {
-        keyboardMain_taskFlashHeartbeatLed();
-      };
-      if (ledTick % 3000 == 200) {
-        keyboardMain_taskFlashHeartbeatLed();
-      };
-    }
-    subCount++;
-    if ((subCount & 15) == 0) {
-      tick++;
-      if (liveCounter > 0) {
-        liveCounter--;
-      }
-    }
+    taskForEach100ms(slave_ledTask);
     delayUs(10);
   }
 }
@@ -484,25 +497,14 @@ static void detection_sendMasterOath() {
   boardLink_exchangeFramesBlocking();
 }
 
-static void detection_showLed(uint32_t tick) {
-  // uint32_t ledTick = tick >> heartbeat_led_tick_division_shift;
-  uint32_t ledTick = tick;
-  if (ledTick > 300) {
-    //2回ずつ点滅
-    uint32_t tt = ledTick % 3000;
-    if (tt == 0) {
-      boardIo_writeLed1(1);
-    }
-    if (tt == 3) {
-      boardIo_writeLed1(0);
-    }
-    if (tt == 200) {
-      boardIo_writeLed1(1);
-    }
-    if (tt == 203) {
-      boardIo_writeLed1(0);
-    }
-  }
+static void detection_ledTask(uint32_t step) {
+  //2回ずつ点滅
+  if (step % 30 == 0) {
+    keyboardMain_taskFlashHeartbeatLed();
+  };
+  if (step % 30 == 2) {
+    keyboardMain_taskFlashHeartbeatLed();
+  };
 }
 
 //USB接続が確立していない期間の動作
@@ -526,7 +528,7 @@ static bool detenction_determineMasterSlaveByUsbConnection() {
       break;
     }
     usbIoCore_processUpdate();
-    detection_showLed(tick);
+    taskForEach100ms(detection_ledTask);
     delayMs(1);
     tick++;
   }
