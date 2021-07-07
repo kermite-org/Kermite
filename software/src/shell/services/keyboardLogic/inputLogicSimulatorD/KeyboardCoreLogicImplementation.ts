@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
-import { LogicalKey } from '~/shared';
+import {
+  LogicalKey,
+  keyCodeTranslator_mapLogicalKeyToHidKeyCode,
+} from '~/shared';
 import { dataStorage } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/DataStorage';
 import {
   keyActionRemapper_setupDataReader,
   keyActionRemapper_translateKeyOperation,
 } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/KeyActionRemapper';
-import { keyCodeTranslator_mapLogicalKeyToHidKeyCode } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/KeyCodeTranslator';
 import { KeyboardCoreLogicInterface } from './KeyboardCoreLogicInterface';
 
 // --------------------------------------------------------------------------------
@@ -615,7 +617,7 @@ const InvocationMode = {
 function convertSingleModifierToFlags(opWord: u16): u16 {
   const wordBase = opWord & 0xf000;
   let modifiers = (opWord >> 8) & 0x0f;
-  let logicalKey = opWord & 0x7f;
+  let logicalKey = opWord & 0xff;
   if (LogicalKey.LK_Ctrl <= logicalKey && logicalKey <= LogicalKey.LK_Gui) {
     modifiers |= 1 << (logicalKey - LogicalKey.LK_Ctrl);
     logicalKey = 0;
@@ -641,7 +643,7 @@ function convertKeyInputOperationWordToOutputKeyStrokeAction(
     logicOptions.wiringMode,
   );
   opWord = convertSingleModifierToFlags(opWord);
-  const logicalKey = opWord & 0x7f;
+  const logicalKey = opWord & 0xff;
   action.modFlags = (opWord >> 8) & 0b1111;
 
   if (logicalKey) {

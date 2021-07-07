@@ -1,4 +1,4 @@
-import { LogicalKey } from '~/shared';
+import { LogicalKey } from './LogicalKey';
 
 // HIDキーコード定義, キーボードの言語やレイアウトによらない共通部分
 const enum HidKey {
@@ -188,6 +188,8 @@ const enum HidKeyJA {
   KU_JA_Yen_VertiacalBar = 137,
   KU_Henkan = 138,
   KU_Muhenkan = 139,
+  KU_Lang1Kana = 144,
+  KU_Lang2Eisu = 145,
 }
 
 const Shifted = 0x100;
@@ -484,6 +486,8 @@ const logicalKeyItems: LogicalKeyItem[] = [
     HidKeyUS.KU_US_Dot_GreaterThan | Shifted,
     HidKeyJA.KU_JA_Dot_GreaterThan | Shifted,
   ],
+  [LogicalKey.LK_Lang1Kana, 'Kana', HidKeyJA.KU_Lang1Kana],
+  [LogicalKey.LK_Lang2Eisu, 'Eisu', HidKeyJA.KU_Lang2Eisu],
 ];
 
 function getLogicalKeysItem(logicalKey: number): LogicalKeyItem | undefined {
