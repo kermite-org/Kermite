@@ -15,7 +15,7 @@ type IRootParentDomNode = HTMLElement & {
 export function render(
   vnode: VNode,
   parentDomNode: IRootParentDomNode,
-  options: { directives?: IDirective } = {},
+  options: { directives?: Record<string, IDirective> } = {},
 ) {
   const rootRef = parentDomNode.$$PETIT_DOM_REF;
   const env = Object.assign({}, DEFAULT_ENV);

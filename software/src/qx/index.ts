@@ -42,6 +42,18 @@ function setupAsyncRenderLoop() {
   }
 }
 
+const domRefDirective = {
+  mount(element: Element, ref: { current: Element } | ((el: Element) => void)) {
+    if (typeof ref === 'function') {
+      ref(element);
+    } else {
+      ref.current = element;
+    }
+  },
+  patch() {},
+  unmount() {},
+};
+
 export function render(
   renderFn: () => JSX.Element,
   parentDomNode: HTMLElement | null,
@@ -53,7 +65,9 @@ export function render(
     d.nUpdated = 0;
     d.nPatchCall = 0;
     const t0 = performance.now();
-    petitDomRender(renderFn() as VNode, parentDomNode!);
+
+    const options = { directives: { ref: domRefDirective } };
+    petitDomRender(renderFn() as VNode, parentDomNode!, options);
     const t1 = performance.now();
     if (0) {
       const dur = t1 - t0;
