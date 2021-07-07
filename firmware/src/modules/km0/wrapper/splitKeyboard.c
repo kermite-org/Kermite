@@ -42,6 +42,12 @@ static const int pin_masterSlaveDetermination = -1;
 #define SingleWireMaxPacketSizeTmp (NumScanSlotBytesLarger + 1)
 #define SingleWireMaxPacketSize (SingleWireMaxPacketSizeTmp > 4 ? SingleWireMaxPacketSizeTmp : 4)
 
+#ifdef KERMITE_TARGET_MCU_RP2040
+static const int heartbeat_led_tick_division_shift = 1;
+#else
+static const int heartbeat_led_tick_division_shift = 0;
+#endif
+
 enum {
   SplitOp_MasterOath = 0xC0,                  //Master --> Slave
   SplitOp_InputScanSlotStatesRequest = 0xC1,  //Master --> Slave
@@ -277,19 +283,20 @@ static void master_start() {
       keyboardMain_updateOledDisplayModule(tick);
       master_waitSlaveTaskCompletion();
     }
+    uint32_t ledTick = tick >> heartbeat_led_tick_division_shift;
     if (isSlaveActive) {
       //左右間の通信ができている場合同期して1回ずつ点滅
-      if (tick % 2000 == 0) {
+      if (ledTick % 2000 == 0) {
         master_sendSlaveTaskOrder(SplitOp_TaskOrder_FlashHeartbeat);
         keyboardMain_taskFlashHeartbeatLed();
         master_waitSlaveTaskCompletion();
       }
     } else {
       //slaveとの疎通が取れない場合2回ずつ点滅
-      if (tick % 3000 == 0) {
+      if (ledTick % 3000 == 0) {
         keyboardMain_taskFlashHeartbeatLed();
       };
-      if (tick % 3000 == 200 && tick > 200) {
+      if (ledTick % 3000 == 200 && ledTick > 200) {
         keyboardMain_taskFlashHeartbeatLed();
       };
     }
@@ -434,11 +441,12 @@ static void slave_start() {
       masterStateReceived = false;
     }
     if (liveCounter == 0) {
+      uint32_t ledTick = tick >> heartbeat_led_tick_division_shift;
       //masterから通信が途絶した場合2回ずつ点滅
-      if (tick % 3000 == 0) {
+      if (ledTick % 3000 == 0) {
         keyboardMain_taskFlashHeartbeatLed();
       };
-      if (tick % 3000 == 200) {
+      if (ledTick % 3000 == 200) {
         keyboardMain_taskFlashHeartbeatLed();
       };
     }
@@ -477,9 +485,11 @@ static void detection_sendMasterOath() {
 }
 
 static void detection_showLed(uint32_t tick) {
-  if (tick > 300) {
+  // uint32_t ledTick = tick >> heartbeat_led_tick_division_shift;
+  uint32_t ledTick = tick;
+  if (ledTick > 300) {
     //2回ずつ点滅
-    uint32_t tt = tick % 3000;
+    uint32_t tt = ledTick % 3000;
     if (tt == 0) {
       boardIo_writeLed1(1);
     }
