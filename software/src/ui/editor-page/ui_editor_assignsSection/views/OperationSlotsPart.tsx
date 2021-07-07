@@ -5,6 +5,7 @@ import { IPlainOperationEditCardsViewModel } from '~/ui/editor-page/ui_editor_as
 import { IOperationSlotsPartViewModel } from '~/ui/editor-page/ui_editor_assignsSection/viewModels/OperationSlotsPartViewModel';
 
 const cssOerationSlotsPart = css`
+  width: 70px;
   > * {
     margin: 2px;
   }
