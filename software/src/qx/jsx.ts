@@ -1,24 +1,19 @@
+import { EMPTY_OBJECT } from 'qx/petit_dom_060/h';
 import { getFunctionComponentWrapperCached } from './functionComponentWrapper';
-import { h as petit_dom_h } from './petit_dom_060';
+import { jsx as petit_dom_jsx } from './petit_dom_060';
 import { IProps, VNode } from './petit_dom_060/types';
 import { qxInterposeProps } from './qxInterposeProps';
 
 export function jsx(
   type: string | Function,
   props: IProps,
-  ...argsChildren: VNode[]
+  ...children: VNode[]
 ): VNode {
+  props = props || EMPTY_OBJECT;
+
   const skip = props && 'qxIf' in props && !props.qxIf;
   if (skip) {
     return null;
-  }
-
-  const children = props?.children || argsChildren;
-
-  for (let i = 0; i < children.length; i++) {
-    if (children[i] === undefined || children[i] === false) {
-      children[i] = null;
-    }
   }
 
   qxInterposeProps(props, type);
@@ -27,5 +22,19 @@ export function jsx(
     type = getFunctionComponentWrapperCached(type);
   }
 
-  return petit_dom_h(type, props, ...children);
+  if (Array.isArray(children)) {
+    for (let i = 0; i < children.length; i++) {
+      if (children[i] === undefined || (children[i] as any) === false) {
+        children[i] = null;
+      }
+    }
+  }
+
+  if (children.length > 1) {
+    props = { ...props, children };
+  } else if (children.length === 1) {
+    props = { ...props, children: children[0] };
+  }
+
+  return petit_dom_jsx(type, props, props.key);
 }
