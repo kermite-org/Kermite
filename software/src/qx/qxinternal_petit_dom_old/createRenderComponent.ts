@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { deepEqual } from 'fast-equals';
 // import { QxOptimizerSpec } from '../qx';
-import { qxGlobal } from '../qxGlobal';
-import { deepEqualValuesBesidesFunction } from '../qxUtils';
 import {
   createHookInstance,
   endHooks,
   flushHookEffects,
   IHookInstance,
   startHooks,
-} from './hookImpl';
+} from '../hookImpl';
+import { qxGlobal } from '../qxGlobal';
+import { deepEqualValuesBesidesFunction } from '../qxUtils';
 // import {
 //   createHookInstance,
 //   IHook,

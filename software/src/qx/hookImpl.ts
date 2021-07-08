@@ -1,4 +1,4 @@
-import { qxGlobal } from '../qxGlobal';
+import { qxGlobal } from './qxGlobal';
 
 type IEffectFunc = () => void | (() => void);
 

@@ -5,7 +5,7 @@ import {
   VNode,
   VTYPE_COMPONENT,
   VTYPE_ELEMENT,
-} from 'qx/qxinternal_petit_dom/types';
+} from './types';
 
 export const isVNull = (c: VNode | null | false | undefined) =>
   c === null || c === false || c === undefined;

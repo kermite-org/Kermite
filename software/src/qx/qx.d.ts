@@ -1,8 +1,7 @@
 // based on type definition of preact
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { Component } from './qxinternal_petit_dom/component';
-import { VNode } from './qxinternal_petit_dom/types';
+import { VNode } from './qxinternal_petit_dom_060/types';
 
 // export { h } from './qxinternal_petit_dom/h';
 // export { Hook } from './qxinternal_petit_dom/hookImpl2';
@@ -55,7 +54,7 @@ declare global {
     //     render(): Element;
     //   };
 
-    interface ElementClass extends Component<any, any> {}
+    // interface ElementClass extends Component<any, any> {}
 
     interface ElementAttributesProperty {
       props: any;
