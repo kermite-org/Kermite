@@ -1,8 +1,8 @@
-import { EMPTY_OBJECT } from 'qx/petit_dom_060/h';
+import { EMPTY_OBJECT } from 'qx/qxinternal_petit_dom_060/h';
 import { getFunctionComponentWrapperCached } from './functionComponentWrapper';
-import { jsx as petit_dom_jsx } from './petit_dom_060';
-import { IProps, VNode } from './petit_dom_060/types';
 import { qxInterposeProps } from './qxInterposeProps';
+import { jsx as petit_dom_jsx } from './qxinternal_petit_dom_060';
+import { IProps, VNode } from './qxinternal_petit_dom_060/types';
 
 export function jsx(
   type: string | Function,

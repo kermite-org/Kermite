@@ -6,8 +6,8 @@ import {
 } from './cssInJs';
 import { Hook } from './hookImpl';
 import { jsx } from './jsx';
-import { render as petitDomRender } from './petit_dom_060';
-import { VNode } from './petit_dom_060/types';
+import { render as petitDomRender } from './qxinternal_petit_dom_060';
+import { VNode } from './qxinternal_petit_dom_060/types';
 import { qxGlobal } from './qxGlobal';
 import { setShortCssProcessor } from './shortCss';
 
