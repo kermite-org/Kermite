@@ -83,6 +83,7 @@ export function insertDom(
 ) {
   if (ref.type === REF_SINGLE) {
     parent.insertBefore(ref.node, nextSibling!);
+    // console.log('dom inserted', ref.node, ref.node.parentNode);
   } else if (ref.type === REF_ARRAY) {
     ref.children.forEach((ch) => {
       insertDom(parent, ch, nextSibling);
@@ -97,6 +98,7 @@ export function insertDom(
 export function removeDom(parent: Element, ref: IRef) {
   if (ref.type === REF_SINGLE) {
     parent.removeChild(ref.node);
+    // console.log('dom removed', ref.node, parent);
   } else if (ref.type === REF_ARRAY) {
     ref.children.forEach((ch) => {
       removeDom(parent, ch);
@@ -109,7 +111,19 @@ export function removeDom(parent: Element, ref: IRef) {
 }
 
 export function replaceDom(parent: Element, newRef: IRef, oldRef: IRef) {
-  insertDom(parent, newRef, getDomNode(oldRef));
+  const nextSibling = getDomNode(oldRef);
+  if (nextSibling && nextSibling.parentNode !== parent) {
+    const debug = false;
+    // const debug = true;
+    if (debug) {
+      console.log('replaceDom', { parent, newRef, oldRef });
+      console.log(
+        '(debug) invalid nextsibling @replaceDom, maybe applying replaceDom twice for the same dom?',
+      );
+    }
+    return;
+  }
+  insertDom(parent, newRef, nextSibling);
   removeDom(parent, oldRef);
 }
 
