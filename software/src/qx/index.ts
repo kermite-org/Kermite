@@ -6,9 +6,9 @@ import {
 } from './cssInJs';
 import { Hook } from './hookImpl';
 import { jsx } from './jsx';
+import { qxGlobal } from './qxGlobal';
 import { render as petitDomRender } from './qxinternal_petit_dom_060';
 import { VNode } from './qxinternal_petit_dom_060/types';
-import { qxGlobal } from './qxGlobal';
 import { setShortCssProcessor } from './shortCss';
 
 export { jsx, Hook, css, styled, applyGlobalStyle, setShortCssProcessor };
