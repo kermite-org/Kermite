@@ -85,7 +85,6 @@ class Renderer implements IRenderer {
 }
 
 export function mount(vnode: VNode, env: IEnv = DEFAULT_ENV): IRef {
-  // console.log("mount", { vnode });
   if (isEmpty(vnode)) {
     return {
       type: REF_SINGLE,

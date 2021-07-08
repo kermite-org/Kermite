@@ -2,7 +2,7 @@ import { insertDom } from './dom';
 import { IDirective, IRef, VNode } from './types';
 import { mount, patchInPlace, DEFAULT_ENV } from './vdom';
 
-export { h, jsx, Fragment } from './h';
+export { jsx, Fragment } from './h';
 export { getParentNode } from './dom';
 
 type IRootParentDomNode = HTMLElement & {

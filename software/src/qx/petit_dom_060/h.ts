@@ -31,50 +31,11 @@ export const isComponent = (c: VNode): c is VComponent =>
 
 const isValidComponentType = (c: any) => typeof c?.mount === 'function';
 
-export function h(
-  type: string | Function,
-  props: IProps,
-  ...children: VNode[]
-): VNode {
-  props = props ?? EMPTY_OBJECT;
-
-  props =
-    children.length > 1
-      ? Object.assign({}, props, { children })
-      : children.length === 1
-      ? Object.assign({}, props, { children: children[0] })
-      : props;
-
-  return jsx(type, props, props.key);
-}
-
 export function jsx(
   type: string | Function,
   props: IProps,
   key: string,
 ): VNode {
-  // eslint-disable-next-line no-self-compare
-  if (key !== key) throw new Error('Invalid NaN key');
-
-  if (props.children === undefined) {
-    props.children = null;
-  }
-
-  // const vtype =
-  //   typeof type === "string"
-  //     ? VTYPE_ELEMENT
-  //     : isValidComponentType(type)
-  //     ? VTYPE_COMPONENT
-  //     : typeof type === "function"
-  //     ? VTYPE_FUNCTION
-  //     : undefined;
-  // if (vtype === undefined) throw new Error("Invalid VNode type");
-  // return {
-  //   vtype,
-  //   type,
-  //   key,
-  //   props,
-  // };
   if (typeof type === 'string') {
     return {
       vtype: VTYPE_ELEMENT,
