@@ -9,8 +9,6 @@ import {
   VComponent,
 } from './types';
 
-export const EMPTY_OBJECT = {};
-
 export const isEmpty = (c: VNode) =>
   c === null || (Array.isArray(c) && c.length === 0);
 

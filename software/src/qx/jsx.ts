@@ -1,8 +1,9 @@
-import { EMPTY_OBJECT } from 'qx/qxinternal_petit_dom_060/h';
 import { getFunctionComponentWrapperCached } from './functionComponentWrapper';
 import { qxInterposeProps } from './qxInterposeProps';
 import { jsx as petit_dom_jsx } from './qxinternal_petit_dom_060';
 import { IProps, VNode } from './qxinternal_petit_dom_060/types';
+
+const EMPTY_OBJECT = {};
 
 export function jsx(
   type: string | Function,
