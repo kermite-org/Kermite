@@ -7,21 +7,16 @@ import {
   flushHookEffects,
   IHookInstance,
   startHooks,
-} from './hookImpl';
-import { qxGlobal } from './qxGlobal';
-import { deepEqualValuesBesidesFunction } from './qxUtils';
+} from '../hookImpl';
+import { qxGlobal } from '../qxGlobal';
+import { deepEqualValuesBesidesFunction } from '../qxUtils';
 // import {
 //   createHookInstance,
 //   IHook,
 //   switchGlobalHookInstance,
 // } from './hookImpl';
-import {
-  IEnv,
-  VNode,
-  IComponentFunction,
-  IComponentObject,
-} from './qxinternal_petit_dom/types';
-import { mount, patch, unmount } from './qxinternal_petit_dom/vdom';
+import { IEnv, VNode, IComponentFunction, IComponentObject } from './types';
+import { mount, patch, unmount } from './vdom';
 
 const promise = Promise.resolve();
 function doLater(fn: () => void) {
