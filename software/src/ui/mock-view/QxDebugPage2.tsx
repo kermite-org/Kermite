@@ -13,11 +13,18 @@ const cssCounterCard = css`
   border: solid 1px blue;
 `;
 
+const TestCard: FC = () => {
+  if (count % 5 === 4) {
+    return null;
+  }
+  return <div id="testCard">testCard</div>;
+};
 const CounterCard: FC = () => {
   return (
-    <div css={cssCounterCard} onClick={() => count++}>
+    <div id="countCard" css={cssCounterCard} onClick={() => count++}>
       {count}
-      {count % 5 === 0 && <div>fizz</div>}
+      {count % 5 < 2 && <div>fizz</div>}
+      <TestCard />
     </div>
   );
 };
