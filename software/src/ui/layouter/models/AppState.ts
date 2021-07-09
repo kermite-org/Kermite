@@ -72,7 +72,7 @@ export const appState: IAppState = {
     isCurrentKeyMirror: false,
     currentShapeId: undefined,
     currentPointIndex: -1,
-    editMode: 'key',
+    editMode: 'select',
     shapeDrawing: false,
     currentTransGroupId: undefined,
   },
