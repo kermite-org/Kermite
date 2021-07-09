@@ -45,4 +45,10 @@ enum {
   SystemAction_GlowBrightnessMinus = 5,
   SystemAction_GlowBrightnessPlus = 6,
   SystemAction_ResetToDfuMode = 0x7e,
+  SystemAction_SystemLayoutSetPrimary = 7,
+  SystemAction_SystemLayoutSetSecondary = 8,
+  SystemAction_SystemLayoutNext = 9,
+  SystemAction_RoutingChannelSetMain = 10,
+  SystemAction_RoutingChannelSetAlter = 11,
+  SystemAction_RoutingChannelNext = 12,
 };
