@@ -11,6 +11,8 @@ export interface IWidgetMainPanelModel {
     cards: IWidgetKeyUnitCardViewModel[];
   };
   backToConfiguratorView(): void;
+  isWidgetAlwaysOnTop: boolean;
+  toggleWidgetAlwaysOnTop(): void;
 }
 
 export function useWidgetMainPanelModel(): IWidgetMainPanelModel {
@@ -22,8 +24,14 @@ export function useWidgetMainPanelModel(): IWidgetMainPanelModel {
     })();
   }, []);
 
+  const { isWindowActive, isWidgetAlwaysOnTop } = siteModel;
+
+  const toggleWidgetAlwaysOnTop = async () => {
+    await ipcAgent.async.window_setWidgetAlwaysOnTop(!isWidgetAlwaysOnTop);
+  };
+
   return {
-    isWindowActive: siteModel.isWindowActive,
+    isWindowActive,
     keyboardVM: {
       keyboardDesign: playerModel.displayDesign,
       cards: playerModel.displayDesign.keyEntities.map((kp) =>
@@ -33,5 +41,7 @@ export function useWidgetMainPanelModel(): IWidgetMainPanelModel {
     backToConfiguratorView() {
       router.navigateTo('/editor');
     },
+    isWidgetAlwaysOnTop,
+    toggleWidgetAlwaysOnTop,
   };
 }

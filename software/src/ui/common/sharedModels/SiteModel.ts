@@ -5,6 +5,7 @@ export class SiteModel {
   isWindowActive: boolean = true;
   isDevtoolsVisible: boolean = false;
   isWindowMaximized: boolean = false;
+  isWidgetAlwaysOnTop: boolean = false;
 
   toggleDevToolVisible = () => {
     ipcAgent.async.window_setDevToolVisibility(!this.isDevtoolsVisible);
@@ -19,6 +20,9 @@ export class SiteModel {
     }
     if (ev.isMaximized !== undefined) {
       this.isWindowMaximized = ev.isMaximized;
+    }
+    if (ev.isWidgetAlwaysOnTop !== undefined) {
+      this.isWidgetAlwaysOnTop = ev.isWidgetAlwaysOnTop;
     }
   };
 

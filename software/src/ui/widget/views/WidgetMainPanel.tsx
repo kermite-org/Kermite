@@ -42,7 +42,7 @@ export function WidgetMainPanel() {
           <WidgetControlButton
             className="pinning-button"
             iconSpec="fa fa-thumbtack"
-            onClick={() => {}}
+            onClick={vm.toggleWidgetAlwaysOnTop}
           />
           <WidgetControlButton
             className="config-button"
