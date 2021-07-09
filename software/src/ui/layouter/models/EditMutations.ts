@@ -174,7 +174,18 @@ class EditMutations {
     });
   }
 
+  private closeShapeIfDrawing() {
+    if (editReader.shapeDrawing) {
+      // 入力中のshapeがある場合閉じる
+      editUpdator.commitEditor((state) => {
+        cleanupInvalidPolygons(state.design);
+        state.shapeDrawing = false;
+      });
+    }
+  }
+
   setEditMode(mode: IEditMode) {
+    this.closeShapeIfDrawing();
     editUpdator.patchEditor((editor) => {
       editor.editMode = mode;
     });
@@ -185,9 +196,9 @@ class EditMutations {
     if (currentMode === mode) {
       return;
     }
+    this.closeShapeIfDrawing();
+
     editUpdator.patchEditor((state) => {
-      cleanupInvalidPolygons(state.design);
-      state.shapeDrawing = false;
       state.currentkeyEntityId = undefined;
       state.isCurrentKeyMirror = false;
       state.currentShapeId = undefined;
