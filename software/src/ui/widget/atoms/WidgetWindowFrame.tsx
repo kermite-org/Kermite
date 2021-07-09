@@ -4,13 +4,11 @@ type Props = {
   children: JSX.Element;
 };
 
-export const WidgetWindowFrame: FC<Props> = ({ children }) => {
-  return (
-    <div css={style}>
-      <div className="inner">{children}</div>
-    </div>
-  );
-};
+export const WidgetWindowFrame: FC<Props> = ({ children }) => (
+  <div css={style}>
+    <div className="inner">{children}</div>
+  </div>
+);
 
 const style = css`
   user-select: none;

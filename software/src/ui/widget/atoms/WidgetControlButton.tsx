@@ -12,18 +12,16 @@ export const WidgetControlButton: FC<Props> = ({
   iconSpec,
   isActive,
   onClick,
-}) => {
-  return (
-    <div
-      css={style}
-      className={className}
-      onClick={onClick}
-      data-active={isActive}
-    >
-      <i className={iconSpec} />
-    </div>
-  );
-};
+}) => (
+  <div
+    css={style}
+    className={className}
+    onClick={onClick}
+    data-active={isActive}
+  >
+    <i className={iconSpec} />
+  </div>
+);
 
 const style = css`
   color: #fff;
