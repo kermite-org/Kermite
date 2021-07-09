@@ -1,5 +1,15 @@
-import { jsx, css } from 'qx';
+import { jsx, css, FC } from 'qx';
 
+export const WidgetWindowActiveChrome: FC = () => {
+  return (
+    <div css={style}>
+      <div class="tl" />
+      <div class="tr" />
+      <div class="bl" />
+      <div class="br" />
+    </div>
+  );
+};
 const style = css`
   position: absolute;
   pointer-events: none;
@@ -37,14 +47,3 @@ const style = css`
     right: 0;
   }
 `;
-
-export const WidgetWindowActiveChrome = () => {
-  return (
-    <div css={style}>
-      <div class="tl" />
-      <div class="tr" />
-      <div class="bl" />
-      <div class="br" />
-    </div>
-  );
-};
