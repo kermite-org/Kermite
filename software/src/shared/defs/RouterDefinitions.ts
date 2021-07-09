@@ -129,6 +129,8 @@ export const routingOptionVirtualKeys: VirtualKey[] = [
   'K_KatakanaHiragana',
   'K_Henkan',
   'K_Muhenkan',
+  'K_Lang1Kana',
+  'K_Lang2Eisu',
 
   'K_Shift',
   'K_Ctrl',
