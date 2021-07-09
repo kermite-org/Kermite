@@ -33,7 +33,7 @@ const style = css`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 16px;
   background: #888;
 
   &[data-active] {
