@@ -3,16 +3,23 @@ import { css, FC, jsx } from 'qx';
 type Props = {
   className?: string;
   iconSpec: string;
+  isActive?: boolean;
   onClick: () => void;
 };
 
 export const WidgetControlButton: FC<Props> = ({
   className,
   iconSpec,
+  isActive,
   onClick,
 }) => {
   return (
-    <div css={style} className={className} onClick={onClick}>
+    <div
+      css={style}
+      className={className}
+      onClick={onClick}
+      data-active={isActive}
+    >
       <i className={iconSpec} />
     </div>
   );
@@ -28,6 +35,10 @@ const style = css`
   cursor: pointer;
   font-size: 20px;
   background: #888;
+
+  &[data-active] {
+    background: #0af;
+  }
 
   &:hover {
     background: #0cf;

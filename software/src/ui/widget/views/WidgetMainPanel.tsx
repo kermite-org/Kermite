@@ -42,6 +42,7 @@ export function WidgetMainPanel() {
           <WidgetControlButton
             className="pinning-button"
             iconSpec="fa fa-thumbtack"
+            isActive={vm.isWidgetAlwaysOnTop}
             onClick={vm.toggleWidgetAlwaysOnTop}
           />
           <WidgetControlButton
