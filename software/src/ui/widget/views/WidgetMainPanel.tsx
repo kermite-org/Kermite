@@ -2,6 +2,7 @@ import { jsx, css } from 'qx';
 import { siteModel } from '~/ui/common';
 import { WidgetSvgKeyboardView } from '~/ui/common-svg/panels/WidgetSvgKeyboardView';
 import { useWidgetMainPanelModel } from '~/ui/widget/models/WidgetMainPanelModel';
+import { WidgetControlButton } from '~/ui/widget/views/WidgetControlButton';
 
 const style = css`
   position: relative;
@@ -21,20 +22,6 @@ const style = css`
       right: 0px;
       top: 0px;
       -webkit-app-region: no-drag;
-      color: #fff;
-      width: 30px;
-      height: 30px;
-      margin: 5px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      font-size: 20px;
-      background: #888;
-
-      &:hover {
-        background: #0cf;
-      }
     }
   }
 `;
@@ -48,13 +35,12 @@ export function WidgetMainPanel() {
           keyboardDesign={vm.keyboardVM.keyboardDesign}
           cards={vm.keyboardVM.cards}
         />
-        <div
+        <WidgetControlButton
           className="config-button"
+          iconSpec="fa fa-cog"
           onClick={vm.backToConfiguratorView}
           qxIf={siteModel.isWindowActive}
-        >
-          <i className="fa fa-cog" />
-        </div>
+        />
       </div>
     </div>
   );
