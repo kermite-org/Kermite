@@ -23,7 +23,13 @@ export type SystemAction =
   | 'GlowColorNext'
   | 'GlowBrightnessMinus'
   | 'GlowBrightnessPlus'
-  | 'ResetToDfuMode';
+  | 'ResetToDfuMode'
+  | 'SystemLayoutSetPrimary'
+  | 'SystemLayoutSetSecondary'
+  | 'SystemLayoutNext'
+  | 'RoutingChannelSetMain'
+  | 'RoutingChannelSetAlter'
+  | 'RoutingChannelNext';
 
 export const systemActionToCodeMap: { [key in SystemAction]: number } = {
   None: 0,
@@ -34,6 +40,12 @@ export const systemActionToCodeMap: { [key in SystemAction]: number } = {
   GlowBrightnessMinus: 5,
   GlowBrightnessPlus: 6,
   ResetToDfuMode: 0x7e,
+  SystemLayoutSetPrimary: 7,
+  SystemLayoutSetSecondary: 8,
+  SystemLayoutNext: 9,
+  RoutingChannelSetMain: 10,
+  RoutingChannelSetAlter: 11,
+  RoutingChannelNext: 12,
 };
 
 export const systemActionToLabelTextMap: { [key in SystemAction]: string } = {
@@ -45,6 +57,12 @@ export const systemActionToLabelTextMap: { [key in SystemAction]: string } = {
   GlowBrightnessMinus: 'led b-',
   GlowBrightnessPlus: 'led b+',
   ResetToDfuMode: 'dfu',
+  SystemLayoutSetPrimary: 'sl-US',
+  SystemLayoutSetSecondary: 'sl-JIS',
+  SystemLayoutNext: 'sl-toggle',
+  RoutingChannelSetMain: 'rc-Main',
+  RoutingChannelSetAlter: 'rc-Alter',
+  RoutingChannelNext: 'rc-toggle',
 };
 
 export const systemActionAssignSelectionSource: SystemAction[] = [
@@ -55,4 +73,10 @@ export const systemActionAssignSelectionSource: SystemAction[] = [
   'GlowColorNext',
   'GlowPatternRoll',
   'ResetToDfuMode',
+  'SystemLayoutSetPrimary',
+  'SystemLayoutSetSecondary',
+  'SystemLayoutNext',
+  'RoutingChannelSetMain',
+  'RoutingChannelSetAlter',
+  'RoutingChannelNext',
 ];
