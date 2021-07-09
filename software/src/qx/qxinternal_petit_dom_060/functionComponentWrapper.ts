@@ -3,7 +3,7 @@ import {
   endHooks,
   flushHookEffects,
   startHooks,
-} from './hookImpl';
+} from '../hookImpl';
 
 const promise = Promise.resolve();
 function doLater(fn: () => void) {

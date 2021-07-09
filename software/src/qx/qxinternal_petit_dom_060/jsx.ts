@@ -1,7 +1,7 @@
+import { qxInterposeProps } from '../qxInterposeProps';
 import { getFunctionComponentWrapperCached } from './functionComponentWrapper';
-import { qxInterposeProps } from './qxInterposeProps';
-import { jsx as petit_dom_jsx } from './qxinternal_petit_dom_060';
-import { IProps, VNode } from './qxinternal_petit_dom_060/types';
+import { IProps, VNode } from './types';
+import { jsx as petit_dom_jsx } from '.';
 
 const EMPTY_OBJECT = {};
 
