@@ -214,6 +214,24 @@ void configManager_handleSystemAction(uint8_t code, uint8_t payloadValue) {
   if (code == SystemAction_ResetToDfuMode) {
     reqRestToDfu = true;
   }
+  if (code == SystemAction_SystemLayoutSetPrimary) {
+    writeParameter(SystemParameter_SystemLayout, 0);
+  }
+  if (code == SystemAction_SystemLayoutSetSecondary) {
+    writeParameter(SystemParameter_SystemLayout, 1);
+  }
+  if (code == SystemAction_SystemLayoutNext) {
+    shiftParameter(SystemParameter_SystemLayout, 1, true);
+  }
+  if (code == SystemAction_RoutingChannelSetMain) {
+    writeParameter(SystemParameter_WiringMode, 0);
+  }
+  if (code == SystemAction_RoutingChannelSetAlter) {
+    writeParameter(SystemParameter_WiringMode, 1);
+  }
+  if (code == SystemAction_RoutingChannelNext) {
+    shiftParameter(SystemParameter_WiringMode, 1, true);
+  }
 }
 
 void configManager_processUpdate() {
