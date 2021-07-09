@@ -24,47 +24,34 @@ const enableFilesWatcher = appEnv.isDevelopment;
 interface IWindowPersistState {
   pagePath: string;
   isDevtoolsVisible: boolean;
-  placement: {
-    main?: {
-      bounds: Rectangle;
-    };
-    widget?: {
-      projectId: string;
-      bounds: Rectangle;
-    };
-  };
+  mainWindowBounds?: Rectangle;
+  widgetWindowBounds?: Rectangle;
+  widgetProjectId?: string;
 }
 
 function makeFallbackWindowPersistState(): IWindowPersistState {
   return {
     pagePath: '/',
     isDevtoolsVisible: false,
-    placement: {
-      main: undefined,
-      widget: undefined,
-    },
+    mainWindowBounds: undefined,
+    widgetWindowBounds: undefined,
+    widgetProjectId: undefined,
   };
 }
 
-const rectangleSchema = vObject({
-  x: vNumber(),
-  y: vNumber(),
-  width: vNumber(),
-  height: vNumber(),
-});
+const makeRectagleSchema = () =>
+  vObject({
+    x: vNumber(),
+    y: vNumber(),
+    width: vNumber(),
+    height: vNumber(),
+  });
 
 const windowStateSchema = vObject({
   pagePath: vString(),
   isDevtoolsVisible: vBoolean(),
-  placement: vObject({
-    main: vObject({
-      bounds: rectangleSchema,
-    }).optional,
-    widget: vObject({
-      projectId: vString(),
-      bounds: rectangleSchema,
-    }).optional,
-  }),
+  mainWindowBounds: makeRectagleSchema().optional,
+  widgetWindowBounds: makeRectagleSchema().optional,
 });
 
 export class AppWindowWrapper implements IAppWindowWrapper {
@@ -93,8 +80,8 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     } = appConfig;
 
     const recalledBounds = this.isWidgetMode
-      ? this.state.placement.widget?.bounds
-      : this.state.placement.main?.bounds;
+      ? this.state.widgetWindowBounds
+      : this.state.mainWindowBounds;
 
     const options: Electron.BrowserWindowConstructorOptions = {
       x: recalledBounds?.x,
@@ -154,15 +141,17 @@ export class AppWindowWrapper implements IAppWindowWrapper {
       this.appWindowEventPort.emit({ isMaximized: false }),
     );
 
+    win.on('moved', () => this.saveWindowSize());
+    win.on('resized', () => this.saveWindowSize());
+
     win.webContents.on('did-navigate-in-page', (_, url) => {
       const pagePath = url.split('#')[1];
-      const widgetModeChanging = [pagePath, this.state.pagePath].some(
-        (it) => it === '/widget',
-      );
+      const widgetModeChanging =
+        pagePath === '/widget' || this.state.pagePath === '/widget';
       if (widgetModeChanging) {
-        this.reserveWindowSize();
+        this.saveWindowSize();
         this.state.pagePath = pagePath;
-        this.adjustWindowSize();
+        this.adjustWindowSizeOnModeChange();
       } else {
         this.state.pagePath = pagePath;
       }
@@ -214,7 +203,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     if (this.mainWindow) {
       // this.mainWindow.isMaximized() ... always returns false for transparent window (?)
       if (!this.mainWindow.isMaximized()) {
-        this.reserveWindowSize();
+        this.saveWindowSize();
         this.mainWindow.maximize();
       } else {
         this.mainWindow.unmaximize();
@@ -231,46 +220,46 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     return this.state.pagePath === '/widget';
   }
 
-  private reserveWindowSize() {
+  // ウインドウサイズを保存
+  private saveWindowSize() {
     if (this.mainWindow) {
       const bounds = this.mainWindow.getBounds();
       if (this.isWidgetMode) {
-        const currentProfileProjectId = this.profileManager.getCurrentProfileProjectId();
-        if (currentProfileProjectId) {
-          this.state.placement.widget = {
-            projectId: currentProfileProjectId,
-            bounds,
-          };
-        }
+        this.state.widgetProjectId = this.profileManager.getCurrentProfileProjectId();
+        this.state.widgetWindowBounds = bounds;
       } else {
-        this.state.placement.main = { bounds };
+        this.state.mainWindowBounds = bounds;
       }
     }
   }
 
-  private async adjustWindowSize() {
+  private async adjustWindowSizeOnModeChange() {
     if (!this.mainWindow) {
       return;
     }
     if (this.isWidgetMode) {
       // this.mainWindow.setAlwaysOnTop(true);
-
-      const currentProfile = await this.profileManager.getCurrentProfileAsync();
-      if (!currentProfile) {
-        return;
-      }
-      if (currentProfile.projectId === this.state.placement.widget?.projectId) {
-        this.mainWindow.setBounds(this.state.placement.widget.bounds);
+      const projectId = this.profileManager.getCurrentProfileProjectId();
+      if (
+        projectId === this.state.widgetProjectId &&
+        this.state.widgetWindowBounds
+      ) {
+        // widgetモードで前回表示していたものと同じキーボードを表示する場合前回表示時のウインドウサイズを復元する
+        this.mainWindow.setBounds(this.state.widgetWindowBounds);
       } else {
-        const design = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
-          currentProfile.keyboardDesign,
-        );
-        const w = design.displayArea.width * 4;
-        const h = design.displayArea.height * 4 + 40;
-        this.mainWindow.setSize(w, h);
+        // widgetモーで前回と異なるキーボードを表示する場合デフォルトのウインドウサイズを算出して設定する
+        const currentProfile = await this.profileManager.getCurrentProfileAsync();
+        if (currentProfile) {
+          const design = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
+            currentProfile.keyboardDesign,
+          );
+          const w = design.displayArea.width * 4;
+          const h = design.displayArea.height * 4 + 40;
+          this.mainWindow.setSize(w, h);
+        }
       }
     } else {
-      const bounds = this.state.placement.main?.bounds;
+      const bounds = this.state.mainWindowBounds;
       if (bounds) {
         this.mainWindow.setBounds(bounds);
       }
@@ -300,9 +289,6 @@ export class AppWindowWrapper implements IAppWindowWrapper {
   }
 
   terminate() {
-    // if (this.mainWindow?.isVisible()) {
-    //   this.reserveWindowSize();
-    // }
     applicationStorage.writeItem('windowState', this.state);
   }
 }
