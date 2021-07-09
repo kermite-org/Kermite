@@ -10,6 +10,7 @@ export function jsx(
   props: IProps,
   ...children: VNode[]
 ): VNode {
+  // console.log({ type, props, children });
   props = props || EMPTY_OBJECT;
 
   const skip = props && 'qxIf' in props && !props.qxIf;

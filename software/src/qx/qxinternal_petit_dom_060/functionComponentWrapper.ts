@@ -22,6 +22,7 @@ function createFunctionComponentWrapper(renderFunction: Function) {
         }
         endHooks();
         doLater(() => flushHookEffects(self.hook));
+        // console.log({ vnode });
         return vnode;
       };
       self.render(self.renderWithHook(self.props));
