@@ -24,11 +24,9 @@ export function jsx(
     type = getFunctionComponentWrapperCached(type);
   }
 
-  if (Array.isArray(children)) {
-    for (let i = 0; i < children.length; i++) {
-      if (children[i] === undefined || (children[i] as any) === false) {
-        children[i] = null;
-      }
+  for (let i = 0; i < children.length; i++) {
+    if (children[i] === undefined || (children[i] as any) === false) {
+      children[i] = null;
     }
   }
 
