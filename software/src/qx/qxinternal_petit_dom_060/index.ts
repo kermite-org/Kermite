@@ -3,6 +3,7 @@ import { IDirective, IRef, VNode } from './types';
 import { mount, patchInPlace, DEFAULT_ENV } from './vdom';
 
 export { jsx, Fragment } from './h';
+export { VNode };
 
 type IRootParentDomNode = HTMLElement & {
   $$PETIT_DOM_REF?: {
