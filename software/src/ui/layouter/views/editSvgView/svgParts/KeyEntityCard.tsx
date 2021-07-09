@@ -268,6 +268,10 @@ export const KeyEntityCard = ({ ke }: { ke: IEditKeyEntity }) => {
       </g>
     );
   } else {
-    return <KeyEntityCardSingle ke={ke} isMirror={false} />;
+    return (
+      <g>
+        <KeyEntityCardSingle ke={ke} isMirror={false} />
+      </g>
+    );
   }
 };
