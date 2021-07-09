@@ -1,8 +1,8 @@
 import { jsx, css } from 'qx';
 import { siteModel } from '~/ui/common';
 import { WidgetSvgKeyboardView } from '~/ui/common-svg/panels/WidgetSvgKeyboardView';
+import { WidgetControlButton } from '~/ui/widget/components';
 import { useWidgetMainPanelModel } from '~/ui/widget/models/WidgetMainPanelModel';
-import { WidgetControlButton } from '~/ui/widget/views/WidgetControlButton';
 
 const style = css`
   position: relative;
