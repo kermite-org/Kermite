@@ -53,6 +53,7 @@ function makeSnapDivisionViewModel() {
 export function makeEditMenuBarViewModel() {
   const editModeVm = createModeSelectionViewModel({
     select: 'select',
+    move: 'move',
     key: 'key',
     shape: 'shape',
     delete: 'delete',

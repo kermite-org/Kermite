@@ -1,7 +1,7 @@
 import { defaultKeyboardDesignSetup } from '~/shared';
 import { IEditKeyboardDesign, IEditKeyEntity } from './DataSchema';
 
-export type IEditMode = 'select' | 'key' | 'shape' | 'delete';
+export type IEditMode = 'select' | 'move' | 'key' | 'shape' | 'delete';
 export interface IEditState {
   loadedDesign: IEditKeyboardDesign;
   design: IEditKeyboardDesign;
@@ -72,7 +72,7 @@ export const appState: IAppState = {
     isCurrentKeyMirror: false,
     currentShapeId: undefined,
     currentPointIndex: -1,
-    editMode: 'key',
+    editMode: 'select',
     shapeDrawing: false,
     currentTransGroupId: undefined,
   },
