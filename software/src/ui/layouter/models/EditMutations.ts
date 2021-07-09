@@ -435,7 +435,7 @@ class EditMutations {
 
   endShapeDrawing() {
     if (appState.editor.shapeDrawing) {
-      editUpdator.patchEditor((editor) => {
+      editUpdator.commitEditor((editor) => {
         cleanupInvalidPolygons(editor.design);
         editor.shapeDrawing = false;
       });
