@@ -5,23 +5,26 @@ import { WidgetControlButton } from '~/ui/widget/components';
 import { useWidgetMainPanelModel } from '~/ui/widget/models/WidgetMainPanelModel';
 
 const style = css`
-  position: relative;
   user-select: none;
 
   width: 100%;
   height: 100%;
-  padding: 6px;
+  padding: 4px;
 
-  > .inner {
+  > .pannel-inner-content {
+    position: relative;
     width: 100%;
     height: 100%;
     -webkit-app-region: drag;
 
-    > .config-button {
+    > .control-buttons-box {
       position: absolute;
-      right: 0px;
-      top: 0px;
+      top: 0;
+      right: 0;
+      margin: 5px;
       -webkit-app-region: no-drag;
+      display: flex;
+      gap: 10px;
     }
   }
 `;
@@ -30,17 +33,23 @@ export function WidgetMainPanel() {
   const vm = useWidgetMainPanelModel();
   return (
     <div css={style}>
-      <div className="inner">
+      <div className="pannel-inner-content">
         <WidgetSvgKeyboardView
           keyboardDesign={vm.keyboardVM.keyboardDesign}
           cards={vm.keyboardVM.cards}
         />
-        <WidgetControlButton
-          className="config-button"
-          iconSpec="fa fa-cog"
-          onClick={vm.backToConfiguratorView}
-          qxIf={siteModel.isWindowActive}
-        />
+        <div className="control-buttons-box" qxIf={siteModel.isWindowActive}>
+          <WidgetControlButton
+            className="pinning-button"
+            iconSpec="fa fa-thumbtack"
+            onClick={() => {}}
+          />
+          <WidgetControlButton
+            className="config-button"
+            iconSpec="fa fa-cog"
+            onClick={vm.backToConfiguratorView}
+          />
+        </div>
       </div>
     </div>
   );

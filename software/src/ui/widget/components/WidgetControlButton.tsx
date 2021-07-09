@@ -22,7 +22,6 @@ const style = css`
   color: #fff;
   width: 30px;
   height: 30px;
-  margin: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
