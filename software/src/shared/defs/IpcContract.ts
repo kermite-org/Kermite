@@ -86,6 +86,7 @@ export type IAppWindowStatus = {
   isActive: boolean;
   isDevtoolsVisible: boolean;
   isMaximized: boolean;
+  isWidgetAlwaysOnTop: boolean;
 };
 
 export type IProfileEditSource =
@@ -242,6 +243,7 @@ export interface IAppIpcContract {
     window_maximizeWindow(): Promise<void>;
     window_restartApplication(): Promise<void>;
     window_setDevToolVisibility(visible: boolean): Promise<void>;
+    window_setWidgetAlwaysOnTop(enabled: boolean): Promise<void>;
     window_reloadPage(): Promise<void>;
 
     profile_getCurrentProfile(): Promise<IProfileData>;
