@@ -24,6 +24,7 @@ const enableFilesWatcher = appEnv.isDevelopment;
 interface IWindowPersistState {
   pagePath: string;
   isDevtoolsVisible: boolean;
+  isWidgetAlwaysOnTop: boolean;
   mainWindowBounds?: Rectangle;
   widgetWindowBounds?: Rectangle;
   widgetProjectId?: string;
@@ -33,6 +34,7 @@ function makeFallbackWindowPersistState(): IWindowPersistState {
   return {
     pagePath: '/',
     isDevtoolsVisible: false,
+    isWidgetAlwaysOnTop: false,
     mainWindowBounds: undefined,
     widgetWindowBounds: undefined,
     widgetProjectId: undefined,
@@ -50,8 +52,10 @@ const makeRectagleSchema = () =>
 const windowStateSchema = vObject({
   pagePath: vString(),
   isDevtoolsVisible: vBoolean(),
+  isWidgetAlwaysOnTop: vBoolean(),
   mainWindowBounds: makeRectagleSchema().optional,
   widgetWindowBounds: makeRectagleSchema().optional,
+  widgetProjectId: vString().optional,
 });
 
 export class AppWindowWrapper implements IAppWindowWrapper {
@@ -114,6 +118,10 @@ export class AppWindowWrapper implements IAppWindowWrapper {
 
     if (appEnv.isDevelopment && this.state.isDevtoolsVisible) {
       this.setDevToolsVisibility(true);
+    }
+
+    if (this.isWidgetMode) {
+      this.mainWindow.setAlwaysOnTop(this.state.isWidgetAlwaysOnTop);
     }
 
     this.loadInitialPage();
@@ -195,6 +203,14 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     }
   }
 
+  setWidgetAlwaysOnTop(isWidgetAlwaysOnTop: boolean) {
+    if (this.isWidgetMode) {
+      this.mainWindow?.setAlwaysOnTop(isWidgetAlwaysOnTop);
+      this.state.isWidgetAlwaysOnTop = isWidgetAlwaysOnTop;
+      this.appWindowEventPort.emit({ isWidgetAlwaysOnTop });
+    }
+  }
+
   minimizeMainWindow() {
     this.mainWindow?.minimize();
   }
@@ -238,7 +254,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
       return;
     }
     if (this.isWidgetMode) {
-      // this.mainWindow.setAlwaysOnTop(true);
+      this.mainWindow.setAlwaysOnTop(this.state.isWidgetAlwaysOnTop);
       const projectId = this.profileManager.getCurrentProfileProjectId();
       if (
         projectId === this.state.widgetProjectId &&
@@ -263,7 +279,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
       if (bounds) {
         this.mainWindow.setBounds(bounds);
       }
-      // this.mainWindow.setAlwaysOnTop(false);
+      this.mainWindow.setAlwaysOnTop(false);
     }
   }
 

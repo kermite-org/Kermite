@@ -75,6 +75,8 @@ export class ApplicationRoot {
       window_reloadPage: async () => windowWrapper.reloadPage(),
       window_setDevToolVisibility: async (visible) =>
         windowWrapper.setDevToolsVisibility(visible),
+      window_setWidgetAlwaysOnTop: async (enabled) =>
+        windowWrapper.setWidgetAlwaysOnTop(enabled),
       profile_getCurrentProfile: () =>
         this.profileManager.getCurrentProfileAsync(),
       profile_executeProfileManagerCommands: (commands) =>
