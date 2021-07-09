@@ -113,8 +113,8 @@ export function removeDom(parent: Element, ref: IRef) {
 export function replaceDom(parent: Element, newRef: IRef, oldRef: IRef) {
   const nextSibling = getDomNode(oldRef);
   if (nextSibling && nextSibling.parentNode !== parent) {
-    const debug = false;
-    // const debug = true;
+    // const debug = false;
+    const debug = true;
     if (debug) {
       console.log('replaceDom', { parent, newRef, oldRef });
       console.log(

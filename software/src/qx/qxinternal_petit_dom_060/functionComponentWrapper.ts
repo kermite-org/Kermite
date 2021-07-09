@@ -4,6 +4,7 @@ import {
   flushHookEffects,
   startHooks,
 } from '../hookImpl';
+import { unmount } from './vdom';
 
 const promise = Promise.resolve();
 function doLater(fn: () => void) {
@@ -13,6 +14,7 @@ function doLater(fn: () => void) {
 function createFunctionComponentWrapper(renderFunction: Function) {
   return {
     mount(self: any) {
+      self.fcsig = renderFunction.name;
       self.hook = createHookInstance();
       self.renderWithHook = (props: any) => {
         startHooks(self.hook);
@@ -31,6 +33,8 @@ function createFunctionComponentWrapper(renderFunction: Function) {
     },
     unmount(self: any) {
       flushHookEffects(self.hook, true);
+      const { vnode, ref, env } = self._STATE_;
+      unmount(vnode, ref, env);
     },
   };
 }

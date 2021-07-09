@@ -1,7 +1,7 @@
 import { qxInterposeProps } from '../qxInterposeProps';
 import { getFunctionComponentWrapperCached } from './functionComponentWrapper';
+import { jsx as petit_dom_jsx } from './h';
 import { IProps, VNode } from './types';
-import { jsx as petit_dom_jsx } from '.';
 
 const EMPTY_OBJECT = {};
 
@@ -23,11 +23,9 @@ export function jsx(
     type = getFunctionComponentWrapperCached(type);
   }
 
-  if (Array.isArray(children)) {
-    for (let i = 0; i < children.length; i++) {
-      if (children[i] === undefined || (children[i] as any) === false) {
-        children[i] = null;
-      }
+  for (let i = 0; i < children.length; i++) {
+    if (children[i] === undefined || (children[i] as any) === false) {
+      children[i] = null;
     }
   }
 
