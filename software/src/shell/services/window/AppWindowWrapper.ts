@@ -70,6 +70,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
   appWindowEventPort = createEventPort<Partial<IAppWindowStatus>>({
     initialValueGetter: () => ({
       isDevtoolsVisible: this.state.isDevtoolsVisible,
+      isWidgetAlwaysOnTop: this.state.isWidgetAlwaysOnTop,
       isMaximized: this.mainWindow?.isMaximized() || false,
     }),
   });
@@ -120,9 +121,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
       this.setDevToolsVisibility(true);
     }
 
-    if (this.isWidgetMode) {
-      this.mainWindow.setAlwaysOnTop(this.state.isWidgetAlwaysOnTop);
-    }
+    this.affectAllwaysOnTopToWindow();
 
     this.loadInitialPage();
 
@@ -160,6 +159,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
         this.saveWindowSize();
         this.state.pagePath = pagePath;
         this.adjustWindowSizeOnModeChange();
+        this.affectAllwaysOnTopToWindow();
       } else {
         this.state.pagePath = pagePath;
       }
@@ -203,12 +203,15 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     }
   }
 
+  private affectAllwaysOnTopToWindow() {
+    const value = this.state.isWidgetAlwaysOnTop;
+    this.mainWindow?.setAlwaysOnTop(this.isWidgetMode && value);
+    this.appWindowEventPort.emit({ isWidgetAlwaysOnTop: value });
+  }
+
   setWidgetAlwaysOnTop(isWidgetAlwaysOnTop: boolean) {
-    if (this.isWidgetMode) {
-      this.mainWindow?.setAlwaysOnTop(isWidgetAlwaysOnTop);
-      this.state.isWidgetAlwaysOnTop = isWidgetAlwaysOnTop;
-      this.appWindowEventPort.emit({ isWidgetAlwaysOnTop });
-    }
+    this.state.isWidgetAlwaysOnTop = isWidgetAlwaysOnTop;
+    this.affectAllwaysOnTopToWindow();
   }
 
   minimizeMainWindow() {
@@ -254,7 +257,6 @@ export class AppWindowWrapper implements IAppWindowWrapper {
       return;
     }
     if (this.isWidgetMode) {
-      this.mainWindow.setAlwaysOnTop(this.state.isWidgetAlwaysOnTop);
       const projectId = this.profileManager.getCurrentProfileProjectId();
       if (
         projectId === this.state.widgetProjectId &&
@@ -279,7 +281,6 @@ export class AppWindowWrapper implements IAppWindowWrapper {
       if (bounds) {
         this.mainWindow.setBounds(bounds);
       }
-      this.mainWindow.setAlwaysOnTop(false);
     }
   }
 
