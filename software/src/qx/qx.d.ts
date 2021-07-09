@@ -1,7 +1,8 @@
 // based on type definition of preact
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { VNode } from './qxinternal_petit_dom_060/types';
+import { VNode } from './qxinternal_petit_dom_old';
+// import { VNode } from './qxinternal_petit_dom_060/types';
 
 // export { h } from './qxinternal_petit_dom/h';
 // export { Hook } from './qxinternal_petit_dom/hookImpl2';
