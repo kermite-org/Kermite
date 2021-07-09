@@ -1,6 +1,8 @@
 import { VNode } from './types';
 import { mount, patch, unmount } from './vdom';
 
+export { jsx } from './h';
+
 type IParentDomNode = Element & {
   $$petitDomState$$?: {
     vnode: VNode;
