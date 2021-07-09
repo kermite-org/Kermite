@@ -47,7 +47,7 @@ export function WidgetMainPanel() {
           />
           <WidgetControlButton
             className="config-button"
-            iconSpec="fa fa-cog"
+            iconSpec="fa fa-window-restore"
             onClick={vm.backToConfiguratorView}
           />
         </div>
