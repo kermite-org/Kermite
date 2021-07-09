@@ -14,7 +14,7 @@ const style = css`
   user-select: none;
   width: 100%;
   height: 100%;
-  padding: 4px;
+  padding: 6px;
 
   > .inner {
     position: relative;
