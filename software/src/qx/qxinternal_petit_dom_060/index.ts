@@ -2,8 +2,9 @@ import { insertDom } from './dom';
 import { IDirective, IRef, VNode } from './types';
 import { mount, patchInPlace, DEFAULT_ENV } from './vdom';
 
-export { jsx, Fragment } from './h';
+export { Fragment } from './h';
 export { VNode };
+export { jsx } from './jsx';
 
 type IRootParentDomNode = HTMLElement & {
   $$PETIT_DOM_REF?: {
