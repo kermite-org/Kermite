@@ -1,0 +1,56 @@
+import { IVComponentWrapper } from 'qx/qxinternal_qxcore/qxcore';
+import {
+  createHookInstance,
+  endHooks,
+  flushHookEffects,
+  startHooks,
+} from '../hookImpl';
+
+const promise = Promise.resolve();
+function doLater(fn: () => void) {
+  promise.then(fn);
+}
+
+function createFunctionComponentWrapper(
+  renderFunction: Function,
+): IVComponentWrapper {
+  return {
+    name: renderFunction.name,
+    mount(self: any, props: any) {
+      self.fcsig = renderFunction.name;
+      self.hook = createHookInstance();
+      self.renderWithHook = (props: any) => {
+        startHooks(self.hook);
+        const vnode = renderFunction(props);
+        if (vnode) {
+          vnode.marker = renderFunction.name;
+        }
+        endHooks();
+        doLater(() => flushHookEffects(self.hook));
+        return vnode;
+      };
+      return self.renderWithHook(props);
+    },
+    update(self: any, props: any) {
+      return self.renderWithHook(props);
+    },
+    unmount(self: any) {
+      flushHookEffects(self.hook, true);
+    },
+  };
+}
+
+type IRenderFunction = Function & {
+  __QxFunctionComponentWrapper?: any;
+};
+
+export function getFunctionComponentWrapperCached(
+  renderFunction: IRenderFunction,
+) {
+  if (!renderFunction.__QxFunctionComponentWrapper) {
+    renderFunction.__QxFunctionComponentWrapper = createFunctionComponentWrapper(
+      renderFunction,
+    );
+  }
+  return renderFunction.__QxFunctionComponentWrapper;
+}
