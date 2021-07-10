@@ -185,12 +185,22 @@ function applyDomAttributes(
 
 // ------------------------------------------------------------
 
+function makePropsWithChildren(props: IProps, children: IVNode[]) {
+  if (children.length === 1) {
+    return { ...props, children: children[0] };
+  } else {
+    return { ...props, children };
+  }
+}
+
 function mountFc(vnode: IVComponent): Node {
   vnode.state.componentState = {};
+  const props = makePropsWithChildren(vnode.props, vnode.children);
   const draftRes =
-    vnode.componentWrapper.mount(vnode.state.componentState, vnode.props) ||
+    vnode.componentWrapper.mount(vnode.state.componentState, props) ||
     createVBlank(null);
   vnode.state.renderRes = draftRes;
+  // console.log('mountFc', vnode.debugSig, draftRes);
   return realize(draftRes);
 }
 
@@ -201,11 +211,10 @@ function patchFc(
 ): Node {
   newVNode.state.componentState = oldVNode.state.componentState;
   const prevRenderRes = oldVNode.state.renderRes!;
+  const props = makePropsWithChildren(newVNode.props, newVNode.children);
   const draftRes =
-    newVNode.componentWrapper.update(
-      newVNode.state.componentState,
-      newVNode.props,
-    ) || createVBlank(null);
+    newVNode.componentWrapper.update(newVNode.state.componentState, props) ||
+    createVBlank(null);
   newVNode.state.renderRes = draftRes;
   const patchRes = patch(dom, draftRes, prevRenderRes);
   return patchRes;

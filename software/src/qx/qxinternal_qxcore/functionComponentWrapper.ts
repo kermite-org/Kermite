@@ -14,9 +14,11 @@ function doLater(fn: () => void) {
 function createFunctionComponentWrapper(
   renderFunction: Function,
 ): IVComponentWrapper {
+  const fcName = renderFunction.name;
   return {
-    name: renderFunction.name,
+    name: fcName,
     mount(self: any, props: any) {
+      // console.log('mount', fcName, props);
       self.fcsig = renderFunction.name;
       self.hook = createHookInstance();
       self.renderWithHook = (props: any) => {
