@@ -146,25 +146,30 @@ function applyDomAttributes(
   vnode: IVElement,
   oldVnode: IVElement | undefined,
 ) {
-  const newClassNames = vnode.props.className?.split(' ');
-  const oldClassNames = oldVnode?.props.className?.split(' ');
-  const added = newClassNames?.filter((it) => !oldClassNames?.includes(it));
-  const removed = oldClassNames?.filter((it) => !newClassNames?.includes(it));
-  if (added) {
-    added.forEach((it) => el.classList.add(it));
-  }
-  if (removed) {
-    removed.forEach((it) => el.classList.remove(it));
-  }
+  // const newClassNames = vnode.props.className?.split(' ');
+  // const oldClassNames = oldVnode?.props.className?.split(' ');
+  // const added = newClassNames?.filter((it) => !oldClassNames?.includes(it));
+  // const removed = oldClassNames?.filter((it) => !newClassNames?.includes(it));
+  // if (added) {
+  //   added.forEach((it) => el.classList.add(it));
+  // }
+  // if (removed) {
+  //   removed.forEach((it) => el.classList.remove(it));
+  // }
 
   if (vnode.props.id) {
     el.id = vnode.props.id;
   }
 
   for (const key in vnode.props) {
+    if (key === 'key' || key === 'children') {
+      continue;
+    }
     const value = vnode.props[key];
     if (key.startsWith('on') && typeof value === 'function') {
       (el as any)[key.toLocaleLowerCase()] = value;
+    } else {
+      el.setAttribute(key, value?.toString() || '');
     }
   }
 }
