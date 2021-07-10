@@ -11,12 +11,14 @@ type IElementProps = {
 type IVBlank = {
   vtype: 'vBlank';
   debugSig: string;
+  dom?: Comment;
 };
 
 type IVText = {
   vtype: 'vText';
   text: string;
   debugSig: string;
+  dom?: Text;
 };
 
 type IVElement = {
@@ -26,6 +28,7 @@ type IVElement = {
   children: IVNode[];
   debugSig: string;
   marker?: string;
+  dom?: Element;
 };
 
 type IProps = {
@@ -50,6 +53,7 @@ type IVComponent = {
     componentState?: any;
     renderRes?: IVNode;
   };
+  dom?: Node; // 関数コンポーネントのVNodeと関数コンポーネントのレンダリング結果のルート要素のVNodeが同じdom要素を参照する
 };
 
 export type IVNode = IVBlank | IVText | IVElement | IVComponent;
@@ -193,6 +197,31 @@ function applyDomAttributes(
 
 // ------------------------------------------------------------
 
+function realize(vnode: IVNode): Node {
+  if (vnode.vtype === 'vText') {
+    const dom = document.createTextNode(vnode.text);
+    vnode.dom = dom;
+    return dom;
+  } else if (vnode.vtype === 'vElement') {
+    const dom = document.createElement(vnode.tagName);
+    applyDomAttributes(dom, vnode, undefined);
+    const childDomNodes = vnode.children.map(realize);
+    childDomNodes.forEach((it) => dom.appendChild(it));
+    vnode.dom = dom;
+    return dom;
+  } else if (vnode.vtype === 'vComponent') {
+    const dom = mountFc(vnode);
+    vnode.dom = dom;
+    return dom;
+  } else {
+    const dom = document.createComment('NULL');
+    vnode.dom = dom;
+    return dom;
+  }
+}
+
+// ------------------------------------------------------------
+
 function makePropsWithChildren(props: IProps, children: IVNode[]) {
   if (children.length === 1) {
     return { ...props, children: children[0] };
@@ -212,11 +241,7 @@ function mountFc(vnode: IVComponent): Node {
   return realize(draftRes);
 }
 
-function patchFc(
-  dom: Node,
-  newVNode: IVComponent,
-  oldVNode: IVComponent,
-): Node {
+function patchFc(dom: Node, newVNode: IVComponent, oldVNode: IVComponent) {
   newVNode.state.componentState = oldVNode.state.componentState;
   const prevRenderRes = oldVNode.state.renderRes!;
   const props = makePropsWithChildren(newVNode.props, newVNode.children);
@@ -224,8 +249,14 @@ function patchFc(
     newVNode.componentWrapper.update(newVNode.state.componentState, props) ||
     createVBlank(null);
   newVNode.state.renderRes = draftRes;
-  const patchRes = patch(dom, draftRes, prevRenderRes);
-  return patchRes;
+  if (1) {
+    console.log('patch', newVNode.componentWrapper.name, {
+      dom,
+      draftRes,
+      prevRenderRes,
+    });
+  }
+  patch(dom, draftRes, prevRenderRes);
 }
 
 function unmountFc(vnode: IVComponent) {
@@ -233,23 +264,6 @@ function unmountFc(vnode: IVComponent) {
 }
 
 // ------------------------------------------------------------
-
-function realize(vnode: IVNode): Node {
-  if (vnode.vtype === 'vText') {
-    return document.createTextNode(vnode.text);
-  }
-  if (vnode.vtype === 'vElement') {
-    const dom = document.createElement(vnode.tagName);
-    applyDomAttributes(dom, vnode, undefined);
-    const childDomNodes = vnode.children.map(realize);
-    childDomNodes.forEach((it) => dom.appendChild(it));
-    return dom;
-  }
-  if (vnode.vtype === 'vComponent') {
-    return mountFc(vnode);
-  }
-  return document.createComment('NULL');
-}
 
 function mount(parentDom: Node, vnode: IVNode): Node {
   const el = realize(vnode);
@@ -259,7 +273,7 @@ function mount(parentDom: Node, vnode: IVNode): Node {
 
 function mountChildren(parentDom: Node, vnodes: IVNode[]) {
   const nodes = vnodes.map(realize);
-  nodes.forEach(parentDom.appendChild);
+  nodes.forEach((node) => parentDom.appendChild(node));
 }
 
 function unmount(dom: Node, oldVNode: IVNode) {
@@ -278,27 +292,33 @@ function patchChildren(
   newVNodes: IVNode[],
   oldVNodes: IVNode[],
 ) {
-  const childDomNodes = Array.from(parentDom.childNodes);
+  // const childDomNodes = Array.from(parentDom.childNodes);
+
+  // if (childDomNodes.length !== oldVNodes.length) {
+  //   debugger;
+  // }
 
   if (newVNodes.length === oldVNodes.length) {
     for (let i = 0; i < newVNodes.length; i++) {
-      const dom = childDomNodes[i];
+      // const dom = childDomNodes[i];
       const newVNode = newVNodes[i];
       const oldVNode = oldVNodes[i];
+      const dom = oldVNode.dom!;
       patch(dom, newVNode, oldVNode);
+      newVNode.dom = dom;
     }
   } else {
-    for (let i = 0; i < newVNodes.length; i++) {
-      const dom = childDomNodes[i];
+    for (let i = 0; i < oldVNodes.length; i++) {
+      // const dom = childDomNodes[i];
       const oldVNode = oldVNodes[i];
-      unmount(dom, oldVNode);
+      unmount(oldVNode.dom!, oldVNode);
     }
     removeDomChildren(parentDom);
     mountChildren(parentDom, newVNodes);
   }
 }
 
-function patch(dom: Node, newVNode: IVNode, oldVNode: IVNode): Node {
+function patch(dom: Node, newVNode: IVNode, oldVNode: IVNode) {
   if (newVNode === oldVNode) {
   } else if (newVNode.vtype === 'vBlank' && oldVNode.vtype === 'vBlank') {
   } else if (newVNode.vtype === 'vText' && oldVNode.vtype === 'vText') {
@@ -330,7 +350,6 @@ function patch(dom: Node, newVNode: IVNode, oldVNode: IVNode): Node {
       mount(parentDom, newVNode);
     }
   }
-  return dom;
 }
 
 let prevDom: Node;
