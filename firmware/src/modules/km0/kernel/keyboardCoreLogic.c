@@ -582,14 +582,15 @@ static void layerMutations_recoverMainLayerIfAllLayeresDisabled() {
 
 enum {
   OpType_KeyInput = 1,
-  OpType_LayerCall = 2,
+  OpType__Reserved = 2,
   OpType_ExtendedOperation = 3,
 };
 
 enum {
-  ExOpType_LayerClearExclusive = 1,
-  ExOpType_SystemAction = 2,
-  ExOpType_MovePointerMovement = 3,
+  ExOpType_LayerCall = 1,
+  ExOpType_LayerClearExclusive = 2,
+  ExOpType_SystemAction = 3,
+  ExOpType_MovePointerMovement = 4,
 };
 
 enum {
@@ -603,7 +604,7 @@ enum {
 static uint16_t convertSingleModifierToFlags(uint16_t opWord) {
   uint16_t wordBase = opWord & 0xf000;
   uint8_t modifiers = (opWord >> 8) & 0x0f;
-  uint8_t logicalKey = opWord & 0x7f;
+  uint8_t logicalKey = opWord & 0xff;
   if (LK_Ctrl <= logicalKey && logicalKey <= LK_Gui) {
     modifiers |= 1 << (logicalKey - LK_Ctrl);
     logicalKey = 0;
@@ -625,10 +626,10 @@ static OutputKeyStrokeAction convertKeyInputOperationWordToOutputKeyStrokeAction
   opWord >>= 16;
   opWord = keyActionRemapper_translateKeyOperation(opWord, logicOptions.wiringMode);
   opWord = convertSingleModifierToFlags(opWord);
-  uint8_t logicalKey = opWord & 0x7f;
+  uint8_t logicalKey = opWord & 0xff;
   action.modFlags = (opWord >> 8) & 0b1111;
   if (logicalKey) {
-    bool isSecondaryLayout = logicOptions.systemLayout == 2;
+    bool isSecondaryLayout = logicOptions.systemLayout == 1;
     uint16_t hidKey = keyCodeTranslator_mapLogicalKeyToHidKeyCode(
         logicalKey, isSecondaryLayout);
     bool isInShiftCancelLayer = ((opWord >> 12) & 1) > 0;
@@ -653,25 +654,30 @@ static void handleOperationOn(uint32_t opWord) {
         true);
     keyStrokeActionQueue_enqueueAction(strokeAction);
   }
-  if (opType == OpType_LayerCall) {
-    opWord >>= 16;
-    uint8_t layerIndex = (opWord >> 8) & 0b1111;
-    uint8_t fInvocationMode = (opWord >> 4) & 0b1111;
 
-    if (fInvocationMode == InvocationMode_Hold) {
-      layerMutations_activate(layerIndex);
-    } else if (fInvocationMode == InvocationMode_TurnOn) {
-      layerMutations_activate(layerIndex);
-    } else if (fInvocationMode == InvocationMode_TurnOff) {
-      layerMutations_deactivate(layerIndex);
-    } else if (fInvocationMode == InvocationMode_Toggle) {
-      layerMutations_toggle(layerIndex);
-    } else if (fInvocationMode == InvocationMode_Oneshot) {
-      layerMutations_oneshot(layerIndex);
-    }
-  }
+  bool isLayerCall = false;
+
   if (opType == OpType_ExtendedOperation) {
     uint8_t exOpType = (opWord >> 24) & 0b111;
+    if (exOpType == ExOpType_LayerCall) {
+      isLayerCall = true;
+      opWord >>= 16;
+      uint8_t fInvocationMode = (opWord >> 4) & 0b1111;
+      uint8_t layerIndex = opWord & 0b1111;
+
+      if (fInvocationMode == InvocationMode_Hold) {
+        layerMutations_activate(layerIndex);
+      } else if (fInvocationMode == InvocationMode_TurnOn) {
+        layerMutations_activate(layerIndex);
+      } else if (fInvocationMode == InvocationMode_TurnOff) {
+        layerMutations_deactivate(layerIndex);
+      } else if (fInvocationMode == InvocationMode_Toggle) {
+        layerMutations_toggle(layerIndex);
+      } else if (fInvocationMode == InvocationMode_Oneshot) {
+        layerMutations_oneshot(layerIndex);
+      }
+    }
+
     if (exOpType == ExOpType_LayerClearExclusive) {
       opWord >>= 16;
       uint8_t targetGroup = opWord & 0b111;
@@ -684,7 +690,7 @@ static void handleOperationOn(uint32_t opWord) {
     }
   }
 
-  if (opType != OpType_LayerCall) {
+  if (!isLayerCall) {
     layerMutations_clearOneshot();
   }
   layerMutations_recoverMainLayerIfAllLayeresDisabled();
@@ -698,12 +704,15 @@ static void handleOperationOff(uint32_t opWord) {
         false);
     keyStrokeActionQueue_enqueueAction(strokeAction);
   }
-  if (opType == OpType_LayerCall) {
-    opWord >>= 16;
-    uint8_t layerIndex = (opWord >> 8) & 0b1111;
-    uint8_t fInvocationMode = (opWord >> 4) & 0b1111;
-    if (fInvocationMode == InvocationMode_Hold) {
-      layerMutations_deactivate(layerIndex);
+  if (opType == OpType_ExtendedOperation) {
+    uint8_t exOpType = (opWord >> 24) & 0b111;
+    if (exOpType == ExOpType_LayerCall) {
+      opWord >>= 16;
+      uint8_t fInvocationMode = (opWord >> 4) & 0b1111;
+      uint8_t layerIndex = opWord & 0b1111;
+      if (fInvocationMode == InvocationMode_Hold) {
+        layerMutations_deactivate(layerIndex);
+      }
     }
   }
   layerMutations_recoverMainLayerIfAllLayeresDisabled();

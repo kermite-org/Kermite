@@ -14,6 +14,7 @@ import {
   DeviceWrapper,
   IDeviceWrapper,
 } from '~/shell/services/device/keyboardDevice/DeviceWrapper';
+import { Packets } from '~/shell/services/device/keyboardDevice/Packets';
 
 const deviceSpecificationParams: IDeviceSpecificationParams[] = [
   // {
@@ -67,6 +68,7 @@ export class DeviceSelectionManager {
 
   private closeDevice() {
     if (this.device) {
+      this.device.writeSingleFrame(Packets.connectionClosingFrame);
       this.device.close();
       this.device = undefined;
     }
@@ -83,6 +85,7 @@ export class DeviceSelectionManager {
             console.log(`failed to open device: ${deviceSig}`);
             return;
           }
+          device.writeSingleFrame(Packets.connectionOpenedFrame);
           console.log(`device opened: ${deviceSig}`);
           device.onClosed(() => {
             this.setStatus({ currentDevicePath: 'none' });

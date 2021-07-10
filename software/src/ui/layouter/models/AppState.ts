@@ -1,6 +1,7 @@
+import { defaultKeyboardDesignSetup } from '~/shared';
 import { IEditKeyboardDesign, IEditKeyEntity } from './DataSchema';
 
-export type IEditMode = 'select' | 'key' | 'shape' | 'delete';
+export type IEditMode = 'select' | 'move' | 'key' | 'shape' | 'delete';
 export interface IEditState {
   loadedDesign: IEditKeyboardDesign;
   design: IEditKeyboardDesign;
@@ -48,12 +49,7 @@ interface IAppState {
 
 export function createFallbackEditKeyboardDesign(): IEditKeyboardDesign {
   return {
-    setup: {
-      placementUnit: 'mm',
-      placementAnchor: 'center',
-      keySizeUnit: 'KP 19',
-      keyIdMode: 'auto',
-    },
+    setup: { ...defaultKeyboardDesignSetup },
     keyEntities: {},
     outlineShapes: {},
     transGroups: {
@@ -76,7 +72,7 @@ export const appState: IAppState = {
     isCurrentKeyMirror: false,
     currentShapeId: undefined,
     currentPointIndex: -1,
-    editMode: 'key',
+    editMode: 'select',
     shapeDrawing: false,
     currentTransGroupId: undefined,
   },

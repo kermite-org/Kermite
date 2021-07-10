@@ -42,6 +42,12 @@ static const int pin_masterSlaveDetermination = -1;
 #define SingleWireMaxPacketSizeTmp (NumScanSlotBytesLarger + 1)
 #define SingleWireMaxPacketSize (SingleWireMaxPacketSizeTmp > 4 ? SingleWireMaxPacketSizeTmp : 4)
 
+// #ifdef KERMITE_TARGET_MCU_RP2040
+// static const int heartbeat_led_tick_division_shift = 1;
+// #else
+// static const int heartbeat_led_tick_division_shift = 0;
+// #endif
+
 enum {
   SplitOp_MasterOath = 0xC0,                  //Master --> Slave
   SplitOp_InputScanSlotStatesRequest = 0xC1,  //Master --> Slave
@@ -71,6 +77,21 @@ bool isRightHand = false;
 void (*boardConfigCallback)(int8_t side) = NULL;
 
 int8_t configuredBoardSide = -1;
+
+//-------------------------------------------------------
+//100ms周期のタスク, ステータスLED用
+
+static uint32_t taskHmsNextTimeMs = 0;
+static uint32_t taskHmsStep = 0;
+
+static void taskForEach100ms(void (*taskFunc)(uint32_t)) {
+  uint32_t timeMs = system_getSystemTimeMs();
+  if (timeMs > taskHmsNextTimeMs) {
+    taskFunc(taskHmsStep);
+    taskHmsStep++;
+    taskHmsNextTimeMs = timeMs + 100;
+  }
+}
 
 //-------------------------------------------------------
 
@@ -246,6 +267,25 @@ static void master_setupBoard() {
   setBoardSide(side);
 }
 
+static void master_ledTask(uint32_t step) {
+  if (isSlaveActive) {
+    //左右間の通信が機能している場合同期して1回ずつ点滅
+    if (step % 30 == 0) {
+      master_sendSlaveTaskOrder(SplitOp_TaskOrder_FlashHeartbeat);
+      keyboardMain_taskFlashHeartbeatLed();
+      master_waitSlaveTaskCompletion();
+    }
+  } else {
+    //slaveとの疎通が取れなくなっている場合2回ずつ点滅
+    if (step % 30 == 0) {
+      keyboardMain_taskFlashHeartbeatLed();
+    };
+    if (step % 30 == 2) {
+      keyboardMain_taskFlashHeartbeatLed();
+    };
+  }
+}
+
 static void master_start() {
   master_setupBoard();
   master_sendInitialParameteresAll();
@@ -277,14 +317,7 @@ static void master_start() {
       keyboardMain_updateOledDisplayModule(tick);
       master_waitSlaveTaskCompletion();
     }
-    if (tick % 4000 == 3 && isSlaveActive) {
-      master_sendSlaveTaskOrder(SplitOp_TaskOrder_FlashHeartbeat);
-      keyboardMain_taskFlashHeartbeatLed();
-      master_waitSlaveTaskCompletion();
-    }
-    if (tick % 1000 == 0 && !isSlaveActive) {
-      boardIo_toggleLed1();
-    }
+    taskForEach100ms(master_ledTask);
     keyboardMain_processUpdate();
     delayUs(500);
     tick++;
@@ -299,6 +332,8 @@ volatile static bool masterStateReceived = false;
 
 static uint8_t slaveSendingKeyStateBytes[NumScanSlotBytesLarger] = { 0 };
 static uint8_t slaveSendingKeyStateBytesLen = 0;
+
+volatile static uint8_t slavePacketReceivedFromMaster = false;
 
 static void slave_respondAck() {
   sw_txbuf[0] = SplitOp_SlaveAck;
@@ -359,6 +394,7 @@ static void slave_onRecevierInterruption() {
       masterStateReceived = true;
       slave_respondAck();
     }
+    slavePacketReceivedFromMaster = true;
   }
 }
 
@@ -391,6 +427,20 @@ static void slave_consumeMasterStatePackets() {
   }
 }
 
+static void slave_ledTask(uint32_t step) {
+  bool isConnected = slavePacketReceivedFromMaster;
+  if (!isConnected) {
+    //masterからの通信が途絶している場合2回ずつ点滅
+    if (step % 30 == 0) {
+      keyboardMain_taskFlashHeartbeatLed();
+    };
+    if (step % 30 == 2) {
+      keyboardMain_taskFlashHeartbeatLed();
+    };
+  }
+  slavePacketReceivedFromMaster = false;
+}
+
 static void slave_start() {
   keyboardMain_setAsSplitSlave();
   boardLink_setupSlaveReceiver(slave_onRecevierInterruption);
@@ -419,6 +469,7 @@ static void slave_start() {
       slave_consumeMasterStatePackets();
       masterStateReceived = false;
     }
+    taskForEach100ms(slave_ledTask);
     delayUs(10);
   }
 }
@@ -446,6 +497,16 @@ static void detection_sendMasterOath() {
   boardLink_exchangeFramesBlocking();
 }
 
+static void detection_ledTask(uint32_t step) {
+  //2回ずつ点滅
+  if (step % 30 == 0) {
+    keyboardMain_taskFlashHeartbeatLed();
+  };
+  if (step % 30 == 2) {
+    keyboardMain_taskFlashHeartbeatLed();
+  };
+}
+
 //USB接続が確立していない期間の動作
 //双方待機し、USB接続が確立すると自分がMasterになり、相手にMaseter確定通知パケットを送る
 static bool detenction_determineMasterSlaveByUsbConnection() {
@@ -467,9 +528,7 @@ static bool detenction_determineMasterSlaveByUsbConnection() {
       break;
     }
     usbIoCore_processUpdate();
-    if (tick % 1000 == 0 && tick > 0) {
-      boardIo_toggleLed1();
-    }
+    taskForEach100ms(detection_ledTask);
     delayMs(1);
     tick++;
   }

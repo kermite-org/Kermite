@@ -1,5 +1,4 @@
-#ifndef __BOARD_IO_H__
-#define __BOARD_IO_H__
+#pragma once
 
 #include "km0/types.h"
 
@@ -15,5 +14,3 @@ void boardIo_setupLeds_proMicroRp() __attribute__((weak));
 void boardIo_setupLeds_rpiPico() __attribute__((weak));
 void boardIo_setupLeds_qtPyRp() __attribute__((weak));
 void boardIo_setupLeds_tiny2040() __attribute__((weak));
-
-#endif

@@ -141,7 +141,7 @@ export const vNumberRanged = createChecker((lo: number, hi: number) => {
     if (!isFinite(value)) {
       return 'must be a number';
     }
-    if (lo <= value && value <= hi) {
+    if (!(lo <= value && value <= hi)) {
       return `must be a value in the range ${lo} to ${hi}`;
     }
   };

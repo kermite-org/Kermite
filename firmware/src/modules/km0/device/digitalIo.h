@@ -1,5 +1,4 @@
-#ifndef __DIGITAL_IO_H__
-#define __DIGITAL_IO_H__
+#pragma once
 
 #include "km0/types.h"
 
@@ -134,5 +133,3 @@ bool digitalIo_read(uint8_t pin);
 void digitalIo_toggle(uint8_t pin);
 void digitalIo_setHigh(uint8_t pin);
 void digitalIo_setLow(uint8_t pin);
-
-#endif

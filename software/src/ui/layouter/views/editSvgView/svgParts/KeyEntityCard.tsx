@@ -97,13 +97,21 @@ export const KeyEntityCardSingle = (props: {
       let { editMode } = editReader;
 
       if (editMode === 'shape') {
-        editMutations.setEditMode('key');
-        editMode = 'key';
+        editMutations.setEditMode('move');
+        editMode = 'move';
       }
 
       if (editMode === 'select') {
         editMutations.setCurrentKeyEntity(ke.id, isMirror);
         editMutations.setCurrentPointIndex(-1);
+        e.stopPropagation();
+      } else if (editMode === 'move') {
+        editMutations.setCurrentKeyEntity(ke.id, isMirror);
+        editMutations.setCurrentPointIndex(-1);
+        editMutations.startKeyEdit(true);
+        startKeyEntityDragOperation(e, isMirror, () => {
+          editMutations.endKeyEdit();
+        });
         e.stopPropagation();
       } else if (editMode === 'key') {
         editMutations.setCurrentKeyEntity(ke.id, isMirror);
@@ -260,6 +268,10 @@ export const KeyEntityCard = ({ ke }: { ke: IEditKeyEntity }) => {
       </g>
     );
   } else {
-    return <KeyEntityCardSingle ke={ke} isMirror={false} />;
+    return (
+      <g>
+        <KeyEntityCardSingle ke={ke} isMirror={false} />
+      </g>
+    );
   }
 };

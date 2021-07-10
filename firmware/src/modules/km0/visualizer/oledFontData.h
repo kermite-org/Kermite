@@ -1,5 +1,4 @@
-#ifndef __OLED_FONT_DATA_H__
-#define __OLED_FONT_DATA_H__
+#pragma once
 
 #include "km0/types.h"
 
@@ -211,6 +210,4 @@ __flash const uint8_t oledFontData[] = {
   0x00, 0x00, 0x00, 0x7f, 0x00,
   0x00, 0x00, 0x41, 0x7f, 0x08
 };
-#endif
-
 #endif

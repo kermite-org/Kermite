@@ -1,5 +1,4 @@
-#ifndef __CONFIG_MANAGER_H__
-#define __CONFIG_MANAGER_H__
+#pragma once
 
 #include "km0/types.h"
 
@@ -18,5 +17,3 @@ void configManager_processUpdate();
 void configManager_processUpdateNoSave();
 
 uint8_t *configManager_getParameterValuesRawPointer();
-
-#endif

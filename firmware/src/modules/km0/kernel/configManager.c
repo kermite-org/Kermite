@@ -20,7 +20,6 @@ static uint16_t parameterChangedFlags = 0;
 static bool reqRestToDfu = false;
 
 static const T_SystemParametersSet systemParametersDefault = {
-  .emitKeyStroke = true,
   .emitRealtimeEvents = true,
   .keyHoldLedOutput = true,
   .heartbeatLedOutput = true,
@@ -36,12 +35,11 @@ static const T_SystemParametersSet systemParametersDefault = {
 };
 
 static T_SystemParametersSet systemParameterMaxValues = {
-  .emitKeyStroke = 1,
   .emitRealtimeEvents = 1,
   .keyHoldLedOutput = 1,
   .heartbeatLedOutput = 1,
   .masterSide = 1,
-  .systemLayout = 2,
+  .systemLayout = 1,
   .wiringMode = 1,
   .glowActive = 1,
   .glowColor = 255,
@@ -101,9 +99,6 @@ void configManager_overrideParameterMaxValue(uint8_t parameterIndex, uint8_t val
 
 bool validateParameter(uint8_t parameterIndex, uint8_t value) {
   uint8_t min = 0;
-  if (parameterIndex == SystemParameter_SystemLayout) {
-    min = 1;
-  }
   uint8_t max = ((uint8_t *)&systemParameterMaxValues)[parameterIndex];
   return utils_inRange(value, min, max);
 }
@@ -218,6 +213,24 @@ void configManager_handleSystemAction(uint8_t code, uint8_t payloadValue) {
   }
   if (code == SystemAction_ResetToDfuMode) {
     reqRestToDfu = true;
+  }
+  if (code == SystemAction_SystemLayoutSetPrimary) {
+    writeParameter(SystemParameter_SystemLayout, 0);
+  }
+  if (code == SystemAction_SystemLayoutSetSecondary) {
+    writeParameter(SystemParameter_SystemLayout, 1);
+  }
+  if (code == SystemAction_SystemLayoutNext) {
+    shiftParameter(SystemParameter_SystemLayout, 1, true);
+  }
+  if (code == SystemAction_RoutingChannelSetMain) {
+    writeParameter(SystemParameter_WiringMode, 0);
+  }
+  if (code == SystemAction_RoutingChannelSetAlter) {
+    writeParameter(SystemParameter_WiringMode, 1);
+  }
+  if (code == SystemAction_RoutingChannelNext) {
+    shiftParameter(SystemParameter_WiringMode, 1, true);
   }
 }
 

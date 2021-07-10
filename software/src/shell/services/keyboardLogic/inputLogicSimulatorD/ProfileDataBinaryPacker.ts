@@ -12,8 +12,8 @@ import {
   sortOrderBy,
   getLogicalKeyForVirtualKey,
   routerConstants,
-  encodeModifierVirtualKeys,
   systemActionToCodeMap,
+  encodeModifierVirtualKeys,
 } from '~/shared';
 import {
   writeBytes,
@@ -79,9 +79,10 @@ MMMM: modifiers, [os, alt, shift, ctrl] for msb-lsb
 KKKK_KKKK: logical keycode
 
 layerCall
-0bTTxx_LLLL 0bIIII_xxxx
-0b10~
-TT: type, 0b10 for layerCall
+0bTTxx_xFFF 0bIIII_LLLL
+0b11xx_x001 ~
+TT: type, 0b11 for extended operations
+FFF: extended operation type, 0b001 for layer call
 LLLL: layerIndex
 IIII: invocation mode
  1: hold
@@ -92,24 +93,24 @@ IIII: invocation mode
 
 layerClearExclusive
 0bTTxx_xFFF 0bxxxx_xQQQ
-0b11xx_x001 ~
+0b11xx_x010 ~
 TT: type, 0b11 for extended operations
-FFF: extended operation type, 0b001 for layer clear exclusive
+FFF: extended operation type, 0b010 for layer clear exclusive
 QQQ: target exclusion group
 
 SystemAction
 0bTTxx_xFFF CCCC_CCCC VVVV_VVVV
-0b11xx_x010 ~
+0b11xx_x011 ~
 TT: type, 0b10 for extended operations
-FFF: extended operation type, 0b010 for user system action
+FFF: extended operation type, 0b011 for user system action
 CCCC_CCCC: system action code
 VVVV_VVVV: payload value
 
 MousePointerMovement (NOT IMPLEMENTED YET)
 0bTTxx_xFFF AAAA_AAAA BBBB_BBBB
-0b11xx_x011 ~
+0b11xx_x100 ~
 TT: type, 0b11 for extended operations
-FFF: extended operation type, 0b011 for mouse pointer movement
+FFF: extended operation type, 0b100 for mouse pointer movement
 AAAA_AAAA: movement amount x, -128~127
 BBBB_BBBB: movement amount y, -128~127
 
@@ -124,35 +125,42 @@ function encodeAssignOperation(
     const vk = op.virtualKey;
     if (encodeSoloModifierActionToModifierFlags) {
       if (isModifierVirtualKey(vk)) {
-        const mods = encodeModifierVirtualKeys([vk]);
-        return [(fAssignType << 6) | mods, 0];
+        const modifiers = encodeModifierVirtualKeys([vk]);
+        return [(fAssignType << 6) | modifiers, 0];
       }
     }
-    const mods = encodeModifierVirtualKeys(op.attachedModifiers);
+    const modifiers = op.attachedModifiers;
     const logicalKey = getLogicalKeyForVirtualKey(vk);
     // ShiftCancelオプションが有効でshiftレイヤの場合のみ、shiftCancelを適用可能にする
     const fIsShiftCancellable =
       context.useShiftCancel && layer.isShiftLayer ? 1 : 0;
-    return [(fAssignType << 6) | (fIsShiftCancellable << 4) | mods, logicalKey];
+    return [
+      (fAssignType << 6) | (fIsShiftCancellable << 4) | modifiers,
+      logicalKey,
+    ];
   }
   if (op?.type === 'layerCall') {
-    const fAssignType = 0b10;
+    const fAssignType = 0b11;
+    const fExOperationType = 0b001;
     const layerInfo = context.layersDict[op.targetLayerId];
     if (layerInfo) {
       const { layerIndex } = layerInfo;
       const fInvocationMode = makeLayerInvocationModeBits(op.invocationMode);
-      return [(fAssignType << 6) | layerIndex, fInvocationMode << 4];
+      return [
+        (fAssignType << 6) | fExOperationType,
+        (fInvocationMode << 4) | layerIndex,
+      ];
     }
   }
   if (op?.type === 'layerClearExclusive') {
     const fAssingType = 0b11;
-    const fExOperationType = 0b001;
+    const fExOperationType = 0b010;
     const targetGroup = op.targetExclusionGroup;
     return [(fAssingType << 6) | fExOperationType, targetGroup];
   }
   if (op?.type === 'systemAction') {
     const fAssingType = 0b11;
-    const fExOperationType = 0b010;
+    const fExOperationType = 0b011;
     const actionCode = systemActionToCodeMap[op.action] || 0;
     return [(fAssingType << 6) | fExOperationType, actionCode, op.payloadValue];
   }
@@ -252,7 +260,7 @@ function encodeRawAssignEntry(
         ),
         ...flattenArray(operationWords),
       ];
-    } else if (entry.secondaryOp) {
+    } else if (entry.primaryOp && entry.secondaryOp) {
       const operationWords = [
         encodeAssignOperation(entry.primaryOp, layer, context),
         encodeAssignOperation(entry.secondaryOp, layer, context),
@@ -265,17 +273,21 @@ function encodeRawAssignEntry(
         ),
         ...flattenArray(operationWords),
       ];
-    } else {
-      const primaryOpWord = encodeAssignOperation(
-        entry.primaryOp,
-        layer,
-        context,
-      );
+    } else if (entry.secondaryOp) {
+      const opWord = encodeAssignOperation(entry.secondaryOp, layer, context);
       return [
         ...encodeRawAssignEntryHeaderBytes('single', ra.layerIndex, [
-          primaryOpWord.length,
+          opWord.length,
         ]),
-        ...primaryOpWord,
+        ...opWord,
+      ];
+    } else {
+      const opWord = encodeAssignOperation(entry.primaryOp, layer, context);
+      return [
+        ...encodeRawAssignEntryHeaderBytes('single', ra.layerIndex, [
+          opWord.length,
+        ]),
+        ...opWord,
       ];
     }
   }
@@ -353,7 +365,7 @@ function createProfileContext(profile: IProfileData): IProfileContenxt {
       la.layerId,
       {
         layerIndex: idx,
-        isShiftLayer: la.attachedModifiers?.includes('K_Shift') || false,
+        isShiftLayer: (la.attachedModifiers & 0b0010) > 0,
       },
     ]),
   );
@@ -411,9 +423,7 @@ function encodeLayerListData(profile: IProfileData): number[] {
     profile.layers.map((la) => {
       const fDefaultScheme = la.defaultScheme === 'block' ? 1 : 0;
       const fInitialActive = la.initialActive ? 1 : 0;
-      const fAttachedModifiers = encodeModifierVirtualKeys(
-        la.attachedModifiers,
-      );
+      const fAttachedModifiers = la.attachedModifiers;
       return [
         (fDefaultScheme << 7) | (fInitialActive << 5) | fAttachedModifiers,
         la.exclusionGroup,

@@ -186,6 +186,8 @@ enum HidKeyJA {
   KU_JA_Yen_VertiacalBar = 137,
   KU_Henkan = 138,
   KU_Muhenkan = 139,
+  KU_Lang1Kana = 144,
+  KU_Lang2Eisu = 145,
 };
 
 #define Shifted 0x100
@@ -311,6 +313,8 @@ __flash static const LogicalKeyItem logicalKeyItems[] = {
   { LK_RightCurlyBrace, "}", KU_US_RightSquareBracket_RightCurlyBrace | Shifted, KU_JA_RightSquareBracket_RightCurlyBrace | Shifted },
   { LK_LessThan, "<", KU_US_Comma_LessThan | Shifted, KU_JA_Comma_LessThan | Shifted },
   { LK_GreaterThan, ">", KU_US_Dot_GreaterThan | Shifted, KU_JA_Dot_GreaterThan | Shifted },
+  { LK_Lang1Kana, "Kana", KU_Lang1Kana },
+  { LK_Lang2Eisu, "Eisu", KU_Lang2Eisu }
 };
 
 #define SizeLogicalKeyItem sizeof(LogicalKeyItem)

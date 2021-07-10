@@ -1,4 +1,4 @@
-import { jsx, css } from 'qx';
+import { css, FC, jsx } from 'qx';
 import { IDisplayKeyShape } from '~/shared';
 import { texts, uiTheme } from '~/ui/common';
 import { KeyUnitShape } from '~/ui/common-svg/keyUnitCards/KeyUnitShape';
@@ -15,10 +15,52 @@ export interface IEditKeyUnitCardViewModel {
   setCurrent: () => void;
   primaryText: string;
   secondaryText: string;
+  tertiaryText: string;
   isLayerFallback: boolean;
   isHold: boolean;
   shiftHold: boolean;
 }
+
+const cssKeyText = css`
+  fill: ${uiTheme.colors.clKeyUnitLegend};
+
+  &[data-is-weak] {
+    fill: ${uiTheme.colors.clKeyUnitLegendWeak};
+  }
+
+  pointer-events: none;
+`;
+
+export const KeyTextLabel: FC<{
+  text: string;
+  xpos: number;
+  ypos: number;
+  isWeak?: boolean;
+  isBold?: boolean;
+}> = ({ text, xpos, ypos, isWeak, isBold }) => {
+  const getFontSize = (text: string) => {
+    if (text.length === 1) {
+      return '8px';
+    } else {
+      return '5px';
+    }
+  };
+
+  return (
+    <text
+      css={cssKeyText}
+      x={xpos}
+      y={ypos}
+      font-size={getFontSize(text)}
+      font-weight={isBold ? 'bold' : 'normal'}
+      data-is-weak={isWeak}
+      text-anchor="middle"
+      dominant-baseline="center"
+    >
+      {text}
+    </text>
+  );
+};
 
 const cssKeyShape = css`
   cursor: pointer;
@@ -35,20 +77,6 @@ const cssKeyShape = css`
   }
 `;
 
-const cssKeyText = css`
-  fill: ${uiTheme.colors.clKeyUnitLegend};
-
-  &[data-is-weak] {
-    fill: ${uiTheme.colors.clKeyUnitLegendWeak};
-  }
-
-  &[data-hidden] {
-    display: none;
-  }
-
-  pointer-events: none;
-`;
-
 export function EditKeyUnitCard(props: {
   keyUnit: IEditKeyUnitCardViewModel;
   showLayerDefaultAssign: boolean;
@@ -60,6 +88,7 @@ export function EditKeyUnitCard(props: {
     setCurrent,
     primaryText,
     secondaryText,
+    tertiaryText,
     isLayerFallback,
     isHold,
     shape,
@@ -74,17 +103,8 @@ export function EditKeyUnitCard(props: {
     e.stopPropagation();
   };
 
-  const getFontSize = (text: string) => {
-    if (text.length === 1) {
-      return '8px';
-    } else {
-      return '5px';
-    }
-  };
-
-  const getFontWeight = (text: string) => {
-    const shouldBold = shiftHold && text.match(/^[A-Z]$/);
-    return shouldBold ? 'bold' : 'normal';
+  const checkBold = (text: string): boolean => {
+    return (shiftHold && !!text.match(/^[A-Z]$/)) || false;
   };
 
   return (
@@ -100,31 +120,26 @@ export function EditKeyUnitCard(props: {
         data-hold={isHold}
         onMouseDown={onMouseDown}
       />
-      <text
-        css={cssKeyText}
-        x={0}
-        y={0}
-        font-size={getFontSize(primaryText)}
-        font-weight={getFontWeight(primaryText)}
-        text-anchor="middle"
-        dominant-baseline="center"
-        data-is-weak={isLayerFallback}
-        data-hidden={!textShown}
-      >
-        {primaryText}
-      </text>
-
-      <text
-        css={cssKeyText}
-        x={0}
-        y={8}
-        font-size={getFontSize(secondaryText)}
-        font-weight={getFontWeight(secondaryText)}
-        text-anchor="middle"
-        dominant-baseline="center"
-      >
-        {secondaryText}
-      </text>
+      <KeyTextLabel
+        text={primaryText}
+        xpos={0}
+        ypos={0}
+        isWeak={isLayerFallback}
+        isBold={checkBold(primaryText)}
+        qxIf={textShown}
+      />
+      <KeyTextLabel
+        text={secondaryText}
+        xpos={0}
+        ypos={8}
+        isBold={checkBold(secondaryText)}
+      />
+      <KeyTextLabel
+        text={tertiaryText}
+        xpos={4}
+        ypos={-4}
+        isBold={checkBold(secondaryText)}
+      />
     </g>
   );
 }

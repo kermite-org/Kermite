@@ -1,5 +1,4 @@
-#ifndef __DATA_MEMORY_H__
-#define __DATA_MEMORY_H__
+#pragma once
 
 #include "km0/types.h"
 
@@ -14,5 +13,3 @@ void dataMemory_clearAllZero();
 
 void dataMemory_initialize();
 void dataMemory_processTick();
-
-#endif

@@ -123,8 +123,13 @@ export class ProjectResourceProviderImpl_Remote
         fetchJson,
         uri,
       );
+      const _parameterConfigurations =
+        projectJsonContent.parameterConfigurations;
+      const parameterConfigurations = Array.isArray(_parameterConfigurations)
+        ? _parameterConfigurations
+        : [_parameterConfigurations];
       return readCustomParameterDefinition(
-        projectJsonContent.parameterConfigurations,
+        parameterConfigurations,
         variationName,
       );
     }

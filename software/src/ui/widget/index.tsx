@@ -1,7 +1,19 @@
-import { jsx, css } from 'qx';
+import { jsx, css, FC } from 'qx';
 import { siteModel } from '~/ui/common';
-import { WidgetMainPanel } from '~/ui/widget/views/WidgetMainPanel';
-import { WidgetWindowActiveChrome } from '~/ui/widget/views/WidgetWindowActiveChrome';
+import { WidgetWindowActiveChrome } from '~/ui/widget/atoms/WidgetWindowActiveChrome';
+import { WidgetWindowFrame } from '~/ui/widget/atoms/WidgetWindowFrame';
+import { WidgetMainPanel } from '~/ui/widget/panels/WidgetMainPanel';
+
+export const WidgetZoneRoot: FC = () => {
+  return (
+    <div css={style}>
+      <WidgetWindowFrame>
+        <WidgetMainPanel />
+      </WidgetWindowFrame>
+      <WidgetWindowActiveChrome qxIf={siteModel.isWindowActive} />
+    </div>
+  );
+};
 
 const style = css`
   height: 100%;
@@ -11,12 +23,3 @@ const style = css`
   align-items: center;
   background: transparent;
 `;
-
-export const WidgetZoneRoot = () => {
-  return (
-    <div css={style}>
-      <WidgetWindowActiveChrome qxIf={siteModel.isWindowActive} />
-      <WidgetMainPanel />
-    </div>
-  );
-};

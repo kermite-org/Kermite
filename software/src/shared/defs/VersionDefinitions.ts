@@ -4,13 +4,18 @@
 // 210509 5-->6, チャンク単位でデータを格納するように変更
 export const ConfigStorageFormatRevision = 6;
 
-export const RawHidMessageProtocolRevision = 1;
+// 210705, 2, メッセージ形式を簡素化
+// export const RawHidMessageProtocolRevision = 1;
+export const RawHidMessageProtocolRevision = 2;
 
 // 210509 1, 初版
 // 210515 2, mappingEntriesを追加
 // 210601 3, 論理キーのshiftとctrlの値を修正
-export const ProfileBinaryFormatRevision = 3;
+// 210705 4, OpType/ExOpTypeを整理
+export const ProfileBinaryFormatRevision = 4;
 
 // 210513, 1, 初版
 // 210522, 2, sytemLayoutをUS:1,JIS:2に変更
-export const ConfigParametersRevision = 2;
+// 210706, 3, emitKeyStrokeを削除
+// 210706, 4, systemLayoutをUS:0,JIS:1に戻す
+export const ConfigParametersRevision = 4;

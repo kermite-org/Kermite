@@ -37,10 +37,12 @@ function makeEditKeyUnitCardViewModel(
     uiStatusModel.stopLiveMode();
   };
   const assign = getAssignForKeyUnit(keyUnitId, playerModel, editorModel);
-  const { primaryText, secondaryText, isLayerFallback } = getAssignEntryTexts(
-    assign,
-    editorModel.layers,
-  );
+  const {
+    primaryText,
+    secondaryText,
+    tertiaryText,
+    isLayerFallback,
+  } = getAssignEntryTexts(assign, editorModel.layers);
 
   const dynamic = uiStatusModel.settings.showLayersDynamic;
   const isHold = (dynamic && playerModel.keyStates[ke.keyId]) || false;
@@ -54,6 +56,7 @@ function makeEditKeyUnitCardViewModel(
     setCurrent,
     primaryText,
     secondaryText,
+    tertiaryText,
     isLayerFallback: isLayerFallback || false,
     isHold,
     shiftHold,

@@ -5,7 +5,6 @@
     {
       "targetVariationNames": ["promicro_atmega"],
       "systemParameterKeys": [
-        "emitKeyStroke",
         "emitRealtimeEvents",
         "keyHoldIndicatorLed",
         "heartbeatLed"

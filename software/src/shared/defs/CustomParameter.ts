@@ -34,12 +34,6 @@ export type ICustromParameterSpec =
 export const SystemParameterDefinitions: ICustromParameterSpec[] = [
   {
     type: 'toggle',
-    slotIndex: 0,
-    label: 'Emit Key Stroke',
-    defaultValue: 1,
-  },
-  {
-    type: 'toggle',
     slotIndex: 1,
     label: 'Emit Realtime Events',
     defaultValue: 1,
@@ -136,7 +130,6 @@ export function getSystemParameterDefinitionBySystemParameterKey(
   systemParameterKey: string,
 ): ICustromParameterSpec | undefined {
   const keys = [
-    'emitKeyStroke',
     'emitRealtimeEvents',
     'keyHoldIndicatorLed',
     'heartbeatLed',

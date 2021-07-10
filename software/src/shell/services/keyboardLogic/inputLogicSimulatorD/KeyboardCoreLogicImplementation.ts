@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
-import { LogicalKey } from '~/shared';
+import {
+  LogicalKey,
+  keyCodeTranslator_mapLogicalKeyToHidKeyCode,
+} from '~/shared';
 import { dataStorage } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/DataStorage';
 import {
   keyActionRemapper_setupDataReader,
   keyActionRemapper_translateKeyOperation,
 } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/KeyActionRemapper';
-import { keyCodeTranslator_mapLogicalKeyToHidKeyCode } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/KeyCodeTranslator';
 import { KeyboardCoreLogicInterface } from './KeyboardCoreLogicInterface';
 
 // --------------------------------------------------------------------------------
@@ -593,14 +595,15 @@ function layerMutations_recoverMainLayerIfAllLayeresDisabled() {
 
 const OpType = {
   KeyInput: 1,
-  LayerCall: 2,
+  __Reserved: 2,
   ExtendedOperation: 3,
 };
 
 const ExOpType = {
-  LayerClearExclusive: 1,
-  SystemAction: 2,
-  MovePointerMovement: 3,
+  LayerCall: 1,
+  LayerClearExclusive: 2,
+  SystemAction: 3,
+  MovePointerMovement: 4,
 };
 
 const InvocationMode = {
@@ -614,7 +617,7 @@ const InvocationMode = {
 function convertSingleModifierToFlags(opWord: u16): u16 {
   const wordBase = opWord & 0xf000;
   let modifiers = (opWord >> 8) & 0x0f;
-  let logicalKey = opWord & 0x7f;
+  let logicalKey = opWord & 0xff;
   if (LogicalKey.LK_Ctrl <= logicalKey && logicalKey <= LogicalKey.LK_Gui) {
     modifiers |= 1 << (logicalKey - LogicalKey.LK_Ctrl);
     logicalKey = 0;
@@ -640,11 +643,11 @@ function convertKeyInputOperationWordToOutputKeyStrokeAction(
     logicOptions.wiringMode,
   );
   opWord = convertSingleModifierToFlags(opWord);
-  const logicalKey = opWord & 0x7f;
+  const logicalKey = opWord & 0xff;
   action.modFlags = (opWord >> 8) & 0b1111;
 
   if (logicalKey) {
-    const isSecondaryLayout = logicOptions.systemLayout === 2;
+    const isSecondaryLayout = logicOptions.systemLayout === 1;
     const hidKey = keyCodeTranslator_mapLogicalKeyToHidKeyCode(
       logicalKey,
       isSecondaryLayout,
@@ -672,25 +675,30 @@ function handleOperationOn(opWord: u32) {
     );
     keyStrokeActionQueue_enqueueAction(strokeAction);
   }
-  if (opType === OpType.LayerCall) {
-    opWord >>= 16;
-    const layerIndex = (opWord >> 8) & 0b1111;
-    const fInvocationMode = (opWord >> 4) & 0b1111;
 
-    if (fInvocationMode === InvocationMode.Hold) {
-      layerMutations_activate(layerIndex);
-    } else if (fInvocationMode === InvocationMode.TurnOn) {
-      layerMutations_activate(layerIndex);
-    } else if (fInvocationMode === InvocationMode.TurnOff) {
-      layerMutations_deactivate(layerIndex);
-    } else if (fInvocationMode === InvocationMode.Toggle) {
-      layerMutations_toggle(layerIndex);
-    } else if (fInvocationMode === InvocationMode.Oneshot) {
-      layerMutations_oneshot(layerIndex);
-    }
-  }
+  let isLayerCall: boolean = false;
+
   if (opType === OpType.ExtendedOperation) {
     const exOpType = (opWord >> 24) & 0b111;
+    if (exOpType === ExOpType.LayerCall) {
+      isLayerCall = true;
+      opWord >>= 16;
+      const fInvocationMode = (opWord >> 4) & 0b1111;
+      const layerIndex = opWord & 0b1111;
+
+      if (fInvocationMode === InvocationMode.Hold) {
+        layerMutations_activate(layerIndex);
+      } else if (fInvocationMode === InvocationMode.TurnOn) {
+        layerMutations_activate(layerIndex);
+      } else if (fInvocationMode === InvocationMode.TurnOff) {
+        layerMutations_deactivate(layerIndex);
+      } else if (fInvocationMode === InvocationMode.Toggle) {
+        layerMutations_toggle(layerIndex);
+      } else if (fInvocationMode === InvocationMode.Oneshot) {
+        layerMutations_oneshot(layerIndex);
+      }
+    }
+
     if (exOpType === ExOpType.LayerClearExclusive) {
       opWord >>= 16;
       const targetGroup = opWord & 0b111;
@@ -703,7 +711,7 @@ function handleOperationOn(opWord: u32) {
     }
   }
 
-  if (opType !== OpType.LayerCall) {
+  if (!isLayerCall) {
     layerMutations_clearOneshot();
   }
   layerMutations_recoverMainLayerIfAllLayeresDisabled();
@@ -718,12 +726,15 @@ function handleOperationOff(opWord: u32) {
     );
     keyStrokeActionQueue_enqueueAction(strokeAction);
   }
-  if (opType === OpType.LayerCall) {
-    opWord >>= 16;
-    const layerIndex = (opWord >> 8) & 0b1111;
-    const fInvocationMode = (opWord >> 4) & 0b1111;
-    if (fInvocationMode === InvocationMode.Hold) {
-      layerMutations_deactivate(layerIndex);
+  if (opType === OpType.ExtendedOperation) {
+    const exOpType = (opWord >> 24) & 0b111;
+    if (exOpType === ExOpType.LayerCall) {
+      opWord >>= 16;
+      const fInvocationMode = (opWord >> 4) & 0b1111;
+      const layerIndex = opWord & 0b1111;
+      if (fInvocationMode === InvocationMode.Hold) {
+        layerMutations_deactivate(layerIndex);
+      }
     }
   }
   layerMutations_recoverMainLayerIfAllLayeresDisabled();

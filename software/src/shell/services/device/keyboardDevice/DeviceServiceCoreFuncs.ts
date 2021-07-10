@@ -193,33 +193,3 @@ export async function deviceSetupTask(
     customParamsRes,
   };
 }
-
-export function updateDeviceCustomParameterSingle(
-  device: IDeviceWrapper,
-  index: number,
-  value: number,
-) {
-  device.writeSingleFrame(
-    Packets.makeCustomParameterSignleWriteOperationFrame(index, value),
-  );
-}
-
-export function sendSimulatorHidReport(
-  device: IDeviceWrapper,
-  report: number[],
-) {
-  if (report.length === 8) {
-    console.log(JSON.stringify(report));
-    const pk = Packets.makeSimulatorHidReportFrame(report);
-    device.writeSingleFrame(pk);
-  }
-}
-
-export function sendSimulatorMode(device: IDeviceWrapper, enabled: boolean) {
-  // console.log(`writeSimulatorMode ${enabled ? 1 : 0}`);
-  if (!enabled) {
-    const blankHidReport = [0, 0, 0, 0, 0, 0, 0, 0];
-    sendSimulatorHidReport(device, blankHidReport);
-  }
-  device.writeSingleFrame(Packets.makeSimulatorModeSpecFrame(enabled));
-}

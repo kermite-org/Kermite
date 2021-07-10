@@ -75,6 +75,8 @@ export class ApplicationRoot {
       window_reloadPage: async () => windowWrapper.reloadPage(),
       window_setDevToolVisibility: async (visible) =>
         windowWrapper.setDevToolsVisibility(visible),
+      window_setWidgetAlwaysOnTop: async (enabled) =>
+        windowWrapper.setWidgetAlwaysOnTop(enabled),
       profile_getCurrentProfile: () =>
         this.profileManager.getCurrentProfileAsync(),
       profile_executeProfileManagerCommands: (commands) =>
@@ -127,8 +129,6 @@ export class ApplicationRoot {
         this.presetHubService.getServerProjectIds(),
       presetHub_getServerProfiles: (projectId: string) =>
         this.presetHubService.getServerProfiles(projectId),
-      config_getKeyboardConfig: async () =>
-        this.keyboardConfigProvider.getKeyboardConfig(),
       config_writeKeyboardConfig: async (config) =>
         this.keyboardConfigProvider.writeKeyboardConfig(config),
       config_writeKeyMappingToDevice: async () => {
@@ -164,6 +164,9 @@ export class ApplicationRoot {
       platform_openUrlInDefaultBrowser: (path) => shell.openExternal(path),
       global_triggerLazyInitializeServices: async () =>
         this.lazyInitialzeServices(),
+
+      simulator_postSimulationTargetProfile: async (profile) =>
+        this.inputLogicSimulator.postSimulationTargetProfile(profile),
     });
 
     appGlobal.icpMainAgent.supplySubscriptionHandlers({
@@ -194,6 +197,9 @@ export class ApplicationRoot {
       projects_layoutFileUpdationEvents: (cb) =>
         this.keyboardLayoutFilesWatcher.fileUpdationEvents.subscribe(cb),
       window_appWindowStatus: windowWrapper.appWindowEventPort.subscribe,
+
+      config_keyboardConfigEvents: (cb) =>
+        this.keyboardConfigProvider.keyboardConfigEventPort.subscribe(cb),
     });
   }
 

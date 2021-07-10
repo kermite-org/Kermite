@@ -1,10 +1,7 @@
 {
   "projectId": "RcYEeqNX",
   "keyboardName": "testbed",
-  "parameterConfigurations": [
-    {
-      "targetVariationNames": ["all"],
-      "systemParameterKeys": ["masterSide"]
-    }
-  ]
+  "parameterConfigurations": {
+    "systemParameterKeys": ["masterSide"]
+  }
 }

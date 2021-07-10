@@ -86,6 +86,7 @@ export type IAppWindowStatus = {
   isActive: boolean;
   isDevtoolsVisible: boolean;
   isMaximized: boolean;
+  isWidgetAlwaysOnTop: boolean;
 };
 
 export type IProfileEditSource =
@@ -242,6 +243,7 @@ export interface IAppIpcContract {
     window_maximizeWindow(): Promise<void>;
     window_restartApplication(): Promise<void>;
     window_setDevToolVisibility(visible: boolean): Promise<void>;
+    window_setWidgetAlwaysOnTop(enabled: boolean): Promise<void>;
     window_reloadPage(): Promise<void>;
 
     profile_getCurrentProfile(): Promise<IProfileData>;
@@ -258,8 +260,7 @@ export interface IAppIpcContract {
     layout_showEditLayoutFileInFiler(): Promise<void>;
     // layout_getAllProjectLayoutsInfos(): Promise<IProjectLayoutsInfo[]>;
 
-    config_getKeyboardConfig(): Promise<IKeyboardConfig>;
-    config_writeKeyboardConfig(config: IKeyboardConfig): Promise<void>;
+    config_writeKeyboardConfig(config: Partial<IKeyboardConfig>): Promise<void>;
     config_writeKeyMappingToDevice(): Promise<boolean>;
 
     config_getGlobalSettings(): Promise<IGlobalSettings>;
@@ -303,6 +304,8 @@ export interface IAppIpcContract {
     file_saveObjectToJsonWithFileDialog(obj: any): Promise<boolean>;
     file_getOpenDirectoryWithDialog(): Promise<string | undefined>;
 
+    simulator_postSimulationTargetProfile(profile: IProfileData): Promise<void>;
+
     platform_openUrlInDefaultBrowser(path: string): Promise<void>;
 
     global_triggerLazyInitializeServices(): Promise<void>;
@@ -320,5 +323,7 @@ export interface IAppIpcContract {
 
     firmup_deviceDetectionEvents: IBootloaderDeviceDetectionStatus;
     projects_layoutFileUpdationEvents: { projectId: string };
+
+    config_keyboardConfigEvents: Partial<IKeyboardConfig>;
   };
 }

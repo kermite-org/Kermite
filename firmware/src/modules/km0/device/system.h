@@ -1,5 +1,4 @@
-#ifndef __SYSTEM_H__
-#define __SYSTEM_H__
+#pragma once
 
 #include "km0/types.h"
 
@@ -12,5 +11,3 @@ void system_initializeUserProgram();
 void system_jumpToDfuBootloader();
 void system_setupFallbackStdout();
 uint32_t system_getSystemTimeMs();
-
-#endif

@@ -68,7 +68,7 @@ export const VirtualKeyTexts: { [key in VirtualKey]?: string } = {
   K_LeftArrow: '←',
   K_DownArrow: '↓',
   K_UpArrow: '↑',
-  K_KatakanaHiragana: 'かな',
+  K_KatakanaHiragana: '片平',
   K_Henkan: '変換',
   K_Muhenkan: '無変',
 
@@ -126,4 +126,6 @@ export const VirtualKeyTexts: { [key in VirtualKey]?: string } = {
   K_U7: 'U7',
   K_U8: 'U8',
   K_U9: 'U9',
+  K_Lang1Kana: 'かな',
+  K_Lang2Eisu: '英数',
 };

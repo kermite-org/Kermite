@@ -2,12 +2,8 @@ import { IKeyboardDeviceStatus, IRealtimeKeyboardEvent } from '~/shared';
 import { executeWithAppErrorHandler2 } from '~/shell/base/ErrorChecker';
 import { createEventPort } from '~/shell/funcs';
 import { getPortNameFromDevicePath } from '~/shell/services/device/keyboardDevice/DeviceEnumerator';
-import {
-  deviceSetupTask,
-  sendSimulatorHidReport,
-  sendSimulatorMode,
-  updateDeviceCustomParameterSingle,
-} from '~/shell/services/device/keyboardDevice/DeviceServiceCoreFuncs';
+import { deviceSetupTask } from '~/shell/services/device/keyboardDevice/DeviceServiceCoreFuncs';
+import { Packets } from '~/shell/services/device/keyboardDevice/Packets';
 import {
   ICustomParametersReadResponseData,
   IDeviceAttributesReadResponseData,
@@ -94,9 +90,9 @@ export class KeyboardDeviceServiceCore {
   };
 
   setCustomParameterValue(index: number, value: number) {
-    if (this.device) {
-      updateDeviceCustomParameterSingle(this.device, index, value);
-    }
+    this.device?.writeSingleFrame(
+      Packets.makeCustomParameterSignleWriteOperationFrame(index, value),
+    );
   }
 
   setDeivce(device: IDeviceWrapper | undefined) {
@@ -109,18 +105,21 @@ export class KeyboardDeviceServiceCore {
     this.device = device;
   }
 
-  private isSimulatorMode = false;
-
   setSimulatorMode(enabled: boolean) {
-    this.isSimulatorMode = enabled;
-    if (this.device) {
-      sendSimulatorMode(this.device, enabled);
-    }
+    this.device?.writeSingleFrame(Packets.makeSimulatorModeSpecFrame(enabled));
   }
 
   writeSimulatorHidReport(report: number[]) {
-    if (this.device && this.isSimulatorMode) {
-      sendSimulatorHidReport(this.device, report);
+    if (this.device) {
+      if (report.length === 8) {
+        console.log(JSON.stringify(report));
+        const pk = Packets.makeSimulatorHidReportFrame(report);
+        this.device.writeSingleFrame(pk);
+      }
     }
+  }
+
+  setMuteMode(enabled: boolean) {
+    this.device?.writeSingleFrame(Packets.makeMuteModeSpecFrame(enabled));
   }
 }

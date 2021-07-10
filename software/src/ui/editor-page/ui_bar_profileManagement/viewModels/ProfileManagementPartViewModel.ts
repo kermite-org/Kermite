@@ -1,5 +1,9 @@
-import { asyncRerender, Hook } from 'qx';
-import { forceChangeFilePathExtension, IProfileEditSource } from '~/shared';
+import { Hook } from 'qx';
+import {
+  forceChangeFilePathExtension,
+  IProfileData,
+  IProfileEditSource,
+} from '~/shared';
 import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import {
   getFileNameFromPath,
@@ -7,7 +11,6 @@ import {
   ISelectorSource,
   makePlainSelectorOption,
   modalAlert,
-  modalAlertTop,
   modalConfirm,
   modalTextEdit,
   texts,
@@ -196,7 +199,12 @@ const openConfiguration = () => {
 };
 
 const onSaveButton = () => {
-  profilesModel.saveProfile();
+  const editSourceType = profilesModel.editSource.type;
+  if (editSourceType === 'NewlyCreated' || editSourceType === 'ExternalFile') {
+    handleSaveUnsavedProfile();
+  } else {
+    profilesModel.saveProfile();
+  }
 };
 
 const handleImportFromFile = async () => {
@@ -213,6 +221,23 @@ const handleExportToFile = async () => {
     profilesModel.exportToFile(modFilePath);
   }
 };
+
+const simulatorProfileUpdator = new (class {
+  private profileStringified: string = '';
+
+  affectToSimulatorIfEditProfileChanged(
+    profile: IProfileData,
+    isSimulatorMode: boolean,
+  ) {
+    if (isSimulatorMode) {
+      const str = JSON.stringify(profile);
+      if (str !== this.profileStringified) {
+        this.profileStringified = str;
+        ipcAgent.async.simulator_postSimulationTargetProfile(profile);
+      }
+    }
+  }
+})();
 
 export function makeProfileManagementPartViewModel(): IProfileManagementPartViewModel {
   Hook.useEffect(profilesModel.startPageSession, []);
@@ -231,7 +256,9 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
   const { editSource, allProfileNames, saveProfile } = profilesModel;
 
   const canSave =
-    editSource.type === 'InternalProfile' && profilesModel.checkDirty();
+    editSource.type === 'NewlyCreated' ||
+    editSource.type === 'ExternalFile' ||
+    (editSource.type === 'InternalProfile' && profilesModel.checkDirty());
 
   // todo: デフォルトではProjetIDが異なるデバイスには書き込めないようにする
   // const refProjectId = profilesModel.getCurrentProfileProjectId();
@@ -258,21 +285,23 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     await ipcAgent.async.profile_openUserProfilesFolder();
   };
 
-  const { behaviorMode } = useKeyboardBehaviorModeModel();
+  const { isSimulatorMode } = useKeyboardBehaviorModeModel();
+
+  simulatorProfileUpdator.affectToSimulatorIfEditProfileChanged(
+    editorModel.profileData,
+    isSimulatorMode,
+  );
 
   const onWriteButton = async () => {
     await profilesModel.saveProfile();
-    if (behaviorMode === 'Standalone') {
-      const done = await ipcAgent.async.config_writeKeyMappingToDevice();
-      // todo: トーストにする
-      if (done) {
-        await modalAlertTop('write succeeded.');
-      } else {
-        await modalAlertTop('write failed.');
-      }
+    uiStatusModel.status.isLoading = true;
+    const done = await ipcAgent.async.config_writeKeyMappingToDevice();
+    uiStatusModel.status.isLoading = false;
+    // todo: トーストにする?
+    if (done) {
+      await modalAlert('write succeeded.');
     } else {
-      asyncRerender();
-      await modalAlertTop('write succeeded. (simulator mode)');
+      await modalAlert('write failed.');
     }
   };
 

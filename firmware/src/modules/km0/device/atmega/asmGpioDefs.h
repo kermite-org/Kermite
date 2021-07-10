@@ -1,5 +1,4 @@
-#ifndef __ASM_PIN_DEFS_H__
-#define __ASM_PIN_DEFS_H__
+#pragma once
 
 #include <avr/io.h>
 
@@ -99,5 +98,3 @@
 #define regPINX(p) _SFR_IO8(0x03 + 3 * portIndex(p))
 #define regDDRX(p) _SFR_IO8(0x04 + 3 * portIndex(p))
 #define regPORTX(p) _SFR_IO8(0x05 + 3 * portIndex(p))
-
-#endif

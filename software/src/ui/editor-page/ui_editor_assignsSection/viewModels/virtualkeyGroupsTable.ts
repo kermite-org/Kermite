@@ -127,6 +127,8 @@ const assignKeysGroup5: VirtualKey[] = [
   'K_KatakanaHiragana',
   'K_Henkan',
   'K_Muhenkan',
+  'K_Lang2Eisu',
+  'K_Lang1Kana',
 ];
 
 const assignKeysGroup6: VirtualKey[] = ['K_Shift', 'K_Ctrl', 'K_Alt', 'K_Gui'];

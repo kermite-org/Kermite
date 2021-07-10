@@ -31,10 +31,12 @@ const defaultUiSettings: IUiSettings = {
 
 export interface IUiStatus {
   profileConfigModalVisible: boolean;
+  isLoading: boolean;
 }
 
 const defaultUiStatus: IUiStatus = {
   profileConfigModalVisible: false,
+  isLoading: false,
 };
 
 export class UiStatusModel {

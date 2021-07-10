@@ -1,4 +1,5 @@
 import { jsx, css } from 'qx';
+import { SlotTriggerDisplay } from '~/ui/editor-page/ui_editor_assignsSection/views/SlotTriggerDisplay';
 import { makeAssignEditSectionViewModel } from './viewModels/AssignEditSectionViewModel';
 import { OpertionEditPart } from './views/OperationEditPart';
 import { OerationSlotsPart } from './views/OperationSlotsPart';
@@ -17,6 +18,10 @@ const cssAssignEntryEditPart = css`
     pointer-events: none;
   }
   padding: 8px;
+
+  .slot-trigger-display {
+    margin-top: 15px;
+  }
 `;
 
 export function AssignEditSection() {
@@ -34,10 +39,13 @@ export function AssignEditSection() {
     <div css={cssAssignEditSection}>
       <div css={cssAssignEntryEditPart} data-disabled={isDisabled}>
         {isDualMode && (
-          <OerationSlotsPart
-            operationSlotsVM={operationSlotsVM}
-            plainOperationEditCardsVM={plainOperationEditCardsVM}
-          />
+          <div>
+            <OerationSlotsPart
+              operationSlotsVM={operationSlotsVM}
+              plainOperationEditCardsVM={plainOperationEditCardsVM}
+            />
+            <SlotTriggerDisplay className="slot-trigger-display" />
+          </div>
         )}
         <OpertionEditPart
           plainOperationEditCardsVM={plainOperationEditCardsVM}

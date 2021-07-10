@@ -1,5 +1,4 @@
-#ifndef __ASMDEV_H__
-#define __ASMDEV_H__
+#pragma once
 
 #include <stdint.h>
 
@@ -14,5 +13,3 @@ void emitNeoPixelByte(uint8_t val);
 //uint8_t receiveByteOne();
 
 uint8_t sumArrayA(uint8_t *buf, uint8_t len);
-
-#endif
