@@ -91,9 +91,13 @@ function createVComponent(
   };
 }
 
-type ISourceChild = IVNode | string | number | boolean | number | undefined;
+type ISourceChild = IVNode | string | number | boolean | undefined;
 
 function convertChildren(children: ISourceChild[]): IVNode[] {
+  if (children.length === 1 && Array.isArray(children[0])) {
+    children = children[0];
+  }
+
   return children.map((child) => {
     if (child === null || child === undefined || child === false) {
       return createVBlank(child);
