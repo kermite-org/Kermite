@@ -5,7 +5,7 @@ import { getFunctionComponentWrapperCached } from './functionComponentWrapper';
 type IElementProps = {
   id?: string;
   className?: string;
-  [key: string]: string | Function | undefined;
+  [key: string]: any;
 };
 
 type IVBlank = {
@@ -25,6 +25,7 @@ type IVElement = {
   props: IElementProps;
   children: IVNode[];
   debugSig: string;
+  marker?: string;
 };
 
 type IProps = {
@@ -157,20 +158,23 @@ function applyDomAttributes(
   //   removed.forEach((it) => el.classList.remove(it));
   // }
 
-  if (vnode.props.id) {
-    el.id = vnode.props.id;
-  }
-
   for (const key in vnode.props) {
-    if (key === 'key' || key === 'children') {
+    if (key === 'key' || key === 'children' || key === 'qxIf') {
       continue;
     }
     const value = vnode.props[key];
-    if (key.startsWith('on') && typeof value === 'function') {
+
+    if (value === false || value === null || value === undefined) {
+      el.removeAttribute(key);
+    } else if (key.startsWith('on') && typeof value === 'function') {
       (el as any)[key.toLocaleLowerCase()] = value;
     } else {
       el.setAttribute(key, value?.toString() || '');
     }
+  }
+
+  if (vnode.marker) {
+    el.setAttribute('data-fc', vnode.marker);
   }
 }
 
