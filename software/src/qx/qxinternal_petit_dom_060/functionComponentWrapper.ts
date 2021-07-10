@@ -20,7 +20,7 @@ function createFunctionComponentWrapper(renderFunction: Function) {
         startHooks(self.hook);
         const vnode = renderFunction(props);
         if (vnode) {
-          vnode.marker = renderFunction.name;
+          vnode.props['data-fc'] = renderFunction.name;
         }
         endHooks();
         doLater(() => flushHookEffects(self.hook));
