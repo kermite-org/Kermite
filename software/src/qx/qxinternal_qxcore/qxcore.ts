@@ -40,6 +40,17 @@ export function mount(parentDom: Node, vnode: IVNode): Node {
 
 // ------------------------------------------------------------
 
+function unmount(parentDom: Node, oldVNode: IVNode) {
+  if (oldVNode.vtype === 'vComponent') {
+    oldVNode.componentWrapper.unmount(oldVNode.state.componentState);
+  }
+  parentDom.removeChild(oldVNode.dom!);
+  oldVNode.dom = undefined;
+  oldVNode.parentDom = undefined;
+}
+
+// ------------------------------------------------------------
+
 function patchFc(
   parentDom: Node,
   newVNode: IVComponent,
@@ -62,17 +73,6 @@ function patchFc(
   //   oldRenderRes,
   // });
   patch(parentDom, renderRes, oldRenderRes);
-}
-
-// ------------------------------------------------------------
-
-function unmount(parentDom: Node, oldVNode: IVNode) {
-  if (oldVNode.vtype === 'vComponent') {
-    oldVNode.componentWrapper.unmount(oldVNode.state.componentState);
-  }
-  parentDom.removeChild(oldVNode.dom!);
-  oldVNode.dom = undefined;
-  oldVNode.parentDom = undefined;
 }
 
 // ------------------------------------------------------------

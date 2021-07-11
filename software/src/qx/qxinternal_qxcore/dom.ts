@@ -5,17 +5,6 @@ export function applyDomAttributes(
   vnode: IVElement,
   oldVnode: IVElement | undefined,
 ) {
-  // const newClassNames = vnode.props.className?.split(' ');
-  // const oldClassNames = oldVnode?.props.className?.split(' ');
-  // const added = newClassNames?.filter((it) => !oldClassNames?.includes(it));
-  // const removed = oldClassNames?.filter((it) => !newClassNames?.includes(it));
-  // if (added) {
-  //   added.forEach((it) => el.classList.add(it));
-  // }
-  // if (removed) {
-  //   removed.forEach((it) => el.classList.remove(it));
-  // }
-
   if (vnode.marker) {
     el.setAttribute('data-fc', vnode.marker);
   }
