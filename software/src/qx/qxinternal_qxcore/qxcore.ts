@@ -32,7 +32,7 @@ function makePropsWithChildren(props: IProps, children: IVNode[]) {
 
 const svgNs = 'http://www.w3.org/2000/svg';
 
-export function mount(parentDom: Node, vnode: IVNode, isSvg = false): Node {
+export function mount(parentDom: Node, vnode: IVNode, isSvg?: boolean): Node {
   let dom: Node;
   if (vnode.vtype === 'vText') {
     dom = document.createTextNode(vnode.text);
@@ -120,9 +120,10 @@ function patchChildren(
     //   const oldVNode = oldVNodes[i];
     //   unmount(oldVNode.dom!, oldVNode);
     // }
+    const isSvg = (parentDom as Element).tagName === 'SVG';
     oldVNodes.forEach((vnode) => unmount(parentDom, vnode));
     // removeDomChildren(parentDom);
-    newVNodes.forEach((vnode) => mount(parentDom, vnode));
+    newVNodes.forEach((vnode) => mount(parentDom, vnode, isSvg));
   }
 }
 
