@@ -25,7 +25,7 @@ function createFunctionComponentWrapper(
         startHooks(self.hook);
         const vnode = renderFunction(props);
         if (vnode) {
-          vnode.marker = `${renderFunction.name}__res`;
+          vnode.marker = `${renderFunction.name}`;
         }
         endHooks();
         doLater(() => flushHookEffects(self.hook));

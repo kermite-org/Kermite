@@ -16,8 +16,17 @@ export function applyDomAttributes(
   //   removed.forEach((it) => el.classList.remove(it));
   // }
 
+  if (vnode.marker) {
+    el.setAttribute('data-fc', vnode.marker);
+  }
+
   for (const key in vnode.props) {
-    if (key === 'key' || key === 'children' || key === 'qxIf') {
+    if (
+      key === 'key' ||
+      key === 'children' ||
+      key === 'qxIf' ||
+      key === 'ref'
+    ) {
       continue;
     }
     const value = vnode.props[key];
@@ -29,9 +38,5 @@ export function applyDomAttributes(
     } else {
       el.setAttribute(key, value?.toString() || '');
     }
-  }
-
-  if (vnode.marker) {
-    el.setAttribute('data-fc', vnode.marker);
   }
 }
