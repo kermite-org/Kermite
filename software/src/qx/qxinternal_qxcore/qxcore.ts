@@ -1,6 +1,6 @@
 import { applyDomAttributes } from 'qx/qxinternal_qxcore/dom';
 import { createVBlank } from 'qx/qxinternal_qxcore/jsx';
-import { IVComponent, IVNode } from './types';
+import { IVComponent, IVNode } from 'qx/qxinternal_qxcore/types';
 
 function assert(cond: any) {
   if (!cond) {

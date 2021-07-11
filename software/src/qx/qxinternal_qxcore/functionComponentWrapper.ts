@@ -1,10 +1,10 @@
-import { IVComponentWrapper } from 'qx/qxinternal_qxcore/types';
 import {
   createHookInstance,
   endHooks,
   flushHookEffects,
   startHooks,
-} from '../hookImpl';
+} from 'qx/hookImpl';
+import { IVComponentWrapper } from 'qx/qxinternal_qxcore/types';
 
 const promise = Promise.resolve();
 function doLater(fn: () => void) {
