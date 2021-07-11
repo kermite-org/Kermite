@@ -21,11 +21,6 @@ import { IProps, IVComponent, IVNode } from './types';
 
 function makePropsWithChildren(props: IProps, children: IVNode[]) {
   return { ...props, children };
-  // if (children.length === 1) {
-  //   return { ...props, children: children[0] };
-  // } else {
-
-  // }
 }
 
 // ------------------------------------------------------------
@@ -49,14 +44,12 @@ export function mount(parentDom: Node, vnode: IVNode): Node {
     }
   } else if (vnode.vtype === 'vComponent') {
     // console.log(`mount-fc ${vnode.debugSig} ${(vnode as any).marker || ''}`);
-
     vnode.state.componentState = {};
-    const props = makePropsWithChildren(vnode.props, vnode.children);
-    const draftRes =
-      vnode.componentWrapper.mount(vnode.state.componentState, props) ||
+    const renderRes =
+      vnode.componentWrapper.mount(vnode.state.componentState, vnode.props) ||
       createVBlank(null);
-    vnode.state.renderRes = draftRes;
-    dom = mount(parentDom, draftRes);
+    vnode.state.renderRes = renderRes;
+    dom = mount(parentDom, renderRes);
   } else {
     dom = document.createComment('NULL');
   }
@@ -76,22 +69,19 @@ function patchFc(
   // console.log(
   //   `patch-fc ${newVNode.debugSig} ${(newVNode as any).marker || ''}`,
   // );
-
   newVNode.state.componentState = oldVNode.state.componentState;
-  const prevRenderRes = oldVNode.state.renderRes!;
+  const oldRenderRes = oldVNode.state.renderRes!;
   const props = makePropsWithChildren(newVNode.props, newVNode.children);
-  const draftRes =
+  const renderRes =
     newVNode.componentWrapper.update(newVNode.state.componentState, props) ||
     createVBlank(null);
-  newVNode.state.renderRes = draftRes;
-  if (0) {
-    console.log('patch', newVNode.componentWrapper.name, {
-      dom: oldVNode.dom,
-      draftRes,
-      prevRenderRes,
-    });
-  }
-  patch(parentDom, draftRes, prevRenderRes);
+  newVNode.state.renderRes = renderRes;
+  // console.log('patch', newVNode.componentWrapper.name, {
+  //   dom: oldVNode.dom,
+  //   renderRes,
+  //   oldRenderRes,
+  // });
+  patch(parentDom, renderRes, oldRenderRes);
 }
 
 // ------------------------------------------------------------
@@ -120,12 +110,7 @@ function patchChildren(
       patch(parentDom, newVNode, oldVNode);
     }
   } else {
-    // for (let i = 0; i < oldVNodes.length; i++) {
-    //   const oldVNode = oldVNodes[i];
-    //   unmount(oldVNode.dom!, oldVNode);
-    // }
     oldVNodes.forEach((vnode) => unmount(parentDom, vnode));
-    // removeDomChildren(parentDom);
     newVNodes.forEach((vnode) => mount(parentDom, vnode));
   }
 }
