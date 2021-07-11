@@ -101,6 +101,7 @@ export function jsx(
   }
 
   const children = convertChildren(props.children || argsChildren);
+  props = { ...props, children };
   const vnode =
     typeof tagType === 'object'
       ? createVComponent(tagType, props, children)

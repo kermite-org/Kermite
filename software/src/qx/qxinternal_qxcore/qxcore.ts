@@ -1,27 +1,6 @@
 import { applyDomAttributes } from 'qx/qxinternal_qxcore/dom';
 import { createVBlank } from 'qx/qxinternal_qxcore/jsx';
-import { IProps, IVComponent, IVNode } from './types';
-
-// ------------------------------------------------------------
-
-// function removeDomChildren(parentDom: Node) {
-//   while (parentDom.firstChild) {
-//     parentDom.removeChild(parentDom.firstChild);
-//   }
-// }
-
-// function cleanupDomAttributes(el: Element, vnode: IVElement) {
-//   for (const key in vnode.props) {
-//     const value = vnode.props[key];
-//     if (key.startsWith('on') && typeof value === 'function') {
-//       // (el as any)[key.toLocaleLowerCase()] = undefined;
-//     }
-//   }
-// }
-
-function makePropsWithChildren(props: IProps, children: IVNode[]) {
-  return { ...props, children };
-}
+import { IVComponent, IVNode } from './types';
 
 // ------------------------------------------------------------
 
@@ -71,10 +50,11 @@ function patchFc(
   // );
   newVNode.state.componentState = oldVNode.state.componentState;
   const oldRenderRes = oldVNode.state.renderRes!;
-  const props = makePropsWithChildren(newVNode.props, newVNode.children);
   const renderRes =
-    newVNode.componentWrapper.update(newVNode.state.componentState, props) ||
-    createVBlank(null);
+    newVNode.componentWrapper.update(
+      newVNode.state.componentState,
+      newVNode.props,
+    ) || createVBlank(null);
   newVNode.state.renderRes = renderRes;
   // console.log('patch', newVNode.componentWrapper.name, {
   //   dom: oldVNode.dom,
