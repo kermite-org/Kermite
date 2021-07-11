@@ -43,8 +43,12 @@ export function mount(parentDom: Node, vnode: IVNode, isSvg?: boolean): Node {
       : document.createElement(vnode.tagName);
     applyDomAttributes(dom as any, vnode, undefined);
     vnode.children.forEach((vnode) => mount(dom, vnode, isSvg));
+    const refProp = vnode.props.ref;
+    if (refProp && typeof refProp === 'object') {
+      refProp.current = dom;
+    }
   } else if (vnode.vtype === 'vComponent') {
-    console.log(`mount-fc ${vnode.debugSig} ${(vnode as any).marker || ''}`);
+    // console.log(`mount-fc ${vnode.debugSig} ${(vnode as any).marker || ''}`);
 
     vnode.state.componentState = {};
     const props = makePropsWithChildren(vnode.props, vnode.children);
@@ -69,9 +73,9 @@ function patchFc(
   newVNode: IVComponent,
   oldVNode: IVComponent,
 ) {
-  console.log(
-    `patch-fc ${newVNode.debugSig} ${(newVNode as any).marker || ''}`,
-  );
+  // console.log(
+  //   `patch-fc ${newVNode.debugSig} ${(newVNode as any).marker || ''}`,
+  // );
 
   newVNode.state.componentState = oldVNode.state.componentState;
   const prevRenderRes = oldVNode.state.renderRes!;
