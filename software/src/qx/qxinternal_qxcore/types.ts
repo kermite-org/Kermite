@@ -8,7 +8,6 @@ export type IVBlank = {
   vtype: 'vBlank';
   debugSig: string;
   dom?: Comment;
-  parentDom?: Node;
 };
 
 export type IVText = {
@@ -16,7 +15,6 @@ export type IVText = {
   text: string;
   debugSig: string;
   dom?: Text;
-  parentDom?: Node;
 };
 
 export type IVElement = {
@@ -27,7 +25,6 @@ export type IVElement = {
   debugSig: string;
   marker?: string;
   dom?: Element;
-  parentDom?: Node;
 };
 
 export type IProps = {
