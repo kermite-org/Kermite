@@ -18,14 +18,14 @@ function createFunctionComponentWrapper(
   return {
     name: fcName,
     mount(self: any, props: any) {
-      // console.log('mount', fcName, props);
-      self.fcsig = renderFunction.name;
+      // console.log('mount', fcName);
+      self.fcsig = fcName;
       self.hook = createHookInstance();
       self.renderWithHook = (props: any) => {
         startHooks(self.hook);
         const vnode = renderFunction(props);
         if (vnode) {
-          vnode.marker = `${renderFunction.name}`;
+          vnode.marker = `${fcName}`;
         }
         endHooks();
         doLater(() => flushHookEffects(self.hook));
@@ -37,6 +37,7 @@ function createFunctionComponentWrapper(
       return self.renderWithHook(props);
     },
     unmount(self: any) {
+      // console.log('unmount', fcName);
       flushHookEffects(self.hook, true);
     },
   };
