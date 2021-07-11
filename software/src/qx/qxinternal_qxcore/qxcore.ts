@@ -138,7 +138,7 @@ function patchChildren(
   //   debugger;
   // }
 
-  if (newVNodes.length === oldVNodes.length) {
+  if (newVNodes.length === oldVNodes.length && false) {
     for (let i = 0; i < newVNodes.length; i++) {
       // const dom = childDomNodes[i];
       const newVNode = newVNodes[i];
