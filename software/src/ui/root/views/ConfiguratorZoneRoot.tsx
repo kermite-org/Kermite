@@ -25,8 +25,22 @@ const styles = {
   `,
 };
 
-export const ConfiguratorZoneRoot = () => {
+const MainColumnRoutes = () => {
   const pagePath = router.getPagePath();
+  return (
+    <div css={styles.cssMainColumn}>
+      {pagePath === '/editor' && <EditorPage />}
+      {pagePath === '/layouter' && <UiLayouterPageComponent />}
+      {pagePath === '/shapePreview' && <ShapePreviewPage />}
+      {pagePath === '/firmwareUpdation' && <FirmwareUpdationPage />}
+      {pagePath === '/presetBrowser' && <PresetBrowserPage />}
+      {pagePath === '/presetBrowser2' && <PresetBrowserPage2 />}
+      {pagePath === '/settings' && <UiSettingsPage />}
+    </div>
+  );
+};
+
+export const ConfiguratorZoneRoot = () => {
   return (
     <CustomWindowFrame
       renderTitleBar={WindowTitleBarSection}
@@ -34,15 +48,7 @@ export const ConfiguratorZoneRoot = () => {
     >
       <div css={styles.cssContentRow}>
         <NavigationColumn />
-        <div css={styles.cssMainColumn}>
-          {pagePath === '/editor' && <EditorPage />}
-          {pagePath === '/layouter' && <UiLayouterPageComponent />}
-          {pagePath === '/shapePreview' && <ShapePreviewPage />}
-          {pagePath === '/firmwareUpdation' && <FirmwareUpdationPage />}
-          {pagePath === '/presetBrowser' && <PresetBrowserPage />}
-          {pagePath === '/presetBrowser2' && <PresetBrowserPage2 />}
-          {pagePath === '/settings' && <UiSettingsPage />}
-        </div>
+        <MainColumnRoutes />
         <DevToolPullTab qxIf={appUi.isDevelopment} />
       </div>
     </CustomWindowFrame>
