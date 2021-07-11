@@ -54,51 +54,43 @@ function applyDomAttributes(
 //   }
 // }
 
-// ------------------------------------------------------------
-
-function realize(vnode: IVNode): Node {
-  if (vnode.vtype === 'vText') {
-    const dom = document.createTextNode(vnode.text);
-    vnode.dom = dom;
-    return dom;
-  } else if (vnode.vtype === 'vElement') {
-    const dom = document.createElement(vnode.tagName);
-    applyDomAttributes(dom, vnode, undefined);
-    const childDomNodes = vnode.children.map(realize);
-    childDomNodes.forEach((it) => dom.appendChild(it));
-    vnode.dom = dom;
-    return dom;
-  } else if (vnode.vtype === 'vComponent') {
-    const dom = mountFc(vnode);
-    vnode.dom = dom;
-    return dom;
-  } else {
-    const dom = document.createComment('NULL');
-    vnode.dom = dom;
-    return dom;
-  }
-}
-
-// ------------------------------------------------------------
-
 function makePropsWithChildren(props: IProps, children: IVNode[]) {
-  if (children.length === 1) {
-    return { ...props, children: children[0] };
-  } else {
-    return { ...props, children };
-  }
+  return { ...props, children };
+  // if (children.length === 1) {
+  //   return { ...props, children: children[0] };
+  // } else {
+
+  // }
 }
 
-function mountFc(vnode: IVComponent): Node {
-  vnode.state.componentState = {};
-  const props = makePropsWithChildren(vnode.props, vnode.children);
-  const draftRes =
-    vnode.componentWrapper.mount(vnode.state.componentState, props) ||
-    createVBlank(null);
-  vnode.state.renderRes = draftRes;
-  // console.log('mountFc', vnode.debugSig, draftRes);
-  return realize(draftRes);
+// ------------------------------------------------------------
+
+export function mount(parentDom: Node, vnode: IVNode): Node {
+  let dom: Node;
+  if (vnode.vtype === 'vText') {
+    dom = document.createTextNode(vnode.text);
+  } else if (vnode.vtype === 'vElement') {
+    dom = document.createElement(vnode.tagName);
+    applyDomAttributes(dom as any, vnode, undefined);
+    vnode.children.forEach((vnode) => mount(dom, vnode));
+  } else if (vnode.vtype === 'vComponent') {
+    vnode.state.componentState = {};
+    const props = makePropsWithChildren(vnode.props, vnode.children);
+    const draftRes =
+      vnode.componentWrapper.mount(vnode.state.componentState, props) ||
+      createVBlank(null);
+    vnode.state.renderRes = draftRes;
+    dom = mount(parentDom, draftRes);
+  } else {
+    dom = document.createComment('NULL');
+  }
+  parentDom.appendChild(dom);
+  vnode.dom = dom as any;
+  vnode.parentDom = parentDom;
+  return dom;
 }
+
+// ------------------------------------------------------------
 
 function patchFc(dom: Node, newVNode: IVComponent, oldVNode: IVComponent) {
   newVNode.state.componentState = oldVNode.state.componentState;
@@ -123,17 +115,6 @@ function unmountFc(vnode: IVComponent) {
 }
 
 // ------------------------------------------------------------
-
-export function mount(parentDom: Node, vnode: IVNode): Node {
-  const el = realize(vnode);
-  parentDom.appendChild(el);
-  return el;
-}
-
-function mountChildren(parentDom: Node, vnodes: IVNode[]) {
-  const nodes = vnodes.map(realize);
-  nodes.forEach((node) => parentDom.appendChild(node));
-}
 
 function unmount(dom: Node, oldVNode: IVNode) {
   if (oldVNode.vtype === 'vComponent') {
@@ -173,7 +154,7 @@ function patchChildren(
       unmount(oldVNode.dom!, oldVNode);
     }
     removeDomChildren(parentDom);
-    mountChildren(parentDom, newVNodes);
+    newVNodes.forEach((vnode) => mount(parentDom, vnode));
   }
 }
 

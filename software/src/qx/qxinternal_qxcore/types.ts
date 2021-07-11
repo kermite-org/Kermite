@@ -8,6 +8,7 @@ export type IVBlank = {
   vtype: 'vBlank';
   debugSig: string;
   dom?: Comment;
+  parentDom?: Node;
 };
 
 export type IVText = {
@@ -15,6 +16,7 @@ export type IVText = {
   text: string;
   debugSig: string;
   dom?: Text;
+  parentDom?: Node;
 };
 
 export type IVElement = {
@@ -25,6 +27,7 @@ export type IVElement = {
   debugSig: string;
   marker?: string;
   dom?: Element;
+  parentDom?: Node;
 };
 
 export type IProps = {
@@ -50,6 +53,7 @@ export type IVComponent = {
     renderRes?: IVNode;
   };
   dom?: Node; // 関数コンポーネントのVNodeと関数コンポーネントのレンダリング結果のルート要素のVNodeが同じdom要素を参照する
+  parentDom?: Node;
 };
 
 export type IVNode = IVBlank | IVText | IVElement | IVComponent;
