@@ -73,7 +73,7 @@ function convertChildren(children: ISourceChild[]): IVNode[] {
 export function jsx(
   tagType: string | IVComponentWrapper,
   props: IProps | undefined,
-  ...children: (string | IVNode)[]
+  ...argsChildren: (string | IVNode)[]
 ): IVNode | null {
   props ||= {};
 
@@ -88,9 +88,10 @@ export function jsx(
     tagType = getFunctionComponentWrapperCached(tagType);
   }
 
+  const children = convertChildren(props.children || argsChildren);
   const vnode =
     typeof tagType === 'object'
-      ? createVComponent(tagType, props, convertChildren(children))
-      : createVElement(tagType, props, convertChildren(children));
+      ? createVComponent(tagType, props, children)
+      : createVElement(tagType, props, children);
   return vnode;
 }
