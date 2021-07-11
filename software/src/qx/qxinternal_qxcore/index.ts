@@ -11,7 +11,7 @@ export function render(vnode: IVNode, rootDom: Element | null) {
   if (!prevDom) {
     prevDom = mount(rootDom!, vnode);
   } else {
-    patch(prevDom, vnode, prevVDom);
+    patch(rootDom!, prevDom, vnode, prevVDom);
   }
   prevVDom = vnode;
 }

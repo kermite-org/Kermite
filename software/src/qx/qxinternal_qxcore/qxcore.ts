@@ -3,11 +3,11 @@ import { IProps, IVComponent, IVElement, IVNode } from './types';
 
 // ------------------------------------------------------------
 
-function removeDomChildren(parentDom: Node) {
-  while (parentDom.firstChild) {
-    parentDom.removeChild(parentDom.firstChild);
-  }
-}
+// function removeDomChildren(parentDom: Node) {
+//   while (parentDom.firstChild) {
+//     parentDom.removeChild(parentDom.firstChild);
+//   }
+// }
 
 function applyDomAttributes(
   el: Element,
@@ -92,7 +92,12 @@ export function mount(parentDom: Node, vnode: IVNode): Node {
 
 // ------------------------------------------------------------
 
-function patchFc(dom: Node, newVNode: IVComponent, oldVNode: IVComponent) {
+function patchFc(
+  parentDom: Node,
+  dom: Node,
+  newVNode: IVComponent,
+  oldVNode: IVComponent,
+) {
   newVNode.state.componentState = oldVNode.state.componentState;
   const prevRenderRes = oldVNode.state.renderRes!;
   const props = makePropsWithChildren(newVNode.props, newVNode.children);
@@ -107,22 +112,18 @@ function patchFc(dom: Node, newVNode: IVComponent, oldVNode: IVComponent) {
       prevRenderRes,
     });
   }
-  patch(dom, draftRes, prevRenderRes);
-}
-
-function unmountFc(vnode: IVComponent) {
-  vnode.componentWrapper.unmount(vnode.state.componentState);
+  patch(parentDom, dom, draftRes, prevRenderRes);
 }
 
 // ------------------------------------------------------------
 
-function unmount(dom: Node, oldVNode: IVNode) {
-  if (oldVNode.vtype === 'vComponent') {
-    unmountFc(oldVNode);
+function unmount(parentDom: Node, vnode: IVNode) {
+  if (vnode.vtype === 'vComponent') {
+    vnode.componentWrapper.unmount(vnode.state.componentState);
   }
-  if (oldVNode.vtype === 'vElement' && dom instanceof Element) {
-    // cleanupDomAttributes(dom, oldVNode);
-  }
+  parentDom.removeChild(vnode.dom!);
+  vnode.dom = undefined;
+  vnode.parentDom = undefined;
 }
 
 // ------------------------------------------------------------
@@ -144,34 +145,38 @@ function patchChildren(
       const newVNode = newVNodes[i];
       const oldVNode = oldVNodes[i];
       const dom = oldVNode.dom!;
-      patch(dom, newVNode, oldVNode);
+      patch(parentDom, dom, newVNode, oldVNode);
       newVNode.dom = dom;
     }
   } else {
-    for (let i = 0; i < oldVNodes.length; i++) {
-      // const dom = childDomNodes[i];
-      const oldVNode = oldVNodes[i];
-      unmount(oldVNode.dom!, oldVNode);
-    }
-    removeDomChildren(parentDom);
+    // for (let i = 0; i < oldVNodes.length; i++) {
+    //   const oldVNode = oldVNodes[i];
+    //   unmount(oldVNode.dom!, oldVNode);
+    // }
+    oldVNodes.forEach((vnode) => unmount(parentDom, vnode));
+    // removeDomChildren(parentDom);
     newVNodes.forEach((vnode) => mount(parentDom, vnode));
   }
 }
 
-export function patch(dom: Node, newVNode: IVNode, oldVNode: IVNode) {
+export function patch(
+  parentDom: Node,
+  dom: Node,
+  newVNode: IVNode,
+  oldVNode: IVNode,
+) {
   if (newVNode === oldVNode) {
   } else if (newVNode.vtype === 'vBlank' && oldVNode.vtype === 'vBlank') {
   } else if (newVNode.vtype === 'vText' && oldVNode.vtype === 'vText') {
     if (newVNode.text !== oldVNode.text) {
       dom.nodeValue = newVNode.text;
-    } else {
     }
   } else if (
     newVNode.vtype === 'vComponent' &&
     oldVNode.vtype === 'vComponent' &&
     newVNode.componentWrapper === oldVNode.componentWrapper
   ) {
-    patchFc(dom, newVNode, oldVNode);
+    patchFc(parentDom, dom, newVNode, oldVNode);
   } else if (
     dom instanceof Element &&
     newVNode.vtype === 'vElement' &&
@@ -182,12 +187,10 @@ export function patch(dom: Node, newVNode: IVNode, oldVNode: IVNode) {
     patchChildren(dom, newVNode.children, oldVNode.children);
   } else {
     if (newVNode.vtype !== oldVNode.vtype) {
-      unmount(dom, oldVNode);
-    }
-    const parentDom = dom.parentElement;
-    if (parentDom) {
-      parentDom.removeChild(dom);
+      unmount(parentDom, oldVNode);
       mount(parentDom, newVNode);
+    } else {
+      console.log('invalid condition');
     }
   }
 }
