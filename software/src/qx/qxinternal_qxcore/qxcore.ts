@@ -32,17 +32,17 @@ function makePropsWithChildren(props: IProps, children: IVNode[]) {
 
 const svgNs = 'http://www.w3.org/2000/svg';
 
-export function mount(parentDom: Node, vnode: IVNode, isSvg?: boolean): Node {
+export function mount(parentDom: Node, vnode: IVNode): Node {
   let dom: Node;
   if (vnode.vtype === 'vText') {
     dom = document.createTextNode(vnode.text);
   } else if (vnode.vtype === 'vElement') {
-    isSvg ||= vnode.tagName === 'svg';
+    const isSvg = vnode.tagName === 'svg' || parentDom instanceof SVGElement;
     dom = isSvg
       ? document.createElementNS(svgNs, vnode.tagName)
       : document.createElement(vnode.tagName);
     applyDomAttributes(dom as any, vnode, undefined);
-    vnode.children.forEach((vnode) => mount(dom, vnode, isSvg));
+    vnode.children.forEach((vnode) => mount(dom, vnode));
     const refProp = vnode.props.ref;
     if (refProp && typeof refProp === 'object') {
       refProp.current = dom;
@@ -56,7 +56,7 @@ export function mount(parentDom: Node, vnode: IVNode, isSvg?: boolean): Node {
       vnode.componentWrapper.mount(vnode.state.componentState, props) ||
       createVBlank(null);
     vnode.state.renderRes = draftRes;
-    dom = mount(parentDom, draftRes, isSvg);
+    dom = mount(parentDom, draftRes);
   } else {
     dom = document.createComment('NULL');
   }
@@ -124,10 +124,9 @@ function patchChildren(
     //   const oldVNode = oldVNodes[i];
     //   unmount(oldVNode.dom!, oldVNode);
     // }
-    const isSvg = (parentDom as Element).tagName === 'SVG';
     oldVNodes.forEach((vnode) => unmount(parentDom, vnode));
     // removeDomChildren(parentDom);
-    newVNodes.forEach((vnode) => mount(parentDom, vnode, isSvg));
+    newVNodes.forEach((vnode) => mount(parentDom, vnode));
   }
 }
 
@@ -161,9 +160,8 @@ export function patch(parentDom: Node, newVNode: IVNode, oldVNode: IVNode) {
     newVNode.dom = dom;
   } else {
     if (newVNode.vtype !== oldVNode.vtype) {
-      const isSvg = (parentDom as Element).tagName === 'SVG';
       unmount(parentDom, oldVNode);
-      mount(parentDom, newVNode, isSvg);
+      mount(parentDom, newVNode);
     } else {
       console.log('invalid condition');
     }
