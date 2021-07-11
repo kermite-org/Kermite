@@ -88,13 +88,13 @@ function patchFc(
 
 // ------------------------------------------------------------
 
-function unmount(parentDom: Node, vnode: IVNode) {
-  if (vnode.vtype === 'vComponent') {
-    vnode.componentWrapper.unmount(vnode.state.componentState);
+function unmount(parentDom: Node, oldVNode: IVNode) {
+  if (oldVNode.vtype === 'vComponent') {
+    oldVNode.componentWrapper.unmount(oldVNode.state.componentState);
   }
-  parentDom.removeChild(vnode.dom!);
-  vnode.dom = undefined;
-  vnode.parentDom = undefined;
+  parentDom.removeChild(oldVNode.dom!);
+  oldVNode.dom = undefined;
+  oldVNode.parentDom = undefined;
 }
 
 // ------------------------------------------------------------
@@ -110,14 +110,13 @@ function patchChildren(
   //   debugger;
   // }
 
-  if (newVNodes.length === oldVNodes.length && false) {
+  if (newVNodes.length === oldVNodes.length) {
     for (let i = 0; i < newVNodes.length; i++) {
       // const dom = childDomNodes[i];
       const newVNode = newVNodes[i];
       const oldVNode = oldVNodes[i];
       const dom = oldVNode.dom!;
       patch(parentDom, dom, newVNode, oldVNode);
-      newVNode.dom = dom;
     }
   } else {
     // for (let i = 0; i < oldVNodes.length; i++) {
@@ -137,17 +136,21 @@ export function patch(
   oldVNode: IVNode,
 ) {
   if (newVNode === oldVNode) {
+    newVNode.dom = oldVNode.dom;
   } else if (newVNode.vtype === 'vBlank' && oldVNode.vtype === 'vBlank') {
+    newVNode.dom = oldVNode.dom;
   } else if (newVNode.vtype === 'vText' && oldVNode.vtype === 'vText') {
     if (newVNode.text !== oldVNode.text) {
       dom.nodeValue = newVNode.text;
     }
+    newVNode.dom = oldVNode.dom;
   } else if (
     newVNode.vtype === 'vComponent' &&
     oldVNode.vtype === 'vComponent' &&
     newVNode.componentWrapper === oldVNode.componentWrapper
   ) {
     patchFc(parentDom, dom, newVNode, oldVNode);
+    newVNode.dom = oldVNode.dom;
   } else if (
     dom instanceof Element &&
     newVNode.vtype === 'vElement' &&
@@ -156,6 +159,7 @@ export function patch(
   ) {
     applyDomAttributes(dom, newVNode, oldVNode);
     patchChildren(dom, newVNode.children, oldVNode.children);
+    newVNode.dom = oldVNode.dom;
   } else {
     if (newVNode.vtype !== oldVNode.vtype) {
       unmount(parentDom, oldVNode);
