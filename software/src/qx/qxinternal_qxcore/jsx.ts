@@ -43,7 +43,7 @@ function createVComponent(
     componentWrapper,
     props,
     children,
-    debugSig: `${componentWrapper.name}__${children.length}`,
+    debugSig: `${componentWrapper.name}__outer`,
     state: {},
   };
 }
