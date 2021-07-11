@@ -161,8 +161,9 @@ export function patch(parentDom: Node, newVNode: IVNode, oldVNode: IVNode) {
     newVNode.dom = dom;
   } else {
     if (newVNode.vtype !== oldVNode.vtype) {
+      const isSvg = (parentDom as Element).tagName === 'SVG';
       unmount(parentDom, oldVNode);
-      mount(parentDom, newVNode);
+      mount(parentDom, newVNode, isSvg);
     } else {
       console.log('invalid condition');
     }
