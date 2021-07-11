@@ -50,17 +50,22 @@ export function mount(parentDom: Node, vnode: IVNode): Node {
 // ------------------------------------------------------------
 
 function unmount(parentDom: Node, oldVNode: IVNode) {
-  if (oldVNode.vtype === 'vElement') {
+  if (oldVNode.vtype === 'vBlank') {
+    parentDom.removeChild(oldVNode.dom!);
+  } else if (oldVNode.vtype === 'vText') {
+    parentDom.removeChild(oldVNode.dom!);
+  } else if (oldVNode.vtype === 'vElement') {
     const dom = oldVNode.dom!;
     oldVNode.children.forEach((vnode) => unmount(dom, vnode));
     parentDom.removeChild(dom);
-    oldVNode.dom = undefined;
   } else if (oldVNode.vtype === 'vComponent') {
     oldVNode.componentWrapper.unmount(oldVNode.state.componentState);
     unmount(parentDom, oldVNode.state.renderRes!);
     oldVNode.state.renderRes = undefined;
-    oldVNode.dom = undefined;
+  } else {
+    throw new Error(`invalid vnode ${oldVNode}`);
   }
+  oldVNode.dom = undefined;
 }
 
 // ------------------------------------------------------------
@@ -98,7 +103,6 @@ function patchChildren(
 ) {
   if (newVNodes.length === oldVNodes.length) {
     for (let i = 0; i < newVNodes.length; i++) {
-      // const dom = childDomNodes[i];
       const newVNode = newVNodes[i];
       const oldVNode = oldVNodes[i];
       patch(parentDom, newVNode, oldVNode);
