@@ -43,7 +43,10 @@ export function mount(parentDom: Node, vnode: IVNode): Node {
 // ------------------------------------------------------------
 
 function unmount(parentDom: Node, oldVNode: IVNode) {
-  if (oldVNode.vtype === 'vComponent') {
+  if (oldVNode.vtype === 'vElement') {
+    const dom = oldVNode.dom!;
+    oldVNode.children.forEach((vnode) => unmount(dom, vnode));
+  } else if (oldVNode.vtype === 'vComponent') {
     oldVNode.componentWrapper.unmount(oldVNode.state.componentState);
   }
   parentDom.removeChild(oldVNode.dom!);
