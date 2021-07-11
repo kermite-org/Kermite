@@ -30,14 +30,19 @@ function makePropsWithChildren(props: IProps, children: IVNode[]) {
 
 // ------------------------------------------------------------
 
-export function mount(parentDom: Node, vnode: IVNode): Node {
+const svgNs = 'http://www.w3.org/2000/svg';
+
+export function mount(parentDom: Node, vnode: IVNode, isSvg = false): Node {
   let dom: Node;
   if (vnode.vtype === 'vText') {
     dom = document.createTextNode(vnode.text);
   } else if (vnode.vtype === 'vElement') {
-    dom = document.createElement(vnode.tagName);
+    isSvg ||= vnode.tagName === 'svg';
+    dom = isSvg
+      ? document.createElementNS(svgNs, vnode.tagName)
+      : document.createElement(vnode.tagName);
     applyDomAttributes(dom as any, vnode, undefined);
-    vnode.children.forEach((vnode) => mount(dom, vnode));
+    vnode.children.forEach((vnode) => mount(dom, vnode, isSvg));
   } else if (vnode.vtype === 'vComponent') {
     vnode.state.componentState = {};
     const props = makePropsWithChildren(vnode.props, vnode.children);
@@ -45,7 +50,7 @@ export function mount(parentDom: Node, vnode: IVNode): Node {
       vnode.componentWrapper.mount(vnode.state.componentState, props) ||
       createVBlank(null);
     vnode.state.renderRes = draftRes;
-    dom = mount(parentDom, draftRes);
+    dom = mount(parentDom, draftRes, isSvg);
   } else {
     dom = document.createComment('NULL');
   }
