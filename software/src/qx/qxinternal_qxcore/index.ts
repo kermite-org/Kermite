@@ -4,14 +4,13 @@ import { IVNode } from 'qx/qxinternal_qxcore/types';
 export { IVNode as VNode } from './types';
 export { jsx } from './jsx';
 
-let prevDom: Node;
 let prevVDom: IVNode;
 
 export function render(vnode: IVNode, rootDom: Element | null) {
-  if (!prevDom) {
-    prevDom = mount(rootDom!, vnode);
+  if (!prevVDom) {
+    mount(rootDom!, vnode);
   } else {
-    patch(rootDom!, prevDom, vnode, prevVDom);
+    patch(rootDom!, vnode, prevVDom);
   }
   prevVDom = vnode;
 }

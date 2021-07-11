@@ -65,7 +65,6 @@ export function mount(parentDom: Node, vnode: IVNode, isSvg = false): Node {
 
 function patchFc(
   parentDom: Node,
-  dom: Node,
   newVNode: IVComponent,
   oldVNode: IVComponent,
 ) {
@@ -78,12 +77,12 @@ function patchFc(
   newVNode.state.renderRes = draftRes;
   if (0) {
     console.log('patch', newVNode.componentWrapper.name, {
-      dom,
+      dom: oldVNode.dom,
       draftRes,
       prevRenderRes,
     });
   }
-  patch(parentDom, dom, draftRes, prevRenderRes);
+  patch(parentDom, draftRes, prevRenderRes);
 }
 
 // ------------------------------------------------------------
@@ -104,19 +103,12 @@ function patchChildren(
   newVNodes: IVNode[],
   oldVNodes: IVNode[],
 ) {
-  // const childDomNodes = Array.from(parentDom.childNodes);
-
-  // if (childDomNodes.length !== oldVNodes.length) {
-  //   debugger;
-  // }
-
   if (newVNodes.length === oldVNodes.length) {
     for (let i = 0; i < newVNodes.length; i++) {
       // const dom = childDomNodes[i];
       const newVNode = newVNodes[i];
       const oldVNode = oldVNodes[i];
-      const dom = oldVNode.dom!;
-      patch(parentDom, dom, newVNode, oldVNode);
+      patch(parentDom, newVNode, oldVNode);
     }
   } else {
     // for (let i = 0; i < oldVNodes.length; i++) {
@@ -129,37 +121,34 @@ function patchChildren(
   }
 }
 
-export function patch(
-  parentDom: Node,
-  dom: Node,
-  newVNode: IVNode,
-  oldVNode: IVNode,
-) {
+export function patch(parentDom: Node, newVNode: IVNode, oldVNode: IVNode) {
   if (newVNode === oldVNode) {
     newVNode.dom = oldVNode.dom;
   } else if (newVNode.vtype === 'vBlank' && oldVNode.vtype === 'vBlank') {
     newVNode.dom = oldVNode.dom;
   } else if (newVNode.vtype === 'vText' && oldVNode.vtype === 'vText') {
+    const dom = oldVNode.dom!;
     if (newVNode.text !== oldVNode.text) {
       dom.nodeValue = newVNode.text;
     }
-    newVNode.dom = oldVNode.dom;
+    newVNode.dom = dom;
   } else if (
     newVNode.vtype === 'vComponent' &&
     oldVNode.vtype === 'vComponent' &&
     newVNode.componentWrapper === oldVNode.componentWrapper
   ) {
-    patchFc(parentDom, dom, newVNode, oldVNode);
+    patchFc(parentDom, newVNode, oldVNode);
     newVNode.dom = oldVNode.dom;
   } else if (
-    dom instanceof Element &&
+    oldVNode.dom instanceof Element &&
     newVNode.vtype === 'vElement' &&
     oldVNode.vtype === 'vElement' &&
     newVNode.tagName === oldVNode.tagName
   ) {
+    const dom = oldVNode.dom!;
     applyDomAttributes(dom, newVNode, oldVNode);
     patchChildren(dom, newVNode.children, oldVNode.children);
-    newVNode.dom = oldVNode.dom;
+    newVNode.dom = dom;
   } else {
     if (newVNode.vtype !== oldVNode.vtype) {
       unmount(parentDom, oldVNode);
