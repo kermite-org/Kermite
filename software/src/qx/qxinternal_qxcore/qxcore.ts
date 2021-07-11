@@ -59,9 +59,9 @@ function unmount(parentDom: Node, oldVNode: IVNode) {
     oldVNode.children.forEach((vnode) => unmount(dom, vnode));
     parentDom.removeChild(dom);
   } else if (oldVNode.vtype === 'vComponent') {
-    oldVNode.componentWrapper.unmount(oldVNode.state.componentState);
     unmount(parentDom, oldVNode.state.renderRes!);
     oldVNode.state.renderRes = undefined;
+    oldVNode.componentWrapper.unmount(oldVNode.state.componentState);
   } else {
     throw new Error(`invalid vnode ${oldVNode}`);
   }
