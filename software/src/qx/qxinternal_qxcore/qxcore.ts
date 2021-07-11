@@ -1,146 +1,5 @@
-import { qxInterposeProps } from '../qxInterposeProps';
-// eslint-disable-next-line import/no-cycle
-import { getFunctionComponentWrapperCached } from './functionComponentWrapper';
-
-type IElementProps = {
-  id?: string;
-  className?: string;
-  [key: string]: any;
-};
-
-type IVBlank = {
-  vtype: 'vBlank';
-  debugSig: string;
-  dom?: Comment;
-};
-
-type IVText = {
-  vtype: 'vText';
-  text: string;
-  debugSig: string;
-  dom?: Text;
-};
-
-type IVElement = {
-  vtype: 'vElement';
-  tagName: string;
-  props: IElementProps;
-  children: IVNode[];
-  debugSig: string;
-  marker?: string;
-  dom?: Element;
-};
-
-type IProps = {
-  [key: string]: any;
-};
-
-export type IVComponentWrapper = {
-  name: string;
-  mount: (self: any, props: IProps) => IVNode | null;
-  update: (self: any, props: IProps) => IVNode | null;
-  unmount: (self: any) => void;
-};
-
-type IVComponent = {
-  vtype: 'vComponent';
-  componentWrapper: IVComponentWrapper;
-  // renderFunc: IRenderFunc;
-  props: IProps;
-  children: IVNode[];
-  debugSig: string;
-  state: {
-    componentState?: any;
-    renderRes?: IVNode;
-  };
-  dom?: Node; // 関数コンポーネントのVNodeと関数コンポーネントのレンダリング結果のルート要素のVNodeが同じdom要素を参照する
-};
-
-export type IVNode = IVBlank | IVText | IVElement | IVComponent;
-
-function createVBlank(value: null | undefined | false): IVBlank {
-  return { vtype: 'vBlank', debugSig: `blank__${value}` };
-}
-
-function createVText(text: string): IVText {
-  return { vtype: 'vText', text, debugSig: `text__${text}` };
-}
-
-function createVElement(
-  tagName: string,
-  props: IProps,
-  children: IVNode[],
-): IVElement {
-  return {
-    vtype: 'vElement',
-    tagName,
-    props,
-    children,
-    debugSig: `${tagName}__${children.length}`,
-  };
-}
-
-function createVComponent(
-  componentWrapper: IVComponentWrapper,
-  props: IProps,
-  children: IVNode[],
-): IVComponent {
-  return {
-    vtype: 'vComponent',
-    componentWrapper,
-    props,
-    children,
-    debugSig: `${componentWrapper.name}__${children.length}`,
-    state: {},
-  };
-}
-
-type ISourceChild = IVNode | string | number | boolean | undefined;
-
-function convertChildren(children: ISourceChild[]): IVNode[] {
-  if (children.length === 1 && Array.isArray(children[0])) {
-    children = children[0];
-  }
-
-  return children.map((child) => {
-    if (child === null || child === undefined || child === false) {
-      return createVBlank(child);
-    } else if (
-      typeof child === 'string' ||
-      typeof child === 'number' ||
-      typeof child === 'boolean'
-    ) {
-      return createVText(child.toString());
-    } else {
-      return child;
-    }
-  });
-}
-
-export function jsx(
-  tagType: string | IVComponentWrapper,
-  props: IProps | undefined,
-  ...children: (string | IVNode)[]
-): IVNode | null {
-  props ||= {};
-
-  const skip = props && 'qxIf' in props && !props.qxIf;
-  if (skip) {
-    return null;
-  }
-
-  qxInterposeProps(props, tagType);
-
-  if (typeof tagType === 'function') {
-    tagType = getFunctionComponentWrapperCached(tagType);
-  }
-
-  const vnode =
-    typeof tagType === 'object'
-      ? createVComponent(tagType, props, convertChildren(children))
-      : createVElement(tagType, props, convertChildren(children));
-  return vnode;
-}
+import { createVBlank } from 'qx/qxinternal_qxcore/jsx';
+import { IProps, IVComponent, IVElement, IVNode } from './types';
 
 // ------------------------------------------------------------
 
@@ -265,7 +124,7 @@ function unmountFc(vnode: IVComponent) {
 
 // ------------------------------------------------------------
 
-function mount(parentDom: Node, vnode: IVNode): Node {
+export function mount(parentDom: Node, vnode: IVNode): Node {
   const el = realize(vnode);
   parentDom.appendChild(el);
   return el;
@@ -318,7 +177,7 @@ function patchChildren(
   }
 }
 
-function patch(dom: Node, newVNode: IVNode, oldVNode: IVNode) {
+export function patch(dom: Node, newVNode: IVNode, oldVNode: IVNode) {
   if (newVNode === oldVNode) {
   } else if (newVNode.vtype === 'vBlank' && oldVNode.vtype === 'vBlank') {
   } else if (newVNode.vtype === 'vText' && oldVNode.vtype === 'vText') {
@@ -350,16 +209,4 @@ function patch(dom: Node, newVNode: IVNode, oldVNode: IVNode) {
       mount(parentDom, newVNode);
     }
   }
-}
-
-let prevDom: Node;
-let prevVDom: IVNode;
-
-export function render(vnode: IVNode, rootDom: Element | null) {
-  if (!prevDom) {
-    prevDom = mount(rootDom!, vnode);
-  } else {
-    patch(prevDom, vnode, prevVDom);
-  }
-  prevVDom = vnode;
 }

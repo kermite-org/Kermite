@@ -1,4 +1,4 @@
-import { IVComponentWrapper } from 'qx/qxinternal_qxcore/qxcore';
+import { IVComponentWrapper } from 'qx/qxinternal_qxcore/types';
 import {
   createHookInstance,
   endHooks,
