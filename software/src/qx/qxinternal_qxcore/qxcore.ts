@@ -33,7 +33,6 @@ function makePropsWithChildren(props: IProps, children: IVNode[]) {
 const svgNs = 'http://www.w3.org/2000/svg';
 
 export function mount(parentDom: Node, vnode: IVNode, isSvg = false): Node {
-  console.log(`mount ${vnode.debugSig} ${(vnode as any).marker || ''}`);
   let dom: Node;
   if (vnode.vtype === 'vText') {
     dom = document.createTextNode(vnode.text);
@@ -45,6 +44,8 @@ export function mount(parentDom: Node, vnode: IVNode, isSvg = false): Node {
     applyDomAttributes(dom as any, vnode, undefined);
     vnode.children.forEach((vnode) => mount(dom, vnode, isSvg));
   } else if (vnode.vtype === 'vComponent') {
+    console.log(`mount-fc ${vnode.debugSig} ${(vnode as any).marker || ''}`);
+
     vnode.state.componentState = {};
     const props = makePropsWithChildren(vnode.props, vnode.children);
     const draftRes =
@@ -68,6 +69,10 @@ function patchFc(
   newVNode: IVComponent,
   oldVNode: IVComponent,
 ) {
+  console.log(
+    `patch-fc ${newVNode.debugSig} ${(newVNode as any).marker || ''}`,
+  );
+
   newVNode.state.componentState = oldVNode.state.componentState;
   const prevRenderRes = oldVNode.state.renderRes!;
   const props = makePropsWithChildren(newVNode.props, newVNode.children);
