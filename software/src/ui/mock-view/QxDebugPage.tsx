@@ -13,7 +13,7 @@ const Frame = (props: { children?: QxChildren }) => {
 
 const Frame1 = (props: { children: QxChild }) => {
   const frameStyle = css`
-    border: solid 1px blue;
+    border: solid 1px red;
     padding: 4px;
   `;
   return <div css={frameStyle}>{props.children}</div>;
