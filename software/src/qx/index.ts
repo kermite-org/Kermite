@@ -35,7 +35,7 @@ function setupAsyncRenderLoop() {
       }
       requestAnimationFrame(asyncRenderLoop);
     }
-    // asyncRenderLoop();
+    asyncRenderLoop();
     asyncLoopInitialized = true;
   }
 }
