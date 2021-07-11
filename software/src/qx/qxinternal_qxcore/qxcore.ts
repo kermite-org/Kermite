@@ -2,6 +2,12 @@ import { applyDomAttributes } from 'qx/qxinternal_qxcore/dom';
 import { createVBlank } from 'qx/qxinternal_qxcore/jsx';
 import { IVComponent, IVNode } from './types';
 
+function assert(cond: any) {
+  if (!cond) {
+    console.log('assertion failed');
+  }
+}
+
 // ------------------------------------------------------------
 
 const svgNs = 'http://www.w3.org/2000/svg';
@@ -104,6 +110,10 @@ function patchChildren(
 }
 
 export function patch(parentDom: Node, newVNode: IVNode, oldVNode: IVNode) {
+  assert(parentDom && newVNode && oldVNode);
+  assert(oldVNode.dom);
+  assert(!Array.isArray(newVNode));
+
   if (newVNode === oldVNode) {
     newVNode.dom = oldVNode.dom;
   } else if (newVNode.vtype === 'vBlank' && oldVNode.vtype === 'vBlank') {
