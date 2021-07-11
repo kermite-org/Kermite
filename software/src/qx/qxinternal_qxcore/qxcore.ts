@@ -8,7 +8,9 @@ const svgNs = 'http://www.w3.org/2000/svg';
 
 export function mount(parentDom: Node, vnode: IVNode): Node {
   let dom: Node;
-  if (vnode.vtype === 'vText') {
+  if (vnode.vtype === 'vBlank') {
+    dom = document.createComment('NULL');
+  } else if (vnode.vtype === 'vText') {
     dom = document.createTextNode(vnode.text);
   } else if (vnode.vtype === 'vElement') {
     const isSvg = vnode.tagName === 'svg' || parentDom instanceof SVGElement;
@@ -30,7 +32,7 @@ export function mount(parentDom: Node, vnode: IVNode): Node {
     vnode.state.renderRes = renderRes;
     dom = mount(parentDom, renderRes);
   } else {
-    dom = document.createComment('NULL');
+    throw new Error(`invalid vnode ${vnode}`);
   }
   parentDom.appendChild(dom);
   vnode.dom = dom as any;
