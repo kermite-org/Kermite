@@ -8,7 +8,6 @@ import {
   IVText,
 } from 'qx/qxinternal_qxcore/types';
 import { qxInterposeProps } from '../qxInterposeProps';
-// eslint-disable-next-line import/no-cycle
 import { getFunctionComponentWrapperCached } from './functionComponentWrapper';
 
 export function createVBlank(value: null | undefined | false): IVBlank {
@@ -50,11 +49,24 @@ function createVComponent(
 
 type ISourceChild = IVNode | string | number | boolean | undefined;
 
-function convertChildren(children: ISourceChild[]): IVNode[] {
-  if (children.length === 1 && Array.isArray(children[0])) {
-    children = children[0];
+function flattenArrayIfNested<T>(arr: (T | T[])[]): T[] {
+  const nested = arr.some((a) => Array.isArray(a));
+  if (nested) {
+    const res: T[] = [];
+    for (const a of arr) {
+      if (Array.isArray(a)) {
+        res.push(...a);
+      } else {
+        res.push(a);
+      }
+    }
+    return res;
   }
+  return arr as T[];
+}
 
+function convertChildren(children: ISourceChild[]): IVNode[] {
+  children = flattenArrayIfNested(children);
   return children.map((child) => {
     if (child === null || child === undefined || child === false) {
       return createVBlank(child);
