@@ -1,25 +1,34 @@
 import { IVElement } from 'qx/qxinternal_qxcore/types';
 
+const ignoreKeys = ['key', 'children', 'qxIf', 'ref'];
+
 export function applyDomAttributes(
   el: Element,
   vnode: IVElement,
-  oldVnode: IVElement | undefined,
+  oldVNode: IVElement | undefined,
 ) {
-  if (vnode.marker) {
-    el.setAttribute('data-fc', vnode.marker);
-  }
+  const oldProps = oldVNode?.props || {};
+  const newProps = vnode.props;
 
-  for (const key in vnode.props) {
-    if (
-      key === 'key' ||
-      key === 'children' ||
-      key === 'qxIf' ||
-      key === 'ref'
-    ) {
-      continue;
+  const changed = Object.keys(newProps)
+    .filter((key) => !ignoreKeys.includes(key))
+    .filter((key) => newProps[key] !== oldProps[key]);
+
+  const removed = Object.keys(oldProps)
+    .filter((key) => !ignoreKeys.includes(key))
+    .filter((key) => newProps[key] === undefined);
+
+  removed.forEach((key) => {
+    const value = oldProps[key];
+    if (key.startsWith('on') && typeof value === 'function') {
+      (el as any)[key.toLocaleLowerCase()] = undefined;
+    } else {
+      el.removeAttribute(key);
     }
-    const value = vnode.props[key];
+  });
 
+  changed.forEach((key) => {
+    const value = vnode.props[key];
     if (value === false || value === null || value === undefined) {
       el.removeAttribute(key);
     } else if (key.startsWith('on') && typeof value === 'function') {
@@ -27,5 +36,9 @@ export function applyDomAttributes(
     } else {
       el.setAttribute(key, value?.toString() || '');
     }
+  });
+
+  if (!oldVNode?.marker && vnode.marker) {
+    el.setAttribute('data-fc', vnode.marker);
   }
 }
