@@ -10,8 +10,10 @@ export function mount(parentDom: Node, vnode: IVNode): Node {
   let dom: Node;
   if (vnode.vtype === 'vBlank') {
     dom = document.createComment('NULL');
+    parentDom.appendChild(dom);
   } else if (vnode.vtype === 'vText') {
     dom = document.createTextNode(vnode.text);
+    parentDom.appendChild(dom);
   } else if (vnode.vtype === 'vElement') {
     const isSvg = vnode.tagName === 'svg' || parentDom instanceof SVGElement;
     dom = isSvg
@@ -23,6 +25,7 @@ export function mount(parentDom: Node, vnode: IVNode): Node {
     if (refProp && typeof refProp === 'object') {
       refProp.current = dom;
     }
+    parentDom.appendChild(dom);
   } else if (vnode.vtype === 'vComponent') {
     // console.log(`mount-fc ${vnode.debugSig} ${(vnode as any).marker || ''}`);
     vnode.state.componentState = {};
@@ -34,9 +37,7 @@ export function mount(parentDom: Node, vnode: IVNode): Node {
   } else {
     throw new Error(`invalid vnode ${vnode}`);
   }
-  parentDom.appendChild(dom);
   vnode.dom = dom as any;
-  vnode.parentDom = parentDom;
   return dom;
 }
 
@@ -46,12 +47,14 @@ function unmount(parentDom: Node, oldVNode: IVNode) {
   if (oldVNode.vtype === 'vElement') {
     const dom = oldVNode.dom!;
     oldVNode.children.forEach((vnode) => unmount(dom, vnode));
+    parentDom.removeChild(dom);
+    oldVNode.dom = undefined;
   } else if (oldVNode.vtype === 'vComponent') {
     oldVNode.componentWrapper.unmount(oldVNode.state.componentState);
+    unmount(parentDom, oldVNode.state.renderRes!);
+    oldVNode.state.renderRes = undefined;
+    oldVNode.dom = undefined;
   }
-  parentDom.removeChild(oldVNode.dom!);
-  oldVNode.dom = undefined;
-  oldVNode.parentDom = undefined;
 }
 
 // ------------------------------------------------------------
