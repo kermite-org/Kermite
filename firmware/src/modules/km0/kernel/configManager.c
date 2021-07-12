@@ -8,7 +8,7 @@
 #include "km0/kernel/versionDefinitions.h"
 #include <stdio.h>
 
-typedef void (*ParameterChangedListener)(uint8_t parameterIndex, uint8_t value);
+typedef void (*ParameterChangedListener)(uint8_t eventType, uint8_t parameterIndex, uint8_t value);
 
 static uint8_t systemParameterValues[NumSystemParameters];
 static uint16_t addrSystemParameters = 0;
@@ -17,6 +17,7 @@ static ParameterChangedListener parameterChangedListeners[4] = { 0 };
 static int numParameterChangedListeners = 0;
 
 static uint16_t parameterChangedFlags = 0;
+static bool allParameterChangedFlag = false;
 
 static bool reqRestToDfu = false;
 
@@ -50,24 +51,32 @@ static T_SystemParametersSet systemParameterMaxValues = {
   .glowSpeed = 10,
 };
 
-static void notifyParameterChanged(uint8_t parameterIndex, uint8_t value) {
+static void notifyParameterChanged(uint8_t eventType, uint8_t parameterIndex, uint8_t value) {
   for (int i = 0; i < numParameterChangedListeners; i++) {
     ParameterChangedListener listener = parameterChangedListeners[i];
-    listener(parameterIndex, value);
+    listener(eventType, parameterIndex, value);
   }
 }
 
 static void taskChangedParameterNotification() {
   for (int i = 0; i < NumSystemParameters; i++) {
     if (bit_is_on(parameterChangedFlags, i)) {
-      notifyParameterChanged(i, systemParameterValues[i]);
+      notifyParameterChanged(ParameterChangeEventType_ChangedSinle, i, systemParameterValues[i]);
       bit_off(parameterChangedFlags, i);
     }
+  }
+  if (allParameterChangedFlag) {
+    notifyParameterChanged(ParameterChangeEventType_ChangedAll, 0, 0);
+    allParameterChangedFlag = false;
   }
 }
 
 static void reserveParameterChangedNotification(uint8_t parameterIndex) {
   bit_on(parameterChangedFlags, parameterIndex);
+}
+
+static void reseverAllParameterChangedNotification() {
+  allParameterChangedFlag = true;
 }
 
 static void reserveLazySave() {
@@ -123,6 +132,13 @@ void writeParameter(uint8_t parameterIndex, uint8_t value) {
   }
 }
 
+void writeParameterWuthoutNotification(uint8_t parameterIndex, uint8_t value) {
+  if (validateParameter(parameterIndex, value)) {
+    systemParameterValues[parameterIndex] = value;
+    reserveLazySave();
+  }
+}
+
 void configManager_initialize() {
   addrSystemParameters = dataStorage_getDataAddress_systemParameters();
 
@@ -136,12 +152,9 @@ void configManager_initialize() {
         printf("system parameters initialized\n");
       }
     }
-
     dataMemory_readBytes(addrSystemParameters, systemParameterValues, NumSystemParameters);
     fixSystemParametersLoaded();
-    for (int i = 0; i < NumSystemParameters; i++) {
-      reserveParameterChangedNotification(i);
-    }
+    reseverAllParameterChangedNotification();
   }
 }
 
@@ -164,16 +177,18 @@ void configManager_writeParameter(uint8_t parameterIndex, uint8_t value) {
 void configManager_bulkWriteParameters(uint8_t *buf, uint8_t len, uint8_t parameterIndexBase) {
   for (int i = 0; i < len; i++) {
     uint8_t value = buf[i];
-    configManager_writeParameter(i, value);
+    writeParameterWuthoutNotification(i, value);
   }
+  reseverAllParameterChangedNotification();
 }
 
 void configManager_resetSystemParameters() {
   uint8_t *pDefaultValues = (uint8_t *)&systemParametersDefault;
   for (int i = 0; i < NumSystemParameters; i++) {
     uint8_t value = pDefaultValues[i];
-    configManager_writeParameter(i, value);
+    writeParameterWuthoutNotification(i, value);
   }
+  reseverAllParameterChangedNotification();
 }
 
 static void shiftParameter(uint8_t parameterIndex, int dir, bool roll) {
