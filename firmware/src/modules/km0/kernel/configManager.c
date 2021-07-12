@@ -5,6 +5,7 @@
 #include "km0/base/utils.h"
 #include "km0/device/dataMemory.h"
 #include "km0/device/system.h"
+#include "km0/kernel/versionDefinitions.h"
 #include <stdio.h>
 
 typedef void (*ParameterChangedListener)(uint8_t parameterIndex, uint8_t value);
@@ -126,12 +127,12 @@ void configManager_initialize() {
   addrSystemParameters = dataStorage_getDataAddress_systemParameters();
 
   if (addrSystemParameters) {
-    uint16_t addrParameterInitializationFlag = dataStorage_getDataAddress_parametersInitializationFlag();
-    if (addrParameterInitializationFlag) {
-      bool isParametersInitialized = dataMemory_readByte(addrParameterInitializationFlag);
-      if (!isParametersInitialized) {
+    uint16_t addrParametersRevision = dataStorage_getDataAddress_storageSystemParametersRevision();
+    if (addrParametersRevision) {
+      uint8_t parametersRevision = dataMemory_readByte(addrParametersRevision);
+      if (parametersRevision != Kermite_ConfigParametersRevision) {
         dataMemory_writeBytes(addrSystemParameters, (uint8_t *)&systemParametersDefault, NumSystemParameters);
-        dataMemory_writeByte(addrParameterInitializationFlag, 1);
+        dataMemory_writeByte(addrParametersRevision, Kermite_ConfigParametersRevision);
         printf("system parameters initialized\n");
       }
     }
