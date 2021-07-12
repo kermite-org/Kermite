@@ -11,6 +11,7 @@ import { MockPageLoadedDesignDrawing } from '~/ui/mock-view/MockPageLoadedDesign
 import { QxDebugPage } from '~/ui/mock-view/QxDebugPage';
 import { QxDebugPage2 } from '~/ui/mock-view/QxDebugPage2';
 import { QxDebugPage3 } from '~/ui/mock-view/QxDebugPage3';
+import { QxDebugPage4 } from '~/ui/mock-view/QxDebugPage4';
 import { RoutingDevelopmentPage } from '~/ui/mock-view/RoutingDevelopmentPage';
 import { ShortCssDevPage } from '~/ui/mock-view/ShortCssDevPage';
 import { MockPageLayouterDevelopment } from './MockPageLayouterDevelopment';
@@ -20,7 +21,8 @@ const PageRoot = () => {
     <div style={{ height: '100%' }}>
       {/* <QxDebugPage /> */}
       {/* <QxDebugPage2 /> */}
-      <QxDebugPage3 />
+      {/* <QxDebugPage3 /> */}
+      <QxDebugPage4 />
       {/* <MockPageLayouterDevelopment /> */}
       {/* <MockPageLoadedDesignDrawing /> */}
       {/* <UiLayouterPageComponent /> */}

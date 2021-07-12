@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { FC, jsx } from 'qx';
 
 const items = ['aaa', 'bbb', 'ccc'];
 
