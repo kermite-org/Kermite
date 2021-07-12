@@ -32,8 +32,6 @@ static const T_SystemParametersSet systemParametersDefault = {
   .glowColor = 0,
   .glowBrightness = 20,
   .glowPattern = 0,
-  .glowDirection = 1,
-  .glowSpeed = 4,
 };
 
 static T_SystemParametersSet systemParameterMaxValues = {
@@ -47,8 +45,6 @@ static T_SystemParametersSet systemParameterMaxValues = {
   .glowColor = 255,
   .glowBrightness = 255,
   .glowPattern = 255,
-  .glowDirection = 1,
-  .glowSpeed = 10,
 };
 
 static void notifyParameterChanged(uint8_t eventType, uint8_t parameterIndex, uint8_t value) {

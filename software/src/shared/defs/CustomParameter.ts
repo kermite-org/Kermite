@@ -107,23 +107,6 @@ export const SystemParameterDefinitions: ICustromParameterSpec[] = [
     defaultValue: 0,
     maxValue: 255, // read from firmware
   },
-  {
-    slotIndex: 10,
-    type: 'selection',
-    label: 'Glow Direction',
-    defaultValue: 0,
-    options: [
-      { value: 0, label: 'Backword' },
-      { value: 1, label: 'Forward' },
-    ],
-  },
-  {
-    slotIndex: 11,
-    type: 'linear',
-    label: 'Glow Speed',
-    defaultValue: 0,
-    maxValue: 255, // read from firmware
-  },
 ];
 
 export function getSystemParameterDefinitionBySystemParameterKey(
@@ -140,8 +123,6 @@ export function getSystemParameterDefinitionBySystemParameterKey(
     'glowColor',
     'glowBrightness',
     'glowPattern',
-    'glowDirection',
-    'glowSpeed',
   ];
   const index = keys.indexOf(systemParameterKey);
   if (index >= 0) {

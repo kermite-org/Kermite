@@ -1,4 +1,4 @@
-export const NumSystemParameters = 12;
+export const NumSystemParameters = 10;
 
 export const enum SystemParameter {
   EmitRealtimeEvents = 0,
@@ -11,8 +11,6 @@ export const enum SystemParameter {
   GlowColor,
   GlowBrightness,
   GlowPattern,
-  GlowDirection,
-  GlowSpeed,
 }
 
 export type SystemAction =
