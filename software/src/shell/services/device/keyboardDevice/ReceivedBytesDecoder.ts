@@ -46,6 +46,7 @@ export function recievedBytesDecoder(
   buf: Uint8Array,
 ): IReceivedBytesDecodeResult | undefined {
   const cmd = buf[0];
+  // console.log(`received cmd:0x${cmd.toString(16)}`);
   if (cmd === RawHidOpcode.DeviceAttributesResponse) {
     const projectReleaseBuildRevision = (buf[1] << 8) | buf[2];
     const configStorageFormatRevision = buf[3];
