@@ -40,17 +40,17 @@ function setupAsyncRenderLoop() {
   }
 }
 
-const domRefDirective = {
-  mount(element: Element, ref: { current: Element } | ((el: Element) => void)) {
-    if (typeof ref === 'function') {
-      ref(element);
-    } else {
-      ref.current = element;
-    }
-  },
-  patch() {},
-  unmount() {},
-};
+// const domRefDirective = {
+//   mount(element: Element, ref: { current: Element } | ((el: Element) => void)) {
+//     if (typeof ref === 'function') {
+//       ref(element);
+//     } else {
+//       ref.current = element;
+//     }
+//   },
+//   patch() {},
+//   unmount() {},
+// };
 
 export function render(
   renderFn: () => JSX.Element,
