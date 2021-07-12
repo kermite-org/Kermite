@@ -291,6 +291,7 @@ export interface IAppIpcContract {
 
     device_connectToDevice(path: string): Promise<void>;
     device_setCustomParameterValue(index: number, value: number): Promise<void>;
+    device_resetParaemters(): Promise<void>;
 
     firmup_uploadFirmware(
       origin: IResourceOrigin,

@@ -18,4 +18,5 @@ export const ProfileBinaryFormatRevision = 4;
 // 210522, 2, sytemLayoutをUS:1,JIS:2に変更
 // 210706, 3, emitKeyStrokeを削除
 // 210706, 4, systemLayoutをUS:0,JIS:1に戻す
-export const ConfigParametersRevision = 4;
+// 210712, 5, glowDirectionとglowSpeedを削除
+export const ConfigParametersRevision = 5;

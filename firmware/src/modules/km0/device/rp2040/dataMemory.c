@@ -26,7 +26,7 @@ static void storeRamDataToFlash() {
 }
 
 static void saveLazy() {
-  saveCount = 3000;
+  saveCount = 1000;
 }
 
 static void processSaving() {

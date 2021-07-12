@@ -9,9 +9,7 @@
       "glowActive",
       "glowColor",
       "glowBrightness",
-      "glowPattern",
-      "glowDirection",
-      "glowSpeed"
+      "glowPattern"
     ]
   }
 }

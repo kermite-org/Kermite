@@ -3,38 +3,42 @@ import {
   endHooks,
   flushHookEffects,
   startHooks,
-} from '../hookImpl';
-import { unmount } from './vdom';
+} from 'qx/hookImpl';
+import { IVComponentWrapper } from 'qx/qxinternal_qxcore/types';
 
 const promise = Promise.resolve();
 function doLater(fn: () => void) {
   promise.then(fn);
 }
 
-function createFunctionComponentWrapper(renderFunction: Function) {
+function createFunctionComponentWrapper(
+  renderFunction: Function,
+): IVComponentWrapper {
+  const fcName = renderFunction.name;
   return {
-    mount(self: any) {
-      self.fcsig = renderFunction.name;
+    name: fcName,
+    mount(self: any, props: any) {
+      // console.log('mount', fcName);
+      self.fcsig = fcName;
       self.hook = createHookInstance();
       self.renderWithHook = (props: any) => {
         startHooks(self.hook);
         const vnode = renderFunction(props);
         if (vnode) {
-          vnode.props['data-fc'] = renderFunction.name;
+          vnode.marker = `${fcName}`;
         }
         endHooks();
         doLater(() => flushHookEffects(self.hook));
         return vnode;
       };
-      self.render(self.renderWithHook(self.props));
+      return self.renderWithHook(props);
     },
-    patch(self: any) {
-      self.render(self.renderWithHook(self.props));
+    update(self: any, props: any) {
+      return self.renderWithHook(props);
     },
     unmount(self: any) {
+      // console.log('unmount', fcName);
       flushHookEffects(self.hook, true);
-      const { vnode, ref, env } = self._STATE_;
-      unmount(vnode, ref, env);
     },
   };
 }

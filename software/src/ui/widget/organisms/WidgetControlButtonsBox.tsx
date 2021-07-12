@@ -17,7 +17,7 @@ export const WidgetControlButtonsBox: FC<Props> = ({ vm, className }) => (
     />
     <WidgetControlButton
       className="config-button"
-      iconSpec="fa fa-window-restore"
+      iconSpec="exit_to_app"
       onClick={vm.backToConfiguratorView}
     />
   </div>

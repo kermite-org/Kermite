@@ -38,6 +38,10 @@ export class KeyboardDeviceService implements IKeyboardDeviceServcie {
     this.core.setCustomParameterValue(index, value);
   }
 
+  resetParameters() {
+    this.core.resetParameters();
+  }
+
   setSimulatorMode(enabled: boolean) {
     this.core.setSimulatorMode(enabled);
   }

@@ -18,12 +18,23 @@ const style = css`
       }
     }
   }
+
+  > .button-row {
+    margin-top: 10px;
+    display: flex;
+    button {
+      padding: 2px 5px;
+      cursor: pointer;
+    }
+  }
 `;
 
 export const CustomParametersPart: FC = () => {
   const {
     parameterModels,
     definitionUnavailable,
+    isConnected,
+    resetParameters,
   } = useCustomParametersPartModel();
   return (
     <div css={style}>
@@ -65,6 +76,11 @@ export const CustomParametersPart: FC = () => {
             </div>
           ))}
         </div>
+      </div>
+      <div className="button-row">
+        {isConnected && !definitionUnavailable && (
+          <button onClick={resetParameters}>Reset To Default</button>
+        )}
       </div>
     </div>
   );

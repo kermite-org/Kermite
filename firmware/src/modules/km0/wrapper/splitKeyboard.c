@@ -235,7 +235,12 @@ static void master_pushMasterStatePacketOne() {
   }
 }
 
-static void master_handleMasterParameterChanged(uint8_t parameterIndex, uint8_t value) {
+static void master_handleMasterParameterChanged(uint8_t eventType, uint8_t parameterIndex, uint8_t value) {
+  if (eventType == ParameterChangeEventType_ChangedAll) {
+    configManager_dispatchSingleParameterChangedEventsAll(master_handleMasterParameterChanged);
+    return;
+  }
+
   uint8_t pi = parameterIndex;
   if (pi == SystemParameter_KeyHoldIndicatorLed ||
       pi == SystemParameter_HeartbeatLed ||
@@ -248,13 +253,6 @@ static void master_handleMasterParameterChanged(uint8_t parameterIndex, uint8_t 
   }
   if (pi == SystemParameter_MasterSide) {
     setBoardSide(value);
-  }
-}
-
-static void master_sendInitialParameteresAll() {
-  uint8_t *pp = configManager_getParameterValuesRawPointer();
-  for (int i = 0; i < NumSystemParameters; i++) {
-    master_handleMasterParameterChanged(i, pp[i]);
   }
 }
 
@@ -288,7 +286,7 @@ static void master_ledTask(uint32_t step) {
 
 static void master_start() {
   master_setupBoard();
-  master_sendInitialParameteresAll();
+  configManager_dispatchSingleParameterChangedEventsAll(master_handleMasterParameterChanged);
   configManager_addParameterChangeListener(master_handleMasterParameterChanged);
   keyboardMain_setKeySlotStateChangedCallback(master_handleMasterKeySlotStateChanged);
 

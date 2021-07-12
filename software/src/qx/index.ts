@@ -6,11 +6,7 @@ import {
 } from './cssInJs';
 import { Hook } from './hookImpl';
 import { qxGlobal } from './qxGlobal';
-import {
-  render as petitDomRender,
-  jsx,
-  VNode,
-} from './qxinternal_petit_dom_060';
+import { render as vdomCoreRender, jsx, VNode } from './qxinternal_qxcore';
 import { setShortCssProcessor } from './shortCss';
 
 export { jsx, Hook, css, styled, applyGlobalStyle, setShortCssProcessor };
@@ -44,17 +40,17 @@ function setupAsyncRenderLoop() {
   }
 }
 
-const domRefDirective = {
-  mount(element: Element, ref: { current: Element } | ((el: Element) => void)) {
-    if (typeof ref === 'function') {
-      ref(element);
-    } else {
-      ref.current = element;
-    }
-  },
-  patch() {},
-  unmount() {},
-};
+// const domRefDirective = {
+//   mount(element: Element, ref: { current: Element } | ((el: Element) => void)) {
+//     if (typeof ref === 'function') {
+//       ref(element);
+//     } else {
+//       ref.current = element;
+//     }
+//   },
+//   patch() {},
+//   unmount() {},
+// };
 
 export function render(
   renderFn: () => JSX.Element,
@@ -68,9 +64,9 @@ export function render(
     d.nPatchCall = 0;
     const t0 = performance.now();
 
-    const options = { directives: { ref: domRefDirective } };
-    petitDomRender(renderFn() as VNode, parentDomNode!, options);
-    // petitDomRender(renderFn() as VNode, parentDomNode!);
+    // const options = { directives: { ref: domRefDirective } };
+    // vdomCoreRender(renderFn() as VNode, parentDomNode!, options);
+    vdomCoreRender((renderFn() as any) as VNode, parentDomNode!);
     const t1 = performance.now();
     if (0) {
       const dur = t1 - t0;

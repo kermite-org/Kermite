@@ -1,5 +1,6 @@
 import { jsx, css } from 'qx';
-import { appUi, router, uiTheme } from '~/ui/common';
+import { appUi, router, uiStatusModel, uiTheme } from '~/ui/common';
+import { LoadingOverlay } from '~/ui/common/components/overlay/LoadingOverlay';
 import { EditorPage } from '~/ui/editor-page';
 import { FirmwareUpdationPage } from '~/ui/firmware-updation-page';
 import { UiLayouterPageComponent } from '~/ui/layouter-page';
@@ -25,8 +26,22 @@ const styles = {
   `,
 };
 
-export const ConfiguratorZoneRoot = () => {
+const MainColumnRoutes = () => {
   const pagePath = router.getPagePath();
+  return (
+    <div css={styles.cssMainColumn}>
+      {pagePath === '/editor' && <EditorPage />}
+      {pagePath === '/layouter' && <UiLayouterPageComponent />}
+      {pagePath === '/shapePreview' && <ShapePreviewPage />}
+      {pagePath === '/firmwareUpdation' && <FirmwareUpdationPage />}
+      {pagePath === '/presetBrowser' && <PresetBrowserPage />}
+      {pagePath === '/presetBrowser2' && <PresetBrowserPage2 />}
+      {pagePath === '/settings' && <UiSettingsPage />}
+    </div>
+  );
+};
+
+export const ConfiguratorZoneRoot = () => {
   return (
     <CustomWindowFrame
       renderTitleBar={WindowTitleBarSection}
@@ -34,15 +49,8 @@ export const ConfiguratorZoneRoot = () => {
     >
       <div css={styles.cssContentRow}>
         <NavigationColumn />
-        <div css={styles.cssMainColumn}>
-          {pagePath === '/editor' && <EditorPage />}
-          {pagePath === '/layouter' && <UiLayouterPageComponent />}
-          {pagePath === '/shapePreview' && <ShapePreviewPage />}
-          {pagePath === '/firmwareUpdation' && <FirmwareUpdationPage />}
-          {pagePath === '/presetBrowser' && <PresetBrowserPage />}
-          {pagePath === '/presetBrowser2' && <PresetBrowserPage2 />}
-          {pagePath === '/settings' && <UiSettingsPage />}
-        </div>
+        <MainColumnRoutes />
+        <LoadingOverlay isLoading={uiStatusModel.status.isLoading} />
         <DevToolPullTab qxIf={appUi.isDevelopment} />
       </div>
     </CustomWindowFrame>
