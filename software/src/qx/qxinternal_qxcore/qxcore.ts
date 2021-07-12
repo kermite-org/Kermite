@@ -152,8 +152,9 @@ export function patch(parentDom: Node, newVNode: IVNode, oldVNode: IVNode) {
     newVNode.tagName === oldVNode.tagName
   ) {
     const dom = oldVNode.dom!;
-    patchChildren(dom, newVNode.children, oldVNode.children);
     applyDomAttributes(dom, newVNode, oldVNode);
+    patchChildren(dom, newVNode.children, oldVNode.children);
+
     newVNode.dom = dom;
     interactivePropKeys.forEach((key) => {
       const oldValue = oldVNode.props[key];
