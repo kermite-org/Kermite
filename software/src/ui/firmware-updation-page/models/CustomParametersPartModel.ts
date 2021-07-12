@@ -7,6 +7,8 @@ import {
 interface ICustomParametersPartModel {
   parameterModels: ICustomParameterModel[];
   definitionUnavailable: boolean;
+  isConnected: boolean;
+  resetParameters: () => void;
 }
 
 export function useCustomParametersPartModel(): ICustomParametersPartModel {
@@ -41,6 +43,14 @@ export function useCustomParametersPartModel(): ICustomParametersPartModel {
 
   const parameterSpec = customDef?.customParameterSpecs;
 
+  const isConnected = deviceStatus.isConnected;
+
+  const resetParameters = () => {
+    if (isConnected) {
+      ipcAgent.async.device_resetParaemters();
+    }
+  };
+
   return {
     parameterModels:
       (parameterSpec &&
@@ -55,5 +65,7 @@ export function useCustomParametersPartModel(): ICustomParametersPartModel {
         )) ||
       [],
     definitionUnavailable: deviceStatus.isConnected && !customDef,
+    isConnected,
+    resetParameters,
   };
 }
