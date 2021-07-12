@@ -1,6 +1,5 @@
-import { jsx, css } from 'qx';
-import { uiStatusModel, uiTheme } from '~/ui/common';
-import { LoadingOverlay } from '~/ui/common/components/overlay/LoadingOverlay';
+import { css, jsx } from 'qx';
+import { uiTheme } from '~/ui/common';
 import { KeyAssignEditView } from './KeyAssignEditView';
 import { DeviceControlSection } from './ui_bar_deviceControlSection/DeviceControlSection';
 import { ProfileManagementPart } from './ui_bar_profileManagement/ProfileManagementPart';
@@ -45,7 +44,6 @@ export function EditorPage() {
         <KeyAssignEditView />
       </div>
       <ProfileConfigratuionModalLayer />
-      <LoadingOverlay isLoading={uiStatusModel.status.isLoading} />
     </div>
   );
 }

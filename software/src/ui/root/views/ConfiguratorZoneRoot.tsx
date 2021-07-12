@@ -1,5 +1,6 @@
 import { jsx, css } from 'qx';
-import { appUi, router, uiTheme } from '~/ui/common';
+import { appUi, router, uiStatusModel, uiTheme } from '~/ui/common';
+import { LoadingOverlay } from '~/ui/common/components/overlay/LoadingOverlay';
 import { EditorPage } from '~/ui/editor-page';
 import { FirmwareUpdationPage } from '~/ui/firmware-updation-page';
 import { UiLayouterPageComponent } from '~/ui/layouter-page';
@@ -49,6 +50,7 @@ export const ConfiguratorZoneRoot = () => {
       <div css={styles.cssContentRow}>
         <NavigationColumn />
         <MainColumnRoutes />
+        <LoadingOverlay isLoading={uiStatusModel.status.isLoading} />
         <DevToolPullTab qxIf={appUi.isDevelopment} />
       </div>
     </CustomWindowFrame>

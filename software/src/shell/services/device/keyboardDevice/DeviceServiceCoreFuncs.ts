@@ -150,6 +150,7 @@ export async function deviceSetupTask(
   attrsRes: IDeviceAttributesReadResponseData;
   customParamsRes: ICustomParametersReadResponseData | undefined;
 }> {
+  console.log('start deviceSetupTask');
   let attrsRes = await readDeviceAttributes(device);
   checkDeviceRevisions(attrsRes);
   if (!checkDeviceInstanceCodeFormat(attrsRes.deviceInstanceCode)) {
@@ -188,6 +189,7 @@ export async function deviceSetupTask(
   //     throw new Error('failed to write initial custom parameters');
   //   }
   // }
+  console.log('end deviceSetupTask');
   return {
     attrsRes,
     customParamsRes,

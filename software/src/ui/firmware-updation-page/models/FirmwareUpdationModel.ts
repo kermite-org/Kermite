@@ -6,7 +6,7 @@ import {
   IProjectResourceInfo,
   sortOrderBy,
 } from '~/shared';
-import { ipcAgent, modalAlert } from '~/ui/common';
+import { ipcAgent, modalAlert, uiStatusModel } from '~/ui/common';
 
 export type FirmwareUpdationPhase =
   | 'WaitingReset'
@@ -129,11 +129,13 @@ export class FirmwareUpdationModel {
       );
       if (info) {
         this.phase = 'Uploading';
+        uiStatusModel.setLoading();
         const res = await ipcAgent.async.firmup_uploadFirmware(
           info.origin,
           info.projectId,
           variationName,
         );
+        uiStatusModel.clearLoading();
         this.firmwareUploadResult = res;
         if (res === 'ok') {
           this.phase = 'UploadSuccess';

@@ -294,9 +294,9 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
 
   const onWriteButton = async () => {
     await profilesModel.saveProfile();
-    uiStatusModel.status.isLoading = true;
+    uiStatusModel.setLoading();
     const done = await ipcAgent.async.config_writeKeyMappingToDevice();
-    uiStatusModel.status.isLoading = false;
+    uiStatusModel.clearLoading();
     // todo: トーストにする?
     if (done) {
       await modalAlert('write succeeded.');
