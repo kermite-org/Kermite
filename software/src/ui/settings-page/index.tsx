@@ -148,7 +148,7 @@ export const UiSettingsPage = () => {
         </Indent>
       </Indent>
 
-      <div className="version-area">
+      <div className="version-area" qxIf={!!appVersionInfo.version}>
         application version: {appVersionInfo.version}
       </div>
     </div>
