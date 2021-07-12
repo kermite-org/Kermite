@@ -1,8 +1,12 @@
+import { exec } from 'child_process';
 import { IKeyboardDeviceStatus, IRealtimeKeyboardEvent } from '~/shared';
 import { executeWithAppErrorHandler2 } from '~/shell/base/ErrorChecker';
 import { createEventPort } from '~/shell/funcs';
 import { getPortNameFromDevicePath } from '~/shell/services/device/keyboardDevice/DeviceEnumerator';
-import { deviceSetupTask } from '~/shell/services/device/keyboardDevice/DeviceServiceCoreFuncs';
+import {
+  deviceSetupTask,
+  readDeviceCustomParameters,
+} from '~/shell/services/device/keyboardDevice/DeviceServiceCoreFuncs';
 import { Packets } from '~/shell/services/device/keyboardDevice/Packets';
 import {
   ICustomParametersReadResponseData,
@@ -93,6 +97,18 @@ export class KeyboardDeviceServiceCore {
     this.device?.writeSingleFrame(
       Packets.makeCustomParameterSignleWriteOperationFrame(index, value),
     );
+  }
+
+  resetParameters() {
+    executeWithAppErrorHandler2(async () => {
+      if (this.device) {
+        this.device.writeSingleFrame(Packets.customParametersResetRequestFrame);
+        const customParamsRes = await readDeviceCustomParameters(this.device);
+        this.setStatus({
+          systemParameterValues: customParamsRes.parameterValues,
+        });
+      }
+    });
   }
 
   setDeivce(device: IDeviceWrapper | undefined) {
