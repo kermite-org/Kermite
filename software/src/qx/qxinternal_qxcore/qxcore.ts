@@ -1,3 +1,4 @@
+import { interactivePropKeys, svgNs } from 'qx/qxinternal_qxcore/constants';
 import { applyDomAttributes } from 'qx/qxinternal_qxcore/dom';
 import { createVBlank } from 'qx/qxinternal_qxcore/jsx';
 import { IVComponent, IVNode } from 'qx/qxinternal_qxcore/types';
@@ -9,8 +10,6 @@ function assert(cond: any) {
 }
 
 // ------------------------------------------------------------
-
-const svgNs = 'http://www.w3.org/2000/svg';
 
 export function mount(parentDom: Node, vnode: IVNode): Node {
   let dom: Node;
@@ -32,6 +31,13 @@ export function mount(parentDom: Node, vnode: IVNode): Node {
       refProp.current = dom;
     }
     parentDom.appendChild(dom);
+
+    interactivePropKeys.forEach((key) => {
+      const value = vnode.props[key];
+      if (value) {
+        (dom as any)[key] = value;
+      }
+    });
   } else if (vnode.vtype === 'vComponent') {
     // console.log(`mount-fc ${vnode.debugSig} ${(vnode as any).marker || ''}`);
     vnode.state.componentState = {};
@@ -145,6 +151,13 @@ export function patch(parentDom: Node, newVNode: IVNode, oldVNode: IVNode) {
     applyDomAttributes(dom, newVNode, oldVNode);
     patchChildren(dom, newVNode.children, oldVNode.children);
     newVNode.dom = dom;
+    interactivePropKeys.forEach((key) => {
+      const oldValue = oldVNode.props[key];
+      const newValue = newVNode.props[key];
+      if (newValue !== oldValue) {
+        (dom as any)[key] = newValue;
+      }
+    });
   } else {
     if (newVNode.vtype !== oldVNode.vtype) {
       unmount(parentDom, oldVNode);

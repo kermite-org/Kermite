@@ -1,6 +1,5 @@
+import { attributeIgnoreKeys } from 'qx/qxinternal_qxcore/constants';
 import { IVElement } from 'qx/qxinternal_qxcore/types';
-
-const ignoreKeys = ['key', 'children', 'qxIf', 'ref'];
 
 export function applyDomAttributes(
   el: Element,
@@ -11,11 +10,11 @@ export function applyDomAttributes(
   const newProps = vnode.props;
 
   const changed = Object.keys(newProps)
-    .filter((key) => !ignoreKeys.includes(key))
+    .filter((key) => !attributeIgnoreKeys.includes(key))
     .filter((key) => newProps[key] !== oldProps[key]);
 
   const removed = Object.keys(oldProps)
-    .filter((key) => !ignoreKeys.includes(key))
+    .filter((key) => !attributeIgnoreKeys.includes(key))
     .filter((key) => newProps[key] === undefined);
 
   removed.forEach((key) => {
