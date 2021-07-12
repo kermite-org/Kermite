@@ -71,7 +71,7 @@ static void reserveParameterChangedNotification(uint8_t parameterIndex) {
 }
 
 static void reserveLazySave() {
-  lazySaveTick = 3000; //およそ3秒後にデータをストレージに書き込む
+  lazySaveTick = 1000; //およそ1秒後にデータをストレージに書き込む
 }
 
 static void taskLazySave() {
