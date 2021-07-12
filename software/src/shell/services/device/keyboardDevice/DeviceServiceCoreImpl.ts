@@ -1,4 +1,3 @@
-import { exec } from 'child_process';
 import { IKeyboardDeviceStatus, IRealtimeKeyboardEvent } from '~/shared';
 import { executeWithAppErrorHandler2 } from '~/shell/base/ErrorChecker';
 import { createEventPort } from '~/shell/funcs';
