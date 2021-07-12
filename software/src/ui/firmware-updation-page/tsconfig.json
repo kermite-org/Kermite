@@ -3,10 +3,5 @@
   "compilerOptions": {
     "rootDir": "../../"
   },
-  "include": [
-    "./**/*",
-    "../../qx/**/*",
-    "../../shared/**/*",
-    "../../common/**/*"
-  ]
+  "include": ["./**/*", "../../qx/**/*", "../../shared/**/*", "../common/**/*"]
 }
