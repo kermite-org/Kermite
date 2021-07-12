@@ -76,6 +76,9 @@ async function makeShell() {
       platform: 'node',
       entry: `${shellSrcDir}/index.ts`,
       outfile: `${shellDistDir}/index.js`,
+      define: {
+        KERMITE_APP_VERSION: `'${process.env.KERMITE_APP_VERSION || ''}'`,
+      },
       external: [
         'electron',
         'require',
@@ -107,6 +110,8 @@ async function makeUi() {
       entry: `${srcDir}/index.tsx`,
       outfile: `${distDir}/index.js`,
       define: {
+        // immerがprocess.env.NODE_ENVを参照するため値を定義する必要がある
+        // アプリケーションでは使用しない
         'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`,
       },
       bundle: true,
