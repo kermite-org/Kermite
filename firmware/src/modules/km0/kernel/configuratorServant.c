@@ -264,8 +264,8 @@ static void processReadGenericHidData() {
 //---------------------------------------------
 //parameter changed handler
 
-static void onParameterChanged(uint8_t parameterIndex, uint8_t value) {
-  if (rawHidFirstConnectDone && !skipNotify) {
+static void onParameterChanged(uint8_t eventType, uint8_t parameterIndex, uint8_t value) {
+  if (rawHidFirstConnectDone && eventType == ParameterChangeEventType_ChangedSinle) {
     emitSingleParameterChangedNotification(parameterIndex, value);
   }
 }

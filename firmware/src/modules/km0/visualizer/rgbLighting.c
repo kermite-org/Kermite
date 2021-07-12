@@ -211,7 +211,12 @@ __flash static const SceneFunc sceneFuncs[] = {
 static const int NumSceneFuncs = sizeof(sceneFuncs) / sizeof(SceneFunc);
 static uint8_t glowPattern = 0;
 
-static void parameterChangeHandler(uint8_t slotIndex, uint8_t value) {
+static void parameterChangeHandler(uint8_t eventType, uint8_t slotIndex, uint8_t value) {
+  if (eventType == ParameterChangeEventType_ChangedAll) {
+    configManager_dispatchSingleParameterChangedEventsAll(parameterChangeHandler);
+    return;
+  }
+
   if (slotIndex == SystemParameter_GlowActive) {
     glowEnabled = value;
   } else if (slotIndex == SystemParameter_GlowColor) {

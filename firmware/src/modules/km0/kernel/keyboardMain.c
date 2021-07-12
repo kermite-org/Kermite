@@ -162,7 +162,12 @@ static bool checkIfSomeInputSlotKeyPressed() {
 //callbacks
 
 //カスタムパラメタロード/変更時に呼ばれるハンドラ
-static void parameterValueHandler(uint8_t slotIndex, uint8_t value) {
+static void parameterValueHandler(uint8_t eventType, uint8_t slotIndex, uint8_t value) {
+  if (eventType == ParameterChangeEventType_ChangedAll) {
+    configManager_dispatchSingleParameterChangedEventsAll(parameterValueHandler);
+    return;
+  }
+
   if (callbacks && callbacks->customParameterHandlerOverride) {
     callbacks->customParameterHandlerOverride(slotIndex, value);
     return;
