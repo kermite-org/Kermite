@@ -43,9 +43,15 @@ const fallbackGlobalSettings: IGlobalSettings = {
   localProjectRootFolderPath: '',
 };
 
-const uiScaleOptions: ISelectorOption[] = [0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3].map(
-  (val) => ({ label: `${(val * 100) >> 0}%`, value: val.toString() }),
-);
+const uiScaleOptions: ISelectorOption[] = [
+  0.7,
+  0.8,
+  0.9,
+  1,
+  1.1,
+  1.2,
+  1.3,
+].map((val) => ({ label: `${(val * 100) >> 0}%`, value: val.toString() }));
 
 export const UiSettingsPage = () => {
   const local = useLocal({
@@ -57,8 +63,7 @@ export const UiSettingsPage = () => {
     (async () => {
       local.settings = await ipcAgent.async.config_getGlobalSettings();
       if (appUi.isDevelopment) {
-        local.fixedProjectRootPath =
-          await ipcAgent.async.config_getProjectRootDirectoryPath();
+        local.fixedProjectRootPath = await ipcAgent.async.config_getProjectRootDirectoryPath();
       }
     })();
     return () => ipcAgent.async.config_writeGlobalSettings(local.settings);
