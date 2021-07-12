@@ -1,4 +1,5 @@
 import { css, FC, jsx } from 'qx';
+import { Icon } from '~/ui/common';
 
 type Props = {
   className?: string;
@@ -19,7 +20,7 @@ export const WidgetControlButton: FC<Props> = ({
     onClick={onClick}
     data-active={isActive}
   >
-    <i className={iconSpec} />
+    <Icon spec={iconSpec} size={16} sizeMi={21} />
   </div>
 );
 
@@ -31,7 +32,6 @@ const style = css`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  font-size: 16px;
   background: #888;
 
   &[data-active] {
