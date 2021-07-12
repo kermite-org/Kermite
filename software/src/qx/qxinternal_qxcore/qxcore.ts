@@ -11,14 +11,18 @@ function assert(cond: any) {
 
 // ------------------------------------------------------------
 
-export function mount(parentDom: Node, vnode: IVNode): Node {
+export function mount(
+  parentDom: Node,
+  vnode: IVNode,
+  insertBeforeTarget: Node | null = null,
+): Node {
   let dom: Node;
   if (vnode.vtype === 'vBlank') {
     dom = document.createComment('NULL');
-    parentDom.appendChild(dom);
+    parentDom.insertBefore(dom, insertBeforeTarget);
   } else if (vnode.vtype === 'vText') {
     dom = document.createTextNode(vnode.text);
-    parentDom.appendChild(dom);
+    parentDom.insertBefore(dom, insertBeforeTarget);
   } else if (vnode.vtype === 'vElement') {
     const isSvg = vnode.tagName === 'svg' || parentDom instanceof SVGElement;
     dom = isSvg
@@ -30,7 +34,7 @@ export function mount(parentDom: Node, vnode: IVNode): Node {
     if (refProp && typeof refProp === 'object') {
       refProp.current = dom;
     }
-    parentDom.appendChild(dom);
+    parentDom.insertBefore(dom, insertBeforeTarget);
 
     interactivePropKeys.forEach((key) => {
       const value = vnode.props[key];
@@ -45,7 +49,7 @@ export function mount(parentDom: Node, vnode: IVNode): Node {
       vnode.componentWrapper.mount(vnode.state.componentState, vnode.props) ||
       createVBlank(null);
     vnode.state.renderRes = renderRes;
-    dom = mount(parentDom, renderRes);
+    dom = mount(parentDom, renderRes, insertBeforeTarget);
   } else {
     throw new Error(`invalid vnode ${vnode}`);
   }
@@ -148,8 +152,8 @@ export function patch(parentDom: Node, newVNode: IVNode, oldVNode: IVNode) {
     newVNode.tagName === oldVNode.tagName
   ) {
     const dom = oldVNode.dom!;
-    applyDomAttributes(dom, newVNode, oldVNode);
     patchChildren(dom, newVNode.children, oldVNode.children);
+    applyDomAttributes(dom, newVNode, oldVNode);
     newVNode.dom = dom;
     interactivePropKeys.forEach((key) => {
       const oldValue = oldVNode.props[key];
@@ -160,8 +164,9 @@ export function patch(parentDom: Node, newVNode: IVNode, oldVNode: IVNode) {
     });
   } else {
     if (newVNode.vtype !== oldVNode.vtype) {
+      const nextSibling = oldVNode.dom?.nextSibling || null;
       unmount(parentDom, oldVNode);
-      mount(parentDom, newVNode);
+      mount(parentDom, newVNode, nextSibling);
     } else {
       console.log('invalid condition');
     }
