@@ -14,7 +14,7 @@ const cssCounterCard = css`
 `;
 
 const TestCard: FC = () => {
-  if (count % 5 === 4) {
+  if (count % 6 >= 3) {
     return null;
   }
   return <div id="testCard">testCard</div>;
