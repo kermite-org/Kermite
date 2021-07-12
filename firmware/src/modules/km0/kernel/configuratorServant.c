@@ -69,7 +69,6 @@ static void initializeDataAddresses() {
 static uint8_t rawHidTempBuf[64] = { 0 };
 
 static bool rawHidFirstConnectDone = false;
-static bool skipNotify = false;
 
 static void emitGenericHidData(uint8_t *p) {
   if (!usbIoCore_isConnectedToHost()) {
@@ -224,9 +223,7 @@ static void processReadGenericHidData() {
     uint8_t parameterIndexBase = p[1];
     uint8_t count = p[2];
     uint8_t *ptr = p + 3;
-    skipNotify = true;
     configManager_bulkWriteParameters(ptr, count, parameterIndexBase);
-    skipNotify = false;
   }
 
   if (cmd == RawHidOpcode_ParameterSingleWriteOperation) {
@@ -239,9 +236,7 @@ static void processReadGenericHidData() {
   }
 
   if (cmd == RawHidOpcode_ParametersResetOperation) {
-    skipNotify = true;
     configManager_resetSystemParameters();
-    skipNotify = false;
   }
 
   if (cmd == RawHidOpcode_SimulationModeSpec) {
@@ -264,8 +259,8 @@ static void processReadGenericHidData() {
 //---------------------------------------------
 //parameter changed handler
 
-static void onParameterChanged(uint8_t parameterIndex, uint8_t value) {
-  if (rawHidFirstConnectDone && !skipNotify) {
+static void onParameterChanged(uint8_t eventType, uint8_t parameterIndex, uint8_t value) {
+  if (rawHidFirstConnectDone && eventType == ParameterChangeEventType_ChangedSinle) {
     emitSingleParameterChangedNotification(parameterIndex, value);
   }
 }

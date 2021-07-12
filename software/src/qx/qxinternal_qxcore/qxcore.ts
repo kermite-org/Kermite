@@ -38,7 +38,7 @@ export function mount(
 
     interactivePropKeys.forEach((key) => {
       const value = vnode.props[key];
-      if (value) {
+      if (value !== undefined) {
         (dom as any)[key] = value;
       }
     });
