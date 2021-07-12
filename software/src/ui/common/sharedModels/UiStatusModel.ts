@@ -61,6 +61,14 @@ export class UiStatusModel {
     this.settings.showLayersDynamic = false;
   }
 
+  setLoading() {
+    this.status.isLoading = true;
+  }
+
+  clearLoading() {
+    this.status.isLoading = false;
+  }
+
   finalize() {
     this.save();
   }
