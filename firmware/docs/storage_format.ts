@@ -21,7 +21,7 @@ BB BB ...: チャンクのボディデータ, LL LL で規定されるサイズ�
     systemData: Chunk<0xaa20, 18> & {
       projectId: Bytes<8>;
       deviceInstanceCode: Bytes<8>;
-      parametersDataInitializationFlag: U8;
+      storageSystemParametersRevision: U8;
       softwareStorageFomartRevision: U8;
     };
     systemParameters: Chunk<0xaa30, 12> & {

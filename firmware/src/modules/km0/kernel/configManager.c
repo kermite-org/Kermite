@@ -126,7 +126,7 @@ void configManager_initialize() {
   addrSystemParameters = dataStorage_getDataAddress_systemParameters();
 
   if (addrSystemParameters) {
-    uint16_t addrParameterInitializationFlag = dataStorage_getDataAddress_parametersInitializationFlag();
+    uint16_t addrParameterInitializationFlag = dataStorage_getDataAddress_storageSystemParametersRevision();
     if (addrParameterInitializationFlag) {
       bool isParametersInitialized = dataMemory_readByte(addrParameterInitializationFlag);
       if (!isParametersInitialized) {

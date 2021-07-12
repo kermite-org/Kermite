@@ -202,7 +202,7 @@ uint16_t dataStorage_getDataAddress_deviceInstanceCode() {
   return base + 8;
 }
 
-uint16_t dataStorage_getDataAddress_parametersInitializationFlag() {
+uint16_t dataStorage_getDataAddress_storageSystemParametersRevision() {
   uint16_t base = getChunkBodyAddress(ChunkSig_SystemData);
   return base + 16;
 }
