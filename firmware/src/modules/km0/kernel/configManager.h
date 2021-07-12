@@ -24,3 +24,6 @@ void configManager_processUpdate();
 void configManager_processUpdateNoSave();
 
 uint8_t *configManager_getParameterValuesRawPointer();
+
+void configManager_dispatchSingleParameterChangedEventsAll(
+    void (*handler)(uint8_t eventType, uint8_t parameterIndex, uint8_t value))

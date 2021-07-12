@@ -266,3 +266,10 @@ void configManager_processUpdateNoSave() {
 uint8_t *configManager_getParameterValuesRawPointer() {
   return systemParameterValues;
 }
+
+void configManager_dispatchSingleParameterChangedEventsAll(
+    void (*handler)(uint8_t eventType, uint8_t parameterIndex, uint8_t value)) {
+  for (int i = 0; i < NumSystemParameters; i++) {
+    handler(ParameterChangeEventType_ChangedSinle, i, systemParameterValues[i]);
+  }
+}
