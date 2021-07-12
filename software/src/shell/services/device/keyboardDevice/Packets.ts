@@ -58,6 +58,10 @@ export class Packets {
     RawHidOpcode.ParametersReadAllRequest,
   ];
 
+  static customParametersResetRequestFrame = [
+    RawHidOpcode.ParametersResetOperation,
+  ];
+
   static makeCustomParametersBulkWriteOperationFrame(data: number[]) {
     return [RawHidOpcode.ParametersWriteAllOperation, ...data];
   }

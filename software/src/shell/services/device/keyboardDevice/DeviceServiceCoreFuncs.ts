@@ -119,7 +119,7 @@ async function readDeviceAttributes(
   );
 }
 
-async function readDeviceCustomParameters(
+export async function readDeviceCustomParameters(
   device: IDeviceWrapper,
 ): Promise<ICustomParametersReadResponseData> {
   return await queryDeviceOperation(

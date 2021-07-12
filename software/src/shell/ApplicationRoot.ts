@@ -101,6 +101,7 @@ export class ApplicationRoot {
         this.deviceService.selectTargetDevice(path),
       device_setCustomParameterValue: async (index, value) =>
         this.deviceService.setCustomParameterValue(index, value),
+      device_resetParaemters: async () => this.deviceService.resetParameters(),
       firmup_uploadFirmware: (origin, projectId, variationName) =>
         this.firmwareUpdationService.writeFirmware(
           origin,
