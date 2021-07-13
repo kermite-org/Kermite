@@ -23,19 +23,29 @@
 以下では署名がないために出るOSの保護機能を抑止しています。
 
 <details><summary>コード署名についての詳細</summary><div>
-WindowsやMacOSは、コード署名によってアプリが改ざんされていないことを証明することを推奨しています。コード署名には費用がかかるため、無償で提供しているソフトウェアでは適用するのが難しいです。
+WindowsやMacOSは、コード署名によってアプリが改ざんされていないことを証明することを推奨しています。コード署名には費用がかかるため、小規模なOSSなど非営利で開発しているソフトウェアでは適用するのが難しいです。
 Kermiteではソースコードやビルド過程を公開しており、それによって配布されるプログラムの透明性を保っています。
 </div></details>
 
 ### Windows
  インストーラを実行しようとすると'WindowsによってPCが保護されました'というダイアログが出ます。
  
+<div style="display:flex; gap:5px">
+<img src="https://i.gyazo.com/55a198a3b5d8d1e139e3ae40327048de.png" width="250px" />
+<img src="https://i.gyazo.com/73908bcac30a29f6b046da5c489c5517.png" width="250px" />
+</div>
+
  '詳細情報'をクリックして、'実行'ボタンを押します。
 
  インストーラの手順に沿ってインストールします。
 
 ### MacOS
  そのまま実行すると'開発元が未確認のため開けません'というダイアログが出ます。
+
+<div style="display:flex; gap:5px; align-items:center">
+<img src="https://i.gyazo.com/52a4b69442655ec7383bf4a3cd9b9019.png" width="250px" />
+<img src="https://i.gyazo.com/98db4109bd2bf1d525f59aff94084a24.png" width="250px" />
+</div>
 
  アプリのアイコンを右クリックしたときに出るメニューから'開く'を選ぶと実行するかどうかを確認するダイアログが出るので、そこから実行します。
 
