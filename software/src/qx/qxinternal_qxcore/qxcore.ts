@@ -111,6 +111,8 @@ function patchChildren(
   newVNodes: IVNode[],
   oldVNodes: IVNode[],
 ) {
+  // 現状diff/patchに実装コストをかけていない
+  // 将来パフォーマンスが問題になる場合にはここを改善する必要がある
   if (newVNodes.length === oldVNodes.length) {
     for (let i = 0; i < newVNodes.length; i++) {
       const newVNode = newVNodes[i];
