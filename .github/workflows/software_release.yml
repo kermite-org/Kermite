@@ -17,8 +17,10 @@ jobs:
       - name: check out git repository
         uses: actions/checkout@v2
 
-      - name: extract release tag name
-        run: echo "RELEASE_TAG_NAME=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+      - uses: olegtarasov/get-tag@v2.1
+        id: tagName
+        with:
+          tagRegex: "v(.*)"
 
       - name: setup node.js
         uses: actions/setup-node@v1
@@ -34,7 +36,7 @@ jobs:
         run: yarn build
         working-directory: software
         env:
-          KERMITE_APP_VERSION: ${{ env.RELEASE_TAG_NAME }}
+          KERMITE_APP_VERSION: ${{ steps.tagName.outputs.tag }}
 
       - name: build distribution package (mac)
         if: matrix.os == 'macos-latest'
