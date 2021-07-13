@@ -159,7 +159,13 @@ export function patch(parentDom: Node, newVNode: IVNode, oldVNode: IVNode) {
     interactivePropKeys.forEach((key) => {
       const oldValue = oldVNode.props[key];
       const newValue = newVNode.props[key];
-      if (newValue !== oldValue) {
+      // value,selected,chekedの値が変わったとき
+      // selectなどで子要素の数が変わったとき
+      // に、値を更新する
+      if (
+        newValue !== oldValue ||
+        newVNode.children.length !== oldVNode.children.length
+      ) {
         (dom as any)[key] = newValue;
       }
     });
