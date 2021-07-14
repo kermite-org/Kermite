@@ -1,0 +1,13 @@
+#pragma once
+
+#define KERMITE_PROJECT_ID "K3e89XcG"
+#define KM0_KEYBOARD__NUM_SCAN_SLOTS 70
+
+#define KS_NUM_COLUMNS 7
+#define KS_NUM_ROWS 10
+
+#define KS_COLUMN_PINS \
+  { GP29, GP28, GP27, GP26, GP22, GP20, GP23 }
+
+#define KS_ROW_PINS \
+  { GP1, GP2, GP3, GP4, GP5, GP6, GP7, GP8, GP9, GP21 }
