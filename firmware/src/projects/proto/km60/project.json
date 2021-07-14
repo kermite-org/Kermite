@@ -1,0 +1,11 @@
+{
+  "projectId": "K3e89XcG",
+  "keyboardName": "km60",
+  "parameterConfigurations": {
+    "systemParameterKeys": [
+      "emitRealtimeEvents",
+      "keyHoldIndicatorLed",
+      "heartbeatLed"
+    ]
+  }
+}
