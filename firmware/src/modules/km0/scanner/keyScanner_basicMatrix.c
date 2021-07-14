@@ -44,7 +44,7 @@ void keyScanner_basicMatrix_update(uint8_t *keyStateBitFlags) {
   for (uint8_t i = 0; i < numRows; i++) {
     uint8_t rowPin = rowPins[i];
     digitalIo_setLow(rowPin);
-    delayUs(1); //RP2040の場合僅かに待たないとキーの状態を正しく読み出せない
+    delayUs(5); //RP2040の場合僅かに待たないとキーの状態を正しく読み出せない
     for (uint8_t j = 0; j < numColumns; j++) {
       uint8_t columnPin = columnPins[j];
       bool isDown = digitalIo_read(columnPin) == 0;
