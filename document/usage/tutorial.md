@@ -1,7 +1,10 @@
 # Kermite 導入方法
 
 このページでは、Kermiteを使ってキーボードを運用する方法を解説します。
-例としてT.Shinohara氏の<a href="https://booth.pm/ja/items/1444895" target='_blank'>shiro</a>に対応ファームウェアを書き込んで、Kermite上で使えるようにしてみます。
+
+例としてT.Shinohara氏の<a href="https://booth.pm/ja/items/1444895" target='_blank'>Shiro</a>に対応ファームウェアを書き込んで、Kermite上で使えるようにしてみます。
+
+(この解説でShiroを使用することについて、Shinohara氏の承諾を得ています。Kermiteを使用することで問題が出た場合は、Shinohara氏ではなくyahiroに相談してください。)
 ## 目次
 - インストール
 - 起動
