@@ -47,20 +47,26 @@
 
 現在開発中のため正式なリリースがまだありません。
 
-現状のものを動かしてみたいという方は、[こちら](https://github.com/kermite-org/Kermite/releases )にデバッグ用にビルドしたバイナリがあるのでご利用ください。
+現状できているもののデバッグにご協力いただける方は、[こちら](https://github.com/kermite-org/Kermite/releases )にデバッグ用にビルドしたバイナリがあるのでご利用ください。概ね毎週末に更新しています。
 
 使い方は以下のドキュメントを参照してください。
 
 [ユーティリティソフトの使い方](./document/usage/tutorial.md)
 
 ## 開発状況
-キー入力やレイヤなどの基本的な機能は実装が概ね固まりました。現在周辺部品(LCD,RGBLEDなど)の対応を進めています。またユーティリティソフトの改修を行っています。2021年の夏頃にリリースする予定です。
+キー入力やレイヤなどの基本的な機能は実装がおおよそ固まりました。現在周辺部品(LCD,RGBLEDなど)の対応を進めています。またユーティリティソフトの改修を行っています。2021年の夏頃にリリースする予定です。
 ## その他
 [KermiteServer](https://dev.server.kermite.org/) プロファイルを投稿できるサーバーです。(試験運用中)
 
 [Firmwave Build Status](https://app.kermite.org/firmware-stats/) 対応ファームウェアのビルド状況です
 
 [Project Id Generator](https://app.kermite.org/krs/generator/) ファームウェアを新しく作る際に必要なProjectIdのジェネレータです
+
+## 連絡先
+https://discord.gg/7662Ak2Q
+
+Discordのサーバです。バグ報告や機能の相談などはこちらにお願いします。
+
 ## ライセンス
 MITライセンスです。
 
