@@ -204,7 +204,7 @@ const keyStrokeActionQueueState = new (class {
   readPos: u8 = 0;
 })();
 
-function keyStrokeActionQueue_enqueueAction(action: OutputKeyStrokeAction) {
+function keyStrokeActionQueue_enqueueActionRaw(action: OutputKeyStrokeAction) {
   const size = OutputActionQueueSize;
   const mask = OutputActionQueueIndexMask;
   const qs = keyStrokeActionQueueState;
@@ -212,6 +212,30 @@ function keyStrokeActionQueue_enqueueAction(action: OutputKeyStrokeAction) {
   if (count < OutputActionQueueSize) {
     qs.buffer[qs.writePos] = action;
     qs.writePos = (qs.writePos + 1) & mask;
+  }
+}
+
+function keyStrokeActionQueue_enqueueAction(action: OutputKeyStrokeAction) {
+  // OSのHIDキーボードのドライバによってはモディファイヤとレポートが同時に変更される状況にうまく対応できない場合があるため、それを回避
+  // キーとモディファイヤが同時に変更された場合に、モディファイヤを1フレーム先行してHIDレポートに反映し、
+  // 次のフレームでキーをレポートに反映する。
+  if (action.shiftCancel > 0 || action.modFlags > 0) {
+    keyStrokeActionQueue_enqueueActionRaw({
+      isDown: action.isDown,
+      shiftCancel: action.shiftCancel,
+      reserved: 0,
+      modFlags: action.modFlags,
+      hidKeyCode: 0,
+    });
+  }
+  if (action.hidKeyCode > 0) {
+    keyStrokeActionQueue_enqueueActionRaw({
+      isDown: action.isDown,
+      shiftCancel: 0,
+      reserved: 0,
+      modFlags: 0,
+      hidKeyCode: action.hidKeyCode,
+    });
   }
 }
 
