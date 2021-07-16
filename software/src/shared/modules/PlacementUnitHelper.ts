@@ -1,3 +1,5 @@
+import { IsoEnterOutlineSizeSpec } from '~/shared/modules/ExtendedKeyShapes';
+
 export type ICoordUnit =
   | {
       mode: 'mm';
@@ -46,7 +48,7 @@ export function getKeySize(shapeSpec: string, sizeUnit: ICoordUnit) {
   if (shapeSpec === 'ext circle') {
     return [18, 18];
   } else if (shapeSpec === 'ext isoEnter') {
-    return [27, 37];
+    return IsoEnterOutlineSizeSpec;
   }
   return getStdKeySize(shapeSpec, sizeUnit);
 }
