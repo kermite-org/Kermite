@@ -12,6 +12,7 @@ import {
   rotateCoord,
   translateCoord,
 } from '~/shared';
+import { getIsoEnterShapePoints } from '~/shared/modules/ExtendedKeyShapes';
 import {
   getCoordUnitFromUnitSpec,
   getKeySize,
@@ -58,15 +59,6 @@ export namespace DisplayKeyboardDesignLoader {
     return { groupX, groupY, groupAngle };
   }
 
-  const isoEnterPathPoints = [
-    [-16.125, -18.5],
-    [-16.125, -0.5],
-    [-11.375, -0.5],
-    [-11.375, 18.5],
-    [11.375, 18.5],
-    [11.375, -18.5],
-  ];
-
   function getKeyShape(
     shapeSpec: string,
     sizeUnit: ICoordUnit,
@@ -76,7 +68,7 @@ export namespace DisplayKeyboardDesignLoader {
     } else if (shapeSpec === 'ext isoEnter') {
       return {
         type: 'polygon',
-        points: isoEnterPathPoints.map(([x, y]) => ({ x, y })),
+        points: getIsoEnterShapePoints('center'),
       };
     }
     const [w, h] = getStdKeySize(shapeSpec, sizeUnit);
@@ -114,7 +106,15 @@ export namespace DisplayKeyboardDesignLoader {
 
     const p = { x: 0, y: 0 };
     if (placementAnchor === 'topLeft') {
-      translateCoord(p, w / 2 + 0.5, h / 2 + 0.5);
+      if (keyShape !== 'ext isoEnter') {
+        translateCoord(p, w / 2 + 0.5, h / 2 + 0.5);
+      } else {
+        translateCoord(p, w * 0.6 + 0.5, h / 2 + 0.5);
+      }
+    } else {
+      if (keyShape === 'ext isoEnter') {
+        translateCoord(p, -w * 0.1 + 0.5, 0);
+      }
     }
     translateCoord(p, keyX * mi, keyY);
     rotateCoord(p, groupRot * mi);
