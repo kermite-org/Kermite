@@ -135,6 +135,17 @@ export const UiSettingsPage = () => {
             )}
           />
         </Indent>
+        <div>Application Behavior</div>
+        <Indent>
+          <CheckBoxLine
+            text="Allow Cross Keyboard Keymapping Write"
+            checked={settings.allowCrossKeyboardKeyMappingWrite}
+            setChecked={fieldSetter(
+              settings,
+              'allowCrossKeyboardKeyMappingWrite',
+            )}
+          />
+        </Indent>
         <div>{texts.label_settings_header_userInterface}</div>
         <Indent>
           <div>{texts.label_settings_configUiScaling}</div>
