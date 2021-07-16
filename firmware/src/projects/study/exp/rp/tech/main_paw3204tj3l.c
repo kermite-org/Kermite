@@ -1,9 +1,9 @@
 
-#include "km0/common/bitOperations.h"
-#include "km0/deviceIo/boardIo.h"
-#include "km0/deviceIo/debugUart.h"
-#include "km0/deviceIo/dio.h"
-#include "km0/deviceIo/system.h"
+#include "km0/base/bitOperations.h"
+#include "km0/device/boardIo.h"
+#include "km0/device/debugUart.h"
+#include "km0/device/digitalIo.h"
+#include "km0/device/system.h"
 #include "pico_sdk/src/rp2_common/include/hardware/gpio.h"
 #include <stdio.h>
 
@@ -19,26 +19,26 @@ const int pin_sclk = GP5;
 const int pin_debug = GP6;
 
 void initPorts() {
-  dio_setOutput(pin_sclk);
-  dio_write(pin_sclk, 1);
+  digitalIo_setOutput(pin_sclk);
+  digitalIo_write(pin_sclk, 1);
 
   //configure sdio as pseudo open drain
   gpio_init(pin_sdio);
   gpio_pull_up(pin_sdio);
   gpio_set_dir(pin_sdio, 0);
 
-  dio_setOutput(pin_debug);
-  dio_setHigh(pin_debug);
+  digitalIo_setOutput(pin_debug);
+  digitalIo_setHigh(pin_debug);
 }
 
 void clockHigh() {
-  dio_setHigh(pin_sclk);
-  // dio_write(pin_sclk, 1);
+  digitalIo_setHigh(pin_sclk);
+  // digitalIo_write(pin_sclk, 1);
 }
 
 void clockLow() {
-  dio_setLow(pin_sclk);
-  // dio_write(pin_sclk, 0);
+  digitalIo_setLow(pin_sclk);
+  // digitalIo_write(pin_sclk, 0);
 }
 
 void signalOut(bool value) {
@@ -54,15 +54,15 @@ void signalLow() {
 }
 
 bool signalRead() {
-  dio_read(pin_sdio);
+  digitalIo_read(pin_sdio);
 }
 
 void debugLow() {
-  dio_setLow(pin_debug);
+  digitalIo_setLow(pin_debug);
 }
 
 void debugHigh() {
-  dio_setHigh(pin_debug);
+  digitalIo_setHigh(pin_debug);
 }
 
 void reSyncSerial() {
@@ -111,7 +111,7 @@ void writeData(uint8_t addr, uint8_t data) {
 }
 
 int main() {
-  debugUart_setup(115200);
+  debugUart_initialize(115200);
   boardIo_setupLeds(GP25, GP25, false);
   initPorts();
   reSyncSerial();
