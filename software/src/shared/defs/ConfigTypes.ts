@@ -25,6 +25,7 @@ export const globalSettingsSchema = vObject({
   useOnlineResources: vBoolean(),
   useLocalResouces: vBoolean(),
   localProjectRootFolderPath: vString(),
+  allowCrossKeyboardKeyMappingWrite: vBoolean().optional,
 });
 
 export const globalSettingsDefault: IGlobalSettings = {
