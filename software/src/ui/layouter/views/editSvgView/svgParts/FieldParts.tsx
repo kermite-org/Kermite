@@ -1,4 +1,5 @@
 import { jsx } from 'qx';
+import { makeIntegersRange } from '~/shared';
 import { uiTheme } from '~/ui/common';
 import { editReader } from '~/ui/layouter/models';
 import {
@@ -38,10 +39,6 @@ export const FieldAxis = () => {
   );
 };
 
-function makeRange(lo: number, hi: number) {
-  return new Array(hi - lo + 1).fill(0).map((_, i) => lo + i);
-}
-
 export const FieldGrid = () => {
   const { x: gpx, y: gpy } = editReader.gridPitches;
   const { cx, cy, radius } = getSightBoundingCircle(
@@ -57,8 +54,8 @@ export const FieldGrid = () => {
   const nr = (right / gpx) >> 0;
   const nb = (bottom / gpy) >> 0;
 
-  const xs = makeRange(nl, nr).map((ix) => ix * gpx);
-  const ys = makeRange(nt, nb).map((iy) => iy * gpy);
+  const xs = makeIntegersRange(nl, nr).map((ix) => ix * gpx);
+  const ys = makeIntegersRange(nt, nb).map((iy) => iy * gpy);
 
   // console.log([xs, ys]);
 
