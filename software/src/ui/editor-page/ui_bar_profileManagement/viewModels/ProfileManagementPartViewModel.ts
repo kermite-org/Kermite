@@ -245,7 +245,7 @@ const simulatorProfileUpdator = new (class {
 function getCanWrite(
   deviceStatus: IKeyboardDeviceStatus,
   globalSettings: IGlobalSettings,
-) {
+): boolean {
   const { allowCrossKeyboardKeyMappingWrite } = globalSettings;
   const { editSource } = profilesModel;
 
@@ -263,10 +263,59 @@ function getCanWrite(
   }
 }
 
+function getCanSave(): boolean {
+  const { editSource, checkDirty } = profilesModel;
+  return (
+    editSource.type === 'NewlyCreated' ||
+    editSource.type === 'ExternalFile' ||
+    (editSource.type === 'InternalProfile' && checkDirty())
+  );
+}
+
+const loadProfile = async (profileName: string) => {
+  if (profilesModel.checkDirty()) {
+    const ok = await modalConfirm({
+      caption: texts.label_assigner_confirmModal_loadProfile_modalTitle,
+      message: texts.label_assigner_confirmModal_loadProfile_modalMessage,
+    });
+    if (!ok) {
+      return;
+    }
+  }
+  profilesModel.loadProfile(profileName);
+};
+
+const openUserProfilesFolder = async () => {
+  await ipcAgent.async.profile_openUserProfilesFolder();
+};
+
+const onWriteButton = async () => {
+  await profilesModel.saveProfile();
+  uiStatusModel.setLoading();
+  const done = await ipcAgent.async.config_writeKeyMappingToDevice();
+  uiStatusModel.clearLoading();
+  // todo: トーストにする?
+  if (done) {
+    await modalAlert('write succeeded.');
+  } else {
+    await modalAlert('write failed.');
+  }
+};
+
+const toggleRoutingPanel = () => {
+  editorPageModel.routingPanelVisible = !editorPageModel.routingPanelVisible;
+};
+
 export function makeProfileManagementPartViewModel(): IProfileManagementPartViewModel {
   Hook.useEffect(profilesModel.startPageSession, []);
 
   const deviceStatus = useDeviceStatusModel();
+
+  const globalSettings = useGlobalSettingsFetch();
+
+  const { isSimulatorMode } = useKeyboardBehaviorModeModel();
+
+  const { editSource, allProfileNames, saveProfile } = profilesModel;
 
   const state = useLocal({ isPresetsModalOpen: false });
 
@@ -277,57 +326,14 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     state.isPresetsModalOpen = false;
   };
 
-  const { editSource, allProfileNames, saveProfile } = profilesModel;
-
-  const globalSettings = useGlobalSettingsFetch();
-
-  const canSave =
-    editSource.type === 'NewlyCreated' ||
-    editSource.type === 'ExternalFile' ||
-    (editSource.type === 'InternalProfile' && profilesModel.checkDirty());
-
   const canWrite = getCanWrite(deviceStatus, globalSettings);
 
-  const loadProfile = async (profileName: string) => {
-    if (profilesModel.checkDirty()) {
-      const ok = await modalConfirm({
-        caption: texts.label_assigner_confirmModal_loadProfile_modalTitle,
-        message: texts.label_assigner_confirmModal_loadProfile_modalMessage,
-      });
-      if (!ok) {
-        return;
-      }
-    }
-    profilesModel.loadProfile(profileName);
-  };
-
-  const openUserProfilesFolder = async () => {
-    await ipcAgent.async.profile_openUserProfilesFolder();
-  };
-
-  const { isSimulatorMode } = useKeyboardBehaviorModeModel();
+  const canSave = getCanSave();
 
   simulatorProfileUpdator.affectToSimulatorIfEditProfileChanged(
     editorModel.profileData,
     isSimulatorMode,
   );
-
-  const onWriteButton = async () => {
-    await profilesModel.saveProfile();
-    uiStatusModel.setLoading();
-    const done = await ipcAgent.async.config_writeKeyMappingToDevice();
-    uiStatusModel.clearLoading();
-    // todo: トーストにする?
-    if (done) {
-      await modalAlert('write succeeded.');
-    } else {
-      await modalAlert('write failed.');
-    }
-  };
-
-  const toggleRoutingPanel = () => {
-    editorPageModel.routingPanelVisible = !editorPageModel.routingPanelVisible;
-  };
 
   return {
     createProfile,
