@@ -1,5 +1,5 @@
 import { jsx, Hook, css } from 'qx';
-import { IGlobalSettings } from '~/shared';
+import { globalSettingsFallbackValue } from '~/shared';
 import {
   appUi,
   fieldSetter,
@@ -37,12 +37,6 @@ const cssUiSettingsPage = css`
   }
 `;
 
-const fallbackGlobalSettings: IGlobalSettings = {
-  useLocalResouces: false,
-  useOnlineResources: false,
-  localProjectRootFolderPath: '',
-};
-
 const uiScaleOptions: ISelectorOption[] = [
   0.7,
   0.8,
@@ -55,7 +49,7 @@ const uiScaleOptions: ISelectorOption[] = [
 
 export const UiSettingsPage = () => {
   const local = useLocal({
-    settings: fallbackGlobalSettings,
+    settings: globalSettingsFallbackValue,
     fixedProjectRootPath: '',
   });
 
@@ -131,6 +125,17 @@ export const UiSettingsPage = () => {
             setChecked={fieldSetter(
               uiStatusModel.settings,
               'integrateUserPresetHub',
+            )}
+          />
+        </Indent>
+        <div>Application Behavior</div>
+        <Indent>
+          <CheckBoxLine
+            text="Allow Cross Keyboard Keymapping Write"
+            checked={settings.allowCrossKeyboardKeyMappingWrite}
+            setChecked={fieldSetter(
+              settings,
+              'allowCrossKeyboardKeyMappingWrite',
             )}
           />
         </Indent>

@@ -1,6 +1,8 @@
 import { Hook } from 'qx';
 import {
   forceChangeFilePathExtension,
+  IGlobalSettings,
+  IKeyboardDeviceStatus,
   IProfileData,
   IProfileEditSource,
 } from '~/shared';
@@ -16,6 +18,7 @@ import {
   texts,
   uiStatusModel,
   useDeviceStatusModel,
+  useGlobalSettingsFetch,
   useLocal,
 } from '~/ui/common';
 import { useKeyboardBehaviorModeModel } from '~/ui/common/sharedModels/KeyboardBehaviorModeModel';
@@ -239,6 +242,27 @@ const simulatorProfileUpdator = new (class {
   }
 })();
 
+function getCanWrite(
+  deviceStatus: IKeyboardDeviceStatus,
+  globalSettings: IGlobalSettings,
+) {
+  const { allowCrossKeyboardKeyMappingWrite } = globalSettings;
+  const { editSource } = profilesModel;
+
+  const isInternalProfile = editSource.type === 'InternalProfile';
+
+  const isDeviceConnected = deviceStatus.isConnected;
+
+  const refProjectId = editorModel.loadedPorfileData.projectId;
+  const isProjectMatched = deviceStatus.deviceAttrs?.projectId === refProjectId;
+
+  if (allowCrossKeyboardKeyMappingWrite) {
+    return isInternalProfile && isDeviceConnected;
+  } else {
+    return isInternalProfile && isDeviceConnected && isProjectMatched;
+  }
+}
+
 export function makeProfileManagementPartViewModel(): IProfileManagementPartViewModel {
   Hook.useEffect(profilesModel.startPageSession, []);
 
@@ -255,18 +279,14 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
 
   const { editSource, allProfileNames, saveProfile } = profilesModel;
 
+  const globalSettings = useGlobalSettingsFetch();
+
   const canSave =
     editSource.type === 'NewlyCreated' ||
     editSource.type === 'ExternalFile' ||
     (editSource.type === 'InternalProfile' && profilesModel.checkDirty());
 
-  // todo: デフォルトではProjetIDが異なるデバイスには書き込めないようにする
-  // const refProjectId = profilesModel.getCurrentProfileProjectId();
-  const canWrite =
-    editSource.type === 'InternalProfile' && deviceStatus.isConnected;
-  // (refProjectId
-  //   ? deviceStatus.deviceAttrs?.projectId === refProjectId
-  //   : true);
+  const canWrite = getCanWrite(deviceStatus, globalSettings);
 
   const loadProfile = async (profileName: string) => {
     if (profilesModel.checkDirty()) {
