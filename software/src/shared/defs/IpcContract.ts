@@ -1,7 +1,7 @@
 import { IAppErrorData } from '~/shared/defs/CustomErrors';
 import { ICustromParameterSpec } from '~/shared/defs/CustomParameter';
 import { IPersistKeyboardDesign } from '~/shared/defs/KeyboardDesign';
-import { IKeyboardConfig } from './ConfigTypes';
+import { IGlobalSettings, IKeyboardConfig } from './ConfigTypes';
 import { IProfileData } from './ProfileData';
 
 export type IPresetType = 'blank' | 'preset';
@@ -201,13 +201,6 @@ export interface IProjectLayoutsInfo {
   projectPath: string;
   keyboardName: string;
   layoutNames: string[];
-}
-
-export interface IGlobalSettings {
-  useOnlineResources: boolean;
-  useLocalResouces: boolean;
-  localProjectRootFolderPath: string;
-  allowCrossKeyboardKeyMappingWrite: boolean;
 }
 
 export interface IServerPorfileInfo {
