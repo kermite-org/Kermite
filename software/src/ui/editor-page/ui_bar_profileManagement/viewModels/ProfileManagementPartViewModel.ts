@@ -19,8 +19,8 @@ import {
   uiStatusModel,
   useDeviceStatusModel,
   useGlobalSettingsFetch,
-  useLocal,
 } from '~/ui/common';
+import { useModalDisplayStateModel } from '~/ui/common/sharedModels/GeneralUiStateModels';
 import { useKeyboardBehaviorModeModel } from '~/ui/common/sharedModels/KeyboardBehaviorModeModel';
 import { editorModel } from '~/ui/editor-page/models/EditorModel';
 import { ProfilesModel } from '~/ui/editor-page/models/ProfilesModel';
@@ -245,7 +245,7 @@ const simulatorProfileUpdator = new (class {
 function getCanWrite(
   deviceStatus: IKeyboardDeviceStatus,
   globalSettings: IGlobalSettings,
-) {
+): boolean {
   const { allowCrossKeyboardKeyMappingWrite } = globalSettings;
   const { editSource } = profilesModel;
 
@@ -263,71 +263,70 @@ function getCanWrite(
   }
 }
 
+function getCanSave(): boolean {
+  const { editSource } = profilesModel;
+  return (
+    editSource.type === 'NewlyCreated' ||
+    editSource.type === 'ExternalFile' ||
+    (editSource.type === 'InternalProfile' && profilesModel.checkDirty())
+  );
+}
+
+const loadProfile = async (profileName: string) => {
+  if (profilesModel.checkDirty()) {
+    const ok = await modalConfirm({
+      caption: texts.label_assigner_confirmModal_loadProfile_modalTitle,
+      message: texts.label_assigner_confirmModal_loadProfile_modalMessage,
+    });
+    if (!ok) {
+      return;
+    }
+  }
+  profilesModel.loadProfile(profileName);
+};
+
+const openUserProfilesFolder = async () => {
+  await ipcAgent.async.profile_openUserProfilesFolder();
+};
+
+const onWriteButton = async () => {
+  await profilesModel.saveProfile();
+  uiStatusModel.setLoading();
+  const done = await ipcAgent.async.config_writeKeyMappingToDevice();
+  uiStatusModel.clearLoading();
+  // todo: トーストにする?
+  if (done) {
+    await modalAlert('write succeeded.');
+  } else {
+    await modalAlert('write failed.');
+  }
+};
+
+const toggleRoutingPanel = () => {
+  editorPageModel.routingPanelVisible = !editorPageModel.routingPanelVisible;
+};
+
 export function makeProfileManagementPartViewModel(): IProfileManagementPartViewModel {
   Hook.useEffect(profilesModel.startPageSession, []);
 
-  const deviceStatus = useDeviceStatusModel();
-
-  const state = useLocal({ isPresetsModalOpen: false });
-
-  const openExportingPresetSelectionModal = () => {
-    state.isPresetsModalOpen = true;
-  };
-  const closeExportingPresetSelectionModal = () => {
-    state.isPresetsModalOpen = false;
-  };
-
   const { editSource, allProfileNames, saveProfile } = profilesModel;
+
+  const deviceStatus = useDeviceStatusModel();
 
   const globalSettings = useGlobalSettingsFetch();
 
-  const canSave =
-    editSource.type === 'NewlyCreated' ||
-    editSource.type === 'ExternalFile' ||
-    (editSource.type === 'InternalProfile' && profilesModel.checkDirty());
+  const { isSimulatorMode } = useKeyboardBehaviorModeModel();
+
+  const presetsModalDisplayStateModel = useModalDisplayStateModel();
 
   const canWrite = getCanWrite(deviceStatus, globalSettings);
 
-  const loadProfile = async (profileName: string) => {
-    if (profilesModel.checkDirty()) {
-      const ok = await modalConfirm({
-        caption: texts.label_assigner_confirmModal_loadProfile_modalTitle,
-        message: texts.label_assigner_confirmModal_loadProfile_modalMessage,
-      });
-      if (!ok) {
-        return;
-      }
-    }
-    profilesModel.loadProfile(profileName);
-  };
-
-  const openUserProfilesFolder = async () => {
-    await ipcAgent.async.profile_openUserProfilesFolder();
-  };
-
-  const { isSimulatorMode } = useKeyboardBehaviorModeModel();
+  const canSave = getCanSave();
 
   simulatorProfileUpdator.affectToSimulatorIfEditProfileChanged(
     editorModel.profileData,
     isSimulatorMode,
   );
-
-  const onWriteButton = async () => {
-    await profilesModel.saveProfile();
-    uiStatusModel.setLoading();
-    const done = await ipcAgent.async.config_writeKeyMappingToDevice();
-    uiStatusModel.clearLoading();
-    // todo: トーストにする?
-    if (done) {
-      await modalAlert('write succeeded.');
-    } else {
-      await modalAlert('write failed.');
-    }
-  };
-
-  const toggleRoutingPanel = () => {
-    editorPageModel.routingPanelVisible = !editorPageModel.routingPanelVisible;
-  };
 
   return {
     createProfile,
@@ -345,9 +344,9 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
       editSource,
       loadProfile,
     ),
-    isExportingPresetSelectionModalOpen: state.isPresetsModalOpen,
-    openExportingPresetSelectionModal,
-    closeExportingPresetSelectionModal,
+    isExportingPresetSelectionModalOpen: presetsModalDisplayStateModel.isOpen,
+    openExportingPresetSelectionModal: presetsModalDisplayStateModel.open,
+    closeExportingPresetSelectionModal: presetsModalDisplayStateModel.close,
     saveProfileAsPreset: profilesModel.exportProfileAsProjectPreset,
     currentProfileProjectId: editorModel.loadedPorfileData.projectId,
     isCurrentProfileInternal: editSource.type === 'InternalProfile',
