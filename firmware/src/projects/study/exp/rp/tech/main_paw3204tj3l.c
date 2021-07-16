@@ -70,7 +70,7 @@ void reSyncSerial() {
   delayUs(1); //T_RESYNC
   clockHigh();
   delayMs(2); //T_SIWTT, 1.7ms for normal mode
-  // delayMs(400); //T_SIWTT, 320ms(+-20%) for sleep2  mode
+  // delayMs(400); //T_SIWTT, 320ms(+-20%) for sleep2 mode
 }
 
 void writeByte(uint8_t byte) {
@@ -78,9 +78,9 @@ void writeByte(uint8_t byte) {
     uint8_t bit = bit_read(byte, i);
     clockLow();
     signalOut(bit);
-    delayUs(1);
+    delayUs(5);
     clockHigh();
-    delayUs(1);
+    delayUs(5);
   }
 }
 
@@ -88,10 +88,10 @@ uint8_t readByte() {
   uint8_t data = 0;
   for (int i = 7; i >= 0; i--) {
     clockLow();
-    delayUs(1);
+    delayUs(5);
     clockHigh();
     uint8_t bit = signalRead();
-    delayUs(1);
+    delayUs(5);
     bit_spec(data, i, bit);
   }
   return data;
@@ -116,16 +116,24 @@ int main() {
   initPorts();
   reSyncSerial();
 
+  uint32_t cnt = 0;
   while (true) {
-    boardIo_toggleLed1();
-    delayMs(1000);
+    if (cnt % 100 == 0) {
+      boardIo_toggleLed1();
+    }
+
+    delayMs(10);
     debugLow();
     uint8_t res0 = readData(0x00); //Product_ID1
     uint8_t res1 = readData(0x01); //Product_ID2
     uint8_t res2 = readData(0x02); //Motion_Status
     int8_t res3 = readData(0x03);  //Delta_X
     int8_t res4 = readData(0x04);  //Delta_Y
-    printf("%x %x %x %d %d\n", res0, res1, res2, res3, res4);
+
+    if (cnt % 10 == 0) {
+      printf("%x %x %x %d %d\n", res0, res1, res2, res3, res4);
+    }
+    cnt++;
     debugHigh();
   }
 }
