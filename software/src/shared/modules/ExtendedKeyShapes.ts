@@ -14,6 +14,8 @@ const isoEnterPointsInUnitU: IPoint[] = [
 const standardKeyBasePitch = 19.05;
 const displayShrinkOffset = 0.5;
 
+export const IsoEnterOutlineSizeSpec = [27, 37];
+
 function createIsoEnterPolygonPoints(
   placementAnchor: IKeyPlacementAnchor,
 ): IPoint[] {
