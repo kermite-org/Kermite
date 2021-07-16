@@ -207,6 +207,7 @@ export interface IGlobalSettings {
   useOnlineResources: boolean;
   useLocalResouces: boolean;
   localProjectRootFolderPath: string;
+  allowCrossKeyboardKeyMappingWrite: boolean;
 }
 
 export interface IServerPorfileInfo {

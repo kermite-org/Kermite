@@ -41,6 +41,7 @@ const fallbackGlobalSettings: IGlobalSettings = {
   useLocalResouces: false,
   useOnlineResources: false,
   localProjectRootFolderPath: '',
+  allowCrossKeyboardKeyMappingWrite: false,
 };
 
 const uiScaleOptions: ISelectorOption[] = [

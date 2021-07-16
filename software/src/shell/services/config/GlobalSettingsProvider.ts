@@ -17,6 +17,7 @@ export namespace GlobalSettingsProvider {
     useOnlineResources: true,
     useLocalResouces: false,
     localProjectRootFolderPath: '',
+    allowCrossKeyboardKeyMappingWrite: false,
   };
 
   export function getGlobalSettings(): IGlobalSettings {
