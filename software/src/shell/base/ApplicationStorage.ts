@@ -1,4 +1,7 @@
-import { duplicateObjectByJsonStringifyParse } from '~/shared';
+import {
+  copyObjectPropsRecursive,
+  duplicateObjectByJsonStringifyParse,
+} from '~/shared';
 import { ICheckerEx } from '~/shared/modules/SchemaValidationHelper';
 import { appEnv } from '~/shell/base/AppEnv';
 import { fsExistsSync, fsxReadJsonFile, fsxWriteJsonFile } from '~/shell/funcs';
@@ -11,6 +14,7 @@ class ApplicationStorage {
     return this.data[key];
   }
 
+  // 値を読み込み、スキーマがおかしい場合はデフォルト値に置き換える
   readItemSafe<T>(
     key: string,
     schemaChecker: ICheckerEx,
@@ -26,6 +30,21 @@ class ApplicationStorage {
       } else {
         return duplicateObjectByJsonStringifyParse(fallbackSource);
       }
+    }
+    return value;
+  }
+
+  // 値を読み込みんでスキーマをチェックし、デフォルトの値をベースに各フィールドを読み込んだ値で上書きする
+  readItemBasedOnDefault<T>(
+    key: string,
+    schemaChecker: ICheckerEx,
+    defaultValue: T,
+  ) {
+    const loaded = this.data[key];
+    const errors = schemaChecker(loaded);
+    const value = duplicateObjectByJsonStringifyParse(defaultValue);
+    if (!errors) {
+      copyObjectPropsRecursive(value, loaded);
     }
     return value;
   }

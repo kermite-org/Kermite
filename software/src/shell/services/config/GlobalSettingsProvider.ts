@@ -21,7 +21,7 @@ export namespace GlobalSettingsProvider {
   };
 
   export function getGlobalSettings(): IGlobalSettings {
-    return applicationStorage.readItemSafe(
+    return applicationStorage.readItemBasedOnDefault(
       'globalSettings',
       globalSettingsSchema,
       globalSettingsDefault,
