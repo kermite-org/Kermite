@@ -150,7 +150,7 @@ class EditMutations {
       changePlacementCoordUnit(editor.design, unitSpec);
     });
     if (editReader.gridSpecKey.startsWith('kp')) {
-      this.setGridSpec('mm_pitch10');
+      this.setGridSpecKey('mm_pitch10');
     }
   }
 
@@ -172,7 +172,7 @@ class EditMutations {
     });
   }
 
-  setGridSpec(gs: IGridSpecKey) {
+  setGridSpecKey(gs: IGridSpecKey) {
     editUpdator.patchEnvState((env) => {
       env.gridSpecKey = gs;
     });

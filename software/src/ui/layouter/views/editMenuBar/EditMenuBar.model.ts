@@ -42,7 +42,7 @@ function makeSnapDivisionViewModel() {
     options: gridPitchSelectorOptions,
     value: editReader.gridSpecKey,
     setValue: (value: string) =>
-      editMutations.setGridSpec(value as IGridSpecKey),
+      editMutations.setGridSpecKey(value as IGridSpecKey),
   };
 }
 
