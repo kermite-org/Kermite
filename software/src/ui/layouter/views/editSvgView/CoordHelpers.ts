@@ -88,3 +88,13 @@ export function getSightBoundingCircle(
 
   return { cx, cy, radius };
 }
+
+export function screenCoordToGroupTransformationCoord(
+  sx: number,
+  sy: number,
+  group: IEditTransGroup | undefined,
+) {
+  const [wx, wy] = screenToWorld(sx, sy);
+  const [gx, gy] = applyInverseGroupTransform(wx, wy, group, false);
+  return [gx, gy];
+}

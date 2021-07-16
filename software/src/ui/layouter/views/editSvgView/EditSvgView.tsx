@@ -6,7 +6,11 @@ import {
 } from '~/ui/layouter/common';
 import { editReader, editMutations } from '~/ui/layouter/models';
 import { FieldGrid } from '~/ui/layouter/views/editSvgView/svgParts/FieldGrid';
-import { applyInverseGroupTransform, screenToWorld } from './CoordHelpers';
+import {
+  applyInverseGroupTransform,
+  screenCoordToGroupTransformationCoord,
+  screenToWorld,
+} from './CoordHelpers';
 import { FieldAxis } from './svgParts/FieldAxis';
 import {
   KeyEntityCard,
@@ -54,12 +58,10 @@ const onSvgMouseDown = (e: MouseEvent) => {
     }
     if (editMode === 'key') {
       const [sx, sy] = getRelativeMousePosition(e);
-      const [wx, wy] = screenToWorld(sx, sy);
-      const [gx, gy] = applyInverseGroupTransform(
-        wx,
-        wy,
+      const [gx, gy] = screenCoordToGroupTransformationCoord(
+        sx,
+        sy,
         currentTransGroup,
-        false,
       );
       editMutations.startEdit();
       editMutations.addKeyEntity(gx, gy);
