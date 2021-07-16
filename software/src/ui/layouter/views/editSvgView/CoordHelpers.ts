@@ -46,3 +46,26 @@ export function getGroupOuterSvgTransformSpec(
   const mirrorMultX = isMirror ? -1 : 1;
   return `scale(${mirrorMultX}, 1) translate(${ox}, ${oy}) rotate(${orot})`;
 }
+
+// 視界範囲を覆う円の配置をワールド座標系の座標単位で得る
+// グループの座標変換を適用したグリッドラインの生成に使用
+export function getSightBoundingCircle(
+  group: IEditTransGroup | undefined,
+): {
+  cx: number;
+  cy: number;
+  radius: number;
+} {
+  const { sight } = editReader;
+  const [cx, cy] = applyInverseGroupTransform(
+    sight.pos.x,
+    sight.pos.y,
+    group,
+    false,
+  );
+  const ew = (sight.screenW / 2) * sight.scale;
+  const eh = (sight.screenH / 2) * sight.scale;
+  const radius = Math.sqrt(ew * ew + eh * eh);
+
+  return { cx, cy, radius };
+}

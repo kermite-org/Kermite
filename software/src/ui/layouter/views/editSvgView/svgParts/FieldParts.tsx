@@ -1,7 +1,10 @@
 import { jsx } from 'qx';
 import { uiTheme } from '~/ui/common';
 import { editReader } from '~/ui/layouter/models';
-import { getGroupOuterSvgTransformSpec } from '~/ui/layouter/views/editSvgView/CoordHelpers';
+import {
+  getGroupOuterSvgTransformSpec,
+  getSightBoundingCircle,
+} from '~/ui/layouter/views/editSvgView/CoordHelpers';
 
 function getWorldViewBounds(isGroupCoord: boolean) {
   const { sight } = editReader;
@@ -64,8 +67,14 @@ function makeRange(lo: number, hi: number) {
 }
 
 export const FieldGrid = () => {
-  const { left, top, right, bottom } = getWorldViewBounds(true);
   const { x: gpx, y: gpy } = editReader.gridPitches;
+  const { cx, cy, radius } = getSightBoundingCircle(
+    editReader.currentTransGroup,
+  );
+  const left = cx - radius;
+  const top = cy - radius;
+  const right = cx + radius;
+  const bottom = cy + radius;
 
   const nl = (left / gpx) >> 0;
   const nt = (top / gpy) >> 0;
@@ -75,10 +84,14 @@ export const FieldGrid = () => {
   const xs = makeRange(nl, nr).map((ix) => ix * gpx);
   const ys = makeRange(nt, nb).map((iy) => iy * gpy);
 
+  // console.log([xs, ys]);
+
   const groupTransformSpec = getGroupOuterSvgTransformSpec(
     editReader.currentTransGroupId,
     false,
   );
+
+  const { showAxis } = editReader;
 
   return (
     <g transform={groupTransformSpec}>
@@ -90,7 +103,11 @@ export const FieldGrid = () => {
             y1={y}
             x2={right}
             y2={y}
-            stroke={uiTheme.colors.clLayouterGrid}
+            stroke={
+              showAxis && y === 0
+                ? uiTheme.colors.clLayouterAxis
+                : uiTheme.colors.clLayouterGrid
+            }
             stroke-width={0.5}
           />
         ))}
@@ -103,7 +120,11 @@ export const FieldGrid = () => {
             y1={top}
             x2={x}
             y2={bottom}
-            stroke={uiTheme.colors.clLayouterGrid}
+            stroke={
+              showAxis && x === 0
+                ? uiTheme.colors.clLayouterAxis
+                : uiTheme.colors.clLayouterGrid
+            }
             stroke-width={0.5}
           />
         ))}
