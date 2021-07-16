@@ -20,10 +20,17 @@ function getWorldViewBounds() {
   };
 }
 
-export const FieldAxis = () => {
+export const FieldAxis = (props: { isGroupCoordAxis: boolean }) => {
+  const { isGroupCoordAxis } = props;
   const { left, top, right, bottom } = getWorldViewBounds();
+
+  const groupTransformSpec =
+    (isGroupCoordAxis &&
+      getGroupOuterSvgTransformSpec(editReader.currentTransGroupId, false)) ||
+    undefined;
+
   return (
-    <g>
+    <g transform={groupTransformSpec}>
       <line
         x1={left}
         y1={0}
