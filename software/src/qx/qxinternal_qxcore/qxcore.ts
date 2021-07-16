@@ -171,13 +171,16 @@ export function patch(parentDom: Node, newVNode: IVNode, oldVNode: IVNode) {
         (dom as any)[key] = newValue;
       }
     });
+  } else if (
+    newVNode.vtype !== oldVNode.vtype ||
+    (oldVNode.vtype === 'vElement' &&
+      newVNode.vtype === 'vElement' &&
+      oldVNode.tagName !== newVNode.tagName)
+  ) {
+    const nextSibling = oldVNode.dom?.nextSibling || null;
+    unmount(parentDom, oldVNode);
+    mount(parentDom, newVNode, nextSibling);
   } else {
-    if (newVNode.vtype !== oldVNode.vtype) {
-      const nextSibling = oldVNode.dom?.nextSibling || null;
-      unmount(parentDom, oldVNode);
-      mount(parentDom, newVNode, nextSibling);
-    } else {
-      console.log('invalid condition');
-    }
+    console.log('invalid condition');
   }
 }
