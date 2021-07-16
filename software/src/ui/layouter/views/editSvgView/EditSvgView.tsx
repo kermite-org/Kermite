@@ -111,8 +111,7 @@ export const EditSvgView = () => {
     >
       <g transform={transformSpec}>
         {showGrid && <FieldGrid />}
-        {showAxis && <FieldAxis isGroupCoordAxis={false} />}
-        {showAxis && <FieldAxis isGroupCoordAxis={true} />}
+        {showAxis && <FieldAxis />}
         {ghost && <KeyEntityCard ke={ghost} />}
 
         {/* <DisplayAreaFrame /> */}

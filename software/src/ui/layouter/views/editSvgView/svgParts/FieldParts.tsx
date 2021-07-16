@@ -6,23 +6,16 @@ import {
   getSightBoundingCircle,
 } from '~/ui/layouter/views/editSvgView/CoordHelpers';
 
-function getWorldViewBounds(isGroupCoord: boolean) {
+function getWorldViewBounds() {
   const { sight } = editReader;
   const d = 1; // デバッグ用のオフセット値
 
-  const group = (isGroupCoord && editReader.currentTransGroup) || undefined;
-  const ox = group?.x || 0;
-  const oy = group?.y || 0;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const orot = group?.angle || 0;
-  // TODO:グループに回転が適用されている場合に範囲を補正する必要がある。計算がわからない
-
   const ew = (sight.screenW / 2) * sight.scale;
   const eh = (sight.screenH / 2) * sight.scale;
-  const left = -ew + sight.pos.x - ox + d;
-  const top = -eh + sight.pos.y - oy + d;
-  const right = ew + sight.pos.x - ox - d;
-  const bottom = eh + sight.pos.y - oy - d;
+  const left = -ew + sight.pos.x + d;
+  const top = -eh + sight.pos.y + d;
+  const right = ew + sight.pos.x - d;
+  const bottom = eh + sight.pos.y - d;
   return {
     left,
     top,
@@ -31,17 +24,11 @@ function getWorldViewBounds(isGroupCoord: boolean) {
   };
 }
 
-export const FieldAxis = (props: { isGroupCoordAxis: boolean }) => {
-  const { isGroupCoordAxis } = props;
-  const { left, top, right, bottom } = getWorldViewBounds(isGroupCoordAxis);
-
-  const groupTransformSpec =
-    (isGroupCoordAxis &&
-      getGroupOuterSvgTransformSpec(editReader.currentTransGroupId, false)) ||
-    undefined;
+export const FieldAxis = () => {
+  const { left, top, right, bottom } = getWorldViewBounds();
 
   return (
-    <g transform={groupTransformSpec}>
+    <g>
       <line
         x1={left}
         y1={0}
