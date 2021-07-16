@@ -47,6 +47,25 @@ export function getGroupOuterSvgTransformSpec(
   return `scale(${mirrorMultX}, 1) translate(${ox}, ${oy}) rotate(${orot})`;
 }
 
+// ワールド座標系での視界範囲の領域を得る
+export function getWorldViewBounds() {
+  const { sight } = editReader;
+  const d = 1; // デバッグ用のオフセット値
+
+  const ew = (sight.screenW / 2) * sight.scale;
+  const eh = (sight.screenH / 2) * sight.scale;
+  const left = -ew + sight.pos.x + d;
+  const top = -eh + sight.pos.y + d;
+  const right = ew + sight.pos.x - d;
+  const bottom = eh + sight.pos.y - d;
+  return {
+    left,
+    top,
+    right,
+    bottom,
+  };
+}
+
 // 視界範囲を覆う円の配置をワールド座標系の座標単位で得る
 // グループの座標変換を適用したグリッドラインの生成に使用
 export function getSightBoundingCircle(

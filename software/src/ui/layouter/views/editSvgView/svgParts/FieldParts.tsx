@@ -4,25 +4,8 @@ import { editReader } from '~/ui/layouter/models';
 import {
   getGroupOuterSvgTransformSpec,
   getSightBoundingCircle,
+  getWorldViewBounds,
 } from '~/ui/layouter/views/editSvgView/CoordHelpers';
-
-function getWorldViewBounds() {
-  const { sight } = editReader;
-  const d = 1; // デバッグ用のオフセット値
-
-  const ew = (sight.screenW / 2) * sight.scale;
-  const eh = (sight.screenH / 2) * sight.scale;
-  const left = -ew + sight.pos.x + d;
-  const top = -eh + sight.pos.y + d;
-  const right = ew + sight.pos.x - d;
-  const bottom = eh + sight.pos.y - d;
-  return {
-    left,
-    top,
-    right,
-    bottom,
-  };
-}
 
 export const FieldAxis = () => {
   const { left, top, right, bottom } = getWorldViewBounds();
