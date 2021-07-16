@@ -1,6 +1,6 @@
 import {
   globalSettingsDefault,
-  globalSettingsSchema,
+  globalSettingsLoadingSchema,
   IGlobalSettings,
 } from '~/shared';
 import { applicationStorage } from '~/shell/base';
@@ -9,7 +9,7 @@ export namespace GlobalSettingsProvider {
   export function getGlobalSettings(): IGlobalSettings {
     return applicationStorage.readItemBasedOnDefault(
       'globalSettings',
-      globalSettingsSchema,
+      globalSettingsLoadingSchema,
       globalSettingsDefault,
     );
   }

@@ -21,7 +21,7 @@ export interface IGlobalSettings {
   allowCrossKeyboardKeyMappingWrite: boolean;
 }
 
-export const globalSettingsSchema = vObject({
+export const globalSettingsLoadingSchema = vObject({
   useOnlineResources: vBoolean(),
   useLocalResouces: vBoolean(),
   localProjectRootFolderPath: vString(),
