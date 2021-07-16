@@ -324,10 +324,18 @@ void usbIoCore_initialize() {
 
 bool usbIoCore_hidKeyboard_writeReport(uint8_t *pReportBytes8) {
   if (tud_hid_n_ready(ITF_KEYBOARD)) {
-    uint8_t *p = pReportBytes8;
     tud_hid_n_report(ITF_KEYBOARD, 0, pReportBytes8, 8);
   } else {
     enqueueKeyboardEmitInternalBuffer(pReportBytes8);
+  }
+  return true;
+}
+
+bool usbIoCore_hidMouse_writeReport(uint8_t *pReportBytes3) {
+  if (tud_hid_n_ready(ITF_MOUSE)) {
+    tud_hid_n_report(ITF_MOUSE, 0, pReportBytes3, 8);
+  } else {
+    // enqueueMouseEmitInternalBuffer(pReportBytes3);
   }
   return true;
 }
