@@ -34,3 +34,10 @@ export const globalSettingsDefault: IGlobalSettings = {
   localProjectRootFolderPath: '',
   allowCrossKeyboardKeyMappingWrite: false,
 };
+
+export const globalSettingsFallbackValue: IGlobalSettings = {
+  useOnlineResources: false,
+  useLocalResouces: false,
+  localProjectRootFolderPath: '',
+  allowCrossKeyboardKeyMappingWrite: false,
+};
