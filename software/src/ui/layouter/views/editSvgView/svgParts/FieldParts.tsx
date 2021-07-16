@@ -3,15 +3,23 @@ import { uiTheme } from '~/ui/common';
 import { editReader } from '~/ui/layouter/models';
 import { getGroupOuterSvgTransformSpec } from '~/ui/layouter/views/editSvgView/CoordHelpers';
 
-function getWorldViewBounds() {
+function getWorldViewBounds(isGroupCoord: boolean) {
   const { sight } = editReader;
-  const d = 1;
+  const d = 1; // デバッグ用のオフセット値
+
+  const group = (isGroupCoord && editReader.currentTransGroup) || undefined;
+  const ox = group?.x || 0;
+  const oy = group?.y || 0;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const orot = group?.angle || 0;
+  // TODO:グループに回転が適用されている場合に範囲を補正する必要がある。計算がわからない
+
   const ew = (sight.screenW / 2) * sight.scale;
   const eh = (sight.screenH / 2) * sight.scale;
-  const left = -ew + sight.pos.x + d;
-  const top = -eh + sight.pos.y + d;
-  const right = ew + sight.pos.x - d;
-  const bottom = eh + sight.pos.y - d;
+  const left = -ew + sight.pos.x - ox + d;
+  const top = -eh + sight.pos.y - oy + d;
+  const right = ew + sight.pos.x - ox - d;
+  const bottom = eh + sight.pos.y - oy - d;
   return {
     left,
     top,
@@ -22,7 +30,7 @@ function getWorldViewBounds() {
 
 export const FieldAxis = (props: { isGroupCoordAxis: boolean }) => {
   const { isGroupCoordAxis } = props;
-  const { left, top, right, bottom } = getWorldViewBounds();
+  const { left, top, right, bottom } = getWorldViewBounds(isGroupCoordAxis);
 
   const groupTransformSpec =
     (isGroupCoordAxis &&
@@ -56,7 +64,7 @@ function makeRange(lo: number, hi: number) {
 }
 
 export const FieldGrid = () => {
-  const { left, top, right, bottom } = getWorldViewBounds();
+  const { left, top, right, bottom } = getWorldViewBounds(true);
   const { x: gpx, y: gpy } = editReader.gridPitches;
 
   const nl = (left / gpx) >> 0;
