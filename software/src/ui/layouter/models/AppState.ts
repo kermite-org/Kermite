@@ -1,4 +1,5 @@
 import { defaultKeyboardDesignSetup } from '~/shared';
+import { IGridSpecKey } from '~/ui/layouter/models/GridDefinitions';
 import { IEditKeyboardDesign, IEditKeyEntity } from './DataSchema';
 
 export type IEditMode = 'select' | 'move' | 'key' | 'shape' | 'delete';
@@ -29,7 +30,7 @@ export interface IEnvState {
   showAxis: boolean;
   showGrid: boolean;
   snapToGrid: boolean;
-  snapDivision: number;
+  gridSpecKey: IGridSpecKey;
   showKeyId: boolean;
   showKeyIndex: boolean;
   pressedKeyIndices: number[];
@@ -90,7 +91,7 @@ export const appState: IAppState = {
     showAxis: true,
     showGrid: true,
     snapToGrid: true,
-    snapDivision: 4,
+    gridSpecKey: 'kp_div4',
     showKeyId: true,
     showKeyIndex: true,
     pressedKeyIndices: [],
