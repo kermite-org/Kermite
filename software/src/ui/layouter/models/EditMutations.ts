@@ -65,7 +65,13 @@ class EditMutations {
   };
 
   addKeyEntity(px: number, py: number) {
-    const { coordUnit, sizeUnit, allKeyEntities, placementAnchor } = editReader;
+    const {
+      coordUnit,
+      sizeUnit,
+      allKeyEntities,
+      placementAnchor,
+      currentTransGroupId,
+    } = editReader;
     const keySize = sizeUnit.mode === 'KP' ? 1 : 18;
     if (placementAnchor === 'topLeft') {
       if (sizeUnit.mode === 'KP') {
@@ -89,7 +95,7 @@ class EditMutations {
       shape: `std ${keySize}`,
       keyIndex: -1,
       mirrorKeyIndex: -1,
-      groupId: '',
+      groupId: currentTransGroupId || '',
     };
     editUpdator.patchEditor((editor) => {
       editor.design.keyEntities[id] = keyEntity;

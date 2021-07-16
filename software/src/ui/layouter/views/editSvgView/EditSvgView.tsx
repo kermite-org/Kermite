@@ -6,7 +6,7 @@ import {
 } from '~/ui/layouter/common';
 import { editReader, editMutations } from '~/ui/layouter/models';
 import { FieldGrid } from '~/ui/layouter/views/editSvgView/svgParts/FieldGrid';
-import { screenToWorld } from './CoordHelpers';
+import { applyInverseGroupTransform, screenToWorld } from './CoordHelpers';
 import { FieldAxis } from './svgParts/FieldAxis';
 import {
   KeyEntityCard,
@@ -46,7 +46,7 @@ function startSightDragOperation(e: MouseEvent) {
 
 const onSvgMouseDown = (e: MouseEvent) => {
   if (e.button === 0) {
-    const { editMode } = editReader;
+    const { editMode, currentTransGroup } = editReader;
     if (editMode === 'select') {
       editMutations.setCurrentShapeId(undefined);
       editMutations.unsetCurrentKeyEntity();
@@ -54,9 +54,15 @@ const onSvgMouseDown = (e: MouseEvent) => {
     }
     if (editMode === 'key') {
       const [sx, sy] = getRelativeMousePosition(e);
-      const [x, y] = screenToWorld(sx, sy);
+      const [wx, wy] = screenToWorld(sx, sy);
+      const [gx, gy] = applyInverseGroupTransform(
+        wx,
+        wy,
+        currentTransGroup,
+        false,
+      );
       editMutations.startEdit();
-      editMutations.addKeyEntity(x, y);
+      editMutations.addKeyEntity(gx, gy);
       startKeyEntityDragOperation(e, false, () => {
         editMutations.endEdit();
       });
