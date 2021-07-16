@@ -18,10 +18,10 @@ export function getWorldMousePositionOnEditSvg(
 }
 
 export function getGroupOuterSvgTransformSpec(
-  groupId: string,
+  groupId: string | undefined,
   isMirror: boolean,
 ): string {
-  const group = editReader.getTransGroupById(groupId);
+  const group = editReader.getTransGroupById(groupId || '');
   const ox = group?.x || 0;
   const oy = group?.y || 0;
   const orot = group?.angle || 0;

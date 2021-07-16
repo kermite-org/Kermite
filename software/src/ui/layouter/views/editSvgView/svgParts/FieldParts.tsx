@@ -1,6 +1,7 @@
 import { jsx } from 'qx';
 import { uiTheme } from '~/ui/common';
 import { editReader } from '~/ui/layouter/models';
+import { getGroupOuterSvgTransformSpec } from '~/ui/layouter/views/editSvgView/CoordHelpers';
 
 function getWorldViewBounds() {
   const { sight } = editReader;
@@ -59,8 +60,13 @@ export const FieldGrid = () => {
   const xs = makeRange(nl, nr).map((ix) => ix * gpx);
   const ys = makeRange(nt, nb).map((iy) => iy * gpy);
 
+  const groupTransformSpec = getGroupOuterSvgTransformSpec(
+    editReader.currentTransGroupId,
+    false,
+  );
+
   return (
-    <g>
+    <g transform={groupTransformSpec}>
       <g>
         {ys.map((y) => (
           <line
