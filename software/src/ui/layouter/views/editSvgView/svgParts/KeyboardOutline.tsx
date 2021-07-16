@@ -9,7 +9,10 @@ import {
   IEditOutlineShape,
   IEditTransGroup,
 } from '~/ui/layouter/models';
-import { getWorldMousePositionOnEditSvg } from '../CoordHelpers';
+import {
+  getGroupOuterSvgTransformSpec,
+  getWorldMousePositionOnEditSvg,
+} from '../CoordHelpers';
 
 function applyInverseGroupTransform(
   wx: number,
@@ -250,12 +253,10 @@ export const KeyboardOutlineShapeViewSingle = (props: {
     makeHittestLineViewModel(idx, points, shapeId),
   );
 
-  const group = editReader.getTransGroupById(shape.groupId);
-  const ox = group ? group.x : 0;
-  const oy = group ? group.y : 0;
-  const orot = group ? group.angle : 0;
-  const mirrorMultX = isMirror ? -1 : 1;
-  const outerTransformSpec = `scale(${mirrorMultX}, 1) translate(${ox}, ${oy}) rotate(${orot})`;
+  const outerTransformSpec = getGroupOuterSvgTransformSpec(
+    shape.groupId,
+    isMirror,
+  );
 
   const isDrawing =
     editReader.shapeDrawing && editReader.currentOutlineShape === shape;

@@ -16,3 +16,15 @@ export function getWorldMousePositionOnEditSvg(
   const sy = e.pageY - bounds.top;
   return screenToWorld(sx, sy);
 }
+
+export function getGroupOuterSvgTransformSpec(
+  groupId: string,
+  isMirror: boolean,
+): string {
+  const group = editReader.getTransGroupById(groupId);
+  const ox = group?.x || 0;
+  const oy = group?.y || 0;
+  const orot = group?.angle || 0;
+  const mirrorMultX = isMirror ? -1 : 1;
+  return `scale(${mirrorMultX}, 1) translate(${ox}, ${oy}) rotate(${orot})`;
+}
