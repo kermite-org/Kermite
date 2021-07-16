@@ -111,11 +111,8 @@ export namespace DisplayKeyboardDesignLoader {
       } else {
         translateCoord(p, w * 0.6 + 0.5, h / 2 + 0.5);
       }
-    } else {
-      if (keyShape === 'ext isoEnter') {
-        translateCoord(p, -w * 0.1 + 0.5, 0);
-      }
     }
+
     translateCoord(p, keyX * mi, keyY);
     rotateCoord(p, groupRot * mi);
     translateCoord(p, groupX * mi, groupY);
