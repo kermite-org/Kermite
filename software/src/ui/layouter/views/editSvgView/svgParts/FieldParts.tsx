@@ -8,8 +8,14 @@ import {
 } from '~/ui/layouter/views/editSvgView/CoordHelpers';
 
 export const FieldAxis = () => {
-  const { left, top, right, bottom } = getWorldViewBounds();
-
+  let { left, top, right, bottom } = getWorldViewBounds();
+  if (editReader.showGrid && editReader.currentTransGroup) {
+    const d = 5;
+    left = -d;
+    top = -d;
+    right = d;
+    bottom = d;
+  }
   return (
     <g>
       <line
