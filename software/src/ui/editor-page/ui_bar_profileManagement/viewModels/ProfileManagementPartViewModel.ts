@@ -19,8 +19,8 @@ import {
   uiStatusModel,
   useDeviceStatusModel,
   useGlobalSettingsFetch,
-  useLocal,
 } from '~/ui/common';
+import { useModalDisplayStateModel } from '~/ui/common/sharedModels/GeneralUiStateModels';
 import { useKeyboardBehaviorModeModel } from '~/ui/common/sharedModels/KeyboardBehaviorModeModel';
 import { editorModel } from '~/ui/editor-page/models/EditorModel';
 import { ProfilesModel } from '~/ui/editor-page/models/ProfilesModel';
@@ -264,11 +264,11 @@ function getCanWrite(
 }
 
 function getCanSave(): boolean {
-  const { editSource, checkDirty } = profilesModel;
+  const { editSource } = profilesModel;
   return (
     editSource.type === 'NewlyCreated' ||
     editSource.type === 'ExternalFile' ||
-    (editSource.type === 'InternalProfile' && checkDirty())
+    (editSource.type === 'InternalProfile' && profilesModel.checkDirty())
   );
 }
 
@@ -309,22 +309,15 @@ const toggleRoutingPanel = () => {
 export function makeProfileManagementPartViewModel(): IProfileManagementPartViewModel {
   Hook.useEffect(profilesModel.startPageSession, []);
 
+  const { editSource, allProfileNames, saveProfile } = profilesModel;
+
   const deviceStatus = useDeviceStatusModel();
 
   const globalSettings = useGlobalSettingsFetch();
 
   const { isSimulatorMode } = useKeyboardBehaviorModeModel();
 
-  const { editSource, allProfileNames, saveProfile } = profilesModel;
-
-  const state = useLocal({ isPresetsModalOpen: false });
-
-  const openExportingPresetSelectionModal = () => {
-    state.isPresetsModalOpen = true;
-  };
-  const closeExportingPresetSelectionModal = () => {
-    state.isPresetsModalOpen = false;
-  };
+  const presetsModalDisplayStateModel = useModalDisplayStateModel();
 
   const canWrite = getCanWrite(deviceStatus, globalSettings);
 
@@ -351,9 +344,9 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
       editSource,
       loadProfile,
     ),
-    isExportingPresetSelectionModalOpen: state.isPresetsModalOpen,
-    openExportingPresetSelectionModal,
-    closeExportingPresetSelectionModal,
+    isExportingPresetSelectionModalOpen: presetsModalDisplayStateModel.isOpen,
+    openExportingPresetSelectionModal: presetsModalDisplayStateModel.open,
+    closeExportingPresetSelectionModal: presetsModalDisplayStateModel.close,
     saveProfileAsPreset: profilesModel.exportProfileAsProjectPreset,
     currentProfileProjectId: editorModel.loadedPorfileData.projectId,
     isCurrentProfileInternal: editSource.type === 'InternalProfile',
