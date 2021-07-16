@@ -49,7 +49,7 @@ function makeRange(lo: number, hi: number) {
 
 export const FieldGrid = () => {
   const { left, top, right, bottom } = getWorldViewBounds();
-  const [gpx, gpy] = editReader.gridPitches;
+  const { x: gpx, y: gpy } = editReader.gridPitches;
 
   const nl = (left / gpx) >> 0;
   const nt = (top / gpy) >> 0;
