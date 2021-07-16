@@ -6,6 +6,7 @@ import {
 } from '~/shared';
 import { getNextEntityInstanceId } from '~/ui/layouter/models/DomainRelatedHelpers';
 import { editManager } from '~/ui/layouter/models/EditManager';
+import { IGridSpecKey } from '~/ui/layouter/models/GridDefinitions';
 import {
   changeKeySizeUnit,
   changePlacementCoordUnit,
@@ -64,7 +65,13 @@ class EditMutations {
   };
 
   addKeyEntity(px: number, py: number) {
-    const { coordUnit, sizeUnit, allKeyEntities, placementAnchor } = editReader;
+    const {
+      coordUnit,
+      sizeUnit,
+      allKeyEntities,
+      placementAnchor,
+      currentTransGroupId,
+    } = editReader;
     const keySize = sizeUnit.mode === 'KP' ? 1 : 18;
     if (placementAnchor === 'topLeft') {
       if (sizeUnit.mode === 'KP') {
@@ -88,7 +95,7 @@ class EditMutations {
       shape: `std ${keySize}`,
       keyIndex: -1,
       mirrorKeyIndex: -1,
-      groupId: '',
+      groupId: currentTransGroupId || '',
     };
     editUpdator.patchEditor((editor) => {
       editor.design.keyEntities[id] = keyEntity;
@@ -148,6 +155,9 @@ class EditMutations {
     editUpdator.commitEditor((editor) => {
       changePlacementCoordUnit(editor.design, unitSpec);
     });
+    if (editReader.gridSpecKey.startsWith('kp')) {
+      this.setGridSpecKey('mm_pitch10');
+    }
   }
 
   setPlacementAnchor(anchor: IKeyPlacementAnchor) {
@@ -168,9 +178,9 @@ class EditMutations {
     });
   }
 
-  setSnapDivision(sd: number) {
+  setGridSpecKey(gs: IGridSpecKey) {
     editUpdator.patchEnvState((env) => {
-      env.snapDivision = sd;
+      env.gridSpecKey = gs;
     });
   }
 
@@ -257,10 +267,9 @@ class EditMutations {
   }
 
   setKeyPosition(px: number, py: number) {
-    const { coordUnit, snapToGrid, gridPitches, snapDivision } = editReader;
-    let [gpx, gpy] = gridPitches;
-    gpx /= snapDivision;
-    gpy /= snapDivision;
+    const { coordUnit, snapToGrid, snapPitches } = editReader;
+    const gpx = snapPitches.x;
+    const gpy = snapPitches.y;
 
     editUpdator.patchEditKeyEntity((ke) => {
       let [kx, ky] = unitValueToMm(ke.x, ke.y, coordUnit);
@@ -291,7 +300,7 @@ class EditMutations {
     const {
       currentShapeId,
       currentPointIndex,
-      snapDivision,
+      snapPitches,
       snapToGrid,
     } = editReader;
 
@@ -299,10 +308,11 @@ class EditMutations {
       return;
     }
 
-    const gp = 10 / snapDivision;
+    const gpx = snapPitches.x;
+    const gpy = snapPitches.y;
     if (snapToGrid) {
-      px = Math.round(px / gp) * gp;
-      py = Math.round(py / gp) * gp;
+      px = Math.round(px / gpx) * gpx;
+      py = Math.round(py / gpy) * gpy;
     }
 
     editUpdator.patchEditor((editor) => {
@@ -435,7 +445,7 @@ class EditMutations {
         editor.design.outlineShapes[newId] = {
           id: newId,
           points: [],
-          groupId: '',
+          groupId: editReader.currentTransGroupId || '',
         };
         editor.currentShapeId = newId;
         editor.currentPointIndex = -1;

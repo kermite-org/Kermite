@@ -3,6 +3,10 @@ import {
   ICoordUnit,
 } from '~/shared/modules/PlacementUnitHelper';
 import { createSimpleSelector } from '~/ui/common';
+import {
+  decodeGridSpec,
+  IGridSpecKey,
+} from '~/ui/layouter/models/GridDefinitions';
 import { appState, IEnvBoolPropKey } from './AppState';
 import { getKeyboardDesignBoundingBox } from './BoundingBoxCalculator';
 import {
@@ -59,17 +63,32 @@ class EditReader {
       | 'KP';
   }
 
-  get gridPitches(): [number, number] {
-    const cu = this.coordUnit;
-    if (this.editMode === 'key' && cu.mode === 'KP') {
-      return [cu.x, cu.y];
+  get gridSpecKey(): IGridSpecKey {
+    return appState.env.gridSpecKey;
+  }
+
+  get gridSpec() {
+    return decodeGridSpec(this.gridSpecKey);
+  }
+
+  get gridPitches(): { x: number; y: number } {
+    const { gridSpec, coordUnit } = this;
+    if (gridSpec.unit === 'KP' && coordUnit.mode === 'KP') {
+      return { x: coordUnit.x, y: coordUnit.y };
     } else {
-      return [10, 10];
+      return { x: 10, y: 10 };
     }
   }
 
-  get snapDivision(): number {
-    return appState.env.snapDivision;
+  get snapPitches(): { x: number; y: number } {
+    const { gridSpec, coordUnit } = this;
+    if (gridSpec.unit === 'KP' && coordUnit.mode === 'KP') {
+      const div = gridSpec.division;
+      return { x: coordUnit.x / div, y: coordUnit.y / div };
+    } else {
+      const gp = (gridSpec.unit === 'mm' && gridSpec.pitch) || 1;
+      return { x: gp, y: gp };
+    }
   }
 
   getBoolOption<K extends IEnvBoolPropKey>(propKey: K) {
@@ -191,5 +210,10 @@ class EditReader {
   get shapeDrawing() {
     return appState.editor.shapeDrawing;
   }
+
+  get isPlacementUnitKpBased() {
+    return appState.editor.design.setup.placementUnit.startsWith('KP');
+  }
 }
+
 export const editReader = new EditReader();
