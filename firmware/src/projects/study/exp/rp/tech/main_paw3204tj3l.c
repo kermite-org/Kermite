@@ -9,8 +9,8 @@
 
 //board RPi Pico
 //GP25: onboard LED
-//GP4 SDIO <--> PAW3204 SDIO ---> LA.ch2
-//GP5 SCLK ---> PAW3204 SCLK ---> LA.ch1
+//GP4 <--> PAW3204 SDIO ---> LA.ch2
+//GP5 ---> PAW3204 SCLK ---> LA.ch1
 //GP6 debug timing monitor ---> LA.ch0
 
 const int pin_sdio = GP4;
