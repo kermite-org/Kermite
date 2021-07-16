@@ -149,6 +149,9 @@ class EditMutations {
     editUpdator.commitEditor((editor) => {
       changePlacementCoordUnit(editor.design, unitSpec);
     });
+    if (editReader.gridSpecKey.startsWith('kp')) {
+      this.setGridSpec('mm_pitch10');
+    }
   }
 
   setPlacementAnchor(anchor: IKeyPlacementAnchor) {
