@@ -1,16 +1,12 @@
 import { Hook, jsx } from 'qx';
 import {
+  getRelativeMousePosition,
   IPosition,
   startDragSession,
-  getRelativeMousePosition,
 } from '~/ui/layouter/common';
-import { editReader, editMutations } from '~/ui/layouter/models';
+import { editMutations, editReader } from '~/ui/layouter/models';
 import { FieldGrid } from '~/ui/layouter/views/editSvgView/svgParts/FieldGrid';
-import {
-  applyInverseGroupTransform,
-  screenCoordToGroupTransformationCoord,
-  screenToWorld,
-} from './CoordHelpers';
+import { screenCoordToGroupTransformationCoord } from './CoordHelpers';
 import { FieldAxis } from './svgParts/FieldAxis';
 import {
   KeyEntityCard,
@@ -71,10 +67,14 @@ const onSvgMouseDown = (e: MouseEvent) => {
     }
     if (editMode === 'shape') {
       const [sx, sy] = getRelativeMousePosition(e);
-      const [x, y] = screenToWorld(sx, sy);
+      const [gx, gy] = screenCoordToGroupTransformationCoord(
+        sx,
+        sy,
+        currentTransGroup,
+      );
       editMutations.startEdit();
       editMutations.startShapeDrawing();
-      editMutations.addOutlinePoint(x, y);
+      editMutations.addOutlinePoint(gx, gy);
       startOutlinePointDragOperation(e, false, () => {
         editMutations.endEdit();
       });

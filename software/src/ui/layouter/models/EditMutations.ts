@@ -445,7 +445,7 @@ class EditMutations {
         editor.design.outlineShapes[newId] = {
           id: newId,
           points: [],
-          groupId: '',
+          groupId: editReader.currentTransGroupId || '',
         };
         editor.currentShapeId = newId;
         editor.currentPointIndex = -1;
