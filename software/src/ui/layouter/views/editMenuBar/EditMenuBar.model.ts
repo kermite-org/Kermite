@@ -38,8 +38,12 @@ function createToggleOptionViewModel<K extends IEnvBoolPropKey>(targetKey: K) {
 }
 
 function makeSnapDivisionViewModel() {
+  let options = gridPitchSelectorOptions;
+  if (!editReader.isPlacementUnitKpBased) {
+    options = options.filter((option) => option.value.startsWith('mm'));
+  }
   return {
-    options: gridPitchSelectorOptions,
+    options,
     value: editReader.gridSpecKey,
     setValue: (value: string) =>
       editMutations.setGridSpecKey(value as IGridSpecKey),

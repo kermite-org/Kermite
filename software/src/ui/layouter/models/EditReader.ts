@@ -210,5 +210,10 @@ class EditReader {
   get shapeDrawing() {
     return appState.editor.shapeDrawing;
   }
+
+  get isPlacementUnitKpBased() {
+    return appState.editor.design.setup.placementUnit.startsWith('KP');
+  }
 }
+
 export const editReader = new EditReader();
