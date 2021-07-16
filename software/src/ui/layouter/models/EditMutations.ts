@@ -6,6 +6,7 @@ import {
 } from '~/shared';
 import { getNextEntityInstanceId } from '~/ui/layouter/models/DomainRelatedHelpers';
 import { editManager } from '~/ui/layouter/models/EditManager';
+import { IGridSpecKey } from '~/ui/layouter/models/GridDefinitions';
 import {
   changeKeySizeUnit,
   changePlacementCoordUnit,
@@ -257,10 +258,9 @@ class EditMutations {
   }
 
   setKeyPosition(px: number, py: number) {
-    const { coordUnit, snapToGrid, gridPitches, snapDivision } = editReader;
-    let [gpx, gpy] = gridPitches;
-    gpx /= snapDivision;
-    gpy /= snapDivision;
+    const { coordUnit, snapToGrid, snapPitches } = editReader;
+    const gpx = snapPitches.x;
+    const gpy = snapPitches.y;
 
     editUpdator.patchEditKeyEntity((ke) => {
       let [kx, ky] = unitValueToMm(ke.x, ke.y, coordUnit);
@@ -291,7 +291,7 @@ class EditMutations {
     const {
       currentShapeId,
       currentPointIndex,
-      snapDivision,
+      snapPitches,
       snapToGrid,
     } = editReader;
 
@@ -299,10 +299,11 @@ class EditMutations {
       return;
     }
 
-    const gp = 10 / snapDivision;
+    const gpx = snapPitches.x;
+    const gpy = snapPitches.y;
     if (snapToGrid) {
-      px = Math.round(px / gp) * gp;
-      py = Math.round(py / gp) * gp;
+      px = Math.round(px / gpx) * gpx;
+      py = Math.round(py / gpy) * gpy;
     }
 
     editUpdator.patchEditor((editor) => {
