@@ -7,6 +7,10 @@ import {
   IEditMode,
   IEnvBoolPropKey,
 } from '~/ui/layouter/models';
+import {
+  gridPitchSelectorOptions,
+  IGridSpecKey,
+} from '~/ui/layouter/models/GridDefinitions';
 
 function createModeSelectionViewModel(
   sources: { [key in IEditMode]?: string },
@@ -34,19 +38,11 @@ function createToggleOptionViewModel<K extends IEnvBoolPropKey>(targetKey: K) {
 }
 
 function makeSnapDivisionViewModel() {
-  const divs = [1, 2, 3, 4, 5, 6, 8, 10, 20];
-  const options = divs.map((d) => ({
-    value: d.toString(),
-    label: d === 1 ? '1' : `1/${d}`,
-  }));
-  const value = editReader.snapDivision.toString();
-  const setValue = (id: string) => {
-    editMutations.setSnapDivision(parseInt(id));
-  };
   return {
-    options,
-    value,
-    setValue,
+    options: gridPitchSelectorOptions,
+    value: editReader.gridSpecKey,
+    setValue: (value: string) =>
+      editMutations.setGridSpec(value as IGridSpecKey),
   };
 }
 
