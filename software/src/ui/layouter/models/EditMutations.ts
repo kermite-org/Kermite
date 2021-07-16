@@ -168,9 +168,9 @@ class EditMutations {
     });
   }
 
-  setSnapDivision(sd: number) {
+  setGridSpec(gs: IGridSpecKey) {
     editUpdator.patchEnvState((env) => {
-      env.snapDivision = sd;
+      env.gridSpecKey = gs;
     });
   }
 
