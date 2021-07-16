@@ -5,8 +5,9 @@ import {
   getRelativeMousePosition,
 } from '~/ui/layouter/common';
 import { editReader, editMutations } from '~/ui/layouter/models';
+import { FieldGrid } from '~/ui/layouter/views/editSvgView/svgParts/FieldGrid';
 import { screenToWorld } from './CoordHelpers';
-import { FieldGrid, FieldAxis } from './svgParts/FieldParts';
+import { FieldAxis } from './svgParts/FieldAxis';
 import {
   KeyEntityCard,
   startKeyEntityDragOperation,
