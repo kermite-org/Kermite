@@ -15,6 +15,7 @@ MODULE_SRCS += km0/kernel/keyCodeTranslator.c
 MODULE_SRCS += km0/kernel/keyActionRemapper.c
 MODULE_SRCS += km0/kernel/keyboardCoreLogic.c
 MODULE_SRCS += km0/kernel/keyboardMain.c
+MODULE_SRCS += km0/pointer/pointingDevice_rp_opticalSensor_paw3204db.c
 MODULE_SRCS += km0/scanner/keyScanner_directWired.c
 MODULE_SRCS += km0/wrapper/generalKeyboard.c
 
