@@ -96,7 +96,7 @@ const onSvgScroll = (e: WheelEvent) => {
 };
 
 export const EditSvgView = () => {
-  const { ghost, showAxis, showGrid, sight } = editReader;
+  const { ghost, showAxis, showGrid, sight, drawingShape } = editReader;
   const viewBoxSpec = getViewBoxSpec();
   const transformSpec = getTransformSpec();
 
@@ -110,7 +110,7 @@ export const EditSvgView = () => {
   // const { pressedKeyIndices } = editReader;
   // layouterAppGlobal.setDebugValue({ pressedKeyIndices });
 
-  layouterAppGlobal.debugObject.shapeDrawing = editReader.shapeDrawing;
+  layouterAppGlobal.debugObject.shapeDrawing = !!drawingShape;
 
   return (
     <svg
@@ -135,6 +135,7 @@ export const EditSvgView = () => {
         {editReader.allOutlineShapes.map((shape, idx) => (
           <KeyboardOutlineShapeView shape={shape} key={idx} />
         ))}
+        {drawingShape && <KeyboardOutlineShapeView shape={drawingShape} />}
       </g>
     </svg>
   );
