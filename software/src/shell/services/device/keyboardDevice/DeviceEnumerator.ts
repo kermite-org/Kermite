@@ -2,9 +2,7 @@ import * as HID from 'node-hid';
 import { compareString, IKeyboardDeviceInfo } from '~/shared';
 
 export interface IDeviceSpecificationParams {
-  // vendorId: number;
-  // productId: number;
-  serialNumberMcuCode: string;
+  serialNumberFirst8Bytes: string;
   usagePage: number;
   usage: number;
 }
@@ -22,9 +20,7 @@ export function enumerateSupportedDevicePathsCore(
     .filter((d) =>
       params.some(
         (param) =>
-          // d.vendorId === param.vendorId &&
-          // d.productId === param.productId &&
-          d.serialNumber?.slice(0, 8) === param.serialNumberMcuCode &&
+          d.serialNumber?.slice(0, 8) === param.serialNumberFirst8Bytes &&
           d.usagePage === param.usagePage &&
           d.usage === param.usage,
       ),
