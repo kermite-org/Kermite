@@ -36,6 +36,10 @@ class EditMutations {
     editUpdator.endEditSession();
   };
 
+  cancelEdit = () => {
+    editUpdator.cancelEditSession();
+  };
+
   startKeyEdit = (useGhost: boolean = true) => {
     editUpdator.startEditSession();
     if (useGhost) {

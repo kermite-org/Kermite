@@ -106,7 +106,7 @@ const OutlinePoint = (props: {
           editMutations.endEdit();
         } else {
           editMutations.cancelShapeDrawing();
-          editMutations.endEdit();
+          editMutations.cancelEdit();
         }
         editMutations.setCurrentShapeId(undefined);
         editMutations.unsetCurrentKeyEntity();
