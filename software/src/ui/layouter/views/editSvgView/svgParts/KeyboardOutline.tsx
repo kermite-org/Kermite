@@ -247,6 +247,9 @@ export const KeyboardOutlineShapeViewSingle = (props: {
 
   const isDrawing = shape === editReader.drawingShape;
 
+  const canSplitLine =
+    editReader.editMode === 'shape' && !editReader.drawingShape;
+
   return (
     <g transform={outerTransformSpec}>
       {!isDrawing && (
@@ -255,7 +258,7 @@ export const KeyboardOutlineShapeViewSingle = (props: {
       {isDrawing && (
         <polyline points={pointsSpec} css={cssKeyboardOutlineShapeView} />
       )}
-      <g>
+      <g qxIf={canSplitLine}>
         {vmLines.map((vm) => (
           <HittestLine key={vm.dstPointIndex} vm={vm} isMirror={isMirror} />
         ))}
