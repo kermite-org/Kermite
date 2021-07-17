@@ -145,6 +145,10 @@ class EditMutations {
   }
 
   addOutlinePoint(x: number, y: number) {
+    const { snapToGrid, snapPitches } = editReader;
+    if (snapToGrid) {
+      [x, y] = applyCoordSnapping(x, y, snapPitches);
+    }
     editUpdator.patchEditor((editor) => {
       const shape = editor.drawingShape;
       if (shape) {
