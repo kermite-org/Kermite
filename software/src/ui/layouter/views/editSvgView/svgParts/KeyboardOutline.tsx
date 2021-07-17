@@ -112,7 +112,6 @@ const OutlinePoint = (props: {
         editMutations.unsetCurrentKeyEntity();
         editMutations.setCurrentPointIndex(-1);
         e.stopPropagation();
-        return;
       }
       if (editMode === 'select') {
         editMutations.setCurrentShapeId(shapeId);
