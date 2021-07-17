@@ -73,12 +73,12 @@ const onSvgMouseDown = (e: MouseEvent) => {
         sy,
         currentTransGroup,
       );
-      editMutations.startEdit();
-      editMutations.startShapeDrawing();
+      if (!editReader.drawingShape) {
+        editMutations.startEdit();
+        editMutations.startShapeDrawing();
+      }
       editMutations.addOutlinePoint(gx, gy);
-      startOutlinePointDragOperation(e, false, () => {
-        editMutations.endEdit();
-      });
+      startOutlinePointDragOperation(e, false, () => {});
     }
   }
   if (e.button === 1) {

@@ -103,8 +103,10 @@ const OutlinePoint = (props: {
         if (drawingShape.points.length >= 3) {
           // shapeを閉じる
           editMutations.completeShapeDrawing();
+          editMutations.endEdit();
         } else {
           editMutations.cancelShapeDrawing();
+          editMutations.endEdit();
         }
         editMutations.setCurrentShapeId(undefined);
         editMutations.unsetCurrentKeyEntity();
