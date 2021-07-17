@@ -69,7 +69,10 @@ class EditMutations {
       allKeyEntities,
       placementAnchor,
       currentTransGroupId,
+      snapToGrid,
+      snapPitches,
     } = editReader;
+
     const keySize = sizeUnit.mode === 'KP' ? 1 : 18;
     if (placementAnchor === 'topLeft') {
       if (sizeUnit.mode === 'KP') {
@@ -80,6 +83,10 @@ class EditMutations {
         py -= keySize / 2;
       }
     }
+    if (snapToGrid) {
+      [px, py] = applyCoordSnapping(px, py, snapPitches);
+    }
+
     const [kx, ky] = mmToUnitValue(px, py, coordUnit);
     const id = getNextEntityInstanceId('key', allKeyEntities);
     const editKeyId = `ke${(Math.random() * 1000) >> 0}`;
