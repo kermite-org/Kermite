@@ -370,10 +370,9 @@ void keyboardMain_initialize() {
   dataStorage_initialize();
   configManager_addParameterChangeListener(parameterValueHandler);
   configManager_initialize();
-  setupSerialNumberText();
-  // usbIoCore_initialize();
   resetKeyboardCoreLogic();
   configuratorServant_initialize(ConfiguratorServantEventHandler);
+  setupSerialNumberText();
 }
 
 void keyboardMain_udpateKeyScanners() {
