@@ -2,6 +2,7 @@ import { Hook, jsx } from 'qx';
 import {
   getRelativeMousePosition,
   IPosition,
+  layouterAppGlobal,
   startDragSession,
 } from '~/ui/layouter/common';
 import { editMutations, editReader } from '~/ui/layouter/models';
@@ -108,6 +109,8 @@ export const EditSvgView = () => {
 
   // const { pressedKeyIndices } = editReader;
   // layouterAppGlobal.setDebugValue({ pressedKeyIndices });
+
+  layouterAppGlobal.debugObject.shapeDrawing = editReader.shapeDrawing;
 
   return (
     <svg
