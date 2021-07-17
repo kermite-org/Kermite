@@ -93,15 +93,19 @@ const OutlinePoint = (props: {
   const isSelected = shapeId === currentShapeId && index === currentPointIndex;
 
   const onMouseDown = (e: MouseEvent) => {
-    let { editMode, shapeDrawing } = editReader;
+    let { editMode, drawingShape } = editReader;
     if (e.button === 0) {
       if (editMode === 'key') {
         editMutations.setEditMode('move');
         editMode = 'move';
       }
-      if (editMode === 'shape' && shapeDrawing) {
-        // shapeを閉じる
-        editMutations.endShapeDrawing();
+      if (editMode === 'shape' && drawingShape) {
+        if (drawingShape.points.length >= 3) {
+          // shapeを閉じる
+          editMutations.completeShapeDrawing();
+        } else {
+          editMutations.cancelShapeDrawing();
+        }
         editMutations.setCurrentShapeId(undefined);
         editMutations.unsetCurrentKeyEntity();
         editMutations.setCurrentPointIndex(-1);
@@ -241,8 +245,7 @@ export const KeyboardOutlineShapeViewSingle = (props: {
     isMirror,
   );
 
-  const isDrawing =
-    editReader.shapeDrawing && editReader.currentOutlineShape === shape;
+  const isDrawing = shape === editReader.drawingShape;
 
   return (
     <g transform={outerTransformSpec}>
