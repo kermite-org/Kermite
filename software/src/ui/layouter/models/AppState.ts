@@ -1,6 +1,10 @@
 import { defaultKeyboardDesignSetup } from '~/shared';
 import { IGridSpecKey } from '~/ui/layouter/models/GridDefinitions';
-import { IEditKeyboardDesign, IEditKeyEntity } from './DataSchema';
+import {
+  IEditKeyboardDesign,
+  IEditKeyEntity,
+  IEditOutlineShape,
+} from './DataSchema';
 
 export type IEditMode = 'select' | 'move' | 'key' | 'shape' | 'delete';
 export interface IEditState {
@@ -11,7 +15,7 @@ export interface IEditState {
   currentShapeId: string | undefined;
   currentPointIndex: number;
   editMode: IEditMode;
-  shapeDrawing: boolean;
+  drawingShape: IEditOutlineShape | undefined;
   currentTransGroupId: string | undefined;
 }
 
@@ -74,7 +78,7 @@ export const appState: IAppState = {
     currentShapeId: undefined,
     currentPointIndex: -1,
     editMode: 'select',
-    shapeDrawing: false,
+    drawingShape: undefined,
     currentTransGroupId: undefined,
   },
   env: {

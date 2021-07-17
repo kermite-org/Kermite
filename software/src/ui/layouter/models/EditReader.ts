@@ -207,8 +207,8 @@ class EditReader {
     return appState.editor.design !== appState.editor.loadedDesign;
   }
 
-  get shapeDrawing() {
-    return appState.editor.shapeDrawing;
+  get drawingShape() {
+    return appState.editor.drawingShape;
   }
 
   get isPlacementUnitKpBased() {
