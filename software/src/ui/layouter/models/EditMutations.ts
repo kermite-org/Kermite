@@ -6,6 +6,7 @@ import {
 } from '~/shared';
 import { getNextEntityInstanceId } from '~/ui/layouter/models/DomainRelatedHelpers';
 import { editManager } from '~/ui/layouter/models/EditManager';
+import { draftGetEditPoint } from '~/ui/layouter/models/EditorHelper';
 import { IGridSpecKey } from '~/ui/layouter/models/GridDefinitions';
 import {
   changeKeySizeUnit,
@@ -307,31 +308,16 @@ class EditMutations {
   }
 
   setOutlinePointProp(propKey: 'x' | 'y', value: number) {
-    const { currentShapeId, currentPointIndex } = editReader;
-    if (!currentShapeId || currentPointIndex === -1) {
-      return;
-    }
     editUpdator.patchEditor((editor) => {
-      const point =
-        editor.design.outlineShapes[currentShapeId].points[currentPointIndex];
-      point[propKey] = value;
+      const point = draftGetEditPoint(editor);
+      if (point) {
+        point[propKey] = value;
+      }
     });
   }
 
   setOutlinePointPosition(px: number, py: number) {
-    const {
-      drawingShape,
-      currentOutlineShape,
-      currentPointIndex,
-      snapPitches,
-      snapToGrid,
-    } = editReader;
-
-    if (!currentOutlineShape || currentPointIndex === -1) {
-      return;
-    }
-
-    const isTargetDrawingShape = currentOutlineShape === drawingShape;
+    const { snapPitches, snapToGrid } = editReader;
 
     const gpx = snapPitches.x;
     const gpy = snapPitches.y;
@@ -341,10 +327,11 @@ class EditMutations {
     }
 
     editUpdator.patchEditor((editor) => {
-      const shape = isTargetDrawingShape
-        ? editor.drawingShape!
-        : editor.design.outlineShapes[currentOutlineShape!.id];
-      shape.points[currentPointIndex] = { x: px, y: py };
+      const point = draftGetEditPoint(editor);
+      if (point) {
+        point.x = px;
+        point.y = py;
+      }
     });
   }
 
