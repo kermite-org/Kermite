@@ -173,10 +173,12 @@ static void resetDataStorage() {
   }
   pos = putBlankChunk(pos, ChunkSig_ProfileData, 0);
 
-  //write project id
   uint16_t posSystemDataBody = getChunkBodyAddress(ChunkSig_SystemData);
   if (posSystemDataBody) {
+    //write project id
     dataMemory_writeBytes(posSystemDataBody, (uint8_t *)KERMITE_PROJECT_ID, 8);
+    //write default instance number
+    dataMemory_writeBytes(posSystemDataBody + 8, (uint8_t *)"00000000", 8);
   }
 }
 

@@ -1,28 +1,15 @@
-import { IGlobalSettings } from '~/shared';
 import {
-  vBoolean,
-  vObject,
-  vString,
-} from '~/shared/modules/SchemaValidationHelper';
+  globalSettingsDefault,
+  globalSettingsLoadingSchema,
+  IGlobalSettings,
+} from '~/shared';
 import { applicationStorage } from '~/shell/base';
 
 export namespace GlobalSettingsProvider {
-  const globalSettingsSchema = vObject({
-    useOnlineResources: vBoolean(),
-    useLocalResouces: vBoolean(),
-    localProjectRootFolderPath: vString(),
-  });
-
-  const globalSettingsDefault: IGlobalSettings = {
-    useOnlineResources: true,
-    useLocalResouces: false,
-    localProjectRootFolderPath: '',
-  };
-
   export function getGlobalSettings(): IGlobalSettings {
-    return applicationStorage.readItemSafe(
+    return applicationStorage.readItemBasedOnDefault(
       'globalSettings',
-      globalSettingsSchema,
+      globalSettingsLoadingSchema,
       globalSettingsDefault,
     );
   }

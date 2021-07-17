@@ -1,6 +1,8 @@
 import { Hook } from 'qx';
 import {
   forceChangeFilePathExtension,
+  IGlobalSettings,
+  IKeyboardDeviceStatus,
   IProfileData,
   IProfileEditSource,
 } from '~/shared';
@@ -16,8 +18,9 @@ import {
   texts,
   uiStatusModel,
   useDeviceStatusModel,
-  useLocal,
+  useGlobalSettingsFetch,
 } from '~/ui/common';
+import { useModalDisplayStateModel } from '~/ui/common/sharedModels/GeneralUiStateModels';
 import { useKeyboardBehaviorModeModel } from '~/ui/common/sharedModels/KeyboardBehaviorModeModel';
 import { editorModel } from '~/ui/editor-page/models/EditorModel';
 import { ProfilesModel } from '~/ui/editor-page/models/ProfilesModel';
@@ -239,75 +242,91 @@ const simulatorProfileUpdator = new (class {
   }
 })();
 
+function getCanWrite(
+  deviceStatus: IKeyboardDeviceStatus,
+  globalSettings: IGlobalSettings,
+): boolean {
+  const { allowCrossKeyboardKeyMappingWrite } = globalSettings;
+  const { editSource } = profilesModel;
+
+  const isInternalProfile = editSource.type === 'InternalProfile';
+
+  const isDeviceConnected = deviceStatus.isConnected;
+
+  const refProjectId = editorModel.loadedPorfileData.projectId;
+  const isProjectMatched = deviceStatus.deviceAttrs?.projectId === refProjectId;
+
+  if (allowCrossKeyboardKeyMappingWrite) {
+    return isInternalProfile && isDeviceConnected;
+  } else {
+    return isInternalProfile && isDeviceConnected && isProjectMatched;
+  }
+}
+
+function getCanSave(): boolean {
+  const { editSource } = profilesModel;
+  return (
+    editSource.type === 'NewlyCreated' ||
+    editSource.type === 'ExternalFile' ||
+    (editSource.type === 'InternalProfile' && profilesModel.checkDirty())
+  );
+}
+
+const loadProfile = async (profileName: string) => {
+  if (profilesModel.checkDirty()) {
+    const ok = await modalConfirm({
+      caption: texts.label_assigner_confirmModal_loadProfile_modalTitle,
+      message: texts.label_assigner_confirmModal_loadProfile_modalMessage,
+    });
+    if (!ok) {
+      return;
+    }
+  }
+  profilesModel.loadProfile(profileName);
+};
+
+const openUserProfilesFolder = async () => {
+  await ipcAgent.async.profile_openUserProfilesFolder();
+};
+
+const onWriteButton = async () => {
+  await profilesModel.saveProfile();
+  uiStatusModel.setLoading();
+  const done = await ipcAgent.async.config_writeKeyMappingToDevice();
+  uiStatusModel.clearLoading();
+  // todo: トーストにする?
+  if (done) {
+    await modalAlert('write succeeded.');
+  } else {
+    await modalAlert('write failed.');
+  }
+};
+
+const toggleRoutingPanel = () => {
+  editorPageModel.routingPanelVisible = !editorPageModel.routingPanelVisible;
+};
+
 export function makeProfileManagementPartViewModel(): IProfileManagementPartViewModel {
   Hook.useEffect(profilesModel.startPageSession, []);
 
-  const deviceStatus = useDeviceStatusModel();
-
-  const state = useLocal({ isPresetsModalOpen: false });
-
-  const openExportingPresetSelectionModal = () => {
-    state.isPresetsModalOpen = true;
-  };
-  const closeExportingPresetSelectionModal = () => {
-    state.isPresetsModalOpen = false;
-  };
-
   const { editSource, allProfileNames, saveProfile } = profilesModel;
 
-  const canSave =
-    editSource.type === 'NewlyCreated' ||
-    editSource.type === 'ExternalFile' ||
-    (editSource.type === 'InternalProfile' && profilesModel.checkDirty());
+  const deviceStatus = useDeviceStatusModel();
 
-  // todo: デフォルトではProjetIDが異なるデバイスには書き込めないようにする
-  // const refProjectId = profilesModel.getCurrentProfileProjectId();
-  const canWrite =
-    editSource.type === 'InternalProfile' && deviceStatus.isConnected;
-  // (refProjectId
-  //   ? deviceStatus.deviceAttrs?.projectId === refProjectId
-  //   : true);
-
-  const loadProfile = async (profileName: string) => {
-    if (profilesModel.checkDirty()) {
-      const ok = await modalConfirm({
-        caption: texts.label_assigner_confirmModal_loadProfile_modalTitle,
-        message: texts.label_assigner_confirmModal_loadProfile_modalMessage,
-      });
-      if (!ok) {
-        return;
-      }
-    }
-    profilesModel.loadProfile(profileName);
-  };
-
-  const openUserProfilesFolder = async () => {
-    await ipcAgent.async.profile_openUserProfilesFolder();
-  };
+  const globalSettings = useGlobalSettingsFetch();
 
   const { isSimulatorMode } = useKeyboardBehaviorModeModel();
+
+  const presetsModalDisplayStateModel = useModalDisplayStateModel();
+
+  const canWrite = getCanWrite(deviceStatus, globalSettings);
+
+  const canSave = getCanSave();
 
   simulatorProfileUpdator.affectToSimulatorIfEditProfileChanged(
     editorModel.profileData,
     isSimulatorMode,
   );
-
-  const onWriteButton = async () => {
-    await profilesModel.saveProfile();
-    uiStatusModel.setLoading();
-    const done = await ipcAgent.async.config_writeKeyMappingToDevice();
-    uiStatusModel.clearLoading();
-    // todo: トーストにする?
-    if (done) {
-      await modalAlert('write succeeded.');
-    } else {
-      await modalAlert('write failed.');
-    }
-  };
-
-  const toggleRoutingPanel = () => {
-    editorPageModel.routingPanelVisible = !editorPageModel.routingPanelVisible;
-  };
 
   return {
     createProfile,
@@ -325,9 +344,9 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
       editSource,
       loadProfile,
     ),
-    isExportingPresetSelectionModalOpen: state.isPresetsModalOpen,
-    openExportingPresetSelectionModal,
-    closeExportingPresetSelectionModal,
+    isExportingPresetSelectionModalOpen: presetsModalDisplayStateModel.isOpen,
+    openExportingPresetSelectionModal: presetsModalDisplayStateModel.open,
+    closeExportingPresetSelectionModal: presetsModalDisplayStateModel.close,
     saveProfileAsPreset: profilesModel.exportProfileAsProjectPreset,
     currentProfileProjectId: editorModel.loadedPorfileData.projectId,
     isCurrentProfileInternal: editSource.type === 'InternalProfile',

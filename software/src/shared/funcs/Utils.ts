@@ -374,3 +374,7 @@ export function bumpObjectProps<T extends {}>(obj: T, source: T) {
   getObjectKeys(obj).forEach((key) => obj[key]);
   getObjectKeys(source).forEach((key) => (obj[key] = source[key]));
 }
+
+export function makeIntegersRange(lo: number, hi: number) {
+  return new Array(hi - lo + 1).fill(0).map((_, i) => lo + i);
+}

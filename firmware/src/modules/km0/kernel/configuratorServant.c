@@ -111,8 +111,8 @@ static void emitSingleParameterChangedNotification(uint8_t parameterIndex, uint8
   emitGenericHidData(rawHidTempBuf);
 }
 
-static void copyEepromBytesToBuffer(uint8_t *dstBuffer, int dstOffset, uint16_t srcEepromAddr, uint16_t len) {
-  dataMemory_readBytes(srcEepromAddr, dstBuffer + dstOffset, len);
+static void copyStorageBytesToBuffer(uint8_t *dstBuffer, int dstOffset, uint16_t srcStorageAddr, uint16_t len) {
+  dataMemory_readBytes(srcStorageAddr, dstBuffer + dstOffset, len);
 }
 
 static void emitDeviceAttributesResponse() {
@@ -125,7 +125,7 @@ static void emitDeviceAttributesResponse() {
   utils_copyBytes(p + 5, (uint8_t *)KERMITE_PROJECT_ID, 8);
   p[13] = Kermite_Project_IsResourceOriginOnline;
   p[14] = 0;
-  copyEepromBytesToBuffer(p, 15, storageAddr_DeviceInstanceCode, 8);
+  copyStorageBytesToBuffer(p, 15, storageAddr_DeviceInstanceCode, 8);
   p[23] = keyMappingDataCapacity >> 8 & 0xFF;
   p[24] = keyMappingDataCapacity & 0xFF;
   utils_fillBytes(p + 25, 0, 16);
@@ -287,5 +287,5 @@ void configuratorServant_emitRelatimeLayerEvent(uint16_t layerFlags) {
 }
 
 void configuratorServant_readDeviceInstanceCode(uint8_t *buffer) {
-  copyEepromBytesToBuffer(buffer, 0, storageAddr_DeviceInstanceCode, 8);
+  copyStorageBytesToBuffer(buffer, 0, storageAddr_DeviceInstanceCode, 8);
 }

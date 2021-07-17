@@ -1,5 +1,9 @@
 import { Hook } from 'qx';
-import { IResourceOrigin, sortOrderBy } from '~/shared';
+import {
+  globalSettingsFallbackValue,
+  IResourceOrigin,
+  sortOrderBy,
+} from '~/shared';
 import { ipcAgent, appUi } from '~/ui/common/base';
 import { useFetcher } from '~/ui/common/helpers';
 
@@ -36,4 +40,11 @@ export function useProjectResourceInfos(
     [resourceInfos],
   );
   return sorted;
+}
+
+export function useGlobalSettingsFetch() {
+  return useFetcher(
+    ipcAgent.async.config_getGlobalSettings,
+    globalSettingsFallbackValue,
+  );
 }

@@ -43,7 +43,10 @@ export function generateRandomDeviceInstanceCode(): string {
     .join('');
 }
 
-export function checkDeviceInstanceCodeFormat(code: string): boolean {
+export function checkDeviceInstanceCodeValid(code: string): boolean {
+  if (code === '00000000') {
+    return false;
+  }
   return /^[0-9a-f]{8}$/.test(code);
 }
 

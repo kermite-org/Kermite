@@ -1,5 +1,6 @@
 import { jsx, css } from 'qx';
 import { degToRad } from '~/shared';
+import { getIsoEnterSvgPathSpecText } from '~/shared/modules/ExtendedKeyShapes';
 import { getKeySize } from '~/shared/modules/PlacementUnitHelper';
 import { uiTheme } from '~/ui/common';
 import { IPosition, startDragSession } from '~/ui/layouter/common';
@@ -44,29 +45,7 @@ export function startKeyEntityDragOperation(
   startDragSession(e, moveCallback, completeCallback);
 }
 
-// no shrink
-// const isoEnterPathMarkupText = [
-//   'M -16.625, -19',
-//   'L -16.625, 0',
-//   'L -11.875, 0',
-//   'L -11.875, 19',
-//   'L 11.875, 19',
-//   'L 11.875, -19',
-//   'z',
-// ].join(' ');
-
-// shrink 0.5
-const isoEnterPathMarkupText = [
-  'M -16.125, -18.5',
-  'L -16.125, -0.5',
-  'L -11.375, -0.5',
-  'L -11.375, 18.5',
-  'L 11.375, 18.5',
-  'L 11.375, -18.5',
-  'z',
-].join(' ');
-
-export const KeyEntityCardSingle = (props: {
+const KeyEntityCardSingle = (props: {
   ke: IEditKeyEntity;
   isMirror: boolean;
 }) => {
@@ -222,12 +201,10 @@ export const KeyEntityCardSingle = (props: {
   }
 
   if (ke.shape === 'ext isoEnter') {
-    const transformSpec = `translate(${d * 16.25}, ${d * 19})`;
     return (
       <g transform={outerTransformSpec}>
         <path
-          transform={transformSpec}
-          d={isoEnterPathMarkupText}
+          d={getIsoEnterSvgPathSpecText(placementAnchor)}
           css={cssKeyRect}
           data-selected={isSelected}
           data-ghost={isGhost}

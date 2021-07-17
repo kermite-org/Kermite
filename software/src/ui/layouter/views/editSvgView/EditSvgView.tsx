@@ -1,12 +1,13 @@
 import { Hook, jsx } from 'qx';
 import {
+  getRelativeMousePosition,
   IPosition,
   startDragSession,
-  getRelativeMousePosition,
 } from '~/ui/layouter/common';
-import { editReader, editMutations } from '~/ui/layouter/models';
-import { screenToWorld } from './CoordHelpers';
-import { FieldGrid, FieldAxis } from './svgParts/FieldParts';
+import { editMutations, editReader } from '~/ui/layouter/models';
+import { FieldGrid } from '~/ui/layouter/views/editSvgView/svgParts/FieldGrid';
+import { screenCoordToGroupTransformationCoord } from './CoordHelpers';
+import { FieldAxis } from './svgParts/FieldAxis';
 import {
   KeyEntityCard,
   startKeyEntityDragOperation,
@@ -45,7 +46,7 @@ function startSightDragOperation(e: MouseEvent) {
 
 const onSvgMouseDown = (e: MouseEvent) => {
   if (e.button === 0) {
-    const { editMode } = editReader;
+    const { editMode, currentTransGroup } = editReader;
     if (editMode === 'select') {
       editMutations.setCurrentShapeId(undefined);
       editMutations.unsetCurrentKeyEntity();
@@ -53,19 +54,27 @@ const onSvgMouseDown = (e: MouseEvent) => {
     }
     if (editMode === 'key') {
       const [sx, sy] = getRelativeMousePosition(e);
-      const [x, y] = screenToWorld(sx, sy);
+      const [gx, gy] = screenCoordToGroupTransformationCoord(
+        sx,
+        sy,
+        currentTransGroup,
+      );
       editMutations.startEdit();
-      editMutations.addKeyEntity(x, y);
+      editMutations.addKeyEntity(gx, gy);
       startKeyEntityDragOperation(e, false, () => {
         editMutations.endEdit();
       });
     }
     if (editMode === 'shape') {
       const [sx, sy] = getRelativeMousePosition(e);
-      const [x, y] = screenToWorld(sx, sy);
+      const [gx, gy] = screenCoordToGroupTransformationCoord(
+        sx,
+        sy,
+        currentTransGroup,
+      );
       editMutations.startEdit();
       editMutations.startShapeDrawing();
-      editMutations.addOutlinePoint(x, y);
+      editMutations.addOutlinePoint(gx, gy);
       startOutlinePointDragOperation(e, false, () => {
         editMutations.endEdit();
       });
