@@ -27,15 +27,6 @@ import {
 import { editReader } from './EditReader';
 import { editUpdator } from './EditUpdator';
 
-function cleanupInvalidPolygons(design: IEditKeyboardDesign) {
-  const { outlineShapes } = design;
-  for (const key in outlineShapes) {
-    const shape = outlineShapes[key];
-    if (shape && shape.points.length < 3) {
-      delete outlineShapes[key];
-    }
-  }
-}
 class EditMutations {
   startEdit = () => {
     editUpdator.startEditSession();
@@ -140,14 +131,12 @@ class EditMutations {
   }
 
   addOutlinePoint(x: number, y: number) {
-    const shapeId = editReader.currentShapeId;
-    if (!shapeId) {
-      return;
-    }
     editUpdator.patchEditor((editor) => {
-      const shape = editor.design.outlineShapes[shapeId];
-      shape.points.push({ x, y });
-      editor.currentPointIndex = shape.points.length - 1;
+      const shape = editor.drawingShape;
+      if (shape) {
+        shape.points.push({ x, y });
+        editor.currentPointIndex = shape.points.length - 1;
+      }
     });
   }
 
@@ -184,18 +173,45 @@ class EditMutations {
     });
   }
 
-  private closeShapeIfDrawing() {
-    if (editReader.shapeDrawing) {
-      // 入力中のshapeがある場合閉じる
+  startShapeDrawing() {
+    if (!editReader.drawingShape) {
+      const newId = getNextEntityInstanceId(
+        'shape',
+        editReader.allOutlineShapes,
+      );
+
+      editUpdator.patchEditor((editor) => {
+        editor.drawingShape = {
+          id: newId,
+          points: [],
+          groupId: editReader.currentTransGroupId || '',
+        };
+        editor.currentShapeId = newId;
+        editor.currentPointIndex = -1;
+      });
+    }
+  }
+
+  completeShapeDrawing() {
+    const { drawingShape } = editReader;
+    if (drawingShape && drawingShape.points.length >= 3) {
       editUpdator.commitEditor((state) => {
-        cleanupInvalidPolygons(state.design);
-        state.shapeDrawing = false;
+        state.design.outlineShapes[drawingShape.id] = drawingShape;
+        state.drawingShape = undefined;
+      });
+    }
+  }
+
+  cancelShapeDrawing() {
+    if (editReader.drawingShape) {
+      editUpdator.patchEditor((editor) => {
+        editor.drawingShape = undefined;
       });
     }
   }
 
   setEditMode(mode: IEditMode) {
-    this.closeShapeIfDrawing();
+    this.cancelShapeDrawing();
     editUpdator.patchEditor((editor) => {
       editor.editMode = mode;
     });
@@ -206,7 +222,7 @@ class EditMutations {
     if (currentMode === mode) {
       return;
     }
-    this.closeShapeIfDrawing();
+    this.cancelShapeDrawing();
 
     editUpdator.patchEditor((state) => {
       state.currentkeyEntityId = undefined;
@@ -432,35 +448,6 @@ class EditMutations {
       env.sight.pos.x = cx;
       env.sight.pos.y = cy;
     });
-  }
-
-  startShapeDrawing() {
-    if (!appState.editor.shapeDrawing) {
-      const newId = getNextEntityInstanceId(
-        'shape',
-        editReader.allOutlineShapes,
-      );
-
-      editUpdator.patchEditor((editor) => {
-        editor.design.outlineShapes[newId] = {
-          id: newId,
-          points: [],
-          groupId: editReader.currentTransGroupId || '',
-        };
-        editor.currentShapeId = newId;
-        editor.currentPointIndex = -1;
-        editor.shapeDrawing = true;
-      });
-    }
-  }
-
-  endShapeDrawing() {
-    if (appState.editor.shapeDrawing) {
-      editUpdator.commitEditor((editor) => {
-        cleanupInvalidPolygons(editor.design);
-        editor.shapeDrawing = false;
-      });
-    }
   }
 
   setCurrentShapeGroupId(groupId: string) {
