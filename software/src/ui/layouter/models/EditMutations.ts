@@ -413,7 +413,7 @@ class EditMutations {
       const { sight } = env;
       const sza = 1 + dir * 0.05;
       const oldScale = sight.scale;
-      const newScale = clamp(sight.scale * sza, 0.1, 10);
+      const newScale = clamp(sight.scale * sza, 0.02, 2);
       sight.scale = newScale;
       const scaleDiff = newScale - oldScale;
       sight.pos.x -= px * scaleDiff;
