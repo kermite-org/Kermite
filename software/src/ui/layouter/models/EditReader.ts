@@ -217,6 +217,10 @@ class EditReader {
   get isPlacementUnitKpBased() {
     return appState.editor.design.setup.placementUnit.startsWith('KP');
   }
+
+  get worldMousePos() {
+    return appState.env.worldMousePos;
+  }
 }
 
 export const editReader = new EditReader();

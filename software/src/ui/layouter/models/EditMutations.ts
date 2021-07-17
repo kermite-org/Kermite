@@ -473,6 +473,14 @@ class EditMutations {
     });
   }
 
+  setWorldMousePos(x: number, y: number) {
+    editUpdator.patchEnvState((env) => {
+      const mp = env.worldMousePos;
+      mp.x = x;
+      mp.y = y;
+    });
+  }
+
   get canUndo() {
     return editManager.canUndo || !!editReader.drawingShape;
   }
