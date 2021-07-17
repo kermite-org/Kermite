@@ -6,13 +6,15 @@ import {
 } from '~/shared';
 import { getNextEntityInstanceId } from '~/ui/layouter/models/DomainRelatedHelpers';
 import { editManager } from '~/ui/layouter/models/EditManager';
-import { draftGetEditPoint } from '~/ui/layouter/models/EditorHelper';
+import {
+  applyCoordSnapping,
+  draftGetEditPoint,
+} from '~/ui/layouter/models/EditorHelper';
 import { IGridSpecKey } from '~/ui/layouter/models/GridDefinitions';
 import {
   changeKeySizeUnit,
   changePlacementCoordUnit,
   mmToUnitValue,
-  unitValueToMm,
 } from '~/ui/layouter/models/PlacementUnitHelperEx';
 import {
   appState,
@@ -291,19 +293,13 @@ class EditMutations {
 
   setKeyPosition(px: number, py: number) {
     const { coordUnit, snapToGrid, snapPitches } = editReader;
-    const gpx = snapPitches.x;
-    const gpy = snapPitches.y;
-
     editUpdator.patchEditKeyEntity((ke) => {
-      let [kx, ky] = unitValueToMm(ke.x, ke.y, coordUnit);
       if (snapToGrid) {
-        kx = Math.round(px / gpx) * gpx;
-        ky = Math.round(py / gpy) * gpy;
+        const [kx, ky] = applyCoordSnapping(px, py, snapPitches);
+        [ke.x, ke.y] = mmToUnitValue(kx, ky, coordUnit);
       } else {
-        kx = px;
-        ky = py;
+        [ke.x, ke.y] = mmToUnitValue(px, py, coordUnit);
       }
-      [ke.x, ke.y] = mmToUnitValue(kx, ky, coordUnit);
     });
   }
 
@@ -318,14 +314,9 @@ class EditMutations {
 
   setOutlinePointPosition(px: number, py: number) {
     const { snapPitches, snapToGrid } = editReader;
-
-    const gpx = snapPitches.x;
-    const gpy = snapPitches.y;
     if (snapToGrid) {
-      px = Math.round(px / gpx) * gpx;
-      py = Math.round(py / gpy) * gpy;
+      [px, py] = applyCoordSnapping(px, py, snapPitches);
     }
-
     editUpdator.patchEditor((editor) => {
       const point = draftGetEditPoint(editor);
       if (point) {
