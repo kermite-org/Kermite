@@ -2,6 +2,7 @@ import { Hook, jsx } from 'qx';
 import {
   getRelativeMousePosition,
   IPosition,
+  layouterAppFeatures,
   startDragSession,
 } from '~/ui/layouter/common';
 import { editMutations, editReader } from '~/ui/layouter/models';
@@ -121,7 +122,9 @@ export const EditSvgView = () => {
       height={sight.screenH}
       viewBox={viewBoxSpec}
       onMouseDown={onSvgMouseDown}
-      onMouseMove={onSvgMouseMove}
+      onMouseMove={
+        (layouterAppFeatures.showCoordCrosshair && onSvgMouseMove) || undefined
+      }
       onWheel={onSvgScroll}
       id="domEditSvg"
     >
@@ -141,7 +144,7 @@ export const EditSvgView = () => {
           ))}
         </g>
         {drawingShape && <KeyboardOutlineShapeView shape={drawingShape} />}
-        <CoordCursor />
+        {layouterAppFeatures.showCoordCrosshair && <CoordCursor />}
       </g>
     </svg>
   );
