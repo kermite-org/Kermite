@@ -17,13 +17,16 @@ void generalKeyboard_start() {
       keyboardMain_processKeyInputUpdate();
       keyboardMain_updateKeyInidicatorLed();
     }
-    if (tick % 40 == 1) {
+    if (tick % 4 == 1) {
+      keyboardMain_updatePointingDevice();
+    }
+    if (tick % 40 == 2) {
       keyboardMain_updateRgbLightingModules(tick);
     }
-    if (tick % 48 == 2) {
+    if (tick % 48 == 3) {
       keyboardMain_updateOledDisplayModule(tick);
     }
-    if (tick % 4000 == 3) {
+    if (tick % 4000 == 0) {
       keyboardMain_taskFlashHeartbeatLed();
     }
     keyboardMain_processUpdate();
