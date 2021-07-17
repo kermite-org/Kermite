@@ -2,6 +2,7 @@ import { Hook, jsx } from 'qx';
 import {
   getRelativeMousePosition,
   IPosition,
+  layouterAppGlobal,
   startDragSession,
 } from '~/ui/layouter/common';
 import { editMutations, editReader } from '~/ui/layouter/models';
@@ -72,12 +73,11 @@ const onSvgMouseDown = (e: MouseEvent) => {
         sy,
         currentTransGroup,
       );
-      editMutations.startEdit();
-      editMutations.startShapeDrawing();
+      if (!editReader.drawingShape) {
+        editMutations.startShapeDrawing();
+      }
       editMutations.addOutlinePoint(gx, gy);
-      startOutlinePointDragOperation(e, false, () => {
-        editMutations.endEdit();
-      });
+      startOutlinePointDragOperation(e, false, () => {});
     }
   }
   if (e.button === 1) {
@@ -95,7 +95,7 @@ const onSvgScroll = (e: WheelEvent) => {
 };
 
 export const EditSvgView = () => {
-  const { ghost, showAxis, showGrid, sight } = editReader;
+  const { ghost, showAxis, showGrid, sight, drawingShape } = editReader;
   const viewBoxSpec = getViewBoxSpec();
   const transformSpec = getTransformSpec();
 
@@ -108,6 +108,8 @@ export const EditSvgView = () => {
 
   // const { pressedKeyIndices } = editReader;
   // layouterAppGlobal.setDebugValue({ pressedKeyIndices });
+
+  layouterAppGlobal.debugObject.drawingShape = drawingShape;
 
   return (
     <svg
@@ -122,16 +124,18 @@ export const EditSvgView = () => {
         {showGrid && <FieldGrid />}
         {showAxis && <FieldAxis />}
         {ghost && <KeyEntityCard ke={ghost} />}
-
         {/* <DisplayAreaFrame /> */}
-
-        {editReader.allKeyEntities.map((ke) => (
-          <KeyEntityCard ke={ke} key={ke.id} />
-        ))}
-
-        {editReader.allOutlineShapes.map((shape, idx) => (
-          <KeyboardOutlineShapeView shape={shape} key={idx} />
-        ))}
+        <g>
+          {editReader.allKeyEntities.map((ke) => (
+            <KeyEntityCard ke={ke} key={ke.id} />
+          ))}
+        </g>
+        <g>
+          {editReader.allOutlineShapes.map((shape, idx) => (
+            <KeyboardOutlineShapeView shape={shape} key={idx} />
+          ))}
+        </g>
+        {drawingShape && <KeyboardOutlineShapeView shape={drawingShape} />}
       </g>
     </svg>
   );

@@ -146,7 +146,10 @@ class EditReader {
   }
 
   get currentOutlineShape(): IEditOutlineShape | undefined {
-    return appState.editor.design.outlineShapes[this.currentShapeId || ''];
+    return (
+      appState.editor.drawingShape ||
+      appState.editor.design.outlineShapes[this.currentShapeId || '']
+    );
   }
 
   get outlinePoints(): IEditOutlinePoint[] | undefined {
@@ -207,8 +210,8 @@ class EditReader {
     return appState.editor.design !== appState.editor.loadedDesign;
   }
 
-  get shapeDrawing() {
-    return appState.editor.shapeDrawing;
+  get drawingShape() {
+    return appState.editor.drawingShape;
   }
 
   get isPlacementUnitKpBased() {
