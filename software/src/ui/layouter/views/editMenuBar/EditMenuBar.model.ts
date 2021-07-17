@@ -1,7 +1,6 @@
 import { getObjectKeys } from '~/shared';
 import { ISelectorOption } from '~/ui/common';
 import {
-  editManager,
   editMutations,
   editReader,
   IEditMode,
