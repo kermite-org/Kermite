@@ -485,7 +485,7 @@ class EditMutations {
   }
 
   get canUndo() {
-    return editManager.canUndo;
+    return editManager.canUndo || !!editReader.drawingShape;
   }
 
   get canRedo() {
@@ -493,6 +493,10 @@ class EditMutations {
   }
 
   undo() {
+    if (editReader.drawingShape) {
+      this.cancelShapeDrawing();
+      return;
+    }
     editManager.undo();
   }
 
