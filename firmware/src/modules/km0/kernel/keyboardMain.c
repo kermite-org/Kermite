@@ -54,6 +54,8 @@ static uint8_t inputScanSlotFlags[NumScanSlotBytes] = { 0 };
 static uint16_t localLayerFlags = 0;
 static uint8_t localHidReport[8] = { 0 };
 
+static uint8_t localHidMouseReport[3] = { 0 };
+
 //メインロジックをPC側ユーティリティのLogicSimulatorに移譲するモード
 static bool isSimulatorModeEnabled = false;
 
@@ -65,6 +67,9 @@ static KeyboardCallbackSet *callbacks = NULL;
 typedef void (*KeyScannerUpdateFunc)(uint8_t *keyStateBitFlags);
 static KeyScannerUpdateFunc keyScannerUpdateFuncs[NumMaxKeyScanners] = { 0 };
 static uint8_t keyScannersLength = 0;
+
+typedef void (*PointingDeviceUpdateFunc)(int8_t *outDeltaX, int8_t *outDeltaY);
+PointingDeviceUpdateFunc pointingDeviceUpdateFunc = NULL;
 
 typedef void (*VisualModuleUpdateFunc)(void);
 static VisualModuleUpdateFunc rgbLightingUpdateFuncs[NumsMaxRgbLightingModules] = { 0 };
@@ -341,6 +346,10 @@ void keyboardMain_useRgbLightingModule(void (*_updateFn)(void)) {
   rgbLightingUpdateFuncs[rgbLightingModulesLength++] = _updateFn;
 }
 
+void keyboardMain_usePointingDevice(void (*_pointingDeviceUpdateFunc)(int8_t *outDeltaX, int8_t *outDeltaY)) {
+  pointingDeviceUpdateFunc = _pointingDeviceUpdateFunc;
+}
+
 void keyboardMain_useOledDisplayModule(void (*_updateFn)(void)) {
   oledDisplayUpdateFunc = _updateFn;
 }
@@ -378,6 +387,18 @@ void keyboardMain_initialize() {
 
 void keyboardMain_udpateKeyScanners() {
   updateKeyScanners();
+}
+
+void keyboardMain_updatePointingDevice() {
+  int8_t deltaX = 0, deltaY = 0;
+  if (pointingDeviceUpdateFunc) {
+    pointingDeviceUpdateFunc(&deltaX, &deltaY);
+    if (deltaX != 0 || deltaY != 0) {
+      localHidMouseReport[1] = deltaX;
+      localHidMouseReport[2] = deltaY;
+      usbIoCore_hidMouse_writeReport(localHidMouseReport);
+    }
+  }
 }
 
 void keyboardMain_processKeyInputUpdate() {
