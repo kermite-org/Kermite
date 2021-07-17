@@ -394,6 +394,7 @@ void keyboardMain_updatePointingDevice() {
   if (pointingDeviceUpdateFunc) {
     pointingDeviceUpdateFunc(&deltaX, &deltaY);
     if (deltaX != 0 || deltaY != 0) {
+      localHidMouseReport[0] = 0;
       localHidMouseReport[1] = deltaX;
       localHidMouseReport[2] = deltaY;
       usbIoCore_hidMouse_writeReport(localHidMouseReport);
