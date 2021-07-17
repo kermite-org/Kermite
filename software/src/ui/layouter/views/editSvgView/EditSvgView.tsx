@@ -2,12 +2,16 @@ import { Hook, jsx } from 'qx';
 import {
   getRelativeMousePosition,
   IPosition,
-  layouterAppGlobal,
+  layouterAppFeatures,
   startDragSession,
 } from '~/ui/layouter/common';
 import { editMutations, editReader } from '~/ui/layouter/models';
+import { CoordCursor } from '~/ui/layouter/views/editSvgView/svgParts/CoordCursor';
 import { FieldGrid } from '~/ui/layouter/views/editSvgView/svgParts/FieldGrid';
-import { screenCoordToGroupTransformationCoord } from './CoordHelpers';
+import {
+  screenCoordToGroupTransformationCoord,
+  screenToWorld,
+} from './CoordHelpers';
 import { FieldAxis } from './svgParts/FieldAxis';
 import {
   KeyEntityCard,
@@ -85,6 +89,12 @@ const onSvgMouseDown = (e: MouseEvent) => {
   }
 };
 
+const onSvgMouseMove = (e: MouseEvent) => {
+  const [sx, sy] = getRelativeMousePosition(e);
+  const [wx, wy] = screenToWorld(sx, sy);
+  editMutations.setWorldMousePos(wx, wy);
+};
+
 const onSvgScroll = (e: WheelEvent) => {
   const { screenW, screenH } = editReader.sight;
   const dir = e.deltaY / 120;
@@ -106,17 +116,15 @@ export const EditSvgView = () => {
     }
   }, []);
 
-  // const { pressedKeyIndices } = editReader;
-  // layouterAppGlobal.setDebugValue({ pressedKeyIndices });
-
-  layouterAppGlobal.debugObject.drawingShape = drawingShape;
-
   return (
     <svg
       width={sight.screenW}
       height={sight.screenH}
       viewBox={viewBoxSpec}
       onMouseDown={onSvgMouseDown}
+      onMouseMove={
+        (layouterAppFeatures.showCoordCrosshair && onSvgMouseMove) || undefined
+      }
       onWheel={onSvgScroll}
       id="domEditSvg"
     >
@@ -136,6 +144,7 @@ export const EditSvgView = () => {
           ))}
         </g>
         {drawingShape && <KeyboardOutlineShapeView shape={drawingShape} />}
+        {layouterAppFeatures.showCoordCrosshair && <CoordCursor />}
       </g>
     </svg>
   );

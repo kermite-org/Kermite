@@ -38,6 +38,10 @@ export interface IEnvState {
   showKeyId: boolean;
   showKeyIndex: boolean;
   pressedKeyIndices: number[];
+  worldMousePos: {
+    x: number;
+    y: number;
+  };
 }
 
 export type IEnvBoolPropKey =
@@ -99,5 +103,9 @@ export const appState: IAppState = {
     showKeyId: true,
     showKeyIndex: true,
     pressedKeyIndices: [],
+    worldMousePos: {
+      x: 0,
+      y: 0,
+    },
   },
 };

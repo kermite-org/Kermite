@@ -23,3 +23,15 @@ export function draftGetEditPoint(
   }
   return undefined;
 }
+
+export function applyCoordSnapping(
+  x: number,
+  y: number,
+  snapPitches: { x: number; y: number },
+): [number, number] {
+  const gpx = snapPitches.x;
+  const gpy = snapPitches.y;
+  x = Math.round(x / gpx) * gpx;
+  y = Math.round(y / gpy) * gpy;
+  return [x, y];
+}
