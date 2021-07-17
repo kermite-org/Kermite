@@ -179,11 +179,11 @@ class EditMutations {
 
   startShapeDrawing() {
     if (!editReader.drawingShape) {
+      editMutations.startEdit();
       const newId = getNextEntityInstanceId(
         'shape',
         editReader.allOutlineShapes,
       );
-
       editUpdator.patchEditor((editor) => {
         editor.drawingShape = {
           id: newId,
@@ -203,6 +203,7 @@ class EditMutations {
         state.design.outlineShapes[drawingShape.id] = drawingShape;
         state.drawingShape = undefined;
       });
+      editMutations.endEdit();
     }
   }
 
@@ -211,6 +212,7 @@ class EditMutations {
       editUpdator.patchEditor((editor) => {
         editor.drawingShape = undefined;
       });
+      editMutations.cancelEdit();
     }
   }
 

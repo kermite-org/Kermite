@@ -74,7 +74,6 @@ const onSvgMouseDown = (e: MouseEvent) => {
         currentTransGroup,
       );
       if (!editReader.drawingShape) {
-        editMutations.startEdit();
         editMutations.startShapeDrawing();
       }
       editMutations.addOutlinePoint(gx, gy);
