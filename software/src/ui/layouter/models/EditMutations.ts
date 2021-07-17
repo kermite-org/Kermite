@@ -195,7 +195,7 @@ class EditMutations {
   completeShapeDrawing() {
     const { drawingShape } = editReader;
     if (drawingShape && drawingShape.points.length >= 3) {
-      editUpdator.commitEditor((state) => {
+      editUpdator.patchEditor((state) => {
         state.design.outlineShapes[drawingShape.id] = drawingShape;
         state.drawingShape = undefined;
       });
