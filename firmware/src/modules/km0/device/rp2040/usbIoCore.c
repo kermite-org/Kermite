@@ -108,12 +108,48 @@ uint8_t const *tud_descriptor_device_cb(void) {
   HID_COLLECTION_END
 // clang-format on
 
+// clang-format off
+// Mouse Report Descriptor Template
+#define TUD_HID_REPORT_DESC_MOUSE__MODIFIED(...) \
+  HID_USAGE_PAGE ( HID_USAGE_PAGE_DESKTOP      )                   ,\
+  HID_USAGE      ( HID_USAGE_DESKTOP_MOUSE     )                   ,\
+  HID_COLLECTION ( HID_COLLECTION_APPLICATION  )                   ,\
+    /* Report ID if any */\
+    __VA_ARGS__ \
+    HID_USAGE      ( HID_USAGE_DESKTOP_POINTER )                   ,\
+    HID_COLLECTION ( HID_COLLECTION_PHYSICAL   )                   ,\
+      HID_USAGE_PAGE  ( HID_USAGE_PAGE_BUTTON  )                   ,\
+        HID_USAGE_MIN   ( 1                                      ) ,\
+        HID_USAGE_MAX   ( 5                                      ) ,\
+        HID_LOGICAL_MIN ( 0                                      ) ,\
+        HID_LOGICAL_MAX ( 1                                      ) ,\
+        /* Left, Right, Middle, Backward, Forward buttons */ \
+        HID_REPORT_COUNT( 5                                      ) ,\
+        HID_REPORT_SIZE ( 1                                      ) ,\
+        HID_INPUT       ( HID_DATA | HID_VARIABLE | HID_ABSOLUTE ) ,\
+        /* 3 bit padding */ \
+        HID_REPORT_COUNT( 1                                      ) ,\
+        HID_REPORT_SIZE ( 3                                      ) ,\
+        HID_INPUT       ( HID_CONSTANT                           ) ,\
+      HID_USAGE_PAGE  ( HID_USAGE_PAGE_DESKTOP )                   ,\
+        /* X, Y position [-127, 127] */ \
+        HID_USAGE       ( HID_USAGE_DESKTOP_X                    ) ,\
+        HID_USAGE       ( HID_USAGE_DESKTOP_Y                    ) ,\
+        HID_LOGICAL_MIN ( 0x81                                   ) ,\
+        HID_LOGICAL_MAX ( 0x7f                                   ) ,\
+        HID_REPORT_COUNT( 2                                      ) ,\
+        HID_REPORT_SIZE ( 8                                      ) ,\
+        HID_INPUT       ( HID_DATA | HID_VARIABLE | HID_RELATIVE ) ,\
+    HID_COLLECTION_END                                            , \
+  HID_COLLECTION_END \
+// clang-format on
+
 static uint8_t const desc_hid_report_keyboard[] = {
   TUD_HID_REPORT_DESC_KEYBOARD__MODIFIED()
 };
 
 static uint8_t const desc_hid_report_mouse[] = {
-  TUD_HID_REPORT_DESC_MOUSE()
+  TUD_HID_REPORT_DESC_MOUSE__MODIFIED()
 };
 
 static uint8_t const desc_hid_report_rawhid[] = {
@@ -324,10 +360,18 @@ void usbIoCore_initialize() {
 
 bool usbIoCore_hidKeyboard_writeReport(uint8_t *pReportBytes8) {
   if (tud_hid_n_ready(ITF_KEYBOARD)) {
-    uint8_t *p = pReportBytes8;
     tud_hid_n_report(ITF_KEYBOARD, 0, pReportBytes8, 8);
   } else {
     enqueueKeyboardEmitInternalBuffer(pReportBytes8);
+  }
+  return true;
+}
+
+bool usbIoCore_hidMouse_writeReport(uint8_t *pReportBytes3) {
+  if (tud_hid_n_ready(ITF_MOUSE)) {
+    tud_hid_n_report(ITF_MOUSE, 0, pReportBytes3, 3);
+  } else {
+    // enqueueMouseEmitInternalBuffer(pReportBytes3);
   }
   return true;
 }
