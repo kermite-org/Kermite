@@ -103,6 +103,11 @@ void pointingDevice_initialize() {
 }
 
 void pointingDevice_update(int8_t *outDeltaX, int8_t *outDeltaY) {
-  *outDeltaX = readData(OpticalSensorRegister_DeltaX);
-  *outDeltaY = readData(OpticalSensorRegister_DeltaY);
+  uint8_t motionStatus = readData(OpticalSensorRegister_MotionStatus);
+  if (bit_read(motionStatus, 7)) {
+    int8_t deltaX = readData(OpticalSensorRegister_DeltaX);
+    int8_t deltaY = readData(OpticalSensorRegister_DeltaY);
+    *outDeltaX = deltaX;
+    *outDeltaY = deltaY;
+  }
 }
