@@ -110,7 +110,7 @@ export const EditSvgView = () => {
   // const { pressedKeyIndices } = editReader;
   // layouterAppGlobal.setDebugValue({ pressedKeyIndices });
 
-  layouterAppGlobal.debugObject.shapeDrawing = !!drawingShape;
+  layouterAppGlobal.debugObject.drawingShape = drawingShape;
 
   return (
     <svg
@@ -125,16 +125,17 @@ export const EditSvgView = () => {
         {showGrid && <FieldGrid />}
         {showAxis && <FieldAxis />}
         {ghost && <KeyEntityCard ke={ghost} />}
-
         {/* <DisplayAreaFrame /> */}
-
-        {editReader.allKeyEntities.map((ke) => (
-          <KeyEntityCard ke={ke} key={ke.id} />
-        ))}
-
-        {editReader.allOutlineShapes.map((shape, idx) => (
-          <KeyboardOutlineShapeView shape={shape} key={idx} />
-        ))}
+        <g>
+          {editReader.allKeyEntities.map((ke) => (
+            <KeyEntityCard ke={ke} key={ke.id} />
+          ))}
+        </g>
+        <g>
+          {editReader.allOutlineShapes.map((shape, idx) => (
+            <KeyboardOutlineShapeView shape={shape} key={idx} />
+          ))}
+        </g>
         {drawingShape && <KeyboardOutlineShapeView shape={drawingShape} />}
       </g>
     </svg>
