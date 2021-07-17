@@ -106,11 +106,6 @@ export const EditSvgView = () => {
     }
   }, []);
 
-  // const { pressedKeyIndices } = editReader;
-  // layouterAppGlobal.setDebugValue({ pressedKeyIndices });
-
-  layouterAppGlobal.debugObject.drawingShape = drawingShape;
-
   return (
     <svg
       width={sight.screenW}
