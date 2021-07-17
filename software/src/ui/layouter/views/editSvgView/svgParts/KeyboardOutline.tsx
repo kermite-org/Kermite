@@ -100,7 +100,7 @@ const OutlinePoint = (props: {
         editMode = 'move';
       }
       if (editMode === 'shape' && drawingShape) {
-        if (drawingShape.points.length >= 3) {
+        if (drawingShape.id === shapeId && drawingShape.points.length >= 3) {
           // shapeを閉じる
           editMutations.completeShapeDrawing();
           editMutations.endEdit();
