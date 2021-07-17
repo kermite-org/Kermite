@@ -7,7 +7,7 @@ import {
 } from '~/shared';
 import { NumSystemParameters } from '~/shared/defs/CommandDefinitions';
 import {
-  checkDeviceInstanceCodeFormat,
+  checkDeviceInstanceCodeValid,
   generateRandomDeviceInstanceCode,
 } from '~/shared/funcs/DomainRelatedHelpers';
 import { Packets } from '~/shell/services/device/keyboardDevice/Packets';
@@ -153,7 +153,7 @@ export async function deviceSetupTask(
   console.log('start deviceSetupTask');
   let attrsRes = await readDeviceAttributes(device);
   checkDeviceRevisions(attrsRes);
-  if (!checkDeviceInstanceCodeFormat(attrsRes.deviceInstanceCode)) {
+  if (!checkDeviceInstanceCodeValid(attrsRes.deviceInstanceCode)) {
     console.log('write device instance code');
     const code = generateRandomDeviceInstanceCode();
     writeDeviceInstanceCode(device, code);
