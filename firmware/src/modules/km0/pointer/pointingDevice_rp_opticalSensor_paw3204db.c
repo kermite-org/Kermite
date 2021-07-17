@@ -7,8 +7,16 @@
 #include "pico_sdk/src/rp2_common/include/hardware/gpio.h"
 #include <stdio.h>
 
-const int pin_sdio = GP4;
-const int pin_sclk = GP5;
+#ifndef KM0_RP_OPTICALSENSOR_PAW3204DB_PIN_CLOCK
+#error KM0_RP_OPTICALSENSOR_PAW3204DB_PIN_CLOCK is not defined
+#endif
+
+#ifndef KM0_RP_OPTICALSENSOR_PAW3204DB_PIN_DATA
+#error KM0_RP_OPTICALSENSOR_PAW3204DB_PIN_DATA is not defined
+#endif
+
+static const int pin_sclk = KM0_RP_OPTICALSENSOR_PAW3204DB_PIN_CLOCK;
+static const int pin_sdio = KM0_RP_OPTICALSENSOR_PAW3204DB_PIN_DATA;
 
 enum {
   OpticalSensorRegister_ProductId1 = 0x00,
