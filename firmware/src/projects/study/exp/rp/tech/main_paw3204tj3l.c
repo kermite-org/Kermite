@@ -8,13 +8,12 @@
 #include <stdio.h>
 
 //board RPi Pico
-//GP25: onboard LED
-//GP4 <--> PAW3204 SDIO ---> LA.ch2
-//GP5 ---> PAW3204 SCLK ---> LA.ch1
+//GP4 ---> PAW3204 SCLK ---> LA.ch1
+//GP5 <--> PAW3204 SDIO ---> LA.ch2
 //GP6 debug timing monitor ---> LA.ch0
 
-const int pin_sdio = GP4;
-const int pin_sclk = GP5;
+const int pin_sclk = GP4;
+const int pin_sdio = GP5;
 
 const int pin_debug = GP6;
 
@@ -111,8 +110,8 @@ void writeData(uint8_t addr, uint8_t data) {
 }
 
 int main() {
-  debugUart_initialize(115200);
-  boardIo_setupLeds(GP25, GP25, false);
+  debugUart_initialize(38400);
+  boardIo_setupLeds_rpiPico();
   initPorts();
   reSyncSerial();
 
@@ -131,6 +130,7 @@ int main() {
     int8_t res4 = readData(0x04);  //Delta_Y
 
     if (cnt % 10 == 0) {
+      // printf("res0=%x\n", res0);
       printf("%x %x %x %d %d\n", res0, res1, res2, res3, res4);
     }
     cnt++;

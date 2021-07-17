@@ -12,8 +12,8 @@
 //PC0 ,with external pullup <--(level convertion)--> PAW3204 SDIO ---> LA.ch2
 //PF4 debug timing monitor ---> LA.ch0
 
-const int pin_clock = P_D4;
-const int pin_data = P_C6;
+const int pin_sclk = P_D4;
+const int pin_sdio = P_C6;
 
 const int pin_debug = P_F4;
 
@@ -42,33 +42,33 @@ void digitalIo_pseudoOpenDrain_output(uint8_t p, bool value) {
 }
 
 void initPorts() {
-  digitalIo_setOutput(pin_clock);
-  digitalIo_setHigh(pin_clock);
+  digitalIo_setOutput(pin_sclk);
+  digitalIo_setHigh(pin_sclk);
 
-  digitalIo_pseudoOpenDrain_init(pin_data);
+  digitalIo_pseudoOpenDrain_init(pin_sdio);
 
   digitalIo_setOutput(pin_debug);
   digitalIo_setHigh(pin_debug);
 }
 
 void clockHigh() {
-  digitalIo_setHigh(pin_clock);
+  digitalIo_setHigh(pin_sclk);
 }
 
 void clockLow() {
-  digitalIo_setLow(pin_clock);
+  digitalIo_setLow(pin_sclk);
 }
 
 void signalHiZ() {
-  digitalIo_pseudoOpenDrain_output(pin_data, 1);
+  digitalIo_pseudoOpenDrain_output(pin_sdio, 1);
 }
 
 void signalOut(bool value) {
-  digitalIo_pseudoOpenDrain_output(pin_data, value);
+  digitalIo_pseudoOpenDrain_output(pin_sdio, value);
 }
 
 bool signalRead() {
-  return digitalIo_read(pin_data);
+  return digitalIo_read(pin_sdio);
 }
 
 void debugLow() {
@@ -114,9 +114,7 @@ uint8_t readByte() {
 uint8_t readData(uint8_t addr) {
   writeByte(addr);
   signalHiZ();
-  delayUs(3); //T_HOLD
-  // delayUs(30);
-  debugHigh();
+  delayUs(3); //T_HOLD (>=3us)
   return readByte();
 }
 
@@ -141,14 +139,14 @@ int main() {
     delayMs(10);
     debugLow();
     uint8_t res0 = readData(0x00); //Product_ID1
-    // uint8_t res1 = readData(0x01); //Product_ID2
-    // uint8_t res2 = readData(0x02); //Motion_Status
-    // int8_t res3 = readData(0x03);  //Delta_X
-    // int8_t res4 = readData(0x04);  //Delta_Y
+    uint8_t res1 = readData(0x01); //Product_ID2
+    uint8_t res2 = readData(0x02); //Motion_Status
+    int8_t res3 = readData(0x03);  //Delta_X
+    int8_t res4 = readData(0x04);  //Delta_Y
 
     if (cnt % 10 == 0) {
-      printf("res= %x \n", res0);
-      // printf("%x %x %x %d %d\n", res0, res1, res2, res3, res4);
+      // printf("res0=%x\n", res0);
+      printf("%x %x %x %d %d\n", res0, res1, res2, res3, res4);
     }
     cnt++;
     debugHigh();
