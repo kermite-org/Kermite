@@ -146,7 +146,10 @@ class EditReader {
   }
 
   get currentOutlineShape(): IEditOutlineShape | undefined {
-    return appState.editor.design.outlineShapes[this.currentShapeId || ''];
+    return (
+      appState.editor.drawingShape ||
+      appState.editor.design.outlineShapes[this.currentShapeId || '']
+    );
   }
 
   get outlinePoints(): IEditOutlinePoint[] | undefined {

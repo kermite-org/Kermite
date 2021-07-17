@@ -314,15 +314,18 @@ class EditMutations {
 
   setOutlinePointPosition(px: number, py: number) {
     const {
-      currentShapeId,
+      drawingShape,
+      currentOutlineShape,
       currentPointIndex,
       snapPitches,
       snapToGrid,
     } = editReader;
 
-    if (!currentShapeId || currentPointIndex === -1) {
+    if (!currentOutlineShape || currentPointIndex === -1) {
       return;
     }
+
+    const isTargetDrawingShape = currentOutlineShape === drawingShape;
 
     const gpx = snapPitches.x;
     const gpy = snapPitches.y;
@@ -332,7 +335,9 @@ class EditMutations {
     }
 
     editUpdator.patchEditor((editor) => {
-      const shape = editor.design.outlineShapes[currentShapeId];
+      const shape = isTargetDrawingShape
+        ? editor.drawingShape!
+        : editor.design.outlineShapes[currentOutlineShape!.id];
       shape.points[currentPointIndex] = { x: px, y: py };
     });
   }
