@@ -71,10 +71,10 @@ export function makeEditMenuBarViewModel() {
   const vmShowKeyIndex = createToggleOptionViewModel('showKeyIndex');
 
   return {
-    canUndo: editManager.canUndo,
-    canRedo: editManager.canRedo,
-    undo: () => editManager.undo(),
-    redo: () => editManager.redo(),
+    canUndo: editMutations.canUndo,
+    canRedo: editMutations.canRedo,
+    undo: () => editMutations.undo(),
+    redo: () => editMutations.redo(),
     editModeVm,
     vmShowAxis,
     vmShowGrid,

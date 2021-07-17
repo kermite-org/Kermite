@@ -483,5 +483,21 @@ class EditMutations {
       removeArrayItems(env.pressedKeyIndices, keyIndex);
     });
   }
+
+  get canUndo() {
+    return editManager.canUndo;
+  }
+
+  get canRedo() {
+    return editManager.canRedo;
+  }
+
+  undo() {
+    editManager.undo();
+  }
+
+  redo() {
+    editManager.redo();
+  }
 }
 export const editMutations = new EditMutations();

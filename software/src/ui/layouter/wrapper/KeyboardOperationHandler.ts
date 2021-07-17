@@ -1,5 +1,5 @@
 import { rerender } from 'qx';
-import { editManager, editMutations, editReader } from '~/ui/layouter/models';
+import { editMutations, editReader } from '~/ui/layouter/models';
 
 export function keyboardOperationHander(e: KeyboardEvent) {
   if (e.key === 'Delete' || (e.key === 'Backspace' && e.metaKey)) {
@@ -17,21 +17,21 @@ export function keyboardOperationHander(e: KeyboardEvent) {
   if (isMacOS) {
     if (e.key === 'z' && e.metaKey) {
       if (!e.shiftKey) {
-        editManager.undo();
+        editMutations.undo();
       } else {
-        editManager.redo();
+        editMutations.redo();
       }
       rerender();
       e.preventDefault();
     }
   } else {
     if (e.key === 'z' && e.ctrlKey) {
-      editManager.undo();
+      editMutations.undo();
       rerender();
       e.preventDefault();
     }
     if (e.key === 'y' && e.ctrlKey) {
-      editManager.redo();
+      editMutations.redo();
       rerender();
       e.preventDefault();
     }
