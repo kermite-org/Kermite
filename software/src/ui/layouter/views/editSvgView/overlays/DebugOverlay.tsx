@@ -7,10 +7,11 @@ export const DebugOverlay = () => {
     top: 0;
     left: 0;
     pointer-events: none;
-    opacity: 0.5;
+    opacity: 0.7;
 
     word-break: break-all;
-    font-size: 12px;
+    font-size: 14px;
+    margin: 2px;
   `;
 
   const { debugObject, hasDebugValue } = layouterAppGlobal;
