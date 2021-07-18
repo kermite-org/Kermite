@@ -6,12 +6,15 @@ import {
 } from '~/shared';
 import { getNextEntityInstanceId } from '~/ui/layouter/models/DomainRelatedHelpers';
 import { editManager } from '~/ui/layouter/models/EditManager';
+import {
+  applyCoordSnapping,
+  draftGetEditPoint,
+} from '~/ui/layouter/models/EditorHelper';
 import { IGridSpecKey } from '~/ui/layouter/models/GridDefinitions';
 import {
   changeKeySizeUnit,
   changePlacementCoordUnit,
   mmToUnitValue,
-  unitValueToMm,
 } from '~/ui/layouter/models/PlacementUnitHelperEx';
 import {
   appState,
@@ -27,15 +30,6 @@ import {
 import { editReader } from './EditReader';
 import { editUpdator } from './EditUpdator';
 
-function cleanupInvalidPolygons(design: IEditKeyboardDesign) {
-  const { outlineShapes } = design;
-  for (const key in outlineShapes) {
-    const shape = outlineShapes[key];
-    if (shape && shape.points.length < 3) {
-      delete outlineShapes[key];
-    }
-  }
-}
 class EditMutations {
   startEdit = () => {
     editUpdator.startEditSession();
@@ -43,6 +37,10 @@ class EditMutations {
 
   endEdit = () => {
     editUpdator.endEditSession();
+  };
+
+  cancelEdit = () => {
+    editUpdator.cancelEditSession();
   };
 
   startKeyEdit = (useGhost: boolean = true) => {
@@ -71,7 +69,10 @@ class EditMutations {
       allKeyEntities,
       placementAnchor,
       currentTransGroupId,
+      snapToGrid,
+      snapPitches,
     } = editReader;
+
     const keySize = sizeUnit.mode === 'KP' ? 1 : 18;
     if (placementAnchor === 'topLeft') {
       if (sizeUnit.mode === 'KP') {
@@ -82,6 +83,10 @@ class EditMutations {
         py -= keySize / 2;
       }
     }
+    if (snapToGrid) {
+      [px, py] = applyCoordSnapping(px, py, snapPitches);
+    }
+
     const [kx, ky] = mmToUnitValue(px, py, coordUnit);
     const id = getNextEntityInstanceId('key', allKeyEntities);
     const editKeyId = `ke${(Math.random() * 1000) >> 0}`;
@@ -140,14 +145,16 @@ class EditMutations {
   }
 
   addOutlinePoint(x: number, y: number) {
-    const shapeId = editReader.currentShapeId;
-    if (!shapeId) {
-      return;
+    const { snapToGrid, snapPitches } = editReader;
+    if (snapToGrid) {
+      [x, y] = applyCoordSnapping(x, y, snapPitches);
     }
     editUpdator.patchEditor((editor) => {
-      const shape = editor.design.outlineShapes[shapeId];
-      shape.points.push({ x, y });
-      editor.currentPointIndex = shape.points.length - 1;
+      const shape = editor.drawingShape;
+      if (shape) {
+        shape.points.push({ x, y });
+        editor.currentPointIndex = shape.points.length - 1;
+      }
     });
   }
 
@@ -184,18 +191,47 @@ class EditMutations {
     });
   }
 
-  private closeShapeIfDrawing() {
-    if (editReader.shapeDrawing) {
-      // 入力中のshapeがある場合閉じる
-      editUpdator.commitEditor((state) => {
-        cleanupInvalidPolygons(state.design);
-        state.shapeDrawing = false;
+  startShapeDrawing() {
+    if (!editReader.drawingShape) {
+      editMutations.startEdit();
+      const newId = getNextEntityInstanceId(
+        'shape',
+        editReader.allOutlineShapes,
+      );
+      editUpdator.patchEditor((editor) => {
+        editor.drawingShape = {
+          id: newId,
+          points: [],
+          groupId: editReader.currentTransGroupId || '',
+        };
+        editor.currentShapeId = newId;
+        editor.currentPointIndex = -1;
       });
     }
   }
 
+  completeShapeDrawing() {
+    const { drawingShape } = editReader;
+    if (drawingShape && drawingShape.points.length >= 3) {
+      editUpdator.patchEditor((state) => {
+        state.design.outlineShapes[drawingShape.id] = drawingShape;
+        state.drawingShape = undefined;
+      });
+      editMutations.endEdit();
+    }
+  }
+
+  cancelShapeDrawing() {
+    if (editReader.drawingShape) {
+      editUpdator.patchEditor((editor) => {
+        editor.drawingShape = undefined;
+      });
+      editMutations.cancelEdit();
+    }
+  }
+
   setEditMode(mode: IEditMode) {
-    this.closeShapeIfDrawing();
+    this.cancelShapeDrawing();
     editUpdator.patchEditor((editor) => {
       editor.editMode = mode;
     });
@@ -206,7 +242,7 @@ class EditMutations {
     if (currentMode === mode) {
       return;
     }
-    this.closeShapeIfDrawing();
+    this.cancelShapeDrawing();
 
     editUpdator.patchEditor((state) => {
       state.currentkeyEntityId = undefined;
@@ -268,56 +304,36 @@ class EditMutations {
 
   setKeyPosition(px: number, py: number) {
     const { coordUnit, snapToGrid, snapPitches } = editReader;
-    const gpx = snapPitches.x;
-    const gpy = snapPitches.y;
-
     editUpdator.patchEditKeyEntity((ke) => {
-      let [kx, ky] = unitValueToMm(ke.x, ke.y, coordUnit);
       if (snapToGrid) {
-        kx = Math.round(px / gpx) * gpx;
-        ky = Math.round(py / gpy) * gpy;
+        const [kx, ky] = applyCoordSnapping(px, py, snapPitches);
+        [ke.x, ke.y] = mmToUnitValue(kx, ky, coordUnit);
       } else {
-        kx = px;
-        ky = py;
+        [ke.x, ke.y] = mmToUnitValue(px, py, coordUnit);
       }
-      [ke.x, ke.y] = mmToUnitValue(kx, ky, coordUnit);
     });
   }
 
   setOutlinePointProp(propKey: 'x' | 'y', value: number) {
-    const { currentShapeId, currentPointIndex } = editReader;
-    if (!currentShapeId || currentPointIndex === -1) {
-      return;
-    }
     editUpdator.patchEditor((editor) => {
-      const point =
-        editor.design.outlineShapes[currentShapeId].points[currentPointIndex];
-      point[propKey] = value;
+      const point = draftGetEditPoint(editor);
+      if (point) {
+        point[propKey] = value;
+      }
     });
   }
 
   setOutlinePointPosition(px: number, py: number) {
-    const {
-      currentShapeId,
-      currentPointIndex,
-      snapPitches,
-      snapToGrid,
-    } = editReader;
-
-    if (!currentShapeId || currentPointIndex === -1) {
-      return;
-    }
-
-    const gpx = snapPitches.x;
-    const gpy = snapPitches.y;
+    const { snapPitches, snapToGrid } = editReader;
     if (snapToGrid) {
-      px = Math.round(px / gpx) * gpx;
-      py = Math.round(py / gpy) * gpy;
+      [px, py] = applyCoordSnapping(px, py, snapPitches);
     }
-
     editUpdator.patchEditor((editor) => {
-      const shape = editor.design.outlineShapes[currentShapeId];
-      shape.points[currentPointIndex] = { x: px, y: py };
+      const point = draftGetEditPoint(editor);
+      if (point) {
+        point.x = px;
+        point.y = py;
+      }
     });
   }
 
@@ -399,7 +415,7 @@ class EditMutations {
       const { sight } = env;
       const sza = 1 + dir * 0.05;
       const oldScale = sight.scale;
-      const newScale = clamp(sight.scale * sza, 0.1, 10);
+      const newScale = clamp(sight.scale * sza, 0.02, 2);
       sight.scale = newScale;
       const scaleDiff = newScale - oldScale;
       sight.pos.x -= px * scaleDiff;
@@ -434,35 +450,6 @@ class EditMutations {
     });
   }
 
-  startShapeDrawing() {
-    if (!appState.editor.shapeDrawing) {
-      const newId = getNextEntityInstanceId(
-        'shape',
-        editReader.allOutlineShapes,
-      );
-
-      editUpdator.patchEditor((editor) => {
-        editor.design.outlineShapes[newId] = {
-          id: newId,
-          points: [],
-          groupId: editReader.currentTransGroupId || '',
-        };
-        editor.currentShapeId = newId;
-        editor.currentPointIndex = -1;
-        editor.shapeDrawing = true;
-      });
-    }
-  }
-
-  endShapeDrawing() {
-    if (appState.editor.shapeDrawing) {
-      editUpdator.commitEditor((editor) => {
-        cleanupInvalidPolygons(editor.design);
-        editor.shapeDrawing = false;
-      });
-    }
-  }
-
   setCurrentShapeGroupId(groupId: string) {
     const { currentShapeId } = editReader;
     if (!currentShapeId) {
@@ -484,6 +471,34 @@ class EditMutations {
     editUpdator.patchEnvState((env) => {
       removeArrayItems(env.pressedKeyIndices, keyIndex);
     });
+  }
+
+  setWorldMousePos(x: number, y: number) {
+    editUpdator.patchEnvState((env) => {
+      const mp = env.worldMousePos;
+      mp.x = x;
+      mp.y = y;
+    });
+  }
+
+  get canUndo() {
+    return editManager.canUndo || !!editReader.drawingShape;
+  }
+
+  get canRedo() {
+    return editManager.canRedo;
+  }
+
+  undo() {
+    if (editReader.drawingShape) {
+      this.cancelShapeDrawing();
+      return;
+    }
+    editManager.undo();
+  }
+
+  redo() {
+    editManager.redo();
   }
 }
 export const editMutations = new EditMutations();

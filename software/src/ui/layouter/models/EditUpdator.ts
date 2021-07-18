@@ -50,6 +50,10 @@ class EditUpdator {
       this.originalEditState = undefined;
     }
   }
+
+  cancelEditSession() {
+    this.originalEditState = undefined;
+  }
 }
 
 export const editUpdator = new EditUpdator();

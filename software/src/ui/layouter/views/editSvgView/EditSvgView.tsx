@@ -2,11 +2,16 @@ import { Hook, jsx } from 'qx';
 import {
   getRelativeMousePosition,
   IPosition,
+  layouterAppFeatures,
   startDragSession,
 } from '~/ui/layouter/common';
 import { editMutations, editReader } from '~/ui/layouter/models';
+import { CoordCursor } from '~/ui/layouter/views/editSvgView/svgParts/CoordCursor';
 import { FieldGrid } from '~/ui/layouter/views/editSvgView/svgParts/FieldGrid';
-import { screenCoordToGroupTransformationCoord } from './CoordHelpers';
+import {
+  screenCoordToGroupTransformationCoord,
+  screenToWorld,
+} from './CoordHelpers';
 import { FieldAxis } from './svgParts/FieldAxis';
 import {
   KeyEntityCard,
@@ -72,17 +77,22 @@ const onSvgMouseDown = (e: MouseEvent) => {
         sy,
         currentTransGroup,
       );
-      editMutations.startEdit();
-      editMutations.startShapeDrawing();
+      if (!editReader.drawingShape) {
+        editMutations.startShapeDrawing();
+      }
       editMutations.addOutlinePoint(gx, gy);
-      startOutlinePointDragOperation(e, false, () => {
-        editMutations.endEdit();
-      });
+      startOutlinePointDragOperation(e, false, () => {});
     }
   }
   if (e.button === 1) {
     startSightDragOperation(e);
   }
+};
+
+const onSvgMouseMove = (e: MouseEvent) => {
+  const [sx, sy] = getRelativeMousePosition(e);
+  const [wx, wy] = screenToWorld(sx, sy);
+  editMutations.setWorldMousePos(wx, wy);
 };
 
 const onSvgScroll = (e: WheelEvent) => {
@@ -95,7 +105,7 @@ const onSvgScroll = (e: WheelEvent) => {
 };
 
 export const EditSvgView = () => {
-  const { ghost, showAxis, showGrid, sight } = editReader;
+  const { ghost, showAxis, showGrid, sight, drawingShape } = editReader;
   const viewBoxSpec = getViewBoxSpec();
   const transformSpec = getTransformSpec();
 
@@ -106,15 +116,15 @@ export const EditSvgView = () => {
     }
   }, []);
 
-  // const { pressedKeyIndices } = editReader;
-  // layouterAppGlobal.setDebugValue({ pressedKeyIndices });
-
   return (
     <svg
       width={sight.screenW}
       height={sight.screenH}
       viewBox={viewBoxSpec}
       onMouseDown={onSvgMouseDown}
+      onMouseMove={
+        (layouterAppFeatures.showCoordCrosshair && onSvgMouseMove) || undefined
+      }
       onWheel={onSvgScroll}
       id="domEditSvg"
     >
@@ -122,16 +132,19 @@ export const EditSvgView = () => {
         {showGrid && <FieldGrid />}
         {showAxis && <FieldAxis />}
         {ghost && <KeyEntityCard ke={ghost} />}
-
         {/* <DisplayAreaFrame /> */}
-
-        {editReader.allKeyEntities.map((ke) => (
-          <KeyEntityCard ke={ke} key={ke.id} />
-        ))}
-
-        {editReader.allOutlineShapes.map((shape, idx) => (
-          <KeyboardOutlineShapeView shape={shape} key={idx} />
-        ))}
+        <g>
+          {editReader.allKeyEntities.map((ke) => (
+            <KeyEntityCard ke={ke} key={ke.id} />
+          ))}
+        </g>
+        <g>
+          {editReader.allOutlineShapes.map((shape, idx) => (
+            <KeyboardOutlineShapeView shape={shape} key={idx} />
+          ))}
+        </g>
+        {drawingShape && <KeyboardOutlineShapeView shape={drawingShape} />}
+        {layouterAppFeatures.showCoordCrosshair && <CoordCursor />}
       </g>
     </svg>
   );
