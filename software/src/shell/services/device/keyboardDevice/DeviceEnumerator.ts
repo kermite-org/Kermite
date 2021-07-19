@@ -50,7 +50,7 @@ function makeKeyboardDeviceInfoFromDeviceSpec(
 ): IKeyboardDeviceInfo {
   const { path, serialNumber } = spec;
   const portName = getPortNameFromDevicePath(path) || index.toString();
-  const projectId = serialNumber.slice(8, 16);
+  const projectId = serialNumber.slice(8, 14);
   const deviceInstanceCode = serialNumber.slice(16, 24);
   return {
     path,
