@@ -36,20 +36,17 @@ namespace CommunicationDataBinaryForamt {
 
   type PktDeviceAttributesResponse = PacketDeviceToHost & {
     [0]: { opcode: 0xf3 };
-    [1_2]: { projectReleaseBuildRevision: u16 };
-    [3]: { configStorageFormatRevision: u8 };
-    [4]: { rawHidMessageProtocolRevision: u8 };
-    [5_10]: { projectId: Bytes<6> };
-    [11_12]: { __reserved: Bytes<2> };
-    [13]: { isOnlineProject: u8 };
-    [14]: { padding: u8 };
-    [15_22]: { deviceInstanceCode: Bytes<8> };
-    [23_24]: { assignStorageCapacity: u16 };
-    [25_40]: { variationName: Bytes<16> };
-    [41_48]: { __reserved: Bytes<8> };
-    [49]: { profileBinaryFormatRevision: u8 };
-    [50]: { configParametersRevision: u8 };
-    [51_60]: { kermiteMcuCode: Bytes<10> };
+    [1]: { rawHidMessageProtocolRevision: u8 };
+    [2]: { configStorageFormatRevision: u8 };
+    [3]: { profileBinaryFormatRevision: u8 };
+    [4]: { configParametersRevision: u8 };
+    [5_14]: { kermiteMcuCode: Bytes<10> };
+    [15_20]: { projectId: Bytes<6> };
+    [21]: { isOnlineProject: u8 };
+    [22_23]: { projectReleaseBuildRevision: u16 };
+    [24_39]: { variationName: Bytes<16> };
+    [40_47]: { deviceInstanceCode: Bytes<8> };
+    [48_49]: { assignStorageCapacity: u16 };
   };
 
   type PktDeviceInstanceCodeWriteOperation = PacketHostToDevice & {
