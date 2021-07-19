@@ -1,6 +1,7 @@
 import { Hook } from 'qx';
 import {
   fallbackProfileData,
+  getProjectOriginAndIdFromSig,
   IProfileData,
   IProjectResourceInfo,
   IServerPorfileInfo,
@@ -25,7 +26,7 @@ function makeProjectOptions(
   return infos
     .filter((it) => projectIds.includes(it.projectId) && it.origin === 'online')
     .map((it) => ({
-      value: it.projectId,
+      value: it.sig,
       label: it.keyboardName,
     }));
 }
@@ -49,7 +50,7 @@ function sendCreateProfileCommand(profileData: IProfileData) {
 
 export function usePresetSelectionModel2(): IPresetSelectionModel {
   const sel = usePersistState(`presetSelecionModel2__sel`, {
-    projectKey: '', // projectId
+    projectKey: '', // ${origin}#${projectId}
     presetKey: '', // id of user profile
   });
 
@@ -77,13 +78,6 @@ export function usePresetSelectionModel2(): IPresetSelectionModel {
     sel.presetKey = '';
   };
 
-  const selectProjectByProjectId = (projectId: string) => {
-    const info = resourceInfos.find((info) => info.projectId === projectId);
-    if (info) {
-      selectProject(info.sig);
-    }
-  };
-
   const loadedProfileData = local.projectProfiles.find(
     (it) => it.id === modPresetKey,
   )?.profileData;
@@ -97,8 +91,9 @@ export function usePresetSelectionModel2(): IPresetSelectionModel {
 
   Hook.useEffect(() => {
     if (modProjectKey) {
+      const { projectId } = getProjectOriginAndIdFromSig(modProjectKey);
       ipcAgent.async
-        .presetHub_getServerProfiles(modProjectKey)
+        .presetHub_getServerProfiles(projectId)
         .then((res) => (local.projectProfiles = res || []));
     }
   }, [modProjectKey]);
@@ -116,7 +111,7 @@ export function usePresetSelectionModel2(): IPresetSelectionModel {
     },
     currentProjectKey: modProjectKey,
     currentPresetKey: modPresetKey,
-    selectProjectByProjectId,
+    selectProject,
     loadedProfileData: loadedProfileData || fallbackProfileData,
     editSelectedProjectPreset,
   };

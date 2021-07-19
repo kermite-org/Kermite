@@ -26,7 +26,6 @@ import {
   IPorjectFileJson,
   readCustomParameterDefinition,
 } from '~/shell/projectResources/ProjectResourceProviderImpl_Local';
-import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 
 const remoteBaseUri = 'https://app.kermite.org/krs/resources';
 
