@@ -113,14 +113,6 @@ export const UiSettingsPage = () => {
               />
             </HFlex>
           </div>
-          <CheckBoxLine
-            text="Use KermiteServer Profiles"
-            checked={uiStatusModel.settings.integrateUserPresetHub}
-            setChecked={fieldSetter(
-              uiStatusModel.settings,
-              'integrateUserPresetHub',
-            )}
-          />
         </Indent>
         <div>Application Behavior</div>
         <Indent>
