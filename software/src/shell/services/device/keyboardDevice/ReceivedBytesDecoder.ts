@@ -51,7 +51,7 @@ export function recievedBytesDecoder(
     const projectReleaseBuildRevision = (buf[1] << 8) | buf[2];
     const configStorageFormatRevision = buf[3];
     const rawHidMessageProtocolRevision = buf[4];
-    const projectId = bytesToString([...buf].slice(5, 13));
+    const projectId = bytesToString([...buf].slice(5, 11));
     const isProjectOriginOnline = !!buf[13];
     const deviceInstanceCode = bytesToString([...buf].slice(15, 23));
     const assignStorageCapacity = (buf[23] << 8) | buf[24];
