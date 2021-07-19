@@ -54,7 +54,7 @@ function loadProjectInfo(projectVariationPath: string): IProjectInfo {
       throw `KERMITE_PROJECT_ID is not defined in ${projectVariationPath}/config.h`;
     }
 
-    if (!projectId?.match(/^[a-zA-Z0-9]{8}$/)) {
+    if (!projectId?.match(/^[a-zA-Z0-9]{6}$/)) {
       throw `invalid Project ID ${projectId} for ${projectPath}`;
     }
 
