@@ -56,9 +56,9 @@ export function recievedBytesDecoder(
     const deviceInstanceCode = bytesToString([...buf].slice(15, 23));
     const assignStorageCapacity = (buf[23] << 8) | buf[24];
     const firmwareVariationName = bytesToString([...buf].slice(25, 41));
-    const kermiteMcuCode = bytesToString([...buf].slice(41, 49));
     const profileBinaryFormatRevision = buf[49];
     const configParametersRevision = buf[50];
+    const kermiteMcuCode = bytesToString([...buf].slice(51, 61));
     return {
       type: 'deviceAttributeResponse',
       data: {
