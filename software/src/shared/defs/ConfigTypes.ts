@@ -15,28 +15,24 @@ export const fallbackKeyboardConfig: IKeyboardConfig = {
 };
 
 export interface IGlobalSettings {
-  useOnlineResources: boolean;
   useLocalResouces: boolean;
   localProjectRootFolderPath: string;
   allowCrossKeyboardKeyMappingWrite: boolean;
 }
 
 export const globalSettingsLoadingSchema = vObject({
-  useOnlineResources: vBoolean(),
   useLocalResouces: vBoolean(),
   localProjectRootFolderPath: vString(),
   allowCrossKeyboardKeyMappingWrite: vBoolean().optional,
 });
 
 export const globalSettingsDefault: IGlobalSettings = {
-  useOnlineResources: true,
   useLocalResouces: false,
   localProjectRootFolderPath: '',
   allowCrossKeyboardKeyMappingWrite: false,
 };
 
 export const globalSettingsFallbackValue: IGlobalSettings = {
-  useOnlineResources: false,
   useLocalResouces: false,
   localProjectRootFolderPath: '',
   allowCrossKeyboardKeyMappingWrite: false,
