@@ -122,7 +122,7 @@ static void emitDeviceAttributesResponse() {
   p[2] = Kermite_Project_ReleaseBuildRevision & 0xFF;
   p[3] = Kermite_ConfigStorageFormatRevision;
   p[4] = Kermite_RawHidMessageProtocolRevision;
-  utils_copyBytes(p + 5, (uint8_t *)KERMITE_PROJECT_ID, 8);
+  utils_copyBytes(p + 5, (uint8_t *)KERMITE_PROJECT_ID, 6);
   p[13] = Kermite_Project_IsResourceOriginOnline;
   p[14] = 0;
   copyStorageBytesToBuffer(p, 15, storageAddr_DeviceInstanceCode, 8);

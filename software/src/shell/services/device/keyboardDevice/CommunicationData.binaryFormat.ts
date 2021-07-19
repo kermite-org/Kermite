@@ -39,7 +39,8 @@ namespace CommunicationDataBinaryForamt {
     [1_2]: { projectReleaseBuildRevision: u16 };
     [3]: { configStorageFormatRevision: u8 };
     [4]: { rawHidMessageProtocolRevision: u8 };
-    [5_12]: { projectId: Bytes<8> };
+    [5_10]: { projectId: Bytes<6> };
+    [11_12]: { __reserved: Bytes<2> };
     [13]: { isOnlineProject: u8 };
     [14]: { padding: u8 };
     [15_22]: { deviceInstanceCode: Bytes<8> };
