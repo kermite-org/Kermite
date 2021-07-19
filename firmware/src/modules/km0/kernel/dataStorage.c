@@ -22,7 +22,8 @@ const uint16_t UserStorageDataSize = KM0_STORAGE__USER_STORAGE_SIZE;
 #endif
 const uint16_t CustomParametersDataSize = KM0_KEYBOARD__NUM_CUSTOM_PARAMETERS;
 typedef struct {
-  uint8_t projectId[8];
+  uint8_t projectId[6];
+  uint8_t __reserved[2];
   uint8_t deviceInstanceCode[8];
   uint8_t parametersDataInitializationFlag;
   uint8_t softwareStorageFomartRevision;
@@ -127,7 +128,7 @@ static uint16_t getKeyMappingDataBodyLengthMax() {
   return 0;
 }
 
-static uint8_t tempDataBuf[8];
+static uint8_t tempDataBuf[6];
 
 static bool validateStorageDataFormat() {
   uint16_t first = dataMemory_readWord(0);
@@ -149,8 +150,8 @@ static bool validateStorageDataFormat() {
   }
   //check project id stored in system data body
   uint16_t posSystemDataBody = getChunkBodyAddress(ChunkSig_SystemData);
-  dataMemory_readBytes(posSystemDataBody, tempDataBuf, 8);
-  bool projectIdValid = utils_compareBytes(tempDataBuf, (uint8_t *)KERMITE_PROJECT_ID, 8);
+  dataMemory_readBytes(posSystemDataBody, tempDataBuf, 6);
+  bool projectIdValid = utils_compareBytes(tempDataBuf, (uint8_t *)KERMITE_PROJECT_ID, 6);
   if (!projectIdValid) {
     return false;
   }
@@ -176,7 +177,7 @@ static void resetDataStorage() {
   uint16_t posSystemDataBody = getChunkBodyAddress(ChunkSig_SystemData);
   if (posSystemDataBody) {
     //write project id
-    dataMemory_writeBytes(posSystemDataBody, (uint8_t *)KERMITE_PROJECT_ID, 8);
+    dataMemory_writeBytes(posSystemDataBody, (uint8_t *)KERMITE_PROJECT_ID, 6);
     //write default instance number
     dataMemory_writeBytes(posSystemDataBody + 8, (uint8_t *)"00000000", 8);
   }
