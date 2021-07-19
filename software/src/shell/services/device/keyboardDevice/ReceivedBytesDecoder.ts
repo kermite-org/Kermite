@@ -48,17 +48,17 @@ export function recievedBytesDecoder(
   const cmd = buf[0];
   // console.log(`received cmd:0x${cmd.toString(16)}`);
   if (cmd === RawHidOpcode.DeviceAttributesResponse) {
-    const projectReleaseBuildRevision = (buf[1] << 8) | buf[2];
-    const configStorageFormatRevision = buf[3];
-    const rawHidMessageProtocolRevision = buf[4];
-    const projectId = bytesToString([...buf].slice(5, 11));
-    const isProjectOriginOnline = !!buf[13];
-    const deviceInstanceCode = bytesToString([...buf].slice(15, 23));
-    const assignStorageCapacity = (buf[23] << 8) | buf[24];
-    const firmwareVariationName = bytesToString([...buf].slice(25, 41));
-    const kermiteMcuCode = bytesToString([...buf].slice(41, 49));
-    const profileBinaryFormatRevision = buf[49];
-    const configParametersRevision = buf[50];
+    const rawHidMessageProtocolRevision = buf[1];
+    const configStorageFormatRevision = buf[2];
+    const profileBinaryFormatRevision = buf[3];
+    const configParametersRevision = buf[4];
+    const kermiteMcuCode = bytesToString([...buf].slice(5, 15));
+    const projectId = bytesToString([...buf].slice(15, 21));
+    const isProjectOriginOnline = !!buf[21];
+    const projectReleaseBuildRevision = (buf[22] << 8) | buf[23];
+    const firmwareVariationName = bytesToString([...buf].slice(24, 40));
+    const deviceInstanceCode = bytesToString([...buf].slice(40, 48));
+    const assignStorageCapacity = (buf[48] << 8) | buf[49];
     return {
       type: 'deviceAttributeResponse',
       data: {
