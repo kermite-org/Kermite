@@ -12,7 +12,7 @@ import { fsxReadJsonFile, globSync } from "./helpers";
 process.chdir("..");
 
 const projectJsonDataValidator = vObject({
-  projectId: vStringMatchesTo([/^[a-zA-Z0-9]{8}$/]),
+  projectId: vStringMatchesTo([/^[a-zA-Z0-9]{6}$/]),
   keyboardName: vString(20),
 });
 

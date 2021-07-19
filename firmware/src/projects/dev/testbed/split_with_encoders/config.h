@@ -1,6 +1,6 @@
 #pragma once
 
-#define KERMITE_PROJECT_ID "RcYEeqNX"
+#define KERMITE_PROJECT_ID "RcYEeq"
 
 #define KM0_ATMEGA_SINGLEWIRE__PIN_SIGNAL D2
 #define KM0_KEYBOARD__NUM_SCAN_SLOTS 8

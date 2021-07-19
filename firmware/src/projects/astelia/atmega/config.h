@@ -1,6 +1,6 @@
 #pragma once
 
-#define KERMITE_PROJECT_ID "79xv6ZbA"
+#define KERMITE_PROJECT_ID "79xv6Z"
 
 #define KS_NUM_SCAN_SLOTS 48
 
