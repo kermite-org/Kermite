@@ -46,9 +46,10 @@ namespace CommunicationDataBinaryForamt {
     [15_22]: { deviceInstanceCode: Bytes<8> };
     [23_24]: { assignStorageCapacity: u16 };
     [25_40]: { variationName: Bytes<16> };
-    [41_48]: { kermiteMcuCode: Bytes<8> };
+    [41_48]: { __reserved: Bytes<8> };
     [49]: { profileBinaryFormatRevision: u8 };
     [50]: { configParametersRevision: u8 };
+    [51_60]: { kermiteMcuCode: Bytes<10> };
   };
 
   type PktDeviceInstanceCodeWriteOperation = PacketHostToDevice & {

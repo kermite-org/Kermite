@@ -123,6 +123,7 @@ static void emitDeviceAttributesResponse() {
   p[3] = Kermite_ConfigStorageFormatRevision;
   p[4] = Kermite_RawHidMessageProtocolRevision;
   utils_copyBytes(p + 5, (uint8_t *)KERMITE_PROJECT_ID, 6);
+  //11-12, reserved
   p[13] = Kermite_Project_IsResourceOriginOnline;
   p[14] = 0;
   copyStorageBytesToBuffer(p, 15, storageAddr_DeviceInstanceCode, 8);
@@ -131,9 +132,10 @@ static void emitDeviceAttributesResponse() {
   utils_fillBytes(p + 25, 0, 16);
   size_t slen = utils_clamp(strlen(Kermite_Project_VariationName), 0, 16);
   utils_copyBytes(p + 25, (uint8_t *)Kermite_Project_VariationName, slen);
-  utils_copyBytes(p + 41, (uint8_t *)Kermite_Project_McuCode, 8);
+  //41-48, reserved
   p[49] = Kermite_ProfileBinaryFormatRevision;
   p[50] = Kermite_ConfigParametersRevision;
+  utils_copyBytes(p + 51, (uint8_t *)Kermite_Project_McuCode, 10);
   emitGenericHidData(rawHidTempBuf);
 }
 
