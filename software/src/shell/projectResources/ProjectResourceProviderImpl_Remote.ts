@@ -80,10 +80,6 @@ export class ProjectResourceProviderImpl_Remote
 
   private loaded = false;
   async getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]> {
-    const globalSetttings = GlobalSettingsProvider.getGlobalSettings();
-    if (!globalSetttings.useOnlineResources) {
-      return [];
-    }
     if (!this.loaded) {
       this.projectInfoSources = await loadRemoteResourceInfosFromSummaryJson();
       this.loaded = true;
