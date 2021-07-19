@@ -25,6 +25,9 @@ export function usePresetSelectionSectionViewModel(
     presetSelectorSource: model.presetSelectorSource,
     isLinkButtonActive:
       deviceStatusModel.isConnected &&
+      model.projectSelectorSource.options.some(
+        (opt) => opt.value === connectedDeviceProjectKey,
+      ) &&
       model.currentProjectKey !== connectedDeviceProjectKey,
     linkButtonHandler() {
       if (connectedDeviceProjectKey) {
