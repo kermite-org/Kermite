@@ -2,7 +2,7 @@ import * as HID from 'node-hid';
 import { compareString, IKeyboardDeviceInfo } from '~/shared';
 
 export interface IDeviceSpecificationParams {
-  serialNumberFirst8Bytes: string;
+  serialNumberFirst10Bytes: string;
   usagePage: number;
   usage: number;
 }
@@ -20,7 +20,7 @@ export function enumerateSupportedDevicePathsCore(
     .filter((d) =>
       params.some(
         (param) =>
-          d.serialNumber?.slice(0, 8) === param.serialNumberFirst8Bytes &&
+          d.serialNumber?.slice(0, 10) === param.serialNumberFirst10Bytes &&
           d.usagePage === param.usagePage &&
           d.usage === param.usage,
       ),
@@ -50,7 +50,7 @@ function makeKeyboardDeviceInfoFromDeviceSpec(
 ): IKeyboardDeviceInfo {
   const { path, serialNumber } = spec;
   const portName = getPortNameFromDevicePath(path) || index.toString();
-  const projectId = serialNumber.slice(8, 14);
+  const projectId = serialNumber.slice(10, 16);
   const deviceInstanceCode = serialNumber.slice(16, 24);
   return {
     path,

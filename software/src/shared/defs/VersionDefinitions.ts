@@ -5,8 +5,8 @@
 export const ConfigStorageFormatRevision = 6;
 
 // 210705, 2, メッセージ形式を簡素化
-// export const RawHidMessageProtocolRevision = 1;
-export const RawHidMessageProtocolRevision = 2;
+// 210719, 3, deviceAttributesResponseを整理
+export const RawHidMessageProtocolRevision = 3;
 
 // 210509 1, 初版
 // 210515 2, mappingEntriesを追加

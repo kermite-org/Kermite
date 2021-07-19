@@ -118,22 +118,21 @@ static void copyStorageBytesToBuffer(uint8_t *dstBuffer, int dstOffset, uint16_t
 static void emitDeviceAttributesResponse() {
   uint8_t *p = rawHidTempBuf;
   p[0] = RawHidOpcode_DeviceAttributesResponse;
-  p[1] = Kermite_Project_ReleaseBuildRevision >> 8 & 0xFF;
-  p[2] = Kermite_Project_ReleaseBuildRevision & 0xFF;
-  p[3] = Kermite_ConfigStorageFormatRevision;
-  p[4] = Kermite_RawHidMessageProtocolRevision;
-  utils_copyBytes(p + 5, (uint8_t *)KERMITE_PROJECT_ID, 6);
-  p[13] = Kermite_Project_IsResourceOriginOnline;
-  p[14] = 0;
-  copyStorageBytesToBuffer(p, 15, storageAddr_DeviceInstanceCode, 8);
-  p[23] = keyMappingDataCapacity >> 8 & 0xFF;
-  p[24] = keyMappingDataCapacity & 0xFF;
-  utils_fillBytes(p + 25, 0, 16);
+  p[1] = Kermite_RawHidMessageProtocolRevision;
+  p[2] = Kermite_ConfigStorageFormatRevision;
+  p[3] = Kermite_ProfileBinaryFormatRevision;
+  p[4] = Kermite_ConfigParametersRevision;
+  utils_copyBytes(p + 5, (uint8_t *)Kermite_Project_McuCode, 10);
+  utils_copyBytes(p + 15, (uint8_t *)KERMITE_PROJECT_ID, 6);
+  p[21] = Kermite_Project_IsResourceOriginOnline;
+  p[22] = Kermite_Project_ReleaseBuildRevision >> 8 & 0xFF;
+  p[23] = Kermite_Project_ReleaseBuildRevision & 0xFF;
+  utils_fillBytes(p + 24, 0, 16);
   size_t slen = utils_clamp(strlen(Kermite_Project_VariationName), 0, 16);
-  utils_copyBytes(p + 25, (uint8_t *)Kermite_Project_VariationName, slen);
-  utils_copyBytes(p + 41, (uint8_t *)Kermite_Project_McuCode, 8);
-  p[49] = Kermite_ProfileBinaryFormatRevision;
-  p[50] = Kermite_ConfigParametersRevision;
+  utils_copyBytes(p + 24, (uint8_t *)Kermite_Project_VariationName, slen);
+  copyStorageBytesToBuffer(p, 40, storageAddr_DeviceInstanceCode, 8);
+  p[48] = keyMappingDataCapacity >> 8 & 0xFF;
+  p[49] = keyMappingDataCapacity & 0xFF;
   emitGenericHidData(rawHidTempBuf);
 }
 
