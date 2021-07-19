@@ -133,6 +133,11 @@ export namespace ProfileDataMigrator {
     if (profile.formatRevision === <string>'PRF05') {
       fixProfileDataPRF05toPRF06(profile);
     }
+    if (profile.formatRevision === <string>'PRF06') {
+      if (profile.projectId.length > 6) {
+        profile.projectId = profile.projectId.slice(0, 6);
+      }
+    }
     return profile;
   }
 }
