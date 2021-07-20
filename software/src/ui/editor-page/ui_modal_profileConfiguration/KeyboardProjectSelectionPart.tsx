@@ -1,4 +1,5 @@
 import { css, jsx } from 'qx';
+import { uniqueArrayItemsByField } from '~/shared';
 import {
   GeneralSelector,
   ISelectorOption,
@@ -15,22 +16,32 @@ const cssAttrsRow = css`
   }
 `;
 
-export const KeyboardProjectSelectionPart = () => {
+function makeTargetProjectSelectOptions(): ISelectorOption[] {
   const projectInfos = useProjectResourceInfos('projectsSortedByKeyboardName');
-  const options: ISelectorOption[] = projectInfos
-    .filter((it) => it.origin === 'online')
-    .map((it) => ({ label: it.keyboardName, value: it.projectId }));
+  const options: ISelectorOption[] = uniqueArrayItemsByField(
+    projectInfos,
+    'projectId',
+  ).map((it) => ({ label: it.keyboardName, value: it.projectId }));
 
-  if (options.length > 0) {
-    options.push({ label: 'unspecified', value: '__PROJECT_ID_UNSPECIFIED' });
+  const originalProjectId = editorModel.loadedPorfileData.projectId;
+  if (
+    originalProjectId &&
+    !options.find((it) => it.value === originalProjectId)
+  ) {
+    options.push({
+      label: `unknown(${originalProjectId})`,
+      value: originalProjectId,
+    });
   }
+  options.push({ label: 'unspecified', value: '' });
 
-  const value = editorModel.profileData.projectId || '__PROJECT_ID_UNSPECIFIED';
-  const setValue = (value: string) => {
-    editorModel.changeProjectId(
-      value === '__PROJECT_ID_UNSPECIFIED' ? '' : value,
-    );
-  };
+  return options;
+}
+
+export const KeyboardProjectSelectionPart = () => {
+  const options = makeTargetProjectSelectOptions();
+  const value = editorModel.profileData.projectId || '';
+  const setValue = editorModel.changeProjectId;
 
   return (
     <div css={cssAttrsRow}>
