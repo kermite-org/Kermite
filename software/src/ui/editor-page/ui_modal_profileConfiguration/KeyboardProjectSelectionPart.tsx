@@ -1,4 +1,3 @@
-import { iteratorSymbol } from 'immer/dist/internal';
 import { css, jsx } from 'qx';
 import { uniqueArrayItemsByField } from '~/shared';
 import {
@@ -34,20 +33,15 @@ function makeTargetProjectSelectOptions(): ISelectorOption[] {
       value: originalProjectId,
     });
   }
-  options.push({ label: 'unspecified', value: '__PROJECT_ID_UNSPECIFIED' });
+  options.push({ label: 'unspecified', value: '' });
 
   return options;
 }
 
 export const KeyboardProjectSelectionPart = () => {
   const options = makeTargetProjectSelectOptions();
-  const currentProjectId = editorModel.profileData.projectId;
-  const value = currentProjectId || '__PROJECT_ID_UNSPECIFIED';
-  const setValue = (value: string) => {
-    editorModel.changeProjectId(
-      value === '__PROJECT_ID_UNSPECIFIED' ? '' : value,
-    );
-  };
+  const value = editorModel.profileData.projectId || '';
+  const setValue = editorModel.changeProjectId;
 
   return (
     <div css={cssAttrsRow}>
