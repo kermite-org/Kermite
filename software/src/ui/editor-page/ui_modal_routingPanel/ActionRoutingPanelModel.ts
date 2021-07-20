@@ -50,21 +50,21 @@ const modifiersOptionsBase: ISelectorOptionN[] = [
   { value: fShift, label: 'Shift' },
   { value: fCtrl, label: 'Ctrl' },
   { value: fAlt, label: 'Alt' },
-  { value: fGui, label: 'Gui' },
+  { value: fGui, label: 'OS' },
 
   { value: fShift | fCtrl, label: 'S+C' },
   { value: fShift | fAlt, label: 'S+A' },
-  { value: fShift | fGui, label: 'S+G' },
+  { value: fShift | fGui, label: 'S+O' },
   { value: fCtrl | fAlt, label: 'C+A' },
-  { value: fCtrl | fGui, label: 'C+G' },
-  { value: fAlt | fGui, label: 'A+G' },
+  { value: fCtrl | fGui, label: 'C+O' },
+  { value: fAlt | fGui, label: 'A+O' },
 
   { value: fShift | fCtrl | fAlt, label: 'S+C+A' },
-  { value: fShift | fCtrl | fGui, label: 'S+C+G' },
-  { value: fShift | fAlt | fGui, label: 'S+A+G' },
-  { value: fCtrl | fAlt | fGui, label: 'C+A+G' },
+  { value: fShift | fCtrl | fGui, label: 'S+C+O' },
+  { value: fShift | fAlt | fGui, label: 'S+A+O' },
+  { value: fCtrl | fAlt | fGui, label: 'C+A+O' },
 
-  { value: fShift | fCtrl | fAlt | fGui, label: 'S+C+A+G' },
+  { value: fShift | fCtrl | fAlt | fGui, label: 'S+C+A+O' },
 ];
 
 const optionAny: ISelectorOptionN = { value: vAny, label: 'Any' };
