@@ -104,7 +104,7 @@ enum LogicalKey {
   LK_DownArrow,
   LK_PrintScreen,
   LK_CapsLock,
-  LK_ScrollLockk,
+  LK_ScrollLock,
   LK_PauseBreak,
   LK_Menu,
   LK_HankakuZenkaku,
