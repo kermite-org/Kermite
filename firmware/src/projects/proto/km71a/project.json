@@ -1,0 +1,15 @@
+{
+  "projectId": "wHvGTW",
+  "keyboardName": "KM71A",
+  "parameterConfigurations": {
+    "systemParameterKeys": [
+      "emitRealtimeEvents",
+      "keyHoldIndicatorLed",
+      "heartbeatLed",
+      "glowActive",
+      "glowColor",
+      "glowBrightness",
+      "glowPattern"
+    ]
+  }
+}
