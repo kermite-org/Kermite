@@ -1,0 +1,15 @@
+{
+  "projectId": "PKM71A",
+  "keyboardName": "KM71A",
+  "parameterConfigurations": {
+    "systemParameterKeys": [
+      "emitRealtimeEvents",
+      "keyHoldIndicatorLed",
+      "heartbeatLed",
+      "glowActive",
+      "glowColor",
+      "glowBrightness",
+      "glowPattern"
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+#pragma once
+
+#define KERMITE_PROJECT_ID "PKM71A"
+
+#define KS_NUM_SCAN_SLOTS 75
+
+#define KS_NUM_RGBLEDS 71
+#define KS_RGBLED_PIN GP21
+
+#define KS_NUM_COLUMNS 15
+#define KS_NUM_ROWS 5
+
+#define KS_COLUMN_PINS \
+  { GP0, GP1, GP2, GP3, GP4, GP5, GP6, GP7, GP8, GP9, GP10, GP11, GP12, GP13, GP14 }
+
+#define KS_ROW_PINS \
+  { GP16, GP17, GP18, GP19, GP20 }
+  
