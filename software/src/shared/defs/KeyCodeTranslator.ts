@@ -488,6 +488,9 @@ const logicalKeyItems: LogicalKeyItem[] = [
   ],
   [LogicalKey.LK_Lang1Kana, 'Kana', HidKeyJA.KU_Lang1Kana],
   [LogicalKey.LK_Lang2Eisu, 'Eisu', HidKeyJA.KU_Lang2Eisu],
+  [LogicalKey.LK_NumLock, 'NumLock', HidKey.KU_NumLock],
+  [LogicalKey.LK_CapsLock, 'CapsLocck', HidKey.KU_CapsLock],
+  [LogicalKey.LK_ScrollLock, 'ScrollLock', HidKey.KU_ScrollLock],
 ];
 
 function getLogicalKeysItem(logicalKey: number): LogicalKeyItem | undefined {

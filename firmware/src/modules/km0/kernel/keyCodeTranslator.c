@@ -314,7 +314,10 @@ __flash static const LogicalKeyItem logicalKeyItems[] = {
   { LK_LessThan, "<", KU_US_Comma_LessThan | Shifted, KU_JA_Comma_LessThan | Shifted },
   { LK_GreaterThan, ">", KU_US_Dot_GreaterThan | Shifted, KU_JA_Dot_GreaterThan | Shifted },
   { LK_Lang1Kana, "Kana", KU_Lang1Kana },
-  { LK_Lang2Eisu, "Eisu", KU_Lang2Eisu }
+  { LK_Lang2Eisu, "Eisu", KU_Lang2Eisu },
+  { LK_NumLock, "NumLock", KU_NumLock },
+  { LK_CapsLock, "CapsLock", KU_CapsLock },
+  { LK_ScrollLock, "ScrollLock", KU_ScrollLock },
 };
 
 #define SizeLogicalKeyItem sizeof(LogicalKeyItem)
