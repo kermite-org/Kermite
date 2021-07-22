@@ -141,6 +141,53 @@ const assignKeysGroup7: VirtualKey[] = [
   'K_PostDouble',
 ];
 
+const assignKeysGroup8: VirtualKey[] = [
+  'K_NumPad_0',
+  'K_NumPad_1',
+  'K_NumPad_2',
+  'K_NumPad_3',
+  'K_NumPad_4',
+  'K_NumPad_5',
+  'K_NumPad_6',
+  'K_NumPad_7',
+  'K_NumPad_8',
+  'K_NumPad_9',
+  'K_NumPad_Dot',
+  'K_NumPad_Plus',
+  'K_NumPad_Minus',
+  'K_NumPad_Asterisk',
+  'K_NumPad_Slash',
+  'K_NumPad_Equal',
+  'K_NumPad_Enter',
+  'K_NumPad_BackSpace',
+  'K_NumPad_00',
+  'K_NumLock',
+  'K_CapsLock',
+  'K_ScrollLockk',
+  'K_PauseBreak',
+  'K_Menu',
+  'K_F13',
+  'K_F14',
+  'K_F15',
+  'K_F16',
+  'K_F17',
+  'K_F18',
+  'K_F19',
+  'K_F20',
+  'K_F21',
+  'K_F22',
+  'K_F23',
+  'K_F24',
+  'K_LShift',
+  'K_LCtrl',
+  'K_LAlt',
+  'K_LGui',
+  'K_RShift',
+  'K_RCtrl',
+  'K_RAlt',
+  'K_RGui',
+];
+
 export const virtualKeyGroupsTable: VirtualKey[][] = [
   assignKeysGroup0,
   assignKeysGroup1,
@@ -160,3 +207,5 @@ export const virtualKeyGroupsTable2: VirtualKey[][] = [
   assignKeysGroup5,
   // assignKeysGroup7
 ];
+
+export const virtualKeyGroupsTable3: VirtualKey[][] = [assignKeysGroup8];
