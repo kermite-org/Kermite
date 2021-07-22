@@ -1043,6 +1043,10 @@ bool usbIoCore_hidKeyboard_writeReport(uint8_t *pReportBytes8) {
   return hidKeyboard_writeReport(pReportBytes8);
 }
 
+uint8_t usbIoCore_hidKeyboard_getStatusLedFlags() {
+  return keyboard_leds;
+}
+
 bool usbIoCore_hidMouse_writeReport(uint8_t *pReportBytes3) {
   return hidMouse_writeReport(pReportBytes3);
 }
