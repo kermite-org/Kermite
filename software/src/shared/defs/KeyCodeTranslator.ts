@@ -522,6 +522,9 @@ const logicalKeyItems: LogicalKeyItem[] = [
   [LogicalKey.LK_F22, 'F22', HidKey.KU_F22],
   [LogicalKey.LK_F23, 'F23', HidKey.KU_F23],
   [LogicalKey.LK_F24, 'F24', HidKey.KU_F24],
+  [LogicalKey.LK_PrintScreen, 'PrtScr', HidKey.KU_PrintScreen],
+  [LogicalKey.LK_PauseBreak, 'PauseBreak', HidKey.KU_Pause],
+  [LogicalKey.LK_Menu, 'Menu', HidKey.KU_Menu],
 ];
 
 function getLogicalKeysItem(logicalKey: number): LogicalKeyItem | undefined {

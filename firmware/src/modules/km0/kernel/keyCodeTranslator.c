@@ -349,6 +349,9 @@ __flash static const LogicalKeyItem logicalKeyItems[] = {
   { LK_F22, "F22", KU_F22 },
   { LK_F23, "F23", KU_F23 },
   { LK_F24, "F24", KU_F24 },
+  { LK_PrintScreen, "PrtScr", KU_PrintScreen },
+  { LK_PauseBreak, "PauseBreak", KU_Pause },
+  { LK_Menu, "Menu", KU_Menu },
 };
 
 #define SizeLogicalKeyItem sizeof(LogicalKeyItem)
