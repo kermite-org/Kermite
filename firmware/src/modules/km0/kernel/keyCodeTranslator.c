@@ -318,6 +318,26 @@ __flash static const LogicalKeyItem logicalKeyItems[] = {
   { LK_NumLock, "NumLock", KU_NumLock },
   { LK_CapsLock, "CapsLock", KU_CapsLock },
   { LK_ScrollLock, "ScrollLock", KU_ScrollLock },
+  { LK_NumPad_0, "Num0", KU_KeyPad_0 },
+  { LK_NumPad_1, "Num1", KU_KeyPad_1 },
+  { LK_NumPad_2, "Num2", KU_KeyPad_2 },
+  { LK_NumPad_3, "Num3", KU_KeyPad_3 },
+  { LK_NumPad_4, "Num4", KU_KeyPad_4 },
+  { LK_NumPad_5, "Num5", KU_KeyPad_5 },
+  { LK_NumPad_6, "Num6", KU_KeyPad_6 },
+  { LK_NumPad_7, "Num7", KU_KeyPad_7 },
+  { LK_NumPad_8, "Num8", KU_KeyPad_8 },
+  { LK_NumPad_9, "Num9", KU_KeyPad_9 },
+  { LK_NumPad_00, "Num00", KU_KeyPad_00 },
+  { LK_NumPad_Dot, "Num.", KU_KeyPad_Dot },
+  { LK_NumPad_Slash, "Num/", KU_KeyPad_Slash },
+  { LK_NumPad_Asterisk, "Num*", KU_KeyPad_Asterisk },
+  { LK_NumPad_Minus, "Num-", KU_KeyPad_Minus },
+  { LK_NumPad_Plus, "Num+", KU_KeyPad_Plus },
+  { LK_NumPad_Equal, "Num=", KU_KeyPad_Equal },
+  { LK_NumPad_Enter, "Num_Enter", KU_KeyPad_Enter },
+  { LK_NumPad_BackSpace, "Num_BS", KU_KeyPad_BackSpace },
+
 };
 
 #define SizeLogicalKeyItem sizeof(LogicalKeyItem)
