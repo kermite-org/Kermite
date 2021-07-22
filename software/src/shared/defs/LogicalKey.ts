@@ -294,7 +294,7 @@ const virtualKeyToLogicalKeyMappingTable: {
   K_DownArrow: LogicalKey.LK_DownArrow,
   K_PrintScreen: LogicalKey.LK_PrintScreen,
   K_CapsLock: LogicalKey.LK_CapsLock,
-  K_ScrollLockk: LogicalKey.LK_ScrollLock,
+  K_ScrollLock: LogicalKey.LK_ScrollLock,
   K_PauseBreak: LogicalKey.LK_PauseBreak,
   K_Menu: LogicalKey.LK_Menu,
   K_HankakuZenkaku: LogicalKey.LK_HankakuZenkaku,

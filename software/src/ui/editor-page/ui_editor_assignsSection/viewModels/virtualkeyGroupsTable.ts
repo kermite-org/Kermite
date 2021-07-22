@@ -163,7 +163,7 @@ const assignKeysGroup8: VirtualKey[] = [
   'K_NumPad_00',
   'K_NumLock',
   'K_CapsLock',
-  'K_ScrollLockk',
+  'K_ScrollLock',
   'K_PauseBreak',
   'K_Menu',
   'K_F13',

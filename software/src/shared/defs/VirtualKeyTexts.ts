@@ -120,7 +120,7 @@ export const VirtualKeyTexts: { [key in VirtualKey]?: string } = {
   K_HankakuZenkaku: 'E/J',
   K_NumLock: 'numlk',
   K_CapsLock: 'cpslk',
-  K_ScrollLockk: 'scrlk',
+  K_ScrollLock: 'scrlk',
   K_PrintScreen: 'prtsc',
   K_PauseBreak: 'pause',
   K_Menu: 'menu',
