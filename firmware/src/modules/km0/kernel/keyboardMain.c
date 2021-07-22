@@ -88,6 +88,7 @@ KeyboardMainExposedState keyboardMain_exposedState = {
   .pressedKeyIndex = KEYINDEX_NONE,
   .isSplitSlave = false,
   .optionInvertSide = false,
+  .hostKeyboardStateFlags = 0
 };
 
 typedef void (*KeySlotStateChangedCallback)(uint8_t slotIndex, bool isDown);
@@ -445,6 +446,7 @@ void keyboardMain_updateOledDisplayModule(uint32_t tick) {
 
 void keyboardMain_processUpdate() {
   usbIoCore_processUpdate();
+  keyboardMain_exposedState.hostKeyboardStateFlags = usbIoCore_hidKeyboard_getStatusLedFlags();
   configuratorServant_processUpdate();
   configManager_processUpdate();
   dataMemory_processTick();

@@ -18,6 +18,7 @@ typedef struct {
   uint8_t pressedKeyIndex;
   bool isSplitSlave;
   bool optionInvertSide;
+  uint8_t hostKeyboardStateFlags;
 } KeyboardMainExposedState;
 
 extern KeyboardMainExposedState keyboardMain_exposedState;
