@@ -77,6 +77,8 @@ static uint8_t rgbLightingModulesLength = 0;
 
 static VisualModuleUpdateFunc oledDisplayUpdateFunc = NULL;
 
+static VisualModuleUpdateFunc hostKeyboardStatusOutputFunc = NULL;
+
 //動的に変更可能なオプション
 static bool optionEmitRealtimeEvents = true;
 static bool optionAffectKeyHoldStateToLed = true;
@@ -143,6 +145,12 @@ static void updateRgbLightingModules(uint32_t tick) {
 static void updateOledDisplayModule(uint32_t tick) {
   if (oledDisplayUpdateFunc) {
     oledDisplayUpdateFunc();
+  }
+}
+
+static void updateHostKeyboardStatusOutputModule() {
+  if (hostKeyboardStatusOutputFunc) {
+    hostKeyboardStatusOutputFunc();
   }
 }
 
@@ -355,6 +363,10 @@ void keyboardMain_useOledDisplayModule(void (*_updateFn)(void)) {
   oledDisplayUpdateFunc = _updateFn;
 }
 
+void keyboardMain_useHostKeyboardStatusOutputModule(void (*_updateFn)(void)) {
+  hostKeyboardStatusOutputFunc = _updateFn;
+}
+
 void keyboardMain_setKeyIndexTable(const int8_t *_scanIndexToKeyIndexMap) {
   scanIndexToKeyIndexMap = (uint8_t *)_scanIndexToKeyIndexMap;
 }
@@ -442,6 +454,10 @@ void keyboardMain_updateRgbLightingModules(uint32_t tick) {
 
 void keyboardMain_updateOledDisplayModule(uint32_t tick) {
   updateOledDisplayModule(tick);
+}
+
+void keyboardMain_updateHostKeyboardStatusOutputModule() {
+  updateHostKeyboardStatusOutputModule();
 }
 
 void keyboardMain_processUpdate() {

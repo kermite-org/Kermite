@@ -35,6 +35,7 @@ void keyboardMain_updateKeyInidicatorLed();
 void keyboardMain_updateInputSlotInidicatorLed();
 void keyboardMain_updateRgbLightingModules(uint32_t tick);
 void keyboardMain_updateOledDisplayModule(uint32_t tick);
+void keyboardMain_updateHostKeyboardStatusOutputModule();
 void keyboardMain_taskFlashHeartbeatLed();
 void keyboardMain_processUpdate();
 void keyboardMain_setKeySlotStateChangedCallback(void (*callback)(uint8_t slotIndex, bool isDown));
