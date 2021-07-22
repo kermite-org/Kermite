@@ -337,7 +337,18 @@ __flash static const LogicalKeyItem logicalKeyItems[] = {
   { LK_NumPad_Equal, "Num=", KU_KeyPad_Equal },
   { LK_NumPad_Enter, "Num_Enter", KU_KeyPad_Enter },
   { LK_NumPad_BackSpace, "Num_BS", KU_KeyPad_BackSpace },
-
+  { LK_F13, "F13", KU_F13 },
+  { LK_F14, "F14", KU_F14 },
+  { LK_F15, "F15", KU_F15 },
+  { LK_F16, "F16", KU_F16 },
+  { LK_F17, "F17", KU_F17 },
+  { LK_F18, "F18", KU_F18 },
+  { LK_F19, "F19", KU_F19 },
+  { LK_F20, "F20", KU_F20 },
+  { LK_F21, "F21", KU_F21 },
+  { LK_F22, "F22", KU_F22 },
+  { LK_F23, "F23", KU_F23 },
+  { LK_F24, "F24", KU_F24 },
 };
 
 #define SizeLogicalKeyItem sizeof(LogicalKeyItem)

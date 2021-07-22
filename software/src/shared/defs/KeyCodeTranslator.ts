@@ -510,6 +510,18 @@ const logicalKeyItems: LogicalKeyItem[] = [
   [LogicalKey.LK_NumPad_Equal, 'Num=', HidKey.KU_KeyPad_Equal],
   [LogicalKey.LK_NumPad_Enter, 'Num_Enter', HidKey.KU_KeyPad_Enter],
   [LogicalKey.LK_NumPad_BackSpace, 'Num_BS', HidKey.KU_KeyPad_BackSpace],
+  [LogicalKey.LK_F13, 'F13', HidKey.KU_F13],
+  [LogicalKey.LK_F14, 'F14', HidKey.KU_F14],
+  [LogicalKey.LK_F15, 'F15', HidKey.KU_F15],
+  [LogicalKey.LK_F16, 'F16', HidKey.KU_F16],
+  [LogicalKey.LK_F17, 'F17', HidKey.KU_F17],
+  [LogicalKey.LK_F18, 'F18', HidKey.KU_F18],
+  [LogicalKey.LK_F19, 'F19', HidKey.KU_F19],
+  [LogicalKey.LK_F20, 'F20', HidKey.KU_F20],
+  [LogicalKey.LK_F21, 'F21', HidKey.KU_F21],
+  [LogicalKey.LK_F22, 'F22', HidKey.KU_F22],
+  [LogicalKey.LK_F23, 'F23', HidKey.KU_F23],
+  [LogicalKey.LK_F24, 'F24', HidKey.KU_F24],
 ];
 
 function getLogicalKeysItem(logicalKey: number): LogicalKeyItem | undefined {
