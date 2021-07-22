@@ -1,6 +1,6 @@
 import { fallbackKeyboardConfig, IKeyboardConfig } from '~/shared';
 import { vBoolean, vObject } from '~/shared/modules/SchemaValidationHelper';
-import { applicationStorage } from '~/shell/base';
+import { appGlobal, applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
 
 // 環境に関連したキーボードの設定を保存する
@@ -12,6 +12,15 @@ const keyboardConfigDataSchema = vObject({
 
 export class KeyboardConfigProvider {
   private keyboardConfig: IKeyboardConfig = fallbackKeyboardConfig;
+
+  constructor() {
+    appGlobal.getSimulatorMode = () => {
+      if (this.keyboardConfig === fallbackKeyboardConfig) {
+        this.loadFromBackingStore();
+      }
+      return this.keyboardConfig.isSimulatorMode;
+    };
+  }
 
   keyboardConfigEventPort = createEventPort<Partial<IKeyboardConfig>>({
     onFirstSubscriptionStarting: () => this.loadFromBackingStore(),
