@@ -52,6 +52,7 @@ export function OpertionEditPart(props: {
     attachedModifierEntries,
     layerCallEntries,
     systemActionEntries,
+    virtualKeyEntryGroups2,
   } = props.operationEditPartVM;
 
   return (
@@ -92,6 +93,17 @@ export function OpertionEditPart(props: {
           <div css={cssGroupBox}>
             {systemActionEntries.map((model) => (
               <OperationCard model={model} key={model.sig} />
+            ))}
+          </div>
+        </div>
+        <div css={cssKeyAssignsRow}>
+          <div>
+            {virtualKeyEntryGroups2.map((group, index) => (
+              <div css={cssGroupBox} key={index}>
+                {group.map((model) => (
+                  <OperationCard model={model} key={model.sig} />
+                ))}
+              </div>
             ))}
           </div>
         </div>
