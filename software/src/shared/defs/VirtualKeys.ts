@@ -150,7 +150,7 @@ export type VirtualKey =
   | 'K_NumPad_Dot'
   | 'K_NumPad_Plus'
   | 'K_NumPad_Minus'
-  | 'K_NumPad_Asterisc'
+  | 'K_NumPad_Asterisk'
   | 'K_NumPad_Slash'
   | 'K_NumPad_Equal'
   | 'K_NumPad_Enter'

@@ -152,7 +152,7 @@ enum LogicalKey {
   LK_NumPad_Dot,
   LK_NumPad_Plus,
   LK_NumPad_Minus,
-  LK_NumPad_Asterisc,
+  LK_NumPad_Asterisk,
   LK_NumPad_Slash,
   LK_NumPad_Equal,
   LK_NumPad_Enter,
