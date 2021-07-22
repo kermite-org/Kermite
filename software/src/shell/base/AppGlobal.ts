@@ -11,4 +11,6 @@ export const appGlobal = new (class {
   icpMainAgent = new IpcMainAgent<IAppIpcContract>();
   // eventBus = new TypedEventEmitter<IAppInternalEvents>();
   appErrorEventPort = createEventPort<IAppErrorData<any>>();
+
+  getSimulatorMode = () => false;
 })();
