@@ -29,6 +29,9 @@ void generalKeyboard_start() {
     if (tick % 4000 == 0) {
       keyboardMain_taskFlashHeartbeatLed();
     }
+    if (tick % 100 == 0) {
+      keyboardMain_updateHostKeyboardStatusOutputModule();
+    }
     keyboardMain_processUpdate();
     delayMs(1);
     tick++;

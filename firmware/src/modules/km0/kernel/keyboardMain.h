@@ -7,3 +7,4 @@ void keyboardMain_usePointingDevice(void (*_pointingDeviceUpdateFunc)(int8_t *ou
 void keyboardMain_setKeyIndexTable(const int8_t *_scanIndexToKeyIndexMap);
 void keyboardMain_useRgbLightingModule(void (*_updateFn)(void));
 void keyboardMain_useOledDisplayModule(void (*_updateFn)(void));
+void keyboardMain_useHostKeyboardStatusOutputModule(void (*_updateFn)(void));
