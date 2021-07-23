@@ -36,3 +36,13 @@ void digitalIo_setHigh(uint8_t pin) {
 void digitalIo_setLow(uint8_t pin) {
   gpio_put(pin, 0);
 }
+
+void digitalIo_pseudoOpenDrain_init(uint8_t pin) {
+  gpio_init(pin);
+  // gpio_pull_up(pin);
+  gpio_set_dir(pin, GPIO_IN);
+}
+
+void digitalIo_pseudoOpenDrain_write(uint8_t pin, bool val) {
+  gpio_set_dir(pin, !val ? GPIO_OUT : GPIO_IN); //drive low for 0, hi-z for 1
+}

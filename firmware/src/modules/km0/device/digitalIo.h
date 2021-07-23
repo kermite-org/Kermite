@@ -133,3 +133,5 @@ bool digitalIo_read(uint8_t pin);
 void digitalIo_toggle(uint8_t pin);
 void digitalIo_setHigh(uint8_t pin);
 void digitalIo_setLow(uint8_t pin);
+void digitalIo_pseudoOpenDrain_init(uint8_t pin);
+void digitalIo_pseudoOpenDrain_write(uint8_t pin, bool val);

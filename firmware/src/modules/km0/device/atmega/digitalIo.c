@@ -57,3 +57,12 @@ void digitalIo_setLow(uint8_t p) {
 void digitalIo_toggle_2(uint8_t p) {
   bit_on(*regPINX(p), portBit(p));
 }
+
+void digitalIo_pseudoOpenDrain_init(uint8_t p) {
+  bit_off(*regDDRX(p), portBit(p));  //DDR=0, input
+  bit_off(*regPORTX(p), portBit(p)); //PORT=0
+}
+
+void digitalIo_pseudoOpenDrain_write(uint8_t p, bool val) {
+  bit_spec(*regDDRX(p), portBit(p), !val); //drive low for 0, hi-z for 1
+}
