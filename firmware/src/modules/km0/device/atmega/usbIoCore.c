@@ -316,10 +316,10 @@ static const uint8_t PROGMEM mouse_hid_report_desc[] = {
   0x81, 0x06, //   Input (Data, Variable, Relative)
 
   // Wheel rotation
-  0x09, 0x38, //   Usage (Wheel)
-  0x95, 0x01, //   Report Count (1),
-  0x81, 0x06, //   Input (Data, Variable, Relative)
-  0xC0        // End Collection
+  // 0x09, 0x38, //   Usage (Wheel)
+  // 0x95, 0x01, //   Report Count (1),
+  // 0x81, 0x06, //   Input (Data, Variable, Relative)
+  0xC0 // End Collection
 };
 
 // #define CONFIG1_DESC_SIZE (9 + 9 + 9 + 7 + 9 + 9 + 7 + 9 + 9 + 7 + 7)
