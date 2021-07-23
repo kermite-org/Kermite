@@ -4,27 +4,48 @@
 #include "km0/device/debugUart.h"
 #include "km0/device/digitalIo.h"
 #include "km0/device/system.h"
-#include "pico_sdk/src/rp2_common/include/hardware/gpio.h"
+#include <avr/io.h>
 #include <stdio.h>
 
-//board RPi Pico
-//GP4 ---> PAW3204 SCLK ---> LA.ch1
-//GP5 <--> PAW3204 SDIO ---> LA.ch2
-//GP6 debug timing monitor ---> LA.ch0
+//board Pro Micro
+//PD4 ---(level convertion)--> PAW3204 SCLK ---> LA.ch1
+//PC0 ,with external pullup <--(level convertion)--> PAW3204 SDIO ---> LA.ch2
+//PF4 debug timing monitor ---> LA.ch0
 
-const int pin_sclk = GP4;
-const int pin_sdio = GP5;
+const int pin_sclk = P_D4;
+const int pin_sdio = P_C6;
 
-const int pin_debug = GP6;
+const int pin_debug = P_F4;
+
+#define portIndex(p) ((p) >> 3)
+#define portBit(p) ((p)&0x07)
+
+#define regPINX(p) (&_SFR_IO8(0x03 + 3 * portIndex(p)))
+#define regDDRX(p) (&_SFR_IO8(0x04 + 3 * portIndex(p)))
+#define regPORTX(p) (&_SFR_IO8(0x05 + 3 * portIndex(p)))
+
+void digitalIo_pseudoOpenDrain_init(uint8_t p) {
+  bit_off(*regDDRX(p), portBit(p));  //DDR=0, input
+  bit_off(*regPORTX(p), portBit(p)); //PORT=0
+}
+
+// void digitalIo_pseudoOpenDrain_HiImpedance(uint8_t p) {
+//   bit_off(*regDDRX(p), portBit(p)); //DDR=0, hi-z
+// }
+
+// void digitalIo_pseudoOpenDrain_DriveLow(uint8_t p) {
+//   bit_on(*regDDRX(p), portBit(p)); //DDR=1, drive low
+// }
+
+void digitalIo_pseudoOpenDrain_output(uint8_t p, bool value) {
+  bit_spec(*regDDRX(p), portBit(p), !value); //drive low for 0, hi-z for 1
+}
 
 void initPorts() {
   digitalIo_setOutput(pin_sclk);
-  digitalIo_write(pin_sclk, 1);
+  digitalIo_setHigh(pin_sclk);
 
-  //configure sdio as pseudo open drain
-  gpio_init(pin_sdio);
-  gpio_pull_up(pin_sdio);
-  gpio_set_dir(pin_sdio, 0);
+  digitalIo_pseudoOpenDrain_init(pin_sdio);
 
   digitalIo_setOutput(pin_debug);
   digitalIo_setHigh(pin_debug);
@@ -32,28 +53,22 @@ void initPorts() {
 
 void clockHigh() {
   digitalIo_setHigh(pin_sclk);
-  // digitalIo_write(pin_sclk, 1);
 }
 
 void clockLow() {
   digitalIo_setLow(pin_sclk);
-  // digitalIo_write(pin_sclk, 0);
+}
+
+void signalHiZ() {
+  digitalIo_pseudoOpenDrain_output(pin_sdio, 1);
 }
 
 void signalOut(bool value) {
-  gpio_set_dir(pin_sdio, !value); //drive low for 0, hi-z for 1
-}
-
-void signalHigh() {
-  gpio_set_dir(pin_sdio, 0); //sdio hi-z
-}
-
-void signalLow() {
-  gpio_set_dir(pin_sdio, 1); //sdio drive low
+  digitalIo_pseudoOpenDrain_output(pin_sdio, value);
 }
 
 bool signalRead() {
-  digitalIo_read(pin_sdio);
+  return digitalIo_read(pin_sdio);
 }
 
 void debugLow() {
@@ -68,7 +83,7 @@ void reSyncSerial() {
   clockLow();
   delayUs(1); //T_RESYNC
   clockHigh();
-  delayMs(2); //T_SIWTT, 1.7ms for normal mode
+  delayMs(1); //T_SIWTT, 1.7ms for normal mode
   // delayMs(400); //T_SIWTT, 320ms(+-20%) for sleep2 mode
 }
 
@@ -77,9 +92,9 @@ void writeByte(uint8_t byte) {
     uint8_t bit = bit_read(byte, i);
     clockLow();
     signalOut(bit);
-    delayUs(5);
+    delayUs(1);
     clockHigh();
-    delayUs(5);
+    delayUs(1);
   }
 }
 
@@ -87,10 +102,10 @@ uint8_t readByte() {
   uint8_t data = 0;
   for (int i = 7; i >= 0; i--) {
     clockLow();
-    delayUs(5);
+    delayUs(1);
     clockHigh();
     uint8_t bit = signalRead();
-    delayUs(5);
+    delayUs(1);
     bit_spec(data, i, bit);
   }
   return data;
@@ -98,8 +113,8 @@ uint8_t readByte() {
 
 uint8_t readData(uint8_t addr) {
   writeByte(addr);
-  signalHigh();
-  delayUs(3); //T_HOLD
+  signalHiZ();
+  delayUs(3); //T_HOLD (>=3us)
   return readByte();
 }
 
@@ -111,7 +126,7 @@ void writeData(uint8_t addr, uint8_t data) {
 
 int main() {
   debugUart_initialize(38400);
-  boardIo_setupLeds_rpiPico();
+  boardIo_setupLeds_proMicroAvr();
   initPorts();
   reSyncSerial();
 
