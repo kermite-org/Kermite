@@ -1003,25 +1003,6 @@ static bool hidKeyboard_writeReport(uint8_t *pReportBytes8) {
   return true;
 }
 
-static bool hidKeyboard_writeKeyStatus(uint8_t modifier, uint8_t *pKeyUsages6) {
-  if (!usb_configuration) {
-    return false;
-  }
-  UENUM = KEYBOARD_ENDPOINT;
-  if (!bit_is_on(UEINTX, RWAL)) {
-    return false;
-  }
-  cli();
-  UEDATX = modifier;
-  UEDATX = 0;
-  for (uint8_t i = 0; i < 6; i++) {
-    UEDATX = pKeyUsages6[i];
-  }
-  UEINTX = 0x3A;
-  sei();
-  return true;
-}
-
 static bool genericHid_writeData(uint8_t *pDataBytes64) {
   if (!usb_configuration) {
     return false;
@@ -1061,10 +1042,6 @@ static bool genericHid_readDataIfExists(uint8_t *pDataBytes64) {
 
 void usbIoCore_initialize() {
   initUSB();
-}
-
-bool usbIoCore_hidKeyboard_writeKeyStatus(uint8_t modifier, uint8_t *pKeyUsages6) {
-  return hidKeyboard_writeKeyStatus(modifier, pKeyUsages6);
 }
 
 bool usbIoCore_hidKeyboard_writeReport(uint8_t *pReportBytes8) {
