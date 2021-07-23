@@ -33,6 +33,8 @@ enum {
 
 volatile static bool isConnected = false;
 
+static uint8_t keyboardLedStatus = 0;
+
 //--------------------------------------------------------------------
 // Device Descriptors
 
@@ -171,9 +173,10 @@ uint8_t const *tud_hid_descriptor_report_cb(uint8_t itf) {
 // Configuration Descriptor
 
 #define CONFIG_TOTAL_LEN (TUD_CONFIG_DESC_LEN + TUD_HID_DESC_LEN + TUD_HID_DESC_LEN + TUD_HID_INOUT_DESC_LEN)
+// #define CONFIG_TOTAL_LEN (TUD_CONFIG_DESC_LEN + TUD_HID_INOUT_DESC_LEN + TUD_HID_DESC_LEN + TUD_HID_INOUT_DESC_LEN)
 
-#define EPNUM_HID_MOUSE 0x81
-#define EPNUM_HID_KEYBOARD 0x82
+#define EPNUM_HID_MOUSE 0x01
+#define EPNUM_HID_KEYBOARD 0x02
 #define EPNUM_HID_RAWHID 0x03
 
 static uint8_t const desc_configuration[] = {
@@ -181,11 +184,15 @@ static uint8_t const desc_configuration[] = {
   TUD_CONFIG_DESCRIPTOR(1, 3, 0, CONFIG_TOTAL_LEN, TUSB_DESC_CONFIG_ATT_REMOTE_WAKEUP, 100),
 
   // Interface number, string index, protocol, report descriptor len, EP In & Out address, size & polling interval
-  TUD_HID_DESCRIPTOR(ITF_KEYBOARD, 0, HID_ITF_PROTOCOL_NONE, sizeof(desc_hid_report_keyboard), EPNUM_HID_KEYBOARD, CFG_TUD_HID_EP_BUFSIZE, 10),
-  TUD_HID_DESCRIPTOR(ITF_MOUSE, 0, HID_ITF_PROTOCOL_NONE, sizeof(desc_hid_report_mouse), EPNUM_HID_MOUSE, CFG_TUD_HID_EP_BUFSIZE, 10),
+  TUD_HID_DESCRIPTOR(ITF_KEYBOARD, 0, HID_ITF_PROTOCOL_NONE, sizeof(desc_hid_report_keyboard),
+                     0x80 | EPNUM_HID_KEYBOARD, CFG_TUD_HID_EP_BUFSIZE, 10),
+  // TUD_HID_INOUT_DESCRIPTOR(ITF_KEYBOARD, 0, HID_ITF_PROTOCOL_NONE, sizeof(desc_hid_report_keyboard),
+  //                          EPNUM_HID_KEYBOARD, 0x80 | EPNUM_HID_KEYBOARD, CFG_TUD_HID_EP_BUFSIZE, 10),
+  TUD_HID_DESCRIPTOR(ITF_MOUSE, 0, HID_ITF_PROTOCOL_NONE, sizeof(desc_hid_report_mouse),
+                     0x80 | EPNUM_HID_MOUSE, CFG_TUD_HID_EP_BUFSIZE, 10),
   // Interface number, string index, protocol, report descriptor len, EP In & Out address, size & polling interval
-  TUD_HID_INOUT_DESCRIPTOR(ITF_RAWHID, 0, HID_ITF_PROTOCOL_NONE, sizeof(desc_hid_report_rawhid), EPNUM_HID_RAWHID,
-                           0x80 | EPNUM_HID_RAWHID, CFG_TUD_HID_EP_BUFSIZE, 10)
+  TUD_HID_INOUT_DESCRIPTOR(ITF_RAWHID, 0, HID_ITF_PROTOCOL_NONE, sizeof(desc_hid_report_rawhid),
+                           EPNUM_HID_RAWHID, 0x80 | EPNUM_HID_RAWHID, CFG_TUD_HID_EP_BUFSIZE, 10)
 
 };
 
@@ -277,8 +284,11 @@ static uint32_t rawHidReceivedPageCount = 0;
 // Invoked when received SET_REPORT control request
 // or received data on OUT endpoint ( Report ID = 0, Type = 0 )
 void tud_hid_set_report_cb(uint8_t itf, uint8_t report_id, hid_report_type_t report_type, uint8_t const *buffer, uint16_t bufsize) {
-  printf("received %d %d %d, %d bytes\n", itf, report_id, report_type, bufsize);
+  // printf("set report %d %d %d, %d bytes\n", itf, report_id, report_type, bufsize);
 
+  if(itf == ITF_KEYBOARD && bufsize == 1){
+    keyboardLedStatus = buffer[0];
+  }
   if (itf == ITF_RAWHID) {
     memcpy(rawHidReceivedBuf, buffer, bufsize);
     rawHidReceivedPageCount++;
@@ -374,6 +384,10 @@ bool usbIoCore_hidMouse_writeReport(uint8_t *pReportBytes3) {
     // enqueueMouseEmitInternalBuffer(pReportBytes3);
   }
   return true;
+}
+
+uint8_t usbIoCore_hidKeyboard_getStatusLedFlags() {
+  return keyboardLedStatus;
 }
 
 bool usbIoCore_genericHid_writeData(uint8_t *pDataBytes64) {
