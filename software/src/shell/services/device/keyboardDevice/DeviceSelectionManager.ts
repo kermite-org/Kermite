@@ -3,7 +3,7 @@ import {
   IDeviceSelectionStatus,
   IntervalTimerWrapper,
 } from '~/shared';
-import { applicationStorage } from '~/shell/base';
+import { appGlobal, applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
 import {
   enumerateSupportedDeviceInfos,
@@ -19,13 +19,13 @@ import { Packets } from '~/shell/services/device/keyboardDevice/Packets';
 const deviceSpecificationParams: IDeviceSpecificationParams[] = [
   // atmega32u4
   {
-    serialNumberFirst8Bytes: 'A152FD20',
+    serialNumberFirst10Bytes: 'A152FD2C01',
     usagePage: 0xffab,
     usage: 0x0200,
   },
   // rp2040
   {
-    serialNumberFirst8Bytes: 'A152FD21',
+    serialNumberFirst10Bytes: 'A152FD2C02',
     usagePage: 0xff00,
     usage: 0x0001,
   },
@@ -72,6 +72,9 @@ export class DeviceSelectionManager {
             return;
           }
           device.writeSingleFrame(Packets.connectionOpenedFrame);
+          device.writeSingleFrame(
+            Packets.makeSimulatorModeSpecFrame(appGlobal.getSimulatorMode()),
+          );
           console.log(`device opened: ${deviceSig}`);
           device.onClosed(() => {
             this.setStatus({ currentDevicePath: 'none' });

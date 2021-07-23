@@ -26,7 +26,6 @@ import {
   IPorjectFileJson,
   readCustomParameterDefinition,
 } from '~/shell/projectResources/ProjectResourceProviderImpl_Local';
-import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 
 const remoteBaseUri = 'https://app.kermite.org/krs/resources';
 
@@ -80,10 +79,6 @@ export class ProjectResourceProviderImpl_Remote
 
   private loaded = false;
   async getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]> {
-    const globalSetttings = GlobalSettingsProvider.getGlobalSettings();
-    if (!globalSetttings.useOnlineResources) {
-      return [];
-    }
     if (!this.loaded) {
       this.projectInfoSources = await loadRemoteResourceInfosFromSummaryJson();
       this.loaded = true;

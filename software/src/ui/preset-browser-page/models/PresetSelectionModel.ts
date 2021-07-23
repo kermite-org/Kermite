@@ -16,7 +16,7 @@ export interface IPresetSelectionModel {
   presetSelectorSource: ISelectorSource;
   currentProjectKey: string;
   currentPresetKey: string;
-  selectProjectByProjectId(projectId: string): void;
+  selectProject(projectKey: string): void;
   loadedProfileData: IProfileData;
   editSelectedProjectPreset(): void;
 }
@@ -85,13 +85,6 @@ export function usePresetSelectionModel(): IPresetSelectionModel {
     sel.presetKey = '';
   };
 
-  const selectProjectByProjectId = (projectId: string) => {
-    const info = resourceInfos.find((info) => info.projectId === projectId);
-    if (info) {
-      selectProject(info.sig);
-    }
-  };
-
   const loadedProfileData = useProfileDataLoaded(modProjectKey, modPresetKey);
 
   const editSelectedProjectPreset = () => {
@@ -111,7 +104,7 @@ export function usePresetSelectionModel(): IPresetSelectionModel {
     },
     currentProjectKey: modProjectKey,
     currentPresetKey: modPresetKey,
-    selectProjectByProjectId,
+    selectProject,
     loadedProfileData,
     editSelectedProjectPreset,
   };

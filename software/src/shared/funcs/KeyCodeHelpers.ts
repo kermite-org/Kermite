@@ -46,6 +46,6 @@ export function decodeModifierVirtualKeys(bits: number): ModifierVirtualKey[] {
     mCtlr && 'K_Ctrl',
     mShift && 'K_Shift',
     mAlt && 'K_Alt',
-    mGui && 'K_GUI',
+    mGui && 'K_Gui',
   ].filter((a) => !!a) as ModifierVirtualKey[];
 }

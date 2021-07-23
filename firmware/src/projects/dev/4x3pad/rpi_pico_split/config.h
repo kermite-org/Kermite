@@ -1,6 +1,6 @@
 #pragma once
 
-#define KERMITE_PROJECT_ID "066MbLCf"
+#define KERMITE_PROJECT_ID "066MbL"
 
 #define KM0_KEYBOARD__NUM_SCAN_SLOTS 24
 

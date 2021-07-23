@@ -1,4 +1,9 @@
-import { IPresetSpec, IPresetType, IResourceOrigin } from '~/shared/defs';
+import {
+  IKeyboardDeviceAttributes,
+  IPresetSpec,
+  IPresetType,
+  IResourceOrigin,
+} from '~/shared/defs';
 import { generateNumberSequence } from '~/shared/funcs/Utils';
 
 // プロジェクトソースの単一文字列表現 `local#${projectId}` or `online#${projectId}`
@@ -51,9 +56,15 @@ export function checkDeviceInstanceCodeValid(code: string): boolean {
 }
 
 const kermiteMcuCodeToMcuNameMap: { [key in string]: string } = {
-  A152FD20: 'ATmega32U4',
-  A152FD21: 'RP2040',
+  A152FD2C01: 'ATmega32U4',
+  A152FD2C02: 'RP2040',
 };
 export function getMcuNameFromKermiteMcuCode(code: string) {
   return kermiteMcuCodeToMcuNameMap[code] || 'unknown';
+}
+
+export function getProjectKeyFromDeviceAttributes(
+  deviceAttrs: IKeyboardDeviceAttributes,
+): string {
+  return `${deviceAttrs.origin}#${deviceAttrs.projectId}`;
 }
