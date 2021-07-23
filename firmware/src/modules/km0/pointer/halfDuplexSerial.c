@@ -1,5 +1,6 @@
 #include "halfDuplexSerial.h"
 #include "km0/base/bitOperations.h"
+#include "km0/base/configImport.h"
 #include "km0/device/digitalIo.h"
 #include "km0/device/system.h"
 
