@@ -12,7 +12,7 @@
 static const uint8_t keyInputPins[NumScanSlots] = { GP12, GP13, GP14, GP15 };
 
 int main() {
-  debugUart_initialize(115200);
+  debugUart_initialize(38400);
   boardIo_setupLeds_rpiPico();
   keyScanner_directWired_initialize(NumScanSlots, keyInputPins, 0);
   keyboardMain_useKeyScanner(keyScanner_directWired_update);
