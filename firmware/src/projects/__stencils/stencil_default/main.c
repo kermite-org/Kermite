@@ -32,6 +32,10 @@
 #include "km0/visualizer/rgbLighting.h"
 #endif
 
+#ifdef KS_USE_MOUSE_SENSOR
+#include "km0/pointer/pointingDevice.h"
+#endif
+
 #ifdef KS_USE_CUSTOM_KEYINDEX_TABLE
 extern const int8_t customData_keyIndexTable[KM0_KEYBOARD__NUM_SCAN_SLOTS];
 #endif
@@ -98,6 +102,11 @@ int main() {
 #endif
   keyboardMain_useKeyScanner(keyScanner_encoders_update);
   keyScanner_encoders_initialize(KS_NUM_ENCODERS, encoderConfigs);
+#endif
+
+#ifdef KS_USE_MOUSE_SENSOR
+  pointingDevice_initialize();
+  keyboardMain_usePointingDevice(pointingDevice_update);
 #endif
 
 #ifdef KS_USE_CUSTOM_KEYINDEX_TABLE

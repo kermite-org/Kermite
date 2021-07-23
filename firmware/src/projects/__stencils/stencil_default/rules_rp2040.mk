@@ -86,6 +86,13 @@ MODULE_SRCS += km0/device/rp2040/neoPixelCore.c
 MODULE_PIOASM_SRCS += km0/device/rp2040/neoPixelCore.pio
 endif
 
+#mouse sensor
+ifneq ($(KL_USE_MOUSE_SENSOR_PAW3024),)
+MODULE_SRCS += km0/pointer/halfDuplexSerial.c
+MODULE_SRCS += km0/pointer/pointingDevice_opticalSensor_paw3204.c
+DEFINES += KS_USE_MOUSE_SENSOR
+endif
+
 #unified keyboard
 ifneq ($(KL_USE_GENERAL_KEYBOARD),)
 MODULE_SRCS += km0/wrapper/generalKeyboard.c
@@ -103,3 +110,4 @@ endif
 ifneq ($(KL_USE_CUSTOM_DATA),)
 PROJECT_SRCS += customData.c
 endif
+

@@ -78,6 +78,10 @@
 
 #endif
 
+#ifdef KS_USE_MOUSE_SENSOR
+#include "km0/pointer/pointingDevice.h"
+#endif
+
 #ifdef KS_USE_CUSTOM_KEYINDEX_TABLE
 extern const int8_t customData_keyIndexTable[KM0_KEYBOARD__NUM_SCAN_SLOTS];
 #endif
@@ -178,6 +182,11 @@ int main() {
   rgbLighting_preConfigure();
   rgbLighting_initialize();
   keyboardMain_useRgbLightingModule(rgbLighting_update);
+#endif
+
+#ifdef KS_USE_MOUSE_SENSOR
+  pointingDevice_initialize();
+  keyboardMain_usePointingDevice(pointingDevice_update);
 #endif
 
 #ifdef KS_USE_CUSTOM_KEYINDEX_TABLE
