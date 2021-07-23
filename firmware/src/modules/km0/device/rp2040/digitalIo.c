@@ -39,7 +39,7 @@ void digitalIo_setLow(uint8_t pin) {
 
 void digitalIo_pseudoOpenDrain_init(uint8_t pin) {
   gpio_init(pin);
-  // gpio_pull_up(pin);
+  gpio_pull_up(pin);
   gpio_set_dir(pin, GPIO_IN);
 }
 
