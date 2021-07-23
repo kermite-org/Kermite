@@ -28,6 +28,7 @@ void keyboardMain_setAsSplitSlave();
 void keyboardMain_setCallbacks(KeyboardCallbackSet *_callbacks);
 void keyboardMain_initialize();
 void keyboardMain_udpateKeyScanners();
+void keyboardMain_updatePointingDevice();
 void keyboardMain_processKeyInputUpdate();
 void keyboardMain_updateKeyInidicatorLed();
 void keyboardMain_updateInputSlotInidicatorLed();

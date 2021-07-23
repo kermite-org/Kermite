@@ -1,0 +1,14 @@
+#pragma once
+
+#define KERMITE_PROJECT_ID "RcYEeq"
+
+#define KS_NUM_SCAN_SLOTS 4
+
+#define KS_NUM_DIRECT_WIRED_KEYS 4
+
+#define KS_DIRECT_WIRED_KEY_INPUT_PINS \
+  { D7, E6, B4, B5 }
+
+#define KS_MOUSE_SENSOR_PIN_SCLK D4
+#define KS_MOUSE_SENSOR_PIN_SDIO C6
+#define KS_MOUSE_SENSOR_SWAP_XY
