@@ -986,38 +986,29 @@ ISR(USB_COM_vect) {
 //------------------------------------------------------------
 //endpoint accessors
 
-static bool hidKeyboard_writeReport(uint8_t *pReportBytes8) {
+static bool writeTransmitData(uint8_t endpoint, uint8_t *bytes, int len) {
   if (!usb_configuration) {
     return false;
   }
-  UENUM = KEYBOARD_ENDPOINT;
+  UENUM = endpoint;
   if (!bit_is_on(UEINTX, RWAL)) {
     return false;
   }
   cli();
-  for (uint8_t i = 0; i < 8; i++) {
-    UEDATX = pReportBytes8[i];
+  for (uint8_t i = 0; i < len; i++) {
+    UEDATX = bytes[i];
   }
   UEINTX = 0x3A;
   sei();
   return true;
 }
 
+static bool hidKeyboard_writeReport(uint8_t *pReportBytes8) {
+  return writeTransmitData(KEYBOARD_ENDPOINT, pReportBytes8, 8);
+}
+
 static bool genericHid_writeData(uint8_t *pDataBytes64) {
-  if (!usb_configuration) {
-    return false;
-  }
-  UENUM = RAWHID_TX_ENDPOINT;
-  if (!bit_is_on(UEINTX, RWAL)) {
-    return false;
-  }
-  cli();
-  for (uint8_t i = 0; i < 64; i++) {
-    UEDATX = pDataBytes64[i];
-  }
-  UEINTX = 0x3A;
-  sei();
-  return true;
+  return writeTransmitData(RAWHID_TX_ENDPOINT, pDataBytes64, 64);
 }
 
 static bool genericHid_readDataIfExists(uint8_t *pDataBytes64) {
