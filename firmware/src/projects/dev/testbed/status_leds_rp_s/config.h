@@ -1,0 +1,15 @@
+#pragma once
+
+#define KERMITE_PROJECT_ID "RcYEeq"
+
+#define KS_NUM_SCAN_SLOTS 4
+
+#define KS_NUM_DIRECT_WIRED_KEYS 4
+
+#define KS_DIRECT_WIRED_KEY_INPUT_PINS \
+  { GP12, GP13, GP14, GP15 }
+
+#define KS_KEYBOARD_STATUS_LEDS_PINS \
+  { GP7, GP8, GP9 }
+
+#define KS_KEYBOARD_STATUS_LEDS_SINK
