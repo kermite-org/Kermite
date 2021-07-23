@@ -62,7 +62,7 @@ static uint8_t readByte() {
 void halfDuplexSerial_initialize() {
   digitalIo_setOutput(pin_sclk);
   digitalIo_setHigh(pin_sclk);
-  digitalIo_pseudoOpenDrain_init(pin_sclk);
+  digitalIo_pseudoOpenDrain_init(pin_sdio);
 }
 
 void halfDuplexSerial_reSyncSerial() {
