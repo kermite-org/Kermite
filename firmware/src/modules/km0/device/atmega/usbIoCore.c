@@ -1007,6 +1007,10 @@ static bool hidKeyboard_writeReport(uint8_t *pReportBytes8) {
   return writeTransmitData(KEYBOARD_ENDPOINT, pReportBytes8, 8);
 }
 
+static bool hidMouse_writeReport(uint8_t *pReportBytes3) {
+  return writeTransmitData(MOUSE_ENDPOINT, pReportBytes3, 3);
+}
+
 static bool genericHid_writeData(uint8_t *pDataBytes64) {
   return writeTransmitData(RAWHID_TX_ENDPOINT, pDataBytes64, 64);
 }
@@ -1037,6 +1041,10 @@ void usbIoCore_initialize() {
 
 bool usbIoCore_hidKeyboard_writeReport(uint8_t *pReportBytes8) {
   return hidKeyboard_writeReport(pReportBytes8);
+}
+
+bool usbIoCore_hidMouse_writeReport(uint8_t *pReportBytes3) {
+  return hidMouse_writeReport(pReportBytes3);
 }
 
 bool usbIoCore_genericHid_writeData(uint8_t *pDataBytes64) {
