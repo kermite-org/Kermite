@@ -1,11 +1,30 @@
 
 #include "halfDuplexSerial.h"
 #include "km0/base/bitOperations.h"
+#include "km0/base/configImport.h"
 #include "km0/device/boardIo.h"
 #include "km0/device/debugUart.h"
 #include "km0/device/digitalIo.h"
 #include "km0/device/system.h"
 #include <stdio.h>
+
+#ifdef KM0_OPTICAL_SENSOR__SWAP_XY
+static const bool outputSwapXY = true;
+#else
+static const bool outputSwapXY = false;
+#endif
+
+#ifdef KM0_OPTICAL_SENSOR__INVERT_X
+static const int outputMultX = -1;
+#else
+static const int outputMultX = 1;
+#endif
+
+#ifdef KM0_OPTICAL_SENSOR__INVERT_Y
+static const bool outputMultY = -1;
+#else
+static const bool outputMultY = 1;
+#endif
 
 enum {
   OpticalSensorRegister_ProductId1 = 0x00,
@@ -27,8 +46,13 @@ void pointingDevice_update(int8_t *outDeltaX, int8_t *outDeltaY) {
     if (bit_read(motionStatus, 7)) {
       int8_t deltaX = halfDuplexSerial_readData(OpticalSensorRegister_DeltaX);
       int8_t deltaY = halfDuplexSerial_readData(OpticalSensorRegister_DeltaY);
-      *outDeltaX = deltaX;
-      *outDeltaY = deltaY;
+      if (outputSwapXY) {
+        int8_t tmp = deltaY;
+        deltaY = deltaX;
+        deltaX = tmp;
+      }
+      *outDeltaX = deltaX * outputMultX;
+      *outDeltaY = deltaY * outputMultY;
     }
   }
 }
