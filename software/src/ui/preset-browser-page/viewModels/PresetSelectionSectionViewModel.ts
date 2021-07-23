@@ -1,4 +1,4 @@
-import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
+import { getProjectKeyFromDeviceAttributes } from '~/shared/funcs/DomainRelatedHelpers';
 import { ISelectorSource, useDeviceStatusModel } from '~/ui/common';
 import { IPresetSelectionModel } from '~/ui/preset-browser-page/models';
 
@@ -14,16 +14,25 @@ export function usePresetSelectionSectionViewModel(
   model: IPresetSelectionModel,
 ): IPresetSelectionSectionViewModel {
   const deviceStatusModel = useDeviceStatusModel();
+  const connectedDeviceProjectKey =
+    (deviceStatusModel.isConnected &&
+      deviceStatusModel.deviceAttrs &&
+      getProjectKeyFromDeviceAttributes(deviceStatusModel.deviceAttrs)) ||
+    undefined;
+
   return {
     projectSelectorSource: model.projectSelectorSource,
     presetSelectorSource: model.presetSelectorSource,
     isLinkButtonActive:
       deviceStatusModel.isConnected &&
-      deviceStatusModel.deviceAttrs?.projectId !==
-        getProjectOriginAndIdFromSig(model.currentProjectKey || '').projectId,
+      model.projectSelectorSource.options.some(
+        (opt) => opt.value === connectedDeviceProjectKey,
+      ) &&
+      model.currentProjectKey !== connectedDeviceProjectKey,
     linkButtonHandler() {
-      const deviceProjectId = deviceStatusModel.deviceAttrs?.projectId || '';
-      model.selectProjectByProjectId(deviceProjectId);
+      if (connectedDeviceProjectKey) {
+        model.selectProject(connectedDeviceProjectKey);
+      }
     },
     editPresetButtonHandler() {
       model.editSelectedProjectPreset();

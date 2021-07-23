@@ -1,4 +1,4 @@
-import { router, PagePaths, texts, uiStatusModel } from '~/ui/common';
+import { router, PagePaths, texts } from '~/ui/common';
 
 export interface NavigationEntryViewModel {
   pagePath: PagePaths;
@@ -41,7 +41,6 @@ const entrySources: NavigationEntrySource[] = [
     pageName: 'Presets2',
     iconSpec: 'fa fa-book',
     hint: texts.hint_sideMenu_app_presetBrowser,
-    isAvailable: () => uiStatusModel.settings.integrateUserPresetHub,
   },
   {
     pagePath: '/shapePreview',

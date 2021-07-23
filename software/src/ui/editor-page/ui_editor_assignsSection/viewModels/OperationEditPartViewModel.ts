@@ -4,10 +4,14 @@ import {
   systemActionToLabelTextMap,
   systemActionAssignSelectionSource,
   encodeSingleModifierVirtualKey,
+  VirtualKey,
 } from '~/shared';
 import { texts } from '~/ui/common';
 import { editorModel } from '~/ui/editor-page/models/EditorModel';
-import { virtualKeyGroupsTable2 } from './virtualkeyGroupsTable';
+import {
+  virtualKeyGroupsTable2,
+  virtualKeyGroupsTable3,
+} from './virtualkeyGroupsTable';
 
 export interface IOperationCardViewModel {
   sig: string;
@@ -85,6 +89,31 @@ export interface IOperationEditPartViewModel {
   attachedModifierEntries: IOperationCardViewModel[];
   layerCallEntries: IOperationCardViewModel[];
   systemActionEntries: IOperationCardViewModel[];
+  virtualKeyEntryGroups2: IOperationCardViewModel[][];
+}
+
+function makeVeritualKeyEntryGroup(
+  group: VirtualKey[],
+): IOperationCardViewModel[] {
+  const { editOperation, writeEditOperation } = editorModel;
+  return group.map((vk) => ({
+    sig: vk,
+    text: VirtualKeyTexts[vk] || '',
+    isCurrent:
+      editOperation?.type === 'keyInput' && editOperation.virtualKey === vk,
+    setCurrent: () =>
+      writeEditOperation({
+        type: 'keyInput',
+        virtualKey: vk,
+        attachedModifiers: 0,
+      }),
+    // isEnabled:
+    //   !isDualSecondary ||
+    //   (isDualSecondary &&
+    //     modifierVirtualKeys.includes(vk as ModifierVirtualKey)),
+    isEnabled: true,
+    hint: texts.hint_assigner_assigns_keyInput,
+  }));
 }
 
 export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
@@ -96,24 +125,11 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
     editorModel.dualModeEditTargetOperationSig === 'sec';
 
   const virtualKeyEntryGroups: IOperationCardViewModel[][] = virtualKeyGroupsTable2.map(
-    (group) =>
-      group.map((vk) => ({
-        sig: vk,
-        text: VirtualKeyTexts[vk] || '',
-        isCurrent:
-          editOperation?.type === 'keyInput' && editOperation.virtualKey === vk,
-        setCurrent: () =>
-          writeEditOperation({
-            type: 'keyInput',
-            virtualKey: vk,
-            attachedModifiers: 0,
-          }),
-        isEnabled:
-          !isDualSecondary ||
-          (isDualSecondary &&
-            modifierVirtualKeys.includes(vk as ModifierVirtualKey)),
-        hint: texts.hint_assigner_assigns_keyInput,
-      })),
+    makeVeritualKeyEntryGroup,
+  );
+
+  const virtualKeyEntryGroups2: IOperationCardViewModel[][] = virtualKeyGroupsTable3.map(
+    makeVeritualKeyEntryGroup,
   );
 
   const attachedModifierEntries: IOperationCardViewModel[] = modifierVirtualKeys.map(
@@ -198,5 +214,6 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
     attachedModifierEntries,
     layerCallEntries,
     systemActionEntries,
+    virtualKeyEntryGroups2,
   };
 }

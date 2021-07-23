@@ -316,10 +316,10 @@ static const uint8_t PROGMEM mouse_hid_report_desc[] = {
   0x81, 0x06, //   Input (Data, Variable, Relative)
 
   // Wheel rotation
-  0x09, 0x38, //   Usage (Wheel)
-  0x95, 0x01, //   Report Count (1),
-  0x81, 0x06, //   Input (Data, Variable, Relative)
-  0xC0        // End Collection
+  // 0x09, 0x38, //   Usage (Wheel)
+  // 0x95, 0x01, //   Report Count (1),
+  // 0x81, 0x06, //   Input (Data, Variable, Relative)
+  0xC0 // End Collection
 };
 
 // #define CONFIG1_DESC_SIZE (9 + 9 + 9 + 7 + 9 + 9 + 7 + 9 + 9 + 7 + 7)
@@ -986,57 +986,33 @@ ISR(USB_COM_vect) {
 //------------------------------------------------------------
 //endpoint accessors
 
-static bool hidKeyboard_writeReport(uint8_t *pReportBytes8) {
+static bool writeTransmitData(uint8_t endpoint, uint8_t *bytes, int len) {
   if (!usb_configuration) {
     return false;
   }
-  UENUM = KEYBOARD_ENDPOINT;
+  UENUM = endpoint;
   if (!bit_is_on(UEINTX, RWAL)) {
     return false;
   }
   cli();
-  for (uint8_t i = 0; i < 8; i++) {
-    UEDATX = pReportBytes8[i];
+  for (uint8_t i = 0; i < len; i++) {
+    UEDATX = bytes[i];
   }
   UEINTX = 0x3A;
   sei();
   return true;
 }
 
-static bool hidKeyboard_writeKeyStatus(uint8_t modifier, uint8_t *pKeyUsages6) {
-  if (!usb_configuration) {
-    return false;
-  }
-  UENUM = KEYBOARD_ENDPOINT;
-  if (!bit_is_on(UEINTX, RWAL)) {
-    return false;
-  }
-  cli();
-  UEDATX = modifier;
-  UEDATX = 0;
-  for (uint8_t i = 0; i < 6; i++) {
-    UEDATX = pKeyUsages6[i];
-  }
-  UEINTX = 0x3A;
-  sei();
-  return true;
+static bool hidKeyboard_writeReport(uint8_t *pReportBytes8) {
+  return writeTransmitData(KEYBOARD_ENDPOINT, pReportBytes8, 8);
+}
+
+static bool hidMouse_writeReport(uint8_t *pReportBytes3) {
+  return writeTransmitData(MOUSE_ENDPOINT, pReportBytes3, 3);
 }
 
 static bool genericHid_writeData(uint8_t *pDataBytes64) {
-  if (!usb_configuration) {
-    return false;
-  }
-  UENUM = RAWHID_TX_ENDPOINT;
-  if (!bit_is_on(UEINTX, RWAL)) {
-    return false;
-  }
-  cli();
-  for (uint8_t i = 0; i < 64; i++) {
-    UEDATX = pDataBytes64[i];
-  }
-  UEINTX = 0x3A;
-  sei();
-  return true;
+  return writeTransmitData(RAWHID_TX_ENDPOINT, pDataBytes64, 64);
 }
 
 static bool genericHid_readDataIfExists(uint8_t *pDataBytes64) {
@@ -1063,12 +1039,16 @@ void usbIoCore_initialize() {
   initUSB();
 }
 
-bool usbIoCore_hidKeyboard_writeKeyStatus(uint8_t modifier, uint8_t *pKeyUsages6) {
-  return hidKeyboard_writeKeyStatus(modifier, pKeyUsages6);
-}
-
 bool usbIoCore_hidKeyboard_writeReport(uint8_t *pReportBytes8) {
   return hidKeyboard_writeReport(pReportBytes8);
+}
+
+uint8_t usbIoCore_hidKeyboard_getStatusLedFlags() {
+  return keyboard_leds;
+}
+
+bool usbIoCore_hidMouse_writeReport(uint8_t *pReportBytes3) {
+  return hidMouse_writeReport(pReportBytes3);
 }
 
 bool usbIoCore_genericHid_writeData(uint8_t *pDataBytes64) {
