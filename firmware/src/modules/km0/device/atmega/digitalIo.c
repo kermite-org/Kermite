@@ -66,3 +66,7 @@ void digitalIo_pseudoOpenDrain_init(uint8_t p) {
 void digitalIo_pseudoOpenDrain_write(uint8_t p, bool val) {
   bit_spec(*regDDRX(p), portBit(p), !val); //drive low for 0, hi-z for 1
 }
+
+bool digitalIo_pseudoOpenDrain_read(uint8_t p) {
+  return bit_read(*regPINX(p), portBit(p));
+}

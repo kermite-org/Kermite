@@ -32,7 +32,7 @@ void signalHiZ() {
 }
 
 static bool signalRead() {
-  digitalIo_read(pin_sdio);
+  return digitalIo_pseudoOpenDrain_read(pin_sdio);
 }
 
 static void writeByte(uint8_t byte) {
