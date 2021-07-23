@@ -93,6 +93,12 @@ MODULE_SRCS += km0/pointer/pointingDevice_opticalSensor_paw3204.c
 DEFINES += KS_USE_MOUSE_SENSOR
 endif
 
+#status leds
+ifneq ($(KL_USE_KEYBOARD_STATUS_LEDS),)
+MODULE_SRCS += km0/visualizer/keyboardStatusLeds.c
+DEFINES += KS_USE_KEYBOARD_STATUS_LEDS
+endif
+
 #unified keyboard
 ifneq ($(KL_USE_GENERAL_KEYBOARD),)
 MODULE_SRCS += km0/wrapper/generalKeyboard.c
