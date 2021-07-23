@@ -53,6 +53,7 @@ void pointingDevice_update(int8_t *outDeltaX, int8_t *outDeltaY) {
       }
       *outDeltaX = deltaX * outputMultX;
       *outDeltaY = deltaY * outputMultY;
+      //printf("mouse moved, %d %d %d %d\n", productId, motionStatus, deltaX, deltaY);
     }
   }
 }
