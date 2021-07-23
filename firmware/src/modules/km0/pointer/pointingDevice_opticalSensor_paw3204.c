@@ -5,6 +5,7 @@
 #include "km0/device/debugUart.h"
 #include "km0/device/digitalIo.h"
 #include "km0/device/system.h"
+#include <stdio.h>
 
 enum {
   OpticalSensorRegister_ProductId1 = 0x00,
@@ -20,11 +21,14 @@ void pointingDevice_initialize() {
 }
 
 void pointingDevice_update(int8_t *outDeltaX, int8_t *outDeltaY) {
-  uint8_t motionStatus = halfDuplexSerial_readData(OpticalSensorRegister_MotionStatus);
-  if (bit_read(motionStatus, 7)) {
-    int8_t deltaX = halfDuplexSerial_readData(OpticalSensorRegister_DeltaX);
-    int8_t deltaY = halfDuplexSerial_readData(OpticalSensorRegister_DeltaY);
-    *outDeltaX = deltaX;
-    *outDeltaY = deltaY;
+  uint8_t productId = halfDuplexSerial_readData(OpticalSensorRegister_ProductId1);
+  if (productId == 0x30) {
+    uint8_t motionStatus = halfDuplexSerial_readData(OpticalSensorRegister_MotionStatus);
+    if (bit_read(motionStatus, 7)) {
+      int8_t deltaX = halfDuplexSerial_readData(OpticalSensorRegister_DeltaX);
+      int8_t deltaY = halfDuplexSerial_readData(OpticalSensorRegister_DeltaY);
+      *outDeltaX = deltaX;
+      *outDeltaY = deltaY;
+    }
   }
 }
