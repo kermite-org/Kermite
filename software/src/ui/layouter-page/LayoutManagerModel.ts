@@ -10,6 +10,7 @@ import {
   IProjectLayoutsInfo,
 } from '~/shared';
 import { appUi, ipcAgent, modalConfirm, router } from '~/ui/common';
+import { editorModel } from '~/ui/editor-page/models/EditorModel';
 import { UiLayouterCore } from '~/ui/layouter';
 
 interface ILayoutManagerModel {
@@ -224,10 +225,13 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     const unsub2 = ipcAgent.events.profile_profileManagerStatus.subscribe(
       this.onProfileManagerStatus,
     );
-
     return () => {
       unbsub();
       unsub2();
+      if (this.editSource.type === 'CurrentProfile' && this.isModified) {
+        const design = UiLayouterCore.emitSavingDesign();
+        editorModel.replaceKeyboardDesign(design);
+      }
     };
   }
 }

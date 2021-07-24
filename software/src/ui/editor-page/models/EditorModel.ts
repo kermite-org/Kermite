@@ -7,6 +7,7 @@ import {
   IAssignOperation,
   compareObjectByJsonStringify,
   duplicateObjectByJsonStringifyParse,
+  IPersistKeyboardDesign,
 } from '~/shared';
 import { getDisplayKeyboardDesignSingleCached } from '~/shared/modules/DisplayKeyboardSingleCache';
 import {
@@ -217,6 +218,10 @@ export class EditorModel {
       (kp) => kp.keyIndex === keyIndex,
     );
     return keyEntity?.keyId;
+  }
+
+  replaceKeyboardDesign(design: IPersistKeyboardDesign) {
+    this.profileData.keyboardDesign = design;
   }
 }
 
