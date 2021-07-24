@@ -127,7 +127,7 @@ class EditMutations {
     editUpdator.commitEditor((editor) => {
       const shape = editor.design.outlineShapes[shapeId];
       shape.points.splice(idx, 1);
-      if (shape.points.length === 0) {
+      if (shape.points.length <= 2) {
         delete editor.design.outlineShapes[shapeId];
       }
     });
