@@ -179,8 +179,14 @@ const KeyEntityCardSingle = (props: {
   const [keyW, keyH] = getKeySize(ke.shape, sizeUnit);
 
   if (placementAnchor === 'topLeft') {
-    x3 += (keyW / 2 + 0.5) * (isMirror ? -1 : 1);
+    x3 += (keyW / 2 + 0.5) * mirrorMultX;
     y3 += keyH / 2 + 0.5;
+    if (ke.shape === 'ext isoEnter') {
+      x3 -= 2.1 * mirrorMultX;
+      if (!isMirror) {
+        x3 += 19.05 / 4;
+      }
+    }
   }
 
   const outerTransformSpec = `translate(${ox}, ${oy}) rotate(${orot}) translate(${x3}, ${y3}) rotate(${angle2})`;
