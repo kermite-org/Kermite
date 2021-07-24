@@ -132,8 +132,6 @@ const KeyEntityCardSingle = (props: {
   const x = coordUnit.mode === 'KP' ? ke.x * coordUnit.x : ke.x;
   const y = coordUnit.mode === 'KP' ? ke.y * coordUnit.y : ke.y;
 
-  const d = placementAnchor === 'topLeft' ? 1 : 0;
-
   const showBoth = showKeyId && showKeyIndex;
 
   const keyIndex = isMirror ? ke.mirrorKeyIndex : ke.keyIndex;
@@ -144,11 +142,7 @@ const KeyEntityCardSingle = (props: {
     editReader.isManualKeyIdMode,
   );
 
-  const [keyW, keyH] = getKeySize(ke.shape, sizeUnit);
-
-  const idTextsTransformSpec = `translate(${d * (keyW / 2 + 1)}, ${
-    d * (keyH / 2 + 1)
-  }) scale(0.2)`;
+  const idTextsTransformSpec = `scale(0.2)`;
   const idTexts = (
     <g transform={idTextsTransformSpec}>
       <text
@@ -179,14 +173,22 @@ const KeyEntityCardSingle = (props: {
   const x2 = x * mirrorMultX;
   const angle2 = ke.angle * mirrorMultX;
 
-  const outerTransformSpec = `translate(${ox}, ${oy}) rotate(${orot}) translate(${x2}, ${y}) rotate(${angle2})`;
+  let x3 = x2;
+  let y3 = y;
+
+  const [keyW, keyH] = getKeySize(ke.shape, sizeUnit);
+
+  if (placementAnchor === 'topLeft') {
+    x3 += (keyW / 2 + 0.5) * (isMirror ? -1 : 1);
+    y3 += keyH / 2 + 0.5;
+  }
+
+  const outerTransformSpec = `translate(${ox}, ${oy}) rotate(${orot}) translate(${x3}, ${y3}) rotate(${angle2})`;
 
   if (ke.shape === 'ext circle') {
-    const transformSpec = `translate(${d * 9.5}, ${d * 9.5})`;
     return (
       <g transform={outerTransformSpec}>
         <circle
-          transform={transformSpec}
           cx={0}
           cy={0}
           r={9}
@@ -204,7 +206,7 @@ const KeyEntityCardSingle = (props: {
     return (
       <g transform={outerTransformSpec}>
         <path
-          d={getIsoEnterSvgPathSpecText(placementAnchor)}
+          d={getIsoEnterSvgPathSpecText('center')}
           css={cssKeyRect}
           data-selected={isSelected}
           data-ghost={isGhost}
@@ -215,12 +217,9 @@ const KeyEntityCardSingle = (props: {
     );
   }
 
-  const transformSpec = `translate(
-    ${d * (keyW / 2 + 0.5)}, ${d * (keyH / 2 + 0.5)})`;
   return (
     <g transform={outerTransformSpec}>
       <rect
-        transform={transformSpec}
         x={-keyW / 2}
         y={-keyH / 2}
         width={keyW}
