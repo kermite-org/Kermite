@@ -291,7 +291,7 @@ class EditMutations {
 
   setCurrentTransGroupById(id: string | undefined) {
     editUpdator.patchEditor((editor) => {
-      editor.currentTransGroupId = id;
+      editor.currentTransGroupId = id || undefined;
     });
   }
 
