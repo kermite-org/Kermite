@@ -377,7 +377,7 @@ class EditMutations {
 
   deleteLastTransGroup() {
     const numGroups = editReader.allTransGroups.length;
-    if (numGroups === 1) {
+    if (numGroups === 0) {
       return;
     }
     const deletingGroupId = (numGroups - 1).toString();

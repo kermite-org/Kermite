@@ -29,9 +29,13 @@ export function useTransGroupListPartModel(): ITransGroupListPartModel {
     });
   }
 
+  const canDeleteGroup =
+    allTransGroups.length > 0 &&
+    currentTransGroupId === allTransGroups[allTransGroups.length - 1].id;
+
   return {
     canAddGroup: true,
-    canDeleteGroup: allTransGroups.length > 1 && !!currentTransGroupId,
+    canDeleteGroup,
     addGroup: () => editMutations.addTransGroup(),
     deleteGroup: () => editMutations.deleteLastTransGroup(),
     groupItems,
