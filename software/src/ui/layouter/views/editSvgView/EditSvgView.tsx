@@ -116,6 +116,14 @@ export const EditSvgView = () => {
     }
   }, []);
 
+  Hook.useEffect(() => {
+    return () => {
+      if (editReader.drawingShape) {
+        editMutations.cancelShapeDrawing();
+      }
+    };
+  }, []);
+
   return (
     <svg
       width={sight.screenW}
