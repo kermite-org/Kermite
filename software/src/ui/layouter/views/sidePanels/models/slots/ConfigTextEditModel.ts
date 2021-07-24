@@ -101,6 +101,7 @@ export class ConfigTextEditModel implements IConfigTextEditModel {
 // reflect edit value to model on each type
 export function createConfigTextEditModelDynamic(
   patterns: RegExp[],
+  textMaxLength: number,
   procStartEdit: () => void,
   procEmitValidText: (text: string) => void,
   procEndEdit: () => void,
@@ -122,6 +123,9 @@ export function createConfigTextEditModelDynamic(
     onValueChanged(text: string) {
       editText = text;
       valid = patterns.some((p) => text.match(p));
+      if (textMaxLength > 0 && text.length > textMaxLength) {
+        valid = false;
+      }
       if (valid) {
         originalText = editText;
         procEmitValidText(editText);
