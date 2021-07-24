@@ -279,9 +279,13 @@ function createKeyIndexEditViewModel() {
         return undefined;
       }
       if (!text.match(/^[0-9]+$/)) {
-        return ''; // 'keyIndex must be a number';
+        return 'keyIndex must be a number';
       }
       const newKeyIndex = parseInt(text);
+
+      if (newKeyIndex > 9999) {
+        return 'keyIndex too large';
+      }
 
       const {
         allKeyEntities,
