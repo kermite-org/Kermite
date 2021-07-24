@@ -77,6 +77,18 @@ const slotSources: IAttributeSlotSource<IEditKeyEntity, IEditPropKey>[] = [
         /^isoEnter$/,
       ];
       const valid = patterns.some((p) => text.match(p));
+
+      if (text !== 'circle' && text !== 'isoEnter') {
+        const textValues = text.split(' ');
+        if (textValues.some((t) => t.length > 8)) {
+          return 'too many digits';
+        }
+        const numberValues = textValues.map((v) => parseFloat(v));
+        if (numberValues.some((val) => val > 16)) {
+          return 'key size too large';
+        }
+      }
+
       return valid ? undefined : 'invalid specification';
     },
     reader(value: string) {
