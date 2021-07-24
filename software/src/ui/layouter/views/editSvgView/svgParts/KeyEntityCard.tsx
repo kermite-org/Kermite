@@ -45,31 +45,42 @@ export function startKeyEntityDragOperation(
   startDragSession(e, moveCallback, completeCallback);
 }
 
+const cssKeyRect = css`
+  stroke-width: 0.5;
+  fill: ${uiTheme.colors.clLayouterKeyFace};
+  stroke: ${uiTheme.colors.clLayouterKeyEdge};
+  cursor: pointer;
+
+  &[data-selected] {
+    stroke: #4bb;
+  }
+
+  &[data-ghost] {
+    opacity: 0.3;
+  }
+
+  &:hover {
+    opacity: 0.7;
+  }
+`;
+
+const cssText = css`
+  text-anchor: middle;
+  dominant-baseline: central;
+  user-select: none;
+  pointer-events: none;
+  fill: ${uiTheme.colors.clLayouterKeyLegend};
+  &[data-selected] {
+    fill: #4bb;
+  }
+`;
+
 const KeyEntityCardSingle = (props: {
   ke: IEditKeyEntity;
   isMirror: boolean;
 }) => {
   const { ke, isMirror } = props;
   const mirrorMultX = isMirror ? -1 : 1;
-
-  const cssKeyRect = css`
-    stroke-width: 0.5;
-    fill: ${uiTheme.colors.clLayouterKeyFace};
-    stroke: ${uiTheme.colors.clLayouterKeyEdge};
-    cursor: pointer;
-
-    &[data-selected] {
-      stroke: #4bb;
-    }
-
-    &[data-ghost] {
-      opacity: 0.3;
-    }
-
-    &:hover {
-      opacity: 0.7;
-    }
-  `;
 
   const onMouseDown = (e: MouseEvent) => {
     if (e.button === 0) {
@@ -122,17 +133,6 @@ const KeyEntityCardSingle = (props: {
   const y = coordUnit.mode === 'KP' ? ke.y * coordUnit.y : ke.y;
 
   const d = placementAnchor === 'topLeft' ? 1 : 0;
-
-  const cssText = css`
-    text-anchor: middle;
-    dominant-baseline: central;
-    user-select: none;
-    pointer-events: none;
-    fill: ${uiTheme.colors.clLayouterKeyLegend};
-    &[data-selected] {
-      fill: #4bb;
-    }
-  `;
 
   const showBoth = showKeyId && showKeyIndex;
 
