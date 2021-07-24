@@ -19,6 +19,9 @@ import {
 import { makeSelectorModel } from '~/ui/layouter/views/sidePanels/models/slots/SelectorModel';
 
 function floatNumberValidator(text: string) {
+  if (text.length > 10) {
+    return 'too many digits';
+  }
   return text.match(/^-?\d+\.?\d*?$/) ? undefined : 'must be a number';
 }
 
