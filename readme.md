@@ -63,7 +63,7 @@
 [Project Id Generator](https://app.kermite.org/krs/generator/) ファームウェアを新しく作る際に必要なProjectIdのジェネレータです
 
 ## 連絡先
-https://discord.gg/7662Ak2Q
+https://discord.gg/PNpEn3Z2kT
 
 Discordのサーバです。バグ報告や機能の相談などはこちらにお願いします。
 
