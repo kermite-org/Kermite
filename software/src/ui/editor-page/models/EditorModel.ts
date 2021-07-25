@@ -36,6 +36,8 @@ export class EditorModel {
   slotAddress: string = '';
   dualModeEditTargetOperationSig: IDualModeEditTargetOperationSig = 'pri';
 
+  private preModifiedDesign?: IPersistKeyboardDesign;
+
   // getters
 
   private get profileAssignType(): IProfileAssignType {
@@ -145,6 +147,11 @@ export class EditorModel {
     this.loadedPorfileData = profileData;
     this.profileData = duplicateObjectByJsonStringifyParse(profileData);
     this.currentLayerId = profileData.layers[0].layerId;
+
+    if (this.preModifiedDesign) {
+      this.profileData.keyboardDesign = this.preModifiedDesign;
+      this.preModifiedDesign = undefined;
+    }
   };
 
   private updateEditAssignSlot = () => {
@@ -221,7 +228,11 @@ export class EditorModel {
   }
 
   replaceKeyboardDesign(design: IPersistKeyboardDesign) {
-    this.profileData.keyboardDesign = design;
+    if (this.profileData !== fallbackProfileData) {
+      this.profileData.keyboardDesign = design;
+    } else {
+      this.preModifiedDesign = design;
+    }
   }
 }
 
