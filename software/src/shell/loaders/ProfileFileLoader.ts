@@ -10,7 +10,7 @@ import { ProfileDataMigrator } from '~/shell/loaders/ProfileDataMigrator';
 import { checkProfileDataObjectSchema } from '~/shell/loaders/ProfileDataSchemaChecker';
 
 export namespace ProfileFileLoader {
-  function convertProfileDataFromPersistProfileData(
+  export function convertProfileDataFromPersistProfileData(
     sourceProfileData: IPersistProfileData,
     filePath: string,
   ): IProfileData {

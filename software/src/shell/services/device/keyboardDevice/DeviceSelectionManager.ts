@@ -3,7 +3,7 @@ import {
   IDeviceSelectionStatus,
   IntervalTimerWrapper,
 } from '~/shared';
-import { applicationStorage } from '~/shell/base';
+import { appGlobal, applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
 import {
   enumerateSupportedDeviceInfos,
@@ -72,6 +72,9 @@ export class DeviceSelectionManager {
             return;
           }
           device.writeSingleFrame(Packets.connectionOpenedFrame);
+          device.writeSingleFrame(
+            Packets.makeSimulatorModeSpecFrame(appGlobal.getSimulatorMode()),
+          );
           console.log(`device opened: ${deviceSig}`);
           device.onClosed(() => {
             this.setStatus({ currentDevicePath: 'none' });

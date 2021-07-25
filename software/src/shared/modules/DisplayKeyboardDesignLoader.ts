@@ -106,11 +106,15 @@ export namespace DisplayKeyboardDesignLoader {
 
     const p = { x: 0, y: 0 };
     if (placementAnchor === 'topLeft') {
-      if (keyShape !== 'ext isoEnter') {
-        translateCoord(p, w / 2 + 0.5, h / 2 + 0.5);
-      } else {
-        translateCoord(p, w * 0.6 + 0.5, h / 2 + 0.5);
+      let transX = (w / 2 + 0.5) * mi;
+      const transY = h / 2 + 0.5;
+      if (keyShape === 'ext isoEnter') {
+        transX -= 2.1 * mi;
+        if (!isMirror) {
+          transX += 19.05 / 4;
+        }
       }
+      translateCoord(p, transX, transY);
     }
 
     translateCoord(p, keyX * mi, keyY);

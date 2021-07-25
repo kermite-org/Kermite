@@ -253,7 +253,7 @@ function getCanWrite(
 
   const isDeviceConnected = deviceStatus.isConnected;
 
-  const refProjectId = editorModel.loadedPorfileData.projectId;
+  const refProjectId = editorModel.profileData.projectId;
   const isProjectMatched = deviceStatus.deviceAttrs?.projectId === refProjectId;
 
   if (allowCrossKeyboardKeyMappingWrite) {

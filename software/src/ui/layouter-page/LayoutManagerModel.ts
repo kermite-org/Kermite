@@ -10,6 +10,7 @@ import {
   IProjectLayoutsInfo,
 } from '~/shared';
 import { appUi, ipcAgent, modalConfirm, router } from '~/ui/common';
+import { editorModel } from '~/ui/editor-page/models/EditorModel';
 import { UiLayouterCore } from '~/ui/layouter';
 
 interface ILayoutManagerModel {
@@ -31,6 +32,7 @@ interface ILayoutManagerModel {
 }
 
 let _prevLoadedDevsign: IPersistKeyboardDesign | undefined;
+let _keepUnsavedNewDesign: boolean = false;
 export class LayoutManagerModel implements ILayoutManagerModel {
   private _projectLayoutsInfos: IProjectLayoutsInfo[] = [];
 
@@ -75,6 +77,7 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     if (!(await this.checkShallLoadData())) {
       return;
     }
+    _keepUnsavedNewDesign = false;
     this.sendCommand({ type: 'createNewLayout' });
   }
 
@@ -192,6 +195,9 @@ export class LayoutManagerModel implements ILayoutManagerModel {
         diff.loadedDesign,
         createFallbackPersistKeyboardDesign(),
       );
+      if (isClean && _keepUnsavedNewDesign) {
+        return;
+      }
       if (!same || isClean) {
         UiLayouterCore.loadEditDesign(diff.loadedDesign);
         _prevLoadedDevsign = diff.loadedDesign;
@@ -224,10 +230,18 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     const unsub2 = ipcAgent.events.profile_profileManagerStatus.subscribe(
       this.onProfileManagerStatus,
     );
-
     return () => {
       unbsub();
       unsub2();
+      if (this.isModified) {
+        if (this.editSource.type === 'CurrentProfile') {
+          const design = UiLayouterCore.emitSavingDesign();
+          editorModel.replaceKeyboardDesign(design);
+        }
+        if (this.editSource.type === 'NewlyCreated') {
+          _keepUnsavedNewDesign = true;
+        }
+      }
     };
   }
 }

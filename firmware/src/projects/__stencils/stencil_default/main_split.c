@@ -32,6 +32,14 @@
 #include "km0/visualizer/rgbLighting.h"
 #endif
 
+#ifdef KS_USE_MOUSE_SENSOR
+#include "km0/pointer/pointingDevice.h"
+#endif
+
+#ifdef KS_USE_KEYBOARD_STATUS_LEDS
+#include "km0/visualizer/keyboardStatusLeds.h"
+#endif
+
 #ifndef KM0_KEYBOARD__RIGHTHAND_SCAN_SLOTS_OFFSET
 #define KM0_KEYBOARD__RIGHTHAND_SCAN_SLOTS_OFFSET (KM0_KEYBOARD__NUM_SCAN_SLOTS / 2)
 #endif
@@ -178,6 +186,16 @@ int main() {
   rgbLighting_preConfigure();
   rgbLighting_initialize();
   keyboardMain_useRgbLightingModule(rgbLighting_update);
+#endif
+
+#ifdef KS_USE_MOUSE_SENSOR
+  pointingDevice_initialize();
+  keyboardMain_usePointingDevice(pointingDevice_update);
+#endif
+
+#ifdef KS_USE_KEYBOARD_STATUS_LEDS
+  keyboardStatusLeds_initialize();
+  keyboardMain_useHostKeyboardStatusOutputModule(keyboardStatusLeds_update);
 #endif
 
 #ifdef KS_USE_CUSTOM_KEYINDEX_TABLE

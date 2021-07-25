@@ -370,6 +370,12 @@ export function uniqueArrayItems<T>(arr: T[]): T[] {
   return arr.filter((a, idx) => arr.indexOf(a) === idx);
 }
 
+export function uniqueArrayItemsByField<T>(items: T[], fieldKey: keyof T): T[] {
+  return items.filter(
+    (item) => items.find((it) => it[fieldKey] === item[fieldKey]) === item,
+  );
+}
+
 export function bumpObjectProps<T extends {}>(obj: T, source: T) {
   getObjectKeys(obj).forEach((key) => obj[key]);
   getObjectKeys(source).forEach((key) => (obj[key] = source[key]));

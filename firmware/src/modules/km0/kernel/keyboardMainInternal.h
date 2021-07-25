@@ -18,6 +18,7 @@ typedef struct {
   uint8_t pressedKeyIndex;
   bool isSplitSlave;
   bool optionInvertSide;
+  uint8_t hostKeyboardStateFlags;
 } KeyboardMainExposedState;
 
 extern KeyboardMainExposedState keyboardMain_exposedState;
@@ -28,11 +29,13 @@ void keyboardMain_setAsSplitSlave();
 void keyboardMain_setCallbacks(KeyboardCallbackSet *_callbacks);
 void keyboardMain_initialize();
 void keyboardMain_udpateKeyScanners();
+void keyboardMain_updatePointingDevice();
 void keyboardMain_processKeyInputUpdate();
 void keyboardMain_updateKeyInidicatorLed();
 void keyboardMain_updateInputSlotInidicatorLed();
 void keyboardMain_updateRgbLightingModules(uint32_t tick);
 void keyboardMain_updateOledDisplayModule(uint32_t tick);
+void keyboardMain_updateHostKeyboardStatusOutputModule();
 void keyboardMain_taskFlashHeartbeatLed();
 void keyboardMain_processUpdate();
 void keyboardMain_setKeySlotStateChangedCallback(void (*callback)(uint8_t slotIndex, bool isDown));

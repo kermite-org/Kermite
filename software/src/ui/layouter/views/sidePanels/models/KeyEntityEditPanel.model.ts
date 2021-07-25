@@ -19,6 +19,9 @@ import {
 import { makeSelectorModel } from '~/ui/layouter/views/sidePanels/models/slots/SelectorModel';
 
 function floatNumberValidator(text: string) {
+  if (text.length > 10) {
+    return 'too many digits';
+  }
   return text.match(/^-?\d+\.?\d*?$/) ? undefined : 'must be a number';
 }
 
@@ -74,6 +77,18 @@ const slotSources: IAttributeSlotSource<IEditKeyEntity, IEditPropKey>[] = [
         /^isoEnter$/,
       ];
       const valid = patterns.some((p) => text.match(p));
+
+      if (text !== 'circle' && text !== 'isoEnter') {
+        const textValues = text.split(' ');
+        if (textValues.some((t) => t.length > 8)) {
+          return 'too many digits';
+        }
+        const numberValues = textValues.map((v) => parseFloat(v));
+        if (numberValues.some((val) => val > 16)) {
+          return 'key size too large';
+        }
+      }
+
       return valid ? undefined : 'invalid specification';
     },
     reader(value: string) {
@@ -276,9 +291,13 @@ function createKeyIndexEditViewModel() {
         return undefined;
       }
       if (!text.match(/^[0-9]+$/)) {
-        return ''; // 'keyIndex must be a number';
+        return 'keyIndex must be a number';
       }
       const newKeyIndex = parseInt(text);
+
+      if (newKeyIndex > 9999) {
+        return 'keyIndex too large';
+      }
 
       const {
         allKeyEntities,

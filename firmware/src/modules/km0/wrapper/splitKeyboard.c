@@ -315,6 +315,9 @@ static void master_start() {
       keyboardMain_updateOledDisplayModule(tick);
       master_waitSlaveTaskCompletion();
     }
+    if (tick % 100 == 0) {
+      keyboardMain_updateHostKeyboardStatusOutputModule();
+    }
     taskForEach100ms(master_ledTask);
     keyboardMain_processUpdate();
     delayUs(500);
