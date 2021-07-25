@@ -32,6 +32,7 @@ interface ILayoutManagerModel {
 }
 
 let _prevLoadedDevsign: IPersistKeyboardDesign | undefined;
+let _keepUnsavedNewDesign: boolean = false;
 export class LayoutManagerModel implements ILayoutManagerModel {
   private _projectLayoutsInfos: IProjectLayoutsInfo[] = [];
 
@@ -76,6 +77,7 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     if (!(await this.checkShallLoadData())) {
       return;
     }
+    _keepUnsavedNewDesign = false;
     this.sendCommand({ type: 'createNewLayout' });
   }
 
@@ -193,6 +195,9 @@ export class LayoutManagerModel implements ILayoutManagerModel {
         diff.loadedDesign,
         createFallbackPersistKeyboardDesign(),
       );
+      if (isClean && _keepUnsavedNewDesign) {
+        return;
+      }
       if (!same || isClean) {
         UiLayouterCore.loadEditDesign(diff.loadedDesign);
         _prevLoadedDevsign = diff.loadedDesign;
@@ -228,9 +233,14 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     return () => {
       unbsub();
       unsub2();
-      if (this.editSource.type === 'CurrentProfile' && this.isModified) {
-        const design = UiLayouterCore.emitSavingDesign();
-        editorModel.replaceKeyboardDesign(design);
+      if (this.isModified) {
+        if (this.editSource.type === 'CurrentProfile') {
+          const design = UiLayouterCore.emitSavingDesign();
+          editorModel.replaceKeyboardDesign(design);
+        }
+        if (this.editSource.type === 'NewlyCreated') {
+          _keepUnsavedNewDesign = true;
+        }
       }
     };
   }
