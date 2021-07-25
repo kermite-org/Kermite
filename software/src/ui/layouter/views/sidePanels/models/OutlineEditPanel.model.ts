@@ -22,6 +22,7 @@ function createOutlineEditPanelModel() {
   function createOulineEditPropModel(propKey: 'x' | 'y') {
     return createConfigTextEditModelDynamic(
       numberPatterns,
+      10,
       editMutations.startEdit,
       (text) => {
         const value = parseFloat(text);

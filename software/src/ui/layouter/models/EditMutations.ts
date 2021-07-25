@@ -127,7 +127,7 @@ class EditMutations {
     editUpdator.commitEditor((editor) => {
       const shape = editor.design.outlineShapes[shapeId];
       shape.points.splice(idx, 1);
-      if (shape.points.length === 0) {
+      if (shape.points.length <= 2) {
         delete editor.design.outlineShapes[shapeId];
       }
     });
@@ -291,7 +291,7 @@ class EditMutations {
 
   setCurrentTransGroupById(id: string | undefined) {
     editUpdator.patchEditor((editor) => {
-      editor.currentTransGroupId = id;
+      editor.currentTransGroupId = id || undefined;
     });
   }
 
@@ -377,7 +377,7 @@ class EditMutations {
 
   deleteLastTransGroup() {
     const numGroups = editReader.allTransGroups.length;
-    if (numGroups === 1) {
+    if (numGroups === 0) {
       return;
     }
     const deletingGroupId = (numGroups - 1).toString();

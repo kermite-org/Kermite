@@ -20,6 +20,7 @@ function createTransGroupEditPanelModel() {
   function createTransGroupEditPropModel(propKey: 'x' | 'y' | 'angle') {
     return createConfigTextEditModelDynamic(
       numberPatterns,
+      10,
       editMutations.startEdit,
       (text) => {
         const value = parseFloat(text);

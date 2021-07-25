@@ -59,7 +59,11 @@ function createModels(): () => IDesignConfigurationPanelModel {
         text.match(p),
       );
       if (textValid) {
-        const values = text.split(' ').map((str) => parseFloat(str));
+        const texts = text.split(' ');
+        if (texts.some((t) => t.length > 8)) {
+          return false;
+        }
+        const values = texts.map((str) => parseFloat(str));
         return values.every((val) => val >= 5);
       }
       return false;
@@ -87,7 +91,11 @@ function createModels(): () => IDesignConfigurationPanelModel {
         text.match(p),
       );
       if (textValid) {
-        const values = text.split(' ').map((str) => parseFloat(str));
+        const texts = text.split(' ');
+        if (texts.some((t) => t.length > 8)) {
+          return false;
+        }
+        const values = texts.map((str) => parseFloat(str));
         return values.every((val) => val >= 1);
       }
       return false;

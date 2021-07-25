@@ -7,6 +7,7 @@ import {
   IAssignOperation,
   compareObjectByJsonStringify,
   duplicateObjectByJsonStringifyParse,
+  IPersistKeyboardDesign,
 } from '~/shared';
 import { getDisplayKeyboardDesignSingleCached } from '~/shared/modules/DisplayKeyboardSingleCache';
 import {
@@ -34,6 +35,8 @@ export class EditorModel {
   currentKeyUnitId: string = '';
   slotAddress: string = '';
   dualModeEditTargetOperationSig: IDualModeEditTargetOperationSig = 'pri';
+
+  private preModifiedDesign?: IPersistKeyboardDesign;
 
   // getters
 
@@ -144,6 +147,11 @@ export class EditorModel {
     this.loadedPorfileData = profileData;
     this.profileData = duplicateObjectByJsonStringifyParse(profileData);
     this.currentLayerId = profileData.layers[0].layerId;
+
+    if (this.preModifiedDesign) {
+      this.profileData.keyboardDesign = this.preModifiedDesign;
+      this.preModifiedDesign = undefined;
+    }
   };
 
   private updateEditAssignSlot = () => {
@@ -217,6 +225,14 @@ export class EditorModel {
       (kp) => kp.keyIndex === keyIndex,
     );
     return keyEntity?.keyId;
+  }
+
+  replaceKeyboardDesign(design: IPersistKeyboardDesign) {
+    if (this.profileData !== fallbackProfileData) {
+      this.profileData.keyboardDesign = design;
+    } else {
+      this.preModifiedDesign = design;
+    }
   }
 }
 
