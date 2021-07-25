@@ -76,9 +76,6 @@ async function makeShell() {
       platform: 'node',
       entry: `${shellSrcDir}/index.ts`,
       outfile: `${shellDistDir}/index.js`,
-      define: {
-        KERMITE_APP_VERSION: `'${process.env.KERMITE_APP_VERSION || ''}'`,
-      },
       external: [
         'electron',
         'require',

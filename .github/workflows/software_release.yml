@@ -35,8 +35,6 @@ jobs:
       - name: build application
         run: yarn build
         working-directory: software
-        env:
-          KERMITE_APP_VERSION: ${{ steps.tagName.outputs.tag }}
 
       - name: build distribution package (mac)
         if: matrix.os == 'macos-latest'
