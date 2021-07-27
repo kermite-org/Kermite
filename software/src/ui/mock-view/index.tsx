@@ -12,6 +12,7 @@ import { QxDebugPage } from '~/ui/mock-view/QxDebugPage';
 import { QxDebugPage2 } from '~/ui/mock-view/QxDebugPage2';
 import { QxDebugPage3 } from '~/ui/mock-view/QxDebugPage3';
 import { QxDebugPage4 } from '~/ui/mock-view/QxDebugPage4';
+import { QxDebugPage5 } from '~/ui/mock-view/QxDebugPage5';
 import { RoutingDevelopmentPage } from '~/ui/mock-view/RoutingDevelopmentPage';
 import { ShortCssDevPage } from '~/ui/mock-view/ShortCssDevPage';
 import { MockPageLayouterDevelopment } from './MockPageLayouterDevelopment';
@@ -22,7 +23,8 @@ const PageRoot = () => {
       {/* <QxDebugPage /> */}
       {/* <QxDebugPage2 /> */}
       {/* <QxDebugPage3 /> */}
-      <QxDebugPage4 />
+      {/* <QxDebugPage4 /> */}
+      <QxDebugPage5 />
       {/* <MockPageLayouterDevelopment /> */}
       {/* <MockPageLoadedDesignDrawing /> */}
       {/* <UiLayouterPageComponent /> */}
