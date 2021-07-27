@@ -1,4 +1,4 @@
-import { Hook, jsx } from 'qx';
+import { Hook, jsx, useLocal } from 'qx';
 import { IProjectResourceInfo } from '~/shared';
 import {
   ClosableOverlay,
@@ -11,7 +11,6 @@ import {
   GeneralSelector,
   ISelectorOption,
   reflectFieldValue,
-  useLocal,
   useMemoEx,
   useProjectResourceInfos,
 } from '~/ui/common';

@@ -1,5 +1,4 @@
-import { jsx, Hook, QxChild, QxChildren, css } from 'qx';
-import { useLocal } from '~/ui/common';
+import { jsx, Hook, QxChild, QxChildren, css, useLocal } from 'qx';
 
 const Hello = () => <div>hello</div>;
 

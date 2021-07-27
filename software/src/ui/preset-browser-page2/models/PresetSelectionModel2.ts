@@ -1,4 +1,4 @@
-import { Hook } from 'qx';
+import { Hook, useLocal } from 'qx';
 import {
   fallbackProfileData,
   getProjectOriginAndIdFromSig,
@@ -13,7 +13,6 @@ import {
   ISelectorOption,
   router,
   useFetcher,
-  useLocal,
   usePersistState,
   useProjectResourceInfos,
 } from '~/ui/common';

@@ -1,6 +1,5 @@
-import { Hook } from 'qx';
+import { Hook, useLocal } from 'qx';
 import { IProfileData } from '~/shared';
-import { useLocal } from '~/ui/common';
 import { IPresetKeyboardViewProps } from '~/ui/common-svg/panels/PresetKeyboardView';
 import { usePresetKeyboardViewModel } from '~/ui/preset-browser-page/viewModels/PresetKeyboardViewModel';
 

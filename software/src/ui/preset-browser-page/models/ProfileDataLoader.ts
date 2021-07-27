@@ -1,10 +1,10 @@
-import { Hook } from 'qx';
+import { Hook, useLocal } from 'qx';
 import { fallbackProfileData, IProfileData } from '~/shared';
 import {
   getPresetSpecFromPresetKey,
   getProjectOriginAndIdFromSig,
 } from '~/shared/funcs/DomainRelatedHelpers';
-import { ipcAgent, useLocal } from '~/ui/common';
+import { ipcAgent } from '~/ui/common';
 
 export function useProfileDataLoaded(
   projectKey: string,

@@ -1,9 +1,8 @@
-import { jsx, Hook } from 'qx';
+import { jsx, Hook, useLocal } from 'qx';
 import { IProjectResourceInfo } from '~/shared';
 import {
   fieldSetter,
   ipcAgent,
-  useLocal,
   IProjectAttachmentFileSelectorModalModel,
   ProjectAttachmentFileSelectorModal,
   modalConfirm,

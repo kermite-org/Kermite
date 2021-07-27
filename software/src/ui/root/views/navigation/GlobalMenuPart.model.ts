@@ -1,4 +1,5 @@
-import { appUi, texts, useLocal } from '~/ui/common';
+import { useLocal } from 'qx';
+import { appUi, texts } from '~/ui/common';
 import { uiStatusModel } from '~/ui/common/sharedModels/UiStatusModel';
 import { useLanguageSelectionModel } from '~/ui/root/models/LanguageSelectionModel';
 import { useThemeSelectionModel } from '~/ui/root/models/ThemeSelectionModel';

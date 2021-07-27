@@ -1,5 +1,4 @@
-import { jsx, Hook, asyncRerender, css } from 'qx';
-import { useLocal } from '~/ui/common';
+import { jsx, Hook, asyncRerender, css, useLocal } from 'qx';
 
 const cssBase = css`
   width: 100%;

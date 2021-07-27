@@ -1,4 +1,4 @@
-import { jsx, Hook, css } from 'qx';
+import { jsx, Hook, css, useLocal } from 'qx';
 import { globalSettingsFallbackValue } from '~/shared';
 import {
   appUi,
@@ -8,7 +8,6 @@ import {
   texts,
   uiTheme,
   useFetcher,
-  useLocal,
   CheckBoxLine,
   GeneralButton,
   GeneralInput,

@@ -1,4 +1,5 @@
-import { texts, useLocal } from '~/ui/common';
+import { useLocal } from 'qx';
+import { texts } from '~/ui/common';
 import { useProjectResourcePresenceChecker } from '~/ui/common/sharedModels/Hooks';
 import { IProfileManagementPartViewModel } from './ProfileManagementPartViewModel';
 
