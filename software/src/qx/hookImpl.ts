@@ -150,6 +150,12 @@ export namespace Hook {
   }
 }
 
+export function useLocal<T extends object>(arg: T | (() => T)): T {
+  const initialValue = 'call' in arg ? arg() : arg;
+  const [value] = Hook.useState(initialValue);
+  return value;
+}
+
 export function startHooks(target: IHookInstance) {
   target.index = 0;
   gHookInstance = target;

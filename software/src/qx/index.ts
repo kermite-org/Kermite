@@ -4,12 +4,20 @@ import {
   setJsxCreateElementFunction,
   styled,
 } from './cssInJs';
-import { Hook } from './hookImpl';
+import { Hook, useLocal } from './hookImpl';
 import { qxGlobal } from './qxGlobal';
 import { render as vdomCoreRender, jsx, VNode } from './qxinternal_qxcore';
 import { setShortCssProcessor } from './shortCss';
 
-export { jsx, Hook, css, styled, applyGlobalStyle, setShortCssProcessor };
+export {
+  jsx,
+  Hook,
+  css,
+  styled,
+  applyGlobalStyle,
+  setShortCssProcessor,
+  useLocal,
+};
 
 export type FC<T extends {} = {}> = (props: T) => JSX.Element | null;
 export type QxChild = JSX.Element | string;
