@@ -1,4 +1,5 @@
-import { ICommonSelectorViewModel, useLocal } from '~/ui/common';
+import { useLocal } from 'qx';
+import { ICommonSelectorViewModel } from '~/ui/common';
 import { useClosureModel } from '~/ui/layouter/common';
 import {
   editMutations,

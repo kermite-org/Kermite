@@ -1,4 +1,4 @@
-import { Hook } from 'qx';
+import { useEffect, useLocal } from 'qx';
 import {
   fallbackProfileData,
   getProjectOriginAndIdFromSig,
@@ -13,7 +13,6 @@ import {
   ISelectorOption,
   router,
   useFetcher,
-  useLocal,
   usePersistState,
   useProjectResourceInfos,
 } from '~/ui/common';
@@ -89,7 +88,7 @@ export function usePresetSelectionModel2(): IPresetSelectionModel {
     }
   };
 
-  Hook.useEffect(() => {
+  useEffect(() => {
     if (modProjectKey) {
       const { projectId } = getProjectOriginAndIdFromSig(modProjectKey);
       ipcAgent.async

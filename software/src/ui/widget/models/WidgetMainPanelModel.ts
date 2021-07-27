@@ -1,4 +1,4 @@
-import { Hook } from 'qx';
+import { useEffect } from 'qx';
 import { IDisplayKeyboardDesign } from '~/shared';
 import { ipcAgent, router, siteModel, usePlayerModel } from '~/ui/common';
 import { IWidgetKeyUnitCardViewModel } from '~/ui/common-svg/keyUnitCards/WidgetKeyUnitCard';
@@ -17,7 +17,7 @@ export interface IWidgetMainPanelModel {
 
 export function useWidgetMainPanelModel(): IWidgetMainPanelModel {
   const playerModel = usePlayerModel();
-  Hook.useEffect(() => {
+  useEffect(() => {
     (async () => {
       const profileData = await ipcAgent.async.profile_getCurrentProfile();
       playerModel.setProfileData(profileData);

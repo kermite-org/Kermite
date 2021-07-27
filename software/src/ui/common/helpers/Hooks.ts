@@ -1,16 +1,10 @@
-import { Hook } from 'qx';
+import { useLocal, useState, useEffect, useMemo } from 'qx';
 import { copyObjectProps } from '~/shared';
 import { UiLocalStorage } from '~/ui/common/base';
 
-export function useLocal<T extends object>(arg: T | (() => T)) {
-  const initialValue = 'call' in arg ? arg() : arg;
-  const [value] = Hook.useState(initialValue);
-  return value;
-}
-
 export function useFetcher<T>(func: () => Promise<T>, defaultValue: T): T {
-  const [value, setValue] = Hook.useState(defaultValue);
-  Hook.useEffect(() => {
+  const [value, setValue] = useState(defaultValue);
+  useEffect(() => {
     func().then((value) => value && setValue(value));
   }, []);
   return value;
@@ -20,8 +14,8 @@ export function useFetcher2<T>(
   func: () => Promise<T> | undefined,
   deps: any[],
 ): T | undefined {
-  const [value, setValue] = Hook.useState<T | undefined>(undefined);
-  Hook.useEffect(() => {
+  const [value, setValue] = useState<T | undefined>(undefined);
+  useEffect(() => {
     const promise = func();
     if (promise) {
       promise.then((value) => setValue(value));
@@ -36,13 +30,13 @@ export function useMemoEx<T extends (...args: any[]) => any>(
   func: T,
   args: Parameters<T>,
 ): ReturnType<T> {
-  return Hook.useMemo(() => func(...args), args);
+  return useMemo(() => func(...args), args);
 }
 
 export function usePersistState<T extends {}>(key: string, initialValue: T) {
-  const [value] = Hook.useState(initialValue);
+  const value = useLocal(initialValue);
   const storageKey = `usePersistState__${key}`;
-  Hook.useEffect(() => {
+  useEffect(() => {
     const savedValue = UiLocalStorage.readItem<T>(storageKey);
     if (savedValue) {
       copyObjectProps(value, savedValue);
@@ -58,8 +52,8 @@ export function useEventSource<T extends {}>(
   source: { subscribe: (listener: (value: Partial<T>) => void) => () => void },
   initialValue: T,
 ): T {
-  const [value, setValue] = Hook.useState(initialValue);
-  Hook.useEffect(() => {
+  const [value, setValue] = useState(initialValue);
+  useEffect(() => {
     return source.subscribe((newValuePartial) => {
       setValue((oldValue) => ({ ...oldValue, ...newValuePartial }));
     });

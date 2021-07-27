@@ -1,9 +1,9 @@
-import { FC, jsx, Hook, css } from 'qx';
+import { FC, jsx, css, useState, QxNode } from 'qx';
 import { uiTheme, Icon } from '~/ui/common';
 
 type Props = {
   headerText: string;
-  children: any;
+  children: QxNode;
   canToggleOpen?: boolean;
   initialOpen?: boolean;
 };
@@ -55,7 +55,7 @@ export const ConfigPanelBox: FC<Props> = ({
   canToggleOpen = false,
   initialOpen = true,
 }) => {
-  const [isOpen, setIsOpen] = Hook.useState(initialOpen);
+  const [isOpen, setIsOpen] = useState(initialOpen);
   const toggleIsOpen = () => setIsOpen(!isOpen);
 
   return (

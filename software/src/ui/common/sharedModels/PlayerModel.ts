@@ -1,4 +1,4 @@
-import { Hook } from 'qx';
+import { useEffect, useLocal } from 'qx';
 import {
   addArrayItemIfNotExist,
   createFallbackDisplayKeyboardDesign,
@@ -255,8 +255,8 @@ function createLocalState(): ILocalState {
 }
 
 export function usePlayerModel(): IPlayerModel {
-  const local = Hook.useMemo<ILocalState>(createLocalState, []);
-  Hook.useEffect(
+  const local = useLocal<ILocalState>(createLocalState);
+  useEffect(
     () =>
       ipcAgent.events.device_keyEvents.subscribe((ev) =>
         handlekeyEvents(ev, local),

@@ -1,4 +1,4 @@
-import { useLocal } from '~/ui/common';
+import { useLocal } from 'qx';
 import { ILayoutManagerViewModel } from '~/ui/layouter-page/LayoutManagerViewModel';
 
 type ILayoutManagerViewModelCommandFunctionKey =

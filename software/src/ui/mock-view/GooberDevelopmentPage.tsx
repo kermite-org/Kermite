@@ -1,4 +1,4 @@
-import { jsx, Hook, rerender, css, applyGlobalStyle, styled } from 'qx';
+import { jsx, rerender, css, applyGlobalStyle, styled, useEffect } from 'qx';
 
 const cssRoot = css`
   border: solid 4px orange;
@@ -46,7 +46,7 @@ const Foo = styled.div`
 `;
 
 export const GooberDevelopmentPage = () => {
-  Hook.useEffect(() => {
+  useEffect(() => {
     setTimeout(rerender, 1000);
   }, []);
 

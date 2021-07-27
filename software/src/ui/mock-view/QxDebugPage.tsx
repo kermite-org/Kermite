@@ -1,5 +1,4 @@
-import { jsx, Hook, QxChild, QxChildren, css } from 'qx';
-import { useLocal } from '~/ui/common';
+import { jsx, QxChild, QxChildren, css, useLocal, useEffect } from 'qx';
 
 const Hello = () => <div>hello</div>;
 
@@ -52,7 +51,7 @@ const SelectorTest = () => {
 
   const local = useLocal({ index: 0, optionSource: [] });
 
-  Hook.useEffect(() => {
+  useEffect(() => {
     // local.index = 1;
     local.optionSource = [];
   }, []);

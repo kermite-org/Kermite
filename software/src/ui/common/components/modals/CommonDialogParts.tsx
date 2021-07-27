@@ -1,9 +1,8 @@
-import { jsx, css } from 'qx';
-import { useLocal } from '~/ui/common/helpers';
+import { jsx, css, useLocal, QxNode, QxChildren } from 'qx';
 
 export function ClosableOverlay(props: {
   close: () => void;
-  children: JSX.Element;
+  children: QxNode;
   placeAtTop?: boolean;
 }) {
   const cssDiv = css`
@@ -97,7 +96,7 @@ export const CommonDialogFrame = (props: {
   );
 };
 
-export const DialogContentRow = (props: { children: any }) => {
+export const DialogContentRow = (props: { children: QxChildren }) => {
   const cssBody = css`
     margin: 10px 15px 0;
     color: #048;
@@ -114,7 +113,7 @@ export const DialogContentRow = (props: { children: any }) => {
   return <div css={cssBody}>{props.children}</div>;
 };
 
-export const DialogButtonsRow = (props: { children: any }) => {
+export const DialogButtonsRow = (props: { children: QxChildren }) => {
   const cssButtonsRow = css`
     margin: 10px 15px;
     display: flex;

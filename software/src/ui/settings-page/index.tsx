@@ -1,4 +1,4 @@
-import { jsx, Hook, css } from 'qx';
+import { jsx, css, useLocal, useEffect } from 'qx';
 import { globalSettingsFallbackValue } from '~/shared';
 import {
   appUi,
@@ -8,7 +8,6 @@ import {
   texts,
   uiTheme,
   useFetcher,
-  useLocal,
   CheckBoxLine,
   GeneralButton,
   GeneralInput,
@@ -53,7 +52,7 @@ export const UiSettingsPage = () => {
     fixedProjectRootPath: '',
   });
 
-  Hook.useEffect(() => {
+  useEffect(() => {
     (async () => {
       local.settings = await ipcAgent.async.config_getGlobalSettings();
       if (appUi.isDevelopment) {

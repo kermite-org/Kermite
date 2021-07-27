@@ -1,4 +1,4 @@
-import { Hook } from 'qx';
+import { useEffect, useLocal } from 'qx';
 import { IKeyboardDeviceAttributes } from '~/shared';
 import { ipcAgent } from '~/ui/common/base';
 
@@ -8,12 +8,12 @@ export interface IDeviceStatusModel {
 }
 
 export function useDeviceStatusModel(): IDeviceStatusModel {
-  const [deviceStatus] = Hook.useState<IDeviceStatusModel>({
+  const deviceStatus = useLocal<IDeviceStatusModel>({
     isConnected: false,
     deviceAttrs: undefined,
   });
 
-  Hook.useEffect(
+  useEffect(
     () =>
       ipcAgent.events.device_keyboardDeviceStatusEvents.subscribe((status) => {
         if (status.isConnected !== undefined) {

@@ -1,5 +1,12 @@
-import { jsx, Hook, asyncRerender, css } from 'qx';
-import { useLocal } from '~/ui/common';
+import {
+  jsx,
+  asyncRerender,
+  css,
+  useLocal,
+  useRef,
+  useEffect,
+  QxNode,
+} from 'qx';
 
 const cssBase = css`
   width: 100%;
@@ -22,7 +29,7 @@ const cssInner = css`
 interface IScalerBoxProps {
   contentWidth: number;
   contentHeight: number;
-  children: any;
+  children: QxNode;
 }
 
 export function ScalerBox(props: IScalerBoxProps) {
@@ -34,7 +41,7 @@ export function ScalerBox(props: IScalerBoxProps) {
 
   const { contentWidth, contentHeight, children } = props;
 
-  const ref = Hook.useRef<HTMLDivElement>();
+  const ref = useRef<HTMLDivElement>();
   const baseEl = ref.current;
   if (baseEl) {
     const { clientWidth: bw, clientHeight: bh } = baseEl;
@@ -45,7 +52,7 @@ export function ScalerBox(props: IScalerBoxProps) {
     asyncRerender();
   }
 
-  Hook.useEffect(asyncRerender, [contentWidth, contentHeight]);
+  useEffect(asyncRerender, [contentWidth, contentHeight]);
 
   return (
     <div css={cssBase} ref={ref}>

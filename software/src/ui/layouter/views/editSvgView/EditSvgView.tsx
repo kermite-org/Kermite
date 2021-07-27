@@ -1,4 +1,4 @@
-import { Hook, jsx } from 'qx';
+import { jsx, useEffect } from 'qx';
 import {
   getRelativeMousePosition,
   IPosition,
@@ -109,14 +109,14 @@ export const EditSvgView = () => {
   const viewBoxSpec = getViewBoxSpec();
   const transformSpec = getTransformSpec();
 
-  Hook.useEffect(() => {
+  useEffect(() => {
     const el = document.getElementById('domEditSvg');
     if (el) {
       el.addEventListener('contextmenu', (e) => e.preventDefault());
     }
   }, []);
 
-  Hook.useEffect(() => {
+  useEffect(() => {
     return () => {
       if (editReader.drawingShape) {
         editMutations.cancelShapeDrawing();

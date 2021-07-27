@@ -1,6 +1,5 @@
-import { jsx, css } from 'qx';
+import { jsx, css, useLocal } from 'qx';
 import { appUi } from '~/ui/common/base';
-import { useLocal } from '~/ui/common/helpers';
 
 const cssTab = css`
   position: absolute;

@@ -1,4 +1,4 @@
-import { Hook } from 'qx';
+import { useEffect } from 'qx';
 import {
   forceChangeFilePathExtension,
   IGlobalSettings,
@@ -307,7 +307,7 @@ const toggleRoutingPanel = () => {
 };
 
 export function makeProfileManagementPartViewModel(): IProfileManagementPartViewModel {
-  Hook.useEffect(profilesModel.startPageSession, []);
+  useEffect(profilesModel.startPageSession, []);
 
   const { editSource, allProfileNames, saveProfile } = profilesModel;
 
