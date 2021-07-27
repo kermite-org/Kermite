@@ -16,7 +16,7 @@ function useHoldKeyIndices() {
   const [holdKeyIndices] = Hook.useState<number[]>([]);
 
   Hook.useEffect(() => {
-    ipcAgent.events.device_keyEvents.subscribe((e) => {
+    return ipcAgent.events.device_keyEvents.subscribe((e) => {
       if (e.type === 'keyStateChanged') {
         if (e.isDown) {
           holdKeyIndices.push(e.keyIndex);
