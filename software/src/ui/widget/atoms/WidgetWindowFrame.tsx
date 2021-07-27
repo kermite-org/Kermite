@@ -1,7 +1,7 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx, QxNode } from 'qx';
 
 type Props = {
-  children: JSX.Element;
+  children: QxNode;
 };
 
 export const WidgetWindowFrame: FC<Props> = ({ children }) => (

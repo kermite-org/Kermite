@@ -1,4 +1,12 @@
-import { jsx, asyncRerender, css, useLocal, useRef, useEffect } from 'qx';
+import {
+  jsx,
+  asyncRerender,
+  css,
+  useLocal,
+  useRef,
+  useEffect,
+  QxNode,
+} from 'qx';
 
 const cssBase = css`
   width: 100%;
@@ -21,7 +29,7 @@ const cssInner = css`
 interface IScalerBoxProps {
   contentWidth: number;
   contentHeight: number;
-  children: any;
+  children: QxNode;
 }
 
 export function ScalerBox(props: IScalerBoxProps) {

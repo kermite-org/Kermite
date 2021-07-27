@@ -1,4 +1,4 @@
-import { jsx, css } from 'qx';
+import { jsx, css, QxChildren } from 'qx';
 import { IDisplayArea } from '~/shared';
 
 function getViewBox(da: IDisplayArea) {
@@ -11,7 +11,7 @@ function getViewBox(da: IDisplayArea) {
 export const KeyboardSvgFrame = (props: {
   displayArea: IDisplayArea;
   dpiScale: number;
-  children: JSX.Element[];
+  children: QxChildren;
   baseStrokeWidth: number;
 }) => {
   const cssSvgFrame = css`

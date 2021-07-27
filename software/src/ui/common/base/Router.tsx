@@ -1,4 +1,4 @@
-import { FC, jsx, rerender } from 'qx';
+import { FC, jsx, QxNode, rerender } from 'qx';
 
 export namespace router {
   let chainginHashInEventCallback = false;
@@ -38,11 +38,14 @@ export function linkTo(path: string) {
   return () => router.navigateTo(path);
 }
 
-export const ALink: FC<{ to: string; children: any }> = ({ to, children }) => {
+export const ALink: FC<{ to: string; children: QxNode }> = ({
+  to,
+  children,
+}) => {
   return <a href={`#${to}`}>{children}</a>;
 };
 
-export const Link: FC<{ to: string; children: any; className?: string }> = ({
+export const Link: FC<{ to: string; children: QxNode; className?: string }> = ({
   to,
   children,
   className,

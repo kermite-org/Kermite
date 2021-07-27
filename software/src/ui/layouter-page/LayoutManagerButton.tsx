@@ -1,4 +1,4 @@
-import { jsx, css } from 'qx';
+import { jsx, css, QxNode } from 'qx';
 
 const cssLayoutManagerButton = css`
   border: solid 1px #048;
@@ -27,7 +27,7 @@ const cssLayoutManagerButton = css`
 
 export const LayoutManagerButton = (props: {
   handler?: () => void;
-  children: any;
+  children: QxNode;
   active?: boolean;
   disabled?: boolean;
 }) => {

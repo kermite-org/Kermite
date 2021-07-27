@@ -1,4 +1,4 @@
-import { jsx, css } from 'qx';
+import { jsx, css, QxChildren } from 'qx';
 import { IDisplayArea } from '~/shared';
 import { KeyboardSvgFrame } from '~/ui/common-svg/frames/KeyboardSvgFrame';
 import { ScalerBox } from '~/ui/common-svg/frames/ScalerBox';
@@ -12,7 +12,7 @@ export const cssScalerContent = css`
 
 export function KeyboardSvgFrameWithAutoScaler(props: {
   displayArea: IDisplayArea;
-  children: JSX.Element[];
+  children: QxChildren;
   dpiScale: number;
   marginRatio: number;
   baseStrokeWidth: number;

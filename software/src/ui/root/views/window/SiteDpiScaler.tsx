@@ -1,6 +1,9 @@
-import { jsx, css } from 'qx';
+import { jsx, css, QxNode } from 'qx';
 
-export const SiteDpiScaler = (props: { children: any; dpiScale: number }) => {
+export const SiteDpiScaler = (props: {
+  children: QxNode;
+  dpiScale: number;
+}) => {
   const { children, dpiScale } = props;
   const baseW = window.innerWidth;
   const baseH = window.innerHeight;

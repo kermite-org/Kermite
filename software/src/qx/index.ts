@@ -35,6 +35,7 @@ export {
 export type FC<T extends {} = {}> = (props: T) => JSX.Element | null;
 export type QxChild = JSX.Element | string;
 export type QxChildren = QxChild | QxChild[];
+export type QxNode = QxChild;
 
 setJsxCreateElementFunction(jsx);
 
