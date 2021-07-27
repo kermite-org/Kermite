@@ -1,4 +1,4 @@
-import { Hook, useLocal } from 'qx';
+import { useEffect, useLocal } from 'qx';
 import { fallbackProfileData, IProfileData } from '~/shared';
 import {
   getPresetSpecFromPresetKey,
@@ -11,7 +11,7 @@ export function useProfileDataLoaded(
   presetKey: string,
 ): IProfileData {
   const local = useLocal({ profileData: fallbackProfileData });
-  Hook.useEffect(() => {
+  useEffect(() => {
     if (projectKey && presetKey) {
       const { origin, projectId } = getProjectOriginAndIdFromSig(projectKey);
       const presetSpec = getPresetSpecFromPresetKey(presetKey);

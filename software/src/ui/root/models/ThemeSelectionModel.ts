@@ -1,4 +1,4 @@
-import { Hook } from 'qx';
+import { useMemo } from 'qx';
 import { ipcAgent, ThemeKey, uiThemeConfigLoader } from '~/ui/common';
 
 interface IThemeSelectionModel {
@@ -8,7 +8,7 @@ interface IThemeSelectionModel {
 }
 
 export function useThemeSelectionModel(): IThemeSelectionModel {
-  const currentThemeKey = Hook.useMemo(uiThemeConfigLoader.loadThemeKey, []);
+  const currentThemeKey = useMemo(uiThemeConfigLoader.loadThemeKey, []);
   return {
     currentThemeKey,
     // themeOptions: Object.keys(themeColors) as ThemeKey[],

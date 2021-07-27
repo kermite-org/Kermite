@@ -1,4 +1,4 @@
-import { Hook } from 'qx';
+import { useMemo } from 'qx';
 import { ILanguageKey, ipcAgent, uiTextConfigLoader } from '~/ui/common/base';
 
 export interface ILanguageSelectionModel {
@@ -7,7 +7,7 @@ export interface ILanguageSelectionModel {
 }
 
 export function useLanguageSelectionModel(): ILanguageSelectionModel {
-  const currrentLanguage = Hook.useMemo(
+  const currrentLanguage = useMemo(
     () => uiTextConfigLoader.loadLanugageKey(),
     [],
   );

@@ -1,4 +1,4 @@
-import { jsx, Hook, css } from 'qx';
+import { jsx, css, useEffect } from 'qx';
 import {
   createFallbackDisplayKeyboardDesign,
   IDisplayKeyboardDesign,
@@ -25,7 +25,7 @@ const cssText = css`
 `;
 
 export const MockPageLoadedDesignDrawing = () => {
-  Hook.useEffect(() => {
+  useEffect(() => {
     const persistDesign = loadLocalStorageKeyboardDesignOrDefault();
     const design = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
       persistDesign,

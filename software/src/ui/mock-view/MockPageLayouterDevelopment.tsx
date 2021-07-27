@@ -1,4 +1,4 @@
-import { jsx, Hook } from 'qx';
+import { jsx, useEffect } from 'qx';
 import { UiLayouterCore } from '~/ui/layouter';
 import {
   loadLocalStorageKeyboardDesignOrDefault,
@@ -6,7 +6,7 @@ import {
 } from '~/ui/mock-view/LocalStoragePersistKeyboardDesign';
 
 export const MockPageLayouterDevelopment = () => {
-  Hook.useEffect(() => {
+  useEffect(() => {
     UiLayouterCore.loadEditDesign(loadLocalStorageKeyboardDesignOrDefault());
     return () =>
       saveLocalStorageKeyboardDesign(UiLayouterCore.emitSavingDesign());

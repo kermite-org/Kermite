@@ -1,4 +1,4 @@
-import { css, Hook, jsx } from 'qx';
+import { css, jsx, useMemo } from 'qx';
 import { GeneralButton, GeneralInput, texts } from '~/ui/common';
 import { makeTestInputAreaViewModel } from '~/ui/editor-page/ui_bar_testInputArea/TestInputAreaViewModel';
 
@@ -8,7 +8,7 @@ const cssTestInputArea = css`
 `;
 
 export const TestInputArea = () => {
-  const vm = Hook.useMemo(makeTestInputAreaViewModel, []);
+  const vm = useMemo(makeTestInputAreaViewModel, []);
   return (
     <div css={cssTestInputArea}>
       <GeneralInput

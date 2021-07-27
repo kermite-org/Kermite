@@ -1,4 +1,4 @@
-import { jsx, FC, Hook, css, styled } from 'qx';
+import { jsx, FC, css, styled, useState } from 'qx';
 import {
   ISelectorOption,
   uiTheme,
@@ -72,17 +72,17 @@ const cssIconsContainer = css`
 `;
 
 function useSelectorModel(options: ISelectorOption[]) {
-  const [value, setValue] = Hook.useState(options[0].value);
+  const [value, setValue] = useState(options[0].value);
   return { options, value, setValue };
 }
 
 function useCheckboxModel(initialChecked: boolean) {
-  const [checked, setChecked] = Hook.useState(initialChecked);
+  const [checked, setChecked] = useState(initialChecked);
   return { checked, setChecked };
 }
 
 function useInputModel(initialText: string) {
-  const [value, setValue] = Hook.useState(initialText);
+  const [value, setValue] = useState(initialText);
   return { value, setValue };
 }
 

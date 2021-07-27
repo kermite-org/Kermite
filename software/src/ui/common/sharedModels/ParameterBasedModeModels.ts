@@ -1,4 +1,4 @@
-import { Hook } from 'qx';
+import { useEffect, useState } from 'qx';
 import { SystemParameter } from '~/shared';
 import { ipcAgent } from '~/ui/common/base';
 import {
@@ -15,8 +15,8 @@ function useSystemParameterModel(
   parameterIndex: number,
   defaultValue: number,
 ): ISystemParameterModel {
-  const [value, _setValue] = Hook.useState(defaultValue);
-  Hook.useEffect(
+  const [value, _setValue] = useState(defaultValue);
+  useEffect(
     () =>
       ipcAgent.events.device_keyboardDeviceStatusEvents.subscribe((status) => {
         if (status.systemParameterValues) {

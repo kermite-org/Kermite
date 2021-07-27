@@ -1,4 +1,4 @@
-import { Hook } from 'qx';
+import { useEffect, useMemo } from 'qx';
 import {
   IDisplayKeyboardDesign,
   IProjectResourceInfo,
@@ -153,7 +153,7 @@ class KeyboardShapesModel {
 }
 
 export function useKeyboardShapesModel(): IKeyboardShapesModel {
-  const shapesModel = Hook.useMemo(() => new KeyboardShapesModel(), []);
-  Hook.useEffect(shapesModel.startPageSession, []);
+  const shapesModel = useMemo(() => new KeyboardShapesModel(), []);
+  useEffect(shapesModel.startPageSession, []);
   return shapesModel;
 }

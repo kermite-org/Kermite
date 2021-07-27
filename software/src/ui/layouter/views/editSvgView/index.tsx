@@ -1,4 +1,4 @@
-import { Hook, jsx, asyncRerender, css } from 'qx';
+import { jsx, asyncRerender, css, useRef } from 'qx';
 import { editReader, editMutations } from '~/ui/layouter/models';
 import { EditSvgView } from './EditSvgView';
 import { DebugOverlay } from './overlays/DebugOverlay';
@@ -16,7 +16,7 @@ export const EditSvgViewContainer = () => {
 
   const { screenW, screenH } = editReader.sight;
 
-  const ref = Hook.useRef<HTMLDivElement>();
+  const ref = useRef<HTMLDivElement>();
   const baseEl = ref.current;
   if (baseEl) {
     const cw = baseEl.clientWidth;

@@ -1,4 +1,10 @@
-import { jsx, Hook, applyGlobalStyle, css, setShortCssProcessor } from 'qx';
+import {
+  jsx,
+  applyGlobalStyle,
+  css,
+  setShortCssProcessor,
+  useEffect,
+} from 'qx';
 import {
   router,
   shortCssProcessor,
@@ -47,10 +53,10 @@ const cssSiteRoot = css`
 `;
 
 export const SiteRoot = () => {
-  Hook.useEffect(router.rerenderEffectOnHashChange, []);
-  Hook.useEffect(globalAppServicesInitializerEffect, []);
-  Hook.useEffect(siteModel.setupLifecycle, []);
-  Hook.useEffect(globalHintMouseMoveHandlerEffect, []);
+  useEffect(router.rerenderEffectOnHashChange, []);
+  useEffect(globalAppServicesInitializerEffect, []);
+  useEffect(siteModel.setupLifecycle, []);
+  useEffect(globalHintMouseMoveHandlerEffect, []);
   router.useRedirect(['', '/'], '/editor');
 
   const isWidgetMode = router.getPagePath() === '/widget';

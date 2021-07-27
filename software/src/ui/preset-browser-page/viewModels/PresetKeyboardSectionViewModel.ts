@@ -1,4 +1,4 @@
-import { Hook, useLocal } from 'qx';
+import { useEffect, useLocal } from 'qx';
 import { IProfileData } from '~/shared';
 import { IPresetKeyboardViewProps } from '~/ui/common-svg/panels/PresetKeyboardView';
 import { usePresetKeyboardViewModel } from '~/ui/preset-browser-page/viewModels/PresetKeyboardViewModel';
@@ -22,7 +22,7 @@ export function usePresetKeyboardSectionViewModel(
   profileData: IProfileData,
 ): IPresetKeyboardSectionViewModel {
   const state = useLocal({ currentLayerId: '' });
-  Hook.useEffect(() => {
+  useEffect(() => {
     state.currentLayerId = '';
   }, [profileData]);
   return {

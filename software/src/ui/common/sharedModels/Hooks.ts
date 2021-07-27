@@ -1,4 +1,4 @@
-import { Hook } from 'qx';
+import { useMemo } from 'qx';
 import {
   globalSettingsFallbackValue,
   IResourceOrigin,
@@ -28,7 +28,7 @@ export function useProjectResourceInfos(
     ipcAgent.async.projects_getAllProjectResourceInfos,
     [],
   );
-  const sorted = Hook.useMemo(
+  const sorted = useMemo(
     () =>
       resourceInfos.sort(
         sortOrderBy((it) =>

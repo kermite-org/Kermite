@@ -1,4 +1,4 @@
-import { Hook, jsx, useLocal } from 'qx';
+import { jsx, useInlineEffect, useLocal } from 'qx';
 import { IProjectResourceInfo } from '~/shared';
 import {
   ClosableOverlay,
@@ -130,7 +130,7 @@ function useProfileSetupModalViewModel(): IProfileSetupModalViewModel {
   const resourceInfos = useProjectResourceInfos('projectsSortedByKeyboardName');
   const projectOptions = useMemoEx(makeProjectOptions, [resourceInfos]);
 
-  Hook.useInlineEffect(() => {
+  useInlineEffect(() => {
     editValues.projectKey = projectOptions[0]?.value || '';
   }, [projectOptions]);
 
@@ -139,7 +139,7 @@ function useProfileSetupModalViewModel(): IProfileSetupModalViewModel {
     editValues.projectKey,
   ]);
 
-  Hook.useInlineEffect(() => {
+  useInlineEffect(() => {
     editValues.layoutKey = layoutOptions[0]?.value || '';
   }, [layoutOptions]);
 

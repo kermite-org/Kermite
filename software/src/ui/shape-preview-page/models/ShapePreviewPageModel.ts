@@ -1,4 +1,4 @@
-import { Hook, useLocal } from 'qx';
+import { useEffect, useLocal } from 'qx';
 import { IDisplayKeyboardDesign, removeArrayItems } from '~/shared';
 import { ipcAgent, ISelectorSource } from '~/ui/common';
 import { useKeyboardShapesModel } from '~/ui/shape-preview-page/models/KeyboardShapesModel';
@@ -15,7 +15,7 @@ export interface IShapePreviewPageModel {
 function useHoldKeyIndices() {
   const holdKeyIndices = useLocal<number[]>([]);
 
-  Hook.useEffect(() => {
+  useEffect(() => {
     return ipcAgent.events.device_keyEvents.subscribe((e) => {
       if (e.type === 'keyStateChanged') {
         if (e.isDown) {

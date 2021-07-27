@@ -1,4 +1,4 @@
-import { FC, jsx, Hook, css } from 'qx';
+import { FC, jsx, css, useEffect } from 'qx';
 import { Link, linkTo, router } from '~/ui/common';
 
 const cssNavBox = css`
@@ -24,7 +24,7 @@ const cssNavButton = css`
 `;
 
 export const RoutingDevelopmentPage: FC = () => {
-  Hook.useEffect(router.rerenderEffectOnHashChange, []);
+  useEffect(router.rerenderEffectOnHashChange, []);
 
   console.log(`render`, { hash: location.hash });
 

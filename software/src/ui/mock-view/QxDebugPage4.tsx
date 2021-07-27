@@ -1,9 +1,9 @@
-import { FC, Hook, jsx } from 'qx';
+import { FC, jsx, useRef, useState } from 'qx';
 
 const Foo: FC = () => {
-  const [message] = Hook.useState('Hello');
+  const [message] = useState('Hello');
 
-  const ref = Hook.useRef();
+  const ref = useRef();
   console.log({ ...ref });
 
   return <div ref={ref}>{message}</div>;

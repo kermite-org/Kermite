@@ -1,6 +1,6 @@
-import { Hook } from 'qx';
+import { useMemo } from 'qx';
 
 export function useClosureModel<T>(creator: () => () => T) {
-  const model = Hook.useMemo(creator, []);
+  const model = useMemo(creator, []);
   return model();
 }

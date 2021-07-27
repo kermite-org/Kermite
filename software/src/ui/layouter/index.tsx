@@ -1,4 +1,4 @@
-import { jsx, Hook } from 'qx';
+import { jsx, useEffect } from 'qx';
 import { IPersistKeyboardDesign } from '~/shared';
 import { windowKeyboardEventEffect } from '~/ui/common';
 import { editMutations, editReader } from '~/ui/layouter/models';
@@ -32,8 +32,8 @@ export namespace UiLayouterCore {
   }
 
   export function Component() {
-    Hook.useEffect(windowKeyboardEventEffect(keyboardOperationHander), []);
-    Hook.useEffect(setupDeviceKeyEventsListener, []);
+    useEffect(windowKeyboardEventEffect(keyboardOperationHander), []);
+    useEffect(setupDeviceKeyEventsListener, []);
     return <PageRoot />;
   }
 }

@@ -5,7 +5,6 @@ import {
   styled,
 } from './cssInJs';
 import {
-  Hook,
   useCallback,
   useEffect,
   useInlineEffect,
@@ -20,7 +19,6 @@ import { setShortCssProcessor } from './shortCss';
 
 export {
   jsx,
-  Hook,
   css,
   styled,
   applyGlobalStyle,

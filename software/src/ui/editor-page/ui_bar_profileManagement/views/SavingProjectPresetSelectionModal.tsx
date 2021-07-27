@@ -1,4 +1,4 @@
-import { jsx, Hook, useLocal } from 'qx';
+import { jsx, useLocal, useEffect } from 'qx';
 import { IProjectResourceInfo } from '~/shared';
 import {
   fieldSetter,
@@ -27,7 +27,7 @@ function useProjectAttachmentFileSelectorViewModel(
     currentPresetName: '',
   });
 
-  Hook.useEffect(() => {
+  useEffect(() => {
     ipcAgent.async
       .projects_getAllProjectResourceInfos()
       .then(
