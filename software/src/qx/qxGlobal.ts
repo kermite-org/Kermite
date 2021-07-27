@@ -1,7 +1,6 @@
 interface IQxGlobal {
   rerender: () => void;
   asyncRerenderFlag: boolean;
-  // hookRerenderFlag: boolean;
   hookEffectFuncs: (() => void)[];
   debug: {
     nAll: number;
@@ -13,7 +12,6 @@ interface IQxGlobal {
 export const qxGlobal: IQxGlobal = {
   rerender: () => {},
   asyncRerenderFlag: false,
-  // hookRerenderFlag: false,
   hookEffectFuncs: [],
 
   debug: {
