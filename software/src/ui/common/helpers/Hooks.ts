@@ -1,4 +1,4 @@
-import { Hook } from 'qx';
+import { Hook, useLocal } from 'qx';
 import { copyObjectProps } from '~/shared';
 import { UiLocalStorage } from '~/ui/common/base';
 
@@ -34,7 +34,7 @@ export function useMemoEx<T extends (...args: any[]) => any>(
 }
 
 export function usePersistState<T extends {}>(key: string, initialValue: T) {
-  const [value] = Hook.useState(initialValue);
+  const value = useLocal(initialValue);
   const storageKey = `usePersistState__${key}`;
   Hook.useEffect(() => {
     const savedValue = UiLocalStorage.readItem<T>(storageKey);
