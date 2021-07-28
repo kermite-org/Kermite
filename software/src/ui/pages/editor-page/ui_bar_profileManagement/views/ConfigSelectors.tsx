@@ -1,13 +1,13 @@
 import { jsx } from 'qx';
 import { texts } from '~/ui/base';
-import { CheckBoxLine } from '~/ui/components';
-import { DualItemsHoverSelector } from '~/ui/components_editor';
-import { useDeviceStatusModel } from '~/ui/sharedModels';
-import { useKeyboardBehaviorModeModel } from '~/ui/sharedModels/KeyboardBehaviorModeModel';
+import { useDeviceStatusModel } from '~/ui/commonModels';
+import { useKeyboardBehaviorModeModel } from '~/ui/commonModels/KeyboardBehaviorModeModel';
 import {
   useRoutingChannelModel,
   useSystemLayoutModel,
-} from '~/ui/sharedModels/ParameterBasedModeModels';
+} from '~/ui/commonModels/ParameterBasedModeModels';
+import { CheckBoxLine } from '~/ui/components';
+import { DualItemsHoverSelector } from '~/ui/components_editor';
 
 export const BehaviorSelector = () => {
   const { isSimulatorMode, setSimulatorMode } = useKeyboardBehaviorModeModel();

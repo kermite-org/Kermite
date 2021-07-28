@@ -1,8 +1,8 @@
 import { jsx, css, FC } from 'qx';
+import { siteModel } from '~/ui/commonModels';
 import { WidgetSvgKeyboardView } from '~/ui/components_svg';
 import { useWidgetMainPanelModel } from '~/ui/pages/widget/models/WidgetMainPanelModel';
 import { WidgetControlButtonsBox } from '~/ui/pages/widget/organisms/WidgetControlButtonsBox';
-import { siteModel } from '~/ui/sharedModels';
 
 export const WidgetMainPanel: FC = () => {
   const vm = useWidgetMainPanelModel();

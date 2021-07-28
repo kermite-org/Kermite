@@ -1,7 +1,7 @@
 import { jsx, css } from 'qx';
 import { texts } from '~/ui/base';
+import { useProjectResourceInfos } from '~/ui/commonModels';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
-import { useProjectResourceInfos } from '~/ui/sharedModels';
 
 const style = css`
   padding: 5px;

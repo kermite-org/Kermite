@@ -1,8 +1,8 @@
 import { jsx, css, FC } from 'qx';
+import { siteModel } from '~/ui/commonModels';
 import { WidgetWindowActiveChrome } from '~/ui/pages/widget/atoms/WidgetWindowActiveChrome';
 import { WidgetWindowFrame } from '~/ui/pages/widget/atoms/WidgetWindowFrame';
 import { WidgetMainPanel } from '~/ui/pages/widget/panels/WidgetMainPanel';
-import { siteModel } from '~/ui/sharedModels';
 
 export const WidgetZoneRoot: FC = () => {
   return (

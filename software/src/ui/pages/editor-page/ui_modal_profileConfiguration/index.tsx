@@ -1,9 +1,9 @@
 import { css, jsx } from 'qx';
 import { texts } from '~/ui/base';
+import { uiStatusModel } from '~/ui/commonModels/UiStatusModel';
 import { ClosableOverlay, CommonDialogFrame } from '~/ui/components';
 import { KeyboardProjectSelectionPart } from '~/ui/pages/editor-page/ui_modal_profileConfiguration/KeyboardProjectSelectionPart';
 import { ShiftCancelOptionPart } from '~/ui/pages/editor-page/ui_modal_profileConfiguration/ShiftCancelOptionPart';
-import { uiStatusModel } from '~/ui/sharedModels/UiStatusModel';
 import { AssignTypeSelectionPart } from './AssignTypeSelectionPart';
 
 export const ProfileConfigratuionModalLayer = () => {

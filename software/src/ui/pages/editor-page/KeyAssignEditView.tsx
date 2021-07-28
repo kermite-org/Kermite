@@ -1,11 +1,11 @@
 import { css, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
+import { uiStatusModel } from '~/ui/commonModels';
 import { editorPageModel } from '~/ui/pages/editor-page/models/editorPageModel';
 import { BehaviorOptionsPartA } from '~/ui/pages/editor-page/ui_editor_sideConfigPart/BehaviorOptionsPartA';
 import { BehaviorOptionsPartB } from '~/ui/pages/editor-page/ui_editor_sideConfigPart/BehaviorOptionsPartB';
 import { ProfileConfigurationPart } from '~/ui/pages/editor-page/ui_editor_sideConfigPart/ProfileConfigurationPart';
 import { ActionRoutingPanel } from '~/ui/pages/editor-page/ui_modal_routingPanel/ActionRoutingPanel';
-import { uiStatusModel } from '~/ui/sharedModels';
 import { TestInputArea } from './ui_bar_testInputArea/TestInputArea';
 import { AssignEditSection } from './ui_editor_assignsSection';
 import { KeyboardSection } from './ui_editor_keyboardSection/KeyboardSection';

@@ -13,19 +13,19 @@ import {
   makePlainSelectorOption,
   texts,
 } from '~/ui/base';
+import {
+  uiStatusModel,
+  useDeviceStatusModel,
+  useGlobalSettingsFetch,
+  useKeyboardBehaviorModeModel,
+} from '~/ui/commonModels';
+import { useModalDisplayStateModel } from '~/ui/commonModels/GeneralUiStateModels';
 import { modalAlert, modalConfirm, modalTextEdit } from '~/ui/components';
 import { getFileNameFromPath } from '~/ui/helpers';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 import { ProfilesModel } from '~/ui/pages/editor-page/models/ProfilesModel';
 import { editorPageModel } from '~/ui/pages/editor-page/models/editorPageModel';
 import { callProfileSetupModal } from '~/ui/pages/editor-page/ui_modal_profileSetup/ProfileSetupModal';
-import {
-  uiStatusModel,
-  useDeviceStatusModel,
-  useGlobalSettingsFetch,
-  useKeyboardBehaviorModeModel,
-} from '~/ui/sharedModels';
-import { useModalDisplayStateModel } from '~/ui/sharedModels/GeneralUiStateModels';
 
 export interface IProfileManagementPartViewModel {
   createProfile(): void;

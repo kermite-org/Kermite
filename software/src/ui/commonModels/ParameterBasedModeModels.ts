@@ -4,7 +4,7 @@ import { ipcAgent } from '~/ui/base';
 import {
   IRoutingChannelModel,
   ISystemLayoutModel,
-} from '~/ui/sharedModels/Interfaces';
+} from '~/ui/commonModels/Interfaces';
 
 interface ISystemParameterModel {
   value: number;

@@ -5,10 +5,10 @@ import {
   ISelectorOption,
   getSelectionValueCorrected,
 } from '~/ui/base';
+import { useProjectResourceInfos } from '~/ui/commonModels';
 import { usePersistState, fieldSetter } from '~/ui/helpers';
 import { editSelectedProjectPreset as editSelectedProjectPresetOriginal } from '~/ui/pages/preset-browser-page/models/ProfileCreator';
 import { useProfileDataLoaded } from '~/ui/pages/preset-browser-page/models/ProfileDataLoader';
-import { useProjectResourceInfos } from '~/ui/sharedModels';
 
 export interface IPresetSelectionModel {
   projectSelectorSource: ISelectorSource;

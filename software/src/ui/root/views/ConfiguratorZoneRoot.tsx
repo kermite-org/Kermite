@@ -1,5 +1,6 @@
 import { jsx, css } from 'qx';
 import { uiTheme, router, appUi } from '~/ui/base';
+import { uiStatusModel } from '~/ui/commonModels';
 import { LoadingOverlay } from '~/ui/components/overlay/LoadingOverlay';
 import { EditorPage } from '~/ui/pages/editor-page';
 import { FirmwareUpdationPage } from '~/ui/pages/firmware-updation-page';
@@ -11,7 +12,6 @@ import { ShapePreviewPage } from '~/ui/pages/shape-preview-page';
 import { WindowStatusBarSection } from '~/ui/root/views/titleBar/WindowStatusBarSection';
 import { CustomWindowFrame } from '~/ui/root/views/window/CustomWindowFrame';
 import { DevToolPullTab } from '~/ui/root/views/window/DevToolPullTab';
-import { uiStatusModel } from '~/ui/sharedModels';
 import { NavigationColumn } from './navigation/NavigationColumn';
 import { WindowTitleBarSection } from './titleBar/WindowTitleBarSection';
 

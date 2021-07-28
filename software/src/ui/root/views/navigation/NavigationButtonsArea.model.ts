@@ -1,5 +1,5 @@
 import { texts, router } from '~/ui/base';
-import { PagePaths } from '~/ui/sharedModels';
+import { PagePaths } from '~/ui/commonModels';
 
 export interface NavigationEntryViewModel {
   pagePath: PagePaths;

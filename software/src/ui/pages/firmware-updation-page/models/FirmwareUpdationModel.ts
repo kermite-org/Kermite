@@ -7,8 +7,8 @@ import {
   sortOrderBy,
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
+import { uiStatusModel } from '~/ui/commonModels';
 import { modalAlert } from '~/ui/components';
-import { uiStatusModel } from '~/ui/sharedModels';
 
 export type FirmwareUpdationPhase =
   | 'WaitingReset'

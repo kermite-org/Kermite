@@ -16,8 +16,8 @@ import {
 } from '~/shared';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import { ipcAgent } from '~/ui/base';
-import { ILayerStackItem, IPlayerModel } from '~/ui/sharedModels/Interfaces';
-import { useRoutingChannelModel } from '~/ui/sharedModels/ParameterBasedModeModels';
+import { ILayerStackItem, IPlayerModel } from '~/ui/commonModels/Interfaces';
+import { useRoutingChannelModel } from '~/ui/commonModels/ParameterBasedModeModels';
 
 function translateKeyIndexToKeyUnitId(
   keyIndex: number,

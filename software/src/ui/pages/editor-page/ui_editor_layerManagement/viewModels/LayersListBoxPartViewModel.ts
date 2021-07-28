@@ -1,6 +1,6 @@
 import { ILayer } from '~/shared';
+import { uiStatusModel } from '~/ui/commonModels';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
-import { uiStatusModel } from '~/ui/sharedModels';
 
 export interface ILayerListViewModel {
   layerId: string;

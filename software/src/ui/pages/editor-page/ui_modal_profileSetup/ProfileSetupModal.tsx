@@ -1,6 +1,7 @@
 import { jsx, useInlineEffect, useLocal } from 'qx';
 import { IProjectResourceInfo } from '~/shared';
 import { ISelectorOption } from '~/ui/base';
+import { useProjectResourceInfos } from '~/ui/commonModels';
 import {
   ClosableOverlay,
   CommonDialogFrame,
@@ -15,7 +16,6 @@ import {
   cssCommonTextInput,
 } from '~/ui/components_editor';
 import { reflectFieldValue, fieldSetter, useMemoEx } from '~/ui/helpers';
-import { useProjectResourceInfos } from '~/ui/sharedModels';
 
 interface ICreateProfileDialogEditValues {
   profileName: string;

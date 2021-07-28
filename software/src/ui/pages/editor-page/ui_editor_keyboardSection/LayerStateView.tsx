@@ -4,7 +4,7 @@ import {
   IPlayerModel,
   uiStatusModel,
   useDeviceStatusModel,
-} from '~/ui/sharedModels';
+} from '~/ui/commonModels';
 
 const cssLayerStateView = css`
   position: absolute;
