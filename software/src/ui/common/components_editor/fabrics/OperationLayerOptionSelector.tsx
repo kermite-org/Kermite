@@ -1,5 +1,6 @@
 import { jsx, css } from 'qx';
-import { reflectValue, texts } from '~/ui/common';
+import { texts } from '~/ui/common/base';
+import { reflectValue } from '~/ui/common/helpers';
 
 const cssOperationLayerOptionSelector = css`
   margin-left: 10px;

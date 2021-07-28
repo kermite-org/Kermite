@@ -1,6 +1,5 @@
 import { jsx, css } from 'qx';
-import { OperationCard } from '~/ui/editor-page/components/elements/OperationCard';
-import { OperationLayerOptionSelector } from '~/ui/editor-page/components/fabrics/OperationLayerOptionSelector';
+import { OperationCard, OperationLayerOptionSelector } from '~/ui/common';
 import {
   IPlainOperationEditCardsViewModel,
   IOperationEditPartViewModel,

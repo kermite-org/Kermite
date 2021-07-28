@@ -6,21 +6,12 @@ import {
   encodeSingleModifierVirtualKey,
   VirtualKey,
 } from '~/shared';
-import { texts } from '~/ui/common';
+import { IOperationCardViewModel, texts } from '~/ui/common';
 import { editorModel } from '~/ui/editor-page/models/EditorModel';
 import {
   virtualKeyGroupsTable2,
   virtualKeyGroupsTable3,
 } from './virtualkeyGroupsTable';
-
-export interface IOperationCardViewModel {
-  sig: string;
-  text: string;
-  isCurrent: boolean;
-  setCurrent(): void;
-  isEnabled: boolean;
-  hint: string;
-}
 
 const modifierVirtualKeys: ModifierVirtualKey[] = [
   'K_Shift',

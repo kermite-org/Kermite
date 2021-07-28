@@ -60,3 +60,12 @@ export interface IWidgetKeyUnitCardViewModel {
   shape: IDisplayKeyShape;
   shiftHold: boolean;
 }
+
+export interface IOperationCardViewModel {
+  sig: string;
+  text: string;
+  isCurrent: boolean;
+  setCurrent(): void;
+  isEnabled: boolean;
+  hint: string;
+}

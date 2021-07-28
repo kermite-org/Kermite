@@ -1,5 +1,5 @@
 import { css, jsx } from 'qx';
-import { texts, uiTheme } from '~/ui/common';
+import { texts, uiTheme } from '~/ui/common/base';
 
 export const LinkIndicator = (props: { isActive: boolean }) => {
   const cssLinkIndicator = css`

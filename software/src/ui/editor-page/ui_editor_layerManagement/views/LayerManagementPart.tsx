@@ -1,6 +1,5 @@
 import { jsx, css } from 'qx';
-import { texts } from '~/ui/common';
-import { LayerOperationButtton } from '~/ui/editor-page/components/elements/LayerOperationButtton';
+import { texts, LayerOperationButtton } from '~/ui/common';
 import { ILayerManagementPartViewModel } from '~/ui/editor-page/ui_editor_layerManagement/viewModels/LayersManagementPartViewModel';
 
 export const LayerManagementPart = (props: {

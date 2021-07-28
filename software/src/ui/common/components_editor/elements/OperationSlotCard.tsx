@@ -1,5 +1,5 @@
 import { jsx, css } from 'qx';
-import { uiTheme } from '~/ui/common';
+import { uiTheme } from '~/ui/common/base';
 
 const cssOperationSlotCard = css`
   min-width: 28px;

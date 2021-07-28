@@ -17,12 +17,10 @@ import {
   reflectFieldValue,
   reflectValue,
   texts,
-} from '~/ui/common';
-import {
   cssCommonPropertiesTable,
   cssCommonTextInput,
-} from '~/ui/editor-page/components/controls/CommonStyles';
-import { DefaultSchemeButton } from '~/ui/editor-page/components/controls/DefaultSchemeButton';
+  DefaultSchemeButton,
+} from '~/ui/common';
 
 export interface ILayerConfigurationModelEditValues {
   layerName: string;

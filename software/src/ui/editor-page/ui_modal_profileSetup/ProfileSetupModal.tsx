@@ -13,11 +13,9 @@ import {
   reflectFieldValue,
   useMemoEx,
   useProjectResourceInfos,
-} from '~/ui/common';
-import {
   cssCommonPropertiesTable,
   cssCommonTextInput,
-} from '~/ui/editor-page/components/controls/CommonStyles';
+} from '~/ui/common';
 
 interface ICreateProfileDialogEditValues {
   profileName: string;

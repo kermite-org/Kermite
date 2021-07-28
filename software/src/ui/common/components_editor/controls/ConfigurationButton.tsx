@@ -1,5 +1,5 @@
 import { css, jsx } from 'qx';
-import { texts } from '~/ui/common';
+import { texts } from '~/ui/common/base';
 
 export const ConfigurationButton = (props: { onClick(): void }) => {
   const cssConfigurationButton = css`

@@ -1,11 +1,15 @@
 import { jsx } from 'qx';
-import { CheckBoxLine, texts, useDeviceStatusModel } from '~/ui/common';
+import {
+  CheckBoxLine,
+  texts,
+  useDeviceStatusModel,
+  DualItemsHoverSelector,
+} from '~/ui/common';
 import { useKeyboardBehaviorModeModel } from '~/ui/common/sharedModels/KeyboardBehaviorModeModel';
 import {
   useRoutingChannelModel,
   useSystemLayoutModel,
 } from '~/ui/common/sharedModels/ParameterBasedModeModels';
-import { DualItemsHoverSelector } from '~/ui/editor-page/components/fabrics/DualItemHoverSelector';
 
 export const BehaviorSelector = () => {
   const { isSimulatorMode, setSimulatorMode } = useKeyboardBehaviorModeModel();
