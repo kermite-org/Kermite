@@ -1,8 +1,8 @@
 import { jsx, css } from 'qx';
 import { uiTheme, router, appUi } from '~/ui/base';
 import { uiStatusModel } from '~/ui/commonModels';
+import { CustomWindowFrame } from '~/ui/components';
 import { LoadingOverlay } from '~/ui/components/overlay/LoadingOverlay';
-import { CustomWindowFrame } from '~/ui/components_window';
 import { EditorPage } from '~/ui/pages/editor-page';
 import { FirmwareUpdationPage } from '~/ui/pages/firmware-updation-page';
 import { UiLayouterPageComponent } from '~/ui/pages/layouter-page';

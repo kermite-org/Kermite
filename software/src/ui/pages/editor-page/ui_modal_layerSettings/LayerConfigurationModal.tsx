@@ -18,7 +18,7 @@ import {
   cssCommonPropertiesTable,
   cssCommonTextInput,
   DefaultSchemeButton,
-} from '~/ui/components_editor';
+} from '~/ui/components/editorParts';
 import {
   reflectFieldValue,
   reflectChecked,

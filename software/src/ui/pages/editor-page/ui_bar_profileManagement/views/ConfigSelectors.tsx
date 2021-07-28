@@ -7,7 +7,7 @@ import {
   useSystemLayoutModel,
 } from '~/ui/commonModels/ParameterBasedModeModels';
 import { CheckBoxLine } from '~/ui/components';
-import { DualItemsHoverSelector } from '~/ui/components_editor';
+import { DualItemsHoverSelector } from '~/ui/components/editorParts';
 
 export const BehaviorSelector = () => {
   const { isSimulatorMode, setSimulatorMode } = useKeyboardBehaviorModeModel();

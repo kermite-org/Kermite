@@ -14,7 +14,7 @@ import {
 import {
   cssCommonPropertiesTable,
   cssCommonTextInput,
-} from '~/ui/components_editor';
+} from '~/ui/components/editorParts';
 import { reflectFieldValue, fieldSetter, useMemoEx } from '~/ui/helpers';
 
 interface ICreateProfileDialogEditValues {

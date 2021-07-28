@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { WidgetControlButton } from '~/ui/components_widget/atoms';
+import { WidgetControlButton } from '~/ui/components';
 import { IWidgetMainPanelModel } from '~/ui/pages/widget/models/WidgetMainPanelModel';
 
 type Props = {

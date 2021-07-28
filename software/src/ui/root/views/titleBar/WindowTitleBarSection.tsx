@@ -1,6 +1,6 @@
 import { jsx, css } from 'qx';
 import { uiTheme } from '~/ui/base';
-import { WindowTitlePart } from '~/ui/components_window';
+import { WindowTitlePart } from '~/ui/components';
 import { WindowControlButtonsPart } from './WindowControlButtonsPart';
 
 const cssWindowTitleBarSection = css`

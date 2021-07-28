@@ -3,7 +3,7 @@ import { texts } from '~/ui/base';
 import {
   WindowControlButton,
   WindowRestartButton,
-} from '~/ui/components_window/elements';
+} from '~/ui/components/window';
 import { makeWindowControlButtonsModel } from '~/ui/root/views/titleBar/WindowControlButtonsPart.model';
 
 export const WindowControlButtonsPart = () => {

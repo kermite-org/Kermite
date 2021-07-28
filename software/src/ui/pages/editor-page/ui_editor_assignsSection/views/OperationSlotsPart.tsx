@@ -1,5 +1,5 @@
 import { jsx, css } from 'qx';
-import { OperationCard, OperationSlotCard } from '~/ui/components_editor';
+import { OperationCard, OperationSlotCard } from '~/ui/components/editorParts';
 import { IPlainOperationEditCardsViewModel } from '~/ui/pages/editor-page/ui_editor_assignsSection/viewModels/OperationEditPartViewModel';
 import { IOperationSlotsPartViewModel } from '~/ui/pages/editor-page/ui_editor_assignsSection/viewModels/OperationSlotsPartViewModel';
 

@@ -1,9 +1,6 @@
 import { css, FC, jsx } from 'qx';
 import { siteModel } from '~/ui/commonModels';
-import {
-  WidgetWindowActiveChrome,
-  WidgetWindowFrame,
-} from '~/ui/components_widget/atoms';
+import { WidgetWindowActiveChrome, WidgetWindowFrame } from '~/ui/components';
 import { WidgetMainPanel } from '~/ui/pages/widget/panels/WidgetMainPanel';
 
 export const WidgetZoneRoot: FC = () => {

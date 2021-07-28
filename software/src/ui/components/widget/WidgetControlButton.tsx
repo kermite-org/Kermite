@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { Icon } from '~/ui/components';
+import { Icon } from '~/ui/components/atoms';
 
 type Props = {
   className?: string;
