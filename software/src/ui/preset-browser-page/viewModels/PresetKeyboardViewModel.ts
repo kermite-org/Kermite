@@ -1,7 +1,9 @@
 import { IDisplayArea, IDisplayOutlineShape, IProfileData } from '~/shared';
 import { getDisplayKeyboardDesignSingleCached } from '~/shared/modules/DisplayKeyboardSingleCache';
-import { makePresetKeyUnitViewModels } from '~/ui/common-svg/keyUnitCardModels/PresetKeyUnitViewModel';
-import { IPresetKeyUnitViewModel } from '~/ui/common-svg/keyUnitCards/PresetKeyUnitCard';
+import {
+  makePresetKeyUnitViewModels,
+  IPresetKeyUnitViewModel,
+} from '~/ui/common';
 
 export interface IPresetKeyboardViewModel {
   keyUnits: IPresetKeyUnitViewModel[];

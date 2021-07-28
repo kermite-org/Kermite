@@ -1,7 +1,7 @@
 import { jsx, css, QxChildren } from 'qx';
 import { IDisplayArea } from '~/shared';
-import { KeyboardSvgFrame } from '~/ui/common-svg/frames/KeyboardSvgFrame';
-import { ScalerBox } from '~/ui/common-svg/frames/ScalerBox';
+import { KeyboardSvgFrame } from '~/ui/common/components_svg/frames/KeyboardSvgFrame';
+import { ScalerBox } from '~/ui/common/components_svg/frames/ScalerBox';
 
 export const cssScalerContent = css`
   height: 100%;

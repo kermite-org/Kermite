@@ -1,7 +1,10 @@
 import { IAssignEntryWithLayerFallback, IDisplayKeyEntity } from '~/shared';
-import { IPlayerModel, uiStatusModel } from '~/ui/common';
-import { getAssignEntryTexts } from '~/ui/common-svg/keyUnitCardModels/KeyUnitCardViewModelCommon';
-import { IEditKeyUnitCardViewModel } from '~/ui/common-svg/keyUnitCards/EditKeyUnitCard';
+import {
+  IPlayerModel,
+  uiStatusModel,
+  getAssignEntryTexts,
+  IEditKeyUnitCardViewModel,
+} from '~/ui/common';
 import { EditorModel } from '~/ui/editor-page/models/EditorModel';
 
 export interface IEditKeyUnitCardPartViewModel {

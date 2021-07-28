@@ -1,6 +1,6 @@
 import { jsx, css } from 'qx';
 import { IDisplayKeyShape } from '~/shared';
-import { KeyUnitShape } from '~/ui/common-svg/keyUnitCards/KeyUnitShape';
+import { KeyUnitShape } from '~/ui/common/components_svg/keyUnitCards/KeyUnitShape';
 
 export interface IWidgetKeyUnitCardViewModel {
   keyUnitId: string;

@@ -6,7 +6,7 @@ import {
 import {
   getAssignForKeyUnitWithLayerFallback,
   getAssignEntryTexts,
-} from '~/ui/common-svg/keyUnitCardModels/KeyUnitCardViewModelCommon';
+} from '~/ui/common/components_svg/keyUnitCardModels/KeyUnitCardViewModelCommon';
 
 export interface ICustomKeyUnitViewModelBase {
   keyUnitId: string;

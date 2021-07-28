@@ -1,12 +1,12 @@
 import { jsx } from 'qx';
 import { IDisplayKeyboardDesign } from '~/shared';
-import { uiTheme } from '~/ui/common';
-import { KeyboardSvgFrameWithAutoScaler } from '~/ui/common-svg/frames/KeyboardSvgFrameWithAutoScaler';
+import { uiTheme } from '~/ui/common/base';
+import { KeyboardSvgFrameWithAutoScaler } from '~/ui/common/components_svg/frames/KeyboardSvgFrameWithAutoScaler';
 import {
   EditKeyUnitCard,
   IEditKeyUnitCardViewModel,
-} from '~/ui/common-svg/keyUnitCards/EditKeyUnitCard';
-import { KeyboardBodyShape } from '~/ui/common-svg/keyboardBody/KeyboardBodyShape';
+} from '~/ui/common/components_svg/keyUnitCards/EditKeyUnitCard';
+import { KeyboardBodyShape } from '~/ui/common/components_svg/keyboardBody/KeyboardBodyShape';
 
 const EditKeyUnitCardsPart = (props: {
   cards: IEditKeyUnitCardViewModel[];

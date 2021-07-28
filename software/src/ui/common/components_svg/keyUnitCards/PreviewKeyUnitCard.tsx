@@ -1,6 +1,6 @@
 import { jsx, css } from 'qx';
 import { IDisplayKeyEntity } from '~/shared';
-import { KeyUnitShape } from '~/ui/common-svg/keyUnitCards/KeyUnitShape';
+import { KeyUnitShape } from '~/ui/common/components_svg/keyUnitCards/KeyUnitShape';
 
 export const PreviewKeyEntityCard = (props: {
   keyEntity: IDisplayKeyEntity;

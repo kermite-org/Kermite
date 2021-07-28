@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { IDisplayKeyShape } from '~/shared';
-import { texts, uiTheme } from '~/ui/common';
-import { KeyUnitShape } from '~/ui/common-svg/keyUnitCards/KeyUnitShape';
+import { texts, uiTheme } from '~/ui/common/base';
+import { KeyUnitShape } from '~/ui/common/components_svg/keyUnitCards/KeyUnitShape';
 
 export interface IEditKeyUnitCardViewModel {
   keyUnitId: string;

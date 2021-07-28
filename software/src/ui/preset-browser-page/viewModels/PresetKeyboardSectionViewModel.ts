@@ -1,6 +1,6 @@
 import { useEffect, useLocal } from 'qx';
 import { IProfileData } from '~/shared';
-import { IPresetKeyboardViewProps } from '~/ui/common-svg/panels/PresetKeyboardView';
+import { IPresetKeyboardViewProps } from '~/ui/common';
 import { usePresetKeyboardViewModel } from '~/ui/preset-browser-page/viewModels/PresetKeyboardViewModel';
 
 export interface IPresetKeyboardLayerViewModel {

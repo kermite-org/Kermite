@@ -1,9 +1,9 @@
 import { jsx, css } from 'qx';
 import { IDisplayKeyboardDesign, IDisplayKeyEntity } from '~/shared';
-import { KeyboardSvgFrameWithAutoScaler } from '~/ui/common-svg/frames/KeyboardSvgFrameWithAutoScaler';
-import { PreviewKeyEntityCard } from '~/ui/common-svg/keyUnitCards/PreviewKeyUnitCard';
-import { KeyboardBodyShape } from '~/ui/common-svg/keyboardBody/KeyboardBodyShape';
-import { PreviewDisplayAreaBox } from '~/ui/common-svg/keyboardBody/PreviewBoundingBox';
+import { KeyboardSvgFrameWithAutoScaler } from '~/ui/common/components_svg/frames/KeyboardSvgFrameWithAutoScaler';
+import { PreviewKeyEntityCard } from '~/ui/common/components_svg/keyUnitCards/PreviewKeyUnitCard';
+import { KeyboardBodyShape } from '~/ui/common/components_svg/keyboardBody/KeyboardBodyShape';
+import { PreviewDisplayAreaBox } from '~/ui/common/components_svg/keyboardBody/PreviewBoundingBox';
 
 const PreviewKeyEntityCardsPart = (props: {
   keyEntities: IDisplayKeyEntity[];

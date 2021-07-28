@@ -8,8 +8,8 @@ import {
   getAssignForKeyUnitWithLayerFallback,
   getAssignEntryTexts,
   getAssignForKeyUnitInInitialLayerStack,
-} from '~/ui/common-svg/keyUnitCardModels/KeyUnitCardViewModelCommon';
-import { IPresetKeyUnitViewModel } from '~/ui/common-svg/keyUnitCards/PresetKeyUnitCard';
+} from '~/ui/common/components_svg/keyUnitCardModels/KeyUnitCardViewModelCommon';
+import { IPresetKeyUnitViewModel } from '~/ui/common/components_svg/keyUnitCards/PresetKeyUnitCard';
 
 function createPresetKeyUnitViewModel(
   ke: IDisplayKeyEntity,

@@ -1,6 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { texts } from '~/ui/common';
-import { PresetKeyboardView } from '~/ui/common-svg/panels/PresetKeyboardView';
+import { texts, PresetKeyboardView } from '~/ui/common';
 import { PresetLayersBox } from '~/ui/preset-browser-page/components/PresetLayersBox';
 import { IPresetKeyboardSectionViewModel } from '~/ui/preset-browser-page/viewModels/PresetKeyboardSectionViewModel';
 

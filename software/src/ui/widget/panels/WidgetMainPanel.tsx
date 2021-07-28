@@ -1,6 +1,5 @@
 import { jsx, css, FC } from 'qx';
-import { siteModel } from '~/ui/common';
-import { WidgetSvgKeyboardView } from '~/ui/common-svg/panels/WidgetSvgKeyboardView';
+import { siteModel, WidgetSvgKeyboardView } from '~/ui/common';
 import { useWidgetMainPanelModel } from '~/ui/widget/models/WidgetMainPanelModel';
 import { WidgetControlButtonsBox } from '~/ui/widget/organisms/WidgetControlButtonsBox';
 
