@@ -1,5 +1,6 @@
-import { css, jsx, useEffect, useLocal } from 'qx';
+import { css, FC, jsx, useEffect, useLocal } from 'qx';
 import { FlatListSelector } from '~/ui/components';
+import { CheckBoxExamples } from '~/ui/components/atoms/CheckBox.visor';
 import { GeneralButtonExamples } from '~/ui/components/atoms/GeneralButton.visor';
 import { GeneralSelectorExamples } from '~/ui/components/atoms/GeneralSelector.visor';
 import { fieldSetter } from '~/ui/helpers';
@@ -41,7 +42,10 @@ const cssRoot = css`
   }
 `;
 
-const visualSource = {
+type IVisualEntry = Record<string, FC | JSX.Element>;
+
+const visualSource: Record<string, IVisualEntry> = {
+  CheckBoxExamples,
   GeneralButtonExamples,
   GeneralSelectorExamples,
 };
@@ -87,7 +91,7 @@ export const ComponentCatalogPage = () => {
           <div className={'preview-content'}>
             {Object.entries(currentVisual).map(([key, value]) => (
               <div className="row" key={key}>
-                {value}
+                {typeof value === 'function' ? value({}) : value}
               </div>
             ))}
           </div>
