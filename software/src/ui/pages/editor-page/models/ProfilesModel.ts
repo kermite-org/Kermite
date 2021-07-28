@@ -6,7 +6,7 @@ import {
   IProfileManagerStatus,
   IResourceOrigin,
 } from '~/shared';
-import { ipcAgent } from '~/ui/common';
+import { ipcAgent } from '~/ui/common/base';
 import { EditorModel } from '~/ui/pages/editor-page/models/EditorModel';
 
 export class ProfilesModel {

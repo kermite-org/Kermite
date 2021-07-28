@@ -1,5 +1,5 @@
 import { jsx } from 'qx';
-import { GeneralSelector, HFlex } from '~/ui/common';
+import { HFlex, GeneralSelector } from '~/ui/common/components';
 import {
   ConfigSubContent,
   ConfigSubHeader,

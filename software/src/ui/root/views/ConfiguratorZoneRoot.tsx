@@ -1,6 +1,7 @@
 import { jsx, css } from 'qx';
-import { appUi, router, uiStatusModel, uiTheme } from '~/ui/common';
+import { uiTheme, router, appUi } from '~/ui/common/base';
 import { LoadingOverlay } from '~/ui/common/components/overlay/LoadingOverlay';
+import { uiStatusModel } from '~/ui/common/sharedModels';
 import { EditorPage } from '~/ui/pages/editor-page';
 import { FirmwareUpdationPage } from '~/ui/pages/firmware-updation-page';
 import { UiLayouterPageComponent } from '~/ui/pages/layouter-page';

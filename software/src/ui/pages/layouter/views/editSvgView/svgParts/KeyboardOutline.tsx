@@ -1,6 +1,6 @@
 import { jsx, css } from 'qx';
 import { degToRad } from '~/shared';
-import { makeCssColor, uiTheme } from '~/ui/common';
+import { makeCssColor, uiTheme } from '~/ui/common/base';
 import { IPosition, startDragSession } from '~/ui/pages/layouter/common';
 import {
   editReader,

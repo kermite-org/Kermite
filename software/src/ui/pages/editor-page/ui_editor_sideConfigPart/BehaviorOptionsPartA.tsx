@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'qx';
-import { ISelectorOption, texts } from '~/ui/common';
+import { ISelectorOption, texts } from '~/ui/common/base';
 import { RibbonSelector } from '~/ui/common/components';
-import { uiStatusModel } from '~/ui/common/sharedModels/UiStatusModel';
+import { uiStatusModel } from '~/ui/common/sharedModels';
 
 const style = css`
   padding: 10px;

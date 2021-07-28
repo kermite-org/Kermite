@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
 import { css, FC, jsx } from 'qx';
-import { texts } from '~/ui/common';
+import { texts } from '~/ui/common/base';
 import { useConnectedDevicesAttrsPartModel } from '~/ui/pages/firmware-updation-page/models';
 
 const style = css`

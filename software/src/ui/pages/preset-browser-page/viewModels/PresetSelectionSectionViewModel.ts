@@ -1,5 +1,6 @@
 import { getProjectKeyFromDeviceAttributes } from '~/shared/funcs/DomainRelatedHelpers';
-import { ISelectorSource, useDeviceStatusModel } from '~/ui/common';
+import { ISelectorSource } from '~/ui/common/base';
+import { useDeviceStatusModel } from '~/ui/common/sharedModels';
 import { IPresetSelectionModel } from '~/ui/pages/preset-browser-page/models';
 
 export interface IPresetSelectionSectionViewModel {

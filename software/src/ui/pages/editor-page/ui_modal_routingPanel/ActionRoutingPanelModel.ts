@@ -3,7 +3,7 @@ import {
   routingOptionVirtualKeys,
   VirtualKeyTexts,
 } from '~/shared';
-import { ISelectorOption, ISelectorOptionN } from '~/ui/common';
+import { ISelectorOption, ISelectorOptionN } from '~/ui/common/base';
 
 const virtualKeyOptionsBase: ISelectorOption[] = routingOptionVirtualKeys.map(
   (vk) => ({

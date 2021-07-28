@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import { texts } from '~/ui/common';
+import { texts } from '~/ui/common/base';
 import { useConnectedDeviceAttributes } from '~/ui/pages/firmware-updation-page/models/DataSource';
 
 interface IConnectedDevicesAttrsPartModel {

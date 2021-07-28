@@ -1,7 +1,8 @@
 import { css, FC, jsx } from 'qx';
-import { fieldSetter, texts } from '~/ui/common';
+import { texts } from '~/ui/common/base';
 import { CheckBoxLine } from '~/ui/common/components';
-import { uiStatusModel } from '~/ui/common/sharedModels/UiStatusModel';
+import { fieldSetter } from '~/ui/common/helpers';
+import { uiStatusModel } from '~/ui/common/sharedModels';
 
 const style = css`
   margin: 0 5px;

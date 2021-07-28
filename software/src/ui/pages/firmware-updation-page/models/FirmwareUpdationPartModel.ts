@@ -1,5 +1,5 @@
 import { useEffect } from 'qx';
-import { ISelectorSource } from '~/ui/common';
+import { ISelectorSource } from '~/ui/common/base';
 import { showCommandOutputLogModal } from '~/ui/pages/firmware-updation-page/modals';
 import {
   firmwareUpdationModel,

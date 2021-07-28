@@ -1,6 +1,6 @@
 import { FC, jsx } from 'qx';
-import { GeneralSelector } from '~/ui/common';
 import { ISelectorOptionN } from '~/ui/common/base';
+import { GeneralSelector } from '~/ui/common/components';
 
 interface Props {
   options: ISelectorOptionN[];

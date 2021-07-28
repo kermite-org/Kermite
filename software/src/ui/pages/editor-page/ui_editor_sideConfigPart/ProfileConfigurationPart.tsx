@@ -1,5 +1,6 @@
 import { jsx, css } from 'qx';
-import { texts, useProjectResourceInfos } from '~/ui/common';
+import { texts } from '~/ui/common/base';
+import { useProjectResourceInfos } from '~/ui/common/sharedModels';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 
 const style = css`

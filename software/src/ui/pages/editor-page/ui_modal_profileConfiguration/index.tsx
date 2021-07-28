@@ -1,5 +1,5 @@
 import { css, jsx } from 'qx';
-import { texts } from '~/ui/common';
+import { texts } from '~/ui/common/base';
 import { ClosableOverlay, CommonDialogFrame } from '~/ui/common/components';
 import { uiStatusModel } from '~/ui/common/sharedModels/UiStatusModel';
 import { KeyboardProjectSelectionPart } from '~/ui/pages/editor-page/ui_modal_profileConfiguration/KeyboardProjectSelectionPart';

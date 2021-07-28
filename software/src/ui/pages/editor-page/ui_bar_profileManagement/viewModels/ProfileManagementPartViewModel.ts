@@ -8,20 +8,24 @@ import {
 } from '~/shared';
 import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import {
-  getFileNameFromPath,
   ipcAgent,
   ISelectorSource,
   makePlainSelectorOption,
+  texts,
+} from '~/ui/common/base';
+import {
   modalAlert,
   modalConfirm,
   modalTextEdit,
-  texts,
+} from '~/ui/common/components';
+import { getFileNameFromPath } from '~/ui/common/helpers';
+import {
   uiStatusModel,
   useDeviceStatusModel,
   useGlobalSettingsFetch,
-} from '~/ui/common';
+  useKeyboardBehaviorModeModel,
+} from '~/ui/common/sharedModels';
 import { useModalDisplayStateModel } from '~/ui/common/sharedModels/GeneralUiStateModels';
-import { useKeyboardBehaviorModeModel } from '~/ui/common/sharedModels/KeyboardBehaviorModeModel';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 import { ProfilesModel } from '~/ui/pages/editor-page/models/ProfilesModel';
 import { editorPageModel } from '~/ui/pages/editor-page/models/editorPageModel';

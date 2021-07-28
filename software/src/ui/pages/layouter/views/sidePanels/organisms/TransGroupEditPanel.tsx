@@ -1,5 +1,5 @@
 import { jsx } from 'qx';
-import { CheckBox, HFlex } from '~/ui/common';
+import { HFlex, CheckBox } from '~/ui/common/components';
 import {
   ConfigSubContent,
   ConfigSubHeader,

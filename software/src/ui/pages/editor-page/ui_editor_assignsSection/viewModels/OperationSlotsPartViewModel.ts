@@ -1,4 +1,4 @@
-import { texts } from '~/ui/common';
+import { texts } from '~/ui/common/base';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 
 export interface IOperationSlotViewModel {

@@ -1,13 +1,12 @@
 import { IPresetSpec, IProfileData, IProjectResourceInfo } from '~/shared';
 import { createPresetKey } from '~/shared/funcs/DomainRelatedHelpers';
 import {
-  fieldSetter,
-  getSelectionValueCorrected,
-  ISelectorOption,
   ISelectorSource,
-  usePersistState,
-  useProjectResourceInfos,
-} from '~/ui/common';
+  ISelectorOption,
+  getSelectionValueCorrected,
+} from '~/ui/common/base';
+import { usePersistState, fieldSetter } from '~/ui/common/helpers';
+import { useProjectResourceInfos } from '~/ui/common/sharedModels';
 import { editSelectedProjectPreset as editSelectedProjectPresetOriginal } from '~/ui/pages/preset-browser-page/models/ProfileCreator';
 import { useProfileDataLoaded } from '~/ui/pages/preset-browser-page/models/ProfileDataLoader';
 

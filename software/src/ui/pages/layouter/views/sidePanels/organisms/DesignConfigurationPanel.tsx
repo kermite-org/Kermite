@@ -1,5 +1,6 @@
 import { jsx, css } from 'qx';
-import { ICommonSelectorViewModel, RibbonSelector } from '~/ui/common';
+import { ICommonSelectorViewModel } from '~/ui/common/base';
+import { RibbonSelector } from '~/ui/common/components';
 import {
   ConfigRow,
   ConfigSubContent,

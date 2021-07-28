@@ -1,9 +1,7 @@
 import { useEffect, useLocal } from 'qx';
 import { ILayoutEditSource, IProjectLayoutsInfo } from '~/shared';
-import {
-  ISelectorOption,
-  useProjectResourcePresenceChecker,
-} from '~/ui/common';
+import { ISelectorOption } from '~/ui/common/base';
+import { useProjectResourcePresenceChecker } from '~/ui/common/sharedModels';
 import { UiLayouterCore } from '~/ui/pages/layouter';
 import { LayoutManagerModel } from '~/ui/pages/layouter-page/LayoutManagerModel';
 

@@ -1,5 +1,6 @@
 import { jsx, css } from 'qx';
-import { uiTheme, uiStatusModel } from '~/ui/common';
+import { uiTheme } from '~/ui/common/base';
+import { uiStatusModel } from '~/ui/common/sharedModels';
 import { editorPageModel } from '~/ui/pages/editor-page/models/editorPageModel';
 import { BehaviorOptionsPartA } from '~/ui/pages/editor-page/ui_editor_sideConfigPart/BehaviorOptionsPartA';
 import { BehaviorOptionsPartB } from '~/ui/pages/editor-page/ui_editor_sideConfigPart/BehaviorOptionsPartB';

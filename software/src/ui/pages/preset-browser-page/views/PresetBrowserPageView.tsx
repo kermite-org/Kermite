@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { uiTheme } from '~/ui/common';
+import { uiTheme } from '~/ui/common/base';
 import { IPresetBrowserViewModel } from '~/ui/pages/preset-browser-page/viewModels';
 import {
   PresetKeyboardSection,

@@ -1,4 +1,4 @@
-import { ISelectorOption } from '~/ui/common';
+import { ISelectorOption } from '~/ui/common/base';
 
 export type IGridSpec =
   | { unit: 'mm'; pitch: number }

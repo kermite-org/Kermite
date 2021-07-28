@@ -8,12 +8,10 @@ import {
 import {
   router,
   shortCssProcessor,
-  DebugOverlay,
-  ForegroundModalLayerRoot,
   globalHintMouseMoveHandlerEffect,
-  siteModel,
-  uiStatusModel,
-} from '~/ui/common';
+} from '~/ui/common/base';
+import { DebugOverlay, ForegroundModalLayerRoot } from '~/ui/common/components';
+import { siteModel, uiStatusModel } from '~/ui/common/sharedModels';
 import { WidgetZoneRoot } from '~/ui/pages/widget';
 import { globalAppServicesInitializerEffect } from '~/ui/root/models/AppServicesInitializer';
 import { SiteDpiScaler } from '~/ui/root/views/window/SiteDpiScaler';

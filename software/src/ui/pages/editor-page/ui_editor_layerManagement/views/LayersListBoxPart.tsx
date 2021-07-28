@@ -1,5 +1,5 @@
 import { jsx, css } from 'qx';
-import { texts, uiTheme } from '~/ui/common';
+import { texts, uiTheme } from '~/ui/common/base';
 import {
   ILayerListBoxPartViewModel,
   ILayerListViewModel,

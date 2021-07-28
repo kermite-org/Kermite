@@ -6,7 +6,9 @@ import {
   IProjectResourceInfo,
   sortOrderBy,
 } from '~/shared';
-import { ipcAgent, modalAlert, uiStatusModel } from '~/ui/common';
+import { ipcAgent } from '~/ui/common/base';
+import { modalAlert } from '~/ui/common/components';
+import { uiStatusModel } from '~/ui/common/sharedModels';
 
 export type FirmwareUpdationPhase =
   | 'WaitingReset'

@@ -1,5 +1,5 @@
 import { jsx, css, QxNode } from 'qx';
-import { uiTheme } from '~/ui/common';
+import { uiTheme } from '~/ui/common/base';
 
 export const CustomWindowFrame = (props: {
   children: QxNode;

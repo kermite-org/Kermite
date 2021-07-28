@@ -1,5 +1,5 @@
 import { useLocal } from 'qx';
-import { ICommonSelectorViewModel } from '~/ui/common';
+import { ICommonSelectorViewModel } from '~/ui/common/base';
 import { useClosureModel } from '~/ui/pages/layouter/common';
 import {
   editMutations,

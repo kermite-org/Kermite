@@ -1,5 +1,7 @@
 import { css, FC, jsx } from 'qx';
-import { Link, usePlayerModel, EditorKeyboardView } from '~/ui/common';
+import { Link } from '~/ui/common/base';
+import { EditorKeyboardView } from '~/ui/common/components_svg';
+import { usePlayerModel } from '~/ui/common/sharedModels';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 import { profilesModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileManagementPartViewModel';
 import { makeEditKeyUnitCardsPartViewModel } from '~/ui/pages/editor-page/ui_editor_keyboardSection/EditKeyUnitCardsPartViewModel';

@@ -1,10 +1,8 @@
 import { jsx } from 'qx';
-import {
-  CheckBoxLine,
-  texts,
-  useDeviceStatusModel,
-  DualItemsHoverSelector,
-} from '~/ui/common';
+import { texts } from '~/ui/common/base';
+import { CheckBoxLine } from '~/ui/common/components';
+import { DualItemsHoverSelector } from '~/ui/common/components_editor';
+import { useDeviceStatusModel } from '~/ui/common/sharedModels';
 import { useKeyboardBehaviorModeModel } from '~/ui/common/sharedModels/KeyboardBehaviorModeModel';
 import {
   useRoutingChannelModel,

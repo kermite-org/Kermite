@@ -1,5 +1,6 @@
 import { jsx, css } from 'qx';
-import { texts, uiTheme, LinkIndicator } from '~/ui/common';
+import { texts, uiTheme } from '~/ui/common/base';
+import { LinkIndicator } from '~/ui/common/components_editor';
 import { makeDeviceControlSectionViewModel } from '~/ui/pages/editor-page/ui_bar_deviceControlSection/DeviceControlSectionViewModel';
 
 const cssDeviceControlSection = css`

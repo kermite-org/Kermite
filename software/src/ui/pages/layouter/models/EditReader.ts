@@ -2,7 +2,7 @@ import {
   getCoordUnitFromUnitSpec,
   ICoordUnit,
 } from '~/shared/modules/PlacementUnitHelper';
-import { createSimpleSelector } from '~/ui/common';
+import { createSimpleSelector } from '~/ui/common/helpers';
 import {
   decodeGridSpec,
   IGridSpecKey,

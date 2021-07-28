@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { texts } from '~/ui/common';
+import { texts } from '~/ui/common/base';
 import { GeneralButton, GeneralSelector } from '~/ui/common/components';
 import { useFirmwareUpdationPartModel } from '~/ui/pages/firmware-updation-page/models';
 

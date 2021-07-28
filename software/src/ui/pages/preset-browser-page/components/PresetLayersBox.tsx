@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { texts } from '~/ui/common';
+import { texts } from '~/ui/common/base';
 import { PresetLayerItem } from '~/ui/pages/preset-browser-page/components/PresetLayerItem';
 
 type Props = {

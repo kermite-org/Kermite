@@ -1,9 +1,7 @@
 import { css, jsx } from 'qx';
-import {
-  uiTheme,
-  GeneralSelector,
-  PreviewKeyboardShapeView,
-} from '~/ui/common';
+import { uiTheme } from '~/ui/common/base';
+import { GeneralSelector } from '~/ui/common/components';
+import { PreviewKeyboardShapeView } from '~/ui/common/components_svg';
 import { useShapePreviewPageModel } from '~/ui/pages/shape-preview-page/models';
 import { ShapePreviewOptionsBox } from '~/ui/pages/shape-preview-page/views/ShapePreviewOptionsBox';
 

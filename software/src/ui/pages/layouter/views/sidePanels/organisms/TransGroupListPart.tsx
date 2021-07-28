@@ -1,5 +1,6 @@
 import { jsx, css } from 'qx';
-import { uiTheme, GeneralButton } from '~/ui/common';
+import { uiTheme } from '~/ui/common/base';
+import { GeneralButton } from '~/ui/common/components';
 import { editMutations } from '~/ui/pages/layouter/models';
 import { ConfigSubHeader } from '~/ui/pages/layouter/views/sidePanels/atoms';
 import { useTransGroupListPartModel } from '~/ui/pages/layouter/views/sidePanels/models/TransGroupListPanel.model';

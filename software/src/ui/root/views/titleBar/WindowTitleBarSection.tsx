@@ -1,5 +1,5 @@
 import { jsx, css } from 'qx';
-import { uiTheme } from '~/ui/common';
+import { uiTheme } from '~/ui/common/base';
 import { WindowControlButtonsPart } from './WindowControlButtonsPart';
 import { WindowTitlePart } from './elements/WindowTitlePart';
 

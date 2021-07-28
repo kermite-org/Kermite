@@ -1,4 +1,4 @@
-import { IProjectAttachmentFileSelectorModalModel } from '~/ui/common';
+import { IProjectAttachmentFileSelectorModalModel } from '~/ui/common/components';
 import { ILayoutManagerViewModel } from '~/ui/pages/layouter-page/LayoutManagerViewModel';
 
 export function makeLayoutSelectorModalViewModel(

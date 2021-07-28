@@ -1,5 +1,6 @@
 import { jsx, css, FC } from 'qx';
-import { fieldSetter, CheckBoxLine } from '~/ui/common';
+import { CheckBoxLine } from '~/ui/common/components';
+import { fieldSetter } from '~/ui/common/helpers';
 import { IShapeViewPersistState } from '~/ui/pages/shape-preview-page/models';
 
 interface IDisplayOptionSource {

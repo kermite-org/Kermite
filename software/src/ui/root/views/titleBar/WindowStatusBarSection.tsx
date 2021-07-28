@@ -1,5 +1,6 @@
 import { jsx, css } from 'qx';
-import { uiTheme, uiStatusModel, GlobalHintDisplayText } from '~/ui/common';
+import { uiTheme, GlobalHintDisplayText } from '~/ui/common/base';
+import { uiStatusModel } from '~/ui/common/sharedModels';
 import { GlobalHintIconButton } from '~/ui/root/views/titleBar/elements/GlobalHintIconButton';
 
 const style = css`

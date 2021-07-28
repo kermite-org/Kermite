@@ -1,7 +1,6 @@
 import { jsx, FC, css, styled, useState } from 'qx';
+import { ISelectorOption, uiTheme } from '~/ui/common/base';
 import {
-  ISelectorOption,
-  uiTheme,
   GeneralButton,
   GeneralInput,
   GeneralSelector,
@@ -12,7 +11,7 @@ import {
   OperationButtonOnlyIcon,
   OperationButtonWithIcon,
   SmallSymbolicActionButton,
-} from '~/ui/common';
+} from '~/ui/common/components';
 
 const cssRoot = css`
   height: 100%;
