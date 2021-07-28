@@ -1,7 +1,7 @@
 import { css, jsx, useEffect, useLocal } from 'qx';
 import { fieldSetter, FlatListSelector } from '~/ui/common';
-import { GeneralButtonExamples } from '~/ui/common/components/atoms/GeneralButton.viz';
-import { GeneralSelectorExamples } from '~/ui/common/components/atoms/GeneralSelector.viz';
+import { GeneralButtonExamples } from '~/ui/common/components/atoms/GeneralButton.visor';
+import { GeneralSelectorExamples } from '~/ui/common/components/atoms/GeneralSelector.visor';
 
 const cssRoot = css`
   height: 100%;
