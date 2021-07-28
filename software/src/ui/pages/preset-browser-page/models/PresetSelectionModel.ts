@@ -4,11 +4,11 @@ import {
   ISelectorSource,
   ISelectorOption,
   getSelectionValueCorrected,
-} from '~/ui/common/base';
-import { usePersistState, fieldSetter } from '~/ui/common/helpers';
-import { useProjectResourceInfos } from '~/ui/common/sharedModels';
+} from '~/ui/base';
+import { usePersistState, fieldSetter } from '~/ui/helpers';
 import { editSelectedProjectPreset as editSelectedProjectPresetOriginal } from '~/ui/pages/preset-browser-page/models/ProfileCreator';
 import { useProfileDataLoaded } from '~/ui/pages/preset-browser-page/models/ProfileDataLoader';
+import { useProjectResourceInfos } from '~/ui/sharedModels';
 
 export interface IPresetSelectionModel {
   projectSelectorSource: ISelectorSource;

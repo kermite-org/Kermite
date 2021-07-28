@@ -3,7 +3,7 @@ import {
   getPresetSpecFromPresetKey,
   getProjectOriginAndIdFromSig,
 } from '~/shared/funcs/DomainRelatedHelpers';
-import { ipcAgent, router } from '~/ui/common/base';
+import { ipcAgent, router } from '~/ui/base';
 
 /*
 function getNewProfileNameBase(

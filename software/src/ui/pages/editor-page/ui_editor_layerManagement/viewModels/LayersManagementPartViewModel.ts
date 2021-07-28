@@ -1,8 +1,8 @@
 import { asyncRerender } from 'qx';
 import { removeArrayItems } from '~/shared';
 import { generateNextSequentialId } from '~/shared/funcs/DomainRelatedHelpers';
-import { texts } from '~/ui/common/base';
-import { modalConfirm } from '~/ui/common/components';
+import { texts } from '~/ui/base';
+import { modalConfirm } from '~/ui/components';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 import {
   callLayerConfigurationModal,

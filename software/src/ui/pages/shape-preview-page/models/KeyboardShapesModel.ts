@@ -6,7 +6,7 @@ import {
 } from '~/shared';
 import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
-import { ipcAgent, UiLocalStorage } from '~/ui/common/base';
+import { ipcAgent, UiLocalStorage } from '~/ui/base';
 import {
   IShapeViewPersistState,
   shapeViewPersistStateDefault,

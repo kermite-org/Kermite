@@ -1,5 +1,5 @@
 import { css, jsx } from 'qx';
-import { uiTheme } from '~/ui/common/base';
+import { uiTheme } from '~/ui/base';
 import { KeyAssignEditView } from './KeyAssignEditView';
 import { DeviceControlSection } from './ui_bar_deviceControlSection/DeviceControlSection';
 import { ProfileManagementPart } from './ui_bar_profileManagement/ProfileManagementPart';

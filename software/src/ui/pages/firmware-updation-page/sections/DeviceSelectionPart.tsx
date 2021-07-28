@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'qx';
-import { texts } from '~/ui/common/base';
-import { FlatListSelector } from '~/ui/common/components';
+import { texts } from '~/ui/base';
+import { FlatListSelector } from '~/ui/components';
 import { useDeviceSelectionPartModel } from '~/ui/pages/firmware-updation-page/models';
 
 const style = css`

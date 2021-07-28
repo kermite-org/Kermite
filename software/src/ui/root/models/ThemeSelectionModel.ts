@@ -1,5 +1,5 @@
 import { useMemo } from 'qx';
-import { ThemeKey, uiThemeConfigLoader, ipcAgent } from '~/ui/common/base';
+import { ThemeKey, uiThemeConfigLoader, ipcAgent } from '~/ui/base';
 
 interface IThemeSelectionModel {
   currentThemeKey: ThemeKey;

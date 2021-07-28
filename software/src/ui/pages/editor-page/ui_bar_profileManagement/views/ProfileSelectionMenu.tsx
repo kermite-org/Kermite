@@ -1,5 +1,5 @@
 import { jsx, css } from 'qx';
-import { texts } from '~/ui/common/base';
+import { texts } from '~/ui/base';
 import { IProfileSelectionMenuPartViewModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileSelectionMenuPartViewModel';
 
 const cssProfileSelectionMenuPart = css``;

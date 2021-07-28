@@ -1,5 +1,5 @@
 import { jsx, css } from 'qx';
-import { texts } from '~/ui/common/base';
+import { texts } from '~/ui/base';
 import { makeGlobalMenuViewModel } from '~/ui/root/views/navigation/GlobalMenuPart.model';
 
 const cssGlobalMenuPart = css``;

@@ -1,10 +1,10 @@
 import { css, jsx } from 'qx';
-import { FcWithClassName, texts } from '~/ui/common/base';
+import { FcWithClassName, texts } from '~/ui/base';
 import {
   KeyboardProfileSelector,
   OperationButtonWithIcon,
-} from '~/ui/common/components';
-import { ConfigurationButton } from '~/ui/common/components_editor';
+} from '~/ui/components';
+import { ConfigurationButton } from '~/ui/components_editor';
 import { makeProfileManagementPartViewModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileManagementPartViewModel';
 import { makeProfileSelectionMenuPartViewModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileSelectionMenuPartViewModel';
 import {

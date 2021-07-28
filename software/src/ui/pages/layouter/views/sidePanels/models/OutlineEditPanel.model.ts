@@ -1,4 +1,4 @@
-import { ICommonSelectorViewModel } from '~/ui/common/base';
+import { ICommonSelectorViewModel } from '~/ui/base';
 import { useClosureModel } from '~/ui/pages/layouter/common';
 import { editMutations, editReader } from '~/ui/pages/layouter/models';
 import {

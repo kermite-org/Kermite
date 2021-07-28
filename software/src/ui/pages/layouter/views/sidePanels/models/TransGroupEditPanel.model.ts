@@ -1,4 +1,4 @@
-import { ICommonCheckboxViewModel } from '~/ui/common/base';
+import { ICommonCheckboxViewModel } from '~/ui/base';
 import { useClosureModel } from '~/ui/pages/layouter/common';
 import { editMutations, editReader } from '~/ui/pages/layouter/models';
 import {

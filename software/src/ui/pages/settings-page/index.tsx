@@ -1,12 +1,6 @@
 import { jsx, css, useLocal, useEffect } from 'qx';
 import { globalSettingsFallbackValue } from '~/shared';
-import {
-  uiTheme,
-  ISelectorOption,
-  ipcAgent,
-  appUi,
-  texts,
-} from '~/ui/common/base';
+import { uiTheme, ISelectorOption, ipcAgent, appUi, texts } from '~/ui/base';
 import {
   Indent,
   CheckBoxLine,
@@ -14,9 +8,9 @@ import {
   GeneralInput,
   GeneralButton,
   RibbonSelector,
-} from '~/ui/common/components';
-import { useFetcher, fieldSetter } from '~/ui/common/helpers';
-import { uiStatusModel } from '~/ui/common/sharedModels';
+} from '~/ui/components';
+import { useFetcher, fieldSetter } from '~/ui/helpers';
+import { uiStatusModel } from '~/ui/sharedModels';
 
 const cssUiSettingsPage = css`
   background: ${uiTheme.colors.clBackground};

@@ -1,7 +1,7 @@
 import { jsx, css } from 'qx';
 import { IProfileAssignType } from '~/shared';
-import { texts } from '~/ui/common/base';
-import { reflectValue } from '~/ui/common/helpers';
+import { texts } from '~/ui/base';
+import { reflectValue } from '~/ui/helpers';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 
 const AssignTypeSelectionPartViewModel = () => {

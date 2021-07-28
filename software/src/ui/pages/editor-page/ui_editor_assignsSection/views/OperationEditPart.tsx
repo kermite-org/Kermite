@@ -2,7 +2,7 @@ import { jsx, css } from 'qx';
 import {
   OperationCard,
   OperationLayerOptionSelector,
-} from '~/ui/common/components_editor';
+} from '~/ui/components_editor';
 import {
   IPlainOperationEditCardsViewModel,
   IOperationEditPartViewModel,

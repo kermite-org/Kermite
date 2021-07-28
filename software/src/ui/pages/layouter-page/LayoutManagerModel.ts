@@ -9,8 +9,8 @@ import {
   IProfileManagerStatus,
   IProjectLayoutsInfo,
 } from '~/shared';
-import { ipcAgent, router, appUi } from '~/ui/common/base';
-import { modalConfirm } from '~/ui/common/components';
+import { ipcAgent, router, appUi } from '~/ui/base';
+import { modalConfirm } from '~/ui/components';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 import { UiLayouterCore } from '~/ui/pages/layouter';
 

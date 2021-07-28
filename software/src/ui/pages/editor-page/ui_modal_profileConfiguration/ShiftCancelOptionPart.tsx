@@ -1,6 +1,6 @@
 import { jsx } from 'qx';
-import { texts } from '~/ui/common/base';
-import { reflectFieldChecked } from '~/ui/common/helpers';
+import { texts } from '~/ui/base';
+import { reflectFieldChecked } from '~/ui/helpers';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 
 export const ShiftCancelOptionPart = () => {

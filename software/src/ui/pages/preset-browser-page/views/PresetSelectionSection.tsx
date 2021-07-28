@@ -1,10 +1,10 @@
 import { css, FC, jsx } from 'qx';
-import { texts } from '~/ui/common/base';
+import { texts } from '~/ui/base';
 import {
   KeyboardProfileSelector,
   KeyboardProjectSelector,
   GeneralButton,
-} from '~/ui/common/components';
+} from '~/ui/components';
 import { IPresetSelectionSectionViewModel } from '~/ui/pages/preset-browser-page/viewModels/PresetSelectionSectionViewModel';
 
 type Props = {

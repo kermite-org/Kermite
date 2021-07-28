@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'qx';
-import { texts } from '~/ui/common/base';
-import { GeneralSelector, CheckBox, Slider } from '~/ui/common/components';
+import { texts } from '~/ui/base';
+import { GeneralSelector, CheckBox, Slider } from '~/ui/components';
 import { useCustomParametersPartModel } from '~/ui/pages/firmware-updation-page/models';
 
 const style = css`

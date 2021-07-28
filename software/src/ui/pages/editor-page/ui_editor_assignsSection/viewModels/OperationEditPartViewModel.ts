@@ -6,7 +6,7 @@ import {
   encodeSingleModifierVirtualKey,
   VirtualKey,
 } from '~/shared';
-import { IOperationCardViewModel, texts } from '~/ui/common/base';
+import { IOperationCardViewModel, texts } from '~/ui/base';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 import {
   virtualKeyGroupsTable2,

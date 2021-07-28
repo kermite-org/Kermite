@@ -1,5 +1,5 @@
 import { jsx, css } from 'qx';
-import { siteModel } from '~/ui/common/sharedModels';
+import { siteModel } from '~/ui/sharedModels';
 
 const cssDevToolPullTabBase = css`
   position: absolute;

@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'qx';
-import { uiTheme } from '~/ui/common/base';
-import { withStopPropagation } from '~/ui/common/helpers';
+import { uiTheme } from '~/ui/base';
+import { withStopPropagation } from '~/ui/helpers';
 
 type Props = {
   layerName: string;

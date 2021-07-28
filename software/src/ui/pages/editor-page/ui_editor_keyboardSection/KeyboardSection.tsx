@@ -1,10 +1,10 @@
 import { css, FC, jsx } from 'qx';
-import { Link } from '~/ui/common/base';
-import { EditorKeyboardView } from '~/ui/common/components_svg';
-import { usePlayerModel } from '~/ui/common/sharedModels';
+import { Link } from '~/ui/base';
+import { EditorKeyboardView } from '~/ui/components_svg';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 import { profilesModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileManagementPartViewModel';
 import { makeEditKeyUnitCardsPartViewModel } from '~/ui/pages/editor-page/ui_editor_keyboardSection/EditKeyUnitCardsPartViewModel';
+import { usePlayerModel } from '~/ui/sharedModels';
 import { LayerStateView } from './LayerStateView';
 
 const ProfileSetupNavigationCardView: FC = () => {

@@ -12,24 +12,20 @@ import {
   ISelectorSource,
   makePlainSelectorOption,
   texts,
-} from '~/ui/common/base';
-import {
-  modalAlert,
-  modalConfirm,
-  modalTextEdit,
-} from '~/ui/common/components';
-import { getFileNameFromPath } from '~/ui/common/helpers';
+} from '~/ui/base';
+import { modalAlert, modalConfirm, modalTextEdit } from '~/ui/components';
+import { getFileNameFromPath } from '~/ui/helpers';
+import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
+import { ProfilesModel } from '~/ui/pages/editor-page/models/ProfilesModel';
+import { editorPageModel } from '~/ui/pages/editor-page/models/editorPageModel';
+import { callProfileSetupModal } from '~/ui/pages/editor-page/ui_modal_profileSetup/ProfileSetupModal';
 import {
   uiStatusModel,
   useDeviceStatusModel,
   useGlobalSettingsFetch,
   useKeyboardBehaviorModeModel,
-} from '~/ui/common/sharedModels';
-import { useModalDisplayStateModel } from '~/ui/common/sharedModels/GeneralUiStateModels';
-import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
-import { ProfilesModel } from '~/ui/pages/editor-page/models/ProfilesModel';
-import { editorPageModel } from '~/ui/pages/editor-page/models/editorPageModel';
-import { callProfileSetupModal } from '~/ui/pages/editor-page/ui_modal_profileSetup/ProfileSetupModal';
+} from '~/ui/sharedModels';
+import { useModalDisplayStateModel } from '~/ui/sharedModels/GeneralUiStateModels';
 
 export interface IProfileManagementPartViewModel {
   createProfile(): void;

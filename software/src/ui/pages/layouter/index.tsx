@@ -1,6 +1,6 @@
 import { jsx, useEffect } from 'qx';
 import { IPersistKeyboardDesign } from '~/shared';
-import { windowKeyboardEventEffect } from '~/ui/common/helpers';
+import { windowKeyboardEventEffect } from '~/ui/helpers';
 import { editMutations, editReader } from '~/ui/pages/layouter/models';
 import { PageRoot } from '~/ui/pages/layouter/views/PageRoot';
 import {

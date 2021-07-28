@@ -1,5 +1,5 @@
 import { jsx, css } from 'qx';
-import { uiTheme } from '~/ui/common/base';
+import { uiTheme } from '~/ui/base';
 import { UiLayouterCore } from '~/ui/pages/layouter';
 import { LayoutManagerTopBar } from '~/ui/pages/layouter-page/LayoutManagerTopBar';
 

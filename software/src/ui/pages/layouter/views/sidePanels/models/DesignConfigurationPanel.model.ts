@@ -3,7 +3,7 @@ import {
   IKeyIdMode,
   IKeyPlacementAnchor,
 } from '~/shared';
-import { ICommonSelectorViewModel } from '~/ui/common/base';
+import { ICommonSelectorViewModel } from '~/ui/base';
 import { useClosureModel } from '~/ui/pages/layouter/common';
 import { editReader, editMutations } from '~/ui/pages/layouter/models';
 import {

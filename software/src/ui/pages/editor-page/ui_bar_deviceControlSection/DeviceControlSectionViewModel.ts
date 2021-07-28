@@ -1,6 +1,6 @@
-import { ipcAgent } from '~/ui/common/base';
-import { useFetcher } from '~/ui/common/helpers';
-import { useDeviceStatusModel } from '~/ui/common/sharedModels';
+import { ipcAgent } from '~/ui/base';
+import { useFetcher } from '~/ui/helpers';
+import { useDeviceStatusModel } from '~/ui/sharedModels';
 
 export function makeDeviceControlSectionViewModel() {
   const { isConnected, deviceAttrs } = useDeviceStatusModel();

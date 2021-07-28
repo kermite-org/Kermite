@@ -1,12 +1,12 @@
 import { jsx, useLocal, useEffect } from 'qx';
 import { IProjectResourceInfo } from '~/shared';
-import { ipcAgent, texts } from '~/ui/common/base';
+import { ipcAgent, texts } from '~/ui/base';
 import {
   IProjectAttachmentFileSelectorModalModel,
   modalConfirm,
   ProjectAttachmentFileSelectorModal,
-} from '~/ui/common/components';
-import { fieldSetter } from '~/ui/common/helpers';
+} from '~/ui/components';
+import { fieldSetter } from '~/ui/helpers';
 import { IProfileManagementPartViewModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileManagementPartViewModel';
 
 function getTargetPresetNameFilePath(projectPath: string, presetName: string) {

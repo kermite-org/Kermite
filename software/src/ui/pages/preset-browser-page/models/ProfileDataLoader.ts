@@ -4,7 +4,7 @@ import {
   getPresetSpecFromPresetKey,
   getProjectOriginAndIdFromSig,
 } from '~/shared/funcs/DomainRelatedHelpers';
-import { ipcAgent } from '~/ui/common/base';
+import { ipcAgent } from '~/ui/base';
 
 export function useProfileDataLoaded(
   projectKey: string,

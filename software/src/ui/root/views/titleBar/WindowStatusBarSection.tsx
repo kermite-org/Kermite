@@ -1,7 +1,7 @@
 import { jsx, css } from 'qx';
-import { uiTheme, GlobalHintDisplayText } from '~/ui/common/base';
-import { uiStatusModel } from '~/ui/common/sharedModels';
+import { uiTheme, GlobalHintDisplayText } from '~/ui/base';
 import { GlobalHintIconButton } from '~/ui/root/views/titleBar/elements/GlobalHintIconButton';
+import { uiStatusModel } from '~/ui/sharedModels';
 
 const style = css`
   font-size: 14px;

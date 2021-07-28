@@ -5,7 +5,7 @@ import {
   ModifierVirtualKey,
   VirtualKeyTexts,
 } from '~/shared';
-import { texts } from '~/ui/common/base';
+import { texts } from '~/ui/base';
 import {
   ClosableOverlay,
   CommonDialogFrame,
@@ -13,18 +13,18 @@ import {
   DialogButton,
   DialogButtonsRow,
   DialogContentRow,
-} from '~/ui/common/components';
+} from '~/ui/components';
 import {
   cssCommonPropertiesTable,
   cssCommonTextInput,
   DefaultSchemeButton,
-} from '~/ui/common/components_editor';
+} from '~/ui/components_editor';
 import {
   reflectFieldValue,
   reflectChecked,
   reflectValue,
   reflectFieldChecked,
-} from '~/ui/common/helpers';
+} from '~/ui/helpers';
 
 export interface ILayerConfigurationModelEditValues {
   layerName: string;

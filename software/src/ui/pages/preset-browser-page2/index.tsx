@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { ipcAgent, texts } from '~/ui/common/base';
+import { ipcAgent, texts } from '~/ui/base';
 import { usePresetBrowserViewModel } from '~/ui/pages/preset-browser-page/viewModels';
 import { PresetBrowserPageView } from '~/ui/pages/preset-browser-page/views/PresetBrowserPageView';
 import { usePresetSelectionModel2 } from '~/ui/pages/preset-browser-page2/models/PresetSelectionModel2';

@@ -1,5 +1,5 @@
 import { jsx, css } from 'qx';
-import { texts } from '~/ui/common/base';
+import { texts } from '~/ui/base';
 import { makeWindowControlButtonsModel } from '~/ui/root/views/titleBar/WindowControlButtonsPart.model';
 import { WindowControlButton } from './elements/WindowControlButton';
 import { WindowRestartButton } from './elements/WindowRestartButton';

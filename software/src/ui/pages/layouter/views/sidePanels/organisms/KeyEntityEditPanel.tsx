@@ -1,5 +1,5 @@
 import { jsx, css } from 'qx';
-import { HFlex, GeneralSelector } from '~/ui/common/components';
+import { HFlex, GeneralSelector } from '~/ui/components';
 import { ConfigVStack } from '~/ui/pages/layouter/views/sidePanels/atoms';
 import { ConfigPanelBox } from '~/ui/pages/layouter/views/sidePanels/atoms/ConfigPanelBox';
 import { useKeyEntityEditPanelModel } from '~/ui/pages/layouter/views/sidePanels/models/KeyEntityEditPanel.model';

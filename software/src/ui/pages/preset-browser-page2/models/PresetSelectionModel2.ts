@@ -11,10 +11,10 @@ import {
   ipcAgent,
   getSelectionValueCorrected,
   router,
-} from '~/ui/common/base';
-import { usePersistState, useFetcher, fieldSetter } from '~/ui/common/helpers';
-import { useProjectResourceInfos } from '~/ui/common/sharedModels';
+} from '~/ui/base';
+import { usePersistState, useFetcher, fieldSetter } from '~/ui/helpers';
 import { IPresetSelectionModel } from '~/ui/pages/preset-browser-page/models';
+import { useProjectResourceInfos } from '~/ui/sharedModels';
 
 function makeProjectOptions(
   infos: IProjectResourceInfo[],

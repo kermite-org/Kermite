@@ -1,6 +1,6 @@
 import { makeDipsalyErrorMessage } from '~/shared';
-import { ipcAgent } from '~/ui/common/base';
-import { modalError } from '~/ui/common/components';
+import { ipcAgent } from '~/ui/base';
+import { modalError } from '~/ui/components';
 
 export function globalAppServicesInitializerEffect() {
   const unsub = ipcAgent.events.global_appErrorEvents.subscribe(

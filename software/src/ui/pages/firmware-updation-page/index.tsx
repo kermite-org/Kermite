@@ -1,5 +1,5 @@
 import { css, jsx } from 'qx';
-import { uiTheme } from '~/ui/common/base';
+import { uiTheme } from '~/ui/base';
 import {
   ConnectedDeviceAttrsPart,
   CustomParametersPart,

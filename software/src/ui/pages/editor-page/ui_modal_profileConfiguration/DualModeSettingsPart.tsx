@@ -1,10 +1,10 @@
 import { jsx, css } from 'qx';
-import { texts } from '~/ui/common/base';
+import { texts } from '~/ui/base';
 import {
   reflectFieldValue,
   reflectValue,
   reflectFieldChecked,
-} from '~/ui/common/helpers';
+} from '~/ui/helpers';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 
 const cssDualModeSettingsPart = css`

@@ -1,6 +1,6 @@
 import { css, jsx, useLocal } from 'qx';
-import { texts } from '~/ui/common/base';
-import { GeneralInput, GeneralButton } from '~/ui/common/components';
+import { texts } from '~/ui/base';
+import { GeneralInput, GeneralButton } from '~/ui/components';
 import { makeTestInputAreaViewModel } from '~/ui/pages/editor-page/ui_bar_testInputArea/TestInputAreaViewModel';
 
 const cssTestInputArea = css`

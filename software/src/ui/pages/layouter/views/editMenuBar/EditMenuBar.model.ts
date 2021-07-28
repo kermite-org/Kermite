@@ -1,5 +1,5 @@
 import { getObjectKeys } from '~/shared';
-import { ISelectorOption } from '~/ui/common/base';
+import { ISelectorOption } from '~/ui/base';
 import {
   editMutations,
   editReader,

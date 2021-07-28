@@ -1,5 +1,5 @@
 import { jsx, css } from 'qx';
-import { Icon } from '~/ui/common/components';
+import { Icon } from '~/ui/components';
 import { NavigationEntryViewModel } from '~/ui/root/views/navigation/NavigationButtonsArea.model';
 
 const cssNavigationButton = css`

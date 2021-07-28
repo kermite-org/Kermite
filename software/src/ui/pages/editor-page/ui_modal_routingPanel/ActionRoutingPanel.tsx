@@ -1,9 +1,9 @@
 import { css, jsx } from 'qx';
 import { generateNextSequentialId } from '~/shared/funcs/DomainRelatedHelpers';
-import { FcWithClassName, uiTheme } from '~/ui/common/base';
-import { GeneralButton, GeneralSelector } from '~/ui/common/components';
-import { GeneralSelectorN } from '~/ui/common/components/atoms/GeneralSelectorN';
-import { fieldSetter } from '~/ui/common/helpers';
+import { FcWithClassName, uiTheme } from '~/ui/base';
+import { GeneralButton, GeneralSelector } from '~/ui/components';
+import { GeneralSelectorN } from '~/ui/components/atoms/GeneralSelectorN';
+import { fieldSetter } from '~/ui/helpers';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 import { editorPageModel } from '~/ui/pages/editor-page/models/editorPageModel';
 import {

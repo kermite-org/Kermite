@@ -1,9 +1,9 @@
 import { css, jsx } from 'qx';
 import { uniqueArrayItemsByField } from '~/shared';
-import { ISelectorOption, texts } from '~/ui/common/base';
-import { GeneralSelector } from '~/ui/common/components';
-import { useProjectResourceInfos } from '~/ui/common/sharedModels';
+import { ISelectorOption, texts } from '~/ui/base';
+import { GeneralSelector } from '~/ui/components';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
+import { useProjectResourceInfos } from '~/ui/sharedModels';
 
 const cssAttrsRow = css`
   display: flex;

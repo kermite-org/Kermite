@@ -1,6 +1,6 @@
 import { FC, jsx } from 'qx';
 import { makeIntegersRange } from '~/shared';
-import { uiTheme } from '~/ui/common/base';
+import { uiTheme } from '~/ui/base';
 import { editReader } from '~/ui/pages/layouter/models';
 import {
   getGroupOuterSvgTransformSpec,

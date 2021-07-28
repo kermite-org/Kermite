@@ -1,10 +1,10 @@
 import { css, jsx } from 'qx';
-import { texts } from '~/ui/common/base';
+import { texts } from '~/ui/base';
 import {
   IPlayerModel,
   uiStatusModel,
   useDeviceStatusModel,
-} from '~/ui/common/sharedModels';
+} from '~/ui/sharedModels';
 
 const cssLayerStateView = css`
   position: absolute;

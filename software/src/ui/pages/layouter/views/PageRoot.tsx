@@ -1,5 +1,5 @@
 import { jsx, css } from 'qx';
-import { uiTheme } from '~/ui/common/base';
+import { uiTheme } from '~/ui/base';
 import { EditMenuBar } from '~/ui/pages/layouter/views/editMenuBar/EditMenuBar';
 import { EditSvgViewContainer } from '~/ui/pages/layouter/views/editSvgView';
 import { EditorSideColumnContent } from '~/ui/pages/layouter/views/sidePanels';

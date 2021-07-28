@@ -1,5 +1,5 @@
 import { IKeyboardDeviceInfo, IProjectResourceInfo } from '~/shared';
-import { ISelectorOption, ipcAgent } from '~/ui/common/base';
+import { ISelectorOption, ipcAgent } from '~/ui/base';
 import {
   useDeviceSelectionStatus,
   useProjectResourceInfos,

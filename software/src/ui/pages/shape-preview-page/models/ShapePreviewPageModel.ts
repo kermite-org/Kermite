@@ -1,6 +1,6 @@
 import { useEffect, useLocal } from 'qx';
 import { IDisplayKeyboardDesign, removeArrayItems } from '~/shared';
-import { ISelectorSource, ipcAgent } from '~/ui/common/base';
+import { ISelectorSource, ipcAgent } from '~/ui/base';
 import { useKeyboardShapesModel } from '~/ui/pages/shape-preview-page/models/KeyboardShapesModel';
 import { IShapeViewPersistState } from '~/ui/pages/shape-preview-page/models/ShapeViewPersistState';
 

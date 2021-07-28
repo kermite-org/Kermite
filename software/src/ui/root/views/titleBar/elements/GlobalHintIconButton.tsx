@@ -1,6 +1,6 @@
 import { FC, jsx, css } from 'qx';
-import { texts } from '~/ui/common/base';
-import { ButtonBase, Icon } from '~/ui/common/components';
+import { texts } from '~/ui/base';
+import { ButtonBase, Icon } from '~/ui/components';
 
 type Props = {
   isActive: boolean;

@@ -1,4 +1,4 @@
-import { appUi, ipcAgent } from '~/ui/common/base';
+import { appUi, ipcAgent } from '~/ui/base';
 import { editMutations } from '~/ui/pages/layouter/models';
 
 export function setupDeviceKeyEventsListener(): () => void {

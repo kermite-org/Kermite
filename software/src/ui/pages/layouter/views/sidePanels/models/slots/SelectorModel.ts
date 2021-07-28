@@ -1,4 +1,4 @@
-import { ICommonSelectorViewModel } from '~/ui/common/base';
+import { ICommonSelectorViewModel } from '~/ui/base';
 
 export function makeSelectorModel<T extends string>(props: {
   sources: [T, string][];

@@ -1,9 +1,9 @@
 import { useEffect, useLocal } from 'qx';
 import { ILayoutEditSource, IProjectLayoutsInfo } from '~/shared';
-import { ISelectorOption } from '~/ui/common/base';
-import { useProjectResourcePresenceChecker } from '~/ui/common/sharedModels';
+import { ISelectorOption } from '~/ui/base';
 import { UiLayouterCore } from '~/ui/pages/layouter';
 import { LayoutManagerModel } from '~/ui/pages/layouter-page/LayoutManagerModel';
+import { useProjectResourcePresenceChecker } from '~/ui/sharedModels';
 
 export type ILayoutManagerModalState =
   | 'None'

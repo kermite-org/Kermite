@@ -1,5 +1,5 @@
-import { ipcAgent, router } from '~/ui/common/base';
-import { siteModel } from '~/ui/common/sharedModels';
+import { ipcAgent, router } from '~/ui/base';
+import { siteModel } from '~/ui/sharedModels';
 
 export interface IWindowControlButtonsModel {
   showReloadButton: boolean;

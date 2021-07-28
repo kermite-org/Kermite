@@ -1,6 +1,6 @@
 import { FC, jsx, css, useState, QxChildren } from 'qx';
-import { uiTheme } from '~/ui/common/base';
-import { Icon } from '~/ui/common/components';
+import { uiTheme } from '~/ui/base';
+import { Icon } from '~/ui/components';
 
 type Props = {
   headerText: string;

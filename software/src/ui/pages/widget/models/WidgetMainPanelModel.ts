@@ -1,12 +1,8 @@
 import { useEffect } from 'qx';
 import { IDisplayKeyboardDesign } from '~/shared';
-import {
-  ipcAgent,
-  IWidgetKeyUnitCardViewModel,
-  router,
-} from '~/ui/common/base';
-import { siteModel, usePlayerModel } from '~/ui/common/sharedModels';
+import { ipcAgent, IWidgetKeyUnitCardViewModel, router } from '~/ui/base';
 import { useWidgetKeyUnitCardViewModel } from '~/ui/pages/widget/models/WidgetKeyUnitCardViewModel';
+import { siteModel, usePlayerModel } from '~/ui/sharedModels';
 
 export interface IWidgetMainPanelModel {
   isWindowActive: boolean;

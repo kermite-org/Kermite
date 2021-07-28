@@ -9,12 +9,12 @@ import {
   router,
   shortCssProcessor,
   globalHintMouseMoveHandlerEffect,
-} from '~/ui/common/base';
-import { DebugOverlay, ForegroundModalLayerRoot } from '~/ui/common/components';
-import { siteModel, uiStatusModel } from '~/ui/common/sharedModels';
+} from '~/ui/base';
+import { DebugOverlay, ForegroundModalLayerRoot } from '~/ui/components';
 import { WidgetZoneRoot } from '~/ui/pages/widget';
 import { globalAppServicesInitializerEffect } from '~/ui/root/models/AppServicesInitializer';
 import { SiteDpiScaler } from '~/ui/root/views/window/SiteDpiScaler';
+import { siteModel, uiStatusModel } from '~/ui/sharedModels';
 import { ConfiguratorZoneRoot } from './views/ConfiguratorZoneRoot';
 
 setShortCssProcessor(shortCssProcessor);
