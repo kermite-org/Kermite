@@ -97,7 +97,7 @@ async function makeShell() {
 }
 
 async function makeUi() {
-  const srcDir = './src/ui/root';
+  const srcDir = './src/ui';
   const distDir = `./dist/ui`;
   fs.mkdirSync(distDir, { recursive: true });
   fs.copyFileSync(`${srcDir}/index.html`, `${distDir}/index.html`);
