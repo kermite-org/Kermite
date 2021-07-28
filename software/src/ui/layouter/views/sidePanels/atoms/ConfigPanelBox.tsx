@@ -1,9 +1,9 @@
-import { FC, jsx, css, useState, QxNode } from 'qx';
+import { FC, jsx, css, useState, QxChildren } from 'qx';
 import { uiTheme, Icon } from '~/ui/common';
 
 type Props = {
   headerText: string;
-  children: QxNode;
+  children: QxChildren;
   canToggleOpen?: boolean;
   initialOpen?: boolean;
 };
