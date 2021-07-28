@@ -125,7 +125,7 @@ async function makeUi() {
 }
 
 function startMockView() {
-  const srcDir = './src/ui/mock-view';
+  const srcDir = './src/ui-mock-view';
   const distDir = `./dist/ui_mock`;
   fs.mkdirSync(distDir, { recursive: true });
   fs.copyFileSync(`${srcDir}/index.html`, `${distDir}/index.html`);

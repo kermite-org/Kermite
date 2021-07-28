@@ -1,21 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { jsx, render, rerender } from 'qx';
 import { debounce } from '~/shared';
+import { ComponentCatalogPage } from '~/ui-mock-view/ComponentCatalog';
+import { initializeCss } from '~/ui-mock-view/CssInitializer';
+import { GooberDevelopmentPage } from '~/ui-mock-view/GooberDevelopmentPage';
+import { GooberDevelopmentPage2 } from '~/ui-mock-view/GooberDevelopmentPage2';
+import { HoverHintDevelopmentPage } from '~/ui-mock-view/HoverHintDevelopmentPage';
+import { MockPageComponentDevelopment } from '~/ui-mock-view/MockPageComponentDevelopment';
+import { MockPageLoadedDesignDrawing } from '~/ui-mock-view/MockPageLoadedDesignDrawing';
+import { QxDebugPage } from '~/ui-mock-view/QxDebugPage';
+import { QxDebugPage2 } from '~/ui-mock-view/QxDebugPage2';
+import { QxDebugPage3 } from '~/ui-mock-view/QxDebugPage3';
+import { QxDebugPage4 } from '~/ui-mock-view/QxDebugPage4';
+import { QxDebugPage5 } from '~/ui-mock-view/QxDebugPage5';
+import { RoutingDevelopmentPage } from '~/ui-mock-view/RoutingDevelopmentPage';
+import { ShortCssDevPage } from '~/ui-mock-view/ShortCssDevPage';
 import { UiLayouterPageComponent } from '~/ui/layouter-page';
-import { ComponentCatalogPage } from '~/ui/mock-view/ComponentCatalog';
-import { initializeCss } from '~/ui/mock-view/CssInitializer';
-import { GooberDevelopmentPage } from '~/ui/mock-view/GooberDevelopmentPage';
-import { GooberDevelopmentPage2 } from '~/ui/mock-view/GooberDevelopmentPage2';
-import { HoverHintDevelopmentPage } from '~/ui/mock-view/HoverHintDevelopmentPage';
-import { MockPageComponentDevelopment } from '~/ui/mock-view/MockPageComponentDevelopment';
-import { MockPageLoadedDesignDrawing } from '~/ui/mock-view/MockPageLoadedDesignDrawing';
-import { QxDebugPage } from '~/ui/mock-view/QxDebugPage';
-import { QxDebugPage2 } from '~/ui/mock-view/QxDebugPage2';
-import { QxDebugPage3 } from '~/ui/mock-view/QxDebugPage3';
-import { QxDebugPage4 } from '~/ui/mock-view/QxDebugPage4';
-import { QxDebugPage5 } from '~/ui/mock-view/QxDebugPage5';
-import { RoutingDevelopmentPage } from '~/ui/mock-view/RoutingDevelopmentPage';
-import { ShortCssDevPage } from '~/ui/mock-view/ShortCssDevPage';
 import { MockPageLayouterDevelopment } from './MockPageLayouterDevelopment';
 
 const PageRoot = () => {

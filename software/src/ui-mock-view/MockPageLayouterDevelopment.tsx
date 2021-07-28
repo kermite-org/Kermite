@@ -1,9 +1,9 @@
 import { jsx, useEffect } from 'qx';
-import { UiLayouterCore } from '~/ui/layouter';
 import {
   loadLocalStorageKeyboardDesignOrDefault,
   saveLocalStorageKeyboardDesign,
-} from '~/ui/mock-view/LocalStoragePersistKeyboardDesign';
+} from '~/ui-mock-view/LocalStoragePersistKeyboardDesign';
+import { UiLayouterCore } from '~/ui/layouter';
 
 export const MockPageLayouterDevelopment = () => {
   useEffect(() => {

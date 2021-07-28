@@ -4,7 +4,7 @@ import {
   IDisplayKeyboardDesign,
 } from '~/shared';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
-import { loadLocalStorageKeyboardDesignOrDefault } from '~/ui/mock-view/LocalStoragePersistKeyboardDesign';
+import { loadLocalStorageKeyboardDesignOrDefault } from '~/ui-mock-view/LocalStoragePersistKeyboardDesign';
 
 const state = new (class {
   design: IDisplayKeyboardDesign = createFallbackDisplayKeyboardDesign();
