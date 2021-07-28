@@ -3,7 +3,7 @@ import {
   loadLocalStorageKeyboardDesignOrDefault,
   saveLocalStorageKeyboardDesign,
 } from '~/ui-mock-view/LocalStoragePersistKeyboardDesign';
-import { UiLayouterCore } from '~/ui/layouter';
+import { UiLayouterCore } from '~/ui/pages/layouter';
 
 export const MockPageLayouterDevelopment = () => {
   useEffect(() => {

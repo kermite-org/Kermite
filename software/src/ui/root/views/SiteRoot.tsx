@@ -14,9 +14,9 @@ import {
   siteModel,
   uiStatusModel,
 } from '~/ui/common';
+import { WidgetZoneRoot } from '~/ui/pages/widget';
 import { globalAppServicesInitializerEffect } from '~/ui/root/models/AppServicesInitializer';
 import { SiteDpiScaler } from '~/ui/root/views/window/SiteDpiScaler';
-import { WidgetZoneRoot } from '~/ui/widget';
 import { ConfiguratorZoneRoot } from './ConfiguratorZoneRoot';
 
 setShortCssProcessor(shortCssProcessor);

@@ -1,16 +1,16 @@
 import { jsx, css } from 'qx';
 import { appUi, router, uiStatusModel, uiTheme } from '~/ui/common';
 import { LoadingOverlay } from '~/ui/common/components/overlay/LoadingOverlay';
-import { EditorPage } from '~/ui/editor-page';
-import { FirmwareUpdationPage } from '~/ui/firmware-updation-page';
-import { UiLayouterPageComponent } from '~/ui/layouter-page';
-import { PresetBrowserPage } from '~/ui/preset-browser-page';
-import { PresetBrowserPage2 } from '~/ui/preset-browser-page2';
+import { EditorPage } from '~/ui/pages/editor-page';
+import { FirmwareUpdationPage } from '~/ui/pages/firmware-updation-page';
+import { UiLayouterPageComponent } from '~/ui/pages/layouter-page';
+import { PresetBrowserPage } from '~/ui/pages/preset-browser-page';
+import { PresetBrowserPage2 } from '~/ui/pages/preset-browser-page2';
+import { UiSettingsPage } from '~/ui/pages/settings-page';
+import { ShapePreviewPage } from '~/ui/pages/shape-preview-page';
 import { WindowStatusBarSection } from '~/ui/root/views/titleBar/WindowStatusBarSection';
 import { CustomWindowFrame } from '~/ui/root/views/window/CustomWindowFrame';
 import { DevToolPullTab } from '~/ui/root/views/window/DevToolPullTab';
-import { UiSettingsPage } from '~/ui/settings-page';
-import { ShapePreviewPage } from '~/ui/shape-preview-page';
 import { NavigationColumn } from './navigation/NavigationColumn';
 import { WindowTitleBarSection } from './titleBar/WindowTitleBarSection';
 
