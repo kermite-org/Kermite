@@ -8,3 +8,4 @@ export * from './UiCommonTypes';
 export * from './UiGlobal';
 export * from './UiText';
 export * from './UiTheme';
+export * from './ViewModelTypes';

@@ -1,11 +1,8 @@
 import { jsx } from 'qx';
 import { IDisplayKeyboardDesign } from '~/shared';
-import { uiTheme } from '~/ui/common/base';
+import { uiTheme, IEditKeyUnitCardViewModel } from '~/ui/common/base';
 import { KeyboardSvgFrameWithAutoScaler } from '~/ui/common/components_svg/frames/KeyboardSvgFrameWithAutoScaler';
-import {
-  EditKeyUnitCard,
-  IEditKeyUnitCardViewModel,
-} from '~/ui/common/components_svg/keyUnitCards/EditKeyUnitCard';
+import { EditKeyUnitCard } from '~/ui/common/components_svg/keyUnitCards/EditKeyUnitCard';
 import { KeyboardBodyShape } from '~/ui/common/components_svg/keyboardBody/KeyboardBodyShape';
 
 const EditKeyUnitCardsPart = (props: {

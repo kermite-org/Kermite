@@ -4,12 +4,12 @@ import {
   IDisplayKeyEntity,
   IDisplayKeyboardDesign,
 } from '~/shared';
+import { IPresetKeyUnitViewModel } from '~/ui/common/base';
 import {
   getAssignForKeyUnitWithLayerFallback,
   getAssignEntryTexts,
   getAssignForKeyUnitInInitialLayerStack,
 } from '~/ui/common/components_svg/keyUnitCardModels/KeyUnitCardViewModelCommon';
-import { IPresetKeyUnitViewModel } from '~/ui/common/components_svg/keyUnitCards/PresetKeyUnitCard';
 
 function createPresetKeyUnitViewModel(
   ke: IDisplayKeyEntity,

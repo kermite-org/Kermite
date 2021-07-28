@@ -1,25 +1,9 @@
+import { IDisplayKeyboardDesign, IProfileData } from '~/shared';
+import { ICustomKeyUnitViewModelBase } from '~/ui/common/base';
 import {
-  IDisplayKeyboardDesign,
-  IDisplayKeyShape,
-  IProfileData,
-} from '~/shared';
-import {
-  getAssignForKeyUnitWithLayerFallback,
   getAssignEntryTexts,
+  getAssignForKeyUnitWithLayerFallback,
 } from '~/ui/common/components_svg/keyUnitCardModels/KeyUnitCardViewModelCommon';
-
-export interface ICustomKeyUnitViewModelBase {
-  keyUnitId: string;
-  pos: {
-    x: number;
-    y: number;
-    r: number;
-  };
-  primaryText: string;
-  secondaryText: string;
-  isLayerFallback: boolean;
-  shape: IDisplayKeyShape;
-}
 
 export function makeCustomKeyUnitViewModels<
   TCustomKeyUnitViewModel extends ICustomKeyUnitViewModelBase

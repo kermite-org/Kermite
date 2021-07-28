@@ -1,22 +1,7 @@
 import { jsx, css } from 'qx';
-import { IDisplayKeyShape } from '~/shared';
-import { uiTheme } from '~/ui/common/base';
+import { uiTheme, IPresetKeyUnitViewModel } from '~/ui/common/base';
 import { KeyUnitShape } from '~/ui/common/components_svg/keyUnitCards/KeyUnitShape';
 import { mvvmView } from '~/ui/common/helpers';
-
-export interface IPresetKeyUnitViewModel {
-  keyUnitId: string;
-  pos: {
-    x: number;
-    y: number;
-    r: number;
-  };
-  primaryText: string;
-  secondaryText: string;
-  tertiaryText: string;
-  isLayerFallback: boolean;
-  shape: IDisplayKeyShape;
-}
 
 const cssKeyShape = css`
   fill: transparent;

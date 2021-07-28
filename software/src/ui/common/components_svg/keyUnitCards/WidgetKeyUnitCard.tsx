@@ -1,22 +1,6 @@
 import { jsx, css } from 'qx';
-import { IDisplayKeyShape } from '~/shared';
+import { IWidgetKeyUnitCardViewModel } from '~/ui/common/base';
 import { KeyUnitShape } from '~/ui/common/components_svg/keyUnitCards/KeyUnitShape';
-
-export interface IWidgetKeyUnitCardViewModel {
-  keyUnitId: string;
-  pos: {
-    x: number;
-    y: number;
-    r: number;
-  };
-  primaryText: string;
-  secondaryText: string;
-  tertiaryText: string;
-  isLayerFallback: boolean;
-  isHold: boolean;
-  shape: IDisplayKeyShape;
-  shiftHold: boolean;
-}
 
 export function WidgetKeyUnitCard({
   keyUnit,

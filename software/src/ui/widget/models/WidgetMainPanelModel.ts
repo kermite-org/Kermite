@@ -1,12 +1,7 @@
 import { useEffect } from 'qx';
 import { IDisplayKeyboardDesign } from '~/shared';
-import {
-  ipcAgent,
-  router,
-  siteModel,
-  usePlayerModel,
-  IWidgetKeyUnitCardViewModel,
-} from '~/ui/common';
+import { ipcAgent, router, siteModel, usePlayerModel } from '~/ui/common';
+import { IWidgetKeyUnitCardViewModel } from '~/ui/common/base';
 import { useWidgetKeyUnitCardViewModel } from '~/ui/widget/models/WidgetKeyUnitCardViewModel';
 
 export interface IWidgetMainPanelModel {

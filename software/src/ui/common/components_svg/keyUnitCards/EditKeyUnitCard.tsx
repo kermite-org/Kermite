@@ -1,25 +1,6 @@
 import { css, FC, jsx } from 'qx';
-import { IDisplayKeyShape } from '~/shared';
-import { texts, uiTheme } from '~/ui/common/base';
+import { texts, uiTheme, IEditKeyUnitCardViewModel } from '~/ui/common/base';
 import { KeyUnitShape } from '~/ui/common/components_svg/keyUnitCards/KeyUnitShape';
-
-export interface IEditKeyUnitCardViewModel {
-  keyUnitId: string;
-  pos: {
-    x: number;
-    y: number;
-    r: number;
-  };
-  shape: IDisplayKeyShape;
-  isCurrent: boolean;
-  setCurrent: () => void;
-  primaryText: string;
-  secondaryText: string;
-  tertiaryText: string;
-  isLayerFallback: boolean;
-  isHold: boolean;
-  shiftHold: boolean;
-}
 
 const cssKeyText = css`
   fill: ${uiTheme.colors.clKeyUnitLegend};
