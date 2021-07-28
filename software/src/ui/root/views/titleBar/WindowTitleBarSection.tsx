@@ -1,7 +1,7 @@
 import { jsx, css } from 'qx';
 import { uiTheme } from '~/ui/base';
+import { WindowTitlePart } from '~/ui/components_window';
 import { WindowControlButtonsPart } from './WindowControlButtonsPart';
-import { WindowTitlePart } from './elements/WindowTitlePart';
 
 const cssWindowTitleBarSection = css`
   display: flex;

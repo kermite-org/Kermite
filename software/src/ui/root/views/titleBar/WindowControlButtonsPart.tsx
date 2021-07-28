@@ -1,8 +1,10 @@
-import { jsx, css } from 'qx';
+import { css, jsx } from 'qx';
 import { texts } from '~/ui/base';
+import {
+  WindowControlButton,
+  WindowRestartButton,
+} from '~/ui/components_window/elements';
 import { makeWindowControlButtonsModel } from '~/ui/root/views/titleBar/WindowControlButtonsPart.model';
-import { WindowControlButton } from './elements/WindowControlButton';
-import { WindowRestartButton } from './elements/WindowRestartButton';
 
 export const WindowControlButtonsPart = () => {
   const cssButtonsBox = css`
