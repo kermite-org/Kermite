@@ -1,6 +1,10 @@
 import { css, FC, jsx } from 'qx';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 
+type Props = {
+  className?: string;
+};
+
 type ISlotTriggerDisplayText = 'normal' | 'tap' | 'hold' | 'double-tap';
 
 function getSlotTriggerText(
@@ -20,13 +24,7 @@ function getSlotTriggerText(
   }
 }
 
-const style = css`
-  font-size: 14px;
-`;
-
-export const SlotTriggerDisplay: FC<{ className?: string }> = ({
-  className,
-}) => {
+export const SlotTriggerDisplay: FC<Props> = ({ className }) => {
   const { assignEntry, dualModeEditTargetOperationSig: slotSig } = editorModel;
   if (assignEntry?.type === 'dual') {
     const hasPrimary = !!assignEntry.primaryOp;
@@ -55,3 +53,7 @@ export const SlotTriggerDisplay: FC<{ className?: string }> = ({
   }
   return null;
 };
+
+const style = css`
+  font-size: 14px;
+`;

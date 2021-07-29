@@ -12,25 +12,6 @@ import {
 } from '~/ui/components';
 import { useFetcher, fieldSetter } from '~/ui/helpers';
 
-const cssUiSettingsPage = css`
-  background: ${uiTheme.colors.clBackground};
-  color: ${uiTheme.colors.clMainText};
-  height: 100%;
-  padding: 10px;
-  position: relative;
-
-  > * + * {
-    margin-top: 5px;
-  }
-
-  .version-area {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 10px;
-  }
-`;
-
 const uiScaleOptions: ISelectorOption[] = [
   0.7,
   0.8,
@@ -77,7 +58,7 @@ export const UiSettingsPage = () => {
   );
 
   return (
-    <div css={cssUiSettingsPage}>
+    <div css={style}>
       <div>{texts.label_settings_pageTitle}</div>
 
       <Indent>
@@ -139,3 +120,22 @@ export const UiSettingsPage = () => {
     </div>
   );
 };
+
+const style = css`
+  background: ${uiTheme.colors.clBackground};
+  color: ${uiTheme.colors.clMainText};
+  height: 100%;
+  padding: 10px;
+  position: relative;
+
+  > * + * {
+    margin-top: 5px;
+  }
+
+  .version-area {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 10px;
+  }
+`;

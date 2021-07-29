@@ -1,9 +1,24 @@
-import { jsx, css } from 'qx';
+import { jsx, css, FC } from 'qx';
 import { texts, uiTheme } from '~/ui/base';
 import { LinkIndicator } from '~/ui/components';
 import { makeDeviceControlSectionViewModel } from '~/ui/pages/editor-page/ui_bar_deviceControlSection/DeviceControlSectionViewModel';
 
-const cssDeviceControlSection = css`
+export const DeviceControlSection: FC = () => {
+  const vm = makeDeviceControlSectionViewModel();
+  return (
+    <div css={style}>
+      <div
+        className="keyboardName"
+        data-hint={texts.hint_assigner_topBar_connectedKeyboardName}
+      >
+        {vm.currentDeviceKeyboardName}
+      </div>
+      <LinkIndicator isActive={vm.isDeviceConnected} />
+    </div>
+  );
+};
+
+const style = css`
   display: flex;
   align-items: center;
   margin-right: 10px;
@@ -16,18 +31,3 @@ const cssDeviceControlSection = css`
     margin-left: 7px;
   }
 `;
-
-export const DeviceControlSection = () => {
-  const vm = makeDeviceControlSectionViewModel();
-  return (
-    <div css={cssDeviceControlSection}>
-      <div
-        className="keyboardName"
-        data-hint={texts.hint_assigner_topBar_connectedKeyboardName}
-      >
-        {vm.currentDeviceKeyboardName}
-      </div>
-      <LinkIndicator isActive={vm.isDeviceConnected} />
-    </div>
-  );
-};

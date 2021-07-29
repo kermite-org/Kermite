@@ -3,15 +3,6 @@ import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { useConnectedDevicesAttrsPartModel } from '~/ui/pages/firmware-updation-page/models';
 
-const style = css`
-  td + td {
-    padding-left: 20px;
-    max-width: 240px;
-    overflow-x: hidden;
-    white-space: nowrap;
-  }
-`;
-
 export const ConnectedDeviceAttrsPart: FC = () => {
   const { tableData } = useConnectedDevicesAttrsPartModel();
   return (
@@ -34,3 +25,12 @@ export const ConnectedDeviceAttrsPart: FC = () => {
     </div>
   );
 };
+
+const style = css`
+  td + td {
+    padding-left: 20px;
+    max-width: 240px;
+    overflow-x: hidden;
+    white-space: nowrap;
+  }
+`;

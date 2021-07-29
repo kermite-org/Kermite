@@ -1,22 +1,10 @@
-import { jsx, css } from 'qx';
+import { jsx, css, FC } from 'qx';
 import { layouterAppGlobal } from '~/ui/pages/layouter/common';
 
-export const DebugOverlay = () => {
-  const cssDebugOverlay = css`
-    position: absolute;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    opacity: 0.7;
-
-    word-break: break-all;
-    font-size: 14px;
-    margin: 2px;
-  `;
-
+export const DebugOverlay: FC = () => {
   const { debugObject, hasDebugValue } = layouterAppGlobal;
   return (
-    <div css={cssDebugOverlay} qxIf={hasDebugValue}>
+    <div css={style} qxIf={hasDebugValue}>
       {Object.keys(debugObject).map((key) => {
         const value = debugObject[key];
         return (
@@ -28,3 +16,15 @@ export const DebugOverlay = () => {
     </div>
   );
 };
+
+const style = css`
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  opacity: 0.7;
+
+  word-break: break-all;
+  font-size: 14px;
+  margin: 2px;
+`;

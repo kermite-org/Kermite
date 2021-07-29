@@ -1,4 +1,4 @@
-import { jsx, css } from 'qx';
+import { jsx, css, FC } from 'qx';
 import { texts } from '~/ui/base';
 import {
   reflectFieldValue,
@@ -7,29 +7,7 @@ import {
 } from '~/ui/helpers';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 
-const cssDualModeSettingsPart = css`
-  margin-top: 15px;
-
-  table.settingsTable {
-    margin-top: 3px;
-    margin-left: 10px;
-
-    td {
-      padding: 2px 0;
-    }
-
-    td + td {
-      padding-left: 5px;
-    }
-  }
-
-  .msInput {
-    width: 60px;
-    text-align: center;
-  }
-`;
-
-export const DualModeSettingsPart = () => {
+export const DualModeSettingsPart: FC = () => {
   if (editorModel.profileData.settings.assignType === 'single') {
     return null;
   }
@@ -46,7 +24,7 @@ export const DualModeSettingsPart = () => {
   };
 
   return (
-    <div css={cssDualModeSettingsPart}>
+    <div css={style}>
       <div data-hint={texts.hint_assigner_profileConfigModal_dualMode_header}>
         {texts.label_assigner_profileConfigModal_dualMode_header}
       </div>
@@ -116,3 +94,25 @@ export const DualModeSettingsPart = () => {
     </div>
   );
 };
+
+const style = css`
+  margin-top: 15px;
+
+  table.settingsTable {
+    margin-top: 3px;
+    margin-left: 10px;
+
+    td {
+      padding: 2px 0;
+    }
+
+    td + td {
+      padding-left: 5px;
+    }
+  }
+
+  .msInput {
+    width: 60px;
+    text-align: center;
+  }
+`;

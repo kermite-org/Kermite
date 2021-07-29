@@ -10,13 +10,6 @@ import { createModal } from '~/ui/components/overlay';
 
 export const showCommandOutputLogModal = createModal(
   (args: { caption: string; logText: string }) => {
-    const cssContentBody = css`
-      .logTextBox {
-        border: solid 1px #888;
-        height: 400px;
-        overflow-y: scroll;
-      }
-    `;
     return (props: { close: () => void }) => {
       return (
         <ClosableOverlay close={props.close}>
@@ -35,3 +28,11 @@ export const showCommandOutputLogModal = createModal(
     };
   },
 );
+
+const cssContentBody = css`
+  .logTextBox {
+    border: solid 1px #888;
+    height: 400px;
+    overflow-y: scroll;
+  }
+`;

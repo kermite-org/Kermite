@@ -1,24 +1,21 @@
-import { jsx, css } from 'qx';
+import { jsx, css, FC } from 'qx';
 import { IDisplayKeyEntity } from '~/shared';
 import { KeyUnitShape } from '~/ui/components_svg/keyUnitCards/KeyUnitShape';
 
-export const PreviewKeyEntityCard = (props: {
+type Props = {
   keyEntity: IDisplayKeyEntity;
   showKeyId: boolean;
   showKeyIndex: boolean;
+};
+
+export const PreviewKeyEntityCard: FC<Props> = ({
+  keyEntity,
+  showKeyId,
+  showKeyIndex,
 }) => {
-  const ke = props.keyEntity;
+  const ke = keyEntity;
   const pos = { x: ke.x, y: ke.y, r: ke.angle || 0 };
   const { keyId: keyUnitId, keyIndex, shape } = ke;
-
-  const cssKeyShape = css`
-    fill: rgba(0, 0, 0, 0.5);
-  `;
-
-  const cssKeyText = css`
-    fill: #fff;
-    font-size: 4px;
-  `;
 
   return (
     <g
@@ -32,7 +29,7 @@ export const PreviewKeyEntityCard = (props: {
         y={-2}
         text-anchor="middle"
         dominant-baseline="center"
-        qxIf={props.showKeyId}
+        qxIf={showKeyId}
       >
         {keyUnitId}
       </text>
@@ -43,10 +40,19 @@ export const PreviewKeyEntityCard = (props: {
         y={4}
         text-anchor="middle"
         dominant-baseline="center"
-        qxIf={props.showKeyIndex}
+        qxIf={showKeyIndex}
       >
         {keyIndex}
       </text>
     </g>
   );
 };
+
+const cssKeyShape = css`
+  fill: rgba(0, 0, 0, 0.5);
+`;
+
+const cssKeyText = css`
+  fill: #fff;
+  font-size: 4px;
+`;

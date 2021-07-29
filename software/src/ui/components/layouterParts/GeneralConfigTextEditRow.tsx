@@ -1,4 +1,4 @@
-import { jsx, css } from 'qx';
+import { jsx, css, FC } from 'qx';
 import { GeneralInput } from '~/ui/components/atoms';
 import { styleWidthSpec } from '~/ui/components/utils';
 
@@ -15,7 +15,7 @@ type Props = {
   unit?: string;
 };
 
-export const GeneralConfigTextEditRow = ({
+export const GeneralConfigTextEditRow: FC<Props> = ({
   editText,
   valid,
   disabled,
@@ -26,25 +26,23 @@ export const GeneralConfigTextEditRow = ({
   labelWidth,
   inputWidth,
   unit,
-}: Props) => {
-  return (
-    <div css={cssEditRow}>
-      <label style={styleWidthSpec(labelWidth)}>{label}</label>
-      <GeneralInput
-        value={editText}
-        setValue={onValueChanged}
-        disabled={disabled}
-        invalid={!valid}
-        width={inputWidth}
-        onFocus={onFocus}
-        onBlur={onBlur}
-      />
-      <span class="unit">{unit}</span>
-    </div>
-  );
-};
+}) => (
+  <div css={style}>
+    <label style={styleWidthSpec(labelWidth)}>{label}</label>
+    <GeneralInput
+      value={editText}
+      setValue={onValueChanged}
+      disabled={disabled}
+      invalid={!valid}
+      width={inputWidth}
+      onFocus={onFocus}
+      onBlur={onBlur}
+    />
+    <span class="unit">{unit}</span>
+  </div>
+);
 
-const cssEditRow = css`
+const style = css`
   display: flex;
   align-items: center;
 

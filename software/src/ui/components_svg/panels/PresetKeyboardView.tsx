@@ -5,11 +5,13 @@ import { KeyboardSvgFrameWithAutoScaler } from '~/ui/components_svg/frames/Keybo
 import { PresetKeyUnitCard } from '~/ui/components_svg/keyUnitCards/PresetKeyUnitCard';
 import { KeyboardBodyShape } from '~/ui/components_svg/keyboardBody/KeyboardBodyShape';
 
-export type IPresetKeyboardViewProps = {
+type Props = {
   keyUnits: IPresetKeyUnitViewModel[];
   displayArea: IDisplayArea;
   outlineShapes: IDisplayOutlineShape[];
 };
+
+export type IPresetKeyboardViewProps = Props;
 
 const configs = {
   dpiScale: 2,
@@ -19,12 +21,7 @@ const configs = {
   strokeColor: '#0A8',
 };
 
-const style = css`
-  height: 100%;
-  overflow: hidden;
-`;
-
-export const PresetKeyboardView: FC<IPresetKeyboardViewProps> = ({
+export const PresetKeyboardView: FC<Props> = ({
   keyUnits,
   displayArea,
   outlineShapes,
@@ -49,3 +46,8 @@ export const PresetKeyboardView: FC<IPresetKeyboardViewProps> = ({
     </KeyboardSvgFrameWithAutoScaler>
   </div>
 );
+
+const style = css`
+  height: 100%;
+  overflow: hidden;
+`;

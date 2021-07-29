@@ -1,5 +1,27 @@
-import { jsx, css, useLocal } from 'qx';
+import { jsx, css, useLocal, FC } from 'qx';
 import { appUi } from '~/ui/base';
+
+export const DebugOverlay: FC = () => {
+  const baseVisible = appUi.isDevelopment && appUi.hasDebugValue;
+  const state = useLocal({ isOpen: true });
+
+  const toggleOpen = () => {
+    state.isOpen = !state.isOpen;
+  };
+
+  return baseVisible ? (
+    <div>
+      <div css={cssTab} onClick={toggleOpen}>
+        D
+      </div>
+      {state.isOpen && (
+        <div css={cssDebugPane}>
+          <pre>{JSON.stringify(appUi.debugObject, null, '  ')}</pre>
+        </div>
+      )}
+    </div>
+  ) : null;
+};
 
 const cssTab = css`
   position: absolute;
@@ -33,25 +55,3 @@ const cssDebugPane = css`
   font-size: 10px;
   padding-top: 15px;
 `;
-
-export const DebugOverlay = () => {
-  const baseVisible = appUi.isDevelopment && appUi.hasDebugValue;
-  const state = useLocal({ isOpen: true });
-
-  const toggleOpen = () => {
-    state.isOpen = !state.isOpen;
-  };
-
-  return baseVisible ? (
-    <div>
-      <div css={cssTab} onClick={toggleOpen}>
-        D
-      </div>
-      {state.isOpen && (
-        <div css={cssDebugPane}>
-          <pre>{JSON.stringify(appUi.debugObject, null, '  ')}</pre>
-        </div>
-      )}
-    </div>
-  ) : null;
-};

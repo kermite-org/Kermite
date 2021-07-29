@@ -1,11 +1,26 @@
-import { css, jsx } from 'qx';
+import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
 import { KeyAssignEditView } from './KeyAssignEditView';
 import { DeviceControlSection } from './ui_bar_deviceControlSection/DeviceControlSection';
 import { ProfileManagementPart } from './ui_bar_profileManagement/ProfileManagementPart';
 import { ProfileConfigratuionModalLayer } from './ui_modal_profileConfiguration';
 
-const cssEditorPage = css`
+export const EditorPage: FC = () => {
+  return (
+    <div css={style}>
+      <div className="topRow">
+        <ProfileManagementPart className="profile-management-part" />
+        <DeviceControlSection />
+      </div>
+      <div className="mainRow">
+        <KeyAssignEditView />
+      </div>
+      <ProfileConfigratuionModalLayer />
+    </div>
+  );
+};
+
+const style = css`
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -32,18 +47,3 @@ const cssEditorPage = css`
     }
   }
 `;
-
-export function EditorPage() {
-  return (
-    <div css={cssEditorPage}>
-      <div className="topRow">
-        <ProfileManagementPart className="profile-management-part" />
-        <DeviceControlSection />
-      </div>
-      <div className="mainRow">
-        <KeyAssignEditView />
-      </div>
-      <ProfileConfigratuionModalLayer />
-    </div>
-  );
-}

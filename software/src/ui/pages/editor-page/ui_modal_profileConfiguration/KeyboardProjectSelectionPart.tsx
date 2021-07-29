@@ -1,17 +1,9 @@
-import { css, jsx } from 'qx';
+import { css, FC, jsx } from 'qx';
 import { uniqueArrayItemsByField } from '~/shared';
 import { ISelectorOption, texts } from '~/ui/base';
 import { useProjectResourceInfos } from '~/ui/commonModels';
 import { GeneralSelector } from '~/ui/components';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
-
-const cssAttrsRow = css`
-  display: flex;
-  align-items: center;
-  > * + * {
-    margin-left: 10px;
-  }
-`;
 
 function makeTargetProjectSelectOptions(): ISelectorOption[] {
   const projectInfos = useProjectResourceInfos('projectsSortedByKeyboardName');
@@ -35,13 +27,13 @@ function makeTargetProjectSelectOptions(): ISelectorOption[] {
   return options;
 }
 
-export const KeyboardProjectSelectionPart = () => {
+export const KeyboardProjectSelectionPart: FC = () => {
   const options = makeTargetProjectSelectOptions();
   const value = editorModel.profileData.projectId || '';
   const setValue = editorModel.changeProjectId;
 
   return (
-    <div css={cssAttrsRow}>
+    <div css={style}>
       <div data-hint={texts.hint_assigner_profileConfigModal_assignModel}>
         target project
       </div>
@@ -51,3 +43,11 @@ export const KeyboardProjectSelectionPart = () => {
     </div>
   );
 };
+
+const style = css`
+  display: flex;
+  align-items: center;
+  > * + * {
+    margin-left: 10px;
+  }
+`;

@@ -1,4 +1,4 @@
-import { css, jsx } from 'qx';
+import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { uiStatusModel } from '~/ui/commonModels/UiStatusModel';
 import { ClosableOverlay, CommonDialogFrame } from '~/ui/components';
@@ -6,7 +6,7 @@ import { KeyboardProjectSelectionPart } from '~/ui/pages/editor-page/ui_modal_pr
 import { ShiftCancelOptionPart } from '~/ui/pages/editor-page/ui_modal_profileConfiguration/ShiftCancelOptionPart';
 import { AssignTypeSelectionPart } from './AssignTypeSelectionPart';
 
-export const ProfileConfigratuionModalLayer = () => {
+export const ProfileConfigratuionModalLayer: FC = () => {
   const uiStatus = uiStatusModel.status;
   const visible = uiStatus.profileConfigModalVisible;
   const closeModal = () => {
@@ -16,16 +16,6 @@ export const ProfileConfigratuionModalLayer = () => {
   if (!visible) {
     return null;
   }
-
-  const cssDialogContent = css`
-    margin: 10px;
-    color: black;
-    min-height: 140px;
-
-    > * + * {
-      margin-top: 10px;
-    }
-  `;
 
   return (
     <ClosableOverlay close={closeModal}>
@@ -44,3 +34,13 @@ export const ProfileConfigratuionModalLayer = () => {
     </ClosableOverlay>
   );
 };
+
+const cssDialogContent = css`
+  margin: 10px;
+  color: black;
+  min-height: 140px;
+
+  > * + * {
+    margin-top: 10px;
+  }
+`;

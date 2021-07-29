@@ -1,4 +1,4 @@
-import { jsx } from 'qx';
+import { FC, jsx } from 'qx';
 import { HFlex, CheckBox } from '~/ui/components';
 import {
   ConfigSubContent,
@@ -10,7 +10,7 @@ import {
 import { useTransGroupEditPanelModel } from '~/ui/pages/layouter/views/sidePanels/models/TransGroupEditPanel.model';
 import { TransGroupListPart } from '~/ui/pages/layouter/views/sidePanels/organisms/TransGroupListPart';
 
-export const TransGroupEditPanel = () => {
+export const TransGroupEditPanel: FC = () => {
   const {
     vmX,
     vmY,

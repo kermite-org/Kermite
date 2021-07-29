@@ -3,14 +3,6 @@ import { texts } from '~/ui/base';
 import { useProjectResourceInfos } from '~/ui/commonModels';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 
-const style = css`
-  padding: 5px;
-
-  > * + * {
-    margin-top: 5px;
-  }
-`;
-
 export const ProfileConfigurationPart = () => {
   const projectInfos = useProjectResourceInfos('projectsSortedByKeyboardName');
   const projectId = editorModel.profileData.projectId;
@@ -28,3 +20,11 @@ export const ProfileConfigurationPart = () => {
     </div>
   );
 };
+
+const style = css`
+  padding: 5px;
+
+  > * + * {
+    margin-top: 5px;
+  }
+`;

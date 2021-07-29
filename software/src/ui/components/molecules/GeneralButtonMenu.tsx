@@ -6,6 +6,46 @@ type Props = {
   menuItems: IGeneralMenuItem[];
 };
 
+const useMenuStateModel = () => {
+  const state = useLocal({ isOpen: false });
+  const openMenu = () => (state.isOpen = true);
+  const closeMenu = () => (state.isOpen = false);
+  return { isOpen: state.isOpen, openMenu, closeMenu };
+};
+
+export const GeneralButtonMenu: FC<Props> = ({ menuItems }) => {
+  const { isOpen, openMenu, closeMenu } = useMenuStateModel();
+  return (
+    <div>
+      <div css={cssMenuOverlay} onClick={closeMenu} qxIf={isOpen} />
+      <div css={cssMenuBase}>
+        <GeneralButtonMenuButton handler={openMenu} active={isOpen}>
+          <i class="fa fa-bars" />
+        </GeneralButtonMenuButton>
+        <div css={cssMenuPanel} qxIf={isOpen}>
+          {menuItems.map((item, idx) =>
+            item.type === 'separator' ? (
+              <hr key={idx} />
+            ) : (
+              <div
+                key={idx}
+                class="menuEntry"
+                onClick={() => {
+                  item.handler();
+                  closeMenu();
+                }}
+                data-disabled={item.disabled}
+              >
+                {item.text}
+              </div>
+            ),
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const cssMenuBase = css`
   position: relative;
 `;
@@ -47,43 +87,3 @@ const cssMenuOverlay = css`
   width: 100%;
   height: 100%;
 `;
-
-const useMenuStateModel = () => {
-  const state = useLocal({ isOpen: false });
-  const openMenu = () => (state.isOpen = true);
-  const closeMenu = () => (state.isOpen = false);
-  return { isOpen: state.isOpen, openMenu, closeMenu };
-};
-
-export const GeneralButtonMenu: FC<Props> = ({ menuItems }) => {
-  const { isOpen, openMenu, closeMenu } = useMenuStateModel();
-  return (
-    <div>
-      <div css={cssMenuOverlay} onClick={closeMenu} qxIf={isOpen} />
-      <div css={cssMenuBase}>
-        <GeneralButtonMenuButton handler={openMenu} active={isOpen}>
-          <i class="fa fa-bars" />
-        </GeneralButtonMenuButton>
-        <div css={cssMenuPanel} qxIf={isOpen}>
-          {menuItems.map((item, idx) =>
-            item.type === 'separator' ? (
-              <hr key={idx} />
-            ) : (
-              <div
-                key={idx}
-                class="menuEntry"
-                onClick={() => {
-                  item.handler();
-                  closeMenu();
-                }}
-                data-disabled={item.disabled}
-              >
-                {item.text}
-              </div>
-            ),
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};

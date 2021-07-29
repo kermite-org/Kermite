@@ -1,68 +1,15 @@
 import { css, FC, jsx } from 'qx';
 import { texts, uiTheme, IEditKeyUnitCardViewModel } from '~/ui/base';
+import { KeyTextLabel } from '~/ui/components_svg/keyUnitCards/EditKeyUnitCard.KeyTextLabel';
 import { KeyUnitShape } from '~/ui/components_svg/keyUnitCards/KeyUnitShape';
 
-const cssKeyText = css`
-  fill: ${uiTheme.colors.clKeyUnitLegend};
-
-  &[data-is-weak] {
-    fill: ${uiTheme.colors.clKeyUnitLegendWeak};
-  }
-
-  pointer-events: none;
-`;
-
-export const KeyTextLabel: FC<{
-  text: string;
-  xpos: number;
-  ypos: number;
-  isWeak?: boolean;
-  isBold?: boolean;
-}> = ({ text, xpos, ypos, isWeak, isBold }) => {
-  const getFontSize = (text: string) => {
-    if (text.length === 1) {
-      return '8px';
-    } else {
-      return '5px';
-    }
-  };
-
-  return (
-    <text
-      css={cssKeyText}
-      x={xpos}
-      y={ypos}
-      font-size={getFontSize(text)}
-      font-weight={isBold ? 'bold' : 'normal'}
-      data-is-weak={isWeak}
-      text-anchor="middle"
-      dominant-baseline="center"
-    >
-      {text}
-    </text>
-  );
-};
-
-const cssKeyShape = css`
-  cursor: pointer;
-  fill: ${uiTheme.colors.clKeyUnitFace};
-
-  &[data-current] {
-    fill: ${uiTheme.colors.clSelectHighlight};
-  }
-  &[data-hold] {
-    fill: ${uiTheme.colors.clHoldHighlight};
-  }
-  &:hover {
-    opacity: 0.7;
-  }
-`;
-
-export function EditKeyUnitCard(props: {
+type Props = {
   keyUnit: IEditKeyUnitCardViewModel;
   showLayerDefaultAssign: boolean;
-}) {
-  const {
+};
+
+export const EditKeyUnitCard: FC<Props> = ({
+  keyUnit: {
     keyUnitId,
     pos,
     isCurrent,
@@ -74,9 +21,9 @@ export function EditKeyUnitCard(props: {
     isHold,
     shape,
     shiftHold,
-  } = props.keyUnit;
-  const { showLayerDefaultAssign } = props;
-
+  },
+  showLayerDefaultAssign,
+}) => {
   const textShown = isLayerFallback ? showLayerDefaultAssign : true;
 
   const onMouseDown = (e: MouseEvent) => {
@@ -96,7 +43,7 @@ export function EditKeyUnitCard(props: {
     >
       <KeyUnitShape
         shape={shape}
-        css={cssKeyShape}
+        css={style}
         data-current={isCurrent}
         data-hold={isHold}
         onMouseDown={onMouseDown}
@@ -123,4 +70,19 @@ export function EditKeyUnitCard(props: {
       />
     </g>
   );
-}
+};
+
+const style = css`
+  cursor: pointer;
+  fill: ${uiTheme.colors.clKeyUnitFace};
+
+  &[data-current] {
+    fill: ${uiTheme.colors.clSelectHighlight};
+  }
+  &[data-hold] {
+    fill: ${uiTheme.colors.clHoldHighlight};
+  }
+  &:hover {
+    opacity: 0.7;
+  }
+`;

@@ -1,10 +1,38 @@
-import { css, jsx } from 'qx';
+import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import {
   IPlayerModel,
   uiStatusModel,
   useDeviceStatusModel,
 } from '~/ui/commonModels';
+
+type Props = {
+  playerModel: IPlayerModel;
+};
+
+export const LayerStateView: FC<Props> = ({ playerModel }) => {
+  const { isConnected } = useDeviceStatusModel();
+  const visible = uiStatusModel.settings.showLayersDynamic;
+  return (
+    <div
+      css={cssLayerStateView}
+      data-hint={texts.hint_assigner_keyboardView_layerStates}
+      qxIf={visible}
+    >
+      {playerModel.layerStackItems.map((la) => {
+        return (
+          <div
+            key={la.layerId}
+            css={cssLayerCard}
+            data-active={(isConnected && la.isActive) || false}
+          >
+            {la.layerName}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
 
 const cssLayerStateView = css`
   position: absolute;
@@ -32,28 +60,3 @@ const cssLayerCard = css`
   border-radius: 2px;
   overflow: hidden;
 `;
-
-export const LayerStateView = (props: { playerModel: IPlayerModel }) => {
-  const { isConnected } = useDeviceStatusModel();
-  const visible = uiStatusModel.settings.showLayersDynamic;
-
-  return (
-    <div
-      css={cssLayerStateView}
-      data-hint={texts.hint_assigner_keyboardView_layerStates}
-      qxIf={visible}
-    >
-      {props.playerModel.layerStackItems.map((la) => {
-        return (
-          <div
-            key={la.layerId}
-            css={cssLayerCard}
-            data-active={(isConnected && la.isActive) || false}
-          >
-            {la.layerName}
-          </div>
-        );
-      })}
-    </div>
-  );
-};

@@ -4,13 +4,6 @@ import { uiStatusModel } from '~/ui/commonModels';
 import { CheckBoxLine } from '~/ui/components';
 import { fieldSetter } from '~/ui/helpers';
 
-const style = css`
-  margin: 0 5px;
-  > div + div {
-    margin-top: 2px;
-  }
-`;
-
 export const BehaviorOptionsPartB: FC = () => {
   const { settings } = uiStatusModel;
 
@@ -25,3 +18,10 @@ export const BehaviorOptionsPartB: FC = () => {
     </div>
   );
 };
+
+const style = css`
+  margin: 0 5px;
+  > div + div {
+    margin-top: 2px;
+  }
+`;

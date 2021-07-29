@@ -4,92 +4,6 @@ import { FlatListSelector } from '~/ui/components/atoms/FlatListSelector';
 import { ClosableOverlay } from '~/ui/components/modals/CommonDialogParts';
 import { reflectValue } from '~/ui/helpers';
 
-const cssPanel = css`
-  background: #fff;
-  width: 500px;
-  border: solid 3px #08f;
-
-  > .panelHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #08f;
-    color: #fff;
-    padding: 4px 1px;
-
-    > .titleText {
-      margin-left: 4px;
-    }
-
-    > .closeButton {
-      cursor: pointer;
-      padding: 0 4px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 24px;
-      height: 24px;
-    }
-  }
-
-  > .panelBody {
-    padding: 15px;
-  }
-`;
-
-const cssProjectLayoutContent = css`
-  > .primaryRow {
-    display: flex;
-
-    > .column {
-      padding: 10px;
-      border: solid 1px #ccc;
-      display: flex;
-      flex-direction: column;
-
-      > * + * {
-        margin-top: 5px;
-      }
-    }
-
-    > .listColumn {
-      flex-basis: 100%;
-      flex-grow: 1;
-    }
-  }
-
-  > .bottomRow {
-    margin-top: 10px;
-    display: flex;
-
-    > .filePathText {
-      flex-grow: 1;
-      height: 28px;
-      line-height: 28px;
-    }
-  }
-
-  .keyboardNameText {
-    height: 28px;
-    line-height: 28px;
-  }
-
-  input.layoutNameEdit {
-    width: 100px;
-    height: 28px;
-    padding-left: 4px;
-    width: 150px;
-  }
-
-  button {
-    height: 28px;
-    width: 80px;
-    padding: 5px;
-    margin: 2px;
-    cursor: pointer;
-  }
-`;
-
 export interface IProjectAttachmentFileSelectorModalModel {
   titleText: string;
   closeModal(): void;
@@ -192,3 +106,89 @@ export const ProjectAttachmentFileSelectorModal = (props: {
     </ClosableOverlay>
   );
 };
+
+const cssPanel = css`
+  background: #fff;
+  width: 500px;
+  border: solid 3px #08f;
+
+  > .panelHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #08f;
+    color: #fff;
+    padding: 4px 1px;
+
+    > .titleText {
+      margin-left: 4px;
+    }
+
+    > .closeButton {
+      cursor: pointer;
+      padding: 0 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  > .panelBody {
+    padding: 15px;
+  }
+`;
+
+const cssProjectLayoutContent = css`
+  > .primaryRow {
+    display: flex;
+
+    > .column {
+      padding: 10px;
+      border: solid 1px #ccc;
+      display: flex;
+      flex-direction: column;
+
+      > * + * {
+        margin-top: 5px;
+      }
+    }
+
+    > .listColumn {
+      flex-basis: 100%;
+      flex-grow: 1;
+    }
+  }
+
+  > .bottomRow {
+    margin-top: 10px;
+    display: flex;
+
+    > .filePathText {
+      flex-grow: 1;
+      height: 28px;
+      line-height: 28px;
+    }
+  }
+
+  .keyboardNameText {
+    height: 28px;
+    line-height: 28px;
+  }
+
+  input.layoutNameEdit {
+    width: 100px;
+    height: 28px;
+    padding-left: 4px;
+    width: 150px;
+  }
+
+  button {
+    height: 28px;
+    width: 80px;
+    padding: 5px;
+    margin: 2px;
+    cursor: pointer;
+  }
+`;

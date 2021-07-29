@@ -1,4 +1,4 @@
-import { jsx, css } from 'qx';
+import { jsx, css, FC } from 'qx';
 import {
   GeneralButton,
   GeneralSelector,
@@ -7,29 +7,7 @@ import {
 } from '~/ui/components';
 import { makeEditMenuBarViewModel } from '~/ui/pages/layouter/views/editMenuBar/EditMenuBar.model';
 
-const cssEditMenuBar = css`
-  display: flex;
-  flex-wrap: wrap;
-
-  > * + * {
-    margin-left: 40px;
-  }
-
-  > .buttonsBox {
-    display: flex;
-    > * + * {
-      margin-left: 5px;
-    }
-  }
-  button {
-    width: 50px;
-    padding: 5px;
-    cursor: pointer;
-    user-select: none;
-  }
-`;
-
-export const EditMenuBar = () => {
+export const EditMenuBar: FC = () => {
   const {
     canUndo,
     canRedo,
@@ -46,7 +24,7 @@ export const EditMenuBar = () => {
   } = makeEditMenuBarViewModel();
 
   return (
-    <div class={cssEditMenuBar}>
+    <div class={style}>
       <RibbonSelector
         options={editModeVm.options}
         value={editModeVm.value}
@@ -107,3 +85,25 @@ export const EditMenuBar = () => {
     </div>
   );
 };
+
+const style = css`
+  display: flex;
+  flex-wrap: wrap;
+
+  > * + * {
+    margin-left: 40px;
+  }
+
+  > .buttonsBox {
+    display: flex;
+    > * + * {
+      margin-left: 5px;
+    }
+  }
+  button {
+    width: 50px;
+    padding: 5px;
+    cursor: pointer;
+    user-select: none;
+  }
+`;

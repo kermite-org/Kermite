@@ -3,39 +3,6 @@ import { texts } from '~/ui/base';
 import { GeneralButton, GeneralSelector } from '~/ui/components';
 import { useFirmwareUpdationPartModel } from '~/ui/pages/firmware-updation-page/models';
 
-const style = css`
-  > * + * {
-    margin-top: 10px;
-  }
-
-  .operationAlert {
-  }
-
-  .mainRow {
-    > * + * {
-      margin-left: 5px;
-    }
-  }
-
-  .statusRow {
-    > div {
-      display: flex;
-      align-items: center;
-      > * + * {
-        margin-left: 10px;
-      }
-    }
-  }
-
-  button {
-    padding: 0 5px;
-  }
-
-  .note {
-    margin-top: 10px;
-  }
-`;
-
 export const FirmwareUpdationPart: FC = () => {
   const {
     phase,
@@ -134,3 +101,36 @@ export const FirmwareUpdationPart: FC = () => {
     </div>
   );
 };
+
+const style = css`
+  > * + * {
+    margin-top: 10px;
+  }
+
+  .operationAlert {
+  }
+
+  .mainRow {
+    > * + * {
+      margin-left: 5px;
+    }
+  }
+
+  .statusRow {
+    > div {
+      display: flex;
+      align-items: center;
+      > * + * {
+        margin-left: 10px;
+      }
+    }
+  }
+
+  button {
+    padding: 0 5px;
+  }
+
+  .note {
+    margin-top: 10px;
+  }
+`;

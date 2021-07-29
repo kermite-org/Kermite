@@ -1,4 +1,4 @@
-import { css, jsx } from 'qx';
+import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
 import { uiStatusModel } from '~/ui/commonModels';
 import { editorPageModel } from '~/ui/pages/editor-page/models/editorPageModel';
@@ -10,6 +10,42 @@ import { TestInputArea } from './ui_bar_testInputArea/TestInputArea';
 import { AssignEditSection } from './ui_editor_assignsSection';
 import { KeyboardSection } from './ui_editor_keyboardSection/KeyboardSection';
 import { LayersSection } from './ui_editor_layerManagement';
+
+export const KeyAssignEditView: FC = () => {
+  return (
+    <div css={cssKeyAssignEditView}>
+      <div
+        css={cssEditTopBarBox}
+        qxIf={uiStatusModel.settings.showTestInputArea}
+      >
+        <TestInputArea />
+      </div>
+      <div css={cssEditMainRow}>
+        <div css={cssEditMainColumn}>
+          <div class="keyboardPartBox">
+            <KeyboardSection />
+          </div>
+          <div class="assignPartBox">
+            <AssignEditSection />
+          </div>
+          {editorPageModel.routingPanelVisible && <ActionRoutingPanel />}
+        </div>
+        <div css={cssEditSideBarColumn}>
+          <div class="topPartBox">
+            <BehaviorOptionsPartA />
+          </div>
+          <div class="layersPartBox">
+            <LayersSection />
+          </div>
+          <div class="restPartBox">
+            <ProfileConfigurationPart />
+            <BehaviorOptionsPartB />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const localStyleConstants = {
   editorPartMargin: '4px',
@@ -111,39 +147,3 @@ const cssEditSideBarColumn = css`
     flex-grow: 1;
   }
 `;
-
-export const KeyAssignEditView = () => {
-  return (
-    <div css={cssKeyAssignEditView}>
-      <div
-        css={cssEditTopBarBox}
-        qxIf={uiStatusModel.settings.showTestInputArea}
-      >
-        <TestInputArea />
-      </div>
-      <div css={cssEditMainRow}>
-        <div css={cssEditMainColumn}>
-          <div class="keyboardPartBox">
-            <KeyboardSection />
-          </div>
-          <div class="assignPartBox">
-            <AssignEditSection />
-          </div>
-          {editorPageModel.routingPanelVisible && <ActionRoutingPanel />}
-        </div>
-        <div css={cssEditSideBarColumn}>
-          <div class="topPartBox">
-            <BehaviorOptionsPartA />
-          </div>
-          <div class="layersPartBox">
-            <LayersSection />
-          </div>
-          <div class="restPartBox">
-            <ProfileConfigurationPart />
-            <BehaviorOptionsPartB />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};

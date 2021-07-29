@@ -3,33 +3,6 @@ import { texts } from '~/ui/base';
 import { GeneralSelector, CheckBox, Slider } from '~/ui/components';
 import { useCustomParametersPartModel } from '~/ui/pages/firmware-updation-page/models';
 
-const style = css`
-  > .parameters-list-outer {
-    display: inline-block;
-    margin-top: 10px;
-
-    > .parameters-list {
-      display: grid;
-      grid-template-columns: auto auto;
-      gap: 8px 20px;
-      align-items: center;
-
-      > .row {
-        display: contents;
-      }
-    }
-  }
-
-  > .button-row {
-    margin-top: 10px;
-    display: flex;
-    button {
-      padding: 2px 5px;
-      cursor: pointer;
-    }
-  }
-`;
-
 export const CustomParametersPart: FC = () => {
   const {
     parameterModels,
@@ -86,3 +59,30 @@ export const CustomParametersPart: FC = () => {
     </div>
   );
 };
+
+const style = css`
+  > .parameters-list-outer {
+    display: inline-block;
+    margin-top: 10px;
+
+    > .parameters-list {
+      display: grid;
+      grid-template-columns: auto auto;
+      gap: 8px 20px;
+      align-items: center;
+
+      > .row {
+        display: contents;
+      }
+    }
+  }
+
+  > .button-row {
+    margin-top: 10px;
+    display: flex;
+    button {
+      padding: 2px 5px;
+      cursor: pointer;
+    }
+  }
+`;

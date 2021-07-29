@@ -1,9 +1,22 @@
-import { jsx, css } from 'qx';
+import { jsx, css, FC } from 'qx';
 import { uiTheme } from '~/ui/base';
 import { UiLayouterCore } from '~/ui/pages/layouter';
 import { LayoutManagerTopBar } from '~/ui/pages/layouter-page/LayoutManagerTopBar';
 
-const cssBase = css`
+export const UiLayouterPageComponent: FC = () => {
+  return (
+    <div css={style}>
+      <div className="topRow">
+        <LayoutManagerTopBar />
+      </div>
+      <div className="mainRow">
+        <UiLayouterCore.Component />
+      </div>
+    </div>
+  );
+};
+
+const style = css`
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -23,15 +36,3 @@ const cssBase = css`
     /* margin: 4px; */
   }
 `;
-export const UiLayouterPageComponent = () => {
-  return (
-    <div css={cssBase}>
-      <div className="topRow">
-        <LayoutManagerTopBar />
-      </div>
-      <div className="mainRow">
-        <UiLayouterCore.Component />
-      </div>
-    </div>
-  );
-};

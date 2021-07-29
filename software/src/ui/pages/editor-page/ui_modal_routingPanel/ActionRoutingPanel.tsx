@@ -12,70 +12,6 @@ import {
   getRoutingTargetModifierOptions,
 } from '~/ui/pages/editor-page/ui_modal_routingPanel/ActionRoutingPanelModel';
 
-const style = css`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  > .panel {
-    position: absolute;
-    width: 100%;
-    max-width: 700px;
-    height: calc(100% - 40px);
-    max-height: 700px;
-    padding: 15px 20px;
-    border: solid 1px ${uiTheme.colors.clPrimary};
-    background: ${uiTheme.colors.clPanelBox};
-    display: flex;
-    flex-direction: column;
-
-    > .closeButton {
-      position: absolute;
-      right: 0;
-      top: 0;
-      width: 24px;
-      height: 24px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: 5px;
-      cursor: pointer;
-      font-size: 18px;
-    }
-
-    > .topArea {
-      flex-shrink: 0;
-      display: flex;
-      gap: 20px;
-      align-items: center;
-    }
-
-    > .mainArea {
-      margin-top: 10px;
-      flex-grow: 1;
-      overflow-y: scroll;
-      border: solid 1px #888;
-      padding: 10px;
-
-      > .mappingEntriesTable {
-        flex-grow: 1;
-        overflow-y: scroll;
-
-        border-collapse: collapse;
-        td {
-          border: solid 1px #888;
-          padding: 4px 10px;
-        }
-      }
-    }
-  }
-`;
-
 export const ActionRoutingPanel: FcWithClassName = ({ className }) => {
   const { mappingEntries } = editorModel.profileData;
 
@@ -176,3 +112,67 @@ export const ActionRoutingPanel: FcWithClassName = ({ className }) => {
     </div>
   );
 };
+
+const style = css`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  > .panel {
+    position: absolute;
+    width: 100%;
+    max-width: 700px;
+    height: calc(100% - 40px);
+    max-height: 700px;
+    padding: 15px 20px;
+    border: solid 1px ${uiTheme.colors.clPrimary};
+    background: ${uiTheme.colors.clPanelBox};
+    display: flex;
+    flex-direction: column;
+
+    > .closeButton {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 5px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    > .topArea {
+      flex-shrink: 0;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    > .mainArea {
+      margin-top: 10px;
+      flex-grow: 1;
+      overflow-y: scroll;
+      border: solid 1px #888;
+      padding: 10px;
+
+      > .mappingEntriesTable {
+        flex-grow: 1;
+        overflow-y: scroll;
+
+        border-collapse: collapse;
+        td {
+          border: solid 1px #888;
+          padding: 4px 10px;
+        }
+      }
+    }
+  }
+`;
