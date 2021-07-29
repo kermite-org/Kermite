@@ -1,15 +1,15 @@
-import { jsx } from 'qx';
+import { FC, jsx } from 'qx';
 import { HFlex, GeneralSelector } from '~/ui/components';
 import {
   ConfigSubContent,
   ConfigSubHeader,
   ConfigVStack,
-} from '~/ui/pages/layouter/views/sidePanels/atoms';
-import { ConfigPanelBox } from '~/ui/pages/layouter/views/sidePanels/atoms/ConfigPanelBox';
+  ConfigPanelBox,
+  GeneralConfigTextEditRow,
+} from '~/ui/components/layouterParts';
 import { useOutlineEditPanelModel } from '~/ui/pages/layouter/views/sidePanels/models/OutlineEditPanel.model';
-import { GeneralConfigTextEditRow } from '~/ui/pages/layouter/views/sidePanels/molecules/GeneralConfigTextEditRow';
 
-export const OutlineEditPanel = () => {
+export const OutlineEditPanel: FC = () => {
   const {
     vmX,
     vmY,

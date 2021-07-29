@@ -8,6 +8,21 @@ interface Props {
   disabled?: boolean;
 }
 
+export const CheckBox: FC<Props> = ({
+  className,
+  checked,
+  setChecked,
+  disabled,
+}) => (
+  <div
+    css={style}
+    classNames={[className, checked && '--checked', disabled && '--disabled']}
+    onClick={() => setChecked(!checked)}
+  >
+    <i class="fa fa-check mark" />
+  </div>
+);
+
 const style = css`
   border: solid 1px ${uiTheme.colors.clPrimary};
   background: ${uiTheme.colors.clControlBase};
@@ -24,7 +39,7 @@ const style = css`
     visibility: hidden;
   }
 
-  &[data-checked] {
+  &.--checked {
     background: ${uiTheme.colors.clPrimary};
     > .mark {
       visibility: visible;
@@ -35,25 +50,8 @@ const style = css`
     opacity: 0.7;
   }
 
-  &[data-disabled] {
+  &.--disabled {
     opacity: 0.5;
     pointer-events: none;
   }
 `;
-
-export const CheckBox: FC<Props> = ({
-  className,
-  checked,
-  setChecked,
-  disabled,
-}) => (
-  <div
-    css={style}
-    className={className}
-    data-checked={checked}
-    onClick={() => setChecked(!checked)}
-    data-disabled={disabled}
-  >
-    <i class="fa fa-check mark" />
-  </div>
-);

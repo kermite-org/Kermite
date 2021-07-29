@@ -1,5 +1,13 @@
 import { css, FC, jsx } from 'qx';
 
+export const LoadingAnimationIcon: FC = () => (
+  <div css={style}>
+    <div class="loading">
+      <div class="spinner"></div>
+    </div>
+  </div>
+);
+
 const style = css`
   .spinner {
     width: 100px;
@@ -18,11 +26,3 @@ const style = css`
     }
   }
 `;
-
-export const LoadingAnimationIcon: FC = () => (
-  <div css={style}>
-    <div class="loading">
-      <div class="spinner"></div>
-    </div>
-  </div>
-);

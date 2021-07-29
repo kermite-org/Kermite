@@ -3,14 +3,6 @@ import { ISelectorOption, texts } from '~/ui/base';
 import { uiStatusModel } from '~/ui/commonModels';
 import { RibbonSelector } from '~/ui/components';
 
-const style = css`
-  padding: 10px;
-
-  > .selector {
-    margin-top: 5px;
-  }
-`;
-
 const options: ISelectorOption[] = [
   { label: 'EDIT', value: 'edit' },
   { label: 'LIVE', value: 'live' },
@@ -36,3 +28,11 @@ export const BehaviorOptionsPartA: FC = () => {
     </div>
   );
 };
+
+const style = css`
+  padding: 10px;
+
+  > .selector {
+    margin-top: 5px;
+  }
+`;

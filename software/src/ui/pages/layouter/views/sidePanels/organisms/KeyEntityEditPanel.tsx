@@ -1,16 +1,10 @@
-import { jsx, css } from 'qx';
+import { jsx, css, FC } from 'qx';
 import { HFlex, GeneralSelector } from '~/ui/components';
-import { ConfigVStack } from '~/ui/pages/layouter/views/sidePanels/atoms';
-import { ConfigPanelBox } from '~/ui/pages/layouter/views/sidePanels/atoms/ConfigPanelBox';
+import { ConfigVStack, ConfigPanelBox } from '~/ui/components/layouterParts';
+import { GeneralConfigTextEditRow } from '~/ui/components/layouterParts/GeneralConfigTextEditRow';
 import { useKeyEntityEditPanelModel } from '~/ui/pages/layouter/views/sidePanels/models/KeyEntityEditPanel.model';
-import { GeneralConfigTextEditRow } from '~/ui/pages/layouter/views/sidePanels/molecules/GeneralConfigTextEditRow';
 
-const cssErrorText = css`
-  color: red;
-  font-size: 14px;
-`;
-
-export const KeyEntityEditPanel = () => {
+export const KeyEntityEditPanel: FC = () => {
   const { keyEntityAttrsVm: vm } = useKeyEntityEditPanelModel();
   return (
     <ConfigPanelBox headerText="key properties">
@@ -52,3 +46,8 @@ export const KeyEntityEditPanel = () => {
     </ConfigPanelBox>
   );
 };
+
+const cssErrorText = css`
+  color: red;
+  font-size: 14px;
+`;

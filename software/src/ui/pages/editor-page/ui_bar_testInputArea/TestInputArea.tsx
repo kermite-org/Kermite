@@ -1,17 +1,12 @@
-import { css, jsx, useLocal } from 'qx';
+import { css, FC, jsx, useLocal } from 'qx';
 import { texts } from '~/ui/base';
 import { GeneralInput, GeneralButton } from '~/ui/components';
 import { makeTestInputAreaViewModel } from '~/ui/pages/editor-page/ui_bar_testInputArea/TestInputAreaViewModel';
 
-const cssTestInputArea = css`
-  margin: 5px;
-  display: flex;
-`;
-
-export const TestInputArea = () => {
+export const TestInputArea: FC = () => {
   const vm = useLocal(makeTestInputAreaViewModel);
   return (
-    <div css={cssTestInputArea}>
+    <div css={style}>
       <GeneralInput
         value={vm.text}
         setValue={vm.setText}
@@ -26,3 +21,8 @@ export const TestInputArea = () => {
     </div>
   );
 };
+
+const style = css`
+  margin: 5px;
+  display: flex;
+`;

@@ -1,12 +1,26 @@
 import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
+import { PresetLayersBox } from '~/ui/components';
 import { PresetKeyboardView } from '~/ui/components_svg';
-import { PresetLayersBox } from '~/ui/pages/preset-browser-page/components/PresetLayersBox';
 import { IPresetKeyboardSectionViewModel } from '~/ui/pages/preset-browser-page/viewModels/PresetKeyboardSectionViewModel';
 
 type Props = {
   viewModel: IPresetKeyboardSectionViewModel;
 };
+
+export const PresetKeyboardSection: FC<Props> = ({
+  viewModel: { keyboard, layerList },
+}) => (
+  <div css={style}>
+    <div class="keyboardPart">
+      <PresetKeyboardView {...keyboard} />
+    </div>
+    <div class="layersPart">
+      <h3>{texts.label_presetBrowser_layers}</h3>
+      <PresetLayersBox {...layerList} className="layersBox" />
+    </div>
+  </div>
+);
 
 const style = css`
   height: 300px;
@@ -32,17 +46,3 @@ const style = css`
     }
   }
 `;
-
-export const PresetKeyboardSection: FC<Props> = ({
-  viewModel: { keyboard, layerList },
-}) => (
-  <div css={style}>
-    <div class="keyboardPart">
-      <PresetKeyboardView {...keyboard} />
-    </div>
-    <div class="layersPart">
-      <h3>{texts.label_presetBrowser_layers}</h3>
-      <PresetLayersBox {...layerList} className="layersBox" />
-    </div>
-  </div>
-);

@@ -1,23 +1,17 @@
-import { jsx, css } from 'qx';
+import { jsx, css, FC } from 'qx';
 import { editReader } from '~/ui/pages/layouter/models';
 import { DesignConfigurationPanel } from '~/ui/pages/layouter/views/sidePanels/organisms/DesignConfigurationPanel';
 import { KeyEntityEditPanel } from '~/ui/pages/layouter/views/sidePanels/organisms/KeyEntityEditPanel';
 import { OutlineEditPanel } from '~/ui/pages/layouter/views/sidePanels/organisms/OutlineEditPanel';
 import { TransGroupEditPanel } from '~/ui/pages/layouter/views/sidePanels/organisms/TransGroupEditPanel';
 
-const cssEditorSideColumnContent = css`
-  > :not(:first-child) {
-    margin-top: 5px;
-  }
-`;
-
-export const EditorSideColumnContent = () => {
+export const EditorSideColumnContent: FC = () => {
   const { editMode, currentKeyEntity, currentOutlinePoint } = editReader;
 
   const isKeyPanelVisible = editMode === 'key' || !!currentKeyEntity;
   const isShapePanelVisible = editMode === 'shape' || !!currentOutlinePoint;
   return (
-    <div css={cssEditorSideColumnContent}>
+    <div css={style}>
       <DesignConfigurationPanel />
       {/* {editorTarget === 'key' && <KeyEntityEditPanel />}
       {editorTarget === 'outline' && <OutlineEditPanel />} */}
@@ -33,3 +27,9 @@ export const EditorSideColumnContent = () => {
     </div>
   );
 };
+
+const style = css`
+  > :not(:first-child) {
+    margin-top: 5px;
+  }
+`;

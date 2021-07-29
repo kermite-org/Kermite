@@ -3,16 +3,6 @@ import { texts } from '~/ui/base';
 import { FlatListSelector } from '~/ui/components';
 import { useDeviceSelectionPartModel } from '~/ui/pages/firmware-updation-page/models';
 
-const style = css`
-  * + * {
-    margin-top: 5px;
-  }
-
-  .selector {
-    width: 300px;
-  }
-`;
-
 export const DeviceSelectionPart: FC = () => {
   const {
     deviceOptions,
@@ -34,3 +24,13 @@ export const DeviceSelectionPart: FC = () => {
     </div>
   );
 };
+
+const style = css`
+  * + * {
+    margin-top: 5px;
+  }
+
+  .selector {
+    width: 300px;
+  }
+`;

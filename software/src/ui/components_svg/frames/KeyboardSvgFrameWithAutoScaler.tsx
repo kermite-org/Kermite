@@ -1,29 +1,23 @@
-import { jsx, css, QxChildren } from 'qx';
+import { jsx, css, QxChildren, FC } from 'qx';
 import { IDisplayArea } from '~/shared';
 import { KeyboardSvgFrame } from '~/ui/components_svg/frames/KeyboardSvgFrame';
 import { ScalerBox } from '~/ui/components_svg/frames/ScalerBox';
 
-export const cssScalerContent = css`
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-export function KeyboardSvgFrameWithAutoScaler(props: {
+type Props = {
   displayArea: IDisplayArea;
   children: QxChildren;
   dpiScale: number;
   marginRatio: number;
   baseStrokeWidth: number;
-}) {
-  const {
-    displayArea,
-    children,
-    dpiScale,
-    marginRatio,
-    baseStrokeWidth,
-  } = props;
+};
+
+export const KeyboardSvgFrameWithAutoScaler: FC<Props> = ({
+  displayArea,
+  children,
+  dpiScale,
+  marginRatio,
+  baseStrokeWidth,
+}) => {
   const da = displayArea;
   const margin = Math.min(da.width, da.height) * marginRatio;
   const contentWidth = (da.width + margin * 2) * dpiScale;
@@ -42,4 +36,11 @@ export function KeyboardSvgFrameWithAutoScaler(props: {
       </div>
     </ScalerBox>
   );
-}
+};
+
+export const cssScalerContent = css`
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;

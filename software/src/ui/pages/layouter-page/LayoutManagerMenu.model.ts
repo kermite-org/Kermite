@@ -1,4 +1,4 @@
-import { useLocal } from 'qx';
+import { IGeneralMenuItem } from '~/ui/base';
 import { ILayoutManagerViewModel } from '~/ui/pages/layouter-page/LayoutManagerViewModel';
 
 type ILayoutManagerViewModelCommandFunctionKey =
@@ -50,33 +50,19 @@ const menuItemSources: (IMenuItemSource | IMenuItemSeparator)[] = [
   },
 ];
 
-type IMenuItem =
-  | { type: 'menuEntry'; text: string; handler: () => void; disabled?: boolean }
-  | { type: 'separator' };
-
 export const useLayoutManagerMenuModel = (baseVm: ILayoutManagerViewModel) => {
-  const state = useLocal({ isOpen: false });
-  const openMenu = () => (state.isOpen = true);
-  const closeMenu = () => (state.isOpen = false);
-
-  const menuItems: IMenuItem[] = menuItemSources.map((source) =>
+  const menuItems: IGeneralMenuItem[] = menuItemSources.map((source) =>
     'separator' in source
       ? { type: 'separator' }
       : {
           type: 'menuEntry',
           text: source.text,
-          handler: () => {
-            baseVm[source.command]();
-            closeMenu();
-          },
+          handler: () => baseVm[source.command](),
           disabled:
             source.commandActiveFlagKey && !baseVm[source.commandActiveFlagKey],
         },
   );
   return {
-    isOpen: state.isOpen,
-    openMenu,
-    closeMenu,
     menuItems,
   };
 };

@@ -1,8 +1,17 @@
-import { jsx, css } from 'qx';
+import { jsx, css, FC } from 'qx';
 import { uiTheme } from '~/ui/base';
 import { editReader } from '~/ui/pages/layouter/models';
 
-const cssInformationOverlay = css`
+export const InformationOverlay: FC = () => {
+  const { pressedKeyIndices } = editReader;
+  return (
+    <div css={style} qxIf={pressedKeyIndices.length > 0}>
+      hold key indices: {JSON.stringify(pressedKeyIndices)}
+    </div>
+  );
+};
+
+const style = css`
   position: absolute;
   bottom: 0;
   left: 0;
@@ -10,12 +19,3 @@ const cssInformationOverlay = css`
   color: ${uiTheme.colors.clPrimary};
   margin: 1px 4px;
 `;
-
-export const InformationOverlay = () => {
-  const { pressedKeyIndices } = editReader;
-  return (
-    <div css={cssInformationOverlay} qxIf={pressedKeyIndices.length > 0}>
-      hold key indices: {JSON.stringify(pressedKeyIndices)}
-    </div>
-  );
-};

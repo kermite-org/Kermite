@@ -3,5 +3,10 @@
   "compilerOptions": {
     "rootDir": "../"
   },
-  "include": ["./**/*", "../qx/**/*", "../shared/**/*"]
+  "include": [
+    "./**/*",
+    "../qx/**/*",
+    "../shared/**/*",
+    "../ui-mock-view/ComponentCatalog0.tsx"
+  ]
 }

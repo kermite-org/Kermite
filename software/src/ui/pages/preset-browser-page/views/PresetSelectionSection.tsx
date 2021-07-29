@@ -11,25 +11,6 @@ type Props = {
   viewModel: IPresetSelectionSectionViewModel;
 };
 
-const style = css`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  > .selectorsPart {
-    display: flex;
-    > * + * {
-      margin-left: 40px;
-    }
-
-    > .selectorBlock {
-      > * + * {
-        margin-top: 2px;
-      }
-    }
-  }
-`;
-
 export const PresetSelectionSection: FC<Props> = ({
   viewModel: {
     projectSelectorSource,
@@ -66,3 +47,22 @@ export const PresetSelectionSection: FC<Props> = ({
     />
   </div>
 );
+
+const style = css`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  > .selectorsPart {
+    display: flex;
+    > * + * {
+      margin-left: 40px;
+    }
+
+    > .selectorBlock {
+      > * + * {
+        margin-top: 2px;
+      }
+    }
+  }
+`;

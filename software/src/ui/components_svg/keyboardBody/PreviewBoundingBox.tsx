@@ -1,8 +1,12 @@
-import { jsx } from 'qx';
+import { FC, jsx } from 'qx';
 import { IDisplayArea } from '~/shared';
 
-export const PreviewDisplayAreaBox = (props: { dispalyArea: IDisplayArea }) => {
-  const da = props.dispalyArea;
+type Props = {
+  dispalyArea: IDisplayArea;
+};
+
+export const PreviewDisplayAreaBox: FC<Props> = ({ dispalyArea }) => {
+  const da = dispalyArea;
   const left = da.centerX - da.width / 2;
   const top = da.centerY - da.height / 2;
   const { width, height } = da;

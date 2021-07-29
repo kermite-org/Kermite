@@ -1,4 +1,4 @@
-import { jsx, css } from 'qx';
+import { jsx, css, FC } from 'qx';
 import { uiTheme } from '~/ui/base';
 import {
   OperationButtonWithIcon,
@@ -8,7 +8,25 @@ import { LayoutManagerMenu } from '~/ui/pages/layouter-page/LayoutManagerMenu';
 import { useLayoutManagerViewModel } from '~/ui/pages/layouter-page/LayoutManagerViewModel';
 import { makeLayoutSelectorModalViewModel } from '~/ui/pages/layouter-page/ProjectLayoutSelectorModalViewModel';
 
-const cssLayoutManagementBar = css`
+export const LayoutManagerTopBar: FC = () => {
+  const vm = useLayoutManagerViewModel();
+  const modalVm = makeLayoutSelectorModalViewModel(vm);
+  return (
+    <div css={style}>
+      <LayoutManagerMenu baseVm={vm} />
+      <div class="targetDisplayArea">{vm.editSourceText}</div>
+      <OperationButtonWithIcon
+        icon="save"
+        label="save"
+        disabled={!vm.canOverwrite}
+        onClick={vm.overwriteLayout}
+      />
+      {modalVm && <ProjectAttachmentFileSelectorModal vm={modalVm} />}
+    </div>
+  );
+};
+
+const style = css`
   color: ${uiTheme.colors.clMainText};
   display: flex;
   padding: 6px;
@@ -27,21 +45,3 @@ const cssLayoutManagementBar = css`
     padding: 0 5px;
   }
 `;
-
-export const LayoutManagerTopBar = () => {
-  const vm = useLayoutManagerViewModel();
-  const modalVm = makeLayoutSelectorModalViewModel(vm);
-  return (
-    <div css={cssLayoutManagementBar}>
-      <LayoutManagerMenu baseVm={vm} />
-      <div class="targetDisplayArea">{vm.editSourceText}</div>
-      <OperationButtonWithIcon
-        icon="save"
-        label="save"
-        disabled={!vm.canOverwrite}
-        onClick={vm.overwriteLayout}
-      />
-      {modalVm && <ProjectAttachmentFileSelectorModal vm={modalVm} />}
-    </div>
-  );
-};

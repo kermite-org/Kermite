@@ -1,22 +1,28 @@
-import { jsx, css } from 'qx';
+import { jsx, css, FC } from 'qx';
 import { IDisplayOutlineShape } from '~/shared';
 
-export const KeyboardBodyShape = (props: {
+type Props = {
   outlineShapes: IDisplayOutlineShape[];
   fillColor: string;
   strokeColor: string;
+};
+
+export const KeyboardBodyShape: FC<Props> = ({
+  fillColor,
+  strokeColor,
+  outlineShapes,
 }) => {
-  const cssBody = css`
-    fill: ${props.fillColor};
-    stroke: ${props.strokeColor};
+  const style = css`
+    fill: ${fillColor};
+    stroke: ${strokeColor};
   `;
   return (
     <g>
-      {props.outlineShapes.map((shape, idx) => (
+      {outlineShapes.map((shape, idx) => (
         <polygon
           points={shape.points.map((p) => `${p.x}, ${p.y}`).join(' ')}
           key={idx}
-          css={cssBody}
+          css={style}
         />
       ))}
     </g>

@@ -1,10 +1,11 @@
 import { jsx, FC } from 'qx';
 import { IDisplayKeyShape } from '~/shared';
 
-type IKeyUnitShapeProps = Omit<JSX.SVGAttributes, 'shape'> & {
+type Props = Omit<JSX.SVGAttributes, 'shape'> & {
   shape: IDisplayKeyShape;
 };
-export const KeyUnitShape: FC<IKeyUnitShapeProps> = ({ shape, ...rest }) => {
+
+export const KeyUnitShape: FC<Props> = ({ shape, ...rest }) => {
   if (shape.type === 'rect') {
     const sw = shape.width;
     const sh = shape.height;

@@ -1,4 +1,4 @@
-import { css, jsx } from 'qx';
+import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
 import {
   ConnectedDeviceAttrsPart,
@@ -7,7 +7,25 @@ import {
   FirmwareUpdationPart,
 } from '~/ui/pages/firmware-updation-page/sections';
 
-const cssPage = css`
+export const FirmwareUpdationPage: FC = () => {
+  return (
+    <div css={style}>
+      <div className="topRow">
+        <div className="leftColumn">
+          <DeviceSelectionPart />
+          <CustomParametersPart />
+        </div>
+        <div className="rightColumn">
+          <ConnectedDeviceAttrsPart />
+        </div>
+      </div>
+
+      <FirmwareUpdationPart />
+    </div>
+  );
+};
+
+const style = css`
   background: ${uiTheme.colors.clBackground};
   color: ${uiTheme.colors.clMainText};
   height: 100%;
@@ -30,21 +48,3 @@ const cssPage = css`
     }
   }
 `;
-
-export const FirmwareUpdationPage = () => {
-  return (
-    <div css={cssPage}>
-      <div className="topRow">
-        <div className="leftColumn">
-          <DeviceSelectionPart />
-          <CustomParametersPart />
-        </div>
-        <div className="rightColumn">
-          <ConnectedDeviceAttrsPart />
-        </div>
-      </div>
-
-      <FirmwareUpdationPart />
-    </div>
-  );
-};

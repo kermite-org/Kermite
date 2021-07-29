@@ -15,6 +15,30 @@ interface Props {
   hint?: string;
 }
 
+export const GeneralButton: FC<Props> = ({
+  text,
+  icon,
+  onClick,
+  disabled,
+  className,
+  size = 'unit',
+  children,
+  hint,
+}) => (
+  <div
+    css={style}
+    className={className}
+    onClick={onClick}
+    data-disabled={disabled}
+    data-size={size}
+    data-hint={hint}
+  >
+    {icon && <Icon spec={icon} />}
+    {text && <span>{text}</span>}
+    {children}
+  </div>
+);
+
 const style = css`
   background: ${uiTheme.colors.clPrimary};
   color: ${uiTheme.colors.clDecal};
@@ -58,27 +82,3 @@ const style = css`
     opacity: 0.3;
   }
 `;
-
-export const GeneralButton: FC<Props> = ({
-  text,
-  icon,
-  onClick,
-  disabled,
-  className,
-  size = 'unit',
-  children,
-  hint,
-}) => (
-  <div
-    css={style}
-    className={className}
-    onClick={onClick}
-    data-disabled={disabled}
-    data-size={size}
-    data-hint={hint}
-  >
-    {icon && <Icon spec={icon} />}
-    {text && <span>{text}</span>}
-    {children}
-  </div>
-);

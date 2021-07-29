@@ -5,6 +5,17 @@ type Props = {
   isLoading: boolean;
 };
 
+export const LoadingOverlay: FC<Props> = ({ isLoading }) => {
+  if (!isLoading) {
+    return null;
+  }
+  return (
+    <div css={style}>
+      <LoadingAnimationIcon />
+    </div>
+  );
+};
+
 const style = css`
   position: fixed;
   top: 0;
@@ -17,14 +28,3 @@ const style = css`
   align-items: center;
   color: #fff;
 `;
-
-export const LoadingOverlay: FC<Props> = ({ isLoading }) => {
-  if (!isLoading) {
-    return null;
-  }
-  return (
-    <div css={style}>
-      <LoadingAnimationIcon />
-    </div>
-  );
-};

@@ -1,43 +1,23 @@
-import { jsx, css } from 'qx';
+import { jsx, css, FC } from 'qx';
 import { IDisplayKeyboardDesign, IDisplayKeyEntity } from '~/shared';
 import { KeyboardSvgFrameWithAutoScaler } from '~/ui/components_svg/frames/KeyboardSvgFrameWithAutoScaler';
 import { PreviewKeyEntityCard } from '~/ui/components_svg/keyUnitCards/PreviewKeyUnitCard';
 import { KeyboardBodyShape } from '~/ui/components_svg/keyboardBody/KeyboardBodyShape';
 import { PreviewDisplayAreaBox } from '~/ui/components_svg/keyboardBody/PreviewBoundingBox';
 
-const PreviewKeyEntityCardsPart = (props: {
-  keyEntities: IDisplayKeyEntity[];
-  showKeyId: boolean;
-  showKeyIndex: boolean;
-}) => (
-  <g>
-    {props.keyEntities.map((ke) => (
-      <PreviewKeyEntityCard
-        keyEntity={ke}
-        key={ke.keyId}
-        showKeyId={props.showKeyId}
-        showKeyIndex={props.showKeyIndex}
-      />
-    ))}
-  </g>
-);
-
-export const PreviewKeyboardShapeView = (props: {
+type Props = {
   keyboardDesign: IDisplayKeyboardDesign;
   settings: {
     shapeViewShowKeyId: boolean;
     shapeViewShowKeyIndex: boolean;
     shapeViewShowBoundingBox: boolean;
   };
+};
+
+export const PreviewKeyboardShapeView: FC<Props> = ({
+  keyboardDesign,
+  settings,
 }) => {
-  const { keyboardDesign, settings } = props;
-
-  const cssKeyboardShapeView = css`
-    background: #222;
-    height: 100%;
-    overflow: hidden;
-  `;
-
   const showBoundingBox = settings.shapeViewShowBoundingBox;
 
   const showKeyId = settings.shapeViewShowKeyId;
@@ -75,3 +55,26 @@ export const PreviewKeyboardShapeView = (props: {
     </div>
   );
 };
+
+const cssKeyboardShapeView = css`
+  background: #222;
+  height: 100%;
+  overflow: hidden;
+`;
+
+const PreviewKeyEntityCardsPart = (props: {
+  keyEntities: IDisplayKeyEntity[];
+  showKeyId: boolean;
+  showKeyIndex: boolean;
+}) => (
+  <g>
+    {props.keyEntities.map((ke) => (
+      <PreviewKeyEntityCard
+        keyEntity={ke}
+        key={ke.keyId}
+        showKeyId={props.showKeyId}
+        showKeyIndex={props.showKeyIndex}
+      />
+    ))}
+  </g>
+);

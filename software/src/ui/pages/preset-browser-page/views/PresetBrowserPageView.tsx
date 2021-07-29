@@ -12,17 +12,6 @@ interface Props {
   customContent?: JSX.Element;
 }
 
-const style = css`
-  background: ${uiTheme.colors.clBackground};
-  color: ${uiTheme.colors.clMainText};
-
-  height: 100%;
-  padding: 20px;
-  > * + * {
-    margin-top: 10px;
-  }
-`;
-
 export const PresetBrowserPageView: FC<Props> = ({
   pageTitle,
   viewModel,
@@ -39,3 +28,14 @@ export const PresetBrowserPageView: FC<Props> = ({
     {customContent && <div>{customContent}</div>}
   </div>
 );
+
+const style = css`
+  background: ${uiTheme.colors.clBackground};
+  color: ${uiTheme.colors.clMainText};
+
+  height: 100%;
+  padding: 20px;
+  > * + * {
+    margin-top: 10px;
+  }
+`;

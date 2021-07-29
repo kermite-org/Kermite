@@ -7,13 +7,6 @@ type Props = {
   onClick(): void;
 };
 
-const style = css`
-  opacity: 0.5;
-  &.active {
-    opacity: 1;
-  }
-`;
-
 export const GlobalHintIconButton: FC<Props> = ({ isActive, onClick }) => (
   <ButtonBase
     active={isActive}
@@ -24,3 +17,10 @@ export const GlobalHintIconButton: FC<Props> = ({ isActive, onClick }) => (
     <Icon spec="info" size={18} />
   </ButtonBase>
 );
+
+const style = css`
+  opacity: 0.5;
+  &.active {
+    opacity: 1;
+  }
+`;

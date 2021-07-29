@@ -1,4 +1,4 @@
-import { jsx, css } from 'qx';
+import { jsx, css, FC } from 'qx';
 import { IProfileAssignType } from '~/shared';
 import { texts } from '~/ui/base';
 import { reflectValue } from '~/ui/helpers';
@@ -13,14 +13,7 @@ const AssignTypeSelectionPartViewModel = () => {
   return { assignTypeOptions, currentAssignType, setAssignType };
 };
 
-const cssAttrsRow = css`
-  display: flex;
-  > * + * {
-    margin-left: 10px;
-  }
-`;
-
-export const AssignTypeSelectionPart = () => {
+export const AssignTypeSelectionPart: FC = () => {
   const {
     assignTypeOptions,
     currentAssignType,
@@ -28,7 +21,7 @@ export const AssignTypeSelectionPart = () => {
   } = AssignTypeSelectionPartViewModel();
 
   return (
-    <div css={cssAttrsRow}>
+    <div css={style}>
       <div data-hint={texts.hint_assigner_profileConfigModal_assignModel}>
         {texts.label_assigner_profileConfigModal_assignModel}
       </div>
@@ -47,3 +40,10 @@ export const AssignTypeSelectionPart = () => {
     </div>
   );
 };
+
+const style = css`
+  display: flex;
+  > * + * {
+    margin-left: 10px;
+  }
+`;

@@ -3,8 +3,8 @@ import { FcWithClassName, texts } from '~/ui/base';
 import {
   KeyboardProfileSelector,
   OperationButtonWithIcon,
+  ConfigurationButton,
 } from '~/ui/components';
-import { ConfigurationButton } from '~/ui/components/editorParts';
 import { makeProfileManagementPartViewModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileManagementPartViewModel';
 import { makeProfileSelectionMenuPartViewModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileSelectionMenuPartViewModel';
 import {
@@ -16,40 +16,12 @@ import {
 import { SavingProjectPresetSelectionModal } from '~/ui/pages/editor-page/ui_bar_profileManagement/views/SavingProjectPresetSelectionModal';
 import { ProfileSelectionMenuPart } from './views/ProfileSelectionMenu';
 
-const cssProfileManagementPart = css`
-  /* background: #024; */
-  flex-grow: 1;
-  display: flex;
-  align-items: center;
-  padding: 4px;
-  gap: 0 15px;
-  button {
-    padding: 0 4px;
-  }
-  > .spacer {
-    flex-grow: 1;
-  }
-
-  > .mode-selectors-box {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-right: 15px;
-  }
-
-  > .operation-buttons-box {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
-`;
-
 export const ProfileManagementPart: FcWithClassName = ({ className }) => {
   const baseVm = makeProfileManagementPartViewModel();
   const menuModel = makeProfileSelectionMenuPartViewModel(baseVm);
 
   return (
-    <div css={cssProfileManagementPart} className={className}>
+    <div css={style} className={className}>
       <ProfileSelectionMenuPart vm={menuModel} />
       <KeyboardProfileSelector
         selectorSource={baseVm.profileSelectorSource}
@@ -92,3 +64,31 @@ export const ProfileManagementPart: FcWithClassName = ({ className }) => {
     </div>
   );
 };
+
+const style = css`
+  /* background: #024; */
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  gap: 0 15px;
+  button {
+    padding: 0 4px;
+  }
+  > .spacer {
+    flex-grow: 1;
+  }
+
+  > .mode-selectors-box {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-right: 15px;
+  }
+
+  > .operation-buttons-box {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+`;

@@ -1,19 +1,10 @@
-import { jsx, asyncRerender, css, useRef } from 'qx';
+import { jsx, asyncRerender, css, useRef, FC } from 'qx';
 import { editReader, editMutations } from '~/ui/pages/layouter/models';
 import { EditSvgView } from './EditSvgView';
 import { DebugOverlay } from './overlays/DebugOverlay';
 import { InformationOverlay } from './overlays/InformationOverlay';
 
-export const EditSvgViewContainer = () => {
-  const cssSvgView = css`
-    flex-grow: 1;
-    overflow: hidden;
-    position: relative;
-    > svg {
-      position: absolute;
-    }
-  `;
-
+export const EditSvgViewContainer: FC = () => {
   const { screenW, screenH } = editReader.sight;
 
   const ref = useRef<HTMLDivElement>();
@@ -29,10 +20,19 @@ export const EditSvgViewContainer = () => {
   }
 
   return (
-    <div css={cssSvgView} ref={ref}>
+    <div css={style} ref={ref}>
       <EditSvgView />
       <DebugOverlay />
       <InformationOverlay />
     </div>
   );
 };
+
+const style = css`
+  flex-grow: 1;
+  overflow: hidden;
+  position: relative;
+  > svg {
+    position: absolute;
+  }
+`;

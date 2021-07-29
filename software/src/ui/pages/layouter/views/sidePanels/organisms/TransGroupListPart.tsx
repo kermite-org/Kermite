@@ -1,53 +1,11 @@
-import { jsx, css } from 'qx';
+import { jsx, css, FC } from 'qx';
 import { uiTheme } from '~/ui/base';
 import { GeneralButton } from '~/ui/components';
+import { ConfigSubHeader } from '~/ui/components/layouterParts';
 import { editMutations } from '~/ui/pages/layouter/models';
-import { ConfigSubHeader } from '~/ui/pages/layouter/views/sidePanels/atoms';
 import { useTransGroupListPartModel } from '~/ui/pages/layouter/views/sidePanels/models/TransGroupListPanel.model';
 
-const cssHeaderRow = css`
-  display: flex;
-  justify-content: space-between;
-
-  > .buttonsBox {
-    display: flex;
-
-    > * {
-      margin-left: 4px;
-    }
-  }
-`;
-
-const cssListFrame = css`
-  margin-top: 2px;
-  /* border: solid 1px ${uiTheme.colors.clPrimary}; */
-  display: flex;
-  flex-wrap: wrap;
-`;
-
-const cssTransGroupListItemCard = css`
-  width: 24px;
-  height: 24px;
-  margin: 2px;
-  border: solid 1px ${uiTheme.colors.clPrimary};
-  color: ${uiTheme.colors.clPrimary};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  cursor: pointer;
-  &[data-active] {
-    background: ${uiTheme.colors.clPrimary};
-    color: ${uiTheme.colors.clDecal};
-  }
-`;
-
-const cssOpButton = css`
-  width: 18px !important;
-  height: 18px !important;
-`;
-
-export const TransGroupListPart = () => {
+export const TransGroupListPart: FC = () => {
   const {
     canAddGroup,
     canDeleteGroup,
@@ -100,3 +58,45 @@ export const TransGroupListPart = () => {
     </div>
   );
 };
+
+const cssHeaderRow = css`
+  display: flex;
+  justify-content: space-between;
+
+  > .buttonsBox {
+    display: flex;
+
+    > * {
+      margin-left: 4px;
+    }
+  }
+`;
+
+const cssListFrame = css`
+  margin-top: 2px;
+  /* border: solid 1px ${uiTheme.colors.clPrimary}; */
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+const cssTransGroupListItemCard = css`
+  width: 24px;
+  height: 24px;
+  margin: 2px;
+  border: solid 1px ${uiTheme.colors.clPrimary};
+  color: ${uiTheme.colors.clPrimary};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+  &[data-active] {
+    background: ${uiTheme.colors.clPrimary};
+    color: ${uiTheme.colors.clDecal};
+  }
+`;
+
+const cssOpButton = css`
+  width: 18px !important;
+  height: 18px !important;
+`;
