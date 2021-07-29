@@ -13,12 +13,10 @@ import {
   DialogButton,
   DialogButtonsRow,
   DialogContentRow,
-} from '~/ui/components';
-import {
   cssCommonPropertiesTable,
   cssCommonTextInput,
   DefaultSchemeButton,
-} from '~/ui/components/editorParts';
+} from '~/ui/components';
 import {
   reflectFieldValue,
   reflectChecked,

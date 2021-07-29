@@ -1,6 +1,6 @@
 import { jsx, css } from 'qx';
 import { ISelectorOption } from '~/ui/base';
-import { GeneralSelector, GeneralButton } from '~/ui/components';
+import { GeneralSelector, GeneralButton } from '~/ui/components/atoms';
 
 const testOptions: ISelectorOption[] = [
   { value: '', label: 'no-user' },

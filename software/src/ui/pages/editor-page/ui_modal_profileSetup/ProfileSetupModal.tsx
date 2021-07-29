@@ -10,11 +10,9 @@ import {
   DialogButtonsRow,
   DialogButton,
   createModal,
-} from '~/ui/components';
-import {
   cssCommonPropertiesTable,
   cssCommonTextInput,
-} from '~/ui/components/editorParts';
+} from '~/ui/components';
 import { reflectFieldValue, fieldSetter, useMemoEx } from '~/ui/helpers';
 
 interface ICreateProfileDialogEditValues {

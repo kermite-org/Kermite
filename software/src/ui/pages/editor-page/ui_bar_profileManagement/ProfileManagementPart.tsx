@@ -3,8 +3,8 @@ import { FcWithClassName, texts } from '~/ui/base';
 import {
   KeyboardProfileSelector,
   OperationButtonWithIcon,
+  ConfigurationButton,
 } from '~/ui/components';
-import { ConfigurationButton } from '~/ui/components/editorParts';
 import { makeProfileManagementPartViewModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileManagementPartViewModel';
 import { makeProfileSelectionMenuPartViewModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileSelectionMenuPartViewModel';
 import {
