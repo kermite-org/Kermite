@@ -12,10 +12,6 @@ type Props = {
   setCurrentLayerId(layerId: string): void;
 };
 
-const style = css`
-  padding: 5px;
-`;
-
 export const PresetLayersBox: FC<Props> = ({
   className,
   layers,
@@ -38,3 +34,7 @@ export const PresetLayersBox: FC<Props> = ({
     ))}
   </div>
 );
+
+const style = css`
+  padding: 5px;
+`;

@@ -3,8 +3,8 @@ import { uiTheme } from '~/ui/base';
 
 type Props = {
   children: QxNode;
-  renderTitleBar: () => JSX.Element;
-  renderStatusBar: () => JSX.Element;
+  renderTitleBar: FC;
+  renderStatusBar: FC;
 };
 
 export const CustomWindowFrame: FC<Props> = ({
@@ -13,9 +13,9 @@ export const CustomWindowFrame: FC<Props> = ({
   children,
 }) => (
   <div css={style}>
-    <div class="title-bar">{renderTitleBar()}</div>
+    <div class="title-bar">{renderTitleBar({})}</div>
     <div class="body-row">{children}</div>
-    <div class="statu-bar">{renderStatusBar()}</div>
+    <div class="statu-bar">{renderStatusBar({})}</div>
   </div>
 );
 

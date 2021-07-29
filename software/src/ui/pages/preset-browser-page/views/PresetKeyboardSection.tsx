@@ -8,6 +8,20 @@ type Props = {
   viewModel: IPresetKeyboardSectionViewModel;
 };
 
+export const PresetKeyboardSection: FC<Props> = ({
+  viewModel: { keyboard, layerList },
+}) => (
+  <div css={style}>
+    <div class="keyboardPart">
+      <PresetKeyboardView {...keyboard} />
+    </div>
+    <div class="layersPart">
+      <h3>{texts.label_presetBrowser_layers}</h3>
+      <PresetLayersBox {...layerList} className="layersBox" />
+    </div>
+  </div>
+);
+
 const style = css`
   height: 300px;
   display: flex;
@@ -32,17 +46,3 @@ const style = css`
     }
   }
 `;
-
-export const PresetKeyboardSection: FC<Props> = ({
-  viewModel: { keyboard, layerList },
-}) => (
-  <div css={style}>
-    <div class="keyboardPart">
-      <PresetKeyboardView {...keyboard} />
-    </div>
-    <div class="layersPart">
-      <h3>{texts.label_presetBrowser_layers}</h3>
-      <PresetLayersBox {...layerList} className="layersBox" />
-    </div>
-  </div>
-);

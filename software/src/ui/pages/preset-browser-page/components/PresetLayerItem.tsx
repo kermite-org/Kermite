@@ -8,19 +8,6 @@ type Props = {
   onClick: () => void;
 };
 
-const style = css`
-  color: ${uiTheme.colors.clAltText};
-  padding: 0 4px;
-  user-select: none;
-  cursor: pointer;
-  &[data-active] {
-    background: #0cc;
-  }
-  &:hover {
-    opacity: 0.7;
-  }
-`;
-
 export const PresetLayerItem: FC<Props> = ({
   layerName,
   isActive,
@@ -34,3 +21,16 @@ export const PresetLayerItem: FC<Props> = ({
     {layerName}
   </div>
 );
+
+const style = css`
+  color: ${uiTheme.colors.clAltText};
+  padding: 0 4px;
+  user-select: none;
+  cursor: pointer;
+  &[data-active] {
+    background: #0cc;
+  }
+  &:hover {
+    opacity: 0.7;
+  }
+`;

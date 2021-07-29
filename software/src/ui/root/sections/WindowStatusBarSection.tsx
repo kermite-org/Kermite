@@ -3,18 +3,6 @@ import { uiTheme, GlobalHintDisplayText } from '~/ui/base';
 import { uiStatusModel } from '~/ui/commonModels';
 import { GlobalHintIconButton } from '~/ui/components';
 
-const style = css`
-  font-size: 14px;
-  color: ${uiTheme.colors.clDecal};
-  display: flex;
-  align-items: center;
-  height: 100%;
-  margin-left: 4px;
-  > :nth-child(2) {
-    margin-left: 2px;
-  }
-`;
-
 export const WindowStatusBarSection = () => {
   const { settings } = uiStatusModel;
   const showHint = settings.showGlobalHint;
@@ -28,3 +16,15 @@ export const WindowStatusBarSection = () => {
     </div>
   );
 };
+
+const style = css`
+  font-size: 14px;
+  color: ${uiTheme.colors.clDecal};
+  display: flex;
+  align-items: center;
+  height: 100%;
+  margin-left: 4px;
+  > :nth-child(2) {
+    margin-left: 2px;
+  }
+`;
