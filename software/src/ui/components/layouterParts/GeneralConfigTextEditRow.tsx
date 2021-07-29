@@ -2,7 +2,7 @@ import { jsx, css } from 'qx';
 import { GeneralInput } from '~/ui/components/atoms';
 import { styleWidthSpec } from '~/ui/components/utils';
 
-interface IProps {
+type Props = {
   editText: string;
   valid: boolean;
   disabled: boolean;
@@ -13,16 +13,7 @@ interface IProps {
   labelWidth: number;
   inputWidth: number;
   unit?: string;
-}
-
-const cssEditRow = css`
-  display: flex;
-  align-items: center;
-
-  > .unit {
-    margin-left: 4px;
-  }
-`;
+};
 
 export const GeneralConfigTextEditRow = ({
   editText,
@@ -35,7 +26,7 @@ export const GeneralConfigTextEditRow = ({
   labelWidth,
   inputWidth,
   unit,
-}: IProps) => {
+}: Props) => {
   return (
     <div css={cssEditRow}>
       <label style={styleWidthSpec(labelWidth)}>{label}</label>
@@ -52,3 +43,12 @@ export const GeneralConfigTextEditRow = ({
     </div>
   );
 };
+
+const cssEditRow = css`
+  display: flex;
+  align-items: center;
+
+  > .unit {
+    margin-left: 4px;
+  }
+`;

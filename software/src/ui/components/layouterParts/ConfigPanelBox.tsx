@@ -9,6 +9,32 @@ type Props = {
   initialOpen?: boolean;
 };
 
+export const ConfigPanelBox: FC<Props> = ({
+  headerText,
+  children,
+  canToggleOpen = false,
+  initialOpen = true,
+}) => {
+  const [isOpen, setIsOpen] = useState(initialOpen);
+  const toggleIsOpen = () => setIsOpen(!isOpen);
+
+  return (
+    <div css={style}>
+      <div class="header">
+        <Icon spec="article" />
+        <span class="caption">{headerText}</span>
+        <div class="spacer" />
+        <div onClick={toggleIsOpen} class="arrowBox" qxIf={canToggleOpen}>
+          <Icon spec={isOpen ? 'expand_less' : 'expand_more'} />
+        </div>
+      </div>
+      <div class="body" qxIf={isOpen}>
+        {children}
+      </div>
+    </div>
+  );
+};
+
 const style = css`
   > .header {
     display: flex;
@@ -49,29 +75,3 @@ const style = css`
     }
   }
 `;
-
-export const ConfigPanelBox: FC<Props> = ({
-  headerText,
-  children,
-  canToggleOpen = false,
-  initialOpen = true,
-}) => {
-  const [isOpen, setIsOpen] = useState(initialOpen);
-  const toggleIsOpen = () => setIsOpen(!isOpen);
-
-  return (
-    <div css={style}>
-      <div class="header">
-        <Icon spec="article" />
-        <span class="caption">{headerText}</span>
-        <div class="spacer" />
-        <div onClick={toggleIsOpen} class="arrowBox" qxIf={canToggleOpen}>
-          <Icon spec={isOpen ? 'expand_less' : 'expand_more'} />
-        </div>
-      </div>
-      <div class="body" qxIf={isOpen}>
-        {children}
-      </div>
-    </div>
-  );
-};
