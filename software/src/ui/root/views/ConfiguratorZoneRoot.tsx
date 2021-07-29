@@ -1,7 +1,7 @@
 import { jsx, css } from 'qx';
 import { uiTheme, router, appUi } from '~/ui/base';
-import { uiStatusModel } from '~/ui/commonModels';
-import { CustomWindowFrame } from '~/ui/components';
+import { siteModel, uiStatusModel } from '~/ui/commonModels';
+import { CustomWindowFrame, DevToolPullTab } from '~/ui/components';
 import { LoadingOverlay } from '~/ui/components/overlay/LoadingOverlay';
 import { EditorPage } from '~/ui/pages/editor-page';
 import { FirmwareUpdationPage } from '~/ui/pages/firmware-updation-page';
@@ -11,7 +11,6 @@ import { PresetBrowserPage2 } from '~/ui/pages/preset-browser-page2';
 import { UiSettingsPage } from '~/ui/pages/settings-page';
 import { ShapePreviewPage } from '~/ui/pages/shape-preview-page';
 import { WindowStatusBarSection } from '~/ui/root/views/titleBar/WindowStatusBarSection';
-import { DevToolPullTab } from '~/ui/root/views/window/DevToolPullTab';
 import { NavigationColumn } from './navigation/NavigationColumn';
 import { WindowTitleBarSection } from './titleBar/WindowTitleBarSection';
 
@@ -52,7 +51,10 @@ export const ConfiguratorZoneRoot = () => {
         <NavigationColumn />
         <MainColumnRoutes />
         <LoadingOverlay isLoading={uiStatusModel.status.isLoading} />
-        <DevToolPullTab qxIf={appUi.isDevelopment} />
+        <DevToolPullTab
+          qxIf={appUi.isDevelopment}
+          handler={siteModel.toggleDevToolVisible}
+        />
       </div>
     </CustomWindowFrame>
   );

@@ -1,7 +1,18 @@
-import { jsx, css } from 'qx';
-import { siteModel } from '~/ui/commonModels';
+import { jsx, css, FC } from 'qx';
 
-const cssDevToolPullTabBase = css`
+type Props = {
+  handler(): void;
+};
+
+export const DevToolPullTab: FC<Props> = ({ handler }) => {
+  return (
+    <div css={style}>
+      <div onClick={handler}>devtools</div>
+    </div>
+  );
+};
+
+const style = css`
   position: absolute;
   top: 0;
   left: 0;
@@ -24,11 +35,3 @@ const cssDevToolPullTabBase = css`
     pointer-events: auto;
   }
 `;
-
-export const DevToolPullTab = () => {
-  return (
-    <div css={cssDevToolPullTabBase}>
-      <div onClick={siteModel.toggleDevToolVisible}>devtools</div>
-    </div>
-  );
-};
