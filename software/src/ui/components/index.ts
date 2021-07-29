@@ -1,4 +1,6 @@
 export * from './atoms';
+export * from './editorParts';
+export * from './layouterParts';
 export * from './modals';
 export * from './molecules';
 export * from './overlay';

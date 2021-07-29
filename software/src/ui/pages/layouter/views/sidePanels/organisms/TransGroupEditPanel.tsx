@@ -4,10 +4,10 @@ import {
   ConfigSubContent,
   ConfigSubHeader,
   ConfigVStack,
-} from '~/ui/pages/layouter/views/sidePanels/atoms';
-import { ConfigPanelBox } from '~/ui/pages/layouter/views/sidePanels/atoms/ConfigPanelBox';
+  ConfigPanelBox,
+  GeneralConfigTextEditRow,
+} from '~/ui/components/layouterParts';
 import { useTransGroupEditPanelModel } from '~/ui/pages/layouter/views/sidePanels/models/TransGroupEditPanel.model';
-import { GeneralConfigTextEditRow } from '~/ui/pages/layouter/views/sidePanels/molecules/GeneralConfigTextEditRow';
 import { TransGroupListPart } from '~/ui/pages/layouter/views/sidePanels/organisms/TransGroupListPart';
 
 export const TransGroupEditPanel = () => {

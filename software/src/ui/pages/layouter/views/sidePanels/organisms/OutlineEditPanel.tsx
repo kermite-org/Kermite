@@ -4,10 +4,10 @@ import {
   ConfigSubContent,
   ConfigSubHeader,
   ConfigVStack,
-} from '~/ui/pages/layouter/views/sidePanels/atoms';
-import { ConfigPanelBox } from '~/ui/pages/layouter/views/sidePanels/atoms/ConfigPanelBox';
+  ConfigPanelBox,
+  GeneralConfigTextEditRow,
+} from '~/ui/components/layouterParts';
 import { useOutlineEditPanelModel } from '~/ui/pages/layouter/views/sidePanels/models/OutlineEditPanel.model';
-import { GeneralConfigTextEditRow } from '~/ui/pages/layouter/views/sidePanels/molecules/GeneralConfigTextEditRow';
 
 export const OutlineEditPanel = () => {
   const {

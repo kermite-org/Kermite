@@ -1,8 +1,8 @@
 import { jsx, css } from 'qx';
 import { uiTheme } from '~/ui/base';
 import { GeneralButton } from '~/ui/components';
+import { ConfigSubHeader } from '~/ui/components/layouterParts';
 import { editMutations } from '~/ui/pages/layouter/models';
-import { ConfigSubHeader } from '~/ui/pages/layouter/views/sidePanels/atoms';
 import { useTransGroupListPartModel } from '~/ui/pages/layouter/views/sidePanels/models/TransGroupListPanel.model';
 
 const cssHeaderRow = css`

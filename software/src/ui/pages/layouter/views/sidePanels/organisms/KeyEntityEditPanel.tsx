@@ -1,9 +1,8 @@
 import { jsx, css } from 'qx';
 import { HFlex, GeneralSelector } from '~/ui/components';
-import { ConfigVStack } from '~/ui/pages/layouter/views/sidePanels/atoms';
-import { ConfigPanelBox } from '~/ui/pages/layouter/views/sidePanels/atoms/ConfigPanelBox';
+import { ConfigVStack, ConfigPanelBox } from '~/ui/components/layouterParts';
+import { GeneralConfigTextEditRow } from '~/ui/components/layouterParts/GeneralConfigTextEditRow';
 import { useKeyEntityEditPanelModel } from '~/ui/pages/layouter/views/sidePanels/models/KeyEntityEditPanel.model';
-import { GeneralConfigTextEditRow } from '~/ui/pages/layouter/views/sidePanels/molecules/GeneralConfigTextEditRow';
 
 const cssErrorText = css`
   color: red;

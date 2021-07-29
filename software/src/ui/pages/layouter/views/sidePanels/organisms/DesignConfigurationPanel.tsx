@@ -5,11 +5,11 @@ import {
   ConfigRow,
   ConfigSubContent,
   ConfigSubHeader,
-} from '~/ui/pages/layouter/views/sidePanels/atoms';
-import { ConfigPanelBox } from '~/ui/pages/layouter/views/sidePanels/atoms/ConfigPanelBox';
+  ConfigPanelBox,
+  GeneralConfigTextEditRow,
+} from '~/ui/components/layouterParts';
 import { useDesignConfigurationPanelModel } from '~/ui/pages/layouter/views/sidePanels/models/DesignConfigurationPanel.model';
 import { IConfigTextEditModel } from '~/ui/pages/layouter/views/sidePanels/models/slots/ConfigTextEditModel';
-import { GeneralConfigTextEditRow } from '~/ui/pages/layouter/views/sidePanels/molecules/GeneralConfigTextEditRow';
 
 const cssErrorText = css`
   color: red;

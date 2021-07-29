@@ -1,5 +1,6 @@
 import { jsx, css } from 'qx';
-import { styleWidthSpec, GeneralInput } from '~/ui/components';
+import { GeneralInput } from '~/ui/components/atoms';
+import { styleWidthSpec } from '~/ui/components/utils';
 
 interface IProps {
   editText: string;
