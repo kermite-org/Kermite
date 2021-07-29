@@ -3,6 +3,10 @@ import { CheckBoxLine } from '~/ui/components';
 import { fieldSetter } from '~/ui/helpers';
 import { IShapeViewPersistState } from '~/ui/pages/shape-preview-page/models';
 
+interface Props {
+  settings: IShapeViewPersistState;
+}
+
 interface IDisplayOptionSource {
   fieldKey: keyof IShapeViewPersistState;
   label: string;
@@ -22,9 +26,19 @@ const displayOptionsSource: IDisplayOptionSource[] = [
   },
 ];
 
-interface Props {
-  settings: IShapeViewPersistState;
-}
+export const ShapePreviewOptionsBox: FC<Props> = ({ settings }) => (
+  <div css={style}>
+    {displayOptionsSource.map((om) => (
+      <div key={om.fieldKey}>
+        <CheckBoxLine
+          checked={settings[om.fieldKey] as boolean}
+          setChecked={fieldSetter(settings, om.fieldKey)}
+          text={om.label}
+        />
+      </div>
+    ))}
+  </div>
+);
 
 const style = css`
   display: flex;
@@ -47,17 +61,3 @@ const style = css`
     }
   }
 `;
-
-export const ShapePreviewOptionsBox: FC<Props> = ({ settings }) => (
-  <div css={style}>
-    {displayOptionsSource.map((om) => (
-      <div key={om.fieldKey}>
-        <CheckBoxLine
-          checked={settings[om.fieldKey] as boolean}
-          setChecked={fieldSetter(settings, om.fieldKey)}
-          text={om.label}
-        />
-      </div>
-    ))}
-  </div>
-);
