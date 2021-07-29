@@ -1,5 +1,5 @@
 import { useMemo } from 'qx';
-import { ILanguageKey, ipcAgent, uiTextConfigLoader } from '~/ui/common/base';
+import { ILanguageKey, ipcAgent, uiTextConfigLoader } from '~/ui/base';
 
 export interface ILanguageSelectionModel {
   currrentLanguage: ILanguageKey;
