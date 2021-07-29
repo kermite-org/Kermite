@@ -1,5 +1,5 @@
 import { jsx, css } from 'qx';
-import { LayoutManagerButton } from '~/ui/pages/layouter-page/LayoutManagerButton';
+import { LayoutManagerButton } from '~/ui/components';
 import { useLayoutManagerMenuModel } from '~/ui/pages/layouter-page/LayoutManagerMenu.model';
 import { ILayoutManagerViewModel } from '~/ui/pages/layouter-page/LayoutManagerViewModel';
 
