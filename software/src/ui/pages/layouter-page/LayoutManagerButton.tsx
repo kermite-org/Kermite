@@ -1,6 +1,29 @@
-import { jsx, css, QxNode } from 'qx';
+import { jsx, css, QxNode, FC } from 'qx';
 
-const cssLayoutManagerButton = css`
+type Props = {
+  handler?: () => void;
+  children: QxNode;
+  active?: boolean;
+  disabled?: boolean;
+};
+
+export const LayoutManagerButton: FC<Props> = ({
+  handler,
+  children,
+  active,
+  disabled,
+}) => (
+  <div
+    css={style}
+    onClick={handler}
+    data-active={active}
+    data-disabled={disabled}
+  >
+    {children}
+  </div>
+);
+
+const style = css`
   border: solid 1px #048;
   color: #048;
   background: #fff;
@@ -24,22 +47,3 @@ const cssLayoutManagerButton = css`
     pointer-events: none;
   }
 `;
-
-export const LayoutManagerButton = (props: {
-  handler?: () => void;
-  children: QxNode;
-  active?: boolean;
-  disabled?: boolean;
-}) => {
-  const { handler, children, active, disabled } = props;
-  return (
-    <div
-      css={cssLayoutManagerButton}
-      onClick={handler}
-      data-active={active}
-      data-disabled={disabled}
-    >
-      {children}
-    </div>
-  );
-};
