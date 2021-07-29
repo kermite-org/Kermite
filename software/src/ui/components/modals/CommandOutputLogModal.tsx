@@ -2,11 +2,11 @@ import { jsx, css } from 'qx';
 import {
   ClosableOverlay,
   CommonDialogFrame,
-  DialogContentRow,
-  DialogButtonsRow,
   DialogButton,
-  createModal,
-} from '~/ui/components';
+  DialogButtonsRow,
+  DialogContentRow,
+} from '~/ui/components/modals/CommonDialogParts';
+import { createModal } from '~/ui/components/overlay';
 
 export const showCommandOutputLogModal = createModal(
   (args: { caption: string; logText: string }) => {
