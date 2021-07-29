@@ -1,7 +1,6 @@
 import { jsx, css } from 'qx';
 import { uiTheme } from '~/ui/base';
-import { GlobalMenuPart } from './GlobalMenuPart';
-import { NavigationButtonsArea } from './NavigationButtonsArea';
+import { GlobalMenuPart, NavigationButtonsArea } from '~/ui/root/organisms';
 
 const cssNavigationColumn = css`
   width: 50px;

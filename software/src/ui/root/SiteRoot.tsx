@@ -17,8 +17,8 @@ import {
   SiteDpiScaler,
 } from '~/ui/components';
 import { WidgetZoneRoot } from '~/ui/pages/widget';
+import { ConfiguratorZoneRoot } from '~/ui/root/ConfiguratorZoneRoot';
 import { globalAppServicesInitializerEffect } from '~/ui/root/models/AppServicesInitializer';
-import { ConfiguratorZoneRoot } from './views/ConfiguratorZoneRoot';
 
 setShortCssProcessor(shortCssProcessor);
 

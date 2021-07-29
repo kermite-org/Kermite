@@ -1,7 +1,7 @@
 import { jsx, css } from 'qx';
 import { uiTheme } from '~/ui/base';
 import { WindowTitlePart } from '~/ui/components';
-import { WindowControlButtonsPart } from './WindowControlButtonsPart';
+import { WindowControlButtonsPart } from '~/ui/root/organisms';
 
 const cssWindowTitleBarSection = css`
   display: flex;

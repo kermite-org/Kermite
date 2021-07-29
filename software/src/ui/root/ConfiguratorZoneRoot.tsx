@@ -10,9 +10,11 @@ import { PresetBrowserPage } from '~/ui/pages/preset-browser-page';
 import { PresetBrowserPage2 } from '~/ui/pages/preset-browser-page2';
 import { UiSettingsPage } from '~/ui/pages/settings-page';
 import { ShapePreviewPage } from '~/ui/pages/shape-preview-page';
-import { WindowStatusBarSection } from '~/ui/root/views/titleBar/WindowStatusBarSection';
-import { NavigationColumn } from './navigation/NavigationColumn';
-import { WindowTitleBarSection } from './titleBar/WindowTitleBarSection';
+import {
+  NavigationColumn,
+  WindowStatusBarSection,
+  WindowTitleBarSection,
+} from '~/ui/root/sections';
 
 const styles = {
   cssContentRow: css`

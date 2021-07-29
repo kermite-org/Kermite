@@ -4,7 +4,7 @@ import {
   WindowControlButton,
   WindowRestartButton,
 } from '~/ui/components/window';
-import { makeWindowControlButtonsModel } from '~/ui/root/views/titleBar/WindowControlButtonsPart.model';
+import { makeWindowControlButtonsModel } from '~/ui/root/organisms/WindowControlButtonsPart.model';
 
 export const WindowControlButtonsPart = () => {
   const cssButtonsBox = css`
