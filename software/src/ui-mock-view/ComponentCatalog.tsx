@@ -1,6 +1,7 @@
 import { css, FC, jsx, useEffect, useLocal } from 'qx';
 import { FlatListSelector } from '~/ui/components';
 import { CheckBoxExamples } from '~/ui/components/atoms/CheckBox.visor';
+import { FlatListSelectorExamples } from '~/ui/components/atoms/FlatListSelector.visor';
 import { GeneralButtonExamples } from '~/ui/components/atoms/GeneralButton.visor';
 import { GeneralSelectorExamples } from '~/ui/components/atoms/GeneralSelector.visor';
 import { fieldSetter } from '~/ui/helpers';
@@ -48,6 +49,7 @@ const visualSource: Record<string, IVisualEntry> = {
   CheckBoxExamples,
   GeneralButtonExamples,
   GeneralSelectorExamples,
+  FlatListSelectorExamples,
 };
 
 type VisualKey = keyof typeof visualSource;

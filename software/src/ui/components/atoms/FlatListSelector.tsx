@@ -15,6 +15,7 @@ type Props = {
 const style = css`
   padding: 5px;
   font-size: 15px;
+  outline: none;
 `;
 
 export const FlatListSelector: FC<Props> = ({
