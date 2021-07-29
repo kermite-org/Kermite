@@ -1,21 +1,22 @@
-import { jsx, css } from 'qx';
+import { jsx, css, FC } from 'qx';
 import { Icon } from '~/ui/components';
 
-export function SectionHeaderText(props: {
+type Props = {
   text: string;
   icon: string;
   hint?: string;
-}) {
-  const cssSectionHeader = css`
-    display: flex;
-    align-items: center;
-    padding: 6px 4px 4px;
-    font-size: 18px;
-  `;
-  return (
-    <div css={cssSectionHeader} data-hint={props.hint}>
-      <Icon spec={props.icon} size={20} />
-      <span>{props.text}</span>
-    </div>
-  );
-}
+};
+
+export const SectionHeaderText: FC<Props> = ({ text, icon, hint }) => (
+  <div css={style} data-hint={hint}>
+    <Icon spec={icon} size={20} />
+    <span>{text}</span>
+  </div>
+);
+
+const style = css`
+  display: flex;
+  align-items: center;
+  padding: 6px 4px 4px;
+  font-size: 18px;
+`;

@@ -1,22 +1,23 @@
-import { css, jsx } from 'qx';
+import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 
-export const ConfigurationButton = (props: { onClick(): void }) => {
-  const cssConfigurationButton = css`
-    cursor: pointer;
-
-    &:hover {
-      opacity: 0.8;
-    }
-  `;
-
-  return (
-    <div
-      css={cssConfigurationButton}
-      onClick={props.onClick}
-      data-hint={texts.hint_assigner_topBar_profileConfigurationButton}
-    >
-      <i class="fa fa-cog" />
-    </div>
-  );
+type Props = {
+  onClick(): void;
 };
+
+export const ConfigurationButton: FC<Props> = ({ onClick }) => (
+  <div
+    css={style}
+    onClick={onClick}
+    data-hint={texts.hint_assigner_topBar_profileConfigurationButton}
+  >
+    <i class="fa fa-cog" />
+  </div>
+);
+
+const style = css`
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
+`;

@@ -1,23 +1,35 @@
-import { jsx, css, QxNode } from 'qx';
+import { jsx, css, QxNode, FC } from 'qx';
 import { uiTheme } from '~/ui/base';
 
-export const CustomWindowFrame = (props: {
+type Props = {
   children: QxNode;
   renderTitleBar: () => JSX.Element;
   renderStatusBar: () => JSX.Element;
-}) => {
-  const cssRoot = css`
-    height: 100%;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  `;
+};
 
-  const cssTitleBarRow = css`
+export const CustomWindowFrame: FC<Props> = ({
+  renderTitleBar,
+  renderStatusBar,
+  children,
+}) => (
+  <div css={style}>
+    <div class="title-bar">{renderTitleBar()}</div>
+    <div class="body-row">{children}</div>
+    <div class="statu-bar">{renderStatusBar()}</div>
+  </div>
+);
+
+const style = css`
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  > .title-bar {
     flex-shrink: 0;
-  `;
+  }
 
-  const cssBodyRow = css`
+  > .body-row {
     flex-grow: 1;
     overflow: hidden;
     display: flex;
@@ -25,19 +37,11 @@ export const CustomWindowFrame = (props: {
     > * {
       flex-grow: 1;
     }
-  `;
+  }
 
-  const cssStatusBar = css`
+  > .status-bar {
     flex-shrink: 0;
     height: 28px;
     background: ${uiTheme.colors.clWindowBar};
-  `;
-
-  return (
-    <div css={cssRoot}>
-      <div css={cssTitleBarRow}>{props.renderTitleBar()}</div>
-      <div css={cssBodyRow}>{props.children}</div>
-      <div css={cssStatusBar}>{props.renderStatusBar()}</div>
-    </div>
-  );
-};
+  }
+`;

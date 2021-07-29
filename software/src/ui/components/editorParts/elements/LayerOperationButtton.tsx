@@ -1,7 +1,29 @@
-import { jsx, css } from 'qx';
+import { jsx, css, FC } from 'qx';
 import { uiTheme } from '~/ui/base';
 
-const cssButton = css`
+type Props = {
+  icon: string;
+  handler: () => void;
+  enabled: boolean;
+  hint: string;
+};
+export const LayerOperationButtton: FC<Props> = ({
+  icon,
+  handler,
+  enabled,
+  hint,
+}) => (
+  <div
+    css={style}
+    onClick={(enabled && handler) || undefined}
+    data-disabled={!enabled}
+    data-hint={hint}
+  >
+    <i className={icon} />
+  </div>
+);
+
+const style = css`
   font-size: 16px;
   width: 26px;
   height: 26px;
@@ -20,21 +42,3 @@ const cssButton = css`
   }
   color: ${uiTheme.colors.clMainText};
 `;
-
-export const LayerOperationButtton = (props: {
-  icon: string;
-  handler: () => void;
-  enabled: boolean;
-  hint: string;
-}) => {
-  return (
-    <div
-      css={cssButton}
-      onClick={(props.enabled && props.handler) || undefined}
-      data-disabled={!props.enabled}
-      data-hint={props.hint}
-    >
-      <i className={props.icon} />
-    </div>
-  );
-};

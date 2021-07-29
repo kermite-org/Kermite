@@ -1,6 +1,6 @@
 import { jsx, css } from 'qx';
 
-interface IDualItemsHoverSelectorProps<T extends string | number> {
+interface Props<T extends string | number> {
   items: T[];
   currentItem: T;
   setCurrentItem: (nextItem: T) => void;
@@ -9,7 +9,37 @@ interface IDualItemsHoverSelectorProps<T extends string | number> {
   disabled?: boolean;
 }
 
-const cssDualItemsSelector = css`
+export function DualItemsHoverSelector<T extends string | number>({
+  items,
+  currentItem,
+  setCurrentItem,
+  textDictionary,
+  hint,
+  disabled,
+}: Props<T>) {
+  return (
+    <div
+      css={style}
+      data-hint={hint}
+      className={(disabled && '--disabled') || ''}
+    >
+      <div class="fixedView">{textDictionary[currentItem]}</div>
+      <div class="selectable">
+        {items.map((it) => (
+          <div
+            key={it}
+            data-current={currentItem === it}
+            onClick={() => setCurrentItem(it)}
+          >
+            {textDictionary[it]}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const style = css`
   width: 36px;
   user-select: none;
   > .fixedView {
@@ -45,35 +75,3 @@ const cssDualItemsSelector = css`
     display: none;
   }
 `;
-
-export function DualItemsHoverSelector<T extends string | number>(
-  props: IDualItemsHoverSelectorProps<T>,
-) {
-  const {
-    items,
-    currentItem,
-    setCurrentItem,
-    textDictionary,
-    disabled,
-  } = props;
-  return (
-    <div
-      css={cssDualItemsSelector}
-      data-hint={props.hint}
-      className={(disabled && '--disabled') || ''}
-    >
-      <div class="fixedView">{textDictionary[currentItem]}</div>
-      <div class="selectable">
-        {items.map((it) => (
-          <div
-            key={it}
-            data-current={currentItem === it}
-            onClick={() => setCurrentItem(it)}
-          >
-            {textDictionary[it]}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}

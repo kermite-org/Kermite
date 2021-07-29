@@ -1,7 +1,29 @@
-import { jsx, css } from 'qx';
+import { jsx, css, FC } from 'qx';
 import { IOperationCardViewModel, uiTheme } from '~/ui/base';
 
-const cssOperationCard = css`
+type Props = {
+  model: IOperationCardViewModel;
+};
+
+export const OperationCard: FC<Props> = ({
+  model: { text, isCurrent, setCurrent, isEnabled, hint },
+}) => {
+  const isTextLong = text.length >= 2;
+  return (
+    <div
+      css={style}
+      data-current={isCurrent}
+      onMouseDown={setCurrent}
+      data-disabled={!isEnabled}
+      data-text-long={isTextLong}
+      data-hint={hint}
+    >
+      {text}
+    </div>
+  );
+};
+
+const style = css`
   min-width: 28px;
   height: 28px;
   background: ${uiTheme.colors.clAssignCardFace};
@@ -31,22 +53,3 @@ const cssOperationCard = css`
     opacity: 0.7;
   }
 `;
-
-export const OperationCard = (props: { model: IOperationCardViewModel }) => {
-  const { text, isCurrent, setCurrent, isEnabled, hint } = props.model;
-
-  const isTextLong = text.length >= 2;
-
-  return (
-    <div
-      css={cssOperationCard}
-      data-current={isCurrent}
-      onMouseDown={setCurrent}
-      data-disabled={!isEnabled}
-      data-text-long={isTextLong}
-      data-hint={hint}
-    >
-      {text}
-    </div>
-  );
-};

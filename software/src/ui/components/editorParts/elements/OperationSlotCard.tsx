@@ -1,7 +1,30 @@
-import { jsx, css } from 'qx';
+import { jsx, css, FC } from 'qx';
 import { uiTheme } from '~/ui/base';
 
-const cssOperationSlotCard = css`
+type Props = {
+  text: string;
+  isCurrent: boolean;
+  setCurrent(): void;
+  hint: string;
+};
+
+export const OperationSlotCard: FC<Props> = ({
+  text,
+  isCurrent,
+  setCurrent,
+  hint,
+}) => (
+  <div
+    css={style}
+    data-current={isCurrent}
+    onClick={setCurrent}
+    data-hint={hint}
+  >
+    {text}
+  </div>
+);
+
+const style = css`
   min-width: 28px;
   height: 28px;
   font-size: 14px;
@@ -16,21 +39,3 @@ const cssOperationSlotCard = css`
     background: ${uiTheme.colors.clSelectHighlight};
   }
 `;
-
-export function OperationSlotCard(props: {
-  text: string;
-  isCurrent: boolean;
-  setCurrent(): void;
-  hint: string;
-}) {
-  return (
-    <div
-      css={cssOperationSlotCard}
-      data-current={props.isCurrent}
-      onClick={props.setCurrent}
-      data-hint={props.hint}
-    >
-      {props.text}
-    </div>
-  );
-}
