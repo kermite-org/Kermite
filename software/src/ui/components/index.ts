@@ -7,3 +7,4 @@ export * from './overlay';
 export * from './utils';
 export * from './widget';
 export * from './window';
+export * from './windowInner';

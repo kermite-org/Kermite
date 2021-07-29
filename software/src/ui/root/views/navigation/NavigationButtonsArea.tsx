@@ -1,6 +1,6 @@
 import { jsx } from 'qx';
+import { NavigationButton } from '~/ui/components';
 import { makeNavigationViewModel } from '~/ui/root/views/navigation/NavigationButtonsArea.model';
-import { NavigationButton } from './elements/NavigationButton';
 
 export const NavigationButtonsArea = () => {
   const vm = makeNavigationViewModel();
