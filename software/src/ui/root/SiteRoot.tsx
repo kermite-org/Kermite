@@ -11,10 +11,13 @@ import {
   globalHintMouseMoveHandlerEffect,
 } from '~/ui/base';
 import { siteModel, uiStatusModel } from '~/ui/commonModels';
-import { DebugOverlay, ForegroundModalLayerRoot } from '~/ui/components';
+import {
+  DebugOverlay,
+  ForegroundModalLayerRoot,
+  SiteDpiScaler,
+} from '~/ui/components';
 import { WidgetZoneRoot } from '~/ui/pages/widget';
 import { globalAppServicesInitializerEffect } from '~/ui/root/models/AppServicesInitializer';
-import { SiteDpiScaler } from '~/ui/root/views/window/SiteDpiScaler';
 import { ConfiguratorZoneRoot } from './views/ConfiguratorZoneRoot';
 
 setShortCssProcessor(shortCssProcessor);
