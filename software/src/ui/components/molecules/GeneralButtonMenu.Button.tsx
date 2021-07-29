@@ -7,7 +7,7 @@ type Props = {
   disabled?: boolean;
 };
 
-export const LayoutManagerButton: FC<Props> = ({
+export const GeneralButtonMenuButton: FC<Props> = ({
   handler,
   children,
   active,

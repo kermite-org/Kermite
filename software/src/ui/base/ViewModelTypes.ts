@@ -69,3 +69,7 @@ export interface IOperationCardViewModel {
   isEnabled: boolean;
   hint: string;
 }
+
+export type IGeneralMenuItem =
+  | { type: 'menuEntry'; text: string; handler: () => void; disabled?: boolean }
+  | { type: 'separator' };
