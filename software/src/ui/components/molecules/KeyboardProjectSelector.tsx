@@ -9,10 +9,6 @@ interface Props {
   hint?: string;
 }
 
-const style = css`
-  display: flex;
-`;
-
 export const KeyboardProjectSelector: FC<Props> = (props) => (
   <div css={style}>
     <GeneralSelector {...props.selectorSource} width={170} hint={props.hint} />
@@ -25,3 +21,7 @@ export const KeyboardProjectSelector: FC<Props> = (props) => (
     />
   </div>
 );
+
+const style = css`
+  display: flex;
+`;

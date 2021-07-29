@@ -11,6 +11,22 @@ interface Props {
   hint?: string;
 }
 
+export const CheckBoxLine: FC<Props> = ({
+  className,
+  checked,
+  setChecked,
+  text,
+  disabled,
+  hint,
+}) => (
+  <div css={style} className={className} data-hint={hint}>
+    <div className="inner">
+      <CheckBox checked={checked} setChecked={setChecked} disabled={disabled} />
+      <span data-disabled={disabled}>{text}</span>
+    </div>
+  </div>
+);
+
 const style = css`
   height: ${uiTheme.unitHeight}px;
   display: flex;
@@ -30,19 +46,3 @@ const style = css`
     }
   }
 `;
-
-export const CheckBoxLine: FC<Props> = ({
-  className,
-  checked,
-  setChecked,
-  text,
-  disabled,
-  hint,
-}) => (
-  <div css={style} className={className} data-hint={hint}>
-    <div className="inner">
-      <CheckBox checked={checked} setChecked={setChecked} disabled={disabled} />
-      <span data-disabled={disabled}>{text}</span>
-    </div>
-  </div>
-);

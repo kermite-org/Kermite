@@ -15,36 +15,6 @@ interface Props {
   hint?: string;
 }
 
-const style = (width: number = 100) => css`
-  display: block;
-  background: ${uiTheme.colors.clControlBase};
-  border: solid 1px ${uiTheme.colors.clPrimary};
-  color: ${uiTheme.colors.clControlText};
-  border-radius: ${uiTheme.controlBorderRadius}px;
-  /* min-width: 100px; */
-  height: ${uiTheme.unitHeight}px;
-  width: ${width ? `${width}px` : 'inherit'};
-  font-size: 15px;
-  padding-left: 4px;
-
-  &:hover {
-    opacity: 0.8;
-  }
-
-  &:focus {
-    outline: none;
-    opacity: 1;
-  }
-
-  &:disabled {
-    opacity: 0.5;
-  }
-
-  &[data-invalid] {
-    background: ${uiTheme.colors.clInvalidInput};
-  }
-`;
-
 export const GeneralInput: FC<Props> = ({
   value,
   setValue,
@@ -74,3 +44,33 @@ export const GeneralInput: FC<Props> = ({
     />
   );
 };
+
+const style = (width: number = 100) => css`
+  display: block;
+  background: ${uiTheme.colors.clControlBase};
+  border: solid 1px ${uiTheme.colors.clPrimary};
+  color: ${uiTheme.colors.clControlText};
+  border-radius: ${uiTheme.controlBorderRadius}px;
+  /* min-width: 100px; */
+  height: ${uiTheme.unitHeight}px;
+  width: ${width ? `${width}px` : 'inherit'};
+  font-size: 15px;
+  padding-left: 4px;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &:focus {
+    outline: none;
+    opacity: 1;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+  }
+
+  &[data-invalid] {
+    background: ${uiTheme.colors.clInvalidInput};
+  }
+`;

@@ -10,25 +10,6 @@ interface Props {
   hint?: string;
 }
 
-const style = css`
-  font-size: 15px;
-  cursor: pointer;
-  user-select: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  &:hover {
-    opacity: 0.7;
-  }
-
-  &.disabled {
-    /* pointer-events: none; */
-    cursor: inherit;
-    opacity: 0.5;
-  }
-`;
-
 export const ButtonBase: FC<Props> = ({
   onClick,
   disabled,
@@ -52,3 +33,22 @@ export const ButtonBase: FC<Props> = ({
     {children}
   </div>
 );
+
+const style = css`
+  font-size: 15px;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &.disabled {
+    /* pointer-events: none; */
+    cursor: inherit;
+    opacity: 0.5;
+  }
+`;

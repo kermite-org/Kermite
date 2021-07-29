@@ -10,6 +10,23 @@ interface Props {
   text: string;
 }
 
+export const ToggleButton: FC<Props> = ({
+  text,
+  active,
+  setActive,
+  width,
+  disabled,
+}) => (
+  <ButtonBase
+    extraCss={style(width)}
+    active={active}
+    disabled={disabled}
+    onClick={() => setActive(!active)}
+  >
+    <span>{text}</span>
+  </ButtonBase>
+);
+
 const style = (buttonWidth: number | undefined) => css`
   width: ${buttonWidth ? `${buttonWidth}px` : 'inherit'};
   height: ${uiTheme.unitHeight}px;
@@ -32,20 +49,3 @@ const style = (buttonWidth: number | undefined) => css`
     opacity: 0.4;
   }
 `;
-
-export const ToggleButton: FC<Props> = ({
-  text,
-  active,
-  setActive,
-  width,
-  disabled,
-}) => (
-  <ButtonBase
-    extraCss={style(width)}
-    active={active}
-    disabled={disabled}
-    onClick={() => setActive(!active)}
-  >
-    <span>{text}</span>
-  </ButtonBase>
-);

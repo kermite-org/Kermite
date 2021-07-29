@@ -2,7 +2,7 @@ import { css, FC, jsx } from 'qx';
 import { ISelectorOption } from '~/ui/base';
 import { reflectValue } from '~/ui/helpers';
 
-type Props = {
+interface Props {
   options: ISelectorOption[];
   value: string;
   setValue: (value: string) => void;
@@ -10,13 +10,7 @@ type Props = {
   disabled?: boolean;
   className?: string;
   hint?: string;
-};
-
-const style = css`
-  padding: 5px;
-  font-size: 15px;
-  outline: none;
-`;
+}
 
 export const FlatListSelector: FC<Props> = ({
   options,
@@ -43,3 +37,9 @@ export const FlatListSelector: FC<Props> = ({
     ))}
   </select>
 );
+
+const style = css`
+  padding: 5px;
+  font-size: 15px;
+  outline: none;
+`;

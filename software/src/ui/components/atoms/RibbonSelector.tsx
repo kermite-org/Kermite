@@ -11,6 +11,34 @@ interface Props {
   hint?: string;
 }
 
+export const RibbonSelector: FC<Props> = ({
+  options,
+  value,
+  setValue,
+  className,
+  buttonWidth = 60,
+  disabled,
+  hint,
+}) => (
+  <div
+    css={style(buttonWidth)}
+    class={className}
+    data-disabled={disabled}
+    data-hint={hint}
+  >
+    {options.map((item) => (
+      <div
+        key={item.value}
+        class="strip"
+        data-active={item.value === value}
+        onClick={() => setValue(item.value)}
+      >
+        <span class="text">{item.label}</span>
+      </div>
+    ))}
+  </div>
+);
+
 const style = (buttonWidth: number) => css`
   display: flex;
 
@@ -53,31 +81,3 @@ const style = (buttonWidth: number) => css`
     pointer-events: none;
   }
 `;
-
-export const RibbonSelector: FC<Props> = ({
-  options,
-  value,
-  setValue,
-  className,
-  buttonWidth = 60,
-  disabled,
-  hint,
-}) => (
-  <div
-    css={style(buttonWidth)}
-    class={className}
-    data-disabled={disabled}
-    data-hint={hint}
-  >
-    {options.map((item) => (
-      <div
-        key={item.value}
-        class="strip"
-        data-active={item.value === value}
-        onClick={() => setValue(item.value)}
-      >
-        <span class="text">{item.label}</span>
-      </div>
-    ))}
-  </div>
-);
