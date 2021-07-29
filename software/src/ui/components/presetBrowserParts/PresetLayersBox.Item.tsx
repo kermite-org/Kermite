@@ -8,7 +8,7 @@ type Props = {
   onClick: () => void;
 };
 
-export const PresetLayerItem: FC<Props> = ({
+export const PresetLayersBoxItem: FC<Props> = ({
   layerName,
   isActive,
   onClick,

@@ -4,6 +4,7 @@ export * from './layouterParts';
 export * from './modals';
 export * from './molecules';
 export * from './overlay';
+export * from './presetBrowserParts';
 export * from './utils';
 export * from './widget';
 export * from './window';

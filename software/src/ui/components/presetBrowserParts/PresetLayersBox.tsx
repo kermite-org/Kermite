@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
-import { PresetLayerItem } from '~/ui/pages/preset-browser-page/components/PresetLayerItem';
+import { PresetLayersBoxItem } from '~/ui/components/presetBrowserParts/PresetLayersBox.Item';
 
 type Props = {
   className?: string;
@@ -25,7 +25,7 @@ export const PresetLayersBox: FC<Props> = ({
     onClick={() => setCurrentLayerId('')}
   >
     {layers.reverse().map((la) => (
-      <PresetLayerItem
+      <PresetLayersBoxItem
         key={la.layerId}
         layerName={la.layerName}
         isActive={la.layerId === currentLayerId}
