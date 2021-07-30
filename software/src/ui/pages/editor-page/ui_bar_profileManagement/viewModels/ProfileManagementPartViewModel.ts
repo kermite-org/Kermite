@@ -60,7 +60,13 @@ function makeProfileSelectionSource(
   editSource: IProfileEditSource,
   loadProfile: (profileName: string) => void,
 ): ISelectorSource {
-  if (editSource.type === 'ProfileNewlyCreated') {
+  if (editSource.type === 'NoProfilesAvailable') {
+    return {
+      options: [],
+      value: '',
+      setValue: () => {},
+    };
+  } else if (editSource.type === 'ProfileNewlyCreated') {
     return {
       options: [
         { label: '(untitled)', value: '__NEWLY_CREATED_PROFILE__' },
