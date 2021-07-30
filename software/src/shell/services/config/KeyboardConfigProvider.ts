@@ -1,14 +1,10 @@
-import { fallbackKeyboardConfig, IKeyboardConfig } from '~/shared';
-import { vBoolean, vObject } from '~/shared/modules/SchemaValidationHelper';
+import {
+  fallbackKeyboardConfig,
+  IKeyboardConfig,
+  keyboardConfigLoadingDataSchema,
+} from '~/shared';
 import { appGlobal, applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
-
-// 環境に関連したキーボードの設定を保存する
-
-const keyboardConfigDataSchema = vObject({
-  isSimulatorMode: vBoolean(),
-  isMuteMode: vBoolean(),
-});
 
 export class KeyboardConfigProvider {
   private keyboardConfig: IKeyboardConfig = fallbackKeyboardConfig;
@@ -37,9 +33,9 @@ export class KeyboardConfigProvider {
   }
 
   loadFromBackingStore() {
-    this.keyboardConfig = applicationStorage.readItemSafe(
+    this.keyboardConfig = applicationStorage.readItemBasedOnDefault(
       'keyboardConfig',
-      keyboardConfigDataSchema,
+      keyboardConfigLoadingDataSchema,
       fallbackKeyboardConfig,
     );
   }

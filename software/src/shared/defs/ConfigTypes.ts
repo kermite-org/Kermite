@@ -9,6 +9,11 @@ export interface IKeyboardConfig {
   isMuteMode: boolean;
 }
 
+export const keyboardConfigLoadingDataSchema = vObject({
+  isSimulatorMode: vBoolean(),
+  isMuteMode: vBoolean(),
+});
+
 export const fallbackKeyboardConfig: IKeyboardConfig = {
   isSimulatorMode: false,
   isMuteMode: false,
