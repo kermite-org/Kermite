@@ -3,6 +3,7 @@ import { texts } from '~/ui/base';
 import { uiStatusModel } from '~/ui/commonModels';
 import { CheckBoxLine } from '~/ui/components';
 import { fieldSetter } from '~/ui/helpers';
+import { profilesModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileManagementPartViewModel';
 
 export const BehaviorOptionsPartB: FC = () => {
   const { settings } = uiStatusModel;
@@ -14,6 +15,7 @@ export const BehaviorOptionsPartB: FC = () => {
         checked={settings.showLayerDefaultAssign}
         setChecked={fieldSetter(settings, 'showLayerDefaultAssign')}
         hint={texts.hint_assigner_configs_showFallbackAssigns}
+        disabled={!profilesModel.isEditProfileAvailable}
       />
     </div>
   );
