@@ -15,7 +15,7 @@ export const CustomWindowFrame: FC<Props> = ({
   <div css={style}>
     <div class="title-bar">{renderTitleBar({})}</div>
     <div class="body-row">{children}</div>
-    <div class="statu-bar">{renderStatusBar({})}</div>
+    <div class="status-bar">{renderStatusBar({})}</div>
   </div>
 );
 
