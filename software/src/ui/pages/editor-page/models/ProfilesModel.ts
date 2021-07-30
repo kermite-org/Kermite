@@ -13,7 +13,7 @@ export class ProfilesModel {
   constructor(private editorModel: EditorModel) {}
 
   // state
-  editSource: IProfileEditSource = { type: 'NewlyCreated' };
+  editSource: IProfileEditSource = { type: 'ProfileNewlyCreated' };
   allProfileNames: string[] = [];
 
   profileLoaded: boolean = false;

@@ -89,7 +89,7 @@ export type IAppWindowStatus = {
 
 export type IProfileEditSource =
   | {
-      type: 'NewlyCreated';
+      type: 'ProfileNewlyCreated';
     }
   | {
       type: 'InternalProfile';
