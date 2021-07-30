@@ -39,7 +39,10 @@ function createLazyInitializer(
 
 const profileEditSourceSchema = vSchemaOneOf([
   vObject({
-    type: vValueEquals('NewlyCreated'),
+    type: vValueEquals('NoProfilesAvailable'),
+  }),
+  vObject({
+    type: vValueEquals('ProfileNewlyCreated'),
   }),
   vObject({
     type: vValueEquals('InternalProfile'),
@@ -55,7 +58,7 @@ const profileEditSourceSchema = vSchemaOneOf([
 export class ProfileManager implements IProfileManager {
   private status: IProfileManagerStatus = {
     editSource: {
-      type: 'NewlyCreated',
+      type: 'ProfileNewlyCreated',
     },
     allProfileNames: [],
     loadedProfileData: fallbackProfileData,
@@ -105,10 +108,13 @@ export class ProfileManager implements IProfileManager {
   }
 
   private loadInitialEditSource(): IProfileEditSource {
+    if (this.status.allProfileNames.length === 0) {
+      return { type: 'NoProfilesAvailable' };
+    }
     return applicationStorage.readItemSafe<IProfileEditSource>(
       'profileEditSource',
       profileEditSourceSchema,
-      { type: 'NewlyCreated' },
+      { type: 'ProfileNewlyCreated' },
     );
   }
 
@@ -116,7 +122,7 @@ export class ProfileManager implements IProfileManager {
     this.status = { ...this.status, ...newStatePartial };
     this.statusEventPort.emit(newStatePartial);
     if (newStatePartial.editSource) {
-      if (newStatePartial.editSource.type !== 'NewlyCreated') {
+      if (newStatePartial.editSource.type !== 'ProfileNewlyCreated') {
         applicationStorage.writeItem(
           'profileEditSource',
           newStatePartial.editSource,
@@ -138,7 +144,9 @@ export class ProfileManager implements IProfileManager {
   async loadProfileByEditSource(
     editSource: IProfileEditSource,
   ): Promise<IProfileData> {
-    if (editSource.type === 'NewlyCreated') {
+    if (editSource.type === 'NoProfilesAvailable') {
+      return fallbackProfileData;
+    } else if (editSource.type === 'ProfileNewlyCreated') {
       return fallbackProfileData;
     } else if (editSource.type === 'InternalProfile') {
       return await this.core.loadProfile(editSource.profileName);
@@ -172,7 +180,8 @@ export class ProfileManager implements IProfileManager {
 
   async saveCurrentProfile(profileData: IProfileData) {
     const { editSource } = this.status;
-    if (editSource.type === 'NewlyCreated') {
+    if (editSource.type === 'NoProfilesAvailable') {
+    } else if (editSource.type === 'ProfileNewlyCreated') {
     } else if (editSource.type === 'ExternalFile') {
       await this.core.saveExternalProfileFile(editSource.filePath, profileData);
     } else if (editSource.type === 'InternalProfile') {
@@ -257,14 +266,14 @@ export class ProfileManager implements IProfileManager {
       presetSpec,
     );
     this.setStatus({
-      editSource: { type: 'NewlyCreated' },
+      editSource: { type: 'ProfileNewlyCreated' },
       loadedProfileData: profileData,
     });
   }
 
   private createProfileExternal(profileData: IProfileData) {
     this.setStatus({
-      editSource: { type: 'NewlyCreated' },
+      editSource: { type: 'ProfileNewlyCreated' },
       loadedProfileData: profileData,
     });
   }
@@ -279,7 +288,7 @@ export class ProfileManager implements IProfileManager {
     profileData.projectId = projectId;
     profileData.keyboardDesign = layout;
     this.setStatus({
-      editSource: { type: 'NewlyCreated' },
+      editSource: { type: 'ProfileNewlyCreated' },
       loadedProfileData: profileData,
     });
   }
