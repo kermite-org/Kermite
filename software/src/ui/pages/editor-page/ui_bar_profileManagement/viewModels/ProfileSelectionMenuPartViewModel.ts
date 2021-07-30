@@ -1,6 +1,6 @@
 import { useLocal } from 'qx';
 import { texts } from '~/ui/base';
-import { useProjectResourcePresenceChecker } from '~/ui/commonModels';
+import { useGlobalSettingsValue } from '~/ui/commonModels';
 import { IProfileManagementPartViewModel } from './ProfileManagementPartViewModel';
 
 interface IMenuItem {
@@ -93,7 +93,8 @@ export function makeProfileSelectionMenuPartViewModel(
   vm: IProfileManagementPartViewModel,
 ) {
   const state = useLocal({ isOpen: false });
-  const isLocalProjectsAvailable = useProjectResourcePresenceChecker('local');
+  const isLocalProjectsAvailable = useGlobalSettingsValue('useLocalResouces');
+  // const isLocalProjectsAvailable = useProjectResourcePresenceChecker('local');
   const menuItemsSource = createMenuItemSources(vm, isLocalProjectsAvailable);
 
   return {
