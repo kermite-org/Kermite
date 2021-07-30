@@ -1,4 +1,4 @@
-import { IDisplayKeyShape } from '~/shared';
+import { IDisplayKeyboardDesign, IDisplayKeyShape } from '~/shared';
 
 export interface ICustomKeyUnitViewModelBase {
   keyUnitId: string;
@@ -73,3 +73,9 @@ export interface IOperationCardViewModel {
 export type IGeneralMenuItem =
   | { type: 'menuEntry'; text: string; handler: () => void; disabled?: boolean }
   | { type: 'separator' };
+
+export interface IProjectKeyboardListProjectItem {
+  projectId: string;
+  keyboardName: string;
+  design: IDisplayKeyboardDesign;
+}
