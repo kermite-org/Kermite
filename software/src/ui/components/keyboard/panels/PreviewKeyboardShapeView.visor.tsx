@@ -1,16 +1,16 @@
 import { jsx } from 'qx';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
-import { ProjectKeyboardShapeView } from '~/ui/components_svg/panels/ProjectKeyboardShapeView';
+import { PreviewKeyboardShapeView } from '~/ui/components/keyboard/panels/PreviewKeyboardShapeView';
 import { exampleData_persistKeyboardDesign_astelia } from '~/ui/exampleData';
 
 const design = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
   exampleData_persistKeyboardDesign_astelia,
 );
 
-export const ProjectKeyboardShapeViewExamples = {
+export const PreviewKeyboardShapeViewExamples = {
   default: () => (
-    <div style="width: 200px; height: 150px; border: solid 1px #AAA">
-      <ProjectKeyboardShapeView
+    <div style="width: 100%; height: 400px;">
+      <PreviewKeyboardShapeView
         keyboardDesign={design}
         settings={{
           shapeViewShowKeyId: true,

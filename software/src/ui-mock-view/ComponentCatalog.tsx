@@ -4,8 +4,8 @@ import { CheckBoxExamples } from '~/ui/components/atoms/CheckBox.visor';
 import { FlatListSelectorExamples } from '~/ui/components/atoms/FlatListSelector.visor';
 import { GeneralButtonExamples } from '~/ui/components/atoms/GeneralButton.visor';
 import { GeneralSelectorExamples } from '~/ui/components/atoms/GeneralSelector.visor';
-import { PreviewKeyboardShapeViewExamples } from '~/ui/components_svg/panels/PreviewKeyboardShapeView.visor';
-import { ProjectKeyboardShapeViewExamples } from '~/ui/components_svg/panels/ProjectKeyboardShapeView.visor';
+import { PreviewKeyboardShapeViewExamples } from '~/ui/components/keyboard/panels/PreviewKeyboardShapeView.visor';
+import { ProjectKeyboardShapeViewExamples } from '~/ui/components/keyboard/panels/ProjectKeyboardShapeView.visor';
 import { fieldSetter } from '~/ui/helpers';
 
 type IVisualEntry = Record<string, FC | JSX.Element>;
@@ -75,7 +75,7 @@ const style = css`
   display: flex;
 
   > .selection-area {
-    width: 200px;
+    width: 240px;
     flex-shrink: 0;
     background: #ccc;
     padding: 15px;

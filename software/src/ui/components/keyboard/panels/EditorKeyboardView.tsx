@@ -1,9 +1,9 @@
 import { FC, jsx } from 'qx';
 import { IDisplayKeyboardDesign } from '~/shared';
 import { uiTheme, IEditKeyUnitCardViewModel } from '~/ui/base';
-import { KeyboardSvgFrameWithAutoScaler } from '~/ui/components_svg/frames/KeyboardSvgFrameWithAutoScaler';
-import { EditKeyUnitCard } from '~/ui/components_svg/keyUnitCards/EditKeyUnitCard';
-import { KeyboardBodyShape } from '~/ui/components_svg/keyboardBody/KeyboardBodyShape';
+import { KeyboardSvgFrameWithAutoScaler } from '~/ui/components/keyboard/frames/KeyboardSvgFrameWithAutoScaler';
+import { EditKeyUnitCard } from '~/ui/components/keyboard/keyUnitCards/EditKeyUnitCard';
+import { KeyboardBodyShape } from '~/ui/components/keyboard/keyboardBody/KeyboardBodyShape';
 
 type Props = {
   cards: IEditKeyUnitCardViewModel[];

@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { texts, uiTheme, IEditKeyUnitCardViewModel } from '~/ui/base';
-import { KeyTextLabel } from '~/ui/components_svg/keyUnitCards/EditKeyUnitCard.KeyTextLabel';
-import { KeyUnitShape } from '~/ui/components_svg/keyUnitCards/KeyUnitShape';
+import { KeyTextLabel } from '~/ui/components/keyboard/keyUnitCards/EditKeyUnitCard.KeyTextLabel';
+import { KeyUnitShape } from '~/ui/components/keyboard/keyUnitCards/KeyUnitShape';
 
 type Props = {
   keyUnit: IEditKeyUnitCardViewModel;

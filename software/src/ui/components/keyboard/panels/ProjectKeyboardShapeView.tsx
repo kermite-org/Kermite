@@ -1,10 +1,10 @@
 import { jsx, css, FC } from 'qx';
 import { IDisplayKeyboardDesign, IDisplayKeyEntity } from '~/shared';
 import { uiTheme } from '~/ui/base';
-import { KeyboardSvgFrameWithAutoScaler } from '~/ui/components_svg/frames/KeyboardSvgFrameWithAutoScaler';
-import { ProjectKeyEntityCard } from '~/ui/components_svg/keyUnitCards/ProjectKeyEntityCard';
-import { KeyboardBodyShape } from '~/ui/components_svg/keyboardBody/KeyboardBodyShape';
-import { PreviewDisplayAreaBox } from '~/ui/components_svg/keyboardBody/PreviewBoundingBox';
+import { KeyboardSvgFrameWithAutoScaler } from '~/ui/components/keyboard/frames/KeyboardSvgFrameWithAutoScaler';
+import { ProjectKeyEntityCard } from '~/ui/components/keyboard/keyUnitCards/ProjectKeyEntityCard';
+import { KeyboardBodyShape } from '~/ui/components/keyboard/keyboardBody/KeyboardBodyShape';
+import { PreviewDisplayAreaBox } from '~/ui/components/keyboard/keyboardBody/PreviewBoundingBox';
 
 type Props = {
   keyboardDesign: IDisplayKeyboardDesign;

@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
 import { GeneralSelector } from '~/ui/components';
-import { PreviewKeyboardShapeView } from '~/ui/components_svg';
+import { PreviewKeyboardShapeView } from '~/ui/components/keyboard';
 import { useShapePreviewPageModel } from '~/ui/pages/shape-preview-page/models';
 import { ShapePreviewOptionsBox } from '~/ui/pages/shape-preview-page/organisms/ShapePreviewOptionsBox';
 
