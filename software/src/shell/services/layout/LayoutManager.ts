@@ -82,6 +82,13 @@ export class LayoutManager implements ILayoutManager {
       }
       this.initialized = true;
     }
+
+    if (this.status.editSource.type === 'CurrentProfile') {
+      const profile = await this.profileManager.getCurrentProfileAsync();
+      if (!profile) {
+        this.createNewLayout();
+      }
+    }
   };
 
   private finalizeOnLastDisconnect = () => {
