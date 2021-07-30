@@ -9,7 +9,7 @@ import { IEventPort } from '~/shell/funcs';
 
 export interface IProfileManager {
   getCurrentProfileProjectId(): string;
-  getCurrentProfileAsync(): Promise<IProfileData>;
+  getCurrentProfileAsync(): Promise<IProfileData | undefined>;
   getAllProfileNamesAsync(): Promise<string[]>;
   statusEventPort: IEventPort<Partial<IProfileManagerStatus>>;
   executeCommands(commands: IProfileManagerCommand[]): Promise<void>;

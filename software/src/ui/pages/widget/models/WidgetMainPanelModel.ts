@@ -1,5 +1,5 @@
 import { useEffect } from 'qx';
-import { IDisplayKeyboardDesign } from '~/shared';
+import { fallbackProfileData, IDisplayKeyboardDesign } from '~/shared';
 import { ipcAgent, IWidgetKeyUnitCardViewModel, router } from '~/ui/base';
 import { siteModel, usePlayerModel } from '~/ui/commonModels';
 import { useWidgetKeyUnitCardViewModel } from '~/ui/pages/widget/models/WidgetKeyUnitCardViewModel';
@@ -20,7 +20,7 @@ export function useWidgetMainPanelModel(): IWidgetMainPanelModel {
   useEffect(() => {
     (async () => {
       const profileData = await ipcAgent.async.profile_getCurrentProfile();
-      playerModel.setProfileData(profileData);
+      playerModel.setProfileData(profileData || fallbackProfileData);
     })();
   }, []);
 

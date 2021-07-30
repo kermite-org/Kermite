@@ -26,12 +26,19 @@ export const ProfileManagementPart: FcWithClassName = ({ className }) => {
       <KeyboardProfileSelector
         selectorSource={baseVm.profileSelectorSource}
         hint={texts.hint_assigner_topBar_selectCurrentProfile}
+        disabled={!baseVm.isEditProfileAvailable}
       />
-      <ConfigurationButton onClick={baseVm.openConfiguration} />
-
-      <p onClick={baseVm.toggleRoutingPanel} style={{ cursor: 'pointer' }}>
-        <i class="fa fa-list" />
-      </p>
+      <ConfigurationButton
+        onClick={baseVm.openConfiguration}
+        iconSpec="fa fa-cog"
+        data-hint={texts.hint_assigner_topBar_profileConfigurationButton}
+        disabled={!baseVm.isEditProfileAvailable}
+      />
+      <ConfigurationButton
+        onClick={baseVm.toggleRoutingPanel}
+        iconSpec="fa fa-list"
+        disabled={!baseVm.isEditProfileAvailable}
+      />
 
       <div class="spacer" />
       <div class="mode-selectors-box">

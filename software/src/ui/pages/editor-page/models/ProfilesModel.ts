@@ -13,11 +13,8 @@ export class ProfilesModel {
   constructor(private editorModel: EditorModel) {}
 
   // state
-  editSource: IProfileEditSource = { type: 'NewlyCreated' };
+  editSource: IProfileEditSource = { type: 'ProfileNewlyCreated' };
   allProfileNames: string[] = [];
-
-  profileLoaded: boolean = false;
-  loadedProfileReceived: boolean = false;
 
   // listeners
 
@@ -38,13 +35,15 @@ export class ProfilesModel {
         )
       ) {
         this.editorModel.loadProfileData(payload.loadedProfileData);
-        this.profileLoaded = true;
       }
-      this.loadedProfileReceived = true;
     }
   };
 
   // reader
+
+  get isEditProfileAvailable() {
+    return this.editSource.type !== 'NoProfilesAvailable';
+  }
 
   get currentProfileName() {
     return (

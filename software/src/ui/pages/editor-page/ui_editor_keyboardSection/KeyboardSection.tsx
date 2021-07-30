@@ -23,11 +23,7 @@ export const KeyboardSection: FC = () => {
     editorModel,
   );
 
-  if (
-    profilesModel.allProfileNames.length === 0 &&
-    profilesModel.loadedProfileReceived &&
-    !profilesModel.profileLoaded
-  ) {
+  if (!profilesModel.isEditProfileAvailable) {
     // Profileが存在しない場合、presetBrowserへの導線を表示
     return <ProfileSetupNavigationCardView />;
   }

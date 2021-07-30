@@ -60,7 +60,7 @@ function getEditSourceDisplayText(
   editSource: ILayoutEditSource,
   projectLayoutsInfos: IProjectLayoutsInfo[],
 ) {
-  if (editSource.type === 'NewlyCreated') {
+  if (editSource.type === 'LayoutNewlyCreated') {
     return `[NewlyCreated]`;
   } else if (editSource.type === 'CurrentProfile') {
     return `[CurrentProfileLayout]`;
@@ -160,7 +160,8 @@ function useLayoutManagerViewModelImpl(
     loadFromFileWithDialog: () => model.loadFromFileWithDialog(),
     saveToFileWithDialog: () =>
       model.saveToFileWithDialog(UiLayouterCore.emitSavingDesign()),
-    canOverwrite: model.editSource.type !== 'NewlyCreated' && model.isModified,
+    canOverwrite:
+      model.editSource.type !== 'LayoutNewlyCreated' && model.isModified,
     overwriteLayout: () => model.save(UiLayouterCore.emitSavingDesign()),
     modalState: local.modalState,
     openLoadFromProjectModal: () => setModalState('LoadFromProject'),

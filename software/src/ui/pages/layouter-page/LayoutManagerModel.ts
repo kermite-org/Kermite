@@ -38,7 +38,7 @@ export class LayoutManagerModel implements ILayoutManagerModel {
   private _projectLayoutsInfos: IProjectLayoutsInfo[] = [];
 
   private _layoutManagerStatus: ILayoutManagerStatus = {
-    editSource: { type: 'NewlyCreated' },
+    editSource: { type: 'LayoutNewlyCreated' },
     loadedDesign: createFallbackPersistKeyboardDesign(),
     // errroInfo: undefined,
     projectLayoutsInfos: [],
@@ -163,6 +163,10 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     }
     if (this.editSource.type === 'CurrentProfile') {
       const profile = await ipcAgent.async.profile_getCurrentProfile();
+      if (!profile) {
+        console.error('current profile unavailable');
+        return;
+      }
       projectId = profile.projectId;
     }
     const layout = UiLayouterCore.emitSavingDesign();
@@ -239,7 +243,7 @@ export class LayoutManagerModel implements ILayoutManagerModel {
           const design = UiLayouterCore.emitSavingDesign();
           editorModel.replaceKeyboardDesign(design);
         }
-        if (this.editSource.type === 'NewlyCreated') {
+        if (this.editSource.type === 'LayoutNewlyCreated') {
           _keepUnsavedNewDesign = true;
         }
       }

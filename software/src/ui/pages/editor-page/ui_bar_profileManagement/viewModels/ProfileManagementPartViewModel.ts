@@ -51,6 +51,8 @@ export interface IProfileManagementPartViewModel {
   openUserProfilesFolder(): void;
 
   toggleRoutingPanel(): void;
+  isMenuItemSaveEnabled: boolean;
+  isEditProfileAvailable: boolean;
 }
 
 export const profilesModel = new ProfilesModel(editorModel);
@@ -60,7 +62,13 @@ function makeProfileSelectionSource(
   editSource: IProfileEditSource,
   loadProfile: (profileName: string) => void,
 ): ISelectorSource {
-  if (editSource.type === 'NewlyCreated') {
+  if (editSource.type === 'NoProfilesAvailable') {
+    return {
+      options: [],
+      value: '',
+      setValue: () => {},
+    };
+  } else if (editSource.type === 'ProfileNewlyCreated') {
     return {
       options: [
         { label: '(untitled)', value: '__NEWLY_CREATED_PROFILE__' },
@@ -203,7 +211,10 @@ const openConfiguration = () => {
 
 const onSaveButton = () => {
   const editSourceType = profilesModel.editSource.type;
-  if (editSourceType === 'NewlyCreated' || editSourceType === 'ExternalFile') {
+  if (
+    editSourceType === 'ProfileNewlyCreated' ||
+    editSourceType === 'ExternalFile'
+  ) {
     handleSaveUnsavedProfile();
   } else {
     profilesModel.saveProfile();
@@ -266,7 +277,7 @@ function getCanWrite(
 function getCanSave(): boolean {
   const { editSource } = profilesModel;
   return (
-    editSource.type === 'NewlyCreated' ||
+    editSource.type === 'ProfileNewlyCreated' ||
     editSource.type === 'ExternalFile' ||
     (editSource.type === 'InternalProfile' && profilesModel.checkDirty())
   );
@@ -355,5 +366,9 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     handleExportToFile,
     openUserProfilesFolder,
     toggleRoutingPanel,
+    isMenuItemSaveEnabled:
+      editSource.type === 'ProfileNewlyCreated' ||
+      editSource.type === 'ExternalFile',
+    isEditProfileAvailable: profilesModel.isEditProfileAvailable,
   };
 }

@@ -1,4 +1,4 @@
-import { jsx } from 'qx';
+import { FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { useDeviceStatusModel } from '~/ui/commonModels';
 import { useKeyboardBehaviorModeModel } from '~/ui/commonModels/KeyboardBehaviorModeModel';
@@ -8,7 +8,7 @@ import {
 } from '~/ui/commonModels/ParameterBasedModeModels';
 import { CheckBoxLine, DualItemsHoverSelector } from '~/ui/components';
 
-export const BehaviorSelector = () => {
+export const BehaviorSelector: FC = () => {
   const { isSimulatorMode, setSimulatorMode } = useKeyboardBehaviorModeModel();
   const { isConnected } = useDeviceStatusModel();
   return (
@@ -22,7 +22,7 @@ export const BehaviorSelector = () => {
   );
 };
 
-export const MuteModeSelector = () => {
+export const MuteModeSelector: FC = () => {
   const { isMuteMode, setMuteMode } = useKeyboardBehaviorModeModel();
   const { isConnected } = useDeviceStatusModel();
   return (
@@ -35,7 +35,7 @@ export const MuteModeSelector = () => {
   );
 };
 
-export const LayoutStandardSelector = () => {
+export const LayoutStandardSelector: FC = () => {
   const { systemLayoutIndex, setSystemLayoutIndex } = useSystemLayoutModel();
   const layoutIndices: number[] = [0, 1];
   const textDictionary: { [key in number]: string } = {
@@ -55,7 +55,7 @@ export const LayoutStandardSelector = () => {
   );
 };
 
-export const RoutingChannelSelector = () => {
+export const RoutingChannelSelector: FC = () => {
   const { routingChannel, setRoutingChannel } = useRoutingChannelModel();
   const channelValues: number[] = [0, 1];
   const textDictionary: { [key in number]: string } = {
