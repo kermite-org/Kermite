@@ -10,14 +10,7 @@ const design = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
 export const ProjectKeyboardShapeViewExamples = {
   default: () => (
     <div style="width: 200px; height: 150px; border: solid 1px #AAA">
-      <ProjectKeyboardShapeView
-        keyboardDesign={design}
-        settings={{
-          shapeViewShowKeyId: true,
-          shapeViewShowKeyIndex: true,
-          shapeViewShowBoundingBox: false,
-        }}
-      />
+      <ProjectKeyboardShapeView keyboardDesign={design} />
     </div>
   ),
 };

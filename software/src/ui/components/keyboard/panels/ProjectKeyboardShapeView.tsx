@@ -4,26 +4,12 @@ import { uiTheme } from '~/ui/base';
 import { KeyboardSvgFrameWithAutoScaler } from '~/ui/components/keyboard/frames/KeyboardSvgFrameWithAutoScaler';
 import { ProjectKeyEntityCard } from '~/ui/components/keyboard/keyUnitCards/ProjectKeyEntityCard';
 import { KeyboardBodyShape } from '~/ui/components/keyboard/keyboardBody/KeyboardBodyShape';
-import { PreviewDisplayAreaBox } from '~/ui/components/keyboard/keyboardBody/PreviewBoundingBox';
 
 type Props = {
   keyboardDesign: IDisplayKeyboardDesign;
-  settings: {
-    shapeViewShowKeyId: boolean;
-    shapeViewShowKeyIndex: boolean;
-    shapeViewShowBoundingBox: boolean;
-  };
 };
 
-export const ProjectKeyboardShapeView: FC<Props> = ({
-  keyboardDesign,
-  settings,
-}) => {
-  const showBoundingBox = settings.shapeViewShowBoundingBox;
-
-  const showKeyId = settings.shapeViewShowKeyId;
-  const showKeyIndex = settings.shapeViewShowKeyIndex;
-
+export const ProjectKeyboardShapeView: FC<Props> = ({ keyboardDesign }) => {
   const dpiScale = 2;
   const marginRatio = 0.06;
   const baseStrokeWidth = 0.3;
@@ -43,15 +29,7 @@ export const ProjectKeyboardShapeView: FC<Props> = ({
           fillColor={bodyFillColor}
           strokeColor={bodyStrokeColor}
         />
-        <ProjectKeyEntityCardsPart
-          keyEntities={keyboardDesign.keyEntities}
-          showKeyId={showKeyId}
-          showKeyIndex={showKeyIndex}
-        />
-        <PreviewDisplayAreaBox
-          dispalyArea={keyboardDesign.displayArea}
-          qxIf={showBoundingBox}
-        />
+        <ProjectKeyEntityCardsPart keyEntities={keyboardDesign.keyEntities} />
       </KeyboardSvgFrameWithAutoScaler>
     </div>
   );
@@ -63,8 +41,6 @@ const cssKeyboardShapeView = css`
 
 const ProjectKeyEntityCardsPart = (props: {
   keyEntities: IDisplayKeyEntity[];
-  showKeyId: boolean;
-  showKeyIndex: boolean;
 }) => (
   <g>
     {props.keyEntities.map((ke) => (
