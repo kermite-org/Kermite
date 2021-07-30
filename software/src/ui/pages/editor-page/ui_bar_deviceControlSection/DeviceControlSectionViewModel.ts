@@ -1,20 +1,11 @@
-import { ipcAgent } from '~/ui/base';
-import { useDeviceStatusModel } from '~/ui/commonModels';
-import { useFetcher } from '~/ui/helpers';
+import { useKeyboardDeviceStatus, useProjectInfo } from '~/ui/commonModels';
 
 export function makeDeviceControlSectionViewModel() {
-  const { isConnected, deviceAttrs } = useDeviceStatusModel();
-
-  const resourceInfos = useFetcher(
-    ipcAgent.async.projects_getAllProjectResourceInfos,
-    [],
+  const { isConnected, deviceAttrs } = useKeyboardDeviceStatus();
+  const projectInfo = useProjectInfo(
+    deviceAttrs?.origin,
+    deviceAttrs?.projectId,
   );
-  const projectInfo = resourceInfos.find(
-    (info) =>
-      info.origin === deviceAttrs?.origin &&
-      info.projectId === deviceAttrs?.projectId,
-  );
-
   return {
     currentDeviceKeyboardName: projectInfo?.keyboardName || '',
     isDeviceConnected: isConnected,

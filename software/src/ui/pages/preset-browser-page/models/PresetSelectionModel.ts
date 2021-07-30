@@ -69,7 +69,7 @@ export function usePresetSelectionModel(): IPresetSelectionModel {
     presetKey: '', // blank:${layoutName} or preset:${presetName}
   });
 
-  const resourceInfos = useProjectResourceInfos('projectsSortedByKeyboardName');
+  const resourceInfos = useProjectResourceInfos();
   const projectOptions = makeProjectOptions(resourceInfos);
   const presetOptions = makePresetOptions(resourceInfos, sel.projectKey);
 

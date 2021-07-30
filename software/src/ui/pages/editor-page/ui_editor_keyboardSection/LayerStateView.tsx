@@ -3,7 +3,7 @@ import { texts } from '~/ui/base';
 import {
   IPlayerModel,
   uiStatusModel,
-  useDeviceStatusModel,
+  useKeyboardDeviceStatus,
 } from '~/ui/commonModels';
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
 };
 
 export const LayerStateView: FC<Props> = ({ playerModel }) => {
-  const { isConnected } = useDeviceStatusModel();
+  const { isConnected } = useKeyboardDeviceStatus();
   const visible = uiStatusModel.settings.showLayersDynamic;
   return (
     <div

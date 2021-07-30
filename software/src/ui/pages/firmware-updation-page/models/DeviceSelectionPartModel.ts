@@ -3,7 +3,7 @@ import { ISelectorOption, ipcAgent } from '~/ui/base';
 import {
   useDeviceSelectionStatus,
   useProjectResourceInfos,
-} from '~/ui/pages/firmware-updation-page/models/DataSource';
+} from '~/ui/commonModels';
 
 interface IDeviceSelectionPartModel {
   deviceOptions: ISelectorOption[];

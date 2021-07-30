@@ -1,12 +1,9 @@
 import { useEffect, useLocal } from 'qx';
-import {
-  IDisplayKeyboardDesign,
-  IProjectResourceInfo,
-  sortOrderBy,
-} from '~/shared';
+import { IDisplayKeyboardDesign, IProjectResourceInfo } from '~/shared';
 import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import { ipcAgent, UiLocalStorage } from '~/ui/base';
+import { getProjectResourceInfosWithFilter } from '~/ui/commonModels';
 import {
   IShapeViewPersistState,
   shapeViewPersistStateDefault,
@@ -105,13 +102,9 @@ class KeyboardShapesModel {
   };
 
   private async initialize() {
-    this.projectInfos = (
-      await ipcAgent.async.projects_getAllProjectResourceInfos()
-    )
-      .filter((info) => info.layoutNames.length > 0)
-      .sort(
-        sortOrderBy((it) => `${it.origin}${it.keyboardName}${it.projectPath}`),
-      );
+    this.projectInfos = await getProjectResourceInfosWithFilter(
+      (info) => info.layoutNames.length > 0,
+    );
     if (this.projectInfos.length === 0) {
       this._currentLayoutName = undefined;
       this._currentLayoutName = undefined;

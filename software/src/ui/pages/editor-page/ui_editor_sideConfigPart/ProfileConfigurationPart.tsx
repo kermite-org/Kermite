@@ -5,7 +5,7 @@ import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 import { profilesModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileManagementPartViewModel';
 
 export const ProfileConfigurationPart = () => {
-  const projectInfos = useProjectResourceInfos('projectsSortedByKeyboardName');
+  const projectInfos = useProjectResourceInfos();
   const projectId = editorModel.profileData.projectId;
   const info = projectInfos.find((it) => it.projectId === projectId);
   const keyboardName = info?.keyboardName;

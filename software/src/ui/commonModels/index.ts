@@ -1,4 +1,3 @@
-export * from './DeviceStatusModelHook';
 export * from './Hooks';
 export * from './Interfaces';
 export * from './KeyboardBehaviorModeModel';

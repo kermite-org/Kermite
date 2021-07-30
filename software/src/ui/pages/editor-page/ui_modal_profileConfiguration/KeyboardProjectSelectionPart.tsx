@@ -6,7 +6,7 @@ import { GeneralSelector } from '~/ui/components';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 
 function makeTargetProjectSelectOptions(): ISelectorOption[] {
-  const projectInfos = useProjectResourceInfos('projectsSortedByKeyboardName');
+  const projectInfos = useProjectResourceInfos();
   const options: ISelectorOption[] = uniqueArrayItemsByField(
     projectInfos,
     'projectId',

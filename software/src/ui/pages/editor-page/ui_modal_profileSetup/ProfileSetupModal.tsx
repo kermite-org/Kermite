@@ -123,7 +123,7 @@ function useProfileSetupModalViewModel(): IProfileSetupModalViewModel {
     layoutKey: '',
   });
 
-  const resourceInfos = useProjectResourceInfos('projectsSortedByKeyboardName');
+  const resourceInfos = useProjectResourceInfos();
   const projectOptions = useMemoEx(makeProjectOptions, [resourceInfos]);
 
   useInlineEffect(() => {
