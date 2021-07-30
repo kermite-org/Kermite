@@ -26,7 +26,7 @@ void generalKeyboard_start() {
     if (tick % 48 == 3) {
       keyboardMain_updateOledDisplayModule(tick);
     }
-    if (tick % 4000 == 0) {
+    if (tick % 4000 == 3) {
       keyboardMain_taskFlashHeartbeatLed();
     }
     if (tick % 100 == 0) {
