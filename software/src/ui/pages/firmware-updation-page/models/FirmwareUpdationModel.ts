@@ -6,10 +6,7 @@ import {
   IProjectResourceInfo,
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
-import {
-  getProjectResourceInfosWithFilter,
-  uiStatusModel,
-} from '~/ui/commonModels';
+import { fetchAllProjectResourceInfos, uiStatusModel } from '~/ui/commonModels';
 import { modalAlert } from '~/ui/components';
 
 export type FirmwareUpdationPhase =
@@ -151,9 +148,9 @@ export class FirmwareUpdationModel {
   };
 
   private async fechProjectInfos() {
-    this.projectInfosWithFirmware = await getProjectResourceInfosWithFilter(
-      (ifno) => ifno.firmwares.length > 0,
-    );
+    this.projectInfosWithFirmware = (
+      await fetchAllProjectResourceInfos()
+    ).filter((ifno) => ifno.firmwares.length > 0);
   }
 
   startPageSession = () => {

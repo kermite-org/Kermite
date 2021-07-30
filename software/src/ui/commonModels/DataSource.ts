@@ -28,6 +28,12 @@ export function useAllProjectResourceInfos(): IProjectResourceInfo[] {
   return useFetcher(ipcAgent.async.projects_getAllProjectResourceInfos, []);
 }
 
+export async function fetchAllProjectResourceInfos(): Promise<
+  IProjectResourceInfo[]
+> {
+  return await ipcAgent.async.projects_getAllProjectResourceInfos();
+}
+
 export function useGlobalSettingsFetch() {
   return useFetcher(
     ipcAgent.async.config_getGlobalSettings,
@@ -47,13 +53,6 @@ export function useProjectResourcePresenceChecker(
 
 export function useProjectResourceInfos() {
   return useAllProjectResourceInfos();
-}
-
-export async function getProjectResourceInfosWithFilter(
-  filterConditionFunc: (info: IProjectResourceInfo) => boolean = () => true,
-): Promise<IProjectResourceInfo[]> {
-  const resourceInfos = await ipcAgent.async.projects_getAllProjectResourceInfos();
-  return resourceInfos.filter(filterConditionFunc);
 }
 
 export function useLocalProjectResourceInfos(): IProjectResourceInfo[] {
