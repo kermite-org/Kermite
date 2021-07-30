@@ -4,6 +4,7 @@ import { CheckBoxExamples } from '~/ui/components/atoms/CheckBox.visor';
 import { FlatListSelectorExamples } from '~/ui/components/atoms/FlatListSelector.visor';
 import { GeneralButtonExamples } from '~/ui/components/atoms/GeneralButton.visor';
 import { GeneralSelectorExamples } from '~/ui/components/atoms/GeneralSelector.visor';
+import { PreviewKeyboardShapeViewExamples } from '~/ui/components_svg/panels/PreviewKeyboardShapeView.visor';
 import { fieldSetter } from '~/ui/helpers';
 
 type IVisualEntry = Record<string, FC | JSX.Element>;
@@ -13,6 +14,7 @@ const visualSource: Record<string, IVisualEntry> = {
   GeneralButtonExamples,
   GeneralSelectorExamples,
   FlatListSelectorExamples,
+  PreviewKeyboardShapeViewExamples,
 };
 
 type VisualKey = keyof typeof visualSource;
