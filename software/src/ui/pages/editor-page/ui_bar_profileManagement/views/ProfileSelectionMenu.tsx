@@ -1,38 +1,39 @@
-import { jsx, css } from 'qx';
+import { jsx, css, FC } from 'qx';
 import { texts } from '~/ui/base';
 import { IProfileSelectionMenuPartViewModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileSelectionMenuPartViewModel';
 
-export const ProfileSelectionMenuPart = (props: {
+type Props = {
   vm: IProfileSelectionMenuPartViewModel;
-}) => {
-  const { isOpen, openMenu, closeMenu, menuItems } = props.vm;
-  return (
-    <div css={cssProfileSelectionMenuPart}>
-      <div css={cssOverlay} qxIf={isOpen} onClick={closeMenu} />
-      <div css={cssMenuArea}>
-        <div
-          css={cssMenuButton}
-          onMouseDown={openMenu}
-          data-hint={texts.hint_assigner_topBar_profileOperationsMenu}
-        >
-          <i className="fa fa-bars" />
-        </div>
-        <div css={cssMenuPopup} qxIf={isOpen}>
-          {menuItems.map((mi) => (
-            <div
-              key={mi.key}
-              onMouseUp={mi.handler}
-              data-hint={mi.hint}
-              qxIf={mi.enabled}
-            >
-              {mi.text}
-            </div>
-          ))}
-        </div>
+};
+
+export const ProfileSelectionMenuPart: FC<Props> = ({
+  vm: { isOpen, openMenu, closeMenu, menuItems },
+}) => (
+  <div css={cssProfileSelectionMenuPart}>
+    <div css={cssOverlay} qxIf={isOpen} onClick={closeMenu} />
+    <div css={cssMenuArea}>
+      <div
+        css={cssMenuButton}
+        onMouseDown={openMenu}
+        data-hint={texts.hint_assigner_topBar_profileOperationsMenu}
+      >
+        <i className="fa fa-bars" />
+      </div>
+      <div css={cssMenuPopup} qxIf={isOpen}>
+        {menuItems.map((mi) => (
+          <div
+            key={mi.key}
+            onMouseUp={mi.handler}
+            data-hint={mi.hint}
+            qxIf={mi.enabled}
+          >
+            {mi.text}
+          </div>
+        ))}
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 const cssProfileSelectionMenuPart = css``;
 
