@@ -9,6 +9,7 @@ type Props = {
 
 export const LayerManagementPart: FC<Props> = ({
   vm: {
+    canEdit,
     canShiftBackCurrentLayer,
     canShiftForwardCurrentLayer,
     shiftBackCurrentLayer,
@@ -22,31 +23,31 @@ export const LayerManagementPart: FC<Props> = ({
   <div css={style}>
     <LayerOperationButtton
       icon="fa fa-plus"
-      enabled={true}
+      enabled={canEdit}
       handler={addNewLayer}
       hint={texts.hint_assigner_layerOps_addNewLayer}
     />
     <LayerOperationButtton
       icon="fa fa-pen-square"
-      enabled={true}
+      enabled={canEdit}
       handler={editCurrentLayer}
       hint={texts.hint_assigner_layerOps_editLayerProperties}
     />
     <LayerOperationButtton
       icon="fa fa-times"
-      enabled={canDeleteCurrentLayer}
+      enabled={canEdit && canDeleteCurrentLayer}
       handler={deleteCurrentLayer}
       hint={texts.hint_assigner_layerOps_deleteLayer}
     />
     <LayerOperationButtton
       icon="fa fa-long-arrow-alt-up"
-      enabled={canShiftForwardCurrentLayer}
+      enabled={canEdit && canShiftForwardCurrentLayer}
       handler={shiftForwardCurrentLayer}
       hint={texts.hint_assigner_layerOps_bringForward}
     />
     <LayerOperationButtton
       icon="fa fa-long-arrow-alt-down"
-      enabled={canShiftBackCurrentLayer}
+      enabled={canEdit && canShiftBackCurrentLayer}
       handler={shiftBackCurrentLayer}
       hint={texts.hint_assigner_layerOps_bringBackward}
     />

@@ -4,12 +4,14 @@ import { generateNextSequentialId } from '~/shared/funcs/DomainRelatedHelpers';
 import { texts } from '~/ui/base';
 import { modalConfirm } from '~/ui/components';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
+import { profilesModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileManagementPartViewModel';
 import {
   callLayerConfigurationModal,
   ILayerConfigurationModelEditValues,
 } from '~/ui/pages/editor-page/ui_modal_layerSettings/LayerConfigurationModal';
 
 export interface ILayerManagementPartViewModel {
+  canEdit: boolean;
   canShiftBackCurrentLayer: boolean;
   canShiftForwardCurrentLayer: boolean;
   canDeleteCurrentLayer: boolean;
@@ -42,6 +44,7 @@ export function makeLayerManagementPartViewModel(): ILayerManagementPartViewMode
   };
 
   return {
+    canEdit: profilesModel.isEditProfileAvailable,
     canShiftBackCurrentLayer: canShiftCurrentLayerOrder(-1),
     canShiftForwardCurrentLayer: canShiftCurrentLayerOrder(1),
     canDeleteCurrentLayer: isCurrentLayerCustom,
