@@ -201,6 +201,8 @@ export class ApplicationRoot {
 
       config_keyboardConfigEvents: (cb) =>
         this.keyboardConfigProvider.keyboardConfigEventPort.subscribe(cb),
+      config_globalSettingsEvents: (cb) =>
+        globalSettingsProvider.globalConfigEventPort.subscribe(cb),
     });
   }
 
