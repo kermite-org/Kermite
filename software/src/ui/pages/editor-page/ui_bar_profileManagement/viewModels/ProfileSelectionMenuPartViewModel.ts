@@ -1,6 +1,6 @@
 import { useLocal } from 'qx';
 import { texts } from '~/ui/base';
-import { useProjectResourcePresenceChecker } from '~/ui/commonModels/Hooks';
+import { useProjectResourcePresenceChecker } from '~/ui/commonModels';
 import { IProfileManagementPartViewModel } from './ProfileManagementPartViewModel';
 
 interface IMenuItem {
