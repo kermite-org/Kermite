@@ -56,7 +56,7 @@ function createMenuItemSources(
       text: texts.label_assigner_menu_saveProfile,
       hint: texts.hint_assigner_menu_saveProfile,
       handler: vm.handleSaveUnsavedProfile,
-      enabled: !vm.isCurrentProfileInternal,
+      enabled: vm.isMenuItemSaveEnabled,
     },
     {
       key: 'importFromFile',

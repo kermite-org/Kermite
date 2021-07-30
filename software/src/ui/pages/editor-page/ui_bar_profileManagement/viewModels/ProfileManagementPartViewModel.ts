@@ -51,6 +51,7 @@ export interface IProfileManagementPartViewModel {
   openUserProfilesFolder(): void;
 
   toggleRoutingPanel(): void;
+  isMenuItemSaveEnabled: boolean;
 }
 
 export const profilesModel = new ProfilesModel(editorModel);
@@ -364,5 +365,8 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     handleExportToFile,
     openUserProfilesFolder,
     toggleRoutingPanel,
+    isMenuItemSaveEnabled:
+      editSource.type === 'ProfileNewlyCreated' ||
+      editSource.type === 'ExternalFile',
   };
 }
