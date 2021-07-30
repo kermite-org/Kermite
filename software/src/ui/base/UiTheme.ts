@@ -31,6 +31,11 @@ const themeColorsDark = {
   clLayouterKeyLegend: '#fff',
   clLayouterAxis: '#0845',
   clLayouterGrid: '#5554',
+
+  projectKeyboard_bodyFill: '#99bae5',
+  projectKeyboard_bodyEdge: '#004',
+  projectKeyboard_keyFill: '#eee',
+  projectKeyboard_keyEdge: '#004',
 };
 
 const themeColorsLight = {
@@ -64,6 +69,11 @@ const themeColorsLight = {
   clLayouterKeyLegend: '#000',
   clLayouterAxis: '#4442',
   clLayouterGrid: '#4441',
+
+  projectKeyboard_bodyFill: '#99bae5',
+  projectKeyboard_bodyEdge: '#004',
+  projectKeyboard_keyFill: '#eee',
+  projectKeyboard_keyEdge: '#004',
 };
 
 type IThemeColorSet = { [key in keyof typeof themeColorsDark]: string };
