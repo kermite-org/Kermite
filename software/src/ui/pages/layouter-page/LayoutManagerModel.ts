@@ -38,7 +38,7 @@ export class LayoutManagerModel implements ILayoutManagerModel {
   private _projectLayoutsInfos: IProjectLayoutsInfo[] = [];
 
   private _layoutManagerStatus: ILayoutManagerStatus = {
-    editSource: { type: 'NewlyCreated' },
+    editSource: { type: 'LayoutNewlyCreated' },
     loadedDesign: createFallbackPersistKeyboardDesign(),
     // errroInfo: undefined,
     projectLayoutsInfos: [],
@@ -239,7 +239,7 @@ export class LayoutManagerModel implements ILayoutManagerModel {
           const design = UiLayouterCore.emitSavingDesign();
           editorModel.replaceKeyboardDesign(design);
         }
-        if (this.editSource.type === 'NewlyCreated') {
+        if (this.editSource.type === 'LayoutNewlyCreated') {
           _keepUnsavedNewDesign = true;
         }
       }

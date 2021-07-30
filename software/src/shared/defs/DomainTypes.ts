@@ -139,7 +139,7 @@ export interface IProfileManagerCommand {
 
 export type ILayoutEditSource =
   | {
-      type: 'NewlyCreated';
+      type: 'LayoutNewlyCreated';
     }
   | {
       type: 'CurrentProfile';

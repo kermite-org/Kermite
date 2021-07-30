@@ -28,7 +28,7 @@ import {
 
 const layoutEditSourceSchema = vSchemaOneOf([
   vObject({
-    type: vValueEquals('NewlyCreated'),
+    type: vValueEquals('LayoutNewlyCreated'),
   }),
   vObject({
     type: vValueEquals('CurrentProfile'),
@@ -54,7 +54,7 @@ export class LayoutManager implements ILayoutManager {
 
   private status: ILayoutManagerStatus = {
     editSource: {
-      type: 'NewlyCreated',
+      type: 'LayoutNewlyCreated',
     },
     loadedDesign: createFallbackPersistKeyboardDesign(),
     projectLayoutsInfos: [],
@@ -126,7 +126,7 @@ export class LayoutManager implements ILayoutManager {
   // eslint-disable-next-line @typescript-eslint/require-await
   private async createNewLayout() {
     this.setStatus({
-      editSource: { type: 'NewlyCreated' },
+      editSource: { type: 'LayoutNewlyCreated' },
       loadedDesign: createFallbackPersistKeyboardDesign(),
     });
   }
@@ -244,7 +244,7 @@ export class LayoutManager implements ILayoutManager {
   }
 
   private async loadLayoutByEditSource(editSource: ILayoutEditSource) {
-    if (editSource.type === 'NewlyCreated') {
+    if (editSource.type === 'LayoutNewlyCreated') {
       await this.createNewLayout();
     } else if (editSource.type === 'CurrentProfile') {
       await this.loadCurrentProfileLayout();
@@ -259,7 +259,7 @@ export class LayoutManager implements ILayoutManager {
 
   private async overwriteCurrentLayout(design: IPersistKeyboardDesign) {
     const { editSource } = this.status;
-    if (editSource.type === 'NewlyCreated') {
+    if (editSource.type === 'LayoutNewlyCreated') {
       throw new Error('cannot save newly created layout');
     } else if (editSource.type === 'CurrentProfile') {
       const profile = await this.profileManager.getCurrentProfileAsync();
