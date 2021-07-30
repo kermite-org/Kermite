@@ -11,6 +11,7 @@ import {
   globalHintMouseMoveHandlerEffect,
 } from '~/ui/base';
 import { siteModel, uiStatusModel } from '~/ui/commonModels';
+import { useGlobalSettingsModelUpdator } from '~/ui/commonModels/GlobalSettingsModel';
 import {
   DebugOverlay,
   ForegroundModalLayerRoot,
@@ -58,6 +59,8 @@ export const SiteRoot = () => {
   useEffect(globalAppServicesInitializerEffect, []);
   useEffect(siteModel.setupLifecycle, []);
   useEffect(globalHintMouseMoveHandlerEffect, []);
+  useGlobalSettingsModelUpdator();
+
   router.useRedirect(['', '/'], '/editor');
 
   const isWidgetMode = router.getPagePath() === '/widget';
