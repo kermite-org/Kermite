@@ -1,6 +1,6 @@
 import { jsx, css, FC } from 'qx';
 import { uiTheme, IPresetKeyUnitViewModel } from '~/ui/base';
-import { KeyUnitShape } from '~/ui/components_svg/keyUnitCards/KeyUnitShape';
+import { KeyUnitShape } from '~/ui/components/keyboard/keyUnitCards/KeyUnitShape';
 
 type Props = {
   model: IPresetKeyUnitViewModel;

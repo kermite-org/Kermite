@@ -1,9 +1,9 @@
 import { jsx, css, FC } from 'qx';
 import { IDisplayKeyboardDesign, linerInterpolateValue } from '~/shared';
 import { IWidgetKeyUnitCardViewModel } from '~/ui/base';
-import { KeyboardSvgFrameWithAutoScaler } from '~/ui/components_svg/frames/KeyboardSvgFrameWithAutoScaler';
-import { WidgetKeyUnitCard } from '~/ui/components_svg/keyUnitCards/WidgetKeyUnitCard';
-import { KeyboardBodyShape } from '~/ui/components_svg/keyboardBody/KeyboardBodyShape';
+import { KeyboardSvgFrameWithAutoScaler } from '~/ui/components/keyboard/frames/KeyboardSvgFrameWithAutoScaler';
+import { WidgetKeyUnitCard } from '~/ui/components/keyboard/keyUnitCards/WidgetKeyUnitCard';
+import { KeyboardBodyShape } from '~/ui/components/keyboard/keyboardBody/KeyboardBodyShape';
 
 type Props = {
   keyboardDesign: IDisplayKeyboardDesign;

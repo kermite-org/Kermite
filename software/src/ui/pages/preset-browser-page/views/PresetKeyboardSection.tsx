@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { PresetLayersBox } from '~/ui/components';
-import { PresetKeyboardView } from '~/ui/components_svg';
+import { PresetKeyboardView } from '~/ui/components/keyboard';
 import { IPresetKeyboardSectionViewModel } from '~/ui/pages/preset-browser-page/viewModels/PresetKeyboardSectionViewModel';
 
 type Props = {
