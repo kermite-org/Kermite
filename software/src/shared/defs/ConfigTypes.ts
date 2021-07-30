@@ -18,22 +18,26 @@ export interface IGlobalSettings {
   useLocalResouces: boolean;
   localProjectRootFolderPath: string;
   allowCrossKeyboardKeyMappingWrite: boolean;
+  globalProjectId: string;
 }
 
 export const globalSettingsLoadingSchema = vObject({
   useLocalResouces: vBoolean(),
   localProjectRootFolderPath: vString(),
   allowCrossKeyboardKeyMappingWrite: vBoolean().optional,
+  globalProjectId: vString().optional,
 });
 
 export const globalSettingsDefault: IGlobalSettings = {
   useLocalResouces: false,
   localProjectRootFolderPath: '',
   allowCrossKeyboardKeyMappingWrite: false,
+  globalProjectId: '',
 };
 
 export const globalSettingsFallbackValue: IGlobalSettings = {
   useLocalResouces: false,
   localProjectRootFolderPath: '',
   allowCrossKeyboardKeyMappingWrite: false,
+  globalProjectId: '',
 };
