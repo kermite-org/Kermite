@@ -36,7 +36,7 @@ export interface IAppIpcContract {
     window_setWidgetAlwaysOnTop(enabled: boolean): Promise<void>;
     window_reloadPage(): Promise<void>;
 
-    profile_getCurrentProfile(): Promise<IProfileData>;
+    profile_getCurrentProfile(): Promise<IProfileData | undefined>;
     profile_getAllProfileNames(): Promise<string[]>;
     profile_executeProfileManagerCommands(
       commands: IProfileManagerCommand[],

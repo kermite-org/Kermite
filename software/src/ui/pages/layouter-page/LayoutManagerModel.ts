@@ -163,6 +163,10 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     }
     if (this.editSource.type === 'CurrentProfile') {
       const profile = await ipcAgent.async.profile_getCurrentProfile();
+      if (!profile) {
+        console.error('current profile unavailable');
+        return;
+      }
       projectId = profile.projectId;
     }
     const layout = UiLayouterCore.emitSavingDesign();

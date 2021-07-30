@@ -100,8 +100,11 @@ export class ProfileManager implements IProfileManager {
     return this.status.allProfileNames;
   }
 
-  async getCurrentProfileAsync(): Promise<IProfileData> {
+  async getCurrentProfileAsync(): Promise<IProfileData | undefined> {
     await this.lazyInitializer();
+    if (this.status.editSource.type === 'NoProfilesAvailable') {
+      return undefined;
+    }
     return this.status.loadedProfileData;
   }
 
