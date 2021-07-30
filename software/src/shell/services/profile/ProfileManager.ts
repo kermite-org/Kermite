@@ -23,8 +23,6 @@ import { projectResourceProvider } from '~/shell/projectResources';
 import { IPresetProfileLoader, IProfileManager } from './Interfaces';
 import { ProfileManagerCore } from './ProfileManagerCore';
 
-const defaultProfileName = 'default';
-
 function createLazyInitializer(
   taskCreator: () => Promise<void>,
 ): () => Promise<void> {
@@ -208,11 +206,6 @@ export class ProfileManager implements IProfileManager {
     }
   }
 
-  private async createDefaultProfile(profName: string) {
-    const profile = duplicateObjectByJsonStringifyParse(fallbackProfileData);
-    await this.core.saveProfile(profName, profile);
-  }
-
   private async createProfileImpl(
     origin: IResourceOrigin,
     projectId: string,
@@ -302,20 +295,25 @@ export class ProfileManager implements IProfileManager {
     }
     const isCurrent = this.status.editSource.profileName === profName;
     const currentProfileIndex = this.status.allProfileNames.indexOf(profName);
-    const isLastOne = this.status.allProfileNames.length === 1;
     await this.core.deleteProfile(profName);
-    if (isLastOne) {
-      await this.createDefaultProfile(defaultProfileName);
-    }
     const allProfileNames = await this.core.listAllProfileNames();
     this.setStatus({ allProfileNames });
+    if (allProfileNames.length === 0) {
+      this.setStatus({
+        editSource: { type: 'NoProfilesAvailable' },
+        loadedProfileData: fallbackProfileData,
+      });
+    }
     if (isCurrent) {
       const newIndex = clampValue(
         currentProfileIndex,
         0,
         this.status.allProfileNames.length - 1,
       );
-      await this.loadProfile(allProfileNames[newIndex]);
+      const nextProfileName = allProfileNames[newIndex];
+      if (nextProfileName) {
+        await this.loadProfile(nextProfileName);
+      }
     }
   }
 
