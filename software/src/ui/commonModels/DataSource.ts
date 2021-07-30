@@ -6,7 +6,6 @@ import {
   IKeyboardDeviceStatus,
   IProjectResourceInfo,
   IResourceOrigin,
-  sortOrderBy,
 } from '~/shared';
 import { appUi, ipcAgent } from '~/ui/base';
 import { useEventSource, useFetcher } from '~/ui/helpers';
@@ -47,26 +46,14 @@ export function useProjectResourcePresenceChecker(
 }
 
 export function useProjectResourceInfos() {
-  const resourceInfos = useAllProjectResourceInfos();
-  const sorted = useMemo(
-    () =>
-      resourceInfos.sort(
-        sortOrderBy((it) => `${it.origin}${it.keyboardName}${it.projectPath}`),
-      ),
-    [resourceInfos],
-  );
-  return sorted;
+  return useAllProjectResourceInfos();
 }
 
 export async function getProjectResourceInfosWithFilter(
   filterConditionFunc: (info: IProjectResourceInfo) => boolean = () => true,
 ): Promise<IProjectResourceInfo[]> {
   const resourceInfos = await ipcAgent.async.projects_getAllProjectResourceInfos();
-  return resourceInfos
-    .filter(filterConditionFunc)
-    .sort(
-      sortOrderBy((it) => `${it.origin}${it.keyboardName}${it.projectPath}`),
-    );
+  return resourceInfos.filter(filterConditionFunc);
 }
 
 export function useLocalProjectResourceInfos(): IProjectResourceInfo[] {
