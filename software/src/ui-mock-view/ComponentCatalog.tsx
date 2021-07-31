@@ -6,6 +6,7 @@ import { GeneralButtonExamples } from '~/ui/components/atoms/GeneralButton.visor
 import { GeneralSelectorExamples } from '~/ui/components/atoms/GeneralSelector.visor';
 import { PreviewKeyboardShapeViewExamples } from '~/ui/components/keyboard/panels/PreviewKeyboardShapeView.visor';
 import { ProjectKeyboardShapeViewExamples } from '~/ui/components/keyboard/panels/ProjectKeyboardShapeView.visor';
+import { NavigationStepListExamples } from '~/ui/components/molecules/NavigationStepList.visor';
 import { ProjectKeyboardListExamples } from '~/ui/components/organisms/ProjectKeyboardList.visor';
 import { fieldSetter } from '~/ui/helpers';
 
@@ -19,6 +20,7 @@ const visualSource: Record<string, IVisualEntry> = {
   PreviewKeyboardShapeViewExamples,
   ProjectKeyboardShapeViewExamples,
   ProjectKeyboardListExamples,
+  NavigationStepListExamples,
 };
 
 type VisualKey = keyof typeof visualSource;
