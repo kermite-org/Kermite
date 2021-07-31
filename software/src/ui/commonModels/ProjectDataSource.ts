@@ -1,6 +1,7 @@
 import { useMemo } from 'qx';
 import { IProjectResourceInfo, IResourceOrigin } from '~/shared';
 import { appUi, ipcAgent } from '~/ui/base';
+import { globalSettingsModel } from '~/ui/commonModels/GlobalSettingsModel';
 import { useFetcher } from '~/ui/helpers';
 
 export async function fetchAllProjectResourceInfos(): Promise<
@@ -25,6 +26,16 @@ export function useProjectResourcePresenceChecker(
 
 export function useProjectResourceInfos() {
   return useAllProjectResourceInfos();
+}
+
+export function useProjectResourceInfosBasedOnGlobalSettings() {
+  const { useLocalResouces } = globalSettingsModel.globalSettings;
+  const origin: IResourceOrigin = useLocalResouces ? 'local' : 'online';
+  const allResourceInfos = useAllProjectResourceInfos();
+  return useMemo(
+    () => allResourceInfos.filter((info) => info.origin === origin),
+    [allResourceInfos],
+  );
 }
 
 export function useLocalProjectResourceInfos(): IProjectResourceInfo[] {

@@ -1,12 +1,12 @@
 import { IPresetSpec, IProfileData, IProjectResourceInfo } from '~/shared';
 import { createPresetKey } from '~/shared/funcs/DomainRelatedHelpers';
 import {
-  ISelectorSource,
-  ISelectorOption,
   getSelectionValueCorrected,
+  ISelectorOption,
+  ISelectorSource,
 } from '~/ui/base';
-import { useProjectResourceInfos } from '~/ui/commonModels';
-import { usePersistState, fieldSetter } from '~/ui/helpers';
+import { useProjectResourceInfosBasedOnGlobalSettings } from '~/ui/commonModels';
+import { fieldSetter, usePersistState } from '~/ui/helpers';
 import { editSelectedProjectPreset as editSelectedProjectPresetOriginal } from '~/ui/pages/preset-browser-page/models/ProfileCreator';
 import { useProfileDataLoaded } from '~/ui/pages/preset-browser-page/models/ProfileDataLoader';
 
@@ -68,8 +68,7 @@ export function usePresetSelectionModel(): IPresetSelectionModel {
     projectKey: '', // ${origin}#${projectId}
     presetKey: '', // blank:${layoutName} or preset:${presetName}
   });
-
-  const resourceInfos = useProjectResourceInfos();
+  const resourceInfos = useProjectResourceInfosBasedOnGlobalSettings();
   const projectOptions = makeProjectOptions(resourceInfos);
   const presetOptions = makePresetOptions(resourceInfos, sel.projectKey);
 
