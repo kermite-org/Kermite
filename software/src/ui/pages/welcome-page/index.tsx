@@ -1,30 +1,40 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
-import { onboadingPanelDisplayStateModel } from '~/ui/commonModels';
+import {
+  onboadingPanelDisplayStateModel,
+  useApplicationVersionText,
+} from '~/ui/commonModels';
 import { WelcomePageButton } from '~/ui/components/atoms';
 
-export const WelcomePage: FC = () => (
-  <div css={style}>
-    <h1>Kermite</h1>
-    <h2>Keyboard Ecosystem All in One</h2>
-    <div className="buttons-panel">
-      <div className="row">
-        <WelcomePageButton className="button">English</WelcomePageButton>
-        <WelcomePageButton className="button" active={true}>
-          日本語
-        </WelcomePageButton>
+export const WelcomePage: FC = () => {
+  const appVersion = useApplicationVersionText();
+  return (
+    <div css={style}>
+      <h1>Kermite</h1>
+      <h2>Keyboard Ecosystem All in One</h2>
+      <div className="buttons-panel">
+        <div className="row">
+          <WelcomePageButton className="button">English</WelcomePageButton>
+          <WelcomePageButton className="button" active={true}>
+            日本語
+          </WelcomePageButton>
+        </div>
+        <div className="row">
+          <WelcomePageButton
+            className="button"
+            onClick={onboadingPanelDisplayStateModel.toggleOnboardingPanel}
+          >
+            使い方のナビゲーションを表示
+          </WelcomePageButton>
+        </div>
       </div>
-      <div className="row">
-        <WelcomePageButton
-          className="button"
-          onClick={onboadingPanelDisplayStateModel.toggleOnboardingPanel}
-        >
-          使い方のナビゲーションを表示
-        </WelcomePageButton>
+
+      <div className="version-area" qxIf={!!appVersion}>
+        version: {appVersion}
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const style = css`
   background: ${uiTheme.colors.clBackground};
@@ -32,25 +42,28 @@ const style = css`
   height: 100%;
   padding: 10px;
 
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 
   color: #469;
+  padding-bottom: 30px;
 
   > h1 {
-    font-size: 48px;
+    font-size: 56px;
     font-weight: normal;
   }
 
   > h2 {
     margin-top: 15px;
+    font-size: 28px;
     font-weight: normal;
   }
 
   > .buttons-panel {
-    margin-top: 50px;
+    margin-top: 70px;
     width: 400px;
     display: flex;
     flex-direction: column;
@@ -66,5 +79,12 @@ const style = css`
         width: 100%;
       }
     }
+  }
+
+  > .version-area {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 5px;
   }
 `;

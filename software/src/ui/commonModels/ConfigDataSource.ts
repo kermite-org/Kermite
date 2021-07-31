@@ -19,3 +19,11 @@ export function useGlobalSettingsValue<K extends keyof IGlobalSettings>(
   const globalSettings = useGlobalSettingsFetch();
   return globalSettings[key];
 }
+
+export function useApplicationVersionText(): string {
+  const appVersionInfo = useFetcher(
+    ipcAgent.async.system_getApplicationVersionInfo,
+    { version: '' },
+  );
+  return appVersionInfo.version;
+}
