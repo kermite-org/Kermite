@@ -1,6 +1,10 @@
 import { jsx, css } from 'qx';
 import { uiTheme, router, appUi } from '~/ui/base';
-import { siteModel, uiStatusModel } from '~/ui/commonModels';
+import {
+  onboadingPanelDisplayStateModel,
+  siteModel,
+  uiStatusModel,
+} from '~/ui/commonModels';
 import { CustomWindowFrame, DevToolPullTab } from '~/ui/components';
 import {
   OnboadingPullTabPlacer,
@@ -48,11 +52,6 @@ const cssMainColumn = css`
 `;
 
 export const ConfiguratorZoneRoot = () => {
-  const toggleOnboardingPanel = () => {
-    const { settings } = uiStatusModel;
-    settings.showOnboardingPanel = !settings.showOnboardingPanel;
-  };
-
   return (
     <CustomWindowFrame
       renderTitleBar={WindowTitleBarSection}
@@ -68,7 +67,9 @@ export const ConfiguratorZoneRoot = () => {
             handler={siteModel.toggleDevToolVisible}
           />
           <OnboadingPullTabPlacer>
-            <OnboardingPullTab handler={toggleOnboardingPanel} />
+            <OnboardingPullTab
+              handler={onboadingPanelDisplayStateModel.toggleOnboardingPanel}
+            />
           </OnboadingPullTabPlacer>
         </div>
       </div>

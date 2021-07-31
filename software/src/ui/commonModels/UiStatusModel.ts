@@ -77,3 +77,13 @@ export class UiStatusModel {
 }
 
 export const uiStatusModel = new UiStatusModel();
+
+export const onboadingPanelDisplayStateModel = {
+  get isPanelVisible() {
+    return uiStatusModel.settings.showOnboardingPanel;
+  },
+  toggleOnboardingPanel: () => {
+    const { settings } = uiStatusModel;
+    settings.showOnboardingPanel = !settings.showOnboardingPanel;
+  },
+};
