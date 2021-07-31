@@ -1,11 +1,7 @@
-import { jsx, css } from 'qx';
-import { uiTheme, router, appUi } from '~/ui/base';
+import { css, jsx } from 'qx';
+import { appUi, router, uiTheme } from '~/ui/base';
 import { siteModel, uiStatusModel } from '~/ui/commonModels';
 import { CustomWindowFrame, DevToolPullTab } from '~/ui/components';
-import {
-  OnboadingPullTabPlacer,
-  OnboardingPullTab,
-} from '~/ui/components/atoms/OnboardingPullTab';
 import { LoadingOverlay } from '~/ui/components/overlay/LoadingOverlay';
 import { OnboadingPanel } from '~/ui/features/OnboardingPanel';
 import { EditorPage } from '~/ui/pages/editor-page';
@@ -16,6 +12,7 @@ import { PresetBrowserPage2 } from '~/ui/pages/preset-browser-page2';
 import { ProjectSelectionPage } from '~/ui/pages/project-selection-page';
 import { UiSettingsPage } from '~/ui/pages/settings-page';
 import { ShapePreviewPage } from '~/ui/pages/shape-preview-page';
+import { WelcomePage } from '~/ui/pages/welcome-page';
 import {
   NavigationColumn,
   WindowStatusBarSection,
@@ -35,6 +32,7 @@ const MainColumnRoutes = () => {
       {pagePath === '/presetBrowser2' && <PresetBrowserPage2 />}
       {pagePath === '/settings' && <UiSettingsPage />}
       {pagePath === '/projectSelection' && <ProjectSelectionPage />}
+      {pagePath === '/home' && <WelcomePage />}
     </div>
   );
 };
@@ -46,11 +44,6 @@ const cssMainColumn = css`
 `;
 
 export const ConfiguratorZoneRoot = () => {
-  const toggleOnboardingPanel = () => {
-    const { settings } = uiStatusModel;
-    settings.showOnboardingPanel = !settings.showOnboardingPanel;
-  };
-
   return (
     <CustomWindowFrame
       renderTitleBar={WindowTitleBarSection}
@@ -65,9 +58,6 @@ export const ConfiguratorZoneRoot = () => {
             qxIf={appUi.isDevelopment}
             handler={siteModel.toggleDevToolVisible}
           />
-          <OnboadingPullTabPlacer>
-            <OnboardingPullTab handler={toggleOnboardingPanel} />
-          </OnboadingPullTabPlacer>
         </div>
       </div>
     </CustomWindowFrame>

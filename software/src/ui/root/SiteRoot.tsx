@@ -10,8 +10,12 @@ import {
   shortCssProcessor,
   globalHintMouseMoveHandlerEffect,
 } from '~/ui/base';
-import { siteModel, uiStatusModel } from '~/ui/commonModels';
-import { useGlobalSettingsModelUpdator } from '~/ui/commonModels/GlobalSettingsModel';
+import {
+  siteModel,
+  uiStatusModel,
+  globalAppServicesInitializerEffect,
+  useGlobalSettingsModelUpdator,
+} from '~/ui/commonModels';
 import {
   DebugOverlay,
   ForegroundModalLayerRoot,
@@ -19,7 +23,6 @@ import {
 } from '~/ui/components';
 import { WidgetZoneRoot } from '~/ui/pages/widget';
 import { ConfiguratorZoneRoot } from '~/ui/root/ConfiguratorZoneRoot';
-import { globalAppServicesInitializerEffect } from '~/ui/root/models/AppServicesInitializer';
 
 setShortCssProcessor(shortCssProcessor);
 
@@ -61,7 +64,7 @@ export const SiteRoot = () => {
   useEffect(globalHintMouseMoveHandlerEffect, []);
   useGlobalSettingsModelUpdator();
 
-  router.useRedirect(['', '/'], '/editor');
+  router.useRedirect(['', '/'], '/home');
 
   const isWidgetMode = router.getPagePath() === '/widget';
   return (

@@ -10,7 +10,8 @@ export type PagePaths =
   | '/presetBrowser2'
   | '/settings'
   | '/widget'
-  | '/projectSelection';
+  | '/projectSelection'
+  | '/home';
 
 export interface IUiSettings {
   showTestInputArea: boolean;
@@ -76,3 +77,19 @@ export class UiStatusModel {
 }
 
 export const uiStatusModel = new UiStatusModel();
+
+export const onboadingPanelDisplayStateModel = {
+  get isPanelVisible() {
+    return uiStatusModel.settings.showOnboardingPanel;
+  },
+  open() {
+    uiStatusModel.settings.showOnboardingPanel = true;
+  },
+  close() {
+    uiStatusModel.settings.showOnboardingPanel = false;
+  },
+  toggleOnboardingPanel() {
+    const { settings } = uiStatusModel;
+    settings.showOnboardingPanel = !settings.showOnboardingPanel;
+  },
+};
