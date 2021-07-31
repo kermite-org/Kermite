@@ -61,8 +61,8 @@ export const OnboadingPanel: FC<Props> = ({ className }) => {
 };
 
 const style = css`
-  height: 120px;
-  padding: 10px;
+  height: 110px;
+  padding: 10px 15px;
   position: relative;
 
   > .step-list {
@@ -70,7 +70,6 @@ const style = css`
 
   > .instruction-part {
     margin-top: 10px;
-    color: #36a;
     line-height: 1.5em;
   }
 
@@ -78,7 +77,7 @@ const style = css`
     position: absolute;
     right: 0;
     top: 0;
-    margin: 10px;
+    margin: 12px;
     cursor: pointer;
   }
 `;
