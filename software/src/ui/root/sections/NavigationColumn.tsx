@@ -1,8 +1,8 @@
-import { jsx, css } from 'qx';
+import { jsx, css, FC } from 'qx';
 import { uiTheme } from '~/ui/base';
 import { GlobalMenuPart, NavigationButtonsArea } from '~/ui/root/organisms';
 
-export const NavigationColumn = () => {
+export const NavigationColumn: FC = () => {
   return (
     <div css={style}>
       <GlobalMenuPart />
