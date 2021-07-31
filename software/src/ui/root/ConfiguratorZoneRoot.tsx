@@ -8,6 +8,7 @@ import { FirmwareUpdationPage } from '~/ui/pages/firmware-updation-page';
 import { UiLayouterPageComponent } from '~/ui/pages/layouter-page';
 import { PresetBrowserPage } from '~/ui/pages/preset-browser-page';
 import { PresetBrowserPage2 } from '~/ui/pages/preset-browser-page2';
+import { ProjectSelectionPage } from '~/ui/pages/project-selection-page';
 import { UiSettingsPage } from '~/ui/pages/settings-page';
 import { ShapePreviewPage } from '~/ui/pages/shape-preview-page';
 import {
@@ -39,6 +40,7 @@ const MainColumnRoutes = () => {
       {pagePath === '/presetBrowser' && <PresetBrowserPage />}
       {pagePath === '/presetBrowser2' && <PresetBrowserPage2 />}
       {pagePath === '/settings' && <UiSettingsPage />}
+      {pagePath === '/projectSelection' && <ProjectSelectionPage />}
     </div>
   );
 };

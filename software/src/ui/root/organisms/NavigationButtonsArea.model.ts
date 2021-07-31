@@ -61,6 +61,12 @@ const entrySources: NavigationEntrySource[] = [
     iconSpec: 'fa fa-cog',
     hint: texts.hint_sideMenu_app_settings,
   },
+  {
+    pagePath: '/projectSelection',
+    pageName: texts.label_sideMenu_app_projectSelection,
+    iconSpec: 'fa fa-book-open',
+    hint: 'project selection',
+  },
 ];
 
 // const entrySources: NavigationEntrySource[] = [
