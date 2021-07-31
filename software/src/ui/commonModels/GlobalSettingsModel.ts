@@ -8,6 +8,14 @@ export const globalSettingsModel = new (class {
   getValue<K extends keyof IGlobalSettings>(key: K): IGlobalSettings[K] {
     return this.globalSettings[key];
   }
+
+  writeValue<K extends keyof IGlobalSettings>(
+    key: K,
+    value: IGlobalSettings[K],
+  ) {
+    const settings = { ...this.globalSettings, [key]: value };
+    ipcAgent.async.config_writeGlobalSettings(settings);
+  }
 })();
 
 export function useGlobalSettingsModelUpdator() {
