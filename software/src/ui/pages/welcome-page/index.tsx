@@ -4,12 +4,15 @@ import {
   onboadingPanelDisplayStateModel,
   useApplicationVersionText,
   useLanguageSelectionModel,
+  useThemeSelectionModel,
 } from '~/ui/commonModels';
+import { CheckBoxLine } from '~/ui/components';
 import { WelcomePageButton } from '~/ui/components/atoms';
 
 export const WelcomePage: FC = () => {
   const appVersion = useApplicationVersionText();
   const { currrentLanguage, changeLanguage } = useLanguageSelectionModel();
+  const { currentThemeKey, changeTheme } = useThemeSelectionModel();
   return (
     <div css={style}>
       <h1>Kermite</h1>
@@ -44,6 +47,14 @@ export const WelcomePage: FC = () => {
       <div className="version-area" qxIf={!!appVersion}>
         version: {appVersion}
       </div>
+
+      <div className="theme-config-area">
+        <CheckBoxLine
+          text="dark theme"
+          checked={currentThemeKey === 'dark'}
+          setChecked={(ck) => changeTheme(ck ? 'dark' : 'light')}
+        />
+      </div>
     </div>
   );
 };
@@ -75,11 +86,11 @@ const style = css`
   }
 
   > .buttons-panel {
-    margin-top: 70px;
+    margin-top: 60px;
     width: 400px;
     display: flex;
     flex-direction: column;
-    gap: 40px;
+    gap: 30px;
 
     > .row {
       width: 100%;
@@ -98,5 +109,12 @@ const style = css`
     bottom: 0;
     right: 0;
     margin: 5px;
+  }
+
+  > .theme-config-area {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 5px 10px;
   }
 `;
