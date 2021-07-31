@@ -1,12 +1,22 @@
-import { IPresetSpec, IProfileData, IProjectResourceInfo } from '~/shared';
+import { useEffect, useLocal, useMemo } from 'qx';
+import {
+  IGlobalSettings,
+  IPresetSpec,
+  IProfileData,
+  IProjectResourceInfo,
+} from '~/shared';
 import { createPresetKey } from '~/shared/funcs/DomainRelatedHelpers';
 import {
   getSelectionValueCorrected,
   ISelectorOption,
   ISelectorSource,
 } from '~/ui/base';
-import { useProjectResourceInfosBasedOnGlobalSettings } from '~/ui/commonModels';
-import { fieldSetter, usePersistState } from '~/ui/helpers';
+import {
+  useAllProjectResourceInfos,
+  useGlobalSettingsFetch,
+  readGlobalProjectKey,
+} from '~/ui/commonModels';
+import { fieldSetter } from '~/ui/helpers';
 import { editSelectedProjectPreset as editSelectedProjectPresetOriginal } from '~/ui/pages/preset-browser-page/models/ProfileCreator';
 import { useProfileDataLoaded } from '~/ui/pages/preset-browser-page/models/ProfileDataLoader';
 
@@ -63,12 +73,40 @@ function makePresetOptions(
   ];
 }
 
+function useFileterdResourceInfos(
+  allProjectInfos: IProjectResourceInfo[],
+  globalSettings: IGlobalSettings,
+) {
+  return useMemo(() => {
+    const { useLocalResouces, globalProjectId } = globalSettings;
+    const targetOrigin = useLocalResouces ? 'local' : 'online';
+    return allProjectInfos
+      .filter((info) => info.origin === targetOrigin)
+      .filter(
+        (info) => globalProjectId === '' || info.projectId === globalProjectId,
+      );
+  }, [allProjectInfos, globalSettings]);
+}
+
 export function usePresetSelectionModel(): IPresetSelectionModel {
-  const sel = usePersistState(`presetSelecionModel__sel`, {
-    projectKey: '', // ${origin}#${projectId}
-    presetKey: '', // blank:${layoutName} or preset:${presetName}
+  // const sel = usePersistState(`presetSelecionModel__sel`, {
+  //   projectKey: '', // ${origin}#${projectId}
+  //   presetKey: '', // blank:${layoutName} or preset:${presetName}
+  // });
+
+  const sel = useLocal({
+    projectKey: '',
+    presetKey: '',
   });
-  const resourceInfos = useProjectResourceInfosBasedOnGlobalSettings();
+
+  const globalSettings = useGlobalSettingsFetch();
+  const allProjectInfos = useAllProjectResourceInfos();
+
+  const resourceInfos = useFileterdResourceInfos(
+    allProjectInfos,
+    globalSettings,
+  );
+
   const projectOptions = makeProjectOptions(resourceInfos);
   const presetOptions = makePresetOptions(resourceInfos, sel.projectKey);
 
@@ -78,15 +116,20 @@ export function usePresetSelectionModel(): IPresetSelectionModel {
   );
   const modPresetKey = getSelectionValueCorrected(presetOptions, sel.presetKey);
 
-  const selectProject = (projectKey: string) => {
-    sel.projectKey = projectKey;
-    sel.presetKey = '';
-  };
+  useEffect(() => {
+    sel.projectKey =
+      readGlobalProjectKey(globalSettings) || projectOptions[0]?.value || '';
+  }, [globalSettings]);
 
   const loadedProfileData = useProfileDataLoaded(modProjectKey, modPresetKey);
 
   const editSelectedProjectPreset = () => {
     editSelectedProjectPresetOriginal(modProjectKey, modPresetKey);
+  };
+
+  const selectProject = (projectKey: string) => {
+    sel.projectKey = projectKey;
+    sel.presetKey = '';
   };
 
   return {
