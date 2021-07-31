@@ -10,7 +10,7 @@ export const ProjectSelectionPage: FC = () => {
     label: info.keyboardName,
     value: info.projectId,
   }));
-  options.unshift({ value: '', label: 'none' });
+  options.unshift({ value: '', label: 'any' });
   const { globalProjectId } = globalSettingsModel.globalSettings;
   const setGlobalProjectId = (id: string) => {
     globalSettingsModel.writeValue('globalProjectId', id);
