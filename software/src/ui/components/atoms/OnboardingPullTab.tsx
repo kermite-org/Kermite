@@ -24,6 +24,7 @@ const style = css`
   cursor: pointer;
   font-size: 16px;
   line-height: 20px;
+  user-select: none;
 `;
 
 export const OnboadingPullTabPlacer = styled.div`
