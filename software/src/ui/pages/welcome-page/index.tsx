@@ -39,7 +39,7 @@ export const WelcomePage: FC = () => {
             className="button"
             onClick={onboadingPanelDisplayStateModel.open}
           >
-            使い方のナビゲーションを表示
+            セットアップナビゲーションを表示
           </WelcomePageButton>
         </div>
       </div>
