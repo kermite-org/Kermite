@@ -15,3 +15,4 @@ export * from './LoadingAnimationIcon';
 export * from './RibbonSelector';
 export * from './Slider';
 export * from './ToggleButton';
+export * from './WelcomePageButton';

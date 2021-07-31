@@ -1,13 +1,23 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
+import { WelcomePageButton } from '~/ui/components/atoms';
 
 export const WelcomePage: FC = () => (
   <div css={style}>
     <h1>Kermite</h1>
     <h2>Keyboard Ecosystem All in One</h2>
-    <div className="buttos-panel">
-      <div className="row"></div>
-      <div className="row"></div>
+    <div className="buttons-panel">
+      <div className="row">
+        <WelcomePageButton className="button">English</WelcomePageButton>
+        <WelcomePageButton className="button" active={true}>
+          日本語
+        </WelcomePageButton>
+      </div>
+      <div className="row">
+        <WelcomePageButton className="button">
+          使い方のナビゲーションを表示
+        </WelcomePageButton>
+      </div>
     </div>
   </div>
 );
@@ -23,7 +33,7 @@ const style = css`
   justify-content: center;
   align-items: center;
 
-  color: #468;
+  color: #469;
 
   > h1 {
     font-size: 48px;
@@ -36,8 +46,21 @@ const style = css`
   }
 
   > .buttons-panel {
+    margin-top: 50px;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+
     > .row {
+      width: 100%;
       display: flex;
+      justify-content: center;
+      gap: 30px;
+
+      > .button {
+        width: 100%;
+      }
     }
   }
 `;
