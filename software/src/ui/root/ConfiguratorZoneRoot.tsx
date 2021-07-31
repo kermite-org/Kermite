@@ -1,15 +1,7 @@
-import { jsx, css } from 'qx';
-import { uiTheme, router, appUi } from '~/ui/base';
-import {
-  onboadingPanelDisplayStateModel,
-  siteModel,
-  uiStatusModel,
-} from '~/ui/commonModels';
+import { css, jsx } from 'qx';
+import { appUi, router, uiTheme } from '~/ui/base';
+import { siteModel, uiStatusModel } from '~/ui/commonModels';
 import { CustomWindowFrame, DevToolPullTab } from '~/ui/components';
-import {
-  OnboadingPullTabPlacer,
-  OnboardingPullTab,
-} from '~/ui/components/atoms/OnboardingPullTab';
 import { LoadingOverlay } from '~/ui/components/overlay/LoadingOverlay';
 import { OnboadingPanel } from '~/ui/features/OnboardingPanel';
 import { EditorPage } from '~/ui/pages/editor-page';
@@ -66,11 +58,6 @@ export const ConfiguratorZoneRoot = () => {
             qxIf={appUi.isDevelopment}
             handler={siteModel.toggleDevToolVisible}
           />
-          <OnboadingPullTabPlacer>
-            <OnboardingPullTab
-              handler={onboadingPanelDisplayStateModel.toggleOnboardingPanel}
-            />
-          </OnboadingPullTabPlacer>
         </div>
       </div>
     </CustomWindowFrame>
