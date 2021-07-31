@@ -10,7 +10,7 @@ type Props = {
 const steps = [0, 1, 2, 3, 4, 5];
 
 const stepToPagePathMap: { [step: number]: PagePaths | undefined } = {
-  0: undefined,
+  0: '/home',
   1: '/projectSelection',
   2: '/firmwareUpdation',
   3: '/presetBrowser',
@@ -28,7 +28,7 @@ const stepInstructionMap: { [step: number]: string } = {
 };
 
 export const OnboadingPanel: FC<Props> = ({ className }) => {
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(0);
 
   useEffect(() => {
     const pagePath = stepToPagePathMap[step];

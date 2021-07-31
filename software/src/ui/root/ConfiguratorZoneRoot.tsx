@@ -16,6 +16,7 @@ import { PresetBrowserPage2 } from '~/ui/pages/preset-browser-page2';
 import { ProjectSelectionPage } from '~/ui/pages/project-selection-page';
 import { UiSettingsPage } from '~/ui/pages/settings-page';
 import { ShapePreviewPage } from '~/ui/pages/shape-preview-page';
+import { WelcomePage } from '~/ui/pages/welcome-page';
 import {
   NavigationColumn,
   WindowStatusBarSection,
@@ -35,6 +36,7 @@ const MainColumnRoutes = () => {
       {pagePath === '/presetBrowser2' && <PresetBrowserPage2 />}
       {pagePath === '/settings' && <UiSettingsPage />}
       {pagePath === '/projectSelection' && <ProjectSelectionPage />}
+      {pagePath === '/home' && <WelcomePage />}
     </div>
   );
 };

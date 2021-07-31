@@ -61,7 +61,7 @@ export const SiteRoot = () => {
   useEffect(globalHintMouseMoveHandlerEffect, []);
   useGlobalSettingsModelUpdator();
 
-  router.useRedirect(['', '/'], '/editor');
+  router.useRedirect(['', '/'], '/home');
 
   const isWidgetMode = router.getPagePath() === '/widget';
   return (
