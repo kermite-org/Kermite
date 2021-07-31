@@ -1,6 +1,7 @@
 import { css, FC, jsx, useEffect, useState } from 'qx';
 import { router } from '~/ui/base';
-import { PagePaths } from '~/ui/commonModels';
+import { onboadingPanelDisplayStateModel, PagePaths } from '~/ui/commonModels';
+import { Icon } from '~/ui/components';
 import { NavigationStepList } from '~/ui/components/molecules/NavigationStepList';
 
 type Props = {
@@ -49,6 +50,12 @@ export const OnboadingPanel: FC<Props> = ({ className }) => {
         <p>ステップを順番に進めてキーボードのセットアップを行いましょう</p>
         <p>{stepInstructionMap[step]}</p>
       </div>
+      <div
+        className="close-button"
+        onClick={onboadingPanelDisplayStateModel.close}
+      >
+        <Icon spec="fa fa-times" />
+      </div>
     </div>
   );
 };
@@ -56,6 +63,7 @@ export const OnboadingPanel: FC<Props> = ({ className }) => {
 const style = css`
   height: 120px;
   padding: 10px;
+  position: relative;
 
   > .step-list {
   }
@@ -64,5 +72,13 @@ const style = css`
     margin-top: 10px;
     color: #36a;
     line-height: 1.5em;
+  }
+
+  > .close-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 10px;
+    cursor: pointer;
   }
 `;

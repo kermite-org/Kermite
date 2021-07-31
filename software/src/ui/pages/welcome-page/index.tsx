@@ -37,7 +37,7 @@ export const WelcomePage: FC = () => {
         <div className="row">
           <WelcomePageButton
             className="button"
-            onClick={onboadingPanelDisplayStateModel.toggleOnboardingPanel}
+            onClick={onboadingPanelDisplayStateModel.open}
           >
             使い方のナビゲーションを表示
           </WelcomePageButton>

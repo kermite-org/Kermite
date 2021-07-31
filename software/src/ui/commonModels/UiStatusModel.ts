@@ -82,7 +82,13 @@ export const onboadingPanelDisplayStateModel = {
   get isPanelVisible() {
     return uiStatusModel.settings.showOnboardingPanel;
   },
-  toggleOnboardingPanel: () => {
+  open() {
+    uiStatusModel.settings.showOnboardingPanel = true;
+  },
+  close() {
+    uiStatusModel.settings.showOnboardingPanel = false;
+  },
+  toggleOnboardingPanel() {
     const { settings } = uiStatusModel;
     settings.showOnboardingPanel = !settings.showOnboardingPanel;
   },
