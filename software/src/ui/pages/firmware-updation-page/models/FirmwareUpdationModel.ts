@@ -6,8 +6,11 @@ import {
   IProjectResourceInfo,
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
-import { fetchAllProjectResourceInfos, uiStatusModel } from '~/ui/commonModels';
-import { globalSettingsModel } from '~/ui/commonModels/GlobalSettingsModel';
+import {
+  fetchAllProjectResourceInfos,
+  projectResourceInfoFilter_affectGlobalProjectSelection,
+  uiStatusModel,
+} from '~/ui/commonModels';
 import { modalAlert } from '~/ui/components';
 
 export type FirmwareUpdationPhase =
@@ -149,12 +152,9 @@ export class FirmwareUpdationModel {
   };
 
   private async fechProjectInfos() {
-    const { globalProjectId } = globalSettingsModel.globalSettings;
     this.projectInfosWithFirmware = (await fetchAllProjectResourceInfos())
-      .filter((info) => info.firmwares.length > 0)
-      .filter(
-        (info) => globalProjectId === '' || info.projectId === globalProjectId,
-      );
+      .filter(projectResourceInfoFilter_affectGlobalProjectSelection)
+      .filter((info) => info.firmwares.length > 0);
   }
 
   startPageSession = () => {

@@ -55,3 +55,10 @@ export function useProjectInfo(
     (info) => info.origin === origin && info.projectId === projectId,
   );
 }
+
+export function projectResourceInfoFilter_affectGlobalProjectSelection(
+  info: IProjectResourceInfo,
+): boolean {
+  const { globalProjectId } = globalSettingsModel.globalSettings;
+  return globalProjectId === '' || info.projectId === globalProjectId;
+}
