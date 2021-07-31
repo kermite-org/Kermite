@@ -1,8 +1,10 @@
 import { useLocal } from 'qx';
 import { texts, appUi } from '~/ui/base';
-import { uiStatusModel } from '~/ui/commonModels';
-import { useLanguageSelectionModel } from '~/ui/root/models/LanguageSelectionModel';
-import { useThemeSelectionModel } from '~/ui/root/models/ThemeSelectionModel';
+import {
+  uiStatusModel,
+  useThemeSelectionModel,
+  useLanguageSelectionModel,
+} from '~/ui/commonModels';
 
 export interface IGlobalMenuItem {
   key: string;
