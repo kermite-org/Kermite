@@ -80,6 +80,7 @@ function useFileterdResourceInfos(
   return useMemo(() => {
     const { useLocalResouces, globalProjectId } = globalSettings;
     const targetOrigin = useLocalResouces ? 'local' : 'online';
+
     return allProjectInfos
       .filter((info) => info.origin === targetOrigin)
       .filter(
@@ -100,6 +101,8 @@ export function usePresetSelectionModel(): IPresetSelectionModel {
   });
 
   const globalSettings = useGlobalSettingsFetch();
+  // console.log({ globalSettings });
+
   const allProjectInfos = useAllProjectResourceInfos();
 
   const resourceInfos = useFileterdResourceInfos(
@@ -115,6 +118,8 @@ export function usePresetSelectionModel(): IPresetSelectionModel {
     sel.projectKey,
   );
   const modPresetKey = getSelectionValueCorrected(presetOptions, sel.presetKey);
+
+  // console.log({ projectOptions, presetOptions, modProjectKey, modPresetKey });
 
   useEffect(() => {
     sel.projectKey =
