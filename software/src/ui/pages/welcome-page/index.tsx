@@ -1,5 +1,6 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
+import { onboadingPanelDisplayStateModel } from '~/ui/commonModels';
 import { WelcomePageButton } from '~/ui/components/atoms';
 
 export const WelcomePage: FC = () => (
@@ -14,7 +15,10 @@ export const WelcomePage: FC = () => (
         </WelcomePageButton>
       </div>
       <div className="row">
-        <WelcomePageButton className="button">
+        <WelcomePageButton
+          className="button"
+          onClick={onboadingPanelDisplayStateModel.toggleOnboardingPanel}
+        >
           使い方のナビゲーションを表示
         </WelcomePageButton>
       </div>
