@@ -1,6 +1,6 @@
-import { jsx, useLocal, useEffect } from 'qx';
-import { IProjectResourceInfo } from '~/shared';
-import { ipcAgent, texts } from '~/ui/base';
+import { jsx, useLocal } from 'qx';
+import { texts } from '~/ui/base';
+import { useLocalProjectResourceInfos } from '~/ui/commonModels';
 import {
   IProjectAttachmentFileSelectorModalModel,
   modalConfirm,
@@ -22,22 +22,12 @@ function useProjectAttachmentFileSelectorViewModel(
   baseVm: IProfileManagementPartViewModel,
 ): IProjectAttachmentFileSelectorModalModel {
   const local = useLocal({
-    resourceInfos: [] as IProjectResourceInfo[],
     currentPresetName: '',
   });
 
-  useEffect(() => {
-    ipcAgent.async
-      .projects_getAllProjectResourceInfos()
-      .then(
-        (infos) =>
-          (local.resourceInfos = infos.filter(
-            (info) => info.origin === 'local',
-          )),
-      );
-  }, []);
+  const resourceInfos = useLocalProjectResourceInfos();
 
-  const projectOptions = local.resourceInfos.map((info) => ({
+  const projectOptions = resourceInfos.map((info) => ({
     value: info.projectId,
     label: info.projectPath,
   }));
@@ -45,11 +35,11 @@ function useProjectAttachmentFileSelectorViewModel(
   // 編集しているプロファイルのプロジェクトを規定で選び、変更させない
   const currentProjectId = baseVm.currentProfileProjectId;
 
-  const includedInResources = local.resourceInfos.find(
+  const includedInResources = resourceInfos.find(
     (info) => info.origin === 'local' && info.projectId === currentProjectId,
   );
 
-  const currentProject = local.resourceInfos.find(
+  const currentProject = resourceInfos.find(
     (info) => info.projectId === currentProjectId,
   );
 

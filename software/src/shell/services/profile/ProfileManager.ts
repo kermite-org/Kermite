@@ -35,13 +35,7 @@ function createLazyInitializer(
   };
 }
 
-const profileEditSourceSchema = vSchemaOneOf([
-  vObject({
-    type: vValueEquals('NoProfilesAvailable'),
-  }),
-  vObject({
-    type: vValueEquals('ProfileNewlyCreated'),
-  }),
+const profileEditSourceLoadingDataSchema = vSchemaOneOf([
   vObject({
     type: vValueEquals('InternalProfile'),
     profileName: vString(),
@@ -114,7 +108,7 @@ export class ProfileManager implements IProfileManager {
     }
     return applicationStorage.readItemSafe<IProfileEditSource>(
       'profileEditSource',
-      profileEditSourceSchema,
+      profileEditSourceLoadingDataSchema,
       { type: 'ProfileNewlyCreated' },
     );
   }
@@ -123,7 +117,10 @@ export class ProfileManager implements IProfileManager {
     this.status = { ...this.status, ...newStatePartial };
     this.statusEventPort.emit(newStatePartial);
     if (newStatePartial.editSource) {
-      if (newStatePartial.editSource.type !== 'ProfileNewlyCreated') {
+      if (
+        newStatePartial.editSource.type !== 'ProfileNewlyCreated' &&
+        newStatePartial.editSource.type !== 'NoProfilesAvailable'
+      ) {
         applicationStorage.writeItem(
           'profileEditSource',
           newStatePartial.editSource,

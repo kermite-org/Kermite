@@ -4,10 +4,13 @@ import {
   IBootloaderType,
   IFirmwareTargetDevice,
   IProjectResourceInfo,
-  sortOrderBy,
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
-import { uiStatusModel } from '~/ui/commonModels';
+import {
+  fetchAllProjectResourceInfos,
+  fetchGlobalSettings,
+  uiStatusModel,
+} from '~/ui/commonModels';
 import { modalAlert } from '~/ui/components';
 
 export type FirmwareUpdationPhase =
@@ -149,12 +152,12 @@ export class FirmwareUpdationModel {
   };
 
   private async fechProjectInfos() {
-    const projectResourceInfos = await ipcAgent.async.projects_getAllProjectResourceInfos();
-    this.projectInfosWithFirmware = projectResourceInfos
-      .filter((info) => info.firmwares.length > 0)
-      .sort(
-        sortOrderBy((it) => `${it.origin}${it.keyboardName}${it.projectPath}`),
-      );
+    const { globalProjectId } = await fetchGlobalSettings();
+    this.projectInfosWithFirmware = (await fetchAllProjectResourceInfos())
+      .filter(
+        (info) => globalProjectId === '' || info.projectId === globalProjectId,
+      )
+      .filter((info) => info.firmwares.length > 0);
   }
 
   startPageSession = () => {

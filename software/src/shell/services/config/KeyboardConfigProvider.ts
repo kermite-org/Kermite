@@ -1,50 +1,39 @@
-import { fallbackKeyboardConfig, IKeyboardConfig } from '~/shared';
-import { vBoolean, vObject } from '~/shared/modules/SchemaValidationHelper';
+import {
+  fallbackKeyboardConfig,
+  IKeyboardConfig,
+  keyboardConfigLoadingDataSchema,
+} from '~/shared';
 import { appGlobal, applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
 
-// 環境に関連したキーボードの設定を保存する
-
-const keyboardConfigDataSchema = vObject({
-  isSimulatorMode: vBoolean(),
-  isMuteMode: vBoolean(),
-});
-
 export class KeyboardConfigProvider {
-  private keyboardConfig: IKeyboardConfig = fallbackKeyboardConfig;
+  private _keyboardConfig: IKeyboardConfig = fallbackKeyboardConfig;
+
+  private get keyboardConfig(): IKeyboardConfig {
+    if (this._keyboardConfig === fallbackKeyboardConfig) {
+      this._keyboardConfig = applicationStorage.readItemBasedOnDefault(
+        'keyboardConfig',
+        keyboardConfigLoadingDataSchema,
+        fallbackKeyboardConfig,
+      );
+    }
+    return this._keyboardConfig;
+  }
 
   constructor() {
-    appGlobal.getSimulatorMode = () => {
-      if (this.keyboardConfig === fallbackKeyboardConfig) {
-        this.loadFromBackingStore();
-      }
-      return this.keyboardConfig.isSimulatorMode;
-    };
+    appGlobal.getSimulatorMode = () => this.keyboardConfig.isSimulatorMode;
   }
 
   keyboardConfigEventPort = createEventPort<Partial<IKeyboardConfig>>({
-    onFirstSubscriptionStarting: () => this.loadFromBackingStore(),
-    onLastSubscriptionEnded: () => this.saveToBackingStore(),
     initialValueGetter: () => this.keyboardConfig,
   });
 
   writeKeyboardConfig(partialConfig: Partial<IKeyboardConfig>) {
-    this.keyboardConfig = {
-      ...this.keyboardConfig,
+    this._keyboardConfig = {
+      ...this._keyboardConfig,
       ...partialConfig,
     };
+    applicationStorage.writeItem('keyboardConfig', this._keyboardConfig);
     this.keyboardConfigEventPort.emit(partialConfig);
-  }
-
-  loadFromBackingStore() {
-    this.keyboardConfig = applicationStorage.readItemSafe(
-      'keyboardConfig',
-      keyboardConfigDataSchema,
-      fallbackKeyboardConfig,
-    );
-  }
-
-  saveToBackingStore() {
-    applicationStorage.writeItem('keyboardConfig', this.keyboardConfig);
   }
 }

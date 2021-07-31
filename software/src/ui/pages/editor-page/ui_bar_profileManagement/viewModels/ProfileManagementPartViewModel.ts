@@ -15,7 +15,7 @@ import {
 } from '~/ui/base';
 import {
   uiStatusModel,
-  useDeviceStatusModel,
+  useKeyboardDeviceStatus,
   useGlobalSettingsFetch,
   useKeyboardBehaviorModeModel,
 } from '~/ui/commonModels';
@@ -322,7 +322,7 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
 
   const { editSource, allProfileNames, saveProfile } = profilesModel;
 
-  const deviceStatus = useDeviceStatusModel();
+  const deviceStatus = useKeyboardDeviceStatus();
 
   const globalSettings = useGlobalSettingsFetch();
 

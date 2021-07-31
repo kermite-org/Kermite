@@ -116,5 +116,6 @@ export interface IAppIpcContract {
     projects_layoutFileUpdationEvents: { projectId: string };
 
     config_keyboardConfigEvents: Partial<IKeyboardConfig>;
+    config_globalSettingsEvents: Partial<IGlobalSettings>;
   };
 }

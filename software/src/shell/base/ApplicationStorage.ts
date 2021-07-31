@@ -10,7 +10,12 @@ class ApplicationStorage {
   private configFilePath = appEnv.resolveUserDataFilePath('data/config.json');
   private data: { [key: string]: any } = {};
 
+  private initialized: boolean = false;
+
   readItem<T>(key: string): T | undefined {
+    if (!this.initialized) {
+      console.warn('[WARN] accessed ApplicationStorage before initialization');
+    }
     return this.data[key];
   }
 
@@ -20,7 +25,7 @@ class ApplicationStorage {
     schemaChecker: ICheckerEx,
     fallbackSource: T | (() => T),
   ): T {
-    const value = this.data[key];
+    const value = this.readItem<T>(key);
     const errors = schemaChecker(value);
     if (errors) {
       console.error(`invalid persist data for ${key}`);
@@ -31,7 +36,7 @@ class ApplicationStorage {
         return duplicateObjectByJsonStringifyParse(fallbackSource);
       }
     }
-    return value;
+    return value!;
   }
 
   // 値を読み込みんでスキーマをチェックし、デフォルトの値をベースに各フィールドを読み込んだ値で上書きする
@@ -39,8 +44,8 @@ class ApplicationStorage {
     key: string,
     schemaChecker: ICheckerEx,
     defaultValue: T,
-  ) {
-    const loaded = this.data[key];
+  ): T {
+    const loaded = this.readItem(key);
     const errors = schemaChecker(loaded);
     const value = duplicateObjectByJsonStringifyParse(defaultValue);
     if (!errors) {
@@ -60,6 +65,7 @@ class ApplicationStorage {
     }
     const obj = await fsxReadJsonFile(this.configFilePath);
     this.data = obj;
+    this.initialized = true;
   }
 
   async terminateAsync() {

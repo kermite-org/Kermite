@@ -9,7 +9,8 @@ export type PagePaths =
   | '/presetBrowser'
   | '/presetBrowser2'
   | '/settings'
-  | '/widget';
+  | '/widget'
+  | '/projectSelection';
 
 export interface IUiSettings {
   showTestInputArea: boolean;

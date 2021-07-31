@@ -55,7 +55,7 @@ export function usePresetSelectionModel2(): IPresetSelectionModel {
     projectProfiles: [],
   });
 
-  const resourceInfos = useProjectResourceInfos('projectsSortedByKeyboardName');
+  const resourceInfos = useProjectResourceInfos();
   const projectIds = useFetcher(
     ipcAgent.async.presetHub_getServerProjectIds,
     [],
