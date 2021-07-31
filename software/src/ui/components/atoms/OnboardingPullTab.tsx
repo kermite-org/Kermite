@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx, styled } from 'qx';
 
 type Props = {
   className?: string;
@@ -24,4 +24,10 @@ const style = css`
   cursor: pointer;
   font-size: 16px;
   line-height: 20px;
+`;
+
+export const OnboadingPullTabPlacer = styled.div`
+  position: absolute;
+  top: 80px;
+  right: -2px;
 `;
