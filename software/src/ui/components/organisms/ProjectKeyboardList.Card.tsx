@@ -40,6 +40,10 @@ const style = css`
 
   cursor: pointer;
 
+  &:hover {
+    border: solid 4px #8ce;
+  }
+
   > .inner {
     width: 100%;
     height: 100%;
