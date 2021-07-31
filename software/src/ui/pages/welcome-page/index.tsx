@@ -3,19 +3,31 @@ import { uiTheme } from '~/ui/base';
 import {
   onboadingPanelDisplayStateModel,
   useApplicationVersionText,
+  useLanguageSelectionModel,
 } from '~/ui/commonModels';
 import { WelcomePageButton } from '~/ui/components/atoms';
 
 export const WelcomePage: FC = () => {
   const appVersion = useApplicationVersionText();
+  const { currrentLanguage, changeLanguage } = useLanguageSelectionModel();
   return (
     <div css={style}>
       <h1>Kermite</h1>
       <h2>Keyboard Ecosystem All in One</h2>
       <div className="buttons-panel">
         <div className="row">
-          <WelcomePageButton className="button">English</WelcomePageButton>
-          <WelcomePageButton className="button" active={true}>
+          <WelcomePageButton
+            className="button"
+            active={currrentLanguage === 'english'}
+            onClick={() => changeLanguage('english')}
+          >
+            English
+          </WelcomePageButton>
+          <WelcomePageButton
+            className="button"
+            active={currrentLanguage === 'japanese'}
+            onClick={() => changeLanguage('japanese')}
+          >
             日本語
           </WelcomePageButton>
         </div>
