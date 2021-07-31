@@ -8,7 +8,7 @@ import {
 import { ipcAgent } from '~/ui/base';
 import {
   fetchAllProjectResourceInfos,
-  projectResourceInfoFilter_affectGlobalProjectSelection,
+  fetchGlobalSettings,
   uiStatusModel,
 } from '~/ui/commonModels';
 import { modalAlert } from '~/ui/components';
@@ -152,8 +152,11 @@ export class FirmwareUpdationModel {
   };
 
   private async fechProjectInfos() {
+    const { globalProjectId } = await fetchGlobalSettings();
     this.projectInfosWithFirmware = (await fetchAllProjectResourceInfos())
-      .filter(projectResourceInfoFilter_affectGlobalProjectSelection)
+      .filter(
+        (info) => globalProjectId === '' || info.projectId === globalProjectId,
+      )
       .filter((info) => info.firmwares.length > 0);
   }
 

@@ -2,6 +2,10 @@ import { globalSettingsFallbackValue, IGlobalSettings } from '~/shared';
 import { ipcAgent } from '~/ui/base';
 import { useFetcher } from '~/ui/helpers';
 
+export async function fetchGlobalSettings(): Promise<IGlobalSettings> {
+  return await ipcAgent.async.config_getGlobalSettings();
+}
+
 export function useGlobalSettingsFetch() {
   return useFetcher(
     ipcAgent.async.config_getGlobalSettings,
