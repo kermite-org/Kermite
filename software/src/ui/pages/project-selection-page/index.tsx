@@ -10,6 +10,7 @@ import {
   fetchGlobalSettings,
 } from '~/ui/commonModels';
 import { globalSettingsModel } from '~/ui/commonModels/GlobalSettingsModel';
+import { RadioButtonLine } from '~/ui/components/molecules/RadioButtonLine';
 import { ProjectKeyboardList } from '~/ui/components/organisms/ProjectKeyboardList';
 import { useFetcher } from '~/ui/helpers';
 
@@ -68,15 +69,11 @@ export const ProjectSelectionPage: FC = () => {
           setCurrentProjectId={setProjectId}
         />
         <div className="bottom-row">
-          <label style="cursor: pointer;">
-            <input
-              type="radio"
-              checked={projectId === ''}
-              onClick={() => setProjectId('')}
-              style="margin-right: 2px;"
-            />
-            <span>各画面で選択する</span>
-          </label>
+          <RadioButtonLine
+            checked={projectId === ''}
+            onClick={() => setProjectId('')}
+            text="各画面で選択する"
+          />
         </div>
       </div>
     </div>
