@@ -1,9 +1,9 @@
 import { css, FC, jsx, QxNode } from 'qx';
-import { getObjectKeyByValue } from '~/shared';
+import { getObjectKeyByValue, isNumberInRange } from '~/shared';
 import { router } from '~/ui/base';
 import { onboadingPanelDisplayStateModel, PagePaths } from '~/ui/commonModels';
 import { Icon } from '~/ui/components';
-import { OnboardingButton } from '~/ui/components/atoms/OnboardingButton';
+import { OnboardingStepShiftButton } from '~/ui/components/atoms/OnboardingButton';
 import { NavigationStepList } from '~/ui/components/molecules/NavigationStepList';
 
 type Props = {
@@ -45,6 +45,17 @@ export const OnboadingFrame: FC<Props> = ({ className, children }) => {
     }
   };
 
+  const closePanel = onboadingPanelDisplayStateModel.close;
+
+  const canShiftStepBack = isNumberInRange(currentStep, 1, 4);
+  const canShiftStepForward = isNumberInRange(currentStep, 0, 3);
+
+  const shiftStepBack = () => setStep(currentStep - 1);
+  const shiftStepForward = () => setStep(currentStep + 1);
+
+  const canCompleteSteps = currentStep === 4;
+  const completeSteps = closePanel;
+
   return (
     <div css={style} className={className}>
       <div className="top-bar">
@@ -58,17 +69,30 @@ export const OnboadingFrame: FC<Props> = ({ className, children }) => {
           <p>ステップを順番に進めてキーボードのセットアップを行いましょう</p>
           <p>{stepInstructionMap[currentStep]}</p>
         </div>
-        <div
-          className="close-button"
-          onClick={onboadingPanelDisplayStateModel.close}
-        >
+        <div className="close-button" onClick={closePanel}>
           <Icon spec="fa fa-times" />
         </div>
       </div>
       {children}
       <div className="bottom-bar">
-        <OnboardingButton>戻る</OnboardingButton>
-        <OnboardingButton>進む</OnboardingButton>
+        <OnboardingStepShiftButton
+          onClick={shiftStepBack}
+          qxIf={canShiftStepBack}
+        >
+          戻る
+        </OnboardingStepShiftButton>
+        <OnboardingStepShiftButton
+          onClick={shiftStepForward}
+          qxIf={canShiftStepForward}
+        >
+          次へ
+        </OnboardingStepShiftButton>
+        <OnboardingStepShiftButton
+          onClick={completeSteps}
+          qxIf={canCompleteSteps}
+        >
+          完了
+        </OnboardingStepShiftButton>
       </div>
     </div>
   );

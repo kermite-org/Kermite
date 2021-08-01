@@ -391,3 +391,7 @@ export function getObjectKeyByValue<T extends {}>(
 ): string | undefined {
   return Object.keys(obj).find((key) => obj[key as keyof T] === value) as any;
 }
+
+export function isNumberInRange(value: number, lo: number, hi: number) {
+  return lo <= value && value <= hi;
+}

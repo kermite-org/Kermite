@@ -8,7 +8,7 @@ type Props = {
   disabled?: boolean;
 };
 
-export const OnboardingButton: FC<Props> = ({
+export const OnboardingStepShiftButton: FC<Props> = ({
   className,
   onClick,
   children,
