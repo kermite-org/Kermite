@@ -76,23 +76,25 @@ export const OnboadingFrame: FC<Props> = ({ className, children }) => {
       {children}
       <div className="bottom-bar">
         <OnboardingStepShiftButton
+          qxIf={currentStep === 0}
+          text="キャンセル"
+          onClick={closePanel}
+        />
+        <OnboardingStepShiftButton
           onClick={shiftStepBack}
           qxIf={canShiftStepBack}
-        >
-          戻る
-        </OnboardingStepShiftButton>
+          text="戻る"
+        />
         <OnboardingStepShiftButton
           onClick={shiftStepForward}
           qxIf={canShiftStepForward}
-        >
-          次へ
-        </OnboardingStepShiftButton>
+          text="次へ"
+        />
         <OnboardingStepShiftButton
           onClick={completeSteps}
           qxIf={canCompleteSteps}
-        >
-          完了
-        </OnboardingStepShiftButton>
+          text="完了"
+        />
       </div>
     </div>
   );

@@ -1,17 +1,17 @@
-import { css, FC, jsx, QxChildren } from 'qx';
+import { css, FC, jsx, styled } from 'qx';
 import { ButtonBase } from '~/ui/components/atoms/ButtonBase';
 
 type Props = {
   className?: string;
   onClick?: () => void;
-  children: QxChildren;
+  text: string;
   disabled?: boolean;
 };
 
 export const OnboardingStepShiftButton: FC<Props> = ({
   className,
   onClick,
-  children,
+  text,
   disabled,
 }) => (
   <ButtonBase
@@ -20,7 +20,7 @@ export const OnboardingStepShiftButton: FC<Props> = ({
     extraCss={buttonStyle}
     disabled={disabled}
   >
-    {children}
+    {text}
   </ButtonBase>
 );
 
@@ -37,4 +37,9 @@ const buttonStyle = css`
     opacity: 1;
     transition: all 0.3s;
   }
+`;
+
+export const OnboadingStepShiftButtonDummy = styled.div`
+  width: 90px;
+  height: 32px;
 `;
