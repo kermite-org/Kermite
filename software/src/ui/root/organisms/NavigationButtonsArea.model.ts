@@ -20,18 +20,6 @@ interface NavigationEntrySource {
 
 const entrySources: NavigationEntrySource[] = [
   {
-    pagePath: '/home',
-    pageName: 'home',
-    iconSpec: 'fa fa-home',
-    hint: 'home',
-  },
-  {
-    pagePath: '/projectSelection',
-    pageName: texts.label_sideMenu_app_projectSelection,
-    iconSpec: 'fa fa-book-open',
-    hint: 'project selection',
-  },
-  {
     pagePath: '/editor',
     pageName: texts.label_sideMenu_app_assigner,
     iconSpec: 'fa fa-keyboard',
@@ -72,6 +60,18 @@ const entrySources: NavigationEntrySource[] = [
     pageName: texts.label_sideMenu_app_settings,
     iconSpec: 'fa fa-cog',
     hint: texts.hint_sideMenu_app_settings,
+  },
+  {
+    pagePath: '/projectSelection',
+    pageName: texts.label_sideMenu_app_projectSelection,
+    iconSpec: 'fa fa-globe',
+    hint: 'project selection',
+  },
+  {
+    pagePath: '/home',
+    pageName: 'entrance',
+    iconSpec: 'fa fa-door-open',
+    hint: 'start',
   },
 ];
 
