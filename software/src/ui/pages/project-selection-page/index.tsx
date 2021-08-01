@@ -28,7 +28,7 @@ async function loadSourceProjectItems(): Promise<
   const { useLocalResouces } = globalSettings;
   const targetOrigin = useLocalResouces ? 'local' : 'online';
   const projectInfos = allProjectInfos.filter(
-    (info) => info.origin === targetOrigin,
+    (info) => info.origin === targetOrigin && info.layoutNames.length > 0,
   );
   return await Promise.all(
     projectInfos.map(async (info) => {
