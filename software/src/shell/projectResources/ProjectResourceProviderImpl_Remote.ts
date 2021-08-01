@@ -1,10 +1,13 @@
 import {
-  IFirmwareTargetDevice,
   IPersistKeyboardDesign,
   IProfileData,
   IProjectCustomDefinition,
   IProjectResourceInfo,
 } from '~/shared';
+import {
+  IKrsRemoteProjectResourceInfoSource,
+  IKrsSummaryJsonData,
+} from '~/shared/defs/OnlineResourceTypes';
 import { createProjectSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { appEnv } from '~/shell/base';
 import {
@@ -29,44 +32,10 @@ import {
 
 const remoteBaseUri = 'https://app.kermite.org/krs/resources';
 
-interface IRemoteProjectResourceInfoSource {
-  projectId: string;
-  projectPath: string;
-  keyboardName: string;
-  layoutNames: string[];
-  presetNames: string[];
-  firmwares: {
-    variationName: string;
-    targetDevice: IFirmwareTargetDevice;
-    binaryFileName: string;
-    buildRevision: number;
-    buildTimestamp: string;
-    romUsage: number;
-    ramUsage: number;
-  }[];
-}
-
-interface ISummaryJsonData {
-  info: {
-    buildStats: {
-      numSuccess: number;
-      numTotal: number;
-    };
-    environment: {
-      OS: string;
-      'avr-gcc': string;
-      make: string;
-    };
-    updateAt: string;
-    filesRevision: number;
-  };
-  projects: IRemoteProjectResourceInfoSource[];
-}
-
 async function loadRemoteResourceInfosFromSummaryJson(): Promise<
-  IRemoteProjectResourceInfoSource[]
+  IKrsRemoteProjectResourceInfoSource[]
 > {
-  const remoteSummary = await cacheRemoteResouce<ISummaryJsonData>(
+  const remoteSummary = await cacheRemoteResouce<IKrsSummaryJsonData>(
     fetchJson,
     `${remoteBaseUri}/summary.json`,
   );
@@ -75,7 +44,7 @@ async function loadRemoteResourceInfosFromSummaryJson(): Promise<
 
 export class ProjectResourceProviderImpl_Remote
   implements IProjectResourceProviderImpl {
-  private projectInfoSources: IRemoteProjectResourceInfoSource[] = [];
+  private projectInfoSources: IKrsRemoteProjectResourceInfoSource[] = [];
 
   private loaded = false;
   async getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]> {
@@ -102,7 +71,7 @@ export class ProjectResourceProviderImpl_Remote
 
   private getProjectInfoSourceById(
     projectId: string,
-  ): IRemoteProjectResourceInfoSource | undefined {
+  ): IKrsRemoteProjectResourceInfoSource | undefined {
     return this.projectInfoSources.find((info) => info.projectId === projectId);
   }
 
