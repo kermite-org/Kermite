@@ -4,16 +4,38 @@ import {
   setJsxCreateElementFunction,
   styled,
 } from './cssInJs';
-import { Hook } from './hookImpl';
+import {
+  useCallback,
+  useEffect,
+  useInlineEffect,
+  useLocal,
+  useMemo,
+  useRef,
+  useState,
+} from './hookImpl';
 import { qxGlobal } from './qxGlobal';
 import { render as vdomCoreRender, jsx, VNode } from './qxinternal_qxcore';
 import { setShortCssProcessor } from './shortCss';
 
-export { jsx, Hook, css, styled, applyGlobalStyle, setShortCssProcessor };
+export {
+  jsx,
+  css,
+  styled,
+  applyGlobalStyle,
+  setShortCssProcessor,
+  useState,
+  useLocal,
+  useMemo,
+  useCallback,
+  useEffect,
+  useInlineEffect,
+  useRef,
+};
 
 export type FC<T extends {} = {}> = (props: T) => JSX.Element | null;
 export type QxChild = JSX.Element | string;
 export type QxChildren = QxChild | QxChild[];
+export type QxNode = QxChild;
 
 setJsxCreateElementFunction(jsx);
 
@@ -39,18 +61,6 @@ function setupAsyncRenderLoop() {
     asyncLoopInitialized = true;
   }
 }
-
-// const domRefDirective = {
-//   mount(element: Element, ref: { current: Element } | ((el: Element) => void)) {
-//     if (typeof ref === 'function') {
-//       ref(element);
-//     } else {
-//       ref.current = element;
-//     }
-//   },
-//   patch() {},
-//   unmount() {},
-// };
 
 export function render(
   renderFn: () => JSX.Element,

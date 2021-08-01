@@ -65,12 +65,13 @@ export class IpcMainAgent<T extends IIpcContractBase>
       ) => () => void;
     },
   ) {
+    // let num = 0;
     for (const propKey in handlers) {
       const handler = handlers[propKey]!;
       ipcMain.handle(
         `__subscriptionStarted__${propKey}`,
         (event, subsciptionKey) => {
-          // console.log(`subscriptionStarted ${subsciptionKey}`);
+          // console.log(`subscriptionStarted ${subsciptionKey}, ${++num}`);
           const callback = (value: any) => {
             this.webContents?.send(subsciptionKey, value);
           };
@@ -81,7 +82,7 @@ export class IpcMainAgent<T extends IIpcContractBase>
       ipcMain.handle(
         `__subscriptionEnded__${propKey}`,
         (event, subsciptionKey) => {
-          // console.log(`subscriptionEnded ${subsciptionKey}`);
+          // console.log(`subscriptionEnded ${subsciptionKey}, ${--num}`);
           const unsub = this.unsubMap[subsciptionKey];
           unsub?.();
           delete this.unsubMap[subsciptionKey];
