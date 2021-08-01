@@ -384,3 +384,10 @@ export function bumpObjectProps<T extends {}>(obj: T, source: T) {
 export function makeIntegersRange(lo: number, hi: number) {
   return new Array(hi - lo + 1).fill(0).map((_, i) => lo + i);
 }
+
+export function getObjectKeyByValue<T extends {}>(
+  obj: T,
+  value: any,
+): string | undefined {
+  return Object.keys(obj).find((key) => obj[key as keyof T] === value) as any;
+}

@@ -1,4 +1,5 @@
-import { css, FC, jsx, useEffect, useState } from 'qx';
+import { css, FC, jsx } from 'qx';
+import { getObjectKeyByValue } from '~/shared';
 import { router } from '~/ui/base';
 import { onboadingPanelDisplayStateModel, PagePaths } from '~/ui/commonModels';
 import { Icon } from '~/ui/components';
@@ -26,27 +27,33 @@ const stepInstructionMap: { [step: number]: string } = {
   4: 'Step4: キーマッピングを編集し、デバイスに書き込みます。',
 };
 
-export const OnboadingPanel: FC<Props> = ({ className }) => {
-  const [step, setStep] = useState(0);
+function getStepByPagePath(pagePath: string): number {
+  const _step = getObjectKeyByValue(stepToPagePathMap, pagePath);
+  return _step === undefined ? -1 : parseInt(_step);
+}
 
-  useEffect(() => {
-    const pagePath = stepToPagePathMap[step];
-    if (pagePath) {
-      router.navigateTo(pagePath);
+export const OnboadingPanel: FC<Props> = ({ className }) => {
+  const pagePath = router.getPagePath();
+  const currentStep = getStepByPagePath(pagePath);
+
+  const setStep = (newStep: number) => {
+    const newPagePath = stepToPagePathMap[newStep];
+    if (newPagePath) {
+      router.navigateTo(newPagePath);
     }
-  }, [step]);
+  };
 
   return (
     <div css={style} className={className}>
       <NavigationStepList
         className="step-list"
         steps={steps}
-        currentStep={step}
+        currentStep={currentStep}
         setCurrentStep={setStep}
       />
       <div className="instruction-part">
         <p>ステップを順番に進めてキーボードのセットアップを行いましょう</p>
-        <p>{stepInstructionMap[step]}</p>
+        <p>{stepInstructionMap[currentStep]}</p>
       </div>
       <div
         className="close-button"
