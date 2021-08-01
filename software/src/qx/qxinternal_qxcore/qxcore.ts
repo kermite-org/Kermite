@@ -175,7 +175,10 @@ export function patch(parentDom: Node, newVNode: IVNode, oldVNode: IVNode) {
     newVNode.vtype !== oldVNode.vtype ||
     (oldVNode.vtype === 'vElement' &&
       newVNode.vtype === 'vElement' &&
-      oldVNode.tagName !== newVNode.tagName)
+      oldVNode.tagName !== newVNode.tagName) ||
+    (oldVNode.vtype === 'vComponent' &&
+      newVNode.vtype === 'vComponent' &&
+      newVNode.componentWrapper !== oldVNode.componentWrapper)
   ) {
     const nextSibling = oldVNode.dom?.nextSibling || null;
     unmount(parentDom, oldVNode);

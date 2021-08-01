@@ -29,7 +29,7 @@ import {
   IFirmwareBinaryFileSpec,
   IProjectResourceProviderImpl,
 } from '~/shell/projectResources/Interfaces';
-import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
+import { globalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 
 interface IParameterConfigurationEntry {
   targetVariationNames?: string[];
@@ -228,7 +228,7 @@ export class ProjectResourceProviderImpl_Local
   }
 
   private getLocalRepositoryDir() {
-    const settings = GlobalSettingsProvider.getGlobalSettings();
+    const settings = globalSettingsProvider.getGlobalSettings();
     if (settings.useLocalResouces) {
       if (appEnv.isDevelopment) {
         return pathResolve('../');

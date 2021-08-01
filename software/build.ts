@@ -76,9 +76,6 @@ async function makeShell() {
       platform: 'node',
       entry: `${shellSrcDir}/index.ts`,
       outfile: `${shellDistDir}/index.js`,
-      define: {
-        KERMITE_APP_VERSION: `'${process.env.KERMITE_APP_VERSION || ''}'`,
-      },
       external: [
         'electron',
         'require',
@@ -100,7 +97,7 @@ async function makeShell() {
 }
 
 async function makeUi() {
-  const srcDir = './src/ui/root';
+  const srcDir = './src/ui';
   const distDir = `./dist/ui`;
   fs.mkdirSync(distDir, { recursive: true });
   fs.copyFileSync(`${srcDir}/index.html`, `${distDir}/index.html`);
@@ -128,7 +125,7 @@ async function makeUi() {
 }
 
 function startMockView() {
-  const srcDir = './src/ui/mock-view';
+  const srcDir = './src/ui-mock-view';
   const distDir = `./dist/ui_mock`;
   fs.mkdirSync(distDir, { recursive: true });
   fs.copyFileSync(`${srcDir}/index.html`, `${distDir}/index.html`);

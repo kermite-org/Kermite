@@ -48,6 +48,9 @@ function convertPointsToSvgPolygonPointsSpec(points: IPoint[]): string {
   return points.map(({ x, y }) => `${x}, ${y}`).join(' ');
 }
 
+// IsoEnterの配置
+// topLeft: 19.05mmベースのグリッドで、isoEnterの左上の角を基点として配置
+// center: IsoEnterのキースイッチの軸の位置を基点として配置
 const pointsTopLeft = createIsoEnterPolygonPoints('topLeft');
 const pointsCentered = createIsoEnterPolygonPoints('center');
 

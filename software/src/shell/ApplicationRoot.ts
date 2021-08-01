@@ -5,7 +5,7 @@ import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
-import { GlobalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
+import { globalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
 import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
 import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStatic';
@@ -140,14 +140,14 @@ export class ApplicationRoot {
         return false;
       },
       config_getGlobalSettings: async () =>
-        GlobalSettingsProvider.getGlobalSettings(),
+        globalSettingsProvider.getGlobalSettings(),
       config_writeGlobalSettings: async (settings) =>
-        GlobalSettingsProvider.writeGlobalSettings(settings),
+        globalSettingsProvider.writeGlobalSettings(settings),
       config_getProjectRootDirectoryPath: async () => {
         if (appEnv.isDevelopment) {
           return pathResolve('..');
         } else {
-          const settings = GlobalSettingsProvider.getGlobalSettings();
+          const settings = globalSettingsProvider.getGlobalSettings();
           return settings.localProjectRootFolderPath;
         }
       },
@@ -201,6 +201,8 @@ export class ApplicationRoot {
 
       config_keyboardConfigEvents: (cb) =>
         this.keyboardConfigProvider.keyboardConfigEventPort.subscribe(cb),
+      config_globalSettingsEvents: (cb) =>
+        globalSettingsProvider.globalConfigEventPort.subscribe(cb),
     });
   }
 

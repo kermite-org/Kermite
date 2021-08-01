@@ -5,7 +5,7 @@ import { uniqueArrayItems } from '../src/shared/funcs/Utils';
 import {
   textSourceEnglish,
   textSourceJapanese,
-} from '../src/ui/common/base/UiTextData';
+} from '../src/ui/base/UiTextData';
 
 const keys = uniqueArrayItems([
   ...Object.keys(textSourceEnglish),

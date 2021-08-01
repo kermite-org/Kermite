@@ -76,78 +76,82 @@ function getHookHolder<T>(): { holder: T; first: boolean } {
   return { holder, first };
 }
 
-export namespace Hook {
-  export function useState<T>(initialValue: T): [T, IStateSetValue<T>] {
-    const { holder, first } = getHookHolder<IHookStateHolder<T>>();
-    if (first) {
-      holder.value = initialValue;
-      holder.setValue = (arg: T | ((oldValue: T) => T)) => {
-        if (typeof arg === 'function') {
-          holder.value = (arg as any)(holder.value);
-        } else {
-          holder.value = arg;
-        }
-      };
-    }
-    const { value, setValue } = holder;
-    return [value, setValue];
-  }
-
-  export function useMemo<T>(func: () => T, deps: any[]): T {
-    const { holder } = getHookHolder<IHookMemoHolder<T>>();
-    const changed = hasDepsChanged(holder.deps, deps);
-    if (changed) {
-      holder.value = func();
-      holder.deps = deps;
-    }
-    return holder.value;
-  }
-
-  export function useCallback<T extends (...args: any) => any>(
-    func: T,
-    deps: any[],
-  ): T {
-    const { holder } = getHookHolder<IHookCallbackHolder<T>>();
-    const changed = hasDepsChanged(holder.deps, deps);
-    if (changed) {
-      holder.value = func;
-      holder.deps = deps;
-    }
-    return holder.value;
-  }
-
-  export function useEffect(effectFunc: IEffectFunc, deps: any[] | undefined) {
-    const { holder } = getHookHolder<IHookEffectHolder>();
-    const changed = hasDepsChanged(holder.deps, deps);
-    if (changed) {
-      holder.effectFunc = effectFunc;
-      holder.deps = deps;
-      gHookInstance!.pendingEffectHolders.push(holder);
-    }
-  }
-
-  export function useInlineEffect(
-    effectFunc: IEffectFunc,
-    deps: any[] | undefined,
-  ) {
-    const { holder } = getHookHolder<IHookEffectHolder>();
-    const changed = hasDepsChanged(holder.deps, deps);
-    if (changed) {
-      const result = effectFunc();
-      if (result && typeof result === 'function') {
-        holder.cleanupFunc = result;
+export function useState<T>(initialValue: T): [T, IStateSetValue<T>] {
+  const { holder, first } = getHookHolder<IHookStateHolder<T>>();
+  if (first) {
+    holder.value = initialValue;
+    holder.setValue = (arg: T | ((oldValue: T) => T)) => {
+      if (typeof arg === 'function') {
+        holder.value = (arg as any)(holder.value);
+      } else {
+        holder.value = arg;
       }
-      holder.deps = deps;
-    }
+    };
   }
+  const { value, setValue } = holder;
+  return [value, setValue];
+}
 
-  export function useRef<T>() {
-    const { holder, first } = getHookHolder<IHookRefHolder<T>>();
-    if (first) {
-      holder.refObject = { current: undefined };
-    }
-    return holder.refObject;
+export function useLocal<T extends object>(arg: T | (() => T)): T {
+  const initialValue = 'call' in arg ? arg() : arg;
+  const [value] = useState(initialValue);
+  return value;
+}
+
+export function useMemo<T>(func: () => T, deps: any[]): T {
+  const { holder } = getHookHolder<IHookMemoHolder<T>>();
+  const changed = hasDepsChanged(holder.deps, deps);
+  if (changed) {
+    holder.value = func();
+    holder.deps = deps;
   }
+  return holder.value;
+}
+
+export function useCallback<T extends (...args: any) => any>(
+  func: T,
+  deps: any[],
+): T {
+  const { holder } = getHookHolder<IHookCallbackHolder<T>>();
+  const changed = hasDepsChanged(holder.deps, deps);
+  if (changed) {
+    holder.value = func;
+    holder.deps = deps;
+  }
+  return holder.value;
+}
+
+export function useEffect(effectFunc: IEffectFunc, deps: any[] | undefined) {
+  const { holder } = getHookHolder<IHookEffectHolder>();
+  const changed = hasDepsChanged(holder.deps, deps);
+  if (changed) {
+    holder.effectFunc = effectFunc;
+    holder.deps = deps;
+    gHookInstance!.pendingEffectHolders.push(holder);
+  }
+}
+
+export function useInlineEffect(
+  effectFunc: IEffectFunc,
+  deps: any[] | undefined,
+) {
+  const { holder } = getHookHolder<IHookEffectHolder>();
+  const changed = hasDepsChanged(holder.deps, deps);
+  if (changed) {
+    const result = effectFunc();
+    if (result && typeof result === 'function') {
+      holder.cleanupFunc = result;
+    }
+    holder.deps = deps;
+  }
+}
+
+export function useRef<T>() {
+  const { holder, first } = getHookHolder<IHookRefHolder<T>>();
+  if (first) {
+    holder.refObject = { current: undefined };
+  }
+  return holder.refObject;
 }
 
 export function startHooks(target: IHookInstance) {

@@ -1,19 +1,30 @@
 // based on type definition of preact
-/* eslint-disable @typescript-eslint/no-unused-vars */
+// https://github.com/preactjs/preact
+/*
+The MIT License (MIT)
+
+Copyright (c) 2015-present Jason Miller
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
 
 import { VNode } from './qxinternal_qxcore';
-// import { VNode } from './qxinternal_petit_dom_060/types';
-
-// export { h } from './qxinternal_petit_dom/h';
-// export { Hook } from './qxinternal_petit_dom/hookImpl2';
-// export declare function rerender(): void;
-// export declare function asyncRerender(): void;
-// export declare function render(
-//   renderFn: () => JSX.Element,
-//   parentDomNode: HTMLElement | null,
-// ): void;
-
-// export type QxOptimizerSpec = 'shallowEqual' | 'deepEqual' | 'deepEqualExFn';
 
 declare namespace JsxLocal {
   type InternalClassAttributes = {
@@ -44,18 +55,9 @@ declare global {
     interface IntrinsicAttributes {
       key?: any;
       qxIf?: boolean;
-      // qxOptimizer?: QxOptimizerSpec;
     }
 
     type Element = VNode | ((props?: any) => Element | null);
-    // | {
-    //     didMount?(): void;
-    //     didUpdate?(): void;
-    //     willUnmount?(): void;
-    //     render(): Element;
-    //   };
-
-    // interface ElementClass extends Component<any, any> {}
 
     interface ElementAttributesProperty {
       props: any;
@@ -654,7 +656,7 @@ declare global {
       challenge?: string;
       checked?: boolean;
       class?: string;
-      className?: string;
+      className?: string | false;
       cols?: number;
       colSpan?: number;
       content?: string;
@@ -783,7 +785,7 @@ declare global {
       itemRef?: string;
 
       // extended multiple classNames
-      classNames?: (string | undefined)[] | { [key: string]: boolean };
+      classNames?: (string | undefined | false)[] | { [key: string]: boolean };
     }
 
     interface HTMLMarqueeElement extends HTMLElement {
