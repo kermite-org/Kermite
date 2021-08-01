@@ -34,6 +34,7 @@ const style = css`
   border: solid 1px ${uiTheme.colors.clPrimary};
   border-radius: 4px;
   cursor: pointer;
+  outline: none;
 
   &:after {
     position: absolute;

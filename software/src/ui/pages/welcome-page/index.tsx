@@ -6,8 +6,8 @@ import {
   useLanguageSelectionModel,
   useThemeSelectionModel,
 } from '~/ui/commonModels';
-import { CheckBoxLine } from '~/ui/components';
 import { WelcomePageButton } from '~/ui/components/atoms';
+import { ToggleSwitchLine } from '~/ui/components/molecules/ToggleSwitchLine';
 
 export const WelcomePage: FC = () => {
   const appVersion = useApplicationVersionText();
@@ -49,10 +49,10 @@ export const WelcomePage: FC = () => {
       </div>
 
       <div className="theme-config-area">
-        <CheckBoxLine
+        <ToggleSwitchLine
           text="dark theme"
           checked={currentThemeKey === 'dark'}
-          setChecked={(ck) => changeTheme(ck ? 'dark' : 'light')}
+          onChange={(ck) => changeTheme(ck ? 'dark' : 'light')}
         />
       </div>
     </div>
