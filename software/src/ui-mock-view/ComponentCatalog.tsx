@@ -104,6 +104,7 @@ const style = css`
   > .preview-area {
     flex-grow: 1;
     background: #f0f0f0;
+    /* background: #444; */
     padding: 20px;
 
     > .preview-content {

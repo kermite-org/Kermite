@@ -1,7 +1,10 @@
 import { jsx } from 'qx';
 import { ToggleSwitch } from '~/ui/components/atoms/ToggleSwitch';
 
-const labelStyle =
+const outerDivStyle =
+  'display: flex; align-items: center; gap: 5px; user-select:none;';
+
+const outerLabelStyle =
   'display: flex; align-items: center; gap: 5px; cursor: pointer; user-select:none;';
 
 export const ToggleSwitchExamples = {
@@ -10,15 +13,15 @@ export const ToggleSwitchExamples = {
   notCheckedDisabled: <ToggleSwitch checked={false} disabled />,
   checkedDisabled: <ToggleSwitch checked={true} disabled />,
   withLabelLeft: (
-    <label style={labelStyle}>
+    <label style={outerLabelStyle}>
       <span>special mode</span>
       <ToggleSwitch checked={false} />
     </label>
   ),
-  withLabelRight: (
-    <label style={labelStyle}>
+  withTextRight: (
+    <div style={outerDivStyle}>
       <ToggleSwitch checked={false} />
       <span>special mode</span>
-    </label>
+    </div>
   ),
 };
