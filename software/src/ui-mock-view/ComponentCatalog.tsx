@@ -9,6 +9,7 @@ import { ToggleSwitchExamples } from '~/ui/components/atoms/ToggleSwitch.visor';
 import { PreviewKeyboardShapeViewExamples } from '~/ui/components/keyboard/panels/PreviewKeyboardShapeView.visor';
 import { ProjectKeyboardShapeViewExamples } from '~/ui/components/keyboard/panels/ProjectKeyboardShapeView.visor';
 import { NavigationStepListExamples } from '~/ui/components/molecules/NavigationStepList.visor';
+import { ToggleSwitchLineExamples } from '~/ui/components/molecules/ToggleSwitchLine.visor';
 import { ProjectKeyboardListExamples } from '~/ui/components/organisms/ProjectKeyboardList.visor';
 import { fieldSetter } from '~/ui/helpers';
 
@@ -25,6 +26,7 @@ const visualSource: Record<string, IVisualEntry> = {
   NavigationStepListExamples,
   OnboardingPullTabExamples,
   ToggleSwitchExamples,
+  ToggleSwitchLineExamples,
 };
 
 type VisualKey = keyof typeof visualSource;
