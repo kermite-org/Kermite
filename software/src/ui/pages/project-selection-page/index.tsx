@@ -60,7 +60,7 @@ export const ProjectSelectionPage: FC = () => {
 
   return (
     <div css={style}>
-      Global Project Selection
+      Keyboard Product Selection
       <div className="content-part">
         <ProjectKeyboardList
           className="keyboard-list"
