@@ -8,7 +8,7 @@ type Props = {
   className?: string;
 };
 
-const steps = [0, 1, 2, 3, 4, 5];
+const steps = [0, 1, 2, 3, 4];
 
 const stepToPagePathMap: { [step: number]: PagePaths | undefined } = {
   0: '/home',
@@ -16,7 +16,6 @@ const stepToPagePathMap: { [step: number]: PagePaths | undefined } = {
   2: '/firmwareUpdation',
   3: '/presetBrowser',
   4: '/editor',
-  5: '/layouter',
 };
 
 const stepInstructionMap: { [step: number]: string } = {
@@ -25,7 +24,6 @@ const stepInstructionMap: { [step: number]: string } = {
   2: 'Step2: デバイスにファームウェアを書き込みます。',
   3: 'Step3: 使用するプリセットを選び、プロファイルを作成します。',
   4: 'Step4: キーマッピングを編集し、デバイスに書き込みます。',
-  5: 'Step5: キーのレイアウトにバリエーションがある場合、ここでキーの配置を調整します。',
 };
 
 export const OnboadingPanel: FC<Props> = ({ className }) => {
