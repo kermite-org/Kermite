@@ -1,12 +1,14 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx, QxNode } from 'qx';
 import { getObjectKeyByValue } from '~/shared';
 import { router } from '~/ui/base';
 import { onboadingPanelDisplayStateModel, PagePaths } from '~/ui/commonModels';
 import { Icon } from '~/ui/components';
+import { OnboardingButton } from '~/ui/components/atoms/OnboardingButton';
 import { NavigationStepList } from '~/ui/components/molecules/NavigationStepList';
 
 type Props = {
   className?: string;
+  children: QxNode;
 };
 
 const steps = [0, 1, 2, 3, 4];
@@ -32,7 +34,7 @@ function getStepByPagePath(pagePath: string): number {
   return _step === undefined ? -1 : parseInt(_step);
 }
 
-export const OnboadingPanel: FC<Props> = ({ className }) => {
+export const OnboadingFrame: FC<Props> = ({ className, children }) => {
   const pagePath = router.getPagePath();
   const currentStep = getStepByPagePath(pagePath);
 
@@ -45,44 +47,65 @@ export const OnboadingPanel: FC<Props> = ({ className }) => {
 
   return (
     <div css={style} className={className}>
-      <NavigationStepList
-        className="step-list"
-        steps={steps}
-        currentStep={currentStep}
-        setCurrentStep={setStep}
-      />
-      <div className="instruction-part">
-        <p>ステップを順番に進めてキーボードのセットアップを行いましょう</p>
-        <p>{stepInstructionMap[currentStep]}</p>
+      <div className="top-bar">
+        <NavigationStepList
+          className="step-list"
+          steps={steps}
+          currentStep={currentStep}
+          setCurrentStep={setStep}
+        />
+        <div className="instruction-part">
+          <p>ステップを順番に進めてキーボードのセットアップを行いましょう</p>
+          <p>{stepInstructionMap[currentStep]}</p>
+        </div>
+        <div
+          className="close-button"
+          onClick={onboadingPanelDisplayStateModel.close}
+        >
+          <Icon spec="fa fa-times" />
+        </div>
       </div>
-      <div
-        className="close-button"
-        onClick={onboadingPanelDisplayStateModel.close}
-      >
-        <Icon spec="fa fa-times" />
+      {children}
+      <div className="bottom-bar">
+        <OnboardingButton>戻る</OnboardingButton>
+        <OnboardingButton>進む</OnboardingButton>
       </div>
     </div>
   );
 };
 
 const style = css`
-  height: 110px;
-  padding: 10px 15px;
-  position: relative;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 
-  > .step-list {
+  > .top-bar {
+    height: 110px;
+    padding: 10px 15px;
+    position: relative;
+
+    > .step-list {
+    }
+
+    > .instruction-part {
+      margin-top: 10px;
+      line-height: 1.5em;
+    }
+
+    > .close-button {
+      position: absolute;
+      right: 0;
+      top: 0;
+      margin: 12px;
+      cursor: pointer;
+    }
   }
 
-  > .instruction-part {
-    margin-top: 10px;
-    line-height: 1.5em;
-  }
-
-  > .close-button {
-    position: absolute;
-    right: 0;
-    top: 0;
-    margin: 12px;
-    cursor: pointer;
+  > .bottom-bar {
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 80px;
   }
 `;
