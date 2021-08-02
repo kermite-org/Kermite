@@ -1,5 +1,5 @@
 import { texts, router } from '~/ui/base';
-import { PagePaths } from '~/ui/commonModels';
+import { globalSettingsModel, PagePaths } from '~/ui/commonModels';
 
 export interface NavigationEntryViewModel {
   pagePath: PagePaths;
@@ -48,6 +48,7 @@ const entrySources: NavigationEntrySource[] = [
     pageName: texts.label_sideMenu_app_shapePreview,
     iconSpec: 'fa fa-file-code',
     hint: texts.hint_sideMenu_app_shapePreview,
+    isAvailable: () => globalSettingsModel.isDeveloperMode,
   },
   {
     pagePath: '/firmwareUpdation',
