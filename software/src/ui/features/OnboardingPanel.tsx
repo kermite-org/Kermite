@@ -26,7 +26,7 @@ const stepInstructionMap: { [step: number]: string } = {
   1: 'Step1: 使用するキーボードを選択します。',
   2: 'Step2: デバイスにファームウェアを書き込みます。',
   3: 'Step3: 使用するプリセットを選び、プロファイルを作成します。',
-  4: 'Step4: キーマッピングを編集し、デバイスに書き込みます。',
+  4: 'Step4: プロファイルを保存して、デバイスにキーマッピングを書き込みます。',
 };
 
 function getStepByPagePath(pagePath: string): number {
