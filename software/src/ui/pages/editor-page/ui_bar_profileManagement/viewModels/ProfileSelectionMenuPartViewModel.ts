@@ -63,14 +63,14 @@ function createMenuItemSources(
       text: texts.label_assigner_menu_importFromFile,
       hint: texts.hint_assigner_menu_importFromFile,
       handler: vm.handleImportFromFile,
-      enabled: true,
+      enabled: globalSettingsModel.isDeveloperMode,
     },
     {
       key: 'exportToFile',
       text: texts.label_assigner_menu_exportToFile,
       hint: texts.hint_assigner_menu_exportToFile,
       handler: vm.handleExportToFile,
-      enabled: true,
+      enabled: globalSettingsModel.isDeveloperMode,
     },
     {
       key: 'saveAsPreset',
