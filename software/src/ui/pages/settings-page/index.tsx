@@ -70,6 +70,11 @@ export const UiSettingsPage = () => {
         <div>{texts.label_settings_header_resources}</div>
         <Indent>
           <CheckBoxLine
+            text="Developer Mode"
+            checked={settings.developerMode}
+            setChecked={fieldSetter(settings, 'developerMode')}
+          />
+          <CheckBoxLine
             text={texts.label_settings_configUseLocalProjectResources}
             hint={texts.hint_settings_configUseLocalProjectResources}
             checked={settings.useLocalResouces}

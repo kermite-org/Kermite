@@ -27,4 +27,8 @@ export const globalSettingsModel = new (class {
   get isLocalProjectsAvailable() {
     return this.globalSettings.useLocalResouces;
   }
+
+  get isDeveloperMode() {
+    return this.globalSettings.developerMode;
+  }
 })();
