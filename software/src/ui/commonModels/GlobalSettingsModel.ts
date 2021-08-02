@@ -20,6 +20,10 @@ export const globalSettingsModel = new (class {
     ipcAgent.async.config_writeGlobalSettings(settings);
   }
 
+  save() {
+    ipcAgent.async.config_writeGlobalSettings(this.globalSettings);
+  }
+
   async loadInitialGlobalSettings() {
     this.globalSettings = await ipcAgent.async.config_getGlobalSettings();
   }

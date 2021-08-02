@@ -1,8 +1,4 @@
 import { jsx, css, useLocal, useEffect } from 'qx';
-import {
-  duplicateObjectByJsonStringifyParse,
-  globalSettingsDefault,
-} from '~/shared';
 import { uiTheme, ISelectorOption, ipcAgent, appUi, texts } from '~/ui/base';
 import { globalSettingsModel, uiStatusModel } from '~/ui/commonModels';
 import {
@@ -27,35 +23,31 @@ const uiScaleOptions: ISelectorOption[] = [
 
 export const UiSettingsPage = () => {
   const local = useLocal({
-    settings: globalSettingsDefault,
     fixedProjectRootPath: '',
   });
 
   useEffect(() => {
     (async () => {
-      local.settings = duplicateObjectByJsonStringifyParse(
-        globalSettingsModel.globalSettings,
-      );
       if (appUi.isDevelopment) {
         local.fixedProjectRootPath = await ipcAgent.async.config_getProjectRootDirectoryPath();
       }
     })();
-    return () => globalSettingsModel.writeGlobalSettings(local.settings);
+    return () => globalSettingsModel.save();
   }, []);
+
+  const { globalSettings } = globalSettingsModel;
 
   const onSelectButton = async () => {
     const path = await ipcAgent.async.file_getOpenDirectoryWithDialog();
     if (path) {
-      local.settings.localProjectRootFolderPath = path;
+      globalSettings.localProjectRootFolderPath = path;
     }
   };
 
   const canChangeFolder = !appUi.isDevelopment;
 
   const folderPathDisplayValue =
-    local.fixedProjectRootPath || local.settings.localProjectRootFolderPath;
-
-  const { settings } = local;
+    local.fixedProjectRootPath || globalSettings.localProjectRootFolderPath;
 
   const appVersionInfo = useFetcher(
     ipcAgent.async.system_getApplicationVersionInfo,
@@ -71,14 +63,14 @@ export const UiSettingsPage = () => {
         <Indent>
           <CheckBoxLine
             text="Developer Mode"
-            checked={settings.developerMode}
-            setChecked={fieldSetter(settings, 'developerMode')}
+            checked={globalSettings.developerMode}
+            setChecked={fieldSetter(globalSettings, 'developerMode')}
           />
           <CheckBoxLine
             text={texts.label_settings_configUseLocalProjectResources}
             hint={texts.hint_settings_configUseLocalProjectResources}
-            checked={settings.useLocalResouces}
-            setChecked={fieldSetter(settings, 'useLocalResouces')}
+            checked={globalSettings.useLocalResouces}
+            setChecked={fieldSetter(globalSettings, 'useLocalResouces')}
           />
           <div>
             <div>{texts.label_settings_configKermiteRootDirectory}</div>
@@ -103,9 +95,9 @@ export const UiSettingsPage = () => {
         <Indent>
           <CheckBoxLine
             text="Allow Cross Keyboard Keymapping Write"
-            checked={settings.allowCrossKeyboardKeyMappingWrite}
+            checked={globalSettings.allowCrossKeyboardKeyMappingWrite}
             setChecked={fieldSetter(
-              settings,
+              globalSettings,
               'allowCrossKeyboardKeyMappingWrite',
             )}
           />
