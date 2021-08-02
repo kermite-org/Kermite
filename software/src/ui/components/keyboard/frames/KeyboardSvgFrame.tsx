@@ -1,5 +1,6 @@
 import { jsx, css, QxChildren, FC } from 'qx';
 import { IDisplayArea } from '~/shared';
+import { getKeyboardSvgViewBoxSpec } from '~/ui/base';
 
 type Props = {
   displayArea: IDisplayArea;
@@ -7,13 +8,6 @@ type Props = {
   children: QxChildren;
   baseStrokeWidth: number;
 };
-
-function getViewBoxSpec(da: IDisplayArea) {
-  const left = da.centerX - da.width / 2;
-  const top = da.centerY - da.height / 2;
-  const { width, height } = da;
-  return `${left} ${top} ${width} ${height}`;
-}
 
 export const KeyboardSvgFrame: FC<Props> = ({
   displayArea,
@@ -24,7 +18,7 @@ export const KeyboardSvgFrame: FC<Props> = ({
   <svg
     width={displayArea.width * dpiScale}
     height={displayArea.height * dpiScale}
-    viewBox={getViewBoxSpec(displayArea)}
+    viewBox={getKeyboardSvgViewBoxSpec(displayArea)}
     css={style}
   >
     <g stroke-width={baseStrokeWidth} stroke-linejoin="round">

@@ -38,8 +38,8 @@ const PageRoot = () => {
       {/* <GooberDevelopmentPage /> */}
       {/* <GooberDevelopmentPage2 /> */}
       {/* <ShortCssDevPage /> */}
-      {/* <ComponentCatalogPage /> */}
-      <SvgScalingDevPage />
+      <ComponentCatalogPage />
+      {/* <SvgScalingDevPage /> */}
     </div>
   );
 };
