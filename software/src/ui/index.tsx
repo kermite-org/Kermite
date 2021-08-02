@@ -1,14 +1,16 @@
 import { jsx, render } from 'qx';
 import { debounce } from '~/shared';
 import { appUi } from '~/ui/base';
-import { uiStatusModel } from '~/ui/commonModels';
+import { globalSettingsModel, uiStatusModel } from '~/ui/commonModels';
 import { SiteRoot } from '~/ui/root/SiteRoot';
 
-function start() {
+async function start() {
   console.log('start');
   const appDiv = document.getElementById('app');
 
   uiStatusModel.initialize();
+  await globalSettingsModel.loadInitialGlobalSettings();
+
   render(() => <SiteRoot />, appDiv);
   window.addEventListener('resize', debounce(appUi.rerender, 100));
 

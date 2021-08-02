@@ -1,6 +1,5 @@
 import { globalSettingsDefault, IGlobalSettings } from '~/shared';
 import { ipcAgent } from '~/ui/base';
-import { useEventSource } from '~/ui/helpers';
 
 export const globalSettingsModel = new (class {
   globalSettings: IGlobalSettings = globalSettingsDefault;
@@ -13,14 +12,19 @@ export const globalSettingsModel = new (class {
     key: K,
     value: IGlobalSettings[K],
   ) {
-    const settings = { ...this.globalSettings, [key]: value };
+    this.writeGlobalSettings({ ...this.globalSettings, [key]: value });
+  }
+
+  writeGlobalSettings(settings: IGlobalSettings) {
+    this.globalSettings = settings;
     ipcAgent.async.config_writeGlobalSettings(settings);
   }
-})();
 
-export function useGlobalSettingsModelUpdator() {
-  globalSettingsModel.globalSettings = useEventSource(
-    ipcAgent.events.config_globalSettingsEvents,
-    globalSettingsDefault,
-  );
-}
+  async loadInitialGlobalSettings() {
+    this.globalSettings = await ipcAgent.async.config_getGlobalSettings();
+  }
+
+  get isLocalProjectsAvailable() {
+    return this.globalSettings.useLocalResouces;
+  }
+})();

@@ -16,8 +16,8 @@ import {
 import {
   uiStatusModel,
   useKeyboardDeviceStatus,
-  useGlobalSettingsFetch,
   useKeyboardBehaviorModeModel,
+  globalSettingsModel,
 } from '~/ui/commonModels';
 import { useModalDisplayStateModel } from '~/ui/commonModels/GeneralUiStateModels';
 import { modalAlert, modalConfirm, modalTextEdit } from '~/ui/components';
@@ -324,7 +324,7 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
 
   const deviceStatus = useKeyboardDeviceStatus();
 
-  const globalSettings = useGlobalSettingsFetch();
+  const { globalSettings } = globalSettingsModel;
 
   const { isSimulatorMode } = useKeyboardBehaviorModeModel();
 

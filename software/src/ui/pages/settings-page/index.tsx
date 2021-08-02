@@ -1,7 +1,10 @@
 import { jsx, css, useLocal, useEffect } from 'qx';
-import { globalSettingsFallbackValue } from '~/shared';
+import {
+  duplicateObjectByJsonStringifyParse,
+  globalSettingsDefault,
+} from '~/shared';
 import { uiTheme, ISelectorOption, ipcAgent, appUi, texts } from '~/ui/base';
-import { uiStatusModel } from '~/ui/commonModels';
+import { globalSettingsModel, uiStatusModel } from '~/ui/commonModels';
 import {
   Indent,
   CheckBoxLine,
@@ -24,18 +27,20 @@ const uiScaleOptions: ISelectorOption[] = [
 
 export const UiSettingsPage = () => {
   const local = useLocal({
-    settings: globalSettingsFallbackValue,
+    settings: globalSettingsDefault,
     fixedProjectRootPath: '',
   });
 
   useEffect(() => {
     (async () => {
-      local.settings = await ipcAgent.async.config_getGlobalSettings();
+      local.settings = duplicateObjectByJsonStringifyParse(
+        globalSettingsModel.globalSettings,
+      );
       if (appUi.isDevelopment) {
         local.fixedProjectRootPath = await ipcAgent.async.config_getProjectRootDirectoryPath();
       }
     })();
-    return () => ipcAgent.async.config_writeGlobalSettings(local.settings);
+    return () => globalSettingsModel.writeGlobalSettings(local.settings);
   }, []);
 
   const onSelectButton = async () => {

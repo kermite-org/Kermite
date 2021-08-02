@@ -13,7 +13,6 @@ import {
 } from '~/ui/base';
 import {
   useAllProjectResourceInfos,
-  useGlobalSettingsFetch,
   readGlobalProjectKey,
   globalSettingsModel,
 } from '~/ui/commonModels';
@@ -111,9 +110,7 @@ export function usePresetSelectionModel(): IPresetSelectionModel {
     presetKey: '',
   });
 
-  const globalSettings = useGlobalSettingsFetch();
-  // console.log({ globalSettings });
-
+  const { globalSettings } = globalSettingsModel;
   const allProjectInfos = useAllProjectResourceInfos();
 
   const resourceInfos = useFileterdResourceInfos(
