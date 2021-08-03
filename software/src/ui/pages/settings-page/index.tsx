@@ -53,8 +53,6 @@ export const UiSettingsPage = () => {
     }
   };
 
-  const canChangeFolder = !appUi.isDevelopment;
-
   const folderPathDisplayValue =
     local.temporaryInvalidLocalRepositoryFolderPath ||
     local.fixedProjectRootPath ||
@@ -64,6 +62,10 @@ export const UiSettingsPage = () => {
     ipcAgent.async.system_getApplicationVersionInfo,
     { version: '' },
   );
+
+  const isDeveloperModeOn = globalSettings.developerMode;
+
+  const canChangeFolder = !local.fixedProjectRootPath && isDeveloperModeOn;
 
   return (
     <div css={style}>
@@ -77,48 +79,52 @@ export const UiSettingsPage = () => {
             checked={globalSettings.developerMode}
             setChecked={fieldSetter(globalSettings, 'developerMode')}
           />
-          <CheckBoxLine
-            text={texts.label_settings_configUseLocalProjectResources}
-            hint={texts.hint_settings_configUseLocalProjectResources}
-            checked={globalSettings.useLocalResouces}
-            setChecked={fieldSetter(globalSettings, 'useLocalResouces')}
-          />
-          <div>
-            <div>{texts.label_settings_configKermiteRootDirectory}</div>
-            <HFlex>
-              <GeneralInput
-                value={folderPathDisplayValue}
-                disabled={!canChangeFolder}
-                readOnly={true}
-                width={350}
-                hint={texts.hint_settings_configKermiteRootDirectory}
-              />
-              <GeneralButton
-                onClick={onSelectButton}
-                disabled={!canChangeFolder}
-                icon="folder_open"
-                size="unitSquare"
-              />
-            </HFlex>
-            <div
-              style="color:red"
-              qxIf={!!local.temporaryInvalidLocalRepositoryFolderPath}
-            >
-              invalid source folder path
+          <Indent>
+            <CheckBoxLine
+              text={texts.label_settings_configUseLocalProjectResources}
+              hint={texts.hint_settings_configUseLocalProjectResources}
+              checked={globalSettings.useLocalResouces}
+              setChecked={fieldSetter(globalSettings, 'useLocalResouces')}
+              disabled={!isDeveloperModeOn}
+            />
+            <div>
+              <div className={!canChangeFolder && 'text-disabled'}>
+                {texts.label_settings_configKermiteRootDirectory}
+              </div>
+              <HFlex>
+                <GeneralInput
+                  value={folderPathDisplayValue}
+                  disabled={!canChangeFolder}
+                  readOnly={true}
+                  width={350}
+                  hint={texts.hint_settings_configKermiteRootDirectory}
+                />
+                <GeneralButton
+                  onClick={onSelectButton}
+                  disabled={!canChangeFolder}
+                  icon="folder_open"
+                  size="unitSquare"
+                />
+              </HFlex>
+              <div
+                style="color:red"
+                qxIf={!!local.temporaryInvalidLocalRepositoryFolderPath}
+              >
+                invalid source folder path
+              </div>
             </div>
-          </div>
+            <CheckBoxLine
+              text="Allow Cross Keyboard Keymapping Write"
+              checked={globalSettings.allowCrossKeyboardKeyMappingWrite}
+              setChecked={fieldSetter(
+                globalSettings,
+                'allowCrossKeyboardKeyMappingWrite',
+              )}
+              disabled={!isDeveloperModeOn}
+            />
+          </Indent>
         </Indent>
-        <div>Application Behavior</div>
-        <Indent>
-          <CheckBoxLine
-            text="Allow Cross Keyboard Keymapping Write"
-            checked={globalSettings.allowCrossKeyboardKeyMappingWrite}
-            setChecked={fieldSetter(
-              globalSettings,
-              'allowCrossKeyboardKeyMappingWrite',
-            )}
-          />
-        </Indent>
+
         <div>{texts.label_settings_header_userInterface}</div>
         <Indent>
           <div>{texts.label_settings_configUiScaling}</div>
@@ -148,7 +154,7 @@ const style = css`
   position: relative;
 
   > * + * {
-    margin-top: 5px;
+    margin-top: 10px;
   }
 
   .version-area {
@@ -156,5 +162,9 @@ const style = css`
     top: 0;
     right: 0;
     margin: 10px;
+  }
+
+  .text-disabled {
+    opacity: 0.4;
   }
 `;
