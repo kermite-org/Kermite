@@ -97,6 +97,7 @@ export type IProfileEditSource =
   | {
       type: 'InternalProfile';
       profileName: string;
+      projectId: string;
     }
   | {
       type: 'ExternalFile';
@@ -105,8 +106,9 @@ export type IProfileEditSource =
 
 export interface IProfileManagerStatus {
   editSource: IProfileEditSource;
-  allProfileEntries: IProfileEntry[];
   loadedProfileData: IProfileData;
+  allProfileEntries: IProfileEntry[];
+  visibleProfileEntries: IProfileEntry[];
 }
 export interface IProfileManagerCommand {
   creatProfile?: {

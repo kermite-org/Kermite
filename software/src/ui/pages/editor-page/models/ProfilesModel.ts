@@ -25,8 +25,8 @@ export class ProfilesModel {
     if (payload.editSource) {
       this.editSource = payload.editSource;
     }
-    if (payload.allProfileEntries) {
-      this.allProfileEntries = payload.allProfileEntries;
+    if (payload.visibleProfileEntries) {
+      this.allProfileEntries = payload.visibleProfileEntries;
     }
     if (payload.loadedProfileData) {
       if (
