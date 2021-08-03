@@ -24,6 +24,7 @@ const uiScaleOptions: ISelectorOption[] = [
 export const UiSettingsPage = () => {
   const local = useLocal({
     fixedProjectRootPath: '',
+    temporaryInvalidLocalRepositoryFolderPath: '',
   });
 
   useEffect(() => {
@@ -40,14 +41,24 @@ export const UiSettingsPage = () => {
   const onSelectButton = async () => {
     const path = await ipcAgent.async.file_getOpenDirectoryWithDialog();
     if (path) {
-      globalSettings.localProjectRootFolderPath = path;
+      const valid = await ipcAgent.async.config_checkLocalRepositoryFolderPath(
+        path,
+      );
+      if (!valid) {
+        local.temporaryInvalidLocalRepositoryFolderPath = path;
+      } else {
+        local.temporaryInvalidLocalRepositoryFolderPath = '';
+        globalSettings.localProjectRootFolderPath = path;
+      }
     }
   };
 
   const canChangeFolder = !appUi.isDevelopment;
 
   const folderPathDisplayValue =
-    local.fixedProjectRootPath || globalSettings.localProjectRootFolderPath;
+    local.temporaryInvalidLocalRepositoryFolderPath ||
+    local.fixedProjectRootPath ||
+    globalSettings.localProjectRootFolderPath;
 
   const appVersionInfo = useFetcher(
     ipcAgent.async.system_getApplicationVersionInfo,
@@ -89,6 +100,12 @@ export const UiSettingsPage = () => {
                 size="unitSquare"
               />
             </HFlex>
+            <div
+              style="color:red"
+              qxIf={!!local.temporaryInvalidLocalRepositoryFolderPath}
+            >
+              invalid source folder path
+            </div>
           </div>
         </Indent>
         <div>Application Behavior</div>

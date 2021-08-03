@@ -5,6 +5,7 @@ import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
+import { checkLocalRepositoryFolder } from '~/shell/projectResources/LocalResourceHelper';
 import { globalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
 import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
@@ -151,6 +152,8 @@ export class ApplicationRoot {
           return settings.localProjectRootFolderPath;
         }
       },
+      config_checkLocalRepositoryFolderPath: async (path) =>
+        checkLocalRepositoryFolder(path),
       file_getOpenJsonFilePathWithDialog:
         JsonFileServiceStatic.getOpeningJsonFilePathWithDialog,
       file_getSaveJsonFilePathWithDialog:
