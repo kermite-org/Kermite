@@ -15,6 +15,7 @@ import {
   useAllProjectResourceInfos,
   readGlobalProjectKey,
   globalSettingsModel,
+  readSettingsResouceOrigin,
 } from '~/ui/commonModels';
 import { fieldSetter } from '~/ui/helpers';
 import { editSelectedProjectPreset as editSelectedProjectPresetOriginal } from '~/ui/pages/preset-browser-page/models/ProfileCreator';
@@ -88,9 +89,8 @@ function useFileterdResourceInfos(
   globalSettings: IGlobalSettings,
 ) {
   return useMemo(() => {
-    const { useLocalResouces, globalProjectId } = globalSettings;
-    const targetOrigin = useLocalResouces ? 'local' : 'online';
-
+    const { globalProjectId } = globalSettings;
+    const targetOrigin = readSettingsResouceOrigin(globalSettings);
     return allProjectInfos
       .filter((info) => info.origin === targetOrigin)
       .filter(

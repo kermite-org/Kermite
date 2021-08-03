@@ -28,8 +28,16 @@ export const globalSettingsModel = new (class {
     this.globalSettings = await ipcAgent.async.config_getGlobalSettings();
   }
 
-  get isLocalProjectsAvailable() {
-    return this.globalSettings.useLocalResouces;
+  get isLocalProjectsAvailable(): boolean {
+    const {
+      developerMode,
+      useLocalResouces,
+      localProjectRootFolderPath,
+    } = this.globalSettings;
+    return (
+      (developerMode && useLocalResouces && !!localProjectRootFolderPath) ||
+      false
+    );
   }
 
   get isDeveloperMode() {

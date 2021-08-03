@@ -1,7 +1,20 @@
-import { IGlobalSettings, createProjectSig } from '~/shared';
+import { IGlobalSettings, createProjectSig, IResourceOrigin } from '~/shared';
+
+export function readSettingsResouceOrigin(
+  globalSettings: IGlobalSettings,
+): IResourceOrigin {
+  const {
+    developerMode,
+    useLocalResouces,
+    localProjectRootFolderPath,
+  } = globalSettings;
+  return developerMode && useLocalResouces && !!localProjectRootFolderPath
+    ? 'local'
+    : 'online';
+}
 
 export function readGlobalProjectKey(globalSettings: IGlobalSettings): string {
-  const { useLocalResouces, globalProjectId } = globalSettings;
-  const origin = useLocalResouces ? 'local' : 'online';
+  const { globalProjectId } = globalSettings;
+  const origin = readSettingsResouceOrigin(globalSettings);
   return (globalProjectId && createProjectSig(origin, globalProjectId)) || '';
 }
