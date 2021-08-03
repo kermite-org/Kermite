@@ -56,6 +56,7 @@ export interface IAppIpcContract {
     config_getGlobalSettings(): Promise<IGlobalSettings>;
     config_writeGlobalSettings(settings: IGlobalSettings): Promise<void>;
     config_getProjectRootDirectoryPath(): Promise<string>;
+    config_checkLocalRepositoryFolderPath(path: string): Promise<boolean>;
 
     projects_getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
     projects_getProjectCustomDefinition(

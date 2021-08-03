@@ -16,8 +16,8 @@ import {
 import {
   uiStatusModel,
   useKeyboardDeviceStatus,
-  useGlobalSettingsFetch,
   useKeyboardBehaviorModeModel,
+  globalSettingsModel,
 } from '~/ui/commonModels';
 import { useModalDisplayStateModel } from '~/ui/commonModels/GeneralUiStateModels';
 import { modalAlert, modalConfirm, modalTextEdit } from '~/ui/components';
@@ -257,7 +257,7 @@ function getCanWrite(
   deviceStatus: IKeyboardDeviceStatus,
   globalSettings: IGlobalSettings,
 ): boolean {
-  const { allowCrossKeyboardKeyMappingWrite } = globalSettings;
+  const { developerMode, allowCrossKeyboardKeyMappingWrite } = globalSettings;
   const { editSource } = profilesModel;
 
   const isInternalProfile = editSource.type === 'InternalProfile';
@@ -267,7 +267,7 @@ function getCanWrite(
   const refProjectId = editorModel.profileData.projectId;
   const isProjectMatched = deviceStatus.deviceAttrs?.projectId === refProjectId;
 
-  if (allowCrossKeyboardKeyMappingWrite) {
+  if (developerMode && allowCrossKeyboardKeyMappingWrite) {
     return isInternalProfile && isDeviceConnected;
   } else {
     return isInternalProfile && isDeviceConnected && isProjectMatched;
@@ -324,7 +324,7 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
 
   const deviceStatus = useKeyboardDeviceStatus();
 
-  const globalSettings = useGlobalSettingsFetch();
+  const { globalSettings } = globalSettingsModel;
 
   const { isSimulatorMode } = useKeyboardBehaviorModeModel();
 

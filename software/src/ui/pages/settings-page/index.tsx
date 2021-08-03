@@ -1,7 +1,6 @@
 import { jsx, css, useLocal, useEffect } from 'qx';
-import { globalSettingsFallbackValue } from '~/shared';
 import { uiTheme, ISelectorOption, ipcAgent, appUi, texts } from '~/ui/base';
-import { uiStatusModel } from '~/ui/commonModels';
+import { globalSettingsModel, uiStatusModel } from '~/ui/commonModels';
 import {
   Indent,
   CheckBoxLine,
@@ -24,38 +23,49 @@ const uiScaleOptions: ISelectorOption[] = [
 
 export const UiSettingsPage = () => {
   const local = useLocal({
-    settings: globalSettingsFallbackValue,
     fixedProjectRootPath: '',
+    temporaryInvalidLocalRepositoryFolderPath: '',
   });
 
   useEffect(() => {
     (async () => {
-      local.settings = await ipcAgent.async.config_getGlobalSettings();
       if (appUi.isDevelopment) {
         local.fixedProjectRootPath = await ipcAgent.async.config_getProjectRootDirectoryPath();
       }
     })();
-    return () => ipcAgent.async.config_writeGlobalSettings(local.settings);
+    return () => globalSettingsModel.save();
   }, []);
+
+  const { globalSettings } = globalSettingsModel;
 
   const onSelectButton = async () => {
     const path = await ipcAgent.async.file_getOpenDirectoryWithDialog();
     if (path) {
-      local.settings.localProjectRootFolderPath = path;
+      const valid = await ipcAgent.async.config_checkLocalRepositoryFolderPath(
+        path,
+      );
+      if (!valid) {
+        local.temporaryInvalidLocalRepositoryFolderPath = path;
+      } else {
+        local.temporaryInvalidLocalRepositoryFolderPath = '';
+        globalSettings.localProjectRootFolderPath = path;
+      }
     }
   };
 
-  const canChangeFolder = !appUi.isDevelopment;
-
   const folderPathDisplayValue =
-    local.fixedProjectRootPath || local.settings.localProjectRootFolderPath;
-
-  const { settings } = local;
+    local.temporaryInvalidLocalRepositoryFolderPath ||
+    local.fixedProjectRootPath ||
+    globalSettings.localProjectRootFolderPath;
 
   const appVersionInfo = useFetcher(
     ipcAgent.async.system_getApplicationVersionInfo,
     { version: '' },
   );
+
+  const isDeveloperModeOn = globalSettings.developerMode;
+
+  const canChangeFolder = !local.fixedProjectRootPath && isDeveloperModeOn;
 
   return (
     <div css={style}>
@@ -65,41 +75,56 @@ export const UiSettingsPage = () => {
         <div>{texts.label_settings_header_resources}</div>
         <Indent>
           <CheckBoxLine
-            text={texts.label_settings_configUseLocalProjectResources}
-            hint={texts.hint_settings_configUseLocalProjectResources}
-            checked={settings.useLocalResouces}
-            setChecked={fieldSetter(settings, 'useLocalResouces')}
+            text="Developer Mode"
+            checked={globalSettings.developerMode}
+            setChecked={fieldSetter(globalSettings, 'developerMode')}
           />
-          <div>
-            <div>{texts.label_settings_configKermiteRootDirectory}</div>
-            <HFlex>
-              <GeneralInput
-                value={folderPathDisplayValue}
-                disabled={!canChangeFolder}
-                readOnly={true}
-                width={350}
-                hint={texts.hint_settings_configKermiteRootDirectory}
-              />
-              <GeneralButton
-                onClick={onSelectButton}
-                disabled={!canChangeFolder}
-                icon="folder_open"
-                size="unitSquare"
-              />
-            </HFlex>
-          </div>
+          <Indent>
+            <CheckBoxLine
+              text={texts.label_settings_configUseLocalProjectResources}
+              hint={texts.hint_settings_configUseLocalProjectResources}
+              checked={globalSettings.useLocalResouces}
+              setChecked={fieldSetter(globalSettings, 'useLocalResouces')}
+              disabled={!isDeveloperModeOn}
+            />
+            <div>
+              <div className={!canChangeFolder && 'text-disabled'}>
+                {texts.label_settings_configKermiteRootDirectory}
+              </div>
+              <HFlex>
+                <GeneralInput
+                  value={folderPathDisplayValue}
+                  disabled={!canChangeFolder}
+                  readOnly={true}
+                  width={350}
+                  hint={texts.hint_settings_configKermiteRootDirectory}
+                />
+                <GeneralButton
+                  onClick={onSelectButton}
+                  disabled={!canChangeFolder}
+                  icon="folder_open"
+                  size="unitSquare"
+                />
+              </HFlex>
+              <div
+                style="color:red"
+                qxIf={!!local.temporaryInvalidLocalRepositoryFolderPath}
+              >
+                invalid source folder path
+              </div>
+            </div>
+            <CheckBoxLine
+              text="Allow Cross Keyboard Keymapping Write"
+              checked={globalSettings.allowCrossKeyboardKeyMappingWrite}
+              setChecked={fieldSetter(
+                globalSettings,
+                'allowCrossKeyboardKeyMappingWrite',
+              )}
+              disabled={!isDeveloperModeOn}
+            />
+          </Indent>
         </Indent>
-        <div>Application Behavior</div>
-        <Indent>
-          <CheckBoxLine
-            text="Allow Cross Keyboard Keymapping Write"
-            checked={settings.allowCrossKeyboardKeyMappingWrite}
-            setChecked={fieldSetter(
-              settings,
-              'allowCrossKeyboardKeyMappingWrite',
-            )}
-          />
-        </Indent>
+
         <div>{texts.label_settings_header_userInterface}</div>
         <Indent>
           <div>{texts.label_settings_configUiScaling}</div>
@@ -129,7 +154,7 @@ const style = css`
   position: relative;
 
   > * + * {
-    margin-top: 5px;
+    margin-top: 10px;
   }
 
   .version-area {
@@ -137,5 +162,9 @@ const style = css`
     top: 0;
     right: 0;
     margin: 10px;
+  }
+
+  .text-disabled {
+    opacity: 0.4;
   }
 `;

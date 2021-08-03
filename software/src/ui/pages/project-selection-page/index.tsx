@@ -7,7 +7,7 @@ import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDes
 import { ipcAgent, IProjectKeyboardListProjectItem, uiTheme } from '~/ui/base';
 import {
   fetchAllProjectResourceInfos,
-  fetchGlobalSettings,
+  readSettingsResouceOrigin,
 } from '~/ui/commonModels';
 import { globalSettingsModel } from '~/ui/commonModels/GlobalSettingsModel';
 import { RadioButtonLine } from '~/ui/components/molecules/RadioButtonLine';
@@ -25,9 +25,9 @@ async function loadSourceProjectItems(): Promise<
   IProjectKeyboardListProjectItem[]
 > {
   const allProjectInfos = await fetchAllProjectResourceInfos();
-  const globalSettings = await fetchGlobalSettings();
-  const { useLocalResouces } = globalSettings;
-  const targetOrigin = useLocalResouces ? 'local' : 'online';
+  const targetOrigin = readSettingsResouceOrigin(
+    globalSettingsModel.globalSettings,
+  );
   const projectInfos = allProjectInfos.filter(
     (info) => info.origin === targetOrigin && info.layoutNames.length > 0,
   );
