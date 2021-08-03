@@ -105,7 +105,7 @@ export type IProfileEditSource =
 
 export interface IProfileManagerStatus {
   editSource: IProfileEditSource;
-  allProfileNames: string[];
+  allProfileEntries: IProfileEntry[];
   loadedProfileData: IProfileData;
 }
 export interface IProfileManagerCommand {
@@ -225,3 +225,8 @@ export type IBootloaderDeviceDetectionStatus =
       bootloaderType: IBootloaderType;
       targetDeviceSig: string;
     };
+
+export type IProfileEntry = {
+  profileName: string;
+  projectId: string;
+};

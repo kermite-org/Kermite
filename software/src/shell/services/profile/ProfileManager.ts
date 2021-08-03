@@ -10,6 +10,7 @@ import {
   IResourceOrigin,
   IProfileEditSource,
   IPersistKeyboardDesign,
+  IProfileEntry,
 } from '~/shared';
 import {
   vObject,
@@ -52,7 +53,7 @@ export class ProfileManager implements IProfileManager {
     editSource: {
       type: 'ProfileNewlyCreated',
     },
-    allProfileNames: [],
+    allProfileEntries: [],
     loadedProfileData: fallbackProfileData,
   };
 
@@ -67,14 +68,14 @@ export class ProfileManager implements IProfileManager {
     initialValueGetter: () => this.status,
   });
 
-  private async reEnumerateAllProfileNames() {
-    const allProfileNames = await this.core.listAllProfileNames();
-    this.setStatus({ allProfileNames });
+  private async reEnumerateAllProfileEntries() {
+    const allProfileEntries = await this.core.listAllProfileEntries();
+    this.setStatus({ allProfileEntries });
   }
 
   private lazyInitializer = createLazyInitializer(async () => {
     await this.core.ensureProfilesDirectoryExists();
-    await this.reEnumerateAllProfileNames();
+    await this.reEnumerateAllProfileEntries();
     // const initialProfileName = this.getInitialProfileName(allProfileNames);
     // await this.loadProfile(initialProfileName);
     const editSource = this.loadInitialEditSource();
@@ -89,9 +90,9 @@ export class ProfileManager implements IProfileManager {
     return this.status.loadedProfileData?.projectId;
   }
 
-  async getAllProfileNamesAsync(): Promise<string[]> {
+  async getAllProfileEntriesAsync(): Promise<IProfileEntry[]> {
     await this.lazyInitializer();
-    return this.status.allProfileNames;
+    return this.status.allProfileEntries;
   }
 
   async getCurrentProfileAsync(): Promise<IProfileData | undefined> {
@@ -103,7 +104,7 @@ export class ProfileManager implements IProfileManager {
   }
 
   private loadInitialEditSource(): IProfileEditSource {
-    if (this.status.allProfileNames.length === 0) {
+    if (this.status.allProfileEntries.length === 0) {
       return { type: 'NoProfilesAvailable' };
     }
     return applicationStorage.readItemSafe<IProfileEditSource>(
@@ -222,13 +223,19 @@ export class ProfileManager implements IProfileManager {
     return profile;
   }
 
+  private hasProfileWithName(profileName: string): boolean {
+    return this.status.allProfileEntries.some(
+      (it) => it.profileName === profileName,
+    );
+  }
+
   private async createProfile(
     profileName: string,
     origin: IResourceOrigin,
     projectId: string,
     presetSpec: IPresetSpec,
   ) {
-    if (this.status.allProfileNames.includes(profileName)) {
+    if (this.hasProfileWithName(profileName)) {
       return false;
     }
     const profileData = await this.createProfileImpl(
@@ -237,9 +244,9 @@ export class ProfileManager implements IProfileManager {
       presetSpec,
     );
     await this.core.saveProfile(profileName, profileData);
-    const allProfileNames = await this.core.listAllProfileNames();
+    const allProfileEntries = await this.core.listAllProfileEntries();
     this.setStatus({
-      allProfileNames,
+      allProfileEntries,
       editSource: {
         type: 'InternalProfile',
         profileName,
@@ -290,15 +297,17 @@ export class ProfileManager implements IProfileManager {
     if (this.status.editSource.type !== 'InternalProfile') {
       return;
     }
-    if (!this.status.allProfileNames.includes(profName)) {
+    if (!this.hasProfileWithName(profName)) {
       return false;
     }
     const isCurrent = this.status.editSource.profileName === profName;
-    const currentProfileIndex = this.status.allProfileNames.indexOf(profName);
+    const currentProfileIndex = this.status.allProfileEntries.findIndex(
+      (it) => it.profileName === profName,
+    );
     await this.core.deleteProfile(profName);
-    const allProfileNames = await this.core.listAllProfileNames();
-    this.setStatus({ allProfileNames });
-    if (allProfileNames.length === 0) {
+    const allProfileEntries = await this.core.listAllProfileEntries();
+    this.setStatus({ allProfileEntries });
+    if (allProfileEntries.length === 0) {
       this.setStatus({
         editSource: { type: 'NoProfilesAvailable' },
         loadedProfileData: fallbackProfileData,
@@ -308,9 +317,9 @@ export class ProfileManager implements IProfileManager {
       const newIndex = clampValue(
         currentProfileIndex,
         0,
-        this.status.allProfileNames.length - 1,
+        this.status.allProfileEntries.length - 1,
       );
-      const nextProfileName = allProfileNames[newIndex];
+      const nextProfileName = allProfileEntries[newIndex]?.profileName;
       if (nextProfileName) {
         await this.loadProfile(nextProfileName);
       }
@@ -321,38 +330,38 @@ export class ProfileManager implements IProfileManager {
     if (this.status.editSource.type !== 'InternalProfile') {
       return;
     }
-    if (!this.status.allProfileNames.includes(profName)) {
+    if (!this.hasProfileWithName(profName)) {
       return false;
     }
-    if (this.status.allProfileNames.includes(newProfName)) {
+    if (this.hasProfileWithName(newProfName)) {
       return false;
     }
     const isCurrent = this.status.editSource.profileName === profName;
     await this.core.renameProfile(profName, newProfName);
-    await this.reEnumerateAllProfileNames();
+    await this.reEnumerateAllProfileEntries();
     if (isCurrent) {
       await this.loadProfile(newProfName);
     }
   }
 
   private async copyProfile(profName: string, newProfName: string) {
-    if (!this.status.allProfileNames.includes(profName)) {
+    if (!this.hasProfileWithName(profName)) {
       return false;
     }
-    if (this.status.allProfileNames.includes(newProfName)) {
+    if (this.hasProfileWithName(newProfName)) {
       return false;
     }
     await this.core.copyProfile(profName, newProfName);
-    await this.reEnumerateAllProfileNames();
+    await this.reEnumerateAllProfileEntries();
     await this.loadProfile(newProfName);
   }
 
   private async saveProfileAs(newProfName: string, profileData: IProfileData) {
-    if (this.status.allProfileNames.includes(newProfName)) {
+    if (this.hasProfileWithName(newProfName)) {
       return false;
     }
     await this.core.saveProfile(newProfName, profileData);
-    await this.reEnumerateAllProfileNames();
+    await this.reEnumerateAllProfileEntries();
     await this.loadProfile(newProfName);
   }
 

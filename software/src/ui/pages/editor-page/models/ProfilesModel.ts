@@ -2,6 +2,7 @@ import {
   compareObjectByJsonStringify,
   IPresetSpec,
   IProfileEditSource,
+  IProfileEntry,
   IProfileManagerCommand,
   IProfileManagerStatus,
   IResourceOrigin,
@@ -14,7 +15,7 @@ export class ProfilesModel {
 
   // state
   editSource: IProfileEditSource = { type: 'ProfileNewlyCreated' };
-  allProfileNames: string[] = [];
+  allProfileEntries: IProfileEntry[] = [];
 
   // listeners
 
@@ -24,8 +25,8 @@ export class ProfilesModel {
     if (payload.editSource) {
       this.editSource = payload.editSource;
     }
-    if (payload.allProfileNames) {
-      this.allProfileNames = payload.allProfileNames;
+    if (payload.allProfileEntries) {
+      this.allProfileEntries = payload.allProfileEntries;
     }
     if (payload.loadedProfileData) {
       if (

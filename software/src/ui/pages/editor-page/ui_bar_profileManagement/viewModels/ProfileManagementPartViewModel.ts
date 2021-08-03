@@ -110,7 +110,9 @@ const checkValidNewProfileName = async (
 
   const lowered = newProfileName.toLowerCase();
   if (
-    profilesModel.allProfileNames.find((name) => name.toLowerCase() === lowered)
+    profilesModel.allProfileEntries.find(
+      (it) => it.profileName.toLowerCase() === lowered,
+    )
   ) {
     await modalAlert(
       `${newProfileName} is already exists. operation cancelled.`,
@@ -320,7 +322,9 @@ const toggleRoutingPanel = () => {
 export function makeProfileManagementPartViewModel(): IProfileManagementPartViewModel {
   useEffect(profilesModel.startPageSession, []);
 
-  const { editSource, allProfileNames, saveProfile } = profilesModel;
+  const { editSource, allProfileEntries, saveProfile } = profilesModel;
+
+  const allProfileNames = allProfileEntries.map((it) => it.profileName);
 
   const deviceStatus = useKeyboardDeviceStatus();
 
