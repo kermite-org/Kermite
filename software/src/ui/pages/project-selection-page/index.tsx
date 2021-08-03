@@ -10,7 +10,7 @@ import {
   fetchGlobalSettings,
 } from '~/ui/commonModels';
 import { globalSettingsModel } from '~/ui/commonModels/GlobalSettingsModel';
-import { CheckBoxLine } from '~/ui/components';
+import { RadioButtonLine } from '~/ui/components/molecules/RadioButtonLine';
 import { ProjectKeyboardList } from '~/ui/components/organisms/ProjectKeyboardList';
 import { useFetcher } from '~/ui/helpers';
 
@@ -29,7 +29,7 @@ async function loadSourceProjectItems(): Promise<
   const { useLocalResouces } = globalSettings;
   const targetOrigin = useLocalResouces ? 'local' : 'online';
   const projectInfos = allProjectInfos.filter(
-    (info) => info.origin === targetOrigin,
+    (info) => info.origin === targetOrigin && info.layoutNames.length > 0,
   );
   return await Promise.all(
     projectInfos.map(async (info) => {
@@ -60,7 +60,7 @@ export const ProjectSelectionPage: FC = () => {
 
   return (
     <div css={style}>
-      Global Project Selection
+      Keyboard Product Selection
       <div className="content-part">
         <ProjectKeyboardList
           className="keyboard-list"
@@ -69,10 +69,10 @@ export const ProjectSelectionPage: FC = () => {
           setCurrentProjectId={setProjectId}
         />
         <div className="bottom-row">
-          <CheckBoxLine
-            text="any"
+          <RadioButtonLine
             checked={projectId === ''}
-            setChecked={(value) => value && setProjectId('')}
+            onClick={() => setProjectId('')}
+            text="各画面で選択する"
           />
         </div>
       </div>

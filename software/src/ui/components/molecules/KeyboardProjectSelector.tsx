@@ -18,6 +18,7 @@ export const KeyboardProjectSelector: FC<Props> = (props) => (
       onClick={props.linkButtonHandler}
       size="unitSquare"
       hint={texts.hint_presetBrowser_projectLinkButton}
+      qxIf={false}
     />
   </div>
 );

@@ -15,6 +15,7 @@ import {
   useAllProjectResourceInfos,
   useGlobalSettingsFetch,
   readGlobalProjectKey,
+  globalSettingsModel,
 } from '~/ui/commonModels';
 import { fieldSetter } from '~/ui/helpers';
 import { editSelectedProjectPreset as editSelectedProjectPresetOriginal } from '~/ui/pages/preset-browser-page/models/ProfileCreator';
@@ -30,14 +31,24 @@ export interface IPresetSelectionModel {
   editSelectedProjectPreset(): void;
 }
 
+function getProjectSelectionLabel(info: IProjectResourceInfo): string {
+  const isDeveloperMode = globalSettingsModel.getValue('useLocalResouces');
+  if (isDeveloperMode) {
+    const prefix = info.origin === 'local' ? '(local) ' : '';
+    return `${prefix}${info.keyboardName} (${info.projectPath})`;
+  } else {
+    return info.keyboardName;
+  }
+}
+
 function makeProjectOptions(infos: IProjectResourceInfo[]): ISelectorOption[] {
   return infos
-    .filter((it) => it.presetNames.length > 0 || it.layoutNames.length > 0)
-    .map((it) => ({
-      value: it.sig,
-      label: `${it.origin === 'local' ? '(local) ' : ''}${it.keyboardName} (${
-        it.projectPath
-      })`,
+    .filter(
+      (info) => info.presetNames.length > 0 || info.layoutNames.length > 0,
+    )
+    .map((info) => ({
+      value: info.sig,
+      label: getProjectSelectionLabel(info),
     }));
 }
 

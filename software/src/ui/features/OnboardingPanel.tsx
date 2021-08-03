@@ -1,14 +1,17 @@
-import { css, FC, jsx, useEffect, useState } from 'qx';
+import { css, FC, jsx, QxNode } from 'qx';
+import { getObjectKeyByValue, isNumberInRange } from '~/shared';
 import { router } from '~/ui/base';
 import { onboadingPanelDisplayStateModel, PagePaths } from '~/ui/commonModels';
 import { Icon } from '~/ui/components';
+import { OnboardingStepShiftButton } from '~/ui/components/atoms/OnboardingButton';
 import { NavigationStepList } from '~/ui/components/molecules/NavigationStepList';
 
 type Props = {
   className?: string;
+  children: QxNode;
 };
 
-const steps = [0, 1, 2, 3, 4, 5];
+const steps = [0, 1, 2, 3, 4];
 
 const stepToPagePathMap: { [step: number]: PagePaths | undefined } = {
   0: '/home',
@@ -16,7 +19,6 @@ const stepToPagePathMap: { [step: number]: PagePaths | undefined } = {
   2: '/firmwareUpdation',
   3: '/presetBrowser',
   4: '/editor',
-  5: '/layouter',
 };
 
 const stepInstructionMap: { [step: number]: string } = {
@@ -24,60 +26,112 @@ const stepInstructionMap: { [step: number]: string } = {
   1: 'Step1: 使用するキーボードを選択します。',
   2: 'Step2: デバイスにファームウェアを書き込みます。',
   3: 'Step3: 使用するプリセットを選び、プロファイルを作成します。',
-  4: 'Step4: キーマッピングを編集し、デバイスに書き込みます。',
-  5: 'Step5: キーのレイアウトにバリエーションがある場合、ここでキーの配置を調整します。',
+  4: 'Step4: プロファイルを保存して、デバイスにキーマッピングを書き込みます。',
 };
 
-export const OnboadingPanel: FC<Props> = ({ className }) => {
-  const [step, setStep] = useState(0);
+function getStepByPagePath(pagePath: string): number {
+  const _step = getObjectKeyByValue(stepToPagePathMap, pagePath);
+  return _step === undefined ? -1 : parseInt(_step);
+}
 
-  useEffect(() => {
-    const pagePath = stepToPagePathMap[step];
-    if (pagePath) {
-      router.navigateTo(pagePath);
+export const OnboadingFrame: FC<Props> = ({ className, children }) => {
+  const pagePath = router.getPagePath();
+  const currentStep = getStepByPagePath(pagePath);
+
+  const setStep = (newStep: number) => {
+    const newPagePath = stepToPagePathMap[newStep];
+    if (newPagePath) {
+      router.navigateTo(newPagePath);
     }
-  }, [step]);
+  };
+
+  const closePanel = onboadingPanelDisplayStateModel.close;
+
+  const canShiftStepBack = isNumberInRange(currentStep, 1, 4);
+  const canShiftStepForward = isNumberInRange(currentStep, 0, 3);
+
+  const shiftStepBack = () => setStep(currentStep - 1);
+  const shiftStepForward = () => setStep(currentStep + 1);
+
+  const canCompleteSteps = currentStep === 4;
+  const completeSteps = closePanel;
 
   return (
     <div css={style} className={className}>
-      <NavigationStepList
-        className="step-list"
-        steps={steps}
-        currentStep={step}
-        setCurrentStep={setStep}
-      />
-      <div className="instruction-part">
-        <p>ステップを順番に進めてキーボードのセットアップを行いましょう</p>
-        <p>{stepInstructionMap[step]}</p>
+      <div className="top-bar">
+        <NavigationStepList
+          className="step-list"
+          steps={steps}
+          currentStep={currentStep}
+          setCurrentStep={setStep}
+        />
+        <div className="instruction-part">
+          <p>ステップを順番に進めてキーボードのセットアップを行いましょう</p>
+          <p>{stepInstructionMap[currentStep]}</p>
+        </div>
+        <div className="close-button" onClick={closePanel}>
+          <Icon spec="fa fa-times" />
+        </div>
       </div>
-      <div
-        className="close-button"
-        onClick={onboadingPanelDisplayStateModel.close}
-      >
-        <Icon spec="fa fa-times" />
+      {children}
+      <div className="bottom-bar">
+        <OnboardingStepShiftButton
+          qxIf={currentStep === 0}
+          text="キャンセル"
+          onClick={closePanel}
+        />
+        <OnboardingStepShiftButton
+          onClick={shiftStepBack}
+          qxIf={canShiftStepBack}
+          text="戻る"
+        />
+        <OnboardingStepShiftButton
+          onClick={shiftStepForward}
+          qxIf={canShiftStepForward}
+          text="次へ"
+        />
+        <OnboardingStepShiftButton
+          onClick={completeSteps}
+          qxIf={canCompleteSteps}
+          text="完了"
+        />
       </div>
     </div>
   );
 };
 
 const style = css`
-  height: 110px;
-  padding: 10px 15px;
-  position: relative;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 
-  > .step-list {
+  > .top-bar {
+    height: 110px;
+    padding: 10px 15px;
+    position: relative;
+
+    > .step-list {
+    }
+
+    > .instruction-part {
+      margin-top: 10px;
+      line-height: 1.5em;
+    }
+
+    > .close-button {
+      position: absolute;
+      right: 0;
+      top: 0;
+      margin: 12px;
+      cursor: pointer;
+    }
   }
 
-  > .instruction-part {
-    margin-top: 10px;
-    line-height: 1.5em;
-  }
-
-  > .close-button {
-    position: absolute;
-    right: 0;
-    top: 0;
-    margin: 12px;
-    cursor: pointer;
+  > .bottom-bar {
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 80px;
   }
 `;
