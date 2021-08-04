@@ -6,6 +6,7 @@ import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
 import { checkLocalRepositoryFolder } from '~/shell/projectResources/LocalResourceHelper';
+import { setupGlobalSettingsFixer } from '~/shell/services/config/GlobalSettingsFixer';
 import { globalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
 import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
@@ -215,6 +216,7 @@ export class ApplicationRoot {
       await applicationStorage.initializeAsync();
       this.setupIpcBackend();
       this.windowWrapper.initialize();
+      setupGlobalSettingsFixer();
     });
   }
 

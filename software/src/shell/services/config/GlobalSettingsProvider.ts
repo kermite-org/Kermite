@@ -10,6 +10,8 @@ import { checkLocalRepositoryFolder } from '~/shell/projectResources/LocalResour
 export class GlobalSettingsProvider {
   private _globalSettings: IGlobalSettings = globalSettingsDefault;
 
+  settingsFixerCallback: ((diff: Partial<IGlobalSettings>) => void) | undefined;
+
   getGlobalSettings(): IGlobalSettings {
     if (this._globalSettings === globalSettingsDefault) {
       const settings = applicationStorage.readItemBasedOnDefault(
@@ -39,6 +41,8 @@ export class GlobalSettingsProvider {
     };
     applicationStorage.writeItem('globalSettings', this._globalSettings);
     this.globalConfigEventPort.emit(partialConfig);
+
+    this.settingsFixerCallback?.(partialConfig);
   }
 }
 export const globalSettingsProvider = new GlobalSettingsProvider();
