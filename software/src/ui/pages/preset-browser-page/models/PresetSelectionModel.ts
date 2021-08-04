@@ -119,12 +119,14 @@ export function usePresetSelectionModel(): IPresetSelectionModel {
   );
 
   const projectOptions = makeProjectOptions(resourceInfos);
-  const presetOptions = makePresetOptions(resourceInfos, sel.projectKey);
 
   const modProjectKey = getSelectionValueCorrected(
     projectOptions,
     sel.projectKey,
   );
+
+  const presetOptions = makePresetOptions(resourceInfos, modProjectKey);
+
   const modPresetKey = getSelectionValueCorrected(presetOptions, sel.presetKey);
 
   // console.log({ projectOptions, presetOptions, modProjectKey, modPresetKey });
