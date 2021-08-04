@@ -55,7 +55,10 @@ export interface IAppIpcContract {
     config_writeKeyMappingToDevice(): Promise<boolean>;
 
     config_getGlobalSettings(): Promise<IGlobalSettings>;
-    config_writeGlobalSettings(settings: IGlobalSettings): Promise<void>;
+    config_writeGlobalSettings(
+      settings: Partial<IGlobalSettings>,
+    ): Promise<void>;
+
     config_getProjectRootDirectoryPath(): Promise<string>;
     config_checkLocalRepositoryFolderPath(path: string): Promise<boolean>;
 

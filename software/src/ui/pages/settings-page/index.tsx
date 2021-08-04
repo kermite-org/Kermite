@@ -9,7 +9,7 @@ import {
   GeneralButton,
   RibbonSelector,
 } from '~/ui/components';
-import { useFetcher, fieldSetter } from '~/ui/helpers';
+import { useFetcher } from '~/ui/helpers';
 
 const uiScaleOptions: ISelectorOption[] = [
   0.7,
@@ -33,7 +33,6 @@ export const UiSettingsPage = () => {
         local.fixedProjectRootPath = await ipcAgent.async.config_getProjectRootDirectoryPath();
       }
     })();
-    return () => globalSettingsModel.save();
   }, []);
 
   const { globalSettings } = globalSettingsModel;
@@ -48,7 +47,7 @@ export const UiSettingsPage = () => {
         local.temporaryInvalidLocalRepositoryFolderPath = path;
       } else {
         local.temporaryInvalidLocalRepositoryFolderPath = '';
-        globalSettings.localProjectRootFolderPath = path;
+        globalSettingsModel.writeValue('localProjectRootFolderPath', path);
       }
     }
   };
@@ -77,14 +76,18 @@ export const UiSettingsPage = () => {
           <CheckBoxLine
             text="Developer Mode"
             checked={globalSettings.developerMode}
-            setChecked={fieldSetter(globalSettings, 'developerMode')}
+            setChecked={(value) =>
+              globalSettingsModel.writeValue('developerMode', value)
+            }
           />
           <Indent>
             <CheckBoxLine
               text={texts.label_settings_configUseLocalProjectResources}
               hint={texts.hint_settings_configUseLocalProjectResources}
               checked={globalSettings.useLocalResouces}
-              setChecked={fieldSetter(globalSettings, 'useLocalResouces')}
+              setChecked={(value) =>
+                globalSettingsModel.writeValue('useLocalResouces', value)
+              }
               disabled={!isDeveloperModeOn}
             />
             <div>
@@ -116,10 +119,12 @@ export const UiSettingsPage = () => {
             <CheckBoxLine
               text="Allow Cross Keyboard Keymapping Write"
               checked={globalSettings.allowCrossKeyboardKeyMappingWrite}
-              setChecked={fieldSetter(
-                globalSettings,
-                'allowCrossKeyboardKeyMappingWrite',
-              )}
+              setChecked={(value) =>
+                globalSettingsModel.writeValue(
+                  'allowCrossKeyboardKeyMappingWrite',
+                  value,
+                )
+              }
               disabled={!isDeveloperModeOn}
             />
           </Indent>

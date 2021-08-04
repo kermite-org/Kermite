@@ -28,16 +28,7 @@ class GlobalSettingsModel {
     key: K,
     value: IGlobalSettings[K],
   ) {
-    this.writeGlobalSettings({ ...this.globalSettings, [key]: value });
-  }
-
-  writeGlobalSettings(settings: IGlobalSettings) {
-    this.globalSettings = settings;
-    ipcAgent.async.config_writeGlobalSettings(settings);
-  }
-
-  save() {
-    ipcAgent.async.config_writeGlobalSettings(this.globalSettings);
+    ipcAgent.async.config_writeGlobalSettings({ [key]: value });
   }
 
   private onBackendGlobalSettingsChange = (diff: Partial<IGlobalSettings>) => {
