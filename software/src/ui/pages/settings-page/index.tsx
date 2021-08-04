@@ -21,7 +21,24 @@ const uiScaleOptions: ISelectorOption[] = [
   1.3,
 ].map((val) => ({ label: `${(val * 100) >> 0}%`, value: val.toString() }));
 
-export const UiSettingsPage = () => {
+interface ISettingsPageModel {
+  flagDeveloperMode: boolean;
+  setFlagDeveloperMode: (value: boolean) => void;
+  flagUseLocalResources: boolean;
+  setFlagUseLocalResources: (value: boolean) => void;
+  flagAllowCrossKeyboardKeyMappingWrite: boolean;
+  setFlagAllowCrossKeyboardKeyMappingWrite: (value: boolean) => void;
+  canChangeLocalRepositoryFolderPath: boolean;
+  localRepositoryFolderPathDisplayValue: string;
+  handleSelectLocalRepositoryFolder: () => void;
+  isLocalRepositoryFolderPathValid: boolean;
+  uiScalingOptions: ISelectorOption[];
+  uiScalingSelectionValue: string;
+  setUiScalingSelectionValue: (value: string) => void;
+  appVersionInfo: string;
+}
+
+function useSettingsPageModel(): ISettingsPageModel {
   const local = useLocal({
     fixedProjectRootPath: '',
     temporaryInvalidLocalRepositoryFolderPath: '',
@@ -60,11 +77,59 @@ export const UiSettingsPage = () => {
   const appVersionInfo = useFetcher(
     ipcAgent.async.system_getApplicationVersionInfo,
     { version: '' },
-  );
+  )?.version;
 
   const isDeveloperModeOn = globalSettings.developerMode;
 
   const canChangeFolder = !local.fixedProjectRootPath && isDeveloperModeOn;
+
+  return {
+    flagDeveloperMode: globalSettings.developerMode,
+    setFlagDeveloperMode: (value) =>
+      globalSettingsModel.writeValue('developerMode', value),
+
+    flagUseLocalResources: globalSettings.useLocalResouces,
+    setFlagUseLocalResources: (value) =>
+      globalSettingsModel.writeValue('useLocalResouces', value),
+
+    flagAllowCrossKeyboardKeyMappingWrite:
+      globalSettings.allowCrossKeyboardKeyMappingWrite,
+    setFlagAllowCrossKeyboardKeyMappingWrite: (value) =>
+      globalSettingsModel.writeValue(
+        'allowCrossKeyboardKeyMappingWrite',
+        value,
+      ),
+
+    canChangeLocalRepositoryFolderPath: canChangeFolder,
+    localRepositoryFolderPathDisplayValue: folderPathDisplayValue,
+    handleSelectLocalRepositoryFolder: onSelectButton,
+    isLocalRepositoryFolderPathValid: !local.temporaryInvalidLocalRepositoryFolderPath,
+
+    uiScalingOptions: uiScaleOptions,
+    uiScalingSelectionValue: uiStatusModel.settings.siteDpiScale.toString(),
+    setUiScalingSelectionValue: (strVal) =>
+      (uiStatusModel.settings.siteDpiScale = parseFloat(strVal)),
+    appVersionInfo,
+  };
+}
+
+export const UiSettingsPage = () => {
+  const {
+    flagDeveloperMode,
+    setFlagDeveloperMode,
+    flagUseLocalResources,
+    setFlagUseLocalResources,
+    flagAllowCrossKeyboardKeyMappingWrite,
+    setFlagAllowCrossKeyboardKeyMappingWrite,
+    canChangeLocalRepositoryFolderPath,
+    localRepositoryFolderPathDisplayValue,
+    handleSelectLocalRepositoryFolder,
+    isLocalRepositoryFolderPathValid,
+    uiScalingOptions,
+    uiScalingSelectionValue,
+    setUiScalingSelectionValue,
+    appVersionInfo,
+  } = useSettingsPageModel();
 
   return (
     <div css={style}>
@@ -75,57 +140,49 @@ export const UiSettingsPage = () => {
         <Indent>
           <CheckBoxLine
             text="Developer Mode"
-            checked={globalSettings.developerMode}
-            setChecked={(value) =>
-              globalSettingsModel.writeValue('developerMode', value)
-            }
+            checked={flagDeveloperMode}
+            setChecked={setFlagDeveloperMode}
           />
           <Indent>
             <CheckBoxLine
               text={texts.label_settings_configUseLocalProjectResources}
               hint={texts.hint_settings_configUseLocalProjectResources}
-              checked={globalSettings.useLocalResouces}
-              setChecked={(value) =>
-                globalSettingsModel.writeValue('useLocalResouces', value)
-              }
-              disabled={!isDeveloperModeOn}
+              checked={flagUseLocalResources}
+              setChecked={setFlagUseLocalResources}
+              disabled={!flagDeveloperMode}
             />
             <div>
-              <div className={!canChangeFolder && 'text-disabled'}>
+              <div
+                className={
+                  !canChangeLocalRepositoryFolderPath && 'text-disabled'
+                }
+              >
                 {texts.label_settings_configKermiteRootDirectory}
               </div>
               <HFlex>
                 <GeneralInput
-                  value={folderPathDisplayValue}
-                  disabled={!canChangeFolder}
+                  value={localRepositoryFolderPathDisplayValue}
+                  disabled={!canChangeLocalRepositoryFolderPath}
                   readOnly={true}
                   width={350}
                   hint={texts.hint_settings_configKermiteRootDirectory}
                 />
                 <GeneralButton
-                  onClick={onSelectButton}
-                  disabled={!canChangeFolder}
+                  onClick={handleSelectLocalRepositoryFolder}
+                  disabled={!canChangeLocalRepositoryFolderPath}
                   icon="folder_open"
                   size="unitSquare"
                 />
               </HFlex>
-              <div
-                style="color:red"
-                qxIf={!!local.temporaryInvalidLocalRepositoryFolderPath}
-              >
+              <div style="color:red" qxIf={!isLocalRepositoryFolderPathValid}>
                 invalid source folder path
               </div>
             </div>
             <CheckBoxLine
               text="Allow Cross Keyboard Keymapping Write"
-              checked={globalSettings.allowCrossKeyboardKeyMappingWrite}
-              setChecked={(value) =>
-                globalSettingsModel.writeValue(
-                  'allowCrossKeyboardKeyMappingWrite',
-                  value,
-                )
-              }
-              disabled={!isDeveloperModeOn}
+              checked={flagAllowCrossKeyboardKeyMappingWrite}
+              setChecked={setFlagAllowCrossKeyboardKeyMappingWrite}
+              disabled={!flagDeveloperMode}
             />
           </Indent>
         </Indent>
@@ -134,18 +191,16 @@ export const UiSettingsPage = () => {
         <Indent>
           <div>{texts.label_settings_configUiScaling}</div>
           <RibbonSelector
-            options={uiScaleOptions}
-            value={uiStatusModel.settings.siteDpiScale.toString()}
-            setValue={(strVal) =>
-              (uiStatusModel.settings.siteDpiScale = parseFloat(strVal))
-            }
+            options={uiScalingOptions}
+            value={uiScalingSelectionValue}
+            setValue={setUiScalingSelectionValue}
             hint={texts.hint_settings_configUiScaling}
           />
         </Indent>
       </Indent>
 
-      <div className="version-area" qxIf={!!appVersionInfo.version}>
-        application version: {appVersionInfo.version}
+      <div className="version-area" qxIf={!!appVersionInfo}>
+        application version: {appVersionInfo}
       </div>
     </div>
   );
