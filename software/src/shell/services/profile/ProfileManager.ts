@@ -214,7 +214,7 @@ export class ProfileManager implements IProfileManager {
     }
   }
 
-  async loadProfileByEditSource(
+  private async loadProfileByEditSource(
     editSource: IProfileEditSource,
   ): Promise<IProfileData> {
     if (editSource.type === 'NoProfilesAvailable') {
@@ -229,7 +229,7 @@ export class ProfileManager implements IProfileManager {
     return fallbackProfileData;
   }
 
-  async loadProfile(profName: string) {
+  private async loadProfile(profName: string) {
     const profileData = await this.core.loadProfile(profName);
     this.setStatus({
       editSource: {
