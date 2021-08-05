@@ -10,6 +10,9 @@ export type ILayoutManagerModalState =
   | 'LoadFromProject'
   | 'SaveToProject';
 
+export type ILayoutManagerEditTargetRadioSelection =
+  | 'CurrentProfile'
+  | 'LayoutFile';
 export interface ILayoutManagerViewModel {
   editSourceText: string;
 
@@ -43,6 +46,10 @@ export interface ILayoutManagerViewModel {
   showEditLayoutFileInFiler(): void;
   canOpenProjectIoModal: boolean;
   createNewProfileFromCurrentLayout(): void;
+  editTargetRadioSelection: ILayoutManagerEditTargetRadioSelection;
+  setEditTargetRadioSelection: (
+    value: ILayoutManagerEditTargetRadioSelection,
+  ) => void;
 }
 
 function getTargetProjectLayoutFilePath(
@@ -120,6 +127,11 @@ function useLayoutManagerViewModelImpl(
 
   const { isLocalProjectsAvailable } = globalSettingsModel;
 
+  const editTargetRadioSelection =
+    model.editSource.type === 'CurrentProfile'
+      ? 'CurrentProfile'
+      : 'LayoutFile';
+
   return {
     editSourceText: getEditSourceDisplayText(
       model.editSource,
@@ -174,6 +186,16 @@ function useLayoutManagerViewModelImpl(
     canOpenProjectIoModal: isLocalProjectsAvailable,
     createNewProfileFromCurrentLayout: () =>
       model.createNewProfileFromCurrentLayout(),
+    editTargetRadioSelection,
+    setEditTargetRadioSelection: (value) => {
+      if (editTargetRadioSelection !== value) {
+        if (value === 'CurrentProfile') {
+          model.loadCurrentProfileLayout();
+        } else {
+          model.createNewLayout();
+        }
+      }
+    },
   };
 }
 
