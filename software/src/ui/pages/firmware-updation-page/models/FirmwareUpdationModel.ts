@@ -5,7 +5,7 @@ import {
   IFirmwareTargetDevice,
   IProjectResourceInfo,
 } from '~/shared';
-import { ipcAgent } from '~/ui/base';
+import { ipcAgent, ISelectorSource } from '~/ui/base';
 import {
   fetchAllProjectResourceInfos,
   globalSettingsModel,
@@ -69,6 +69,21 @@ export class FirmwareUpdationModel {
       ),
     );
     return [blankOption, ...projectOptions];
+  }
+
+  getProjectSelectionSource(): ISelectorSource {
+    if (
+      !this.projectOptions.some(
+        (option) => option.value === this.currentProjectFirmwareSpec,
+      )
+    ) {
+      this.currentProjectFirmwareSpec = '';
+    }
+    return {
+      options: this.projectOptions,
+      value: this.currentProjectFirmwareSpec,
+      setValue: this.setCurrentProjectFirmwareSpec,
+    };
   }
 
   get canSelectTargetFirmware() {
