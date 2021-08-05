@@ -1,32 +1,8 @@
 import { globalSettingsDefault, IGlobalSettings } from '~/shared';
 import { ipcAgent } from '~/ui/base';
 
-export const globalSettingsModel = new (class {
+class GlobalSettingsModel {
   globalSettings: IGlobalSettings = globalSettingsDefault;
-
-  getValue<K extends keyof IGlobalSettings>(key: K): IGlobalSettings[K] {
-    return this.globalSettings[key];
-  }
-
-  writeValue<K extends keyof IGlobalSettings>(
-    key: K,
-    value: IGlobalSettings[K],
-  ) {
-    this.writeGlobalSettings({ ...this.globalSettings, [key]: value });
-  }
-
-  writeGlobalSettings(settings: IGlobalSettings) {
-    this.globalSettings = settings;
-    ipcAgent.async.config_writeGlobalSettings(settings);
-  }
-
-  save() {
-    ipcAgent.async.config_writeGlobalSettings(this.globalSettings);
-  }
-
-  async loadInitialGlobalSettings() {
-    this.globalSettings = await ipcAgent.async.config_getGlobalSettings();
-  }
 
   get isLocalProjectsAvailable(): boolean {
     const {
@@ -43,4 +19,34 @@ export const globalSettingsModel = new (class {
   get isDeveloperMode() {
     return this.globalSettings.developerMode;
   }
-})();
+
+  getValue<K extends keyof IGlobalSettings>(key: K): IGlobalSettings[K] {
+    return this.globalSettings[key];
+  }
+
+  writeValue<K extends keyof IGlobalSettings>(
+    key: K,
+    value: IGlobalSettings[K],
+  ) {
+    ipcAgent.async.config_writeGlobalSettings({ [key]: value });
+  }
+
+  private onBackendGlobalSettingsChange = (diff: Partial<IGlobalSettings>) => {
+    this.globalSettings = { ...this.globalSettings, ...diff };
+  };
+
+  async initialize() {
+    this.globalSettings = await ipcAgent.async.config_getGlobalSettings();
+    ipcAgent.events.config_globalSettingsEvents.subscribe(
+      this.onBackendGlobalSettingsChange,
+    );
+  }
+
+  terminate() {
+    ipcAgent.events.config_globalSettingsEvents.unsubscribe(
+      this.onBackendGlobalSettingsChange,
+    );
+  }
+}
+
+export const globalSettingsModel = new GlobalSettingsModel();

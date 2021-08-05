@@ -9,7 +9,7 @@ async function start() {
   const appDiv = document.getElementById('app');
 
   uiStatusModel.initialize();
-  await globalSettingsModel.loadInitialGlobalSettings();
+  await globalSettingsModel.initialize();
 
   render(() => <SiteRoot />, appDiv);
   window.addEventListener('resize', debounce(appUi.rerender, 100));
@@ -17,6 +17,7 @@ async function start() {
   window.addEventListener('beforeunload', () => {
     render(() => <div />, appDiv);
     uiStatusModel.finalize();
+    globalSettingsModel.terminate();
   });
 }
 
