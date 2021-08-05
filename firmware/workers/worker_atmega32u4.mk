@@ -31,6 +31,7 @@ IS_RESOURCE_ORIGIN_ONLINE ?= 0
 #--------------------
 
 ELF = $(OUT_DIR)/$(CORE_NAME).elf
+BIN = $(OUT_DIR)/$(CORE_NAME).bin
 HEX = $(OUT_DIR)/$(CORE_NAME).hex
 LST = $(OUT_DIR)/$(CORE_NAME).lst
 MAP = $(OUT_DIR)/$(CORE_NAME).map
@@ -97,7 +98,7 @@ LDFLAGS += -Wl,--cref,--defsym=__EEPROM_REGION_LENGTH__=1024
 
 all: build
 
-build: $(HEX) $(LST)
+build: $(BIN) $(HEX) $(LST)
 
 $(OBJS): $(RULES_MK)
 
@@ -119,6 +120,9 @@ $(ELF): $(OBJS)
 $(HEX) : $(ELF)
 	@$(OBJCOPY) -O ihex $(ELF) $(HEX)
 	@echo output: $(HEX)
+
+$(BIN) : $(ELF)
+	@$(OBJCOPY) -O binary $(ELF) $(BIN)
 
 $(LST): $(ELF)
 	@$(OBJDUMP) -h -S $< > $@
