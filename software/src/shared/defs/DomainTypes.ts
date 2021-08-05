@@ -97,6 +97,7 @@ export type IProfileEditSource =
   | {
       type: 'InternalProfile';
       profileName: string;
+      projectId: string;
     }
   | {
       type: 'ExternalFile';
@@ -105,8 +106,9 @@ export type IProfileEditSource =
 
 export interface IProfileManagerStatus {
   editSource: IProfileEditSource;
-  allProfileNames: string[];
   loadedProfileData: IProfileData;
+  allProfileEntries: IProfileEntry[];
+  visibleProfileEntries: IProfileEntry[];
 }
 export interface IProfileManagerCommand {
   creatProfile?: {
@@ -225,3 +227,8 @@ export type IBootloaderDeviceDetectionStatus =
       bootloaderType: IBootloaderType;
       targetDeviceSig: string;
     };
+
+export type IProfileEntry = {
+  profileName: string;
+  projectId: string;
+};
