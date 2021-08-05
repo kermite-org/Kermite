@@ -51,8 +51,10 @@ export function useProjectInfo(
   projectId?: string,
 ): IProjectResourceInfo | undefined {
   const resourceInfos = useAllProjectResourceInfos();
-  return resourceInfos.find(
-    (info) => info.origin === origin && info.projectId === projectId,
+  return (
+    resourceInfos.find(
+      (info) => info.origin === origin && info.projectId === projectId,
+    ) || resourceInfos.find((info) => info.projectId === projectId)
   );
 }
 
