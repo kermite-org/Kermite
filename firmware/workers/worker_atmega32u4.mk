@@ -140,6 +140,17 @@ ifdef AVRDUDE_COM_PORT_ALT
 endif
 	avrdude -p m32u4 -P $(AVRDUDE_COM_PORT) -c avr109 -U flash:w:$(HEX)
 
+
+flash_bin:
+ifndef AVRDUDE_COM_PORT
+	$(error variable AVRDUDE_COM_PORT is not set)
+endif
+ifdef AVRDUDE_COM_PORT_ALT
+	-avrdude -p m32u4 -P $(AVRDUDE_COM_PORT_ALT) -c avr109 -U flash:w:$(BIN)
+endif
+	avrdude -p m32u4 -P $(AVRDUDE_COM_PORT) -c avr109 -U flash:w:$(BIN)
+
+
 flash_with_dfu: build
 	dfu-programmer atmega32u4 erase
 	dfu-programmer atmega32u4 flash $(HEX)
