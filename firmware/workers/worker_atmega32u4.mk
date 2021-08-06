@@ -32,6 +32,7 @@ IS_RESOURCE_ORIGIN_ONLINE ?= 0
 
 ELF = $(OUT_DIR)/$(CORE_NAME).elf
 BIN = $(OUT_DIR)/$(CORE_NAME).bin
+PATCHED_BIN = $(OUT_DIR)/$(CORE_NAME)_patched.bin
 HEX = $(OUT_DIR)/$(CORE_NAME).hex
 LST = $(OUT_DIR)/$(CORE_NAME).lst
 MAP = $(OUT_DIR)/$(CORE_NAME).map
@@ -141,14 +142,14 @@ endif
 	avrdude -p m32u4 -P $(AVRDUDE_COM_PORT) -c avr109 -U flash:w:$(HEX)
 
 
-flash_bin:
+flash_patched_bin:
 ifndef AVRDUDE_COM_PORT
 	$(error variable AVRDUDE_COM_PORT is not set)
 endif
 ifdef AVRDUDE_COM_PORT_ALT
-	-avrdude -p m32u4 -P $(AVRDUDE_COM_PORT_ALT) -c avr109 -U flash:w:$(BIN)
+	-avrdude -p m32u4 -P $(AVRDUDE_COM_PORT_ALT) -c avr109 -U flash:w:$(PATCHED_BIN)
 endif
-	avrdude -p m32u4 -P $(AVRDUDE_COM_PORT) -c avr109 -U flash:w:$(BIN)
+	avrdude -p m32u4 -P $(AVRDUDE_COM_PORT) -c avr109 -U flash:w:$(PATCHED_BIN)
 
 
 flash_with_dfu: build
