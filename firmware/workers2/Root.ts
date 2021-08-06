@@ -1,8 +1,5 @@
 import { serializeCustomKeyboardSpec } from '@/CustomKeyboardDataSerializer';
-import {
-  keyboardSpec_customKeyboard1,
-  keyboardSpec_customKeyboard2,
-} from '@/KeyboardVariants';
+import { keyboardSpec_astelia, keyboardSpec_dw4 } from '@/KeyboardVariants';
 import * as fs from 'fs';
 
 function compareArray(ar1: number[], ar2: number[]): boolean {
@@ -42,8 +39,8 @@ function getBinaryContentMarkerIndex(
 }
 
 function forgeStandardKeyboardFirmware() {
-  const targetKeyboardSpec = keyboardSpec_customKeyboard1;
-  // const targetKeyboardSpec = keyboardSpec_customKeyboard2;
+  const targetKeyboardSpec = keyboardSpec_astelia;
+  // const targetKeyboardSpec = keyboardSpec_dw4;
 
   const customDataBytes = serializeCustomKeyboardSpec(targetKeyboardSpec);
 
