@@ -89,6 +89,12 @@ export function fsxMkdirpSync(path: string) {
   }
 }
 
+export async function fsxEnsureFolderExists(path: string) {
+  if (!fsExistsSync(path)) {
+    await fspMkdir(path);
+  }
+}
+
 export async function fsxReadFile(filePath: string): Promise<string> {
   try {
     return await fs.promises.readFile(filePath, { encoding: 'utf-8' });

@@ -1,12 +1,11 @@
 import { IPersistProfileData, IProfileData, IProfileEntry } from '~/shared';
 import { appEnv } from '~/shell/base/AppEnv';
 import {
-  fsExistsSync,
   fspCopyFile,
-  fspMkdir,
   fspReaddir,
   fspRename,
   fspUnlink,
+  fsxEnsureFolderExists,
   fsxMkdirpSync,
   fsxReadJsonFile,
   pathBasename,
@@ -27,13 +26,9 @@ export class ProfileManagerCore {
 
   async ensureProfilesDirectoryExists() {
     const dataDirPath = appEnv.resolveUserDataFilePath('data');
-    if (!fsExistsSync(dataDirPath)) {
-      await fspMkdir(dataDirPath);
-    }
+    await fsxEnsureFolderExists(dataDirPath);
     const profilesDirPath = appEnv.resolveUserDataFilePath('data/profiles');
-    if (!fsExistsSync(profilesDirPath)) {
-      await fspMkdir(profilesDirPath);
-    }
+    await fsxEnsureFolderExists(profilesDirPath);
   }
 
   private async listAllProfileNames(): Promise<string[]> {
@@ -67,12 +62,17 @@ export class ProfileManagerCore {
     return await ProfileFileLoader.loadProfileFromFile(filePath);
   }
 
+  private async ensureSavingFolder(filePath: string) {
+    await fsxEnsureFolderExists(pathDirname(filePath));
+  }
+
   async saveProfile(
     profName: string,
     profileData: IProfileData,
   ): Promise<void> {
     const filePath = this.getProfileFilePath(profName);
     console.log(`saving current profile to ${pathBasename(filePath)}`);
+    this.ensureSavingFolder(filePath);
     await ProfileFileLoader.saveProfileToFile(filePath, profileData);
   }
 
