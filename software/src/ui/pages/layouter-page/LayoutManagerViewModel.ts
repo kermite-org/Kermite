@@ -1,7 +1,7 @@
 import { useEffect, useLocal } from 'qx';
 import { ILayoutEditSource, IProjectLayoutsInfo } from '~/shared';
 import { ISelectorOption } from '~/ui/base';
-import { useGlobalSettingsValue } from '~/ui/commonModels';
+import { globalSettingsModel } from '~/ui/commonModels';
 import { UiLayouterCore } from '~/ui/pages/layouter';
 import { LayoutManagerModel } from '~/ui/pages/layouter-page/LayoutManagerModel';
 
@@ -10,6 +10,9 @@ export type ILayoutManagerModalState =
   | 'LoadFromProject'
   | 'SaveToProject';
 
+export type ILayoutManagerEditTargetRadioSelection =
+  | 'CurrentProfile'
+  | 'LayoutFile';
 export interface ILayoutManagerViewModel {
   editSourceText: string;
 
@@ -43,6 +46,10 @@ export interface ILayoutManagerViewModel {
   showEditLayoutFileInFiler(): void;
   canOpenProjectIoModal: boolean;
   createNewProfileFromCurrentLayout(): void;
+  editTargetRadioSelection: ILayoutManagerEditTargetRadioSelection;
+  setEditTargetRadioSelection: (
+    value: ILayoutManagerEditTargetRadioSelection,
+  ) => void;
 }
 
 function getTargetProjectLayoutFilePath(
@@ -118,8 +125,12 @@ function useLayoutManagerViewModelImpl(
     local.currentProjectId && local.currentLayoutName
   );
 
-  const isLocalProjectsAvailable = useGlobalSettingsValue('useLocalResouces');
-  // const isLocalProjectsAvailable = useProjectResourcePresenceChecker('local');
+  const { isLocalProjectsAvailable } = globalSettingsModel;
+
+  const editTargetRadioSelection =
+    model.editSource.type === 'CurrentProfile'
+      ? 'CurrentProfile'
+      : 'LayoutFile';
 
   return {
     editSourceText: getEditSourceDisplayText(
@@ -175,6 +186,16 @@ function useLayoutManagerViewModelImpl(
     canOpenProjectIoModal: isLocalProjectsAvailable,
     createNewProfileFromCurrentLayout: () =>
       model.createNewProfileFromCurrentLayout(),
+    editTargetRadioSelection,
+    setEditTargetRadioSelection: (value) => {
+      if (editTargetRadioSelection !== value) {
+        if (value === 'CurrentProfile') {
+          model.loadCurrentProfileLayout();
+        } else {
+          model.createNewLayout();
+        }
+      }
+    },
   };
 }
 

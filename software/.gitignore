@@ -5,6 +5,7 @@ node_modules/
 /dist_ex/
 /release/
 /build/
+/dist_ex/
 
 package-lock.json
 yarn-error.log

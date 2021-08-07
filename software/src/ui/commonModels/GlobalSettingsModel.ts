@@ -1,9 +1,24 @@
 import { globalSettingsDefault, IGlobalSettings } from '~/shared';
 import { ipcAgent } from '~/ui/base';
-import { useEventSource } from '~/ui/helpers';
 
-export const globalSettingsModel = new (class {
+class GlobalSettingsModel {
   globalSettings: IGlobalSettings = globalSettingsDefault;
+
+  get isLocalProjectsAvailable(): boolean {
+    const {
+      developerMode,
+      useLocalResouces,
+      localProjectRootFolderPath,
+    } = this.globalSettings;
+    return (
+      (developerMode && useLocalResouces && !!localProjectRootFolderPath) ||
+      false
+    );
+  }
+
+  get isDeveloperMode() {
+    return this.globalSettings.developerMode;
+  }
 
   getValue<K extends keyof IGlobalSettings>(key: K): IGlobalSettings[K] {
     return this.globalSettings[key];
@@ -13,14 +28,25 @@ export const globalSettingsModel = new (class {
     key: K,
     value: IGlobalSettings[K],
   ) {
-    const settings = { ...this.globalSettings, [key]: value };
-    ipcAgent.async.config_writeGlobalSettings(settings);
+    ipcAgent.async.config_writeGlobalSettings({ [key]: value });
   }
-})();
 
-export function useGlobalSettingsModelUpdator() {
-  globalSettingsModel.globalSettings = useEventSource(
-    ipcAgent.events.config_globalSettingsEvents,
-    globalSettingsDefault,
-  );
+  private onBackendGlobalSettingsChange = (diff: Partial<IGlobalSettings>) => {
+    this.globalSettings = { ...this.globalSettings, ...diff };
+  };
+
+  async initialize() {
+    this.globalSettings = await ipcAgent.async.config_getGlobalSettings();
+    ipcAgent.events.config_globalSettingsEvents.subscribe(
+      this.onBackendGlobalSettingsChange,
+    );
+  }
+
+  terminate() {
+    ipcAgent.events.config_globalSettingsEvents.unsubscribe(
+      this.onBackendGlobalSettingsChange,
+    );
+  }
 }
+
+export const globalSettingsModel = new GlobalSettingsModel();

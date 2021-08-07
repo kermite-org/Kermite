@@ -1,6 +1,7 @@
 import {
   IPresetSpec,
   IProfileData,
+  IProfileEntry,
   IProfileManagerCommand,
   IProfileManagerStatus,
   IResourceOrigin,
@@ -10,7 +11,7 @@ import { IEventPort } from '~/shell/funcs';
 export interface IProfileManager {
   getCurrentProfileProjectId(): string;
   getCurrentProfileAsync(): Promise<IProfileData | undefined>;
-  getAllProfileNamesAsync(): Promise<string[]>;
+  getAllProfileEntriesAsync(): Promise<IProfileEntry[]>;
   statusEventPort: IEventPort<Partial<IProfileManagerStatus>>;
   executeCommands(commands: IProfileManagerCommand[]): Promise<void>;
   saveCurrentProfile(profileData: IProfileData): Promise<void>;

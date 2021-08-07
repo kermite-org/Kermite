@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'qx';
 import { IProjectKeyboardListProjectItem } from '~/ui/base';
-import { ProjectKeyboardShapeView } from '~/ui/components/keyboard/panels/ProjectKeyboardShapeView';
+import { ProjectKeyboardShapeView } from '~/ui/components/keyboard/panels';
 
 type Props = {
   project: IProjectKeyboardListProjectItem;
@@ -19,10 +19,7 @@ export const ProjectKeyboardListCard: FC<Props> = ({
         <div className="keyboard-name">{project.keyboardName}</div>
       </div>
       <div className="body-part">
-        <ProjectKeyboardShapeView
-          keyboardDesign={project.design}
-          className="shape-view"
-        />
+        <ProjectKeyboardShapeView keyboardDesign={project.design} />
       </div>
     </div>
   </div>
@@ -51,6 +48,8 @@ const style = css`
     background: #fff;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    gap: 5px;
 
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
 
@@ -68,7 +67,7 @@ const style = css`
     }
 
     > .body-part {
-      flex-grow: 1;
+      height: 120px;
     }
   }
 `;

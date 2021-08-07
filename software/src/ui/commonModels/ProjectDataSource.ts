@@ -1,6 +1,7 @@
 import { useMemo } from 'qx';
 import { IProjectResourceInfo, IResourceOrigin } from '~/shared';
 import { appUi, ipcAgent } from '~/ui/base';
+import { readSettingsResouceOrigin } from '~/ui/commonModels/DomainHelpers';
 import { globalSettingsModel } from '~/ui/commonModels/GlobalSettingsModel';
 import { useFetcher } from '~/ui/helpers';
 
@@ -29,8 +30,7 @@ export function useProjectResourceInfos() {
 }
 
 export function useProjectResourceInfosBasedOnGlobalSettings() {
-  const { useLocalResouces } = globalSettingsModel.globalSettings;
-  const origin: IResourceOrigin = useLocalResouces ? 'local' : 'online';
+  const origin = readSettingsResouceOrigin(globalSettingsModel.globalSettings);
   const allResourceInfos = useAllProjectResourceInfos();
   return useMemo(
     () => allResourceInfos.filter((info) => info.origin === origin),
@@ -51,8 +51,10 @@ export function useProjectInfo(
   projectId?: string,
 ): IProjectResourceInfo | undefined {
   const resourceInfos = useAllProjectResourceInfos();
-  return resourceInfos.find(
-    (info) => info.origin === origin && info.projectId === projectId,
+  return (
+    resourceInfos.find(
+      (info) => info.origin === origin && info.projectId === projectId,
+    ) || resourceInfos.find((info) => info.projectId === projectId)
   );
 }
 

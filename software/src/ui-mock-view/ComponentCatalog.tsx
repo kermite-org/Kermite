@@ -1,16 +1,18 @@
 import { css, FC, jsx, useEffect, useLocal } from 'qx';
-import { FlatListSelector } from '~/ui/components';
-import { CheckBoxExamples } from '~/ui/components/atoms/CheckBox.visor';
-import { FlatListSelectorExamples } from '~/ui/components/atoms/FlatListSelector.visor';
-import { GeneralButtonExamples } from '~/ui/components/atoms/GeneralButton.visor';
-import { GeneralSelectorExamples } from '~/ui/components/atoms/GeneralSelector.visor';
-import { OnboardingPullTabExamples } from '~/ui/components/atoms/OnboardingPullTab.visor';
-import { ToggleSwitchExamples } from '~/ui/components/atoms/ToggleSwitch.visor';
-import { PreviewKeyboardShapeViewExamples } from '~/ui/components/keyboard/panels/PreviewKeyboardShapeView.visor';
-import { ProjectKeyboardShapeViewExamples } from '~/ui/components/keyboard/panels/ProjectKeyboardShapeView.visor';
-import { NavigationStepListExamples } from '~/ui/components/molecules/NavigationStepList.visor';
-import { ToggleSwitchLineExamples } from '~/ui/components/molecules/ToggleSwitchLine.visor';
-import { ProjectKeyboardListExamples } from '~/ui/components/organisms/ProjectKeyboardList.visor';
+import {
+  FlatListSelector,
+  CheckBoxExamples,
+  FlatListSelectorExamples,
+  GeneralButtonExamples,
+  GeneralSelectorExamples,
+  OnboardingPullTabExamples,
+  ToggleSwitchExamples,
+  PreviewKeyboardShapeViewExamples,
+  ProjectKeyboardShapeViewExamples,
+  NavigationStepListExamples,
+  ToggleSwitchLineExamples,
+  ProjectKeyboardListExamples,
+} from '~/ui/components';
 import { fieldSetter } from '~/ui/helpers';
 
 type IVisualEntry = Record<string, FC | JSX.Element>;

@@ -15,6 +15,7 @@ import { QxDebugPage4 } from '~/ui-mock-view/QxDebugPage4';
 import { QxDebugPage5 } from '~/ui-mock-view/QxDebugPage5';
 import { RoutingDevelopmentPage } from '~/ui-mock-view/RoutingDevelopmentPage';
 import { ShortCssDevPage } from '~/ui-mock-view/ShortCssDevPage';
+import { SvgScalingDevPage } from '~/ui-mock-view/SvgScalingDev';
 import { UiLayouterPageComponent } from '~/ui/pages/layouter-page';
 import { MockPageLayouterDevelopment } from './MockPageLayouterDevelopment';
 
@@ -38,6 +39,7 @@ const PageRoot = () => {
       {/* <GooberDevelopmentPage2 /> */}
       {/* <ShortCssDevPage /> */}
       <ComponentCatalogPage />
+      {/* <SvgScalingDevPage /> */}
     </div>
   );
 };

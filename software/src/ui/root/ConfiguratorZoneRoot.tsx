@@ -3,7 +3,7 @@ import { appUi, router, uiTheme } from '~/ui/base';
 import { siteModel, uiStatusModel } from '~/ui/commonModels';
 import { CustomWindowFrame, DevToolPullTab } from '~/ui/components';
 import { LoadingOverlay } from '~/ui/components/overlay/LoadingOverlay';
-import { OnboadingPanel } from '~/ui/features/OnboardingPanel';
+import { OnboadingFrame } from '~/ui/features/OnboardingPanel';
 import { EditorPage } from '~/ui/pages/editor-page';
 import { FirmwareUpdationPage } from '~/ui/pages/firmware-updation-page';
 import { UiLayouterPageComponent } from '~/ui/pages/layouter-page';
@@ -23,7 +23,6 @@ const MainColumnRoutes = () => {
   const pagePath = router.getPagePath();
   return (
     <div css={cssMainColumn}>
-      <OnboadingPanel qxIf={uiStatusModel.settings.showOnboardingPanel} />
       {pagePath === '/editor' && <EditorPage />}
       {pagePath === '/layouter' && <UiLayouterPageComponent />}
       {pagePath === '/shapePreview' && <ShapePreviewPage />}
@@ -44,6 +43,7 @@ const cssMainColumn = css`
 `;
 
 export const ConfiguratorZoneRoot = () => {
+  const showOnboarding = uiStatusModel.settings.showOnboardingPanel;
   return (
     <CustomWindowFrame
       renderTitleBar={WindowTitleBarSection}
@@ -52,7 +52,13 @@ export const ConfiguratorZoneRoot = () => {
       <div css={cssWindowContent}>
         <div className="main-row">
           <NavigationColumn />
-          <MainColumnRoutes />
+          {showOnboarding ? (
+            <OnboadingFrame>
+              <MainColumnRoutes />
+            </OnboadingFrame>
+          ) : (
+            <MainColumnRoutes />
+          )}
           <LoadingOverlay isLoading={uiStatusModel.status.isLoading} />
           <DevToolPullTab
             qxIf={appUi.isDevelopment}

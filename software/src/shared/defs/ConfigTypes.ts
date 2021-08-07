@@ -24,6 +24,7 @@ export interface IGlobalSettings {
   localProjectRootFolderPath: string;
   allowCrossKeyboardKeyMappingWrite: boolean;
   globalProjectId: string;
+  developerMode: boolean;
 }
 
 export const globalSettingsLoadingSchema = vObject({
@@ -31,6 +32,7 @@ export const globalSettingsLoadingSchema = vObject({
   localProjectRootFolderPath: vString(),
   allowCrossKeyboardKeyMappingWrite: vBoolean().optional,
   globalProjectId: vString().optional,
+  developerMode: vBoolean().optional,
 });
 
 export const globalSettingsDefault: IGlobalSettings = {
@@ -38,6 +40,7 @@ export const globalSettingsDefault: IGlobalSettings = {
   localProjectRootFolderPath: '',
   allowCrossKeyboardKeyMappingWrite: false,
   globalProjectId: '',
+  developerMode: false,
 };
 
 export const globalSettingsFallbackValue: IGlobalSettings = {
@@ -45,4 +48,5 @@ export const globalSettingsFallbackValue: IGlobalSettings = {
   localProjectRootFolderPath: '',
   allowCrossKeyboardKeyMappingWrite: false,
   globalProjectId: '',
+  developerMode: false,
 };

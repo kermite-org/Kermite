@@ -24,11 +24,7 @@ export function useFirmwareUpdationPartModel(): IFirmwareUpdationPartModel {
     phase: model.phase,
     detectedDeviceSig: model.detectedDeviceSig,
     canSelectTargetFirmware: model.canSelectTargetFirmware,
-    projectSelectorSource: {
-      options: model.projectOptions,
-      value: model.currentProjectFirmwareSpec,
-      setValue: model.setCurrentProjectFirmwareSpec,
-    },
+    projectSelectorSource: model.getProjectSelectionSource(),
     get canFlashSelectedFirmwareToDetectedDevice() {
       return model.canFlashSelectedFirmwareToDetectedDevice;
     },
