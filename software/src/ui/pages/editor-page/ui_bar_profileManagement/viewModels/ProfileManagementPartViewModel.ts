@@ -6,7 +6,11 @@ import {
   IProfileData,
   IProfileEditSource,
 } from '~/shared';
-import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
+import {
+  getProjectOriginAndIdFromSig,
+  joinProjectProfileName,
+  splitProjectProfileName,
+} from '~/shared/funcs/DomainRelatedHelpers';
 import {
   ipcAgent,
   ISelectorSource,
@@ -14,10 +18,10 @@ import {
   texts,
 } from '~/ui/base';
 import {
-  uiStatusModel,
-  useKeyboardDeviceStatus,
-  useKeyboardBehaviorModeModel,
   globalSettingsModel,
+  uiStatusModel,
+  useKeyboardBehaviorModeModel,
+  useKeyboardDeviceStatus,
 } from '~/ui/commonModels';
 import { useModalDisplayStateModel } from '~/ui/commonModels/GeneralUiStateModels';
 import { modalAlert, modalConfirm, modalTextEdit } from '~/ui/components';
@@ -140,10 +144,11 @@ const createProfile = async () => {
 
 const inputNewProfileName = async (
   caption: string,
+  defaultText: string,
 ): Promise<string | undefined> => {
   const newProfileName = await modalTextEdit({
     message: texts.label_assigner_profileNameEditModal_newProfileName,
-    defaultText: profilesModel.currentProfileName,
+    defaultText,
     caption,
   });
   if (newProfileName) {
@@ -159,10 +164,15 @@ const renameProfile = async () => {
   if (profilesModel.editSource.type !== 'InternalProfile') {
     return;
   }
-  const newProfileName = await inputNewProfileName(
-    texts.label_assigner_profileNameEditModal_modalTitleRename,
+  const { folderPart, filePart } = splitProjectProfileName(
+    profilesModel.currentProfileName,
   );
-  if (newProfileName) {
+  const newFilePart = await inputNewProfileName(
+    texts.label_assigner_profileNameEditModal_modalTitleRename,
+    filePart,
+  );
+  if (newFilePart) {
+    const newProfileName = joinProjectProfileName(folderPart, newFilePart);
     profilesModel.renameProfile(newProfileName);
   }
 };
@@ -171,10 +181,15 @@ const copyProfile = async () => {
   if (profilesModel.editSource.type !== 'InternalProfile') {
     return;
   }
-  const newProfileName = await inputNewProfileName(
-    texts.label_assigner_profileNameEditModal_modalTitleCopy,
+  const { folderPart, filePart } = splitProjectProfileName(
+    profilesModel.currentProfileName,
   );
-  if (newProfileName) {
+  const newFilePart = await inputNewProfileName(
+    texts.label_assigner_profileNameEditModal_modalTitleCopy,
+    filePart,
+  );
+  if (newFilePart) {
+    const newProfileName = joinProjectProfileName(folderPart, newFilePart);
     profilesModel.copyProfile(newProfileName);
   }
 };
@@ -199,10 +214,13 @@ const handleSaveUnsavedProfile = async () => {
   if (profilesModel.editSource.type === 'InternalProfile') {
     return;
   }
-  const newProfileName = await inputNewProfileName(
+  const newFilePart = await inputNewProfileName(
     texts.label_assigner_profileNameEditModal_modalTitleSave,
+    profilesModel.currentProfileName,
   );
-  if (newProfileName) {
+  if (newFilePart) {
+    const projectId = editorModel.profileData.projectId;
+    const newProfileName = joinProjectProfileName(projectId, newFilePart);
     profilesModel.saveUnsavedProfileAs(newProfileName);
   }
 };
