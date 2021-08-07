@@ -76,15 +76,19 @@ export class ProfileManager implements IProfileManager {
   });
 
   async initializeAsync() {
-    await this.core.ensureProfilesDirectoryExists();
-    await this.reEnumerateAllProfileEntries();
-    const loadedEditSource = this.loadInitialEditSource();
-    const editSource = this.fixEditSource(loadedEditSource);
-    const profile = await this.loadProfileByEditSource(editSource);
-    this.setStatus({
-      editSource,
-      loadedProfileData: profile,
-    });
+    try {
+      await this.core.ensureProfilesDirectoryExists();
+      await this.reEnumerateAllProfileEntries();
+      const loadedEditSource = this.loadInitialEditSource();
+      const editSource = this.fixEditSource(loadedEditSource);
+      const profile = await this.loadProfileByEditSource(editSource);
+      this.setStatus({
+        editSource,
+        loadedProfileData: profile,
+      });
+    } catch (error) {
+      console.error(error);
+    }
 
     globalSettingsProvider.globalConfigEventPort.subscribe(
       this.onGlobalSettingsChange,
