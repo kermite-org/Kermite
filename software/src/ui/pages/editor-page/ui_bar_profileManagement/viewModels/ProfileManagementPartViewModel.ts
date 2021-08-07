@@ -11,12 +11,7 @@ import {
   joinProjectProfileName,
   splitProjectProfileName,
 } from '~/shared/funcs/DomainRelatedHelpers';
-import {
-  ipcAgent,
-  ISelectorSource,
-  makePlainSelectorOption,
-  texts,
-} from '~/ui/base';
+import { ipcAgent, ISelectorOption, ISelectorSource, texts } from '~/ui/base';
 import {
   globalSettingsModel,
   uiStatusModel,
@@ -61,6 +56,14 @@ export interface IProfileManagementPartViewModel {
 
 export const profilesModel = new ProfilesModel(editorModel);
 
+function makeProfileNameSelectorOption(profileName: string): ISelectorOption {
+  const omitFolder = !!globalSettingsModel.globalSettings.globalProjectId;
+  return {
+    value: profileName,
+    label: omitFolder ? profileName.replace(/^.*\//, '') : profileName,
+  };
+}
+
 function makeProfileSelectionSource(
   allProfileNames: string[],
   editSource: IProfileEditSource,
@@ -76,7 +79,7 @@ function makeProfileSelectionSource(
     return {
       options: [
         { label: '(untitled)', value: '__NEWLY_CREATED_PROFILE__' },
-        ...allProfileNames.map(makePlainSelectorOption),
+        ...allProfileNames.map(makeProfileNameSelectorOption),
       ],
       value: '__NEWLY_CREATED_PROFILE__',
       setValue: loadProfile,
@@ -88,14 +91,14 @@ function makeProfileSelectionSource(
           label: `(file)${getFileNameFromPath(editSource.filePath)}`,
           value: '__EXTERNALY_LOADED_PROFILE__',
         },
-        ...allProfileNames.map(makePlainSelectorOption),
+        ...allProfileNames.map(makeProfileNameSelectorOption),
       ],
       value: '__EXTERNALY_LOADED_PROFILE__',
       setValue: loadProfile,
     };
   } else {
     return {
-      options: allProfileNames.map(makePlainSelectorOption),
+      options: allProfileNames.map(makeProfileNameSelectorOption),
       value: editSource.profileName,
       setValue: loadProfile,
     };
