@@ -2,12 +2,12 @@ import { IPersistProfileData, IProfileData, IProfileEntry } from '~/shared';
 import { appEnv } from '~/shell/base/AppEnv';
 import {
   fspCopyFile,
-  fspReaddir,
   fspRename,
   fspUnlink,
   fsxEnsureFolderExists,
   fsxMkdirpSync,
   fsxReadJsonFile,
+  globAsync,
   pathBasename,
   pathDirname,
 } from '~/shell/funcs';
@@ -32,12 +32,9 @@ export class ProfileManagerCore {
   }
 
   private async listAllProfileNames(): Promise<string[]> {
-    const fileNames = await fspReaddir(
-      appEnv.resolveUserDataFilePath(`data/profiles`),
-    );
-    return fileNames
-      .filter((fname) => fname.endsWith('.profile.json'))
-      .map((fname) => pathBasename(fname, '.profile.json'));
+    const profilesFolderPath = appEnv.resolveUserDataFilePath(`data/profiles`);
+    const fileNames = await globAsync('**/*.profile.json', profilesFolderPath);
+    return fileNames.map((fname) => fname.replace('.profile.json', ''));
   }
 
   async listAllProfileEntries(): Promise<IProfileEntry[]> {
