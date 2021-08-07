@@ -293,7 +293,7 @@ export class ProfileManager implements IProfileManager {
       projectId,
       presetSpec,
     );
-    await this.core.saveProfile(profileName, profileData);
+    await this.core.saveProfile(`${projectId}/${profileName}`, profileData);
     await this.reEnumerateAllProfileEntries();
     this.setStatus({
       editSource: {
