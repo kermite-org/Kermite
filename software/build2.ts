@@ -5,8 +5,12 @@ import open from 'open';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const servor = require('servor');
 
-const [opts] = cliopts.parse(['x-mockview', 'start mockview']);
+const [opts] = cliopts.parse(
+  ['x-mockview', 'start mockview'],
+  ['x-web', 'start web'],
+);
 const reqMockView = opts['x-mockview'];
+const reqWeb = opts['x-web'];
 
 type IKeyPressEvent = {
   sequence: string;
@@ -45,9 +49,9 @@ function launchDebugServer(distDir: string) {
   })();
 }
 
-function startMockView() {
-  const srcDir = './src/ui-mock-view';
-  const distDir = `./dist/ui_mock`;
+function startWatchPage(folderName: string) {
+  const srcDir = `./src/${folderName}`;
+  const distDir = `./dist/${folderName}`;
   fs.mkdirSync(distDir, { recursive: true });
   fs.copyFileSync(`${srcDir}/index.html`, `${distDir}/index.html`);
 
@@ -71,7 +75,10 @@ function startMockView() {
 
 function entry() {
   if (reqMockView) {
-    startMockView();
+    startWatchPage('ui-mock-view');
+  }
+  if (reqWeb) {
+    startWatchPage('web');
   }
 }
 
