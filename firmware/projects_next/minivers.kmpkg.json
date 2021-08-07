@@ -4,21 +4,25 @@
   "customFirmwareReferences": [
     {
       "variantName": "rev1",
-      "firmwareId": "FZiVsZ"
+      "firmwareId": "FZiVsZ",
+      "systemParameterKeys": [
+        "emitRealtimeEvents",
+        "keyHoldIndicatorLed",
+        "heartbeatLed",
+        "masterSide"
+      ]
     },
     {
       "variantName": "rev2_rp",
-      "firmwareId": "7zabZ0"
+      "firmwareId": "7zabZ0",
+      "systemParameterKeys": [
+        "emitRealtimeEvents",
+        "keyHoldIndicatorLed",
+        "heartbeatLed",
+        "masterSide"
+      ]
     }
   ],
-  "parameterConfigurations": {
-    "systemParameterKeys": [
-      "emitRealtimeEvents",
-      "keyHoldIndicatorLed",
-      "heartbeatLed",
-      "masterSide"
-    ]
-  },
   "layouts": [
     {
       "layoutName": "rev1",

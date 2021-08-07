@@ -4,16 +4,14 @@
   "customFirmwareReferences": [
     {
       "variantName": "atmega",
-      "firmwareId": "dFbA81"
+      "firmwareId": "dFbA81",
+      "systemParameterKeys": [
+        "emitRealtimeEvents",
+        "keyHoldIndicatorLed",
+        "heartbeatLed"
+      ]
     }
   ],
-  "parameterConfigurations": {
-    "systemParameterKeys": [
-      "emitRealtimeEvents",
-      "keyHoldIndicatorLed",
-      "heartbeatLed"
-    ]
-  },
   "layouts": [
     {
       "layoutName": "default",
@@ -725,9 +723,7 @@
             "layerId": "la867",
             "layerName": "xshift",
             "defaultScheme": "transparent",
-            "attachedModifiers": [
-              "K_Shift"
-            ],
+            "attachedModifiers": ["K_Shift"],
             "exclusionGroup": 0,
             "initialActive": false
           },
@@ -1254,10 +1250,7 @@
               "op": {
                 "type": "keyInput",
                 "virtualKey": "K_J",
-                "attachedModifiers": [
-                  "K_Shift",
-                  "K_Ctrl"
-                ]
+                "attachedModifiers": ["K_Shift", "K_Ctrl"]
               }
             }
           },
@@ -1522,10 +1515,7 @@
               "op": {
                 "type": "keyInput",
                 "virtualKey": "K_Semicolon",
-                "attachedModifiers": [
-                  "K_Shift",
-                  "K_Ctrl"
-                ]
+                "attachedModifiers": ["K_Shift", "K_Ctrl"]
               }
             }
           },

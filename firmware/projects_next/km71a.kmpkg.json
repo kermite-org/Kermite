@@ -4,20 +4,18 @@
   "customFirmwareReferences": [
     {
       "variantName": "rp",
-      "firmwareId": "O1lweX"
+      "firmwareId": "O1lweX",
+      "systemParameterKeys": [
+        "emitRealtimeEvents",
+        "keyHoldIndicatorLed",
+        "heartbeatLed",
+        "glowActive",
+        "glowColor",
+        "glowBrightness",
+        "glowPattern"
+      ]
     }
   ],
-  "parameterConfigurations": {
-    "systemParameterKeys": [
-      "emitRealtimeEvents",
-      "keyHoldIndicatorLed",
-      "heartbeatLed",
-      "glowActive",
-      "glowColor",
-      "glowBrightness",
-      "glowPattern"
-    ]
-  },
   "layouts": [
     {
       "layoutName": "default",
