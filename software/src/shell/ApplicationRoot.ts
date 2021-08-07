@@ -79,12 +79,12 @@ export class ApplicationRoot {
         windowWrapper.setDevToolsVisibility(visible),
       window_setWidgetAlwaysOnTop: async (enabled) =>
         windowWrapper.setWidgetAlwaysOnTop(enabled),
-      profile_getCurrentProfile: () =>
-        this.profileManager.getCurrentProfileAsync(),
+      profile_getCurrentProfile: async () =>
+        this.profileManager.getCurrentProfile(),
       profile_executeProfileManagerCommands: (commands) =>
         this.profileManager.executeCommands(commands),
-      profile_getAllProfileEntries: () =>
-        this.profileManager.getAllProfileEntriesAsync(),
+      profile_getAllProfileEntries: async () =>
+        this.profileManager.getAllProfileEntries(),
       profile_openUserProfilesFolder: () =>
         this.profileManager.openUserProfilesFolder(),
       layout_executeLayoutManagerCommands: (commands) =>
@@ -135,7 +135,7 @@ export class ApplicationRoot {
       config_writeKeyboardConfig: async (config) =>
         this.keyboardConfigProvider.writeKeyboardConfig(config),
       config_writeKeyMappingToDevice: async () => {
-        const profile = await this.profileManager.getCurrentProfileAsync();
+        const profile = this.profileManager.getCurrentProfile();
         if (profile) {
           return await this.deviceService.emitKeyAssignsToDevice(profile);
         }

@@ -252,7 +252,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     }
   }
 
-  private async adjustWindowSizeOnModeChange() {
+  private adjustWindowSizeOnModeChange() {
     if (!this.mainWindow) {
       return;
     }
@@ -266,7 +266,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
         this.mainWindow.setBounds(this.state.widgetWindowBounds);
       } else {
         // widgetモーで前回と異なるキーボードを表示する場合デフォルトのウインドウサイズを算出して設定する
-        const currentProfile = await this.profileManager.getCurrentProfileAsync();
+        const currentProfile = this.profileManager.getCurrentProfile();
         if (currentProfile) {
           const design = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
             currentProfile.keyboardDesign,

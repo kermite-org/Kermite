@@ -126,11 +126,11 @@ export class ProfileManager implements IProfileManager {
     return this.status.loadedProfileData?.projectId;
   }
 
-  async getAllProfileEntriesAsync(): Promise<IProfileEntry[]> {
+  getAllProfileEntries(): IProfileEntry[] {
     return this.status.allProfileEntries;
   }
 
-  async getCurrentProfileAsync(): Promise<IProfileData | undefined> {
+  getCurrentProfile(): IProfileData | undefined {
     if (this.status.editSource.type === 'NoProfilesAvailable') {
       return undefined;
     }
