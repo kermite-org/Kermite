@@ -3,18 +3,16 @@ import { fsxListFileBaseNames, fsxReadJsonFile, pathJoin } from '~/shell/funcs';
 import { globalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 
 interface IProjectPackageProvider {
-  getAllProjectResourceInfos(): Promise<IProjectPackageInfo[]>;
+  getAllProjectPackageInfos(): Promise<IProjectPackageInfo[]>;
 }
 
-async function loadLocalProjectResourceInfos(): Promise<IProjectPackageInfo[]> {
+async function loadLocalProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
   const localRepositoryDir = globalSettingsProvider.getLocalRepositoryDir();
   if (!localRepositoryDir) {
     return [];
   }
-
   const packagesRoot = pathJoin(localRepositoryDir, 'firmware/projects_next');
   const packageNames = await fsxListFileBaseNames(packagesRoot, '.kmpkg.json');
-  console.log({ packageNames });
   return await Promise.all(
     packageNames.map(async (packageName) => {
       const filePath = pathJoin(packagesRoot, packageName + '.kmpkg.json');
@@ -26,9 +24,9 @@ async function loadLocalProjectResourceInfos(): Promise<IProjectPackageInfo[]> {
 export class ProjectPackageProvider implements IProjectPackageProvider {
   private cached: IProjectPackageInfo[] | undefined;
 
-  async getAllProjectResourceInfos(): Promise<IProjectPackageInfo[]> {
+  async getAllProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
     if (!this.cached) {
-      this.cached = await loadLocalProjectResourceInfos();
+      this.cached = await loadLocalProjectPackageInfos();
     }
     return this.cached;
   }
