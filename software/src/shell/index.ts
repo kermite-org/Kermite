@@ -1,6 +1,7 @@
 import 'source-map-support/register';
 import { app } from 'electron';
 import { ApplicationRoot } from '~/shell/ApplicationRoot';
+import { shellDevelopmentEntry } from '~/shell/DevelopmentEntry';
 import { appEnv, appGlobal } from '~/shell/base';
 
 let appRoot: ApplicationRoot | undefined;
@@ -9,6 +10,8 @@ async function startApplication() {
   console.log('start');
   appRoot = new ApplicationRoot();
   await appRoot.initialize();
+
+  await shellDevelopmentEntry();
 }
 
 async function endApplication() {
