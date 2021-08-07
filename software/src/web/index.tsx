@@ -1,5 +1,6 @@
 import { applyGlobalStyle, css, FC, jsx, render, rerender } from 'qx';
 import { debounce } from '~/shared';
+import { DeviceDevelopmentPage } from '~/web/DeviceDevelopmentPage';
 
 applyGlobalStyle(css`
   * {
@@ -25,7 +26,11 @@ applyGlobalStyle(css`
 `);
 
 const PageRoot: FC = () => {
-  return <div>hello</div>;
+  return (
+    <div>
+      <DeviceDevelopmentPage />
+    </div>
+  );
 };
 
 window.addEventListener('load', () => {
