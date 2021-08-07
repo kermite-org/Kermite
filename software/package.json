@@ -46,6 +46,7 @@
     "incver": "npm version patch"
   },
   "dependencies": {
+    "@types/w3c-web-hid": "^1.0.2",
     "fast-equals": "^2.0.0",
     "glob": "^7.1.6",
     "immer": "^9.0.1",
