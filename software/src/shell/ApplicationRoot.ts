@@ -214,6 +214,7 @@ export class ApplicationRoot {
     await executeWithFatalErrorHandler(async () => {
       console.log(`initialize services`);
       await applicationStorage.initializeAsync();
+      await this.profileManager.initializeAsync();
       this.setupIpcBackend();
       this.windowWrapper.initialize();
       setupGlobalSettingsFixer();
@@ -235,6 +236,7 @@ export class ApplicationRoot {
       this.inputLogicSimulator.terminate();
       this.deviceService.terminate();
       this.windowWrapper.terminate();
+      this.profileManager.terminate();
       await applicationStorage.terminateAsync();
     });
   }

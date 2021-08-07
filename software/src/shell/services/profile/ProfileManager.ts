@@ -26,18 +26,6 @@ import { globalSettingsProvider } from '~/shell/services/config/GlobalSettingsPr
 import { IPresetProfileLoader, IProfileManager } from './Interfaces';
 import { ProfileManagerCore } from './ProfileManagerCore';
 
-function createLazyInitializer(
-  taskCreator: () => Promise<void>,
-): () => Promise<void> {
-  let task: Promise<void> | undefined;
-  return async () => {
-    if (!task) {
-      task = taskCreator();
-    }
-    await task;
-  };
-}
-
 function createInternalProfileEditSourceOrFallback(
   profileEntry?: IProfileEntry,
 ): IProfileEditSource {
@@ -84,21 +72,26 @@ export class ProfileManager implements IProfileManager {
   }
 
   statusEventPort = createEventPort<Partial<IProfileManagerStatus>>({
-    onFirstSubscriptionStarting: () => {
-      this.lazyInitializer();
-      this.startLifecycle();
-    },
-    onLastSubscriptionEnded: () => this.endLifecycle(),
     initialValueGetter: () => this.status,
   });
 
-  private startLifecycle() {
+  async initializeAsync() {
+    await this.core.ensureProfilesDirectoryExists();
+    await this.reEnumerateAllProfileEntries();
+    const loadedEditSource = this.loadInitialEditSource();
+    const editSource = this.fixEditSource(loadedEditSource);
+    const profile = await this.loadProfileByEditSource(editSource);
+    this.setStatus({
+      editSource,
+      loadedProfileData: profile,
+    });
+
     globalSettingsProvider.globalConfigEventPort.subscribe(
       this.onGlobalSettingsChange,
     );
   }
 
-  private endLifecycle() {
+  terminate() {
     globalSettingsProvider.globalConfigEventPort.unsubscribe(
       this.onGlobalSettingsChange,
     );
@@ -129,29 +122,15 @@ export class ProfileManager implements IProfileManager {
     this.setStatus({ allProfileEntries, visibleProfileEntries });
   }
 
-  private lazyInitializer = createLazyInitializer(async () => {
-    await this.core.ensureProfilesDirectoryExists();
-    await this.reEnumerateAllProfileEntries();
-    const loadedEditSource = this.loadInitialEditSource();
-    const editSource = this.fixEditSource(loadedEditSource);
-    const profile = await this.loadProfileByEditSource(editSource);
-    this.setStatus({
-      editSource,
-      loadedProfileData: profile,
-    });
-  });
-
   getCurrentProfileProjectId(): string {
     return this.status.loadedProfileData?.projectId;
   }
 
   async getAllProfileEntriesAsync(): Promise<IProfileEntry[]> {
-    await this.lazyInitializer();
     return this.status.allProfileEntries;
   }
 
   async getCurrentProfileAsync(): Promise<IProfileData | undefined> {
-    await this.lazyInitializer();
     if (this.status.editSource.type === 'NoProfilesAvailable') {
       return undefined;
     }
