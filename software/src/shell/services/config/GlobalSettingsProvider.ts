@@ -27,12 +27,12 @@ export class GlobalSettingsProvider {
     this._globalSettings = settings;
   }
 
-  getGlobalSettings(): IGlobalSettings {
+  get globalSettings(): IGlobalSettings {
     return this._globalSettings;
   }
 
   globalConfigEventPort = createEventPort<Partial<IGlobalSettings>>({
-    initialValueGetter: () => this.getGlobalSettings(),
+    initialValueGetter: () => this._globalSettings,
   });
 
   writeGlobalSettings(partialConfig: Partial<IGlobalSettings>) {

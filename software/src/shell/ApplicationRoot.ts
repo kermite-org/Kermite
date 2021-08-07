@@ -142,14 +142,14 @@ export class ApplicationRoot {
         return false;
       },
       config_getGlobalSettings: async () =>
-        globalSettingsProvider.getGlobalSettings(),
+        globalSettingsProvider.globalSettings,
       config_writeGlobalSettings: async (settings) =>
         globalSettingsProvider.writeGlobalSettings(settings),
       config_getProjectRootDirectoryPath: async () => {
         if (appEnv.isDevelopment) {
           return pathResolve('..');
         } else {
-          const settings = globalSettingsProvider.getGlobalSettings();
+          const settings = globalSettingsProvider.globalSettings;
           return settings.localProjectRootFolderPath;
         }
       },

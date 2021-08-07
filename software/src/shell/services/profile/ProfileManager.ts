@@ -149,7 +149,7 @@ export class ProfileManager implements IProfileManager {
   }
 
   private getVisibleProfiles(allProfiles: IProfileEntry[]): IProfileEntry[] {
-    const { globalProjectId } = globalSettingsProvider.getGlobalSettings();
+    const { globalProjectId } = globalSettingsProvider.globalSettings;
     if (globalProjectId) {
       return allProfiles.filter((it) => it.projectId === globalProjectId);
     } else {
@@ -158,7 +158,7 @@ export class ProfileManager implements IProfileManager {
   }
 
   private fixEditSource(editSource: IProfileEditSource): IProfileEditSource {
-    const { globalProjectId } = globalSettingsProvider.getGlobalSettings();
+    const { globalProjectId } = globalSettingsProvider.globalSettings;
     if (globalProjectId) {
       if (
         editSource.type === 'InternalProfile' &&
