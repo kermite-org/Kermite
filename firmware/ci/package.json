@@ -9,7 +9,8 @@
     "checkHardcodedVersions": "ts-node checkHardcodedVersions.ts",
     "checkProjectJsonSchemas": "ts-node -r tsconfig-paths/register checkProjectJsonSchemas.ts",
     "checkProjectIds": "ts-node checkProjectIds.ts",
-    "updateAllProjectDistributions": "ts-node updateAllProjectDistributions.ts"
+    "updateAllProjectDistributions": "ts-node updateAllProjectDistributions.ts",
+    "convertProjects": "ts-node convertProjects.ts"
   },
   "dependencies": {
     "@types/fs-extra": "^9.0.4",
