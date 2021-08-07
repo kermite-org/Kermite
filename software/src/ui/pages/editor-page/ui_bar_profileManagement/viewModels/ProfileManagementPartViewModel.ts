@@ -198,10 +198,13 @@ const deleteProfile = async () => {
   if (profilesModel.editSource.type !== 'InternalProfile') {
     return;
   }
+  const { filePart } = splitProjectProfileName(
+    profilesModel.currentProfileName,
+  );
   const ok = await modalConfirm({
     message: texts.label_assigner_confirmModal_deleteProfile_modalMessage.replace(
       '{PROFILE_NAME}',
-      profilesModel.currentProfileName,
+      filePart,
     ),
     caption: texts.label_assigner_confirmModal_deleteProfile_modalTitle,
   });
