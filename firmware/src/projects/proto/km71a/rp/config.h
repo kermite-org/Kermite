@@ -1,6 +1,6 @@
 #pragma once
 
-#define KERMITE_FIRMWARE_ID "wHvGTW"
+#define KERMITE_FIRMWARE_ID "O1lweX"
 
 #define KS_NUM_SCAN_SLOTS 75
 

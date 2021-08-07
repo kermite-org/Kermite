@@ -1,6 +1,12 @@
 {
   "projectId": "wHvGTW",
   "keyboardName": "KM71A",
+  "customFirmwareReferences": [
+    {
+      "variantName": "rp",
+      "firmwareId": "O1lweX"
+    }
+  ],
   "parameterConfigurations": {
     "systemParameterKeys": [
       "emitRealtimeEvents",
