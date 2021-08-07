@@ -1,6 +1,6 @@
 #pragma once
 
-#define KERMITE_PROJECT_ID "K3e89X"
+#define KERMITE_FIRMWARE_ID "K3e89X"
 #define KM0_KEYBOARD__NUM_SCAN_SLOTS 70
 
 #define KS_NUM_COLUMNS 7

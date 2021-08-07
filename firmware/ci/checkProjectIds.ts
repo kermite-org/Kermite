@@ -42,7 +42,7 @@ function loadProjectInfo(projectVariationPath: string): IProjectInfo {
   const configContent = fsxReadTextFile(configFilePath);
   const configProjectId = getMatched(
     configContent,
-    /^#define KERMITE_PROJECT_ID "([a-zA-Z0-9]+)"$/m
+    /^#define KERMITE_FIRMWARE_ID "([a-zA-Z0-9]+)"$/m
   );
 
   try {
@@ -51,7 +51,7 @@ function loadProjectInfo(projectVariationPath: string): IProjectInfo {
     }
 
     if (!configProjectId) {
-      throw `KERMITE_PROJECT_ID is not defined in ${projectVariationPath}/config.h`;
+      throw `KERMITE_FIRMWARE_ID is not defined in ${projectVariationPath}/config.h`;
     }
 
     if (!projectId?.match(/^[a-zA-Z0-9]{6}$/)) {

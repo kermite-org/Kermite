@@ -1,6 +1,6 @@
 #pragma once
 
-#define KERMITE_PROJECT_ID "dx5kE9"
+#define KERMITE_FIRMWARE_ID "dx5kE9"
 
 #define KS_NUM_SCAN_SLOTS 15
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#define KERMITE_PROJECT_ID "LN9M6T"
+#define KERMITE_FIRMWARE_ID "LN9M6T"
 
 #define KM0_KEYBOARD__NUM_SCAN_SLOTS 4
 

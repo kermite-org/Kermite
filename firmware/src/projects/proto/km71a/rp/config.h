@@ -1,6 +1,6 @@
 #pragma once
 
-#define KERMITE_PROJECT_ID "wHvGTW"
+#define KERMITE_FIRMWARE_ID "wHvGTW"
 
 #define KS_NUM_SCAN_SLOTS 75
 
@@ -15,4 +15,3 @@
 
 #define KS_ROW_PINS \
   { GP16, GP17, GP18, GP19, GP20 }
-  

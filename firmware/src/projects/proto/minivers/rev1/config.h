@@ -1,6 +1,6 @@
 #pragma once
 
-#define KERMITE_PROJECT_ID "Di6V4K"
+#define KERMITE_FIRMWARE_ID "Di6V4K"
 
 #define KS_SNGLEWIRE_PIN D2
 
