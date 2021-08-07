@@ -1,5 +1,5 @@
 import { texts, router } from '~/ui/base';
-import { PagePaths } from '~/ui/commonModels';
+import { globalSettingsModel, PagePaths } from '~/ui/commonModels';
 
 export interface NavigationEntryViewModel {
   pagePath: PagePaths;
@@ -19,18 +19,6 @@ interface NavigationEntrySource {
 }
 
 const entrySources: NavigationEntrySource[] = [
-  {
-    pagePath: '/home',
-    pageName: 'home',
-    iconSpec: 'fa fa-home',
-    hint: 'home',
-  },
-  {
-    pagePath: '/projectSelection',
-    pageName: texts.label_sideMenu_app_projectSelection,
-    iconSpec: 'fa fa-book-open',
-    hint: 'project selection',
-  },
   {
     pagePath: '/editor',
     pageName: texts.label_sideMenu_app_assigner,
@@ -60,6 +48,7 @@ const entrySources: NavigationEntrySource[] = [
     pageName: texts.label_sideMenu_app_shapePreview,
     iconSpec: 'fa fa-file-code',
     hint: texts.hint_sideMenu_app_shapePreview,
+    isAvailable: () => globalSettingsModel.isDeveloperMode,
   },
   {
     pagePath: '/firmwareUpdation',
@@ -72,6 +61,18 @@ const entrySources: NavigationEntrySource[] = [
     pageName: texts.label_sideMenu_app_settings,
     iconSpec: 'fa fa-cog',
     hint: texts.hint_sideMenu_app_settings,
+  },
+  {
+    pagePath: '/projectSelection',
+    pageName: texts.label_sideMenu_app_projectSelection,
+    iconSpec: 'fa fa-globe',
+    hint: 'project selection',
+  },
+  {
+    pagePath: '/home',
+    pageName: 'entrance',
+    iconSpec: 'fa fa-door-open',
+    hint: 'start',
   },
 ];
 

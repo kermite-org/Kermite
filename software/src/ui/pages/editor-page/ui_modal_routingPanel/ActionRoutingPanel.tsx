@@ -42,6 +42,7 @@ export const ActionRoutingPanel: FcWithClassName = ({ className }) => {
 
   return (
     <div css={style} class={className}>
+      <div class="overlay" onClick={handleClose} />
       <div class="panel">
         <div class="closeButton" onClick={handleClose}>
           <i class="fa fa-times" />
@@ -122,6 +123,15 @@ const style = css`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  > .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+  }
 
   > .panel {
     position: absolute;

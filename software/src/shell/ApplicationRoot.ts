@@ -5,6 +5,8 @@ import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
+import { checkLocalRepositoryFolder } from '~/shell/projectResources/LocalResourceHelper';
+import { setupGlobalSettingsFixer } from '~/shell/services/config/GlobalSettingsFixer';
 import { globalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
 import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
@@ -81,8 +83,8 @@ export class ApplicationRoot {
         this.profileManager.getCurrentProfileAsync(),
       profile_executeProfileManagerCommands: (commands) =>
         this.profileManager.executeCommands(commands),
-      profile_getAllProfileNames: () =>
-        this.profileManager.getAllProfileNamesAsync(),
+      profile_getAllProfileEntries: () =>
+        this.profileManager.getAllProfileEntriesAsync(),
       profile_openUserProfilesFolder: () =>
         this.profileManager.openUserProfilesFolder(),
       layout_executeLayoutManagerCommands: (commands) =>
@@ -151,6 +153,8 @@ export class ApplicationRoot {
           return settings.localProjectRootFolderPath;
         }
       },
+      config_checkLocalRepositoryFolderPath: async (path) =>
+        checkLocalRepositoryFolder(path),
       file_getOpenJsonFilePathWithDialog:
         JsonFileServiceStatic.getOpeningJsonFilePathWithDialog,
       file_getSaveJsonFilePathWithDialog:
@@ -212,6 +216,7 @@ export class ApplicationRoot {
       await applicationStorage.initializeAsync();
       this.setupIpcBackend();
       this.windowWrapper.initialize();
+      setupGlobalSettingsFixer();
     });
   }
 

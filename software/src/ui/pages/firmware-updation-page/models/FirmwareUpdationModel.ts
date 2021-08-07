@@ -5,10 +5,10 @@ import {
   IFirmwareTargetDevice,
   IProjectResourceInfo,
 } from '~/shared';
-import { ipcAgent } from '~/ui/base';
+import { ipcAgent, ISelectorSource } from '~/ui/base';
 import {
   fetchAllProjectResourceInfos,
-  fetchGlobalSettings,
+  globalSettingsModel,
   uiStatusModel,
 } from '~/ui/commonModels';
 import { modalAlert } from '~/ui/components';
@@ -69,6 +69,21 @@ export class FirmwareUpdationModel {
       ),
     );
     return [blankOption, ...projectOptions];
+  }
+
+  getProjectSelectionSource(): ISelectorSource {
+    if (
+      !this.projectOptions.some(
+        (option) => option.value === this.currentProjectFirmwareSpec,
+      )
+    ) {
+      this.currentProjectFirmwareSpec = '';
+    }
+    return {
+      options: this.projectOptions,
+      value: this.currentProjectFirmwareSpec,
+      setValue: this.setCurrentProjectFirmwareSpec,
+    };
   }
 
   get canSelectTargetFirmware() {
@@ -152,7 +167,7 @@ export class FirmwareUpdationModel {
   };
 
   private async fechProjectInfos() {
-    const { globalProjectId } = await fetchGlobalSettings();
+    const { globalProjectId } = globalSettingsModel.globalSettings;
     this.projectInfosWithFirmware = (await fetchAllProjectResourceInfos())
       .filter(
         (info) => globalProjectId === '' || info.projectId === globalProjectId,

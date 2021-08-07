@@ -15,6 +15,7 @@ import {
   IRealtimeKeyboardEvent,
   IKeyboardDeviceStatus,
   IBootloaderDeviceDetectionStatus,
+  IProfileEntry,
 } from '~/shared/defs/DomainTypes';
 import { IPersistKeyboardDesign } from '~/shared/defs/KeyboardDesign';
 import { IGlobalSettings, IKeyboardConfig } from './ConfigTypes';
@@ -37,7 +38,7 @@ export interface IAppIpcContract {
     window_reloadPage(): Promise<void>;
 
     profile_getCurrentProfile(): Promise<IProfileData | undefined>;
-    profile_getAllProfileNames(): Promise<string[]>;
+    profile_getAllProfileEntries(): Promise<IProfileEntry[]>;
     profile_executeProfileManagerCommands(
       commands: IProfileManagerCommand[],
     ): Promise<void>;
@@ -54,8 +55,12 @@ export interface IAppIpcContract {
     config_writeKeyMappingToDevice(): Promise<boolean>;
 
     config_getGlobalSettings(): Promise<IGlobalSettings>;
-    config_writeGlobalSettings(settings: IGlobalSettings): Promise<void>;
+    config_writeGlobalSettings(
+      settings: Partial<IGlobalSettings>,
+    ): Promise<void>;
+
     config_getProjectRootDirectoryPath(): Promise<string>;
+    config_checkLocalRepositoryFolderPath(path: string): Promise<boolean>;
 
     projects_getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
     projects_getProjectCustomDefinition(

@@ -13,8 +13,9 @@ import {
 } from '~/ui/base';
 import {
   useAllProjectResourceInfos,
-  useGlobalSettingsFetch,
   readGlobalProjectKey,
+  globalSettingsModel,
+  readSettingsResouceOrigin,
 } from '~/ui/commonModels';
 import { fieldSetter } from '~/ui/helpers';
 import { editSelectedProjectPreset as editSelectedProjectPresetOriginal } from '~/ui/pages/preset-browser-page/models/ProfileCreator';
@@ -30,14 +31,24 @@ export interface IPresetSelectionModel {
   editSelectedProjectPreset(): void;
 }
 
+function getProjectSelectionLabel(info: IProjectResourceInfo): string {
+  const isDeveloperMode = globalSettingsModel.getValue('useLocalResouces');
+  if (isDeveloperMode) {
+    const prefix = info.origin === 'local' ? '(local) ' : '';
+    return `${prefix}${info.keyboardName} (${info.projectPath})`;
+  } else {
+    return info.keyboardName;
+  }
+}
+
 function makeProjectOptions(infos: IProjectResourceInfo[]): ISelectorOption[] {
   return infos
-    .filter((it) => it.presetNames.length > 0 || it.layoutNames.length > 0)
-    .map((it) => ({
-      value: it.sig,
-      label: `${it.origin === 'local' ? '(local) ' : ''}${it.keyboardName} (${
-        it.projectPath
-      })`,
+    .filter(
+      (info) => info.presetNames.length > 0 || info.layoutNames.length > 0,
+    )
+    .map((info) => ({
+      value: info.sig,
+      label: getProjectSelectionLabel(info),
     }));
 }
 
@@ -78,9 +89,8 @@ function useFileterdResourceInfos(
   globalSettings: IGlobalSettings,
 ) {
   return useMemo(() => {
-    const { useLocalResouces, globalProjectId } = globalSettings;
-    const targetOrigin = useLocalResouces ? 'local' : 'online';
-
+    const { globalProjectId } = globalSettings;
+    const targetOrigin = readSettingsResouceOrigin(globalSettings);
     return allProjectInfos
       .filter((info) => info.origin === targetOrigin)
       .filter(
@@ -100,9 +110,7 @@ export function usePresetSelectionModel(): IPresetSelectionModel {
     presetKey: '',
   });
 
-  const globalSettings = useGlobalSettingsFetch();
-  // console.log({ globalSettings });
-
+  const { globalSettings } = globalSettingsModel;
   const allProjectInfos = useAllProjectResourceInfos();
 
   const resourceInfos = useFileterdResourceInfos(
@@ -111,12 +119,14 @@ export function usePresetSelectionModel(): IPresetSelectionModel {
   );
 
   const projectOptions = makeProjectOptions(resourceInfos);
-  const presetOptions = makePresetOptions(resourceInfos, sel.projectKey);
 
   const modProjectKey = getSelectionValueCorrected(
     projectOptions,
     sel.projectKey,
   );
+
+  const presetOptions = makePresetOptions(resourceInfos, modProjectKey);
+
   const modPresetKey = getSelectionValueCorrected(presetOptions, sel.presetKey);
 
   // console.log({ projectOptions, presetOptions, modProjectKey, modPresetKey });

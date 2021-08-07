@@ -16,8 +16,8 @@ import {
 import {
   uiStatusModel,
   useKeyboardDeviceStatus,
-  useGlobalSettingsFetch,
   useKeyboardBehaviorModeModel,
+  globalSettingsModel,
 } from '~/ui/commonModels';
 import { useModalDisplayStateModel } from '~/ui/commonModels/GeneralUiStateModels';
 import { modalAlert, modalConfirm, modalTextEdit } from '~/ui/components';
@@ -110,7 +110,9 @@ const checkValidNewProfileName = async (
 
   const lowered = newProfileName.toLowerCase();
   if (
-    profilesModel.allProfileNames.find((name) => name.toLowerCase() === lowered)
+    profilesModel.allProfileEntries.find(
+      (it) => it.profileName.toLowerCase() === lowered,
+    )
   ) {
     await modalAlert(
       `${newProfileName} is already exists. operation cancelled.`,
@@ -257,7 +259,7 @@ function getCanWrite(
   deviceStatus: IKeyboardDeviceStatus,
   globalSettings: IGlobalSettings,
 ): boolean {
-  const { allowCrossKeyboardKeyMappingWrite } = globalSettings;
+  const { developerMode, allowCrossKeyboardKeyMappingWrite } = globalSettings;
   const { editSource } = profilesModel;
 
   const isInternalProfile = editSource.type === 'InternalProfile';
@@ -267,7 +269,7 @@ function getCanWrite(
   const refProjectId = editorModel.profileData.projectId;
   const isProjectMatched = deviceStatus.deviceAttrs?.projectId === refProjectId;
 
-  if (allowCrossKeyboardKeyMappingWrite) {
+  if (developerMode && allowCrossKeyboardKeyMappingWrite) {
     return isInternalProfile && isDeviceConnected;
   } else {
     return isInternalProfile && isDeviceConnected && isProjectMatched;
@@ -320,11 +322,13 @@ const toggleRoutingPanel = () => {
 export function makeProfileManagementPartViewModel(): IProfileManagementPartViewModel {
   useEffect(profilesModel.startPageSession, []);
 
-  const { editSource, allProfileNames, saveProfile } = profilesModel;
+  const { editSource, allProfileEntries, saveProfile } = profilesModel;
+
+  const allProfileNames = allProfileEntries.map((it) => it.profileName);
 
   const deviceStatus = useKeyboardDeviceStatus();
 
-  const globalSettings = useGlobalSettingsFetch();
+  const { globalSettings } = globalSettingsModel;
 
   const { isSimulatorMode } = useKeyboardBehaviorModeModel();
 

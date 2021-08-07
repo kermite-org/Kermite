@@ -5,17 +5,27 @@ import {
 } from '~/shared';
 import { applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
+import { checkLocalRepositoryFolder } from '~/shell/projectResources/LocalResourceHelper';
 
 export class GlobalSettingsProvider {
   private _globalSettings: IGlobalSettings = globalSettingsDefault;
 
+  settingsFixerCallback: ((diff: Partial<IGlobalSettings>) => void) | undefined;
+
   getGlobalSettings(): IGlobalSettings {
     if (this._globalSettings === globalSettingsDefault) {
-      this._globalSettings = applicationStorage.readItemBasedOnDefault(
+      const settings = applicationStorage.readItemBasedOnDefault(
         'globalSettings',
         globalSettingsLoadingSchema,
         globalSettingsDefault,
       );
+      if (settings.localProjectRootFolderPath) {
+        if (!checkLocalRepositoryFolder(settings.localProjectRootFolderPath)) {
+          console.warn('invalid local repository folder setting');
+          settings.localProjectRootFolderPath = '';
+        }
+      }
+      this._globalSettings = settings;
     }
     return this._globalSettings;
   }
@@ -31,6 +41,8 @@ export class GlobalSettingsProvider {
     };
     applicationStorage.writeItem('globalSettings', this._globalSettings);
     this.globalConfigEventPort.emit(partialConfig);
+
+    this.settingsFixerCallback?.(partialConfig);
   }
 }
 export const globalSettingsProvider = new GlobalSettingsProvider();
