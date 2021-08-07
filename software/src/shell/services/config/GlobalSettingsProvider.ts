@@ -12,21 +12,22 @@ export class GlobalSettingsProvider {
 
   settingsFixerCallback: ((diff: Partial<IGlobalSettings>) => void) | undefined;
 
-  getGlobalSettings(): IGlobalSettings {
-    if (this._globalSettings === globalSettingsDefault) {
-      const settings = applicationStorage.readItemBasedOnDefault(
-        'globalSettings',
-        globalSettingsLoadingSchema,
-        globalSettingsDefault,
-      );
-      if (settings.localProjectRootFolderPath) {
-        if (!checkLocalRepositoryFolder(settings.localProjectRootFolderPath)) {
-          console.warn('invalid local repository folder setting');
-          settings.localProjectRootFolderPath = '';
-        }
+  initialize() {
+    const settings = applicationStorage.readItemBasedOnDefault(
+      'globalSettings',
+      globalSettingsLoadingSchema,
+      globalSettingsDefault,
+    );
+    if (settings.localProjectRootFolderPath) {
+      if (!checkLocalRepositoryFolder(settings.localProjectRootFolderPath)) {
+        console.warn('invalid local repository folder setting');
+        settings.localProjectRootFolderPath = '';
       }
-      this._globalSettings = settings;
     }
+    this._globalSettings = settings;
+  }
+
+  getGlobalSettings(): IGlobalSettings {
     return this._globalSettings;
   }
 
