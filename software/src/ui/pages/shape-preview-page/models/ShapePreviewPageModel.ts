@@ -43,7 +43,7 @@ export function useShapePreviewPageModel(): IShapePreviewPageModel {
         value: info.sig,
         label: `${info.origin === 'local' ? '(local) ' : ''} ${
           info.keyboardName
-        } (${info.projectPath})`,
+        }`,
       })),
       value: shapesModel.currentProjectSig,
       setValue: shapesModel.setCurrentProjectSig,
