@@ -37,6 +37,8 @@ export interface IProjectResourceInfo {
 }
 
 export interface IProjectPackageInfo {
+  sig: string; // ${origin}#${projectId}
+  origin: IResourceOrigin;
   projectId: string;
   keyboardName: string;
   customFirmwareReferences: {
