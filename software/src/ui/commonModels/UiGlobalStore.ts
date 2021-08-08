@@ -1,5 +1,9 @@
 import { IProjectPackageInfo } from '~/shared';
 
-export const uiGlobalStore = new (class {
-  allProjectPackageInfos: IProjectPackageInfo[] = [];
-})();
+type IUiGlobalStore = {
+  allProjectPackageInfos: IProjectPackageInfo[];
+};
+
+export const uiGlobalStore: IUiGlobalStore = {
+  allProjectPackageInfos: [],
+};
