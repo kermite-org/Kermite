@@ -137,7 +137,8 @@ const createProfile = async () => {
     const nameValid = await checkValidNewProfileName(profileName);
     if (nameValid) {
       const { origin, projectId } = getProjectOriginAndIdFromSig(projectKey);
-      profilesModel.createProfile(profileName, origin, projectId, {
+      const fullProfileName = joinProjectProfileName(projectId, profileName);
+      profilesModel.createProfile(fullProfileName, origin, projectId, {
         type: 'blank',
         layoutName: layoutKey,
       });
