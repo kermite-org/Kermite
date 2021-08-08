@@ -4,6 +4,7 @@ import { getAppErrorData, IPresetSpec, makeCompactStackTrace } from '~/shared';
 import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
+import { projectPackageProvider } from '~/shell/projectPackages/ProjectPackageProvider';
 import { projectResourceProvider } from '~/shell/projectResources';
 import { checkLocalRepositoryFolder } from '~/shell/projectResources/LocalResourceHelper';
 import { setupGlobalSettingsFixer } from '~/shell/services/config/GlobalSettingsFixer';
@@ -128,6 +129,8 @@ export class ApplicationRoot {
           profileId,
           presetSpec,
         ),
+      projects_getAllProjectPackageInfos: () =>
+        projectPackageProvider.getAllProjectPackageInfos(),
       presetHub_getServerProjectIds: () =>
         this.presetHubService.getServerProjectIds(),
       presetHub_getServerProfiles: (projectId: string) =>
