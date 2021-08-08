@@ -1,7 +1,7 @@
 import { jsx, useInlineEffect, useLocal } from 'qx';
 import { IProjectResourceInfo } from '~/shared';
 import { ISelectorOption } from '~/ui/base';
-import { useProjectResourceInfos } from '~/ui/commonModels';
+import { useProjectResourceInfosFilteredByGlobalProjectSelection } from '~/ui/commonModels';
 import {
   ClosableOverlay,
   CommonDialogFrame,
@@ -123,7 +123,7 @@ function useProfileSetupModalViewModel(): IProfileSetupModalViewModel {
     layoutKey: '',
   });
 
-  const resourceInfos = useProjectResourceInfos();
+  const resourceInfos = useProjectResourceInfosFilteredByGlobalProjectSelection();
   const projectOptions = useMemoEx(makeProjectOptions, [resourceInfos]);
 
   useInlineEffect(() => {
