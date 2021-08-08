@@ -107,6 +107,7 @@ function makeProfileSelectionSource(
 
 const checkValidNewProfileName = async (
   newProfileName: string,
+  projectId: string,
 ): Promise<boolean> => {
   if (!newProfileName.match(/^[^/./\\:*?"<>|]+$/)) {
     await modalAlert(
@@ -115,7 +116,8 @@ const checkValidNewProfileName = async (
     return false;
   }
 
-  const lowered = newProfileName.toLowerCase();
+  const newFullName = joinProjectProfileName(projectId, newProfileName);
+  const lowered = newFullName.toLowerCase();
   if (
     profilesModel.allProfileEntries.find(
       (it) => it.profileName.toLowerCase() === lowered,
@@ -134,9 +136,9 @@ const createProfile = async () => {
   // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
   if (res && res.profileName && res.projectKey && res.layoutKey) {
     const { profileName, projectKey, layoutKey } = res;
-    const nameValid = await checkValidNewProfileName(profileName);
+    const { origin, projectId } = getProjectOriginAndIdFromSig(projectKey);
+    const nameValid = await checkValidNewProfileName(profileName, projectId);
     if (nameValid) {
-      const { origin, projectId } = getProjectOriginAndIdFromSig(projectKey);
       const fullProfileName = joinProjectProfileName(projectId, profileName);
       profilesModel.createProfile(fullProfileName, origin, projectId, {
         type: 'blank',
@@ -149,6 +151,7 @@ const createProfile = async () => {
 const inputNewProfileName = async (
   caption: string,
   defaultText: string,
+  projectId: string,
 ): Promise<string | undefined> => {
   const newProfileName = await modalTextEdit({
     message: texts.label_assigner_profileNameEditModal_newProfileName,
@@ -156,7 +159,7 @@ const inputNewProfileName = async (
     caption,
   });
   if (newProfileName) {
-    const nameValid = await checkValidNewProfileName(newProfileName);
+    const nameValid = await checkValidNewProfileName(newProfileName, projectId);
     if (nameValid) {
       return newProfileName;
     }
@@ -174,6 +177,7 @@ const renameProfile = async () => {
   const newFilePart = await inputNewProfileName(
     texts.label_assigner_profileNameEditModal_modalTitleRename,
     filePart,
+    folderPart,
   );
   if (newFilePart) {
     const newProfileName = joinProjectProfileName(folderPart, newFilePart);
@@ -191,6 +195,7 @@ const copyProfile = async () => {
   const newFilePart = await inputNewProfileName(
     texts.label_assigner_profileNameEditModal_modalTitleCopy,
     filePart,
+    folderPart,
   );
   if (newFilePart) {
     const newProfileName = joinProjectProfileName(folderPart, newFilePart);
@@ -221,12 +226,13 @@ const handleSaveUnsavedProfile = async () => {
   if (profilesModel.editSource.type === 'InternalProfile') {
     return;
   }
+  const projectId = editorModel.profileData.projectId;
   const newFilePart = await inputNewProfileName(
     texts.label_assigner_profileNameEditModal_modalTitleSave,
     profilesModel.currentProfileName,
+    projectId,
   );
   if (newFilePart) {
-    const projectId = editorModel.profileData.projectId;
     const newProfileName = joinProjectProfileName(projectId, newFilePart);
     profilesModel.saveUnsavedProfileAs(newProfileName);
   }
