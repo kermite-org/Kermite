@@ -1,7 +1,7 @@
-import { jsx, useInlineEffect, useLocal } from 'qx';
-import { IProjectResourceInfo } from '~/shared';
+import { jsx, useInlineEffect, useLocal, useMemo } from 'qx';
+import { IProjectPackageInfo } from '~/shared';
 import { ISelectorOption } from '~/ui/base';
-import { useProjectResourceInfosFilteredByGlobalProjectSelection } from '~/ui/commonModels';
+import { uiGlobalStoreReader } from '~/ui/commonModels';
 import {
   ClosableOverlay,
   CommonDialogFrame,
@@ -97,23 +97,24 @@ interface IProfileSetupModalViewModel {
   canSubmit: boolean;
 }
 
-function makeProjectOptions(infos: IProjectResourceInfo[]): ISelectorOption[] {
-  return infos
-    .filter((info) => info.layoutNames.length > 0)
-    .map((info) => ({
-      value: info.sig,
-      label: `${info.origin === 'local' ? '(local) ' : ''}${
-        info.keyboardName
-      } (${info.projectPath})`,
-    }));
+function makeProjectOptions(infos: IProjectPackageInfo[]): ISelectorOption[] {
+  return infos.map((info) => ({
+    value: info.sig,
+    label: `${info.origin === 'local' ? '(local) ' : ''}${info.keyboardName}`,
+  }));
 }
 
 function makeLayoutOptions(
-  resouceInfos: IProjectResourceInfo[],
+  resouceInfos: IProjectPackageInfo[],
   projectSig: string,
 ): ISelectorOption[] {
   const info = resouceInfos.find((info) => info.sig === projectSig);
-  return info?.layoutNames.map((it) => ({ value: it, label: it })) || [];
+  return (
+    info?.layouts.map((it) => ({
+      value: it.layoutName,
+      label: it.layoutName,
+    })) || []
+  );
 }
 
 function useProfileSetupModalViewModel(): IProfileSetupModalViewModel {
@@ -123,7 +124,10 @@ function useProfileSetupModalViewModel(): IProfileSetupModalViewModel {
     layoutKey: '',
   });
 
-  const resourceInfos = useProjectResourceInfosFilteredByGlobalProjectSelection();
+  const resourceInfos = useMemo(
+    uiGlobalStoreReader.getProjectInfosGlobalProjectSelectionAffected,
+    [],
+  );
   const projectOptions = useMemoEx(makeProjectOptions, [resourceInfos]);
 
   useInlineEffect(() => {
