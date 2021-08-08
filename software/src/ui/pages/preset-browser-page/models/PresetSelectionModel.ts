@@ -6,8 +6,11 @@ import {
   ISelectorOption,
   ISelectorSource,
 } from '~/ui/base';
-import { globalSettingsModel, readGlobalProjectKey } from '~/ui/commonModels';
-import { uiGlobalStoreReader } from '~/ui/commonModels/UiGlobalStore';
+import {
+  globalSettingsModel,
+  readGlobalProjectKey,
+  uiGlobalStoreReader,
+} from '~/ui/commonModels';
 import { fieldSetter } from '~/ui/helpers';
 import { editSelectedProjectPreset as editSelectedProjectPresetOriginal } from '~/ui/pages/preset-browser-page/models/ProfileCreator';
 import { useProfileDataLoaded } from '~/ui/pages/preset-browser-page/models/ProfileDataLoader';

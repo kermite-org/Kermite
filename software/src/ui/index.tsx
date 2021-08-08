@@ -2,8 +2,11 @@ import { jsx, render } from 'qx';
 import { debounce } from '~/shared';
 import { resourceDevelopmentEntry } from '~/ui/ResourceDevelopment';
 import { appUi, ipcAgent } from '~/ui/base';
-import { globalSettingsModel, uiStatusModel } from '~/ui/commonModels';
-import { uiGlobalStore } from '~/ui/commonModels/UiGlobalStore';
+import {
+  globalSettingsModel,
+  uiStatusModel,
+  uiGlobalStore,
+} from '~/ui/commonModels';
 import { SiteRoot } from '~/ui/root/SiteRoot';
 
 async function start() {

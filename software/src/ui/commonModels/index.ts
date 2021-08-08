@@ -12,4 +12,5 @@ export * from './PlayerModel';
 export * from './ProjectDataSource';
 export * from './SiteModel';
 export * from './ThemeSelectionModel';
+export * from './UiGlobalStore';
 export * from './UiStatusModel';

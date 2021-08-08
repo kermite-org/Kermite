@@ -1,8 +1,7 @@
 import { useMemo } from 'qx';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import { IProjectKeyboardListProjectItem } from '~/ui/base';
-import { globalSettingsModel } from '~/ui/commonModels/GlobalSettingsModel';
-import { uiGlobalStore } from '~/ui/commonModels/UiGlobalStore';
+import { globalSettingsModel, uiGlobalStore } from '~/ui/commonModels';
 
 type IProjectSelectionPageModel = {
   sourceProjectItems: IProjectKeyboardListProjectItem[];
