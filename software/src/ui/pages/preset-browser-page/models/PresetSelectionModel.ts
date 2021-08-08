@@ -1,22 +1,13 @@
 import { useEffect, useLocal, useMemo } from 'qx';
-import {
-  IGlobalSettings,
-  IPresetSpec,
-  IProfileData,
-  IProjectResourceInfo,
-} from '~/shared';
+import { IPresetSpec, IProfileData, IProjectPackageInfo } from '~/shared';
 import { createPresetKey } from '~/shared/funcs/DomainRelatedHelpers';
 import {
   getSelectionValueCorrected,
   ISelectorOption,
   ISelectorSource,
 } from '~/ui/base';
-import {
-  useAllProjectResourceInfos,
-  readGlobalProjectKey,
-  globalSettingsModel,
-  readSettingsResouceOrigin,
-} from '~/ui/commonModels';
+import { globalSettingsModel, readGlobalProjectKey } from '~/ui/commonModels';
+import { uiGlobalStoreReader } from '~/ui/commonModels/UiGlobalStore';
 import { fieldSetter } from '~/ui/helpers';
 import { editSelectedProjectPreset as editSelectedProjectPresetOriginal } from '~/ui/pages/preset-browser-page/models/ProfileCreator';
 import { useProfileDataLoaded } from '~/ui/pages/preset-browser-page/models/ProfileDataLoader';
@@ -31,25 +22,21 @@ export interface IPresetSelectionModel {
   editSelectedProjectPreset(): void;
 }
 
-function getProjectSelectionLabel(info: IProjectResourceInfo): string {
+function getProjectSelectionLabel(info: IProjectPackageInfo): string {
   const isDeveloperMode = globalSettingsModel.getValue('useLocalResouces');
   if (isDeveloperMode) {
     const prefix = info.origin === 'local' ? '(local) ' : '';
-    return `${prefix}${info.keyboardName} (${info.projectPath})`;
+    return `${prefix}${info.keyboardName}`;
   } else {
     return info.keyboardName;
   }
 }
 
-function makeProjectOptions(infos: IProjectResourceInfo[]): ISelectorOption[] {
-  return infos
-    .filter(
-      (info) => info.presetNames.length > 0 || info.layoutNames.length > 0,
-    )
-    .map((info) => ({
-      value: info.sig,
-      label: getProjectSelectionLabel(info),
-    }));
+function makeProjectOptions(infos: IProjectPackageInfo[]): ISelectorOption[] {
+  return infos.map((info) => ({
+    value: info.sig,
+    label: getProjectSelectionLabel(info),
+  }));
 }
 
 type IPresetSelectorOption = ISelectorOption & {
@@ -57,7 +44,7 @@ type IPresetSelectorOption = ISelectorOption & {
 };
 
 function makePresetOptions(
-  resouceInfos: IProjectResourceInfo[],
+  resouceInfos: IProjectPackageInfo[],
   projectSig: string,
 ): IPresetSelectorOption[] {
   const projectInfo = resouceInfos.find((info) => info.sig === projectSig);
@@ -65,7 +52,7 @@ function makePresetOptions(
     return [];
   }
   return [
-    ...projectInfo.layoutNames.map((layoutName) => ({
+    ...projectInfo.layouts.map(({ layoutName }) => ({
       value: createPresetKey('blank', layoutName),
       label: `[blank]${layoutName}`,
       spec: {
@@ -73,7 +60,7 @@ function makePresetOptions(
         layoutName,
       },
     })),
-    ...projectInfo.presetNames.map((presetName) => ({
+    ...projectInfo.profiles.map(({ profileName: presetName }) => ({
       value: createPresetKey('preset', presetName),
       label: `[preset]${presetName}`,
       spec: {
@@ -82,21 +69,6 @@ function makePresetOptions(
       },
     })),
   ];
-}
-
-function useFileterdResourceInfos(
-  allProjectInfos: IProjectResourceInfo[],
-  globalSettings: IGlobalSettings,
-) {
-  return useMemo(() => {
-    const { globalProjectId } = globalSettings;
-    const targetOrigin = readSettingsResouceOrigin(globalSettings);
-    return allProjectInfos
-      .filter((info) => info.origin === targetOrigin)
-      .filter(
-        (info) => globalProjectId === '' || info.projectId === globalProjectId,
-      );
-  }, [allProjectInfos, globalSettings]);
 }
 
 export function usePresetSelectionModel(): IPresetSelectionModel {
@@ -111,11 +83,10 @@ export function usePresetSelectionModel(): IPresetSelectionModel {
   });
 
   const { globalSettings } = globalSettingsModel;
-  const allProjectInfos = useAllProjectResourceInfos();
 
-  const resourceInfos = useFileterdResourceInfos(
-    allProjectInfos,
-    globalSettings,
+  const resourceInfos = useMemo(
+    uiGlobalStoreReader.getProjectInfosGlobalProjectSelectionAffected,
+    [],
   );
 
   const projectOptions = makeProjectOptions(resourceInfos);
@@ -129,14 +100,16 @@ export function usePresetSelectionModel(): IPresetSelectionModel {
 
   const modPresetKey = getSelectionValueCorrected(presetOptions, sel.presetKey);
 
-  // console.log({ projectOptions, presetOptions, modProjectKey, modPresetKey });
-
   useEffect(() => {
     sel.projectKey =
       readGlobalProjectKey(globalSettings) || projectOptions[0]?.value || '';
   }, [globalSettings]);
 
-  const loadedProfileData = useProfileDataLoaded(modProjectKey, modPresetKey);
+  const loadedProfileData = useProfileDataLoaded(
+    modProjectKey,
+    modPresetKey,
+    resourceInfos,
+  );
 
   const editSelectedProjectPreset = () => {
     editSelectedProjectPresetOriginal(modProjectKey, modPresetKey);
