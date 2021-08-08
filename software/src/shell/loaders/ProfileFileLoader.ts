@@ -1,11 +1,11 @@
 import { AppError, IPersistProfileData, IProfileData } from '~/shared';
+import { ProfileDataConverter } from '~/shared/modules/ProfileDataConverter';
 import {
   cacheRemoteResouce,
   fetchJson,
   fsxReadJsonFile,
   fsxWriteJsonFile,
 } from '~/shell/funcs';
-import { ProfileDataConverter } from '~/shared/modules/ProfileDataConverter';
 import { ProfileDataMigrator } from '~/shell/loaders/ProfileDataMigrator';
 import { checkProfileDataObjectSchema } from '~/shell/loaders/ProfileDataSchemaChecker';
 
