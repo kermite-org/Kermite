@@ -1,15 +1,8 @@
-import {
-  createFallbackPersistKeyboardDesign,
-  IDisplayKeyboardDesign,
-} from '~/shared';
+import { useMemo } from 'qx';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
-import { ipcAgent, IProjectKeyboardListProjectItem } from '~/ui/base';
-import {
-  fetchAllProjectResourceInfos,
-  readSettingsResouceOrigin,
-} from '~/ui/commonModels';
+import { IProjectKeyboardListProjectItem } from '~/ui/base';
 import { globalSettingsModel } from '~/ui/commonModels/GlobalSettingsModel';
-import { useFetcher } from '~/ui/helpers';
+import { uiGlobalStore } from '~/ui/commonModels/UiGlobalStore';
 
 type IProjectSelectionPageModel = {
   sourceProjectItems: IProjectKeyboardListProjectItem[];
@@ -17,44 +10,18 @@ type IProjectSelectionPageModel = {
   setProjectId: (id: string) => void;
 };
 
-type ProjectInfoEx = {
-  projectId: string;
-  keyboardName: string;
-  projectPath: string;
-  design: IDisplayKeyboardDesign;
-};
-
-async function loadSourceProjectItems(): Promise<
-  IProjectKeyboardListProjectItem[]
-> {
-  const allProjectInfos = await fetchAllProjectResourceInfos();
-  const targetOrigin = readSettingsResouceOrigin(
-    globalSettingsModel.globalSettings,
-  );
-  const projectInfos = allProjectInfos.filter(
-    (info) => info.origin === targetOrigin && info.layoutNames.length > 0,
-  );
-  return await Promise.all(
-    projectInfos.map(async (info) => {
-      const design =
-        (await ipcAgent.async.projects_loadKeyboardShape(
-          info.origin,
-          info.projectId,
-          info.layoutNames[0],
-        )) || createFallbackPersistKeyboardDesign();
-      const infoEx: ProjectInfoEx = {
-        projectId: info.projectId,
-        keyboardName: info.keyboardName,
-        projectPath: info.projectPath,
-        design: DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(design),
-      };
-      return infoEx;
-    }),
-  );
+function createSourceProjectItems(): IProjectKeyboardListProjectItem[] {
+  return uiGlobalStore.allProjectPackageInfos.map((info) => ({
+    projectId: info.projectId,
+    keyboardName: info.keyboardName,
+    design: DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
+      info.layouts[0].data,
+    ),
+  }));
 }
 
 export function useProjectSelectionPartModel(): IProjectSelectionPageModel {
-  const sourceProjectItems = useFetcher(loadSourceProjectItems, []);
+  const sourceProjectItems = useMemo(createSourceProjectItems, []);
   const { globalProjectId: projectId } = globalSettingsModel.globalSettings;
   const setProjectId = (id: string) => {
     globalSettingsModel.writeValue('globalProjectId', id);
