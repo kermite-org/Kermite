@@ -41,6 +41,8 @@ export const fsExistsSync = fs.existsSync;
 
 export const fsMkdirSync = fs.mkdirSync;
 
+export const fsRmdirSync = fs.rmdirSync;
+
 export const fspMkdir = asyncWrap(fs.promises.mkdir);
 
 export const fspUnlink = asyncWrap(fs.promises.unlink);

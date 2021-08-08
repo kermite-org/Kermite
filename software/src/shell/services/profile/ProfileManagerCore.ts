@@ -2,8 +2,10 @@ import { IPersistProfileData, IProfileData, IProfileEntry } from '~/shared';
 import { appEnv } from '~/shell/base/AppEnv';
 import {
   fspCopyFile,
+  fspReaddir,
   fspRename,
   fspUnlink,
+  fsRmdirSync,
   fsxEnsureFolderExists,
   fsxMkdirpSync,
   fsxReadJsonFile,
@@ -99,6 +101,11 @@ export class ProfileManagerCore {
   async deleteProfile(profName: string): Promise<void> {
     const fpath = this.getProfileFilePath(profName);
     await fspUnlink(fpath);
+    const folderPath = pathDirname(fpath);
+    const fileNames = await fspReaddir(folderPath);
+    if (fileNames.length === 0) {
+      fsRmdirSync(folderPath);
+    }
   }
 
   async renameProfile(profName: string, newProfName: string): Promise<void> {
