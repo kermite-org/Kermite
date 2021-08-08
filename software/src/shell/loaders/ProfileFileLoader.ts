@@ -5,7 +5,7 @@ import {
   fsxReadJsonFile,
   fsxWriteJsonFile,
 } from '~/shell/funcs';
-import { ProfileDataConverter } from '~/shell/loaders/ProfileDataConverter';
+import { ProfileDataConverter } from '~/shared/modules/ProfileDataConverter';
 import { ProfileDataMigrator } from '~/shell/loaders/ProfileDataMigrator';
 import { checkProfileDataObjectSchema } from '~/shell/loaders/ProfileDataSchemaChecker';
 
