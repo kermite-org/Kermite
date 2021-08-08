@@ -494,6 +494,10 @@ export class ProfileManager implements IProfileManager {
   }
 
   async openUserProfilesFolder() {
-    await shell.openPath(this.core.getProfilesFolderPath());
+    const { editSource } = this.status;
+    const projectId =
+      (editSource.type === 'InternalProfile' && editSource.projectId) ||
+      undefined;
+    await shell.openPath(this.core.getProfilesFolderPath(projectId));
   }
 }

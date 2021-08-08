@@ -14,8 +14,11 @@ import {
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
 
 export class ProfileManagerCore {
-  getProfilesFolderPath(): string {
-    return appEnv.resolveUserDataFilePath(`data/profiles`);
+  getProfilesFolderPath(projectId: string | undefined): string {
+    const folderPath = projectId
+      ? `data/profiles/${projectId}`
+      : `data/profiles`;
+    return appEnv.resolveUserDataFilePath(folderPath);
   }
 
   private getProfileFilePath(profName: string): string {
