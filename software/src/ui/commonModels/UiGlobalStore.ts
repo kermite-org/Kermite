@@ -10,10 +10,16 @@ export const uiGlobalStore: IUiGlobalStore = {
 };
 
 export const uiGlobalStoreReader = {
-  getProjectInfosGlobalProjectSelectionAffected() {
-    const { globalProjectId } = globalSettingsModel.globalSettings;
-    return uiGlobalStore.allProjectPackageInfos.filter(
-      (info) => globalProjectId === '' || info.projectId === globalProjectId,
-    );
+  getProjectInfosGlobalProjectSelectionAffected(): IProjectPackageInfo[] {
+    const {
+      useLocalResouces,
+      globalProjectId,
+    } = globalSettingsModel.globalSettings;
+
+    return uiGlobalStore.allProjectPackageInfos
+      .filter((info) => useLocalResouces || info.origin === 'online')
+      .filter(
+        (info) => globalProjectId === '' || info.projectId === globalProjectId,
+      );
   },
 };
