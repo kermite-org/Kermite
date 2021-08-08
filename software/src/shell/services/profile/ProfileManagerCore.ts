@@ -74,7 +74,7 @@ export class ProfileManagerCore {
   ): Promise<void> {
     const filePath = this.getProfileFilePath(profName);
     console.log(`saving current profile to ${pathBasename(filePath)}`);
-    this.ensureSavingFolder(filePath);
+    await this.ensureSavingFolder(filePath);
     await ProfileFileLoader.saveProfileToFile(filePath, profileData);
   }
 
