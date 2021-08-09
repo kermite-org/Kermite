@@ -4,6 +4,7 @@ import {
   IResourceOrigin,
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
+import { globalSettingsModel } from '~/ui/commonModels/GlobalSettingsModel';
 import { uiGlobalStore } from '~/ui/commonModels/UiGlobalStore';
 
 export async function fetchAllProjectResourceInfos(): Promise<
@@ -23,3 +24,24 @@ export function useProjectInfo(
     ) || resourceInfos.find((info) => info.projectId === projectId)
   );
 }
+
+export const projectPackagesReader = {
+  getProjectInfosGlobalProjectSelectionAffected(): IProjectPackageInfo[] {
+    const {
+      useLocalResouces,
+      globalProjectId,
+    } = globalSettingsModel.globalSettings;
+
+    return uiGlobalStore.allProjectPackageInfos
+      .filter((info) => useLocalResouces || info.origin === 'online')
+      .filter(
+        (info) => globalProjectId === '' || info.projectId === globalProjectId,
+      );
+  },
+  getEditTargetProject(): IProjectPackageInfo | undefined {
+    const { globalProjectId } = globalSettingsModel.globalSettings;
+    return uiGlobalStore.allProjectPackageInfos.find(
+      (info) => info.origin === 'local' && info.projectId === globalProjectId,
+    );
+  },
+};

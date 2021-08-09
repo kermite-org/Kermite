@@ -1,11 +1,11 @@
 import { css, FC, jsx, useMemo } from 'qx';
 import { fallbackProjectPackageInfo } from '~/shared';
 import { uiTheme } from '~/ui/base';
-import { uiGlobalStoreReader } from '~/ui/commonModels';
+import { projectPackagesReader } from '~/ui/commonModels';
 
 export const ProjectEditPage: FC = () => {
   const projectInfo =
-    useMemo(uiGlobalStoreReader.getEditTargetProject, []) ||
+    useMemo(projectPackagesReader.getEditTargetProject, []) ||
     fallbackProjectPackageInfo;
   console.log({ projectInfo });
 
