@@ -54,14 +54,16 @@ export const projectPackagesMutations = {
     const index = uiGlobalStore.allProjectPackageInfos.findIndex(
       (info) => info.sig === projectInfo.sig,
     );
-    if (index !== -1) {
-      uiGlobalStore.allProjectPackageInfos = produce(
-        uiGlobalStore.allProjectPackageInfos,
-        (draft) => {
-          draft.splice(index, 1, projectInfo);
-        },
-      );
+    if (index === -1) {
+      return;
     }
+    uiGlobalStore.allProjectPackageInfos = produce(
+      uiGlobalStore.allProjectPackageInfos,
+      (draft) => {
+        draft.splice(index, 1, projectInfo);
+      },
+    );
+    ipcAgent.async.projects_saveLocalProjectPackageInfo(projectInfo);
   },
 };
 

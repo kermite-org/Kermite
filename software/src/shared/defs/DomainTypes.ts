@@ -40,6 +40,7 @@ export interface IProjectPackageInfo {
   sig: string; // ${origin}#${projectId}
   origin: IResourceOrigin;
   projectId: string;
+  packageName: string;
   keyboardName: string;
   customFirmwareReferences: {
     variantName: string;
@@ -60,6 +61,7 @@ export const fallbackProjectPackageInfo: IProjectPackageInfo = {
   sig: '',
   origin: 'online',
   projectId: '',
+  packageName: '',
   keyboardName: '',
   customFirmwareReferences: [],
   layouts: [],
