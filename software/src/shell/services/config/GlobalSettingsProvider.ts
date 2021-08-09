@@ -24,10 +24,6 @@ export class GlobalSettingsProvider {
         settings.localProjectRootFolderPath = '';
       }
     }
-    // DEBUG
-    settings.developerMode = true;
-    settings.useLocalResouces = true;
-
     this._globalSettings = settings;
   }
 
@@ -51,7 +47,7 @@ export class GlobalSettingsProvider {
   }
 
   getLocalRepositoryDir() {
-    const settings = this._globalSettings;
+    const settings = this.getGlobalSettings();
     if (settings.developerMode && settings.useLocalResouces) {
       if (appEnv.isDevelopment) {
         return pathResolve('../');
