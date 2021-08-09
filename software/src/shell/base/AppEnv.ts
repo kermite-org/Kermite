@@ -6,6 +6,10 @@ export const appEnv = new (class {
 
   platform = process.platform;
 
+  get useDataFolderPath() {
+    return app.getPath('userData');
+  }
+
   resolveUserDataFilePath(relPath: string) {
     const appDataDir = app.getPath('userData');
     return pathJoin(appDataDir, relPath);
