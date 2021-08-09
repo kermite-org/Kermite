@@ -5,16 +5,11 @@ import {
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
 import { uiGlobalStore } from '~/ui/commonModels/UiGlobalStore';
-import { useFetcher } from '~/ui/helpers';
 
 export async function fetchAllProjectResourceInfos(): Promise<
   IProjectResourceInfo[]
 > {
   return await ipcAgent.async.projects_getAllProjectResourceInfos();
-}
-
-export function useProjectResourceInfos(): IProjectResourceInfo[] {
-  return useFetcher(ipcAgent.async.projects_getAllProjectResourceInfos, []);
 }
 
 export function useProjectInfo(
