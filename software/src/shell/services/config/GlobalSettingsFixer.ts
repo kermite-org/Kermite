@@ -13,12 +13,14 @@ export function setupGlobalSettingsFixer() {
     if (reqCheck) {
       const settings = globalSettingsProvider.globalSettings;
       const { globalProjectId } = settings;
-      const projectInfos = await projectResourceProvider.getAllProjectResourceInfos();
-      const isGlobalProjectIncludedInResources = projectInfos.some(
-        (info) => info.projectId === globalProjectId,
-      );
-      if (!isGlobalProjectIncludedInResources) {
-        globalSettingsProvider.writeGlobalSettings({ globalProjectId: '' });
+      if (globalProjectId) {
+        const projectInfos = await projectResourceProvider.getAllProjectResourceInfos();
+        const isGlobalProjectIncludedInResources = projectInfos.some(
+          (info) => info.projectId === globalProjectId,
+        );
+        if (!isGlobalProjectIncludedInResources) {
+          globalSettingsProvider.writeGlobalSettings({ globalProjectId: '' });
+        }
       }
     }
   };
