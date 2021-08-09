@@ -10,13 +10,17 @@ type IProjectSelectionPageModel = {
 };
 
 function createSourceProjectItems(): IProjectKeyboardListProjectItem[] {
-  return uiGlobalStore.allProjectPackageInfos.map((info) => ({
-    projectId: info.projectId,
-    keyboardName: info.keyboardName,
-    design: DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
-      info.layouts[0].data,
-    ),
-  }));
+  const { useLocalResouces } = globalSettingsModel.globalSettings;
+  const origin = useLocalResouces ? 'local' : 'online';
+  return uiGlobalStore.allProjectPackageInfos
+    .filter((info) => info.origin === origin)
+    .map((info) => ({
+      projectId: info.projectId,
+      keyboardName: info.keyboardName,
+      design: DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
+        info.layouts[0].data,
+      ),
+    }));
 }
 
 export function useProjectSelectionPartModel(): IProjectSelectionPageModel {
