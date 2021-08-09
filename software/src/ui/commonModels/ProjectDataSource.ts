@@ -13,12 +13,8 @@ export async function fetchAllProjectResourceInfos(): Promise<
   return await ipcAgent.async.projects_getAllProjectResourceInfos();
 }
 
-export function useAllProjectResourceInfos(): IProjectResourceInfo[] {
+export function useProjectResourceInfos(): IProjectResourceInfo[] {
   return useFetcher(ipcAgent.async.projects_getAllProjectResourceInfos, []);
-}
-
-export function useProjectResourceInfos() {
-  return useAllProjectResourceInfos();
 }
 
 export function useProjectInfo(
