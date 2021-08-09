@@ -1,4 +1,3 @@
-import { useMemo } from 'qx';
 import {
   IProjectPackageInfo,
   IProjectResourceInfo,
@@ -20,14 +19,6 @@ export function useAllProjectResourceInfos(): IProjectResourceInfo[] {
 
 export function useProjectResourceInfos() {
   return useAllProjectResourceInfos();
-}
-
-export function useLocalProjectResourceInfos(): IProjectPackageInfo[] {
-  const allResourceInfos = uiGlobalStore.allProjectPackageInfos;
-  return useMemo(
-    () => allResourceInfos.filter((info) => info.origin === 'local'),
-    [allResourceInfos],
-  );
 }
 
 export function useProjectInfo(
