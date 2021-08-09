@@ -13,7 +13,7 @@ export const ProjectEditPage: FC = () => {
 
   const handleKeyboardNameChange = (value: string) => {
     const newProjectInfo = { ...projectInfo, keyboardName: value };
-    projectPackagesMutations.saveLocalProjectPackageData(newProjectInfo);
+    projectPackagesMutations.saveLocalProject(newProjectInfo);
   };
 
   return (

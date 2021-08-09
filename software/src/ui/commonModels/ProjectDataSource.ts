@@ -50,7 +50,7 @@ export const projectPackagesReader = {
 };
 
 export const projectPackagesMutations = {
-  saveLocalProjectPackageData(projectInfo: IProjectPackageInfo) {
+  saveLocalProject(projectInfo: IProjectPackageInfo) {
     const index = uiGlobalStore.allProjectPackageInfos.findIndex(
       (info) => info.sig === projectInfo.sig,
     );
