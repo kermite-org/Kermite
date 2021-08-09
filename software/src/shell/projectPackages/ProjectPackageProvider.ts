@@ -5,8 +5,12 @@ import {
   IResourceOrigin,
 } from '~/shared';
 import { appEnv } from '~/shell/base';
-import { fsxListFileBaseNames, fsxReadJsonFile, pathJoin } from '~/shell/funcs';
-import { globalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
+import {
+  fsxListFileBaseNames,
+  fsxReadJsonFile,
+  pathJoin,
+  pathResolve,
+} from '~/shell/funcs';
 
 interface IProjectPackageProvider {
   getAllProjectPackageInfos(): Promise<IProjectPackageInfo[]>;
@@ -51,11 +55,7 @@ async function loadProjectPackageFiles(
 }
 
 async function loadMasterProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
-  const localRepositoryDir = globalSettingsProvider.getLocalRepositoryDir();
-  if (!localRepositoryDir) {
-    return [];
-  }
-  const packagesRoot = pathJoin(localRepositoryDir, 'firmware/projects_next');
+  const packagesRoot = pathResolve('../firmware/projects_next');
   return await loadProjectPackageFiles(packagesRoot, 'online');
 }
 
