@@ -1,19 +1,19 @@
-import { css, FC, jsx, useMemo } from 'qx';
-import { fallbackProjectPackageInfo } from '~/shared';
+import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
-import { projectPackagesReader } from '~/ui/commonModels';
+import {
+  projectPackagesHooks,
+  projectPackagesMutations,
+} from '~/ui/commonModels';
+import { reflectValue } from '~/ui/helpers';
 
 export const ProjectEditPage: FC = () => {
-  const projectInfo =
-    useMemo(projectPackagesReader.getEditTargetProject, []) ||
-    fallbackProjectPackageInfo;
-  console.log({ projectInfo });
+  const projectInfo = projectPackagesHooks.useEditTargetProject();
 
   const keyboardName = projectInfo.keyboardName;
 
-  const onChange = (e: Event) => {
-    const text = (e.currentTarget as HTMLInputElement).value;
-    projectInfo.keyboardName = text;
+  const handleKeyboardNameChange = (value: string) => {
+    const newProjectInfo = { ...projectInfo, keyboardName: value };
+    projectPackagesMutations.saveLocalProjectPackageData(newProjectInfo);
   };
 
   return (
@@ -22,7 +22,11 @@ export const ProjectEditPage: FC = () => {
       <div>
         <label>
           <span>keyboard name</span>
-          <input type="text" value={keyboardName} onChange={onChange} />
+          <input
+            type="text"
+            value={keyboardName}
+            onChange={reflectValue(handleKeyboardNameChange)}
+          />
         </label>
       </div>
     </div>

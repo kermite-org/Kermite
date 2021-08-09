@@ -1,4 +1,7 @@
+import produce from 'immer';
+import { useMemo } from 'qx';
 import {
+  fallbackProjectPackageInfo,
   IProjectPackageInfo,
   IProjectResourceInfo,
   IResourceOrigin,
@@ -42,6 +45,32 @@ export const projectPackagesReader = {
     const { globalProjectId } = globalSettingsModel.globalSettings;
     return uiGlobalStore.allProjectPackageInfos.find(
       (info) => info.origin === 'local' && info.projectId === globalProjectId,
+    );
+  },
+};
+
+export const projectPackagesMutations = {
+  saveLocalProjectPackageData(projectInfo: IProjectPackageInfo) {
+    const index = uiGlobalStore.allProjectPackageInfos.findIndex(
+      (info) => info.sig === projectInfo.sig,
+    );
+    if (index !== -1) {
+      uiGlobalStore.allProjectPackageInfos = produce(
+        uiGlobalStore.allProjectPackageInfos,
+        (draft) => {
+          draft.splice(index, 1, projectInfo);
+        },
+      );
+    }
+  },
+};
+
+export const projectPackagesHooks = {
+  useEditTargetProject(): IProjectPackageInfo {
+    return (
+      useMemo(projectPackagesReader.getEditTargetProject, [
+        uiGlobalStore.allProjectPackageInfos,
+      ]) || fallbackProjectPackageInfo
     );
   },
 };
