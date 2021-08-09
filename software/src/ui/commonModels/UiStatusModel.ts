@@ -11,7 +11,8 @@ export type PagePaths =
   | '/settings'
   | '/widget'
   | '/projectSelection'
-  | '/home';
+  | '/home'
+  | '/projectEdit';
 
 export interface IUiSettings {
   showTestInputArea: boolean;
