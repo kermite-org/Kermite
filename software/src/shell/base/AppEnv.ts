@@ -6,7 +6,7 @@ export const appEnv = new (class {
 
   platform = process.platform;
 
-  get useDataFolderPath() {
+  get userDataFolderPath() {
     return app.getPath('userData');
   }
 

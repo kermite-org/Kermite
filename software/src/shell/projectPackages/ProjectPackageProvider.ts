@@ -60,7 +60,11 @@ async function loadMasterProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
 }
 
 async function loadLocalProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
-  const projectsFolder = pathJoin(appEnv.useDataFolderPath, 'data', 'projects');
+  const projectsFolder = pathJoin(
+    appEnv.userDataFolderPath,
+    'data',
+    'projects',
+  );
   return await loadProjectPackageFiles(projectsFolder, 'local');
 }
 export class ProjectPackageProvider implements IProjectPackageProvider {
