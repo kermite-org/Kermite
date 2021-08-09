@@ -1,8 +1,32 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx, useMemo } from 'qx';
+import { fallbackProjectPackageInfo } from '~/shared';
 import { uiTheme } from '~/ui/base';
+import { uiGlobalStoreReader } from '~/ui/commonModels';
 
 export const ProjectEditPage: FC = () => {
-  return <div css={style}>project edit page</div>;
+  const projectInfo =
+    useMemo(uiGlobalStoreReader.getEditTargetProject, []) ||
+    fallbackProjectPackageInfo;
+  console.log({ projectInfo });
+
+  const keyboardName = projectInfo.keyboardName;
+
+  const onChange = (e: Event) => {
+    const text = (e.currentTarget as HTMLInputElement).value;
+    projectInfo.keyboardName = text;
+  };
+
+  return (
+    <div css={style}>
+      project edit page
+      <div>
+        <label>
+          <span>keyboard name</span>
+          <input type="text" value={keyboardName} onChange={onChange} />
+        </label>
+      </div>
+    </div>
+  );
 };
 
 const style = css`

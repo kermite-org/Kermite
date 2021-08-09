@@ -56,6 +56,16 @@ export interface IProjectPackageInfo {
   }[];
 }
 
+export const fallbackProjectPackageInfo: IProjectPackageInfo = {
+  sig: '',
+  origin: 'online',
+  projectId: '',
+  keyboardName: '',
+  customFirmwareReferences: [],
+  layouts: [],
+  profiles: [],
+};
+
 export interface IProjectCustomDefinition {
   customParameterSpecs?: ICustromParameterSpec[];
 }
