@@ -16,9 +16,15 @@ export const ProjectEditPage: FC = () => {
     projectPackagesMutations.saveLocalProject(newProjectInfo);
   };
 
+  const resourceData = {
+    firmwares: projectInfo.customFirmwareReferences.map((it) => it.variantName),
+    layouts: projectInfo.layouts.map((it) => it.layoutName),
+    preset: projectInfo.profiles.map((it) => it.profileName),
+  };
+
   return (
     <div css={style}>
-      project edit page
+      <div>project edit page</div>
       <div>
         <label>
           <span>keyboard name</span>
@@ -29,6 +35,7 @@ export const ProjectEditPage: FC = () => {
           />
         </label>
       </div>
+      <pre>{JSON.stringify(resourceData, null, ' ')}</pre>
     </div>
   );
 };
@@ -38,4 +45,20 @@ const style = css`
   color: ${uiTheme.colors.clMainText};
   height: 100%;
   padding: 15px;
+
+  > * + * {
+    margin-top: 10px;
+  }
+
+  input {
+    margin-left: 10px;
+  }
+
+  pre {
+    border: solid 1px #888;
+    color: #222;
+    padding: 10px;
+    width: 300px;
+    font-size: 14px;
+  }
 `;
