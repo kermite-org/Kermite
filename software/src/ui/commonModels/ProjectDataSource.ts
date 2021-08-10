@@ -2,6 +2,7 @@ import produce from 'immer';
 import { useMemo } from 'qx';
 import {
   fallbackProjectPackageInfo,
+  IPersistKeyboardDesign,
   IProjectPackageInfo,
   IProjectResourceInfo,
   IResourceOrigin,
@@ -64,6 +65,21 @@ export const projectPackagesMutations = {
       },
     );
     ipcAgent.async.projects_saveLocalProjectPackageInfo(projectInfo);
+  },
+  saveLocalProjectLayout(layoutName: string, design: IPersistKeyboardDesign) {
+    const projectInfo = projectPackagesReader.getEditTargetProject();
+    if (!projectInfo) {
+      return;
+    }
+    const newProjectInfo = produce(projectInfo, (draft) => {
+      const layout = draft.layouts.find((la) => la.layoutName === layoutName);
+      if (layout) {
+        layout.data = design;
+      } else {
+        draft.layouts.push({ layoutName, data: design });
+      }
+    });
+    projectPackagesMutations.saveLocalProject(newProjectInfo);
   },
 };
 
