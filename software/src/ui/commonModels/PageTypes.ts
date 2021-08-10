@@ -11,3 +11,10 @@ export type PagePaths =
   | '/projectSelection'
   | '/home'
   | '/projectEdit';
+
+export type IPageSpec_ProjectLayoutEdit = {
+  type: 'projectLayoutEdit';
+  layoutName: string;
+};
+
+export type IPageSpec = IPageSpec_ProjectLayoutEdit;
