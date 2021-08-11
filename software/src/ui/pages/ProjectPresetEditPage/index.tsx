@@ -6,6 +6,7 @@ import {
   pageActions,
   projectPackagesHooks,
 } from '~/ui/commonModels';
+import { AssignerGeneralComponent } from '~/ui/pages/editor-page/EditorGeneralComponent';
 
 type Props = {
   spec: IPageSpec_ProjectPresetEdit;
@@ -13,7 +14,7 @@ type Props = {
 
 export const ProjectPresetEditPage: FC<Props> = ({ spec: { presetName } }) => {
   const projectInfo = projectPackagesHooks.useEditTargetProject();
-  const profile = useMemo(() => {
+  const originalProfile = useMemo(() => {
     const entry = projectInfo.profiles.find(
       (it) => it.profileName === presetName,
     );
@@ -22,6 +23,7 @@ export const ProjectPresetEditPage: FC<Props> = ({ spec: { presetName } }) => {
 
   const saveProfile = (newProfile: IPersistProfileData) => {
     // projectPackagesMutations.saveLocalProjectLayout(layoutName, newLayout);
+    // const editorModel.profileData;
   };
 
   return (
@@ -32,8 +34,11 @@ export const ProjectPresetEditPage: FC<Props> = ({ spec: { presetName } }) => {
         </button>
         project preset edit page {presetName}
       </div>
-
-      {/* <LayouterGeneralComponent layout={layout} saveLayout={saveLayout} /> */}
+      <AssignerGeneralComponent
+        className="editor-frame"
+        originalProfile={originalProfile}
+        saveProfile={saveProfile}
+      />
     </div>
   );
 };
@@ -43,4 +48,7 @@ const style = css`
   color: ${uiTheme.colors.clMainText};
   height: 100%;
   padding: 15px;
+
+  display: flex;
+  flex-direction: column;
 `;
