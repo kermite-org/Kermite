@@ -38,7 +38,7 @@ function getBinaryContentMarkerIndex(
   return -1;
 }
 
-function forgeStandardKeyboardFirmware() {
+function forgeStandardKeyboardFirmwareAvr() {
   const targetKeyboardSpec = keyboardSpec_astelia;
   // const targetKeyboardSpec = keyboardSpec_dw4;
 
@@ -65,4 +65,27 @@ function forgeStandardKeyboardFirmware() {
   console.log('done');
 }
 
-forgeStandardKeyboardFirmware();
+function forgeStandardKeyboardFirmwareRp_dev() {
+  const binaryBaseDir = '../build/standard/rp';
+  const srcBinaryFilePath = `${binaryBaseDir}/standard_rp.uf2`;
+  const modBinaryFilePath = `${binaryBaseDir}/standard_rp_patched.uf2`;
+
+  const buffer = fs.readFileSync(srcBinaryFilePath);
+  const binaryBytes = [...new Uint8Array(buffer)];
+
+  const markerPosition = getBinaryContentMarkerIndex(binaryBytes, 'KMDF');
+  if (markerPosition === -1) {
+    throw new Error('cannot find marker');
+  }
+  const dataLocation = markerPosition + 4;
+  replaceArrayConent(binaryBytes, dataLocation, [7]);
+
+  const savingBuffer = Buffer.from(binaryBytes);
+  fs.writeFileSync(modBinaryFilePath, savingBuffer);
+
+  console.log(`file saved: ${modBinaryFilePath}`);
+  console.log('done');
+}
+
+// forgeStandardKeyboardFirmwareAvr();
+forgeStandardKeyboardFirmwareRp_dev();
