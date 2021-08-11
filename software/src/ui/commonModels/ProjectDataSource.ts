@@ -3,6 +3,7 @@ import { useMemo } from 'qx';
 import {
   fallbackProjectPackageInfo,
   IPersistKeyboardDesign,
+  IPersistProfileData,
   IProjectPackageInfo,
   IProjectResourceInfo,
   IResourceOrigin,
@@ -77,6 +78,23 @@ export const projectPackagesMutations = {
         layout.data = design;
       } else {
         draft.layouts.push({ layoutName, data: design });
+      }
+    });
+    projectPackagesMutations.saveLocalProject(newProjectInfo);
+  },
+  saveLocalProjectPreset(presetName: string, preset: IPersistProfileData) {
+    const projectInfo = projectPackagesReader.getEditTargetProject();
+    if (!projectInfo) {
+      return;
+    }
+    const newProjectInfo = produce(projectInfo, (draft) => {
+      const profile = draft.profiles.find(
+        (la) => la.profileName === presetName,
+      );
+      if (profile) {
+        profile.data = preset;
+      } else {
+        draft.profiles.push({ profileName: presetName, data: preset });
       }
     });
     projectPackagesMutations.saveLocalProject(newProjectInfo);

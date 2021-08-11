@@ -5,6 +5,7 @@ import {
   IPageSpec_ProjectPresetEdit,
   pageActions,
   projectPackagesHooks,
+  projectPackagesMutations,
 } from '~/ui/commonModels';
 import { AssignerGeneralComponent } from '~/ui/pages/editor-page/EditorGeneralComponent';
 
@@ -22,8 +23,7 @@ export const ProjectPresetEditPage: FC<Props> = ({ spec: { presetName } }) => {
   }, [projectInfo]);
 
   const saveProfile = (newProfile: IPersistProfileData) => {
-    // projectPackagesMutations.saveLocalProjectLayout(layoutName, newLayout);
-    // const editorModel.profileData;
+    projectPackagesMutations.saveLocalProjectPreset(presetName, newProfile);
   };
 
   return (
