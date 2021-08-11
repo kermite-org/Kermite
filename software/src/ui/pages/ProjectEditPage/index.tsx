@@ -23,10 +23,17 @@ export const ProjectEditPage: FC = () => {
     preset: projectInfo.profiles.map((it) => it.profileName),
   };
 
-  const onButton = () => {
+  const onLayoutEditButton = () => {
     pageActions.navigateTo({
       type: 'projectLayoutEdit',
       layoutName: projectInfo.layouts[0].layoutName,
+    });
+  };
+
+  const onPresetEditButton = () => {
+    pageActions.navigateTo({
+      type: 'projectPresetEdit',
+      presetName: projectInfo.profiles[0].profileName,
     });
   };
 
@@ -45,7 +52,8 @@ export const ProjectEditPage: FC = () => {
       </div>
       <pre>{JSON.stringify(resourceData, null, ' ')}</pre>
       <div>
-        <button onClick={onButton}>edit layout</button>
+        <button onClick={onLayoutEditButton}>edit layout</button>
+        <button onClick={onPresetEditButton}>edit preset</button>
       </div>
     </div>
   );

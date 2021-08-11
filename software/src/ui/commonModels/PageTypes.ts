@@ -17,4 +17,11 @@ export type IPageSpec_ProjectLayoutEdit = {
   layoutName: string;
 };
 
-export type IPageSpec = IPageSpec_ProjectLayoutEdit;
+export type IPageSpec_ProjectPresetEdit = {
+  type: 'projectPresetEdit';
+  presetName: string;
+};
+
+export type IPageSpec =
+  | IPageSpec_ProjectLayoutEdit
+  | IPageSpec_ProjectPresetEdit;
