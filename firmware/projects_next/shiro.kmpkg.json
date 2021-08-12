@@ -2,9 +2,21 @@
   "formatRevision": "PKG0",
   "projectId": "dx5kE9",
   "keyboardName": "Shiro",
-  "customFirmwareReferences": [
+  "standardFirmwareDefinitions": [
     {
       "variantName": "atmega",
+      "data": {
+        "baseFirmwareType": "AvrUnified",
+        "useBoardLedsProMicroAvr": true,
+        "useMatrixKeyScanner": true,
+        "matrixColumnPins": ["PF4", "PF5", "PF6"],
+        "matrixRowPins": ["PD4", "PC6", "PD7", "PE6", "PB4"]
+      }
+    }
+  ],
+  "customFirmwareReferences": [
+    {
+      "variantName": "atmega_custom",
       "firmwareId": "hxcfM7",
       "systemParameterKeys": [
         "emitRealtimeEvents",
