@@ -16,6 +16,7 @@ import {
   IKeyboardDeviceStatus,
   IBootloaderDeviceDetectionStatus,
   IProfileEntry,
+  IProjectPackageInfo,
 } from '~/shared/defs/DomainTypes';
 import { IPersistKeyboardDesign } from '~/shared/defs/KeyboardDesign';
 import { IGlobalSettings, IKeyboardConfig } from './ConfigTypes';
@@ -78,6 +79,8 @@ export interface IAppIpcContract {
       projectId: string,
       layoutName: string,
     ): Promise<IPersistKeyboardDesign | undefined>;
+
+    projects_getAllProjectPackageInfos(): Promise<IProjectPackageInfo[]>;
 
     presetHub_getServerProjectIds(): Promise<string[]>;
     presetHub_getServerProfiles(

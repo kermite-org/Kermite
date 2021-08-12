@@ -1,6 +1,6 @@
 import { jsx, useLocal } from 'qx';
 import { texts } from '~/ui/base';
-import { useLocalProjectResourceInfos } from '~/ui/commonModels';
+import { uiGlobalStore } from '~/ui/commonModels';
 import {
   IProjectAttachmentFileSelectorModalModel,
   modalConfirm,
@@ -25,11 +25,11 @@ function useProjectAttachmentFileSelectorViewModel(
     currentPresetName: '',
   });
 
-  const resourceInfos = useLocalProjectResourceInfos();
+  const resourceInfos = uiGlobalStore.allProjectPackageInfos;
 
   const projectOptions = resourceInfos.map((info) => ({
     value: info.projectId,
-    label: info.projectPath,
+    label: info.keyboardName,
   }));
 
   // 編集しているプロファイルのプロジェクトを規定で選び、変更させない
@@ -44,7 +44,7 @@ function useProjectAttachmentFileSelectorViewModel(
   );
 
   const presetNameOptions =
-    currentProject?.presetNames.map((presetName) => ({
+    currentProject?.profiles.map(({ profileName: presetName }) => ({
       value: presetName,
       label: presetName,
     })) || [];
@@ -65,7 +65,7 @@ function useProjectAttachmentFileSelectorViewModel(
     currentAttachmentFileName: local.currentPresetName,
     setCurrentAttachmentFileName: fieldSetter(local, 'currentPresetName'),
     targetAttachementFilePath: getTargetPresetNameFilePath(
-      currentProject?.projectPath || '',
+      currentProject?.keyboardName || '',
       local.currentPresetName,
     ),
     buttonText: 'Save',
