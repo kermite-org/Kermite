@@ -18,9 +18,14 @@ export function convertArrayElementsToBytes(
   });
 }
 
-export function padZeros(
+export function padByteArray(
   bytes: number[] | undefined,
-  length: number
+  length: number,
+  fallbackValue: number
 ): number[] {
-  return new Array(length).fill(0).map((_, i) => bytes?.[i] || 0);
+  return new Array(length)
+    .fill(0)
+    .map((_, i) =>
+      bytes?.[i] && isFinite(bytes?.[i]) ? bytes[i] : fallbackValue
+    );
 }
