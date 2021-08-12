@@ -1,83 +1,43 @@
-import { IKermiteStandardKeyboaredSpec, Pins } from '@/CoreDefinitions';
+import { IKermiteStandardKeyboaredSpec } from '@/CoreDefinitions';
 
 export const keyboardSpec_astelia: IKermiteStandardKeyboaredSpec = {
   useBoardLedsProMicroAvr: true,
   useDebugUart: true,
   useMatrixKeyScanner: true,
-  numMatrixColumns: 6,
-  numMatrixRows: 8,
-  keyScannerPins: [
-    //columns
-    Pins.PC6,
-    Pins.PD4,
-    Pins.PF7,
-    Pins.PF6,
-    Pins.PF5,
-    Pins.PF4,
-    //rows
-    Pins.PB1,
-    Pins.PB3,
-    Pins.PB2,
-    Pins.PB6,
-    Pins.PD7,
-    Pins.PE6,
-    Pins.PB4,
-    Pins.PB5,
-  ],
+  matrixColumnPins: ['PC6', 'PD4', 'PF7', 'PF6', 'PF5', 'PF4'],
+  matrixRowPins: ['PB1', 'PB3', 'PB2', 'PB6', 'PD7', 'PE6', 'PB4', 'PB5'],
 };
 
 export const keyboardSpec_dw4: IKermiteStandardKeyboaredSpec = {
   useBoardLedsProMicroAvr: true,
   useDebugUart: true,
   useDirectWiredKeyScanner: true,
-  numDirectWiredKeys: 4,
-  keyScannerPins: [Pins.PE6, Pins.PB4, Pins.PB5, Pins.PB6],
+  directWiredPins: ['PE6', 'PB4', 'PB5', 'PB6'],
 };
 
 export const keyboardSpec_mp2105: IKermiteStandardKeyboaredSpec = {
   useBoardLedsProMicroRp: true,
   useDebugUart: true,
   useMatrixKeyScanner: true,
-  numMatrixColumns: 4,
-  numMatrixRows: 3,
-  keyScannerPins: [
-    //columns
-    Pins.GP6,
-    Pins.GP7,
-    Pins.GP8,
-    Pins.GP9,
-    //rows
-    Pins.GP20,
-    Pins.GP23,
-    Pins.GP21,
-  ],
+  matrixColumnPins: ['GP6', 'GP7', 'GP8', 'GP9'],
+  matrixRowPins: ['GP20', 'GP23', 'GP21'],
 };
 
 export const keyboardSpec_km60: IKermiteStandardKeyboaredSpec = {
   useBoardLedsProMicroRp: true,
   useDebugUart: true,
   useMatrixKeyScanner: true,
-  numMatrixColumns: 7,
-  numMatrixRows: 10,
-  keyScannerPins: [
-    //columns
-    Pins.GP29,
-    Pins.GP28,
-    Pins.GP27,
-    Pins.GP26,
-    Pins.GP22,
-    Pins.GP20,
-    Pins.GP23,
-    //rows
-    Pins.GP1,
-    Pins.GP2,
-    Pins.GP3,
-    Pins.GP4,
-    Pins.GP5,
-    Pins.GP6,
-    Pins.GP7,
-    Pins.GP8,
-    Pins.GP9,
-    Pins.GP21,
+  matrixColumnPins: ['GP29', 'GP28', 'GP27', 'GP26', 'GP22', 'GP20', 'GP23'],
+  matrixRowPins: [
+    'GP1',
+    'GP2',
+    'GP3',
+    'GP4',
+    'GP5',
+    'GP6',
+    'GP7',
+    'GP8',
+    'GP9',
+    'GP21',
   ],
 };

@@ -1,4 +1,76 @@
-export type IKermiteStandardKeyboaredSpec = {
+export type PinName =
+  | 'PB0'
+  | 'PB1'
+  | 'PB2'
+  | 'PB3'
+  | 'PB4'
+  | 'PB5'
+  | 'PB6'
+  | 'PB7'
+  | 'PC0'
+  | 'PC1'
+  | 'PC2'
+  | 'PC3'
+  | 'PC4'
+  | 'PC5'
+  | 'PC6'
+  | 'PC7'
+  | 'PD0'
+  | 'PD1'
+  | 'PD2'
+  | 'PD3'
+  | 'PD4'
+  | 'PD5'
+  | 'PD6'
+  | 'PD7'
+  | 'PE0'
+  | 'PE1'
+  | 'PE2'
+  | 'PE3'
+  | 'PE4'
+  | 'PE5'
+  | 'PE6'
+  | 'PE7'
+  | 'PF0'
+  | 'PF1'
+  | 'PF2'
+  | 'PF3'
+  | 'PF4'
+  | 'PF5'
+  | 'PF6'
+  | 'PF7'
+  | 'GP0'
+  | 'GP1'
+  | 'GP2'
+  | 'GP3'
+  | 'GP4'
+  | 'GP5'
+  | 'GP6'
+  | 'GP7'
+  | 'GP8'
+  | 'GP9'
+  | 'GP10'
+  | 'GP11'
+  | 'GP12'
+  | 'GP13'
+  | 'GP14'
+  | 'GP15'
+  | 'GP16'
+  | 'GP17'
+  | 'GP18'
+  | 'GP19'
+  | 'GP20'
+  | 'GP21'
+  | 'GP22'
+  | 'GP23'
+  | 'GP24'
+  | 'GP25'
+  | 'GP26'
+  | 'GP27'
+  | 'GP28'
+  | 'GP29';
+
+export type IKermiteStandardKeyboaredRawSpec = {
   useBoardLedsProMicroAvr?: boolean;
   useBoardLedsProMicroRp?: boolean;
   useBoardLedsRpiPico?: boolean;
@@ -11,76 +83,14 @@ export type IKermiteStandardKeyboaredSpec = {
   keyScannerPins?: number[];
 };
 
-export const enum Pins {
-  PB0 = 0,
-  PB1,
-  PB2,
-  PB3,
-  PB4,
-  PB5,
-  PB6,
-  PB7,
-  PC0 = 8,
-  PC1,
-  PC2,
-  PC3,
-  PC4,
-  PC5,
-  PC6,
-  PC7,
-  PD0 = 16,
-  PD1,
-  PD2,
-  PD3,
-  PD4,
-  PD5,
-  PD6,
-  PD7,
-  PE0 = 24,
-  PE1,
-  PE2,
-  PE3,
-  PE4,
-  PE5,
-  PE6,
-  PE7,
-  PF0 = 32,
-  PF1,
-  PF2,
-  PF3,
-  PF4,
-  PF5,
-  PF6,
-  PF7,
-
-  GP0 = 0,
-  GP1,
-  GP2,
-  GP3,
-  GP4,
-  GP5,
-  GP6,
-  GP7,
-  GP8,
-  GP9,
-  GP10,
-  GP11,
-  GP12,
-  GP13,
-  GP14,
-  GP15,
-  GP16,
-  GP17,
-  GP18,
-  GP19,
-  GP20,
-  GP21,
-  GP22,
-  GP23,
-  GP24,
-  GP25,
-  GP26,
-  GP27,
-  GP28,
-  GP29,
-}
+export type IKermiteStandardKeyboaredSpec = {
+  useBoardLedsProMicroAvr?: boolean;
+  useBoardLedsProMicroRp?: boolean;
+  useBoardLedsRpiPico?: boolean;
+  useDebugUart?: boolean;
+  useMatrixKeyScanner?: boolean;
+  matrixColumnPins?: PinName[];
+  matrixRowPins?: PinName[];
+  useDirectWiredKeyScanner?: boolean;
+  directWiredPins?: PinName[];
+};

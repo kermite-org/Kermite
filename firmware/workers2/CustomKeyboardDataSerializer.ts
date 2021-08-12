@@ -1,40 +1,42 @@
-import { IKermiteStandardKeyboaredSpec } from '@/CoreDefinitions';
+import { IKermiteStandardKeyboaredSpec, PinName } from '@/CoreDefinitions';
+import { PinNameToPinNumberMap } from '@/DataTables';
+import { convertArrayElementsToBytes, padByteArray } from '@/Helpers';
 
-function makeOutputBytes(arr: (number | boolean | undefined)[]): number[] {
-  return arr.map((value) => {
-    if (value === undefined) {
-      return 0;
-    }
-    if (value === false) {
-      return 0;
-    }
-    if (value === true) {
-      return 1;
-    }
-    if (isFinite(value)) {
-      return value;
-    }
-    return 0;
-  });
-}
-
-function padZeros(bytes: number[] | undefined, length: number): number[] {
-  return new Array(length).fill(0).map((_, i) => bytes?.[i] || 0);
+function mapPinNameToPinNumber(pinName: PinName): number {
+  const pinNumber = PinNameToPinNumberMap[pinName];
+  return isFinite(pinNumber) ? pinNumber : -1;
 }
 
 export function serializeCustomKeyboardSpec(
   spec: IKermiteStandardKeyboaredSpec
 ): number[] {
-  return makeOutputBytes([
+  let numMatrixColumns = 0;
+  let numMatrixRows = 0;
+  let numDirectWiredKeys = 0;
+  const keyScannerPins: PinName[] = [];
+  if (spec.useMatrixKeyScanner) {
+    numMatrixColumns = spec.matrixColumnPins?.length || 0;
+    numMatrixRows = spec.matrixRowPins?.length || 0;
+    keyScannerPins.push(
+      ...(spec.matrixColumnPins || []),
+      ...(spec.matrixRowPins || [])
+    );
+  }
+  if (spec.useDirectWiredKeyScanner) {
+    numDirectWiredKeys = spec.directWiredPins?.length || 0;
+    keyScannerPins.push(...(spec.directWiredPins || []));
+  }
+
+  return convertArrayElementsToBytes([
     spec.useBoardLedsProMicroAvr,
     spec.useBoardLedsProMicroRp,
     spec.useBoardLedsRpiPico,
     spec.useDebugUart,
     spec.useMatrixKeyScanner,
     spec.useDirectWiredKeyScanner,
-    spec.numMatrixColumns,
-    spec.numMatrixRows,
-    spec.numDirectWiredKeys,
-    ...padZeros(spec.keyScannerPins, 32),
+    numMatrixColumns,
+    numMatrixRows,
+    numDirectWiredKeys,
+    ...padByteArray(keyScannerPins.map(mapPinNameToPinNumber), 32, 0xff),
   ]);
 }
