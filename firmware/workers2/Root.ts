@@ -1,5 +1,10 @@
 import { serializeCustomKeyboardSpec } from '@/CustomKeyboardDataSerializer';
-import { keyboardSpec_astelia, keyboardSpec_dw4 } from '@/KeyboardVariants';
+import {
+  keyboardSpec_astelia,
+  keyboardSpec_dw4,
+  keyboardSpec_km60,
+  keyboardSpec_mp2105,
+} from '@/KeyboardVariants';
 import * as fs from 'fs';
 
 function compareArray(ar1: number[], ar2: number[]): boolean {
@@ -65,7 +70,11 @@ function forgeStandardKeyboardFirmwareAvr() {
   console.log('done');
 }
 
-function forgeStandardKeyboardFirmwareRp_dev() {
+function forgeStandardKeyboardFirmwareRp() {
+  // const targetKeyboardSpec = keyboardSpec_mp2105;
+  const targetKeyboardSpec = keyboardSpec_km60;
+  const customDataBytes = serializeCustomKeyboardSpec(targetKeyboardSpec);
+
   const binaryBaseDir = '../build/standard/rp';
   const srcBinaryFilePath = `${binaryBaseDir}/standard_rp.uf2`;
   const modBinaryFilePath = `${binaryBaseDir}/standard_rp_patched.uf2`;
@@ -78,7 +87,8 @@ function forgeStandardKeyboardFirmwareRp_dev() {
     throw new Error('cannot find marker');
   }
   const dataLocation = markerPosition + 4;
-  replaceArrayConent(binaryBytes, dataLocation, [7]);
+  //todo: UF2で512バイトのブロック境界をまたぐ場合の考慮が必要
+  replaceArrayConent(binaryBytes, dataLocation, customDataBytes);
 
   const savingBuffer = Buffer.from(binaryBytes);
   fs.writeFileSync(modBinaryFilePath, savingBuffer);
@@ -88,4 +98,4 @@ function forgeStandardKeyboardFirmwareRp_dev() {
 }
 
 // forgeStandardKeyboardFirmwareAvr();
-forgeStandardKeyboardFirmwareRp_dev();
+forgeStandardKeyboardFirmwareRp();

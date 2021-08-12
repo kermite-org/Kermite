@@ -26,7 +26,9 @@ export function serializeCustomKeyboardSpec(
   spec: IKermiteStandardKeyboaredSpec
 ): number[] {
   return makeOutputBytes([
-    spec.useBoardsLedsProMicroAvr,
+    spec.useBoardLedsProMicroAvr,
+    spec.useBoardLedsProMicroRp,
+    spec.useBoardLedsRpiPico,
     spec.useDebugUart,
     spec.useMatrixKeyScanner,
     spec.useDirectWiredKeyScanner,

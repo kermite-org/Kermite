@@ -8,7 +8,9 @@
 
 typedef struct {
   uint8_t dataHeader[4];
-  bool useBoardsLedsProMicroAvr;
+  bool useBoardLedsProMicroAvr;
+  bool useBoardLedsProMicroRp;
+  bool useBoardLedsRpiPico;
   bool useDebugUart;
   bool useMatrixKeyScanner;
   bool useDirectWiredKeyScanner;
@@ -20,7 +22,9 @@ typedef struct {
 
 KermiteKeyboardDefinitionData defs = {
   .dataHeader = { 0x4B, 0x4D, 0x44, 0x46 }, //K,M,D,F
-  .useBoardsLedsProMicroAvr = false,
+  .useBoardLedsProMicroAvr = false,
+  .useBoardLedsProMicroRp = false,
+  .useBoardLedsRpiPico = false,
   .useDebugUart = false,
   .useMatrixKeyScanner = false,
   .useDirectWiredKeyScanner = false,
@@ -31,8 +35,14 @@ KermiteKeyboardDefinitionData defs = {
 };
 
 int main() {
-  if (defs.useBoardsLedsProMicroAvr) {
+  if (defs.useBoardLedsProMicroAvr) {
     boardIo_setupLeds_proMicroAvr();
+  }
+  if (defs.useBoardLedsProMicroRp) {
+    boardIo_setupLeds_proMicroRp();
+  }
+  if (defs.useBoardLedsRpiPico) {
+    boardIo_setupLeds_rpiPico();
   }
   if (defs.useDebugUart) {
     debugUart_initialize(38400);

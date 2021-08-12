@@ -5,7 +5,10 @@
   "scripts": {
     "prepare": "cd .. && make standard:avr:build",
     "build": "ts-node -r tsconfig-paths/register Root.ts",
-    "flash": "cd .. && make standard:avr:flash_patched_bin"
+    "flash": "cd .. && make standard:avr:flash_patched_bin",
+    "rp:prepare": "cd .. && make standard:rp:build",
+    "rp:build": "ts-node -r tsconfig-paths/register Root.ts",
+    "rp:flash": "cd .. && make standard:rp:flash_patched_uf2"
   },
   "dependencies": {
     "@types/fs-extra": "^9.0.4",
