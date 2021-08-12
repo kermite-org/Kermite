@@ -1,6 +1,12 @@
 {
   "projectId": "79xv6Z",
   "keyboardName": "Astelia",
+  "customFirmwareReferences": [
+    {
+      "variantName": "atmega",
+      "firmwareId": "dFbA81"
+    }
+  ],
   "parameterConfigurations": {
     "systemParameterKeys": [
       "emitRealtimeEvents",
