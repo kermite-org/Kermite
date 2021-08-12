@@ -24,10 +24,6 @@ export class GlobalSettingsProvider {
         settings.localProjectRootFolderPath = '';
       }
     }
-    // DEBUG
-    settings.developerMode = true;
-    settings.useLocalResouces = true;
-
     this._globalSettings = settings;
   }
 
