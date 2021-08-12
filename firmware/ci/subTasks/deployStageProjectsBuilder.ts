@@ -31,13 +31,9 @@ type ITargetDevice = "atmega32u4" | "rp2040";
 function gatherTargetProjectVariationPaths() {
   return globSync("./src/projects/**/rules.mk")
     .map((fpath) => pathDirname(fpath))
-    .filter(
-      (fpath) =>
-        fsExistsSync(pathJoin(fpath, "config.h")) &&
-        fsExistsSync(pathJoin(pathDirname(fpath), "project.json"))
-    )
+    .filter((fpath) => fsExistsSync(pathJoin(fpath, "config.h")))
     .map((fpath) => pathRelative("src/projects", fpath))
-    .filter((vp) => !vp.startsWith("dev/"));
+    .filter((vp) => !(vp.startsWith("dev/") || vp.startsWith("study")));
 }
 
 function loadFirmwareCommonRevisions(): ICommonRevisions {
@@ -74,9 +70,10 @@ interface IProjectSourceAttributes {
 
 function loadProjectSourceAttributes(
   projectPath: string,
+  projectName: string,
   variationName: string
 ): IProjectSourceAttributes {
-  const metadataFilePath = `./KRS/resources/variants/${projectPath}/metadata_${variationName}.json`;
+  const metadataFilePath = `./KRS/resources2/firmwares/${projectPath}/${projectName}_${variationName}.metadata.json.metadata.json`;
 
   if (fsExistsSync(metadataFilePath)) {
     const obj = fsxReadJsonFile(metadataFilePath);
@@ -195,6 +192,7 @@ function readOutputBinaryFileInfo(
 }
 
 interface IProjectBuildResultUpdatedAttrs {
+  firmwareId: string;
   releaseBuildRevision: number;
   buildTimestamp: string;
   flashUsage: number;
@@ -207,6 +205,7 @@ interface IProjectBuildResultUpdatedAttrs {
 }
 
 function projectBuildPipeline(
+  firmwareId: string,
   projectPath: string,
   variationName: string,
   targetDevice: ITargetDevice,
@@ -230,6 +229,7 @@ function projectBuildPipeline(
 
   if (info.md5 == sourceAttrs.firmwareBinaryFileMD5) {
     return {
+      firmwareId,
       releaseBuildRevision: buildRevision,
       buildTimestamp: sourceAttrs.buildTimestamp || timeNow(),
       flashUsage: sizeRes.flash,
@@ -251,6 +251,7 @@ function projectBuildPipeline(
     firmwareFileName
   );
   return {
+    firmwareId,
     releaseBuildRevision: nextBuildRevision,
     buildTimestamp: timeNow(),
     flashUsage: sizeRes.flash,
@@ -277,6 +278,7 @@ function makeSuccessMetadataContent(
 ) {
   const ua = updatedAttrs;
   return {
+    firmwareId: ua.firmwareId,
     buildResult: "success",
     releaseBuildRevision: ua.releaseBuildRevision,
     buildTimestamp: ua.buildTimestamp,
@@ -292,6 +294,16 @@ function makeSuccessMetadataContent(
     targetDevice: ua.targetDevice,
     firmwareFileName: ua.firmwareFileName,
   };
+}
+
+function readFirmwareIdFromConfigH(projectVariationPath: string) {
+  const configFilePath = `./src/projects/${projectVariationPath}/config.h`;
+  const configContent = fsxReadTextFile(configFilePath);
+  const firmwareId = getMatched(
+    configContent,
+    /^#define KERMITE_FIRMWARE_ID "([a-zA-Z0-9]+)"$/m
+  );
+  return firmwareId;
 }
 
 function detectTargetDeviceFromRulesMk(
@@ -321,22 +333,31 @@ function buildProjectVariationEntry(
 
   const targetDevice = detectTargetDeviceFromRulesMk(projectVariationPath);
   if (!targetDevice) {
-    throw new BuildStepError(`cannot detecte target device for ${targetName}`);
+    throw new BuildStepError(`cannot detect target device for ${targetName}`);
   }
+  const firmwareId = readFirmwareIdFromConfigH(projectVariationPath);
+  if (!firmwareId) {
+    throw new BuildStepError(`cannot read firmware id for ${targetName}`);
+  }
+
   const extension = targetDevice === "atmega32u4" ? "hex" : "uf2";
 
-  // const srcDir = `./src/projects/${projectVariationPath}`;
   const midDir = `./build/${projectVariationPath}`;
-  const destDir = `./dist/variants/${projectPath}`;
+  const destDir = `./dist/firmwares/${projectPath}`;
 
   fsxMakeDirectory(destDir);
 
-  const sourceAttrs = loadProjectSourceAttributes(projectPath, variationName);
+  const sourceAttrs = loadProjectSourceAttributes(
+    projectPath,
+    projectName,
+    variationName
+  );
 
   const firmwareFileName = `${projectName}_${variationName}.${extension}`;
 
   try {
     const updatedAttrs = projectBuildPipeline(
+      firmwareId,
       projectPath,
       variationName,
       targetDevice,
@@ -351,19 +372,22 @@ function buildProjectVariationEntry(
       updatedAttrs,
       commonRevisions
     );
-    fsxWriteJsonFile(`${destDir}/metadata_${variationName}.json`, metadataObj);
+    fsxWriteJsonFile(
+      `${destDir}/${projectName}_${variationName}.metadata.json`,
+      metadataObj
+    );
     puts(`build ${targetName} ... OK`);
     return true;
   } catch (error) {
     if (error instanceof BuildStepError) {
       puts(error.message);
       fsxWriteTextFile(
-        `${destDir}/build_error_${variationName}.log`,
+        `${destDir}/${projectName}_${variationName}.build_error.log`,
         error.message
       );
       const metadataObj = makeFailureMetadataContent(sourceAttrs);
       fsxWriteJsonFile(
-        `${destDir}/metadata_${variationName}.json`,
+        `${destDir}/${projectName}_${variationName}.metadata.json`,
         metadataObj
       );
       puts(`build ${targetName} ... NG`);
@@ -373,31 +397,6 @@ function buildProjectVariationEntry(
       console.error(error);
       process.exit(1);
     }
-  }
-}
-
-function copyFilesInFolder(srcDir: string, destDir: string, extension: string) {
-  const targetFiles = fsReaddirSync(srcDir).filter((fileName) =>
-    fileName.endsWith(extension)
-  );
-  targetFiles.forEach((fileName) =>
-    fsCopyFileSync(`${srcDir}/${fileName}`, `${destDir}/${fileName}`)
-  );
-}
-
-function copyProjectDataResources(projectPath: string) {
-  const srcDir = `./src/projects/${projectPath}`;
-  const destDir = `./dist/variants/${projectPath}`;
-
-  fsCopyFileSync(`${srcDir}/project.json`, `${destDir}/project.json`);
-
-  copyFilesInFolder(srcDir, destDir, ".profile.json");
-  copyFilesInFolder(srcDir, destDir, ".layout.json");
-
-  const srcDataDir = pathJoin(srcDir, "__data");
-  if (fsExistsSync(srcDataDir)) {
-    copyFilesInFolder(srcDataDir, destDir, ".profile.json");
-    copyFilesInFolder(srcDataDir, destDir, ".layout.json");
   }
 }
 
@@ -415,10 +414,6 @@ export function deployStageProjectsBuilder_buildProjects(): IBuildStats {
   const results = projectVariationPaths.map((pp) =>
     buildProjectVariationEntry(pp, commonRevisions)
   );
-  const projectPaths = uniqueArrayItemsDeep(
-    projectVariationPaths.map((pp) => pathDirname(pp))
-  );
-  projectPaths.forEach(copyProjectDataResources);
 
   const numSuccess = arrayCount(results, (a) => !!a);
   const numTotal = results.length;
