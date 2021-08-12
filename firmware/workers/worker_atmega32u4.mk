@@ -31,6 +31,8 @@ IS_RESOURCE_ORIGIN_ONLINE ?= 0
 #--------------------
 
 ELF = $(OUT_DIR)/$(CORE_NAME).elf
+BIN = $(OUT_DIR)/$(CORE_NAME).bin
+PATCHED_BIN = $(OUT_DIR)/$(CORE_NAME)_patched.bin
 HEX = $(OUT_DIR)/$(CORE_NAME).hex
 LST = $(OUT_DIR)/$(CORE_NAME).lst
 MAP = $(OUT_DIR)/$(CORE_NAME).map
@@ -97,7 +99,7 @@ LDFLAGS += -Wl,--cref,--defsym=__EEPROM_REGION_LENGTH__=1024
 
 all: build
 
-build: $(HEX) $(LST)
+build: $(BIN) $(HEX) $(LST)
 
 $(OBJS): $(RULES_MK)
 
@@ -120,6 +122,9 @@ $(HEX) : $(ELF)
 	@$(OBJCOPY) -O ihex $(ELF) $(HEX)
 	@echo output: $(HEX)
 
+$(BIN) : $(ELF)
+	@$(OBJCOPY) -O binary $(ELF) $(BIN)
+
 $(LST): $(ELF)
 	@$(OBJDUMP) -h -S $< > $@
 
@@ -135,6 +140,17 @@ ifdef AVRDUDE_COM_PORT_ALT
 	-avrdude -p m32u4 -P $(AVRDUDE_COM_PORT_ALT) -c avr109 -U flash:w:$(HEX)
 endif
 	avrdude -p m32u4 -P $(AVRDUDE_COM_PORT) -c avr109 -U flash:w:$(HEX)
+
+
+flash_patched_bin:
+ifndef AVRDUDE_COM_PORT
+	$(error variable AVRDUDE_COM_PORT is not set)
+endif
+ifdef AVRDUDE_COM_PORT_ALT
+	-avrdude -p m32u4 -P $(AVRDUDE_COM_PORT_ALT) -c avr109 -U flash:w:$(PATCHED_BIN)
+endif
+	avrdude -p m32u4 -P $(AVRDUDE_COM_PORT) -c avr109 -U flash:w:$(PATCHED_BIN)
+
 
 flash_with_dfu: build
 	dfu-programmer atmega32u4 erase
