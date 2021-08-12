@@ -117,7 +117,8 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     appGlobal.mainWindow = win;
     appGlobal.icpMainAgent.setWebcontents(win.webContents);
 
-    if (appEnv.isDevelopment && this.state.isDevtoolsVisible) {
+    // DEBUG, ALWAYS ENABLE DEVTOOL
+    if ((appEnv.isDevelopment && this.state.isDevtoolsVisible) || 1) {
       this.setDevToolsVisibility(true);
     }
 

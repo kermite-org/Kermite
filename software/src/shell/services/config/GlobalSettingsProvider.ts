@@ -3,8 +3,8 @@ import {
   globalSettingsLoadingSchema,
   IGlobalSettings,
 } from '~/shared';
-import { applicationStorage } from '~/shell/base';
-import { createEventPort } from '~/shell/funcs';
+import { appEnv, applicationStorage } from '~/shell/base';
+import { createEventPort, pathResolve } from '~/shell/funcs';
 import { checkLocalRepositoryFolder } from '~/shell/projectResources/LocalResourceHelper';
 
 export class GlobalSettingsProvider {
@@ -24,6 +24,10 @@ export class GlobalSettingsProvider {
         settings.localProjectRootFolderPath = '';
       }
     }
+    // DEBUG
+    settings.developerMode = true;
+    settings.useLocalResouces = true;
+
     this._globalSettings = settings;
   }
 
@@ -44,6 +48,18 @@ export class GlobalSettingsProvider {
     this.globalConfigEventPort.emit(partialConfig);
 
     this.settingsFixerCallback?.(partialConfig);
+  }
+
+  getLocalRepositoryDir() {
+    const settings = this._globalSettings;
+    if (settings.developerMode && settings.useLocalResouces) {
+      if (appEnv.isDevelopment) {
+        return pathResolve('../');
+      } else {
+        return settings.localProjectRootFolderPath;
+      }
+    }
+    return undefined;
   }
 }
 export const globalSettingsProvider = new GlobalSettingsProvider();
