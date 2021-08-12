@@ -8,7 +8,7 @@
     "buildUpdatedProjects": "ts-node buildAll.ts --updatedOnly --failIfError",
     "checkHardcodedVersions": "ts-node checkHardcodedVersions.ts",
     "checkProjectJsonSchemas": "ts-node -r tsconfig-paths/register checkProjectJsonSchemas.ts",
-    "checkProjectIds": "ts-node checkProjectIds.ts",
+    "checkFirmwareIds": "ts-node checkFirmwareIds.ts",
     "updateAllProjectDistributions": "ts-node updateAllProjectDistributions.ts"
   },
   "dependencies": {

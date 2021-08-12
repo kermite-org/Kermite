@@ -1,6 +1,5 @@
 import {
   fsExistsSync,
-  fsxReadJsonFile,
   fsxReadTextFile,
   getMatched,
   globSync,
@@ -88,7 +87,7 @@ function checkAllProjectIds(_projectInfos: IProjectInfo[]) {
   }
 }
 
-function checkProjectIds() {
+function checkFirmwareIds() {
   const projectVariationPaths = getAllProjectVariationPaths();
   // console.log({ projectVariationPaths });
   const projectInfos = projectVariationPaths.map(loadProjectInfo);
@@ -100,4 +99,4 @@ function checkProjectIds() {
   }
 }
 
-checkProjectIds();
+checkFirmwareIds();
