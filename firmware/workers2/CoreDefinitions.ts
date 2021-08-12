@@ -83,7 +83,14 @@ export type IKermiteStandardKeyboaredRawSpec = {
   keyScannerPins?: number[];
 };
 
+export type IBaseFirmwareType =
+  | 'AvrUnified'
+  | 'AvrSplit'
+  | 'RpUnified'
+  | 'RpSplit';
+
 export type IKermiteStandardKeyboaredSpec = {
+  baseFirmwareType: IBaseFirmwareType;
   useBoardLedsProMicroAvr?: boolean;
   useBoardLedsProMicroRp?: boolean;
   useBoardLedsRpiPico?: boolean;

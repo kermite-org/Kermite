@@ -1,6 +1,7 @@
 import { IKermiteStandardKeyboaredSpec } from '@/CoreDefinitions';
 
 export const keyboardSpec_astelia: IKermiteStandardKeyboaredSpec = {
+  baseFirmwareType: 'AvrUnified',
   useBoardLedsProMicroAvr: true,
   useDebugUart: true,
   useMatrixKeyScanner: true,
@@ -9,6 +10,7 @@ export const keyboardSpec_astelia: IKermiteStandardKeyboaredSpec = {
 };
 
 export const keyboardSpec_dw4: IKermiteStandardKeyboaredSpec = {
+  baseFirmwareType: 'AvrUnified',
   useBoardLedsProMicroAvr: true,
   useDebugUart: true,
   useDirectWiredKeyScanner: true,
@@ -16,6 +18,7 @@ export const keyboardSpec_dw4: IKermiteStandardKeyboaredSpec = {
 };
 
 export const keyboardSpec_mp2105: IKermiteStandardKeyboaredSpec = {
+  baseFirmwareType: 'RpUnified',
   useBoardLedsProMicroRp: true,
   useDebugUart: true,
   useMatrixKeyScanner: true,
@@ -24,6 +27,7 @@ export const keyboardSpec_mp2105: IKermiteStandardKeyboaredSpec = {
 };
 
 export const keyboardSpec_km60: IKermiteStandardKeyboaredSpec = {
+  baseFirmwareType: 'RpUnified',
   useBoardLedsProMicroRp: true,
   useDebugUart: true,
   useMatrixKeyScanner: true,
