@@ -1,6 +1,6 @@
-import { IKermiteStandardKeyboaredSpec, Pins } from '@/CoreDefinitions';
+import { IKermiteStandardKeyboaredRawSpec, Pins } from '@/CoreDefinitions';
 
-export const keyboardSpec_astelia: IKermiteStandardKeyboaredSpec = {
+export const keyboardSpec_astelia: IKermiteStandardKeyboaredRawSpec = {
   useBoardLedsProMicroAvr: true,
   useDebugUart: true,
   useMatrixKeyScanner: true,
@@ -26,7 +26,7 @@ export const keyboardSpec_astelia: IKermiteStandardKeyboaredSpec = {
   ],
 };
 
-export const keyboardSpec_dw4: IKermiteStandardKeyboaredSpec = {
+export const keyboardSpec_dw4: IKermiteStandardKeyboaredRawSpec = {
   useBoardLedsProMicroAvr: true,
   useDebugUart: true,
   useDirectWiredKeyScanner: true,
@@ -34,7 +34,7 @@ export const keyboardSpec_dw4: IKermiteStandardKeyboaredSpec = {
   keyScannerPins: [Pins.PE6, Pins.PB4, Pins.PB5, Pins.PB6],
 };
 
-export const keyboardSpec_mp2105: IKermiteStandardKeyboaredSpec = {
+export const keyboardSpec_mp2105: IKermiteStandardKeyboaredRawSpec = {
   useBoardLedsProMicroRp: true,
   useDebugUart: true,
   useMatrixKeyScanner: true,
@@ -53,7 +53,7 @@ export const keyboardSpec_mp2105: IKermiteStandardKeyboaredSpec = {
   ],
 };
 
-export const keyboardSpec_km60: IKermiteStandardKeyboaredSpec = {
+export const keyboardSpec_km60: IKermiteStandardKeyboaredRawSpec = {
   useBoardLedsProMicroRp: true,
   useDebugUart: true,
   useMatrixKeyScanner: true,

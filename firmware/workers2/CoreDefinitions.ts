@@ -1,4 +1,4 @@
-export type IKermiteStandardKeyboaredSpec = {
+export type IKermiteStandardKeyboaredRawSpec = {
   useBoardLedsProMicroAvr?: boolean;
   useBoardLedsProMicroRp?: boolean;
   useBoardLedsRpiPico?: boolean;

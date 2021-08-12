@@ -1,4 +1,4 @@
-import { IKermiteStandardKeyboaredSpec } from '@/CoreDefinitions';
+import { IKermiteStandardKeyboaredRawSpec } from '@/CoreDefinitions';
 
 function makeOutputBytes(arr: (number | boolean | undefined)[]): number[] {
   return arr.map((value) => {
@@ -23,7 +23,7 @@ function padZeros(bytes: number[] | undefined, length: number): number[] {
 }
 
 export function serializeCustomKeyboardSpec(
-  spec: IKermiteStandardKeyboaredSpec
+  spec: IKermiteStandardKeyboaredRawSpec
 ): number[] {
   return makeOutputBytes([
     spec.useBoardLedsProMicroAvr,
