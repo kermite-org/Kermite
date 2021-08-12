@@ -68,3 +68,17 @@ export function getProjectKeyFromDeviceAttributes(
 ): string {
   return `${deviceAttrs.origin}#${deviceAttrs.projectId}`;
 }
+
+export function splitProjectProfileName(
+  profileName: string,
+): { folderPart: string; filePart: string } {
+  const [folderPart, filePart] = profileName.split('/');
+  return { folderPart, filePart };
+}
+
+export function joinProjectProfileName(
+  folderPart: string,
+  filePart: string,
+): string {
+  return `${folderPart}/${filePart}`;
+}

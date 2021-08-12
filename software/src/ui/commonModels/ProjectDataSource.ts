@@ -64,3 +64,20 @@ export function projectResourceInfoFilter_affectGlobalProjectSelection(
   const { globalProjectId } = globalSettingsModel.globalSettings;
   return globalProjectId === '' || info.projectId === globalProjectId;
 }
+
+export function useProjectResourceInfosFilteredByGlobalProjectSelection() {
+  const {
+    useLocalResouces,
+    globalProjectId,
+  } = globalSettingsModel.globalSettings;
+  const allResourceInfos = useAllProjectResourceInfos();
+  return useMemo(
+    () =>
+      allResourceInfos
+        .filter((info) => useLocalResouces || info.origin === 'online')
+        .filter(
+          (info) => !globalProjectId || info.projectId === globalProjectId,
+        ),
+    [allResourceInfos],
+  );
+}

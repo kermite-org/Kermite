@@ -228,7 +228,7 @@ export class ProjectResourceProviderImpl_Local
   }
 
   private getLocalRepositoryDir() {
-    const settings = globalSettingsProvider.getGlobalSettings();
+    const settings = globalSettingsProvider.globalSettings;
     if (settings.developerMode && settings.useLocalResouces) {
       if (appEnv.isDevelopment) {
         return pathResolve('../');

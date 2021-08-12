@@ -157,7 +157,7 @@ export class LayoutManagerModel implements ILayoutManagerModel {
   }
 
   async createNewProfileFromCurrentLayout() {
-    let projectId = '';
+    let projectId = '000000';
     if (this.editSource.type === 'ProjectLayout') {
       projectId = this.editSource.projectId;
     }
