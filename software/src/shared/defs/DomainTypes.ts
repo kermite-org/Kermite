@@ -25,6 +25,25 @@ export interface IProjectFirmwareInfo {
   buildTimestamp: string;
 }
 
+export type IStandardBaseFirmwareType =
+  | 'AvrUnified'
+  | 'AvrSplit'
+  | 'RpUnified'
+  | 'RpSplit';
+
+export type IKermiteStandardKeyboaredSpec = {
+  baseFirmwareType: IStandardBaseFirmwareType;
+  useBoardLedsProMicroAvr?: boolean;
+  useBoardLedsProMicroRp?: boolean;
+  useBoardLedsRpiPico?: boolean;
+  useDebugUart?: boolean;
+  useMatrixKeyScanner?: boolean;
+  matrixColumnPins?: string[];
+  matrixRowPins?: string[];
+  useDirectWiredKeyScanner?: boolean;
+  directWiredPins?: string[];
+};
+
 export interface IProjectResourceInfo {
   sig: string; // ${origin}#${projectId}
   origin: IResourceOrigin;
@@ -36,12 +55,40 @@ export interface IProjectResourceInfo {
   firmwares: IProjectFirmwareInfo[];
 }
 
+export interface IProjectPackageFileContent {
+  formatRevision: 'PKG0';
+  projectId: string;
+  keyboardName: string;
+  standardFirmwareDefinitions?: {
+    variantName: string;
+    data: IKermiteStandardKeyboaredSpec;
+  }[];
+  customFirmwareReferences: {
+    variantName: string;
+    firmwareId: string;
+    systemParameterKeys: string[];
+  }[];
+  layouts: {
+    layoutName: string;
+    data: IPersistKeyboardDesign;
+  }[];
+  profiles: {
+    profileName: string;
+    data: IPersistProfileData;
+  }[];
+}
+
 export interface IProjectPackageInfo {
   sig: string; // ${origin}#${projectId}
   origin: IResourceOrigin;
+  formatRevision: 'PKG0';
   projectId: string;
   packageName: string;
   keyboardName: string;
+  standardFirmwareDefinitions: {
+    variantName: string;
+    data: IKermiteStandardKeyboaredSpec;
+  }[];
   customFirmwareReferences: {
     variantName: string;
     firmwareId: string;
@@ -60,9 +107,11 @@ export interface IProjectPackageInfo {
 export const fallbackProjectPackageInfo: IProjectPackageInfo = {
   sig: '',
   origin: 'online',
+  formatRevision: 'PKG0',
   projectId: '',
   packageName: '',
   keyboardName: '',
+  standardFirmwareDefinitions: [],
   customFirmwareReferences: [],
   layouts: [],
   profiles: [],
