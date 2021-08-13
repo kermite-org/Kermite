@@ -47,8 +47,8 @@ jobs:
           path: "./firmware/KRS"
           token: ${{ secrets.API_TOKEN_GITHUB }}
 
-      - name: Check Project IDs
-        run: yarn checkProjectIds --abortOnError
+      - name: Check Firmware IDs
+        run: yarn checkFirmwareIds --abortOnError
         working-directory: ./firmware/ci
 
       - name: Update All Project Distributions
