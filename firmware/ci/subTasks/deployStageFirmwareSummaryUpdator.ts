@@ -1,5 +1,6 @@
 import {
   fsCopyFileSync,
+  fsExistsSync,
   fsxReadJsonFile,
   fsxWriteJsonFile,
   globSync,
@@ -35,7 +36,7 @@ interface IFirmwareInfo {
   buildTimestamp: string;
 }
 
-interface ISummaryData {
+interface IFirmwareSummaryData {
   info: {
     buildStats: IBuildStats;
     environment: IEnvironmentVersions;
@@ -45,10 +46,10 @@ interface ISummaryData {
   firmwares: IFirmwareInfo[];
 }
 
-function makeSummaryFileContent(
+function makeFirmwareSummaryFileContent(
   buildStats: IBuildStats,
   filesRevision: number
-): ISummaryData {
+): IFirmwareSummaryData {
   const firmwareMetadataFilePaths = globSync(
     "./dist/firmwares/**/*.metadata.json"
   );
@@ -86,15 +87,21 @@ function makeSummaryFileContent(
   };
 }
 
-export function deployStageSummaryUpdator_outputSummaryFile(
+export function deployStageFirmwareSummaryUpdator_outputSummaryFile(
   buildStats: IBuildStats,
   changeRes: IIndexUpdatorResult
 ) {
   const { filesChanged, filesRevision } = changeRes;
-  if (filesChanged) {
-    const savingSummaryObj = makeSummaryFileContent(buildStats, filesRevision);
-    fsxWriteJsonFile("./dist/summary.json", savingSummaryObj);
+
+  const sourceSummaryFilePath = "./KRS/resources2/firmware_summary.json";
+  const distSummaryFilePath = "./dist/firmware_summary.json";
+  if (!filesChanged && fsExistsSync(sourceSummaryFilePath)) {
+    fsCopyFileSync(sourceSummaryFilePath, distSummaryFilePath);
   } else {
-    fsCopyFileSync("./KRS/resources2/summary.json", "./dist/summary.json");
+    const savingSummaryObj = makeFirmwareSummaryFileContent(
+      buildStats,
+      filesRevision
+    );
+    fsxWriteJsonFile(distSummaryFilePath, savingSummaryObj);
   }
 }

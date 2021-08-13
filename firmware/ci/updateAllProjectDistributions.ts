@@ -6,7 +6,7 @@ import {
 } from "./helpers";
 import { deployStageIndexUpdator_updateIndexIfFilesChanged } from "./subTasks/deployStageIndexUpdator";
 import { deployStageProjectsBuilder_buildProjects } from "./subTasks/deployStageProjectsBuilder";
-import { deployStageSummaryUpdator_outputSummaryFile } from "./subTasks/deployStageSummaryUpdator";
+import { deployStageFirmwareSummaryUpdator_outputSummaryFile } from "./subTasks/deployStageFirmwareSummaryUpdator";
 
 process.chdir("..");
 
@@ -32,7 +32,7 @@ function buildAllProjectDistributions() {
     process.exit(-1);
   }
   const changeRes = deployStageIndexUpdator_updateIndexIfFilesChanged();
-  deployStageSummaryUpdator_outputSummaryFile(buildStats, changeRes);
+  deployStageFirmwareSummaryUpdator_outputSummaryFile(buildStats, changeRes);
   copyResourcesToLocalResourceStoreRepo();
   console.log("done");
 }
