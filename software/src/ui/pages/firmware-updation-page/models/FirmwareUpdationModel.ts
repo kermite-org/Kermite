@@ -44,11 +44,11 @@ export class FirmwareUpdationModel {
     const blankOption = { value: '', label: 'select firmware' };
     const projectOptions = flattenArray(
       this.projectInfosWithFirmware.map((info) =>
-        info.standardFirmwareDefinitions.map((firmware) => ({
-          value: `${info.sig}:${firmware.variantName}`,
+        info.firmwares.map((firmware) => ({
+          value: `${info.sig}:${firmware.variationName}`,
           label: `${info.origin === 'local' ? '(local) ' : ''} ${
             info.keyboardName
-          } (${firmware.variantName})`,
+          } (${firmware.variationName})`,
         })),
       ),
     );
@@ -102,8 +102,8 @@ export class FirmwareUpdationModel {
       const projectaInfo = this.projectInfosWithFirmware.find((it) =>
         it.sig.startsWith(projectSig),
       );
-      const firmwareInfo = projectaInfo?.standardFirmwareDefinitions.find(
-        (f) => f.variantName === variationName,
+      const firmwareInfo = projectaInfo?.firmwares.find(
+        (f) => f.variationName === variationName,
       );
       if (firmwareInfo) {
         const targetDevice = getFirmwareTargetDeviceFromBaseFirmwareType(
@@ -156,7 +156,7 @@ export class FirmwareUpdationModel {
   private fechProjectInfos() {
     this.projectInfosWithFirmware = projectPackagesReader
       .getProjectInfosGlobalProjectSelectionAffected()
-      .filter((info) => info.standardFirmwareDefinitions.length > 0);
+      .filter((info) => info.firmwares.length > 0);
   }
 
   startPageSession = () => {
