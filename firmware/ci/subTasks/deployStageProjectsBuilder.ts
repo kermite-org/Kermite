@@ -411,7 +411,7 @@ function copyFilesInFolder(srcDir: string, destDir: string, extension: string) {
 }
 
 function copyProjectPackages() {
-  const srcDir = `./projects_next`;
+  const srcDir = `./project_packages`;
   const destDir = `./dist/projects`;
   fsxMakeDirectory(destDir);
   copyFilesInFolder(srcDir, destDir, ".kmpkg.json");
