@@ -400,6 +400,22 @@ function buildProjectVariationEntry(
   }
 }
 
+function copyFilesInFolder(srcDir: string, destDir: string, extension: string) {
+  const targetFiles = fsReaddirSync(srcDir).filter((fileName) =>
+    fileName.endsWith(extension)
+  );
+  targetFiles.forEach((fileName) =>
+    fsCopyFileSync(`${srcDir}/${fileName}`, `${destDir}/${fileName}`)
+  );
+}
+
+function copyProjectPackages() {
+  const srcDir = `./projects_next`;
+  const destDir = `./dist/projects`;
+  fsxMakeDirectory(destDir);
+  copyFilesInFolder(srcDir, destDir, ".kmpkg.json");
+}
+
 interface IBuildStats {
   numSuccess: number;
   numTotal: number;
@@ -414,6 +430,8 @@ export function deployStageProjectsBuilder_buildProjects(): IBuildStats {
   const results = projectVariationPaths.map((pp) =>
     buildProjectVariationEntry(pp, commonRevisions)
   );
+
+  copyProjectPackages();
 
   const numSuccess = arrayCount(results, (a) => !!a);
   const numTotal = results.length;
