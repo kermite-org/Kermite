@@ -3,10 +3,15 @@ import {
   flattenArray,
   getFirmwareTargetDeviceFromBaseFirmwareType,
   IBootloaderDeviceDetectionStatus,
+  IFirmwareTargetDevice,
   IProjectPackageInfo,
 } from '~/shared';
 import { ipcAgent, ISelectorSource } from '~/ui/base';
-import { projectPackagesReader, uiStatusModel } from '~/ui/commonModels';
+import {
+  projectPackagesReader,
+  uiGlobalStore,
+  uiStatusModel,
+} from '~/ui/commonModels';
 import { modalAlert } from '~/ui/components';
 
 export type FirmwareUpdationPhase =
@@ -16,6 +21,22 @@ export type FirmwareUpdationPhase =
   | 'UploadSuccess'
   | 'UploadFailure';
 
+function getTargetDeviceFromFirmwareInfo(
+  entry: IProjectPackageInfo['firmwares'][0],
+): IFirmwareTargetDevice | undefined {
+  if ('standardFirmwareConfig' in entry) {
+    return getFirmwareTargetDeviceFromBaseFirmwareType(
+      entry.standardFirmwareConfig.baseFirmwareType,
+    );
+  }
+  if ('customFirmwareId' in entry) {
+    const item = uiGlobalStore.allCustomFirmwareInfos.find(
+      (it) => it.firmwareId === entry.customFirmwareId,
+    );
+    return item?.targetDevice as IFirmwareTargetDevice;
+  }
+  return undefined;
+}
 export class FirmwareUpdationModel {
   currentProjectFirmwareSpec: string = '';
   phase: FirmwareUpdationPhase = 'WaitingReset';
@@ -106,12 +127,13 @@ export class FirmwareUpdationModel {
         (f) => f.variationName === variationName,
       );
       if (firmwareInfo) {
-        const targetDevice = getFirmwareTargetDeviceFromBaseFirmwareType(
-          firmwareInfo.data.baseFirmwareType,
-        );
-        return checkDeviceBootloaderMatch(
-          this.deviceDetectionStatus.bootloaderType,
-          targetDevice,
+        const targetDevice = getTargetDeviceFromFirmwareInfo(firmwareInfo);
+        return (
+          !!targetDevice &&
+          checkDeviceBootloaderMatch(
+            this.deviceDetectionStatus.bootloaderType,
+            targetDevice,
+          )
         );
       }
     }
