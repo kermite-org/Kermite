@@ -374,9 +374,9 @@
       }
     }
   ],
-  "profiles": [
+  "presets": [
     {
-      "profileName": "default",
+      "presetName": "default",
       "data": {
         "formatRevision": "PRF03",
         "projectId": "79xv6Z",
