@@ -59,50 +59,31 @@ export interface IProjectPackageFileContent {
   formatRevision: 'PKG0';
   projectId: string;
   keyboardName: string;
-  standardFirmwareDefinitions?: {
-    variantName: string;
-    data: IKermiteStandardKeyboaredSpec;
-  }[];
-  customFirmwareReferences: {
-    variantName: string;
-    firmwareId: string;
-    systemParameterKeys: string[];
-  }[];
+  firmwares: (
+    | {
+        variationName: string;
+        standardFirmwareConfig: IKermiteStandardKeyboaredSpec;
+      }
+    | {
+        variationName: string;
+        customFirmwareId: string;
+      }
+  )[];
   layouts: {
     layoutName: string;
     data: IPersistKeyboardDesign;
   }[];
-  profiles: {
-    profileName: string;
+  presets: {
+    presetName: string;
     data: IPersistProfileData;
   }[];
 }
 
-export interface IProjectPackageInfo {
+export type IProjectPackageInfo = {
   sig: string; // ${origin}#${projectId}
   origin: IResourceOrigin;
-  formatRevision: 'PKG0';
-  projectId: string;
   packageName: string;
-  keyboardName: string;
-  standardFirmwareDefinitions: {
-    variantName: string;
-    data: IKermiteStandardKeyboaredSpec;
-  }[];
-  customFirmwareReferences: {
-    variantName: string;
-    firmwareId: string;
-    systemParameterKeys: string[];
-  }[];
-  layouts: {
-    layoutName: string;
-    data: IPersistKeyboardDesign;
-  }[];
-  profiles: {
-    profileName: string;
-    data: IPersistProfileData;
-  }[];
-}
+} & IProjectPackageFileContent;
 
 export const fallbackProjectPackageInfo: IProjectPackageInfo = {
   sig: '',
@@ -111,10 +92,9 @@ export const fallbackProjectPackageInfo: IProjectPackageInfo = {
   projectId: '',
   packageName: '',
   keyboardName: '',
-  standardFirmwareDefinitions: [],
-  customFirmwareReferences: [],
+  firmwares: [],
   layouts: [],
-  profiles: [],
+  presets: [],
 };
 
 export interface IProjectCustomDefinition {
