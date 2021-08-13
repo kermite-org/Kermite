@@ -2,7 +2,7 @@ import { useEffect, useLocal } from 'qx';
 import { IDisplayKeyboardDesign, IProjectPackageInfo } from '~/shared';
 import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
-import { ipcAgent, UiLocalStorage } from '~/ui/base';
+import { UiLocalStorage } from '~/ui/base';
 import { projectPackagesReader } from '~/ui/commonModels';
 import {
   IShapeViewPersistState,
@@ -92,17 +92,6 @@ class KeyboardShapesModel {
     }
   };
 
-  private onLayoutFileUpdated = (args: { projectId: string }) => {
-    if (this._currentProjectSig) {
-      if (
-        args.projectId ===
-        getProjectOriginAndIdFromSig(this._currentProjectSig).projectId
-      ) {
-        this.loadCurrentProjectLayout();
-      }
-    }
-  };
-
   private initialize() {
     this.projectInfos = projectPackagesReader.getProjectInfosGlobalProjectSelectionAffected();
     if (this.projectInfos.length === 0) {
@@ -135,12 +124,7 @@ class KeyboardShapesModel {
 
     this.initialize();
 
-    const unsub = ipcAgent.events.projects_layoutFileUpdationEvents.subscribe(
-      this.onLayoutFileUpdated,
-    );
-
     return () => {
-      unsub();
       UiLocalStorage.writeItem('shapePareviewPageSettings', this.settings);
     };
   };

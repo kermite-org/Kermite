@@ -126,7 +126,6 @@ export interface IAppIpcContract {
     device_keyboardDeviceStatusEvents: Partial<IKeyboardDeviceStatus>;
 
     firmup_deviceDetectionEvents: IBootloaderDeviceDetectionStatus;
-    projects_layoutFileUpdationEvents: { projectId: string };
 
     config_keyboardConfigEvents: Partial<IKeyboardConfig>;
     config_globalSettingsEvents: Partial<IGlobalSettings>;

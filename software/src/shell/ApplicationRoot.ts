@@ -14,7 +14,6 @@ import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
 import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStatic';
 import { FirmwareUpdationService } from '~/shell/services/firmwareUpdation';
 import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/inputLogicSimulatorD';
-import { KeyboardLayoutFilesWatcher } from '~/shell/services/layout/KeyboardLayoutFilesWatcher';
 import { LayoutManager } from '~/shell/services/layout/LayoutManager';
 import { PresetProfileLoader } from '~/shell/services/profile/PresetProfileLoader';
 import { ProfileManager } from '~/shell/services/profile/ProfileManager';
@@ -23,8 +22,6 @@ import { AppWindowWrapper } from '~/shell/services/window';
 
 export class ApplicationRoot {
   private keyboardConfigProvider = new KeyboardConfigProvider();
-
-  private keyboardLayoutFilesWatcher = new KeyboardLayoutFilesWatcher();
 
   private firmwareUpdationService = new FirmwareUpdationService();
 
@@ -206,8 +203,6 @@ export class ApplicationRoot {
       },
       firmup_deviceDetectionEvents: (cb) =>
         this.firmwareUpdationService.deviceDetectionEvents.subscribe(cb),
-      projects_layoutFileUpdationEvents: (cb) =>
-        this.keyboardLayoutFilesWatcher.fileUpdationEvents.subscribe(cb),
       window_appWindowStatus: windowWrapper.appWindowEventPort.subscribe,
 
       config_keyboardConfigEvents: (cb) =>
