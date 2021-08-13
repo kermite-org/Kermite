@@ -16,6 +16,7 @@ async function start() {
   uiStatusModel.initialize();
   await globalSettingsModel.initialize();
   uiGlobalStore.allProjectPackageInfos = await ipcAgent.async.projects_getAllProjectPackageInfos();
+  uiGlobalStore.allCustomFirmwareInfos = await ipcAgent.async.projects_getAllCustomFirmwareInfos();
 
   render(() => <SiteRoot />, appDiv);
   window.addEventListener('resize', debounce(appUi.rerender, 100));

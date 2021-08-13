@@ -17,6 +17,7 @@ import {
   IBootloaderDeviceDetectionStatus,
   IProfileEntry,
   IProjectPackageInfo,
+  ICustomFirmwareInfo,
 } from '~/shared/defs/DomainTypes';
 import { IPersistKeyboardDesign } from '~/shared/defs/KeyboardDesign';
 import { IGlobalSettings, IKeyboardConfig } from './ConfigTypes';
@@ -84,6 +85,7 @@ export interface IAppIpcContract {
     projects_saveLocalProjectPackageInfo(
       info: IProjectPackageInfo,
     ): Promise<void>;
+    projects_getAllCustomFirmwareInfos(): Promise<ICustomFirmwareInfo[]>;
 
     presetHub_getServerProjectIds(): Promise<string[]>;
     presetHub_getServerProfiles(

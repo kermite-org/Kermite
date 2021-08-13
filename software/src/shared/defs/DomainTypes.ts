@@ -97,6 +97,12 @@ export const fallbackProjectPackageInfo: IProjectPackageInfo = {
   presets: [],
 };
 
+export type ICustomFirmwareInfo = {
+  firmwareId: string;
+  firmwareProjectPath: string;
+  variationName: string;
+  targetDevice: string;
+};
 export interface IProjectCustomDefinition {
   customParameterSpecs?: ICustromParameterSpec[];
 }
