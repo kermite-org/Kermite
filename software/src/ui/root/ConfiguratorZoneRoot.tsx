@@ -11,6 +11,7 @@ import { LoadingOverlay } from '~/ui/components/overlay/LoadingOverlay';
 import { OnboadingFrame } from '~/ui/features/OnboardingPanel';
 import { ProjectEditPage } from '~/ui/pages/ProjectEditPage';
 import { ProjectLayoutEditPage } from '~/ui/pages/ProjectLayoutEditPage';
+import { ProjectPresetEditPage } from '~/ui/pages/ProjectPresetEditPage';
 import { EditorPage } from '~/ui/pages/editor-page';
 import { FirmwareUpdationPage } from '~/ui/pages/firmware-updation-page';
 import { UiLayouterPageComponent } from '~/ui/pages/layouter-page';
@@ -33,6 +34,9 @@ const MainColumnRoutes = () => {
       <div css={cssMainColumn}>
         {pageSpec.type === 'projectLayoutEdit' && (
           <ProjectLayoutEditPage spec={pageSpec} />
+        )}
+        {pageSpec.type === 'projectPresetEdit' && (
+          <ProjectPresetEditPage spec={pageSpec} />
         )}
       </div>
     );
