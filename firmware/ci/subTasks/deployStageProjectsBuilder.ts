@@ -22,7 +22,6 @@ import {
   puts,
   stringifyArray,
   timeNow,
-  uniqueArrayItemsDeep,
 } from "../helpers";
 
 class BuildStepError extends Error {}
