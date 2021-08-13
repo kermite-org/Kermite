@@ -1,6 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
 import {
+  pageActions,
   projectPackagesHooks,
   projectPackagesMutations,
 } from '~/ui/commonModels';
@@ -22,6 +23,13 @@ export const ProjectEditPage: FC = () => {
     preset: projectInfo.profiles.map((it) => it.profileName),
   };
 
+  const onButton = () => {
+    pageActions.navigateTo({
+      type: 'projectLayoutEdit',
+      layoutName: projectInfo.layouts[0].layoutName,
+    });
+  };
+
   return (
     <div css={style}>
       <div>project edit page</div>
@@ -36,6 +44,9 @@ export const ProjectEditPage: FC = () => {
         </label>
       </div>
       <pre>{JSON.stringify(resourceData, null, ' ')}</pre>
+      <div>
+        <button onClick={onButton}>edit layout</button>
+      </div>
     </div>
   );
 };
