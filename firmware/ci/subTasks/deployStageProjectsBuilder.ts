@@ -1,4 +1,4 @@
-import { IFirmwareMetadataJson } from "subTasks/common";
+import { IFirmwareMetadataJson } from "./common";
 import {
   arrayCount,
   executeCommand,
