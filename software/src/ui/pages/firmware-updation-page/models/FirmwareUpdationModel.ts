@@ -3,14 +3,11 @@ import {
   IBootloaderDeviceDetectionStatus,
   IBootloaderType,
   IFirmwareTargetDevice,
-  IProjectResourceInfo,
+  IProjectPackageInfo,
+  IStandardBaseFirmwareType,
 } from '~/shared';
 import { ipcAgent, ISelectorSource } from '~/ui/base';
-import {
-  fetchAllProjectResourceInfos,
-  globalSettingsModel,
-  uiStatusModel,
-} from '~/ui/commonModels';
+import { projectPackagesReader, uiStatusModel } from '~/ui/commonModels';
 import { modalAlert } from '~/ui/components';
 
 export type FirmwareUpdationPhase =
@@ -32,13 +29,23 @@ function checkDeviceBootloaderMatch(
     (isBootloaderRp2040 && firmwareTargetDevice === 'rp2040')
   );
 }
+
+function getFirmwareTargetDeviceFromBaseFirmwareType(
+  baseFirmwareType: IStandardBaseFirmwareType,
+): IFirmwareTargetDevice {
+  if (baseFirmwareType === 'AvrUnified' || baseFirmwareType === 'AvrSplit') {
+    return 'atmega32u4';
+  } else {
+    return 'rp2040';
+  }
+}
 export class FirmwareUpdationModel {
   currentProjectFirmwareSpec: string = '';
   phase: FirmwareUpdationPhase = 'WaitingReset';
 
   firmwareUploadResult: string | undefined = undefined;
 
-  private projectInfosWithFirmware: IProjectResourceInfo[] = [];
+  private projectInfosWithFirmware: IProjectPackageInfo[] = [];
 
   private deviceDetectionStatus: IBootloaderDeviceDetectionStatus = {
     detected: false,
@@ -60,11 +67,11 @@ export class FirmwareUpdationModel {
     const blankOption = { value: '', label: 'select firmware' };
     const projectOptions = flattenArray(
       this.projectInfosWithFirmware.map((info) =>
-        info.firmwares.map((firmware) => ({
-          value: `${info.sig}:${firmware.variationName}`,
+        info.standardFirmwareDefinitions.map((firmware) => ({
+          value: `${info.sig}:${firmware.variantName}`,
           label: `${info.origin === 'local' ? '(local) ' : ''} ${
             info.keyboardName
-          } (${info.projectPath} ${firmware.variationName})`,
+          } (${firmware.variantName})`,
         })),
       ),
     );
@@ -118,13 +125,16 @@ export class FirmwareUpdationModel {
       const projectaInfo = this.projectInfosWithFirmware.find((it) =>
         it.sig.startsWith(projectSig),
       );
-      const firmwareInfo = projectaInfo?.firmwares.find(
-        (f) => f.variationName === variationName,
+      const firmwareInfo = projectaInfo?.standardFirmwareDefinitions.find(
+        (f) => f.variantName === variationName,
       );
       if (firmwareInfo) {
+        const targetDevice = getFirmwareTargetDeviceFromBaseFirmwareType(
+          firmwareInfo.data.baseFirmwareType,
+        );
         return checkDeviceBootloaderMatch(
           this.deviceDetectionStatus.bootloaderType,
-          firmwareInfo.targetDevice,
+          targetDevice,
         );
       }
     }
@@ -166,13 +176,10 @@ export class FirmwareUpdationModel {
     }
   };
 
-  private async fechProjectInfos() {
-    const { globalProjectId } = globalSettingsModel.globalSettings;
-    this.projectInfosWithFirmware = (await fetchAllProjectResourceInfos())
-      .filter(
-        (info) => globalProjectId === '' || info.projectId === globalProjectId,
-      )
-      .filter((info) => info.firmwares.length > 0);
+  private fechProjectInfos() {
+    this.projectInfosWithFirmware = projectPackagesReader
+      .getProjectInfosGlobalProjectSelectionAffected()
+      .filter((info) => info.standardFirmwareDefinitions.length > 0);
   }
 
   startPageSession = () => {
