@@ -74,7 +74,7 @@ function loadProjectSourceAttributes(
   projectName: string,
   variationName: string
 ): IProjectSourceAttributes {
-  const metadataFilePath = `./KRS/resources2/firmwares/${projectPath}/${projectName}_${variationName}.metadata.json.metadata.json`;
+  const metadataFilePath = `./KRS/resources2/firmwares/${projectPath}/${projectName}_${variationName}.metadata.json`;
 
   if (fsExistsSync(metadataFilePath)) {
     const obj = fsxReadJsonFile(metadataFilePath);
