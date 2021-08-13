@@ -2,10 +2,10 @@
   "formatRevision": "PKG0",
   "projectId": "79xv6Z",
   "keyboardName": "Astelia",
-  "standardFirmwareDefinitions": [
+  "firmwares": [
     {
-      "variantName": "atmega",
-      "data": {
+      "variationName": "atmega",
+      "standardFirmwareConfig": {
         "baseFirmwareType": "AvrUnified",
         "useBoardLedsProMicroAvr": true,
         "useMatrixKeyScanner": true,
@@ -21,17 +21,10 @@
           "PB5"
         ]
       }
-    }
-  ],
-  "customFirmwareReferences": [
+    },
     {
-      "variantName": "atmega_custom",
-      "firmwareId": "dFbA81",
-      "systemParameterKeys": [
-        "emitRealtimeEvents",
-        "keyHoldIndicatorLed",
-        "heartbeatLed"
-      ]
+      "variationName": "atmega_custom",
+      "customFirmwareId": "dFbA81"
     }
   ],
   "layouts": [
@@ -381,9 +374,9 @@
       }
     }
   ],
-  "profiles": [
+  "presets": [
     {
-      "profileName": "default",
+      "presetName": "default",
       "data": {
         "formatRevision": "PRF03",
         "projectId": "79xv6Z",

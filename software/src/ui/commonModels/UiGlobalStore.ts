@@ -1,25 +1,12 @@
 import { IProjectPackageInfo } from '~/shared';
-import { globalSettingsModel } from '~/ui/commonModels/GlobalSettingsModel';
+import { IPageSpec } from '~/ui/commonModels/PageTypes';
 
 type IUiGlobalStore = {
+  pageSpec: IPageSpec | undefined;
   allProjectPackageInfos: IProjectPackageInfo[];
 };
 
 export const uiGlobalStore: IUiGlobalStore = {
+  pageSpec: undefined,
   allProjectPackageInfos: [],
-};
-
-export const uiGlobalStoreReader = {
-  getProjectInfosGlobalProjectSelectionAffected(): IProjectPackageInfo[] {
-    const {
-      useLocalResouces,
-      globalProjectId,
-    } = globalSettingsModel.globalSettings;
-
-    return uiGlobalStore.allProjectPackageInfos
-      .filter((info) => useLocalResouces || info.origin === 'online')
-      .filter(
-        (info) => globalProjectId === '' || info.projectId === globalProjectId,
-      );
-  },
 };

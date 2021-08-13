@@ -1,8 +1,11 @@
-import { useKeyboardDeviceStatus, useProjectInfo } from '~/ui/commonModels';
+import {
+  projectPackagesReader,
+  useKeyboardDeviceStatus,
+} from '~/ui/commonModels';
 
 export function makeDeviceControlSectionViewModel() {
   const { isConnected, deviceAttrs } = useKeyboardDeviceStatus();
-  const projectInfo = useProjectInfo(
+  const projectInfo = projectPackagesReader.findProjectInfo(
     deviceAttrs?.origin,
     deviceAttrs?.projectId,
   );

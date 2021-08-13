@@ -57,6 +57,13 @@ const entrySources: NavigationEntrySource[] = [
     hint: texts.hint_sideMenu_app_firmwareUpdation,
   },
   {
+    pagePath: '/projectEdit',
+    pageName: 'project',
+    iconSpec: 'fa fa-globe',
+    hint: 'project edit',
+    isAvailable: () => globalSettingsModel.isLocalProjectSelectedForEdit,
+  },
+  {
     pagePath: '/projectSelection',
     pageName: texts.label_sideMenu_app_projectSelection,
     iconSpec: 'fa fa-globe',
@@ -68,7 +75,6 @@ const entrySources: NavigationEntrySource[] = [
     iconSpec: 'fa fa-cog',
     hint: texts.hint_sideMenu_app_settings,
   },
-
   {
     pagePath: '/home',
     pageName: 'entrance',

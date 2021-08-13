@@ -81,6 +81,9 @@ export interface IAppIpcContract {
     ): Promise<IPersistKeyboardDesign | undefined>;
 
     projects_getAllProjectPackageInfos(): Promise<IProjectPackageInfo[]>;
+    projects_saveLocalProjectPackageInfo(
+      info: IProjectPackageInfo,
+    ): Promise<void>;
 
     presetHub_getServerProjectIds(): Promise<string[]>;
     presetHub_getServerProfiles(

@@ -2,10 +2,11 @@
   "formatRevision": "PKG0",
   "projectId": "K3e89X",
   "keyboardName": "km60",
-  "standardFirmwareDefinitions": [
+
+  "firmwares": [
     {
-      "variantName": "proto0",
-      "data": {
+      "variationName": "proto0",
+      "standardFirmwareConfig": {
         "baseFirmwareType": "RpUnified",
         "useBoardLedsProMicroRp": true,
         "useMatrixKeyScanner": true,
@@ -31,17 +32,10 @@
           "GP21"
         ]
       }
-    }
-  ],
-  "customFirmwareReferences": [
+    },
     {
-      "variantName": "proto0_custom",
-      "firmwareId": "7qHDCp",
-      "systemParameterKeys": [
-        "emitRealtimeEvents",
-        "keyHoldIndicatorLed",
-        "heartbeatLed"
-      ]
+      "variationName": "proto0_custom",
+      "customFirmwareId": "7qHDCp"
     }
   ],
   "layouts": [
@@ -904,5 +898,5 @@
       }
     }
   ],
-  "profiles": []
+  "presets": []
 }

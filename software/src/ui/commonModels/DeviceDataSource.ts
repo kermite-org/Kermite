@@ -5,7 +5,7 @@ import {
   IProjectPackageInfo,
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
-import { useProjectInfo } from '~/ui/commonModels/ProjectDataSource';
+import { projectPackagesReader } from '~/ui/commonModels/ProjectDataSource';
 import { useEventSource } from '~/ui/helpers';
 
 export function useDeviceSelectionStatus(): IDeviceSelectionStatus {
@@ -28,7 +28,7 @@ export function useConnectedDeviceAttributes(): {
 } {
   const deviceStatus = useKeyboardDeviceStatus();
   const deviceAttrs = deviceStatus.deviceAttrs;
-  const projectInfo = useProjectInfo(
+  const projectInfo = projectPackagesReader.findProjectInfo(
     deviceAttrs?.origin,
     deviceAttrs?.projectId,
   );

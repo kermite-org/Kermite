@@ -2,10 +2,10 @@
   "formatRevision": "PKG0",
   "projectId": "wHvGTW",
   "keyboardName": "KM71A",
-  "standardFirmwareDefinitions": [
+  "firmwares": [
     {
-      "variantName": "rp",
-      "data": {
+      "variationName": "rp",
+      "standardFirmwareConfig": {
         "baseFirmwareType": "RpUnified",
         "useBoardLedsProMicroRp": true,
         "useMatrixKeyScanner": true,
@@ -28,21 +28,10 @@
         ],
         "matrixRowPins": ["GP16", "GP17", "GP18", "GP19", "GP20"]
       }
-    }
-  ],
-  "customFirmwareReferences": [
+    },
     {
-      "variantName": "rp_custom",
-      "firmwareId": "O1lweX",
-      "systemParameterKeys": [
-        "emitRealtimeEvents",
-        "keyHoldIndicatorLed",
-        "heartbeatLed",
-        "glowActive",
-        "glowColor",
-        "glowBrightness",
-        "glowPattern"
-      ]
+      "variationName": "rp_custom",
+      "customFirmwareId": "O1lweX"
     }
   ],
   "layouts": [
@@ -515,5 +504,5 @@
       }
     }
   ],
-  "profiles": []
+  "presets": []
 }

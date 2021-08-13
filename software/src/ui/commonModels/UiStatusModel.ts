@@ -1,18 +1,5 @@
 import { copyObjectProps } from '~/shared';
 
-export type PagePaths =
-  | '/'
-  | '/editor'
-  | '/layouter'
-  | '/shapePreview'
-  | '/firmwareUpdation'
-  | '/presetBrowser'
-  | '/presetBrowser2'
-  | '/settings'
-  | '/widget'
-  | '/projectSelection'
-  | '/home';
-
 export interface IUiSettings {
   showTestInputArea: boolean;
   showLayersDynamic: boolean;

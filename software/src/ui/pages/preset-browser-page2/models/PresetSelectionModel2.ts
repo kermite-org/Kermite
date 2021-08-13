@@ -12,7 +12,7 @@ import {
   ISelectorOption,
   router,
 } from '~/ui/base';
-import { uiGlobalStoreReader } from '~/ui/commonModels';
+import { projectPackagesReader } from '~/ui/commonModels';
 import { fieldSetter, useFetcher, usePersistState } from '~/ui/helpers';
 import { IPresetSelectionModel } from '~/ui/pages/preset-browser-page/models';
 
@@ -56,7 +56,7 @@ export function usePresetSelectionModel2(): IPresetSelectionModel {
   });
 
   const resourceInfos = useMemo(
-    uiGlobalStoreReader.getProjectInfosGlobalProjectSelectionAffected,
+    projectPackagesReader.getProjectInfosGlobalProjectSelectionAffected,
     [],
   );
   const projectIds = useFetcher(
