@@ -2,14 +2,14 @@
   "formatRevision": "PKG0",
   "projectId": "Di6V4K",
   "keyboardName": "Minivers",
-  "customFirmwareReferences": [
+  "firmwares": [
     {
-      "variantName": "rev1",
-      "firmwareId": "FZiVsZ"
+      "variationName": "rev1",
+      "customFirmwareId": "FZiVsZ"
     },
     {
-      "variantName": "rev2_rp",
-      "firmwareId": "7zabZ0"
+      "variationName": "rev2_rp",
+      "customFirmwareId": "7zabZ0"
     }
   ],
   "layouts": [

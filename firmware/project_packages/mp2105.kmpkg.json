@@ -2,26 +2,24 @@
   "formatRevision": "PKG0",
   "projectId": "2xUWcB",
   "keyboardName": "mp2105",
-  "standardFirmwareDefinitions": [
+  "firmwares": [
     {
-      "variantName": "rp",
-      "data": {
+      "variationName": "rp",
+      "standardFirmwareConfig": {
         "baseFirmwareType": "RpUnified",
         "useBoardLedsProMicroRp": true,
         "useMatrixKeyScanner": true,
         "matrixColumnPins": ["GP6", "GP7", "GP8", "GP9"],
         "matrixRowPins": ["GP20", "GP23", "GP21"]
       }
-    }
-  ],
-  "customFirmwareReferences": [
-    {
-      "variantName": "atmega_custom",
-      "firmwareId": "feGV0G"
     },
     {
-      "variantName": "rp_custom",
-      "firmwareId": "UMyy5p"
+      "variationName": "atmega_custom",
+      "customFirmwareId": "feGV0G"
+    },
+    {
+      "variationName": "rp_custom",
+      "customFirmwareId": "UMyy5p"
     }
   ],
   "layouts": [
