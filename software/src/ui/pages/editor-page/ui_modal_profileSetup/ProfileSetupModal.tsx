@@ -1,7 +1,7 @@
 import { jsx, useInlineEffect, useLocal, useMemo } from 'qx';
 import { IProjectPackageInfo } from '~/shared';
 import { ISelectorOption } from '~/ui/base';
-import { uiGlobalStoreReader } from '~/ui/commonModels';
+import { projectPackagesReader } from '~/ui/commonModels';
 import {
   ClosableOverlay,
   CommonDialogFrame,
@@ -125,7 +125,7 @@ function useProfileSetupModalViewModel(): IProfileSetupModalViewModel {
   });
 
   const resourceInfos = useMemo(
-    uiGlobalStoreReader.getProjectInfosGlobalProjectSelectionAffected,
+    projectPackagesReader.getProjectInfosGlobalProjectSelectionAffected,
     [],
   );
   const projectOptions = useMemoEx(makeProjectOptions, [resourceInfos]);

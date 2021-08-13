@@ -8,12 +8,14 @@ import { appEnv } from '~/shell/base';
 import {
   fsxListFileBaseNames,
   fsxReadJsonFile,
+  fsxWriteJsonFile,
   pathJoin,
   pathResolve,
 } from '~/shell/funcs';
 
 interface IProjectPackageProvider {
   getAllProjectPackageInfos(): Promise<IProjectPackageInfo[]>;
+  saveLocalProjectPackageInfo(info: IProjectPackageInfo): Promise<void>;
 }
 
 interface IProjectPackageFileContent {
@@ -48,6 +50,7 @@ async function loadProjectPackageFiles(
       return {
         sig: `${origin}#${data.projectId}`,
         origin,
+        packageName,
         ...data,
       };
     }),
@@ -67,6 +70,16 @@ async function loadLocalProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
   );
   return await loadProjectPackageFiles(projectsFolder, 'local');
 }
+
+async function saveLocalProjectPackgeInfoImpl(info: IProjectPackageInfo) {
+  const filePath = pathJoin(
+    appEnv.userDataFolderPath,
+    'data',
+    'projects',
+    `${info.packageName}.kmpkg.json`,
+  );
+  await fsxWriteJsonFile(filePath, info);
+}
 export class ProjectPackageProvider implements IProjectPackageProvider {
   private cached: IProjectPackageInfo[] | undefined;
 
@@ -78,6 +91,10 @@ export class ProjectPackageProvider implements IProjectPackageProvider {
       ];
     }
     return this.cached;
+  }
+
+  async saveLocalProjectPackageInfo(info: IProjectPackageInfo): Promise<void> {
+    await saveLocalProjectPackgeInfoImpl(info);
   }
 }
 

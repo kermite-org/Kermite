@@ -131,6 +131,8 @@ export class ApplicationRoot {
         ),
       projects_getAllProjectPackageInfos: () =>
         projectPackageProvider.getAllProjectPackageInfos(),
+      projects_saveLocalProjectPackageInfo: (info) =>
+        projectPackageProvider.saveLocalProjectPackageInfo(info),
       presetHub_getServerProjectIds: () =>
         this.presetHubService.getServerProjectIds(),
       presetHub_getServerProfiles: (projectId: string) =>

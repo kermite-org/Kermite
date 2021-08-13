@@ -3,7 +3,7 @@ import { IDisplayKeyboardDesign, IProjectPackageInfo } from '~/shared';
 import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import { ipcAgent, UiLocalStorage } from '~/ui/base';
-import { uiGlobalStoreReader } from '~/ui/commonModels';
+import { projectPackagesReader } from '~/ui/commonModels';
 import {
   IShapeViewPersistState,
   shapeViewPersistStateDefault,
@@ -102,7 +102,7 @@ class KeyboardShapesModel {
   };
 
   private initialize() {
-    this.projectInfos = uiGlobalStoreReader.getProjectInfosGlobalProjectSelectionAffected();
+    this.projectInfos = projectPackagesReader.getProjectInfosGlobalProjectSelectionAffected();
     if (this.projectInfos.length === 0) {
       this._currentLayoutName = undefined;
       this._currentLayoutName = undefined;

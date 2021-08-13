@@ -63,6 +63,13 @@ const entrySources: NavigationEntrySource[] = [
     hint: 'project selection',
   },
   {
+    pagePath: '/projectEdit',
+    pageName: 'project',
+    iconSpec: 'fa fa-globe',
+    hint: 'project edit',
+    isAvailable: () => globalSettingsModel.isLocalProjectSelectedForEdit,
+  },
+  {
     pagePath: '/settings',
     pageName: texts.label_sideMenu_app_settings,
     iconSpec: 'fa fa-cog',
