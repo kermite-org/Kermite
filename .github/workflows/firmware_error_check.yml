@@ -53,12 +53,8 @@ jobs:
       - run: yarn checkHardcodedVersions
         working-directory: ./firmware/ci
 
-      - name: Check Project IDs
-        run: yarn checkProjectIds --abortOnError
-        working-directory: ./firmware/ci
-
-      - name: Check Project Related Json Schemas
-        run: yarn checkProjectJsonSchemas
+      - name: Check Firmware IDs
+        run: yarn checkFirmwareIds --abortOnError
         working-directory: ./firmware/ci
 
       - name: Check Firmware Build Errors

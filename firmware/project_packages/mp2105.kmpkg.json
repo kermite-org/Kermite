@@ -1,15 +1,44 @@
 {
   "formatRevision": "PKG0",
-  "projectId": "dx5kE9",
-  "keyboardName": "Shiro",
+  "projectId": "2xUWcB",
+  "keyboardName": "mp2105",
+  "standardFirmwareDefinitions": [
+    {
+      "variantName": "rp",
+      "data": {
+        "baseFirmwareType": "RpUnified",
+        "useBoardLedsProMicroRp": true,
+        "useMatrixKeyScanner": true,
+        "matrixColumnPins": ["GP6", "GP7", "GP8", "GP9"],
+        "matrixRowPins": ["GP20", "GP23", "GP21"]
+      }
+    }
+  ],
   "customFirmwareReferences": [
     {
-      "variantName": "atmega",
-      "firmwareId": "hxcfM7",
+      "variantName": "atmega_custom",
+      "firmwareId": "feGV0G",
       "systemParameterKeys": [
         "emitRealtimeEvents",
         "keyHoldIndicatorLed",
-        "heartbeatLed"
+        "heartbeatLed",
+        "glowActive",
+        "glowColor",
+        "glowBrightness",
+        "glowPattern"
+      ]
+    },
+    {
+      "variantName": "rp_custom",
+      "firmwareId": "UMyy5p",
+      "systemParameterKeys": [
+        "emitRealtimeEvents",
+        "keyHoldIndicatorLed",
+        "heartbeatLed",
+        "glowActive",
+        "glowColor",
+        "glowBrightness",
+        "glowPattern"
       ]
     }
   ],
@@ -17,123 +46,117 @@
     {
       "layoutName": "default",
       "data": {
-        "formatRevision": "LA00",
+        "formatRevision": "LA01",
         "setup": {
           "placementUnit": "KP 18 17",
           "placementAnchor": "center",
-          "keySizeUnit": "KP",
+          "keySizeUnit": "KP 18 17",
           "keyIdMode": "auto"
         },
         "keyEntities": [
           {
             "keyId": "key0",
-            "x": -1,
-            "y": -2,
+            "x": -1.5,
+            "y": -1,
             "keyIndex": 0
           },
           {
             "keyId": "key1",
-            "x": 0,
-            "y": -2,
+            "x": -0.5,
+            "y": -1,
             "keyIndex": 1
           },
           {
             "keyId": "key2",
-            "x": 1,
-            "y": -2,
+            "x": 0.5,
+            "y": -1,
             "keyIndex": 2
           },
           {
             "keyId": "key3",
-            "x": -1,
+            "x": 1.5,
             "y": -1,
             "keyIndex": 3
           },
           {
             "keyId": "key4",
-            "x": 0,
-            "y": -1,
+            "x": -2,
+            "y": 0,
             "keyIndex": 4
           },
           {
             "keyId": "key5",
-            "x": 1,
-            "y": -1,
+            "x": -1,
+            "y": 0,
             "keyIndex": 5
           },
           {
             "keyId": "key6",
-            "x": -1,
+            "x": 1,
             "y": 0,
             "keyIndex": 6
           },
           {
             "keyId": "key7",
-            "x": 0,
+            "x": 2,
             "y": 0,
             "keyIndex": 7
           },
           {
             "keyId": "key8",
-            "x": 1,
-            "y": 0,
+            "x": -1.5,
+            "y": 1,
             "keyIndex": 8
           },
           {
             "keyId": "key9",
-            "x": -1,
+            "x": -0.5,
             "y": 1,
             "keyIndex": 9
           },
           {
             "keyId": "key10",
-            "x": 0,
+            "x": 0.5,
             "y": 1,
             "keyIndex": 10
           },
           {
             "keyId": "key11",
-            "x": 1,
+            "x": 1.5,
             "y": 1,
             "keyIndex": 11
           },
           {
             "keyId": "key12",
-            "x": -1,
-            "y": 2,
+            "x": 1.25,
+            "y": -2.25,
             "keyIndex": 12
           },
           {
             "keyId": "key13",
-            "x": 0,
-            "y": 2,
+            "x": 2.25,
+            "y": -2.25,
             "keyIndex": 13
-          },
-          {
-            "keyId": "key14",
-            "x": 1,
-            "y": 2,
-            "keyIndex": 14
           }
         ],
         "outlineShapes": [
           {
             "points": [
               {
-                "x": -32.5,
-                "y": -47.5
+                "x": -50,
+                "y": -50
               },
               {
-                "x": 32.5,
-                "y": -47.5
+                "x": 50,
+                "y": -50
               },
               {
-                "x": 32.5,
-                "y": 47.5
+                "x": 50,
+                "y": 30
               },
               {
-                "x": -32.5,
-                "y": 47.5
+                "x": -50,
+                "y": 30
               }
             ]
           }
