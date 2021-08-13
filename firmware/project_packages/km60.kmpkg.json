@@ -36,12 +36,7 @@
   "customFirmwareReferences": [
     {
       "variantName": "proto0_custom",
-      "firmwareId": "7qHDCp",
-      "systemParameterKeys": [
-        "emitRealtimeEvents",
-        "keyHoldIndicatorLed",
-        "heartbeatLed"
-      ]
+      "firmwareId": "7qHDCp"
     }
   ],
   "layouts": [

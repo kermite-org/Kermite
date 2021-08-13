@@ -26,12 +26,7 @@
   "customFirmwareReferences": [
     {
       "variantName": "atmega_custom",
-      "firmwareId": "dFbA81",
-      "systemParameterKeys": [
-        "emitRealtimeEvents",
-        "keyHoldIndicatorLed",
-        "heartbeatLed"
-      ]
+      "firmwareId": "dFbA81"
     }
   ],
   "layouts": [

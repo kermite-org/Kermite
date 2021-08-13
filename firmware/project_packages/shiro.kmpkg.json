@@ -17,12 +17,7 @@
   "customFirmwareReferences": [
     {
       "variantName": "atmega_custom",
-      "firmwareId": "hxcfM7",
-      "systemParameterKeys": [
-        "emitRealtimeEvents",
-        "keyHoldIndicatorLed",
-        "heartbeatLed"
-      ]
+      "firmwareId": "hxcfM7"
     }
   ],
   "layouts": [

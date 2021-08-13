@@ -33,16 +33,7 @@
   "customFirmwareReferences": [
     {
       "variantName": "rp_custom",
-      "firmwareId": "O1lweX",
-      "systemParameterKeys": [
-        "emitRealtimeEvents",
-        "keyHoldIndicatorLed",
-        "heartbeatLed",
-        "glowActive",
-        "glowColor",
-        "glowBrightness",
-        "glowPattern"
-      ]
+      "firmwareId": "O1lweX"
     }
   ],
   "layouts": [

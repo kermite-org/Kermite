@@ -17,29 +17,11 @@
   "customFirmwareReferences": [
     {
       "variantName": "atmega_custom",
-      "firmwareId": "feGV0G",
-      "systemParameterKeys": [
-        "emitRealtimeEvents",
-        "keyHoldIndicatorLed",
-        "heartbeatLed",
-        "glowActive",
-        "glowColor",
-        "glowBrightness",
-        "glowPattern"
-      ]
+      "firmwareId": "feGV0G"
     },
     {
       "variantName": "rp_custom",
-      "firmwareId": "UMyy5p",
-      "systemParameterKeys": [
-        "emitRealtimeEvents",
-        "keyHoldIndicatorLed",
-        "heartbeatLed",
-        "glowActive",
-        "glowColor",
-        "glowBrightness",
-        "glowPattern"
-      ]
+      "firmwareId": "UMyy5p"
     }
   ],
   "layouts": [
