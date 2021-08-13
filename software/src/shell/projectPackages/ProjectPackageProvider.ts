@@ -6,11 +6,11 @@ import {
 } from '~/shared';
 import { appEnv } from '~/shell/base';
 import {
+  fetchJson,
   fsxListFileBaseNames,
   fsxReadJsonFile,
   fsxWriteJsonFile,
   pathJoin,
-  pathResolve,
 } from '~/shell/funcs';
 
 interface IProjectPackageProvider {
@@ -57,9 +57,32 @@ async function loadProjectPackageFiles(
   );
 }
 
-async function loadMasterProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
-  const packagesRoot = pathResolve('../firmware/projects_next');
-  return await loadProjectPackageFiles(packagesRoot, 'online');
+type IIndexContent = {
+  files: Record<string, string>;
+};
+
+async function loadRemoteProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
+  const remoteBaseUrl = 'https://app.kermite.org/krs/resources2';
+  const indexContent = (await fetchJson(
+    `${remoteBaseUrl}/index.json`,
+  )) as IIndexContent;
+  const origin = 'online' as const;
+
+  const targetPaths = Object.keys(indexContent.files).filter((it) =>
+    it.endsWith('.kmpkg.json'),
+  );
+  return await Promise.all(
+    targetPaths.map(async (path) => {
+      const data = (await fetchJson(
+        `${remoteBaseUrl}/${path}`,
+      )) as IProjectPackageFileContent;
+      return {
+        sig: `${origin}#${data.projectId}`,
+        origin,
+        ...data,
+      };
+    }),
+  );
 }
 
 async function loadLocalProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
@@ -86,7 +109,7 @@ export class ProjectPackageProvider implements IProjectPackageProvider {
   async getAllProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
     if (!this.cached) {
       this.cached = [
-        ...(await loadMasterProjectPackageInfos()),
+        ...(await loadRemoteProjectPackageInfos()),
         ...(await loadLocalProjectPackageInfos()),
       ];
     }
