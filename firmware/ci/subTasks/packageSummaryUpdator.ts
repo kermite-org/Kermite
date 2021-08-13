@@ -48,5 +48,5 @@ export function packageSummaryUpdator_generateSummaryFile() {
     projects: projectCoreInfos,
   };
 
-  fsxWriteJsonFile("./dist/project_summary.json", summaryContent);
+  fsxWriteJsonFile("./dist/index.projects.json", summaryContent);
 }

@@ -93,8 +93,8 @@ export function deployStageFirmwareSummaryUpdator_outputSummaryFile(
 ) {
   const { filesChanged, filesRevision } = changeRes;
 
-  const sourceSummaryFilePath = "./KRS/resources2/firmware_summary.json";
-  const distSummaryFilePath = "./dist/firmware_summary.json";
+  const sourceSummaryFilePath = "./KRS/resources2/index.firmwares.json";
+  const distSummaryFilePath = "./dist/index.firmwares.json";
   if (!filesChanged && fsExistsSync(sourceSummaryFilePath)) {
     fsCopyFileSync(sourceSummaryFilePath, distSummaryFilePath);
   } else {
