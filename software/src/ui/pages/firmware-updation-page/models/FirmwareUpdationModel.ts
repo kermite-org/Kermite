@@ -1,10 +1,9 @@
 import {
+  checkDeviceBootloaderMatch,
   flattenArray,
+  getFirmwareTargetDeviceFromBaseFirmwareType,
   IBootloaderDeviceDetectionStatus,
-  IBootloaderType,
-  IFirmwareTargetDevice,
   IProjectPackageInfo,
-  IStandardBaseFirmwareType,
 } from '~/shared';
 import { ipcAgent, ISelectorSource } from '~/ui/base';
 import { projectPackagesReader, uiStatusModel } from '~/ui/commonModels';
@@ -17,28 +16,6 @@ export type FirmwareUpdationPhase =
   | 'UploadSuccess'
   | 'UploadFailure';
 
-function checkDeviceBootloaderMatch(
-  bootloaderType: IBootloaderType,
-  firmwareTargetDevice: IFirmwareTargetDevice,
-): boolean {
-  const isBootloaderAvr =
-    bootloaderType === 'avrCaterina' || bootloaderType === 'avrDfu';
-  const isBootloaderRp2040 = bootloaderType === 'rp2040uf2';
-  return (
-    (isBootloaderAvr && firmwareTargetDevice === 'atmega32u4') ||
-    (isBootloaderRp2040 && firmwareTargetDevice === 'rp2040')
-  );
-}
-
-function getFirmwareTargetDeviceFromBaseFirmwareType(
-  baseFirmwareType: IStandardBaseFirmwareType,
-): IFirmwareTargetDevice {
-  if (baseFirmwareType === 'AvrUnified' || baseFirmwareType === 'AvrSplit') {
-    return 'atmega32u4';
-  } else {
-    return 'rp2040';
-  }
-}
 export class FirmwareUpdationModel {
   currentProjectFirmwareSpec: string = '';
   phase: FirmwareUpdationPhase = 'WaitingReset';
