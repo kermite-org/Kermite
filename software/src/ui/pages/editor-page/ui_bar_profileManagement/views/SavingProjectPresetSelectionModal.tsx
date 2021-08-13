@@ -44,7 +44,7 @@ function useProjectAttachmentFileSelectorViewModel(
   );
 
   const presetNameOptions =
-    currentProject?.profiles.map(({ profileName: presetName }) => ({
+    currentProject?.presets.map(({ presetName }) => ({
       value: presetName,
       label: presetName,
     })) || [];
