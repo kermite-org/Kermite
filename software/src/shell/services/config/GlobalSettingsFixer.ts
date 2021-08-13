@@ -1,5 +1,5 @@
 import { IGlobalSettings } from '~/shared';
-import { projectResourceProvider } from '~/shell/projectResources';
+import { projectPackageProvider } from '~/shell/projectPackages/ProjectPackageProvider';
 import { globalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 
 export function setupGlobalSettingsFixer() {
@@ -14,7 +14,7 @@ export function setupGlobalSettingsFixer() {
       const settings = globalSettingsProvider.globalSettings;
       const { globalProjectId } = settings;
       if (globalProjectId) {
-        const projectInfos = await projectResourceProvider.getAllProjectResourceInfos();
+        const projectInfos = await projectPackageProvider.getAllProjectPackageInfos();
         const isGlobalProjectIncludedInResources = projectInfos.some(
           (info) => info.projectId === globalProjectId,
         );
