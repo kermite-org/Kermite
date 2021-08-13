@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/require-await */
 import { shell } from 'electron';
-import { getAppErrorData, IPresetSpec, makeCompactStackTrace } from '~/shared';
+import { getAppErrorData, makeCompactStackTrace } from '~/shared';
 import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
@@ -15,7 +15,6 @@ import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStat
 import { FirmwareUpdationService } from '~/shell/services/firmwareUpdation';
 import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/inputLogicSimulatorD';
 import { LayoutManager } from '~/shell/services/layout/LayoutManager';
-import { PresetProfileLoader } from '~/shell/services/profile/PresetProfileLoader';
 import { ProfileManager } from '~/shell/services/profile/ProfileManager';
 import { UserPresetHubService } from '~/shell/services/userPresetHub/UserPresetHubService';
 import { AppWindowWrapper } from '~/shell/services/window';
@@ -27,14 +26,9 @@ export class ApplicationRoot {
 
   private deviceService = new KeyboardDeviceService();
 
-  private presetProfileLoader = new PresetProfileLoader();
+  private profileManager = new ProfileManager();
 
-  private profileManager = new ProfileManager(this.presetProfileLoader);
-
-  private layoutManager = new LayoutManager(
-    this.presetProfileLoader,
-    this.profileManager,
-  );
+  private layoutManager = new LayoutManager(this.profileManager);
 
   private inputLogicSimulator = new InputLogicSimulatorD(
     this.profileManager,
@@ -115,16 +109,6 @@ export class ApplicationRoot {
           origin,
           projectId,
           variationName,
-        ),
-      projects_loadPresetProfile: (
-        origin,
-        profileId,
-        presetSpec: IPresetSpec,
-      ) =>
-        this.presetProfileLoader.loadPresetProfileData(
-          origin,
-          profileId,
-          presetSpec,
         ),
       projects_getAllProjectPackageInfos: () =>
         projectPackageProvider.getAllProjectPackageInfos(),

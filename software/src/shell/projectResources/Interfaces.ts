@@ -38,11 +38,11 @@ export interface IProjectResourceProviderImpl {
 export interface IProjectResourceProvider {
   getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
 
-  loadProjectPreset(
-    origin: IResourceOrigin,
-    projectId: string,
-    presetName: string,
-  ): Promise<IProfileData | undefined>;
+  // loadProjectPreset(
+  //   origin: IResourceOrigin,
+  //   projectId: string,
+  //   presetName: string,
+  // ): Promise<IProfileData | undefined>;
 
   loadProjectLayout(
     origin: IResourceOrigin,

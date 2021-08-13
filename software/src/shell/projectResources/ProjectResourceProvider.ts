@@ -1,6 +1,5 @@
 import {
   IPersistKeyboardDesign,
-  IProfileData,
   IProjectCustomDefinition,
   IProjectResourceInfo,
   IResourceOrigin,
@@ -50,14 +49,15 @@ class ProjectResourceProvider implements IProjectResourceProvider {
     );
   }
 
-  async loadProjectPreset(
-    origin: IResourceOrigin,
-    projectId: string,
-    presetName: string,
-  ): Promise<IProfileData | undefined> {
-    const providerImpl = this.getResouceProviderImpl(origin);
-    return await providerImpl.loadProjectPreset(projectId, presetName);
-  }
+  // async loadProjectPreset(
+  //   origin: IResourceOrigin,
+  //   projectId: string,
+  //   presetName: string,
+  // ): Promise<IProfileData | undefined> {
+  //   // const providerImpl = this.getResouceProviderImpl(origin);
+  //   // return await providerImpl.loadProjectPreset(projectId, presetName);
+  //   return undefined;
+  // }
 
   async loadProjectLayout(
     origin: IResourceOrigin,

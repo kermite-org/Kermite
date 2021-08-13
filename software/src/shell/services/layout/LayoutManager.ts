@@ -21,10 +21,7 @@ import { FileWather } from '~/shell/funcs/FileWatcher';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { projectResourceProvider } from '~/shell/projectResources';
 import { ILayoutManager } from '~/shell/services/layout/Interfaces';
-import {
-  IPresetProfileLoader,
-  IProfileManager,
-} from '~/shell/services/profile/Interfaces';
+import { IProfileManager } from '~/shell/services/profile/Interfaces';
 
 const layoutEditSourceSchema = vSchemaOneOf([
   vObject({
@@ -45,10 +42,7 @@ const layoutEditSourceSchema = vSchemaOneOf([
 ]);
 
 export class LayoutManager implements ILayoutManager {
-  constructor(
-    private presetProfileLoader: IPresetProfileLoader,
-    private profileManager: IProfileManager,
-  ) {}
+  constructor(private profileManager: IProfileManager) {}
 
   private fileWatcher = new FileWather();
 
@@ -287,7 +281,7 @@ export class LayoutManager implements ILayoutManager {
       );
       if (filePath) {
         await LayoutFileLoader.saveLayoutToFile(filePath, design);
-        this.presetProfileLoader.deleteProjectPresetProfileCache(projectId);
+        // this.presetProfileLoader.deleteProjectPresetProfileCache(projectId);
       }
     }
     this.setStatus({ loadedDesign: design });
