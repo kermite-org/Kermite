@@ -4,7 +4,6 @@ import {
   IProjectCustomDefinition,
   IProjectResourceInfo,
   IResourceOrigin,
-  sortOrderBy,
 } from '~/shared';
 import {
   IFirmwareBinaryFileSpec,
@@ -18,13 +17,15 @@ class ProjectResourceProvider implements IProjectResourceProvider {
   localResourceProviderImpl = new ProjectResourceProviderImpl_Local();
   remoteResourceProviderImpl = new ProjectResourceProviderImpl_Remote();
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   async getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]> {
-    const locals = await this.localResourceProviderImpl.getAllProjectResourceInfos();
-    const remotes = await this.remoteResourceProviderImpl.getAllProjectResourceInfos();
-    const allResourceInfos = [...locals, ...remotes];
-    return allResourceInfos.sort(
-      sortOrderBy((it) => `${it.origin}${it.keyboardName}${it.projectPath}`),
-    );
+    // const locals = await this.localResourceProviderImpl.getAllProjectResourceInfos();
+    // const remotes = await this.remoteResourceProviderImpl.getAllProjectResourceInfos();
+    // const allResourceInfos = [...locals, ...remotes];
+    // return allResourceInfos.sort(
+    //   sortOrderBy((it) => `${it.origin}${it.keyboardName}${it.projectPath}`),
+    // );
+    return [];
   }
 
   private getResouceProviderImpl(
