@@ -55,7 +55,7 @@ async function loadProjectPackageFiles(
 }
 
 async function loadMasterProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
-  const packagesRoot = pathResolve('../firmware/projects_next');
+  const packagesRoot = pathResolve('../firmware/project_packages');
   return await loadProjectPackageFiles(packagesRoot, 'online');
 }
 
