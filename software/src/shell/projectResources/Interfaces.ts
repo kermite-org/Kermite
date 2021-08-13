@@ -52,9 +52,9 @@ export interface IProjectResourceProvider {
 
   // local: ローカルにあるプロジェクトのHexファイルのパスを返す
   // online: Hexファイルをリモートからダウンロードして一時ファイルに保存しファイルパスを返す
-  loadProjectFirmwareFile(
-    origin: IResourceOrigin,
-    projectId: string,
-    variationName: string,
-  ): Promise<IFirmwareBinaryFileSpec | undefined>;
+  // loadProjectFirmwareFile(
+  //   origin: IResourceOrigin,
+  //   projectId: string,
+  //   variationName: string,
+  // ): Promise<IFirmwareBinaryFileSpec | undefined>;
 }

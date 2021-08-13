@@ -5,7 +5,6 @@ import {
   IResourceOrigin,
 } from '~/shared';
 import {
-  IFirmwareBinaryFileSpec,
   IProjectResourceProvider,
   IProjectResourceProviderImpl,
 } from '~/shell/projectResources/Interfaces';
@@ -68,14 +67,14 @@ class ProjectResourceProvider implements IProjectResourceProvider {
     return await providerImpl.loadProjectLayout(projectId, layoutName);
   }
 
-  async loadProjectFirmwareFile(
-    origin: IResourceOrigin,
-    projectId: string,
-    variationName: string,
-  ): Promise<IFirmwareBinaryFileSpec | undefined> {
-    const providerImpl = this.getResouceProviderImpl(origin);
-    return await providerImpl.loadProjectFirmwareFile(projectId, variationName);
-  }
+  // async loadProjectFirmwareFile(
+  //   origin: IResourceOrigin,
+  //   projectId: string,
+  //   variationName: string,
+  // ): Promise<IFirmwareBinaryFileSpec | undefined> {
+  //   const providerImpl = this.getResouceProviderImpl(origin);
+  //   return await providerImpl.loadProjectFirmwareFile(projectId, variationName);
+  // }
 }
 
 export const projectResourceProvider = new ProjectResourceProvider();
