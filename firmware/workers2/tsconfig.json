@@ -10,8 +10,9 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
-      // "~/*": ["../../software/src/*"]
+      "@/*": ["./*"],
+      "~/*": ["../../software/src/*"]
     }
-  }
+  },
+  "includes": [".", "../../software/src/shared"]
 }

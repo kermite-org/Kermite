@@ -97,5 +97,10 @@ function forgeStandardKeyboardFirmwareRp() {
   console.log('done');
 }
 
-forgeStandardKeyboardFirmwareAvr();
-// forgeStandardKeyboardFirmwareRp();
+if (process.argv.includes('--target=avr')) {
+  forgeStandardKeyboardFirmwareAvr();
+} else if (process.argv.includes('--target=rp')) {
+  forgeStandardKeyboardFirmwareRp();
+} else {
+  throw new Error('no target specification');
+}
