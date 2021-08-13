@@ -50,8 +50,8 @@ function forgeStandardKeyboardFirmwareAvr() {
   const customDataBytes = serializeCustomKeyboardSpec(targetKeyboardSpec);
 
   const binaryBaseDir = '../build/standard/avr';
-  const srcBinaryFilePath = `${binaryBaseDir}/standard_avr.bin`;
-  const modBinaryFilePath = `${binaryBaseDir}/standard_avr_patched.bin`;
+  const srcBinaryFilePath = `${binaryBaseDir}/standard_avr.hex`;
+  const modBinaryFilePath = `${binaryBaseDir}/standard_avr_patched.hex`;
 
   const buffer = fs.readFileSync(srcBinaryFilePath);
   const binaryBytes = [...new Uint8Array(buffer)];
@@ -97,5 +97,5 @@ function forgeStandardKeyboardFirmwareRp() {
   console.log('done');
 }
 
-// forgeStandardKeyboardFirmwareAvr();
-forgeStandardKeyboardFirmwareRp();
+forgeStandardKeyboardFirmwareAvr();
+// forgeStandardKeyboardFirmwareRp();
