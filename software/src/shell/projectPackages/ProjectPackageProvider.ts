@@ -107,6 +107,7 @@ async function saveLocalProjectPackgeInfoImpl(info: IProjectPackageInfo) {
     'projects',
     `${info.packageName}.kmpkg.json`,
   );
+  console.log(`saving ${pathBasename(filePath)}`);
   await fsxWriteJsonFile(filePath, info);
 }
 export class ProjectPackageProvider implements IProjectPackageProvider {
@@ -124,6 +125,7 @@ export class ProjectPackageProvider implements IProjectPackageProvider {
 
   async saveLocalProjectPackageInfo(info: IProjectPackageInfo): Promise<void> {
     await saveLocalProjectPackgeInfoImpl(info);
+    // TODO: 画面に変更差分を通知して、画面側で持っているデータを更新する必要がある
   }
 
   async getAllCustomFirmwareInfos(): Promise<ICustomFirmwareInfo[]> {
