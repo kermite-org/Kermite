@@ -67,7 +67,7 @@ async function fetchCustomFirmware(
   )) as IFirmwareSummaryJson;
   const entry = summary.firmwares.find((it) => it.firmwareId === firmwareId);
   if (entry) {
-    const url = `${remoteBaseUrl}/${entry.firmwareProjectPath}/${entry.firmwareFileName}`;
+    const url = `${remoteBaseUrl}/firmwares/${entry.firmwareProjectPath}/${entry.firmwareFileName}`;
     const data = await cacheRemoteResouce(fetchBinary, url);
     return {
       fileName: entry.firmwareFileName,
