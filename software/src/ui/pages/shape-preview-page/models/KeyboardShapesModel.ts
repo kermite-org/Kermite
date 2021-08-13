@@ -52,18 +52,20 @@ class KeyboardShapesModel {
     return info?.layouts.map((la) => la.layoutName) || [];
   }
 
-  private async loadCurrentProjectLayout() {
+  private loadCurrentProjectLayout() {
     if (!(this._currentProjectSig && this._currentLayoutName)) {
       return;
     }
     const { origin, projectId } = getProjectOriginAndIdFromSig(
       this._currentProjectSig,
     );
-    const design = await ipcAgent.async.projects_loadKeyboardShape(
-      origin,
-      projectId,
-      this._currentLayoutName,
-    );
+
+    const info = projectPackagesReader.findProjectInfo(origin, projectId);
+
+    const design = info?.layouts.find(
+      (it) => it.layoutName === this.currentLayoutName,
+    )?.data;
+
     if (design) {
       this._loadedDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
         design,
