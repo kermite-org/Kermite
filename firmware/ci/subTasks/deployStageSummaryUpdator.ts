@@ -1,3 +1,4 @@
+import { IFirmwareMetadataJson } from "subTasks/common";
 import {
   execueteOneliner,
   fsCopyFileSync,
@@ -17,22 +18,6 @@ interface IBuildStats {
 interface IIndexUpdatorResult {
   filesChanged: boolean;
   filesRevision: number;
-}
-
-interface IFirmwareMetadataJson {
-  firmwareId: string;
-  buildResult: "success" | "failure";
-  releaseBuildRevision: number;
-  buildTimestamp: string;
-  storageFormatRevision: number;
-  messageProtocolRevision: number;
-  flashUsage: number;
-  ramUsage: number;
-  firmwareFileSize: number;
-  firmwareBinaryFileMD5: string;
-  variationName: string;
-  targetDevice: "atmega32u4" | "rp2040";
-  firmwareFileName: string;
 }
 
 interface IFirmwareInfo {

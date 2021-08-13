@@ -1,3 +1,4 @@
+import { IFirmwareMetadataJson } from "subTasks/common";
 import {
   arrayCount,
   executeCommand,
@@ -275,7 +276,7 @@ function makeFailureMetadataContent(sourceAttrs: IProjectSourceAttributes) {
 function makeSuccessMetadataContent(
   updatedAttrs: IProjectBuildResultUpdatedAttrs,
   commonRevisions: ICommonRevisions
-) {
+): IFirmwareMetadataJson {
   const ua = updatedAttrs;
   return {
     firmwareId: ua.firmwareId,
