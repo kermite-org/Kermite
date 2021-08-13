@@ -22,7 +22,7 @@ interface IIndexJsonData {
 }
 
 function loadSourceIndex(): IIndexJsonData {
-  const indexFilePath = "./KRS/resources/index.json";
+  const indexFilePath = "./KRS/resources2/index.json";
   if (fsExistsSync(indexFilePath)) {
     return fsxReadJsonFile(indexFilePath);
   }
@@ -34,7 +34,7 @@ function loadSourceIndex(): IIndexJsonData {
 }
 
 function makeFilesMd5Dict(): IFilesMd5Dict {
-  const filePaths = globSync("./dist/variants/**/*").filter((f) =>
+  const filePaths = globSync("./dist/**/*").filter((f) =>
     fsStatSync(f).isFile()
   );
   return createObjectFromKeyValues(

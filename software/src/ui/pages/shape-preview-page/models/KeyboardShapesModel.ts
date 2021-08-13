@@ -1,9 +1,9 @@
 import { useEffect, useLocal } from 'qx';
-import { IDisplayKeyboardDesign, IProjectResourceInfo } from '~/shared';
+import { IDisplayKeyboardDesign, IProjectPackageInfo } from '~/shared';
 import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import { ipcAgent, UiLocalStorage } from '~/ui/base';
-import { fetchAllProjectResourceInfos } from '~/ui/commonModels';
+import { uiGlobalStoreReader } from '~/ui/commonModels';
 import {
   IShapeViewPersistState,
   shapeViewPersistStateDefault,
@@ -13,7 +13,7 @@ import {
 export interface IKeyboardShapesModel {
   settings: IShapeViewPersistState;
   loadedDesign: IDisplayKeyboardDesign | undefined;
-  projectInfos: IProjectResourceInfo[];
+  projectInfos: IProjectPackageInfo[];
   currentProjectSig: string;
   currentLayoutName: string;
   optionLayoutNames: string[];
@@ -23,7 +23,7 @@ export interface IKeyboardShapesModel {
 }
 
 class KeyboardShapesModel {
-  projectInfos: IProjectResourceInfo[] = [];
+  projectInfos: IProjectPackageInfo[] = [];
 
   private _currentProjectSig: string | undefined;
   private _loadedDesign: IDisplayKeyboardDesign | undefined;
@@ -49,7 +49,7 @@ class KeyboardShapesModel {
     const info = this.projectInfos.find(
       (info) => info.sig === this._currentProjectSig,
     );
-    return info?.layoutNames || [];
+    return info?.layouts.map((la) => la.layoutName) || [];
   }
 
   private async loadCurrentProjectLayout() {
@@ -101,10 +101,8 @@ class KeyboardShapesModel {
     }
   };
 
-  private async initialize() {
-    this.projectInfos = (await fetchAllProjectResourceInfos()).filter(
-      (info) => info.layoutNames.length > 0,
-    );
+  private initialize() {
+    this.projectInfos = uiGlobalStoreReader.getProjectInfosGlobalProjectSelectionAffected();
     if (this.projectInfos.length === 0) {
       this._currentLayoutName = undefined;
       this._currentLayoutName = undefined;
@@ -116,7 +114,8 @@ class KeyboardShapesModel {
       this.settings.shapeViewProjectSig || this.projectInfos[0].sig;
 
     this._currentLayoutName =
-      this.settings.shapeViewLayoutName || this.projectInfos[0].layoutNames[0];
+      this.settings.shapeViewLayoutName ||
+      this.projectInfos[0].layouts[0].layoutName;
 
     if (!this.optionLayoutNames.includes(this._currentLayoutName)) {
       this._currentLayoutName = this.optionLayoutNames[0];

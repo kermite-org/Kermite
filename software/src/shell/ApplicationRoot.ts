@@ -4,6 +4,7 @@ import { getAppErrorData, IPresetSpec, makeCompactStackTrace } from '~/shared';
 import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
+import { projectPackageProvider } from '~/shell/projectPackages/ProjectPackageProvider';
 import { projectResourceProvider } from '~/shell/projectResources';
 import { checkLocalRepositoryFolder } from '~/shell/projectResources/LocalResourceHelper';
 import { setupGlobalSettingsFixer } from '~/shell/services/config/GlobalSettingsFixer';
@@ -79,12 +80,12 @@ export class ApplicationRoot {
         windowWrapper.setDevToolsVisibility(visible),
       window_setWidgetAlwaysOnTop: async (enabled) =>
         windowWrapper.setWidgetAlwaysOnTop(enabled),
-      profile_getCurrentProfile: () =>
-        this.profileManager.getCurrentProfileAsync(),
+      profile_getCurrentProfile: async () =>
+        this.profileManager.getCurrentProfile(),
       profile_executeProfileManagerCommands: (commands) =>
         this.profileManager.executeCommands(commands),
-      profile_getAllProfileEntries: () =>
-        this.profileManager.getAllProfileEntriesAsync(),
+      profile_getAllProfileEntries: async () =>
+        this.profileManager.getAllProfileEntries(),
       profile_openUserProfilesFolder: () =>
         this.profileManager.openUserProfilesFolder(),
       layout_executeLayoutManagerCommands: (commands) =>
@@ -128,6 +129,8 @@ export class ApplicationRoot {
           profileId,
           presetSpec,
         ),
+      projects_getAllProjectPackageInfos: () =>
+        projectPackageProvider.getAllProjectPackageInfos(),
       presetHub_getServerProjectIds: () =>
         this.presetHubService.getServerProjectIds(),
       presetHub_getServerProfiles: (projectId: string) =>
@@ -135,21 +138,21 @@ export class ApplicationRoot {
       config_writeKeyboardConfig: async (config) =>
         this.keyboardConfigProvider.writeKeyboardConfig(config),
       config_writeKeyMappingToDevice: async () => {
-        const profile = await this.profileManager.getCurrentProfileAsync();
+        const profile = this.profileManager.getCurrentProfile();
         if (profile) {
           return await this.deviceService.emitKeyAssignsToDevice(profile);
         }
         return false;
       },
       config_getGlobalSettings: async () =>
-        globalSettingsProvider.getGlobalSettings(),
+        globalSettingsProvider.globalSettings,
       config_writeGlobalSettings: async (settings) =>
         globalSettingsProvider.writeGlobalSettings(settings),
       config_getProjectRootDirectoryPath: async () => {
         if (appEnv.isDevelopment) {
           return pathResolve('..');
         } else {
-          const settings = globalSettingsProvider.getGlobalSettings();
+          const settings = globalSettingsProvider.globalSettings;
           return settings.localProjectRootFolderPath;
         }
       },
@@ -214,6 +217,8 @@ export class ApplicationRoot {
     await executeWithFatalErrorHandler(async () => {
       console.log(`initialize services`);
       await applicationStorage.initializeAsync();
+      globalSettingsProvider.initialize();
+      await this.profileManager.initializeAsync();
       this.setupIpcBackend();
       this.windowWrapper.initialize();
       setupGlobalSettingsFixer();
@@ -235,6 +240,7 @@ export class ApplicationRoot {
       this.inputLogicSimulator.terminate();
       this.deviceService.terminate();
       this.windowWrapper.terminate();
+      this.profileManager.terminate();
       await applicationStorage.terminateAsync();
     });
   }

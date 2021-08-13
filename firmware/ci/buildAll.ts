@@ -17,13 +17,9 @@ function getAllProjectVariationPaths() {
   return glob
     .sync("src/projects/**/rules.mk")
     .map((fpath) => path.dirname(fpath))
-    .filter(
-      (fpath) =>
-        fs.existsSync(path.join(fpath, "config.h")) &&
-        fs.existsSync(path.join(path.dirname(fpath), "project.json"))
-    )
+    .filter((fpath) => fs.existsSync(path.join(fpath, "config.h")))
     .map((fpath) => path.relative("src/projects", fpath))
-    .filter((vp) => !vp.startsWith("dev/"));
+    .filter((vp) => !(vp.startsWith("dev/") || vp.startsWith("study/")));
 }
 
 function getUpdatedProjectVariationPaths() {
@@ -39,11 +35,10 @@ function getUpdatedProjectVariationPaths() {
     .filter(
       (fpath) =>
         fs.existsSync(path.join(fpath, "rules.mk")) &&
-        fs.existsSync(path.join(fpath, "config.h")) &&
-        fs.existsSync(path.join(path.dirname(fpath), "project.json"))
+        fs.existsSync(path.join(fpath, "config.h"))
     )
     .map((fpath) => path.relative("src/projects", fpath))
-    .filter((vp) => !vp.startsWith("dev/"));
+    .filter((vp) => !(vp.startsWith("dev/") || vp.startsWith("study/")));
 }
 
 function makeFirmwareBuild(projectPath: string, variationName: string) {

@@ -1,0 +1,908 @@
+{
+  "formatRevision": "PKG0",
+  "projectId": "K3e89X",
+  "keyboardName": "km60",
+  "standardFirmwareDefinitions": [
+    {
+      "variantName": "proto0",
+      "data": {
+        "baseFirmwareType": "RpUnified",
+        "useBoardLedsProMicroRp": true,
+        "useMatrixKeyScanner": true,
+        "matrixColumnPins": [
+          "GP29",
+          "GP28",
+          "GP27",
+          "GP26",
+          "GP22",
+          "GP20",
+          "GP23"
+        ],
+        "matrixRowPins": [
+          "GP1",
+          "GP2",
+          "GP3",
+          "GP4",
+          "GP5",
+          "GP6",
+          "GP7",
+          "GP8",
+          "GP9",
+          "GP21"
+        ]
+      }
+    }
+  ],
+  "customFirmwareReferences": [
+    {
+      "variantName": "proto0_custom",
+      "firmwareId": "7qHDCp",
+      "systemParameterKeys": [
+        "emitRealtimeEvents",
+        "keyHoldIndicatorLed",
+        "heartbeatLed"
+      ]
+    }
+  ],
+  "layouts": [
+    {
+      "layoutName": "proto0_space275div3",
+      "data": {
+        "formatRevision": "LA01",
+        "setup": {
+          "placementUnit": "KP 19.05",
+          "placementAnchor": "topLeft",
+          "keySizeUnit": "KP 19.05",
+          "keyIdMode": "auto"
+        },
+        "keyEntities": [
+          {
+            "keyId": "key0",
+            "x": 0,
+            "y": 0,
+            "keyIndex": 0
+          },
+          {
+            "keyId": "key1",
+            "x": 1,
+            "y": 0,
+            "keyIndex": 1
+          },
+          {
+            "keyId": "key2",
+            "x": 2,
+            "y": 0,
+            "keyIndex": 2
+          },
+          {
+            "keyId": "key3",
+            "x": 3,
+            "y": 0,
+            "keyIndex": 3
+          },
+          {
+            "keyId": "key4",
+            "x": 4,
+            "y": 0,
+            "keyIndex": 4
+          },
+          {
+            "keyId": "key5",
+            "x": 5,
+            "y": 0,
+            "keyIndex": 5
+          },
+          {
+            "keyId": "key6",
+            "x": 6,
+            "y": 0,
+            "keyIndex": 6
+          },
+          {
+            "keyId": "key35",
+            "x": 7,
+            "y": 0,
+            "keyIndex": 35
+          },
+          {
+            "keyId": "key36",
+            "x": 8,
+            "y": 0,
+            "keyIndex": 36
+          },
+          {
+            "keyId": "key37",
+            "x": 9,
+            "y": 0,
+            "keyIndex": 37
+          },
+          {
+            "keyId": "key38",
+            "x": 10,
+            "y": 0,
+            "keyIndex": 38
+          },
+          {
+            "keyId": "key39",
+            "x": 11,
+            "y": 0,
+            "keyIndex": 39
+          },
+          {
+            "keyId": "key40",
+            "x": 12,
+            "y": 0,
+            "keyIndex": 40
+          },
+          {
+            "keyId": "key55",
+            "x": 13,
+            "y": 0,
+            "shape": "std 2",
+            "keyIndex": 55
+          },
+          {
+            "keyId": "key7",
+            "x": 0,
+            "y": 1,
+            "shape": "std 1.5",
+            "keyIndex": 7
+          },
+          {
+            "keyId": "key8",
+            "x": 1.5,
+            "y": 1,
+            "keyIndex": 8
+          },
+          {
+            "keyId": "key9",
+            "x": 2.5,
+            "y": 1,
+            "keyIndex": 9
+          },
+          {
+            "keyId": "key10",
+            "x": 3.5,
+            "y": 1,
+            "keyIndex": 10
+          },
+          {
+            "keyId": "key11",
+            "x": 4.5,
+            "y": 1,
+            "keyIndex": 11
+          },
+          {
+            "keyId": "key12",
+            "x": 5.5,
+            "y": 1,
+            "keyIndex": 12
+          },
+          {
+            "keyId": "key13",
+            "x": 6.5,
+            "y": 1,
+            "keyIndex": 13
+          },
+          {
+            "keyId": "key42",
+            "x": 7.5,
+            "y": 1,
+            "keyIndex": 42
+          },
+          {
+            "keyId": "key43",
+            "x": 8.5,
+            "y": 1,
+            "keyIndex": 43
+          },
+          {
+            "keyId": "key44",
+            "x": 9.5,
+            "y": 1,
+            "keyIndex": 44
+          },
+          {
+            "keyId": "key45",
+            "x": 10.5,
+            "y": 1,
+            "keyIndex": 45
+          },
+          {
+            "keyId": "key46",
+            "x": 11.5,
+            "y": 1,
+            "keyIndex": 46
+          },
+          {
+            "keyId": "key47",
+            "x": 12.5,
+            "y": 1,
+            "keyIndex": 47
+          },
+          {
+            "keyId": "key48",
+            "x": 13.5,
+            "y": 1,
+            "shape": "std 1.5",
+            "keyIndex": 48
+          },
+          {
+            "keyId": "key14",
+            "x": 0,
+            "y": 2,
+            "shape": "std 1.75",
+            "keyIndex": 14
+          },
+          {
+            "keyId": "key15",
+            "x": 1.75,
+            "y": 2,
+            "keyIndex": 15
+          },
+          {
+            "keyId": "key16",
+            "x": 2.75,
+            "y": 2,
+            "keyIndex": 16
+          },
+          {
+            "keyId": "key17",
+            "x": 3.75,
+            "y": 2,
+            "keyIndex": 17
+          },
+          {
+            "keyId": "key18",
+            "x": 4.75,
+            "y": 2,
+            "keyIndex": 18
+          },
+          {
+            "keyId": "key19",
+            "x": 5.75,
+            "y": 2,
+            "keyIndex": 19
+          },
+          {
+            "keyId": "key20",
+            "x": 6.75,
+            "y": 2,
+            "keyIndex": 20
+          },
+          {
+            "keyId": "key49",
+            "x": 7.75,
+            "y": 2,
+            "keyIndex": 49
+          },
+          {
+            "keyId": "key50",
+            "x": 8.75,
+            "y": 2,
+            "keyIndex": 50
+          },
+          {
+            "keyId": "key51",
+            "x": 9.75,
+            "y": 2,
+            "keyIndex": 51
+          },
+          {
+            "keyId": "key52",
+            "x": 10.75,
+            "y": 2,
+            "keyIndex": 52
+          },
+          {
+            "keyId": "key53",
+            "x": 11.75,
+            "y": 2,
+            "keyIndex": 53
+          },
+          {
+            "keyId": "key54",
+            "x": 12.75,
+            "y": 2,
+            "shape": "std 2.25",
+            "keyIndex": 54
+          },
+          {
+            "keyId": "key21",
+            "x": 0,
+            "y": 3,
+            "shape": "std 2.25",
+            "keyIndex": 21
+          },
+          {
+            "keyId": "key22",
+            "x": 2.25,
+            "y": 3,
+            "keyIndex": 22
+          },
+          {
+            "keyId": "key23",
+            "x": 3.25,
+            "y": 3,
+            "keyIndex": 23
+          },
+          {
+            "keyId": "key24",
+            "x": 4.25,
+            "y": 3,
+            "keyIndex": 24
+          },
+          {
+            "keyId": "key25",
+            "x": 5.25,
+            "y": 3,
+            "keyIndex": 25
+          },
+          {
+            "keyId": "key26",
+            "x": 6.25,
+            "y": 3,
+            "keyIndex": 26
+          },
+          {
+            "keyId": "key27",
+            "x": 7.25,
+            "y": 3,
+            "keyIndex": 27
+          },
+          {
+            "keyId": "key56",
+            "x": 8.25,
+            "y": 3,
+            "keyIndex": 56
+          },
+          {
+            "keyId": "key57",
+            "x": 9.25,
+            "y": 3,
+            "keyIndex": 57
+          },
+          {
+            "keyId": "key58",
+            "x": 10.25,
+            "y": 3,
+            "keyIndex": 58
+          },
+          {
+            "keyId": "key59",
+            "x": 11.25,
+            "y": 3,
+            "keyIndex": 59
+          },
+          {
+            "keyId": "key60",
+            "x": 12.25,
+            "y": 3,
+            "shape": "std 1.75",
+            "keyIndex": 60
+          },
+          {
+            "keyId": "key61",
+            "x": 14,
+            "y": 3,
+            "keyIndex": 61
+          },
+          {
+            "keyId": "key28",
+            "x": 0,
+            "y": 4,
+            "shape": "std 1.25",
+            "keyIndex": 28
+          },
+          {
+            "keyId": "key29",
+            "x": 1.25,
+            "y": 4,
+            "shape": "std 1.25",
+            "keyIndex": 29
+          },
+          {
+            "keyId": "key30",
+            "x": 2.5,
+            "y": 4,
+            "shape": "std 1.25",
+            "keyIndex": 30
+          },
+          {
+            "keyId": "key31",
+            "x": 4,
+            "y": 4,
+            "shape": "std 1.5",
+            "keyIndex": 31
+          },
+          {
+            "keyId": "key33",
+            "x": 5.5,
+            "y": 4,
+            "shape": "std 2.75",
+            "keyIndex": 33
+          },
+          {
+            "keyId": "key63",
+            "x": 8.25,
+            "y": 4,
+            "shape": "std 1.5",
+            "keyIndex": 63
+          },
+          {
+            "keyId": "key64",
+            "x": 10,
+            "y": 4,
+            "keyIndex": 64
+          },
+          {
+            "keyId": "key65",
+            "x": 11,
+            "y": 4,
+            "keyIndex": 65
+          },
+          {
+            "keyId": "key66",
+            "x": 12,
+            "y": 4,
+            "keyIndex": 66
+          },
+          {
+            "keyId": "key67",
+            "x": 13,
+            "y": 4,
+            "keyIndex": 67
+          },
+          {
+            "keyId": "key68",
+            "x": 14,
+            "y": 4,
+            "keyIndex": 68
+          }
+        ],
+        "outlineShapes": [
+          {
+            "points": [
+              {
+                "x": -4,
+                "y": -4
+              },
+              {
+                "x": 290,
+                "y": -4
+              },
+              {
+                "x": 290,
+                "y": 99
+              },
+              {
+                "x": -4,
+                "y": 99
+              }
+            ]
+          }
+        ],
+        "transformationGroups": []
+      }
+    },
+    {
+      "layoutName": "proto0_us_default",
+      "data": {
+        "formatRevision": "LA01",
+        "setup": {
+          "placementUnit": "KP 19.05",
+          "placementAnchor": "topLeft",
+          "keySizeUnit": "KP 19.05",
+          "keyIdMode": "auto"
+        },
+        "keyEntities": [
+          {
+            "keyId": "key0",
+            "x": 0,
+            "y": 0,
+            "keyIndex": 0
+          },
+          {
+            "keyId": "key1",
+            "x": 1,
+            "y": 0,
+            "keyIndex": 1
+          },
+          {
+            "keyId": "key2",
+            "x": 2,
+            "y": 0,
+            "keyIndex": 2
+          },
+          {
+            "keyId": "key3",
+            "x": 3,
+            "y": 0,
+            "keyIndex": 3
+          },
+          {
+            "keyId": "key4",
+            "x": 4,
+            "y": 0,
+            "keyIndex": 4
+          },
+          {
+            "keyId": "key5",
+            "x": 5,
+            "y": 0,
+            "keyIndex": 5
+          },
+          {
+            "keyId": "key6",
+            "x": 6,
+            "y": 0,
+            "keyIndex": 6
+          },
+          {
+            "keyId": "key35",
+            "x": 7,
+            "y": 0,
+            "keyIndex": 35
+          },
+          {
+            "keyId": "key36",
+            "x": 8,
+            "y": 0,
+            "keyIndex": 36
+          },
+          {
+            "keyId": "key37",
+            "x": 9,
+            "y": 0,
+            "keyIndex": 37
+          },
+          {
+            "keyId": "key38",
+            "x": 10,
+            "y": 0,
+            "keyIndex": 38
+          },
+          {
+            "keyId": "key39",
+            "x": 11,
+            "y": 0,
+            "keyIndex": 39
+          },
+          {
+            "keyId": "key40",
+            "x": 12,
+            "y": 0,
+            "keyIndex": 40
+          },
+          {
+            "keyId": "key55",
+            "x": 13,
+            "y": 0,
+            "shape": "std 2",
+            "keyIndex": 55
+          },
+          {
+            "keyId": "key7",
+            "x": 0,
+            "y": 1,
+            "shape": "std 1.5",
+            "keyIndex": 7
+          },
+          {
+            "keyId": "key8",
+            "x": 1.5,
+            "y": 1,
+            "keyIndex": 8
+          },
+          {
+            "keyId": "key9",
+            "x": 2.5,
+            "y": 1,
+            "keyIndex": 9
+          },
+          {
+            "keyId": "key10",
+            "x": 3.5,
+            "y": 1,
+            "keyIndex": 10
+          },
+          {
+            "keyId": "key11",
+            "x": 4.5,
+            "y": 1,
+            "keyIndex": 11
+          },
+          {
+            "keyId": "key12",
+            "x": 5.5,
+            "y": 1,
+            "keyIndex": 12
+          },
+          {
+            "keyId": "key13",
+            "x": 6.5,
+            "y": 1,
+            "keyIndex": 13
+          },
+          {
+            "keyId": "key42",
+            "x": 7.5,
+            "y": 1,
+            "keyIndex": 42
+          },
+          {
+            "keyId": "key43",
+            "x": 8.5,
+            "y": 1,
+            "keyIndex": 43
+          },
+          {
+            "keyId": "key44",
+            "x": 9.5,
+            "y": 1,
+            "keyIndex": 44
+          },
+          {
+            "keyId": "key45",
+            "x": 10.5,
+            "y": 1,
+            "keyIndex": 45
+          },
+          {
+            "keyId": "key46",
+            "x": 11.5,
+            "y": 1,
+            "keyIndex": 46
+          },
+          {
+            "keyId": "key47",
+            "x": 12.5,
+            "y": 1,
+            "keyIndex": 47
+          },
+          {
+            "keyId": "key48",
+            "x": 13.5,
+            "y": 1,
+            "shape": "std 1.5",
+            "keyIndex": 48
+          },
+          {
+            "keyId": "key14",
+            "x": 0,
+            "y": 2,
+            "shape": "std 1.75",
+            "keyIndex": 14
+          },
+          {
+            "keyId": "key15",
+            "x": 1.75,
+            "y": 2,
+            "keyIndex": 15
+          },
+          {
+            "keyId": "key16",
+            "x": 2.75,
+            "y": 2,
+            "keyIndex": 16
+          },
+          {
+            "keyId": "key17",
+            "x": 3.75,
+            "y": 2,
+            "keyIndex": 17
+          },
+          {
+            "keyId": "key18",
+            "x": 4.75,
+            "y": 2,
+            "keyIndex": 18
+          },
+          {
+            "keyId": "key19",
+            "x": 5.75,
+            "y": 2,
+            "keyIndex": 19
+          },
+          {
+            "keyId": "key20",
+            "x": 6.75,
+            "y": 2,
+            "keyIndex": 20
+          },
+          {
+            "keyId": "key49",
+            "x": 7.75,
+            "y": 2,
+            "keyIndex": 49
+          },
+          {
+            "keyId": "key50",
+            "x": 8.75,
+            "y": 2,
+            "keyIndex": 50
+          },
+          {
+            "keyId": "key51",
+            "x": 9.75,
+            "y": 2,
+            "keyIndex": 51
+          },
+          {
+            "keyId": "key52",
+            "x": 10.75,
+            "y": 2,
+            "keyIndex": 52
+          },
+          {
+            "keyId": "key53",
+            "x": 11.75,
+            "y": 2,
+            "keyIndex": 53
+          },
+          {
+            "keyId": "key54",
+            "x": 12.75,
+            "y": 2,
+            "shape": "std 2.25",
+            "keyIndex": 54
+          },
+          {
+            "keyId": "key21",
+            "x": 0,
+            "y": 3,
+            "shape": "std 2.25",
+            "keyIndex": 21
+          },
+          {
+            "keyId": "key22",
+            "x": 2.25,
+            "y": 3,
+            "keyIndex": 22
+          },
+          {
+            "keyId": "key23",
+            "x": 3.25,
+            "y": 3,
+            "keyIndex": 23
+          },
+          {
+            "keyId": "key24",
+            "x": 4.25,
+            "y": 3,
+            "keyIndex": 24
+          },
+          {
+            "keyId": "key25",
+            "x": 5.25,
+            "y": 3,
+            "keyIndex": 25
+          },
+          {
+            "keyId": "key26",
+            "x": 6.25,
+            "y": 3,
+            "keyIndex": 26
+          },
+          {
+            "keyId": "key27",
+            "x": 7.25,
+            "y": 3,
+            "keyIndex": 27
+          },
+          {
+            "keyId": "key56",
+            "x": 8.25,
+            "y": 3,
+            "keyIndex": 56
+          },
+          {
+            "keyId": "key57",
+            "x": 9.25,
+            "y": 3,
+            "keyIndex": 57
+          },
+          {
+            "keyId": "key58",
+            "x": 10.25,
+            "y": 3,
+            "keyIndex": 58
+          },
+          {
+            "keyId": "key59",
+            "x": 11.25,
+            "y": 3,
+            "keyIndex": 59
+          },
+          {
+            "keyId": "key60",
+            "x": 12.25,
+            "y": 3,
+            "shape": "std 2.75",
+            "keyIndex": 60
+          },
+          {
+            "keyId": "key28",
+            "x": 0,
+            "y": 4,
+            "shape": "std 1.25",
+            "keyIndex": 28
+          },
+          {
+            "keyId": "key29",
+            "x": 1.25,
+            "y": 4,
+            "shape": "std 1.25",
+            "keyIndex": 29
+          },
+          {
+            "keyId": "key30",
+            "x": 2.5,
+            "y": 4,
+            "shape": "std 1.25",
+            "keyIndex": 30
+          },
+          {
+            "keyId": "key33",
+            "x": 3.75,
+            "y": 4,
+            "shape": "std 6.25",
+            "keyIndex": 33
+          },
+          {
+            "keyId": "key64",
+            "x": 10,
+            "y": 4,
+            "shape": "std 1.25",
+            "keyIndex": 64
+          },
+          {
+            "keyId": "key65",
+            "x": 11.25,
+            "y": 4,
+            "shape": "std 1.25",
+            "keyIndex": 65
+          },
+          {
+            "keyId": "key67",
+            "x": 12.5,
+            "y": 4,
+            "shape": "std 1.25",
+            "keyIndex": 67
+          },
+          {
+            "keyId": "key68",
+            "x": 13.75,
+            "y": 4,
+            "shape": "std 1.25",
+            "keyIndex": 68
+          }
+        ],
+        "outlineShapes": [
+          {
+            "points": [
+              {
+                "x": -4,
+                "y": -4
+              },
+              {
+                "x": 290,
+                "y": -4
+              },
+              {
+                "x": 290,
+                "y": 99
+              },
+              {
+                "x": -4,
+                "y": 99
+              }
+            ]
+          }
+        ],
+        "transformationGroups": []
+      }
+    }
+  ],
+  "profiles": []
+}

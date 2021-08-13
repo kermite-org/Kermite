@@ -1,0 +1,922 @@
+{
+  "formatRevision": "PKG0",
+  "projectId": "Di6V4K",
+  "keyboardName": "Minivers",
+  "customFirmwareReferences": [
+    {
+      "variantName": "rev1",
+      "firmwareId": "FZiVsZ",
+      "systemParameterKeys": [
+        "emitRealtimeEvents",
+        "keyHoldIndicatorLed",
+        "heartbeatLed",
+        "masterSide"
+      ]
+    },
+    {
+      "variantName": "rev2_rp",
+      "firmwareId": "7zabZ0",
+      "systemParameterKeys": [
+        "emitRealtimeEvents",
+        "keyHoldIndicatorLed",
+        "heartbeatLed",
+        "masterSide"
+      ]
+    }
+  ],
+  "layouts": [
+    {
+      "layoutName": "rev1",
+      "data": {
+        "formatRevision": "LA01",
+        "setup": {
+          "placementUnit": "mm",
+          "placementAnchor": "center",
+          "keySizeUnit": "KP 17",
+          "keyIdMode": "auto"
+        },
+        "keyEntities": [
+          {
+            "keyId": "key0",
+            "x": -30,
+            "y": 17,
+            "keyIndex": 0
+          },
+          {
+            "keyId": "key1",
+            "x": -47,
+            "y": 17,
+            "keyIndex": 1
+          },
+          {
+            "keyId": "key2",
+            "x": -64,
+            "y": 17,
+            "keyIndex": 2
+          },
+          {
+            "keyId": "key3",
+            "x": -81,
+            "y": 17,
+            "keyIndex": 3
+          },
+          {
+            "keyId": "key4",
+            "x": -98,
+            "y": 17,
+            "keyIndex": 4
+          },
+          {
+            "keyId": "key5",
+            "x": -115,
+            "y": 17,
+            "keyIndex": 5
+          },
+          {
+            "keyId": "key6",
+            "x": -132,
+            "y": 17,
+            "keyIndex": 6
+          },
+          {
+            "keyId": "key7",
+            "x": -149,
+            "y": 17,
+            "keyIndex": 7
+          },
+          {
+            "keyId": "key8",
+            "x": -30,
+            "y": 34,
+            "keyIndex": 8
+          },
+          {
+            "keyId": "key9",
+            "x": -47,
+            "y": 34,
+            "keyIndex": 9
+          },
+          {
+            "keyId": "key10",
+            "x": -64,
+            "y": 34,
+            "keyIndex": 10
+          },
+          {
+            "keyId": "key11",
+            "x": -81,
+            "y": 34,
+            "keyIndex": 11
+          },
+          {
+            "keyId": "key12",
+            "x": -98,
+            "y": 34,
+            "keyIndex": 12
+          },
+          {
+            "keyId": "key13",
+            "x": -115,
+            "y": 34,
+            "keyIndex": 13
+          },
+          {
+            "keyId": "key14",
+            "x": -132,
+            "y": 34,
+            "keyIndex": 14
+          },
+          {
+            "keyId": "key15",
+            "x": -149,
+            "y": 34,
+            "keyIndex": 15
+          },
+          {
+            "keyId": "key16",
+            "x": -30,
+            "y": 51,
+            "keyIndex": 16
+          },
+          {
+            "keyId": "key17",
+            "x": -47,
+            "y": 51,
+            "keyIndex": 17
+          },
+          {
+            "keyId": "key18",
+            "x": -64,
+            "y": 51,
+            "keyIndex": 18
+          },
+          {
+            "keyId": "key19",
+            "x": -81,
+            "y": 51,
+            "keyIndex": 19
+          },
+          {
+            "keyId": "key20",
+            "x": -98,
+            "y": 51,
+            "keyIndex": 20
+          },
+          {
+            "keyId": "key21",
+            "x": -115,
+            "y": 51,
+            "keyIndex": 21
+          },
+          {
+            "keyId": "key22",
+            "x": -132,
+            "y": 51,
+            "keyIndex": 22
+          },
+          {
+            "keyId": "key23",
+            "x": -149,
+            "y": 51,
+            "keyIndex": 23
+          },
+          {
+            "keyId": "key24",
+            "x": -30,
+            "y": 68,
+            "keyIndex": 24
+          },
+          {
+            "keyId": "key25",
+            "x": -47,
+            "y": 68,
+            "keyIndex": 25
+          },
+          {
+            "keyId": "key26",
+            "x": -64,
+            "y": 68,
+            "keyIndex": 26
+          },
+          {
+            "keyId": "key27",
+            "x": -81,
+            "y": 68,
+            "keyIndex": 27
+          },
+          {
+            "keyId": "key28",
+            "x": -98,
+            "y": 68,
+            "keyIndex": 28
+          },
+          {
+            "keyId": "key29",
+            "x": -115,
+            "y": 68,
+            "keyIndex": 29
+          },
+          {
+            "keyId": "key30",
+            "x": -132,
+            "y": 68,
+            "keyIndex": 30
+          },
+          {
+            "keyId": "key31",
+            "x": -149,
+            "y": 68,
+            "keyIndex": 31
+          },
+          {
+            "keyId": "key32",
+            "x": -30,
+            "y": 90,
+            "keyIndex": 32
+          },
+          {
+            "keyId": "key33",
+            "x": -47,
+            "y": 90,
+            "keyIndex": 33
+          },
+          {
+            "keyId": "key34",
+            "x": -64,
+            "y": 90,
+            "keyIndex": 34
+          },
+          {
+            "keyId": "key35",
+            "x": -89.5,
+            "y": 90,
+            "keyIndex": 35
+          },
+          {
+            "keyId": "key36",
+            "x": -115,
+            "y": 90,
+            "keyIndex": 36
+          },
+          {
+            "keyId": "key37",
+            "x": -132,
+            "y": 90,
+            "keyIndex": 37
+          },
+          {
+            "keyId": "key38",
+            "x": -149,
+            "y": 90,
+            "keyIndex": 38
+          },
+          {
+            "keyId": "key40",
+            "x": 30,
+            "y": 17,
+            "keyIndex": 40
+          },
+          {
+            "keyId": "key41",
+            "x": 47,
+            "y": 17,
+            "keyIndex": 41
+          },
+          {
+            "keyId": "key42",
+            "x": 64,
+            "y": 17,
+            "keyIndex": 42
+          },
+          {
+            "keyId": "key43",
+            "x": 81,
+            "y": 17,
+            "keyIndex": 43
+          },
+          {
+            "keyId": "key44",
+            "x": 98,
+            "y": 17,
+            "keyIndex": 44
+          },
+          {
+            "keyId": "key45",
+            "x": 115,
+            "y": 17,
+            "keyIndex": 45
+          },
+          {
+            "keyId": "key46",
+            "x": 132,
+            "y": 17,
+            "keyIndex": 46
+          },
+          {
+            "keyId": "key47",
+            "x": 149,
+            "y": 17,
+            "keyIndex": 47
+          },
+          {
+            "keyId": "key48",
+            "x": 30,
+            "y": 34,
+            "keyIndex": 48
+          },
+          {
+            "keyId": "key49",
+            "x": 47,
+            "y": 34,
+            "keyIndex": 49
+          },
+          {
+            "keyId": "key50",
+            "x": 64,
+            "y": 34,
+            "keyIndex": 50
+          },
+          {
+            "keyId": "key51",
+            "x": 81,
+            "y": 34,
+            "keyIndex": 51
+          },
+          {
+            "keyId": "key52",
+            "x": 98,
+            "y": 34,
+            "keyIndex": 52
+          },
+          {
+            "keyId": "key53",
+            "x": 115,
+            "y": 34,
+            "keyIndex": 53
+          },
+          {
+            "keyId": "key54",
+            "x": 132,
+            "y": 34,
+            "keyIndex": 54
+          },
+          {
+            "keyId": "key55",
+            "x": 149,
+            "y": 34,
+            "keyIndex": 55
+          },
+          {
+            "keyId": "key56",
+            "x": 30,
+            "y": 51,
+            "keyIndex": 56
+          },
+          {
+            "keyId": "key57",
+            "x": 47,
+            "y": 51,
+            "keyIndex": 57
+          },
+          {
+            "keyId": "key58",
+            "x": 64,
+            "y": 51,
+            "keyIndex": 58
+          },
+          {
+            "keyId": "key59",
+            "x": 81,
+            "y": 51,
+            "keyIndex": 59
+          },
+          {
+            "keyId": "key60",
+            "x": 98,
+            "y": 51,
+            "keyIndex": 60
+          },
+          {
+            "keyId": "key61",
+            "x": 115,
+            "y": 51,
+            "keyIndex": 61
+          },
+          {
+            "keyId": "key62",
+            "x": 132,
+            "y": 51,
+            "keyIndex": 62
+          },
+          {
+            "keyId": "key63",
+            "x": 149,
+            "y": 51,
+            "keyIndex": 63
+          },
+          {
+            "keyId": "key64",
+            "x": 30,
+            "y": 68,
+            "keyIndex": 64
+          },
+          {
+            "keyId": "key65",
+            "x": 47,
+            "y": 68,
+            "keyIndex": 65
+          },
+          {
+            "keyId": "key66",
+            "x": 64,
+            "y": 68,
+            "keyIndex": 66
+          },
+          {
+            "keyId": "key67",
+            "x": 81,
+            "y": 68,
+            "keyIndex": 67
+          },
+          {
+            "keyId": "key68",
+            "x": 98,
+            "y": 68,
+            "keyIndex": 68
+          },
+          {
+            "keyId": "key69",
+            "x": 115,
+            "y": 68,
+            "keyIndex": 69
+          },
+          {
+            "keyId": "key70",
+            "x": 132,
+            "y": 68,
+            "keyIndex": 70
+          },
+          {
+            "keyId": "key71",
+            "x": 149,
+            "y": 68,
+            "keyIndex": 71
+          },
+          {
+            "keyId": "key72",
+            "x": 30,
+            "y": 90,
+            "keyIndex": 72
+          },
+          {
+            "keyId": "key73",
+            "x": 47,
+            "y": 90,
+            "keyIndex": 73
+          },
+          {
+            "keyId": "key74",
+            "x": 64,
+            "y": 90,
+            "keyIndex": 74
+          },
+          {
+            "keyId": "key75",
+            "x": 89.5,
+            "y": 90,
+            "keyIndex": 75
+          },
+          {
+            "keyId": "key76",
+            "x": 115,
+            "y": 90,
+            "keyIndex": 76
+          },
+          {
+            "keyId": "key77",
+            "x": 132,
+            "y": 90,
+            "keyIndex": 77
+          },
+          {
+            "keyId": "key78",
+            "x": 149,
+            "y": 90,
+            "keyIndex": 78
+          }
+        ],
+        "outlineShapes": [
+          {
+            "points": [
+              {
+                "x": -11,
+                "y": -1
+              },
+              {
+                "x": -11,
+                "y": 107
+              },
+              {
+                "x": -167,
+                "y": 107
+              },
+              {
+                "x": -167,
+                "y": -1
+              }
+            ],
+            "groupIndex": 0
+          }
+        ],
+        "transformationGroups": [
+          {
+            "x": 0,
+            "y": 0,
+            "mirror": true
+          }
+        ]
+      }
+    },
+    {
+      "layoutName": "rev2",
+      "data": {
+        "formatRevision": "LA00",
+        "setup": {
+          "placementUnit": "KP 18 17",
+          "placementAnchor": "center",
+          "keySizeUnit": "KP",
+          "keyIdMode": "manual"
+        },
+        "keyEntities": [
+          {
+            "keyId": "KL0",
+            "x": -1.5,
+            "y": -1.5,
+            "keyIndex": 0,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL1",
+            "x": -2.5,
+            "y": -1.5,
+            "keyIndex": 1,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL2",
+            "x": -3.5,
+            "y": -1.5,
+            "keyIndex": 2,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL3",
+            "x": -4.5,
+            "y": -1.5,
+            "keyIndex": 3,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL4",
+            "x": -5.5,
+            "y": -1.5,
+            "keyIndex": 4,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL5",
+            "x": -6.5,
+            "y": -1.5,
+            "keyIndex": 5,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL6",
+            "x": -7.5,
+            "y": -1.5,
+            "keyIndex": 6,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL7",
+            "x": -1.5,
+            "y": -0.5,
+            "keyIndex": 7,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL8",
+            "x": -2.5,
+            "y": -0.5,
+            "keyIndex": 8,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL9",
+            "x": -3.5,
+            "y": -0.5,
+            "keyIndex": 9,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL10",
+            "x": -4.5,
+            "y": -0.5,
+            "keyIndex": 10,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL11",
+            "x": -5.5,
+            "y": -0.5,
+            "keyIndex": 11,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL12",
+            "x": -6.5,
+            "y": -0.5,
+            "keyIndex": 12,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL13",
+            "x": -7.5,
+            "y": -0.5,
+            "keyIndex": 13,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL14",
+            "x": -1.5,
+            "y": 0.5,
+            "keyIndex": 14,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL15",
+            "x": -2.5,
+            "y": 0.5,
+            "keyIndex": 15,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL16",
+            "x": -3.5,
+            "y": 0.5,
+            "keyIndex": 16,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL17",
+            "x": -4.5,
+            "y": 0.5,
+            "keyIndex": 17,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL18",
+            "x": -5.5,
+            "y": 0.5,
+            "keyIndex": 18,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL19",
+            "x": -6.5,
+            "y": 0.5,
+            "keyIndex": 19,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL20",
+            "x": -7.5,
+            "y": 0.5,
+            "keyIndex": 20,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL21",
+            "x": -1.5,
+            "y": 1.6667,
+            "keyIndex": 21,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL22",
+            "x": -2.5,
+            "y": 1.6667,
+            "keyIndex": 22,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL23",
+            "x": -3.5,
+            "y": 1.6667,
+            "keyIndex": 23,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL24",
+            "x": -4.5,
+            "y": 1.6667,
+            "keyIndex": 24,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL25",
+            "x": -5.5,
+            "y": 1.6667,
+            "keyIndex": 25,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL26",
+            "x": -6.5,
+            "y": 1.6667,
+            "keyIndex": 26,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL27",
+            "x": -7.5,
+            "y": 1.6667,
+            "keyIndex": 27,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KR0",
+            "mirrorOf": "KL0",
+            "keyIndex": 28
+          },
+          {
+            "keyId": "KR1",
+            "mirrorOf": "KL1",
+            "keyIndex": 29
+          },
+          {
+            "keyId": "KR2",
+            "mirrorOf": "KL2",
+            "keyIndex": 30
+          },
+          {
+            "keyId": "KR3",
+            "mirrorOf": "KL3",
+            "keyIndex": 31
+          },
+          {
+            "keyId": "KR4",
+            "mirrorOf": "KL4",
+            "keyIndex": 32
+          },
+          {
+            "keyId": "KR5",
+            "mirrorOf": "KL5",
+            "keyIndex": 33
+          },
+          {
+            "keyId": "KR6",
+            "mirrorOf": "KL6",
+            "keyIndex": 34
+          },
+          {
+            "keyId": "KR7",
+            "mirrorOf": "KL7",
+            "keyIndex": 35
+          },
+          {
+            "keyId": "KR8",
+            "mirrorOf": "KL8",
+            "keyIndex": 36
+          },
+          {
+            "keyId": "KR9",
+            "mirrorOf": "KL9",
+            "keyIndex": 37
+          },
+          {
+            "keyId": "KR10",
+            "mirrorOf": "KL10",
+            "keyIndex": 38
+          },
+          {
+            "keyId": "KR11",
+            "mirrorOf": "KL11",
+            "keyIndex": 39
+          },
+          {
+            "keyId": "KR12",
+            "mirrorOf": "KL12",
+            "keyIndex": 40
+          },
+          {
+            "keyId": "KR13",
+            "mirrorOf": "KL13",
+            "keyIndex": 41
+          },
+          {
+            "keyId": "KR14",
+            "mirrorOf": "KL14",
+            "keyIndex": 42
+          },
+          {
+            "keyId": "KR15",
+            "mirrorOf": "KL15",
+            "keyIndex": 43
+          },
+          {
+            "keyId": "KR16",
+            "mirrorOf": "KL16",
+            "keyIndex": 44
+          },
+          {
+            "keyId": "KR17",
+            "mirrorOf": "KL17",
+            "keyIndex": 45
+          },
+          {
+            "keyId": "KR18",
+            "mirrorOf": "KL18",
+            "keyIndex": 46
+          },
+          {
+            "keyId": "KR19",
+            "mirrorOf": "KL19",
+            "keyIndex": 47
+          },
+          {
+            "keyId": "KR20",
+            "mirrorOf": "KL20",
+            "keyIndex": 48
+          },
+          {
+            "keyId": "KR21",
+            "mirrorOf": "KL21",
+            "keyIndex": 49
+          },
+          {
+            "keyId": "KR22",
+            "mirrorOf": "KL22",
+            "keyIndex": 50
+          },
+          {
+            "keyId": "KR23",
+            "mirrorOf": "KL23",
+            "keyIndex": 51
+          },
+          {
+            "keyId": "KR24",
+            "mirrorOf": "KL24",
+            "keyIndex": 52
+          },
+          {
+            "keyId": "KR25",
+            "mirrorOf": "KL25",
+            "keyIndex": 53
+          },
+          {
+            "keyId": "KR26",
+            "mirrorOf": "KL26",
+            "keyIndex": 54
+          },
+          {
+            "keyId": "KR27",
+            "mirrorOf": "KL27",
+            "keyIndex": 55
+          }
+        ],
+        "outlineShapes": [
+          {
+            "points": [
+              {
+                "x": -153,
+                "y": -40
+              },
+              {
+                "x": -153,
+                "y": 43
+              },
+              {
+                "x": 5,
+                "y": 43
+              },
+              {
+                "x": 5,
+                "y": -40
+              }
+            ],
+            "groupIndex": 0
+          }
+        ],
+        "transformationGroups": [
+          {
+            "x": -20,
+            "y": 0,
+            "mirror": true
+          }
+        ]
+      }
+    }
+  ],
+  "profiles": []
+}

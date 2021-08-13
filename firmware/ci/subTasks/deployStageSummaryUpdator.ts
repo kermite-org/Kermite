@@ -1,13 +1,12 @@
+import { IFirmwareMetadataJson } from "subTasks/common";
 import {
   execueteOneliner,
   fsCopyFileSync,
-  fsxListFileBaseNames,
-  fsReaddirSync,
   fsxReadJsonFile,
   fsxWriteJsonFile,
   globSync,
+  pathBasename,
   pathDirname,
-  pathJoin,
   pathRelative,
   timeNow,
 } from "../helpers";
@@ -21,41 +20,16 @@ interface IIndexUpdatorResult {
   filesRevision: number;
 }
 
-interface IProjectJsonPartial {
-  projectId: string;
-  keyboardName: string;
-}
-
-interface IMetadataJson {
-  buildResult: "success" | "failure";
-  releaseBuildRevision: number;
-  buildTimestamp: string;
-  storageFormatRevision: number;
-  messageProtocolRevision: number;
-  flashUsage: number;
-  ramUsage: number;
-  firmwareFileSize: number;
-  firmwareBinaryFileMD5: string;
+interface IFirmwareInfo {
+  firmwareId: string;
+  firmwareProjectPath: string;
   variationName: string;
   targetDevice: "atmega32u4" | "rp2040";
+  buildResult: "success" | "failure";
   firmwareFileName: string;
-}
-
-interface IProjectInfo {
-  projectId: string;
-  projectPath: string;
-  keyboardName: string;
-  layoutNames: string[];
-  presetNames: string[];
-  firmwares: {
-    variationName: string;
-    targetDevice: "atmega32u4" | "rp2040";
-    binaryFileName: string;
-    buildRevision: number;
-    buildTimestamp: string;
-    romUsage: number;
-    ramUsage: number;
-  }[];
+  metadataFileName: string;
+  releaseBuildRevision: number;
+  buildTimestamp: string;
 }
 
 interface IEnvironmentVersions {
@@ -72,7 +46,7 @@ interface ISummaryData {
     updateAt: string;
     filesRevision: number;
   };
-  projects: IProjectInfo[];
+  firmwares: IFirmwareInfo[];
 }
 
 function readOsVersion(): string {
@@ -117,48 +91,32 @@ function makeSummaryFileContent(
   buildStats: IBuildStats,
   filesRevision: number
 ): ISummaryData {
-  const projectJsonFilePahts = globSync("./dist/variants/**/project.json");
-  const projectInfos = projectJsonFilePahts.map((projectJsonFilePath) => {
-    const projectPath = pathDirname(
-      pathRelative("./dist/variants", projectJsonFilePath)
-    );
-    const distProjectDir = `./dist/variants/${projectPath}`;
-    const projectObj = fsxReadJsonFile(
-      projectJsonFilePath
-    ) as IProjectJsonPartial;
+  const firmwareMetadataFilePaths = globSync(
+    "./dist/firmwares/**/*.metadata.json"
+  );
 
-    const presetNames = fsxListFileBaseNames(distProjectDir, ".profile.json");
-    const layoutNames = fsxListFileBaseNames(distProjectDir, ".layout.json");
+  const firmwareInfos: IFirmwareInfo[] = firmwareMetadataFilePaths.map(
+    (firmwareMetadataFilePath) => {
+      const firmwareProjectPath = pathDirname(
+        pathRelative("./dist/firmwares", firmwareMetadataFilePath)
+      );
+      const me = fsxReadJsonFile(
+        firmwareMetadataFilePath
+      ) as IFirmwareMetadataJson;
+      return {
+        firmwareId: me.firmwareId,
+        firmwareProjectPath,
+        variationName: me.variationName,
+        targetDevice: me.targetDevice,
+        buildResult: me.buildResult,
+        firmwareFileName: me.firmwareFileName,
+        metadataFileName: pathBasename(firmwareMetadataFilePath),
+        releaseBuildRevision: me.releaseBuildRevision,
+        buildTimestamp: me.buildTimestamp,
+      };
+    }
+  );
 
-    const metadataFileNames = fsReaddirSync(distProjectDir).filter((fileName) =>
-      fileName.match(/^metadata_.*\.json$/)
-    );
-
-    const firmwares = metadataFileNames
-      .map((metadataFileName) => {
-        const filePath = pathJoin(distProjectDir, metadataFileName);
-        return fsxReadJsonFile(filePath) as IMetadataJson;
-      })
-      .filter((metadata) => metadata.buildResult === "success")
-      .map((md) => ({
-        variationName: md.variationName,
-        targetDevice: md.targetDevice,
-        binaryFileName: md.firmwareFileName,
-        buildRevision: md.releaseBuildRevision,
-        buildTimestamp: md.buildTimestamp,
-        romUsage: md.flashUsage,
-        ramUsage: md.ramUsage,
-      }));
-
-    return {
-      projectPath: projectPath,
-      projectId: projectObj.projectId,
-      keyboardName: projectObj.keyboardName,
-      layoutNames,
-      presetNames,
-      firmwares,
-    };
-  });
   return {
     info: {
       buildStats,
@@ -166,7 +124,7 @@ function makeSummaryFileContent(
       updateAt: timeNow(),
       filesRevision,
     },
-    projects: projectInfos,
+    firmwares: firmwareInfos,
   };
 }
 
@@ -179,6 +137,6 @@ export function deployStageSummaryUpdator_outputSummaryFile(
     const savingSummaryObj = makeSummaryFileContent(buildStats, filesRevision);
     fsxWriteJsonFile("./dist/summary.json", savingSummaryObj);
   } else {
-    fsCopyFileSync("./KRS/resources/summary.json", "./dist/summary.json");
+    fsCopyFileSync("./KRS/resources2/summary.json", "./dist/summary.json");
   }
 }

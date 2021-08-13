@@ -1,0 +1,158 @@
+{
+  "formatRevision": "PKG0",
+  "projectId": "dx5kE9",
+  "keyboardName": "Shiro",
+  "standardFirmwareDefinitions": [
+    {
+      "variantName": "atmega",
+      "data": {
+        "baseFirmwareType": "AvrUnified",
+        "useBoardLedsProMicroAvr": true,
+        "useMatrixKeyScanner": true,
+        "matrixColumnPins": ["PF4", "PF5", "PF6"],
+        "matrixRowPins": ["PD4", "PC6", "PD7", "PE6", "PB4"]
+      }
+    }
+  ],
+  "customFirmwareReferences": [
+    {
+      "variantName": "atmega_custom",
+      "firmwareId": "hxcfM7",
+      "systemParameterKeys": [
+        "emitRealtimeEvents",
+        "keyHoldIndicatorLed",
+        "heartbeatLed"
+      ]
+    }
+  ],
+  "layouts": [
+    {
+      "layoutName": "default",
+      "data": {
+        "formatRevision": "LA00",
+        "setup": {
+          "placementUnit": "KP 18 17",
+          "placementAnchor": "center",
+          "keySizeUnit": "KP",
+          "keyIdMode": "auto"
+        },
+        "keyEntities": [
+          {
+            "keyId": "key0",
+            "x": -1,
+            "y": -2,
+            "keyIndex": 0
+          },
+          {
+            "keyId": "key1",
+            "x": 0,
+            "y": -2,
+            "keyIndex": 1
+          },
+          {
+            "keyId": "key2",
+            "x": 1,
+            "y": -2,
+            "keyIndex": 2
+          },
+          {
+            "keyId": "key3",
+            "x": -1,
+            "y": -1,
+            "keyIndex": 3
+          },
+          {
+            "keyId": "key4",
+            "x": 0,
+            "y": -1,
+            "keyIndex": 4
+          },
+          {
+            "keyId": "key5",
+            "x": 1,
+            "y": -1,
+            "keyIndex": 5
+          },
+          {
+            "keyId": "key6",
+            "x": -1,
+            "y": 0,
+            "keyIndex": 6
+          },
+          {
+            "keyId": "key7",
+            "x": 0,
+            "y": 0,
+            "keyIndex": 7
+          },
+          {
+            "keyId": "key8",
+            "x": 1,
+            "y": 0,
+            "keyIndex": 8
+          },
+          {
+            "keyId": "key9",
+            "x": -1,
+            "y": 1,
+            "keyIndex": 9
+          },
+          {
+            "keyId": "key10",
+            "x": 0,
+            "y": 1,
+            "keyIndex": 10
+          },
+          {
+            "keyId": "key11",
+            "x": 1,
+            "y": 1,
+            "keyIndex": 11
+          },
+          {
+            "keyId": "key12",
+            "x": -1,
+            "y": 2,
+            "keyIndex": 12
+          },
+          {
+            "keyId": "key13",
+            "x": 0,
+            "y": 2,
+            "keyIndex": 13
+          },
+          {
+            "keyId": "key14",
+            "x": 1,
+            "y": 2,
+            "keyIndex": 14
+          }
+        ],
+        "outlineShapes": [
+          {
+            "points": [
+              {
+                "x": -32.5,
+                "y": -47.5
+              },
+              {
+                "x": 32.5,
+                "y": -47.5
+              },
+              {
+                "x": 32.5,
+                "y": 47.5
+              },
+              {
+                "x": -32.5,
+                "y": 47.5
+              }
+            ]
+          }
+        ],
+        "transformationGroups": []
+      }
+    }
+  ],
+  "profiles": []
+}

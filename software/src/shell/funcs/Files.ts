@@ -41,6 +41,8 @@ export const fsExistsSync = fs.existsSync;
 
 export const fsMkdirSync = fs.mkdirSync;
 
+export const fsRmdirSync = fs.rmdirSync;
+
 export const fspMkdir = asyncWrap(fs.promises.mkdir);
 
 export const fspUnlink = asyncWrap(fs.promises.unlink);
@@ -86,6 +88,12 @@ export async function fsxReaddir(folderPath: string): Promise<string[]> {
 export function fsxMkdirpSync(path: string) {
   if (!fsExistsSync(path)) {
     fsMkdirSync(path, { recursive: true });
+  }
+}
+
+export async function fsxEnsureFolderExists(path: string) {
+  if (!fsExistsSync(path)) {
+    await fspMkdir(path);
   }
 }
 

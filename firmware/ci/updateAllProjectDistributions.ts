@@ -19,8 +19,8 @@ function pullResourceStoreRepo() {
 }
 
 function copyResourcesToLocalResourceStoreRepo() {
-  fsRmdirSync("./KRS/resources", { recursive: true });
-  fsxCopyDirectory("./dist", "./KRS/resources");
+  fsRmdirSync("./KRS/resources2", { recursive: true });
+  fsxCopyDirectory("./dist", "./KRS/resources2");
 }
 
 function buildAllProjectDistributions() {

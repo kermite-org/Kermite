@@ -1,6 +1,6 @@
 import { ICustromParameterSpec } from '~/shared/defs/CustomParameter';
 import { IPersistKeyboardDesign } from '~/shared/defs/KeyboardDesign';
-import { IProfileData } from './ProfileData';
+import { IPersistProfileData, IProfileData } from './ProfileData';
 
 export type IPresetType = 'blank' | 'preset';
 
@@ -34,6 +34,26 @@ export interface IProjectResourceInfo {
   presetNames: string[];
   layoutNames: string[];
   firmwares: IProjectFirmwareInfo[];
+}
+
+export interface IProjectPackageInfo {
+  sig: string; // ${origin}#${projectId}
+  origin: IResourceOrigin;
+  projectId: string;
+  keyboardName: string;
+  customFirmwareReferences: {
+    variantName: string;
+    firmwareId: string;
+    systemParameterKeys: string[];
+  }[];
+  layouts: {
+    layoutName: string;
+    data: IPersistKeyboardDesign;
+  }[];
+  profiles: {
+    profileName: string;
+    data: IPersistProfileData;
+  }[];
 }
 
 export interface IProjectCustomDefinition {

@@ -8,8 +8,8 @@
 #include "versionDefinitions.h"
 #include <stdio.h>
 
-#ifndef KERMITE_PROJECT_ID
-#error KERMITE_PROJECT_ID is not defined in config.h
+#ifndef KERMITE_FIRMWARE_ID
+#error KERMITE_FIRMWARE_ID is not defined in config.h
 #endif
 
 #ifndef KM0_STORAGE__USER_STORAGE_SIZE
@@ -151,7 +151,7 @@ static bool validateStorageDataFormat() {
   //check project id stored in system data body
   uint16_t posSystemDataBody = getChunkBodyAddress(ChunkSig_SystemData);
   dataMemory_readBytes(posSystemDataBody, tempDataBuf, 6);
-  bool projectIdValid = utils_compareBytes(tempDataBuf, (uint8_t *)KERMITE_PROJECT_ID, 6);
+  bool projectIdValid = utils_compareBytes(tempDataBuf, (uint8_t *)KERMITE_FIRMWARE_ID, 6);
   if (!projectIdValid) {
     return false;
   }
@@ -177,7 +177,7 @@ static void resetDataStorage() {
   uint16_t posSystemDataBody = getChunkBodyAddress(ChunkSig_SystemData);
   if (posSystemDataBody) {
     //write project id
-    dataMemory_writeBytes(posSystemDataBody, (uint8_t *)KERMITE_PROJECT_ID, 6);
+    dataMemory_writeBytes(posSystemDataBody, (uint8_t *)KERMITE_FIRMWARE_ID, 6);
     //write default instance number
     dataMemory_writeBytes(posSystemDataBody + 8, (uint8_t *)"00000000", 8);
   }

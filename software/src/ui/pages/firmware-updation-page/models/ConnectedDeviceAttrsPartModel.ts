@@ -6,12 +6,12 @@ interface IConnectedDevicesAttrsPartModel {
   tableData: [string, string][] | undefined;
 }
 
-function fixDatetimeText(datetimeText: string) {
-  if (datetimeText.endsWith('Z')) {
-    return new Date(datetimeText).toLocaleString();
-  }
-  return datetimeText;
-}
+// function fixDatetimeText(datetimeText: string) {
+//   if (datetimeText.endsWith('Z')) {
+//     return new Date(datetimeText).toLocaleString();
+//   }
+//   return datetimeText;
+// }
 
 export function useConnectedDevicesAttrsPartModel(): IConnectedDevicesAttrsPartModel {
   const { deviceAttrs, projectInfo } = useConnectedDeviceAttributes();
@@ -20,9 +20,9 @@ export function useConnectedDevicesAttrsPartModel(): IConnectedDevicesAttrsPartM
 
   const isOriginOnline = deviceAttrs?.origin === 'online';
 
-  const firm = projectInfo?.firmwares.find(
-    (f) => f.variationName === deviceAttrs?.firmwareVariationName,
-  );
+  // const firm = projectInfo?.customFirmwareReferences.find(
+  //   (f) => f.variantName === deviceAttrs?.firmwareVariationName,
+  // );
   const tableData =
     deviceAttrs &&
     ([
@@ -36,10 +36,6 @@ export function useConnectedDevicesAttrsPartModel(): IConnectedDevicesAttrsPartM
       [
         texts.lebel_device_deviceInfo_fieldName_projectID,
         deviceAttrs.projectId,
-      ],
-      projectInfo && [
-        texts.lebel_device_deviceInfo_fieldName_projectPath,
-        projectInfo.projectPath,
       ],
       projectInfo && [
         texts.lebel_device_deviceInfo_fieldName_keyboardName,
@@ -58,17 +54,16 @@ export function useConnectedDevicesAttrsPartModel(): IConnectedDevicesAttrsPartM
         texts.lebel_device_deviceInfo_fieldName_firmwareRevision,
         (isOriginOnline && deviceAttrs.firmwareBuildRevision) || 'N/A',
       ],
-      isOriginOnline &&
-        firm && [
-          texts.lebel_device_deviceInfo_fieldName_firmwareLatestRevision,
-          firm.buildRevision,
-        ],
-
-      isOriginOnline &&
-        firm && [
-          texts.lebel_device_deviceInfo_fieldName_firmwareLatestTimestamp,
-          fixDatetimeText(firm.buildTimestamp),
-        ],
+      // isOriginOnline &&
+      //   firm && [
+      //     texts.lebel_device_deviceInfo_fieldName_firmwareLatestRevision,
+      //     firm.buildRevision,
+      //   ],
+      // isOriginOnline &&
+      //   firm && [
+      //     texts.lebel_device_deviceInfo_fieldName_firmwareLatestTimestamp,
+      //     fixDatetimeText(firm.buildTimestamp),
+      //   ],
       [
         texts.lebel_device_deviceInfo_fieldName_keymappingAreaSize,
         deviceAttrs.assignStorageCapacity + ' bytes',

@@ -1,0 +1,1989 @@
+{
+  "formatRevision": "PKG0",
+  "projectId": "79xv6Z",
+  "keyboardName": "Astelia",
+  "standardFirmwareDefinitions": [
+    {
+      "variantName": "atmega",
+      "data": {
+        "baseFirmwareType": "AvrUnified",
+        "useBoardLedsProMicroAvr": true,
+        "useMatrixKeyScanner": true,
+        "matrixColumnPins": ["PC6", "PD4", "PF7", "PF6", "PF5", "PF4"],
+        "matrixRowPins": [
+          "PB1",
+          "PB3",
+          "PB2",
+          "PB6",
+          "PD7",
+          "PE6",
+          "PB4",
+          "PB5"
+        ]
+      }
+    }
+  ],
+  "customFirmwareReferences": [
+    {
+      "variantName": "atmega_custom",
+      "firmwareId": "dFbA81",
+      "systemParameterKeys": [
+        "emitRealtimeEvents",
+        "keyHoldIndicatorLed",
+        "heartbeatLed"
+      ]
+    }
+  ],
+  "layouts": [
+    {
+      "layoutName": "default",
+      "data": {
+        "formatRevision": "LA00",
+        "setup": {
+          "placementUnit": "mm",
+          "placementAnchor": "center",
+          "keySizeUnit": "KP",
+          "keyIdMode": "manual"
+        },
+        "keyEntities": [
+          {
+            "keyId": "KL0",
+            "x": 28,
+            "y": -19,
+            "keyIndex": 0,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL1",
+            "x": 9,
+            "y": -19,
+            "keyIndex": 1,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL2",
+            "x": -10,
+            "y": -19,
+            "keyIndex": 2,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL3",
+            "x": -29,
+            "y": -19,
+            "keyIndex": 3,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL4",
+            "x": 11,
+            "y": -19,
+            "keyIndex": 4,
+            "groupIndex": 1
+          },
+          {
+            "keyId": "KL5",
+            "x": -8,
+            "y": -19,
+            "keyIndex": 5,
+            "groupIndex": 1
+          },
+          {
+            "keyId": "KL6",
+            "x": 28.5,
+            "y": 0,
+            "keyIndex": 6,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL7",
+            "x": 9.5,
+            "y": 0,
+            "keyIndex": 7,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL8",
+            "x": -9.5,
+            "y": 0,
+            "keyIndex": 8,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL9",
+            "x": -28.5,
+            "y": 0,
+            "keyIndex": 9,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL10",
+            "x": 9.5,
+            "y": 0,
+            "keyIndex": 10,
+            "groupIndex": 1
+          },
+          {
+            "keyId": "KL11",
+            "x": -9.5,
+            "y": 0,
+            "keyIndex": 11,
+            "groupIndex": 1
+          },
+          {
+            "keyId": "KL12",
+            "x": 29,
+            "y": 19,
+            "keyIndex": 12,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL13",
+            "x": 10,
+            "y": 19,
+            "keyIndex": 13,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL14",
+            "x": -9,
+            "y": 19,
+            "keyIndex": 14,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL15",
+            "x": -28,
+            "y": 19,
+            "keyIndex": 15,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL16",
+            "x": 8,
+            "y": 19,
+            "keyIndex": 16,
+            "groupIndex": 1
+          },
+          {
+            "keyId": "KL17",
+            "x": -11,
+            "y": 19,
+            "keyIndex": 17,
+            "groupIndex": 1
+          },
+          {
+            "keyId": "KL18",
+            "x": 35,
+            "y": 41.5,
+            "keyIndex": 18,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL19",
+            "x": 16,
+            "y": 41.5,
+            "keyIndex": 19,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL20",
+            "x": -3,
+            "y": 41.5,
+            "keyIndex": 20,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL21",
+            "x": -22,
+            "y": 41.5,
+            "keyIndex": 21,
+            "groupIndex": 0
+          },
+          {
+            "keyId": "KL22",
+            "x": 7.5,
+            "y": 42,
+            "keyIndex": 22,
+            "groupIndex": 1
+          },
+          {
+            "keyId": "KL23",
+            "x": -12,
+            "y": 42,
+            "keyIndex": 23,
+            "groupIndex": 1
+          },
+          {
+            "keyId": "KR0",
+            "mirrorOf": "KL0",
+            "keyIndex": 24
+          },
+          {
+            "keyId": "KR1",
+            "mirrorOf": "KL1",
+            "keyIndex": 25
+          },
+          {
+            "keyId": "KR2",
+            "mirrorOf": "KL2",
+            "keyIndex": 26
+          },
+          {
+            "keyId": "KR3",
+            "mirrorOf": "KL3",
+            "keyIndex": 27
+          },
+          {
+            "keyId": "KR4",
+            "mirrorOf": "KL4",
+            "keyIndex": 28
+          },
+          {
+            "keyId": "KR5",
+            "mirrorOf": "KL5",
+            "keyIndex": 29
+          },
+          {
+            "keyId": "KR6",
+            "mirrorOf": "KL6",
+            "keyIndex": 30
+          },
+          {
+            "keyId": "KR7",
+            "mirrorOf": "KL7",
+            "keyIndex": 31
+          },
+          {
+            "keyId": "KR8",
+            "mirrorOf": "KL8",
+            "keyIndex": 32
+          },
+          {
+            "keyId": "KR9",
+            "mirrorOf": "KL9",
+            "keyIndex": 33
+          },
+          {
+            "keyId": "KR10",
+            "mirrorOf": "KL10",
+            "keyIndex": 34
+          },
+          {
+            "keyId": "KR11",
+            "mirrorOf": "KL11",
+            "keyIndex": 35
+          },
+          {
+            "keyId": "KR12",
+            "mirrorOf": "KL12",
+            "keyIndex": 36
+          },
+          {
+            "keyId": "KR13",
+            "mirrorOf": "KL13",
+            "keyIndex": 37
+          },
+          {
+            "keyId": "KR14",
+            "mirrorOf": "KL14",
+            "keyIndex": 38
+          },
+          {
+            "keyId": "KR15",
+            "mirrorOf": "KL15",
+            "keyIndex": 39
+          },
+          {
+            "keyId": "KR16",
+            "mirrorOf": "KL16",
+            "keyIndex": 40
+          },
+          {
+            "keyId": "KR17",
+            "mirrorOf": "KL17",
+            "keyIndex": 41
+          },
+          {
+            "keyId": "KR18",
+            "mirrorOf": "KL18",
+            "keyIndex": 42
+          },
+          {
+            "keyId": "KR19",
+            "mirrorOf": "KL19",
+            "keyIndex": 43
+          },
+          {
+            "keyId": "KR20",
+            "mirrorOf": "KL20",
+            "keyIndex": 44
+          },
+          {
+            "keyId": "KR21",
+            "mirrorOf": "KL21",
+            "keyIndex": 45
+          },
+          {
+            "keyId": "KR22",
+            "mirrorOf": "KL22",
+            "keyIndex": 46
+          },
+          {
+            "keyId": "KR23",
+            "mirrorOf": "KL23",
+            "keyIndex": 47
+          }
+        ],
+        "outlineShapes": [
+          {
+            "points": [
+              {
+                "x": 145,
+                "y": 97.7
+              },
+              {
+                "x": 145,
+                "y": 0
+              },
+              {
+                "x": -145,
+                "y": 0
+              },
+              {
+                "x": -145,
+                "y": 97.7
+              },
+              {
+                "x": -25,
+                "y": 111
+              },
+              {
+                "x": 25,
+                "y": 111
+              }
+            ]
+          }
+        ],
+        "transformationGroups": [
+          {
+            "x": -54.5,
+            "y": 44,
+            "angle": 9,
+            "mirror": true
+          },
+          {
+            "x": -113.5,
+            "y": 38,
+            "mirror": true
+          }
+        ]
+      }
+    }
+  ],
+  "profiles": [
+    {
+      "profileName": "default",
+      "data": {
+        "formatRevision": "PRF03",
+        "projectId": "79xv6Z",
+        "keyboardDesign": {
+          "formatRevision": "LA00",
+          "setup": {
+            "placementUnit": "mm",
+            "placementAnchor": "center",
+            "keySizeUnit": "KP",
+            "keyIdMode": "manual"
+          },
+          "keyEntities": [
+            {
+              "keyId": "KL0",
+              "x": 28,
+              "y": -19,
+              "keyIndex": 0,
+              "groupIndex": 0
+            },
+            {
+              "keyId": "KL1",
+              "x": 9,
+              "y": -19,
+              "keyIndex": 1,
+              "groupIndex": 0
+            },
+            {
+              "keyId": "KL2",
+              "x": -10,
+              "y": -19,
+              "keyIndex": 2,
+              "groupIndex": 0
+            },
+            {
+              "keyId": "KL3",
+              "x": -29,
+              "y": -19,
+              "keyIndex": 3,
+              "groupIndex": 0
+            },
+            {
+              "keyId": "KL4",
+              "x": 11,
+              "y": -19,
+              "keyIndex": 4,
+              "groupIndex": 1
+            },
+            {
+              "keyId": "KL5",
+              "x": -8,
+              "y": -19,
+              "keyIndex": 5,
+              "groupIndex": 1
+            },
+            {
+              "keyId": "KL6",
+              "x": 28.5,
+              "y": 0,
+              "keyIndex": 6,
+              "groupIndex": 0
+            },
+            {
+              "keyId": "KL7",
+              "x": 9.5,
+              "y": 0,
+              "keyIndex": 7,
+              "groupIndex": 0
+            },
+            {
+              "keyId": "KL8",
+              "x": -9.5,
+              "y": 0,
+              "keyIndex": 8,
+              "groupIndex": 0
+            },
+            {
+              "keyId": "KL9",
+              "x": -28.5,
+              "y": 0,
+              "keyIndex": 9,
+              "groupIndex": 0
+            },
+            {
+              "keyId": "KL10",
+              "x": 9.5,
+              "y": 0,
+              "keyIndex": 10,
+              "groupIndex": 1
+            },
+            {
+              "keyId": "KL11",
+              "x": -9.5,
+              "y": 0,
+              "keyIndex": 11,
+              "groupIndex": 1
+            },
+            {
+              "keyId": "KL12",
+              "x": 29,
+              "y": 19,
+              "keyIndex": 12,
+              "groupIndex": 0
+            },
+            {
+              "keyId": "KL13",
+              "x": 10,
+              "y": 19,
+              "keyIndex": 13,
+              "groupIndex": 0
+            },
+            {
+              "keyId": "KL14",
+              "x": -9,
+              "y": 19,
+              "keyIndex": 14,
+              "groupIndex": 0
+            },
+            {
+              "keyId": "KL15",
+              "x": -28,
+              "y": 19,
+              "keyIndex": 15,
+              "groupIndex": 0
+            },
+            {
+              "keyId": "KL16",
+              "x": 8,
+              "y": 19,
+              "keyIndex": 16,
+              "groupIndex": 1
+            },
+            {
+              "keyId": "KL17",
+              "x": -11,
+              "y": 19,
+              "keyIndex": 17,
+              "groupIndex": 1
+            },
+            {
+              "keyId": "KL18",
+              "x": 35,
+              "y": 41.5,
+              "keyIndex": 18,
+              "groupIndex": 0
+            },
+            {
+              "keyId": "KL19",
+              "x": 16,
+              "y": 41.5,
+              "keyIndex": 19,
+              "groupIndex": 0
+            },
+            {
+              "keyId": "KL20",
+              "x": -3,
+              "y": 41.5,
+              "keyIndex": 20,
+              "groupIndex": 0
+            },
+            {
+              "keyId": "KL21",
+              "x": -22,
+              "y": 41.5,
+              "keyIndex": 21,
+              "groupIndex": 0
+            },
+            {
+              "keyId": "KL22",
+              "x": 7.5,
+              "y": 42,
+              "keyIndex": 22,
+              "groupIndex": 1
+            },
+            {
+              "keyId": "KL23",
+              "x": -12,
+              "y": 42,
+              "keyIndex": 23,
+              "groupIndex": 1
+            },
+            {
+              "keyId": "KR0",
+              "mirrorOf": "KL0",
+              "keyIndex": 24
+            },
+            {
+              "keyId": "KR1",
+              "mirrorOf": "KL1",
+              "keyIndex": 25
+            },
+            {
+              "keyId": "KR2",
+              "mirrorOf": "KL2",
+              "keyIndex": 26
+            },
+            {
+              "keyId": "KR3",
+              "mirrorOf": "KL3",
+              "keyIndex": 27
+            },
+            {
+              "keyId": "KR4",
+              "mirrorOf": "KL4",
+              "keyIndex": 28
+            },
+            {
+              "keyId": "KR5",
+              "mirrorOf": "KL5",
+              "keyIndex": 29
+            },
+            {
+              "keyId": "KR6",
+              "mirrorOf": "KL6",
+              "keyIndex": 30
+            },
+            {
+              "keyId": "KR7",
+              "mirrorOf": "KL7",
+              "keyIndex": 31
+            },
+            {
+              "keyId": "KR8",
+              "mirrorOf": "KL8",
+              "keyIndex": 32
+            },
+            {
+              "keyId": "KR9",
+              "mirrorOf": "KL9",
+              "keyIndex": 33
+            },
+            {
+              "keyId": "KR10",
+              "mirrorOf": "KL10",
+              "keyIndex": 34
+            },
+            {
+              "keyId": "KR11",
+              "mirrorOf": "KL11",
+              "keyIndex": 35
+            },
+            {
+              "keyId": "KR12",
+              "mirrorOf": "KL12",
+              "keyIndex": 36
+            },
+            {
+              "keyId": "KR13",
+              "mirrorOf": "KL13",
+              "keyIndex": 37
+            },
+            {
+              "keyId": "KR14",
+              "mirrorOf": "KL14",
+              "keyIndex": 38
+            },
+            {
+              "keyId": "KR15",
+              "mirrorOf": "KL15",
+              "keyIndex": 39
+            },
+            {
+              "keyId": "KR16",
+              "mirrorOf": "KL16",
+              "keyIndex": 40
+            },
+            {
+              "keyId": "KR17",
+              "mirrorOf": "KL17",
+              "keyIndex": 41
+            },
+            {
+              "keyId": "KR18",
+              "mirrorOf": "KL18",
+              "keyIndex": 42
+            },
+            {
+              "keyId": "KR19",
+              "mirrorOf": "KL19",
+              "keyIndex": 43
+            },
+            {
+              "keyId": "KR20",
+              "mirrorOf": "KL20",
+              "keyIndex": 44
+            },
+            {
+              "keyId": "KR21",
+              "mirrorOf": "KL21",
+              "keyIndex": 45
+            },
+            {
+              "keyId": "KR22",
+              "mirrorOf": "KL22",
+              "keyIndex": 46
+            },
+            {
+              "keyId": "KR23",
+              "mirrorOf": "KL23",
+              "keyIndex": 47
+            }
+          ],
+          "outlineShapes": [
+            {
+              "points": [
+                {
+                  "x": 145,
+                  "y": 97.7
+                },
+                {
+                  "x": 145,
+                  "y": 0
+                },
+                {
+                  "x": -145,
+                  "y": 0
+                },
+                {
+                  "x": -145,
+                  "y": 97.7
+                },
+                {
+                  "x": -25,
+                  "y": 111
+                },
+                {
+                  "x": 25,
+                  "y": 111
+                }
+              ]
+            }
+          ],
+          "transformationGroups": [
+            {
+              "x": -54.5,
+              "y": 44,
+              "angle": 9,
+              "mirror": true
+            },
+            {
+              "x": -113.5,
+              "y": 38,
+              "mirror": true
+            }
+          ]
+        },
+        "settings": {
+          "assignType": "single",
+          "useShiftCancel": false
+        },
+        "layers": [
+          {
+            "layerId": "la0",
+            "layerName": "main",
+            "defaultScheme": "block",
+            "exclusionGroup": 0,
+            "initialActive": true
+          },
+          {
+            "layerId": "la867",
+            "layerName": "xshift",
+            "defaultScheme": "transparent",
+            "attachedModifiers": ["K_Shift"],
+            "exclusionGroup": 0,
+            "initialActive": false
+          },
+          {
+            "layerId": "la797",
+            "layerName": "raise",
+            "defaultScheme": "transparent",
+            "exclusionGroup": 0,
+            "initialActive": false
+          },
+          {
+            "layerId": "la844",
+            "layerName": "lower",
+            "defaultScheme": "transparent",
+            "exclusionGroup": 0,
+            "initialActive": false
+          }
+        ],
+        "assigns": [
+          {
+            "layerId": "la0",
+            "keyId": "KL10",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_A"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KL9",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_S"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KL8",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_D"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KL7",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_F"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KL6",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_G"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KR6",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_H"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KR7",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_J"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KR8",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_K"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KR9",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_L"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KR10",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Semicolon"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KL4",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Q"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KL3",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_W"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KL2",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_E"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KL1",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_R"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KL0",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_T"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KR0",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Y"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KR1",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_U"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KR2",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_I"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KR3",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_O"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KR4",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_P"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KL16",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Z"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KL15",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_X"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KL14",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_C"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KL13",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_V"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KL12",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_B"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KR12",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_N"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KR13",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_M"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KR14",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Comma"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KR15",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Dot"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KR16",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Slash"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KL18",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Space"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KR18",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Enter"
+              }
+            }
+          },
+          {
+            "layerId": "la867",
+            "keyId": "KR10",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Colon"
+              }
+            }
+          },
+          {
+            "layerId": "la867",
+            "keyId": "KR16",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Question"
+              }
+            }
+          },
+          {
+            "layerId": "la867",
+            "keyId": "KR15",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_GreaterThan"
+              }
+            }
+          },
+          {
+            "layerId": "la867",
+            "keyId": "KR14",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_LessThan"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KR19",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "layerCall",
+                "targetLayerId": "la797",
+                "invocationMode": "hold"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KL19",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "layerCall",
+                "targetLayerId": "la844",
+                "invocationMode": "hold"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KL17",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "layerCall",
+                "targetLayerId": "la867",
+                "invocationMode": "hold"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KR17",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "layerCall",
+                "targetLayerId": "la867",
+                "invocationMode": "hold"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KL11",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Tab"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KR5",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_BackSpace"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KL5",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Escape"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KL23",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Ctrl"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KR6",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Insert"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KR7",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_J",
+                "attachedModifiers": ["K_Shift", "K_Ctrl"]
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KR8",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Home"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KR9",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_End"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KL4",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Num_1"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KL3",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Num_2"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KL2",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Num_3"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KL1",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Num_4"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KL0",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Num_5"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KR0",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Num_6"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KR1",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Num_7"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KR2",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Num_8"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KR3",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Num_9"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KR4",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Num_0"
+              }
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KL4",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Exclamation"
+              }
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KL3",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_AtMark"
+              }
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KL2",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Sharp"
+              }
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KL1",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Dollar"
+              }
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KL0",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Percent"
+              }
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KR0",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Hat"
+              }
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KR1",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Ampersand"
+              }
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KR2",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Asterisk"
+              }
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KR3",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_LeftParenthesis"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KL21",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Alt"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KL20",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Gui"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KR10",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Semicolon",
+                "attachedModifiers": ["K_Shift", "K_Ctrl"]
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KR13",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_F12"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KR12",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_F11"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KR16",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_PrintScreen"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KL10",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_F1"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KL9",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_F2"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KL8",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_F3"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KL7",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_F4"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KL6",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_F5"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KL16",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_F6"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KL15",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_F7"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KL14",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_F8"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KL13",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_F9"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KL12",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_F10"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KR14",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_PageUp"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KR15",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_PageDn"
+              }
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KR6",
+            "usage": {
+              "type": "block"
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KR7",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_LeftCurlyBrace"
+              }
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KR8",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_RightCurlyBrace"
+              }
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KR9",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_LeftSquareBracket"
+              }
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KR15",
+            "usage": {
+              "type": "block"
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KR10",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_RightSquareBracket"
+              }
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KR4",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_RightParenthesis"
+              }
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KL6",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Tilde"
+              }
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KL10",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Underscore"
+              }
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KL12",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_VerticalBar"
+              }
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KL16",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_BackSlash"
+              }
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KR12",
+            "usage": {
+              "type": "block"
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KR11",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_SingleQuote"
+              }
+            }
+          },
+          {
+            "layerId": "la867",
+            "keyId": "KR11",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_DoubleQuote"
+              }
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KL14",
+            "usage": {
+              "type": "block"
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KL15",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Yen"
+              }
+            }
+          },
+          {
+            "layerId": "la844",
+            "keyId": "KR5",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Delete"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KR23",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_RightArrow"
+              }
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KL9",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Plus"
+              }
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KL8",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Minus"
+              }
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KL7",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_Equal"
+              }
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KL13",
+            "usage": {
+              "type": "block"
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KR14",
+            "usage": {
+              "type": "block"
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KR16",
+            "usage": {
+              "type": "block"
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KR20",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_LeftArrow"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KR21",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_DownArrow"
+              }
+            }
+          },
+          {
+            "layerId": "la0",
+            "keyId": "KR22",
+            "usage": {
+              "type": "single",
+              "op": {
+                "type": "keyInput",
+                "virtualKey": "K_UpArrow"
+              }
+            }
+          },
+          {
+            "layerId": "la797",
+            "keyId": "KR13",
+            "usage": {
+              "type": "block"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

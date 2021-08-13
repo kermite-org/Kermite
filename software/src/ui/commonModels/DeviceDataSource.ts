@@ -2,7 +2,7 @@ import {
   IDeviceSelectionStatus,
   IKeyboardDeviceAttributes,
   IKeyboardDeviceStatus,
-  IProjectResourceInfo,
+  IProjectPackageInfo,
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
 import { useProjectInfo } from '~/ui/commonModels/ProjectDataSource';
@@ -24,7 +24,7 @@ export function useKeyboardDeviceStatus(): IKeyboardDeviceStatus {
 
 export function useConnectedDeviceAttributes(): {
   deviceAttrs: IKeyboardDeviceAttributes | undefined;
-  projectInfo: IProjectResourceInfo | undefined;
+  projectInfo: IProjectPackageInfo | undefined;
 } {
   const deviceStatus = useKeyboardDeviceStatus();
   const deviceAttrs = deviceStatus.deviceAttrs;

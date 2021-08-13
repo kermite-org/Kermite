@@ -84,7 +84,7 @@ export class LayoutManager implements ILayoutManager {
     }
 
     if (this.status.editSource.type === 'CurrentProfile') {
-      const profile = await this.profileManager.getCurrentProfileAsync();
+      const profile = this.profileManager.getCurrentProfile();
       if (!profile) {
         this.createNewLayout();
       }
@@ -138,8 +138,9 @@ export class LayoutManager implements ILayoutManager {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   private async loadCurrentProfileLayout() {
-    const profile = await this.profileManager.getCurrentProfileAsync();
+    const profile = this.profileManager.getCurrentProfile();
     if (profile) {
       this.setStatus({
         editSource: { type: 'CurrentProfile' },
@@ -269,7 +270,7 @@ export class LayoutManager implements ILayoutManager {
     if (editSource.type === 'LayoutNewlyCreated') {
       throw new Error('cannot save newly created layout');
     } else if (editSource.type === 'CurrentProfile') {
-      const profile = await this.profileManager.getCurrentProfileAsync();
+      const profile = this.profileManager.getCurrentProfile();
       if (profile) {
         const newProfile = duplicateObjectByJsonStringifyParse(profile);
         newProfile.keyboardDesign = design;

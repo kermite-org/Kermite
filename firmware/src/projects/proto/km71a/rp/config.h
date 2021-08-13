@@ -1,6 +1,6 @@
 #pragma once
 
-#define KERMITE_PROJECT_ID "wHvGTW"
+#define KERMITE_FIRMWARE_ID "O1lweX"
 
 #define KS_NUM_SCAN_SLOTS 75
 
@@ -15,7 +15,6 @@
 
 #define KS_ROW_PINS \
   { GP16, GP17, GP18, GP19, GP20 }
-  
+
 #define KS_KEYBOARD_STATUS_LEDS_PINS \
   { GP24, GP23, GP22 }
-  

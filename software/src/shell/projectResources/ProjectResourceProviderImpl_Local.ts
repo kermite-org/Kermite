@@ -9,7 +9,6 @@ import {
   IResourceOrigin,
 } from '~/shared';
 import { createProjectSig } from '~/shared/funcs/DomainRelatedHelpers';
-import { appEnv } from '~/shell/base';
 import {
   fsExistsSync,
   fsLstatSync,
@@ -21,7 +20,6 @@ import {
   pathDirname,
   pathJoin,
   pathRelative,
-  pathResolve,
 } from '~/shell/funcs';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
@@ -227,20 +225,8 @@ export class ProjectResourceProviderImpl_Local
     this.loadedLocalRepositoryDir = undefined;
   }
 
-  private getLocalRepositoryDir() {
-    const settings = globalSettingsProvider.getGlobalSettings();
-    if (settings.developerMode && settings.useLocalResouces) {
-      if (appEnv.isDevelopment) {
-        return pathResolve('../');
-      } else {
-        return settings.localProjectRootFolderPath;
-      }
-    }
-    return undefined;
-  }
-
   async getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]> {
-    const localRepositoryDir = this.getLocalRepositoryDir();
+    const localRepositoryDir = globalSettingsProvider.getLocalRepositoryDir();
 
     if (!localRepositoryDir) {
       return [];
