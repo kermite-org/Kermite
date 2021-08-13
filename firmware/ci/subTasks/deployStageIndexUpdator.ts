@@ -34,7 +34,7 @@ function loadSourceIndex(): IIndexJsonData {
 }
 
 function makeFilesMd5Dict(): IFilesMd5Dict {
-  const filePaths = globSync("./dist/firmwares/**/*").filter((f) =>
+  const filePaths = globSync("./dist/**/*").filter((f) =>
     fsStatSync(f).isFile()
   );
   return createObjectFromKeyValues(
