@@ -1,5 +1,9 @@
 import { serializeCustomKeyboardSpec } from '@/CustomKeyboardDataSerializer';
 import {
+  decodeBytesFromHexFileContent,
+  encodeBytesToHexFileContent,
+} from '@/FirmwareBinaryDataConverter';
+import {
   keyboardSpec_astelia,
   keyboardSpec_dw4,
   keyboardSpec_km60,
@@ -44,17 +48,19 @@ function getBinaryContentMarkerIndex(
 }
 
 function forgeStandardKeyboardFirmwareAvr() {
-  const targetKeyboardSpec = keyboardSpec_astelia;
-  // const targetKeyboardSpec = keyboardSpec_dw4;
+  // const targetKeyboardSpec = keyboardSpec_astelia;
+  const targetKeyboardSpec = keyboardSpec_dw4;
 
   const customDataBytes = serializeCustomKeyboardSpec(targetKeyboardSpec);
 
   const binaryBaseDir = '../build/standard/avr';
-  const srcBinaryFilePath = `${binaryBaseDir}/standard_avr.hex`;
-  const modBinaryFilePath = `${binaryBaseDir}/standard_avr_patched.hex`;
+  const srcFilePath = `${binaryBaseDir}/standard_avr.hex`;
+  const modFilePath = `${binaryBaseDir}/standard_avr_patched.hex`;
 
-  const buffer = fs.readFileSync(srcBinaryFilePath);
-  const binaryBytes = [...new Uint8Array(buffer)];
+  const fileText = fs.readFileSync(srcFilePath, {
+    encoding: 'utf-8',
+  });
+  const binaryBytes = decodeBytesFromHexFileContent(fileText);
 
   const markerPosition = getBinaryContentMarkerIndex(binaryBytes, 'KMDF');
   if (markerPosition === -1) {
@@ -63,10 +69,11 @@ function forgeStandardKeyboardFirmwareAvr() {
   const dataLocation = markerPosition + 4;
   replaceArrayConent(binaryBytes, dataLocation, customDataBytes);
 
-  const savingBuffer = Buffer.from(binaryBytes);
-  fs.writeFileSync(modBinaryFilePath, savingBuffer);
+  const savingText = encodeBytesToHexFileContent(binaryBytes);
 
-  console.log(`file saved: ${modBinaryFilePath}`);
+  fs.writeFileSync(modFilePath, savingText);
+
+  console.log(`file saved: ${modFilePath}`);
   console.log('done');
 }
 
