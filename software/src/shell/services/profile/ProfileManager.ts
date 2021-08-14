@@ -1,4 +1,5 @@
 import { shell } from 'electron';
+import produce from 'immer';
 import {
   IProfileManagerStatus,
   IProfileData,
@@ -13,6 +14,7 @@ import {
   IProfileEntry,
   IGlobalSettings,
 } from '~/shared';
+import { ProfileDataConverter } from '~/shared/modules/ProfileDataConverter';
 import {
   vObject,
   vSchemaOneOf,
@@ -21,7 +23,7 @@ import {
 } from '~/shared/modules/SchemaValidationHelper';
 import { applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
-import { projectResourceProvider } from '~/shell/projectResources';
+import { projectPackageProvider } from '~/shell/projectPackages/ProjectPackageProvider';
 import { globalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 import { presetProfileLoader_loadPresetProfileData } from '~/shell/services/profile/PresetProfileLoader';
 import { IProfileManager } from './Interfaces';
@@ -251,14 +253,25 @@ export class ProfileManager implements IProfileManager {
     presetName: string,
     profileData: IProfileData,
   ): Promise<void> {
-    const filePath = projectResourceProvider.localResourceProviderImpl.getLocalPresetProfileFilePath(
-      projectId,
-      presetName,
+    const projectInfos = await projectPackageProvider.getAllProjectPackageInfos();
+    const projectInfo = projectInfos.find(
+      (info) => info.origin === 'local' && info.projectId === projectId,
     );
-    if (filePath) {
-      await this.core.saveProfileAsPreset(filePath, profileData);
-      projectResourceProvider.localResourceProviderImpl.clearCache();
-      // this.presetProfileLoader.deleteProjectPresetProfileCache(projectId);
+    if (projectInfo) {
+      const preset = ProfileDataConverter.convertProfileDataToPersist(
+        profileData,
+      );
+      const newProjectInfo = produce(projectInfo, (draft) => {
+        const profile = draft.presets.find(
+          (it) => it.presetName === presetName,
+        );
+        if (profile) {
+          profile.data = preset;
+        } else {
+          draft.presets.push({ presetName: presetName, data: preset });
+        }
+      });
+      projectPackageProvider.saveLocalProjectPackageInfo(newProjectInfo);
     }
   }
 

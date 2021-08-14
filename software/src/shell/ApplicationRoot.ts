@@ -83,7 +83,7 @@ export class ApplicationRoot {
         this.layoutManager.executeCommands(commands),
       // layout_getAllProjectLayoutsInfos: () =>
       //   this.layoutManager.getAllProjectLayoutsInfos(),
-      layout_showEditLayoutFileInFiler: async () =>
+      layout_showEditLayoutFileInFiler: () =>
         this.layoutManager.showEditLayoutFileInFiler(),
       projects_loadKeyboardShape: (origin, projectId, layoutName) =>
         projectResourceProvider.loadProjectLayout(

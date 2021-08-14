@@ -225,7 +225,6 @@ export type ILayoutEditSource =
 export interface ILayoutManagerStatus {
   editSource: ILayoutEditSource;
   loadedDesign: IPersistKeyboardDesign;
-  projectLayoutsInfos: IProjectLayoutsInfo[];
 }
 
 export type ILayoutManagerCommand =

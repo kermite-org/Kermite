@@ -7,7 +7,6 @@ import {
   fspUnlink,
   fsRmdirSync,
   fsxEnsureFolderExists,
-  fsxMkdirpSync,
   fsxReadJsonFile,
   globAsync,
   pathBasename,
@@ -86,15 +85,6 @@ export class ProfileManagerCore {
     filePath: string,
     profileData: IProfileData,
   ): Promise<void> {
-    await ProfileFileLoader.saveProfileToFile(filePath, profileData);
-  }
-
-  async saveProfileAsPreset(
-    filePath: string,
-    profileData: IProfileData,
-  ): Promise<void> {
-    console.log(`saving current profile to ${filePath}`);
-    fsxMkdirpSync(pathDirname(filePath));
     await ProfileFileLoader.saveProfileToFile(filePath, profileData);
   }
 
