@@ -1,8 +1,6 @@
 import { useEffect } from 'qx';
 import {
   forceChangeFilePathExtension,
-  IGlobalSettings,
-  IKeyboardDeviceStatus,
   IProfileData,
   IProfileEditSource,
 } from '~/shared';
@@ -286,11 +284,14 @@ const simulatorProfileUpdator = new (class {
   }
 })();
 
-function getCanWrite(
-  deviceStatus: IKeyboardDeviceStatus,
-  globalSettings: IGlobalSettings,
-): boolean {
-  const { developerMode, allowCrossKeyboardKeyMappingWrite } = globalSettings;
+function getCanWrite(): boolean {
+  const deviceStatus = useKeyboardDeviceStatus();
+
+  const {
+    developerMode,
+    allowCrossKeyboardKeyMappingWrite,
+  } = uiStateReader.globalSettings;
+
   const { editSource } = profilesModel;
 
   const isInternalProfile = editSource.type === 'InternalProfile';
@@ -357,15 +358,11 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
 
   const allProfileNames = allProfileEntries.map((it) => it.profileName);
 
-  const deviceStatus = useKeyboardDeviceStatus();
-
-  const { globalSettings } = uiStateReader;
-
   const { isSimulatorMode } = useKeyboardBehaviorModeModel();
 
   const presetsModalDisplayStateModel = useModalDisplayStateModel();
 
-  const canWrite = getCanWrite(deviceStatus, globalSettings);
+  const canWrite = getCanWrite();
 
   const canSave = getCanSave();
 

@@ -1,7 +1,6 @@
 export * from './AppServicesInitializer';
 export * from './ConfigDataSource';
 export * from './DeviceDataSource';
-export * from './DomainHelpers';
 export * from './GeneralUiStateModels';
 export * from './GlobalSettingsModel';
 export * from './Interfaces';

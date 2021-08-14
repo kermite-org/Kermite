@@ -1,4 +1,4 @@
-import { IGlobalSettings } from '~/shared';
+import { createProjectSig, IGlobalSettings, IResourceOrigin } from '~/shared';
 import { dispatchCoreAction } from '~/ui/commonModels/ActionDispatcher';
 import { uiState } from '~/ui/commonModels/UiState';
 
@@ -33,8 +33,20 @@ export const globalSettingsReader = {
   get isDeveloperMode() {
     return this.globalSettings.developerMode;
   },
-  getValue<K extends keyof IGlobalSettings>(key: K): IGlobalSettings[K] {
-    return this.globalSettings[key];
+  get settingsResouceOrigin(): IResourceOrigin {
+    const {
+      developerMode,
+      useLocalResouces,
+      localProjectRootFolderPath,
+    } = this.globalSettings;
+    return developerMode && useLocalResouces && !!localProjectRootFolderPath
+      ? 'local'
+      : 'online';
+  },
+  get globalProjectKey(): string {
+    const { globalProjectId } = this.globalSettings;
+    const origin = this.settingsResouceOrigin;
+    return (globalProjectId && createProjectSig(origin, globalProjectId)) || '';
   },
 };
 
