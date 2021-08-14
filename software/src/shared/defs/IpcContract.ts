@@ -4,7 +4,6 @@ import {
   IAppWindowStatus,
   IBootloaderDeviceDetectionStatus,
   ICustomFirmwareInfo,
-  IDeviceSelectionStatus,
   ILayoutManagerCommand,
   ILayoutManagerStatus,
   IProfileEntry,
@@ -96,8 +95,6 @@ export interface IAppIpcContract {
     window_appWindowStatus: Partial<IAppWindowStatus>;
     profile_profileManagerStatus: Partial<IProfileManagerStatus>;
     layout_layoutManagerStatus: Partial<ILayoutManagerStatus>;
-
-    device_deviceSelectionEvents: Partial<IDeviceSelectionStatus>;
     device_keyEvents: IRealtimeKeyboardEvent;
     firmup_deviceDetectionEvents: IBootloaderDeviceDetectionStatus;
     global_coreStateEvents: Partial<ICoreState>;

@@ -158,8 +158,6 @@ export class ApplicationRoot {
       },
       layout_layoutManagerStatus: (listener) =>
         this.layoutManager.statusEvents.subscribe(listener),
-      device_deviceSelectionEvents: (cb) =>
-        this.deviceService.selectionStatusEventPort.subscribe(cb),
       device_keyEvents: (cb) => {
         this.deviceService.realtimeEventPort.subscribe(cb);
         return () => this.deviceService.realtimeEventPort.unsubscribe(cb);

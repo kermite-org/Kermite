@@ -5,7 +5,9 @@ import {
   IKeyboardConfig,
 } from '~/shared/defs/ConfigTypes';
 import {
+  fallbackDeviceSelectionStatus,
   ICustomFirmwareInfo,
+  IDeviceSelectionStatus,
   IKeyboardDeviceStatus,
   IProjectPackageInfo,
 } from '~/shared/defs/DomainTypes';
@@ -15,8 +17,9 @@ export type ICoreState = {
   allProjectPackageInfos: IProjectPackageInfo[];
   allCustomFirmwareInfos: ICustomFirmwareInfo[];
   globalSettings: IGlobalSettings;
-  deviceStatus: IKeyboardDeviceStatus;
   keyboardConfig: IKeyboardConfig;
+  deviceStatus: IKeyboardDeviceStatus;
+  deviceSelectionStatus: IDeviceSelectionStatus;
 };
 
 export const defaultCoreState: ICoreState = {
@@ -24,8 +27,9 @@ export const defaultCoreState: ICoreState = {
   allProjectPackageInfos: [],
   allCustomFirmwareInfos: [],
   globalSettings: globalSettingsDefault,
-  deviceStatus: { isConnected: false },
   keyboardConfig: fallbackKeyboardConfig,
+  deviceStatus: { isConnected: false },
+  deviceSelectionStatus: fallbackDeviceSelectionStatus,
 };
 
 export type ICoreAction = Partial<{

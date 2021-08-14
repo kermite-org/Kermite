@@ -1,7 +1,6 @@
 import { IKeyboardDeviceInfo, IProjectPackageInfo } from '~/shared';
 import { ipcAgent, ISelectorOption } from '~/ui/base';
-import { useDeviceSelectionStatus } from '~/ui/commonModels';
-import { uiStateReader } from '~/ui/commonStore';
+import { uiState, uiStateReader } from '~/ui/commonStore';
 
 interface IDeviceSelectionPartModel {
   deviceOptions: ISelectorOption[];
@@ -25,7 +24,7 @@ function makeDeviceOptionEntry(
 
 export function useDeviceSelectionPartModel(): IDeviceSelectionPartModel {
   const resourceInfos = uiStateReader.allProjectPackageInfos;
-  const selectionStatus = useDeviceSelectionStatus();
+  const selectionStatus = uiState.core.deviceSelectionStatus;
   const noneOption: ISelectorOption = { label: 'none', value: 'none' };
   const deviceOptionsBase: ISelectorOption[] = selectionStatus.allDeviceInfos.map(
     (deviceInfo) => makeDeviceOptionEntry(deviceInfo, resourceInfos),

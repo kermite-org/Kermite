@@ -4,8 +4,7 @@ import {
   IntervalTimerWrapper,
 } from '~/shared';
 import { applicationStorage } from '~/shell/base';
-import { createEventPort } from '~/shell/funcs';
-import { coreState } from '~/shell/global';
+import { commitCoreState, coreState } from '~/shell/global';
 import {
   enumerateSupportedDeviceInfos,
   getDebugDeviceSigFromDevicePath,
@@ -33,24 +32,22 @@ const deviceSpecificationParams: IDeviceSpecificationParams[] = [
 ];
 
 export class DeviceSelectionManager {
-  private status: IDeviceSelectionStatus = {
-    allDeviceInfos: [],
-    currentDevicePath: 'none',
-  };
-
-  selectionStatusEventPort = createEventPort<Partial<IDeviceSelectionStatus>>({
-    initialValueGetter: () => this.status,
-  });
-
-  private setStatus(status: Partial<IDeviceSelectionStatus>) {
-    this.status = { ...this.status, ...status };
-    this.selectionStatusEventPort.emit(status);
-  }
-
   private device: IDeviceWrapper | undefined;
 
   getDevice() {
     return this.device;
+  }
+
+  private get status() {
+    return coreState.deviceSelectionStatus;
+  }
+
+  private setStatus(status: Partial<IDeviceSelectionStatus>) {
+    const deviceSelectionStatus = {
+      ...coreState.deviceSelectionStatus,
+      ...status,
+    };
+    commitCoreState({ deviceSelectionStatus });
   }
 
   private closeDevice() {

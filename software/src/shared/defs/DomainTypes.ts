@@ -119,6 +119,11 @@ export interface IDeviceSelectionStatus {
   currentDevicePath: string | 'none';
 }
 
+export const fallbackDeviceSelectionStatus: IDeviceSelectionStatus = {
+  allDeviceInfos: [],
+  currentDevicePath: 'none',
+};
+
 export interface IKeyboardDeviceAttributes {
   origin: IResourceOrigin;
   projectId: string;
