@@ -1,6 +1,5 @@
 import {
-  IPersistKeyboardDesign,
-  IPersistProfileData,
+  IProjectPackageFileContent,
   IProjectPackageInfo,
   IResourceOrigin,
 } from '~/shared';
@@ -10,6 +9,7 @@ import {
   fsxListFileBaseNames,
   fsxReadJsonFile,
   fsxWriteJsonFile,
+  pathBasename,
   pathJoin,
 } from '~/shell/funcs';
 
@@ -18,22 +18,18 @@ interface IProjectPackageProvider {
   saveLocalProjectPackageInfo(info: IProjectPackageInfo): Promise<void>;
 }
 
-interface IProjectPackageFileContent {
-  projectId: string;
-  keyboardName: string;
-  customFirmwareReferences: {
-    variantName: string;
-    firmwareId: string;
-    systemParameterKeys: string[];
-  }[];
-  layouts: {
-    layoutName: string;
-    data: IPersistKeyboardDesign;
-  }[];
-  profiles: {
-    profileName: string;
-    data: IPersistProfileData;
-  }[];
+function convertPackageFileContentToPackageInfo(
+  data: IProjectPackageFileContent,
+  origin: IResourceOrigin,
+  packageName: string,
+): IProjectPackageInfo {
+  return {
+    sig: `${origin}#${data.projectId}`,
+    origin,
+    packageName,
+    standardFirmwareDefinitions: data.standardFirmwareDefinitions || [],
+    ...data,
+  };
 }
 
 async function loadProjectPackageFiles(
@@ -47,12 +43,7 @@ async function loadProjectPackageFiles(
       const data = (await fsxReadJsonFile(
         filePath,
       )) as IProjectPackageFileContent;
-      return {
-        sig: `${origin}#${data.projectId}`,
-        origin,
-        packageName,
-        ...data,
-      };
+      return convertPackageFileContentToPackageInfo(data, origin, packageName);
     }),
   );
 }
@@ -76,11 +67,8 @@ async function loadRemoteProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
       const data = (await fetchJson(
         `${remoteBaseUrl}/${path}`,
       )) as IProjectPackageFileContent;
-      return {
-        sig: `${origin}#${data.projectId}`,
-        origin,
-        ...data,
-      };
+      const packageName = pathBasename(path, '.kmpkg.json');
+      return convertPackageFileContentToPackageInfo(data, origin, packageName);
     }),
   );
 }

@@ -18,18 +18,6 @@ export async function fetchAllProjectResourceInfos(): Promise<
   return await ipcAgent.async.projects_getAllProjectResourceInfos();
 }
 
-export function useProjectInfo(
-  origin?: IResourceOrigin,
-  projectId?: string,
-): IProjectPackageInfo | undefined {
-  const resourceInfos = uiGlobalStore.allProjectPackageInfos;
-  return (
-    resourceInfos.find(
-      (info) => info.origin === origin && info.projectId === projectId,
-    ) || resourceInfos.find((info) => info.projectId === projectId)
-  );
-}
-
 export const projectPackagesReader = {
   getProjectInfosGlobalProjectSelectionAffected(): IProjectPackageInfo[] {
     const {
@@ -47,6 +35,17 @@ export const projectPackagesReader = {
     const { globalProjectId } = globalSettingsModel.globalSettings;
     return uiGlobalStore.allProjectPackageInfos.find(
       (info) => info.origin === 'local' && info.projectId === globalProjectId,
+    );
+  },
+  findProjectInfo(
+    origin?: IResourceOrigin,
+    projectId?: string,
+  ): IProjectPackageInfo | undefined {
+    const resourceInfos = uiGlobalStore.allProjectPackageInfos;
+    return (
+      resourceInfos.find(
+        (info) => info.origin === origin && info.projectId === projectId,
+      ) || resourceInfos.find((info) => info.projectId === projectId)
     );
   },
 };
