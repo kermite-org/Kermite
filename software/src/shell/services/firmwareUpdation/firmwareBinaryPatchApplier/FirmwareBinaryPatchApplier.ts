@@ -1,5 +1,9 @@
 import { compareArray, IKermiteStandardKeyboaredSpec } from '~/shared';
 import { serializeCustomKeyboardSpec } from '~/shell/services/firmwareUpdation/firmwareBinaryPatchApplier/CustomKeyboardDataSerializer';
+import {
+  decodeBytesFromHexFileContent,
+  encodeBytesToHexFileContent,
+} from '~/shell/services/firmwareUpdation/firmwareBinaryPatchApplier/FirmwareBinaryDataConverter';
 
 function replaceArrayContent(dst: number[], dstOffset: number, src: number[]) {
   for (let i = 0; i < src.length; i++) {
@@ -25,32 +29,33 @@ function getBinaryContentMarkerIndex(
   return -1;
 }
 
+function getCustomDataLocation(binaryBytes: number[]): number {
+  const markerPosition = getBinaryContentMarkerIndex(binaryBytes, 'KMDF');
+  if (markerPosition === -1) {
+    throw new Error('cannot find marker');
+  }
+  return markerPosition + 4;
+}
+
 export function applyStandardFirmwareBinaryPatch(
   buffer: Uint8Array,
   firmwareBinaryFormat: 'hex' | 'uf2',
   targetKeyboardSpec: IKermiteStandardKeyboaredSpec,
 ): Uint8Array {
   const customDataBytes = serializeCustomKeyboardSpec(targetKeyboardSpec);
-  const binaryBytes = [...new Uint8Array(buffer)];
 
   if (firmwareBinaryFormat === 'hex') {
-    throw new Error('patching hex file is not supported yet');
-    // eslint-disable-next-line no-unreachable
-    const markerPosition = getBinaryContentMarkerIndex(binaryBytes, 'KMDF');
-    if (markerPosition === -1) {
-      throw new Error('cannot find marker');
-    }
-    const dataLocation = markerPosition + 4;
-    // todo: hexファイルのデコード/エンコードが必要
+    const hexFileContentText = new TextDecoder().decode(buffer);
+    const binaryBytes = decodeBytesFromHexFileContent(hexFileContentText);
+    const dataLocation = getCustomDataLocation(binaryBytes);
     replaceArrayContent(binaryBytes, dataLocation, customDataBytes);
+    const modHexFileContentText = encodeBytesToHexFileContent(binaryBytes);
+    return new TextEncoder().encode(modHexFileContentText);
   } else {
-    const markerPosition = getBinaryContentMarkerIndex(binaryBytes, 'KMDF');
-    if (markerPosition === -1) {
-      throw new Error('cannot find marker');
-    }
-    const dataLocation = markerPosition + 4;
+    const binaryBytes = [...new Uint8Array(buffer)];
+    const dataLocation = getCustomDataLocation(binaryBytes);
     // todo: UF2で512バイトのブロック境界をまたぐ場合の考慮が必要
     replaceArrayContent(binaryBytes, dataLocation, customDataBytes);
+    return new Uint8Array(binaryBytes);
   }
-  return new Uint8Array(binaryBytes);
 }

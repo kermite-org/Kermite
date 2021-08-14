@@ -4,10 +4,10 @@
   "license": "UNLICENSED",
   "scripts": {
     "prepare": "cd .. && make standard:avr:build",
-    "build": "ts-node -r tsconfig-paths/register Root.ts",
-    "flash": "cd .. && make standard:avr:flash_patched_bin",
+    "build": "ts-node -r tsconfig-paths/register Root.ts --target=avr",
+    "flash": "cd .. && make standard:avr:flash_patched_hex",
     "rp:prepare": "cd .. && make standard:rp:build",
-    "rp:build": "ts-node -r tsconfig-paths/register Root.ts",
+    "rp:build": "ts-node -r tsconfig-paths/register Root.ts --target=rp",
     "rp:flash": "cd .. && make standard:rp:flash_patched_uf2"
   },
   "dependencies": {
