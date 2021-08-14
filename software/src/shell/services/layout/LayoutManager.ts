@@ -168,15 +168,6 @@ export class LayoutManager implements ILayoutManager {
     });
   }
 
-  // private addLayoutNameToProjectInfoSourceIfNotExist(
-  //   projectId: string,
-  //   layoutName: string,
-  // ) {
-  //   projectResourceProvider.patchLocalProjectInfoSource(projectId, (info) =>
-  //     addArrayItemIfNotExist(info.layoutNames, layoutName),
-  //   );
-  // }
-
   private async getProjectInfo(
     projectId: string,
   ): Promise<IProjectPackageInfo | undefined> {
@@ -187,16 +178,9 @@ export class LayoutManager implements ILayoutManager {
   }
 
   private async createLayoutForProject(projectId: string, layoutName: string) {
-    const filePath = projectResourceProvider.localResourceProviderImpl.getLocalLayoutFilePath(
-      projectId,
-      layoutName,
-    );
-    if (filePath) {
+    const projectInfo = await this.getProjectInfo(projectId);
+    if (projectInfo) {
       const design = createFallbackPersistKeyboardDesign();
-      await this.saveLayoutToFile(filePath, design);
-      // this.addLayoutNameToProjectInfoSourceIfNotExist(projectId, layoutName);
-      // await projectResourceProvider.reenumerateResourceInfos();
-      projectResourceProvider.localResourceProviderImpl.clearCache();
       this.setStatus({
         editSource: {
           type: 'ProjectLayout',
@@ -204,7 +188,6 @@ export class LayoutManager implements ILayoutManager {
           layoutName,
         },
         loadedDesign: design,
-        projectLayoutsInfos: await this.getAllProjectLayoutsInfos(),
       });
     }
   }
