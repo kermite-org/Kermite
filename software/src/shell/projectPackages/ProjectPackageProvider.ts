@@ -27,7 +27,6 @@ function convertPackageFileContentToPackageInfo(
     sig: `${origin}#${data.projectId}`,
     origin,
     packageName,
-    standardFirmwareDefinitions: data.standardFirmwareDefinitions || [],
     ...data,
   };
 }
