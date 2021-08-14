@@ -1,26 +1,24 @@
 import { shell } from 'electron';
 import produce from 'immer';
 import {
-  ILayoutManagerCommand,
-  IProjectLayoutsInfo,
-  ILayoutManagerStatus,
   createFallbackPersistKeyboardDesign,
   duplicateObjectByJsonStringifyParse,
-  IPersistKeyboardDesign,
   ILayoutEditSource,
+  ILayoutManagerCommand,
+  ILayoutManagerStatus,
+  IPersistKeyboardDesign,
   IProjectPackageInfo,
 } from '~/shared';
 import {
-  vSchemaOneOf,
   vObject,
-  vValueEquals,
+  vSchemaOneOf,
   vString,
+  vValueEquals,
 } from '~/shared/modules/SchemaValidationHelper';
-import { applicationStorage } from '~/shell/base';
+import { appEnv, applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { projectPackageProvider } from '~/shell/projectPackages/ProjectPackageProvider';
-import { projectResourceProvider } from '~/shell/projectResources';
 import { ILayoutManager } from '~/shell/services/layout/Interfaces';
 import { IProfileManager } from '~/shell/services/profile/Interfaces';
 
@@ -89,19 +87,6 @@ export class LayoutManager implements ILayoutManager {
     onFirstSubscriptionStarting: this.initializeOnFirstConnect,
     onLastSubscriptionEnded: this.finalizeOnLastDisconnect,
   });
-
-  private getCurrentEditLayoutFilePath(): string | undefined {
-    const { editSource } = this.status;
-    if (editSource.type === 'ProjectLayout') {
-      const { projectId, layoutName } = editSource;
-      return projectResourceProvider.localResourceProviderImpl.getLocalLayoutFilePath(
-        projectId,
-        layoutName,
-      );
-    } else if (editSource.type === 'File') {
-      return editSource.filePath;
-    }
-  }
 
   private setStatus(newStatusPartial: Partial<ILayoutManagerStatus>) {
     this.status = { ...this.status, ...newStatusPartial };
@@ -277,8 +262,23 @@ export class LayoutManager implements ILayoutManager {
     return true;
   }
 
-  showEditLayoutFileInFiler() {
-    const filePath = this.getCurrentEditLayoutFilePath();
+  private async getCurrentEditLayoutFilePath(): Promise<string | undefined> {
+    const { editSource } = this.status;
+    if (editSource.type === 'ProjectLayout') {
+      const { projectId } = editSource;
+      const projectInfo = await this.getProjectInfo(projectId);
+      if (projectInfo) {
+        return appEnv.resolveUserDataFilePath(
+          `data/projects/${projectInfo?.packageName}.kmpkg.json`,
+        );
+      }
+    } else if (editSource.type === 'File') {
+      return editSource.filePath;
+    }
+  }
+
+  async showEditLayoutFileInFiler() {
+    const filePath = await this.getCurrentEditLayoutFilePath();
     if (filePath) {
       shell.showItemInFolder(filePath);
     }
