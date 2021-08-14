@@ -1,15 +1,10 @@
-import {
-  globalSettingsDefault,
-  globalSettingsLoadingSchema,
-  IActionReceiver,
-  ICoreAction,
-} from '~/shared';
+import { globalSettingsDefault, globalSettingsLoadingSchema } from '~/shared';
 import { appEnv, applicationStorage } from '~/shell/base';
 import { pathResolve } from '~/shell/funcs';
-import { commitCoreState, coreState } from '~/shell/global';
+import { commitCoreState, coreState, createCoreModule } from '~/shell/global';
 import { checkLocalRepositoryFolder } from '~/shell/projectResources/LocalResourceHelper';
 
-export const globalSettingsModule: IActionReceiver<ICoreAction> = {
+export const globalSettingsModule = createCoreModule({
   loadGlobalSettings() {
     const settings = applicationStorage.readItemBasedOnDefault(
       'globalSettings',
@@ -42,7 +37,7 @@ export const globalSettingsModule: IActionReceiver<ICoreAction> = {
     applicationStorage.writeItem('globalSettings', globalSettings);
     commitCoreState({ globalSettings });
   },
-};
+});
 
 export const globalSettingsReader = {
   getLocalRepositoryDir(): string | undefined {

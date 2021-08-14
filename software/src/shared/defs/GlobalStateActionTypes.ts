@@ -36,7 +36,6 @@ export type ICoreAction = Partial<{
   loadAllCustomFirmwareInfos: 1;
   loadGlobalSettings: 1;
   writeGlobalSettings: { partialConfig: Partial<IGlobalSettings> };
-
   loadKeyboardConfig: 1;
   writeKeyboardConfig: { partialConfig: Partial<IKeyboardConfig> };
 }>;

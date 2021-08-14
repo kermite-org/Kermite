@@ -179,10 +179,8 @@ export class ApplicationRoot {
       projectPackageModule,
       keyboardConfigModule,
     );
-    await dispatchCoreAction({ loadGlobalSettings: 1 });
-
-    keyboardConfigModule.loadKeyboardConfig(1);
-    await dispatchCoreAction({ loadKeyboardConfig: 1 });
+    globalSettingsModule.loadGlobalSettings!(1);
+    keyboardConfigModule.loadKeyboardConfig!(1);
     await dispatchCoreAction({ loadAllProjectPackages: 1 });
     await dispatchCoreAction({ loadAllCustomFirmwareInfos: 1 });
   }

@@ -29,10 +29,10 @@ export function commitCoreState(diff: Partial<ICoreState>) {
   coreStateManager.coreStateEventPort.emit(diff);
 }
 
-export function createCoreModule<K extends keyof ICoreAction>(
+export function createCoreModule(
   source: {
-    [Key in K]: (
-      payload: NonNullable<ICoreAction[Key]>,
+    [K in keyof ICoreAction]?: (
+      payload: NonNullable<ICoreAction[K]>,
     ) => void | Promise<void>;
   },
 ) {
