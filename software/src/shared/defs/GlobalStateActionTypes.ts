@@ -4,6 +4,7 @@ import {
 } from '~/shared/defs/ConfigTypes';
 import {
   ICustomFirmwareInfo,
+  IKeyboardDeviceStatus,
   IProjectPackageInfo,
 } from '~/shared/defs/DomainTypes';
 
@@ -12,6 +13,7 @@ export type ICoreState = {
   allProjectPackageInfos: IProjectPackageInfo[];
   allCustomFirmwareInfos: ICustomFirmwareInfo[];
   globalSettings: IGlobalSettings;
+  deviceStatus: IKeyboardDeviceStatus;
 };
 
 export const defaultCoreState: ICoreState = {
@@ -19,6 +21,7 @@ export const defaultCoreState: ICoreState = {
   allProjectPackageInfos: [],
   allCustomFirmwareInfos: [],
   globalSettings: globalSettingsDefault,
+  deviceStatus: { isConnected: false },
 };
 
 export type ICoreAction = Partial<{

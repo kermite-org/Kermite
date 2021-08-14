@@ -171,10 +171,6 @@ export class ApplicationRoot {
         this.deviceService.realtimeEventPort.subscribe(cb);
         return () => this.deviceService.realtimeEventPort.unsubscribe(cb);
       },
-      device_keyboardDeviceStatusEvents: (cb) => {
-        this.deviceService.statusEventPort.subscribe(cb);
-        return () => this.deviceService.statusEventPort.unsubscribe(cb);
-      },
       firmup_deviceDetectionEvents: (cb) =>
         this.firmwareUpdationService.deviceDetectionEvents.subscribe(cb),
       window_appWindowStatus: windowWrapper.appWindowEventPort.subscribe,

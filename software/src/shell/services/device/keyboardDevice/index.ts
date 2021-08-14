@@ -12,10 +12,6 @@ export class KeyboardDeviceService implements IKeyboardDeviceServcie {
     return this.core.realtimeEventPort;
   }
 
-  get statusEventPort() {
-    return this.core.statusEventPort;
-  }
-
   get selectionStatusEventPort() {
     return this.selectionManager.selectionStatusEventPort;
   }

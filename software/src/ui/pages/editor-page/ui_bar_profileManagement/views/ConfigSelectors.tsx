@@ -1,16 +1,16 @@
 import { FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
-import { useKeyboardDeviceStatus } from '~/ui/commonModels';
 import { useKeyboardBehaviorModeModel } from '~/ui/commonModels/KeyboardBehaviorModeModel';
 import {
   useRoutingChannelModel,
   useSystemLayoutModel,
 } from '~/ui/commonModels/ParameterBasedModeModels';
+import { uiStateReader } from '~/ui/commonStore';
 import { CheckBoxLine, DualItemsHoverSelector } from '~/ui/components';
 
 export const BehaviorSelector: FC = () => {
   const { isSimulatorMode, setSimulatorMode } = useKeyboardBehaviorModeModel();
-  const { isConnected } = useKeyboardDeviceStatus();
+  const { isConnected } = uiStateReader.deviceStatus;
   return (
     <CheckBoxLine
       checked={isSimulatorMode}
@@ -24,7 +24,7 @@ export const BehaviorSelector: FC = () => {
 
 export const MuteModeSelector: FC = () => {
   const { isMuteMode, setMuteMode } = useKeyboardBehaviorModeModel();
-  const { isConnected } = useKeyboardDeviceStatus();
+  const { isConnected } = uiStateReader.deviceStatus;
   return (
     <CheckBoxLine
       checked={isMuteMode}
@@ -42,7 +42,7 @@ export const LayoutStandardSelector: FC = () => {
     0: 'US',
     1: 'JIS',
   };
-  const { isConnected } = useKeyboardDeviceStatus();
+  const { isConnected } = uiStateReader.deviceStatus;
   return (
     <DualItemsHoverSelector
       items={layoutIndices}
@@ -62,7 +62,7 @@ export const RoutingChannelSelector: FC = () => {
     0: 'Main',
     1: 'Alter',
   };
-  const { isConnected } = useKeyboardDeviceStatus();
+  const { isConnected } = uiStateReader.deviceStatus;
   return (
     <DualItemsHoverSelector
       items={channelValues}

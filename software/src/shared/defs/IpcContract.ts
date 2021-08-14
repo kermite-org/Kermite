@@ -5,7 +5,6 @@ import {
   IBootloaderDeviceDetectionStatus,
   ICustomFirmwareInfo,
   IDeviceSelectionStatus,
-  IKeyboardDeviceStatus,
   ILayoutManagerCommand,
   ILayoutManagerStatus,
   IProfileEntry,
@@ -102,8 +101,6 @@ export interface IAppIpcContract {
 
     device_deviceSelectionEvents: Partial<IDeviceSelectionStatus>;
     device_keyEvents: IRealtimeKeyboardEvent;
-    device_keyboardDeviceStatusEvents: Partial<IKeyboardDeviceStatus>;
-
     firmup_deviceDetectionEvents: IBootloaderDeviceDetectionStatus;
 
     config_keyboardConfigEvents: Partial<IKeyboardConfig>;

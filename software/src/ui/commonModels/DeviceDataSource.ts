@@ -1,10 +1,10 @@
 import {
   IDeviceSelectionStatus,
   IKeyboardDeviceAttributes,
-  IKeyboardDeviceStatus,
   IProjectPackageInfo,
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
+import { uiStateReader } from '~/ui/commonStore';
 import { projectPackagesReader } from '~/ui/commonStore/modules/ProjectPackages';
 import { useEventSource } from '~/ui/helpers';
 
@@ -15,18 +15,11 @@ export function useDeviceSelectionStatus(): IDeviceSelectionStatus {
   });
 }
 
-export function useKeyboardDeviceStatus(): IKeyboardDeviceStatus {
-  return useEventSource(ipcAgent.events.device_keyboardDeviceStatusEvents, {
-    isConnected: false,
-    deviceAttrs: undefined,
-  });
-}
-
 export function useConnectedDeviceAttributes(): {
   deviceAttrs: IKeyboardDeviceAttributes | undefined;
   projectInfo: IProjectPackageInfo | undefined;
 } {
-  const deviceStatus = useKeyboardDeviceStatus();
+  const deviceStatus = uiStateReader.deviceStatus;
   const deviceAttrs = deviceStatus.deviceAttrs;
   const projectInfo = projectPackagesReader.findProjectInfo(
     deviceAttrs?.origin,

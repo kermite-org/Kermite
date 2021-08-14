@@ -1,17 +1,14 @@
 import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
-import {
-  IPlayerModel,
-  uiStatusModel,
-  useKeyboardDeviceStatus,
-} from '~/ui/commonModels';
+import { IPlayerModel, uiStatusModel } from '~/ui/commonModels';
+import { uiStateReader } from '~/ui/commonStore';
 
 type Props = {
   playerModel: IPlayerModel;
 };
 
 export const LayerStateView: FC<Props> = ({ playerModel }) => {
-  const { isConnected } = useKeyboardDeviceStatus();
+  const { isConnected } = uiStateReader.deviceStatus;
   const visible = uiStatusModel.settings.showLayersDynamic;
   return (
     <div

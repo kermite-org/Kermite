@@ -10,11 +10,7 @@ import {
   splitProjectProfileName,
 } from '~/shared/funcs/DomainRelatedHelpers';
 import { ipcAgent, ISelectorOption, ISelectorSource, texts } from '~/ui/base';
-import {
-  uiStatusModel,
-  useKeyboardBehaviorModeModel,
-  useKeyboardDeviceStatus,
-} from '~/ui/commonModels';
+import { uiStatusModel, useKeyboardBehaviorModeModel } from '~/ui/commonModels';
 import { useModalDisplayStateModel } from '~/ui/commonModels/GeneralUiStateModels';
 import { uiStateReader } from '~/ui/commonStore';
 import { modalAlert, modalConfirm, modalTextEdit } from '~/ui/components';
@@ -285,7 +281,7 @@ const simulatorProfileUpdator = new (class {
 })();
 
 function getCanWrite(): boolean {
-  const deviceStatus = useKeyboardDeviceStatus();
+  const { deviceStatus } = uiStateReader;
 
   const {
     developerMode,

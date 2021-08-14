@@ -7,6 +7,7 @@ import {
   ICoreState,
   ICustomFirmwareInfo,
   IGlobalSettings,
+  IKeyboardDeviceStatus,
   IProjectPackageInfo,
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
@@ -58,5 +59,8 @@ export const uiStateReader = {
   },
   get allCustomFirmwareInfos(): ICustomFirmwareInfo[] {
     return uiState.core.allCustomFirmwareInfos;
+  },
+  get deviceStatus(): IKeyboardDeviceStatus {
+    return uiState.core.deviceStatus;
   },
 };

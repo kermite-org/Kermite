@@ -1,7 +1,7 @@
 import {
   generateNumberSequence,
+  ICoreState,
   IKeyboardConfig,
-  IKeyboardDeviceStatus,
   IntervalTimerWrapper,
   IProfileData,
   IProfileManagerStatus,
@@ -9,6 +9,7 @@ import {
   SystemParameter,
 } from '~/shared';
 import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
+import { coreStateManager } from '~/shell/global';
 import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
 import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
 import { dataStorage } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/DataStorage';
@@ -66,15 +67,16 @@ export class InputLogicSimulatorD {
     }
   };
 
-  private onDeviceStatusEvent = (event: Partial<IKeyboardDeviceStatus>) => {
-    const values = event.systemParameterValues;
-    if (values) {
-      const systemLayout = values[SystemParameter.SystemLayout];
-      // const isSimulatorMode = values[SystemParameter.SimulatorMode] > 0;
-      const wiringMode = values[SystemParameter.WiringMode];
-      // console.log(`systemlayout: ${systemLayout}, wiringMode: ${wiringMode}`);
-      this.CL.keyboardCoreLogic_setSystemLayout(systemLayout);
-      this.CL.keyboardCoreLogic_setWiringMode(wiringMode);
+  private onCoreStatusChange = (diff: Partial<ICoreState>) => {
+    if (diff.deviceStatus) {
+      const values = diff.deviceStatus.systemParameterValues;
+      if (values) {
+        const systemLayout = values[SystemParameter.SystemLayout];
+        const wiringMode = values[SystemParameter.WiringMode];
+        // console.log(`systemlayout: ${systemLayout}, wiringMode: ${wiringMode}`);
+        this.CL.keyboardCoreLogic_setSystemLayout(systemLayout);
+        this.CL.keyboardCoreLogic_setWiringMode(wiringMode);
+      }
     }
   };
 
@@ -141,7 +143,7 @@ export class InputLogicSimulatorD {
     this.deviceService.realtimeEventPort.subscribe(
       this.onRealtimeKeyboardEvent,
     );
-    this.deviceService.statusEventPort.subscribe(this.onDeviceStatusEvent);
+    coreStateManager.coreStateEventPort.subscribe(this.onCoreStatusChange);
     this.tickerTimer.start(
       withAppErrorHandler(
         this.processTicker,
@@ -161,7 +163,7 @@ export class InputLogicSimulatorD {
     this.deviceService.realtimeEventPort.unsubscribe(
       this.onRealtimeKeyboardEvent,
     );
-    this.deviceService.statusEventPort.unsubscribe(this.onDeviceStatusEvent);
+    coreStateManager.coreStateEventPort.unsubscribe(this.onCoreStatusChange);
     this.tickerTimer.stop();
   }
 }
