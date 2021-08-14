@@ -1,6 +1,6 @@
 import { jsx, useLocal } from 'qx';
 import { texts } from '~/ui/base';
-import { projectPackagesReader, uiStateReader } from '~/ui/commonModels';
+import { projectPackagesReader, uiStateReader } from '~/ui/commonStore';
 import {
   IProjectAttachmentFileSelectorModalModel,
   modalConfirm,

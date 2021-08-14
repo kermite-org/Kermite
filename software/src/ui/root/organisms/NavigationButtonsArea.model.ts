@@ -1,5 +1,6 @@
-import { texts, router } from '~/ui/base';
-import { globalSettingsReader, PagePaths } from '~/ui/commonModels';
+import { router, texts } from '~/ui/base';
+import { PagePaths } from '~/ui/commonModels';
+import { globalSettingsReader } from '~/ui/commonStore';
 
 export interface NavigationEntryViewModel {
   pagePath: PagePaths;

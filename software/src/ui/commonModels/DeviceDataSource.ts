@@ -5,7 +5,7 @@ import {
   IProjectPackageInfo,
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
-import { projectPackagesReader } from '~/ui/commonModels/ProjectDataSource';
+import { projectPackagesReader } from '~/ui/commonStore/modules/ProjectPackages';
 import { useEventSource } from '~/ui/helpers';
 
 export function useDeviceSelectionStatus(): IDeviceSelectionStatus {

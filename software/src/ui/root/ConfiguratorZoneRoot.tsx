@@ -1,11 +1,7 @@
 import { css, jsx } from 'qx';
 import { appUi, router, uiTheme } from '~/ui/base';
-import {
-  PagePaths,
-  siteModel,
-  uiState,
-  uiStatusModel,
-} from '~/ui/commonModels';
+import { PagePaths, siteModel, uiStatusModel } from '~/ui/commonModels';
+import { uiState } from '~/ui/commonStore';
 import { CustomWindowFrame, DevToolPullTab } from '~/ui/components';
 import { LoadingOverlay } from '~/ui/components/overlay/LoadingOverlay';
 import { OnboadingFrame } from '~/ui/features/OnboardingPanel';

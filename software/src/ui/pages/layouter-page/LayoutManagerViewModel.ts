@@ -5,7 +5,7 @@ import {
   globalSettingsReader,
   projectPackagesReader,
   uiStateReader,
-} from '~/ui/commonModels';
+} from '~/ui/commonStore';
 import { UiLayouterCore } from '~/ui/pages/layouter';
 import { LayoutManagerModel } from '~/ui/pages/layouter-page/LayoutManagerModel';
 

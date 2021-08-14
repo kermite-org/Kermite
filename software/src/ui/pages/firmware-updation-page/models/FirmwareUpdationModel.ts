@@ -7,11 +7,8 @@ import {
   IProjectPackageInfo,
 } from '~/shared';
 import { ipcAgent, ISelectorSource } from '~/ui/base';
-import {
-  projectPackagesReader,
-  uiStateReader,
-  uiStatusModel,
-} from '~/ui/commonModels';
+import { uiStatusModel } from '~/ui/commonModels';
+import { projectPackagesReader, uiStateReader } from '~/ui/commonStore';
 import { modalAlert } from '~/ui/components';
 
 export type FirmwareUpdationPhase =

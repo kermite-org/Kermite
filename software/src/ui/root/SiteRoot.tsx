@@ -14,8 +14,8 @@ import {
   siteModel,
   uiStatusModel,
   globalAppServicesInitializerEffect,
-  uiStateDriverEffect,
 } from '~/ui/commonModels';
+import { uiStateDriverEffect } from '~/ui/commonStore';
 import {
   DebugOverlay,
   ForegroundModalLayerRoot,

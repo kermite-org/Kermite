@@ -7,8 +7,7 @@ import {
   IProjectPackageInfo,
   IResourceOrigin,
 } from '~/shared';
-import { dispatchCoreAction } from '~/ui/commonModels/ActionDispatcher';
-import { uiStateReader } from '~/ui/commonModels/UiState';
+import { uiStateReader, dispatchCoreAction } from '~/ui/commonStore/base';
 
 export const projectPackagesReader = {
   getProjectInfosGlobalProjectSelectionAffected(): IProjectPackageInfo[] {
@@ -39,7 +38,7 @@ export const projectPackagesReader = {
   },
 };
 
-export const projectPackagesMutations = {
+export const projectPackagesWriter = {
   saveLocalProject(projectInfo: IProjectPackageInfo) {
     dispatchCoreAction({
       saveLocalProjectPackageInfo: { projectInfo },
@@ -58,7 +57,7 @@ export const projectPackagesMutations = {
         draft.layouts.push({ layoutName, data: design });
       }
     });
-    projectPackagesMutations.saveLocalProject(newProjectInfo);
+    projectPackagesWriter.saveLocalProject(newProjectInfo);
   },
   saveLocalProjectPreset(presetName: string, preset: IPersistProfileData) {
     const projectInfo = projectPackagesReader.getEditTargetProject();
@@ -73,7 +72,7 @@ export const projectPackagesMutations = {
         draft.presets.push({ presetName: presetName, data: preset });
       }
     });
-    projectPackagesMutations.saveLocalProject(newProjectInfo);
+    projectPackagesWriter.saveLocalProject(newProjectInfo);
   },
 };
 

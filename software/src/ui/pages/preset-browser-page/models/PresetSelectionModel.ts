@@ -7,10 +7,10 @@ import {
   ISelectorSource,
 } from '~/ui/base';
 import {
-  projectPackagesReader,
   globalSettingsReader,
+  projectPackagesReader,
   uiStateReader,
-} from '~/ui/commonModels';
+} from '~/ui/commonStore';
 import { fieldSetter } from '~/ui/helpers';
 import { editSelectedProjectPreset as editSelectedProjectPresetOriginal } from '~/ui/pages/preset-browser-page/models/ProfileCreator';
 import { useProfileDataLoaded } from '~/ui/pages/preset-browser-page/models/ProfileDataLoader';

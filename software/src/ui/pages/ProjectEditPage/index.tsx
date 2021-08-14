@@ -1,10 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
-import {
-  pageActions,
-  projectPackagesHooks,
-  projectPackagesMutations,
-} from '~/ui/commonModels';
+import { pageActions } from '~/ui/commonModels';
+import { projectPackagesHooks, projectPackagesWriter } from '~/ui/commonStore';
 import { reflectValue } from '~/ui/helpers';
 
 export const ProjectEditPage: FC = () => {
@@ -14,7 +11,7 @@ export const ProjectEditPage: FC = () => {
 
   const handleKeyboardNameChange = (value: string) => {
     const newProjectInfo = { ...projectInfo, keyboardName: value };
-    projectPackagesMutations.saveLocalProject(newProjectInfo);
+    projectPackagesWriter.saveLocalProject(newProjectInfo);
   };
 
   const resourceData = {

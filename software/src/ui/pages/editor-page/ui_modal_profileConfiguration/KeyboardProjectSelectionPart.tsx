@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { uniqueArrayItemsByField } from '~/shared';
 import { ISelectorOption, texts } from '~/ui/base';
-import { uiStateReader } from '~/ui/commonModels';
+import { uiStateReader } from '~/ui/commonStore';
 import { GeneralSelector } from '~/ui/components';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 

@@ -2,10 +2,10 @@ import { useMemo } from 'qx';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import { IProjectKeyboardListProjectItem } from '~/ui/base';
 import {
-  globalSettingsMutations,
   globalSettingsReader,
+  globalSettingsWriter,
   uiStateReader,
-} from '~/ui/commonModels';
+} from '~/ui/commonStore';
 
 type IProjectSelectionPageModel = {
   sourceProjectItems: IProjectKeyboardListProjectItem[];
@@ -31,7 +31,7 @@ export function useProjectSelectionPartModel(): IProjectSelectionPageModel {
   const sourceProjectItems = useMemo(createSourceProjectItems, []);
   const { globalProjectId: projectId } = globalSettingsReader.globalSettings;
   const setProjectId = (id: string) => {
-    globalSettingsMutations.writeValue('globalProjectId', id);
+    globalSettingsWriter.writeValue('globalProjectId', id);
   };
   return {
     sourceProjectItems,

@@ -1,6 +1,7 @@
 import { IKeyboardDeviceInfo, IProjectPackageInfo } from '~/shared';
 import { ipcAgent, ISelectorOption } from '~/ui/base';
-import { uiStateReader, useDeviceSelectionStatus } from '~/ui/commonModels';
+import { useDeviceSelectionStatus } from '~/ui/commonModels';
+import { uiStateReader } from '~/ui/commonStore';
 
 interface IDeviceSelectionPartModel {
   deviceOptions: ISelectorOption[];

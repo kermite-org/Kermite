@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
-import { globalSettingsReader } from '~/ui/commonModels';
 import { uiStatusModel } from '~/ui/commonModels/UiStatusModel';
+import { globalSettingsReader } from '~/ui/commonStore';
 import { ClosableOverlay, CommonDialogFrame } from '~/ui/components';
 import { KeyboardProjectSelectionPart } from '~/ui/pages/editor-page/ui_modal_profileConfiguration/KeyboardProjectSelectionPart';
 import { ShiftCancelOptionPart } from '~/ui/pages/editor-page/ui_modal_profileConfiguration/ShiftCancelOptionPart';

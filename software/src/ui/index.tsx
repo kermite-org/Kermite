@@ -2,13 +2,15 @@ import { jsx, render } from 'qx';
 import { debounce } from '~/shared';
 import { resourceDevelopmentEntry } from '~/ui/ResourceDevelopment';
 import { appUi, ipcAgent } from '~/ui/base';
-import { uiState, uiStatusModel } from '~/ui/commonModels';
+import { uiStatusModel } from '~/ui/commonModels';
+import { intializeCommonStore, uiState } from '~/ui/commonStore';
 import { SiteRoot } from '~/ui/root/SiteRoot';
 
 async function start() {
   console.log('start');
   const appDiv = document.getElementById('app');
 
+  intializeCommonStore();
   uiStatusModel.initialize();
   uiState.core.globalSettings = await ipcAgent.async.config_getGlobalSettings();
   uiState.core.allProjectPackageInfos = await ipcAgent.async.projects_getAllProjectPackageInfos();

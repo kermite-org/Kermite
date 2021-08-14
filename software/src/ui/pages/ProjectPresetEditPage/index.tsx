@@ -1,12 +1,8 @@
 import { css, FC, jsx, useMemo } from 'qx';
 import { fallbackPersistProfileData, IPersistProfileData } from '~/shared';
 import { uiTheme } from '~/ui/base';
-import {
-  IPageSpec_ProjectPresetEdit,
-  pageActions,
-  projectPackagesHooks,
-  projectPackagesMutations,
-} from '~/ui/commonModels';
+import { IPageSpec_ProjectPresetEdit, pageActions } from '~/ui/commonModels';
+import { projectPackagesHooks, projectPackagesWriter } from '~/ui/commonStore';
 import { AssignerGeneralComponent } from '~/ui/pages/editor-page/EditorGeneralComponent';
 
 type Props = {
@@ -23,7 +19,7 @@ export const ProjectPresetEditPage: FC<Props> = ({ spec: { presetName } }) => {
   }, [projectInfo]);
 
   const saveProfile = (newProfile: IPersistProfileData) => {
-    projectPackagesMutations.saveLocalProjectPreset(presetName, newProfile);
+    projectPackagesWriter.saveLocalProjectPreset(presetName, newProfile);
   };
 
   return (

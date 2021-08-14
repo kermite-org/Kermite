@@ -1,10 +1,7 @@
 import { useEffect, useLocal } from 'qx';
 import { appUi, ipcAgent, ISelectorOption } from '~/ui/base';
-import {
-  globalSettingsMutations,
-  globalSettingsReader,
-  uiStatusModel,
-} from '~/ui/commonModels';
+import { uiStatusModel } from '~/ui/commonModels';
+import { globalSettingsReader, globalSettingsWriter } from '~/ui/commonStore';
 import { useFetcher } from '~/ui/helpers';
 
 export interface ISettingsPageModel {
@@ -60,7 +57,7 @@ export function useSettingsPageModel(): ISettingsPageModel {
         local.temporaryInvalidLocalRepositoryFolderPath = path;
       } else {
         local.temporaryInvalidLocalRepositoryFolderPath = '';
-        globalSettingsMutations.writeValue('localProjectRootFolderPath', path);
+        globalSettingsWriter.writeValue('localProjectRootFolderPath', path);
       }
     }
   };
@@ -82,14 +79,14 @@ export function useSettingsPageModel(): ISettingsPageModel {
   return {
     flagDeveloperMode: globalSettings.developerMode,
     setFlagDeveloperMode: (value) =>
-      globalSettingsMutations.writeValue('developerMode', value),
+      globalSettingsWriter.writeValue('developerMode', value),
     flagUseLocalResources: globalSettings.useLocalResouces,
     setFlagUseLocalResources: (value) =>
-      globalSettingsMutations.writeValue('useLocalResouces', value),
+      globalSettingsWriter.writeValue('useLocalResouces', value),
     flagAllowCrossKeyboardKeyMappingWrite:
       globalSettings.allowCrossKeyboardKeyMappingWrite,
     setFlagAllowCrossKeyboardKeyMappingWrite: (value) =>
-      globalSettingsMutations.writeValue(
+      globalSettingsWriter.writeValue(
         'allowCrossKeyboardKeyMappingWrite',
         value,
       ),

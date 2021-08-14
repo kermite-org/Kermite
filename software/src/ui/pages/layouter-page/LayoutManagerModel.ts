@@ -9,7 +9,7 @@ import {
   IProfileManagerStatus,
 } from '~/shared';
 import { appUi, ipcAgent, router } from '~/ui/base';
-import { projectPackagesReader } from '~/ui/commonModels';
+import { projectPackagesReader } from '~/ui/commonStore';
 import { modalConfirm } from '~/ui/components';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 import { UiLayouterCore } from '~/ui/pages/layouter';

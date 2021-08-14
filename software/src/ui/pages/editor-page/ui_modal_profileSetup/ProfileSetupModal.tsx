@@ -1,7 +1,7 @@
 import { jsx, useInlineEffect, useLocal, useMemo } from 'qx';
 import { IProjectPackageInfo } from '~/shared';
 import { ISelectorOption } from '~/ui/base';
-import { projectPackagesReader } from '~/ui/commonModels';
+import { projectPackagesReader } from '~/ui/commonStore';
 import {
   ClosableOverlay,
   CommonDialogFrame,

@@ -11,12 +11,12 @@ import {
 } from '~/shared/funcs/DomainRelatedHelpers';
 import { ipcAgent, ISelectorOption, ISelectorSource, texts } from '~/ui/base';
 import {
-  uiStateReader,
   uiStatusModel,
   useKeyboardBehaviorModeModel,
   useKeyboardDeviceStatus,
 } from '~/ui/commonModels';
 import { useModalDisplayStateModel } from '~/ui/commonModels/GeneralUiStateModels';
+import { uiStateReader } from '~/ui/commonStore';
 import { modalAlert, modalConfirm, modalTextEdit } from '~/ui/components';
 import { getFileNameFromPath } from '~/ui/helpers';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';

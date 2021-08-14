@@ -1,6 +1,5 @@
 import { createProjectSig, IGlobalSettings, IResourceOrigin } from '~/shared';
-import { dispatchCoreAction } from '~/ui/commonModels/ActionDispatcher';
-import { uiState } from '~/ui/commonModels/UiState';
+import { uiState, dispatchCoreAction } from '~/ui/commonStore/base';
 
 export const globalSettingsReader = {
   get globalSettings() {
@@ -50,7 +49,7 @@ export const globalSettingsReader = {
   },
 };
 
-export const globalSettingsMutations = {
+export const globalSettingsWriter = {
   writeValue<K extends keyof IGlobalSettings>(
     key: K,
     value: IGlobalSettings[K],
