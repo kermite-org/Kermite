@@ -7,6 +7,7 @@ import {
   duplicateObjectByJsonStringifyParse,
   IPersistKeyboardDesign,
   ILayoutEditSource,
+  IProjectPackageInfo,
 } from '~/shared';
 import {
   vSchemaOneOf,
@@ -19,6 +20,7 @@ import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { createEventPort } from '~/shell/funcs';
 import { FileWather } from '~/shell/funcs/FileWatcher';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
+import { projectPackageProvider } from '~/shell/projectPackages/ProjectPackageProvider';
 import { projectResourceProvider } from '~/shell/projectResources';
 import { ILayoutManager } from '~/shell/services/layout/Interfaces';
 import { IProfileManager } from '~/shell/services/profile/Interfaces';
@@ -174,6 +176,15 @@ export class LayoutManager implements ILayoutManager {
   //   );
   // }
 
+  private async getProjectInfo(
+    projectId: string,
+  ): Promise<IProjectPackageInfo | undefined> {
+    const projectInfos = await projectPackageProvider.getAllProjectPackageInfos();
+    return projectInfos.find(
+      (info) => info.origin === 'local' && info.projectId === projectId,
+    );
+  }
+
   private async createLayoutForProject(projectId: string, layoutName: string) {
     const filePath = projectResourceProvider.localResourceProviderImpl.getLocalLayoutFilePath(
       projectId,
@@ -198,25 +209,21 @@ export class LayoutManager implements ILayoutManager {
   }
 
   private async loadLayoutFromProject(projectId: string, layoutName: string) {
-    const filePath = projectResourceProvider.localResourceProviderImpl.getLocalLayoutFilePath(
-      projectId,
-      layoutName,
-    );
-    if (filePath) {
-      const loadedDesign = await projectResourceProvider.loadProjectLayout(
-        'local',
-        projectId,
-        layoutName,
-      );
-      this.fileWatcher.observeFile(filePath, this.onObservedFileChanged);
-      this.setStatus({
-        editSource: {
-          type: 'ProjectLayout',
-          projectId,
-          layoutName,
-        },
-        loadedDesign,
-      });
+    const projectInfo = await this.getProjectInfo(projectId);
+    if (projectInfo) {
+      const layout = projectInfo.layouts.find(
+        (it) => it.layoutName === layoutName,
+      )?.data;
+      if (layout) {
+        this.setStatus({
+          editSource: {
+            type: 'ProjectLayout',
+            projectId,
+            layoutName,
+          },
+          loadedDesign: layout,
+        });
+      }
     }
   }
 
