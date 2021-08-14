@@ -241,14 +241,7 @@ export class LayoutManager implements ILayoutManager {
       await LayoutFileLoader.saveLayoutToFile(filePath, design);
     } else if (editSource.type === 'ProjectLayout') {
       const { projectId, layoutName } = editSource;
-      const filePath = projectResourceProvider.localResourceProviderImpl.getLocalLayoutFilePath(
-        projectId,
-        layoutName,
-      );
-      if (filePath) {
-        await LayoutFileLoader.saveLayoutToFile(filePath, design);
-        // this.presetProfileLoader.deleteProjectPresetProfileCache(projectId);
-      }
+      this.saveLayoutToProject(projectId, layoutName, design);
     }
     this.setStatus({ loadedDesign: design });
   }
