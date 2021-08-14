@@ -9,7 +9,7 @@ import {
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
 import { globalSettingsModel } from '~/ui/commonModels/GlobalSettingsModel';
-import { uiGlobalStore } from '~/ui/commonModels/UiGlobalStore';
+import { uiState, uiStateReader } from '~/ui/commonModels/UiState';
 
 export const projectPackagesReader = {
   getProjectInfosGlobalProjectSelectionAffected(): IProjectPackageInfo[] {
@@ -18,7 +18,7 @@ export const projectPackagesReader = {
       globalProjectId,
     } = globalSettingsModel.globalSettings;
 
-    return uiGlobalStore.allProjectPackageInfos
+    return uiStateReader.allProjectPackageInfos
       .filter((info) => useLocalResouces || info.origin === 'online')
       .filter(
         (info) => globalProjectId === '' || info.projectId === globalProjectId,
@@ -26,7 +26,7 @@ export const projectPackagesReader = {
   },
   getEditTargetProject(): IProjectPackageInfo | undefined {
     const { globalProjectId } = globalSettingsModel.globalSettings;
-    return uiGlobalStore.allProjectPackageInfos.find(
+    return uiStateReader.allProjectPackageInfos.find(
       (info) => info.origin === 'local' && info.projectId === globalProjectId,
     );
   },
@@ -34,7 +34,7 @@ export const projectPackagesReader = {
     origin?: IResourceOrigin,
     projectId?: string,
   ): IProjectPackageInfo | undefined {
-    const resourceInfos = uiGlobalStore.allProjectPackageInfos;
+    const resourceInfos = uiStateReader.allProjectPackageInfos;
     return (
       resourceInfos.find(
         (info) => info.origin === origin && info.projectId === projectId,
@@ -45,14 +45,14 @@ export const projectPackagesReader = {
 
 export const projectPackagesMutations = {
   saveLocalProject(projectInfo: IProjectPackageInfo) {
-    const index = uiGlobalStore.allProjectPackageInfos.findIndex(
+    const index = uiStateReader.allProjectPackageInfos.findIndex(
       (info) => info.sig === projectInfo.sig,
     );
     if (index === -1) {
       return;
     }
-    uiGlobalStore.allProjectPackageInfos = produce(
-      uiGlobalStore.allProjectPackageInfos,
+    uiState.core.allProjectPackageInfos = produce(
+      uiStateReader.allProjectPackageInfos,
       (draft) => {
         draft.splice(index, 1, projectInfo);
       },
@@ -95,7 +95,7 @@ export const projectPackagesHooks = {
   useEditTargetProject(): IProjectPackageInfo {
     return (
       useMemo(projectPackagesReader.getEditTargetProject, [
-        uiGlobalStore.allProjectPackageInfos,
+        uiStateReader.allProjectPackageInfos,
       ]) || fallbackProjectPackageInfo
     );
   },

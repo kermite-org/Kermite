@@ -1,4 +1,9 @@
-import { defaultUiState, IUiState } from '~/shared';
+import {
+  defaultUiState,
+  ICustomFirmwareInfo,
+  IProjectPackageInfo,
+  IUiState,
+} from '~/shared';
 import { ipcAgent } from '~/ui/base';
 
 export const uiState: IUiState = defaultUiState;
@@ -10,4 +15,13 @@ export const uiStateDriverEffect = () => {
     uiState.core = { ...uiState.core, ...diff };
     console.log({ uiState });
   });
+};
+
+export const uiStateReader = {
+  get allProjectPackageInfos(): IProjectPackageInfo[] {
+    return uiState.core.allProjectPackageInfos;
+  },
+  get allCustomFirmwareInfos(): ICustomFirmwareInfo[] {
+    return uiState.core.allCustomFirmwareInfos;
+  },
 };

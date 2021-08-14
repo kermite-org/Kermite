@@ -1,7 +1,7 @@
 import { useMemo } from 'qx';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import { IProjectKeyboardListProjectItem } from '~/ui/base';
-import { globalSettingsModel, uiGlobalStore } from '~/ui/commonModels';
+import { globalSettingsModel, uiStateReader } from '~/ui/commonModels';
 
 type IProjectSelectionPageModel = {
   sourceProjectItems: IProjectKeyboardListProjectItem[];
@@ -12,7 +12,7 @@ type IProjectSelectionPageModel = {
 function createSourceProjectItems(): IProjectKeyboardListProjectItem[] {
   const { useLocalResouces } = globalSettingsModel.globalSettings;
   const origin = useLocalResouces ? 'local' : 'online';
-  return uiGlobalStore.allProjectPackageInfos
+  return uiStateReader.allProjectPackageInfos
     .filter((info) => info.origin === origin)
     .map((info) => ({
       projectId: info.projectId,

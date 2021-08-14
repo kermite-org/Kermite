@@ -9,7 +9,7 @@ import {
 import { ipcAgent, ISelectorSource } from '~/ui/base';
 import {
   projectPackagesReader,
-  uiGlobalStore,
+  uiStateReader,
   uiStatusModel,
 } from '~/ui/commonModels';
 import { modalAlert } from '~/ui/components';
@@ -30,7 +30,7 @@ function getTargetDeviceFromFirmwareInfo(
     );
   }
   if ('customFirmwareId' in entry) {
-    const item = uiGlobalStore.allCustomFirmwareInfos.find(
+    const item = uiStateReader.allCustomFirmwareInfos.find(
       (it) => it.firmwareId === entry.customFirmwareId,
     );
     return item?.targetDevice as IFirmwareTargetDevice;
