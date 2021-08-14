@@ -1,23 +1,22 @@
 import { IAppErrorData } from '~/shared/defs/CustomErrors';
 import {
   IApplicationVersionInfo,
-  IProfileManagerCommand,
-  ILayoutManagerCommand,
-  IProjectResourceInfo,
-  IResourceOrigin,
-  IProjectCustomDefinition,
-  IPresetSpec,
-  IServerPorfileInfo,
   IAppWindowStatus,
-  IProfileManagerStatus,
-  ILayoutManagerStatus,
-  IDeviceSelectionStatus,
-  IRealtimeKeyboardEvent,
-  IKeyboardDeviceStatus,
   IBootloaderDeviceDetectionStatus,
-  IProfileEntry,
-  IProjectPackageInfo,
   ICustomFirmwareInfo,
+  IDeviceSelectionStatus,
+  IKeyboardDeviceStatus,
+  ILayoutManagerCommand,
+  ILayoutManagerStatus,
+  IProfileEntry,
+  IProfileManagerCommand,
+  IProfileManagerStatus,
+  IProjectCustomDefinition,
+  IProjectPackageInfo,
+  IProjectResourceInfo,
+  IRealtimeKeyboardEvent,
+  IResourceOrigin,
+  IServerPorfileInfo,
 } from '~/shared/defs/DomainTypes';
 import { IPersistKeyboardDesign } from '~/shared/defs/KeyboardDesign';
 import { IGlobalSettings, IKeyboardConfig } from './ConfigTypes';
@@ -70,11 +69,6 @@ export interface IAppIpcContract {
       projectId: string,
       variationName: string,
     ): Promise<IProjectCustomDefinition | undefined>;
-    projects_loadPresetProfile(
-      origin: IResourceOrigin,
-      projectId: string,
-      presetSpec: IPresetSpec,
-    ): Promise<IProfileData | undefined>;
     projects_loadKeyboardShape(
       origin: IResourceOrigin,
       projectId: string,
@@ -126,7 +120,6 @@ export interface IAppIpcContract {
     device_keyboardDeviceStatusEvents: Partial<IKeyboardDeviceStatus>;
 
     firmup_deviceDetectionEvents: IBootloaderDeviceDetectionStatus;
-    projects_layoutFileUpdationEvents: { projectId: string };
 
     config_keyboardConfigEvents: Partial<IKeyboardConfig>;
     config_globalSettingsEvents: Partial<IGlobalSettings>;

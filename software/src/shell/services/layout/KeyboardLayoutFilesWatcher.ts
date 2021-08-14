@@ -12,7 +12,8 @@ import { projectResourceProvider } from '~/shell/projectResources';
 
 type IFileUpdationEvent = { projectId: string };
 
-export class KeyboardLayoutFilesWatcher {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+class KeyboardLayoutFilesWatcher_OBSOLETE {
   private baseDir = pathResolve('../firmware/src/projects');
 
   private watcher: FSWatcher | undefined;

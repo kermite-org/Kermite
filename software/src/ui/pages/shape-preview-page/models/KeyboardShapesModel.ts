@@ -2,7 +2,7 @@ import { useEffect, useLocal } from 'qx';
 import { IDisplayKeyboardDesign, IProjectPackageInfo } from '~/shared';
 import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
-import { ipcAgent, UiLocalStorage } from '~/ui/base';
+import { UiLocalStorage } from '~/ui/base';
 import { projectPackagesReader } from '~/ui/commonModels';
 import {
   IShapeViewPersistState,
@@ -52,18 +52,20 @@ class KeyboardShapesModel {
     return info?.layouts.map((la) => la.layoutName) || [];
   }
 
-  private async loadCurrentProjectLayout() {
+  private loadCurrentProjectLayout() {
     if (!(this._currentProjectSig && this._currentLayoutName)) {
       return;
     }
     const { origin, projectId } = getProjectOriginAndIdFromSig(
       this._currentProjectSig,
     );
-    const design = await ipcAgent.async.projects_loadKeyboardShape(
-      origin,
-      projectId,
-      this._currentLayoutName,
-    );
+
+    const info = projectPackagesReader.findProjectInfo(origin, projectId);
+
+    const design = info?.layouts.find(
+      (it) => it.layoutName === this.currentLayoutName,
+    )?.data;
+
     if (design) {
       this._loadedDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
         design,
@@ -87,17 +89,6 @@ class KeyboardShapesModel {
       this._currentLayoutName = layoutName;
       this.settings.shapeViewLayoutName = layoutName;
       this.loadCurrentProjectLayout();
-    }
-  };
-
-  private onLayoutFileUpdated = (args: { projectId: string }) => {
-    if (this._currentProjectSig) {
-      if (
-        args.projectId ===
-        getProjectOriginAndIdFromSig(this._currentProjectSig).projectId
-      ) {
-        this.loadCurrentProjectLayout();
-      }
     }
   };
 
@@ -133,12 +124,7 @@ class KeyboardShapesModel {
 
     this.initialize();
 
-    const unsub = ipcAgent.events.projects_layoutFileUpdationEvents.subscribe(
-      this.onLayoutFileUpdated,
-    );
-
     return () => {
-      unsub();
       UiLocalStorage.writeItem('shapePareviewPageSettings', this.settings);
     };
   };

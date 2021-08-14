@@ -23,7 +23,8 @@ import { applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
 import { projectResourceProvider } from '~/shell/projectResources';
 import { globalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
-import { IPresetProfileLoader, IProfileManager } from './Interfaces';
+import { presetProfileLoader_loadPresetProfileData } from '~/shell/services/profile/PresetProfileLoader';
+import { IProfileManager } from './Interfaces';
 import { ProfileManagerCore } from './ProfileManagerCore';
 
 function createInternalProfileEditSourceOrFallback(
@@ -67,7 +68,7 @@ export class ProfileManager implements IProfileManager {
 
   private core: ProfileManagerCore;
 
-  constructor(private presetProfileLoader: IPresetProfileLoader) {
+  constructor() {
     this.core = new ProfileManagerCore();
   }
 
@@ -257,7 +258,7 @@ export class ProfileManager implements IProfileManager {
     if (filePath) {
       await this.core.saveProfileAsPreset(filePath, profileData);
       projectResourceProvider.localResourceProviderImpl.clearCache();
-      this.presetProfileLoader.deleteProjectPresetProfileCache(projectId);
+      // this.presetProfileLoader.deleteProjectPresetProfileCache(projectId);
     }
   }
 
@@ -266,7 +267,7 @@ export class ProfileManager implements IProfileManager {
     projectId: string,
     presetSpec: IPresetSpec,
   ): Promise<IProfileData> {
-    const profile = await this.presetProfileLoader.loadPresetProfileData(
+    const profile = await presetProfileLoader_loadPresetProfileData(
       origin,
       projectId,
       presetSpec,
