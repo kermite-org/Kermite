@@ -7,9 +7,9 @@ import {
   IProjectPackageInfo,
   IResourceOrigin,
 } from '~/shared';
-import { ipcAgent } from '~/ui/base';
+import { dispatchCoreAction } from '~/ui/commonModels/ActionDispatcher';
 import { globalSettingsModel } from '~/ui/commonModels/GlobalSettingsModel';
-import { uiState, uiStateReader } from '~/ui/commonModels/UiState';
+import { uiStateReader } from '~/ui/commonModels/UiState';
 
 export const projectPackagesReader = {
   getProjectInfosGlobalProjectSelectionAffected(): IProjectPackageInfo[] {
@@ -45,19 +45,9 @@ export const projectPackagesReader = {
 
 export const projectPackagesMutations = {
   saveLocalProject(projectInfo: IProjectPackageInfo) {
-    const index = uiStateReader.allProjectPackageInfos.findIndex(
-      (info) => info.sig === projectInfo.sig,
-    );
-    if (index === -1) {
-      return;
-    }
-    uiState.core.allProjectPackageInfos = produce(
-      uiStateReader.allProjectPackageInfos,
-      (draft) => {
-        draft.splice(index, 1, projectInfo);
-      },
-    );
-    ipcAgent.async.projects_saveLocalProjectPackageInfo(projectInfo);
+    dispatchCoreAction({
+      saveLocalProjectPackageInfo: { projectInfo },
+    });
   },
   saveLocalProjectLayout(layoutName: string, design: IPersistKeyboardDesign) {
     const projectInfo = projectPackagesReader.getEditTargetProject();
