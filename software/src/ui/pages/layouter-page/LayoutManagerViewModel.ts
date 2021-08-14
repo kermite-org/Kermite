@@ -1,7 +1,11 @@
 import { useEffect, useLocal } from 'qx';
-import { ILayoutEditSource, IProjectLayoutsInfo } from '~/shared';
+import { ILayoutEditSource, IProjectPackageInfo } from '~/shared';
 import { ISelectorOption } from '~/ui/base';
-import { globalSettingsModel } from '~/ui/commonModels';
+import {
+  globalSettingsModel,
+  projectPackagesReader,
+  uiGlobalStore,
+} from '~/ui/commonModels';
 import { UiLayouterCore } from '~/ui/pages/layouter';
 import { LayoutManagerModel } from '~/ui/pages/layouter-page/LayoutManagerModel';
 
@@ -17,9 +21,9 @@ export interface ILayoutManagerViewModel {
   editSourceText: string;
 
   projectOptions: ISelectorOption[];
-  setCurrentProjectId(projectId: string): void;
+  // setCurrentProjectId(projectId: string): void;
   currentProjectId: string;
-  currentProjectPath: string;
+  // currentProjectPath: string;
   currentKeyboardName: string;
   targetProjectLayoutFilePath: string;
 
@@ -52,20 +56,17 @@ export interface ILayoutManagerViewModel {
   ) => void;
 }
 
-function getTargetProjectLayoutFilePath(
-  projectPath: string,
-  layoutName: string,
-) {
-  if (projectPath && layoutName) {
-    return `projects/${projectPath}/${layoutName}.layout.json`;
-    // return `<KermiteRoot>/firmare/src/projects/${projectPath}/${fileNamePart}.json`;
+function getSavingPackageFilePath() {
+  const projectInfo = projectPackagesReader.getEditTargetProject();
+  if (projectInfo) {
+    return `data/projects/${projectInfo.packageName}.kmpkg.json`;
   }
   return '';
 }
 
 function getEditSourceDisplayText(
   editSource: ILayoutEditSource,
-  projectLayoutsInfos: IProjectLayoutsInfo[],
+  editProjectInfo?: IProjectPackageInfo,
 ) {
   if (editSource.type === 'LayoutNewlyCreated') {
     return `[NewlyCreated]`;
@@ -74,12 +75,8 @@ function getEditSourceDisplayText(
   } else if (editSource.type === 'File') {
     return `[File]${editSource.filePath}`;
   } else if (editSource.type === 'ProjectLayout') {
-    const { projectId, layoutName } = editSource;
-    const projectInfo = projectLayoutsInfos.find(
-      (info) => info.projectId === projectId,
-    );
-    const projectPath = projectInfo?.projectPath || '';
-    return getTargetProjectLayoutFilePath(projectPath, layoutName);
+    const { layoutName } = editSource;
+    return `[ProjectLayout] ${editProjectInfo?.packageName} ${layoutName}`;
   }
   return '';
 }
@@ -88,15 +85,10 @@ function useLayoutManagerViewModelImpl(
   model: LayoutManagerModel,
 ): ILayoutManagerViewModel {
   const local = useLocal({
-    currentProjectId: '',
     currentLayoutName: '',
     modalState: 'None' as ILayoutManagerModalState,
     // modalState: 'LoadFromProject' as ILayoutManagerModalState,
   });
-
-  const setCurrentProjectId = (projectId: string) => {
-    local.currentProjectId = projectId;
-  };
 
   const setCurrentLayoutName = (projectName: string) => {
     local.currentLayoutName = projectName;
@@ -106,23 +98,34 @@ function useLayoutManagerViewModelImpl(
     local.modalState = modalState;
   };
 
-  const currentProject = model.projectLayoutsInfos.find(
-    (info) => info.projectId === local.currentProjectId,
-  );
+  const resourceInfos = uiGlobalStore.allProjectPackageInfos;
 
-  const projectOptions = model.projectLayoutsInfos.map((info) => ({
+  const projectOptions = resourceInfos.map((info) => ({
     value: info.projectId,
-    label: info.projectPath,
+    label: info.keyboardName,
   }));
 
+  const editTargetProject = projectPackagesReader.getEditTargetProject();
+
+  // 編集しているプロファイルのプロジェクトを規定で選び、変更させない
+  const currentProjectId = editTargetProject?.projectId || '';
+
+  // const includedInResources = resourceInfos.find(
+  //   (info) => info.origin === 'local' && info.projectId === currentProjectId,
+  // );
+
+  const currentProject = resourceInfos.find(
+    (info) => info.projectId === currentProjectId,
+  );
+
   const layoutOptions =
-    currentProject?.layoutNames.map((layoutName) => ({
+    currentProject?.layouts.map(({ layoutName }) => ({
       value: layoutName,
       label: layoutName,
     })) || [];
 
   const isProjectLayoutSourceSpecified = !!(
-    local.currentProjectId && local.currentLayoutName
+    editTargetProject && local.currentLayoutName
   );
 
   const { isLocalProjectsAvailable } = globalSettingsModel;
@@ -135,35 +138,30 @@ function useLayoutManagerViewModelImpl(
   return {
     editSourceText: getEditSourceDisplayText(
       model.editSource,
-      model.projectLayoutsInfos,
+      editTargetProject,
     ),
     projectOptions,
-    currentProjectId: local.currentProjectId,
-    setCurrentProjectId,
-    currentProjectPath: currentProject?.projectPath || '',
+    currentProjectId,
     currentKeyboardName: currentProject?.keyboardName || '',
     layoutOptions,
     currentLayoutName: local.currentLayoutName,
     setCurrentLayoutName,
-    targetProjectLayoutFilePath: getTargetProjectLayoutFilePath(
-      currentProject?.projectPath || '',
-      local.currentLayoutName,
-    ),
+    targetProjectLayoutFilePath: getSavingPackageFilePath(),
     createNewLayout: () => model.createNewLayout(),
     loadCurrentProfileLayout: () => model.loadCurrentProfileLayout(),
     canLoadFromProject: isProjectLayoutSourceSpecified,
     createForProject: () => {
-      model.createForProject(local.currentProjectId, local.currentLayoutName);
+      model.createForProject(currentProjectId, local.currentLayoutName);
       setModalState('None');
     },
     loadFromProject: () => {
-      model.loadFromProject(local.currentProjectId, local.currentLayoutName);
+      model.loadFromProject(currentProjectId, local.currentLayoutName);
       setModalState('None');
     },
     canSaveToProject: isProjectLayoutSourceSpecified,
     saveToProject: () => {
       model.saveToProject(
-        local.currentProjectId,
+        currentProjectId,
         local.currentLayoutName,
         UiLayouterCore.emitSavingDesign(),
       );
