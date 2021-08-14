@@ -2,7 +2,7 @@ import { useEffect, useLocal } from 'qx';
 import { ILayoutEditSource, IProjectPackageInfo } from '~/shared';
 import { ISelectorOption } from '~/ui/base';
 import {
-  globalSettingsModel,
+  globalSettingsReader,
   projectPackagesReader,
   uiStateReader,
 } from '~/ui/commonModels';
@@ -128,7 +128,7 @@ function useLayoutManagerViewModelImpl(
     editTargetProject && local.currentLayoutName
   );
 
-  const { isLocalProjectsAvailable } = globalSettingsModel;
+  const { isLocalProjectsAvailable } = globalSettingsReader;
 
   const editTargetRadioSelection =
     model.editSource.type === 'CurrentProfile'

@@ -2,11 +2,10 @@ import { IGlobalSettings } from '~/shared';
 import { dispatchCoreAction } from '~/ui/commonModels/ActionDispatcher';
 import { uiState } from '~/ui/commonModels/UiState';
 
-class GlobalSettingsModel {
+export const globalSettingsReader = {
   get globalSettings() {
     return uiState.core.globalSettings;
-  }
-
+  },
   get isLocalProjectsAvailable(): boolean {
     const {
       developerMode,
@@ -17,8 +16,7 @@ class GlobalSettingsModel {
       (developerMode && useLocalResouces && !!localProjectRootFolderPath) ||
       false
     );
-  }
-
+  },
   get isLocalProjectSelectedForEdit(): boolean {
     const {
       developerMode,
@@ -31,16 +29,16 @@ class GlobalSettingsModel {
         false) &&
       !!globalProjectId
     );
-  }
-
+  },
   get isDeveloperMode() {
     return this.globalSettings.developerMode;
-  }
-
+  },
   getValue<K extends keyof IGlobalSettings>(key: K): IGlobalSettings[K] {
     return this.globalSettings[key];
-  }
+  },
+};
 
+export const globalSettingsMutations = {
   writeValue<K extends keyof IGlobalSettings>(
     key: K,
     value: IGlobalSettings[K],
@@ -48,7 +46,5 @@ class GlobalSettingsModel {
     dispatchCoreAction({
       writeGlobalSettings: { partialConfig: { [key]: value } },
     });
-  }
-}
-
-export const globalSettingsModel = new GlobalSettingsModel();
+  },
+};

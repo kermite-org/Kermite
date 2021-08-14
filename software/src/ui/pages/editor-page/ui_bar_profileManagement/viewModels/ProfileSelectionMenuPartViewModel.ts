@@ -1,6 +1,6 @@
 import { useLocal } from 'qx';
 import { texts } from '~/ui/base';
-import { globalSettingsModel } from '~/ui/commonModels';
+import { globalSettingsReader } from '~/ui/commonModels';
 import { IProfileManagementPartViewModel } from './ProfileManagementPartViewModel';
 
 interface IMenuItem {
@@ -63,14 +63,14 @@ function createMenuItemSources(
       text: texts.label_assigner_menu_importFromFile,
       hint: texts.hint_assigner_menu_importFromFile,
       handler: vm.handleImportFromFile,
-      enabled: globalSettingsModel.isDeveloperMode,
+      enabled: globalSettingsReader.isDeveloperMode,
     },
     {
       key: 'exportToFile',
       text: texts.label_assigner_menu_exportToFile,
       hint: texts.hint_assigner_menu_exportToFile,
       handler: vm.handleExportToFile,
-      enabled: globalSettingsModel.isDeveloperMode,
+      enabled: globalSettingsReader.isDeveloperMode,
     },
     {
       key: 'saveAsPreset',
@@ -93,7 +93,7 @@ export function makeProfileSelectionMenuPartViewModel(
   vm: IProfileManagementPartViewModel,
 ) {
   const state = useLocal({ isOpen: false });
-  const { isLocalProjectsAvailable } = globalSettingsModel;
+  const { isLocalProjectsAvailable } = globalSettingsReader;
   const menuItemsSource = createMenuItemSources(vm, isLocalProjectsAvailable);
 
   return {

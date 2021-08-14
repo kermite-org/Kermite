@@ -1,6 +1,7 @@
 import {
   defaultUiState,
   ICustomFirmwareInfo,
+  IGlobalSettings,
   IProjectPackageInfo,
   IUiState,
 } from '~/shared';
@@ -18,6 +19,9 @@ export const uiStateDriverEffect = () => {
 };
 
 export const uiStateReader = {
+  get globalSettings(): IGlobalSettings {
+    return uiState.core.globalSettings;
+  },
   get allProjectPackageInfos(): IProjectPackageInfo[] {
     return uiState.core.allProjectPackageInfos;
   },

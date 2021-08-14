@@ -13,7 +13,7 @@ import {
 } from '~/shared/funcs/DomainRelatedHelpers';
 import { ipcAgent, ISelectorOption, ISelectorSource, texts } from '~/ui/base';
 import {
-  globalSettingsModel,
+  uiStateReader,
   uiStatusModel,
   useKeyboardBehaviorModeModel,
   useKeyboardDeviceStatus,
@@ -57,7 +57,7 @@ export interface IProfileManagementPartViewModel {
 export const profilesModel = new ProfilesModel(editorModel);
 
 function makeProfileNameSelectorOption(profileName: string): ISelectorOption {
-  const omitFolder = !!globalSettingsModel.globalSettings.globalProjectId;
+  const omitFolder = !!uiStateReader.globalSettings.globalProjectId;
   return {
     value: profileName,
     label: omitFolder ? profileName.replace(/^.*\//, '') : profileName,
@@ -359,7 +359,7 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
 
   const deviceStatus = useKeyboardDeviceStatus();
 
-  const { globalSettings } = globalSettingsModel;
+  const { globalSettings } = uiStateReader;
 
   const { isSimulatorMode } = useKeyboardBehaviorModeModel();
 

@@ -8,15 +8,11 @@ import {
   IResourceOrigin,
 } from '~/shared';
 import { dispatchCoreAction } from '~/ui/commonModels/ActionDispatcher';
-import { globalSettingsModel } from '~/ui/commonModels/GlobalSettingsModel';
 import { uiStateReader } from '~/ui/commonModels/UiState';
 
 export const projectPackagesReader = {
   getProjectInfosGlobalProjectSelectionAffected(): IProjectPackageInfo[] {
-    const {
-      useLocalResouces,
-      globalProjectId,
-    } = globalSettingsModel.globalSettings;
+    const { useLocalResouces, globalProjectId } = uiStateReader.globalSettings;
 
     return uiStateReader.allProjectPackageInfos
       .filter((info) => useLocalResouces || info.origin === 'online')
@@ -25,7 +21,7 @@ export const projectPackagesReader = {
       );
   },
   getEditTargetProject(): IProjectPackageInfo | undefined {
-    const { globalProjectId } = globalSettingsModel.globalSettings;
+    const { globalProjectId } = uiStateReader.globalSettings;
     return uiStateReader.allProjectPackageInfos.find(
       (info) => info.origin === 'local' && info.projectId === globalProjectId,
     );

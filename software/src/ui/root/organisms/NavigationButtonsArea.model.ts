@@ -1,5 +1,5 @@
 import { texts, router } from '~/ui/base';
-import { globalSettingsModel, PagePaths } from '~/ui/commonModels';
+import { globalSettingsReader, PagePaths } from '~/ui/commonModels';
 
 export interface NavigationEntryViewModel {
   pagePath: PagePaths;
@@ -48,7 +48,7 @@ const entrySources: NavigationEntrySource[] = [
     pageName: texts.label_sideMenu_app_shapePreview,
     iconSpec: 'fa fa-file-code',
     hint: texts.hint_sideMenu_app_shapePreview,
-    isAvailable: () => globalSettingsModel.isDeveloperMode,
+    isAvailable: () => globalSettingsReader.isDeveloperMode,
   },
   {
     pagePath: '/firmwareUpdation',
@@ -61,7 +61,7 @@ const entrySources: NavigationEntrySource[] = [
     pageName: 'project',
     iconSpec: 'fa fa-globe',
     hint: 'project edit',
-    isAvailable: () => globalSettingsModel.isLocalProjectSelectedForEdit,
+    isAvailable: () => globalSettingsReader.isLocalProjectSelectedForEdit,
   },
   {
     pagePath: '/projectSelection',
