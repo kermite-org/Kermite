@@ -7,6 +7,7 @@ import {
   ICoreState,
   ICustomFirmwareInfo,
   IGlobalSettings,
+  IKeyboardConfig,
   IKeyboardDeviceStatus,
   IProjectPackageInfo,
 } from '~/shared';
@@ -62,5 +63,8 @@ export const uiStateReader = {
   },
   get deviceStatus(): IKeyboardDeviceStatus {
     return uiState.core.deviceStatus;
+  },
+  get keyboardConfig(): IKeyboardConfig {
+    return uiState.core.keyboardConfig;
   },
 };
