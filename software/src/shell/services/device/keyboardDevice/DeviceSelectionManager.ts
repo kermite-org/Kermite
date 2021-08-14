@@ -3,8 +3,9 @@ import {
   IDeviceSelectionStatus,
   IntervalTimerWrapper,
 } from '~/shared';
-import { appGlobal, applicationStorage } from '~/shell/base';
+import { applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
+import { coreState } from '~/shell/global';
 import {
   enumerateSupportedDeviceInfos,
   getDebugDeviceSigFromDevicePath,
@@ -73,7 +74,9 @@ export class DeviceSelectionManager {
           }
           device.writeSingleFrame(Packets.connectionOpenedFrame);
           device.writeSingleFrame(
-            Packets.makeSimulatorModeSpecFrame(appGlobal.getSimulatorMode()),
+            Packets.makeSimulatorModeSpecFrame(
+              coreState.keyboardConfig.isSimulatorMode,
+            ),
           );
           console.log(`device opened: ${deviceSig}`);
           device.onClosed(() => {

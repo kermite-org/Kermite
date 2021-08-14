@@ -10,7 +10,6 @@ import {
 } from '~/shared';
 import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { coreStateManager } from '~/shell/global';
-import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
 import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
 import { dataStorage } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/DataStorage';
 import { ProfileManager } from '~/shell/services/profile/ProfileManager';
@@ -45,7 +44,6 @@ export class InputLogicSimulatorD {
 
   constructor(
     private profileManager: ProfileManager,
-    private keyboardConfigProvider: KeyboardConfigProvider,
     private deviceService: KeyboardDeviceService,
   ) {}
 
@@ -67,6 +65,18 @@ export class InputLogicSimulatorD {
     }
   };
 
+  private keyboardConfigHandler = (config: IKeyboardConfig) => {
+    const { isSimulatorMode, isMuteMode } = config;
+    if (this.isSimulatorMode !== isSimulatorMode) {
+      this.deviceService.setSimulatorMode(isSimulatorMode);
+      this.isSimulatorMode = isSimulatorMode;
+    }
+    if (this.isMuteMode !== isMuteMode) {
+      this.deviceService.setMuteMode(isMuteMode);
+      this.isMuteMode = isMuteMode;
+    }
+  };
+
   private onCoreStatusChange = (diff: Partial<ICoreState>) => {
     if (diff.deviceStatus) {
       const values = diff.deviceStatus.systemParameterValues;
@@ -77,6 +87,9 @@ export class InputLogicSimulatorD {
         this.CL.keyboardCoreLogic_setSystemLayout(systemLayout);
         this.CL.keyboardCoreLogic_setWiringMode(wiringMode);
       }
+    }
+    if (diff.keyboardConfig) {
+      this.keyboardConfigHandler(diff.keyboardConfig);
     }
   };
 
@@ -116,30 +129,12 @@ export class InputLogicSimulatorD {
     }
   };
 
-  private keyboardConfigHandler = (config: Partial<IKeyboardConfig>) => {
-    const { isSimulatorMode, isMuteMode } = config;
-    if (
-      isSimulatorMode !== undefined &&
-      this.isSimulatorMode !== isSimulatorMode
-    ) {
-      this.deviceService.setSimulatorMode(isSimulatorMode);
-      this.isSimulatorMode = isSimulatorMode;
-    }
-    if (isMuteMode !== undefined && this.isMuteMode !== isMuteMode) {
-      this.deviceService.setMuteMode(isMuteMode);
-      this.isMuteMode = isMuteMode;
-    }
-  };
-
   postSimulationTargetProfile(profile: IProfileData) {
     this.loadSimulationProfile(profile);
   }
 
   initialize() {
     this.profileManager.statusEventPort.subscribe(this.onProfileStatusChanged);
-    this.keyboardConfigProvider.keyboardConfigEventPort.subscribe(
-      this.keyboardConfigHandler,
-    );
     this.deviceService.realtimeEventPort.subscribe(
       this.onRealtimeKeyboardEvent,
     );
@@ -156,9 +151,6 @@ export class InputLogicSimulatorD {
   terminate() {
     this.profileManager.statusEventPort.unsubscribe(
       this.onProfileStatusChanged,
-    );
-    this.keyboardConfigProvider.keyboardConfigEventPort.unsubscribe(
-      this.keyboardConfigHandler,
     );
     this.deviceService.realtimeEventPort.unsubscribe(
       this.onRealtimeKeyboardEvent,

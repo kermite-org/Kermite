@@ -12,11 +12,11 @@ import {
 } from '~/shell/global';
 import {
   developmentModule_ActionReceiver,
+  keyboardConfigModule,
   projectPackageModule,
 } from '~/shell/modules';
 import { globalSettingsModule } from '~/shell/modules/GlobalSettingsModule';
 import { checkLocalRepositoryFolder } from '~/shell/projectResources/LocalResourceHelper';
-import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
 import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
 import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStatic';
 import { FirmwareUpdationService } from '~/shell/services/firmwareUpdation';
@@ -27,8 +27,6 @@ import { UserPresetHubService } from '~/shell/services/userPresetHub/UserPresetH
 import { AppWindowWrapper } from '~/shell/services/window';
 
 export class ApplicationRoot {
-  private keyboardConfigProvider = new KeyboardConfigProvider();
-
   private firmwareUpdationService = new FirmwareUpdationService();
 
   private deviceService = new KeyboardDeviceService();
@@ -39,7 +37,6 @@ export class ApplicationRoot {
 
   private inputLogicSimulator = new InputLogicSimulatorD(
     this.profileManager,
-    this.keyboardConfigProvider,
     this.deviceService,
   );
 
@@ -61,8 +58,6 @@ export class ApplicationRoot {
 
     appGlobal.icpMainAgent.supplySyncHandlers({
       dev_debugMessage: (msg) => console.log(`[renderer] ${msg}`),
-      config_saveKeyboardConfigOnClosing: (data) =>
-        this.keyboardConfigProvider.writeKeyboardConfig(data),
     });
 
     appGlobal.icpMainAgent.supplyAsyncHandlers({
@@ -111,8 +106,6 @@ export class ApplicationRoot {
         this.presetHubService.getServerProjectIds(),
       presetHub_getServerProfiles: (projectId: string) =>
         this.presetHubService.getServerProfiles(projectId),
-      config_writeKeyboardConfig: async (config) =>
-        this.keyboardConfigProvider.writeKeyboardConfig(config),
       config_writeKeyMappingToDevice: async () => {
         const profile = this.profileManager.getCurrentProfile();
         if (profile) {
@@ -174,9 +167,6 @@ export class ApplicationRoot {
       firmup_deviceDetectionEvents: (cb) =>
         this.firmwareUpdationService.deviceDetectionEvents.subscribe(cb),
       window_appWindowStatus: windowWrapper.appWindowEventPort.subscribe,
-
-      config_keyboardConfigEvents: (cb) =>
-        this.keyboardConfigProvider.keyboardConfigEventPort.subscribe(cb),
       global_coreStateEvents: (cb) =>
         coreStateManager.coreStateEventPort.subscribe(cb),
     });
@@ -187,8 +177,12 @@ export class ApplicationRoot {
       globalSettingsModule,
       developmentModule_ActionReceiver,
       projectPackageModule,
+      keyboardConfigModule,
     );
     await dispatchCoreAction({ loadGlobalSettings: 1 });
+
+    keyboardConfigModule.loadKeyboardConfig(1);
+    await dispatchCoreAction({ loadKeyboardConfig: 1 });
     await dispatchCoreAction({ loadAllProjectPackages: 1 });
     await dispatchCoreAction({ loadAllCustomFirmwareInfos: 1 });
   }

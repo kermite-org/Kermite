@@ -28,3 +28,13 @@ export function commitCoreState(diff: Partial<ICoreState>) {
   copyObjectProps(coreState, diff);
   coreStateManager.coreStateEventPort.emit(diff);
 }
+
+export function createCoreModule<K extends keyof ICoreAction>(
+  source: {
+    [Key in K]: (
+      payload: NonNullable<ICoreAction[Key]>,
+    ) => void | Promise<void>;
+  },
+) {
+  return source;
+}

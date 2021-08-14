@@ -16,14 +16,13 @@ import {
   IServerPorfileInfo,
 } from '~/shared/defs/DomainTypes';
 import { ICoreAction, ICoreState } from '~/shared/defs/GlobalStateActionTypes';
-import { IGlobalSettings, IKeyboardConfig } from './ConfigTypes';
+import { IGlobalSettings } from './ConfigTypes';
 import { IProfileData } from './ProfileData';
 
 export interface IAppIpcContract {
   sync: {
     dev_debugMessage(message: string): void;
     // config_saveSettingsOnClosing?: IApplicationSettings;
-    config_saveKeyboardConfigOnClosing(data: IKeyboardConfig): void;
   };
   async: {
     system_getApplicationVersionInfo(): Promise<IApplicationVersionInfo>;
@@ -49,7 +48,6 @@ export interface IAppIpcContract {
     layout_showEditLayoutFileInFiler(): Promise<void>;
     // layout_getAllProjectLayoutsInfos(): Promise<IProjectLayoutsInfo[]>;
 
-    config_writeKeyboardConfig(config: Partial<IKeyboardConfig>): Promise<void>;
     config_writeKeyMappingToDevice(): Promise<boolean>;
 
     config_getGlobalSettings(): Promise<IGlobalSettings>;
@@ -102,9 +100,6 @@ export interface IAppIpcContract {
     device_deviceSelectionEvents: Partial<IDeviceSelectionStatus>;
     device_keyEvents: IRealtimeKeyboardEvent;
     firmup_deviceDetectionEvents: IBootloaderDeviceDetectionStatus;
-
-    config_keyboardConfigEvents: Partial<IKeyboardConfig>;
-
     global_coreStateEvents: Partial<ICoreState>;
   };
 }

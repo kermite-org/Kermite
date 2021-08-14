@@ -1,6 +1,8 @@
 import {
+  fallbackKeyboardConfig,
   globalSettingsDefault,
   IGlobalSettings,
+  IKeyboardConfig,
 } from '~/shared/defs/ConfigTypes';
 import {
   ICustomFirmwareInfo,
@@ -14,6 +16,7 @@ export type ICoreState = {
   allCustomFirmwareInfos: ICustomFirmwareInfo[];
   globalSettings: IGlobalSettings;
   deviceStatus: IKeyboardDeviceStatus;
+  keyboardConfig: IKeyboardConfig;
 };
 
 export const defaultCoreState: ICoreState = {
@@ -22,6 +25,7 @@ export const defaultCoreState: ICoreState = {
   allCustomFirmwareInfos: [],
   globalSettings: globalSettingsDefault,
   deviceStatus: { isConnected: false },
+  keyboardConfig: fallbackKeyboardConfig,
 };
 
 export type ICoreAction = Partial<{
@@ -32,4 +36,7 @@ export type ICoreAction = Partial<{
   loadAllCustomFirmwareInfos: 1;
   loadGlobalSettings: 1;
   writeGlobalSettings: { partialConfig: Partial<IGlobalSettings> };
+
+  loadKeyboardConfig: 1;
+  writeKeyboardConfig: { partialConfig: Partial<IKeyboardConfig> };
 }>;
