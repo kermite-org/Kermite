@@ -102,6 +102,8 @@ export type ICustomFirmwareInfo = {
   firmwareProjectPath: string;
   variationName: string;
   targetDevice: string;
+  buildRevision: number;
+  buildTimestamp: string;
 };
 export interface IProjectCustomDefinition {
   customParameterSpecs?: ICustromParameterSpec[];
@@ -110,7 +112,7 @@ export interface IProjectCustomDefinition {
 export interface IKeyboardDeviceInfo {
   path: string;
   portName: string;
-  projectId: string;
+  firmwareId: string;
   deviceInstanceCode: string;
 }
 
@@ -126,7 +128,7 @@ export const fallbackDeviceSelectionStatus: IDeviceSelectionStatus = {
 
 export interface IKeyboardDeviceAttributes {
   origin: IResourceOrigin;
-  projectId: string;
+  firmwareId: string;
   firmwareVariationName: string;
   firmwareBuildRevision: number;
   deviceInstanceCode: string;

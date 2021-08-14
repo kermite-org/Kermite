@@ -133,6 +133,8 @@ export class ProjectPackageProvider implements IProjectPackageProvider {
         firmwareProjectPath: info.firmwareProjectPath,
         variationName: info.variationName,
         targetDevice: info.targetDevice,
+        buildRevision: info.releaseBuildRevision,
+        buildTimestamp: info.buildTimestamp,
       };
     });
   }

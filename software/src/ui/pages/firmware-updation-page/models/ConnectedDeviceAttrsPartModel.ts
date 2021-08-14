@@ -1,28 +1,24 @@
 /* eslint-disable react/jsx-key */
 import { texts } from '~/ui/base';
-import { useConnectedDeviceAttributes } from '~/ui/commonModels';
+import { projectPackagesReader, uiStateReader } from '~/ui/commonStore';
 
 interface IConnectedDevicesAttrsPartModel {
   tableData: [string, string][] | undefined;
 }
 
-// function fixDatetimeText(datetimeText: string) {
-//   if (datetimeText.endsWith('Z')) {
-//     return new Date(datetimeText).toLocaleString();
-//   }
-//   return datetimeText;
-// }
+function fixDatetimeText(datetimeText: string) {
+  if (datetimeText.endsWith('Z')) {
+    return new Date(datetimeText).toLocaleString();
+  }
+  return datetimeText;
+}
 
 export function useConnectedDevicesAttrsPartModel(): IConnectedDevicesAttrsPartModel {
-  const { deviceAttrs, projectInfo } = useConnectedDeviceAttributes();
-
-  // console.log({ deviceAttrs, projectInfo });
-
+  const deviceAttrs = uiStateReader.deviceStatus.deviceAttrs;
   const isOriginOnline = deviceAttrs?.origin === 'online';
-
-  // const firm = projectInfo?.customFirmwareReferences.find(
-  //   (f) => f.variantName === deviceAttrs?.firmwareVariationName,
-  // );
+  const firmwareInfo = projectPackagesReader.findFirmwareInfo(
+    deviceAttrs?.firmwareId,
+  );
   const tableData =
     deviceAttrs &&
     ([
@@ -34,12 +30,12 @@ export function useConnectedDevicesAttrsPartModel(): IConnectedDevicesAttrsPartM
           : texts.lebel_device_deviceInfo_value_resourceOrigin_local,
       ],
       [
-        texts.lebel_device_deviceInfo_fieldName_projectID,
-        deviceAttrs.projectId,
+        texts.lebel_device_deviceInfo_fieldName_firmwareId,
+        deviceAttrs.firmwareId,
       ],
-      projectInfo && [
+      firmwareInfo && [
         texts.lebel_device_deviceInfo_fieldName_keyboardName,
-        projectInfo.keyboardName,
+        firmwareInfo.firmwareProjectPath,
       ],
       [
         texts.lebel_device_deviceInfo_fieldName_instanceNumber,
@@ -54,16 +50,16 @@ export function useConnectedDevicesAttrsPartModel(): IConnectedDevicesAttrsPartM
         texts.lebel_device_deviceInfo_fieldName_firmwareRevision,
         (isOriginOnline && deviceAttrs.firmwareBuildRevision) || 'N/A',
       ],
-      // isOriginOnline &&
-      //   firm && [
-      //     texts.lebel_device_deviceInfo_fieldName_firmwareLatestRevision,
-      //     firm.buildRevision,
-      //   ],
-      // isOriginOnline &&
-      //   firm && [
-      //     texts.lebel_device_deviceInfo_fieldName_firmwareLatestTimestamp,
-      //     fixDatetimeText(firm.buildTimestamp),
-      //   ],
+      isOriginOnline &&
+        firmwareInfo && [
+          texts.lebel_device_deviceInfo_fieldName_firmwareLatestRevision,
+          firmwareInfo.buildRevision,
+        ],
+      isOriginOnline &&
+        firmwareInfo && [
+          texts.lebel_device_deviceInfo_fieldName_firmwareLatestTimestamp,
+          fixDatetimeText(firmwareInfo.buildTimestamp),
+        ],
       [
         texts.lebel_device_deviceInfo_fieldName_keymappingAreaSize,
         deviceAttrs.assignStorageCapacity + ' bytes',

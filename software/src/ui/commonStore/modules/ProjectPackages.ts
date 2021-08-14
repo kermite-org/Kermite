@@ -7,7 +7,11 @@ import {
   IProjectPackageInfo,
   IResourceOrigin,
 } from '~/shared';
-import { uiStateReader, dispatchCoreAction } from '~/ui/commonStore/base';
+import {
+  uiStateReader,
+  dispatchCoreAction,
+  uiState,
+} from '~/ui/commonStore/base';
 
 export const projectPackagesReader = {
   getProjectInfosGlobalProjectSelectionAffected(): IProjectPackageInfo[] {
@@ -34,6 +38,11 @@ export const projectPackagesReader = {
       resourceInfos.find(
         (info) => info.origin === origin && info.projectId === projectId,
       ) || resourceInfos.find((info) => info.projectId === projectId)
+    );
+  },
+  findFirmwareInfo(firmwareId: string | undefined) {
+    return uiState.core.allCustomFirmwareInfos.find(
+      (info) => info.firmwareId === firmwareId,
     );
   },
 };

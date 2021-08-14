@@ -1,6 +1,5 @@
 export * from './AppServicesInitializer';
 export * from './ConfigDataSource';
-export * from './DeviceDataSource';
 export * from './GeneralUiStateModels';
 export * from './Interfaces';
 export * from './KeyboardBehaviorModeModel';

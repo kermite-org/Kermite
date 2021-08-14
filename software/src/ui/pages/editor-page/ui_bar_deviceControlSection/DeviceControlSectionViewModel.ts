@@ -2,12 +2,13 @@ import { projectPackagesReader, uiStateReader } from '~/ui/commonStore';
 
 export function makeDeviceControlSectionViewModel() {
   const { isConnected, deviceAttrs } = uiStateReader.deviceStatus;
-  const projectInfo = projectPackagesReader.findProjectInfo(
-    deviceAttrs?.origin,
-    deviceAttrs?.projectId,
+
+  const firmwareInfo = projectPackagesReader.findFirmwareInfo(
+    deviceAttrs?.firmwareId,
   );
+  const displayName = firmwareInfo?.firmwareProjectPath || '';
   return {
-    currentDeviceKeyboardName: projectInfo?.keyboardName || '',
+    currentDeviceKeyboardName: displayName,
     isDeviceConnected: isConnected,
   };
 }

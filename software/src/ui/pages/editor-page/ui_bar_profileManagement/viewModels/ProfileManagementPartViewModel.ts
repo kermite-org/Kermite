@@ -295,7 +295,24 @@ function getCanWrite(): boolean {
   const isDeviceConnected = deviceStatus.isConnected;
 
   const refProjectId = editorModel.profileData.projectId;
-  const isProjectMatched = deviceStatus.deviceAttrs?.projectId === refProjectId;
+
+  const allProjctInfos = uiStateReader.allProjectPackageInfos;
+
+  const standardFirmwareIds = ['HCV52K', 'HCV52L'];
+
+  const deviceFirmwareId = deviceStatus.deviceAttrs?.firmwareId || '';
+
+  const isProjectMatched = allProjctInfos.some(
+    (info) =>
+      info.projectId === refProjectId &&
+      info.firmwares.some(
+        (firmware) =>
+          ('standardFirmwareDefinition' in firmware &&
+            standardFirmwareIds.includes(deviceFirmwareId)) ||
+          ('customFirmwareId' in firmware &&
+            firmware.customFirmwareId === deviceFirmwareId),
+      ),
+  );
 
   if (developerMode && allowCrossKeyboardKeyMappingWrite) {
     return isInternalProfile && isDeviceConnected;

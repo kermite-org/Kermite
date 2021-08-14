@@ -24,7 +24,7 @@ function createConnectedStatus(
     isConnected: true,
     deviceAttrs: {
       origin: attrsRes.resourceOrigin,
-      projectId: attrsRes.projectId,
+      firmwareId: attrsRes.firmwareId,
       firmwareVariationName: attrsRes.firmwareVariationName,
       firmwareBuildRevision: attrsRes.projectReleaseBuildRevision,
       deviceInstanceCode: attrsRes.deviceInstanceCode,
