@@ -1,7 +1,12 @@
 import { jsx, render } from 'qx';
 import { debounce } from '~/shared';
-import { appUi } from '~/ui/base';
-import { globalSettingsModel, uiStatusModel } from '~/ui/commonModels';
+import { resourceDevelopmentEntry } from '~/ui/ResourceDevelopment';
+import { appUi, ipcAgent } from '~/ui/base';
+import {
+  globalSettingsModel,
+  uiStatusModel,
+  uiGlobalStore,
+} from '~/ui/commonModels';
 import { SiteRoot } from '~/ui/root/SiteRoot';
 
 async function start() {
@@ -10,6 +15,8 @@ async function start() {
 
   uiStatusModel.initialize();
   await globalSettingsModel.initialize();
+  uiGlobalStore.allProjectPackageInfos = await ipcAgent.async.projects_getAllProjectPackageInfos();
+  uiGlobalStore.allCustomFirmwareInfos = await ipcAgent.async.projects_getAllCustomFirmwareInfos();
 
   render(() => <SiteRoot />, appDiv);
   window.addEventListener('resize', debounce(appUi.rerender, 100));
@@ -22,3 +29,4 @@ async function start() {
 }
 
 window.addEventListener('load', start);
+window.addEventListener('load', resourceDevelopmentEntry);

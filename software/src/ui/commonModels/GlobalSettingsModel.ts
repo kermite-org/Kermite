@@ -16,6 +16,20 @@ class GlobalSettingsModel {
     );
   }
 
+  get isLocalProjectSelectedForEdit(): boolean {
+    const {
+      developerMode,
+      useLocalResouces,
+      localProjectRootFolderPath,
+      globalProjectId,
+    } = this.globalSettings;
+    return (
+      ((developerMode && useLocalResouces && !!localProjectRootFolderPath) ||
+        false) &&
+      !!globalProjectId
+    );
+  }
+
   get isDeveloperMode() {
     return this.globalSettings.developerMode;
   }

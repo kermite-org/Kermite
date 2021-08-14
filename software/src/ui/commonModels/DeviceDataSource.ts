@@ -2,10 +2,10 @@ import {
   IDeviceSelectionStatus,
   IKeyboardDeviceAttributes,
   IKeyboardDeviceStatus,
-  IProjectResourceInfo,
+  IProjectPackageInfo,
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
-import { useProjectInfo } from '~/ui/commonModels/ProjectDataSource';
+import { projectPackagesReader } from '~/ui/commonModels/ProjectDataSource';
 import { useEventSource } from '~/ui/helpers';
 
 export function useDeviceSelectionStatus(): IDeviceSelectionStatus {
@@ -24,11 +24,11 @@ export function useKeyboardDeviceStatus(): IKeyboardDeviceStatus {
 
 export function useConnectedDeviceAttributes(): {
   deviceAttrs: IKeyboardDeviceAttributes | undefined;
-  projectInfo: IProjectResourceInfo | undefined;
+  projectInfo: IProjectPackageInfo | undefined;
 } {
   const deviceStatus = useKeyboardDeviceStatus();
   const deviceAttrs = deviceStatus.deviceAttrs;
-  const projectInfo = useProjectInfo(
+  const projectInfo = projectPackagesReader.findProjectInfo(
     deviceAttrs?.origin,
     deviceAttrs?.projectId,
   );

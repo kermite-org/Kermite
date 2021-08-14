@@ -6,18 +6,17 @@ import {
   IProfileData,
   IProfileEditSource,
 } from '~/shared';
-import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import {
-  ipcAgent,
-  ISelectorSource,
-  makePlainSelectorOption,
-  texts,
-} from '~/ui/base';
+  getProjectOriginAndIdFromSig,
+  joinProjectProfileName,
+  splitProjectProfileName,
+} from '~/shared/funcs/DomainRelatedHelpers';
+import { ipcAgent, ISelectorOption, ISelectorSource, texts } from '~/ui/base';
 import {
-  uiStatusModel,
-  useKeyboardDeviceStatus,
-  useKeyboardBehaviorModeModel,
   globalSettingsModel,
+  uiStatusModel,
+  useKeyboardBehaviorModeModel,
+  useKeyboardDeviceStatus,
 } from '~/ui/commonModels';
 import { useModalDisplayStateModel } from '~/ui/commonModels/GeneralUiStateModels';
 import { modalAlert, modalConfirm, modalTextEdit } from '~/ui/components';
@@ -57,6 +56,14 @@ export interface IProfileManagementPartViewModel {
 
 export const profilesModel = new ProfilesModel(editorModel);
 
+function makeProfileNameSelectorOption(profileName: string): ISelectorOption {
+  const omitFolder = !!globalSettingsModel.globalSettings.globalProjectId;
+  return {
+    value: profileName,
+    label: omitFolder ? profileName.replace(/^.*\//, '') : profileName,
+  };
+}
+
 function makeProfileSelectionSource(
   allProfileNames: string[],
   editSource: IProfileEditSource,
@@ -72,7 +79,7 @@ function makeProfileSelectionSource(
     return {
       options: [
         { label: '(untitled)', value: '__NEWLY_CREATED_PROFILE__' },
-        ...allProfileNames.map(makePlainSelectorOption),
+        ...allProfileNames.map(makeProfileNameSelectorOption),
       ],
       value: '__NEWLY_CREATED_PROFILE__',
       setValue: loadProfile,
@@ -84,14 +91,14 @@ function makeProfileSelectionSource(
           label: `(file)${getFileNameFromPath(editSource.filePath)}`,
           value: '__EXTERNALY_LOADED_PROFILE__',
         },
-        ...allProfileNames.map(makePlainSelectorOption),
+        ...allProfileNames.map(makeProfileNameSelectorOption),
       ],
       value: '__EXTERNALY_LOADED_PROFILE__',
       setValue: loadProfile,
     };
   } else {
     return {
-      options: allProfileNames.map(makePlainSelectorOption),
+      options: allProfileNames.map(makeProfileNameSelectorOption),
       value: editSource.profileName,
       setValue: loadProfile,
     };
@@ -100,6 +107,7 @@ function makeProfileSelectionSource(
 
 const checkValidNewProfileName = async (
   newProfileName: string,
+  projectId: string,
 ): Promise<boolean> => {
   if (!newProfileName.match(/^[^/./\\:*?"<>|]+$/)) {
     await modalAlert(
@@ -108,7 +116,8 @@ const checkValidNewProfileName = async (
     return false;
   }
 
-  const lowered = newProfileName.toLowerCase();
+  const newFullName = joinProjectProfileName(projectId, newProfileName);
+  const lowered = newFullName.toLowerCase();
   if (
     profilesModel.allProfileEntries.find(
       (it) => it.profileName.toLowerCase() === lowered,
@@ -127,10 +136,11 @@ const createProfile = async () => {
   // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
   if (res && res.profileName && res.projectKey && res.layoutKey) {
     const { profileName, projectKey, layoutKey } = res;
-    const nameValid = await checkValidNewProfileName(profileName);
+    const { origin, projectId } = getProjectOriginAndIdFromSig(projectKey);
+    const nameValid = await checkValidNewProfileName(profileName, projectId);
     if (nameValid) {
-      const { origin, projectId } = getProjectOriginAndIdFromSig(projectKey);
-      profilesModel.createProfile(profileName, origin, projectId, {
+      const fullProfileName = joinProjectProfileName(projectId, profileName);
+      profilesModel.createProfile(fullProfileName, origin, projectId, {
         type: 'blank',
         layoutName: layoutKey,
       });
@@ -140,14 +150,16 @@ const createProfile = async () => {
 
 const inputNewProfileName = async (
   caption: string,
+  defaultText: string,
+  projectId: string,
 ): Promise<string | undefined> => {
   const newProfileName = await modalTextEdit({
     message: texts.label_assigner_profileNameEditModal_newProfileName,
-    defaultText: profilesModel.currentProfileName,
+    defaultText,
     caption,
   });
   if (newProfileName) {
-    const nameValid = await checkValidNewProfileName(newProfileName);
+    const nameValid = await checkValidNewProfileName(newProfileName, projectId);
     if (nameValid) {
       return newProfileName;
     }
@@ -159,10 +171,16 @@ const renameProfile = async () => {
   if (profilesModel.editSource.type !== 'InternalProfile') {
     return;
   }
-  const newProfileName = await inputNewProfileName(
-    texts.label_assigner_profileNameEditModal_modalTitleRename,
+  const { folderPart, filePart } = splitProjectProfileName(
+    profilesModel.currentProfileName,
   );
-  if (newProfileName) {
+  const newFilePart = await inputNewProfileName(
+    texts.label_assigner_profileNameEditModal_modalTitleRename,
+    filePart,
+    folderPart,
+  );
+  if (newFilePart) {
+    const newProfileName = joinProjectProfileName(folderPart, newFilePart);
     profilesModel.renameProfile(newProfileName);
   }
 };
@@ -171,10 +189,16 @@ const copyProfile = async () => {
   if (profilesModel.editSource.type !== 'InternalProfile') {
     return;
   }
-  const newProfileName = await inputNewProfileName(
-    texts.label_assigner_profileNameEditModal_modalTitleCopy,
+  const { folderPart, filePart } = splitProjectProfileName(
+    profilesModel.currentProfileName,
   );
-  if (newProfileName) {
+  const newFilePart = await inputNewProfileName(
+    texts.label_assigner_profileNameEditModal_modalTitleCopy,
+    filePart,
+    folderPart,
+  );
+  if (newFilePart) {
+    const newProfileName = joinProjectProfileName(folderPart, newFilePart);
     profilesModel.copyProfile(newProfileName);
   }
 };
@@ -183,10 +207,13 @@ const deleteProfile = async () => {
   if (profilesModel.editSource.type !== 'InternalProfile') {
     return;
   }
+  const { filePart } = splitProjectProfileName(
+    profilesModel.currentProfileName,
+  );
   const ok = await modalConfirm({
     message: texts.label_assigner_confirmModal_deleteProfile_modalMessage.replace(
       '{PROFILE_NAME}',
-      profilesModel.currentProfileName,
+      filePart,
     ),
     caption: texts.label_assigner_confirmModal_deleteProfile_modalTitle,
   });
@@ -199,10 +226,14 @@ const handleSaveUnsavedProfile = async () => {
   if (profilesModel.editSource.type === 'InternalProfile') {
     return;
   }
-  const newProfileName = await inputNewProfileName(
+  const projectId = editorModel.profileData.projectId;
+  const newFilePart = await inputNewProfileName(
     texts.label_assigner_profileNameEditModal_modalTitleSave,
+    profilesModel.currentProfileName,
+    projectId,
   );
-  if (newProfileName) {
+  if (newFilePart) {
+    const newProfileName = joinProjectProfileName(projectId, newFilePart);
     profilesModel.saveUnsavedProfileAs(newProfileName);
   }
 };

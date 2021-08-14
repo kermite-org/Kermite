@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { splitBytesN } from '~/shared';
 import { CommandLogger } from '~/shell/services/firmwareUpdation/flashSchemeAtMegaCaterina/CommandLogger';
 import {
   bhi,
   blo,
   bufferPadZerosTo,
   hex4,
-  splitBytesN,
 } from '~/shell/services/firmwareUpdation/flashSchemeAtMegaCaterina/helpers';
 import {
   DfuRequest,

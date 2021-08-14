@@ -1,23 +1,23 @@
-import { useEffect, useLocal } from 'qx';
+import { useEffect, useLocal, useMemo } from 'qx';
 import {
   fallbackProfileData,
   getProjectOriginAndIdFromSig,
   IProfileData,
-  IProjectResourceInfo,
+  IProjectPackageInfo,
   IServerPorfileInfo,
 } from '~/shared';
 import {
-  ISelectorOption,
-  ipcAgent,
   getSelectionValueCorrected,
+  ipcAgent,
+  ISelectorOption,
   router,
 } from '~/ui/base';
-import { useProjectResourceInfos } from '~/ui/commonModels';
-import { usePersistState, useFetcher, fieldSetter } from '~/ui/helpers';
+import { projectPackagesReader } from '~/ui/commonModels';
+import { fieldSetter, useFetcher, usePersistState } from '~/ui/helpers';
 import { IPresetSelectionModel } from '~/ui/pages/preset-browser-page/models';
 
 function makeProjectOptions(
-  infos: IProjectResourceInfo[],
+  infos: IProjectPackageInfo[],
   projectIds: string[],
 ): ISelectorOption[] {
   return infos
@@ -55,7 +55,10 @@ export function usePresetSelectionModel2(): IPresetSelectionModel {
     projectProfiles: [],
   });
 
-  const resourceInfos = useProjectResourceInfos();
+  const resourceInfos = useMemo(
+    projectPackagesReader.getProjectInfosGlobalProjectSelectionAffected,
+    [],
+  );
   const projectIds = useFetcher(
     ipcAgent.async.presetHub_getServerProjectIds,
     [],

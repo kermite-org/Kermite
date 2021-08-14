@@ -6,8 +6,8 @@ AbortOnError = ARGV.include?('--abortOnError')
 def get_all_project_variation_paths
   Dir.glob('./src/projects/**/rules.mk')
      .map { |path| File.dirname(path) }
-     .select { |path| File.exist?(File.join(Pathname(path).parent, 'project.json')) }
      .map { |path| path.sub('./src/projects/', '') }
+     .select { |path| !(path.start_with?('dev') || path.start_with?('study')) }
      .sort
 end
 

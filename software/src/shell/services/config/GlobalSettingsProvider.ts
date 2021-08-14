@@ -3,8 +3,8 @@ import {
   globalSettingsLoadingSchema,
   IGlobalSettings,
 } from '~/shared';
-import { applicationStorage } from '~/shell/base';
-import { createEventPort } from '~/shell/funcs';
+import { appEnv, applicationStorage } from '~/shell/base';
+import { createEventPort, pathResolve } from '~/shell/funcs';
 import { checkLocalRepositoryFolder } from '~/shell/projectResources/LocalResourceHelper';
 
 export class GlobalSettingsProvider {
@@ -12,26 +12,27 @@ export class GlobalSettingsProvider {
 
   settingsFixerCallback: ((diff: Partial<IGlobalSettings>) => void) | undefined;
 
-  getGlobalSettings(): IGlobalSettings {
-    if (this._globalSettings === globalSettingsDefault) {
-      const settings = applicationStorage.readItemBasedOnDefault(
-        'globalSettings',
-        globalSettingsLoadingSchema,
-        globalSettingsDefault,
-      );
-      if (settings.localProjectRootFolderPath) {
-        if (!checkLocalRepositoryFolder(settings.localProjectRootFolderPath)) {
-          console.warn('invalid local repository folder setting');
-          settings.localProjectRootFolderPath = '';
-        }
+  initialize() {
+    const settings = applicationStorage.readItemBasedOnDefault(
+      'globalSettings',
+      globalSettingsLoadingSchema,
+      globalSettingsDefault,
+    );
+    if (settings.localProjectRootFolderPath) {
+      if (!checkLocalRepositoryFolder(settings.localProjectRootFolderPath)) {
+        console.warn('invalid local repository folder setting');
+        settings.localProjectRootFolderPath = '';
       }
-      this._globalSettings = settings;
     }
+    this._globalSettings = settings;
+  }
+
+  get globalSettings(): IGlobalSettings {
     return this._globalSettings;
   }
 
   globalConfigEventPort = createEventPort<Partial<IGlobalSettings>>({
-    initialValueGetter: () => this.getGlobalSettings(),
+    initialValueGetter: () => this._globalSettings,
   });
 
   writeGlobalSettings(partialConfig: Partial<IGlobalSettings>) {
@@ -43,6 +44,18 @@ export class GlobalSettingsProvider {
     this.globalConfigEventPort.emit(partialConfig);
 
     this.settingsFixerCallback?.(partialConfig);
+  }
+
+  getLocalRepositoryDir() {
+    const settings = this._globalSettings;
+    if (settings.developerMode && settings.useLocalResouces) {
+      if (appEnv.isDevelopment) {
+        return pathResolve('../');
+      } else {
+        return settings.localProjectRootFolderPath;
+      }
+    }
+    return undefined;
   }
 }
 export const globalSettingsProvider = new GlobalSettingsProvider();

@@ -149,6 +149,28 @@ export type IPersistProfileData = {
   mappingEntries: IMappingEntry[];
 };
 
+export const fallbackPersistProfileData: IPersistProfileData = {
+  formatRevision: 'PRF06',
+  projectId: '',
+  keyboardDesign: createFallbackPersistKeyboardDesign(),
+  settings: {
+    assignType: 'single',
+    useShiftCancel: false,
+  },
+  layers: [
+    {
+      layerId: 'la0',
+      layerName: 'main',
+      defaultScheme: 'block',
+      attachedModifiers: 0,
+      exclusionGroup: 0,
+      initialActive: true,
+    },
+  ],
+  assigns: [],
+  mappingEntries: [],
+};
+
 export const fallbackProfileData: IProfileData = {
   projectId: '',
   keyboardDesign: createFallbackPersistKeyboardDesign(),

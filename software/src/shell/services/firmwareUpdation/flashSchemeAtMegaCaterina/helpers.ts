@@ -27,10 +27,3 @@ export function bufferPadZerosTo(bytes: number[], len: number) {
   const padding = new Array(len - bytes.length).fill(0);
   return [...bytes, ...padding];
 }
-
-export function splitBytesN(bytes: number[], n: number) {
-  const m = Math.ceil(bytes.length / n);
-  return Array(m)
-    .fill(0)
-    .map((_, i) => bytes.slice(i * n, i * n + n));
-}

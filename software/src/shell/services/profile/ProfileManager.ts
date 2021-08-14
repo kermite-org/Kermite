@@ -1,4 +1,5 @@
 import { shell } from 'electron';
+import produce from 'immer';
 import {
   IProfileManagerStatus,
   IProfileData,
@@ -13,6 +14,7 @@ import {
   IProfileEntry,
   IGlobalSettings,
 } from '~/shared';
+import { ProfileDataConverter } from '~/shared/modules/ProfileDataConverter';
 import {
   vObject,
   vSchemaOneOf,
@@ -21,22 +23,11 @@ import {
 } from '~/shared/modules/SchemaValidationHelper';
 import { applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
-import { projectResourceProvider } from '~/shell/projectResources';
+import { projectPackageProvider } from '~/shell/projectPackages/ProjectPackageProvider';
 import { globalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
-import { IPresetProfileLoader, IProfileManager } from './Interfaces';
+import { presetProfileLoader_loadPresetProfileData } from '~/shell/services/profile/PresetProfileLoader';
+import { IProfileManager } from './Interfaces';
 import { ProfileManagerCore } from './ProfileManagerCore';
-
-function createLazyInitializer(
-  taskCreator: () => Promise<void>,
-): () => Promise<void> {
-  let task: Promise<void> | undefined;
-  return async () => {
-    if (!task) {
-      task = taskCreator();
-    }
-    await task;
-  };
-}
 
 function createInternalProfileEditSourceOrFallback(
   profileEntry?: IProfileEntry,
@@ -79,26 +70,35 @@ export class ProfileManager implements IProfileManager {
 
   private core: ProfileManagerCore;
 
-  constructor(private presetProfileLoader: IPresetProfileLoader) {
+  constructor() {
     this.core = new ProfileManagerCore();
   }
 
   statusEventPort = createEventPort<Partial<IProfileManagerStatus>>({
-    onFirstSubscriptionStarting: () => {
-      this.lazyInitializer();
-      this.startLifecycle();
-    },
-    onLastSubscriptionEnded: () => this.endLifecycle(),
     initialValueGetter: () => this.status,
   });
 
-  private startLifecycle() {
+  async initializeAsync() {
+    try {
+      await this.core.ensureProfilesDirectoryExists();
+      await this.reEnumerateAllProfileEntries();
+      const loadedEditSource = this.loadInitialEditSource();
+      const editSource = this.fixEditSource(loadedEditSource);
+      const profile = await this.loadProfileByEditSource(editSource);
+      this.setStatus({
+        editSource,
+        loadedProfileData: profile,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+
     globalSettingsProvider.globalConfigEventPort.subscribe(
       this.onGlobalSettingsChange,
     );
   }
 
-  private endLifecycle() {
+  terminate() {
     globalSettingsProvider.globalConfigEventPort.unsubscribe(
       this.onGlobalSettingsChange,
     );
@@ -129,29 +129,15 @@ export class ProfileManager implements IProfileManager {
     this.setStatus({ allProfileEntries, visibleProfileEntries });
   }
 
-  private lazyInitializer = createLazyInitializer(async () => {
-    await this.core.ensureProfilesDirectoryExists();
-    await this.reEnumerateAllProfileEntries();
-    const loadedEditSource = this.loadInitialEditSource();
-    const editSource = this.fixEditSource(loadedEditSource);
-    const profile = await this.loadProfileByEditSource(editSource);
-    this.setStatus({
-      editSource,
-      loadedProfileData: profile,
-    });
-  });
-
   getCurrentProfileProjectId(): string {
     return this.status.loadedProfileData?.projectId;
   }
 
-  async getAllProfileEntriesAsync(): Promise<IProfileEntry[]> {
-    await this.lazyInitializer();
+  getAllProfileEntries(): IProfileEntry[] {
     return this.status.allProfileEntries;
   }
 
-  async getCurrentProfileAsync(): Promise<IProfileData | undefined> {
-    await this.lazyInitializer();
+  getCurrentProfile(): IProfileData | undefined {
     if (this.status.editSource.type === 'NoProfilesAvailable') {
       return undefined;
     }
@@ -170,7 +156,7 @@ export class ProfileManager implements IProfileManager {
   }
 
   private getVisibleProfiles(allProfiles: IProfileEntry[]): IProfileEntry[] {
-    const { globalProjectId } = globalSettingsProvider.getGlobalSettings();
+    const { globalProjectId } = globalSettingsProvider.globalSettings;
     if (globalProjectId) {
       return allProfiles.filter((it) => it.projectId === globalProjectId);
     } else {
@@ -179,7 +165,7 @@ export class ProfileManager implements IProfileManager {
   }
 
   private fixEditSource(editSource: IProfileEditSource): IProfileEditSource {
-    const { globalProjectId } = globalSettingsProvider.getGlobalSettings();
+    const { globalProjectId } = globalSettingsProvider.globalSettings;
     if (globalProjectId) {
       if (
         editSource.type === 'InternalProfile' &&
@@ -267,14 +253,25 @@ export class ProfileManager implements IProfileManager {
     presetName: string,
     profileData: IProfileData,
   ): Promise<void> {
-    const filePath = projectResourceProvider.localResourceProviderImpl.getLocalPresetProfileFilePath(
-      projectId,
-      presetName,
+    const projectInfos = await projectPackageProvider.getAllProjectPackageInfos();
+    const projectInfo = projectInfos.find(
+      (info) => info.origin === 'local' && info.projectId === projectId,
     );
-    if (filePath) {
-      await this.core.saveProfileAsPreset(filePath, profileData);
-      projectResourceProvider.localResourceProviderImpl.clearCache();
-      this.presetProfileLoader.deleteProjectPresetProfileCache(projectId);
+    if (projectInfo) {
+      const preset = ProfileDataConverter.convertProfileDataToPersist(
+        profileData,
+      );
+      const newProjectInfo = produce(projectInfo, (draft) => {
+        const profile = draft.presets.find(
+          (it) => it.presetName === presetName,
+        );
+        if (profile) {
+          profile.data = preset;
+        } else {
+          draft.presets.push({ presetName: presetName, data: preset });
+        }
+      });
+      projectPackageProvider.saveLocalProjectPackageInfo(newProjectInfo);
     }
   }
 
@@ -283,7 +280,7 @@ export class ProfileManager implements IProfileManager {
     projectId: string,
     presetSpec: IPresetSpec,
   ): Promise<IProfileData> {
-    const profile = await this.presetProfileLoader.loadPresetProfileData(
+    const profile = await presetProfileLoader_loadPresetProfileData(
       origin,
       projectId,
       presetSpec,
@@ -511,6 +508,10 @@ export class ProfileManager implements IProfileManager {
   }
 
   async openUserProfilesFolder() {
-    await shell.openPath(this.core.getProfilesFolderPath());
+    const { editSource } = this.status;
+    const projectId =
+      (editSource.type === 'InternalProfile' && editSource.projectId) ||
+      undefined;
+    await shell.openPath(this.core.getProfilesFolderPath(projectId));
   }
 }

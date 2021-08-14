@@ -1,5 +1,5 @@
 import { IGlobalSettings } from '~/shared';
-import { projectResourceProvider } from '~/shell/projectResources';
+import { projectPackageProvider } from '~/shell/projectPackages/ProjectPackageProvider';
 import { globalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 
 export function setupGlobalSettingsFixer() {
@@ -11,14 +11,16 @@ export function setupGlobalSettingsFixer() {
       diff.useLocalResouces !== undefined ||
       diff.localProjectRootFolderPath !== undefined;
     if (reqCheck) {
-      const settings = globalSettingsProvider.getGlobalSettings();
+      const settings = globalSettingsProvider.globalSettings;
       const { globalProjectId } = settings;
-      const projectInfos = await projectResourceProvider.getAllProjectResourceInfos();
-      const isGlobalProjectIncludedInResources = projectInfos.some(
-        (info) => info.projectId === globalProjectId,
-      );
-      if (!isGlobalProjectIncludedInResources) {
-        globalSettingsProvider.writeGlobalSettings({ globalProjectId: '' });
+      if (globalProjectId) {
+        const projectInfos = await projectPackageProvider.getAllProjectPackageInfos();
+        const isGlobalProjectIncludedInResources = projectInfos.some(
+          (info) => info.projectId === globalProjectId,
+        );
+        if (!isGlobalProjectIncludedInResources) {
+          globalSettingsProvider.writeGlobalSettings({ globalProjectId: '' });
+        }
       }
     }
   };

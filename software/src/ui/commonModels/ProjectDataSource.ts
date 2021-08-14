@@ -1,66 +1,102 @@
+import produce from 'immer';
 import { useMemo } from 'qx';
-import { IProjectResourceInfo, IResourceOrigin } from '~/shared';
-import { appUi, ipcAgent } from '~/ui/base';
-import { readSettingsResouceOrigin } from '~/ui/commonModels/DomainHelpers';
+import {
+  fallbackProjectPackageInfo,
+  IPersistKeyboardDesign,
+  IPersistProfileData,
+  IProjectPackageInfo,
+  IResourceOrigin,
+} from '~/shared';
+import { ipcAgent } from '~/ui/base';
 import { globalSettingsModel } from '~/ui/commonModels/GlobalSettingsModel';
-import { useFetcher } from '~/ui/helpers';
+import { uiGlobalStore } from '~/ui/commonModels/UiGlobalStore';
 
-export async function fetchAllProjectResourceInfos(): Promise<
-  IProjectResourceInfo[]
-> {
-  return await ipcAgent.async.projects_getAllProjectResourceInfos();
-}
+export const projectPackagesReader = {
+  getProjectInfosGlobalProjectSelectionAffected(): IProjectPackageInfo[] {
+    const {
+      useLocalResouces,
+      globalProjectId,
+    } = globalSettingsModel.globalSettings;
 
-export function useAllProjectResourceInfos(): IProjectResourceInfo[] {
-  return useFetcher(ipcAgent.async.projects_getAllProjectResourceInfos, []);
-}
+    return uiGlobalStore.allProjectPackageInfos
+      .filter((info) => useLocalResouces || info.origin === 'online')
+      .filter(
+        (info) => globalProjectId === '' || info.projectId === globalProjectId,
+      );
+  },
+  getEditTargetProject(): IProjectPackageInfo | undefined {
+    const { globalProjectId } = globalSettingsModel.globalSettings;
+    return uiGlobalStore.allProjectPackageInfos.find(
+      (info) => info.origin === 'local' && info.projectId === globalProjectId,
+    );
+  },
+  findProjectInfo(
+    origin?: IResourceOrigin,
+    projectId?: string,
+  ): IProjectPackageInfo | undefined {
+    const resourceInfos = uiGlobalStore.allProjectPackageInfos;
+    return (
+      resourceInfos.find(
+        (info) => info.origin === origin && info.projectId === projectId,
+      ) || resourceInfos.find((info) => info.projectId === projectId)
+    );
+  },
+};
 
-export function useProjectResourcePresenceChecker(
-  origin: IResourceOrigin,
-): boolean {
-  if (!appUi.isExecutedInApp) {
-    return false;
-  }
-  const resourceInfos = useAllProjectResourceInfos();
-  return resourceInfos.some((info) => info.origin === origin);
-}
+export const projectPackagesMutations = {
+  saveLocalProject(projectInfo: IProjectPackageInfo) {
+    const index = uiGlobalStore.allProjectPackageInfos.findIndex(
+      (info) => info.sig === projectInfo.sig,
+    );
+    if (index === -1) {
+      return;
+    }
+    uiGlobalStore.allProjectPackageInfos = produce(
+      uiGlobalStore.allProjectPackageInfos,
+      (draft) => {
+        draft.splice(index, 1, projectInfo);
+      },
+    );
+    ipcAgent.async.projects_saveLocalProjectPackageInfo(projectInfo);
+  },
+  saveLocalProjectLayout(layoutName: string, design: IPersistKeyboardDesign) {
+    const projectInfo = projectPackagesReader.getEditTargetProject();
+    if (!projectInfo) {
+      return;
+    }
+    const newProjectInfo = produce(projectInfo, (draft) => {
+      const layout = draft.layouts.find((la) => la.layoutName === layoutName);
+      if (layout) {
+        layout.data = design;
+      } else {
+        draft.layouts.push({ layoutName, data: design });
+      }
+    });
+    projectPackagesMutations.saveLocalProject(newProjectInfo);
+  },
+  saveLocalProjectPreset(presetName: string, preset: IPersistProfileData) {
+    const projectInfo = projectPackagesReader.getEditTargetProject();
+    if (!projectInfo) {
+      return;
+    }
+    const newProjectInfo = produce(projectInfo, (draft) => {
+      const profile = draft.presets.find((la) => la.presetName === presetName);
+      if (profile) {
+        profile.data = preset;
+      } else {
+        draft.presets.push({ presetName: presetName, data: preset });
+      }
+    });
+    projectPackagesMutations.saveLocalProject(newProjectInfo);
+  },
+};
 
-export function useProjectResourceInfos() {
-  return useAllProjectResourceInfos();
-}
-
-export function useProjectResourceInfosBasedOnGlobalSettings() {
-  const origin = readSettingsResouceOrigin(globalSettingsModel.globalSettings);
-  const allResourceInfos = useAllProjectResourceInfos();
-  return useMemo(
-    () => allResourceInfos.filter((info) => info.origin === origin),
-    [allResourceInfos],
-  );
-}
-
-export function useLocalProjectResourceInfos(): IProjectResourceInfo[] {
-  const allResourceInfos = useAllProjectResourceInfos();
-  return useMemo(
-    () => allResourceInfos.filter((info) => info.origin === 'local'),
-    [allResourceInfos],
-  );
-}
-
-export function useProjectInfo(
-  origin?: IResourceOrigin,
-  projectId?: string,
-): IProjectResourceInfo | undefined {
-  const resourceInfos = useAllProjectResourceInfos();
-  return (
-    resourceInfos.find(
-      (info) => info.origin === origin && info.projectId === projectId,
-    ) || resourceInfos.find((info) => info.projectId === projectId)
-  );
-}
-
-export function projectResourceInfoFilter_affectGlobalProjectSelection(
-  info: IProjectResourceInfo,
-): boolean {
-  const { globalProjectId } = globalSettingsModel.globalSettings;
-  return globalProjectId === '' || info.projectId === globalProjectId;
-}
+export const projectPackagesHooks = {
+  useEditTargetProject(): IProjectPackageInfo {
+    return (
+      useMemo(projectPackagesReader.getEditTargetProject, [
+        uiGlobalStore.allProjectPackageInfos,
+      ]) || fallbackProjectPackageInfo
+    );
+  },
+};

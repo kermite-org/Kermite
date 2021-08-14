@@ -1,32 +1,47 @@
-import { useEffect, useLocal } from 'qx';
-import { fallbackProfileData, IProfileData } from '~/shared';
+import { useMemo } from 'qx';
+import {
+  fallbackProfileData,
+  IProfileData,
+  IProjectPackageInfo,
+} from '~/shared';
 import {
   getPresetSpecFromPresetKey,
   getProjectOriginAndIdFromSig,
 } from '~/shared/funcs/DomainRelatedHelpers';
-import { ipcAgent } from '~/ui/base';
+import { ProfileDataConverter } from '~/shared/modules/ProfileDataConverter';
 
 export function useProfileDataLoaded(
   projectKey: string,
   presetKey: string,
+  resourceInfos: IProjectPackageInfo[],
 ): IProfileData {
-  const local = useLocal({ profileData: fallbackProfileData });
-  useEffect(() => {
+  return useMemo(() => {
     if (projectKey && presetKey) {
       const { origin, projectId } = getProjectOriginAndIdFromSig(projectKey);
       const presetSpec = getPresetSpecFromPresetKey(presetKey);
-      (async () => {
-        const _profileData = await ipcAgent.async.projects_loadPresetProfile(
-          origin,
-          projectId,
-          presetSpec,
-        );
-        local.profileData = _profileData || fallbackProfileData;
-      })();
-    } else {
-      local.profileData = fallbackProfileData;
+      const info = resourceInfos.find(
+        (info) => info.origin === origin && info.projectId === projectId,
+      );
+      if (info) {
+        if (presetSpec.type === 'preset') {
+          const profile = info.presets.find(
+            (profile) => profile.presetName === presetSpec.presetName,
+          );
+          if (profile) {
+            return ProfileDataConverter.convertProfileDataFromPersist(
+              profile.data,
+            );
+          }
+        } else {
+          const layout = info.layouts.find(
+            (layout) => layout.layoutName === presetSpec.layoutName,
+          );
+          if (layout) {
+            return { ...fallbackProfileData, keyboardDesign: layout.data };
+          }
+        }
+      }
     }
+    return fallbackProfileData;
   }, [projectKey, presetKey]);
-
-  return local.profileData;
 }

@@ -42,6 +42,7 @@ DIS = $(OUT_DIR)/$(CORE_NAME).dis
 LST = $(OUT_DIR)/$(CORE_NAME).lst
 MAP = $(OUT_DIR)/$(CORE_NAME).map
 UF2 = $(OUT_DIR)/$(CORE_NAME).uf2
+PATCHED_UF2 = $(OUT_DIR)/$(CORE_NAME)_patched.uf2
 
 CC = arm-none-eabi-gcc
 AS = arm-none-eabi-gcc
@@ -271,6 +272,10 @@ size: $(OBJS)
 
 flash: $(UF2)
 	cp $(UF2) $(RP2040_UF2_TARGET_DRIVE_PATH)
+
+flash_patched_uf2: $(PATCHED_UF2)
+	cp $(PATCHED_UF2) $(RP2040_UF2_TARGET_DRIVE_PATH)
+
 
 flash_via_swd: $(ELF)
 	openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "program $(ELF) verify reset exit"

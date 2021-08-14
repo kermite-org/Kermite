@@ -1,8 +1,11 @@
 import {
+  IBootloaderType,
+  IFirmwareTargetDevice,
   IKeyboardDeviceAttributes,
   IPresetSpec,
   IPresetType,
   IResourceOrigin,
+  IStandardBaseFirmwareType,
 } from '~/shared/defs';
 import { generateNumberSequence } from '~/shared/funcs/Utils';
 
@@ -67,4 +70,41 @@ export function getProjectKeyFromDeviceAttributes(
   deviceAttrs: IKeyboardDeviceAttributes,
 ): string {
   return `${deviceAttrs.origin}#${deviceAttrs.projectId}`;
+}
+
+export function splitProjectProfileName(
+  profileName: string,
+): { folderPart: string; filePart: string } {
+  const [folderPart, filePart] = profileName.split('/');
+  return { folderPart, filePart };
+}
+
+export function joinProjectProfileName(
+  folderPart: string,
+  filePart: string,
+): string {
+  return `${folderPart}/${filePart}`;
+}
+
+export function checkDeviceBootloaderMatch(
+  bootloaderType: IBootloaderType,
+  firmwareTargetDevice: IFirmwareTargetDevice,
+): boolean {
+  const isBootloaderAvr =
+    bootloaderType === 'avrCaterina' || bootloaderType === 'avrDfu';
+  const isBootloaderRp2040 = bootloaderType === 'rp2040uf2';
+  return (
+    (isBootloaderAvr && firmwareTargetDevice === 'atmega32u4') ||
+    (isBootloaderRp2040 && firmwareTargetDevice === 'rp2040')
+  );
+}
+
+export function getFirmwareTargetDeviceFromBaseFirmwareType(
+  baseFirmwareType: IStandardBaseFirmwareType,
+): IFirmwareTargetDevice {
+  if (baseFirmwareType === 'AvrUnified' || baseFirmwareType === 'AvrSplit') {
+    return 'atmega32u4';
+  } else {
+    return 'rp2040';
+  }
 }

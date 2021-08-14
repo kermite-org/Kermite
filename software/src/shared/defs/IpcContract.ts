@@ -1,23 +1,21 @@
 import { IAppErrorData } from '~/shared/defs/CustomErrors';
 import {
   IApplicationVersionInfo,
-  IProfileManagerCommand,
-  ILayoutManagerCommand,
-  IProjectResourceInfo,
-  IResourceOrigin,
-  IProjectCustomDefinition,
-  IPresetSpec,
-  IServerPorfileInfo,
   IAppWindowStatus,
-  IProfileManagerStatus,
-  ILayoutManagerStatus,
-  IDeviceSelectionStatus,
-  IRealtimeKeyboardEvent,
-  IKeyboardDeviceStatus,
   IBootloaderDeviceDetectionStatus,
+  ICustomFirmwareInfo,
+  IDeviceSelectionStatus,
+  IKeyboardDeviceStatus,
+  ILayoutManagerCommand,
+  ILayoutManagerStatus,
   IProfileEntry,
+  IProfileManagerCommand,
+  IProfileManagerStatus,
+  IProjectPackageInfo,
+  IRealtimeKeyboardEvent,
+  IResourceOrigin,
+  IServerPorfileInfo,
 } from '~/shared/defs/DomainTypes';
-import { IPersistKeyboardDesign } from '~/shared/defs/KeyboardDesign';
 import { IGlobalSettings, IKeyboardConfig } from './ConfigTypes';
 import { IProfileData } from './ProfileData';
 
@@ -62,22 +60,11 @@ export interface IAppIpcContract {
     config_getProjectRootDirectoryPath(): Promise<string>;
     config_checkLocalRepositoryFolderPath(path: string): Promise<boolean>;
 
-    projects_getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
-    projects_getProjectCustomDefinition(
-      origin: IResourceOrigin,
-      projectId: string,
-      variationName: string,
-    ): Promise<IProjectCustomDefinition | undefined>;
-    projects_loadPresetProfile(
-      origin: IResourceOrigin,
-      projectId: string,
-      presetSpec: IPresetSpec,
-    ): Promise<IProfileData | undefined>;
-    projects_loadKeyboardShape(
-      origin: IResourceOrigin,
-      projectId: string,
-      layoutName: string,
-    ): Promise<IPersistKeyboardDesign | undefined>;
+    projects_getAllProjectPackageInfos(): Promise<IProjectPackageInfo[]>;
+    projects_saveLocalProjectPackageInfo(
+      info: IProjectPackageInfo,
+    ): Promise<void>;
+    projects_getAllCustomFirmwareInfos(): Promise<ICustomFirmwareInfo[]>;
 
     presetHub_getServerProjectIds(): Promise<string[]>;
     presetHub_getServerProfiles(
@@ -118,7 +105,6 @@ export interface IAppIpcContract {
     device_keyboardDeviceStatusEvents: Partial<IKeyboardDeviceStatus>;
 
     firmup_deviceDetectionEvents: IBootloaderDeviceDetectionStatus;
-    projects_layoutFileUpdationEvents: { projectId: string };
 
     config_keyboardConfigEvents: Partial<IKeyboardConfig>;
     config_globalSettingsEvents: Partial<IGlobalSettings>;
