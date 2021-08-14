@@ -5,18 +5,11 @@ import {
   IPersistKeyboardDesign,
   IPersistProfileData,
   IProjectPackageInfo,
-  IProjectResourceInfo,
   IResourceOrigin,
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
 import { globalSettingsModel } from '~/ui/commonModels/GlobalSettingsModel';
 import { uiGlobalStore } from '~/ui/commonModels/UiGlobalStore';
-
-export async function fetchAllProjectResourceInfos(): Promise<
-  IProjectResourceInfo[]
-> {
-  return await ipcAgent.async.projects_getAllProjectResourceInfos();
-}
 
 export const projectPackagesReader = {
   getProjectInfosGlobalProjectSelectionAffected(): IProjectPackageInfo[] {

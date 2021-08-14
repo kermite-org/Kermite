@@ -11,7 +11,8 @@ import {
 import { ProjectResourceProviderImpl_Local } from '~/shell/projectResources/ProjectResourceProviderImpl_Local';
 import { ProjectResourceProviderImpl_Remote } from '~/shell/projectResources/ProjectResourceProviderImpl_Remote';
 
-class ProjectResourceProvider implements IProjectResourceProvider {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+class ProjectResourceProvider_OBSOLETE implements IProjectResourceProvider {
   localResourceProviderImpl = new ProjectResourceProviderImpl_Local();
   remoteResourceProviderImpl = new ProjectResourceProviderImpl_Remote();
 
@@ -76,5 +77,3 @@ class ProjectResourceProvider implements IProjectResourceProvider {
   //   return await providerImpl.loadProjectFirmwareFile(projectId, variationName);
   // }
 }
-
-export const projectResourceProvider = new ProjectResourceProvider();

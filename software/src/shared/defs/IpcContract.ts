@@ -11,14 +11,11 @@ import {
   IProfileEntry,
   IProfileManagerCommand,
   IProfileManagerStatus,
-  IProjectCustomDefinition,
   IProjectPackageInfo,
-  IProjectResourceInfo,
   IRealtimeKeyboardEvent,
   IResourceOrigin,
   IServerPorfileInfo,
 } from '~/shared/defs/DomainTypes';
-import { IPersistKeyboardDesign } from '~/shared/defs/KeyboardDesign';
 import { IGlobalSettings, IKeyboardConfig } from './ConfigTypes';
 import { IProfileData } from './ProfileData';
 
@@ -62,18 +59,6 @@ export interface IAppIpcContract {
 
     config_getProjectRootDirectoryPath(): Promise<string>;
     config_checkLocalRepositoryFolderPath(path: string): Promise<boolean>;
-
-    projects_getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
-    projects_getProjectCustomDefinition(
-      origin: IResourceOrigin,
-      projectId: string,
-      variationName: string,
-    ): Promise<IProjectCustomDefinition | undefined>;
-    projects_loadKeyboardShape(
-      origin: IResourceOrigin,
-      projectId: string,
-      layoutName: string,
-    ): Promise<IPersistKeyboardDesign | undefined>;
 
     projects_getAllProjectPackageInfos(): Promise<IProjectPackageInfo[]>;
     projects_saveLocalProjectPackageInfo(
