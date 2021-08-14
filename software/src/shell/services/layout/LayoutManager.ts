@@ -17,9 +17,7 @@ import {
   vString,
 } from '~/shared/modules/SchemaValidationHelper';
 import { applicationStorage } from '~/shell/base';
-import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { createEventPort } from '~/shell/funcs';
-import { FileWather } from '~/shell/funcs/FileWatcher';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { projectPackageProvider } from '~/shell/projectPackages/ProjectPackageProvider';
 import { projectResourceProvider } from '~/shell/projectResources';
@@ -46,8 +44,6 @@ const layoutEditSourceSchema = vSchemaOneOf([
 
 export class LayoutManager implements ILayoutManager {
   constructor(private profileManager: IProfileManager) {}
-
-  private fileWatcher = new FileWather();
 
   private status: ILayoutManagerStatus = {
     editSource: {
@@ -90,7 +86,6 @@ export class LayoutManager implements ILayoutManager {
 
   private finalizeOnLastDisconnect = () => {
     applicationStorage.writeItem('layoutEditSource', this.status.editSource);
-    this.fileWatcher.unobserveFile();
   };
 
   statusEvents = createEventPort<Partial<ILayoutManagerStatus>>({
@@ -117,16 +112,6 @@ export class LayoutManager implements ILayoutManager {
     this.statusEvents.emit(newStatusPartial);
   }
 
-  private onObservedFileChanged = async () => {
-    const filePath = this.getCurrentEditLayoutFilePath();
-    if (filePath) {
-      const loadedDesign = await LayoutFileLoader.loadLayoutFromFile(filePath);
-      this.setStatus({
-        loadedDesign,
-      });
-    }
-  };
-
   // eslint-disable-next-line @typescript-eslint/require-await
   private async createNewLayout() {
     this.setStatus({
@@ -148,10 +133,6 @@ export class LayoutManager implements ILayoutManager {
 
   private async loadLayoutFromFile(filePath: string) {
     const loadedDesign = await LayoutFileLoader.loadLayoutFromFile(filePath);
-    this.fileWatcher.observeFile(
-      filePath,
-      withAppErrorHandler(this.onObservedFileChanged),
-    );
     this.setStatus({
       editSource: { type: 'File', filePath },
       loadedDesign,
