@@ -14,9 +14,8 @@ import {
   developmentModule_ActionReceiver,
   projectPackageModule,
 } from '~/shell/modules';
+import { globalSettingsModule } from '~/shell/modules/GlobalSettingsModule';
 import { checkLocalRepositoryFolder } from '~/shell/projectResources/LocalResourceHelper';
-import { setupGlobalSettingsFixer } from '~/shell/services/config/GlobalSettingsFixer';
-import { globalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
 import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
 import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStatic';
@@ -121,16 +120,12 @@ export class ApplicationRoot {
         }
         return false;
       },
-      config_getGlobalSettings: async () =>
-        globalSettingsProvider.globalSettings,
-      config_writeGlobalSettings: async (settings) =>
-        globalSettingsProvider.writeGlobalSettings(settings),
+      config_getGlobalSettings: async () => coreState.globalSettings,
       config_getProjectRootDirectoryPath: async () => {
         if (appEnv.isDevelopment) {
           return pathResolve('..');
         } else {
-          const settings = globalSettingsProvider.globalSettings;
-          return settings.localProjectRootFolderPath;
+          return coreState.globalSettings.localProjectRootFolderPath;
         }
       },
       config_checkLocalRepositoryFolderPath: async (path) =>
@@ -186,8 +181,6 @@ export class ApplicationRoot {
 
       config_keyboardConfigEvents: (cb) =>
         this.keyboardConfigProvider.keyboardConfigEventPort.subscribe(cb),
-      config_globalSettingsEvents: (cb) =>
-        globalSettingsProvider.globalConfigEventPort.subscribe(cb),
       global_coreStateEvents: (cb) =>
         coreStateManager.coreStateEventPort.subscribe(cb),
     });
@@ -195,9 +188,11 @@ export class ApplicationRoot {
 
   private async setupActionReceivers() {
     coreActionDistributor.addReceivers(
+      globalSettingsModule,
       developmentModule_ActionReceiver,
       projectPackageModule,
     );
+    await dispatchCoreAction({ loadGlobalSettings: 1 });
     await dispatchCoreAction({ loadAllProjectPackages: 1 });
     await dispatchCoreAction({ loadAllCustomFirmwareInfos: 1 });
   }
@@ -206,12 +201,10 @@ export class ApplicationRoot {
     await executeWithFatalErrorHandler(async () => {
       console.log(`initialize services`);
       await applicationStorage.initializeAsync();
-      globalSettingsProvider.initialize();
-      await this.profileManager.initializeAsync();
       await this.setupActionReceivers();
+      await this.profileManager.initializeAsync();
       this.setupIpcBackend();
       this.windowWrapper.initialize();
-      setupGlobalSettingsFixer();
     });
   }
 

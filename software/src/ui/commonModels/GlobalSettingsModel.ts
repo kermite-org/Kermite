@@ -1,8 +1,11 @@
-import { globalSettingsDefault, IGlobalSettings } from '~/shared';
-import { ipcAgent } from '~/ui/base';
+import { IGlobalSettings } from '~/shared';
+import { dispatchCoreAction } from '~/ui/commonModels/ActionDispatcher';
+import { uiState } from '~/ui/commonModels/UiState';
 
 class GlobalSettingsModel {
-  globalSettings: IGlobalSettings = globalSettingsDefault;
+  get globalSettings() {
+    return uiState.core.globalSettings;
+  }
 
   get isLocalProjectsAvailable(): boolean {
     const {
@@ -42,24 +45,9 @@ class GlobalSettingsModel {
     key: K,
     value: IGlobalSettings[K],
   ) {
-    ipcAgent.async.config_writeGlobalSettings({ [key]: value });
-  }
-
-  private onBackendGlobalSettingsChange = (diff: Partial<IGlobalSettings>) => {
-    this.globalSettings = { ...this.globalSettings, ...diff };
-  };
-
-  async initialize() {
-    this.globalSettings = await ipcAgent.async.config_getGlobalSettings();
-    ipcAgent.events.config_globalSettingsEvents.subscribe(
-      this.onBackendGlobalSettingsChange,
-    );
-  }
-
-  terminate() {
-    ipcAgent.events.config_globalSettingsEvents.unsubscribe(
-      this.onBackendGlobalSettingsChange,
-    );
+    dispatchCoreAction({
+      writeGlobalSettings: { partialConfig: { [key]: value } },
+    });
   }
 }
 

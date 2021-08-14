@@ -4,7 +4,6 @@ import {
   clampValue,
   duplicateObjectByJsonStringifyParse,
   fallbackProfileData,
-  IGlobalSettings,
   IPersistKeyboardDesign,
   IPresetSpec,
   IProfileData,
@@ -23,8 +22,11 @@ import {
 } from '~/shared/modules/SchemaValidationHelper';
 import { applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
-import { coreState, dispatchCoreAction } from '~/shell/global';
-import { globalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
+import {
+  coreState,
+  coreStateManager,
+  dispatchCoreAction,
+} from '~/shell/global';
 import { presetProfileLoader_loadPresetProfileData } from '~/shell/services/profile/PresetProfileLoader';
 import { IProfileManager } from './Interfaces';
 import { ProfileManagerCore } from './ProfileManagerCore';
@@ -70,6 +72,8 @@ export class ProfileManager implements IProfileManager {
 
   private core: ProfileManagerCore;
 
+  private _globalProjectId: string = '';
+
   constructor() {
     this.core = new ProfileManagerCore();
   }
@@ -79,6 +83,7 @@ export class ProfileManager implements IProfileManager {
   });
 
   async initializeAsync() {
+    this._globalProjectId = coreState.globalSettings.globalProjectId;
     try {
       await this.core.ensureProfilesDirectoryExists();
       await this.reEnumerateAllProfileEntries();
@@ -92,21 +97,18 @@ export class ProfileManager implements IProfileManager {
     } catch (error) {
       console.error(error);
     }
-
-    globalSettingsProvider.globalConfigEventPort.subscribe(
-      this.onGlobalSettingsChange,
-    );
+    coreStateManager.coreStateEventPort.subscribe(this.onCoreStateChange);
   }
 
   terminate() {
-    globalSettingsProvider.globalConfigEventPort.unsubscribe(
-      this.onGlobalSettingsChange,
-    );
+    coreStateManager.coreStateEventPort.unsubscribe(this.onCoreStateChange);
   }
 
-  private onGlobalSettingsChange = (settings: Partial<IGlobalSettings>) => {
-    if (settings.globalProjectId !== undefined) {
+  private onCoreStateChange = () => {
+    const { globalProjectId } = coreState.globalSettings;
+    if (globalProjectId !== this._globalProjectId) {
       this.patchStatusOnGlobalProjectIdChange();
+      this._globalProjectId = globalProjectId;
     }
   };
 
@@ -156,7 +158,7 @@ export class ProfileManager implements IProfileManager {
   }
 
   private getVisibleProfiles(allProfiles: IProfileEntry[]): IProfileEntry[] {
-    const { globalProjectId } = globalSettingsProvider.globalSettings;
+    const { globalProjectId } = coreState.globalSettings;
     if (globalProjectId) {
       return allProfiles.filter((it) => it.projectId === globalProjectId);
     } else {
@@ -165,7 +167,7 @@ export class ProfileManager implements IProfileManager {
   }
 
   private fixEditSource(editSource: IProfileEditSource): IProfileEditSource {
-    const { globalProjectId } = globalSettingsProvider.globalSettings;
+    const { globalProjectId } = coreState.globalSettings;
     if (globalProjectId) {
       if (
         editSource.type === 'InternalProfile' &&

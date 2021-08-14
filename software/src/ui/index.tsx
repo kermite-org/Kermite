@@ -2,7 +2,7 @@ import { jsx, render } from 'qx';
 import { debounce } from '~/shared';
 import { resourceDevelopmentEntry } from '~/ui/ResourceDevelopment';
 import { appUi, ipcAgent } from '~/ui/base';
-import { globalSettingsModel, uiState, uiStatusModel } from '~/ui/commonModels';
+import { uiState, uiStatusModel } from '~/ui/commonModels';
 import { SiteRoot } from '~/ui/root/SiteRoot';
 
 async function start() {
@@ -10,7 +10,7 @@ async function start() {
   const appDiv = document.getElementById('app');
 
   uiStatusModel.initialize();
-  await globalSettingsModel.initialize();
+  uiState.core.globalSettings = await ipcAgent.async.config_getGlobalSettings();
   uiState.core.allProjectPackageInfos = await ipcAgent.async.projects_getAllProjectPackageInfos();
   uiState.core.allCustomFirmwareInfos = await ipcAgent.async.projects_getAllCustomFirmwareInfos();
 
@@ -20,7 +20,6 @@ async function start() {
   window.addEventListener('beforeunload', () => {
     render(() => <div />, appDiv);
     uiStatusModel.finalize();
-    globalSettingsModel.terminate();
   });
 }
 
