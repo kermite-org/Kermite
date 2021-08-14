@@ -10,8 +10,10 @@ import {
   coreStateManager,
   dispatchCoreAction,
 } from '~/shell/global';
-import { developmentModule_ActionReceiver } from '~/shell/modules/DevelopmentModule';
-import { projectPackageModule } from '~/shell/modules/ProjectPackageModule';
+import {
+  developmentModule_ActionReceiver,
+  projectPackageModule,
+} from '~/shell/modules';
 import { checkLocalRepositoryFolder } from '~/shell/projectResources/LocalResourceHelper';
 import { setupGlobalSettingsFixer } from '~/shell/services/config/GlobalSettingsFixer';
 import { globalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
