@@ -1,4 +1,5 @@
 import { shell } from 'electron';
+import produce from 'immer';
 import {
   ILayoutManagerCommand,
   IProjectLayoutsInfo,
@@ -232,23 +233,17 @@ export class LayoutManager implements ILayoutManager {
     layoutName: string,
     design: IPersistKeyboardDesign,
   ) {
-    const filePath = projectResourceProvider.localResourceProviderImpl.getLocalLayoutFilePath(
-      projectId,
-      layoutName,
-    );
-    if (filePath) {
-      await LayoutFileLoader.saveLayoutToFile(filePath, design);
-      // this.addLayoutNameToProjectInfoSourceIfNotExist(projectId, layoutName);
-      // await projectResourceProvider.reenumerateResourceInfos();
-      projectResourceProvider.localResourceProviderImpl.clearCache();
-      this.setStatus({
-        editSource: {
-          type: 'ProjectLayout',
-          projectId,
-          layoutName,
-        },
-        projectLayoutsInfos: await this.getAllProjectLayoutsInfos(),
+    const projectInfo = await this.getProjectInfo(projectId);
+    if (projectInfo) {
+      const newProjectInfo = produce(projectInfo, (draft) => {
+        const layout = draft.layouts.find((it) => it.layoutName === layoutName);
+        if (layout) {
+          layout.data = design;
+        } else {
+          draft.layouts.push({ layoutName, data: design });
+        }
       });
+      projectPackageProvider.saveLocalProjectPackageInfo(newProjectInfo);
     }
   }
 

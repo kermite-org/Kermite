@@ -263,7 +263,7 @@ export class ProfileManager implements IProfileManager {
       );
       const newProjectInfo = produce(projectInfo, (draft) => {
         const profile = draft.presets.find(
-          (la) => la.presetName === presetName,
+          (it) => it.presetName === presetName,
         );
         if (profile) {
           profile.data = preset;
