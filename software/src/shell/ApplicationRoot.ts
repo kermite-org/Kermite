@@ -6,6 +6,7 @@ import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
 import {
   coreActionDistributor,
+  coreState,
   coreStateManager,
   dispatchCoreAction,
 } from '~/shell/global';
@@ -87,9 +88,7 @@ export class ApplicationRoot {
         this.profileManager.openUserProfilesFolder(),
       layout_executeLayoutManagerCommands: (commands) =>
         this.layoutManager.executeCommands(commands),
-      // layout_getAllProjectLayoutsInfos: () =>
-      //   this.layoutManager.getAllProjectLayoutsInfos(),
-      layout_showEditLayoutFileInFiler: () =>
+      layout_showEditLayoutFileInFiler: async () =>
         this.layoutManager.showEditLayoutFileInFiler(),
       device_connectToDevice: async (path) =>
         this.deviceService.selectTargetDevice(path),
@@ -102,8 +101,8 @@ export class ApplicationRoot {
           projectId,
           variationName,
         ),
-      projects_getAllProjectPackageInfos: () =>
-        projectPackageProvider.getAllProjectPackageInfos(),
+      projects_getAllProjectPackageInfos: async () =>
+        coreState.allProjectPackageInfos,
       projects_saveLocalProjectPackageInfo: (info) =>
         projectPackageProvider.saveLocalProjectPackageInfo(info),
       projects_getAllCustomFirmwareInfos: () =>

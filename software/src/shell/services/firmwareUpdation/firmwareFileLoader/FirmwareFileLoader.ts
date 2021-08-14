@@ -15,7 +15,7 @@ import {
   pathBasename,
   pathDirname,
 } from '~/shell/funcs';
-import { projectPackageProvider } from '~/shell/projectPackages/ProjectPackageProvider';
+import { coreState } from '~/shell/global';
 import { IFirmwareBinaryFileSpec } from '~/shell/projectResources';
 import { applyStandardFirmwareBinaryPatch } from '~/shell/services/firmwareUpdation/firmwareBinaryPatchApplier/FirmwareBinaryPatchApplier';
 
@@ -120,7 +120,7 @@ export async function firmwareFileLoader_loadFirmwareFile(
   projectId: string,
   variationName: string,
 ): Promise<IFirmwareBinaryFileSpec | undefined> {
-  const packageInfos = await projectPackageProvider.getAllProjectPackageInfos();
+  const packageInfos = coreState.allProjectPackageInfos;
   const packageInfo = packageInfos.find(
     (info) => info.origin === origin && info.projectId === projectId,
   );

@@ -23,6 +23,7 @@ import {
 } from '~/shared/modules/SchemaValidationHelper';
 import { applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
+import { coreState } from '~/shell/global';
 import { projectPackageProvider } from '~/shell/projectPackages/ProjectPackageProvider';
 import { globalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 import { presetProfileLoader_loadPresetProfileData } from '~/shell/services/profile/PresetProfileLoader';
@@ -248,12 +249,12 @@ export class ProfileManager implements IProfileManager {
     });
   }
 
-  private async saveAsProjectPreset(
+  private saveAsProjectPreset(
     projectId: string,
     presetName: string,
     profileData: IProfileData,
-  ): Promise<void> {
-    const projectInfos = await projectPackageProvider.getAllProjectPackageInfos();
+  ) {
+    const projectInfos = coreState.allProjectPackageInfos;
     const projectInfo = projectInfos.find(
       (info) => info.origin === 'local' && info.projectId === projectId,
     );
@@ -275,12 +276,12 @@ export class ProfileManager implements IProfileManager {
     }
   }
 
-  private async createProfileImpl(
+  private createProfileImpl(
     origin: IResourceOrigin,
     projectId: string,
     presetSpec: IPresetSpec,
-  ): Promise<IProfileData> {
-    const profile = await presetProfileLoader_loadPresetProfileData(
+  ): IProfileData {
+    const profile = presetProfileLoader_loadPresetProfileData(
       origin,
       projectId,
       presetSpec,
@@ -306,11 +307,7 @@ export class ProfileManager implements IProfileManager {
     if (this.hasProfileWithName(profileName)) {
       return false;
     }
-    const profileData = await this.createProfileImpl(
-      origin,
-      projectId,
-      presetSpec,
-    );
+    const profileData = this.createProfileImpl(origin, projectId, presetSpec);
     await this.core.saveProfile(profileName, profileData);
     await this.reEnumerateAllProfileEntries();
     this.setStatus({
@@ -323,16 +320,12 @@ export class ProfileManager implements IProfileManager {
     });
   }
 
-  private async createProfileUnnamed(
+  private createProfileUnnamed(
     origin: IResourceOrigin,
     projectId: string,
     presetSpec: IPresetSpec,
   ) {
-    const profileData = await this.createProfileImpl(
-      origin,
-      projectId,
-      presetSpec,
-    );
+    const profileData = this.createProfileImpl(origin, projectId, presetSpec);
     this.setStatus({
       editSource: { type: 'ProfileNewlyCreated' },
       loadedProfileData: profileData,
@@ -457,7 +450,7 @@ export class ProfileManager implements IProfileManager {
           cmd.creatProfile.presetSpec,
         );
       } else {
-        await this.createProfileUnnamed(
+        this.createProfileUnnamed(
           cmd.creatProfile.targetProjectOrigin,
           cmd.creatProfile.targetProjectId,
           cmd.creatProfile.presetSpec,
@@ -485,7 +478,7 @@ export class ProfileManager implements IProfileManager {
       await this.saveCurrentProfile(cmd.saveCurrentProfile.profileData);
     } else if (cmd.saveAsProjectPreset) {
       const { projectId, presetName, profileData } = cmd.saveAsProjectPreset;
-      await this.saveAsProjectPreset(projectId, presetName, profileData);
+      this.saveAsProjectPreset(projectId, presetName, profileData);
     } else if (cmd.importFromFile) {
       await this.importFromFile(cmd.importFromFile.filePath);
     } else if (cmd.exportToFile) {

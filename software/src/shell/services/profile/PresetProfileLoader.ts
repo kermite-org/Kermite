@@ -1,12 +1,12 @@
 import {
-  IProfileData,
   duplicateObjectByJsonStringifyParse,
   fallbackProfileData,
   IPresetSpec,
+  IProfileData,
   IResourceOrigin,
 } from '~/shared';
 import { ProfileDataConverter } from '~/shared/modules/ProfileDataConverter';
-import { projectPackageProvider } from '~/shell/projectPackages/ProjectPackageProvider';
+import { coreState } from '~/shell/global';
 // import { IPresetProfileLoader } from '~/shell/services/profile/Interfaces';
 
 // export class PresetProfileLoader implements IPresetProfileLoader {
@@ -65,12 +65,12 @@ import { projectPackageProvider } from '~/shell/projectPackages/ProjectPackagePr
 //   // }
 // }
 
-export async function presetProfileLoader_loadPresetProfileData(
+export function presetProfileLoader_loadPresetProfileData(
   origin: IResourceOrigin,
   projectId: string,
   presetSpec: IPresetSpec,
-): Promise<IProfileData | undefined> {
-  const projectInfos = await projectPackageProvider.getAllProjectPackageInfos();
+): IProfileData | undefined {
+  const projectInfos = coreState.allProjectPackageInfos;
   const projectInfo = projectInfos.find(
     (info) => info.origin === origin && info.projectId === projectId,
   );
