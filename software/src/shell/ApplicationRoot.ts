@@ -5,7 +5,6 @@ import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
 import { projectPackageProvider } from '~/shell/projectPackages/ProjectPackageProvider';
-import { projectResourceProvider } from '~/shell/projectResources';
 import { checkLocalRepositoryFolder } from '~/shell/projectResources/LocalResourceHelper';
 import { setupGlobalSettingsFixer } from '~/shell/services/config/GlobalSettingsFixer';
 import { globalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
@@ -85,12 +84,6 @@ export class ApplicationRoot {
       //   this.layoutManager.getAllProjectLayoutsInfos(),
       layout_showEditLayoutFileInFiler: () =>
         this.layoutManager.showEditLayoutFileInFiler(),
-      projects_loadKeyboardShape: (origin, projectId, layoutName) =>
-        projectResourceProvider.loadProjectLayout(
-          origin,
-          projectId,
-          layoutName,
-        ),
       device_connectToDevice: async (path) =>
         this.deviceService.selectTargetDevice(path),
       device_setCustomParameterValue: async (index, value) =>
@@ -98,14 +91,6 @@ export class ApplicationRoot {
       device_resetParaemters: async () => this.deviceService.resetParameters(),
       firmup_uploadFirmware: (origin, projectId, variationName) =>
         this.firmwareUpdationService.writeFirmware(
-          origin,
-          projectId,
-          variationName,
-        ),
-      projects_getAllProjectResourceInfos: () =>
-        projectResourceProvider.getAllProjectResourceInfos(),
-      projects_getProjectCustomDefinition: (origin, projectId, variationName) =>
-        projectResourceProvider.getProjectCustomDefinition(
           origin,
           projectId,
           variationName,
