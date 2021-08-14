@@ -17,9 +17,8 @@ import {
 } from '~/shared/modules/SchemaValidationHelper';
 import { appEnv, applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
-import { coreState } from '~/shell/global';
+import { coreState, dispatchCoreAction } from '~/shell/global';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
-import { projectPackageProvider } from '~/shell/projectPackages/ProjectPackageProvider';
 import { ILayoutManager } from '~/shell/services/layout/Interfaces';
 import { IProfileManager } from '~/shell/services/profile/Interfaces';
 
@@ -187,7 +186,9 @@ export class LayoutManager implements ILayoutManager {
           draft.layouts.push({ layoutName, data: design });
         }
       });
-      projectPackageProvider.saveLocalProjectPackageInfo(newProjectInfo);
+      dispatchCoreAction({
+        saveLocalProjectPackageInfo: { info: newProjectInfo },
+      });
     }
   }
 

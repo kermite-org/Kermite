@@ -1,18 +1,18 @@
 import { shell } from 'electron';
 import produce from 'immer';
 import {
-  IProfileManagerStatus,
-  IProfileData,
+  clampValue,
   duplicateObjectByJsonStringifyParse,
   fallbackProfileData,
-  clampValue,
-  IProfileManagerCommand,
-  IPresetSpec,
-  IResourceOrigin,
-  IProfileEditSource,
-  IPersistKeyboardDesign,
-  IProfileEntry,
   IGlobalSettings,
+  IPersistKeyboardDesign,
+  IPresetSpec,
+  IProfileData,
+  IProfileEditSource,
+  IProfileEntry,
+  IProfileManagerCommand,
+  IProfileManagerStatus,
+  IResourceOrigin,
 } from '~/shared';
 import { ProfileDataConverter } from '~/shared/modules/ProfileDataConverter';
 import {
@@ -23,8 +23,7 @@ import {
 } from '~/shared/modules/SchemaValidationHelper';
 import { applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
-import { coreState } from '~/shell/global';
-import { projectPackageProvider } from '~/shell/projectPackages/ProjectPackageProvider';
+import { coreState, dispatchCoreAction } from '~/shell/global';
 import { globalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 import { presetProfileLoader_loadPresetProfileData } from '~/shell/services/profile/PresetProfileLoader';
 import { IProfileManager } from './Interfaces';
@@ -272,7 +271,9 @@ export class ProfileManager implements IProfileManager {
           draft.presets.push({ presetName: presetName, data: preset });
         }
       });
-      projectPackageProvider.saveLocalProjectPackageInfo(newProjectInfo);
+      dispatchCoreAction({
+        saveLocalProjectPackageInfo: { info: newProjectInfo },
+      });
     }
   }
 

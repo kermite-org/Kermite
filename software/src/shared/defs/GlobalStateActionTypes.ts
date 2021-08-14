@@ -1,9 +1,13 @@
-import { IProjectPackageInfo } from '~/shared/defs/DomainTypes';
+import {
+  ICustomFirmwareInfo,
+  IProjectPackageInfo,
+} from '~/shared/defs/DomainTypes';
 import { cloneObject } from '~/shared/funcs/Utils';
 
 export type ICoreState = {
   appVersion: string;
   allProjectPackageInfos: IProjectPackageInfo[];
+  allCustomFirmwareInfos: ICustomFirmwareInfo[];
 };
 
 export type IUiState = {
@@ -13,6 +17,7 @@ export type IUiState = {
 export const defaultCoreState: ICoreState = {
   appVersion: '',
   allProjectPackageInfos: [],
+  allCustomFirmwareInfos: [],
 };
 
 export const defaultUiState: IUiState = cloneObject({
@@ -23,6 +28,8 @@ export type ICoreAction = Partial<{
   loadAppVersion?: 1;
   greet: { name: string; age: number };
   loadAllProjectPackages: 1;
+  saveLocalProjectPackageInfo: { info: IProjectPackageInfo };
+  loadAllCustomFirmwareInfos: 1;
 }>;
 
 export type IUiAction = Partial<{}>;

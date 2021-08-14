@@ -12,7 +12,6 @@ import {
 } from '~/shell/global';
 import { developmentModule_ActionReceiver } from '~/shell/modules/DevelopmentModule';
 import { projectPackageModule } from '~/shell/modules/ProjectPackageModule';
-import { projectPackageProvider } from '~/shell/projectPackages/ProjectPackageProvider';
 import { checkLocalRepositoryFolder } from '~/shell/projectResources/LocalResourceHelper';
 import { setupGlobalSettingsFixer } from '~/shell/services/config/GlobalSettingsFixer';
 import { globalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
@@ -104,9 +103,9 @@ export class ApplicationRoot {
       projects_getAllProjectPackageInfos: async () =>
         coreState.allProjectPackageInfos,
       projects_saveLocalProjectPackageInfo: (info) =>
-        projectPackageProvider.saveLocalProjectPackageInfo(info),
-      projects_getAllCustomFirmwareInfos: () =>
-        projectPackageProvider.getAllCustomFirmwareInfos(),
+        dispatchCoreAction({ saveLocalProjectPackageInfo: { info } }),
+      projects_getAllCustomFirmwareInfos: async () =>
+        coreState.allCustomFirmwareInfos,
       presetHub_getServerProjectIds: () =>
         this.presetHubService.getServerProjectIds(),
       presetHub_getServerProfiles: (projectId: string) =>
@@ -198,6 +197,7 @@ export class ApplicationRoot {
       projectPackageModule,
     );
     await dispatchCoreAction({ loadAllProjectPackages: 1 });
+    await dispatchCoreAction({ loadAllCustomFirmwareInfos: 1 });
   }
 
   async initialize() {
