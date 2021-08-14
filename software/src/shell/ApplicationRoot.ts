@@ -102,8 +102,8 @@ export class ApplicationRoot {
         ),
       projects_getAllProjectPackageInfos: async () =>
         coreState.allProjectPackageInfos,
-      projects_saveLocalProjectPackageInfo: (info) =>
-        dispatchCoreAction({ saveLocalProjectPackageInfo: { info } }),
+      projects_saveLocalProjectPackageInfo: (projectInfo) =>
+        dispatchCoreAction({ saveLocalProjectPackageInfo: { projectInfo } }),
       projects_getAllCustomFirmwareInfos: async () =>
         coreState.allCustomFirmwareInfos,
       presetHub_getServerProjectIds: () =>

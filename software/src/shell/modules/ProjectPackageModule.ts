@@ -10,18 +10,16 @@ export const projectPackageModule: IActionReceiver<ICoreAction> = {
     const allProjectPackageInfos = await projectPackageProvider.getAllProjectPackageInfos();
     commitCoreState({ allProjectPackageInfos });
   },
-  async saveLocalProjectPackageInfo({ info }) {
-    await projectPackageProvider.saveLocalProjectPackageInfo(info);
+  async saveLocalProjectPackageInfo({ projectInfo }) {
+    await projectPackageProvider.saveLocalProjectPackageInfo(projectInfo);
     const allProjectPackageInfos = produce(
       coreState.allProjectPackageInfos,
       (draft) => {
-        const index = draft.findIndex(
-          (it) => it.origin === info.origin && it.projectId === info.projectId,
-        );
+        const index = draft.findIndex((it) => it.sig === projectInfo.sig);
         if (index >= 0) {
-          draft.splice(index, 1, info);
+          draft.splice(index, 1, projectInfo);
         } else {
-          draft.push(info);
+          draft.push(projectInfo);
         }
       },
     );

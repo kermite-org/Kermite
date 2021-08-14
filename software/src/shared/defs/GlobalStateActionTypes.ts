@@ -28,7 +28,7 @@ export type ICoreAction = Partial<{
   loadAppVersion?: 1;
   greet: { name: string; age: number };
   loadAllProjectPackages: 1;
-  saveLocalProjectPackageInfo: { info: IProjectPackageInfo };
+  saveLocalProjectPackageInfo: { projectInfo: IProjectPackageInfo };
   loadAllCustomFirmwareInfos: 1;
 }>;
 
