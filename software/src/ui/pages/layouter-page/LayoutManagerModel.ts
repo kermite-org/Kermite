@@ -40,8 +40,6 @@ export class LayoutManagerModel implements ILayoutManagerModel {
   private _layoutManagerStatus: ILayoutManagerStatus = {
     editSource: { type: 'LayoutNewlyCreated' },
     loadedDesign: createFallbackPersistKeyboardDesign(),
-    // errroInfo: undefined,
-    projectLayoutsInfos: [],
   };
 
   // get projectLayoutsInfos() {

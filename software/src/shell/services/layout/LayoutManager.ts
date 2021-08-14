@@ -50,16 +50,12 @@ export class LayoutManager implements ILayoutManager {
       type: 'LayoutNewlyCreated',
     },
     loadedDesign: createFallbackPersistKeyboardDesign(),
-    projectLayoutsInfos: [],
   };
 
   private initialized = false;
 
   private initializeOnFirstConnect = async () => {
     if (!this.initialized) {
-      this.setStatus({
-        projectLayoutsInfos: await this.getAllProjectLayoutsInfos(),
-      });
       const editSource = applicationStorage.readItemSafe<ILayoutEditSource>(
         'layoutEditSource',
         layoutEditSourceSchema,
@@ -279,17 +275,6 @@ export class LayoutManager implements ILayoutManager {
       await this.executeCommand(command);
     }
     return true;
-  }
-
-  private async getAllProjectLayoutsInfos(): Promise<IProjectLayoutsInfo[]> {
-    const resourceInfos = await projectResourceProvider.getAllProjectResourceInfos();
-    return resourceInfos.map((info) => ({
-      origin: info.origin,
-      projectId: info.projectId,
-      projectPath: info.projectPath,
-      keyboardName: info.keyboardName,
-      layoutNames: info.layoutNames,
-    }));
   }
 
   showEditLayoutFileInFiler() {
