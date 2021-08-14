@@ -62,7 +62,8 @@ const entrySources: NavigationEntrySource[] = [
     pageName: 'project',
     iconSpec: 'fa fa-globe',
     hint: 'project edit',
-    isAvailable: () => globalSettingsReader.isLocalProjectSelectedForEdit,
+    // isAvailable: () => globalSettingsModel.isLocalProjectSelectedForEdit,
+    isAvailable: () => false,
   },
   {
     pagePath: '/projectSelection',
