@@ -16,8 +16,8 @@ type Props = {
 export const ProjectPresetEditPage: FC<Props> = ({ spec: { presetName } }) => {
   const projectInfo = projectPackagesHooks.useEditTargetProject();
   const originalProfile = useMemo(() => {
-    const entry = projectInfo.profiles.find(
-      (it) => it.profileName === presetName,
+    const entry = projectInfo.presets.find(
+      (it) => it.presetName === presetName,
     );
     return entry?.data || fallbackPersistProfileData;
   }, [projectInfo]);

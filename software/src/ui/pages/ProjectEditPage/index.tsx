@@ -18,9 +18,9 @@ export const ProjectEditPage: FC = () => {
   };
 
   const resourceData = {
-    firmwares: projectInfo.customFirmwareReferences.map((it) => it.variantName),
+    firmwares: projectInfo.firmwares.map((it) => it.variationName),
     layouts: projectInfo.layouts.map((it) => it.layoutName),
-    preset: projectInfo.profiles.map((it) => it.profileName),
+    preset: projectInfo.presets.map((it) => it.presetName),
   };
 
   const onLayoutEditButton = () => {
@@ -33,7 +33,7 @@ export const ProjectEditPage: FC = () => {
   const onPresetEditButton = () => {
     pageActions.navigateTo({
       type: 'projectPresetEdit',
-      presetName: projectInfo.profiles[0].profileName,
+      presetName: projectInfo.presets[0].presetName,
     });
   };
 

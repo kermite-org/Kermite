@@ -87,13 +87,11 @@ export const projectPackagesMutations = {
       return;
     }
     const newProjectInfo = produce(projectInfo, (draft) => {
-      const profile = draft.profiles.find(
-        (la) => la.profileName === presetName,
-      );
+      const profile = draft.presets.find((la) => la.presetName === presetName);
       if (profile) {
         profile.data = preset;
       } else {
-        draft.profiles.push({ profileName: presetName, data: preset });
+        draft.presets.push({ presetName: presetName, data: preset });
       }
     });
     projectPackagesMutations.saveLocalProject(newProjectInfo);
