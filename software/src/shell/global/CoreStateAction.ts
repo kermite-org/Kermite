@@ -1,6 +1,7 @@
 import {
   ActionDistributor,
   copyObjectProps,
+  defaultCoreState,
   IActionReceiver,
   ICoreAction,
   ICoreState,
@@ -11,9 +12,11 @@ export type ICoreActionReceiver = IActionReceiver<ICoreAction>;
 
 export const coreActionDistributor = new ActionDistributor<ICoreAction>();
 
-export const coreState: ICoreState = {
-  appVersion: '',
-};
+export async function dispatchCoreAction(action: ICoreAction) {
+  await coreActionDistributor.putAction(action);
+}
+
+export const coreState: ICoreState = defaultCoreState;
 
 export const coreStateManager = {
   coreStateEventPort: createEventPort<Partial<ICoreState>>({

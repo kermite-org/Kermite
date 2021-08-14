@@ -4,8 +4,13 @@ import { getAppErrorData, makeCompactStackTrace } from '~/shared';
 import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
-import { coreActionDistributor, coreStateManager } from '~/shell/global';
+import {
+  coreActionDistributor,
+  coreStateManager,
+  dispatchCoreAction,
+} from '~/shell/global';
 import { developmentModule_ActionReceiver } from '~/shell/modules/DevelopmentModule';
+import { projectPackageModule } from '~/shell/modules/ProjectPackageModule';
 import { projectPackageProvider } from '~/shell/projectPackages/ProjectPackageProvider';
 import { checkLocalRepositoryFolder } from '~/shell/projectResources/LocalResourceHelper';
 import { setupGlobalSettingsFixer } from '~/shell/services/config/GlobalSettingsFixer';
@@ -149,7 +154,7 @@ export class ApplicationRoot {
         this.inputLogicSimulator.postSimulationTargetProfile(profile),
 
       global_dispatchCoreAction: async (action) =>
-        coreActionDistributor.putAction(action),
+        await dispatchCoreAction(action),
     });
 
     appGlobal.icpMainAgent.supplySubscriptionHandlers({
@@ -188,8 +193,12 @@ export class ApplicationRoot {
     });
   }
 
-  private setupActionReceivers() {
-    coreActionDistributor.addReceiver(developmentModule_ActionReceiver);
+  private async setupActionReceivers() {
+    coreActionDistributor.addReceivers(
+      developmentModule_ActionReceiver,
+      projectPackageModule,
+    );
+    await dispatchCoreAction({ loadAllProjectPackages: 1 });
   }
 
   async initialize() {
@@ -198,7 +207,7 @@ export class ApplicationRoot {
       await applicationStorage.initializeAsync();
       globalSettingsProvider.initialize();
       await this.profileManager.initializeAsync();
-      this.setupActionReceivers();
+      await this.setupActionReceivers();
       this.setupIpcBackend();
       this.windowWrapper.initialize();
       setupGlobalSettingsFixer();
