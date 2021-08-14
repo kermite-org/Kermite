@@ -4,6 +4,8 @@ import { getAppErrorData, makeCompactStackTrace } from '~/shared';
 import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
+import { coreActionDistributor, coreStateManager } from '~/shell/global';
+import { developmentModule_ActionReceiver } from '~/shell/modules/DevelopmentModule';
 import { projectPackageProvider } from '~/shell/projectPackages/ProjectPackageProvider';
 import { checkLocalRepositoryFolder } from '~/shell/projectResources/LocalResourceHelper';
 import { setupGlobalSettingsFixer } from '~/shell/services/config/GlobalSettingsFixer';
@@ -145,6 +147,9 @@ export class ApplicationRoot {
 
       simulator_postSimulationTargetProfile: async (profile) =>
         this.inputLogicSimulator.postSimulationTargetProfile(profile),
+
+      global_dispatchCoreAction: async (action) =>
+        coreActionDistributor.putAction(action),
     });
 
     appGlobal.icpMainAgent.supplySubscriptionHandlers({
@@ -178,7 +183,13 @@ export class ApplicationRoot {
         this.keyboardConfigProvider.keyboardConfigEventPort.subscribe(cb),
       config_globalSettingsEvents: (cb) =>
         globalSettingsProvider.globalConfigEventPort.subscribe(cb),
+      global_coreStateEvents: (cb) =>
+        coreStateManager.coreStateEventPort.subscribe(cb),
     });
+  }
+
+  private setupActionReceivers() {
+    coreActionDistributor.addReceiver(developmentModule_ActionReceiver);
   }
 
   async initialize() {
@@ -187,6 +198,7 @@ export class ApplicationRoot {
       await applicationStorage.initializeAsync();
       globalSettingsProvider.initialize();
       await this.profileManager.initializeAsync();
+      this.setupActionReceivers();
       this.setupIpcBackend();
       this.windowWrapper.initialize();
       setupGlobalSettingsFixer();

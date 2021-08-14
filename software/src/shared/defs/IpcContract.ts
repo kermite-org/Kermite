@@ -16,6 +16,7 @@ import {
   IResourceOrigin,
   IServerPorfileInfo,
 } from '~/shared/defs/DomainTypes';
+import { ICoreAction, ICoreState } from '~/shared/defs/GlobalStateActionTypes';
 import { IGlobalSettings, IKeyboardConfig } from './ConfigTypes';
 import { IProfileData } from './ProfileData';
 
@@ -92,6 +93,8 @@ export interface IAppIpcContract {
     platform_openUrlInDefaultBrowser(path: string): Promise<void>;
 
     global_triggerLazyInitializeServices(): Promise<void>;
+
+    global_dispatchCoreAction(action: ICoreAction): Promise<void>;
   };
   events: {
     dev_testEvent: { type: string };
@@ -108,5 +111,7 @@ export interface IAppIpcContract {
 
     config_keyboardConfigEvents: Partial<IKeyboardConfig>;
     config_globalSettingsEvents: Partial<IGlobalSettings>;
+
+    global_coreStateEvents: Partial<ICoreState>;
   };
 }

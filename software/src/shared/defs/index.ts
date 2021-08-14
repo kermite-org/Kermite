@@ -12,3 +12,4 @@ export * from './RouterDefinitions';
 export * from './VersionDefinitions';
 export * from './VirtualKeys';
 export * from './VirtualKeyTexts';
+export * from './GlobalStateActionTypes';

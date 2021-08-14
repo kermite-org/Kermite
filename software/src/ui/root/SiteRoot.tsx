@@ -14,6 +14,7 @@ import {
   siteModel,
   uiStatusModel,
   globalAppServicesInitializerEffect,
+  uiStateDriverEffect,
 } from '~/ui/commonModels';
 import {
   DebugOverlay,
@@ -61,6 +62,7 @@ export const SiteRoot = () => {
   useEffect(globalAppServicesInitializerEffect, []);
   useEffect(siteModel.setupLifecycle, []);
   useEffect(globalHintMouseMoveHandlerEffect, []);
+  useEffect(uiStateDriverEffect, []);
 
   router.useRedirect(['', '/'], '/home');
 

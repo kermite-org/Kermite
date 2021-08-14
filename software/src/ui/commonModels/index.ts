@@ -16,3 +16,4 @@ export * from './ThemeSelectionModel';
 export * from './UiGlobalStore';
 export * from './UiStatusModel';
 export * from './ProjectDataSource';
+export * from './UiState';
