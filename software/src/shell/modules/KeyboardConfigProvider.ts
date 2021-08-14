@@ -14,7 +14,7 @@ export const keyboardConfigModule = createCoreModule({
     );
     commitCoreState({ keyboardConfig });
   },
-  writeKeyboardConfig({ partialConfig }) {
+  writeKeyboardConfig(partialConfig) {
     const keyboardConfig = {
       ...coreState.keyboardConfig,
       ...partialConfig,

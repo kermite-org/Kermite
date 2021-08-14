@@ -32,10 +32,10 @@ export type ICoreAction = Partial<{
   loadAppVersion: 1;
   greet: { name: string; age: number };
   loadAllProjectPackages: 1;
-  saveLocalProjectPackageInfo: { projectInfo: IProjectPackageInfo };
+  saveLocalProjectPackageInfo: IProjectPackageInfo;
   loadAllCustomFirmwareInfos: 1;
   loadGlobalSettings: 1;
-  writeGlobalSettings: { partialConfig: Partial<IGlobalSettings> };
+  writeGlobalSettings: Partial<IGlobalSettings>;
   loadKeyboardConfig: 1;
-  writeKeyboardConfig: { partialConfig: Partial<IKeyboardConfig> };
+  writeKeyboardConfig: Partial<IKeyboardConfig>;
 }>;

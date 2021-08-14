@@ -55,7 +55,7 @@ export const globalSettingsWriter = {
     value: IGlobalSettings[K],
   ) {
     dispatchCoreAction({
-      writeGlobalSettings: { partialConfig: { [key]: value } },
+      writeGlobalSettings: { [key]: value },
     });
   },
 };

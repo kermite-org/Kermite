@@ -12,13 +12,13 @@ export function useKeyboardBehaviorModeModel(): IKeyboardBehaviorModeModel {
 
   const setSimulatorMode = (enabled: boolean) => {
     dispatchCoreAction({
-      writeKeyboardConfig: { partialConfig: { isSimulatorMode: enabled } },
+      writeKeyboardConfig: { isSimulatorMode: enabled },
     });
   };
 
   const setMuteMode = (enabled: boolean) => {
     dispatchCoreAction({
-      writeKeyboardConfig: { partialConfig: { isMuteMode: enabled } },
+      writeKeyboardConfig: { isMuteMode: enabled },
     });
   };
 

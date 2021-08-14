@@ -10,7 +10,7 @@ export const projectPackageModule: IActionReceiver<ICoreAction> = {
     const allProjectPackageInfos = await projectPackageProvider.getAllProjectPackageInfos();
     commitCoreState({ allProjectPackageInfos });
   },
-  async saveLocalProjectPackageInfo({ projectInfo }) {
+  async saveLocalProjectPackageInfo(projectInfo) {
     await projectPackageProvider.saveLocalProjectPackageInfo(projectInfo);
     const allProjectPackageInfos = produce(
       coreState.allProjectPackageInfos,

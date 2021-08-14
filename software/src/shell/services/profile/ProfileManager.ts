@@ -274,7 +274,7 @@ export class ProfileManager implements IProfileManager {
         }
       });
       dispatchCoreAction({
-        saveLocalProjectPackageInfo: { projectInfo: newProjectInfo },
+        saveLocalProjectPackageInfo: newProjectInfo,
       });
     }
   }

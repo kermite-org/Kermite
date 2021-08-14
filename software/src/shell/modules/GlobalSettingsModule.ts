@@ -19,7 +19,7 @@ export const globalSettingsModule = createCoreModule({
     }
     commitCoreState({ globalSettings: settings });
   },
-  writeGlobalSettings({ partialConfig }) {
+  writeGlobalSettings(partialConfig) {
     const globalSettings = {
       ...coreState.globalSettings,
       ...partialConfig,
