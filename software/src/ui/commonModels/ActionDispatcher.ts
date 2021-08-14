@@ -1,5 +1,6 @@
-import { ICoreAction, IUiAction } from '~/shared/defs';
+import { ICoreAction } from '~/shared/defs';
 import { ipcAgent } from '~/ui/base';
+import { IUiAction } from '~/ui/commonModels/UiState';
 
 export function dispatchCoreAction(action: ICoreAction) {
   ipcAgent.async.global_dispatchCoreAction(action);

@@ -6,7 +6,6 @@ import {
   ICustomFirmwareInfo,
   IProjectPackageInfo,
 } from '~/shared/defs/DomainTypes';
-import { cloneObject } from '~/shared/funcs/Utils';
 
 export type ICoreState = {
   appVersion: string;
@@ -15,20 +14,12 @@ export type ICoreState = {
   globalSettings: IGlobalSettings;
 };
 
-export type IUiState = {
-  core: ICoreState;
-};
-
 export const defaultCoreState: ICoreState = {
   appVersion: '',
   allProjectPackageInfos: [],
   allCustomFirmwareInfos: [],
   globalSettings: globalSettingsDefault,
 };
-
-export const defaultUiState: IUiState = cloneObject({
-  core: defaultCoreState,
-});
 
 export type ICoreAction = Partial<{
   loadAppVersion: 1;
@@ -39,5 +30,3 @@ export type ICoreAction = Partial<{
   loadGlobalSettings: 1;
   writeGlobalSettings: { partialConfig: Partial<IGlobalSettings> };
 }>;
-
-export type IUiAction = Partial<{}>;

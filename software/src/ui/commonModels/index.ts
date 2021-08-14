@@ -12,7 +12,6 @@ export * from './ParameterBasedModeModels';
 export * from './PlayerModel';
 export * from './SiteModel';
 export * from './ThemeSelectionModel';
-export * from './UiGlobalStore';
 export * from './UiStatusModel';
 export * from './ProjectDataSource';
 export * from './UiState';

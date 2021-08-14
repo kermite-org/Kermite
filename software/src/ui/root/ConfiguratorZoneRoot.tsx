@@ -3,7 +3,7 @@ import { appUi, router, uiTheme } from '~/ui/base';
 import {
   PagePaths,
   siteModel,
-  uiGlobalStore,
+  uiState,
   uiStatusModel,
 } from '~/ui/commonModels';
 import { CustomWindowFrame, DevToolPullTab } from '~/ui/components';
@@ -28,7 +28,7 @@ import {
 } from '~/ui/root/sections';
 
 const MainColumnRoutes = () => {
-  const { pageSpec } = uiGlobalStore;
+  const { pageSpec } = uiState;
   if (pageSpec) {
     return (
       <div css={cssMainColumn}>
