@@ -1,6 +1,6 @@
 import { ICustromParameterSpec } from '~/shared/defs/CustomParameter';
 import { IPersistKeyboardDesign } from '~/shared/defs/KeyboardDesign';
-import { IProfileData } from './ProfileData';
+import { IPersistProfileData, IProfileData } from './ProfileData';
 
 export type IPresetType = 'blank' | 'preset';
 
@@ -25,6 +25,25 @@ export interface IProjectFirmwareInfo {
   buildTimestamp: string;
 }
 
+export type IStandardBaseFirmwareType =
+  | 'AvrUnified'
+  | 'AvrSplit'
+  | 'RpUnified'
+  | 'RpSplit';
+
+export type IKermiteStandardKeyboaredSpec = {
+  baseFirmwareType: IStandardBaseFirmwareType;
+  useBoardLedsProMicroAvr?: boolean;
+  useBoardLedsProMicroRp?: boolean;
+  useBoardLedsRpiPico?: boolean;
+  useDebugUart?: boolean;
+  useMatrixKeyScanner?: boolean;
+  matrixColumnPins?: string[];
+  matrixRowPins?: string[];
+  useDirectWiredKeyScanner?: boolean;
+  directWiredPins?: string[];
+};
+
 export interface IProjectResourceInfo {
   sig: string; // ${origin}#${projectId}
   origin: IResourceOrigin;
@@ -36,6 +55,56 @@ export interface IProjectResourceInfo {
   firmwares: IProjectFirmwareInfo[];
 }
 
+export interface IProjectPackageFileContent {
+  formatRevision: 'PKG0';
+  projectId: string;
+  keyboardName: string;
+  firmwares: (
+    | {
+        variationName: string;
+        standardFirmwareConfig: IKermiteStandardKeyboaredSpec;
+      }
+    | {
+        variationName: string;
+        customFirmwareId: string;
+      }
+  )[];
+  layouts: {
+    layoutName: string;
+    data: IPersistKeyboardDesign;
+  }[];
+  presets: {
+    presetName: string;
+    data: IPersistProfileData;
+  }[];
+}
+
+export type IProjectPackageInfo = {
+  sig: string; // ${origin}#${projectId}
+  origin: IResourceOrigin;
+  packageName: string;
+} & IProjectPackageFileContent;
+
+export const fallbackProjectPackageInfo: IProjectPackageInfo = {
+  sig: '',
+  origin: 'online',
+  formatRevision: 'PKG0',
+  projectId: '',
+  packageName: '',
+  keyboardName: '',
+  firmwares: [],
+  layouts: [],
+  presets: [],
+};
+
+export type ICustomFirmwareInfo = {
+  firmwareId: string;
+  firmwareProjectPath: string;
+  variationName: string;
+  targetDevice: string;
+  buildRevision: number;
+  buildTimestamp: string;
+};
 export interface IProjectCustomDefinition {
   customParameterSpecs?: ICustromParameterSpec[];
 }
@@ -43,7 +112,7 @@ export interface IProjectCustomDefinition {
 export interface IKeyboardDeviceInfo {
   path: string;
   portName: string;
-  projectId: string;
+  firmwareId: string;
   deviceInstanceCode: string;
 }
 
@@ -52,9 +121,14 @@ export interface IDeviceSelectionStatus {
   currentDevicePath: string | 'none';
 }
 
+export const fallbackDeviceSelectionStatus: IDeviceSelectionStatus = {
+  allDeviceInfos: [],
+  currentDevicePath: 'none',
+};
+
 export interface IKeyboardDeviceAttributes {
   origin: IResourceOrigin;
-  projectId: string;
+  firmwareId: string;
   firmwareVariationName: string;
   firmwareBuildRevision: number;
   deviceInstanceCode: string;
@@ -158,7 +232,6 @@ export type ILayoutEditSource =
 export interface ILayoutManagerStatus {
   editSource: ILayoutEditSource;
   loadedDesign: IPersistKeyboardDesign;
-  projectLayoutsInfos: IProjectLayoutsInfo[];
 }
 
 export type ILayoutManagerCommand =

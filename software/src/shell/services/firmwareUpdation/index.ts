@@ -7,7 +7,7 @@ import {
 import { appEnv } from '~/shell/base';
 import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { createEventPort } from '~/shell/funcs';
-import { projectResourceProvider } from '~/shell/projectResources';
+import { firmwareFileLoader_loadFirmwareFile } from '~/shell/services/firmwareUpdation/firmwareFileLoader/FirmwareFileLoader';
 import { FirmwareUpdationSchemeAtMegaCaterina } from '~/shell/services/firmwareUpdation/flashSchemeAtMegaCaterina/FlashSchemeAtMegaCaterina';
 import { FirmwareUpdationSchemeAtMegaDfu } from '~/shell/services/firmwareUpdation/flashSchemeAtmegaDfu/FlashSchemeAtMegaDfu';
 import { FirmwareUpdationSchemeRp_Mac } from '~/shell/services/firmwareUpdation/flashSchemeRp/FlashSchemeRp_Mac';
@@ -90,7 +90,7 @@ export class FirmwareUpdationService {
     projectId: string,
     variationName: string,
   ): Promise<'ok' | string> {
-    const binarySpec = await projectResourceProvider.loadProjectFirmwareFile(
+    const binarySpec = await firmwareFileLoader_loadFirmwareFile(
       origin,
       projectId,
       variationName,

@@ -1,22 +1,25 @@
 import { IPersistProfileData, IProfileData, IProfileEntry } from '~/shared';
 import { appEnv } from '~/shell/base/AppEnv';
 import {
-  fsExistsSync,
   fspCopyFile,
-  fspMkdir,
   fspReaddir,
   fspRename,
   fspUnlink,
-  fsxMkdirpSync,
+  fsRmdirSync,
+  fsxEnsureFolderExists,
   fsxReadJsonFile,
+  globAsync,
   pathBasename,
   pathDirname,
 } from '~/shell/funcs';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
 
 export class ProfileManagerCore {
-  getProfilesFolderPath(): string {
-    return appEnv.resolveUserDataFilePath(`data/profiles`);
+  getProfilesFolderPath(projectId: string | undefined): string {
+    const folderPath = projectId
+      ? `data/profiles/${projectId}`
+      : `data/profiles`;
+    return appEnv.resolveUserDataFilePath(folderPath);
   }
 
   private getProfileFilePath(profName: string): string {
@@ -27,22 +30,15 @@ export class ProfileManagerCore {
 
   async ensureProfilesDirectoryExists() {
     const dataDirPath = appEnv.resolveUserDataFilePath('data');
-    if (!fsExistsSync(dataDirPath)) {
-      await fspMkdir(dataDirPath);
-    }
+    await fsxEnsureFolderExists(dataDirPath);
     const profilesDirPath = appEnv.resolveUserDataFilePath('data/profiles');
-    if (!fsExistsSync(profilesDirPath)) {
-      await fspMkdir(profilesDirPath);
-    }
+    await fsxEnsureFolderExists(profilesDirPath);
   }
 
   private async listAllProfileNames(): Promise<string[]> {
-    const fileNames = await fspReaddir(
-      appEnv.resolveUserDataFilePath(`data/profiles`),
-    );
-    return fileNames
-      .filter((fname) => fname.endsWith('.profile.json'))
-      .map((fname) => pathBasename(fname, '.profile.json'));
+    const profilesFolderPath = appEnv.resolveUserDataFilePath(`data/profiles`);
+    const fileNames = await globAsync('**/*.profile.json', profilesFolderPath);
+    return fileNames.map((fname) => fname.replace('.profile.json', ''));
   }
 
   async listAllProfileEntries(): Promise<IProfileEntry[]> {
@@ -67,12 +63,17 @@ export class ProfileManagerCore {
     return await ProfileFileLoader.loadProfileFromFile(filePath);
   }
 
+  private async ensureSavingFolder(filePath: string) {
+    await fsxEnsureFolderExists(pathDirname(filePath));
+  }
+
   async saveProfile(
     profName: string,
     profileData: IProfileData,
   ): Promise<void> {
     const filePath = this.getProfileFilePath(profName);
     console.log(`saving current profile to ${pathBasename(filePath)}`);
+    await this.ensureSavingFolder(filePath);
     await ProfileFileLoader.saveProfileToFile(filePath, profileData);
   }
 
@@ -87,18 +88,14 @@ export class ProfileManagerCore {
     await ProfileFileLoader.saveProfileToFile(filePath, profileData);
   }
 
-  async saveProfileAsPreset(
-    filePath: string,
-    profileData: IProfileData,
-  ): Promise<void> {
-    console.log(`saving current profile to ${filePath}`);
-    fsxMkdirpSync(pathDirname(filePath));
-    await ProfileFileLoader.saveProfileToFile(filePath, profileData);
-  }
-
   async deleteProfile(profName: string): Promise<void> {
     const fpath = this.getProfileFilePath(profName);
     await fspUnlink(fpath);
+    const folderPath = pathDirname(fpath);
+    const fileNames = await fspReaddir(folderPath);
+    if (fileNames.length === 0) {
+      fsRmdirSync(folderPath);
+    }
   }
 
   async renameProfile(profName: string, newProfName: string): Promise<void> {

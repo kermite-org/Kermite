@@ -1,0 +1,11 @@
+{
+  "projectId": "HCV52K",
+  "keyboardName": "standard",
+  "parameterConfigurations": {
+    "systemParameterKeys": [
+      "emitRealtimeEvents",
+      "keyHoldIndicatorLed",
+      "heartbeatLed"
+    ]
+  }
+}

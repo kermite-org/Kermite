@@ -11,12 +11,17 @@ import { AssignEditSection } from './ui_editor_assignsSection';
 import { KeyboardSection } from './ui_editor_keyboardSection/KeyboardSection';
 import { LayersSection } from './ui_editor_layerManagement';
 
-export const KeyAssignEditView: FC = () => {
+type Props = {
+  forceHideTestInputArea?: boolean;
+};
+export const KeyAssignEditView: FC<Props> = ({ forceHideTestInputArea }) => {
   return (
     <div css={cssKeyAssignEditView}>
       <div
         css={cssEditTopBarBox}
-        qxIf={uiStatusModel.settings.showTestInputArea}
+        qxIf={
+          !forceHideTestInputArea && uiStatusModel.settings.showTestInputArea
+        }
       >
         <TestInputArea />
       </div>

@@ -1,9 +1,6 @@
-import { IKeyboardDeviceInfo, IProjectResourceInfo } from '~/shared';
-import { ISelectorOption, ipcAgent } from '~/ui/base';
-import {
-  useDeviceSelectionStatus,
-  useProjectResourceInfos,
-} from '~/ui/commonModels';
+import { IKeyboardDeviceInfo } from '~/shared';
+import { ipcAgent, ISelectorOption } from '~/ui/base';
+import { projectPackagesReader, uiState } from '~/ui/commonStore';
 
 interface IDeviceSelectionPartModel {
   deviceOptions: ISelectorOption[];
@@ -13,12 +10,11 @@ interface IDeviceSelectionPartModel {
 
 function makeDeviceOptionEntry(
   deviceInfo: IKeyboardDeviceInfo,
-  resourceInfos: IProjectResourceInfo[],
 ): ISelectorOption {
-  const { path, portName, projectId } = deviceInfo;
-  const project = resourceInfos.find((info) => info.projectId === projectId);
-  const keyboardName = project?.keyboardName;
-  const postfix = (keyboardName && ` (${keyboardName})`) || '';
+  const { path, portName, firmwareId } = deviceInfo;
+  const firmwareInfo = projectPackagesReader.findFirmwareInfo(firmwareId);
+  const keyboardDisplayName = firmwareInfo?.firmwareProjectPath;
+  const postfix = (keyboardDisplayName && ` (${keyboardDisplayName})`) || '';
   return {
     label: `device@${portName}${postfix}`,
     value: path,
@@ -26,11 +22,10 @@ function makeDeviceOptionEntry(
 }
 
 export function useDeviceSelectionPartModel(): IDeviceSelectionPartModel {
-  const resourceInfos = useProjectResourceInfos();
-  const selectionStatus = useDeviceSelectionStatus();
+  const selectionStatus = uiState.core.deviceSelectionStatus;
   const noneOption: ISelectorOption = { label: 'none', value: 'none' };
   const deviceOptionsBase: ISelectorOption[] = selectionStatus.allDeviceInfos.map(
-    (deviceInfo) => makeDeviceOptionEntry(deviceInfo, resourceInfos),
+    (deviceInfo) => makeDeviceOptionEntry(deviceInfo),
   );
   const deviceOptions = [noneOption, ...deviceOptionsBase];
 

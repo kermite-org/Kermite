@@ -1,11 +1,11 @@
-import { jsx, css } from 'qx';
+import { css, jsx } from 'qx';
 import { texts } from '~/ui/base';
-import { useProjectResourceInfos } from '~/ui/commonModels';
+import { uiStateReader } from '~/ui/commonStore';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 import { profilesModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileManagementPartViewModel';
 
 export const ProfileConfigurationPart = () => {
-  const projectInfos = useProjectResourceInfos();
+  const projectInfos = uiStateReader.allProjectPackageInfos;
   const projectId = editorModel.profileData.projectId;
   const info = projectInfos.find((it) => it.projectId === projectId);
   const keyboardName = info?.keyboardName;

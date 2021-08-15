@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
 import { texts } from '~/ui/base';
-import { useConnectedDeviceAttributes } from '~/ui/commonModels';
+import { projectPackagesReader, uiStateReader } from '~/ui/commonStore';
 
 interface IConnectedDevicesAttrsPartModel {
   tableData: [string, string][] | undefined;
@@ -14,14 +14,10 @@ function fixDatetimeText(datetimeText: string) {
 }
 
 export function useConnectedDevicesAttrsPartModel(): IConnectedDevicesAttrsPartModel {
-  const { deviceAttrs, projectInfo } = useConnectedDeviceAttributes();
-
-  // console.log({ deviceAttrs, projectInfo });
-
+  const deviceAttrs = uiStateReader.deviceStatus.deviceAttrs;
   const isOriginOnline = deviceAttrs?.origin === 'online';
-
-  const firm = projectInfo?.firmwares.find(
-    (f) => f.variationName === deviceAttrs?.firmwareVariationName,
+  const firmwareInfo = projectPackagesReader.findFirmwareInfo(
+    deviceAttrs?.firmwareId,
   );
   const tableData =
     deviceAttrs &&
@@ -34,16 +30,12 @@ export function useConnectedDevicesAttrsPartModel(): IConnectedDevicesAttrsPartM
           : texts.lebel_device_deviceInfo_value_resourceOrigin_local,
       ],
       [
-        texts.lebel_device_deviceInfo_fieldName_projectID,
-        deviceAttrs.projectId,
+        texts.lebel_device_deviceInfo_fieldName_firmwareId,
+        deviceAttrs.firmwareId,
       ],
-      projectInfo && [
-        texts.lebel_device_deviceInfo_fieldName_projectPath,
-        projectInfo.projectPath,
-      ],
-      projectInfo && [
+      firmwareInfo && [
         texts.lebel_device_deviceInfo_fieldName_keyboardName,
-        projectInfo.keyboardName,
+        firmwareInfo.firmwareProjectPath,
       ],
       [
         texts.lebel_device_deviceInfo_fieldName_instanceNumber,
@@ -59,15 +51,14 @@ export function useConnectedDevicesAttrsPartModel(): IConnectedDevicesAttrsPartM
         (isOriginOnline && deviceAttrs.firmwareBuildRevision) || 'N/A',
       ],
       isOriginOnline &&
-        firm && [
+        firmwareInfo && [
           texts.lebel_device_deviceInfo_fieldName_firmwareLatestRevision,
-          firm.buildRevision,
+          firmwareInfo.buildRevision,
         ],
-
       isOriginOnline &&
-        firm && [
+        firmwareInfo && [
           texts.lebel_device_deviceInfo_fieldName_firmwareLatestTimestamp,
-          fixDatetimeText(firm.buildTimestamp),
+          fixDatetimeText(firmwareInfo.buildTimestamp),
         ],
       [
         texts.lebel_device_deviceInfo_fieldName_keymappingAreaSize,

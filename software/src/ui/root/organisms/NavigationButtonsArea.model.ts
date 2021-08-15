@@ -1,5 +1,6 @@
-import { texts, router } from '~/ui/base';
-import { globalSettingsModel, PagePaths } from '~/ui/commonModels';
+import { router, texts } from '~/ui/base';
+import { PagePaths } from '~/ui/commonModels';
+import { globalSettingsReader } from '~/ui/commonStore';
 
 export interface NavigationEntryViewModel {
   pagePath: PagePaths;
@@ -48,7 +49,7 @@ const entrySources: NavigationEntrySource[] = [
     pageName: texts.label_sideMenu_app_shapePreview,
     iconSpec: 'fa fa-file-code',
     hint: texts.hint_sideMenu_app_shapePreview,
-    isAvailable: () => globalSettingsModel.isDeveloperMode,
+    isAvailable: () => globalSettingsReader.isDeveloperMode,
   },
   {
     pagePath: '/firmwareUpdation',
@@ -57,16 +58,24 @@ const entrySources: NavigationEntrySource[] = [
     hint: texts.hint_sideMenu_app_firmwareUpdation,
   },
   {
-    pagePath: '/settings',
-    pageName: texts.label_sideMenu_app_settings,
-    iconSpec: 'fa fa-cog',
-    hint: texts.hint_sideMenu_app_settings,
+    pagePath: '/projectEdit',
+    pageName: 'project',
+    iconSpec: 'fa fa-globe',
+    hint: 'project edit',
+    // isAvailable: () => globalSettingsModel.isLocalProjectSelectedForEdit,
+    isAvailable: () => false,
   },
   {
     pagePath: '/projectSelection',
     pageName: texts.label_sideMenu_app_projectSelection,
     iconSpec: 'fa fa-globe',
     hint: 'project selection',
+  },
+  {
+    pagePath: '/settings',
+    pageName: texts.label_sideMenu_app_settings,
+    iconSpec: 'fa fa-cog',
+    hint: texts.hint_sideMenu_app_settings,
   },
   {
     pagePath: '/home',

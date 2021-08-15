@@ -1,12 +1,12 @@
 import { css, FC, jsx } from 'qx';
 import { uniqueArrayItemsByField } from '~/shared';
 import { ISelectorOption, texts } from '~/ui/base';
-import { useProjectResourceInfos } from '~/ui/commonModels';
+import { uiStateReader } from '~/ui/commonStore';
 import { GeneralSelector } from '~/ui/components';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 
 function makeTargetProjectSelectOptions(): ISelectorOption[] {
-  const projectInfos = useProjectResourceInfos();
+  const projectInfos = uiStateReader.allProjectPackageInfos;
   const options: ISelectorOption[] = uniqueArrayItemsByField(
     projectInfos,
     'projectId',

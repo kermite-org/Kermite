@@ -38,11 +38,11 @@ export interface IProjectResourceProviderImpl {
 export interface IProjectResourceProvider {
   getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]>;
 
-  loadProjectPreset(
-    origin: IResourceOrigin,
-    projectId: string,
-    presetName: string,
-  ): Promise<IProfileData | undefined>;
+  // loadProjectPreset(
+  //   origin: IResourceOrigin,
+  //   projectId: string,
+  //   presetName: string,
+  // ): Promise<IProfileData | undefined>;
 
   loadProjectLayout(
     origin: IResourceOrigin,
@@ -52,9 +52,9 @@ export interface IProjectResourceProvider {
 
   // local: ローカルにあるプロジェクトのHexファイルのパスを返す
   // online: Hexファイルをリモートからダウンロードして一時ファイルに保存しファイルパスを返す
-  loadProjectFirmwareFile(
-    origin: IResourceOrigin,
-    projectId: string,
-    variationName: string,
-  ): Promise<IFirmwareBinaryFileSpec | undefined>;
+  // loadProjectFirmwareFile(
+  //   origin: IResourceOrigin,
+  //   projectId: string,
+  //   variationName: string,
+  // ): Promise<IFirmwareBinaryFileSpec | undefined>;
 }

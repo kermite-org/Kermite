@@ -8,8 +8,8 @@ import {
   IPersistProfileData,
   ModifierVirtualKey,
 } from '~/shared';
+import { ProfileDataConverter } from '~/shared/modules/ProfileDataConverter';
 import { LayoutDataMigrator } from '~/shell/loaders/LayoutDataMigrator';
-import { ProfileDataConverter } from '~/shell/loaders/ProfileDataConverter';
 
 namespace ProfileDataMigratorHelper {
   export function patchAllLayers(layers: ILayer[], fn: (la: ILayer) => void) {

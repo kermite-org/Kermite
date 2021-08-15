@@ -395,3 +395,10 @@ export function getObjectKeyByValue<T extends {}>(
 export function isNumberInRange(value: number, lo: number, hi: number) {
   return lo <= value && value <= hi;
 }
+
+export function splitBytesN(bytes: number[], n: number) {
+  const m = Math.ceil(bytes.length / n);
+  return Array(m)
+    .fill(0)
+    .map((_, i) => bytes.slice(i * n, i * n + n));
+}

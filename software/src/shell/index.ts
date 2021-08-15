@@ -1,7 +1,8 @@
 import 'source-map-support/register';
 import { app } from 'electron';
 import { ApplicationRoot } from '~/shell/ApplicationRoot';
-import { appGlobal } from '~/shell/base';
+import { shellDevelopmentEntry } from '~/shell/DevelopmentEntry';
+import { appEnv, appGlobal } from '~/shell/base';
 
 let appRoot: ApplicationRoot | undefined;
 
@@ -9,6 +10,8 @@ async function startApplication() {
   console.log('start');
   appRoot = new ApplicationRoot();
   await appRoot.initialize();
+
+  await shellDevelopmentEntry();
 }
 
 async function endApplication() {
@@ -37,4 +40,9 @@ function bootElectronApp() {
   }
 }
 
-bootElectronApp();
+if (!appEnv.isDevelopment) {
+  console.log('this branch is not allowed to execute in release build, abort');
+  app.quit();
+} else {
+  bootElectronApp();
+}

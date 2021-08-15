@@ -1,6 +1,4 @@
-import { fallbackKeyboardConfig } from '~/shared';
-import { ipcAgent } from '~/ui/base';
-import { useEventSource } from '~/ui/helpers';
+import { dispatchCoreAction, uiStateReader } from '~/ui/commonStore';
 
 interface IKeyboardBehaviorModeModel {
   isSimulatorMode: boolean;
@@ -10,19 +8,18 @@ interface IKeyboardBehaviorModeModel {
 }
 
 export function useKeyboardBehaviorModeModel(): IKeyboardBehaviorModeModel {
-  const keyboardConfig = useEventSource(
-    ipcAgent.events.config_keyboardConfigEvents,
-    fallbackKeyboardConfig,
-  );
+  const { keyboardConfig } = uiStateReader;
 
-  const setSimulatorMode = async (enabled: boolean) => {
-    await ipcAgent.async.config_writeKeyboardConfig({
-      isSimulatorMode: enabled,
+  const setSimulatorMode = (enabled: boolean) => {
+    dispatchCoreAction({
+      writeKeyboardConfig: { isSimulatorMode: enabled },
     });
   };
 
-  const setMuteMode = async (enabled: boolean) => {
-    await ipcAgent.async.config_writeKeyboardConfig({ isMuteMode: enabled });
+  const setMuteMode = (enabled: boolean) => {
+    dispatchCoreAction({
+      writeKeyboardConfig: { isMuteMode: enabled },
+    });
   };
 
   return {

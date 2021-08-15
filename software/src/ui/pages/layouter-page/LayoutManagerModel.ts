@@ -7,15 +7,15 @@ import {
   ILayoutManagerStatus,
   IPersistKeyboardDesign,
   IProfileManagerStatus,
-  IProjectLayoutsInfo,
 } from '~/shared';
-import { ipcAgent, router, appUi } from '~/ui/base';
+import { appUi, ipcAgent, router } from '~/ui/base';
+import { projectPackagesReader } from '~/ui/commonStore';
 import { modalConfirm } from '~/ui/components';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 import { UiLayouterCore } from '~/ui/pages/layouter';
 
 interface ILayoutManagerModel {
-  projectLayoutsInfos: IProjectLayoutsInfo[];
+  // projectLayoutsInfos: IProjectLayoutsInfo[];
   editSource: ILayoutEditSource;
   loadedDesign: IPersistKeyboardDesign;
   createNewLayout(): void;
@@ -35,18 +35,16 @@ interface ILayoutManagerModel {
 let _prevLoadedDevsign: IPersistKeyboardDesign | undefined;
 let _keepUnsavedNewDesign: boolean = false;
 export class LayoutManagerModel implements ILayoutManagerModel {
-  private _projectLayoutsInfos: IProjectLayoutsInfo[] = [];
+  // private _projectLayoutsInfos: IProjectLayoutsInfo[] = [];
 
   private _layoutManagerStatus: ILayoutManagerStatus = {
     editSource: { type: 'LayoutNewlyCreated' },
     loadedDesign: createFallbackPersistKeyboardDesign(),
-    // errroInfo: undefined,
-    projectLayoutsInfos: [],
   };
 
-  get projectLayoutsInfos() {
-    return this._projectLayoutsInfos;
-  }
+  // get projectLayoutsInfos() {
+  //   return this._projectLayoutsInfos;
+  // }
 
   get editSource() {
     return this._layoutManagerStatus.editSource;
@@ -108,10 +106,13 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     layoutName: string,
     design: IPersistKeyboardDesign,
   ) {
-    const isExist = this.projectLayoutsInfos.find(
-      (info) =>
-        info.projectId === projectId && info.layoutNames.includes(layoutName),
-    );
+    // const isExist = this.projectLayoutsInfos.find(
+    //   (info) =>
+    //     info.projectId === projectId && info.layoutNames.includes(layoutName),
+    // );
+    const isExist = !!projectPackagesReader
+      .getEditTargetProject()
+      ?.layouts.some((it) => it.layoutName === layoutName);
     if (isExist) {
       const ok = await modalConfirm({
         message: 'File ovewritten. Are you sure?',
@@ -157,7 +158,7 @@ export class LayoutManagerModel implements ILayoutManagerModel {
   }
 
   async createNewProfileFromCurrentLayout() {
-    let projectId = '';
+    let projectId = '000000';
     if (this.editSource.type === 'ProjectLayout') {
       projectId = this.editSource.projectId;
     }
@@ -208,11 +209,11 @@ export class LayoutManagerModel implements ILayoutManagerModel {
         _prevLoadedDevsign = diff.loadedDesign;
       }
     }
-    if (diff.projectLayoutsInfos) {
-      this._projectLayoutsInfos = diff.projectLayoutsInfos.filter(
-        (info) => info.origin === 'local',
-      );
-    }
+    // if (diff.projectLayoutsInfos) {
+    //   this._projectLayoutsInfos = diff.projectLayoutsInfos.filter(
+    //     (info) => info.origin === 'local',
+    //   );
+    // }
   };
 
   private onProfileManagerStatus = (

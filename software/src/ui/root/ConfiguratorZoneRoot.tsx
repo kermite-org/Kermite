@@ -1,9 +1,13 @@
 import { css, jsx } from 'qx';
 import { appUi, router, uiTheme } from '~/ui/base';
-import { siteModel, uiStatusModel } from '~/ui/commonModels';
+import { PagePaths, siteModel, uiStatusModel } from '~/ui/commonModels';
+import { uiState } from '~/ui/commonStore';
 import { CustomWindowFrame, DevToolPullTab } from '~/ui/components';
 import { LoadingOverlay } from '~/ui/components/overlay/LoadingOverlay';
 import { OnboadingFrame } from '~/ui/features/OnboardingPanel';
+import { ProjectEditPage } from '~/ui/pages/ProjectEditPage';
+import { ProjectLayoutEditPage } from '~/ui/pages/ProjectLayoutEditPage';
+import { ProjectPresetEditPage } from '~/ui/pages/ProjectPresetEditPage';
 import { EditorPage } from '~/ui/pages/editor-page';
 import { FirmwareUpdationPage } from '~/ui/pages/firmware-updation-page';
 import { UiLayouterPageComponent } from '~/ui/pages/layouter-page';
@@ -20,7 +24,20 @@ import {
 } from '~/ui/root/sections';
 
 const MainColumnRoutes = () => {
-  const pagePath = router.getPagePath();
+  const { pageSpec } = uiState;
+  if (pageSpec) {
+    return (
+      <div css={cssMainColumn}>
+        {pageSpec.type === 'projectLayoutEdit' && (
+          <ProjectLayoutEditPage spec={pageSpec} />
+        )}
+        {pageSpec.type === 'projectPresetEdit' && (
+          <ProjectPresetEditPage spec={pageSpec} />
+        )}
+      </div>
+    );
+  }
+  const pagePath = router.getPagePath() as PagePaths;
   return (
     <div css={cssMainColumn}>
       {pagePath === '/editor' && <EditorPage />}
@@ -32,6 +49,7 @@ const MainColumnRoutes = () => {
       {pagePath === '/settings' && <UiSettingsPage />}
       {pagePath === '/projectSelection' && <ProjectSelectionPage />}
       {pagePath === '/home' && <WelcomePage />}
+      {pagePath === '/projectEdit' && <ProjectEditPage />}
     </div>
   );
 };
