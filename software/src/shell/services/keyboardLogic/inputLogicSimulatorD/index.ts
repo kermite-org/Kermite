@@ -1,7 +1,7 @@
 import {
   generateNumberSequence,
+  ICoreState,
   IKeyboardConfig,
-  IKeyboardDeviceStatus,
   IntervalTimerWrapper,
   IProfileData,
   IProfileManagerStatus,
@@ -9,7 +9,7 @@ import {
   SystemParameter,
 } from '~/shared';
 import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
-import { KeyboardConfigProvider } from '~/shell/services/config/KeyboardConfigProvider';
+import { coreStateManager } from '~/shell/global';
 import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
 import { dataStorage } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/DataStorage';
 import { ProfileManager } from '~/shell/services/profile/ProfileManager';
@@ -44,7 +44,6 @@ export class InputLogicSimulatorD {
 
   constructor(
     private profileManager: ProfileManager,
-    private keyboardConfigProvider: KeyboardConfigProvider,
     private deviceService: KeyboardDeviceService,
   ) {}
 
@@ -66,15 +65,31 @@ export class InputLogicSimulatorD {
     }
   };
 
-  private onDeviceStatusEvent = (event: Partial<IKeyboardDeviceStatus>) => {
-    const values = event.systemParameterValues;
-    if (values) {
-      const systemLayout = values[SystemParameter.SystemLayout];
-      // const isSimulatorMode = values[SystemParameter.SimulatorMode] > 0;
-      const wiringMode = values[SystemParameter.WiringMode];
-      // console.log(`systemlayout: ${systemLayout}, wiringMode: ${wiringMode}`);
-      this.CL.keyboardCoreLogic_setSystemLayout(systemLayout);
-      this.CL.keyboardCoreLogic_setWiringMode(wiringMode);
+  private keyboardConfigHandler = (config: IKeyboardConfig) => {
+    const { isSimulatorMode, isMuteMode } = config;
+    if (this.isSimulatorMode !== isSimulatorMode) {
+      this.deviceService.setSimulatorMode(isSimulatorMode);
+      this.isSimulatorMode = isSimulatorMode;
+    }
+    if (this.isMuteMode !== isMuteMode) {
+      this.deviceService.setMuteMode(isMuteMode);
+      this.isMuteMode = isMuteMode;
+    }
+  };
+
+  private onCoreStatusChange = (diff: Partial<ICoreState>) => {
+    if (diff.deviceStatus) {
+      const values = diff.deviceStatus.systemParameterValues;
+      if (values) {
+        const systemLayout = values[SystemParameter.SystemLayout];
+        const wiringMode = values[SystemParameter.WiringMode];
+        // console.log(`systemlayout: ${systemLayout}, wiringMode: ${wiringMode}`);
+        this.CL.keyboardCoreLogic_setSystemLayout(systemLayout);
+        this.CL.keyboardCoreLogic_setWiringMode(wiringMode);
+      }
+    }
+    if (diff.keyboardConfig) {
+      this.keyboardConfigHandler(diff.keyboardConfig);
     }
   };
 
@@ -114,34 +129,16 @@ export class InputLogicSimulatorD {
     }
   };
 
-  private keyboardConfigHandler = (config: Partial<IKeyboardConfig>) => {
-    const { isSimulatorMode, isMuteMode } = config;
-    if (
-      isSimulatorMode !== undefined &&
-      this.isSimulatorMode !== isSimulatorMode
-    ) {
-      this.deviceService.setSimulatorMode(isSimulatorMode);
-      this.isSimulatorMode = isSimulatorMode;
-    }
-    if (isMuteMode !== undefined && this.isMuteMode !== isMuteMode) {
-      this.deviceService.setMuteMode(isMuteMode);
-      this.isMuteMode = isMuteMode;
-    }
-  };
-
   postSimulationTargetProfile(profile: IProfileData) {
     this.loadSimulationProfile(profile);
   }
 
   initialize() {
     this.profileManager.statusEventPort.subscribe(this.onProfileStatusChanged);
-    this.keyboardConfigProvider.keyboardConfigEventPort.subscribe(
-      this.keyboardConfigHandler,
-    );
     this.deviceService.realtimeEventPort.subscribe(
       this.onRealtimeKeyboardEvent,
     );
-    this.deviceService.statusEventPort.subscribe(this.onDeviceStatusEvent);
+    coreStateManager.coreStateEventPort.subscribe(this.onCoreStatusChange);
     this.tickerTimer.start(
       withAppErrorHandler(
         this.processTicker,
@@ -155,13 +152,10 @@ export class InputLogicSimulatorD {
     this.profileManager.statusEventPort.unsubscribe(
       this.onProfileStatusChanged,
     );
-    this.keyboardConfigProvider.keyboardConfigEventPort.unsubscribe(
-      this.keyboardConfigHandler,
-    );
     this.deviceService.realtimeEventPort.unsubscribe(
       this.onRealtimeKeyboardEvent,
     );
-    this.deviceService.statusEventPort.unsubscribe(this.onDeviceStatusEvent);
+    coreStateManager.coreStateEventPort.unsubscribe(this.onCoreStatusChange);
     this.tickerTimer.stop();
   }
 }

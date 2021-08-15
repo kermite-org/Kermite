@@ -7,10 +7,10 @@ import {
   ISelectorSource,
 } from '~/ui/base';
 import {
-  globalSettingsModel,
-  readGlobalProjectKey,
+  globalSettingsReader,
   projectPackagesReader,
-} from '~/ui/commonModels';
+  uiStateReader,
+} from '~/ui/commonStore';
 import { fieldSetter } from '~/ui/helpers';
 import { editSelectedProjectPreset as editSelectedProjectPresetOriginal } from '~/ui/pages/preset-browser-page/models/ProfileCreator';
 import { useProfileDataLoaded } from '~/ui/pages/preset-browser-page/models/ProfileDataLoader';
@@ -26,7 +26,7 @@ export interface IPresetSelectionModel {
 }
 
 function getProjectSelectionLabel(info: IProjectPackageInfo): string {
-  const isDeveloperMode = globalSettingsModel.getValue('useLocalResouces');
+  const { isDeveloperMode } = globalSettingsReader;
   if (isDeveloperMode) {
     const prefix = info.origin === 'local' ? '(local) ' : '';
     return `${prefix}${info.keyboardName}`;
@@ -85,7 +85,7 @@ export function usePresetSelectionModel(): IPresetSelectionModel {
     presetKey: '',
   });
 
-  const { globalSettings } = globalSettingsModel;
+  const { globalSettings } = uiStateReader;
 
   const resourceInfos = useMemo(
     projectPackagesReader.getProjectInfosGlobalProjectSelectionAffected,
@@ -105,7 +105,7 @@ export function usePresetSelectionModel(): IPresetSelectionModel {
 
   useEffect(() => {
     sel.projectKey =
-      readGlobalProjectKey(globalSettings) || projectOptions[0]?.value || '';
+      globalSettingsReader.globalProjectKey || projectOptions[0]?.value || '';
   }, [globalSettings]);
 
   const loadedProfileData = useProfileDataLoaded(

@@ -1,6 +1,6 @@
 import { SystemParameterDefinitions } from '~/shared';
 import { ipcAgent } from '~/ui/base';
-import { useEventSource } from '~/ui/helpers';
+import { uiStateReader } from '~/ui/commonStore';
 import {
   ICustomParameterModel,
   makeParameterModel,
@@ -14,12 +14,7 @@ interface ICustomParametersPartModel {
 }
 
 export function useCustomParametersPartModel(): ICustomParametersPartModel {
-  const deviceStatus = useEventSource(
-    ipcAgent.events.device_keyboardDeviceStatusEvents,
-    {
-      isConnected: false,
-    },
-  );
+  const { deviceStatus } = uiStateReader;
 
   const parameterValues =
     (deviceStatus.isConnected && deviceStatus.systemParameterValues) ||

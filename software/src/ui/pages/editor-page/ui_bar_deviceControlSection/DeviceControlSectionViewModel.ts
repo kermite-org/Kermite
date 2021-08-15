@@ -1,16 +1,14 @@
-import {
-  projectPackagesReader,
-  useKeyboardDeviceStatus,
-} from '~/ui/commonModels';
+import { projectPackagesReader, uiStateReader } from '~/ui/commonStore';
 
 export function makeDeviceControlSectionViewModel() {
-  const { isConnected, deviceAttrs } = useKeyboardDeviceStatus();
-  const projectInfo = projectPackagesReader.findProjectInfo(
-    deviceAttrs?.origin,
-    deviceAttrs?.projectId,
+  const { isConnected, deviceAttrs } = uiStateReader.deviceStatus;
+
+  const firmwareInfo = projectPackagesReader.findFirmwareInfo(
+    deviceAttrs?.firmwareId,
   );
+  const displayName = firmwareInfo?.firmwareProjectPath || '';
   return {
-    currentDeviceKeyboardName: projectInfo?.keyboardName || '',
+    currentDeviceKeyboardName: displayName,
     isDeviceConnected: isConnected,
   };
 }

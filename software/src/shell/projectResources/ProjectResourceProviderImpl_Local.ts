@@ -23,11 +23,11 @@ import {
 } from '~/shell/funcs';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
+import { globalSettingsReader } from '~/shell/modules/GlobalSettingsModule';
 import {
   IFirmwareBinaryFileSpec,
   IProjectResourceProviderImpl,
 } from '~/shell/projectResources/Interfaces';
-import { globalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
 
 interface IParameterConfigurationEntry {
   targetVariationNames?: string[];
@@ -226,7 +226,7 @@ export class ProjectResourceProviderImpl_Local
   }
 
   async getAllProjectResourceInfos(): Promise<IProjectResourceInfo[]> {
-    const localRepositoryDir = globalSettingsProvider.getLocalRepositoryDir();
+    const localRepositoryDir = globalSettingsReader.getLocalRepositoryDir();
 
     if (!localRepositoryDir) {
       return [];

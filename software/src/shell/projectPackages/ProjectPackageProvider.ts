@@ -111,21 +111,15 @@ async function saveLocalProjectPackgeInfoImpl(info: IProjectPackageInfo) {
   await fsxWriteJsonFile(filePath, info);
 }
 export class ProjectPackageProvider implements IProjectPackageProvider {
-  private cached: IProjectPackageInfo[] | undefined;
-
   async getAllProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
-    if (!this.cached) {
-      this.cached = [
-        ...(await loadRemoteProjectPackageInfos()),
-        ...(await loadLocalProjectPackageInfos()),
-      ];
-    }
-    return this.cached;
+    return [
+      ...(await loadRemoteProjectPackageInfos()),
+      ...(await loadLocalProjectPackageInfos()),
+    ];
   }
 
   async saveLocalProjectPackageInfo(info: IProjectPackageInfo): Promise<void> {
     await saveLocalProjectPackgeInfoImpl(info);
-    // TODO: 画面に変更差分を通知して、画面側で持っているデータを更新する必要がある
   }
 
   async getAllCustomFirmwareInfos(): Promise<ICustomFirmwareInfo[]> {
@@ -139,9 +133,9 @@ export class ProjectPackageProvider implements IProjectPackageProvider {
         firmwareProjectPath: info.firmwareProjectPath,
         variationName: info.variationName,
         targetDevice: info.targetDevice,
+        buildRevision: info.releaseBuildRevision,
+        buildTimestamp: info.buildTimestamp,
       };
     });
   }
 }
-
-export const projectPackageProvider = new ProjectPackageProvider();

@@ -2,10 +2,10 @@ import { useEffect, useLocal } from 'qx';
 import { ILayoutEditSource, IProjectPackageInfo } from '~/shared';
 import { ISelectorOption } from '~/ui/base';
 import {
-  globalSettingsModel,
+  globalSettingsReader,
   projectPackagesReader,
-  uiGlobalStore,
-} from '~/ui/commonModels';
+  uiStateReader,
+} from '~/ui/commonStore';
 import { UiLayouterCore } from '~/ui/pages/layouter';
 import { LayoutManagerModel } from '~/ui/pages/layouter-page/LayoutManagerModel';
 
@@ -98,7 +98,7 @@ function useLayoutManagerViewModelImpl(
     local.modalState = modalState;
   };
 
-  const resourceInfos = uiGlobalStore.allProjectPackageInfos;
+  const resourceInfos = uiStateReader.allProjectPackageInfos;
 
   const projectOptions = resourceInfos.map((info) => ({
     value: info.projectId,
@@ -128,7 +128,7 @@ function useLayoutManagerViewModelImpl(
     editTargetProject && local.currentLayoutName
   );
 
-  const { isLocalProjectsAvailable } = globalSettingsModel;
+  const { isLocalProjectsAvailable } = globalSettingsReader;
 
   const editTargetRadioSelection =
     model.editSource.type === 'CurrentProfile'

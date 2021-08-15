@@ -7,11 +7,8 @@ import {
   IProjectPackageInfo,
 } from '~/shared';
 import { ipcAgent, ISelectorSource } from '~/ui/base';
-import {
-  projectPackagesReader,
-  uiGlobalStore,
-  uiStatusModel,
-} from '~/ui/commonModels';
+import { uiStatusModel } from '~/ui/commonModels';
+import { projectPackagesReader, uiStateReader } from '~/ui/commonStore';
 import { modalAlert } from '~/ui/components';
 
 export type FirmwareUpdationPhase =
@@ -30,7 +27,7 @@ function getTargetDeviceFromFirmwareInfo(
     );
   }
   if ('customFirmwareId' in entry) {
-    const item = uiGlobalStore.allCustomFirmwareInfos.find(
+    const item = uiStateReader.allCustomFirmwareInfos.find(
       (it) => it.firmwareId === entry.customFirmwareId,
     );
     return item?.targetDevice as IFirmwareTargetDevice;

@@ -4,8 +4,6 @@ import {
   IAppWindowStatus,
   IBootloaderDeviceDetectionStatus,
   ICustomFirmwareInfo,
-  IDeviceSelectionStatus,
-  IKeyboardDeviceStatus,
   ILayoutManagerCommand,
   ILayoutManagerStatus,
   IProfileEntry,
@@ -16,14 +14,14 @@ import {
   IResourceOrigin,
   IServerPorfileInfo,
 } from '~/shared/defs/DomainTypes';
-import { IGlobalSettings, IKeyboardConfig } from './ConfigTypes';
+import { ICoreAction, ICoreState } from '~/shared/defs/GlobalStateActionTypes';
+import { IGlobalSettings } from './ConfigTypes';
 import { IProfileData } from './ProfileData';
 
 export interface IAppIpcContract {
   sync: {
     dev_debugMessage(message: string): void;
     // config_saveSettingsOnClosing?: IApplicationSettings;
-    config_saveKeyboardConfigOnClosing(data: IKeyboardConfig): void;
   };
   async: {
     system_getApplicationVersionInfo(): Promise<IApplicationVersionInfo>;
@@ -49,13 +47,9 @@ export interface IAppIpcContract {
     layout_showEditLayoutFileInFiler(): Promise<void>;
     // layout_getAllProjectLayoutsInfos(): Promise<IProjectLayoutsInfo[]>;
 
-    config_writeKeyboardConfig(config: Partial<IKeyboardConfig>): Promise<void>;
     config_writeKeyMappingToDevice(): Promise<boolean>;
 
     config_getGlobalSettings(): Promise<IGlobalSettings>;
-    config_writeGlobalSettings(
-      settings: Partial<IGlobalSettings>,
-    ): Promise<void>;
 
     config_getProjectRootDirectoryPath(): Promise<string>;
     config_checkLocalRepositoryFolderPath(path: string): Promise<boolean>;
@@ -92,6 +86,8 @@ export interface IAppIpcContract {
     platform_openUrlInDefaultBrowser(path: string): Promise<void>;
 
     global_triggerLazyInitializeServices(): Promise<void>;
+
+    global_dispatchCoreAction(action: ICoreAction): Promise<void>;
   };
   events: {
     dev_testEvent: { type: string };
@@ -99,14 +95,8 @@ export interface IAppIpcContract {
     window_appWindowStatus: Partial<IAppWindowStatus>;
     profile_profileManagerStatus: Partial<IProfileManagerStatus>;
     layout_layoutManagerStatus: Partial<ILayoutManagerStatus>;
-
-    device_deviceSelectionEvents: Partial<IDeviceSelectionStatus>;
     device_keyEvents: IRealtimeKeyboardEvent;
-    device_keyboardDeviceStatusEvents: Partial<IKeyboardDeviceStatus>;
-
     firmup_deviceDetectionEvents: IBootloaderDeviceDetectionStatus;
-
-    config_keyboardConfigEvents: Partial<IKeyboardConfig>;
-    config_globalSettingsEvents: Partial<IGlobalSettings>;
+    global_coreStateEvents: Partial<ICoreState>;
   };
 }

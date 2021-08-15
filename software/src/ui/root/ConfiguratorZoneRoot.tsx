@@ -1,11 +1,7 @@
 import { css, jsx } from 'qx';
 import { appUi, router, uiTheme } from '~/ui/base';
-import {
-  PagePaths,
-  siteModel,
-  uiGlobalStore,
-  uiStatusModel,
-} from '~/ui/commonModels';
+import { PagePaths, siteModel, uiStatusModel } from '~/ui/commonModels';
+import { uiState } from '~/ui/commonStore';
 import { CustomWindowFrame, DevToolPullTab } from '~/ui/components';
 import { LoadingOverlay } from '~/ui/components/overlay/LoadingOverlay';
 import { OnboadingFrame } from '~/ui/features/OnboardingPanel';
@@ -28,7 +24,7 @@ import {
 } from '~/ui/root/sections';
 
 const MainColumnRoutes = () => {
-  const { pageSpec } = uiGlobalStore;
+  const { pageSpec } = uiState;
   if (pageSpec) {
     return (
       <div css={cssMainColumn}>

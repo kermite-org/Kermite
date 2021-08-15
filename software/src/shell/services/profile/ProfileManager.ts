@@ -1,18 +1,17 @@
 import { shell } from 'electron';
 import produce from 'immer';
 import {
-  IProfileManagerStatus,
-  IProfileData,
+  clampValue,
   duplicateObjectByJsonStringifyParse,
   fallbackProfileData,
-  clampValue,
-  IProfileManagerCommand,
-  IPresetSpec,
-  IResourceOrigin,
-  IProfileEditSource,
   IPersistKeyboardDesign,
+  IPresetSpec,
+  IProfileData,
+  IProfileEditSource,
   IProfileEntry,
-  IGlobalSettings,
+  IProfileManagerCommand,
+  IProfileManagerStatus,
+  IResourceOrigin,
 } from '~/shared';
 import { ProfileDataConverter } from '~/shared/modules/ProfileDataConverter';
 import {
@@ -23,8 +22,11 @@ import {
 } from '~/shared/modules/SchemaValidationHelper';
 import { applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
-import { projectPackageProvider } from '~/shell/projectPackages/ProjectPackageProvider';
-import { globalSettingsProvider } from '~/shell/services/config/GlobalSettingsProvider';
+import {
+  coreState,
+  coreStateManager,
+  dispatchCoreAction,
+} from '~/shell/global';
 import { presetProfileLoader_loadPresetProfileData } from '~/shell/services/profile/PresetProfileLoader';
 import { IProfileManager } from './Interfaces';
 import { ProfileManagerCore } from './ProfileManagerCore';
@@ -70,6 +72,8 @@ export class ProfileManager implements IProfileManager {
 
   private core: ProfileManagerCore;
 
+  private _globalProjectId: string = '';
+
   constructor() {
     this.core = new ProfileManagerCore();
   }
@@ -79,6 +83,7 @@ export class ProfileManager implements IProfileManager {
   });
 
   async initializeAsync() {
+    this._globalProjectId = coreState.globalSettings.globalProjectId;
     try {
       await this.core.ensureProfilesDirectoryExists();
       await this.reEnumerateAllProfileEntries();
@@ -92,21 +97,18 @@ export class ProfileManager implements IProfileManager {
     } catch (error) {
       console.error(error);
     }
-
-    globalSettingsProvider.globalConfigEventPort.subscribe(
-      this.onGlobalSettingsChange,
-    );
+    coreStateManager.coreStateEventPort.subscribe(this.onCoreStateChange);
   }
 
   terminate() {
-    globalSettingsProvider.globalConfigEventPort.unsubscribe(
-      this.onGlobalSettingsChange,
-    );
+    coreStateManager.coreStateEventPort.unsubscribe(this.onCoreStateChange);
   }
 
-  private onGlobalSettingsChange = (settings: Partial<IGlobalSettings>) => {
-    if (settings.globalProjectId !== undefined) {
+  private onCoreStateChange = () => {
+    const { globalProjectId } = coreState.globalSettings;
+    if (globalProjectId !== this._globalProjectId) {
       this.patchStatusOnGlobalProjectIdChange();
+      this._globalProjectId = globalProjectId;
     }
   };
 
@@ -156,7 +158,7 @@ export class ProfileManager implements IProfileManager {
   }
 
   private getVisibleProfiles(allProfiles: IProfileEntry[]): IProfileEntry[] {
-    const { globalProjectId } = globalSettingsProvider.globalSettings;
+    const { globalProjectId } = coreState.globalSettings;
     if (globalProjectId) {
       return allProfiles.filter((it) => it.projectId === globalProjectId);
     } else {
@@ -165,7 +167,7 @@ export class ProfileManager implements IProfileManager {
   }
 
   private fixEditSource(editSource: IProfileEditSource): IProfileEditSource {
-    const { globalProjectId } = globalSettingsProvider.globalSettings;
+    const { globalProjectId } = coreState.globalSettings;
     if (globalProjectId) {
       if (
         editSource.type === 'InternalProfile' &&
@@ -248,12 +250,12 @@ export class ProfileManager implements IProfileManager {
     });
   }
 
-  private async saveAsProjectPreset(
+  private saveAsProjectPreset(
     projectId: string,
     presetName: string,
     profileData: IProfileData,
-  ): Promise<void> {
-    const projectInfos = await projectPackageProvider.getAllProjectPackageInfos();
+  ) {
+    const projectInfos = coreState.allProjectPackageInfos;
     const projectInfo = projectInfos.find(
       (info) => info.origin === 'local' && info.projectId === projectId,
     );
@@ -271,16 +273,18 @@ export class ProfileManager implements IProfileManager {
           draft.presets.push({ presetName: presetName, data: preset });
         }
       });
-      projectPackageProvider.saveLocalProjectPackageInfo(newProjectInfo);
+      dispatchCoreAction({
+        saveLocalProjectPackageInfo: newProjectInfo,
+      });
     }
   }
 
-  private async createProfileImpl(
+  private createProfileImpl(
     origin: IResourceOrigin,
     projectId: string,
     presetSpec: IPresetSpec,
-  ): Promise<IProfileData> {
-    const profile = await presetProfileLoader_loadPresetProfileData(
+  ): IProfileData {
+    const profile = presetProfileLoader_loadPresetProfileData(
       origin,
       projectId,
       presetSpec,
@@ -306,11 +310,7 @@ export class ProfileManager implements IProfileManager {
     if (this.hasProfileWithName(profileName)) {
       return false;
     }
-    const profileData = await this.createProfileImpl(
-      origin,
-      projectId,
-      presetSpec,
-    );
+    const profileData = this.createProfileImpl(origin, projectId, presetSpec);
     await this.core.saveProfile(profileName, profileData);
     await this.reEnumerateAllProfileEntries();
     this.setStatus({
@@ -323,16 +323,12 @@ export class ProfileManager implements IProfileManager {
     });
   }
 
-  private async createProfileUnnamed(
+  private createProfileUnnamed(
     origin: IResourceOrigin,
     projectId: string,
     presetSpec: IPresetSpec,
   ) {
-    const profileData = await this.createProfileImpl(
-      origin,
-      projectId,
-      presetSpec,
-    );
+    const profileData = this.createProfileImpl(origin, projectId, presetSpec);
     this.setStatus({
       editSource: { type: 'ProfileNewlyCreated' },
       loadedProfileData: profileData,
@@ -457,7 +453,7 @@ export class ProfileManager implements IProfileManager {
           cmd.creatProfile.presetSpec,
         );
       } else {
-        await this.createProfileUnnamed(
+        this.createProfileUnnamed(
           cmd.creatProfile.targetProjectOrigin,
           cmd.creatProfile.targetProjectId,
           cmd.creatProfile.presetSpec,
@@ -485,7 +481,7 @@ export class ProfileManager implements IProfileManager {
       await this.saveCurrentProfile(cmd.saveCurrentProfile.profileData);
     } else if (cmd.saveAsProjectPreset) {
       const { projectId, presetName, profileData } = cmd.saveAsProjectPreset;
-      await this.saveAsProjectPreset(projectId, presetName, profileData);
+      this.saveAsProjectPreset(projectId, presetName, profileData);
     } else if (cmd.importFromFile) {
       await this.importFromFile(cmd.importFromFile.filePath);
     } else if (cmd.exportToFile) {

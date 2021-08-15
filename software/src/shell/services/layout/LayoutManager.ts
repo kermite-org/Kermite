@@ -17,8 +17,8 @@ import {
 } from '~/shared/modules/SchemaValidationHelper';
 import { appEnv, applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
+import { coreState, dispatchCoreAction } from '~/shell/global';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
-import { projectPackageProvider } from '~/shell/projectPackages/ProjectPackageProvider';
 import { ILayoutManager } from '~/shell/services/layout/Interfaces';
 import { IProfileManager } from '~/shell/services/profile/Interfaces';
 
@@ -130,17 +130,15 @@ export class LayoutManager implements ILayoutManager {
     });
   }
 
-  private async getProjectInfo(
-    projectId: string,
-  ): Promise<IProjectPackageInfo | undefined> {
-    const projectInfos = await projectPackageProvider.getAllProjectPackageInfos();
+  private getProjectInfo(projectId: string): IProjectPackageInfo | undefined {
+    const projectInfos = coreState.allProjectPackageInfos;
     return projectInfos.find(
       (info) => info.origin === 'local' && info.projectId === projectId,
     );
   }
 
-  private async createLayoutForProject(projectId: string, layoutName: string) {
-    const projectInfo = await this.getProjectInfo(projectId);
+  private createLayoutForProject(projectId: string, layoutName: string) {
+    const projectInfo = this.getProjectInfo(projectId);
     if (projectInfo) {
       const design = createFallbackPersistKeyboardDesign();
       this.setStatus({
@@ -154,8 +152,8 @@ export class LayoutManager implements ILayoutManager {
     }
   }
 
-  private async loadLayoutFromProject(projectId: string, layoutName: string) {
-    const projectInfo = await this.getProjectInfo(projectId);
+  private loadLayoutFromProject(projectId: string, layoutName: string) {
+    const projectInfo = this.getProjectInfo(projectId);
     if (projectInfo) {
       const layout = projectInfo.layouts.find(
         (it) => it.layoutName === layoutName,
@@ -173,12 +171,12 @@ export class LayoutManager implements ILayoutManager {
     }
   }
 
-  private async saveLayoutToProject(
+  private saveLayoutToProject(
     projectId: string,
     layoutName: string,
     design: IPersistKeyboardDesign,
   ) {
-    const projectInfo = await this.getProjectInfo(projectId);
+    const projectInfo = this.getProjectInfo(projectId);
     if (projectInfo) {
       const newProjectInfo = produce(projectInfo, (draft) => {
         const layout = draft.layouts.find((it) => it.layoutName === layoutName);
@@ -188,7 +186,9 @@ export class LayoutManager implements ILayoutManager {
           draft.layouts.push({ layoutName, data: design });
         }
       });
-      projectPackageProvider.saveLocalProjectPackageInfo(newProjectInfo);
+      dispatchCoreAction({
+        saveLocalProjectPackageInfo: newProjectInfo,
+      });
     }
   }
 
@@ -202,7 +202,7 @@ export class LayoutManager implements ILayoutManager {
       await this.loadLayoutFromFile(filePath);
     } else if (editSource.type === 'ProjectLayout') {
       const { projectId, layoutName } = editSource;
-      await this.loadLayoutFromProject(projectId, layoutName);
+      this.loadLayoutFromProject(projectId, layoutName);
     }
   }
 
@@ -242,16 +242,16 @@ export class LayoutManager implements ILayoutManager {
       await this.saveLayoutToFile(filePath, design);
     } else if (command.type === 'loadFromProject') {
       const { projectId, layoutName } = command;
-      await this.loadLayoutFromProject(projectId, layoutName);
+      this.loadLayoutFromProject(projectId, layoutName);
     } else if (command.type === 'saveToProject') {
       const { projectId, layoutName, design } = command;
-      await this.saveLayoutToProject(projectId, layoutName, design);
+      this.saveLayoutToProject(projectId, layoutName, design);
     } else if (command.type === 'save') {
       const { design } = command;
       await this.overwriteCurrentLayout(design);
     } else if (command.type === 'createForProject') {
       const { projectId, layoutName } = command;
-      await this.createLayoutForProject(projectId, layoutName);
+      this.createLayoutForProject(projectId, layoutName);
     }
   }
 
@@ -262,11 +262,11 @@ export class LayoutManager implements ILayoutManager {
     return true;
   }
 
-  private async getCurrentEditLayoutFilePath(): Promise<string | undefined> {
+  private getCurrentEditLayoutFilePath(): string | undefined {
     const { editSource } = this.status;
     if (editSource.type === 'ProjectLayout') {
       const { projectId } = editSource;
-      const projectInfo = await this.getProjectInfo(projectId);
+      const projectInfo = this.getProjectInfo(projectId);
       if (projectInfo) {
         return appEnv.resolveUserDataFilePath(
           `data/projects/${projectInfo?.packageName}.kmpkg.json`,
@@ -277,8 +277,8 @@ export class LayoutManager implements ILayoutManager {
     }
   }
 
-  async showEditLayoutFileInFiler() {
-    const filePath = await this.getCurrentEditLayoutFilePath();
+  showEditLayoutFileInFiler() {
+    const filePath = this.getCurrentEditLayoutFilePath();
     if (filePath) {
       shell.showItemInFolder(filePath);
     }

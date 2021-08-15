@@ -69,7 +69,7 @@ export function getMcuNameFromKermiteMcuCode(code: string) {
 export function getProjectKeyFromDeviceAttributes(
   deviceAttrs: IKeyboardDeviceAttributes,
 ): string {
-  return `${deviceAttrs.origin}#${deviceAttrs.projectId}`;
+  return `${deviceAttrs.origin}#${deviceAttrs.firmwareId}`;
 }
 
 export function splitProjectProfileName(

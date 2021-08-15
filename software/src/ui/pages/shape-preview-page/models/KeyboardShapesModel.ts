@@ -3,7 +3,7 @@ import { IDisplayKeyboardDesign, IProjectPackageInfo } from '~/shared';
 import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import { UiLocalStorage } from '~/ui/base';
-import { projectPackagesReader } from '~/ui/commonModels';
+import { projectPackagesReader } from '~/ui/commonStore';
 import {
   IShapeViewPersistState,
   shapeViewPersistStateDefault,
