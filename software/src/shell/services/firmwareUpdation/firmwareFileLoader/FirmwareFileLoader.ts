@@ -15,7 +15,7 @@ import {
   pathBasename,
   pathDirname,
 } from '~/shell/funcs';
-import { projectPackageProvider } from '~/shell/projectPackages/ProjectPackageProvider';
+import { coreState } from '~/shell/global';
 import { IFirmwareBinaryFileSpec } from '~/shell/projectResources';
 import { applyStandardFirmwareBinaryPatch } from '~/shell/services/firmwareUpdation/firmwareBinaryPatchApplier/FirmwareBinaryPatchApplier';
 
@@ -67,7 +67,7 @@ async function fetchCustomFirmware(
   )) as IFirmwareSummaryJson;
   const entry = summary.firmwares.find((it) => it.firmwareId === firmwareId);
   if (entry) {
-    const url = `${remoteBaseUrl}/${entry.firmwareProjectPath}/${entry.firmwareFileName}`;
+    const url = `${remoteBaseUrl}/firmwares/${entry.firmwareProjectPath}/${entry.firmwareFileName}`;
     const data = await cacheRemoteResouce(fetchBinary, url);
     return {
       fileName: entry.firmwareFileName,
@@ -82,12 +82,12 @@ export async function loadFirmwareFileBytes(
   packageInfo: IProjectPackageInfo,
   variationName: string,
 ): Promise<IFirmwareFetchResultWithTargetDevice | undefined> {
-  const standardEntry = packageInfo.standardFirmwareDefinitions.find(
-    (it) => it.variantName === variationName,
-  )?.data;
-
-  if (standardEntry) {
-    const { baseFirmwareType } = standardEntry;
+  const firmwareEntry = packageInfo.firmwares.find(
+    (it) => it.variationName === variationName,
+  );
+  if (firmwareEntry && 'standardFirmwareConfig' in firmwareEntry) {
+    const { standardFirmwareConfig } = firmwareEntry;
+    const { baseFirmwareType } = standardFirmwareConfig;
     const targetDevice = getFirmwareTargetDeviceFromBaseFirmwareType(
       baseFirmwareType,
     );
@@ -101,7 +101,7 @@ export async function loadFirmwareFileBytes(
     const data = applyStandardFirmwareBinaryPatch(
       sourceFirmwareBytes,
       firmwareFormat,
-      standardEntry,
+      standardFirmwareConfig,
     );
     return {
       fileName: `${sourceFirmwareFileName}_patched_for_${packageInfo.keyboardName}.${firmwareFormat}`,
@@ -109,12 +109,8 @@ export async function loadFirmwareFileBytes(
       targetDevice,
     };
   }
-
-  const customEntry = packageInfo.customFirmwareReferences.find(
-    (it) => it.variantName === variationName,
-  );
-  if (customEntry) {
-    return fetchCustomFirmware(customEntry.firmwareId);
+  if (firmwareEntry && 'customFirmwareId' in firmwareEntry) {
+    return fetchCustomFirmware(firmwareEntry.customFirmwareId);
   }
   return undefined;
 }
@@ -124,7 +120,7 @@ export async function firmwareFileLoader_loadFirmwareFile(
   projectId: string,
   variationName: string,
 ): Promise<IFirmwareBinaryFileSpec | undefined> {
-  const packageInfos = await projectPackageProvider.getAllProjectPackageInfos();
+  const packageInfos = coreState.allProjectPackageInfos;
   const packageInfo = packageInfos.find(
     (info) => info.origin === origin && info.projectId === projectId,
   );

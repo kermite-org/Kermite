@@ -1,6 +1,6 @@
 import { jsx, useLocal } from 'qx';
 import { texts } from '~/ui/base';
-import { uiGlobalStore } from '~/ui/commonModels';
+import { projectPackagesReader, uiStateReader } from '~/ui/commonStore';
 import {
   IProjectAttachmentFileSelectorModalModel,
   modalConfirm,
@@ -9,11 +9,10 @@ import {
 import { fieldSetter } from '~/ui/helpers';
 import { IProfileManagementPartViewModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileManagementPartViewModel';
 
-function getTargetPresetNameFilePath(projectPath: string, presetName: string) {
-  if (projectPath && presetName) {
-    // todo: __dataフォルダがあるかどうかで保存場所を切り替える
-    // return `projects/${projectPath}/__data/${presetName}.profile.json`;
-    return `projects/${projectPath}/${presetName}.profile.json`;
+function getSavingPackageFilePath() {
+  const projectInfo = projectPackagesReader.getEditTargetProject();
+  if (projectInfo) {
+    return `data/projects/${projectInfo.packageName}.kmpkg.json`;
   }
   return '';
 }
@@ -25,7 +24,7 @@ function useProjectAttachmentFileSelectorViewModel(
     currentPresetName: '',
   });
 
-  const resourceInfos = uiGlobalStore.allProjectPackageInfos;
+  const resourceInfos = uiStateReader.allProjectPackageInfos;
 
   const projectOptions = resourceInfos.map((info) => ({
     value: info.projectId,
@@ -44,7 +43,7 @@ function useProjectAttachmentFileSelectorViewModel(
   );
 
   const presetNameOptions =
-    currentProject?.profiles.map(({ profileName: presetName }) => ({
+    currentProject?.presets.map(({ presetName }) => ({
       value: presetName,
       label: presetName,
     })) || [];
@@ -64,10 +63,7 @@ function useProjectAttachmentFileSelectorViewModel(
     attachmentFileNameOptions: presetNameOptions,
     currentAttachmentFileName: local.currentPresetName,
     setCurrentAttachmentFileName: fieldSetter(local, 'currentPresetName'),
-    targetAttachementFilePath: getTargetPresetNameFilePath(
-      currentProject?.keyboardName || '',
-      local.currentPresetName,
-    ),
+    targetAttachementFilePath: getSavingPackageFilePath(),
     buttonText: 'Save',
     buttonActive: !!(
       currentProjectId &&

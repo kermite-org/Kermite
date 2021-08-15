@@ -5,35 +5,27 @@ import {
   IPersistKeyboardDesign,
   IPersistProfileData,
   IProjectPackageInfo,
-  IProjectResourceInfo,
   IResourceOrigin,
 } from '~/shared';
-import { ipcAgent } from '~/ui/base';
-import { globalSettingsModel } from '~/ui/commonModels/GlobalSettingsModel';
-import { uiGlobalStore } from '~/ui/commonModels/UiGlobalStore';
-
-export async function fetchAllProjectResourceInfos(): Promise<
-  IProjectResourceInfo[]
-> {
-  return await ipcAgent.async.projects_getAllProjectResourceInfos();
-}
+import {
+  uiStateReader,
+  dispatchCoreAction,
+  uiState,
+} from '~/ui/commonStore/base';
 
 export const projectPackagesReader = {
   getProjectInfosGlobalProjectSelectionAffected(): IProjectPackageInfo[] {
-    const {
-      useLocalResouces,
-      globalProjectId,
-    } = globalSettingsModel.globalSettings;
+    const { useLocalResouces, globalProjectId } = uiStateReader.globalSettings;
 
-    return uiGlobalStore.allProjectPackageInfos
+    return uiStateReader.allProjectPackageInfos
       .filter((info) => useLocalResouces || info.origin === 'online')
       .filter(
         (info) => globalProjectId === '' || info.projectId === globalProjectId,
       );
   },
   getEditTargetProject(): IProjectPackageInfo | undefined {
-    const { globalProjectId } = globalSettingsModel.globalSettings;
-    return uiGlobalStore.allProjectPackageInfos.find(
+    const { globalProjectId } = uiStateReader.globalSettings;
+    return uiStateReader.allProjectPackageInfos.find(
       (info) => info.origin === 'local' && info.projectId === globalProjectId,
     );
   },
@@ -41,30 +33,25 @@ export const projectPackagesReader = {
     origin?: IResourceOrigin,
     projectId?: string,
   ): IProjectPackageInfo | undefined {
-    const resourceInfos = uiGlobalStore.allProjectPackageInfos;
+    const resourceInfos = uiStateReader.allProjectPackageInfos;
     return (
       resourceInfos.find(
         (info) => info.origin === origin && info.projectId === projectId,
       ) || resourceInfos.find((info) => info.projectId === projectId)
     );
   },
+  findFirmwareInfo(firmwareId: string | undefined) {
+    return uiState.core.allCustomFirmwareInfos.find(
+      (info) => info.firmwareId === firmwareId,
+    );
+  },
 };
 
-export const projectPackagesMutations = {
+export const projectPackagesWriter = {
   saveLocalProject(projectInfo: IProjectPackageInfo) {
-    const index = uiGlobalStore.allProjectPackageInfos.findIndex(
-      (info) => info.sig === projectInfo.sig,
-    );
-    if (index === -1) {
-      return;
-    }
-    uiGlobalStore.allProjectPackageInfos = produce(
-      uiGlobalStore.allProjectPackageInfos,
-      (draft) => {
-        draft.splice(index, 1, projectInfo);
-      },
-    );
-    ipcAgent.async.projects_saveLocalProjectPackageInfo(projectInfo);
+    dispatchCoreAction({
+      saveLocalProjectPackageInfo: projectInfo,
+    });
   },
   saveLocalProjectLayout(layoutName: string, design: IPersistKeyboardDesign) {
     const projectInfo = projectPackagesReader.getEditTargetProject();
@@ -79,7 +66,7 @@ export const projectPackagesMutations = {
         draft.layouts.push({ layoutName, data: design });
       }
     });
-    projectPackagesMutations.saveLocalProject(newProjectInfo);
+    projectPackagesWriter.saveLocalProject(newProjectInfo);
   },
   saveLocalProjectPreset(presetName: string, preset: IPersistProfileData) {
     const projectInfo = projectPackagesReader.getEditTargetProject();
@@ -87,16 +74,14 @@ export const projectPackagesMutations = {
       return;
     }
     const newProjectInfo = produce(projectInfo, (draft) => {
-      const profile = draft.profiles.find(
-        (la) => la.profileName === presetName,
-      );
+      const profile = draft.presets.find((la) => la.presetName === presetName);
       if (profile) {
         profile.data = preset;
       } else {
-        draft.profiles.push({ profileName: presetName, data: preset });
+        draft.presets.push({ presetName: presetName, data: preset });
       }
     });
-    projectPackagesMutations.saveLocalProject(newProjectInfo);
+    projectPackagesWriter.saveLocalProject(newProjectInfo);
   },
 };
 
@@ -104,7 +89,7 @@ export const projectPackagesHooks = {
   useEditTargetProject(): IProjectPackageInfo {
     return (
       useMemo(projectPackagesReader.getEditTargetProject, [
-        uiGlobalStore.allProjectPackageInfos,
+        uiStateReader.allProjectPackageInfos,
       ]) || fallbackProjectPackageInfo
     );
   },

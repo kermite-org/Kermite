@@ -4,12 +4,8 @@ import {
   IPersistKeyboardDesign,
 } from '~/shared';
 import { uiTheme } from '~/ui/base';
-import {
-  IPageSpec_ProjectLayoutEdit,
-  pageActions,
-  projectPackagesHooks,
-  projectPackagesMutations,
-} from '~/ui/commonModels';
+import { IPageSpec_ProjectLayoutEdit, pageActions } from '~/ui/commonModels';
+import { projectPackagesHooks, projectPackagesWriter } from '~/ui/commonStore';
 import { LayouterGeneralComponent } from '~/ui/pages/layouter';
 
 type Props = {
@@ -26,7 +22,7 @@ export const ProjectLayoutEditPage: FC<Props> = ({ spec: { layoutName } }) => {
   }, [projectInfo]);
 
   const saveLayout = (newLayout: IPersistKeyboardDesign) => {
-    projectPackagesMutations.saveLocalProjectLayout(layoutName, newLayout);
+    projectPackagesWriter.saveLocalProjectLayout(layoutName, newLayout);
   };
 
   return (

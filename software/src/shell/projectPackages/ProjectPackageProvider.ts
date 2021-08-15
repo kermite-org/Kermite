@@ -1,10 +1,13 @@
 import {
+  ICustomFirmwareInfo,
+  IFirmwareTargetDevice,
   IProjectPackageFileContent,
   IProjectPackageInfo,
   IResourceOrigin,
 } from '~/shared';
 import { appEnv } from '~/shell/base';
 import {
+  cacheRemoteResouce,
   fetchJson,
   fsxListFileBaseNames,
   fsxReadJsonFile,
@@ -16,6 +19,7 @@ import {
 interface IProjectPackageProvider {
   getAllProjectPackageInfos(): Promise<IProjectPackageInfo[]>;
   saveLocalProjectPackageInfo(info: IProjectPackageInfo): Promise<void>;
+  getAllCustomFirmwareInfos(): Promise<ICustomFirmwareInfo[]>;
 }
 
 function convertPackageFileContentToPackageInfo(
@@ -27,7 +31,6 @@ function convertPackageFileContentToPackageInfo(
     sig: `${origin}#${data.projectId}`,
     origin,
     packageName,
-    standardFirmwareDefinitions: data.standardFirmwareDefinitions || [],
     ...data,
   };
 }
@@ -52,8 +55,23 @@ type IIndexContent = {
   files: Record<string, string>;
 };
 
+type IIndexFirmwaresContent = {
+  firmwares: {
+    firmwareId: string;
+    firmwareProjectPath: string;
+    variationName: string;
+    targetDevice: IFirmwareTargetDevice;
+    buildResult: 'success' | 'failure';
+    firmwareFileName: string;
+    metadataFileName: string;
+    releaseBuildRevision: number;
+    buildTimestamp: string;
+  }[];
+};
+
+const remoteBaseUrl = 'https://app.kermite.org/krs/resources2';
+
 async function loadRemoteProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
-  const remoteBaseUrl = 'https://app.kermite.org/krs/resources2';
   const indexContent = (await fetchJson(
     `${remoteBaseUrl}/index.json`,
   )) as IIndexContent;
@@ -89,24 +107,35 @@ async function saveLocalProjectPackgeInfoImpl(info: IProjectPackageInfo) {
     'projects',
     `${info.packageName}.kmpkg.json`,
   );
+  console.log(`saving ${pathBasename(filePath)}`);
   await fsxWriteJsonFile(filePath, info);
 }
 export class ProjectPackageProvider implements IProjectPackageProvider {
-  private cached: IProjectPackageInfo[] | undefined;
-
   async getAllProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
-    if (!this.cached) {
-      this.cached = [
-        ...(await loadRemoteProjectPackageInfos()),
-        ...(await loadLocalProjectPackageInfos()),
-      ];
-    }
-    return this.cached;
+    return [
+      ...(await loadRemoteProjectPackageInfos()),
+      ...(await loadLocalProjectPackageInfos()),
+    ];
   }
 
   async saveLocalProjectPackageInfo(info: IProjectPackageInfo): Promise<void> {
     await saveLocalProjectPackgeInfoImpl(info);
   }
-}
 
-export const projectPackageProvider = new ProjectPackageProvider();
+  async getAllCustomFirmwareInfos(): Promise<ICustomFirmwareInfo[]> {
+    const data = (await cacheRemoteResouce(
+      fetchJson,
+      `${remoteBaseUrl}/index.firmwares.json`,
+    )) as IIndexFirmwaresContent;
+    return data.firmwares.map((info) => {
+      return {
+        firmwareId: info.firmwareId,
+        firmwareProjectPath: info.firmwareProjectPath,
+        variationName: info.variationName,
+        targetDevice: info.targetDevice,
+        buildRevision: info.releaseBuildRevision,
+        buildTimestamp: info.buildTimestamp,
+      };
+    });
+  }
+}

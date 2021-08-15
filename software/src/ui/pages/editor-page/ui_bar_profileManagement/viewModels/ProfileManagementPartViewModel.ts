@@ -1,8 +1,6 @@
 import { useEffect } from 'qx';
 import {
   forceChangeFilePathExtension,
-  IGlobalSettings,
-  IKeyboardDeviceStatus,
   IProfileData,
   IProfileEditSource,
 } from '~/shared';
@@ -12,13 +10,9 @@ import {
   splitProjectProfileName,
 } from '~/shared/funcs/DomainRelatedHelpers';
 import { ipcAgent, ISelectorOption, ISelectorSource, texts } from '~/ui/base';
-import {
-  globalSettingsModel,
-  uiStatusModel,
-  useKeyboardBehaviorModeModel,
-  useKeyboardDeviceStatus,
-} from '~/ui/commonModels';
+import { uiStatusModel, useKeyboardBehaviorModeModel } from '~/ui/commonModels';
 import { useModalDisplayStateModel } from '~/ui/commonModels/GeneralUiStateModels';
+import { uiStateReader } from '~/ui/commonStore';
 import { modalAlert, modalConfirm, modalTextEdit } from '~/ui/components';
 import { getFileNameFromPath } from '~/ui/helpers';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
@@ -57,7 +51,7 @@ export interface IProfileManagementPartViewModel {
 export const profilesModel = new ProfilesModel(editorModel);
 
 function makeProfileNameSelectorOption(profileName: string): ISelectorOption {
-  const omitFolder = !!globalSettingsModel.globalSettings.globalProjectId;
+  const omitFolder = !!uiStateReader.globalSettings.globalProjectId;
   return {
     value: profileName,
     label: omitFolder ? profileName.replace(/^.*\//, '') : profileName,
@@ -286,11 +280,14 @@ const simulatorProfileUpdator = new (class {
   }
 })();
 
-function getCanWrite(
-  deviceStatus: IKeyboardDeviceStatus,
-  globalSettings: IGlobalSettings,
-): boolean {
-  const { developerMode, allowCrossKeyboardKeyMappingWrite } = globalSettings;
+function getCanWrite(): boolean {
+  const { deviceStatus } = uiStateReader;
+
+  const {
+    developerMode,
+    allowCrossKeyboardKeyMappingWrite,
+  } = uiStateReader.globalSettings;
+
   const { editSource } = profilesModel;
 
   const isInternalProfile = editSource.type === 'InternalProfile';
@@ -298,7 +295,24 @@ function getCanWrite(
   const isDeviceConnected = deviceStatus.isConnected;
 
   const refProjectId = editorModel.profileData.projectId;
-  const isProjectMatched = deviceStatus.deviceAttrs?.projectId === refProjectId;
+
+  const allProjctInfos = uiStateReader.allProjectPackageInfos;
+
+  const standardFirmwareIds = ['HCV52K', 'HCV52L'];
+
+  const deviceFirmwareId = deviceStatus.deviceAttrs?.firmwareId || '';
+
+  const isProjectMatched = allProjctInfos.some(
+    (info) =>
+      info.projectId === refProjectId &&
+      info.firmwares.some(
+        (firmware) =>
+          ('standardFirmwareDefinition' in firmware &&
+            standardFirmwareIds.includes(deviceFirmwareId)) ||
+          ('customFirmwareId' in firmware &&
+            firmware.customFirmwareId === deviceFirmwareId),
+      ),
+  );
 
   if (developerMode && allowCrossKeyboardKeyMappingWrite) {
     return isInternalProfile && isDeviceConnected;
@@ -357,15 +371,11 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
 
   const allProfileNames = allProfileEntries.map((it) => it.profileName);
 
-  const deviceStatus = useKeyboardDeviceStatus();
-
-  const { globalSettings } = globalSettingsModel;
-
   const { isSimulatorMode } = useKeyboardBehaviorModeModel();
 
   const presetsModalDisplayStateModel = useModalDisplayStateModel();
 
-  const canWrite = getCanWrite(deviceStatus, globalSettings);
+  const canWrite = getCanWrite();
 
   const canSave = getCanSave();
 

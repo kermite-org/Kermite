@@ -3,10 +3,12 @@ import {
   flattenArray,
   getFirmwareTargetDeviceFromBaseFirmwareType,
   IBootloaderDeviceDetectionStatus,
+  IFirmwareTargetDevice,
   IProjectPackageInfo,
 } from '~/shared';
 import { ipcAgent, ISelectorSource } from '~/ui/base';
-import { projectPackagesReader, uiStatusModel } from '~/ui/commonModels';
+import { uiStatusModel } from '~/ui/commonModels';
+import { projectPackagesReader, uiStateReader } from '~/ui/commonStore';
 import { modalAlert } from '~/ui/components';
 
 export type FirmwareUpdationPhase =
@@ -16,6 +18,22 @@ export type FirmwareUpdationPhase =
   | 'UploadSuccess'
   | 'UploadFailure';
 
+function getTargetDeviceFromFirmwareInfo(
+  entry: IProjectPackageInfo['firmwares'][0],
+): IFirmwareTargetDevice | undefined {
+  if ('standardFirmwareConfig' in entry) {
+    return getFirmwareTargetDeviceFromBaseFirmwareType(
+      entry.standardFirmwareConfig.baseFirmwareType,
+    );
+  }
+  if ('customFirmwareId' in entry) {
+    const item = uiStateReader.allCustomFirmwareInfos.find(
+      (it) => it.firmwareId === entry.customFirmwareId,
+    );
+    return item?.targetDevice as IFirmwareTargetDevice;
+  }
+  return undefined;
+}
 export class FirmwareUpdationModel {
   currentProjectFirmwareSpec: string = '';
   phase: FirmwareUpdationPhase = 'WaitingReset';
@@ -44,11 +62,11 @@ export class FirmwareUpdationModel {
     const blankOption = { value: '', label: 'select firmware' };
     const projectOptions = flattenArray(
       this.projectInfosWithFirmware.map((info) =>
-        info.standardFirmwareDefinitions.map((firmware) => ({
-          value: `${info.sig}:${firmware.variantName}`,
+        info.firmwares.map((firmware) => ({
+          value: `${info.sig}:${firmware.variationName}`,
           label: `${info.origin === 'local' ? '(local) ' : ''} ${
             info.keyboardName
-          } (${firmware.variantName})`,
+          } (${firmware.variationName})`,
         })),
       ),
     );
@@ -102,16 +120,17 @@ export class FirmwareUpdationModel {
       const projectaInfo = this.projectInfosWithFirmware.find((it) =>
         it.sig.startsWith(projectSig),
       );
-      const firmwareInfo = projectaInfo?.standardFirmwareDefinitions.find(
-        (f) => f.variantName === variationName,
+      const firmwareInfo = projectaInfo?.firmwares.find(
+        (f) => f.variationName === variationName,
       );
       if (firmwareInfo) {
-        const targetDevice = getFirmwareTargetDeviceFromBaseFirmwareType(
-          firmwareInfo.data.baseFirmwareType,
-        );
-        return checkDeviceBootloaderMatch(
-          this.deviceDetectionStatus.bootloaderType,
-          targetDevice,
+        const targetDevice = getTargetDeviceFromFirmwareInfo(firmwareInfo);
+        return (
+          !!targetDevice &&
+          checkDeviceBootloaderMatch(
+            this.deviceDetectionStatus.bootloaderType,
+            targetDevice,
+          )
         );
       }
     }
@@ -156,7 +175,7 @@ export class FirmwareUpdationModel {
   private fechProjectInfos() {
     this.projectInfosWithFirmware = projectPackagesReader
       .getProjectInfosGlobalProjectSelectionAffected()
-      .filter((info) => info.standardFirmwareDefinitions.length > 0);
+      .filter((info) => info.firmwares.length > 0);
   }
 
   startPageSession = () => {

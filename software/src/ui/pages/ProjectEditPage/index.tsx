@@ -1,10 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
-import {
-  pageActions,
-  projectPackagesHooks,
-  projectPackagesMutations,
-} from '~/ui/commonModels';
+import { pageActions } from '~/ui/commonModels';
+import { projectPackagesHooks, projectPackagesWriter } from '~/ui/commonStore';
 import { reflectValue } from '~/ui/helpers';
 
 export const ProjectEditPage: FC = () => {
@@ -14,13 +11,13 @@ export const ProjectEditPage: FC = () => {
 
   const handleKeyboardNameChange = (value: string) => {
     const newProjectInfo = { ...projectInfo, keyboardName: value };
-    projectPackagesMutations.saveLocalProject(newProjectInfo);
+    projectPackagesWriter.saveLocalProject(newProjectInfo);
   };
 
   const resourceData = {
-    firmwares: projectInfo.customFirmwareReferences.map((it) => it.variantName),
+    firmwares: projectInfo.firmwares.map((it) => it.variationName),
     layouts: projectInfo.layouts.map((it) => it.layoutName),
-    preset: projectInfo.profiles.map((it) => it.profileName),
+    preset: projectInfo.presets.map((it) => it.presetName),
   };
 
   const onLayoutEditButton = () => {
@@ -33,7 +30,7 @@ export const ProjectEditPage: FC = () => {
   const onPresetEditButton = () => {
     pageActions.navigateTo({
       type: 'projectPresetEdit',
-      presetName: projectInfo.profiles[0].profileName,
+      presetName: projectInfo.presets[0].presetName,
     });
   };
 

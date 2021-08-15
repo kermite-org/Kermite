@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'qx';
 import { SystemParameter } from '~/shared';
 import { ipcAgent } from '~/ui/base';
 import {
   IRoutingChannelModel,
   ISystemLayoutModel,
 } from '~/ui/commonModels/Interfaces';
+import { uiStateReader } from '~/ui/commonStore';
 
 interface ISystemParameterModel {
   value: number;
@@ -15,17 +15,9 @@ function useSystemParameterModel(
   parameterIndex: number,
   defaultValue: number,
 ): ISystemParameterModel {
-  const [value, _setValue] = useState(defaultValue);
-  useEffect(
-    () =>
-      ipcAgent.events.device_keyboardDeviceStatusEvents.subscribe((status) => {
-        if (status.systemParameterValues) {
-          const newValue = status.systemParameterValues[parameterIndex];
-          _setValue(newValue);
-        }
-      }),
-    [],
-  );
+  const _value =
+    uiStateReader.deviceStatus.systemParameterMaxValues?.[parameterIndex];
+  const value = typeof _value === 'number' ? _value : defaultValue;
   const setValue = (newValue: number) => {
     ipcAgent.async.device_setCustomParameterValue(parameterIndex, newValue);
   };

@@ -1,6 +1,7 @@
 import { IKeyboardDeviceStatus, IRealtimeKeyboardEvent } from '~/shared';
 import { executeWithAppErrorHandler2 } from '~/shell/base/ErrorChecker';
 import { createEventPort } from '~/shell/funcs';
+import { commitCoreState, coreState } from '~/shell/global';
 import { getPortNameFromDevicePath } from '~/shell/services/device/keyboardDevice/DeviceEnumerator';
 import {
   deviceSetupTask,
@@ -23,7 +24,7 @@ function createConnectedStatus(
     isConnected: true,
     deviceAttrs: {
       origin: attrsRes.resourceOrigin,
-      projectId: attrsRes.projectId,
+      firmwareId: attrsRes.firmwareId,
       firmwareVariationName: attrsRes.firmwareVariationName,
       firmwareBuildRevision: attrsRes.projectReleaseBuildRevision,
       deviceInstanceCode: attrsRes.deviceInstanceCode,
@@ -41,17 +42,9 @@ export class KeyboardDeviceServiceCore {
 
   private device: IDeviceWrapper | undefined;
 
-  private deviceStatus: IKeyboardDeviceStatus = {
-    isConnected: false,
-  };
-
-  statusEventPort = createEventPort<Partial<IKeyboardDeviceStatus>>({
-    initialValueGetter: () => this.deviceStatus,
-  });
-
   private setStatus(newStatus: Partial<IKeyboardDeviceStatus>) {
-    this.deviceStatus = { ...this.deviceStatus, ...newStatus };
-    this.statusEventPort.emit(newStatus);
+    const deviceStatus = { ...coreState.deviceStatus, ...newStatus };
+    commitCoreState({ deviceStatus });
   }
 
   private onDeviceDataReceived = (buf: Uint8Array) => {
@@ -60,7 +53,7 @@ export class KeyboardDeviceServiceCore {
       this.realtimeEventPort.emit(res.event);
     }
     if (res?.type === 'parameterChangedNotification') {
-      const newValues = this.deviceStatus.systemParameterValues!.slice();
+      const newValues = coreState.deviceStatus.systemParameterValues!.slice();
       newValues[res.parameterIndex] = res.value;
       this.setStatus({
         systemParameterValues: newValues,

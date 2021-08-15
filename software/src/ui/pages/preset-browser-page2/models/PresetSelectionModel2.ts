@@ -12,7 +12,7 @@ import {
   ISelectorOption,
   router,
 } from '~/ui/base';
-import { projectPackagesReader } from '~/ui/commonModels';
+import { projectPackagesReader } from '~/ui/commonStore';
 import { fieldSetter, useFetcher, usePersistState } from '~/ui/helpers';
 import { IPresetSelectionModel } from '~/ui/pages/preset-browser-page/models';
 
