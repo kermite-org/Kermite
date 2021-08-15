@@ -12,7 +12,8 @@ import { ProjectResourceProviderImpl_Local } from '~/shell/projectResources/Proj
 import { ProjectResourceProviderImpl_Remote } from '~/shell/projectResources/ProjectResourceProviderImpl_Remote';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-class ProjectResourceProvider_OBSOLETE implements IProjectResourceProvider {
+export class ProjectResourceProvider_OBSOLETE
+  implements IProjectResourceProvider {
   localResourceProviderImpl = new ProjectResourceProviderImpl_Local();
   remoteResourceProviderImpl = new ProjectResourceProviderImpl_Remote();
 
