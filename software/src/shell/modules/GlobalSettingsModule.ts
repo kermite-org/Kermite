@@ -17,6 +17,7 @@ export const globalSettingsModule = createCoreModule({
         settings.localProjectRootFolderPath = '';
       }
     }
+    settings.useLocalResouces = false;
     commitCoreState({ globalSettings: settings });
   },
   writeGlobalSettings(partialConfig) {
