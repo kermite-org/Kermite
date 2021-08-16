@@ -6,7 +6,6 @@ import {
   useEffect,
   FC,
 } from 'qx';
-import { delayMs } from '~/shared';
 import {
   router,
   shortCssProcessor,
@@ -18,7 +17,12 @@ import {
   uiStatusModel,
   globalAppServicesInitializerEffect,
 } from '~/ui/commonModels';
-import { commitUiState, uiState, uiStateDriverEffect } from '~/ui/commonStore';
+import {
+  commitUiState,
+  fetchInitialUiStateData,
+  uiState,
+  uiStateDriverEffect,
+} from '~/ui/commonStore';
 import {
   DebugOverlay,
   ForegroundModalLayerRoot,
@@ -71,10 +75,11 @@ const AppView: FC = () => {
 
 const InitialLoadingView: FC = () => {
   useEffect(() => {
-    delayMs(2000).then(() => {
+    (async () => {
+      await fetchInitialUiStateData();
       commitUiState({ initialLoading: false });
       appUi.rerender();
-    });
+    })();
   }, []);
   return <div>Loading...</div>;
 };
