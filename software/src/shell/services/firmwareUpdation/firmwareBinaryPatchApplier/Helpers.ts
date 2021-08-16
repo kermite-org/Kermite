@@ -1,5 +1,5 @@
 export function convertArrayElementsToBytes(
-  arr: (number | boolean | undefined)[]
+  arr: (number | boolean | undefined)[],
 ): number[] {
   return arr.map((value) => {
     if (value === undefined) {
@@ -19,13 +19,11 @@ export function convertArrayElementsToBytes(
 }
 
 export function padByteArray(
-  bytes: number[] | undefined,
+  bytes: number[],
   length: number,
-  fallbackValue: number
+  fallbackValue: number,
 ): number[] {
   return new Array(length)
     .fill(0)
-    .map((_, i) =>
-      bytes?.[i] && isFinite(bytes?.[i]) ? bytes[i] : fallbackValue
-    );
+    .map((_, i) => (i < bytes.length ? bytes[i] : fallbackValue));
 }
