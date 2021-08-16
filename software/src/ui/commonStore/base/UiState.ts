@@ -17,11 +17,13 @@ import { IPageSpec } from '~/ui/commonModels/PageTypes';
 export type IUiState = {
   core: ICoreState;
   pageSpec: IPageSpec | undefined;
+  initialLoading: boolean;
 };
 
 export const defaultUiState: IUiState = {
   core: cloneObject(defaultCoreState),
   pageSpec: undefined,
+  initialLoading: false,
 };
 
 export type IUiAction = Partial<{}>;

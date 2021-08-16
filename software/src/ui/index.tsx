@@ -3,7 +3,7 @@ import { debounce } from '~/shared';
 import { resourceDevelopmentEntry } from '~/ui/ResourceDevelopment';
 import { appUi, ipcAgent } from '~/ui/base';
 import { uiStatusModel } from '~/ui/commonModels';
-import { uiState } from '~/ui/commonStore';
+import { commitUiState, uiState } from '~/ui/commonStore';
 import { SiteRoot } from '~/ui/root/SiteRoot';
 
 async function start() {
@@ -15,6 +15,7 @@ async function start() {
   uiState.core.allProjectPackageInfos = await ipcAgent.async.projects_getAllProjectPackageInfos();
   uiState.core.allCustomFirmwareInfos = await ipcAgent.async.projects_getAllCustomFirmwareInfos();
 
+  commitUiState({ initialLoading: true });
   render(() => <SiteRoot />, appDiv);
   window.addEventListener('resize', debounce(appUi.rerender, 100));
 
