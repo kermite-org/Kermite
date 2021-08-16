@@ -1,6 +1,5 @@
 import { jsx, render } from 'qx';
 import { debounce } from '~/shared';
-import { resourceDevelopmentEntry } from '~/ui/ResourceDevelopment';
 import { appUi } from '~/ui/base';
 import { uiStatusModel } from '~/ui/commonModels';
 import { commitUiState } from '~/ui/commonStore';
@@ -23,4 +22,3 @@ function start() {
 }
 
 window.addEventListener('load', start);
-window.addEventListener('load', resourceDevelopmentEntry);
