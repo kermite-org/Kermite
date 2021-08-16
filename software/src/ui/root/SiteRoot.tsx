@@ -15,7 +15,7 @@ import {
 import {
   siteModel,
   uiStatusModel,
-  globalAppServicesInitializerEffect,
+  appErrorNotifierEffect,
 } from '~/ui/commonModels';
 import {
   commitUiState,
@@ -86,7 +86,7 @@ const InitialLoadingView: FC = () => {
 
 export const SiteRoot: FC = () => {
   useEffect(router.rerenderEffectOnHashChange, []);
-  useEffect(globalAppServicesInitializerEffect, []);
+  useEffect(appErrorNotifierEffect, []);
   useEffect(siteModel.setupLifecycle, []);
   useEffect(globalHintMouseMoveHandlerEffect, []);
   useEffect(uiStateDriverEffect, []);
