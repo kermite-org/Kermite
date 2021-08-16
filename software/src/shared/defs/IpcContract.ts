@@ -85,7 +85,7 @@ export interface IAppIpcContract {
 
     platform_openUrlInDefaultBrowser(path: string): Promise<void>;
 
-    global_triggerLazyInitializeServices(): Promise<void>;
+    global_lazyInitializeServices(): Promise<void>;
 
     global_dispatchCoreAction(action: ICoreAction): Promise<void>;
   };

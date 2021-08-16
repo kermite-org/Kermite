@@ -19,7 +19,7 @@ import {
 } from '~/ui/commonModels';
 import {
   commitUiState,
-  fetchInitialUiStateData,
+  lazyInitializeCoreServices,
   uiState,
   uiStateDriverEffect,
 } from '~/ui/commonStore';
@@ -76,7 +76,7 @@ const AppView: FC = () => {
 const InitialLoadingView: FC = () => {
   useEffect(() => {
     (async () => {
-      await fetchInitialUiStateData();
+      await lazyInitializeCoreServices();
       commitUiState({ initialLoading: false });
       appUi.rerender();
     })();
