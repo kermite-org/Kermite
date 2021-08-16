@@ -30,6 +30,12 @@ export function serializeCustomKeyboardSpec(
     keyScannerPins.push(...(spec.directWiredPins || []));
   }
 
+  const pinDefinitionsBytes = padByteArray(
+    keyScannerPins.map(mapPinNameToPinNumber),
+    32,
+    0xff,
+  );
+
   return convertArrayElementsToBytes([
     spec.useBoardLedsProMicroAvr,
     spec.useBoardLedsProMicroRp,
@@ -40,6 +46,6 @@ export function serializeCustomKeyboardSpec(
     numMatrixColumns,
     numMatrixRows,
     numDirectWiredKeys,
-    ...padByteArray(keyScannerPins.map(mapPinNameToPinNumber), 32, 0xff),
+    ...pinDefinitionsBytes,
   ]);
 }
