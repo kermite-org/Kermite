@@ -15,7 +15,7 @@ export const RawHidMessageProtocolRevision = 3;
 export const ProfileBinaryFormatRevision = 4;
 
 // 210513, 1, 初版
-// 210522, 2, sytemLayoutをUS:1,JIS:2に変更
+// 210522, 2, systemLayoutをUS:1,JIS:2に変更
 // 210706, 3, emitKeyStrokeを削除
 // 210706, 4, systemLayoutをUS:0,JIS:1に戻す
 // 210712, 5, glowDirectionとglowSpeedを削除

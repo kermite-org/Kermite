@@ -1,6 +1,6 @@
-import { IServerPorfileInfo } from '~/shared';
+import { IServerProfileInfo } from '~/shared';
 
 export interface IUserPresetHubService {
   getServerProjectIds(): Promise<string[]>;
-  getServerProfiles(projectId: string): Promise<IServerPorfileInfo[]>;
+  getServerProfiles(projectId: string): Promise<IServerProfileInfo[]>;
 }

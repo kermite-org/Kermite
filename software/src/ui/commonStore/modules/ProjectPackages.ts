@@ -15,10 +15,10 @@ import {
 
 export const projectPackagesReader = {
   getProjectInfosGlobalProjectSelectionAffected(): IProjectPackageInfo[] {
-    const { useLocalResouces, globalProjectId } = uiStateReader.globalSettings;
+    const { useLocalResources, globalProjectId } = uiStateReader.globalSettings;
 
     return uiStateReader.allProjectPackageInfos
-      .filter((info) => useLocalResouces || info.origin === 'online')
+      .filter((info) => useLocalResources || info.origin === 'online')
       .filter(
         (info) => globalProjectId === '' || info.projectId === globalProjectId,
       );

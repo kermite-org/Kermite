@@ -1,11 +1,11 @@
-import { makeDipsalyErrorMessage } from '~/shared';
+import { makeDisplayErrorMessage } from '~/shared';
 import { ipcAgent } from '~/ui/base';
 import { modalError } from '~/ui/components';
 
 export function globalAppServicesInitializerEffect() {
   const unsub = ipcAgent.events.global_appErrorEvents.subscribe(
     async (errorData) => {
-      await modalError(makeDipsalyErrorMessage(errorData));
+      await modalError(makeDisplayErrorMessage(errorData));
     },
   );
   ipcAgent.async.global_triggerLazyInitializeServices();

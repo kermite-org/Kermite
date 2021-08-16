@@ -19,7 +19,7 @@ interface IOutlineEditPanelModel {
 function createOutlineEditPanelModel() {
   const numberPatterns = [/^-?\d+\.?\d*$/];
 
-  function createOulineEditPropModel(propKey: 'x' | 'y') {
+  function createOutlineEditPropModel(propKey: 'x' | 'y') {
     return createConfigTextEditModelDynamic(
       numberPatterns,
       10,
@@ -53,8 +53,8 @@ function createOutlineEditPanelModel() {
     });
   }
 
-  const vmX = createOulineEditPropModel('x');
-  const vmY = createOulineEditPropModel('y');
+  const vmX = createOutlineEditPropModel('x');
+  const vmY = createOutlineEditPropModel('y');
 
   return () => {
     const p = editReader.currentOutlinePoint;

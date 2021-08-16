@@ -105,10 +105,10 @@ function makeProjectOptions(infos: IProjectPackageInfo[]): ISelectorOption[] {
 }
 
 function makeLayoutOptions(
-  resouceInfos: IProjectPackageInfo[],
+  resourceInfos: IProjectPackageInfo[],
   projectSig: string,
 ): ISelectorOption[] {
-  const info = resouceInfos.find((info) => info.sig === projectSig);
+  const info = resourceInfos.find((info) => info.sig === projectSig);
   return (
     info?.layouts.map((it) => ({
       value: it.layoutName,

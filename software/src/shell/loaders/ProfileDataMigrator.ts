@@ -58,7 +58,7 @@ function showLog(text: string) {
 export namespace ProfileDataMigrator {
   function fixProfileDataPRF03toPRF04(profile: IPersistProfileData) {
     // PRF03 --> PRF04
-    // profile.assignType を profile.settings.assingTypeに移動
+    // profile.assignType を profile.settings.assignTypeに移動
     // アサインを辞書形式から配列形式に変更
     showLog(`PRF03 --> PRF04`);
     const _profile = (profile as any) as {
@@ -74,7 +74,7 @@ export namespace ProfileDataMigrator {
     }
     LayoutDataMigrator.patchOldFormatLayoutData(profile.keyboardDesign);
     if (!Array.isArray(profile.assigns)) {
-      profile.assigns = ProfileDataConverter.convertAssingsDictionaryToArray(
+      profile.assigns = ProfileDataConverter.convertAssignsDictionaryToArray(
         profile.assigns,
       );
     }

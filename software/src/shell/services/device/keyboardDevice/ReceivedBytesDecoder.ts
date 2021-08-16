@@ -33,7 +33,7 @@ export type IReceivedBytesDecodeResult =
       data: IDeviceAttributesReadResponseData;
     }
   | {
-      type: 'custromParametersReadResponse';
+      type: 'customParametersReadResponse';
       data: ICustomParametersReadResponseData;
     }
   | {
@@ -42,7 +42,7 @@ export type IReceivedBytesDecodeResult =
       value: number;
     };
 
-export function recievedBytesDecoder(
+export function receivedBytesDecoder(
   buf: Uint8Array,
 ): IReceivedBytesDecodeResult | undefined {
   const cmd = buf[0];
@@ -82,7 +82,7 @@ export function recievedBytesDecoder(
     const parameterValues = [...buf.slice(2, 2 + sz)];
     const parameterMaxValues = [...buf.slice(2 + sz, 2 + sz + sz)];
     return {
-      type: 'custromParametersReadResponse',
+      type: 'customParametersReadResponse',
       data: {
         numParameters: sz,
         parameterValues,

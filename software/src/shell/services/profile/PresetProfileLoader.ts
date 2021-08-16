@@ -30,7 +30,7 @@ import { coreState } from '~/shell/global';
 //       return profileData;
 //     }
 //   } catch (error) {
-//     console.log(`errorr on loading layout file`);
+//     console.log(`error on loading layout file`);
 //     console.error(error);
 //   }
 // }

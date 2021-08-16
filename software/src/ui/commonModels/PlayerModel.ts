@@ -5,7 +5,7 @@ import {
   fallbackProfileData,
   IAssignEntry,
   IAssignOperation,
-  IAssingOperationKeyInput,
+  IAssignOperationKeyInput,
   IDisplayKeyboardDesign,
   ILayer,
   IProfileData,
@@ -64,14 +64,14 @@ const {
   ModifierSourceValueAny,
   ModifierDestinationValueKeep,
 } = routerConstants;
-const VirutalKeySourceValueAny: VirtualKey = 'K_RoutingSource_Any';
+const VirtualKeySourceValueAny: VirtualKey = 'K_RoutingSource_Any';
 const VirtualKeyDestinationValueKeep: VirtualKey = 'K_RoutingDestination_Keep';
 
 function translateKeyInputOperation(
-  op: IAssingOperationKeyInput,
+  op: IAssignOperationKeyInput,
   profile: IProfileData,
   routingChannel: number,
-): IAssingOperationKeyInput {
+): IAssignOperationKeyInput {
   let virtualKey = op.virtualKey;
   let modifiers = op.attachedModifiers;
 
@@ -82,7 +82,7 @@ function translateKeyInputOperation(
       const srcModifiers = re.srcModifiers;
       if (
         (virtualKey === srcVirtualKey ||
-          srcVirtualKey === VirutalKeySourceValueAny) &&
+          srcVirtualKey === VirtualKeySourceValueAny) &&
         (modifiers === srcModifiers || srcModifiers === ModifierSourceValueAny)
       ) {
         const dstVirtualKey = re.dstKey;
@@ -211,7 +211,7 @@ const setProfileData = (profile: IProfileData, local: ILocalState) => {
   }
 };
 
-const handlekeyEvents = (ev: IRealtimeKeyboardEvent, local: ILocalState) => {
+const handleKeyEvents = (ev: IRealtimeKeyboardEvent, local: ILocalState) => {
   if (ev.type === 'keyStateChanged') {
     const { keyIndex, isDown } = ev;
     if (isDown) {
@@ -256,7 +256,7 @@ export function usePlayerModel(): IPlayerModel {
   useEffect(
     () =>
       ipcAgent.events.device_keyEvents.subscribe((ev) =>
-        handlekeyEvents(ev, local),
+        handleKeyEvents(ev, local),
       ),
     [],
   );

@@ -10,7 +10,7 @@ export type IEditMode = 'select' | 'move' | 'key' | 'shape' | 'delete';
 export interface IEditState {
   loadedDesign: IEditKeyboardDesign;
   design: IEditKeyboardDesign;
-  currentkeyEntityId: string | undefined;
+  currentKeyEntityId: string | undefined;
   isCurrentKeyMirror: boolean;
   currentShapeId: string | undefined;
   currentPointIndex: number;
@@ -77,7 +77,7 @@ export const appState: IAppState = {
   editor: {
     loadedDesign: createFallbackEditKeyboardDesign(),
     design: createFallbackEditKeyboardDesign(),
-    currentkeyEntityId: undefined,
+    currentKeyEntityId: undefined,
     isCurrentKeyMirror: false,
     currentShapeId: undefined,
     currentPointIndex: -1,

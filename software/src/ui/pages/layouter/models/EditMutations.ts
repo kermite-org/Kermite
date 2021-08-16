@@ -28,25 +28,25 @@ import {
   IEditPropKey,
 } from './DataSchema';
 import { editReader } from './EditReader';
-import { editUpdator } from './EditUpdator';
+import { editUpdater } from './EditUpdater';
 
 class EditMutations {
   startEdit = () => {
-    editUpdator.startEditSession();
+    editUpdater.startEditSession();
   };
 
   endEdit = () => {
-    editUpdator.endEditSession();
+    editUpdater.endEditSession();
   };
 
   cancelEdit = () => {
-    editUpdator.cancelEditSession();
+    editUpdater.cancelEditSession();
   };
 
   startKeyEdit = (useGhost: boolean = true) => {
-    editUpdator.startEditSession();
+    editUpdater.startEditSession();
     if (useGhost) {
-      editUpdator.patchEnvState((env) => {
+      editUpdater.patchEnvState((env) => {
         const ke = editReader.currentKeyEntity;
         env.ghost = (ke && { ...ke }) || undefined;
       });
@@ -54,9 +54,9 @@ class EditMutations {
   };
 
   endKeyEdit = () => {
-    editUpdator.endEditSession();
+    editUpdater.endEditSession();
     if (editReader.ghost) {
-      editUpdator.patchEnvState((env) => {
+      editUpdater.patchEnvState((env) => {
         env.ghost = undefined;
       });
     }
@@ -102,18 +102,18 @@ class EditMutations {
       mirrorKeyIndex: -1,
       groupId: currentTransGroupId || '',
     };
-    editUpdator.patchEditor((editor) => {
+    editUpdater.patchEditor((editor) => {
       editor.design.keyEntities[id] = keyEntity;
-      editor.currentkeyEntityId = id;
+      editor.currentKeyEntityId = id;
     });
   }
 
   deleteCurrentKeyEntity() {
-    const { currentkeyEntityId } = appState.editor;
-    if (currentkeyEntityId) {
-      editUpdator.commitEditor((editor) => {
-        delete editor.design.keyEntities[currentkeyEntityId];
-        editor.currentkeyEntityId = undefined;
+    const { currentKeyEntityId } = appState.editor;
+    if (currentKeyEntityId) {
+      editUpdater.commitEditor((editor) => {
+        delete editor.design.keyEntities[currentKeyEntityId];
+        editor.currentKeyEntityId = undefined;
       });
     }
   }
@@ -124,7 +124,7 @@ class EditMutations {
     if (!shapeId || idx === -1) {
       return;
     }
-    editUpdator.commitEditor((editor) => {
+    editUpdater.commitEditor((editor) => {
       const shape = editor.design.outlineShapes[shapeId];
       shape.points.splice(idx, 1);
       if (shape.points.length <= 2) {
@@ -138,7 +138,7 @@ class EditMutations {
     if (!shapeId) {
       return;
     }
-    editUpdator.patchEditor((editor) => {
+    editUpdater.patchEditor((editor) => {
       const shape = editor.design.outlineShapes[shapeId];
       shape.points.splice(dstPointIndex, 0, { x, y });
     });
@@ -149,7 +149,7 @@ class EditMutations {
     if (snapToGrid) {
       [x, y] = applyCoordSnapping(x, y, snapPitches);
     }
-    editUpdator.patchEditor((editor) => {
+    editUpdater.patchEditor((editor) => {
       const shape = editor.drawingShape;
       if (shape) {
         shape.points.push({ x, y });
@@ -159,7 +159,7 @@ class EditMutations {
   }
 
   setPlacementUnit(unitSpec: string) {
-    editUpdator.commitEditor((editor) => {
+    editUpdater.commitEditor((editor) => {
       changePlacementCoordUnit(editor.design, unitSpec);
     });
     if (editReader.gridSpecKey.startsWith('kp')) {
@@ -168,25 +168,25 @@ class EditMutations {
   }
 
   setPlacementAnchor(anchor: IKeyPlacementAnchor) {
-    editUpdator.commitEditor((editor) => {
+    editUpdater.commitEditor((editor) => {
       editor.design.setup.placementAnchor = anchor;
     });
   }
 
   setKeyIdMode(mode: IKeyIdMode) {
-    editUpdator.commitEditor((editor) => {
+    editUpdater.commitEditor((editor) => {
       editor.design.setup.keyIdMode = mode;
     });
   }
 
   setKeySizeUnit(unitSpec: string) {
-    editUpdator.commitEditor((editor) => {
+    editUpdater.commitEditor((editor) => {
       changeKeySizeUnit(editor.design, unitSpec);
     });
   }
 
   setGridSpecKey(gs: IGridSpecKey) {
-    editUpdator.patchEnvState((env) => {
+    editUpdater.patchEnvState((env) => {
       env.gridSpecKey = gs;
     });
   }
@@ -198,7 +198,7 @@ class EditMutations {
         'shape',
         editReader.allOutlineShapes,
       );
-      editUpdator.patchEditor((editor) => {
+      editUpdater.patchEditor((editor) => {
         editor.drawingShape = {
           id: newId,
           points: [],
@@ -213,7 +213,7 @@ class EditMutations {
   completeShapeDrawing() {
     const { drawingShape } = editReader;
     if (drawingShape && drawingShape.points.length >= 3) {
-      editUpdator.patchEditor((state) => {
+      editUpdater.patchEditor((state) => {
         state.design.outlineShapes[drawingShape.id] = drawingShape;
         state.drawingShape = undefined;
       });
@@ -223,7 +223,7 @@ class EditMutations {
 
   cancelShapeDrawing() {
     if (editReader.drawingShape) {
-      editUpdator.patchEditor((editor) => {
+      editUpdater.patchEditor((editor) => {
         editor.drawingShape = undefined;
       });
       editMutations.cancelEdit();
@@ -232,7 +232,7 @@ class EditMutations {
 
   setEditMode(mode: IEditMode) {
     this.cancelShapeDrawing();
-    editUpdator.patchEditor((editor) => {
+    editUpdater.patchEditor((editor) => {
       editor.editMode = mode;
     });
   }
@@ -244,8 +244,8 @@ class EditMutations {
     }
     this.cancelShapeDrawing();
 
-    editUpdator.patchEditor((state) => {
-      state.currentkeyEntityId = undefined;
+    editUpdater.patchEditor((state) => {
+      state.currentKeyEntityId = undefined;
       state.isCurrentKeyMirror = false;
       state.currentShapeId = undefined;
       state.currentPointIndex = -1;
@@ -254,14 +254,14 @@ class EditMutations {
   }
 
   setBoolOption<K extends IEnvBoolPropKey>(fieldKey: K, value: boolean) {
-    editUpdator.patchEnvState((env) => {
+    editUpdater.patchEnvState((env) => {
       env[fieldKey] = value;
     });
   }
 
   setCurrentKeyEntity(keyEntityId: string, isMirror: boolean) {
-    editUpdator.patchEditor((editor) => {
-      editor.currentkeyEntityId = keyEntityId;
+    editUpdater.patchEditor((editor) => {
+      editor.currentKeyEntityId = keyEntityId;
       editor.isCurrentKeyMirror = isMirror;
     });
     const ke = editReader.currentKeyEntity;
@@ -269,14 +269,14 @@ class EditMutations {
   }
 
   unsetCurrentKeyEntity() {
-    editUpdator.patchEditor((editor) => {
-      editor.currentkeyEntityId = undefined;
+    editUpdater.patchEditor((editor) => {
+      editor.currentKeyEntityId = undefined;
       editor.isCurrentKeyMirror = false;
     });
   }
 
   setCurrentShapeId(shapeId: string | undefined) {
-    editUpdator.patchEditor((editor) => {
+    editUpdater.patchEditor((editor) => {
       editor.currentShapeId = shapeId;
     });
     const shape = editReader.currentOutlineShape;
@@ -284,19 +284,19 @@ class EditMutations {
   }
 
   setCurrentPointIndex(index: number) {
-    editUpdator.patchEditor((editor) => {
+    editUpdater.patchEditor((editor) => {
       editor.currentPointIndex = index;
     });
   }
 
   setCurrentTransGroupById(id: string | undefined) {
-    editUpdator.patchEditor((editor) => {
+    editUpdater.patchEditor((editor) => {
       editor.currentTransGroupId = id || undefined;
     });
   }
 
   moveKeyDelta(deltaX: number, deltaY: number) {
-    editUpdator.patchEditKeyEntity((ke) => {
+    editUpdater.patchEditKeyEntity((ke) => {
       ke.x += deltaX;
       ke.y += deltaY;
     });
@@ -304,7 +304,7 @@ class EditMutations {
 
   setKeyPosition(px: number, py: number) {
     const { coordUnit, snapToGrid, snapPitches } = editReader;
-    editUpdator.patchEditKeyEntity((ke) => {
+    editUpdater.patchEditKeyEntity((ke) => {
       if (snapToGrid) {
         const [kx, ky] = applyCoordSnapping(px, py, snapPitches);
         [ke.x, ke.y] = mmToUnitValue(kx, ky, coordUnit);
@@ -315,7 +315,7 @@ class EditMutations {
   }
 
   setOutlinePointProp(propKey: 'x' | 'y', value: number) {
-    editUpdator.patchEditor((editor) => {
+    editUpdater.patchEditor((editor) => {
       const point = draftGetEditPoint(editor);
       if (point) {
         point[propKey] = value;
@@ -328,7 +328,7 @@ class EditMutations {
     if (snapToGrid) {
       [px, py] = applyCoordSnapping(px, py, snapPitches);
     }
-    editUpdator.patchEditor((editor) => {
+    editUpdater.patchEditor((editor) => {
       const point = draftGetEditPoint(editor);
       if (point) {
         point.x = px;
@@ -342,7 +342,7 @@ class EditMutations {
     if (!currentTransGroupId) {
       return;
     }
-    editUpdator.patchEditor((editor) => {
+    editUpdater.patchEditor((editor) => {
       const group = editor.design.transGroups[currentTransGroupId];
       group[propKey] = value;
     });
@@ -353,7 +353,7 @@ class EditMutations {
     if (!currentTransGroupId) {
       return;
     }
-    editUpdator.commitEditor((editor) => {
+    editUpdater.commitEditor((editor) => {
       const group = editor.design.transGroups[currentTransGroupId];
       group.mirror = mirror;
     });
@@ -363,7 +363,7 @@ class EditMutations {
     const numGroups = editReader.allTransGroups.length;
     const newGroupId = numGroups.toString();
 
-    editUpdator.commitEditor((editor) => {
+    editUpdater.commitEditor((editor) => {
       editor.design.transGroups[newGroupId] = {
         id: newGroupId,
         x: 0,
@@ -381,7 +381,7 @@ class EditMutations {
       return;
     }
     const deletingGroupId = (numGroups - 1).toString();
-    editUpdator.commitEditor((editor) => {
+    editUpdater.commitEditor((editor) => {
       delete editor.design.transGroups[deletingGroupId];
       editor.currentTransGroupId = undefined;
     });
@@ -391,27 +391,27 @@ class EditMutations {
     propKey: K,
     value: IEditKeyEntity[K],
   ) => {
-    editUpdator.patchEditKeyEntity((ke) => {
+    editUpdater.patchEditKeyEntity((ke) => {
       ke[propKey] = value;
     });
   };
 
   setEditScreenSize(w: number, h: number) {
-    editUpdator.patchEnvState((env) => {
+    editUpdater.patchEnvState((env) => {
       env.sight.screenW = w;
       env.sight.screenH = h;
     });
   }
 
   moveSight(deltaX: number, deltaY: number) {
-    editUpdator.patchEnvState((env) => {
+    editUpdater.patchEnvState((env) => {
       env.sight.pos.x += deltaX;
       env.sight.pos.y += deltaY;
     });
   }
 
   scaleSight(dir: number, px: number, py: number) {
-    editUpdator.patchEnvState((env) => {
+    editUpdater.patchEnvState((env) => {
       const { sight } = env;
       const sza = 1 + dir * 0.05;
       const oldScale = sight.scale;
@@ -424,7 +424,7 @@ class EditMutations {
   }
 
   resetKeyboardDesign() {
-    editUpdator.patchEditor((editor) => {
+    editUpdater.patchEditor((editor) => {
       const design = createFallbackEditKeyboardDesign();
       editor.loadedDesign = design;
       editor.design = design;
@@ -432,7 +432,7 @@ class EditMutations {
   }
 
   loadKeyboardDesign(design: IEditKeyboardDesign) {
-    editUpdator.patchEditor((editor) => {
+    editUpdater.patchEditor((editor) => {
       editor.loadedDesign = design;
       editor.design = design;
     });
@@ -441,10 +441,10 @@ class EditMutations {
   }
 
   resetSitePosition() {
-    const bb = editReader.dispalyArea;
+    const bb = editReader.displayArea;
     const cx = (bb.left + bb.right) / 2;
     const cy = (bb.top + bb.bottom) / 2;
-    editUpdator.patchEnvState((env) => {
+    editUpdater.patchEnvState((env) => {
       env.sight.pos.x = cx;
       env.sight.pos.y = cy;
     });
@@ -455,26 +455,26 @@ class EditMutations {
     if (!currentShapeId) {
       return;
     }
-    editUpdator.commitEditor((editor) => {
+    editUpdater.commitEditor((editor) => {
       const shape = editor.design.outlineShapes[currentShapeId];
       shape.groupId = groupId;
     });
   }
 
   addPressedKey(keyIndex: number) {
-    editUpdator.patchEnvState((env) => {
+    editUpdater.patchEnvState((env) => {
       env.pressedKeyIndices.push(keyIndex);
     });
   }
 
   removePressedKey(keyIndex: number) {
-    editUpdator.patchEnvState((env) => {
+    editUpdater.patchEnvState((env) => {
       removeArrayItems(env.pressedKeyIndices, keyIndex);
     });
   }
 
   setWorldMousePos(x: number, y: number) {
-    editUpdator.patchEnvState((env) => {
+    editUpdater.patchEnvState((env) => {
       const mp = env.worldMousePos;
       mp.x = x;
       mp.y = y;

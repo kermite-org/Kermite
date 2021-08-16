@@ -610,7 +610,7 @@ function layerMutations_clearExclusive(
   }
 }
 
-function layerMutations_recoverMainLayerIfAllLayeresDisabled() {
+function layerMutations_recoverMainLayerIfAllLayersDisabled() {
   const isAllOff = layerState.layerActiveFlags === 0;
   if (isAllOff) {
     layerMutations_activate(0);
@@ -738,7 +738,7 @@ function handleOperationOn(opWord: u32) {
   if (!isLayerCall) {
     layerMutations_clearOneshot();
   }
-  layerMutations_recoverMainLayerIfAllLayeresDisabled();
+  layerMutations_recoverMainLayerIfAllLayersDisabled();
 }
 
 function handleOperationOff(opWord: u32) {
@@ -761,7 +761,7 @@ function handleOperationOff(opWord: u32) {
       }
     }
   }
-  layerMutations_recoverMainLayerIfAllLayeresDisabled();
+  layerMutations_recoverMainLayerIfAllLayersDisabled();
 }
 
 // --------------------------------------------------------------------------------
@@ -1162,8 +1162,8 @@ function keySlot_tick(slot: KeySlot, ms: number) {
     slot.inputEdge = InputEdge.Up;
   }
 
-  const intrrupt_kidx = resolverState.interruptKeyIndex;
-  slot.interrupted = intrrupt_kidx !== -1 && intrrupt_kidx !== slot.keyIndex;
+  const interrupt_kidx = resolverState.interruptKeyIndex;
+  slot.interrupted = interrupt_kidx !== -1 && interrupt_kidx !== slot.keyIndex;
 
   if (!slot.resolverProc && slot.inputEdge === InputEdge.Down) {
     const assignSet = findAssignInLayerStack(
@@ -1217,7 +1217,7 @@ function triggerResolver_tick(ms: number) {
   });
 }
 
-function triggerResoler_attachKeyToFreeSlot(
+function triggerResolver_attachKeyToFreeSlot(
   keyIndex: number,
 ): KeySlot | undefined {
   const slot = resolverState.keySlots.find((ks) => !ks.isActive);
@@ -1229,7 +1229,7 @@ function triggerResoler_attachKeyToFreeSlot(
   return undefined;
 }
 
-function triggerResoler_getActiveKeySlotByKeyIndex(
+function triggerResolver_getActiveKeySlotByKeyIndex(
   keyIndex: number,
 ): KeySlot | undefined {
   return resolverState.keySlots.find(
@@ -1241,8 +1241,8 @@ function triggerResolver_handleKeyInput(keyIndex: u8, isDown: boolean) {
   if (isDown) {
     console.log(`down ${keyIndex}`);
     const slot =
-      triggerResoler_getActiveKeySlotByKeyIndex(keyIndex) ||
-      triggerResoler_attachKeyToFreeSlot(keyIndex);
+      triggerResolver_getActiveKeySlotByKeyIndex(keyIndex) ||
+      triggerResolver_attachKeyToFreeSlot(keyIndex);
     if (slot) {
       resolverState.interruptKeyIndex = keyIndex;
       slot.nextHold = true;
@@ -1251,7 +1251,7 @@ function triggerResolver_handleKeyInput(keyIndex: u8, isDown: boolean) {
     }
   } else {
     console.log(`up ${keyIndex}`);
-    const slot = triggerResoler_getActiveKeySlotByKeyIndex(keyIndex);
+    const slot = triggerResolver_getActiveKeySlotByKeyIndex(keyIndex);
     if (slot) {
       slot.nextHold = false;
     }

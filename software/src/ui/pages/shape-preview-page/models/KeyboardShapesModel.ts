@@ -117,7 +117,7 @@ class KeyboardShapesModel {
 
   startPageSession = () => {
     this.settings = UiLocalStorage.readItemSafe(
-      'shapePareviewPageSettings',
+      'shapePreviewPageSettings',
       shapeViewPersistStateSchema,
       shapeViewPersistStateDefault,
     );
@@ -125,7 +125,7 @@ class KeyboardShapesModel {
     this.initialize();
 
     return () => {
-      UiLocalStorage.writeItem('shapePareviewPageSettings', this.settings);
+      UiLocalStorage.writeItem('shapePreviewPageSettings', this.settings);
     };
   };
 }

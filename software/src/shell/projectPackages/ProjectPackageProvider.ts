@@ -7,7 +7,7 @@ import {
 } from '~/shared';
 import { appEnv } from '~/shell/base';
 import {
-  cacheRemoteResouce,
+  cacheRemoteResource,
   fetchJson,
   fsxListFileBaseNames,
   fsxReadJsonFile,
@@ -100,7 +100,7 @@ async function loadLocalProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
   return await loadProjectPackageFiles(projectsFolder, 'local');
 }
 
-async function saveLocalProjectPackgeInfoImpl(info: IProjectPackageInfo) {
+async function saveLocalProjectPackageInfoImpl(info: IProjectPackageInfo) {
   const filePath = pathJoin(
     appEnv.userDataFolderPath,
     'data',
@@ -119,11 +119,11 @@ export class ProjectPackageProvider implements IProjectPackageProvider {
   }
 
   async saveLocalProjectPackageInfo(info: IProjectPackageInfo): Promise<void> {
-    await saveLocalProjectPackgeInfoImpl(info);
+    await saveLocalProjectPackageInfoImpl(info);
   }
 
   async getAllCustomFirmwareInfos(): Promise<ICustomFirmwareInfo[]> {
-    const data = (await cacheRemoteResouce(
+    const data = (await cacheRemoteResource(
       fetchJson,
       `${remoteBaseUrl}/index.firmwares.json`,
     )) as IIndexFirmwaresContent;

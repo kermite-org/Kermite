@@ -38,9 +38,9 @@ export function getPresetSpecFromPresetKey(presetKey: string): IPresetSpec {
 
 export function generateNextSequentialId(
   prefix: string,
-  existingsIds: string[],
+  existingIds: string[],
 ): string {
-  const allNumbers = existingsIds.map((it) => parseInt(it.replace(prefix, '')));
+  const allNumbers = existingIds.map((it) => parseInt(it.replace(prefix, '')));
   const newNumber = allNumbers.length > 0 ? Math.max(...allNumbers) + 1 : 0;
   return `${prefix}${newNumber}`;
 }

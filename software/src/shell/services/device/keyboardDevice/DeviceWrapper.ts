@@ -50,7 +50,7 @@ export class DeviceWrapper implements IDeviceWrapper {
   };
 
   private handleError = (error: any) => {
-    console.log(`hid device error occured: ${error}`);
+    console.log(`hid device error occurred: ${error}`);
     this.close();
   };
 

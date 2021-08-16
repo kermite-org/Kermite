@@ -28,11 +28,11 @@ interface ILayoutManagerModel {
     design: IPersistKeyboardDesign,
   ): void;
   loadFromFileWithDialog(): void;
-  saveToFileWithDialog(desing: IPersistKeyboardDesign): void;
+  saveToFileWithDialog(design: IPersistKeyboardDesign): void;
   save(design: IPersistKeyboardDesign): void;
 }
 
-let _prevLoadedDevsign: IPersistKeyboardDesign | undefined;
+let _prevLoadedDesign: IPersistKeyboardDesign | undefined;
 let _keepUnsavedNewDesign: boolean = false;
 export class LayoutManagerModel implements ILayoutManagerModel {
   // private _projectLayoutsInfos: IProjectLayoutsInfo[] = [];
@@ -115,7 +115,7 @@ export class LayoutManagerModel implements ILayoutManagerModel {
       ?.layouts.some((it) => it.layoutName === layoutName);
     if (isExist) {
       const ok = await modalConfirm({
-        message: 'File ovewritten. Are you sure?',
+        message: 'File overwritten. Are you sure?',
         caption: 'Save',
       });
       if (!ok) {
@@ -149,7 +149,7 @@ export class LayoutManagerModel implements ILayoutManagerModel {
   async save(design: IPersistKeyboardDesign) {
     const isProfile = this.editSource.type === 'CurrentProfile';
     const ok = await modalConfirm({
-      message: `${isProfile ? 'Profile' : 'File'} ovewritten. Are you ok?`,
+      message: `${isProfile ? 'Profile' : 'File'} overwritten. Are you ok?`,
       caption: 'Save',
     });
     if (ok) {
@@ -195,7 +195,7 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     if (diff.loadedDesign) {
       const same = compareObjectByJsonStringify(
         diff.loadedDesign,
-        _prevLoadedDevsign,
+        _prevLoadedDesign,
       );
       const isClean = compareObjectByJsonStringify(
         diff.loadedDesign,
@@ -206,7 +206,7 @@ export class LayoutManagerModel implements ILayoutManagerModel {
       }
       if (!same || isClean) {
         UiLayouterCore.loadEditDesign(diff.loadedDesign);
-        _prevLoadedDevsign = diff.loadedDesign;
+        _prevLoadedDesign = diff.loadedDesign;
       }
     }
     // if (diff.projectLayoutsInfos) {

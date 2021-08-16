@@ -29,7 +29,7 @@ const dualModeEditTargetOperationSigToOperationPathMap: {
 export class EditorModel {
   // state
 
-  loadedPorfileData: IProfileData = fallbackProfileData;
+  loadedProfileData: IProfileData = fallbackProfileData;
   profileData: IProfileData = fallbackProfileData;
   currentLayerId: string = '';
   currentKeyUnitId: string = '';
@@ -136,7 +136,7 @@ export class EditorModel {
       removeInvalidProfileAssigns(this.profileData);
     }
     return !compareObjectByJsonStringify(
-      this.loadedPorfileData,
+      this.loadedProfileData,
       this.profileData,
     );
   }
@@ -144,7 +144,7 @@ export class EditorModel {
   // mutations
 
   loadProfileData = (profileData: IProfileData) => {
-    this.loadedPorfileData = profileData;
+    this.loadedProfileData = profileData;
     this.profileData = duplicateObjectByJsonStringifyParse(profileData);
     this.currentLayerId = profileData.layers[0].layerId;
 

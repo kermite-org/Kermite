@@ -26,12 +26,12 @@ export type ICustomParameterSpec_Select = {
   defaultValue: number;
 };
 
-export type ICustromParameterSpec =
+export type ICustomParameterSpec =
   | ICustomParameterSpec_Toggle
   | ICustomParameterSpec_Linear
   | ICustomParameterSpec_Select;
 
-export const SystemParameterDefinitions: ICustromParameterSpec[] = [
+export const SystemParameterDefinitions: ICustomParameterSpec[] = [
   {
     type: 'toggle',
     slotIndex: 0,
@@ -111,7 +111,7 @@ export const SystemParameterDefinitions: ICustromParameterSpec[] = [
 
 export function getSystemParameterDefinitionBySystemParameterKey(
   systemParameterKey: string,
-): ICustromParameterSpec | undefined {
+): ICustomParameterSpec | undefined {
   const keys = [
     'emitRealtimeEvents',
     'keyHoldIndicatorLed',

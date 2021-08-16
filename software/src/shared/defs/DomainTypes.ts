@@ -1,4 +1,4 @@
-import { ICustromParameterSpec } from '~/shared/defs/CustomParameter';
+import { ICustomParameterSpec } from '~/shared/defs/CustomParameter';
 import { IPersistKeyboardDesign } from '~/shared/defs/KeyboardDesign';
 import { IPersistProfileData, IProfileData } from './ProfileData';
 
@@ -31,7 +31,7 @@ export type IStandardBaseFirmwareType =
   | 'RpUnified'
   | 'RpSplit';
 
-export type IKermiteStandardKeyboaredSpec = {
+export type IKermiteStandardKeyboardSpec = {
   baseFirmwareType: IStandardBaseFirmwareType;
   useBoardLedsProMicroAvr?: boolean;
   useBoardLedsProMicroRp?: boolean;
@@ -62,7 +62,7 @@ export interface IProjectPackageFileContent {
   firmwares: (
     | {
         variationName: string;
-        standardFirmwareConfig: IKermiteStandardKeyboaredSpec;
+        standardFirmwareConfig: IKermiteStandardKeyboardSpec;
       }
     | {
         variationName: string;
@@ -106,7 +106,7 @@ export type ICustomFirmwareInfo = {
   buildTimestamp: string;
 };
 export interface IProjectCustomDefinition {
-  customParameterSpecs?: ICustromParameterSpec[];
+  customParameterSpecs?: ICustomParameterSpec[];
 }
 
 export interface IKeyboardDeviceInfo {
@@ -279,7 +279,7 @@ export interface IProjectLayoutsInfo {
   layoutNames: string[];
 }
 
-export interface IServerPorfileInfo {
+export interface IServerProfileInfo {
   id: string;
   profileName: string;
   userName: string;

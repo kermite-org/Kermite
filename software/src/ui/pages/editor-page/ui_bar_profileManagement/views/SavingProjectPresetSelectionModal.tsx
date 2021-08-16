@@ -57,13 +57,13 @@ function useProjectAttachmentFileSelectorViewModel(
     projectOptions,
     currentProjectId,
     setCurrentProjectId: () => {},
-    currentProejctKeyboardName: currentProject?.keyboardName || '',
+    currentProjectKeyboardName: currentProject?.keyboardName || '',
     attachmentFileTypeHeader:
       texts.label_projectAttachmentFileSelectionModal_preset,
     attachmentFileNameOptions: presetNameOptions,
     currentAttachmentFileName: local.currentPresetName,
     setCurrentAttachmentFileName: fieldSetter(local, 'currentPresetName'),
-    targetAttachementFilePath: getSavingPackageFilePath(),
+    targetAttachmentFilePath: getSavingPackageFilePath(),
     buttonText: 'Save',
     buttonActive: !!(
       currentProjectId &&

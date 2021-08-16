@@ -47,10 +47,10 @@ type IPresetSelectorOption = ISelectorOption & {
 };
 
 function makePresetOptions(
-  resouceInfos: IProjectPackageInfo[],
+  resourceInfos: IProjectPackageInfo[],
   projectSig: string,
 ): IPresetSelectorOption[] {
-  const projectInfo = resouceInfos.find((info) => info.sig === projectSig);
+  const projectInfo = resourceInfos.find((info) => info.sig === projectSig);
   if (!projectInfo) {
     return [];
   }
@@ -75,7 +75,7 @@ function makePresetOptions(
 }
 
 export function usePresetSelectionModel(): IPresetSelectionModel {
-  // const sel = usePersistState(`presetSelecionModel__sel`, {
+  // const sel = usePersistState(`presetSelectionModel__sel`, {
   //   projectKey: '', // ${origin}#${projectId}
   //   presetKey: '', // blank:${layoutName} or preset:${presetName}
   // });
