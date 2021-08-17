@@ -83,12 +83,8 @@ export class ApplicationRoot {
           projectId,
           variationName,
         ),
-      projects_getAllProjectPackageInfos: async () =>
-        coreState.allProjectPackageInfos,
       projects_saveLocalProjectPackageInfo: (projectInfo) =>
         dispatchCoreAction({ saveLocalProjectPackageInfo: projectInfo }),
-      projects_getAllCustomFirmwareInfos: async () =>
-        coreState.allCustomFirmwareInfos,
       presetHub_getServerProjectIds: () =>
         this.presetHubService.getServerProjectIds(),
       presetHub_getServerProfiles: (projectId: string) =>
@@ -100,7 +96,6 @@ export class ApplicationRoot {
         }
         return false;
       },
-      config_getGlobalSettings: async () => coreState.globalSettings,
       config_getProjectRootDirectoryPath: async () => {
         if (appEnv.isDevelopment) {
           return pathResolve('..');

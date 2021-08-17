@@ -1,7 +1,6 @@
 import { IAppErrorData } from '~/shared/defs/CustomErrors';
 import {
   IBootloaderDeviceDetectionStatus,
-  ICustomFirmwareInfo,
   ILayoutManagerCommand,
   ILayoutManagerStatus,
   IProfileEntry,
@@ -13,7 +12,6 @@ import {
   IServerProfileInfo,
 } from '~/shared/defs/DomainTypes';
 import { ICoreAction, ICoreState } from '~/shared/defs/GlobalStateActionTypes';
-import { IGlobalSettings } from './ConfigTypes';
 import { IProfileData } from './ProfileData';
 
 export interface IAppIpcContract {
@@ -38,16 +36,12 @@ export interface IAppIpcContract {
 
     config_writeKeyMappingToDevice(): Promise<boolean>;
 
-    config_getGlobalSettings(): Promise<IGlobalSettings>;
-
     config_getProjectRootDirectoryPath(): Promise<string>;
     config_checkLocalRepositoryFolderPath(path: string): Promise<boolean>;
 
-    projects_getAllProjectPackageInfos(): Promise<IProjectPackageInfo[]>;
     projects_saveLocalProjectPackageInfo(
       info: IProjectPackageInfo,
     ): Promise<void>;
-    projects_getAllCustomFirmwareInfos(): Promise<ICustomFirmwareInfo[]>;
 
     presetHub_getServerProjectIds(): Promise<string[]>;
     presetHub_getServerProfiles(
