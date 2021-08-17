@@ -1,33 +1,7 @@
-import { useEffect } from 'qx';
-import {
-  compareObjectByJsonStringify,
-  IPresetSpec,
-  IProfileManagerCommand,
-  IProfileManagerStatus,
-  IResourceOrigin,
-} from '~/shared';
+import { IPresetSpec, IProfileManagerCommand, IResourceOrigin } from '~/shared';
 import { ipcAgent } from '~/ui/base';
-import { uiState } from '~/ui/commonStore';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
-
-export const profilesReader = {
-  get editSource() {
-    return uiState.core.profileManagerStatus.editSource;
-  },
-  get allProfileEntries() {
-    return uiState.core.profileManagerStatus.allProfileEntries;
-  },
-  get isEditProfileAvailable() {
-    const { editSource } = uiState.core.profileManagerStatus;
-    return editSource.type !== 'NoProfilesAvailable';
-  },
-  get currentProfileName() {
-    const { editSource } = uiState.core.profileManagerStatus;
-    return (
-      (editSource.type === 'InternalProfile' && editSource.profileName) || ''
-    );
-  },
-};
+import { profilesReader } from '~/ui/pages/editor-page/models/ProfilesReader';
 
 const getSaveCommandIfDirty = () => {
   const isDirty = editorModel.checkDirty(true);
@@ -134,18 +108,3 @@ export const profilesActions = {
     sendProfileManagerCommands(exportCommand);
   },
 };
-
-export function updateProfilesModelOnRender() {
-  const handleProfileStatusChange = (status: IProfileManagerStatus) => {
-    if (
-      !compareObjectByJsonStringify(
-        status.loadedProfileData,
-        editorModel.loadedProfileData,
-      )
-    ) {
-      editorModel.loadProfileData(status.loadedProfileData);
-    }
-  };
-  const status = uiState.core.profileManagerStatus;
-  useEffect(() => handleProfileStatusChange(status), [status]);
-}

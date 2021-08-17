@@ -1,13 +1,13 @@
 import {
-  IProfileData,
+  compareObjectByJsonStringify,
+  duplicateObjectByJsonStringifyParse,
   fallbackProfileData,
-  IProfileAssignType,
   IAssignEntry,
   IAssignEntryWithLayerFallback,
   IAssignOperation,
-  compareObjectByJsonStringify,
-  duplicateObjectByJsonStringifyParse,
   IPersistKeyboardDesign,
+  IProfileAssignType,
+  IProfileData,
 } from '~/shared';
 import { getDisplayKeyboardDesignSingleCached } from '~/shared/modules/DisplayKeyboardSingleCache';
 import {

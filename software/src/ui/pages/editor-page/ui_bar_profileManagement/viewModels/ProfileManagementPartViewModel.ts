@@ -14,11 +14,7 @@ import { useModalDisplayStateModel } from '~/ui/commonModels/GeneralUiStateModel
 import { uiStateReader } from '~/ui/commonStore';
 import { modalAlert, modalConfirm, modalTextEdit } from '~/ui/components';
 import { getFileNameFromPath } from '~/ui/helpers';
-import {
-  profilesActions,
-  profilesReader,
-  updateProfilesModelOnRender,
-} from '~/ui/pages/editor-page/models';
+import { profilesActions, profilesReader } from '~/ui/pages/editor-page/models';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 import { editorPageModel } from '~/ui/pages/editor-page/models/editorPageModel';
 import { callProfileSetupModal } from '~/ui/pages/editor-page/ui_modal_profileSetup/ProfileSetupModal';
@@ -368,8 +364,6 @@ const toggleRoutingPanel = () => {
 };
 
 export function makeProfileManagementPartViewModel(): IProfileManagementPartViewModel {
-  updateProfilesModelOnRender();
-
   const { editSource, allProfileEntries } = profilesReader;
 
   const allProfileNames = allProfileEntries.map((it) => it.profileName);
