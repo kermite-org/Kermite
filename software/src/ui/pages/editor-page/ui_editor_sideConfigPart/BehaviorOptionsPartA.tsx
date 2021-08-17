@@ -2,7 +2,7 @@ import { css, FC, jsx } from 'qx';
 import { ISelectorOption, texts } from '~/ui/base';
 import { uiStatusModel } from '~/ui/commonModels';
 import { RibbonSelector } from '~/ui/components';
-import { profilesModel } from '~/ui/pages/editor-page/models/ProfilesModel';
+import { profilesModel } from '~/ui/pages/editor-page/models';
 
 const options: ISelectorOption[] = [
   { label: 'EDIT', value: 'edit' },

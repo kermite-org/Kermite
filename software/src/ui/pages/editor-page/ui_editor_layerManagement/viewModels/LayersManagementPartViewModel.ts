@@ -3,8 +3,8 @@ import { removeArrayItems } from '~/shared';
 import { generateNextSequentialId } from '~/shared/funcs/DomainRelatedHelpers';
 import { texts } from '~/ui/base';
 import { modalConfirm } from '~/ui/components';
+import { profilesModel } from '~/ui/pages/editor-page/models';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
-import { profilesModel } from '~/ui/pages/editor-page/models/ProfilesModel';
 import {
   callLayerConfigurationModal,
   ILayerConfigurationModelEditValues,

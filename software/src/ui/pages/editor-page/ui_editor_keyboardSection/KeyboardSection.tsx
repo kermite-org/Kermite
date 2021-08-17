@@ -1,8 +1,8 @@
 import { css, FC, jsx } from 'qx';
 import { usePlayerModel } from '~/ui/commonModels';
 import { EditorKeyboardView } from '~/ui/components/keyboard';
+import { profilesModel } from '~/ui/pages/editor-page/models';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
-import { profilesModel } from '~/ui/pages/editor-page/models/ProfilesModel';
 import { makeEditKeyUnitCardsPartViewModel } from '~/ui/pages/editor-page/ui_editor_keyboardSection/EditKeyUnitCardsPartViewModel';
 import { ProfileSetupNavigationCardView } from '~/ui/pages/editor-page/ui_editor_keyboardSection/ProfileSetupNavigationCardView';
 import { LayerStateView } from './LayerStateView';

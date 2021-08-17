@@ -4,7 +4,7 @@ import {
   WindowControlButton,
   WindowRestartButton,
 } from '~/ui/components/window';
-import { profilesModel } from '~/ui/pages/editor-page/models/ProfilesModel';
+import { profilesModel } from '~/ui/pages/editor-page/models';
 import { makeWindowControlButtonsModel } from '~/ui/root/organisms/WindowControlButtonsPart.model';
 
 export const WindowControlButtonsPart = () => {
