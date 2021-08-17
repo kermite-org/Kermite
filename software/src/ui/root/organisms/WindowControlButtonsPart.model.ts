@@ -1,6 +1,5 @@
 import { router } from '~/ui/base';
-import { siteModel } from '~/ui/commonModels';
-import { dispatchCoreAction } from '~/ui/commonStore';
+import { dispatchCoreAction, siteModel } from '~/ui/commonStore';
 
 export interface IWindowControlButtonsModel {
   showReloadButton: boolean;

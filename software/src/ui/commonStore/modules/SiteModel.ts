@@ -1,4 +1,4 @@
-import { dispatchCoreAction, uiState } from '~/ui/commonStore';
+import { dispatchCoreAction, uiState } from '~/ui/commonStore/base';
 
 export const siteModel = {
   get isWindowActive() {
