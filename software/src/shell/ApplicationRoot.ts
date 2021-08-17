@@ -121,11 +121,6 @@ export class ApplicationRoot {
     });
 
     appGlobal.icpMainAgent.supplySubscriptionHandlers({
-      dev_testEvent: (cb) => {
-        // eslint-disable-next-line node/no-callback-literal
-        cb({ type: 'test_event_with_supplySubscriptionHandlers' });
-        return () => {};
-      },
       global_appErrorEvents: (cb) => appGlobal.appErrorEventPort.subscribe(cb),
       profile_profileManagerStatus: (cb) => {
         this.profileManager.statusEventPort.subscribe(cb);

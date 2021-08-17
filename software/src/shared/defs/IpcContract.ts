@@ -64,7 +64,6 @@ export interface IAppIpcContract {
     global_dispatchCoreAction(action: ICoreAction): Promise<void>;
   };
   events: {
-    dev_testEvent: { type: string };
     global_appErrorEvents: IAppErrorData<any>;
     profile_profileManagerStatus: Partial<IProfileManagerStatus>;
     layout_layoutManagerStatus: Partial<ILayoutManagerStatus>;
