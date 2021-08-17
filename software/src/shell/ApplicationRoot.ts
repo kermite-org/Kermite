@@ -83,8 +83,6 @@ export class ApplicationRoot {
           projectId,
           variationName,
         ),
-      projects_saveLocalProjectPackageInfo: (projectInfo) =>
-        dispatchCoreAction({ saveLocalProjectPackageInfo: projectInfo }),
       presetHub_getServerProjectIds: () =>
         this.presetHubService.getServerProjectIds(),
       presetHub_getServerProfiles: (projectId: string) =>

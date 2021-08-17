@@ -6,7 +6,6 @@ import {
   IProfileEntry,
   IProfileManagerCommand,
   IProfileManagerStatus,
-  IProjectPackageInfo,
   IRealtimeKeyboardEvent,
   IResourceOrigin,
   IServerProfileInfo,
@@ -30,18 +29,11 @@ export interface IAppIpcContract {
     layout_executeLayoutManagerCommands(
       commands: ILayoutManagerCommand[],
     ): Promise<boolean>;
-
     layout_showEditLayoutFileInFiler(): Promise<void>;
-    // layout_getAllProjectLayoutsInfos(): Promise<IProjectLayoutsInfo[]>;
 
     config_writeKeyMappingToDevice(): Promise<boolean>;
-
     config_getProjectRootDirectoryPath(): Promise<string>;
     config_checkLocalRepositoryFolderPath(path: string): Promise<boolean>;
-
-    projects_saveLocalProjectPackageInfo(
-      info: IProjectPackageInfo,
-    ): Promise<void>;
 
     presetHub_getServerProjectIds(): Promise<string[]>;
     presetHub_getServerProfiles(
@@ -69,7 +61,6 @@ export interface IAppIpcContract {
     platform_openUrlInDefaultBrowser(path: string): Promise<void>;
 
     global_lazyInitializeServices(): Promise<void>;
-
     global_dispatchCoreAction(action: ICoreAction): Promise<void>;
   };
   events: {
