@@ -26,7 +26,7 @@ export const ProfileManagementPart: FcWithClassName = ({ className }) => {
       <KeyboardProfileSelector
         selectorSource={baseVm.profileSelectorSource}
         hint={texts.hint_assigner_topBar_selectCurrentProfile}
-        disabled={!baseVm.isEditProfileAvailable}
+        // disabled={!baseVm.isEditProfileAvailable}
       />
       <ConfigurationButton
         onClick={baseVm.openConfiguration}

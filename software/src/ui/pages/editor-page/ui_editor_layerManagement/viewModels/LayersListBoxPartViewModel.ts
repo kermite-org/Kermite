@@ -1,7 +1,7 @@
 import { ILayer } from '~/shared';
 import { uiStatusModel } from '~/ui/commonModels';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
-import { profilesModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileManagementPartViewModel';
+import { profilesModel } from '~/ui/pages/editor-page/models/ProfilesModel';
 
 export interface ILayerListViewModel {
   layerId: string;

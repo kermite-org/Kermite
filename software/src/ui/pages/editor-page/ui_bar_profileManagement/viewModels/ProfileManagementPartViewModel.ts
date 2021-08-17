@@ -15,7 +15,10 @@ import { uiStateReader } from '~/ui/commonStore';
 import { modalAlert, modalConfirm, modalTextEdit } from '~/ui/components';
 import { getFileNameFromPath } from '~/ui/helpers';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
-import { ProfilesModel } from '~/ui/pages/editor-page/models/ProfilesModel';
+import {
+  profilesModel,
+  updateProfilesModelOnRender,
+} from '~/ui/pages/editor-page/models/ProfilesModel';
 import { editorPageModel } from '~/ui/pages/editor-page/models/editorPageModel';
 import { callProfileSetupModal } from '~/ui/pages/editor-page/ui_modal_profileSetup/ProfileSetupModal';
 
@@ -47,8 +50,6 @@ export interface IProfileManagementPartViewModel {
   isEditProfileAvailable: boolean;
 }
 
-export const profilesModel = new ProfilesModel(editorModel);
-
 function makeProfileNameSelectorOption(profileName: string): ISelectorOption {
   const omitFolder = !!uiStateReader.globalSettings.globalProjectId;
   return {
@@ -64,9 +65,9 @@ function makeProfileSelectionSource(
 ): ISelectorSource {
   if (editSource.type === 'NoProfilesAvailable') {
     return {
-      options: [],
+      options: allProfileNames.map(makeProfileNameSelectorOption),
       value: '',
-      setValue: () => {},
+      setValue: loadProfile,
     };
   } else if (editSource.type === 'ProfileNewlyCreated') {
     return {
@@ -364,8 +365,7 @@ const toggleRoutingPanel = () => {
 };
 
 export function makeProfileManagementPartViewModel(): IProfileManagementPartViewModel {
-  // useEffect(profilesModel.startPageSession, []);
-  profilesModel.onBeforeRender();
+  updateProfilesModelOnRender();
 
   const { editSource, allProfileEntries, saveProfile } = profilesModel;
 

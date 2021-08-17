@@ -2,7 +2,7 @@ import { css, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { uiStateReader } from '~/ui/commonStore';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
-import { profilesModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileManagementPartViewModel';
+import { profilesModel } from '~/ui/pages/editor-page/models/ProfilesModel';
 
 export const ProfileConfigurationPart = () => {
   const projectInfos = uiStateReader.allProjectPackageInfos;

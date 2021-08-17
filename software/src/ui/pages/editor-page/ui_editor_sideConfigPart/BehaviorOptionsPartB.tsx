@@ -3,7 +3,7 @@ import { texts } from '~/ui/base';
 import { uiStatusModel } from '~/ui/commonModels';
 import { CheckBoxLine } from '~/ui/components';
 import { fieldSetter } from '~/ui/helpers';
-import { profilesModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileManagementPartViewModel';
+import { profilesModel } from '~/ui/pages/editor-page/models/ProfilesModel';
 
 export const BehaviorOptionsPartB: FC = () => {
   const { settings } = uiStatusModel;

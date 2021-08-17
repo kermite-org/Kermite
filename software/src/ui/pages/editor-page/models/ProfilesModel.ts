@@ -10,56 +10,74 @@ import {
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
 import { uiState } from '~/ui/commonStore';
-import { EditorModel } from '~/ui/pages/editor-page/models/EditorModel';
+import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 
-export class ProfilesModel {
-  constructor(private editorModel: EditorModel) {}
+export interface IProfilesModel {
+  editSource: IProfileEditSource;
+  allProfileEntries: IProfileEntry[];
+  isEditProfileAvailable: boolean;
+  currentProfileName: string;
 
-  // state
-  editSource: IProfileEditSource = { type: 'ProfileNewlyCreated' };
-  allProfileEntries: IProfileEntry[] = [];
+  checkDirty(): boolean;
 
-  // listeners
+  createProfile(
+    newProfileName: string,
+    targetProjectOrigin: IResourceOrigin,
+    targetProjectId: string,
+    presetSpec: IPresetSpec,
+  ): void;
+  loadProfile(profileName: string): void;
+  renameProfile(newProfileName: string): void;
+  copyProfile(newProfileName: string): void;
+  saveProfile(): Promise<void>;
+  deleteProfile(): void;
+  exportProfileAsProjectPreset(projectId: string, presetName: string): void;
+  importFromFile(filePath: string): void;
+  exportToFile(filePath: string): void;
+  saveUnsavedProfileAs(profileName: string): void;
+}
 
-  // reader
-
+const profilesReader = {
+  get editSource() {
+    return uiState.core.profileManagerStatus.editSource;
+  },
+  get allProfileEntries() {
+    return uiState.core.profileManagerStatus.allProfileEntries;
+  },
   get isEditProfileAvailable() {
-    return this.editSource.type !== 'NoProfilesAvailable';
-  }
-
+    const { editSource } = uiState.core.profileManagerStatus;
+    return editSource.type !== 'NoProfilesAvailable';
+  },
   get currentProfileName() {
+    const { editSource } = uiState.core.profileManagerStatus;
     return (
-      (this.editSource.type === 'InternalProfile' &&
-        this.editSource.profileName) ||
-      ''
+      (editSource.type === 'InternalProfile' && editSource.profileName) || ''
     );
+  },
+};
+
+const checkDirty = () => editorModel.checkDirty(false);
+
+const getSaveCommandIfDirty = () => {
+  const isDirty = editorModel.checkDirty(true);
+  if (isDirty) {
+    return {
+      saveCurrentProfile: { profileData: editorModel.profileData },
+    };
   }
+  return undefined;
+};
 
-  checkDirty() {
-    return this.editorModel.checkDirty(false);
-  }
+const sendProfileManagerCommands = (
+  ...commands: (IProfileManagerCommand | undefined)[]
+) => {
+  return ipcAgent.async.profile_executeProfileManagerCommands(
+    commands.filter((c) => c !== undefined) as IProfileManagerCommand[],
+  );
+};
 
-  // actions
-
-  private getSaveCommandIfDirty() {
-    const isDirty = this.editorModel.checkDirty(true);
-    if (isDirty) {
-      return {
-        saveCurrentProfile: { profileData: this.editorModel.profileData },
-      };
-    }
-    return undefined;
-  }
-
-  private sendProfileManagerCommands(
-    ...commands: (IProfileManagerCommand | undefined)[]
-  ) {
-    return ipcAgent.async.profile_executeProfileManagerCommands(
-      commands.filter((c) => c !== undefined) as IProfileManagerCommand[],
-    );
-  }
-
-  createProfile = (
+const profilesActions = {
+  createProfile: (
     newProfileName: string,
     targetProjectOrigin: IResourceOrigin,
     targetProjectId: string,
@@ -73,93 +91,107 @@ export class ProfilesModel {
         presetSpec,
       },
     };
-    this.sendProfileManagerCommands(createCommand);
-  };
+    sendProfileManagerCommands(createCommand);
+  },
 
-  loadProfile = (profileName: string) => {
-    if (profileName === this.currentProfileName) {
+  loadProfile: (profileName: string) => {
+    if (profileName === profilesReader.currentProfileName) {
       return;
     }
     const loadCommand = { loadProfile: { name: profileName } };
-    this.sendProfileManagerCommands(loadCommand);
-  };
+    sendProfileManagerCommands(loadCommand);
+  },
 
-  renameProfile = (newProfileName: string) => {
-    const curProfName = this.currentProfileName;
-    const saveCommand = this.getSaveCommandIfDirty();
+  renameProfile: (newProfileName: string) => {
+    const curProfName = profilesReader.currentProfileName;
+    const saveCommand = getSaveCommandIfDirty();
     const renameCommand = {
       renameProfile: { name: curProfName, newName: newProfileName },
     };
-    this.sendProfileManagerCommands(saveCommand, renameCommand);
-  };
+    sendProfileManagerCommands(saveCommand, renameCommand);
+  },
 
-  copyProfile = (newProfileName: string) => {
-    const curProfName = this.currentProfileName;
-    const saveCommand = this.getSaveCommandIfDirty();
+  copyProfile: (newProfileName: string) => {
+    const curProfName = profilesReader.currentProfileName;
+    const saveCommand = getSaveCommandIfDirty();
     const copyCommand = {
       copyProfile: { name: curProfName, newName: newProfileName },
     };
-    this.sendProfileManagerCommands(saveCommand, copyCommand);
-  };
+    sendProfileManagerCommands(saveCommand, copyCommand);
+  },
 
-  saveProfile = async () => {
-    const saveCommand = this.getSaveCommandIfDirty();
-    if (saveCommand) {
-      await this.sendProfileManagerCommands(saveCommand);
-    }
-  };
-
-  deleteProfile = () => {
-    const curProfName = this.currentProfileName;
+  deleteProfile: () => {
+    const curProfName = profilesReader.currentProfileName;
     const deleteCommand = { deleteProfile: { name: curProfName } };
-    this.sendProfileManagerCommands(deleteCommand);
-  };
+    sendProfileManagerCommands(deleteCommand);
+  },
 
-  exportProfileAsProjectPreset = (projectId: string, presetName: string) => {
+  saveProfile: async () => {
+    const saveCommand = getSaveCommandIfDirty();
+    if (saveCommand) {
+      await sendProfileManagerCommands(saveCommand);
+    }
+  },
+
+  saveUnsavedProfileAs: (profileName: string) => {
+    sendProfileManagerCommands({
+      saveProfileAs: {
+        name: profileName,
+        profileData: editorModel.profileData,
+      },
+    });
+  },
+
+  importFromFile: (filePath: string) => {
+    sendProfileManagerCommands({ importFromFile: { filePath } });
+  },
+
+  exportToFile: (filePath: string) => {
+    sendProfileManagerCommands({
+      exportToFile: { filePath, profileData: editorModel.profileData },
+    });
+  },
+
+  exportProfileAsProjectPreset: (projectId: string, presetName: string) => {
     const exportCommand: Partial<IProfileManagerCommand> = {
       saveAsProjectPreset: {
         projectId,
         presetName,
-        profileData: this.editorModel.profileData,
+        profileData: editorModel.profileData,
       },
     };
-    this.sendProfileManagerCommands(exportCommand);
-  };
+    sendProfileManagerCommands(exportCommand);
+  },
+};
 
-  importFromFile = (filePath: string) => {
-    this.sendProfileManagerCommands({ importFromFile: { filePath } });
-  };
+export const profilesModel: IProfilesModel = {
+  get editSource() {
+    return profilesReader.editSource;
+  },
+  get allProfileEntries() {
+    return profilesReader.allProfileEntries;
+  },
+  get currentProfileName() {
+    return profilesReader.currentProfileName;
+  },
+  get isEditProfileAvailable() {
+    return profilesReader.isEditProfileAvailable;
+  },
+  checkDirty,
+  ...profilesActions,
+};
 
-  exportToFile = (filePath: string) => {
-    this.sendProfileManagerCommands({
-      exportToFile: { filePath, profileData: this.editorModel.profileData },
-    });
-  };
-
-  saveUnsavedProfileAs = (profileName: string) => {
-    this.sendProfileManagerCommands({
-      saveProfileAs: {
-        name: profileName,
-        profileData: this.editorModel.profileData,
-      },
-    });
-  };
-
-  private handleProfileStatusChange = (status: IProfileManagerStatus) => {
-    this.editSource = status.editSource;
-    this.allProfileEntries = status.visibleProfileEntries;
+export function updateProfilesModelOnRender() {
+  const handleProfileStatusChange = (status: IProfileManagerStatus) => {
     if (
       !compareObjectByJsonStringify(
         status.loadedProfileData,
-        this.editorModel.loadedProfileData,
+        editorModel.loadedProfileData,
       )
     ) {
-      this.editorModel.loadProfileData(status.loadedProfileData);
+      editorModel.loadProfileData(status.loadedProfileData);
     }
   };
-
-  onBeforeRender = () => {
-    const status = uiState.core.profileManagerStatus;
-    useEffect(() => this.handleProfileStatusChange(status), [status]);
-  };
+  const status = uiState.core.profileManagerStatus;
+  useEffect(() => handleProfileStatusChange(status), [status]);
 }
