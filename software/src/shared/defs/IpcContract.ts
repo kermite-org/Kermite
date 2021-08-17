@@ -1,6 +1,5 @@
 import { IAppErrorData } from '~/shared/defs/CustomErrors';
 import {
-  IApplicationVersionInfo,
   IBootloaderDeviceDetectionStatus,
   ICustomFirmwareInfo,
   ILayoutManagerCommand,
@@ -23,8 +22,6 @@ export interface IAppIpcContract {
     // config_saveSettingsOnClosing?: IApplicationSettings;
   };
   async: {
-    system_getApplicationVersionInfo(): Promise<IApplicationVersionInfo>;
-
     profile_getCurrentProfile(): Promise<IProfileData | undefined>;
     profile_getAllProfileEntries(): Promise<IProfileEntry[]>;
     profile_executeProfileManagerCommands(

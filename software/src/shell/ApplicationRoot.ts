@@ -5,6 +5,7 @@ import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
 import {
+  commitCoreState,
   coreActionDistributor,
   coreState,
   coreStateManager,
@@ -59,9 +60,6 @@ export class ApplicationRoot {
     });
 
     appGlobal.icpMainAgent.supplyAsyncHandlers({
-      system_getApplicationVersionInfo: async () => ({
-        version: appConfig.applicationVersion,
-      }),
       profile_getCurrentProfile: async () =>
         this.profileManager.getCurrentProfile(),
       profile_executeProfileManagerCommands: (commands) =>
@@ -186,6 +184,11 @@ export class ApplicationRoot {
       await this.profileManager.initializeAsync();
       this.deviceService.initialize();
       this.inputLogicSimulator.initialize();
+      commitCoreState({
+        applicationVersionInfo: {
+          version: appConfig.applicationVersion,
+        },
+      });
     }
   }
 

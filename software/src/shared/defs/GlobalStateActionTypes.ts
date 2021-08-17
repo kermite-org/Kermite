@@ -6,6 +6,7 @@ import {
 } from '~/shared/defs/ConfigTypes';
 import {
   fallbackDeviceSelectionStatus,
+  IApplicationVersionInfo,
   IAppWindowStatus,
   ICustomFirmwareInfo,
   IDeviceSelectionStatus,
@@ -14,7 +15,7 @@ import {
 } from '~/shared/defs/DomainTypes';
 
 export type ICoreState = {
-  appVersion: string;
+  applicationVersionInfo: IApplicationVersionInfo;
   allProjectPackageInfos: IProjectPackageInfo[];
   allCustomFirmwareInfos: ICustomFirmwareInfo[];
   globalSettings: IGlobalSettings;
@@ -24,7 +25,11 @@ export type ICoreState = {
   appWindowStatus: IAppWindowStatus;
 };
 
-export const defaultAppWindowStatus: IAppWindowStatus = {
+const defaultApplicationVersionInfo: IApplicationVersionInfo = {
+  version: '',
+};
+
+const defaultAppWindowStatus: IAppWindowStatus = {
   isActive: false,
   isDevtoolsVisible: false,
   isMaximized: false,
@@ -32,7 +37,7 @@ export const defaultAppWindowStatus: IAppWindowStatus = {
 };
 
 export const defaultCoreState: ICoreState = {
-  appVersion: '',
+  applicationVersionInfo: defaultApplicationVersionInfo,
   allProjectPackageInfos: [],
   allCustomFirmwareInfos: [],
   globalSettings: globalSettingsDefault,
