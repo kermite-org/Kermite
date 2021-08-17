@@ -211,6 +211,8 @@ export interface IProfileManagerCommand {
   importFromFile?: { filePath: string };
   exportToFile?: { filePath: string; profileData: IProfileData };
   saveProfileAs?: { name: string; profileData: IProfileData };
+
+  openUserProfilesFolder?: 1;
 }
 
 export type ILayoutEditSource =

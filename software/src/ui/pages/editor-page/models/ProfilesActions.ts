@@ -107,4 +107,8 @@ export const profilesActions = {
     };
     sendProfileManagerCommands(exportCommand);
   },
+
+  openUserProfilesFolder: () => {
+    sendProfileManagerCommands({ openUserProfilesFolder: 1 });
+  },
 };

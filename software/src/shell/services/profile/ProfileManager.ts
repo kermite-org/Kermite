@@ -432,6 +432,14 @@ export class ProfileManager implements IProfileManager {
     await this.core.saveExternalProfileFile(filePath, profileData);
   }
 
+  private async openUserProfilesFolder() {
+    const { editSource } = this.status;
+    const projectId =
+      (editSource.type === 'InternalProfile' && editSource.projectId) ||
+      undefined;
+    await shell.openPath(this.core.getProfilesFolderPath(projectId));
+  }
+
   private async executeCommand(cmd: IProfileManagerCommand) {
     // console.log(`execute command`, { cmd });
     if (cmd.creatProfile) {
@@ -484,6 +492,8 @@ export class ProfileManager implements IProfileManager {
         cmd.saveProfileAs.name,
         cmd.saveProfileAs.profileData,
       );
+    } else if (cmd.openUserProfilesFolder) {
+      await this.openUserProfilesFolder();
     }
   }
 
@@ -491,13 +501,5 @@ export class ProfileManager implements IProfileManager {
     for (const cmd of commands) {
       await this.executeCommand(cmd);
     }
-  }
-
-  async openUserProfilesFolder() {
-    const { editSource } = this.status;
-    const projectId =
-      (editSource.type === 'InternalProfile' && editSource.projectId) ||
-      undefined;
-    await shell.openPath(this.core.getProfilesFolderPath(projectId));
   }
 }

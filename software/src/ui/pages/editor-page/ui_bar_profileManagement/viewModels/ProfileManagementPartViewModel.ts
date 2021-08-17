@@ -342,8 +342,8 @@ const loadProfile = async (profileName: string) => {
   profilesActions.loadProfile(profileName);
 };
 
-const openUserProfilesFolder = async () => {
-  await ipcAgent.async.profile_openUserProfilesFolder();
+const openUserProfilesFolder = () => {
+  profilesActions.openUserProfilesFolder();
 };
 
 const onWriteButton = async () => {
