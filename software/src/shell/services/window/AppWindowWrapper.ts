@@ -1,5 +1,5 @@
 import { app, BrowserWindow, Rectangle } from 'electron';
-import { IAppWindowStatus } from '~/shared';
+import { getObjectKeys, IAppWindowStatus } from '~/shared';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import {
   vObject,
@@ -8,7 +8,8 @@ import {
   vBoolean,
 } from '~/shared/modules/SchemaValidationHelper';
 import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
-import { createEventPort, pathRelative } from '~/shell/funcs';
+import { pathRelative } from '~/shell/funcs';
+import { commitCoreState, coreState, createCoreModule } from '~/shell/global';
 import { IProfileManager } from '~/shell/services/profile/Interfaces';
 import { MenuManager } from '~/shell/services/window/MenuManager';
 import { IAppWindowWrapper } from './Interfaces';
@@ -67,13 +68,14 @@ export class AppWindowWrapper implements IAppWindowWrapper {
 
   constructor(private profileManager: IProfileManager) {}
 
-  appWindowEventPort = createEventPort<Partial<IAppWindowStatus>>({
-    initialValueGetter: () => ({
-      isDevtoolsVisible: this.state.isDevtoolsVisible,
-      isWidgetAlwaysOnTop: this.state.isWidgetAlwaysOnTop,
-      isMaximized: this.mainWindow?.isMaximized() || false,
-    }),
-  });
+  private commitWindowStatus(diff: Partial<IAppWindowStatus>) {
+    const key = getObjectKeys(diff)[0];
+    const value = diff[key];
+    if (coreState.appWindowStatus[key] !== value) {
+      const appWindowStatus = { ...coreState.appWindowStatus, ...diff };
+      commitCoreState({ appWindowStatus });
+    }
+  }
 
   openMainWindow() {
     const {
@@ -121,32 +123,32 @@ export class AppWindowWrapper implements IAppWindowWrapper {
       this.setDevToolsVisibility(true);
     }
 
+    if (this.state.isWidgetAlwaysOnTop) {
+      this.setWidgetAlwaysOnTop(true);
+    }
+
     this.affectAlwaysOnTopToWindow();
 
     this.loadInitialPage();
 
     app.on('browser-window-focus', () => {
-      this.appWindowEventPort.emit({ isActive: true });
+      this.commitWindowStatus({ isActive: true });
     });
     app.on('browser-window-blur', () => {
-      this.appWindowEventPort.emit({ isActive: false });
+      this.commitWindowStatus({ isActive: false });
     });
 
     win.webContents.on('devtools-opened', () => {
       this.state.isDevtoolsVisible = true;
-      this.appWindowEventPort.emit({ isDevtoolsVisible: true });
+      this.commitWindowStatus({ isDevtoolsVisible: true });
     });
     win.webContents.on('devtools-closed', () => {
       this.state.isDevtoolsVisible = false;
-      this.appWindowEventPort.emit({ isDevtoolsVisible: false });
+      this.commitWindowStatus({ isDevtoolsVisible: false });
     });
 
-    win.on('maximize', () =>
-      this.appWindowEventPort.emit({ isMaximized: true }),
-    );
-    win.on('unmaximize', () =>
-      this.appWindowEventPort.emit({ isMaximized: false }),
-    );
+    win.on('maximize', () => this.commitWindowStatus({ isMaximized: true }));
+    win.on('unmaximize', () => this.commitWindowStatus({ isMaximized: false }));
 
     win.on('moved', () => this.saveWindowSize());
     win.on('resized', () => this.saveWindowSize());
@@ -201,12 +203,13 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     } else {
       this.mainWindow?.webContents.closeDevTools();
     }
+    this.commitWindowStatus({ isDevtoolsVisible: visible });
   }
 
   private affectAlwaysOnTopToWindow() {
     const value = this.state.isWidgetAlwaysOnTop;
     this.mainWindow?.setAlwaysOnTop(this.isWidgetMode && value);
-    this.appWindowEventPort.emit({ isWidgetAlwaysOnTop: value });
+    this.commitWindowStatus({ isWidgetAlwaysOnTop: value });
   }
 
   setWidgetAlwaysOnTop(isWidgetAlwaysOnTop: boolean) {
@@ -227,6 +230,9 @@ export class AppWindowWrapper implements IAppWindowWrapper {
       } else {
         this.mainWindow.unmaximize();
       }
+      this.commitWindowStatus({
+        isMaximized: this.mainWindow.isMaximized() || false,
+      });
     }
   }
 
@@ -308,4 +314,18 @@ export class AppWindowWrapper implements IAppWindowWrapper {
   terminate() {
     applicationStorage.writeItem('windowState', this.state);
   }
+}
+
+export function createWindowModule(appWindow: AppWindowWrapper) {
+  return createCoreModule({
+    window_closeWindow: () => appWindow.closeMainWindow(),
+    window_minimizeWindow: () => appWindow.minimizeMainWindow(),
+    window_maximizeWindow: () => appWindow.maximizeMainWindow(),
+    window_restartApplication: () => appWindow.restartApplication(),
+    window_setDevToolVisibility: (visible) =>
+      appWindow.setDevToolsVisibility(visible),
+    window_setWidgetAlwaysOnTop: (alwaysOnTop) =>
+      appWindow.setWidgetAlwaysOnTop(alwaysOnTop),
+    window_reloadPage: () => appWindow.reloadPage(),
+  });
 }

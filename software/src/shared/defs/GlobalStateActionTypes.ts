@@ -6,6 +6,7 @@ import {
 } from '~/shared/defs/ConfigTypes';
 import {
   fallbackDeviceSelectionStatus,
+  IAppWindowStatus,
   ICustomFirmwareInfo,
   IDeviceSelectionStatus,
   IKeyboardDeviceStatus,
@@ -20,6 +21,14 @@ export type ICoreState = {
   keyboardConfig: IKeyboardConfig;
   deviceStatus: IKeyboardDeviceStatus;
   deviceSelectionStatus: IDeviceSelectionStatus;
+  appWindowStatus: IAppWindowStatus;
+};
+
+export const defaultAppWindowStatus: IAppWindowStatus = {
+  isActive: false,
+  isDevtoolsVisible: false,
+  isMaximized: false,
+  isWidgetAlwaysOnTop: false,
 };
 
 export const defaultCoreState: ICoreState = {
@@ -30,6 +39,7 @@ export const defaultCoreState: ICoreState = {
   keyboardConfig: fallbackKeyboardConfig,
   deviceStatus: { isConnected: false },
   deviceSelectionStatus: fallbackDeviceSelectionStatus,
+  appWindowStatus: defaultAppWindowStatus,
 };
 
 export type ICoreAction = Partial<{
@@ -42,4 +52,12 @@ export type ICoreAction = Partial<{
   writeGlobalSettings: Partial<IGlobalSettings>;
   loadKeyboardConfig: 1;
   writeKeyboardConfig: Partial<IKeyboardConfig>;
+
+  window_closeWindow: 1;
+  window_minimizeWindow: 1;
+  window_maximizeWindow: 1;
+  window_restartApplication: 1;
+  window_setDevToolVisibility: boolean;
+  window_setWidgetAlwaysOnTop: boolean;
+  window_reloadPage: 1;
 }>;

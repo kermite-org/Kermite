@@ -24,7 +24,7 @@ import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/inputLogicS
 import { LayoutManager } from '~/shell/services/layout/LayoutManager';
 import { ProfileManager } from '~/shell/services/profile/ProfileManager';
 import { UserPresetHubService } from '~/shell/services/userPresetHub/UserPresetHubService';
-import { AppWindowWrapper } from '~/shell/services/window';
+import { AppWindowWrapper, createWindowModule } from '~/shell/services/window';
 
 export class ApplicationRoot {
   private firmwareUpdateService = new FirmwareUpdateService();
@@ -47,8 +47,6 @@ export class ApplicationRoot {
   // ------------------------------------------------------------
 
   private setupIpcBackend() {
-    const windowWrapper = this.windowWrapper;
-
     appGlobal.icpMainAgent.setErrorHandler((error) => {
       console.error(makeCompactStackTrace(error));
       appGlobal.appErrorEventPort.emit(
@@ -64,15 +62,6 @@ export class ApplicationRoot {
       system_getApplicationVersionInfo: async () => ({
         version: appConfig.applicationVersion,
       }),
-      window_closeWindow: async () => windowWrapper.closeMainWindow(),
-      window_minimizeWindow: async () => windowWrapper.minimizeMainWindow(),
-      window_maximizeWindow: async () => windowWrapper.maximizeMainWindow(),
-      window_restartApplication: async () => windowWrapper.restartApplication(),
-      window_reloadPage: async () => windowWrapper.reloadPage(),
-      window_setDevToolVisibility: async (visible) =>
-        windowWrapper.setDevToolsVisibility(visible),
-      window_setWidgetAlwaysOnTop: async (enabled) =>
-        windowWrapper.setWidgetAlwaysOnTop(enabled),
       profile_getCurrentProfile: async () =>
         this.profileManager.getCurrentProfile(),
       profile_executeProfileManagerCommands: (commands) =>
@@ -163,7 +152,6 @@ export class ApplicationRoot {
       },
       firmup_deviceDetectionEvents: (cb) =>
         this.firmwareUpdateService.deviceDetectionEvents.subscribe(cb),
-      window_appWindowStatus: windowWrapper.appWindowEventPort.subscribe,
       global_coreStateEvents: (cb) =>
         coreStateManager.coreStateEventPort.subscribe(cb),
     });
@@ -183,11 +171,13 @@ export class ApplicationRoot {
   async lazyInitializeServices() {
     if (!this._lazyInitializeTriggered) {
       this._lazyInitializeTriggered = true;
+      const windowModule = createWindowModule(this.windowWrapper);
       coreActionDistributor.addReceivers(
         globalSettingsModule,
         developmentModule_ActionReceiver,
         projectPackageModule,
         keyboardConfigModule,
+        windowModule,
       );
       globalSettingsModule.loadGlobalSettings!(1);
       keyboardConfigModule.loadKeyboardConfig!(1);

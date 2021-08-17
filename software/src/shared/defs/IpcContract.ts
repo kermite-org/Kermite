@@ -1,7 +1,6 @@
 import { IAppErrorData } from '~/shared/defs/CustomErrors';
 import {
   IApplicationVersionInfo,
-  IAppWindowStatus,
   IBootloaderDeviceDetectionStatus,
   ICustomFirmwareInfo,
   ILayoutManagerCommand,
@@ -25,13 +24,6 @@ export interface IAppIpcContract {
   };
   async: {
     system_getApplicationVersionInfo(): Promise<IApplicationVersionInfo>;
-    window_closeWindow(): Promise<void>;
-    window_minimizeWindow(): Promise<void>;
-    window_maximizeWindow(): Promise<void>;
-    window_restartApplication(): Promise<void>;
-    window_setDevToolVisibility(visible: boolean): Promise<void>;
-    window_setWidgetAlwaysOnTop(enabled: boolean): Promise<void>;
-    window_reloadPage(): Promise<void>;
 
     profile_getCurrentProfile(): Promise<IProfileData | undefined>;
     profile_getAllProfileEntries(): Promise<IProfileEntry[]>;
@@ -92,7 +84,6 @@ export interface IAppIpcContract {
   events: {
     dev_testEvent: { type: string };
     global_appErrorEvents: IAppErrorData<any>;
-    window_appWindowStatus: Partial<IAppWindowStatus>;
     profile_profileManagerStatus: Partial<IProfileManagerStatus>;
     layout_layoutManagerStatus: Partial<ILayoutManagerStatus>;
     device_keyEvents: IRealtimeKeyboardEvent;

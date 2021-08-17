@@ -1,5 +1,6 @@
-import { ipcAgent, router } from '~/ui/base';
+import { router } from '~/ui/base';
 import { siteModel } from '~/ui/commonModels';
+import { dispatchCoreAction } from '~/ui/commonStore';
 
 export interface IWindowControlButtonsModel {
   showReloadButton: boolean;
@@ -16,19 +17,19 @@ export function makeWindowControlButtonsModel(): IWindowControlButtonsModel {
     // showReloadButton: appUi.isDevelopment,
     showReloadButton: false,
     onReloadButton() {
-      ipcAgent.async.window_restartApplication();
+      dispatchCoreAction({ window_restartApplication: 1 });
     },
     onWidgetButton() {
       router.navigateTo('/widget');
     },
     onMinimizeButton() {
-      ipcAgent.async.window_minimizeWindow();
+      dispatchCoreAction({ window_minimizeWindow: 1 });
     },
     onMaximizeButton() {
-      ipcAgent.async.window_maximizeWindow();
+      dispatchCoreAction({ window_maximizeWindow: 1 });
     },
     onCloseButton() {
-      ipcAgent.async.window_closeWindow();
+      dispatchCoreAction({ window_closeWindow: 1 });
     },
     isWindowMaximized: siteModel.isWindowMaximized,
   };
