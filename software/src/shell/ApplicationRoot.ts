@@ -122,10 +122,6 @@ export class ApplicationRoot {
 
     appGlobal.icpMainAgent.supplySubscriptionHandlers({
       global_appErrorEvents: (cb) => appGlobal.appErrorEventPort.subscribe(cb),
-      profile_profileManagerStatus: (cb) => {
-        this.profileManager.statusEventPort.subscribe(cb);
-        return () => this.profileManager.statusEventPort.unsubscribe(cb);
-      },
       layout_layoutManagerStatus: (listener) =>
         this.layoutManager.statusEvents.subscribe(listener),
       device_keyEvents: (cb) => {

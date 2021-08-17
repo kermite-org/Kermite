@@ -4,7 +4,6 @@ import {
   IKeyboardConfig,
   IntervalTimerWrapper,
   IProfileData,
-  IProfileManagerStatus,
   IRealtimeKeyboardEvent,
   SystemParameter,
 } from '~/shared';
@@ -91,6 +90,10 @@ export class InputLogicSimulatorD {
     if (diff.keyboardConfig) {
       this.keyboardConfigHandler(diff.keyboardConfig);
     }
+
+    if (diff.profileManagerStatus) {
+      this.loadSimulationProfile(diff.profileManagerStatus.loadedProfileData);
+    }
   };
 
   private processTicker = () => {
@@ -121,20 +124,11 @@ export class InputLogicSimulatorD {
     this.CL.keyboardCoreLogic_initialize();
   }
 
-  private onProfileStatusChanged = (
-    changedStatus: Partial<IProfileManagerStatus>,
-  ) => {
-    if (changedStatus.loadedProfileData) {
-      this.loadSimulationProfile(changedStatus.loadedProfileData);
-    }
-  };
-
   postSimulationTargetProfile(profile: IProfileData) {
     this.loadSimulationProfile(profile);
   }
 
   initialize() {
-    this.profileManager.statusEventPort.subscribe(this.onProfileStatusChanged);
     this.deviceService.realtimeEventPort.subscribe(
       this.onRealtimeKeyboardEvent,
     );
@@ -149,9 +143,6 @@ export class InputLogicSimulatorD {
   }
 
   terminate() {
-    this.profileManager.statusEventPort.unsubscribe(
-      this.onProfileStatusChanged,
-    );
     this.deviceService.realtimeEventPort.unsubscribe(
       this.onRealtimeKeyboardEvent,
     );

@@ -1,3 +1,4 @@
+import { useEffect } from 'qx';
 import {
   compareObjectByJsonStringify,
   IPresetSpec,
@@ -8,6 +9,7 @@ import {
   IResourceOrigin,
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
+import { uiState } from '~/ui/commonStore';
 import { EditorModel } from '~/ui/pages/editor-page/models/EditorModel';
 
 export class ProfilesModel {
@@ -18,27 +20,6 @@ export class ProfilesModel {
   allProfileEntries: IProfileEntry[] = [];
 
   // listeners
-
-  private handleProfileStatusChange = (
-    payload: Partial<IProfileManagerStatus>,
-  ) => {
-    if (payload.editSource) {
-      this.editSource = payload.editSource;
-    }
-    if (payload.visibleProfileEntries) {
-      this.allProfileEntries = payload.visibleProfileEntries;
-    }
-    if (payload.loadedProfileData) {
-      if (
-        !compareObjectByJsonStringify(
-          payload.loadedProfileData,
-          this.editorModel.loadedProfileData,
-        )
-      ) {
-        this.editorModel.loadProfileData(payload.loadedProfileData);
-      }
-    }
-  };
 
   // reader
 
@@ -164,9 +145,21 @@ export class ProfilesModel {
     });
   };
 
-  startPageSession = () => {
-    return ipcAgent.events.profile_profileManagerStatus.subscribe(
-      this.handleProfileStatusChange,
-    );
+  private handleProfileStatusChange = (status: IProfileManagerStatus) => {
+    this.editSource = status.editSource;
+    this.allProfileEntries = status.visibleProfileEntries;
+    if (
+      !compareObjectByJsonStringify(
+        status.loadedProfileData,
+        this.editorModel.loadedProfileData,
+      )
+    ) {
+      this.editorModel.loadProfileData(status.loadedProfileData);
+    }
+  };
+
+  onBeforeRender = () => {
+    const status = uiState.core.profileManagerStatus;
+    useEffect(() => this.handleProfileStatusChange(status), [status]);
   };
 }

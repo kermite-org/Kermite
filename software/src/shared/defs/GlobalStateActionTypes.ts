@@ -11,8 +11,10 @@ import {
   ICustomFirmwareInfo,
   IDeviceSelectionStatus,
   IKeyboardDeviceStatus,
+  IProfileManagerStatus,
   IProjectPackageInfo,
 } from '~/shared/defs/DomainTypes';
+import { fallbackProfileData } from '~/shared/defs/ProfileData';
 
 export type ICoreState = {
   applicationVersionInfo: IApplicationVersionInfo;
@@ -23,6 +25,7 @@ export type ICoreState = {
   deviceStatus: IKeyboardDeviceStatus;
   deviceSelectionStatus: IDeviceSelectionStatus;
   appWindowStatus: IAppWindowStatus;
+  profileManagerStatus: IProfileManagerStatus;
 };
 
 const defaultApplicationVersionInfo: IApplicationVersionInfo = {
@@ -36,6 +39,15 @@ const defaultAppWindowStatus: IAppWindowStatus = {
   isWidgetAlwaysOnTop: false,
 };
 
+const defaultProfileManagerStatus: IProfileManagerStatus = {
+  editSource: {
+    type: 'NoProfilesAvailable',
+  },
+  loadedProfileData: fallbackProfileData,
+  allProfileEntries: [],
+  visibleProfileEntries: [],
+};
+
 export const defaultCoreState: ICoreState = {
   applicationVersionInfo: defaultApplicationVersionInfo,
   allProjectPackageInfos: [],
@@ -45,6 +57,7 @@ export const defaultCoreState: ICoreState = {
   deviceStatus: { isConnected: false },
   deviceSelectionStatus: fallbackDeviceSelectionStatus,
   appWindowStatus: defaultAppWindowStatus,
+  profileManagerStatus: defaultProfileManagerStatus,
 };
 
 export type ICoreAction = Partial<{

@@ -1,4 +1,4 @@
-import { useEffect, useLocal } from 'qx';
+import { useLocal } from 'qx';
 import { ILayoutEditSource, IProjectPackageInfo } from '~/shared';
 import { ISelectorOption } from '~/ui/base';
 import {
@@ -199,6 +199,5 @@ function useLayoutManagerViewModelImpl(
 
 export function useLayoutManagerViewModel(): ILayoutManagerViewModel {
   const model = useLocal(() => new LayoutManagerModel());
-  useEffect(() => model.startLifecycle(), []);
   return useLayoutManagerViewModelImpl(model);
 }

@@ -233,12 +233,12 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     const unbsub = ipcAgent.events.layout_layoutManagerStatus.subscribe(
       this.onLayoutManagerStatus,
     );
-    const unsub2 = ipcAgent.events.profile_profileManagerStatus.subscribe(
-      this.onProfileManagerStatus,
-    );
+    // const unsub2 = ipcAgent.events.profile_profileManagerStatus.subscribe(
+    //   this.onProfileManagerStatus,
+    // );
     return () => {
       unbsub();
-      unsub2();
+      // unsub2();
       if (this.isModified) {
         if (this.editSource.type === 'CurrentProfile') {
           const design = UiLayouterCore.emitSavingDesign();

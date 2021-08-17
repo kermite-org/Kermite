@@ -1,4 +1,3 @@
-import { useEffect } from 'qx';
 import {
   forceChangeFilePathExtension,
   IProfileData,
@@ -365,7 +364,8 @@ const toggleRoutingPanel = () => {
 };
 
 export function makeProfileManagementPartViewModel(): IProfileManagementPartViewModel {
-  useEffect(profilesModel.startPageSession, []);
+  // useEffect(profilesModel.startPageSession, []);
+  profilesModel.onBeforeRender();
 
   const { editSource, allProfileEntries, saveProfile } = profilesModel;
 

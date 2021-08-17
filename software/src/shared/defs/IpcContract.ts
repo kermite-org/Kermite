@@ -65,7 +65,6 @@ export interface IAppIpcContract {
   };
   events: {
     global_appErrorEvents: IAppErrorData<any>;
-    profile_profileManagerStatus: Partial<IProfileManagerStatus>;
     layout_layoutManagerStatus: Partial<ILayoutManagerStatus>;
     device_keyEvents: IRealtimeKeyboardEvent;
     firmup_deviceDetectionEvents: IBootloaderDeviceDetectionStatus;

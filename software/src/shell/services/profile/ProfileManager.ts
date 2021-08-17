@@ -21,8 +21,8 @@ import {
   vValueEquals,
 } from '~/shared/modules/SchemaValidationHelper';
 import { applicationStorage } from '~/shell/base';
-import { createEventPort } from '~/shell/funcs';
 import {
+  commitCoreState,
   coreState,
   coreStateManager,
   dispatchCoreAction,
@@ -61,26 +61,36 @@ const profileEditSourceLoadingDataSchema = vSchemaOneOf([
 
 // プロファイルを<UserDataDir>/data/profiles以下でファイルとして管理
 export class ProfileManager implements IProfileManager {
-  private status: IProfileManagerStatus = {
-    editSource: {
-      type: 'ProfileNewlyCreated',
-    },
-    loadedProfileData: fallbackProfileData,
-    allProfileEntries: [],
-    visibleProfileEntries: [],
-  };
-
   private core: ProfileManagerCore;
-
   private _globalProjectId: string = '';
 
   constructor() {
     this.core = new ProfileManagerCore();
   }
 
-  statusEventPort = createEventPort<Partial<IProfileManagerStatus>>({
-    initialValueGetter: () => this.status,
-  });
+  private get status() {
+    return coreState.profileManagerStatus;
+  }
+
+  private setStatus(newStatePartial: Partial<IProfileManagerStatus>) {
+    const profileManagerStatus = {
+      ...coreState.profileManagerStatus,
+      ...newStatePartial,
+    };
+    commitCoreState({ profileManagerStatus });
+
+    if (newStatePartial.editSource) {
+      if (
+        newStatePartial.editSource.type !== 'ProfileNewlyCreated' &&
+        newStatePartial.editSource.type !== 'NoProfilesAvailable'
+      ) {
+        applicationStorage.writeItem(
+          'profileEditSource',
+          newStatePartial.editSource,
+        );
+      }
+    }
+  }
 
   async initializeAsync() {
     this._globalProjectId = coreState.globalSettings.globalProjectId;
@@ -184,22 +194,6 @@ export class ProfileManager implements IProfileManager {
       );
     }
     return editSource;
-  }
-
-  private setStatus(newStatePartial: Partial<IProfileManagerStatus>) {
-    this.status = { ...this.status, ...newStatePartial };
-    this.statusEventPort.emit(newStatePartial);
-    if (newStatePartial.editSource) {
-      if (
-        newStatePartial.editSource.type !== 'ProfileNewlyCreated' &&
-        newStatePartial.editSource.type !== 'NoProfilesAvailable'
-      ) {
-        applicationStorage.writeItem(
-          'profileEditSource',
-          newStatePartial.editSource,
-        );
-      }
-    }
   }
 
   private async loadProfileByEditSource(
