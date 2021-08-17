@@ -1,5 +1,6 @@
 import { useMemo } from 'qx';
-import { ThemeKey, uiThemeConfigLoader, ipcAgent } from '~/ui/base';
+import { ThemeKey, uiThemeConfigLoader } from '~/ui/base';
+import { dispatchCoreAction } from '~/ui/commonStore';
 
 interface IThemeSelectionModel {
   currentThemeKey: ThemeKey;
@@ -16,7 +17,7 @@ export function useThemeSelectionModel(): IThemeSelectionModel {
       if (themeKey !== currentThemeKey) {
         uiThemeConfigLoader.saveThemeKey(themeKey);
         // location.reload(); // Windowsの場合にうまくリロードされずにページが真っ白になってしまう問題がある
-        ipcAgent.async.window_reloadPage();
+        dispatchCoreAction({ window_reloadPage: 1 });
       }
     },
   };

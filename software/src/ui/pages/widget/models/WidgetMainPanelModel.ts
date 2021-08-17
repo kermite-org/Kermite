@@ -2,6 +2,7 @@ import { useEffect } from 'qx';
 import { fallbackProfileData, IDisplayKeyboardDesign } from '~/shared';
 import { ipcAgent, IWidgetKeyUnitCardViewModel, router } from '~/ui/base';
 import { siteModel, usePlayerModel } from '~/ui/commonModels';
+import { dispatchCoreAction } from '~/ui/commonStore';
 import { useWidgetKeyUnitCardViewModel } from '~/ui/pages/widget/models/WidgetKeyUnitCardViewModel';
 
 export interface IWidgetMainPanelModel {
@@ -26,8 +27,8 @@ export function useWidgetMainPanelModel(): IWidgetMainPanelModel {
 
   const { isWindowActive, isWidgetAlwaysOnTop } = siteModel;
 
-  const toggleWidgetAlwaysOnTop = async () => {
-    await ipcAgent.async.window_setWidgetAlwaysOnTop(!isWidgetAlwaysOnTop);
+  const toggleWidgetAlwaysOnTop = () => {
+    dispatchCoreAction({ window_setWidgetAlwaysOnTop: !isWidgetAlwaysOnTop });
   };
 
   return {

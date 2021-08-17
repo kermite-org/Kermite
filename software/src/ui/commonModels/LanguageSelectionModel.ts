@@ -1,5 +1,6 @@
 import { useMemo } from 'qx';
-import { ILanguageKey, ipcAgent, uiTextConfigLoader } from '~/ui/base';
+import { ILanguageKey, uiTextConfigLoader } from '~/ui/base';
+import { dispatchCoreAction } from '~/ui/commonStore';
 
 export interface ILanguageSelectionModel {
   currentLanguage: ILanguageKey;
@@ -14,7 +15,7 @@ export function useLanguageSelectionModel(): ILanguageSelectionModel {
   const changeLanguage = (languageKey: ILanguageKey) => {
     if (languageKey !== currentLanguage) {
       uiTextConfigLoader.saveLanguageKey(languageKey);
-      ipcAgent.async.window_reloadPage();
+      dispatchCoreAction({ window_reloadPage: 1 });
     }
   };
   return { currentLanguage, changeLanguage };
