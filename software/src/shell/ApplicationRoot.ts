@@ -170,10 +170,10 @@ export class ApplicationRoot {
         keyboardConfigModule,
         windowModule,
       );
-      globalSettingsModule.loadGlobalSettings!(1);
-      keyboardConfigModule.loadKeyboardConfig!(1);
-      await dispatchCoreAction({ loadAllProjectPackages: 1 });
-      await dispatchCoreAction({ loadAllCustomFirmwareInfos: 1 });
+      globalSettingsModule.config_loadGlobalSettings!(1);
+      keyboardConfigModule.config_loadKeyboardConfig!(1);
+      await dispatchCoreAction({ project_loadAllProjectPackages: 1 });
+      await dispatchCoreAction({ project_loadAllCustomFirmwareInfos: 1 });
       await this.profileManager.initializeAsync();
       this.deviceService.initialize();
       this.inputLogicSimulator.initialize();

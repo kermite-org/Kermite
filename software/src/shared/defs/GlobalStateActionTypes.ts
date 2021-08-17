@@ -50,13 +50,13 @@ export const defaultCoreState: ICoreState = {
 export type ICoreAction = Partial<{
   loadAppVersion: 1;
   greet: { name: string; age: number };
-  loadAllProjectPackages: 1;
-  saveLocalProjectPackageInfo: IProjectPackageInfo;
-  loadAllCustomFirmwareInfos: 1;
-  loadGlobalSettings: 1;
-  writeGlobalSettings: Partial<IGlobalSettings>;
-  loadKeyboardConfig: 1;
-  writeKeyboardConfig: Partial<IKeyboardConfig>;
+  project_loadAllProjectPackages: 1;
+  project_saveLocalProjectPackageInfo: IProjectPackageInfo;
+  project_loadAllCustomFirmwareInfos: 1;
+  config_loadGlobalSettings: 1;
+  config_writeGlobalSettings: Partial<IGlobalSettings>;
+  config_loadKeyboardConfig: 1;
+  config_writeKeyboardConfig: Partial<IKeyboardConfig>;
 
   window_closeWindow: 1;
   window_minimizeWindow: 1;

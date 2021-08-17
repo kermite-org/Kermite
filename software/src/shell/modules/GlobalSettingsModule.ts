@@ -5,7 +5,7 @@ import { commitCoreState, coreState, createCoreModule } from '~/shell/global';
 import { checkLocalRepositoryFolder } from '~/shell/projectResources/LocalResourceHelper';
 
 export const globalSettingsModule = createCoreModule({
-  loadGlobalSettings() {
+  config_loadGlobalSettings() {
     const settings = applicationStorage.readItemBasedOnDefault(
       'globalSettings',
       globalSettingsLoadingSchema,
@@ -20,7 +20,7 @@ export const globalSettingsModule = createCoreModule({
     settings.useLocalResources = false;
     commitCoreState({ globalSettings: settings });
   },
-  writeGlobalSettings(partialConfig) {
+  config_writeGlobalSettings(partialConfig) {
     const globalSettings = {
       ...coreState.globalSettings,
       ...partialConfig,
