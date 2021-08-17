@@ -15,7 +15,7 @@ import { uiStateReader } from '~/ui/commonStore';
 import { modalAlert, modalConfirm, modalTextEdit } from '~/ui/components';
 import { getFileNameFromPath } from '~/ui/helpers';
 import {
-  profilesModel,
+  profilesActions,
   profilesReader,
   updateProfilesModelOnRender,
 } from '~/ui/pages/editor-page/models';
@@ -135,7 +135,7 @@ const createProfile = async () => {
     const nameValid = await checkValidNewProfileName(profileName, projectId);
     if (nameValid) {
       const fullProfileName = joinProjectProfileName(projectId, profileName);
-      profilesModel.createProfile(fullProfileName, origin, projectId, {
+      profilesActions.createProfile(fullProfileName, origin, projectId, {
         type: 'blank',
         layoutName: layoutKey,
       });
@@ -176,7 +176,7 @@ const renameProfile = async () => {
   );
   if (newFilePart) {
     const newProfileName = joinProjectProfileName(folderPart, newFilePart);
-    profilesModel.renameProfile(newProfileName);
+    profilesActions.renameProfile(newProfileName);
   }
 };
 
@@ -194,7 +194,7 @@ const copyProfile = async () => {
   );
   if (newFilePart) {
     const newProfileName = joinProjectProfileName(folderPart, newFilePart);
-    profilesModel.copyProfile(newProfileName);
+    profilesActions.copyProfile(newProfileName);
   }
 };
 
@@ -213,7 +213,7 @@ const deleteProfile = async () => {
     caption: texts.label_assigner_confirmModal_deleteProfile_modalTitle,
   });
   if (ok) {
-    profilesModel.deleteProfile();
+    profilesActions.deleteProfile();
   }
 };
 
@@ -229,7 +229,7 @@ const handleSaveUnsavedProfile = async () => {
   );
   if (newFilePart) {
     const newProfileName = joinProjectProfileName(projectId, newFilePart);
-    profilesModel.saveUnsavedProfileAs(newProfileName);
+    profilesActions.saveUnsavedProfileAs(newProfileName);
   }
 };
 
@@ -245,14 +245,14 @@ const onSaveButton = () => {
   ) {
     handleSaveUnsavedProfile();
   } else {
-    profilesModel.saveProfile();
+    profilesActions.saveProfile();
   }
 };
 
 const handleImportFromFile = async () => {
   const filePath = await ipcAgent.async.file_getOpenJsonFilePathWithDialog();
   if (filePath) {
-    profilesModel.importFromFile(filePath);
+    profilesActions.importFromFile(filePath);
   }
 };
 
@@ -260,7 +260,7 @@ const handleExportToFile = async () => {
   const filePath = await ipcAgent.async.file_getSaveJsonFilePathWithDialog();
   if (filePath) {
     const modFilePath = forceChangeFilePathExtension(filePath, '.profile.json');
-    profilesModel.exportToFile(modFilePath);
+    profilesActions.exportToFile(modFilePath);
   }
 };
 
@@ -322,17 +322,19 @@ function getCanWrite(): boolean {
   }
 }
 
+const checkEditProfileDirty = () => editorModel.checkDirty(false);
+
 function getCanSave(): boolean {
   const { editSource } = profilesReader;
   return (
     editSource.type === 'ProfileNewlyCreated' ||
     editSource.type === 'ExternalFile' ||
-    (editSource.type === 'InternalProfile' && profilesModel.checkDirty())
+    (editSource.type === 'InternalProfile' && checkEditProfileDirty())
   );
 }
 
 const loadProfile = async (profileName: string) => {
-  if (profilesModel.checkDirty()) {
+  if (checkEditProfileDirty()) {
     const ok = await modalConfirm({
       caption: texts.label_assigner_confirmModal_loadProfile_modalTitle,
       message: texts.label_assigner_confirmModal_loadProfile_modalMessage,
@@ -341,7 +343,7 @@ const loadProfile = async (profileName: string) => {
       return;
     }
   }
-  profilesModel.loadProfile(profileName);
+  profilesActions.loadProfile(profileName);
 };
 
 const openUserProfilesFolder = async () => {
@@ -349,7 +351,7 @@ const openUserProfilesFolder = async () => {
 };
 
 const onWriteButton = async () => {
-  await profilesModel.saveProfile();
+  await profilesActions.saveProfile();
   uiStatusModel.setLoading();
   const done = await ipcAgent.async.config_writeKeyMappingToDevice();
   uiStatusModel.clearLoading();
@@ -370,8 +372,6 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
 
   const { editSource, allProfileEntries } = profilesReader;
 
-  const { saveProfile } = profilesModel;
-
   const allProfileNames = allProfileEntries.map((it) => it.profileName);
 
   const { isSimulatorMode } = useKeyboardBehaviorModeModel();
@@ -389,7 +389,7 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
 
   return {
     createProfile,
-    saveProfile,
+    saveProfile: profilesActions.saveProfile,
     renameProfile,
     copyProfile,
     deleteProfile,
@@ -406,7 +406,7 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     isExportingPresetSelectionModalOpen: presetsModalDisplayStateModel.isOpen,
     openExportingPresetSelectionModal: presetsModalDisplayStateModel.open,
     closeExportingPresetSelectionModal: presetsModalDisplayStateModel.close,
-    saveProfileAsPreset: profilesModel.exportProfileAsProjectPreset,
+    saveProfileAsPreset: profilesActions.exportProfileAsProjectPreset,
     currentProfileProjectId: editorModel.loadedProfileData.projectId,
     isCurrentProfileInternal: editSource.type === 'InternalProfile',
     handleSaveUnsavedProfile,

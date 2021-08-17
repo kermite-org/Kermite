@@ -10,26 +10,6 @@ import { ipcAgent } from '~/ui/base';
 import { uiState } from '~/ui/commonStore';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 
-export interface IProfilesModel {
-  checkDirty(): boolean;
-
-  createProfile(
-    newProfileName: string,
-    targetProjectOrigin: IResourceOrigin,
-    targetProjectId: string,
-    presetSpec: IPresetSpec,
-  ): void;
-  loadProfile(profileName: string): void;
-  renameProfile(newProfileName: string): void;
-  copyProfile(newProfileName: string): void;
-  saveProfile(): Promise<void>;
-  deleteProfile(): void;
-  exportProfileAsProjectPreset(projectId: string, presetName: string): void;
-  importFromFile(filePath: string): void;
-  exportToFile(filePath: string): void;
-  saveUnsavedProfileAs(profileName: string): void;
-}
-
 export const profilesReader = {
   get editSource() {
     return uiState.core.profileManagerStatus.editSource;
@@ -49,8 +29,6 @@ export const profilesReader = {
   },
 };
 
-const checkDirty = () => editorModel.checkDirty(false);
-
 const getSaveCommandIfDirty = () => {
   const isDirty = editorModel.checkDirty(true);
   if (isDirty) {
@@ -69,7 +47,7 @@ const sendProfileManagerCommands = (
   );
 };
 
-const profilesActions = {
+export const profilesActions = {
   createProfile: (
     newProfileName: string,
     targetProjectOrigin: IResourceOrigin,
@@ -155,11 +133,6 @@ const profilesActions = {
     };
     sendProfileManagerCommands(exportCommand);
   },
-};
-
-export const profilesModel: IProfilesModel = {
-  checkDirty,
-  ...profilesActions,
 };
 
 export function updateProfilesModelOnRender() {
