@@ -3,9 +3,7 @@ import {
   IBootloaderDeviceDetectionStatus,
   ILayoutManagerCommand,
   ILayoutManagerStatus,
-  IProfileEntry,
   IProfileManagerCommand,
-  IProfileManagerStatus,
   IRealtimeKeyboardEvent,
   IResourceOrigin,
   IServerProfileInfo,
@@ -20,7 +18,6 @@ export interface IAppIpcContract {
   };
   async: {
     profile_getCurrentProfile(): Promise<IProfileData | undefined>;
-    profile_getAllProfileEntries(): Promise<IProfileEntry[]>;
     profile_executeProfileManagerCommands(
       commands: IProfileManagerCommand[],
     ): Promise<void>;

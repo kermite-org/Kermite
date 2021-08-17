@@ -145,10 +145,6 @@ export class ProfileManager implements IProfileManager {
     return this.status.loadedProfileData?.projectId;
   }
 
-  getAllProfileEntries(): IProfileEntry[] {
-    return this.status.allProfileEntries;
-  }
-
   getCurrentProfile(): IProfileData | undefined {
     if (this.status.editSource.type === 'NoProfilesAvailable') {
       return undefined;

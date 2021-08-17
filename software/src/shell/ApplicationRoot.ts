@@ -60,8 +60,6 @@ export class ApplicationRoot {
         this.profileManager.getCurrentProfile(),
       profile_executeProfileManagerCommands: (commands) =>
         this.profileManager.executeCommands(commands),
-      profile_getAllProfileEntries: async () =>
-        this.profileManager.getAllProfileEntries(),
       profile_openUserProfilesFolder: () =>
         this.profileManager.openUserProfilesFolder(),
       layout_executeLayoutManagerCommands: (commands) =>

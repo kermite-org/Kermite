@@ -1,9 +1,8 @@
-import { IProfileData, IProfileEntry, IProfileManagerCommand } from '~/shared';
+import { IProfileData, IProfileManagerCommand } from '~/shared';
 
 export interface IProfileManager {
   getCurrentProfileProjectId(): string;
   getCurrentProfile(): IProfileData | undefined;
-  getAllProfileEntries(): IProfileEntry[];
   executeCommands(commands: IProfileManagerCommand[]): Promise<void>;
   saveCurrentProfile(profileData: IProfileData): Promise<void>;
 }
