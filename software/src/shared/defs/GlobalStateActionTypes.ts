@@ -48,11 +48,10 @@ export const defaultCoreState: ICoreState = {
 };
 
 export type ICoreAction = Partial<{
-  loadAppVersion: 1;
-  greet: { name: string; age: number };
   project_loadAllProjectPackages: 1;
   project_saveLocalProjectPackageInfo: IProjectPackageInfo;
   project_loadAllCustomFirmwareInfos: 1;
+
   config_loadGlobalSettings: 1;
   config_writeGlobalSettings: Partial<IGlobalSettings>;
   config_loadKeyboardConfig: 1;

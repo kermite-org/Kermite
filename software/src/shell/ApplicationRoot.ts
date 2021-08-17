@@ -11,11 +11,7 @@ import {
   coreStateManager,
   dispatchCoreAction,
 } from '~/shell/global';
-import {
-  developmentModule_ActionReceiver,
-  keyboardConfigModule,
-  projectPackageModule,
-} from '~/shell/modules';
+import { keyboardConfigModule, projectPackageModule } from '~/shell/modules';
 import { globalSettingsModule } from '~/shell/modules/GlobalSettingsModule';
 import { checkLocalRepositoryFolder } from '~/shell/projectResources/LocalResourceHelper';
 import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
@@ -165,7 +161,6 @@ export class ApplicationRoot {
       const windowModule = createWindowModule(this.windowWrapper);
       coreActionDistributor.addReceivers(
         globalSettingsModule,
-        developmentModule_ActionReceiver,
         projectPackageModule,
         keyboardConfigModule,
         windowModule,
