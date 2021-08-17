@@ -2,7 +2,7 @@ import { css, FC, jsx } from 'qx';
 import { ISelectorOption, texts } from '~/ui/base';
 import { uiStatusModel } from '~/ui/commonModels';
 import { RibbonSelector } from '~/ui/components';
-import { profilesModel } from '~/ui/pages/editor-page/models';
+import { profilesReader } from '~/ui/pages/editor-page/models';
 
 const options: ISelectorOption[] = [
   { label: 'EDIT', value: 'edit' },
@@ -25,7 +25,7 @@ export const BehaviorOptionsPartA: FC = () => {
         setValue={setValue}
         hint={texts.hint_assigner_configs_showLayersDynamic}
         className="selector"
-        disabled={!profilesModel.isEditProfileAvailable}
+        disabled={!profilesReader.isEditProfileAvailable}
       />
     </div>
   );

@@ -1,7 +1,7 @@
 import { css, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { uiStateReader } from '~/ui/commonStore';
-import { profilesModel } from '~/ui/pages/editor-page/models';
+import { profilesReader } from '~/ui/pages/editor-page/models';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 
 export const ProfileConfigurationPart = () => {
@@ -11,7 +11,7 @@ export const ProfileConfigurationPart = () => {
   const keyboardName = info?.keyboardName;
   const currentAssignType = editorModel.profileData.settings.assignType;
 
-  const { isEditProfileAvailable } = profilesModel;
+  const { isEditProfileAvailable } = profilesReader;
 
   return (
     <div css={style}>

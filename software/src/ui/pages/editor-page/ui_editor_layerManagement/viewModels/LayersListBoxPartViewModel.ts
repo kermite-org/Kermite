@@ -1,6 +1,6 @@
 import { ILayer } from '~/shared';
 import { uiStatusModel } from '~/ui/commonModels';
-import { profilesModel } from '~/ui/pages/editor-page/models';
+import { profilesReader } from '~/ui/pages/editor-page/models';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 
 export interface ILayerListViewModel {
@@ -31,7 +31,7 @@ function makeLayerListViewModel(layer: ILayer): ILayerListViewModel {
 }
 
 export function makeLayerListBoxPartViewModel(): ILayerListBoxPartViewModel {
-  if (!profilesModel.isEditProfileAvailable) {
+  if (!profilesReader.isEditProfileAvailable) {
     return { layers: [] };
   }
   return {

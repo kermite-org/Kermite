@@ -2,8 +2,6 @@ import { useEffect } from 'qx';
 import {
   compareObjectByJsonStringify,
   IPresetSpec,
-  IProfileEditSource,
-  IProfileEntry,
   IProfileManagerCommand,
   IProfileManagerStatus,
   IResourceOrigin,
@@ -13,11 +11,6 @@ import { uiState } from '~/ui/commonStore';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 
 export interface IProfilesModel {
-  editSource: IProfileEditSource;
-  allProfileEntries: IProfileEntry[];
-  isEditProfileAvailable: boolean;
-  currentProfileName: string;
-
   checkDirty(): boolean;
 
   createProfile(
@@ -37,7 +30,7 @@ export interface IProfilesModel {
   saveUnsavedProfileAs(profileName: string): void;
 }
 
-const profilesReader = {
+export const profilesReader = {
   get editSource() {
     return uiState.core.profileManagerStatus.editSource;
   },
@@ -165,18 +158,6 @@ const profilesActions = {
 };
 
 export const profilesModel: IProfilesModel = {
-  get editSource() {
-    return profilesReader.editSource;
-  },
-  get allProfileEntries() {
-    return profilesReader.allProfileEntries;
-  },
-  get currentProfileName() {
-    return profilesReader.currentProfileName;
-  },
-  get isEditProfileAvailable() {
-    return profilesReader.isEditProfileAvailable;
-  },
   checkDirty,
   ...profilesActions,
 };

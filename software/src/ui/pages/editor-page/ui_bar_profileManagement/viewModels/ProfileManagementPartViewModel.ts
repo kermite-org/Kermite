@@ -16,6 +16,7 @@ import { modalAlert, modalConfirm, modalTextEdit } from '~/ui/components';
 import { getFileNameFromPath } from '~/ui/helpers';
 import {
   profilesModel,
+  profilesReader,
   updateProfilesModelOnRender,
 } from '~/ui/pages/editor-page/models';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
@@ -113,7 +114,7 @@ const checkValidNewProfileName = async (
   const newFullName = joinProjectProfileName(projectId, newProfileName);
   const lowered = newFullName.toLowerCase();
   if (
-    profilesModel.allProfileEntries.find(
+    profilesReader.allProfileEntries.find(
       (it) => it.profileName.toLowerCase() === lowered,
     )
   ) {
@@ -162,11 +163,11 @@ const inputNewProfileName = async (
 };
 
 const renameProfile = async () => {
-  if (profilesModel.editSource.type !== 'InternalProfile') {
+  if (profilesReader.editSource.type !== 'InternalProfile') {
     return;
   }
   const { folderPart, filePart } = splitProjectProfileName(
-    profilesModel.currentProfileName,
+    profilesReader.currentProfileName,
   );
   const newFilePart = await inputNewProfileName(
     texts.label_assigner_profileNameEditModal_modalTitleRename,
@@ -180,11 +181,11 @@ const renameProfile = async () => {
 };
 
 const copyProfile = async () => {
-  if (profilesModel.editSource.type !== 'InternalProfile') {
+  if (profilesReader.editSource.type !== 'InternalProfile') {
     return;
   }
   const { folderPart, filePart } = splitProjectProfileName(
-    profilesModel.currentProfileName,
+    profilesReader.currentProfileName,
   );
   const newFilePart = await inputNewProfileName(
     texts.label_assigner_profileNameEditModal_modalTitleCopy,
@@ -198,11 +199,11 @@ const copyProfile = async () => {
 };
 
 const deleteProfile = async () => {
-  if (profilesModel.editSource.type !== 'InternalProfile') {
+  if (profilesReader.editSource.type !== 'InternalProfile') {
     return;
   }
   const { filePart } = splitProjectProfileName(
-    profilesModel.currentProfileName,
+    profilesReader.currentProfileName,
   );
   const ok = await modalConfirm({
     message: texts.label_assigner_confirmModal_deleteProfile_modalMessage.replace(
@@ -217,13 +218,13 @@ const deleteProfile = async () => {
 };
 
 const handleSaveUnsavedProfile = async () => {
-  if (profilesModel.editSource.type === 'InternalProfile') {
+  if (profilesReader.editSource.type === 'InternalProfile') {
     return;
   }
   const projectId = editorModel.profileData.projectId;
   const newFilePart = await inputNewProfileName(
     texts.label_assigner_profileNameEditModal_modalTitleSave,
-    profilesModel.currentProfileName,
+    profilesReader.currentProfileName,
     projectId,
   );
   if (newFilePart) {
@@ -237,7 +238,7 @@ const openConfiguration = () => {
 };
 
 const onSaveButton = () => {
-  const editSourceType = profilesModel.editSource.type;
+  const editSourceType = profilesReader.editSource.type;
   if (
     editSourceType === 'ProfileNewlyCreated' ||
     editSourceType === 'ExternalFile'
@@ -288,7 +289,7 @@ function getCanWrite(): boolean {
     allowCrossKeyboardKeyMappingWrite,
   } = uiStateReader.globalSettings;
 
-  const { editSource } = profilesModel;
+  const { editSource } = profilesReader;
 
   const isInternalProfile = editSource.type === 'InternalProfile';
 
@@ -322,7 +323,7 @@ function getCanWrite(): boolean {
 }
 
 function getCanSave(): boolean {
-  const { editSource } = profilesModel;
+  const { editSource } = profilesReader;
   return (
     editSource.type === 'ProfileNewlyCreated' ||
     editSource.type === 'ExternalFile' ||
@@ -367,7 +368,9 @@ const toggleRoutingPanel = () => {
 export function makeProfileManagementPartViewModel(): IProfileManagementPartViewModel {
   updateProfilesModelOnRender();
 
-  const { editSource, allProfileEntries, saveProfile } = profilesModel;
+  const { editSource, allProfileEntries } = profilesReader;
+
+  const { saveProfile } = profilesModel;
 
   const allProfileNames = allProfileEntries.map((it) => it.profileName);
 
@@ -414,6 +417,6 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     isMenuItemSaveEnabled:
       editSource.type === 'ProfileNewlyCreated' ||
       editSource.type === 'ExternalFile',
-    isEditProfileAvailable: profilesModel.isEditProfileAvailable,
+    isEditProfileAvailable: profilesReader.isEditProfileAvailable,
   };
 }

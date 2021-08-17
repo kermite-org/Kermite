@@ -4,7 +4,7 @@ import {
   WindowControlButton,
   WindowRestartButton,
 } from '~/ui/components/window';
-import { profilesModel } from '~/ui/pages/editor-page/models';
+import { profilesReader } from '~/ui/pages/editor-page/models';
 import { makeWindowControlButtonsModel } from '~/ui/root/organisms/WindowControlButtonsPart.model';
 
 export const WindowControlButtonsPart = () => {
@@ -26,7 +26,7 @@ export const WindowControlButtonsPart = () => {
         icon="fa fa-feather-alt"
         onClick={vm.onWidgetButton}
         hint={texts.hint_titleBar_switchToWidgetView}
-        disabled={!profilesModel.isEditProfileAvailable}
+        disabled={!profilesReader.isEditProfileAvailable}
       />
       <WindowControlButton
         icon="fa fa-window-minimize"

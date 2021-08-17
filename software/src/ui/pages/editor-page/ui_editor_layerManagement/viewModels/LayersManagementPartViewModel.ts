@@ -3,7 +3,7 @@ import { removeArrayItems } from '~/shared';
 import { generateNextSequentialId } from '~/shared/funcs/DomainRelatedHelpers';
 import { texts } from '~/ui/base';
 import { modalConfirm } from '~/ui/components';
-import { profilesModel } from '~/ui/pages/editor-page/models';
+import { profilesReader } from '~/ui/pages/editor-page/models';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 import {
   callLayerConfigurationModal,
@@ -44,7 +44,7 @@ export function makeLayerManagementPartViewModel(): ILayerManagementPartViewMode
   };
 
   return {
-    canEdit: profilesModel.isEditProfileAvailable,
+    canEdit: profilesReader.isEditProfileAvailable,
     canShiftBackCurrentLayer: canShiftCurrentLayerOrder(-1),
     canShiftForwardCurrentLayer: canShiftCurrentLayerOrder(1),
     canDeleteCurrentLayer: isCurrentLayerCustom,
