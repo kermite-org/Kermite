@@ -1,13 +1,11 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
-import { updateEditSourceProfileOnRender } from '~/ui/pages/editor-page/models';
 import { KeyAssignEditView } from './KeyAssignEditView';
 import { DeviceControlSection } from './ui_bar_deviceControlSection/DeviceControlSection';
 import { ProfileManagementPart } from './ui_bar_profileManagement/ProfileManagementPart';
 import { ProfileConfigratuionModalLayer } from './ui_modal_profileConfiguration';
 
 export const EditorPage: FC = () => {
-  updateEditSourceProfileOnRender();
   return (
     <div css={style}>
       <div className="topRow">

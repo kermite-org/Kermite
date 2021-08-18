@@ -1,7 +1,7 @@
 import { useLocal } from 'qx';
 import { texts } from '~/ui/base';
 import { globalSettingsReader } from '~/ui/commonStore';
-import { IProfileManagementPartViewModel } from './ProfileManagementPartViewModel';
+import { IProfileManagementPartViewModel } from './ProfilesOperationModel';
 
 interface IMenuItem {
   key: string;
