@@ -15,6 +15,7 @@ import {
   pathBasename,
   pathJoin,
 } from '~/shell/funcs';
+import { migrateProjectPackageData } from '~/shell/loaders/ProjectPackageDataMigrator';
 
 interface IProjectPackageProvider {
   getAllProjectPackageInfos(): Promise<IProjectPackageInfo[]>;
@@ -46,6 +47,7 @@ async function loadProjectPackageFiles(
       const data = (await fsxReadJsonFile(
         filePath,
       )) as IProjectPackageFileContent;
+      migrateProjectPackageData(data);
       return convertPackageFileContentToPackageInfo(data, origin, packageName);
     }),
   );
@@ -85,6 +87,7 @@ async function loadRemoteProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
       const data = (await fetchJson(
         `${remoteBaseUrl}/${path}`,
       )) as IProjectPackageFileContent;
+      migrateProjectPackageData(data);
       const packageName = pathBasename(path, '.kmpkg.json');
       return convertPackageFileContentToPackageInfo(data, origin, packageName);
     }),
