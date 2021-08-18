@@ -47,11 +47,11 @@ function createSelectorOptionExternalProfile(
 }
 
 function makeProfileSelectionSource(
-  allProfileEntries: IProfileEntry[],
+  visibleProfileEntries: IProfileEntry[],
   editSource: IProfileEditSource,
   loadProfile: (profileEntry: IProfileEntry) => void,
 ): ISelectorSource {
-  const optionsBase = allProfileEntries.map(makeProfileNameSelectorOption);
+  const optionsBase = visibleProfileEntries.map(makeProfileNameSelectorOption);
 
   const setValue = (text: string) => {
     const profileEntry = parseProfileEntry(text);
@@ -101,10 +101,10 @@ const loadProfile = async (profileEntry: IProfileEntry) => {
 };
 
 export function useProfileSelectorModel(): IProfileSelectorModel {
-  const { editSource, allProfileEntries } = profilesReader;
+  const { editSource, visibleProfileEntries } = profilesReader;
   return {
     profileSelectorSource: makeProfileSelectionSource(
-      allProfileEntries,
+      visibleProfileEntries,
       editSource,
       loadProfile,
     ),
