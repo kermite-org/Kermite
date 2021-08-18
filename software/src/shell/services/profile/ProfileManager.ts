@@ -1,6 +1,7 @@
 import { shell } from 'electron';
 import produce from 'immer';
 import {
+  checkProfileEntryEquality,
   clampValue,
   duplicateObjectByJsonStringifyParse,
   fallbackProfileData,
@@ -35,11 +36,9 @@ function createInternalProfileEditSourceOrFallback(
   profileEntry?: IProfileEntry,
 ): IProfileEditSource {
   if (profileEntry) {
-    const { profileName, projectId } = profileEntry;
     return {
       type: 'InternalProfile',
-      profileName,
-      projectId,
+      profileEntry,
     };
   } else {
     return {
@@ -51,7 +50,10 @@ function createInternalProfileEditSourceOrFallback(
 const profileEditSourceLoadingDataSchema = vSchemaOneOf([
   vObject({
     type: vValueEquals('InternalProfile'),
-    profileName: vString(),
+    profileEntry: vObject({
+      projectId: vString(),
+      profileName: vString(),
+    }),
   }),
   vObject({
     type: vValueEquals('ExternalFile'),
@@ -177,7 +179,7 @@ export class ProfileManager implements IProfileManager {
     if (globalProjectId) {
       if (
         editSource.type === 'InternalProfile' &&
-        editSource.projectId !== globalProjectId
+        editSource.profileEntry.projectId !== globalProjectId
       ) {
         return createInternalProfileEditSourceOrFallback(
           this.status.visibleProfileEntries[0],
@@ -200,20 +202,19 @@ export class ProfileManager implements IProfileManager {
     } else if (editSource.type === 'ProfileNewlyCreated') {
       return fallbackProfileData;
     } else if (editSource.type === 'InternalProfile') {
-      return await this.core.loadProfile(editSource.profileName);
+      return await this.core.loadProfile(editSource.profileEntry);
     } else if (editSource.type === 'ExternalFile') {
       return await this.core.loadExternalProfileFile(editSource.filePath);
     }
     return fallbackProfileData;
   }
 
-  private async loadProfile(profName: string) {
-    const profileData = await this.core.loadProfile(profName);
+  private async loadProfile(profileEntry: IProfileEntry) {
+    const profileData = await this.core.loadProfile(profileEntry);
     this.setStatus({
       editSource: {
         type: 'InternalProfile',
-        profileName: profName,
-        projectId: profileData.projectId,
+        profileEntry,
       },
       loadedProfileData: profileData,
     });
@@ -233,7 +234,7 @@ export class ProfileManager implements IProfileManager {
     } else if (editSource.type === 'ExternalFile') {
       await this.core.saveExternalProfileFile(editSource.filePath, profileData);
     } else if (editSource.type === 'InternalProfile') {
-      await this.core.saveProfile(editSource.profileName, profileData);
+      await this.core.saveProfile(editSource.profileEntry, profileData);
     }
     this.setStatus({
       loadedProfileData: profileData,
@@ -285,9 +286,9 @@ export class ProfileManager implements IProfileManager {
     return profile;
   }
 
-  private hasProfileWithName(profileName: string): boolean {
-    return this.status.allProfileEntries.some(
-      (it) => it.profileName === profileName,
+  private hasProfileEntry(profileEntry: IProfileEntry): boolean {
+    return this.status.allProfileEntries.some((it) =>
+      checkProfileEntryEquality(it, profileEntry),
     );
   }
 
@@ -297,17 +298,17 @@ export class ProfileManager implements IProfileManager {
     projectId: string,
     presetSpec: IPresetSpec,
   ) {
-    if (this.hasProfileWithName(profileName)) {
+    const profileEntry = { projectId, profileName };
+    if (this.hasProfileEntry(profileEntry)) {
       return false;
     }
     const profileData = this.createProfileImpl(origin, projectId, presetSpec);
-    await this.core.saveProfile(profileName, profileData);
+    await this.core.saveProfile(profileEntry, profileData);
     await this.reEnumerateAllProfileEntries();
     this.setStatus({
       editSource: {
         type: 'InternalProfile',
-        profileName,
-        projectId,
+        profileEntry,
       },
       loadedProfileData: profileData,
     });
@@ -347,18 +348,21 @@ export class ProfileManager implements IProfileManager {
     });
   }
 
-  private async deleteProfile(profName: string) {
+  private async deleteProfile(profileEntry: IProfileEntry) {
     if (this.status.editSource.type !== 'InternalProfile') {
       return;
     }
-    if (!this.hasProfileWithName(profName)) {
+    if (!this.hasProfileEntry(profileEntry)) {
       return false;
     }
-    const isCurrent = this.status.editSource.profileName === profName;
-    const currentProfileIndex = this.status.visibleProfileEntries.findIndex(
-      (it) => it.profileName === profName,
+    const isCurrent = checkProfileEntryEquality(
+      this.status.editSource.profileEntry,
+      profileEntry,
     );
-    await this.core.deleteProfile(profName);
+    const currentProfileIndex = this.status.visibleProfileEntries.findIndex(
+      (it) => checkProfileEntryEquality(it, profileEntry),
+    );
+    await this.core.deleteProfile(profileEntry);
     await this.reEnumerateAllProfileEntries();
     if (this.status.visibleProfileEntries.length === 0) {
       this.unloadProfile();
@@ -369,51 +373,68 @@ export class ProfileManager implements IProfileManager {
         0,
         this.status.visibleProfileEntries.length - 1,
       );
-      const nextProfileName = this.status.visibleProfileEntries[newIndex]
-        ?.profileName;
-      if (nextProfileName) {
-        await this.loadProfile(nextProfileName);
+      const newProfileEntry = this.status.visibleProfileEntries[newIndex];
+      if (newProfileEntry) {
+        await this.loadProfile(newProfileEntry);
       }
     }
   }
 
-  private async renameProfile(profName: string, newProfName: string) {
+  private async renameProfile(
+    profileEntry: IProfileEntry,
+    newProfileName: string,
+  ) {
+    const newProfileEntry = { ...profileEntry, profileName: newProfileName };
     if (this.status.editSource.type !== 'InternalProfile') {
       return;
     }
-    if (!this.hasProfileWithName(profName)) {
+    if (!this.hasProfileEntry(profileEntry)) {
       return false;
     }
-    if (this.hasProfileWithName(newProfName)) {
+    if (this.hasProfileEntry(newProfileEntry)) {
       return false;
     }
-    const isCurrent = this.status.editSource.profileName === profName;
-    await this.core.renameProfile(profName, newProfName);
+    const isCurrent = checkProfileEntryEquality(
+      this.status.editSource.profileEntry,
+      profileEntry,
+    );
+    await this.core.renameProfile(profileEntry, newProfileEntry);
     await this.reEnumerateAllProfileEntries();
     if (isCurrent) {
-      await this.loadProfile(newProfName);
+      await this.loadProfile(newProfileEntry);
     }
   }
 
-  private async copyProfile(profName: string, newProfName: string) {
-    if (!this.hasProfileWithName(profName)) {
+  private async copyProfile(
+    profileEntry: IProfileEntry,
+    newProfileName: string,
+  ) {
+    const newProfileEntry = { ...profileEntry, profileName: newProfileName };
+    if (!this.hasProfileEntry(profileEntry)) {
       return false;
     }
-    if (this.hasProfileWithName(newProfName)) {
+    if (this.hasProfileEntry(newProfileEntry)) {
       return false;
     }
-    await this.core.copyProfile(profName, newProfName);
+    await this.core.copyProfile(profileEntry, newProfileEntry);
     await this.reEnumerateAllProfileEntries();
-    await this.loadProfile(newProfName);
+    await this.loadProfile(newProfileEntry);
   }
 
-  private async saveProfileAs(newProfName: string, profileData: IProfileData) {
-    if (this.hasProfileWithName(newProfName)) {
+  private async saveProfileAs(
+    profileData: IProfileData,
+    newProfileName: string,
+  ) {
+    const newProfileEntry = {
+      projectId: profileData.projectId,
+      profileName: newProfileName,
+    };
+    if (this.hasProfileEntry(newProfileEntry)) {
       return false;
     }
-    await this.core.saveProfile(newProfName, profileData);
+    await this.core.saveProfile(newProfileEntry, profileData);
     await this.reEnumerateAllProfileEntries();
-    await this.loadProfile(newProfName);
+    await this.loadProfile(newProfileEntry);
   }
 
   private async importFromFile(filePath: string) {
@@ -434,10 +455,11 @@ export class ProfileManager implements IProfileManager {
 
   private async openUserProfilesFolder() {
     const { editSource } = this.status;
-    const projectId =
-      (editSource.type === 'InternalProfile' && editSource.projectId) ||
-      undefined;
-    await shell.openPath(this.core.getProfilesFolderPath(projectId));
+    if (editSource.type === 'InternalProfile' && editSource.profileEntry) {
+      await shell.openPath(
+        this.core.getProfilesFolderPath(editSource.profileEntry),
+      );
+    }
   }
 
   private async executeCommand(cmd: IProfileManagerCommand) {
@@ -465,16 +487,19 @@ export class ProfileManager implements IProfileManager {
         cmd.createProfileFromLayout.layout,
       );
     } else if (cmd.deleteProfile) {
-      await this.deleteProfile(cmd.deleteProfile.name);
+      await this.deleteProfile(cmd.deleteProfile.profileEntry);
     } else if (cmd.loadProfile) {
-      await this.loadProfile(cmd.loadProfile.name);
+      await this.loadProfile(cmd.loadProfile.profileEntry);
     } else if (cmd.renameProfile) {
       await this.renameProfile(
-        cmd.renameProfile.name,
-        cmd.renameProfile.newName,
+        cmd.renameProfile.profileEntry,
+        cmd.renameProfile.newProfileName,
       );
     } else if (cmd.copyProfile) {
-      await this.copyProfile(cmd.copyProfile.name, cmd.copyProfile.newName);
+      await this.copyProfile(
+        cmd.copyProfile.profileEntry,
+        cmd.copyProfile.newProfileName,
+      );
     } else if (cmd.saveCurrentProfile) {
       await this.saveCurrentProfile(cmd.saveCurrentProfile.profileData);
     } else if (cmd.saveAsProjectPreset) {
@@ -489,8 +514,8 @@ export class ProfileManager implements IProfileManager {
       );
     } else if (cmd.saveProfileAs) {
       await this.saveProfileAs(
-        cmd.saveProfileAs.name,
         cmd.saveProfileAs.profileData,
+        cmd.saveProfileAs.newProfileName,
       );
     } else if (cmd.openUserProfilesFolder) {
       await this.openUserProfilesFolder();

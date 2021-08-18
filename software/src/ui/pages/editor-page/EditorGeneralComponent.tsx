@@ -23,7 +23,7 @@ export const AssignerGeneralComponent: FC<Props> = ({
     editorModel.loadProfileData(profileData);
   }, [originalProfile]);
 
-  const isModified = editorModel.checkDirty(false);
+  const isModified = editorModel.checkDirty();
 
   const onSaveButton = () => {
     const savingData = ProfileDataConverter.convertProfileDataToPersist(

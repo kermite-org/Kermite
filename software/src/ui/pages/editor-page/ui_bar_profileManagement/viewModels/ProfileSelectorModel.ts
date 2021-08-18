@@ -1,4 +1,9 @@
-import { IProfileEditSource } from '~/shared';
+import {
+  IProfileEditSource,
+  IProfileEntry,
+  parseProfileEntry,
+  stringifyProfileEntry,
+} from '~/shared';
 import { ISelectorOption, ISelectorSource, texts } from '~/ui/base';
 import { uiStateReader } from '~/ui/commonStore';
 import { modalConfirm } from '~/ui/components';
@@ -13,57 +18,77 @@ export type IProfileSelectorModel = {
   profileSelectorSource: ISelectorSource;
 };
 
-function makeProfileNameSelectorOption(profileName: string): ISelectorOption {
+function makeProfileNameSelectorOption(
+  profileEntry: IProfileEntry,
+): ISelectorOption {
   const omitFolder = !!uiStateReader.globalSettings.globalProjectId;
+  const { projectId, profileName } = profileEntry;
   return {
-    value: profileName,
-    label: omitFolder ? profileName.replace(/^.*\//, '') : profileName,
+    value: stringifyProfileEntry(profileEntry),
+    label: omitFolder ? profileName : `${projectId}/${profileName}`,
+  };
+}
+
+const selectorValueNewlyCreated = '__PROFILE_NEWLY_CREATED__';
+const selectorValueExternalProfile = '__PROFILE_EXTERNALLY_LOADED__';
+
+const selectorOptionNewlyCreated: ISelectorOption = {
+  label: '(untitled)',
+  value: selectorValueNewlyCreated,
+};
+
+function createSelectorOptionExternalProfile(
+  filePath: string,
+): ISelectorOption {
+  return {
+    label: `(file)${getFileNameFromPath(filePath)}`,
+    value: selectorValueExternalProfile,
   };
 }
 
 function makeProfileSelectionSource(
-  allProfileNames: string[],
+  allProfileEntries: IProfileEntry[],
   editSource: IProfileEditSource,
-  loadProfile: (profileName: string) => void,
+  loadProfile: (profileEntry: IProfileEntry) => void,
 ): ISelectorSource {
-  if (editSource.type === 'NoEditProfileAvailable') {
+  const optionsBase = allProfileEntries.map(makeProfileNameSelectorOption);
+
+  const setValue = (text: string) => {
+    const profileEntry = parseProfileEntry(text);
+    loadProfile(profileEntry);
+  };
+
+  if (editSource.type === 'ProfileNewlyCreated') {
     return {
-      options: allProfileNames.map(makeProfileNameSelectorOption),
-      value: '',
-      setValue: loadProfile,
-    };
-  } else if (editSource.type === 'ProfileNewlyCreated') {
-    return {
-      options: [
-        { label: '(untitled)', value: '__NEWLY_CREATED_PROFILE__' },
-        ...allProfileNames.map(makeProfileNameSelectorOption),
-      ],
-      value: '__NEWLY_CREATED_PROFILE__',
-      setValue: loadProfile,
+      options: [selectorOptionNewlyCreated, ...optionsBase],
+      value: selectorValueNewlyCreated,
+      setValue,
     };
   } else if (editSource.type === 'ExternalFile') {
     return {
       options: [
-        {
-          label: `(file)${getFileNameFromPath(editSource.filePath)}`,
-          value: '__EXTERNALLY_LOADED_PROFILE__',
-        },
-        ...allProfileNames.map(makeProfileNameSelectorOption),
+        createSelectorOptionExternalProfile(editSource.filePath),
+        ...optionsBase,
       ],
-      value: '__EXTERNALLY_LOADED_PROFILE__',
-      setValue: loadProfile,
+      value: selectorValueExternalProfile,
+      setValue,
     };
-  } else {
+  } else if (editSource.type === 'InternalProfile') {
     return {
-      options: allProfileNames.map(makeProfileNameSelectorOption),
-      value: editSource.profileName,
-      setValue: loadProfile,
+      options: optionsBase,
+      value: stringifyProfileEntry(editSource.profileEntry),
+      setValue,
     };
   }
+  return {
+    options: optionsBase,
+    value: '',
+    setValue,
+  };
 }
 
-const loadProfile = async (profileName: string) => {
-  if (editorModel.checkDirty(false)) {
+const loadProfile = async (profileEntry: IProfileEntry) => {
+  if (editorModel.checkDirty()) {
     const ok = await modalConfirm({
       caption: texts.label_assigner_confirmModal_loadProfile_modalTitle,
       message: texts.label_assigner_confirmModal_loadProfile_modalMessage,
@@ -72,15 +97,14 @@ const loadProfile = async (profileName: string) => {
       return;
     }
   }
-  profilesActions.loadProfile(profileName);
+  profilesActions.loadProfile(profileEntry);
 };
 
 export function useProfileSelectorModel(): IProfileSelectorModel {
   const { editSource, allProfileEntries } = profilesReader;
-  const allProfileNames = allProfileEntries.map((it) => it.profileName);
   return {
     profileSelectorSource: makeProfileSelectionSource(
-      allProfileNames,
+      allProfileEntries,
       editSource,
       loadProfile,
     ),

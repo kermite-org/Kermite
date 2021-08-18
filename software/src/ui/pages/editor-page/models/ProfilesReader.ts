@@ -1,3 +1,4 @@
+import { IProfileEntry } from '~/shared';
 import { uiState } from '~/ui/commonStore/base';
 
 export const profilesReader = {
@@ -11,10 +12,11 @@ export const profilesReader = {
     const { editSource } = uiState.core.profileManagerStatus;
     return editSource.type !== 'NoEditProfileAvailable';
   },
-  get currentProfileName() {
+  get currentProfileEntry(): IProfileEntry | undefined {
     const { editSource } = uiState.core.profileManagerStatus;
     return (
-      (editSource.type === 'InternalProfile' && editSource.profileName) || ''
+      (editSource.type === 'InternalProfile' && editSource.profileEntry) ||
+      undefined
     );
   },
 };

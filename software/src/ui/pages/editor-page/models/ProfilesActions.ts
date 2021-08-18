@@ -1,10 +1,14 @@
-import { IPresetSpec, IProfileManagerCommand, IResourceOrigin } from '~/shared';
+import {
+  IPresetSpec,
+  IProfileEntry,
+  IProfileManagerCommand,
+  IResourceOrigin,
+} from '~/shared';
 import { ipcAgent } from '~/ui/base';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
-import { profilesReader } from '~/ui/pages/editor-page/models/ProfilesReader';
 
 const getSaveCommandIfDirty = () => {
-  const isDirty = editorModel.checkDirty(true);
+  const isDirty = editorModel.checkDirtyWithCleanupSideEffect();
   if (isDirty) {
     return {
       saveCurrentProfile: { profileData: editorModel.profileData },
@@ -39,35 +43,29 @@ export const profilesActions = {
     sendProfileManagerCommands(createCommand);
   },
 
-  loadProfile: (profileName: string) => {
-    if (profileName === profilesReader.currentProfileName) {
-      return;
-    }
-    const loadCommand = { loadProfile: { name: profileName } };
+  loadProfile: (profileEntry: IProfileEntry) => {
+    const loadCommand = { loadProfile: { profileEntry } };
     sendProfileManagerCommands(loadCommand);
   },
 
-  renameProfile: (newProfileName: string) => {
-    const curProfName = profilesReader.currentProfileName;
+  renameProfile: (profileEntry: IProfileEntry, newProfileName: string) => {
     const saveCommand = getSaveCommandIfDirty();
     const renameCommand = {
-      renameProfile: { name: curProfName, newName: newProfileName },
+      renameProfile: { profileEntry, newProfileName },
     };
     sendProfileManagerCommands(saveCommand, renameCommand);
   },
 
-  copyProfile: (newProfileName: string) => {
-    const curProfName = profilesReader.currentProfileName;
+  copyProfile: (profileEntry: IProfileEntry, newProfileName: string) => {
     const saveCommand = getSaveCommandIfDirty();
     const copyCommand = {
-      copyProfile: { name: curProfName, newName: newProfileName },
+      copyProfile: { profileEntry, newProfileName },
     };
     sendProfileManagerCommands(saveCommand, copyCommand);
   },
 
-  deleteProfile: () => {
-    const curProfName = profilesReader.currentProfileName;
-    const deleteCommand = { deleteProfile: { name: curProfName } };
+  deleteProfile: (profileEntry: IProfileEntry) => {
+    const deleteCommand = { deleteProfile: { profileEntry } };
     sendProfileManagerCommands(deleteCommand);
   },
 
@@ -78,10 +76,10 @@ export const profilesActions = {
     }
   },
 
-  saveUnsavedProfileAs: (profileName: string) => {
+  saveUnsavedProfileAs: (newProfileName: string) => {
     sendProfileManagerCommands({
       saveProfileAs: {
-        name: profileName,
+        newProfileName,
         profileData: editorModel.profileData,
       },
     });

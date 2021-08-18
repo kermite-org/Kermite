@@ -39,7 +39,7 @@ export const profilesOperationReader = {
     return (
       editSource.type === 'ProfileNewlyCreated' ||
       editSource.type === 'ExternalFile' ||
-      (editSource.type === 'InternalProfile' && editorModel.checkDirty(false))
+      (editSource.type === 'InternalProfile' && editorModel.checkDirty())
     );
   },
   get isCurrentProfileInternal(): boolean {

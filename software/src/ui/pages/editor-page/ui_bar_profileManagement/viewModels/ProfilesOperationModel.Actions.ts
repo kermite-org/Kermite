@@ -2,7 +2,6 @@ import { forceChangeFilePathExtension } from '~/shared';
 import {
   getProjectOriginAndIdFromSig,
   joinProjectProfileName,
-  splitProjectProfileName,
 } from '~/shared/funcs/DomainRelatedHelpers';
 import { ipcAgent, texts } from '~/ui/base';
 import { uiStatusModel } from '~/ui/commonModels';
@@ -13,8 +12,8 @@ import { editorPageModel } from '~/ui/pages/editor-page/models/editorPageModel';
 import { callProfileSetupModal } from '~/ui/pages/editor-page/ui_modal_profileSetup/ProfileSetupModal';
 
 const checkValidNewProfileName = async (
-  newProfileName: string,
   projectId: string,
+  newProfileName: string,
 ): Promise<boolean> => {
   if (!newProfileName.match(/^[^/./\\:*?"<>|]+$/)) {
     await modalAlert(
@@ -23,13 +22,12 @@ const checkValidNewProfileName = async (
     return false;
   }
 
-  const newFullName = joinProjectProfileName(projectId, newProfileName);
-  const lowered = newFullName.toLowerCase();
-  if (
-    profilesReader.allProfileEntries.find(
-      (it) => it.profileName.toLowerCase() === lowered,
-    )
-  ) {
+  const isExist = profilesReader.allProfileEntries.some(
+    (it) =>
+      it.projectId === projectId &&
+      it.profileName.toLowerCase() === newProfileName.toLowerCase(),
+  );
+  if (isExist) {
     await modalAlert(
       `${newProfileName} is already exists. operation cancelled.`,
     );
@@ -44,7 +42,7 @@ const createProfile = async () => {
   if (res && res.profileName && res.projectKey && res.layoutKey) {
     const { profileName, projectKey, layoutKey } = res;
     const { origin, projectId } = getProjectOriginAndIdFromSig(projectKey);
-    const nameValid = await checkValidNewProfileName(profileName, projectId);
+    const nameValid = await checkValidNewProfileName(projectId, profileName);
     if (nameValid) {
       const fullProfileName = joinProjectProfileName(projectId, profileName);
       profilesActions.createProfile(fullProfileName, origin, projectId, {
@@ -57,8 +55,8 @@ const createProfile = async () => {
 
 const inputNewProfileName = async (
   caption: string,
-  defaultText: string,
   projectId: string,
+  defaultText: string,
 ): Promise<string | undefined> => {
   const newProfileName = await modalTextEdit({
     message: texts.label_assigner_profileNameEditModal_newProfileName,
@@ -66,7 +64,7 @@ const inputNewProfileName = async (
     caption,
   });
   if (newProfileName) {
-    const nameValid = await checkValidNewProfileName(newProfileName, projectId);
+    const nameValid = await checkValidNewProfileName(projectId, newProfileName);
     if (nameValid) {
       return newProfileName;
     }
@@ -75,73 +73,60 @@ const inputNewProfileName = async (
 };
 
 const renameProfile = async () => {
-  if (profilesReader.editSource.type !== 'InternalProfile') {
-    return;
-  }
-  const { folderPart, filePart } = splitProjectProfileName(
-    profilesReader.currentProfileName,
-  );
-  const newFilePart = await inputNewProfileName(
-    texts.label_assigner_profileNameEditModal_modalTitleRename,
-    filePart,
-    folderPart,
-  );
-  if (newFilePart) {
-    const newProfileName = joinProjectProfileName(folderPart, newFilePart);
-    profilesActions.renameProfile(newProfileName);
+  const profileEntry = profilesReader.currentProfileEntry;
+  if (profileEntry) {
+    const newProfileName = await inputNewProfileName(
+      texts.label_assigner_profileNameEditModal_modalTitleRename,
+      profileEntry.projectId,
+      profileEntry.profileName,
+    );
+    if (newProfileName) {
+      profilesActions.renameProfile(profileEntry, newProfileName);
+    }
   }
 };
 
 const copyProfile = async () => {
-  if (profilesReader.editSource.type !== 'InternalProfile') {
-    return;
-  }
-  const { folderPart, filePart } = splitProjectProfileName(
-    profilesReader.currentProfileName,
-  );
-  const newFilePart = await inputNewProfileName(
-    texts.label_assigner_profileNameEditModal_modalTitleCopy,
-    filePart,
-    folderPart,
-  );
-  if (newFilePart) {
-    const newProfileName = joinProjectProfileName(folderPart, newFilePart);
-    profilesActions.copyProfile(newProfileName);
+  const profileEntry = profilesReader.currentProfileEntry;
+  if (profileEntry) {
+    const newProfileName = await inputNewProfileName(
+      texts.label_assigner_profileNameEditModal_modalTitleCopy,
+      profileEntry.projectId,
+      profileEntry.profileName,
+    );
+    if (newProfileName) {
+      profilesActions.copyProfile(profileEntry, newProfileName);
+    }
   }
 };
 
 const deleteProfile = async () => {
-  if (profilesReader.editSource.type !== 'InternalProfile') {
-    return;
-  }
-  const { filePart } = splitProjectProfileName(
-    profilesReader.currentProfileName,
-  );
-  const ok = await modalConfirm({
-    message: texts.label_assigner_confirmModal_deleteProfile_modalMessage.replace(
-      '{PROFILE_NAME}',
-      filePart,
-    ),
-    caption: texts.label_assigner_confirmModal_deleteProfile_modalTitle,
-  });
-  if (ok) {
-    profilesActions.deleteProfile();
+  const profileEntry = profilesReader.currentProfileEntry;
+  if (profileEntry) {
+    const ok = await modalConfirm({
+      message: texts.label_assigner_confirmModal_deleteProfile_modalMessage.replace(
+        '{PROFILE_NAME}',
+        profileEntry.profileName,
+      ),
+      caption: texts.label_assigner_confirmModal_deleteProfile_modalTitle,
+    });
+    if (ok) {
+      profilesActions.deleteProfile(profileEntry);
+    }
   }
 };
 
 const handleSaveUnsavedProfile = async () => {
-  if (profilesReader.editSource.type === 'InternalProfile') {
-    return;
-  }
-  const projectId = editorModel.profileData.projectId;
-  const newFilePart = await inputNewProfileName(
-    texts.label_assigner_profileNameEditModal_modalTitleSave,
-    profilesReader.currentProfileName,
-    projectId,
-  );
-  if (newFilePart) {
-    const newProfileName = joinProjectProfileName(projectId, newFilePart);
-    profilesActions.saveUnsavedProfileAs(newProfileName);
+  if (profilesReader.editSource.type !== 'InternalProfile') {
+    const projectId = editorModel.profileData.projectId;
+    const newProfileName = await inputNewProfileName(
+      texts.label_assigner_profileNameEditModal_modalTitleSave,
+      projectId,
+      '',
+    );
+    if (newProfileName) {
+      profilesActions.saveUnsavedProfileAs(newProfileName);
+    }
   }
 };
 
