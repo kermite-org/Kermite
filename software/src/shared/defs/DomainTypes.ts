@@ -190,7 +190,12 @@ export interface IProfileManagerStatus {
 }
 export interface IProfileManagerCommand {
   creatProfile?: {
-    name?: string;
+    name: string;
+    targetProjectOrigin: IResourceOrigin;
+    targetProjectId: string;
+    presetSpec: IPresetSpec;
+  };
+  creatProfileUnnamed?: {
     targetProjectOrigin: IResourceOrigin;
     targetProjectId: string;
     presetSpec: IPresetSpec;

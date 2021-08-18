@@ -32,7 +32,7 @@ function createProfile(
   presetSpec: IPresetSpec,
 ) {
   const createCommand = {
-    creatProfile: {
+    creatProfileUnnamed: {
       targetProjectOrigin,
       targetProjectId,
       presetSpec,

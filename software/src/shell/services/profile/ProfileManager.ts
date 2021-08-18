@@ -465,20 +465,18 @@ export class ProfileManager implements IProfileManager {
   private async executeCommand(cmd: IProfileManagerCommand) {
     // console.log(`execute command`, { cmd });
     if (cmd.creatProfile) {
-      if (cmd.creatProfile.name) {
-        await this.createProfile(
-          cmd.creatProfile.name,
-          cmd.creatProfile.targetProjectOrigin,
-          cmd.creatProfile.targetProjectId,
-          cmd.creatProfile.presetSpec,
-        );
-      } else {
-        this.createProfileUnnamed(
-          cmd.creatProfile.targetProjectOrigin,
-          cmd.creatProfile.targetProjectId,
-          cmd.creatProfile.presetSpec,
-        );
-      }
+      await this.createProfile(
+        cmd.creatProfile.name,
+        cmd.creatProfile.targetProjectOrigin,
+        cmd.creatProfile.targetProjectId,
+        cmd.creatProfile.presetSpec,
+      );
+    } else if (cmd.creatProfileUnnamed) {
+      this.createProfileUnnamed(
+        cmd.creatProfileUnnamed.targetProjectOrigin,
+        cmd.creatProfileUnnamed.targetProjectId,
+        cmd.creatProfileUnnamed.presetSpec,
+      );
     } else if (cmd.createProfileExternal) {
       this.createProfileExternal(cmd.createProfileExternal.profileData);
     } else if (cmd.createProfileFromLayout) {
