@@ -163,7 +163,7 @@ export type IAppWindowStatus = {
 
 export type IProfileEditSource =
   | {
-      type: 'NoProfilesAvailable';
+      type: 'NoEditProfileAvailable';
     }
   | {
       type: 'ProfileNewlyCreated';

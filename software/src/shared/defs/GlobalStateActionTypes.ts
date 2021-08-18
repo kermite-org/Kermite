@@ -41,7 +41,7 @@ const defaultAppWindowStatus: IAppWindowStatus = {
 
 const defaultProfileManagerStatus: IProfileManagerStatus = {
   editSource: {
-    type: 'NoProfilesAvailable',
+    type: 'NoEditProfileAvailable',
   },
   loadedProfileData: fallbackProfileData,
   allProfileEntries: [],

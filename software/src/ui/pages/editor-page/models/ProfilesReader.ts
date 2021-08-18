@@ -9,7 +9,7 @@ export const profilesReader = {
   },
   get isEditProfileAvailable() {
     const { editSource } = uiState.core.profileManagerStatus;
-    return editSource.type !== 'NoProfilesAvailable';
+    return editSource.type !== 'NoEditProfileAvailable';
   },
   get currentProfileName() {
     const { editSource } = uiState.core.profileManagerStatus;

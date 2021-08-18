@@ -26,7 +26,7 @@ function makeProfileSelectionSource(
   editSource: IProfileEditSource,
   loadProfile: (profileName: string) => void,
 ): ISelectorSource {
-  if (editSource.type === 'NoProfilesAvailable') {
+  if (editSource.type === 'NoEditProfileAvailable') {
     return {
       options: allProfileNames.map(makeProfileNameSelectorOption),
       value: '',

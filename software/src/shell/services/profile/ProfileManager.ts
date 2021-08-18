@@ -43,7 +43,7 @@ function createInternalProfileEditSourceOrFallback(
     };
   } else {
     return {
-      type: 'NoProfilesAvailable',
+      type: 'NoEditProfileAvailable',
     };
   }
 }
@@ -82,7 +82,7 @@ export class ProfileManager implements IProfileManager {
     if (newStatePartial.editSource) {
       if (
         newStatePartial.editSource.type !== 'ProfileNewlyCreated' &&
-        newStatePartial.editSource.type !== 'NoProfilesAvailable'
+        newStatePartial.editSource.type !== 'NoEditProfileAvailable'
       ) {
         applicationStorage.writeItem(
           'profileEditSource',
@@ -146,7 +146,7 @@ export class ProfileManager implements IProfileManager {
   }
 
   getCurrentProfile(): IProfileData | undefined {
-    if (this.status.editSource.type === 'NoProfilesAvailable') {
+    if (this.status.editSource.type === 'NoEditProfileAvailable') {
       return undefined;
     }
     return this.status.loadedProfileData;
@@ -154,7 +154,7 @@ export class ProfileManager implements IProfileManager {
 
   private loadInitialEditSource(): IProfileEditSource {
     if (this.status.visibleProfileEntries.length === 0) {
-      return { type: 'NoProfilesAvailable' };
+      return { type: 'NoEditProfileAvailable' };
     }
     return applicationStorage.readItemSafe<IProfileEditSource>(
       'profileEditSource',
@@ -184,7 +184,7 @@ export class ProfileManager implements IProfileManager {
         );
       }
     }
-    if (editSource.type === 'NoProfilesAvailable') {
+    if (editSource.type === 'NoEditProfileAvailable') {
       return createInternalProfileEditSourceOrFallback(
         this.status.visibleProfileEntries[0],
       );
@@ -195,7 +195,7 @@ export class ProfileManager implements IProfileManager {
   private async loadProfileByEditSource(
     editSource: IProfileEditSource,
   ): Promise<IProfileData> {
-    if (editSource.type === 'NoProfilesAvailable') {
+    if (editSource.type === 'NoEditProfileAvailable') {
       return fallbackProfileData;
     } else if (editSource.type === 'ProfileNewlyCreated') {
       return fallbackProfileData;
@@ -221,14 +221,14 @@ export class ProfileManager implements IProfileManager {
 
   private unloadProfile() {
     this.setStatus({
-      editSource: { type: 'NoProfilesAvailable' },
+      editSource: { type: 'NoEditProfileAvailable' },
       loadedProfileData: fallbackProfileData,
     });
   }
 
   async saveCurrentProfile(profileData: IProfileData) {
     const { editSource } = this.status;
-    if (editSource.type === 'NoProfilesAvailable') {
+    if (editSource.type === 'NoEditProfileAvailable') {
     } else if (editSource.type === 'ProfileNewlyCreated') {
     } else if (editSource.type === 'ExternalFile') {
       await this.core.saveExternalProfileFile(editSource.filePath, profileData);
