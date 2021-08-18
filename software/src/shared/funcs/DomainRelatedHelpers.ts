@@ -73,20 +73,6 @@ export function getProjectKeyFromDeviceAttributes(
   return `${deviceAttrs.origin}#${deviceAttrs.firmwareId}`;
 }
 
-export function splitProjectProfileName(
-  profileName: string,
-): { folderPart: string; filePart: string } {
-  const [folderPart, filePart] = profileName.split('/');
-  return { folderPart, filePart };
-}
-
-export function joinProjectProfileName(
-  folderPart: string,
-  filePart: string,
-): string {
-  return `${folderPart}/${filePart}`;
-}
-
 export function checkDeviceBootloaderMatch(
   bootloaderType: IBootloaderType,
   firmwareTargetDevice: IFirmwareTargetDevice,
