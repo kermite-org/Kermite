@@ -2,6 +2,7 @@ import { useEffect } from 'qx';
 import { fallbackProfileData } from '~/shared';
 import { dispatchCoreAction } from '~/ui/commonStore';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
+import { removeInvalidProfileAssigns } from '~/ui/pages/editor-page/models/ProfileDataHelper';
 import { profilesReader } from '~/ui/pages/editor-page/models/ProfilesReader';
 
 function affectStoreLoadedProfileDataToModelProfileData() {
@@ -15,6 +16,7 @@ function affectStoreLoadedProfileDataToModelProfileData() {
 let profileStringified: string = JSON.stringify(fallbackProfileData);
 
 function affectModelProfileDataToStoreEditProfile() {
+  removeInvalidProfileAssigns(editorModel.profileData);
   const str = JSON.stringify(editorModel.profileData);
   if (str !== profileStringified) {
     const obj = JSON.parse(str);
