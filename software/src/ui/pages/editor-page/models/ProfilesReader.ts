@@ -23,4 +23,7 @@ export const profilesReader = {
       undefined
     );
   },
+  get loadedProfileData() {
+    return uiState.core.loadedProfileData;
+  },
 };

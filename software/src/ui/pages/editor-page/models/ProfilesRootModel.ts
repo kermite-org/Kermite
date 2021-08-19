@@ -1,23 +1,15 @@
 import { useEffect } from 'qx';
-import { compareObjectByJsonStringify, IProfileData } from '~/shared';
 import { ipcAgent } from '~/ui/base';
 import { useKeyboardBehaviorModeModel } from '~/ui/commonModels';
-import { uiState } from '~/ui/commonStore';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
+import { profilesReader } from '~/ui/pages/editor-page/models/ProfilesReader';
 
 function updateEditSourceProfileOnRender() {
-  const handleProfileStatusChange = (loadedProfileData: IProfileData) => {
-    if (
-      !compareObjectByJsonStringify(
-        loadedProfileData,
-        editorModel.loadedProfileData,
-      )
-    ) {
-      editorModel.loadProfileData(loadedProfileData);
-    }
-  };
-  const data = uiState.core.loadedProfileData;
-  useEffect(() => handleProfileStatusChange(data), [data]);
+  const { loadedProfileData } = profilesReader;
+  useEffect(() => {
+    // console.log('apply loaded profile to editor model');
+    editorModel.loadProfileData(loadedProfileData);
+  }, [loadedProfileData]);
 }
 
 let profileStringified: string = '';
