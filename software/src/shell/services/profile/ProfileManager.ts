@@ -28,7 +28,6 @@ import {
 } from '~/shell/global';
 import { presetProfileLoader_loadPresetProfileData } from '~/shell/services/profile/PresetProfileLoader';
 import { profileManagerCore } from '~/shell/services/profile/ProfileManagerCore';
-import { IProfileManager } from './Interfaces';
 
 function createInternalProfileEditSourceOrFallback(
   profileEntry?: IProfileEntry,
@@ -187,7 +186,7 @@ function onCoreStateChange(partialState: Partial<ICoreState>) {
 let _globalProjectId: string = '';
 
 // プロファイルを<UserDataDir>/data/profiles以下でファイルとして管理
-class ProfileManager implements IProfileManager {
+class ProfileManager {
   async initializeAsync() {
     _globalProjectId = coreState.globalSettings.globalProjectId;
     await profileManagerCore.ensureProfilesDirectoryExists();
