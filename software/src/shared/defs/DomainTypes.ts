@@ -183,7 +183,7 @@ export type IProfileEditSource =
     };
 
 export interface IProfileManagerStatus {
-  editSource: IProfileEditSource;
+  profileEditSource: IProfileEditSource;
   loadedProfileData: IProfileData;
   allProfileEntries: IProfileEntry[];
   visibleProfileEntries: IProfileEntry[];

@@ -113,7 +113,7 @@ const deleteProfile = async () => {
 };
 
 const handleSaveUnsavedProfile = async () => {
-  if (profilesReader.editSource.type !== 'InternalProfile') {
+  if (profilesReader.profileEditSource.type !== 'InternalProfile') {
     const projectId = editorModel.profileData.projectId;
     const newProfileName = await inputNewProfileName(
       texts.label_assigner_profileNameEditModal_modalTitleSave,
@@ -131,7 +131,7 @@ const openConfiguration = () => {
 };
 
 const onSaveButton = () => {
-  const editSourceType = profilesReader.editSource.type;
+  const editSourceType = profilesReader.profileEditSource.type;
   if (
     editSourceType === 'ProfileNewlyCreated' ||
     editSourceType === 'ExternalFile'

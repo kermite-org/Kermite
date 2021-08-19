@@ -48,7 +48,7 @@ function createSelectorOptionExternalProfile(
 
 function makeProfileSelectionSource(
   visibleProfileEntries: IProfileEntry[],
-  editSource: IProfileEditSource,
+  profileEditSource: IProfileEditSource,
   loadProfile: (profileEntry: IProfileEntry) => void,
 ): ISelectorSource {
   const optionsBase = visibleProfileEntries.map(makeProfileNameSelectorOption);
@@ -58,25 +58,25 @@ function makeProfileSelectionSource(
     loadProfile(profileEntry);
   };
 
-  if (editSource.type === 'ProfileNewlyCreated') {
+  if (profileEditSource.type === 'ProfileNewlyCreated') {
     return {
       options: [selectorOptionNewlyCreated, ...optionsBase],
       value: selectorValueNewlyCreated,
       setValue,
     };
-  } else if (editSource.type === 'ExternalFile') {
+  } else if (profileEditSource.type === 'ExternalFile') {
     return {
       options: [
-        createSelectorOptionExternalProfile(editSource.filePath),
+        createSelectorOptionExternalProfile(profileEditSource.filePath),
         ...optionsBase,
       ],
       value: selectorValueExternalProfile,
       setValue,
     };
-  } else if (editSource.type === 'InternalProfile') {
+  } else if (profileEditSource.type === 'InternalProfile') {
     return {
       options: optionsBase,
-      value: stringifyProfileEntry(editSource.profileEntry),
+      value: stringifyProfileEntry(profileEditSource.profileEntry),
       setValue,
     };
   }
@@ -101,11 +101,11 @@ const loadProfile = async (profileEntry: IProfileEntry) => {
 };
 
 export function useProfileSelectorModel(): IProfileSelectorModel {
-  const { editSource, visibleProfileEntries } = profilesReader;
+  const { profileEditSource, visibleProfileEntries } = profilesReader;
   return {
     profileSelectorSource: makeProfileSelectionSource(
       visibleProfileEntries,
-      editSource,
+      profileEditSource,
       loadProfile,
     ),
   };

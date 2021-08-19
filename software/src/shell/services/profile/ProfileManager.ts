@@ -81,14 +81,14 @@ export class ProfileManager implements IProfileManager {
     };
     commitCoreState({ profileManagerStatus });
 
-    if (newStatePartial.editSource) {
+    if (newStatePartial.profileEditSource) {
       if (
-        newStatePartial.editSource.type !== 'ProfileNewlyCreated' &&
-        newStatePartial.editSource.type !== 'NoEditProfileAvailable'
+        newStatePartial.profileEditSource.type !== 'ProfileNewlyCreated' &&
+        newStatePartial.profileEditSource.type !== 'NoEditProfileAvailable'
       ) {
         applicationStorage.writeItem(
           'profileEditSource',
-          newStatePartial.editSource,
+          newStatePartial.profileEditSource,
         );
       }
     }
@@ -102,7 +102,7 @@ export class ProfileManager implements IProfileManager {
     const editSource = this.fixEditSource(loadedEditSource);
     const profile = await this.loadProfileByEditSource(editSource);
     this.setStatus({
-      editSource,
+      profileEditSource: editSource,
       loadedProfileData: profile,
     });
     coreStateManager.coreStateEventPort.subscribe(this.onCoreStateChange);
@@ -122,12 +122,12 @@ export class ProfileManager implements IProfileManager {
 
   private async patchStatusOnGlobalProjectIdChange() {
     await this.reEnumerateAllProfileEntries();
-    const currEditSource = this.status.editSource;
+    const currEditSource = this.status.profileEditSource;
     const modEditSource = this.fixEditSource(currEditSource);
     if (modEditSource !== currEditSource) {
       const profile = await this.loadProfileByEditSource(modEditSource);
       this.setStatus({
-        editSource: modEditSource,
+        profileEditSource: modEditSource,
         loadedProfileData: profile,
       });
     }
@@ -144,7 +144,7 @@ export class ProfileManager implements IProfileManager {
   }
 
   getCurrentProfile(): IProfileData | undefined {
-    if (this.status.editSource.type === 'NoEditProfileAvailable') {
+    if (this.status.profileEditSource.type === 'NoEditProfileAvailable') {
       return undefined;
     }
     return this.status.loadedProfileData;
@@ -208,7 +208,7 @@ export class ProfileManager implements IProfileManager {
   private async loadProfile(profileEntry: IProfileEntry) {
     const profileData = await this.core.loadProfile(profileEntry);
     this.setStatus({
-      editSource: {
+      profileEditSource: {
         type: 'InternalProfile',
         profileEntry,
       },
@@ -218,13 +218,13 @@ export class ProfileManager implements IProfileManager {
 
   private unloadProfile() {
     this.setStatus({
-      editSource: { type: 'NoEditProfileAvailable' },
+      profileEditSource: { type: 'NoEditProfileAvailable' },
       loadedProfileData: fallbackProfileData,
     });
   }
 
   async saveCurrentProfile(profileData: IProfileData) {
-    const { editSource } = this.status;
+    const { profileEditSource: editSource } = this.status;
     if (editSource.type === 'NoEditProfileAvailable') {
     } else if (editSource.type === 'ProfileNewlyCreated') {
     } else if (editSource.type === 'ExternalFile') {
@@ -302,7 +302,7 @@ export class ProfileManager implements IProfileManager {
     await this.core.saveProfile(profileEntry, profileData);
     await this.reEnumerateAllProfileEntries();
     this.setStatus({
-      editSource: {
+      profileEditSource: {
         type: 'InternalProfile',
         profileEntry,
       },
@@ -317,14 +317,14 @@ export class ProfileManager implements IProfileManager {
   ) {
     const profileData = this.createProfileImpl(origin, projectId, presetSpec);
     this.setStatus({
-      editSource: { type: 'ProfileNewlyCreated' },
+      profileEditSource: { type: 'ProfileNewlyCreated' },
       loadedProfileData: profileData,
     });
   }
 
   private createProfileExternal(profileData: IProfileData) {
     this.setStatus({
-      editSource: { type: 'ProfileNewlyCreated' },
+      profileEditSource: { type: 'ProfileNewlyCreated' },
       loadedProfileData: profileData,
     });
   }
@@ -339,20 +339,20 @@ export class ProfileManager implements IProfileManager {
     profileData.projectId = projectId;
     profileData.keyboardDesign = layout;
     this.setStatus({
-      editSource: { type: 'ProfileNewlyCreated' },
+      profileEditSource: { type: 'ProfileNewlyCreated' },
       loadedProfileData: profileData,
     });
   }
 
   private async deleteProfile(profileEntry: IProfileEntry) {
-    if (this.status.editSource.type !== 'InternalProfile') {
+    if (this.status.profileEditSource.type !== 'InternalProfile') {
       return;
     }
     if (!this.hasProfileEntry(profileEntry)) {
       return false;
     }
     const isCurrent = checkProfileEntryEquality(
-      this.status.editSource.profileEntry,
+      this.status.profileEditSource.profileEntry,
       profileEntry,
     );
     const currentProfileIndex = this.status.visibleProfileEntries.findIndex(
@@ -381,7 +381,7 @@ export class ProfileManager implements IProfileManager {
     newProfileName: string,
   ) {
     const newProfileEntry = { ...profileEntry, profileName: newProfileName };
-    if (this.status.editSource.type !== 'InternalProfile') {
+    if (this.status.profileEditSource.type !== 'InternalProfile') {
       return;
     }
     if (!this.hasProfileEntry(profileEntry)) {
@@ -391,7 +391,7 @@ export class ProfileManager implements IProfileManager {
       return false;
     }
     const isCurrent = checkProfileEntryEquality(
-      this.status.editSource.profileEntry,
+      this.status.profileEditSource.profileEntry,
       profileEntry,
     );
     await this.core.renameProfile(profileEntry, newProfileEntry);
@@ -440,7 +440,7 @@ export class ProfileManager implements IProfileManager {
     };
     const profile = await this.loadProfileByEditSource(editSource);
     this.setStatus({
-      editSource,
+      profileEditSource: editSource,
       loadedProfileData: profile,
     });
   }
@@ -450,7 +450,7 @@ export class ProfileManager implements IProfileManager {
   }
 
   private async openUserProfilesFolder() {
-    const { editSource } = this.status;
+    const { profileEditSource: editSource } = this.status;
     if (editSource.type === 'InternalProfile' && editSource.profileEntry) {
       await shell.openPath(
         this.core.getProfilesFolderPath(editSource.profileEntry),
