@@ -185,29 +185,29 @@ function onCoreStateChange(partialState: Partial<ICoreState>) {
 
 let _globalProjectId: string = '';
 
-// プロファイルを<UserDataDir>/data/profiles以下でファイルとして管理
-class ProfileManager {
-  async initializeAsync() {
-    _globalProjectId = coreState.globalSettings.globalProjectId;
-    await profileManagerCore.ensureProfilesDirectoryExists();
-    const allProfileEntries = await profileManagerCore.listAllProfileEntries();
-    const loadedEditSource = loadInitialEditSource();
-    const editSource = fixEditSource(loadedEditSource);
-    const profile = await loadProfileByEditSource(editSource);
-    commitCoreState({
-      allProfileEntries,
-      profileEditSource: editSource,
-      loadedProfileData: profile,
-    });
-    coreStateManager.coreStateEventPort.subscribe(onCoreStateChange);
-  }
-
-  terminate() {
-    coreStateManager.coreStateEventPort.unsubscribe(onCoreStateChange);
-  }
+async function initializeAsync() {
+  _globalProjectId = coreState.globalSettings.globalProjectId;
+  await profileManagerCore.ensureProfilesDirectoryExists();
+  const allProfileEntries = await profileManagerCore.listAllProfileEntries();
+  const loadedEditSource = loadInitialEditSource();
+  const editSource = fixEditSource(loadedEditSource);
+  const profile = await loadProfileByEditSource(editSource);
+  commitCoreState({
+    allProfileEntries,
+    profileEditSource: editSource,
+    loadedProfileData: profile,
+  });
+  coreStateManager.coreStateEventPort.subscribe(onCoreStateChange);
 }
 
-export const profileManager = new ProfileManager();
+function terminate() {
+  coreStateManager.coreStateEventPort.unsubscribe(onCoreStateChange);
+}
+
+export const profileManager = {
+  initializeAsync,
+  terminate,
+};
 
 const errorTextInvalidOperation = 'invalid operation';
 
