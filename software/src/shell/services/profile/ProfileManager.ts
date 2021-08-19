@@ -372,14 +372,9 @@ export const profileManagerModule = createCoreModule({
     if (!profileEntry) {
       return;
     }
-    const currentProfileIndex = getVisibleProfiles(
-      coreState.allProfileEntries,
-    ).findIndex((it) => checkProfileEntryEquality(it, profileEntry));
     await profileManager.core.deleteProfile(profileEntry);
-
     const allProfileEntries = await reEnumerateAllProfileEntries();
     const visibleProfileEntries = getVisibleProfiles(allProfileEntries);
-
     if (visibleProfileEntries.length === 0) {
       commitCoreState({
         allProfileEntries,
@@ -387,25 +382,15 @@ export const profileManagerModule = createCoreModule({
         loadedProfileData: fallbackProfileData,
       });
     } else {
-      const newIndex = clampValue(
-        currentProfileIndex,
-        0,
-        visibleProfileEntries.length - 1,
+      const newProfileEntry = visibleProfileEntries[0];
+      const profileData = await profileManager.core.loadProfile(
+        newProfileEntry,
       );
-      const newProfileEntry = visibleProfileEntries[newIndex];
-      if (newProfileEntry) {
-        const profileData = await profileManager.core.loadProfile(
-          newProfileEntry,
-        );
-        commitCoreState({
-          allProfileEntries,
-          profileEditSource: {
-            type: 'InternalProfile',
-            profileEntry,
-          },
-          loadedProfileData: profileData,
-        });
-      }
+      commitCoreState({
+        allProfileEntries,
+        profileEditSource: { type: 'InternalProfile', profileEntry },
+        loadedProfileData: profileData,
+      });
     }
   },
   async profile_saveCurrentProfile({ profileData }) {
