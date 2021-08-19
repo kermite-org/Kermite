@@ -3,20 +3,20 @@ import { uiState } from '~/ui/commonStore/base';
 
 export const profilesReader = {
   get profileEditSource() {
-    return uiState.core.profileManagerStatus.profileEditSource;
+    return uiState.core.profileEditSource;
   },
   get allProfileEntries() {
-    return uiState.core.profileManagerStatus.allProfileEntries;
+    return uiState.core.allProfileEntries;
   },
   get visibleProfileEntries() {
-    return uiState.core.profileManagerStatus.visibleProfileEntries;
+    return uiState.core.visibleProfileEntries;
   },
   get isEditProfileAvailable() {
-    const { profileEditSource } = uiState.core.profileManagerStatus;
+    const { profileEditSource } = uiState.core;
     return profileEditSource.type !== 'NoEditProfileAvailable';
   },
   get currentProfileEntry(): IProfileEntry | undefined {
-    const { profileEditSource } = uiState.core.profileManagerStatus;
+    const { profileEditSource } = uiState.core;
     return (
       (profileEditSource.type === 'InternalProfile' &&
         profileEditSource.profileEntry) ||

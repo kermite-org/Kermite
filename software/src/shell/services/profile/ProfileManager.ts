@@ -5,13 +5,13 @@ import {
   clampValue,
   duplicateObjectByJsonStringifyParse,
   fallbackProfileData,
+  ICoreState,
   IPersistKeyboardDesign,
   IPresetSpec,
   IProfileData,
   IProfileEditSource,
   IProfileEntry,
   IProfileManagerCommand,
-  IProfileManagerStatus,
   IResourceOrigin,
 } from '~/shared';
 import { ProfileDataConverter } from '~/shared/modules/ProfileDataConverter';
@@ -61,6 +61,14 @@ const profileEditSourceLoadingDataSchema = vSchemaOneOf([
   }),
 ]);
 
+type IProfileManagerStatus = Pick<
+  ICoreState,
+  | 'allProfileEntries'
+  | 'visibleProfileEntries'
+  | 'profileEditSource'
+  | 'loadedProfileData'
+>;
+
 // プロファイルを<UserDataDir>/data/profiles以下でファイルとして管理
 export class ProfileManager implements IProfileManager {
   private core: ProfileManagerCore;
@@ -70,16 +78,12 @@ export class ProfileManager implements IProfileManager {
     this.core = new ProfileManagerCore();
   }
 
-  private get status() {
-    return coreState.profileManagerStatus;
+  private get status(): IProfileManagerStatus {
+    return coreState;
   }
 
   private setStatus(newStatePartial: Partial<IProfileManagerStatus>) {
-    const profileManagerStatus = {
-      ...coreState.profileManagerStatus,
-      ...newStatePartial,
-    };
-    commitCoreState({ profileManagerStatus });
+    commitCoreState(newStatePartial);
 
     if (newStatePartial.profileEditSource) {
       if (

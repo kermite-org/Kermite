@@ -11,10 +11,11 @@ import {
   ICustomFirmwareInfo,
   IDeviceSelectionStatus,
   IKeyboardDeviceStatus,
-  IProfileManagerStatus,
+  IProfileEditSource,
+  IProfileEntry,
   IProjectPackageInfo,
 } from '~/shared/defs/DomainTypes';
-import { fallbackProfileData } from '~/shared/defs/ProfileData';
+import { fallbackProfileData, IProfileData } from '~/shared/defs/ProfileData';
 
 export type ICoreState = {
   applicationVersionInfo: IApplicationVersionInfo;
@@ -25,7 +26,10 @@ export type ICoreState = {
   deviceStatus: IKeyboardDeviceStatus;
   deviceSelectionStatus: IDeviceSelectionStatus;
   appWindowStatus: IAppWindowStatus;
-  profileManagerStatus: IProfileManagerStatus;
+  profileEditSource: IProfileEditSource;
+  loadedProfileData: IProfileData;
+  allProfileEntries: IProfileEntry[];
+  visibleProfileEntries: IProfileEntry[];
 };
 
 const defaultApplicationVersionInfo: IApplicationVersionInfo = {
@@ -39,14 +43,18 @@ const defaultAppWindowStatus: IAppWindowStatus = {
   isWidgetAlwaysOnTop: false,
 };
 
-const defaultProfileManagerStatus: IProfileManagerStatus = {
-  profileEditSource: {
-    type: 'NoEditProfileAvailable',
-  },
-  loadedProfileData: fallbackProfileData,
-  allProfileEntries: [],
-  visibleProfileEntries: [],
+const defaultProfileEditSource: IProfileEditSource = {
+  type: 'NoEditProfileAvailable',
 };
+
+// const defaultProfileManagerStatus: IProfileManagerStatus = {
+//   profileEditSource: {
+//     type: 'NoEditProfileAvailable',
+//   },
+//   loadedProfileData: fallbackProfileData,
+//   allProfileEntries: [],
+//   visibleProfileEntries: [],
+// };
 
 export const defaultCoreState: ICoreState = {
   applicationVersionInfo: defaultApplicationVersionInfo,
@@ -57,7 +65,10 @@ export const defaultCoreState: ICoreState = {
   deviceStatus: { isConnected: false },
   deviceSelectionStatus: fallbackDeviceSelectionStatus,
   appWindowStatus: defaultAppWindowStatus,
-  profileManagerStatus: defaultProfileManagerStatus,
+  profileEditSource: defaultProfileEditSource,
+  loadedProfileData: fallbackProfileData,
+  allProfileEntries: [],
+  visibleProfileEntries: [],
 };
 
 export type ICoreAction = Partial<{

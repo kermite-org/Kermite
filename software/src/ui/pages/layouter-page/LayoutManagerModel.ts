@@ -6,7 +6,6 @@ import {
   ILayoutManagerCommand,
   ILayoutManagerStatus,
   IPersistKeyboardDesign,
-  IProfileManagerStatus,
 } from '~/shared';
 import { appUi, ipcAgent, router } from '~/ui/base';
 import { projectPackagesReader } from '~/ui/commonStore';
@@ -216,15 +215,15 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     // }
   };
 
-  private onProfileManagerStatus = (
-    payload: Partial<IProfileManagerStatus>,
-  ) => {
-    if (payload.loadedProfileData) {
-      if (this.editSource.type === 'CurrentProfile') {
-        this.sendCommand({ type: 'loadCurrentProfileLayout' });
-      }
-    }
-  };
+  // private onProfileManagerStatus = (
+  //   payload: Partial<IProfileManagerStatus>,
+  // ) => {
+  //   if (payload.loadedProfileData) {
+  //     if (this.editSource.type === 'CurrentProfile') {
+  //       this.sendCommand({ type: 'loadCurrentProfileLayout' });
+  //     }
+  //   }
+  // };
 
   startLifecycle() {
     if (!appUi.isExecutedInApp) {

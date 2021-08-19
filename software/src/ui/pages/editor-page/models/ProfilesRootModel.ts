@@ -1,23 +1,23 @@
 import { useEffect } from 'qx';
-import { compareObjectByJsonStringify, IProfileManagerStatus } from '~/shared';
+import { compareObjectByJsonStringify, IProfileData } from '~/shared';
 import { ipcAgent } from '~/ui/base';
 import { useKeyboardBehaviorModeModel } from '~/ui/commonModels';
 import { uiState } from '~/ui/commonStore';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 
 function updateEditSourceProfileOnRender() {
-  const handleProfileStatusChange = (status: IProfileManagerStatus) => {
+  const handleProfileStatusChange = (loadedProfileData: IProfileData) => {
     if (
       !compareObjectByJsonStringify(
-        status.loadedProfileData,
+        loadedProfileData,
         editorModel.loadedProfileData,
       )
     ) {
-      editorModel.loadProfileData(status.loadedProfileData);
+      editorModel.loadProfileData(loadedProfileData);
     }
   };
-  const status = uiState.core.profileManagerStatus;
-  useEffect(() => handleProfileStatusChange(status), [status]);
+  const data = uiState.core.loadedProfileData;
+  useEffect(() => handleProfileStatusChange(data), [data]);
 }
 
 let profileStringified: string = '';

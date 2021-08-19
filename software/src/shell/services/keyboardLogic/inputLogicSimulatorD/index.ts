@@ -91,8 +91,8 @@ export class InputLogicSimulatorD {
       this.keyboardConfigHandler(diff.keyboardConfig);
     }
 
-    if (diff.profileManagerStatus) {
-      this.loadSimulationProfile(diff.profileManagerStatus.loadedProfileData);
+    if (diff.loadedProfileData) {
+      this.loadSimulationProfile(diff.loadedProfileData);
     }
   };
 
