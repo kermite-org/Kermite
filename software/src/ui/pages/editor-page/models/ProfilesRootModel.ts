@@ -1,6 +1,6 @@
 import { useEffect } from 'qx';
 import { fallbackProfileData } from '~/shared';
-import { commitCoreStateFromUiSide } from '~/ui/commonStore';
+import { dispatchCoreAction } from '~/ui/commonStore';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 import { profilesReader } from '~/ui/pages/editor-page/models/ProfilesReader';
 
@@ -19,7 +19,9 @@ function affectModelProfileDataToStoreEditProfile() {
   if (str !== profileStringified) {
     const obj = JSON.parse(str);
     console.log('editorModel.profileData --> store.editProfileData');
-    commitCoreStateFromUiSide({ editProfileData: obj });
+    dispatchCoreAction({
+      profile_setEditProfileData: { editProfileData: obj },
+    });
     profileStringified = str;
   }
 }

@@ -90,4 +90,6 @@ export type ICoreAction = Partial<{
   window_setDevToolVisibility: boolean;
   window_setWidgetAlwaysOnTop: boolean;
   window_reloadPage: 1;
+
+  profile_setEditProfileData?: { editProfileData: IProfileData };
 }>;

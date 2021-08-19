@@ -26,6 +26,7 @@ import {
   commitCoreState,
   coreState,
   coreStateManager,
+  createCoreModule,
   dispatchCoreAction,
 } from '~/shell/global';
 import { presetProfileLoader_loadPresetProfileData } from '~/shell/services/profile/PresetProfileLoader';
@@ -528,3 +529,9 @@ export class ProfileManager implements IProfileManager {
 }
 
 export const profileManager = new ProfileManager();
+
+export const profileManagerModule = createCoreModule({
+  profile_setEditProfileData({ editProfileData }) {
+    commitCoreState({ editProfileData });
+  },
+});

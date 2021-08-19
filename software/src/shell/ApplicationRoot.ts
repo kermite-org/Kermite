@@ -19,7 +19,10 @@ import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStat
 import { FirmwareUpdateService } from '~/shell/services/firmwareUpdate';
 import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/inputLogicSimulatorD';
 import { LayoutManager } from '~/shell/services/layout/LayoutManager';
-import { profileManager } from '~/shell/services/profile/ProfileManager';
+import {
+  profileManager,
+  profileManagerModule,
+} from '~/shell/services/profile/ProfileManager';
 import { UserPresetHubService } from '~/shell/services/userPresetHub/UserPresetHubService';
 import { AppWindowWrapper, createWindowModule } from '~/shell/services/window';
 
@@ -145,6 +148,7 @@ export class ApplicationRoot {
         projectPackageModule,
         keyboardConfigModule,
         windowModule,
+        profileManagerModule,
       );
       globalSettingsModule.config_loadGlobalSettings!(1);
       keyboardConfigModule.config_loadKeyboardConfig!(1);
