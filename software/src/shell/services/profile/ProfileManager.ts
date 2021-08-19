@@ -27,8 +27,8 @@ import {
   dispatchCoreAction,
 } from '~/shell/global';
 import { presetProfileLoader_loadPresetProfileData } from '~/shell/services/profile/PresetProfileLoader';
+import { profileManagerCore } from '~/shell/services/profile/ProfileManagerCore';
 import { IProfileManager } from './Interfaces';
-import { ProfileManagerCore } from './ProfileManagerCore';
 
 function createInternalProfileEditSourceOrFallback(
   profileEntry?: IProfileEntry,
@@ -88,12 +88,7 @@ const profilesReader = {
 
 // プロファイルを<UserDataDir>/data/profiles以下でファイルとして管理
 class ProfileManager implements IProfileManager {
-  core: ProfileManagerCore;
   private _globalProjectId: string = '';
-
-  constructor() {
-    this.core = new ProfileManagerCore();
-  }
 
   private get status(): IProfileManagerStatus {
     return coreState;
@@ -121,7 +116,7 @@ class ProfileManager implements IProfileManager {
 
   async initializeAsync() {
     this._globalProjectId = coreState.globalSettings.globalProjectId;
-    await this.core.ensureProfilesDirectoryExists();
+    await profileManagerCore.ensureProfilesDirectoryExists();
     await this.reEnumerateAllProfileEntries();
     const loadedEditSource = this.loadInitialEditSource();
     const editSource = this.fixEditSource(loadedEditSource);
@@ -159,7 +154,7 @@ class ProfileManager implements IProfileManager {
   }
 
   private async reEnumerateAllProfileEntries() {
-    const allProfileEntries = await this.core.listAllProfileEntries();
+    const allProfileEntries = await profileManagerCore.listAllProfileEntries();
     this.setStatus({ allProfileEntries });
   }
 
@@ -213,9 +208,11 @@ class ProfileManager implements IProfileManager {
     } else if (editSource.type === 'ProfileNewlyCreated') {
       return fallbackProfileData;
     } else if (editSource.type === 'InternalProfile') {
-      return await this.core.loadProfile(editSource.profileEntry);
+      return await profileManagerCore.loadProfile(editSource.profileEntry);
     } else if (editSource.type === 'ExternalFile') {
-      return await this.core.loadExternalProfileFile(editSource.filePath);
+      return await profileManagerCore.loadExternalProfileFile(
+        editSource.filePath,
+      );
     }
     return fallbackProfileData;
   }
@@ -257,8 +254,8 @@ export const profileManagerModule = createCoreModule({
       projectId,
       presetSpec,
     );
-    await profileManager.core.saveProfile(profileEntry, profileData);
-    const allProfileEntries = await profileManager.core.listAllProfileEntries();
+    await profileManagerCore.saveProfile(profileEntry, profileData);
+    const allProfileEntries = await profileManagerCore.listAllProfileEntries();
     commitCoreState({
       allProfileEntries,
       profileEditSource: {
@@ -302,7 +299,7 @@ export const profileManagerModule = createCoreModule({
   },
 
   async profile_loadProfile({ profileEntry }) {
-    const profileData = await profileManager.core.loadProfile(profileEntry);
+    const profileData = await profileManagerCore.loadProfile(profileEntry);
     commitCoreState({
       profileEditSource: {
         type: 'InternalProfile',
@@ -318,9 +315,9 @@ export const profileManagerModule = createCoreModule({
     if (profilesReader.hasProfileEntry(newProfileEntry)) {
       throw new Error(errorTextInvalidOperation);
     }
-    await profileManager.core.copyProfile(profileEntry, newProfileEntry);
-    const profileData = await profileManager.core.loadProfile(newProfileEntry);
-    const allProfileEntries = await profileManager.core.listAllProfileEntries();
+    await profileManagerCore.copyProfile(profileEntry, newProfileEntry);
+    const profileData = await profileManagerCore.loadProfile(newProfileEntry);
+    const allProfileEntries = await profileManagerCore.listAllProfileEntries();
     commitCoreState({
       allProfileEntries,
       profileEditSource: {
@@ -337,13 +334,13 @@ export const profileManagerModule = createCoreModule({
     if (profilesReader.hasProfileEntry(newProfileEntry)) {
       throw new Error(errorTextInvalidOperation);
     }
-    await profileManager.core.deleteProfile(profileEntry);
-    await profileManager.core.saveProfile(
+    await profileManagerCore.deleteProfile(profileEntry);
+    await profileManagerCore.saveProfile(
       newProfileEntry,
       coreState.editProfileData,
     );
-    const profileData = await profileManager.core.loadProfile(profileEntry);
-    const allProfileEntries = await profileManager.core.listAllProfileEntries();
+    const profileData = await profileManagerCore.loadProfile(profileEntry);
+    const allProfileEntries = await profileManagerCore.listAllProfileEntries();
     commitCoreState({
       allProfileEntries,
       profileEditSource: {
@@ -356,8 +353,8 @@ export const profileManagerModule = createCoreModule({
 
   async profile_deleteProfile() {
     const profileEntry = profilesReader.currentProfileEntry;
-    await profileManager.core.deleteProfile(profileEntry);
-    const allProfileEntries = await profileManager.core.listAllProfileEntries();
+    await profileManagerCore.deleteProfile(profileEntry);
+    const allProfileEntries = await profileManagerCore.listAllProfileEntries();
     const visibleProfileEntries = profilesReader.getVisibleProfiles(
       allProfileEntries,
     );
@@ -369,9 +366,7 @@ export const profileManagerModule = createCoreModule({
       });
     } else {
       const newProfileEntry = visibleProfileEntries[0];
-      const profileData = await profileManager.core.loadProfile(
-        newProfileEntry,
-      );
+      const profileData = await profileManagerCore.loadProfile(newProfileEntry);
       commitCoreState({
         allProfileEntries,
         profileEditSource: { type: 'InternalProfile', profileEntry },
@@ -384,12 +379,12 @@ export const profileManagerModule = createCoreModule({
     if (editSource.type === 'NoEditProfileAvailable') {
     } else if (editSource.type === 'ProfileNewlyCreated') {
     } else if (editSource.type === 'ExternalFile') {
-      await profileManager.core.saveExternalProfileFile(
+      await profileManagerCore.saveExternalProfileFile(
         editSource.filePath,
         profileData,
       );
     } else if (editSource.type === 'InternalProfile') {
-      await profileManager.core.saveProfile(
+      await profileManagerCore.saveProfile(
         editSource.profileEntry,
         profileData,
       );
@@ -407,9 +402,9 @@ export const profileManagerModule = createCoreModule({
     if (profilesReader.hasProfileEntry(newProfileEntry)) {
       throw new Error(errorTextInvalidOperation);
     }
-    await profileManager.core.saveProfile(newProfileEntry, profileData);
-    const allProfileEntries = await profileManager.core.listAllProfileEntries();
-    const newProfileData = await profileManager.core.loadProfile(
+    await profileManagerCore.saveProfile(newProfileEntry, profileData);
+    const allProfileEntries = await profileManagerCore.listAllProfileEntries();
+    const newProfileData = await profileManagerCore.loadProfile(
       newProfileEntry,
     );
     commitCoreState({
@@ -463,14 +458,14 @@ export const profileManagerModule = createCoreModule({
   },
 
   async profile_exportToFile({ filePath, profileData }) {
-    await profileManager.core.saveExternalProfileFile(filePath, profileData);
+    await profileManagerCore.saveExternalProfileFile(filePath, profileData);
   },
 
   async profile_openUserProfilesFolder() {
     const { profileEditSource: editSource } = coreState;
     if (editSource.type === 'InternalProfile' && editSource.profileEntry) {
       await shell.openPath(
-        profileManager.core.getProfilesFolderPath(editSource.profileEntry),
+        profileManagerCore.getProfilesFolderPath(editSource.profileEntry),
       );
     }
   },

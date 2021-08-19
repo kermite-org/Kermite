@@ -13,7 +13,7 @@ import {
 } from '~/shell/funcs';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
 
-export class ProfileManagerCore {
+class ProfileManagerCore {
   getProfilesFolderPath(profileEntry: IProfileEntry): string {
     const { projectId } = profileEntry;
     const folderPath = `data/profiles/${projectId}`;
@@ -107,3 +107,4 @@ export class ProfileManagerCore {
     await fspCopyFile(srcPath, dstPath);
   }
 }
+export const profileManagerCore = new ProfileManagerCore();
