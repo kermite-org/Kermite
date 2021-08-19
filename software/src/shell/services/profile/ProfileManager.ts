@@ -64,27 +64,30 @@ type IProfileManagerStatus = Pick<
   'allProfileEntries' | 'profileEditSource' | 'loadedProfileData'
 >;
 
-function getVisibleProfiles(allProfiles: IProfileEntry[]): IProfileEntry[] {
-  const { globalProjectId } = coreState.globalSettings;
-  if (globalProjectId) {
-    return allProfiles.filter((it) => it.projectId === globalProjectId);
-  } else {
-    return allProfiles;
-  }
-}
-
-function hasProfileEntry(profileEntry: IProfileEntry): boolean {
-  return coreState.allProfileEntries.some((it) =>
-    checkProfileEntryEquality(it, profileEntry),
-  );
-}
-
-async function reEnumerateAllProfileEntries() {
-  return await profileManager.core.listAllProfileEntries();
-}
+const profilesReader = {
+  getVisibleProfiles(allProfiles: IProfileEntry[]): IProfileEntry[] {
+    const { globalProjectId } = coreState.globalSettings;
+    if (globalProjectId) {
+      return allProfiles.filter((it) => it.projectId === globalProjectId);
+    } else {
+      return allProfiles;
+    }
+  },
+  hasProfileEntry(profileEntry: IProfileEntry): boolean {
+    return coreState.allProfileEntries.some((it) =>
+      checkProfileEntryEquality(it, profileEntry),
+    );
+  },
+  get currentProfileEntry(): IProfileEntry {
+    if (coreState.profileEditSource.type === 'InternalProfile') {
+      return coreState.profileEditSource.profileEntry;
+    }
+    throw new Error(errorTextInvalidOperation);
+  },
+};
 
 // プロファイルを<UserDataDir>/data/profiles以下でファイルとして管理
-export class ProfileManager implements IProfileManager {
+class ProfileManager implements IProfileManager {
   core: ProfileManagerCore;
   private _globalProjectId: string = '';
 
@@ -97,7 +100,7 @@ export class ProfileManager implements IProfileManager {
   }
 
   private get visibleProfileEntries() {
-    return getVisibleProfiles(coreState.allProfileEntries);
+    return profilesReader.getVisibleProfiles(coreState.allProfileEntries);
   }
 
   private setStatus(newStatePartial: Partial<IProfileManagerStatus>) {
@@ -238,15 +241,6 @@ export const profileManager = new ProfileManager();
 
 const errorTextInvalidOperation = 'invalid operation';
 
-const profilesReader = {
-  get currentProfileEntry(): IProfileEntry {
-    if (coreState.profileEditSource.type === 'InternalProfile') {
-      return coreState.profileEditSource.profileEntry;
-    }
-    throw new Error(errorTextInvalidOperation);
-  },
-};
-
 export const profileManagerModule = createCoreModule({
   async profile_createProfile({
     newProfileName: profileName,
@@ -255,7 +249,7 @@ export const profileManagerModule = createCoreModule({
     presetSpec,
   }) {
     const profileEntry = { projectId, profileName };
-    if (hasProfileEntry(profileEntry)) {
+    if (profilesReader.hasProfileEntry(profileEntry)) {
       throw new Error(errorTextInvalidOperation);
     }
     const profileData = profileManager.createProfileImpl(
@@ -264,7 +258,7 @@ export const profileManagerModule = createCoreModule({
       presetSpec,
     );
     await profileManager.core.saveProfile(profileEntry, profileData);
-    const allProfileEntries = await reEnumerateAllProfileEntries();
+    const allProfileEntries = await profileManager.core.listAllProfileEntries();
     commitCoreState({
       allProfileEntries,
       profileEditSource: {
@@ -321,12 +315,12 @@ export const profileManagerModule = createCoreModule({
   async profile_copyProfile({ newProfileName }) {
     const profileEntry = profilesReader.currentProfileEntry;
     const newProfileEntry = { ...profileEntry, profileName: newProfileName };
-    if (hasProfileEntry(newProfileEntry)) {
+    if (profilesReader.hasProfileEntry(newProfileEntry)) {
       throw new Error(errorTextInvalidOperation);
     }
     await profileManager.core.copyProfile(profileEntry, newProfileEntry);
     const profileData = await profileManager.core.loadProfile(newProfileEntry);
-    const allProfileEntries = await reEnumerateAllProfileEntries();
+    const allProfileEntries = await profileManager.core.listAllProfileEntries();
     commitCoreState({
       allProfileEntries,
       profileEditSource: {
@@ -340,7 +334,7 @@ export const profileManagerModule = createCoreModule({
   async profile_renameProfile({ newProfileName }) {
     const profileEntry = profilesReader.currentProfileEntry;
     const newProfileEntry = { ...profileEntry, profileName: newProfileName };
-    if (hasProfileEntry(newProfileEntry)) {
+    if (profilesReader.hasProfileEntry(newProfileEntry)) {
       throw new Error(errorTextInvalidOperation);
     }
     await profileManager.core.deleteProfile(profileEntry);
@@ -349,7 +343,7 @@ export const profileManagerModule = createCoreModule({
       coreState.editProfileData,
     );
     const profileData = await profileManager.core.loadProfile(profileEntry);
-    const allProfileEntries = await reEnumerateAllProfileEntries();
+    const allProfileEntries = await profileManager.core.listAllProfileEntries();
     commitCoreState({
       allProfileEntries,
       profileEditSource: {
@@ -363,8 +357,10 @@ export const profileManagerModule = createCoreModule({
   async profile_deleteProfile() {
     const profileEntry = profilesReader.currentProfileEntry;
     await profileManager.core.deleteProfile(profileEntry);
-    const allProfileEntries = await reEnumerateAllProfileEntries();
-    const visibleProfileEntries = getVisibleProfiles(allProfileEntries);
+    const allProfileEntries = await profileManager.core.listAllProfileEntries();
+    const visibleProfileEntries = profilesReader.getVisibleProfiles(
+      allProfileEntries,
+    );
     if (visibleProfileEntries.length === 0) {
       commitCoreState({
         allProfileEntries,
@@ -408,11 +404,11 @@ export const profileManagerModule = createCoreModule({
       projectId: profileData.projectId,
       profileName: newProfileName,
     };
-    if (hasProfileEntry(newProfileEntry)) {
+    if (profilesReader.hasProfileEntry(newProfileEntry)) {
       throw new Error(errorTextInvalidOperation);
     }
     await profileManager.core.saveProfile(newProfileEntry, profileData);
-    const allProfileEntries = await reEnumerateAllProfileEntries();
+    const allProfileEntries = await profileManager.core.listAllProfileEntries();
     const newProfileData = await profileManager.core.loadProfile(
       newProfileEntry,
     );
