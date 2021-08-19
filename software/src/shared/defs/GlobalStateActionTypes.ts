@@ -94,13 +94,13 @@ export type ICoreAction = Partial<{
   window_setWidgetAlwaysOnTop: boolean;
   window_reloadPage: 1;
 
-  profile_creatProfile?: {
+  profile_createProfile?: {
     newProfileName: string;
     targetProjectOrigin: IResourceOrigin;
     targetProjectId: string;
     presetSpec: IPresetSpec;
   };
-  profile_creatProfileUnnamed?: {
+  profile_createProfileUnnamed?: {
     targetProjectOrigin: IResourceOrigin;
     targetProjectId: string;
     presetSpec: IPresetSpec;

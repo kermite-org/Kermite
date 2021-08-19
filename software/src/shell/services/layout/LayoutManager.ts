@@ -213,7 +213,9 @@ export class LayoutManager implements ILayoutManager {
       if (profile) {
         const newProfile = duplicateObjectByJsonStringifyParse(profile);
         newProfile.keyboardDesign = design;
-        profileManager.saveCurrentProfile(newProfile);
+        await dispatchCoreAction({
+          profile_saveCurrentProfile: { profileData: newProfile },
+        });
       }
     } else if (editSource.type === 'File') {
       const { filePath } = editSource;
