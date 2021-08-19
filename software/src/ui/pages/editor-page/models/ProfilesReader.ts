@@ -9,7 +9,15 @@ export const profilesReader = {
     return uiState.core.allProfileEntries;
   },
   get visibleProfileEntries() {
-    return uiState.core.visibleProfileEntries;
+    const {
+      globalSettings: { globalProjectId },
+      allProfileEntries,
+    } = uiState.core;
+    if (globalProjectId) {
+      return allProfileEntries.filter((it) => it.projectId === globalProjectId);
+    } else {
+      return allProfileEntries;
+    }
   },
   get isEditProfileAvailable() {
     const { profileEditSource } = uiState.core;

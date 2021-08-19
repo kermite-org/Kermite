@@ -63,10 +63,7 @@ const profileEditSourceLoadingDataSchema = vSchemaOneOf([
 
 type IProfileManagerStatus = Pick<
   ICoreState,
-  | 'allProfileEntries'
-  | 'visibleProfileEntries'
-  | 'profileEditSource'
-  | 'loadedProfileData'
+  'allProfileEntries' | 'profileEditSource' | 'loadedProfileData'
 >;
 
 function getVisibleProfiles(allProfiles: IProfileEntry[]): IProfileEntry[] {
@@ -85,9 +82,7 @@ function hasProfileEntry(profileEntry: IProfileEntry): boolean {
 }
 
 async function reEnumerateAllProfileEntries() {
-  const allProfileEntries = await profileManager.core.listAllProfileEntries();
-  const visibleProfileEntries = getVisibleProfiles(allProfileEntries);
-  return { allProfileEntries, visibleProfileEntries };
+  return await profileManager.core.listAllProfileEntries();
 }
 
 // プロファイルを<UserDataDir>/data/profiles以下でファイルとして管理
@@ -101,6 +96,10 @@ export class ProfileManager implements IProfileManager {
 
   private get status(): IProfileManagerStatus {
     return coreState;
+  }
+
+  private get visibleProfileEntries() {
+    return getVisibleProfiles(coreState.allProfileEntries);
   }
 
   private setStatus(newStatePartial: Partial<IProfileManagerStatus>) {
@@ -160,8 +159,7 @@ export class ProfileManager implements IProfileManager {
 
   private async reEnumerateAllProfileEntries() {
     const allProfileEntries = await this.core.listAllProfileEntries();
-    const visibleProfileEntries = getVisibleProfiles(allProfileEntries);
-    this.setStatus({ allProfileEntries, visibleProfileEntries });
+    this.setStatus({ allProfileEntries });
   }
 
   getCurrentProfileProjectId(): string {
@@ -176,7 +174,7 @@ export class ProfileManager implements IProfileManager {
   }
 
   private loadInitialEditSource(): IProfileEditSource {
-    if (this.status.visibleProfileEntries.length === 0) {
+    if (this.visibleProfileEntries.length === 0) {
       return { type: 'NoEditProfileAvailable' };
     }
     return applicationStorage.readItemSafe<IProfileEditSource>(
@@ -194,13 +192,13 @@ export class ProfileManager implements IProfileManager {
         editSource.profileEntry.projectId !== globalProjectId
       ) {
         return createInternalProfileEditSourceOrFallback(
-          this.status.visibleProfileEntries[0],
+          this.visibleProfileEntries[0],
         );
       }
     }
     if (editSource.type === 'NoEditProfileAvailable') {
       return createInternalProfileEditSourceOrFallback(
-        this.status.visibleProfileEntries[0],
+        this.visibleProfileEntries[0],
       );
     }
     return editSource;
@@ -262,13 +260,9 @@ export const profileManagerModule = createCoreModule({
       presetSpec,
     );
     await profileManager.core.saveProfile(profileEntry, profileData);
-    const {
-      allProfileEntries,
-      visibleProfileEntries,
-    } = await reEnumerateAllProfileEntries();
+    const allProfileEntries = await reEnumerateAllProfileEntries();
     commitCoreState({
       allProfileEntries,
-      visibleProfileEntries,
       profileEditSource: {
         type: 'InternalProfile',
         profileEntry,
@@ -333,15 +327,11 @@ export const profileManagerModule = createCoreModule({
       profileEntry,
     );
     await profileManager.core.renameProfile(profileEntry, newProfileEntry);
-    const {
-      allProfileEntries,
-      visibleProfileEntries,
-    } = await reEnumerateAllProfileEntries();
+    const allProfileEntries = await reEnumerateAllProfileEntries();
     if (isCurrent) {
       const profileData = await profileManager.core.loadProfile(profileEntry);
       commitCoreState({
         allProfileEntries,
-        visibleProfileEntries,
         profileEditSource: {
           type: 'InternalProfile',
           profileEntry,
@@ -349,10 +339,7 @@ export const profileManagerModule = createCoreModule({
         loadedProfileData: profileData,
       });
     } else {
-      commitCoreState({
-        allProfileEntries,
-        visibleProfileEntries,
-      });
+      commitCoreState({ allProfileEntries });
     }
   },
 
@@ -362,14 +349,10 @@ export const profileManagerModule = createCoreModule({
       return;
     }
     await profileManager.core.copyProfile(profileEntry, newProfileEntry);
-    const {
-      allProfileEntries,
-      visibleProfileEntries,
-    } = await reEnumerateAllProfileEntries();
+    const allProfileEntries = await reEnumerateAllProfileEntries();
     const profileData = await profileManager.core.loadProfile(newProfileEntry);
     commitCoreState({
       allProfileEntries,
-      visibleProfileEntries,
       profileEditSource: {
         type: 'InternalProfile',
         profileEntry,
@@ -391,20 +374,17 @@ export const profileManagerModule = createCoreModule({
       coreState.profileEditSource.profileEntry,
       profileEntry,
     );
-    const currentProfileIndex = coreState.visibleProfileEntries.findIndex(
-      (it) => checkProfileEntryEquality(it, profileEntry),
-    );
+    const currentProfileIndex = getVisibleProfiles(
+      coreState.allProfileEntries,
+    ).findIndex((it) => checkProfileEntryEquality(it, profileEntry));
     await profileManager.core.deleteProfile(profileEntry);
 
-    const {
-      allProfileEntries,
-      visibleProfileEntries,
-    } = await reEnumerateAllProfileEntries();
+    const allProfileEntries = await reEnumerateAllProfileEntries();
+    const visibleProfileEntries = getVisibleProfiles(allProfileEntries);
 
     if (visibleProfileEntries.length === 0) {
       commitCoreState({
         allProfileEntries,
-        visibleProfileEntries,
         profileEditSource: { type: 'NoEditProfileAvailable' },
         loadedProfileData: fallbackProfileData,
       });
@@ -421,7 +401,6 @@ export const profileManagerModule = createCoreModule({
         );
         commitCoreState({
           allProfileEntries,
-          visibleProfileEntries,
           profileEditSource: {
             type: 'InternalProfile',
             profileEntry,
@@ -430,10 +409,7 @@ export const profileManagerModule = createCoreModule({
         });
       }
     } else {
-      commitCoreState({
-        allProfileEntries,
-        visibleProfileEntries,
-      });
+      commitCoreState({ allProfileEntries });
     }
   },
   async profile_saveCurrentProfile({ profileData }) {
@@ -465,16 +441,12 @@ export const profileManagerModule = createCoreModule({
       return;
     }
     await profileManager.core.saveProfile(newProfileEntry, profileData);
-    const {
-      allProfileEntries,
-      visibleProfileEntries,
-    } = await reEnumerateAllProfileEntries();
+    const allProfileEntries = await reEnumerateAllProfileEntries();
     const newProfileData = await profileManager.core.loadProfile(
       newProfileEntry,
     );
     commitCoreState({
       allProfileEntries,
-      visibleProfileEntries,
       profileEditSource: {
         type: 'InternalProfile',
         profileEntry: newProfileEntry,

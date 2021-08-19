@@ -30,7 +30,6 @@ export type ICoreState = {
   deviceSelectionStatus: IDeviceSelectionStatus;
   appWindowStatus: IAppWindowStatus;
   allProfileEntries: IProfileEntry[];
-  visibleProfileEntries: IProfileEntry[];
   profileEditSource: IProfileEditSource;
   loadedProfileData: IProfileData;
   editProfileData: IProfileData;
@@ -70,7 +69,6 @@ export const defaultCoreState: ICoreState = {
   deviceSelectionStatus: fallbackDeviceSelectionStatus,
   appWindowStatus: defaultAppWindowStatus,
   allProfileEntries: [],
-  visibleProfileEntries: [],
   profileEditSource: defaultProfileEditSource,
   loadedProfileData: fallbackProfileData,
   editProfileData: fallbackProfileData,
