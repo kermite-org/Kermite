@@ -2,7 +2,6 @@ import { shell } from 'electron';
 import produce from 'immer';
 import {
   checkProfileEntryEquality,
-  clampValue,
   duplicateObjectByJsonStringifyParse,
   fallbackProfileData,
   ICoreState,
@@ -243,12 +242,14 @@ export class ProfileManager implements IProfileManager {
 
 export const profileManager = new ProfileManager();
 
-const reader = {
-  get currentProfileEntry(): IProfileEntry | undefined {
+const errorTextInvalidOperation = 'invalid operation';
+
+const profilesReader = {
+  get currentProfileEntry(): IProfileEntry {
     if (coreState.profileEditSource.type === 'InternalProfile') {
       return coreState.profileEditSource.profileEntry;
     }
-    return undefined;
+    throw new Error(errorTextInvalidOperation);
   },
 };
 
@@ -261,7 +262,7 @@ export const profileManagerModule = createCoreModule({
   }) {
     const profileEntry = { projectId, profileName };
     if (hasProfileEntry(profileEntry)) {
-      return;
+      throw new Error(errorTextInvalidOperation);
     }
     const profileData = profileManager.createProfileImpl(
       origin,
@@ -324,13 +325,10 @@ export const profileManagerModule = createCoreModule({
   },
 
   async profile_copyProfile({ newProfileName }) {
-    const profileEntry = reader.currentProfileEntry;
-    if (!profileEntry) {
-      return;
-    }
+    const profileEntry = profilesReader.currentProfileEntry;
     const newProfileEntry = { ...profileEntry, profileName: newProfileName };
     if (hasProfileEntry(newProfileEntry)) {
-      return;
+      throw new Error(errorTextInvalidOperation);
     }
     await profileManager.core.copyProfile(profileEntry, newProfileEntry);
     const profileData = await profileManager.core.loadProfile(newProfileEntry);
@@ -346,13 +344,10 @@ export const profileManagerModule = createCoreModule({
   },
 
   async profile_renameProfile({ newProfileName }) {
-    const profileEntry = reader.currentProfileEntry;
-    if (!profileEntry) {
-      return;
-    }
+    const profileEntry = profilesReader.currentProfileEntry;
     const newProfileEntry = { ...profileEntry, profileName: newProfileName };
     if (hasProfileEntry(newProfileEntry)) {
-      return;
+      throw new Error(errorTextInvalidOperation);
     }
     await profileManager.core.renameProfile(profileEntry, newProfileEntry);
     const profileData = await profileManager.core.loadProfile(profileEntry);
@@ -368,10 +363,7 @@ export const profileManagerModule = createCoreModule({
   },
 
   async profile_deleteProfile() {
-    const profileEntry = reader.currentProfileEntry;
-    if (!profileEntry) {
-      return;
-    }
+    const profileEntry = profilesReader.currentProfileEntry;
     await profileManager.core.deleteProfile(profileEntry);
     const allProfileEntries = await reEnumerateAllProfileEntries();
     const visibleProfileEntries = getVisibleProfiles(allProfileEntries);
@@ -419,7 +411,7 @@ export const profileManagerModule = createCoreModule({
       profileName: newProfileName,
     };
     if (hasProfileEntry(newProfileEntry)) {
-      return;
+      throw new Error(errorTextInvalidOperation);
     }
     await profileManager.core.saveProfile(newProfileEntry, profileData);
     const allProfileEntries = await reEnumerateAllProfileEntries();
