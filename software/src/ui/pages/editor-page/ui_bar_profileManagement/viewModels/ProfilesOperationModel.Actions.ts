@@ -77,7 +77,7 @@ const renameProfile = async () => {
       profileEntry.profileName,
     );
     if (newProfileName) {
-      profilesActions.renameProfile(profileEntry, newProfileName);
+      profilesActions.renameProfile(newProfileName);
     }
   }
 };
@@ -91,7 +91,7 @@ const copyProfile = async () => {
       profileEntry.profileName,
     );
     if (newProfileName) {
-      profilesActions.copyProfile(profileEntry, newProfileName);
+      profilesActions.copyProfile(newProfileName);
     }
   }
 };
@@ -107,7 +107,7 @@ const deleteProfile = async () => {
       caption: texts.label_assigner_confirmModal_deleteProfile_modalTitle,
     });
     if (ok) {
-      profilesActions.deleteProfile(profileEntry);
+      profilesActions.deleteProfile();
     }
   }
 };

@@ -23,15 +23,15 @@ export const profilesActions = {
     dispatchCoreAction({ profile_loadProfile: { profileEntry } });
   },
 
-  renameProfile: (_profileEntry: IProfileEntry, newProfileName: string) => {
+  renameProfile: (newProfileName: string) => {
     dispatchCoreAction({ profile_renameProfile: { newProfileName } });
   },
 
-  copyProfile: (_profileEntry: IProfileEntry, newProfileName: string) => {
+  copyProfile: (newProfileName: string) => {
     dispatchCoreAction({ profile_copyProfile: { newProfileName } });
   },
 
-  deleteProfile: (_profileEntry: IProfileEntry) => {
+  deleteProfile: () => {
     dispatchCoreAction({ profile_deleteProfile: 1 });
   },
 
