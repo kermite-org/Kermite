@@ -19,7 +19,7 @@ import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStat
 import { FirmwareUpdateService } from '~/shell/services/firmwareUpdate';
 import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/inputLogicSimulatorD';
 import { LayoutManager } from '~/shell/services/layout/LayoutManager';
-import { ProfileManager } from '~/shell/services/profile/ProfileManager';
+import { profileManager } from '~/shell/services/profile/ProfileManager';
 import { UserPresetHubService } from '~/shell/services/userPresetHub/UserPresetHubService';
 import { AppWindowWrapper, createWindowModule } from '~/shell/services/window';
 
@@ -28,16 +28,11 @@ export class ApplicationRoot {
 
   private deviceService = new KeyboardDeviceService();
 
-  private profileManager = new ProfileManager();
+  private layoutManager = new LayoutManager();
 
-  private layoutManager = new LayoutManager(this.profileManager);
+  private inputLogicSimulator = new InputLogicSimulatorD(this.deviceService);
 
-  private inputLogicSimulator = new InputLogicSimulatorD(
-    this.profileManager,
-    this.deviceService,
-  );
-
-  private windowWrapper = new AppWindowWrapper(this.profileManager);
+  private windowWrapper = new AppWindowWrapper();
 
   private presetHubService = new UserPresetHubService();
 
@@ -56,10 +51,9 @@ export class ApplicationRoot {
     });
 
     appGlobal.icpMainAgent.supplyAsyncHandlers({
-      profile_getCurrentProfile: async () =>
-        this.profileManager.getCurrentProfile(),
+      profile_getCurrentProfile: async () => profileManager.getCurrentProfile(),
       profile_executeProfileManagerCommands: (commands) =>
-        this.profileManager.executeCommands(commands),
+        profileManager.executeCommands(commands),
       layout_executeLayoutManagerCommands: (commands) =>
         this.layoutManager.executeCommands(commands),
       layout_showEditLayoutFileInFiler: async () =>
@@ -80,7 +74,7 @@ export class ApplicationRoot {
       presetHub_getServerProfiles: (projectId: string) =>
         this.presetHubService.getServerProfiles(projectId),
       config_writeKeyMappingToDevice: async () => {
-        const profile = this.profileManager.getCurrentProfile();
+        const profile = profileManager.getCurrentProfile();
         if (profile) {
           return await this.deviceService.emitKeyAssignsToDevice(profile);
         }
@@ -156,7 +150,7 @@ export class ApplicationRoot {
       keyboardConfigModule.config_loadKeyboardConfig!(1);
       await dispatchCoreAction({ project_loadAllProjectPackages: 1 });
       await dispatchCoreAction({ project_loadAllCustomFirmwareInfos: 1 });
-      await this.profileManager.initializeAsync();
+      await profileManager.initializeAsync();
       this.deviceService.initialize();
       this.inputLogicSimulator.initialize();
       commitCoreState({
@@ -173,7 +167,7 @@ export class ApplicationRoot {
       this.inputLogicSimulator.terminate();
       this.deviceService.terminate();
       this.windowWrapper.terminate();
-      this.profileManager.terminate();
+      profileManager.terminate();
       await applicationStorage.terminateAsync();
     });
   }

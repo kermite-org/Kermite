@@ -526,3 +526,5 @@ export class ProfileManager implements IProfileManager {
     }
   }
 }
+
+export const profileManager = new ProfileManager();
