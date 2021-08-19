@@ -30,8 +30,8 @@ export type IUiAction = Partial<{}>;
 
 export const uiState: IUiState = defaultUiState;
 
-export function dispatchCoreAction(action: ICoreAction) {
-  ipcAgent.async.global_dispatchCoreAction(action);
+export async function dispatchCoreAction(action: ICoreAction) {
+  await ipcAgent.async.global_dispatchCoreAction(action);
 }
 
 export const uiActionDistributor = new ActionDistributor<IUiAction>();

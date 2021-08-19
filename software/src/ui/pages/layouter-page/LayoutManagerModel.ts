@@ -8,7 +8,7 @@ import {
   IPersistKeyboardDesign,
 } from '~/shared';
 import { appUi, ipcAgent, router } from '~/ui/base';
-import { projectPackagesReader } from '~/ui/commonStore';
+import { dispatchCoreAction, projectPackagesReader } from '~/ui/commonStore';
 import { modalConfirm } from '~/ui/components';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 import { UiLayouterCore } from '~/ui/pages/layouter';
@@ -170,14 +170,12 @@ export class LayoutManagerModel implements ILayoutManagerModel {
       projectId = profile.projectId;
     }
     const layout = UiLayouterCore.emitSavingDesign();
-    await ipcAgent.async.profile_executeProfileManagerCommands([
-      {
-        createProfileFromLayout: {
-          projectId,
-          layout,
-        },
+    dispatchCoreAction({
+      profile_createProfileFromLayout: {
+        projectId,
+        layout,
       },
-    ]);
+    });
     router.navigateTo('/editor');
     this.sendCommand({ type: 'loadCurrentProfileLayout' });
   }
