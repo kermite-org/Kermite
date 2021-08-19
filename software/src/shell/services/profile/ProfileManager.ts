@@ -349,7 +349,11 @@ export const profileManagerModule = createCoreModule({
     if (hasProfileEntry(newProfileEntry)) {
       throw new Error(errorTextInvalidOperation);
     }
-    await profileManager.core.renameProfile(profileEntry, newProfileEntry);
+    await profileManager.core.deleteProfile(profileEntry);
+    await profileManager.core.saveProfile(
+      newProfileEntry,
+      coreState.editProfileData,
+    );
     const profileData = await profileManager.core.loadProfile(profileEntry);
     const allProfileEntries = await reEnumerateAllProfileEntries();
     commitCoreState({
