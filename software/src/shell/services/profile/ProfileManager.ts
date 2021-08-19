@@ -243,6 +243,15 @@ export class ProfileManager implements IProfileManager {
 
 export const profileManager = new ProfileManager();
 
+const reader = {
+  get currentProfileEntry(): IProfileEntry | undefined {
+    if (coreState.profileEditSource.type === 'InternalProfile') {
+      return coreState.profileEditSource.profileEntry;
+    }
+    return undefined;
+  },
+};
+
 export const profileManagerModule = createCoreModule({
   async profile_createProfile({
     newProfileName: profileName,
@@ -314,43 +323,18 @@ export const profileManagerModule = createCoreModule({
     });
   },
 
-  async profile_renameProfile({ profileEntry, newProfileName }) {
-    if (coreState.profileEditSource.type !== 'InternalProfile') {
+  async profile_copyProfile({ newProfileName }) {
+    const profileEntry = reader.currentProfileEntry;
+    if (!profileEntry) {
       return;
     }
     const newProfileEntry = { ...profileEntry, profileName: newProfileName };
-    if (!(hasProfileEntry(profileEntry) && !hasProfileEntry(newProfileEntry))) {
-      return;
-    }
-    const isCurrent = checkProfileEntryEquality(
-      coreState.profileEditSource.profileEntry,
-      profileEntry,
-    );
-    await profileManager.core.renameProfile(profileEntry, newProfileEntry);
-    const allProfileEntries = await reEnumerateAllProfileEntries();
-    if (isCurrent) {
-      const profileData = await profileManager.core.loadProfile(profileEntry);
-      commitCoreState({
-        allProfileEntries,
-        profileEditSource: {
-          type: 'InternalProfile',
-          profileEntry,
-        },
-        loadedProfileData: profileData,
-      });
-    } else {
-      commitCoreState({ allProfileEntries });
-    }
-  },
-
-  async profile_copyProfile({ profileEntry, newProfileName }) {
-    const newProfileEntry = { ...profileEntry, profileName: newProfileName };
-    if (!(hasProfileEntry(profileEntry) && !hasProfileEntry(newProfileEntry))) {
+    if (hasProfileEntry(newProfileEntry)) {
       return;
     }
     await profileManager.core.copyProfile(profileEntry, newProfileEntry);
-    const allProfileEntries = await reEnumerateAllProfileEntries();
     const profileData = await profileManager.core.loadProfile(newProfileEntry);
+    const allProfileEntries = await reEnumerateAllProfileEntries();
     commitCoreState({
       allProfileEntries,
       profileEditSource: {
@@ -361,19 +345,33 @@ export const profileManagerModule = createCoreModule({
     });
   },
 
-  async profile_deleteProfile({ profileEntry }) {
-    if (
-      !(
-        coreState.profileEditSource.type === 'InternalProfile' &&
-        hasProfileEntry(profileEntry)
-      )
-    ) {
+  async profile_renameProfile({ newProfileName }) {
+    const profileEntry = reader.currentProfileEntry;
+    if (!profileEntry) {
       return;
     }
-    const isCurrent = checkProfileEntryEquality(
-      coreState.profileEditSource.profileEntry,
-      profileEntry,
-    );
+    const newProfileEntry = { ...profileEntry, profileName: newProfileName };
+    if (hasProfileEntry(newProfileEntry)) {
+      return;
+    }
+    await profileManager.core.renameProfile(profileEntry, newProfileEntry);
+    const profileData = await profileManager.core.loadProfile(profileEntry);
+    const allProfileEntries = await reEnumerateAllProfileEntries();
+    commitCoreState({
+      allProfileEntries,
+      profileEditSource: {
+        type: 'InternalProfile',
+        profileEntry,
+      },
+      loadedProfileData: profileData,
+    });
+  },
+
+  async profile_deleteProfile() {
+    const profileEntry = reader.currentProfileEntry;
+    if (!profileEntry) {
+      return;
+    }
     const currentProfileIndex = getVisibleProfiles(
       coreState.allProfileEntries,
     ).findIndex((it) => checkProfileEntryEquality(it, profileEntry));
@@ -388,7 +386,7 @@ export const profileManagerModule = createCoreModule({
         profileEditSource: { type: 'NoEditProfileAvailable' },
         loadedProfileData: fallbackProfileData,
       });
-    } else if (isCurrent) {
+    } else {
       const newIndex = clampValue(
         currentProfileIndex,
         0,
@@ -408,8 +406,6 @@ export const profileManagerModule = createCoreModule({
           loadedProfileData: profileData,
         });
       }
-    } else {
-      commitCoreState({ allProfileEntries });
     }
   },
   async profile_saveCurrentProfile({ profileData }) {

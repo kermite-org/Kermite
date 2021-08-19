@@ -112,12 +112,10 @@ export type ICoreAction = Partial<{
   };
   profile_loadProfile?: { profileEntry: IProfileEntry };
   profile_saveCurrentProfile?: { profileData: IProfileData };
-  profile_deleteProfile?: { profileEntry: IProfileEntry };
-  profile_renameProfile?: {
-    profileEntry: IProfileEntry;
-    newProfileName: string;
-  };
-  profile_copyProfile?: { profileEntry: IProfileEntry; newProfileName: string };
+  profile_copyProfile?: { newProfileName: string };
+  profile_renameProfile?: { newProfileName: string };
+  profile_deleteProfile?: 1;
+
   profile_saveProfileAs?: { profileData: IProfileData; newProfileName: string };
   profile_saveAsProjectPreset?: {
     projectId: string;
