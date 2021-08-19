@@ -1,4 +1,8 @@
-import { IProfileData } from '~/shared';
+import {
+  checkProfileEntryEquality,
+  IProfileData,
+  IProfileEntry,
+} from '~/shared';
 import { coreState } from '~/shell/global/CoreStateAction';
 
 export const profilesReader = {
@@ -11,5 +15,26 @@ export const profilesReader = {
       return undefined;
     }
     return coreState.loadedProfileData;
+  },
+  getVisibleProfiles(allProfiles: IProfileEntry[]): IProfileEntry[] {
+    const { globalProjectId } = coreState.globalSettings;
+    if (globalProjectId) {
+      return allProfiles.filter((it) => it.projectId === globalProjectId);
+    } else {
+      return allProfiles;
+    }
+  },
+  get visibleProfileEntries() {
+    return profilesReader.getVisibleProfiles(coreState.allProfileEntries);
+  },
+  hasProfileEntry(profileEntry: IProfileEntry): boolean {
+    return coreState.allProfileEntries.some((it) =>
+      checkProfileEntryEquality(it, profileEntry),
+    );
+  },
+  getCurrentInternalProfileEntry(): IProfileEntry | undefined {
+    if (coreState.profileEditSource.type === 'InternalProfile') {
+      return coreState.profileEditSource.profileEntry;
+    }
   },
 };

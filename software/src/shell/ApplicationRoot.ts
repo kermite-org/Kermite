@@ -20,10 +20,8 @@ import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStat
 import { FirmwareUpdateService } from '~/shell/services/firmwareUpdate';
 import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/inputLogicSimulatorD';
 import { LayoutManager } from '~/shell/services/layout/LayoutManager';
-import {
-  profileManager,
-  profileManagerModule,
-} from '~/shell/services/profile/ProfileManager';
+import { profileManager } from '~/shell/services/profile/ProfileManager';
+import { profileManagerModule } from '~/shell/services/profile/ProfileManagerModule';
 import { UserPresetHubService } from '~/shell/services/userPresetHub/UserPresetHubService';
 import { AppWindowWrapper, createWindowModule } from '~/shell/services/window';
 
