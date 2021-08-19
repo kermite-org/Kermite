@@ -44,6 +44,10 @@ export function commitUiState(diff: Partial<IUiState>) {
   copyObjectProps(uiState, diff);
 }
 
+export function commitCoreStateFromUiSide(diff: Partial<ICoreState>) {
+  commitUiState({ core: { ...uiState.core, ...diff } });
+}
+
 export const uiStateDriverEffect = () => {
   // dispatchCoreAction({ loadAppVersion: 1 });
   // dispatchCoreAction({ greet: { name: 'yamada', age: 20 } });

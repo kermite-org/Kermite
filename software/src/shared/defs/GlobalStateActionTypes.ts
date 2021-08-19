@@ -26,10 +26,11 @@ export type ICoreState = {
   deviceStatus: IKeyboardDeviceStatus;
   deviceSelectionStatus: IDeviceSelectionStatus;
   appWindowStatus: IAppWindowStatus;
-  profileEditSource: IProfileEditSource;
-  loadedProfileData: IProfileData;
   allProfileEntries: IProfileEntry[];
   visibleProfileEntries: IProfileEntry[];
+  profileEditSource: IProfileEditSource;
+  loadedProfileData: IProfileData;
+  editProfileData: IProfileData;
 };
 
 const defaultApplicationVersionInfo: IApplicationVersionInfo = {
@@ -65,10 +66,11 @@ export const defaultCoreState: ICoreState = {
   deviceStatus: { isConnected: false },
   deviceSelectionStatus: fallbackDeviceSelectionStatus,
   appWindowStatus: defaultAppWindowStatus,
-  profileEditSource: defaultProfileEditSource,
-  loadedProfileData: fallbackProfileData,
   allProfileEntries: [],
   visibleProfileEntries: [],
+  profileEditSource: defaultProfileEditSource,
+  loadedProfileData: fallbackProfileData,
+  editProfileData: fallbackProfileData,
 };
 
 export type ICoreAction = Partial<{

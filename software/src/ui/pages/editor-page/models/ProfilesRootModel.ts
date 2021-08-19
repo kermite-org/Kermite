@@ -1,32 +1,30 @@
 import { useEffect } from 'qx';
-import { ipcAgent } from '~/ui/base';
-import { useKeyboardBehaviorModeModel } from '~/ui/commonModels';
+import { fallbackProfileData } from '~/shared';
+import { commitCoreStateFromUiSide } from '~/ui/commonStore';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 import { profilesReader } from '~/ui/pages/editor-page/models/ProfilesReader';
 
-function updateEditSourceProfileOnRender() {
+function affectStoreLoadedProfileDataToModelProfileData() {
   const { loadedProfileData } = profilesReader;
   useEffect(() => {
-    // console.log('apply loaded profile to editor model');
+    console.log('editorModel.profileData <-- store.loadedProfileData');
     editorModel.loadProfileData(loadedProfileData);
   }, [loadedProfileData]);
 }
 
-let profileStringified: string = '';
+let profileStringified: string = JSON.stringify(fallbackProfileData);
 
-function affectToSimulatorIfEditProfileChanged() {
-  const { isSimulatorMode } = useKeyboardBehaviorModeModel();
-  const profile = editorModel.profileData;
-  if (isSimulatorMode) {
-    const str = JSON.stringify(profile);
-    if (str !== profileStringified) {
-      profileStringified = str;
-      ipcAgent.async.simulator_postSimulationTargetProfile(profile);
-    }
+function affectModelProfileDataToStoreEditProfile() {
+  const str = JSON.stringify(editorModel.profileData);
+  if (str !== profileStringified) {
+    const obj = JSON.parse(str);
+    console.log('editorModel.profileData --> store.editProfileData');
+    commitCoreStateFromUiSide({ editProfileData: obj });
+    profileStringified = str;
   }
 }
 
 export function updateProfileDataSourceHandling() {
-  updateEditSourceProfileOnRender();
-  affectToSimulatorIfEditProfileChanged();
+  affectStoreLoadedProfileDataToModelProfileData();
+  affectModelProfileDataToStoreEditProfile();
 }
