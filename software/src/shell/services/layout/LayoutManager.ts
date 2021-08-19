@@ -17,10 +17,9 @@ import {
 } from '~/shared/modules/SchemaValidationHelper';
 import { appEnv, applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
-import { coreState, dispatchCoreAction } from '~/shell/global';
+import { coreState, dispatchCoreAction, profilesReader } from '~/shell/global';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { ILayoutManager } from '~/shell/services/layout/Interfaces';
-import { profileManager } from '~/shell/services/profile/ProfileManager';
 
 const layoutEditSourceSchema = vSchemaOneOf([
   vObject({
@@ -69,7 +68,7 @@ export class LayoutManager implements ILayoutManager {
     }
 
     if (this.status.editSource.type === 'CurrentProfile') {
-      const profile = profileManager.getCurrentProfile();
+      const profile = profilesReader.getCurrentProfile();
       if (!profile) {
         this.createNewLayout();
       }
@@ -101,7 +100,7 @@ export class LayoutManager implements ILayoutManager {
 
   // eslint-disable-next-line @typescript-eslint/require-await
   private async loadCurrentProfileLayout() {
-    const profile = profileManager.getCurrentProfile();
+    const profile = profilesReader.getCurrentProfile();
     if (profile) {
       this.setStatus({
         editSource: { type: 'CurrentProfile' },
@@ -209,7 +208,7 @@ export class LayoutManager implements ILayoutManager {
     if (editSource.type === 'LayoutNewlyCreated') {
       throw new Error('cannot save newly created layout');
     } else if (editSource.type === 'CurrentProfile') {
-      const profile = profileManager.getCurrentProfile();
+      const profile = profilesReader.getCurrentProfile();
       if (profile) {
         const newProfile = duplicateObjectByJsonStringifyParse(profile);
         newProfile.keyboardDesign = design;

@@ -10,6 +10,7 @@ import {
   coreState,
   coreStateManager,
   dispatchCoreAction,
+  profilesReader,
 } from '~/shell/global';
 import { keyboardConfigModule, projectPackageModule } from '~/shell/modules';
 import { globalSettingsModule } from '~/shell/modules/GlobalSettingsModule';
@@ -54,7 +55,7 @@ export class ApplicationRoot {
     });
 
     appGlobal.icpMainAgent.supplyAsyncHandlers({
-      profile_getCurrentProfile: async () => profileManager.getCurrentProfile(),
+      profile_getCurrentProfile: async () => profilesReader.getCurrentProfile(),
       layout_executeLayoutManagerCommands: (commands) =>
         this.layoutManager.executeCommands(commands),
       layout_showEditLayoutFileInFiler: async () =>
@@ -75,7 +76,7 @@ export class ApplicationRoot {
       presetHub_getServerProfiles: (projectId: string) =>
         this.presetHubService.getServerProfiles(projectId),
       config_writeKeyMappingToDevice: async () => {
-        const profile = profileManager.getCurrentProfile();
+        const profile = profilesReader.getCurrentProfile();
         if (profile) {
           return await this.deviceService.emitKeyAssignsToDevice(profile);
         }

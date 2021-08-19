@@ -1,8 +1,8 @@
-import { IProfileData } from '~/shared';
+// import { IProfileData } from '~/shared';
 
 export interface IProfileManager {
-  getCurrentProfileProjectId(): string;
-  getCurrentProfile(): IProfileData | undefined;
+  // getCurrentProfileProjectId(): string;
+  // getCurrentProfile(): IProfileData | undefined;
 }
 
 // export interface IPresetProfileLoader {

@@ -206,17 +206,6 @@ class ProfileManager implements IProfileManager {
   terminate() {
     coreStateManager.coreStateEventPort.unsubscribe(onCoreStateChange);
   }
-
-  getCurrentProfileProjectId(): string {
-    return coreState.loadedProfileData?.projectId;
-  }
-
-  getCurrentProfile(): IProfileData | undefined {
-    if (coreState.profileEditSource.type === 'NoEditProfileAvailable') {
-      return undefined;
-    }
-    return coreState.loadedProfileData;
-  }
 }
 
 export const profileManager = new ProfileManager();
