@@ -55,8 +55,6 @@ export class ApplicationRoot {
 
     appGlobal.icpMainAgent.supplyAsyncHandlers({
       profile_getCurrentProfile: async () => profileManager.getCurrentProfile(),
-      profile_executeProfileManagerCommands: (commands) =>
-        profileManager.executeCommands(commands),
       layout_executeLayoutManagerCommands: (commands) =>
         this.layoutManager.executeCommands(commands),
       layout_showEditLayoutFileInFiler: async () =>

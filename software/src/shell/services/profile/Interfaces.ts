@@ -1,9 +1,8 @@
-import { IProfileData, IProfileManagerCommand } from '~/shared';
+import { IProfileData } from '~/shared';
 
 export interface IProfileManager {
   getCurrentProfileProjectId(): string;
   getCurrentProfile(): IProfileData | undefined;
-  executeCommands(commands: IProfileManagerCommand[]): Promise<void>;
 }
 
 // export interface IPresetProfileLoader {

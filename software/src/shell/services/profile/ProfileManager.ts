@@ -9,7 +9,6 @@ import {
   IProfileData,
   IProfileEditSource,
   IProfileEntry,
-  IProfileManagerCommand,
   IResourceOrigin,
 } from '~/shared';
 import { ProfileDataConverter } from '~/shared/modules/ProfileDataConverter';
@@ -232,11 +231,6 @@ export class ProfileManager implements IProfileManager {
       throw new Error('failed to load profile');
     }
     return profile;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/require-await
-  async executeCommands(_commands: IProfileManagerCommand[]) {
-    throw new Error('invoked method obsoleted');
   }
 }
 
