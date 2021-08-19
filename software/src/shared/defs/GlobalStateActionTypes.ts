@@ -11,10 +11,13 @@ import {
   ICustomFirmwareInfo,
   IDeviceSelectionStatus,
   IKeyboardDeviceStatus,
+  IPresetSpec,
   IProfileEditSource,
   IProfileEntry,
   IProjectPackageInfo,
+  IResourceOrigin,
 } from '~/shared/defs/DomainTypes';
+import { IPersistKeyboardDesign } from '~/shared/defs/KeyboardDesign';
 import { fallbackProfileData, IProfileData } from '~/shared/defs/ProfileData';
 
 export type ICoreState = {
@@ -91,5 +94,40 @@ export type ICoreAction = Partial<{
   window_setWidgetAlwaysOnTop: boolean;
   window_reloadPage: 1;
 
+  profile_creatProfile?: {
+    newProfileName: string;
+    targetProjectOrigin: IResourceOrigin;
+    targetProjectId: string;
+    presetSpec: IPresetSpec;
+  };
+  profile_creatProfileUnnamed?: {
+    targetProjectOrigin: IResourceOrigin;
+    targetProjectId: string;
+    presetSpec: IPresetSpec;
+  };
+  profile_createProfileExternal?: {
+    profileData: IProfileData;
+  };
+  profile_createProfileFromLayout?: {
+    projectId: string;
+    layout: IPersistKeyboardDesign;
+  };
+  profile_loadProfile?: { profileEntry: IProfileEntry };
+  profile_saveCurrentProfile?: { profileData: IProfileData };
+  profile_deleteProfile?: { profileEntry: IProfileEntry };
+  profile_renameProfile?: {
+    profileEntry: IProfileEntry;
+    newProfileName: string;
+  };
+  profile_copyProfile?: { profileEntry: IProfileEntry; newProfileName: string };
+  profile_saveProfileAs?: { profileData: IProfileData; newProfileName: string };
+  profile_saveAsProjectPreset?: {
+    projectId: string;
+    presetName: string;
+    profileData: IProfileData;
+  };
+  profile_importFromFile?: { filePath: string };
+  profile_exportToFile?: { filePath: string; profileData: IProfileData };
+  profile_openUserProfilesFolder?: 1;
   profile_setEditProfileData?: { editProfileData: IProfileData };
 }>;
