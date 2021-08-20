@@ -95,28 +95,6 @@ export const profileManagerModule = createCoreModule({
     });
   },
 
-  async profile_copyProfile({ newProfileName }) {
-    const profileEntry = profilesReader.getCurrentInternalProfileEntry();
-    if (!profileEntry) {
-      throw new Error(errorTextInvalidOperation);
-    }
-    const newProfileEntry = { ...profileEntry, profileName: newProfileName };
-    if (profilesReader.hasProfileEntry(newProfileEntry)) {
-      throw new Error(errorTextInvalidOperation);
-    }
-    await profileManagerCore.copyProfile(profileEntry, newProfileEntry);
-    const profileData = await profileManagerCore.loadProfile(newProfileEntry);
-    const allProfileEntries = await profileManagerCore.listAllProfileEntries();
-    commitCoreState({
-      allProfileEntries,
-      profileEditSource: {
-        type: 'InternalProfile',
-        profileEntry,
-      },
-      loadedProfileData: profileData,
-    });
-  },
-
   async profile_renameProfile({ newProfileName }) {
     const profileEntry = profilesReader.getCurrentInternalProfileEntry();
     if (!profileEntry) {
@@ -131,13 +109,39 @@ export const profileManagerModule = createCoreModule({
       newProfileEntry,
       coreState.editProfileData,
     );
-    const profileData = await profileManagerCore.loadProfile(profileEntry);
+    const profileData = await profileManagerCore.loadProfile(newProfileEntry);
     const allProfileEntries = await profileManagerCore.listAllProfileEntries();
     commitCoreState({
       allProfileEntries,
       profileEditSource: {
         type: 'InternalProfile',
-        profileEntry,
+        profileEntry: newProfileEntry,
+      },
+      loadedProfileData: profileData,
+    });
+  },
+
+  async profile_copyProfile({ newProfileName }) {
+    const profileEntry = profilesReader.getCurrentInternalProfileEntry();
+    if (!profileEntry) {
+      throw new Error(errorTextInvalidOperation);
+    }
+    const newProfileEntry = { ...profileEntry, profileName: newProfileName };
+    if (profilesReader.hasProfileEntry(newProfileEntry)) {
+      throw new Error(errorTextInvalidOperation);
+    }
+    await profileManagerCore.deleteProfile(profileEntry);
+    await profileManagerCore.saveProfile(
+      newProfileEntry,
+      coreState.editProfileData,
+    );
+    const profileData = await profileManagerCore.loadProfile(newProfileEntry);
+    const allProfileEntries = await profileManagerCore.listAllProfileEntries();
+    commitCoreState({
+      allProfileEntries,
+      profileEditSource: {
+        type: 'InternalProfile',
+        profileEntry: newProfileEntry,
       },
       loadedProfileData: profileData,
     });
@@ -164,7 +168,10 @@ export const profileManagerModule = createCoreModule({
       const profileData = await profileManagerCore.loadProfile(newProfileEntry);
       commitCoreState({
         allProfileEntries,
-        profileEditSource: { type: 'InternalProfile', profileEntry },
+        profileEditSource: {
+          type: 'InternalProfile',
+          profileEntry: newProfileEntry,
+        },
         loadedProfileData: profileData,
       });
     }
