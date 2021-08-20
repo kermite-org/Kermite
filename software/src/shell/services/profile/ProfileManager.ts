@@ -65,6 +65,15 @@ function fixEditSource(editSource: IProfileEditSource): IProfileEditSource {
       return createInternalProfileEditSourceOrFallback();
     }
   }
+  if (editSource.type === 'ProfileNewlyCreated') {
+    const {
+      loadedProfileData,
+      globalSettings: { globalProjectId },
+    } = coreState;
+    if (globalProjectId && loadedProfileData.projectId !== globalProjectId) {
+      return createInternalProfileEditSourceOrFallback();
+    }
+  }
   if (editSource.type === 'NoEditProfileAvailable') {
     return createInternalProfileEditSourceOrFallback();
   }
