@@ -5,7 +5,7 @@ import {
   stringifyProfileEntry,
 } from '~/shared';
 import { ISelectorOption, ISelectorSource, texts } from '~/ui/base';
-import { uiStateReader } from '~/ui/commonStore';
+import { projectPackagesReader, uiStateReader } from '~/ui/commonStore';
 import { modalConfirm } from '~/ui/components';
 import { getFileNameFromPath } from '~/ui/helpers';
 import {
@@ -18,14 +18,27 @@ export type IProfileSelectorModel = {
   profileSelectorSource: ISelectorSource;
 };
 
+function getProfileLabel(profileEntry: IProfileEntry) {
+  const { projectId, profileName } = profileEntry;
+  const addProjectPrefix = !uiStateReader.globalSettings.globalProjectId;
+  if (addProjectPrefix) {
+    const projectInfo = projectPackagesReader.findProjectInfo(
+      'local',
+      projectId,
+    );
+    const keyboardName = projectInfo?.keyboardName || 'unknown';
+    return `${keyboardName} -- ${profileName}`;
+  } else {
+    return profileName;
+  }
+}
+
 function makeProfileNameSelectorOption(
   profileEntry: IProfileEntry,
 ): ISelectorOption {
-  const omitFolder = !!uiStateReader.globalSettings.globalProjectId;
-  const { projectId, profileName } = profileEntry;
   return {
     value: stringifyProfileEntry(profileEntry),
-    label: omitFolder ? profileName : `${projectId}/${profileName}`,
+    label: getProfileLabel(profileEntry),
   };
 }
 
