@@ -257,7 +257,7 @@ export const textSourceJapanese = {
   hint_assigner_topBar_profileOperationsMenu:
     'プロファイル管理メニューを開きます。',
   label_assigner_menu_newProfile: '新規作成',
-  label_assigner_menu_saveProfile: '保存',
+  label_assigner_menu_saveProfile: '名前をつけて保存',
   label_assigner_menu_renameProfile: '名前を変更',
   label_assigner_menu_copyProfile: '別名で保存',
   label_assigner_menu_deleteProfile: '削除',
@@ -266,7 +266,7 @@ export const textSourceJapanese = {
   label_assigner_menu_saveAsPreset: 'プリセットとして保存',
   label_assigner_menu_openUserProfilesFolder: 'データの保存場所を開く',
   hint_assigner_menu_newProfile: '新規プロファイルを作成します。',
-  hint_assigner_menu_saveProfile: 'プロファイルを保存します。',
+  hint_assigner_menu_saveProfile: 'プロファイルに名前をつけて保存します。',
   hint_assigner_menu_renameProfile: 'プロファイルの名前を変更します。',
   hint_assigner_menu_copyProfile: 'プロファイルを別名で保存します。',
   hint_assigner_menu_deleteProfile: 'プロファイルを削除します。',
