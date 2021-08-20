@@ -70,7 +70,8 @@ function createMenuItemSources(
       text: texts.label_assigner_menu_exportToFile,
       hint: texts.hint_assigner_menu_exportToFile,
       handler: vm.handleExportToFile,
-      enabled: globalSettingsReader.isDeveloperMode,
+      enabled:
+        globalSettingsReader.isDeveloperMode && vm.isEditProfileAvailable,
     },
     {
       key: 'saveAsPreset',
@@ -84,7 +85,7 @@ function createMenuItemSources(
       text: texts.label_assigner_menu_openUserProfilesFolder,
       hint: texts.hint_assigner_menu_openUserProfilesFolder,
       handler: vm.openUserProfilesFolder,
-      enabled: true,
+      enabled: vm.isCurrentProfileInternal,
     },
   ];
 }
