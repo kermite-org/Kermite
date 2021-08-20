@@ -157,14 +157,11 @@ export const profileManagerModule = createCoreModule({
     const visibleProfileEntries = profilesReader.getVisibleProfiles(
       allProfileEntries,
     );
-    if (visibleProfileEntries.length === 0) {
-      commitCoreState({
-        allProfileEntries,
-        profileEditSource: { type: 'NoEditProfileAvailable' },
-        loadedProfileData: fallbackProfileData,
-      });
-    } else {
-      const newProfileEntry = visibleProfileEntries[0];
+    const newProfileEntry =
+      visibleProfileEntries.find(
+        (it) => it.projectId === profileEntry.projectId,
+      ) || visibleProfileEntries[0];
+    if (newProfileEntry) {
       const profileData = await profileManagerCore.loadProfile(newProfileEntry);
       commitCoreState({
         allProfileEntries,
@@ -173,6 +170,12 @@ export const profileManagerModule = createCoreModule({
           profileEntry: newProfileEntry,
         },
         loadedProfileData: profileData,
+      });
+    } else {
+      commitCoreState({
+        allProfileEntries,
+        profileEditSource: { type: 'NoEditProfileAvailable' },
+        loadedProfileData: fallbackProfileData,
       });
     }
   },
