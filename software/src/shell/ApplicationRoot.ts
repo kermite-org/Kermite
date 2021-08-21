@@ -19,7 +19,7 @@ import { globalSettingsModule } from '~/shell/modules/GlobalSettingsModule';
 import { checkLocalRepositoryFolder } from '~/shell/projectResources/LocalResourceHelper';
 import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
 import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStatic';
-import { FirmwareUpdationService } from '~/shell/services/firmwareUpdation';
+import { FirmwareUpdateService } from '~/shell/services/firmwareUpdate';
 import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/inputLogicSimulatorD';
 import { LayoutManager } from '~/shell/services/layout/LayoutManager';
 import { ProfileManager } from '~/shell/services/profile/ProfileManager';
@@ -27,7 +27,7 @@ import { UserPresetHubService } from '~/shell/services/userPresetHub/UserPresetH
 import { AppWindowWrapper } from '~/shell/services/window';
 
 export class ApplicationRoot {
-  private firmwareUpdationService = new FirmwareUpdationService();
+  private firmwareUpdateService = new FirmwareUpdateService();
 
   private deviceService = new KeyboardDeviceService();
 
@@ -89,9 +89,9 @@ export class ApplicationRoot {
         this.deviceService.selectTargetDevice(path),
       device_setCustomParameterValue: async (index, value) =>
         this.deviceService.setCustomParameterValue(index, value),
-      device_resetParaemters: async () => this.deviceService.resetParameters(),
+      device_resetParameters: async () => this.deviceService.resetParameters(),
       firmup_uploadFirmware: (origin, projectId, variationName) =>
-        this.firmwareUpdationService.writeFirmware(
+        this.firmwareUpdateService.writeFirmware(
           origin,
           projectId,
           variationName,
@@ -136,7 +136,7 @@ export class ApplicationRoot {
 
       platform_openUrlInDefaultBrowser: (path) => shell.openExternal(path),
       global_triggerLazyInitializeServices: async () =>
-        this.lazyInitialzeServices(),
+        this.lazyInitializeServices(),
 
       simulator_postSimulationTargetProfile: async (profile) =>
         this.inputLogicSimulator.postSimulationTargetProfile(profile),
@@ -163,7 +163,7 @@ export class ApplicationRoot {
         return () => this.deviceService.realtimeEventPort.unsubscribe(cb);
       },
       firmup_deviceDetectionEvents: (cb) =>
-        this.firmwareUpdationService.deviceDetectionEvents.subscribe(cb),
+        this.firmwareUpdateService.deviceDetectionEvents.subscribe(cb),
       window_appWindowStatus: windowWrapper.appWindowEventPort.subscribe,
       global_coreStateEvents: (cb) =>
         coreStateManager.coreStateEventPort.subscribe(cb),
@@ -195,7 +195,7 @@ export class ApplicationRoot {
   }
 
   private _lazyInitializeTriggered = false;
-  lazyInitialzeServices() {
+  lazyInitializeServices() {
     if (!this._lazyInitializeTriggered) {
       this._lazyInitializeTriggered = true;
       this.deviceService.initialize();

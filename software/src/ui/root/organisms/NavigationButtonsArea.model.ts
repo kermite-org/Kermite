@@ -52,10 +52,10 @@ const entrySources: NavigationEntrySource[] = [
     isAvailable: () => globalSettingsReader.isDeveloperMode,
   },
   {
-    pagePath: '/firmwareUpdation',
-    pageName: texts.label_sideMenu_app_firmwareUpdation,
+    pagePath: '/firmwareUpdate',
+    pageName: texts.label_sideMenu_app_firmwareUpdate,
     iconSpec: 'fa fa-microchip',
-    hint: texts.hint_sideMenu_app_firmwareUpdation,
+    hint: texts.hint_sideMenu_app_firmwareUpdate,
   },
   {
     pagePath: '/projectEdit',
@@ -95,7 +95,7 @@ const entrySources: NavigationEntrySource[] = [
 //   { pagePath: '/presetBrowser', pageName: 'Presets', iconSpec: 'menu_book' },
 //   { pagePath: '/shapePreview', pageName: 'Preview', iconSpec: 'format_shapes' },
 //   {
-//     pagePath: '/firmwareUpdation',
+//     pagePath: '/firmwareUpdate',
 //     pageName: 'Firmware',
 //     iconSpec: 'memory',
 //   },

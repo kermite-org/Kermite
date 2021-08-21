@@ -14,8 +14,8 @@ type IProjectSelectionPageModel = {
 };
 
 function createSourceProjectItems(): IProjectKeyboardListProjectItem[] {
-  const { useLocalResouces } = globalSettingsReader.globalSettings;
-  const origin = useLocalResouces ? 'local' : 'online';
+  const { useLocalResources } = globalSettingsReader.globalSettings;
+  const origin = useLocalResources ? 'local' : 'online';
   return uiStateReader.allProjectPackageInfos
     .filter((info) => info.origin === origin)
     .map((info) => ({

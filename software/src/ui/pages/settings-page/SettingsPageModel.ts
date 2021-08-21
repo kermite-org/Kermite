@@ -80,9 +80,9 @@ export function useSettingsPageModel(): ISettingsPageModel {
     flagDeveloperMode: globalSettings.developerMode,
     setFlagDeveloperMode: (value) =>
       globalSettingsWriter.writeValue('developerMode', value),
-    flagUseLocalResources: globalSettings.useLocalResouces,
+    flagUseLocalResources: globalSettings.useLocalResources,
     setFlagUseLocalResources: (value) =>
-      globalSettingsWriter.writeValue('useLocalResouces', value),
+      globalSettingsWriter.writeValue('useLocalResources', value),
     flagAllowCrossKeyboardKeyMappingWrite:
       globalSettings.allowCrossKeyboardKeyMappingWrite,
     setFlagAllowCrossKeyboardKeyMappingWrite: (value) =>

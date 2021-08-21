@@ -47,7 +47,7 @@ export const ComponentCatalogPage: FC = () => {
     visualSource[(local.selectedVisualKey as VisualKey) || ''];
 
   useEffect(() => {
-    const storageKey = 'component-catalog-selected-compoent-key';
+    const storageKey = 'component-catalog-selected-component-key';
     const key = localStorage.getItem(storageKey);
     if (key) {
       local.selectedVisualKey = key;

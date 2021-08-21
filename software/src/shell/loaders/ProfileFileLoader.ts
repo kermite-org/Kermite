@@ -1,7 +1,7 @@
 import { AppError, IPersistProfileData, IProfileData } from '~/shared';
 import { ProfileDataConverter } from '~/shared/modules/ProfileDataConverter';
 import {
-  cacheRemoteResouce,
+  cacheRemoteResource,
   fetchJson,
   fsxReadJsonFile,
   fsxWriteJsonFile,
@@ -40,7 +40,7 @@ export namespace ProfileFileLoader {
   }
 
   export async function loadProfileFromUri(uri: string): Promise<IProfileData> {
-    const _profileData = (await cacheRemoteResouce(
+    const _profileData = (await cacheRemoteResource(
       fetchJson,
       uri,
     )) as IPersistProfileData;

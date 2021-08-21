@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-// pseudo type definition for comminucation data format
+// pseudo type definition for communication data format
 
-namespace CommunicationDataBinaryForamt {
+namespace CommunicationDataBinaryFormat {
   // --------------------
   // types
 
-  type u8 = number; // unsigend byte
+  type u8 = number; // unsigned byte
   type u16 = number; // unsigned short, big endian
 
   type VariableLength = any;
@@ -105,7 +105,7 @@ namespace CommunicationDataBinaryForamt {
   };
 
   // --------------------
-  // custom paramters data read/write
+  // custom parameters data read/write
 
   type PktCustomParametersBulkReadRequest = PacketHostToDevice & {
     [0]: { opcode: 0xc0 };

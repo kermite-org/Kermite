@@ -1,7 +1,7 @@
 import { IProfileData, IRealtimeKeyboardEvent } from '~/shared';
 import { IEventPort } from '~/shell/funcs';
 
-export interface IKeyboardDeviceServcie {
+export interface IKeyboardDeviceService {
   realtimeEventPort: IEventPort<IRealtimeKeyboardEvent>;
   selectTargetDevice(path: string): void;
   setSimulatorMode(enabled: boolean): void;

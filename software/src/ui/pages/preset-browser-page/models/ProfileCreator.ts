@@ -11,11 +11,11 @@ function getNewProfileNameBase(
   profileSourceName: string,
   allProfileNames: string[],
 ): string {
-  const isProfileSourceIncluesKeyboardName = profileSourceName
+  const isProfileSourceIncludesKeyboardName = profileSourceName
     .toLowerCase()
     .includes(keyboardName.toLowerCase());
 
-  let newProfileNameBase = isProfileSourceIncluesKeyboardName
+  let newProfileNameBase = isProfileSourceIncludesKeyboardName
     ? profileSourceName
     : `${keyboardName}_${profileSourceName}`.toLowerCase();
 

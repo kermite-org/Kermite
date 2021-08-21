@@ -36,7 +36,7 @@ export async function fetchBinary(uri: string): Promise<Uint8Array> {
 }
 
 const cached: { [key in string]: Promise<any> } = {};
-export async function cacheRemoteResouce<T>(
+export async function cacheRemoteResource<T>(
   func: (uri: string) => Promise<T>,
   uri: string,
 ): Promise<T> {

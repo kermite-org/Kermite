@@ -41,7 +41,7 @@ function makeFallbackWindowPersistState(): IWindowPersistState {
   };
 }
 
-const makeRectagleSchema = () =>
+const makeRectangleSchema = () =>
   vObject({
     x: vNumber(),
     y: vNumber(),
@@ -53,8 +53,8 @@ const windowStateSchema = vObject({
   pagePath: vString(),
   isDevtoolsVisible: vBoolean(),
   isWidgetAlwaysOnTop: vBoolean(),
-  mainWindowBounds: makeRectagleSchema().optional,
-  widgetWindowBounds: makeRectagleSchema().optional,
+  mainWindowBounds: makeRectangleSchema().optional,
+  widgetWindowBounds: makeRectangleSchema().optional,
   widgetProjectId: vString().optional,
 });
 
@@ -115,13 +115,13 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     this.publicRootPath = publicRootPath;
 
     appGlobal.mainWindow = win;
-    appGlobal.icpMainAgent.setWebcontents(win.webContents);
+    appGlobal.icpMainAgent.setWebContents(win.webContents);
 
     if (appEnv.isDevelopment && this.state.isDevtoolsVisible) {
       this.setDevToolsVisibility(true);
     }
 
-    this.affectAllwaysOnTopToWindow();
+    this.affectAlwaysOnTopToWindow();
 
     this.loadInitialPage();
 
@@ -159,7 +159,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
         this.saveWindowSize();
         this.state.pagePath = pagePath;
         this.adjustWindowSizeOnModeChange();
-        this.affectAllwaysOnTopToWindow();
+        this.affectAlwaysOnTopToWindow();
       } else {
         this.state.pagePath = pagePath;
       }
@@ -203,7 +203,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     }
   }
 
-  private affectAllwaysOnTopToWindow() {
+  private affectAlwaysOnTopToWindow() {
     const value = this.state.isWidgetAlwaysOnTop;
     this.mainWindow?.setAlwaysOnTop(this.isWidgetMode && value);
     this.appWindowEventPort.emit({ isWidgetAlwaysOnTop: value });
@@ -211,7 +211,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
 
   setWidgetAlwaysOnTop(isWidgetAlwaysOnTop: boolean) {
     this.state.isWidgetAlwaysOnTop = isWidgetAlwaysOnTop;
-    this.affectAllwaysOnTopToWindow();
+    this.affectAlwaysOnTopToWindow();
   }
 
   minimizeMainWindow() {

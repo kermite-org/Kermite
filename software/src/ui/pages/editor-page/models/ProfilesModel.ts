@@ -32,7 +32,7 @@ export class ProfilesModel {
       if (
         !compareObjectByJsonStringify(
           payload.loadedProfileData,
-          this.editorModel.loadedPorfileData,
+          this.editorModel.loadedProfileData,
         )
       ) {
         this.editorModel.loadProfileData(payload.loadedProfileData);

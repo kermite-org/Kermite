@@ -1,6 +1,6 @@
 import {
   getSystemParameterDefinitionBySystemParameterKey,
-  ICustromParameterSpec,
+  ICustomParameterSpec,
   IFirmwareTargetDevice,
   IPersistKeyboardDesign,
   IProfileData,
@@ -33,7 +33,7 @@ interface IParameterConfigurationEntry {
   targetVariationNames?: string[];
   systemParameterKeys: string[];
 }
-export interface IPorjectFileJson {
+export interface IProjectFileJson {
   projectId: string;
   keyboardName: string;
   parameterConfigurations:
@@ -76,9 +76,9 @@ namespace ProjectResourceInfoSourceLoader {
 
   async function readProjectFile(
     projectFilePath: string,
-  ): Promise<IPorjectFileJson> {
+  ): Promise<IProjectFileJson> {
     // TODO: スキーマをチェック
-    return (await fsxReadJsonFile(projectFilePath)) as IPorjectFileJson;
+    return (await fsxReadJsonFile(projectFilePath)) as IProjectFileJson;
   }
 
   async function gatherFirmwares(
@@ -209,7 +209,7 @@ export function readCustomParameterDefinition(
   if (targetConfig) {
     const customParameterSpecs = targetConfig.systemParameterKeys
       .map(getSystemParameterDefinitionBySystemParameterKey)
-      .filter((a) => !!a) as ICustromParameterSpec[];
+      .filter((a) => !!a) as ICustomParameterSpec[];
     return { customParameterSpecs };
   }
   return undefined;
@@ -358,7 +358,7 @@ export class ProjectResourceProviderImpl_Local
       try {
         return await ProfileFileLoader.loadProfileFromFile(filePath);
       } catch (error) {
-        console.log(`errorr on loading preset file`);
+        console.log(`error on loading preset file`);
         console.error(error);
       }
     }

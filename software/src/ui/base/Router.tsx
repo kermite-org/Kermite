@@ -1,14 +1,14 @@
 import { FC, jsx, QxNode, rerender } from 'qx';
 
 export namespace router {
-  let chainginHashInEventCallback = false;
+  let chainingHashInEventCallback = false;
 
   export function rerenderEffectOnHashChange() {
     const onHashChange = () => {
       // DOMのイベントハンドラでから呼び出された処理でlocation.hashを設定したときに
       // レンダリングが2回呼ばれてしまうのを回避
-      if (chainginHashInEventCallback) {
-        chainginHashInEventCallback = false;
+      if (chainingHashInEventCallback) {
+        chainingHashInEventCallback = false;
         return;
       }
       rerender();
@@ -22,7 +22,7 @@ export namespace router {
   }
 
   export function navigateTo(path: string) {
-    chainginHashInEventCallback = true;
+    chainingHashInEventCallback = true;
     location.hash = path;
   }
 

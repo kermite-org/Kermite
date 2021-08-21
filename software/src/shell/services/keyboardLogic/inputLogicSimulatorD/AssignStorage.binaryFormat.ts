@@ -2,14 +2,14 @@
 
 // pseudo type definition for assign data binary buffer
 
-namespace AssignStroageBinaryFormat {
+namespace AssignStorageBinaryFormat {
   // --------------------
   // types
 
   type valueOf<T> = T[keyof T];
 
   type s8 = number;
-  type u8 = number; // unsigend byte
+  type u8 = number; // unsigned byte
   type u16 = number; // unsigned short, big endian
   type u24 = number;
 
@@ -93,7 +93,7 @@ namespace AssignStroageBinaryFormat {
     bit7_0: { fMoveAmountY: s8 };
   };
 
-  type AssignOpeartion = VariableLength<1, 4> &
+  type AssignOperation = VariableLength<1, 4> &
     (
       | OpNoOperation
       | OpKeyInput
@@ -143,20 +143,20 @@ namespace AssignStroageBinaryFormat {
 
   type SingleAssignEntry = VariableLength<3, 6> & {
     byte0_1: { header: AssignEntryHeaderB<1> };
-    vl_min1_max4: { operation: AssignOpeartion };
+    vl_min1_max4: { operation: AssignOperation };
   };
 
   type DualAssignEntry = VariableLength<4, 10> & {
     byte0_1: { header: AssignEntryHeaderB<2> };
-    vl_min1_max4_a: { opPrimary: AssignOpeartion };
-    vl_min1_max4_b: { opSecondary: AssignOpeartion };
+    vl_min1_max4_a: { opPrimary: AssignOperation };
+    vl_min1_max4_b: { opSecondary: AssignOperation };
   };
 
   type TripleAssignEntry = VariableLength<5, 14> & {
     byte0_1: { header: AssignEntryHeaderB<3> };
-    vl_min1_max4_a: { opPrimary: AssignOpeartion };
-    vl_min1_max4_b: { opSecondary: AssignOpeartion };
-    vl_min1_max4_c: { opTertiary: AssignOpeartion };
+    vl_min1_max4_a: { opPrimary: AssignOperation };
+    vl_min1_max4_b: { opSecondary: AssignOperation };
+    vl_min1_max4_c: { opTertiary: AssignOperation };
   };
 
   type AssignEntry = VariableLength &

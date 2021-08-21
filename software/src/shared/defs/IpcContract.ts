@@ -12,7 +12,7 @@ import {
   IProjectPackageInfo,
   IRealtimeKeyboardEvent,
   IResourceOrigin,
-  IServerPorfileInfo,
+  IServerProfileInfo,
 } from '~/shared/defs/DomainTypes';
 import { ICoreAction, ICoreState } from '~/shared/defs/GlobalStateActionTypes';
 import { IGlobalSettings } from './ConfigTypes';
@@ -63,11 +63,11 @@ export interface IAppIpcContract {
     presetHub_getServerProjectIds(): Promise<string[]>;
     presetHub_getServerProfiles(
       projectId: string,
-    ): Promise<IServerPorfileInfo[]>;
+    ): Promise<IServerProfileInfo[]>;
 
     device_connectToDevice(path: string): Promise<void>;
     device_setCustomParameterValue(index: number, value: number): Promise<void>;
-    device_resetParaemters(): Promise<void>;
+    device_resetParameters(): Promise<void>;
 
     firmup_uploadFirmware(
       origin: IResourceOrigin,

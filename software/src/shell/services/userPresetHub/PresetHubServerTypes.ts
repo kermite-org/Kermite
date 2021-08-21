@@ -3,7 +3,7 @@ export namespace PresetHubServerTypes {
     projectIds?: string[] | null;
   };
 
-  export type PublicProfileInfomation = {
+  export type PublicProfileInformation = {
     id: string;
     name: string;
     description: string;
@@ -17,6 +17,6 @@ export namespace PresetHubServerTypes {
   };
 
   export type GetPublicProfilesResponse = {
-    profiles?: PublicProfileInfomation[] | null;
+    profiles?: PublicProfileInformation[] | null;
   };
 }

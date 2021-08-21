@@ -83,7 +83,7 @@ export interface IOperationEditPartViewModel {
   virtualKeyEntryGroups2: IOperationCardViewModel[][];
 }
 
-function makeVeritualKeyEntryGroup(
+function makeVirtualKeyEntryGroup(
   group: VirtualKey[],
 ): IOperationCardViewModel[] {
   const { editOperation, writeEditOperation } = editorModel;
@@ -116,11 +116,11 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
     editorModel.dualModeEditTargetOperationSig === 'sec';
 
   const virtualKeyEntryGroups: IOperationCardViewModel[][] = virtualKeyGroupsTable2.map(
-    makeVeritualKeyEntryGroup,
+    makeVirtualKeyEntryGroup,
   );
 
   const virtualKeyEntryGroups2: IOperationCardViewModel[][] = virtualKeyGroupsTable3.map(
-    makeVeritualKeyEntryGroup,
+    makeVirtualKeyEntryGroup,
   );
 
   const attachedModifierEntries: IOperationCardViewModel[] = modifierVirtualKeys.map(

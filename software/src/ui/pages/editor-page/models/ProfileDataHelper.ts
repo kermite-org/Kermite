@@ -5,7 +5,7 @@ import {
   IAssignEntry,
 } from '~/shared';
 
-function convertSignleAssignToDualAssign(src: IAssignEntry): IAssignEntry {
+function convertSingleAssignToDualAssign(src: IAssignEntry): IAssignEntry {
   if (src.type === 'block' || src.type === 'transparent') {
     return src;
   } else if (src.type === 'dual') {
@@ -55,7 +55,7 @@ export function changeProfileDataAssignType(
       },
       assigns: mapObjectValues(
         profile.assigns,
-        (it) => it && convertSignleAssignToDualAssign(it),
+        (it) => it && convertSingleAssignToDualAssign(it),
       ),
     };
   }

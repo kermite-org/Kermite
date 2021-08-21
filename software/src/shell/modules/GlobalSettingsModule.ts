@@ -17,7 +17,7 @@ export const globalSettingsModule = createCoreModule({
         settings.localProjectRootFolderPath = '';
       }
     }
-    settings.useLocalResouces = false;
+    settings.useLocalResources = false;
     commitCoreState({ globalSettings: settings });
   },
   writeGlobalSettings(partialConfig) {
@@ -43,7 +43,7 @@ export const globalSettingsModule = createCoreModule({
 export const globalSettingsReader = {
   getLocalRepositoryDir(): string | undefined {
     const settings = coreState.globalSettings;
-    if (settings.developerMode && settings.useLocalResouces) {
+    if (settings.developerMode && settings.useLocalResources) {
       if (appEnv.isDevelopment) {
         return pathResolve('../');
       } else {

@@ -83,11 +83,11 @@ function makeProfileSelectionSource(
       options: [
         {
           label: `(file)${getFileNameFromPath(editSource.filePath)}`,
-          value: '__EXTERNALY_LOADED_PROFILE__',
+          value: '__EXTERNALLY_LOADED_PROFILE__',
         },
         ...allProfileNames.map(makeProfileNameSelectorOption),
       ],
-      value: '__EXTERNALY_LOADED_PROFILE__',
+      value: '__EXTERNALLY_LOADED_PROFILE__',
       setValue: loadProfile,
     };
   } else {
@@ -263,7 +263,7 @@ const handleExportToFile = async () => {
   }
 };
 
-const simulatorProfileUpdator = new (class {
+const simulatorProfileUpdater = new (class {
   private profileStringified: string = '';
 
   affectToSimulatorIfEditProfileChanged(
@@ -296,13 +296,13 @@ function getCanWrite(): boolean {
 
   const refProjectId = editorModel.profileData.projectId;
 
-  const allProjctInfos = uiStateReader.allProjectPackageInfos;
+  const allProjectInfos = uiStateReader.allProjectPackageInfos;
 
   const standardFirmwareIds = ['HCV52K', 'HCV52L'];
 
   const deviceFirmwareId = deviceStatus.deviceAttrs?.firmwareId || '';
 
-  const isProjectMatched = allProjctInfos.some(
+  const isProjectMatched = allProjectInfos.some(
     (info) =>
       info.projectId === refProjectId &&
       info.firmwares.some(
@@ -379,7 +379,7 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
 
   const canSave = getCanSave();
 
-  simulatorProfileUpdator.affectToSimulatorIfEditProfileChanged(
+  simulatorProfileUpdater.affectToSimulatorIfEditProfileChanged(
     editorModel.profileData,
     isSimulatorMode,
   );
@@ -404,7 +404,7 @@ export function makeProfileManagementPartViewModel(): IProfileManagementPartView
     openExportingPresetSelectionModal: presetsModalDisplayStateModel.open,
     closeExportingPresetSelectionModal: presetsModalDisplayStateModel.close,
     saveProfileAsPreset: profilesModel.exportProfileAsProjectPreset,
-    currentProfileProjectId: editorModel.loadedPorfileData.projectId,
+    currentProfileProjectId: editorModel.loadedProfileData.projectId,
     isCurrentProfileInternal: editSource.type === 'InternalProfile',
     handleSaveUnsavedProfile,
     handleImportFromFile,

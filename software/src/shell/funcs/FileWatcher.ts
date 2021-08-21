@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-export class FileWather {
+export class FileWatcher {
   private watcher: fs.FSWatcher | undefined;
 
   observeFile(filePath: string, listener: () => void) {

@@ -25,7 +25,7 @@ export namespace KeyMappingEmitter {
 
     console.log(`len: ${dataLength}, checksum: ${checksum}`);
 
-    const keyAssingnDataFrames = Packets.makeMemoryWriteOperationFrames(data);
+    const keyAssignDataFrames = Packets.makeMemoryWriteOperationFrames(data);
     const checksumRequestFrame = Packets.makeMemoryChecksumRequestFrame(
       0,
       dataLength,
@@ -35,7 +35,7 @@ export namespace KeyMappingEmitter {
       console.log('writing...');
       device.writeSingleFrame(Packets.memoryWriteTransactionStartFrame);
       delayMs(50);
-      await device.writeFrames(keyAssingnDataFrames);
+      await device.writeFrames(keyAssignDataFrames);
 
       device.writeSingleFrame(checksumRequestFrame);
       delayMs(50);

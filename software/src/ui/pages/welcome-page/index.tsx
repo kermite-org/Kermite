@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
 import {
-  onboadingPanelDisplayStateModel,
+  onboardingPanelDisplayStateModel,
   useApplicationVersionText,
   useLanguageSelectionModel,
   useThemeSelectionModel,
@@ -11,7 +11,7 @@ import { ToggleSwitchLine } from '~/ui/components/molecules/ToggleSwitchLine';
 
 export const WelcomePage: FC = () => {
   const appVersion = useApplicationVersionText();
-  const { currrentLanguage, changeLanguage } = useLanguageSelectionModel();
+  const { currentLanguage, changeLanguage } = useLanguageSelectionModel();
   const { currentThemeKey, changeTheme } = useThemeSelectionModel();
   return (
     <div css={style}>
@@ -21,14 +21,14 @@ export const WelcomePage: FC = () => {
         <div className="row">
           <WelcomePageButton
             className="button"
-            active={currrentLanguage === 'english'}
+            active={currentLanguage === 'english'}
             onClick={() => changeLanguage('english')}
           >
             English
           </WelcomePageButton>
           <WelcomePageButton
             className="button"
-            active={currrentLanguage === 'japanese'}
+            active={currentLanguage === 'japanese'}
             onClick={() => changeLanguage('japanese')}
           >
             日本語
@@ -37,7 +37,7 @@ export const WelcomePage: FC = () => {
         <div className="row">
           <WelcomePageButton
             className="button"
-            onClick={onboadingPanelDisplayStateModel.open}
+            onClick={onboardingPanelDisplayStateModel.open}
           >
             セットアップナビゲーションを表示
           </WelcomePageButton>

@@ -4,7 +4,7 @@ import {
   getProjectOriginAndIdFromSig,
   IProfileData,
   IProjectPackageInfo,
-  IServerPorfileInfo,
+  IServerProfileInfo,
 } from '~/shared';
 import {
   getSelectionValueCorrected,
@@ -29,7 +29,7 @@ function makeProjectOptions(
 }
 
 function makePresetOptions(
-  projectPresets: IServerPorfileInfo[],
+  projectPresets: IServerProfileInfo[],
 ): ISelectorOption[] {
   return projectPresets.map((it) => ({
     value: it.id,
@@ -46,12 +46,12 @@ function sendCreateProfileCommand(profileData: IProfileData) {
 }
 
 export function usePresetSelectionModel2(): IPresetSelectionModel {
-  const sel = usePersistState(`presetSelecionModel2__sel`, {
+  const sel = usePersistState(`presetSelectionModel2__sel`, {
     projectKey: '', // ${origin}#${projectId}
     presetKey: '', // id of user profile
   });
 
-  const local = useLocal<{ projectProfiles: IServerPorfileInfo[] }>({
+  const local = useLocal<{ projectProfiles: IServerProfileInfo[] }>({
     projectProfiles: [],
   });
 

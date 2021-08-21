@@ -40,7 +40,7 @@ export class InputLogicSimulatorD {
   private layerActiveFlags: number = 0;
   private hidReportBytes: number[] = new Array(8).fill(0);
 
-  private tickUpdator = createTimeIntervalCounter();
+  private tickUpdater = createTimeIntervalCounter();
 
   constructor(
     private profileManager: ProfileManager,
@@ -94,7 +94,7 @@ export class InputLogicSimulatorD {
   };
 
   private processTicker = () => {
-    const elapsedMs = this.tickUpdator();
+    const elapsedMs = this.tickUpdater();
 
     if (this.simulationActive) {
       this.CL.keyboardCoreLogic_processTicker(elapsedMs);

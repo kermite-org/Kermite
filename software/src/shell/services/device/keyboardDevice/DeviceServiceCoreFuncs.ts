@@ -15,7 +15,7 @@ import {
   ICustomParametersReadResponseData,
   IDeviceAttributesReadResponseData,
   IReceivedBytesDecodeResult,
-  recievedBytesDecoder,
+  receivedBytesDecoder,
 } from '~/shell/services/device/keyboardDevice/ReceivedBytesDecoder';
 import { IDeviceWrapper } from './DeviceWrapper';
 
@@ -85,7 +85,7 @@ async function queryDeviceOperation<T>(
 ): Promise<T> {
   let result: T | undefined;
   const onData = (buf: Uint8Array) => {
-    const decoded = recievedBytesDecoder(buf);
+    const decoded = receivedBytesDecoder(buf);
     if (decoded) {
       const res = handler(decoded);
       if (res) {
@@ -125,7 +125,7 @@ export async function readDeviceCustomParameters(
   return await queryDeviceOperation(
     device,
     Packets.customParametersBulkReadRequestFrame,
-    (res) => res.type === 'custromParametersReadResponse' && res.data,
+    (res) => res.type === 'customParametersReadResponse' && res.data,
   );
 }
 
@@ -135,7 +135,7 @@ function writeDeviceInstanceCode(device: IDeviceWrapper, code: string) {
   );
 }
 
-// function writeDeviceCustromParameters(
+// function writeDeviceCustomParameters(
 //   device: IDeviceWrapper,
 //   initialParameters: number[],
 // ) {
@@ -182,7 +182,7 @@ export async function deviceSetupTask(
   //   }
   //   console.log(`writing initial custom parameters`);
   //   const parameterValues = getDeviceInitialParameterValues(customDef);
-  //   writeDeviceCustromParameters(device, parameterValues);
+  //   writeDeviceCustomParameters(device, parameterValues);
   //   customParamsRes = await readDeviceCustomParameters(device);
   //   if (!customParamsRes.isParametersInitialized) {
   //     throw new Error('failed to write initial custom parameters');
