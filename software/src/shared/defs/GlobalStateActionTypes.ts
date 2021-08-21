@@ -117,9 +117,7 @@ export type ICoreAction = Partial<{
     targetProjectId: string;
     presetSpec: IPresetSpec;
   };
-  profile_createProfileExternal: {
-    profileData: IProfileData;
-  };
+  profile_createProfileExternal: { profileData: IProfileData };
   profile_createProfileFromLayout: {
     projectId: string;
     layout: IPersistKeyboardDesign;
@@ -140,4 +138,17 @@ export type ICoreAction = Partial<{
   profile_exportToFile: { filePath: string; profileData: IProfileData };
   profile_openUserProfilesFolder: 1;
   profile_setEditProfileData: { editProfileData: IProfileData };
+
+  layout_createNewLayout: 1;
+  layout_loadCurrentProfileLayout: 1;
+  layout_overwriteCurrentLayout: { design: IPersistKeyboardDesign };
+  layout_loadFromFile: { filePath: string };
+  layout_saveToFile: { filePath: string; design: IPersistKeyboardDesign };
+  layout_createProjectLayout: { projectId: string; layoutName: string };
+  layout_loadProjectLayout: { projectId: string; layoutName: string };
+  layout_saveProjectLayout: {
+    projectId: string;
+    layoutName: string;
+    design: IPersistKeyboardDesign;
+  };
 }>;
