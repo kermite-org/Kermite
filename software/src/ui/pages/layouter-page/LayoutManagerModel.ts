@@ -175,50 +175,67 @@ const layoutManagerActions = {
   },
 };
 
-function updateBeforeRender() {
-  const sourceLayoutData = uiState.core.loadedLayoutData;
+const local = new (class {
+  layoutEditSource: ILayoutEditSource | undefined;
+})();
 
-  useEffect(() => {
-    const same = compareObjectByJsonStringify(
-      sourceLayoutData,
-      _prevLoadedDesign,
-    );
-    const isClean = compareObjectByJsonStringify(
-      sourceLayoutData,
-      createFallbackPersistKeyboardDesign(),
-    );
-    if (isClean && _keepUnsavedNewDesign) {
-      return;
-    }
-    if (!same || isClean) {
-      UiLayouterCore.loadEditDesign(sourceLayoutData);
-      _prevLoadedDesign = sourceLayoutData;
-    }
-  }, [sourceLayoutData]);
+export const layoutManagerRootModel = {
+  updateBeforeRender() {
+    const { layoutEditSource, loadedLayoutData } = uiState.core;
 
-  // useEffect(() => {
-  //   if (uiState.core.loadedProfileData) {
-  //     if (this.editSource.type === 'CurrentProfile') {
-  //       this.sendCommand({ type: 'loadCurrentProfileLayout' });
-  //     }
-  //   }
-  // }, [uiState.core]);
-
-  useEffect(() => {
-    return () => {
-      const { isModified, editSource } = layoutManagerReader;
-      if (isModified) {
-        if (editSource.type === 'CurrentProfile') {
-          const design = UiLayouterCore.emitSavingDesign();
-          editorModel.replaceKeyboardDesign(design);
-        }
-        if (editSource.type === 'LayoutNewlyCreated') {
-          _keepUnsavedNewDesign = true;
-        }
+    useEffect(() => {
+      if (layoutEditSource !== local.layoutEditSource) {
+        console.log('load', { layoutEditSource });
+        UiLayouterCore.loadEditDesign(loadedLayoutData);
+        local.layoutEditSource = layoutEditSource;
       }
-    };
-  }, []);
-}
+    }, [layoutEditSource]);
+  },
+  updateBeforeRender_old() {
+    const sourceLayoutData = uiState.core.loadedLayoutData;
+
+    useEffect(() => {
+      const same = compareObjectByJsonStringify(
+        sourceLayoutData,
+        _prevLoadedDesign,
+      );
+      const isClean = compareObjectByJsonStringify(
+        sourceLayoutData,
+        createFallbackPersistKeyboardDesign(),
+      );
+      if (isClean && _keepUnsavedNewDesign) {
+        return;
+      }
+      if (!same || isClean) {
+        UiLayouterCore.loadEditDesign(sourceLayoutData);
+        _prevLoadedDesign = sourceLayoutData;
+      }
+    }, [sourceLayoutData]);
+
+    // useEffect(() => {
+    //   if (uiState.core.loadedProfileData) {
+    //     if (this.editSource.type === 'CurrentProfile') {
+    //       this.sendCommand({ type: 'loadCurrentProfileLayout' });
+    //     }
+    //   }
+    // }, [uiState.core]);
+
+    useEffect(() => {
+      return () => {
+        const { isModified, editSource } = layoutManagerReader;
+        if (isModified) {
+          if (editSource.type === 'CurrentProfile') {
+            const design = UiLayouterCore.emitSavingDesign();
+            editorModel.replaceKeyboardDesign(design);
+          }
+          if (editSource.type === 'LayoutNewlyCreated') {
+            _keepUnsavedNewDesign = true;
+          }
+        }
+      };
+    }, []);
+  },
+};
 
 export function useLayoutManagerModel(): ILayoutManagerModel {
   const { editSource, isModified } = layoutManagerReader;
@@ -235,7 +252,7 @@ export function useLayoutManagerModel(): ILayoutManagerModel {
     showEditLayoutFileInFiler,
   } = layoutManagerActions;
 
-  updateBeforeRender();
+  layoutManagerRootModel.updateBeforeRender();
 
   return {
     editSource,
