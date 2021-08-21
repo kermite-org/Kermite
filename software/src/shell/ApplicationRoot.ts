@@ -19,7 +19,7 @@ import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
 import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStatic';
 import { FirmwareUpdateService } from '~/shell/services/firmwareUpdate';
 import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/inputLogicSimulatorD';
-import { LayoutManager } from '~/shell/services/layout/LayoutManager';
+import { layoutManager } from '~/shell/services/layout/LayoutManager';
 import { profileManager } from '~/shell/services/profile/ProfileManager';
 import { profileManagerModule } from '~/shell/services/profile/ProfileManagerModule';
 import { UserPresetHubService } from '~/shell/services/userPresetHub/UserPresetHubService';
@@ -29,8 +29,6 @@ export class ApplicationRoot {
   private firmwareUpdateService = new FirmwareUpdateService();
 
   private deviceService = new KeyboardDeviceService();
-
-  private layoutManager = new LayoutManager();
 
   private inputLogicSimulator = new InputLogicSimulatorD(this.deviceService);
 
@@ -55,9 +53,9 @@ export class ApplicationRoot {
     appGlobal.icpMainAgent.supplyAsyncHandlers({
       profile_getCurrentProfile: async () => profilesReader.getCurrentProfile(),
       layout_executeLayoutManagerCommands: (commands) =>
-        this.layoutManager.executeCommands(commands),
+        layoutManager.executeCommands(commands),
       layout_showEditLayoutFileInFiler: async () =>
-        this.layoutManager.showEditLayoutFileInFiler(),
+        layoutManager.showEditLayoutFileInFiler(),
       device_connectToDevice: async (path) =>
         this.deviceService.selectTargetDevice(path),
       device_setCustomParameterValue: async (index, value) =>
@@ -112,8 +110,6 @@ export class ApplicationRoot {
 
     appGlobal.icpMainAgent.supplySubscriptionHandlers({
       global_appErrorEvents: (cb) => appGlobal.appErrorEventPort.subscribe(cb),
-      layout_layoutManagerStatus: (listener) =>
-        this.layoutManager.statusEvents.subscribe(listener),
       device_keyEvents: (cb) => {
         this.deviceService.realtimeEventPort.subscribe(cb);
         return () => this.deviceService.realtimeEventPort.unsubscribe(cb);
@@ -152,6 +148,7 @@ export class ApplicationRoot {
       await dispatchCoreAction({ project_loadAllProjectPackages: 1 });
       await dispatchCoreAction({ project_loadAllCustomFirmwareInfos: 1 });
       await profileManager.initializeAsync();
+      await layoutManager.initializeAsync();
       this.deviceService.initialize();
       this.inputLogicSimulator.initialize();
       commitCoreState({
@@ -169,6 +166,7 @@ export class ApplicationRoot {
       this.deviceService.terminate();
       this.windowWrapper.terminate();
       profileManager.terminate();
+      layoutManager.terminate();
       await applicationStorage.terminateAsync();
     });
   }

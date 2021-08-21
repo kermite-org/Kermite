@@ -11,13 +11,17 @@ import {
   ICustomFirmwareInfo,
   IDeviceSelectionStatus,
   IKeyboardDeviceStatus,
+  ILayoutEditSource,
   IPresetSpec,
   IProfileEditSource,
   IProfileEntry,
   IProjectPackageInfo,
   IResourceOrigin,
 } from '~/shared/defs/DomainTypes';
-import { IPersistKeyboardDesign } from '~/shared/defs/KeyboardDesign';
+import {
+  createFallbackPersistKeyboardDesign,
+  IPersistKeyboardDesign,
+} from '~/shared/defs/KeyboardDesign';
 import { fallbackProfileData, IProfileData } from '~/shared/defs/ProfileData';
 
 export type ICoreState = {
@@ -29,10 +33,14 @@ export type ICoreState = {
   deviceStatus: IKeyboardDeviceStatus;
   deviceSelectionStatus: IDeviceSelectionStatus;
   appWindowStatus: IAppWindowStatus;
+  // profile
   allProfileEntries: IProfileEntry[];
   profileEditSource: IProfileEditSource;
   loadedProfileData: IProfileData;
   editProfileData: IProfileData;
+  // layout
+  layoutEditSource: ILayoutEditSource;
+  loadedLayoutData: IPersistKeyboardDesign;
 };
 
 const defaultApplicationVersionInfo: IApplicationVersionInfo = {
@@ -48,6 +56,10 @@ const defaultAppWindowStatus: IAppWindowStatus = {
 
 const defaultProfileEditSource: IProfileEditSource = {
   type: 'NoEditProfileAvailable',
+};
+
+const fallbackLayoutEditSource: ILayoutEditSource = {
+  type: 'LayoutNewlyCreated',
 };
 
 // const defaultProfileManagerStatus: IProfileManagerStatus = {
@@ -72,6 +84,8 @@ export const defaultCoreState: ICoreState = {
   profileEditSource: defaultProfileEditSource,
   loadedProfileData: fallbackProfileData,
   editProfileData: fallbackProfileData,
+  layoutEditSource: fallbackLayoutEditSource,
+  loadedLayoutData: createFallbackPersistKeyboardDesign(),
 };
 
 export type ICoreAction = Partial<{
