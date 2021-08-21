@@ -11,7 +11,7 @@ import {
 import { createProjectSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { appEnv } from '~/shell/base';
 import {
-  cacheRemoteResouce,
+  cacheRemoteResource,
   fetchBinary,
   fetchJson,
   fetchText,
@@ -26,7 +26,7 @@ import {
   IProjectResourceProviderImpl,
 } from '~/shell/projectResources/Interfaces';
 import {
-  IPorjectFileJson,
+  IProjectFileJson,
   readCustomParameterDefinition,
 } from '~/shell/projectResources/ProjectResourceProviderImpl_Local';
 
@@ -35,7 +35,7 @@ const remoteBaseUri = 'https://app.kermite.org/krs/resources';
 async function loadRemoteResourceInfosFromSummaryJson(): Promise<
   IKrsRemoteProjectResourceInfoSource[]
 > {
-  const remoteSummary = await cacheRemoteResouce<IKrsSummaryJsonData>(
+  const remoteSummary = await cacheRemoteResource<IKrsSummaryJsonData>(
     fetchJson,
     `${remoteBaseUri}/summary.json`,
   );
@@ -83,7 +83,7 @@ export class ProjectResourceProviderImpl_Remote
     if (info) {
       const relPath = `variants/${info.projectPath}/project.json`;
       const uri = `${remoteBaseUri}/${relPath}`;
-      const projectJsonContent = await cacheRemoteResouce<IPorjectFileJson>(
+      const projectJsonContent = await cacheRemoteResource<IProjectFileJson>(
         fetchJson,
         uri,
       );
@@ -142,11 +142,11 @@ export class ProjectResourceProviderImpl_Remote
 
       if (firm.targetDevice === 'atmega32u4') {
         // text file (.hex)
-        const hexFileContent = await cacheRemoteResouce(fetchText, uri);
+        const hexFileContent = await cacheRemoteResource(fetchText, uri);
         await fsxWriteFile(localTempFilePath, hexFileContent);
       } else if (firm.targetDevice === 'rp2040') {
         // binary file (.uf2)
-        const uf2FileContent = await cacheRemoteResouce(fetchBinary, uri);
+        const uf2FileContent = await cacheRemoteResource(fetchBinary, uri);
         await fsxWriteFile(localTempFilePath, uf2FileContent);
       } else {
         throw new Error(`unexpected target device ${firm.targetDevice}`);

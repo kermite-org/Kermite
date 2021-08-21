@@ -187,7 +187,7 @@ export type VirtualKey =
 
 export type ModifierVirtualKey = 'K_Shift' | 'K_Ctrl' | 'K_Alt' | 'K_Gui';
 
-const modfierVirutalKeys: ModifierVirtualKey[] = [
+const modifierVirtualKeys: ModifierVirtualKey[] = [
   'K_Ctrl',
   'K_Shift',
   'K_Alt',
@@ -195,5 +195,5 @@ const modfierVirutalKeys: ModifierVirtualKey[] = [
 ];
 
 export function isModifierVirtualKey(vk: VirtualKey): vk is ModifierVirtualKey {
-  return modfierVirutalKeys.includes(vk as ModifierVirtualKey);
+  return modifierVirtualKeys.includes(vk as ModifierVirtualKey);
 }

@@ -3,7 +3,7 @@ import { IIpcContractBase } from './IpcContractBase';
 
 type IErrorHandler = (error: any) => void;
 export interface IIpcMainAgent<T extends IIpcContractBase> {
-  setWebcontents(webContents: Electron.webContents): void;
+  setWebContents(webContents: Electron.webContents): void;
   setErrorHandler(errorHandler: IErrorHandler): void;
   supplySyncHandlers(handlers: T['sync']): void;
   supplyAsyncHandlers(handlers: T['async']): void;
@@ -26,7 +26,7 @@ export class IpcMainAgent<T extends IIpcContractBase>
     this.errorHandler = errorHandler;
   }
 
-  setWebcontents(webContents: Electron.WebContents): void {
+  setWebContents(webContents: Electron.WebContents): void {
     this.webContents = webContents;
   }
 
@@ -70,22 +70,22 @@ export class IpcMainAgent<T extends IIpcContractBase>
       const handler = handlers[propKey]!;
       ipcMain.handle(
         `__subscriptionStarted__${propKey}`,
-        (event, subsciptionKey) => {
-          // console.log(`subscriptionStarted ${subsciptionKey}, ${++num}`);
+        (event, subscriptionKey) => {
+          // console.log(`subscriptionStarted ${subscriptionKey}, ${++num}`);
           const callback = (value: any) => {
-            this.webContents?.send(subsciptionKey, value);
+            this.webContents?.send(subscriptionKey, value);
           };
           const unsub = handler(callback);
-          this.unsubMap[subsciptionKey] = unsub;
+          this.unsubMap[subscriptionKey] = unsub;
         },
       );
       ipcMain.handle(
         `__subscriptionEnded__${propKey}`,
-        (event, subsciptionKey) => {
-          // console.log(`subscriptionEnded ${subsciptionKey}, ${--num}`);
-          const unsub = this.unsubMap[subsciptionKey];
+        (event, subscriptionKey) => {
+          // console.log(`subscriptionEnded ${subscriptionKey}, ${--num}`);
+          const unsub = this.unsubMap[subscriptionKey];
           unsub?.();
-          delete this.unsubMap[subsciptionKey];
+          delete this.unsubMap[subscriptionKey];
         },
       );
     }

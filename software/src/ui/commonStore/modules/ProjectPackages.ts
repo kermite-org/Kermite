@@ -15,10 +15,10 @@ import {
 
 export const projectPackagesReader = {
   getProjectInfosGlobalProjectSelectionAffected(): IProjectPackageInfo[] {
-    const { useLocalResouces, globalProjectId } = uiStateReader.globalSettings;
+    const { useLocalResources, globalProjectId } = uiStateReader.globalSettings;
 
     return uiStateReader.allProjectPackageInfos
-      .filter((info) => useLocalResouces || info.origin === 'online')
+      .filter((info) => useLocalResources || info.origin === 'online')
       .filter(
         (info) => globalProjectId === '' || info.projectId === globalProjectId,
       );
@@ -50,7 +50,7 @@ export const projectPackagesReader = {
 export const projectPackagesWriter = {
   saveLocalProject(projectInfo: IProjectPackageInfo) {
     dispatchCoreAction({
-      saveLocalProjectPackageInfo: projectInfo,
+      project_saveLocalProjectPackageInfo: projectInfo,
     });
   },
   saveLocalProjectLayout(layoutName: string, design: IPersistKeyboardDesign) {

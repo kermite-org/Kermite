@@ -27,7 +27,7 @@ const style = css`
   user-select: none;
 `;
 
-export const OnboadingPullTabPlacer = styled.div`
+export const OnboardingPullTabPlacer = styled.div`
   position: absolute;
   top: 80px;
   right: -2px;

@@ -1,8 +1,8 @@
 import { css, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { uiStateReader } from '~/ui/commonStore';
+import { profilesReader } from '~/ui/pages/editor-page/models';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
-import { profilesModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileManagementPartViewModel';
 
 export const ProfileConfigurationPart = () => {
   const projectInfos = uiStateReader.allProjectPackageInfos;
@@ -11,7 +11,7 @@ export const ProfileConfigurationPart = () => {
   const keyboardName = info?.keyboardName;
   const currentAssignType = editorModel.profileData.settings.assignType;
 
-  const { isEditProfileAvailable } = profilesModel;
+  const { isEditProfileAvailable } = profilesReader;
 
   return (
     <div css={style}>

@@ -1,5 +1,5 @@
 import { app, BrowserWindow, Rectangle } from 'electron';
-import { IAppWindowStatus } from '~/shared';
+import { getObjectKeys, IAppWindowStatus } from '~/shared';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import {
   vObject,
@@ -8,8 +8,13 @@ import {
   vBoolean,
 } from '~/shared/modules/SchemaValidationHelper';
 import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
-import { createEventPort, pathRelative } from '~/shell/funcs';
-import { IProfileManager } from '~/shell/services/profile/Interfaces';
+import { pathRelative } from '~/shell/funcs';
+import {
+  commitCoreState,
+  coreState,
+  createCoreModule,
+  profilesReader,
+} from '~/shell/global';
 import { MenuManager } from '~/shell/services/window/MenuManager';
 import { IAppWindowWrapper } from './Interfaces';
 import {
@@ -41,7 +46,7 @@ function makeFallbackWindowPersistState(): IWindowPersistState {
   };
 }
 
-const makeRectagleSchema = () =>
+const makeRectangleSchema = () =>
   vObject({
     x: vNumber(),
     y: vNumber(),
@@ -53,8 +58,8 @@ const windowStateSchema = vObject({
   pagePath: vString(),
   isDevtoolsVisible: vBoolean(),
   isWidgetAlwaysOnTop: vBoolean(),
-  mainWindowBounds: makeRectagleSchema().optional,
-  widgetWindowBounds: makeRectagleSchema().optional,
+  mainWindowBounds: makeRectangleSchema().optional,
+  widgetWindowBounds: makeRectangleSchema().optional,
   widgetProjectId: vString().optional,
 });
 
@@ -65,15 +70,14 @@ export class AppWindowWrapper implements IAppWindowWrapper {
   private mainWindow: BrowserWindow | undefined;
   private state: IWindowPersistState = makeFallbackWindowPersistState();
 
-  constructor(private profileManager: IProfileManager) {}
-
-  appWindowEventPort = createEventPort<Partial<IAppWindowStatus>>({
-    initialValueGetter: () => ({
-      isDevtoolsVisible: this.state.isDevtoolsVisible,
-      isWidgetAlwaysOnTop: this.state.isWidgetAlwaysOnTop,
-      isMaximized: this.mainWindow?.isMaximized() || false,
-    }),
-  });
+  private commitWindowStatus(diff: Partial<IAppWindowStatus>) {
+    const key = getObjectKeys(diff)[0];
+    const value = diff[key];
+    if (coreState.appWindowStatus[key] !== value) {
+      const appWindowStatus = { ...coreState.appWindowStatus, ...diff };
+      commitCoreState({ appWindowStatus });
+    }
+  }
 
   openMainWindow() {
     const {
@@ -115,38 +119,38 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     this.publicRootPath = publicRootPath;
 
     appGlobal.mainWindow = win;
-    appGlobal.icpMainAgent.setWebcontents(win.webContents);
+    appGlobal.icpMainAgent.setWebContents(win.webContents);
 
     if (appEnv.isDevelopment && this.state.isDevtoolsVisible) {
       this.setDevToolsVisibility(true);
     }
 
-    this.affectAllwaysOnTopToWindow();
+    if (this.state.isWidgetAlwaysOnTop) {
+      this.setWidgetAlwaysOnTop(true);
+    }
+
+    this.affectAlwaysOnTopToWindow();
 
     this.loadInitialPage();
 
     app.on('browser-window-focus', () => {
-      this.appWindowEventPort.emit({ isActive: true });
+      this.commitWindowStatus({ isActive: true });
     });
     app.on('browser-window-blur', () => {
-      this.appWindowEventPort.emit({ isActive: false });
+      this.commitWindowStatus({ isActive: false });
     });
 
     win.webContents.on('devtools-opened', () => {
       this.state.isDevtoolsVisible = true;
-      this.appWindowEventPort.emit({ isDevtoolsVisible: true });
+      this.commitWindowStatus({ isDevtoolsVisible: true });
     });
     win.webContents.on('devtools-closed', () => {
       this.state.isDevtoolsVisible = false;
-      this.appWindowEventPort.emit({ isDevtoolsVisible: false });
+      this.commitWindowStatus({ isDevtoolsVisible: false });
     });
 
-    win.on('maximize', () =>
-      this.appWindowEventPort.emit({ isMaximized: true }),
-    );
-    win.on('unmaximize', () =>
-      this.appWindowEventPort.emit({ isMaximized: false }),
-    );
+    win.on('maximize', () => this.commitWindowStatus({ isMaximized: true }));
+    win.on('unmaximize', () => this.commitWindowStatus({ isMaximized: false }));
 
     win.on('moved', () => this.saveWindowSize());
     win.on('resized', () => this.saveWindowSize());
@@ -159,7 +163,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
         this.saveWindowSize();
         this.state.pagePath = pagePath;
         this.adjustWindowSizeOnModeChange();
-        this.affectAllwaysOnTopToWindow();
+        this.affectAlwaysOnTopToWindow();
       } else {
         this.state.pagePath = pagePath;
       }
@@ -201,17 +205,18 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     } else {
       this.mainWindow?.webContents.closeDevTools();
     }
+    this.commitWindowStatus({ isDevtoolsVisible: visible });
   }
 
-  private affectAllwaysOnTopToWindow() {
+  private affectAlwaysOnTopToWindow() {
     const value = this.state.isWidgetAlwaysOnTop;
     this.mainWindow?.setAlwaysOnTop(this.isWidgetMode && value);
-    this.appWindowEventPort.emit({ isWidgetAlwaysOnTop: value });
+    this.commitWindowStatus({ isWidgetAlwaysOnTop: value });
   }
 
   setWidgetAlwaysOnTop(isWidgetAlwaysOnTop: boolean) {
     this.state.isWidgetAlwaysOnTop = isWidgetAlwaysOnTop;
-    this.affectAllwaysOnTopToWindow();
+    this.affectAlwaysOnTopToWindow();
   }
 
   minimizeMainWindow() {
@@ -227,6 +232,9 @@ export class AppWindowWrapper implements IAppWindowWrapper {
       } else {
         this.mainWindow.unmaximize();
       }
+      this.commitWindowStatus({
+        isMaximized: this.mainWindow.isMaximized() || false,
+      });
     }
   }
 
@@ -244,7 +252,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     if (this.mainWindow) {
       const bounds = this.mainWindow.getBounds();
       if (this.isWidgetMode) {
-        this.state.widgetProjectId = this.profileManager.getCurrentProfileProjectId();
+        this.state.widgetProjectId = profilesReader.getCurrentProfileProjectId();
         this.state.widgetWindowBounds = bounds;
       } else {
         this.state.mainWindowBounds = bounds;
@@ -257,7 +265,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
       return;
     }
     if (this.isWidgetMode) {
-      const projectId = this.profileManager.getCurrentProfileProjectId();
+      const projectId = profilesReader.getCurrentProfileProjectId();
       if (
         projectId === this.state.widgetProjectId &&
         this.state.widgetWindowBounds
@@ -266,7 +274,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
         this.mainWindow.setBounds(this.state.widgetWindowBounds);
       } else {
         // widgetモーで前回と異なるキーボードを表示する場合デフォルトのウインドウサイズを算出して設定する
-        const currentProfile = this.profileManager.getCurrentProfile();
+        const currentProfile = profilesReader.getCurrentProfile();
         if (currentProfile) {
           const design = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
             currentProfile.keyboardDesign,
@@ -308,4 +316,18 @@ export class AppWindowWrapper implements IAppWindowWrapper {
   terminate() {
     applicationStorage.writeItem('windowState', this.state);
   }
+}
+
+export function createWindowModule(appWindow: AppWindowWrapper) {
+  return createCoreModule({
+    window_closeWindow: () => appWindow.closeMainWindow(),
+    window_minimizeWindow: () => appWindow.minimizeMainWindow(),
+    window_maximizeWindow: () => appWindow.maximizeMainWindow(),
+    window_restartApplication: () => appWindow.restartApplication(),
+    window_setDevToolVisibility: (visible) =>
+      appWindow.setDevToolsVisibility(visible),
+    window_setWidgetAlwaysOnTop: (alwaysOnTop) =>
+      appWindow.setWidgetAlwaysOnTop(alwaysOnTop),
+    window_reloadPage: () => appWindow.reloadPage(),
+  });
 }

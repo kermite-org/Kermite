@@ -1,7 +1,7 @@
 import { IPersistKeyboardDesign } from '~/shared';
 import { AppError } from '~/shared/defs';
 import {
-  cacheRemoteResouce,
+  cacheRemoteResource,
   fetchJson,
   fsxReadJsonFile,
   fsxWriteJsonFile,
@@ -33,7 +33,7 @@ export namespace LayoutFileLoader {
   export async function loadLayoutFromUri(
     uri: string,
   ): Promise<IPersistKeyboardDesign> {
-    const obj = await cacheRemoteResouce(fetchJson, uri);
+    const obj = await cacheRemoteResource(fetchJson, uri);
     fixLayoutData(obj, uri);
     return obj as IPersistKeyboardDesign;
   }

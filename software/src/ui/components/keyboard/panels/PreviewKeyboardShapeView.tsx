@@ -48,7 +48,7 @@ export const PreviewKeyboardShapeView: FC<Props> = ({
           showKeyIndex={showKeyIndex}
         />
         <PreviewDisplayAreaBox
-          dispalyArea={keyboardDesign.displayArea}
+          displayArea={keyboardDesign.displayArea}
           qxIf={showBoundingBox}
         />
       </KeyboardSvgFrameWithAutoScaler>

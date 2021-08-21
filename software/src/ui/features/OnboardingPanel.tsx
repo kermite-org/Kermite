@@ -1,7 +1,7 @@
 import { css, FC, jsx, QxNode } from 'qx';
 import { getObjectKeyByValue, isNumberInRange } from '~/shared';
 import { router } from '~/ui/base';
-import { onboadingPanelDisplayStateModel, PagePaths } from '~/ui/commonModels';
+import { onboardingPanelDisplayStateModel, PagePaths } from '~/ui/commonModels';
 import { Icon } from '~/ui/components';
 import { OnboardingStepShiftButton } from '~/ui/components/atoms/OnboardingButton';
 import { NavigationStepList } from '~/ui/components/molecules/NavigationStepList';
@@ -16,7 +16,7 @@ const steps = [0, 1, 2, 3, 4];
 const stepToPagePathMap: { [step: number]: PagePaths | undefined } = {
   0: '/home',
   1: '/projectSelection',
-  2: '/firmwareUpdation',
+  2: '/firmwareUpdate',
   3: '/presetBrowser',
   4: '/editor',
 };
@@ -34,7 +34,7 @@ function getStepByPagePath(pagePath: string): number {
   return _step === undefined ? -1 : parseInt(_step);
 }
 
-export const OnboadingFrame: FC<Props> = ({ className, children }) => {
+export const OnboardingFrame: FC<Props> = ({ className, children }) => {
   const pagePath = router.getPagePath();
   const currentStep = getStepByPagePath(pagePath);
 
@@ -45,7 +45,7 @@ export const OnboadingFrame: FC<Props> = ({ className, children }) => {
     }
   };
 
-  const closePanel = onboadingPanelDisplayStateModel.close;
+  const closePanel = onboardingPanelDisplayStateModel.close;
 
   const canShiftStepBack = isNumberInRange(currentStep, 1, 4);
   const canShiftStepForward = isNumberInRange(currentStep, 0, 3);

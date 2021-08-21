@@ -11,14 +11,14 @@ import { Packets } from '~/shell/services/device/keyboardDevice/Packets';
 import {
   ICustomParametersReadResponseData,
   IDeviceAttributesReadResponseData,
-  recievedBytesDecoder,
+  receivedBytesDecoder,
 } from '~/shell/services/device/keyboardDevice/ReceivedBytesDecoder';
 import { IDeviceWrapper } from './DeviceWrapper';
 
 function createConnectedStatus(
   devicePath: string,
   attrsRes: IDeviceAttributesReadResponseData,
-  custromParamsRes: ICustomParametersReadResponseData | undefined,
+  customParamsRes: ICustomParametersReadResponseData | undefined,
 ): IKeyboardDeviceStatus {
   return {
     isConnected: true,
@@ -32,8 +32,8 @@ function createConnectedStatus(
       portName: getPortNameFromDevicePath(devicePath) || devicePath,
       mcuName: attrsRes.firmwareMcuName,
     },
-    systemParameterValues: custromParamsRes?.parameterValues,
-    systemParameterMaxValues: custromParamsRes?.parameterMaxValues,
+    systemParameterValues: customParamsRes?.parameterValues,
+    systemParameterMaxValues: customParamsRes?.parameterMaxValues,
   };
 }
 
@@ -48,7 +48,7 @@ export class KeyboardDeviceServiceCore {
   }
 
   private onDeviceDataReceived = (buf: Uint8Array) => {
-    const res = recievedBytesDecoder(buf);
+    const res = receivedBytesDecoder(buf);
     if (res?.type === 'realtimeEvent') {
       this.realtimeEventPort.emit(res.event);
     }
@@ -103,7 +103,7 @@ export class KeyboardDeviceServiceCore {
     });
   }
 
-  setDeivce(device: IDeviceWrapper | undefined) {
+  setDevice(device: IDeviceWrapper | undefined) {
     this.clearDevice();
     if (device) {
       device.onData(this.onDeviceDataReceived);

@@ -1,8 +1,11 @@
 import { useEffect, useLocal } from 'qx';
 import { appUi, ipcAgent, ISelectorOption } from '~/ui/base';
 import { uiStatusModel } from '~/ui/commonModels';
-import { globalSettingsReader, globalSettingsWriter } from '~/ui/commonStore';
-import { useFetcher } from '~/ui/helpers';
+import {
+  globalSettingsReader,
+  globalSettingsWriter,
+  uiState,
+} from '~/ui/commonStore';
 
 export interface ISettingsPageModel {
   flagDeveloperMode: boolean;
@@ -67,10 +70,7 @@ export function useSettingsPageModel(): ISettingsPageModel {
     local.fixedProjectRootPath ||
     globalSettings.localProjectRootFolderPath;
 
-  const appVersionInfo = useFetcher(
-    ipcAgent.async.system_getApplicationVersionInfo,
-    { version: '' },
-  )?.version;
+  const appVersionInfo = uiState.core.applicationVersionInfo.version;
 
   const isDeveloperModeOn = globalSettings.developerMode;
 
@@ -80,9 +80,9 @@ export function useSettingsPageModel(): ISettingsPageModel {
     flagDeveloperMode: globalSettings.developerMode,
     setFlagDeveloperMode: (value) =>
       globalSettingsWriter.writeValue('developerMode', value),
-    flagUseLocalResources: globalSettings.useLocalResouces,
+    flagUseLocalResources: globalSettings.useLocalResources,
     setFlagUseLocalResources: (value) =>
-      globalSettingsWriter.writeValue('useLocalResouces', value),
+      globalSettingsWriter.writeValue('useLocalResources', value),
     flagAllowCrossKeyboardKeyMappingWrite:
       globalSettings.allowCrossKeyboardKeyMappingWrite,
     setFlagAllowCrossKeyboardKeyMappingWrite: (value) =>

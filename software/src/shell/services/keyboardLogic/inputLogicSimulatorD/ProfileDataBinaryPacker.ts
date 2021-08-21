@@ -42,7 +42,7 @@ interface IRawLayerInfo {
   isShiftLayer: boolean;
 }
 
-type IProfileContenxt = {
+type IProfileContext = {
   layersDict: { [layerId: string]: IRawLayerInfo };
   useShiftCancel: boolean;
 };
@@ -118,7 +118,7 @@ BBBB_BBBB: movement amount y, -128~127
 function encodeAssignOperation(
   op: IAssignOperation | undefined,
   layer: IRawLayerInfo,
-  context: IProfileContenxt,
+  context: IProfileContext,
 ): number[] {
   if (op?.type === 'keyInput') {
     const fAssignType = 0b01;
@@ -153,16 +153,16 @@ function encodeAssignOperation(
     }
   }
   if (op?.type === 'layerClearExclusive') {
-    const fAssingType = 0b11;
+    const fAssignType = 0b11;
     const fExOperationType = 0b010;
     const targetGroup = op.targetExclusionGroup;
-    return [(fAssingType << 6) | fExOperationType, targetGroup];
+    return [(fAssignType << 6) | fExOperationType, targetGroup];
   }
   if (op?.type === 'systemAction') {
-    const fAssingType = 0b11;
+    const fAssignType = 0b11;
     const fExOperationType = 0b011;
     const actionCode = systemActionToCodeMap[op.action] || 0;
-    return [(fAssingType << 6) | fExOperationType, actionCode, op.payloadValue];
+    return [(fAssignType << 6) | fExOperationType, actionCode, op.payloadValue];
   }
   return [0];
 }
@@ -189,7 +189,7 @@ TTT: type
  4: block
  5: transparent
 LLLL: layerIndex
-AABBBCCC: set of opertion data length, exist when single/dual/triple assign
+AABBBCCC: set of operation data length, exist when single/dual/triple assign
 AA: tertiary operation data length, (0: 1byte, 1:2byte, 2:3byte, 3:4byte)
 BBB: secondary operation data length, (0: 0byte, 1:1byte, 2:2byte, 3:3byte, 4:4byte)
 CCC: primary operation data length, (0: 0byte, 1:1byte, 2:2byte, 3:3byte, 4:4byte)
@@ -227,7 +227,7 @@ TT: tertiary operation (variable length, 1~4bytes)
 */
 function encodeRawAssignEntry(
   ra: IRawAssignEntry,
-  context: IProfileContenxt,
+  context: IProfileContext,
 ): number[] {
   const { entry } = ra;
   const layer = context.layersDict[ra.layerId];
@@ -318,7 +318,7 @@ VV VV ...: body bytes, variable length
 */
 function encodeKeyBoundAssignsSet(
   assigns: IRawAssignEntry[],
-  context: IProfileContenxt,
+  context: IProfileContext,
 ): number[] {
   const { keyIndex } = assigns[0];
   const bodyBytes = [
@@ -359,7 +359,7 @@ function makeRawAssignEntries(profile: IProfileData): IRawAssignEntry[] {
     .filter((ra) => !!ra);
 }
 
-function createProfileContext(profile: IProfileData): IProfileContenxt {
+function createProfileContext(profile: IProfileData): IProfileContext {
   const layersDict = createDictionaryFromKeyValues(
     profile.layers.map((la, idx) => [
       la.layerId,

@@ -1,15 +1,15 @@
 import { css, jsx } from 'qx';
 import { appUi, router, uiTheme } from '~/ui/base';
-import { PagePaths, siteModel, uiStatusModel } from '~/ui/commonModels';
-import { uiState } from '~/ui/commonStore';
+import { PagePaths, uiStatusModel } from '~/ui/commonModels';
+import { siteModel, uiState } from '~/ui/commonStore';
 import { CustomWindowFrame, DevToolPullTab } from '~/ui/components';
 import { LoadingOverlay } from '~/ui/components/overlay/LoadingOverlay';
-import { OnboadingFrame } from '~/ui/features/OnboardingPanel';
+import { OnboardingFrame } from '~/ui/features/OnboardingPanel';
 import { ProjectEditPage } from '~/ui/pages/ProjectEditPage';
 import { ProjectLayoutEditPage } from '~/ui/pages/ProjectLayoutEditPage';
 import { ProjectPresetEditPage } from '~/ui/pages/ProjectPresetEditPage';
 import { EditorPage } from '~/ui/pages/editor-page';
-import { FirmwareUpdationPage } from '~/ui/pages/firmware-updation-page';
+import { FirmwareUpdatePage } from '~/ui/pages/firmware-update-page';
 import { UiLayouterPageComponent } from '~/ui/pages/layouter-page';
 import { PresetBrowserPage } from '~/ui/pages/preset-browser-page';
 import { PresetBrowserPage2 } from '~/ui/pages/preset-browser-page2';
@@ -43,7 +43,7 @@ const MainColumnRoutes = () => {
       {pagePath === '/editor' && <EditorPage />}
       {pagePath === '/layouter' && <UiLayouterPageComponent />}
       {pagePath === '/shapePreview' && <ShapePreviewPage />}
-      {pagePath === '/firmwareUpdation' && <FirmwareUpdationPage />}
+      {pagePath === '/firmwareUpdate' && <FirmwareUpdatePage />}
       {pagePath === '/presetBrowser' && <PresetBrowserPage />}
       {pagePath === '/presetBrowser2' && <PresetBrowserPage2 />}
       {pagePath === '/settings' && <UiSettingsPage />}
@@ -71,9 +71,9 @@ export const ConfiguratorZoneRoot = () => {
         <div className="main-row">
           <NavigationColumn />
           {showOnboarding ? (
-            <OnboadingFrame>
+            <OnboardingFrame>
               <MainColumnRoutes />
-            </OnboadingFrame>
+            </OnboardingFrame>
           ) : (
             <MainColumnRoutes />
           )}

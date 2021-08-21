@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { siteModel } from '~/ui/commonModels';
+import { siteModel } from '~/ui/commonStore';
 import { WidgetWindowActiveChrome, WidgetWindowFrame } from '~/ui/components';
 import { WidgetMainPanel } from '~/ui/pages/widget/panels/WidgetMainPanel';
 

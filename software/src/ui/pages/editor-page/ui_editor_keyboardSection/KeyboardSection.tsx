@@ -1,8 +1,8 @@
 import { css, FC, jsx } from 'qx';
 import { usePlayerModel } from '~/ui/commonModels';
 import { EditorKeyboardView } from '~/ui/components/keyboard';
+import { profilesReader } from '~/ui/pages/editor-page/models';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
-import { profilesModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileManagementPartViewModel';
 import { makeEditKeyUnitCardsPartViewModel } from '~/ui/pages/editor-page/ui_editor_keyboardSection/EditKeyUnitCardsPartViewModel';
 import { ProfileSetupNavigationCardView } from '~/ui/pages/editor-page/ui_editor_keyboardSection/ProfileSetupNavigationCardView';
 import { LayerStateView } from './LayerStateView';
@@ -23,7 +23,7 @@ export const KeyboardSection: FC = () => {
     editorModel,
   );
 
-  if (!profilesModel.isEditProfileAvailable) {
+  if (!profilesReader.isEditProfileAvailable) {
     // Profileが存在しない場合、presetBrowserへの導線を表示
     return <ProfileSetupNavigationCardView />;
   }

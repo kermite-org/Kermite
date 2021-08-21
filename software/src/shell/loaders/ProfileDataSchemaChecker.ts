@@ -67,7 +67,7 @@ export const profileDataSchemaChecker = vObject({
       initialActive: vBoolean(),
     }),
   ),
-  // assigns: vObejectDictionary(
+  // assigns: vObjectDictionary(
   //   vSchemaOneOf([
   //     vObject({ type: vValueEquals('block') }),
   //     vObject({ type: vValueEquals('transparent') }),

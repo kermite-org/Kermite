@@ -12,7 +12,7 @@ function makeTargetProjectSelectOptions(): ISelectorOption[] {
     'projectId',
   ).map((it) => ({ label: it.keyboardName, value: it.projectId }));
 
-  const originalProjectId = editorModel.loadedPorfileData.projectId;
+  const originalProjectId = editorModel.loadedProfileData.projectId;
   if (
     originalProjectId &&
     !options.find((it) => it.value === originalProjectId)

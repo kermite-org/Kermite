@@ -65,7 +65,7 @@ export class UiStatusModel {
 
 export const uiStatusModel = new UiStatusModel();
 
-export const onboadingPanelDisplayStateModel = {
+export const onboardingPanelDisplayStateModel = {
   get isPanelVisible() {
     return uiStatusModel.settings.showOnboardingPanel;
   },

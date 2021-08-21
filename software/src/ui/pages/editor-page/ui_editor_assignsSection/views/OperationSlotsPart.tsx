@@ -8,7 +8,7 @@ type Props = {
   plainOperationEditCardsVM: IPlainOperationEditCardsViewModel;
 };
 
-export const OerationSlotsPart: FC<Props> = ({
+export const OperationSlotsPart: FC<Props> = ({
   plainOperationEditCardsVM: { transparentEntry, blockEntry },
   operationSlotsVM,
 }) => (

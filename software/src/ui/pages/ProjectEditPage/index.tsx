@@ -1,7 +1,10 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
-import { pageActions } from '~/ui/commonModels';
-import { projectPackagesHooks, projectPackagesWriter } from '~/ui/commonStore';
+import {
+  pageActions,
+  projectPackagesHooks,
+  projectPackagesWriter,
+} from '~/ui/commonStore';
 import { reflectValue } from '~/ui/helpers';
 
 export const ProjectEditPage: FC = () => {

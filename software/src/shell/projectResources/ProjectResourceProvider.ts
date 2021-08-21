@@ -28,7 +28,7 @@ export class ProjectResourceProvider_OBSOLETE
     return [];
   }
 
-  private getResouceProviderImpl(
+  private getResourceProviderImpl(
     origin: IResourceOrigin,
   ): IProjectResourceProviderImpl {
     if (origin === 'local') {
@@ -43,7 +43,7 @@ export class ProjectResourceProvider_OBSOLETE
     projectId: string,
     variationName: string,
   ): Promise<IProjectCustomDefinition | undefined> {
-    const providerImpl = this.getResouceProviderImpl(origin);
+    const providerImpl = this.getResourceProviderImpl(origin);
     return await providerImpl.getProjectCustomDefinition(
       projectId,
       variationName,
@@ -55,7 +55,7 @@ export class ProjectResourceProvider_OBSOLETE
   //   projectId: string,
   //   presetName: string,
   // ): Promise<IProfileData | undefined> {
-  //   // const providerImpl = this.getResouceProviderImpl(origin);
+  //   // const providerImpl = this.getResourceProviderImpl(origin);
   //   // return await providerImpl.loadProjectPreset(projectId, presetName);
   //   return undefined;
   // }
@@ -65,7 +65,7 @@ export class ProjectResourceProvider_OBSOLETE
     projectId: string,
     layoutName: string,
   ): Promise<IPersistKeyboardDesign | undefined> {
-    const providerImpl = this.getResouceProviderImpl(origin);
+    const providerImpl = this.getResourceProviderImpl(origin);
     return await providerImpl.loadProjectLayout(projectId, layoutName);
   }
 
@@ -74,7 +74,7 @@ export class ProjectResourceProvider_OBSOLETE
   //   projectId: string,
   //   variationName: string,
   // ): Promise<IFirmwareBinaryFileSpec | undefined> {
-  //   const providerImpl = this.getResouceProviderImpl(origin);
+  //   const providerImpl = this.getResourceProviderImpl(origin);
   //   return await providerImpl.loadProjectFirmwareFile(projectId, variationName);
   // }
 }

@@ -1,1 +1,1 @@
-export function intializeCommonStore() {}
+export function initializeCommonStore() {}
