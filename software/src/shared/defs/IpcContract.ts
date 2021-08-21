@@ -1,21 +1,16 @@
 import { IAppErrorData } from '~/shared/defs/CustomErrors';
 import {
-  IApplicationVersionInfo,
-  IAppWindowStatus,
   IBootloaderDeviceDetectionStatus,
-  ICustomFirmwareInfo,
   ILayoutManagerCommand,
   ILayoutManagerStatus,
   IProfileEntry,
   IProfileManagerCommand,
   IProfileManagerStatus,
-  IProjectPackageInfo,
   IRealtimeKeyboardEvent,
   IResourceOrigin,
   IServerProfileInfo,
 } from '~/shared/defs/DomainTypes';
 import { ICoreAction, ICoreState } from '~/shared/defs/GlobalStateActionTypes';
-import { IGlobalSettings } from './ConfigTypes';
 import { IProfileData } from './ProfileData';
 
 export interface IAppIpcContract {
@@ -24,15 +19,6 @@ export interface IAppIpcContract {
     // config_saveSettingsOnClosing?: IApplicationSettings;
   };
   async: {
-    system_getApplicationVersionInfo(): Promise<IApplicationVersionInfo>;
-    window_closeWindow(): Promise<void>;
-    window_minimizeWindow(): Promise<void>;
-    window_maximizeWindow(): Promise<void>;
-    window_restartApplication(): Promise<void>;
-    window_setDevToolVisibility(visible: boolean): Promise<void>;
-    window_setWidgetAlwaysOnTop(enabled: boolean): Promise<void>;
-    window_reloadPage(): Promise<void>;
-
     profile_getCurrentProfile(): Promise<IProfileData | undefined>;
     profile_getAllProfileEntries(): Promise<IProfileEntry[]>;
     profile_executeProfileManagerCommands(
@@ -43,22 +29,11 @@ export interface IAppIpcContract {
     layout_executeLayoutManagerCommands(
       commands: ILayoutManagerCommand[],
     ): Promise<boolean>;
-
     layout_showEditLayoutFileInFiler(): Promise<void>;
-    // layout_getAllProjectLayoutsInfos(): Promise<IProjectLayoutsInfo[]>;
 
     config_writeKeyMappingToDevice(): Promise<boolean>;
-
-    config_getGlobalSettings(): Promise<IGlobalSettings>;
-
     config_getProjectRootDirectoryPath(): Promise<string>;
     config_checkLocalRepositoryFolderPath(path: string): Promise<boolean>;
-
-    projects_getAllProjectPackageInfos(): Promise<IProjectPackageInfo[]>;
-    projects_saveLocalProjectPackageInfo(
-      info: IProjectPackageInfo,
-    ): Promise<void>;
-    projects_getAllCustomFirmwareInfos(): Promise<ICustomFirmwareInfo[]>;
 
     presetHub_getServerProjectIds(): Promise<string[]>;
     presetHub_getServerProfiles(
@@ -86,13 +61,10 @@ export interface IAppIpcContract {
     platform_openUrlInDefaultBrowser(path: string): Promise<void>;
 
     global_lazyInitializeServices(): Promise<void>;
-
     global_dispatchCoreAction(action: ICoreAction): Promise<void>;
   };
   events: {
-    dev_testEvent: { type: string };
     global_appErrorEvents: IAppErrorData<any>;
-    window_appWindowStatus: Partial<IAppWindowStatus>;
     profile_profileManagerStatus: Partial<IProfileManagerStatus>;
     layout_layoutManagerStatus: Partial<ILayoutManagerStatus>;
     device_keyEvents: IRealtimeKeyboardEvent;

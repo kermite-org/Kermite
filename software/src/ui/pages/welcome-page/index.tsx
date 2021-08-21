@@ -2,15 +2,15 @@ import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
 import {
   onboardingPanelDisplayStateModel,
-  useApplicationVersionText,
   useLanguageSelectionModel,
   useThemeSelectionModel,
 } from '~/ui/commonModels';
+import { uiState } from '~/ui/commonStore';
 import { WelcomePageButton } from '~/ui/components/atoms';
 import { ToggleSwitchLine } from '~/ui/components/molecules/ToggleSwitchLine';
 
 export const WelcomePage: FC = () => {
-  const appVersion = useApplicationVersionText();
+  const appVersion = uiState.core.applicationVersionInfo.version;
   const { currentLanguage, changeLanguage } = useLanguageSelectionModel();
   const { currentThemeKey, changeTheme } = useThemeSelectionModel();
   return (

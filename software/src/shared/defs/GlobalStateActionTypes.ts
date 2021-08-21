@@ -6,6 +6,8 @@ import {
 } from '~/shared/defs/ConfigTypes';
 import {
   fallbackDeviceSelectionStatus,
+  IApplicationVersionInfo,
+  IAppWindowStatus,
   ICustomFirmwareInfo,
   IDeviceSelectionStatus,
   IKeyboardDeviceStatus,
@@ -13,33 +15,53 @@ import {
 } from '~/shared/defs/DomainTypes';
 
 export type ICoreState = {
-  appVersion: string;
+  applicationVersionInfo: IApplicationVersionInfo;
   allProjectPackageInfos: IProjectPackageInfo[];
   allCustomFirmwareInfos: ICustomFirmwareInfo[];
   globalSettings: IGlobalSettings;
   keyboardConfig: IKeyboardConfig;
   deviceStatus: IKeyboardDeviceStatus;
   deviceSelectionStatus: IDeviceSelectionStatus;
+  appWindowStatus: IAppWindowStatus;
+};
+
+const defaultApplicationVersionInfo: IApplicationVersionInfo = {
+  version: '',
+};
+
+const defaultAppWindowStatus: IAppWindowStatus = {
+  isActive: false,
+  isDevtoolsVisible: false,
+  isMaximized: false,
+  isWidgetAlwaysOnTop: false,
 };
 
 export const defaultCoreState: ICoreState = {
-  appVersion: '',
+  applicationVersionInfo: defaultApplicationVersionInfo,
   allProjectPackageInfos: [],
   allCustomFirmwareInfos: [],
   globalSettings: globalSettingsDefault,
   keyboardConfig: fallbackKeyboardConfig,
   deviceStatus: { isConnected: false },
   deviceSelectionStatus: fallbackDeviceSelectionStatus,
+  appWindowStatus: defaultAppWindowStatus,
 };
 
 export type ICoreAction = Partial<{
-  loadAppVersion: 1;
-  greet: { name: string; age: number };
-  loadAllProjectPackages: 1;
-  saveLocalProjectPackageInfo: IProjectPackageInfo;
-  loadAllCustomFirmwareInfos: 1;
-  loadGlobalSettings: 1;
-  writeGlobalSettings: Partial<IGlobalSettings>;
-  loadKeyboardConfig: 1;
-  writeKeyboardConfig: Partial<IKeyboardConfig>;
+  project_loadAllProjectPackages: 1;
+  project_saveLocalProjectPackageInfo: IProjectPackageInfo;
+  project_loadAllCustomFirmwareInfos: 1;
+
+  config_loadGlobalSettings: 1;
+  config_writeGlobalSettings: Partial<IGlobalSettings>;
+  config_loadKeyboardConfig: 1;
+  config_writeKeyboardConfig: Partial<IKeyboardConfig>;
+
+  window_closeWindow: 1;
+  window_minimizeWindow: 1;
+  window_maximizeWindow: 1;
+  window_restartApplication: 1;
+  window_setDevToolVisibility: boolean;
+  window_setWidgetAlwaysOnTop: boolean;
+  window_reloadPage: 1;
 }>;

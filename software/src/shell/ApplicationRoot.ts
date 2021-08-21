@@ -5,16 +5,13 @@ import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
 import {
+  commitCoreState,
   coreActionDistributor,
   coreState,
   coreStateManager,
   dispatchCoreAction,
 } from '~/shell/global';
-import {
-  developmentModule_ActionReceiver,
-  keyboardConfigModule,
-  projectPackageModule,
-} from '~/shell/modules';
+import { keyboardConfigModule, projectPackageModule } from '~/shell/modules';
 import { globalSettingsModule } from '~/shell/modules/GlobalSettingsModule';
 import { checkLocalRepositoryFolder } from '~/shell/projectResources/LocalResourceHelper';
 import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
@@ -24,7 +21,7 @@ import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/inputLogicS
 import { LayoutManager } from '~/shell/services/layout/LayoutManager';
 import { ProfileManager } from '~/shell/services/profile/ProfileManager';
 import { UserPresetHubService } from '~/shell/services/userPresetHub/UserPresetHubService';
-import { AppWindowWrapper } from '~/shell/services/window';
+import { AppWindowWrapper, createWindowModule } from '~/shell/services/window';
 
 export class ApplicationRoot {
   private firmwareUpdateService = new FirmwareUpdateService();
@@ -47,8 +44,6 @@ export class ApplicationRoot {
   // ------------------------------------------------------------
 
   private setupIpcBackend() {
-    const windowWrapper = this.windowWrapper;
-
     appGlobal.icpMainAgent.setErrorHandler((error) => {
       console.error(makeCompactStackTrace(error));
       appGlobal.appErrorEventPort.emit(
@@ -61,18 +56,6 @@ export class ApplicationRoot {
     });
 
     appGlobal.icpMainAgent.supplyAsyncHandlers({
-      system_getApplicationVersionInfo: async () => ({
-        version: appConfig.applicationVersion,
-      }),
-      window_closeWindow: async () => windowWrapper.closeMainWindow(),
-      window_minimizeWindow: async () => windowWrapper.minimizeMainWindow(),
-      window_maximizeWindow: async () => windowWrapper.maximizeMainWindow(),
-      window_restartApplication: async () => windowWrapper.restartApplication(),
-      window_reloadPage: async () => windowWrapper.reloadPage(),
-      window_setDevToolVisibility: async (visible) =>
-        windowWrapper.setDevToolsVisibility(visible),
-      window_setWidgetAlwaysOnTop: async (enabled) =>
-        windowWrapper.setWidgetAlwaysOnTop(enabled),
       profile_getCurrentProfile: async () =>
         this.profileManager.getCurrentProfile(),
       profile_executeProfileManagerCommands: (commands) =>
@@ -96,12 +79,6 @@ export class ApplicationRoot {
           projectId,
           variationName,
         ),
-      projects_getAllProjectPackageInfos: async () =>
-        coreState.allProjectPackageInfos,
-      projects_saveLocalProjectPackageInfo: (projectInfo) =>
-        dispatchCoreAction({ saveLocalProjectPackageInfo: projectInfo }),
-      projects_getAllCustomFirmwareInfos: async () =>
-        coreState.allCustomFirmwareInfos,
       presetHub_getServerProjectIds: () =>
         this.presetHubService.getServerProjectIds(),
       presetHub_getServerProfiles: (projectId: string) =>
@@ -113,7 +90,6 @@ export class ApplicationRoot {
         }
         return false;
       },
-      config_getGlobalSettings: async () => coreState.globalSettings,
       config_getProjectRootDirectoryPath: async () => {
         if (appEnv.isDevelopment) {
           return pathResolve('..');
@@ -145,11 +121,6 @@ export class ApplicationRoot {
     });
 
     appGlobal.icpMainAgent.supplySubscriptionHandlers({
-      dev_testEvent: (cb) => {
-        // eslint-disable-next-line node/no-callback-literal
-        cb({ type: 'test_event_with_supplySubscriptionHandlers' });
-        return () => {};
-      },
       global_appErrorEvents: (cb) => appGlobal.appErrorEventPort.subscribe(cb),
       profile_profileManagerStatus: (cb) => {
         this.profileManager.statusEventPort.subscribe(cb);
@@ -163,7 +134,6 @@ export class ApplicationRoot {
       },
       firmup_deviceDetectionEvents: (cb) =>
         this.firmwareUpdateService.deviceDetectionEvents.subscribe(cb),
-      window_appWindowStatus: windowWrapper.appWindowEventPort.subscribe,
       global_coreStateEvents: (cb) =>
         coreStateManager.coreStateEventPort.subscribe(cb),
     });
@@ -183,19 +153,25 @@ export class ApplicationRoot {
   async lazyInitializeServices() {
     if (!this._lazyInitializeTriggered) {
       this._lazyInitializeTriggered = true;
+      const windowModule = createWindowModule(this.windowWrapper);
       coreActionDistributor.addReceivers(
         globalSettingsModule,
-        developmentModule_ActionReceiver,
         projectPackageModule,
         keyboardConfigModule,
+        windowModule,
       );
-      globalSettingsModule.loadGlobalSettings!(1);
-      keyboardConfigModule.loadKeyboardConfig!(1);
-      await dispatchCoreAction({ loadAllProjectPackages: 1 });
-      await dispatchCoreAction({ loadAllCustomFirmwareInfos: 1 });
+      globalSettingsModule.config_loadGlobalSettings!(1);
+      keyboardConfigModule.config_loadKeyboardConfig!(1);
+      await dispatchCoreAction({ project_loadAllProjectPackages: 1 });
+      await dispatchCoreAction({ project_loadAllCustomFirmwareInfos: 1 });
       await this.profileManager.initializeAsync();
       this.deviceService.initialize();
       this.inputLogicSimulator.initialize();
+      commitCoreState({
+        applicationVersionInfo: {
+          version: appConfig.applicationVersion,
+        },
+      });
     }
   }
 

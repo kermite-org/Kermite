@@ -50,7 +50,7 @@ export const projectPackagesReader = {
 export const projectPackagesWriter = {
   saveLocalProject(projectInfo: IProjectPackageInfo) {
     dispatchCoreAction({
-      saveLocalProjectPackageInfo: projectInfo,
+      project_saveLocalProjectPackageInfo: projectInfo,
     });
   },
   saveLocalProjectLayout(layoutName: string, design: IPersistKeyboardDesign) {

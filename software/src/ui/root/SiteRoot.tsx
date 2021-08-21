@@ -12,11 +12,7 @@ import {
   globalHintMouseMoveHandlerEffect,
   appUi,
 } from '~/ui/base';
-import {
-  siteModel,
-  uiStatusModel,
-  appErrorNotifierEffect,
-} from '~/ui/commonModels';
+import { uiStatusModel, appErrorNotifierEffect } from '~/ui/commonModels';
 import {
   commitUiState,
   lazyInitializeCoreServices,
@@ -87,7 +83,6 @@ const InitialLoadingView: FC = () => {
 export const SiteRoot: FC = () => {
   useEffect(router.rerenderEffectOnHashChange, []);
   useEffect(appErrorNotifierEffect, []);
-  useEffect(siteModel.setupLifecycle, []);
   useEffect(globalHintMouseMoveHandlerEffect, []);
   useEffect(uiStateDriverEffect, []);
   router.useRedirect(['', '/'], '/home');

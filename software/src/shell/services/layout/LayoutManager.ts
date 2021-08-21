@@ -187,7 +187,7 @@ export class LayoutManager implements ILayoutManager {
         }
       });
       dispatchCoreAction({
-        saveLocalProjectPackageInfo: newProjectInfo,
+        project_saveLocalProjectPackageInfo: newProjectInfo,
       });
     }
   }

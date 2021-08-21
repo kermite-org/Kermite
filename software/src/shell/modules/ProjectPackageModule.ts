@@ -6,11 +6,11 @@ import { ProjectPackageProvider } from '~/shell/projectPackages/ProjectPackagePr
 const projectPackageProvider = new ProjectPackageProvider();
 
 export const projectPackageModule: IActionReceiver<ICoreAction> = {
-  async loadAllProjectPackages() {
+  async project_loadAllProjectPackages() {
     const allProjectPackageInfos = await projectPackageProvider.getAllProjectPackageInfos();
     commitCoreState({ allProjectPackageInfos });
   },
-  async saveLocalProjectPackageInfo(projectInfo) {
+  async project_saveLocalProjectPackageInfo(projectInfo) {
     await projectPackageProvider.saveLocalProjectPackageInfo(projectInfo);
     const allProjectPackageInfos = produce(
       coreState.allProjectPackageInfos,
@@ -25,7 +25,7 @@ export const projectPackageModule: IActionReceiver<ICoreAction> = {
     );
     commitCoreState({ allProjectPackageInfos });
   },
-  async loadAllCustomFirmwareInfos() {
+  async project_loadAllCustomFirmwareInfos() {
     const allCustomFirmwareInfos = await projectPackageProvider.getAllCustomFirmwareInfos();
     commitCoreState({ allCustomFirmwareInfos });
   },
