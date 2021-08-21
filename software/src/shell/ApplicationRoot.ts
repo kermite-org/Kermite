@@ -19,10 +19,8 @@ import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
 import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStatic';
 import { FirmwareUpdateService } from '~/shell/services/firmwareUpdate';
 import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/inputLogicSimulatorD';
-import {
-  layoutManager,
-  layoutManagerModule,
-} from '~/shell/services/layout/LayoutManager';
+import { layoutManager } from '~/shell/services/layout/LayoutManager';
+import { layoutManagerModule } from '~/shell/services/layout/LayoutManagerModule';
 import { profileManager } from '~/shell/services/profile/ProfileManager';
 import { profileManagerModule } from '~/shell/services/profile/ProfileManagerModule';
 import { UserPresetHubService } from '~/shell/services/userPresetHub/UserPresetHubService';
