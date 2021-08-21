@@ -3,7 +3,6 @@ import produce from 'immer';
 import {
   createFallbackPersistKeyboardDesign,
   duplicateObjectByJsonStringifyParse,
-  IProjectPackageInfo,
 } from '~/shared';
 import { appEnv } from '~/shell/base';
 import {
@@ -12,21 +11,15 @@ import {
   createCoreModule,
   dispatchCoreAction,
   profilesReader,
+  projectPackagesReader,
 } from '~/shell/global';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
-
-function getProjectInfo(projectId: string): IProjectPackageInfo | undefined {
-  const projectInfos = coreState.allProjectPackageInfos;
-  return projectInfos.find(
-    (info) => info.origin === 'local' && info.projectId === projectId,
-  );
-}
 
 function getCurrentEditLayoutFilePath(): string | undefined {
   const { layoutEditSource } = coreState;
   if (layoutEditSource.type === 'ProjectLayout') {
     const { projectId } = layoutEditSource;
-    const projectInfo = getProjectInfo(projectId);
+    const projectInfo = projectPackagesReader.getLocalProjectInfo(projectId);
     if (projectInfo) {
       return appEnv.resolveUserDataFilePath(
         `data/projects/${projectInfo?.packageName}.kmpkg.json`,
@@ -93,7 +86,7 @@ export const layoutManagerModule = createCoreModule({
     });
   },
   layout_createProjectLayout({ projectId, layoutName }) {
-    const projectInfo = getProjectInfo(projectId);
+    const projectInfo = projectPackagesReader.getLocalProjectInfo(projectId);
     if (projectInfo) {
       const design = createFallbackPersistKeyboardDesign();
       commitCoreState({
@@ -107,7 +100,7 @@ export const layoutManagerModule = createCoreModule({
     }
   },
   layout_loadProjectLayout({ projectId, layoutName }) {
-    const projectInfo = getProjectInfo(projectId);
+    const projectInfo = projectPackagesReader.getLocalProjectInfo(projectId);
     if (projectInfo) {
       const layout = projectInfo.layouts.find(
         (it) => it.layoutName === layoutName,
@@ -125,7 +118,7 @@ export const layoutManagerModule = createCoreModule({
     }
   },
   layout_saveProjectLayout({ projectId, layoutName, design }) {
-    const projectInfo = getProjectInfo(projectId);
+    const projectInfo = projectPackagesReader.getLocalProjectInfo(projectId);
     if (projectInfo) {
       const newProjectInfo = produce(projectInfo, (draft) => {
         const layout = draft.layouts.find((it) => it.layoutName === layoutName);

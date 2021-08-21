@@ -2,6 +2,7 @@ import {
   checkProfileEntryEquality,
   IProfileData,
   IProfileEntry,
+  IProjectPackageInfo,
 } from '~/shared';
 import { coreState } from '~/shell/global/CoreStateAction';
 
@@ -36,5 +37,14 @@ export const profilesReader = {
     if (coreState.profileEditSource.type === 'InternalProfile') {
       return coreState.profileEditSource.profileEntry;
     }
+  },
+};
+
+export const projectPackagesReader = {
+  getLocalProjectInfo(projectId: string): IProjectPackageInfo | undefined {
+    const projectInfos = coreState.allProjectPackageInfos;
+    return projectInfos.find(
+      (info) => info.origin === 'local' && info.projectId === projectId,
+    );
   },
 };
