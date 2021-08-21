@@ -19,7 +19,10 @@ import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
 import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStatic';
 import { FirmwareUpdateService } from '~/shell/services/firmwareUpdate';
 import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/inputLogicSimulatorD';
-import { layoutManager } from '~/shell/services/layout/LayoutManager';
+import {
+  layoutManager,
+  layoutManagerModule,
+} from '~/shell/services/layout/LayoutManager';
 import { profileManager } from '~/shell/services/profile/ProfileManager';
 import { profileManagerModule } from '~/shell/services/profile/ProfileManagerModule';
 import { UserPresetHubService } from '~/shell/services/userPresetHub/UserPresetHubService';
@@ -140,6 +143,7 @@ export class ApplicationRoot {
         keyboardConfigModule,
         windowModule,
         profileManagerModule,
+        layoutManagerModule,
       );
       globalSettingsModule.config_loadGlobalSettings(1);
       keyboardConfigModule.config_loadKeyboardConfig(1);
