@@ -1,7 +1,5 @@
 import { useEffect } from 'qx';
 import {
-  compareObjectByJsonStringify,
-  createFallbackPersistKeyboardDesign,
   forceChangeFilePathExtension,
   ILayoutEditSource,
   IPersistKeyboardDesign,
@@ -35,9 +33,6 @@ export interface ILayoutManagerModel {
   showEditLayoutFileInFiler(): void;
 }
 
-let _prevLoadedDesign: IPersistKeyboardDesign | undefined;
-let _keepUnsavedNewDesign: boolean = false;
-
 export const layoutManagerReader = {
   get editSource(): ILayoutEditSource {
     return uiState.core.layoutEditSource;
@@ -62,7 +57,6 @@ const layoutManagerActions = {
     if (!(await checkShallLoadData())) {
       return;
     }
-    _keepUnsavedNewDesign = false;
     dispatchCoreAction({ layout_createNewLayout: 1 });
   },
 
@@ -201,50 +195,6 @@ export const layoutManagerRootModel = {
     }, [layoutEditSource]);
 
     useEffect(() => {}, []);
-  },
-  updateBeforeRender_old() {
-    const sourceLayoutData = uiState.core.loadedLayoutData;
-
-    useEffect(() => {
-      const same = compareObjectByJsonStringify(
-        sourceLayoutData,
-        _prevLoadedDesign,
-      );
-      const isClean = compareObjectByJsonStringify(
-        sourceLayoutData,
-        createFallbackPersistKeyboardDesign(),
-      );
-      if (isClean && _keepUnsavedNewDesign) {
-        return;
-      }
-      if (!same || isClean) {
-        UiLayouterCore.loadEditDesign(sourceLayoutData);
-        _prevLoadedDesign = sourceLayoutData;
-      }
-    }, [sourceLayoutData]);
-
-    // useEffect(() => {
-    //   if (uiState.core.loadedProfileData) {
-    //     if (this.editSource.type === 'CurrentProfile') {
-    //       this.sendCommand({ type: 'loadCurrentProfileLayout' });
-    //     }
-    //   }
-    // }, [uiState.core]);
-
-    useEffect(() => {
-      return () => {
-        const { isModified, editSource } = layoutManagerReader;
-        if (isModified) {
-          if (editSource.type === 'CurrentProfile') {
-            const design = UiLayouterCore.emitSavingDesign();
-            editorModel.replaceKeyboardDesign(design);
-          }
-          if (editSource.type === 'LayoutNewlyCreated') {
-            _keepUnsavedNewDesign = true;
-          }
-        }
-      };
-    }, []);
   },
 };
 

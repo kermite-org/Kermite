@@ -9,7 +9,6 @@ function affectStoreLoadedProfileDataToModelProfileData() {
   const { loadedProfileData } = profilesReader;
   useEffect(() => {
     if (editorModel.loadedProfileData !== loadedProfileData) {
-      console.log('editorModel.profileData <-- store.loadedProfileData');
       editorModel.loadProfileData(loadedProfileData);
     }
   }, [loadedProfileData]);
@@ -22,7 +21,6 @@ function affectModelProfileDataToStoreEditProfile() {
   const str = JSON.stringify(editorModel.profileData);
   if (str !== profileStringified) {
     const obj = JSON.parse(str);
-    console.log('editorModel.profileData --> store.editProfileData');
     dispatchCoreAction({
       profile_setEditProfileData: { editProfileData: obj },
     });
