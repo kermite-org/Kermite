@@ -1,11 +1,9 @@
 import { useEffect } from 'qx';
 import {
-  compareObjectByJsonStringify,
   createFallbackPersistKeyboardDesign,
   forceChangeFilePathExtension,
   ILayoutEditSource,
   ILayoutManagerCommand,
-  ILayoutManagerStatus,
   IPersistKeyboardDesign,
 } from '~/shared';
 import { ipcAgent, router } from '~/ui/base';
@@ -35,20 +33,19 @@ interface ILayoutManagerModel {
   save(design: IPersistKeyboardDesign): void;
 }
 
-let _prevLoadedDesign: IPersistKeyboardDesign | undefined;
-let _keepUnsavedNewDesign: boolean = false;
-export class LayoutManagerModel implements ILayoutManagerModel {
-  private _layoutManagerStatus: ILayoutManagerStatus = {
-    layoutEditSource: { type: 'LayoutNewlyCreated' },
-    loadedLayoutData: createFallbackPersistKeyboardDesign(),
-  };
+// let _prevLoadedDesign: IPersistKeyboardDesign | undefined;
+// let _keepUnsavedNewDesign: boolean = false;
 
-  get editSource() {
-    return this._layoutManagerStatus.layoutEditSource;
+const local = new (class {
+  loadedLayoutData: IPersistKeyboardDesign = createFallbackPersistKeyboardDesign();
+})();
+export class LayoutManagerModel implements ILayoutManagerModel {
+  get editSource(): ILayoutEditSource {
+    return uiState.core.layoutEditSource;
   }
 
   get loadedDesign() {
-    return this._layoutManagerStatus.loadedLayoutData;
+    return local.loadedLayoutData;
   }
 
   get isModified() {
@@ -73,7 +70,7 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     if (!(await this.checkShallLoadData())) {
       return;
     }
-    _keepUnsavedNewDesign = false;
+    // _keepUnsavedNewDesign = false;
     this.sendCommand({ type: 'createNewLayout' });
   }
 
@@ -178,46 +175,36 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     await ipcAgent.async.layout_showEditLayoutFileInFiler();
   }
 
-  private onLayoutManagerStatus = (diff: Partial<ILayoutManagerStatus>) => {
-    this._layoutManagerStatus = {
-      ...this._layoutManagerStatus,
-      ...diff,
-    };
-    if (diff.loadedLayoutData) {
-      const same = compareObjectByJsonStringify(
-        diff.loadedLayoutData,
-        _prevLoadedDesign,
-      );
-      const isClean = compareObjectByJsonStringify(
-        diff.loadedLayoutData,
-        createFallbackPersistKeyboardDesign(),
-      );
-      if (isClean && _keepUnsavedNewDesign) {
-        return;
-      }
-      if (!same || isClean) {
-        UiLayouterCore.loadEditDesign(diff.loadedLayoutData);
-        _prevLoadedDesign = diff.loadedLayoutData;
-      }
-    }
-  };
-
   updateBeforeRender() {
-    useEffect(
-      () =>
-        ipcAgent.events.layout_layoutManagerStatus.subscribe(
-          this.onLayoutManagerStatus,
-        ),
-      [],
-    );
+    const sourceLayoutData = uiState.core.loadedLayoutData;
 
     useEffect(() => {
-      if (uiState.core.loadedProfileData) {
-        if (this.editSource.type === 'CurrentProfile') {
-          this.sendCommand({ type: 'loadCurrentProfileLayout' });
-        }
-      }
-    }, [uiState.core]);
+      // const same = compareObjectByJsonStringify(
+      //   sourceLoadedLayoutData,
+      //   _prevLoadedDesign,
+      // );
+      // const isClean = compareObjectByJsonStringify(
+      //   sourceLoadedLayoutData,
+      //   createFallbackPersistKeyboardDesign(),
+      // );
+      // if (isClean && _keepUnsavedNewDesign) {
+      //   return;
+      // }
+      // if (!same || isClean) {
+      //   UiLayouterCore.loadEditDesign(sourceLoadedLayoutData);
+      //   _prevLoadedDesign = sourceLoadedLayoutData;
+      // }
+      UiLayouterCore.loadEditDesign(sourceLayoutData);
+      local.loadedLayoutData = sourceLayoutData;
+    }, [sourceLayoutData]);
+
+    // useEffect(() => {
+    //   if (uiState.core.loadedProfileData) {
+    //     if (this.editSource.type === 'CurrentProfile') {
+    //       this.sendCommand({ type: 'loadCurrentProfileLayout' });
+    //     }
+    //   }
+    // }, [uiState.core]);
 
     useEffect(() => {
       return () => {
@@ -226,9 +213,9 @@ export class LayoutManagerModel implements ILayoutManagerModel {
             const design = UiLayouterCore.emitSavingDesign();
             editorModel.replaceKeyboardDesign(design);
           }
-          if (this.editSource.type === 'LayoutNewlyCreated') {
-            _keepUnsavedNewDesign = true;
-          }
+          // if (this.editSource.type === 'LayoutNewlyCreated') {
+          //   _keepUnsavedNewDesign = true;
+          // }
         }
       };
     }, []);
