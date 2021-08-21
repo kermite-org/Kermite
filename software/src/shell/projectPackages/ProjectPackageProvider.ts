@@ -7,7 +7,7 @@ import {
 } from '~/shared';
 import { appEnv } from '~/shell/base';
 import {
-  cacheRemoteResouce,
+  cacheRemoteResource,
   fetchJson,
   fsxListFileBaseNames,
   fsxReadJsonFile,
@@ -15,6 +15,7 @@ import {
   pathBasename,
   pathJoin,
 } from '~/shell/funcs';
+import { migrateProjectPackageData } from '~/shell/loaders/ProjectPackageDataMigrator';
 
 interface IProjectPackageProvider {
   getAllProjectPackageInfos(): Promise<IProjectPackageInfo[]>;
@@ -46,6 +47,7 @@ async function loadProjectPackageFiles(
       const data = (await fsxReadJsonFile(
         filePath,
       )) as IProjectPackageFileContent;
+      migrateProjectPackageData(data);
       return convertPackageFileContentToPackageInfo(data, origin, packageName);
     }),
   );
@@ -85,6 +87,7 @@ async function loadRemoteProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
       const data = (await fetchJson(
         `${remoteBaseUrl}/${path}`,
       )) as IProjectPackageFileContent;
+      migrateProjectPackageData(data);
       const packageName = pathBasename(path, '.kmpkg.json');
       return convertPackageFileContentToPackageInfo(data, origin, packageName);
     }),
@@ -100,7 +103,7 @@ async function loadLocalProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
   return await loadProjectPackageFiles(projectsFolder, 'local');
 }
 
-async function saveLocalProjectPackgeInfoImpl(info: IProjectPackageInfo) {
+async function saveLocalProjectPackageInfoImpl(info: IProjectPackageInfo) {
   const filePath = pathJoin(
     appEnv.userDataFolderPath,
     'data',
@@ -119,11 +122,11 @@ export class ProjectPackageProvider implements IProjectPackageProvider {
   }
 
   async saveLocalProjectPackageInfo(info: IProjectPackageInfo): Promise<void> {
-    await saveLocalProjectPackgeInfoImpl(info);
+    await saveLocalProjectPackageInfoImpl(info);
   }
 
   async getAllCustomFirmwareInfos(): Promise<ICustomFirmwareInfo[]> {
-    const data = (await cacheRemoteResouce(
+    const data = (await cacheRemoteResource(
       fetchJson,
       `${remoteBaseUrl}/index.firmwares.json`,
     )) as IIndexFirmwaresContent;

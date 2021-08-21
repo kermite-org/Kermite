@@ -13,7 +13,7 @@ type Props = {
   isSingleMode: boolean;
 };
 
-export const OpertionEditPart: FC<Props> = ({
+export const OperationEditPart: FC<Props> = ({
   plainOperationEditCardsVM: { noAssignEntry, transparentEntry, blockEntry },
   operationEditPartVM: {
     virtualKeyEntryGroups,

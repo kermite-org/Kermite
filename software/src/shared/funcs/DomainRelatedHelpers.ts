@@ -4,6 +4,7 @@ import {
   IKeyboardDeviceAttributes,
   IPresetSpec,
   IPresetType,
+  IProfileEntry,
   IResourceOrigin,
   IStandardBaseFirmwareType,
 } from '~/shared/defs';
@@ -38,9 +39,9 @@ export function getPresetSpecFromPresetKey(presetKey: string): IPresetSpec {
 
 export function generateNextSequentialId(
   prefix: string,
-  existingsIds: string[],
+  existingIds: string[],
 ): string {
-  const allNumbers = existingsIds.map((it) => parseInt(it.replace(prefix, '')));
+  const allNumbers = existingIds.map((it) => parseInt(it.replace(prefix, '')));
   const newNumber = allNumbers.length > 0 ? Math.max(...allNumbers) + 1 : 0;
   return `${prefix}${newNumber}`;
 }
@@ -72,20 +73,6 @@ export function getProjectKeyFromDeviceAttributes(
   return `${deviceAttrs.origin}#${deviceAttrs.firmwareId}`;
 }
 
-export function splitProjectProfileName(
-  profileName: string,
-): { folderPart: string; filePart: string } {
-  const [folderPart, filePart] = profileName.split('/');
-  return { folderPart, filePart };
-}
-
-export function joinProjectProfileName(
-  folderPart: string,
-  filePart: string,
-): string {
-  return `${folderPart}/${filePart}`;
-}
-
 export function checkDeviceBootloaderMatch(
   bootloaderType: IBootloaderType,
   firmwareTargetDevice: IFirmwareTargetDevice,
@@ -107,4 +94,18 @@ export function getFirmwareTargetDeviceFromBaseFirmwareType(
   } else {
     return 'rp2040';
   }
+}
+
+export function checkProfileEntryEquality(a: IProfileEntry, b: IProfileEntry) {
+  return a.projectId === b.projectId && a.profileName === b.profileName;
+}
+
+export function stringifyProfileEntry(profileEntry: IProfileEntry): string {
+  const { projectId, profileName } = profileEntry;
+  return `${projectId}:${profileName}`;
+}
+
+export function parseProfileEntry(profileKey: string): IProfileEntry {
+  const [projectId, profileName] = profileKey.split(':');
+  return { projectId, profileName };
 }

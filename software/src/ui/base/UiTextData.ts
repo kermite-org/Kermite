@@ -2,7 +2,7 @@
 
 // prettier-ignore
 export const textSourceEnglish = {
-  STUB: 'TODO: specify text for this elelement',
+  STUB: 'TODO: specify text for this element',
   hint_titleBar_switchToWidgetView: 'Switch to widget view',
   hint_titleBar_minimizeWindow: 'Minimize window',
   hint_titleBar_maximizeWindow: 'Maximize window',
@@ -118,16 +118,16 @@ export const textSourceEnglish = {
   label_assigner_layerModal_modalTitleEdit: 'Edit Layer Properties',
   label_assigner_layerModal_layerName: 'Layer Name',
   label_assigner_layerModal_defaultScheme: 'Default Scheme',
-  label_assigner_layerModal_attachedModifiers: 'Attrached Modifiers',
+  label_assigner_layerModal_attachedModifiers: 'Attached Modifiers',
   label_assigner_layerModal_exclusionGroup: 'Exclusion Group',
   label_assigner_layerModal_initialActive: 'Initial Active',
   hint_assigner_layerModal_layerName: 'Set layer name.',
   hint_assigner_layerModal_defaultScheme:
-    'Set default behavor for keys. (transparent: skip this layer, block: stop lookuping flow)',
+    'Set default behavior for keys. (transparent: skip this layer, block: stop lookup flow)',
   hint_assigner_layerModal_attachedModifiers:
     'Set attached modifiers activated together with the layer.',
   hint_assigner_layerModal_exclusionGroup:
-    'Set layer exlusive group. Only at least one layer would activated at a time for layers within same group.',
+    'Set layer exclusive group. Only at least one layer would activated at a time for layers within same group.',
   hint_assigner_layerModal_initialActive: 'Activate layer on startup.',
   label_assigner_newProfileModal_modalTitle: 'Create Profile',
   label_assigner_newProfileModal_profileName: 'Profile Name',
@@ -160,42 +160,42 @@ export const textSourceEnglish = {
   hint_device_deviceSelection_selectionArea:
     'Supported devices are enumerated. Select device to connect.',
   label_device_deviceInfo_sectionTitle: 'Device Information',
-  lebel_device_deviceInfo_fieldName_port: 'Port',
-  lebel_device_deviceInfo_fieldName_resourceOrigin: 'Resource Origin',
-  lebel_device_deviceInfo_fieldName_firmwareId: 'Firmware ID',
-  lebel_device_deviceInfo_value_resourceOrigin_local: 'Local',
-  lebel_device_deviceInfo_value_resourceOrigin_online: 'Online',
-  lebel_device_deviceInfo_fieldName_projectPath: 'Project Path',
-  lebel_device_deviceInfo_fieldName_keyboardName: 'Keyboard Name',
-  lebel_device_deviceInfo_fieldName_instanceNumber: 'Instance Number',
-  lebel_device_deviceInfo_fieldName_firmwareVariation:
+  label_device_deviceInfo_fieldName_port: 'Port',
+  label_device_deviceInfo_fieldName_resourceOrigin: 'Resource Origin',
+  label_device_deviceInfo_fieldName_firmwareId: 'Firmware ID',
+  label_device_deviceInfo_value_resourceOrigin_local: 'Local',
+  label_device_deviceInfo_value_resourceOrigin_online: 'Online',
+  label_device_deviceInfo_fieldName_projectPath: 'Project Path',
+  label_device_deviceInfo_fieldName_keyboardName: 'Keyboard Name',
+  label_device_deviceInfo_fieldName_instanceNumber: 'Instance Number',
+  label_device_deviceInfo_fieldName_firmwareVariation:
     'Firmware Variation Name',
-  lebel_device_deviceInfo_fieldName_mcuName: 'MCU Name',
-  lebel_device_deviceInfo_fieldName_firmwareRevision: 'Firmware Revision',
-  lebel_device_deviceInfo_fieldName_firmwareLatestRevision:
+  label_device_deviceInfo_fieldName_mcuName: 'MCU Name',
+  label_device_deviceInfo_fieldName_firmwareRevision: 'Firmware Revision',
+  label_device_deviceInfo_fieldName_firmwareLatestRevision:
     'Firmware Latest Revision',
-  lebel_device_deviceInfo_fieldName_firmwareLatestTimestamp:
+  label_device_deviceInfo_fieldName_firmwareLatestTimestamp:
     'Firmware Latest Build Timestamp',
-  lebel_device_deviceInfo_fieldName_keymappingAreaSize: 'Keymapping Area Size',
+  label_device_deviceInfo_fieldName_keymappingAreaSize: 'Keymapping Area Size',
   label_device_customParameters_sectionTitle: 'Custom Parameters',
   hint_device_customParameters_sectionArea:
     'Configure firmware specific parameters. ',
-  label_device_customParameters_patamtersUnavailable:
-    'Parameter definitons are unavaiable.',
-  label_device_firmwareUpdation_sectionTitle: 'Firmware Updation',
-  label_deivce_firmwareUpdation_operationAlertText:
+  label_device_customParameters_parametersUnavailable:
+    'Parameter definitions are unavailable.',
+  label_device_firmwareUpdate_sectionTitle: 'Firmware Update',
+  label_device_firmwareUpdate_operationAlertText:
     'Note: Wrong firmware selection may damage the hardware. Be careful.',
-  label_device_firmwareUpdation_projectSelector:
+  label_device_firmwareUpdate_projectSelector:
     'Select target keyboard project.',
-  label_device_firmwareUpdation_usageText:
+  label_device_firmwareUpdate_usageText:
     'Double tap the reset button on the device.',
-  label_device_firmwareUpdation_deviceDetected: '{DEVICE_NAME} detected.',
-  label_device_firmwareUpdation_writeButton: 'write',
-  label_device_firmwareUpdation_writing: 'Writing...',
-  label_device_firmwareUpdation_success: 'Success!',
-  label_device_firmwareUpdation_failure: 'Failure',
-  label_device_firmwareUpdation_logButton: 'log',
-  label_device_firmwareUpdation_doneButton: 'done',
+  label_device_firmwareUpdate_deviceDetected: '{DEVICE_NAME} detected.',
+  label_device_firmwareUpdate_writeButton: 'write',
+  label_device_firmwareUpdate_writing: 'Writing...',
+  label_device_firmwareUpdate_success: 'Success!',
+  label_device_firmwareUpdate_failure: 'Failure',
+  label_device_firmwareUpdate_logButton: 'log',
+  label_device_firmwareUpdate_doneButton: 'done',
   label_settings_pageTitle: 'Configurations',
   label_settings_header_resources: 'Resources',
   label_settings_configUseOnlineProjectResources:
@@ -225,20 +225,20 @@ export const textSourceEnglish = {
   label_sideMenu_app_layouter: 'Layouter',
   label_sideMenu_app_presetBrowser: 'Presets',
   label_sideMenu_app_shapePreview: 'Preview',
-  label_sideMenu_app_firmwareUpdation: 'Device',
+  label_sideMenu_app_firmwareUpdate: 'Device',
   label_sideMenu_app_settings: 'Settings',
   label_sideMenu_app_projectSelection: 'Keyboard',
   hint_sideMenu_app_assigner: 'Edit key assigns',
   hint_sideMenu_app_layouter: 'Edit keyboard layout',
   hint_sideMenu_app_presetBrowser: 'View presets',
   hint_sideMenu_app_shapePreview: 'Preview keyboard shapes',
-  hint_sideMenu_app_firmwareUpdation: 'Manage supported keyboard devices',
+  hint_sideMenu_app_firmwareUpdate: 'Manage supported keyboard devices',
   hint_sideMenu_app_settings: 'Manage application settings',
 };
 
 // prettier-ignore
 export const textSourceJapanese = {
-  STUB: 'TODO: specify text for this elelement',
+  STUB: 'TODO: specify text for this element',
   hint_titleBar_switchToWidgetView: 'ウィジェット表示に切り替えます。',
   hint_titleBar_minimizeWindow: 'ウインドウを最小化します。',
   hint_titleBar_maximizeWindow: 'ウインドウを最大化します。',
@@ -257,18 +257,18 @@ export const textSourceJapanese = {
   hint_assigner_topBar_profileOperationsMenu:
     'プロファイル管理メニューを開きます。',
   label_assigner_menu_newProfile: '新規作成',
-  label_assigner_menu_saveProfile: '保存',
+  label_assigner_menu_saveProfile: '名前をつけて保存',
   label_assigner_menu_renameProfile: '名前を変更',
-  label_assigner_menu_copyProfile: '複製',
+  label_assigner_menu_copyProfile: '別名で保存',
   label_assigner_menu_deleteProfile: '削除',
-  label_assigner_menu_importFromFile: 'インポート',
-  label_assigner_menu_exportToFile: 'エクスポート',
+  label_assigner_menu_importFromFile: '外部ファイルから読み込み',
+  label_assigner_menu_exportToFile: '外部ファイルに保存',
   label_assigner_menu_saveAsPreset: 'プリセットとして保存',
   label_assigner_menu_openUserProfilesFolder: 'データの保存場所を開く',
   hint_assigner_menu_newProfile: '新規プロファイルを作成します。',
-  hint_assigner_menu_saveProfile: 'プロファイルを保存します。',
+  hint_assigner_menu_saveProfile: 'プロファイルに名前をつけて保存します。',
   hint_assigner_menu_renameProfile: 'プロファイルの名前を変更します。',
-  hint_assigner_menu_copyProfile: 'プロファイルを複製します。',
+  hint_assigner_menu_copyProfile: 'プロファイルを別名で保存します。',
   hint_assigner_menu_deleteProfile: 'プロファイルを削除します。',
   hint_assigner_menu_importFromFile:
     'ディスク上の任意にあるファイルからプロファイルを読み込みます。',
@@ -410,45 +410,45 @@ export const textSourceJapanese = {
   hint_device_deviceSelection_selectionArea:
     '対応しているデバイスが列挙されます。接続するデバイスを選択します。',
   label_device_deviceInfo_sectionTitle: 'デバイス情報',
-  lebel_device_deviceInfo_fieldName_port: 'ポート',
-  lebel_device_deviceInfo_fieldName_resourceOrigin: 'リソースオリジン',
-  lebel_device_deviceInfo_fieldName_firmwareId: 'ファームウェアID',
-  lebel_device_deviceInfo_value_resourceOrigin_local: 'ローカル',
-  lebel_device_deviceInfo_value_resourceOrigin_online: 'オンライン',
-  lebel_device_deviceInfo_fieldName_projectPath: 'プロジェクトパス',
-  lebel_device_deviceInfo_fieldName_keyboardName: 'キーボード名',
-  lebel_device_deviceInfo_fieldName_instanceNumber: '個体番号',
-  lebel_device_deviceInfo_fieldName_firmwareVariation:
+  label_device_deviceInfo_fieldName_port: 'ポート',
+  label_device_deviceInfo_fieldName_resourceOrigin: 'リソースオリジン',
+  label_device_deviceInfo_fieldName_firmwareId: 'ファームウェアID',
+  label_device_deviceInfo_value_resourceOrigin_local: 'ローカル',
+  label_device_deviceInfo_value_resourceOrigin_online: 'オンライン',
+  label_device_deviceInfo_fieldName_projectPath: 'プロジェクトパス',
+  label_device_deviceInfo_fieldName_keyboardName: 'キーボード名',
+  label_device_deviceInfo_fieldName_instanceNumber: '個体番号',
+  label_device_deviceInfo_fieldName_firmwareVariation:
     'ファームウェアバリエーション',
-  lebel_device_deviceInfo_fieldName_mcuName: 'MCU品種名',
-  lebel_device_deviceInfo_fieldName_firmwareRevision:
+  label_device_deviceInfo_fieldName_mcuName: 'MCU品種名',
+  label_device_deviceInfo_fieldName_firmwareRevision:
     'ファームウェアリビジョン',
-  lebel_device_deviceInfo_fieldName_firmwareLatestRevision:
+  label_device_deviceInfo_fieldName_firmwareLatestRevision:
     'ファームウェア最新リビジョン',
-  lebel_device_deviceInfo_fieldName_firmwareLatestTimestamp:
+  label_device_deviceInfo_fieldName_firmwareLatestTimestamp:
     'ファームウェア最新ビルド日時',
-  lebel_device_deviceInfo_fieldName_keymappingAreaSize:
+  label_device_deviceInfo_fieldName_keymappingAreaSize:
     'キーマッピング領域サイズ',
   label_device_customParameters_sectionTitle: 'カスタムパラメータ',
   hint_device_customParameters_sectionArea:
     'ファームウェア固有のパラメータを設定します。',
-  label_device_customParameters_patamtersUnavailable:
+  label_device_customParameters_parametersUnavailable:
     'パラメータの定義が利用できません。',
-  label_device_firmwareUpdation_sectionTitle: 'ファームウェア書き込み',
-  label_deivce_firmwareUpdation_operationAlertText:
+  label_device_firmwareUpdate_sectionTitle: 'ファームウェア書き込み',
+  label_device_firmwareUpdate_operationAlertText:
     '誤ったファームウェアを書き込むとデバイスが破損する可能性があります。ご注意ください。',
-  label_device_firmwareUpdation_projectSelector:
+  label_device_firmwareUpdate_projectSelector:
     'デバイスに書き込むファームウェアを選択します。',
-  label_device_firmwareUpdation_usageText:
+  label_device_firmwareUpdate_usageText:
     'デバイスのリセットボタンを2回タップして、ファームウェア書き込みモードにしてください。',
-  label_device_firmwareUpdation_deviceDetected:
+  label_device_firmwareUpdate_deviceDetected:
     '{DEVICE_NAME}に対応デバイスを認識しました。',
-  label_device_firmwareUpdation_writeButton: '書き込む',
-  label_device_firmwareUpdation_writing: '書き込んでいます...',
-  label_device_firmwareUpdation_success: '成功しました!',
-  label_device_firmwareUpdation_failure: '書き込みに失敗しました。',
-  label_device_firmwareUpdation_logButton: 'ログ',
-  label_device_firmwareUpdation_doneButton: '完了',
+  label_device_firmwareUpdate_writeButton: '書き込む',
+  label_device_firmwareUpdate_writing: '書き込んでいます...',
+  label_device_firmwareUpdate_success: '成功しました!',
+  label_device_firmwareUpdate_failure: '書き込みに失敗しました。',
+  label_device_firmwareUpdate_logButton: 'ログ',
+  label_device_firmwareUpdate_doneButton: '完了',
   label_settings_pageTitle: '設定',
   label_settings_header_resources: 'リソース',
   label_settings_configUseOnlineProjectResources:
@@ -481,13 +481,13 @@ export const textSourceJapanese = {
   label_sideMenu_app_layouter: 'レイアウト',
   label_sideMenu_app_presetBrowser: 'プリセット',
   label_sideMenu_app_shapePreview: 'プレビュー',
-  label_sideMenu_app_firmwareUpdation: 'デバイス',
+  label_sideMenu_app_firmwareUpdate: 'デバイス',
   label_sideMenu_app_settings: '設定',
   label_sideMenu_app_projectSelection: 'キーボード',
   hint_sideMenu_app_assigner: 'キーアサインを編集します。',
   hint_sideMenu_app_layouter: 'キーの配置を編集します。',
   hint_sideMenu_app_presetBrowser: 'プリセットを閲覧します。',
   hint_sideMenu_app_shapePreview: 'キーボードの形状を表示します。',
-  hint_sideMenu_app_firmwareUpdation: 'デバイスの管理を行います。',
+  hint_sideMenu_app_firmwareUpdate: 'デバイスの管理を行います。',
   hint_sideMenu_app_settings: 'アプリの設定を行います。',
 };

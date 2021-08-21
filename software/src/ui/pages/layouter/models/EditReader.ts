@@ -108,8 +108,8 @@ class EditReader {
   }
 
   get currentKeyEntity(): IEditKeyEntity | undefined {
-    const { design, currentkeyEntityId } = appState.editor;
-    return design.keyEntities[currentkeyEntityId || ''];
+    const { design, currentKeyEntityId } = appState.editor;
+    return design.keyEntities[currentKeyEntityId || ''];
   }
 
   getKeyEntityById(id: string): IEditKeyEntity | undefined {
@@ -129,7 +129,7 @@ class EditReader {
     getKeyboardDesignBoundingBox,
   );
 
-  get dispalyArea() {
+  get displayArea() {
     return this.displayAreaSelector();
   }
 

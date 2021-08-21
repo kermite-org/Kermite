@@ -54,7 +54,7 @@ function createMenuItems(): IGlobalMenuItem[] {
       handler() {
         languageSelectionModel.changeLanguage('english');
       },
-      active: languageSelectionModel.currrentLanguage === 'english',
+      active: languageSelectionModel.currentLanguage === 'english',
       hint: texts.hint_globalMenu_language_english,
     },
     {
@@ -63,7 +63,7 @@ function createMenuItems(): IGlobalMenuItem[] {
       handler() {
         languageSelectionModel.changeLanguage('japanese');
       },
-      active: languageSelectionModel.currrentLanguage === 'japanese',
+      active: languageSelectionModel.currentLanguage === 'japanese',
       hint: texts.hint_globalMenu_language_japanese,
     },
   ];

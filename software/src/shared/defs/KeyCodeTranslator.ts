@@ -141,7 +141,7 @@ const enum HidKeyUS {
   KU_US_Num9_LeftParenthesis,
   KU_US_Num0_RightParenthesis,
 
-  KU_US_Minus_Undersocre = 45,
+  KU_US_Minus_Underscore = 45,
   KU_US_Equal_Plus = 46,
   KU_US_LeftSquareBracket_LeftCurlyBrace = 47,
   KU_US_RightSquareBracket_RightCurlyBrace = 48,
@@ -165,7 +165,7 @@ const enum HidKeyJA {
   KU_JA_Num6_Ampersand,
   KU_JA_Num7_SingleQuote,
   KU_JA_Num8_LeftParenthesis,
-  KU_JA_Num9_RightParenethesis,
+  KU_JA_Num9_RightParenthesis,
   KU_JA_Num0,
 
   KU_JA_Minus_Equal = 45,
@@ -185,7 +185,7 @@ const enum HidKeyJA {
 
   KU_JA_BackSlash_Underscore = 135,
   KU_KatakanaHiragana = 136,
-  KU_JA_Yen_VertiacalBar = 137,
+  KU_JA_Yen_VerticalBar = 137,
   KU_Henkan = 138,
   KU_Muhenkan = 139,
   KU_Lang1Kana = 144,
@@ -327,7 +327,7 @@ const logicalKeyItems: LogicalKeyItem[] = [
   [
     LogicalKey.LK_Underscore,
     '_',
-    HidKeyUS.KU_US_Minus_Undersocre | Shifted,
+    HidKeyUS.KU_US_Minus_Underscore | Shifted,
     HidKeyJA.KU_JA_BackSlash_Underscore | Shifted,
   ],
   [
@@ -339,7 +339,7 @@ const logicalKeyItems: LogicalKeyItem[] = [
   [
     LogicalKey.LK_Minus,
     '-',
-    HidKeyUS.KU_US_Minus_Undersocre | NoShift,
+    HidKeyUS.KU_US_Minus_Underscore | NoShift,
     HidKeyJA.KU_JA_Minus_Equal | NoShift,
   ],
   [
@@ -370,7 +370,7 @@ const logicalKeyItems: LogicalKeyItem[] = [
     LogicalKey.LK_VerticalBar,
     '|',
     HidKeyUS.KU_US_Backslash_Verticalbar | Shifted,
-    HidKeyJA.KU_JA_Yen_VertiacalBar | Shifted,
+    HidKeyJA.KU_JA_Yen_VerticalBar | Shifted,
   ],
   [
     LogicalKey.LK_Hat,
@@ -406,7 +406,7 @@ const logicalKeyItems: LogicalKeyItem[] = [
     LogicalKey.LK_Yen,
     '¥',
     HidKeyUS.KU_US_Backslash_Verticalbar | NoShift,
-    HidKeyJA.KU_JA_Yen_VertiacalBar | NoShift,
+    HidKeyJA.KU_JA_Yen_VerticalBar | NoShift,
   ],
   [
     LogicalKey.LK_Percent,
@@ -448,7 +448,7 @@ const logicalKeyItems: LogicalKeyItem[] = [
     LogicalKey.LK_RightParenthesis,
     ')',
     HidKeyUS.KU_US_Num0_RightParenthesis | Shifted,
-    HidKeyJA.KU_JA_Num9_RightParenethesis | Shifted,
+    HidKeyJA.KU_JA_Num9_RightParenthesis | Shifted,
   ],
   [
     LogicalKey.LK_LeftSquareBracket,

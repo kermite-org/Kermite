@@ -26,7 +26,7 @@ export type LayerInvocationMode = IHoldFunctionInvocationMode;
 
 export type IAssignOperationType = 'none' | 'keyInput' | 'layerCall';
 
-export type IAssingOperationKeyInput = {
+export type IAssignOperationKeyInput = {
   type: 'keyInput';
   virtualKey: VirtualKey;
   attachedModifiers: number;
@@ -51,7 +51,7 @@ export type IAssignOperationSystemAction = {
 };
 
 export type IAssignOperation =
-  | IAssingOperationKeyInput
+  | IAssignOperationKeyInput
   | IAssignOperationLayerCall
   | IAssignOperationClearExclusiveLayers
   | IAssignOperationSystemAction;
@@ -72,7 +72,7 @@ export type IAssignEntry_Dual = {
   tertiaryOp?: IAssignOperation; // double-tap
 };
 
-export type IAssingEntry_Block = {
+export type IAssignEntry_Block = {
   type: 'block';
 };
 
@@ -83,13 +83,13 @@ export type IAssignEntry_Transparent = {
 export type IAssignEntry =
   | IAssignEntry_Single
   | IAssignEntry_Dual
-  | IAssingEntry_Block
+  | IAssignEntry_Block
   | IAssignEntry_Transparent;
 
 export type IAssignEntryWithLayerFallback =
   | IAssignEntry_Single
   | IAssignEntry_Dual
-  | IAssingEntry_Block
+  | IAssignEntry_Block
   | IAssignEntry_Transparent
   | { type: 'layerFallbackTransparent' }
   | { type: 'layerFallbackBlock' };

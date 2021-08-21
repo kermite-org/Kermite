@@ -112,7 +112,7 @@ export function getAppErrorData(
   }
 }
 
-export function makeDipsalyErrorMessage(errorData: IAppErrorData<any>) {
+export function makeDisplayErrorMessage(errorData: IAppErrorData<any>) {
   if (errorData.isAppError) {
     const { type, params, stack } = errorData;
     const headline = errorTextMapJP[type as IErrorType] || type; // TODO: 多言語対応

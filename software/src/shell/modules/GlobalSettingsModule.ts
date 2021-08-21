@@ -5,7 +5,7 @@ import { commitCoreState, coreState, createCoreModule } from '~/shell/global';
 import { checkLocalRepositoryFolder } from '~/shell/projectResources/LocalResourceHelper';
 
 export const globalSettingsModule = createCoreModule({
-  loadGlobalSettings() {
+  config_loadGlobalSettings() {
     const settings = applicationStorage.readItemBasedOnDefault(
       'globalSettings',
       globalSettingsLoadingSchema,
@@ -17,10 +17,10 @@ export const globalSettingsModule = createCoreModule({
         settings.localProjectRootFolderPath = '';
       }
     }
-    settings.useLocalResouces = false;
+    settings.useLocalResources = false;
     commitCoreState({ globalSettings: settings });
   },
-  writeGlobalSettings(partialConfig) {
+  config_writeGlobalSettings(partialConfig) {
     const globalSettings = {
       ...coreState.globalSettings,
       ...partialConfig,
@@ -43,7 +43,7 @@ export const globalSettingsModule = createCoreModule({
 export const globalSettingsReader = {
   getLocalRepositoryDir(): string | undefined {
     const settings = coreState.globalSettings;
-    if (settings.developerMode && settings.useLocalResouces) {
+    if (settings.developerMode && settings.useLocalResources) {
       if (appEnv.isDevelopment) {
         return pathResolve('../');
       } else {

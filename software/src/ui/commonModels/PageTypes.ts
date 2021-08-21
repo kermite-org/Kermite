@@ -3,7 +3,7 @@ export type PagePaths =
   | '/editor'
   | '/layouter'
   | '/shapePreview'
-  | '/firmwareUpdation'
+  | '/firmwareUpdate'
   | '/presetBrowser'
   | '/presetBrowser2'
   | '/settings'

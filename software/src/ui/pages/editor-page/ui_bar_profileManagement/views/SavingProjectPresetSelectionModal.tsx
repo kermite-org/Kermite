@@ -7,7 +7,7 @@ import {
   ProjectAttachmentFileSelectorModal,
 } from '~/ui/components';
 import { fieldSetter } from '~/ui/helpers';
-import { IProfileManagementPartViewModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileManagementPartViewModel';
+import { IProfileManagementPartViewModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfilesOperationModel';
 
 function getSavingPackageFilePath() {
   const projectInfo = projectPackagesReader.getEditTargetProject();
@@ -57,13 +57,13 @@ function useProjectAttachmentFileSelectorViewModel(
     projectOptions,
     currentProjectId,
     setCurrentProjectId: () => {},
-    currentProejctKeyboardName: currentProject?.keyboardName || '',
+    currentProjectKeyboardName: currentProject?.keyboardName || '',
     attachmentFileTypeHeader:
       texts.label_projectAttachmentFileSelectionModal_preset,
     attachmentFileNameOptions: presetNameOptions,
     currentAttachmentFileName: local.currentPresetName,
     setCurrentAttachmentFileName: fieldSetter(local, 'currentPresetName'),
-    targetAttachementFilePath: getSavingPackageFilePath(),
+    targetAttachmentFilePath: getSavingPackageFilePath(),
     buttonText: 'Save',
     buttonActive: !!(
       currentProjectId &&

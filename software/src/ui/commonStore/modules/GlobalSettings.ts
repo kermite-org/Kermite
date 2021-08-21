@@ -8,23 +8,23 @@ export const globalSettingsReader = {
   get isLocalProjectsAvailable(): boolean {
     const {
       developerMode,
-      useLocalResouces,
+      useLocalResources,
       localProjectRootFolderPath,
     } = this.globalSettings;
     return (
-      (developerMode && useLocalResouces && !!localProjectRootFolderPath) ||
+      (developerMode && useLocalResources && !!localProjectRootFolderPath) ||
       false
     );
   },
   get isLocalProjectSelectedForEdit(): boolean {
     const {
       developerMode,
-      useLocalResouces,
+      useLocalResources,
       localProjectRootFolderPath,
       globalProjectId,
     } = this.globalSettings;
     return (
-      ((developerMode && useLocalResouces && !!localProjectRootFolderPath) ||
+      ((developerMode && useLocalResources && !!localProjectRootFolderPath) ||
         false) &&
       !!globalProjectId
     );
@@ -32,19 +32,19 @@ export const globalSettingsReader = {
   get isDeveloperMode() {
     return this.globalSettings.developerMode;
   },
-  get settingsResouceOrigin(): IResourceOrigin {
+  get settingsResourceOrigin(): IResourceOrigin {
     const {
       developerMode,
-      useLocalResouces,
+      useLocalResources,
       localProjectRootFolderPath,
     } = this.globalSettings;
-    return developerMode && useLocalResouces && !!localProjectRootFolderPath
+    return developerMode && useLocalResources && !!localProjectRootFolderPath
       ? 'local'
       : 'online';
   },
   get globalProjectKey(): string {
     const { globalProjectId } = this.globalSettings;
-    const origin = this.settingsResouceOrigin;
+    const origin = this.settingsResourceOrigin;
     return (globalProjectId && createProjectSig(origin, globalProjectId)) || '';
   },
 };
@@ -55,7 +55,7 @@ export const globalSettingsWriter = {
     value: IGlobalSettings[K],
   ) {
     dispatchCoreAction({
-      writeGlobalSettings: { [key]: value },
+      config_writeGlobalSettings: { [key]: value },
     });
   },
 };

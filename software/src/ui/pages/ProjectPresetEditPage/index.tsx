@@ -1,8 +1,12 @@
 import { css, FC, jsx, useMemo } from 'qx';
 import { fallbackPersistProfileData, IPersistProfileData } from '~/shared';
 import { uiTheme } from '~/ui/base';
-import { IPageSpec_ProjectPresetEdit, pageActions } from '~/ui/commonModels';
-import { projectPackagesHooks, projectPackagesWriter } from '~/ui/commonStore';
+import { IPageSpec_ProjectPresetEdit } from '~/ui/commonModels';
+import {
+  pageActions,
+  projectPackagesHooks,
+  projectPackagesWriter,
+} from '~/ui/commonStore';
 import { AssignerGeneralComponent } from '~/ui/pages/editor-page/EditorGeneralComponent';
 
 type Props = {

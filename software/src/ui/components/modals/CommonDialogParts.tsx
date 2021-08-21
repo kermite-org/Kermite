@@ -149,12 +149,7 @@ export const DialogButton = (props: {
     }
   `;
   return (
-    <button
-      css={cssButton}
-      onClick={props.onClick}
-      data-debug="hoge"
-      disabled={props.disabled}
-    >
+    <button css={cssButton} onClick={props.onClick} disabled={props.disabled}>
       {props.children}
     </button>
   );

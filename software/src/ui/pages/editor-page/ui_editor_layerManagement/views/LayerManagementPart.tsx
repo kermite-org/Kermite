@@ -1,6 +1,6 @@
 import { jsx, css, FC } from 'qx';
 import { texts } from '~/ui/base';
-import { LayerOperationButtton } from '~/ui/components';
+import { LayerOperationButton } from '~/ui/components';
 import { ILayerManagementPartViewModel } from '~/ui/pages/editor-page/ui_editor_layerManagement/viewModels/LayersManagementPartViewModel';
 
 type Props = {
@@ -21,31 +21,31 @@ export const LayerManagementPart: FC<Props> = ({
   },
 }) => (
   <div css={style}>
-    <LayerOperationButtton
+    <LayerOperationButton
       icon="fa fa-plus"
       enabled={canEdit}
       handler={addNewLayer}
       hint={texts.hint_assigner_layerOps_addNewLayer}
     />
-    <LayerOperationButtton
+    <LayerOperationButton
       icon="fa fa-pen-square"
       enabled={canEdit}
       handler={editCurrentLayer}
       hint={texts.hint_assigner_layerOps_editLayerProperties}
     />
-    <LayerOperationButtton
+    <LayerOperationButton
       icon="fa fa-times"
       enabled={canEdit && canDeleteCurrentLayer}
       handler={deleteCurrentLayer}
       hint={texts.hint_assigner_layerOps_deleteLayer}
     />
-    <LayerOperationButtton
+    <LayerOperationButton
       icon="fa fa-long-arrow-alt-up"
       enabled={canEdit && canShiftForwardCurrentLayer}
       handler={shiftForwardCurrentLayer}
       hint={texts.hint_assigner_layerOps_bringForward}
     />
-    <LayerOperationButtton
+    <LayerOperationButton
       icon="fa fa-long-arrow-alt-down"
       enabled={canEdit && canShiftBackCurrentLayer}
       handler={shiftBackCurrentLayer}

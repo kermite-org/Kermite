@@ -27,7 +27,7 @@ const local = new (class {
 })();
 
 export function keyActionRemapper_setupDataReader() {
-  const addrMappingEntriesBlock = dataStorage.getChunk_mappingEntreis().address;
+  const addrMappingEntriesBlock = dataStorage.getChunk_mappingEntries().address;
   if (addrMappingEntriesBlock) {
     local.numItems = dataStorage.readByte(addrMappingEntriesBlock);
     local.addrItems = addrMappingEntriesBlock + 1;

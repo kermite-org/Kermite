@@ -4,7 +4,6 @@ import {
   IKeyboardConfig,
   IntervalTimerWrapper,
   IProfileData,
-  IProfileManagerStatus,
   IRealtimeKeyboardEvent,
   SystemParameter,
 } from '~/shared';
@@ -12,7 +11,6 @@ import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { coreStateManager } from '~/shell/global';
 import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
 import { dataStorage } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/DataStorage';
-import { ProfileManager } from '~/shell/services/profile/ProfileManager';
 import { getKeyboardCoreLogicInterface } from './KeyboardCoreLogicImplementation';
 import { makeProfileBinaryData } from './ProfileDataBinaryPacker';
 
@@ -40,12 +38,9 @@ export class InputLogicSimulatorD {
   private layerActiveFlags: number = 0;
   private hidReportBytes: number[] = new Array(8).fill(0);
 
-  private tickUpdator = createTimeIntervalCounter();
+  private tickUpdater = createTimeIntervalCounter();
 
-  constructor(
-    private profileManager: ProfileManager,
-    private deviceService: KeyboardDeviceService,
-  ) {}
+  constructor(private deviceService: KeyboardDeviceService) {}
 
   private get simulationActive(): boolean {
     return this.isSimulatorMode && !this.isMuteMode;
@@ -91,10 +86,14 @@ export class InputLogicSimulatorD {
     if (diff.keyboardConfig) {
       this.keyboardConfigHandler(diff.keyboardConfig);
     }
+
+    if (diff.editProfileData) {
+      this.loadSimulationProfile(diff.editProfileData);
+    }
   };
 
   private processTicker = () => {
-    const elapsedMs = this.tickUpdator();
+    const elapsedMs = this.tickUpdater();
 
     if (this.simulationActive) {
       this.CL.keyboardCoreLogic_processTicker(elapsedMs);
@@ -121,20 +120,11 @@ export class InputLogicSimulatorD {
     this.CL.keyboardCoreLogic_initialize();
   }
 
-  private onProfileStatusChanged = (
-    changedStatus: Partial<IProfileManagerStatus>,
-  ) => {
-    if (changedStatus.loadedProfileData) {
-      this.loadSimulationProfile(changedStatus.loadedProfileData);
-    }
-  };
-
   postSimulationTargetProfile(profile: IProfileData) {
     this.loadSimulationProfile(profile);
   }
 
   initialize() {
-    this.profileManager.statusEventPort.subscribe(this.onProfileStatusChanged);
     this.deviceService.realtimeEventPort.subscribe(
       this.onRealtimeKeyboardEvent,
     );
@@ -149,9 +139,6 @@ export class InputLogicSimulatorD {
   }
 
   terminate() {
-    this.profileManager.statusEventPort.unsubscribe(
-      this.onProfileStatusChanged,
-    );
     this.deviceService.realtimeEventPort.unsubscribe(
       this.onRealtimeKeyboardEvent,
     );

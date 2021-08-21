@@ -6,7 +6,7 @@ import { applicationStorage } from '~/shell/base';
 import { commitCoreState, coreState, createCoreModule } from '~/shell/global';
 
 export const keyboardConfigModule = createCoreModule({
-  loadKeyboardConfig() {
+  config_loadKeyboardConfig() {
     const keyboardConfig = applicationStorage.readItemBasedOnDefault(
       'keyboardConfig',
       keyboardConfigLoadingDataSchema,
@@ -14,7 +14,7 @@ export const keyboardConfigModule = createCoreModule({
     );
     commitCoreState({ keyboardConfig });
   },
-  writeKeyboardConfig(partialConfig) {
+  config_writeKeyboardConfig(partialConfig) {
     const keyboardConfig = {
       ...coreState.keyboardConfig,
       ...partialConfig,

@@ -12,7 +12,8 @@ import { ProjectResourceProviderImpl_Local } from '~/shell/projectResources/Proj
 import { ProjectResourceProviderImpl_Remote } from '~/shell/projectResources/ProjectResourceProviderImpl_Remote';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-class ProjectResourceProvider_OBSOLETE implements IProjectResourceProvider {
+export class ProjectResourceProvider_OBSOLETE
+  implements IProjectResourceProvider {
   localResourceProviderImpl = new ProjectResourceProviderImpl_Local();
   remoteResourceProviderImpl = new ProjectResourceProviderImpl_Remote();
 
@@ -27,7 +28,7 @@ class ProjectResourceProvider_OBSOLETE implements IProjectResourceProvider {
     return [];
   }
 
-  private getResouceProviderImpl(
+  private getResourceProviderImpl(
     origin: IResourceOrigin,
   ): IProjectResourceProviderImpl {
     if (origin === 'local') {
@@ -42,7 +43,7 @@ class ProjectResourceProvider_OBSOLETE implements IProjectResourceProvider {
     projectId: string,
     variationName: string,
   ): Promise<IProjectCustomDefinition | undefined> {
-    const providerImpl = this.getResouceProviderImpl(origin);
+    const providerImpl = this.getResourceProviderImpl(origin);
     return await providerImpl.getProjectCustomDefinition(
       projectId,
       variationName,
@@ -54,7 +55,7 @@ class ProjectResourceProvider_OBSOLETE implements IProjectResourceProvider {
   //   projectId: string,
   //   presetName: string,
   // ): Promise<IProfileData | undefined> {
-  //   // const providerImpl = this.getResouceProviderImpl(origin);
+  //   // const providerImpl = this.getResourceProviderImpl(origin);
   //   // return await providerImpl.loadProjectPreset(projectId, presetName);
   //   return undefined;
   // }
@@ -64,7 +65,7 @@ class ProjectResourceProvider_OBSOLETE implements IProjectResourceProvider {
     projectId: string,
     layoutName: string,
   ): Promise<IPersistKeyboardDesign | undefined> {
-    const providerImpl = this.getResouceProviderImpl(origin);
+    const providerImpl = this.getResourceProviderImpl(origin);
     return await providerImpl.loadProjectLayout(projectId, layoutName);
   }
 
@@ -73,7 +74,7 @@ class ProjectResourceProvider_OBSOLETE implements IProjectResourceProvider {
   //   projectId: string,
   //   variationName: string,
   // ): Promise<IFirmwareBinaryFileSpec | undefined> {
-  //   const providerImpl = this.getResouceProviderImpl(origin);
+  //   const providerImpl = this.getResourceProviderImpl(origin);
   //   return await providerImpl.loadProjectFirmwareFile(projectId, variationName);
   // }
 }

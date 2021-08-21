@@ -10,7 +10,7 @@ const textSources: { [key in ILanguageKey]: ITextSource } = {
 };
 
 export const uiTextConfigLoader = {
-  loadLanugageKey(): ILanguageKey {
+  loadLanguageKey(): ILanguageKey {
     const languageKey = localStorage.getItem('languageKey') as ILanguageKey;
     if (Object.keys(textSources).includes(languageKey)) {
       return languageKey;
@@ -22,4 +22,4 @@ export const uiTextConfigLoader = {
   },
 };
 
-export const texts = textSources[uiTextConfigLoader.loadLanugageKey()];
+export const texts = textSources[uiTextConfigLoader.loadLanguageKey()];

@@ -1,21 +1,22 @@
 import { useMemo } from 'qx';
-import { ILanguageKey, ipcAgent, uiTextConfigLoader } from '~/ui/base';
+import { ILanguageKey, uiTextConfigLoader } from '~/ui/base';
+import { dispatchCoreAction } from '~/ui/commonStore';
 
 export interface ILanguageSelectionModel {
-  currrentLanguage: ILanguageKey;
+  currentLanguage: ILanguageKey;
   changeLanguage(languageKey: ILanguageKey): void;
 }
 
 export function useLanguageSelectionModel(): ILanguageSelectionModel {
-  const currrentLanguage = useMemo(
-    () => uiTextConfigLoader.loadLanugageKey(),
+  const currentLanguage = useMemo(
+    () => uiTextConfigLoader.loadLanguageKey(),
     [],
   );
   const changeLanguage = (languageKey: ILanguageKey) => {
-    if (languageKey !== currrentLanguage) {
+    if (languageKey !== currentLanguage) {
       uiTextConfigLoader.saveLanguageKey(languageKey);
-      ipcAgent.async.window_reloadPage();
+      dispatchCoreAction({ window_reloadPage: 1 });
     }
   };
-  return { currrentLanguage, changeLanguage };
+  return { currentLanguage, changeLanguage };
 }

@@ -21,7 +21,7 @@ export namespace ProfileDataConverter {
     );
   }
 
-  export function convertAssingsDictionaryToArray(
+  export function convertAssignsDictionaryToArray(
     assigns: IAssignsDictionary,
   ): IPersistAssignEntry[] {
     return Object.keys(assigns).map((address) => {
@@ -44,7 +44,7 @@ export namespace ProfileDataConverter {
       keyboardDesign: source.keyboardDesign,
       settings: source.settings,
       layers: source.layers,
-      assigns: convertAssingsDictionaryToArray(source.assigns),
+      assigns: convertAssignsDictionaryToArray(source.assigns),
       mappingEntries: source.mappingEntries,
     };
   }

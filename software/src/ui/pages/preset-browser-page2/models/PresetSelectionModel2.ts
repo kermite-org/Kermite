@@ -4,7 +4,7 @@ import {
   getProjectOriginAndIdFromSig,
   IProfileData,
   IProjectPackageInfo,
-  IServerPorfileInfo,
+  IServerProfileInfo,
 } from '~/shared';
 import {
   getSelectionValueCorrected,
@@ -12,7 +12,7 @@ import {
   ISelectorOption,
   router,
 } from '~/ui/base';
-import { projectPackagesReader } from '~/ui/commonStore';
+import { dispatchCoreAction, projectPackagesReader } from '~/ui/commonStore';
 import { fieldSetter, useFetcher, usePersistState } from '~/ui/helpers';
 import { IPresetSelectionModel } from '~/ui/pages/preset-browser-page/models';
 
@@ -29,7 +29,7 @@ function makeProjectOptions(
 }
 
 function makePresetOptions(
-  projectPresets: IServerPorfileInfo[],
+  projectPresets: IServerProfileInfo[],
 ): ISelectorOption[] {
   return projectPresets.map((it) => ({
     value: it.id,
@@ -37,21 +37,17 @@ function makePresetOptions(
   }));
 }
 
-function sendCreateProfileCommand(profileData: IProfileData) {
-  return ipcAgent.async.profile_executeProfileManagerCommands([
-    {
-      createProfileExternal: { profileData },
-    },
-  ]);
+async function sendCreateProfileCommand(profileData: IProfileData) {
+  await dispatchCoreAction({ profile_createProfileExternal: { profileData } });
 }
 
 export function usePresetSelectionModel2(): IPresetSelectionModel {
-  const sel = usePersistState(`presetSelecionModel2__sel`, {
+  const sel = usePersistState(`presetSelectionModel2__sel`, {
     projectKey: '', // ${origin}#${projectId}
     presetKey: '', // id of user profile
   });
 
-  const local = useLocal<{ projectProfiles: IServerPorfileInfo[] }>({
+  const local = useLocal<{ projectProfiles: IServerProfileInfo[] }>({
     projectProfiles: [],
   });
 

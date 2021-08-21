@@ -4,8 +4,12 @@ import {
   IPersistKeyboardDesign,
 } from '~/shared';
 import { uiTheme } from '~/ui/base';
-import { IPageSpec_ProjectLayoutEdit, pageActions } from '~/ui/commonModels';
-import { projectPackagesHooks, projectPackagesWriter } from '~/ui/commonStore';
+import { IPageSpec_ProjectLayoutEdit } from '~/ui/commonModels';
+import {
+  pageActions,
+  projectPackagesHooks,
+  projectPackagesWriter,
+} from '~/ui/commonStore';
 import { LayouterGeneralComponent } from '~/ui/pages/layouter';
 
 type Props = {

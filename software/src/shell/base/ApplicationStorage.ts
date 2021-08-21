@@ -60,8 +60,8 @@ class ApplicationStorage {
 
   async initializeAsync() {
     if (!fsExistsSync(this.configFilePath)) {
-      console.log('config file not found!');
-      return;
+      console.log('config file not found!, create it');
+      await fsxWriteJsonFile(this.configFilePath, {});
     }
     const obj = await fsxReadJsonFile(this.configFilePath);
     this.data = obj;

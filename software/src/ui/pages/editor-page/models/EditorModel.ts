@@ -1,13 +1,13 @@
 import {
-  IProfileData,
+  compareObjectByJsonStringify,
+  duplicateObjectByJsonStringifyParse,
   fallbackProfileData,
-  IProfileAssignType,
   IAssignEntry,
   IAssignEntryWithLayerFallback,
   IAssignOperation,
-  compareObjectByJsonStringify,
-  duplicateObjectByJsonStringifyParse,
   IPersistKeyboardDesign,
+  IProfileAssignType,
+  IProfileData,
 } from '~/shared';
 import { getDisplayKeyboardDesignSingleCached } from '~/shared/modules/DisplayKeyboardSingleCache';
 import {
@@ -29,7 +29,7 @@ const dualModeEditTargetOperationSigToOperationPathMap: {
 export class EditorModel {
   // state
 
-  loadedPorfileData: IProfileData = fallbackProfileData;
+  loadedProfileData: IProfileData = fallbackProfileData;
   profileData: IProfileData = fallbackProfileData;
   currentLayerId: string = '';
   currentKeyUnitId: string = '';
@@ -131,12 +131,17 @@ export class EditorModel {
     return this.layers.find((la) => la.layerId === layerId);
   }
 
-  checkDirty(clean: boolean): boolean {
-    if (clean) {
-      removeInvalidProfileAssigns(this.profileData);
-    }
+  checkDirtyWithCleanupSideEffect(): boolean {
+    removeInvalidProfileAssigns(this.profileData);
     return !compareObjectByJsonStringify(
-      this.loadedPorfileData,
+      this.loadedProfileData,
+      this.profileData,
+    );
+  }
+
+  checkDirty(): boolean {
+    return !compareObjectByJsonStringify(
+      this.loadedProfileData,
       this.profileData,
     );
   }
@@ -144,7 +149,7 @@ export class EditorModel {
   // mutations
 
   loadProfileData = (profileData: IProfileData) => {
-    this.loadedPorfileData = profileData;
+    this.loadedProfileData = profileData;
     this.profileData = duplicateObjectByJsonStringifyParse(profileData);
     this.currentLayerId = profileData.layers[0].layerId;
 

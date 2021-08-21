@@ -1,10 +1,10 @@
 import { IProfileData, IRealtimeKeyboardEvent } from '~/shared';
 import { DeviceSelectionManager } from '~/shell/services/device/keyboardDevice/DeviceSelectionManager';
 import { KeyboardDeviceServiceCore } from '~/shell/services/device/keyboardDevice/DeviceServiceCoreImpl';
-import { IKeyboardDeviceServcie } from '~/shell/services/device/keyboardDevice/Interfaces';
+import { IKeyboardDeviceService } from '~/shell/services/device/keyboardDevice/Interfaces';
 import { KeyMappingEmitter } from '~/shell/services/device/keyboardDevice/KeyMappingEmitter';
 
-export class KeyboardDeviceService implements IKeyboardDeviceServcie {
+export class KeyboardDeviceService implements IKeyboardDeviceService {
   private core = new KeyboardDeviceServiceCore();
   private selectionManager = new DeviceSelectionManager();
 
@@ -14,12 +14,12 @@ export class KeyboardDeviceService implements IKeyboardDeviceServcie {
 
   selectTargetDevice(path: string) {
     this.selectionManager.selectTargetDevice(path);
-    this.core.setDeivce(this.selectionManager.getDevice());
+    this.core.setDevice(this.selectionManager.getDevice());
   }
 
   initialize() {
     this.selectionManager.initialize();
-    this.core.setDeivce(this.selectionManager.getDevice());
+    this.core.setDevice(this.selectionManager.getDevice());
   }
 
   terminate() {

@@ -13,13 +13,13 @@ export interface IProjectAttachmentFileSelectorModalModel {
   projectOptions: ISelectorOption[];
   currentProjectId: string;
   setCurrentProjectId(projectId: string): void;
-  currentProejctKeyboardName: string;
+  currentProjectKeyboardName: string;
 
   attachmentFileTypeHeader: string;
   attachmentFileNameOptions: ISelectorOption[];
   currentAttachmentFileName: string;
   setCurrentAttachmentFileName(fileName: string): void;
-  targetAttachementFilePath: string;
+  targetAttachmentFilePath: string;
 
   buttonText: string;
   buttonActive: boolean;
@@ -37,12 +37,12 @@ export const ProjectAttachmentFileSelectorModal = (props: {
     projectOptions,
     currentProjectId,
     setCurrentProjectId,
-    currentProejctKeyboardName,
+    currentProjectKeyboardName,
     attachmentFileTypeHeader,
-    attachmentFileNameOptions: attachementFileNameOptions,
-    currentAttachmentFileName: currentAttachementFileName,
+    attachmentFileNameOptions,
+    currentAttachmentFileName,
     setCurrentAttachmentFileName,
-    targetAttachementFilePath,
+    targetAttachmentFilePath,
     buttonText,
     buttonActive,
     buttonHandler,
@@ -71,13 +71,13 @@ export const ProjectAttachmentFileSelectorModal = (props: {
                   size={selectorSize}
                   disabled={!canSelectProject}
                 />
-                <div class="keyboardNameText">{currentProejctKeyboardName}</div>
+                <div class="keyboardNameText">{currentProjectKeyboardName}</div>
               </div>
               <div class="column listColumn">
                 <div>{attachmentFileTypeHeader}</div>
                 <FlatListSelector
-                  options={attachementFileNameOptions}
-                  value={currentAttachementFileName}
+                  options={attachmentFileNameOptions}
+                  value={currentAttachmentFileName}
                   setValue={setCurrentAttachmentFileName}
                   size={selectorSize}
                 />
@@ -85,7 +85,7 @@ export const ProjectAttachmentFileSelectorModal = (props: {
                   <input
                     class="layoutNameEdit"
                     type="text"
-                    value={currentAttachementFileName}
+                    value={currentAttachmentFileName}
                     onInput={reflectValue(setCurrentAttachmentFileName)}
                     spellcheck={'false' as any}
                   />
@@ -93,7 +93,7 @@ export const ProjectAttachmentFileSelectorModal = (props: {
               </div>
             </div>
             <div class="bottomRow">
-              <div class="filePathText">{targetAttachementFilePath}</div>
+              <div class="filePathText">{targetAttachmentFilePath}</div>
               <div class="buttonBox">
                 <button onClick={buttonHandler} disabled={!buttonActive}>
                   {buttonText}

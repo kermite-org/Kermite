@@ -11,7 +11,7 @@ export function makeCustomKeyUnitViewModels<
   profileData: IProfileData,
   keyboardDesign: IDisplayKeyboardDesign,
   targetLayerId: string,
-  propsDecolator: (
+  propsDecorator: (
     source: ICustomKeyUnitViewModelBase,
   ) => TCustomKeyUnitViewModel,
 ): TCustomKeyUnitViewModel[] {
@@ -36,7 +36,7 @@ export function makeCustomKeyUnitViewModels<
       layers,
     );
 
-    return propsDecolator({
+    return propsDecorator({
       keyUnitId,
       pos,
       primaryText,

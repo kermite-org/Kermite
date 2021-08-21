@@ -3,7 +3,7 @@ import { makeCssColor } from '~/ui/base';
 import { editReader } from '~/ui/pages/layouter/models';
 
 export const DisplayAreaFrame: FC = () => {
-  const { dispalyArea: da } = editReader;
+  const { displayArea: da } = editReader;
   const x = da.left;
   const y = da.top;
   const w = da.right - da.left;

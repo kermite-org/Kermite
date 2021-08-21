@@ -5,50 +5,40 @@ import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
 import {
+  commitCoreState,
   coreActionDistributor,
   coreState,
   coreStateManager,
   dispatchCoreAction,
+  profilesReader,
 } from '~/shell/global';
-import {
-  developmentModule_ActionReceiver,
-  keyboardConfigModule,
-  projectPackageModule,
-} from '~/shell/modules';
+import { keyboardConfigModule, projectPackageModule } from '~/shell/modules';
 import { globalSettingsModule } from '~/shell/modules/GlobalSettingsModule';
 import { checkLocalRepositoryFolder } from '~/shell/projectResources/LocalResourceHelper';
 import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
 import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStatic';
-import { FirmwareUpdationService } from '~/shell/services/firmwareUpdation';
+import { FirmwareUpdateService } from '~/shell/services/firmwareUpdate';
 import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/inputLogicSimulatorD';
-import { LayoutManager } from '~/shell/services/layout/LayoutManager';
-import { ProfileManager } from '~/shell/services/profile/ProfileManager';
+import { layoutManager } from '~/shell/services/layout/LayoutManager';
+import { profileManager } from '~/shell/services/profile/ProfileManager';
+import { profileManagerModule } from '~/shell/services/profile/ProfileManagerModule';
 import { UserPresetHubService } from '~/shell/services/userPresetHub/UserPresetHubService';
-import { AppWindowWrapper } from '~/shell/services/window';
+import { AppWindowWrapper, createWindowModule } from '~/shell/services/window';
 
 export class ApplicationRoot {
-  private firmwareUpdationService = new FirmwareUpdationService();
+  private firmwareUpdateService = new FirmwareUpdateService();
 
   private deviceService = new KeyboardDeviceService();
 
-  private profileManager = new ProfileManager();
+  private inputLogicSimulator = new InputLogicSimulatorD(this.deviceService);
 
-  private layoutManager = new LayoutManager(this.profileManager);
-
-  private inputLogicSimulator = new InputLogicSimulatorD(
-    this.profileManager,
-    this.deviceService,
-  );
-
-  private windowWrapper = new AppWindowWrapper(this.profileManager);
+  private windowWrapper = new AppWindowWrapper();
 
   private presetHubService = new UserPresetHubService();
 
   // ------------------------------------------------------------
 
   private setupIpcBackend() {
-    const windowWrapper = this.windowWrapper;
-
     appGlobal.icpMainAgent.setErrorHandler((error) => {
       console.error(makeCompactStackTrace(error));
       appGlobal.appErrorEventPort.emit(
@@ -61,59 +51,33 @@ export class ApplicationRoot {
     });
 
     appGlobal.icpMainAgent.supplyAsyncHandlers({
-      system_getApplicationVersionInfo: async () => ({
-        version: appConfig.applicationVersion,
-      }),
-      window_closeWindow: async () => windowWrapper.closeMainWindow(),
-      window_minimizeWindow: async () => windowWrapper.minimizeMainWindow(),
-      window_maximizeWindow: async () => windowWrapper.maximizeMainWindow(),
-      window_restartApplication: async () => windowWrapper.restartApplication(),
-      window_reloadPage: async () => windowWrapper.reloadPage(),
-      window_setDevToolVisibility: async (visible) =>
-        windowWrapper.setDevToolsVisibility(visible),
-      window_setWidgetAlwaysOnTop: async (enabled) =>
-        windowWrapper.setWidgetAlwaysOnTop(enabled),
-      profile_getCurrentProfile: async () =>
-        this.profileManager.getCurrentProfile(),
-      profile_executeProfileManagerCommands: (commands) =>
-        this.profileManager.executeCommands(commands),
-      profile_getAllProfileEntries: async () =>
-        this.profileManager.getAllProfileEntries(),
-      profile_openUserProfilesFolder: () =>
-        this.profileManager.openUserProfilesFolder(),
+      profile_getCurrentProfile: async () => profilesReader.getCurrentProfile(),
       layout_executeLayoutManagerCommands: (commands) =>
-        this.layoutManager.executeCommands(commands),
+        layoutManager.executeCommands(commands),
       layout_showEditLayoutFileInFiler: async () =>
-        this.layoutManager.showEditLayoutFileInFiler(),
+        layoutManager.showEditLayoutFileInFiler(),
       device_connectToDevice: async (path) =>
         this.deviceService.selectTargetDevice(path),
       device_setCustomParameterValue: async (index, value) =>
         this.deviceService.setCustomParameterValue(index, value),
-      device_resetParaemters: async () => this.deviceService.resetParameters(),
+      device_resetParameters: async () => this.deviceService.resetParameters(),
       firmup_uploadFirmware: (origin, projectId, variationName) =>
-        this.firmwareUpdationService.writeFirmware(
+        this.firmwareUpdateService.writeFirmware(
           origin,
           projectId,
           variationName,
         ),
-      projects_getAllProjectPackageInfos: async () =>
-        coreState.allProjectPackageInfos,
-      projects_saveLocalProjectPackageInfo: (projectInfo) =>
-        dispatchCoreAction({ saveLocalProjectPackageInfo: projectInfo }),
-      projects_getAllCustomFirmwareInfos: async () =>
-        coreState.allCustomFirmwareInfos,
       presetHub_getServerProjectIds: () =>
         this.presetHubService.getServerProjectIds(),
       presetHub_getServerProfiles: (projectId: string) =>
         this.presetHubService.getServerProfiles(projectId),
       config_writeKeyMappingToDevice: async () => {
-        const profile = this.profileManager.getCurrentProfile();
+        const profile = profilesReader.getCurrentProfile();
         if (profile) {
           return await this.deviceService.emitKeyAssignsToDevice(profile);
         }
         return false;
       },
-      config_getGlobalSettings: async () => coreState.globalSettings,
       config_getProjectRootDirectoryPath: async () => {
         if (appEnv.isDevelopment) {
           return pathResolve('..');
@@ -135,8 +99,7 @@ export class ApplicationRoot {
         JsonFileServiceStatic.getOpeningDirectoryPathWithDialog,
 
       platform_openUrlInDefaultBrowser: (path) => shell.openExternal(path),
-      global_triggerLazyInitializeServices: async () =>
-        this.lazyInitialzeServices(),
+      global_lazyInitializeServices: () => this.lazyInitializeServices(),
 
       simulator_postSimulationTargetProfile: async (profile) =>
         this.inputLogicSimulator.postSimulationTargetProfile(profile),
@@ -146,60 +109,53 @@ export class ApplicationRoot {
     });
 
     appGlobal.icpMainAgent.supplySubscriptionHandlers({
-      dev_testEvent: (cb) => {
-        // eslint-disable-next-line node/no-callback-literal
-        cb({ type: 'test_event_with_supplySubscriptionHandlers' });
-        return () => {};
-      },
       global_appErrorEvents: (cb) => appGlobal.appErrorEventPort.subscribe(cb),
-      profile_profileManagerStatus: (cb) => {
-        this.profileManager.statusEventPort.subscribe(cb);
-        return () => this.profileManager.statusEventPort.unsubscribe(cb);
-      },
-      layout_layoutManagerStatus: (listener) =>
-        this.layoutManager.statusEvents.subscribe(listener),
       device_keyEvents: (cb) => {
         this.deviceService.realtimeEventPort.subscribe(cb);
         return () => this.deviceService.realtimeEventPort.unsubscribe(cb);
       },
       firmup_deviceDetectionEvents: (cb) =>
-        this.firmwareUpdationService.deviceDetectionEvents.subscribe(cb),
-      window_appWindowStatus: windowWrapper.appWindowEventPort.subscribe,
+        this.firmwareUpdateService.deviceDetectionEvents.subscribe(cb),
       global_coreStateEvents: (cb) =>
         coreStateManager.coreStateEventPort.subscribe(cb),
     });
-  }
-
-  private async setupActionReceivers() {
-    coreActionDistributor.addReceivers(
-      globalSettingsModule,
-      developmentModule_ActionReceiver,
-      projectPackageModule,
-      keyboardConfigModule,
-    );
-    globalSettingsModule.loadGlobalSettings!(1);
-    keyboardConfigModule.loadKeyboardConfig!(1);
-    await dispatchCoreAction({ loadAllProjectPackages: 1 });
-    await dispatchCoreAction({ loadAllCustomFirmwareInfos: 1 });
   }
 
   async initialize() {
     await executeWithFatalErrorHandler(async () => {
       console.log(`initialize services`);
       await applicationStorage.initializeAsync();
-      await this.setupActionReceivers();
-      await this.profileManager.initializeAsync();
       this.setupIpcBackend();
       this.windowWrapper.initialize();
     });
   }
 
   private _lazyInitializeTriggered = false;
-  lazyInitialzeServices() {
+
+  async lazyInitializeServices() {
     if (!this._lazyInitializeTriggered) {
       this._lazyInitializeTriggered = true;
+      const windowModule = createWindowModule(this.windowWrapper);
+      coreActionDistributor.addReceivers(
+        globalSettingsModule,
+        projectPackageModule,
+        keyboardConfigModule,
+        windowModule,
+        profileManagerModule,
+      );
+      globalSettingsModule.config_loadGlobalSettings(1);
+      keyboardConfigModule.config_loadKeyboardConfig(1);
+      await dispatchCoreAction({ project_loadAllProjectPackages: 1 });
+      await dispatchCoreAction({ project_loadAllCustomFirmwareInfos: 1 });
+      await profileManager.initializeAsync();
+      await layoutManager.initializeAsync();
       this.deviceService.initialize();
       this.inputLogicSimulator.initialize();
+      commitCoreState({
+        applicationVersionInfo: {
+          version: appConfig.applicationVersion,
+        },
+      });
     }
   }
 
@@ -209,7 +165,8 @@ export class ApplicationRoot {
       this.inputLogicSimulator.terminate();
       this.deviceService.terminate();
       this.windowWrapper.terminate();
-      this.profileManager.terminate();
+      profileManager.terminate();
+      layoutManager.terminate();
       await applicationStorage.terminateAsync();
     });
   }

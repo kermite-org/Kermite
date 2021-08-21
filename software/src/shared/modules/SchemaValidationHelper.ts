@@ -34,7 +34,7 @@ export function createChecker<
   };
 }
 
-export function createCheckerWithArrrayArguments<T>(
+export function createCheckerWithArrayArguments<T>(
   checkerImpl: (args: T[]) => IChecker,
 ) {
   return (args: T[]) => {
@@ -83,7 +83,7 @@ export const vArray = createChecker((itemChecker: IChecker) => {
   };
 });
 
-export const vObejectDictionary = createChecker(
+export const vObjectDictionary = createChecker(
   (itemChecker: IChecker, keyChecker?: IChecker) => {
     return (itemsDict: { [key in string]: any }) => {
       const errors: { [indexKey: string]: any } = {};
@@ -120,7 +120,7 @@ export const vString = createChecker((len?: number) => {
 export const vNumber = createChecker(() => {
   return (value: number) => {
     if (typeof value !== 'number') {
-      return 'musb be a number';
+      return 'must be a number';
     }
     if (!isFinite(value)) {
       return 'must be a number';
@@ -171,7 +171,7 @@ export const vInteger = createChecker((opts?: { lo?: number; hi?: number }) => {
 export const vNaturalInteger = (includesZero: boolean = true) =>
   vInteger({ lo: includesZero ? 0 : 1 });
 
-export const vSchemaOneOf = createCheckerWithArrrayArguments(
+export const vSchemaOneOf = createCheckerWithArrayArguments(
   (checkers: IChecker[]) => {
     return (value: any) => {
       const errors = checkers.map((checker) => checker(value));
@@ -195,7 +195,7 @@ export const vValueEquals = createChecker((refValue: any) => {
   };
 });
 
-export const vValueOneOf = createCheckerWithArrrayArguments(
+export const vValueOneOf = createCheckerWithArrayArguments(
   (refValues: any[]) => {
     return (value: any) => {
       if (!refValues.includes(value)) {

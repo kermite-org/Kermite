@@ -3,7 +3,7 @@ import { getAppErrorData, makeCompactStackTrace } from '~/shared';
 import { appEnv } from '~/shell/base/AppEnv';
 import { appGlobal } from '~/shell/base/AppGlobal';
 
-const badExcutionContextNames: string[] = [];
+const badExecutionContextNames: string[] = [];
 
 export async function executeWithAppErrorHandler(
   executionContextName: string,
@@ -11,7 +11,7 @@ export async function executeWithAppErrorHandler(
 ): Promise<void> {
   if (
     executionContextName &&
-    badExcutionContextNames.includes(executionContextName)
+    badExecutionContextNames.includes(executionContextName)
   ) {
     return;
   }
@@ -23,7 +23,7 @@ export async function executeWithAppErrorHandler(
     appGlobal.appErrorEventPort.emit(getAppErrorData(error, rootDir));
     if (executionContextName) {
       // setIntervalのコールバックなどで例外が発生した場合に、次回以降処理を実行しないようにする
-      badExcutionContextNames.push(executionContextName);
+      badExecutionContextNames.push(executionContextName);
     }
   }
 }
