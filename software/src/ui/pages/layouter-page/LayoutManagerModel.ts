@@ -18,7 +18,6 @@ import { UiLayouterCore } from '~/ui/pages/layouter';
 
 export interface ILayoutManagerModel {
   editSource: ILayoutEditSource;
-  loadedDesign: IPersistKeyboardDesign;
   isModified: boolean;
   createNewLayout(): void;
   loadCurrentProfileLayout(): void;
@@ -39,16 +38,9 @@ export interface ILayoutManagerModel {
 let _prevLoadedDesign: IPersistKeyboardDesign | undefined;
 let _keepUnsavedNewDesign: boolean = false;
 
-const local = new (class {
-  loadedLayoutData: IPersistKeyboardDesign = createFallbackPersistKeyboardDesign();
-})();
-
 export const layoutManagerReader = {
   get editSource(): ILayoutEditSource {
     return uiState.core.layoutEditSource;
-  },
-  get loadedDesign() {
-    return local.loadedLayoutData;
   },
   get isModified() {
     return UiLayouterCore.getIsModified();
@@ -229,7 +221,7 @@ function updateBeforeRender() {
 }
 
 export function useLayoutManagerModel(): ILayoutManagerModel {
-  const { editSource, loadedDesign, isModified } = layoutManagerReader;
+  const { editSource, isModified } = layoutManagerReader;
   const {
     createNewLayout,
     loadCurrentProfileLayout,
@@ -247,7 +239,6 @@ export function useLayoutManagerModel(): ILayoutManagerModel {
 
   return {
     editSource,
-    loadedDesign,
     isModified,
     createNewLayout,
     loadCurrentProfileLayout,
