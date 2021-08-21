@@ -7,7 +7,10 @@ import {
   uiStateReader,
 } from '~/ui/commonStore';
 import { UiLayouterCore } from '~/ui/pages/layouter';
-import { LayoutManagerModel } from '~/ui/pages/layouter-page/LayoutManagerModel';
+import {
+  ILayoutManagerModel,
+  useLayoutManagerModel,
+} from '~/ui/pages/layouter-page/LayoutManagerModel';
 
 export type ILayoutManagerModalState =
   | 'None'
@@ -82,7 +85,7 @@ function getEditSourceDisplayText(
 }
 
 function useLayoutManagerViewModelImpl(
-  model: LayoutManagerModel,
+  model: ILayoutManagerModel,
 ): ILayoutManagerViewModel {
   const local = useLocal({
     currentLayoutName: '',
@@ -198,7 +201,6 @@ function useLayoutManagerViewModelImpl(
 }
 
 export function useLayoutManagerViewModel(): ILayoutManagerViewModel {
-  const model = useLocal(() => new LayoutManagerModel());
-  model.updateBeforeRender();
+  const model = useLayoutManagerModel();
   return useLayoutManagerViewModelImpl(model);
 }
