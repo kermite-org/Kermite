@@ -8,6 +8,9 @@ export const profilesReader = {
   get allProfileEntries() {
     return uiState.core.profileManagerStatus.allProfileEntries;
   },
+  get visibleProfileEntries() {
+    return uiState.core.profileManagerStatus.visibleProfileEntries;
+  },
   get isEditProfileAvailable() {
     const { editSource } = uiState.core.profileManagerStatus;
     return editSource.type !== 'NoEditProfileAvailable';

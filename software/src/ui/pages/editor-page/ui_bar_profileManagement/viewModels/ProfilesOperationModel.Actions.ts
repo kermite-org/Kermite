@@ -1,8 +1,5 @@
 import { forceChangeFilePathExtension } from '~/shared';
-import {
-  getProjectOriginAndIdFromSig,
-  joinProjectProfileName,
-} from '~/shared/funcs/DomainRelatedHelpers';
+import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { ipcAgent, texts } from '~/ui/base';
 import { uiStatusModel } from '~/ui/commonModels';
 import { modalAlert, modalConfirm, modalTextEdit } from '~/ui/components';
@@ -44,8 +41,7 @@ const createProfile = async () => {
     const { origin, projectId } = getProjectOriginAndIdFromSig(projectKey);
     const nameValid = await checkValidNewProfileName(projectId, profileName);
     if (nameValid) {
-      const fullProfileName = joinProjectProfileName(projectId, profileName);
-      profilesActions.createProfile(fullProfileName, origin, projectId, {
+      profilesActions.createProfile(profileName, origin, projectId, {
         type: 'blank',
         layoutName: layoutKey,
       });

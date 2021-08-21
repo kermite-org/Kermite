@@ -96,19 +96,15 @@ export class ProfileManager implements IProfileManager {
 
   async initializeAsync() {
     this._globalProjectId = coreState.globalSettings.globalProjectId;
-    try {
-      await this.core.ensureProfilesDirectoryExists();
-      await this.reEnumerateAllProfileEntries();
-      const loadedEditSource = this.loadInitialEditSource();
-      const editSource = this.fixEditSource(loadedEditSource);
-      const profile = await this.loadProfileByEditSource(editSource);
-      this.setStatus({
-        editSource,
-        loadedProfileData: profile,
-      });
-    } catch (error) {
-      console.error(error);
-    }
+    await this.core.ensureProfilesDirectoryExists();
+    await this.reEnumerateAllProfileEntries();
+    const loadedEditSource = this.loadInitialEditSource();
+    const editSource = this.fixEditSource(loadedEditSource);
+    const profile = await this.loadProfileByEditSource(editSource);
+    this.setStatus({
+      editSource,
+      loadedProfileData: profile,
+    });
     coreStateManager.coreStateEventPort.subscribe(this.onCoreStateChange);
   }
 
