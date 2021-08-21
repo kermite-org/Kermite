@@ -1,13 +1,13 @@
 import {
-  IProfileData,
+  compareObjectByJsonStringify,
+  duplicateObjectByJsonStringifyParse,
   fallbackProfileData,
-  IProfileAssignType,
   IAssignEntry,
   IAssignEntryWithLayerFallback,
   IAssignOperation,
-  compareObjectByJsonStringify,
-  duplicateObjectByJsonStringifyParse,
   IPersistKeyboardDesign,
+  IProfileAssignType,
+  IProfileData,
 } from '~/shared';
 import { getDisplayKeyboardDesignSingleCached } from '~/shared/modules/DisplayKeyboardSingleCache';
 import {
@@ -131,10 +131,15 @@ export class EditorModel {
     return this.layers.find((la) => la.layerId === layerId);
   }
 
-  checkDirty(clean: boolean): boolean {
-    if (clean) {
-      removeInvalidProfileAssigns(this.profileData);
-    }
+  checkDirtyWithCleanupSideEffect(): boolean {
+    removeInvalidProfileAssigns(this.profileData);
+    return !compareObjectByJsonStringify(
+      this.loadedProfileData,
+      this.profileData,
+    );
+  }
+
+  checkDirty(): boolean {
     return !compareObjectByJsonStringify(
       this.loadedProfileData,
       this.profileData,

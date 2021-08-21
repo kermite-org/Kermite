@@ -5,8 +5,10 @@ import {
   OperationButtonWithIcon,
   ConfigurationButton,
 } from '~/ui/components';
-import { makeProfileManagementPartViewModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileManagementPartViewModel';
+import { updateProfileDataSourceHandling } from '~/ui/pages/editor-page/models';
 import { makeProfileSelectionMenuPartViewModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileSelectionMenuPartViewModel';
+import { useProfileSelectorModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileSelectorModel';
+import { makeProfilesOperationModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfilesOperationModel';
 import {
   BehaviorSelector,
   LayoutStandardSelector,
@@ -17,16 +19,18 @@ import { SavingProjectPresetSelectionModal } from '~/ui/pages/editor-page/ui_bar
 import { ProfileSelectionMenuPart } from './views/ProfileSelectionMenu';
 
 export const ProfileManagementPart: FcWithClassName = ({ className }) => {
-  const baseVm = makeProfileManagementPartViewModel();
+  updateProfileDataSourceHandling();
+  const baseVm = makeProfilesOperationModel();
   const menuModel = makeProfileSelectionMenuPartViewModel(baseVm);
+  const { profileSelectorSource } = useProfileSelectorModel();
 
   return (
     <div css={style} className={className}>
       <ProfileSelectionMenuPart vm={menuModel} />
       <KeyboardProfileSelector
-        selectorSource={baseVm.profileSelectorSource}
+        selectorSource={profileSelectorSource}
         hint={texts.hint_assigner_topBar_selectCurrentProfile}
-        disabled={!baseVm.isEditProfileAvailable}
+        // disabled={!baseVm.isEditProfileAvailable}
       />
       <ConfigurationButton
         onClick={baseVm.openConfiguration}

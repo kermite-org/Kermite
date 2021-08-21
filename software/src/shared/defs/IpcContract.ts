@@ -3,9 +3,7 @@ import {
   IBootloaderDeviceDetectionStatus,
   ILayoutManagerCommand,
   ILayoutManagerStatus,
-  IProfileEntry,
   IProfileManagerCommand,
-  IProfileManagerStatus,
   IRealtimeKeyboardEvent,
   IResourceOrigin,
   IServerProfileInfo,
@@ -20,11 +18,9 @@ export interface IAppIpcContract {
   };
   async: {
     profile_getCurrentProfile(): Promise<IProfileData | undefined>;
-    profile_getAllProfileEntries(): Promise<IProfileEntry[]>;
     profile_executeProfileManagerCommands(
       commands: IProfileManagerCommand[],
     ): Promise<void>;
-    profile_openUserProfilesFolder(): Promise<void>;
 
     layout_executeLayoutManagerCommands(
       commands: ILayoutManagerCommand[],
@@ -65,7 +61,6 @@ export interface IAppIpcContract {
   };
   events: {
     global_appErrorEvents: IAppErrorData<any>;
-    profile_profileManagerStatus: Partial<IProfileManagerStatus>;
     layout_layoutManagerStatus: Partial<ILayoutManagerStatus>;
     device_keyEvents: IRealtimeKeyboardEvent;
     firmup_deviceDetectionEvents: IBootloaderDeviceDetectionStatus;

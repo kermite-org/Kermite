@@ -1,16 +1,8 @@
-import {
-  IProfileData,
-  IProfileEntry,
-  IProfileManagerCommand,
-  IProfileManagerStatus,
-} from '~/shared';
-import { IEventPort } from '~/shell/funcs';
+import { IProfileData, IProfileManagerCommand } from '~/shared';
 
 export interface IProfileManager {
   getCurrentProfileProjectId(): string;
   getCurrentProfile(): IProfileData | undefined;
-  getAllProfileEntries(): IProfileEntry[];
-  statusEventPort: IEventPort<Partial<IProfileManagerStatus>>;
   executeCommands(commands: IProfileManagerCommand[]): Promise<void>;
   saveCurrentProfile(profileData: IProfileData): Promise<void>;
 }

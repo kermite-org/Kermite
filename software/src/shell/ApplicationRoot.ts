@@ -60,10 +60,6 @@ export class ApplicationRoot {
         this.profileManager.getCurrentProfile(),
       profile_executeProfileManagerCommands: (commands) =>
         this.profileManager.executeCommands(commands),
-      profile_getAllProfileEntries: async () =>
-        this.profileManager.getAllProfileEntries(),
-      profile_openUserProfilesFolder: () =>
-        this.profileManager.openUserProfilesFolder(),
       layout_executeLayoutManagerCommands: (commands) =>
         this.layoutManager.executeCommands(commands),
       layout_showEditLayoutFileInFiler: async () =>
@@ -122,10 +118,6 @@ export class ApplicationRoot {
 
     appGlobal.icpMainAgent.supplySubscriptionHandlers({
       global_appErrorEvents: (cb) => appGlobal.appErrorEventPort.subscribe(cb),
-      profile_profileManagerStatus: (cb) => {
-        this.profileManager.statusEventPort.subscribe(cb);
-        return () => this.profileManager.statusEventPort.unsubscribe(cb);
-      },
       layout_layoutManagerStatus: (listener) =>
         this.layoutManager.statusEvents.subscribe(listener),
       device_keyEvents: (cb) => {

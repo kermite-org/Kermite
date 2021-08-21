@@ -161,17 +161,21 @@ export type IAppWindowStatus = {
   isWidgetAlwaysOnTop: boolean;
 };
 
+export type IProfileEntry = {
+  projectId: string;
+  profileName: string;
+};
+
 export type IProfileEditSource =
   | {
-      type: 'NoProfilesAvailable';
+      type: 'NoEditProfileAvailable';
     }
   | {
       type: 'ProfileNewlyCreated';
     }
   | {
       type: 'InternalProfile';
-      profileName: string;
-      projectId: string;
+      profileEntry: IProfileEntry;
     }
   | {
       type: 'ExternalFile';
@@ -186,7 +190,12 @@ export interface IProfileManagerStatus {
 }
 export interface IProfileManagerCommand {
   creatProfile?: {
-    name?: string;
+    name: string;
+    targetProjectOrigin: IResourceOrigin;
+    targetProjectId: string;
+    presetSpec: IPresetSpec;
+  };
+  creatProfileUnnamed?: {
     targetProjectOrigin: IResourceOrigin;
     targetProjectId: string;
     presetSpec: IPresetSpec;
@@ -198,11 +207,16 @@ export interface IProfileManagerCommand {
     projectId: string;
     layout: IPersistKeyboardDesign;
   };
-  loadProfile?: { name: string };
+  loadProfile?: { profileEntry: IProfileEntry };
   saveCurrentProfile?: { profileData: IProfileData };
-  deleteProfile?: { name: string };
-  renameProfile?: { name: string; newName: string };
-  copyProfile?: { name: string; newName: string };
+  deleteProfile?: { profileEntry: IProfileEntry };
+  renameProfile?: {
+    profileEntry: IProfileEntry;
+    newProfileName: string;
+  };
+  copyProfile?: { profileEntry: IProfileEntry; newProfileName: string };
+  saveProfileAs?: { profileData: IProfileData; newProfileName: string };
+
   saveAsProjectPreset?: {
     projectId: string;
     presetName: string;
@@ -210,7 +224,8 @@ export interface IProfileManagerCommand {
   };
   importFromFile?: { filePath: string };
   exportToFile?: { filePath: string; profileData: IProfileData };
-  saveProfileAs?: { name: string; profileData: IProfileData };
+
+  openUserProfilesFolder?: 1;
 }
 
 export type ILayoutEditSource =
@@ -300,8 +315,3 @@ export type IBootloaderDeviceDetectionStatus =
       bootloaderType: IBootloaderType;
       targetDeviceSig: string;
     };
-
-export type IProfileEntry = {
-  profileName: string;
-  projectId: string;
-};

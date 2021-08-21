@@ -7,7 +7,7 @@ import {
   ProjectAttachmentFileSelectorModal,
 } from '~/ui/components';
 import { fieldSetter } from '~/ui/helpers';
-import { IProfileManagementPartViewModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileManagementPartViewModel';
+import { IProfileManagementPartViewModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfilesOperationModel';
 
 function getSavingPackageFilePath() {
   const projectInfo = projectPackagesReader.getEditTargetProject();

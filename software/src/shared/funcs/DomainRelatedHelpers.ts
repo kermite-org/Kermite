@@ -4,6 +4,7 @@ import {
   IKeyboardDeviceAttributes,
   IPresetSpec,
   IPresetType,
+  IProfileEntry,
   IResourceOrigin,
   IStandardBaseFirmwareType,
 } from '~/shared/defs';
@@ -107,4 +108,18 @@ export function getFirmwareTargetDeviceFromBaseFirmwareType(
   } else {
     return 'rp2040';
   }
+}
+
+export function checkProfileEntryEquality(a: IProfileEntry, b: IProfileEntry) {
+  return a.projectId === b.projectId && a.profileName === b.profileName;
+}
+
+export function stringifyProfileEntry(profileEntry: IProfileEntry): string {
+  const { projectId, profileName } = profileEntry;
+  return `${projectId}:${profileName}`;
+}
+
+export function parseProfileEntry(profileKey: string): IProfileEntry {
+  const [projectId, profileName] = profileKey.split(':');
+  return { projectId, profileName };
 }
