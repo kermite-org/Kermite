@@ -93,12 +93,6 @@ export const layoutManager = {
       coreState.layoutEditSource,
     );
   },
-  showEditLayoutFileInFiler() {
-    const filePath = getCurrentEditLayoutFilePath();
-    if (filePath) {
-      shell.showItemInFolder(filePath);
-    }
-  },
 };
 
 async function loadLayoutByEditSource(editSource: ILayoutEditSource) {
@@ -216,6 +210,12 @@ export const layoutManagerModule = createCoreModule({
       dispatchCoreAction({
         project_saveLocalProjectPackageInfo: newProjectInfo,
       });
+    }
+  },
+  layout_showEditLayoutFileInFiler() {
+    const filePath = getCurrentEditLayoutFilePath();
+    if (filePath) {
+      shell.showItemInFolder(filePath);
     }
   },
 });

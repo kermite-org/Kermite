@@ -151,4 +151,5 @@ export type ICoreAction = Partial<{
     layoutName: string;
     design: IPersistKeyboardDesign;
   };
+  layout_showEditLayoutFileInFiler: 1;
 }>;

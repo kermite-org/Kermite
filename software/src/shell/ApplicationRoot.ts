@@ -55,8 +55,6 @@ export class ApplicationRoot {
 
     appGlobal.icpMainAgent.supplyAsyncHandlers({
       profile_getCurrentProfile: async () => profilesReader.getCurrentProfile(),
-      layout_showEditLayoutFileInFiler: async () =>
-        layoutManager.showEditLayoutFileInFiler(),
       device_connectToDevice: async (path) =>
         this.deviceService.selectTargetDevice(path),
       device_setCustomParameterValue: async (index, value) =>

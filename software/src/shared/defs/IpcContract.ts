@@ -15,8 +15,6 @@ export interface IAppIpcContract {
   };
   async: {
     profile_getCurrentProfile(): Promise<IProfileData | undefined>;
-    layout_showEditLayoutFileInFiler(): Promise<void>;
-
     config_writeKeyMappingToDevice(): Promise<boolean>;
     config_getProjectRootDirectoryPath(): Promise<string>;
     config_checkLocalRepositoryFolderPath(path: string): Promise<boolean>;

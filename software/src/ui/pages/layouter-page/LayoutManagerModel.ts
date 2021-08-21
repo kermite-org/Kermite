@@ -178,8 +178,8 @@ const layoutManagerActions = {
     router.navigateTo('/editor');
     dispatchCoreAction({ layout_loadCurrentProfileLayout: 1 });
   },
-  async showEditLayoutFileInFiler() {
-    await ipcAgent.async.layout_showEditLayoutFileInFiler();
+  showEditLayoutFileInFiler() {
+    dispatchCoreAction({ layout_showEditLayoutFileInFiler: 1 });
   },
 };
 
