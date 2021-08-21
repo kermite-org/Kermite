@@ -1,3 +1,4 @@
+import { useEffect } from 'qx';
 import {
   compareObjectByJsonStringify,
   createFallbackPersistKeyboardDesign,
@@ -7,8 +8,12 @@ import {
   ILayoutManagerStatus,
   IPersistKeyboardDesign,
 } from '~/shared';
-import { appUi, ipcAgent, router } from '~/ui/base';
-import { dispatchCoreAction, projectPackagesReader } from '~/ui/commonStore';
+import { ipcAgent, router } from '~/ui/base';
+import {
+  dispatchCoreAction,
+  projectPackagesReader,
+  uiState,
+} from '~/ui/commonStore';
 import { modalConfirm } from '~/ui/components';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 import { UiLayouterCore } from '~/ui/pages/layouter';
@@ -213,38 +218,35 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     // }
   };
 
-  // private onProfileManagerStatus = (
-  //   payload: Partial<IProfileManagerStatus>,
-  // ) => {
-  //   if (payload.loadedProfileData) {
-  //     if (this.editSource.type === 'CurrentProfile') {
-  //       this.sendCommand({ type: 'loadCurrentProfileLayout' });
-  //     }
-  //   }
-  // };
-
-  startLifecycle() {
-    if (!appUi.isExecutedInApp) {
-      return () => {};
-    }
-    const unbsub = ipcAgent.events.layout_layoutManagerStatus.subscribe(
-      this.onLayoutManagerStatus,
+  updateBeforeRender() {
+    useEffect(
+      () =>
+        ipcAgent.events.layout_layoutManagerStatus.subscribe(
+          this.onLayoutManagerStatus,
+        ),
+      [],
     );
-    // const unsub2 = ipcAgent.events.profile_profileManagerStatus.subscribe(
-    //   this.onProfileManagerStatus,
-    // );
-    return () => {
-      unbsub();
-      // unsub2();
-      if (this.isModified) {
+
+    useEffect(() => {
+      if (uiState.core.loadedProfileData) {
         if (this.editSource.type === 'CurrentProfile') {
-          const design = UiLayouterCore.emitSavingDesign();
-          editorModel.replaceKeyboardDesign(design);
-        }
-        if (this.editSource.type === 'LayoutNewlyCreated') {
-          _keepUnsavedNewDesign = true;
+          this.sendCommand({ type: 'loadCurrentProfileLayout' });
         }
       }
-    };
+    }, [uiState.core]);
+
+    useEffect(() => {
+      return () => {
+        if (this.isModified) {
+          if (this.editSource.type === 'CurrentProfile') {
+            const design = UiLayouterCore.emitSavingDesign();
+            editorModel.replaceKeyboardDesign(design);
+          }
+          if (this.editSource.type === 'LayoutNewlyCreated') {
+            _keepUnsavedNewDesign = true;
+          }
+        }
+      };
+    }, []);
   }
 }

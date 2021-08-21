@@ -199,5 +199,6 @@ function useLayoutManagerViewModelImpl(
 
 export function useLayoutManagerViewModel(): ILayoutManagerViewModel {
   const model = useLocal(() => new LayoutManagerModel());
+  model.updateBeforeRender();
   return useLayoutManagerViewModelImpl(model);
 }
