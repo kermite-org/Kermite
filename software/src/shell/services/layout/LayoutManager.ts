@@ -6,7 +6,7 @@ import {
   vValueEquals,
 } from '~/shared/modules/SchemaValidationHelper';
 import { applicationStorage } from '~/shell/base';
-import { coreState } from '~/shell/global';
+import { coreState, profilesReader } from '~/shell/global';
 import { layoutManagerModule } from '~/shell/services/layout/LayoutManagerModule';
 
 const layoutEditSourceSchema = vSchemaOneOf([
@@ -57,12 +57,10 @@ export const layoutManager = {
     }
 
     if (coreState.layoutEditSource.type === 'CurrentProfile') {
-      // const profile = profilesReader.getCurrentProfile();
-      // if (!profile) {
-      //   this.createNewLayout();
-      // }
-      // 一旦CurrentProfileの編集を無効化
-      layoutManagerModule.layout_createNewLayout(1);
+      const profile = profilesReader.getCurrentProfile();
+      if (!profile) {
+        layoutManagerModule.layout_createNewLayout(1);
+      }
     }
   },
   terminate() {
