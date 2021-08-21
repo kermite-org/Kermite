@@ -106,38 +106,38 @@ export type ICoreAction = Partial<{
   window_setWidgetAlwaysOnTop: boolean;
   window_reloadPage: 1;
 
-  profile_createProfile?: {
+  profile_createProfile: {
     newProfileName: string;
     targetProjectOrigin: IResourceOrigin;
     targetProjectId: string;
     presetSpec: IPresetSpec;
   };
-  profile_createProfileUnnamed?: {
+  profile_createProfileUnnamed: {
     targetProjectOrigin: IResourceOrigin;
     targetProjectId: string;
     presetSpec: IPresetSpec;
   };
-  profile_createProfileExternal?: {
+  profile_createProfileExternal: {
     profileData: IProfileData;
   };
-  profile_createProfileFromLayout?: {
+  profile_createProfileFromLayout: {
     projectId: string;
     layout: IPersistKeyboardDesign;
   };
-  profile_loadProfile?: { profileEntry: IProfileEntry };
-  profile_saveCurrentProfile?: { profileData: IProfileData };
-  profile_copyProfile?: { newProfileName: string };
-  profile_renameProfile?: { newProfileName: string };
-  profile_deleteProfile?: 1;
+  profile_loadProfile: { profileEntry: IProfileEntry };
+  profile_saveCurrentProfile: { profileData: IProfileData };
+  profile_copyProfile: { newProfileName: string };
+  profile_renameProfile: { newProfileName: string };
+  profile_deleteProfile: 1;
 
-  profile_saveProfileAs?: { profileData: IProfileData; newProfileName: string };
-  profile_saveAsProjectPreset?: {
+  profile_saveProfileAs: { profileData: IProfileData; newProfileName: string };
+  profile_saveAsProjectPreset: {
     projectId: string;
     presetName: string;
     profileData: IProfileData;
   };
-  profile_importFromFile?: { filePath: string };
-  profile_exportToFile?: { filePath: string; profileData: IProfileData };
-  profile_openUserProfilesFolder?: 1;
-  profile_setEditProfileData?: { editProfileData: IProfileData };
+  profile_importFromFile: { filePath: string };
+  profile_exportToFile: { filePath: string; profileData: IProfileData };
+  profile_openUserProfilesFolder: 1;
+  profile_setEditProfileData: { editProfileData: IProfileData };
 }>;

@@ -143,8 +143,8 @@ export class ApplicationRoot {
         windowModule,
         profileManagerModule,
       );
-      globalSettingsModule.config_loadGlobalSettings!(1);
-      keyboardConfigModule.config_loadKeyboardConfig!(1);
+      globalSettingsModule.config_loadGlobalSettings(1);
+      keyboardConfigModule.config_loadKeyboardConfig(1);
       await dispatchCoreAction({ project_loadAllProjectPackages: 1 });
       await dispatchCoreAction({ project_loadAllCustomFirmwareInfos: 1 });
       await profileManager.initializeAsync();
