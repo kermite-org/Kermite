@@ -64,10 +64,12 @@ export class LayoutManager implements ILayoutManager {
     }
 
     if (coreState.layoutEditSource.type === 'CurrentProfile') {
-      const profile = profilesReader.getCurrentProfile();
-      if (!profile) {
-        this.createNewLayout();
-      }
+      // const profile = profilesReader.getCurrentProfile();
+      // if (!profile) {
+      //   this.createNewLayout();
+      // }
+      // 一旦CurrentProfileの編集を無効化
+      this.createNewLayout();
     }
   }
 
