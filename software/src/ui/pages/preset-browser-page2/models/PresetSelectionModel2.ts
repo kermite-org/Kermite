@@ -12,7 +12,7 @@ import {
   ISelectorOption,
   router,
 } from '~/ui/base';
-import { projectPackagesReader } from '~/ui/commonStore';
+import { dispatchCoreAction, projectPackagesReader } from '~/ui/commonStore';
 import { fieldSetter, useFetcher, usePersistState } from '~/ui/helpers';
 import { IPresetSelectionModel } from '~/ui/pages/preset-browser-page/models';
 
@@ -37,12 +37,8 @@ function makePresetOptions(
   }));
 }
 
-function sendCreateProfileCommand(profileData: IProfileData) {
-  return ipcAgent.async.profile_executeProfileManagerCommands([
-    {
-      createProfileExternal: { profileData },
-    },
-  ]);
+async function sendCreateProfileCommand(profileData: IProfileData) {
+  await dispatchCoreAction({ profile_createProfileExternal: { profileData } });
 }
 
 export function usePresetSelectionModel2(): IPresetSelectionModel {

@@ -9,8 +9,8 @@ export const profilesOperationReader = {
       developerMode,
       allowCrossKeyboardKeyMappingWrite,
     } = uiStateReader.globalSettings;
-    const { editSource } = profilesReader;
-    const isInternalProfile = editSource.type === 'InternalProfile';
+    const { profileEditSource } = profilesReader;
+    const isInternalProfile = profileEditSource.type === 'InternalProfile';
     const isDeviceConnected = deviceStatus.isConnected;
     const refProjectId = editorModel.profileData.projectId;
     const allProjectInfos = uiStateReader.allProjectPackageInfos;
@@ -35,21 +35,21 @@ export const profilesOperationReader = {
     }
   },
   get canSaveProfile(): boolean {
-    const { editSource } = profilesReader;
+    const { profileEditSource } = profilesReader;
     return (
-      editSource.type === 'ProfileNewlyCreated' ||
-      editSource.type === 'ExternalFile' ||
-      (editSource.type === 'InternalProfile' && editorModel.checkDirty())
+      profileEditSource.type === 'ProfileNewlyCreated' ||
+      profileEditSource.type === 'ExternalFile' ||
+      (profileEditSource.type === 'InternalProfile' && editorModel.checkDirty())
     );
   },
   get isCurrentProfileInternal(): boolean {
-    return profilesReader.editSource.type === 'InternalProfile';
+    return profilesReader.profileEditSource.type === 'InternalProfile';
   },
   get isMenuItemSaveEnabled(): boolean {
-    const { editSource } = profilesReader;
+    const { profileEditSource } = profilesReader;
     return (
-      editSource.type === 'ProfileNewlyCreated' ||
-      editSource.type === 'ExternalFile'
+      profileEditSource.type === 'ProfileNewlyCreated' ||
+      profileEditSource.type === 'ExternalFile'
     );
   },
 };

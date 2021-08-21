@@ -3,7 +3,8 @@ import {
   getPresetSpecFromPresetKey,
   getProjectOriginAndIdFromSig,
 } from '~/shared/funcs/DomainRelatedHelpers';
-import { ipcAgent, router } from '~/ui/base';
+import { router } from '~/ui/base';
+import { dispatchCoreAction } from '~/ui/commonStore';
 
 /*
 function getNewProfileNameBase(
@@ -31,14 +32,13 @@ function createProfile(
   targetProjectId: string,
   presetSpec: IPresetSpec,
 ) {
-  const createCommand = {
-    creatProfileUnnamed: {
+  dispatchCoreAction({
+    profile_createProfileUnnamed: {
       targetProjectOrigin,
       targetProjectId,
       presetSpec,
     },
-  };
-  ipcAgent.async.profile_executeProfileManagerCommands([createCommand]);
+  });
 }
 
 export function editSelectedProjectPreset(

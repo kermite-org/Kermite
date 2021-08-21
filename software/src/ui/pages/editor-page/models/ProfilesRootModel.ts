@@ -1,40 +1,34 @@
 import { useEffect } from 'qx';
-import { compareObjectByJsonStringify, IProfileManagerStatus } from '~/shared';
-import { ipcAgent } from '~/ui/base';
-import { useKeyboardBehaviorModeModel } from '~/ui/commonModels';
-import { uiState } from '~/ui/commonStore';
+import { fallbackProfileData } from '~/shared';
+import { dispatchCoreAction } from '~/ui/commonStore';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
+import { removeInvalidProfileAssigns } from '~/ui/pages/editor-page/models/ProfileDataHelper';
+import { profilesReader } from '~/ui/pages/editor-page/models/ProfilesReader';
 
-function updateEditSourceProfileOnRender() {
-  const handleProfileStatusChange = (status: IProfileManagerStatus) => {
-    if (
-      !compareObjectByJsonStringify(
-        status.loadedProfileData,
-        editorModel.loadedProfileData,
-      )
-    ) {
-      editorModel.loadProfileData(status.loadedProfileData);
-    }
-  };
-  const status = uiState.core.profileManagerStatus;
-  useEffect(() => handleProfileStatusChange(status), [status]);
+function affectStoreLoadedProfileDataToModelProfileData() {
+  const { loadedProfileData } = profilesReader;
+  useEffect(() => {
+    console.log('editorModel.profileData <-- store.loadedProfileData');
+    editorModel.loadProfileData(loadedProfileData);
+  }, [loadedProfileData]);
 }
 
-let profileStringified: string = '';
+let profileStringified: string = JSON.stringify(fallbackProfileData);
 
-function affectToSimulatorIfEditProfileChanged() {
-  const { isSimulatorMode } = useKeyboardBehaviorModeModel();
-  const profile = editorModel.profileData;
-  if (isSimulatorMode) {
-    const str = JSON.stringify(profile);
-    if (str !== profileStringified) {
-      profileStringified = str;
-      ipcAgent.async.simulator_postSimulationTargetProfile(profile);
-    }
+function affectModelProfileDataToStoreEditProfile() {
+  removeInvalidProfileAssigns(editorModel.profileData);
+  const str = JSON.stringify(editorModel.profileData);
+  if (str !== profileStringified) {
+    const obj = JSON.parse(str);
+    console.log('editorModel.profileData --> store.editProfileData');
+    dispatchCoreAction({
+      profile_setEditProfileData: { editProfileData: obj },
+    });
+    profileStringified = str;
   }
 }
 
 export function updateProfileDataSourceHandling() {
-  updateEditSourceProfileOnRender();
-  affectToSimulatorIfEditProfileChanged();
+  affectStoreLoadedProfileDataToModelProfileData();
+  affectModelProfileDataToStoreEditProfile();
 }

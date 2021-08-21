@@ -181,13 +181,6 @@ export type IProfileEditSource =
       type: 'ExternalFile';
       filePath: string;
     };
-
-export interface IProfileManagerStatus {
-  editSource: IProfileEditSource;
-  loadedProfileData: IProfileData;
-  allProfileEntries: IProfileEntry[];
-  visibleProfileEntries: IProfileEntry[];
-}
 export interface IProfileManagerCommand {
   creatProfile?: {
     name: string;

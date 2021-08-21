@@ -9,8 +9,12 @@ import {
 } from '~/shared/modules/SchemaValidationHelper';
 import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { pathRelative } from '~/shell/funcs';
-import { commitCoreState, coreState, createCoreModule } from '~/shell/global';
-import { IProfileManager } from '~/shell/services/profile/Interfaces';
+import {
+  commitCoreState,
+  coreState,
+  createCoreModule,
+  profilesReader,
+} from '~/shell/global';
 import { MenuManager } from '~/shell/services/window/MenuManager';
 import { IAppWindowWrapper } from './Interfaces';
 import {
@@ -65,8 +69,6 @@ export class AppWindowWrapper implements IAppWindowWrapper {
   private publicRootPath: string | undefined;
   private mainWindow: BrowserWindow | undefined;
   private state: IWindowPersistState = makeFallbackWindowPersistState();
-
-  constructor(private profileManager: IProfileManager) {}
 
   private commitWindowStatus(diff: Partial<IAppWindowStatus>) {
     const key = getObjectKeys(diff)[0];
@@ -250,7 +252,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     if (this.mainWindow) {
       const bounds = this.mainWindow.getBounds();
       if (this.isWidgetMode) {
-        this.state.widgetProjectId = this.profileManager.getCurrentProfileProjectId();
+        this.state.widgetProjectId = profilesReader.getCurrentProfileProjectId();
         this.state.widgetWindowBounds = bounds;
       } else {
         this.state.mainWindowBounds = bounds;
@@ -263,7 +265,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
       return;
     }
     if (this.isWidgetMode) {
-      const projectId = this.profileManager.getCurrentProfileProjectId();
+      const projectId = profilesReader.getCurrentProfileProjectId();
       if (
         projectId === this.state.widgetProjectId &&
         this.state.widgetWindowBounds
@@ -272,7 +274,7 @@ export class AppWindowWrapper implements IAppWindowWrapper {
         this.mainWindow.setBounds(this.state.widgetWindowBounds);
       } else {
         // widgetモーで前回と異なるキーボードを表示する場合デフォルトのウインドウサイズを算出して設定する
-        const currentProfile = this.profileManager.getCurrentProfile();
+        const currentProfile = profilesReader.getCurrentProfile();
         if (currentProfile) {
           const design = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
             currentProfile.keyboardDesign,

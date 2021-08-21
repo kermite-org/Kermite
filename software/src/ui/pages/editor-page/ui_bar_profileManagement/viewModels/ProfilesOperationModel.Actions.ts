@@ -77,7 +77,7 @@ const renameProfile = async () => {
       profileEntry.profileName,
     );
     if (newProfileName) {
-      profilesActions.renameProfile(profileEntry, newProfileName);
+      profilesActions.renameProfile(newProfileName);
     }
   }
 };
@@ -91,7 +91,7 @@ const copyProfile = async () => {
       profileEntry.profileName,
     );
     if (newProfileName) {
-      profilesActions.copyProfile(profileEntry, newProfileName);
+      profilesActions.copyProfile(newProfileName);
     }
   }
 };
@@ -107,13 +107,13 @@ const deleteProfile = async () => {
       caption: texts.label_assigner_confirmModal_deleteProfile_modalTitle,
     });
     if (ok) {
-      profilesActions.deleteProfile(profileEntry);
+      profilesActions.deleteProfile();
     }
   }
 };
 
 const handleSaveUnsavedProfile = async () => {
-  if (profilesReader.editSource.type !== 'InternalProfile') {
+  if (profilesReader.profileEditSource.type !== 'InternalProfile') {
     const projectId = editorModel.profileData.projectId;
     const newProfileName = await inputNewProfileName(
       texts.label_assigner_profileNameEditModal_modalTitleSave,
@@ -131,7 +131,7 @@ const openConfiguration = () => {
 };
 
 const onSaveButton = () => {
-  const editSourceType = profilesReader.editSource.type;
+  const editSourceType = profilesReader.profileEditSource.type;
   if (
     editSourceType === 'ProfileNewlyCreated' ||
     editSourceType === 'ExternalFile'

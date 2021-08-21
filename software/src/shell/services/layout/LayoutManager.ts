@@ -17,10 +17,9 @@ import {
 } from '~/shared/modules/SchemaValidationHelper';
 import { appEnv, applicationStorage } from '~/shell/base';
 import { createEventPort } from '~/shell/funcs';
-import { coreState, dispatchCoreAction } from '~/shell/global';
+import { coreState, dispatchCoreAction, profilesReader } from '~/shell/global';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { ILayoutManager } from '~/shell/services/layout/Interfaces';
-import { IProfileManager } from '~/shell/services/profile/Interfaces';
 
 const layoutEditSourceSchema = vSchemaOneOf([
   vObject({
@@ -41,8 +40,6 @@ const layoutEditSourceSchema = vSchemaOneOf([
 ]);
 
 export class LayoutManager implements ILayoutManager {
-  constructor(private profileManager: IProfileManager) {}
-
   private status: ILayoutManagerStatus = {
     editSource: {
       type: 'LayoutNewlyCreated',
@@ -71,7 +68,7 @@ export class LayoutManager implements ILayoutManager {
     }
 
     if (this.status.editSource.type === 'CurrentProfile') {
-      const profile = this.profileManager.getCurrentProfile();
+      const profile = profilesReader.getCurrentProfile();
       if (!profile) {
         this.createNewLayout();
       }
@@ -103,7 +100,7 @@ export class LayoutManager implements ILayoutManager {
 
   // eslint-disable-next-line @typescript-eslint/require-await
   private async loadCurrentProfileLayout() {
-    const profile = this.profileManager.getCurrentProfile();
+    const profile = profilesReader.getCurrentProfile();
     if (profile) {
       this.setStatus({
         editSource: { type: 'CurrentProfile' },
@@ -211,11 +208,13 @@ export class LayoutManager implements ILayoutManager {
     if (editSource.type === 'LayoutNewlyCreated') {
       throw new Error('cannot save newly created layout');
     } else if (editSource.type === 'CurrentProfile') {
-      const profile = this.profileManager.getCurrentProfile();
+      const profile = profilesReader.getCurrentProfile();
       if (profile) {
         const newProfile = duplicateObjectByJsonStringifyParse(profile);
         newProfile.keyboardDesign = design;
-        this.profileManager.saveCurrentProfile(newProfile);
+        await dispatchCoreAction({
+          profile_saveCurrentProfile: { profileData: newProfile },
+        });
       }
     } else if (editSource.type === 'File') {
       const { filePath } = editSource;
