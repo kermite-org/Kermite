@@ -19,7 +19,6 @@ import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 import { UiLayouterCore } from '~/ui/pages/layouter';
 
 interface ILayoutManagerModel {
-  // projectLayoutsInfos: IProjectLayoutsInfo[];
   editSource: ILayoutEditSource;
   loadedDesign: IPersistKeyboardDesign;
   createNewLayout(): void;
@@ -39,16 +38,10 @@ interface ILayoutManagerModel {
 let _prevLoadedDesign: IPersistKeyboardDesign | undefined;
 let _keepUnsavedNewDesign: boolean = false;
 export class LayoutManagerModel implements ILayoutManagerModel {
-  // private _projectLayoutsInfos: IProjectLayoutsInfo[] = [];
-
   private _layoutManagerStatus: ILayoutManagerStatus = {
     editSource: { type: 'LayoutNewlyCreated' },
     loadedDesign: createFallbackPersistKeyboardDesign(),
   };
-
-  // get projectLayoutsInfos() {
-  //   return this._projectLayoutsInfos;
-  // }
 
   get editSource() {
     return this._layoutManagerStatus.editSource;
@@ -110,10 +103,6 @@ export class LayoutManagerModel implements ILayoutManagerModel {
     layoutName: string,
     design: IPersistKeyboardDesign,
   ) {
-    // const isExist = this.projectLayoutsInfos.find(
-    //   (info) =>
-    //     info.projectId === projectId && info.layoutNames.includes(layoutName),
-    // );
     const isExist = !!projectPackagesReader
       .getEditTargetProject()
       ?.layouts.some((it) => it.layoutName === layoutName);
@@ -211,11 +200,6 @@ export class LayoutManagerModel implements ILayoutManagerModel {
         _prevLoadedDesign = diff.loadedDesign;
       }
     }
-    // if (diff.projectLayoutsInfos) {
-    //   this._projectLayoutsInfos = diff.projectLayoutsInfos.filter(
-    //     (info) => info.origin === 'local',
-    //   );
-    // }
   };
 
   updateBeforeRender() {
