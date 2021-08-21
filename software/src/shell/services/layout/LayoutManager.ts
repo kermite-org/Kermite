@@ -47,25 +47,35 @@ function getProjectInfo(projectId: string): IProjectPackageInfo | undefined {
   );
 }
 
-export class LayoutManager {
-  private initialized = false;
-
-  async initializeAsync() {
-    if (!this.initialized) {
-      const editSource = applicationStorage.readItemSafe<ILayoutEditSource>(
-        'layoutEditSource',
-        layoutEditSourceSchema,
-        { type: 'CurrentProfile' },
+function getCurrentEditLayoutFilePath(): string | undefined {
+  const { layoutEditSource } = coreState;
+  if (layoutEditSource.type === 'ProjectLayout') {
+    const { projectId } = layoutEditSource;
+    const projectInfo = getProjectInfo(projectId);
+    if (projectInfo) {
+      return appEnv.resolveUserDataFilePath(
+        `data/projects/${projectInfo?.packageName}.kmpkg.json`,
       );
-      try {
-        // 前回起動時に編集していたファイルの読み込みを試みる
-        await loadLayoutByEditSource(editSource);
-      } catch (error) {
-        // 読み込めない場合は初期状態のままで、特にエラーを通知しない
-        console.log(`error while loading previous edit layout file`);
-        console.log(error);
-      }
-      this.initialized = true;
+    }
+  } else if (layoutEditSource.type === 'File') {
+    return layoutEditSource.filePath;
+  }
+}
+
+export const layoutManager = {
+  async initializeAsync() {
+    const editSource = applicationStorage.readItemSafe<ILayoutEditSource>(
+      'layoutEditSource',
+      layoutEditSourceSchema,
+      { type: 'CurrentProfile' },
+    );
+    try {
+      // 前回起動時に編集していたファイルの読み込みを試みる
+      await loadLayoutByEditSource(editSource);
+    } catch (error) {
+      // 読み込めない場合は初期状態のままで、特にエラーを通知しない
+      console.log(`error while loading previous edit layout file`);
+      console.log(error);
     }
 
     if (coreState.layoutEditSource.type === 'CurrentProfile') {
@@ -76,38 +86,20 @@ export class LayoutManager {
       // 一旦CurrentProfileの編集を無効化
       layoutManagerModule.layout_createNewLayout(1);
     }
-  }
-
+  },
   terminate() {
     applicationStorage.writeItem(
       'layoutEditSource',
       coreState.layoutEditSource,
     );
-  }
-
-  private getCurrentEditLayoutFilePath(): string | undefined {
-    const { layoutEditSource } = coreState;
-    if (layoutEditSource.type === 'ProjectLayout') {
-      const { projectId } = layoutEditSource;
-      const projectInfo = getProjectInfo(projectId);
-      if (projectInfo) {
-        return appEnv.resolveUserDataFilePath(
-          `data/projects/${projectInfo?.packageName}.kmpkg.json`,
-        );
-      }
-    } else if (layoutEditSource.type === 'File') {
-      return layoutEditSource.filePath;
-    }
-  }
-
+  },
   showEditLayoutFileInFiler() {
-    const filePath = this.getCurrentEditLayoutFilePath();
+    const filePath = getCurrentEditLayoutFilePath();
     if (filePath) {
       shell.showItemInFolder(filePath);
     }
-  }
-}
-export const layoutManager = new LayoutManager();
+  },
+};
 
 async function loadLayoutByEditSource(editSource: ILayoutEditSource) {
   if (editSource.type === 'LayoutNewlyCreated') {
