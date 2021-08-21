@@ -22,7 +22,6 @@ import {
   profilesReader,
 } from '~/shell/global';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
-import { ILayoutManager } from '~/shell/services/layout/Interfaces';
 
 const layoutEditSourceSchema = vSchemaOneOf([
   vObject({
@@ -42,7 +41,7 @@ const layoutEditSourceSchema = vSchemaOneOf([
   }),
 ]);
 
-export class LayoutManager implements ILayoutManager {
+export class LayoutManager {
   private initialized = false;
 
   async initializeAsync() {
