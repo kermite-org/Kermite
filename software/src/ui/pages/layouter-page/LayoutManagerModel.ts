@@ -39,16 +39,16 @@ let _prevLoadedDesign: IPersistKeyboardDesign | undefined;
 let _keepUnsavedNewDesign: boolean = false;
 export class LayoutManagerModel implements ILayoutManagerModel {
   private _layoutManagerStatus: ILayoutManagerStatus = {
-    editSource: { type: 'LayoutNewlyCreated' },
-    loadedDesign: createFallbackPersistKeyboardDesign(),
+    layoutEditSource: { type: 'LayoutNewlyCreated' },
+    loadedLayoutData: createFallbackPersistKeyboardDesign(),
   };
 
   get editSource() {
-    return this._layoutManagerStatus.editSource;
+    return this._layoutManagerStatus.layoutEditSource;
   }
 
   get loadedDesign() {
-    return this._layoutManagerStatus.loadedDesign;
+    return this._layoutManagerStatus.loadedLayoutData;
   }
 
   get isModified() {
@@ -183,21 +183,21 @@ export class LayoutManagerModel implements ILayoutManagerModel {
       ...this._layoutManagerStatus,
       ...diff,
     };
-    if (diff.loadedDesign) {
+    if (diff.loadedLayoutData) {
       const same = compareObjectByJsonStringify(
-        diff.loadedDesign,
+        diff.loadedLayoutData,
         _prevLoadedDesign,
       );
       const isClean = compareObjectByJsonStringify(
-        diff.loadedDesign,
+        diff.loadedLayoutData,
         createFallbackPersistKeyboardDesign(),
       );
       if (isClean && _keepUnsavedNewDesign) {
         return;
       }
       if (!same || isClean) {
-        UiLayouterCore.loadEditDesign(diff.loadedDesign);
-        _prevLoadedDesign = diff.loadedDesign;
+        UiLayouterCore.loadEditDesign(diff.loadedLayoutData);
+        _prevLoadedDesign = diff.loadedLayoutData;
       }
     }
   };

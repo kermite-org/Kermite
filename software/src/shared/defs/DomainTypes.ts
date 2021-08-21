@@ -238,8 +238,8 @@ export type ILayoutEditSource =
       layoutName: string;
     };
 export interface ILayoutManagerStatus {
-  editSource: ILayoutEditSource;
-  loadedDesign: IPersistKeyboardDesign;
+  layoutEditSource: ILayoutEditSource;
+  loadedLayoutData: IPersistKeyboardDesign;
 }
 
 export type ILayoutManagerCommand =
