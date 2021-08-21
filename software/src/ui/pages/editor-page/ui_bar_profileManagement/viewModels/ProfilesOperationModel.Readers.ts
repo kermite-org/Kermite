@@ -21,7 +21,7 @@ export const profilesOperationReader = {
         info.projectId === refProjectId &&
         info.firmwares.some(
           (firmware) =>
-            ('standardFirmwareDefinition' in firmware &&
+            ('standardFirmwareConfig' in firmware &&
               standardFirmwareIds.includes(deviceFirmwareId)) ||
             ('customFirmwareId' in firmware &&
               firmware.customFirmwareId === deviceFirmwareId),
