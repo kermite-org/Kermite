@@ -16,7 +16,7 @@ function useSystemParameterModel(
   defaultValue: number,
 ): ISystemParameterModel {
   const _value =
-    uiStateReader.deviceStatus.systemParameterMaxValues?.[parameterIndex];
+    uiStateReader.deviceStatus.systemParameterValues?.[parameterIndex];
   const value = typeof _value === 'number' ? _value : defaultValue;
   const setValue = (newValue: number) => {
     ipcAgent.async.device_setCustomParameterValue(parameterIndex, newValue);
