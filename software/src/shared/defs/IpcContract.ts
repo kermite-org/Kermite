@@ -1,7 +1,6 @@
 import { IAppErrorData } from '~/shared/defs/CustomErrors';
 import {
   IBootloaderDeviceDetectionStatus,
-  ILayoutManagerCommand,
   IRealtimeKeyboardEvent,
   IResourceOrigin,
   IServerProfileInfo,
@@ -16,9 +15,6 @@ export interface IAppIpcContract {
   };
   async: {
     profile_getCurrentProfile(): Promise<IProfileData | undefined>;
-    layout_executeLayoutManagerCommands(
-      commands: ILayoutManagerCommand[],
-    ): Promise<boolean>;
     layout_showEditLayoutFileInFiler(): Promise<void>;
 
     config_writeKeyMappingToDevice(): Promise<boolean>;

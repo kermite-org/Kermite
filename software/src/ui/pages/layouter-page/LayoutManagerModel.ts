@@ -4,7 +4,6 @@ import {
   createFallbackPersistKeyboardDesign,
   forceChangeFilePathExtension,
   ILayoutEditSource,
-  ILayoutManagerCommand,
   IPersistKeyboardDesign,
 } from '~/shared';
 import { ipcAgent, router } from '~/ui/base';
@@ -56,10 +55,6 @@ export const layoutManagerReader = {
   },
 };
 
-function sendCommand(command: ILayoutManagerCommand) {
-  ipcAgent.async.layout_executeLayoutManagerCommands([command]);
-}
-
 async function checkShallLoadData(): Promise<boolean> {
   if (!layoutManagerReader.isModified) {
     return true;
@@ -76,28 +71,30 @@ const layoutManagerActions = {
       return;
     }
     _keepUnsavedNewDesign = false;
-    sendCommand({ type: 'createNewLayout' });
+    dispatchCoreAction({ layout_createNewLayout: 1 });
   },
 
   async loadCurrentProfileLayout() {
     if (!(await checkShallLoadData())) {
       return;
     }
-    sendCommand({ type: 'loadCurrentProfileLayout' });
+    dispatchCoreAction({ layout_loadCurrentProfileLayout: 1 });
   },
 
   async createForProject(projectId: string, layoutName: string) {
     if (!(await checkShallLoadData())) {
       return;
     }
-    sendCommand({ type: 'createForProject', projectId, layoutName });
+    dispatchCoreAction({
+      layout_createProjectLayout: { projectId, layoutName },
+    });
   },
 
   async loadFromProject(projectId: string, layoutName: string) {
     if (!(await checkShallLoadData())) {
       return;
     }
-    sendCommand({ type: 'loadFromProject', projectId, layoutName });
+    dispatchCoreAction({ layout_loadProjectLayout: { projectId, layoutName } });
   },
 
   async saveToProject(
@@ -117,7 +114,9 @@ const layoutManagerActions = {
         return;
       }
     }
-    sendCommand({ type: 'saveToProject', projectId, layoutName, design });
+    dispatchCoreAction({
+      layout_saveProjectLayout: { projectId, layoutName, design },
+    });
   },
 
   async loadFromFileWithDialog() {
@@ -126,7 +125,7 @@ const layoutManagerActions = {
     }
     const filePath = await ipcAgent.async.file_getOpenJsonFilePathWithDialog();
     if (filePath) {
-      sendCommand({ type: 'loadFromFile', filePath });
+      dispatchCoreAction({ layout_loadFromFile: { filePath } });
     }
   },
 
@@ -137,7 +136,9 @@ const layoutManagerActions = {
         filePath,
         '.layout.json',
       );
-      sendCommand({ type: 'saveToFile', filePath: modFilePath, design });
+      dispatchCoreAction({
+        layout_saveToFile: { filePath: modFilePath, design },
+      });
     }
   },
 
@@ -149,7 +150,7 @@ const layoutManagerActions = {
       caption: 'Save',
     });
     if (ok) {
-      sendCommand({ type: 'save', design });
+      dispatchCoreAction({ layout_overwriteCurrentLayout: { design } });
     }
   },
 
@@ -175,7 +176,7 @@ const layoutManagerActions = {
       },
     });
     router.navigateTo('/editor');
-    sendCommand({ type: 'loadCurrentProfileLayout' });
+    dispatchCoreAction({ layout_loadCurrentProfileLayout: 1 });
   },
   async showEditLayoutFileInFiler() {
     await ipcAgent.async.layout_showEditLayoutFileInFiler();
