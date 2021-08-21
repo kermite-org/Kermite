@@ -241,44 +241,6 @@ export interface ILayoutManagerStatus {
   layoutEditSource: ILayoutEditSource;
   loadedLayoutData: IPersistKeyboardDesign;
 }
-
-export type ILayoutManagerCommand =
-  | {
-      type: 'createNewLayout';
-    }
-  | {
-      type: 'loadCurrentProfileLayout';
-    }
-  | {
-      type: 'save';
-      design: IPersistKeyboardDesign;
-    }
-  | {
-      type: 'loadFromFile';
-      filePath: string;
-    }
-  | {
-      type: 'saveToFile';
-      filePath: string;
-      design: IPersistKeyboardDesign;
-    }
-  | {
-      type: 'createForProject';
-      projectId: string;
-      layoutName: string;
-    }
-  | {
-      type: 'loadFromProject';
-      projectId: string;
-      layoutName: string;
-    }
-  | {
-      type: 'saveToProject';
-      projectId: string;
-      layoutName: string;
-      design: IPersistKeyboardDesign;
-    };
-
 export interface IProjectLayoutsInfo {
   origin: IResourceOrigin;
   projectId: string;

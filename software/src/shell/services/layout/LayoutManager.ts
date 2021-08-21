@@ -85,43 +85,6 @@ export class LayoutManager {
     );
   }
 
-  /*
-  private async executeCommand(command: ILayoutManagerCommand) {
-    // console.log(`execute layout manager command`, JSON.stringify(command));
-
-    if (command.type === 'createNewLayout') {
-      await this.createNewLayout();
-    } else if (command.type === 'loadCurrentProfileLayout') {
-      await this.loadCurrentProfileLayout();
-    } else if (command.type === 'loadFromFile') {
-      const { filePath } = command;
-      await this.loadLayoutFromFile(filePath);
-    } else if (command.type === 'saveToFile') {
-      const { filePath, design } = command;
-      await this.saveLayoutToFile(filePath, design);
-    } else if (command.type === 'loadFromProject') {
-      const { projectId, layoutName } = command;
-      this.loadLayoutFromProject(projectId, layoutName);
-    } else if (command.type === 'saveToProject') {
-      const { projectId, layoutName, design } = command;
-      this.saveLayoutToProject(projectId, layoutName, design);
-    } else if (command.type === 'save') {
-      const { design } = command;
-      await this.overwriteCurrentLayout(design);
-    } else if (command.type === 'createForProject') {
-      const { projectId, layoutName } = command;
-      this.createLayoutForProject(projectId, layoutName);
-    }
-  }
-
-  async executeCommands(commands: ILayoutManagerCommand[]): Promise<boolean> {
-    for (const command of commands) {
-      await this.executeCommand(command);
-    }
-    return true;
-  }
-  */
-
   private getCurrentEditLayoutFilePath(): string | undefined {
     const { layoutEditSource } = coreState;
     if (layoutEditSource.type === 'ProjectLayout') {
