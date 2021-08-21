@@ -135,8 +135,7 @@ export class ApplicationRoot {
         JsonFileServiceStatic.getOpeningDirectoryPathWithDialog,
 
       platform_openUrlInDefaultBrowser: (path) => shell.openExternal(path),
-      global_triggerLazyInitializeServices: async () =>
-        this.lazyInitializeServices(),
+      global_lazyInitializeServices: () => this.lazyInitializeServices(),
 
       simulator_postSimulationTargetProfile: async (profile) =>
         this.inputLogicSimulator.postSimulationTargetProfile(profile),
@@ -170,34 +169,31 @@ export class ApplicationRoot {
     });
   }
 
-  private async setupActionReceivers() {
-    coreActionDistributor.addReceivers(
-      globalSettingsModule,
-      developmentModule_ActionReceiver,
-      projectPackageModule,
-      keyboardConfigModule,
-    );
-    globalSettingsModule.loadGlobalSettings!(1);
-    keyboardConfigModule.loadKeyboardConfig!(1);
-    await dispatchCoreAction({ loadAllProjectPackages: 1 });
-    await dispatchCoreAction({ loadAllCustomFirmwareInfos: 1 });
-  }
-
   async initialize() {
     await executeWithFatalErrorHandler(async () => {
       console.log(`initialize services`);
       await applicationStorage.initializeAsync();
-      await this.setupActionReceivers();
-      await this.profileManager.initializeAsync();
       this.setupIpcBackend();
       this.windowWrapper.initialize();
     });
   }
 
   private _lazyInitializeTriggered = false;
-  lazyInitializeServices() {
+
+  async lazyInitializeServices() {
     if (!this._lazyInitializeTriggered) {
       this._lazyInitializeTriggered = true;
+      coreActionDistributor.addReceivers(
+        globalSettingsModule,
+        developmentModule_ActionReceiver,
+        projectPackageModule,
+        keyboardConfigModule,
+      );
+      globalSettingsModule.loadGlobalSettings!(1);
+      keyboardConfigModule.loadKeyboardConfig!(1);
+      await dispatchCoreAction({ loadAllProjectPackages: 1 });
+      await dispatchCoreAction({ loadAllCustomFirmwareInfos: 1 });
+      await this.profileManager.initializeAsync();
       this.deviceService.initialize();
       this.inputLogicSimulator.initialize();
     }

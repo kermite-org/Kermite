@@ -1,4 +1,4 @@
-export * from './AppServicesInitializer';
+export * from './CommonUiModels';
 export * from './ConfigDataSource';
 export * from './GeneralUiStateModels';
 export * from './Interfaces';

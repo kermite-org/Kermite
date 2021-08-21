@@ -17,11 +17,13 @@ import { IPageSpec } from '~/ui/commonModels/PageTypes';
 export type IUiState = {
   core: ICoreState;
   pageSpec: IPageSpec | undefined;
+  initialLoading: boolean;
 };
 
 export const defaultUiState: IUiState = {
   core: cloneObject(defaultCoreState),
   pageSpec: undefined,
+  initialLoading: false,
 };
 
 export type IUiAction = Partial<{}>;
@@ -50,6 +52,13 @@ export const uiStateDriverEffect = () => {
     console.log({ uiState });
   });
 };
+
+export async function lazyInitializeCoreServices() {
+  await ipcAgent.async.global_lazyInitializeServices();
+  uiState.core.globalSettings = await ipcAgent.async.config_getGlobalSettings();
+  uiState.core.allProjectPackageInfos = await ipcAgent.async.projects_getAllProjectPackageInfos();
+  uiState.core.allCustomFirmwareInfos = await ipcAgent.async.projects_getAllCustomFirmwareInfos();
+}
 
 export const uiStateReader = {
   get globalSettings(): IGlobalSettings {
