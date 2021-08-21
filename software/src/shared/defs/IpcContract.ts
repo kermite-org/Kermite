@@ -2,7 +2,6 @@ import { IAppErrorData } from '~/shared/defs/CustomErrors';
 import {
   IBootloaderDeviceDetectionStatus,
   ILayoutManagerCommand,
-  ILayoutManagerStatus,
   IRealtimeKeyboardEvent,
   IResourceOrigin,
   IServerProfileInfo,
@@ -56,7 +55,6 @@ export interface IAppIpcContract {
   };
   events: {
     global_appErrorEvents: IAppErrorData<any>;
-    layout_layoutManagerStatus: Partial<ILayoutManagerStatus>;
     device_keyEvents: IRealtimeKeyboardEvent;
     firmup_deviceDetectionEvents: IBootloaderDeviceDetectionStatus;
     global_coreStateEvents: Partial<ICoreState>;
