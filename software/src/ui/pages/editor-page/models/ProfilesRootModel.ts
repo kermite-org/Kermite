@@ -8,8 +8,10 @@ import { profilesReader } from '~/ui/pages/editor-page/models/ProfilesReader';
 function affectStoreLoadedProfileDataToModelProfileData() {
   const { loadedProfileData } = profilesReader;
   useEffect(() => {
-    console.log('editorModel.profileData <-- store.loadedProfileData');
-    editorModel.loadProfileData(loadedProfileData);
+    if (editorModel.loadedProfileData !== loadedProfileData) {
+      console.log('editorModel.profileData <-- store.loadedProfileData');
+      editorModel.loadProfileData(loadedProfileData);
+    }
   }, [loadedProfileData]);
 }
 

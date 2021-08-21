@@ -185,11 +185,22 @@ export const layoutManagerRootModel = {
 
     useEffect(() => {
       if (layoutEditSource !== local.layoutEditSource) {
-        console.log('load', { layoutEditSource });
         UiLayouterCore.loadEditDesign(loadedLayoutData);
         local.layoutEditSource = layoutEditSource;
       }
+
+      return () => {
+        if (
+          layoutEditSource.type === 'CurrentProfile' &&
+          UiLayouterCore.getIsModified()
+        ) {
+          const design = UiLayouterCore.emitSavingDesign();
+          editorModel.replaceKeyboardDesign(design);
+        }
+      };
     }, [layoutEditSource]);
+
+    useEffect(() => {}, []);
   },
   updateBeforeRender_old() {
     const sourceLayoutData = uiState.core.loadedLayoutData;
