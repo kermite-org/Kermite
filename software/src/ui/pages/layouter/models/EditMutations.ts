@@ -440,6 +440,12 @@ class EditMutations {
     editManager.reset();
   }
 
+  rebase() {
+    editUpdater.patchEditor((editor) => {
+      editor.loadedDesign = editReader.design;
+    });
+  }
+
   resetSitePosition() {
     const bb = editReader.displayArea;
     const cx = (bb.left + bb.right) / 2;

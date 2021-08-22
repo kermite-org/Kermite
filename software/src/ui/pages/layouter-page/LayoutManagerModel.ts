@@ -144,6 +144,9 @@ const layoutManagerActions = {
     });
     if (ok) {
       dispatchCoreAction({ layout_overwriteCurrentLayout: { design } });
+      if (!isProfile) {
+        UiLayouterCore.rebase();
+      }
     }
   },
 

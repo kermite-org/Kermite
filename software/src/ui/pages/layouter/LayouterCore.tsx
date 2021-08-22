@@ -22,9 +22,15 @@ export namespace UiLayouterCore {
   }
 
   export function emitSavingDesign(): IPersistKeyboardDesign {
-    return KeyboardDesignConverter.convertKeyboardDesignEditToPersist(
-      editReader.design,
+    const savingDesign = editReader.design;
+    const persistDesign = KeyboardDesignConverter.convertKeyboardDesignEditToPersist(
+      savingDesign,
     );
+    return persistDesign;
+  }
+
+  export function rebase() {
+    editMutations.rebase();
   }
 
   export function getIsModified(): boolean {
