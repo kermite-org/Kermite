@@ -184,10 +184,7 @@ export const layoutManagerRootModel = {
       }
 
       return () => {
-        if (
-          layoutEditSource.type === 'CurrentProfile' &&
-          UiLayouterCore.getIsModified()
-        ) {
+        if (layoutEditSource.type === 'CurrentProfile') {
           const design = UiLayouterCore.emitSavingDesign();
           editorModel.replaceKeyboardDesign(design);
         }
