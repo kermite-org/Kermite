@@ -20,6 +20,7 @@ import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStat
 import { FirmwareUpdateService } from '~/shell/services/firmwareUpdate';
 import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/inputLogicSimulatorD';
 import { layoutManager } from '~/shell/services/layout/LayoutManager';
+import { layoutManagerModule } from '~/shell/services/layout/LayoutManagerModule';
 import { profileManager } from '~/shell/services/profile/ProfileManager';
 import { profileManagerModule } from '~/shell/services/profile/ProfileManagerModule';
 import { UserPresetHubService } from '~/shell/services/userPresetHub/UserPresetHubService';
@@ -52,10 +53,6 @@ export class ApplicationRoot {
 
     appGlobal.icpMainAgent.supplyAsyncHandlers({
       profile_getCurrentProfile: async () => profilesReader.getCurrentProfile(),
-      layout_executeLayoutManagerCommands: (commands) =>
-        layoutManager.executeCommands(commands),
-      layout_showEditLayoutFileInFiler: async () =>
-        layoutManager.showEditLayoutFileInFiler(),
       device_connectToDevice: async (path) =>
         this.deviceService.selectTargetDevice(path),
       device_setCustomParameterValue: async (index, value) =>
@@ -142,6 +139,7 @@ export class ApplicationRoot {
         keyboardConfigModule,
         windowModule,
         profileManagerModule,
+        layoutManagerModule,
       );
       globalSettingsModule.config_loadGlobalSettings(1);
       keyboardConfigModule.config_loadKeyboardConfig(1);

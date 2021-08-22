@@ -53,7 +53,7 @@ export const uiStateDriverEffect = () => {
   // dispatchCoreAction({ greet: { name: 'yamada', age: 20 } });
   return ipcAgent.events.global_coreStateEvents.subscribe((diff) => {
     commitUiState({ core: { ...uiState.core, ...diff } });
-    console.log({ uiState });
+    // console.log({ uiState });
   });
 };
 
