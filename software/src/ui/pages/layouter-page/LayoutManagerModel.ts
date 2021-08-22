@@ -1,5 +1,6 @@
 import { useEffect } from 'qx';
 import {
+  compareObjectByJsonStringify,
   forceChangeFilePathExtension,
   ILayoutEditSource,
   IPersistKeyboardDesign,
@@ -50,6 +51,20 @@ async function checkShallLoadData(): Promise<boolean> {
   return await modalConfirm({
     message: 'Unsaved changes will be lost. Are you OK?',
     caption: 'Load',
+  });
+}
+
+async function checkShallLoadDataForProfile(): Promise<boolean> {
+  const profileModified = !compareObjectByJsonStringify(
+    uiState.core.loadedProfileData,
+    uiState.core.editProfileData,
+  );
+  if (!profileModified) {
+    return true;
+  }
+  return await modalConfirm({
+    message: 'Unsaved changes of current profile will be lost. Are you OK?',
+    caption: 'create new profile',
   });
 }
 
@@ -151,6 +166,9 @@ const layoutManagerActions = {
   },
 
   async createNewProfileFromCurrentLayout() {
+    if (!(await checkShallLoadDataForProfile())) {
+      return;
+    }
     const { editSource } = layoutManagerReader;
     let projectId = '000000';
     if (editSource.type === 'ProjectLayout') {
