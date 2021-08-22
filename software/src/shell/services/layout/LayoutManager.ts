@@ -43,11 +43,12 @@ async function loadLayoutByEditSource(editSource: ILayoutEditSource) {
 
 function onCoreStateChange(diff: Partial<ICoreState>) {
   if (diff.profileEditSource) {
-    if (
-      coreState.layoutEditSource.type === 'CurrentProfile' &&
-      diff.profileEditSource.type !== 'InternalProfile'
-    ) {
-      layoutManagerModule.layout_createNewLayout(1);
+    if (coreState.layoutEditSource.type === 'CurrentProfile') {
+      if (diff.profileEditSource.type === 'InternalProfile') {
+        layoutManagerModule.layout_loadCurrentProfileLayout(1);
+      } else {
+        layoutManagerModule.layout_createNewLayout(1);
+      }
     }
   }
 }
