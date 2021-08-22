@@ -1,6 +1,5 @@
 import { globalSettingsDefault, globalSettingsLoadingSchema } from '~/shared';
-import { appEnv, applicationStorage } from '~/shell/base';
-import { pathResolve } from '~/shell/funcs';
+import { applicationStorage } from '~/shell/base';
 import { commitCoreState, coreState, createCoreModule } from '~/shell/global';
 import { checkLocalRepositoryFolder } from '~/shell/modules/project/projectResources/LocalResourceHelper';
 
@@ -39,17 +38,3 @@ export const globalSettingsModule = createCoreModule({
     commitCoreState({ globalSettings });
   },
 });
-
-export const globalSettingsReader = {
-  getLocalRepositoryDir(): string | undefined {
-    const settings = coreState.globalSettings;
-    if (settings.developerMode && settings.useLocalResources) {
-      if (appEnv.isDevelopment) {
-        return pathResolve('../');
-      } else {
-        return settings.localProjectRootFolderPath;
-      }
-    }
-    return undefined;
-  },
-};

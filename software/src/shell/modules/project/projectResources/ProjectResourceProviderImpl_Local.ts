@@ -21,9 +21,9 @@ import {
   pathJoin,
   pathRelative,
 } from '~/shell/funcs';
+import { globalSettingsReader } from '~/shell/global';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
-import { globalSettingsReader } from '~/shell/modules/setting/GlobalSettingsModule';
 import {
   IFirmwareBinaryFileSpec,
   IProjectResourceProviderImpl,
