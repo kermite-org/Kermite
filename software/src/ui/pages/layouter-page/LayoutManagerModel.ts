@@ -17,6 +17,7 @@ import { UiLayouterCore } from '~/ui/pages/layouter';
 export interface ILayoutManagerModel {
   editSource: ILayoutEditSource;
   isModified: boolean;
+  hasLayoutEntities: boolean;
   createNewLayout(): void;
   loadCurrentProfileLayout(): void;
   createForProject(projectId: string, layoutName: string): void;
@@ -215,6 +216,7 @@ export function useLayoutManagerModel(): ILayoutManagerModel {
   return {
     editSource,
     isModified,
+    hasLayoutEntities: UiLayouterCore.hasEditLayoutEntities(),
     createNewLayout,
     loadCurrentProfileLayout,
     createForProject,

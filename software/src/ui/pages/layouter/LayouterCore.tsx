@@ -31,6 +31,10 @@ export namespace UiLayouterCore {
     return editReader.isModified;
   }
 
+  export function hasEditLayoutEntities(): boolean {
+    return editReader.hasLayoutEntities;
+  }
+
   export function Component() {
     useEffect(windowKeyboardEventEffect(keyboardOperationHander), []);
     useEffect(setupDeviceKeyEventsListener, []);
